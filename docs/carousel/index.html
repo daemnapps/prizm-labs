@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="/studio.css?v=prizm12">
-<link rel="stylesheet" href="goja-theme.css?v=13">
+<link rel="stylesheet" href="goja-theme.css?v=14">
 <link rel="stylesheet" href="vocab-section.css?v=1">
 <style>
 /* Layout only — the look is the Goja theme (goja-theme.css). */
@@ -43,10 +43,11 @@
 
   <!-- the profile -->
   <header class="gj-profile">
-    <div class="gj-avatar"><img src="m/s-sep-master.jpg" alt="DÆMN" width="480" height="722" decoding="async"></div>
+    <button class="gj-avatar" id="story-open" type="button" aria-label="Watch DÆMN’s story" aria-haspopup="dialog"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" decoding="async"></button>
+    <span class="gj-sign" lang="ja" aria-hidden="true">回転木馬</span>
     <div class="gj-who">
-      <h1>DÆMN</h1>
-      <p class="label">Carousel · visual + audio</p>
+      <h1><span class="gj-wordmark">DÆMN</span></h1>
+      <p class="label"><span class="gj-live"></span>Carousel · visual + audio</p>
       <ul class="gj-stats">
         <li><b>11</b>posts</li><li><b>18</b>scenes</li><li><b>22</b>objects</li><li><b>57</b>moves</li>
       </ul>
@@ -64,13 +65,13 @@
     <!-- /frames:left --></div>
     <div class="gj-piece">
       <p class="eyebrow"><span class="gj-pin">Pinned</span> · a visual + audio mix</p>
-      <h1>Carousel.</h1>
+      <h1 class="gj-flick">Carousel.</h1>
       <div class="gj-player" id="player">
         <video id="piece" class="gj-video" src="carousel.mp4?v=14" poster="poster.jpg?v=14" muted loop playsinline preload="none"></video>
         <span class="gj-preview-tag" aria-hidden="true">Preview</span>
         <button class="gj-play" id="play" type="button" aria-label="Play Carousel from the start, with sound"><span class="gj-play-icon" aria-hidden="true"></span><span>Play</span></button>
       </div>
-      <div class="btns"><button class="btn" id="sound" type="button">Tap for sound</button><label class="gj-quality"><span>Quality</span><select data-quality-for="piece" aria-label="Video quality"><option value="auto">Auto</option><option value="1080">1080p · Max</option><option value="720">720p</option><option value="540">540p</option><option value="360">360p · data saver</option></select></label></div>
+      <div class="btns"><button class="btn" id="sound" type="button">Play with sound</button><label class="gj-quality"><span>Quality</span><select data-quality-for="piece" aria-label="Video quality"><option value="auto">Auto</option><option value="1080">1080p · Max</option><option value="720">720p</option><option value="540">540p</option><option value="360">360p · data saver</option></select></label></div>
       <p class="gj-quote">“Life is a game, a loop, you define yourself.”</p>
       <p class="label">to Gotts Street Park — Lost &amp; Found</p>
     </div>
@@ -86,7 +87,7 @@
 
   <!-- the feed: one post per part of the making-of; each opens as a full-screen view (feed.js) -->
   <section class="gj-feed" aria-labelledby="feed-h">
-    <div class="gj-feed-head"><p class="eyebrow" id="feed-h">The making of</p><p class="label">11 posts · tap one</p></div>
+    <div class="gj-feed-head"><p class="eyebrow" id="feed-h">The making of</p><p class="label"><span class="gj-live"></span>11 posts · tap one</p></div>
     <div class="gj-posts">
     <a class="gj-post" href="#frames" data-go="frames" data-title="Frames">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
@@ -95,42 +96,42 @@
     </a>
     <a class="gj-post" href="#personas" data-go="personas" data-title="The personas">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><video data-clip="m/p-weeknd.mp4" data-poster="m/p-weeknd.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">01</span><span class="gj-post-count">6 clips</span></div>
+      <div class="gj-post-media"><video data-clip="m/p-weeknd.mp4" data-poster="m/p-weeknd.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">01<span class="gj-th" lang="th" aria-hidden="true">๐๑</span></span><span class="gj-post-count">6 clips</span></div>
       <div class="gj-post-cap"><b>The personas</b><span>Six of me, a few frames each.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#motion" data-go="motion" data-title="Motion control">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><video data-clip="m/outfits.mp4" data-poster="m/outfits.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">02</span><span class="gj-post-count">8 looks</span></div>
+      <div class="gj-post-media"><div class="gj-mosaic" aria-hidden="true" style="grid-template-columns:repeat(3,1fr)"><img width="540" height="960" src="f-fit-linen.jpg?v=09271406" alt="" loading="lazy" decoding="async"><img width="540" height="960" src="f-fit-leather.jpg?v=09271406" alt="" loading="lazy" decoding="async"><img width="540" height="960" src="f-fit-purple.jpg?v=09271406" alt="" loading="lazy" decoding="async"></div><span class="gj-post-n">02<span class="gj-th" lang="th" aria-hidden="true">๐๒</span></span><span class="gj-post-count">8 looks</span></div>
       <div class="gj-post-cap"><b>Motion control</b><span>Same move, any outfit.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#sheets" data-go="sheets" data-title="Character sheets">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><img width="480" height="722" src="m/s-sep-master.jpg" alt="" loading="lazy" decoding="async" style="object-position:50% 15%"><span class="gj-post-n">03</span><span class="gj-post-count">12 sheets · 7 in 3D</span></div>
+      <div class="gj-post-media"><img width="480" height="722" src="m/s-sep-master.jpg" alt="" loading="lazy" decoding="async" style="object-position:50% 15%"><span class="gj-post-n">03<span class="gj-th" lang="th" aria-hidden="true">๐๓</span></span><span class="gj-post-count">12 sheets · 7 in 3D</span></div>
       <div class="gj-post-cap"><b>Character sheets</b><span>Locking my face — and every item he wears, in 3D.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#objects" data-go="objects" data-title="The objects">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><video data-clip="m/v-orbit.mp4" data-poster="m/v-orbit.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">04</span><span class="gj-post-count">18 in 3D</span></div>
+      <div class="gj-post-media"><video data-clip="m/v-orbit.mp4" data-poster="m/v-orbit.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">04<span class="gj-th" lang="th" aria-hidden="true">๐๔</span></span><span class="gj-post-count">18 in 3D</span></div>
       <div class="gj-post-cap"><b>The objects</b><span>Ride the carousel.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#edit" data-go="edit" data-title="The edit">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><div class="gj-reel" aria-hidden="true"><img width="4536" height="96" src="m/filmstrip.jpg" alt="" loading="lazy" decoding="async" style="--at:0%"><div><i class="k-real" style="--w:3"></i><i class="k-ai" style="--w:2"></i><i class="k-3d" style="--w:4"></i><i class="k-real" style="--w:2"></i></div><img width="4536" height="96" src="m/filmstrip.jpg" alt="" loading="lazy" decoding="async" style="--at:45%"><div><i class="k-fit" style="--w:2"></i><i class="k-flash" style="--w:1"></i><i class="k-obj" style="--w:3"></i><i class="k-open" style="--w:2"></i></div><img width="4536" height="96" src="m/filmstrip.jpg" alt="" loading="lazy" decoding="async" style="--at:90%"></div><span class="gj-post-n">05</span><span class="gj-post-count">17 layers</span></div>
+      <div class="gj-post-media"><div class="gj-ecover" data-src="m/edit.json?v=6" aria-hidden="true"><span class="head"></span></div><span class="gj-post-n">05<span class="gj-th" lang="th" aria-hidden="true">๐๕</span></span><span class="gj-post-count">17 layers</span></div>
       <div class="gj-post-cap"><b>The edit</b><span>Every layer, on one clock.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#vocab" data-go="vocab" data-title="The vocabulary">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><video data-clip="m/v-speed-ramp.mp4" data-poster="m/v-speed-ramp.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">06</span><span class="gj-post-count">57 moves</span></div>
+      <div class="gj-post-media"><video data-clip="m/v-speed-ramp.mp4" data-poster="m/v-speed-ramp.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">06<span class="gj-th" lang="th" aria-hidden="true">๐๖</span></span><span class="gj-post-count">57 moves</span></div>
       <div class="gj-post-cap"><b>The vocabulary</b><span>Every move, by name.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#sound-map" data-go="sound-map" data-title="The sound">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><div class="gj-bars" aria-hidden="true"><i class="k-flash" style="--h:70%;--d:-0.1s"></i><i class="k-3d" style="--h:45%;--d:-0.5s"></i><i class="k-real" style="--h:90%;--d:-0.3s"></i><i class="k-fit" style="--h:55%;--d:-0.8s"></i><i class="k-flash" style="--h:80%;--d:-0.2s"></i><i class="k-3d" style="--h:65%;--d:-0.6s"></i><i class="k-real" style="--h:40%;--d:-0.9s"></i><i class="k-fit" style="--h:85%;--d:-0.4s"></i><i class="k-flash" style="--h:50%;--d:-0.7s"></i><i class="k-3d" style="--h:95%;--d:-0.15s"></i><i class="k-real" style="--h:60%;--d:-0.55s"></i><i class="k-fit" style="--h:75%;--d:-0.35s"></i></div><span class="gj-post-n">07</span><span class="gj-post-count">12 bars · 6 players</span></div>
+      <div class="gj-post-media"><div class="gj-bars" aria-hidden="true"><i class="k-flash" style="--h:70%;--d:-0.1s"></i><i class="k-3d" style="--h:45%;--d:-0.5s"></i><i class="k-real" style="--h:90%;--d:-0.3s"></i><i class="k-fit" style="--h:55%;--d:-0.8s"></i><i class="k-flash" style="--h:80%;--d:-0.2s"></i><i class="k-3d" style="--h:65%;--d:-0.6s"></i><i class="k-real" style="--h:40%;--d:-0.9s"></i><i class="k-fit" style="--h:85%;--d:-0.4s"></i><i class="k-flash" style="--h:50%;--d:-0.7s"></i><i class="k-3d" style="--h:95%;--d:-0.15s"></i><i class="k-real" style="--h:60%;--d:-0.55s"></i><i class="k-fit" style="--h:75%;--d:-0.35s"></i></div><span class="gj-post-n">07<span class="gj-th" lang="th" aria-hidden="true">๐๗</span></span><span class="gj-post-count">12 bars · 6 players</span></div>
       <div class="gj-post-cap"><b>The sound</b><span>Twelve bars, taken apart.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#how" data-go="how" data-title="How it was made">
       <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
-      <div class="gj-post-media"><video data-clip="m/v-match-move.mp4" data-poster="m/v-match-move.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">08</span><span class="gj-post-count">6 steps</span></div>
+      <div class="gj-post-media"><video data-clip="m/v-match-move.mp4" data-poster="m/v-match-move.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">08<span class="gj-th" lang="th" aria-hidden="true">๐๘</span></span><span class="gj-post-count">6 steps</span></div>
       <div class="gj-post-cap"><b>How it was made</b><span>Footage in, a loop out.</span><span class="gj-open">Open →</span></div>
     </a>
     <a class="gj-post" href="#memes" data-go="memes" data-title="The memes">
@@ -159,7 +160,7 @@
   <!-- 2 · frames -->
   <section class="gj-sec" id="frames">
     <p class="eyebrow">Frames from the piece</p>
-    <h2>Every scene, in order.</h2>
+    <h2 class="gj-flick">Every scene, in order.</h2>
     <p class="lede">One still per scene, straight from the final cut. Scroll sideways.</p>
     <div class="gj-strip"><!-- frames:strip -->
       <figure><img src="f-eye.jpg?v=09271406" alt="The Goja neon, in my eye" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:05</b> The Goja neon, in my eye</figcaption></figure>
@@ -186,8 +187,8 @@
 
   <!-- 3a · the personas -->
   <section class="gj-sec" id="personas">
-    <p class="eyebrow">The making of · 01 · The personas</p>
-    <h2>Six of me, a few frames each.</h2>
+    <p class="eyebrow"><span>The making of · 01<span class="gj-th" lang="th" aria-hidden="true">๐๑</span> · The personas</span></p>
+    <h2 class="gj-flick">Six of me, a few frames each.</h2>
     <p class="lede">Iconic photos, re-made with me in them from real photos of me — then animated. Each one flashes on a kick. Times are on the video's clock.</p>
     <div class="gj-cards">
       <figure><video data-clip="m/p-tongue.mp4" data-poster="m/p-tongue.jpg" muted loop playsinline preload="none" aria-label="Black and white, tongue out, animated"></video><figcaption><b>0:12</b> tongue out</figcaption></figure>
@@ -201,8 +202,8 @@
 
   <!-- 3b · motion control -->
   <section class="gj-sec" id="motion">
-    <p class="eyebrow">The making of · 02 · Motion control</p>
-    <h2>Same move, any outfit.</h2>
+    <p class="eyebrow"><span>The making of · 02<span class="gj-th" lang="th" aria-hidden="true">๐๒</span> · Motion control</span></p>
+    <h2 class="gj-flick">Same move, any outfit.</h2>
     <p class="lede">My real clip drives the AI: it copies every movement, frame for frame, in whatever I'm wearing.</p>
     <figure class="gj-fig">
       <video data-clip="m/outfits.mp4" data-poster="m/outfits.jpg" muted loop playsinline preload="none" width="960" height="394" aria-label="Four clips side by side, in sync: the real me, then the same motion in a cream linen suit, a leather jacket, and a purple satin tracksuit"></video>
@@ -223,8 +224,8 @@
 
   <!-- 3c · the character sheets -->
   <section class="gj-sec" id="sheets">
-    <p class="eyebrow">The making of · 03 · The character sheets</p>
-    <h2>Locking my face.</h2>
+    <p class="eyebrow"><span>The making of · 03<span class="gj-th" lang="th" aria-hidden="true">๐๓</span> · The character sheets</span></p>
+    <h2 class="gj-flick">Locking my face.</h2>
     <p class="lede">One identity, rebuilt from a real September selfie, so every AI shot is the same man. Every item he wears is locked to one real version: one pair of glasses, one pair of shoes, the band on the left wrist.</p>
     <div class="gj-look">
       <figure><img width="480" height="722" src="m/s-sep-master.jpg" alt="Master portrait: big afro, full beard, gold octagonal wire glasses, grey tee" loading="lazy" decoding="async"><figcaption class="label">master</figcaption></figure>
@@ -265,8 +266,8 @@
 
   <!-- 3d · the objects -->
   <section class="gj-sec" id="objects">
-    <p class="eyebrow">The making of · 04 · The objects</p>
-    <h2>Ride the carousel.</h2>
+    <p class="eyebrow"><span>The making of · 04<span class="gj-th" lang="th" aria-hidden="true">๐๔</span> · The objects</span></p>
+    <h2 class="gj-flick">Ride the carousel.</h2>
     <p class="lede">Every object in the piece, built in 3D and seated on one carousel. Drag to spin it.</p>
     <div class="gj-carousel" id="carousel" role="img" aria-label="A 3D carousel carrying every object from the piece. Drag sideways or use the arrow keys to spin it."></div>
     <p class="label" id="carousel-label" aria-live="polite">Koi — swims through the iris</p>
@@ -296,8 +297,8 @@
 
   <!-- 3d½ · the edit -->
   <section class="gj-sec" id="edit">
-    <p class="eyebrow">The making of · 05 · The edit</p>
-    <h2>Every layer, on one clock.</h2>
+    <p class="eyebrow"><span>The making of · 05<span class="gj-th" lang="th" aria-hidden="true">๐๕</span> · The edit</span></p>
+    <h2 class="gj-flick">Every layer, on one clock.</h2>
     <p class="lede">The 42.3 seconds as they are built: the picture, each layer stacked on top of it, and, frame by frame, how the picture is treated and how everything moves. The speed line drops below zero where a shot runs backwards. Play the video and the line runs across; tap anywhere to jump there.</p>
     <div class="gj-edit-top">
       <video id="edit-video" class="gj-edit-video" src="carousel.mp4?v=14" poster="poster.jpg?v=14" muted playsinline controls preload="none"></video>
@@ -324,8 +325,8 @@
      Generated from tools/moves/vocab/build.py — same clips as the Motion Vocabulary artifact.
      Needs vocab-section.css (theme tokens only). Clips lazy-play via page.js (video[data-clip]). -->
 <section class="gj-sec gj-vocab" id="vocab">
-  <p class="eyebrow">The making of · 06 · The vocabulary</p>
-  <h2>Every move, by name.</h2>
+  <p class="eyebrow"><span>The making of · 06<span class="gj-th" lang="th" aria-hidden="true">๐๖</span> · The vocabulary</span></p>
+  <h2 class="gj-flick">Every move, by name.</h2>
   <p class="lede">The words editors use for what happens in the piece, each one shown on the moment it happens. Times are on the video's clock.</p>
   <h3>Cuts</h3>
   <div class="gj-cards">
@@ -413,8 +414,8 @@
 
   <!-- 3e · the sound -->
   <section class="gj-sec" id="sound-map">
-    <p class="eyebrow">The making of · 07 · The sound</p>
-    <h2>Twelve bars, taken apart.</h2>
+    <p class="eyebrow"><span>The making of · 07<span class="gj-th" lang="th" aria-hidden="true">๐๗</span> · The sound</span></p>
+    <h2 class="gj-flick">Twelve bars, taken apart.</h2>
     <p class="lede">The loop is 12 bars of the song, split into stems and re-cut on the bar lines. The shaded bars are the remix.</p>
     <div class="gj-map" id="stem-map" data-src="m/sound.json"><p class="label">Loading the stem map…</p></div>
     <p class="label gj-sound-note">Press play on the loop below and a playhead runs across it · scroll sideways on a phone</p>
@@ -438,8 +439,8 @@
 
   <!-- 3f · how it was made -->
   <section class="gj-sec" id="how">
-    <p class="eyebrow">The making of · 08 · How it was made</p>
-    <h2>Footage in, a loop out.</h2>
+    <p class="eyebrow"><span>The making of · 08<span class="gj-th" lang="th" aria-hidden="true">๐๘</span> · How it was made</span></p>
+    <h2 class="gj-flick">Footage in, a loop out.</h2>
     <ol class="gj-pipe">
       <li><b>Real footage</b>Phone clips from the trip — the base of every shot.</li>
       <li><b>Tracking</b>Each clip's camera move is tracked so 3D can sit inside it.</li>
@@ -454,7 +455,7 @@
   <!-- bonus · the memes -->
   <section class="gj-sec" id="memes">
     <p class="eyebrow">Bonus · The memes</p>
-    <h2>Two memes, starring me.</h2>
+    <h2 class="gj-flick">Two memes, starring me.</h2>
     <p class="lede">Made the same way as the piece: real photos of me, rebuilt with AI, then animated. Tap one for sound.</p>
     <div class="gj-memes">
       <figure><video data-clip="m/meme-neuron.mp4?v=1" data-poster="m/meme-neuron.jpg?v=1" muted loop playsinline controls preload="none" aria-label="Neuron activation: a blank stare, then my brain lights up purple"></video><figcaption><b>Neuron activation</b>a blank stare, then the whole brain lights up Goja purple</figcaption></figure>
@@ -478,21 +479,15 @@
 
 <footer class="bot">
   <span>DÆMN</span>
-  <span class="right">Carousel · 2026</span>
+  <span class="right">Carousel · <span lang="th">ม้าหมุน</span> · 2026</span>
 </footer>
-<script>
-/* the piece: a muted preview plays while it is in view; Play starts the real thing from the very beginning, with sound, full screen (iPhones use their own video player) */
-(function(){var v=document.getElementById("piece"),w=document.getElementById("player"),go=document.getElementById("play"),b=document.getElementById("sound");
- function full(){try{if(v.requestFullscreen)return v.requestFullscreen({navigationUI:"hide"}).catch(function(){});if(v.webkitRequestFullscreen)return v.webkitRequestFullscreen();if(v.webkitEnterFullscreen)return v.webkitEnterFullscreen()}catch(e){}}
- function start(){w.classList.add("is-playing");v.controls=true;v.muted=false;v.volume=1;try{v.currentTime=0}catch(e){}var p=v.play();p&&p.catch&&p.catch(function(){});full();sync()}
- function sync(){b.textContent=!w.classList.contains("is-playing")?"Play with sound":(v.muted?"Sound on":"Sound off")}
- go.addEventListener("click",start);
- b.addEventListener("click",function(){if(!w.classList.contains("is-playing"))return start();v.muted=!v.muted;if(!v.muted){v.volume=1;var p=v.play();p&&p.catch&&p.catch(function(){})}sync()});
- v.addEventListener("volumechange",sync);sync();})();
-</script>
-<script src="stream.js?v=2"></script>
-<script src="feed.js?v=5"></script>
-<script src="page.js?v=8" defer></script>
+<!-- the piece's Play and "Play with sound" open the immersive viewer at the piece (reels.js) -->
+<script src="stream.js?v=3"></script>
+<script src="neon.js?v=1"></script>
+<script src="feed.js?v=6"></script>
+<script src="reels.js?v=1"></script>
+<script src="story.js?v=1"></script>
+<script src="page.js?v=9" defer></script>
 <!-- carousel.js and objects-grid.js are loaded by feed.js when a 3D part opens -->
 </body>
 </html>

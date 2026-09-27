@@ -3,7 +3,8 @@
    the way Instagram and YouTube do (iPhones and Safari stream it natively; everything else uses hls.js, fetched only
    when needed). A picked quality plays a fixed file instead: "1080p · Max" is the untouched master (1080×1920,
    256k audio), for when the full experience is worth the wait. The pick is remembered on that device.
-   build_web_video.py makes v/ and the q-*.mp4 files. Markup: <select data-quality-for="piece"> next to the video. */
+   build_web_video.py makes v/ and the q-*.mp4 files. Markup: <select data-quality-for="piece"> next to the video.
+   window.gjStream.attach(video) gives any other player (the immersive viewer) the same choice. */
 (() => {
   const MASTER = 'v/master.m3u8?v=1';
   const FIXED = {'1080': 'q-1080.mp4?v=1', '720': 'carousel.mp4?v=14', '540': 'q-540.mp4?v=1', '360': 'q-360.mp4?v=1'};
@@ -39,6 +40,12 @@
       h.on(Hls.Events.MANIFEST_PARSED, resume);
     }).catch(() => {});
   }
+
+  // the immersive viewer (reels.js) plays the piece in its own player: it borrows the same choice
+  window.gjStream = {
+    attach(v) { if (!state.has(v)) state.set(v, {fallback: FIXED['720']}); apply(v, pick); },
+    detach(v) { const st = state.get(v); if (st && st.hls) { st.hls.destroy(); st.hls = null; } state.delete(v); }
+  };
 
   // Auto attaches as the video comes near (before anyone presses play); a fixed pick is just a file, already set
   vids.forEach(v => {

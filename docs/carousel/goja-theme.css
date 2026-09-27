@@ -43,6 +43,24 @@
   --stem-bass:#B264FF;
   --stem-vocals:#3CD2F0;
   --stem-other:#FFB02E;
+  /* ── neon system v1 (THEME.md): the light as tube, glass and motion ── */
+  --neon-spectrum:conic-gradient(from 0deg,#B264FF,#FF5CC8,#3CD2F0,#7B61FF,#B264FF);  /* the ring: violet → magenta → cyan → indigo */
+  --neon-line:linear-gradient(90deg,#B264FF,#FF5CC8 55%,#3CD2F0);                     /* a lit line, a filled segment */
+  --neon-wordmark:linear-gradient(90deg,#F3EEFB,#B264FF 20%,#FF5CC8 42%,#3CD2F0 64%,#F3EEFB 84%,#F3EEFB);  /* DÆMN, flowing */
+  --neon-text:0 0 1px rgba(243,238,251,.55),0 0 10px rgba(178,100,255,.5),0 0 28px rgba(255,92,200,.22);   /* a heading, lit */
+  --neon-soft:0 0 6px rgba(178,100,255,.55),0 0 16px rgba(255,92,200,.2);                                   /* a small thing, lit */
+  --neon-drop:drop-shadow(0 0 8px rgba(178,100,255,.5));                                                    /* glow for clipped text / tiny marks */
+  --neon-edge:0 0 0 1px rgba(178,100,255,.6),0 0 18px rgba(178,100,255,.34),inset 0 0 14px rgba(178,100,255,.16);  /* a control, hovered */
+  --neon-press:0 0 0 1px rgba(255,92,200,.75),0 0 26px rgba(255,92,200,.42),inset 0 0 18px rgba(255,92,200,.22);   /* a control, pressed */
+  --neon-hot:rgba(255,92,200,.55);           /* the ripple's core */
+  --glass:rgba(27,22,40,.62);                /* a control's body: card, see-through */
+  --glass-line:rgba(243,238,251,.18);        /* a control's rim at rest */
+  --scrim:rgba(14,12,20,.78);                /* legibility wash over media */
+  --pattern-wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' viewBox='0 0 40 20'%3E%3Cdefs%3E%3Cg id='s'%3E%3Ccircle r='19' fill='%230E0C14' stroke='%23B264FF'/%3E%3Ccircle r='14' fill='none' stroke='%23B264FF'/%3E%3Ccircle r='9' fill='none' stroke='%23B264FF'/%3E%3Ccircle r='4' fill='none' stroke='%23B264FF'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23s' x='20' y='-10'/%3E%3Cuse href='%23s' x='0' y='0'/%3E%3Cuse href='%23s' x='40' y='0'/%3E%3Cuse href='%23s' x='20' y='10'/%3E%3Cuse href='%23s' x='0' y='20'/%3E%3Cuse href='%23s' x='40' y='20'/%3E%3Cuse href='%23s' x='20' y='30'/%3E%3C/svg%3E");  /* seigaiha, the wave */
+  --ease-portal:cubic-bezier(.7,0,.2,1);     /* stepping through */
+  --ease-settle:cubic-bezier(.16,1,.3,1);    /* landing */
+  --t-fast:.18s; --t-mid:.42s; --t-slow:.7s;
+  --ring-spin:6.5s; --ring-breathe:3.4s;
 }
 body.theme-goja{
   background:
@@ -297,6 +315,7 @@ body.theme-goja::after{opacity:.06}
 .gj-profile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s3) var(--s5);align-items:center;
   padding-block:var(--s3) var(--s4)}
 .gj-avatar{width:clamp(76px,18vw,120px);aspect-ratio:1;border-radius:var(--r4);padding:3px;background:var(--prism)}
+button.gj-avatar{display:block;border:0;font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .gj-avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;border-radius:var(--r4);border:3px solid var(--bone)}
 .gj-who h1{font-size:clamp(24px,4vw,34px);letter-spacing:-.02em}
 .gj-who .label{margin-top:2px}
@@ -414,3 +433,242 @@ html.gj-app:not(.xp-open){scroll-snap-type:y proximity}
 /* on a phone the piece stands alone; its side frames are all in the Frames post */
 @media (max-width:980px){ .gj-app .gj-side{display:none} }
 .gj-app .gj-sec{scroll-margin-top:140px}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   NEON SYSTEM v1 (2026-09-27) — the Goja light as tube, glass and motion.
+   Tokens live in .theme-goja above; THEME.md lists the rules. Motion is
+   transform + opacity only; a blur appears only on small things or inside a
+   short transition; every effect switches off under reduced motion.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* N1 · the ring — a neon tube round the avatar: colour travels round it, the bloom breathes.
+   The gradient never repaints: the whole disc turns (compositor only). */
+.gj-avatar{position:relative;isolation:isolate;background:none;transition:transform var(--t-mid) var(--ease-settle)}
+.gj-avatar::before,.gj-avatar::after{content:"";position:absolute;inset:0;border-radius:var(--r4);background:var(--neon-spectrum);
+  z-index:-1;animation:gj-spin var(--ring-spin) linear infinite}
+.gj-avatar::after{inset:-3px;z-index:-2;filter:blur(9px);opacity:.55;
+  animation:gj-spin var(--ring-spin) linear infinite,gj-breathe var(--ring-breathe) ease-in-out infinite}
+@media (hover:hover){ button.gj-avatar:hover{transform:scale(1.04)} }
+button.gj-avatar:active{transform:scale(.96)}
+button.gj-avatar:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
+@keyframes gj-spin{to{transform:rotate(1turn)}}
+@keyframes gj-breathe{0%,100%{opacity:.3}50%{opacity:.85}}
+.gj-story-open .gj-avatar::before,.gj-story-open .gj-avatar::after,.gj-reels-open .gj-avatar::before,.gj-reels-open .gj-avatar::after{animation-play-state:paused}
+
+/* N2 · lit type — headings glow; each flickers on once when it first comes into view (neon.js adds .is-lit) */
+.gj-sec > h2,.gj-piece h1,.gj-lit{text-shadow:var(--neon-text)}
+.gj-flick.is-lit{animation:gj-flicker .95s both;animation-timing-function:steps(1,end)}
+@keyframes gj-flicker{0%{opacity:.12}7%{opacity:.85}10%{opacity:.2}16%{opacity:1}21%{opacity:.4}27%,100%{opacity:1}}
+/* the wordmark: the spectrum flows through DÆMN (a small box, so the repaint is cheap) */
+.gj-wordmark,.theme-goja nav.bar .mark{background:var(--neon-wordmark) 0 0/6em 100% repeat-x;-webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;filter:var(--neon-drop);animation:gj-flow 10s linear infinite}
+@keyframes gj-flow{to{background-position:6em 0}}
+/* eyebrows: the leading rule becomes a lit line ending in a dot */
+.theme-goja .eyebrow::before{width:28px;height:5px;border-radius:0;filter:var(--neon-drop);
+  background:radial-gradient(circle,var(--magenta) 0 2px,transparent 2.6px) right center/5px 5px no-repeat,
+             linear-gradient(90deg,transparent,var(--goja)) left center/24px 1.5px no-repeat}
+/* a live dot before a label */
+.gj-live::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;vertical-align:1px;border-radius:var(--r4);
+  background:var(--magenta);box-shadow:var(--neon-soft)}
+/* Thai numerals beside the section numbers (๐๑ … ๐๘) — real digits, set small and lit */
+.gj-th{font-family:var(--mono);font-size:.95em;letter-spacing:.06em;color:var(--magenta);text-shadow:var(--neon-soft);margin-left:.45em}
+/* a vertical neon sign: 回転木馬 (merry-go-round) */
+.gj-profile{position:relative;padding-right:28px}
+.gj-sign{position:absolute;right:0;top:var(--s3);writing-mode:vertical-rl;font-family:var(--body);font-weight:600;font-size:12px;
+  letter-spacing:.42em;color:var(--ink-2);text-shadow:var(--neon-soft);opacity:.8;pointer-events:none}
+/* the room: a seigaiha wave under the grain, fading out down the page */
+body.theme-goja::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;
+  background:var(--pattern-wave) 0 0/48px 24px;-webkit-mask-image:linear-gradient(to bottom,black,transparent 70%);mask-image:linear-gradient(to bottom,black,transparent 70%)}
+
+/* N3 · neon controls — glass body, a rim that lights on hover, a glow + ripple on press */
+.theme-goja .btn,.gj-xpbar-in button,.gj-snapnav button,.gj-nb{position:relative}
+.theme-goja .btn,.gj-xpbar-in button,.gj-snapnav button,.gj-play,.gj-nb{overflow:hidden;isolation:isolate;
+  background-color:var(--glass);border:1px solid var(--glass-line);color:var(--ink);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-tap-highlight-color:transparent;
+  transition:border-color var(--t-fast),box-shadow var(--t-mid),color var(--t-fast),transform var(--t-fast) var(--ease-settle),opacity var(--t-mid)}
+.gj-quality select{background-color:var(--glass);border-color:var(--glass-line);transition:border-color var(--t-fast),box-shadow var(--t-mid)}
+@media (hover:hover){
+  .theme-goja .btn:hover,.gj-xpbar-in button:not(:disabled):hover,.gj-snapnav button:not(:disabled):hover,.gj-play:hover,.gj-nb:hover,
+  .gj-quality select:hover{border-color:var(--goja);box-shadow:var(--neon-edge);color:var(--ink);background-color:var(--glass);text-shadow:var(--neon-soft)}
+}
+.theme-goja .btn:active,.gj-xpbar-in button:not(:disabled):active,.gj-snapnav button:not(:disabled):active,.gj-play:active,.gj-nb:active{
+  box-shadow:var(--neon-press);border-color:var(--magenta);transform:scale(.96)}
+.gj-quality select:focus-visible,.gj-quality select:active{box-shadow:var(--neon-edge);border-color:var(--goja)}
+.theme-goja .btn::after,.gj-xpbar-in button::after,.gj-snapnav button::after,.gj-play::after,.gj-nb::after{content:"";position:absolute;
+  left:var(--rx,50%);top:var(--ry,50%);width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:var(--r4);pointer-events:none;z-index:-1;
+  background:radial-gradient(circle,var(--neon-hot),transparent 70%);opacity:0;transform:scale(0)}
+.is-rip::after{animation:gj-ripple .6s var(--ease-settle)}
+@keyframes gj-ripple{from{opacity:1;transform:scale(0)}to{opacity:0;transform:scale(16)}}
+.gj-play{background-color:var(--glass)}
+.gj-play-icon{filter:var(--neon-drop)}
+/* the post's "Open →": a lit link */
+.gj-open{transition:color var(--t-fast),text-shadow var(--t-mid)}
+.gj-post:hover .gj-open,.gj-post:focus-visible .gj-open{color:var(--magenta);text-shadow:var(--neon-soft)}
+.gj-post:hover .gj-post-media,.gj-post:focus-visible .gj-post-media{box-shadow:var(--neon-edge)}
+.gj-post-n{border:1px solid var(--glass-line)}
+.gj-upnext{transition:border-color var(--t-fast),box-shadow var(--t-mid)}
+.gj-upnext:hover{box-shadow:var(--neon-edge)}
+.gj-upnext .arrow{text-shadow:var(--neon-soft)}
+/* story segments: the track dims, the fill slides in and the current one glows */
+.gj-xp-seg button::before,.gj-xp-seg button.done::before,.gj-xp-seg button[aria-current]::before{background:var(--line-2)}
+.gj-xp-seg button::after{content:"";position:absolute;inset:5px 0;border-radius:var(--r4);background:var(--neon-line);
+  transform-origin:0 50%;transform:scaleX(0);transition:transform var(--t-slow) var(--ease-settle),opacity var(--t-mid)}
+.gj-xp-seg button.done::after{transform:scaleX(1);opacity:.4}
+.gj-xp-seg button[aria-current]::after{transform:scaleX(1);box-shadow:var(--neon-soft)}
+@media (hover:hover){ .gj-xp-seg button:hover::before{background:var(--ink-3)} }
+/* the part view's header: a torii line — the lit beam (kasagi) over a thin one (nuki) */
+.gj-app.xp-open .gj-xpbar{border-bottom:0}
+.gj-xpbar::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:6px;pointer-events:none;filter:var(--neon-drop);
+  background:linear-gradient(90deg,transparent,var(--goja) 10%,var(--magenta) 50%,var(--goja) 90%,transparent) top/100% 2px no-repeat,
+             linear-gradient(90deg,transparent 7%,var(--line-2) 13%,var(--line-2) 87%,transparent 93%) bottom/100% 1px no-repeat}
+.gj-xp-title b{text-shadow:var(--neon-soft)}
+
+/* N4 · the portal — a lit disc opens from the tapped post, the part settles in behind it (neon.js + feed.js) */
+.gj-portal{position:fixed;left:0;top:0;width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:var(--r4);pointer-events:none;z-index:45;opacity:0;
+  background:radial-gradient(circle,var(--bone) 0 55%,var(--magenta) 61%,var(--goja) 65%,var(--glow) 69%,transparent 72%)}
+.gj-portal-in{animation:gj-settle .55s var(--ease-settle) backwards}
+.gj-portal-in > .eyebrow,.gj-portal-in > h2,.gj-portal-in > .lede{animation:gj-unblur .6s var(--ease-settle) backwards}
+.gj-portal-back{animation:gj-back .5s var(--ease-settle) backwards}
+@keyframes gj-settle{from{opacity:0;transform:scale(1.06)}}
+@keyframes gj-unblur{from{opacity:0;filter:blur(8px)}}
+@keyframes gj-back{from{opacity:0;transform:scale(.965)}}
+
+/* N5 · travelling through — posts rise out of depth as they enter and sink as they leave (scroll-driven; neon.js falls back to an observer) */
+@supports (animation-timeline:view()){
+  .gj-app .gj-post{animation:gj-depth linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+}
+@keyframes gj-depth{
+  0%{opacity:.2;transform:perspective(900px) translate3d(0,64px,-90px) rotateX(9deg)}
+  30%,74%{opacity:1;transform:none}
+  100%{opacity:.5;transform:perspective(900px) translate3d(0,-22px,-60px) rotateX(-4deg)}}
+.gj-depth-io .gj-post{transition:opacity .7s ease,transform .8s var(--ease-settle)}
+.gj-depth-io .gj-post.gj-far{opacity:.2;transform:perspective(900px) translate3d(0,64px,-90px) rotateX(9deg)}
+
+/* N6 · Play on every video — a muted preview under a glass pill; the pill opens the immersive viewer (reels.js) */
+.gj-vwrap{position:relative;display:block}
+.gj-play.sm{min-height:44px;padding:10px 18px 10px 13px;gap:9px;font-size:14px;box-shadow:none}
+.gj-play.sm .gj-play-icon{border-width:7px 0 7px 12px}
+.gj-post .gj-play.sm{inset:auto var(--s3) var(--s3) auto;margin:0;z-index:2}
+.gj-vwrap.is-inline .gj-play{opacity:0;pointer-events:none}
+
+/* N7 · the story — tap the ring: DÆMN's story, full screen (story.js) */
+.gj-story,.gj-reels{position:fixed;inset:0;z-index:60;height:100dvh;background:var(--bone);color:var(--ink);overscroll-behavior:contain;
+  -webkit-tap-highlight-color:transparent}
+.gj-story{display:grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none}
+.theme-goja [hidden]{display:none!important}   /* a component's own display never un-hides it */
+.gj-story::before,.gj-reels::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 40% at 50% 0%,var(--glow) 0%,transparent 62%),radial-gradient(50% 40% at 100% 70%,var(--glow-2) 0%,transparent 60%)}
+.gj-story-frame{position:relative;width:100vw;height:100dvh;overflow:hidden;background:var(--card)}
+@media (min-width:620px){ .gj-story-frame{height:calc(100dvh - 40px);width:auto;aspect-ratio:9/16;border-radius:var(--r3);box-shadow:var(--float)} }
+.gj-story-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.gj-story-frame::before,.gj-story-frame::after{content:"";position:absolute;left:0;right:0;z-index:1;pointer-events:none}
+.gj-story-frame::before{top:0;height:130px;background:linear-gradient(var(--scrim),transparent)}
+.gj-story-frame::after{bottom:0;height:160px;background:linear-gradient(transparent,var(--scrim))}
+.gj-story-top{position:absolute;top:0;left:0;right:0;z-index:2;display:grid;gap:10px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 12px 0;transition:opacity var(--t-mid)}
+.gj-story-seg{display:flex;gap:3px}
+.gj-story-seg i{flex:1;height:2.5px;border-radius:var(--r4);background:var(--line-2);overflow:hidden}
+.gj-story-seg b{display:block;height:100%;background:var(--neon-line);transform-origin:0 50%;transform:scaleX(0)}
+.gj-story-seg i.done b{transform:scaleX(1)}
+.gj-story-seg i.on{box-shadow:var(--neon-soft)}
+.gj-story-who{display:flex;align-items:center;gap:10px;min-width:0}
+.gj-story-av{width:34px;height:34px;flex:none;border-radius:var(--r4);padding:2px;background:var(--neon-spectrum)}
+.gj-story-av img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;border-radius:var(--r4);border:2px solid var(--bone)}
+.gj-story-who > b{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-.01em}
+.gj-story-who > span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gj-story-who > .sp{flex:1}
+.gj-nb.round{width:44px;height:44px;flex:none;border-radius:var(--r4);display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:15px;line-height:1;cursor:pointer;padding:0}
+.gj-nb.pill{height:44px;padding:0 14px;border-radius:var(--r4);display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+.gj-story-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;display:grid;gap:4px;
+  padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px));transition:opacity var(--t-mid)}
+.gj-story-cap b{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.015em;line-height:1.15;text-shadow:var(--neon-text)}
+.gj-story-cap span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.gj-story.is-held .gj-story-top,.gj-story.is-held .gj-story-cap{opacity:0}
+.gj-story.is-loading .gj-story-frame{animation:gj-pulse 1.4s ease-in-out infinite}
+.gj-burst{position:fixed;left:0;top:0;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:var(--r4);pointer-events:none;z-index:70;
+  background:var(--neon-spectrum);-webkit-mask:radial-gradient(circle,transparent 58%,black 61% 68%,transparent 72%);
+  mask:radial-gradient(circle,transparent 58%,black 61% 68%,transparent 72%);opacity:0}
+.gj-story-open,.gj-story-open body,.gj-reels-open,.gj-reels-open body{overflow:hidden}
+
+/* N8 · the immersive viewer — every video, one after another; swipe up for the next (reels.js) */
+.gj-reels-track{position:relative;height:100%;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none}
+.gj-reels-track::-webkit-scrollbar{display:none}
+.gj-reel-slide{position:relative;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:grid;place-items:center;overflow:hidden}
+.gj-reel-slide > img,.gj-reel-slide > video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.gj-reel-slide > video{background:var(--bone)}
+.gj-reels-top{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;gap:10px;pointer-events:none;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 14px 28px;background:linear-gradient(var(--scrim),transparent)}
+.gj-reels-top > *{pointer-events:auto}
+.gj-reels-top .sp{flex:1;pointer-events:none}
+.gj-reels-part{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gj-reels-part b{color:var(--goja);font-weight:500;text-shadow:var(--neon-soft);margin-right:6px}
+.gj-reels-cap{position:absolute;left:0;right:0;bottom:0;z-index:3;display:grid;gap:8px;pointer-events:none;
+  padding:36px 16px calc(18px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--scrim))}
+.gj-reels-cap b{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;line-height:1.2;max-width:34ch;text-shadow:var(--neon-text)}
+.gj-reels-cap span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.gj-reels-bar{height:2px;border-radius:var(--r4);background:var(--line-2);overflow:hidden}
+.gj-reels-bar b{display:block;height:100%;max-width:none;background:var(--neon-line);transform-origin:0 50%;transform:scaleX(0)}
+.gj-reels-tip{position:absolute;left:50%;top:50%;z-index:3;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:var(--r4);
+  display:grid;place-items:center;background:var(--glass);border:1px solid var(--glass-line);pointer-events:none;opacity:0;transform:scale(.8);
+  transition:opacity var(--t-mid),transform var(--t-mid) var(--ease-settle)}
+.gj-reels.is-paused .gj-reels-tip{opacity:1;transform:none;box-shadow:var(--neon-edge)}
+.gj-reels-tip i{width:0;height:0;border-style:solid;border-width:13px 0 13px 21px;border-color:transparent transparent transparent var(--goja);margin-left:5px;filter:var(--neon-drop)}
+.gj-reels-hint{position:absolute;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:3;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);pointer-events:none;
+  animation:gj-hint 2.6s ease-in-out 3 both}
+@keyframes gj-hint{0%,100%{opacity:0;transform:translate(-50%,6px)}30%,70%{opacity:.9;transform:translate(-50%,0)}}
+
+/* N9 · the edit post's cover: the real timeline, drawn from m/edit.json, with a playhead sweeping it (neon.js) */
+.gj-ecover{position:absolute;inset:0;display:grid;align-content:center;padding:var(--s5) var(--s3);
+  background:radial-gradient(80% 60% at 50% 40%,var(--glow) 0%,transparent 70%)}
+.gj-ecover svg{display:block;width:100%;height:auto;overflow:visible}
+.gj-ecover .l{fill:var(--line)} .gj-ecover .g{stroke:var(--line);stroke-width:1}
+.gj-ecover .real{fill:var(--cyan)} .gj-ecover .ai{fill:var(--magenta)} .gj-ecover .d3{fill:var(--violet)}
+.gj-ecover .mix{fill:var(--indigo)} .gj-ecover .open{fill:var(--green)} .gj-ecover .fit{fill:var(--amber)}
+.gj-ecover .flash{fill:var(--coral)} .gj-ecover .obj{fill:var(--indigo)} .gj-ecover .kick{stroke:var(--stem-drums);stroke-width:2;stroke-linecap:round}
+.gj-ecover .c{fill:none;stroke-width:1.6;stroke-linejoin:round} .gj-ecover .c.speed{stroke:var(--cyan)} .gj-ecover .c.zoom{stroke:var(--goja)}
+.gj-ecover text{font-family:var(--mono);font-size:7.5px;letter-spacing:.1em;fill:var(--ink-3);text-transform:uppercase}
+/* the playhead: a full-width box whose left edge is the line, so the sweep is a pure translate of its own width */
+.gj-ecover .head{position:absolute;top:18%;bottom:18%;left:calc(var(--s3) + 1.3%);right:calc(var(--s3) + 1.3%);pointer-events:none;opacity:0}
+.gj-ecover .head::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:2px;border-radius:var(--r4);background:var(--ink);box-shadow:var(--neon-soft)}
+.is-focus .gj-ecover .head{opacity:1;animation:gj-sweep 9s linear infinite}
+@keyframes gj-sweep{from{transform:translateX(0)}to{transform:translateX(100%)}}
+
+@media (prefers-reduced-motion:reduce){
+  .gj-avatar::before,.gj-avatar::after,.gj-wordmark,.theme-goja nav.bar .mark,.gj-flick.is-lit,.gj-app .gj-post,.gj-portal-in,.gj-portal-in > *,
+  .gj-portal-back,.gj-reels-hint,.gj-ecover .head{animation:none!important}
+  .gj-depth-io .gj-post.gj-far{opacity:1;transform:none}
+}
+
+/* ═══ MOBILE HARDENING (2026-09-27): nothing may make the page wider than the screen ═══
+   A grid or flex child's automatic minimum is its content's min-content width; a swipe row's is its whole
+   run of cards. So every child that holds a scroller is allowed to shrink (min-width:0), every scroller
+   scrolls inside its own box, and media never outgrows its column. */
+.gj-sec > *,.gj-look > *,.gj-edit-top > *,.gj-edit-key > *,.gj-hero > *,.gj-piece > *,.gj-profile > *,.gj-posts > *,
+.gj-snap,.gj-snap > *,.gj-fig,.gj-vwrap,.gj-objs,.gj-edit,.gj-edit > *,.gj-map,.gj-xpbar-in > *{min-width:0}
+.gj-snap,.gj-map,.gj-edit-scroll,.gj-strip{max-width:100%}
+.gj-app .gj-snap{position:relative}   /* its cards measure their place from it (feed.js) */
+.gj-sec img,.gj-sec video,.gj-sec canvas{max-width:100%}
+.gj-quality{flex-wrap:wrap;max-width:100%}
+.gj-quality select{max-width:100%;min-height:44px}
+/* swipe rows show a peek of the next card, so they read as swipeable */
+@media (max-width:620px){
+  .gj-app .gj-snap{grid-auto-columns:86%;gap:var(--s3)}
+  .gj-app .gj-look > figure{max-width:min(220px,62%)}
+  .gj-edit-top{grid-template-columns:minmax(0,120px) minmax(0,1fr)}
+  .gj-snapnav button{width:44px;height:44px}
+  .gj-snapnav button,.gj-xp-nav button{font-size:20px}
+  .gj-xpbar-in button{min-width:44px;height:44px}
+  .gj-bio{font-size:15px}
+  .gj-post-cap span{font-size:14px}
+}
+/* a part sliding in from the side (feed.js .gj-in-r / .gj-in-l) must not leave the page wider for a frame:
+   the main column clips sideways (clip, not hidden: it is not a scroller, so the sticky header still sticks) */
+.gj-app main{overflow-x:clip}
+/* the top of the page is a resting place too: without it, the scroll snap pulls a taller phone down onto the piece
+   and the profile (and its story ring) can't be reached */
+.gj-app nav.bar{scroll-snap-align:start}

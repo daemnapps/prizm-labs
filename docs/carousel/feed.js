@@ -16,6 +16,13 @@
    objects becomes a row you swipe one item at a time, with a count (3 / 12)
    and arrows. page.js plays only the one thing most in view. three.js and
    the 3D scripts load only when a 3D part (sheets, objects) opens.
+
+   The portal (neon.js, window.gjPortal): opening a post, a lit disc opens
+   from the tapped cover and the part settles in behind it; closing reverses
+   it into the post you came from. Off under reduced motion.
+   A video inside a part deep-links as #part.n (the n-th video in it, from 0):
+   the part opens scrolled to that video. The immersive viewer (reels.js) uses
+   this to land you where you stopped watching (window.gjFeed).
    No colours here. */
 (() => {
   const root = document.documentElement;
@@ -27,7 +34,8 @@
   };
   if (!root.classList.contains('gj-app')) { load3d(); return; }
   const posts = [...document.querySelectorAll('.gj-post[data-go]')]
-    .map(a => ({id: a.dataset.go, title: a.dataset.title, n: a.querySelector('.gj-post-n').textContent, a, sec: document.getElementById(a.dataset.go)}))
+    .map(a => { const n = a.querySelector('.gj-post-n'), th = n.querySelector('.gj-th');
+      return {id: a.dataset.go, title: a.dataset.title, n: n.firstChild.textContent.trim(), th: th ? th.textContent : '', a, sec: document.getElementById(a.dataset.go)}; })
     .filter(p => p.sec);
   if (!posts.length) { root.classList.remove('gj-app'); load3d(); return; }
   const ALIAS = {sound: 'sound-map', stems: 'sound-map', map: 'edit', carousel: 'objects', bible: 'sheets', making: 'how', bonus: 'memes', words: 'vocab'};
@@ -53,10 +61,12 @@
     nav.innerHTML = '<button type="button" aria-label="Previous">‹</button><span class="gj-count" aria-live="polite"><b>1</b> / ' + n + '</span><button type="button" aria-label="Next">›</button>';
     box.after(nav);
     const [pb, nb] = nav.querySelectorAll('button'), cnt = nav.querySelector('b');
-    const pitch = () => row.clientWidth + (parseFloat(getComputedStyle(row).columnGap) || 0);
-    const at = () => Math.max(0, Math.min(n - 1, Math.round(row.scrollLeft / (pitch() || 1))));
+    // the item in view is the one whose centre is nearest the row's centre (works with a peek of the next card)
+    const at = () => { const c = row.scrollLeft + row.clientWidth / 2; let best = 0, bd = Infinity;
+      items.forEach((it, i) => { const d = Math.abs(it.offsetLeft + it.offsetWidth / 2 - c); if (d < bd) { bd = d; best = i; } }); return best; };
     const paint = () => { const i = at(); cnt.textContent = i + 1; pb.disabled = i === 0; nb.disabled = i === n - 1; };
-    const to = i => row.scrollTo({left: Math.max(0, Math.min(n - 1, i)) * pitch(), behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth'});
+    const to = i => { const it = items[Math.max(0, Math.min(n - 1, i))];
+      row.scrollTo({left: it.offsetLeft + it.offsetWidth / 2 - row.clientWidth / 2, behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth'}); };
     pb.addEventListener('click', () => to(at() - 1)); nb.addEventListener('click', () => to(at() + 1));
     let raf = 0; row.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; paint(); }); }, {passive: true});
     row.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { to(at() + 1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { to(at() - 1); e.preventDefault(); } });
@@ -77,7 +87,16 @@
 
   let cur = -1, feedY = 0;
 
-  function show(i, dir) {
+  // the n-th video of a part, in view: its swipe row turned to it, the page scrolled so it sits in the middle
+  function toItem(sec, k) {
+    const v = sec.querySelectorAll('video')[k];
+    if (!v) return;
+    const slide = v.closest('.gj-snap > *');
+    if (slide) { const row = slide.parentElement; row.scrollLeft = slide.offsetLeft + slide.offsetWidth / 2 - row.clientWidth / 2; }
+    v.scrollIntoView({block: 'center'});
+  }
+
+  function show(i, dir, how) {
     if (i === cur) return;
     const p = posts[i];
     if (cur === -1) feedY = scrollY;
@@ -85,10 +104,12 @@
     posts.forEach((q, j) => q.sec.classList.toggle('on', j === i));
     root.classList.add('xp-open');
     const s = p.sec;
-    s.classList.remove('gj-in', 'gj-in-l', 'gj-in-r'); void s.offsetWidth;
-    s.classList.add(dir > 0 ? 'gj-in-r' : dir < 0 ? 'gj-in-l' : 'gj-in');
+    s.classList.remove('gj-in', 'gj-in-l', 'gj-in-r', 'gj-portal-in'); void s.offsetWidth;
+    s.classList.add(how === 'portal' ? 'gj-portal-in' : dir > 0 ? 'gj-in-r' : dir < 0 ? 'gj-in-l' : 'gj-in');
     cur = i;
-    num.textContent = p.n; ttl.textContent = p.title;
+    num.textContent = p.n;
+    if (p.th) { const t = document.createElement('span'); t.className = 'gj-th'; t.lang = 'th'; t.textContent = p.th; num.appendChild(t); }
+    ttl.textContent = p.title;
     prev.disabled = i === 0;
     next.setAttribute('aria-label', i === posts.length - 1 ? 'Back to the feed' : 'Next post');
     segs.forEach((b, j) => { b.classList.toggle('done', j < i); if (j === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
@@ -96,7 +117,7 @@
     const nx = posts[(i + 1) % posts.length], media = nx.a.querySelector('.gj-post-media');
     up.href = '#' + nx.id; up.querySelector('b').textContent = nx.title;
     up.querySelector('.label').textContent = i === posts.length - 1 ? 'Back to the start' : 'Up next';
-    const slot = up.querySelector('.gj-post-media'), cover = media.querySelector('img, .gj-mosaic, .gj-reel, .gj-bars, .gj-type');
+    const slot = up.querySelector('.gj-post-media'), cover = media.querySelector('.gj-ecover, .gj-mosaic, .gj-reel, .gj-bars, .gj-type, img');
     const still = media.querySelector('video');
     slot.replaceChildren();
     if (still) { const im = new Image(); im.src = still.getAttribute('poster') || still.dataset.poster; im.alt = ''; im.decoding = 'async'; slot.appendChild(im); }
@@ -109,23 +130,51 @@
     requestAnimationFrame(() => { dispatchEvent(new Event('resize')); dispatchEvent(new Event('scroll')); });
   }
 
-  function feed() {
-    if (cur === -1) return;
+  function feed(y) {
+    if (cur === -1) { if (y !== undefined) scrollTo(0, y); return; }
     const was = cur; cur = -1;
-    posts.forEach(q => q.sec.classList.remove('on'));
-    root.classList.remove('xp-open');
-    document.title = TITLE;
-    scrollTo(0, feedY);
-    posts[was].a.focus({preventScroll: true});
-    requestAnimationFrame(() => dispatchEvent(new Event('scroll')));
+    const swap = () => {
+      posts.forEach(q => q.sec.classList.remove('on'));
+      root.classList.remove('xp-open');
+      document.title = TITLE;
+      scrollTo(0, y !== undefined ? y : feedY);
+      posts[was].a.focus({preventScroll: true});
+      requestAnimationFrame(() => dispatchEvent(new Event('scroll')));
+    };
+    const P = window.gjPortal;
+    if (P && P.ok() && y === undefined) P.close(swap, () => posts[was].a.querySelector('.gj-post-media'),
+      ['.gj-profile', '.gj-hero', '.gj-feed'].map(q => document.querySelector(q)));
+    else swap();
   }
 
-  const find = hash => { const h = decodeURIComponent(hash.replace(/^#/, '')); const id = ALIAS[h] || h; return posts.findIndex(p => p.id === id); };
+  // '#edit' → the edit; '#vocab.12' → the vocabulary, at its 13th video
+  const find = hash => { const [h0, k] = decodeURIComponent(hash.replace(/^#/, '')).split('.'); const id = ALIAS[h0] || h0;
+    const i = posts.findIndex(p => p.id === id); return {i, k: k === undefined || k === '' ? -1 : parseInt(k, 10)}; };
   function route() {
-    const i = find(location.hash);
-    if (i >= 0) show(i, cur >= 0 ? Math.sign(i - cur) : 0); else feed();
+    const {i, k} = find(location.hash);
+    if (i >= 0) { show(i, cur >= 0 ? Math.sign(i - cur) : 0); if (k >= 0) requestAnimationFrame(() => toItem(posts[i].sec, k)); }
+    else feed();
   }
-  function open(i) { history.pushState({xp: 1}, '', '#' + posts[i].id); show(i, 0); }
+  function open(i) {
+    history.pushState({xp: 1}, '', '#' + posts[i].id);
+    const P = window.gjPortal;
+    if (P && P.ok()) P.open(posts[i].a.querySelector('.gj-post-media'), () => show(i, 0, 'portal'));
+    else show(i, 0);
+  }
+  /* for the immersive viewer: land on part `id` at its k-th video (push: add a history step from the feed),
+     or back on the feed at scroll y */
+  window.gjFeed = {
+    part: () => (cur >= 0 ? posts[cur].id : null),
+    land(id, k, push) {
+      const i = posts.findIndex(p => p.id === id);
+      if (i < 0) return;
+      const url = '#' + id + (k >= 0 ? '.' + k : '');
+      if (push) history.pushState({xp: 1}, '', url); else history.replaceState(history.state, '', url);
+      if (cur !== i) show(i, 0);
+      requestAnimationFrame(() => toItem(posts[i].sec, k >= 0 ? k : 0));
+    },
+    feed(y) { feed(y); }
+  };
   function close() {
     if (history.state && history.state.xp) history.back();
     else { history.replaceState(null, '', location.pathname + location.search); feed(); }
@@ -162,7 +211,7 @@
   });
 
   // swipe sideways between parts, except on things that are dragged sideways themselves
-  const NOSWIPE = '.gj-snap, .gj-map, .gj-edit, .gj-carousel, .gj-objs, video[controls], audio, .gj-xp-seg';
+  const NOSWIPE = '.gj-snap, .gj-map, .gj-edit, .gj-carousel, .gj-objs, video[controls], audio, .gj-xp-seg, .gj-story, .gj-reels';
   let sx = 0, sy = 0, st = 0, ok = false;
   addEventListener('touchstart', e => {
     ok = cur >= 0 && e.touches.length === 1 && !(e.target.closest && e.target.closest(NOSWIPE));

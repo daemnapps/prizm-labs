@@ -22,7 +22,8 @@
      focus until it stops. */
   const clips = [...document.querySelectorAll('video[data-clip]')];
   const piece = document.getElementById('piece');
-  const watched = [...new Set([piece, ...clips, ...document.querySelectorAll('[data-focus]')])].filter(Boolean);
+  // the edit's own player is a preview like the rest: it loops muted while it is the focus
+  const watched = [...new Set([piece, document.getElementById('edit-video'), ...clips, ...document.querySelectorAll('[data-focus]')])].filter(Boolean);
   const isClip = el => el.tagName === 'VIDEO';
   // phones only autoplay a clip that is muted and inline as properties, set before the source loads
   const prime = v => {
@@ -37,7 +38,7 @@
     clips.forEach(v => { still.observe(v); near.observe(v); });
 
     const seen = new Map();
-    let focus = null, manual = null, blocked = false, ours = false;
+    let focus = null, manual = null, blocked = false, ours = false, hold = false;
     const TH = Array.from({length: 21}, (_, i) => i / 20);
     const io = new IntersectionObserver(es => {
       const vw = innerWidth, vh = innerHeight;
@@ -74,7 +75,7 @@
         document.dispatchEvent(new CustomEvent('gj-focus', {detail: el}));
       }
       if (focus && isClip(focus)) {
-        if (manual || focus.held) pause(focus);
+        if (manual || focus.held || hold) pause(focus);
         else if (focus.paused) { prime(focus); tryPlay(focus); }
       }
     }
@@ -92,7 +93,14 @@
     const release = e => { if (e.target === manual) { manual = null; focusOn(focus); } };
     document.addEventListener('pause', release, true); document.addEventListener('ended', release, true);
     // if the phone still refuses to autoplay (Low Power Mode), the first touch anywhere starts the focus
-    const wake = () => { if (!blocked) return; blocked = false; if (focus && isClip(focus) && !manual) tryPlay(focus); };
+    /* the story or the immersive viewer is open over the page: everything behind it stops (one focus at a time),
+       and picks up where it was when it closes */
+    document.addEventListener('gj-hold', e => {
+      hold = !!e.detail;
+      if (hold) { watched.filter(isClip).forEach(pause); if (manual && !manual.paused) manual.pause(); }
+      else { if (manual && (manual.paused || !manual.isConnected)) manual = null; focusOn(focus); }
+    });
+    const wake = () => { if (!blocked || hold) return; blocked = false; if (focus && isClip(focus) && !manual) tryPlay(focus); };
     addEventListener('touchstart', wake, {passive: true}); addEventListener('click', wake);
   } else clips.forEach(v => { if (v.dataset.poster) v.poster = v.dataset.poster; v.src = v.dataset.clip; });
 
