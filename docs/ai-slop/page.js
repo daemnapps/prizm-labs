@@ -102,7 +102,7 @@
       let t = null;
       if (loop && !loop.paused) t = loop.currentTime % m.L;
       else if (remix && !remix.paused) t = m.remixAt + remix.currentTime;
-      else if (piece && !piece.paused) t = piece.currentTime % m.L;
+      else if (piece && !piece.paused) { const pt = piece.currentTime - 3.6; t = pt >= 0 ? pt % m.L : null; }   // the piece opens with the 3.6s scroll stopper
       if (t === null) { m.head.classList.remove('on'); }
       else {
         const px = f(m.x(t)); m.head.setAttribute('x1', px); m.head.setAttribute('x2', px); m.head.classList.add('on');
@@ -114,6 +114,138 @@
 
   const load = () => fetch(box.dataset.src).then(r => r.json()).then(d => follow(draw(d))).catch(e => {
     box.textContent = 'The stem map could not load.'; console.warn('stem map', e);
+  });
+  if ('IntersectionObserver' in window) {
+    const near = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { near.disconnect(); load(); } }, {rootMargin: '800px 0px'});
+    near.observe(box);
+  } else load();
+})();
+
+/* ── 3. the edit map ─────────────────────────────────────────────────────
+   The whole 42.3-second piece as a stack of layers on one clock, from m/edit.json
+   (build_edit_map.py): the picture, the scenes, the camera, the jump cuts, the
+   outfit swaps, the persona flashes, the 3D objects, the finish and the sound.
+   Its own player sits above it: the playhead follows it, a tap on the map jumps
+   the video there, and the line under the player names what is on screen. */
+(() => {
+  const box = document.getElementById('edit-map');
+  if (!box) return;
+  const vid = document.getElementById('edit-video'), now = document.getElementById('edit-now');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text !== undefined) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const f = n => Math.round(n * 10) / 10;
+  const clock = t => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
+
+  function draw(d) {
+    const PX = 64, W = Math.ceil(d.total * PX) + 16, x = t => 8 + t * PX;
+    const LANES = [['ruler', '', 22], ['film', 'Picture', 100], ['scenes', 'Scenes', 44], ['camera', 'Camera', 50],
+      ['jumps', 'Jump cuts', 28], ['outfits', 'Outfits', 34], ['flashes', 'Personas', 34], ['objects', '3D objects', 50],
+      ['finish', 'Finish', 50], ['sound', 'Sound', 44]];
+    const top = {}; let y = 0;
+    LANES.forEach(([k, , h]) => { top[k] = y; y += h; });
+    const H = y + 6;
+    const labels = box.querySelector('.gj-edit-labels'), scroll = box.querySelector('.gj-edit-scroll');
+    labels.replaceChildren(...LANES.map(([k, name, h]) => { const s = document.createElement('span'); s.textContent = name; s.style.height = h + 'px'; return s; }));
+    const svg = el('svg', {width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img',
+      'aria-label': 'The edit as layers over 42.3 seconds: picture, scenes, camera, jump cuts, outfits, personas, 3D objects, finish and sound.'});
+    const tip = (n, t) => { el('title', {}, n, t); return n; };
+    const band = (k, a, b, cls, row = 0, rows = 1, label) => {
+      const h = (LANES.find(l => l[0] === k)[2] - 10) / rows, yy = top[k] + 5 + row * h;
+      const r = el('rect', {class: cls, x: f(x(a)), y: f(yy + 1), width: f(Math.max(2, x(b) - x(a) - 1)), height: f(h - 2), rx: 3}, svg);
+      if (label && x(b) - x(a) > label.length * 6.2 + 8) el('text', {class: 't-in', x: f(x(a) + 5), y: f(yy + h / 2 + 4)}, svg, label);
+      return r;
+    };
+    // the loop starts after the opener: shade the opener, rule every lane
+    el('rect', {class: 'e-pre', x: x(0), y: 0, width: f(x(d.pre) - x(0)), height: H}, svg);
+    LANES.slice(1).forEach(([k]) => el('line', {class: 'grid', x1: 0, x2: W, y1: top[k], y2: top[k]}, svg));
+    // the ruler: seconds, and the bar numbers of the loop
+    for (let s = 0; s <= d.total; s++) {
+      el('line', {class: 'grid' + (s % 5 ? '' : ' bar1'), x1: x(s), x2: x(s), y1: 14, y2: H}, svg);
+      if (s % 5 === 0) el('text', {class: 't-bar', x: x(s) + 3, y: 12}, svg, clock(s).replace('.0', ''));
+    }
+    // picture
+    const fm = d.film, fh = LANES[1][2] - 4, fw = fh * fm.w / fm.h, n = Math.floor(d.total / fm.step);
+    const clip = el('clipPath', {id: 'e-film'}, el('defs', {}, svg));
+    el('rect', {x: x(0), y: top.film + 2, width: f(x(d.total) - x(0)), height: fh}, clip);
+    const g = el('g', {'clip-path': 'url(#e-film)'}, svg);
+    for (let i = 0; i < n; i++) {
+      const sv = el('svg', {x: f(x(i * fm.step)), y: top.film + 2, width: f(fm.step * PX), height: fh, viewBox: `${i * fm.w} 0 ${fm.w} ${fm.h}`, preserveAspectRatio: 'xMidYMid slice'}, g);
+      el('image', {href: fm.src, x: 0, y: 0, width: n * fm.w, height: fm.h}, sv);
+    }
+    // scenes
+    d.scenes.forEach(s => tip(band('scenes', s.a, s.b, 'e-scene ' + s.kind, 0, 1, s.n), `${s.n} · ${s.name || ''} — ${s.what}`));
+    // camera: moves on two rows, turns at the cuts as marks
+    d.camera.forEach((c, i) => tip(band('camera', c.a, c.b, 'e-cam', i === 0 || i === 5 ? 0 : 1, 2, c.t), c.t));
+    d.camera.filter(c => c.hat).forEach(c => el('circle', {class: 'e-hat', cx: f(x(c.hat)), cy: top.camera + 30, r: 4}, svg));
+    d.turns.forEach(t => tip(el('path', {class: 'e-turn', d: `M${f(x(t))} ${top.camera + 3} l5 5 -5 5 -5 -5z`}, svg), 'turn + push around him at the cut'));
+    // jump cuts
+    d.jumps.forEach(t => tip(el('line', {class: 'e-jump', x1: f(x(t)), x2: f(x(t)), y1: top.jumps + 6, y2: top.jumps + 22}, svg), 'jump cut on the kick'));
+    // outfits, personas
+    d.outfits.forEach(o => tip(band('outfits', o.a, o.b, 'e-fit', 0, 1, o.o), 'AI him in the ' + o.o + ' look, same motion'));
+    d.flashes.forEach(p => {
+      tip(band('flashes', p.a, p.b + 0.05, 'e-flash'), p.p + ' flash · 4 frames');
+      el('text', {class: 't-flash', x: f(x(p.b) + 5), y: top.flashes + 21}, svg, p.p);
+    });
+    // 3D objects on two rows, with the hand-offs at the lens
+    d.objects.forEach((o, i) => {
+      tip(band('objects', o.a, o.b, 'e-obj', i % 2, 2, o.o), o.o);
+      o.lens.forEach(t => el('circle', {class: 'e-lens', cx: f(x(t)), cy: top.objects + 5 + (i % 2) * 20 + 10, r: 3.5}, svg));
+    });
+    // finish
+    d.finish.forEach((q, i) => tip(band('finish', q.a, q.b, 'e-fin' + (i === 2 ? ' frz' : ''), i === 2 ? 1 : i, 2, q.t), q.t));
+    // sound: the phone-speaker lead-in, bars, kicks
+    tip(band('sound', d.sound.pre[0], d.sound.pre[1], 'e-lead', 0, 1, 'lead-in'), 'the song, thin like a phone speaker, opening up');
+    d.sound.bars.forEach((t, i) => {
+      el('line', {class: 'e-barl', x1: f(x(t)), x2: f(x(t)), y1: top.sound + 4, y2: top.sound + 40}, svg);
+      if (i < 12) el('text', {class: 't-bar', x: f(x(t) + 4), y: top.sound + 15}, svg, 'bar ' + (i + 1));
+    });
+    d.sound.kicks.forEach(t => el('line', {class: 'kick', x1: f(x(t)), x2: f(x(t)), y1: top.sound + 22, y2: top.sound + 38}, svg));
+    const head = el('line', {class: 'head on', x1: x(0), x2: x(0), y1: 0, y2: H}, svg);
+    scroll.replaceChildren(svg);
+    return {d, x, PX, head, svg, scroll};
+  }
+
+  function live(m) {
+    const {d} = m, at = (list, t) => list.find(o => o.a <= t && t < o.b);
+    const say = t => {
+      const s = at(d.scenes, t), o = at(d.outfits, t), p = at(d.flashes, t), b = at(d.objects, t), c = d.camera.filter(c => c.a <= t && t < c.b).pop();
+      const bits = [clock(t), s ? `scene ${s.n}${s.name ? ' · ' + s.name : ''}` : ''];
+      if (p) bits.push(p.p + ' flash'); else if (o) bits.push(o.o + ' look');
+      if (b) bits.push(b.o); if (c) bits.push(c.t);
+      if (now) now.textContent = bits.filter(Boolean).join('  ·  ');
+    };
+    let raf = 0, seen = false, last = -1;
+    const tick = () => {
+      raf = 0;
+      const piece = document.getElementById('piece');
+      const src = vid && !vid.paused ? vid : piece && !piece.paused ? piece : vid;
+      const t = src ? src.currentTime % d.total : 0;
+      if (Math.abs(t - last) > 0.01) {
+        last = t; const px = f(m.x(t)); m.head.setAttribute('x1', px); m.head.setAttribute('x2', px); say(t);
+        if (src && !src.paused) {                       // keep the playhead in view while it plays
+          const sc = m.scroll, left = px - sc.clientWidth * 0.35;
+          if (px < sc.scrollLeft + 40 || px > sc.scrollLeft + sc.clientWidth - 60) sc.scrollLeft = left;
+        }
+      }
+      if (seen) raf = requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(es => { seen = es[0].isIntersecting; if (seen && !raf) raf = requestAnimationFrame(tick); }).observe(box);
+    m.svg.addEventListener('click', e => {             // tap the map: the video jumps there
+      const r = m.svg.getBoundingClientRect(), t = Math.max(0, Math.min(d.total - 0.05, (e.clientX - r.left - 8) / m.PX));
+      if (vid) { vid.currentTime = t; const p = vid.play(); p && p.catch && p.catch(() => {}); }
+      say(t);
+    });
+    say(0);
+  }
+
+  const load = () => fetch(box.dataset.src).then(r => r.json()).then(d => live(draw(d))).catch(e => {
+    box.querySelector('.gj-edit-scroll').textContent = 'The edit map could not load.'; console.warn('edit map', e);
   });
   if ('IntersectionObserver' in window) {
     const near = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { near.disconnect(); load(); } }, {rootMargin: '800px 0px'});
