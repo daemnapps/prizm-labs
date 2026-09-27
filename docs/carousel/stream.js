@@ -6,8 +6,8 @@
    build_web_video.py makes v/ and the q-*.mp4 files. Markup: <select data-quality-for="piece"> next to the video.
    window.gjStream.attach(video) gives any other player (the immersive viewer) the same choice. */
 (() => {
-  const MASTER = 'v/master.m3u8?v=1';
-  const FIXED = {'1080': 'q-1080.mp4?v=1', '720': 'carousel.mp4?v=14', '540': 'q-540.mp4?v=1', '360': 'q-360.mp4?v=1'};
+  const MASTER = 'v/master.m3u8?v=2';
+  const FIXED = {'1080': 'q-1080.mp4?v=2', '720': 'carousel.mp4?v=15', '540': 'q-540.mp4?v=2', '360': 'q-360.mp4?v=2'};
   const vids = ['piece', 'edit-video'].map(id => document.getElementById(id)).filter(Boolean);
   if (!vids.length) return;
   const KEY = 'carousel-quality';
