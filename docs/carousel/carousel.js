@@ -357,7 +357,9 @@ export function mountCarousel(el, label){
 
   /* ── load the riders, front seats first, and give each its lifelike finish ── */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
-  const base = new URL('objects/', import.meta.url);
+  // phones get the light copies (textures capped at 1024px, build_mobile_objects.mjs); big screens the full ones
+  const PHONE = matchMedia('(max-width: 820px), (pointer: coarse)').matches;
+  const base = new URL(PHONE ? 'objects-m/' : 'objects/', import.meta.url);
   const order = seats.map((s, i) => [Math.min(i, N - i), s]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
   let q = 0, done = 0, doneAt = 0;
   const next = () => {

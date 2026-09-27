@@ -80,7 +80,8 @@ function setup(grid) {
   function load(v) {
     if (v.state !== 'idle') return; v.state = 'loading';
     const r = v.tile.dataset.life ? JSON.parse(v.tile.dataset.life) : {};
-    loader.load(v.tile.dataset.glb, g => {
+    const PHONE = matchMedia('(max-width: 820px), (pointer: coarse)').matches;   // phones: the light copies (objects-m/)
+    loader.load(PHONE ? v.tile.dataset.glb.replace('objects/', 'objects-m/') : v.tile.dataset.glb, g => {
       const obj = g.scene;
       obj.traverse(o => { if (o.isMesh) o.material = Array.isArray(o.material) ? o.material.map(m => lifelike(m, r)) : lifelike(o.material, r); });
       const box = new THREE.Box3().setFromObject(obj), c = box.getCenter(new THREE.Vector3());

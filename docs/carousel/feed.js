@@ -23,7 +23,7 @@
   let three = false;
   const load3d = () => {
     if (three) return; three = true;
-    ['carousel.js?v=6', 'objects-grid.js?v=3'].forEach(src => { const s = document.createElement('script'); s.type = 'module'; s.src = src; document.body.appendChild(s); });
+    ['carousel.js?v=7', 'objects-grid.js?v=4'].forEach(src => { const s = document.createElement('script'); s.type = 'module'; s.src = src; document.body.appendChild(s); });
   };
   if (!root.classList.contains('gj-app')) { load3d(); return; }
   const posts = [...document.querySelectorAll('.gj-post[data-go]')]
