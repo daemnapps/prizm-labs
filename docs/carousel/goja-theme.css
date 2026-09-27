@@ -229,6 +229,17 @@ body.theme-goja::after{opacity:.06}
 .gj-memes figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
 .gj-memes figcaption b{display:block;color:var(--goja);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
 
+/* the quality picker under the piece (stream.js): Auto, or a fixed quality up to the 1080p master */
+.gj-quality{display:inline-flex;align-items:center;gap:var(--s2);font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3)}
+.gj-quality select{appearance:none;-webkit-appearance:none;font:inherit;letter-spacing:.06em;color:var(--ink);background:var(--card);
+  border:1px solid var(--line-2);border-radius:999px;padding:8px 30px 8px 14px;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.gj-quality select:focus-visible{outline:2px solid var(--goja);outline-offset:2px}
+.gj-piece .btns{display:flex;flex-wrap:wrap;gap:var(--s2);justify-content:center;align-items:center}
+.gj-edit-top .gj-quality{margin-top:var(--s2)}
+
 /* how it was made: a pipeline, left to right (top to bottom on a phone) */
 .gj-pipe{list-style:none;padding:0;margin:0;max-width:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s2);
   counter-reset:gp}
