@@ -145,7 +145,8 @@
   function draw(d) {
     const PX = 64, W = Math.ceil(d.total * PX) + 16, x = t => 8 + t * PX;
     const LANES = [['ruler', '', 22], ['film', 'Picture', 100], ['scenes', 'Scenes', 44], ['camera', 'Camera', 50],
-      ['jumps', 'Jump cuts', 28], ['outfits', 'Outfits', 34], ['flashes', 'Personas', 34], ['objects', '3D objects', 50],
+      ['speed', 'Speed', 64], ['zoom', 'Zoom', 52], ['turn', 'Turn', 52], ['reframe', 'Reframe', 44], ['picture', 'Treatment', 50],
+      ['jumps', 'Jump cuts', 28], ['outfits', 'Outfits', 34], ['flashes', 'Personas', 34], ['objects', '3D objects', 50], ['osize', 'Object size', 48], ['ospeed', 'Object speed', 48],
       ['finish', 'Finish', 50], ['sound', 'Sound', 44]];
     const top = {}; let y = 0;
     LANES.forEach(([k, , h]) => { top[k] = y; y += h; });
@@ -184,6 +185,30 @@
     d.camera.forEach((c, i) => tip(band('camera', c.a, c.b, 'e-cam', i === 0 || i === 5 ? 0 : 1, 2, c.t), c.t));
     d.camera.filter(c => c.hat).forEach(c => el('circle', {class: 'e-hat', cx: f(x(c.hat)), cy: top.camera + 30, r: 4}, svg));
     d.turns.forEach(t => tip(el('path', {class: 'e-turn', d: `M${f(x(t))} ${top.camera + 3} l5 5 -5 5 -5 -5z`}, svg), 'turn + push around him at the cut'));
+    // the picture and the movement, frame by frame: curves on the loop's clock (the opener is a 3D render)
+    const C = d.curves, ct = i => C.start + i / C.fps;
+    const curve = (k, arr, lo, hi, cls, refs) => {
+      const h = LANES.find(l => l[0] === k)[2], y0 = top[k] + 6, yh = h - 12;
+      const yy = v => f(y0 + yh - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * yh);
+      (refs || []).forEach(([v, t]) => {
+        el('line', {class: 'e-ref', x1: x(C.start), x2: x(d.total), y1: yy(v), y2: yy(v)}, svg);
+        el('text', {class: 't-ref', x: f(x(C.start) - 4), y: yy(v) + 3, 'text-anchor': 'end'}, svg, t);
+      });
+      let path = '', pen = false;
+      arr.forEach((v, i) => {
+        if (v === null || v === undefined) { pen = false; return; }
+        path += (pen ? 'L' : 'M') + f(x(ct(i))) + ' ' + yy(v); pen = true;
+      });
+      el('path', {class: 'e-curve ' + cls, d: path}, svg);
+    };
+    curve('speed', C.speed, -4, 6, 'c-speed', [[0, ''], [-3, '−3×'], [5, '5×']]);
+    curve('zoom', C.zoom, 1, 2.1, 'c-zoom', [[1, '1×'], [1.5, '1.5×'], [2, '2×']]);
+    curve('turn', C.turn, -12, 12, 'c-turn', [[0, '0°'], [11, '11°'], [-11, '−11°']]);
+    curve('reframe', C.reframe, 0, Math.max(60, ...C.reframe), 'c-ref', [[0, '0'], [Math.round(Math.max(...C.reframe) / 10) * 10, Math.round(Math.max(...C.reframe) / 10) * 10 + 'px']]);
+    d.picture.forEach(q => tip(band('picture', q.a, q.b, 'e-pic' + (q.row ? ' r1' : ''), q.row, 2, q.t), q.t));
+    curve('osize', C.osize, 0, 3.6, 'c-osize', [[1, '1×'], [3.4, 'at lens']]);
+    curve('ospeed', C.ospeed, 0, 120, 'c-ospeed', [[0, '0'], [14, 'smear'], [100, '100px']]);
+    const _o = el('text', {class: 't-ref', x: f(x(d.pre / 2)), y: top.zoom + 30, 'text-anchor': 'middle'}, svg, 'opener: a 3D render');
     // jump cuts
     d.jumps.forEach(t => tip(el('line', {class: 'e-jump', x1: f(x(t)), x2: f(x(t)), y1: top.jumps + 6, y2: top.jumps + 22}, svg), 'jump cut on the kick'));
     // outfits, personas
@@ -218,6 +243,11 @@
       const bits = [clock(t), s ? `scene ${s.n}${s.name ? ' · ' + s.name : ''}` : ''];
       if (p) bits.push(p.p + ' flash'); else if (o) bits.push(o.o + ' look');
       if (b) bits.push(b.o); if (c) bits.push(c.t);
+      const i = Math.round((t - d.curves.start) * d.curves.fps);
+      if (i >= 0 && i < d.curves.zoom.length) {
+        const sp = d.curves.speed[i];
+        bits.push(`speed ${sp === null ? '3D' : sp.toFixed(1) + '×'} · zoom ${d.curves.zoom[i].toFixed(2)}× · turn ${d.curves.turn[i].toFixed(0)}°`);
+      }
       if (now) now.textContent = bits.filter(Boolean).join('  ·  ');
     };
     let raf = 0, seen = false, last = -1;

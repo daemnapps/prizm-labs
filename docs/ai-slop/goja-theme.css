@@ -192,6 +192,13 @@ body.theme-goja::after{opacity:.06}
 .gj-edit .e-lead{fill:var(--green);opacity:.5}
 .gj-edit .e-barl{stroke:var(--line-2)}
 .gj-edit .kick{stroke:var(--stem-drums);stroke-width:2;stroke-linecap:round}
+.gj-edit .e-ref{stroke:var(--line);stroke-dasharray:2 4}
+.gj-edit .t-ref{font-size:9px;fill:var(--ink-3)}
+.gj-edit .e-curve{fill:none;stroke-width:1.75;stroke-linejoin:round}
+.gj-edit .c-speed{stroke:var(--cyan)} .gj-edit .c-zoom{stroke:var(--goja)} .gj-edit .c-turn{stroke:var(--magenta)}
+.gj-edit .c-ref{stroke:var(--green)} .gj-edit .c-osize{stroke:var(--indigo)} .gj-edit .c-ospeed{stroke:var(--amber)}
+.gj-edit .e-pic{fill:var(--ink-3);opacity:.55} .gj-edit .e-pic.r1{fill:var(--cyan);opacity:.45}
+.gj-edit .e-pic + .t-in{fill:var(--ink)}
 .gj-edit .head{stroke:var(--ink);stroke-width:1.5;opacity:.95}
 .gj-edit rect:hover{filter:brightness(1.25)}
 @media (max-width:620px){
@@ -200,6 +207,19 @@ body.theme-goja::after{opacity:.06}
   .gj-edit-labels span{padding-left:8px;font-size:9px;letter-spacing:.08em}
   .gj-key{grid-template-columns:1fr}
 }
+
+/* live 3D objects, one per tile (objects-grid.js draws them all through one click-through canvas) */
+.gj-objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s3);margin-top:var(--s3)}
+.gj-obj{margin:0;display:grid;gap:6px;align-content:start}
+.gj-obj-view{aspect-ratio:1/1;border:1px solid var(--line);border-radius:var(--r2);touch-action:pan-y;cursor:grab;
+  background:radial-gradient(70% 70% at 50% 40%,var(--glow) 0%,transparent 70%),var(--card)}
+.gj-obj-view:active{cursor:grabbing}
+.gj-obj:not(.ready) .gj-obj-view{animation:gj-pulse 1.6s ease-in-out infinite}
+@keyframes gj-pulse{50%{opacity:.6}}
+.gj-obj figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-3)}
+.gj-obj figcaption b{display:block;color:var(--ink);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.gj-objs-canvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:5}
+@media (max-width:620px){.gj-objs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* how it was made: a pipeline, left to right (top to bottom on a phone) */
 .gj-pipe{list-style:none;padding:0;margin:0;max-width:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s2);
