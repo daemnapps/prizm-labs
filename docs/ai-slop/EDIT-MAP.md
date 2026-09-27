@@ -33,7 +33,7 @@ Every layer of the 42.3s piece on one clock (the 3.6s opener, then the 38.7s loo
 ## Camera
 
 - 0:03.6–0:04.1: zoom out of his eye
-- 0:03.6–0:06.8: one continuous move, flips on the kicks · lands on the hat at 2.0s
+- 0:03.6–0:06.8: one continuous move, flips on the kicks · snaps into his eye on the snare
 - 0:21.4–0:23.0: own framing: the ball lands dead centre
 - 0:29.5–0:32.7: bullet time
 - 0:35.9–0:39.1: objects orbit him
