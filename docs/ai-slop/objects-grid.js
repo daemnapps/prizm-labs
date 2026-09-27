@@ -11,8 +11,10 @@ import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 
-const tiles = [...document.querySelectorAll('.gj-obj[data-glb]')];
-if (tiles.length) {
+for (const grid of document.querySelectorAll('.gj-objs')) setup(grid);
+function setup(grid) {
+  const tiles = [...grid.querySelectorAll('.gj-obj[data-glb]')];
+  if (!tiles.length) return;
   const CALM = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
@@ -20,7 +22,7 @@ if (tiles.length) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .95;
   renderer.setClearColor(0x000000, 0); renderer.setScissorTest(true);
   const cv = renderer.domElement; cv.className = 'gj-objs-canvas'; cv.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(cv);
+  grid.appendChild(cv);
   const maxAniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
   let env = null;
@@ -95,14 +97,15 @@ if (tiles.length) {
   let raf = 0, t0 = performance.now();
   function frame(now) {
     raf = 0; const dt = Math.min(.05, (now - t0) / 1000); t0 = now;
-    const W = innerWidth, H = innerHeight;
+    const G = grid.getBoundingClientRect(), W = G.width, H = G.height, VH = innerHeight;
     if (cv.width !== Math.round(W * renderer.getPixelRatio()) || cv.height !== Math.round(H * renderer.getPixelRatio())) renderer.setSize(W, H, false);
     renderer.setScissor(0, 0, W, H); renderer.clear();
     let any = false;
     for (const v of views) {
       if (!v.seen || v.state !== 'ready') continue;
-      const b = v.view.getBoundingClientRect();
-      if (b.bottom < 0 || b.top > H || b.right < 0 || b.left > W) continue;
+      const b0 = v.view.getBoundingClientRect();
+      if (b0.bottom < 0 || b0.top > VH) continue;
+      const b = {left: b0.left - G.left, top: b0.top - G.top, width: b0.width, height: b0.height, bottom: b0.bottom - G.top};
       any = true;
       if (!v.drag) { v.vel *= Math.pow(.05, dt); v.rot += v.vel + (CALM ? 0 : .35 * dt); }
       v.pivot.rotation.set(v.tilt * .5, v.rot, 0);

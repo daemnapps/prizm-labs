@@ -17,11 +17,18 @@
     const io = new IntersectionObserver(es => es.forEach(e => {
       const v = e.target;
       if (e.isIntersecting) {
-        if (!v.src) { v.src = v.dataset.clip; }
-        if (!CALM) { const p = v.play(); p && p.catch && p.catch(() => {}); }
-      } else if (!v.paused) v.pause();
+        // phones only autoplay a clip that is muted and inline as properties, set before the source loads
+        if (!v.src) { v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.src = v.dataset.clip; v.load(); }
+        v.dataset.near = '1'; tryPlay(v);
+      } else { v.dataset.near = ''; if (!v.paused) v.pause(); }
     }), {rootMargin: '200px 0px'});
     clips.forEach(v => io.observe(v));
+    // the clips are the content, so they play even with Reduce Motion on; if the phone still refuses (Low Power Mode),
+    // the first touch anywhere starts every clip on screen
+    function tryPlay(v) { const p = v.play(); p && p.catch && p.catch(() => { blocked = true; }); }
+    let blocked = false;
+    const wakeAll = () => { if (!blocked) return; blocked = false; clips.filter(v => v.dataset.near).forEach(tryPlay); };
+    addEventListener('touchstart', wakeAll, {passive: true}); addEventListener('click', wakeAll);
   } else clips.forEach(v => { v.src = v.dataset.clip; });
 
   /* ── 2. the stem map ──────────────────────────────────────────────── */
