@@ -182,7 +182,7 @@
     // scenes
     d.scenes.forEach(s => tip(band('scenes', s.a, s.b, 'e-scene ' + s.kind, 0, 1, s.n), `${s.n} · ${s.name || ''} — ${s.what}`));
     // camera: moves on two rows, turns at the cuts as marks
-    d.camera.forEach((c, i) => tip(band('camera', c.a, c.b, 'e-cam', i === 0 || i === 5 ? 0 : 1, 2, c.t), c.t));
+    d.camera.forEach((c, i) => tip(band('camera', c.a, c.b, 'e-cam', i === 0 || i === 2 || i === 6 ? 0 : 1, 2, c.t), c.t));
     d.camera.filter(c => c.hat).forEach(c => el('circle', {class: 'e-hat', cx: f(x(c.hat)), cy: top.camera + 30, r: 4}, svg));
     d.turns.forEach(t => tip(el('path', {class: 'e-turn', d: `M${f(x(t))} ${top.camera + 3} l5 5 -5 5 -5 -5z`}, svg), 'turn + push around him at the cut'));
     // the picture and the movement, frame by frame: curves on the loop's clock (the opener is a 3D render)
