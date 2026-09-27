@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/studio.css?v=prizm12">
 <link rel="stylesheet" href="goja-theme.css?v=5">
+<link rel="stylesheet" href="vocab-section.css?v=1">
 <style>
 /* Layout only — the look is the Goja theme (goja-theme.css). */
 .gj-sec .label{margin-top:var(--s3);max-width:none}
@@ -219,9 +220,102 @@
     <p class="label gj-sound-note">Scroll sideways along the map · hold a block for its detail on desktop</p>
   </section>
 
+  <!-- 3d¾ · the vocabulary -->
+<!-- Motion vocabulary: the editing words for what happens in AI Slop, each on the moment it happens,
+     then demos (built from our own plates and 3D objects) for the words the piece does not use yet.
+     Generated from tools/moves/vocab/build.py — same clips as the Motion Vocabulary artifact.
+     Needs vocab-section.css (theme tokens only). Clips lazy-play via page.js (video[data-clip]). -->
+<section class="gj-sec gj-vocab" id="vocab">
+  <p class="eyebrow">The making of · 06 · The vocabulary</p>
+  <h2>Every move, by name.</h2>
+  <p class="lede">The words editors use for what happens in the piece, each one shown on the moment it happens. Times are on the video's clock.</p>
+  <h3>Cuts</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-hard-cut.mp4" poster="m/v-hard-cut.jpg" muted loop playsinline preload="none" aria-label="Hard cut: one shot straight into the next"></video><figcaption><b>0:27.9</b> Hard cut<span class="gj-vocab-def">One shot stops and the next starts instantly, with nothing in between.</span></figcaption></figure>
+    <figure><video data-clip="m/v-match-shape.mp4" poster="m/v-match-shape.jpg" muted loop playsinline preload="none" aria-label="Match cut — shape: stone him into stone him"></video><figcaption><b>0:32.7</b> Match cut — shape<span class="gj-vocab-def">The cut lands so a shape in one shot sits in the exact same spot as a similar shape in the next.</span></figcaption></figure>
+    <figure><video data-clip="m/v-match-motion.mp4" poster="m/v-match-motion.jpg" muted loop playsinline preload="none" aria-label="Match cut — motion: robe into silk shirt, same move"></video><figcaption><b>0:24.7</b> Match cut — motion<span class="gj-vocab-def">A movement that starts in one shot carries on in the same direction and speed in the next.</span></figcaption></figure>
+    <figure><video data-clip="m/v-match-colour.mp4" poster="m/v-match-colour.jpg" muted loop playsinline preload="none" aria-label="Match cut — colour: purple iris into purple galaxy"></video><figcaption><b>0:06.8</b> Match cut — colour<span class="gj-vocab-def">The last colour of one shot is the first colour of the next, so the eye doesn&#x27;t feel the jump.</span></figcaption></figure>
+    <figure><video data-clip="m/v-jump-cut.mp4" poster="m/v-jump-cut.jpg" muted loop playsinline preload="none" aria-label="Jump cut: skips ahead on the kick"></video><figcaption><b>0:35.1</b> Jump cut<span class="gj-vocab-def">Cutting inside the same shot so it skips ahead (or back) in time, and the picture visibly jumps.</span></figcaption></figure>
+    <figure><video data-clip="m/v-smash-cut.mp4" poster="m/v-smash-cut.jpg" muted loop playsinline preload="none" aria-label="Smash cut: calm river into the tongue"></video><figcaption><b>0:12.9</b> Smash cut<span class="gj-vocab-def">A sudden cut from one mood to the opposite — calm to loud, or loud to silent — with no warning.</span></figcaption></figure>
+    <figure><video data-clip="m/v-insert.mp4" poster="m/v-insert.jpg" muted loop playsinline preload="none" aria-label="Insert / B-roll burst: the city burst"></video><figcaption><b>0:10.1–12.9</b> Insert / B-roll burst<span class="gj-vocab-def">Short extra shots dropped in to add texture — details, places, objects — often a fast run of them.</span></figcaption></figure>
+    <figure><video data-clip="m/v-cut-beat.mp4" poster="m/v-cut-beat.jpg" muted loop playsinline preload="none" aria-label="Cut on the beat: cuts on the kick"></video><figcaption><b>0:19.8 / 0:20.6</b> Cut on the beat<span class="gj-vocab-def">Every cut lands exactly on a beat in the music, so you feel the edit in your body.</span></figcaption></figure>
+    <figure><video data-clip="m/v-flash-frame.mp4" poster="m/v-flash-frame.jpg" muted loop playsinline preload="none" aria-label="Flash frame: 4 frames of a persona (a picture, not white)"></video><figcaption><b>0:19.0</b> Flash frame<span class="gj-vocab-def">A single frame of white (or colour) between two shots — a blink of light on a hit.</span></figcaption></figure>
+  </div>
+  <h3>Transitions</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-zoom-transition.mp4" poster="m/v-zoom-transition.jpg" muted loop playsinline preload="none" aria-label="Zoom transition: into one point, out of his eye"></video><figcaption><b>0:03.6</b> Zoom transition<span class="gj-vocab-def">The camera zooms into or out of something (a screen, an eye) and that carries you into the next picture.</span></figcaption></figure>
+    <figure><video data-clip="m/v-punch-in.mp4" poster="m/v-punch-in.jpg" muted loop playsinline preload="none" aria-label="Punch-in: lands close, then settles"></video><figcaption><b>0:16.6</b> Punch-in<span class="gj-vocab-def">The frame jumps a little closer in one hard step, usually on a beat, then settles.</span></figcaption></figure>
+    <figure><video data-clip="m/v-object-wipe.mp4" poster="m/v-object-wipe.jpg" muted loop playsinline preload="none" aria-label="Object wipe: the helmet fills the lens"></video><figcaption><b>0:18.1</b> Object wipe<span class="gj-vocab-def">Something passes across the lens and fills the frame, and when it clears we&#x27;re in a new shot.</span></figcaption></figure>
+    <figure><video data-clip="m/v-hand-off.mp4" poster="m/v-hand-off.jpg" muted loop playsinline preload="none" aria-label="Object hand-off: the koi, space into the pond"></video><figcaption><b>0:08.5</b> Object hand-off<span class="gj-vocab-def">An object leaves one shot through the edge of the frame and arrives in the next shot, so it carries you across.</span></figcaption></figure>
+    <figure><video data-clip="m/v-morph.mp4" poster="m/v-morph.jpg" muted loop playsinline preload="none" aria-label="Morph: stone becomes him"></video><figcaption><b>0:33.3</b> Morph<span class="gj-vocab-def">One shape or face melts smoothly into another, with no cut.</span></figcaption></figure>
+    <figure><video data-clip="m/v-iris.mp4" poster="m/v-iris.jpg" muted loop playsinline preload="none" aria-label="Iris transition: space in the iris"></video><figcaption><b>0:06.0</b> Iris transition<span class="gj-vocab-def">The picture opens or closes through a circle — here, the eye&#x27;s iris opens into another world.</span></figcaption></figure>
+    <figure><video data-clip="m/v-dissolve.mp4" poster="m/v-dissolve.jpg" muted loop playsinline preload="none" aria-label="Dissolve: the screen dissolves into frame one"></video><figcaption><b>0:41.6</b> Dissolve<span class="gj-vocab-def">One shot fades out while the next fades in on top of it, so for a moment you see both.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ramp-transition.mp4" poster="m/v-ramp-transition.jpg" muted loop playsinline preload="none" aria-label="Speed-ramp transition: speeds up into the cut"></video><figcaption><b>0:06.0–6.8</b> Speed-ramp transition<span class="gj-vocab-def">The shot speeds up hard into the cut, and the next shot comes in fast and slows down.</span></figcaption></figure>
+  </div>
+  <h3>Time</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-speed-ramp.mp4" poster="m/v-speed-ramp.jpg" muted loop playsinline preload="none" aria-label="Speed ramp: Goja, −3.2× to 5.1×"></video><figcaption><b>0:03.6–6.8</b> Speed ramp<span class="gj-vocab-def">The speed changes inside one shot: fast, then suddenly slow on the key moment, then fast again.</span></figcaption></figure>
+    <figure><video data-clip="m/v-bullet-time.mp4" poster="m/v-bullet-time.jpg" muted loop playsinline preload="none" aria-label="Time freeze / bullet time: bullet time"></video><figcaption><b>0:29.5–32.7</b> Time freeze / bullet time<span class="gj-vocab-def">Time almost stops, and the camera keeps moving around the frozen moment.</span></figcaption></figure>
+    <figure><video data-clip="m/v-reverse.mp4" poster="m/v-reverse.jpg" muted loop playsinline preload="none" aria-label="Reverse: played backwards"></video><figcaption><b>0:26.3–29.5</b> Reverse<span class="gj-vocab-def">The footage plays backwards.</span></figcaption></figure>
+    <figure><video data-clip="m/v-loop.mp4" poster="m/v-loop.jpg" muted loop playsinline preload="none" aria-label="Seamless loop: the seam"></video><figcaption><b>0:42.3 → 0:00</b> Seamless loop<span class="gj-vocab-def">The last frame hands straight back into the first, so it plays forever with no visible seam.</span></figcaption></figure>
+  </div>
+  <h3>Motion</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-keyframe.mp4" poster="m/v-keyframe.jpg" muted loop playsinline preload="none" aria-label="Keyframe: the temple, lens to lens"></video><figcaption><b>0:18.2–19.7</b> Keyframe<span class="gj-vocab-def">A point where you pin down where something is at a certain moment; the computer fills in the movement between the pins.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ease-in.mp4" poster="m/v-ease-in.jpg" muted loop playsinline preload="none" aria-label="Ease-in: the bag speeds up and leaves"></video><figcaption><b>0:29.3</b> Ease-in<span class="gj-vocab-def">Starts slow and speeds up — like something being pulled away.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ease-out.mp4" poster="m/v-ease-out.jpg" muted loop playsinline preload="none" aria-label="Ease-out: the basket slams in and settles"></video><figcaption><b>0:23.0</b> Ease-out<span class="gj-vocab-def">Starts fast and slows down to a stop — like something landing.</span></figcaption></figure>
+    <figure><video data-clip="m/v-anticipation.mp4" poster="m/v-anticipation.jpg" muted loop playsinline preload="none" aria-label="Anticipation: the racket winds back"></video><figcaption><b>0:21.5</b> Anticipation<span class="gj-vocab-def">A small move in the opposite direction just before the main move, like winding up before a throw.</span></figcaption></figure>
+    <figure><video data-clip="m/v-motion-blur.mp4" poster="m/v-motion-blur.jpg" muted loop playsinline preload="none" aria-label="Motion blur: the disco ball smears"></video><figcaption><b>0:11.7 / 12.4</b> Motion blur<span class="gj-vocab-def">Fast movement smears into a streak, the way a real camera sees speed.</span></figcaption></figure>
+    <figure><video data-clip="m/v-parallax.mp4" poster="m/v-parallax.jpg" muted loop playsinline preload="none" aria-label="Parallax: railing vs the falls"></video><figcaption><b>0:30.2</b> Parallax<span class="gj-vocab-def">Near things slide past faster than far things, which makes a flat picture feel deep.</span></figcaption></figure>
+    <figure><video data-clip="m/v-orbit.mp4" poster="m/v-orbit.jpg" muted loop playsinline preload="none" aria-label="Orbit: the objects circle him"></video><figcaption><b>0:35.9</b> Orbit<span class="gj-vocab-def">The camera circles around the subject while he stays in the middle.</span></figcaption></figure>
+  </div>
+  <h3>Tracking &amp; compositing</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-match-move.mp4" poster="m/v-match-move.jpg" muted loop playsinline preload="none" aria-label="Motion tracking / match-move: the headphones ride his selfie"></video><figcaption><b>0:13.3</b> Motion tracking / match-move<span class="gj-vocab-def">The software follows a point in real footage so a 3D object can be stuck to it and move with it.</span></figcaption></figure>
+    <figure class="wide"><video data-clip="m/v-compositing.mp4" poster="m/v-compositing.jpg" muted loop playsinline preload="none" aria-label="Compositing / layering: before the layers (left), finished (right)"></video><figcaption><b>0:18.3</b> Compositing / layering<span class="gj-vocab-def">Stacking separate layers — footage, 3D objects, text — into one finished picture.</span></figcaption></figure>
+    <figure><video data-clip="m/v-dof.mp4" poster="m/v-dof.jpg" muted loop playsinline preload="none" aria-label="Depth of field / rack focus: only the carousel is sharp"></video><figcaption><b>0:39.1</b> Depth of field / rack focus<span class="gj-vocab-def">How much of the picture is sharp; a rack focus moves the sharp spot from one thing to another.</span></figcaption></figure>
+  </div>
+  <h3>Sound-led</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-hit-point.mp4" poster="m/v-hit-point.jpg" muted loop playsinline preload="none" aria-label="Hit point: ball at the lens on the bar"></video><figcaption><b>0:23.0</b> Hit point<span class="gj-vocab-def">The exact moment in the music a picture event must land on — a hit, a drop, a snare.</span></figcaption></figure>
+    <figure><video data-clip="m/v-downbeat.mp4" poster="m/v-downbeat.jpg" muted loop playsinline preload="none" aria-label="Downbeat: new bar, new shot"></video><figcaption><b>0:26.3</b> Downbeat<span class="gj-vocab-def">The first and strongest beat of each bar — the &quot;ONE&quot; in 1-2-3-4.</span></figcaption></figure>
+    <figure><video data-clip="m/v-sync.mp4" poster="m/v-sync.jpg" muted loop playsinline preload="none" aria-label="Sync: on the kicks"></video><figcaption><b>0:15.1 / 15.5 / 15.7</b> Sync<span class="gj-vocab-def">Picture and sound lined up so they happen at exactly the same moment.</span></figcaption></figure>
+  </div>
+  <h3>Camera</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-dolly.mp4" poster="m/v-dolly.jpg" muted loop playsinline preload="none" aria-label="Dolly in / dolly out: the 3D camera travels back"></video><figcaption><b>0:40.1</b> Dolly in / dolly out<span class="gj-vocab-def">The camera physically moves closer or further — near things grow faster than far ones, unlike a zoom.</span></figcaption></figure>
+    <figure><video data-clip="m/v-push-in.mp4" poster="m/v-push-in.jpg" muted loop playsinline preload="none" aria-label="Push-in: into the eye"></video><figcaption><b>0:05.6</b> Push-in<span class="gj-vocab-def">A slow, steady move toward the subject that builds tension or focus.</span></figcaption></figure>
+    <figure><video data-clip="m/v-pull-back.mp4" poster="m/v-pull-back.jpg" muted loop playsinline preload="none" aria-label="Pull-back reveal: it was a toy"></video><figcaption><b>0:39.1–41.6</b> Pull-back reveal<span class="gj-vocab-def">The camera pulls back to show something we couldn&#x27;t see — often that the world was smaller or different than we thought.</span></figcaption></figure>
+    <figure><video data-clip="m/v-pov.mp4" poster="m/v-pov.jpg" muted loop playsinline preload="none" aria-label="POV: riding pillion"></video><figcaption><b>0:16.6</b> POV<span class="gj-vocab-def">Point of view: the camera is someone&#x27;s eyes, so we see what he sees.</span></figcaption></figure>
+    <figure><video data-clip="m/v-locked-off.mp4" poster="m/v-locked-off.jpg" muted loop playsinline preload="none" aria-label="Locked-off: the footbridge"></video><figcaption><b>0:23.0</b> Locked-off<span class="gj-vocab-def">The camera doesn&#x27;t move at all — only the subject and the world move inside the frame.</span></figcaption></figure>
+  </div>
+  <h3>Not in the piece yet</h3>
+  <p class="gj-vocab-note">Demos, not in the video: the same words shown on our own footage and objects.</p>
+  <div class="gj-cards gj-vocab-demos">
+    <figure><video data-clip="m/v-j-cut.mp4" poster="m/v-j-cut.jpg" muted loop playsinline preload="none" aria-label="J-cut: demo, not in the video. the court&#x27;s sound starts before the picture cuts"></video><figcaption><b>demo</b> J-cut<span class="gj-vocab-def">You hear the next shot before you see it: its sound starts early, under the current picture.</span></figcaption></figure>
+    <figure><video data-clip="m/v-l-cut.mp4" poster="m/v-l-cut.jpg" muted loop playsinline preload="none" aria-label="L-cut: demo, not in the video. the falls&#x27; sound runs on over the court"></video><figcaption><b>demo</b> L-cut<span class="gj-vocab-def">The sound of a shot keeps going after the picture has already cut away to the next one.</span></figcaption></figure>
+    <figure><video data-clip="m/v-cutaway.mp4" poster="m/v-cutaway.jpg" muted loop playsinline preload="none" aria-label="Cutaway: demo, not in the video. main shot, a close shot of his hands, back"></video><figcaption><b>demo</b> Cutaway<span class="gj-vocab-def">A short shot of something else (what he&#x27;s looking at, his hands, the place) dropped in, before returning to the main shot.</span></figcaption></figure>
+    <figure><video data-clip="m/v-whip-pan.mp4" poster="m/v-whip-pan.jpg" muted loop playsinline preload="none" aria-label="Whip pan: demo, not in the video. the monument whips to the falls"></video><figcaption><b>demo</b> Whip pan<span class="gj-vocab-def">The camera swings sideways so fast it blurs, and comes out of the blur somewhere new.</span></figcaption></figure>
+    <figure><video data-clip="m/v-invisible-cut.mp4" poster="m/v-invisible-cut.jpg" muted loop playsinline preload="none" aria-label="Invisible cut: demo, not in the video. the cut hides in the black of his sunglasses"></video><figcaption><b>demo</b> Invisible cut<span class="gj-vocab-def">The cut is hidden in a moment where the frame goes fully dark or blocked, so it looks like one continuous shot.</span></figcaption></figure>
+    <figure><video data-clip="m/v-slow-mo.mp4" poster="m/v-slow-mo.jpg" muted loop playsinline preload="none" aria-label="Slow motion: demo, not in the video. the forehand at real speed, then ¼ speed"></video><figcaption><b>demo</b> Slow motion<span class="gj-vocab-def">Time runs slower than real life so you can see every detail of a moment.</span></figcaption></figure>
+    <figure><video data-clip="m/v-stutter.mp4" poster="m/v-stutter.jpg" muted loop playsinline preload="none" aria-label="Stutter: demo, not in the video. the same three frames, four times over"></video><figcaption><b>demo</b> Stutter<span class="gj-vocab-def">The same few frames repeat quickly, so the picture looks like it&#x27;s skipping or stamping.</span></figcaption></figure>
+    <figure><video data-clip="m/v-echo.mp4" poster="m/v-echo.jpg" muted loop playsinline preload="none" aria-label="Echo / trails: demo, not in the video. fading copies of him trail behind"></video><figcaption><b>demo</b> Echo / trails<span class="gj-vocab-def">A moving thing leaves fading copies of itself behind it.</span></figcaption></figure>
+    <figure><video data-clip="m/v-linear.mp4" poster="m/v-linear.jpg" muted loop playsinline preload="none" aria-label="Linear: demo, not in the video. the headphones at one speed: evenly spaced dots"></video><figcaption><b>demo</b> Linear<span class="gj-vocab-def">Movement at one constant speed from start to stop — feels robotic.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ease-in-out.mp4" poster="m/v-ease-in-out.jpg" muted loop playsinline preload="none" aria-label="Ease-in-out: demo, not in the video. the headphones ease in and out: dots bunch at the ends"></video><figcaption><b>demo</b> Ease-in-out<span class="gj-vocab-def">Starts slow, speeds up in the middle, slows down at the end — the most natural feel.</span></figcaption></figure>
+    <figure><video data-clip="m/v-overshoot.mp4" poster="m/v-overshoot.jpg" muted loop playsinline preload="none" aria-label="Overshoot: demo, not in the video. the headphones pop past full size, then settle"></video><figcaption><b>demo</b> Overshoot<span class="gj-vocab-def">Something goes a bit past where it should stop, then settles back — it feels bouncy and alive.</span></figcaption></figure>
+    <figure><video data-clip="m/v-follow-through.mp4" poster="m/v-follow-through.jpg" muted loop playsinline preload="none" aria-label="Follow-through: demo, not in the video. the headphones stop; the swing carries on"></video><figcaption><b>demo</b> Follow-through<span class="gj-vocab-def">When the main thing stops, the loose parts (hair, a strap, a tail) keep moving for a moment.</span></figcaption></figure>
+    <figure><video data-clip="m/v-camera-shake.mp4" poster="m/v-camera-shake.jpg" muted loop playsinline preload="none" aria-label="Camera shake: demo, not in the video. the frame jolts on the hit"></video><figcaption><b>demo</b> Camera shake<span class="gj-vocab-def">The picture jolts as if the camera took the hit.</span></figcaption></figure>
+    <figure><video data-clip="m/v-roto.mp4" poster="m/v-roto.jpg" muted loop playsinline preload="none" aria-label="Rotoscoping / matte: demo, not in the video. the footage, his matte, him on a new background"></video><figcaption><b>demo</b> Rotoscoping / matte<span class="gj-vocab-def">Cutting a person or object out of the footage, frame by frame; the cut-out shape is called the matte.</span></figcaption></figure>
+    <figure><video data-clip="m/v-keying.mp4" poster="m/v-keying.jpg" muted loop playsinline preload="none" aria-label="Keying / chroma key: demo, not in the video. him on green, then the green keyed out"></video><figcaption><b>demo</b> Keying / chroma key<span class="gj-vocab-def">Removing one flat colour (usually green) from the picture so you can put anything behind.</span></figcaption></figure>
+    <figure><video data-clip="m/v-occlusion.mp4" poster="m/v-occlusion.jpg" muted loop playsinline preload="none" aria-label="Occlusion: demo, not in the video. the koi passes behind him"></video><figcaption><b>demo</b> Occlusion<span class="gj-vocab-def">When something closer blocks something further away — getting it right is what makes a 3D object feel really there.</span></figcaption></figure>
+    <figure><video data-clip="m/v-grade.mp4" poster="m/v-grade.jpg" muted loop playsinline preload="none" aria-label="Colour grade / colour match: demo, not in the video. before and graded, wiping across"></video><figcaption><b>demo</b> Colour grade / colour match<span class="gj-vocab-def">Adjusting colour and contrast for a mood, or so different shots and layers look like they belong together.</span></figcaption></figure>
+    <figure><video data-clip="m/v-sound-off.mp4" poster="m/v-sound-off.jpg" muted loop playsinline preload="none" aria-label="Sound-off design: demo, not in the video. the words on screen carry it with no sound"></video><figcaption><b>demo</b> Sound-off design<span class="gj-vocab-def">Making the video work even with the sound off — captions, clear visuals, the story told in pictures.</span></figcaption></figure>
+  </div>
+</section>
+
   <!-- 3e · the sound -->
   <section class="gj-sec" id="sound-map">
-    <p class="eyebrow">The making of · 06 · The sound</p>
+    <p class="eyebrow">The making of · 07 · The sound</p>
     <h2>Twelve bars, taken apart.</h2>
     <p class="lede">The loop is 12 bars of the song, split into stems and re-cut on the bar lines. The shaded bars are the remix.</p>
     <div class="gj-map" id="stem-map" data-src="m/sound.json"><p class="label">Loading the stem map…</p></div>
@@ -246,7 +340,7 @@
 
   <!-- 3f · how it was made -->
   <section class="gj-sec" id="how">
-    <p class="eyebrow">The making of · 07 · How it was made</p>
+    <p class="eyebrow">The making of · 08 · How it was made</p>
     <h2>Footage in, a loop out.</h2>
     <ol class="gj-pipe">
       <li><b>Real footage</b>Phone clips from the trip — the base of every shot.</li>
