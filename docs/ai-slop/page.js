@@ -95,12 +95,13 @@
   }
 
   function follow(m) {
-    const piece = document.getElementById('piece'), remix = document.getElementById('remix');
+    const piece = document.getElementById('piece'), remix = document.getElementById('remix'), loop = document.getElementById('loop');
     let seen = false, raf = 0;
     const tick = () => {
       raf = 0;
       let t = null;
-      if (remix && !remix.paused) t = m.remixAt + remix.currentTime;
+      if (loop && !loop.paused) t = loop.currentTime % m.L;
+      else if (remix && !remix.paused) t = m.remixAt + remix.currentTime;
       else if (piece && !piece.paused) t = piece.currentTime % m.L;
       if (t === null) { m.head.classList.remove('on'); }
       else {

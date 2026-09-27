@@ -107,6 +107,7 @@ body.theme-goja::after{opacity:.06}
 .gj-look > figure{margin:0;display:grid;gap:6px}
 .gj-look > figure img{width:100%;height:auto;border-radius:var(--r2);border:1px solid var(--line)}
 .gj-look h3{margin:0 0 var(--s1)}
+.gj-look .gj-sheets + h3{margin-top:var(--s5)}
 .gj-sheets{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--s2)}
 .gj-sheets img{width:100%;height:auto;border-radius:var(--r1);border:1px solid var(--line);background:var(--card)}
 
@@ -146,6 +147,8 @@ body.theme-goja::after{opacity:.06}
   --hue:var(--goja);border-top:3px solid var(--hue)}
 .gj-stem .label{color:var(--ink)}
 .gj-stem audio{width:100%;height:36px}
+.gj-loop{margin-top:var(--s4);border-top-width:4px}
+.gj-loop + .gj-stems{margin-top:var(--s2)}
 .gj-stem.drums{--hue:var(--stem-drums)} .gj-stem.bass{--hue:var(--stem-bass)}
 .gj-stem.vocals{--hue:var(--stem-vocals)} .gj-stem.other{--hue:var(--stem-other)}
 
