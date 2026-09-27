@@ -44,6 +44,13 @@ output/
 !docs/ai-slop/m/*.mp4
 !docs/ai-slop/m/*.mp3
 !docs/ai-slop/m/*.png
+# the Carousel page (was ai-slop; moved 2026-09-27)
+!docs/carousel/*.mp4
+!docs/carousel/*.jpg
+!docs/carousel/m/*.jpg
+!docs/carousel/m/*.mp4
+!docs/carousel/m/*.mp3
+!docs/carousel/m/*.png
 # the site's own icons
 !docs/*.png
 !docs/media/*.png
