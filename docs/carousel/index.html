@@ -481,9 +481,10 @@
   <span class="right">Carousel · 2026</span>
 </footer>
 <script>
-/* the piece: a muted preview plays while it is in view; Play starts the real thing from the very beginning, with sound */
+/* the piece: a muted preview plays while it is in view; Play starts the real thing from the very beginning, with sound, full screen (iPhones use their own video player) */
 (function(){var v=document.getElementById("piece"),w=document.getElementById("player"),go=document.getElementById("play"),b=document.getElementById("sound");
- function start(){w.classList.add("is-playing");v.controls=true;v.muted=false;v.volume=1;try{v.currentTime=0}catch(e){}var p=v.play();p&&p.catch&&p.catch(function(){});sync()}
+ function full(){try{if(v.requestFullscreen)return v.requestFullscreen({navigationUI:"hide"}).catch(function(){});if(v.webkitRequestFullscreen)return v.webkitRequestFullscreen();if(v.webkitEnterFullscreen)return v.webkitEnterFullscreen()}catch(e){}}
+ function start(){w.classList.add("is-playing");v.controls=true;v.muted=false;v.volume=1;try{v.currentTime=0}catch(e){}var p=v.play();p&&p.catch&&p.catch(function(){});full();sync()}
  function sync(){b.textContent=!w.classList.contains("is-playing")?"Play with sound":(v.muted?"Sound on":"Sound off")}
  go.addEventListener("click",start);
  b.addEventListener("click",function(){if(!w.classList.contains("is-playing"))return start();v.muted=!v.muted;if(!v.muted){v.volume=1;var p=v.play();p&&p.catch&&p.catch(function(){})}sync()});
