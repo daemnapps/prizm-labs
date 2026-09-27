@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E0C14">
+<meta name="description" content="Carousel — a 38.7-second DÆMN loop to Gotts Street Park's Lost &amp; Found. Real trip footage, AI made only from real photos of me, and lifelike 3D objects, cut as one. The whole making-of underneath.">
+<meta property="og:title" content="Carousel">
+<meta property="og:url" content="https://daemn.co/carousel/">
+<meta property="og:description" content="A 38.7-second loop. Real footage, AI built from real photos of me, lifelike 3D. Life is a game, a loop, you define yourself.">
+<meta property="og:image" content="https://daemn.co/carousel/poster.jpg">
+<meta property="og:video" content="https://daemn.co/carousel/ai-slop.mp4">
+<meta property="og:type" content="video.other">
+<meta name="twitter:card" content="summary_large_image">
+<title>Carousel — DÆMN</title>
+<link rel="canonical" href="https://daemn.co/carousel/">
+<script>document.documentElement.classList.add("gj-app")</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/studio.css?v=prizm12">
+<link rel="stylesheet" href="goja-theme.css?v=11">
+<link rel="stylesheet" href="vocab-section.css?v=1">
+<style>
+/* Layout only — the look is the Goja theme (goja-theme.css). */
+.gj-sec .label{margin-top:var(--s3);max-width:none}
+#carousel-label{text-align:center;min-height:2.8em}
+.gj-sound-note{margin-top:var(--s3);max-width:none}
+</style>
+
+<body class="theme-goja">
+<nav class="bar">
+  <a class="mark" href="/carousel/">DÆMN</a>
+</nav>
+
+<main class="wrap">
+
+  <!-- the profile -->
+  <header class="gj-profile">
+    <div class="gj-avatar"><img src="m/s-sep-master.jpg" alt="DÆMN" width="480" height="722" decoding="async"></div>
+    <div class="gj-who">
+      <h1>DÆMN</h1>
+      <p class="label">Carousel · visual + audio</p>
+      <ul class="gj-stats">
+        <li><b>11</b>posts</li><li><b>18</b>scenes</li><li><b>22</b>objects</li><li><b>57</b>moves</li>
+      </ul>
+    </div>
+    <p class="gj-bio">Real trip footage, AI made only from real photos of me, and lifelike 3D objects, cut as one loop. The piece is pinned; every part of how it was made is a post below. Tap in.</p>
+  </header>
+
+  <!-- 1 · the piece -->
+  <section class="gj-hero" aria-label="The piece">
+    <div class="gj-side left"><!-- frames:left -->
+      <figure><img src="f-eye.jpg?v=09271246" alt="The Goja neon, in my eye" width="540" height="960" loading="lazy" decoding="async"><figcaption>the iris</figcaption></figure>
+      <figure><img src="f-koi-pond.jpg?v=09271246" alt="…and into the real pond" width="540" height="960" loading="lazy" decoding="async"><figcaption>the pond</figcaption></figure>
+      <figure><img src="f-flash-1.jpg?v=09271246" alt="Flash — tongue out, black and white" width="540" height="960" loading="lazy" decoding="async"><figcaption>flash</figcaption></figure>
+      <figure><img src="f-padel.jpg?v=09271246" alt="Padel, mid-rally" width="540" height="960" loading="lazy" decoding="async"><figcaption>the rally</figcaption></figure>
+    <!-- /frames:left --></div>
+    <div class="gj-piece">
+      <p class="eyebrow"><span class="gj-pin">Pinned</span> · a visual + audio mix</p>
+      <h1>Carousel.</h1>
+      <video id="piece" class="gj-video" src="ai-slop.mp4?v=13" poster="poster.jpg?v=13" muted loop playsinline controls preload="none"></video>
+      <div class="btns"><button class="btn" id="sound" type="button">Tap for sound</button></div>
+      <p class="gj-quote">“Life is a game, a loop, you define yourself.”</p>
+      <p class="label">to Gotts Street Park — Lost &amp; Found</p>
+    </div>
+    <div class="gj-side right"><!-- frames:right -->
+      <figure><img src="f-ball.jpg?v=09271246" alt="The ball comes at the lens" width="540" height="960" loading="lazy" decoding="async"><figcaption>the lens</figcaption></figure>
+      <figure><img src="f-stone.jpg?v=09271246" alt="Bullet time, turned to stone" width="540" height="960" loading="lazy" decoding="async"><figcaption>lost</figcaption></figure>
+      <figure><img src="f-fit-purple.jpg?v=09271246" alt="Outfit swap — Goja purple" width="540" height="960" loading="lazy" decoding="async"><figcaption>outfit</figcaption></figure>
+      <figure><img src="f-toy.jpg?v=09271246" alt="It was a toy all along" width="540" height="960" loading="lazy" decoding="async"><figcaption>the toy</figcaption></figure>
+    <!-- /frames:right --></div>
+  </section>
+
+  <hr class="prism">
+
+  <!-- the feed: one post per part of the making-of; each opens as a full-screen view (feed.js) -->
+  <section class="gj-feed" aria-labelledby="feed-h">
+    <div class="gj-feed-head"><p class="eyebrow" id="feed-h">The making of</p><p class="label">11 posts · tap one</p></div>
+    <div class="gj-posts">
+    <a class="gj-post" href="#frames" data-go="frames" data-title="Frames">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><div class="gj-mosaic" aria-hidden="true"><img width="540" height="960" src="f-eye.jpg?v=09271246" alt="" loading="lazy" decoding="async"><img width="540" height="960" src="f-disco.jpg?v=09271246" alt="" loading="lazy" decoding="async"><img width="540" height="960" src="f-stone.jpg?v=09271246" alt="" loading="lazy" decoding="async"><img width="540" height="960" src="f-fit-purple.jpg?v=09271246" alt="" loading="lazy" decoding="async"></div><span class="gj-post-n">Frames</span><span class="gj-post-count">18 stills</span></div>
+      <div class="gj-post-cap"><b>Frames</b><span>Every scene, in order.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#personas" data-go="personas" data-title="The personas">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><video data-clip="m/p-weeknd.mp4" data-poster="m/p-weeknd.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">01</span><span class="gj-post-count">6 clips</span></div>
+      <div class="gj-post-cap"><b>The personas</b><span>Six of me, a few frames each.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#motion" data-go="motion" data-title="Motion control">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><video data-clip="m/outfits.mp4" data-poster="m/outfits.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">02</span><span class="gj-post-count">8 looks</span></div>
+      <div class="gj-post-cap"><b>Motion control</b><span>Same move, any outfit.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#sheets" data-go="sheets" data-title="Character sheets">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><img width="480" height="722" src="m/s-sep-master.jpg" alt="" loading="lazy" decoding="async" style="object-position:50% 15%"><span class="gj-post-n">03</span><span class="gj-post-count">12 sheets · 7 in 3D</span></div>
+      <div class="gj-post-cap"><b>Character sheets</b><span>Locking my face — and every item he wears, in 3D.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#objects" data-go="objects" data-title="The objects">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><video data-clip="m/v-orbit.mp4" data-poster="m/v-orbit.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">04</span><span class="gj-post-count">18 in 3D</span></div>
+      <div class="gj-post-cap"><b>The objects</b><span>Ride the carousel.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#edit" data-go="edit" data-title="The edit">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><div class="gj-reel" aria-hidden="true"><img width="4536" height="96" src="m/filmstrip.jpg" alt="" loading="lazy" decoding="async" style="--at:0%"><div><i class="k-real" style="--w:3"></i><i class="k-ai" style="--w:2"></i><i class="k-3d" style="--w:4"></i><i class="k-real" style="--w:2"></i></div><img width="4536" height="96" src="m/filmstrip.jpg" alt="" loading="lazy" decoding="async" style="--at:45%"><div><i class="k-fit" style="--w:2"></i><i class="k-flash" style="--w:1"></i><i class="k-obj" style="--w:3"></i><i class="k-open" style="--w:2"></i></div><img width="4536" height="96" src="m/filmstrip.jpg" alt="" loading="lazy" decoding="async" style="--at:90%"></div><span class="gj-post-n">05</span><span class="gj-post-count">17 layers</span></div>
+      <div class="gj-post-cap"><b>The edit</b><span>Every layer, on one clock.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#vocab" data-go="vocab" data-title="The vocabulary">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><video data-clip="m/v-speed-ramp.mp4" data-poster="m/v-speed-ramp.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">06</span><span class="gj-post-count">57 moves</span></div>
+      <div class="gj-post-cap"><b>The vocabulary</b><span>Every move, by name.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#sound-map" data-go="sound-map" data-title="The sound">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><div class="gj-bars" aria-hidden="true"><i class="k-flash" style="--h:70%;--d:-0.1s"></i><i class="k-3d" style="--h:45%;--d:-0.5s"></i><i class="k-real" style="--h:90%;--d:-0.3s"></i><i class="k-fit" style="--h:55%;--d:-0.8s"></i><i class="k-flash" style="--h:80%;--d:-0.2s"></i><i class="k-3d" style="--h:65%;--d:-0.6s"></i><i class="k-real" style="--h:40%;--d:-0.9s"></i><i class="k-fit" style="--h:85%;--d:-0.4s"></i><i class="k-flash" style="--h:50%;--d:-0.7s"></i><i class="k-3d" style="--h:95%;--d:-0.15s"></i><i class="k-real" style="--h:60%;--d:-0.55s"></i><i class="k-fit" style="--h:75%;--d:-0.35s"></i></div><span class="gj-post-n">07</span><span class="gj-post-count">12 bars · 6 players</span></div>
+      <div class="gj-post-cap"><b>The sound</b><span>Twelve bars, taken apart.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#how" data-go="how" data-title="How it was made">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><video data-clip="m/v-match-move.mp4" data-poster="m/v-match-move.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">08</span><span class="gj-post-count">6 steps</span></div>
+      <div class="gj-post-cap"><b>How it was made</b><span>Footage in, a loop out.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#memes" data-go="memes" data-title="The memes">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><video data-clip="m/meme-neuron.mp4" data-poster="m/meme-neuron.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span class="gj-post-n">Bonus</span><span class="gj-post-count">2 clips</span></div>
+      <div class="gj-post-cap"><b>The memes</b><span>Two memes, starring me.</span><span class="gj-open">Open →</span></div>
+    </a>
+    <a class="gj-post" href="#credits" data-go="credits" data-title="Credits">
+      <div class="gj-post-top"><span class="gj-post-av"><img src="m/s-sep-master.jpg" alt="" width="480" height="722" loading="lazy" decoding="async"></span><b>DÆMN</b><span class="label">Carousel</span></div>
+      <div class="gj-post-media"><div class="gj-type" aria-hidden="true"><b>Credits.</b><span>Music · Footage · AI · 3D · Sound</span></div><span class="gj-post-n">End</span><span class="gj-post-count">6 credits</span></div>
+      <div class="gj-post-cap"><b>Credits</b><span>Who and what made it.</span><span class="gj-open">Open →</span></div>
+    </a>
+    </div>
+  </section>
+
+  <!-- the view bar: shows only while a post is open -->
+  <div class="gj-xpbar" id="xpbar">
+    <div class="gj-xpbar-in">
+      <button type="button" id="xp-back" aria-label="Back to the feed">←<span class="t">Back</span></button>
+      <p class="gj-xp-title" aria-live="polite"><b id="xp-n"></b><span id="xp-t"></span></p>
+      <div class="gj-xp-nav"><button type="button" id="xp-prev" aria-label="Previous post">‹</button><button type="button" id="xp-next" aria-label="Next post">›</button></div>
+    </div>
+    <div class="gj-xp-seg" id="xp-seg"></div>
+  </div>
+
+  <!-- 2 · frames -->
+  <section class="gj-sec" id="frames">
+    <p class="eyebrow">Frames from the piece</p>
+    <h2>Every scene, in order.</h2>
+    <p class="lede">One still per scene, straight from the final cut. Scroll sideways.</p>
+    <div class="gj-strip"><!-- frames:strip -->
+      <figure><img src="f-eye.jpg?v=09271246" alt="The Goja neon, in my eye" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:02</b> The Goja neon, in my eye</figcaption></figure>
+      <figure><img src="f-koi-space.jpg?v=09271246" alt="A koi swims out of the iris" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:04</b> A koi swims out of the iris</figcaption></figure>
+      <figure><img src="f-koi-pond.jpg?v=09271246" alt="…and into the real pond" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:05</b> …and into the real pond</figcaption></figure>
+      <figure><img src="f-disco.jpg?v=09271246" alt="A disco ball over the river" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:08</b> A disco ball over the river</figcaption></figure>
+      <figure><img src="f-flash-1.jpg?v=09271246" alt="Flash — tongue out, black and white" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:09</b> Flash — tongue out, black and white</figcaption></figure>
+      <figure><img src="f-flash-2.jpg?v=09271246" alt="Flash — the stage" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:11</b> Flash — the stage</figcaption></figure>
+      <figure><img src="f-flash-3.jpg?v=09271246" alt="Flash — the golfer" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:12</b> Flash — the golfer</figcaption></figure>
+      <figure><img src="f-flash-4.jpg?v=09271246" alt="Flash — the president" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:15</b> Flash — the president</figcaption></figure>
+      <figure><img src="f-flash-6.jpg?v=09271246" alt="Flash — the champion" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:17</b> Flash — the champion</figcaption></figure>
+      <figure><img src="f-padel.jpg?v=09271246" alt="Padel, mid-rally" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:17</b> Padel, mid-rally</figcaption></figure>
+      <figure><img src="f-ball.jpg?v=09271246" alt="The ball comes at the lens" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:19</b> The ball comes at the lens</figcaption></figure>
+      <figure><img src="f-flash-5.jpg?v=09271246" alt="Flash — the anchor" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:21</b> Flash — the anchor</figcaption></figure>
+      <figure><img src="f-stone.jpg?v=09271246" alt="Bullet time, turned to stone" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:27</b> Bullet time, turned to stone</figcaption></figure>
+      <figure><img src="f-skin.jpg?v=09271246" alt="Stone back to skin" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:30</b> Stone back to skin</figcaption></figure>
+      <figure><img src="f-fit-linen.jpg?v=09271246" alt="Outfit swap — cream linen" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:33</b> Outfit swap — cream linen</figcaption></figure>
+      <figure><img src="f-fit-leather.jpg?v=09271246" alt="Outfit swap — leather and gold" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:34</b> Outfit swap — leather and gold</figcaption></figure>
+      <figure><img src="f-fit-purple.jpg?v=09271246" alt="Outfit swap — Goja purple" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:35</b> Outfit swap — Goja purple</figcaption></figure>
+      <figure><img src="f-toy.jpg?v=09271246" alt="It was a toy all along" width="540" height="960" loading="lazy" decoding="async"><figcaption><b class="num">0:38</b> It was a toy all along</figcaption></figure>
+    <!-- /frames:strip --></div>
+  </section>
+
+
+  <!-- 3a · the personas -->
+  <section class="gj-sec" id="personas">
+    <p class="eyebrow">The making of · 01 · The personas</p>
+    <h2>Six of me, a few frames each.</h2>
+    <p class="lede">Iconic photos, re-made with me in them from real photos of me — then animated. Each one flashes on a kick. Times are on the video's clock.</p>
+    <div class="gj-cards">
+      <figure><video data-clip="m/p-tongue.mp4" data-poster="m/p-tongue.jpg" muted loop playsinline preload="none" aria-label="Black and white, tongue out, animated"></video><figcaption><b>0:12</b> tongue out</figcaption></figure>
+      <figure><video data-clip="m/p-weeknd.mp4" data-poster="m/p-weeknd.jpg" muted loop playsinline preload="none" aria-label="Me as The Weeknd on stage, arm raised, animated"></video><figcaption><b>0:15</b> the stage</figcaption></figure>
+      <figure><video data-clip="m/p-golfer.mp4" data-poster="m/p-golfer.jpg" muted loop playsinline preload="none" aria-label="Me as the golfer mid-swing, animated"></video><figcaption><b>0:15</b> the golfer</figcaption></figure>
+      <figure><video data-clip="m/p-president.mp4" data-poster="m/p-president.jpg" muted loop playsinline preload="none" aria-label="Me as the president, arms crossed, animated"></video><figcaption><b>0:18</b> the president</figcaption></figure>
+      <figure><video data-clip="m/p-serena.mp4" data-poster="m/p-serena.jpg" muted loop playsinline preload="none" aria-label="Me as the tennis champion, braids, mid-roar, animated"></video><figcaption><b>0:20</b> the champion</figcaption></figure>
+      <figure><video data-clip="m/p-anchor.mp4" data-poster="m/p-anchor.jpg" muted loop playsinline preload="none" aria-label="Me as the anchor at a desk, animated"></video><figcaption><b>0:25</b> the anchor</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 3b · motion control -->
+  <section class="gj-sec" id="motion">
+    <p class="eyebrow">The making of · 02 · Motion control</p>
+    <h2>Same move, any outfit.</h2>
+    <p class="lede">My real clip drives the AI: it copies every movement, frame for frame, in whatever I'm wearing.</p>
+    <figure class="gj-fig">
+      <video data-clip="m/outfits.mp4" data-poster="m/outfits.jpg" muted loop playsinline preload="none" width="960" height="394" aria-label="Four clips side by side, in sync: the real me, then the same motion in a cream linen suit, a leather jacket, and a purple satin tracksuit"></video>
+      <div class="gj-labels" aria-hidden="true"><span>real</span><span>cream linen</span><span>leather + gold</span><span>Goja purple</span></div>
+    </figure>
+    <h3>One real frame, seven outfits.</h3>
+    <div class="gj-cards real">
+      <figure><img width="360" height="640" src="m/o-real.jpg" alt="The real frame at the falls" loading="lazy" decoding="async"><figcaption><b>real</b> the source</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-linen.jpg" alt="Cream linen suit" loading="lazy" decoding="async"><figcaption>cream linen</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-leather.jpg" alt="Black leather jacket and gold chain" loading="lazy" decoding="async"><figcaption>leather + gold</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-purple.jpg" alt="Purple satin tracksuit" loading="lazy" decoding="async"><figcaption>Goja purple</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-monk.jpg" alt="Saffron monk's robe" loading="lazy" decoding="async"><figcaption>saffron robe</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-silk.jpg" alt="Thai silk shirt" loading="lazy" decoding="async"><figcaption>Thai silk</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-bomber.jpg" alt="Purple bomber jacket" loading="lazy" decoding="async"><figcaption>bomber</figcaption></figure>
+      <figure><img width="360" height="636" src="m/o-padel.jpg" alt="Padel whites" loading="lazy" decoding="async"><figcaption>padel whites</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 3c · the character sheets -->
+  <section class="gj-sec" id="sheets">
+    <p class="eyebrow">The making of · 03 · The character sheets</p>
+    <h2>Locking my face.</h2>
+    <p class="lede">One identity, rebuilt from a real September selfie, so every AI shot is the same man. Every item he wears is locked to one real version: one pair of glasses, one pair of shoes, the band on the left wrist.</p>
+    <div class="gj-look">
+      <figure><img width="480" height="722" src="m/s-sep-master.jpg" alt="Master portrait: big afro, full beard, gold octagonal wire glasses, grey tee" loading="lazy" decoding="async"><figcaption class="label">master</figcaption></figure>
+      <div>
+        <h3>The identity — big afro, full beard</h3>
+        <p class="label">turnaround, angles, details, light, colour</p>
+        <div class="gj-sheets">
+          <img width="900" height="598" src="m/s-sep-turnaround.jpg" alt="Turnaround: front, three-quarter, side, back, in grey On running shoes" loading="lazy" decoding="async">
+          <img width="900" height="600" src="m/s-sep-angles-expressions.jpg" alt="Angles and expressions" loading="lazy" decoding="async">
+          <img width="900" height="598" src="m/s-sep-details.jpg" alt="Details: hands with the pink band on the left wrist, the gold glasses, hair, beard, On shoes" loading="lazy" decoding="async">
+          <img width="900" height="600" src="m/s-sep-light-test.jpg" alt="Light test in three lighting set-ups" loading="lazy" decoding="async">
+          <img width="900" height="270" src="m/s-sep-colour-key.jpg" alt="Colour key: skin, hair and clothing swatches" loading="lazy" decoding="async">
+        </div>
+        <h3>The character bible</h3>
+        <p class="label">every item he wears, locked to one real version and built in 3D · drag any of them</p>
+        <div class="gj-objs">
+      <figure class="gj-obj" data-glb="objects/el-glasses.glb" data-life='{"coat":0.3}'><div class="gj-obj-view" role="img" aria-label="Glasses, in 3D. Drag to spin."></div><figcaption><b>Glasses</b>gold octagonal wire frames</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/el-sunglasses.glb" data-life='{"coat":0.4, "clear":0.6}'><div class="gj-obj-view" role="img" aria-label="Sunglasses, in 3D. Drag to spin."></div><figcaption><b>Sunglasses</b>clear frames</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/el-on-shoe.glb" data-life='{"sheen":0.4}'><div class="gj-obj-view" role="img" aria-label="On running shoe, in 3D. Drag to spin."></div><figcaption><b>On running shoe</b>grey knit, the pod sole</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/el-headphones.glb" data-life='{"sheen":0.4, "coat":0.2}'><div class="gj-obj-view" role="img" aria-label="Headphones, in 3D. Drag to spin."></div><figcaption><b>Headphones</b>dark space-grey over-ears</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/el-wristband.glb" data-life='{"sheen":0.6}'><div class="gj-obj-view" role="img" aria-label="Wristband, in 3D. Drag to spin."></div><figcaption><b>Wristband</b>pink, left wrist</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/padel-racket.glb" data-life='{"coat":0.8, "coatRough":0.12}'><div class="gj-obj-view" role="img" aria-label="Padel racket, in 3D. Drag to spin."></div><figcaption><b>Padel racket</b>black with gold bars</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/bag-black-pouch.glb" data-life='{"sheen":0.3, "coat":0.2}'><div class="gj-obj-view" role="img" aria-label="Bag, in 3D. Drag to spin."></div><figcaption><b>Bag</b>black crossbody pouch</figcaption></figure>
+        </div>
+        <h3>The looks</h3>
+        <p class="label">every outfit made from the same identity</p>
+        <div class="gj-sheets">
+          <img width="900" height="598" src="m/s-sep-look-headphones.jpg" alt="Look: dark grey over-ear headphones, black tee, On shoes" loading="lazy" decoding="async">
+          <img width="900" height="598" src="m/s-sep-look-purple-tracksuit.jpg" alt="Look: purple satin tracksuit" loading="lazy" decoding="async">
+          <img width="900" height="598" src="m/s-sep-look-leather-chain.jpg" alt="Look: leather jacket and gold chain" loading="lazy" decoding="async">
+          <img width="900" height="598" src="m/s-sep-look-linen-suit.jpg" alt="Look: cream linen suit" loading="lazy" decoding="async">
+          <img width="900" height="600" src="m/s-sep-look-kuangsi-grey-tee.jpg" alt="Look: grey tee and cross-body bag at the falls" loading="lazy" decoding="async">
+          <img width="900" height="600" src="m/s-sep-look-kl-pool.jpg" alt="Look: swim shorts at the pool" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3d · the objects -->
+  <section class="gj-sec" id="objects">
+    <p class="eyebrow">The making of · 04 · The objects</p>
+    <h2>Ride the carousel.</h2>
+    <p class="lede">Every object in the piece, built in 3D and seated on one carousel. Drag to spin it.</p>
+    <div class="gj-carousel" id="carousel" role="img" aria-label="A 3D carousel carrying every object from the piece. Drag sideways or use the arrow keys to spin it."></div>
+    <p class="label" id="carousel-label" aria-live="polite">Koi — swims through the iris</p>
+    <h3>Every object, on its own.</h3>
+    <p class="label">rendered with the same lifelike finish as the video · drag any of them</p>
+    <div class="gj-objs">
+      <figure class="gj-obj" data-glb="objects/koi.glb" data-life='{"coat":0.7, "coatRough":0.08}'><div class="gj-obj-view" role="img" aria-label="Koi, in 3D. Drag to spin."></div><figcaption><b>Koi</b>swims through the iris</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/goja-sign.glb" data-life='{"coat":0.6, "coatRough":0.03, "neon":5}'><div class="gj-obj-view" role="img" aria-label="Goja sign, in 3D. Drag to spin."></div><figcaption><b>Goja sign</b>the neon that opens the loop</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/chicken-heart-skewer.glb" data-life='{"coat":0.35, "sheen":0.3}'><div class="gj-obj-view" role="img" aria-label="Chicken-heart skewer, in 3D. Drag to spin."></div><figcaption><b>Chicken-heart skewer</b>pops in on the street-food burst</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/beerlao.glb" data-life='{"coat":0.6, "glass":true}'><div class="gj-obj-view" role="img" aria-label="Beerlao, in 3D. Drag to spin."></div><figcaption><b>Beerlao</b>pops in on the night-out burst</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/disco-ball.glb" data-life='{"env":1.35}'><div class="gj-obj-view" role="img" aria-label="Disco ball, in 3D. Drag to spin."></div><figcaption><b>Disco ball</b>pops in on the dance-floor burst</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/longtail-boat.glb" data-life='{"coat":0.15}'><div class="gj-obj-view" role="img" aria-label="Longtail boat, in 3D. Drag to spin."></div><figcaption><b>Longtail boat</b>pops in on the river burst</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/el-headphones.glb" data-life='{"sheen":0.4, "coat":0.2}'><div class="gj-obj-view" role="img" aria-label="Headphones, in 3D. Drag to spin."></div><figcaption><b>Headphones</b>his dark space-grey pair, in the opener and the selfie</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/helmet.glb" data-life='{"coat":1, "coatRough":0.04}'><div class="gj-obj-view" role="img" aria-label="Helmet, in 3D. Drag to spin."></div><figcaption><b>Helmet</b>the motorbike selfie</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/temple.glb" data-life='{"coat":0.1}'><div class="gj-obj-view" role="img" aria-label="Temple, in 3D. Drag to spin."></div><figcaption><b>Temple</b>circles Patuxai</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/padel-racket.glb" data-life='{"coat":0.8, "coatRough":0.12}'><div class="gj-obj-view" role="img" aria-label="Padel racket, in 3D. Drag to spin."></div><figcaption><b>Padel racket</b>swings with every shot</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/padel-ball.glb" data-life='{"sheen":0.9, "sheenRough":0.35}'><div class="gj-obj-view" role="img" aria-label="Padel ball, in 3D. Drag to spin."></div><figcaption><b>Padel ball</b>hits the lens</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/sticky-rice-basket.glb" data-life='{"sheen":0.2}'><div class="gj-obj-view" role="img" aria-label="Sticky-rice basket, in 3D. Drag to spin."></div><figcaption><b>Sticky-rice basket</b>crosses the footbridge</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/bag-cream-strap.glb" data-life='{"sheen":0.35}'><div class="gj-obj-view" role="img" aria-label="Cream-strap bag, in 3D. Drag to spin."></div><figcaption><b>Cream-strap bag</b>runs in reverse</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/bag-black-pouch.glb" data-life='{"sheen":0.3, "coat":0.2}'><div class="gj-obj-view" role="img" aria-label="Black pouch, in 3D. Drag to spin."></div><figcaption><b>Black pouch</b>packed for the trip</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/turntable.glb" data-life='{"coat":0.3}'><div class="gj-obj-view" role="img" aria-label="Turntable, in 3D. Drag to spin."></div><figcaption><b>Turntable</b>rides the carousel at the end</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/vinyl.glb" data-life='{"coat":0.6}'><div class="gj-obj-view" role="img" aria-label="Vinyl, in 3D. Drag to spin."></div><figcaption><b>Vinyl</b>the record the loop spins on</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/gold-glasses.glb" data-life='{"coat":0.3}'><div class="gj-obj-view" role="img" aria-label="Gold glasses, in 3D. Drag to spin."></div><figcaption><b>Gold glasses</b>worn on the trip</figcaption></figure>
+      <figure class="gj-obj" data-glb="objects/monk.glb" data-life='{"sheen":0.5, "sheenRough":0.6}'><div class="gj-obj-view" role="img" aria-label="Monk, in 3D. Drag to spin."></div><figcaption><b>Monk</b>sits in the corner the whole piece</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 3d½ · the edit -->
+  <section class="gj-sec" id="edit">
+    <p class="eyebrow">The making of · 05 · The edit</p>
+    <h2>Every layer, on one clock.</h2>
+    <p class="lede">The 42.3 seconds as they are built: the picture, each layer stacked on top of it, and, frame by frame, how the picture is treated and how everything moves. The speed line drops below zero where a shot runs backwards. Play the video and the line runs across; tap anywhere to jump there.</p>
+    <div class="gj-edit-top">
+      <video id="edit-video" class="gj-edit-video" src="ai-slop.mp4?v=13" poster="poster.jpg?v=13" muted playsinline controls preload="none"></video>
+      <div class="gj-edit-key">
+        <p class="label gj-now" id="edit-now" aria-live="off">0:00.0</p>
+        <ul class="gj-key">
+          <li><i class="k-real"></i>Real footage</li><li><i class="k-ai"></i>AI video</li><li><i class="k-3d"></i>3D</li>
+          <li><i class="k-open"></i>Screen recording</li><li><i class="k-fit"></i>Outfit swap</li><li><i class="k-flash"></i>Persona flash</li>
+          <li><i class="k-obj"></i>3D object · dot = it hits the lens</li><li><i class="k-cam"></i>Camera move · diamond = turn at the cut</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gj-edit" id="edit-map" data-src="m/edit.json?v=5">
+      <div class="gj-edit-labels" aria-hidden="true"></div>
+      <div class="gj-edit-scroll"><p class="label">Loading the edit map…</p></div>
+    </div>
+    <p class="label gj-sound-note">Scroll sideways along the map · hold a block for its detail on desktop</p>
+  </section>
+
+  <!-- 3d¾ · the vocabulary -->
+<!-- Motion vocabulary: the editing words for what happens in Carousel, each on the moment it happens,
+     then demos (built from our own plates and 3D objects) for the words the piece does not use yet.
+     Generated from tools/moves/vocab/build.py — same clips as the Motion Vocabulary artifact.
+     Needs vocab-section.css (theme tokens only). Clips lazy-play via page.js (video[data-clip]). -->
+<section class="gj-sec gj-vocab" id="vocab">
+  <p class="eyebrow">The making of · 06 · The vocabulary</p>
+  <h2>Every move, by name.</h2>
+  <p class="lede">The words editors use for what happens in the piece, each one shown on the moment it happens. Times are on the video's clock.</p>
+  <h3>Cuts</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-hard-cut.mp4" data-poster="m/v-hard-cut.jpg" muted loop playsinline preload="none" aria-label="Hard cut: one shot straight into the next"></video><figcaption><b>0:27.9</b> Hard cut<span class="gj-vocab-def">One shot stops and the next starts instantly, with nothing in between.</span></figcaption></figure>
+    <figure><video data-clip="m/v-match-shape.mp4" data-poster="m/v-match-shape.jpg" muted loop playsinline preload="none" aria-label="Match cut — shape: stone him into stone him"></video><figcaption><b>0:32.7</b> Match cut — shape<span class="gj-vocab-def">The cut lands so a shape in one shot sits in the exact same spot as a similar shape in the next.</span></figcaption></figure>
+    <figure><video data-clip="m/v-match-motion.mp4" data-poster="m/v-match-motion.jpg" muted loop playsinline preload="none" aria-label="Match cut — motion: robe into silk shirt, same move"></video><figcaption><b>0:24.7</b> Match cut — motion<span class="gj-vocab-def">A movement that starts in one shot carries on in the same direction and speed in the next.</span></figcaption></figure>
+    <figure><video data-clip="m/v-match-colour.mp4" data-poster="m/v-match-colour.jpg" muted loop playsinline preload="none" aria-label="Match cut — colour: purple iris into purple galaxy"></video><figcaption><b>0:06.8</b> Match cut — colour<span class="gj-vocab-def">The last colour of one shot is the first colour of the next, so the eye doesn&#x27;t feel the jump.</span></figcaption></figure>
+    <figure><video data-clip="m/v-jump-cut.mp4" data-poster="m/v-jump-cut.jpg" muted loop playsinline preload="none" aria-label="Jump cut: skips ahead on the kick"></video><figcaption><b>0:35.1</b> Jump cut<span class="gj-vocab-def">Cutting inside the same shot so it skips ahead (or back) in time, and the picture visibly jumps.</span></figcaption></figure>
+    <figure><video data-clip="m/v-smash-cut.mp4" data-poster="m/v-smash-cut.jpg" muted loop playsinline preload="none" aria-label="Smash cut: calm river into the tongue"></video><figcaption><b>0:12.9</b> Smash cut<span class="gj-vocab-def">A sudden cut from one mood to the opposite — calm to loud, or loud to silent — with no warning.</span></figcaption></figure>
+    <figure><video data-clip="m/v-insert.mp4" data-poster="m/v-insert.jpg" muted loop playsinline preload="none" aria-label="Insert / B-roll burst: the city burst"></video><figcaption><b>0:10.1–12.9</b> Insert / B-roll burst<span class="gj-vocab-def">Short extra shots dropped in to add texture — details, places, objects — often a fast run of them.</span></figcaption></figure>
+    <figure><video data-clip="m/v-cut-beat.mp4" data-poster="m/v-cut-beat.jpg" muted loop playsinline preload="none" aria-label="Cut on the beat: cuts on the kick"></video><figcaption><b>0:19.8 / 0:20.6</b> Cut on the beat<span class="gj-vocab-def">Every cut lands exactly on a beat in the music, so you feel the edit in your body.</span></figcaption></figure>
+    <figure><video data-clip="m/v-flash-frame.mp4" data-poster="m/v-flash-frame.jpg" muted loop playsinline preload="none" aria-label="Flash frame: 4 frames of a persona (a picture, not white)"></video><figcaption><b>0:19.0</b> Flash frame<span class="gj-vocab-def">A single frame of white (or colour) between two shots — a blink of light on a hit.</span></figcaption></figure>
+  </div>
+  <h3>Transitions</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-zoom-transition.mp4" data-poster="m/v-zoom-transition.jpg" muted loop playsinline preload="none" aria-label="Zoom transition: into one point, out of his eye"></video><figcaption><b>0:03.6</b> Zoom transition<span class="gj-vocab-def">The camera zooms into or out of something (a screen, an eye) and that carries you into the next picture.</span></figcaption></figure>
+    <figure><video data-clip="m/v-punch-in.mp4" data-poster="m/v-punch-in.jpg" muted loop playsinline preload="none" aria-label="Punch-in: lands close, then settles"></video><figcaption><b>0:16.6</b> Punch-in<span class="gj-vocab-def">The frame jumps a little closer in one hard step, usually on a beat, then settles.</span></figcaption></figure>
+    <figure><video data-clip="m/v-object-wipe.mp4" data-poster="m/v-object-wipe.jpg" muted loop playsinline preload="none" aria-label="Object wipe: the helmet fills the lens"></video><figcaption><b>0:18.1</b> Object wipe<span class="gj-vocab-def">Something passes across the lens and fills the frame, and when it clears we&#x27;re in a new shot.</span></figcaption></figure>
+    <figure><video data-clip="m/v-hand-off.mp4" data-poster="m/v-hand-off.jpg" muted loop playsinline preload="none" aria-label="Object hand-off: the koi, space into the pond"></video><figcaption><b>0:08.5</b> Object hand-off<span class="gj-vocab-def">An object leaves one shot through the edge of the frame and arrives in the next shot, so it carries you across.</span></figcaption></figure>
+    <figure><video data-clip="m/v-morph.mp4" data-poster="m/v-morph.jpg" muted loop playsinline preload="none" aria-label="Morph: stone becomes him"></video><figcaption><b>0:33.3</b> Morph<span class="gj-vocab-def">One shape or face melts smoothly into another, with no cut.</span></figcaption></figure>
+    <figure><video data-clip="m/v-iris.mp4" data-poster="m/v-iris.jpg" muted loop playsinline preload="none" aria-label="Iris transition: space in the iris"></video><figcaption><b>0:06.0</b> Iris transition<span class="gj-vocab-def">The picture opens or closes through a circle — here, the eye&#x27;s iris opens into another world.</span></figcaption></figure>
+    <figure><video data-clip="m/v-dissolve.mp4" data-poster="m/v-dissolve.jpg" muted loop playsinline preload="none" aria-label="Dissolve: the screen dissolves into frame one"></video><figcaption><b>0:41.6</b> Dissolve<span class="gj-vocab-def">One shot fades out while the next fades in on top of it, so for a moment you see both.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ramp-transition.mp4" data-poster="m/v-ramp-transition.jpg" muted loop playsinline preload="none" aria-label="Speed-ramp transition: speeds up into the cut"></video><figcaption><b>0:06.0–6.8</b> Speed-ramp transition<span class="gj-vocab-def">The shot speeds up hard into the cut, and the next shot comes in fast and slows down.</span></figcaption></figure>
+  </div>
+  <h3>Time</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-speed-ramp.mp4" data-poster="m/v-speed-ramp.jpg" muted loop playsinline preload="none" aria-label="Speed ramp: Goja, −3.2× to 5.1×"></video><figcaption><b>0:03.6–6.8</b> Speed ramp<span class="gj-vocab-def">The speed changes inside one shot: fast, then suddenly slow on the key moment, then fast again.</span></figcaption></figure>
+    <figure><video data-clip="m/v-bullet-time.mp4" data-poster="m/v-bullet-time.jpg" muted loop playsinline preload="none" aria-label="Time freeze / bullet time: bullet time"></video><figcaption><b>0:29.5–32.7</b> Time freeze / bullet time<span class="gj-vocab-def">Time almost stops, and the camera keeps moving around the frozen moment.</span></figcaption></figure>
+    <figure><video data-clip="m/v-reverse.mp4" data-poster="m/v-reverse.jpg" muted loop playsinline preload="none" aria-label="Reverse: played backwards"></video><figcaption><b>0:26.3–29.5</b> Reverse<span class="gj-vocab-def">The footage plays backwards.</span></figcaption></figure>
+    <figure><video data-clip="m/v-loop.mp4" data-poster="m/v-loop.jpg" muted loop playsinline preload="none" aria-label="Seamless loop: the seam"></video><figcaption><b>0:42.3 → 0:00</b> Seamless loop<span class="gj-vocab-def">The last frame hands straight back into the first, so it plays forever with no visible seam.</span></figcaption></figure>
+  </div>
+  <h3>Motion</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-keyframe.mp4" data-poster="m/v-keyframe.jpg" muted loop playsinline preload="none" aria-label="Keyframe: the temple, lens to lens"></video><figcaption><b>0:18.2–19.7</b> Keyframe<span class="gj-vocab-def">A point where you pin down where something is at a certain moment; the computer fills in the movement between the pins.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ease-in.mp4" data-poster="m/v-ease-in.jpg" muted loop playsinline preload="none" aria-label="Ease-in: the bag speeds up and leaves"></video><figcaption><b>0:29.3</b> Ease-in<span class="gj-vocab-def">Starts slow and speeds up — like something being pulled away.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ease-out.mp4" data-poster="m/v-ease-out.jpg" muted loop playsinline preload="none" aria-label="Ease-out: the basket slams in and settles"></video><figcaption><b>0:23.0</b> Ease-out<span class="gj-vocab-def">Starts fast and slows down to a stop — like something landing.</span></figcaption></figure>
+    <figure><video data-clip="m/v-anticipation.mp4" data-poster="m/v-anticipation.jpg" muted loop playsinline preload="none" aria-label="Anticipation: the racket winds back"></video><figcaption><b>0:21.5</b> Anticipation<span class="gj-vocab-def">A small move in the opposite direction just before the main move, like winding up before a throw.</span></figcaption></figure>
+    <figure><video data-clip="m/v-motion-blur.mp4" data-poster="m/v-motion-blur.jpg" muted loop playsinline preload="none" aria-label="Motion blur: the disco ball smears"></video><figcaption><b>0:11.7 / 12.4</b> Motion blur<span class="gj-vocab-def">Fast movement smears into a streak, the way a real camera sees speed.</span></figcaption></figure>
+    <figure><video data-clip="m/v-parallax.mp4" data-poster="m/v-parallax.jpg" muted loop playsinline preload="none" aria-label="Parallax: railing vs the falls"></video><figcaption><b>0:30.2</b> Parallax<span class="gj-vocab-def">Near things slide past faster than far things, which makes a flat picture feel deep.</span></figcaption></figure>
+    <figure><video data-clip="m/v-orbit.mp4" data-poster="m/v-orbit.jpg" muted loop playsinline preload="none" aria-label="Orbit: the objects circle him"></video><figcaption><b>0:35.9</b> Orbit<span class="gj-vocab-def">The camera circles around the subject while he stays in the middle.</span></figcaption></figure>
+  </div>
+  <h3>Tracking &amp; compositing</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-match-move.mp4" data-poster="m/v-match-move.jpg" muted loop playsinline preload="none" aria-label="Motion tracking / match-move: the headphones ride his selfie"></video><figcaption><b>0:13.3</b> Motion tracking / match-move<span class="gj-vocab-def">The software follows a point in real footage so a 3D object can be stuck to it and move with it.</span></figcaption></figure>
+    <figure class="wide"><video data-clip="m/v-compositing.mp4" data-poster="m/v-compositing.jpg" muted loop playsinline preload="none" aria-label="Compositing / layering: before the layers (left), finished (right)"></video><figcaption><b>0:18.3</b> Compositing / layering<span class="gj-vocab-def">Stacking separate layers — footage, 3D objects, text — into one finished picture.</span></figcaption></figure>
+    <figure><video data-clip="m/v-dof.mp4" data-poster="m/v-dof.jpg" muted loop playsinline preload="none" aria-label="Depth of field / rack focus: only the carousel is sharp"></video><figcaption><b>0:39.1</b> Depth of field / rack focus<span class="gj-vocab-def">How much of the picture is sharp; a rack focus moves the sharp spot from one thing to another.</span></figcaption></figure>
+  </div>
+  <h3>Sound-led</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-hit-point.mp4" data-poster="m/v-hit-point.jpg" muted loop playsinline preload="none" aria-label="Hit point: ball at the lens on the bar"></video><figcaption><b>0:23.0</b> Hit point<span class="gj-vocab-def">The exact moment in the music a picture event must land on — a hit, a drop, a snare.</span></figcaption></figure>
+    <figure><video data-clip="m/v-downbeat.mp4" data-poster="m/v-downbeat.jpg" muted loop playsinline preload="none" aria-label="Downbeat: new bar, new shot"></video><figcaption><b>0:26.3</b> Downbeat<span class="gj-vocab-def">The first and strongest beat of each bar — the &quot;ONE&quot; in 1-2-3-4.</span></figcaption></figure>
+    <figure><video data-clip="m/v-sync.mp4" data-poster="m/v-sync.jpg" muted loop playsinline preload="none" aria-label="Sync: on the kicks"></video><figcaption><b>0:15.1 / 15.5 / 15.7</b> Sync<span class="gj-vocab-def">Picture and sound lined up so they happen at exactly the same moment.</span></figcaption></figure>
+  </div>
+  <h3>Camera</h3>
+  <div class="gj-cards">
+    <figure><video data-clip="m/v-dolly.mp4" data-poster="m/v-dolly.jpg" muted loop playsinline preload="none" aria-label="Dolly in / dolly out: the 3D camera travels back"></video><figcaption><b>0:40.1</b> Dolly in / dolly out<span class="gj-vocab-def">The camera physically moves closer or further — near things grow faster than far ones, unlike a zoom.</span></figcaption></figure>
+    <figure><video data-clip="m/v-push-in.mp4" data-poster="m/v-push-in.jpg" muted loop playsinline preload="none" aria-label="Push-in: into the eye"></video><figcaption><b>0:05.6</b> Push-in<span class="gj-vocab-def">A slow, steady move toward the subject that builds tension or focus.</span></figcaption></figure>
+    <figure><video data-clip="m/v-pull-back.mp4" data-poster="m/v-pull-back.jpg" muted loop playsinline preload="none" aria-label="Pull-back reveal: it was a toy"></video><figcaption><b>0:39.1–41.6</b> Pull-back reveal<span class="gj-vocab-def">The camera pulls back to show something we couldn&#x27;t see — often that the world was smaller or different than we thought.</span></figcaption></figure>
+    <figure><video data-clip="m/v-pov.mp4" data-poster="m/v-pov.jpg" muted loop playsinline preload="none" aria-label="POV: riding pillion"></video><figcaption><b>0:16.6</b> POV<span class="gj-vocab-def">Point of view: the camera is someone&#x27;s eyes, so we see what he sees.</span></figcaption></figure>
+    <figure><video data-clip="m/v-locked-off.mp4" data-poster="m/v-locked-off.jpg" muted loop playsinline preload="none" aria-label="Locked-off: the footbridge"></video><figcaption><b>0:23.0</b> Locked-off<span class="gj-vocab-def">The camera doesn&#x27;t move at all — only the subject and the world move inside the frame.</span></figcaption></figure>
+  </div>
+  <h3>Not in the piece yet</h3>
+  <p class="gj-vocab-note">Demos, not in the video: the same words shown on our own footage and objects.</p>
+  <div class="gj-cards gj-vocab-demos">
+    <figure><video data-clip="m/v-j-cut.mp4" data-poster="m/v-j-cut.jpg" muted loop playsinline preload="none" aria-label="J-cut: demo, not in the video. the court&#x27;s sound starts before the picture cuts"></video><figcaption><b>demo</b> J-cut<span class="gj-vocab-def">You hear the next shot before you see it: its sound starts early, under the current picture.</span></figcaption></figure>
+    <figure><video data-clip="m/v-l-cut.mp4" data-poster="m/v-l-cut.jpg" muted loop playsinline preload="none" aria-label="L-cut: demo, not in the video. the falls&#x27; sound runs on over the court"></video><figcaption><b>demo</b> L-cut<span class="gj-vocab-def">The sound of a shot keeps going after the picture has already cut away to the next one.</span></figcaption></figure>
+    <figure><video data-clip="m/v-cutaway.mp4" data-poster="m/v-cutaway.jpg" muted loop playsinline preload="none" aria-label="Cutaway: demo, not in the video. main shot, a close shot of his hands, back"></video><figcaption><b>demo</b> Cutaway<span class="gj-vocab-def">A short shot of something else (what he&#x27;s looking at, his hands, the place) dropped in, before returning to the main shot.</span></figcaption></figure>
+    <figure><video data-clip="m/v-whip-pan.mp4" data-poster="m/v-whip-pan.jpg" muted loop playsinline preload="none" aria-label="Whip pan: demo, not in the video. the monument whips to the falls"></video><figcaption><b>demo</b> Whip pan<span class="gj-vocab-def">The camera swings sideways so fast it blurs, and comes out of the blur somewhere new.</span></figcaption></figure>
+    <figure><video data-clip="m/v-invisible-cut.mp4" data-poster="m/v-invisible-cut.jpg" muted loop playsinline preload="none" aria-label="Invisible cut: demo, not in the video. the cut hides in the black of his sunglasses"></video><figcaption><b>demo</b> Invisible cut<span class="gj-vocab-def">The cut is hidden in a moment where the frame goes fully dark or blocked, so it looks like one continuous shot.</span></figcaption></figure>
+    <figure><video data-clip="m/v-slow-mo.mp4" data-poster="m/v-slow-mo.jpg" muted loop playsinline preload="none" aria-label="Slow motion: demo, not in the video. the forehand at real speed, then ¼ speed"></video><figcaption><b>demo</b> Slow motion<span class="gj-vocab-def">Time runs slower than real life so you can see every detail of a moment.</span></figcaption></figure>
+    <figure><video data-clip="m/v-stutter.mp4" data-poster="m/v-stutter.jpg" muted loop playsinline preload="none" aria-label="Stutter: demo, not in the video. the same three frames, four times over"></video><figcaption><b>demo</b> Stutter<span class="gj-vocab-def">The same few frames repeat quickly, so the picture looks like it&#x27;s skipping or stamping.</span></figcaption></figure>
+    <figure><video data-clip="m/v-echo.mp4" data-poster="m/v-echo.jpg" muted loop playsinline preload="none" aria-label="Echo / trails: demo, not in the video. fading copies of him trail behind"></video><figcaption><b>demo</b> Echo / trails<span class="gj-vocab-def">A moving thing leaves fading copies of itself behind it.</span></figcaption></figure>
+    <figure><video data-clip="m/v-linear.mp4" data-poster="m/v-linear.jpg" muted loop playsinline preload="none" aria-label="Linear: demo, not in the video. the headphones at one speed: evenly spaced dots"></video><figcaption><b>demo</b> Linear<span class="gj-vocab-def">Movement at one constant speed from start to stop — feels robotic.</span></figcaption></figure>
+    <figure><video data-clip="m/v-ease-in-out.mp4" data-poster="m/v-ease-in-out.jpg" muted loop playsinline preload="none" aria-label="Ease-in-out: demo, not in the video. the headphones ease in and out: dots bunch at the ends"></video><figcaption><b>demo</b> Ease-in-out<span class="gj-vocab-def">Starts slow, speeds up in the middle, slows down at the end — the most natural feel.</span></figcaption></figure>
+    <figure><video data-clip="m/v-overshoot.mp4" data-poster="m/v-overshoot.jpg" muted loop playsinline preload="none" aria-label="Overshoot: demo, not in the video. the headphones pop past full size, then settle"></video><figcaption><b>demo</b> Overshoot<span class="gj-vocab-def">Something goes a bit past where it should stop, then settles back — it feels bouncy and alive.</span></figcaption></figure>
+    <figure><video data-clip="m/v-follow-through.mp4" data-poster="m/v-follow-through.jpg" muted loop playsinline preload="none" aria-label="Follow-through: demo, not in the video. the headphones stop; the swing carries on"></video><figcaption><b>demo</b> Follow-through<span class="gj-vocab-def">When the main thing stops, the loose parts (hair, a strap, a tail) keep moving for a moment.</span></figcaption></figure>
+    <figure><video data-clip="m/v-camera-shake.mp4" data-poster="m/v-camera-shake.jpg" muted loop playsinline preload="none" aria-label="Camera shake: demo, not in the video. the frame jolts on the hit"></video><figcaption><b>demo</b> Camera shake<span class="gj-vocab-def">The picture jolts as if the camera took the hit.</span></figcaption></figure>
+    <figure><video data-clip="m/v-roto.mp4" data-poster="m/v-roto.jpg" muted loop playsinline preload="none" aria-label="Rotoscoping / matte: demo, not in the video. the footage, his matte, him on a new background"></video><figcaption><b>demo</b> Rotoscoping / matte<span class="gj-vocab-def">Cutting a person or object out of the footage, frame by frame; the cut-out shape is called the matte.</span></figcaption></figure>
+    <figure><video data-clip="m/v-keying.mp4" data-poster="m/v-keying.jpg" muted loop playsinline preload="none" aria-label="Keying / chroma key: demo, not in the video. him on green, then the green keyed out"></video><figcaption><b>demo</b> Keying / chroma key<span class="gj-vocab-def">Removing one flat colour (usually green) from the picture so you can put anything behind.</span></figcaption></figure>
+    <figure><video data-clip="m/v-occlusion.mp4" data-poster="m/v-occlusion.jpg" muted loop playsinline preload="none" aria-label="Occlusion: demo, not in the video. the koi passes behind him"></video><figcaption><b>demo</b> Occlusion<span class="gj-vocab-def">When something closer blocks something further away — getting it right is what makes a 3D object feel really there.</span></figcaption></figure>
+    <figure><video data-clip="m/v-grade.mp4" data-poster="m/v-grade.jpg" muted loop playsinline preload="none" aria-label="Colour grade / colour match: demo, not in the video. before and graded, wiping across"></video><figcaption><b>demo</b> Colour grade / colour match<span class="gj-vocab-def">Adjusting colour and contrast for a mood, or so different shots and layers look like they belong together.</span></figcaption></figure>
+    <figure><video data-clip="m/v-sound-off.mp4" data-poster="m/v-sound-off.jpg" muted loop playsinline preload="none" aria-label="Sound-off design: demo, not in the video. the words on screen carry it with no sound"></video><figcaption><b>demo</b> Sound-off design<span class="gj-vocab-def">Making the video work even with the sound off — captions, clear visuals, the story told in pictures.</span></figcaption></figure>
+  </div>
+</section>
+
+  <!-- 3e · the sound -->
+  <section class="gj-sec" id="sound-map">
+    <p class="eyebrow">The making of · 07 · The sound</p>
+    <h2>Twelve bars, taken apart.</h2>
+    <p class="lede">The loop is 12 bars of the song, split into stems and re-cut on the bar lines. The shaded bars are the remix.</p>
+    <div class="gj-map" id="stem-map" data-src="m/sound.json"><p class="label">Loading the stem map…</p></div>
+    <p class="label gj-sound-note">Press play on the loop below and a playhead runs across it · scroll sideways on a phone</p>
+    <ul class="gj-moves">
+      <li><b>Bars 5–6 · double time</b>the music plays two bars in the space of one</li>
+      <li><b>Bar 7 · space</b>the music drops out; drums and voice carry it</li>
+      <li><b>Bar 8 · reversed swell</b>a bar played backwards, rising in</li>
+      <li><b>Bar 9 · the break</b>the kick drops out</li>
+      <li><b>Bar 10 · drums return</b>the kick comes back in</li>
+    </ul>
+    <h3>The stems.</h3>
+    <div class="gj-stem gj-loop"><span class="label">The loop — 38.7s, the edit the video is cut to</span><audio id="loop" src="m/loop.mp3" controls preload="none"></audio></div>
+    <div class="gj-stems">
+      <div class="gj-stem drums"><span class="label">Drums · 2 bars</span><audio src="m/stem-drums.mp3" controls preload="none"></audio></div>
+      <div class="gj-stem bass"><span class="label">Bass · 2 bars</span><audio src="m/stem-bass.mp3" controls preload="none"></audio></div>
+      <div class="gj-stem vocals"><span class="label">Vocals · 2 bars</span><audio src="m/stem-vocals.mp3" controls preload="none"></audio></div>
+      <div class="gj-stem other"><span class="label">Other · 2 bars</span><audio src="m/stem-other.mp3" controls preload="none"></audio></div>
+      <div class="gj-stem"><span class="label">The remix · bars 6–8</span><audio id="remix" src="m/stem-remix.mp3" controls preload="none"></audio></div>
+    </div>
+  </section>
+
+  <!-- 3f · how it was made -->
+  <section class="gj-sec" id="how">
+    <p class="eyebrow">The making of · 08 · How it was made</p>
+    <h2>Footage in, a loop out.</h2>
+    <ol class="gj-pipe">
+      <li><b>Real footage</b>Phone clips from the trip — the base of every shot.</li>
+      <li><b>Tracking</b>Each clip's camera move is tracked so 3D can sit inside it.</li>
+      <li><b>3D objects</b>Built in Blender with lifelike materials.</li>
+      <li><b>AI shots</b>GPT Image 2.5 stills, Seedance 2.5 motion, Genjutsu motion transfer.</li>
+      <li><b>The edit</b>Cut on the kicks, turns around the subject, jump cuts.</li>
+      <li><b>The song</b>12 bars split into stems and remixed into a loop.</li>
+    </ol>
+  </section>
+
+  <!-- 3g · credits -->
+  <!-- bonus · the memes -->
+  <section class="gj-sec" id="memes">
+    <p class="eyebrow">Bonus · The memes</p>
+    <h2>Two memes, starring me.</h2>
+    <p class="lede">Made the same way as the piece: real photos of me, rebuilt with AI, then animated. Tap one for sound.</p>
+    <div class="gj-memes">
+      <figure><video data-clip="m/meme-neuron.mp4?v=1" data-poster="m/meme-neuron.jpg?v=1" muted loop playsinline controls preload="none" aria-label="Neuron activation: a blank stare, then my brain lights up purple"></video><figcaption><b>Neuron activation</b>a blank stare, then the whole brain lights up Goja purple</figcaption></figure>
+      <figure><video data-clip="m/meme-introvert.mp4?v=1" data-poster="m/meme-introvert.jpg?v=1" muted loop playsinline controls preload="none" aria-label="Introvert with AI: boss, leader, introvert, introvert with AI"></video><figcaption><b>Introvert with AI</b>boss, leader, introvert… then introvert with AI</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="gj-sec" id="credits">
+    <p class="eyebrow">Credits</p>
+    <dl class="gj-credits">
+      <div><dt>Made by</dt><dd>DÆMN</dd></div>
+      <div><dt>Music</dt><dd>Gotts Street Park — Lost &amp; Found</dd></div>
+      <div><dt>Footage</dt><dd>Shot on a phone, Thailand and Laos, 2026</dd></div>
+      <div><dt>AI</dt><dd>GPT Image 2.5 · Seedance 2.5 · Higgsfield Genjutsu</dd></div>
+      <div><dt>3D</dt><dd>Blender · three.js · light map from Poly Haven (CC0)</dd></div>
+      <div><dt>Sound</dt><dd>Demucs stem split · Rubber Band time-stretch</dd></div>
+    </dl>
+  </section>
+  <a class="gj-upnext" id="xp-upnext" href="#personas"><div class="gj-post-media"></div><div><p class="label">Up next</p><b></b></div><span class="arrow" aria-hidden="true">→</span></a>
+</main>
+
+<footer class="bot">
+  <span>DÆMN</span>
+  <span class="right">Carousel · 2026</span>
+</footer>
+<script>
+(function(){var v=document.getElementById("piece"),b=document.getElementById("sound");
+ function sync(){b.textContent=v.muted?"Tap for sound":"Sound off"}
+ b.addEventListener("click",function(){v.muted=!v.muted;if(!v.muted){v.volume=1;var p=v.play();p&&p.catch&&p.catch(function(){})}sync()});
+ v.addEventListener("volumechange",sync);})();
+</script>
+<script src="feed.js?v=4"></script>
+<script src="page.js?v=8" defer></script>
+<!-- carousel.js and objects-grid.js are loaded by feed.js when a 3D part opens -->
+</body>
+</html>

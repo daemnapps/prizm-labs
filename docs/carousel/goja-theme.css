@@ -1,0 +1,393 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   GOJA — a dark theme of the PRIZM system, for a piece that lives at night.
+   Proposed 2026-09-27 for daemn.co/ai-slop/ (see THEME.md). Merge target:
+   the end of studio.css.
+
+   THE IDEA: the Goja gallery's neon. The page is the dark around the sign —
+   a deep purple-black ground, bone ink, one violet-magenta glow behind the
+   work. Same three faces, same spine, same radii; only the light changes.
+   Put class="theme-goja" on <body>; every token below is redefined for
+   everything inside it, so the shared primitives (.eyebrow, .btn, .label,
+   nav.bar, footer.bot) come out dark with no page CSS.
+
+   The spectrum keeps its jobs, lifted so each reads on the dark. The glow is
+   the only decoration, and only the piece and a floating object get it.
+   ═══════════════════════════════════════════════════════════════════════ */
+.theme-goja{
+  color-scheme:dark;
+  /* the ground and the ink */
+  --bone:#0E0C14;          /* the ground — purple-black, never #000   */
+  --paper:#151120;         /* a panel on the ground                  */
+  --card:#1B1628;          /* a card, a frame's backing              */
+  --ink:#F3EEFB;           /* bone ink, never #fff                   */
+  --ink-2:#CFC6DF;
+  --ink-3:#A9A0BB;
+  --line:rgba(243,238,251,.12);
+  --line-2:rgba(243,238,251,.24);
+  /* the spectrum, lifted for the dark; jobs unchanged */
+  --violet:#B264FF;
+  --indigo:#7B61FF;
+  --cyan:#3CD2F0;
+  --green:#3DD68C;
+  --amber:#FFB02E;
+  --coral:#FF6A4D;
+  --magenta:#FF5CC8;
+  --prism:linear-gradient(96deg,#6D3BF5,#B264FF,#FF5CC8);
+  /* new: the Goja light itself */
+  --goja:#B264FF;
+  --glow:rgba(178,100,255,.28);
+  --glow-2:rgba(255,92,200,.14);
+  --float:0 0 0 1px rgba(243,238,251,.08),0 30px 120px rgba(178,100,255,.28);
+  /* the four stems, for the sound map and its legend */
+  --stem-drums:#FF6A4D;
+  --stem-bass:#B264FF;
+  --stem-vocals:#3CD2F0;
+  --stem-other:#FFB02E;
+}
+body.theme-goja{
+  background:
+    radial-gradient(60% 40% at 50% 0%, var(--glow) 0%, transparent 62%),
+    radial-gradient(50% 40% at 100% 60%, var(--glow-2) 0%, transparent 60%),
+    var(--bone);
+  background-attachment:fixed;
+}
+.theme-goja ::selection{background:var(--goja);color:var(--bone)}
+body.theme-goja::after{opacity:.06}
+
+/* ── the piece: frames either side, the video in the middle, glowing ──── */
+.gj-hero{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:var(--s6);align-items:center;
+  padding-block:var(--s5) var(--s7)}
+.gj-piece{display:grid;justify-items:center;gap:var(--s4);text-align:center}
+.gj-piece h1{font-size:clamp(44px,6.4vw,72px);letter-spacing:-.02em}
+.gj-piece .eyebrow{justify-content:center}
+.gj-quote{font-family:var(--display);font-weight:600;font-size:clamp(17px,2vw,21px);line-height:1.3;
+  letter-spacing:-.01em;text-wrap:balance;max-width:24ch;margin-inline:auto}
+.gj-video{width:min(420px,86vw,calc(80svh * 9 / 16));aspect-ratio:9/16;display:block;border-radius:var(--r3);background:var(--card);
+  box-shadow:var(--float)}
+.gj-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2)}
+.gj-side figure,.gj-strip figure{margin:0;display:grid;gap:6px}
+.gj-side img{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r2);opacity:.94}
+.gj-side figcaption,.gj-strip figcaption,.gj-cards figcaption,.gj-fig figcaption{font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);line-height:1.35}
+.gj-strip figcaption{text-transform:none;letter-spacing:.02em;font-size:11px}
+.gj-strip figcaption b,.gj-cards figcaption b{color:var(--goja);font-weight:500;margin-right:4px}
+
+/* ── a making-of section: eyebrow, one plain line, the visuals ──────── */
+.gj-sec{padding-block:clamp(var(--s7),9vw,120px) 0}
+.gj-sec > .eyebrow{margin-bottom:var(--s3)}
+.gj-sec > h2{margin-bottom:var(--s2)}
+.gj-sec > .lede{margin-bottom:var(--s5)}
+.gj-sec h3{margin:var(--s6) 0 var(--s3)}
+.gj-num{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--goja);margin-right:var(--s2)}
+
+/* the frames, in running order, scrolled sideways */
+.gj-strip{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(128px,14vw,170px);gap:var(--s3);
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:var(--s3);scrollbar-width:thin;
+  scrollbar-color:var(--line-2) transparent}
+.gj-strip figure{scroll-snap-align:start}
+.gj-strip img{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r2);border:1px solid var(--line)}
+
+/* cards of tall media — clips, stills */
+.gj-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:var(--s3)}
+.gj-cards figure{margin:0;display:grid;gap:6px;align-content:start}
+.gj-cards img,.gj-cards video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r2);
+  border:1px solid var(--line);background:var(--card)}
+.gj-cards.real figure:first-child img{outline:2px solid var(--goja);outline-offset:2px}
+
+/* one wide piece of media: a comparison clip, a grid still, a sheet */
+.gj-fig{margin:0;display:grid;gap:var(--s2)}
+.gj-fig img,.gj-fig video{width:100%;height:auto;border-radius:var(--r2);border:1px solid var(--line);background:var(--card)}
+.gj-labels{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.gj-labels span:first-child{color:var(--goja)}
+
+/* the character sheets: one look per row */
+.gj-look{display:grid;grid-template-columns:minmax(120px,200px) 1fr;gap:var(--s4);align-items:start;
+  padding-block:var(--s5);border-top:1px solid var(--line)}
+.gj-look > figure{margin:0;display:grid;gap:6px}
+.gj-look > figure img{width:100%;height:auto;border-radius:var(--r2);border:1px solid var(--line)}
+.gj-look h3{margin:0 0 var(--s1)}
+.gj-look .gj-sheets + h3{margin-top:var(--s5)}
+.gj-sheets{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--s2)}
+.gj-sheets img{width:100%;height:auto;border-radius:var(--r1);border:1px solid var(--line);background:var(--card)}
+
+/* the objects: the 3D carousel on the dark, with its glow */
+.gj-carousel{position:relative;width:100%;height:600px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(46% 42% at 50% 58%, var(--glow) 0%, transparent 70%)}
+.gj-carousel.grabbing{cursor:grabbing}
+.gj-carousel canvas{display:block;width:100%;height:100%;touch-action:pan-y}
+
+/* the sound: the stem map, the moves, the excerpts */
+.gj-map{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.gj-map svg{display:block;width:100%;min-width:760px;height:auto}
+.gj-map text{font-family:var(--mono);fill:var(--ink-3);font-size:11px;letter-spacing:.06em}
+.gj-map .t-bar{fill:var(--ink-2)}
+.gj-map .t-lane{fill:var(--ink);text-transform:uppercase;font-size:10.5px;letter-spacing:.12em}
+.gj-map .t-move{fill:var(--goja);font-size:10.5px}
+.gj-map .grid{stroke:var(--line);stroke-width:1}
+.gj-map .grid.bar1{stroke:var(--line-2)}
+.gj-map .band{fill:var(--goja);opacity:.1}
+.gj-map .band.drums{fill:var(--stem-drums)}
+.gj-map .kick{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.gj-map .note{fill:var(--stem-bass);opacity:.9}
+.gj-map .keyline{stroke:var(--line);stroke-dasharray:2 4}
+.gj-map .env{opacity:.85}
+.gj-map .env.drums{fill:var(--stem-drums)} .gj-map .env.bass{fill:var(--stem-bass)}
+.gj-map .env.vocals{fill:var(--stem-vocals)} .gj-map .env.other{fill:var(--stem-other)}
+.gj-map .head{stroke:var(--ink);stroke-width:1.5;opacity:0;transition:opacity .3s}
+.gj-map .head.on{opacity:.9}
+.gj-moves{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--s2);margin-top:var(--s4);
+  padding:0;list-style:none;max-width:none}
+.gj-moves li{margin:0;padding:var(--s3);border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);font-size:14px}
+.gj-moves b{display:block;font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--goja);margin-bottom:2px}
+.gj-stems{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--s2);margin-top:var(--s5)}
+.gj-stem{display:grid;gap:var(--s2);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);
+  --hue:var(--goja);border-top:3px solid var(--hue)}
+.gj-stem .label{color:var(--ink)}
+.gj-stem audio{width:100%;height:36px}
+.gj-loop{margin-top:var(--s4);border-top-width:4px}
+.gj-loop + .gj-stems{margin-top:var(--s2)}
+.gj-stem.drums{--hue:var(--stem-drums)} .gj-stem.bass{--hue:var(--stem-bass)}
+.gj-stem.vocals{--hue:var(--stem-vocals)} .gj-stem.other{--hue:var(--stem-other)}
+
+/* the edit: the whole piece as layers on one clock (page.js §3) */
+.gj-edit-top{display:grid;grid-template-columns:minmax(140px,200px) 1fr;gap:var(--s4);align-items:end;margin-bottom:var(--s3)}
+.gj-edit-video{width:100%;height:auto;aspect-ratio:9/16;border-radius:var(--r2);background:var(--card);box-shadow:var(--float);display:block}
+.gj-edit-key{display:grid;gap:var(--s3)}
+.gj-now{color:var(--ink);font-size:12px;min-height:3em;font-variant-numeric:tabular-nums}
+.gj-key{list-style:none;padding:0;margin:0;max-width:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px var(--s3)}
+.gj-key li{margin:0;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--ink-2)}
+.gj-key i{width:18px;height:10px;border-radius:3px;flex:none;background:var(--hue)}
+.k-real{--hue:var(--cyan)} .k-ai{--hue:var(--magenta)} .k-3d{--hue:var(--violet)} .k-open{--hue:var(--green)}
+.k-fit{--hue:var(--amber)} .k-flash{--hue:var(--coral)} .k-obj{--hue:var(--indigo)} .k-cam{--hue:var(--line-2)}
+.gj-edit{display:grid;grid-template-columns:92px minmax(0,1fr);border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);overflow:hidden}
+.gj-edit-labels{display:grid;align-content:start;border-right:1px solid var(--line);padding-bottom:6px}
+.gj-edit-labels span{display:flex;align-items:center;padding-left:var(--s3);font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink);border-top:1px solid var(--line);box-sizing:border-box}
+.gj-edit-labels span:first-child{border-top:0}
+.gj-edit-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;cursor:pointer}
+.gj-edit-scroll > .label{padding:var(--s4)}
+.gj-edit svg{display:block}
+.gj-edit text{font-family:var(--mono);fill:var(--ink-3);font-size:10.5px;letter-spacing:.04em;pointer-events:none}
+.gj-edit .t-bar{fill:var(--ink-2)}
+.gj-edit .t-in{fill:var(--bone);font-weight:500}
+.gj-edit .t-flash{fill:var(--coral)}
+.gj-edit .grid{stroke:var(--line);stroke-width:1}
+.gj-edit .grid.bar1{stroke:var(--line-2)}
+.gj-edit .e-pre{fill:var(--green);opacity:.06}
+.gj-edit .e-scene{fill:var(--cyan)} .gj-edit .e-scene.ai{fill:var(--magenta)} .gj-edit .e-scene.d3{fill:var(--violet)}
+.gj-edit .e-scene.mix{fill:var(--indigo)} .gj-edit .e-scene.open{fill:var(--green)}
+.gj-edit .e-cam{fill:var(--line-2)} .gj-edit .e-cam + .t-in{fill:var(--ink)}
+.gj-edit .e-turn{fill:var(--cyan)}
+.gj-edit .e-hat{fill:var(--ink)}
+.gj-edit .e-jump{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.gj-edit .e-fit{fill:var(--amber)}
+.gj-edit .e-flash{fill:var(--coral)}
+.gj-edit .e-obj{fill:var(--indigo)} .gj-edit .e-obj + .t-in{fill:var(--ink)}
+.gj-edit .e-lens{fill:var(--ink);stroke:var(--bone);stroke-width:1.5}
+.gj-edit .e-fin{fill:var(--goja);opacity:.55} .gj-edit .e-fin.frz{fill:var(--cyan);opacity:.8}
+.gj-edit .e-fin + .t-in{fill:var(--ink)}
+.gj-edit .e-lead{fill:var(--green);opacity:.5}
+.gj-edit .e-barl{stroke:var(--line-2)}
+.gj-edit .kick{stroke:var(--stem-drums);stroke-width:2;stroke-linecap:round}
+.gj-edit .e-ref{stroke:var(--line);stroke-dasharray:2 4}
+.gj-edit .t-ref{font-size:9px;fill:var(--ink-3)}
+.gj-edit .e-curve{fill:none;stroke-width:1.75;stroke-linejoin:round}
+.gj-edit .c-speed{stroke:var(--cyan)} .gj-edit .c-zoom{stroke:var(--goja)} .gj-edit .c-turn{stroke:var(--magenta)}
+.gj-edit .c-ref{stroke:var(--green)} .gj-edit .c-osize{stroke:var(--indigo)} .gj-edit .c-ospeed{stroke:var(--amber)}
+.gj-edit .e-pic{fill:var(--ink-3);opacity:.55} .gj-edit .e-pic.r1{fill:var(--cyan);opacity:.45}
+.gj-edit .e-pic + .t-in{fill:var(--ink)}
+.gj-edit .head{stroke:var(--ink);stroke-width:1.5;opacity:.95}
+.gj-edit rect:hover{filter:brightness(1.25)}
+@media (max-width:620px){
+  .gj-edit-top{grid-template-columns:120px 1fr;gap:var(--s3)}
+  .gj-edit{grid-template-columns:72px minmax(0,1fr)}
+  .gj-edit-labels span{padding-left:8px;font-size:9px;letter-spacing:.08em}
+  .gj-key{grid-template-columns:1fr}
+}
+
+/* live 3D objects, one per tile (objects-grid.js draws them all through one click-through canvas) */
+.gj-objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s3);margin-top:var(--s3)}
+.gj-obj{margin:0;display:grid;gap:6px;align-content:start}
+.gj-obj-view{aspect-ratio:1/1;border:1px solid var(--line);border-radius:var(--r2);touch-action:pan-y;cursor:grab;
+  background:radial-gradient(70% 70% at 50% 40%,var(--glow) 0%,transparent 70%),var(--card)}
+.gj-obj-view:active{cursor:grabbing}
+.gj-obj:not(.ready) .gj-obj-view{animation:gj-pulse 1.6s ease-in-out infinite}
+@keyframes gj-pulse{50%{opacity:.6}}
+.gj-obj figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-3)}
+.gj-obj figcaption b{display:block;color:var(--ink);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.gj-objs{position:relative}
+.gj-objs-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+@media (max-width:620px){.gj-objs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* bonus: the memes, two up */
+.gj-memes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);max-width:760px}
+.gj-memes figure{margin:0;display:grid;gap:var(--s2)}
+.gj-memes video{width:100%;height:auto;aspect-ratio:9/16;border-radius:var(--r2);background:var(--card);box-shadow:var(--float);display:block}
+.gj-memes figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
+.gj-memes figcaption b{display:block;color:var(--goja);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+
+/* how it was made: a pipeline, left to right (top to bottom on a phone) */
+.gj-pipe{list-style:none;padding:0;margin:0;max-width:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s2);
+  counter-reset:gp}
+.gj-pipe li{counter-increment:gp;margin:0;position:relative;padding:var(--s4) var(--s3);border:1px solid var(--line);
+  border-radius:var(--r2);background:var(--paper);font-size:13.5px;color:var(--ink-2)}
+.gj-pipe li::before{content:counter(gp,decimal-leading-zero);display:block;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:var(--goja);margin-bottom:var(--s2)}
+.gj-pipe li:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);color:var(--goja);z-index:1}
+.gj-pipe b{display:block;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em;color:var(--ink);margin-bottom:4px}
+
+/* credits */
+.gj-credits{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--s4) var(--s5);margin:0}
+.gj-credits dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.gj-credits dd{margin:2px 0 0;color:var(--ink)}
+
+@media (max-width:980px){
+  .gj-hero{grid-template-columns:1fr;gap:var(--s5)}
+  .gj-piece{order:1}
+  .gj-side{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .gj-side.left{order:2} .gj-side.right{order:3}
+  .gj-pipe{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gj-pipe li:nth-child(3)::after{content:none}
+}
+@media (max-width:620px){
+  .gj-pipe{grid-template-columns:1fr}
+  .gj-pipe li:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-15px;transform:translateX(-50%) rotate(90deg)}
+  .gj-pipe li:nth-child(3):not(:last-child)::after{content:"→"}
+  .gj-pipe li:not(:last-child){margin-bottom:var(--s2)}
+  .gj-look{grid-template-columns:1fr}
+  .gj-look > figure{max-width:180px}
+  .gj-sheets{grid-template-columns:1fr 1fr}
+  .gj-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gj-labels{font-size:9px;letter-spacing:.06em}
+  /* the carousel on a phone: square, so the whole ride fits the width with room round it */
+  .gj-carousel{height:auto;aspect-ratio:1/1.08}
+}
+
+/* ═══ the feed: a profile, the pinned piece, then one post per part of the making-of ═══
+   feed.js puts .gj-app on <html>. Without it (no script) every section simply shows in a
+   column, and the posts work as a contents list. With it, the landing is the feed and a
+   post opens its part as a full-screen view (.gj-sec.on), deep-linked by a bare hash. */
+.gj-profile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s3) var(--s5);align-items:center;
+  padding-block:var(--s3) var(--s4)}
+.gj-avatar{width:clamp(76px,18vw,120px);aspect-ratio:1;border-radius:var(--r4);padding:3px;background:var(--prism)}
+.gj-avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;border-radius:var(--r4);border:3px solid var(--bone)}
+.gj-who h1{font-size:clamp(24px,4vw,34px);letter-spacing:-.02em}
+.gj-who .label{margin-top:2px}
+.gj-stats{display:flex;gap:var(--s5);margin:var(--s3) 0 0;padding:0;list-style:none;max-width:none}
+.gj-stats li{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);line-height:1.3}
+.gj-stats b{display:block;font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.02em;color:var(--ink);text-transform:none}
+.gj-bio{grid-column:1/-1;color:var(--ink-2);font-size:14.5px;max-width:60ch}
+.gj-pin{display:inline-flex;align-items:center;gap:6px;color:var(--goja)}
+.gj-app .gj-hero{padding-block:var(--s4) var(--s6)}
+
+.gj-feed{padding-block:0 var(--s8)}
+.gj-feed-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4)}
+.gj-feed-head{max-width:520px;margin-inline:auto}
+.gj-posts{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s7);max-width:520px;margin-inline:auto}
+.gj-post-top{display:flex;align-items:center;gap:var(--s2)}
+.gj-post-top b{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:-.01em}
+.gj-post-av{width:30px;height:30px;border-radius:var(--r4);padding:2px;background:var(--prism);flex:none}
+.gj-post-av img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;border-radius:var(--r4);border:2px solid var(--bone)}
+.gj-open{display:inline-block;margin-top:var(--s2);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--goja)}
+.gj-post{display:grid;gap:var(--s2);align-content:start;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
+.gj-post-media{position:relative;aspect-ratio:4/5;border-radius:var(--r2);overflow:hidden;background:var(--card);
+  border:1px solid var(--line);transition:transform .25s ease,border-color .25s ease}
+.gj-post:hover .gj-post-media,.gj-post:focus-visible .gj-post-media{border-color:var(--goja);transform:translateY(-2px)}
+.gj-post:active .gj-post-media{transform:scale(.985)}
+.gj-post-media > img,.gj-post-media > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gj-post-media::after{content:"";position:absolute;inset:auto 0 0;height:45%;pointer-events:none;
+  background:linear-gradient(to top,color-mix(in srgb,var(--bone) 80%,transparent),transparent)}
+.gj-post-n,.gj-post-count{position:absolute;z-index:1;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.gj-post-n{top:var(--s2);left:var(--s2);padding:3px 7px;border-radius:var(--r4);color:var(--ink);
+  background:color-mix(in srgb,var(--bone) 62%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.gj-post-count{bottom:var(--s2);left:var(--s3);color:var(--ink)}
+.gj-post-cap b{display:block;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.2}
+.gj-post-cap span{display:block;font-size:13px;color:var(--ink-3);line-height:1.35;margin-top:2px}
+/* post covers that are built, not filmed */
+.gj-mosaic{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.gj-mosaic img{width:100%;height:100%;object-fit:cover}
+.gj-reel{position:absolute;inset:0;display:grid;grid-template-rows:repeat(5,1fr);gap:3px;padding:var(--s2) 0}
+.gj-reel img{width:100%;height:100%;object-fit:cover;object-position:var(--at,0) 50%;opacity:.85}
+.gj-reel div{display:flex;gap:3px;padding-inline:3px}
+.gj-reel i{flex:var(--w,1);border-radius:var(--r1);background:var(--hue);opacity:.9}
+.gj-bars{position:absolute;inset:18% 10% 22%;display:flex;align-items:center;gap:4px}
+.gj-bars i{flex:1;height:var(--h);border-radius:var(--r4);background:var(--hue);animation:gj-eq 1.1s ease-in-out infinite alternate;
+  animation-delay:var(--d,0s);transform-origin:50% 50%}
+@keyframes gj-eq{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+.gj-type{position:absolute;inset:0;display:grid;align-content:center;gap:var(--s2);padding:var(--s5);
+  background:radial-gradient(80% 60% at 50% 30%,var(--glow) 0%,transparent 70%)}
+.gj-type b{font-family:var(--display);font-weight:800;font-size:clamp(20px,3vw,28px);letter-spacing:-.02em;line-height:1.05}
+.gj-type span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);line-height:1.6}
+@media (max-width:620px){ .gj-stats{gap:var(--s4)} }
+.gj-bars i{animation-play-state:paused} .is-focus .gj-bars i,.gj-bars.is-focus i{animation-play-state:running}
+
+/* one focus at a time: a grid of clips, stills or 3D objects becomes a row you swipe, one item on screen,
+   with a count (3 / 12) and small arrows (feed.js adds .gj-snap and the nav; page.js plays only the focused clip) */
+.gj-app .gj-snap{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:100%;gap:var(--s4);
+  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:0;max-width:none}
+.gj-app .gj-snap::-webkit-scrollbar{display:none}
+.gj-app .gj-snap > *{scroll-snap-align:center;scroll-snap-stop:always;justify-self:center;width:min(100%,calc(60svh * 9 / 16))}
+.gj-app .gj-snap > figure.wide{grid-column:auto;width:min(100%,calc(60svh * 9 / 8))}
+.gj-app .gj-sheets.gj-snap > img{width:100%;max-height:60svh;object-fit:contain;border:0;background:none}
+.gj-app .gj-objs{display:block}
+.gj-app .gj-objs-track > .gj-obj{width:min(100%,56svh)}
+.gj-app .gj-snap .gj-obj-view{touch-action:pan-x pan-y}
+.gj-app .gj-memes{max-width:none}
+.gj-snapnav{display:flex;align-items:center;justify-content:center;gap:var(--s3);margin-top:var(--s3)}
+.gj-snapnav button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line-2);border-radius:var(--r4);
+  width:38px;height:38px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px}
+.gj-snapnav button:hover{border-color:var(--goja)}
+.gj-snapnav button:disabled{opacity:.3;cursor:default}
+.gj-count{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-2);min-width:7ch;text-align:center;font-variant-numeric:tabular-nums}
+.gj-count b{color:var(--goja);font-weight:500}
+.gj-app .gj-look{grid-template-columns:1fr}
+.gj-app .gj-look > figure{max-width:200px}
+/* the page settles on one thing at a time as you scroll */
+html.gj-app:not(.xp-open){scroll-snap-type:y proximity}
+.gj-app .gj-piece .gj-video,.gj-app .gj-post-media{scroll-snap-align:center}
+
+/* the view: one part, full screen, with a sticky bar (back · title · prev/next) and story segments */
+.gj-xpbar{display:none}
+.gj-app .gj-sec{display:none}
+.gj-app .gj-sec.on{display:block;padding-top:var(--s5)}
+.gj-app.xp-open .gj-profile,.gj-app.xp-open .gj-hero,.gj-app.xp-open .gj-feed,.gj-app.xp-open main > hr.prism{display:none}
+.gj-app.xp-open .gj-xpbar{display:block;position:sticky;top:0;z-index:20;margin-inline:calc(-1 * var(--gutter));
+  padding:calc(var(--s2) + env(safe-area-inset-top,0px)) var(--gutter) var(--s2);
+  background:color-mix(in srgb,var(--bone) 84%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.gj-xpbar-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--s3)}
+.gj-xpbar button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line-2);border-radius:var(--r4);
+  min-width:40px;height:40px;padding:0 var(--s3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.gj-xpbar button:hover{border-color:var(--goja)}
+.gj-xpbar button:disabled{opacity:.35;cursor:default}
+.gj-xp-title{margin:0;min-width:0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-.01em}
+.gj-xp-title b{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.12em;color:var(--goja);margin-right:6px}
+.gj-xp-nav{display:flex;gap:6px}
+.gj-xp-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;margin-top:var(--s2)}
+.gj-xp-seg button{height:14px;min-width:0;padding:0;border:0;background:none;border-radius:0;position:relative}
+.gj-xp-seg button::before{content:"";position:absolute;inset:5px 0;border-radius:var(--r4);background:var(--line-2)}
+.gj-xp-seg button.done::before{background:var(--ink-3)}
+.gj-xp-seg button[aria-current]::before{background:var(--goja)}
+.gj-upnext{display:none}
+.gj-app.xp-open .gj-upnext{display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:var(--s4);
+  margin-top:var(--s8);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r3);background:var(--paper);
+  text-decoration:none;color:inherit}
+.gj-upnext:hover{border-color:var(--goja)}
+.gj-upnext .gj-post-media{aspect-ratio:1;border-radius:var(--r2)}
+.gj-upnext .gj-post-media::after,.gj-upnext .gj-post-n,.gj-upnext .gj-post-count{display:none}
+.gj-upnext b{display:block;font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em}
+.gj-upnext .arrow{font-family:var(--mono);color:var(--goja);font-size:18px;padding-right:var(--s2)}
+.gj-in{animation:gj-rise .32s ease both} .gj-in-r{animation:gj-from-r .32s ease both} .gj-in-l{animation:gj-from-l .32s ease both}
+@keyframes gj-rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes gj-from-r{from{opacity:0;transform:translateX(28px)}}
+@keyframes gj-from-l{from{opacity:0;transform:translateX(-28px)}}
+@media (max-width:620px){ .gj-xpbar button .t{display:none} }
+/* on a phone the piece stands alone; its side frames are all in the Frames post */
+@media (max-width:980px){ .gj-app .gj-side{display:none} }
+.gj-app .gj-sec{scroll-margin-top:140px}
