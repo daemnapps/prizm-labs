@@ -221,6 +221,13 @@ body.theme-goja::after{opacity:.06}
 .gj-objs-canvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:5}
 @media (max-width:620px){.gj-objs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+/* bonus: the memes, two up */
+.gj-memes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4);max-width:760px}
+.gj-memes figure{margin:0;display:grid;gap:var(--s2)}
+.gj-memes video{width:100%;height:auto;aspect-ratio:9/16;border-radius:var(--r2);background:var(--card);box-shadow:var(--float);display:block}
+.gj-memes figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
+.gj-memes figcaption b{display:block;color:var(--goja);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+
 /* how it was made: a pipeline, left to right (top to bottom on a phone) */
 .gj-pipe{list-style:none;padding:0;margin:0;max-width:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s2);
   counter-reset:gp}
