@@ -1,0 +1,23 @@
+@@ -126,8 +126,20 @@
+     t = Path(run_dir) / "stages" / "1-teardown.md"
+     if not t.exists():
+         return None
+-    m = re.search(r"Hook text:\s*(.+?)\s*(?:\||$)", t.read_text(), re.M)
+-    return m.group(1).strip() if m else None
++    text = t.read_text()
++    m = re.search(r"Hook text:\s*(.+?)\s*(?:\||$)", text, re.M)
++    card = m.group(1).strip() if m else None
++    if card and norm(card) not in ("none", ""):
++        return card
++    # No hook text — but the opening can still carry a card as a layer: a
++    # platform comment-reply sticker, a stitched caption (found 2026-09-28 on
++    # a proven ad whose whole card was a comment reply). The first quoted layer
++    # on screen in the opening second is the card.
++    sheet = text.split("**Layer sheet**", 1)[-1].split("**Sound sheet**", 1)[0]
++    for lm in re.finditer(r"^\*\s+0:0(\d)(?:\.\d)?\s*·[^\n]*?\"(.+?)\"\s*$", sheet, re.M):
++        if int(lm.group(1)) <= 1:
++            return lm.group(2).strip()
++    return card
+ 
+ 
+ def source_opening(run_dir):

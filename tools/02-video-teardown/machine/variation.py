@@ -121,7 +121,7 @@ def copy_run(src_dir, dst_slug, keep, patch):
     return dst, st
 
 
-def open_root(src, brand, route):
+def open_root(src, brand, route, product=None):
     import proven
     ok, proof, why = proven.check(brand, src)
     say(("  0p proven gate: PASSED — " if ok else "  0p proven gate: REFUSED — ") + why)
@@ -136,6 +136,11 @@ def open_root(src, brand, route):
         _label=base_for(src), triage_lane="VARIATION", variation_of=src, variation_role="root",
         proven_proof=proof, production_route=route, route_chosen_by_hand=True))
     st["proven_proof"] = proof
+    # The product is the proven ad's own and stays locked in every branch
+    # (only awareness moves); a brand with several products has to be told
+    # which one, exactly as run.py's --product asks.
+    if product:
+        st["product"] = product.lower()
     save(d, st)
     return d
 
@@ -145,9 +150,12 @@ def run_through(slug, brand, stop, extras, route):
     run folder; the label handed to run.py is the one it was opened with, so
     run.py resolves the very same folder."""
     import run as R
+    st = load(runs() / slug)
     ex = {**base_extras(brand), **extras}
-    label = load(runs() / slug).get("label") or slug
-    return R.run_video(None, label, brand, stop=stop, extras=ex, want_frames=False, route=route)
+    ex["product"] = st.get("product") or ex.get("product") or ""
+    label = st.get("label") or slug
+    return R.run_video(None, label, brand, stop=stop, extras=ex, want_frames=False, route=route,
+                       product=st.get("product") or None)
 
 
 def read_map(root):
@@ -304,7 +312,7 @@ def cmd_plan(a):
 def cmd_start(a):
     src, brand, route = a.source, a.brand, a.route
     say(f"\n▶ VARIATION VIDEO · {src} ({brand}) · route {route}")
-    root = open_root(src, brand, route)
+    root = open_root(src, brand, route, a.product)
     if not run_through(root.name, brand, "4m", {}, route):
         say("  the root stopped before the map — see the run above"); return 1
     m = read_map(root)
@@ -357,6 +365,9 @@ def main():
     ap.add_argument("source")
     ap.add_argument("--brand", required=True)
     ap.add_argument("--route", default="creator", choices=["creator", "ai", "founder"])
+    ap.add_argument("--product", default=None,
+                    help="the product the proven ad sells (a brand with several must say which); "
+                         "it stays locked in every branch")
     ap.add_argument("--levels", default="all")
     ap.add_argument("--hooks", default="0-5")
     ap.add_argument("--jobs", type=int, default=3)
