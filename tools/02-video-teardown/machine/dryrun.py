@@ -29,6 +29,9 @@ import chain as C                                            # noqa: E402
 
 # What run.py itself fills while a stage is running (run_stage), by name.
 RUN_FILLS = {"source_url", "research", "voiceprint", "story"}
+# Filled only on a Variation video run (variation.py hands them in); empty on
+# every other run, and the prompts read empty as "not a variation run".
+VARIATION_FILLS = {"target_awareness", "branch_sections"}
 # What only one kind of stage gets filled (the stage's `role` in the config).
 ROLE_FILLS = {
     "page": {"brief_count"},
@@ -181,6 +184,8 @@ def resolve(video, label, brand, extras=None, route=None, creator=None,
                         origin = "supplied by the run"
                     elif name in RUN_FILLS or name in ROLE_FILLS.get(role, ()):
                         origin = "filled by the run when the stage starts"
+                    elif name in VARIATION_FILLS:
+                        origin = "empty here — filled only on a Variation video run"
                     else:
                         status, origin = MISSING, (
                             f"bound to the run value '{name}', which nothing "

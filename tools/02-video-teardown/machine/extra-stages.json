@@ -103,6 +103,36 @@
         "offer_file": "brands/<brand>/offers/offer-bank.md",
         "today": "!today"
       }
+    },
+    {
+      "stage": "stage3v",
+      "prompt": "stage3v-control-v1-damon.md",
+      "role": "stage",
+      "note": "THE CONTROL — Variation video chain only (Damon, 2026-09-28: \"we only run variation on proven assets\"). The proven ad's own script in stage 3's shape, filed by control.py with no model, so every @stage3 reader gets VERSION 0. The VARIATION route substitutes stage3 -> stage3v.",
+      "vars": {}
+    },
+    {
+      "stage": "stage4m",
+      "prompt": "stage4m-awareness-map-v1-damon.md",
+      "role": "stage",
+      "note": "THE AWARENESS MAP — Variation video chain only (Damon, 2026-09-28: \"The awareness map has only to do with the awareness levels. The format, product, cast, structure, all of that stays locked.\"). One branch per awareness level, each with the sections the doctrine says it needs; ends in a json block variation.py reads into tree.json.",
+      "vars": {
+        "doctrine_read": "@stage1c",
+        "source_reading": "@stage4r",
+        "audience_read": "@stage1b",
+        "baseline_injection": "@stage3",
+        "replication_spec": "@stage2",
+        "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
+        "sections": "components/marketing-doctrine/slices/sections.md",
+        "sophistication_stages": "components/marketing-doctrine/slices/sophistication.md"
+      }
+    },
+    {
+      "stage": "stage5u",
+      "prompt": "stage5u-mark-used-v1-damon.md",
+      "role": "stage",
+      "note": "MARK USED — every chain (Damon, 2026-09-28: \"anytime any of that language is used, we clearly mark it as used in X asset\"). mark_used.py, no model: the LANGUAGE USED blocks plus a verbatim match of the brief against the bank, written to the avatar's language/used/ lane.",
+      "vars": {}
     }
   ],
   "_vars_note": "source_url and hook_set are bound per run, not from the shared config",
@@ -120,14 +150,19 @@
     "stage4a": {
       "source_reading": "@stage4r",
       "hook_set": "@stage4b",
-      "position": "brands/<brand>/position.md"
+      "position": "brands/<brand>/position.md",
+      "target_awareness": "~target_awareness",
+      "branch_sections": "~branch_sections",
+      "awareness_levels": "components/marketing-doctrine/slices/awareness.md"
     },
     "stage4b": {
       "source_reading": "@stage4r",
       "language": "?hooks",
       "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
       "position": "brands/<brand>/position.md",
-      "story": "~story"
+      "story": "~story",
+      "target_awareness": "~target_awareness",
+      "branch_sections": "~branch_sections"
     },
     "stage3": {
       "language": "?injection",
@@ -141,7 +176,10 @@
       "sections": "components/marketing-doctrine/slices/sections.md",
       "sophistication_stages": "components/marketing-doctrine/slices/sophistication.md",
       "research": "~research",
-      "story": "~story"
+      "story": "~story",
+      "target_awareness": "~target_awareness",
+      "branch_sections": "~branch_sections",
+      "awareness_levels": "components/marketing-doctrine/slices/awareness.md"
     },
     "stage1": {
       "sections": "components/marketing-doctrine/slices/sections.md"
@@ -174,11 +212,17 @@
     },
     "stage4d": {
       "offer_close": "components/marketing-doctrine/slices/offer-close.md",
-      "verification": "components/marketing-doctrine/slices/verification.md"
+      "verification": "components/marketing-doctrine/slices/verification.md",
+      "target_awareness": "~target_awareness",
+      "branch_sections": "~branch_sections",
+      "awareness_levels": "components/marketing-doctrine/slices/awareness.md"
     },
     "stage4e": {
       "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
-      "sophistication_stages": "components/marketing-doctrine/slices/sophistication.md"
+      "sophistication_stages": "components/marketing-doctrine/slices/sophistication.md",
+      "target_awareness": "~target_awareness",
+      "branch_sections": "~branch_sections",
+      "baseline_injection": "@stage3"
     },
     "stage2f": {
       "position": "brands/<brand>/position.md",
@@ -196,7 +240,9 @@
     "stage2",
     "stage2f",
     "stage3",
+    "stage3v",
     "stage4r",
+    "stage4m",
     "stage4b",
     "stage4a",
     "stage4c",
@@ -204,6 +250,7 @@
     "stage4e",
     "stage4g",
     "stage5",
+    "stage5u",
     "stage6",
     "stage7",
     "stage7b",

@@ -1,0 +1,7 @@
+{
+ "_what": "The bar a source ad must clear before the Variation video chain will run on it (proven.py). Damon's call. null = any proof on file passes. Organic keys: min_views, min_saves, min_likes, min_shares. Paid keys: min_spend, min_purchases, min_revenue.",
+ "min_views": null,
+ "min_saves": null,
+ "min_spend": null,
+ "min_purchases": null
+}

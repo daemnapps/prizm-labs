@@ -196,3 +196,32 @@ edited directly.
 The board (`board.html`, served on your Mac) is the working surface — every
 prompt beside its output, version tabs per video, a self-check that runs
 every 10 minutes and flags anything it can't fix on its own.
+
+## The Variation video chain (2026-09-28)
+
+Damon: "we only run variation on proven assets." A proven ad of ours, already
+torn down, grows into a tree: its own awareness level is the control, every
+other level gets a branch, each branch writes six hooks (4b), and **each hook
+is written through** — placement, expansion, close, audit, spice, its own
+brief, then mark used. One winner → 30 briefs. Only awareness moves; format,
+product, cast and structure stay locked.
+
+| New | What | Code |
+|---|---|---|
+| **0p** Proven gate | refuses a source with no proof on file; the bar is `machine/proven-bar.json` (Damon's call) | `machine/proven.py` |
+| **3v** Control | the proven ad's own script in stage 3's shape — VERSION 0 | `machine/control.py` |
+| **4m** Awareness map | each level's section list, from the doctrine; ends in json → `tree.json` | `prompts/stage-4m-awareness-map/` |
+| **5u** Mark used | every chain: the language this asset used, into `language/used/` | `machine/mark_used.py` |
+
+The route is `VARIATION` in `chain.py ROUTES` (stage 3 → 3v; expansion never
+skipped). 4b, 4c, 4d, 4e and 4f read `{target_awareness}` and
+`{branch_sections}` — empty on every other chain, where they behave as
+before. `@stage4b#pick` returns the leaf's own hook (`hook_pick`), the control
+everywhere else. Every chain reads the same prompt folders:
+`test_shared_stages.py` fails if one doesn't.
+
+    python3 machine/variation.py plan  <teardown slug> --brand <b>
+    python3 machine/variation.py start <teardown slug> --brand <b> [--levels control|all] [--through map|hooks|briefs]
+    python3 machine/variation.py status <teardown slug> --brand <b>
+    python3 machine/tree_page.py <teardown slug>
+

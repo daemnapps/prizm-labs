@@ -1197,6 +1197,14 @@ def run_stage(d, st, stage, extras, redo=False):
             model = with_retry(lambda: gemini_text(tmp, out), label)
         elif stage["engine"] == "inject":
             model = inject(stage, d, st, out)
+        elif stage["engine"] == "control":
+            # 3v — the proven ad's own script as the baseline (Variation video)
+            import control as _ctl
+            model = _ctl.file_control(d, st, out)
+        elif stage["engine"] == "mark-used":
+            # 5u — the language this asset used, marked in the used lane
+            import mark_used as _mu
+            model = _mu.run(d, st, out)
         elif stage["engine"] == "frames":
             model = frames(stage, d, st, filled_vars, out)
         else:
@@ -1347,7 +1355,9 @@ def run_stage(d, st, stage, extras, redo=False):
 
     # The swipe library is a shelf of SOURCES. A composed run has none, so
     # there is nothing to file there and nothing has gone wrong.
-    if ok and st.get("video"):
+    # A Variation video run's source is already on the shelf (the proven ad's
+    # own teardown); its tree of runs is filed with the tree, not the library.
+    if ok and st.get("video") and not st.get("variation_of"):
         try:
             home = library_home(Path(st["video"]), st["slug"], st)
             home.mkdir(parents=True, exist_ok=True)

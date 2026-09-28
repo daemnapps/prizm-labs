@@ -118,6 +118,8 @@ query = _engine.query
 render = _engine.render
 for_stage = _engine.for_stage
 topics_of = _engine.topics_of
+load_used = _engine.load_used     # the used lane (2026-09-28)
+used_ids = _engine.used_ids
 main = _engine.main
 
 if __name__ == "__main__":

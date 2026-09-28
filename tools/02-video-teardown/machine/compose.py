@@ -539,7 +539,10 @@ def extras_for(spec):
 RUN_SUPPLIED = {"source_url", "research", "voiceprint", "story", "ad_framework", "declared_audience",
                 "format_profile", "brief_count", "video_count", "product",
                 "brand_name", "profile_spec", "creator_record",
-                "teardown_material", "existing_profile", "handle"}
+                "teardown_material", "existing_profile", "handle",
+                # empty on every run but a Variation video one (variation.py);
+                # the prompts read empty as "not a variation run"
+                "target_awareness", "branch_sections"}
 
 
 def resolve_plan(d, st, spec, extras, only=None, start=None, stop=None):

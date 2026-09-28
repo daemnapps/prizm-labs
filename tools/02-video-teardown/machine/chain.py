@@ -267,6 +267,9 @@ PROMPT_HOMES = [
     CM / "prompts/stage-7-inject",
     CM / "prompts/stage-7b-page",
     CM / "prompts/stage-8-profile",
+    CM / "prompts/stage-3v-control",
+    CM / "prompts/stage-4m-awareness-map",
+    CM / "prompts/stage-5u-mark-used",
     CM / "prompts/parked",
     BUILD / "prompts",
 ]
@@ -306,6 +309,13 @@ LOOK = {
                 "The record, abstracted into a brand-free construct everything else slots into."),
     "stage3":  ("Injection", "Make it ours",
                 "Substitution, never rewrite — the source transcript is the template."),
+    "stage3v": ("Control",   "Make it ours",
+                "Variation video only. The proven ad's own script, filed in stage 3's "
+                "shape — VERSION 0. Nothing is substituted: the source is already ours."),
+    "stage4m": ("Awareness map", "Stage 4 loop",
+                "Variation video only. Every awareness level as a branch — the "
+                "control's own level plus the other four — each with the sections "
+                "the doctrine says that level needs. Only awareness moves."),
     "stage4r": ("Reading",   "Stage 4 loop",
                 "What the source already is: its lane, its opening beat, the awareness "
                 "it enters on. Decides nothing about our version."),
@@ -326,6 +336,10 @@ LOOK = {
                 "Every item receipted; it never changes what the film says."),
     "stage5":  ("Brief",     "The brief",
                 "The product — the one document the maker receives."),
+    "stage5u": ("Mark used", "The brief",
+                "Every customer-language row this brief used, marked as used in "
+                "this asset — so the next run reaches for fresh words, and results "
+                "can be read against the words that earned them."),
     "stage7":  ("Final brief", "The brief",
                 "The pictures go into the shot list. This is the file that goes out."),
     "stage7b": ("Page",      "The brief",
@@ -361,6 +375,9 @@ DISPLAY_ID = {
     "stage4e": "4f",   # audit (Dayu's "4e")
     "stage4g": "4g",   # spice — the creative pass, after the loop
     "stage7b": "7b",   # the page — the sheet, after the pictures go in
+    "stage3v": "3v",   # the control — Variation video's stand-in for injection
+    "stage4m": "4m",   # the awareness map — Variation video only
+    "stage5u": "5u",   # mark used — every chain, after the brief
 }
 
 # Stage 4a prints its verdict as a machine-readable first line, so the finding
@@ -454,6 +471,18 @@ ROUTES = {
         why="composed from a chosen framework — there is no swipe to read, so "
             "the construct is written rather than abstracted",
         substitute={"stage2": "stage2f"}),
+    # THE VARIATION VIDEO CHAIN (Damon, 2026-09-28): "we only run variation on
+    # proven assets." The source is our own proven ad, already torn down — so
+    # stage 3 has nothing to substitute and is stood in for by 3v, the ad's own
+    # script (VERSION 0). Expansion is NEVER skipped here even though most
+    # proven ads are ALREADY AN AD: it is where each awareness level's sections
+    # get built. The branches and hooks are laid out by variation.py; this
+    # entry is what every run in the tree routes by.
+    "VARIATION": dict(
+        skip=["stage3"],
+        why="a proven ad of ours — nothing to substitute; its own script is the "
+            "control, and every awareness level gets its own branch",
+        substitute={"stage3": "stage3v"}),
 }
 DEFAULT_ROUTE = dict(skip=[], why="lane unread — running everything", substitute={})
 
@@ -461,7 +490,8 @@ DEFAULT_ROUTE = dict(skip=[], why="lane unread — running everything", substitu
 # in its plan, not on its board as a skipped row. Declared here rather than in
 # the route table because it is a fact about the stage, not about the route:
 # stage2f is meaningless without a chosen framework to compose from.
-LANE_ONLY = {"stage2f": "FRAMEWORK"}
+LANE_ONLY = {"stage2f": "FRAMEWORK",
+             "stage3v": "VARIATION", "stage4m": "VARIATION"}
 LANE_ANY = "*"          # "show me every stage there is" — the prompt page
 
 LANE_LINE = re.compile(r"^LANE:\s*([A-Z ]+)", re.M)
@@ -563,6 +593,10 @@ def engine_for(key):
         return "frames"
     if key == "stage7":
         return "inject"
+    if key == "stage3v":
+        return "control"          # filed by control.py, no model
+    if key == "stage5u":
+        return "mark-used"        # mark_used.py, no model
     return "claude"
 
 
@@ -723,6 +757,22 @@ def variable_map(brand, surface="video"):
     return out
 
 
+def hook_lines(hooks_text, pick):
+    """The LINE and CARD a 4b output printed for one version (V0…V5), as the
+    one hook a leaf writes through. Empty when 4b printed neither."""
+    pick = pick.upper()
+    got = []
+    for tag in ("LINE", "CARD"):
+        m = re.search(rf"^{tag} {re.escape(pick)}:[ \t]*(.+)$", hooks_text or "", re.M)
+        if m:
+            got.append(f"{tag} {pick}: {m.group(1).strip()}")
+    if not got:
+        return ""
+    return (f"{pick} — the hook this leaf writes through (it is the pick; the "
+            f"other versions in the hook set are its siblings, written in their "
+            f"own leaves):\n" + "\n".join(got))
+
+
 def resolve_source(src, brand, outputs, var=None):
     """The config's little variable language:
          @stageN   what that stage produced in this run
@@ -766,7 +816,11 @@ def resolve_source(src, brand, outputs, var=None):
         fn = parts[2] if len(parts) > 2 and parts[2] else outputs.get("_funnel")
         tp = outputs.get("_topics") or None
         try:
-            txt = _L.for_stage(brand, parts[0], av, fn, tp, 40)
+            # Hooks reach for words we have not used yet (the used lane,
+            # Damon 2026-09-28): a winning line stays live in its own ad, the
+            # next batch does not repeat it.
+            txt = _L.for_stage(brand, parts[0], av, fn, tp, 40,
+                               used="no" if parts[0] == "hooks" else None)
         except Exception as e:
             return (f"(language query failed: {e})", "language query — failed")
         return txt, f"language query · {parts[0]}" + (f" · {av}" if av else "")
@@ -783,6 +837,15 @@ def resolve_source(src, brand, outputs, var=None):
     if src.startswith("@"):
         ref = src[1:].split("#")[0].rstrip("*")
         if "#pick" in src:
+            # A Variation video leaf writes one hook through (Damon, 2026-09-28:
+            # every hook gets its own placement, expansion, close, audit, spice
+            # and brief). variation.py names it as `hook_pick` (V0…V5); every
+            # other run takes the control, exactly as before.
+            pick = str(outputs.get("hook_pick") or "").strip().upper()
+            if pick and ref in outputs:
+                got = hook_lines(outputs[ref], pick)
+                if got:
+                    return got, f"hook {pick}, picked for this leaf of the variation tree"
             return ("CONTROL — the control version, taken as the pick.",
                     "the control hook (no human pick was made)")
         if ref not in outputs:
