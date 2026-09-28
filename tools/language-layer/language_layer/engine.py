@@ -256,9 +256,15 @@ def _uses(row):
     return [x for x in (u if isinstance(u, list) else [u]) if x]
 
 
+def _same(text):
+    """Two lines are the same line when they match ignoring case, punctuation
+    and emoji."""
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s']", " ", (text or "").lower())).strip()
+
+
 def query(rows, use=None, topics=None, funnel=None, speaker=None,
           contains=None, exclude_assumed=False, limit=40, used=None,
-          spent=None):
+          spent=None, awareness=None):
     """Filter and rank. Ranking matters as much as filtering: with hundreds
     of candidate rows, which forty a stage sees is the whole difference
     between real language and arbitrary language.
@@ -266,13 +272,30 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
     used   None/"any" — ignore the used lane · "no" — only rows never used ·
            "yes" — only rows already used. `spent` is the set of used ids
            (`used_ids()`); without it "no"/"yes" have nothing to test.
-    Rows Damon retired or burned never come back (status is his call)."""
+    Rows Damon retired or burned never come back (status is his call).
+
+    awareness  a level (or list of levels) the row's `awareness.level` must
+               match — the language bank upgrade, 2026-09-28. Rows not yet
+               labelled are kept, ranked after the labelled matches, so a bank
+               mid-backfill still answers."""
     want_use = list(use or [])
     want_top = {t.lower() for t in (topics or [])}
     spent = spent or set()
+    want_aw = {awareness} if isinstance(awareness, str) else set(awareness or [])
+    # THE SAME WORDS SAID MANY TIMES (2026-09-28: 55 people commented "Recipe"
+    # on one ad). Identical lines collapse into one, carrying how many times
+    # they were said; volume ranks like likes do.
+    said = {}
+    for r in rows:
+        k = _same(r.get("text"))
+        said[k] = said.get(k, 0) + 1
+    seen = set()
     out = []
     for r in rows:
         if r.get("status") in RETIRED:
+            continue
+        k = _same(r.get("text"))
+        if k in seen:
             continue
         if used == "no" and r.get("id") in spent:
             continue
@@ -286,8 +309,12 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
             continue
         if contains and contains.lower() not in (r.get("text") or "").lower():
             continue
+        aw = ((r.get("awareness") or {}).get("level") if isinstance(r.get("awareness"), dict) else None)
+        if want_aw and aw and aw not in want_aw:
+            continue
         rus = _uses(r)
-        if want_use and not any(u in want_use for u in rus):
+        # with an awareness asked for, a labelled match stands in for a tag match
+        if want_use and not any(u in want_use for u in rus) and not (want_aw and aw in want_aw):
             continue
         rt = {t.lower() for t in (r.get("topics") or [])}
         if want_top and not (rt & want_top):
@@ -296,11 +323,18 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
         # loud the row was, then measured over assumed
         use_rank = min((want_use.index(u) for u in rus if u in want_use),
                        default=len(want_use))
+        seen.add(k)
+        r["_repeats"] = said.get(k, 1)
         sig = r.get("signal") or {}
-        loud = -(sig.get("likes") or sig.get("count") or 0)
+        try:
+            n = int(sig.get("likes") or sig.get("count") or 0)
+        except (TypeError, ValueError):
+            n = 0
+        loud = -max(n, r["_repeats"])
         tier = TIER_RANK.get(sig.get("tier"), 9)
         assumed = 1 if r.get("attribution") == "assumed" else 0
-        out.append(((use_rank, -len(rt & want_top), tier, loud, assumed), r))
+        unlabelled = 1 if (want_aw and not aw) else 0
+        out.append(((unlabelled, use_rank, -len(rt & want_top), tier, loud, assumed), r))
     out.sort(key=lambda x: x[0])
     return [r for _, r in out[:limit]]
 
@@ -319,7 +353,10 @@ def render(rows, header=""):
             bits.append(src["date"])
         sig = r.get("signal") or {}
         if sig.get("likes"):
-            bits.append(f"{sig['likes']:,} likes")
+            try:
+                bits.append(f"{int(sig['likes']):,} likes")
+            except (TypeError, ValueError):
+                bits.append(f"{sig['likes']} likes")
         if sig.get("tier"):
             bits.append(sig["tier"])
         if r.get("attribution") == "assumed":
@@ -327,6 +364,8 @@ def render(rows, header=""):
         who = r.get("speaker") or "unattributed"
         tags = ", ".join(_uses(r)) or "untagged"
         rid = f'[{r["id"]}] ' if r.get("id") else ""
+        if (r.get("_repeats") or 1) > 1:
+            bits.insert(0, f"said {r['_repeats']}× in this bank")
         out.append(f'- {rid}"{(r.get("text") or "").strip()}"')
         out.append(f'  _{who} · {tags} · {" · ".join(bits)}_')
     return "\n".join(out)
@@ -334,7 +373,7 @@ def render(rows, header=""):
 
 def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
               limit=40, root=None, stage_use=None, widen=None, title=None,
-              used=None):
+              used=None, awareness=None):
     """The rows one stage should see. The whole point of the module.
 
     `stage_use`, `widen` and `title` default to whatever the host configured;
@@ -349,7 +388,7 @@ def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
     relaxed = []
     spent = used_ids(brand, avatar, root) if used in ("no", "yes") else None
     def q(rows, **kw):                   # every pass below keeps the used filter
-        return query(rows, used=used, spent=spent, **kw)
+        return query(rows, used=used, spent=spent, awareness=awareness, **kw)
     picked = q(rows, use=use, topics=topics, funnel=funnel, limit=limit)
     if widen == "ladder":
         # Narrow first, then widen only as far as needed. A funnel can be thin
@@ -377,7 +416,8 @@ def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
             + (f", topics: {', '.join(topics)}" if topics else "")
             + (f", never used before ({len(spent)} rows already used are held back)"
                if used == "no" else "")
-            + (f", already used only" if used == "yes" else "") + "._\n"
+            + (f", already used only" if used == "yes" else "")
+            + (f", spoken at the {awareness} level first" if awareness else "") + "._\n"
             + (f"\n**Widened:** too few rows matched, so the "
                f"{' and '.join(relaxed)} filter was relaxed to fill this set. "
                f"Treat the fit as looser than the header suggests.\n"

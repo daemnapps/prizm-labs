@@ -37,3 +37,16 @@ purchases joined on the ad name. The video chain's `mark_used.py` (stage 5u)
 writes these files; its hooks query asks for unused rows first.
 
     python3 tests/test_used_lane.py
+
+## Awareness, sophistication, origin — and repeats
+
+Rows can carry the doctrine's awareness level (read in context — who said it,
+where, in answer to what), a sophistication signal, the lane their words point
+to, `origin` (internal: our own relationship with the customer and any
+property where the brand is clearly named; external: everyone else's spaces)
+and `voice` (audience or brand-written). `tools/label.py sample|apply` writes
+them; `query(awareness=…)` reads them. Identical lines collapse when a query
+answers ("said N× in this bank") and the count ranks like likes. A brand's own
+accounts go in `brands/<brand>/channels/own-accounts.json`.
+`tools/check_names.py --brand <b>` checks row and source ids against the
+naming standard.
