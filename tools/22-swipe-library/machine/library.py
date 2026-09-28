@@ -270,7 +270,7 @@ def public_page(F, V, SW, FE) -> str:
 <nav>
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
-  <a class="link" href="/workflows.html">The tools</a>
+  <a class="link" href="/how-it-works.html">The tools</a>
   <a class="link" href="/swipe-library.html" aria-current="page">Swipe library</a>
   <a class="link" href="/onboarding.html">Onboarding</a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
@@ -324,7 +324,7 @@ def public_page(F, V, SW, FE) -> str:
 
   <footer>
     <span>PRIZM LABS</span>
-    <span><a href="/workflows.html">The tools</a> · <a href="/onboarding.html">Onboarding</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
+    <span><a href="/how-it-works.html">The tools</a> · <a href="/onboarding.html">Onboarding</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
   </footer>
 </div>
 </html>

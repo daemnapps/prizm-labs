@@ -194,7 +194,7 @@ td.b{{color:var(--ink);font-weight:500}}
 <p>The walkthrough, the setup, the loop, both prompts with copy buttons, the queue rules, the asks, the rules, and what to do when it breaks. Generic on purpose — it works for anyone who clones the tools; the brand comes from Drive.</p>
 <div class="links">
   <a class="link" href="{PAGE}" target="_blank" rel="noopener"><div class="k">Public page</div><b>daemn.co/onboarding.html</b><span>live once the repo is pushed (GitHub Pages)</span></a>
-  <a class="link" href="https://daemn.co/onboarding-desk.html" target="_blank" rel="noopener"><div class="k">For Steph</div><b>daemn.co/onboarding-desk.html</b><span>the onboarder's side: folders by link once per brand, one message per editor, what to check</span></a>
+  <a class="link" href="https://github.com/daemnapps/prizm-labs/blob/main/tools/21-editor-onboarding/DESK.md" target="_blank" rel="noopener"><div class="k">For the onboarder</div><b>tools/21-editor-onboarding/DESK.md</b><span>the onboarder's side: folders by link once per brand, one message per editor, what to check</span></a>
   <a class="link" href="{FOLDER}" target="_blank" rel="noopener"><div class="k">Drive folder</div><b>Shared Assets / onboarding</b><span>the edited video + the full transcript — share this with editors</span></a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs/tree/main/tools/21-editor-onboarding" target="_blank" rel="noopener"><div class="k">The tool</div><b>tools/21-editor-onboarding</b><span>SOP, prompts, the queue, the cut list</span></a>
 </div>

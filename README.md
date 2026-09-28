@@ -12,14 +12,19 @@ script, a shot list, and a prompt for every frame.
 Code) and tell it what you want. No kits, no copies.
 
 **→ [daemn.co](https://daemn.co)** — see it working, with the same ad rebuilt
-three different ways.
+three different ways. **→ [How it works](https://daemn.co/how-it-works.html)**
+— the whole line on one page: swipe, teardown, brief, make, hand-off, live,
+performance, and the seven roles that carry it.
 
 ---
 
 ## Start here
 
-Everything is plain text. Clone it and it is all there; say "pull for
-updates" and it stays current.
+Sixteen tools, one brand folder. Everything is plain text. Clone it and it is
+all there; say "pull for updates" and it stays current. The numbers are the
+folder names, kept stable so a link never breaks; two tools are marked
+**team-only** where the part that builds them reads our private workspace —
+what they publish is here for everyone.
 
 | | What it is | Read it |
 |---|---|---|
@@ -47,6 +52,7 @@ put our brand where theirs was.
 | **10** | **Image production** — stage two for statics, the twin of the video line. | [`tools/10-image-production/`](tools/10-image-production/) |
 | **13** | **Pages** — swipe, construct, inject, base, then one variation per sub-avatar. No page gets written freehand. | [`tools/13-pages/`](tools/13-pages/) |
 | **14** | **Copywriter** — the copy chain. | [`tools/14-copywriter/`](tools/14-copywriter/) |
+| **—** | **Customer language** — every word the tools use comes from what the market said; this is the query over a brand's language, with the receipt on every row. | [`tools/language-layer/`](tools/language-layer/) |
 
 ### Plan it and finish it
 
@@ -55,8 +61,8 @@ put our brand where theirs was.
 | **15** | **Outlier brief** — the second door. Start from an idea instead of someone else's video. | [`tools/15-outlier-brief/`](tools/15-outlier-brief/) |
 | **16** | **Video edit** — cut sheets, in plain words rather than a timeline. | [`tools/16-video-edit/`](tools/16-video-edit/) |
 | **20** | **Asset index** — a folder of footage becomes records you can search. | [`tools/20-asset-index/`](tools/20-asset-index/) |
-| **21** | **Editor onboarding** — the front door for creative marketers: the walkthrough, the SOP, the two prompts they paste into Higgsfield, and the brief queue. | [`tools/21-editor-onboarding/`](tools/21-editor-onboarding/) · [the page](https://daemn.co/onboarding.html) |
-| **22** | **Swipe library** — one front door to everything swiped: the formats, the torn-down videos, one feed per customer type, every competitor's live ads. Public half on the site, the rest on Drive. | [`tools/22-swipe-library/`](tools/22-swipe-library/) · [the page](https://daemn.co/swipes/) |
+| **21** | **Editor onboarding** — the front door for creative marketers: the walkthrough, the SOP, the two prompts they paste into Higgsfield, and the brief queue. *Team-only:* the queue reads our private workspace; the page, SOP and prompts are for everyone. | [`tools/21-editor-onboarding/`](tools/21-editor-onboarding/) · [the page](https://daemn.co/onboarding.html) |
+| **22** | **Swipe library** — one front door to everything swiped: the formats, the torn-down videos, one feed per customer type, every competitor's live ads. Public half on the site, the rest on Drive. *Team-only:* the build reads our private workspace; the page is for everyone. | [`tools/22-swipe-library/`](tools/22-swipe-library/) · [the page](https://daemn.co/swipes/) |
 
 ### The shared parts
 
@@ -110,13 +116,6 @@ Publish anything. Spend anything on ads. Invent a customer quote. Make a
 medical claim. Write in a voice it hasn't been given evidence for.
 
 Those are hard stops in the prompts, not guidelines.
-
----
-
-## What you need
-
-A Higgsfield account and Claude. Sign up to Higgsfield through the link on the
-site.
 
 ---
 
