@@ -162,13 +162,15 @@
       "position": "brands/<brand>/position.md",
       "story": "~story",
       "target_awareness": "~target_awareness",
-      "branch_sections": "~branch_sections"
+      "branch_sections": "~branch_sections",
+      "doctrine_read": "@stage1c"
     },
     "stage3": {
       "language": "?injection",
       "techniques": "components/marketing-doctrine/slices/techniques.md",
       "position": "brands/<brand>/position.md",
-      "story": "~story"
+      "story": "~story",
+      "doctrine_read": "@stage1c"
     },
     "stage4c": {
       "language": "?expansion",
@@ -179,7 +181,8 @@
       "story": "~story",
       "target_awareness": "~target_awareness",
       "branch_sections": "~branch_sections",
-      "awareness_levels": "components/marketing-doctrine/slices/awareness.md"
+      "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
+      "doctrine_read": "@stage1c"
     },
     "stage1": {
       "sections": "components/marketing-doctrine/slices/sections.md"
@@ -215,14 +218,16 @@
       "verification": "components/marketing-doctrine/slices/verification.md",
       "target_awareness": "~target_awareness",
       "branch_sections": "~branch_sections",
-      "awareness_levels": "components/marketing-doctrine/slices/awareness.md"
+      "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
+      "doctrine_read": "@stage1c"
     },
     "stage4e": {
       "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
       "sophistication_stages": "components/marketing-doctrine/slices/sophistication.md",
       "target_awareness": "~target_awareness",
       "branch_sections": "~branch_sections",
-      "baseline_injection": "@stage3"
+      "baseline_injection": "@stage3",
+      "doctrine_read": "@stage1c"
     },
     "stage2f": {
       "position": "brands/<brand>/position.md",
