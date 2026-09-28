@@ -33,10 +33,15 @@ WHERE = [("stage3", "3"), ("stage3v", "3v"), ("stage4b", "4b"), ("stage4c", "4d"
 BLOCK = re.compile(r"^LANGUAGE USED:[ \t]*(.*?)(?=^\S[^\n]*:\s*$|^## |\Z)", re.M | re.S)
 LINE = re.compile(r"^\s*[-*]\s*\[?([A-Za-z0-9][\w.\-]*)\]?\s*(?:\|\s*(.*))?$", re.M)
 MIN_WORDS = 4
+STOP = set("a an the is it its this that to of in on for and or but so you your i me my he his she her we they them be was are with at as by do did just".split())
 
 
 def _norm(s):
     return re.sub(r"\s+", " ", re.sub(r"[\"“”‘’'`*_]", "", (s or "").lower())).strip()
+
+
+def _clean(s):
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s']", " ", (s or "").lower())).strip()
 
 
 def cited(text):
@@ -77,6 +82,25 @@ def collect(d, st, rows_by_id):
                     continue
             used.setdefault(rid, dict(row_id=rid, text=row.get("text"), avatar=row.get("avatar"),
                                       where=where, how="cited", results=None))
+    # The hook this asset opens on: its fills often come from the room's short
+    # comment rows (two or three words and an emoji) that the brief match below
+    # is too strict for. The picked hook's own LINE and CARD are matched against
+    # the bank at two words and up (Damon, 2026-09-28: "give me the sources").
+    hooks_text = outs.get("stage4b", (None, ""))[1]
+    if hooks_text:
+        lines = re.findall(r"^(?:LINE|CARD) " + re.escape(pick or "V0") + r":[ \t]*(.+)$", hooks_text, re.M)
+        mine = " " + _clean(" ".join(lines)) + " "
+        if mine.strip():
+            for rid, row in rows_by_id.items():
+                if rid in used:
+                    continue
+                words = _clean(row.get("text")).split()
+                # a run of three or more of the row's own words, in order, in the hook
+                if len(words) >= 3 and any(" " + " ".join(words[i:i + 3]) + " " in mine
+                                           and sum(w not in STOP for w in words[i:i + 3]) >= 2
+                                           for i in range(len(words) - 2)):
+                    used[rid] = dict(row_id=rid, text=row.get("text"), avatar=row.get("avatar"),
+                                     where="4b", how="matched", results=None)
     brief = outs.get("stage5", (None, ""))[1]
     nb = _norm(brief)
     if nb:

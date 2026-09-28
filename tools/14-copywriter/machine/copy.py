@@ -304,6 +304,16 @@ def find_video(video_brief, explicit):
     return str(hits[0]) if hits else None
 
 
+def vibe_of(record):
+    """The read's THE VIBE section, as the lines later stages hold to. Empty
+    when the read printed none (an older read) — the stages say what to do then."""
+    m = re.search(r"THE VIBE\.?\*{0,2}(.*?)(?=\n\*\*[A-Z][A-Z ]+\.?\*\*|\Z)", record or "", re.S)
+    if not m:
+        return ""
+    block = re.findall(r"^(?:HUMOR|DELIVERY STYLE|REGISTER|REFERENCE WORLD|AVOID|THE JOKE|THE VIBE):.*$", m.group(1), re.M)
+    return "\n".join(block) or m.group(1).strip()[:1500]
+
+
 def fill(template, fields):
     """Deterministic substitution — same rule the board replays to rebuild the
     'filled in' view of a stage without calling a model again."""
@@ -858,7 +868,11 @@ def main(argv=None):
 
     record = run_stage("stage1", out_dir, args.model, state,
                        today=today, triage=triage, source=source,
-                       awareness_levels=doctrine("awareness")); save()
+                       awareness_levels=doctrine("awareness"),
+                       delivery=doctrine("delivery")); save()
+    # THE VIBE (2026-09-28): how the source feels, named at the read and
+    # handed to every stage that writes — a funny source stays funny.
+    vibe = vibe_of(record)
 
     spec = run_stage("stage2", out_dir, args.model, state,
                      today=today, triage=triage, record=record); save()
@@ -888,7 +902,8 @@ def main(argv=None):
                           today=today, triage=triage, spec=spec, record=record,
                           avatar=avatar_profile, language_bank=language_bank,
                           product_file=product_file, offer_file=offer_file,
-                          brand_context=brand_context, brand_name=args.brand); save()
+                          brand_context=brand_context, brand_name=args.brand,
+                          vibe=vibe); save()
 
     placement = run_stage("stage4", out_dir, args.model, state,
                           today=today, triage=triage, injection=injection, spec=spec,
@@ -899,7 +914,7 @@ def main(argv=None):
                       today=today, triage=triage, record=record, spec=spec,
                       injection=injection, placement=placement,
                       language_bank=language_bank, brand_context=brand_context,
-                      hook_count=args.hooks,
+                      hook_count=args.hooks, vibe=vibe,
                       awareness_levels=doctrine("awareness")); save()
 
     # THE LIVE RESEARCH GATHERER (Damon, 2026-09-18: "the live research gatherer
@@ -950,7 +965,8 @@ def main(argv=None):
                          placement=placement, product_file=product_file,
                          offer_file=offer_file, language_bank=language_bank,
                          brand_context=brand_context,
-                         sections=doctrine("sections"), techniques=doctrine("techniques")); save()
+                         sections=doctrine("sections"), techniques=doctrine("techniques"),
+                         vibe=vibe); save()
         if dry and lane is None and DRY and not DRY[-1].get("reused"):
             DRY[-1]["note"] = "runs only when triage reads the lane as ORGANIC — checked here either way"
     else:
@@ -968,7 +984,7 @@ def main(argv=None):
                       placement=placement, product_file=product_file,
                       offer_file=offer_file, language_bank=language_bank,
                       brand_context=brand_context,
-                      offer_close=doctrine("offer-close"),
+                      offer_close=doctrine("offer-close"), vibe=vibe,
                       verification=doctrine("verification")); save()
 
     # --- write the copy ----------------------------------------------------
@@ -990,7 +1006,7 @@ def main(argv=None):
                        product_file=product_file, offer_file=offer_file,
                        language_bank=language_bank, brand_context=brand_context,
                        formats=formats, output_formats=args.write_as,
-                       channel=args.channel); save()
+                       channel=args.channel, vibe=vibe); save()
 
     # THE COPY GATE (2026-09-20) — see copy_gate(). A held run keeps every
     # file it made and says why; what it does NOT get is the brief, because

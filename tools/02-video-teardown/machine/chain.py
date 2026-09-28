@@ -819,7 +819,13 @@ def resolve_source(src, brand, outputs, var=None):
             # Hooks reach for words we have not used yet (the used lane,
             # Damon 2026-09-28): a winning line stays live in its own ad, the
             # next batch does not repeat it.
-            txt = _L.for_stage(brand, parts[0], av, fn, tp, 40,
+            stage = parts[0]
+            # An opening that enters at the result is filled from the room's
+            # result and reaction words, not its problem words (2026-09-28).
+            tgt = str(outputs.get("target_awareness") or "").lower()
+            if stage == "hooks" and tgt.startswith(("solution", "product", "most")):
+                stage = "hooks-result"
+            txt = _L.for_stage(brand, stage, av, fn, tp, 40,
                                used="no" if parts[0] == "hooks" else None)
         except Exception as e:
             return (f"(language query failed: {e})", "language query — failed")

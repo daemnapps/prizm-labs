@@ -38,8 +38,18 @@ from language_layer import engine as _engine     # noqa: E402
 STAGE_USE = {
     "injection":   ["problem-language", "self-descriptor", "identity",
                     "tried-and-failed", "alternative-solution", "cope"],
+    # A hook opens where its awareness level may begin, and a funny hook is
+    # filled from the room's own reactions — so the result and reaction rows
+    # ride along after the problem rows (2026-09-28: a solution-aware joke hook
+    # was handed only problem-language and had to go outside the bank).
     "hooks":       ["hook", "hook-headline", "caption-hook", "one-liner",
-                    "problem-language", "competitor-annoyance", "self-descriptor"],
+                    "problem-language", "competitor-annoyance", "self-descriptor",
+                    "transformation-reaction", "result-language", "taste", "in-word"],
+    # The same hook pass, for an opening that enters at the RESULT — a
+    # solution-, product- or most-aware opening, where the problem is not where
+    # the ad may begin. The room's reactions and result words lead.
+    "hooks-result": ["transformation-reaction", "result-language", "taste", "in-word",
+                     "hook", "hook-headline", "caption-hook", "one-liner", "self-descriptor"],
     "placement":   ["buying-criteria", "buy-trigger", "why-interested"],
     "expansion":   ["why-bought", "buying-criteria", "competitor-annoyance",
                     "alternative-solution", "why-interested"],
