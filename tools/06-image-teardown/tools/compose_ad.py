@@ -111,4 +111,4 @@ if __name__ == "__main__":
     run_dir = Path(run) if Path(run).is_absolute() else P.RUNS / Path(run).name
     brand = P.brand_of_run(run_dir if run_dir.is_dir() else run, named)
     build(run, plate, out, lines, Path("/tmp/sticker-rot.png"),
-          P.brand(brand)["root"] / "identity/logo-white.png")
+          P.brand(brand)["identity_dir"] / "logo-white.png")

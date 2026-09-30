@@ -529,10 +529,10 @@ def extras_for(spec):
 
 # ------------------------------------------------------------------- resolving
 
-# `story` joined 2026-09-19: run.py fills it from brands/<brand>/story.md
+# `story` joined 2026-09-19: run.py fills it from brands/<brand>/brand-identity/story.md (old: story.md)
 # plus 1b's pick, [UNFILLED] for a brand with none.
 # `voiceprint` joined 2026-09-19: run.py fills it from the brand's measured
-# creator voiceprints (brands/<brand>/creators/VOICEPRINTS.md), [UNFILLED]
+# creator voiceprints (brands/<brand>/content-creators/VOICEPRINTS.md, old: creators/), [UNFILLED]
 # when the brand has none — the same shape as `research`.
 # `declared_audience` joined 2026-09-20: run.py fills it from --for-avatar /
 # --for-sub (a video from a sub-avatar's own organic feed), "NONE" otherwise.

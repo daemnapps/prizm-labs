@@ -85,7 +85,7 @@
     "audio": "the song, for sung formats only — fal-ai/lyria3/pro (Damon's 2026-09-17 ruling: keep model usage on fal/Higgsfield); fal returns no lyric timings, so fal-ai/elevenlabs/speech-to-text runs on the finished song for the timing sheet; Lyria 3 direct on the Gemini key (won the 2026-09-03 test, returns timings natively) is now the alternate; otherwise the editor's"
    },
    "voice_recipe": {
-    "where": "the direct ElevenLabs account — custom voice per character, id in brands/<brand>/ai-cast/<name>/voice.json",
+    "where": "the direct ElevenLabs account — custom voice per character, id in brands/<brand>/ai-elements/characters/<name>/voice.json (old: ai-cast/)",
     "make": "machine/voice.py generates every line first, into <run>/voice/<line id>.mp3",
     "pipe": "<Higgsfield: upload each line as a media, role audio, on the talking beat; register the voice as an element when the account allows> | <fal: attach the line as the audio input on the talking beat>",
     "why_not_via_fal": "fal's ElevenLabs endpoints see library voices only; an account-private voice id cannot be reached through fal (no key passthrough, no clone/design endpoint) — research 2026-09-17"
@@ -139,7 +139,7 @@
     "audio": "the song, for sung formats only — fal-ai/lyria3/pro (Damon's 2026-09-17 ruling: keep model usage on fal/Higgsfield); fal returns no lyric timings, so fal-ai/elevenlabs/speech-to-text runs on the finished song for the timing sheet; Lyria 3 direct on the Gemini key (won the 2026-09-03 test, returns timings natively) is now the alternate; otherwise the editor's"
    },
    "voice_recipe": {
-    "where": "the direct ElevenLabs account — custom voice per character, id in brands/<brand>/ai-cast/<name>/voice.json",
+    "where": "the direct ElevenLabs account — custom voice per character, id in brands/<brand>/ai-elements/characters/<name>/voice.json (old: ai-cast/)",
     "make": "machine/voice.py generates every line first, into <run>/voice/<line id>.mp3",
     "pipe": "<Higgsfield: upload each line as a media, role audio, on the talking beat; register the voice as an element when the account allows> | <fal: attach the line as the audio input on the talking beat>",
     "why_not_via_fal": "fal's ElevenLabs endpoints see library voices only; an account-private voice id cannot be reached through fal (no key passthrough, no clone/design endpoint) — research 2026-09-17"
@@ -192,7 +192,7 @@
     "audio": "the song, for sung formats only — fal-ai/lyria3/pro (Damon's 2026-09-17 ruling: keep model usage on fal/Higgsfield); fal returns no lyric timings, so fal-ai/elevenlabs/speech-to-text runs on the finished song for the timing sheet; Lyria 3 direct on the Gemini key (won the 2026-09-03 test, returns timings natively) is now the alternate; otherwise the editor's"
    },
    "voice_recipe": {
-    "where": "the direct ElevenLabs account — custom voice per character, id in brands/<brand>/ai-cast/<name>/voice.json",
+    "where": "the direct ElevenLabs account — custom voice per character, id in brands/<brand>/ai-elements/characters/<name>/voice.json (old: ai-cast/)",
     "make": "machine/voice.py generates every line first, into <run>/voice/<line id>.mp3",
     "pipe": "<Higgsfield: upload each line as a media, role audio, on the talking beat; register the voice as an element when the account allows> | <fal: attach the line as the audio input on the talking beat>",
     "why_not_via_fal": "fal's ElevenLabs endpoints see library voices only; an account-private voice id cannot be reached through fal (no key passthrough, no clone/design endpoint) — research 2026-09-17"

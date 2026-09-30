@@ -2,10 +2,10 @@
 
 **This folder is the design system: colour, type, marks, and the tokens a web
 surface renders with.** It is not the position — what the brand argues lives in
-`../position.md` and never carries a hex value. A machine that needs a colour,
+`position.md` (same folder) and never carries a hex value. A machine that needs a colour,
 a face or a mark reads here and nowhere else.
 
-_Created <date> by <name>. Shape: `brands/_TEMPLATE/identity/`. Every value is
+_Created <date> by <name>. Shape: `brands/_TEMPLATE/brand-identity/`. Every value is
 **measured, not chosen** — sampled off the brand's own product photography, its
 live CSS, its real font files and its real marks. A slot the material cannot
 settle says `open`._
@@ -27,7 +27,7 @@ and differ in exact value; a print of the product is not a button. Creative read
 
 **Never typeset the brand name** — a wordmark is either right or it is wrong,
 and there is no close. Files live in this folder; the font files live on the
-company drive under `brands/<brand>/identity/fonts/` (workspace rule 3: no
+company drive under brands/<brand>/brand-identity/fonts/ (workspace rule 3: no
 binaries over 10 MB in git).
 
 | File | What it is | Ground |
@@ -49,7 +49,7 @@ nothing of ours was on file to replace it.
 The tool is `brand-identity/measure.py`; every step is one command,
 and every step writes `open` where the material is missing rather than guessing.
 
-1. **Scaffold** — copies these four template files into `brands/<brand>/identity/`,
+1. **Scaffold** — copies these four template files into `brands/<brand>/brand-identity/`,
    never overwriting one that exists.
 2. **Palette** — samples the dominant colours off every image under
    `brands/<brand>/products/**/images/` and writes the table in `palette.md`,

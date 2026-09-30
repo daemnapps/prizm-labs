@@ -13,4 +13,4 @@ and there is no default: a run that does not declare one is writing to nobody.
 | `{avatar}` | `core-avatars/<avatar>/profile.md` |
 | `{language_bank}` | `core-avatars/<avatar>/language/rules.md` |
 | `{offer_file}` | `offers/offer-bank.md` |
-| `{send_history}` | `email/sends/` |
+| `{send_history}` | `email-sms/sends/` |

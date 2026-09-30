@@ -58,7 +58,9 @@ def note(msg):
 
 # --- 1 · <brand> emails — ours, shipped -----------------------------------
 def emails():
-    home = LAB / "brands" / "<brand>" / "email"
+    b = LAB / "brands" / "<brand>"
+    # email-sms/ is the v6 name; email/ the old one, read while a brand moves
+    home = next((b / n for n in ("email-sms", "email") if (b / n).is_dir()), b / "email-sms")
     cls = {}
     try:
         for r in json.loads((home / "classified.json").read_text()):
@@ -250,7 +252,9 @@ def teardowns():
 
 # --- 6 · our own pages ---------------------------------------------------
 def our_pages():
-    base = LAB / "brands" / "<brand>" / "existing-content"
+    b = LAB / "brands" / "<brand>"
+    # intake/ is the v6 name; existing-content/ the old one
+    base = next((b / n for n in ("intake", "existing-content") if (b / n).is_dir()), b / "intake")
     n = 0
     for sub, fmt in (("landing-pages", "landing-page"), ("quiz", "quiz")):
         d = base / sub

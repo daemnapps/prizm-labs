@@ -74,8 +74,8 @@ same beats compressed.>
 
 ## The tellers
 
-Casting comes from `identity-anchors.md` and the rights positions there
-override anything here.
+Casting comes from the talent cards in `../ai-elements/characters/` and
+`../content-creators/`, and the rights positions there override anything here.
 
 | Teller | Cast from | Rule |
 |---|---|---|
@@ -123,7 +123,7 @@ and never restates it, so the brand facts live in one place.
 - <the avatar file>
 - <the language bank, with its row count>
 - <the sub-avatars and their one-line stories>
-- <casting and rights — `identity-anchors.md`>
+- <casting and rights — the talent cards in `../ai-elements/characters/` and `../content-creators/`>
 - The generic story arc and the storyteller delivery — `components/marketing-doctrine/ad-frameworks.json` (`story-testimonial`), `delivery.json` (`storyteller`)
 
 ## Open

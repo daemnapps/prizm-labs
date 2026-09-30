@@ -38,7 +38,8 @@ media. Same recipe on both providers.
                                         [--continuous | --per-line]
 
 Reads `<run>/lines.json` (line id -> text) and `<run>/run.json` (brand).
-Finds the character's `voice.json` under `brands/<brand>/ai-cast/<name>/`
+Finds the character's `voice.json` under `brands/<brand>/ai-elements/characters/<name>/`
+(the old `ai-cast/<name>/` still works)
 (or `--cast-root/<name>/`, so a test never has to read `brands/`). The
 character defaults to the plan's own `cast.name` (`<run>/plan.json`),
 slugified into the same lowercase folder name every ai-cast entry already
@@ -145,8 +146,18 @@ def cast_name_of(run: Path) -> str:
     return (plan.get("cast") or {}).get("name") or ""
 
 
+def cast_root_of(brand: str | None) -> Path:
+    """The brand's characters folder: ai-elements/characters/ (the v6 name),
+    else the old ai-cast/ while a brand has not moved yet."""
+    b = WORKSPACE / "brands" / (brand or "")
+    for rel in ("ai-elements/characters", "ai-cast"):
+        if (b / rel).is_dir():
+            return b / rel
+    return b / "ai-elements" / "characters"
+
+
 def character_home(brand: str | None, character: str, cast_root: Path | None) -> Path:
-    root = cast_root if cast_root else (WORKSPACE / "brands" / (brand or "") / "ai-cast")
+    root = cast_root if cast_root else cast_root_of(brand)
     return root / character
 
 

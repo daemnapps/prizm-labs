@@ -13,7 +13,7 @@ standard, and this shape is the same for every brand.
 | `sweep/` | per-board measurement and the defects found |
 
 **Pictures are not here.** They mirror this path on Drive:
-`Shared Assets/brands/<brand>/email/design-formats/`.
+`Shared Assets/brands/<brand>/email-sms/formats/`.
 
 **Every email has a permanent id** — its board's code plus its number,
 `JAN26-04`. The same id names it in the census, in a format's member list and

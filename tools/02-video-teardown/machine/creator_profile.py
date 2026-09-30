@@ -8,7 +8,7 @@ holds on her. No manual step, no session remembering to do it.
 
 The machine stays brand-agnostic (rule 4): it never knows where profiles
 live or what shape they take. The BRAND says both, in
-`brands/<brand>/channels/creators/profile-home.json` — `spec` is the
+`brands/<brand>/content-creators/profile-home.json` (old: channels/creators/) — `spec` is the
 document that defines a profile (its template is the output's shape), `home`
 is the folder that holds one subfolder per creator. No file, no profiles:
 the brand has not opted in, and stage 8 records itself skipped rather than
@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
+import brand_folders as BF
 
 RECORDS = C.CM / "records"
 CONFIG_NAME = "profile-home.json"
@@ -39,7 +40,7 @@ def home(brand):
     config must not send profiles somewhere half-named."""
     if not brand:
         return None
-    f = C.WS / "brands" / brand / "channels" / "creators" / CONFIG_NAME
+    f = BF.home(C.WS / "brands" / brand, "content-creators") / CONFIG_NAME
     if not f.is_file():
         return None
     try:
@@ -55,7 +56,7 @@ def skip_reason(st):
         return "swipe research — there is no creator to profile"
     cfg = home(st.get("brand"))
     if cfg is None:
-        return (f"brands/{st.get('brand')}/channels/creators/{CONFIG_NAME} "
+        return (f"brands/{st.get('brand')}/content-creators/{CONFIG_NAME} "
                 "names no profile home — this brand keeps no distilled profiles")
     if not (C.WS / cfg["spec"]).is_file():
         return f"the profile spec is missing: {cfg['spec']}"

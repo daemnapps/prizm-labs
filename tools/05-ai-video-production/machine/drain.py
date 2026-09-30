@@ -145,13 +145,14 @@ def cast_home(plan: dict) -> Path | None:
     name = (plan.get("cast") or {}).get("name") or ""
     if not brand or not name:
         return None
-    home = WORKSPACE / "brands" / brand / "ai-cast" / voice_mod.slugify(name)
+    home = voice_mod.cast_root_of(brand) / voice_mod.slugify(name)
     return home if home.is_dir() else None
 
 
 def cast_references(run: Path, plan: dict) -> list[Path]:
     """The pictures a frame is edited from: what the plan names, else the
-    character's own sheet(s) in the brand's ai-cast folder."""
+    character's own sheet(s) in the brand's characters folder
+    (ai-elements/characters/, old name ai-cast/)."""
     cast = plan.get("cast") or {}
     refs = []
     for key in ("references", "reference", "master", "sheet"):
@@ -250,7 +251,7 @@ def do_generate(run: Path, row: dict, plan: dict, dry_run: bool) -> dict:
     voice_id = voice_id_of(plan)
     if not voice_id:
         raise SystemExit(f"{row['id']}: no cloned voice for this character — bind voice_id in "
-                         f"brands/<brand>/ai-cast/<name>/voice.json")
+                         f"brands/<brand>/ai-elements/characters/<name>/voice.json")
     names = element_names(plan)
     perf = plain(f"{row.get('delivery', '')}. {row.get('gesture', '')}", names)
     out = run / "rushes" / "clips" / f"{row['id']}.mp4"

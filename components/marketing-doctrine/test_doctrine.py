@@ -314,9 +314,10 @@ def main():
 
     section("the position gate — every brand's position.md has the template's shape (2026-09-19)")
     import lint_position      # noqa: E402
-    brands = sorted(p for p in (HERE.parent.parent / "brands").glob("*/position.md")
-                    if not p.parent.name.startswith("_"))
-    check("brands/_TEMPLATE/position.md exists and is brand-agnostic",
+    brands = sorted(p for p in [*(HERE.parent.parent / "brands").glob("*/position.md"),
+                                         *(HERE.parent.parent / "brands").glob("*/brand-identity/position.md")]
+                    if not p.relative_to(HERE.parent.parent / "brands").parts[0].startswith("_"))
+    check("brands/_TEMPLATE/brand-identity/position.md exists and is brand-agnostic",
           lint_position.TEMPLATE.is_file()
           and not lint_position.check(lint_position.TEMPLATE, is_template=True),
           str(lint_position.check(lint_position.TEMPLATE, is_template=True)
@@ -332,9 +333,10 @@ def main():
 
     section("the story gate — every brand's story.md has the template's shape (2026-09-19)")
     import lint_story         # noqa: E402
-    stories = sorted(p for p in (HERE.parent.parent / "brands").glob("*/story.md")
-                     if not p.parent.name.startswith("_"))
-    check("brands/_TEMPLATE/story.md exists and is brand-agnostic",
+    stories = sorted(p for p in [*(HERE.parent.parent / "brands").glob("*/story.md"),
+                                          *(HERE.parent.parent / "brands").glob("*/brand-identity/story.md")]
+                     if not p.relative_to(HERE.parent.parent / "brands").parts[0].startswith("_"))
+    check("brands/_TEMPLATE/brand-identity/story.md exists and is brand-agnostic",
           lint_story.TEMPLATE.is_file()
           and not lint_story.check(lint_story.TEMPLATE, is_template=True),
           str(lint_story.check(lint_story.TEMPLATE, is_template=True)

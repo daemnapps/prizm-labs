@@ -636,7 +636,8 @@ def _resolve_ref(run: Path, value: str) -> Path:
 
 def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | None:
     """A reference by path, or by the name the brief gives it. `<NAME> cast
-    sheet` -> the character's master sheet under brands/<brand>/ai-cast/<name>/
+    sheet` -> the character's master sheet under brands/<brand>/ai-elements/characters/<name>/
+    (old name ai-cast/<name>/)
     (master-sheet.png, then master-portrait.*); `style frame` -> the run's
     own style frame if one is banked (media/style-frame.*), else nothing."""
     low = value.lower().strip()
@@ -1433,7 +1434,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--bank")
     s.add_argument("--runs-root")
     s.add_argument("--cast-root", help="test/override root for a character's "
-                    "ai-cast folder; defaults to brands/<brand>/ai-cast/")
+                    "characters folder; defaults to brands/<brand>/ai-elements/characters/ "
+                    "(old name ai-cast/)")
 
     r = sub.add_parser("record")
     r.add_argument("run")

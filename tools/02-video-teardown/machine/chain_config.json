@@ -44,7 +44,7 @@
         "avatar": "brands/<brand>/customer/avatar.md",
         "language_bank": "brands/<brand>/customer/language-bank.md",
         "product_file": "brands/<brand>/products/",
-        "identity_anchors": "brands/<brand>/identity-anchors.md",
+        "identity_anchors": "brands/<brand>/brand-identity/identity-anchors.md",
         "brand_name": "#brand_name",
         "production_route": "=creator",
         "today": "!today",

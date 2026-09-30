@@ -33,6 +33,13 @@ def repo():
 
 
 WORKSPACE = repo()
+
+
+def identity_dir(brand):
+    """The brand's look: brand-identity/ (the v6 folder name), else the old identity/."""
+    b = WORKSPACE / "brands" / brand
+    return next((b / n for n in ("brand-identity", "identity") if (b / n).is_dir()),
+                b / "brand-identity")
 RUNS = WORKSPACE / "runs" / TOOL                         # runs/page-machine/<brand>/<label>/
 OLD_RUNS = HERE / "runs"                                 # read, never written to again
 

@@ -1,4 +1,10 @@
-# core-avatars — the WHO axis
+# core-avatars/
+
+The customer types: one folder per core avatar, its sub-avatars, their exact words, objections and research.
+
+---
+
+## core-avatars — the WHO axis
 
 One folder per **core avatar**, each holding `profile.md`. Sub-avatars live in
 `<core>/sub-avatars/sub-NN-<slug>.md`.

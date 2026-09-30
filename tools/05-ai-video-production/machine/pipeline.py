@@ -91,11 +91,13 @@ def pools():
     # winners — our own running creative
     # actual creative only — a copy bank is notes about ads, not ads
     MEDIA = (".mp4", ".mov", ".jpg", ".jpeg", ".png", ".webp")
-    ads = [p for b in (WS / "brands").glob("*/existing-content/ads")
+    # intake/ads is the v6 name; existing-content/ads the old one, read too
+    INTAKE = ("*/intake/ads", "*/existing-content/ads")
+    ads = [p for pat in INTAKE for b in (WS / "brands").glob(pat)
            for p in b.rglob("*")
            if p.is_file() and p.suffix.lower() in MEDIA]
     try:
-        ads += [p for b in (drive_brands() or []).glob("*/existing-content/ads")
+        ads += [p for pat in INTAKE for b in (drive_brands() or []).glob(pat)
                 for p in b.rglob("*")
                 if p.is_file() and p.suffix.lower() in MEDIA]
     except Exception:
@@ -185,7 +187,8 @@ def counts():
     n_brief = len(list((TD / "runs").glob("*/brief-final.md"))) if (TD / "runs").is_dir() else 0
     ident = list((WS / "brands").glob("*/*/*/lora.json")) + \
             list((WS / "brands").glob("*/*/lora.json"))
-    voices = list((WS / "brands").glob("*/ai-cast/*/voice.json"))
+    voices = list((WS / "brands").glob("*/ai-elements/characters/*/voice.json")) + \
+             list((WS / "brands").glob("*/ai-cast/*/voice.json"))
     fmts = len(list((VP / "formats").glob("*.md"))) - 1  # README
     return {"runs": n_tear, "briefs": n_brief, "identities": len(ident),
             "voices": len(voices), "formats": max(fmts, 0)}

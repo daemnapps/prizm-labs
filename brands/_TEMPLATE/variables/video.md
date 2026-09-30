@@ -15,7 +15,7 @@ and there is no default: a run that does not declare one is writing to nobody.
 | `{product_file}` | `products/` |
 | `{objection_bank}` | `core-avatars/objection-bank.md` |
 | `{offer_file}` | `offers/offer-bank.md` |
-| `{identity_anchors}` | `identity-anchors.md` |
+| `{identity_anchors}` | `brand-identity/identity-anchors.md` |
 
 WIRED 2026-08-31: the video machine reads this map at run time — any
 variable named here outranks its chain config's conventional path, and

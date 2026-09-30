@@ -1,4 +1,10 @@
-# {{brand}} — variables
+# variables/
+
+Every copy fill-in, one map per surface (copy, email, image, video).
+
+---
+
+## {{brand}} — variables
 
 **One map per brand, per surface.** A machine reads ONLY its own surface's
 map — copy never loads email's variables, video never loads copy's. Nothing

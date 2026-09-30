@@ -3,7 +3,8 @@
 
     render.py <brief.md> <plate.png> <out.png> [packshot.png] [variant] [--picture|--over|--all] [--brand <brand>]
 
-The brand's logo and colours are read from `brands/<brand>/identity/`. The
+The brand's logo and colours are read from `brands/<brand>/brand-identity/`
+(old name `identity/`). The
 brand is the one named with `--brand`, else the one teardown recorded for the
 brief's own run (`vars/brand_name.md`). There is no default brand.
 
@@ -142,7 +143,7 @@ def brand_colors(brand_dir):
     """Hexes this brand owns, from its identity folder. Empty is a real answer:
     a brand with no documented palette has no chromatic colour to spend."""
     out = set()
-    for f in Path(brand_dir).glob("identity/*.md"):
+    for f in P.identity_dir(brand_dir).glob("*.md"):
         out |= {m.lower() for m in re.findall(r"#[0-9A-Fa-f]{6}", f.read_text())}
     return out
 
@@ -274,9 +275,10 @@ def draw_logo(e, canvas, notes, drawn=None):
 
     A wordmark is either right or it is wrong, and set in Arial it is
     wrong — an ad went out on 2026-08-31 with <brand> typed."""
-    f = brand_dir() / "identity/logo-white.png"
+    ident = P.identity_dir(brand_dir())          # brand-identity/, old identity/
+    f = ident / "logo-white.png"
     if (e.get("tone") or "light") == "dark":
-        f = brand_dir() / "identity/logo-dark.png"
+        f = ident / "logo-dark.png"
     if not f.is_file():
         notes.append(f"{e['element']}: no logo file at {f.name} — none drawn")
         return

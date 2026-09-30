@@ -1,0 +1,81 @@
+{
+  "_what": "v6 brand folder names (approved 25 Sep 2026). Each key is the folder a brand uses now; the list is the old names it replaced. Tools read the new name first and fall back to the old ones, so a brand that has not moved yet keeps working.",
+  "brand-identity": [
+    "identity",
+    "identity-anchors.md",
+    "story.md",
+    "position.md"
+  ],
+  "brand-identity/story.md": [
+    "story.md"
+  ],
+  "brand-identity/position.md": [
+    "position.md"
+  ],
+  "core-avatars": [
+    "core-avatars"
+  ],
+  "products": [
+    "products"
+  ],
+  "offers": [
+    "offers"
+  ],
+  "strategy": [
+    "calendar",
+    "strategy"
+  ],
+  "ai-elements": [
+    "elements"
+  ],
+  "ai-elements/characters": [
+    "ai-cast",
+    "elements/character"
+  ],
+  "ai-elements/environments": [
+    "elements/environment"
+  ],
+  "ai-elements/props": [
+    "elements/prop"
+  ],
+  "ai-elements/element-facts.json": [
+    "element-facts.json"
+  ],
+  "content-creators": [
+    "creators",
+    "channels/creators"
+  ],
+  "brand-assets": [
+    "footage"
+  ],
+  "intake": [
+    "existing-content"
+  ],
+  "ads": [],
+  "email-sms": [
+    "email"
+  ],
+  "email-sms/formats": [
+    "email/design-formats"
+  ],
+  "web": [
+    "funnels"
+  ],
+  "competitors": [
+    "competitive",
+    "qc-dictionary.json"
+  ],
+  "variables": [
+    "variables"
+  ],
+  "customer-experience": [
+    "customer-service-documentation"
+  ],
+  "learnings": [],
+  "briefs": [
+    "briefs"
+  ],
+  "archive": [
+    "archive"
+  ]
+}
