@@ -106,7 +106,7 @@ def main():
     # 1. front matter + includes
     fm = {"page_layout": plan.get("layout", "base-landing.html"), "page_type": "product",
           "title": "", "next_url": "select", "cta_text": "", "guarantee_text": ""}
-    ident_dir = WORKSPACE / "brands" / brand / "identity"
+    ident_dir = P.identity_dir(brand)                 # brand-identity/, old identity/
     # The library's blocks use fixed variable names, so a block can appear once
     # per page as shipped. A second use gets its own copy of the include with
     # every variable suffixed (problemsolution_4_ -> problemsolution_4__2_), so
@@ -130,7 +130,7 @@ def main():
             blocks.append(b)
     for s in plan["sections"]:
         for k, v in s.get("fields", {}).items():
-            if isinstance(v, str) and v.startswith(f"brands/{brand}/identity/"):
+            if isinstance(v, str) and (v.startswith(f"brands/{brand}/brand-identity/") or v.startswith(f"brands/{brand}/identity/")):
                 v = "images/brand/" + Path(v).name          # the brand's marks live in the project as images/brand/
             if isinstance(v, str) and v.startswith("brands/") and re.search(r"\.(png|jpe?g|webp|svg)$", v) and (WORKSPACE / v).exists():
                 (src / "assets/images/product").mkdir(parents=True, exist_ok=True)
@@ -187,7 +187,7 @@ def main():
     try:
         from PIL import Image, ImageDraw, ImageFont
         tok = {}
-        for line in (WORKSPACE / "brands" / brand / "identity" / "web-tokens.md").read_text().splitlines():
+        for line in (P.identity_dir(brand) / "web-tokens.md").read_text().splitlines():
             m = re.match(r"^\|\s*([a-z-]+)\s*\|\s*`?([^`|]+?)`?\s*\|", line)
             if m: tok[m.group(1)] = m.group(2).strip()
         accent = tok.get("brand-accent", "#B19A6F"); ink = tok.get("text-inverse", "#FFFFFF")

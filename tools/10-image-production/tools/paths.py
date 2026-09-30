@@ -122,11 +122,19 @@ def source_for(run_name):
                  if p.stem == "source" and p.suffix.lower() in (".jpg", ".png")), None)
 
 
+def identity_dir(b):
+    """The brand's look: brand-identity/ (the v6 name), else the old identity/."""
+    b = Path(b)
+    return next((b / n for n in ("brand-identity", "identity") if (b / n).is_dir()),
+                b / "brand-identity")
+
+
 def brand(name):
     b = BRANDS / name
-    return dict(root=b, identity=b / "identity",
-                logo_white=b / "identity/logo-white.png",
-                logo_dark=b / "identity/logo-dark.png",
+    ident = identity_dir(b)
+    return dict(root=b, identity=ident,
+                logo_white=ident / "logo-white.png",
+                logo_dark=ident / "logo-dark.png",
                 products=b / "products",
                 offer=b / "offers/offer-bank.md")
 

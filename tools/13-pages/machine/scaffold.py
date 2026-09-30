@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Make (or refresh) a brand's page-kit project from the machine's kit and the
 brand's own identity. Brand-agnostic: every colour, face and mark comes from
-brands/<brand>/identity/, never from here.
+brands/<brand>/brand-identity/ (old name identity/), never from here.
 
     python3 scaffold.py --brand <brand> --funnel scrub --dest ~/Projects/<brand>-pages
 
@@ -9,7 +9,7 @@ Creates:
     <dest>/package.json, _data/campaigns.json
     <dest>/src/<funnel>/_layouts/base-landing.html     (from kit/)
     <dest>/src/<funnel>/_includes/**                    (the section library)
-    <dest>/src/<funnel>/assets/css/landing/tokens.css   (from identity/web-tokens.md)
+    <dest>/src/<funnel>/assets/css/landing/tokens.css   (from brand-identity/web-tokens.md)
     <dest>/src/<funnel>/assets/css/brand.css            (the brand's faces)
     <dest>/src/<funnel>/assets/images/**                (the library's icons + the brand's marks)
     <dest>/src/<funnel>/assets/config.js                (inert — the SDK is not this page's concern)
@@ -31,8 +31,13 @@ TOKENS = ("brand-primary", "brand-cta", "brand-cta-ink", "brand-cta-hover", "bra
           "border", "font-heading", "font-body", "font-link")
 
 
+def identity_dir(brand):
+    """The brand's look: brand-identity/ (the v6 name), else the old identity/."""
+    return P.identity_dir(brand)
+
+
 def read_tokens(brand):
-    p = WORKSPACE / "brands" / brand / "identity" / "web-tokens.md"
+    p = identity_dir(brand) / "web-tokens.md"
     if not p.exists():
         sys.exit(f"{p.relative_to(WORKSPACE)} is missing — the brand's web skin has to be written down before a page can wear it")
     out = {}
@@ -47,7 +52,7 @@ def read_tokens(brand):
 
 
 def tokens_css(t):
-    return f"""/* Written by the page machine's scaffold from brands/<brand>/identity/web-tokens.md — edit that, not this. */
+    return f"""/* Written by the page machine's scaffold from brands/<brand>/brand-identity/web-tokens.md — edit that, not this. */
 :root {{
   --brand-primary: {t['brand-primary']};
   --brand-primary-dark: {t['brand-primary-dark']};
@@ -75,7 +80,7 @@ def tokens_css(t):
 def brand_css(t):
     link = t["font-link"]
     imp = f"@import url('{link}');\n" if link and link != "none" else ""
-    return f"""{imp}/* The brand's faces, from identity/web-tokens.md. Tailwind's `font-sans` is remapped so every block wears them. */
+    return f"""{imp}/* The brand's faces, from brand-identity/web-tokens.md. Tailwind's `font-sans` is remapped so every block wears them. */
 :root {{ --font-heading: {t['font-heading']}; --font-body: {t['font-body']}; }}
 body, .font-sans {{ font-family: {t['font-body']} !important; }}
 h1, h2, h3, .text-display, .text-heading-1, .text-heading-2, .text-heading-3 {{ font-family: {t['font-heading']} !important; }}
@@ -87,7 +92,7 @@ BUTTONS = r"""/* Pictures: a cover-cropped photograph keeps its upper third — 
 section img[class*="object-cover"] { object-position: 50% 22%; }
 @media (max-width: 767px) { section img[class*="h-[300px]"] { height: 440px; object-position: 50% 38%; } }
 /* Buttons: the library paints every call to action with --brand-primary and white type.
-   The brand's own button (identity/web-tokens.md, "Buttons") wears the cta ground with dark type. */
+   The brand's own button (brand-identity/web-tokens.md, "Buttons") wears the cta ground with dark type. */
 a.bg-\[var\(--brand-primary\)\], button.bg-\[var\(--brand-primary\)\],
 .bg-\[var\(--brand-primary\)\][href], .bg-\[var\(--brand-primary\)\][type="button"], .bg-\[var\(--brand-primary\)\][type="submit"] {
   background-color: var(--brand-cta) !important; color: var(--brand-cta-ink) !important;
@@ -141,7 +146,7 @@ def main():
         # a colour, never an entity (&#226;) or an id reference (#clip0)
         new = re.sub(r'(?<![&\w])#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})(?![0-9A-Fa-f\w])', lambda m: tok0["brand-primary"] if saturated(m.group(0)) else m.group(0), txt)
         if new != txt: svg.write_text(new)
-    ident = WORKSPACE / "brands" / a.brand / "identity"
+    ident = identity_dir(a.brand)
     (src / "assets/images/brand").mkdir(exist_ok=True)
     for p in ident.glob("*"):
         if p.suffix.lower() in (".png", ".svg"):

@@ -150,7 +150,7 @@ def brand_facts(brand, product=None):
     f = {"accent_name": "our accent", "accent_hex": "", "type_hex": "#111111",
          "treats": "the skin the product is for", "treats_short": "that skin",
          "texture": "our product's own texture", "identity": None, "range": []}
-    pal = b / "identity/palette.md"
+    pal = P.brand(brand)["palette"]            # brand-identity/palette.md, old identity/
     if pal.is_file():
         rows = re.findall(r"^\| \*\*(.+?)\*\* \| `(#[0-9A-Fa-f]{6})` \|", pal.read_text(), re.M)
         if rows:

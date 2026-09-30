@@ -1,4 +1,10 @@
-# strategy — the brand's claims
+# strategy/
+
+The brand's plan: calendar/, angles.json (the one angle source) and goals/ (KPIs per function).
+
+---
+
+## strategy — the brand's claims
 
 **`angles.json` is the one angle source.** Every page, ad and email names the
 angle it argues; reports group on it. Nothing else in the brand folder may hold

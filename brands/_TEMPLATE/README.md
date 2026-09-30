@@ -1,99 +1,72 @@
 # _TEMPLATE — the brand folder every brand copies
 
-Ruled by Damon, 2026-08-30, during the naming pass. A new brand starts as a
-copy of this tree; the brand-agnostic tools assume exactly these paths, for
-every brand, no exceptions. If a folder earns a new home, it moves HERE and
-in every brand in the same commit.
+A new brand starts as a copy of this folder. Every tool in this kit reads a
+brand through exactly these names, so a brand is set up once and never
+explained again. This is the **v6 layout** (approved 25 Sep 2026): one layout
+for every brand, the same names on GitHub and on the Drive — words here, media
+on the Drive at the same path.
 
 ```
 <brand>/
-  README.md                          what this brand is; the folder test
-  data-sources.md                    where every derived file's data comes from
-  core-avatars/                      one folder per avatar; sub-avatars inside
-    language-index.json / .md        the language bank's index
-    objection-bank.md                what stops them — the avatars' objections
-    <avatar>/profile.md              who they are
-    <avatar>/language/**/*.json      their real sentences, by funnel stage
-    <avatar>/sub-avatars/*.md
-  calendar/
-    moments.json                     cross-channel moments
-  email/                             the email channel's record
-    identity/sender.md               who emails come from
-    audience-matrix.json             segment × avatar planning cells
-    ledger · classified · learnings · performance · segments · sends/
-  strategy/
-    angles.json                      the one angle source; only Damon signs
-    board.html + build_board.py      the judgment surface
-  products/                          one profile per product, from the live feed
-  offers/
-    offer-bank.md                    the offers, split by avatar. IT IS HERE,
-                                     not under products/ — this tree said
-                                     products/ until 2026-09-19 while both live
-                                     brands had offers/offer-bank.md, and seven
-                                     config lines were repointed at the real one
-  operations/                        the brand's own operating facts
-    brand.json                       label, accounts, timezone, start month,
-                                     rates (freight, payment, lead days)
-    products.json                    every product and its SKUs, pack sizes,
-                                     sets, costs, weights, production days
-  existing-content/                  what the brand has already shipped or proven
-    ads/  emails/  organic/
-    landing-pages/                   the backbone of every page type we make:
-      quiz/ · advertorials/ · listicles/ · offer pages (acquisition,
-      pre-sell, retention) — one folder per page type
-    angles.md                        receipted angles (staying here for now)
-  variables/                         one variable map per surface (email.md, …)
-  customer-service-documentation/    the CS playbook, .html + .md
-  creators/                          the creator program: one folder per creator
-  ai-cast/                           the brand's AI characters (CHARACTER-SPEC)
-  hook-ledger.md                     {hook_ledger} — spent hooks never regenerate
-  identity-anchors.md                {identity_anchors} — who chains may name
-  position.md                        {position} — the line, the mechanism, the market
-                                     stage, as labelled slots (2026-09-19); copy
-                                     _TEMPLATE/position.md, fill every slot or write
-                                     `open`; lint_position.py gates the shape; a brand
-                                     without one refuses at the audience stage
+  README.md             what this brand is
+  FOLDERS.json          new folder name -> the old names it replaced
+  brand-identity/       story.md, position.md, the look (palette, fonts, web tokens, logos), voice, rules
+  core-avatars/         the customer types, sub-avatars, their exact words, objections, research
+  products/             one folder per product: facts here, photos and video on the Drive
+  offers/               offers, guarantees, the standard box, the offer bank
+  strategy/             calendar/ · angles.json (the one angle source) · goals/
+  ai-elements/          everything AI-generated
+    characters/         every AI character, filed like content-creators, with a talent card
+    environments/       places and sets
+    props/              objects used in shots
+    element-facts.json  what is true of each element, appended to every prompt that uses it
+  content-creators/     real creators and their footage, with a talent card each
+  brand-assets/         photo shoots and brand videos (media on the Drive)
+  intake/               what the brand already has: ads, organic, emails, landing pages, reviews
+  ads/                  the ads that are live · formats/ · hooks/ · top/
+  email-sms/            the emails and texts that are live · formats/ · hooks/ · top/
+  web/                  the pages and live links · formats/ · hooks/ · top/
+  competitors/          competitor brands, assigned per avatar
+  variables/            every copy fill-in, one map per surface
+  customer-experience/  support playbook, ticket themes, sentiment, NPS, social comments
+  learnings/            results read and fed back into the rest of the folder
+  briefs/               the editor brief queue
 ```
 
-**THIS TREE IS THE STANDARD, AND IT HAS DRIFTED FROM BOTH LIVE BRANDS BEFORE.**
-`brands/<brand>/README.md` binds a structure change to land here and there in the
-same commit, so a folder that exists in a brand and not here is a broken promise,
-not a detail. Three were found on 2026-09-19 by comparing this file against the
-two live trees: `offers/` (added above, and it was WRONG rather than missing —
-`offer-bank.md` was filed under `products/`), `operations/` (added above, the
-missed rider of MET-C24 (brand operations folder), ruled 2026-09-16 and built in
-both brands the same day), and `meta/`, which is DELIBERATELY STILL ABSENT — it
-is Damon's and undecided, and phase 2 rules it rather than this edit.
+Every folder has a one-line `README.md` saying what goes in it.
 
-One thing this edit does NOT fix, so it is not lost: `brands/<brand>/` carries BOTH
-`offers/offer-bank.md` and `commerce/offer-bank.md`. Two files with one name and
-no ruling on which is the offer bank. That is brand content and a human's call,
-and it belongs to the phase-2 consolidation.
+**No loose files at the top.** Story and position live in `brand-identity/`.
+There is no single hook ledger: ads, email-sms and web each keep their own
+`hooks/`.
 
-Rules that travel with the tree: brand context is read-only to tools during a
-run · every fact derived, never typed · one variable vocabulary across lanes ·
-one avatar per piece.
+**Team-only folders are not part of this kit.** A team running this kit may
+keep money, ad-account and working-notes folders beside these (`operations/`,
+`meta/`, `context/`); they are never shared and no public tool needs them.
+
+## Old folder names still work
+
+`FOLDERS.json` maps each folder to the names it replaced (`identity` →
+`brand-identity`, `ai-cast` → `ai-elements/characters`, `creators` →
+`content-creators`, `email` → `email-sms`, `existing-content` → `intake`, …).
+Every tool in this kit reads the new name first and the old one after, so a
+brand that has not moved yet keeps working.
 
 ## The four axes a brand runs on
 
 Everything a brand makes is one point in four independent axes
 (`components/naming/MODEL.md`), and each axis has exactly one home:
 
-| Axis | Answers | Lives in | Seeded here? |
-|---|---|---|---|
-| **Avatar** | who is this for? | `core-avatars/<slug>/profile.md` | yes — shell + rules |
-| **Angle** | what are we claiming? | `strategy/angles.json` | yes — shell + rules |
-| **Channel** | where does it run? | **shared, not per brand** — `copy/bank/channel-map.json` | n/a |
-| **Format** | how is it built? | 25 banks — `components/naming/registry.json` | partly: `offers/`, `email/` |
+| Axis | Answers | Lives in |
+|---|---|---|
+| **Avatar** | who is this for? | `core-avatars/<slug>/profile.md` |
+| **Angle** | what are we claiming? | `strategy/angles.json` |
+| **Channel** | where does it run? | shared, not per brand — `copy/bank/channel-map.json` |
+| **Format** | how is it built? | each channel's `formats/` (`ads/`, `email-sms/`, `web/`) and the shared banks in `components/naming/registry.json` |
 
 **An angle is channel-free and format-free.** The same claim runs as a paid
 static, an organic video, an email and a landing page. A thing that only works
-in one container is a format. This is checked, not merely asked for.
+in one container is a format.
 
-### `channels/` does not hold channels
-
-Both live brands have a `channels/` folder and neither holds the channel
-vocabulary — they hold creator contacts and rosters. The four channels
-(paid-social, organic-social, email, owned-pages) are shared across brands and
-live in the channel map. **The folder is named after the wrong thing**, which is
-recorded here so a new brand does not copy the confusion.
+Rules that travel with the folder: brand context is read-only to tools during a
+run · every fact derived, never typed · one variable vocabulary across tools ·
+one avatar per piece.

@@ -14,7 +14,7 @@ What it checks, per file:
     allowed only under `## Also on file`)
   * no `<placeholder>` left from the template
   * no hex colour — colour is the design system (identity/), never the position
-  * brand-agnostic template: brands/_TEMPLATE/position.md names no brand
+  * brand-agnostic template: brands/_TEMPLATE/brand-identity/position.md names no brand
 Exit 0 = clean. Exit 1 = findings. Exit 2 = nothing to check.
 Stdlib only.
 """
@@ -23,7 +23,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 WS = HERE.parent.parent
-TEMPLATE = WS / "brands" / "_TEMPLATE" / "position.md"
+# v6 layout: story and position live in brand-identity/; the old top-level spot is still read
+TEMPLATE = next((t for t in (WS / "brands" / "_TEMPLATE" / "brand-identity" / "position.md",
+                             WS / "brands" / "_TEMPLATE" / "position.md") if t.is_file()),
+                WS / "brands" / "_TEMPLATE" / "brand-identity" / "position.md")
 
 SLOTS = ["LINE", "SPINE", "PROBLEM WORD", "MECHANISM", "MECHANISM NAME", "DISPLACES",
          "MARKET STAGE", "STAGE WHY", "LEADS WITH", "TRUST MOVE", "AUTHORITY",
@@ -121,7 +124,8 @@ def check(path, is_template=False):
 
 def main(argv):
     files = [Path(a) for a in argv] or sorted(
-        p for p in (WS / "brands").glob("*/position.md") if not p.parent.name.startswith("_"))
+        p for p in [*(WS / "brands").glob("*/position.md"), *(WS / "brands").glob("*/brand-identity/position.md")]
+        if not p.relative_to(WS / "brands").parts[0].startswith("_"))
     if TEMPLATE.is_file() and not argv:
         files.append(TEMPLATE)
     if not files:

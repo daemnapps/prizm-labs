@@ -72,5 +72,5 @@ copy/*.md) · the live page only to confirm what records claim.
 - No terms/rates/status — operational, churns; the roster owns it.
 - Everything clickable: a reference that can't be clicked is a defect.
 - Refresh is the teardown machine's stage 8: the brand declares spec +
-  home in `brands/<brand>/channels/creators/profile-home.json`; the
+  home in `brands/<brand>/content-creators/profile-home.json`; the
   spec wins over the prompt.

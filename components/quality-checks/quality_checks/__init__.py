@@ -152,7 +152,9 @@ def partner_check(text, partner, own_domains=()):
 def partner_on_file(brand_dir, key):
     """The roster entry, or None. Never invents one; a paused partner is not live."""
     import json
-    f = pathlib.Path(brand_dir) / "email" / "affiliates.json"
+    f = pathlib.Path(brand_dir) / "email-sms" / "affiliates.json"      # v6 name
+    if not f.is_file():
+        f = pathlib.Path(brand_dir) / "email" / "affiliates.json"      # old name
     if not (key and f.is_file()):
         return None
     for a in json.loads(f.read_text()).get("affiliates", []):

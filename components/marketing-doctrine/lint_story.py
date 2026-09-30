@@ -5,7 +5,7 @@
     python3 components/marketing-doctrine/lint_story.py <file> ... # named files
 
 Mirrors lint_position.py. The shape is the one <brand>'s hand-built file set and
-Damon approved on 2026-09-19 ("story looks good"); brands/_TEMPLATE/story.md
+Damon approved on 2026-09-19 ("story looks good"); brands/_TEMPLATE/brand-identity/story.md
 carries it with no brand in it.
 
 What it checks, per file:
@@ -22,7 +22,7 @@ What it checks, per file:
     **Beats:**, **Teller:**, **Fits:** and **Receipt:**/**Receipts:**
   * every id in STORIES has its `###`, and every `###` is in STORIES
   * no `<placeholder>` left from the template (inline code is ignored)
-  * brand-agnostic template: brands/_TEMPLATE/story.md names no brand
+  * brand-agnostic template: brands/_TEMPLATE/brand-identity/story.md names no brand
 Exit 0 = clean. Exit 1 = findings. Exit 2 = nothing to check.
 Stdlib only.
 """
@@ -31,7 +31,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 WS = HERE.parent.parent
-TEMPLATE = WS / "brands" / "_TEMPLATE" / "story.md"
+# v6 layout: story and position live in brand-identity/; the old top-level spot is still read
+TEMPLATE = next((t for t in (WS / "brands" / "_TEMPLATE" / "brand-identity" / "story.md",
+                             WS / "brands" / "_TEMPLATE" / "story.md") if t.is_file()),
+                WS / "brands" / "_TEMPLATE" / "brand-identity" / "story.md")
 
 SLOTS = ["SPINE", "BEFORE", "TURN", "AFTER", "TELLERS", "ENTRY", "STORIES", "ARC",
          "REASON TO SWITCH", "OPENS IN", "PRODUCT ENTERS", "PROOF", "VOICE", "NEVER",
@@ -177,7 +180,8 @@ def check(path, is_template=False):
 
 def main(argv):
     files = [Path(a) for a in argv] or sorted(
-        p for p in (WS / "brands").glob("*/story.md") if not p.parent.name.startswith("_"))
+        p for p in [*(WS / "brands").glob("*/story.md"), *(WS / "brands").glob("*/brand-identity/story.md")]
+        if not p.relative_to(WS / "brands").parts[0].startswith("_"))
     if TEMPLATE.is_file() and not argv:
         files.append(TEMPLATE)
     if not files:

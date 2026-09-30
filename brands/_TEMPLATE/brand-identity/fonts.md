@@ -2,7 +2,7 @@
 
 _A person fills this file from the purchase records. Nothing here can be measured
 by a machine. Font FILES live on the company drive under
-`brands/<brand>/identity/fonts/`, never in git._
+`brands/<brand>/brand-identity/fonts/`, never in git._
 
 | | <Display face> | <Body face> |
 |---|---|---|

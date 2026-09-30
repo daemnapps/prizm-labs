@@ -47,11 +47,14 @@ def _read(path, cap=CAP):
     return text
 
 
-def _file(brand, *parts):
-    """(text, note) — the file's words, or a plain statement that it is not on file."""
+def _file(brand, *parts, old=None):
+    """(text, note) — the file's words, or a plain statement that it is not on file.
+    `old` is the path the file had before the v6 folder names; read when the new one is absent."""
     f = brand_dir(brand).joinpath(*parts)
     if f.is_file():
         return _read(f), None
+    if old and brand_dir(brand).joinpath(*old).is_file():
+        return _read(brand_dir(brand).joinpath(*old)), None
     return f"(not on file: {P.rel(f)} — nothing may be claimed from it)", P.rel(f)
 
 
@@ -185,10 +188,12 @@ def gather(brand, avatar=None, sub=None):
     """Every block a prompt binds, plus the list of what is not on file."""
     missing = []
     blocks = {}
-    for name, parts in (("position", ("position.md",)), ("story", ("story.md",)),
-                        ("offers", ("offers", "offer-bank.md")),
-                        ("objections", ("core-avatars", "objection-bank.md"))):
-        blocks[name], miss = _file(brand, *parts)
+    # story and position live in brand-identity/ (v6); a brand not moved yet has them at the top
+    for name, parts, old in (("position", ("brand-identity", "position.md"), ("position.md",)),
+                             ("story", ("brand-identity", "story.md"), ("story.md",)),
+                             ("offers", ("offers", "offer-bank.md"), None),
+                             ("objections", ("core-avatars", "objection-bank.md"), None)):
+        blocks[name], miss = _file(brand, *parts, old=old)
         if miss:
             missing.append(miss)
     blocks["avatar_menu"] = avatar_menu(brand)

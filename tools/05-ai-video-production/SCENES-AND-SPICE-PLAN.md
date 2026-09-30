@@ -82,7 +82,7 @@ Nothing below is installed until he says go.
   2026-09-18: "we are cloning people's voices and then adjusting them"), a
   lookalike-type character for a B-roll beat
   (written identity only, deliberately different face — the variation
-  rule already in `brands/_TEMPLATE/ai-cast/CHARACTER-SPEC.md`), styling
+  rule already in `brands/_TEMPLATE/ai-elements/characters/CHARACTER-SPEC.md`), styling
   and register per avatar, format-relevance line ("why this format works
   for this avatar").
 - **Gates:** every spice item cites a source; no real likeness, no real

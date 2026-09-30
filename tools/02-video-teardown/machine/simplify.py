@@ -34,7 +34,7 @@ This does, for every run of hers that reached a final brief:
    IN PLACE (same link, new contents, same title) and puts the Start-here Doc
    beside it in BRIEFS. Nothing is trashed.
 
-The intro comes from `brands/<brand>/channels/creators/brief-intro.md`;
+The intro comes from `brands/<brand>/content-creators/brief-intro.md` (old: channels/creators/);
 the concept from the machine; nothing here writes a word of its own.
 """
 import argparse, json, re, sys, time
@@ -42,6 +42,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
+import brand_folders as BF
 import md as MD
 import gdoc as G
 import run as R
@@ -193,7 +194,7 @@ def first_name(handle):
 
 
 def intro_html(brand, name, n, products, contact):
-    f = C.WS / "brands" / brand / "channels" / "creators" / "brief-intro.md"
+    f = BF.home(C.WS / "brands" / brand, "content-creators") / "brief-intro.md"
     if not f.is_file():
         raise RuntimeError(f"no shared intro for {brand}: {f}")
     body = FRONT.sub("", f.read_text(), count=1).strip()
@@ -233,7 +234,7 @@ def brand_label(brand):
     except (OSError, ValueError, AttributeError):
         pass
     want = re.sub(r"[^a-z0-9]", "", brand.lower())
-    for fname in ("position.md", "README.md"):
+    for fname in ("brand-identity/position.md", "position.md", "README.md"):
         try:
             head = (home / fname).read_text().lstrip().splitlines()[0]
         except (OSError, IndexError):
@@ -246,7 +247,7 @@ def brand_label(brand):
 
 
 def contact_for(brand):
-    f = C.WS / "brands" / brand / "channels" / "creators" / "contact.md"
+    f = BF.home(C.WS / "brands" / brand, "content-creators") / "contact.md"
     if not f.is_file():
         return ""
     t = f.read_text().strip()

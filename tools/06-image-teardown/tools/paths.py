@@ -98,16 +98,21 @@ def brand(name):
     the lane ended up reading three different homes for one brand.
     """
     b = BRANDS / name
+    # brand-identity/ is the v6 name for the look; identity/ the old one
+    ident = next((b / n for n in ("brand-identity", "identity") if (b / n).is_dir()),
+                 b / "brand-identity")
     return dict(
         root=b,
         avatars=b / "core-avatars",
         products=b / "products",
         offer=b / "offers/offer-bank.md",
-        identity=next((f for f in (b / "identity-anchors.md",
-                                   b / "identity/anchors.md",
-                                   b / "identity/palette.md") if f.is_file()),
-                      b / "identity-anchors.md"),
-        palette=b / "identity/palette.md",
+        identity_dir=ident,
+        identity=next((f for f in (b / "brand-identity/identity-anchors.md",
+                                   b / "identity-anchors.md",
+                                   ident / "anchors.md",
+                                   ident / "palette.md") if f.is_file()),
+                      b / "brand-identity/identity-anchors.md"),
+        palette=ident / "palette.md",
         hook_ledger=b / "hook-ledger.md",
         # The roster moved under core-avatars/casting/; ai-cast/ has not
         # existed since, so every caller asking for `cast` got a dead path.

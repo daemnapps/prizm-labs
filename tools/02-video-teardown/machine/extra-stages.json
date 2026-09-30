@@ -48,7 +48,7 @@
         "offer_file": "brands/<brand>/offers/offer-bank.md",
         "creator_profile": "=UNASSIGNED. The run supplies this when it is a creator's own post.",
         "brief_count": "~brief_count",
-        "brand_contact": "brands/<brand>/channels/creators/contact.md",
+        "brand_contact": "brands/<brand>/content-creators/contact.md",
         "today": "!today"
       }
     },
@@ -143,14 +143,14 @@
       "source_url": "~source_url",
       "teardown_record": "@stage1",
       "baseline_injection": "@stage3",
-      "brand_contact": "brands/<brand>/channels/creators/contact.md",
+      "brand_contact": "brands/<brand>/content-creators/contact.md",
       "spice_sheet": "@stage4g",
       "spoken": "components/marketing-doctrine/slices/spoken.md"
     },
     "stage4a": {
       "source_reading": "@stage4r",
       "hook_set": "@stage4b",
-      "position": "brands/<brand>/position.md",
+      "position": "brands/<brand>/brand-identity/position.md",
       "target_awareness": "~target_awareness",
       "branch_sections": "~branch_sections",
       "awareness_levels": "components/marketing-doctrine/slices/awareness.md"
@@ -159,7 +159,7 @@
       "source_reading": "@stage4r",
       "language": "?hooks",
       "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
-      "position": "brands/<brand>/position.md",
+      "position": "brands/<brand>/brand-identity/position.md",
       "story": "~story",
       "target_awareness": "~target_awareness",
       "branch_sections": "~branch_sections",
@@ -168,7 +168,7 @@
     "stage3": {
       "language": "?injection",
       "techniques": "components/marketing-doctrine/slices/techniques.md",
-      "position": "brands/<brand>/position.md",
+      "position": "brands/<brand>/brand-identity/position.md",
       "story": "~story",
       "doctrine_read": "@stage1c"
     },
@@ -202,7 +202,7 @@
       "desire_dimensions": "components/marketing-doctrine/slices/desire.md",
       "awareness_levels": "components/marketing-doctrine/slices/awareness.md",
       "sophistication_stages": "components/marketing-doctrine/slices/sophistication.md",
-      "position": "brands/<brand>/position.md",
+      "position": "brands/<brand>/brand-identity/position.md",
       "story": "~story",
       "declared_audience": "~declared_audience"
     },
@@ -230,7 +230,7 @@
       "doctrine_read": "@stage1c"
     },
     "stage2f": {
-      "position": "brands/<brand>/position.md",
+      "position": "brands/<brand>/brand-identity/position.md",
       "story": "~story"
     },
     "stage4g": {
@@ -261,6 +261,6 @@
     "stage7b",
     "stage8"
   ],
-  "_position_note": "2026-09-19: {position} = brands/<brand>/position.md — the brand's declared LINE, MECHANISM and MARKET STAGE as labelled slots. Bound to the audience, compose, injection, hook and placement stages. A brand without the file refuses loudly at 1b (brand file missing), which is the intended gate: no line, no run.",
-  "_story_note": "2026-09-19: {story} = brands/<brand>/story.md — the brand's storytelling framework beside its position (SPINE, TELLERS, STORIES with beats and fits). Bound as the soft ~story fill to audience (picks STORY + TELLER), compose, injection (the main one), hooks, expansion and spice. A brand with no story.md runs as before with [UNFILLED]; story-builder drafts one. 1b's STORY/TELLER are recorded in run.json market_state and appended to {story} for every later stage."
+  "_position_note": "2026-09-19: {position} = brands/<brand>/brand-identity/position.md (old: position.md, still read) — the brand's declared LINE, MECHANISM and MARKET STAGE as labelled slots. Bound to the audience, compose, injection, hook and placement stages. A brand without the file refuses loudly at 1b (brand file missing), which is the intended gate: no line, no run.",
+  "_story_note": "2026-09-19: {story} = brands/<brand>/brand-identity/story.md (old: story.md, still read) — the brand's storytelling framework beside its position (SPINE, TELLERS, STORIES with beats and fits). Bound as the soft ~story fill to audience (picks STORY + TELLER), compose, injection (the main one), hooks, expansion and spice. A brand with no story.md runs as before with [UNFILLED]; story-builder drafts one. 1b's STORY/TELLER are recorded in run.json market_state and appended to {story} for every later stage."
 }

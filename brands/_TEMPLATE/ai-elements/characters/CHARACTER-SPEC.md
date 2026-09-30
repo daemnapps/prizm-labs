@@ -69,7 +69,7 @@ especially as new avatars and new content creators come in:
 3. **Canonical master** generated (description route) — ONE master,
    everything chains from it.
 4. **The full board set** generated, matching the <brand> baseline
-   board-for-board (`brands/<brand>/ai-cast/<brand>/boards/` — Damon's
+   board-for-board (`brands/<brand>/ai-elements/characters/<name>/boards/` — Damon's
    reference set): wardrobe lineup(s), style board, expression+angle
    grid, hair grid, detail close-ups, context scenes in the character's
    world.
@@ -111,7 +111,7 @@ artifacts when a scene needs them (the digital-artifact ruling).
   the description route only; photo-reference generation is reserved for
   characters with no real-person source.
 - These people do not exist — every character is generated and owned by
-  the brand. Real humans live in the brand's creators/ folder.
+  the brand. Real humans live in the brand's content-creators/ folder.
 - Identity chaining: every still of this character is an image-EDIT
   with their master as reference. Never describe the character fresh.
 - The character's pronouns are whatever the brand defined; templates

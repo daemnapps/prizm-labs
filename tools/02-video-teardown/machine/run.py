@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
+import brand_folders as BF
 import library as L
 
 RUNS = C.runs_root()
@@ -177,11 +178,12 @@ def brand_media(brand, *parts):
 
 def creator_files(brand, handle):
     """A creator's profile and the likeness we are allowed to seed frames from."""
-    base = CREATORS / brand / "channels/creators"
+    base = BF.home(CREATORS / brand, "content-creators")   # old: channels/creators
     prof = base / f"{handle}.md"
     face = base / "likeness" / f"{handle}.jpg"
     if not face.exists():
-        face = brand_media(brand, "channels", "creators", "likeness", f"{handle}.jpg")
+        face = (brand_media(brand, "content-creators", "likeness", f"{handle}.jpg")
+                or brand_media(brand, "channels", "creators", "likeness", f"{handle}.jpg"))
     return (prof if prof.exists() else None), (face if face and face.exists() else None)
 
 
@@ -190,7 +192,8 @@ def cast_files(brand, avatar):
     master (the ONE identity image — the variation rule: never a creator's
     face, never more than one identity reference) and their identity block.
 
-    Found by convention: brands/<brand>/ai-cast/<character>/
+    Found by convention: brands/<brand>/ai-elements/characters/<character>/
+    (old name ai-cast/<character>/)
     character.md carries an `- Avatar link:` line naming the avatar it
     embodies, and the master image sits beside it.
 
@@ -199,7 +202,8 @@ def cast_files(brand, avatar):
     swaps the actor for a run."""
     # ONE brand home (Damon, 2026-09-02): brands merged into
     # brands/ and stopped existing, ahead of production.
-    base = C.WS / "brands" / brand / "ai-cast"
+    base = BF.home(C.WS / "brands" / brand, "ai-elements/characters")  # old: ai-cast
+    cast_rel = base.relative_to(C.WS / "brands" / brand).parts
     base = base if base.is_dir() else None
     if not (avatar and base):
         return []
@@ -219,7 +223,7 @@ def cast_files(brand, avatar):
         master = next((d / n for n in names if (d / n).is_file()), None)
         if not master:
             master = next((f for n in names
-                           if (f := brand_media(brand, "ai-cast", d.name, n))), None)
+                           if (f := brand_media(brand, *cast_rel, d.name, n))), None)
         ident, started = [], False
         for line in text.splitlines():     # the FIRST blockquote is the block
             if line.startswith(">"):
@@ -742,7 +746,9 @@ def frames(stage, d, st, vars_, out):
     if st.get("creator"):
         _, face = creator_files(st["brand"], st["creator"])
         root = brand_root_rel(st["brand"])
-        got = identity_of(*root, "creators", st["creator"]) if use_ids else None
+        cc = BF.home(C.WS.joinpath(*root), "content-creators").relative_to(C.WS.joinpath(*root)).parts
+        got = (identity_of(*root, *cc, st["creator"])
+               or identity_of(*root, "creators", st["creator"])) if use_ids else None
         if got:
             cmd += ["--identity", got[0]]
             say(f"      TRAINED IDENTITY: {st['creator']} — generated with "
@@ -753,7 +759,7 @@ def frames(stage, d, st, vars_, out):
         else:
             say(f"      NO likeness anchor for {st['creator']} — the frames will "
                 f"show someone who merely fits the description. Cut one from her "
-                f"own video into brands/{st['brand']}/channels/creators/likeness/")
+                f"own video into brands/{st['brand']}/content-creators/likeness/")
     elif st.get("production_route") == "ai":
         # The AI route casts from the brand's AI cast, bound to the avatar
         # stage 1b assigned — the assignment is used, every run. Same identity
@@ -768,7 +774,8 @@ def frames(stage, d, st, vars_, out):
         if picked and picked[1]:
             who, master, ident, _ = picked
             root = brand_root_rel(st["brand"])
-            got = identity_of(*root, "ai-cast", who) if use_ids else None
+            ch = BF.home(C.WS.joinpath(*root), "ai-elements/characters").relative_to(C.WS.joinpath(*root)).parts
+            got = identity_of(*root, *ch, who) if use_ids else None
             if got:
                 cmd += ["--identity", got[0]]
                 say(f"      TRAINED IDENTITY: {who} — generated with her "
@@ -782,9 +789,9 @@ def frames(stage, d, st, vars_, out):
                 f"canonical master as the one identity image"
                 + (f" (also castable: {others} — rerun with --cast)" if others else ""))
         else:
-            say("      NO cast anchor — no ai-cast character links to this "
+            say("      NO cast anchor — no AI character links to this "
                 "run's avatar, so every frame will invent its own person. "
-                f"Cast one in brands/{st['brand']}/ai-cast/")
+                f"Cast one in brands/{st['brand']}/ai-elements/characters/")
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(C.MACHINE))
     if r.returncode:
         raise RuntimeError((r.stderr or r.stdout or "frames failed")[-1200:])
@@ -1109,23 +1116,25 @@ def run_stage(d, st, stage, extras, redo=False):
                             "[UNFILLED: research gatherer not available]")
         # ~voiceprint — the brand's measured creator voiceprints (Damon,
         # 2026-09-19: "analyze the audio specifically and create voice
-        # prints"). brands/<brand>/creators/VOICEPRINTS.md, written by
+        # prints"). brands/<brand>/content-creators/VOICEPRINTS.md (old: creators/), written by
         # `gather.py voiceprint`, keyed per avatar and sub-avatar; the spoken
         # script matches its rhythm. A brand with none runs on the register
         # recipe alone and the stage is told so — never a stopped run.
         if any(v == "~voiceprint" for v in (stage.get("vars") or {}).values()):
-            vf = C.WS / "brands" / st["brand"] / "creators" / "VOICEPRINTS.md"
+            vf = BF.home(C.WS / "brands" / st["brand"], "content-creators") / "VOICEPRINTS.md"
+            if not vf.is_file():
+                vf = C.WS / "brands" / st["brand"] / "creators" / "VOICEPRINTS.md"
             pack["voiceprint"] = (vf.read_text() if vf.is_file() else
                                   "[UNFILLED: no creator voiceprints on file for this "
                                   "brand — `gather.py voiceprint --brand <brand> --all` "
                                   "measures them off the creators' own audio]")
         # ~story — the brand's storytelling framework beside its position
         # (Damon, 2026-09-19: "storytelling and intent over volume").
-        # brands/<brand>/story.md; after 1b has picked, the pick is appended
+        # brands/<brand>/brand-identity/story.md (old: story.md); after 1b has picked, the pick is appended
         # so every later stage tells the same story in the same teller's
         # mouth. A brand with none runs as before — never a stopped run.
         if any(v == "~story" for v in (stage.get("vars") or {}).values()):
-            sf = C.WS / "brands" / st["brand"] / "story.md"
+            sf = BF.home(C.WS / "brands" / st["brand"], "brand-identity/story.md")
             if sf.is_file():
                 txt = sf.read_text()
                 ms = st.get("market_state") or {}

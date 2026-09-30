@@ -32,6 +32,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import keys
+import brand_folders as BF
 
 WS = Path.home() / "Projects" / "ai-workspace"
 TTS = "https://queue.fal.run/fal-ai/elevenlabs/tts/multilingual-v2"
@@ -51,9 +52,9 @@ def fal(url, data=None, key=None):
 
 
 def character_home(brand, name):
-    d = WS / "brands" / brand / "ai-cast" / name
+    d = BF.home(WS / "brands" / brand, "ai-elements/characters") / name   # old: ai-cast/
     if not d.is_dir():
-        sys.exit(f"no character '{name}' in brands/{brand}/ai-cast/")
+        sys.exit(f"no character '{name}' in brands/{brand}/ai-elements/characters/")
     return d
 
 

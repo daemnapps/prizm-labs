@@ -878,7 +878,12 @@ def resolve_source(src, brand, outputs, var=None):
                 mapped = mapped.replace("<avatar>", who)
     path = (f"brands/{brand}/{mapped}" if mapped
             else re.sub(r"^brands/(<brand>|[^/]+)/", f"brands/{brand}/", src))
-    f = WS / path
+    # v6 folder names (brand-identity/, ai-elements/characters/, email-sms/…):
+    # whichever of the new or old name this brand actually has
+    import brand_folders as BF
+    f = BF.resolve(WS / path)
+    if f != WS / path:
+        path = f.relative_to(WS).as_posix()
     # A folder means "the brand's file of this kind", so the config never has
     # to name one. It used to say `products/body-scrub.md` — a filename only
     # one brand has, in a variable filled at run time, which is the bug rule 4

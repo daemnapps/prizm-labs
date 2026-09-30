@@ -29,7 +29,8 @@
   "<brand>-email": {
    "kind": "our-shipped-sends",
    "market": "<brand>'s own list — men, grooming/skincare",
-   "evidence": "brands/<brand>/email/",
+   "evidence": "brands/<brand>/email-sms/",
+   "evidence_old_name": "brands/<brand>/email/",
    "fits": [
     {
      "brand": "<brand>"
@@ -45,7 +46,8 @@
   "<brand>-pages": {
    "kind": "our-pages",
    "market": "<brand>'s own market — women 45+, body skin",
-   "evidence": "brands/<brand>/existing-content/",
+   "evidence": "brands/<brand>/intake/",
+   "evidence_old_name": "brands/<brand>/existing-content/",
    "fits": [
     {
      "brand": "<brand>"

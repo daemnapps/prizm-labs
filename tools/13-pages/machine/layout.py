@@ -35,13 +35,13 @@ def section_bank():
 def references(brand, product_dir):
     imgs = sorted((WORKSPACE / product_dir / "images").glob("*"))
     lines = [f"- `{p.relative_to(WORKSPACE)}`" for p in imgs if p.is_file() and p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")]
-    ident = WORKSPACE / "brands" / brand / "identity"
+    ident = P.identity_dir(brand)                      # brand-identity/, old identity/
     lines += [f"- `{p.relative_to(WORKSPACE)}` (identity mark)" for p in sorted(ident.glob("*")) if p.suffix.lower() in (".png", ".svg")]
     return "\n".join(lines) or "(none on file)"
 
 
 def identity(brand):
-    ident = WORKSPACE / "brands" / brand / "identity"
+    ident = P.identity_dir(brand)                      # brand-identity/, old identity/
     out = []
     for name in ("web-tokens.md", "palette.md", "README.md"):
         p = ident / name
