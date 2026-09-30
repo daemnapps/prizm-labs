@@ -10,7 +10,7 @@ the walkthrough video, the SOP and the prompts, in one place.
 
 | | |
 |---|---|
-| `DESK.md` | the other side — what the person onboarding an editor does: folders by link once per brand, one message per editor, what to check. Rendered as `docs/onboarding-desk.html`. |
+| `DESK.md` | the other side — what the person onboarding an editor does: folders by link once per brand, one message per editor, what to check. Team-only; it is not a page on the site. |
 | `SOP.md` | the way we work — once to set up, then the loop every session. What the page says, in Markdown. |
 | `prompts/01-day-one-v2-damon.md` | pasted once: connects, clones the tools, finds the brand folder, reads the queue |
 | `prompts/02-pull-briefs-v2-damon.md` | pasted every session: sync → pick → lay out → review → the asks → the edit → deliver |

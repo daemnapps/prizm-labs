@@ -127,7 +127,7 @@ pre.prompt mark{{background:color-mix(in srgb,#E9C7D6 70%,transparent);color:var
 <nav>
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
-  <a class="link" href="/workflows.html">The tools</a>
+  <a class="link" href="/how-it-works.html">The tools</a>
   <a class="link" href="/swipes/">Swipe library</a>
   <a class="link" href="/onboarding.html" aria-current="page">Onboarding</a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
@@ -278,7 +278,7 @@ pre.prompt mark{{background:color-mix(in srgb,#E9C7D6 70%,transparent);color:var
 
   <footer>
     <span>PRIZM LABS</span>
-    <span><a href="/onboarding-desk.html">Onboarding someone? The desk</a> · <a href="/workflows.html">The tools</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
+    <span><a href="/onboarding-desk.html">Onboarding someone? The desk</a> · <a href="/how-it-works.html">The tools</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
   </footer>
 </div>
 
@@ -364,7 +364,7 @@ pre.msg mark{{background:color-mix(in srgb,#E9C7D6 70%,transparent);color:var(--
 <nav>
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
-  <a class="link" href="/workflows.html">The tools</a>
+  <a class="link" href="/how-it-works.html">The tools</a>
   <a class="link" href="/swipes/">Swipe library</a>
   <a class="link" href="/onboarding.html">Onboarding</a>
   <a class="link" href="/onboarding-desk.html" aria-current="page">Desk</a>

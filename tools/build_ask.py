@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 REPO = "https://github.com/daemnapps/prizm-labs/blob/main/"
 # WALKTHROUGH.md is left out: it only points elsewhere now
-# A tool's front door is not always called README. Eight of the twenty-one —
+# A tool's front door is not always called README. Three of the sixteen —
 # the video teardown among them, which is the tool the whole site is about —
 # use START-HERE, HOW-TO-RUN-IT or CLAUDE instead, and every one of them was
 # invisible to the Ask box until 2026-09-26. Anything at a tool's top level

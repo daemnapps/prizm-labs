@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EFE9E1">
+<meta name="description" content="How the generative marketing machine runs, start to finish: swipe, teardown, brief, make, hand-off, live, performance. Seven stages, seven roles, sixteen tools, one page.">
+<title>How it works — PRIZM LABS</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://daemn.co/how-it-works.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PRIZM LABS">
+<meta property="og:url" content="https://daemn.co/how-it-works.html">
+<meta property="og:title" content="How it works — PRIZM LABS">
+<meta property="og:description" content="Swipe, teardown, brief, make, hand-off, live, performance. The whole machine on one page.">
+<meta property="og:image" content="https://daemn.co/media/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://daemn.co/media/share.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/studio.css?v=prizm12">
+<style>
+/* page layout only — everything else is /studio.css */
+.hhero{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--s7);align-items:center;padding-block:clamp(var(--s6),8vh,var(--s9)) var(--s6)}
+.hhero h1{font-size:clamp(40px,6.4vw,84px)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--s3);margin-top:var(--s6)}
+.flow .card{display:grid;gap:var(--s2);align-content:start}
+.flow .card .ib{margin-bottom:var(--s1)}
+.flow .io{display:grid;grid-template-columns:auto 1fr;gap:var(--s1) var(--s3);font-size:13.5px;color:var(--ink-2);
+  margin-top:var(--s2);padding-top:var(--s3);border-top:1px solid var(--line)}
+.flow .io b{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:3px}
+.flow .tools{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-2);line-height:1.7}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:var(--s7);align-items:start;margin-top:var(--s6)}
+.two pre{margin:0}
+.roles td:first-child{font-family:var(--mono);font-size:12px;white-space:nowrap;color:var(--ink)}
+.kit td:first-child{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.kit td:nth-child(2){white-space:nowrap}
+.note{font-size:14px;color:var(--ink-2);margin-top:var(--s3);max-width:var(--measure)}
+.close{display:grid;gap:var(--s4);justify-items:center;text-align:center;padding-block:var(--s7) var(--s8)}
+@media (max-width:860px){ .hhero,.two{grid-template-columns:1fr} .hhero .obj{max-width:300px;order:-1} .kit td:nth-child(2){white-space:normal} }
+</style>
+
+<nav class="bar">
+  <a class="mark" href="/">PRIZM LABS</a>
+  <span class="links">
+    <a href="/machine.html">Machine</a><a href="/how-it-works.html" aria-current="page">How it works</a><a href="/onboarding.html">Onboarding</a>
+    <a href="/briefs/">Briefs</a>
+    <a href="/swipes/">Swipes</a>
+    <a href="/light.html">Light</a>
+    <a href="/objects.html">Objects</a>
+    <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
+  </span>
+</nav>
+
+<div class="wrap">
+  <div class="hhero">
+    <div>
+      <p class="eyebrow">For our editors and designers</p>
+      <h1 class="rise">The generative marketing machine.</h1>
+      <p class="lede">How the whole thing runs, start to finish. An ad that already worked goes in at one end;
+        a live ad, with its numbers, comes out the other. Seven stages, seven roles, sixteen tools — on this one page.</p>
+      <div class="btns">
+        <a class="btn" href="#flow">The flow</a>
+        <a class="btn ghost" href="#roles">The roles</a>
+        <a class="btn ghost" href="#tools">The tools</a>
+      </div>
+    </div>
+    <div class="obj xl" data-obj="prism"><img src="media/objects/prizm.webp" alt="A faceted glass prism splitting light into a spectrum" loading="eager"></div>
+  </div>
+
+  <section class="sec" id="flow" style="padding-top:var(--s5)">
+    <p class="eyebrow">01 · The flow</p>
+    <h2 class="rise">Seven stages. One unbroken line.</h2>
+    <p class="lede">Each stage takes one thing in and hands one thing on. The colour of a card says what kind of thing it holds, before the words do.</p>
+
+    <div class="flow">
+      <div class="card hued" style="--hue:var(--violet)">
+        <p class="label hue">01 · Swipe</p>
+        <i class="ib" data-i="search"></i>
+        <h3>Swipe</h3>
+        <p>Pull what is already winning: a competitor's ad, an organic post, a landing page, an email. Ranked by how hard the market is betting on it — how long it has run, how many copies exist.</p>
+        <div class="io"><b>In</b><span>The open internet, and our own posts.</span><b>Out</b><span>A swipe, filed under its format.</span></div>
+        <p class="tools">Paid ad swipe pack · Organic swipe pack · Swipe library</p>
+      </div>
+      <div class="card hued" style="--hue:var(--violet)">
+        <p class="label hue">02 · Teardown</p>
+        <i class="ib" data-i="scissors"></i>
+        <h3>Tear it down</h3>
+        <p>Take it apart to the structure underneath: the hook, the beats, the argument, the offer — with the brand that made it stripped out. Every part labelled from one element library.</p>
+        <div class="io"><b>In</b><span>One swipe.</span><b>Out</b><span>Its construct: the shape, ready for any brand.</span></div>
+        <p class="tools">Video teardown · Image teardown · Copy teardown · Page teardown</p>
+      </div>
+      <div class="card hued" style="--hue:var(--magenta)">
+        <p class="label hue">03 · Brief</p>
+        <i class="ib" data-i="pen"></i>
+        <h3>Put a brand in</h3>
+        <p>Same structure, the brand's product, its customer's own words — nothing invented the market didn't say first. Every brief gets a number, and that number travels with everything made from it.</p>
+        <div class="io"><b>In</b><span>A construct and the brand folder.</span><b>Out</b><span>A numbered brief a creator can shoot from.</span></div>
+        <p class="tools">Copywriter · Outlier brief · Customer language</p>
+      </div>
+      <div class="card hued" style="--hue:var(--cyan)">
+        <p class="label hue">04 · Make</p>
+        <i class="ib" data-i="layers"></i>
+        <h3>Make it</h3>
+        <p>One brief becomes the assets: the video's scenes and motion, the statics, the page, the email — as a batch, with hooks and variations. Edits are programmed, not hand-calibrated.</p>
+        <div class="io"><b>In</b><span>A brief.</span><b>Out</b><span>Finished assets, named to the standard.</span></div>
+        <p class="tools">AI video production · Image production · Pages · Video edit · Asset index</p>
+      </div>
+      <div class="card hued" style="--hue:var(--amber)">
+        <p class="label hue">05 · Hand-off</p>
+        <i class="ib" data-i="send"></i>
+        <h3>Hand it off</h3>
+        <p>Work leaves the machine as one folder with one instruction file. A role — an agent first, a person when needed — picks it up, does its job, and puts the result in <code>returned/</code>.</p>
+        <div class="io"><b>In</b><span>Finished assets, or briefs for a creator.</span><b>Out</b><span>The returned work.</span></div>
+        <p class="tools">Editor onboarding · the seven roles below</p>
+      </div>
+      <div class="card hued" style="--hue:var(--green)">
+        <p class="label hue">06 · Live</p>
+        <i class="ib" data-i="zap"></i>
+        <h3>Go live</h3>
+        <p>The uploader sets the ad or the email up, ready to publish — and stops there. Once the go is given, the live id comes back and sits beside the brief it came from.</p>
+        <div class="io"><b>In</b><span>Returned work.</span><b>Out</b><span>A live ad or a sent email, recorded against its brief.</span></div>
+        <p class="tools">Ad uploader · Klaviyo uploader</p>
+      </div>
+      <div class="card hued" style="--hue:var(--green)">
+        <p class="label hue">07 · Performance</p>
+        <i class="ib" data-i="loop"></i>
+        <h3>Read it back</h3>
+        <p>What the live ad does is read back against its brief and its swipe. When one lands, the machine makes more like it. When one misses, the prompt that made it is fixed once, and everything after is better.</p>
+        <div class="io"><b>In</b><span>The numbers.</span><b>Out</b><span>The next swipe.</span></div>
+        <p class="tools">Back to 01</p>
+      </div>
+    </div>
+
+    <div class="rule" style="margin-top:var(--s6)">The line stops in one place, every time: nothing is published, sent, or changed on a store until the owner says go. Everything up to that line runs on its own.</div>
+  </section>
+
+  <div class="beam"></div>
+
+  <section class="sec" id="thread">
+    <p class="eyebrow">02 · The thread</p>
+    <h2 class="rise">One number, from the swipe to the live ad.</h2>
+    <p class="lede">Every brief gets a number once. Every file made from it carries that number in its name, the hand-off carries it, the ad name carries it, and the live id comes back to sit beside it.</p>
+    <div class="two">
+      <pre>swipe                what was taken, and where from
+construct            its structure, the brand stripped out
+brief-NNNN           the brief, numbered once
+brief-NNNN · asset   every file made from it
+&lt;role&gt;-handoff       the folder it left in
+live id              what came back — the trace is closed</pre>
+      <div>
+        <p>One record per asset, so anything live can be traced back to the swipe it came from, and any swipe forward to what it earned. That is the whole reason a miss can be fixed at the prompt rather than at the output.</p>
+        <p class="note">Nothing in the tools names a brand. The brand arrives from its folder when a run starts, so the same chain serves every brand and never has to be explained twice.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="beam"></div>
+
+  <section class="sec" id="roles">
+    <p class="eyebrow">03 · The roles</p>
+    <h2 class="rise">Seven roles. Each one is an agent first.</h2>
+    <p class="lede">A role reads its hand-off folder, runs its tools, and puts its work in <code>returned/</code>. A person can take the same folder and do the same job, because the folder is the instruction.</p>
+    <div class="tablewrap roles" style="margin-top:var(--s6)">
+      <table>
+        <thead><tr><th>Role</th><th>Gets</th><th>Makes</th><th>Hands back</th><th>Stops at</th></tr></thead>
+        <tbody>
+          <tr><td>creator-manager</td><td>New creator briefs, and the talent cards</td><td>The match: each brief to a creator, with due dates</td><td>Sent and delivered status for every creator hand-off</td><td>Sending a brief to a creator</td></tr>
+          <tr><td>creator</td><td>Their own folder of briefs, with references and the product's record</td><td>Raw footage and pictures for those briefs</td><td>Files named with the brief and asset numbers</td><td>Hands back only</td></tr>
+          <tr><td>clipper</td><td>The open briefs of a drop: scenes, references, captions</td><td>Clips and slideshows</td><td>The finished clips and where they were posted</td><td>Posting a clip</td></tr>
+          <tr><td>graphic-designer</td><td>Image, sequence, email and page briefs, with exact words and layout</td><td>Static ads, sequences, emails, landing pages</td><td>Finished files named to the standard</td><td>Hands back only</td></tr>
+          <tr><td>video-editor</td><td>The edit kit: clips per scene, voice, music, cut sheet, caption look</td><td>Finished cuts</td><td>One 9:16 master per brief, plus hook versions</td><td>Hands back only</td></tr>
+          <tr><td>ad-uploader</td><td>Named ads, copy, the landing page by link id, the ad set plan</td><td>The ads set up in Meta, ready to publish</td><td>The live ad id for every ad</td><td>Publishing</td></tr>
+          <tr><td>klaviyo-uploader</td><td>Finished emails, subject lines, send date, audience</td><td>The emails set up in Klaviyo, ready to send</td><td>The campaign id for every send</td><td>Scheduling or sending</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Roles, never people. The folder says who it is for by job, so an agent or any person in that job can pick it up.</p>
+  </section>
+
+  <div class="beam"></div>
+
+  <section class="sec" id="folder">
+    <p class="eyebrow">04 · The folder</p>
+    <h2 class="rise">Always the same shape.</h2>
+    <p class="lede">Every hand-off is one folder and one instruction file the receiver's own tool can read, explain back, and act on.</p>
+    <div class="two">
+      <div>
+        <pre>&lt;role&gt;-handoff_&lt;brand&gt;_&lt;date&gt;/
+  handoff.md      the instructions
+  manifest.json   every id inside, checks passed
+  briefs/         one brief per piece
+  assets/         what they work from or upload
+  references/     swipes, inspiration, the product record
+  returned/       their finished work</pre>
+        <p class="note">Before a folder is sent, every product, offer and link inside it is checked against the catalog, every link is opened, and every name is checked against the standard. A folder with an unknown id does not leave.</p>
+      </div>
+      <ol class="steps">
+        <li><div><b>What this is</b><p>One line: the job, the brand, the batch.</p></div></li>
+        <li><div><b>Who it's for</b><p>The role, never a name.</p></div></li>
+        <li><div><b>What's inside</b><p>Every brief and asset, by id.</p></div></li>
+        <li><div><b>What to do</b><p>The steps, in order.</p></div></li>
+        <li><div><b>What must not change</b><p>The product, the words, the offer, the link.</p></div></li>
+        <li><div><b>Links</b><p>Each link id with its working address.</p></div></li>
+        <li><div><b>Checks before you're done</b><p>What to look at before handing back.</p></div></li>
+        <li><div><b>How to send it back</b><p>Into <code>returned/</code>, named to the standard.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="beam"></div>
+
+  <section class="sec" id="tools">
+    <p class="eyebrow">05 · The tools</p>
+    <h2 class="rise">Sixteen tools, each one a folder of readable prompts.</h2>
+    <p class="lede">Clone the repo into Higgsfield Supercomputer or Claude Code and tell it what you want. Every tool sits on one stage of the line.</p>
+    <div class="tablewrap kit" style="margin-top:var(--s6)">
+      <table>
+        <thead><tr><th>Stage</th><th>Tool</th><th>What it does</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Swipe</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/03-organic-swipe-pack" target="_blank" rel="noopener">Organic swipe pack</a></td><td>The formats pulled apart from posts that worked, some past a hundred million views.</td><td></td></tr>
+          <tr><td>Swipe</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/04-paid-ad-swipe-pack" target="_blank" rel="noopener">Paid ad swipe pack</a></td><td>Thousands of live competitor ads, reduced to the angle shapes that keep working.</td><td></td></tr>
+          <tr><td>Swipe</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/22-swipe-library" target="_blank" rel="noopener">Swipe library</a></td><td>One front door to everything swiped. The public half is <a href="/swipes/">on this site</a>.</td><td><span class="pill" style="--hue:var(--ink-2)">team-only build</span></td></tr>
+          <tr><td>Teardown</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/02-video-teardown" target="_blank" rel="noopener">Video teardown</a></td><td>Any video in, a brief out. Written for someone who has never done this.</td><td></td></tr>
+          <tr><td>Teardown</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/06-image-teardown" target="_blank" rel="noopener">Image teardown</a></td><td>The same chain pointed at a single frame.</td><td></td></tr>
+          <tr><td>Teardown</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/07-copy-teardown" target="_blank" rel="noopener">Copy teardown</a></td><td>For a piece of writing rather than a video.</td><td></td></tr>
+          <tr><td>Teardown</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/09-page-teardown" target="_blank" rel="noopener">Page teardown</a></td><td>A landing page, same treatment.</td><td></td></tr>
+          <tr><td>Brief</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/14-copywriter" target="_blank" rel="noopener">Copywriter</a></td><td>The copy chain: primary text, captions, headlines.</td><td></td></tr>
+          <tr><td>Brief</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/15-outlier-brief" target="_blank" rel="noopener">Outlier brief</a></td><td>The second door. Start from an idea instead of someone else's video.</td><td></td></tr>
+          <tr><td>Brief</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/language-layer" target="_blank" rel="noopener">Customer language</a></td><td>Every word the tools use comes from what the market said; this is the query over the brand's language, with the receipt on every row.</td><td></td></tr>
+          <tr><td>Make</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/05-ai-video-production" target="_blank" rel="noopener">AI video production</a></td><td>The brief becomes scenes, motion and finished shots.</td><td></td></tr>
+          <tr><td>Make</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/10-image-production" target="_blank" rel="noopener">Image production</a></td><td>Stage two for statics, the twin of the video line.</td><td></td></tr>
+          <tr><td>Make</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/13-pages" target="_blank" rel="noopener">Pages</a></td><td>Swipe, construct, inject, base, then one variation per sub-avatar. No page gets written freehand.</td><td></td></tr>
+          <tr><td>Make</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/16-video-edit" target="_blank" rel="noopener">Video edit</a></td><td>Cut sheets in plain words rather than a timeline; two stops, then the finished captioned video.</td><td></td></tr>
+          <tr><td>Make</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/20-asset-index" target="_blank" rel="noopener">Asset index</a></td><td>A folder of footage becomes records you can search by what is in the clip.</td><td></td></tr>
+          <tr><td>Hand-off</td><td><a href="https://github.com/daemnapps/prizm-labs/tree/main/tools/21-editor-onboarding" target="_blank" rel="noopener">Editor onboarding</a></td><td>The front door for editors and designers: the walkthrough, the SOP, the two prompts, the brief queue. <a href="/onboarding.html">The page</a>.</td><td><span class="pill" style="--hue:var(--ink-2)">team-only queue</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>Team-only</b> means the part that builds it reads our private workspace. What it publishes — the page, the SOP, the prompts — is here for everyone. Everything else runs on any brand folder that is set up the way <a href="https://github.com/daemnapps/prizm-labs/tree/main/brands/_TEMPLATE" target="_blank" rel="noopener">the template</a> shows.</p>
+    <div class="btns" style="margin-top:var(--s6)">
+      <a class="btn" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Open the repo</a>
+      <a class="btn ghost" href="/onboarding.html">How editors use it</a>
+    </div>
+  </section>
+
+  <div class="beam"></div>
+
+  <div class="close">
+    <div class="obj xl" data-obj="torus"><img src="media/objects/torus.webp" alt="A brushed chrome torus" loading="lazy"></div>
+    <p class="eyebrow" style="justify-content:center">Then again</p>
+    <h2 class="rise">One beam in. Everything out.</h2>
+    <p class="lede" style="max-width:46ch">One ad that already worked goes in. Every format, every variation, every brief comes out, goes live on the go, and what it earns decides the next swipe. If you make the ads, start with onboarding.</p>
+    <div class="btns" style="justify-content:center">
+      <a class="btn" href="/onboarding.html">Start here</a>
+      <a class="btn ghost" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Read the prompts</a>
+    </div>
+    <hr class="prism">
+  </div>
+</div>
+
+<footer class="bot">
+  <span>PRIZM LABS</span>
+  <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
+</footer>
+<script src="/studio.js?v=7" defer></script>
+</html>
