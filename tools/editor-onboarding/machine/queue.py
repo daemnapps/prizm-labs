@@ -692,7 +692,7 @@ def ship(run: Path, brand: str, dry: bool = False) -> Path | None:
         z = shutil.make_archive(str(Path(td) / name), "zip", base)
         dest_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(z, dest)
-    print(f"shipped {brand}/{name} → Shared Assets/brands/{brand}/{dest.relative_to(folder)}")
+    print(f"shipped {brand}/{name} → Shared Assets/{dest.relative_to(shared_assets())}")
     return dest
 
 
@@ -772,7 +772,7 @@ def ship_design(rec: dict, dry: bool = False) -> Path | None:
         z = shutil.make_archive(str(Path(td) / name), "zip", Path(td) / name)
         dest_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(z, dest)
-    print(f"shipped {brand}/{rec['key']} → Shared Assets/brands/{brand}/{dest.relative_to(folder)}")
+    print(f"shipped {brand}/{rec['key']} → Shared Assets/{dest.relative_to(shared_assets())}")
     return dest
 
 
