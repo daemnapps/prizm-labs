@@ -62,6 +62,12 @@ Three directions, all automatic:
   Bounty, due and who are the owner's, set with `queue.py set`, and survive
   every rebuild. The hourly job runs from a clean copy of this repo
   (`~/Projects/prizm-labs-queue`, on origin/main), never a working checkout.
+- **One queue.** When the private workspace carries its Asset Ledger, the
+  ledger is the single source: the hourly job rebuilds it from the Drive and
+  `queue.py build` hands QUEUE.md to its renderer, so the table also sees the
+  older delivery folders, the cards and the live ads. Same columns, same
+  hand-set fields. The folder reading above is the fallback without a ledger
+  (or with `QUEUE_FROM_FOLDERS=1`).
 
 ## Run it
 

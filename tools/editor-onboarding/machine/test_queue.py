@@ -211,6 +211,37 @@ class QueueTest(unittest.TestCase):
         r = self.rows()["p170-acme-poster-01|Graphic designer"]
         self.assertEqual((r["status"], r["type"]), ("Open", "image"))
 
+    def test_ledger_writes_the_queue_when_it_is_here(self):
+        # the private workspace carries the Asset Ledger: build hands QUEUE.md to it
+        led = self.ws / "lab/damon/asset-ledger/db"
+        led.mkdir(parents=True)
+        (led / "ledger.db").write_text("")
+        (led / "load.py").write_text("import pathlib; pathlib.Path('rebuilt').write_text('y')\n")
+        (led / "render_queue.py").write_text(textwrap.dedent("""
+            import sys, pathlib
+            a = sys.argv[1:]
+            b, sa = a[a.index('--brand') + 1], a[a.index('--drive') + 1]
+            (pathlib.Path(sa) / 'brands' / b / 'briefs' / 'QUEUE.md').write_text('from the ledger')
+            print(b + ': 3 row(s) — Open 3')
+        """))
+        out = self.q.write_queue("acme")
+        self.assertEqual(out, "acme: 3 row(s) — Open 3 (from the ledger)")
+        self.assertEqual((self.briefs / "QUEUE.md").read_text(), "from the ledger")
+        self.assertFalse((led / "rebuilt").exists())
+        self.q.write_queue("acme", rebuild=True)
+        self.assertTrue((led / "rebuilt").exists())
+        # a failing ledger, or QUEUE_FROM_FOLDERS, falls back to the folders
+        (led / "render_queue.py").write_text("import sys; sys.exit(1)\n")
+        import contextlib, io
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertTrue(self.q.write_queue("acme").endswith("(from the folders)"))
+        self.assertIn("# Work queue — acme", (self.briefs / "QUEUE.md").read_text())
+        os.environ["QUEUE_FROM_FOLDERS"] = "1"
+        try:
+            self.assertIsNone(self.q.ledger_render("acme"))
+        finally:
+            os.environ.pop("QUEUE_FROM_FOLDERS")
+
     def test_loose_match(self):
         lm = self.q.loose_match
         self.assertTrue(lm("ab-02-hens-coat", "AB-02 The Hen's Coat"))

@@ -46,6 +46,14 @@ in naming.json (`folder_was`). A delivery is matched to its package by brief
 number (naming.json `brief`, the unit name, the brand's aliases) or, failing
 that, by its name (`AB-02 The Hen's Coat` is `ab-02-hens-coat`).
 
+ONE QUEUE (2 Oct 2026): when the private workspace carries the Asset Ledger
+(`lab/damon/asset-ledger/db/render_queue.py` beside its `ledger.db`), `build`
+hands the writing to it — QUEUE.md is then a picture of the ledger's `queue`
+view, which also sees the older delivery folders, the cards and the live ads.
+Same columns, same "How to take one" text, same queue.json fields. The folder
+reading below is the fallback for a computer without the ledger (or with
+QUEUE_FROM_FOLDERS=1). No brand data is kept in this repo either way.
+
 Hand-set fields — bounty, due, note, who — live in `queue.json` beside the
 table and survive every rebuild. Brand-agnostic: the brand is an argument,
 the Drive account is an environment variable (`DRIVE_ACCOUNT`).
@@ -199,6 +207,48 @@ def loose_match(a: str, b: str) -> bool:
 
 
 WORKSPACE = Path(os.environ.get("AI_WORKSPACE", Path.home() / "Projects/ai-workspace"))
+
+
+def ledger_dir() -> Path:
+    return WORKSPACE / "lab/damon/asset-ledger/db"
+
+
+def ledger_render(brand: str, rebuild: bool = False) -> str | None:
+    """Write the brand's QUEUE.md from the private workspace's Asset Ledger.
+    Returns the renderer's one-line summary, or None when there is no ledger
+    here (or it failed) — the caller then builds from the folders itself.
+    With `rebuild`, the ledger is first rebuilt from the Drive (load.py --drive)."""
+    if os.environ.get("QUEUE_FROM_FOLDERS"):
+        return None
+    LEDGER_DIR = ledger_dir()
+    render = LEDGER_DIR / "render_queue.py"
+    if not render.is_file():
+        return None
+    sa = str(shared_assets())
+    if rebuild or not (LEDGER_DIR / "ledger.db").is_file():
+        r = subprocess.run([sys.executable, str(LEDGER_DIR / "load.py"), "--drive", sa],
+                           capture_output=True, text=True, cwd=LEDGER_DIR)
+        if r.returncode:
+            print(f"note: ledger rebuild failed — building {brand} from the folders\n{r.stderr[-400:]}", file=sys.stderr)
+            return None
+    r = subprocess.run([sys.executable, str(render), "--brand", brand, "--drive", sa],
+                       capture_output=True, text=True, cwd=LEDGER_DIR)
+    if r.returncode:
+        print(f"note: ledger could not write {brand}'s queue — building from the folders\n{r.stderr[-400:]}", file=sys.stderr)
+        return None
+    return r.stdout.strip() or f"{brand}: written from the ledger"
+
+
+def write_queue(brand: str, briefs: "Briefs | None" = None, rebuild: bool = False) -> str:
+    """QUEUE.md for one brand: from the ledger when it is here, else from the folders."""
+    out = ledger_render(brand, rebuild=rebuild)
+    if out:
+        return out + " (from the ledger)"
+    rows = build(brand, briefs=briefs)
+    counts = {}
+    for r in rows:
+        counts[r["status"]] = counts.get(r["status"], 0) + 1
+    return f"{brand}: {len(rows)} row(s) — " + (", ".join(f"{k} {v}" for k, v in counts.items()) or "none") + " (from the folders)"
 
 
 class Briefs:
@@ -790,14 +840,14 @@ def cmd_ship(a):
         if n and not a.dry_run:
             for brand in touched:
                 if briefs_folder(brand):
-                    build(brand)
+                    write_queue(brand, rebuild=True)
         print(f"auto-ship: {n} new package(s)")
         return
     run = Path(a.run).expanduser().resolve()
     if not any((run / "deliverable" / f).exists() for f in PACK_FILES):
         sys.exit(f"{run} has no deliverable/EDITOR-PACK.md — the pack has not cleared its gates, nothing ships")
     if ship(run, a.brand, dry=a.dry_run) and not a.dry_run:
-        build(a.brand)
+        write_queue(a.brand, rebuild=True)
 
 
 def cmd_set(a):
@@ -813,7 +863,7 @@ def cmd_set(a):
         else:
             row[k] = v
     (folder / "queue.json").write_text(json.dumps(meta, indent=2))
-    build(a.brand)
+    write_queue(a.brand)
     print(f"{a.brand}/{a.brief}: " + ", ".join(f"{k}={v}" for k, v in row.items()))
 
 
@@ -821,6 +871,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     b = sub.add_parser("build"); b.add_argument("--brand"); b.add_argument("--all", action="store_true")
+    b.add_argument("--rebuild", action="store_true", help="rebuild the ledger from the Drive first (when the ledger is here)")
     s = sub.add_parser("show"); s.add_argument("--brand", required=True)
     st = sub.add_parser("set"); st.add_argument("--brand", required=True); st.add_argument("brief"); st.add_argument("fields", nargs="+")
     sh = sub.add_parser("ship"); sh.add_argument("run", nargs="?"); sh.add_argument("--brand"); sh.add_argument("--auto", action="store_true"); sh.add_argument("--dry-run", action="store_true")
@@ -840,12 +891,8 @@ def main():
     if not brands:
         sys.exit("say --brand <brand> or --all")
     B = Briefs()
-    for br in brands:
-        rows = build(br, briefs=B)
-        counts = {}
-        for r in rows:
-            counts[r["status"]] = counts.get(r["status"], 0) + 1
-        print(f"{br}: {len(rows)} row(s) — " + (", ".join(f"{k} {v}" for k, v in counts.items()) or "none"))
+    for i, br in enumerate(brands):
+        print(write_queue(br, briefs=B, rebuild=a.rebuild and i == 0))
 
 
 if __name__ == "__main__":
