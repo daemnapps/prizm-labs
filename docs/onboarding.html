@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/studio.css?v=prizm12">
+<link rel="stylesheet" href="/studio.css?v=prizm13">
 <style>
 .hero{display:grid;grid-template-columns:.95fr 1.05fr;gap:var(--s7);align-items:start;padding-top:var(--s7)}
 
@@ -89,7 +89,7 @@ pre.prompt mark{background:color-mix(in srgb,var(--violet) 18%,transparent);colo
     
     <a href="/machine.html">Machine</a><a href="/how-it-works.html">How it works</a><a href="/onboarding.html" aria-current="page">Onboarding</a>
     <a href="/briefs/">Briefs</a>
-    <a href="/swipes/">Swipes</a>
+    <a href="/swipes/">Feeds</a>
     <a href="/light.html">Light</a>
       <a href="/objects.html">Objects</a>
     <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
@@ -101,7 +101,7 @@ pre.prompt mark{background:color-mix(in srgb,var(--violet) 18%,transparent);colo
     <a href="#setup">Set up</a>
     <a href="#loop">The loop</a>
     <a href="#prompts">The prompts</a>
-    <a href="#queue">The queue</a>
+    <a href="#queue">Your folder</a>
     <a href="#asks">The asks</a>
     <a href="#rules">The rules</a>
     <a href="#fix">When it breaks</a>
@@ -113,14 +113,15 @@ pre.prompt mark{background:color-mix(in srgb,var(--violet) 18%,transparent);colo
     <div>
       <p class="eyebrow">Onboarding · creative marketers</p>
       <h1 class="rise">Start<br>here.</h1>
-      <p class="lede">You never install anything. You work inside <b>Higgsfield Supercomputer</b>,
-        which reads the brand folder on Google Drive and our tools from GitHub. Briefs come to
-        you there; finished work goes back to Drive from there.</p>
+      <p class="lede">Clippers, creators, editors and designers all work from their own account —
+        <b>Higgsfield Supercomputer</b> (nothing to install) or <b>Claude Code</b>. The tools are a public repo:
+        open it in your account, point it at a brand, run the tool. Work arrives in your own hand-off folder on
+        Google Drive, and goes back into the same folder.</p>
       <p class="lede">Watch the walkthrough once. Then the two prompts below are the whole job.</p>
       <ul class="need">
         <li><span class="n">01</span><div><b><i class="ico" data-i="code"></i> A GitHub account</b>free — <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>. You never write code; the tools live there and Supercomputer pulls them for you. Send the owner your username.</div></li>
         <li><span class="n">02</span><div><b><i class="ico" data-i="sparkles"></i> A Higgsfield account</b>sign up at <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">higgsfield.ai</a> (use that link — ours, costs you nothing extra). Supercomputer is where you work. A paid plan; the free tier won't carry a brief.</div></li>
-        <li><span class="n">03</span><div><b><i class="ico" data-i="link"></i> The brand folder link</b>one Google Drive link from the owner — it opens for anyone with it, no invitation</div></li>
+        <li><span class="n">03</span><div><b><i class="ico" data-i="link"></i> Your hand-off folder link</b>one Google Drive link from the team: <code>Shared Assets/handoffs/&lt;role&gt;/&lt;brand&gt;/&lt;your name&gt;/</code></div></li>
         <li><span class="n">04</span><div><b><i class="ico" data-i="bookmark"></i> This page</b>the video, the steps, the prompts — bookmark it</div></li>
       </ul>
       <div class="btns">
@@ -142,82 +143,83 @@ pre.prompt mark{background:color-mix(in srgb,var(--violet) 18%,transparent);colo
 <li><span class="t">13:37</span>7 · The workflow — review, remove slop, reroll, sequence, edit</li>
 <li><span class="t">14:50</span>8 · Turn the pull into a skill</li>
 <li><span class="t">15:35</span>9 · Execute a brief — pull up its clips</li>
-<li><span class="t">16:34</span>10 · Pull in the AI video production workflows</li>
+<li><span class="t">16:34</span>10 · Pull in the video production workflows</li>
       </ul></details>
     </div>
   </div>
 
   <section id="setup">
-    <div class="obj corner" data-obj="cube"><img src="media/objects/cube.webp" alt="" loading="lazy"></div>
+    <div class="obj corner" data-obj="cube" aria-hidden="true"></div>
     <p class="eyebrow">01 — once</p>
     <h2 class="rise">Set up,<br>ten minutes</h2>
-    <p class="lede">Everything happens in Higgsfield Supercomputer. Supercomputer can only see what
-      is in your own Google Drive, so step 3 matters.</p>
+    <p class="lede">These steps are for Higgsfield Supercomputer. In Claude Code, clone the repo and connect
+      Google Drive, then paste the same prompts. Supercomputer can only see what is in your own Google Drive, so step 5 matters.</p>
     <div class="steps">
       <div class="step"><span class="n">01</span><div><h3><i class="ib" data-i="code"></i>Make a GitHub account</h3>
         <p>Free, two minutes: <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>. This is where the tools live — you don't write code, you just need an account so Supercomputer can pull them for you. Send the owner your username once you have it.</p></div></div>
       <div class="step"><span class="n">02</span><div><h3><i class="ib" data-i="sparkles"></i>Make a Higgsfield account</h3>
         <p>Sign up here: <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">higgsfield.ai</a> — use that link, it's ours and costs you nothing extra. Higgsfield <b>Supercomputer</b> is where you actually work: it reads the brief, makes the pictures and the clips, and talks to Drive and GitHub for you. Pick a paid plan — the free tier won't carry a real brief.</p></div></div>
-      <div class="step"><span class="n">03</span><div><h3><i class="ib" data-i="link"></i>Get the brand folder link</h3>
-        <p>One Google Drive link from the owner. No invitation and nothing to be added to — the folder opens for anyone with the link. Keep it; the Day-one prompt takes it.</p></div></div>
+      <div class="step"><span class="n">03</span><div><h3><i class="ib" data-i="link"></i>Get your hand-off folder link</h3>
+        <p>One Google Drive link from the team, to your own folder: <code>Shared Assets/handoffs/&lt;role&gt;/&lt;brand&gt;/&lt;your name&gt;/</code>. Keep it; the Day-one prompt takes it.</p></div></div>
       <div class="step"><span class="n">04</span><div><h3><i class="ib" data-i="plug"></i>Connect Drive and GitHub</h3>
         <p>In Supercomputer: <b>Connectors → Explore</b> → connect <b>Google Drive</b>, then <b>GitHub</b>. Sign in to each when asked.</p><p class="you">Video · chapter 1</p></div></div>
-      <div class="step"><span class="n">05</span><div><h3><i class="ib" data-i="folder"></i>Put the brand folder in your own Drive</h3>
+      <div class="step"><span class="n">05</span><div><h3><i class="ib" data-i="folder"></i>Put your folder in your own Drive</h3>
         <p>Open the link, then in Google Drive right-click the folder → <b>Organize → Add shortcut</b> → into a folder you make in <i>My Drive</i>. Supercomputer only sees your own Drive.</p><p class="you">Video · chapter 2</p></div></div>
       <div class="step"><span class="n">06</span><div><h3><i class="ib" data-i="chat"></i>New chat → + → Connectors</h3>
         <p>Check Google Drive and GitHub are both ticked for that chat.</p><p class="you">Video · chapter 3</p></div></div>
       <div class="step"><span class="n">07</span><div><h3><i class="ib" data-i="clipboard"></i>Paste the Day-one prompt</h3>
-        <p>With the brand's name and the folder link filled in. It clones the tools, opens the folder, reads the queue and tells you what is open. When it ends with <i>"Set up for &lt;brand&gt; — N briefs open"</i>, you are done.</p><p class="you">Video · chapters 4–5 · the prompt is below</p></div></div>
+        <p>With the brand, your role and the folder link filled in. It clones the tools, opens your folder, reads each <code>handoff.md</code> and tells you what is waiting. When it ends with <i>"Set up for &lt;brand&gt; — N hand-offs waiting"</i>, you are done.</p><p class="you">Video · chapters 4–5 · the prompt is below</p></div></div>
     </div>
   </section>
 
   <section id="loop">
-    <div class="obj corner" data-obj="torus"><img src="media/objects/torus.webp" alt="" loading="lazy"></div>
+    <div class="obj corner" data-obj="torus" aria-hidden="true"></div>
     <p class="eyebrow">02 — every session</p>
     <h2 class="rise">The loop</h2>
     <p class="lede">One prompt, pasted at the start of every session. It stops and shows you at every
       decision — you decide, it does the work.</p>
     <div class="steps">
-      <div class="step"><span class="n">01</span><div><h3><i class="ib" data-i="sync"></i>Sync</h3><p>It pulls the tools for updates and reads the live queue from Drive. Never skipped: a brief made from yesterday's tools is the one that gets sent back.</p></div></div>
-      <div class="step"><span class="n">02</span><div><h3><i class="ib" data-i="check"></i>Pick</h3><p>The brief you name, or the newest open one. It claims it in <code>briefs/claims/</code> so nobody else takes it.</p></div></div>
-      <div class="step"><span class="n">03</span><div><h3><i class="ib" data-i="grid"></i>Lay it out</h3><p>Downloads the package and shows you everything: the scenes with their clips and voices (or the image drafts), the intended cut, what is locked, the known issues, the loop.</p><p class="you">Video · chapters 6 and 9</p></div></div>
+      <div class="step"><span class="n">01</span><div><h3><i class="ib" data-i="sync"></i>Sync</h3><p>It pulls the tools for updates and reads your hand-off folder live from Drive. Never skipped: a brief made from yesterday's tools is the one that gets sent back.</p></div></div>
+      <div class="step"><span class="n">02</span><div><h3><i class="ib" data-i="check"></i>Pick</h3><p>The brief you name, or the newest hand-off whose <code>returned/</code> is still empty.</p></div></div>
+      <div class="step"><span class="n">03</span><div><h3><i class="ib" data-i="grid"></i>Lay it out</h3><p>Reads <code>handoff.md</code> in full and shows you everything: the scenes with their clips and voices (or the image drafts), what must not change, the known issues, the loop.</p><p class="you">Video · chapters 6 and 9</p></div></div>
       <div class="step"><span class="n">04</span><div><h3><i class="ib" data-i="eye"></i>Review</h3><p>Same person, same wardrobe, same product, slop, sound, words, anything odd — one table: KEEP / FIX AT CUT / REROLL. Then three to five ideas inside the brief's own loop.</p><p class="you">You decide what gets rerolled · video · chapter 7</p></div></div>
       <div class="step"><span class="n">05</span><div><h3><i class="ib" data-i="plus"></i>The asks</h3><p>The extras the brief wants — scroll stoppers, headlines, variations, extra scenes, formats, styles — made in Higgsfield from the same cast and product references.</p><p class="you">You approve each one</p></div></div>
-      <div class="step"><span class="n">06</span><div><h3><i class="ib" data-i="film"></i>The edit</h3><p>Video: everything packed into <code>&lt;brief&gt;--edit</code> with a cut sheet; you take it into Premiere or CapCut. Statics: the finals into <code>&lt;brief&gt;--finals</code>.</p></div></div>
-      <div class="step"><span class="n">07</span><div><h3><i class="ib" data-i="send"></i>Deliver</h3><p>Finished files to <code>briefs/delivered/&lt;brief&gt;/</code> on Drive, named <code>&lt;brief&gt;--&lt;what&gt;--v1</code>, with a short <code>DELIVERED.md</code>. The queue updates itself within the hour.</p></div></div>
+      <div class="step"><span class="n">06</span><div><h3><i class="ib" data-i="film"></i>The edit</h3><p>Video: the video-edit tool makes the cut itself and stops twice for you — the <b>timeline</b>, then the <b>captions</b>. Approve, or ask for one change in plain words. Statics: the approved finals at 9:16.</p></div></div>
+      <div class="step"><span class="n">07</span><div><h3><i class="ib" data-i="send"></i>Send it back</h3><p>Finished files into the hand-off's <code>returned/</code>, each named <code>&lt;brief id&gt;_asset-NN</code>. It walks the checks in <code>handoff.md</code> with you. The team runs the take-back from there.</p></div></div>
     </div>
   </section>
 
   <section id="prompts">
-    <div class="obj corner" data-obj="lens"><img src="media/objects/lens.webp" alt="" loading="lazy"></div>
+    <div class="obj corner" data-obj="lens" aria-hidden="true"></div>
     <p class="eyebrow">03 — the prompts</p>
     <h2 class="rise">Two prompts,<br>that's the job</h2>
-    <p class="lede">Type the brand's folder name and paste its Drive link once; the prompts fill them in. Copy, paste into a new
-      Supercomputer chat, go.</p>
-    <div class="brandin"><label for="brand">Brand folder name</label><input id="brand" placeholder="e.g. the folder's name" autocomplete="off">
-      <label for="folder">Brand folder link</label><input id="folder" placeholder="https://drive.google.com/drive/folders/…" autocomplete="off" style="width:min(420px,100%)"></div>
+    <p class="lede">Type the brand, your role and your folder's Drive link once; the prompts fill them in. Copy, paste into a new
+      Supercomputer chat or Claude Code session, go.</p>
+    <div class="brandin"><label for="brand">Brand</label><input id="brand" placeholder="e.g. the brand's name" autocomplete="off">
+      <label for="role">Your role</label><input id="role" placeholder="video-editor · graphic-designer · clipper · creator" autocomplete="off">
+      <label for="folder">Your hand-off folder link</label><input id="folder" placeholder="https://drive.google.com/drive/folders/…" autocomplete="off" style="width:min(420px,100%)"></div>
 
     <div class="panel">
       <h3>Day one</h3>
       <div class="when">Paste once · after Drive and GitHub are connected</div>
-      <pre class="prompt" data-src="dayone">I am a new editor/designer starting on {BRAND}. Set me up, then show me what is waiting. Do these in order and report each one before moving on.
+      <pre class="prompt" data-src="dayone">I am a new {ROLE} starting on {BRAND}. Set me up, then show me what is waiting. Do these in order and report each one before moving on.
 
 1. CONNECTIONS. Confirm Google Drive and GitHub are both connected in this chat. If either is not, stop and tell me exactly which one, in one line — nothing below works without both.
 
-2. THE TOOLS. Clone https://github.com/daemnapps/prizm-labs (if it is already cloned, pull it so it is current). Then read tools/21-editor-onboarding/SOP.md in full. That file is the way we work; treat it as standing instructions for every session with me from now on.
+2. THE TOOLS. Clone https://github.com/daemnapps/prizm-labs (if it is already cloned, pull it so it is current). Then read tools/editor-onboarding/SOP.md in full. That file is the way we work; treat it as standing instructions for every session with me from now on.
 
-3. THE BRAND FOLDER. Open this Google Drive folder directly: {FOLDER LINK} — that is the {BRAND} folder. Do not search for it by name. Inside it, open the folder named `briefs`. If the link does not open, tell me in one line; do not look for another folder with the same name.
+3. MY FOLDER. Open this Google Drive folder directly: {FOLDER LINK} — that is my hand-off folder, `Shared Assets/handoffs/{ROLE}/{BRAND}/&lt;my name&gt;/`. Do not search for it by name. If the link does not open, tell me in one line; do not look for another folder with the same name.
 
-4. THE QUEUE. Open `briefs/QUEUE.md` in that folder — read it live from Drive, never from memory. Show me the whole table as it stands: every brief, its type, status, who has it, the bounty and the due date.
+4. WHAT IS WAITING. Read every `handoff.md` in my folder — live from Drive, never from memory. Show me each hand-off in one line: what it is, how many briefs, and whether its `returned/` folder is empty or already has work in it.
 
-5. WHAT I DO NEXT. Tell me, in five lines or fewer, what happens each time I sit down to work: I paste the &quot;Pull briefs&quot; prompt from tools/21-editor-onboarding/prompts/, you sync the tools and the queue, we pick a brief, review it, produce the asks, and I deliver into `briefs/delivered/`.
+5. WHAT I DO NEXT. Tell me, in five lines or fewer, what happens each time I sit down to work: I paste the &quot;Pull briefs&quot; prompt from tools/editor-onboarding/prompts/, you sync the tools and read my folder, we pick a hand-off, review it, produce the asks, run the edit, and I put the finished work in `returned/`. The team takes it back from there.
 
 Rules for you, always:
-- Never invent a brief, a scene, a product detail or a claim. If it is not in the brief package or the brand folder, say &quot;not in the brief&quot; and ask.
-- Never write into a brief&#x27;s source package. Deliveries go to `briefs/delivered/&lt;brief&gt;/` only.
+- Never invent a brief, a scene, a product detail or a claim. If it is not in the hand-off folder, say &quot;not in the brief&quot; and ask.
+- Never write into the hand-off&#x27;s `briefs/`, `assets/` or `references/`. Finished work goes in `returned/` only.
 - When something in Drive or GitHub cannot be reached, say which door failed in one line. Do not work around it silently.
 
-Finish with one line: &quot;Set up for {BRAND} — N briefs open.&quot;</pre>
+Finish with one line: &quot;Set up for {BRAND} — N hand-offs waiting.&quot;</pre>
       <button class="copy" data-for="dayone">Copy the Day-one prompt</button>
     </div>
 
@@ -227,23 +229,22 @@ Finish with one line: &quot;Set up for {BRAND} — N briefs open.&quot;</pre>
       <pre class="prompt" data-src="pull">Working session on {BRAND}. Brief: {BRIEF} (or &quot;newest open&quot;). Do these in order; stop and show me at every ⏸.
 
 ## 1. SYNC — always first, never skipped
-- Pull https://github.com/daemnapps/prizm-labs for updates and say in one line whether anything changed under tools/21-editor-onboarding/ or tools/05-ai-video-production/. If tools/21-editor-onboarding/SOP.md changed, re-read it.
-- Open `briefs/QUEUE.md` in the {BRAND} folder on Google Drive. Read it live — not a copy from an earlier chat.
-- Show me the open and claimed briefs, newest first: brief · type · status · who · bounty · due.
+- Pull https://github.com/daemnapps/prizm-labs for updates and say in one line whether anything changed under tools/editor-onboarding/, tools/video-production/ or tools/video-edit/. If tools/editor-onboarding/SOP.md changed, re-read it.
+- Open my hand-off folder on Google Drive: `Shared Assets/handoffs/{ROLE}/{BRAND}/&lt;my name&gt;/`. Read it live — not a copy from an earlier chat.
+- Show me every hand-off in it, newest first: what it is · the brief ids · whether `returned/` is empty.
 
 ## 2. PICK
-- If I named a brief, use it. Otherwise take the newest brief whose status is `open`.
-- Claim it: create a file in `briefs/claims/` named `&lt;brief&gt; — &lt;my name&gt;` (empty is fine). If you cannot create files in Drive, tell me and I will make it.
+- If I named a brief, use the hand-off that holds it. Otherwise take the newest hand-off whose `returned/` folder is empty.
 
-## 3. GET THE PACKAGE
-- Download the brief&#x27;s package (a zip or a folder — the queue&#x27;s Package column says which) and unpack it.
-- Read the handoff document in full: `EDITOR-PACK.md`, `&lt;brief&gt;-editor-handoff.md`, or the brief `.md` — whichever is there. Read every section; do not skim.
+## 3. READ THE HAND-OFF
+- Read `handoff.md` in full — every section; do not skim. It says what this is, who it is for, what is inside by id, what to do, what must not change, the links, the checks, and how to send it back.
+- Open `briefs/`, `assets/` and `references/` as `handoff.md` lists them.
 - Lay out the brief for me:
   · WHAT THIS IS — two lines.
-  · THE SCENES — the scene table exactly as the handoff has it, and for each row the clip file, the voice file, and a thumbnail or first frame so I can see it.
+  · THE SCENES — the scene table exactly as the brief has it, and for each row the clip file, the voice file, and a thumbnail or first frame so I can see it.
   · If it is a static brief — every image draft, largest first, with its prompt beside it.
-  · THE INTENDED SHAPE, WHAT IS LOCKED, KNOWN ISSUES and THE LOOP — verbatim.
-  · THE ASKS if the handoff has that section; if not, say &quot;no asks section — using the default menu&quot;.
+  · WHAT MUST NOT CHANGE, the known issues and the loop — verbatim.
+  · THE ASKS if the brief has that section; if not, say &quot;no asks section — using the default menu&quot;.
 ⏸ Show me all of this before doing anything else.
 
 ## 4. REVIEW — find what is wrong before we make anything
@@ -269,14 +270,18 @@ Use THE ASKS from the handoff. If the handoff has none, use this default menu. M
 Name every file `&lt;brief&gt;--&lt;ask&gt;--&lt;n&gt;` (for example `kzn03--stopper--2`). Show me each one as it lands, with the prompt used.
 ⏸ Stop. I approve or reroll.
 
-## 6. HAND IT TO THE EDIT
-Everything is cut at 9:16 with the subjects inside the 4:5 window — one master serves every placement. If the brief is a video: put everything into one folder named `&lt;brief&gt;--edit` — the base clips numbered as in the scene table, the voice files, the approved asks, and a `CUT-SHEET.md` written from THE INTENDED SHAPE: scene order, target seconds per segment, where it breathes, the cards and overlays to compose from POST, the captions to burn. I take that folder into Premiere or CapCut.
-If the brief is static: the approved drafts and asks, padded to the formats named, in one folder `&lt;brief&gt;--finals`.
+## 6. THE EDIT
+Everything is cut at 9:16 with the subjects inside the 4:5 window — one master serves every placement.
+- If the brief is a video: put the approved clips, the voice, the music and the approved asks into one kit folder, then run the video edit from tools/video-edit on it, exactly as its README describes. It makes the cut on its own and stops twice:
+  · STOP 1 — THE TIMELINE. Show me the cut. I approve it, or give one change in plain words and why; it recuts and shows me again.
+  · STOP 2 — THE CAPTIONS. Show me the captioned cut. I approve it or name the change.
+  ⏸ Nothing moves past a stop until I approve it.
+- If the brief is static: the approved drafts and asks, at 9:16, in one folder.
 
-## 7. DELIVER
-- Upload the finished files to `briefs/delivered/&lt;brief&gt;/` in the {BRAND} folder on Google Drive, named `&lt;brief&gt;--&lt;what&gt;--v1.&lt;ext&gt;`. Never into the source package.
-- Write `briefs/delivered/&lt;brief&gt;/DELIVERED.md`: what was delivered, what was rerolled and why, what is still open for the owner to rule on, in that order, plain lines.
-- Confirm to me with the Drive path. The queue picks it up from the folder — you do not edit QUEUE.md.
+## 7. SEND IT BACK
+- Put the finished files in the hand-off&#x27;s `returned/` folder, each named `&lt;brief id&gt;_asset-NN.&lt;ext&gt;` (for example `brief-0142_asset-01.mp4`), numbered in the order `handoff.md` lists the assets. Nothing anywhere else.
+- Walk the checks in `handoff.md` (&quot;Checks before you&#x27;re done&quot;) and tell me each one passed.
+- Confirm to me with the Drive path. The team runs the take-back from `returned/` — you do not edit or move anything else.
 
 Rules, always:
 - Nothing invented. If the brief does not say it, say &quot;not in the brief&quot; and ask.
@@ -284,27 +289,25 @@ Rules, always:
 - When Drive or GitHub cannot be reached, say which door failed, in one line, and wait.</pre>
       <button class="copy" data-for="pull">Copy the Pull-briefs prompt</button>
     </div>
-    <div class="note">These are the same files the tools ship: <code>tools/21-editor-onboarding/prompts/</code>. When they change there, they change here.</div>
+    <div class="note">These are the same files the tools ship: <code>tools/editor-onboarding/prompts/</code>. When they change there, they change here.</div>
   </section>
 
   <section id="queue" class="ref">
-    <div class="obj corner" data-obj="cards"><img src="media/objects/cards.webp" alt="" loading="lazy"></div>
-    <p class="eyebrow">04 — the queue</p>
+    <div class="obj corner" data-obj="cards" aria-hidden="true"></div>
+    <p class="eyebrow">04 — your folder</p>
     <h2 class="rise">What is waiting</h2>
-    <p class="lede"><code>briefs/QUEUE.md</code> in each brand folder on Drive. One row per brief: type, status,
-      who, bounty, due, package. Rebuilt every hour from the folder — nobody edits it by hand.</p>
+    <p class="lede">Your own folder on Drive: <code>Shared Assets/handoffs/&lt;role&gt;/&lt;brand&gt;/&lt;your name&gt;/</code>. Each hand-off in it has the same shape.</p>
     <table class="qtab stack">
-      <tr><th>Status</th><th>It means</th><th>Because</th></tr>
-      <tr><td>open</td><td>Nobody has it</td><td>The package is in the folder</td></tr>
-      <tr><td>claimed</td><td>Someone is on it</td><td>A file named <code>&lt;brief&gt; — &lt;name&gt;</code> is in <code>briefs/claims/</code></td></tr>
-      <tr><td>delivered</td><td>Finished, waiting on the owner</td><td>Files are in <code>briefs/delivered/&lt;brief&gt;/</code></td></tr>
-      <tr><td>approved · paid</td><td>The owner's call</td><td>Set by the owner, never by the folder</td></tr>
+      <tr><th>In the hand-off</th><th>What it is</th><th>You</th></tr>
+      <tr><td><code>handoff.md</code></td><td>What this is, what to do, what must not change, the checks, how to send it back</td><td>Read it in full, first</td></tr>
+      <tr><td><code>briefs/</code> · <code>assets/</code> · <code>references/</code></td><td>The briefs, what you work from, the swipes and the product record</td><td>Read only — never write here</td></tr>
+      <tr><td><code>returned/</code></td><td>Empty until you finish</td><td>Your finished files, each named <code>&lt;brief id&gt;_asset-NN</code></td></tr>
     </table>
-    <div class="note">Bounty and due dates are the owner's. The queue shows them; the folder does not set them.</div>
+    <div class="note">The team runs the take-back from <code>returned/</code> and files each piece against its brief. You never edit anything else.</div>
   </section>
 
   <section id="asks" class="ref">
-    <div class="obj corner" data-obj="ribbon"><img src="media/objects/ribbon.webp" alt="" loading="lazy"></div>
+    <div class="obj corner" data-obj="ribbon" aria-hidden="true"></div>
     <p class="eyebrow">05 — the asks</p>
     <h2 class="rise">Beyond the base cut</h2>
     <p class="lede">Every brief ends with <b>THE ASKS</b> — six lines, each specified or refused with a reason.
@@ -321,25 +324,25 @@ Rules, always:
   </section>
 
   <section id="rules" class="ref">
-    <div class="obj corner" data-obj="monolith"><img src="media/objects/monolith.webp" alt="" loading="lazy"></div>
+    <div class="obj corner" data-obj="monolith" aria-hidden="true"></div>
     <div class="two">
       <div>
         <p class="eyebrow">06 — the rules that never move</p>
         <ul class="rules">
           <li><b><i class="ico" data-i="shield"></i> Nothing invented</b>Not a product detail, not a claim, not a person. If the brief does not say it, the answer is "not in the brief" — ask.</li>
           <li><b><i class="ico" data-i="shield"></i> Every face and product carries its reference</b>A person or product generated without their reference is a reroll, not a delivery.</li>
-          <li><b><i class="ico" data-i="shield"></i> Never write into the source package</b>Deliveries go to <code>delivered/</code>. The package stays as it arrived.</li>
-          <li><b><i class="ico" data-i="shield"></i> Sync first, every session</b>Stale tools or a stale queue are how a brief gets sent back.</li>
+          <li><b><i class="ico" data-i="shield"></i> Never write into what you were sent</b>Finished work goes in <code>returned/</code> only. The rest of the hand-off stays as it arrived.</li>
+          <li><b><i class="ico" data-i="shield"></i> Sync first, every session</b>Stale tools or a stale folder are how a brief gets sent back.</li>
           <li><b><i class="ico" data-i="shield"></i> When a door fails, say which one</b>Drive, GitHub, Higgsfield — one line. Never a silent workaround.</li>
         </ul>
       </div>
       <div>
         <p class="eyebrow">07 — when it goes wrong</p>
         <ul class="rules">
-          <li><b><i class="ico" data-i="alert"></i> "Something went wrong" opening the brand folder</b>Supercomputer picked the wrong folder or cached an old one. Paste the folder's Drive link directly into the chat.</li>
+          <li><b><i class="ico" data-i="alert"></i> "Something went wrong" opening your folder</b>Supercomputer picked the wrong folder or cached an old one. Paste the folder's Drive link directly into the chat.</li>
           <li><b><i class="ico" data-i="alert"></i> No credits · "no chats"</b>You are in the wrong Higgsfield workspace. Switch to the shared one (top-left) and refresh.</li>
-          <li><b><i class="ico" data-i="alert"></i> It found the wrong briefs folder</b>Two folders share the name. Give it the path or the link — it must not guess.</li>
-          <li><b><i class="ico" data-i="alert"></i> A delivered brief still shows open</b>The files are not in <code>delivered/&lt;brief&gt;/</code> under the exact brief name from the queue.</li>
+          <li><b><i class="ico" data-i="alert"></i> It found the wrong folder</b>Two folders share the name. Give it the path or the link — it must not guess.</li>
+          <li><b><i class="ico" data-i="alert"></i> A finished hand-off still shows as waiting</b>The files are not in that hand-off's <code>returned/</code>, or are not named <code>&lt;brief id&gt;_asset-NN</code>.</li>
           <li><b><i class="ico" data-i="alert"></i> "No updates" but the way of working changed</b>The clone is stale. Say: <i>clone https://github.com/daemnapps/prizm-labs again, fresh</i>.</li>
         </ul>
       </div>
@@ -368,21 +371,23 @@ Rules, always:
 (function(){
   var input=document.getElementById('brand');
   var folder=document.getElementById('folder');
+  var role=document.getElementById('role');
   var pres=[].slice.call(document.querySelectorAll('pre.prompt'));
   var raw={};
   pres.forEach(function(p){ raw[p.dataset.src]=p.textContent; });
   function esc(s){ return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
   function fill(t,asHtml){
-    var b=(input.value||'').trim(), f=(folder.value||'').trim();
+    var b=(input.value||'').trim(), f=(folder.value||'').trim(), r=(role.value||'').trim();
     var wrap=function(v,ph){ return asHtml?('<mark>'+esc(v||ph)+'</mark>'):(v||ph); };
     t=asHtml?esc(t):t;
-    return t.replace(/\{BRAND\}/g, wrap(b,'{BRAND}')).replace(/\{FOLDER LINK\}/g, wrap(f,'{FOLDER LINK}'));
+    return t.replace(/\{BRAND\}/g, wrap(b,'{BRAND}')).replace(/\{FOLDER LINK\}/g, wrap(f,'{FOLDER LINK}')).replace(/\{ROLE\}/g, wrap(r,'{ROLE}'));
   }
   function paint(){ pres.forEach(function(p){ p.innerHTML=fill(raw[p.dataset.src],true); }); }
   function text(key){ return fill(raw[key],false); }
-  try{ input.value=localStorage.getItem('onboarding-brand')||''; folder.value=localStorage.getItem('onboarding-folder')||''; }catch(e){}
+  try{ input.value=localStorage.getItem('onboarding-brand')||''; folder.value=localStorage.getItem('onboarding-folder')||''; role.value=localStorage.getItem('onboarding-role')||''; }catch(e){}
   input.addEventListener('input',function(){ paint(); try{localStorage.setItem('onboarding-brand',input.value);}catch(e){} });
   folder.addEventListener('input',function(){ paint(); try{localStorage.setItem('onboarding-folder',folder.value);}catch(e){} });
+  role.addEventListener('input',function(){ paint(); try{localStorage.setItem('onboarding-role',role.value);}catch(e){} });
   paint();
   [].slice.call(document.querySelectorAll('.copy')).forEach(function(btn){
     btn.addEventListener('click',function(){
@@ -395,5 +400,5 @@ Rules, always:
   function fallback(t){ var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
 })();
 </script>
-<script src="/studio.js?v=7" defer></script>
+<script src="/studio.js?v=8" defer></script>
 </html>
