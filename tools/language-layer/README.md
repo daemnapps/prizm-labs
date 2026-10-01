@@ -3,7 +3,7 @@
 The query over a brand's customer-language banks: rows in, filtered and ranked
 rows out, per stage, provenance travelling on every row. It holds no stage map
 and no brand — each chain hands in its own map (see
-`tools/02-video-teardown/machine/language.py`).
+`tools/video-teardown/machine/language.py`).
 
     python3 query_language.py --brand <brand> --avatars
     python3 query_language.py --brand <brand> --stage hooks --profile <chain-profile>.json

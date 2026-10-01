@@ -1,15 +1,13 @@
-# PRIZM LABS — the tools
+# Prizm Labs — the tools
 
-The generative marketing machine. This is Damon's brain for the business: the
-strategy, the brands and the calls stay with him. What's here are the tools our
-creative marketers use to turn those calls into finished work.
+The generative marketing machine, as the tools our creative marketers use to
+turn a proven ad into finished work for our brands. **Prizm Labs is our
+internal system — not for sale.** It is public so the people who work with us
+can read every prompt; it is hosted at [daemn.co](https://daemn.co).
 
 Take a video that already worked — a competitor's ad, an organic post,
 anything — keep its structure, and rebuild it for one of our brands. You get a
 script, a shot list, and a prompt for every frame.
-
-**One way to use it:** clone this repo into Higgsfield Supercomputer (or Claude
-Code) and tell it what you want. No kits, no copies.
 
 **→ [daemn.co](https://daemn.co)** — see it working, with the same ad rebuilt
 three different ways. **→ [How it works](https://daemn.co/how-it-works.html)**
@@ -18,51 +16,56 @@ performance, and the seven roles that carry it.
 
 ---
 
-## Start here
+## How to use it — Higgsfield Supercomputer or Claude Code
 
-Sixteen tools, one brand folder. Everything is plain text. Clone it and it is
-all there; say "pull for updates" and it stays current. The numbers are the
-folder names, kept stable so a link never breaks; two tools are marked
-**team-only** where the part that builds them reads our private workspace —
-what they publish is here for everyone.
+The same three steps in either one:
 
-| | What it is | Read it |
-|---|---|---|
-| **01** | **The brand folder** — every tool reads it, so a brand is set up once and never explained again. | [`brands/_TEMPLATE/`](brands/_TEMPLATE/) |
+1. **Clone this repo** into Higgsfield Supercomputer, or open it in Claude
+   Code (`git clone https://github.com/daemnapps/prizm-labs`).
+2. **Point it at a brand folder** — say which brand you are working on. The
+   folder follows [`brands/_TEMPLATE/`](brands/_TEMPLATE/); every tool reads
+   it, so a brand is set up once and never explained again.
+3. **Run the tool** by saying what you want in plain words — "tear this video
+   down for <brand>", "make the scenes for this brief", "edit this kit". Each
+   tool's front page says what it takes and what comes out.
 
-### Take something apart
+Say "pull for updates" and it stays current. Everything is plain text.
 
-Something already worked. These pull it down to the structure underneath, then
-put our brand where theirs was.
+---
 
-| | What it is | Read it |
-|---|---|---|
-| **02** | **Video teardown** — any video in, your brief out. Written for someone who has never done this. | [`tools/02-video-teardown/`](tools/02-video-teardown/) |
-| **03** | **Organic swipe pack** — 48 formats pulled apart from 377 posts that worked, some past a hundred million views. Rebuilt 2026-09-22. | [`tools/03-organic-swipe-pack/`](tools/03-organic-swipe-pack/) |
-| **04** | **Paid ad swipe pack** — 6,269 live competitor ads across nine markets, reduced to the ten angle shapes that keep working. Rebuilt 2026-09-22. | [`tools/04-paid-ad-swipe-pack/`](tools/04-paid-ad-swipe-pack/) |
-| **06** | **Image teardown** — the same chain pointed at a single frame. | [`tools/06-image-teardown/`](tools/06-image-teardown/) |
-| **07** | **Copy teardown** — for a piece of writing rather than a video. | [`tools/07-copy-teardown/`](tools/07-copy-teardown/) |
-| **09** | **Page teardown** — a landing page, same treatment. | [`tools/09-page-teardown/`](tools/09-page-teardown/) |
+## The tools
 
-### Make something
+Nine tools, one brand folder. Each tool carries the name it has in
+production. Two are marked **team-only** where the part that builds them
+reads our private workspace — what they publish is here for everyone.
 
 | | What it is | Read it |
 |---|---|---|
-| **05** | **AI video production** — the brief becomes scenes, motion and finished shots. The chain that builds a brief from scratch. | [`tools/05-ai-video-production/`](tools/05-ai-video-production/) |
-| **10** | **Image production** — stage two for statics, the twin of the video line. | [`tools/10-image-production/`](tools/10-image-production/) |
-| **13** | **Pages** — swipe, construct, inject, base, then one variation per sub-avatar. No page gets written freehand. | [`tools/13-pages/`](tools/13-pages/) |
-| **14** | **Copywriter** — the copy chain. | [`tools/14-copywriter/`](tools/14-copywriter/) |
-| **—** | **Customer language** — every word the tools use comes from what the market said; this is the query over a brand's language, with the receipt on every row. | [`tools/language-layer/`](tools/language-layer/) |
+| **Brand folder** | Every tool reads it, so a brand is set up once and never explained again. Do this first. | [`brands/_TEMPLATE/`](brands/_TEMPLATE/) |
 
-### Plan it and finish it
+### Swipe and take it apart
 
-| | What it is | Read it |
+| Tool | What it is | Read it |
 |---|---|---|
-| **15** | **Outlier brief** — the second door. Start from an idea instead of someone else's video. | [`tools/15-outlier-brief/`](tools/15-outlier-brief/) |
-| **16** | **Video edit** — cut sheets, in plain words rather than a timeline. | [`tools/16-video-edit/`](tools/16-video-edit/) |
-| **20** | **Asset index** — a folder of footage becomes records you can search. | [`tools/20-asset-index/`](tools/20-asset-index/) |
-| **21** | **Editor onboarding** — the front door for creative marketers: the walkthrough, the SOP, the two prompts they paste into Higgsfield, and the brief queue. *Team-only:* the queue reads our private workspace; the page, SOP and prompts are for everyone. | [`tools/21-editor-onboarding/`](tools/21-editor-onboarding/) · [the page](https://daemn.co/onboarding.html) |
-| **22** | **Swipe library** — one front door to everything swiped: the formats, the torn-down videos, one feed per customer type, every competitor's live ads. Public half on the site, the rest on Drive. *Team-only:* the build reads our private workspace; the page is for everyone. | [`tools/22-swipe-library/`](tools/22-swipe-library/) · [the page](https://daemn.co/swipes/) |
+| **My Feeds** | What already works, organic and paid: 48 organic formats pulled apart from 377 posts, and 6,269 live competitor ads reduced to ten angle shapes — plus the library that indexes both. *Team-only:* the library build reads our private workspace; the page is for everyone. | [`tools/my-feeds/`](tools/my-feeds/) · [the page](https://daemn.co/swipes/) |
+| **Video teardown** | Any video in, your brief out. Written for someone who has never done this. | [`tools/video-teardown/`](tools/video-teardown/) |
+
+### Write and make
+
+| Tool | What it is | Read it |
+|---|---|---|
+| **Copywriter** | The copy: primary text, captions, headlines, from a source and a brief. | [`tools/copywriter/`](tools/copywriter/) |
+| **Language layer** | Every word the tools use comes from what the market said; this is the query over a brand's customer language, with the receipt on every row. | [`tools/language-layer/`](tools/language-layer/) |
+| **Video production** | An AI video brief in; the voice, the stills and the clips out. | [`tools/video-production/`](tools/video-production/) |
+| **Image production** | Brief to finished static ad — the twin of video production. | [`tools/image-production/`](tools/image-production/) |
+
+### Edit and hand off
+
+| Tool | What it is | Read it |
+|---|---|---|
+| **Video edit** | An approved kit — voice, clips, music, sound — becomes the finished, captioned video, with two stops for review: the timeline, then the captions. | [`tools/video-edit/`](tools/video-edit/) |
+| **Asset index** | A folder of footage becomes records you can search by what is in each clip. | [`tools/asset-index/`](tools/asset-index/) |
+| **Editor onboarding** | The front door for creative marketers: the walkthrough, the SOP, the prompts they paste into Higgsfield, and the brief queue. *Team-only:* the queue reads our private workspace; the page, SOP and prompts are for everyone. | [`tools/editor-onboarding/`](tools/editor-onboarding/) · [the page](https://daemn.co/onboarding.html) |
 
 ### The shared parts
 
@@ -71,12 +74,15 @@ them: the chain runner, the element system, the marketing doctrine, the run
 layout, the name maps, the research gatherer and the quality checks.
 [`components/`](components/)
 
-**Do 01 first.** Nothing else works well on an empty brand folder — the tools
-are built to say *"I don't know this"* rather than invent an answer, so an
-empty file shows up as a question instead of a fake.
+Tools retired from the public kit are kept, unchanged, in
+[`archive/`](archive/).
+
+**Do the brand folder first.** Nothing else works well on an empty one — the
+tools are built to say *"I don't know this"* rather than invent an answer, so
+an empty file shows up as a question instead of a fake.
 
 Then read
-[`tools/02-video-teardown/HOW-TO-RUN-IT.md`](tools/02-video-teardown/HOW-TO-RUN-IT.md)
+[`tools/video-teardown/HOW-TO-RUN-IT.md`](tools/video-teardown/HOW-TO-RUN-IT.md)
 — the whole process in seven numbered steps.
 
 ---
@@ -84,16 +90,18 @@ Then read
 ## What you need
 
 1. **Higgsfield Supercomputer** with this repo cloned into it — where the
-   video gets watched, the chain runs and your scenes get made.
-   ([affiliate link](https://higgsfield.ai?fpr=damon61) — costs you nothing
-   extra.) Claude Code with the repo cloned works the same way.
-2. **Google Drive** — where finished briefs and delivered work live, so the
-   people who make the ads can reach them. `tools/21-editor-onboarding`.
+   video gets watched, the chain runs and your scenes get made
+   ([higgsfield.ai](https://higgsfield.ai?fpr=damon61)). **Claude Code** with
+   the repo cloned works the same way.
+2. **Google Drive** — where your hand-off folder lives: you read
+   `handoff.md` there and put finished work in its `returned/` folder.
+   `tools/editor-onboarding`.
 
-Nothing gets installed. Nothing runs on your computer.
+In Higgsfield nothing gets installed and nothing runs on your computer. In
+Claude Code the repo sits on your machine and the tools run there.
 
 The exact models and settings are in
-[`WHICH-MODELS.md`](tools/02-video-teardown/WHICH-MODELS.md) — don't leave it
+[`WHICH-MODELS.md`](tools/video-teardown/WHICH-MODELS.md) — don't leave it
 on Auto.
 
 ---
@@ -106,7 +114,8 @@ the same format — that's the whole point.
 
 **Nothing invented.** If the brand folder doesn't say what the product looks
 like or how the customer talks, the tools say they don't know rather than
-guessing. That's them working correctly. Ask Damon for that part.
+guessing. That's them working correctly. Get that part added to the brand
+folder first.
 
 ---
 
