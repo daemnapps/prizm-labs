@@ -128,7 +128,7 @@ pre.prompt mark{{background:color-mix(in srgb,#E9C7D6 70%,transparent);color:var
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
   <a class="link" href="/how-it-works.html">The tools</a>
-  <a class="link" href="/swipes/">Feeds</a>
+  <a class="link" href="/feeds/">Feeds</a>
   <a class="link" href="/onboarding.html" aria-current="page">Onboarding</a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
 </nav>
@@ -365,7 +365,7 @@ pre.msg mark{{background:color-mix(in srgb,#E9C7D6 70%,transparent);color:var(--
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
   <a class="link" href="/how-it-works.html">The tools</a>
-  <a class="link" href="/swipes/">Feeds</a>
+  <a class="link" href="/feeds/">Feeds</a>
   <a class="link" href="/onboarding.html">Onboarding</a>
   <a class="link" href="/onboarding-desk.html" aria-current="page">Desk</a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>

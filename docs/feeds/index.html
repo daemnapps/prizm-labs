@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EFE9E1">
+<meta name="description" content="My Feeds — good posts and ads to copy. Pick one, see why it works, and make your own.">
+<title>My Feeds — PRIZM LABS</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://daemn.co/feeds/">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PRIZM LABS">
+<meta property="og:url" content="https://daemn.co/feeds/">
+<meta property="og:title" content="My Feeds — PRIZM LABS">
+<meta property="og:description" content="Good posts to copy. Pick one. Make your own.">
+<meta property="og:image" content="https://daemn.co/media/share.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/studio.css?v=prizm13">
+<style>
+/* layout only — colour, type, radii and the one shadow come from the system */
+.hero{padding-top:96px}
+.tabs .tab{flex:1 1 200px}
+.tabs .tab.org[aria-selected="true"]{background:var(--violet);border-color:var(--violet)}
+.who{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;margin:var(--s2) 0 var(--s4)}
+.who .label{flex-basis:100%;margin-top:var(--s2)}
+.who button{appearance:none;cursor:pointer;font-family:var(--body);font-size:14px;background:var(--card);color:var(--ink);border:1px solid var(--line-2);border-radius:var(--r4);padding:6px 14px}
+.who button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bone)}
+.wholine{margin:0 0 var(--s4)}
+.bar2{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center;justify-content:space-between;margin-bottom:var(--s4)}
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:var(--s4)}
+.pc{all:unset;cursor:pointer;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden}
+.pc:hover,.pc:focus-visible{border-color:var(--hue)}
+.pc img,.pc .noimg{width:100%;aspect-ratio:9/14;object-fit:cover;background:var(--paper);display:block}
+.paid .pc img,.paid .pc .noimg{aspect-ratio:1/1}
+.pc .b{padding:var(--s3);display:flex;flex-direction:column;gap:var(--s2);flex:1}
+.pc .w{font-size:14px;line-height:1.35;margin:0}
+.pc .s{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:auto}
+.more{display:flex;justify-content:center;margin:var(--s6) 0}
+.scrim{position:fixed;inset:0;background:var(--line-2);z-index:200}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bone);box-shadow:var(--float);z-index:201;overflow-y:auto;padding:var(--s5) var(--gutter) var(--s8)}
+.sheet .x{position:sticky;top:0;float:right}
+.sheet h2{font-size:20px;margin:var(--s6) 0 var(--s3)}
+.sheet .cover{width:160px;border-radius:var(--r2);border:1px solid var(--line)}
+.sheet .frames{width:100%;border-radius:var(--r2);border:1px solid var(--line);margin-top:var(--s3)}
+.sheet .brief{max-height:none}
+.sheet ol.steps{margin-top:var(--s4)}
+.sheet pre{white-space:pre-wrap;font-size:12px;max-height:180px;overflow:auto}
+@media(max-width:640px){.feed{grid-template-columns:repeat(2,1fr);gap:var(--s3)}.sheet{width:100%}.hero{padding-top:72px}}
+</style>
+
+<nav class="bar">
+  <a class="mark" href="/">PRIZM LABS</a>
+  <span class="links">
+    <a href="/machine.html">Machine</a><a href="/how-it-works.html">How it works</a><a href="/onboarding.html">Onboarding</a>
+    <a href="/briefs/">Briefs</a>
+    <a href="/feeds/" aria-current="page">Feeds</a>
+    <a href="/light.html">Light</a>
+    <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
+  </span>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">My Feeds · <span id="updated">…</span></p>
+    <h1>My Feeds.</h1>
+    <p class="lede">Good posts to copy. Pick one. Make your own.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab org" role="tab" data-t="organic" aria-selected="true">Organic<small>Posts people watch for fun</small></button>
+    <button class="tab" role="tab" data-t="paid" aria-selected="false">Paid<small>Ads brands pay for</small></button>
+  </div>
+
+  <div class="who" id="who"><span class="label">Who is it for?</span></div>
+  <p class="wholine lede" id="wholine"></p>
+
+  <div class="bar2">
+    <div class="btns" id="sort"></div>
+    <a class="btn ghost" id="examples" href="/feeds/examples/" style="display:none">Full breakdowns of one brand's ads</a>
+  </div>
+
+  <div class="feed" id="feed" aria-live="polite"></div>
+  <div class="more"><button class="btn ghost" id="more">Show more</button></div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sheet" id="sheet" hidden aria-label="The post"></aside>
+
+<footer class="bot">
+  <span>PRIZM LABS</span>
+  <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
+</footer>
+<script src="/feeds/feeds.js?v=1" defer></script>
+<script src="/studio.js?v=8" defer></script>
+</html>
