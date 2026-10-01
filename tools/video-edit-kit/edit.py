@@ -268,7 +268,7 @@ def do_cut(sheet_path: Path, out: Path, anyway: bool = False) -> dict:
         raise SystemExit("STOP - a talking clip is cut off. It goes back to production, never edited around:\n  "
                          + "\n  ".join(cut_off) + "\n(--anyway makes a review cut with this marked)")
     out = Path(out)
-    work = Path(tempfile.mkdtemp(prefix="cut-", dir=out.parent if out.parent.exists() else None))
+    work = Path(tempfile.mkdtemp(prefix="cut-", dir=out.parent if out.parent.exists() else None)).resolve()
     t, segs = 0.0, []
     for k, p in enumerate(plan):
         d = round(p["to"] - p["from"], 3)
@@ -427,7 +427,7 @@ def do_captions(video: Path, words_json: Path | None, out: Path, report: Path | 
         cuts |= {max(0.0, float(o["start"])), min(end, float(o["end"]))}
     cuts = sorted(c for c in cuts if 0 <= c <= end)
 
-    work = Path(tempfile.mkdtemp(prefix="caps-"))
+    work = Path(tempfile.mkdtemp(prefix="caps-")).resolve()
     cache: dict = {}
     boxes: list[dict] = []
 
