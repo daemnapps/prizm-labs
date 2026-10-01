@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="PRIZM LABS">
 <meta property="og:url" content="https://daemn.co/objects.html">
 <meta property="og:title" content="Objects — PRIZM LABS">
-<meta property="og:description" content="The chrome and glass objects the studio is built from, live in 3D.">
+<meta property="og:description" content="The chrome and glass objects Prizm Labs is built from, live in 3D.">
 <meta property="og:image" content="https://daemn.co/media/share.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/studio.css?v=prizm12">
+<link rel="stylesheet" href="/studio.css?v=prizm13">
 <style>
 /* page-specific layout only */
 .hero{padding-top:110px}
@@ -47,7 +47,7 @@
     
     <a href="/machine.html">Machine</a><a href="/how-it-works.html">How it works</a><a href="/onboarding.html">Onboarding</a>
     <a href="/briefs/">Briefs</a>
-    <a href="/swipes/">Swipes</a>
+    <a href="/swipes/">Feeds</a>
     <a href="/light.html">Light</a>
       <a href="/objects.html" aria-current="page">Objects</a>
     <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
@@ -68,7 +68,7 @@
           in frame. That consistency is what makes them a set rather than eight
           pictures. Here they are live: scroll, and watch the light move across them.</p>
       </div>
-      <div class="obj xl" data-obj="prism"><img src="media/objects/prizm.webp" alt="A faceted glass prism, its edges catching a spectral fringe" loading="eager"></div>
+      <div class="obj xl" data-obj="prism" role="img" aria-label="A faceted glass prism, its edges catching a spectral fringe"></div>
     </div>
   </div>
 
@@ -82,7 +82,7 @@
 
     <div class="objs">
       <div class="ob">
-        <figure><div class="obj md" data-obj="prism"><img src="media/objects/prizm.webp" alt="Faceted glass prism" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="prism" role="img" aria-label="Faceted glass prism"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--violet)">The mark</p>
           <h3>Prism</h3>
           <p>The brand itself. Use it where the whole company is the subject — a
@@ -90,7 +90,7 @@
           <p class="label file">media/objects/prizm.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="sphere"><img src="media/objects/sphere.webp" alt="Polished chrome sphere" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="sphere" role="img" aria-label="Polished chrome sphere"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--indigo)">A whole</p>
           <h3>Sphere</h3>
           <p>One finished thing. A delivered asset, a closed loop, a single
@@ -98,7 +98,7 @@
           <p class="label file">media/objects/sphere.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="lens"><img src="media/objects/lens.webp" alt="Convex glass lens in a chrome bezel" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="lens" role="img" aria-label="Convex glass lens in a chrome bezel"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--cyan)">Reading</p>
           <h3>Lens</h3>
           <p>Looking closely — a teardown, a review, research. It bends what is
@@ -106,7 +106,7 @@
           <p class="label file">media/objects/lens.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="torus"><img src="media/objects/torus.webp" alt="Brushed chrome torus" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="torus" role="img" aria-label="Brushed chrome torus"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--green)">The loop</p>
           <h3>Torus</h3>
           <p>A process that runs again: the chain, the weekly cadence, the
@@ -114,7 +114,7 @@
           <p class="label file">media/objects/torus.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="monolith"><img src="media/objects/monolith.webp" alt="Liquid chrome monolith slab" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="monolith" role="img" aria-label="Liquid chrome monolith slab"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--indigo)">A standard</p>
           <h3>Monolith</h3>
           <p>Something settled — a ruling, a locked standard, the system. Stands
@@ -122,7 +122,7 @@
           <p class="label file">media/objects/monolith.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="ribbon"><img src="media/objects/ribbon.webp" alt="Twisted chrome mobius ribbon" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="ribbon" role="img" aria-label="Twisted chrome mobius ribbon"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--magenta)">A rewrite</p>
           <h3>Ribbon</h3>
           <p>The same surface, turned — a swipe rebuilt for our brand. One
@@ -130,7 +130,7 @@
           <p class="label file">media/objects/ribbon.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="cube"><img src="media/objects/cube.webp" alt="Glass beam-splitter cube with an internal spectrum" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="cube" role="img" aria-label="Glass beam-splitter cube with an internal spectrum"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--amber)">The split</p>
           <h3>Beam splitter</h3>
           <p>One input becoming many outputs: a brief fanning into variations, a
@@ -138,7 +138,7 @@
           <p class="label file">media/objects/cube.webp</p></div>
       </div>
       <div class="ob">
-        <figure><div class="obj md" data-obj="cards"><img src="media/objects/cards.webp" alt="Stack of bone cards with chrome edges" loading="lazy"></div></figure>
+        <figure><div class="obj md" data-obj="cards" role="img" aria-label="Stack of bone cards with chrome edges"></div></figure>
         <div class="in"><p class="label hue" style="--hue:var(--magenta)">The work</p>
           <h3>Card stack</h3>
           <p>Briefs. The only object made of paper rather than metal, which is
@@ -168,5 +168,5 @@
   <span>PRIZM LABS</span>
   <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
 </footer>
-<script src="/studio.js?v=7" defer></script>
+<script src="/studio.js?v=8" defer></script>
 </html>
