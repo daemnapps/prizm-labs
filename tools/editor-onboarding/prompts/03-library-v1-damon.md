@@ -1,4 +1,4 @@
-# Swipe library — v1
+# Library — v1
 
 *Paste this in Higgsfield Supercomputer when you want to see what has been
 swiped for a brand, or find something to rebuild. Replace `{BRAND}`.*
@@ -8,7 +8,7 @@ swiped for a brand, or find something to rebuild. Replace `{BRAND}`.*
 ---
 
 ```prompt
-Open the swipe library for {BRAND}.
+Open the My Feeds library for {BRAND}.
 
 1. In Google Drive, open `SWIPE LIBRARY.md` at the root of the shared drive. Read it live. Show me the top table — what exists and how much — in four lines.
 

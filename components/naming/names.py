@@ -70,7 +70,7 @@ SLUG = re.compile(r"^[a-z0-9]+$")
 # of the angle, a template and a frame. Everything else in AD_FIELDS is ours
 # alone — our brand, our product, our avatar, our brief, our batch.
 #
-# The swipe library describes its ads in exactly these words, so a Meta export
+# The My Feeds library describes its ads in exactly these words, so a Meta export
 # grouped on `problem` or `source` and the swipe corpus grouped on the same
 # field are answering one question, not two. Two vocabularies for one idea is
 # how you end up unable to say whether the thing that won was the thing you

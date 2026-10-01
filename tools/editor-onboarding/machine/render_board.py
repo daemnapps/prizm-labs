@@ -54,7 +54,7 @@ def queues() -> dict[str, list[dict]]:
 
 
 day_one = block(TOOL / "prompts" / "01-day-one-v3-damon.md")
-swipe_prompt = block(TOOL / "prompts" / "03-swipe-library-v1-damon.md")
+swipe_prompt = block(TOOL / "prompts" / "03-library-v1-damon.md")
 LF, LV, LFE, LSW = LIB.formats(), LIB.videos(), LIB.feeds(), LIB.sweeps()
 ltorn = [v for v in LV if v["torn"]]
 feed_rows = "".join(f'<tr><td class="b">{E(f["feed"])}</td><td>{E(f["brand"])}</td><td>{f["kept"]}</td>'
@@ -173,7 +173,7 @@ td.b{{color:var(--ink);font-weight:500}}
 <p>Editors and designers work inside Higgsfield Supercomputer. It reads the brand folder on Drive and the tools from GitHub; briefs go to them there, finished work comes back to Drive, the queue rebuilds itself every hour.</p>
 <div class="chips">
   <a href="#flow">The flow</a><a href="#page">The page</a><a href="#video">The video</a><a href="#loop">The loop</a>
-  <a href="#prompts">The prompts</a><a href="#asks">The asks</a><a href="#queue">The queues</a><a href="#library">The swipe library</a><a href="#sync">Sync</a><a href="#open">Open</a>
+  <a href="#prompts">The prompts</a><a href="#asks">The asks</a><a href="#queue">The queues</a><a href="#library">The library</a><a href="#sync">Sync</a><a href="#open">Open</a>
 </div>
 
 <section id="flow">
@@ -217,7 +217,7 @@ td.b{{color:var(--ink);font-weight:500}}
   <li><span class="t">13:37</span>7 · The workflow — review, remove slop, reroll, sequence, edit</li>
   <li><span class="t">14:50</span>8 · Turn the pull into a skill</li>
   <li><span class="t">15:35</span>9 · Execute a brief — pull up its clips</li>
-  <li><span class="t">16:34</span>10 · Pull in the AI video production workflows</li>
+  <li><span class="t">16:34</span>10 · Pull in the video production workflows</li>
 </ul>
 </section>
 
@@ -269,7 +269,7 @@ td.b{{color:var(--ink);font-weight:500}}
 </section>
 
 <section id="library">
-<p class="eyebrow">08 · the swipe library · as of {E(built)}</p>
+<p class="eyebrow">08 · My Feeds · the library · as of {E(built)}</p>
 <h2>Everything swiped, one door</h2>
 <p>Tools public, assets private. The formats and the angle shapes are on the site for anyone; the videos, the feeds and the competitor sweeps are on Drive, indexed in <span class="mono">SWIPE LIBRARY.md</span> at the root of the shared drive, read through Higgsfield with the prompt below. Sweeps are numbered here because this board is shareable; the index on Drive names them.</p>
 <div class="flow">
@@ -287,7 +287,7 @@ td.b{{color:var(--ink);font-weight:500}}
 <div class="tw"><table><thead><tr><th>Feed</th><th>Brand</th><th>Kept</th><th>Entertainment</th><th>Educational</th><th>Newest</th></tr></thead><tbody>{feed_rows}</tbody></table></div>
 <h3>The paid sweeps</h3>
 <div class="tw"><table><thead><tr><th>#</th><th>Angles</th><th>Live ads</th><th>Top-3 share</th><th>Media on Drive</th></tr></thead><tbody>{sweep_rows}</tbody></table></div>
-<div class="prompt-head"><h3 style="margin:0">Swipe library · v1</h3><span class="file">prompts/03-swipe-library-v1-damon.md · pasted when they want something to rebuild</span></div>
+<div class="prompt-head"><h3 style="margin:0">Library · v1</h3><span class="file">prompts/03-library-v1-damon.md · pasted when they want something to rebuild</span></div>
 <pre>{E(swipe_prompt)}</pre>
 </section>
 

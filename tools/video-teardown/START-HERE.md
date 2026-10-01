@@ -46,4 +46,4 @@ fill in that part.
 
 ---
 
-*Prizm Labs — daemn.co. Free, MIT licensed.*
+*Prizm Labs — daemn.co. Internal system — not for sale.*

@@ -46,7 +46,7 @@
   /* ── neon system v1 (THEME.md): the light as tube, glass and motion ── */
   --neon-spectrum:conic-gradient(from 0deg,#B264FF,#FF5CC8,#3CD2F0,#7B61FF,#B264FF);  /* the ring: violet → magenta → cyan → indigo */
   --neon-line:linear-gradient(90deg,#B264FF,#FF5CC8 55%,#3CD2F0);                     /* a lit line, a filled segment */
-  --neon-wordmark:linear-gradient(90deg,#F3EEFB,#B264FF 20%,#FF5CC8 42%,#3CD2F0 64%,#F3EEFB 84%,#F3EEFB);  /* DÆMN, flowing */
+  --neon-wordmark:linear-gradient(90deg,#F3EEFB,#B264FF 20%,#FF5CC8 42%,#3CD2F0 64%,#F3EEFB 84%,#F3EEFB);  /* the wordmark, flowing */
   --neon-text:0 0 1px rgba(243,238,251,.55),0 0 10px rgba(178,100,255,.5),0 0 28px rgba(255,92,200,.22);   /* a heading, lit */
   --neon-soft:0 0 6px rgba(178,100,255,.55),0 0 16px rgba(255,92,200,.2);                                   /* a small thing, lit */
   --neon-drop:drop-shadow(0 0 8px rgba(178,100,255,.5));                                                    /* glow for clipped text / tiny marks */
@@ -459,7 +459,7 @@ button.gj-avatar:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
 .gj-sec > h2,.gj-piece h1,.gj-lit{text-shadow:var(--neon-text)}
 .gj-flick.is-lit{animation:gj-flicker .95s both;animation-timing-function:steps(1,end)}
 @keyframes gj-flicker{0%{opacity:.12}7%{opacity:.85}10%{opacity:.2}16%{opacity:1}21%{opacity:.4}27%,100%{opacity:1}}
-/* the wordmark: the spectrum flows through DÆMN (a small box, so the repaint is cheap) */
+/* the wordmark: the spectrum flows through the wordmark (a small box, so the repaint is cheap) */
 .gj-wordmark,.theme-goja nav.bar .mark{background:var(--neon-wordmark) 0 0/6em 100% repeat-x;-webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;filter:var(--neon-drop);animation:gj-flow 10s linear infinite}
 @keyframes gj-flow{to{background-position:6em 0}}
@@ -551,7 +551,7 @@ body.theme-goja::before{content:"";position:fixed;inset:0;z-index:0;pointer-even
 .gj-post .gj-play.sm{inset:auto var(--s3) var(--s3) auto;margin:0;z-index:2}
 .gj-vwrap.is-inline .gj-play{opacity:0;pointer-events:none}
 
-/* N7 · the story — tap the ring: DÆMN's story, full screen (story.js) */
+/* N7 · the story — tap the ring: the story, full screen (story.js) */
 .gj-story,.gj-reels{position:fixed;inset:0;z-index:60;height:100dvh;background:var(--bone);color:var(--ink);overscroll-behavior:contain;
   -webkit-tap-highlight-color:transparent}
 .gj-story{display:grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none}

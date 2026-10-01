@@ -253,7 +253,7 @@
       panel = document.createElement('div'); panel.className = 'ask-panel'; panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-label', 'Ask the machine');
       panel.innerHTML = `<div class="ask-head"><i class="ib" data-i="sparkles" style="--hue:var(--violet)">${icon('sparkles')}</i><b>Ask the machine</b><button class="x" aria-label="Close">×</button></div>
         <div class="ask-log"><div class="it"><p>Ask how anything works: where to start, what a tool does, how to get updates. Answers come straight from the repo.</p>
-        <div class="ask-chips">${['What does the video teardown do?','What is the paid ad swipe pack?','How does the email calendar work?','What is a brief?'].map(c => `<button type="button">${c}</button>`).join('')}</div></div></div>
+        <div class="ask-chips">${['What does the video teardown do?','What is My Feeds?','How does the email calendar work?','What is a brief?'].map(c => `<button type="button">${c}</button>`).join('')}</div></div></div>
         <form class="ask-form"><input type="text" placeholder="Ask a question…" aria-label="Your question" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Ask">${icon('send')}</button></form>`;
       document.body.appendChild(panel);
       log = panel.querySelector('.ask-log'); input = panel.querySelector('input');

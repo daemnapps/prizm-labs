@@ -1,4 +1,4 @@
-# The format bank — AI video production
+# The format bank — video production
 
 Every format the video machine runs is a row in **`bank.json`** and a
 profile file beside it. A run names one (`format` in its `run.json`); a

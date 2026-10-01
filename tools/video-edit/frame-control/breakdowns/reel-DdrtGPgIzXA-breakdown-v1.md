@@ -9,7 +9,7 @@
 - File: 48.9 s · 1080×1920 · 30 fps · stereo AAC
 - Pictures: `contact-sheet.jpg` (every 0.5 s), `key-frames.jpg` (1 / 17 / 23.5 / 26 / 33 / 42 / 44.5 s), `audio-spectrogram.png`
 
-![contact sheet](contact-sheet.jpg)
+*(The pictures stay with the downloaded file — not published here.)*
 
 ## What it is
 

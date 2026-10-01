@@ -153,14 +153,14 @@ A competitor's ad and one of ours are the same kind of object. Both have a
 form, a maker, a person in them (or nobody), a problem they speak to, an angle
 on that problem, an execution of that angle, a template and a frame.
 
-So the swipe library describes its creatives in **these fields**, not a
+So the My Feeds library describes its creatives in **these fields**, not a
 parallel set of its own:
 
 ```
 media · source · talent · problem · angle · concept · format · ratio
 ```
 
-`names.py` owns that list as `CREATIVE_FIELDS` and the swipe library imports
+`names.py` owns that list as `CREATIVE_FIELDS` and the My Feeds library imports
 it. The remaining ad-name fields — brand, product, avatar, brief, batch — are
 ours alone and have no meaning on someone else's ad.
 

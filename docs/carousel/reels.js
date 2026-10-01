@@ -135,7 +135,7 @@
     if (p && p.catch) p.catch(() => { if (!muted) { muted = true; player.muted = true; paintSound(); player.play().catch(() => {}); } });
     paintSound();
     partEl.innerHTML = '';
-    if (it.part) { const b = document.createElement('b'); b.textContent = it.num; partEl.append(b, it.label); } else partEl.textContent = 'DÆMN · the piece';
+    if (it.part) { const b = document.createElement('b'); b.textContent = it.num; partEl.append(b, it.label); } else partEl.textContent = 'Prizm Labs · the piece';
     capB.textContent = it.cap;
     capN.textContent = `${i + 1} / ${items.length}` + (i + 1 < items.length ? ' · swipe up for the next' : ' · the end');
     // fetch the next clip ahead (the piece streams, so it needs nothing)

@@ -38,6 +38,6 @@ this tool only indexes what they and the feeds produce. `AI_WORKSPACE` and
 
 ## For editors, in Higgsfield
 
-`../../editor-onboarding/prompts/03-swipe-library-v1-damon.md` — "open the
-swipe library for <brand>": reads the index and the brand's feeds, shows the
+`../../editor-onboarding/prompts/03-library-v1-damon.md` — "open the
+library for <brand>": reads the index and the brand's feeds, shows the
 posts, and hands any one of them to the teardown.

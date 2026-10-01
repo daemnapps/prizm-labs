@@ -292,7 +292,7 @@ class RepoFiling(unittest.TestCase):
 
 class RealPathStillRuns(unittest.TestCase):
     """The live path — open_run, run_stage, the early-stop ending — with every
-    engine stubbed and the Drive, the swipe library and the bank fenced off.
+    engine stubbed and the Drive, the My Feeds library and the bank fenced off.
     Proves the two hooks fire where they were added and the run is unchanged."""
 
     def test_a_stubbed_run_to_1c_files_doctrine_elements_and_the_repo_record(self):
