@@ -1,0 +1,70 @@
+{
+ "_what": "Every number the edit kit uses. Change a number here, never in edit.py. These are the settled rules of the edit line (cut and dress), brand-free.",
+ "canvas": {"width": 1080, "height": 1920, "fps": 30, "what": "9:16 only. fps: the cut sheet's own fps wins; else the first clip's; else this"},
+ "listen": {
+  "silence_db": -35,
+  "silence_min_s": 0.15,
+  "what": "silence is found in the SOUND, not in the words: anything quieter than -35 dB for 0.15 s or longer"
+ },
+ "cut": {
+  "lead_s": 0.10,
+  "tail_s": 0.14,
+  "breath_under_s": 0.35,
+  "what": "start and end silence always cut, leaving 0.10 s before the first sound and 0.14 s after the last. Gaps under 0.35 s are breaths and are always kept. Gaps of 0.35 s or more are mid-clip pauses: the kit proposes cutting them, the editor keeps any that land a beat (--keep)."
+ },
+ "punch": {
+  "zoom": 1.07,
+  "origin_y": 0.32,
+  "what": "after a cut pause the next piece is 7% closer, so the jump reads like a second camera in the room. Zoom centre sits at 32% down the frame (face height)."
+ },
+ "cut_off": {
+  "end_window_s": 0.15,
+  "what": "a talking clip whose sound is still going in its last 0.15 s probably stops mid-line: flagged, sent back to production, never edited around"
+ },
+ "level": {
+  "clip_lufs": -16,
+  "what": "each clip's sound is levelled to -16 LUFS before the cut, so scenes match"
+ },
+ "master": {
+  "lufs": -14,
+  "true_peak_db": -1,
+  "tolerance_lu": 1.0,
+  "what": "the finished file: -14 LUFS integrated, peaks no higher than -1 dBTP"
+ },
+ "safe": {
+  "band_4x5_top_pct": 14.84,
+  "band_4x5_bottom_pct": 85.16,
+  "ui_top_pct": 8,
+  "ui_bottom_pct": 25,
+  "ui_right_pct": 14,
+  "what": "the 9:16 frame keeps everything that matters inside the centred 4:5 band (1080x1350 of 1080x1920): nothing above 14.84% or below 85.16%. The ui_* numbers are where the app's own buttons sit (organic feeds); text stays out of them."
+ },
+ "zones": {
+  "top-headline": {"x": 15, "y": 19, "w": 70, "h": 11},
+  "upper-third": {"x": 15, "y": 30, "w": 70, "h": 11},
+  "center": {"x": 15, "y": 42, "w": 70, "h": 11},
+  "caption-band": {"x": 15, "y": 63, "w": 70, "h": 9},
+  "what": "named text spots, % of the frame. All sit inside the 4:5 band and clear of the app buttons."
+ },
+ "looks": {
+  "bold-highlight": {"case": "upper", "size_px": 84, "color": "#FFFFFF", "highlight": "#FFD84A", "stroke_px": 10, "stroke": "#000000", "max_words": 3, "zone": "caption-band", "plate": null},
+  "clean-lower": {"case": "sentence", "size_px": 58, "color": "#FFFFFF", "highlight": "#FFFFFF", "stroke_px": 0, "stroke": "#000000", "max_words": 4, "zone": "caption-band", "plate": "#000000B3"},
+  "one-word": {"case": "upper", "size_px": 110, "color": "#FFFFFF", "highlight": "#FFFFFF", "stroke_px": 12, "stroke": "#000000", "max_words": 1, "zone": "caption-band", "plate": null},
+  "card": {"case": "as-written", "size_px": 64, "color": "#000000", "stroke_px": 0, "plate": "#FFFFFFFF", "zone": "top-headline", "what": "hook and cards: black heavy type on a white plate, the cut sheet's exact words and line breaks"},
+  "what": "caption looks. Captions show 2-4 words at a time and the spoken word lights up; one line breaks on a pause of 0.35 s or more and on . ! ?"
+ },
+ "caption_break_s": 0.35,
+ "checks": {
+  "dead_air_s": 0.7,
+  "length_tolerance_s": 0.25,
+  "what": "final checks: no silence of 0.7 s or more anywhere in the master; no black frames; the file is 9:16"
+ },
+ "fonts": [
+  "/usr/share/fonts/truetype/higgsfield/Montserrat-ExtraBold.ttf",
+  "/usr/share/fonts/truetype/higgsfield/Metropolis-ExtraBold.ttf",
+  "~/Library/Fonts/Montserrat-ExtraBold.ttf",
+  "~/Library/Fonts/Montserrat-Black.ttf",
+  "/System/Library/Fonts/Supplemental/Arial Black.ttf",
+  "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+ ]
+}
