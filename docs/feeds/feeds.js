@@ -323,7 +323,7 @@
   // ================================================================ wiring
   const cache = {};
   function get(path) {
-    if (!cache[path]) cache[path] = fetch(DATA + path).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (!cache[path]) cache[path] = fetch(DATA + path, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
     return cache[path];
   }
   async function loadAds() { ADS = (await get('ads.json')) || []; draw(); }
