@@ -35,7 +35,7 @@ Say "pull for updates" and it stays current. Everything is plain text.
 
 ## The tools
 
-Ten tools, one brand folder. Each tool carries the name it has in
+Eleven tools, one brand folder. Each tool carries the name it has in
 production. Two are marked **team-only** where the part that builds them
 reads our private workspace — what they publish is here for everyone.
 
@@ -65,6 +65,7 @@ reads our private workspace — what they publish is here for everyone.
 | Tool | What it is | Read it |
 |---|---|---|
 | **Video edit** | An approved kit — voice, clips, music, sound — becomes the finished, captioned video, with two stops for review: the timeline, then the captions. | [`tools/video-edit/`](tools/video-edit/) |
+| **Edit kit** | The edit as small commands an editor's agent runs inside Higgsfield (or on a laptop): cut to the sound, captions, cards, punch-ins, frame fixes, the 4:5 safe-zone check, loudness, one 9:16 master. | [`tools/video-edit-kit/`](tools/video-edit-kit/) |
 | **Asset index** | A folder of footage becomes records you can search by what is in each clip. | [`tools/asset-index/`](tools/asset-index/) |
 | **Editor onboarding** | The front door for creative marketers: the walkthrough, the SOP, the prompts they paste into Higgsfield, and the brief queue. *Team-only:* the queue reads our private workspace; the page, SOP and prompts are for everyone. | [`tools/editor-onboarding/`](tools/editor-onboarding/) · [the page](https://daemn.co/onboarding.html) |
 

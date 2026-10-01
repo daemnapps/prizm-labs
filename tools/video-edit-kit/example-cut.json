@@ -1,0 +1,15 @@
+{
+ "fps": 24,
+ "scenes": [
+  {"id": "s01", "clip": "scenes/01.mp4", "line": "The first line, as the script spells it."},
+  {"id": "s02", "clip": "scenes/02.mp4", "keep": ["P1"]},
+  {"id": "s03", "clip": "scenes/03-broll.mp4", "talks": false, "from": 0, "to": 2.5},
+  {"id": "s04", "still": "cards/plate.png", "hold": 1.2}
+ ],
+ "overlays": [
+  {"text": "LINE ONE\nLINE TWO", "with": "s01"},
+  {"text": "A LABEL", "start": 8.0, "end": 10.5, "zone": "upper-third"}
+ ],
+ "punches": [[12.4, 13.6]],
+ "captions": {"look": "bold-highlight"}
+}
