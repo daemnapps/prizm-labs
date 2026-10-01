@@ -16,7 +16,7 @@ the walkthrough video, the SOP and the prompts, in one place.
 | `SOP.md` | the way we work — once to set up, then the loop every session. What the page says, in Markdown. |
 | `prompts/01-day-one-v3-damon.md` | pasted once: connects, clones the tools, opens your hand-off folder, reads each `handoff.md` |
 | `prompts/02-pull-briefs-v3-damon.md` | pasted every session: sync → pick → read `handoff.md` → review → the asks → the edit (two review stops) → back into `returned/` |
-| `machine/queue.py` | the brief queue per brand, written to `briefs/QUEUE.md` on Drive from what the folder holds. Runs hourly. |
+| `machine/queue.py` | the work queue per brand — every role (video editor, graphic designer, creator, carousel), every state from Open to Live or Sent back — written to `briefs/QUEUE.md` on Drive from the folders and approval cards. Runs hourly. Tests: `machine/test_queue.py`. |
 | `walkthrough/cut-list.json` + `cut.py` | the edited walkthrough video — a cut list over the recorded call, rendered with ffmpeg. The recording is not in the repo. |
 | `context/artifacts.md` | the pages that show this work |
 
@@ -43,16 +43,25 @@ Three directions, all automatic:
 - **Workspace → Drive.** `queue.py ship --auto` (hourly) finds every run in
   the private workspace whose pack cleared its gates (`deliverable/EDITOR-PACK.md`
   exists), zips it into the brand's `briefs/ai-video-production/` on Drive —
-  once; a brief already on the queue is never duplicated or overwritten.
+  once; a brief already on the queue is never duplicated or overwritten. Image
+  and carousel briefs marked approved in the workspace's brief register (ready
+  to make) are packaged the same way into `briefs/image/` and `briefs/carousel/`.
 
 - **Tools → editors.** The Pull-briefs prompt pulls the repo before anything
   else, every session. A change committed here reaches every editor the next
   time they sit down.
 - **Drive → queue.** `queue.py build --all` runs hourly on the owner's Mac
-  and rewrites each brand's `briefs/QUEUE.md` from the folder: a package makes
-  a brief **open**, a claim file makes it **claimed**, files in
-  `delivered/<brief>/` make it **delivered**. Bounty and due dates are the
-  owner's, set with `queue.py set`, and survive every rebuild.
+  and rewrites each brand's `briefs/QUEUE.md` from the folders: a package (or a
+  creator hand-off folder) makes a brief **Open**, a claim file (a hand-off
+  marked sent) makes it **Claimed**, files in `delivered/` (or the hand-off's
+  `returned/`) make it **Delivered**, and its approval card in
+  `meta/<brand>/1-check|2-approved|3-live|sent-back/` makes it **In check**,
+  **Approved**, **Live** or **Sent back** (with the owner's note). Each row
+  shows `<product> brief-NNNN` with its old code, looked up in the private
+  workspace at run time. Renamed deliveries are matched back to their package.
+  Bounty, due and who are the owner's, set with `queue.py set`, and survive
+  every rebuild. The hourly job runs from a clean copy of this repo
+  (`~/Projects/prizm-labs-queue`, on origin/main), never a working checkout.
 
 ## Run it
 
