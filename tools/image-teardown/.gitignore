@@ -1,0 +1,58 @@
+# Pictures never go in git. They live in the folder you set as PRIZM_MEDIA
+# (default: media/ beside this tool). That is the single
+# home for every picture this lane makes — full-res output, sources, all of it.
+#
+# The web-copy exception was tried on 2026-08-26 and reversed the same day
+# (Damon: "remove the image copies on github"). Two homes for one image is
+# worse than one home anyone can reach — the Drive copy is the full-res
+# original, not a downscale, and nobody has to guess which is current.
+#
+# Pictures only. The stage text in out/, the manifests and the specs stay in
+# git: they are the refine material, and a prompt change is only judgeable
+# against what the last one produced.
+*.png
+*.jpg
+*.jpeg
+*.heic
+*.mp4
+*.mov
+runs/*/assets/*.gemini-uri.json
+runs/*/finals/.compose-tmp/
+
+__pycache__/
+**/__pycache__/
+.DS_Store
+.swipe-cache/
+
+# The board itself is GENERATED and does not belong in git (SI-4 (board files),
+# 2026-09-22). build_ui.py writes both on every run, and refresh.sh runs it
+# EVERY 30 SECONDS while the board is up — so each one that got committed added
+# ~25 MB to the pack permanently. Both are over workspace rule 3's 10 MB limit
+# (12.9 MB and 12.8 MB at the time of this change) and always were.
+#
+# Nothing is lost by ignoring them: build_ui.py rebuilds both from runs/ and the
+# manifests, which DO stay in git for the reason the note above gives. The files
+# keep their paths on disk and serve.py keeps serving them — this only stops the
+# pack growing.
+#
+# NOTE ON FIRST PULL: git removes these two from your working tree when this
+# change arrives, because they stop being tracked. refresh.sh puts them back
+# within 30s; otherwise run `python3 build_ui.py` once.
+#
+# status.json is written by the same three lines and is deliberately NOT listed
+# here: at 3.4 KB it crosses no wall, and whether it stays tracked is Damon's
+# call, not this change's assumption.
+image-board.html
+board.json
+
+# Working runs, generated boards and retired tool snapshots stay out of git.
+runs/
+board.html
+board-*.html
+*-board.html
+tools/superseded/
+*.webp
+*.gif
+
+# Your pictures (PRIZM_MEDIA unset) — never in git.
+media/

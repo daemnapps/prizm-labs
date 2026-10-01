@@ -35,7 +35,7 @@ Say "pull for updates" and it stays current. Everything is plain text.
 
 ## The tools
 
-Nine tools, one brand folder. Each tool carries the name it has in
+Ten tools, one brand folder. Each tool carries the name it has in
 production. Two are marked **team-only** where the part that builds them
 reads our private workspace — what they publish is here for everyone.
 
@@ -49,6 +49,7 @@ reads our private workspace — what they publish is here for everyone.
 |---|---|---|
 | **My Feeds** | What already works, organic and paid: 48 organic formats pulled apart from 377 posts, and 6,269 live competitor ads reduced to ten angle shapes — plus the library that indexes both. *Team-only:* the library build reads our private workspace; the page is for everyone. | [`tools/my-feeds/`](tools/my-feeds/) · [the page](https://daemn.co/swipes/) |
 | **Video teardown** | Any video in, your brief out. Written for someone who has never done this. | [`tools/video-teardown/`](tools/video-teardown/) |
+| **Image teardown** | Paste a picture ad — one still or a carousel. Get its structure and a brief for your brand, for the machine or for a creator. | [`tools/image-teardown/`](tools/image-teardown/) |
 
 ### Write and make
 
