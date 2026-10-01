@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/studio.css?v=prizm12">
+<link rel="stylesheet" href="/studio.css?v=prizm13">
 <style>
 /* page layout only */
 .lhero{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--s7);align-items:center;padding-block:clamp(var(--s6),8vh,var(--s9)) var(--s6)}
@@ -51,7 +51,7 @@
     
     <a href="/machine.html">Machine</a><a href="/how-it-works.html">How it works</a><a href="/onboarding.html">Onboarding</a>
     <a href="/briefs/">Briefs</a>
-    <a href="/swipes/">Swipes</a>
+    <a href="/swipes/">Feeds</a>
     <a href="/light.html" aria-current="page">Light</a>
     <a href="/objects.html">Objects</a>
     <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
@@ -67,7 +67,7 @@
         Everyone believed the glass was colouring the light. He proved the colours had been in the light all along.</p>
       <div class="btns"><a class="btn" href="#lab">Turn the prism</a><a class="btn ghost" href="#why">What it has to do with ads</a></div>
     </div>
-    <div class="obj xl" data-obj="prism"><img src="media/objects/prizm.webp" alt="A glass prism splitting light" loading="eager"></div>
+    <div class="obj xl" data-obj="prism" role="img" aria-label="A glass prism splitting light"></div>
   </div>
 
   <section class="sec" id="lab" style="padding-top:var(--s5)">
@@ -90,15 +90,15 @@
     <p class="eyebrow">Three things the prism proved</p>
     <h2 class="rise">Nothing was added. It was sorted.</h2>
     <div class="beats">
-      <div><div class="obj" data-obj="sphere"><img src="media/objects/sphere.webp" alt="A chrome sphere" loading="lazy"></div>
+      <div><div class="obj" data-obj="sphere" role="img" aria-label="A chrome sphere"></div>
         <i class="ib" data-i="sparkles" style="--hue:var(--indigo)"></i>
         <h3>White is every colour at once</h3>
         <p>The prism doesn't paint anything. It bends each colour a little differently, so the ones travelling together finally come apart.</p></div>
-      <div><div class="obj" data-obj="cube"><img src="media/objects/cube.webp" alt="A glass cube" loading="lazy"></div>
+      <div><div class="obj" data-obj="cube" role="img" aria-label="A glass cube"></div>
         <i class="ib" data-i="target" style="--hue:var(--amber)"></i>
         <h3>One colour stays one colour</h3>
         <p>Newton let a single colour through a second prism. It bent, but it didn't split again. Each colour was its own thing the whole time.</p></div>
-      <div><div class="obj" data-obj="lens"><img src="media/objects/lens.webp" alt="A glass lens" loading="lazy"></div>
+      <div><div class="obj" data-obj="lens" role="img" aria-label="A glass lens"></div>
         <i class="ib" data-i="loop" style="--hue:var(--green)"></i>
         <h3>And back to white</h3>
         <p>Gather the spectrum through a lens and it comes back as white light. Taken apart and put back together, nothing is lost.</p></div>
@@ -106,7 +106,7 @@
   </section>
 
   <section class="sec" id="why">
-    <p class="eyebrow">The studio, in one experiment</p>
+    <p class="eyebrow">Prizm Labs, in one experiment</p>
     <h2 class="rise">One beam in. Everything out.</h2>
     <p class="lede">An ad that already worked is white light: everything it does, travelling together, too fast to see. The machine is the prism.</p>
     <div class="map">
@@ -241,5 +241,5 @@
   <a href="#" data-ask>Ask a question</a>
   <span class="right">PRIZM LABS</span>
 </footer>
-<script src="/studio.js?v=7" defer></script>
+<script src="/studio.js?v=8" defer></script>
 </html>

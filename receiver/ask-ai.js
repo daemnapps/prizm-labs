@@ -62,7 +62,7 @@ async function limited(env, request) {
   return n > 30;                                       // thirty questions an hour a visitor
 }
 
-const SYSTEM = `You answer questions from the editors and designers who make content for Damon's brands with the PRIZM LABS tools (github.com/daemnapps/prizm-labs).
+const SYSTEM = `You answer questions from the editors and designers who make content for our brands with the Prizm Labs tools (github.com/daemnapps/prizm-labs).
 Answer ONLY from the SOURCES given. If they do not answer the question, say so in one line and name the closest tool or guide to read.
 Write plainly for someone who is not technical: short paragraphs, no jargon, no code unless the sources give an exact command or prompt to paste.
 If the question is a brand, offer or strategy call, say the brief or the brand folder decides it and point to where.

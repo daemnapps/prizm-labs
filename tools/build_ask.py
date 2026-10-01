@@ -15,16 +15,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 REPO = "https://github.com/daemnapps/prizm-labs/blob/main/"
 # WALKTHROUGH.md is left out: it only points elsewhere now
-# A tool's front door is not always called README. Three of the sixteen —
-# the video teardown among them, which is the tool the whole site is about —
-# use START-HERE, HOW-TO-RUN-IT or CLAUDE instead, and every one of them was
+# A tool's front door is not always called README. Some — the video
+# teardown among them, which is the tool the whole site is about — use
+# START-HERE, HOW-TO-RUN-IT or CLAUDE instead, and every one of them was
 # invisible to the Ask box until 2026-09-26. Anything at a tool's top level
 # counts as a guide; everything deeper (prompts, machine internals, the chain)
 # does not, so the answers stay in the reader's language.
 GUIDES = {"README.md", "SOP.md", "START-HERE.md", "HOW-TO-RUN-IT.md",
           "CLAUDE.md", "WHICH-MODELS.md", "MACHINE-README.md"}
+# My Feeds is one tool with three parts (organic, paid, library), so its
+# parts' front doors sit one level deeper.
 FILES = ["README.md", "ASK.md"] + sorted(
-    str(p.relative_to(ROOT)) for p in ROOT.glob("tools/*/*.md") if p.name in GUIDES)
+    str(p.relative_to(ROOT)) for pat in ("tools/*/*.md", "tools/my-feeds/*/*.md")
+    for p in ROOT.glob(pat) if p.name in GUIDES)
 MAX = 1600
 
 

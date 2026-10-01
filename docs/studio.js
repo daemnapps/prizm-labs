@@ -163,7 +163,7 @@
         'three/addons/':'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/'}});
       document.head.appendChild(m);
     }
-    const s = document.createElement('script'); s.type = 'module'; s.src = '/objects3d.js?v=1'; document.body.appendChild(s);
+    const s = document.createElement('script'); s.type = 'module'; s.src = '/objects3d.js?v=2'; document.body.appendChild(s);
   }
 
   /* ── light: the beam at each break, the bar, the drifting room light ── */

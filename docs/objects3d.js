@@ -1,10 +1,11 @@
 /* objects3d.js — the chrome and glass objects, as real 3D, anywhere on the site.
 
    Put an element on any page:
-       <div class="obj" data-obj="torus"><img src="/media/objects/torus.webp" alt="…"></div>
+       <div class="obj" data-obj="torus" role="img" aria-label="…"></div>
    and it becomes that object, floating, turning with the scroll, leaning
-   toward the pointer. The <img> is the poster: it shows until the first 3D
-   frame lands, and stays for anyone without WebGL.
+   toward the pointer. There is no poster image (2026-10-01: the old stills
+   showed behind the 3D as it faded in, and read as tacky); without WebGL the
+   page gets a `no-webgl` class and a plain disc of colour instead.
 
    Kinds: prism · lens · ribbon · cube · torus · sphere · monolith · cards,
    and glb:<file> for any model in /media/desk/ (head, laptop, phone …).
@@ -245,8 +246,9 @@ addEventListener('resize', () => CALM ? draw(performance.now()) : wake());
 addEventListener('scroll', () => { if(CALM) draw(performance.now()); }, {passive:true});
 document.addEventListener('visibilitychange', wake);
 
-// WebGL or nothing: without it every poster image simply stays.
+// WebGL or a plain fallback colour (studio.css: .no-webgl .obj).
 let ok = false;
 try{ const p = document.createElement('canvas'); ok = !!(p.getContext('webgl2') || p.getContext('webgl')); }catch(e){}
+if(!ok) document.documentElement.classList.add('no-webgl');
 if(ok) document.querySelectorAll('[data-obj]').forEach(mount);
 window.daemnObjects = {mount, makeObject, draw:() => draw(performance.now())};
