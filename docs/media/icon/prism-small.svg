@@ -5,8 +5,8 @@
 <clipPath id="tile"><rect width="64" height="64" rx="15"/></clipPath></defs>
 <rect width="64" height="64" rx="15" fill="#EFE9E1"/>
 
-<polygon points="25.00,11.00 45.00,51.00 55.00,45.00 35.00,5.00" fill="url(#s)"/>
-<polygon points="25.00,11.00 45.00,51.00 55.00,45.00 35.00,5.00" fill="url(#sh)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/>
-<polygon points="25.00,11.00 45.00,51.00 5.00,51.00" fill="url(#s)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/>
-<polygon points="25.00,11.00 15.00,31.00 25.00,31.00" fill="url(#hl)"/>
+<polygon points="24.00,9.00 46.00,54.00 58.00,47.00 36.00,2.00" fill="url(#s)"/>
+<polygon points="24.00,9.00 46.00,54.00 58.00,47.00 36.00,2.00" fill="url(#sh)" stroke="#171512" stroke-width="4.4" stroke-linejoin="round"/>
+<polygon points="24.00,9.00 46.00,54.00 3.00,54.00" fill="url(#s)" stroke="#171512" stroke-width="4.4" stroke-linejoin="round"/>
+
 </svg>
