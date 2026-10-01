@@ -1,0 +1,182 @@
+{
+ "updated": "Updated 1 Oct 2026",
+ "built": "2026-10-01",
+ "groups": [
+  "Shaving & grooming",
+  "Acne & teen skin",
+  "Dark spots & aging skin",
+  "For anyone"
+ ],
+ "people": [
+  {
+   "slug": "fed-up-king",
+   "label": "The Fed-Up King",
+   "line": "A grown man tired of razor bumps. He has tried everything.",
+   "group": "Shaving & grooming",
+   "organic": 99,
+   "paid": 120
+  },
+  {
+   "slug": "barbershop-regular",
+   "label": "The Barbershop Regular",
+   "line": "Fresh haircut every week. Bumps on his neck ruin it.",
+   "group": "Shaving & grooming",
+   "organic": 43,
+   "paid": 120
+  },
+  {
+   "slug": "bald-bumps-guy",
+   "label": "The Bald Bumps Guy",
+   "line": "Shaves his head. Gets bumps on his head and neck.",
+   "group": "Shaving & grooming",
+   "organic": 39,
+   "paid": 120
+  },
+  {
+   "slug": "ingrown-fighter",
+   "label": "The Ingrown Fighter",
+   "line": "Tried every bump product. Still gets ingrown hairs.",
+   "group": "Shaving & grooming",
+   "organic": 107,
+   "paid": 120
+  },
+  {
+   "slug": "el-rey-cansado",
+   "label": "El Rey Cansado",
+   "line": "Latino man, English and Spanish. Bumps and dark marks keep coming back.",
+   "group": "Shaving & grooming",
+   "organic": 120,
+   "paid": 120
+  },
+  {
+   "slug": "el-jefe",
+   "label": "El Jefe",
+   "line": "Spanish-first working man. Wants a clean shave and to look sharp.",
+   "group": "Shaving & grooming",
+   "organic": 120,
+   "paid": 120
+  },
+  {
+   "slug": "forty-year-shaver",
+   "label": "The Forty-Year Shaver",
+   "line": "Shaving for 40 years. His neck still has bumps.",
+   "group": "Shaving & grooming",
+   "organic": 94,
+   "paid": 120
+  },
+  {
+   "slug": "face-back",
+   "label": "The Face-Back Man",
+   "line": "Man in his 50s or 60s. Wants his younger face back.",
+   "group": "Shaving & grooming",
+   "organic": 120,
+   "paid": 120
+  },
+  {
+   "slug": "glow-up",
+   "label": "The Glow-Up Guy",
+   "line": "Guy, 15 to 24. Wants clear skin and a full glow-up.",
+   "group": "Acne & teen skin",
+   "organic": 120,
+   "paid": 120
+  },
+  {
+   "slug": "tried-every-wash-kid",
+   "label": "The Tried-Every-Wash Kid",
+   "line": "Teen with acne. Tried every face wash.",
+   "group": "Acne & teen skin",
+   "organic": 108,
+   "paid": 120
+  },
+  {
+   "slug": "marks-that-stay-kid",
+   "label": "The Marks-That-Stay Kid",
+   "line": "Teen with acne and dark marks that stay after.",
+   "group": "Acne & teen skin",
+   "organic": 57,
+   "paid": 120
+  },
+  {
+   "slug": "clogged-pores-kid",
+   "label": "The Clogged-Pores Kid",
+   "line": "Teen with oily skin and acne.",
+   "group": "Acne & teen skin",
+   "organic": 31,
+   "paid": 120
+  },
+  {
+   "slug": "gift-buyer",
+   "label": "The Gift Buyer",
+   "line": "Mom buying skin care for her teen son.",
+   "group": "Acne & teen skin",
+   "organic": 106,
+   "paid": 120
+  },
+  {
+   "slug": "before-accutane-mom",
+   "label": "The Before-Accutane Mom",
+   "line": "Mom of a teen son. His acne hurts his confidence.",
+   "group": "Acne & teen skin",
+   "organic": 73,
+   "paid": 120
+  },
+  {
+   "slug": "get-his-face-right-mom",
+   "label": "The Get-His-Face-Right Mom",
+   "line": "Mom buying for her son's acne and dark marks.",
+   "group": "Acne & teen skin",
+   "organic": 115,
+   "paid": 120
+  },
+  {
+   "slug": "mijo-mom",
+   "label": "The Mijo Mom",
+   "line": "Latina mom buying for her son's oily skin and acne.",
+   "group": "Acne & teen skin",
+   "organic": 68,
+   "paid": 120
+  },
+  {
+   "slug": "spot-hider",
+   "label": "The Spot Hider",
+   "line": "Woman, 55 to 65. Wants the dark spots on her body to fade.",
+   "group": "Dark spots & aging skin",
+   "organic": 78,
+   "paid": 120
+  },
+  {
+   "slug": "sun-damage-reckoner",
+   "label": "The Sun Damage Reckoner",
+   "line": "Years in the sun left dark spots. She wants them gone.",
+   "group": "Dark spots & aging skin",
+   "organic": 61,
+   "paid": 120
+  },
+  {
+   "slug": "clean-only-buyer",
+   "label": "The Clean-Only Buyer",
+   "line": "Only buys clean, simple ingredients.",
+   "group": "Dark spots & aging skin",
+   "organic": 120,
+   "paid": 120
+  },
+  {
+   "slug": "texture-seeker",
+   "label": "The Texture Seeker",
+   "line": "Wants skin that feels soft and smooth every day.",
+   "group": "Dark spots & aging skin",
+   "organic": 116,
+   "paid": 120
+  },
+  {
+   "slug": "taken-apart",
+   "label": "Already taken apart",
+   "line": "Posts we took apart step by step. Good for anyone.",
+   "group": "For anyone",
+   "organic": 120,
+   "paid": 120
+  }
+ ],
+ "posts": 1915,
+ "ads": 2520
+}

@@ -280,7 +280,7 @@ td.b{{color:var(--ink);font-weight:500}}
   <div class="node"><div class="w">You · this Mac</div><b>My Feeds</b><span>The live board — Pull now, Tear down. These files are its export.</span></div>
 </div>
 <div class="links">
-  <a class="link" href="https://daemn.co/swipes/" target="_blank" rel="noopener"><div class="k">Public page</div><b>daemn.co/swipes/</b><span>formats + angle shapes, straight from the repo</span></a>
+  <a class="link" href="https://daemn.co/feeds/" target="_blank" rel="noopener"><div class="k">Public page</div><b>daemn.co/feeds/</b><span>formats + angle shapes, straight from the repo</span></a>
   <a class="link" href="https://drive.google.com/drive/folders/1V6s6D98PdelDKh8THm_RqJjGTPgfL-6Y" target="_blank" rel="noopener"><div class="k">Drive</div><b>Shared Assets</b><span>SWIPE LIBRARY.md sits at the root, beside the brands folder</span></a>
 </div>
 <h3>The feeds</h3>

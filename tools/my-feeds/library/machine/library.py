@@ -271,7 +271,7 @@ def public_page(F, V, SW, FE) -> str:
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
   <a class="link" href="/how-it-works.html">The tools</a>
-  <a class="link" href="/swipes/" aria-current="page">Feeds</a>
+  <a class="link" href="/feeds/" aria-current="page">Feeds</a>
   <a class="link" href="/onboarding.html">Onboarding</a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
 </nav>
@@ -351,8 +351,9 @@ def main():
                 shutil.copy2(src, dest / name)
     INDEX.write_text(index_md(F, V, FE, SW))
     print(f"wrote Shared Assets/{INDEX.name} and {len(FE)} FEED.md files")
-    # The public half is the Swipes page (docs/swipes/, daemn.co/swipes/) —
-    # ruled 2026-09-24: one swipe page on the site, not a second one.
+    # The public half is My Feeds (docs/feeds/, daemn.co/feeds/), written by the
+    # team repo's components/swipe-organic/feedsexport.py. This script never
+    # writes into docs/ — ruled 2026-10-01: one feeds page on the site.
 
 
 if __name__ == "__main__":
