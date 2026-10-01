@@ -314,9 +314,9 @@
   }
   function openSounds() {
     const R = S.sounds || [];
-    openPanel(`<p class="eyebrow">${R.length} sounds</p><h2>Trending sounds</h2><p>This week's trending TikTok sounds, recent only. Open one to hear it and see the posts using it.</p>` +
+    openPanel(`<p class="eyebrow">${R.length} sounds</p><h2>Trending sounds</h2><p>This week's trending TikTok sounds, recent only. Press play to hear one; tap the name to see the posts using it.</p>` +
       (R.length ? `<div class="tablewrap"><table><tr><th>#</th><th>sound</th><th>feel</th><th>length</th></tr>${R.map(r => `<tr><td>${r.rank ?? ''}</td>
-        <td><a href="${esc(r.url)}" target="_blank" rel="noopener"><b>${esc(r.title)}</b></a><br><span class="m-sub">${esc(r.artist || '')}</span>${r.use ? `<br><span class="m-why">${esc(r.use)}</span>` : ''}</td>
+        <td><a href="${esc(r.url)}" target="_blank" rel="noopener"><b>${esc(r.title)}</b></a><br><span class="m-sub">${esc(r.artist || '')}</span>${r.use ? `<br><span class="m-why">${esc(r.use)}</span>` : ''}${r.audio ? `<audio controls preload="none" src="${DATA}${esc(r.audio)}" style="display:block;width:100%;max-width:320px;height:32px;margin-top:6px"></audio>` : ''}</td>
         <td>${esc([r.mood, r.energy && r.energy + ' energy', r.bpm && r.bpm + ' bpm'].filter(Boolean).join(' · '))}</td><td>${r.seconds ? r.seconds + 's' : ''}</td></tr>`).join('')}</table></div>` : '<p>No sounds pulled yet.</p>'));
   }
 
