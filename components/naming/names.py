@@ -21,7 +21,7 @@ def _workspace_root(start=None):
     """
     p = (start or Path(__file__)).resolve()
     for d in p.parents:
-        if (d / "brands").is_dir() and (d / "CLAUDE.md").is_file():
+        if (d / "brands").is_dir() and ((d / "CLAUDE.md").is_file() or (d / "components").is_dir()):
             return d
     raise RuntimeError("not inside the ai-workspace")
 
@@ -343,6 +343,71 @@ def write_manifest(out_dir, brand, avatar, fmt, concept, batch, rows):
     p = Path(out_dir) / "manifest.json"
     p.write_text(json.dumps(man, indent=1) + "\n")
     return p
+
+
+
+# --- brief ids, both spellings (brief-0140 and p140) — the production naming
+# layer's brief-id functions, so tools that number briefs (image teardown's
+# register) read the same ids here as in production.
+BRIEF_OLD = re.compile(r"^p(\d{3})$")
+BRIEF_NEW = re.compile(r"^brief-(\d{4})$")
+_ALIASES = None
+
+def brief_aliases():
+    """brief-aliases.json — every brief number in both spellings, and the
+    numbers that were never used. Read once."""
+    global _ALIASES
+    if _ALIASES is None:
+        f = Path(__file__).resolve().parent / "brief-aliases.json"
+        try:
+            _ALIASES = json.loads(f.read_text())
+        except (OSError, json.JSONDecodeError):
+            _ALIASES = {"aliases": {}, "never_used": []}
+    return _ALIASES
+
+
+def brief_id(any_id):
+    """The one brief id, new spelling, from either spelling.
+
+    `p140` -> `brief-0140`; `brief-0140` -> `brief-0140`; `140` -> `brief-0140`.
+    Anything that is not a brief id (`none`, a word) comes back slugged and
+    unchanged, so a name with no brief behind it still names that fact."""
+    if any_id is None:
+        return None
+    if isinstance(any_id, int):
+        return f"brief-{any_id:04d}"
+    t = str(any_id).strip().lower()
+    hit = brief_aliases().get("aliases", {}).get(t)
+    if hit:
+        return hit
+    m = BRIEF_OLD.match(t)
+    if m:
+        return f"brief-{int(m.group(1)):04d}"
+    if BRIEF_NEW.match(t):
+        return t
+    if t.isdigit():
+        return f"brief-{int(t):04d}"
+    return slug(t)
+
+
+def brief_code(any_id):
+    """The OLD spelling (`p140`) from either — the key briefs.json, the
+    worksheets and the live ad names still use. Not a brief id: unchanged."""
+    if any_id is None:
+        return None
+    new = brief_id(any_id)
+    m = BRIEF_NEW.match(new or "")
+    return f"p{int(m.group(1)):03d}" if m else new
+
+
+def brief_forms(any_id):
+    """Both spellings of one brief, for a lookup that must hit either."""
+    forms = {x for x in (brief_id(any_id), brief_code(any_id)) if x}
+    return forms | ({str(any_id).strip().lower()} if any_id else set())
+
+
+def is_brief_id(s):
+    return bool(BRIEF_OLD.match(str(s or "")) or BRIEF_NEW.match(str(s or "")))
 
 
 def main():

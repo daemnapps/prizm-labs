@@ -5,7 +5,7 @@ that a mistake here costs an edit, not a rotation.
 
 ## What is exposed, and what is not
 
-**Public:** the site, the nine tools and their prompts, and this repo's
+**Public:** the site, the ten tools and their prompts, and this repo's
 history. All of it is words and pictures — no code that runs on anyone's
 machine but their own.
 
