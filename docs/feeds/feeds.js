@@ -1,113 +1,250 @@
-/* My Feeds — reads the static export in /feeds/data/ (written by the team
-   repo's components/swipe-organic/feedsexport.py). No server, no keys. */
+/* My Feeds — Damon's board (the desk, port 8820) on the site, read-only.
+   Same controls, same cards, same behaviour; reads the static export in
+   /feeds/data/ (written by the team repo's components/swipe-organic/
+   feedsexport.py after each Pull). No server, no keys, nothing here spends.
+   Organic = the desk. Paid = competitors' ads on the same control bar. */
 (() => {
   const DATA = '/feeds/data/';
-  const PAGE = 24;
-  const $ = s => document.querySelector(s);
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const PLAT = {tiktok: 'TikTok', instagram: 'Instagram', youtube: 'YouTube'};
-  const big = n => n == null ? '' : n >= 1e9 ? (n/1e9).toFixed(1).replace(/\.0$/,'') + 'B'
-    : n >= 1e6 ? (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M' : n >= 1e3 ? Math.round(n/1e3) + 'K' : String(n);
+  const PAGE = 240;
+  const $ = id => document.getElementById(id);
+  const esc = s => (s ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt = n => n == null ? '' : n >= 1e9 ? (n/1e9).toFixed(1) + 'B' : n >= 1e6 ? (n/1e6).toFixed(1) + 'M' : n >= 1e3 ? Math.round(n/1e3) + 'K' : '' + n;
+  const day = s => s ? new Date(s.length > 10 ? s : s + 'T12:00:00Z') : null;
+  const days = s => s ? Math.floor((Date.now() - day(s)) / 864e5) : null;
+  const md = s => s ? day(s).toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: 'UTC'}) : '';
+  const mdy = s => s ? day(s).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'}) : '';
+  const UP = b => b == 'general' ? 'General' : b.toUpperCase();
+  const P = {tiktok: 'TIKTOK', instagram: 'REEL', youtube: 'YOUTUBE'};
+  const PLATN = {tiktok: 'TikTok', instagram: 'Instagram', youtube: 'YouTube'};
+  const SORTS = [['in', 'Just in'], ['sent', 'Most sent'], ['rise', 'Rising'], ['punch', 'Punching above'], ['views', 'Most viewed'], ['new', 'Newest post']];
+  const PSORTS = [['days', 'Running longest'], ['new', 'Newest ad'], ['copies', 'Most copies']];
+  const WINS = [['7', '7d'], ['30', '30d'], ['90', '90d'], ['all', 'All time']];
 
-  const q = new URLSearchParams(location.search);
-  const st = {t: q.get('t') === 'paid' ? 'paid' : 'organic', who: q.get('who'), sort: q.get('sort') || 'views', shown: PAGE};
-  let index = null, people = {}, rows = [];
-  const cache = {};
+  // ---- state (kept in the address bar, so a view can be sent as a link)
+  const u = new URLSearchParams(location.search);
+  let t = u.get('t') == 'paid' ? 'paid' : 'organic';
+  let brand = u.get('brand') || 'all', feed = u.get('who') || 'all', q0 = u.get('q') || '';
+  let lane = u.get('lane') || 'entertainment', shape = u.get('shape') || 'all', plat = u.get('plat') || 'all';
+  let win = u.get('win') || 'all', showOut = u.get('out') == '1', adv = u.get('adv') || 'all', kind = u.get('kind') || 'all';
+  let sort = u.get('sort') || '';
+  // links from the page this replaced: ?sort=views|new (organic), ?t=paid&sort=views|copies
+  if (t == 'paid') sort = {views: 'days', copies: 'copies'}[sort] || (PSORTS.some(s => s[0] == sort) ? sort : 'days');
+  else if (!SORTS.some(s => s[0] == sort)) sort = 'in';
+  let view = 'feed', stageOn = 1, CH = null, shown = PAGE;
+  let S = null, CARDS = [], ADS = null;
+  $('q').value = q0;
 
   function save() {
     const p = new URLSearchParams();
-    if (st.t === 'paid') p.set('t', 'paid');
-    if (st.who) p.set('who', st.who);
-    if (st.sort !== 'views') p.set('sort', st.sort);
+    const put = (k, v, d) => { if (v != d) p.set(k, v); };
+    put('t', t, 'organic'); put('brand', brand, 'all'); put('who', feed, 'all'); put('q', $('q').value.trim(), '');
+    put('sort', sort, t == 'paid' ? 'days' : 'in'); put('win', win, 'all');
+    if (t == 'organic') { put('lane', lane, 'entertainment'); put('shape', shape, 'all'); put('plat', plat, 'all'); put('out', showOut ? '1' : '0', '0'); }
+    else { put('adv', adv, 'all'); put('kind', kind, 'all'); }
     history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
   }
 
-  async function get(path) {
-    if (!cache[path]) cache[path] = fetch(DATA + path).then(r => r.ok ? r.json() : []).catch(() => []);
-    return cache[path];
+  function chips(el, opts, cur, set) {
+    el.innerHTML = opts.map(([v, l]) => `<button class="${v == cur ? 'on' : ''}" data-v="${esc(v)}">${esc(l)}</button>`).join('');
+    el.querySelectorAll('button').forEach(b => b.onclick = () => { set(b.dataset.v); shown = PAGE; draw(); });
   }
 
-  function drawTabs() {
-    document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.t === st.t));
-    document.body.classList.toggle('paid', st.t === 'paid');
-    document.documentElement.style.setProperty('--hue', st.t === 'paid' ? 'var(--indigo)' : 'var(--violet)');
-    $('#examples').style.display = st.t === 'paid' ? '' : 'none';
-    const opts = st.t === 'paid' ? [['views', 'Running longest'], ['copies', 'Most copies']] : [['views', 'Most views'], ['new', 'Newest']];
-    if (!opts.some(o => o[0] === st.sort)) st.sort = 'views';
-    $('#sort').innerHTML = opts.map(([k, l]) =>
-      `<button class="btn ${k === st.sort ? '' : 'ghost'}" data-sort="${k}">${l}</button>`).join('');
+  const fb = f => f.core && f.brand != 'general' ? f.brand : 'general';
+  const own = f => !f.core;
+
+  // ---- the avatar picker, grouped brand → core avatar, the desk's way
+  function avatarOptions(inBrand, count) {
+    const cores = {};
+    inBrand.forEach(f => {
+      const g = fb(f) == 'general' ? 'General' : (brand == 'all' ? UP(f.brand) + ' · ' : '') + (f.core || '').replace(/-/g, ' ');
+      (cores[g] = cores[g] || []).push(f);
+    });
+    return `<option value="all">All avatars${brand == 'all' ? '' : ' in ' + UP(brand)}</option>` +
+      Object.keys(cores).sort().map(g => `<optgroup label="${esc(g)}">${cores[g].sort((x, y) => (x.sub ? 1 : 0) - (y.sub ? 1 : 0)).map(f =>
+        `<option value="${esc(f.id)}" ${feed == f.id ? 'selected' : ''}>${esc(f.sub ? f.title : f.title + (fb(f) == 'general' ? '' : ' — core'))} (${count(f)})</option>`).join('')}</optgroup>`).join('');
   }
 
-  function drawWho() {
-    const box = $('#who');
-    let html = '<span class="label">Who is it for?</span>';
-    for (const g of index.groups) {
-      html += `<span class="label">${esc(g)}</span>`;
-      for (const p of index.people.filter(p => p.group === g))
-        html += `<button data-who="${esc(p.slug)}" aria-pressed="${p.slug === st.who}">${esc(p.label)}</button>`;
-    }
-    box.innerHTML = html;
-    const p = people[st.who];
-    $('#wholine').textContent = p ? p.line : '';
+  function draw() {
+    if (!S) return;
+    chips($('tabs'), [['organic', 'Organic'], ['paid', 'Paid']], t, v => {
+      if (v == t) return;
+      t = v; view = 'feed'; sort = t == 'paid' ? 'days' : 'in';
+      if (t == 'paid' && !ADS) loadAds();
+    });
+    $('desk').classList.toggle('paid', t == 'paid');
+    if (t == 'paid') drawPaid(); else drawOrganic();
+    save();
   }
 
-  function sorted() {
-    const r = rows.slice();
-    if (st.t === 'paid') r.sort(st.sort === 'copies' ? (a, b) => b.copies - a.copies : (a, b) => (b.days || 0) - (a.days || 0));
-    else if (st.sort === 'new') r.sort((a, b) => String(b.posted || '').localeCompare(String(a.posted || '')));
-    else r.sort((a, b) => (b.views || 0) - (a.views || 0));
-    return r;
+  // ================================================================ ORGANIC
+  function drawOrganic() {
+    const newToday = CARDS.filter(c => c.seen_days === 0 && c.keep !== false).length;
+    $('stats').textContent = `${S.feeds.length} feeds · ${CARDS.length.toLocaleString()} posts · ${newToday} new today · ${S.updated}`;
+    $('q').placeholder = 'Search every post — captions, creators, hashtags, formats';
+    const bl = [...new Set(S.feeds.map(fb))].sort((x, y) => (x == 'general') - (y == 'general') || x.localeCompare(y));
+    chips($('brands'), [['all', 'All brands'], ...bl.map(b => [b, UP(b)])], brand, v => { brand = v; feed = 'all'; view = 'feed'; });
+    // A feed with no avatar of its own (his saves) is never filtered out by a
+    // brand chip — each of its cards carries the brand it was saved for.
+    const inBrand = S.feeds.filter(f => brand == 'all' || own(f) || fb(f) == brand);
+    const count = f => CARDS.filter(c => c.feed == f.id && c.keep !== false && (lane == 'all' || !c.lane || c.lane == lane)).length;
+    if (feed != 'all' && !S.feeds.some(f => f.id == feed)) feed = 'all';
+    $('avatarsel').innerHTML = avatarOptions(inBrand, count);
+    $('avatarsel').onchange = () => { feed = $('avatarsel').value; if (feed == 'all') view = 'feed'; shown = PAGE; draw(); };
+    $('advsel').hidden = true;
+    $('sortsel').innerHTML = SORTS.map(([v, l]) => `<option value="${v}" ${v == sort ? 'selected' : ''}>Sort: ${l}</option>`).join('');
+    $('sortsel').onchange = () => { sort = $('sortsel').value; shown = PAGE; draw(); };
+    for (const id of ['lanes', 'shapes', 'plats']) $(id).hidden = false;
+    $('dropped').hidden = false;
+    chips($('lanes'), [['entertainment', 'Entertainment'], ['educational', 'Educational'], ['all', 'Both']], lane, v => lane = v);
+    chips($('wins'), WINS, win, v => win = v);
+    chips($('plats'), [['all', 'All'], ['tiktok', 'TikTok'], ['instagram', 'Instagram'], ['youtube', 'YouTube']], plat, v => plat = v);
+    // his saves carry their own read — ad-shaped or culture. Other feeds have
+    // none and are never hidden by this chip.
+    chips($('shapes'), [['all', 'Any shape'], ['swipe', 'Ad-shaped'], ['organic', 'Culture']], shape, v => shape = v);
+    $('dropped').classList.toggle('on', showOut);
+
+    const f = S.feeds.find(x => x.id == feed);
+    $('feedhead').innerHTML = f ? `${f.whose ? `<div class="m-ask">${esc(f.whose)}</div>` : f.line ? `<div class="m-ask">${esc(f.line)}</div>` : ''}
+      ${f.sources} sources${f.probation ? ` · ${f.probation} on trial (found by following winners)` : ''} · ${f.sweeps} pulls so far
+      · <button class="m-chip ${view == 'chain' ? 'on' : ''}" id="chainbtn">The research chain</button>
+      <details><summary>What it watches, and why</summary>${f.source_list.map(s => `<span class="m-src ${s.status == 'probation' ? 'pro' : ''}" title="${esc(s.why)}">${esc(s.platform.slice(0, 2).toUpperCase())} ${s.kind == 'hashtag' ? '#' : s.kind == 'account' ? '@' : '“'}${esc(s.value)}${s.kind == 'search' ? '”' : ''}</span>`).join('')}</details>` : '';
+    if (f) $('chainbtn').onclick = () => { view = view == 'chain' ? 'feed' : 'chain'; draw(); };
+    const chain = f && view == 'chain';
+    $('grid').hidden = chain; $('chainbox').hidden = !chain;
+    if (chain) { $('more').hidden = true; drawChain(f.id); return; }
+
+    const words = $('q').value.toLowerCase().split(/\s+/).filter(Boolean);
+    const okFeeds = new Set(inBrand.map(f => f.id));
+    const ownFeeds = new Set(S.feeds.filter(own).map(f => f.id));
+    let cs = CARDS.filter(c => (feed == 'all' ? okFeeds.has(c.feed) : c.feed == feed) && (plat == 'all' || c.platform == plat)
+      && (showOut || c.keep !== false) && (lane == 'all' || showOut || !c.lane || c.lane == lane) && (win == 'all' || (c.age != null && c.age <= +win))
+      && (shape == 'all' || !c.swipe_lane || c.swipe_lane == shape)
+      && (brand == 'all' || !ownFeeds.has(c.feed) || !c.brand_fit || c.brand_fit == brand || (brand == 'general' && c.brand_fit == 'general')));
+    if (words.length) cs = cs.filter(c => { const hay = [c.author, c.caption, c.what, c.format, c.why, c.source, (c.tags || []).join(' ')].join(' ').toLowerCase(); return words.every(w => hay.includes(w)); });
+    const key = {in: c => [-(c.seen_days ?? 999), c.views || 0], rise: c => [c.rise ?? -1, c.views || 0], sent: c => [c.sent ?? -1, c.views || 0], punch: c => [c.punch ?? -1, c.views || 0],
+      views: c => [c.views || 0, 0], new: c => [-(c.age ?? 9999), c.views || 0]}[sort];
+    cs.sort((a, b) => { const x = key(a), y = key(b); return y[0] - x[0] || y[1] - x[1]; });
+    const seen = new Set(); cs = cs.filter(c => !seen.has(c.key) && seen.add(c.key));
+    $('grid').innerHTML = cs.length ? cs.slice(0, shown).map((c, i) => `<div class="m-card ${c.keep === false ? 'out' : ''}"><a class="m-thumb" href="${esc(c.url)}" target="_blank" rel="noopener">
+      ${c.thumb ? `<img loading="lazy" alt="" src="${DATA}thumbs/${esc(c.id)}.webp" onerror="this.remove()">` : ''}
+      <span class="m-pb">${P[c.platform] || '?'}</span><span class="m-badges">
+      ${c.seen_days === 0 ? '<span class="m-bd new">NEW</span>' : ''}${c.rise >= 5 ? `<span class="m-bd rise">▲ ${Math.round(c.rise)}%/day</span>` : ''}
+      ${c.sent >= 5 ? `<span class="m-bd rise">↗ sent ${c.sent}/1K views</span>` : ''}${c.punch >= 3 ? `<span class="m-bd punch">${c.punch >= 100 ? Math.round(c.punch) : c.punch}× their following</span>` : ''}</span></a>
+      <div class="m-body"><div class="m-author">@${esc(c.author)}${c.kind ? ` <span class="m-sub">· ${esc(c.kind)}</span>` : ''}</div>
+      ${c.what ? `<div class="m-what">${esc(c.what)}</div>` : ''}<div class="m-cap">${esc(c.caption)}</div>
+      <div class="m-meta">${[c.views ? fmt(c.views) + ' views' : '', c.likes ? fmt(c.likes) + ' likes' : '', md(c.posted), c.age != null ? c.age + 'd old' : ''].filter(Boolean).join(' · ')}</div>
+      ${c.format && c.format != 'unread' ? `<div class="m-fmt">format: ${esc(c.format)}</div>` : ''}
+      ${c.why ? `<div class="m-why">${esc(c.why)}</div>` : ''}
+      <div class="m-acts"><a href="${esc(c.url)}" target="_blank" rel="noopener">Open</a>
+      ${c.sheet || c.frames ? `<button data-i="${i}" data-sheet="1">Sheet</button>` : ''}
+      <button data-i="${i}">Make your own</button></div></div></div>`).join('')
+      : `<div class="m-empty">Nothing matches.</div>`;
+    $('more').hidden = cs.length <= shown;
+    $('grid')._list = cs;
   }
 
-  function stat(r) {
-    if (st.t === 'paid') return [r.days ? `Running ${r.days} day${r.days === 1 ? '' : 's'}` : null,
-      `${r.copies.toLocaleString()} cop${r.copies === 1 ? 'y' : 'ies'}`].filter(Boolean).join(' · ');
-    return [PLAT[r.platform] || r.platform, r.views ? big(r.views) + ' views' : null].filter(Boolean).join(' · ');
+  async function drawChain(id) {
+    const box = $('chainbox');
+    if (!CH || CH.feed != id) { box.innerHTML = '<div class="m-empty">Reading the chain…</div>'; CH = await get(`chain/${id}.json`); if (!CH || !CH.stages) { box.innerHTML = '<div class="m-empty">No chain for this feed.</div>'; return; } }
+    const st = CH.stages, o = n => st[n - 1].output;
+    const big = [o(1) ? ['TIKTOK_SEARCHES', 'TIKTOK_HASHTAGS', 'INSTAGRAM_HASHTAGS', 'YOUTUBE_SEARCHES'].reduce((a, k) => a + (o(1)[k] || []).length, 0) + ' searches' : 'built by hand',
+      o(2) ? `${o(2).new} new of ${Object.values(o(2).by_source || {}).reduce((a, x) => a + x.returned, 0) || o(2).observed} returned` : 'not yet',
+      (() => { const k = Object.values(o(3).kinds); const a = k.reduce((x, y) => x + y.kept, 0), d = k.reduce((x, y) => x + y.dropped, 0); return a + d ? `${a} in · ${d} out` : 'not sifted'; })(),
+      `${o(4).length} creators found`, `${o(5).pulls_so_far} pulls so far`];
+    box.innerHTML = `<div class="m-pipe">${st.map((x, i) => `<div class="m-st ${stageOn == x.n ? 'on' : ''}" data-n="${x.n}"><div class="n">Stage ${x.n}</div><div class="nm">${esc(x.name)}</div><div class="d">${esc(x.does)}</div><div class="big">${esc(big[i])}</div><div class="n">${esc(x.model)}</div></div>`).join('')}</div><div class="m-stage" id="stagebox"></div>`;
+    box.querySelectorAll('.m-st').forEach(e => e.onclick = () => { stageOn = +e.dataset.n; drawChain(id); });
+    const x = st[stageOn - 1]; let out = '';
+    const tbl = h => `<div class="tablewrap"><table>${h}</table></div>`;
+    if (x.n == 1) out = x.output ? tbl(Object.entries(x.output).map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(Array.isArray(v) ? v.map(y => typeof y == 'object' ? JSON.stringify(y) : y).join(' · ') : v)}</td></tr>`).join('')) : 'This feed’s sources were seated by hand from the avatar’s receipts — no plan stage ran.';
+    if (x.n == 2) out = x.output ? `<p class="m-sub">Door rules: nothing older than ${x.entry?.max_age_days ?? '—'} days · search finds need ${fmt(x.entry?.hashtag_min_views)} views or ${fmt(x.entry?.hashtag_min_likes)} likes · declared ads never enter</p>
+      ${tbl(`<tr><th>source</th><th>returned</th><th>new in</th><th>ads</th><th>too old</th><th>too small</th></tr>${Object.entries(x.output.by_source || {}).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${v.returned}</td><td class="kp">${v.new}</td><td>${v.ad}</td><td>${v.too_old}</td><td>${v.too_small}</td></tr>`).join('')}`)}${x.output.trouble ? `<p class="dr">${x.output.trouble} source(s) failed on the last pull.</p>` : ''}` : 'Hasn’t pulled yet.';
+    if (x.n == 3) { const rows = l => l.map(r => `<tr><td><a href="${esc(r.url)}" target="_blank" rel="noopener">@${esc(r.author)}</a></td><td>${esc(r.kind)}</td><td>${esc(r.why)}</td></tr>`).join('');
+      out = Object.keys(x.output.kinds).length ? `${tbl(`<tr><th>kind</th><th>kept</th><th>thrown out</th></tr>${Object.entries(x.output.kinds).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="kp">${v.kept || ''}</td><td class="dr">${v.dropped || ''}</td></tr>`).join('')}`)}
+      <div class="m-two"><div><h4 class="kp">Kept — and why</h4>${tbl(rows(x.output.kept))}</div><div><h4 class="dr">Thrown out — and why</h4>${tbl(rows(x.output.dropped))}</div></div>` : 'No sift on this feed — it has no ask to sift against.'; }
+    if (x.n == 4) out = x.output.length ? tbl(x.output.map(d => `<tr><td>${esc(d.platform)}</td><td>@${esc(d.value)}</td><td>${esc(d.why)}</td></tr>`).join('')) : 'Nothing followed yet.';
+    if (x.n == 5) out = 'Stages 2–4 run again each time the feed is pulled.';
+    $('stagebox').innerHTML = `<h3>Stage ${x.n} — ${esc(x.name)}</h3><div class="m-sub">${esc(x.does)}</div>
+      <div class="m-two"><div><h4>What it was sent</h4>${x.prompt_file ? `<p>The prompt <b>${esc(x.prompt_file)}</b> — in full under “The prompts — exactly as sent” at the bottom of this page.</p>` : '<div class="m-sub">No prompt at this stage.</div>'}</div>
+      <div><h4>What came back</h4>${out}</div></div>`;
   }
 
-  function line(r) {
-    if (st.t === 'paid') return r.headline || r.copy || '';
-    return r.what || (r.author ? '@' + r.author : '');
+  // ================================================================ PAID
+  function drawPaid() {
+    $('q').placeholder = 'Search every ad — headlines, copy, advertisers';
+    for (const id of ['lanes', 'shapes']) $(id).hidden = true;
+    $('dropped').hidden = true; $('grid').hidden = false; $('chainbox').hidden = true;
+    if (!ADS) { $('stats').textContent = 'Loading ads…'; $('grid').innerHTML = '<div class="m-empty">Loading ads…</div>'; $('more').hidden = true; return; }
+    const A = {}; S.advertisers.forEach(a => A[a.id] = a);
+    $('stats').textContent = `${S.advertisers.length} advertisers · ${ADS.length.toLocaleString()} ads · ${S.updated}`;
+    // brands: ours, by the competitors each one names; General = named by none
+    const bl = [...new Set(S.advertisers.flatMap(a => a.brands))].sort((x, y) => (x == 'general') - (y == 'general') || x.localeCompare(y));
+    chips($('brands'), [['all', 'All brands'], ...bl.map(b => [b, UP(b)])], brand, v => { brand = v; feed = 'all'; adv = 'all'; });
+    const people = S.feeds.filter(f => f.brand != 'general');
+    const fbr = f => f.brand;
+    const advOf = b => S.advertisers.filter(a => b == 'all' || a.brands.includes(b)).map(a => a.id);
+    if (feed != 'all' && !people.some(f => f.id == feed)) feed = 'all';
+    const pf = people.find(f => f.id == feed);
+    const scope = pf ? fbr(pf) : brand;
+    const inScope = new Set(advOf(scope));
+    const inBrand = people.filter(f => brand == 'all' || fbr(f) == brand);
+    const countFor = f => ADS.filter(r => advOf(fbr(f)).includes(r.adv)).length;
+    $('avatarsel').innerHTML = brand == 'general' ? '<option value="all">No avatars — competitors none of our brands name</option>' : avatarOptions(inBrand, countFor);
+    $('avatarsel').onchange = () => { feed = $('avatarsel').value; adv = 'all'; shown = PAGE; draw(); };
+    if (adv != 'all' && !inScope.has(adv)) adv = 'all';
+    $('advsel').hidden = false;
+    $('advsel').innerHTML = `<option value="all">All advertisers</option>` + S.advertisers.filter(a => inScope.has(a.id)).map(a =>
+      `<option value="${esc(a.id)}" ${adv == a.id ? 'selected' : ''}>${esc(a.name)} (${a.ads})</option>`).join('');
+    $('advsel').onchange = () => { adv = $('advsel').value; shown = PAGE; draw(); };
+    chips($('plats'), [['all', 'All'], ['video', 'Video'], ['image', 'Image']], kind, v => kind = v);
+    $('plats').hidden = false;
+    chips($('wins'), WINS, win, v => win = v);
+    $('sortsel').innerHTML = PSORTS.map(([v, l]) => `<option value="${v}" ${v == sort ? 'selected' : ''}>Sort: ${l}</option>`).join('');
+    $('sortsel').onchange = () => { sort = $('sortsel').value; shown = PAGE; draw(); };
+
+    const names = [...inScope].map(id => A[id].name).join(', ');
+    $('feedhead').innerHTML = pf ? `<div class="m-ask">${esc(pf.title)}${pf.line ? ' — ' + esc(pf.line) : ''}</div>Ads from the competitors ${esc(UP(pf.brand))} names: ${esc(names)}.`
+      : brand != 'all' ? (brand == 'general' ? `Competitors none of our brands name: ${esc(names)}.` : `${esc(UP(brand))} — the competitors it names: ${esc(names)}.`) : '';
+    $('feedhead').innerHTML += ` <a class="m-chip" href="/feeds/examples/${adv != 'all' ? esc(adv) + '/' : ''}">${adv != 'all' ? 'Full breakdown of ' + esc(A[adv].name) + '’s ads' : 'Full breakdowns of one brand’s ads'}</a>`;
+
+    const words = $('q').value.toLowerCase().split(/\s+/).filter(Boolean);
+    let rs = ADS.filter(r => inScope.has(r.adv) && (adv == 'all' || r.adv == adv) && (kind == 'all' || (kind == 'video') == !!r.video)
+      && (win == 'all' || (r.first && days(r.first) <= +win)));
+    if (words.length) rs = rs.filter(r => { const hay = [A[r.adv].name, r.headline, r.copy].join(' ').toLowerCase(); return words.every(w => hay.includes(w)); });
+    const key = {days: r => [r.days || 0, r.copies], new: r => [r.first ? day(r.first).getTime() : 0, r.days || 0], copies: r => [r.copies, r.days || 0]}[sort];
+    rs.sort((a, b) => { const x = key(a), y = key(b); return y[0] - x[0] || y[1] - x[1]; });
+    $('grid').innerHTML = rs.length ? rs.slice(0, shown).map((r, i) => `<div class="m-card"><a class="m-thumb" href="${esc(r.url)}" target="_blank" rel="noopener">
+      ${r.thumb ? `<img loading="lazy" alt="" src="${DATA}thumbs/${esc(r.id)}.webp" onerror="this.remove()">` : ''}
+      <span class="m-pb">${r.video ? 'VIDEO AD' : 'IMAGE AD'}</span><span class="m-badges">
+      ${r.days ? `<span class="m-bd rise">running ${r.days} days</span>` : ''}${r.copies > 1 ? `<span class="m-bd punch">${r.copies.toLocaleString()} copies</span>` : ''}</span></a>
+      <div class="m-body"><div class="m-author">${esc(A[r.adv].name)}</div>
+      ${r.headline ? `<div class="m-what">${esc(r.headline)}</div>` : ''}<div class="m-cap">${esc(r.copy)}</div>
+      <div class="m-meta">${[r.first ? 'started ' + mdy(r.first) : '', r.last ? 'last seen ' + md(r.last) : ''].filter(Boolean).join(' · ')}</div>
+      <div class="m-acts"><a href="${esc(r.url)}" target="_blank" rel="noopener">Open</a><button data-i="${i}">Make your own</button></div></div></div>`).join('')
+      : `<div class="m-empty">Nothing matches.</div>`;
+    $('more').hidden = rs.length <= shown;
+    $('grid')._list = rs;
   }
 
-  function drawFeed() {
-    const list = sorted();
-    const img = r => r.thumb ? `<img src="${DATA}thumbs/${esc(r.id)}.webp" alt="" loading="lazy">` : '<div class="noimg"></div>';
-    $('#feed').innerHTML = list.slice(0, st.shown).map((r, i) =>
-      `<button class="pc" data-i="${i}">${img(r)}<span class="b">` +
-      (st.t === 'paid' ? `<span class="label hue">${esc(r.brand)}</span>` : '') +
-      `<span class="w">${esc(line(r))}</span><span class="s">${esc(stat(r))}</span></span></button>`).join('') ||
-      '<p class="lede">Nothing here yet for this person.</p>';
-    $("#more").style.display = list.length <= st.shown ? "none" : "";
-    $('#feed')._list = list;
+  // ================================================================ the side panel
+  function whoFor(c) {
+    const f = S.feeds.find(x => x.id == (t == 'paid' ? feed : c.feed)) || S.feeds.find(x => x.id == feed);
+    if (f && f.brand != 'general') return `${f.title}${f.line ? ' — ' + f.line : f.whose ? ' — ' + f.whose : ''} (${UP(f.brand)})`;
+    if (c.brand_fit && c.brand_fit != 'general') return `a ${UP(c.brand_fit)} customer`;
+    if (t == 'paid' && brand != 'all' && brand != 'general') return `a ${UP(brand)} customer`;
+    return 'pick the brand and the person before you run it';
   }
-
-  async function load() {
-    drawTabs(); drawWho(); save();
-    rows = await get(`${st.t}/${st.who}.json`);
-    drawFeed();
+  function prompt(c) {
+    if (t == 'paid') return ['Take this ad apart and write a brief from it.', '',
+      `Ad: ${c.url}`, `Brand running it: ${S.advertisers.find(a => a.id == c.adv)?.name || ''}`, c.headline ? `Headline: ${c.headline}` : null,
+      `Who it's for: ${whoFor(c)}`, '',
+      `Use ${c.video ? 'tools/video-teardown' : 'tools/image-teardown'} in the Prizm Labs repo (https://github.com/daemnapps/prizm-labs). ` +
+      "Take the ad apart, then write the brief for that person. Copy the structure, not the words. Don't invent anything."].filter(x => x !== null).join('\n');
+    return ['Take this post apart and write a brief from it.', '',
+      `Post: ${c.url}`, `Who it's for: ${whoFor(c)}`, '',
+      `Use ${c.pic ? 'tools/image-teardown' : 'tools/video-teardown (or tools/image-teardown if it is a picture)'} in the Prizm Labs repo (https://github.com/daemnapps/prizm-labs). ` +
+      "Take the post apart, then write the brief for that person. Copy the structure, not the words. Don't invent anything."].join('\n');
   }
-
-  /* ---- the side panel */
-  function prompt(r) {
-    const p = people[st.who] || {};
-    const who = `${p.label || 'anyone'} — ${p.line || ''}`.trim();
-    if (st.t === 'paid') return [
-      'Take this ad apart and write a brief from it.', '',
-      `Ad: ${r.url}`, `Brand running it: ${r.brand}`, r.headline ? `Headline: ${r.headline}` : null,
-      `Who it's for: ${who}`, '',
-      `Use ${r.video ? 'tools/video-teardown' : 'tools/image-teardown'} in the Prizm Labs repo (https://github.com/daemnapps/prizm-labs). ` +
-      "Take the ad apart, then write the brief for that person. Copy the structure, not the words. Don't invent anything."
-    ].filter(x => x !== null).join('\n');
-    return [
-      'Take this post apart and write a brief from it.', '',
-      `Post: ${r.url}`, `Who it's for: ${who}`, '',
-      `Use ${r.pic ? 'tools/image-teardown' : 'tools/video-teardown (or tools/image-teardown if it is a picture)'} in the Prizm Labs repo (https://github.com/daemnapps/prizm-labs). ` +
-      "Take the post apart, then write the brief for that person. Copy the structure, not the words. Don't invent anything."
-    ].join('\n');
-  }
-
-  function md(src) {
+  function mdown(src) {
     const out = [], L = esc(src).split('\n');
     const inl = s => s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
       .replace(/(^|\s)\*(\S.+?)\*/g, '$1<em>$2</em>').replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
@@ -115,72 +252,102 @@
       const l = L[i];
       if (/^```/.test(l)) { const b = []; while (++i < L.length && !/^```/.test(L[i])) b.push(L[i]); out.push(`<pre>${b.join('\n')}</pre>`); }
       else if (/^#{1,3} /.test(l)) { const n = l.match(/^#+/)[0].length + 1; out.push(`<h${n}>${inl(l.replace(/^#+ /, ''))}</h${n}>`); }
-      else if (/^\|/.test(l)) {
-        const t = []; while (i < L.length && /^\|/.test(L[i])) t.push(L[i++]); i--;
-        out.push('<div class="tablewrap"><table>' + t.filter(x => !/^\|[\s|:-]+\|$/.test(x)).map((x, j) =>
-          '<tr>' + x.replace(/^\||\|$/g, '').split('|').map(c => j ? `<td>${inl(c.trim())}</td>` : `<th>${inl(c.trim())}</th>`).join('') + '</tr>').join('') + '</table></div>');
-      }
-      else if (/^\s*[-*] /.test(l)) { const u = []; while (i < L.length && /^\s*[-*] /.test(L[i])) u.push(`<li>${inl(L[i++].replace(/^\s*[-*] /, ''))}</li>`); i--; out.push(`<ul>${u.join('')}</ul>`); }
+      else if (/^\|/.test(l)) { const tb = []; while (i < L.length && /^\|/.test(L[i])) tb.push(L[i++]); i--;
+        out.push('<div class="tablewrap"><table>' + tb.filter(x => !/^\|[\s|:-]+\|$/.test(x)).map((x, j) =>
+          '<tr>' + x.replace(/^\||\|$/g, '').split('|').map(c => j ? `<td>${inl(c.trim())}</td>` : `<th>${inl(c.trim())}</th>`).join('') + '</tr>').join('') + '</table></div>'); }
+      else if (/^\s*[-*] /.test(l)) { const ul = []; while (i < L.length && /^\s*[-*] /.test(L[i])) ul.push(`<li>${inl(L[i++].replace(/^\s*[-*] /, ''))}</li>`); i--; out.push(`<ul>${ul.join('')}</ul>`); }
       else if (l.trim()) out.push(`<p>${inl(l)}</p>`);
     }
     return out.join('');
   }
+  function openPanel(html) {
+    const s = $('panel');
+    s.innerHTML = `<button class="btn ghost x" id="x">Close</button>` + html;
+    s.hidden = false; $('scrim').hidden = false; s.scrollTop = 0;
+    $('x').onclick = closePanel;
+  }
+  function closePanel() { $('panel').hidden = true; $('scrim').hidden = true; }
 
-  async function open(r) {
-    const s = $('#sheet');
-    const p = prompt(r);
+  async function openCard(c, toSheet) {
+    const p = prompt(c), paid = t == 'paid';
     const claude = 'https://claude.ai/new?q=' + encodeURIComponent(p);
-    const watch = st.t === 'paid'
-      ? `<p><a class="btn ghost" href="${esc(r.url)}" target="_blank" rel="noopener">Watch it in the Meta Ad Library</a></p>`
-      : `<p><a class="btn ghost" href="${esc(r.url)}" target="_blank" rel="noopener">Watch it on ${esc(PLAT[r.platform] || 'the app')}</a></p>`;
-    const head = st.t === 'paid'
-      ? `<p class="label hue">${esc(r.brand)}</p><h3>${esc(r.headline || 'An ad')}</h3><p>${esc(r.copy)}${r.copy && r.copy.length >= 200 ? '…' : ''}</p>`
-      : `<p class="label hue">${r.author ? '@' + esc(r.author) : ''}</p><h3>${esc(r.what || 'A post')}</h3>`;
-    s.innerHTML = `<button class="btn ghost x" id="x">Close</button>
-      <p class="eyebrow">${esc(stat(r))}</p>${head}
-      ${r.thumb ? `<img class="cover" src="${DATA}thumbs/${esc(r.id)}.webp" alt="">` : ''}
-      <h2>1 · Watch it</h2>${watch}
-      ${r.frames ? `<img class="frames" src="${DATA}thumbs/${esc(r.id)}-frames.webp" alt="Six moments from the video, left to right">` : ''}
-      <h2>2 · How it's built</h2><div id="built">${r.sheet ? '<p>Loading…</p>' : "<p>Not taken apart yet. The prompt below does it.</p>"}</div>
+    const where = paid ? 'the Meta Ad Library' : (PLATN[c.platform] || 'the app');
+    const stat = paid ? [c.days ? `Running ${c.days} days` : '', `${c.copies.toLocaleString()} cop${c.copies == 1 ? 'y' : 'ies'}`].filter(Boolean).join(' · ')
+      : [PLATN[c.platform], c.views ? fmt(c.views) + ' views' : '', c.likes ? fmt(c.likes) + ' likes' : ''].filter(Boolean).join(' · ');
+    const head = paid ? `<p class="label hue">${esc(S.advertisers.find(a => a.id == c.adv)?.name)}</p><h3>${esc(c.headline || 'An ad')}</h3><p>${esc(c.copy)}</p>`
+      : `<p class="label hue">@${esc(c.author)}</p><h3>${esc(c.what || 'A post')}</h3><p>${esc(c.caption)}</p>`;
+    openPanel(`<p class="eyebrow">${esc(stat)}</p>${head}
+      ${c.thumb ? `<img class="cover" src="${DATA}thumbs/${esc(c.id)}.webp" alt="">` : ''}
+      <h2>1 · Watch it</h2><p><a class="btn ghost" href="${esc(c.url)}" target="_blank" rel="noopener">Watch it on ${esc(where)}</a></p>
+      ${c.frames ? `<img class="frames" src="${DATA}thumbs/${esc(c.id)}-frames.webp" alt="Six moments from the video, left to right">` : ''}
+      <h2 id="builthead">2 · How it's built</h2><div id="built">${c.sheet ? '<p>Loading…</p>' : c.frames ? '<p>No written sheet for this one yet — the six frames above are the rebuild material. The prompt below takes it apart.</p>' : '<p>Not taken apart yet. The prompt below does it.</p>'}</div>
       <h2>3 · Make your own</h2>
       <div class="btns"><a class="btn" href="${esc(claude)}" target="_blank" rel="noopener">Open in Claude</a>
       <button class="btn ghost" id="copy">Copy the prompt</button></div>
       <ol class="steps">
         <li><div><b>Press a button</b><p>Open in Claude, or Copy the prompt.</p></div></li>
         <li><div><b>Open your tool</b><p>Your Higgsfield Supercomputer, or Claude Code with the Prizm Labs repo.</p></div></li>
-        <li><div><b>Paste and press Enter</b><p>It takes the ${st.t === 'paid' ? 'ad' : 'post'} apart and writes the brief.</p></div></li>
+        <li><div><b>Paste and press Enter</b><p>It takes the ${paid ? 'ad' : 'post'} apart and writes the brief.</p></div></li>
       </ol>
-      <details><summary>See the prompt</summary><pre>${esc(p)}</pre></details>`;
-    s.hidden = false; $('#scrim').hidden = false; s.scrollTop = 0;
-    $('#x').onclick = close;
-    $('#copy').onclick = async () => {
-      try { await navigator.clipboard.writeText(p); $('#copy').textContent = 'Copied — now paste it'; }
-      catch { $('#copy').textContent = 'Press and hold the prompt below to copy'; s.querySelector('details').open = true; }
+      <details><summary>See the prompt</summary><pre>${esc(p)}</pre></details>`);
+    $('copy').onclick = async () => {
+      try { await navigator.clipboard.writeText(p); $('copy').textContent = 'Copied — now paste it'; }
+      catch { $('copy').textContent = 'Press and hold the prompt below to copy'; $('panel').querySelector('details').open = true; }
     };
-    if (r.sheet) {
-      const d = await get(`sheets/${r.id}.json`);
-      $('#built').innerHTML = d && d.text ? `<div class="brief">${md(d.text)}</div>` : '<p>Not taken apart yet. The prompt below does it.</p>';
+    if (toSheet) $('builthead').scrollIntoView();
+    if (c.sheet) {
+      const d = await get(`sheets/${c.id}.json`);
+      $('built').innerHTML = d && d.text ? `<div class="brief">${mdown(d.text)}</div>` : '<p>Not taken apart yet. The prompt below does it.</p>';
+      if (toSheet) $('builthead').scrollIntoView();
     }
   }
-  function close() { $('#sheet').hidden = true; $('#scrim').hidden = true; }
 
-  /* ---- wiring */
-  document.addEventListener('click', e => {
-    const t = e.target.closest('[data-t]'), w = e.target.closest('[data-who]'), so = e.target.closest('[data-sort]'), c = e.target.closest('.pc');
-    if (t) { st.t = t.dataset.t; st.shown = PAGE; load(); }
-    else if (w) { st.who = w.dataset.who; st.shown = PAGE; load(); }
-    else if (so) { st.sort = so.dataset.sort; st.shown = PAGE; drawTabs(); save(); drawFeed(); }
-    else if (c) open($('#feed')._list[+c.dataset.i]);
-  });
-  $('#more').onclick = () => { st.shown += PAGE; drawFeed(); };
-  $('#scrim').onclick = close;
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  function openFormats() {
+    const F = S.formats || [];
+    openPanel(`<p class="eyebrow">${F.length} formats</p><h2>Format library</h2>
+      <p>The structures behind organic posts that work — camera, text, beat order, what carries it. Never the topic. Strongest evidence first.</p>` +
+      F.map(f => `<div class="m-fm"><h3>${esc(f.name)}</h3>
+        <p class="m-meta">${esc(f.status || '')} · ${f.posts < 2 ? `${f.posts} post — seen once, not proven` : `${f.posts} posts behind it`}${f.best ? ` · ${f.best.toLocaleString()} views at best` : ''}${f.text_mechanic ? ' · ' + esc(f.text_mechanic) : ''}</p>
+        <p>${esc(f.mechanic)}</p>${f.why_it_works ? `<p><b>Why it works.</b> ${esc(f.why_it_works)}</p>` : ''}
+        ${(f.beats || []).length ? `<ol>${f.beats.map(b => `<li>${esc(b)}</li>`).join('')}</ol>` : ''}
+        ${f.proof ? `<p class="m-why">${f.proof.url ? `Proved by <a href="${esc(f.proof.url)}" target="_blank" rel="noopener">@${esc(f.proof.author)}</a>` : esc(f.proof.author)}${f.proof.line ? ` — “${esc(f.proof.line)}”` : ''}</p>` : ''}</div>`).join(''));
+  }
+  function openSounds() {
+    const R = S.sounds || [];
+    openPanel(`<p class="eyebrow">${R.length} sounds</p><h2>Trending sounds</h2><p>This week's trending TikTok sounds, recent only. Open one to hear it and see the posts using it.</p>` +
+      (R.length ? `<div class="tablewrap"><table><tr><th>#</th><th>sound</th><th>feel</th><th>length</th></tr>${R.map(r => `<tr><td>${r.rank ?? ''}</td>
+        <td><a href="${esc(r.url)}" target="_blank" rel="noopener"><b>${esc(r.title)}</b></a><br><span class="m-sub">${esc(r.artist || '')}</span>${r.use ? `<br><span class="m-why">${esc(r.use)}</span>` : ''}</td>
+        <td>${esc([r.mood, r.energy && r.energy + ' energy', r.bpm && r.bpm + ' bpm'].filter(Boolean).join(' · '))}</td><td>${r.seconds ? r.seconds + 's' : ''}</td></tr>`).join('')}</table></div>` : '<p>No sounds pulled yet.</p>'));
+  }
 
-  get('index.json').then(ix => {
-    index = ix;
-    ix.people.forEach(p => people[p.slug] = p);
-    if (!people[st.who]) st.who = ix.people[0] && ix.people[0].slug;
-    $('#updated').textContent = ix.updated;
-    load();
+  // ================================================================ wiring
+  const cache = {};
+  function get(path) {
+    if (!cache[path]) cache[path] = fetch(DATA + path).then(r => r.ok ? r.json() : null).catch(() => null);
+    return cache[path];
+  }
+  async function loadAds() { ADS = (await get('ads.json')) || []; draw(); }
+
+  $('grid').addEventListener('click', e => {
+    const b = e.target.closest('button[data-i]');
+    if (b) openCard($('grid')._list[+b.dataset.i], !!b.dataset.sheet);
   });
+  $('more').onclick = () => { shown += PAGE; draw(); };
+  $('scrim').onclick = closePanel;
+  document.addEventListener('keydown', e => { if (e.key == 'Escape') closePanel(); });
+  let qt; $('q').oninput = () => { clearTimeout(qt); qt = setTimeout(() => { shown = PAGE; draw(); }, 120); };
+  $('dropped').onclick = () => { showOut = !showOut; shown = PAGE; draw(); };
+  $('formatsbtn').onclick = openFormats;
+  $('soundsbtn').onclick = openSounds;
+
+  (async () => {
+    S = await get('index.json');
+    if (!S) { $('stats').textContent = 'Could not load the feeds.'; return; }
+    $('prompts').innerHTML = Object.entries(S.prompts || {}).map(([n, tx]) => `<h4>${esc(n)}</h4><pre>${esc(tx)}</pre>`).join('');
+    if (t == 'paid') loadAds();
+    const lists = await Promise.all(S.feeds.map(f => get(`cards/${f.id}.json`)));
+    CARDS = lists.flatMap(l => l || []);
+    CARDS.forEach(c => { c.age = days(c.posted); c.seen_days = days(c.seen); });
+    draw();
+  })();
 })();

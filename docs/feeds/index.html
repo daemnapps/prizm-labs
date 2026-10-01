@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#EFE9E1">
-<meta name="description" content="My Feeds — good posts and ads to copy. Pick one, see why it works, and make your own.">
+<meta name="description" content="My Feeds — what each avatar actually watches, and the ads competitors keep paying for. Search every post, filter by brand and avatar, and take any one apart.">
 <title>My Feeds — PRIZM LABS</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="PRIZM LABS">
 <meta property="og:url" content="https://daemn.co/feeds/">
 <meta property="og:title" content="My Feeds — PRIZM LABS">
-<meta property="og:description" content="Good posts to copy. Pick one. Make your own.">
+<meta property="og:description" content="What each avatar watches, and the ads competitors keep running.">
 <meta property="og:image" content="https://daemn.co/media/share.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,35 +22,59 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/studio.css?v=prizm13">
 <style>
-/* layout only — colour, type, radii and the one shadow come from the system */
-.hero{padding-top:96px}
-.tabs .tab{flex:1 1 200px}
-.tabs .tab.org[aria-selected="true"]{background:var(--violet);border-color:var(--violet)}
-.who{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;margin:var(--s2) 0 var(--s4)}
-.who .label{flex-basis:100%;margin-top:var(--s2)}
-.who button{appearance:none;cursor:pointer;font-family:var(--body);font-size:14px;background:var(--card);color:var(--ink);border:1px solid var(--line-2);border-radius:var(--r4);padding:6px 14px}
-.who button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bone)}
-.wholine{margin:0 0 var(--s4)}
-.bar2{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center;justify-content:space-between;margin-bottom:var(--s4)}
-.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:var(--s4)}
-.pc{all:unset;cursor:pointer;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden}
-.pc:hover,.pc:focus-visible{border-color:var(--hue)}
-.pc img,.pc .noimg{width:100%;aspect-ratio:9/14;object-fit:cover;background:var(--paper);display:block}
-.paid .pc img,.paid .pc .noimg{aspect-ratio:1/1}
-.pc .b{padding:var(--s3);display:flex;flex-direction:column;gap:var(--s2);flex:1}
-.pc .w{font-size:14px;line-height:1.35;margin:0}
-.pc .s{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:auto}
-.more{display:flex;justify-content:center;margin:var(--s6) 0}
-.scrim{position:fixed;inset:0;background:var(--line-2);z-index:200}
-.sheet{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bone);box-shadow:var(--float);z-index:201;overflow-y:auto;padding:var(--s5) var(--gutter) var(--s8)}
-.sheet .x{position:sticky;top:0;float:right}
-.sheet h2{font-size:20px;margin:var(--s6) 0 var(--s3)}
-.sheet .cover{width:160px;border-radius:var(--r2);border:1px solid var(--line)}
-.sheet .frames{width:100%;border-radius:var(--r2);border:1px solid var(--line);margin-top:var(--s3)}
-.sheet .brief{max-height:none}
-.sheet ol.steps{margin-top:var(--s4)}
-.sheet pre{white-space:pre-wrap;font-size:12px;max-height:180px;overflow:auto}
-@media(max-width:640px){.feed{grid-template-columns:repeat(2,1fr);gap:var(--s3)}.sheet{width:100%}.hero{padding-top:72px}}
+/* My Feeds — the board from the desk (port 8820), laid out on the system: layout only */
+.m-head{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;padding:var(--s5) 0 0}
+.m-head h1{font-size:clamp(24px,3vw,32px);margin-right:var(--s2)}
+.m-sub{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em}.m-head .m-sub{margin-left:auto}
+.m-chip,.m-seg button,.m-acts a,.m-acts button{appearance:none;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-decoration:none;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:6px 11px;white-space:nowrap}
+.m-chip:hover,.m-seg button:hover,.m-acts a:hover,.m-acts button:hover{border-color:var(--indigo);color:var(--indigo)}
+.m-chip.on{color:var(--ink);border-color:var(--ink)}
+.m-seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--card);max-width:100%;overflow-x:auto}
+.m-seg button{border:0;border-right:1px solid var(--line);border-radius:var(--r1)}.m-seg button:last-child{border-right:0}
+.m-seg button.on{background:var(--ink);color:var(--bone)}
+.m-lanes{margin-top:var(--s4)}.m-lanes button{font-size:12px;padding:9px 18px;text-transform:uppercase;letter-spacing:.12em}
+.m-lanes button.on{background:var(--indigo)}
+.m-bar{display:flex;gap:var(--s2);padding:var(--s3) 0;flex-wrap:wrap;align-items:center;position:sticky;top:0;background:var(--bone);z-index:5;border-bottom:1px solid var(--line);margin-top:var(--s3)}
+.m-bar2{display:flex;gap:var(--s2);padding:var(--s3) 0 0;flex-wrap:wrap;align-items:center}
+.m-bar select,.m-bar2 select,.m-bar input{font-family:var(--body);font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:7px 10px;max-width:320px}
+.m-bar input{flex:1;min-width:220px;max-width:none}
+.m-spacer{flex:1}#desk [hidden]{display:none!important}
+.m-feedhead{margin:var(--s3) 0 0;font-size:13px;color:var(--ink-2);border:1px solid var(--line);border-radius:var(--r2);padding:var(--s3) var(--s4);background:var(--card)}
+.m-feedhead:empty{display:none}.m-feedhead .m-ask{color:var(--ink);font-size:15px;margin-bottom:var(--s1)}
+.m-src{display:inline-block;border:1px solid var(--line);border-radius:var(--r1);padding:1px 7px;margin:2px 3px 2px 0;font:11px var(--mono)}.m-src.pro{border-style:dashed;color:var(--amber)}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--s3);padding:var(--s4) 0 var(--s5)}
+.m-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.m-card:hover{border-color:var(--line-2)}.m-card.out{opacity:.4}
+.m-thumb{position:relative;overflow:hidden;aspect-ratio:9/13;background:var(--paper);display:block}.paid .m-thumb{aspect-ratio:1/1}
+.m-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.m-pb,.m-bd{font:500 10px var(--mono);letter-spacing:.06em;padding:2px 6px;border-radius:var(--r1);background:var(--ink);color:var(--bone)}
+.m-pb{position:absolute;top:8px;left:8px}
+.m-badges{position:absolute;bottom:8px;left:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap}
+.m-bd.rise{color:var(--green)}.m-bd.punch{color:var(--amber)}.m-bd.new{color:var(--cyan)}
+.m-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.m-author{font-weight:600;font-size:13px;color:var(--ink);overflow-wrap:anywhere}.m-what{font-size:13px;color:var(--ink)}
+.m-cap{font-size:12px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.m-meta{font:11px var(--mono);color:var(--ink-3)}.m-fmt{font:11px var(--mono);color:var(--indigo)}.m-why{font-size:11.5px;color:var(--ink-3)}
+.m-acts{display:flex;gap:6px;margin-top:auto;padding-top:8px;flex-wrap:wrap}.m-acts a,.m-acts button{flex:1;text-align:center;padding:5px 6px}
+.m-empty{padding:var(--s8) 0;color:var(--ink-3);text-align:center;grid-column:1/-1}
+.m-more{display:flex;justify-content:center;margin-bottom:var(--s6)}
+.m-pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:var(--s4) 0 0}
+.m-st{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:12px;cursor:pointer}.m-st:hover{border-color:var(--line-2)}.m-st.on{border-color:var(--ink)}
+.m-st .n{font:11px var(--mono);color:var(--ink-3)}.m-st .nm{font-weight:600;font-size:15px;color:var(--ink)}.m-st .d{font-size:12px;color:var(--ink-2)}.m-st .big{font-size:16px;font-weight:600;margin-top:8px;color:var(--ink)}
+.m-stage{margin:12px 0 var(--s6);background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:var(--s4)}
+.m-two{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}.m-two h4{margin:12px 0 6px;font-size:13px}
+.m-stage table,.m-panel table{font-size:12.5px}.m-stage td,.m-stage th{padding:6px 10px 6px 0}
+.kp{color:var(--green)}.dr{color:var(--coral)}
+.m-drawers{margin-bottom:var(--s6)}.m-drawers pre{max-height:520px;overflow:auto;font-size:12px}
+.m-scrim{position:fixed;inset:0;background:var(--line-2);z-index:200}
+.m-panel{position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);background:var(--bone);box-shadow:var(--float);z-index:201;overflow-y:auto;padding:var(--s5) var(--gutter) var(--s8)}
+.m-panel .x{position:sticky;top:0;float:right}.m-panel h2{font-size:20px;margin:var(--s6) 0 var(--s3)}
+.m-panel .cover{width:160px;border-radius:var(--r2);border:1px solid var(--line)}
+.m-panel .frames{width:100%;border-radius:var(--r2);border:1px solid var(--line);margin-top:var(--s3)}
+.m-panel pre{white-space:pre-wrap;font-size:12px;max-height:220px;overflow:auto}.m-panel .brief{max-height:none}
+.m-panel .m-fm{border-top:1px solid var(--line);padding:var(--s4) 0}.m-panel .m-fm h3{margin-bottom:var(--s2)}.m-panel ol{margin:var(--s2) 0 0 var(--s4)}
+@media(max-width:800px){.m-pipe{grid-template-columns:1fr 1fr}.m-two{grid-template-columns:1fr}}
+@media(max-width:600px){.m-bar{position:static}.m-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.m-bar select,.m-bar2 select{max-width:100%}.m-bar input{min-width:0;flex-basis:100%}.m-head .m-sub{margin-left:0;flex-basis:100%}}
 </style>
 
 <nav class="bar">
@@ -64,37 +88,40 @@
   </span>
 </nav>
 
-<div class="wrap">
-  <div class="hero">
-    <p class="eyebrow">My Feeds · <span id="updated">…</span></p>
-    <h1>My Feeds.</h1>
-    <p class="lede">Good posts to copy. Pick one. Make your own.</p>
+<div class="wrap" id="desk">
+  <header class="m-head"><h1>My Feeds</h1>
+    <button class="m-chip" id="formatsbtn">Format library</button><button class="m-chip" id="soundsbtn">Trending sounds</button>
+    <span class="m-sub" id="stats">Loading…</span></header>
+  <div class="m-seg m-lanes" id="tabs" role="tablist"></div>
+  <div class="m-bar">
+    <span class="m-seg" id="brands"></span>
+    <select id="avatarsel" aria-label="Avatar"></select>
+    <select id="advsel" aria-label="Advertiser" hidden></select>
+    <input type="search" id="q" placeholder="Search every post — captions, creators, hashtags, formats">
   </div>
-
-  <div class="tabs" role="tablist">
-    <button class="tab org" role="tab" data-t="organic" aria-selected="true">Organic<small>Posts people watch for fun</small></button>
-    <button class="tab" role="tab" data-t="paid" aria-selected="false">Paid<small>Ads brands pay for</small></button>
+  <div class="m-bar2">
+    <span class="m-seg" id="lanes"></span>
+    <span class="m-seg" id="shapes"></span>
+    <span class="m-seg" id="plats"></span>
+    <span class="m-seg" id="wins"></span>
+    <span class="m-spacer"></span>
+    <select id="sortsel" aria-label="Sort"></select>
+    <button class="m-chip" id="dropped">Show thrown out</button>
   </div>
-
-  <div class="who" id="who"><span class="label">Who is it for?</span></div>
-  <p class="wholine lede" id="wholine"></p>
-
-  <div class="bar2">
-    <div class="btns" id="sort"></div>
-    <a class="btn ghost" id="examples" href="/feeds/examples/" style="display:none">Full breakdowns of one brand's ads</a>
-  </div>
-
-  <div class="feed" id="feed" aria-live="polite"></div>
-  <div class="more"><button class="btn ghost" id="more">Show more</button></div>
+  <div class="m-feedhead" id="feedhead"></div>
+  <div class="m-grid" id="grid" aria-live="polite"></div>
+  <div class="m-more"><button class="btn ghost" id="more" hidden>Show more</button></div>
+  <div id="chainbox" hidden></div>
+  <div class="m-drawers"><details><summary>The prompts — exactly as sent</summary><div id="prompts"></div></details></div>
 </div>
 
-<div class="scrim" id="scrim" hidden></div>
-<aside class="sheet" id="sheet" hidden aria-label="The post"></aside>
+<div class="m-scrim" id="scrim" hidden></div>
+<aside class="m-panel" id="panel" hidden aria-label="Details"></aside>
 
 <footer class="bot">
   <span>PRIZM LABS</span>
   <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
 </footer>
-<script src="/feeds/feeds.js?v=1" defer></script>
+<script src="/feeds/feeds.js?v=5" defer></script>
 <script src="/studio.js?v=8" defer></script>
 </html>
