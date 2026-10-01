@@ -28,6 +28,7 @@ from the brief's CUT-SHEET.md. See `example-cut.json`:
   {"text": "LINE ONE\nLINE TWO", "with": "s01"},
   {"text": "A LABEL", "start": 8.0, "end": 10.5, "zone": "upper-third"}
  ],
+ "punches": [[12.4, 13.6]],
  "captions": {"look": "bold-highlight"}
 }
 ```
@@ -38,6 +39,8 @@ from the brief's CUT-SHEET.md. See `example-cut.json`:
 - **overlays** are the hook and cards: the exact words and line breaks. `with`
   ties one to a scene (the hook sits on frame one for its whole first scene).
 - **line** (optional) gives the script's words, so captions use its spelling.
+- **punches** (optional) are extra 7% push-ins, in seconds on the rough cut's
+  clock, put in before any type goes on.
 
 ## The commands
 
@@ -48,8 +51,8 @@ from the brief's CUT-SHEET.md. See `example-cut.json`:
 | Cut to the sound | `edit.py cut cut.json --out rough.mp4` | Start/end silence out, breaths kept, pauses cut unless kept, 7% punch-in after each cut pause, every clip levelled to −16 LUFS, scenes in order |
 | Words | `edit.py words rough.mp4 --out words.json --sheet cut.json` | Word timings off the sound, in the script's spelling when lines are given |
 | Captions + cards | `edit.py captions rough.mp4 words.json --out captioned.mp4 --report rough.report.json` | 2–4 words at a time, the spoken word lit; the hook and cards from the sheet. Type is always a layer on top |
-| Punch-ins | `edit.py punch in.mp4 --at 3.2-4.1 --out out.mp4` | Extra 7% push-ins on chosen moments, sound untouched |
-| Frame fixes | `edit.py frame clean in.mp4 out.mp4` (also `seams`, `bridge`, `loopclose`, …) | Runs `../video-edit/frame-control/framectl.py`; needs `pip install numpy opencv-python-headless` |
+| Punch-ins | `edit.py punch in.mp4 --at 3.2-4.1 --out out.mp4` (or `punches` in the sheet) | Extra 7% push-ins on chosen moments, sound untouched |
+| Frame fixes | `edit.py frame clean in.mp4 out.mp4` (also `seams`, `bridge`, `loopclose`, …) | Runs `../video-edit/frame-control/framectl.py`; needs `pip install numpy 'opencv-python-headless<5'` |
 | Safe zone | `edit.py safezone master.mp4 --boxes captioned.boxes.json --sheet-out sheet.png` | 9:16; every word on screen and (with opencv) every face inside the centred 4:5 band; a contact sheet with the band drawn in red |
 | Loudness | `edit.py loudness master.mp4` | Integrated LUFS and true peak |
 | Master | `edit.py master captioned.mp4 --out master.mp4` | −14 LUFS, −1 dBTP; picture copied untouched |

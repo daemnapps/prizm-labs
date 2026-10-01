@@ -538,16 +538,19 @@ def cmd_captions(a) -> int:
 
 
 # ---------------------------------------------------------------- punch
-def cmd_punch(a) -> int:
-    info = probe(Path(a.video))
+def do_punch(video: Path, spans: list[tuple[float, float]], zoom: float, out: Path) -> None:
+    """Push in `zoom` over each span (seconds on the video's own clock); sound untouched."""
+    info = probe(video)
     W, H, dur = info["width"], info["height"], info["duration"]
-    spans = sorted(tuple(float(x) for x in s.split("-")) for s in a.at)
     parts, t = [], 0.0
-    for s, e in spans:
+    for s, e in sorted(spans):
+        s, e = max(s, t), min(e, dur)
+        if e <= s:
+            continue
         if s > t:
             parts.append((t, s, 1.0))
-        parts.append((s, min(e, dur), a.zoom))
-        t = min(e, dur)
+        parts.append((s, e, zoom))
+        t = e
     if t < dur:
         parts.append((t, dur, 1.0))
     oy = S["punch"]["origin_y"]
@@ -556,8 +559,15 @@ def cmd_punch(a) -> int:
         zz = (f",scale={W * z:.0f}:{H * z:.0f}:force_divisible_by=2,crop={W}:{H}:(iw-{W})/2:(ih-{H})*{oy}" if z != 1.0 else "")
         fc.append(f"[i{k}]trim={s:.3f}:{e:.3f},setpts=PTS-STARTPTS{zz},setsar=1[v{k}]")
     fc.append("".join(f"[v{k}]" for k in range(len(parts))) + f"concat=n={len(parts)}:v=1:a=0,format=yuv420p[v]")
-    ff("-i", a.video, "-filter_complex", ";".join(fc), "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "veryfast",
-       "-crf", "17", "-c:a", "copy", "-movflags", "+faststart", a.out)
+    ff("-i", video, "-filter_complex", ";".join(fc), "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "veryfast",
+       "-crf", "17", "-c:a", "copy", "-movflags", "+faststart", out)
+
+
+def cmd_punch(a) -> int:
+    if Path(a.video).resolve() == Path(a.out).resolve():
+        raise SystemExit("--out must be a new file")
+    spans = [tuple(float(x) for x in s.split("-")) for s in a.at]
+    do_punch(Path(a.video), spans, a.zoom, Path(a.out))
     print(f"{len(spans)} punch-in(s) at {a.zoom:.2f}x -> {a.out}")
     return 0
 
@@ -589,6 +599,8 @@ def do_safezone(video: Path, boxes: Path | None = None, sheet_out: Path | None =
         add("every word on screen inside the 4:5 band", not bad, "; ".join(bad[:6]) or "all text boxes inside")
     try:
         import cv2
+        if not hasattr(cv2, "CascadeClassifier"):
+            raise ImportError("this opencv has no face finder")
         cas = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
         cap = cv2.VideoCapture(str(video))
         fps = cap.get(cv2.CAP_PROP_FPS) or 24
@@ -608,7 +620,7 @@ def do_safezone(video: Path, boxes: Path | None = None, sheet_out: Path | None =
             f"{seen} face sightings checked" + (f"; outside at {', '.join(sorted(set(out_of))[:10])}" if out_of else ""))
     except ImportError:
         res["checks"].append({"check": "faces inside the 4:5 band", "pass": None,
-                              "detail": "opencv not installed - look at the contact sheet (pip install opencv-python-headless to automate)"})
+                              "detail": "no opencv face finder here - look at the contact sheet (pip install 'opencv-python-headless<5' to automate)"})
     if sheet_out:
         n = max(1, int(info["duration"] // 2))
         cols = 6
@@ -697,6 +709,12 @@ def cmd_run(a) -> int:
     report = rough.with_suffix(".report.json")
     print(f"    {rep['length']:.2f}s, {len(rep['pieces'])} pieces, {sum(1 for p in rep['pauses'] if p['action'] == 'cut')} pauses cut"
           + (f", CUT OFF: {len(rep['cut_off'])}" if rep["cut_off"] else ""), flush=True)
+    punches = json.loads(Path(a.sheet).read_text()).get("punches") or []
+    if punches:  # extra push-ins, on the rough cut's clock, before any type goes on
+        pr = od / f"{name}--rough-punched.mp4"
+        do_punch(rough, [tuple(map(float, x)) for x in punches], S["punch"]["zoom"], pr)
+        rough = pr
+        print(f"    {len(punches)} extra punch-in(s)", flush=True)
     dressed = rough
     if not a.no_captions:
         print("2/6 words ...", flush=True)

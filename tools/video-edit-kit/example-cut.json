@@ -10,5 +10,6 @@
   {"text": "LINE ONE\nLINE TWO", "with": "s01"},
   {"text": "A LABEL", "start": 8.0, "end": 10.5, "zone": "upper-third"}
  ],
+ "punches": [[12.4, 13.6]],
  "captions": {"look": "bold-highlight"}
 }
