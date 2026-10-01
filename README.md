@@ -136,4 +136,4 @@ Those are hard stops in the prompts, not guidelines.
 | [`SECURITY.md`](SECURITY.md) | What's exposed, what isn't, and the commit guard that keeps keys out. |
 | [`receiver/`](receiver/) | The small workers behind the site's Ask box and forms. |
 
-License: MIT (see [`LICENSE`](LICENSE)).
+License: all rights reserved — use only with permission (see [`LICENSE`](LICENSE)).
