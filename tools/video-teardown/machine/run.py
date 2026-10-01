@@ -1362,7 +1362,7 @@ def run_stage(d, st, stage, extras, redo=False):
         say(f"  {sid:<3} {stage['name']:<11} STOPPED — {str(e)[:140]}")
         ok = False
 
-    # The swipe library is a shelf of SOURCES. A composed run has none, so
+    # The My Feeds library is a shelf of SOURCES. A composed run has none, so
     # there is nothing to file there and nothing has gone wrong.
     # A Variation video run's source is already on the shelf (the proven ad's
     # own teardown); its tree of runs is filed with the tree, not the library.

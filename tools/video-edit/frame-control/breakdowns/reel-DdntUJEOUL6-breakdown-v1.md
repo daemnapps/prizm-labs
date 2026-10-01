@@ -9,7 +9,7 @@
 - File: 18.7 s · 1080×1920 · 60 fps · stereo AAC
 - Pictures: `contact-sheet.jpg` (every 0.5 s), `key-frames.jpg` (0.3 / 1.8 / 5.5 / 7.1 / 8.6 / 10.5 / 13.5 / 16.5 s), `frames-6.5-9.5s.jpg` (8 fps across the paw → hand exchange), `audio-spectrogram.png`
 
-![contact sheet](contact-sheet.jpg)
+*(The pictures stay with the downloaded file — not published here.)*
 
 ## What it is
 

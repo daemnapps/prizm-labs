@@ -1,4 +1,4 @@
-# The organic swipe pack
+# My Feeds — organic
 
 Built 2026-09-22 · 48 formats · 377 real posts, taken apart
 

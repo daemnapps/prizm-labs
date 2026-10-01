@@ -122,7 +122,7 @@
     slot.replaceChildren();
     if (still) { const im = new Image(); im.src = still.getAttribute('poster') || still.dataset.poster; im.alt = ''; im.decoding = 'async'; slot.appendChild(im); }
     else if (cover) slot.appendChild(cover.cloneNode(true));
-    document.title = `${p.title} — Carousel — DÆMN`;
+    document.title = `${p.title} — Carousel — Prizm Labs`;
     scrollTo(0, 0);
     const h = s.querySelector('h2') || s.querySelector('.eyebrow');
     if (h) { h.setAttribute('tabindex', '-1'); h.focus({preventScroll: true}); }

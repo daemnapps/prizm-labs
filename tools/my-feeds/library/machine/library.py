@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The swipe library — one front door to everything that has been swiped,
+"""The My Feeds library — one front door to everything that has been swiped,
 written where the team already looks.
 
     python3 library.py                # writes the Drive index + every feed's FEED.md, and the public page
@@ -7,10 +7,10 @@ written where the team already looks.
 
 What exists, and where it goes:
 
-  ORGANIC FORMATS   the structures pulled out of posts that worked      → public pack (tools/03) — brand-free
+  ORGANIC FORMATS   the structures pulled out of posts that worked      → public pack (tools/my-feeds/organic) — brand-free
   SWIPE VIDEOS      every post torn down, filed under its format        → Drive, one folder per post, video inside
   MY FEEDS          one feed per sub-avatar: what that person watches   → Drive, one FEED.md per feed + the records
-  PAID SWEEPS       every competitor's live ads, blocked by angle       → Drive (media) + public pack (tools/04) — brand-free
+  PAID SWEEPS       every competitor's live ads, blocked by angle       → Drive (media) + public pack (tools/my-feeds/paid) — brand-free
   SAVES             what the owner saved by hand                         → Drive, inside the feeds as its own feed
 
 The index is `SWIPE LIBRARY.md` at the root of the shared drive. The words in
@@ -166,9 +166,9 @@ def index_md(F, V, FE, SW) -> str:
     by_fmt = {}
     for v in torn:
         by_fmt.setdefault(v["format"], []).append(v)
-    L = [f"# SWIPE LIBRARY", "",
+    L = [f"# MY FEEDS — THE LIBRARY", "",
          f"Everything swiped, in one place. Built {now}; rebuilt whenever the library changes. "
-         "Read this in Higgsfield Supercomputer (\"open the swipe library for <brand>\") or by hand.", "",
+         "Read this in Higgsfield Supercomputer (\"open the library for <brand>\") or by hand.", "",
          "| What | How much | Where |",
          "|---|---|---|",
          f"| **Organic formats** — the structures under posts that worked | {len([k for k in by_fmt if not k.startswith('one-off')])} library formats in use of {len(F)} · {len([k for k in by_fmt if k.startswith('one-off')])} one-offs | "
@@ -248,8 +248,8 @@ def public_page(F, V, SW, FE) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#EDE0DC">
-<meta name="description" content="Every structure we have pulled out of posts and ads that worked — the organic formats and the paid angle shapes — in one place, free.">
-<title>The Swipe Library — PRIZM LABS</title>
+<meta name="description" content="Every structure we have pulled out of posts and ads that worked — the organic formats and the paid angle shapes — in one place.">
+<title>The Library — My Feeds — PRIZM LABS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&family=Archivo:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap">
@@ -271,7 +271,7 @@ def public_page(F, V, SW, FE) -> str:
   <a class="mark" href="/">PRIZM LABS</a>
   <span class="sp"></span>
   <a class="link" href="/how-it-works.html">The tools</a>
-  <a class="link" href="/swipe-library.html" aria-current="page">Swipe library</a>
+  <a class="link" href="/swipes/" aria-current="page">Feeds</a>
   <a class="link" href="/onboarding.html">Onboarding</a>
   <a class="link" href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
 </nav>
@@ -279,7 +279,7 @@ def public_page(F, V, SW, FE) -> str:
 <div class="wrap">
   <div class="hero">
     <div>
-      <p class="eyebrow">The swipe library · free</p>
+      <p class="eyebrow">My Feeds · the library</p>
       <h1>What<br>worked.</h1>
       <p class="lede">Every structure we have pulled out of posts and ads that already earned their audience — the organic <b>formats</b> and the paid <b>angle shapes</b>. Pick one, put your brand in, make it.</p>
       <div class="btns">

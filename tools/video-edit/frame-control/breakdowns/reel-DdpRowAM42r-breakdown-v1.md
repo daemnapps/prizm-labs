@@ -9,7 +9,7 @@
 - File: 8.2 s · 720×1280 (the version Instagram served) · 24 fps · stereo AAC
 - Pictures: `contact-sheet.jpg` (every 0.25 s), `key-frames.jpg` (0 / 2.2 / 3.8 / 7.6 s), `frames-3.5-5.5s.jpg` (8 fps; labels count from 3.5 s), `audio-spectrogram.png`
 
-![contact sheet](contact-sheet.jpg)
+*(The pictures stay with the downloaded file — not published here.)*
 
 ## What it is
 

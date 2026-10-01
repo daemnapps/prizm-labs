@@ -1,4 +1,4 @@
-# AI video production
+# Video production
 
 **A brief goes in. Finished clips come out — one command, nobody at a keyboard.**
 

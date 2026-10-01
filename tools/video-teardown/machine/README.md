@@ -181,7 +181,7 @@ refuses to touch anything outside that root. What follows from it:
 
 - Scraping creators' top posts in automatically (Apify) — the machine starts
   from videos already on the machine. Next up: pulling in Instagram
-  influencer videos this way, straight into the swipe library, so the
+  influencer videos this way, straight into the My Feeds library, so the
   teardown/brief chain can run on them (Damon, 2026-08-24).
 - The image lane is separate and already exists at `content-machine/image-lane/`.
 - Programmed editing — turning a finished brief into a cut asset — is the next

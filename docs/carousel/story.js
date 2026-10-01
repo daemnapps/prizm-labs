@@ -1,4 +1,4 @@
-/* story.js — DÆMN's story. The neon ring round the profile picture is the
+/* story.js — the story. The neon ring round the profile picture is the
    "has a story" cue, as on Instagram; tapping it opens the story full screen.
 
    Seven slides, all 9:16: five of the personas (a still each, 5 seconds) and
@@ -37,13 +37,13 @@
     if (box) return;
     box = document.createElement('div');
     box.className = 'gj-story'; box.hidden = true;
-    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'DÆMN’s story');
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'The Prizm Labs story');
     const av = btn.querySelector('img').getAttribute('src');
     box.innerHTML =
       '<div class="gj-story-frame">' +
         '<div class="gj-story-top">' +
           '<div class="gj-story-seg">' + '<i><b></b></i>'.repeat(N) + '</div>' +
-          '<div class="gj-story-who"><span class="gj-story-av"><img alt="" src="' + av + '"></span><b>DÆMN</b><span></span><span class="sp"></span>' +
+          '<div class="gj-story-who"><span class="gj-story-av"><img alt="" src="' + av + '"></span><b>Prizm Labs</b><span></span><span class="sp"></span>' +
             '<button class="gj-nb pill" type="button" hidden>Tap for sound</button>' +
             '<button class="gj-nb round" type="button" aria-label="Close the story">✕</button></div>' +
         '</div>' +

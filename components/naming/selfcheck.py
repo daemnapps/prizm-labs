@@ -133,10 +133,10 @@ check("a swipe reference round-trips",
 check("a swipe reference refuses anything else",
       N.parse_swipe_id("resilia-162098799") is None)
 
-# The swipe library calls a copy block a BLOCK, not an angle: an angle is
+# The My Feeds library calls a copy block a BLOCK, not an angle: an angle is
 # the signed read on a problem and lives on the creative, not on the file.
 block_files = sorted(SWIPE.glob("*/blocks.json")) if SWIPE.is_dir() else []
-check("the swipe library has brands in it", bool(block_files))
+check("the My Feeds library has brands in it", bool(block_files))
 for f in block_files:
     brand = f.parent.name
     doc = json.loads(f.read_text())

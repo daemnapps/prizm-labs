@@ -5,7 +5,7 @@ Same discipline, same reasons: a name is a **key you group by**, not a
 description, and everything it deliberately leaves out lives in a manifest
 that is recovered by joining on the name.
 
-**The precedent is already in the swipe library.** Resilia slugs carry codes
+**The precedent is already in the My Feeds library.** Resilia slugs carry codes
 — `adv1-w40-cc`, `men-6problems-adv-ooo-google`, `brain-fog-25-google` —
 format, audience, channel, variant. Our `by-type` capture parses them into
 Channel / Product / Audience / Variant code on every `_PAGE.md`. They are
