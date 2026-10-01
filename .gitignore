@@ -62,3 +62,6 @@ __pycache__/
 .venv/
 venv/
 node_modules/
+# …and My Feeds' pictures (360px covers + frame strips, written by the team
+# workspace's feedsexport.py; size-checked under 40 MB before they land).
+!docs/feeds/data/thumbs/*.webp
