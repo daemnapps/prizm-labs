@@ -66,7 +66,11 @@ OLD_VIDEO_RUNS = REPO / "components" / "video-teardown" / "records" / "runs"
 VIDEO_TYPES = ("video-ai", "video-creator")
 ALIASES = REPO / "components" / "naming" / "brief-aliases.json"
 
-sys.path.insert(0, str(REPO / "components" / "naming"))
+# APPENDED, never ahead of the lane: naming has its own deliver.py, and put
+# first it shadowed this lane's — `chain.py variations` (and pack, the
+# walkthrough, the designer page) imported naming's and died on
+# `deliver.newest_draft`. Same rule as paths.py's brandpath.
+sys.path.append(str(REPO / "components" / "naming"))
 import names as N                                       # brief_id, brief_code
 
 # Every kind of brief the register issues an id for. One list, one number
