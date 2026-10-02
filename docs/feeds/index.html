@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/studio.css?v=prizm13">
+<link rel="stylesheet" href="/studio.css?v=prizm14">
 <style>
 /* My Feeds — the board from the desk (port 8820), laid out on the system: layout only */
 .m-head{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;padding:var(--s5) 0 0}
@@ -94,7 +94,12 @@
   <div class="m-seg m-lanes" id="tabs" role="tablist"></div>
   <div class="m-bar">
     <span class="m-seg" id="brands"></span>
-    <select id="avatarsel" aria-label="Avatar"></select>
+    <span class="m-pick">
+      <button class="m-chip m-pickbtn" id="avatarbtn" type="button" aria-haspopup="true" aria-expanded="false">
+        <span class="cur">All avatars</span><span class="cnt"></span>
+      </button>
+      <div class="m-menu" id="avatarmenu" role="menu" hidden></div>
+    </span>
     <select id="advsel" aria-label="Advertiser" hidden></select>
     <input type="search" id="q" placeholder="Search every post — captions, creators, hashtags, formats">
   </div>

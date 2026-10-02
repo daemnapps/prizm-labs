@@ -52,16 +52,72 @@
   const fb = f => f.core && f.brand != 'general' ? f.brand : 'general';
   const own = f => !f.core;
 
-  // ---- the avatar picker, grouped brand → core avatar, the desk's way
-  function avatarOptions(inBrand, count) {
-    const cores = {};
+  // ---- the avatar picker
+  // It used to be one <select> holding everything, which buried the shape of
+  // the thing: a real avatar, Damon's own saved scrolls and a shop/clipper
+  // collection all looked alike in one flat list (Damon, 2 Oct: "our menu to
+  // select through our different avatars is clunky"). Now it opens as a panel
+  // that shows the actual tree — core avatar with its subs indented under it —
+  // and keeps saves and collections in their own named columns, because they
+  // are not avatars and never were.
+  const KIND = f => own(f) ? 'saves' : (f.sub ? 'sub' : (f.core && f.core == f.id ? 'core' : 'collection'));
+
+  function pickerGroups(inBrand, count) {
+    const cores = {}, saves = [], coll = [];
     inBrand.forEach(f => {
-      const g = fb(f) == 'general' ? 'General' : (brand == 'all' ? UP(f.brand) + ' · ' : '') + (f.core || '').replace(/-/g, ' ');
-      (cores[g] = cores[g] || []).push(f);
+      const k = KIND(f);
+      if (k == 'saves') return saves.push(f);
+      if (k == 'collection') return coll.push(f);
+      (cores[f.core] = cores[f.core] || []).push(f);
     });
-    return `<option value="all">All avatars${brand == 'all' ? '' : ' in ' + UP(brand)}</option>` +
-      Object.keys(cores).sort().map(g => `<optgroup label="${esc(g)}">${cores[g].sort((x, y) => (x.sub ? 1 : 0) - (y.sub ? 1 : 0)).map(f =>
-        `<option value="${esc(f.id)}" ${feed == f.id ? 'selected' : ''}>${esc(f.sub ? f.title : f.title + (fb(f) == 'general' ? '' : ' — core'))} (${count(f)})</option>`).join('')}</optgroup>`).join('');
+    const label = f => f.title || (f.id || '').replace(/-/g, ' ');
+    const row = (f, cls) => `<button type="button" data-feed="${esc(f.id)}" class="${cls}${feed == f.id ? ' on' : ''}">` +
+      `<span>${esc(label(f))}</span><span class="n">${count(f)}</span></button>`;
+    let out = '';
+    Object.keys(cores).sort().forEach(c => {
+      const list = cores[c], head = list.find(f => KIND(f) == 'core');
+      const subs = list.filter(f => KIND(f) == 'sub').sort((a, b) => label(a).localeCompare(label(b)));
+      const br = head && brand == 'all' && fb(head) != 'general' ? UP(head.brand) + ' · ' : '';
+      out += `<div class="m-mg"><div class="h">${esc(br + c.replace(/-/g, ' '))}</div>` +
+        (head ? row(head, 'core') : '') + subs.map(f => row(f, 'sub')).join('') + '</div>';
+    });
+    if (coll.length) out += `<div class="m-mg"><div class="h">Collections</div>` +
+      coll.sort((a, b) => label(a).localeCompare(label(b))).map(f => row(f, '')).join('') +
+      `<p class="note">Sources, not people.</p></div>`;
+    if (saves.length) out += `<div class="m-mg"><div class="h">Saved by hand</div>` +
+      saves.map(f => row(f, '')).join('') +
+      `<p class="note">Damon's own scrolls. Each post keeps the brand it was saved for.</p></div>`;
+    return `<div class="m-mg"><div class="h">Everything</div>` +
+      `<button type="button" data-feed="all" class="core${feed == 'all' ? ' on' : ''}"><span>All avatars` +
+      `${brand == 'all' ? '' : ' in ' + UP(brand)}</span></button></div>` + out;
+  }
+
+  function mountPicker(inBrand, count, onPick) {
+    const btn = $('avatarbtn'), menu = $('avatarmenu');
+    const cur = inBrand.find(f => f.id == feed);
+    btn.querySelector('.cur').textContent = cur ? (cur.title || cur.id) :
+      'All avatars' + (brand == 'all' ? '' : ' in ' + UP(brand));
+    btn.querySelector('.cnt').textContent = cur ? count(cur) : '';
+    menu.innerHTML = pickerGroups(inBrand, count);
+    const close = () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+    btn.onclick = e => {
+      e.stopPropagation();
+      menu.hidden = !menu.hidden;
+      btn.setAttribute('aria-expanded', String(!menu.hidden));
+    };
+    menu.onclick = e => {
+      const b = e.target.closest('button[data-feed]');
+      if (!b) return;
+      close();
+      onPick(b.dataset.feed);
+    };
+    if (!mountPicker.wired) {           // one listener for the life of the page
+      mountPicker.wired = true;
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.m-pick')) close();
+      });
+      document.addEventListener('keydown', e => { if (e.key == 'Escape') close(); });
+    }
   }
 
   function draw() {
@@ -88,8 +144,7 @@
     const inBrand = S.feeds.filter(f => brand == 'all' || own(f) || fb(f) == brand);
     const count = f => CARDS.filter(c => c.feed == f.id && c.keep !== false && (lane == 'all' || !c.lane || c.lane == lane)).length;
     if (feed != 'all' && !S.feeds.some(f => f.id == feed)) feed = 'all';
-    $('avatarsel').innerHTML = avatarOptions(inBrand, count);
-    $('avatarsel').onchange = () => { feed = $('avatarsel').value; if (feed == 'all') view = 'feed'; shown = PAGE; draw(); };
+    mountPicker(inBrand, count, v => { feed = v; if (feed == 'all') view = 'feed'; shown = PAGE; draw(); });
     $('advsel').hidden = true;
     $('sortsel').innerHTML = SORTS.map(([v, l]) => `<option value="${v}" ${v == sort ? 'selected' : ''}>Sort: ${l}</option>`).join('');
     $('sortsel').onchange = () => { sort = $('sortsel').value; shown = PAGE; draw(); };
@@ -188,8 +243,12 @@
     const inScope = new Set(advOf(scope));
     const inBrand = people.filter(f => brand == 'all' || fbr(f) == brand);
     const countFor = f => ADS.filter(r => advOf(fbr(f)).includes(r.adv)).length;
-    $('avatarsel').innerHTML = brand == 'general' ? '<option value="all">No avatars — competitors none of our brands name</option>' : avatarOptions(inBrand, countFor);
-    $('avatarsel').onchange = () => { feed = $('avatarsel').value; adv = 'all'; shown = PAGE; draw(); };
+    mountPicker(brand == 'general' ? [] : inBrand, countFor,
+                v => { feed = v; adv = 'all'; shown = PAGE; draw(); });
+    if (brand == 'general') {       // competitors none of our brands name
+      $('avatarbtn').querySelector('.cur').textContent = 'No avatars here';
+      $('avatarbtn').querySelector('.cnt').textContent = '';
+    }
     if (adv != 'all' && !inScope.has(adv)) adv = 'all';
     $('advsel').hidden = false;
     $('advsel').innerHTML = `<option value="all">All advertisers</option>` + S.advertisers.filter(a => inScope.has(a.id)).map(a =>

@@ -947,3 +947,30 @@ h1 + .lede{margin-top:var(--s3)}
 .td .qs .qopts{font-size:.76rem;color:var(--muted);line-height:1.4}
 .td h1,.td h2,.td h3,.td h4,.td .metric .v,.td .field-cap b{font-family:var(--display);font-weight:800;letter-spacing:-.03em}
 /* ── end swipe teardowns ── */
+
+/* ── a grouped picker: a button that opens its options as a laid-out panel
+   rather than a flat <select>. Built for My Feeds' avatar tree (a column
+   per core avatar, subs indented), and general enough for any list whose
+   shape matters as much as its items. ── */
+.m-pick{position:relative}
+.m-pickbtn{display:inline-flex;align-items:center;gap:8px;max-width:340px}
+.m-pickbtn .cur{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.m-pickbtn .cnt{font:11px var(--mono);color:var(--ink-3)}
+.m-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;width:min(92vw,720px);max-height:min(70vh,560px);
+  overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--r3);
+  box-shadow:var(--float);padding:var(--s4);display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:var(--s4) var(--s5);align-content:start}
+.m-menu[hidden]{display:none}
+.m-mg{min-width:0}
+.m-mg > .h{font:11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  padding-bottom:5px;margin-bottom:5px;border-bottom:1px solid var(--line)}
+.m-mg button{display:flex;width:100%;gap:8px;align-items:baseline;text-align:left;appearance:none;cursor:pointer;
+  background:none;border:0;border-radius:var(--r1);padding:5px 6px;font-family:var(--body);font-size:13.5px;color:var(--ink-2)}
+.m-mg button:hover{background:var(--paper);color:var(--ink)}
+.m-mg button.on{color:var(--ink);font-weight:600;background:var(--paper)}
+.m-mg button .n{margin-left:auto;font:11px var(--mono);color:var(--ink-3)}
+.m-mg button.core{color:var(--ink)}
+.m-mg button.sub{padding-left:16px}
+.m-mg .note{font-size:11.5px;color:var(--ink-3);padding:2px 6px 6px}
+@media(max-width:600px){.m-menu{width:min(96vw,420px);grid-template-columns:1fr}}
+/* ── end grouped picker ── */
