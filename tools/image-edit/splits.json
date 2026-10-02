@@ -1,0 +1,24 @@
+{
+  "_what": "What is LOAD-BEARING (never changes) and what is SWAPPABLE (may change) for each kind of reference. A caller's own split for one picture outranks its kind's default. Lifted from edit.py's DEFAULT_SPLIT (frames A/B/C) with the run-specific wardrobe line removed; `picture` and `slide` added 2026-09-22 for the image side.",
+  "_curator": "Damon. A new kind is a row here, never a branch in code.",
+  "frame-A": {
+    "keep": ["the presenter's identity and face", "her wardrobe", "the room she is standing in"],
+    "change": ["framing", "where she is looking", "her gesture"]
+  },
+  "frame-B": {
+    "keep": ["the product's exact geometry", "whose hands and whose skin", "what the beat is demonstrating"],
+    "change": ["framing", "light", "room dressing behind"]
+  },
+  "frame-C": {
+    "keep": ["the product's exact geometry and finish", "that its surface carries no rendered lettering"],
+    "change": ["angle", "light", "surface it stands on"]
+  },
+  "picture": {
+    "keep": ["every person and their face", "the layout and where each element sits", "the type, its size and its placement", "the product's exact geometry", "the colours"],
+    "change": ["the one thing named"]
+  },
+  "slide": {
+    "keep": ["the person and their face", "the product's exact geometry", "the palette", "the framing and the camera distance"],
+    "change": ["the words on the picture", "the pose", "the setting"]
+  }
+}

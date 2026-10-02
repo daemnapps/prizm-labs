@@ -1,0 +1,118 @@
+{
+ "_what": "The named spot fixes image-edit handles. Each is ONE delta with slots, the extra keeps it adds to the kind's split, what the caller must supply, which brand file rides along as a reference, and the test the two-picture judge adds. A fix is a delta template, never a description of the picture.",
+ "_curator": "Damon. Status per row: draft / approved / deprecated. A changed fix is a NEW file -v<N+1>-damon.json beside this one; highest wins.",
+ "fixes": [
+  {
+   "id": "logo",
+   "status": "draft",
+   "name": "Wrong logo",
+   "what": "the logo in the picture is the wrong one, or a made-up one — swap it for the brand's real mark, in the same place at the same size",
+   "delta": "replace the logo with the attached brand logo, same position, same size, same orientation",
+   "keep": [
+    "everything around the logo, to the pixel"
+   ],
+   "needs": [],
+   "references": [
+    "logo"
+   ],
+   "checks": [
+    "The logo now matches the attached brand mark exactly — same letterforms, same proportions — and sits where the old one sat."
+   ],
+   "region_hint": "the logo's own box"
+  },
+  {
+   "id": "text",
+   "status": "parked",
+   "name": "Wrong words",
+   "what": "one line of type says the wrong thing, or is garbled. PARKED 2026-09-22: a model cannot be trusted to re-letter type. Four live attempts on one line: twice it redrew the product's own label, once it re-composed the frame, once it painted the masked band black. This agrees with the standing doctrine — type is composited over a clean plate, never generated. The route for wrong words is the COMPOSITOR: change the words in the brief's type layer and recompose (tools/image-production/tools/compose.py), which is exact and free.",
+   "delta": "re-letter the text that reads \"{was}\" so it reads \"{now}\" — same typeface, same size, same colour, same position",
+   "keep": [
+    "every other word in the picture"
+   ],
+   "needs": [
+    "was",
+    "now"
+   ],
+   "references": [],
+   "checks": [
+    "The text now reads exactly \"{now}\", legibly, in the same typeface, size, colour and position as before. No other word in the picture changed."
+   ],
+   "region_hint": "the line of type being re-lettered"
+  },
+  {
+   "id": "product",
+   "status": "draft",
+   "name": "Wrong product",
+   "what": "the product is drawn wrong, or is the wrong one — swap it for the brand's real product from the attached photo, at the same angle and size, in the same hand or spot",
+   "delta": "replace the product with the attached product photo, at the same angle, the same size, in the same position",
+   "keep": [
+    "the hand or surface holding it",
+    "the light on it"
+   ],
+   "needs": [],
+   "references": [
+    "product"
+   ],
+   "checks": [
+    "The product now matches the attached product photo — its shape, colour, cap and label — at the same angle and size, in the same position."
+   ],
+   "region_hint": "the product's own box"
+  },
+  {
+   "id": "layout",
+   "status": "draft",
+   "name": "Move one element",
+   "what": "one element sits in the wrong place — move it, and only it",
+   "delta": "move {element} to {where}",
+   "keep": [
+    "every other element exactly where it is"
+   ],
+   "needs": [
+    "element",
+    "where"
+   ],
+   "references": [],
+   "checks": [
+    "{element} is now {where}, and nothing else in the picture has moved."
+   ],
+   "region_hint": "the element being moved, plus where it lands"
+  },
+  {
+   "id": "background",
+   "status": "draft",
+   "name": "Swap the background",
+   "what": "the subject, the product and the type are right; the background is wrong — swap it, keeping every foreground element exactly where it is",
+   "delta": "replace the background with {background}, keeping every foreground element exactly where it is",
+   "keep": [
+    "the subject, the product and the type, to the pixel"
+   ],
+   "needs": [
+    "background"
+   ],
+   "references": [],
+   "checks": [
+    "The background is now {background}. The subject, product and type are unchanged in shape, position and size."
+   ]
+  },
+  {
+   "id": "remove",
+   "status": "draft",
+   "name": "Remove one thing",
+   "what": "something is in the picture that should not be — a bystander, a watermark, a stray object — remove it and fill the space with what is behind it",
+   "delta": "remove {thing} and fill the space with what is behind it",
+   "keep": [
+    "everything that is not {thing}"
+   ],
+   "needs": [
+    "thing"
+   ],
+   "references": [],
+   "checks": [
+    "{thing} is gone and the space reads as the background continuing. Nothing else changed."
+   ],
+   "region_hint": "the thing being removed"
+  }
+ ],
+ "_region": "A fix may carry `region` — left,top,right,bottom as percentages — and then NOTHING outside that rectangle can differ: the original is put back over it, pixel for pixel. Ruled 2026-09-22 after three live fixes were held because the model redrew the product's own label text every roll. `region_hint` says what the rectangle should cover for that row.",
+ "_parked": "A row marked `parked` is not run. It stays here with what was measured, so nobody rediscovers it. `text` is parked because type belongs to the compositor."
+}
