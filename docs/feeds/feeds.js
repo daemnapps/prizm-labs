@@ -60,42 +60,41 @@
   // that shows the actual tree — core avatar with its subs indented under it —
   // and keeps saves and collections in their own named columns, because they
   // are not avatars and never were.
-  const KIND = f => own(f) ? 'saves' : (f.sub ? 'sub' : (f.core && f.core == f.id ? 'core' : 'collection'));
+  // Everything that belongs to a core avatar sits under that avatar — its subs
+  // and its collections alike (Damon, 2 Oct: "Base, Shop, and Clipper videos
+  // still go underneath the avatar. That's the whole thing."). Only his own
+  // saved scrolls stand apart, because they are not an avatar at all.
+  const isSave = f => own(f);
+  const isCore = f => !own(f) && !f.sub && f.core == f.id;
+  // Menu labels drop the parenthetical gloss — "El Jefe de la Casa (The
+  // Spanish-First Working Man)" wrapped to three lines and made the list ragged.
+  // The full name still shows on the button and in the feed's own header.
+  const short = f => (f.title || (f.id || '').replace(/-/g, ' ')).replace(/\s*\([^)]*\)\s*$/, '');
 
   function pickerGroups(inBrand, count) {
-    const cores = {}, saves = [], coll = [];
-    inBrand.forEach(f => {
-      const k = KIND(f);
-      if (k == 'saves') return saves.push(f);
-      if (k == 'collection') return coll.push(f);
-      (cores[f.core] = cores[f.core] || []).push(f);
-    });
-    const label = f => f.title || (f.id || '').replace(/-/g, ' ');
+    const cores = {}, saves = [];
+    inBrand.forEach(f => isSave(f) ? saves.push(f) : (cores[f.core] = cores[f.core] || []).push(f));
     const row = (f, cls) => `<button type="button" data-feed="${esc(f.id)}" class="${cls}${feed == f.id ? ' on' : ''}">` +
-      `<span>${esc(label(f))}</span><span class="n">${count(f)}</span></button>`;
-    let out = '';
+      `<span class="t">${esc(short(f))}</span><span class="n">${count(f)}</span></button>`;
+    let out = `<div class="m-mg"><button type="button" data-feed="all" class="core${feed == 'all' ? ' on' : ''}">` +
+      `<span class="t">All avatars${brand == 'all' ? '' : ' in ' + UP(brand)}</span></button></div>`;
     Object.keys(cores).sort().forEach(c => {
-      const list = cores[c], head = list.find(f => KIND(f) == 'core');
-      const subs = list.filter(f => KIND(f) == 'sub').sort((a, b) => label(a).localeCompare(label(b)));
-      const br = head && brand == 'all' && fb(head) != 'general' ? UP(head.brand) + ' · ' : '';
-      out += `<div class="m-mg"><div class="h">${esc(br + c.replace(/-/g, ' '))}</div>` +
-        (head ? row(head, 'core') : '') + subs.map(f => row(f, 'sub')).join('') + '</div>';
+      const list = cores[c], head = list.find(isCore);
+      const rest = list.filter(f => f !== head).sort((a, b) => short(a).localeCompare(short(b)));
+      const br = head && brand == 'all' ? `<span class="br">${esc(UP(head.brand))}</span>` : '';
+      out += `<hr><div class="m-mg"><div class="h">${br}<span>${esc(c.replace(/-/g, ' '))}</span></div>` +
+        (head ? row(head, 'core') : '') + rest.map(f => row(f, 'sub')).join('') + '</div>';
     });
-    if (coll.length) out += `<div class="m-mg"><div class="h">Collections</div>` +
-      coll.sort((a, b) => label(a).localeCompare(label(b))).map(f => row(f, '')).join('') +
-      `<p class="note">Sources, not people.</p></div>`;
-    if (saves.length) out += `<div class="m-mg"><div class="h">Saved by hand</div>` +
+    if (saves.length) out += `<hr><div class="m-mg"><div class="h"><span>Saved by hand</span></div>` +
       saves.map(f => row(f, '')).join('') +
-      `<p class="note">Damon's own scrolls. Each post keeps the brand it was saved for.</p></div>`;
-    return `<div class="m-mg"><div class="h">Everything</div>` +
-      `<button type="button" data-feed="all" class="core${feed == 'all' ? ' on' : ''}"><span>All avatars` +
-      `${brand == 'all' ? '' : ' in ' + UP(brand)}</span></button></div>` + out;
+      `<p class="note">Not avatars. Each post keeps the brand it was saved for.</p></div>`;
+    return out;
   }
 
   function mountPicker(inBrand, count, onPick) {
     const btn = $('avatarbtn'), menu = $('avatarmenu');
     const cur = inBrand.find(f => f.id == feed);
-    btn.querySelector('.cur').textContent = cur ? (cur.title || cur.id) :
+    btn.querySelector('.cur').textContent = cur ? short(cur) :
       'All avatars' + (brand == 'all' ? '' : ' in ' + UP(brand));
     btn.querySelector('.cnt').textContent = cur ? count(cur) : '';
     menu.innerHTML = pickerGroups(inBrand, count);
