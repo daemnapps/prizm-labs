@@ -1,6 +1,6 @@
 {
- "updated": "Updated 1 Oct 2026",
- "built": "2026-10-01",
+ "updated": "Updated 2 Oct 2026",
+ "built": "2026-10-02",
  "feeds": [
   {
    "id": "looksmax-meme-scroll",
@@ -6551,8 +6551,7 @@
    "mood": "confident",
    "energy": "high",
    "use": "Flex, confidence, or bold statement content",
-   "why": "ILLIT (k-pop) + 2Pac mashup; trending remix format",
-   "audio": "sounds/snd-7664281509390813953.mp3"
+   "why": "ILLIT (k-pop) + 2Pac mashup; trending remix format"
   },
   {
    "title": "original sound",
@@ -6568,8 +6567,7 @@
    "mood": "unknown",
    "energy": "unknown",
    "use": "Unknown without hearing the sound",
-   "why": "Cannot identify; THEA original, tag from title only",
-   "audio": "sounds/snd-7597610424405592862.mp3"
+   "why": "Cannot identify; THEA original, tag from title only"
   },
   {
    "title": "Dile Que Tu Me Quieres",
@@ -6585,8 +6583,7 @@
    "mood": "romantic",
    "energy": "mid",
    "use": "Love, romance, or intimate relationship moments",
-   "why": "Ozuna reggaeton track; 'tell him you want me' romantic theme",
-   "audio": "sounds/snd-6694708958696835074.mp3"
+   "why": "Ozuna reggaeton track; 'tell him you want me' romantic theme"
   },
   {
    "title": "Your Love Is My Drug (do you wanna have a slumber party in my basement)",
@@ -6602,8 +6599,7 @@
    "mood": "funny",
    "energy": "high",
    "use": "Absurdist humor, creepy-funny twists, unexpected punchlines",
-   "why": "Kesha pop track with surreal/unsettling added line; used as joke",
-   "audio": "sounds/snd-7345902573655574530.mp3"
+   "why": "Kesha pop track with surreal/unsettling added line; used as joke"
   },
   {
    "title": "Venus and Flower",
@@ -6619,8 +6615,7 @@
    "mood": "unknown",
    "energy": "unknown",
    "use": "Unknown without hearing the sound",
-   "why": "Cannot identify Austin Farwell track; unknown artist/song",
-   "audio": "sounds/snd-7603351654578210832.mp3"
+   "why": "Cannot identify Austin Farwell track; unknown artist/song"
   },
   {
    "title": "sonido original",
@@ -6636,8 +6631,7 @@
    "mood": "unknown",
    "energy": "unknown",
    "use": "Unknown without hearing the sound",
-   "why": "Cannot identify; Spanish 'original sound', tag from title only",
-   "audio": "sounds/snd-7492115557381065477.mp3"
+   "why": "Cannot identify; Spanish 'original sound', tag from title only"
   },
   {
    "title": "son original",
@@ -6653,8 +6647,7 @@
    "mood": "unknown",
    "energy": "unknown",
    "use": "Unknown without hearing the sound",
-   "why": "Cannot identify; Spanish 'original sound' by Nea, unknown audio",
-   "audio": "sounds/snd-7688005566899915552.mp3"
+   "why": "Cannot identify; Spanish 'original sound' by Nea, unknown audio"
   },
   {
    "title": "Puppy Princess",
@@ -6670,8 +6663,7 @@
    "mood": "happy",
    "energy": "mid",
    "use": "Cute, playful, or feel-good aesthetic content",
-   "why": "'Puppy Princess' title suggests playful, upbeat vibe",
-   "audio": "sounds/snd-7001203426906392577.mp3"
+   "why": "'Puppy Princess' title suggests playful, upbeat vibe"
   },
   {
    "title": "original sound",
@@ -6687,8 +6679,7 @@
    "mood": "unknown",
    "energy": "unknown",
    "use": "Unknown without hearing the sound",
-   "why": "Cannot identify; creator name suggests money/flex theme, unknown audio",
-   "audio": "sounds/snd-7625800734319840014.mp3"
+   "why": "Cannot identify; creator name suggests money/flex theme, unknown audio"
   },
   {
    "title": "original sound",
@@ -6704,8 +6695,7 @@
    "mood": "sad",
    "energy": "low",
    "use": "Vulnerable, emotional, or mental health-related content",
-   "why": "Creator name 'Mentally scared' suggests dark/emotional audio",
-   "audio": "sounds/snd-7352519992614587179.mp3"
+   "why": "Creator name 'Mentally scared' suggests dark/emotional audio"
   }
  ]
 }
