@@ -181,6 +181,14 @@
     return s ? `<span class="m-sig">${s}</span>` : '';
   }
 
+  // A card with no lane used to pass EVERY lane filter (`!c.lane ||`), so the
+  // 1,095 unclassified posts — all of BASED, all of Clipper Videos, all of his
+  // own saves — showed up under Entertainment and under Educational alike.
+  // Damon, 2 Oct: "all of Based is in Entertainment when clearly that's about
+  // Product and Brand." They answer to "Unsorted" now and nothing else, so what
+  // has been classified and what has not is visible instead of blended.
+  const laneOK = c => lane == 'all' || (lane == 'unsorted' ? !c.lane : c.lane == lane);
+
   function draw() {
     if (!S) return;
     chips($('tabs'), [['organic', 'Organic'], ['paid', 'Paid']], t, v => {
@@ -203,7 +211,7 @@
     // A feed with no avatar of its own (his saves) is never filtered out by a
     // brand chip — each of its cards carries the brand it was saved for.
     const inBrand = S.feeds.filter(f => brand == 'all' || own(f) || fb(f) == brand);
-    const count = f => CARDS.filter(c => c.feed == f.id && c.keep !== false && (lane == 'all' || !c.lane || c.lane == lane)).length;
+    const count = f => CARDS.filter(c => c.feed == f.id && c.keep !== false && laneOK(c)).length;
     if (feed != 'all' && !S.feeds.some(f => f.id == feed)) feed = 'all';
     mountPicker(inBrand, count, v => { feed = v; if (feed == 'all') view = 'feed'; shown = PAGE; draw(); });
     $('advsel').hidden = true;
@@ -211,7 +219,7 @@
     $('sortsel').onchange = () => { sort = $('sortsel').value; shown = PAGE; draw(); };
     for (const id of ['lanes', 'shapes', 'plats']) $(id).hidden = false;
     $('dropped').hidden = false;
-    chips($('lanes'), [['entertainment', 'Entertainment'], ['educational', 'Educational'], ['all', 'Both']], lane, v => lane = v);
+    chips($('lanes'), [['entertainment', 'Entertainment'], ['educational', 'Educational'], ['unsorted', 'Unsorted'], ['all', 'All']], lane, v => lane = v);
     chips($('wins'), WINS, win, v => win = v);
     chips($('plats'), [['all', 'All'], ['tiktok', 'TikTok'], ['instagram', 'Instagram'], ['youtube', 'YouTube']], plat, v => plat = v);
     // his saves carry their own read — ad-shaped or culture. Other feeds have
@@ -233,7 +241,7 @@
     const okFeeds = new Set(inBrand.map(f => f.id));
     const ownFeeds = new Set(S.feeds.filter(own).map(f => f.id));
     let cs = CARDS.filter(c => (feed == 'all' ? okFeeds.has(c.feed) : c.feed == feed) && (plat == 'all' || c.platform == plat)
-      && (showOut || c.keep !== false) && (lane == 'all' || showOut || !c.lane || c.lane == lane) && (win == 'all' || (c.age != null && c.age <= +win))
+      && (showOut || c.keep !== false) && laneOK(c) && (win == 'all' || (c.age != null && c.age <= +win))
       && (shape == 'all' || !c.swipe_lane || c.swipe_lane == shape)
       && (brand == 'all' || !ownFeeds.has(c.feed) || !c.brand_fit || c.brand_fit == brand || (brand == 'general' && c.brand_fit == 'general')));
     if (words.length) cs = cs.filter(c => { const hay = [c.author, c.caption, c.what, c.format, c.why, c.source, (c.tags || []).join(' ')].join(' ').toLowerCase(); return words.every(w => hay.includes(w)); });
