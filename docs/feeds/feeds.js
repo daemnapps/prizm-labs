@@ -91,19 +91,67 @@
     return out;
   }
 
+  // The detail half of the mega menu: who this avatar actually is, what their
+  // scroll looks like, and where we go looking for it. Damon, 2 Oct: "so that
+  // we can actually see what the avatar would look like and each of the
+  // sub-avatars, so it's very clear who we are actually speaking to."
+  function detailHTML(f, count) {
+    if (!f) return '<p class="who">Point at an avatar to see who they are.</p>';
+    const path = [UP(f.brand), (f.core || '').replace(/-/g, ' ')]
+      .filter(Boolean).concat(f.sub && f.sub != f.core ? ['sub-avatar'] : []).join(' · ');
+    const pics = (typeof CARDS != 'undefined' ? CARDS : [])
+      .filter(c => c.feed == f.id && c.thumb && c.keep !== false).slice(0, 5);
+    const srcs = f.source_list || [];
+    const seen = [];
+    srcs.forEach(x => { const v = (x.value || '').trim(); if (v && !seen.some(y => y.v == v)) seen.push({ v, k: x.kind }); });
+    const chips = seen.slice(0, 14).map(x =>
+      `<span class="${x.k == 'hashtag' ? 'tag' : ''}">${x.k == 'hashtag' ? '#' : ''}${esc(x.v)}</span>`).join('');
+    return `<p class="path">${esc(path)}</p><h4>${esc(f.title || f.id)}</h4>` +
+      (f.whose ? `<p class="who">${esc(f.whose)}</p>` : '') +
+      (pics.length ? `<div><p class="lab">What they watch</p><div class="m-strip">` +
+        pics.map(c => `<img loading="lazy" alt="" src="${DATA}thumbs/${esc(c.id)}.webp" onerror="this.style.visibility='hidden'">`).join('') +
+        `</div></div>` : '') +
+      (seen.length ? `<div><p class="lab">Where we look — ${seen.length} source${seen.length == 1 ? '' : 's'}</p>` +
+        `<div class="m-look">${chips}${seen.length > 14 ? `<span class="more">+${seen.length - 14} more</span>` : ''}</div></div>` : '') +
+      `<p class="nums"><span><b>${count(f)}</b> posts kept</span>` +
+      (f.sweeps ? `<span><b>${f.sweeps}</b> sweep${f.sweeps == 1 ? '' : 's'}</span>` : '') +
+      (f.probation ? `<span><b>${f.probation}</b> on trial</span>` : '') + `</p>`;
+  }
+
   function mountPicker(inBrand, count, onPick) {
     const btn = $('avatarbtn'), menu = $('avatarmenu');
     const cur = inBrand.find(f => f.id == feed);
     btn.querySelector('.cur').textContent = cur ? short(cur) :
       'All avatars' + (brand == 'all' ? '' : ' in ' + UP(brand));
     btn.querySelector('.cnt').textContent = cur ? count(cur) : '';
-    menu.innerHTML = pickerGroups(inBrand, count);
+    menu.className = 'm-menu mega';
+    menu.innerHTML = `<div class="m-mtree">${pickerGroups(inBrand, count)}</div>` +
+                     `<div class="m-mdet" id="avatardet"></div>`;
+    const byId = {};
+    inBrand.forEach(f => byId[f.id] = f);
+    const show = f => { $('avatardet').innerHTML = detailHTML(f, count); };
+    show(cur || inBrand.find(f => !f.sub && f.core == f.id) || inBrand[0]);
+    menu.querySelectorAll('button[data-feed]').forEach(b => {
+      const f = byId[b.dataset.feed];
+      b.addEventListener('mouseenter', () => show(f));
+      b.addEventListener('focus', () => show(f));
+    });
     const close = () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+    // The panel is far wider than its button, so opened near the right of the
+    // window it ran off the edge and cut the detail pane in half. Nudge it back
+    // by however much it overhangs, once it is on screen and measurable.
+    const fit = () => {
+      menu.style.transform = '';
+      const over = menu.getBoundingClientRect().right - (innerWidth - 12);
+      if (over > 0) menu.style.transform = `translateX(${-Math.ceil(over)}px)`;
+    };
     btn.onclick = e => {
       e.stopPropagation();
       menu.hidden = !menu.hidden;
       btn.setAttribute('aria-expanded', String(!menu.hidden));
+      if (!menu.hidden) fit();
     };
+    if (!menu.hidden) fit();
     menu.onclick = e => {
       const b = e.target.closest('button[data-feed]');
       if (!b) return;
@@ -112,12 +160,11 @@
     };
     if (!mountPicker.wired) {           // one listener for the life of the page
       mountPicker.wired = true;
-      document.addEventListener('click', e => {
-        if (!e.target.closest('.m-pick')) close();
-      });
+      document.addEventListener('click', e => { if (!e.target.closest('.m-pick')) close(); });
       document.addEventListener('keydown', e => { if (e.key == 'Escape') close(); });
     }
   }
+
 
   function draw() {
     if (!S) return;

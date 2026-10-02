@@ -975,4 +975,23 @@ h1 + .lede{margin-top:var(--s3)}
 .m-mg button.sub{padding-left:calc(var(--s4) + 15px)}
 .m-mg .note{font-size:11.5px;color:var(--ink-3);padding:2px var(--s4) 8px}
 .m-menu hr{border:0;border-top:1px solid var(--line);margin:var(--s2) 0 0}
+.m-menu.mega{width:min(94vw,900px);max-height:min(72vh,580px);padding:0;
+  display:grid;grid-template-columns:252px minmax(0,1fr)}
+.m-mtree{overflow:auto;border-right:1px solid var(--line);padding:var(--s2) 0}
+.m-mdet{padding:var(--s4) var(--s5) var(--s5);overflow:auto;display:flex;flex-direction:column;gap:var(--s3);min-width:0}
+.m-mdet .path{font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.m-mdet h4{margin:0;font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.01em;line-height:1.2}
+.m-mdet .who{font-size:13.5px;color:var(--ink-2);line-height:1.5;margin:0;max-width:60ch}
+.m-mdet .lab{font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.m-mdet .nums{display:flex;flex-wrap:wrap;gap:var(--s4);font:11px var(--mono);color:var(--ink-3)}
+.m-mdet .nums b{color:var(--ink);font-weight:600;font-size:13px}
+.m-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.m-strip img{width:100%;aspect-ratio:9/13;object-fit:cover;border-radius:var(--r1);display:block;background:var(--paper)}
+.m-look{display:flex;flex-wrap:wrap;gap:4px}
+.m-look span{font:10.5px var(--mono);border:1px solid var(--line);border-radius:var(--r1);
+  padding:2px 7px;color:var(--ink-2);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.m-look span.tag{border-style:dashed}
+.m-look span.more{border:0;color:var(--ink-3)}
+@media(max-width:760px){.m-menu.mega{width:min(94vw,380px);grid-template-columns:minmax(0,1fr)}
+  .m-mtree{border-right:0;border-bottom:1px solid var(--line);max-height:44vh}}
 /* ── end grouped picker ── */
