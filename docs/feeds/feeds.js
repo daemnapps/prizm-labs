@@ -166,6 +166,21 @@
   }
 
 
+  // Every card reads the same way: two numbers big enough to actually see,
+  // then one signal, then the quiet dates. Damon, 2 Oct — the counts "need to
+  // be way clearer… right now they're just light", and the cards were ragged
+  // because the performance badges appeared on some and not others, floating
+  // over the picture at whatever count happened to qualify. They sit in one
+  // fixed slot now, so two cards side by side are comparable.
+  const stat = (n, label) => n ? `<b>${fmt(n)}</b><i>${label}</i>` : '';
+  // One signal per card, the strongest it has, always in the same place.
+  function signal(c) {
+    const s = c.punch >= 3 ? `${c.punch >= 100 ? Math.round(c.punch) : c.punch}× their following`
+      : c.rise >= 5 ? `▲ ${Math.round(c.rise)}%/day`
+      : c.sent >= 5 ? `↗ ${c.sent} sent/1K` : '';
+    return s ? `<span class="m-sig">${s}</span>` : '';
+  }
+
   function draw() {
     if (!S) return;
     chips($('tabs'), [['organic', 'Organic'], ['paid', 'Paid']], t, v => {
@@ -229,11 +244,11 @@
     $('grid').innerHTML = cs.length ? cs.slice(0, shown).map((c, i) => `<div class="m-card ${c.keep === false ? 'out' : ''}"><a class="m-thumb" href="${esc(c.url)}" target="_blank" rel="noopener">
       ${c.thumb ? `<img loading="lazy" alt="" src="${DATA}thumbs/${esc(c.id)}.webp" onerror="this.remove()">` : ''}
       <span class="m-pb">${P[c.platform] || '?'}</span><span class="m-badges">
-      ${c.seen_days === 0 ? '<span class="m-bd new">NEW</span>' : ''}${c.rise >= 5 ? `<span class="m-bd rise">▲ ${Math.round(c.rise)}%/day</span>` : ''}
-      ${c.sent >= 5 ? `<span class="m-bd rise">↗ sent ${c.sent}/1K views</span>` : ''}${c.punch >= 3 ? `<span class="m-bd punch">${c.punch >= 100 ? Math.round(c.punch) : c.punch}× their following</span>` : ''}</span></a>
+      ${c.seen_days === 0 ? '<span class="m-bd new">NEW</span>' : ''}</span></a>
       <div class="m-body"><div class="m-author">@${esc(c.author)}${c.kind ? ` <span class="m-sub">· ${esc(c.kind)}</span>` : ''}</div>
       ${c.what ? `<div class="m-what">${esc(c.what)}</div>` : ''}<div class="m-cap">${esc(c.caption)}</div>
-      <div class="m-meta">${[c.views ? fmt(c.views) + ' views' : '', c.likes ? fmt(c.likes) + ' likes' : '', md(c.posted), c.age != null ? c.age + 'd old' : ''].filter(Boolean).join(' · ')}</div>
+      <div class="m-stats">${stat(c.views, 'views')}${stat(c.likes, 'likes')}${signal(c)}</div>
+      <div class="m-meta">${[md(c.posted), c.age != null ? c.age + 'd old' : ''].filter(Boolean).join(' · ')}</div>
       ${c.format && c.format != 'unread' ? `<div class="m-fmt">format: ${esc(c.format)}</div>` : ''}
       ${c.why ? `<div class="m-why">${esc(c.why)}</div>` : ''}
       <div class="m-acts"><a href="${esc(c.url)}" target="_blank" rel="noopener">Open</a>
@@ -319,10 +334,10 @@
     rs.sort((a, b) => { const x = key(a), y = key(b); return y[0] - x[0] || y[1] - x[1]; });
     $('grid').innerHTML = rs.length ? rs.slice(0, shown).map((r, i) => `<div class="m-card"><a class="m-thumb" href="${esc(r.url)}" target="_blank" rel="noopener">
       ${r.thumb ? `<img loading="lazy" alt="" src="${DATA}thumbs/${esc(r.id)}.webp" onerror="this.remove()">` : ''}
-      <span class="m-pb">${r.video ? 'VIDEO AD' : 'IMAGE AD'}</span><span class="m-badges">
-      ${r.days ? `<span class="m-bd rise">running ${r.days} days</span>` : ''}${r.copies > 1 ? `<span class="m-bd punch">${r.copies.toLocaleString()} copies</span>` : ''}</span></a>
+      <span class="m-pb">${r.video ? 'VIDEO AD' : 'IMAGE AD'}</span></a>
       <div class="m-body"><div class="m-author">${esc(A[r.adv].name)}</div>
       ${r.headline ? `<div class="m-what">${esc(r.headline)}</div>` : ''}<div class="m-cap">${esc(r.copy)}</div>
+      <div class="m-stats">${stat(r.days, 'days running')}${stat(r.copies, 'copies')}</div>
       <div class="m-meta">${[r.first ? 'started ' + mdy(r.first) : '', r.last ? 'last seen ' + md(r.last) : ''].filter(Boolean).join(' · ')}</div>
       <div class="m-acts"><a href="${esc(r.url)}" target="_blank" rel="noopener">Open</a><button data-i="${i}">Make your own</button></div></div></div>`).join('')
       : `<div class="m-empty">Nothing matches.</div>`;
