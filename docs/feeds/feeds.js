@@ -181,12 +181,12 @@
     return s ? `<span class="m-sig">${s}</span>` : '';
   }
 
-  // A card with no lane used to pass EVERY lane filter (`!c.lane ||`), so the
-  // 1,095 unclassified posts — all of BASED, all of Clipper Videos, all of his
-  // own saves — showed up under Entertainment and under Educational alike.
-  // Damon, 2 Oct: "all of Based is in Entertainment when clearly that's about
-  // Product and Brand." They answer to "Unsorted" now and nothing else, so what
-  // has been classified and what has not is visible instead of blended.
+  // A card with no lane used to pass EVERY lane filter (`!c.lane ||`), so 1,095
+  // unclassified posts — all of BASED, all of Clipper Videos, all of his own
+  // saves — showed under Entertainment and Educational alike. They all carry a
+  // lane now, and this is the guard that keeps it that way: anything that turns
+  // up without one shows under All and nowhere else, rather than quietly
+  // joining a lane it was never sorted into.
   const laneOK = c => lane == 'all' || (lane == 'unsorted' ? !c.lane : c.lane == lane);
 
   function draw() {
@@ -219,7 +219,7 @@
     $('sortsel').onchange = () => { sort = $('sortsel').value; shown = PAGE; draw(); };
     for (const id of ['lanes', 'shapes', 'plats']) $(id).hidden = false;
     $('dropped').hidden = false;
-    chips($('lanes'), [['entertainment', 'Entertainment'], ['educational', 'Educational'], ['unsorted', 'Unsorted'], ['all', 'All']], lane, v => lane = v);
+    chips($('lanes'), [['entertainment', 'Entertainment'], ['educational', 'Educational'], ['selling', 'Selling'], ['all', 'All']], lane, v => lane = v);
     chips($('wins'), WINS, win, v => win = v);
     chips($('plats'), [['all', 'All'], ['tiktok', 'TikTok'], ['instagram', 'Instagram'], ['youtube', 'YouTube']], plat, v => plat = v);
     // his saves carry their own read — ad-shaped or culture. Other feeds have
