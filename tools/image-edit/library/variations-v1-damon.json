@@ -1,0 +1,70 @@
+{
+  "_what": "The variation library — every variation instruction a designer runs from a BASELINE draft, as a named delta. Stage 4e of image teardown writes its variation list against these ids so the brief and the library say the same words. Each row is one delta off the baseline; the baseline rides along as the reference; every result is judged against the baseline by the two-picture judge.",
+  "_curator": "Damon. Status per row. A changed row is a NEW file -v<N+1>-damon.json beside this one.",
+  "variations": [
+    {
+      "id": "headline", "status": "draft",
+      "name": "Headline swap",
+      "what": "the same picture with a different headline — the words change, nothing else",
+      "delta": "re-letter the headline so it reads \"{headline}\" — same typeface, same size, same colour, same position",
+      "keep": ["every other word", "the picture under the type"],
+      "needs": ["headline"],
+      "checks": ["The headline reads exactly \"{headline}\". Nothing else in the picture changed."]
+    },
+    {
+      "id": "angle", "status": "draft",
+      "name": "Angle swap",
+      "what": "the same layout carrying a different argument — the headline and the proof line change to the new angle's words, the picture stays",
+      "delta": "re-letter the headline to \"{headline}\" and the proof line to \"{proof}\" — same type, same positions",
+      "keep": ["the picture, the people, the product and the layout"],
+      "needs": ["headline", "proof"],
+      "checks": ["The headline reads \"{headline}\" and the proof line reads \"{proof}\". The picture under the type is unchanged."]
+    },
+    {
+      "id": "person", "status": "draft",
+      "name": "Person swap",
+      "what": "the same ad on a different person from the brand's cast — face, hair and build change; pose, framing, wardrobe register and everything else hold",
+      "delta": "replace the person with a different {who} — a new face, hair and build — in the same pose, framing and wardrobe register",
+      "keep": ["the pose and the framing", "the product and where it is held", "the type", "the background"],
+      "needs": ["who"],
+      "checks": ["The person is visibly a different individual — face, hair, build — in the same pose and framing. Product, type and background are unchanged."]
+    },
+    {
+      "id": "product", "status": "draft",
+      "name": "Product swap",
+      "what": "the same ad selling a different product from the brand — the product and its name in the type change, nothing else",
+      "delta": "replace the product with the attached product photo at the same angle and size, and re-letter its name in the type to \"{product_name}\"",
+      "keep": ["the person, the pose, the layout, the background"],
+      "needs": ["product_name"],
+      "references": ["product"],
+      "checks": ["The product matches the attached photo and its name in the type reads \"{product_name}\". Person, pose, layout and background are unchanged."]
+    },
+    {
+      "id": "colour", "status": "draft",
+      "name": "Colour swap",
+      "what": "the same ad in a different accent colour from the brand's palette — every accent surface changes to the named colour, nothing else",
+      "delta": "change every accent surface from {from_colour} to {to_colour}",
+      "keep": ["the layout, the type, the people, the product"],
+      "needs": ["from_colour", "to_colour"],
+      "checks": ["Every surface that was {from_colour} is now {to_colour}. Nothing else changed."]
+    },
+    {
+      "id": "background", "status": "draft",
+      "name": "Background swap",
+      "what": "the same foreground on a different setting",
+      "delta": "replace the background with {background}, keeping every foreground element exactly where it is",
+      "keep": ["the subject, the product and the type, to the pixel"],
+      "needs": ["background"],
+      "checks": ["The background is now {background}. Subject, product and type are unchanged."]
+    },
+    {
+      "id": "reframe", "status": "draft",
+      "name": "Reframe to another placement",
+      "what": "the same ad re-composed for a different frame — 9:16 to 4:5, 4:5 to 1:1 — the elements move only as far as the new frame forces, the safe zone is respected",
+      "delta": "recompose for a {aspect} frame: keep every element, move each only as far as the new frame forces, nothing inside the safe zone",
+      "keep": ["every element and its relative order", "the type sizes"],
+      "needs": ["aspect"],
+      "checks": ["Every element from the reference is present, in the same relative order, sized the same. Nothing is cropped or cut off."]
+    }
+  ]
+}
