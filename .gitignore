@@ -51,6 +51,13 @@ output/
 !docs/carousel/m/*.mp4
 !docs/carousel/m/*.mp3
 !docs/carousel/m/*.png
+# the Animal Life page (2026-10-04): Harambe video fallback, poster, looks, line sheets, animal clips
+!docs/animal-life/*.mp4
+!docs/animal-life/*.jpg
+!docs/animal-life/looks/*.jpg
+!docs/animal-life/line/*.jpg
+!docs/animal-life/animals/*.mp4
+!docs/animal-life/animals/*.jpg
 # the site's own icons
 !docs/*.png
 !docs/media/*.png
