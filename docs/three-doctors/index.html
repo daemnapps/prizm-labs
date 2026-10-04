@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#EFE9E1">
 <meta name="description" content="One AI-made video ad, start to finish: a winning swipe torn down, rebuilt for our brand, cast, shot, edited, covered, written and handed to Meta by one machine. Six versions, one command.">
-<title>Three doctors — PRIZM LABS</title>
+<title>The ad factory — PRIZM LABS</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -18,42 +18,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/studio.css?v=prizm16">
+<link rel="stylesheet" href="/studio.css?v=prizm17">
 <style>
-/* page layout only — everything else is /studio.css */
-.hhero{display:grid;grid-template-columns:1.15fr .85fr;gap:var(--s7);align-items:center;padding-block:clamp(var(--s6),8vh,var(--s9)) var(--s5)}
-.hhero h1{font-size:clamp(40px,6.4vw,84px)}
-.phone{width:min(300px,100%);justify-self:center;aspect-ratio:9/16;border-radius:var(--r3);border:1px solid var(--line);overflow:hidden;background:var(--ink)}
-.phone video,.phone img{width:100%;height:100%;object-fit:cover;display:block}
-.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--s3);margin-top:var(--s6)}
-.flow .card{display:grid;gap:var(--s2);align-content:start}
-.flow .card img{width:100%;aspect-ratio:4/5;object-position:50% 30%;object-fit:cover;border-radius:var(--r1);border:1px solid var(--line)}
-.flow .io{display:grid;grid-template-columns:auto 1fr;gap:var(--s1) var(--s3);font-size:13.5px;color:var(--ink-2);margin-top:var(--s2);padding-top:var(--s3);border-top:1px solid var(--line)}
-.flow .io b{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:3px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:var(--s7);align-items:start;margin-top:var(--s6)}
-.two > *{min-width:0}
-.line{list-style:none;padding:0;margin:var(--s6) 0 0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--s2)}
-.line li{display:grid;gap:var(--s1);align-content:start;padding:var(--s3);border:1px solid var(--line);border-top:3px solid var(--hue);border-radius:var(--r2);background:var(--card);min-width:0}
-.line li b{font-size:15px}.line li span{font-size:13px;color:var(--ink-2)}
-.covers{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s2);margin-top:var(--s4)}
-.covers img,.pair img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r1);border:1px solid var(--line);display:block}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
-.pair figure,.vids figure{margin:0;display:grid;gap:var(--s1)}
-.pair figcaption,.vids figcaption{font-size:13px;color:var(--ink-2)}
-.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:var(--s3);margin-top:var(--s6)}
+/* page layout only — the factory itself is .fx in /studio.css */
+.fhero{display:grid;gap:var(--s3);padding-block:clamp(var(--s6),7vh,var(--s8)) var(--s5);max-width:760px}
+.fhero h1{font-size:clamp(44px,7vw,92px)}
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--s3);margin-top:var(--s5)}
+.vids figure{margin:0;display:grid;gap:var(--s1)}
+.vids figcaption{font-size:13px;color:var(--ink-2)}
 .vids video{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r2);background:var(--ink);display:block}
-.mtree{display:grid;gap:var(--s2);margin-top:var(--s5)}
-.mtree .lvl{border-left:3px solid var(--hue);padding:var(--s2) 0 var(--s2) var(--s4);display:grid;gap:2px}
-.mtree .lvl:nth-child(2){margin-left:var(--s5)}.mtree .lvl:nth-child(3){margin-left:calc(var(--s5)*2)}.mtree .lvl:nth-child(4){margin-left:calc(var(--s5)*3)}
-.mtree .lvl span{font-size:14px;color:var(--ink-2)}
-.words ol{padding-left:var(--s5);display:grid;gap:var(--s2)}
-.words blockquote{margin:0;padding:var(--s4);background:var(--paper);border-radius:var(--r2);white-space:pre-line;font-size:14px;color:var(--ink-2)}
-.note{font-size:14px;color:var(--ink-2);margin-top:var(--s3);max-width:var(--measure)}
+.note{font-size:13.5px;color:var(--ink-2);margin-top:var(--s3);max-width:var(--measure)}
 .close{display:grid;gap:var(--s4);justify-items:center;text-align:center;padding-block:var(--s7) var(--s8)}
-@media (max-width:1200px){ .line{grid-template-columns:repeat(4,minmax(0,1fr))} }
-@media (max-width:980px){ .covers{grid-template-columns:repeat(3,minmax(0,1fr))} }
-@media (max-width:860px){ .hhero,.two{grid-template-columns:1fr} .phone{max-width:240px} }
-@media (max-width:520px){ .line{grid-template-columns:1fr 1fr} .mtree .lvl:nth-child(n){margin-left:0} }
 </style>
 
 <nav class="bar">
@@ -67,214 +42,31 @@
 </nav>
 
 <div class="wrap">
-  <div class="hhero">
-    <div>
-      <p class="eyebrow">Made by the machine · 4 Oct 2026</p>
-      <h1 class="rise">One ad. Swipe to Meta.</h1>
-      <p class="lede">A creator ad that was already winning went in. Six finished versions came out — cast, shot, voiced, edited, covered, written and packed for Meta — by one line that runs on its own and stops only to ask.</p>
-      <p class="note"><b>Everyone in this ad is AI-made.</b> Kerri and her doctors are dramatised characters, not real customers or real doctors. The ad says so too.</p>
-      <div class="btns">
-        <a class="btn" href="#line">The line</a>
-        <a class="btn ghost" href="#openings">Watch the six openings</a>
-      </div>
-    </div>
-    <div class="phone"><video src="m/turn.mp4" poster="m/turn.jpg" controls playsinline preload="none"></video></div>
+  <div class="fhero">
+    <p class="eyebrow">Made by the machine · 4 Oct 2026</p>
+    <h1 class="rise">The ad factory.</h1>
+    <p class="lede">One winning ad goes in. Six finished ads come out. Press run.</p>
   </div>
 
-  <div class="stats">
-    <div class="stat"><span class="v num">22</span><span class="k">pictures made</span></div>
-    <div class="stat"><span class="v num">29</span><span class="k">talking clips</span></div>
-    <div class="stat"><span class="v num">40</span><span class="k">lines spoken</span></div>
-    <div class="stat"><span class="v num">6</span><span class="k">versions</span></div>
-    <div class="stat"><span class="v num">1</span><span class="k">command to edit all six</span></div>
-  </div>
-
-  <section class="sec" id="line" style="padding-top:var(--s5)">
-    <p class="eyebrow">01 · The line</p>
-    <h2 class="rise">Eight stations. One ad moving through them.</h2>
-    <p class="lede">Each station takes one thing in and hands one thing on. Nothing about this ad lives in the machine. Its choices sit in its own files, so the next brand, product or person goes through the same line.</p>
-
-    <div class="flow">
-      <div class="card hued" style="--hue:var(--violet)">
-        <p class="label hue">01 · Swipe</p>
-        <h3>Start from a winner</h3>
-        <p>A creator's video already holding attention in the feed: a woman asks three experts the same question and gets three different answers.</p>
-        <div class="io"><b>In</b><span>The open feed.</span><b>Out</b><span>One swipe, filed by format.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--violet)">
-        <p class="label hue">02 · Teardown</p>
-        <h3>Keep the shape</h3>
-        <p>Stripped to structure: three visits, three answers, the turn on the third, the close. The brand that made it is taken out; the shape stays locked.</p>
-        <div class="io"><b>In</b><span>The swipe.</span><b>Out</b><span>Its construct: any brand can fill it.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--magenta)">
-        <p class="label hue">03 · Brief</p>
-        <h3>Put our product in</h3>
-        <p>Brown spots. Doctor one bleaches. Doctor two lasers. Doctor three hands her a turmeric face scrub. Every line comes from the customer's own words, nothing invented.</p>
-        <div class="io"><b>In</b><span>The construct and the brand folder.</span><b>Out</b><span>Brief 0286: 40 lines, 22 scenes.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--cyan)">
-        <p class="label hue">04 · Pictures</p>
-        <img src="m/p-s1-f1.jpg" alt="Kerri outside the clinic, filming herself" loading="lazy">
-        <p>One locked picture per scene, made from real references. The product is checked against its measured shape in every frame.</p>
-        <div class="io"><b>Out</b><span>22 approved pictures.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--cyan)">
-        <p class="label hue">05 · Clips + voices</p>
-        <img src="m/p-s8-f1.jpg" alt="Kerri talking to camera, doctor two behind her" loading="lazy">
-        <p>Every clip starts from its approved picture, so faces never drift. Each person keeps one voice through the whole ad.</p>
-        <div class="io"><b>Out</b><span>29 talking clips, one voice each.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--cyan)">
-        <p class="label hue">06 · Edit</p>
-        <img src="m/turn.jpg" alt="The edit: Kerri and doctor three, captions on screen" loading="lazy">
-        <p>Programmed, not hand-cut. One command plans, cuts, checks and renders all six versions. Every check that fails stops the line.</p>
-        <div class="io"><b>Out</b><span>Six 9:16 masters, 2:22 each.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--magenta)">
-        <p class="label hue">07 · Covers + words</p>
-        <img src="m/cover-g01-h2.jpg" alt="The cover: Tried everything. Then doctor three." loading="lazy">
-        <p>A cover for every version in the creator's own card style, plus the post text, written from our best ad on the account.</p>
-        <div class="io"><b>Out</b><span>6 covers, 3 texts, 2 headlines.</span></div>
-      </div>
-      <div class="card hued" style="--hue:var(--amber)">
-        <p class="label hue">08 · Hand-off</p>
-        <h3>Packed for Meta</h3>
-        <p>Everything lands in one checked folder: videos, covers, words, the landing page. It waits there for one Approve click. After that it builds itself.</p>
-        <div class="io"><b>In</b><span>All of the above.</span><b>Out</b><span>One ad, six versions, built paused in Meta.</span></div>
-      </div>
-    </div>
-
-    <div class="rule" style="margin-top:var(--s6)">The line stops in one place, every time: nothing goes to Meta until the owner clicks Approve. Everything before that runs on its own.</div>
-  </section>
-
-  <div class="beam"></div>
-
-  <section class="sec" id="cast">
-    <p class="eyebrow">02 · Cast and pictures</p>
-    <h2 class="rise">Four people, made once, held in every frame.</h2>
-    <p class="lede">Kerri, 64, and her three doctors. Each one is built from real reference photos, then locked, so the face in the last scene is the face in the first.</p>
-    <div class="strip" style="margin-top:var(--s5)">
-      <img src="m/cast-doctors.jpg" alt="The three doctors, thumbs up" loading="lazy">
-      <img src="m/p-s1-f1.jpg" alt="Kerri outside the clinic" loading="lazy">
-      <img src="m/p-s6-f1.jpg" alt="Doctor one points to a spot on her forehead" loading="lazy">
-      <img src="m/p-s8-f1.jpg" alt="Kerri with doctor two" loading="lazy">
-      <img src="m/p-s16-f1.jpg" alt="Doctor two marks the spots with a swab" loading="lazy">
-      <img src="m/p-s2-f1.jpg" alt="Kerri in the chair, a hand on her forehead" loading="lazy">
-      <img src="m/p-s21-f1.jpg" alt="Doctor three's hands on her temples" loading="lazy">
-      <img src="m/p-s26-f1.jpg" alt="Doctor three holds up the scrub" loading="lazy">
-      <img src="m/p-s34-f1.jpg" alt="Doctor three points to her cheekbone" loading="lazy">
-      <img src="m/p-s40-f1.jpg" alt="Kerri films a selfie with the scrub" loading="lazy">
-      <img src="m/p-s41-f1.jpg" alt="The scrub in her hand" loading="lazy">
-      <img src="m/p-s42-f1.jpg" alt="Kerri with the scrub, close" loading="lazy">
-    </div>
-    <p class="note">22 pictures in all, one per scene. Scroll the strip →</p>
-  </section>
-
-  <div class="beam"></div>
-
-  <section class="sec" id="edit">
-    <p class="eyebrow">03 · The edit</p>
-    <h2 class="rise">One command. Every check can stop it.</h2>
-    <p class="lede">The editing is written into the system, not done by hand. The same seven steps run for every ad, and a step that finds a problem stops the line instead of passing it on.</p>
-    <ol class="line">
-      <li style="--hue:var(--cyan)"><b>Plan</b><span>Every line at its real length, the swipe's cuts and push-ins, close-ups on whatever's being talked about.</span></li>
-      <li style="--hue:var(--coral)"><b>Mouths</b><span>Ten times a second: her mouth moves only when it's her voice. If it doesn't, the line stops.</span></li>
-      <li style="--hue:var(--coral)"><b>Render</b><span>Every word is heard back against the script. A missing or cut-off word stops it.</span></li>
-      <li style="--hue:var(--coral)"><b>Scan</b><span>Black frames, dead air, loudness, 9:16. Any miss stops it.</span></li>
-      <li style="--hue:var(--magenta)"><b>Covers</b><span>Reads each picture and puts the words where they cover nothing.</span></li>
-      <li style="--hue:var(--green)"><b>Deliver</b><span>Named to the standard, one file per version.</span></li>
-      <li style="--hue:var(--amber)"><b>File</b><span>Into the folder Meta's uploader reads. Waits for Approve.</span></li>
-    </ol>
-    <div class="stats" style="padding-block:var(--s6) 0">
-      <div class="stat"><span class="v num">0</span><span class="k">cut-off words</span></div>
-      <div class="stat"><span class="v num">0</span><span class="k">wrong mouths moving</span></div>
-      <div class="stat"><span class="v num">≤1</span><span class="k">frame, lips to voice</span></div>
-      <div class="stat"><span class="v num">0</span><span class="k">black frames or dead air</span></div>
-    </div>
-  </section>
-
-  <div class="beam"></div>
-
-  <section class="sec" id="covers">
-    <p class="eyebrow">04 · Covers</p>
-    <h2 class="rise">The machine reads the picture before it writes on it.</h2>
-    <p class="lede">The look is the creator's own: a hot-pink card with blue letters and a white outline. It's ugly on purpose, because it's what stopped people. Placement is read from each frame. It finds faces, lips and hands, and the card goes where it covers none of them.</p>
-    <div class="two">
-      <div class="pair">
-        <figure><img src="m/scene-read.jpg" alt="The frame as the machine reads it: face, lips and hands boxed" loading="lazy"><figcaption>What it sees: face, lips, both hands.</figcaption></figure>
-        <figure><img src="m/cover-g01-h5.jpg" alt="The finished cover: What doctor three handed me" loading="lazy"><figcaption>Where the words go: below the hand, the tube clear.</figcaption></figure>
-      </div>
-      <div>
-        <p>Each of the six versions gets its own line, written by the copy tool from the ad's own story:</p>
-        <div class="covers">
-          <img src="m/cover-control.jpg" alt="3 doctors. 3 answers." loading="lazy">
-          <img src="m/cover-g01-h2.jpg" alt="Tried everything. Then doctor three." loading="lazy">
-          <img src="m/cover-g01-h3.jpg" alt="They keep coming back." loading="lazy">
-          <img src="m/cover-g01-h4.jpg" alt="Bleach it? Laser it?" loading="lazy">
-          <img src="m/cover-g01-h5.jpg" alt="What doctor three handed me" loading="lazy">
-          <img src="m/cover-g01-h6.jpg" alt="Burned. Peeled. Still spotted." loading="lazy">
-        </div>
-        <p class="note">It runs on the Mac's own vision, local and free. If a frame has no clear spot, the line stops and asks for another frame.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="beam"></div>
-
-  <section class="sec" id="words">
-    <p class="eyebrow">05 · The words</p>
-    <h2 class="rise">Copy from what already sold.</h2>
-    <p class="lede">The copy tool starts from the post text of our best-performing ad on the account. It keeps that ad's structure and fills it with this video's details. A check refuses anything the site doesn't say.</p>
-    <div class="two words">
-      <blockquote>Two doctors said bleach or laser for the dark spots on her face. The third handed her a Thai turmeric scrub.
-
-Our family recipe of turmeric, moringa, ginger and chamomile. 60 seconds, once or twice a week. Turmeric helps limit excess pigment, so the same spots don't keep appearing.</blockquote>
-      <div>
-        <p class="label">Headlines</p>
-        <ol><li>The third option wasn't bleach</li><li>A scrub, not a laser</li></ol>
-        <p class="note">Three post texts, two headlines and two descriptions. Meta mixes them with the six videos and learns which combination holds people.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="beam"></div>
-
-  <section class="sec" id="meta">
-    <p class="eyebrow">06 · The hand-off</p>
-    <h2 class="rise">One click, and it builds itself.</h2>
-    <p class="lede">The finished ad waits on one page with nine checks beside it. One Approve and it builds the rest through Meta's own connection, all paused. Nothing spends until the campaign is switched on.</p>
-    <div class="mtree">
-      <div class="lvl" style="--hue:var(--amber)"><p class="label">You</p><b>Approve</b><span>The only step a person takes.</span></div>
-      <div class="lvl" style="--hue:var(--indigo)"><p class="label">Campaign</p><b>Found or made</b><span>Used as it is if it already exists, otherwise made — paused.</span></div>
-      <div class="lvl" style="--hue:var(--indigo)"><p class="label">Ad set</p><b>Named by who it's for and the angle</b><span>Broad US audience, optimised for purchases — paused.</span></div>
-      <div class="lvl" style="--hue:var(--green)"><p class="label">Ad</p><b>One flexible ad</b><span>6 videos, each with its own cover · 3 texts · 2 headlines · the landing page. Meta shows each person the mix that holds them.</span></div>
-    </div>
-  </section>
-
-  <div class="beam"></div>
+  <div class="fx" id="factory"></div>
+  <p class="note">Every red stop on the line really happened on this ad. Each one is now a rule, so the next ad can't hit it. Everyone in the ad is AI-made: Kerri and her doctors are dramatised characters, not real customers or real doctors.</p>
 
   <section class="sec" id="openings">
-    <p class="eyebrow">07 · The six openings</p>
-    <h2 class="rise">Same story. Six ways in.</h2>
-    <p class="lede">The first seconds decide whether anyone stays. Each version opens differently, with the same body after. These are the first twelve seconds of each, sound on.</p>
+    <p class="eyebrow">What came out</p>
+    <h2 class="rise">Six ways in. Tap one.</h2>
     <div class="vids">
-      <figure><video src="m/open-control.mp4" poster="m/cover-control.jpg" controls playsinline preload="none"></video><figcaption><b>1 · The main cut</b></figcaption></figure>
-      <figure><video src="m/open-g01-h2.mp4" poster="m/cover-g01-h2.jpg" controls playsinline preload="none"></video><figcaption><b>2 · The sentence she's already said</b></figcaption></figure>
-      <figure><video src="m/open-g01-h3.mp4" poster="m/cover-g01-h3.jpg" controls playsinline preload="none"></video><figcaption><b>3 · It came back in the same place</b></figcaption></figure>
-      <figure><video src="m/open-g01-h4.mp4" poster="m/cover-g01-h4.jpg" controls playsinline preload="none"></video><figcaption><b>4 · The one she keeps checking</b></figcaption></figure>
-      <figure><video src="m/open-g01-h5.mp4" poster="m/cover-g01-h5.jpg" controls playsinline preload="none"></video><figcaption><b>5 · The word she uses when nothing works</b></figcaption></figure>
-      <figure><video src="m/open-g01-h6.mp4" poster="m/cover-g01-h6.jpg" controls playsinline preload="none"></video><figcaption><b>6 · The bill for the sun</b></figcaption></figure>
+      <figure><video src="m/open-control.mp4" poster="m/cover-control.jpg" controls playsinline preload="none"></video><figcaption><b>1</b> · The main cut</figcaption></figure>
+      <figure><video src="m/open-g01-h2.mp4" poster="m/cover-g01-h2.jpg" controls playsinline preload="none"></video><figcaption><b>2</b> · Already said it</figcaption></figure>
+      <figure><video src="m/open-g01-h3.mp4" poster="m/cover-g01-h3.jpg" controls playsinline preload="none"></video><figcaption><b>3</b> · Came back</figcaption></figure>
+      <figure><video src="m/open-g01-h4.mp4" poster="m/cover-g01-h4.jpg" controls playsinline preload="none"></video><figcaption><b>4</b> · Keeps checking</figcaption></figure>
+      <figure><video src="m/open-g01-h5.mp4" poster="m/cover-g01-h5.jpg" controls playsinline preload="none"></video><figcaption><b>5</b> · Nothing works</figcaption></figure>
+      <figure><video src="m/open-g01-h6.mp4" poster="m/cover-g01-h6.jpg" controls playsinline preload="none"></video><figcaption><b>6</b> · The sun bill</figcaption></figure>
     </div>
   </section>
 
-  <hr class="prism">
-
   <div class="close">
-    <p class="eyebrow">What changes now</p>
-    <h2 class="rise">The next ad goes through the same line.</h2>
-    <p class="lede">Every fix this ad needed is now a rule or a check in the machine. Any brand, product, person or swipe gets it automatically.</p>
-    <div class="btns"><a class="btn" href="/how-it-works.html">How the whole machine works</a></div>
+    <h2 class="rise">Next ad, same line.</h2>
+    <div class="btns"><a class="btn" href="#factory">Run it again</a><a class="btn ghost" href="/how-it-works.html">How the machine works</a></div>
   </div>
 </div>
 
@@ -283,4 +75,5 @@ Our family recipe of turmeric, moringa, ginger and chamomile. 60 seconds, once o
   <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="/light.html">Light</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
 </footer>
 <script src="/studio.js?v=8" defer></script>
+<script src="factory.js?v=1" defer></script>
 </html>
