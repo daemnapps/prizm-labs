@@ -995,3 +995,68 @@ h1 + .lede{margin-top:var(--s3)}
 @media(max-width:760px){.m-menu.mega{width:min(94vw,380px);grid-template-columns:minmax(0,1fr)}
   .m-mtree{border-right:0;border-bottom:1px solid var(--line);max-height:44vh}}
 /* ── end grouped picker ── */
+
+/* ── factory: a run shown as a conveyor of stations (game-style) ─────────
+   .fx is the floor; .fx-st a station with a light; .fx-crate the piece riding
+   the belt; .fx-mon the monitor that shows what the current station made.
+   States on a station: is-run · is-stop · is-wait · is-done. */
+.fx{background:var(--ink);color:var(--bone);border-radius:var(--r3);padding:var(--s4);display:grid;gap:var(--s4);overflow:hidden;
+  box-shadow:var(--shadow)}
+.fx-hud{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:var(--s2)}
+.fx-hud div{border:1px solid color-mix(in srgb,var(--bone) 14%,transparent);border-radius:var(--r2);padding:var(--s2) var(--s3);display:grid;gap:2px}
+.fx b,.fx strong{color:var(--bone)}
+.fx-hud b{font-family:var(--display);font-weight:800;font-size:clamp(22px,3vw,34px);line-height:1;font-variant-numeric:tabular-nums}
+.fx-hud span,.fx-k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--bone) 62%,transparent)}
+.fx-belt{overflow-x:auto;scroll-behavior:smooth;padding-bottom:var(--s2)}
+.fx-track{position:relative;display:flex;gap:var(--s2);padding:var(--s5) var(--s2) var(--s4);width:max-content}
+.fx-track::after{content:"";position:absolute;left:0;right:0;bottom:var(--s2);height:8px;border-radius:var(--r1);
+  background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--bone) 22%,transparent) 0 14px,transparent 14px 28px)}
+.fx.is-on .fx-track::after{animation:fx-belt .6s linear infinite}
+@keyframes fx-belt{to{background-position:28px 0}}
+.fx-st{position:relative;width:112px;flex:none;display:grid;justify-items:center;gap:6px;text-align:center;cursor:pointer;
+  padding:var(--s3) var(--s2);border-radius:var(--r2);border:1px solid color-mix(in srgb,var(--bone) 14%,transparent);
+  background:color-mix(in srgb,var(--bone) 4%,transparent);color:inherit;font:inherit;transition:transform .25s,border-color .25s,background .25s}
+.fx-st b{font-size:12.5px;line-height:1.2}
+.fx-st .ib{width:44px;height:44px;padding:10px;color:var(--hue);background:color-mix(in srgb,var(--hue) 20%,transparent);border-color:color-mix(in srgb,var(--hue) 40%,transparent)}
+.fx-st:hover{transform:translateY(-3px)}
+.fx-st.is-run{border-color:var(--hue);background:color-mix(in srgb,var(--hue) 16%,transparent);transform:translateY(-6px)}
+.fx-st.is-stop{border-color:var(--coral);background:color-mix(in srgb,var(--coral) 18%,transparent);animation:fx-shake .4s 2}
+.fx-st.is-wait{border-color:var(--amber);animation:fx-pulse 1s infinite}
+.fx-st.is-pick{outline:2px solid var(--bone);outline-offset:2px}
+@keyframes fx-shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes fx-pulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--amber) 30%,transparent)}}
+.fx-led{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--bone) 25%,transparent)}
+.is-run .fx-led{background:var(--hue);box-shadow:0 0 8px var(--hue)}
+.is-stop .fx-led,.fx-led.stop{background:var(--coral);box-shadow:0 0 8px var(--coral)}
+.is-wait .fx-led{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.is-done .fx-led,.fx-led.ok{background:var(--green);box-shadow:0 0 8px var(--green)}
+.fx-crate{position:absolute;top:0;width:34px;height:26px;margin-left:39px;border-radius:var(--r1);background:var(--amber);
+  display:grid;place-items:center;font-family:var(--mono);font-size:9px;font-weight:500;color:var(--ink);transition:left .7s cubic-bezier(.6,0,.3,1)}
+.fx-mon{display:grid;grid-template-columns:minmax(150px,230px) minmax(0,1fr);gap:var(--s4);align-items:start;
+  border-top:1px solid color-mix(in srgb,var(--bone) 14%,transparent);padding-top:var(--s4)}
+.fx-scr{aspect-ratio:9/16;border-radius:var(--r2);overflow:hidden;background:color-mix(in srgb,var(--bone) 6%,transparent);display:grid;place-items:center;position:relative}
+.fx-scr > img,.fx-scr > video{width:100%;height:100%;object-fit:cover;display:block;animation:fx-pop .35s}
+.fx-scr .fx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;width:100%;height:100%;align-content:start;padding:3px}
+.fx-grid img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:2px;animation:fx-pop .3s both}
+@keyframes fx-pop{from{opacity:0;transform:scale(.92)}}
+.fx-out{display:grid;gap:var(--s3);min-width:0}
+.fx-out h3{font-size:clamp(22px,3vw,32px);margin:0;color:var(--bone)}
+.fx-big{font-family:var(--display);font-weight:800;font-size:clamp(40px,7vw,72px);line-height:.9;color:var(--hue);font-variant-numeric:tabular-nums}
+.fx-chips{display:flex;flex-wrap:wrap;gap:6px}
+.fx-chips span{font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:var(--r1);border:1px solid color-mix(in srgb,var(--hue) 50%,transparent);
+  background:color-mix(in srgb,var(--hue) 14%,transparent);animation:fx-pop .3s both}
+.fx-chips span.miss{border-style:dashed;border-color:var(--coral);color:var(--coral);text-decoration:line-through}
+.fx-ev{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fx-ev li{display:flex;gap:var(--s2);align-items:center;font-size:14px;animation:fx-pop .3s both}
+.fx-ev li.stop{color:var(--coral)}
+.fx-ctl{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+.fx-ctl button{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;border-radius:var(--r4);cursor:pointer;
+  border:1px solid color-mix(in srgb,var(--bone) 30%,transparent);background:transparent;color:var(--bone)}
+.fx-ctl button.go{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.fx-ctl button.approve{background:var(--amber);border-color:var(--amber);color:var(--ink);font-size:14px;padding:14px 26px;animation:fx-pulse 1s infinite}
+.fx-meta{display:grid;gap:6px}
+.fx-meta div{border-left:3px solid var(--hue);padding:6px 10px;background:color-mix(in srgb,var(--hue) 12%,transparent);border-radius:0 var(--r1) var(--r1) 0;animation:fx-pop .4s both}
+@media(max-width:620px){.fx{padding:var(--s3);gap:var(--s3)}.fx-mon{grid-template-columns:110px minmax(0,1fr);gap:var(--s3)}
+  .fx-hud{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.fx-hud div{padding:6px}.fx-hud b{font-size:18px}.fx-hud span{font-size:7.5px;letter-spacing:.06em}
+  .fx-st{width:92px}.fx-ev li{font-size:13px}.fx-big{font-size:40px}}
+/* ── end factory ── */
