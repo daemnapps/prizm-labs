@@ -6,9 +6,9 @@
   const NAMES = ['Kerri', 'Doctor 1', 'Doctor 2', 'Doctor 3'];
   const POST = 'Two doctors said bleach or laser for the dark spots on her face. The third handed her a Thai turmeric scrub. Our family recipe of turmeric, moringa, ginger and chamomile. 60 seconds, once or twice a week.';
   const S = [
-    { n: 'Swipe', i: 'search', h: 'violet', big: [1, 'winner pulled'], scr: { vid: 'swipe.mp4', poster: 'swipe.jpg', sound: true },
+    { n: 'Swipe', i: 'search', h: 'violet', big: [1, 'organic post pulled'], scr: { vid: 'swipe.mp4', poster: 'swipe.jpg', sound: true },
       chips: ['3 experts', '3 answers', 'the turn on #3'],
-      ev: [['ok', 'Found in the feed, already working'], ['ok', 'Filed by its format']] },
+      ev: [['ok', 'An organic post, not an ad'], ['ok', 'Already holding people in the feed'], ['ok', 'Filed by its format']] },
     { n: 'Teardown', i: 'scissors', h: 'violet', big: [5, 'beats kept'], scr: { grid: ['sw-1', 'sw-2', 'sw-3', 'sw-4', 'sw-5', 'sw-6', 'sw-7', 'sw-8', 'sw-9'] },
       chips: ['visit 1', 'visit 2', 'visit 3', 'the turn', 'the close'],
       ev: [['ok', 'Their brand stripped out'], ['ok', 'The shape locked']] },

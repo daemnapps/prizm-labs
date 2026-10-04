@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#EFE9E1">
-<meta name="description" content="One AI-made video ad, start to finish: a winning swipe torn down, rebuilt for our brand, cast, shot, edited, covered, written and handed to Meta by one machine. Six versions, one command.">
+<meta name="description" content="An organic video goes in, six AI-made ads come out: torn down, rebuilt for our brand, cast, shot, voiced, edited, covered, written and handed to Meta by one machine.">
 <title>The ad factory — PRIZM LABS</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="PRIZM LABS">
 <meta property="og:url" content="https://daemn.co/three-doctors/">
 <meta property="og:title" content="Three doctors — one ad, swipe to Meta">
-<meta property="og:description" content="A winning ad's structure in, six finished AI-made versions out, ready for Meta. The whole run on one page.">
+<meta property="og:description" content="An organic post in. Six finished ads out, ready for Meta. The whole run, playable.">
 <meta property="og:image" content="https://daemn.co/three-doctors/m/cover-control.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +23,12 @@
 /* page layout only — the factory itself is .fx in /studio.css */
 .fhero{display:grid;gap:var(--s3);padding-block:clamp(var(--s6),7vh,var(--s8)) var(--s5);max-width:760px}
 .fhero h1{font-size:clamp(44px,7vw,92px)}
+.duel{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:var(--s4);align-items:center;max-width:760px;margin:0 auto var(--s7)}
+.duel figure{margin:0;display:grid;gap:var(--s2);justify-items:start}
+.duel video{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:var(--r3);background:var(--ink);display:block}
+.duel figcaption{font-size:13px;color:var(--ink-2)}
+.duel .arrow{font-family:var(--display);font-size:clamp(28px,5vw,56px);color:var(--ink-3)}
+@media (max-width:520px){.duel{gap:var(--s2)}.duel .arrow{font-size:20px}}
 .vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--s3);margin-top:var(--s5)}
 .vids figure{margin:0;display:grid;gap:var(--s1)}
 .vids figcaption{font-size:13px;color:var(--ink-2)}
@@ -45,7 +51,13 @@
   <div class="fhero">
     <p class="eyebrow">Made by the machine · 4 Oct 2026</p>
     <h1 class="rise">The ad factory.</h1>
-    <p class="lede">One winning ad goes in. Six finished ads come out. Press run.</p>
+    <p class="lede">An organic video goes in. Six finished ads come out. Press run.</p>
+  </div>
+
+  <div class="duel">
+    <figure><span class="pill" style="--hue:var(--violet)">In · organic post · 1:20</span><video data-hls="organic/index.m3u8" poster="m/organic-poster.jpg" controls playsinline preload="none"></video><figcaption>A creator's own post. Not an ad.</figcaption></figure>
+    <span class="arrow" aria-hidden="true">→</span>
+    <figure><span class="pill" style="--hue:var(--green)">Out · our ad · 2:22</span><video data-hls="full/index.m3u8" poster="m/full-poster.jpg" controls playsinline preload="none"></video><figcaption>Same shape, our product. Made by the machine.</figcaption></figure>
   </div>
 
   <div class="fx" id="factory"></div>
@@ -75,5 +87,14 @@
   <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="/light.html">Light</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
 </footer>
 <script src="/studio.js?v=8" defer></script>
-<script src="factory.js?v=2" defer></script>
+<script src="factory.js?v=3" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js" defer></script>
+<script>
+/* the two full videos stream in small pieces (the site holds no file over 2 MB) */
+addEventListener('DOMContentLoaded', () => document.querySelectorAll('video[data-hls]').forEach(v => {
+  const src = v.dataset.hls;
+  if (v.canPlayType('application/vnd.apple.mpegurl')) { v.src = src; return; }
+  if (window.Hls && Hls.isSupported()) { const h = new Hls(); h.loadSource(src); h.attachMedia(v); }
+}));
+</script>
 </html>
