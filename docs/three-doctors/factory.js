@@ -2,14 +2,17 @@
    Every stop shown here happened on this ad, and each one is now a rule the line enforces. */
 (() => {
   const M = 'm/';
+  const VS = ['control', 'g01-h2', 'g01-h3', 'g01-h4', 'g01-h5', 'g01-h6'];
+  const NAMES = ['Kerri', 'Doctor 1', 'Doctor 2', 'Doctor 3'];
+  const POST = 'Two doctors said bleach or laser for the dark spots on her face. The third handed her a Thai turmeric scrub. Our family recipe of turmeric, moringa, ginger and chamomile. 60 seconds, once or twice a week.';
   const S = [
-    { n: 'Swipe', i: 'search', h: 'violet', big: [1, 'winner pulled'], scr: { icon: 'search' },
+    { n: 'Swipe', i: 'search', h: 'violet', big: [1, 'winner pulled'], scr: { vid: 'swipe.mp4', poster: 'swipe.jpg', sound: true },
       chips: ['3 experts', '3 answers', 'the turn on #3'],
       ev: [['ok', 'Found in the feed, already working'], ['ok', 'Filed by its format']] },
-    { n: 'Teardown', i: 'scissors', h: 'violet', big: [5, 'beats kept'], scr: { icon: 'scissors' },
+    { n: 'Teardown', i: 'scissors', h: 'violet', big: [5, 'beats kept'], scr: { grid: ['sw-1', 'sw-2', 'sw-3', 'sw-4', 'sw-5', 'sw-6', 'sw-7', 'sw-8', 'sw-9'] },
       chips: ['visit 1', 'visit 2', 'visit 3', 'the turn', 'the close'],
       ev: [['ok', 'Their brand stripped out'], ['ok', 'The shape locked']] },
-    { n: 'Brief', i: 'pen', h: 'magenta', big: [40, 'lines written'], scr: { icon: 'pen' },
+    { n: 'Brief', i: 'pen', h: 'magenta', big: [40, 'lines written'], scr: { pairs: [['sw-1', 'p-s1-f1'], ['sw-5', 'p-s8-f1'], ['sw-7', 'p-s21-f1']] },
       chips: ['brief 0286', '22 scenes', 'Kerri, 64', 'brown spots'],
       ev: [['ok', 'Our product goes in'], ['ok', 'Every line from real customer words']] },
     { n: 'Cast', i: 'user', h: 'cyan', big: [4, 'people made'], scr: { img: 'cast-doctors.jpg' }, hud: { people: 4 },
@@ -19,7 +22,7 @@
       ev: [['ok', 'One locked picture per scene'], ['ok', 'Product checked against its real shape']] },
     { n: 'Clips', i: 'video', h: 'cyan', big: [29, 'talking clips'], scr: { vid: 'turn.mp4' }, hud: { clips: 29 },
       ev: [['ok', 'Each clip starts from its picture'], ['ok', 'No copies of copies, so faces hold']] },
-    { n: 'Voices', i: 'chat', h: 'cyan', big: [4, 'voices'], scr: { icon: 'chat' },
+    { n: 'Voices', i: 'chat', h: 'cyan', big: [4, 'voices'], scr: { faces: ['kerri', 'doc1', 'doc2', 'doc3'] },
       chips: ['Kerri', 'Doctor 1', 'Doctor 2', 'Doctor 3'],
       ev: [['ok', 'One cloned voice per person'], ['ok', 'Mm-hmms on their own track']] },
     { n: 'Edit', i: 'film', h: 'cyan', big: [6, 'versions cut'], scr: { img: 'turn.jpg' }, hud: { versions: 6 },
@@ -31,10 +34,10 @@
     { n: 'Covers', i: 'sparkles', h: 'magenta', big: [6, 'covers'], scr: { img: 'scene-read.jpg' },
       ev: [['ok', 'Reads faces, lips, hands'], ['stop', 'The words land on her face'],
            ['fix', 'Moved to the clear spot', 'cover-g01-h5.jpg'], ['ok', 'One cover per version']] },
-    { n: 'Words', i: 'clipboard', h: 'magenta', big: [3, 'post texts'], scr: { icon: 'clipboard' },
+    { n: 'Words', i: 'clipboard', h: 'magenta', big: [3, 'post texts'], scr: { post: true },
       chips: ['The third option wasn’t bleach', 'A scrub, not a laser'],
       ev: [['ok', 'Built on our best ad’s copy'], ['stop', 'A price the site doesn’t show'], ['fix', 'Taken out'], ['ok', '2 headlines, 2 descriptions']] },
-    { n: 'Pack', i: 'folder', h: 'amber', big: [10, 'checks green'], scr: { icon: 'folder' },
+    { n: 'Pack', i: 'folder', h: 'amber', big: [10, 'checks green'], scr: { files: VS },
       chips: ['6 videos', '6 covers', 'words', 'landing page', '9:16'],
       ev: [['ok', 'Named to the standard'], ['ok', 'Filed in one folder'], ['ok', 'Waiting for your click']] },
     { n: 'Approve', i: 'check', h: 'amber', wait: true, big: [1, 'click'], scr: { img: 'cover-control.jpg' },
@@ -42,7 +45,7 @@
     { n: 'Meta', i: 'send', h: 'indigo', big: [1, 'flexible ad'], scr: { meta: true },
       ev: [['ok', 'Campaign found or made'], ['ok', 'Ad set made'], ['ok', '6 videos + 6 covers in one ad'], ['ok', 'All paused, nothing spends yet']] },
     { n: 'Live', i: 'loop', h: 'green', big: [6, 'openings tested'],
-      scr: { grid: ['cover-control', 'cover-g01-h2', 'cover-g01-h3', 'cover-g01-h4', 'cover-g01-h5', 'cover-g01-h6'] },
+      scr: { wall: VS },
       ev: [['ok', 'Meta shows each person the opening that holds them'], ['ok', 'Numbers read back'], ['ok', 'The winner feeds the next swipe']] },
   ];
 
@@ -79,9 +82,14 @@
   function screen(s) {
     const c = s.scr || {};
     if (c.img) scr.innerHTML = `<img src="${M}${c.img}" alt="">`;
-    else if (c.vid) scr.innerHTML = `<video src="${M}${c.vid}" muted autoplay loop playsinline></video>`;
-    else if (c.grid) scr.innerHTML = `<div class="fx-grid" style="grid-template-columns:repeat(${c.grid.length <= 6 ? 3 : 4},1fr)">${c.grid.map((g, k) => `<img src="${M}${g}.jpg" alt="" style="animation-delay:${k * 60}ms">`).join('')}</div>`;
-    else if (c.meta) scr.innerHTML = `<div class="fx-meta" style="width:88%"></div>`;
+    else if (c.vid) scr.innerHTML = `<video src="${M}${c.vid}"${c.poster ? ` poster="${M}${c.poster}"` : ''} muted autoplay loop playsinline${c.sound ? ' controls' : ''}></video>`;
+    else if (c.pairs) scr.innerHTML = `<div class="fx-pairs">${c.pairs.map(([a, b], k) => `<figure style="animation-delay:${k * 160}ms"><img src="${M}${a}.jpg" alt=""><span class="fx-tag">Swipe</span></figure><figure style="animation-delay:${k * 160 + 80}ms"><img src="${M}${b}.jpg" alt=""><span class="fx-tag ours">Ours</span></figure>`).join('')}</div>`;
+    else if (c.faces) scr.innerHTML = `<div class="fx-faces">${c.faces.map((f, k) => `<figure style="animation-delay:${k * 120}ms"><img src="${M}face-${f}.jpg" alt="${NAMES[k]}"><span class="fx-bars"><i></i><i></i><i></i><i></i><i></i></span><span class="fx-k">${NAMES[k]}</span></figure>`).join('')}</div>`;
+    else if (c.post) scr.innerHTML = `<div class="fx-post"><header><i></i><div><b>Pasnida</b><span>Sponsored</span></div></header><p>${POST}</p><video src="${M}open-control.mp4" poster="${M}cover-control.jpg" muted autoplay loop playsinline></video><footer><b>The third option wasn’t bleach</b><em>Shop now</em></footer></div>`;
+    else if (c.files) scr.innerHTML = `<div class="fx-files">${c.files.map((v, k) => `<figure style="animation-delay:${k * 110}ms"><img src="${M}cover-${v}.jpg" alt=""><span class="fx-tag">✓ ▶</span><figcaption>asset-0${k + 1}.mp4</figcaption></figure>`).join('')}</div>`;
+    else if (c.wall) scr.innerHTML = `<div class="fx-files">${c.wall.map((v, k) => `<figure style="animation-delay:${k * 110}ms"><img src="${M}cover-${v}.jpg" alt=""><span class="fx-tag live">● live</span><figcaption>opening ${k + 1}</figcaption></figure>`).join('')}</div>`;
+    else if (c.grid) scr.innerHTML = `<div class="fx-grid" style="grid-template-columns:repeat(${c.grid.length <= 9 ? 3 : 4},1fr)">${c.grid.map((g, k) => `<img src="${M}${g}.jpg" alt="" style="animation-delay:${k * 60}ms">`).join('')}</div>`;
+    else if (c.meta) scr.innerHTML = `<div class="fx-nest"></div>`;
     else scr.innerHTML = `<i class="ib lg" style="width:96px;height:96px;padding:22px;--hue:var(--${s.h})">${ic(c.icon)}</i>`;
   }
 
@@ -104,10 +112,17 @@
     li.innerHTML = `<span class="fx-led ${kind === 'stop' ? 'stop' : 'ok'}"></span>${kind === 'stop' ? '<b>STOP</b>&nbsp;' : kind === 'fix' ? '↳ ' : ''}${text}`;
     out.querySelector('.fx-ev').appendChild(li);
     if (img) scr.innerHTML = `<img src="${M}${img}" alt="">`;
-    if (s.scr && s.scr.meta && kind === 'ok') {
-      const lv = [['indigo', 'Campaign'], ['indigo', 'Ad set'], ['green', 'Ad · 6 videos'], ['amber', 'Paused']][scr.querySelector('.fx-meta').children.length];
-      if (lv) scr.querySelector('.fx-meta').insertAdjacentHTML('beforeend', `<div style="--hue:var(--${lv[0]})"><span class="fx-k">${lv[1]}</span></div>`);
-    }
+    if (s.scr && s.scr.meta && kind === 'ok') nest(scr.querySelector('.fx-nest'));
+  }
+
+  function nest(box) {
+    if (!box) return;
+    let inner = box; while (inner.lastElementChild && inner.lastElementChild.tagName === 'DIV') inner = inner.lastElementChild;
+    const depth = box.querySelectorAll('div').length;
+    const lv = [['indigo', 'Campaign'], ['violet', 'Ad set'], ['green', 'Ad · flexible'], ['amber', 'Paused']][depth];
+    if (!lv) return;
+    if (lv[1] === 'Paused') { box.firstElementChild.insertAdjacentHTML('afterbegin', `<span class="pill" style="--hue:var(--amber)">paused</span>`); return; }
+    inner.insertAdjacentHTML('beforeend', `<div style="--hue:var(--${lv[0]})"><span class="fx-k">${lv[1]}</span>${lv[1].startsWith('Ad ·') ? `<span class="row">${VS.map(v => `<img src="${M}cover-${v}.jpg" alt="">`).join('')}</span>` : ''}</div>`);
   }
 
   function moveTo(i) {
