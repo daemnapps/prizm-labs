@@ -65,3 +65,6 @@ node_modules/
 # …and My Feeds' pictures (360px covers + frame strips, written by the team
 # workspace's feedsexport.py; size-checked under 40 MB before they land).
 !docs/feeds/data/thumbs/*.webp
+# the ad factory page: its pictures and opening clips (each under 2 MB)
+!docs/three-doctors/m/*.mp4
+!docs/three-doctors/m/*.jpg
