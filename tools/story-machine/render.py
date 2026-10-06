@@ -71,22 +71,16 @@ def tts_chunk(text, voice_id, speed, prev="", nxt=""):
 
 
 def voice(text, voice_id, speed, work):
-    """One short piece per call. Long calls drift quieter (2026-10-06: -25 LUFS fading to -40
-    inside a 2,500-character call), so pieces stay under ~700 characters and carry their
-    neighbours as context so the delivery still flows."""
-    chunks = []
-    for para in [p.strip() for p in text.split("\n") if p.strip()]:
-        cur = ""
-        for sent in re.split(r"(?<=[.!?…\"”’])\s+", para):
-            if len(cur) + len(sent) > 700 and cur:
-                chunks.append(cur.strip())
-                cur = ""
-            cur += sent + " "
-        if cur.strip():
-            chunks.append(cur.strip())
+    """One take, one voice. Splitting the read into pieces made the voice change between
+    pieces (2026-10-06), so the whole story goes in a single call (the model takes up to
+    10,000 characters). Its drift in volume is fixed afterwards by leveling, not by splitting."""
+    chunks = [text.strip()]
+    if len(text) > 9500:
+        half = text.rfind("\n", 0, len(text) // 2)
+        chunks = [text[:half].strip(), text[half:].strip()]
     files, chars, starts, ends, offset = [], [], [], [], 0.0
     for i, c in enumerate(chunks):
-        audio, ch, st, en = tts_chunk(c, voice_id, speed, " ".join(chunks[max(0, i - 2):i]),
+        audio, ch, st, en = tts_chunk(c, voice_id, speed, chunks[i - 1] if i else "",
                                       chunks[i + 1] if i + 1 < len(chunks) else "")
         f = os.path.join(work, f"v{i}.mp3")
         open(f, "wb").write(audio)
@@ -130,7 +124,7 @@ def speed_up(src, words, target_wpm, work):
         f /= 2.0
     chain.append(f"atempo={f:.4f}")
     # even the level across the whole read, then set it to social-video loudness
-    chain += ["dynaudnorm=f=200:g=15:p=0.9", "loudnorm=I=-14:TP=-1.5:LRA=7"]
+    chain += ["dynaudnorm=f=150:g=31:p=0.9:m=20", "loudnorm=I=-14:TP=-1.5:LRA=7"]
     sh("ffmpeg", "-y", "-i", src, "-af", ",".join(chain), out)
     for w in words:
         w[1] /= factor
