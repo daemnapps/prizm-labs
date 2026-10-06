@@ -58,11 +58,12 @@ def duration(path):
 
 # ---------- voice ----------
 
-def tts_chunk(text, voice_id, speed):
+def tts_chunk(text, voice_id, speed, prev="", nxt=""):
     req = urllib.request.Request(
         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps",
         data=json.dumps({"text": text, "model_id": "eleven_multilingual_v2",
-                         "voice_settings": {"stability": 0.5, "similarity_boost": 0.8, "speed": speed}}).encode(),
+                         "previous_text": prev[-600:], "next_text": nxt[:300],
+                         "voice_settings": {"stability": 0.6, "similarity_boost": 0.8, "speed": speed}}).encode(),
         headers={"xi-api-key": key(), "Content-Type": "application/json"})
     d = json.load(urllib.request.urlopen(req, timeout=600))
     a = d["alignment"]
@@ -70,17 +71,23 @@ def tts_chunk(text, voice_id, speed):
 
 
 def voice(text, voice_id, speed, work):
-    """Paragraph chunks keep each call small; alignments are offset and joined."""
-    chunks, cur = [], ""
+    """One short piece per call. Long calls drift quieter (2026-10-06: -25 LUFS fading to -40
+    inside a 2,500-character call), so pieces stay under ~700 characters and carry their
+    neighbours as context so the delivery still flows."""
+    chunks = []
     for para in [p.strip() for p in text.split("\n") if p.strip()]:
-        if len(cur) + len(para) > 2500 and cur:
-            chunks.append(cur)
-            cur = ""
-        cur += para + "\n"
-    chunks.append(cur)
+        cur = ""
+        for sent in re.split(r"(?<=[.!?…\"”’])\s+", para):
+            if len(cur) + len(sent) > 700 and cur:
+                chunks.append(cur.strip())
+                cur = ""
+            cur += sent + " "
+        if cur.strip():
+            chunks.append(cur.strip())
     files, chars, starts, ends, offset = [], [], [], [], 0.0
     for i, c in enumerate(chunks):
-        audio, ch, st, en = tts_chunk(c.strip(), voice_id, speed)
+        audio, ch, st, en = tts_chunk(c, voice_id, speed, " ".join(chunks[max(0, i - 2):i]),
+                                      chunks[i + 1] if i + 1 < len(chunks) else "")
         f = os.path.join(work, f"v{i}.mp3")
         open(f, "wb").write(audio)
         files.append(f)
@@ -122,6 +129,8 @@ def speed_up(src, words, target_wpm, work):
         chain.append("atempo=2.0")
         f /= 2.0
     chain.append(f"atempo={f:.4f}")
+    # even the level across the whole read, then set it to social-video loudness
+    chain += ["dynaudnorm=f=200:g=15:p=0.9", "loudnorm=I=-14:TP=-1.5:LRA=7"]
     sh("ffmpeg", "-y", "-i", src, "-af", ",".join(chain), out)
     for w in words:
         w[1] /= factor
