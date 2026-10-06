@@ -1,4 +1,4 @@
-# Stage 2 — Write the Story (v2)
+# Stage 2 — Write the Story (v3)
 
 Turns one seed into the narration for a vertical story video. Shape copied
 from the format's biggest videos (8.4M, 8.3M, 6.6M, 3.6M views).
@@ -6,6 +6,9 @@ from the format's biggest videos (8.4M, 8.3M, 6.6M, 3.6M views).
 **v2 (6 Oct 2026): no length limit.** v1 capped the script at 690–970 words
 and the cap was cutting the work. The story runs as long as the story needs.
 When the seed came from a swipe, the swipe's own beats set the shape.
+
+**v3:** the story-ad lane. It is a dramatized story in the customer's own
+words, with the product at the turn.
 
 ---
 
@@ -17,7 +20,9 @@ The words carry everything.
 
 - `{seed}` — one seed from Stage 1 (door, title, first line, pressure, turn,
   payoff, last line, receipt)
-- `{lane}` — `organic` or `ad`
+- `{lane}` — `organic`, `ad` or `story-ad`
+- `{pack}` — **story-ad lane.** The language pack; her voice is built from it.
+- `{brand_rules}` — **story-ad and ad lanes.** Banned words, required words, claim limits.
 - `{voice}` — whose mouth this is in (first person, age, register). From the
   brand folder in the ad lane; invented in the organic lane.
 - `{product_line}` — **ad lane only.** One product, one sentence of what it
@@ -67,6 +72,24 @@ graphic involving children; no sexual content involving minors in any form.
 - Last line is still a story sting, not a call to action. The CTA lives on
   the end card, not in the voice.
 
+**story-ad**
+- Fiction: an invented narrator and invented events, told as a real person
+  would tell them. Requested Reads' own disclaimer works the same way, and
+  the video carries "Dramatized story" on screen.
+- **Citations never go inside the narration.** The narration is only what the voice says: no [ids], no brackets, no quote marks around whole paragraphs. Ids go under WORDS USED.
+- **Her voice is the pack.** Wherever she describes her skin, her doubts, her
+  age or her family, use the pack's words (verbatim or near-verbatim) instead
+  of writing new ones. List every [id] you used under WORDS USED (never inline).
+- Never put a pack quote in another character's mouth as a review or a
+  testimonial (no "a woman in a video said…").
+- **The product enters at the turn, the way she'd say it.** A woman telling a
+  friend, not a label read aloud. Name it once, maybe twice.
+- Claims: only what `{product_line}` allows. No number of weeks, no
+  "erase/remove/cure", nothing clinical, nothing in `{brand_rules}`' banned list.
+- Proof is shown: someone noticing, or her doing the thing she'd stopped
+  doing. The drama's own payoff and the skin payoff land together.
+- The last line is a story sting, not a call to action.
+
 ## Return
 
 ```
@@ -86,4 +109,6 @@ payoff — ...
 sting — ...
 
 RECEIPT CHECK (ad lane): every fact in the script → the receipt words it came from. Any fact without a receipt: say so here.
+WORDS USED (story-ad lane): every [id] from the pack that the script borrowed, with the line it shaped.
+CLAIM CHECK (story-ad and ad lanes): every claim about the product → the product_line words that allow it.
 ```

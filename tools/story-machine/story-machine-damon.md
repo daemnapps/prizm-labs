@@ -1,7 +1,7 @@
 # The Story Machine
 
 Markdown copy of the artifact: https://claude.ai/artifact/49PhHfF6hquueSG53RGXNb
-v2 · 6 Oct 2026 · no length limits. The first brand run's scripts live only on the artifact
+v3 · 6 Oct 2026 · the full chain, end to end, on our skincare brand. The first brand run's scripts live only on the artifact
 (they quote customer language). Everything else is here.
 
 A narrated story, read at double speed, over footage that has nothing to do
@@ -111,6 +111,35 @@ between AI shots is the safer version on YouTube.
 Prompts, verbatim: `prompts/01-story-mine-v2-damon.md`,
 `prompts/02-write-story-v2-damon.md`, `prompts/03-write-full-v2-damon.md`,
 `prompts/04-visual-plan-v1-damon.md`, `prompts/05-cut-v2-damon.md`.
+
+## The full chain (v3)
+
+1. **Language pack** (`pack.py`): never-used customer sentences from the
+   brand's language layer, grouped by what a story needs: her problem in her
+   words, what she tried, who she is, her life outside her skin, what she buys
+   on, how it felt after. Spent phrases and rows earlier runs used are blocked,
+   so no run leans on the same famous lines again.
+2. **Discovery** (`00-discovery`): territories, each with a real-life drama,
+   the moment her skin collides with it, 4–7 exact phrases from the pack and
+   **why each wording beats the obvious marketing word**, the word to avoid,
+   and the footage mood.
+3. **Seeds** (`01`, story-ad lane): dramas with a villain (or a stranger who
+   steps in), gut-punch titles, the product matched to the body part. An
+   editor pass sends back anything that's her alone with a mirror.
+4. **Story** (`02`): her voice built from the pack, the product at the turn
+   the way she'd say it, a words-used list and a claim check.
+5. **B-roll**: clips from the avatar's own feeds (dogs, baby goats, 70s/80s
+   nostalgia, satisfying, thrift) plus vertical Shorts, rotated by category.
+6. **Render** (`render.py`): her voice, sped to the format's pace, one-word
+   captions, the post card, "Dramatized story" on screen, the end card.
+
+What these women watch (research, 6 Oct 2026): Facebook first (60% of women
+use it daily); Boomer TikTok users' top interests include animals/pets (47%)
+and cooking/baking (44%); animal videos are linked to lower loneliness; bird
+feeding peaks at 65+; quilters average 60s; nostalgia peaks for ages 10–30
+(for women born 1956–71: 1960s kitchens, 1970s teens, 1980s motherhood).
+Avoid brain-rot pacing, Gen Z filler, young faces, and anything that mocks
+aging.
 
 ## 07 · First runs
 

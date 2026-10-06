@@ -1,11 +1,14 @@
-# Stage 1 — Story Mine (v2)
+# Stage 1 — Story Mine (v3)
 
-_v2 (6 Oct 2026): length caps removed._
+_v2 (6 Oct 2026): length caps removed. v3: the story-ad lane, and seeds built from Stage 0's territories and language pack._
 
 Finds the stories worth telling. Runs in one of two lanes, set by `{lane}`.
 
 - **organic** — a story channel. Fiction, written for watch time. No product, no claims.
 - **ad** — a paid story ad. Built only from real receipts the brand handed over.
+- **story-ad** — a paid story ad that is a dramatized story: invented
+  characters and events, written in the customer's own words, with the product
+  at the turn. It always carries "Dramatized story" on screen.
 
 ---
 
@@ -20,7 +23,12 @@ stranger scrolling at midnight stops and stays to the end.
   their days, what they fight about). Comes from the brand folder.
 - `{receipts}` — **ad lane only.** Real quotes from real customers, each with
   its source. The ONLY material an ad seed may be built from.
-- `{spent}` — seeds and titles already used. Never repeat one.
+- `{spent}` — seeds, titles and phrases already used. Never repeat one.
+- `{territories}` — **story-ad lane.** Stage 0's territories: the drama, the
+  collision with her skin, and the exact words to build with.
+- `{pack}` — **story-ad lane.** The language pack the territories cite.
+- `{product_lines}` — **story-ad lane.** The products, what each may claim,
+  and where on the body each one is for.
 - `{count}` — how many seeds to return (default 10)
 
 ## What makes a seed
@@ -70,6 +78,18 @@ Every seed must have all five. If one is missing, it is not a seed.
 - The product may only enter at the turn (part 4), as the thing they found —
   never in the first line.
 
+**story-ad**
+- Start from a territory. The drama is the story; the collision is the turn.
+- The story is fiction, and the narrator is an invented woman. No real
+  customer is named or impersonated, and no quote from the pack is put in
+  another character's mouth as a testimonial.
+- Her voice is built from the pack's words. Cite the [ids] you lean on.
+- The product enters at the turn as the thing she found, and only what
+  `{product_lines}` allows may be claimed. Pick the product that matches the
+  body part in the collision (face → the face product).
+- Never a dated result, a number of weeks, or a "cure". Proof is someone
+  noticing, or her doing the thing she'd stopped doing.
+
 ## Return
 
 For each seed, exactly this:
@@ -84,7 +104,8 @@ PRESSURE: <three escalating beats, each one starting with "but" or "so">
 TURN: <one line>
 PAYOFF: <one line — the feeling, not the moral>
 LAST LINE: <the final spoken sentence — a short sting>
-RECEIPT: <ad lane: the quote + source it rests on · organic lane: none>
+RECEIPT: <ad lane: the quote + source it rests on · story-ad: territory number + the [ids] used · organic: none>
+PRODUCT: <story-ad and ad lanes: which product, and why that one>
 ```
 
 Then one line: which seed you would make first, and why.
