@@ -1,7 +1,7 @@
 # The Story Machine
 
 Markdown copy of the artifact: https://claude.ai/artifact/49PhHfF6hquueSG53RGXNb
-v1 · 6 Oct 2026. The first brand run's scripts live only on the artifact
+v2 · 6 Oct 2026 · no length limits. The first brand run's scripts live only on the artifact
 (they quote customer language). Everything else is here.
 
 A narrated story, read at double speed, over footage that has nothing to do
@@ -31,7 +31,7 @@ The long ones are the back catalogue; the Shorts are the reach.
 
 ## 02 · The anatomy: every hit runs the same clock
 
-Timed from the four biggest Shorts:
+Timed from the four biggest Shorts. This is what their videos do, not a limit on ours:
 
 | Short | Views | Length | The turn | Where |
 |---|---|---|---|---|
@@ -68,10 +68,10 @@ gets a long, slow stretch, and one short line ends it.
 
 | Principle | Source | How they use it | The rule in our prompts |
 |---|---|---|---|
-| A question you can't leave | Loewenstein, "The Psychology of Curiosity" (1994): curiosity is the itch of a gap between what we know and what we want to know | "Not a single kid in sight" at 49s; *why didn't anyone come?* stays open until the doorbell at 108s | Stage 2 has to name its OPEN QUESTION, plant it in the first 12 seconds, and hold it until the turn |
+| A question you can't leave | Loewenstein, "The Psychology of Curiosity" (1994): curiosity is the itch of a gap between what we know and what we want to know | "Not a single kid in sight" at 49s; *why didn't anyone come?* stays open until the doorbell at 108s | Stage 2 has to name its OPEN QUESTION, plant it early, and hold it until the turn |
 | Absorbed people stop arguing | Green & Brock, transportation theory (2000): the more a reader is carried into a story, the less they counter-argue and the more their beliefs move toward it | First person, no narrator frame, small sensory details | In the ad lane the product only enters at the turn, never in line one |
 | Tension buys attention, empathy buys action | Paul Zak, Cerebrum (2015): stories with a real dramatic arc raised cortisol and oxytocin and predicted how much people then donated; flat stories didn't | The injustice is in the title | Stage 1 rejects any seed without a person to side with and an injustice or mystery in line one |
-| Man in a hole | Vonnegut's story shapes; Reagan et al., EPJ Data Science (2016): six core emotional arcs across 1,700+ books, with fall-then-rise among the most downloaded | All four top Shorts fall, then rise, and the rise gets the longest stretch | The beat clock gives pressure about 55 seconds and the payoff about 30 |
+| Man in a hole | Vonnegut's story shapes; Reagan et al., EPJ Data Science (2016): six core emotional arcs across 1,700+ books, with fall-then-rise among the most downloaded | All four top Shorts fall, then rise, and the rise gets the longest stretch | The payoff always gets its own long beat with reactions, never one line |
 | "But" and "therefore", never "and then" | Trey Parker & Matt Stone (NYU, 2011) | "I thought he'd bring me a matcha, **but** little did I know he had a plan." | Stage 1's pressure beats start with "but" or "so"; Stage 2, rule 4: no and-then |
 | The ending is the memory | Fredrickson & Kahneman (1993), the peak-end rule | "I'm marrying him." | The last line is a sting under 12 words, with no moral; in ads the call to action goes on the end card |
 | We'll pay to see unfairness punished | Fehr & Fischbacher, Evolution and Human Behavior (2004): people pay their own money to punish unfairness done to someone else | The whole catalogue runs on "and then they got what was coming" | Stage 3 gives the villain real lines that justify themselves |
@@ -89,57 +89,59 @@ story has to be genuinely different.
 
 **Ad: a story ad.** Built only from real customer receipts: no invented
 customer, number or result. The product enters at the turn, in the brand's
-exact words. Proof is shown as other people's reactions, never a claim. One
-script, cut to 90, 60 and 45 seconds. The end card carries the product, the
-price and one button.
+exact words. Proof is shown as other people's reactions, never a claim. The
+story runs as long as it needs; a shorter cut happens only when asked for.
+The end card carries the product, the price and one button.
 
 ## 06 · The machine
 
 | Stage | What it does | Out |
 |---|---|---|
 | 1 Story Mine | A brand's world (or its receipts) in, seeds out. Ten doors, five required parts. | 6–10 seeds |
-| 2 Write the Short | One seed onto the beat clock. Length is checked in code. | 690–970 words |
-| 3 Full Story | Same spine plus three rounds. Organic only. | ~2,800 words |
+| 2 Write the Story | One seed through the beats. No length limit. | as long as it needs |
+| 3 Full Story | Same spine plus three rounds. Organic only. | the long version |
 | 4 Visual Plan | Shot list: satisfying B-roll, or AI-animated scenes | shot list + captions |
-| 5 The Cut | The model ranks lines, code fills the time. Product can't be dropped. | 90 / 60 / 45s |
+| 5 The Cut | Only when a shorter version is asked for. Uses only lines from the full story; product can't be dropped. | on request |
 
 The AI-animated look comes from the tutorial: a three-part story (problem,
 turn, resolution). You build the character once, and OpenArt's Director makes
 2–5 minutes of scenes, voice and music in one generation. Mixing real footage
 between AI shots is the safer version on YouTube.
 
-Prompts, verbatim: `prompts/01-story-mine-v1-damon.md`,
-`prompts/02-write-short-v1-damon.md`, `prompts/03-write-full-v1-damon.md`,
+Prompts, verbatim: `prompts/01-story-mine-v2-damon.md`,
+`prompts/02-write-story-v2-damon.md`, `prompts/03-write-full-v2-damon.md`,
 `prompts/04-visual-plan-v1-damon.md`, `prompts/05-cut-v2-damon.md`.
 
-## 07 · First run
+## 07 · First runs
 
-Run on one of our brands on 6 Oct 2026. The organic lane got the brand's buyer world and
-wrote six fiction seeds and one full Short. The ad lane got five customer
-receipts and the product line, and wrote three seeds, one Short, and the
-90 / 60 / 45 cuts. **The outputs are on the artifact only.**
+Run on two of our brands on 6 Oct 2026, with no length limits: our men's
+grooming brand (barbershop world) and our skincare brand (women 55–70:
+grandkids, church, daughters-in-law, sisters — the same family-drama world the
+swiped channel's biggest titles live in). Each got six fiction seeds and three
+ad seeds, plus one full organic story and one full ad. Uncapped, the stories
+ran from about 1:45 to about 4:30. **The outputs are on the artifact only**
+(they quote customer language).
 
-## 08 · What the run taught us
+## 08 · What the runs taught us
 
-| Status | Problem | What changed |
+| Status | What | Detail |
 |---|---|---|
-| Fixed | **The AI can't count.** It said its scripts were 816 words; they were 1,157. The "45s" cut ran 84s. Four rounds of "still too long" never got it into range. | The AI now only ranks lines and code fills the time budget (stage 5 v2). Every cut lands in its band, and a cut can't contain a word the full script didn't. |
-| Fixed | **A cut dropped the product.** One 90s cut came back as the first 460 words, with no product in it. | Any ad cut that loses the product line is now refused and rerun. |
-| Damon's call | **The ad lane adds scenes that aren't in the receipts.** The script's own receipt check lists them. | Decision 1 below. |
-| Open | **The ad script switches person.** The hook says "him" (from the receipt), then the story goes to "I". | Next prompt edit: one narrator per script, plus a clean-language switch for paid. |
-
-The 45s cut is the weakest. It probably needs its own write, not a cut.
+| Changed | **Length limits are gone.** v1 capped every script at 690–970 words and the cap was cutting the work. | No caps in any prompt or in the runner. The story decides. |
+| Kept | **Shorter cuts only on request.** | The model ranks lines and code fills the asked-for time. A cut uses only lines from the full story; an ad cut that loses the product is refused. |
+| Damon's call | **The ad lane adds scenes that aren't in the customer quotes.** Each script's own quote check lists them. | Decision 1 below. |
+| Open | **An ad borrowed a real customer's words** for "a woman in a Facebook video", and read the product description aloud word for word. | Next prompt edit: quotes belong to the teller only; the product is said the way she'd say it. |
+| Open | **The narrator can switch person** when the quote is third person. | Next prompt edit: one narrator per script. |
 
 ## 09 · Damon's calls
 
-1. **How much story can an ad add around a receipt?** (a) Receipts only,
-   retold the way he'd tell it. (b) Dramatized scenes around real receipts,
-   with "dramatization" on screen. Recommended: (a). It's what the brand's
-   story rules already say.
-2. **Which story channel first?** Barbershop stories (our men's-grooming buyer's world) /
-   a women's-world channel for our skincare brand / none for now. Recommended: barbershop.
-3. **What gets rendered first?** The 60s product ad / the organic Short.
-   Recommended: the 60s ad, since it's the one that can make money.
+1. **How much story can an ad add around a customer quote?** (a) Quotes only,
+   retold the way she'd tell it. (b) Dramatized scenes around real quotes,
+   with "dramatization" on screen. Recommended: (a).
+2. **Story channels: one each?** Family drama for the skincare brand,
+   barbershop for the grooming brand. Recommended: skincare first, since it's
+   the format's home audience.
+3. **What gets rendered first?** Recommended: the skincare ad (voice, scrub
+   B-roll, captions, end card).
 
 ## Sources
 

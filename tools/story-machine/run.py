@@ -1,16 +1,13 @@
-"""Story machine runner — fills a stage prompt, calls the model, and gates length.
+"""Story machine runner — fills a stage prompt with its {slots} and calls the model.
 
-The model cannot count its own words (first run, 2026-10-06: scripts claimed
-816 words and were 1,157; the "45s" cut was 84s). So length is checked here,
-in code, and a script outside its band goes back with the real count until it
-fits or runs out of tries.
+No length limits (Damon, 2026-10-06): the story runs as long as it needs.
+Nothing is shortened unless a shorter cut is asked for by name:
 
-    python3 run.py <stage-prompt.md> <slots.json> <out.md> [--words MIN-MAX]
+    python3 run.py <stage-prompt.md> <slots.json> <out.md>
+    python3 run.py --cut <narration.md> <out.md> 60 [45 ...] [--product NAME]
 
-Over-long scripts and the paid cuts go through trim() / make_cuts(), which use
-prompts/05-cut-v2-damon.md: the model ranks sentences, code fills the budget.
-
-slots.json maps each {slot} in the prompt to its text.
+--cut uses prompts/05-cut-v2-damon.md: the model ranks sentences, code fills
+the requested time, so a cut is only ever made of lines from the full script.
 Key: OPENAI_API_KEY in the environment, or the local key store if present.
 """
 import json
@@ -22,7 +19,12 @@ import urllib.request
 MODEL = os.environ.get("STORY_MODEL", "gpt-5.1")
 TRIES = 3
 CUT_PROMPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompts", "05-cut-v2-damon.md")
-CUT_BANDS = {"90": (400, 460), "60": (270, 320), "45": (200, 235)}  # ~290 words a minute
+WPM = 290  # measured narration speed of the swiped format
+
+
+def band(seconds):
+    words = round(int(seconds) * WPM / 60)
+    return round(words * 0.92), words
 
 
 def key():
@@ -44,16 +46,6 @@ def chat(messages):
 
 def fill(prompt, slots):
     return prompt + "\n\n---\n## Inputs\n" + "\n".join(f"### {{{k}}}\n{v}\n" for k, v in slots.items())
-
-
-def narration_words(text):
-    body = text.split("NARRATION:", 1)[-1].split("BEAT MARKS", 1)[0]
-    return len(body.split())
-
-
-def cut_words(text):
-    return {m.group(1): len(m.group(2).split())
-            for m in re.finditer(r"CUT (\d+)s[^\n]*\n(.*?)(?=\nCUT \d+s|\nEND CARD|\Z)", text, re.S)}
 
 
 def sentences(text):
@@ -126,57 +118,34 @@ def _trim(text, lo, hi, why):
     return " ".join(sents[k] for k in sorted(keep)).replace("\n\n ", "\n\n").strip(), n, kept_beats
 
 
-def run(stage, slots, out, band=None, cuts=False):
-    messages = [{"role": "user", "content": fill(open(stage).read(), slots)}]
-    for attempt in range(1, TRIES + 1):
-        text = chat(messages)
-        if band:
-            n = narration_words(text)
-            ok = band[0] <= n <= band[1]
-            note = f"NARRATION is {n} words; it must be {band[0]}-{band[1]}."
-        elif cuts:
-            got = cut_words(text)
-            bad = {k: v for k, v in got.items() if not (CUT_BANDS[k][0] <= v <= CUT_BANDS[k][1])}
-            ok = not bad and len(got) == 3
-            note = "; ".join(f"CUT {k}s is {v} words, must be {CUT_BANDS[k][0]}-{CUT_BANDS[k][1]}"
-                             for k, v in bad.items()) or "Return all three cuts."
-        else:
-            ok, note = True, ""
-        print(f"try {attempt}: {'ok' if ok else note}")
-        if ok:
-            break
-        messages += [{"role": "assistant", "content": text},
-                     {"role": "user", "content": f"Counted in code: {note} Rewrite to fit. "
-                      "Cut inside beats, keep every beat, keep the first and last lines. "
-                      "Return the whole thing in the same format, with the real word count."}]
-    if band and not ok:
-        body, n = trim(text, band[0], band[1], "It is too long for the format.")
-        head = text.split("NARRATION:", 1)[0]
-        text = head + "NARRATION:\n" + body + "\n\n(length set in code: " + str(n) + " words)\n"
-        ok = band[0] <= n <= band[1]
+def run(stage, slots, out):
+    text = chat([{"role": "user", "content": fill(open(stage).read(), slots)}])
     open(out, "w").write(text)
-    return text, ok
+    return text
 
 
-def make_cuts(narration_text, out, end_card="", product=""):
-    """Stage 5 done as selection: each paid length is a subset of the approved script."""
+def make_cuts(narration_text, out, seconds, end_card="", product=""):
+    """Only on request: each asked-for length is a subset of the approved script."""
     parts = []
     ok = True
-    for sec, (lo, hi) in CUT_BANDS.items():
+    for sec in seconds:
+        lo, hi = band(sec)
         print(f"cut {sec}s")
         body, n = trim(narration_text, lo, hi, f"Cut it to a {sec}-second paid ad. The product stays at the turn.", must=product)
         ok &= lo <= n <= hi
-        parts.append(f"CUT {sec}s — {n} words (≈{round(n / 290 * 60)}s)\n{body}\n")
+        parts.append(f"CUT {sec}s — {n} words (≈{round(n / WPM * 60)}s)\n{body}\n")
     text = "\n".join(parts) + (f"\nEND CARD: {end_card}\n" if end_card else "")
     open(out, "w").write(text)
     return text, ok
 
 
 if __name__ == "__main__":
-    stage, slots, out = sys.argv[1:4]
-    band = None
-    if "--words" in sys.argv:
-        lo, hi = sys.argv[sys.argv.index("--words") + 1].split("-")
-        band = (int(lo), int(hi))
-    _, ok = run(stage, json.load(open(slots)), out, band, "--cuts" in sys.argv)
-    sys.exit(0 if ok else 1)
+    args = sys.argv[1:]
+    if args and args[0] == "--cut":
+        product = args[args.index("--product") + 1] if "--product" in args else ""
+        rest = [x for x in args[1:] if x not in ("--product", product)]
+        narration, out, secs = rest[0], rest[1], rest[2:]
+        _, ok = make_cuts(open(narration).read(), out, secs, product=product)
+        sys.exit(0 if ok else 1)
+    stage, slots, out = args[:3]
+    run(stage, json.load(open(slots)), out)

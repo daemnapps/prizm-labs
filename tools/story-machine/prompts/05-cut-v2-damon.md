@@ -1,7 +1,8 @@
 # Stage 5 — The Cut (v2)
 
-Shortens a finished narration: trims an over-long Stage 2 script into its
-band, and makes the 90 / 60 / 45-second paid cuts of an ad-lane story.
+**Only runs when a shorter version is asked for by name** (e.g. "a 60s cut
+for Meta"). Nothing in the machine shortens a story on its own — no length
+limits anywhere (Damon, 2026-10-06).
 
 **Why v2 exists.** v1 asked the model to rewrite to a length. It can't count:
 on the first run it claimed 431 words and wrote 607, and four rounds of
@@ -11,9 +12,9 @@ sentence; code keeps the best sentence of every beat, then fills the word
 budget in rank order. It lands in the band every time, and because the model
 only picks lines, a cut can never contain a word the full script didn't.
 
-Bands (~290 words a minute): Short 690–970 · 90s 400–460 · 60s 270–320 ·
-45s 200–235. In the ad lane a cut that loses the product line is refused and
-rerun.
+The asked-for seconds become words at the swiped format's measured ~290
+words a minute. In the ad lane a cut that loses the product line is refused
+and rerun.
 
 ---
 

@@ -10,19 +10,20 @@ lanes:
 
 | Stage | Prompt | Makes |
 |---|---|---|
-| 1 Story Mine | `prompts/01-story-mine-v1-damon.md` | 6–10 seeds |
-| 2 Write the Short | `prompts/02-write-short-v1-damon.md` | a 690–970-word narration (~2½ min) |
-| 3 Full Story | `prompts/03-write-full-v1-damon.md` | the ~14-minute version (organic) |
+| 1 Story Mine | `prompts/01-story-mine-v2-damon.md` | 6–10 seeds |
+| 2 Write the Story | `prompts/02-write-story-v2-damon.md` | the narration, as long as the story needs |
+| 3 Full Story | `prompts/03-write-full-v2-damon.md` | the long version with more rounds (organic) |
 | 4 Visual Plan | `prompts/04-visual-plan-v1-damon.md` | shot list: satisfying B-roll or AI-animated |
-| 5 The Cut | `prompts/05-cut-v2-damon.md` | over-long trims and the 90 / 60 / 45 s paid cuts |
+| 5 The Cut | `prompts/05-cut-v2-damon.md` | a shorter version, only when one is asked for |
 
-`run.py` fills a prompt's `{slots}`, calls the model, and checks length in
-code. The model cannot count its own words, so stage 5 has it rank sentences
-and the code fills the word budget — every cut lands in its band and is made
-only of lines from the full script.
+No length limits: a story runs as long as it needs. `run.py` fills a
+prompt's `{slots}` and calls the model. A shorter cut happens only when asked
+for: the model ranks sentences and code fills the requested time, so the cut
+is made only of lines from the full script.
 
 ```
-python3 run.py prompts/02-write-short-v1-damon.md slots.json out.md --words 690-970
+python3 run.py prompts/02-write-story-v2-damon.md slots.json out.md
+python3 run.py --cut out.md cut.md 60 --product NAME
 ```
 
 Brand context (world, voice, receipts, product line) arrives in `slots.json`

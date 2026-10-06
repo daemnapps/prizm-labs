@@ -15,7 +15,7 @@ finished narration with its beat marks.
 
 ## What you are given
 
-- `{narration}` + `{beat_marks}` — from Stage 2 or 3
+- `{narration}` + `{beat_marks}` — from Stage 2 or 3 (any length; the plan covers the whole narration)
 - `{look}` — `broll` or `animated`
 - `{footage_lane}` — **broll only.** What satisfying footage this brand owns
   or has licensed (e.g. a product being poured, pressed, cut, applied;
@@ -38,7 +38,7 @@ finished narration with its beat marks.
 
 ## broll look
 
-- List clips in order, one per 2–4 seconds, enough to cover the runtime.
+- List clips in order, one per 2–4 seconds, enough to cover the whole narration.
 - Each clip must be **visually complete in itself** (a pour finishes, a cut
   lands, a mould releases) — the micro-satisfaction is what holds the eyes.
 - Raise intensity at the turn: the most satisfying clip in the set lands on
