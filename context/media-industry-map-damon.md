@@ -1,6 +1,6 @@
 # The Media Industry Map
 
-Live page: https://claude.ai/artifact/29rhL2CBaH85f1VB4zfD27 · October 2026
+Live page: https://claude.ai/artifact/29rhL2CBaH85f1VB4zfD27 · October 2026 (the live page also carries a per-avatar newsstand, which is kept private and not mirrored here)
 
 Media is one business that keeps changing shape: make something people pay attention to, then sell that attention or turn it into a sale.
 
@@ -78,3 +78,24 @@ Loop: **Make → Distribute → Capture attention → Earn trust → Monetize** 
 2. *Breakthrough Advertising* ch. 1–3 → an awareness-level tag in the teardown prompt
 3. Aggregation Theory + 1,000 True Fans → owned-list rule + platform-spread check
 4. *Traffic* + latest Gauge/IAB → a quality-floor judge in the chain
+
+## 8 · The full-spectrum farm
+The farm makes the top of the awareness ladder; the ads harvest the bottom. All visual (carousels, clips, reels, stills), no blog posts.
+
+| Level | Who makes it | Content | Brand presence |
+|---|---|---|---|
+| Unaware | Farm | Culture clips, memes, debates, POV, news-style reactions | Invisible / watermark |
+| Problem-aware | Farm | "Why this keeps happening", myth-busts, relatable stories | Light, as the page's voice |
+| Solution-aware | Farm → Ads | Method rankings, mechanism demos, "tried everything" timelines | One option among several |
+| Product-aware | Ads | Before/afters, reviews, creator testimonials, objection killers | Front and centre |
+| Most aware | Ads | Offer, bundle, guarantee, urgency | All brand |
+
+Each avatar gets its own publication: a page that posts like the outlets they already read. It builds an owned audience; boost its best posts as top-of-funnel ads, then retarget watchers lower down the ladder.
+
+## 9 · Creative diversity, built into the system
+Since 2025 Meta's ad system (Andromeda) groups look-alike ads and treats them as one ad in the auction. Swapping hook text, caption or music on the same video is a duplicate, not a new ad.
+
+- **Big moves (these make a new ad):** face/talent · format · setting · visual style · awareness level · avatar and desire
+- **Small moves (Meta sees the same ad):** hook text · caption/headline · music · overlay colour · CTA · small trims
+
+**Rule:** every new ad changes at least **3 big moves** from anything already live in its ad set. The tagging system checks it before upload, and anything under 3 goes back for another variation.
