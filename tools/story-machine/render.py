@@ -8,6 +8,7 @@ job.json:
   voice_id       ElevenLabs voice
   say_as         {"term": "respelling"} swapped into the voice text only
   voice_speed    ElevenLabs speed (0.7-1.2), default 1.0
+  voice_settings / voice_model   the cast voice's saved settings (e.g. from its voice.json)
   target_wpm     final narration pace after speed-up (the format reads ~250-350), default 250
   clips          folder of B-roll segments (vertical mp4s, any length; 2-4 s pieces are cut here)
   handle         the name on the post card
@@ -58,12 +59,16 @@ def duration(path):
 
 # ---------- voice ----------
 
+VOICE = {"model_id": "eleven_multilingual_v2",
+         "settings": {"stability": 0.6, "similarity_boost": 0.8}}  # a job's voice_settings / voice_model override this
+
+
 def tts_chunk(text, voice_id, speed, prev="", nxt=""):
     req = urllib.request.Request(
         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps",
-        data=json.dumps({"text": text, "model_id": "eleven_multilingual_v2",
+        data=json.dumps({"text": text, "model_id": VOICE["model_id"],
                          "previous_text": prev[-600:], "next_text": nxt[:300],
-                         "voice_settings": {"stability": 0.6, "similarity_boost": 0.8, "speed": speed}}).encode(),
+                         "voice_settings": dict(VOICE["settings"], speed=speed)}).encode(),
         headers={"xi-api-key": key(), "Content-Type": "application/json"})
     d = json.load(urllib.request.urlopen(req, timeout=600))
     a = d["alignment"]
@@ -71,6 +76,24 @@ def tts_chunk(text, voice_id, speed, prev="", nxt=""):
 
 
 def voice(text, voice_id, speed, work):
+    """Cached by text + voice + settings, so a re-render never pays for the same read twice."""
+    import hashlib, shutil
+    cache = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".voice-cache")
+    key = hashlib.sha1(json.dumps([text, voice_id, speed, VOICE]).encode()).hexdigest()[:16]
+    hit = os.path.join(cache, key)
+    if os.path.exists(hit + ".json"):
+        shutil.copy(hit + ".wav", os.path.join(work, "voice_raw.wav"))
+        a = json.load(open(hit + ".json"))
+        print("voice: reused from cache")
+        return os.path.join(work, "voice_raw.wav"), a["c"], a["s"], a["e"]
+    out, chars, starts, ends = _voice(text, voice_id, speed, work)
+    os.makedirs(cache, exist_ok=True)
+    shutil.copy(out, hit + ".wav")
+    json.dump({"c": chars, "s": starts, "e": ends}, open(hit + ".json", "w"))
+    return out, chars, starts, ends
+
+
+def _voice(text, voice_id, speed, work):
     """One take, one voice. Splitting the read into pieces made the voice change between
     pieces (2026-10-06), so the whole story goes in a single call (the model takes up to
     10,000 characters). Its drift in volume is fixed afterwards by leveling, not by splitting."""
@@ -266,6 +289,10 @@ def broll(folder, total, work, seed=7):
 
 def render(job):
     work = tempfile.mkdtemp(prefix="story-render-")
+    if job.get("voice_settings"):
+        VOICE["settings"] = job["voice_settings"]
+    if job.get("voice_model"):
+        VOICE["model_id"] = job["voice_model"]
     spoken = job["title"].strip() + "\n\n" + job["narration"].strip()
     for term, say in job.get("say_as", {}).items():
         spoken = spoken.replace(term, say)

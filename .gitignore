@@ -75,3 +75,4 @@ node_modules/
 # the ad factory page: its pictures and opening clips (each under 2 MB)
 !docs/three-doctors/m/*.mp4
 !docs/three-doctors/m/*.jpg
+tools/story-machine/.voice-cache/
