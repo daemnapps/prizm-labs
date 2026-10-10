@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EFE9E1">
+<meta name="description" content="Make It Rain — how AI turns one piece of content into customers, shown on one real ad. University of Mary Washington, 14 Oct 2026.">
+<title>Make It Rain — PRIZM LABS</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/studio.css?v=prizm16">
+<style>
+/* A full-screen deck that always fits one window. Layout only — colour, type, radius and shadow come from /studio.css. */
+html,body{height:100%;overflow:hidden}
+nav.bar,footer.bot,.askbtn{display:none}
+#cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.deck{position:fixed;inset:0;z-index:1;overflow:hidden}
+.slide{height:100%;max-width:1480px;margin:0 auto;padding:clamp(34px,7vh,80px) clamp(20px,5vw,80px) clamp(64px,10vh,96px);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:minmax(0,1fr);gap:clamp(20px,5vw,96px)}
+.txt{align-self:center;animation:rise .5s both;min-height:0}
+.txt h1{font-size:clamp(30px,min(5.2vw,8vh),88px);line-height:1.02;margin-top:var(--s3)}
+.txt .lede{margin-top:var(--s4);font-size:clamp(16px,min(1.6vw,2.6vh),24px);max-width:32ch}
+.txt .ex{margin-top:var(--s5);border-left:3px solid var(--hue);padding-left:var(--s4);max-width:38ch}
+.txt .ex p{color:var(--ink-2);margin-top:var(--s1);font-size:clamp(14px,min(1.25vw,2.1vh),19px)}
+.show{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s3);min-height:0;min-width:0;animation:rise .6s .12s both}
+.show > *{min-height:0}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+.fit{flex:1 1 auto;max-height:100%;max-width:100%;aspect-ratio:9/16;border-radius:var(--r3);overflow:hidden;border:6px solid var(--ink);background:var(--ink);position:relative}
+.fit video,.fit img{width:100%;height:100%;object-fit:cover;display:block}
+.grid3{flex:1 1 auto;max-height:100%;max-width:100%;aspect-ratio:27/32;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:var(--s2)}
+.grid3 figure{margin:0;position:relative;border-radius:var(--r2);overflow:hidden;background:var(--paper);cursor:pointer}
+.grid3 img,.grid3 video{width:100%;height:100%;object-fit:cover;display:block}
+.grid3 figcaption{position:absolute;left:8px;bottom:8px;transition:opacity .3s,transform .3s}
+.grid3 figure.hide figcaption{opacity:0;transform:translateY(6px)}
+.cmp{cursor:ew-resize;touch-action:none}
+.cmp .top{position:absolute;inset:0;clip-path:inset(0 0 0 var(--cut,50%))}
+.cmp .bar{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:3px;background:var(--card)}
+.cmp .tag{position:absolute;top:10px}
+.big{font-family:var(--display);font-size:clamp(56px,min(12vw,20vh),180px);line-height:.92;font-variant-numeric:tabular-nums}
+.show .obj{width:min(100%,62vh);max-width:none;flex:0 1 auto}
+.stops{display:grid;gap:var(--s3);width:min(100%,600px)}
+.stops button{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:var(--r2);padding:var(--s3) var(--s5);font-size:clamp(15px,min(1.4vw,2.3vh),20px)}
+.stops .fix{display:block;max-height:0;overflow:hidden;opacity:0;transition:all .35s;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green)}
+.stops button.open{border-left-color:var(--green)}.stops button.open .fix{max-height:40px;opacity:1;margin-top:var(--s2)}
+.prog{position:fixed;top:0;left:0;right:0;z-index:3;display:flex;gap:4px;padding:12px clamp(20px,5vw,80px)}
+.prog i{flex:1;height:3px;border-radius:var(--r4);background:var(--line);transition:background .4s}.prog i.on{background:var(--ink)}
+.ctl{position:fixed;right:clamp(16px,3vw,40px);bottom:clamp(14px,2.5vh,28px);z-index:3;display:flex;gap:var(--s2);transition:opacity .5s}
+.idle .ctl,.idle .tip{opacity:0}
+.ctl button{all:unset;cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border-radius:var(--r4);background:var(--card);border:1px solid var(--line)}
+.ctl button:hover{border-color:var(--ink)}
+.tip{position:fixed;left:clamp(20px,5vw,80px);bottom:clamp(18px,3vh,32px);z-index:3;transition:opacity .5s}
+.qr{background:var(--card);padding:var(--s2);border-radius:var(--r2);line-height:0;display:inline-block}
+@media(max-aspect-ratio:1/1){.slide{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:var(--s4)}.txt{align-self:end}.txt .ex,.tip{display:none}}
+</style>
+
+<nav class="bar">
+  <a class="mark" href="/">PRIZM LABS</a>
+  <span class="links">
+      <a href="/how-it-works.html">How it works</a>
+      <a href="/briefs/">Briefs</a>
+      <a href="/feeds/">Feeds</a>
+      <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
+    </span>
+</nav>
+
+<canvas id="cv" aria-hidden="true"></canvas>
+<div class="prog" id="prog"></div>
+<main class="deck" id="deck"><section class="slide" id="slide" aria-live="polite"></section></main>
+<span class="label tip" id="tip">← → to move · hold anywhere to make it rain</span>
+<div class="ctl"><button id="prev" aria-label="Previous">←</button><button id="next" aria-label="Next">→</button><button id="fs">Present</button><button id="snd">Sound off</button></div>
+
+<footer class="bot">
+  <span>PRIZM LABS · Make It Rain · UMW, 14 Oct 2026</span>
+  <span class="right"><a href="/machine.html">The machine</a> · <a href="/three-doctors/">The ad factory</a></span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(() => {
+const M = '/three-doctors/m/';
+const COVERS = ['control', 'g01-h2', 'g01-h3', 'g01-h4', 'g01-h5', 'g01-h6'];
+const PAIRS = [['sw-1', 'p-s1-f1'], ['sw-5', 'p-s8-f1'], ['sw-7', 'p-s21-f1']];
+
+/* One idea per slide: explanation + example on the left, the real thing on the right,
+   one thing to touch. The example all the way through is one real ad (daemn.co/three-doctors/).
+   `rain` sets how hard it rains behind the slide, 0–6. */
+const SLIDES = [
+  { rain: 0, hue: 'indigo', eyebrow: 'UMW · 14 Oct 2026 · Damon Dixon, class of 2019',
+    h: 'Make it rain.',
+    p: 'How AI turns one piece of content into customers, shown on one real ad.',
+    show: () => `<div class="obj" data-obj="prism" role="img" aria-label="A glass prism: one beam in, a full spectrum out"></div>` },
+  { rain: 0, hue: 'amber', eyebrow: 'Where it started',
+    h: 'One ad. One million dollars.',
+    p: 'My first business did a million in sales right out of college, off one ad. I didn\'t know why it worked. Now we do, and a machine can repeat it.',
+    show: () => `<div style="text-align:center"><p class="big">1 ad</p><p class="label" style="margin:var(--s4) 0">became</p><p class="big" style="color:var(--green)">$1M</p></div>` },
+  { rain: 1, hue: 'violet', eyebrow: 'Step 1 of 6 · Swipe',
+    h: 'Start from what already works.',
+    p: 'We collect posts people already can\'t stop watching. The market tested them for free.',
+    ex: ['This one', 'A 68-year-old visits three surgeons and gets three different answers. It isn\'t an ad, and people watched to the end.'],
+    tip: 'Tap the video for sound',
+    show: () => `<div class="fit"><video id="v" src="${M}swipe.mp4" poster="${M}swipe.jpg" muted autoplay loop playsinline></video></div>` },
+  { rain: 2, hue: 'indigo', eyebrow: 'Step 2 of 6 · Strip',
+    h: 'Keep the shape. Lose their brand.',
+    p: 'AI breaks the post into the beats that hold attention.',
+    ex: ['What survives', 'Not their faces, their words or their brand. Only the order of the story.'],
+    tip: 'Tap each frame to name its beat',
+    show: () => `<div class="grid3">${['sw-1', 'sw-2', 'sw-4', 'sw-5', 'sw-7', 'sw-9'].map((s, i) => `<figure class="hide"><img src="${M}${s}.jpg" alt=""><figcaption><span class="pill swipe">${['The hook', 'Visit 1', 'Visit 1', 'Visit 2', 'Visit 3', 'Visit 3'][i]}</span></figcaption></figure>`).join('')}</div>` },
+  { rain: 3, hue: 'magenta', eyebrow: 'Step 3 of 6 · Inject',
+    h: 'Pour your product in.',
+    p: 'Same story shape, our product, written in our customers\' own words.',
+    ex: ['Our version', '"Two doctors said bleach or laser for the dark spots on her face. The third handed her a Thai turmeric scrub."'],
+    tip: 'Drag across the picture: theirs ↔ ours',
+    show: () => `<div class="fit cmp" id="cmp"><img src="${M}${PAIRS[1][0]}.jpg" alt="Their scene"><div class="top"><img src="${M}${PAIRS[1][1]}.jpg" alt="Our scene, made by AI"></div><div class="bar"></div><span class="pill swipe tag" style="left:10px">Theirs</span><span class="pill brief tag" style="right:10px">Ours</span></div>
+      <div class="btns">${PAIRS.map((p, i) => `<button class="btn ${i === 1 ? '' : 'ghost'}" data-p="${i}">Scene ${i + 1}</button>`).join('')}</div>` },
+  { rain: 4, hue: 'cyan', eyebrow: 'Step 4 of 6 · Multiply',
+    h: 'Nobody was filmed.',
+    p: 'AI agents cast the people, make every scene and give each person a voice.',
+    ex: ['This ad', '4 people, 22 scenes and 4 voices, all made by the machine.'],
+    show: () => `<div class="grid3">${['p-s2-f1', 'p-s6-f1', 'p-s16-f1', 'p-s26-f1', 'p-s34-f1', 'p-s40-f1'].map(s => `<figure><img src="${M}${s}.jpg" alt="A scene made by AI"></figure>`).join('')}</div>` },
+  { rain: 4, hue: 'coral', eyebrow: 'Step 5 of 6 · Gate',
+    h: 'It refuses bad work.',
+    p: 'Every mistake the machine catches becomes a rule it checks on every ad after.',
+    tip: 'Tap a stop to see the fix',
+    show: () => `<div class="stops">${[['Her mouth moved on someone else\'s voice', 'Covered with a close-up'], ['A word got cut off: "Guaranteed"', 'Re-voiced, heard back whole'], ['The music stopped before the end', 'Music under the whole ad'], ['The cover\'s words landed on her face', 'Moved to a clear spot'], ['The post showed a price the site didn\'t', 'Taken out']].map(([a, b]) => `<button><span class="pill stop">Stop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div>` },
+  { rain: 6, hue: 'green', eyebrow: 'Step 6 of 6 · Learn',
+    h: 'The market picks the winner.',
+    p: 'One click sends six openings to Meta. Each person sees the one that holds them, and the winner feeds the next swipe.',
+    tip: 'Tap an opening to hear it',
+    show: () => `<div class="grid3">${COVERS.map(c => `<figure><video src="${M}open-${c}.mp4" poster="${M}cover-${c}.jpg" muted autoplay loop playsinline></video><figcaption><span class="pill ready">● Live</span></figcaption></figure>`).join('')}</div>` },
+  { rain: 6, hue: 'indigo', eyebrow: 'Your turn',
+    h: 'The tools are basically free.',
+    p: 'One semester of weekends could get you a first sale. My brother is 21. Within months he landed a $2,000 retainer building websites with AI.',
+    ex: ['Choose your destiny', 'There\'s never been a time like this.'],
+    tip: 'Hold anywhere to make it rain',
+    show: () => `<div style="text-align:center"><p class="label">Made it rain</p><p class="big" id="till" style="color:var(--green)">$0</p><div class="btns" style="justify-content:center;margin-top:var(--s5);align-items:center"><span class="qr" id="qr"></span><span class="label" style="text-align:left">Make it rain<br>on your phone<br><b>daemn.co/umw</b></span></div></div>` },
+];
+
+const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue('--' + n).trim();
+const SPEC = ['violet', 'indigo', 'cyan', 'green', 'amber', 'coral', 'magenta'];
+const C = {}; ['ink', 'ink-3', 'card', ...SPEC].forEach(k => C[k] = tok(k));
+let cur = 0, money = 0, shown = 0, hold = 0, sound = false;
+
+/* ── slides ── */
+$('#prog').innerHTML = SLIDES.map(() => '<i></i>').join('');
+function go(i) {
+  cur = Math.max(0, Math.min(SLIDES.length - 1, i));
+  const S = SLIDES[cur], sl = $('#slide');
+  sl.style.setProperty('--hue', `var(--${S.hue})`);
+  sl.innerHTML = `<div class="txt"><p class="eyebrow">${esc(S.eyebrow)}</p><h1>${esc(S.h)}</h1><p class="lede">${esc(S.p)}</p>${S.ex ? `<div class="ex"><p class="label hue">${esc(S.ex[0])}</p><p>${esc(S.ex[1])}</p></div>` : ''}</div><div class="show">${S.show()}</div>`;
+  document.querySelectorAll('#prog i').forEach((d, j) => d.classList.toggle('on', j <= cur));
+  $('#tip').textContent = S.tip || '← → to move · hold anywhere to make it rain';
+  wire(sl);
+  if (i > 0) thunder(.6);
+  try { localStorage.setItem('mir-slide', cur); } catch (e) {}
+}
+function wire(sl) {
+  const objs = sl.querySelectorAll('.obj[data-obj]');
+  (function m(n) { if (!objs.length) return; if (window.daemnObjects) objs.forEach(el => window.daemnObjects.mount(el)); else if (n < 40) setTimeout(() => m(n + 1), 250); })(0);
+  const v = sl.querySelector('#v'); if (v) v.onclick = () => { v.muted = !v.muted; };
+  sl.querySelectorAll('figure.hide').forEach(f => f.onclick = () => { f.classList.remove('hide'); thunder(.2); });
+  sl.querySelectorAll('figure[data-c]').forEach(f => f.onclick = () => {
+    const c = f.dataset.c; f.innerHTML = `<video src="${M}open-${c}.mp4" autoplay playsinline controls></video>`; delete f.dataset.c;
+  });
+  sl.querySelectorAll('.grid3 figure video').forEach(v => v.parentNode.onclick = () => { sl.querySelectorAll('.grid3 video').forEach(o => o.muted = o !== v || !v.muted); });
+  sl.querySelectorAll('.stops button').forEach(b => b.onclick = () => { b.classList.toggle('open'); });
+  const cmp = sl.querySelector('#cmp');
+  if (cmp) {
+    const set = x => { const r = cmp.getBoundingClientRect(); cmp.style.setProperty('--cut', Math.max(0, Math.min(100, (x - r.left) / r.width * 100)) + '%'); };
+    let drag = false;
+    cmp.onpointerdown = e => { drag = true; cmp.setPointerCapture(e.pointerId); set(e.clientX); e.stopPropagation(); };
+    cmp.onpointermove = e => { if (drag || e.pointerType === 'mouse') set(e.clientX); };
+    cmp.onpointerup = () => drag = false;
+    sl.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+      const p = PAIRS[+b.dataset.p], imgs = cmp.querySelectorAll('img');
+      imgs[0].src = M + p[0] + '.jpg'; imgs[1].src = M + p[1] + '.jpg';
+      sl.querySelectorAll('[data-p]').forEach(x => x.classList.toggle('ghost', x !== b));
+    });
+  }
+  if ($('#qr')) { try { new QRCode($('#qr'), { text: 'https://daemn.co/umw/', width: 104, height: 104, colorDark: C.ink, colorLight: C.card }); } catch (e) {} }
+}
+const next = () => go(cur === SLIDES.length - 1 ? 0 : cur + 1), prev = () => go(cur - 1);
+$('#next').onclick = next; $('#prev').onclick = prev;
+document.addEventListener('keydown', e => {
+  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+  if (['ArrowLeft', 'PageUp'].includes(e.key)) prev();
+  if (e.key === 'f' || e.key === 'F') present();
+});
+function present() { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) {} }
+$('#fs').onclick = present;
+document.addEventListener('fullscreenchange', () => { $('#fs').textContent = document.fullscreenElement ? 'Exit' : 'Present'; });
+let tx = null; const deck = $('#deck');
+deck.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+deck.addEventListener('touchend', e => { if (tx === null) return; const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 60 && !e.target.closest('#cmp')) (d < 0 ? next : prev)(); tx = null; });
+let idleT; const wake = () => { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => document.body.classList.add('idle'), 2600); };
+addEventListener('pointermove', wake); addEventListener('keydown', wake); wake();
+
+/* ── sound ── */
+let ac, rainGain;
+function toggleSound() {
+  sound = !sound; $('#snd').textContent = sound ? 'Sound on' : 'Sound off';
+  if (!sound || ac) { if (ac) ac.resume(); return; }
+  try {
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
+    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = .6;
+    rainGain = ac.createGain(); rainGain.gain.value = 0; src.connect(bp).connect(rainGain).connect(ac.destination); src.start();
+  } catch (e) {}
+}
+$('#snd').onclick = toggleSound;
+function thunder(k) {
+  if (!sound || !ac) return;
+  const n = ac.sampleRate * 2, buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.4);
+  const s = ac.createBufferSource(); s.buffer = buf; const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 170;
+  const g = ac.createGain(); g.gain.value = .8 * k; s.connect(lp).connect(g).connect(ac.destination); s.start();
+}
+
+/* ── the rain behind the slides: heavier and more colourful at every step ── */
+const cv = $('#cv'), cx = cv.getContext('2d'), DPR = Math.min(2, devicePixelRatio || 1);
+let W = 0, H = 0, drops = [], last = performance.now();
+function size() { W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+addEventListener('resize', size); size();
+function frame(t) {
+  const dt = Math.min(.05, (t - last) / 1000); last = t;
+  const lvl = SLIDES[cur].rain, rate = [2, 6, 10, 16, 34, 34, 50][lvl] * (1 + hold * 4);
+  let want = rate * dt;
+  while (want > 0) {
+    if (Math.random() < want) {
+      const cash = lvl >= 6 && Math.random() < .3;
+      const hue = cash ? C.green : lvl >= 4 ? C[SPEC[(Math.random() * 7) | 0]] : lvl === 3 ? C.magenta : lvl === 2 ? C.indigo : lvl === 1 ? C.violet : C['ink-3'];
+      drops.push({ x: Math.random() * W, y: -20, v: 420 + Math.random() * 260, len: 12 + Math.random() * 14, hue, cash });
+    }
+    want -= 1;
+  }
+  cx.clearRect(0, 0, W, H); cx.lineCap = 'round'; cx.globalAlpha = .45;
+  drops = drops.filter(d => {
+    d.y += d.v * dt * (1 + hold * .5);
+    if (d.cash) { cx.fillStyle = d.hue; cx.font = '600 16px "Unbounded", sans-serif'; cx.fillText('$', d.x, d.y); }
+    else { cx.strokeStyle = d.hue; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(d.x, d.y - d.len); cx.lineTo(d.x, d.y); cx.stroke(); }
+    if (d.y > H) { if (cur === SLIDES.length - 1) money += d.cash ? 50 : 5; return false; }
+    return true;
+  });
+  cx.globalAlpha = 1;
+  shown += (money - shown) * Math.min(1, dt * 5);
+  const till = $('#till'); if (till) till.textContent = '$' + Math.round(shown).toLocaleString();
+  if (sound && rainGain) rainGain.gain.value = Math.min(.45, drops.length / 700) * (1 + hold);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+deck.addEventListener('pointerdown', e => { if (e.target.closest('a,button,video,figure,#cmp')) return; hold = 1; thunder(.3); });
+addEventListener('pointerup', () => hold = 0); addEventListener('pointercancel', () => hold = 0);
+
+let start = 0; try { start = +(localStorage.getItem('mir-slide') || 0); } catch (e) {}
+go(start);
+})();
+</script>
+<script src="/studio.js?v=8" defer></script>
+</html>
