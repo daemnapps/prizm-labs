@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The First 90 Frames</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single editorial column read like a video timeline — timecode eyebrows, lane diagrams, one live diagnostic at the end */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --ink:#141922; --muted:#5a6475; --line:#d3d9e3;
+  --accent:#1f4fd8; --accent-soft:#dfe7fb; --hot:#d2453a; --ok:#1d8a5b; --warn:#b97a10;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f131a; --surface:#171c25; --ink:#e8ecf2; --muted:#9aa4b5; --line:#2a3240;
+  --accent:#7c9cff; --accent-soft:#1d2a4d; --hot:#ff7a6e; --ok:#4cc38f; --warn:#e3a83c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#171c25; --ink:#e8ecf2; --muted:#9aa4b5; --line:#2a3240;
+  --accent:#7c9cff; --accent-soft:#1d2a4d; --hot:#ff7a6e; --ok:#4cc38f; --warn:#e3a83c; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:40px 80px;display:flex;flex-direction:column;gap:72px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(44px,8vw,92px);font-weight:900;font-stretch:72%;letter-spacing:-.01em;text-transform:uppercase}
+h2{font-size:clamp(28px,4.4vw,44px);font-weight:800;font-stretch:80%}
+h3{font-size:20px;font-weight:700;font-stretch:90%}
+p{margin:0;max-width:66ch}
+.tc{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.sec{display:flex;flex-direction:column;gap:20px}
+.lede{font-size:19px;color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:22px}
+.scroll{overflow-x:auto}
+svg text{font-family:var(--mono)}
+/* hero */
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:36px;align-items:end}
+.hero>*{min-width:0}
+.thesis{border-left:3px solid var(--hot);padding-left:16px;font-size:18px}
+.thesis b{color:var(--hot)}
+/* funnel strip */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+.stage{padding:16px 14px;border-top:4px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.stage.on{border-top-color:var(--accent)}
+.stage .k{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stage .n{font-family:var(--display);font-weight:800;font-size:22px;font-stretch:85%}
+.stage p{font-size:14px;color:var(--muted)}
+/* mechanisms */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.mech{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mech .tag{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.mech .shape{font-family:var(--mono);font-size:13px;background:var(--accent-soft);padding:8px 10px;border-radius:4px}
+.mech .fail{font-size:13px;color:var(--hot)}
+.mech .fail::before{content:"Fails when: ";font-weight:600}
+/* format lock */
+.sentence{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:20px;font-family:var(--display);font-weight:700;font-stretch:90%}
+.fixed{padding:4px 2px}
+.blank{padding:4px 10px;border:2px dashed var(--accent);border-radius:4px;color:var(--accent);font-family:var(--mono);font-size:15px;font-weight:500}
+.fills{display:grid;gap:8px;margin-top:6px}
+.fill{display:grid;grid-template-columns:44px 1fr;gap:10px;font-size:15px;align-items:baseline}
+.fill .v{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.fill em{font-style:normal;color:var(--accent);font-weight:600}
+/* ladder */
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:4px;align-items:baseline}
+.rung>*{min-width:0}
+.rung b{font-family:var(--display);font-stretch:85%;font-size:17px}
+.rung .no{color:var(--hot);font-size:14px}
+.rung .yes{font-size:14px}
+.rung:nth-child(1){margin-left:0}.rung:nth-child(2){margin-left:4%}.rung:nth-child(3){margin-left:8%}.rung:nth-child(4){margin-left:12%}.rung:nth-child(5){margin-left:16%}
+/* diagnostic */
+.diag{display:grid;grid-template-columns:1fr 1.2fr;gap:24px}
+.diag>*{min-width:0}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
+.field label{font-size:14px;font-weight:600}
+.field .row{display:flex;gap:12px;align-items:center}
+.field input[type=range]{flex:1;accent-color:var(--accent)}
+.field output{font-family:var(--mono);font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.field small{color:var(--muted);font-size:12px}
+.verdict{display:flex;flex-direction:column;gap:12px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:99px;color:var(--surface)}
+.v-row{display:grid;grid-template-columns:92px 1fr;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.v-row:last-child{border-bottom:0}
+.v-row .lbl{font-family:var(--display);font-weight:700;font-stretch:85%}
+.v-row p{font-size:14px}
+/* teardown sheet */
+.sheet{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.sheet>*{min-width:0}
+.sheet dl{margin:0;display:grid;grid-template-columns:120px 1fr;gap:8px 12px;font-size:14px}
+.sheet dt{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;padding-top:2px}
+.sheet dd{margin:0;border-bottom:1px dashed var(--line);min-height:22px;color:var(--muted)}
+.sheet a{color:var(--accent);word-break:break-all;font-family:var(--mono);font-size:12px}
+.checks{display:grid;gap:8px;padding:0;margin:0;list-style:none}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:15px}
+.checks li::before{content:"";width:14px;height:14px;border:2px solid var(--accent);border-radius:3px;margin-top:5px}
+@media (max-width:760px){
+  .hero,.diag,.sheet{grid-template-columns:1fr}
+  .strip{grid-template-columns:1fr}
+  .stage{border-top:0;border-left:4px solid var(--line)}
+  .stage.on{border-left-color:var(--accent)}
+  .rung{grid-template-columns:1fr;margin-left:0!important}
+}
+@media (prefers-reduced-motion:no-preference){.curve{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.6s ease-out forwards}.curve.c2{animation-delay:.2s}.curve.c3{animation-delay:.4s}@keyframes draw{to{stroke-dashoffset:0}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="sec">
+    <span class="tc">00:00:00 → 00:00:03 · 90 frames at 30fps</span>
+    <h1>The first 90 frames</h1>
+    <p class="lede">Hook design for short-form video and paid social. What a hook is made of, the seven ways it holds attention, and how to tell if your hook or your body is the thing that failed.</p>
+  </div>
+  <div class="thesis">
+    You're right that the hook is the gate: nothing downstream happens if the thumb doesn't stop. But a hook <b>buys the next three seconds, not the sale</b>. A hook that promises more than the body delivers spikes the 3-second number and then loses people, and the platform reads that drop-off as "bad video." The hook and the body have to be one thought.
+  </div>
+</header>
+
+<!-- Retention curves -->
+<section class="sec">
+  <span class="tc">Retention · how the platform sees your video</span>
+  <h2>Three hooks, three curves</h2>
+  <p class="muted">Illustrative shapes, not data from your account. They show the three failure patterns you'll see in Ads Manager or IG Insights.</p>
+  <div class="panel scroll">
+    <svg viewBox="0 0 900 340" width="100%" style="min-width:620px" role="img" aria-label="Retention curves for three hook types">
+      <g stroke="var(--line)" stroke-width="1">
+        <line x1="70" y1="40" x2="70" y2="280"/><line x1="70" y1="280" x2="870" y2="280"/>
+        <line x1="70" y1="160" x2="870" y2="160" stroke-dasharray="3 5"/>
+        <line x1="70" y1="40" x2="870" y2="40" stroke-dasharray="3 5"/>
+        <line x1="150" y1="40" x2="150" y2="280" stroke-dasharray="3 5"/>
+      </g>
+      <rect x="70" y="40" width="80" height="240" fill="var(--accent-soft)" opacity=".7"/>
+      <text x="110" y="32" text-anchor="middle" font-size="11" fill="var(--accent)">HOOK 0–3s</text>
+      <g font-size="11" fill="var(--muted)">
+        <text x="60" y="44" text-anchor="end">100%</text><text x="60" y="164" text-anchor="end">50%</text><text x="60" y="284" text-anchor="end">0%</text>
+        <text x="70" y="300" text-anchor="middle">0s</text><text x="150" y="300" text-anchor="middle">3s</text>
+        <text x="470" y="300" text-anchor="middle">15s</text><text x="870" y="300" text-anchor="middle">30s</text>
+        <text x="470" y="326" text-anchor="middle">seconds watched</text>
+      </g>
+      <!-- A clickbait: holds 3s, then cliff -->
+      <path class="curve" d="M70 40 C 100 60, 130 80, 150 90 C 180 150, 220 230, 300 250 S 600 268, 870 272" fill="none" stroke="var(--hot)" stroke-width="3"/>
+      <!-- B weak hook -->
+      <path class="curve c2" d="M70 40 C 90 150, 120 200, 150 215 C 250 235, 500 255, 870 262" fill="none" stroke="var(--muted)" stroke-width="3" stroke-dasharray="7 5"/>
+      <!-- C matched -->
+      <path class="curve c3" d="M70 40 C 100 58, 130 72, 150 82 C 300 120, 550 150, 870 175" fill="none" stroke="var(--ok)" stroke-width="3.5"/>
+      <g font-size="12" font-weight="500">
+        <text x="880" y="176" fill="var(--ok)" text-anchor="end" dy="-10">C · hook and body match</text>
+        <text x="880" y="262" fill="var(--hot)" text-anchor="end" dy="-14">A · hook overpromised</text>
+        <text x="320" y="225" fill="var(--muted)">B · frame 1 never stopped anyone</text>
+      </g>
+    </svg>
+  </div>
+  <div class="grid">
+    <div class="panel mech"><span class="tag" style="color:var(--hot)">A · clickbait</span><p class="small">Great 3-second rate, cliff right after. The line opened a loop the body never closes. It attracts the curious, not the buyer, and cheap clicks that don't buy teach the algorithm to find more people who won't buy.</p></div>
+    <div class="panel mech"><span class="tag">B · no stop</span><p class="small">Most people are gone before the line is even said. The fix is in frame one, usually not the words. "Talking head at a desk" is a camera setup. It isn't a scroll stopper.</p></div>
+    <div class="panel mech"><span class="tag" style="color:var(--ok)">C · matched</span><p class="small">The stopper, the line, and the body are one thought. The early drop is about the same as A, but the curve after it is shallow. This is the one that fills the funnel.</p></div>
+  </div>
+</section>
+
+<!-- Funnel strip -->
+<section class="sec">
+  <span class="tc">Funnel · which part of the video does which job</span>
+  <h2>The hook owns one stage out of five</h2>
+  <div class="strip panel" style="padding:0">
+    <div class="stage on"><span class="k">0–1s · frame</span><span class="n">Stop</span><p>Scroll stopper. Something happening in frame one that looks odd with the sound off.</p></div>
+    <div class="stage on"><span class="k">1–3s · line</span><span class="n">Open</span><p>The line names a problem in the viewer's own words and opens a loop.</p></div>
+    <div class="stage"><span class="k">3–15s · body</span><span class="n">Hold</span><p>Pay the loop off a little at a time. Every beat earns the next one.</p></div>
+    <div class="stage"><span class="k">mid · proof</span><span class="n">Believe</span><p>A demo, a result, a real person. This is where the hook's promise gets kept.</p></div>
+    <div class="stage"><span class="k">end · offer</span><span class="n">Act</span><p>CTA plus a landing page that continues the same thought. A mismatched page kills a good ad.</p></div>
+  </div>
+</section>
+
+<!-- Anatomy lanes -->
+<section class="sec">
+  <span class="tc">Anatomy · three channels, one thought</span>
+  <h2>A hook is a line and a scroll stopper together</h2>
+  <p>This is already the rule in your Prizm machine (stage 4b): the line is what people hear or read, the stopper is what arrests the thumb before a word lands. Mapped across the first 90 frames:</p>
+  <div class="panel scroll">
+    <svg viewBox="0 0 900 250" width="100%" style="min-width:620px" role="img" aria-label="Hook channel timeline over three seconds">
+      <g font-size="11" fill="var(--muted)">
+        <text x="130" y="24" text-anchor="middle">f1</text><text x="330" y="24" text-anchor="middle">f30 · 1s</text>
+        <text x="580" y="24" text-anchor="middle">f60 · 2s</text><text x="830" y="24" text-anchor="middle">f90 · 3s</text>
+      </g>
+      <g stroke="var(--line)"><line x1="130" y1="32" x2="130" y2="230"/><line x1="330" y1="32" x2="330" y2="230" stroke-dasharray="3 5"/><line x1="580" y1="32" x2="580" y2="230" stroke-dasharray="3 5"/><line x1="830" y1="32" x2="830" y2="230"/></g>
+      <g font-size="12" fill="var(--ink)" font-weight="500">
+        <text x="10" y="64">FRAME</text><text x="10" y="114">TEXT CARD</text><text x="10" y="164">SPOKEN LINE</text><text x="10" y="214">OPEN LOOP</text>
+      </g>
+      <rect x="130" y="46" width="170" height="28" rx="3" fill="var(--hot)"/>
+      <text x="140" y="65" font-size="12" fill="var(--surface)">act mid-motion, already happening</text>
+      <rect x="300" y="46" width="530" height="28" rx="3" fill="var(--hot)" opacity=".25"/>
+      <text x="310" y="65" font-size="12" fill="var(--ink)">keep moving: cut or reveal by ~f45</text>
+      <rect x="130" y="96" width="700" height="28" rx="3" fill="var(--accent)"/>
+      <text x="140" y="115" font-size="12" fill="var(--surface)">same thought as the line, readable at a glance (most people watch muted)</text>
+      <rect x="160" y="146" width="520" height="28" rx="3" fill="var(--accent)" opacity=".55"/>
+      <text x="170" y="165" font-size="12" fill="var(--ink)">first word lands in under 0.3s · whole line done by ~2.5s</text>
+      <rect x="620" y="196" width="210" height="28" rx="3" fill="var(--ok)"/>
+      <text x="630" y="215" font-size="12" fill="var(--surface)">a question they need answered</text>
+    </svg>
+  </div>
+  <p class="small muted">Test for the stopper: mute the video and look at frame one. If it reads as ordinary, it stops nobody.</p>
+</section>
+
+<!-- Mechanisms -->
+<section class="sec">
+  <span class="tc">Mechanisms · why someone keeps watching</span>
+  <h2>Seven ways a hook works</h2>
+  <p>Viral hooks look different on the surface but almost always run on one of these. When you swipe a hook, name its mechanism first. That's the part you keep; the words are what you swap.</p>
+  <div class="grid">
+    <div class="panel mech"><span class="tag">01 · Recognition</span><h3>"That's literally me"</h3><p class="small">Names a private moment the viewer thought nobody had noticed. Your strongest mechanism for DR, because it filters for the buyer.</p><div class="shape">a behaviour + a time + an object, in their words</div><p class="fail">it describes a category instead of a moment</p></div>
+    <div class="panel mech"><span class="tag">02 · Open loop</span><h3>A question with a delayed answer</h3><p class="small">Starts something the brain wants finished. The answer must sit in the body, not the CTA.</p><div class="shape">result shown → how withheld</div><p class="fail">the payoff never comes (curve A)</p></div>
+    <div class="panel mech"><span class="tag">03 · Pattern interrupt</span><h3>Something where it shouldn't be</h3><p class="small">A visual that breaks the feed's rhythm: wrong object, wrong place, extreme macro, motion in a still feed.</p><div class="shape">ordinary scene + one wrong thing</div><p class="fail">it's strange but unrelated to the line</p></div>
+    <div class="panel mech"><span class="tag">04 · Stakes</span><h3>Something to lose</h3><p class="small">A cost, a mistake, or a risk the viewer might already be making.</p><div class="shape">the thing you do daily × what it's costing</div><p class="fail">it sounds like fear-mongering or breaks ad policy</p></div>
+    <div class="panel mech"><span class="tag">05 · Contradiction</span><h3>The opposite of what they believe</h3><p class="small">Flips a belief the viewer holds. Works best on problem-aware audiences who have tried the usual fixes.</p><div class="shape">the usual fix → why it made it worse</div><p class="fail">the flip is a stretch you can't prove</p></div>
+    <div class="panel mech"><span class="tag">06 · Payoff first</span><h3>Show the ending</h3><p class="small">Open on the after, the result, the reveal. Then rewind. The viewer stays to see how.</p><div class="shape">frame 1 = final frame</div><p class="fail">the result is so plain there's nothing left to learn</p></div>
+    <div class="panel mech"><span class="tag">07 · Joke</span><h3>A gap between what's said and what's true</h3><p class="small">Exaggeration, deadpan, or a mock-serious warning. The joke holds attention; the body supplies the real claim.</p><div class="shape">straight face + impossible statement</div><p class="fail">the joke is replaced with a literal benefit</p></div>
+  </div>
+</section>
+
+<!-- Format lock -->
+<section class="sec">
+  <span class="tc">Iteration · how to make five hooks from one that worked</span>
+  <h2>Lock the format, change the fills</h2>
+  <p>When a hook works, the reason is usually its sentence structure. Keep the fixed words and change only the blanks. Every fill should come from something a real customer said. This is the v18 format lock in your teardown machine, in one picture:</p>
+  <div class="panel sec" style="gap:14px">
+    <div class="sentence"><span class="fixed">I'm</span><span class="blank">[AGE]</span><span class="fixed">and I just found out</span><span class="blank">[HABIT]</span><span class="fixed">was the reason for</span><span class="blank">[PROBLEM]</span></div>
+    <div class="fills">
+      <div class="fill"><span class="v">V0</span><span>The source's own line, brand words swapped. Your <b>control</b>; never improve it.</span></div>
+      <div class="fill"><span class="v">V1</span><span>I'm <em>34</em> and I just found out <em>my 6am pre-workout</em> was the reason for <em>the 3pm crash</em></span></div>
+      <div class="fill"><span class="v">V2</span><span>I'm <em>29</em> and I just found out <em>washing my face twice a day</em> was the reason for <em>the breakouts</em></span></div>
+      <div class="fill"><span class="v">V3</span><span>I'm <em>41</em> and I just found out <em>the dryer sheet</em> was the reason for <em>the itch</em></span></div>
+    </div>
+    <p class="small muted">Example fills are made up to show the shape. In a real run each one cites a row from the brand's language bank.</p>
+  </div>
+</section>
+
+<!-- Awareness ladder -->
+<section class="sec">
+  <span class="tc">Awareness · where the hook is allowed to start</span>
+  <h2>Enter on the viewer's rung</h2>
+  <p>A hook that names the product to someone who doesn't know they have the problem reads fine and is invisible to them. The colder the audience, the more the hook has to be about their life and not your product.</p>
+  <div class="ladder">
+    <div class="rung"><b>Unaware</b><span class="yes">A moment, a scene, a story. A portrait of their life.</span><span class="no">Never: product, price, claim, the problem's name</span></div>
+    <div class="rung"><b>Problem-aware</b><span class="yes">The problem in their words, plus a moment.</span><span class="no">Never: product or price</span></div>
+    <div class="rung"><b>Solution-aware</b><span class="yes">Why the fixes they've tried failed. Contradiction works here.</span><span class="no">Never: price first</span></div>
+    <div class="rung"><b>Product-aware</b><span class="yes">Proof, a demo, an objection handled.</span><span class="no">Avoid: re-explaining the problem</span></div>
+    <div class="rung"><b>Most aware</b><span class="yes">The offer, the deal, the deadline.</span><span class="no">Avoid: long setup</span></div>
+  </div>
+</section>
+
+<!-- Diagnostic -->
+<section class="sec">
+  <span class="tc">Diagnose · which part failed</span>
+  <h2>Hook problem or body problem?</h2>
+  <p>Move the sliders to a video's real numbers. The thresholds are starting points; replace them with your own account's medians once you have 20 or more ads.</p>
+  <div class="panel diag">
+    <form id="diagForm" onsubmit="return false">
+      <div class="field"><label for="thumb">Hook rate (3s views ÷ impressions)</label><div class="row"><input id="thumb" type="range" min="5" max="60" value="38"><output id="thumbO">38%</output></div><small>Starting threshold: 25% weak · 30%+ good</small></div>
+      <div class="field"><label for="hold">Hold rate (ThruPlays or 15s views ÷ 3s views)</label><div class="row"><input id="hold" type="range" min="2" max="60" value="9"><output id="holdO">9%</output></div><small>Starting threshold: under 10% weak · 20%+ good</small></div>
+      <div class="field"><label for="ctr">Link CTR</label><div class="row"><input id="ctr" type="range" min="0.1" max="4" step="0.1" value="1.4"><output id="ctrO">1.4%</output></div><small>Starting threshold: under 0.8% weak · 1.2%+ good</small></div>
+    </form>
+    <div class="verdict" id="verdict" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- Teardown sheet -->
+<section class="sec">
+  <span class="tc">Your two reels · teardown sheet</span>
+  <h2>Fill these in from the reels you sent</h2>
+  <p>I couldn't watch them: Instagram is blocked from my workspace and the Apify scraper hit its monthly limit. Send the video files, a screen recording, or the first line plus a description of frame one, and I'll tear them down into this sheet.</p>
+  <div class="sheet">
+    <div class="panel"><dl>
+      <dt>Reel</dt><dd><a href="https://www.instagram.com/reel/DRvoawJEYYC/">instagram.com/reel/DRvoawJEYYC</a></dd>
+      <dt>Frame 1</dt><dd></dd><dt>Line</dt><dd></dd><dt>Text card</dt><dd></dd>
+      <dt>Mechanism</dt><dd>01–07</dd><dt>Fixed words</dt><dd></dd><dt>Blanks</dt><dd></dd>
+      <dt>Rung</dt><dd></dd><dt>Payoff at</dt><dd>timecode</dd>
+    </dl></div>
+    <div class="panel"><dl>
+      <dt>Reel</dt><dd><a href="https://www.instagram.com/reel/DdnPSy_R0xa/">instagram.com/reel/DdnPSy_R0xa</a></dd>
+      <dt>Frame 1</dt><dd></dd><dt>Line</dt><dd></dd><dt>Text card</dt><dd></dd>
+      <dt>Mechanism</dt><dd>01–07</dd><dt>Fixed words</dt><dd></dd><dt>Blanks</dt><dd></dd>
+      <dt>Rung</dt><dd></dd><dt>Payoff at</dt><dd>timecode</dd>
+    </dl></div>
+  </div>
+  <div class="panel sec" style="gap:12px">
+    <h3>Ship check for any hook</h3>
+    <ul class="checks">
+      <li>Frame one is something happening, and still reads as odd with the sound off.</li>
+      <li>The line, the text card and the frame are about the same thing.</li>
+      <li>The problem is named in the customer's words, and you can cite where you heard them.</li>
+      <li>The loop it opens gets paid off in the body, before the CTA.</li>
+      <li>It doesn't name anything the viewer's awareness rung can't hear yet.</li>
+      <li>It ships next to a control and four or five variations, and the numbers pick the winner.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var t=document.getElementById('thumb'),h=document.getElementById('hold'),c=document.getElementById('ctr'),out=document.getElementById('verdict');
+  function lvl(v,lo,hi){return v<lo?'weak':(v>=hi?'good':'ok')}
+  var col={weak:'var(--hot)',ok:'var(--warn)',good:'var(--ok)'};
+  function row(name,state,text){return '<div class="v-row"><div><div class="lbl">'+name+'</div><span class="pill" style="background:'+col[state]+'">'+state+'</span></div><p>'+text+'</p></div>'}
+  function render(){
+    var tv=+t.value,hv=+h.value,cv=+c.value;
+    document.getElementById('thumbO').textContent=tv+'%';
+    document.getElementById('holdO').textContent=hv+'%';
+    document.getElementById('ctrO').textContent=cv.toFixed(1)+'%';
+    var a=lvl(tv,25,30),b=lvl(hv,10,20),d=lvl(cv,0.8,1.2),html='';
+    html+=row('Stop',a,a==='weak'?'Frame one isn\'t stopping people. Change what happens in the first frame before you touch the words.':a==='ok'?'Borderline. Test a stronger stopper with the same line.':'The stopper is working. Keep this frame and test new lines over it.');
+    var hookOver=(a!=='weak'&&b==='weak');
+    html+=row('Hold',b,hookOver?'Curve A. The hook gets attention the body doesn\'t pay off. Move the payoff earlier or rewrite the hook so it promises what the body shows.':b==='weak'?'People leave early. Tighten the first 10 seconds and pay off a piece of the loop by second 5.':b==='ok'?'Decent. Cut dead air between beats.':'The body is holding. This is a keeper structure.');
+    html+=row('Click',d,d==='weak'?(b!=='weak'?'They watch but don\'t click. The offer or CTA is the problem, or the hook pulled the wrong audience.':'Fix the hold first; clicks follow watch time.'):d==='ok'?'Test a CTA that continues the hook\'s thought.':'The click is landing. Check that the landing page continues the same thought.');
+    out.innerHTML='<h3>Read-out</h3>'+html;
+  }
+  [t,h,c].forEach(function(el){el.addEventListener('input',render)});
+  render();
+})();
+</script>
+</body>
+</html>
