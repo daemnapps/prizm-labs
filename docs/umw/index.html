@@ -16,7 +16,11 @@
 /* A full-screen deck that always fits one window. Layout only — colour, type, radius and shadow come from /studio.css. */
 html,body{height:100%;overflow:hidden}
 nav.bar,footer.bot,.askbtn{display:none}
-#cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.stormbox{position:relative;width:100%;height:100%;min-height:0;cursor:grab;touch-action:none;user-select:none}
+.stormbox:active{cursor:grabbing}
+.storm{position:absolute;inset:0;width:100%;height:100%}
+.stormbox .label{position:absolute;left:50%;bottom:0;transform:translateX(-50%);white-space:nowrap}
+.stormbox .till{position:absolute;left:50%;top:0;transform:translateX(-50%);font-family:var(--display);font-size:clamp(28px,min(4vw,6vh),56px);color:var(--green);font-variant-numeric:tabular-nums}
 .deck{position:fixed;inset:0;z-index:1;overflow:hidden}
 .slide{height:100%;max-width:1480px;margin:0 auto;padding:clamp(34px,7vh,80px) clamp(20px,5vw,80px) clamp(64px,10vh,96px);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:minmax(0,1fr);gap:clamp(20px,5vw,96px)}
 .txt{align-self:center;animation:rise .5s both;min-height:0}
@@ -51,6 +55,10 @@ nav.bar,footer.bot,.askbtn{display:none}
 .ctl button{all:unset;cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border-radius:var(--r4);background:var(--card);border:1px solid var(--line)}
 .ctl button:hover{border-color:var(--ink)}
 .tip{position:fixed;left:clamp(20px,5vw,80px);bottom:clamp(18px,3vh,32px);z-index:3;transition:opacity .5s}
+.photo{aspect-ratio:4/5;border:0}
+.photo .ai{position:absolute;left:10px;bottom:10px;--hue:var(--ink-2);background:var(--card)}
+.duo{display:flex;gap:var(--s4);align-items:center;justify-content:center;height:100%;width:100%;min-height:0}
+.duo>.fit{flex:0 1 auto;height:100%;max-width:45%}
 .qr{background:var(--card);padding:var(--s2);border-radius:var(--r2);line-height:0;display:inline-block}
 @media(max-aspect-ratio:1/1){.slide{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:var(--s4)}.txt{align-self:end}.txt .ex,.tip{display:none}}
 </style>
@@ -65,10 +73,9 @@ nav.bar,footer.bot,.askbtn{display:none}
     </span>
 </nav>
 
-<canvas id="cv" aria-hidden="true"></canvas>
 <div class="prog" id="prog"></div>
 <main class="deck" id="deck"><section class="slide" id="slide" aria-live="polite"></section></main>
-<span class="label tip" id="tip">← → to move · hold anywhere to make it rain</span>
+<span class="label tip" id="tip">← → to move</span>
 <div class="ctl"><button id="prev" aria-label="Previous">←</button><button id="next" aria-label="Next">→</button><button id="fs">Present</button><button id="snd">Sound off</button></div>
 
 <footer class="bot">
@@ -80,6 +87,8 @@ nav.bar,footer.bot,.askbtn{display:none}
 <script>
 (() => {
 const M = '/three-doctors/m/';
+const L = 'media/';
+const photo = (src, alt, ai, cap) => `<div class="fit photo"><img src="${L}${src}" alt="${alt || 'Illustration made with AI'}">${ai ? '<span class="pill ai">Illustration · made with AI</span>' : cap ? `<span class="pill ai">${cap}</span>` : ''}</div>`;
 const COVERS = ['control', 'g01-h2', 'g01-h3', 'g01-h4', 'g01-h5', 'g01-h6'];
 const PAIRS = [['sw-1', 'p-s1-f1'], ['sw-5', 'p-s8-f1'], ['sw-7', 'p-s21-f1']];
 
@@ -90,11 +99,37 @@ const SLIDES = [
   { rain: 0, hue: 'indigo', eyebrow: 'UMW · 14 Oct 2026 · Damon Dixon, class of 2019',
     h: 'Make it rain.',
     p: 'How AI turns one piece of content into customers, shown on one real ad.',
-    show: () => `<div class="obj" data-obj="prism" role="img" aria-label="A glass prism: one beam in, a full spectrum out"></div>` },
-  { rain: 0, hue: 'amber', eyebrow: 'Where it started',
+    tip: 'Press and hold the storm to make it rain',
+    show: () => `<div class="stormbox" role="img" aria-label="A hurricane of digital dollar bills"><canvas class="storm"></canvas><span class="label">Press and hold to make it rain</span></div>` },
+  { rain: 0, hue: 'indigo', eyebrow: 'Who\'s talking',
+    h: 'Damon Dixon.',
+    p: 'Twenty years of making content, and learning exactly how it turns into money.',
+    show: () => photo('gold-shirt.jpg', 'Damon Dixon') },
+  { rain: 0, hue: 'amber', eyebrow: 'Growing up',
+    h: 'It started with YouTube.',
+    p: 'I made my first videos at nine. Unlike TV, you could see exactly who watched what you made.',
+    show: () => photo('school.jpg', 'Damon as a kid, school portrait', false, 'Me, school picture day') },
+  { rain: 0, hue: 'amber', eyebrow: 'College',
+    h: 'Beats on YouTube.',
+    p: 'Midway through college I was making music and selling beats on YouTube, and realised I could make money from a laptop.',
+    tip: 'Tap the video for sound',
+    show: () => `<div class="fit photo"><video id="v" src="${L}singing-2017.mp4" poster="${L}singing-2017.jpg" muted autoplay loop playsinline></video><span class="pill ai">Me singing, 2017</span></div>` },
+  { rain: 0, hue: 'amber', eyebrow: 'Class of 2019',
+    h: 'Right here at UMW.',
+    p: 'Business administration, a few credits short of a double major in music. Music is what pulled me into creativity.',
+    show: () => photo('umw-2023.jpg', 'Damon back at UMW', false, 'Back at UMW, 2023') },
+  { rain: 0, hue: 'amber', eyebrow: 'Right out of college',
     h: 'One ad. One million dollars.',
-    p: 'My first business did a million in sales right out of college, off one ad. I didn\'t know why it worked. Now we do, and a machine can repeat it.',
-    show: () => `<div style="text-align:center"><p class="big">1 ad</p><p class="label" style="margin:var(--s4) 0">became</p><p class="big" style="color:var(--green)">$1M</p></div>` },
+    p: 'My first business did a million in sales off one ad. I didn\'t know why it worked. I just knew a better video sold more.',
+    show: () => photo('whiteboard-2019.jpg', 'Damon\'s whiteboard, July 2019: 22-year-old millionaire, $1M in revenue', false, 'My whiteboard, July 2019') },
+  { rain: 0, hue: 'amber', eyebrow: 'Since then',
+    h: 'About $20 million.',
+    p: 'Everything after came from getting better at one thing: programming an outcome from the fundamentals of marketing and data.',
+    show: () => photo('china-2023.jpg', 'Damon at a factory in China under a sign that reads Welcome Damon', false, 'Factory visit, China, 2023') },
+  { rain: 0, hue: 'indigo', eyebrow: 'Now',
+    h: 'Bangkok.',
+    p: 'Building AI that runs e-commerce brands, with a partner whose fulfillment company is based in Shenzhen. Here\'s how it works.',
+    show: () => `<div class="grid3">${[1, 2, 3, 4, 5, 6].map(i => `<figure><img src="${L}padel-${i}.jpg" alt="Damon playing padel in Bangkok"></figure>`).join('')}</div>` },
   { rain: 1, hue: 'violet', eyebrow: 'Step 1 of 6 · Swipe',
     h: 'Start from what already works.',
     p: 'We collect posts people already can\'t stop watching. The market tested them for free.',
@@ -123,7 +158,7 @@ const SLIDES = [
     h: 'It refuses bad work.',
     p: 'Every mistake the machine catches becomes a rule it checks on every ad after.',
     tip: 'Tap a stop to see the fix',
-    show: () => `<div class="stops">${[['Her mouth moved on someone else\'s voice', 'Covered with a close-up'], ['A word got cut off: "Guaranteed"', 'Re-voiced, heard back whole'], ['The music stopped before the end', 'Music under the whole ad'], ['The cover\'s words landed on her face', 'Moved to a clear spot'], ['The post showed a price the site didn\'t', 'Taken out']].map(([a, b]) => `<button><span class="pill stop">Stop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div>` },
+    show: () => `<div class="duo"><div class="fit"><img src="${M}cover-g01-h5.jpg" alt="A cover where the words landed on her face"></div><div class="stops">${[['Her mouth moved on someone else\'s voice', 'Covered with a close-up'], ['A word got cut off: "Guaranteed"', 'Re-voiced, heard back whole'], ['The music stopped before the end', 'Music under the whole ad'], ['The cover\'s words landed on her face', 'Moved to a clear spot'], ['The post showed a price the site didn\'t', 'Taken out']].map(([a, b]) => `<button><span class="pill stop">Stop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div></div>` },
   { rain: 6, hue: 'green', eyebrow: 'Step 6 of 6 · Learn',
     h: 'The market picks the winner.',
     p: 'One click sends six openings to Meta. Each person sees the one that holds them, and the winner feeds the next swipe.',
@@ -133,15 +168,15 @@ const SLIDES = [
     h: 'The tools are basically free.',
     p: 'One semester of weekends could get you a first sale. My brother is 21. Within months he landed a $2,000 retainer building websites with AI.',
     ex: ['Choose your destiny', 'There\'s never been a time like this.'],
-    tip: 'Hold anywhere to make it rain',
-    show: () => `<div style="text-align:center"><p class="label">Made it rain</p><p class="big" id="till" style="color:var(--green)">$0</p><div class="btns" style="justify-content:center;margin-top:var(--s5);align-items:center"><span class="qr" id="qr"></span><span class="label" style="text-align:left">Make it rain<br>on your phone<br><b>daemn.co/umw</b></span></div></div>` },
+    tip: 'Press and hold the storm to make it rain',
+    show: () => `<div class="duo">${photo('finale.jpg', 'Damon')}<div style="display:flex;flex-direction:column;align-items:center;gap:var(--s3);height:100%;flex:1 1 0;min-width:0"><div class="stormbox" style="flex:1 1 auto"><b class="till" id="till">$0</b><canvas class="storm"></canvas></div><div class="btns" style="align-items:center"><span class="qr" id="qr"></span><span class="label">Make it rain<br>on your phone<br><b>daemn.co/umw</b></span></div></div></div>` },
 ];
 
 const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const tok = n => getComputedStyle(document.documentElement).getPropertyValue('--' + n).trim();
 const SPEC = ['violet', 'indigo', 'cyan', 'green', 'amber', 'coral', 'magenta'];
 const C = {}; ['ink', 'ink-3', 'card', ...SPEC].forEach(k => C[k] = tok(k));
-let cur = 0, money = 0, shown = 0, hold = 0, sound = false;
+let cur = 0, sound = false;
 
 /* ── slides ── */
 $('#prog').innerHTML = SLIDES.map(() => '<i></i>').join('');
@@ -151,12 +186,13 @@ function go(i) {
   sl.style.setProperty('--hue', `var(--${S.hue})`);
   sl.innerHTML = `<div class="txt"><p class="eyebrow">${esc(S.eyebrow)}</p><h1>${esc(S.h)}</h1><p class="lede">${esc(S.p)}</p>${S.ex ? `<div class="ex"><p class="label hue">${esc(S.ex[0])}</p><p>${esc(S.ex[1])}</p></div>` : ''}</div><div class="show">${S.show()}</div>`;
   document.querySelectorAll('#prog i').forEach((d, j) => d.classList.toggle('on', j <= cur));
-  $('#tip').textContent = S.tip || '← → to move · hold anywhere to make it rain';
+  $('#tip').textContent = S.tip || '← → to move';
   wire(sl);
   if (i > 0) thunder(.6);
   try { localStorage.setItem('mir-slide', cur); } catch (e) {}
 }
 function wire(sl) {
+  storms.forEach(stop => stop()); storms = [...sl.querySelectorAll('.stormbox')].map(storm);
   const objs = sl.querySelectorAll('.obj[data-obj]');
   (function m(n) { if (!objs.length) return; if (window.daemnObjects) objs.forEach(el => window.daemnObjects.mount(el)); else if (n < 40) setTimeout(() => m(n + 1), 250); })(0);
   const v = sl.querySelector('#v'); if (v) v.onclick = () => { v.muted = !v.muted; };
@@ -207,7 +243,7 @@ function toggleSound() {
     const buf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate), d = buf.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     const src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
-    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = .6;
+    const bp = ac.createBiquadFilter(); bp.type = 'lowpass'; bp.frequency.value = 520; bp.Q.value = .4;
     rainGain = ac.createGain(); rainGain.gain.value = 0; src.connect(bp).connect(rainGain).connect(ac.destination); src.start();
   } catch (e) {}
 }
@@ -220,40 +256,76 @@ function thunder(k) {
   const g = ac.createGain(); g.gain.value = .8 * k; s.connect(lp).connect(g).connect(ac.destination); s.start();
 }
 
-/* ── the rain behind the slides: heavier and more colourful at every step ── */
-const cv = $('#cv'), cx = cv.getContext('2d'), DPR = Math.min(2, devicePixelRatio || 1);
-let W = 0, H = 0, drops = [], last = performance.now();
-function size() { W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); }
-addEventListener('resize', size); size();
-function frame(t) {
-  const dt = Math.min(.05, (t - last) / 1000); last = t;
-  const lvl = SLIDES[cur].rain, rate = [2, 6, 10, 16, 34, 34, 50][lvl] * (1 + hold * 4);
-  let want = rate * dt;
-  while (want > 0) {
-    if (Math.random() < want) {
-      const cash = lvl >= 6 && Math.random() < .3;
-      const hue = cash ? C.green : lvl >= 4 ? C[SPEC[(Math.random() * 7) | 0]] : lvl === 3 ? C.magenta : lvl === 2 ? C.indigo : lvl === 1 ? C.violet : C['ink-3'];
-      drops.push({ x: Math.random() * W, y: -20, v: 420 + Math.random() * 260, len: 12 + Math.random() * 14, hue, cash });
-    }
-    want -= 1;
+/* ── the money hurricane: digital dollar bills spun up a funnel, drawn in the PRIZM spectrum ── */
+let storms = [], money = 0, shown = 0;
+function billSprite(back) {
+  const c = document.createElement('canvas'), w = 240, h = 108; c.width = w; c.height = h;
+  const g = c.getContext('2d'), G = tok('green'), K = tok('card'), I = tok('ink');
+  g.fillStyle = G; g.beginPath(); g.roundRect(0, 0, w, h, 10); g.fill();
+  const sheen = g.createLinearGradient(0, 0, w, h);
+  SPEC.forEach((k, i) => sheen.addColorStop(i / 6, tok(k)));
+  g.globalAlpha = .28; g.fillStyle = sheen; g.fillRect(0, h * .62, w, h * .16); g.globalAlpha = 1;
+  g.strokeStyle = K; g.globalAlpha = .65; g.lineWidth = 2; g.strokeRect(9, 9, w - 18, h - 18); g.globalAlpha = 1;
+  if (back) {
+    g.fillStyle = I; g.globalAlpha = .18; g.fillRect(0, 0, w, h); g.globalAlpha = 1;
+    g.fillStyle = K; g.font = '500 18px "DM Mono", monospace'; g.textAlign = 'center'; g.fillText('PRIZM LABS', w / 2, h / 2 + 6);
+  } else {
+    g.fillStyle = K; g.globalAlpha = .22; g.beginPath(); g.arc(w / 2, h / 2, 34, 0, Math.PI * 2); g.fill(); g.globalAlpha = 1;
+    g.font = '800 46px "Unbounded", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('$', w / 2, h / 2 + 2);
+    g.font = '500 16px "DM Mono", monospace'; g.fillText('100', 30, 26); g.fillText('100', w - 30, h - 24);
   }
-  cx.clearRect(0, 0, W, H); cx.lineCap = 'round'; cx.globalAlpha = .45;
-  drops = drops.filter(d => {
-    d.y += d.v * dt * (1 + hold * .5);
-    if (d.cash) { cx.fillStyle = d.hue; cx.font = '600 16px "Unbounded", sans-serif'; cx.fillText('$', d.x, d.y); }
-    else { cx.strokeStyle = d.hue; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(d.x, d.y - d.len); cx.lineTo(d.x, d.y); cx.stroke(); }
-    if (d.y > H) { if (cur === SLIDES.length - 1) money += d.cash ? 50 : 5; return false; }
-    return true;
-  });
-  cx.globalAlpha = 1;
-  shown += (money - shown) * Math.min(1, dt * 5);
-  const till = $('#till'); if (till) till.textContent = '$' + Math.round(shown).toLocaleString();
-  if (sound && rainGain) rainGain.gain.value = Math.min(.45, drops.length / 700) * (1 + hold);
-  requestAnimationFrame(frame);
+  return c;
 }
-requestAnimationFrame(frame);
-deck.addEventListener('pointerdown', e => { if (e.target.closest('a,button,video,figure,#cmp')) return; hold = 1; thunder(.3); });
-addEventListener('pointerup', () => hold = 0); addEventListener('pointercancel', () => hold = 0);
+function storm(box) {
+  const cv = box.querySelector('canvas'), cx = cv.getContext('2d'), DPR = Math.min(2, devicePixelRatio || 1);
+  const FRONT = billSprite(false), BACK = billSprite(true);
+  let W = 0, H = 0, boost = 0, want = 0, live = true, last = performance.now();
+  const fit = () => { W = box.clientWidth; H = box.clientHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); };
+  const ro = new ResizeObserver(fit); ro.observe(box); fit();
+  const N = W < 360 ? 70 : 140;
+  const bills = Array.from({ length: N }, () => ({ h: Math.random(), th: Math.random() * Math.PI * 2, r: .75 + Math.random() * .5, flip: Math.random() * 6, fv: 2 + Math.random() * 5, s: .5 + Math.random() * .5 }));
+  box.addEventListener('pointerdown', e => { want = 1; box.setPointerCapture(e.pointerId); thunder(.35); });
+  const up = () => { want = 0; }; box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+  function frame(t) {
+    if (!live) return;
+    const dt = Math.min(.05, (t - last) / 1000); last = t;
+    boost += (want - boost) * Math.min(1, dt * 3);
+    const base = Math.min(W, H) * .05, top = Math.min(W * .48, H * .45), floor = H * .93, span = H * .82;
+    cx.clearRect(0, 0, W, H);
+    // the funnel's wind lines
+    cx.strokeStyle = tok('ink-3'); cx.lineWidth = 1;
+    for (let k = 0; k < 9; k++) {
+      const h = k / 8, R = base + (top - base) * Math.pow(h, 1.35), y = floor - h * span, sway = Math.sin(t / 900 + h * 3) * W * .03 * h;
+      cx.globalAlpha = .08 + boost * .08; cx.beginPath(); cx.ellipse(W / 2 + sway, y, R, R * .22, 0, (t / 300 + k) % (Math.PI * 2), (t / 300 + k) % (Math.PI * 2) + Math.PI * 1.3); cx.stroke();
+    }
+    cx.globalAlpha = .12; cx.fillStyle = tok('ink-3'); cx.beginPath(); cx.ellipse(W / 2, floor + 6, base * 3 + boost * base * 2, base * .5, 0, 0, Math.PI * 2); cx.fill();
+    const speed = 1.4 + boost * 3.2, rise = .07 + boost * .22;
+    const drawn = bills.map(b => {
+      b.h += dt * rise * (.6 + b.s * .8);
+      if (b.h > 1) { b.h = 0; b.th = Math.random() * Math.PI * 2; if (boost > .3 || cur === SLIDES.length - 1) money += 100; }
+      const R = (base + (top - base) * Math.pow(b.h, 1.35)) * b.r;
+      b.th += dt * speed * (1.6 - b.h) * (top / Math.max(R, 1)) * .18;
+      b.flip += dt * b.fv * (1 + boost);
+      const sway = Math.sin(t / 900 + b.h * 3) * W * .03 * b.h, z = Math.sin(b.th);
+      return { b, x: W / 2 + sway + Math.cos(b.th) * R, y: floor - b.h * span + z * R * .22, z };
+    }).sort((p, q) => p.z - q.z);
+    for (const { b, x, y, z } of drawn) {
+      const depth = (z + 1) / 2, sc = (.18 + .22 * b.s) * (.55 + .45 * depth) * Math.min(1.4, W / 520 + .4), fx = Math.cos(b.flip);
+      cx.save(); cx.translate(x, y); cx.rotate(Math.cos(b.th) * .7 + Math.sin(b.flip * .5) * .3); cx.scale(sc * (Math.abs(fx) < .08 ? .08 : fx), sc);
+      cx.globalAlpha = .35 + .65 * depth; cx.drawImage(fx >= 0 ? FRONT : BACK, -120, -54); cx.restore();
+    }
+    cx.globalAlpha = 1;
+    if (sound && rainGain) rainGain.gain.value = .05 + boost * .35;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  return () => { live = false; ro.disconnect(); };
+}
+(function till(t) {
+  shown += (money - shown) * .12;
+  const el = $('#till'); if (el) el.textContent = '$' + Math.round(shown).toLocaleString();
+  requestAnimationFrame(till);
+})();
 
 let start = 0; try { start = +(localStorage.getItem('mir-slide') || 0); } catch (e) {}
 go(start);
