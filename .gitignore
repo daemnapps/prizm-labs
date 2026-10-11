@@ -76,3 +76,6 @@ node_modules/
 !docs/three-doctors/m/*.mp4
 !docs/three-doctors/m/*.jpg
 tools/story-machine/.voice-cache/
+# the UMW talk's own pictures and clip (what daemn.co/umw shows)
+!docs/umw/media/*.jpg
+!docs/umw/media/*.mp4
