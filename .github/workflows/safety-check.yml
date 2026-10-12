@@ -1,0 +1,18 @@
+# Runs on every change proposed to main. It blocks the change if any added line holds
+# something that must never be public: key-like text, a personal email, a path off
+# someone's own computer, or a private brand/person name. Rules: tools/safety_check.py.
+name: safety-check
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  safety-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check every added line
+        run: python3 tools/safety_check.py "origin/${{ github.base_ref }}" HEAD

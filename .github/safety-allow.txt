@@ -1,0 +1,6 @@
+# Lines here let one specific thing through the safety check, only under one path.
+# Format: path-prefix|text      (reviewed like any other change)
+docs/privacy.html|ddixon@gradientmediallc.com
+docs/terms.html|ddixon@gradientmediallc.com
+docs/data-deletion.html|ddixon@gradientmediallc.com
+docs/briefs/douxds-clipper-kit|douxds
