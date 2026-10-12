@@ -1,0 +1,262 @@
+<title>The Type Record</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eff0ec;--surface:#fbfbf9;--sunk:#e5e7e1;--ink:#14171b;--ink-2:#3d444b;--mid:#6b7279;--faint:#9aa1a7;--rule:#d4d7cf;--rule-2:#c2c6bc;--live:#1b6a51;--live-bg:#dfece6;--live-rule:#a9cfbe;--flag:#9b3320;--flag-bg:#f3e2dd;--flag-rule:#ddb3a7;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#121417;--surface:#1a1d21;--sunk:#23272c;--ink:#e9eae4;--ink-2:#c3c7c1;--mid:#8d949b;--faint:#6d747b;--rule:#2b3035;--rule-2:#3a4046;--live:#5cbd99;--live-bg:#17302a;--live-rule:#2e5c4c;--flag:#e8836a;--flag-bg:#31201c;--flag-rule:#5e352c;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#121417;--surface:#1a1d21;--sunk:#23272c;--ink:#e9eae4;--ink-2:#c3c7c1;--mid:#8d949b;--faint:#6d747b;--rule:#2b3035;--rule-2:#3a4046;--live:#5cbd99;--live-bg:#17302a;--live-rule:#2e5c4c;--flag:#e8836a;--flag-bg:#31201c;--flag-rule:#5e352c;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:Newsreader,Georgia,serif;font-size:17px;line-height:1.6;margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:20px;padding-block:clamp(34px,7vw,66px) 90px}
+h1,h2,h3,.lab,i,.tag{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(32px,6vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1.03;margin:0 0 .45em;text-wrap:balance}
+h2{font-size:clamp(19px,3vw,24px);font-weight:700;letter-spacing:-.02em;margin:0 0 .25em}
+p{margin:0 0 1em}
+.dek{font-size:clamp(17.5px,2.5vw,20px);line-height:1.5;color:var(--ink-2);max-width:620px}
+.dek strong{color:var(--ink);font-weight:500}
+.stamp{font-family:"DM Mono",monospace;font-size:11.5px;letter-spacing:.06em;color:var(--mid);text-transform:uppercase;margin-bottom:20px}
+header{border-bottom:2px solid var(--ink);padding-bottom:clamp(26px,5vw,40px);margin-bottom:clamp(30px,5vw,46px)}
+section{margin-top:clamp(42px,7vw,68px)}
+.lab{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin:18px 0 8px}
+.ad{display:grid;grid-template-columns:260px 1fr;gap:0 26px;background:var(--surface);border:1px solid var(--rule);padding:22px;margin-bottom:18px;align-items:start}
+.shot img{width:100%;height:auto;display:block;border:1px solid var(--rule-2)}
+.body h3{font-size:16px;letter-spacing:-.01em;margin:0}
+.body h3 span{font-family:"DM Mono",monospace;font-size:12px;font-weight:400;color:var(--mid);margin-left:8px;letter-spacing:0}
+.zones{display:grid;gap:9px}
+.z{border-left:2px solid var(--rule-2);padding-left:12px}
+.zt{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.zt b{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+.zt q{font-family:"DM Mono",monospace;font-size:12px;color:var(--live);quotes:'"' '"'}
+.z p{margin:3px 0 0;font-size:14.5px;line-height:1.42;color:var(--ink-2)}
+.keys{display:flex;flex-wrap:wrap;gap:6px}
+i{font-style:normal;font-size:11px;font-weight:600;letter-spacing:.05em;padding:4px 8px;border:1px solid var(--rule-2);background:var(--sunk);color:var(--mid)}
+i.y{background:var(--live-bg);border-color:var(--live-rule);color:var(--live)}
+.miss{margin:14px 0 0;font-size:14.5px;line-height:1.45;color:var(--flag);background:var(--flag-bg);border:1px solid var(--flag-rule);padding:11px 13px}
+.miss em{font-style:italic}
+.box{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--live);padding:clamp(18px,3vw,26px);margin-top:20px}
+.box p:last-child{margin-bottom:0}
+.box .q{font-style:italic;color:var(--ink-2);border-left:2px solid var(--rule-2);padding-left:14px;margin-bottom:1em}
+.scroll{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15.5px}
+th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);padding:0 14px 8px 0;border-bottom:2px solid var(--ink)}
+td{padding:12px 14px 12px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45;color:var(--ink-2)}
+td:first-child,th:first-child{padding-left:0}
+td strong{color:var(--ink);font-weight:500}
+tr:last-child td{border-bottom:none}
+code{font-family:"DM Mono",monospace;font-size:13px;background:var(--sunk);padding:1px 5px;border:1px solid var(--rule)}
+.fixed{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--live);background:var(--live-bg);border:1px solid var(--live-rule);padding:3px 6px}
+.tag{font-family:"DM Mono",monospace;font-size:11.5px;color:var(--mid)}
+.ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:8px}
+.ba>div{background:var(--surface);border:1px solid var(--rule);padding:18px}
+.ba .after{border-left:3px solid var(--live)}
+.ba .before{border-left:3px solid var(--rule-2)}
+pre{font-family:"DM Mono",monospace;font-size:12px;line-height:1.55;background:var(--sunk);border:1px solid var(--rule);padding:12px;margin:0;overflow-x:auto;color:var(--ink-2);white-space:pre}
+.note{font-size:14px;line-height:1.45;color:var(--mid);margin:12px 0 0}
+.vocab{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.vocab span{font-family:"DM Mono",monospace;font-size:12.5px;padding:6px 10px;background:var(--surface);border:1px solid var(--rule-2);color:var(--ink-2)}
+.result{margin:0}
+.result img{width:100%;height:auto;display:block;border:1px solid var(--rule-2)}
+footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--rule);font-family:"DM Mono",monospace;font-size:12.5px;color:var(--mid);line-height:1.7}
+@media (max-width:720px){.ad{grid-template-columns:1fr;gap:16px}}
+</style>
+<div class="wrap">
+<header>
+<div class="stamp">25 Sep 2026 · five real Brand A swipes · the hole, and the fix</div>
+<h1>The Type Record</h1>
+<p class="dek">What the teardown captures about the lettering in a swipe, what survived into the brief, and <strong>the one thing that was written down and thrown away — now recorded, carried and sent.</strong></p>
+</header>
+
+<div class="box">
+<p class="q">“Things like the colour of the font, the style of the font. This is what I’m talking about: getting really clear on just the image itself in the teardown record.”</p>
+<p><strong>Colour is captured. Style is captured. Both are dropped before the picture is made.</strong> The teardown writes a full paragraph per type zone — the class, the width, the weight, the case, the cap height, the hex, the tracking, the leading, and sometimes the treatment. The brief’s type layer then keeps eight of those fields and throws the rest away, and the generator never sees any of it at all.</p>
+</div>
+
+<section>
+<h2>Five swipes, what was written and what was kept</h2>
+<p class="dek" style="font-size:16px">Green = the field survives into the brief. Grey = recorded in the teardown and gone by the time a picture is made.</p>
+<article class="ad">
+  <div class="shot"><img alt="swipe p176" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></div>
+  <div class="body">
+    <h3>p176 <span>5 type zones recorded</span></h3>
+    <p class="lab">What the teardown wrote about the lettering</p>
+    <div class="zones"><div class="z"><div class="zt"><b>Zone</b><q>Text (verbatim)</q></div><p>Type &amp; Treatment</p></div><div class="z"><div class="zt"><b>Zone A — eyebrow bar</b><q>Hyper potent</q></div><p>Rounded humanist sans `(inferred: similar to Quicksand)`, normal width, medium, sentence case, ~3% height, `#2B3D34`, normal tracking, solid.</p></div><div class="z"><div class="zt"><b>Zone B — headline block</b><q>eye balm</q></div><p>Textured display serif `(inferred: custom/hand-drawn)`, normal width, bold, lowercase, ~8% height, `#FDF8E5` fill with `#2B3D34` hatched shading and outline, arched baseline.</p></div><div class="z"><div class="zt"><b>Zone C — subhead</b><q>for visible results</q></div><p>Rounded humanist sans, normal width, medium, sentence case, ~3% height, `#2B3D34`, normal tracking, solid.</p></div><div class="z"><div class="zt"><b>Zone E — CTA</b><q>Learn more</q></div><p>Textured display serif, normal width, bold, sentence case, ~4% height, `#FDF8E5` fill with `#2B3D34` hatched shading and outline.</p></div></div>
+    <p class="lab">What survives into the brief's type layer</p>
+    <div class="keys"><i class="y">color</i><i class="y">case</i><i class="y">weight</i><i class="y">tracking</i><i class="y">font</i><i class="y">align</i><i class="y">cap_pct</i><i class="y">top_pct</i></div>
+    <p class="miss">No field carries how the letters are <em>built</em> — textured, hand-drawn, hatched shadow, extruded, outlined, cut paper. It is written in the teardown and dropped here.</p>
+  </div>
+</article>
+<article class="ad">
+  <div class="shot"><img alt="swipe p177" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></div>
+  <div class="body">
+    <h3>p177 <span>5 type zones recorded</span></h3>
+    <p class="lab">What the teardown wrote about the lettering</p>
+    <div class="zones"><div class="z"><div class="zt"><b>Zone</b><q>Text (verbatim)</q></div><p>Type &amp; Treatment</p></div><div class="z"><div class="zt"><b>Zone A — Headline</b><q>RETINOL</q></div><p>Compressed grotesque (inferred Impact), bold, all-caps, ~27% frame height, `#FF0000`, tight tracking, solid fill.</p></div><div class="z"><div class="zt"><b>Zone B — Subhead</b><q>IS A SCAM</q></div><p>Compressed grotesque (inferred Impact), bold, all-caps, ~14% frame height, `#FFFFFF`, tight tracking, solid fill.</p></div><div class="z"><div class="zt"><b>Zone C — Hook line</b><q>It smooths your face, then kills it.</q></div><p>High-contrast serif (inferred Georgia), italic, sentence case, ~6% frame height. `[&quot;It smooths your face, then &quot; → #FFFFFF] [&quot;kills&quot; → #FF0000] [&quot; it.&quot; → #FFFFFF]`.</p></div><div class="z"><div class="zt"><b>Zone E — Product claim</b><q>This one feeds/it back to life.</q></div><p>Humanist sans (inferred Helvetica), regular, sentence case, ~4% frame height, `#FFFFFF`, normal leading.</p></div></div>
+    <p class="lab">What survives into the brief's type layer</p>
+    <div class="keys"><i class="y">color</i><i class="y">case</i><i class="y">weight</i><i class="y">tracking</i><i class="y">font</i><i class="y">align</i><i class="y">cap_pct</i><i class="y">top_pct</i></div>
+    <p class="miss">No field carries how the letters are <em>built</em> — textured, hand-drawn, hatched shadow, extruded, outlined, cut paper. It is written in the teardown and dropped here.</p>
+  </div>
+</article>
+<article class="ad">
+  <div class="shot"><img alt="swipe p182" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></div>
+  <div class="body">
+    <h3>p182 <span>7 type zones recorded</span></h3>
+    <p class="lab">What the teardown wrote about the lettering</p>
+    <div class="zones"><div class="z"><div class="zt"><b>Zone</b><q>Text (verbatim)</q></div><p>Type &amp; Treatment</p></div><div class="z"><div class="zt"><b>Zone B — Headline</b><q>Don’t buy / these creams</q></div><p>Geometric sans-serif, normal width, black/heavy weight, sentence case, ~6% cap height, `#000000`, tight leading.</p></div><div class="z"><div class="zt"><b>Zone C — Subhead</b><q>(if you want to stay looking old)</q></div><p>Geometric sans-serif, normal width, regular weight, sentence case, ~2% cap height, `#000000`.</p></div><div class="z"><div class="zt"><b>Zone E — Benefit 1</b><q>Reduces / lines &amp; wrinkles</q></div><p>Line 1: High-contrast serif, normal width, bold, title case, ~2% cap height, `#000000`. Line 2: High-contrast serif, normal width, regular, lowercase, ~1.8% cap height, `#000000`.</p></div><div class="z"><div class="zt"><b>Zone F — Benefit 2</b><q>Boost / collagen</q></div><p>Line 1: High-contrast serif, normal width, bold, title case, ~2% cap height, `#000000`. Line 2: High-contrast serif, normal width, regular, lowercase, ~1.8% cap height, `#000000`.</p></div></div>
+    <p class="lab">What survives into the brief's type layer</p>
+    <div class="keys"><i class="y">color</i><i class="y">case</i><i class="y">weight</i><i class="y">tracking</i><i class="y">font</i><i class="y">align</i><i class="y">cap_pct</i><i class="y">top_pct</i></div>
+    <p class="miss">No field carries how the letters are <em>built</em> — textured, hand-drawn, hatched shadow, extruded, outlined, cut paper. It is written in the teardown and dropped here.</p>
+  </div>
+</article>
+<article class="ad">
+  <div class="shot"><img alt="swipe p178" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></div>
+  <div class="body">
+    <h3>p178 <span>2 type zones recorded</span></h3>
+    <p class="lab">What the teardown wrote about the lettering</p>
+    <div class="zones"><div class="z"><div class="zt"><b>Zone</b><q>Text (verbatim)</q></div><p>Type &amp; Treatment</p></div><div class="z"><div class="zt"><b>Zone A — Headline block</b><q>Arctic Botanicals / that erase wrinkles / overnight.</q></div><p>High-contrast serif (Ogg or similar `inferred`), `normal` width, regular weight, title case/lowercase, cap height ~6%, color `#FDFBF7`, tight tracking, tight leading, no effects.</p></div></div>
+    <p class="lab">What survives into the brief's type layer</p>
+    <div class="keys"><i class="y">color</i><i class="y">case</i><i class="y">weight</i><i class="y">tracking</i><i class="y">font</i><i class="y">align</i><i class="y">cap_pct</i><i class="y">top_pct</i></div>
+    <p class="miss">No field carries how the letters are <em>built</em> — textured, hand-drawn, hatched shadow, extruded, outlined, cut paper. It is written in the teardown and dropped here.</p>
+  </div>
+</article>
+<article class="ad">
+  <div class="shot"><img alt="swipe p183" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></div>
+  <div class="body">
+    <h3>p183 <span>3 type zones recorded</span></h3>
+    <p class="lab">What the teardown wrote about the lettering</p>
+    <div class="zones"><div class="z"><div class="zt"><b>Zone</b><q>Text (verbatim)</q></div><p>Type &amp; Treatment</p></div><div class="z"><div class="zt"><b>Zone A — Testimonial Quote</b><q>&quot;I can see why Frøya changes / so many people&#x27;s lives. / Nothing</q></div><p>Transitional serif (inferred: Baskerville or similar), normal width, bold, italic, cap height ~2.5%, #FFFFFF, normal tracking, tight leading, soft drop shadow.</p></div><div class="z"><div class="zt"><b>Zone B — Attribution</b><q>-Nicole, 39.</q></div><p>Transitional serif, normal width, bold, italic, cap height ~2%, #FFFFFF, normal tracking, normal leading, soft drop shadow.</p></div></div>
+    <p class="lab">What survives into the brief's type layer</p>
+    <div class="keys"><i class="y">color</i><i class="y">case</i><i class="y">weight</i><i class="y">tracking</i><i class="y">font</i><i class="y">align</i><i class="y">cap_pct</i><i class="y">top_pct</i></div>
+    <p class="miss">No field carries how the letters are <em>built</em> — textured, hand-drawn, hatched shadow, extruded, outlined, cut paper. It is written in the teardown and dropped here.</p>
+  </div>
+</article>
+</section>
+
+<section>
+<h2>The hole, named</h2>
+<p class="dek" style="font-size:16px">Every field below is in the teardown’s own words. The right column is whether anything downstream can read it.</p>
+<div class="scroll"><table>
+<thead><tr><th style="width:24%">What the teardown records</th><th style="width:42%">Example, verbatim</th><th>Reaches the picture?</th></tr></thead>
+<tbody>
+<tr><td><strong>Typeface class</strong></td><td>“Rounded humanist sans (inferred: similar to Quicksand)”</td><td>yes — as <code>font</code></td></tr>
+<tr><td><strong>Colour</strong></td><td><code>#FDF8E5</code>, and per-word splits</td><td>yes — as <code>color</code></td></tr>
+<tr><td><strong>Weight · case · tracking</strong></td><td>“bold, lowercase, tight tracking”</td><td>yes</td></tr>
+<tr><td><strong>Size</strong></td><td>“~8% frame height”</td><td>yes — as <code>cap_pct</code></td></tr>
+<tr><td><strong>How the letters are built</strong></td><td>“<strong>Textured</strong> display serif (inferred: <strong>custom/hand-drawn</strong>)”, “<code>#FDF8E5</code> fill with <code>#2B3D34</code> <strong>hatched shadow</strong>”, “solid fill”</td><td><span class="fixed">NOW YES</span> — the <code>letterform</code> field</td></tr>
+<tr><td><strong>Width</strong></td><td>“normal width”, “compressed”</td><td>no — still dropped</td></tr>
+<tr><td><strong>Leading</strong></td><td>“tight leading”, “normal leading”</td><td>no</td></tr>
+</tbody></table></div>
+</section>
+
+<section>
+<h2>What changed today</h2>
+<p class="dek" style="font-size:16px">Three prompt versions. Here they are versioned rather than edited, so the old ones stay readable and nothing changes under a run that already happened.</p>
+
+<div class="scroll"><table>
+<thead><tr><th style="width:26%">Version</th><th>What it now does</th></tr></thead>
+<tbody>
+<tr><td><code>stage1 v3</code><br><span class="tag">the teardown</span></td><td><strong><code>letterform</code> is required on every text element</strong>, and explicitly is not the typeface. It records what a person would have to do to build the letters. Fourteen worked examples ship in the prompt. “Say what you see, never what is likely” — flat digital type is a real answer; leaving the field out is not.</td></tr>
+<tr><td><code>stage6 v3</code><br><span class="tag">the brief</span></td><td>Carries <code>letterform</code> into the type layer <strong>word for word from the teardown, never written fresh</strong>. The words change when our copy goes in; the way they are made does not — that belongs to the format we swiped, not to the sentence. A run torn down before the field existed writes <code>[NONE: not in the teardown]</code> instead of inventing one.</td></tr>
+<tr><td><code>stage7 v4</code><br><span class="tag">the draft</span></td><td>Replaces the plate-only prompt. Every line goes to the model verbatim with its position, size, colour, case, weight, alignment and exact line breaks, plus its own letterform — then one <em>how the lettering is made</em> clause for the whole ad.</td></tr>
+</tbody></table></div>
+
+<h2 style="margin-top:34px">What the generator used to get, and gets now</h2>
+<div class="ba">
+  <div class="before">
+    <p class="lab" style="margin-top:0">Before — one sentence, scraped out of the brief’s prose with a regex</p>
+    <pre>THE WORDS, exactly: VITAMIN C, IS A SCAM, It
+brightens your face then burns it. Spell every
+word exactly as written.</pre>
+    <p class="note">This is how “2016” got invented, how “WEEK 1 / WEEK 3 / WEEK 6” got added to an ad that never asked for it, and how a competitor’s own quote got copied straight off a swipe.</p>
+  </div>
+  <div class="after">
+    <p class="lab" style="margin-top:0">Now — the real p177 prompt, rendered end to end</p>
+    <pre>1. "VITAMIN C"
+   at the very top, 8% down · enormous — it
+   dominates the frame (cap height 27% of frame
+   height) · #FF0000 · ALL CAPS · bold · centered
+
+2. "IS A SCAM"
+   across the middle, 39% down · very large — the
+   first thing read (cap height 14%) · #FFFFFF ·
+   ALL CAPS · bold · centered
+
+3. "It brightens your face, then burns it."
+   in the lower third, 56% down · large (cap
+   height 6%) · #FFFFFF · regular · centered
+
+4. "This one resets / it back to even."
+   (set on two lines, broken exactly where the
+   slash is)
+   at the very bottom, 85% down · medium (cap
+   height 4%) · #FFFFFF · regular · left-aligned</pre>
+    <p class="note">Each line also carries its own letterform once the teardown records one. The ad’s overall lettering clause is taken from the <strong>largest</strong> element, so a line of fine print cannot describe the whole picture.</p>
+  </div>
+</div>
+
+<h2 style="margin-top:34px">The letterform vocabulary</h2>
+<p class="dek" style="font-size:16px">What ships in the stage 1 prompt as worked examples. The teardown writes one phrase per text element.</p>
+<div class="vocab">
+<span>flat digital type, solid fill, no depth</span><span>extruded 3D, bevelled edge, cast shadow</span><span>moulded clay, thumbprint texture, soft rounded edge</span><span>hand-lettered marker on paper, uneven pressure, bleeding edge</span><span>hand-drawn, textured fill, hatched drop shadow</span><span>cut paper, torn edge, lifted off the ground</span><span>embossed into the surface, no colour of its own</span><span>letterpress, slightly inked and indented</span><span>chrome, bevelled, reflecting the scene</span><span>neon tube with glow spill</span><span>chalk on a dark ground, dusty edge</span><span>knockout through a solid bar</span><span>white with a hard black outline, social-caption style</span><span>typed system UI caption, native screenshot</span>
+</div>
+
+<div class="box" style="border-left-color:var(--flag)">
+<p><strong>The compositor is retired.</strong> The plate-only prompt — picture with no text, words typed on afterwards — is superseded. It could not do moulded clay, and it had its own defects besides: it stacked “2016” down the frame where the swipe reads “20 16” across.</p>
+<p style="margin-bottom:0"><strong>One thing to know.</strong> All 66 existing briefs were torn down before this field existed, so they fall back to reading the swipe fresh at draft time. Any new teardown gets the real thing. The existing ones can be re-read on your word.</p>
+</div>
+</section>
+
+<section>
+<h2>Run on a real ad — the result</h2>
+<p class="dek" style="font-size:16px">One brief, one swipe, torn down fresh with the new prompts and drafted. Nothing else changed.</p>
+<figure class="result"><img alt="the swipe, the old draft, and two new rolls" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></figure>
+<div class="two" style="margin-top:16px">
+  <div class="card">
+    <h3>Before</h3>
+    <p style="margin:0;font-size:15.5px;line-height:1.5;color:var(--ink-2)">The swipe is an <strong>illustration</strong> with a hand-drawn, hatched headline. The old draft came back as a <strong>photograph</strong> of a tube on a flat ground, in set type, with the call to action missing entirely. It is a competent ad and it is not this ad.</p>
+  </div>
+  <div class="card on">
+    <h3>After</h3>
+    <p style="margin:0;font-size:15.5px;line-height:1.5;color:var(--ink-2)">Both rolls come back <strong>drawn</strong>, in the swipe’s own line and shading. “face scrub” is hand-drawn and hatched like “eye balm”. The tube label is white extruded type with a hard outline, like the jar label. “Shop now” is there, in the same hand it was written in.</p>
+  </div>
+</div>
+<p class="col" style="margin-top:18px;max-width:680px"><strong>Three letterforms survived all three stages</strong> — the teardown read them off the picture, the brief carried them word for word, the generator was told each one: <span class="mono">hand-drawn-textured</span> headline, <span class="mono">flat-digital</span> body, <span class="mono">extruded-3d</span> label.</p>
+<div class="box" style="border-left-color:var(--flag)">
+<p style="margin-bottom:0"><strong>Two honest notes.</strong> Roll 2’s tube came back brown where the real product is cream — roll 1 is the closer of the two, and that is what the judge exists to catch. And the product is now <em>drawn</em> rather than photographed, because matching the swipe’s medium outranks everything else in the standard. That is correct here and it is a real tension worth knowing about: on an illustrated swipe, our product will be an illustration of itself.</p>
+</div>
+</section>
+
+<section>
+<h2>Then the product came back wrong</h2>
+<p class="dek" style="font-size:16px">the owner, on the draft above: <em>“our tube is completely wrong with this final ad. The first tube was actually perfect. Make sure when we’re talking about the product, the product’s gotta be the product.”</em></p>
+
+<p class="col" style="max-width:680px">He was right, and it was not the medium rule. <strong>The teardown had recorded the swipe’s jar label as three text zones</strong> — <span class="mono">jar label text (main)</span>, <span class="mono">(brand)</span>, <span class="mono">(volume)</span>. The brief injected our ad copy into all three. The generator, now told to draw every word on the list, printed “&lt;the swipe's own product name&gt;” across the front of our own tube — in place of “GLOW FACE SCRUB · Turmeric and Centella”.</p>
+<p class="col" style="max-width:680px">Stage 1 had forbidden this since August — <em>“in-world text is not a type element”</em> — and the teardown did it anyway, with the exact parenthetical note the rule forbids. So the fix went in at all three points where the mistake can be made or caught.</p>
+
+<div class="scroll"><table>
+<thead><tr><th style="width:24%">Version</th><th>What it now does</th></tr></thead>
+<tbody>
+<tr><td><code>stage1 v5</code><br><span class="tag">the teardown</span></td><td>Forbids <strong>creating the zone at all</strong>, not just leaving its column blank. A zone named “jar label text” is a zone whose whole purpose is in-world text, and everything downstream treats a zone as something the ad sets. The label, wordmark and net weight are one object — the package.</td></tr>
+<tr><td><code>stage6 v5</code><br><span class="tag">the brief</span></td><td>The type layer is the <strong>ad’s</strong> type. A product’s own label never enters it — not carried, not injected into, not renamed. Every element declares <code>on_product</code>, so a mistake is visible instead of silent.</td></tr>
+<tr><td><code>stage7 v5</code><br><span class="tag">the draft</span></td><td><strong>The product’s identity now outranks the medium rule</strong>, which used to outrank everything. The product photograph is the authority on shape, colour and label. <strong>No word from the word list is ever printed on the product.</strong></td></tr>
+<tr><td><code>gpt_drafts.py</code><br><span class="tag">enforcement</span></td><td><code>on_product</code> is honoured in <strong>code</strong>, not only asked for in the prompt — a flagged line is dropped from the word list and the drop is printed. A brief carrying the flag is safe whatever the model decides.</td></tr>
+</tbody></table></div>
+
+<h2 style="margin-top:34px">Run again — the result</h2>
+<figure class="result"><img alt="the swipe, the old draft, and two new rolls" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></figure>
+<figure class="result" style="margin-top:16px"><img alt="the real tube beside both new rolls" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></figure>
+
+<div class="two" style="margin-top:18px">
+  <div class="card"><h3>What the teardown did</h3><p style="margin:0;font-size:15.5px;line-height:1.5;color:var(--ink-2)">Three <span class="mono">jar label text</span> zones became one <span class="mono">product field</span>. The label belongs to the package again.</p></div>
+  <div class="card"><h3>What the brief did</h3><p style="margin:0;font-size:15.5px;line-height:1.5;color:var(--ink-2)"><strong>Seven elements down to four.</strong> The three package lines are gone; all four survivors carry their letterform and their <code>on_product</code> flag.</p></div>
+  <div class="card on"><h3>What came back</h3><p style="margin:0;font-size:15.5px;line-height:1.5;color:var(--ink-2)">The real cream tube with the real label — emblem, <strong>BRAND A SKINCARE</strong>, <strong>GLOW FACE SCRUB</strong>, <strong>Turmeric and Centella</strong>, and on roll 1 the net weight and “&lt;the label's tagline&gt;” in their right places.</p></div>
+</div>
+
+<div class="box">
+<p style="margin-bottom:0"><strong>Both halves hold at once now.</strong> An illustrated ad in the swipe’s own register — “face scrub” hand-drawn and hatched like “eye balm”, “Shop now” in the same hand — carrying our real product. That is the thing that was broken in both directions: the old draft had the right tube in the wrong style, the letterform draft had the right style with the wrong tube. <strong>Roll 1 is the better of the two</strong> — roll 2 dropped “&lt;the label's tagline&gt;” and the net weight off the label.</p>
+</div>
+</section>
+
+<footer>
+Read 25 Sep 2026 off five Brand A runs: p176, p177, p178, p182, p183.<br>
+Type records quoted verbatim from each run’s 01-teardown.md zone table; surviving fields read off each brief’s own type layer.<br>Prompts: stage1 v5, stage6 v5, stage7 v5 — all live on main, all proven on a real run. 34 tests green; the p177 prompt verified rendered end to end.
+</footer>
+</div>

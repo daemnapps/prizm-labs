@@ -6,7 +6,7 @@ off their own audio.
     python3 components/research-gatherer/gather.py voiceprint --brand B --all
     python3 components/research-gatherer/gather.py voiceprint --brand B --all --dry-run
 
-Damon's ruling (2026-09-19): "analyze our actual content creators that we've
+the owner's ruling (2026-09-19): "analyze our actual content creators that we've
 worked with to get a real profile of the avatar and how they deliver
 messaging — we have tons of good-quality creators we've done teardowns on;
 analyze the audio specifically and create voice prints. Then we fine-tune
@@ -44,6 +44,7 @@ import json
 import math
 import mimetypes
 import re
+import shutil
 import statistics
 import subprocess
 import sys
@@ -60,13 +61,36 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 WORKSPACE = ROOT.parents[1]
+sys.path.append(str(WORKSPACE / "components" / "brandpath"))   # appended, never ahead of this machine
+import brandpath as BP  # noqa: E402
 
 ELEVEN_STT = "https://api.elevenlabs.io/v1/speech-to-text"
 STT_MODEL_ID = "scribe_v1"
-FFMPEG = "/opt/homebrew/bin/ffmpeg"
-DRIVE_ROOT = (Path.home() / "Library" / "CloudStorage"
-              / "GoogleDrive-${DRIVE_ACCOUNT}" / "Shared drives"
-              / "Shared Assets" / "lab" / "damon")
+FFMPEG = shutil.which("ffmpeg") or "ffmpeg"   # found on PATH, never one Mac's Homebrew prefix
+def _drive_mount():
+    """The Google Drive mount holding the team's shared drive.
+
+    Was hardcoded to one person's account, so it resolved to nothing on any
+    other machine. DRIVE_ACCOUNT pins it; unset, the first GoogleDrive-*
+    mount found is used.
+    """
+    import os
+    cs = Path.home() / "Library/CloudStorage"
+    acct = os.environ.get("DRIVE_ACCOUNT")
+    if acct:
+        return cs / f"GoogleDrive-{acct}"
+    return next(iter(sorted(cs.glob("GoogleDrive-*"))), cs / "GoogleDrive")
+
+
+def _drive_root():
+    """VOICEPRINT_DRIVE_ROOT — the folder under the mount the drive's SELECTED
+    file and creator folders sit in (a path relative to the mount, or absolute)."""
+    import os
+    rel = os.environ.get("VOICEPRINT_DRIVE_ROOT") or "Shared drives"
+    return _drive_mount() / rel
+
+
+DRIVE_ROOT = _drive_root()
 MIN_PAUSE = 0.3          # seconds — a silence between two words that counts as a pause
 MIN_WORDS = 8            # a post with fewer spoken words is music or a caption piece, not speech
 THIN_WORDS = 100         # a creator under this many measured words is reported but flagged thin
@@ -511,12 +535,14 @@ def roll_up(handle: str, posts: list[dict]) -> dict:
 def creators_root(brand: str, root: Path | None = None) -> Path:
     """The creators' ROSTER — `profile.md` per handle. Brand truth, curated by
     people; this machine only ever READS it."""
-    return (root or WORKSPACE) / "brands" / brand / "creators"
+    # brands/<brand>/content-creators (was creators/) — the folder plan's name,
+    # resolved by brandpath so a rename never strands this reader again
+    return BP.brand_path(brand, "content-creators", root=(root or WORKSPACE) / "brands")
 
 
 def research_root(brand: str, root: Path | None = None) -> Path:
     """Where this machine's own output lives — transcripts, per-creator
-    voiceprints and the brand roll-up. Damon ruled 2026-09-21 "all research
+    voiceprints and the brand roll-up. the owner ruled 2026-09-21 "all research
     should live in the research component moving forward"; the phase-1 rule
     (runs/README.md) keeps a machine's record under `runs/<machine>/<brand>/`
     and out of `brands/`, which is read-only to machines. 65 <brand> files

@@ -31,7 +31,11 @@ from __future__ import annotations
 import argparse, json, os, re, sys
 from pathlib import Path
 
-WS = Path(os.environ.get("AI_WORKSPACE", Path.home() / "Projects/ai-workspace"))
+sys.path.append(str(Path(__file__).resolve().parents[2].parent / "components" / "run-kit"))   # beside this file
+from run_kit.paths import repo  # noqa: E402  the one workspace locator (triage page 12)
+WS = repo(Path(__file__))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2].parent / "components" / "brandpath"))  # beside this file, not WS
+import brandpath as BP                                  # noqa: E402
 
 # a scene header, in either dialect
 HEADS = [
@@ -80,8 +84,8 @@ def scenes_of(text):
 
 def cast_of(brand):
     """The brand's own registry. Nothing is named here."""
-    reg = WS / "brands" / brand / "core-avatars" / "casting"
-    idx = json.loads((WS / "brands" / brand / "elements" / "index.json").read_text())
+    reg = BP.brand_path(brand, "ai-elements/characters", "casting", root=WS / "brands")
+    idx = json.loads(BP.brand_path(brand, "ai-elements", "index.json", root=WS / "brands").read_text())
     items = idx.get("elements") if isinstance(idx.get("elements"), list) else \
         [v for v in idx.values() if isinstance(v, dict)]
     by_id = {e["element_id"]: e for e in items if e.get("element_id")}

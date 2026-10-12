@@ -3,12 +3,14 @@
 **How a scene is generated, step by step, is `../SCENE-GENERATION.md` — the
 method page. This page is the runner that executes it.**
 
+**Superseded for clips and voices, 2026-10-03 (the owner) — `THE-CHAIN.md` is the process.** Clips are Omni Flash on fal at 1080p animating the approved GPT Image 2.5 picture (`run.py start … --clips` → `machine/omni_clips.py`); a person's clip always starts from the approved picture, never a clip's last frame; on-camera lines are said by Omni and turned into the cloned voice (speech-to-speech), off-camera lines are text-to-speech in the cloned voice — the voice-first workflow is retired. What follows is the 2026-09 per-scene method, kept as the record of the legacy doors (`--legacy-clips`).
+
 A brief or a plan goes in. The gates run. Every station is made directly
 on our own keys — voice, cast, stills, edits, song, the talking beat and
 silent motion (the one hand, 2026-09-18) — into `<run>/media/` with
 `direct.json` as the manifest. A house (fal, Higgsfield) is used only when
 `--provider` forces one; then the editor gets a submit sheet and hands
-results back. Every job lands in the ledger. The run lives at `runs/video-machine/<brand>/<label>/`, per the
+results back. Every job lands in the ledger. The run lives at `runs/video-production/<brand>/<label>/`, per the
 repo-root `runs/README.md`.
 
     python3 machine/run.py start  <brief.md | plan.json> --brand B --format F \
@@ -23,7 +25,7 @@ submitted · 3 bad input.
 
 ## `start`
 
-1. Opens `runs/video-machine/<brand>/<label>/`, writes `run.json`
+1. Opens `runs/video-production/<brand>/<label>/`, writes `run.json`
    (`machine`, `brand`, `label`, `format`, `source_brief`, `provider`,
    `opened`) — a key already there is never overwritten, so a second
    `start` on the same run cannot quietly change its history.
@@ -98,7 +100,7 @@ submitted · 3 bad input.
    - `characters` — the cast's name, for scenes; for a cutaway, only if the
      cast's name shows up in its subject/action/place text.
    - `products` — element uuids in the prompt that
-     `brands/<brand>/element-facts.json` marks `kind`./`role` `"product"`.
+     `brands/<brand>/ai-elements/element-facts.json` marks `kind`/`role` `"product"`.
      A brand with no facts file has no products; it is never an error.
    - `lines` — `[scene id]` for a scene, `[]` for a cutaway. A scene whose
      line was just voiced gets that line's take attached as `medias:
@@ -136,7 +138,24 @@ submitted · 3 bad input.
    `voice/*.mp3`, then use the returned media id as the `audio` media on
    the item(s) that carry it.
 
-## Two hands (Damon's 2026-09-17 ruling — "we scale tomorrow")
+## Two hands (the owner's 2026-09-17 ruling — "we scale tomorrow")
+
+**The clip door since 2026-09-22 (evening) is Seedance 2.5 through Higgsfield** (mode `omni_reference`, 1080p bitrate high, 4–30 s, 12 cr/s): EVERY scene submits `start_image` + `end_image`, and a talking scene adds `audio_references` on the same call — so a talking scene keeps the frame it lands on. the owner: *"let's just run with seedance for now, the output is just way better and takes less tweaking."* `--clip-model minimax_h3` puts a run (or a `model` key, one scene) back on the cheap door at 2 cr/s and 2K.
+
+The superseded shape, kept because the alternate still takes it: **MiniMax H3** (2K, 4–15 s, 2 cr/s): a talking scene submits `image_references` [first frame] + `audio_references` [voice slice] with no end_image, a silent scene `start_image` + `end_image` with no audio — `SUBMIT.md` prints each item in exactly that shape; Seedance 2.5 is the alternate for a one-take scene past 15 s (`providers.json` doors, `SCENE-GENERATION.md` step 4).
+
+**THE RUN PICKS** (the owner, 2026-09-22): the settled door is the default, not a
+lock — MiniMax's lip sync is the best in the house and its physical cause and
+effect is the worst, so a hands-and-substance scene should not be forced
+through the same model as a talking one. `python3 machine/run.py models`
+prints the menu (every pickable model, what it is good at, what it is weak at,
+credits a second, dollars at 6 s). Pick for a whole run with
+`--clip-model <id>` on `start`, or for one scene with a `model` key on that
+scene in the brief or the plan — the scene's pick wins over the run's, the
+run's over the registry's. The chosen shape follows the pick: an alternate
+that takes first + last + audio on one call gets that shape, the settled door
+does not. A pick nothing answers to is refused by name with the menu; it never
+falls back silently.
 
 **The machine hand runs directly, with nobody at a keyboard.** Cast, still
 and edit are called on the direct OpenAI/Gemini APIs (`machine/direct_openai.py`,
@@ -189,7 +208,7 @@ row carries a `url` — downloads it into `media/<id>.<ext>`, archiving
 whatever was there before into `media/versions/` rather than overwriting it
 (ported from `pull.py`). Merges every row into `results.json`, keyed by id.
 
-**Line parity, automatic** (Damon, 2026-09-18: a talking clip from one door
+**Line parity, automatic** (the owner, 2026-09-18: a talking clip from one door
 lip-synced perfectly to the WRONG words). Right after a clip downloads
 successfully, if its item carries `lines`, `record` transcribes it on the
 direct ElevenLabs API (`machine/lineparity.py`, speech-to-text) and compares
@@ -207,7 +226,7 @@ No `ELEVENLABS_API_KEY` reachable is a printed skip, never a failed record;
    packed.
 2. Copies every `done` clip's media into `deliverable/`.
 3. The naming gate — `deliver.py`'s own `read_brief()` plus `run.json`'s
-   `brand`./`format`, handed to `components/naming/deliver.py`'s `deliver()`.
+   `brand`/`format`, handed to `components/naming/deliver.py`'s `deliver()`.
    A field it cannot find is never guessed: printed and exit 2.
 4. Writes `deliverable/EDITOR-PACK.md` — WHAT THIS IS, THE CLIPS, LINE
    COVERAGE, POST, THE RECEIPT (from `ledger.json`, never memory), THE NAME
@@ -273,7 +292,7 @@ a bound `voice_id`.
 second plan fixture (built in-test, not `fixtures/run-plan.json` — so none
 of the counts the fal/Higgsfield tests above assert on are touched by it):
 a scene with a `generate` block and a plan-level `song`, run against fake
-`openai_transport`./`google_transport`, produces `media/A1-still.png`,
+`openai_transport`/`google_transport`, produces `media/A1-still.png`,
 `media/SONG.wav` and `media/SONG-song-timings.txt`, a `direct.json` naming
 both models, ledger rows for both, and a `SUBMIT.md` whose `A1` block
 carries a `start_image (upload first)` line pointing at the still made for

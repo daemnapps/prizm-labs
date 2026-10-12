@@ -1,0 +1,324 @@
+{
+  "format_id": "song-ad",
+  "name": "Song ad (sung story, animated)",
+  "status": "approved",
+  "state": "proven on 8 cut runs, 2026-10-09/10",
+  "signed": {
+    "by": "the owner",
+    "date": "2026-10-10",
+    "ruling": "his rulings of 2026-10-09/10 cover every line (cited per line under rulings): punch first + shorter + flow (SONG-WRITING.md); match the swipe's style; nobody talks, all clips, no stills, Omni 360p one take + local upscale; product never drawn; cost down \"even more\"."
+  },
+  "family": "sung-story",
+  "what": "A dramatic first-person story told as a real song (2:30–3:15). The song is made first and the whole cut follows it: every sung line is a silent clip in the swipe's animated style, nobody talks on screen, the product arrives late, rendered in the film's style from the real product photo, and only the end card is the real packshot.",
+  "signature": {
+    "audio": "song",
+    "speakers": 0,
+    "address": "none",
+    "settings": 6,
+    "product_role": "insert",
+    "pacing": "fast",
+    "capture": "animated",
+    "story": "narrative"
+  },
+  "specialised": [
+    {
+      "what": "the song is made and passed before any picture",
+      "why": "the cut is derived from the song's timing; SONG-WRITING.md (the owner 2026-10-10)"
+    },
+    {
+      "what": "song flow: gaps up to 3.5 s, dead air up to 10%, 6 beats a rapped line / 8 a ballad line",
+      "why": "the owner 2026-10-10: the first tight pass sounded rushed — \"it needs to actually sound like a song, just efficient\""
+    },
+    {
+      "what": "the product is rendered in the film's style from the real product photo, held by the cast; only the end card is the real packshot",
+      "why": "the owner 2026-10-10: \"you shouldn't be using real b-roll for this\" — in an animated ad real footage breaks the film. This OVERRIDES the general 'product is never drawn → real footage' route for stylised formats; that route still holds for real-footage / UGC formats"
+    },
+    {
+      "what": "nobody talks; every scene is a silent clip — no stills ever",
+      "why": "attention-first song ads; a held still reads as slop (the owner 2026-10-10)"
+    },
+    {
+      "what": "Omni Flash 360p, one take, then local Real-ESRGAN upscale",
+      "why": "~$__/s vs 1080p; sloppy B-roll is fine under a song (the owner 2026-10-10)"
+    },
+    {
+      "what": "pictures at medium quality on the fast tier, made at 9:16, no framing-fix calls",
+      "why": "pictures were $__/ad of the spend on xhigh 2:3 + zone-fix remakes; the clips are 360p so xhigh detail is thrown away (cost ruling 2026-10-10)"
+    },
+    {
+      "what": "2–3 clips per picture where lyric beats share a set-up",
+      "why": "one picture per scene made 40–57 pictures an ad; same set-up, different motion costs one picture"
+    },
+    {
+      "what": "recurring cast and sets across stories",
+      "why": "the 10-09/10 runs already re-used banked family-3d people; a new cast per story is wasted spend"
+    },
+    {
+      "what": "hooks are cut from existing clips, never generated",
+      "why": "h-a..h-d were 3 s scroll stoppers from the story's shocking beats, $0 extra"
+    }
+  ],
+  "stage_order": [
+    "teardown (style read)",
+    "song (write → print → flow check)",
+    "ad-script (sung lyrics)",
+    "elements (reuse cast + sets first)",
+    "storyboard (from the song's timing)",
+    "pictures",
+    "clips",
+    "upscale",
+    "edit (control + hook versions)",
+    "copywriter (from AD-SCRIPT.md)"
+  ],
+  "stages": {
+    "audio": {
+      "first": "song",
+      "song_model": "music_v2_5",
+      "voice_model": null,
+      "nobody_talks": true
+    },
+    "song": {
+      "length_s": [
+        150,
+        195
+      ],
+      "punch_first": "the story's most shocking line sung in the first second — no intro, no humming, no beat-only bar",
+      "sections": "fit (lines × beats_per_line + tail beats at the row's tempo) — never a hand-written number",
+      "flow": {
+        "first_word_s": 1.0,
+        "max_gap_s": 3.5,
+        "dead_air_ratio": 0.1,
+        "ignore_tail_s": 4.0,
+        "beats_per_line": 6,
+        "tail_beats": 1,
+        "shrink": 0.85
+      },
+      "brand_line": "said plainly once in the bridge and in the outro tag; a dropped tag is fixed by crossfading an 8 s tag in the same style",
+      "master_true_peak_dbtp": -1.0,
+      "loudness_lufs": -14,
+      "beats_per_line_by_style": {
+        "story-rap-soul": 6,
+        "dramatic-pop-ballad": 8,
+        "cinematic-orchestral-ballad": 8
+      },
+      "sound": "it needs to actually sound like a song, just efficient: a melody, a sung hook, fewer syllables per line; short musical breaks are fine (under the 3.5 s gap)",
+      "flow_why": "the owner 2026-10-10 (second pass): max gap 3.5 s, dead air ≤10%, first word ≤1 s; rap 6 beats a line, ballads 8 — \"it needs to actually sound like a song, just efficient\""
+    },
+    "pictures": {
+      "door": "direct.openai",
+      "model_key": "model_fast",
+      "quality": "medium",
+      "size": "864x1536",
+      "aspect": "9:16",
+      "made_at": "9:16 directly at 864x1536 — exact 9:16, both sides divide by 16 (the API takes any such size: tools/image-production/models.json note, 2026-09-22); the clip is 360p so a bigger picture is thrown away",
+      "fix_calls": false,
+      "style_lock": "the swipe's style row, formula first (family-3d on every run so far)",
+      "send_size": null,
+      "start_only": true,
+      "max_references": 3,
+      "product": "image-to-image from the real product photo, restyled into the swipe's style; shape, colour and label exact"
+    },
+    "clips": {
+      "model": "gemini_omni_flash_1_1",
+      "endpoint": "image-to-video",
+      "resolution": "360p",
+      "seconds": [
+        3,
+        4
+      ],
+      "clips_per_picture": [
+        2,
+        3
+      ],
+      "takes": 1,
+      "audio": "silent",
+      "upscale": "local Real-ESRGAN realesr-animevideov3 x3 to 1080x1920, crf 15",
+      "stills_allowed": false,
+      "short_clip": "slow to no less than 0.75x, then play the rest in reverse (ping-pong) — never hold a frame",
+      "send_size": "432x768",
+      "send_format": "jpeg q90, centre-cropped to 9:16",
+      "prompt_order": "action line + style lock FIRST, then motion; nothing else",
+      "refused_every_try": "use the neighbour clip with a 7% punch-in"
+    },
+    "cast": {
+      "reuse": "banked people and sets in the swipe's style first, across stories",
+      "recurring": true,
+      "product": "ANIMATED STYLE RULE: the product is rendered IN THE FILM'S STYLE, image-to-image from the real product photo (shape, colour and label kept exact), held by the banked cast and animated like every other scene; only the end card is the real packshot. Real archive footage and studio renders in the body are refused for an animated style."
+    },
+    "hooks": {
+      "shape": "~3 s scroll stopper cut from the story's most shocking clip, punched in 1.10→1.30x, a lyric line as text + one bank SFX, then into the first sung line",
+      "count": 4,
+      "generated": false
+    },
+    "captions": {
+      "look": "lyric lines in the swipe's caption look; the control opens on the first sung line with a headline at 16% from the top"
+    },
+    "gates": {
+      "apply": [
+        "song line gate",
+        "song flow gate",
+        "style lock",
+        "clip words check (no words on the picture)",
+        "loudness/true peak",
+        "product in the film's style from the real photo (no real footage in the body)"
+      ],
+      "skip": [
+        "voice per speaker",
+        "lip-sync / line parity on clips (nobody talks)",
+        "talking-scene audio slice"
+      ]
+    },
+    "edit": {
+      "method": "video-edit machine cut on the song's clock (renders on python3.14)",
+      "reuse": "second chorus and outro reuse earlier clips with a 7% punch-in",
+      "end_card": "camera move on the real packshot / studio render — the ONLY real product pixels in an animated song ad",
+      "garbled_background_text": "blur at the edit (gblur sigma 22) or punch in past it",
+      "loudness": "-14 LUFS, true peak ≤ -1 dBTP (limit the song first)",
+      "versions": "control + 4 hook versions"
+    },
+    "copy": {
+      "source": "AD-SCRIPT.md — the sung lyrics",
+      "why": "the copywriter drifts to the story plot from the brand files otherwise"
+    }
+  },
+  "failures": [
+    {
+      "failure": "songs 5½–6 min with 35–90 s dead air; first word 12 s in",
+      "fix": "punch line first, sections fit from lines × beats_per_line, every take listened to by song.py flow()",
+      "from_run": "a past run",
+      "stage": "song"
+    },
+    {
+      "failure": "brand line / last line dropped or blurred by the music model",
+      "fix": "cut before it and crossfade an 8 s tag in the same style",
+      "from_run": "a past run",
+      "stage": "song"
+    },
+    {
+      "failure": "cast made photoreal for an animated swipe",
+      "fix": "the teardown names the style row; every element and frame is made in it (family-3d)",
+      "from_run": "a past run",
+      "stage": "elements"
+    },
+    {
+      "failure": "Omni 'could not generate' on a full-size PNG start picture",
+      "fix": "send the start picture centre-cropped to 9:16 as a 432x768 JPEG q90",
+      "from_run": "a past run",
+      "stage": "clips"
+    },
+    {
+      "failure": "Omni re-framed a 2:3 picture / refused it",
+      "fix": "the picture goes in at 9:16; a 9:16 crop passed where the 2:3 was refused",
+      "from_run": "a past run",
+      "stage": "clips"
+    },
+    {
+      "failure": "clip refusals (prohibited / third-party / safety)",
+      "fix": "action line + style lock first; reword the action, never resend the same request; shorten to action + style + motion",
+      "from_run": "a past run",
+      "stage": "clips"
+    },
+    {
+      "failure": "a clip refused on every try",
+      "fix": "the neighbour clip with a 7% punch-in",
+      "from_run": "a past run",
+      "stage": "edit"
+    },
+    {
+      "failure": "clip shorter than its lyric window filled with a still push-in",
+      "fix": "slow to ≥0.75x then reverse (ping-pong); never a still",
+      "from_run": "a past run",
+      "stage": "edit"
+    },
+    {
+      "failure": "garbled background signs and labels",
+      "fix": "blur at the edit (gblur 22) or punch in past it; or blur on the start picture",
+      "from_run": "a past run",
+      "stage": "edit"
+    },
+    {
+      "failure": "real brands drawn in pictures (snacks, batteries)",
+      "fix": "remade unbranded",
+      "from_run": "a past run",
+      "stage": "pictures"
+    },
+    {
+      "failure": "shower scenes refused by the picture filter",
+      "fix": "reword to the sink",
+      "from_run": "a past run",
+      "stage": "pictures"
+    },
+    {
+      "failure": "product label misspelt / a stranger drawn into the packshot",
+      "fix": "the product is restyled image-to-image from the real product photo with its label kept exact (never drawn from words); end card = camera push on the real packshot",
+      "from_run": "a past run",
+      "stage": "edit"
+    },
+    {
+      "failure": "copywriter cards drifted to the story plot",
+      "fix": "name AD-SCRIPT.md (the sung lyrics) as the copy source",
+      "from_run": "a past run",
+      "stage": "copy"
+    },
+    {
+      "failure": "control and a hook version held at -0.7/-0.8 dBTP",
+      "fix": "limit the song first (alimiter 0.6) and master to ≤ -1 dBTP",
+      "from_run": "a past run",
+      "stage": "edit"
+    },
+    {
+      "failure": "zone-fix picture remakes unbilled on the ledger and doubling picture calls",
+      "fix": "make at 9:16 directly; framing-fix calls off",
+      "from_run": "a past run",
+      "stage": "pictures"
+    },
+    {
+      "failure": "real archive B-roll / studio renders cut into an animated film",
+      "fix": "refused for animated styles — the product is rendered in the film's style from the real photo, held by the banked cast",
+      "from_run": "a past run",
+      "stage": "edit"
+    }
+  ],
+  "cost": {
+    "target_usd_per_ad": 10,
+    "cap_usd_per_ad": 30,
+    "measured": "ledger $__ an ad on 8 runs (pictures $__, clips $__) — pictures understated (zone-fix rows unbilled), element sheets ~$__ more, song not on the ledger; ~$__ all in",
+    "how": "pictures medium on the fast tier at 9:16, no fix calls, 2–3 clips per picture (~20 pictures not ~50); clips 3–4 s at 360p (~45 × 3.5 s × $__ ≈ $__ for a 2:45 song); cast and sets reused (element sheets ≈ $0); hooks cut from clips ($0)"
+  },
+  "quality_bar": [
+    "the first sung word lands inside 1 s and it is the story's punch line",
+    "no gap over 2 s between sung words; dead air under 5% (song.py flow)",
+    "every picture in the swipe's style row — no photoreal person in an animated ad",
+    "every shot moves: no still, no frozen frame, no held last frame",
+    "no readable garbage text anywhere on screen (blurred or punched past)",
+    "no stranger, no merged faces, no real third-party brand in frame",
+    "every clip sits under the lyric it illustrates",
+    "master ≤ -1 dBTP at -14 LUFS",
+    "the brand line is heard plainly once in the bridge and in the outro",
+    "the product matches the real photo exactly (shape, colour, label) AND is in the film's style — no real footage in the body; the end card is the real packshot",
+    "it sounds like a song: a melody and a sung hook, not a rushed list of lines"
+  ],
+  "variants": [],
+  "built_from": [
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-production/<brand>/<run>",
+    "runs/video-edit/<brand>/<run> and runs/video-edit/<brand>/<run> (the matching edits + -h-* hook versions)"
+  ],
+  "rulings": [
+    "the owner 2026-10-10 (SONG-WRITING.md): \"the opening line needs to start with the punch … these songs need to be shorter … the songs need to flow\"",
+    "the owner 2026-10-09 (THE-CHAIN.md): \"the creative format itself is supposed to look like Pixar\" — the swipe's style is the lock",
+    "the owner 2026-10-10 (memory: song ads all clips, cheap): no stills ever; Omni 360p ~$__/s + local upscale; sloppy B-roll is fine",
+    "the owner 2026-10-10 (attention-first song ads): no voiceover, silent scenes follow the sung story",
+    "the owner 2026-10-09/10 (CLAUDE.md, product never drawn): \"all this slop stuff is gone … so we can print ads\"",
+    "the owner 2026-10-10: \"how can we get our cost down even more\" — the cost defaults above",
+    "the owner 2026-10-10: \"we cannot have AI slop\" — the quality bar",
+    "the owner 2026-10-10: \"you shouldn't be using real b-roll for this\" — animated formats render the product in the film's style from the real photo; only the end card is real",
+    "the owner 2026-10-10: \"it needs to actually sound like a song, just efficient\" — max gap 3.5 s, dead air ≤10%, rap 6 / ballad 8 beats a line"
+  ]
+}

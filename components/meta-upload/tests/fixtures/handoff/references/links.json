@@ -1,0 +1,30 @@
+{
+  "link_zzbrand_glow_landing": {
+    "id": "link_zzbrand_glow_landing",
+    "type": "link",
+    "brand": "zzbrand",
+    "label": "Offer page",
+    "status": "live",
+    "url": "https://zzbrand-glow.build-host.example/zz-glow/landing/",
+    "page_check": {"status": 200, "ok": true, "title": "Glow balm", "checked": "2026-10-01"},
+    "group": "Glow funnel",
+    "slot": "main",
+    "offers": [],
+    "surface_kind": "funnel-page",
+    "check": {"result": "ok", "note": "fixture — never fetched"}
+  },
+  "link_zzbrand_glow_lip-balm_landing": {
+    "id": "link_zzbrand_glow_lip-balm_landing",
+    "type": "link",
+    "brand": "zzbrand",
+    "label": "Lip balm page",
+    "status": "live",
+    "url": "https://zzbrand-glow.build-host.example/zz-lip/landing/",
+    "page_check": {"status": 200, "ok": true, "title": "Lip balm", "checked": "2026-10-01"},
+    "group": "Glow funnel",
+    "slot": "cross-sell",
+    "offers": [],
+    "surface_kind": "funnel-page",
+    "check": {"result": "ok", "note": "fixture — never fetched"}
+  }
+}

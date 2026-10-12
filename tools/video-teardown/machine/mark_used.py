@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """5u · MARK USED — the customer language this asset used, recorded.
 
-Damon, 2026-09-28: "anytime any of that language is used, we clearly mark it
+the owner, 2026-09-28: "anytime any of that language is used, we clearly mark it
 as used in X asset, right? We can index and search between things that have
 been used and things that have not been used, and then we can get
 performance metrics on what has been used."
@@ -13,9 +13,12 @@ Runs after the brief, on every chain. Two ways a row counts as used:
   matched  the row's words appear verbatim in the brief (rows of four words
            or more; shorter rows only count when cited)
 
-Writes ONE file per asset per avatar into the language folder's used lane —
-brands/<brand>/core-avatars/<avatar>/language/used/<run slug>.json, shaped as
-brands/language-schema.md "The used lane" says. A bank row is never edited.
+Writes ONE file per asset per avatar as a PROPOSAL for the used lane —
+runs/video-writing/<brand>/<run slug>/proposals/language-used/<avatar>/<run slug>.json,
+shaped as brands/language-schema.md "The used lane" says. A machine never writes
+brands/ (K2 (brands write wall), SI-97 (brand research proposals)): a person commits it into
+brands/<brand>/core-avatars/<avatar>/language/used/, and until then the language
+layer's load_used reads the open proposals too. A bank row is never edited.
 No model.
 
     python3 mark_used.py <run dir>        (re-mark a finished run by hand)
@@ -85,7 +88,7 @@ def collect(d, st, rows_by_id):
     # The hook this asset opens on: its fills often come from the room's short
     # comment rows (two or three words and an emoji) that the brief match below
     # is too strict for. The picked hook's own LINE and CARD are matched against
-    # the bank at two words and up (Damon, 2026-09-28: "give me the sources").
+    # the bank at two words and up (the owner, 2026-09-28: "give me the sources").
     hooks_text = outs.get("stage4b", (None, ""))[1]
     if hooks_text:
         lines = re.findall(r"^(?:LINE|CARD) " + re.escape(pick or "V0") + r":[ \t]*(.+)$", hooks_text, re.M)
@@ -119,6 +122,11 @@ def chain_of(st):
     return {"VARIATION": "variation-video", "FRAMEWORK": "framework"}.get(lane, "new-video")
 
 
+def proposal_home(brand, slug, avatar):
+    """Where one asset's used-lane file lands for one avatar: a proposal under runs/."""
+    return C.WS / "runs" / "video-writing" / brand / slug / "proposals" / "language-used" / avatar
+
+
 def run(d, st, out=None):
     import language as L                                  # the language layer, via this machine's shim
     brand = st["brand"]
@@ -132,7 +140,7 @@ def run(d, st, out=None):
         by_av.setdefault(u.get("avatar") or "_unattributed", []).append(u)
     run_rel = str(Path(d).resolve().relative_to(C.WS)) if str(Path(d).resolve()).startswith(str(C.WS)) else str(d)
     for av, items in sorted(by_av.items()):
-        home = base / av / "language" / "used"
+        home = proposal_home(brand, st["slug"], av)
         if not (base / av).is_dir():
             continue                                      # never create an avatar folder
         home.mkdir(parents=True, exist_ok=True)

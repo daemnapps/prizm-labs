@@ -9,15 +9,17 @@
 # record, comprehensive with the creative. Publish lifts it to output/;
 # gdoc_out.py turns published copy into Google Docs afterwards.
 #
-# Born from Jackie's 7-ad delivery (2026-08-31) and the three snags that
+# Born from an editor's 7-ad delivery (2026-08-31) and the three snags that
 # batch hit, all now fixed in the machines themselves: records runs exit
 # clean at their stop; the brand tree is found by shape (no --brand-root
 # needed); product paths resolve as file or folder in either tree.
 set -u
 SRC="${1:?folder of mp4s}"; BRAND="${2:?brand}"; CREATOR="${3:?creator}"
 PROD="${4:?product path}"; PREFIX="${5:-$CREATOR}"
-VT="$HOME/Projects/ai-workspace/components/video-teardown/machine"
-CP="$HOME/Projects/ai-workspace/components/copywriter"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+WS="$(python3 -c 'import sys; sys.path.append(sys.argv[1]); from run_kit.paths import repo; print(repo(sys.argv[2]))' "$HERE/../../../components/run-kit" "$HERE")" || exit 2   # run-kit paths.repo(): AI_WORKSPACE, else this checkout
+VT="$WS/tools/video-teardown/machine"
+CP="$WS/tools/copywriter"
 for v in "$SRC"/*.mp4 "$SRC"/*.mov; do
   [ -f "$v" ] || continue
   base=$(basename "$v"); base="${base%.*}"
@@ -26,8 +28,9 @@ for v in "$SRC"/*.mp4 "$SRC"/*.mov; do
   (cd "$VT" && python3 run.py "$v" --brand "$BRAND" --creator "$CREATOR" \
       --label "$label" --to 1b)
   slug=$(echo "$label" | tr 'A-Z' 'a-z')
-  rec="$VT/runs/$slug/stages/1-teardown.md"
-  [ -f "$rec" ] || rec="$VT/runs/$slug/1-teardown.md"
+  work="$(python3 -c 'import sys; sys.path.append(sys.argv[1]); import workdir; print(workdir.run_dir(sys.argv[3], sys.argv[2]))' "$VT" "$WS" "$slug")"
+  rec="$work/stages/1-teardown.md"
+  [ -f "$rec" ] || rec="$work/1-teardown.md"
   [ -f "$rec" ] || { echo "NO RECORD for $label — teardown really failed"; continue; }
   (cd "$CP" && python3 machine/copy.py "$rec" --brand "$BRAND" --product "$PROD" \
       --video "$v" --channel "Meta (feed / Reels)" --write-as caption \

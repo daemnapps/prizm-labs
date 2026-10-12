@@ -17,7 +17,7 @@ Caveat up front: OpenAI's own pricing page (openai.com/api/pricing) blocked the 
 - **Streaming:** `partial_images` param, 0–3, streams `response.image_generation_call.partial_image` events.
 - **Batch/rate limits:** `v1/batch` supported for bulk; per-minute tiers are TPM/IPM — Tier 1: 100k TPM / 5 IPM, Tier 2: 250k/20, Tier 3: 800k/50, Tier 4: 3M/150, Tier 5: 8M/250.
 - **Response:** base64 — `b64_json` field per image.
-- **Price (third-party-tracked, not OpenAI's own page):** roughly $0.006 (low) to $0.211 (high) per 1024×1024 image; edit calls with reference images bill image-input tokens (~$8/1M) on top, so edit-heavy runs run 2–3x a bare generation.
+- **Price (third-party-tracked, not OpenAI's own page):** roughly $__ (low) to $__ (high) per 1024×1024 image; edit calls with reference images bill image-input tokens (~$__/1M) on top, so edit-heavy runs run 2–3x a bare generation.
 
 ## 2. fal.ai
 
@@ -25,23 +25,23 @@ Two separate model families, don't conflate them:
 - `fal-ai/gpt-image-1/edit-image` — the **older** gpt-image-1, not gpt-image-2.
 - **`openai/gpt-image-2`** (text-to-image) and **`openai/gpt-image-2/edit`** (image-to-image) — the current ones. [Edit API docs](https://fal.ai/models/openai/gpt-image-2/edit/api) · [Generate](https://fal.ai/models/openai/gpt-image-2)
 
-Edit endpoint fields: `prompt` (required), `image_urls` (list, **max 16**), `mask_url`, `image_size` (presets `square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9` or custom `{width,height}` — `portrait_16_9` is your 9:16), `background` (`auto/transparent/opaque`), `quality` (`auto/low/medium/high` — **no xhigh/max**), `num_images`, `output_format`, `sync_mode`. Generate endpoint is the same minus `image_urls`./`mask_url`./`background`.
+Edit endpoint fields: `prompt` (required), `image_urls` (list, **max 16**), `mask_url`, `image_size` (presets `square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9` or custom `{width,height}` — `portrait_16_9` is your 9:16), `background` (`auto/transparent/opaque`), `quality` (`auto/low/medium/high` — **no xhigh/max**), `num_images`, `output_format`, `sync_mode`. Generate endpoint is the same minus `image_urls`/`mask_url`/`background`.
 
 **Missing vs direct:** no `input_fidelity` field anywhere in the schema, no `moderation` field anywhere in the schema.
 
-**Price:** edit endpoint ranges $0.011–$0.151 (1024×768) up to $0.024–$0.413 (3840×2160) across low/medium/high; generate endpoint is slightly cheaper, same shape.
+**Price:** edit endpoint ranges $__–$__ (1024×768) up to $__–$__ (3840×2160) across low/medium/high; generate endpoint is slightly cheaper, same shape.
 
 ## 3. Higgsfield
 
-CLI/model id `gpt_image_2` (plus `gpt_image_2_5` with `flare`./`sunburst` variants). [MODELS.md](https://github.com/higgsfield-ai/cli/blob/main/MODELS.md) · [product page](https://higgsfield.ai/gpt-2) · [2.5 blog](https://higgsfield.ai/blog/gpt-image-2-5-higgsfield)
+CLI/model id `gpt_image_2` (plus `gpt_image_2_5` with `flare`/`sunburst` variants). [MODELS.md](https://github.com/higgsfield-ai/cli/blob/main/MODELS.md) · [product page](https://higgsfield.ai/gpt-2) · [2.5 blog](https://higgsfield.ai/blog/gpt-image-2-5-higgsfield)
 
 - **References:** `--image-references` / `--image`, repeatable. The CLI/MODELS.md doc I could reach states the **2.5** variants take "at most 16"; a separate web summary put the base `gpt_image_2` cap at 14 — sources disagree, verify against your account before batching. I found **no documented `<<<uuid>>>` element-injection syntax or `image_references`-as-medias-role field** in the CLI README or MODELS.md — that pattern may exist only in Higgsfield's web "Elements" UI, not the CLI/API surface these docs cover; flag as unconfirmed rather than assumed present.
 - **Resolution:** `1k`, `2k`, `4k` (default `2k` for base model, `1k` for 2.5). Product page separately claims "native 4K" output.
-- **Quality:** base `low/medium/high`; 2.5 adds `xhigh`./`max` (labelled Low/Medium/High/Extra High/Max).
+- **Quality:** base `low/medium/high`; 2.5 adds `xhigh`/`max` (labelled Low/Medium/High/Extra High/Max).
 - **Aspect ratios:** long enum including `9:16`, `16:9`, `1:1`, etc.
 - **`--background`:** `auto/opaque/transparent`. Inpainting via `--is_inpaint` + `--mask`.
 - **No `moderation` or `input_fidelity` parameter documented anywhere** I could reach (CLI README, MODELS.md, product page, 2.5 blog).
-- **Price:** only the 2.5 credit table is published — 1K/Low = 1.5 credits ($0.075) up to 4K/Max = 26.5 credits ($1.325). Base `gpt_image_2` pricing isn't broken out separately in public docs. **No rate/concurrency limits documented** anywhere I could reach.
+- **Price:** only the 2.5 credit table is published — 1K/Low = 1.5 credits ($__) up to 4K/Max = 26.5 credits ($__). Base `gpt_image_2` pricing isn't broken out separately in public docs. **No rate/concurrency limits documented** anywhere I could reach.
 
 ## Verdict table
 
@@ -51,7 +51,7 @@ CLI/model id `gpt_image_2` (plus `gpt_image_2_5` with `flare`./`sunburst` varian
 | High input fidelity (`input_fidelity`) | ✓ `input_fidelity: "high"` | ✗ not in schema | ✗ not documented |
 | Moderation control | ✓ `moderation: "low"` | ✗ not in schema | ✗ not documented |
 | 9:16 at highest res | partial — custom `WIDTHxHEIGHT`, no named alias, max edge 3840px | ✓ `portrait_16_9` preset | ✓ named `9:16` + `4k` |
-| Mask/inpainting | ✓ `mask` | ✓ `mask_url` | ✓ `--mask`./`--is_inpaint` |
+| Mask/inpainting | ✓ `mask` | ✓ `mask_url` | ✓ `--mask`/`--is_inpaint` |
 | Batch / high-volume | ✓ `v1/batch`, tiered rate limits | no batch endpoint found; no stated rate limits | no rate/concurrency limits documented |
 
 ## The ruling

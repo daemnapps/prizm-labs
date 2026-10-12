@@ -1,0 +1,105 @@
+{
+ "_what": "QC gates a variation can carry, with what passes and the automatic check that exists in the workspace today. Stage 6 picks the gates per variation and writes the variation-specific pass line; the machine also adds any gate a route forces (a generated person forces identity drift, an AI clip forces smoothness).",
+ "curator": "the owner",
+ "gates": [
+  {
+   "id": "identity",
+   "name": "Identity / face drift",
+   "passes": "The generated person matches the cast sheet in every sampled frame; no face melt through the move.",
+   "check": "tools/video-production gate 5 (still vs cast sheet) on the still; one frame every 0.5 s of the clip through the same check. A per-frame video checker is not built yet.",
+   "forced_by": [
+    "gpt-image:person",
+    "seedance-hf:person",
+    "genjutsu-hf",
+    "wan-animate-fal",
+    "kling-mc-fal"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "sku",
+   "name": "SKU / product accuracy",
+   "passes": "The product on screen is the SKU the variation names, drawn as the brand's product file describes it; packaging matches the store photo; the SKU on screen is the SKU on any card.",
+   "check": "video-production gate 4 (QC each still) + the plate check; packaging against the store's product photo.",
+   "forced_by": [
+    "gpt-image:product",
+    "seedance-hf:product"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "smoothness",
+   "name": "Smoothness — no repeated frames",
+   "passes": "No held or repeated frames outside a planned hold; every AI clip de-duplicated, interpolated and conformed to the master's fps before it is cut in.",
+   "check": "ffmpeg mpdecimate / freezedetect scan: repeated frames outside a planned hold = 0. Interpolation local (RIFE). No workspace tool yet — flagged.",
+   "forced_by": [
+    "seedance-hf",
+    "genjutsu-hf",
+    "wan-animate-fal",
+    "kling-mc-fal"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "seams",
+   "name": "Seams — chained clips join cleanly",
+   "passes": "Chained clips were made in order, each starting from the real last frame of the clip before it (never the original still). At every join the frame-to-frame change stays within about 2× the clip's own median frame step. Where a clip could not be made again, an optical-flow bridge over the last ~10 and first ~10 frames closes the join — a repair, recorded as such.",
+   "check": "Frame-difference scan across each join against the clip's median frame step (ffmpeg, per frame). No workspace tool yet — flagged.",
+   "forced_by": [
+    "chain"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "safe-zones",
+   "name": "Caption and face safe zones",
+   "passes": "Faces, the product and the hands doing the beat sit inside the centred 4:5 zone of the 9:16 frame; text off faces and clear of the platform's right rail and bottom caption band.",
+   "check": "tools/video-production/machine/safezone.py (subject 4:5 zone) + tools/video-edit/machine/faces.py (text off the face track).",
+   "forced_by": [
+    "*"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "brand-rules",
+   "name": "Brand rules",
+   "passes": "Only bank words on screen and in new lines; the brand's NEVER lists (position.md, story.md, identity-anchors.md) hold; compliance.json small print where a claim is made.",
+   "check": "tools/video-production/machine/claimfix.py (lines against the product's claim rules) + the NEVER lists checked by text.",
+   "forced_by": [
+    "*"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "not-an-ad",
+   "name": "Doesn't look like an ad",
+   "passes": "The render keeps the source's camouflage: phone-grade, real rooms, no grade, no logo bug on the organic cut; the triage AI-tells line reads the same as the source's.",
+   "check": "Re-run video-teardown triage on the render; pass = the same AI ASSESSMENT line as the source.",
+   "forced_by": [],
+   "status": "draft"
+  },
+  {
+   "id": "lip-sync",
+   "name": "Lip sync",
+   "passes": "Replaced or re-voiced lines land on the lips within ±0.3 s.",
+   "check": "tools/video-edit/machine/syncheck.py.",
+   "forced_by": [
+    "lipsync-sync",
+    "elevenlabs-sts",
+    "genjutsu-hf"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "voice",
+   "name": "Voice",
+   "passes": "A new voice matches the person's age and gender by ear and is unmuffled.",
+   "check": "tools/video-production/machine/voice_qc.py (pitch, highs, gender against the spec).",
+   "forced_by": [
+    "elevenlabs-tts",
+    "elevenlabs-sts"
+   ],
+   "status": "draft"
+  }
+ ]
+}

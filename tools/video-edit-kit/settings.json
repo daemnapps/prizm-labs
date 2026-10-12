@@ -8,9 +8,15 @@
  },
  "cut": {
   "lead_s": 0.10,
-  "tail_s": 0.14,
+  "tail_s": 0.18,
   "breath_under_s": 0.35,
-  "what": "start and end silence always cut, leaving 0.10 s before the first sound and 0.14 s after the last. Gaps under 0.35 s are breaths and are always kept. Gaps of 0.35 s or more are mid-clip pauses: the kit proposes cutting them, the editor keeps any that land a beat (--keep)."
+  "min_piece_s": 0.5,
+  "fade_s": 0.012,
+  "what": "start and end silence always cut, leaving 0.10 s before the first sound and 0.18 s after the last, so a line rings out and no syllable is clipped (edit line, 4 Oct). Gaps under 0.35 s are breaths and are always kept. Gaps of 0.35 s or more are mid-clip pauses: the kit proposes cutting them, the editor keeps any that land a beat (--keep). No piece shorter than 0.5 s (no flashes): a pause that would leave one is kept. Every piece's sound fades in and out over 12 ms so no join clicks."
+ },
+ "room": {
+  "db": -50,
+  "what": "never digital silence: a quiet room (soft brown noise, rumble and hiss cut) sits under the whole master at about -50 dB, as a phone recording always has (edit line, 4 Oct). It is far under the -35 dB the dead-air check listens for, so it never hides a real gap."
  },
  "punch": {
   "zoom": 1.07,
@@ -49,6 +55,7 @@
  "looks": {
   "bold-highlight": {"case": "upper", "size_px": 84, "color": "#FFFFFF", "highlight": "#FFD84A", "stroke_px": 10, "stroke": "#000000", "max_words": 3, "zone": "caption-band", "plate": null},
   "clean-lower": {"case": "sentence", "size_px": 58, "color": "#FFFFFF", "highlight": "#FFFFFF", "stroke_px": 0, "stroke": "#000000", "max_words": 4, "zone": "caption-band", "plate": "#000000B3"},
+  "word-box": {"case": "upper", "size_px": 70, "color": "#FFFFFF", "highlight": "#FFFFFF", "word_box": "#8E3BD6", "stroke_px": 0, "stroke": "#000000", "max_words": 3, "zone": "caption-band", "plate": null, "what": "song ads and lyric-led pieces: the word being sung or said sits on a coloured box that moves word to word (the owner, 2026-10-10)"},
   "one-word": {"case": "upper", "size_px": 110, "color": "#FFFFFF", "highlight": "#FFFFFF", "stroke_px": 12, "stroke": "#000000", "max_words": 1, "zone": "caption-band", "plate": null},
   "card": {"case": "as-written", "size_px": 64, "color": "#000000", "stroke_px": 0, "plate": "#FFFFFFFF", "zone": "top-headline", "what": "hook and cards: black heavy type on a white plate, the cut sheet's exact words and line breaks"},
   "what": "caption looks. Captions show 2-4 words at a time and the spoken word lights up; one line breaks on a pause of 0.35 s or more and on . ! ?"

@@ -1,6 +1,6 @@
 # First run — 2026-08-24
 
-Live <brand> video brief in, six pieces of paste-ready ad copy out. First
+Live Brand A video brief in, six pieces of paste-ready ad copy out. First
 proving run of the five-stage chain (`../prompts/`), run via `../copy.py`.
 
 **One false start, logged for whoever hits this next.** The first attempt
@@ -14,22 +14,22 @@ backfilled 2026-08-24) — not by bypassing the hook. `copy.py`'s `claude()`
 briefly carried a `--bare` workaround; reverted, since `--bare` also drops
 normal OAuth login and needs its own API key.
 
-Source: `new-workflow-design/builds/video-teardown/results/<person>-DbGfFHxI8LJ/stage5--brief.md`
-(<person> × <brand>, "3 lies" video). No existing copy was on file to test
+Source: `new-workflow-design/builds/video-teardown/results/mara-DbGfFHxI8LJ/stage5--brief.md`
+(Mara × Brand A, "3 lies" video). No existing copy was on file to test
 the reuse/re-angle lanes — that needs real past primary text supplied via
 `--existing-copy` on an actual call. All six options below are net-new.
 
-Full stage-by-stage output: `../results/<person>-DbGfFHxI8LJ-netnew/`.
+Full stage-by-stage output: `../results/mara-DbGfFHxI8LJ-netnew/`.
 
 ---
 
-## Media Buyer Brief — <brand> Brilliance Turmeric Body Scrub
+## Media Buyer Brief — Brand A Brand A Glow Body Scrub
 
-**<person> concept · six primary text options · ready to traffic**
+**Mara concept · six primary text options · ready to traffic**
 
-### Concept: <person> — "Three lies" / sleeveless reveal
+### Concept: Mara — "Three lies" / sleeveless reveal
 
-**The video it pairs with:** `<person>-DbGfFHxI8LJ` — <person>, unretouched arms,
+**The video it pairs with:** `mara-DbGfFHxI8LJ` — Mara, unretouched arms,
 sleeve pushed past the elbow mid-video, closing on three unbroken seconds of
 a sleeveless dress with no filter.
 
@@ -58,7 +58,7 @@ Here's the honest part, and it's the part most ads skip: mine took months,
 not weeks. Not four weeks. Months. Twice a week, consistently, small circles
 from the wrist upward until the grains dissolve.
 
-That's the Brilliance Turmeric Body Scrub. $29.99.
+That's the Brand A Glow Body Scrub. $__.
 
 And the guarantee is exactly this — 60-day money back. Use it twice a week,
 consistently. If the spots do not fade, you get every penny back.
@@ -88,7 +88,7 @@ damp skin, small circles from the wrist up until the salt dissolves.
 Everything I'd tried before did half the job — it cleared the old skin off
 and the same spots came back in the same places. This one does both halves.
 
-Brilliance Turmeric Body Scrub. $29.99.
+Brand A Glow Body Scrub. $__.
 
 60-day money back. Use it twice a week, consistently. If the spots do not
 fade, you get every penny back.
@@ -117,11 +117,11 @@ If you want the version where it disappears in four weeks, that's not this.
 Every skin is different — some women see changes in weeks, others in
 months.
 
-Five core ingredients do the work: sea salt, turmeric, moringa, ginger,
+Five core ingredients do the work: sea salt, turmeric, centella, ginger,
 chamomile. The salt clears the old damaged skin off. The turmeric tells
 those cells to stop.
 
-The scrub. $29.99.
+The scrub. $__.
 
 60-day money back. Use it twice a week, consistently. If the spots do not
 fade, you get every penny back.
@@ -145,7 +145,7 @@ and said, hey, that brown spot is fading.
 That's when I believed it.
 
 But I'll tell you the boring part too, because the video only had so long.
-The scrub is $29.99. You use it twice a week in the shower on damp skin, not
+The scrub is $__. You use it twice a week in the shower on damp skin, not
 under the running water — that's how most of it ends up down the drain.
 Small circles from the wrist upward until the grains dissolve. Let it sit a
 minute. Rinse cool.
@@ -155,7 +155,7 @@ up at week four like I nearly did.
 
 Edges soften first. That's where it starts.
 
-Brilliance Turmeric Body Scrub. $29.99. 60-day money back. Use it twice a
+Brand A Glow Body Scrub. $__. 60-day money back. Use it twice a
 week, consistently. If the spots do not fade, you get every penny back.
 
 **Headline:** Ask my husband
@@ -181,7 +181,7 @@ holds instead of coming right back.
 
 Months, not weeks. Twice a week, consistently.
 
-The scrub. $29.99. Or stock up — three for $75, five for $109, free
+The scrub. $__. Or stock up — three for $__ five for $__ free
 shipping on both.
 
 60-day money back. Use it twice a week, consistently. If the spots do not
@@ -211,7 +211,7 @@ Nothing about this was fast. Months, not weeks, twice a week, consistently.
 Clean ingredients, five core ones doing the work, and it rinses clean — it
 doesn't stain you yellow like the kitchen-turmeric versions do.
 
-Brilliance Turmeric Body Scrub. $29.99.
+Brand A Glow Body Scrub. $__.
 
 60-day money back. Use it twice a week, consistently. If the spots do not
 fade, you get every penny back.
@@ -239,7 +239,7 @@ independently: 4 and 6 stand best without their body copy.
 
 ### Applies to everything above
 
-**Price:** $29.99 single tube. Multipacks: three for $75, five for $109,
+**Price:** $__ single tube. Multipacks: three for $__ five for $__
 free shipping on both.
 
 **Guarantee, exact wording:** "Use it twice a week, consistently. If the

@@ -21,12 +21,13 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import keys, library as L
+import workdir
 
 ACTOR = "apify~instagram-scraper"
 PROFILE_ACTOR = "apify~instagram-profile-scraper"
 TIKTOK_ACTOR = "clockworks~tiktok-profile-scraper"
 API = "https://api.apify.com/v2"
-CREATORS = HERE / "creators.json"
+CREATORS = workdir.system() / "creators.json"   # runs/video-teardown/_system/ (SI-56)
 INDEX_DEPTH = 200        # how deep to index a page before ranking
 TOP_N = 10
 

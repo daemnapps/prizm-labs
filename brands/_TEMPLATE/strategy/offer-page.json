@@ -1,0 +1,7 @@
+{
+ "_what": "The one offer every creative sells into — read by components/creative-diversity (matrix.py, tag.py) as the fixed part of every ad. One product, one offer page; `match` lists the URL pieces that mark an ad's link as on-offer.",
+ "brand_name": "<Brand name as it is written in ads>",
+ "product": "<product-id>",
+ "page": "https://<your-offer-page>/",
+ "match": ["<a piece of the offer page URL>"]
+}

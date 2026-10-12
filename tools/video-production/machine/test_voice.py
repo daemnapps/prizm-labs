@@ -158,7 +158,7 @@ class VoiceTests(unittest.TestCase):
 
     def test_slugify(self):
         self.assertEqual(voice.slugify("Lead"), "lead")
-        self.assertEqual(voice.slugify("Dr. Susan O'Neil"), "dr-susan-o-neil")
+        self.assertEqual(voice.slugify("Dr. June O'Neil"), "dr-june-o-neil")
         self.assertEqual(voice.slugify(""), "")
 
 
@@ -180,7 +180,9 @@ class ContinuousTests(unittest.TestCase):
         self.cast_root = self.tmp / "cast"
         self.home = self.cast_root / "lead"
         self.home.mkdir(parents=True)
-        voice.write_json(self.home / "voice.json", {"voice_id": "abc123"})
+        # these tests exercise v2's request stitching; v3 (the house default
+        # since 2026-10-01) is covered by V3Tests below
+        voice.write_json(self.home / "voice.json", {"voice_id": "abc123", "model_id": "eleven_multilingual_v2"})
         self.cuts = []
         self.saved_ffmpeg = voice.run_ffmpeg
         voice.run_ffmpeg = self.record_ffmpeg
@@ -207,14 +209,14 @@ class ContinuousTests(unittest.TestCase):
         self.assertEqual(len(bodies), 2)
         self.assertNotIn("previous_request_ids", bodies[0])
         self.assertEqual(bodies[1]["previous_request_ids"], ["rid-1"])
-        # stitching is not on v3 — the contract's own house default is sent
-        self.assertEqual(bodies[0]["model_id"], voice.default_model_id())
+        self.assertEqual(bodies[0]["model_id"], "eleven_multilingual_v2")
 
     def test_a_scene_carrying_voice_settings_lays_them_over_the_cast_record(self):
         """The spoken pass (2026-09-19) writes stability / style / speed per
         scene from the register recipe; the cast record stays the base."""
         voice.write_json(self.home / "voice.json",
-                         {"voice_id": "abc123", "stability": 0.5, "similarity_boost": 0.8})
+                         {"voice_id": "abc123", "model_id": "eleven_multilingual_v2",
+                          "stability": 0.5, "similarity_boost": 0.8})
         voice.write_json(self.run / "plan.json", {
             "shape": "scene", "cast": {"name": "Lead"},
             "scenes": [{"id": "S1", "frames": [],
@@ -261,16 +263,14 @@ class ContinuousTests(unittest.TestCase):
             self.assertTrue((self.run / "vo" / f"{sid}.mp3").is_file())
             self.assertEqual(manifest[sid]["file"], f"vo/{sid}.mp3")
 
-    def test_slices_are_cut_at_the_scene_bounds(self):
+    def test_a_slice_is_its_scenes_own_chunk(self):
+        # 2026-10-01: slices cut from the joined track drifted later scene by
+        # scene; the slice is now the chunk that scene's words came back in.
         self.make()
-        timing = json.loads((self.run / "vo" / "timing.json").read_text())
-        cuts = [c for c in self.cuts if "-ss" in c]
-        self.assertEqual(len(cuts), 2)
-        for sid, args in zip(("S1", "S2"), cuts):
-            row = timing["scenes"][sid]
-            self.assertEqual(args[args.index("-ss") + 1], f"{row['start']:.3f}")
-            self.assertEqual(args[args.index("-to") + 1], f"{row['end']:.3f}")
-            self.assertTrue(args[-1].endswith(f"{sid}.mp3"))
+        chunks = {p.name.split("-", 1)[1]: p for p in (self.run / "vo" / "chunks").glob("*-S*.mp3")}
+        for sid in ("S1", "S2"):
+            self.assertEqual((self.run / "vo" / f"{sid}.mp3").read_bytes()[:64],
+                             chunks[f"{sid}.mp3"].read_bytes()[:64])
 
     def test_dry_run_writes_nothing_and_still_refuses_a_preset_voice(self):
         code, out = run_quiet(voice.main, [str(self.run), "--cast-root",
@@ -309,7 +309,7 @@ class ForReadingTests(unittest.TestCase):
                              "Look, it works. it does... really, truly now")
 
     def test_a_dash_becomes_a_comma_and_an_ellipsis_is_kept(self):
-        # the ellipsis is the mid-thought breath (Damon, 2026-09-19) — kept
+        # the ellipsis is the mid-thought breath (the owner, 2026-09-19) — kept
         self.assertEqual(
             voice.for_reading("This — the old surface — is why... it failed."),
             "This, the old surface, is why... it failed.")
@@ -321,6 +321,78 @@ class ForReadingTests(unittest.TestCase):
     def test_spoken_copy_passes_through_untouched(self):
         s = "It comes back, every time. Right? That's not the product failing."
         self.assertEqual(voice.for_reading(s), s)
+
+
+
+class SecondSpeakerTests(ContinuousTests):
+    """EVERY SPEAKER HAS THEIR OWN VOICE (2026-09-23): a scene the brief gives
+    to a second person is read in that person's voice, stitched only on that
+    voice's own takes, and a speaker with no voice stops the run by name."""
+
+    def setUp(self):
+        super().setUp()
+        voice.write_json(self.run / "plan.json", {
+            "shape": "scene", "cast": {"name": "Lead", "names": ["LEAD", "SECOND"]},
+            "scenes": [{"id": "S1", "who": "LEAD", "frames": []},
+                       {"id": "S2", "who": "SECOND at the table, LEAD listening", "frames": []}]})
+        self.second = self.cast_root / "second"
+        self.second.mkdir(parents=True)
+        voice.write_json(self.second / "voice.json", {"voice_id": "zzz999"})
+
+    def test_each_scene_reads_in_its_speakers_voice(self):
+        voice.write_json(self.second / "voice.json", {"voice_id": "zzz999"})
+        self.make()
+        urls = [c["url"] for c in self.tr.calls]
+        self.assertIn("abc123", urls[0])
+        self.assertIn("zzz999", urls[1])
+        self.assertNotIn("previous_request_ids", self.tr.calls[1]["body"])
+        timing = voice.read_json(self.run / "vo" / "timing.json")
+        self.assertEqual(timing["voices"]["S2"]["speaker"], "second")
+
+    def test_a_speaker_with_no_voice_is_a_hard_stop(self):
+        (self.second / "voice.json").unlink()
+        with self.assertRaises(SystemExit) as ctx:
+            self.make()
+        self.assertIn("second", str(ctx.exception))
+
+    def test_the_briefs_speaker_field_wins(self):
+        voice.write_json(self.second / "voice.json", {"voice_id": "zzz999"})
+        plan = voice.read_json(self.run / "plan.json")
+        plan["scenes"][1]["speaker"] = "LEAD"
+        voice.write_json(self.run / "plan.json", plan)
+        self.make()
+        self.assertIn("abc123", self.tr.calls[1]["url"])
+
+    # the parent's single-voice assertions do not apply to a two-voice read
+    test_stitching_carries_the_request_ids_forward = None
+    test_never_more_ids_than_the_contract_allows = None
+    test_a_scene_carrying_voice_settings_lays_them_over_the_cast_record = None
+    test_dry_run_writes_nothing_and_still_refuses_a_preset_voice = None
+
+
+class NestedSettingsTest(unittest.TestCase):
+    """2026-10-01: a character's ruled settings nested under "settings" are sent."""
+    def test_nested_settings_are_read(self):
+        import tempfile
+        d = Path(tempfile.mkdtemp())
+        (d / "voice.json").write_text(json.dumps({"voice_id": "v1", "model_id": "m",
+            "settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.3, "speed": 1.0}}))
+        vid, mid, st = voice.binding(d)
+        self.assertEqual(st.get("stability"), 0.45)
+        self.assertEqual(st.get("similarity_boost"), 0.8)
+
+
+class V3Tests(unittest.TestCase):
+    """2026-10-01: eleven_v3 is the house voice model — no stitching, stability snapped."""
+    def test_house_default_is_v3(self):
+        self.assertEqual(voice.default_model_id(), "eleven_v3")
+
+    def test_v3_does_not_stitch_and_snaps_stability(self):
+        self.assertFalse(voice.stitches("eleven_v3"))
+        self.assertTrue(voice.stitches("eleven_multilingual_v2"))
+        self.assertEqual(voice.for_model("eleven_v3", {"stability": 0.45})["stability"], 0.5)
+        self.assertEqual(voice.for_model("eleven_multilingual_v2", {"stability": 0.45})["stability"], 0.45)
+
 
 if __name__ == "__main__":
     unittest.main()

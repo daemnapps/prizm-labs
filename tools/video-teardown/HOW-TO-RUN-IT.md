@@ -31,20 +31,33 @@ a product that is not yours.
 ## Every video — the teardown
 
 Say: **"Tear down this video for <my brand>"** and give it the video — a
-link, or a file you drop in.
+link, or a file you drop in. **Give it the post's own link too** (the
+Instagram or TikTok page, not just the video file): the culture read needs
+the caption and the comments.
 
 It runs `the-chain/` in order and stops to show you at each step:
 
-1. **Watch** — it watches the video and writes the scene record: what is on
-   screen, what is said, what is printed, when.
-2. **Tear down** — the structure underneath: the beats, the hook, the proof,
+1. **Watch** — it sorts the video (ad or organic, how the words reach the
+   ear, its visual style and its format — a 3D-animated piece stays
+   3D-animated all the way through), then writes the scene record: every
+   person on a casting sheet, every place on a set sheet, every shot, every
+   word, the music, the layers on top, and the one core message the ad
+   leaves behind.
+2. **Frame map** — each shot between two cuts, moment by moment: who moves
+   which hand from which edge, where the camera is, what text appears when.
+   This is what makes a remake move like the original.
+3. **Culture read** — what the people watching it recognize: the film,
+   character, song, meme, format, slang or vibe it borrows, each one named
+   only with a receipt (a comment, the screen, a search), and what a remake
+   must keep for it to still land.
+4. **Tear down** — the structure underneath: the beats, the hook, the proof,
    the close. What earned the views, separated from what was sold.
-3. **Spec** — the video described as something rebuildable, with the
+5. **Spec** — the video described as something rebuildable, with the
    brand-specific parts pulled out and left blank.
-4. **Inject** — your brand folder goes into the blanks: your customer, your
+6. **Inject** — your brand folder goes into the blanks: your customer, your
    words, your product where theirs was. Anything the folder does not say,
    it flags as *not known* rather than inventing.
-5. **Hooks and brief** — the hook options, then the brief: the scenes, what
+7. **Hooks and brief** — the hook options, then the brief: the scenes, what
    is said, what the person wears, and a prompt for every frame.
 
 The brief is written to `brands/<my brand>/briefs/` — and, when Drive is

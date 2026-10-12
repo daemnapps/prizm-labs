@@ -1,0 +1,13 @@
+/* Brand B email brand fonts — real files from the brand font pack.
+   Covers every family name the Figma file uses (incl. trial/test aliases). */
+@font-face { font-family: 'GT Super Ds Trial'; src: url('fonts/GT-Super-Display-Regular.woff2') format('woff2'); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'GT Super Ds Trial'; src: url('fonts/GT-Super-Display-Light.woff2') format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'GT Super Display'; src: url('fonts/GT-Super-Display-Regular.woff2') format('woff2'); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'GT Super Display'; src: url('fonts/GT-Super-Display-Light.woff2') format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'GT Super Txt Trial'; src: url('fonts/GT-Super-Display-Regular.woff2') format('woff2'); font-weight: 300 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Untitled Sans'; src: url('fonts/untitled-sans-web-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Untitled Sans'; src: url('fonts/untitled-sans-web-medium.woff2') format('woff2'); font-weight: 500 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Untitled Sans'; src: url('fonts/untitled-sans-web-light.woff2') format('woff2'); font-weight: 200 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Test Untitled Sans'; src: url('fonts/untitled-sans-web-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Test Untitled Sans'; src: url('fonts/untitled-sans-web-medium.woff2') format('woff2'); font-weight: 500 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Untitled Sans Not Licensed For Desktop Use'; src: url('fonts/untitled-sans-web-regular.woff2') format('woff2'); font-weight: 300 700; font-style: normal; font-display: swap; }

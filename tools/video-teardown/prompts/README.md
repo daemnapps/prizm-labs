@@ -1,3 +1,10 @@
+> **Moved 2026-09-30 (the four stations).** Only the TEARDOWN prompts live
+> here now: stage-0-triage, stage-1-teardown, stage-1k-culture (the
+> culture read, 2026-10-05), stage-1c-doctrine, stage-2-replication (and stage-6-frames, retired — never runs). Every
+> WRITING prompt (1b, 2f, 3, 3v, 4a–4g, 4m, 5, 5m, 5n, 5u, 7, 7b, 8) is in
+> `tools/copywriter/prompts/video/`, same folder names. The map below is
+> kept as history.
+
 # Prompts — the map
 
 **One rule everywhere: each folder shows exactly one current prompt.** Older
@@ -39,7 +46,7 @@ prompts/
 └── parked/                    written, not in the run
 ```
 
-**The production route picks the stage-5 brief** (Damon's rulings,
+**The production route picks the stage-5 brief** (the owner's rulings,
 2026-08-30): the route chosen per run — founder, creator or ai (`--route` on
 the machine) — selects the lane, and a NONE verdict from 4a still overrides
 everything with the hook asset. **The original brief is the creator brief**
@@ -56,8 +63,8 @@ files, because the machine is brand-, product- and avatar-agnostic.
 ## Why the folder names and the shared config's names don't match
 
 The folders above are named for **when a stage runs** (4a is first, 4f is
-last). The team's shared chain config (`lab/dayu/prompt-optimizer/regression/
-chain_config.json`) names stages for **what Dayu built them as** — and his
+last). The team's shared chain config (`the developer's lab/prompt-optimizer/regression/
+chain_config.json`) names stages for **what the developer built them as** — and his
 file has `@stage4a`/`@stage4b`-style references baked into it that can't be
 renamed without breaking his config. So the machine keeps his internal names
 and only changes what's *displayed*.
@@ -72,7 +79,7 @@ and only changes what's *displayed*.
 | 4f | `4f-audit/` | `stage4e` |
 | 4g | `4g-spice/` | `stage4g` (new 2026-09-18 — folder and key agree) |
 
-If you're ever tracing a run back to Dayu's file, use the right-hand column.
+If you're ever tracing a run back to the developer's file, use the right-hand column.
 Everywhere else — the board, `run.py --stages`, this README — use the
 left-hand one.
 
@@ -111,7 +118,7 @@ and the sections are written down.
 | 7b | `stage7b-concept-v5-damon.md` | — |
 | 8 | `stage8-profile-v2-damon.md` | — |
 
-**Stage 1c — the doctrine read (Damon's ruling, 2026-09-18).** "Every time
+**Stage 1c — the doctrine read (the owner's ruling, 2026-09-18).** "Every time
 we run a swipe, we'll run it through a marketing doctrine step too so we have
 full awareness of it and can clearly identify the unique framework of that
 video and bank it for later." Between the teardown and the audience pass, one
@@ -128,7 +135,7 @@ nothing about our version.
 It ends in one fenced `json` block, which `run.py` files as
 `<run>/doctrine.json`. `machine/framework_bank.py` compiles every one of
 those into the **framework bank** — one shelf, one row per swipe, queryable
-(`--awareness problem-aware --signature mechanism`). That is the bank Damon
+(`--awareness problem-aware --signature mechanism`). That is the bank the owner
 pulls a shape off later.
 
 **Two reads of the same thing were removed to make room for it.** Stage 1
@@ -138,14 +145,14 @@ labels stay in stage 1, but the whole-asset read is 1c's. Stage 1b and stage
 sophistication from it rather than re-deriving them: 1b's job is the answer
 for OUR reader, and stage 2 carries the signature forward.
 
-**Stage 2f — the compose, the second door (Damon's ruling, 2026-09-18).**
+**Stage 2f — the compose, the second door (the owner's ruling, 2026-09-18).**
 "With all of the different sections we should begin to assemble actual
 frameworks to create ads strategically. We use swipes as the baseline, but
 since we have a fundamental system and understanding of who we are speaking
 to and how and what formats they're receptive to, we can pump out mounds of
 video and photo ads." Every other construct in this chain is abstracted off
 a swiped source; this one has none — a run on the FRAMEWORK lane is opened
-from a CHOICE (`components/video-teardown/machine/compose.py`: avatar x
+from a CHOICE (`tools/video-teardown/machine/compose.py`: avatar x
 awareness x format x framework), and stage 2f WRITES the construct that
 choice implies instead of reading one off a video. It runs in stage 2's own
 slot (`chain.py`'s `LANE_ONLY` + the FRAMEWORK route's `substitute`), phase
@@ -156,7 +163,7 @@ prints, so stage 3 v9 onward runs unchanged. The framework is a plan, not a
 law: a section the market state does not call for is dropped, with a line
 saying so.
 
-**Stage 4g — the spice (Damon's ruling, 2026-09-18).** Clean injection first,
+**Stage 4g — the spice (the owner's ruling, 2026-09-18).** Clean injection first,
 then the spice. After the words are locked and before the brief is written,
 one pass asks what makes this format land for THIS avatar: the
 format-relevance line, which cast voice it is spoken in (cloned, then
@@ -166,7 +173,7 @@ answered by the gatherer, never guessed** — an unanswered question is
 `[UNFILLED]` and the item it would have supported is cut. It never changes
 the SENSE of the script, and the brief reads its sheet as `{spice_sheet}`.
 
-**Stage 4g v3 — THE SPOKEN SCRIPT (Damon's ruling, 2026-09-19: "humans
+**Stage 4g v3 — THE SPOKEN SCRIPT (the owner's ruling, 2026-09-19: "humans
 don't use em dashes when speaking").** Measured that day: a paragraph
 written with em-dashes was read by the voice model with 1.3–1.7 s of
 silence at every dash; a 7 s paragraph took 11 s. So the spice pass's
@@ -175,20 +182,20 @@ contractions, the room's own markers, a pause as a full stop, a question
 and its answer — at the colloquialism level the sub-avatar's dials and
 research rows support (level 3 and above only in words the rows carry,
 quoted), its rhythm matched to the brand's measured creators
-(`{voiceprint}` — `brands/<brand>/creators/VOICEPRINTS.md`, off their own
+(`{voiceprint}` — `runs/research/<brand>/creators/VOICEPRINTS.md`, off their own
 audio), printed the way the voice model reads it, with the level and the
 receipt on every change and a voice-settings line per section. The rules
 are the doctrine's `{spoken}` slice. **The AI brief v10's `voice` field IS
 that paragraph**, never re-flattened, and the video machine's gate refuses
 an em-dash, a semicolon, a parenthesis or an ellipsis in it by name.
 
-**The lane is recommended, not defaulted (Damon's ruling, 2026-09-18).**
+**The lane is recommended, not defaulted (the owner's ruling, 2026-09-18).**
 Stage 1b now prints `ROUTE RECOMMENDED` alongside the market state. A run
 started without `--route` takes that recommendation and prints it in the
 start banner — the default "creator" survives only for a run where 1b has
 not spoken yet. `run.json` records `production_route` and `market_state`.
 
-**Stage 7b — the concept (Christine's round-two feedback and Damon's
+**Stage 7b — the concept (the creator manager's round-two feedback and the owner's
 rulings, 2026-09-18; supersedes the one sheet of 2026-09-02).** One run, two
 documents, still. Stage 5 writes the spec — every frame with its source
 line, wardrobe, sound and timing, which the pictures, the audit and the
@@ -203,16 +210,16 @@ one sheet (v3) went out to fifteen creators and was still too much — one
 opted out, several went silent — so it is archived, not tuned. Still one
 Doc per video ("I still want the separated briefs"). Her folder also holds
 one **Start here** Doc — the brand's four shared sections from
-`brands/<brand>/channels/creators/brief-intro.md` — built by
+`brands/<brand>/content-creators/brief-intro.md` — built by
 `machine/simplify.py`, which is also how an existing creator's briefs get
 rebuilt in the new shape (staged in unshared `work/` until `--send`).
 
-**Stage 8 — the profile refresh (Damon's ruling, 2026-08-30).** After a run
+**Stage 8 — the profile refresh (the owner's ruling, 2026-08-30).** After a run
 of a creator's OWN content, her brand-side profile rebuilds itself from
 everything the machine holds on her — her record, all her teardown runs, her
 existing profile — to the spec her brand declared. Creator runs only; swipe
 runs record it skipped. The machine never knows where profiles live: the
-brand says so in `brands/<brand>/channels/creators/profile-home.json`
+brand says so in `brands/<brand>/content-creators/profile-home.json`
 (`spec` + `home`, workspace-relative), and a brand without that file keeps
 no profiles. A stage-8 failure never stops the run — the brief and its Doc
 still get made, and the profile can be re-run alone with `--only 8` or by

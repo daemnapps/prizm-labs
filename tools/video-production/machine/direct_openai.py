@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 direct_openai.py — the machine hand's stills door: GPT Image 2, direct on the
-OpenAI API (Damon's 2026-09-17 ruling). Every field value this module sends
+OpenAI API (the owner's 2026-09-17 ruling). Every field value this module sends
 (model id, quality, input_fidelity, moderation, size, output_format, and the
 two endpoint URLs) comes from `providers.json`'s own `direct.openai` section
 — nothing here names a model.
@@ -57,6 +57,7 @@ def _load(name: str):
 
 
 platform = _load("platform")
+vp_keys = _load("vp_keys")
 
 
 def cfg() -> dict:
@@ -66,14 +67,7 @@ def cfg() -> dict:
 def key_of() -> str | None:
     """OPENAI_API_KEY: env first, then the Keychain vault — never a crash, a
     teammate's clone with neither simply has no key."""
-    k = os.environ.get("OPENAI_API_KEY")
-    if k:
-        return k
-    try:
-        import daemn_keys
-        return daemn_keys.key("OPENAI_API_KEY") or None
-    except Exception:
-        return None
+    return vp_keys.key("OPENAI_API_KEY")
 
 
 def _boundary() -> str:
@@ -127,7 +121,8 @@ def _redacted(headers: dict) -> dict:
 
 
 def generate(prompt: str, references: list[Path], out: Path, transport=None,
-             key: str | None = None, dry_run: bool = False) -> dict:
+             key: str | None = None, dry_run: bool = False,
+             overrides: dict | None = None, format_id: str | None = None) -> dict:
     """Edit (references given) or generate (none) — see module docstring."""
     transport = transport or http_transport
     k = key if key is not None else key_of()
@@ -137,6 +132,22 @@ def generate(prompt: str, references: list[Path], out: Path, transport=None,
     c = cfg()
     model = c["model"]
     params = dict(c.get("params") or {})
+    # THE FORMAT PLAYBOOK (the owner, 2026-10-10: one specialised workflow per kind of
+    # ad). A format's playbook may set the picture quality, size and which registry
+    # model ('model' | 'model_fast'); explicit `overrides` win. Neither given → the
+    # request is exactly what it was before playbooks.
+    ov = {}
+    if format_id:
+        try:
+            ov.update(_load("playbook").picture_overrides(format_id))
+        except Exception:
+            ov = {}
+    ov.update({k2: v for k2, v in (overrides or {}).items() if v is not None})
+    if ov.get("model_key") and c.get(ov["model_key"]):
+        model = c[ov["model_key"]]
+    for k2 in ("quality", "size"):
+        if ov.get(k2):
+            params[k2] = ov[k2]
 
     if references:
         boundary = _boundary()
@@ -151,6 +162,15 @@ def generate(prompt: str, references: list[Path], out: Path, transport=None,
             return {"file": None, "model": model, "request_id": None, "usage": None}
         body = _multipart_body(fields, files, boundary)
         status, resp_headers, resp_body = transport("POST", url, headers, body)
+        # THE PER-MINUTE LIMIT (found 2026-09-23 building the cast: 5 input
+        # images a minute on this org). A 429 waits and asks again — a run of
+        # thirty frames must not die halfway on a rate limit.
+        for _ in range(15):
+            if status != 429:
+                break
+            import time as _t
+            _t.sleep(20)
+            status, resp_headers, resp_body = transport("POST", url, headers, body)
         if status == 400 and b"invalid_input_fidelity_model" in resp_body and "input_fidelity" in fields:
             # Learned live 2026-09-18: the 2.5 models do not take input_fidelity
             # at all (it was a 2.x edits parameter). Send the same edit without
@@ -197,13 +217,15 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--ref", action="append", default=[], dest="refs")
     ap.add_argument("--out", required=True)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--format", dest="format_id", help="read quality/size/model from this format's playbook")
     return ap
 
 
 def main(argv=None) -> int:
     a = build_parser().parse_args(argv)
     try:
-        result = generate(a.prompt, [Path(r) for r in a.refs], Path(a.out), dry_run=a.dry_run)
+        result = generate(a.prompt, [Path(r) for r in a.refs], Path(a.out), dry_run=a.dry_run,
+                          format_id=a.format_id)
     except SystemExit as e:
         print(str(e), file=sys.stderr)
         return 2

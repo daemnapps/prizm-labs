@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """Stage 8 — her brand-side profile, refreshed by the machine itself.
 
-Damon's ruling (2026-08-30): a retained creator gets the same distillation as
+the owner's ruling (2026-08-30): a retained creator gets the same distillation as
 an avatar, and the refresh is AUTOMATIC — when a teardown run of her own
 content finishes, her profile is rebuilt from everything the machine now
 holds on her. No manual step, no session remembering to do it.
 
 The machine stays brand-agnostic (rule 4): it never knows where profiles
 live or what shape they take. The BRAND says both, in
-`brands/<brand>/content-creators/profile-home.json` (old: channels/creators/) — `spec` is the
+`brands/<brand>/channels/creators/profile-home.json` — `spec` is the
 document that defines a profile (its template is the output's shape), `home`
-is the folder that holds one subfolder per creator. No file, no profiles:
-the brand has not opted in, and stage 8 records itself skipped rather than
-inventing a destination.
+is the folder that holds one subfolder per creator — the ACCEPTED profiles.
+No file, no profiles: the brand has not opted in, and stage 8 records itself
+skipped rather than inventing a destination. The machine never writes the
+brand's home (K2 (brands write wall), SI-97 (brand research proposals)): it writes a PROPOSAL to
+runs/video-teardown/<brand>/_profiles/<handle>/profile.md, a person commits an
+accepted one into the home, and the next refresh reads the brand's profile
+first, else that proposal.
 
     python3 creator_profile.py <handle> --brand <brand>    refresh one by hand
     python3 creator_profile.py --all --brand <brand>       every creator with a run here
@@ -23,7 +27,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
-import brand_folders as BF
+sys.path.insert(0, str(C.WS / "components" / "brandpath"))
+import brandpath as BP
 
 RECORDS = C.CM / "records"
 CONFIG_NAME = "profile-home.json"
@@ -40,7 +45,7 @@ def home(brand):
     config must not send profiles somewhere half-named."""
     if not brand:
         return None
-    f = BF.home(C.WS / "brands" / brand, "content-creators") / CONFIG_NAME
+    f = BP.brand_file(brand, "content-creators", CONFIG_NAME, root=C.WS / "brands")
     if not f.is_file():
         return None
     try:
@@ -56,7 +61,7 @@ def skip_reason(st):
         return "swipe research — there is no creator to profile"
     cfg = home(st.get("brand"))
     if cfg is None:
-        return (f"brands/{st.get('brand')}/content-creators/{CONFIG_NAME} "
+        return (f"brands/{BP.rel(st.get('brand'), 'content-creators', CONFIG_NAME, root=C.WS / 'brands')} "
                 "names no profile home — this brand keeps no distilled profiles")
     if not (C.WS / cfg["spec"]).is_file():
         return f"the profile spec is missing: {cfg['spec']}"
@@ -121,8 +126,14 @@ def teardown_material(handle):
 
 
 def dest_for(st):
+    """The brand's accepted profile — read, never written by the machine."""
     cfg = home(st.get("brand"))
     return C.WS / cfg["home"] / (st.get("creator") or "") / "profile.md"
+
+
+def proposal_for(st):
+    """Where the machine's refreshed profile lands: a proposal under runs/."""
+    return C.WS / "runs" / "video-teardown" / st.get("brand") / "_profiles" / (st.get("creator") or "") / "profile.md"
 
 
 def inputs(st):
@@ -134,8 +145,9 @@ def inputs(st):
     if cfg is None:
         raise RuntimeError("this brand names no profile home")
     handle = st.get("creator") or ""
-    dest = dest_for(st)
+    dest, prop = dest_for(st), proposal_for(st)
     existing = (dest.read_text() if dest.is_file()
+                else prop.read_text() if prop.is_file()
                 else "(none yet — this is her first profile)")
     return {
         "profile_spec": (C.WS / cfg["spec"]).read_text(),
@@ -147,12 +159,12 @@ def inputs(st):
 
 
 def publish(st, text):
-    """The stage's output, landed where the brand said profiles live.
-    Returns the workspace-relative path it wrote."""
-    dest = dest_for(st)
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(text if text.endswith("\n") else text + "\n")
-    return dest.relative_to(C.WS)
+    """The stage's output, landed as a proposal under runs/ — never the brand's
+    home. Returns the workspace-relative path it wrote."""
+    path = proposal_for(st)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text if text.endswith("\n") else text + "\n")
+    return path.relative_to(C.WS)
 
 
 # ---------------------------------------------------------------- by hand

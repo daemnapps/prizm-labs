@@ -1,0 +1,174 @@
+{
+ "_readme": [
+  "THE MUSIC STYLE BANK (SONG-CHAIN.md, 2026-09-23). A sung brief names its sound by ONE row id here (`song.style_id`) and nothing else — no free-text style in a brief, ever. machine/song.py builds every chunk's styles from the row, mechanically: positive_styles + \"<bpm> BPM\" + the row's line for that section name; negative_styles as written.",
+  "status: `approved` rows are the only ones a run uses (rule 6: draft / approved / deprecated; `ruled` until 2026-10-07, the developer's triage page 15). `draft` rows are written but not yet heard and approved by the owner — song.py refuses them by name until they are. A section name the row has no line for is refused: add the line here, never in the brief.",
+  "vocal: the one word the brief's `song.vocal` must match (female · male · duet). bpm: the default tempo; the brief's `song.bpm` may override it with a number."
+ ],
+ "bank": "music-styles",
+ "rows": [
+  {
+   "id": "neo-soul-90s",
+   "status": "approved",
+   "ruled": "2026-09-23 — the owner, after the blind music test (banks/README.md): \"Eleven Labs won for me for sure.\" These are the styles of the Nova proof song on music_v2_5 (every lyric sung verbatim).",
+   "vocal": "female",
+   "bpm": 88,
+   "positive_styles": [
+    "late-1990s neo-soul R&B",
+    "warm soulful female lead vocal, mature and wry",
+    "drums played lazily behind the beat",
+    "Rhodes electric piano",
+    "round fingered bass",
+    "dusty analog warmth"
+   ],
+   "negative_styles": [
+    "EDM",
+    "trap hi-hats",
+    "autotune",
+    "rock guitar"
+   ],
+   "section_styles": {
+    "intro": "instrumental intro, Rhodes and bass pocket, soft vocal hum",
+    "verse": "conversational sung verse, laid-back",
+    "chorus": "full chorus, stacked harmonies, confident strut"
+   },
+   "source": "the Nova proof, 2026-09-23 (scratchpad bakeoff/song/plan.json)"
+  },
+  {
+   "id": "acoustic-folk-warm",
+   "status": "draft",
+   "vocal": "female",
+   "bpm": 96,
+   "positive_styles": [
+    "warm acoustic folk-pop",
+    "clear intimate female lead vocal, every word intelligible",
+    "fingerpicked acoustic guitar",
+    "light brushed percussion",
+    "sparse arrangement, vocal forward"
+   ],
+   "negative_styles": [
+    "EDM",
+    "autotune",
+    "heavy reverb",
+    "distorted guitar"
+   ],
+   "section_styles": {
+    "intro": "short fingerpicked guitar intro, no vocal",
+    "verse": "gentle storytelling verse",
+    "chorus": "lifted chorus, light harmony"
+   },
+   "source": "draft 2026-09-23 — not heard yet"
+  },
+  {
+   "id": "bright-pop-upbeat",
+   "status": "draft",
+   "vocal": "female",
+   "bpm": 112,
+   "positive_styles": [
+    "bright modern pop",
+    "confident clear female lead vocal, every word intelligible",
+    "clean punchy drums",
+    "warm synth pads",
+    "vocal forward mix"
+   ],
+   "negative_styles": [
+    "autotune",
+    "trap hi-hats",
+    "rock guitar",
+    "dubstep"
+   ],
+   "section_styles": {
+    "intro": "short instrumental intro, drums and synth",
+    "verse": "rhythmic verse, conversational",
+    "chorus": "big catchy chorus, doubled vocal"
+   },
+   "source": "draft 2026-09-23 — not heard yet"
+  },
+  {
+   "id": "lofi-rnb-mellow",
+   "status": "draft",
+   "vocal": "male",
+   "bpm": 80,
+   "positive_styles": [
+    "mellow lo-fi R&B",
+    "smooth relaxed male lead vocal, every word intelligible",
+    "soft boom-bap drums",
+    "warm electric piano",
+    "vinyl texture, vocal forward"
+   ],
+   "negative_styles": [
+    "EDM",
+    "autotune",
+    "rock guitar",
+    "orchestral"
+   ],
+   "section_styles": {
+    "intro": "soft keys intro, no vocal",
+    "verse": "laid-back half-sung verse",
+    "chorus": "smooth melodic chorus, light harmony"
+   },
+   "source": "draft 2026-09-23 — not heard yet"
+  },
+  {
+   "id": "country-pop-story",
+   "status": "draft",
+   "vocal": "female",
+   "bpm": 100,
+   "positive_styles": [
+    "modern country-pop",
+    "warm conversational female lead vocal, every word intelligible",
+    "acoustic guitar strum",
+    "light pedal steel",
+    "steady kick and snare, vocal forward"
+   ],
+   "negative_styles": [
+    "EDM",
+    "autotune",
+    "trap hi-hats",
+    "heavy metal"
+   ],
+   "section_styles": {
+    "intro": "acoustic strum intro, no vocal",
+    "verse": "storytelling verse",
+    "chorus": "open singalong chorus"
+   },
+   "source": "draft 2026-09-23 — not heard yet"
+  },
+  {
+   "id": "story-rap-soul",
+   "status": "approved",
+   "ruled": "2026-10-09 — the owner's Fed-Up King corrections (\"white guy voice\", then \"corny\") set the register: first-person storytelling rap, ~88 BPM, Brand C story-song spine (\"Take the Neck Down\" is the reference). Row built from the avatar's music profile lane 'Introspective storytelling rap' (on file + swipe) for the Brand C song-ad batch; his ear on the first take is the review.",
+   "vocal": "male",
+   "bpm": 88,
+   "positive_styles": [
+    "introspective first-person storytelling rap",
+    "Black American male rapper, late 20s to late 30s, conversational West Coast / Southern flow, warm and grounded, not shouting",
+    "soulful sample-based beat, somber and driving",
+    "dusty piano or guitar loop, boom-bap drums",
+    "sung hook by a soulful Black male R&B vocalist with a raw, unpolished tone",
+    "every word intelligible"
+   ],
+   "negative_styles": [
+    "pop vocal",
+    "country",
+    "indie",
+    "musical theatre",
+    "quiet-storm falsetto slow jam",
+    "jingle",
+    "novelty",
+    "autotune",
+    "EDM",
+    "white male voice"
+   ],
+   "section_styles": {
+    "intro": "short beat intro, sample loop, no vocal or one spoken line",
+    "verse": "conversational storytelling rap verse, specifics, behind the beat",
+    "pre-chorus": "half-sung build, tension rising",
+    "chorus": "plain sung hook, soulful male vocal, beat opens up",
+    "bridge": "stripped beat, confessional half-sung lines",
+    "outro": "beat rides out, last line spoken plainly"
+   },
+   "source": "the team notes (lane: Introspective storytelling rap; casting line verbatim)",
+   "beats_per_line": 4
+  }
+ ]
+}

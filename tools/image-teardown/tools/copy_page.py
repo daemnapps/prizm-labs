@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """The long-form copy written for a brand's statics, on one page.
 
-    copy_page.py --brand <brand> --out <brand>-copy.html
+    copy_page.py --brand brand-a --out brand-a-copy.html
 
-Damon, 2026-09-16: *"show me the copy written for the <brand> images that we
+the owner, 2026-09-16: *"show me the copy written for the brand-a images that we
 wrote copy for."*
 
 Each piece is the copy machine's own stage-9 brief, lifted from
-`copy/results/<run>/`, shown beside the swipe it was written from
+`runs/copywriter/<brand>/<label>/` (the copywriter's run home since
+2026-09-20; `COPY` below), shown beside the swipe it was written from
 and the draft picture it will sit under. Only THE COPY and THE OPENINGS are
 shown — the offer notes and run flags stay in the brief. Nothing is
 retyped; the page is rebuilt from the files.
@@ -22,7 +23,7 @@ import briefs as B
 import designer_page as D
 
 ROOT = HERE.parent
-COPY = P.REPO / "tools" / "copywriter" / "results"
+COPY = P.REPO / "runs" / "copywriter"   # runs/copywriter/<brand>/<label>/ (runs/README.md); results/ beside the code is gone
 
 
 def section(t, start, stop):
@@ -30,11 +31,12 @@ def section(t, start, stop):
     return m.group(1).strip() if m else ""
 
 
-def pieces(brand):
+def pieces(brand, copy_root=None):
     reg = B.load()["briefs"]
     by_run = {r.get("run"): b for b, r in reg.items() if r.get("brand") == brand}
     out = []
-    for d in sorted(COPY.glob(f"{brand}-*")):
+    root = Path(copy_root or COPY) / brand
+    for d in sorted(root.glob(f"{brand}-*")):
         f = d / "stage9--brief.md"
         if not f.is_file():
             continue
@@ -85,8 +87,11 @@ def quote_md(t):
     return re.sub(r"^>\s?", "", t, flags=re.M)
 
 
-def build(brand, out):
-    ps = pieces(brand)
+def build(brand, out, copy_root=None):
+    ps = pieces(brand, copy_root)
+    if not ps:
+        sys.exit(f"no copywriter stage-9 briefs for {brand} under {Path(copy_root or COPY) / brand} "
+                 f"(labels {brand}-*) — nothing to put on the page; nothing written")
     tpl = (HERE / "designer-page.html").read_text()
     head = tpl[:tpl.index("<header>")].replace("<title>Working a Brief</title>",
                                                f"<title>{brand.title()} Static Copy</title>")

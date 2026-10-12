@@ -3,37 +3,36 @@
 **Image teardown** takes a picture ad (one still, or a carousel) and gives back
 its structure — what it is, element by element — and a brief to remake it for
 one of our brands. It does not make the picture; the draft standard and
-image production do that from its brief. **New here? Read `START-HERE.md`.**
-The one-page definition is `CLAUDE.md`; how to run it by hand is `RUN.md`.
+image production do that from its brief. Owner: the owner. A component since
+2026-10-01 (moved out of `the team notes/image-teardown/`). Spoken name: "image
+teardown". The one-page definition is `CLAUDE.md`; how to run it is `RUN.md`.
 
     python3 tools/image-teardown/chain.py start --brand <brand> --product <product> --avatar <avatar> --swipe <swipe> --dry-run
 
 Runs file at `runs/image-teardown/<brand>/<label>/`; every brief gets one id in
 `briefs.json` (`python3 tools/briefs.py check`).
 
+## How to use it → (team dashboard)
+
 
 Same chain, one frame. Built 2026-08-19 from `stage1-teardown-v6-damon.md`
-after Damon's call to start the teardown process on image ads.
+after the owner's call to start the teardown process on image ads.
 
 **Current shape (2026-09-20):** `CLAUDE.md` is the one-page definition — steps,
 the element labels, the two gates, where runs file. `RUN.md` is how to run it
 for a brand, including `--dry-run`. Tests: `python3 tests/test_image_teardown.py`.
 What follows is the history.
 
-Read `STAGE-DELTAS.md` first: it is the whole design in one page — what
-changes at each stage and, more importantly, what does not.
-
-**The lane takes one image per run.** Brand asset, swipe file, creator
-submission — it makes no difference which. There is no set pass and no
-carousel lane; the set-map prompt is parked in `prompts/parked/` and reads
-nothing, writes nothing, and is not part of the chain.
+The 2026-08-19 lane took one image per run, with no set pass and no carousel
+lane. Since 2026-09-22 `chain.py start --form sequence` runs a carousel or a
+slideshow (`CLAUDE.md`, "The branch"). The set-map prompt is still parked in
+`prompts/parked/` and is not part of the chain.
 
 ## What is here
 
 | Path | What it is |
 |---|---|
-| **`DRAFT-STANDARD.md`** | **The ruling on how a swipe becomes our draft (Damon, 2026-09-17: "do not deviate"). One command: `tools/draft.py --brand <brand>`. Prompts: `prompts/stage7-*`, `prompts/stage8-*`** |
-| `STAGE-DELTAS.md` | Stage-by-stage: what the image teardown changes from the video chain |
+| **`DRAFT-STANDARD.md`** | **The ruling on how a swipe becomes our draft (the owner, 2026-09-17: "do not deviate"). One command: `tools/draft.py --brand <brand>`. Prompts: `prompts/stage7-*`, `prompts/stage8-*`** |
 | `prompts/stage1-image-teardown-v1-damon.md` | One static in, one reproduction spec out |
 | `prompts/video-doctrine-extract-v1.md` | A teaching video in, its operating doctrine out |
 | `tools/gemini_image.py` | Image-in / text-out runner — the twin of `tools/gemini_breakdown.py` |
@@ -46,7 +45,7 @@ nothing, writes nothing, and is not part of the chain.
 ## Why a separate runner
 
 `tools/gemini_breakdown.py` runs an ffprobe audio pre-flight before every
-call — the fix for the jackie-01 fabrication, where the model invented speech
+call — the fix for the creator-g-01 fabrication, where the model invented speech
 for a silent file. Pointed at a PNG it finds no audio stream and injects
 "this video file contains NO audio track" into an image prompt. So images go
 through `gemini_image.py` instead: inline base64, no Files API, no pre-flight.
@@ -57,12 +56,12 @@ stage 1B reads.
 
 ```bash
 cd content-machine/image-teardown
-R=runs/2026-08-19-<brand>-first-run
+R=runs/2026-08-19-brand-a-thai-secret
 
 # one teardown per ad
 python3 tools/gemini_image.py \
   --prompt-file prompts/stage1-image-teardown-v1-damon.md \
-  --image $R/assets/ad-01_first-run-editorial-1x1.png \
+  --image $R/assets/ad-01_thai-secret-editorial-1x1.png \
   --model gemini-3.1-pro-preview \
   --out $R/out/01-teardown-ad-01.md
 
@@ -126,7 +125,7 @@ compositor. The guarantee always goes to the compositor.
 
 ## Open
 
-- Calibration testing across all stages — Damon's call, scheduled after the
+- Calibration testing across all stages — the owner's call, scheduled after the
   prompts existed rather than before.
 - A per-brand character reference, so the same face holds across a whole set
   without re-describing it.

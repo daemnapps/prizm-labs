@@ -1,0 +1,296 @@
+{
+ "_what": "What a BANKED element must hold before production may use it. Read by machine/elements_check.py; explained in PRODUCTION-ELEMENTS.md. Built 2026-09-23 on the owner's word ('everything needs to be dialed in … every single line of execution is literally fool proof') from the film continuity, animation model-sheet and current AI-video reference traditions (sources in PRODUCTION-ELEMENTS.md). Change a row here and every run is held to it — no code change.",
+ "person": {
+  "folder": "runs/ai-elements/<brand>/casting/<id>/",
+  "requires": [
+   {
+    "name": "character file",
+    "files": [
+     "character.md"
+    ],
+    "why": "the breakdown: age, look, load-bearing details, movement, voice notes — the paste-ready identity block"
+   },
+   {
+    "name": "master",
+    "files": [
+     "master.jpg",
+     "master.png"
+    ],
+    "why": "front, flat light, plain wall — the ONE identity image every generation starts from"
+   },
+   {
+    "name": "turnaround",
+    "files": [
+     "sheets/turnaround.*"
+    ],
+    "why": "full body front · three-quarter · profile · back — the body from every side"
+   },
+   {
+    "name": "angles and expressions",
+    "files": [
+     "sheets/angles-expressions.*"
+    ],
+    "why": "head and shoulders: front, both three-quarters, profile, up, down; neutral, smile, mid-word, concern, laugh — what a talking face needs"
+   },
+   {
+    "name": "looks",
+    "files": [
+     "sheets/look-*.*"
+    ],
+    "why": "one full-body sheet per outfit, front and back, with its continuity notes — the costume bible"
+   },
+   {
+    "name": "details",
+    "files": [
+     "sheets/details.*"
+    ],
+    "why": "hands both sides, the load-bearing skin, jewellery — the macro truth"
+   },
+   {
+    "name": "light test",
+    "files": [
+     "sheets/light-test.*"
+    ],
+    "why": "the same face in daylight, warm indoor and overcast — so the identity holds in every setting's light"
+   },
+   {
+    "name": "colour key",
+    "files": [
+     "sheets/colour-key.*"
+    ],
+    "why": "hair, skin, eyes and each outfit as swatches sampled from the master and looks — the colour lock"
+   },
+   {
+    "name": "looks list",
+    "files": [
+     "looks.json"
+    ],
+    "why": "the looks a brief may name, each with its outfit words and sheet"
+   },
+   {
+    "name": "real reference",
+    "files": [
+     "reference/*"
+    ],
+    "why": "EVERYTHING STARTS FROM A REAL REFERENCE (the owner, 2026-09-23) — a real photo or real video frame this element was made from; nothing is generated from words alone"
+   },
+   {
+    "name": "provenance",
+    "files": [
+     "provenance.json"
+    ],
+    "why": "EVERY ELEMENT DOCUMENTED — each real reference with its source and rights, the model/door/prompt that made each picture, where the full-size files live on the Drive, which runs used it"
+   }
+  ],
+  "voice": {
+   "file": "voice.json",
+   "needs": "voice_id",
+   "rule": "every person who speaks has their OWN designed voice — never another character's"
+  },
+  "motion": {
+   "folder": "motion/",
+   "rule": "performance references (real human clips) for motion transfer — required only when a scene names `motion.reference`"
+  }
+ },
+ "setting": {
+  "folder": "runs/ai-elements/<brand>/sets/<id>/",
+  "requires": [
+   {
+    "name": "set file",
+    "files": [
+     "set.md"
+    ],
+    "why": "what the place is, time of day, light direction, set dressing, hero props, what resets, room tone"
+   },
+   {
+    "name": "establishing plate",
+    "files": [
+     "plates/wide.*"
+    ],
+    "why": "the whole space, empty, in its shooting light"
+   },
+   {
+    "name": "camera angles",
+    "files": [
+     "plates/angle-*.*"
+    ],
+    "why": "at least two: the to-camera position and the cutaway position, empty",
+    "min": 2
+   },
+   {
+    "name": "real reference",
+    "files": [
+     "reference/*"
+    ],
+    "why": "EVERYTHING STARTS FROM A REAL REFERENCE (the owner, 2026-09-23) — a real photo or real video frame this element was made from; nothing is generated from words alone"
+   },
+   {
+    "name": "provenance",
+    "files": [
+     "provenance.json"
+    ],
+    "why": "EVERY ELEMENT DOCUMENTED — each real reference with its source and rights, the model/door/prompt that made each picture, where the full-size files live on the Drive, which runs used it"
+   }
+  ]
+ },
+ "product": {
+  "folder": "brands/<brand>/products/<id>/",
+  "requires": [
+   {
+    "name": "product file",
+    "files": [
+     "product.md"
+    ],
+    "why": "what it is, the label text word for word"
+   },
+   {
+    "name": "real packshot",
+    "files": [
+     "images/packshot*"
+    ],
+    "why": "the real photograph — it IS the real reference; a product is never drawn from words"
+   },
+   {
+    "name": "provenance",
+    "files": [
+     "provenance.json"
+    ],
+    "why": "EVERY ELEMENT DOCUMENTED — each real reference with its source and rights, the model/door/prompt that made each picture, where the full-size files live on the Drive, which runs used it"
+   }
+  ]
+ },
+ "prop": {
+  "folder": "runs/ai-elements/<brand>/props/<id>/",
+  "requires": [
+   {
+    "name": "prop file",
+    "files": [
+     "prop.md"
+    ],
+    "why": "what it is, where it came from, which ads used it"
+   },
+   {
+    "name": "prop picture",
+    "files": [
+     "*.jpg",
+     "*.png",
+     "*.webp"
+    ],
+    "why": "what it looks like, so it is the same object every shot"
+   },
+   {
+    "name": "real reference",
+    "files": [
+     "reference/*"
+    ],
+    "why": "EVERYTHING STARTS FROM A REAL REFERENCE (the owner, 2026-09-23) — a real photo or real video frame this element was made from; nothing is generated from words alone"
+   },
+   {
+    "name": "provenance",
+    "files": [
+     "provenance.json"
+    ],
+    "why": "EVERY ELEMENT DOCUMENTED — each real reference with its source and rights, the model/door/prompt that made each picture, where the full-size files live on the Drive, which runs used it"
+   }
+  ]
+ },
+ "brief": {
+  "motion_reference_required": false,
+  "_motion": "flip to true when real-motion (performance transfer) becomes the default; until then a scene MAY name motion.reference",
+  "speaker_required": true,
+  "_speaker": "Every scene with words names its `speaker` — a cast id — and every speaking cast member names their `voice`: a banked voice, or NEW with a persona so the elements step makes it (the owner, 2026-09-23: 'if you need a second voice that should be clearly identified at the brief level')."
+ },
+ "provenance_rules": {
+  "_what": "What provenance.json must say, checked field by field by elements_check.py",
+  "required": [
+   "element",
+   "kind",
+   "real_references",
+   "rights",
+   "made_with",
+   "drive"
+  ],
+  "real_reference_needs": [
+   "file",
+   "kind",
+   "from"
+  ],
+  "real_kinds": [
+   "real video frame",
+   "real photo",
+   "real packshot",
+   "real audio"
+  ]
+ },
+ "_rule_real_reference": "Every element — person, look, setting, product, prop, voice, movement — is processed FROM A REAL REFERENCE (the owner, 2026-09-23: 'ALL elements in this flow must be processed from a real reference'). A generated picture may be a reference for the next generation only if it traces back, in its provenance, to a real one.",
+ "_rule_documented": "Every element is documented (the owner, 2026-09-23: 'seriously every element documented'): a readable file (character.md / set.md / product.md / prop.md) and a provenance.json. An element without both is not banked.",
+ "_homes": "Generated elements live in runs (casting for people and their voices, ai-elements/<kind>/ for everything else); brands/<brand>/ holds only brand facts — the real products and the cast list (the owner, 2026-09-23). element_paths.py is the one place the paths are written.",
+ "person_voice_only": {
+  "_what": "A person the brief never shows (in no scene's `who`) but who speaks — e.g. an off-camera moderator. Only their voice is ever made (the owner, 7 Oct: standardize so a finished ad has a full manifest).",
+  "folder": "runs/ai-elements/<brand>/casting/<id>/",
+  "requires": [
+   {
+    "name": "character file",
+    "files": [
+     "character.md"
+    ],
+    "why": "who they are and how they sound"
+   },
+   {
+    "name": "voice",
+    "files": [
+     "voice.json"
+    ],
+    "why": "their own voice id — every speaker reads in their own voice"
+   }
+  ]
+ },
+ "person_background": {
+  "_what": "A person or group the brief only ever shows from behind, out of focus or as a crowd — never a readable face. Marked by `\"shown\": \"background\"` in the folder's spec.json or provenance.json. A face sheet set would be made for nothing.",
+  "folder": "runs/ai-elements/<brand>/casting/<id>/",
+  "requires": [
+   {
+    "name": "character file",
+    "files": [
+     "character.md"
+    ],
+    "why": "who they are and how they are shown"
+   },
+   {
+    "name": "look sheet",
+    "files": [
+     "sheets/look-*.jpg",
+     "sheets/look-*.png"
+    ],
+    "why": "what they wear, front and back — for a person never seen face-on this sheet IS the identity picture every generation starts from"
+   },
+   {
+    "name": "provenance",
+    "files": [
+     "provenance.json"
+    ],
+    "why": "every element documented"
+   }
+  ]
+ },
+ "product_kit": {
+  "_what": "When the brand keeps its product as a flat file (brands/<brand>/products/<id>.md) rather than a folder, the product is checked against its truth kit — the real shape, size and photos production measures against (THE-CHAIN.md, 'Products have a truth kit'). The kit is found by the brief's product id: products/<id>/, or the one kit folder named <id>-*.",
+  "folder": "runs/ai-elements/<brand>/products/<kit>/",
+  "requires": [
+   {
+    "name": "kit record",
+    "files": [
+     "kit.json"
+    ],
+    "why": "the measured shape, colours and label of the real product"
+   },
+   {
+    "name": "real packshot",
+    "files": [
+     "sources/*packshot*"
+    ],
+    "why": "the real photograph — a product is never drawn from words"
+   }
+  ]
+ }
+}

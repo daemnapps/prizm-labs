@@ -2,10 +2,10 @@
 """Every letterform the teardowns have used, and every one they had to name.
 
     letterforms.py                  the bank, and what every run actually used
-    letterforms.py --proposed       only the rows waiting for Damon
-    letterforms.py --brand <brand>  one brand's runs
+    letterforms.py --proposed       only the rows waiting for the owner
+    letterforms.py --brand brand-a  one brand's runs
 
-Damon, 2026-09-25: *"when we redo teardown, if something doesn't exist in the
+the owner, 2026-09-25: *"when we redo teardown, if something doesn't exist in the
 bank just yet — just like we have with format and stuff — give it a name so we
 can keep things moving forward."*
 
@@ -15,8 +15,8 @@ on** — nothing waits on a signature. This is the other half: the proposals,
 gathered, so a row that was invented once is signed into the bank rather than
 re-invented under a different name next week.
 
-**Nothing here writes to the bank.** A row becomes real when Damon puts it in
-`tools/image-production/letterform-bank.json` and the element
+**Nothing here writes to the bank.** A row becomes real when the owner puts it in
+`tools/image-production/static/letterform-bank.json` and the element
 library is rebuilt — the same gate every other list runs.
 """
 import argparse, json, sys
@@ -63,7 +63,7 @@ def main():
             print(f"\n  ! ids no row holds: {', '.join(stray)}")
         print(f"\n  none-fits answered {used.get('none-fits', 0)} time(s)")
 
-    print(f"\nPROPOSED — {len(proposed)} row(s) named by a teardown, waiting for Damon")
+    print(f"\nPROPOSED — {len(proposed)} row(s) named by a teardown, waiting for the owner")
     if not proposed:
         print("  none. Every text element so far matched a row in the bank.")
         return
@@ -74,7 +74,7 @@ def main():
         print(f"\n  {rows[0][1]}")
         print(f"      seen on {len(rows)} run(s): {', '.join(r for r, _ in rows[:4])}")
     print("\n  To make one real: add it to "
-          "tools/image-production/letterform-bank.json with "
+          "tools/image-production/static/letterform-bank.json with "
           '"status": "draft", then rebuild the element library.')
 
 

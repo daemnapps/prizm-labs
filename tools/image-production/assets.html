@@ -1,0 +1,92 @@
+<meta charset="utf-8">
+<title>The Asset Baseline</title>
+<style>
+:root{--ground:#F3F1ED;--card:#fff;--ink:#16181A;--mut:#5E6469;--line:#DEDAD3;--hair:#EDE9E3;
+--yes:#1B5E4B;--yes-bg:#E2EFE9;--some:#8A5A16;--some-bg:#F8EDDA;--no:#7A3029;--no-bg:#F7E3E0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#0F1211;--card:#181B1B;
+--ink:#E8EAE8;--mut:#99A1A1;--line:#292E2D;--hair:#1F2423;--yes:#7FC9AC;--yes-bg:#12291F;
+--some:#E2BB7B;--some-bg:#2A2313;--no:#E79488;--no-bg:#2C1815}}
+:root[data-theme="dark"]{--ground:#0F1211;--card:#181B1B;--ink:#E8EAE8;--mut:#99A1A1;--line:#292E2D;
+--hair:#1F2423;--yes:#7FC9AC;--yes-bg:#12291F;--some:#E2BB7B;--some-bg:#2A2313;--no:#E79488;--no-bg:#2C1815}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:36px 72px}
+.eyebrow{font:600 11px/1 ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+h1{font-size:clamp(34px,7vw,54px);line-height:1;letter-spacing:-.025em;margin:10px 0 12px}
+.lede{color:var(--mut);max-width:56ch;margin:0 0 28px;font-size:17px}
+h2{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+margin:40px 0 14px;font-weight:600;font-family:ui-monospace,monospace}
+.row{background:var(--card);border:1px solid var(--line);border-radius:14px;
+padding:18px 20px;margin:0 0 14px}
+.row.take{border-color:var(--yes);border-width:2px}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline}
+.top b{font-size:22px;letter-spacing:-.015em}
+.v{font:700 11px ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;
+padding:4px 10px;border-radius:99px}
+.v-take{background:var(--yes-bg);color:var(--yes)}
+.v-some{background:var(--some-bg);color:var(--some)}
+.v-skip{background:var(--no-bg);color:var(--no)}
+.note{color:var(--mut);margin:8px 0 12px;font-size:15px;max-width:58ch}
+.n{font:600 14px ui-monospace,monospace;margin:0 0 12px}
+.n span{color:var(--mut);font-weight:400}
+.strip{display:flex;gap:7px}
+.strip img{width:calc((100% - 35px)/6);aspect-ratio:1;object-fit:cover;
+border-radius:7px;background:var(--hair);display:block}
+.yrs{display:flex;gap:4px;align-items:flex-end;margin:14px 0 0;height:40px}
+.yrs div{flex:1;background:var(--hair);border-radius:3px 3px 0 0;position:relative;
+display:flex;align-items:flex-end;justify-content:center}
+.yrs div i{position:absolute;bottom:-17px;font:400 10px ui-monospace,monospace;
+color:var(--mut);font-style:normal}
+.yrs div u{display:block;width:100%;background:var(--mut);border-radius:3px 3px 0 0;text-decoration:none}
+.yrs.old div:first-child u{background:var(--some)}
+.ylab{font:400 11px ui-monospace,monospace;color:var(--mut);margin:24px 0 0}
+a.go{display:inline-block;margin-top:14px;font:600 13px ui-monospace,monospace;
+color:var(--ink);text-decoration:none;border-bottom:2px solid var(--line);padding-bottom:1px}
+a.go:hover{border-color:var(--ink)}
+.home{background:var(--yes-bg);border:2px solid var(--yes);border-radius:14px;padding:18px 20px;margin:0 0 14px}
+.home b{font-size:22px}
+.state{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin:0 0 14px}
+a.srow{display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:baseline;
+padding:12px 0;border-bottom:1px solid var(--hair);text-decoration:none;color:inherit}
+a.srow:last-child{border-bottom:0}
+a.srow b{font:600 15px ui-monospace,monospace}
+a.srow span{color:var(--mut);font-size:14.5px}
+a.srow em{font:600 13px ui-monospace,monospace;font-style:normal;color:var(--mut);white-space:nowrap}
+a.srow:hover b{text-decoration:underline}
+@media(max-width:560px){a.srow{grid-template-columns:1fr;gap:2px}}
+.outs{background:var(--no-bg);border-radius:14px;padding:6px 20px}
+.outs div{padding:10px 0;border-bottom:1px solid rgba(128,128,128,.16);font-size:15px}
+.outs div:last-child{border-bottom:0}
+.outs b{color:var(--no)}
+ol.steps{margin:0;padding-left:22px;max-width:60ch}
+ol.steps li{margin:6px 0;color:var(--mut);font-size:15px}
+ol.steps li:first-child{color:var(--ink);font-weight:600}
+footer{margin-top:48px;border-top:1px solid var(--line);padding-top:14px;
+font:12px/1.8 ui-monospace,monospace;color:var(--mut)}
+@media(max-width:560px){.strip img{width:calc((100% - 21px)/4)}
+.strip img:nth-child(n+5){display:none}}
+</style>
+<div class="wrap">
+<div class="eyebrow"> · 2026-10-12</div>
+<h1>The asset baseline</h1>
+<p class="lede">One folder is the truth. Products are down to the product page and nothing else;
+the creator library is copying in; the rest is archived and read by nothing unless you ask.</p>
+
+<h2>Home — how it stands now</h2>
+<div class="home"><b>Team Drive / brands / </b>
+<div class="strip" style="margin-top:12px"></div>
+<a class="go" href="#" target="_blank">open in Drive →</a></div>
+<div class="state"></div>
+
+<h2>Coming in, and still to decide</h2>
+
+
+<h2>Ruled out — 0 folders</h2>
+<div class="outs"></div>
+
+<h2>Then</h2>
+<ol class="steps"></ol>
+
+<footer>rebuilt by assets_page.py + assets_render.py · scope from that brand's own assets.json</footer>
+</div>

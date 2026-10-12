@@ -1,0 +1,5 @@
+#!/bin/bash
+# make3d <image.png> <out.glb>  — local, free image-to-3D (TRELLIS.2 on Apple Silicon)
+HERE="$(cd "$(dirname "$0")" && pwd)"
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"  # weights are cached; skip slow Hub checks
+PYTHONUNBUFFERED=1 exec "$HERE/trellis-mac/.venv/bin/python" "$HERE/make3d.py" "$@"

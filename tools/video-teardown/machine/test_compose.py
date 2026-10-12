@@ -5,9 +5,9 @@
 
 No pytest, no network, no model call. `plan` and `grid` (without --go) never
 call a model by construction, so this suite runs them against the REAL
-doctrine, format bank and a real avatar (<brand> / spot-hider) rather than a
+doctrine, format bank and a real avatar (brand-a / avatar-two) rather than a
 mocked-up shelf — the ids have to be the ids that exist. Any run folder a
-test opens under machine/runs/ is removed in tearDown; framework_bank's
+test opens under runs/video-teardown/_work/ is removed in tearDown; framework_bank's
 --promote is exercised against a temp copy of ad-frameworks.json so this
 suite never writes to the curated file.
 
@@ -29,13 +29,13 @@ import chain as C            # noqa: E402
 import compose as CP         # noqa: E402
 import framework_bank as FB  # noqa: E402
 
-BRAND = "<brand>"
-AVATAR = "spot-hider"
-SUB = "sun-damage-reckoner"
+BRAND = "brand-a"
+AVATAR = "avatar-two"
+SUB = "sub-one"
 FRAMEWORK = "mechanism-led"       # entry problem-aware -> exit product-aware
 FORMAT = "single-presenter"
 AWARENESS = "problem-aware"
-PRODUCT = "brilliance-face-scrub"   # <brand> has 3 — a plan must say which
+PRODUCT = "glow-face-scrub"   # brand-a has 3 — a plan must say which
 
 _OPENED = []          # every run folder a test opened, cleaned in tearDown
 
@@ -144,17 +144,15 @@ class PlanResolves(unittest.TestCase):
         self.assertIn("--product", msgs)
         self.assertIn(PRODUCT, msgs)          # named among the ones there are
 
-    # Two gaps neither belongs to the FRAMEWORK lane nor to compose.py: (1)
-    # <brand> has no brands/<brand>/core-avatars/casting/CAST.md at all (only
-    # <brand> does — stage5 wants it on every route, every lane), and (2) the
-    # ai route's stage7 still asks for `@stage6` even though chain.stages()
-    # itself skips stage6 for ai — true on an ordinary swipe lane too. Both
-    # are pre-existing brand-data / chain facts, reproduced below rather than
-    # silently excluded, so "resolves clean" means clean of what this build
-    # is answerable for.
-    KNOWN_GAPS = {"stage5": "brand file missing: brands/<brand>/core-avatars/"
-                            "casting/CAST.md",
-                  "stage7": "stage6, which this lane never runs"}
+    # One gap belongs neither to the FRAMEWORK lane nor to compose.py: the ai
+    # route's stage7 still asks for `@stage6` even though chain.stages()
+    # itself skips stage6 for ai — true on an ordinary swipe lane too. It is a
+    # pre-existing chain fact, reproduced below rather than silently excluded,
+    # so "resolves clean" means clean of what this build is answerable for.
+    #
+    # The stage5 casting gap that used to sit here is CLOSED (2026-09-21):
+    # both brands' sheets now resolve at runs/casting/<brand>/CAST.md.
+    KNOWN_GAPS = {"stage7": "stage6, which this lane never runs"}
 
     def _unexplained(self, bad):
         out = []
@@ -168,7 +166,7 @@ class PlanResolves(unittest.TestCase):
     def test_creator_route_resolves_clean_of_anything_this_lane_owns(self):
         """The creator route runs stage6 before stage7, so stage7's `@stage6`
         reference is in hand by the time it is checked there — the only
-        finding left on this route is the pre-existing <brand> casting gap."""
+        finding left on this route is the pre-existing brand-a casting gap."""
         d, st, bad = self._plan("creator")
         self.assertEqual(self._unexplained(bad), [])
         self.assertEqual(st["production_route"], "creator")
@@ -177,7 +175,7 @@ class PlanResolves(unittest.TestCase):
         """The ai route is the generation route and its own deliverable is
         the stage-5 brief (task 4's own framing). What is left unresolved —
         casting at stage5, stage6 at stage7 — is proven below to be a fact
-        about <brand> and about the ai route in general, not something the
+        about brand-a and about the ai route in general, not something the
         second door introduced."""
         d, st, bad = self._plan("ai")
         self.assertEqual(self._unexplained(bad), [])
@@ -194,8 +192,10 @@ class PlanResolves(unittest.TestCase):
         self.assertNotIn("stage6", swipe_keys)
         # 2026-09-18: the cast sheet now exists — compiled from the brand's
         # own ai-cast/<name>/character.md files, so stage 5 casts from it.
-        self.assertTrue((Path(C.WS) / "brands" / BRAND / "core-avatars" /
-                         "casting" / "CAST.md").exists())
+        # 2026-09-21: it moved to runs/casting/<brand>/ with the rest of the
+        # cast building, out of the brand folder machines may not write to.
+        self.assertTrue((Path(C.WS) / "runs" / "casting" / BRAND /
+                         "CAST.md").exists())
 
     def test_the_four_stand_ins_are_filed_done(self):
         d, st, bad = self._plan("ai")
@@ -368,7 +368,8 @@ class Promote(unittest.TestCase):
     def test_promote_appends_a_seed_row(self):
         before = json.loads(self.ad_path.read_text())
         row, why = FB.promote("ZZZ-promote-me", self.runs_root)
-        self.assertEqual(row["status"], "seed")
+        self.assertEqual(row["status"], "draft")
+        self.assertEqual(row["state"], "seed")
         self.assertEqual(row["source"], "observed — ZZZ-promote-me")
         self.assertEqual(row["sophistication"], ["stage-3"])
         self.assertEqual({s["id"] for s in row["sections"]},

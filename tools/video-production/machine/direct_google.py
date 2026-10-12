@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 direct_google.py — the machine hand's two Gemini doors: Nano Banana Pro for
-discrete edits, Lyria for the song (Damon's 2026-09-17 ruling). Every field
+discrete edits, Lyria for the song (the owner's 2026-09-17 ruling). Every field
 value (model id, imageConfig, safety categories, song model ids) comes from
 `providers.json`'s own `direct.google` section — nothing here names a model.
 
@@ -61,6 +61,7 @@ def _load(name: str):
 
 
 platform = _load("platform")
+vp_keys = _load("vp_keys")
 
 TIME_MARKER = re.compile(r"\[\d{1,3}:\d{2}(?:\.\d+)?\]")
 BLOCK_LEVEL = re.compile(r"BLOCK_[A-Z_]+")
@@ -72,14 +73,7 @@ def cfg() -> dict:
 
 
 def key_of() -> str | None:
-    k = os.environ.get("GEMINI_API_KEY")
-    if k:
-        return k
-    try:
-        import daemn_keys
-        return daemn_keys.key("GEMINI_API_KEY") or None
-    except Exception:
-        return None
+    return vp_keys.key("GEMINI_API_KEY")
 
 
 def http_transport(method: str, url: str, headers: dict, body: bytes | None):
@@ -154,8 +148,16 @@ def edit_image(prompt: str, images: list[Path], out: Path, transport=None,
                           "body": dry_body}, indent=1))
         return {"file": None, "model": model, "request_id": None, "usage": None}
 
-    status, resp_headers, resp_body = transport("POST", url, headers, json.dumps(body_obj).encode())
-    data = json.loads(resp_body.decode())
+    # A SHORT OUTAGE IS WAITED OUT, not a crash (2026-10-02: one 503 stopped a
+    # 22-picture run after four): 429/500/502/503/504 retried with backoff
+    import time as _t
+    for attempt in range(5):
+        status, resp_headers, resp_body = transport("POST", url, headers, json.dumps(body_obj).encode())
+        data = json.loads(resp_body.decode() or "{}")
+        if status in (429, 500, 502, 503, 504) and attempt < 4:
+            _t.sleep(10 * (attempt + 1))
+            continue
+        break
     if status is not None and status >= 400:
         raise RuntimeError(f"Gemini edit error {status}: {json.dumps(data)[:400]}")
     for part in _parts_of(data):

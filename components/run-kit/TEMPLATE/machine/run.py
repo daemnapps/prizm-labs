@@ -10,7 +10,7 @@ sys.path.insert(0, str(REPO / "components" / "run-kit"))
 sys.path.insert(0, str(REPO / "components" / "quality-checks"))
 from run_kit import filing, paths          # noqa: E402
 from run_kit.stage import Chain            # noqa: E402
-import quality_checks as Q                 # noqa: E402
+import marketing_chain_checks as Q          # noqa: E402  (folder: quality-checks)
 
 TOOL = "<tool-name>"
 STEPS = [

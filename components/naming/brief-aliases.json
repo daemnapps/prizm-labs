@@ -1,0 +1,8 @@
+{
+ "_about": "Every brief number in both spellings. pNNN is the old code (live in ad names, briefs.json keys, worksheets); brief-NNNN is the one id (Master Plan v2, 3.3, 2026-09-28). Same number, two spellings. names.brief_id() reads this; brief_code() reverses it.",
+ "rule": "type-first: brief-NNNN. Numbers are never reissued within a brand+product; a retired or never-used number stays taken. the owner, 2026-10-01: \"brief numbers count per brand AND product — each product starts at 1 inside its brand.\" `aliases` is the old shared count (pNNN) only; a brand's own codes (acm01) live in `brand_aliases` and resolve inside that brand.",
+ "rule_per_product": "the owner, 2026-10-01: brief numbers count per brand AND product — each product starts at 1 inside its brand. They should not share one count. Older briefs keep their numbers. A brief is identified by brand + product + number (the short name brand_product_brief-NNNN carries all three).",
+ "aliases": {},
+ "never_used": [],
+ "brand_aliases": {}
+}

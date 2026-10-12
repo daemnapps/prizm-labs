@@ -1,0 +1,339 @@
+<title>How Language Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{color-scheme:light;--bg:#f3f1ec;--panel:#fffdf8;--ink:#1a1814;--ink2:#58534a;--ink3:#8a8478;--line:#e1dcd1;--data:#2f6f5e;--rule:#b8732a;--mach:#2d5bd0;--out:#8a4fb3;--soft:#efece5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121212;--panel:#1b1b1a;--ink:#efece5;--ink2:#b2ada3;--ink3:#827c72;--line:#2e2d2a;--data:#5bb89d;--rule:#e0a453;--mach:#7ea2ff;--out:#c79bec;--soft:#23221f}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121212;--panel:#1b1b1a;--ink:#efece5;--ink2:#b2ada3;--ink3:#827c72;--line:#2e2d2a;--data:#5bb89d;--rule:#e0a453;--mach:#7ea2ff;--out:#c79bec;--soft:#23221f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Instrument Sans",system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:40px 72px}
+.kick{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mach);margin:0 0 8px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(40px,7vw,66px);line-height:.95;margin:0 0 14px;letter-spacing:-.02em}
+h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(23px,3.2vw,30px);margin:0 0 6px;text-wrap:balance}
+h2 .n{font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--ink3);font-weight:500;margin-right:8px;vertical-align:middle}
+p{max-width:68ch;margin:0 0 12px}
+.lede{font-size:clamp(17px,2vw,20px);color:var(--ink2)}
+.sub{color:var(--ink2);margin-bottom:14px}
+section{padding-top:40px}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+nav a{font-size:13.5px;text-decoration:none;color:var(--ink2);border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 12px}
+nav a:hover{color:var(--ink);border-color:var(--ink3)}
+code{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--soft);padding:1px 6px;border-radius:4px;overflow-wrap:anywhere}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.box{background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:12px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.box .tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.box h3{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-size:24px}
+.box .q{font-style:italic;color:var(--ink2);margin:0}
+.box ul{margin:4px 0 0;padding-left:18px;color:var(--ink2);font-size:14.5px}
+.data{--c:var(--data)} .rule{--c:var(--rule)} .mach{--c:var(--mach)} .out{--c:var(--out)}
+.flow{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto}
+.flow svg{display:block;width:100%;min-width:760px;height:auto}
+.flow text{font-family:"Instrument Sans",sans-serif;fill:var(--ink);font-size:13px}
+.flow .sm{fill:var(--ink3);font-size:11.5px;font-family:"JetBrains Mono",monospace}
+.flow .hd{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;fill:var(--ink3)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.tbl table{border-collapse:collapse;width:100%;font-size:14px;min-width:640px}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+.tbl th{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);background:var(--bg)}
+.tbl tr:last-child td{border-bottom:0} .tbl td{color:var(--ink2)} .tbl td b{color:var(--ink)}
+.tbl td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dir{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:11px;padding:1px 8px;border-radius:99px;white-space:nowrap}
+.in{background:color-mix(in srgb,var(--data) 16%,transparent);color:var(--data)}
+.outd{background:color-mix(in srgb,var(--out) 16%,transparent);color:var(--out)}
+.rd{background:var(--soft);color:var(--ink3)}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.app{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.app h3{margin:0 0 4px;font-size:17px}
+.app p{margin:0 0 8px;color:var(--ink2);font-size:14.5px}
+.app .ask{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink);background:var(--soft);border-radius:6px;padding:6px 9px;display:block}
+.app .st{font-size:12.5px;color:var(--ink3);margin-top:8px;display:block}
+.gorg{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--data);border-radius:12px;padding:16px 18px;display:grid;gap:10px}
+.gorg ol{margin:0;padding-left:20px;color:var(--ink2)} .gorg li{margin:4px 0}
+.pill{display:inline-block;font-size:13px;border:1px solid var(--line);border-radius:99px;padding:2px 10px;margin:0 6px 6px 0}
+.pill b{color:var(--data)} .pill.off b{color:var(--rule)}
+.words{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.words div{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:10px 14px}
+.words b{display:block;font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--c)}
+.note{margin-top:12px;background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--ink2);font-size:15px}
+.chk{display:grid;gap:8px}.chk div{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--ink2);font-size:14.5px}.chk b{color:var(--ink)}.ok{color:var(--data);font-weight:700}.open{color:var(--rule);font-weight:700}
+.lanes2{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:18px;align-items:start}
+@media (max-width:480px){.lanes2{grid-template-columns:1fr}}
+.lh{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;position:relative}
+.steps li{display:grid;grid-template-columns:30px 1fr;gap:12px;padding-bottom:14px;position:relative}
+.steps li:not(:last-child)::before{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+.steps .k{width:30px;height:30px;border-radius:50%;background:var(--panel);border:2px solid var(--mach);color:var(--mach);display:grid;place-items:center;font:600 13px "JetBrains Mono",monospace}
+.steps .t{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.steps p{margin:2px 0 4px;color:var(--ink2);font-size:14.5px}
+.steps .o{font-size:13.5px;color:var(--data);font-weight:600;margin-bottom:4px}
+.steps .r{font-size:11.5px;color:var(--ink3);display:inline-block}
+.m{font:500 10.5px "JetBrains Mono",monospace;padding:1px 7px;border-radius:99px;background:var(--soft);color:var(--ink3)}
+.m.y{background:color-mix(in srgb,var(--out) 18%,transparent);color:var(--out)}
+.st{font:500 11px "JetBrains Mono",monospace;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.st.g{background:color-mix(in srgb,var(--mach) 15%,transparent);color:var(--mach)} .st.r{background:color-mix(in srgb,var(--rule) 18%,transparent);color:var(--rule)} .st.p{background:var(--soft);color:var(--ink3)}
+.tbl small{color:var(--ink3)}
+.cad{font:500 11px "JetBrains Mono",monospace;color:var(--data);margin-left:6px}
+.st2{font:500 11.5px "JetBrains Mono",monospace;color:var(--ink3)}
+.why{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--mach);border-radius:12px;padding:14px 16px}
+.why p{margin:0 0 8px}.wl{font:500 11px "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mach)}
+.six{display:flex;flex-wrap:wrap;gap:6px}.six span{font-size:13.5px;font-weight:600;background:var(--soft);border-radius:99px;padding:3px 12px}
+.idea{font:600 11px "JetBrains Mono",monospace;color:var(--rule);background:color-mix(in srgb,var(--rule) 15%,transparent);padding:2px 9px;border-radius:99px;vertical-align:middle;margin-left:8px}
+.foot{margin-top:48px;font-size:13px;color:var(--ink3)}
+</style>
+<div class="wrap">
+<p class="kick">The language system · brand-agnostic · product-agnostic</p>
+<h1>How Language Works</h1>
+<p class="lede">Everything a customer or prospect says, from any source, is taken in, labelled, given an ID and stored once. Every tool then reads it from that one place.</p>
+<div class="why"><span class="wl">Why it exists</span><p><b>To make the business better.</b> Every line is there to improve something:</p>
+<div class="six"><span>Marketing</span><span>Products</span><span>Operations</span><span>Customer service</span><span>Customer experience</span><span>Website</span></div></div>
+<nav>
+ <a href="#flow">1 · How it flows</a><a href="#chain">2 · The actual chain</a><a href="#triggers">3 · What starts each source</a><a href="#automate">4 · What's still waiting</a><a href="#forms">5 · Our own feedback forms</a><a href="#places">6 · The four places</a><a href="#line">7 · What's on every line</a><a href="#apply">8 · Where it applies</a><a href="#components">9 · What talks to it</a><a href="#gorgias">10 · Gorgias</a><a href="#now">11 · What's in it today</a><a href="#names">12 · The names</a><a href="#health">13 · System check</a><a href="#review">14 · Waiting on you</a>
+</nav>
+
+<section id="flow">
+<h2><span class="n">1</span>How it flows</h2>
+<p class="sub">Words come in on the left and get labelled on the way in. They're stored in the bank, and every tool on the right asks for the lines it needs. Anything an asset uses gets marked as used, so the next asset starts from fresh words.</p>
+<div class="flow" role="img" aria-label="Sources (surveys, ad comments, organic comments, support tickets, reviews, forums, interviews) go through the research gatherer and the labeller into the bank. The language layer reads the bank under the schema's rules. Video chain, copywriter, emails, landing pages, briefs, customer service and avatar work ask it for lines. Lines an asset uses go back into the used lane.">
+<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+ <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="var(--ink3)"/></marker></defs>
+ <text x="10" y="18" class="hd">IN · WHERE WORDS COME FROM</text>
+ <g font-size="13">
+  <rect x="10" y="30" width="210" height="300" rx="10" fill="var(--soft)"/>
+  <text x="26" y="58">Surveys</text><text x="26" y="86">Ad comments (Meta)</text>
+  <text x="26" y="114">Organic comments</text><text x="26" y="132" class="sm">TikTok · IG · FB via Apify</text>
+  <text x="26" y="160">Support tickets</text><text x="26" y="178" class="sm">Gorgias</text>
+  <text x="26" y="206">Reviews</text><text x="26" y="234">Forums · Reddit</text>
+  <text x="26" y="262">Interviews · panels</text><text x="26" y="290">Our own copy</text>
+  <text x="26" y="316" class="sm">any new source plugs in here</text>
+ </g>
+ <path d="M220 180 H262" stroke="var(--ink3)" stroke-width="2" marker-end="url(#a)"/>
+ <text x="378" y="18" class="hd" text-anchor="middle">IN THE MIDDLE · ONE PLACE</text>
+ <rect x="268" y="30" width="220" height="70" rx="10" fill="var(--panel)" stroke="var(--ink3)" stroke-width="1.5"/>
+ <text x="378" y="58" text-anchor="middle" font-weight="700">Research gatherer</text>
+ <text x="378" y="78" text-anchor="middle" class="sm">pulls · cleans · de-dupes</text>
+ <path d="M378 100 V126" stroke="var(--ink3)" stroke-width="2" marker-end="url(#a)"/>
+ <rect x="268" y="130" width="220" height="70" rx="10" fill="var(--panel)" stroke="var(--mach)" stroke-width="2.5"/>
+ <text x="378" y="156" text-anchor="middle" font-weight="700" style="fill:var(--mach)">Labeller</text>
+ <text x="378" y="176" text-anchor="middle" class="sm">lane · awareness · ID · source</text>
+ <path d="M378 200 V226" stroke="var(--ink3)" stroke-width="2" marker-end="url(#a)"/>
+ <rect x="268" y="230" width="220" height="70" rx="10" fill="var(--panel)" stroke="var(--data)" stroke-width="2.5"/>
+ <text x="378" y="258" text-anchor="middle" font-weight="700" style="fill:var(--data)">The bank</text>
+ <text x="378" y="278" text-anchor="middle" class="sm">per brand · per avatar</text>
+ <rect x="268" y="330" width="220" height="50" rx="10" fill="var(--panel)" stroke="var(--rule)" stroke-width="2.5"/>
+ <text x="378" y="352" text-anchor="middle" font-weight="700" style="fill:var(--rule)">The schema</text>
+ <text x="378" y="370" text-anchor="middle" class="sm">rules every line follows</text>
+ <path d="M488 355 C520 355 520 180 492 170" stroke="var(--rule)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#a)"/>
+ <path d="M488 265 H548" stroke="var(--ink3)" stroke-width="2" marker-end="url(#a)"/>
+ <rect x="554" y="215" width="170" height="100" rx="10" fill="var(--panel)" stroke="var(--mach)" stroke-width="2.5"/>
+ <text x="639" y="245" text-anchor="middle" font-weight="700" style="fill:var(--mach)">Language layer</text>
+ <text x="639" y="266" text-anchor="middle" class="sm">"give me unused,</text>
+ <text x="639" y="282" text-anchor="middle" class="sm">problem-aware lines</text>
+ <text x="639" y="298" text-anchor="middle" class="sm">for this avatar"</text>
+ <path d="M724 265 H772" stroke="var(--ink3)" stroke-width="2" marker-end="url(#a)"/>
+ <text x="880" y="18" class="hd" text-anchor="middle">OUT · WHERE IT'S USED</text>
+ <rect x="778" y="30" width="212" height="300" rx="10" fill="var(--soft)"/>
+ <text x="794" y="58">Video chain (hooks → scripts)</text><text x="794" y="86">Copywriter</text>
+ <text x="794" y="114">Emails</text><text x="794" y="142">Landing pages</text>
+ <text x="794" y="170">Briefs · stories</text><text x="794" y="198">Marketing calendar</text>
+ <text x="794" y="226">Customer service</text><text x="794" y="254">Avatar development</text>
+ <text x="794" y="290" class="sm">every tool asks the same way</text>
+ <path d="M884 330 C884 395 560 395 520 290" stroke="var(--out)" stroke-width="1.8" stroke-dasharray="6 4" fill="none" marker-end="url(#a)"/>
+ <text x="700" y="388" text-anchor="middle" class="sm" style="fill:var(--out)">used lines are marked "used" → next asset gets fresh words</text>
+</svg>
+</div>
+</section>
+
+<section id="chain">
+<h2><span class="n">2</span>The actual chain, step by step</h2>
+<p class="sub">A real run from 2026-09-29: @brand-b TikTok post #1 into the bank. Every step shows the exact code, whether a model is used, and what came out.</p>
+<div class="lanes2">
+<div><h3 class="lh">Going in · words → bank</h3><ol class="steps"><li><span class="k">1</span><div><div class="t"><b>Start</b><span class="m">no model</span></div><p>Someone types the command with the brand, avatar and post link. Settings come from the research settings file: up to 400 comments per post.</p><code class="r">research-gatherer/comments.py:102 · ownvoice.py:46</code></div></li><li><span class="k">2</span><div><div class="t"><b>Pull from Apify</b><span class="m">no model</span></div><p>The TikTok, Instagram or Facebook comment scraper runs on the post. The key is read by name (APIFY_TOKEN), with a spare if the first is spent.</p><div class="o">→ 400 comments pulled</div><code class="r">comments.py:52 · components/apify/apify.py:91</code></div></li><li><span class="k">3</span><div><div class="t"><b>Clean</b><span class="m">no model</span></div><p>Each comment is cleaned: emails, phone numbers, addresses, order numbers and @handles removed. It gets a link to the exact comment, the date it was said, and a source ID.</p><code class="r">comments.py:32 · annotate.py:98</code></div></li><li><span class="k">4</span><div><div class="t"><b>Skip what's already in the bank</b><span class="m">no model</span></div><p>Any comment whose link is already in the bank is skipped.</p><div class="o">→ post #2: 394 new (6 already in)</div><code class="r">comments.py:127 · annotate.py:321</code></div></li><li><span class="k">5</span><div><div class="t"><b>Intake read</b><span class="m y">model</span></div><p>The model reads comments 30 at a time against the avatar's rules and decides: keep or drop (and why), what the words do, topics, sub-avatar, and ad use.</p><div class="o">→ kept 338 · dropped 62 (52 too short, 10 other)</div><code class="r">annotate.py:186 · prompts/annotate-row.md · claude-sonnet-5</code></div></li><li><span class="k">6</span><div><div class="t"><b>Labeller</b><span class="m y">model</span></div><p>The model reads the kept lines 20 at a time and gives each an awareness level, a sophistication signal and the lane the words point to. If a reply breaks, it splits the batch and asks again. Origin (internal/external) and voice are set by rule, not by the model.</p><div class="o">→ awareness: product 130 · unaware 97 · unclear 52 · most 40 · solution 16 · problem 3</div><code class="r">language-layer/tools/label.py:186 · prompts/label-awareness-v2.md · label.py:55</code></div></li><li><span class="k">7</span><div><div class="t"><b>Pick the lane</b><span class="m">no model</span></div><p>If the person has ordered, they're a customer, or churned if they cancelled or refunded. Otherwise the words decide: customer, lead or prospect.</p><div class="o">→ prospect 270 · lead 60 · customer 8</div><code class="r">annotate.py:261</code></div></li><li><span class="k">8</span><div><div class="t"><b>Build the line</b><span class="m">no model</span></div><p>Names are replaced with [name], and source, signal (likes), topics, use and labels are attached.</p><code class="r">annotate.py:278</code></div></li><li><span class="k">9</span><div><div class="t"><b>Give it an ID and file it</b><span class="m">no model</span></div><p>Next number after the highest ID in the avatar's folder: language_&lt;brand&gt;_&lt;avatar&gt;_&lt;lane&gt;_NNNN. Written to prospects.json, leads.json or customers/.</p><div class="o">→ 338 lines filed</div><code class="r">annotate.py:401 · :337 · :363</code></div></li><li><span class="k">10</span><div><div class="t"><b>Run record</b><span class="m">no model</span></div><p>Filed, dropped and held lists, a report, and a page that shows the intake prompt word for word.</p><code class="r">comments.py:139 → runs/research/&lt;brand&gt;/comments-&lt;time&gt;/</code></div></li><li><span class="k">11</span><div><div class="t"><b>Save to the repo</b><span class="m">no model</span></div><p>A session commits and pushes. The gatherer doesn't commit by itself.</p><div class="o">→ commit 497b7c89c · 611 lines</div><code class="r">(by hand today)</code></div></li></ol>
+<p class="note"><b>Other ways in, same steps 5–9:</b> <b>ownvoice</b> pulls Meta ad comments (warehouse, then Apify on the top 15 ads) and Gorgias tickets (warehouse), from the last run onward. On 2026-09-28: Brand B 212 filed, Brand A 167 filed. <b>deep</b> runs Reddit questions per sub-avatar and goes through the labeller only, with no intake read.</p></div>
+<div><h3 class="lh">Coming out · bank → ad</h3><ol class="steps"><li><span class="k">1</span><div><div class="t"><b>The prompt asks</b><span class="m">no model</span></div><p>A stage prompt holds a slot like <code>?hooks</code>. The chain fills in the run's avatar and lane, and for a result-first hook it switches to the result tags.</p><code class="r">video-teardown/machine/chain.py:842</code></div></li><li><span class="k">2</span><div><div class="t"><b>The chain's own map</b><span class="m">no model</span></div><p>This chain's list of tags per stage, e.g. hooks = hook, problem-language, transformation-reaction… Then it hands off to the shared engine.</p><code class="r">video-teardown/machine/language.py:38</code></div></li><li><span class="k">3</span><div><div class="t"><b>The engine searches</b><span class="m">no model</span></div><p>Loads every line for the avatar and skips retired lines and lines already used. Identical lines collapse into one with a "said N×" count. Filters by lane and awareness, then ranks: labelled first, then tag order, topic, then loudness.</p><div class="o">→ 40 lines per stage</div><code class="r">language-layer/language_layer/engine.py:383 · :274</code></div></li><li><span class="k">4</span><div><div class="t"><b>Widen if thin</b><span class="m">no model</span></div><p>If fewer than 8 lines match, it relaxes topics, then lane, then both, and says so in the header.</p><code class="r">engine.py:402</code></div></li><li><span class="k">5</span><div><div class="t"><b>Hand to the model</b><span class="m">no model</span></div><p>Each line is shown as [id] "exact words" with speaker, tags, source, date and likes. The stage writes with them and lists the IDs it used.</p><code class="r">engine.py:351</code></div></li><li><span class="k">6</span><div><div class="t"><b>Mark as used</b><span class="m">no model</span></div><p>After the brief is done, the IDs it cited or quoted are written to the used lane, so the next asset gets fresh words. Bank lines are never edited.</p><code class="r">video-teardown/machine/mark_used.py:122 → language/used/&lt;run&gt;.json</code></div></li></ol>
+<p class="note"><b>Cleaning up lines already in the bank</b> (labelling, renaming, linking sources): the tool writes a proposal, and the gatherer's <code>apply</code> step writes it in. Same one door as new lines.</p>
+<p class="note"><b>Copywriter:</b> steps 1–5 are the same, through its own map. It doesn't filter by awareness or used, and it doesn't mark lines used yet.</p></div>
+</div>
+</section>
+
+<section id="triggers">
+<h2><span class="n">3</span>What starts each source</h2>
+<p class="sub">A daily job runs every morning at 5:30 on your Mac (<code>com.daemn.language-daily</code>). It pulls every free source, runs new lines through the intake read and the labeller, refreshes the source list and bank page, and saves only what it produced to the repo. Anything that costs Apify stays on request, per your call (2026-09-29). Inside the daily run, Apify is blocked outright.</p>
+<div class="tbl"><table>
+<tr><th>Source</th><th>Tool that pulls it</th><th>What starts it</th><th>Last run</th><th>State</th></tr>
+<tr><td><b>Surveys</b><br><small>Brand B 13,405 + 34 today</small></td><td><code>gather.py surveys</code> (3 Google Form sheets)</td><td><b>Daily 5:30am</b></td><td>2026-09-29 · 39 pulled, 34 filed</td><td><span class="st g">live</span></td></tr><tr><td><b>Reviews</b><br><small>Brand B Junip · Brand A Judge.me</small></td><td><code>gather.py reviews</code></td><td><b>Daily 5:30am</b> · Brand A waiting on its Judge.me key</td><td>2026-09-29 · Brand B 18 pulled, 17 filed</td><td><span class="st g">live (Brand B)</span></td></tr><tr><td><b>Meta ad comments (warehouse)</b><br><small>Brand B 212</small></td><td><code>gather.py ownvoice --no-scrape</code></td><td><b>Daily 5:30am</b></td><td>2026-09-29 · nothing new since 09-28</td><td><span class="st g">live</span></td></tr><tr><td><b>Gorgias tickets</b><br><small>Brand A 218</small></td><td>same ownvoice run</td><td><b>Daily 5:30am</b> · Brand B's Gorgias isn't in the warehouse yet</td><td>2026-09-29 · nothing new</td><td><span class="st g">live (Brand A)</span></td></tr><tr><td><b>Interviews · panels</b><br><small>Brand A 105 + 55</small></td><td><code>gather.py interviews</code>: drop a transcript in the avatar's <code>language/evidence/inbox/</code></td><td><b>Daily 5:30am</b></td><td>inbox empty</td><td><span class="st g">live</span></td></tr><tr><td><b>Organic comments (TikTok · IG · FB)</b><br><small>611 today</small></td><td><code>gather.py comments --url</code></td><td>On request (costs Apify)</td><td>2026-09-29</td><td><span class="st p">on request</span></td></tr><tr><td><b>Reddit · forums</b><br><small>per sub-avatar</small></td><td><code>gather.py deep</code></td><td>On request (costs Apify)</td><td>2026-09-23</td><td><span class="st p">on request</span></td></tr>
+</table></div>
+<p class="note"><b>First real run, 2026-09-29:</b> 51 new Brand B lines filed (34 from surveys, 17 from Junip reviews). It ran twice through the schedule; the second run hit a clash with other work, caught up on the latest version and saved cleanly. Log: <code>~/Library/Logs/daemn/language-daily.log</code>. Each day's summary goes to <code>runs/research/_system/daily/</code>.</p>
+</section>
+
+<section id="automate">
+<h2><span class="n">4</span>What's still waiting</h2>
+<p class="sub">Everything free is on the daily trigger. Three things are still waiting on something outside the code.</p>
+<div class="apps">
+ <div class="app"><h3>Brand B support tickets</h3><p>Brand B has its own Gorgias account, separate from Brand A's, and it isn't synced into the company warehouse yet. The warehouse notes say "not synced yet" (the ops lead, 2026-09-02). Once it's synced, Brand B switches on with one setting.</p><span class="st2">needs: the Brand B Gorgias → warehouse sync (the ops lead)</span></div>
+ <div class="app"><h3>Brand A reviews (Judge.me)</h3><p>The puller is built. It needs Judge.me's API token and the shop domain Judge.me knows the store by. The storefront is Next Commerce, so there's no public token on the page to read.</p><span class="st2">needs: Judge.me token + shop domain</span></div>
+ <div class="app"><h3>Brand A surveys</h3><p>No survey form is on file for Brand A. When one exists, add it to the brand's pull settings and it runs daily.</p><span class="st2">needs: a Brand A form (see Our own feedback forms)</span></div>
+ <div class="app"><h3>The published bank page</h3><p>The bank page file is rebuilt every morning. The published Language Bank page gets refreshed when a session updates it.</p><span class="st2">refreshed by a session</span></div>
+</div>
+</section>
+
+<section id="forms">
+<h2><span class="n">5</span>Next: our own feedback forms<span class="idea">idea · not built</span></h2>
+<p class="sub">The Google Forms in the Brand B email flows built most of the Brand B bank. The next step is each brand running its own branded, interactive forms, asking the right person the right thing at the right moment.</p>
+<div class="tbl" style="margin-bottom:12px"><table>
+<tr><th>What Brand B had (Google Forms)</th><th>Answers</th><th>What it asked</th><th>What it couldn't tell us</th></tr>
+<tr><td><b>Customers</b></td><td class="num">n<br><small>Apr 2023 – Aug 2026</small></td><td>11 open questions: gut instinct to buy, problem to solve, likes, one thing to change, next-product wish…</td><td>No order count or subscription status</td></tr>
+<tr><td><b>Followers</b></td><td class="num">n<br><small>Mar 2023 – Sep 2025</small></td><td>Why interested, why not bought, unanswered questions, brands used, what would help them buy</td><td>No purchase status. About n said they'd already bought</td></tr>
+<tr><td><b>Refunds</b></td><td class="num">n<br><small>Feb 2024 – Jul 2026</small></td><td>Refund reason, unmet expectations, what we could've done, alternative found</td><td>No subscriber flag</td></tr>
+</table></div>
+<div class="apps">
+ <div class="app"><h3>Asked by lane, at the moment</h3><p>Different questions for a prospect, a lead, a new customer, a repeat customer, a subscriber, a refund and a cancel. Each is sent where it happens: an email flow, after delivery, at cancel, on the site.</p></div>
+ <div class="app"><h3>Branded and interactive</h3><p>One question at a time, taps plus the customer's own words, in the brand's look. Built to get more answers and better ones.</p></div>
+ <div class="app"><h3>Lands already sorted</h3><p>We know who was asked (lane, order count, subscriber) and what was asked, so none of it is guessed. Each answer goes into the bank through the same labeller and gets an ID. It runs daily like the other free sources.</p></div>
+ <div class="app"><h3>Feeds all six</h3><p>Every answer is tagged for marketing, product, operations, customer service, customer experience or the website, so each team can pull its own.</p></div>
+</div>
+</section>
+
+<section id="places">
+<h2><span class="n">6</span>The four places</h2>
+<p class="sub">Each place has one job and one folder.</p>
+<div class="four">
+ <div class="box data"><span class="tag">The data</span><h3>The bank</h3><p class="q">What people said</p><code>brands/&lt;brand&gt;/core-avatars/&lt;avatar&gt;/language/</code>
+ <ul><li>One folder per avatar, per brand</li><li>Files by lane: <code>prospects</code> · <code>leads</code> · <code>customers/</code> · <code>churned/</code></li><li><code>used/</code>: which lines went into which asset</li></ul></div>
+ <div class="box rule"><span class="tag">The rules</span><h3>The schema</h3><p class="q">How every line must be written</p><code>brands/language-schema.md</code>
+ <ul><li>Which lane a line goes in</li><li>Awareness, sophistication, internal vs external, voice</li><li>Row IDs and source IDs</li><li>The used lane and repeats</li></ul></div>
+ <div class="box mach"><span class="tag">The machine</span><h3>The language layer</h3><p class="q">What does the work</p><code>tools/language-layer/</code>
+ <ul><li>Search: every tool asks it for words</li><li>Tools: label, rename, map sources, check, page</li><li><code>docs/STANDARD.md</code>: why the rules are what they are</li></ul></div>
+ <div class="box out"><span class="tag">The output</span><h3>Its runs</h3><p class="q">What the work produced</p><code>runs/language-layer/</code>
+ <ul><li>Each brand's state (<code>BANK.md</code>, the page)</li><li>Rename lookups, lane-move lists</li><li>Test sets</li></ul></div>
+</div>
+</section>
+
+<section id="line">
+<h2><span class="n">7</span>What's on every line</h2>
+<p class="sub">These labels are what let any tool, or any person, pull exactly the right words.</p>
+<div class="tbl"><table>
+<tr><th>Field</th><th>What it says</th><th>Example</th></tr>
+<tr><td><b>id</b></td><td>The line's permanent name, by the Naming Standard</td><td><code>language_brand-b_avatar-one_customer_9607</code></td></tr>
+<tr><td><b>text</b></td><td>The exact words, typos and emoji intact</td><td>"&lt;a joke reaction&gt;"</td></tr>
+<tr><td><b>lane</b></td><td>Who the speaker is to us: prospect · lead · customer · churned. A known order decides; otherwise the words do</td><td>prospect</td></tr>
+<tr><td><b>awareness</b></td><td>What the words show they know, by the doctrine's five levels (plus <i>unclear</i>)</td><td>product-aware</td></tr>
+<tr><td><b>sophistication</b></td><td>What they've already heard from the market</td><td>none · claim-heard · believes-none</td></tr>
+<tr><td><b>origin</b></td><td><b>Internal</b>: our customers and our own properties. <b>External</b>: everyone else's spaces</td><td>internal</td></tr>
+<tr><td><b>voice</b></td><td>The audience, or our own brand's copy</td><td>audience</td></tr>
+<tr><td><b>source</b></td><td>Where it came from, with a link back to the exact comment, ticket or answer</td><td><code>post_tiktok_brand-b_7000000000000000001</code></td></tr>
+<tr><td><b>use · topics</b></td><td>What the words do, and what they're about</td><td>objection · refund-reason · keyword-cta</td></tr>
+<tr><td><b>signal</b></td><td>How loud it was: likes, and how many times the same line was said</td><td>said 41×</td></tr>
+</table></div>
+</section>
+
+<section id="apply">
+<h2><span class="n">8</span>Where it applies</h2>
+<p class="sub">One bank, many questions. Each card shows the kind of ask a tool or a person puts to it, and whether that's live today.</p>
+<div class="apps">
+ <div class="app"><h3>Ads · video hooks and scripts</h3><p>Each part of the script asks for the lines tagged for that part, at the awareness level it's written to.</p><span class="ask">hooks · problem-aware · unused first</span><span class="st">Live: the video chain</span></div>
+ <div class="app"><h3>Copywriting</h3><p>Headlines, expansions, closes and proof drawn from the customers' own phrasing.</p><span class="ask">close → objection · refund-reason · expectation-gap</span><span class="st">Live: the copywriter</span></div>
+ <div class="app"><h3>Emails</h3><p>Flows by lane: prospect, lead, customer and churned each have their own words.</p><span class="ask">the avatar's language rules</span><span class="st">Live: reads the avatar's rules file</span></div>
+ <div class="app"><h3>Landing pages · briefs · stories</h3><p>Pages, creator briefs and story-shaped ads pull rows the same way.</p><span class="ask">sub-avatar rows · story-shaped rows</span><span class="st">Live: lab tools (pages, outlier brief, story builder)</span></div>
+ <div class="app"><h3>Customer service</h3><p>Ticket language lands with its lane and awareness level: what customers ask, what they expected, and why they want refunds.</p><span class="ask">ticket · refund-reason · expectation-gap · churn-risk</span><span class="st">Coming in today: Brand A tickets. Not yet: a CS tool that reads them</span></div>
+ <div class="app"><h3>Avatar development</h3><p>Who's talking, at what awareness level, in which lane, and what they repeat. It's the avatar, measured from real words.</p><span class="ask">lane × awareness counts · loudest repeats</span><span class="st">Live: the Language Bank page</span></div>
+
+ <div class="app"><h3>Products</h3><p>What they wish it did, what they'd change, what they want next. It comes straight from the survey answers already in the bank.</p><span class="ask">one thing to change · next-product wish · expectation-gap</span><span class="st">In the bank · no tool reads it for this yet</span></div>
+ <div class="app"><h3>Operations</h3><p>Why refunds happen. Brand B's refund form: about 2 in 3 refunds were operational (shipping 101, stock 17, billing/checkout about 35), against about 17 for the product itself.</p><span class="ask">refund-reason · churn-risk · ticket</span><span class="st">In the bank · no tool reads it for this yet</span></div>
+ <div class="app"><h3>Website</h3><p>Questions left unanswered, where the site confused them, what would have helped them buy.</p><span class="ask">why not bought · site confusion · buy-trigger</span><span class="st">In the bank · no tool reads it for this yet</span></div>
+</div>
+</section>
+
+<section id="components">
+<h2><span class="n">9</span>What already talks to it, and how</h2>
+<p class="sub">Every tool goes through the same engine, so a change to the bank or the rules reaches all of them at once.</p>
+<div class="tbl"><table>
+<tr><th>Tool</th><th>Direction</th><th>How it talks to it</th></tr>
+<tr><td><b>Research gatherer</b><br><code>components/research-gatherer</code></td><td><span class="dir in">writes in</span></td><td>Three ways in. <b>Deep</b> research runs, <b>comments</b> pulls a post's comments via Apify (TikTok, Instagram, Facebook), and <b>ownvoice</b> pulls the brand's Meta ad comments and Gorgias tickets. Every line goes through the labeller and gets an ID before it's filed.</td></tr>
+<tr><td><b>Labeller</b><br><code>language-layer/tools/label.py</code></td><td><span class="dir in">writes in</span></td><td>Reads each line in context and writes its lane, awareness, sophistication, origin and voice. The gatherer calls it on everything new, and it can backfill a whole bank.</td></tr>
+<tr><td><b>Video chain</b><br><code>tools/video-teardown</code></td><td><span class="dir outd">reads out</span></td><td>Prompts carry an ask like <code>?hooks:avatar:funnel</code>. The chain asks the engine for rows tagged for that stage (hooks, placement, expansion, close, proof, depth, spoken), filtered by awareness, unused first. If there are too few, it widens step by step. After a brief ships, the lines it used are marked used.</td></tr>
+<tr><td><b>Copywriter</b><br><code>tools/copywriter</code></td><td><span class="dir outd">reads out</span></td><td>Same engine and the same kind of ask, with the copywriter's own map of what each stage looks for.</td></tr>
+<tr><td><b>Landing pages</b> (lab)</td><td><span class="dir outd">reads out</span></td><td>Asks the engine per stage, plus rows for a named sub-avatar.</td></tr>
+<tr><td><b>Outlier brief</b> (lab)</td><td><span class="dir outd">reads out</span></td><td>Asks the engine for the customer's own words for a creator brief.</td></tr>
+<tr><td><b>Story builder</b> (lab)</td><td><span class="dir outd">reads out</span></td><td>Pulls story-shaped rows (hid it, tried everything, someone noticed). No model.</td></tr>
+<tr><td><b>Marketing calendar</b><br><code>components/marketing-calendar</code></td><td><span class="dir outd">reads out</span></td><td>Reads who the brand's avatars are through the engine.</td></tr>
+<tr><td><b>Email production</b><br><code>tools/email-production</code></td><td><span class="dir rd">reads rules</span></td><td>Reads the avatar's <code>language/rules.md</code> (the voice rules), not the rows themselves.</td></tr>
+<tr><td><b>Voice check</b><br><code>components/qc-checks</code></td><td><span class="dir rd">checks</span></td><td>Makes sure a piece of copy was written against the right brand's language rules.</td></tr>
+<tr><td><b>CS metrics</b><br><code>components/cs-metrics</code></td><td><span class="dir rd">same source</span></td><td>Reads Gorgias ticket stats from the warehouse for weekly CS health. It reads the same tickets the gatherer does, but doesn't read or write the bank.</td></tr>
+</table></div>
+</section>
+
+<section id="gorgias">
+<h2><span class="n">10</span>Plugging in a source: Gorgias</h2>
+<p class="sub">Gorgias is already wired in. This is how any new source joins.</p>
+<div class="gorg">
+ <div><span class="pill">Brand A <b>on</b> · 218 ticket lines in the bank</span><span class="pill off">Brand B <b>off</b> · its own Gorgias account isn't in the warehouse yet</span></div>
+ <ol>
+  <li><b>Where it's read from:</b> the company data warehouse, which already holds every Gorgias ticket message. The same data feeds CS metrics.</li>
+  <li><b>How a brand turns it on:</b> its Gorgias account is synced into the warehouse, and its settings file (<code>brands/&lt;brand&gt;/operations/brand.json</code>) names <code>"helpdesk": "gorgias"</code>. After that, the daily run pulls every ticket message since the last run. Today the warehouse holds Brand A's account only; Brand B runs a separate one.</li>
+  <li><b>What happens to each message:</b> signatures, addresses and names are stripped, then it's labelled (lane, awareness, origin = internal) and filed with a source ID <code>ticket_&lt;brand&gt;_gorgias</code> that links back to the ticket and message number. Whether the sender has ordered comes along with it.</li>
+  <li><b>Where it goes:</b> into the same bank as every other source, so ads, copy, email and CS all see it at once.</li>
+ </ol>
+ <p style="margin:0;color:var(--ink2)"><b>Any other source works the same way:</b> a way to pull it, a source ID by the Naming Standard, and the labeller. Nothing downstream changes.</p>
+</div>
+</section>
+
+<section id="now">
+<h2><span class="n">11</span>What's in it today</h2>
+<p class="sub">Lines in each brand's bank by where they came from. Counted from the bank files (sub-avatar folders included), 2026-09-29.</p>
+<div class="tbl"><table>
+<tr><th>Source kind</th><th>Brand B</th><th>Brand A</th></tr>
+<tr><td><b>Survey</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Post comments</b> (ads + organic)</td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Community</b> (forums, Reddit)</td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Support tickets</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Interviews</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Panels</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Reviews</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Our own copy</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Database</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Source not yet linked</b></td><td class="num">n</td><td class="num">n</td></tr>
+<tr><td><b>Total</b></td><td class="num"><b>n</b></td><td class="num"><b>n</b></td></tr>
+</table></div>
+</section>
+
+<section id="names">
+<h2><span class="n">12</span>The names: three words, one family</h2>
+<div class="words">
+ <div style="--c:var(--data)"><b>language</b>The bank: the data inside each brand</div>
+ <div style="--c:var(--rule)"><b>language-schema</b>The rules every line follows</div>
+ <div style="--c:var(--mach)"><b>language-layer</b>The machine that does the work, and its output folder <code>runs/language-layer/</code></div>
+</div>
+<p class="note">The output folder is named after the machine, like every other machine's (<code>runs/video-teardown/</code>, <code>runs/copywriter/</code>). Renamed from <code>runs/language-bank/</code> on 2026-09-29.</p>
+</section>
+
+<section id="health">
+<h2><span class="n">13</span>System check (the developer's fit → ready)</h2>
+<p class="sub">Run 2026-09-29 on the language layer against Brand B and Brand A. No model calls. The memos are in <code>runs/system-integration/components-language-layer/</code>.</p>
+<div class="tbl" style="margin-bottom:12px"><table>
+<tr><th>Level</th><th>Before</th><th>After</th></tr>
+<tr><td><b>L1 · runs on the system</b></td><td>Blocked (4 findings)</td><td><span class="ok">Pass</span></td></tr>
+<tr><td><b>L2 · anyone on the team can run it</b></td><td>Blocked</td><td><span class="ok">Pass</span></td></tr>
+<tr><td><b>L3 · the Mac mini</b></td><td>Not applicable: it runs inside the tools that call it</td><td>Not applicable</td></tr>
+</table></div>
+<div class="chk">
+ <div><span class="ok">✓</span><span><b>Video chain gets real lines:</b> 40 per stage for both brands, at the asked awareness level, and lines marked used are held back.</span></div>
+ <div><span class="ok">✓</span><span><b>Copywriter gets real lines:</b> 40 per stage (injection, hooks, render, close) for both brands.</span></div>
+ <div><span class="ok">✓</span><span><b>Research gatherer reaches the labeller.</b></span></div>
+ <div><span class="ok">✓</span><span><b>Tests:</b> the layer's own 36 (7 new for the proposal step), the gatherer's 6 + 24 + 12, plus 74 layer tests, 28 + 4 video-chain tests and 19 copywriter tests. All pass.</span></div>
+ <div><span class="ok">✓</span><span><b>Fixed:</b> keys by name only, output always under <code>runs/language-layer/</code>, no brand names in the code, no guessed laptop paths, runs on the older Python the Mac mini uses, how-to-run docs added.</span></div>
+ <div><span class="ok">✓</span><span><b>Fixed: bank edits go through one door.</b> The clean-up tools (labelling, renaming, source mapping, keyword-CTA) now write a proposal first, to <code>runs/language-layer/</code>. The research gatherer's <code>apply</code> step, the one tool allowed to write to <code>brands/</code>, checks it and writes it in. It never touches the words or drops a link. A label a person wrote is never overwritten.</span></div>
+<div><span class="ok">✓</span><span><b>Fixed:</b> the labeller runs on the model registry's own name (claude-sonnet-5). The video chain and copywriter find the workspace the same way the engine does.</span></div>
+ <div><span class="open">●</span><span><b>Small, for the developer or the ops lead:</b> an untagged card number and an ownership line in the layer's notes file, which only they can edit. The exact text is drafted for them, not sent.</span></div>
+</div>
+</section>
+
+<section id="review">
+<h2><span class="n">14</span>Waiting on you: 21 old comment lines</h2>
+<p class="sub">These 21 Brand B lines were typed in by hand from notes, filed as customers, and have no link to the comment. Today's pull found <b>13</b> of them as real comments with links, filed in the prospect lane. <b>8</b> have no twin. Nothing has been changed.</p>
+<div class="tbl"><table>
+<tr><th>Old #</th><th>Old hand-typed line (customer lane)</th><th>Linked twin pulled today</th></tr>
+</table></div>
+</section>
+<p class="foot">Team copy: <code>tools/language-layer/docs/HOW-IT-WORKS.md</code> · The rules: <code>brands/language-schema.md</code> · Why the rules are what they are: <code>tools/language-layer/docs/STANDARD.md</code></p>
+</div>

@@ -1,7 +1,7 @@
 {
  "element": "style",
  "asset": "image",
- "source": "image-production/style-packs.json",
+ "source": "tools/image-production/style-packs.json",
  "enforced_by": "image production; image teardown stage 6",
  "note": null,
  "rows": [
@@ -15,14 +15,16 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "close, at the subject's own height, level, straight on, shallow depth so the background falls away",
     "light": "soft frontal light with a slight top-down bias, raking enough to show surface texture rather than flatter it",
     "grade": "natural grade, true colour, blacks lifted slightly",
     "style": "candid, unstyled, native to a phone camera roll",
     "texture": "unretouched and no better than the source — visible pores, follicles, marks and micro-shadows, slight softness, the compression and noise of a phone photo, nothing smoothed and nothing upgraded"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "mirror-selfie",
@@ -34,14 +36,16 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "medium close, chest height, level, seen through a wall-mounted mirror, moderate depth with the subject sharp",
     "light": "hard natural daylight from one side with deep shadow opposite, mixed with ambient room fill",
     "grade": "natural grade, crushed blacks in the deep shadows",
     "style": "native phone mirror selfie, unstyled domestic interior",
     "texture": "unretouched — real skin with visible pores and natural imperfections"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "studio-object",
@@ -53,14 +57,16 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "straight on, level, at the height of the object, centre-weighted, deep focus edge to edge",
     "light": "soft overhead fill building a smooth gradient, one hard rim light entering from the side",
     "grade": "high contrast, crushed blacks, clean",
     "style": "clean digital studio render, no film grain, no texture on the ground beyond its own sheen",
     "texture": "true material finish — matte where matte, reflective where reflective"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "flat-vector",
@@ -72,14 +78,16 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "straight on, level, chest height, subject centred and cut at the upper thigh, everything equally crisp",
     "light": "flat, soft and uniform, no modelling",
     "grade": "solid colour fills on a flat ground",
     "style": "flat vector illustration, thick black outlines, solid fills, no gradients, meme and comic aesthetic",
     "texture": "none — clean digital, no shading, no realistic rendering"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "diagnostic-scan",
@@ -91,33 +99,37 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "profile or three-quarter, at eye height, level, cropped at the chest, deep focus",
     "light": "strong warm rim light from behind and to one side, soft fill from the front",
     "grade": "high contrast, crushed blacks, gradient void from charcoal at centre to near-black at the edges",
     "style": "clean digital 3D medical infographic, glowing and semi-translucent",
     "texture": "pathology reads as denser, more opaque interruptions in the glow"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "selfie",
    "name": "Selfie",
-   "what": "She is holding the camera. The phone IS the camera, so it is never in frame — a phone visible in a selfie means the picture is OF someone taking a selfie, which is a different photograph (Damon, 2026-09-14).",
+   "what": "She is holding the camera. The phone IS the camera, so it is never in frame — a phone visible in a selfie means the picture is OF someone taking a selfie, which is a different photograph (the owner, 2026-09-14).",
    "why_it_works": null,
    "status": "draft",
    "signed": null,
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "arm's length, at her own eye height or slightly above, one arm out of frame toward the lens, close, deep enough focus that the room behind reads",
     "light": "whatever light the room has — a window, a lamp, mixed and uncorrected",
     "grade": "natural, uncorrected, lifted blacks",
     "style": "a photograph she took of herself on her own phone and posted the same day",
     "texture": "unretouched and no better than the source — pores, flyaways, uneven skin, phone-camera softness and noise, nothing smoothed, nothing upgraded"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "studio-portrait-bw",
@@ -129,14 +141,16 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "close, eye height, level, portrait-compressed, moderate depth",
     "light": "soft directional loop light from one side, falling off into black",
     "grade": "black and white, crushed blacks, high contrast on the eyes",
     "style": "editorial portrait against a dark flat void, no environment",
     "texture": "every pore, line and hair kept — the point of the register is age, undisguised"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "vintage-print",
@@ -148,15 +162,20 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "extra": {
     "shot": "mid-shot, chest height, level, moderate depth",
     "light": "frontal, soft, like a bounced on-camera flash",
     "grade": "warm sepia or monochrome, lifted blacks",
     "style": "a scanned physical film print — heavy grain throughout, creases across the image, yellowed borders, surface glare in one corner",
     "texture": "the damage is real: grain, folds, the gloss of a print under light"
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

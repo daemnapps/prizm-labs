@@ -21,6 +21,7 @@
  "formats": [
   {
    "key": "short-form",
+   "status": "approved",
    "name": "Short-form",
    "what": "The punchy one. Scroll-stopper, one idea, out.",
    "length": {
@@ -42,6 +43,7 @@
   },
   {
    "key": "caption",
+   "status": "approved",
    "name": "Caption / Meta primary text",
    "what": "The words above the creative in the feed.",
    "length": {
@@ -62,6 +64,7 @@
   },
   {
    "key": "long-form",
+   "status": "approved",
    "name": "Long-form story",
    "what": "A story that earns its length — the middle included, not skipped.",
    "length": {
@@ -82,6 +85,7 @@
   },
   {
    "key": "social-proof",
+   "status": "approved",
    "name": "Social proof",
    "what": "Built on other people's words — what customers actually said.",
    "length": {
@@ -104,5 +108,5 @@
  "asset": "copy",
  "axis": "style",
  "scope": "Copy STYLES only — HOW the copy is written: short-form, long-form story, social proof. This is NOT the surface bank (WHERE the words go — headline, description, hook line), which is format-bank.json in this folder and a different axis entirely. A tool needing a slot reads format-bank.json; a tool needing a voice reads this. The model: components/naming/MODEL.md",
- "updated": "2026-09-11"
+ "updated": "2026-09-21"
 }

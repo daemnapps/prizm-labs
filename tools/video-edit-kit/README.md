@@ -39,6 +39,8 @@ from the brief's CUT-SHEET.md. See `example-cut.json`:
 - **overlays** are the hook and cards: the exact words and line breaks. `with`
   ties one to a scene (the hook sits on frame one for its whole first scene).
 - **line** (optional) gives the script's words, so captions use its spelling.
+- **captions.look** picks a look from `settings.json` (`bold-highlight`, `clean-lower`, `one-word`, `word-box` —
+  the sung or said word on its own coloured box, for song ads).
 - **punches** (optional) are extra 7% push-ins, in seconds on the rough cut's
   clock, put in before any type goes on.
 
@@ -55,18 +57,23 @@ from the brief's CUT-SHEET.md. See `example-cut.json`:
 | Frame fixes | `edit.py frame clean in.mp4 out.mp4` (also `seams`, `bridge`, `loopclose`, …) | Runs `../video-edit/frame-control/framectl.py`; needs `pip install numpy 'opencv-python-headless<5'` |
 | Safe zone | `edit.py safezone master.mp4 --boxes captioned.boxes.json --sheet-out sheet.png` | 9:16; every word on screen and (with opencv) every face inside the centred 4:5 band; a contact sheet with the band drawn in red |
 | Loudness | `edit.py loudness master.mp4` | Integrated LUFS and true peak |
-| Master | `edit.py master captioned.mp4 --out master.mp4` | −14 LUFS, −1 dBTP; picture copied untouched |
+| Master | `edit.py master captioned.mp4 --out master.mp4` | room tone under everything, −14 LUFS, −1 dBTP; picture copied untouched |
 | Final gate | `edit.py check master.mp4 --report rough.report.json` | 9:16 1080×1920, length, never black, mastered, no dead air (0.7 s or more) |
 | All of it | `edit.py run cut.json --out-dir out` | cut → words → captions → master → safe zone → checks, one 9:16 master |
 
 ## The rules it carries (the settled edit line)
 
 - Silence is heard in the sound (quieter than −35 dB for 0.15 s), never read off the words.
-- Start and end silence: always cut. Breaths (under 0.35 s): always kept.
+- Start and end silence: always cut, leaving 0.10 s before the first sound and 0.18 s after the last, so a line
+  rings out and no syllable is clipped. Breaths (under 0.35 s): always kept.
 - Mid-clip pauses (0.35 s or more): the kit proposes cutting them and lists
   them; the editor keeps any that land a beat. A kept pause of 0.7 s or more
   shows in the final gate as dead air, so it is a choice someone made.
 - After a cut pause the next piece is 7% closer — it reads like a second camera.
+- No piece under half a second (no flashes): a pause that would leave one is kept, and the report says so.
+- Every piece's sound fades in and out over 12 ms, so no join clicks.
+- Never digital silence: the master carries a quiet room (about −50 dB) under everything, far below what the
+  dead-air check listens for.
 - A clip whose line runs into its last frame is **cut off**: the cut stops and
   the clip goes back to production. `--anyway` makes a review cut only.
 - 9:16 only. Faces, product and every word sit inside the centred 4:5 band

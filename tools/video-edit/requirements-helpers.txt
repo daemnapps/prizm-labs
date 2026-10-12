@@ -1,0 +1,24 @@
+# The AI helpers' venv (tools/video-edit/.venv, Python 3.12 — gitignored; ~1.8 GB).
+# Built by `python3 machine/helpers.py setup`. The machine itself stays standard-library:
+# faces.py / beats.py / cutout.py run under this venv as a subprocess that prints JSON.
+# Installed and pinned 2026-09-23. Licence-clean only — no GPL / AGPL / share-alike / paid model.
+#
+# face tracking (faces.py) — MediaPipe Apache-2.0; model looks/models/blaze_face_short_range.tflite (Apache-2.0, 225 KB).
+#   Pinned to 0.10.21: mediapipe 1.0.1's detector needs a Metal service that is unavailable here (crashes on open).
+mediapipe==0.10.21
+opencv-contrib-python==4.11.0.86
+numpy==1.26.4
+# beats (beats.py) — librosa ISC; 0.11.0 because librosa 1.0 needs numpy ≥ 2.1, which mediapipe 0.10.21 refuses.
+librosa==0.11.0
+soundfile==0.14.0
+scipy==1.17.1
+numba==0.67.0
+# cut-outs (cutout.py) — BiRefNet MIT (weights ZhengPeng7/BiRefNet_lite, MIT, ~180 MB, fetched by Hugging Face on first use)
+torch==2.14.0
+torchvision==0.29.0
+transformers==5.17.0
+timm==1.0.30
+kornia==0.8.3
+einops==0.8.2
+huggingface_hub==1.32.0
+pillow==12.3.0

@@ -17,6 +17,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import library as L
+import workdir
 
 PORT = int(os.environ.get("DASH_PORT", "8787"))
 SELECTED = "creators/SELECTED-2026-08-27.json"
@@ -36,7 +37,7 @@ def prefixes():
 def runs_now():
     """Every run folder, keyed by the video id in its label."""
     out = {}
-    root = HERE / "runs"
+    root = workdir.root()
     if not root.exists():
         return out
     for d in root.iterdir():
@@ -287,7 +288,7 @@ tabs.forEach(function(t){ t.addEventListener('click',function(){
 def thumb_path(handle, rank):
     """A still, off the Drive. `rank` is either a post folder number or an
     N-id from the deeper pass."""
-    root = L.root() / "creators" / handle
+    root = L.creators_root() / handle
     if str(rank).upper().startswith("N"):
         f = root / "deeper" / f"{str(rank).upper()}.jpg"
         return f if f.is_file() else None

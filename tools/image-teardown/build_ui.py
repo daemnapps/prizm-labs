@@ -6,20 +6,23 @@
 Deliberately not its own design. It lifts the video board's own template
 (tools/video-teardown/machine/board.py) and patches the handful of places
 that say "video" into the handful that say "ad", so the two boards stay one
-board. When Dayu changes the video board's shape, a rebuild here picks it up.
+board. When the developer changes the video board's shape, a rebuild here picks it up.
 
-Damon reviews in HTML. The .md files each run writes are what the team reads;
+the owner reviews in HTML. The .md files each run writes are what the team reads;
 this page is built from those and never replaces them.
 """
-import html as H, json, re, subprocess, time
+import html as H, json, re, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+sys.path.append(str(HERE.parent.parent / "components" / "run-kit"))   # appended, never ahead of this lane
+from run_kit import paths as RK                  # noqa: E402  — the one workspace walk
+
 RUNS = HERE / "runs"
 OUT = HERE / "image-board.html"
-VIDEO_BOARD = next((d / "tools/video-teardown/machine/board.py" for d in HERE.parents
-                    if (d / "tools/video-teardown/machine/board.py").is_file()),
-                   HERE.parent / "video-teardown/machine/board.py")
+# The video board's template is read from this clone, found by run-kit's walk —
+# not from one person's home folder, which no worker worktree is (SI-108 (teardown one locator)).
+VIDEO_BOARD = RK.repo(HERE) / "tools/video-teardown/machine/board.py"
 
 # Each stage: the file it writes, the name and one line on what it is for, and
 # the block of work it belongs to. Mirrors the video board's stage plan.
@@ -271,7 +274,7 @@ def collect():
                     finished[0] if finished else (pics[0] if pics else None))
         poster = hero["src"] if hero else ""
         kind = ("CLONES — proving the format" if "clone" in d.name
-                or "smooche" in d.name else "VARIATIONS — new ads")
+                or "competitor" in d.name else "VARIATIONS — new ads")
         date = d.name[:10] if re.match(r"\d{4}-\d{2}-\d{2}", d.name) else ""
         label = d.name[11:] if date else d.name
         bf = d / "vars/brand_name.md"

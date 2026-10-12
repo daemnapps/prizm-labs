@@ -1,0 +1,105 @@
+{
+ "_what": "The 11 frame-level moves framectl.py runs, one row per move, same pattern as image-edit's fixes/variations libraries. Each row: what it fixes, the knobs, the local command, and the Higgsfield equivalent when one exists. Page (before/after clips on real music-video footage): (team page)",
+ "_curator": "the owner",
+ "moves": [
+  {
+   "id": "clean",
+   "status": "approved",
+   "name": "Clean — dedupe & interpolate",
+   "what": "stutter: AI clips generated at 24fps and padded to 30 repeat every 5th frame — reads as a judder, not motion",
+   "knobs": [{"name": "--fps", "what": "target frame rate", "default": "30"}],
+   "local": "framectl.py clean in.mp4 out.mp4 --fps 30",
+   "higgsfield": "use its upscale/interpolate tool where offered; else run locally, free, on anything"
+  },
+  {
+   "id": "lastframe",
+   "status": "approved",
+   "name": "Chain from the real last frame",
+   "what": "jumps between generated clips — the still a clip was aimed at and the frame it actually lands on are never quite the same image",
+   "knobs": [{"name": "which frame", "what": "always the real last frame, never the aim still"}, {"name": "which clip order", "what": "decided upstream of this"}],
+   "local": "framectl.py lastframe clip.mp4 last.png",
+   "higgsfield": "Seedance/Kling: set start_image to that exact frame, end_image to the next still"
+  },
+  {
+   "id": "seams",
+   "status": "approved",
+   "name": "Seam check",
+   "what": "invisible bad joins — a cut that looks fine paused on either frame can still jump hard once it plays",
+   "knobs": [{"name": "pass line", "what": "fixed", "default": "≤ 2× the clips' own median step"}],
+   "local": "framectl.py seams a.mp4 b.mp4 [c.mp4 …]",
+   "higgsfield": "no equivalent — the local gate that decides whether a generated join needs a re-make or a bridge"
+  },
+  {
+   "id": "bridge",
+   "status": "approved",
+   "name": "Flow bridge",
+   "what": "a join that still jumps and can't be re-made from the real last frame — the fallback, not the first move",
+   "knobs": [{"name": "--k", "what": "frames blended on each side of the join", "default": "10"}],
+   "local": "framectl.py bridge a.mp4 b.mp4 out.mp4 --k 10",
+   "higgsfield": "no equivalent — local only"
+  },
+  {
+   "id": "retime",
+   "status": "approved",
+   "name": "Continuous clock — slow dips & push-in",
+   "what": "“gets stuck”: a frozen hold reads as broken; a static frame that never moves dies on screen",
+   "knobs": [{"name": "--slow", "what": "repeatable: at:width:depth in seconds, depth ≤ 0.8"}, {"name": "--push", "what": "constant push-in over the whole clip (0.05 = 5%)"}],
+   "local": "framectl.py retime in.mp4 out.mp4 --slow 3.2:0.3:0.6 --push 0.05",
+   "higgsfield": "speed ramps in the editor's own timeline; push-in is closer to a camera move baked into the prompt"
+  },
+  {
+   "id": "surge",
+   "status": "approved",
+   "name": "Kick surge",
+   "what": "flat, syncless energy — nothing marks the beat, so the cut feels edited to nothing in particular",
+   "knobs": [{"name": "--beat", "what": "repeatable: a beat time in seconds"}, {"name": "--width", "what": "how wide the swell is, seconds", "default": "0.14"}, {"name": "--depth", "what": "how much scale it adds at the peak", "default": "0.05"}],
+   "local": "framectl.py surge in.mp4 out.mp4 --beat 1.4 --beat 2.6",
+   "higgsfield": "no direct equivalent — bake a small camera push into the generation prompt, or run this after"
+  },
+  {
+   "id": "blend",
+   "status": "approved",
+   "name": "Outfit blend — the look swap",
+   "what": "a hard cut between two takes of the same motion reads as a glitch, not a transformation",
+   "knobs": [{"name": "--at", "what": "seconds — the centre of the swap"}, {"name": "--width", "what": "seconds the crossfade spans", "default": "0.4"}],
+   "local": "framectl.py blend a.mp4 b.mp4 out.mp4 --at 1.5 --width 0.4",
+   "higgsfield": "Genjutsu motion transfer makes the second take (same motion, new look); this dissolves the two together"
+  },
+  {
+   "id": "spin",
+   "status": "approved",
+   "name": "360° spin — radial + motion blur",
+   "what": "a whip-pan or full turn shot at one shutter speed looks like a slideshow, not a spin",
+   "knobs": [{"name": "--lock", "what": "seconds — when the turn begins"}, {"name": "--dur", "what": "seconds — how long the full turn takes"}, {"name": "--bounce-amp", "what": "how hard it settles on landing", "default": "0.09"}, {"name": "--bounce-freq", "what": "how fast the settle oscillates", "default": "26"}],
+   "local": "framectl.py spin in.mp4 out.mp4 --lock 1.4 --dur 0.9",
+   "higgsfield": "motion presets give the turn; they don't add the blur — run this after"
+  },
+  {
+   "id": "flick",
+   "status": "approved",
+   "name": "Eased flick-scroll",
+   "what": "a scroll timed by the clock looks robotic — a real flick eases by how far the thumb actually moved",
+   "knobs": [{"name": "--from / --to", "what": "seconds — the source span to re-time"}, {"name": "--hold", "what": "seconds held still before the flick starts", "default": "0.15"}],
+   "local": "framectl.py flick in.mp4 out.mp4 --from 4.0 --to 6.0 --hold 0.15",
+   "higgsfield": "no equivalent — a screen-recording move, always local"
+  },
+  {
+   "id": "pushinto",
+   "status": "approved",
+   "name": "Pull-back into the screen, in reverse",
+   "what": "a push into a frame-within-a-frame — a phone, a monitor — that doesn't fill the frame exactly, or land where the next shot begins",
+   "knobs": [{"name": "--corners", "what": "tl,tr,br,bl of the rectangle to push into, in pixels"}, {"name": "--land", "what": "optional — a frame to land on, for a seamless join"}],
+   "local": "framectl.py pushinto in.mp4 out.mp4 --corners 300,500,780,500,780,1100,300,1100 --land next-first-frame.png",
+   "higgsfield": "a real 3D camera move is the production route; this is the 2D, locked-off version"
+  },
+  {
+   "id": "loopclose",
+   "status": "approved",
+   "name": "Seamless loop",
+   "what": "a loop that visibly jumps at the repeat instead of disappearing into it — “the last frame hands back into the first”",
+   "knobs": [{"name": "--k", "what": "frames morphed at the wrap point", "default": "8"}],
+   "local": "framectl.py loopcheck in.mp4   # measure it first\nframectl.py loopclose in.mp4 out.mp4 --k 8",
+   "higgsfield": "no equivalent — runs on the finished render, after everything else"
+  }
+ ]
+}

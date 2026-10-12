@@ -37,7 +37,7 @@ Reuses rather than re-implements (workspace convention — CC-3):
   - `components/apify/reddit.py` — the Reddit door: its actor,
     its flags, its cap, its 403 handling. Driven through its own CLI
     contract (`main()` + `sys.argv`).
-  - `swipe-organic/apify.py` — the shared Apify layer (token,
+  - `components/apify/apify.py` — the shared Apify layer (token,
     spare-account fallback) and its per-platform comment actors.
 
 Machine-agnostic (components rule 8): no credential read at import time,
@@ -68,7 +68,7 @@ def _default_workspace():
     for d in HERE.parents:
         if (d / "components").is_dir() and (d / "brands").is_dir():
             return d
-    return Path.home() / "Projects" / "ai-workspace"
+    return Path.home() / "Projects" / "workspace"
 
 
 WORKSPACE = _default_workspace()
@@ -83,24 +83,13 @@ def configure(workspace=None):
 
 
 def _reddit_tool():
-    c = WORKSPACE / "components" / "apify" / "reddit.py"
-    if c.is_file():
-        return c
-    return WORKSPACE / "lab" / "damon" / "control-room" / "tools" / "reddit.py"
+    return WORKSPACE / "components" / "apify" / "reddit.py"
 
 
 def _swipe_apify():
-    """The Apify layer — a component since 2026-09-22.
-
-    It used to live in one person's lab folder, which made this component
-    depend on that folder and shipped a path that does not exist in the
-    public repo. The old location still re-exports, so it stays as a
-    fallback for a workspace that has not moved yet.
-    """
-    c = WORKSPACE / "components" / "apify" / "apify.py"
-    if c.is_file():
-        return c
-    return WORKSPACE / "lab" / "damon" / "swipe-organic" / "apify.py"
+    """The Apify layer, `components/apify/apify.py` — a component since
+    2026-09-22."""
+    return WORKSPACE / "components" / "apify" / "apify.py"
 
 
 def _doctrine_questions_path():
@@ -111,7 +100,7 @@ def _cache_root():
     # Run records never live inside a component (CLAUDE.md §1,
     # runs/README.md): the repo-root `runs/` tree, not this folder, even
     # though this engine is what writes into it.
-    return WORKSPACE / "runs" / "research-cache"
+    return WORKSPACE / "runs" / "research-cache" / "_system"
 
 
 def _deep_runs_root():
@@ -194,7 +183,7 @@ def reddit_door():
 
 
 def apify_layer():
-    """`swipe-organic/apify.py`, loaded once — the shared token +
+    """`components/apify/apify.py`, loaded once — the shared token +
     spare-account layer and its per-platform comment actors."""
     global _apify_mod
     if _apify_mod is None:
@@ -320,7 +309,7 @@ def sub_file(brand, avatar, sub, root=None):
 
 
 def sub_home(brand, avatar, sub, root=None):
-    """ONE home per sub-avatar (Damon, 2026-09-18): the folder beside its
+    """ONE home per sub-avatar (the owner, 2026-09-18): the folder beside its
     card, named exactly like the card — `sub-avatars/<card stem>/` — holding
     `language/` (its clean rows, read by every chain through the language
     layer) and `research/<date>/` (the readable report). Raw pulls never
@@ -337,7 +326,7 @@ def profile_file(brand, avatar, root=None):
 
 # ---------------------------------------------------------------- confirmed vs. seeded
 
-# THE LOCK IS THE LINE, NOT THE HEADING. Damon ruled it on 2026-09-18:
+# THE LOCK IS THE LINE, NOT THE HEADING. the owner ruled it on 2026-09-18:
 # "he should never have to write down rooms, the system finds where the avatar talks on its own".
 # A `### rooms` block is treated as a PERSON'S ruling only when it
 # carries a `confirmed by: <name>` line; everything else — an agent's seed, a
@@ -447,7 +436,7 @@ def _words_from(texts, topics=None):
 
 # ---------------------------------------------------------------- demographic fit
 
-# THE RULING (Damon, 2026-09-18): room discovery for a sun-damage sub-avatar
+# THE RULING (the owner, 2026-09-18): room discovery for a sun-damage sub-avatar
 # came back with r/Blackskincare, r/skincare_ph and r/indianbeautyyappers, and
 # that brand's customers are none of those people. **Research has to be
 # reconciled against the avatar's own demographics or it is irrelevant for that
@@ -504,7 +493,8 @@ def _marker_hits(text, marker):
     """Does this text carry this marker? A marker of 3 characters or fewer must
     EQUAL a whole segment (`ph` finds `skincare_ph`, never `phimosis`); a longer
     one must START a segment or a run of them (`black` finds `blackskincare`,
-    and `men` never fires inside `women`)."""
+    and `men` never fires inside `women`) — or, at 5+ characters, END one
+    (`india` finds `skinsolutionsindia`)."""
     segs = _segments(text)
     joins = ["".join(segs[i:]) for i in range(len(segs))]
     for word in marker.get("match") or []:
@@ -513,6 +503,10 @@ def _marker_hits(text, marker):
             if w in segs:
                 return w
         elif any(j.startswith(w) for j in joins):
+            return w
+        elif len(w) >= 5 and any(seg.endswith(w) for seg in segs):
+            # a run-together name can END on the marker: r/SkinSolutionsindia
+            # (2026-10-01 — 80 rows from it reached a 55-70 US avatar's bank)
             return w
     return None
 
@@ -799,7 +793,7 @@ def _find_rooms_detail(brand, avatar, sub, cap=None, root=None, use_cache=True,
 
 def find_rooms(brand, avatar, sub, cap=40, **kw):
     """ONE discovery search in the avatar's own desire words, unrestricted,
-    sorted `top` over the last `year`, capped small (~40 items ~ $0.16) —
+    sorted `top` over the last `year`, capped small (~40 items ~ $__) —
     then the returned posts tallied by room, weighted by score, top 5 kept.
 
     -> [{"room", "posts", "score", "sample_title", "sample_url"}], loudest
@@ -813,7 +807,7 @@ def write_rooms_block(path, found, when=None, dropped=None):
     earlier gatherer/agent-seeded block and leaving every other byte of the
     file exactly as it was. A block a person confirmed is never touched.
 
-    ONLY THE KEPT ROOMS ARE LISTED (Damon, 2026-09-18). Rooms dropped for a
+    ONLY THE KEPT ROOMS ARE LISTED (the owner, 2026-09-18). Rooms dropped for a
     demographic mismatch get one line naming them, so the file says out loud
     that discovery found them and the check threw them out — a dropped room
     never sits in the block looking like a room to pull from.
@@ -849,7 +843,7 @@ def resolve_rooms(brand, avatar, sub=None, topics=None, root=None, discover=True
 
     A `### rooms` block a PERSON confirmed wins outright. Otherwise the
     gatherer goes and finds the rooms itself, writes them back into the
-    avatar's own file, and uses them — Damon's 2026-09-18 ruling: nobody
+    avatar's own file, and uses them — the owner's 2026-09-18 ruling: nobody
     should have to write down where an avatar talks. Discovery that comes
     back empty (no key, a 403) falls back to whatever the seeded block
     already said, so this is never worse than the old behaviour."""
@@ -1396,7 +1390,7 @@ def build_bank_rows(brand, avatar, sub, posts_by_ref, comments_by_ref, demo=None
     permalink never enters — `posts_by_ref`/`comments_by_ref` are keyed by
     ref, so an empty key is the drop signal, checked again here.
 
-    AND (Damon, 2026-09-18) every row carries the demographic verdict of the
+    AND (the owner, 2026-09-18) every row carries the demographic verdict of the
     room it came from, in a `fit` field; a row from a room the check says `no`
     to is NEVER filed. `dropped_out`, when a list is handed in, collects those
     rows so a run record can show what was thrown away and why."""
@@ -1452,7 +1446,7 @@ def _write_deep_run_record(out_root, brand, avatar, sub, entries, spend, plan, i
             json.dumps({"brand": brand, "avatar": avatar, "sub": sub,
                         "date": date.today().isoformat(),
                         "why": "the room these rows came from does not match this avatar's "
-                               "demographics (Damon, 2026-09-18) — never filed into the bank",
+                               "demographics (the owner, 2026-09-18) — never filed into the bank",
                         "demographics": demo or {}, "rows": dropped_rows}, indent=1))
     L_ = [f"# Deep research — {brand} / {avatar} / {sub}", "", METHOD_HEADER, "",
          "**demographics** (what every room was reconciled against): "
@@ -1508,7 +1502,7 @@ def deep_for(brand, avatar, sub, cap, dry_run=False):
     text = f.read_text()
     state, _m = rooms_block_state(text)
     demo = demographics(brand, avatar, sub, sub_path=f)
-    # DISCOVERY FIRST unless a person has confirmed the block (Damon, 2026-09-18).
+    # DISCOVERY FIRST unless a person has confirmed the block (the owner, 2026-09-18).
     # A dry run discovers nothing — it spends nothing, by contract — and says
     # instead what the real run would go and look for.
     # THE ELEMENTS GATE, before a cent is spent (rollout 2026-09-20): every
@@ -1600,6 +1594,17 @@ def deep_for(brand, avatar, sub, cap, dry_run=False):
                     out=str(out_root), rooms=rooms, discovery=discovery,
                     rows_dropped=len(dropped_rows), demographics=demo,
                     held="delivery", problems=held)
+
+    # Every row the gatherer writes carries the proposal's fields (lane by
+    # language, awareness, sophistication — tools/language-layer/docs/STANDARD.md,
+    # 2026-09-28). Optional: with no model or no doctrine the rows go out as before.
+    try:
+        from . import annotate as _A
+        oc = _config().get("ownvoice", {})
+        entries = _A.enrich_deep(entries, brand, avatar, sub, brand, oc.get("model", "claude-sonnet-5"),
+                                 oc.get("batch", 30))
+    except Exception as e:  # never fail a pull over the enrichment
+        print(f"  annotate skipped: {type(e).__name__}: {e}")
 
     # The avatar's language tree is the only place the language layer reads
     # (`<avatar>/language/**/*.json`); a sub-avatar is a `sub` field on each

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """CLI entry point for the language engine — see language_layer/engine.py.
 
-    python3 components/language-layer/query_language.py --brand <b> --avatars
-    python3 components/language-layer/query_language.py --brand <b> --topic-list
-    python3 components/language-layer/query_language.py --brand <b> \
+    python3 tools/language-layer/query_language.py --brand <b> --avatars
+    python3 tools/language-layer/query_language.py --brand <b> --topic-list
+    python3 tools/language-layer/query_language.py --brand <b> \
         --stage hooks --profile <chain-profile>.json
 
 A stage map is a per-chain definition, so this entry point ships none: without

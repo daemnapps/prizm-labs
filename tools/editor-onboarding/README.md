@@ -33,7 +33,7 @@ the default menu.
 
 The **tools** live here, in the public repo. The **briefs** — runs, packs, brand
 material — never do: they live in the private workspace (`AI_WORKSPACE`,
-default `~/Projects/ai-workspace`) and on Google Drive, which is where editors
+default: your workspace folder) and on Google Drive, which is where editors
 read them. Nothing in this folder reads a brief from the repo.
 
 ## Keeping Drive and the tools in step

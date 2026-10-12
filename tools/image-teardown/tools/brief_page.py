@@ -5,7 +5,7 @@
     brief_page.py --all               every brief with a run behind it
     brief_page.py --all --index       …and the contact sheet over them
 
-Damon, 2026-09-13: *"the brief output: what I want is a clean HTML page that
+the owner, 2026-09-13: *"the brief output: what I want is a clean HTML page that
 has all of the details of the brief… I can see the initial swipes and the spec
 of the injection."* This is the review surface — he reads it, marks it, and
 what he approves is what the designer builds from. It is deliberately NOT a
@@ -134,13 +134,13 @@ def decisions(brief_md):
     """What the brief handed back to a person, and who owns each one.
 
     Stage 6 ends in a numbered list. Only some briefs mark each item
-    `**Whose call:** Damon`; the rest say it in the sentence — "the owner
+    `**Whose call:** the owner`; the rest say it in the sentence — "the owner
     decides", "the compositor must", "a specific roster man must be selected".
     Reading only the marked form reported three of four briefs as having
     nothing outstanding when between two and six things were, which is the
     worst way for this page to be wrong.
     """
-    OWNERS = ((r"\bdamon\b|founder|\bowner\b", "Damon"),
+    OWNERS = ((r"\bdamon\b|founder|\bowner\b", "the owner"),
               (r"compositor|production decision", "compositor"),
               (r"casting|roster man", "casting"),
               (r"customer research|research pull", "research"))
@@ -332,7 +332,7 @@ LINK = ""          # "" on disk (p005.html), "/b/" under the server
 def brands(reg):
     """One card per brand. Briefs never appear in a mixed list.
 
-    Damon, 2026-09-14: *"This would be a different brief for a different
+    the owner, 2026-09-14: *"This would be a different brief for a different
     brand. They should not live together. We already established this."* He
     is right — everything else is keyed by brand (runs, drafts, baselines,
     Drive) and this page was the one place two brands were shown as one
@@ -369,7 +369,7 @@ def brands(reg):
             'family=Archivo:wght@400;600;800&family=Newsreader:opsz,wght@6..72,400&'
             'family=JetBrains+Mono:wght@400;600&display=swap">'
             f'<style>{CSS}</style><div class="wrap"><header>'
-            '<p class="id">the repo &middot; the static ad machine</p><h1>Briefs</h1>'
+            '<p class="id">the team notes &middot; the static ad machine</p><h1>Briefs</h1>'
             '<p class="lede">One swipe in, one brief out. Every brand keeps its own '
             'briefs, its own runs, its own cast and its own folder on Drive &mdash; '
             'nothing is shared but the machine.</p></header>'

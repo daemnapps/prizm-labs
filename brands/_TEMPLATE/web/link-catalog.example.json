@@ -1,0 +1,15 @@
+{
+ "_what": "The shape of the link catalog components/naming/page_pick.py reads ($CATALOG_JSON, default brands/_catalog/catalog.json — yours, never shipped). One record per product, variant, bundle, offer, placement and link; a brief's landing page is a `link` record that is `live` and answers 200.",
+ "brands": {
+  "<brand>": {
+   "records": {
+    "product_<brand>_<product>": {"type": "product", "old_names": [], "store_refs": [{"handle": "<store handle>"}]},
+    "variant_<brand>_<product>_default": {"type": "variant", "product": "product_<brand>_<product>"},
+    "bundle_<brand>_<set>": {"type": "bundle", "label": "<The Set>", "components": [{"item": "variant_<brand>_<product>_default"}]},
+    "offer_<brand>_<offer>": {"type": "offer", "label": "<buy 2, get 1 free>", "item": "product_<brand>_<product>"},
+    "link_<brand>_<funnel>_<page>": {"type": "link", "status": "live", "label": "<Landing · N live ads>", "url": "https://<your-funnel-host>/<path>/", "offers": ["offer_<brand>_<offer>"]},
+    "placement_<brand>_<page>_main": {"type": "placement", "url": "https://<your-store>/pages/<page>", "offers": []}
+   }
+  }
+ }
+}

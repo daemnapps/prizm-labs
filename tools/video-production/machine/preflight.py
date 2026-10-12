@@ -150,14 +150,26 @@ def load_bank_names(bank_path: Path) -> list[str] | None:
 
 
 def claims_in(batch: list[dict], reg: dict) -> dict[str, list[str]]:
-    """line id → item ids that claim it (motion/revoice items only)."""
+    """line id → item ids that claim it (talking/motion/revoice items only).
+    A talking clip says its line, so it covers it (SI-156 (video pack gates))."""
     out: dict[str, list[str]] = {}
     for it in batch:
-        if platform.item_kind(it, reg) not in ("motion", "revoice"):
+        if platform.item_kind(it, reg) not in ("talking", "motion", "revoice"):
             continue
         for line in it.get("lines") or []:
             out.setdefault(str(line), []).append(str(it.get("id", "?")))
     return out
+
+
+def newest_remake(run: Path, iid: str) -> Path | None:
+    """The newest remake order `record` wrote for this item —
+    `<run>/remakes/<iid>-r<N>.json`, highest N (remake.py's own naming)."""
+    tries = []
+    for p in (run / "remakes").glob(f"{iid}-r*.json"):
+        n = p.stem[len(iid) + 2:]
+        if n.isdigit():
+            tries.append((int(n), p))
+    return max(tries)[1] if tries else None
 
 
 def other_batches(run: Path, skip_name: str | None = None) -> list[dict]:
@@ -256,6 +268,13 @@ def check(batch_path: Path, run: Path, provider_name: str | None, bank_path: Pat
             if not (refs["start"] or refs["elements"] or refs["frame"]):
                 fail(1, iid, f"characters {chars} with no start_image and no element",
                      "animate a verified frame (start_image) or reference the cast element in the prompt")
+            # no hand-offs for people (the owner, 2026-10-03, providers.json ruling_2026_10_03_no_handoffs):
+            # a clip with a person on screen starts from the approved picture, never a clip's last frame
+            handed = [str(v) for v in [it.get("start_frame")] + list(refs["start"]) if str(v or "").endswith("-LAST")]
+            if handed:
+                fail(1, iid, f"characters {chars} on a clip that starts from {handed[0]} — a made frame",
+                     "start the clip from the section's approved picture; a person's clip never starts "
+                     "from a clip's last frame")
 
         # rule 2 — a product arrives as its packshot, never as words
         if prods and kind in ("still", "restyle", "edit"):
@@ -312,7 +331,7 @@ def check(batch_path: Path, run: Path, provider_name: str | None, bank_path: Pat
                 warns.append(f"[rule 10] {iid}: no motion/director verdict yet — required before pack")
 
         # rule 11 — the no-cut line, on every motion/talking prompt, without
-        # exception (the course write-up, Damon 09-14, §7: a model that
+        # exception (the course write-up, the owner 09-14, §7: a model that
         # invents a cut mid-sentence is a dead generation, and it is one line)
         if kind in ("motion", "talking"):
             p_lower = (params.get("prompt") or "").lower()
@@ -335,7 +354,7 @@ def check(batch_path: Path, run: Path, provider_name: str | None, bank_path: Pat
             fail(12, iid, bad,
                  "fill it from the scene's frames — machine/MODEL-INPUTS.md is the contract")
 
-    # rule 12, the other half — THE BRIEF IS THE PROMPT (Damon, 2026-09-19).
+    # rule 12, the other half — THE BRIEF IS THE PROMPT (the owner, 2026-09-19).
     # A current brief's truth is the fenced json block at the end of it, and
     # the machine reads that and never the prose. So the block is checked
     # against `brief_schema` here, key by key: a missing key, a string where
@@ -408,9 +427,11 @@ def coverage(run: Path) -> tuple[list[str], list[str], list[str], list[str]]:
 
     # every clip that carries a line — talking, revoice, or a motion item
     # that carries `lines` — must be transcribed and checked against what it
-    # was supposed to say (Damon, 2026-09-18: a clip lip-synced perfectly to
+    # was supposed to say (the owner, 2026-09-18: a clip lip-synced perfectly to
     # the WRONG words). No parity verdict on file is as undeliverable as a
-    # FLAGged one; neither ships quietly.
+    # FLAGged one; neither ships quietly. Only the passing word ships
+    # (SI-156 (video pack gates)): a CUT_OFF clip is made again, never
+    # shipped, and a word this gate does not know is not a pass.
     for it in items:
         kind = platform.item_kind(it, reg)
         carries_lines = bool(it.get("lines"))
@@ -418,11 +439,34 @@ def coverage(run: Path) -> tuple[list[str], list[str], list[str], list[str]]:
             continue
         iid = str(it.get("id", "?"))
         parity = (verdicts.get(iid) or {}).get("parity")
-        if isinstance(parity, dict) and parity.get("verdict") == "FLAG":
+        if not isinstance(parity, dict):
+            not_shippable.append(f"not shippable: no parity verdict — run lineparity ({iid})")
+            continue
+        word = parity.get("verdict")
+        if word == "PASS":
+            continue
+        if word == "FLAG":
             not_shippable.append(
                 f"not shippable: says other words (heard: {parity.get('heard', '')!r}) ({iid})")
-        elif not isinstance(parity, dict):
-            not_shippable.append(f"not shippable: no parity verdict — run lineparity ({iid})")
+        elif word == "CUT_OFF":
+            order = newest_remake(run, iid)
+            todo = f"remake ({order})" if order else "run the remake-clip skill"
+            not_shippable.append(f"not shippable: line cut off — {todo} ({iid})")
+        else:
+            not_shippable.append(f"not shippable: parity verdict {word} ({iid})")
+
+    # THE SUBJECT ZONE (the owner, 2026-09-23; safezone.py): a frame whose face,
+    # product or hands sit outside the centred 4:5 zone after its one fix —
+    # or that was never measured — does not ship.
+    for iid, v in sorted(verdicts.items()):
+        z = (v or {}).get("subject_zone") if isinstance(v, dict) else None
+        if not isinstance(z, dict):
+            continue
+        if z.get("verdict") == "FAIL":
+            not_shippable.append(f"not shippable: {', '.join(z.get('outside') or ['subject'])} outside "
+                                 f"the 4:5 zone after one fix — remake the frame ({iid})")
+        elif z.get("verdict") == "UNCHECKED":
+            not_shippable.append(f"not shippable: subject zone not checked — {z.get('why', '')} ({iid})")
 
     return uncovered, dupes, not_shippable, concept_weak
 
@@ -464,13 +508,13 @@ AMBIGUOUS = ("nsfw", "ip_detected")
 
 
 def ledger(run: Path, model: str, job: str, seconds: float, status: str, tier=None,
-           resolution=None, brand=None, shot=None, note=None) -> dict:
+           resolution=None, brand=None, shot=None, note=None, usage=None) -> dict:
     reg = platform.registry()
     m = reg["models"].get(model)
     if not m:
         raise SystemExit(f"model {model!r} is not in providers.json — record the true slug, then add it there")
     run_json = run / "run.json"
-    seed = {"machine": "video-machine", "brand": brand or "", "label": run.name, "opened": now()}
+    seed = {"machine": "video-production", "brand": brand or "", "label": run.name, "opened": now()}
     existing = read_json(run_json, {}) or {}
     if not existing:
         write_json(run_json, seed)
@@ -482,6 +526,14 @@ def ledger(run: Path, model: str, job: str, seconds: float, status: str, tier=No
     row = {"model": model, "job": job, "seconds": seconds, "tier": tier or (est["rate"] or {}).get("tier"),
            "resolution": resolution or (est["rate"] or {}).get("resolution"), "status": status,
            "credits": est["credits"], "usd": est["usd"], "at": now()}
+    if usage and row["usd"] is None:
+        # token-priced doors (the image model): the call's own token counts × the
+        # door's per-million rates, so every picture's real cost is on the ledger
+        r = next((x for x in m.get("rates") or [] if x.get("usd_per_m_out")), None)
+        if r:
+            i, o = usage.get("input_tokens") or 0, usage.get("output_tokens") or 0
+            row["usd"] = round(i / 1e6 * r.get("usd_per_m_in", 0) + o / 1e6 * r["usd_per_m_out"], 4)
+            row["tokens"] = {"in": i, "out": o}
     if shot:
         row["shot"] = shot
     if note:

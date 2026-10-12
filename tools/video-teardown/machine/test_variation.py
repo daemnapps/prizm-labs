@@ -19,8 +19,8 @@ CARD V0: so this brush turns you into a new person? 😂
 LINE V3: The heck is he rubbing on his face?
 CARD V3: he said it's a brush 😂
 LANGUAGE USED:
-- av-pro-0001 | rubbing on his face
-- av-pro-0002 | new person
+- fuk-pro-0001 | rubbing on his face
+- fuk-pro-0002 | new person
 """
 
 
@@ -75,7 +75,7 @@ class Control(unittest.TestCase):
 class MarkUsed(unittest.TestCase):
     def test_cited_block(self):
         import mark_used as M
-        self.assertEqual(M.cited(HOOKS), [("av-pro-0001", "rubbing on his face"), ("av-pro-0002", "new person")])
+        self.assertEqual(M.cited(HOOKS), [("fuk-pro-0001", "rubbing on his face"), ("fuk-pro-0002", "new person")])
         self.assertEqual(M.cited("x\nLANGUAGE USED: none\n"), [])
 
     def test_a_leaf_keeps_only_its_own_hooks_rows_and_matches_the_brief(self):
@@ -86,15 +86,15 @@ class MarkUsed(unittest.TestCase):
             (d / "stages" / "5-brief.md").write_text("Scene 1. He said: I stopped getting razor bumps after one week of this.")
             st = dict(hook_pick="V3", stages=dict(stage4b=dict(status="done", out="stages/4b-hooks.md"),
                                                    stage5=dict(status="done", out="stages/5-brief.md")))
-            rows = {"av-pro-0001": dict(id="av-pro-0001", text="rubbing on his face", avatar="a"),
-                    "av-pro-0002": dict(id="av-pro-0002", text="new person", avatar="a"),
-                    "av-cus-0009": dict(id="av-cus-0009", text="I stopped getting razor bumps", avatar="a"),
-                    "av-cus-0010": dict(id="av-cus-0010", text="bumps", avatar="a")}
+            rows = {"fuk-pro-0001": dict(id="fuk-pro-0001", text="rubbing on his face", avatar="a"),
+                    "fuk-pro-0002": dict(id="fuk-pro-0002", text="new person", avatar="a"),
+                    "fuk-cus-0009": dict(id="fuk-cus-0009", text="I stopped getting razor bumps", avatar="a"),
+                    "fuk-cus-0010": dict(id="fuk-cus-0010", text="bumps", avatar="a")}
             used = M.collect(d, st, rows)
-            self.assertIn("av-pro-0001", used)           # V3's words
-            self.assertNotIn("av-pro-0002", used)        # V0's words — a sibling leaf's
-            self.assertEqual(used["av-cus-0009"]["how"], "matched")
-            self.assertNotIn("av-cus-0010", used)        # too short to match uncited
+            self.assertIn("fuk-pro-0001", used)           # V3's words
+            self.assertNotIn("fuk-pro-0002", used)        # V0's words — a sibling leaf's
+            self.assertEqual(used["fuk-cus-0009"]["how"], "matched")
+            self.assertNotIn("fuk-cus-0010", used)        # too short to match uncited
 
 
 class Proven(unittest.TestCase):
@@ -127,7 +127,7 @@ class Map(unittest.TestCase):
 
     def test_labels_never_cut_to_the_same_name(self):
         import variation as V
-        src = "brand-7167399325910289706"
+        src = "brand-b-7167399325910289706"
         names = {V.base_for(src)} | {V.base_for(src, l) for l in V.LEVELS} | \
                 {V.base_for(src, l, n) for l in V.LEVELS for n in range(6)}
         self.assertEqual(len(names), 1 + 5 + 30)

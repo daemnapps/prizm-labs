@@ -1,0 +1,341 @@
+{
+ "_readme": "THE CREATIVE QC LOOP, every tool, every stage (the owner, 2026-10-02: 'i want this kind of creative QC process installed for each of my production tools … this should exist for all stages in the creation process'). Each entry says what the stage makes, what its output must agree with, its hard bars, and where a problem is fixed. quality_checks/review.py reads this; the reviewer prompt is prompts/creative-review-v1-damon.md. No brand is named here — every brand runs the same bars. A stage key may be a prefix (stage4 covers stage4b).",
+ "tools": {
+  "video-teardown": {
+   "default": {
+    "what": "a written record or plan of a swiped ad",
+    "compare_against": "the swipe (its transcript, frame map and teardown record) and the stage before",
+    "hard_bars": [
+     "every claim about the swipe is in the swipe — quoted, timed, nothing invented",
+     "nothing the swipe does is dropped or changed without a numbered approval"
+    ],
+    "fix_at": "this stage's prompt"
+   },
+   "stages": {
+    "stage1": {
+     "what": "the teardown record: every line, person, place, shot and sound of the swipe",
+     "compare_against": "the swipe's transcript and frame map",
+     "hard_bars": [
+      "every spoken line is there verbatim, in the right mouth",
+      "every person, place and shot in the swipe is named; nothing is added"
+     ],
+     "fix_at": "stage1 (teardown prompt)"
+    },
+    "stage1b": {
+     "what": "the audience read",
+     "compare_against": "the teardown record and the brand's avatar roster",
+     "hard_bars": [
+      "the avatar named is on the brand's roster",
+      "every reason quotes the swipe or the bank"
+     ],
+     "fix_at": "stage1b"
+    },
+    "stage1c": {
+     "what": "the doctrine read: framework, awareness, sections",
+     "compare_against": "the teardown record and the marketing doctrine slices",
+     "hard_bars": [
+      "every label is a doctrine id, spelled exactly",
+      "every section label matches what that part of the swipe does"
+     ],
+     "fix_at": "stage1c"
+    },
+    "stage2": {
+     "what": "the spec: the swipe's reusable structure",
+     "compare_against": "the teardown record",
+     "hard_bars": [
+      "every load-bearing element of the swipe is in the spec",
+      "nothing in the spec is absent from the swipe"
+     ],
+     "fix_at": "stage2"
+    },
+    "stage3": {
+     "what": "the rewrite: our version of the swipe's script",
+     "compare_against": "the teardown record, the spec, the brand's language bank and product files",
+     "hard_bars": [
+      "every place, role, speaker and beat of the swipe is kept (structure lock)",
+      "every product fact, price and claim is in the product files",
+      "the words are the customer's words from the bank"
+     ],
+     "fix_at": "stage3"
+    },
+    "stage4b": {
+     "what": "the hooks, as fills of the swipe's hook format",
+     "compare_against": "the swipe's opening and the brand's language bank",
+     "hard_bars": [
+      "every fixed word of the swipe's hook is kept",
+      "every blank is filled from the bank, never invented"
+     ],
+     "fix_at": "stage4b"
+    },
+    "stage4": {
+     "what": "a writing stage of our script (placement, expansion, close, spice)",
+     "compare_against": "the stage before, the spec, the offer and the language bank",
+     "hard_bars": [
+      "the swipe's structure is kept",
+      "every offer term and price matches the brand's offer bank",
+      "spoken lines sound like real talk, nothing a copywriter polished"
+     ],
+     "fix_at": "this stage"
+    },
+    "stage5": {
+     "what": "the brief: every scene, line, person, place, prop and on-screen word",
+     "compare_against": "the swipe's frame map and teardown record, the written script, and the locked elements",
+     "hard_bars": [
+      "every swipe shot is carried, in order, with its camera, body geometry and on-screen words",
+      "every person is the swipe's person (gender, role) and matches their element",
+      "every line is the approved script, word for word"
+     ],
+     "fix_at": "stage5 (the brief)"
+    }
+   }
+  },
+  "video-production": {
+   "default": {
+    "what": "a production element",
+    "compare_against": "the locked brief and the locked elements",
+    "hard_bars": [
+     "it matches the brief and the elements; nothing invented"
+    ],
+    "fix_at": "this station"
+   },
+   "stages": {
+    "elements": {
+     "what": "the people, looks, voices, places and props a brief needs",
+     "compare_against": "the brief's words about each, and the swipe frame each recreates",
+     "hard_bars": [
+      "same gender, age and role as the swipe person",
+      "every word of the brief about them is true of the element",
+      "a place is the same kind of place as the swipe's, empty of people"
+     ],
+     "fix_at": "Elements 3.2 (make)"
+    },
+    "voices": {
+     "what": "one recording per spoken line",
+     "compare_against": "the line in the brief and the speaker's voice element",
+     "hard_bars": [
+      "it says the line, every word, and finishes",
+      "it is the speaker's voice (gender, accent)"
+     ],
+     "fix_at": "voices"
+    },
+    "storyboard": {
+     "what": "the sections, their pictures and clips",
+     "compare_against": "the brief and the swipe's frame map",
+     "hard_bars": [
+      "every scene is in exactly one section",
+      "every section copies the swipe shots the brief names"
+     ],
+     "fix_at": "storyboard"
+    },
+    "pictures": {
+     "what": "the start picture of each section",
+     "compare_against": "the swipe shot it copies, and the locked people, outfits and product",
+     "hard_bars": [
+      "every person is exactly their reference (face, hair, age) — a different-looking person is a BLOCKER",
+      "camera position, height, angle, distance, framing, posture, hands and light match the swipe shot",
+      "the outfit is the section's look; the product label is the real one",
+      "no added words, captions, logos or people"
+     ],
+     "fix_at": "pictures",
+     "checklist": [
+      {
+       "key": "framing",
+       "ask": "Framing like the swipe shot: camera position, height, angle, distance, crop, posture"
+      },
+      {
+       "key": "moment",
+       "ask": "The first instant of the scene as the brief and the swipe have it: who touches what and where, gaze, expression; nothing the scene does later"
+      },
+      {
+       "key": "people",
+       "ask": "Each person is exactly ours against their reference: face, hair, age, gender — name anyone who is not"
+      },
+      {
+       "key": "skin_marks",
+       "ask": "Their skin marks (age spots, freckles) are there, on the right side, as soft as the reference — not missing, not blotchy"
+      },
+      {
+       "key": "hands_bodies",
+       "ask": "Hands and bodies are right: five fingers, no extra limbs; each arm enters from the edge the swipe shot has"
+      },
+      {
+       "key": "light_shadow",
+       "ask": "Light and shadow match the swipe shot: where the light comes from, how hard or soft, its colour, and the shading and shadows on faces, necks, hands and clothes"
+      },
+      {
+       "key": "fits_the_look",
+       "ask": "Fits the swipe's look and format: a real-footage swipe reads as real phone footage (grain, softness, not posed, not pasted in); an animated or stylised format sits right inside that style. Judged against the swipe, never on its own"
+      },
+      {
+       "key": "outfit",
+       "ask": "Each person wears the section's look as written"
+      },
+      {
+       "key": "place",
+       "ask": "Our place for this section, the same kind of place as the swipe's"
+      },
+      {
+       "key": "product_props",
+       "ask": "The product is the real one: label spelled exactly, the packshot's shape and proportions, and its real SIZE against the hand and face — the same size as in the ad's other pictures; props as banked (n/a when absent)"
+      },
+      {
+       "key": "continuity",
+       "ask": "Same nails, jewellery, hair and outfit as this person's other pictures in the ad"
+      },
+      {
+       "key": "nothing_added",
+       "ask": "No added words, captions, logos (including on screens), extra people or filming gear"
+      },
+      {
+       "key": "frame_zone",
+       "ask": "Vertical 9:16; people and product inside the middle 4:5 zone"
+      },
+      {
+       "key": "cards",
+       "ask": "A card or endcard is framed like the swipe's card, nothing holding it, clear space where the words go (n/a for other pictures)"
+      }
+     ]
+    },
+    "clips": {
+     "what": "the clip of each section",
+     "compare_against": "its start picture, its voice slice and the swipe's own movement",
+     "hard_bars": [
+      "the person stays their reference from the first frame to the last",
+      "the movement is the swipe's movement",
+      "lips follow the words; the line finishes"
+     ],
+     "fix_at": "clips"
+    }
+   }
+  },
+  "video-edit": {
+   "default": {
+    "what": "the cut: timeline, captions, cards, music",
+    "compare_against": "the brief, the swipe's rhythm and the voice timings",
+    "hard_bars": [
+     "every line and card in the brief is in the cut, in order",
+     "captions are the words said, spelled right",
+     "cuts land where the swipe cuts"
+    ],
+    "fix_at": "video-edit"
+   }
+  },
+  "image-edit": {
+   "default": {
+    "what": "an edited picture",
+    "compare_against": "the picture it edits and the one change asked for",
+    "hard_bars": [
+     "only the asked change happened",
+     "people stay their reference; the product label stays the real one"
+    ],
+    "fix_at": "the edit request"
+   }
+  },
+  "image-production": {
+   "default": {
+    "what": "a generated picture",
+    "compare_against": "the request, the brand's product photos and the people's references",
+    "hard_bars": [
+     "every person is exactly their reference",
+     "the product is the real product",
+     "no invented words or claims"
+    ],
+    "fix_at": "the request"
+   }
+  },
+  "copywriter": {
+   "default": {
+    "what": "a copy stage's output",
+    "compare_against": "the source, the stage before, the offer bank and the language bank",
+    "hard_bars": [
+     "the source's structure is kept",
+     "every price, offer and product fact is in the brand's files",
+     "the words are the customer's words; nothing a source does not support"
+    ],
+    "fix_at": "this stage"
+   }
+  },
+  "email-production": {
+   "default": {
+    "what": "an email stage's output",
+    "compare_against": "the slot or brief, the offer bank, the catalogue and the partner roster",
+    "hard_bars": [
+     "every product, price and offer is current and on file",
+     "no unfilled notes, no chopped thoughts",
+     "the subject and preview match the body"
+    ],
+    "fix_at": "this stage"
+   },
+   "stages": {
+    "pictures": {
+     "what": "the email's hero and offer pictures",
+     "compare_against": "the email's copy and the brand's product photos",
+     "hard_bars": [
+      "the product is the real product",
+      "the picture shows what the copy says",
+      "no invented words in the picture"
+     ],
+     "fix_at": "pictures"
+    }
+   }
+  },
+  "ad-variations": {
+   "default": {
+    "what": "variations of a proven ad",
+    "compare_against": "the ad's teardown and the brand's Variable Index",
+    "hard_bars": [
+     "each variation changes only its named variable",
+     "every new value is on the Variable Index"
+    ],
+    "fix_at": "the plan"
+   }
+  },
+  "meta-upload": {
+   "default": {
+    "what": "the upload sheet",
+    "compare_against": "the naming bank, the brand's Meta account file, the offers and the copy",
+    "hard_bars": [
+     "every name follows the naming bank",
+     "no expired offer, no held asset",
+     "copy and asset belong together"
+    ],
+    "fix_at": "the sheet"
+   }
+  },
+  "marketing-calendar": {
+   "default": {
+    "what": "a calendar layer",
+    "compare_against": "the holidays, the brand's moments, the offer bank and the element library",
+    "hard_bars": [
+     "every date is right",
+     "every offer is on file",
+     "every concept fits its moment"
+    ],
+    "fix_at": "this layer"
+   }
+  },
+  "intake": {
+   "default": {
+    "what": "a swipe's intake record",
+    "compare_against": "the source and the element library",
+    "hard_bars": [
+     "the source, kind and route are right",
+     "every label is in the element library"
+    ],
+    "fix_at": "intake"
+   }
+  },
+  "image-teardown": {
+   "default": {
+    "what": "an image teardown stage or a draft",
+    "compare_against": "the swipe image and the brand's banks",
+    "hard_bars": [
+     "the swipe's layout and structure are kept",
+     "every word comes from the banks",
+     "people and product are ours, from references"
+    ],
+    "fix_at": "this stage"
+   }
+  }
+ }
+}

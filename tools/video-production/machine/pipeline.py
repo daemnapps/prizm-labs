@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """THE MASTER VIEW — the whole video road, in action, on one page.
 
-    python3 pipeline.py            # build pipeline.html
+    python3 pipeline.py            # build runs/video-production/_system/pipeline.html
     python3 pipeline.py --serve    # ...and serve it live on 8792
 
 Four machines, one road:
@@ -25,11 +25,16 @@ import re
 import time
 from pathlib import Path
 
-WS = Path.home() / "Projects" / "ai-workspace"
-TD = WS / "components/video-teardown/machine"
-VP = WS / ""
-SWIPE = WS / "swipe-organic/records/teardowns"
-OUT = VP / "machine/pipeline.html"
+sys.path.append(str(Path(__file__).resolve().parents[2].parent / "components" / "run-kit"))   # beside this file
+from run_kit.paths import repo  # noqa: E402  the one workspace locator (triage page 12)
+WS = repo(Path(__file__))
+sys.path.insert(0, str(WS / "components" / "brandpath"))
+import brandpath as BP                                  # noqa: E402
+import drive_index as DI                                # noqa: E402
+TD =WS / "tools/video-teardown/machine"
+VP = WS / "tools/video-production"
+SWIPE = WS / "components/swipe-organic/records/teardowns"
+OUT = WS / "runs" / "video-production" / "_system" / "pipeline.html"
 
 STAGE_NAMES = {
     "stage1": "Teardown", "stage1b": "Audience read", "stage2": "Replication spec",
@@ -45,7 +50,7 @@ def chains():
     # file. chain_config.json is only half of it — chain.py also folds in
     # extra-stages.json (audit, inject, profile) and the triage stage, so
     # reading the config alone under-reported 15 real stages as 11
-    # (caught by Damon, 2026-09-02).
+    # (caught by the owner, 2026-09-02).
     import importlib.util
     spec = importlib.util.spec_from_file_location("vt_chain", TD / "chain.py")
     mod = importlib.util.module_from_spec(spec)
@@ -67,18 +72,14 @@ def chains():
 
 def drive_brands():
     """The Drive mirror of the brand tree, if this machine has it mounted."""
-    base = Path.home() / "Library/CloudStorage"
-    if not base.is_dir():
-        return None
-    for m in sorted(base.glob("GoogleDrive-*")):
-        d = m / "Shared drives/Shared Assets/brands"
-        if d.is_dir():
-            return d
+    m = DI.mount()
+    if m and (m / "brands").is_dir():
+        return m / "brands"
     return None
 
 
 def pools():
-    """THE THREE SWIPE POOLS (Damon, 2026-09-02). Everything the road can
+    """THE THREE SWIPE POOLS (the owner, 2026-09-02). Everything the road can
     start from, and they are not the same kind of thing:
 
       WINNERS    — our own ads that already performed. The only pool that
@@ -91,13 +92,11 @@ def pools():
     # winners — our own running creative
     # actual creative only — a copy bank is notes about ads, not ads
     MEDIA = (".mp4", ".mov", ".jpg", ".jpeg", ".png", ".webp")
-    # intake/ads is the v6 name; existing-content/ads the old one, read too
-    INTAKE = ("*/intake/ads", "*/existing-content/ads")
-    ads = [p for pat in INTAKE for b in (WS / "brands").glob(pat)
+    ads = [p for b in BP.brand_paths("intake", "ads", root=WS / "brands")
            for p in b.rglob("*")
            if p.is_file() and p.suffix.lower() in MEDIA]
     try:
-        ads += [p for pat in INTAKE for b in (drive_brands() or []).glob(pat)
+        ads += [p for b in BP.brand_paths("intake", "ads", root=drive_brands())
                 for p in b.rglob("*")
                 if p.is_file() and p.suffix.lower() in MEDIA]
     except Exception:
@@ -111,7 +110,7 @@ def pools():
                         "nothing has been banked here yet"})
 
     # competitors — swipe-paid brands
-    sp = WS / "swipe-paid"
+    sp = WS / "components/swipe-paid"
     brands, creatives = 0, 0
     rm = sp / "README.md"
     if rm.is_file():
@@ -132,7 +131,7 @@ def pools():
 
     # organic — the avatar's feed
     n = 0
-    f = WS / "swipe-organic/records/avatar-feeds/damon--saves/items.json"
+    f = WS / "components/swipe-organic/records/avatar-feeds/damon--saves/items.json"
     if f.is_file():
         try:
             d = json.loads(f.read_text())
@@ -149,11 +148,24 @@ def pools():
     return out
 
 
+def _vt_workdir():
+    """video-teardown's working-folder module, loaded by file (SI-56)."""
+    m = sys.modules.get("vt_workdir")
+    if m is None:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "vt_workdir", Path(__file__).resolve().parents[3] / "tools" / "video-teardown" / "machine" / "workdir.py")
+        m = importlib.util.module_from_spec(spec)
+        sys.modules["vt_workdir"] = m
+        spec.loader.exec_module(m)
+    return m
+
+
 def live_run():
     """The run in flight right now, if there is one — so the road below is a
     LIVE view and not a diagram. Newest teardown run wins; a run whose
     run.json has not been touched in an hour is finished, not running."""
-    root = TD / "runs"
+    root = _vt_workdir().root(WS)
     if not root.is_dir():
         return None
     best = None
@@ -183,12 +195,13 @@ def live_run():
 
 
 def counts():
-    n_tear = len(list((TD / "runs").glob("*/run.json"))) if (TD / "runs").is_dir() else 0
-    n_brief = len(list((TD / "runs").glob("*/brief-final.md"))) if (TD / "runs").is_dir() else 0
+    work = _vt_workdir().root(WS)
+    n_tear = len(list(work.glob("*/run.json"))) if work.is_dir() else 0
+    n_brief = len(list(work.glob("*/brief-final.md"))) if work.is_dir() else 0
     ident = list((WS / "brands").glob("*/*/*/lora.json")) + \
             list((WS / "brands").glob("*/*/lora.json"))
-    voices = list((WS / "brands").glob("*/ai-elements/characters/*/voice.json")) + \
-             list((WS / "brands").glob("*/ai-cast/*/voice.json"))
+    voices = list((WS / "runs" / "ai-elements").glob("*/casting/*/voice.json")) + [v for b in sorted((WS / "brands").iterdir()) if b.is_dir()
+                                                                                          for v in BP.brand_path(b.name, "ai-elements/characters", root=WS / "brands").glob("*/voice.json")]
     fmts = len(list((VP / "formats").glob("*.md"))) - 1  # README
     return {"runs": n_tear, "briefs": n_brief, "identities": len(ident),
             "voices": len(voices), "formats": max(fmts, 0)}
@@ -404,8 +417,8 @@ variation quietly becomes a remake.</p>
 
 <footer>Solid outline = a written stage · dashed = machine work · gold = a human decision.
 Hover any stage for what it is for. Built from
-<span class="mono">components/video-teardown/machine/chain_config.json</span> and
-<span class="mono">chain_config.json</span>.</footer>
+<span class="mono">tools/video-teardown/machine/chain_config.json</span> and
+<span class="mono">tools/video-production/chain_config.json</span>.</footer>
 </div></body></html>"""
 
 
@@ -414,6 +427,7 @@ if __name__ == "__main__":
     ap.add_argument("--serve", action="store_true")
     ap.add_argument("--port", type=int, default=8792)
     a = ap.parse_args()
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(render())
     print(f"wrote {OUT}")
     if a.serve:

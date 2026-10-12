@@ -1,0 +1,6 @@
+{
+  "_fixture": "Shape of brands/<brand>/strategy/angles.json, one active angle.",
+  "angles": [
+    {"id": "slow-reset", "was": "slowreset", "avatar": "night-worker", "status": "active"}
+  ]
+}

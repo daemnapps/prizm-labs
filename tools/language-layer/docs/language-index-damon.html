@@ -1,0 +1,101 @@
+<title>The Language Index</title>
+<style>
+  /* Layout: one reading column. A four-step flow (in → kept → picked → written), then how a pick is decided, then who pulls and what's in the bank right now. */
+  :root { --ground:#faf8f3; --card:#ffffff; --soft:#f3efe6; --ink:#1d1a15; --muted:#6f6759;
+    --faint:#a29a8a; --line:#e5dfd2; --teal:#0d8f85; --rose:#a8506e; --bronze:#a06a28;
+    --display:"Futura","Avenir Next Condensed",system-ui,sans-serif;
+    --body:"Avenir Next","Avenir","Segoe UI",system-ui,sans-serif; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --ground:#171410; --card:#211d17; --soft:#2a251d; --ink:#ece6d9; --muted:#a39a87;
+    --faint:#7a7263; --line:#363023; --teal:#43c2b5; --rose:#d987a3; --bronze:#d09a4e; color-scheme:dark; } }
+  :root[data-theme="dark"] {
+    --ground:#171410; --card:#211d17; --soft:#2a251d; --ink:#ece6d9; --muted:#a39a87;
+    --faint:#7a7263; --line:#363023; --teal:#43c2b5; --rose:#d987a3; --bronze:#d09a4e; color-scheme:dark; }
+  * { box-sizing:border-box; }
+  body { background:var(--ground); color:var(--ink); font-family:var(--body); line-height:1.5; margin:0; padding-inline:20px; padding-block:0 90px; }
+  .wrap { max-width:980px; margin:0 auto; }
+  .eyebrow { font-family:var(--display); text-transform:uppercase; letter-spacing:.14em; font-size:12px; font-weight:600; color:var(--muted); }
+  header { padding-block:46px 6px; }
+  h1 { font-family:var(--display); font-weight:700; font-size:clamp(30px,5vw,44px); line-height:1.05; margin:8px 0; text-wrap:balance; }
+  .lede { font-size:16px; color:var(--muted); max-width:46em; margin:0; }
+  h2 { font-family:var(--display); font-weight:700; font-size:26px; margin:44px 0 12px; text-wrap:balance; }
+  a { color:var(--teal); }
+  .flow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+  @media (max-width:760px) { .flow { grid-template-columns:1fr; } }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 15px; display:grid; gap:6px; align-content:start; min-width:0; }
+  .step .k { font-family:var(--display); text-transform:uppercase; letter-spacing:.1em; font-size:11px; color:var(--bronze); }
+  .step b { font-size:16px; }
+  .step ul { margin:0; padding-left:17px; font-size:13.5px; color:var(--muted); }
+  .rules { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; }
+  .rule { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 16px; }
+  .rule b { display:block; font-size:15px; margin-bottom:3px; }
+  .rule span { color:var(--muted); font-size:14px; }
+  .statband { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 16px; }
+  .stat .n { font-family:var(--display); font-size:26px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .stat .l { color:var(--muted); font-size:12.5px; }
+  .grid-scroll { overflow-x:auto; margin-top:12px; }
+  table { width:100%; min-width:560px; border-collapse:separate; border-spacing:0; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:13.5px; }
+  th { font-family:var(--display); text-transform:uppercase; letter-spacing:.08em; font-size:10.5px; color:var(--muted); background:var(--soft); text-align:left; padding:9px 13px; border-bottom:1px solid var(--line); }
+  td { padding:8px 13px; border-bottom:1px solid var(--line); }
+  tr:last-child td { border-bottom:none; }
+  .fn { font-weight:600; }
+  .num { font-variant-numeric:tabular-nums; text-align:right; }
+  .src { color:var(--muted); font-size:12.5px; }
+  .note { background:var(--soft); border-left:4px solid var(--rose); border-radius:0 10px 10px 0; padding:13px 17px; font-size:14.5px; margin-top:14px; }
+</style>
+<div class="wrap">
+<header>
+  <div class="eyebrow">customer language &middot; live</div>
+  <h1>The Language Index</h1>
+  <p class="lede">When we write copy, it pulls real customer quotes from one engine. The engine is fed every morning and reads the brand's quote folders fresh on every pull, so copy always works from the latest words.</p>
+</header>
+
+<h2>How it works</h2>
+<div class="flow">
+  <div class="step"><span class="k">In</span><b>Her own words</b>
+    <ul><li>Support tickets</li><li>Comments on our ads</li><li>Surveys and store reviews</li><li>Interviews and panels</li><li>Forum research per sub-avatar</li></ul></div>
+  <div class="step"><span class="k">Fed</span><b>Every morning, 05:30</b>
+    <ul><li>New quotes pulled in</li><li>Each filed by avatar, sub-avatar and lane (customer, prospect, lead, churned)</li><li>Each labelled with her awareness level</li></ul></div>
+  <div class="step"><span class="k">Picked</span><b>The engine</b>
+    <ul><li>Reads every quote folder fresh on each pull</li><li>Picks the quotes this stage of the copy needs</li><li>Every quote keeps its source</li></ul></div>
+  <div class="step"><span class="k">Written</span><b>The copy</b>
+    <ul><li>Briefs and video scripts</li><li>Ad copy and landing pages</li><li>Emails and calendar</li><li>Outlier briefs</li></ul></div>
+</div>
+
+<h2>How a pull decides</h2>
+<div class="rules">
+  <div class="rule"><b>By stage</b><span>Each step of a chain asks for the kind of quote it needs: the problem, what she tried, the objection, the win.</span></div>
+  <div class="rule"><b>By who she is</b><span>Avatar and sub-avatar, so face copy pulls face words and body copy pulls body words.</span></div>
+  <div class="rule"><b>By awareness</b><span>A stage can ask for problem-aware or product-aware lines. Quotes still waiting for a label stay in, ranked just after the labelled ones.</span></div>
+  <div class="rule"><b>Fresh first</b><span>Quotes never used come first, and the ones shown least come before the ones shown most, so every run reads different words.</span></div>
+  <div class="rule"><b>Proven words kept in</b><span>Up to a quarter of each pull is quotes already used in an asset. Proven words still work; they just don't crowd out the rest.</span></div>
+  <div class="rule"><b>Your calls stick</b><span>A quote you retire or burn never comes back.</span></div>
+</div>
+
+<h2>Brand A's bank right now</h2>
+<div class="statband">
+  <div class="stat"><div class="n">n</div><div class="l">quotes</div></div>
+  <div class="stat"><div class="n">4</div><div class="l">sub-avatars with their own research</div></div>
+  <div class="stat"><div class="n">05:30</div><div class="l">fed daily</div></div>
+</div>
+<div class="grid-scroll"><table>
+  <tr><th>lane</th><th class="num">quotes</th></tr>
+  <tr><td class="fn">customers</td><td class="num">n</td></tr>
+  <tr><td class="fn">prospects, including all sub-avatar research</td><td class="num">n</td></tr>
+  <tr><td class="fn">creator audiences</td><td class="num">n</td></tr>
+  <tr><td class="fn">churned</td><td class="num">n</td></tr>
+  <tr><td class="fn">leads</td><td class="num">n</td></tr>
+</table></div>
+<div class="grid-scroll"><table>
+  <tr><th>sub-avatar</th><th class="num">quotes</th><th>awareness</th></tr>
+  <tr><td class="fn">Sub-avatar 1</td><td class="num">n</td><td class="src">labelled</td></tr>
+  <tr><td class="fn">Sub-avatar 2</td><td class="num">n</td><td class="src">labelled</td></tr>
+  <tr><td class="fn">Sub-avatar 3</td><td class="num">n</td><td class="src">labelled</td></tr>
+  <tr><td class="fn">Sub-avatar 4</td><td class="num">n</td><td class="src">waiting for a label</td></tr>
+</table></div>
+<div class="note">The sub-avatar 4 quotes are in and get pulled for face copy. They were saved on 1 Oct before the labeller ran, so for now they rank just after labelled quotes when a stage asks by awareness.</div>
+
+<h2>Where to look</h2>
+<p><a href="(team page)">The Language Bank: the full count by brand, awareness and source, rebuilt every morning</a></p>
+</div>

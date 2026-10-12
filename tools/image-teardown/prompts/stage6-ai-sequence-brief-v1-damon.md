@@ -437,7 +437,7 @@ name. They are a hierarchy, not one thing:
 ```json
 {
   "problem": "darkspots",
-  "angle": "pigmentmemory",
+  "angle": "tonememory",
   "concept": "handsapplication"
 }
 ```
@@ -477,7 +477,7 @@ name. They are a hierarchy, not one thing:
      `angle` as `proposed`, and add a `proposed_angle` block: a kebab-case
      `id`, a `name` in the voice of the bank's other names, and a `what` of
      two or three sentences saying what it claims and to whom. Say which
-     signed angle is nearest and what makes this one different. **Damon signs
+     signed angle is nearest and what makes this one different. **the owner signs
      it or he does not — you are proposing, never adding.**
   3. **You cannot tell.** Write `unsigned` and say what is missing.
 
@@ -487,7 +487,7 @@ name. They are a hierarchy, not one thing:
   fitting our bank is a finding, not a failure.
 
   **Never coin a slug into the bank.** A proposal lives in the brief until it
-  is signed — the angle vocabulary is Damon's.
+  is signed — the angle vocabulary is the owner's.
 
 - **`concept`** — the ideation and execution of that angle. The creative idea
   itself: `handsapplication`, `beforeafter`, `twostep`.

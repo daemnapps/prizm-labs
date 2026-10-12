@@ -24,6 +24,7 @@ import argparse
 import importlib.util
 import json
 import math
+import os
 import re
 import shutil
 import sys
@@ -31,11 +32,28 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
+
 HERE = Path(__file__).resolve().parent
-# Path(__file__).resolve() (the FILE, not its parent) — the same count
-# prompt.py uses for the same reason: machine/run.py -> ai-video-production
-# -> damon -> lab -> the ai-workspace root.
-WORKSPACE = Path(__file__).resolve().parents[4]
+WORKSPACE = _workspace()
 DEFAULT_RUNS_ROOT = WORKSPACE / "runs"
 DEFAULT_BANK = HERE.parent / "formats" / "bank.json"
 
@@ -63,6 +81,7 @@ plan_from_brief_mod = _load("plan_from_brief")
 voice_mod = _load("voice")
 lineparity_mod = _load("lineparity")
 scenes_mod = _load("scenes")
+safezone = _load("safezone")
 mi = _load("model_inputs")
 
 
@@ -84,13 +103,13 @@ def write_json(p: Path, data) -> None:
 
 
 def products_of(prompt_text: str, brand: str | None) -> list[str]:
-    """Element uuids in `prompt_text` that brands/<brand>/element-facts.json
+    """Element uuids in `prompt_text` that brands/<brand>/ai-elements/element-facts.json
     marks as a product (`kind` or `role` == "product"). A brand with no
     facts file — or none named — simply has no products, never an error."""
     ids = ELEMENT.findall(prompt_text or "")
     if not ids or not brand:
         return []
-    f = WS / "brands" / brand / "element-facts.json"
+    f = WS / "brands" / brand / "ai-elements" / "element-facts.json"
     try:
         book = json.loads(f.read_text()).get("elements", {})
     except Exception:
@@ -167,9 +186,26 @@ def plan_from_scenes(brief_path: Path, text: str, parsed: list[dict], brand: str
         "aspect": piece.get("aspect") or mi.piece_default("aspect"),
         "resolution": piece.get("resolution") or mi.piece_default("resolution"),
         "style": piece.get("style") or "",
+        # the doctrine's ad-framework id (a row's full name is read as its
+        # id), or "observed — …"; the gate refuses anything else (brief v15)
+        "framework": mi.framework_id(piece.get("framework")),
     }
     table = dict(re.findall(r"\| (.+?) \| \`<<<([0-9a-f-]{36})>>>\` \|", text))
+    doc, _ = scenes_mod.json_block(text)
+    carried = {k: doc[k] for k in PIECE_ELEMENTS
+               if isinstance(doc, dict) and k in doc and doc[k] is not None}
+    # AN ENDCARD'S PRODUCT is settled here, once, from the brief's own words
+    # (its refs, its plate, the product_lock) when the endcard does not name
+    # it — so the item, plan.json and the edit all read the same slug.
+    raw = {str(r.get("id")): r for r in (doc or {}).get("scenes") or []
+           if isinstance(r, dict)} if isinstance(doc, dict) else {}
+    for s in parsed:
+        if s.get("kind") == "endcard" and not (s.get("endcard") or {}).get("product"):
+            slug, _why = mi.endcard_product(raw.get(s["id"]) or {}, doc, brand)
+            if slug:
+                s["endcard"]["product"] = s["product"] = slug
     return {
+        **carried,
         "brand": brand,
         "brief": brief_path.name,
         "shape": "scene",
@@ -259,7 +295,21 @@ def cast_display_name(cast: dict) -> str:
 # brief actually wrote onto the batch item, verbatim, so nothing upstream
 # is lost between the brief and the run record.
 SCENE_METADATA_FIELDS = ("section", "technique", "emotion", "outcome",
-                         "cutaways")
+                         "cutaways", "to_camera_missing",
+                         # ELEMENTS.md §1/§4 (2026-09-23): carried untouched
+                         # for the edit — the scroll-stopper and the order a
+                         # cutdown cuts in. The unit a version swaps is the
+                         # doctrine `section` above (brief v15); v14's
+                         # `module` is retired and never carried
+                         "opens", "priority")
+
+# ELEMENTS.md §2–§4: the piece-level elements the edit reads, carried from the
+# brief's block into plan.json untouched (music and sfx then gain their bank
+# row at `start`).
+PIECE_ELEMENTS = ("layers", "music", "sfx", "hooks", "song")
+# kinds made as one still and no clip; and the kinds that may sit in silence
+STILL_ONLY = ("card", "screen", "endcard")
+SILENT_OK = ("card", "screen", "endcard", "split")
 
 
 def _carry_scene_metadata(item: dict, source: dict) -> dict:
@@ -325,7 +375,7 @@ def still_item_for(scene_or_cut: dict, cast: dict, brand: str | None) -> dict | 
 
 # -------------------------------------------- the scene shape -> items
 #
-# FEWER SCENES, MORE FRAMES (Damon, 2026-09-18, as corrected the same day). A
+# FEWER SCENES, MORE FRAMES (the owner, 2026-09-18, as corrected the same day). A
 # scene is one setting, one paragraph of voice and ONE clip, with exactly TWO
 # generated stills:
 #
@@ -351,13 +401,21 @@ def frame_items_of(scene: dict, cast: dict, piece: dict, brand: str | None) -> l
     first_frame_refs = list(
         (next((f for f in scene.get("frames", []) if f.get("role") == "first"), {})
          ).get("refs") or [])
+    first_frame = next((f for f in scene.get("frames", []) if f.get("role") == "first"), {})
     for f in scene.get("frames", []):
         role = f.get("role")
         iid = f"{scene['id']}-{'F1' if role == 'first' else 'FLAST'}"
         contract_id = "still-generate"
+        prompt_missing: list[str] = []
+        if role != "first" and first_frame.get("viewpoint") and not f.get("viewpoint"):
+            # the body geometry travels from the first frame to its edit
+            f = {**f, "viewpoint": first_frame["viewpoint"]}
         if role == "first":
             kind = "still"
             params = {"prompt": mi.still_prompt(f, piece)}
+            bad = mi.viewpoint_fault(scene, f, f"{scene['id']}'s first frame")
+            if bad:
+                prompt_missing.append(bad)
             size = mi.size_for(piece.get("aspect"))
             if size:
                 params["size"] = size
@@ -406,6 +464,8 @@ def frame_items_of(scene: dict, cast: dict, piece: dict, brand: str | None) -> l
             "id": iid, "kind": kind, "contract": contract_id, "for": scene["id"],
             "frame": f.get("n"), "frame_role": role, "edit_of": edit_of,
             "delta": f.get("delta") or "",
+            "viewpoint": f.get("viewpoint") or "",
+            "prompt_missing": prompt_missing,
             "params": params,
             "medias": [{"role": "image_references", "value": r} for r in refs if r],
             "characters": characters_of(scene, cast),
@@ -431,52 +491,73 @@ def clip_seconds_of(scene: dict, row: dict, timing: dict | None = None) -> float
 
 
 def clip_item_of(scene: dict, cast: dict, piece: dict, brand: str | None,
-                 timing: dict | None = None) -> dict:
-    """ONE clip for the scene, in the exact shape of the call that worked
-    live 2026-09-18 evening: the FIRST FRAME as `start_image`, the LAST
-    FRAME as `end_image`, and — on a to-camera scene — the scene's own slice
-    of the one voice track as `audio_references`. **Nothing else travels on
-    the clip.** The first frame already carries the identity, the wardrobe,
-    the room and the light; a cast sheet or a style frame attached beside it
-    is a second opinion about the same face."""
+                 timing: dict | None = None, model: str | None = None) -> dict:
+    """ONE clip for the scene, in the two shapes the settled door takes
+    (the owner's ruling 2026-09-22, after the bake-off) — the door row in
+    `model-inputs.json` decides which, never this code:
+
+      * a TALKING scene — the FIRST FRAME as `image_references`, the scene's
+        own slice of the one voice track as `audio_references`, and NO
+        end_image: the backend refuses a first/last frame beside reference
+        media, so the timeline's last beat says in words where it ends;
+      * a SILENT scene — the FIRST FRAME as `start_image`, the LAST FRAME as
+        `end_image`, no audio: the designed camera move lands.
+
+    **Nothing else travels on the clip.** The first frame already carries
+    the identity, the wardrobe, the room and the light; a cast sheet or a
+    style frame attached beside it is a second opinion about the same face.
+    On the alternate door (first + last + audio together, up to 30 s) the
+    same code builds the 2026-09-18 shape from that door's own row."""
     talking = bool(scene.get("to_camera"))
     sid = "talking" if talking else "motion"
+    # THE RUN PICKS (the owner, 2026-09-22: "we should have the ability to pick
+    # which models we want to run with" — MiniMax's lip sync is the best in
+    # the house and its physical cause-and-effect is the worst, so one door
+    # for every scene is the wrong shape). Order: the SCENE's own pick, then
+    # the run's, then the registry's settled door. A name nothing answers to
+    # is a gate finding, never a silent fall back to the settled door.
+    pick = str(scene.get("model") or model or "").strip() or None
     frames = scene.get("frames") or []
     first = next((f for f in frames if f.get("role") == "first"), None)
     last = next((f for f in reversed(frames) if f.get("role") == "last"), None)
     row = ((timing or {}).get("scenes") or {}).get(scene["id"], {})
     seconds = clip_seconds_of(scene, row, timing)
 
-    # The last frame is a real input where the door takes one, and the
-    # timeline's final beat where it does not — the sheet says which.
-    door_id, end_attached, how = mi.end_image_door(sid)
+    # The last frame is a real input where the door takes one, and words
+    # where it does not — the sheet says which, in the door's own reason.
+    door_id, end_attached, how = mi.end_image_door(sid, pick)
     end_attached = end_attached and last is not None
     scene = {**scene, "end_frame_attached": end_attached}
     params = {"prompt": mi.clip_prompt(scene, piece, seconds, timing, talking=talking)}
     if piece.get("aspect"):
         params["aspect_ratio"] = piece["aspect"]
-    if piece.get("resolution"):
+    # A door that makes one resolution (the settled clip door: 2K) fixes the
+    # clip's; the piece's Resolution still sizes the stills.
+    fixed_res = mi.fixed_resolution(sid, pick)
+    if fixed_res:
+        params["resolution"] = fixed_res
+    elif piece.get("resolution"):
         params["resolution"] = piece["resolution"]
     if seconds:
         # ceil, floored at the door's minimum. The CEILING is never clamped:
-        # a paragraph past it is refused by name so the scene is split at a
-        # beat boundary, never quietly shortened.
-        low = ((mi.station(sid).get("limits") or {}).get("duration_seconds") or [4])[0]
+        # a paragraph past it is refused by name (rule 12) so the scene is
+        # split at a beat or routed to the alternate door, never quietly
+        # shortened.
+        low = (mi.duration_span(sid, pick) or [4])[0]
         params["duration"] = int(max(int(low), math.ceil(float(seconds))))
-    ga = mi.house_default(mi.field_named(sid, "generate_audio") or {})
-    if ga is not None:
-        params["generate_audio"] = ga
-    mode = mi.house_default(mi.field_named(sid, "mode") or {})
-    if mode:
-        params["mode"] = mode
+    # params only some doors take (the alternate's mode and generate_audio)
+    # come off the door row, never from here
+    for k, v in mi.door_params(sid, pick).items():
+        params.setdefault(k, v)
 
     cast_name = cast_display_name(cast)
     who = (scene.get("who") or cast_name or "").split("·")[0].strip()
     start_id = f"{scene['id']}-F1" if first else None
     last_id = f"{scene['id']}-FLAST" if last else None
+    first_role = mi.first_frame_role(sid, pick)
     medias: list[dict] = []
     if start_id:
-        medias.append({"role": "start_image", "value": start_id})
+        medias.append({"role": first_role, "value": start_id})
     if end_attached and last_id:
         medias.append({"role": "end_image", "value": last_id})
     slice_ = row.get("file") or f"vo/{scene['id']}.mp3"
@@ -488,16 +569,22 @@ def clip_item_of(scene: dict, cast: dict, piece: dict, brand: str | None,
         "products": products_of(params.get("prompt", ""), brand),
         "lines": [scene["id"]] if talking else [],
         "start_frame": start_id,
+        "first_frame_role": first_role,
         "last_frame": last_id,
         "end_frame": last_id if end_attached else None,
         "door": door_id,
+        "model": mi.model_of(sid, pick),
+        "model_picked": bool(pick),
+        "model_pick_by": ("the scene" if scene.get("model") else
+                          ("the run" if model else "the registry")),
         "end_frame_how": how,
+        "resolution_fixed": bool(fixed_res),
         "beats": [dict(b) for b in (scene.get("beats") or [])],
         "beat_windows": [list(w) for w in
                          mi.beat_windows(scene, seconds, timing)],
         "frames": [i for i in (start_id, last_id) if i],
         "to_camera": talking,
-        # A B-ROLL SCENE IS A SCENE (Damon, 2026-09-19: "there is no B-roll" —
+        # A B-ROLL SCENE IS A SCENE (the owner, 2026-09-19: "there is no B-roll" —
         # every scene was the speaker to camera). Its paragraph is part of the
         # same continuous read and is still recorded and sliced; it just does
         # not travel on the clip. It is laid UNDER the picture at the edit,
@@ -506,15 +593,210 @@ def clip_item_of(scene: dict, cast: dict, piece: dict, brand: str | None,
         # what the four blocks could not be built from — the gate names each
         # one, and a prompt is never written as a fragment
         "prompt_missing": mi.clip_missing(scene, piece, seconds, timing, talking=talking),
+        # a pick nothing answers to is its OWN finding, not a hole in the
+        # prompt — the prompt is fine; the door is the thing that does not exist
+        "model_missing": [f for f in [mi.model_fault(pick, sid)] if f],
+        # clauses the hold sentence could not carry because a beat undoes
+        # them — the brief's finding, printed, never silently swallowed
+        "hold_dropped": mi.hold_dropped(scene),
     }
     return _carry_scene_metadata(item, scene)
 
 
-def scene_shape_items(plan: dict, brand: str | None, timing: dict | None = None) -> list[dict]:
+def card_item_of(scene: dict, cast: dict, piece: dict, brand: str | None) -> dict:
+    """A CARD (the owner, 2026-09-23: cards are made at production, not left for
+    the edit). ONE still on the same door every first frame uses — the plate,
+    the picture with no words in it — and no clip. Type is a layer, never a
+    generation: the card's exact words, the moment they land on and their
+    sound travel on the item (and in plan.json) as `card`, for the edit to
+    set on the plate."""
+    card = dict(scene.get("card") or {})
+    params = {"prompt": mi.plate_prompt(card.get("plate", ""), piece)}
+    size = mi.size_for(piece.get("aspect"))
+    if size:
+        params["size"] = size
+    q = mi.house_default(mi.field_named("still-generate", "quality") or {})
+    if q:
+        params["quality"] = q
+    names = [n for n in (cast.get("names") or []) if n]
+    plate = str(card.get("plate") or "").lower()
+    suffix = mi.card_plate().get("item_suffix") or "PLATE"
+    item = {
+        "id": f"{scene['id']}-{suffix}", "kind": "still", "contract": "still-generate",
+        "for": scene["id"], "frame": 1, "frame_role": "plate", "edit_of": None,
+        "delta": "", "viewpoint": "", "prompt_missing": [],
+        "params": params,
+        "medias": [{"role": "image_references", "value": r}
+                   for r in (card.get("refs") or []) if r],
+        # a card has nobody in it unless its plate names someone from the cast
+        "characters": [n for n in names if n.lower() in plate],
+        "products": products_of(params["prompt"], brand),
+        "lines": [],
+        "card": {k: card.get(k) for k in ("lines", "lands_on", "sfx")},
+        "to_camera": False,
+        # a card may sit over a slice of the one read; like B-roll, that
+        # slice is laid under it at the edit and never travels on a door
+        "vo_over": f"vo/{scene['id']}.mp3" if scene.get("voice") else None,
+    }
+    return _carry_scene_metadata(item, scene)
+
+
+def _plate_still(scene: dict, cast: dict, piece: dict, brand: str | None,
+                 plate: str, suffix: str, refs: list, carry_key: str, carry: dict) -> dict:
+    """ONE text-free still on the first-frame door — the card's shape, for
+    a screen and a greenscreen's background (ELEMENTS.md §1). The words that
+    will be read on it never enter the prompt; they travel as `carry`."""
+    params = {"prompt": mi.plate_prompt(plate, piece)}
+    size = mi.size_for(piece.get("aspect"))
+    if size:
+        params["size"] = size
+    q = mi.house_default(mi.field_named("still-generate", "quality") or {})
+    if q:
+        params["quality"] = q
+    names = [n for n in (cast.get("names") or []) if n]
+    item = {
+        "id": f"{scene['id']}-{suffix}", "kind": "still", "contract": "still-generate",
+        "for": scene["id"], "frame": 1, "frame_role": "plate", "edit_of": None,
+        "delta": "", "viewpoint": "", "prompt_missing": [],
+        "params": params,
+        "medias": [{"role": "image_references", "value": r} for r in refs if r],
+        "characters": [n for n in names if n.lower() in plate.lower()],
+        "products": products_of(params["prompt"], brand),
+        "lines": [],
+        carry_key: carry,
+        "to_camera": False,
+    }
+    return _carry_scene_metadata(item, scene)
+
+
+def _plate_kinds() -> dict:
+    return (mi.elements().get("plate_kinds") or {})
+
+
+def screen_item_of(scene: dict, cast: dict, piece: dict, brand: str | None) -> dict:
+    """A SCREEN — a review, a comment, a thread, a site, an order page — made
+    as one plate with every word left blank; the legible text is the edit's."""
+    s = dict(scene.get("screen") or {})
+    item = _plate_still(scene, cast, piece, brand, s.get("plate", ""),
+                        _plate_kinds().get("screen", {}).get("item_suffix") or "PLATE",
+                        s.get("refs") or [], "screen",
+                        {k: s.get(k) for k in ("surface", "lines", "lands_on")})
+    item["vo_over"] = f"vo/{scene['id']}.mp3" if scene.get("voice") else None
+    return item
+
+
+def greenscreen_item_of(scene: dict, cast: dict, piece: dict, brand: str | None) -> dict:
+    """A GREENSCREEN's BACKGROUND — one text-free still. The presenter is the
+    talker scene's own clip; the edit keys one over the other."""
+    g = dict(scene.get("greenscreen") or {})
+    return _plate_still(scene, cast, piece, brand, g.get("background", ""),
+                        _plate_kinds().get("greenscreen", {}).get("item_suffix") or "BG",
+                        g.get("refs") or [], "greenscreen",
+                        {k: g.get(k) for k in ("talker_scene", "layout")})
+
+
+def endcard_item_of(scene: dict, cast: dict, piece: dict, brand: str | None,
+                    doc: dict | None = None) -> dict:
+    """An ENDCARD — an EDIT of the brand's REAL packshot into the plate the
+    brief describes, never a product generated from words (ELEMENTS.md §1).
+    The packshot is the edit's first and only product reference; the offer
+    lines, the CTA and the guarantee travel as data for the edit to set."""
+    e = dict(scene.get("endcard") or {})
+    bf = mi._brandfiles()
+    product, why_p = mi.endcard_product({"kind": "endcard", "endcard": e}, doc, brand)
+    shot, why = (bf.packshot_of(brand, product) if product else (None, why_p))
+    keep = _clean_line(mi.elements().get("endcard_keep_line"))
+    base = mi.plate_prompt(e.get("plate", ""), piece)
+    params = {"prompt": " ".join(p for p in (keep, base) if p)}
+    size = mi.size_for(piece.get("aspect"))
+    if size:
+        params["size"] = size
+    q = mi.house_default(mi.field_named("still-edit-fidelity", "quality") or {})
+    if q:
+        params["quality"] = q
+    fid = mi.house_default(mi.field_named("still-edit-fidelity", "input_fidelity") or {})
+    if fid:
+        params["input_fidelity"] = fid
+    others = [r for r in (e.get("refs") or []) if r and "packshot" not in r.lower()]
+    refs = ([str(shot)] if shot else []) + others
+    item = {
+        "id": f"{scene['id']}-{_plate_kinds().get('endcard', {}).get('item_suffix') or 'PACKSHOT'}",
+        "kind": "edit", "contract": "still-edit-fidelity",
+        "for": scene["id"], "frame": 1, "frame_role": "packshot", "edit_of": None,
+        # the edit names its change: the brief's own plate sentence
+        "delta": e.get("plate", ""), "viewpoint": "",
+        "prompt_missing": [] if shot else [f"the real packshot ({why})"],
+        "params": params,
+        "medias": [{"role": "image_references", "value": r} for r in refs],
+        "characters": [],
+        "products": [product] if product else [],
+        "packshot": {"product": product, "file": str(shot) if shot else None, "why": why},
+        "lines": [],
+        "endcard": {k: e.get(k) for k in ("offer_lines", "cta", "guarantee")},
+        "to_camera": False,
+        "vo_over": f"vo/{scene['id']}.mp3" if scene.get("voice") else None,
+    }
+    return _carry_scene_metadata(item, scene)
+
+
+def _clean_line(s) -> str:
+    return " ".join(str(s or "").split())
+
+
+def split_items_of(scene: dict, cast: dict, piece: dict, brand: str | None,
+                   timing: dict | None = None, model: str | None = None) -> list[dict]:
+    """A SPLIT — two B-roll pictures on one screen. Each side is made exactly
+    like B-roll: its first frame, its last frame as an edit of it, and one
+    silent clip; the side's clip runs as long as the split's own slice of the
+    read. The paragraph is laid under the pair once, on the left."""
+    x = dict(scene.get("split") or {})
+    timing = dict(timing or {})
+    rows = dict(timing.get("scenes") or {})
+    items: list[dict] = []
+    for side in ("left", "right"):
+        s = dict(x.get(side) or {})
+        if not s:
+            continue
+        if scene["id"] in rows:
+            rows[s["id"]] = rows[scene["id"]]
+        s = {**s, **{k: scene[k] for k in ("section", "opens", "priority") if k in scene}}
+        t = {**timing, "scenes": rows}
+        side_items = frame_items_of(s, cast, piece, brand) + [
+            clip_item_of(s, cast, piece, brand, t, model)]
+        for it in side_items:
+            it["split"] = {"of": scene["id"], "side": side, "layout": x.get("layout"),
+                           "labels": x.get("labels") or []}
+        clip = side_items[-1]
+        clip["vo_over"] = (f"vo/{scene['id']}.mp3" if side == "left" and scene.get("voice")
+                           else None)
+        items += side_items
+    return items
+
+
+def scene_shape_items(plan: dict, brand: str | None, timing: dict | None = None,
+                      model: str | None = None, doc: dict | None = None) -> list[dict]:
     cast = plan.get("cast", {}) or {}
     piece = plan.get("piece", {}) or {}
+    model = model or plan.get("clip_model")
     items: list[dict] = []
     for s in plan.get("scenes", []):
+        if s.get("kind") == "card":
+            items.append(card_item_of(s, cast, piece, brand))
+            continue
+        if s.get("kind") == "screen":
+            items.append(screen_item_of(s, cast, piece, brand))
+            continue
+        if s.get("kind") == "endcard":
+            items.append(endcard_item_of(s, cast, piece, brand, doc))
+            continue
+        if s.get("kind") == "split":
+            items += split_items_of(s, cast, piece, brand, timing, model)
+            continue
+        if s.get("source_plan") == "cut" and s.get("owned_file"):
+            # CUT FROM OUR FOOTAGE (2026-10-05): the footage step matched this
+            # B-roll scene to a clip we own (owned_file, owned_in–owned_out);
+            # the edit cuts it, nothing is generated for it.
+            continue
         if str(s.get("held") or "").strip():
             # A HELD SCENE makes nothing (2026-09-19). Its place in the order
             # is kept, its section is on the record and the one fact that
@@ -523,14 +805,19 @@ def scene_shape_items(plan: dict, brand: str | None, timing: dict | None = None)
             # these are, so a held scene is a finding rather than a silence.
             continue
         items += frame_items_of(s, cast, piece, brand)
-        items.append(clip_item_of(s, cast, piece, brand, timing))
+        items.append(clip_item_of(s, cast, piece, brand, timing, model))
+        if s.get("kind") == "greenscreen":
+            items.append(greenscreen_item_of(s, cast, piece, brand))
     return items
 
 
 def song_item_of(plan: dict, brand: str | None) -> dict | None:
-    """A plan carries its own `song` block only when the format is sung
-    (Damon's 2026-09-17 ruling: the song is Lyria 3 Pro, direct, made once
-    per run) — this module doesn't need to know which formats those are;
+    """THE LEGACY SONG — a prompt-shaped `song` block, made on the Lyria
+    ALTERNATE. Since 2026-09-23 the song door is ElevenLabs Music (providers.json) and a
+    brief's song block with `sections` is printed by song.py in cmd_start
+    (SONG-CHAIN.md); that block has no `prompt`, so it never becomes an item
+    here. A plan carries its own `song` block only when the format is sung
+    — this module doesn't need to know which formats those are;
     the plan already decided by including one. `clip` picks the 30s Lyria
     model over the full one; the default is the full song."""
     song = plan.get("song") or {}
@@ -543,10 +830,11 @@ def song_item_of(plan: dict, brand: str | None) -> dict | None:
     }
 
 
-def batches_of(plan: dict, brand: str | None, timing: dict | None = None) -> list[dict]:
+def batches_of(plan: dict, brand: str | None, timing: dict | None = None,
+               model: str | None = None) -> list[dict]:
     cast = plan.get("cast", {}) or {}
     if plan.get("shape") == "scene" or any(s.get("frames") for s in plan.get("scenes", [])):
-        items = scene_shape_items(plan, brand, timing)
+        items = scene_shape_items(plan, brand, timing, model)
         song = song_item_of(plan, brand)
         if song:
             items.append(song)
@@ -558,6 +846,8 @@ def batches_of(plan: dict, brand: str | None, timing: dict | None = None) -> lis
             items.append(si)
         items.append(scene_item(s, cast, brand))
     for c in plan.get("cutaways", []):
+        if c.get("source_plan") == "cut" and c.get("owned_file"):
+            continue   # cut from our footage (2026-10-05) — nothing generated
         ci = still_item_for(c, cast, brand)
         if ci:
             items.append(ci)
@@ -570,7 +860,7 @@ def batches_of(plan: dict, brand: str | None, timing: dict | None = None) -> lis
 
 # --------------------------------------------------------- the two hands
 #
-# Damon's 2026-09-17 ruling: cast, still, edit, voice and song run on the
+# the owner's 2026-09-17 ruling: cast, still, edit, voice and song run on the
 # machine hand — direct APIs, nobody at a keyboard. Since 2026-09-18 that
 # includes motion and the talking beat (Seedance on BytePlus, direct); the
 # editor hand — Higgsfield (or fal), from a submit sheet — is what a station
@@ -594,7 +884,7 @@ def split_by_hand(items: list[dict], reg: dict, forced_provider: bool = False) -
     no hand (or resolves to nothing) is left with the editor — the safe
     default, since the editor path is the one a human still reviews.
 
-    `forced_provider` — Damon named a house with `--provider`: the motion
+    `forced_provider` — the owner named a house with `--provider`: the motion
     stations (whose machine door is a direct one) go to that house instead,
     so `--provider higgsfield-ui` still means "the editor animates this".
     Cast, still, edit and the song never leave the machine hand — no house
@@ -644,6 +934,12 @@ def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | N
     p = _resolve_ref(run, value)
     if p.is_file():
         return p
+    # a frame this run made in an earlier pass (a picture redone alone with --only: S10-FLAST edits S10-F1,
+    # which is on disk but not in this pass's manifest — 2026-10-08 it resolved to nothing)
+    for ext in ("png", "jpg", "webp"):
+        f = run / "media" / f"{value}.{ext}"
+        if f.is_file():
+            return f
     if low.endswith("cast sheet"):
         name = value[: -len("cast sheet")].strip().rstrip("—-·:").strip()
         for cand in (name, *(item.get("characters") or [])):
@@ -655,6 +951,16 @@ def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | N
                 f = home / fn
                 if f.is_file():
                     return f
+        # the banked element (runs/ai-elements/<brand>/casting/<id>/master.*) — where people live since 2026-09-23
+        EP = _load("element_paths")
+        for cand in (name, *(item.get("characters") or [])):
+            slug = re.sub(r"[^a-z0-9]+", "-", str(cand or "").lower()).strip("-")
+            if not slug:
+                continue
+            home = EP.casting_home(brand, slug)
+            for fn in ("master.jpg", "master.png", "master.webp"):
+                if (home / fn).is_file():
+                    return home / fn
         return None
     if "style frame" in low:
         for f in sorted((run / "media").glob("style-frame.*")) if (run / "media").is_dir() else []:
@@ -708,10 +1014,172 @@ def colour_match_to(item: dict, made_file, manifest: dict) -> bool:
     return _load("colour_match").match_file(made_file, ref)
 
 
+def piece_first_frame(items: list[dict], made: dict) -> Path | None:
+    """The piece's FIRST FRAME — the first scene's first frame, in play
+    order, that is on disk. Every clip is matched to it (ELEMENTS.md §5)."""
+    for it in items:
+        if it.get("frame_role") == "first":
+            f = (made.get(str(it.get("id"))) or {}).get("file")
+            if f and Path(f).is_file():
+                return Path(f)
+    return None
+
+
+def colour_match_clip(run: Path, iid: str, clip, ref: Path | None) -> dict | None:
+    """The post step after a clip lands: matched to the piece's first frame,
+    on a copy, the original archived in media/versions. Printed either way —
+    a skipped match is said, never silent."""
+    if not clip or ref is None:
+        if clip:
+            print(f"  {iid}: clip colour skipped — the piece's first frame is not on disk")
+        return None
+    res = _load("colour_match").match_clip(clip, ref, archive_dir=run / "media" / "versions",
+                                           stem=iid)
+    print(f"  {iid}: clip colour {'matched' if res['matched'] else 'not matched'} — {res['why']}")
+    return res
+
+
+def review_pictures(run, items, made):
+    try:
+        q = str(HERE.parent.parent.parent / "components" / "quality-checks")
+        if q not in sys.path:
+            sys.path.insert(0, q)
+        from marketing_chain_checks import review
+        sb = _load("storyboard_plan"); idm = _load("identity")
+        plan = read_json(run / "storyboard.json", {}) or {}
+        td = plan.get("teardown")
+        shots = (HERE / td / "framemap" / "shots").resolve() if td else None
+        rows = []
+        for it in items:
+            iid = str(it.get("id")); f = (made.get(iid) or {}).get("file")
+            if it.get("kind") != "still" or not f:
+                continue
+            compare = []
+            k = it.get("swipe_camera")
+            if k and shots:
+                fr = sb.usable_frame(shots, k)
+                if fr:
+                    compare.append(fr)
+            compare += idm.masters_of(it.get("medias"))
+            rows.append({"id": iid, "output": [f], "compare": compare})
+        if rows:
+            res = review.after_stage("video-production", "pictures", run, items=rows)
+            bad = [k for k, v in res.items() if isinstance(v, dict) and v.get("severity") in ("BLOCKER", "FIX")]
+            print(f"picture review: {len(rows) - len(bad)} pass, {len(bad)} sent back — {run / 'qc-log' / 'QC-LOG.md'}")
+    except Exception as e:
+        print(f"picture review not run ({type(e).__name__}: {e})")
+
+
+
+def public_safe(gen, prompt, refs, out, **kw):
+    """One picture call; when the image door refuses it as a PUBLIC FIGURE, the swipe frames among the references
+    (anything under a teardown's framemap/) are sent again once with every head covered — the frame stays sharp,
+    only faces are masked (swipe_guide.make). the owner ruled 2026-10-08 the swipe is used whole, people included; a
+    celebrity swipe (the athlete's press conference) is the one case the door will not take, and no real public figure's
+    face may be lifted into ours. Any other refusal is raised as it was."""
+    try:
+        return gen(prompt, refs, out, **kw)
+    except RuntimeError as e:
+        if "public-figure" not in str(e) and "public_figure" not in str(e):
+            raise
+        sg = _load("swipe_guide")
+        covered = []
+        for r in refs:
+            rp = Path(r)
+            if "framemap" in rp.parts:
+                dst = rp.with_name(rp.stem + "-faces-covered.jpg")
+                if not dst.exists():
+                    sg.make(rp, dst)
+                covered.append(str(dst))
+            else:
+                covered.append(r)
+        if covered == list(refs):
+            raise
+        print(f"  {Path(out).stem}: refused as a public figure — sent again with the swipe frame's faces covered")
+        try:
+            return gen(prompt, covered, out, **kw)
+        except RuntimeError as e2:
+            if "public-figure" not in str(e2) and "public_figure" not in str(e2):
+                raise
+        # the person is known by more than the face (the athlete's jersey and team backdrop): the swipe frame stays out
+        # of this picture — the written composition, the cast and the set carry it, as before 2026-10-08
+        kept = [r for r in refs if "framemap" not in Path(r).parts]
+        print(f"  {Path(out).stem}: still refused — sent without the swipe frame")
+        return gen(prompt, kept, out, **kw)
+
+def faces_of(it, res, iid, dry_run):
+    """THE FACE CHECK, every still with one of our people in it (2026-10-02):
+    each person against their own reference, three asks, the majority wins.
+    A CHECK ONLY — it changes nothing; a DIFFERENT is printed and filed on the
+    picture's record for the picture review and the owner's read."""
+    if dry_run or not res.get("file"):
+        return
+    idm = _load("identity")
+    for master in idm.masters_of(it.get("medias")):
+        faces = idm.check(res["file"], [master])
+        it.setdefault("face_check", []).extend(faces)
+        print(f"  {iid}: face {Path(master).parent.parent.name} = {faces[0]['verdict']}")
+
+
+def ruled_model(reg, station, used):
+    """THE MODEL LOCK (the owner, 2026-10-02: "you switched the model … that should
+    have never happened … this cannot happen again"). A picture, edit or clip
+    made on any model but the one ruled for its station in providers.json stops
+    the run, named. A model changes only by the owner's ruling, written there."""
+    door = (reg.get("doors") or {}).get(station) or {}
+    want = door.get("model")
+    if want and used and str(used) != str(want):
+        raise SystemExit(f"MODEL NOT RULED: {station} was made on {used!r}; the ruled model is {want!r} "
+                         f"(providers.json doors.{station}, ruled {door.get('ruled', '?')}). Only the owner changes it.")
+
+
+def product_gate(refs, iid: str = "?"):
+    """THE PRODUCT KIT GATE (2026-10-02, PRODUCT-KITS.md): any picture made from
+    a real photo of one of our products needs that product's truth kit first.
+    A reference that is a photo of a product with no usable kit STOPS the run
+    before anything is paid for, with one plain line naming the product.
+    Returns (brand, slug, kit.json) of the product in the references, or None."""
+    pk = _load("product_kit")
+    for r in refs:
+        who = pk.product_of_path(r)
+        if not who:
+            continue
+        why = pk.gate(*who)
+        if why:
+            raise SystemExit(f"{iid}: {why}")
+        return who[0], who[1], pk.home(*who) / "kit.json"
+    return None
+
+
+def product_of(it, res, iid, prompt, refs, out, dry_run, transport=None, key=None):
+    """THE PRODUCT CHECK, every still with the real product in it (2026-10-02):
+    its shape is measured against the product's kit (product_check.py: length
+    over width of its exact cut-out). Off by more than the tolerance, twice at
+    most, the
+    picture kept and only the product replaced from its kit (product_fix.py,
+    the image-edit "Wrong product" fix on the ruled edit door); the closest take
+    is kept and the verdict filed on the item. The kit is found by brand + slug
+    from the product photo among the references (product_kit.product_of_path);
+    a product with no kit never gets here — product_gate stopped the run."""
+    if dry_run or not res.get("file"):
+        return res
+    got = product_gate(refs, iid)
+    if got is None:
+        return res
+    brand, slug, kit_path = got
+    # the fix keeps the picture and replaces only the product (product_fix.py)
+    v = _load("product_fix").fix(res["file"], kit_path)
+    it["product_check"] = v
+    want = json.loads(kit_path.read_text())["outline"].get("axis_ratio")
+    print(f"  {iid}: {brand}/{slug} shape {v['shape'].get('measured')} (real {want}) — {'PASS' if v['ok'] else 'HELD: ' + '; '.join(v['why'])}")
+    return res
+
+
 def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | None = None,
                       openai_transport=None, google_transport=None, byteplus_transport=None,
                       openai_key: str | None = None, google_key: str | None = None,
-                      byteplus_key: str | None = None) -> dict:
+                      byteplus_key: str | None = None, clip_colour: bool = True,
+                      zone_caller=None) -> dict:
     """Every machine-hand item (cast · still · edit · the song · motion · talking) runs straight
     to its direct API — no editor, no provider choice. Returns
     `{item id: {file, model, request_id, at, ...}}`, the same manifest
@@ -722,6 +1190,15 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
     `cmd_start` lets that propagate the same way it does for `voice.py`."""
     if not items:
         return {}
+    # >>> APPROVAL-PAGE LEARNINGS HOOK (components/meta-upload/learnings.py) — prints recent rejections to the run log; changes no prompt
+    try:
+        import importlib.util as _iu
+        _ls = _iu.spec_from_file_location("meta_learnings", Path(__file__).resolve().parents[2].parent / "components" / "meta-upload" / "learnings.py")
+        _L = _iu.module_from_spec(_ls); _ls.loader.exec_module(_L)
+        _L.show("video-production", 5, brand)
+    except Exception:
+        pass
+    # <<< APPROVAL-PAGE LEARNINGS HOOK
     direct_openai = _load("direct_openai")
     direct_google = _load("direct_google")
     direct_byteplus = _load("direct_byteplus")
@@ -734,6 +1211,24 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
         kind = it.get("kind")
         params = it.get("params") or {}
         prompt = params.get("prompt", "")
+        # AN ENDCARD edits the brand's REAL packshot and nothing else will
+        # do: a declared photo that is a URL is fetched through
+        # image-production's cache now, and if there is still no file the
+        # run STOPS rather than let the edit door draw a product from words.
+        shot = it.get("packshot")
+        if shot is not None:
+            f = shot.get("file")
+            if not (f and Path(f).is_file()):
+                got, why = mi._brandfiles().packshot_of(brand, shot.get("product"),
+                                                        fetch=not dry_run)
+                if got is not None and Path(str(got)).is_file():
+                    it = {**it, "medias": [{"role": "image_references", "value": str(got)}]
+                          + [m for m in it.get("medias") or [] if m.get("value") != f]}
+                elif not dry_run:
+                    raise SystemExit(f"{iid}: no real packshot on this machine for "
+                                     f"{shot.get('product')!r} ({why}) — an endcard is an "
+                                     f"edit of the brand's own photograph; nothing is drawn "
+                                     f"from words")
         # a reference may name a frame this run already made (the scene shape
         # edits frame N off frame N−1), or a path
         refs = []
@@ -756,14 +1251,37 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
 
         if kind in ("cast", "still"):
             out = media_dir / f"{iid}.png"
-            res = direct_openai.generate(prompt, refs, out, transport=openai_transport,
-                                          key=openai_key, dry_run=dry_run)
+            if kind == "still":
+                product_gate(refs, iid)            # a product with no truth kit stops here, before the spend
+            res = public_safe(direct_openai.generate, prompt, refs, out, transport=openai_transport,
+                              key=openai_key, dry_run=dry_run)
+            if not dry_run:
+                ruled_model(reg, "cast" if kind == "cast" else "still", res.get("model"))
+            if kind == "still":
+                faces_of(it, res, iid, dry_run)
+                res = product_of(it, res, iid, prompt, refs, out, dry_run, openai_transport, openai_key)
             model, file_ = res["model"], res.get("file")
             colour_match_to(it, file_, manifest)
         elif kind in ("edit", "restyle"):
             out = media_dir / f"{iid}.png"
-            res = direct_google.edit_image(prompt, refs, out, transport=google_transport,
-                                            key=google_key, dry_run=dry_run)
+            if not refs and not dry_run:
+                # an edit with nothing to edit is a generation from words — a stranger in another room came back
+                # for S10-FLAST (2026-10-08). It stops, named.
+                raise SystemExit(f"{iid}: an edit with no reference resolved — nothing is drawn from words")
+            # ONE IMAGE DOOR (the owner, 2026-09-18: "gpt for all image work both
+            # initial reference gen and edits"): the registry's edit door
+            # decides, and today it is direct:openai — images/edits with the
+            # previous frame first and the cast sheet second. direct:google
+            # stays the alternate the registry can flip back to.
+            edit_door = ((reg.get("doors") or {}).get("edit") or {}).get("primary", "")
+            if edit_door == "direct:openai":
+                res = public_safe(direct_openai.generate, prompt, refs, out, transport=openai_transport,
+                                  key=openai_key, dry_run=dry_run)
+            else:
+                res = direct_google.edit_image(prompt, refs, out, transport=google_transport,
+                                                key=google_key, dry_run=dry_run)
+            if not dry_run:
+                ruled_model(reg, "edit", res.get("model"))
             model, file_ = res["model"], res.get("file")
             colour_match_to(it, file_, manifest)
         elif kind == "audio":
@@ -777,6 +1295,10 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
             # a scene with a line is the talking beat (its ElevenLabs take
             # rides along as the audio media); a cutaway is silent motion.
             out = media_dir / f"{iid}.mp4"
+            held = zone_held(it, manifest)
+            if held:
+                print(f"  {iid}: clip NOT made — {held}")
+                continue
             still = _still_of(it, run, manifest)
             if still is None and not dry_run:
                 raise SystemExit(f"{iid}: nothing to animate from — no still was made for it "
@@ -784,7 +1306,7 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
             audio = _audio_of(it, run)
             talking_door = str((reg.get("doors") or {}).get("talking", {}).get("primary", ""))
             if audio is not None and talking_door == "direct:omni":
-                # the controlled-Omni recipe (Damon 2026-09-18): the line is
+                # the controlled-Omni recipe (the owner 2026-09-18): the line is
                 # performed from the prompt, then re-voiced into the
                 # character's voice; the ElevenLabs take is the voice
                 # reference, not an input here.
@@ -823,9 +1345,21 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
             raise SystemExit(f"run.py's machine hand has no dispatch for kind {kind!r} "
                               f"(item {iid}) — add one")
 
+        zone = None
+        if kind in ("still", "edit", "restyle") and safezone.is_frame(it):
+            if dry_run:
+                zone_plan_line(iid)
+            else:
+                zone, file_ = zone_gate(it, file_, refs, manifest, run, brand, zone_caller,
+                                        google_transport, openai_transport, openai_key)
         if dry_run:
             continue
         row = {"file": file_, "model": model, "request_id": res.get("request_id") or res.get("task_id"), "at": now()}
+        if zone is not None:
+            row["subject_box"] = zone.get("subject_box")
+            row["zone"] = {k: zone.get(k) for k in ("verdict", "outside", "remade", "why",
+                                                     "subject_box_still", "size", "zone", "frame")
+                           if zone.get(k) is not None}
         if kind in ("motion", "talking"):
             row["usage"] = res.get("usage")
             row["talking"] = _audio_of(it, run) is not None
@@ -834,15 +1368,123 @@ def run_machine_hand(items: list[dict], run: Path, dry_run: bool, brand: str | N
                     row[k] = res[k]
             if res.get("parity_final"):
                 preflight.verdict(run, iid, "parity", res["parity_final"])
+            if clip_colour:
+                cm = colour_match_clip(run, iid, file_, piece_first_frame(items, manifest))
+                if cm:
+                    row["colour"] = cm
         if kind == "audio":
             row["timing"] = res.get("timing")
             row["timed"] = res.get("timed")
+        if it.get("face_check"):
+            row["face_check"] = it["face_check"]
+            preflight.verdict(run, iid, "face", {"verdict": "FAIL" if any(
+                f["verdict"] == "DIFFERENT" for f in it["face_check"]) else "PASS", "faces": it["face_check"]})
         manifest[iid] = row
-        preflight.ledger(run, model, iid, 0.0, "done", brand=brand, shot=iid)
+        preflight.ledger(run, model, iid, 0.0, "done", brand=brand, shot=iid, usage=(res or {}).get("usage"))
 
     if not dry_run:
         write_json(run / "direct.json", manifest)
+        record_subject_boxes(run, items, manifest)
+    else:
+        n = sum(1 for it in items if safezone.is_frame(it))
+        if n:
+            print(f"  subject zone: {n} frame(s) would be checked — about "
+                  f"${n * safezone.CHECK_USD:.3f}, plus at most {n} fix edit(s) "
+                  f"(~${safezone.FIX_USD:.2f} each) for frames found outside")
     return manifest
+
+
+# ------------------------------------------------------- the subject zone
+#
+# Every still production makes — first and last frames, card / screen /
+# split / greenscreen plates, the endcard packshot — is measured against the
+# centred 4:5 zone of the 9:16 frame (the owner, 2026-09-23; safezone.py). A
+# frame outside it gets ONE edit, the frame-edit discipline (the frame first,
+# the cast sheet second, the one change, the keep-line), and is measured
+# again; still outside, it is HELD — no clip is made from it and `pack`
+# refuses the run. A frame the judge could not measure is recorded as
+# UNCHECKED and is not shippable either. Never shipped silently.
+
+def zone_plan_line(iid: str) -> None:
+    print(f"  {iid}: subject zone — would send the still to "
+          f"{safezone_entry().get('vendor_model')} with {safezone.prompt_path().name} "
+          f"(~${safezone.CHECK_USD:.3f}); outside the 4:5 zone → one fix edit "
+          f"(~${safezone.FIX_USD:.2f}) and one more check")
+
+
+def safezone_entry() -> dict:
+    return safezone._ip()[1].judge_entry()
+
+
+def zone_held(it: dict, manifest: dict) -> str | None:
+    """Why a clip may not be made from its frame, or None. Only a MEASURED
+    failure after the one fix holds the clip; an unchecked frame does not
+    stop the run, it stops the pack."""
+    row = (manifest.get(str(it.get("start_frame") or "")) or
+           manifest.get(f"{it.get('id')}-still") or {})
+    z = row.get("zone") or {}
+    if z.get("verdict") == "FAIL":
+        return (f"its frame's {', '.join(z.get('outside') or ['subject'])} is outside the "
+                f"4:5 zone after one fix — remake the frame (remake.py order --element frame)")
+    return None
+
+
+def zone_gate(it: dict, file_, refs: list, manifest: dict, run: Path, brand: str | None,
+              zone_caller, google_transport, openai_transport, openai_key):
+    """Check one frame; on FAIL, one fix edit and one re-check. Returns
+    (zone result, the file that now stands for the frame)."""
+    iid = str(it.get("id"))
+    caller = zone_caller or safezone.default_caller(google_transport)
+    z = safezone.check(file_, caller=caller)
+    if z["verdict"] == "FAIL":
+        direct_openai = _load("direct_openai")
+        delta = safezone.move_delta(z)
+        prompt = mi.edit_prompt({"delta": delta, "viewpoint": it.get("viewpoint")},
+                                "still-edit-fidelity")
+        versions = run / "media" / "versions"
+        versions.mkdir(parents=True, exist_ok=True)
+        before = versions / f"{iid}-offzone{Path(file_).suffix}"
+        shutil.copy2(file_, before)
+        edited_from = str((manifest.get(str(it.get("edit_of") or "")) or {}).get("file") or "")
+        others = [r for r in refs if str(r) != edited_from and str(r) != str(file_)]
+        fix_refs = [Path(file_)] + others[:1]
+        res = direct_openai.generate(prompt, fix_refs, Path(file_), transport=openai_transport,
+                                     key=openai_key)
+        _load("colour_match").match_file(file_, before)
+        preflight.ledger(run, res["model"], f"{iid}-zone-fix", 0.0, "done", brand=brand, shot=iid,
+                         note=f"subject zone fix: {delta}")
+        first = z
+        z = safezone.check(file_, caller=caller)
+        z["remade"] = {"delta": delta, "prompt": prompt, "before": str(before),
+                       "first_outside": first.get("outside")}
+        if z["verdict"] == "PASS":
+            print(f"  {iid}: subject zone — {', '.join(first.get('outside') or [])} moved into the 4:5 zone by one edit")
+    if z["verdict"] == "FAIL":
+        print(f"  {iid}: HELD — {', '.join(z.get('outside') or [])} still outside the 4:5 zone after one fix")
+    elif z["verdict"] == "UNCHECKED":
+        print(f"  {iid}: subject zone UNCHECKED — {z.get('why')} (not shippable until checked)")
+    preflight.verdict(run, iid, "subject_zone",
+                      {k: v for k, v in z.items() if k not in ("raw",)})
+    return z, file_
+
+
+def record_subject_boxes(run: Path, items: list[dict], manifest: dict) -> None:
+    """Every frame's `subject_box` into plan.json, for the edit to keep words
+    off the face: `subject_boxes` by item id, and on the scene's own frame."""
+    boxes = {iid: row.get("subject_box") for iid, row in manifest.items() if "zone" in row}
+    p = run / "plan.json"
+    if not boxes or not p.is_file():
+        return
+    plan = read_json(p, {}) or {}
+    plan["subject_boxes"] = {**(plan.get("subject_boxes") or {}), **boxes}
+    by_id = {str(it.get("id")): it for it in items}
+    for sc in plan.get("scenes") or []:
+        for f in sc.get("frames") or []:
+            for iid, box in boxes.items():
+                it = by_id.get(iid) or {}
+                if it.get("for") == sc.get("id") and it.get("frame_role") == f.get("role"):
+                    f["subject_box"] = box
+    write_json(p, plan)
 
 
 # ------------------------------------------------------------ SUBMIT.md
@@ -865,7 +1507,7 @@ def write_submit_md(run: Path, items: list[dict], prov: dict, reg: dict,
     voice_files = sorted((run / "voice").glob("*.mp3")) if (run / "voice").is_dir() else []
     if voice_files:
         lines += ["## Voices", "",
-                   "Made first, on the direct ElevenLabs account (Damon's 2026-09-17 "
+                   "Made first, on the direct ElevenLabs account (the owner's 2026-09-17 "
                    "ruling) — upload each line below to the provider, then use the "
                    "returned media id as the `audio` media on the item(s) that carry it:",
                    ""]
@@ -875,7 +1517,7 @@ def write_submit_md(run: Path, items: list[dict], prov: dict, reg: dict,
     if direct_manifest:
         lines += ["## Machine-made media", "",
                    "Cast, stills, edits and the song run on the machine hand — direct APIs, "
-                   "made before this sheet was written (Damon's 2026-09-17 ruling). Upload "
+                   "made before this sheet was written (the owner's 2026-09-17 ruling). Upload "
                    "each file below to the provider, then use the returned media id as the "
                    "matching role (`start_image` for a still/edit) on the item that carries it:",
                    ""]
@@ -890,11 +1532,12 @@ def write_submit_md(run: Path, items: list[dict], prov: dict, reg: dict,
         lines.append("")
         still_id = it.get("start_frame") or still_for.get(str(it.get("id")))
         made = direct_manifest.get(still_id) if still_id else None
+        first_role = it.get("first_frame_role") or "start_image"
         if made:
-            lines.append(f"- **start_image (upload first)**: `{made.get('file')}` "
+            lines.append(f"- **{first_role} (upload first)**: `{made.get('file')}` "
                          f"— made by {made.get('model', '?')} ({still_id})")
         elif still_id:
-            lines.append(f"- **start_image (upload first)**: the frame made as `{still_id}`")
+            lines.append(f"- **{first_role} (upload first)**: the frame made as `{still_id}`")
         if it.get("end_frame"):
             end_made = direct_manifest.get(it["end_frame"]) or {}
             lines.append(f"- **end image (upload too)**: "
@@ -917,6 +1560,10 @@ def write_submit_md(run: Path, items: list[dict], prov: dict, reg: dict,
             lines.append(f"- **door**: {it['door']}")
         for k, v in params.items():
             if k == "prompt":
+                continue
+            if k == "resolution" and it.get("resolution_fixed"):
+                lines.append(f"- **{k}**: {v} — the only resolution this door makes; "
+                             f"the piece's own Resolution sized the stills")
                 continue
             lines.append(f"- **{k}**: {v}")
         if it.get("medias"):
@@ -946,9 +1593,10 @@ def write_submit_md(run: Path, items: list[dict], prov: dict, reg: dict,
 # ---------------------------------------------------------------- start
 
 def cmd_start(a, transport=None, download=None, voice_transport=None,
-              openai_transport=None, google_transport=None, byteplus_transport=None) -> int:
+              openai_transport=None, google_transport=None, byteplus_transport=None,
+              song_transport=None, song_stt_transport=None, zone_caller=None) -> int:
     runs_root = Path(a.runs_root).resolve() if a.runs_root else DEFAULT_RUNS_ROOT
-    run = runs_root / "video-machine" / a.brand / a.label
+    run = runs_root / "video-production" / a.brand / a.label
     run.mkdir(parents=True, exist_ok=True)
     (run / "batches").mkdir(exist_ok=True)
 
@@ -971,12 +1619,214 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
         doc, _ = scenes_mod.json_block(src.read_text())
         if isinstance(doc, dict) and doc.get("scenes"):
             (run / "brief-view.md").write_text(scenes_mod.render_view(doc))
+        # THE SWIPE MATCH (the owner, 2026-09-24: "literally this cannot happen
+        # again UNLESS I DISCRETELY SAY SO. THE WHOLE POINT IS TO TAKE A SWIPE
+        # AND ADAPT, not ruin it"). A brief from a swipe is made only when the
+        # teardown's swipe match stamped it PASSED — its places, people,
+        # camera and order checked against the swipe, shot by shot. HELD,
+        # never checked, or edited since the check: refused, --dry-run
+        # included. Only a brief composed WITHOUT a swipe skips it, and says
+        # so (--composed).
+        if not getattr(a, "composed", False):
+            _sm_spec = importlib.util.spec_from_file_location(
+                "swipe_match", HERE.parents[1] / "video-teardown" / "machine" / "swipe_match.py")
+            _sm = importlib.util.module_from_spec(_sm_spec); _sm_spec.loader.exec_module(_sm)
+            _stamp = _sm.stamp_of(src.read_text())
+            if _stamp != "PASSED":
+                why = {"HELD": "the swipe match HELD it — it changes the swipe (see SWIPE-MATCH.md in the teardown run)",
+                       "STALE": "it was edited after its swipe match — check it again",
+                       None: "it was never checked against its swipe"}[_stamp]
+                print(f"REFUSED swipe match: {why}. Check: python3 tools/video-teardown/machine/swipe_match.py "
+                      f"<teardown run> [--approve-structure M1,…] — or --composed for a brief made without a swipe.",
+                      file=sys.stderr)
+                print("the brief is not ready for production — nothing was made", file=sys.stderr)
+                return 2
+            # THE MANIFEST (the owner, 2026-09-24: "a manifest at the end of every
+            # brief … before we can go into ai production — i do not have time
+            # to babysit this anymore"). Re-checked here, right before anything
+            # is spent — the judge is not re-asked for the same brief, only the
+            # elements and prices are looked at again — and refused unless
+            # COMPLETE for this exact brief.
+            _mf_spec = importlib.util.spec_from_file_location(
+                "manifest", HERE.parents[1] / "video-teardown" / "machine" / "manifest.py")
+            _mf = importlib.util.module_from_spec(_mf_spec); _mf_spec.loader.exec_module(_mf)
+            _tdrun = src.resolve().parent.parent
+            if src.resolve().parent.name == "stages" and (_tdrun / "stages" / "2-spec.md").exists():
+                try:
+                    _mf.check(_tdrun, a.brand, src.name)
+                except Exception as e:
+                    print(f"WARNING the manifest could not be re-checked: {e}", file=sys.stderr)
+            _mstat = _mf.status_of(src.read_text())
+            if _mstat != "COMPLETE":
+                import re as _re
+                _line = (_re.search(r"^MANIFEST: [^\n]*", src.read_text(), _re.M) or [None])[0] if _mstat else None
+                print("REFUSED the brief's manifest is not complete — "
+                      + ({None: "the brief has no manifest (manifest.py <teardown run>)",
+                          "STALE": "the brief changed after its manifest — re-check it"}.get(_mstat) or _line),
+                      file=sys.stderr)
+                print("the brief is not ready for production — nothing was made", file=sys.stderr)
+                return 2
+            # DAMON READS THE BRIEF (2026-09-24: "i always need to see a written
+            # brief before moving on to the production stage … so I can
+            # actually read the script before it goes out"). His read is
+            # stamped only on his word, tied to this exact brief.
+            _read = _sm.read_of(src.read_text())
+            if _read != "APPROVED":
+                print("REFUSED the owner has not read this brief" + (" since it was edited" if _read == "STALE" else "")
+                      + " — show him the written brief; on his word: swipe_match.py <teardown run> --damon-read",
+                      file=sys.stderr)
+                print("the brief is not ready for production — nothing was made", file=sys.stderr)
+                return 2
+            # WORTH MAKING? (the owner, 2026-10-02: "if it's not ready for us to
+            # make, then we're not going to even do it"). The last word before
+            # any credit is spent: did 5 viewers from the avatar, scrolling it
+            # inside their real feed, stop, stay and want to tap? A brief with a
+            # stamp is answered free; one never checked is checked now — text
+            # only, cents — and refused if they passed it by. the owner passes one
+            # by hand with --approve-structure V at the teardown.
+            if src.resolve().parent.name == "stages" and (_tdrun / "run.json").exists() \
+                    and os.environ.get("QC_VIEWER", "1") != "0":
+                _q = str(HERE.parents[1].parent / "components" / "quality-checks")
+                if _q not in sys.path:
+                    sys.path.insert(0, _q)
+                from marketing_chain_checks import viewer as _vw
+                _tst = json.loads((_tdrun / "run.json").read_text())
+                _aud = _tst.get("declared_audience") or {}
+                _au2 = _tst.get("audience") or {}
+                try:
+                    _okv, _why, _ = _vw.worth_making(_tdrun, a.brand, _aud.get("avatar") or _au2.get("_avatar"),
+                                                     src, kind="video", sub=_aud.get("sub") or _au2.get("_sub_avatar"))
+                except Exception as e:
+                    _okv, _why = False, f"the viewer check could not run ({type(e).__name__}: {str(e)[:120]})"
+                if not _okv:
+                    print(f"REFUSED not worth making yet: {_why}", file=sys.stderr)
+                    print("the brief is not ready for production — nothing was made", file=sys.stderr)
+                    return 2
+                print(f"worth making: {_why}")
+        # THE PRODUCTION GATE (the owner, 2026-09-23: "clean up each stage
+        # properly so the next stage is able to just do what it's supposed to
+        # do"). Before a voice or a frame is paid for, --dry-run included:
+        # every scene says whether it is the speaker, every card is a plate
+        # and its words, and every row of the swipe's make-list is carried to
+        # a scene of the right kind or dropped with a reason. A brief written
+        # before the roll sheet existed is warned, never refused.
+        if plan.get("shape") == "scene":
+            g_fails, g_warns = mi.production_gate(src.read_text(), plan.get("scenes") or [],
+                                                  brand=a.brand)
+            # The brief contract preflight enforces at spend time is asked here
+            # too, --dry-run included (2026-10-01: the gates "passed", then
+            # preflight refused 15 hand shots with no viewpoint — a pass that
+            # was not one).
+            g_fails = g_fails + [f for f in mi.brief_violations(src.read_text()) if f not in g_fails]
+            for w in g_warns:
+                print(f"WARNING {w}")
+            if g_fails:
+                for f in g_fails:
+                    print(f"REFUSED {f}", file=sys.stderr)
+                print("the brief is not ready for production — nothing was made",
+                      file=sys.stderr)
+                return 2
+
+    # THE BANKS (ELEMENTS.md §3, 2026-09-23). Music and every sound effect
+    # the brief names are picked from a bank made once, and `{bank_id, file}`
+    # is written into plan.json for the edit. A row the bank has not made is
+    # a refusal naming it — never a silent fallback, --dry-run included.
+    if plan.get("music") or plan.get("sfx"):
+        b_fails = _load("banks").resolve(plan, getattr(a, "banks", None))
+        if b_fails:
+            for f in b_fails:
+                print(f"REFUSED {f}", file=sys.stderr)
+            print("the banks cannot supply this brief's sound — nothing was made",
+                  file=sys.stderr)
+            return 2
+        write_json(run / "plan.json", plan)
+        m = plan.get("music") or {}
+        if m.get("bank_id"):
+            print(f"music: {m['bank_id']} — {m['file']}")
+        for c in plan.get("sfx") or []:
+            print(f"sfx {c.get('cue')}: {c.get('bank_id')} — {c.get('file')}")
+
+    # OUR OWN FOOTAGE FIRST (the owner, 2026-10-05: "we need to make sure that the
+    # footage step properly runs … whatever needs to be generated, we can just
+    # generate"). Before any still or clip is made, --dry-run included, every
+    # B-roll scene is looked up in the brand's indexed footage on Shared
+    # Assets (machine/footage.py → tools/asset-index). A confident match
+    # is CUT from that clip (owned_file + owned_in/owned_out on the scene) and
+    # nothing is generated for it; the rest are generated, each carrying its
+    # nearest real clip's frame as a picture reference. The presenter is
+    # never the library's. --no-footage skips it.
+    footage_cut: set = set()
+    if getattr(a, "footage", True):
+        try:
+            fm = _load("footage")
+            f_res = fm.gate(plan, a.brand)
+        except Exception as e:
+            f_res = None
+            print(f"WARNING the footage step could not run ({type(e).__name__}: {e}) — every B-roll scene is generated")
+        if f_res is not None:
+            footage_cut = set(f_res["cut"])
+            saved = None
+            if footage_cut:
+                try:
+                    # priced as if generated: the items these scenes would have made
+                    def _as_generated(rows):
+                        return [{k: v for k, v in r.items() if k != "source_plan"}
+                                for r in rows or [] if r.get("id") in footage_cut]
+                    would = batches_of({**plan, "scenes": _as_generated(plan.get("scenes")),
+                                        "cutaways": _as_generated(plan.get("cutaways"))},
+                                       plan.get("brand") or a.brand)
+                    _pn, _prov, _ = platform.resolve_provider(a.provider)
+                    est = platform.plan(would, _prov, platform.registry(), forced=bool(a.provider))
+                    saved = {"items": len(would), "credits": est.get("total_credits"), "usd": est.get("total_usd")}
+                except Exception:
+                    saved = {"items": 0}
+            fm.report(f_res, saved)
+            for s in (plan.get("scenes") or []) + (plan.get("cutaways") or []):
+                if s.get("id") in footage_cut:
+                    print(f"  cut {s['id']} from our footage · {s.get('owned_in')}–{s.get('owned_out')}s of "
+                          f"{s.get('owned_file')}")
+            if f_res.get("indexed"):
+                write_json(run / "plan.json", plan)
+
+    # THE RUN'S PICK (the owner, 2026-09-22) lands on the plan, so the batches,
+    # the board and a re-read of this run all say the same model. A scene's
+    # own `model` still wins over it.
+    pick = getattr(a, "clip_model", None)
+    if pick:
+        bad = mi.model_fault(pick, "motion")
+        if bad:
+            print(bad, file=sys.stderr)
+            return 3
+        plan["clip_model"] = pick
+        write_json(run / "plan.json", plan)
 
     run_json_path = run / "run.json"
     existing = read_json(run_json_path, {}) or {}
-    fresh = {"machine": "video-machine", "brand": a.brand, "label": a.label,
+    # WHICH MODEL MADE THIS RUN, on the record. the owner, 2026-09-22: "we need
+    # to run through a few more briefs before I can confidently switch models
+    # for different video gen usages" — the split is a decision waiting on
+    # evidence, so every run writes down what made it and who chose, and the
+    # evidence accumulates without anyone keeping a list.
+    fresh = {"machine": "video-production", "brand": a.brand, "label": a.label,
              "format": a.format, "source_brief": src.name,
-             "provider": a.provider, "opened": now()}
+             # the brief's own path, so the brief index can join this run back
+             # to the brief it made (2026-09-30: "index briefs at a high level")
+             "brief_from": str(src.resolve()),
+             "provider": a.provider, "opened": now(),
+             "clip_model": plan.get("clip_model") or mi.model_of("motion"),
+             "clip_model_by": "the run" if plan.get("clip_model") else "the registry",
+             "scene_models": {s["id"]: (s.get("model") or plan.get("clip_model")
+                                        or mi.model_of("talking" if s.get("to_camera") else "motion"))
+                              for s in (plan.get("scenes") or [])
+                              if s.get("id") and s.get("kind") not in STILL_ONLY}}
+    # THE BRIEF NUMBER TRAVELS WITH THE PIECE (the owner, 2026-10-09): the brief got its brief-NNNN when it was
+    # written; production copies it from the brief's own run.json so delivery (video-edit/deliver.py reads
+    # this run.json `brief`) names the files and the Meta ad with the same number. Never coined here.
+    for rj in (src.resolve().parent.parent / "run.json", src.resolve().parent / "run.json"):
+        b = (read_json(rj, {}) or {}).get("brief") if rj.is_file() else None
+        if b:
+            fresh["brief"] = b
+            break
     write_json(run_json_path, {**fresh, **existing})   # never overwrite what's already there
 
     # A scene's line is a PARAGRAPH in the scene shape — the whole run of
@@ -984,26 +1834,158 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
     # the one voice track is chunked on.
     held = [s["id"] for s in plan.get("scenes", []) if str(s.get("held") or "").strip()]
     lines = {s["id"]: (s.get("line") or s.get("voice") or "")
-             for s in plan.get("scenes", []) if s["id"] not in held}
+             for s in plan.get("scenes", []) if s["id"] not in held
+             # a silent card, screen, split or endcard has no slice to claim
+             and not (s.get("kind") in SILENT_OK and not s.get("voice"))}
     write_json(run / "lines.json", lines)
+    # A placeholder left in a spoken line would be read out loud (found 2026-09-23:
+    # Nova's brief S5 carried "[SLOT: how much per use …]"). Refused before the voice.
+    left = {sid: t for sid, t in lines.items() if re.search(r"\[(SLOT|UNFILLED)[^\]]*\]", str(t or ""), flags=re.I)}
+    if left:
+        for sid, t in left.items():
+            ph = re.search(r'\[(SLOT|UNFILLED)[^\]]*\]', t, flags=re.I).group(0)[:90]
+            print(f"STOP {sid}: its spoken line still has a placeholder — {ph}", file=sys.stderr)
+        print("Fill it from the brand files at the brief (stage 5), or cut the sentence. Nothing was voiced.", file=sys.stderr)
+        return 2
     for s in plan.get("scenes", []):
         if s["id"] in held:
             print(f"HELD {s['id']} — nothing is made for it: {s['held']}")
 
-    # Voices before anything else generates (Damon's 2026-09-17 ruling): a
-    # scene with a line gets its ElevenLabs take made now, on the direct
-    # account, so it can be piped into the provider as the audio a talking
-    # beat carries. A plan with no line to speak calls this for nothing —
+    # THE SECTION-FIT GATE (the owner, 2026-09-23: "are they actually aligned with
+    # the script?"). Every scene's words must do the job of the doctrine section
+    # it is labelled with, because a wrong label breaks every section swap made
+    # from it. One check, before the voice or any frame is paid for; a misfit
+    # stops the run, named, and the brief is fixed at its source (stage 5).
+    labelled = any(sc.get("section") for sc in plan.get("scenes") or [])
+    if not labelled and getattr(a, "section_fit", False):
+        print("section fit: no scene carries a section (an older brief) — nothing to check")
+    if labelled and not a.dry_run and getattr(a, "section_fit", False):
+        sectionfit = _load("sectionfit")
+        try:
+            fit = sectionfit.check(plan, out_dir=run / "section-fit")
+        except Exception as e:
+            print(f"section fit could not be checked ({type(e).__name__}: {e}) — STOP", file=sys.stderr)
+            return 2
+        sectionfit.report(fit)
+        if not fit["pass"]:
+            print("STOP — a scene's words don't do the job of its section. Fix the brief's section labels "
+                  "(or its order) at stage 5, then start again. Nothing was made.", file=sys.stderr)
+            return 2
+    elif labelled and a.dry_run and getattr(a, "section_fit", False):
+        print("section fit: would check every scene's words against its section (one model call) — skipped on a dry run")
+
+    # THE ELEMENTS LOCK (the owner, 2026-09-23: "the system should prompt to
+    # confirm the elements before going into actual production … if elements
+    # need to be generated we need to go through that step"). Every person
+    # (their look per scene, their own voice), every setting, the product and
+    # every prop must be BANKED — documented, from a real reference — and
+    # the owner must have confirmed this exact set. Before any voice or picture is
+    # paid for. `<run>/elements.json` is the make-list and the page's source.
+    if getattr(a, "elements_lock", False) and src.suffix.lower() == ".md":
+        ec = _load("elements_check")
+        e_fails, e_notes = ec.gate(run, src.read_text(), a.brand, a.dry_run)
+        for n in e_notes:
+            print(f"WARNING {n}")
+        if e_fails:
+            for f in e_fails:
+                print(f"REFUSED {f}", file=sys.stderr)
+            print(f"the elements are not ready — make what is listed, show the elements "
+                  f"page, confirm; nothing was made ({run / 'elements.json'})", file=sys.stderr)
+            return 2
+
+    # EVERY WORD IN A SPOKEN LINE IS A WORD (the owner, 2026-10-01: "br- br-" was
+    # read aloud as "bar, bar"). Before a voice is paid for, every scene's line
+    # is checked for a fragment (a cut-off word, a repeated non-word).
+    try:
+        _scp = WS / "tools" / "video-teardown" / "machine" / "spoken_check.py"
+        import importlib.util as _ilu2
+        _sp2 = _ilu2.spec_from_file_location("spoken_check", _scp)
+        _sck = _ilu2.module_from_spec(_sp2); _sp2.loader.exec_module(_sck)
+        _bdoc = json.loads(re.findall(r"```json\s*\n(.*?)\n```", src.read_text(), re.S)[-1]) \
+            if src.suffix.lower() == ".md" and "```json" in src.read_text() else {}
+        _frag = _sck.check_lines([(x.get("id"), x.get("voice") or "") for x in _bdoc.get("scenes") or []])
+    except Exception as _e:
+        _frag = []
+        print(f"WARNING the spoken-word check could not run ({_e})")
+    if _frag:
+        for f in _frag:
+            print(f"REFUSED {f['id']}: {'; '.join(f['found'])} — not a word a voice can say: {f['text'][:90]}",
+                  file=sys.stderr)
+        print("fix the line in the brief (the stumble in real words, or dropped); nothing was made", file=sys.stderr)
+        return 2
+
+    # The read of every line, made here (the owner's 2026-09-17 ruling). Since
+    # 2026-10-03 (providers.json ruling_2026_10_03_voice_first_retired) it is
+    # NOT what a clip says: on the Omni route (--clips, the default) Omni says
+    # the on-camera lines inside the clip and ElevenLabs speech-to-speech turns
+    # them into the person's cloned voice; off-camera lines are text-to-speech
+    # in the cloned voice (omni_clips.py). This read stays the storyboard's
+    # timing ruler and the line check's reference, and feeds only the legacy
+    # clip doors (--legacy-clips). A plan with no line to speak calls this for nothing —
     # voice.run_for is itself a no-op when lines.json has nothing in it. A
     # character with no bindable voice is a hard stop, --dry-run included:
     # nothing here should plan around a voice that cannot actually speak.
-    try:
+    # TAKES ALREADY MADE ARE KEPT (2026-10-02): a run that already holds a
+    # recording for every line in lines.json reuses them — the owner's approved
+    # voices are never re-recorded by starting the next step. To record again,
+    # move vo/ aside first.
+    _lines = read_json(run / "lines.json", {}) or {}
+    _man = read_json(run / "vo" / "manifest.json", {}) or {}
+    _need = [sid for sid, t in _lines.items() if t]
+    kept_voices = bool(_need) and (run / "vo" / "timing.json").exists() and all(
+        (run / "vo" / f"{sid}.mp3").exists() and sid in _man for sid in _need)
+    if kept_voices:
+        voice_manifest = {sid: _man[sid] for sid in _need}
+        print(f"voices: kept — {len(_need)} recorded take(s) already in vo/, none re-recorded")
+    else:
+      try:
         voice_manifest = voice_mod.run_for(
             run, character=None, dry_run=a.dry_run, cast_root=a.cast_root,
             transport=voice_transport)
-    except SystemExit as e:
+      except SystemExit as e:
         print(str(e), file=sys.stderr)
         return 2
+
+    # THE AUDIO GATE (the owner, 2026-09-23: the script and the audio drive the
+    # video; the clips only show what is said). The read is heard now, scene
+    # by scene, before any frame or clip is paid for: it says its line, the
+    # line finishes, the sound is not broken. A failing slice is remade once,
+    # voice only; still failing, the run stops here, named.
+    if not a.dry_run and (run / "vo" / "timing.json").exists():
+        audiocheck = _load("audiocheck")
+        # a kept take is never remade by the check — a failure stops the run, named
+        heard = audiocheck.check_run(run, fix=not kept_voices, voice_transport=voice_transport)
+        audiocheck.report(heard)
+        if not heard["pass"]:
+            print("STOP — the voice is wrong, so nothing is made from it. Fix the line or the read, then start again.",
+                  file=sys.stderr)
+            return 2
+
+    # THE SONG (the owner, 2026-09-23: "a specific protocol / chain … so we
+    # remove all hallucination and variables and can just print";
+    # SONG-CHAIN.md). A sung brief's song block is printed by song.py when
+    # the song door (providers.json doors.audio) is song.py's: the words only from the script, the
+    # sound only from a style row, then the song gate. Like the voice, it is
+    # made and heard BEFORE any picture is paid for. --dry-run writes the
+    # request and spends nothing. A legacy prompt-shaped song (no sections)
+    # still goes to the Lyria alternate on the machine hand, below.
+    song_block = plan.get("song") if isinstance(plan.get("song"), dict) else {}
+    if song_block.get("sections"):
+        song_mod = _load("song")
+        shut = song_mod.door_closed()
+        if shut:
+            print(f"REFUSED {shut}", file=sys.stderr)
+            return 2
+        try:
+            sung = song_mod.make(run, plan=plan, dry_run=a.dry_run, transport=song_transport,
+                                 stt_transport=song_stt_transport)
+        except SystemExit as e:
+            print(f"REFUSED {e}", file=sys.stderr)
+            return 2
+        song_mod.report(sung)
+        if not sung["pass"]:
+            print("STOP — the song does not sing its lines, so nothing is made from it.", file=sys.stderr)
+            return 2
 
     plan_brand = plan.get("brand") or a.brand
     prompt_mod.use_brand(plan_brand)
@@ -1015,6 +1997,64 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
     except SystemExit as e:
         print(str(e), file=sys.stderr)
         return 2
+    # THE BANKED ELEMENTS ARE THE REFERENCES (2026-09-23): every first frame
+    # carries the masters, looks, set plate, packshot and props its scene uses
+    if (run / "brief.md").is_file() and getattr(a, "elements_lock", False):
+        for n in _load("element_refs").bind(items, (run / "brief.md").read_text(), plan_brand, run):
+            print(f"refs {n}")
+
+    # THE STORYBOARD DECIDES THE PICTURES (the owner, 2026-10-01: "establish the
+    # sections and just design the start frame and end frame … cut down the
+    # number of images generated while getting better outcome"). With
+    # --storyboard, only the pictures storyboard.json lists are made — a start
+    # (and end) frame per section, a plate per card, the endcard — and no clip:
+    # clips are the next step, section by section, after the owner approves these.
+    if getattr(a, "storyboard", False):
+        sbp = run / "storyboard.json"
+        if not sbp.is_file():
+            print("REFUSED --storyboard: no storyboard.json in the run — storyboard_plan.py makes it", file=sys.stderr)
+            return 2
+        sb_mod = _load("storyboard_plan")
+        sb_doc = json.loads(sbp.read_text())
+        if footage_cut:
+            # a scene cut from our footage gets no picture (2026-10-05)
+            for g in sb_doc.get("sections") or []:
+                dropped = [f for f in g.get("frames") or [] if f.get("from") in footage_cut]
+                for f in dropped:
+                    print(f"storyboard: {f.get('from')} {f.get('what')} not made — cut from our footage")
+                g["frames"] = [f for f in g.get("frames") or [] if f.get("from") not in footage_cut]
+        items, sb_problems = sb_mod.picture_jobs(sb_doc, items)
+        for pr in sb_problems:
+            print(f"REFUSED {pr}", file=sys.stderr)
+        if sb_problems:
+            return 2
+        print(f"storyboard: {len(items)} picture(s), no clips")
+        # QC'S PICTURE FIXES (2026-10-02): a picture QC sends back is made again
+        # with the reviewer's words added — <run>/picture-fixes.json, {id: words}
+        fixes = read_json(run / "picture-fixes.json", {}) or {}
+        for it in items:
+            add = fixes.get(str(it.get("id")))
+            if add and isinstance(it.get("params"), dict) and add not in it["params"].get("prompt", ""):
+                it["params"]["prompt"] = (it["params"].get("prompt", "").rstrip() + " " + add).strip()
+        if getattr(a, "only", None):
+            want = {x.strip() for x in a.only.split(",") if x.strip()}
+            items = [it for it in items if str(it.get("id")) in want]
+            print(f"only: {len(items)} picture(s) — {', '.join(sorted(want))}")
+
+    # THE STORYBOARD DECIDES THE CLIPS (2026-10-02) — the step after its
+    # pictures are approved: only the clips storyboard.json calls for, each
+    # from an approved picture, on the ruled clip door (clips_plan.py).
+    # THE OMNI ROUTE (the owner 2-3 Oct 2026, providers.json direct.omni_route): Omni on fal
+    # animates each approved picture; it is the --clips default while the registry says
+    # default_for_clips (omni_clips.py). --legacy-clips keeps the old door's planner (not the
+    # ruled clip model — kept for the record); both refuse a person's clip that would start
+    # from a clip's last frame (no hand-offs for people, 2026-10-03).
+    if getattr(a, "clips", False):
+        reg_ = platform.registry()
+        omni_default = bool(((reg_.get("direct") or {}).get("omni_route") or {}).get("default_for_clips"))
+        if getattr(a, "omni", False) or (omni_default and not getattr(a, "legacy_clips", False)):
+            return _load("omni_clips").start(a, run, plan, reg_)
+        return _load("clips_plan").start(a, run, plan, reg_, timing=timing, ruled=ruled_model)
 
     # A scene's line carries its own voice take as an audio media — the
     # provider-neutral shape (a path, uploaded later); preflight's rule 4
@@ -1085,8 +2125,15 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
     all_items: list[dict] = []
     for bf in batch_files:
         all_items += platform.load_batch(bf)
+    # ONLY THIS START'S ITEMS (2026-10-02): batches/ keeps files from earlier
+    # starts (the three-doctors run made two 1-Oct frames on top of its 22 pictures).
+    # Whatever this start planned is the whole job; anything else is left alone.
+    wanted = {str(it.get("id")) for it in items}
+    all_items = [it for it in all_items if str(it.get("id")) in wanted]
+    seen_ids: set = set()
+    all_items = [it for it in all_items if not (str(it.get("id")) in seen_ids or seen_ids.add(str(it.get("id"))))]
 
-    # The two hands (Damon's 2026-09-17 ruling): cast, still, edit and the
+    # The two hands (the owner's 2026-09-17 ruling): cast, still, edit and the
     # song run on the machine hand — direct APIs, before the editor ever
     # sees them. Motion and talking stay the editor's. Which hand a station
     # is comes from providers.json's own doors[...].hand, never a kind name
@@ -1096,11 +2143,17 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
         direct_manifest = run_machine_hand(
             machine_items, run, a.dry_run, brand=a.brand,
             openai_transport=openai_transport, google_transport=google_transport,
-            byteplus_transport=byteplus_transport)
+            byteplus_transport=byteplus_transport,
+            clip_colour=getattr(a, "clip_colour", True), zone_caller=zone_caller)
     except SystemExit as e:
         print(str(e), file=sys.stderr)
         return 2
     still_for = still_for_map(machine_items)
+    # THE PICTURE REVIEW, every batch (2026-10-02 — it was a session agent run
+    # by hand): each picture against the swipe shot it copies and its people's
+    # references, filed in qc-log/ (components/quality-checks review.after_stage)
+    if getattr(a, "storyboard", False) and not a.dry_run and direct_manifest:
+        review_pictures(run, machine_items, direct_manifest)
 
     if not editor_items:
         # every station ran on the machine hand — there is no sheet to write
@@ -1157,6 +2210,11 @@ def archive_and_download(run: Path, iid: str, url: str, download) -> Path:
         while (arch_dir / f"{iid}-v{n}{dest.suffix}").exists():
             n += 1
         dest.rename(arch_dir / f"{iid}-v{n}{dest.suffix}")
+        # the take being replaced was colour-matched: its pre-colour original
+        # goes with it, so the NEW take is matched too
+        pre = arch_dir / f"{iid}-precolour{dest.suffix}"
+        if pre.exists():
+            pre.rename(arch_dir / f"{iid}-v{n}-precolour{dest.suffix}")
     download(url, dest)
     return dest
 
@@ -1226,7 +2284,18 @@ def cmd_record(a, download=None, parity_transport=None) -> int:
         else:
             results[iid] = dict(row)
 
-        # Line parity (Damon, 2026-09-18): a downloaded clip that carries a
+        # CLIP COLOUR (ELEMENTS.md §5, 2026-09-23): every clip that lands is
+        # matched to the piece's first frame, on a copy, the original
+        # archived — a post step, on by default, off with --no-clip-colour.
+        if dest is not None and item.get("kind") in ("motion", "talking") \
+                and getattr(a, "clip_colour", True):
+            made = read_json(run / "direct.json", {}) or {}
+            cm = colour_match_clip(run, iid, dest,
+                                   piece_first_frame(list(by_id.values()), made))
+            if cm:
+                results[iid] = {**results.get(iid, {}), "colour": cm}
+
+        # Line parity (the owner, 2026-09-18): a downloaded clip that carries a
         # line is transcribed and checked against it before anything else
         # ships on it — the exact defect that slipped through once, a
         # lip-synced clip that said the WRONG words. No key reachable is a
@@ -1248,6 +2317,13 @@ def cmd_record(a, download=None, parity_transport=None) -> int:
                         preflight.verdict(run, iid, "parity", pres)
                         print(f"{iid}: parity {pres['verdict']} ({pres['match']}) "
                               f"— heard {pres['heard']!r}")
+                        if pres["verdict"] == "CUT_OFF":
+                            # the owner, 2026-09-23: a clip that stops mid-line is an
+                            # error — made again, never shipped flagged. The order
+                            # goes on the run; the remake-clip skill carries it out.
+                            remake = _load("remake")
+                            remake.main(["order", str(run), "--scene", iid, "--why", "cut-off",
+                                         "--heard", pres["heard"]])
 
         # A retried `record` re-sends the same rows; without this a stuck
         # download that eventually gets re-run three times wrote three
@@ -1261,6 +2337,10 @@ def cmd_record(a, download=None, parity_transport=None) -> int:
                           shot=iid, note=note)
 
     write_json(run / "results.json", results)
+    # CLIPS FROM THE STORYBOARD (2026-10-02): the last frames the next clips
+    # start from, then the clip review — as review_pictures does for pictures
+    if (run / "clips" / "plan.json").is_file():
+        _load("clips_plan").after_record(run, results)
     print(f"recorded {len(rows)} row(s)")
     if failed:
         print("failed to download: " + ", ".join(failed))
@@ -1419,6 +2499,33 @@ def cmd_pack(a) -> int:
 
 # ------------------------------------------------------------------ CLI
 
+def cmd_models(a) -> int:
+    """THE MENU — every clip model a run can be pointed at, what it is good
+    at, what it is weak at, and what it costs. Read off providers.json, so
+    the day a model is measured the menu says so without a code change."""
+    rates = platform.registry().get("credits_per_dollar") or {}
+    per_dollar = float(rates.get("higgsfield") or 0) or None
+    for station_name in (a.station or ["motion", "talking"]):
+        print(f"\n{station_name.upper()}")
+        for r in mi.clip_models(station_name):
+            cps = r.get("credits_per_second")
+            price = ""
+            if cps:
+                price = f"{cps} cr/s"
+                if per_dollar:
+                    price += f"  ~${cps * 6 / per_dollar:.2f} / 6 s"
+            cap = f"up to {r['max_seconds']}s" if r.get("max_seconds") else ""
+            mark = "  ← the settled door" if r["settled"] else ""
+            print(f"  {r['model']}   {price}   {cap}{mark}")
+            for g in r["good_at"]:
+                print(f"      good at   {g}")
+            for w in r["weak_at"]:
+                print(f"      weak at   {w}")
+    print("\npick one for a whole run with --clip-model <id>, or put a "
+          "`model` key on one scene.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="verb", required=True)
@@ -1429,13 +2536,39 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--format", required=True)
     s.add_argument("--label", required=True)
     s.add_argument("--provider")
+    s.add_argument("--clip-model", dest="clip_model",
+                   help="which clip model this run's scenes go to — "
+                        "`run.py models` lists them. A scene's own `model` "
+                        "wins over it; absent, the registry's settled door.")
     s.add_argument("--yes", action="store_true")
     s.add_argument("--dry-run", action="store_true")
+    s.add_argument("--only", help="with --storyboard: make only these picture ids (comma-separated), e.g. the ones QC sent back")
+    s.add_argument("--storyboard", action="store_true",
+                   help="make only the pictures the run's storyboard.json lists (no clips)")
+    s.add_argument("--clips", action="store_true",
+                   help="plan only the clips the run's storyboard.json calls for, from its approved pictures "
+                        "(--only G05,G12 picks sections) — on the Omni route by default (omni_clips.py)")
+    s.add_argument("--omni", action="store_true",
+                   help="with --clips: the Omni route (fal, animates each approved picture) — the default today")
+    s.add_argument("--legacy-clips", dest="legacy_clips", action="store_true",
+                   help="with --clips: the old clip door's planner (clips_plan.py) instead of the Omni route — "
+                        "NOT the ruled clip model (Omni on fal, 2026-10-03); only on the owner's ruling")
+    s.add_argument("--no-section-fit", dest="section_fit", action="store_false", default=True, help="skip the check that every scene's words do its section's job (not for real briefs)")
+    s.add_argument("--composed", action="store_true",
+                   help="the brief was composed without a swipe, so there is no swipe to match it to")
+    s.add_argument("--no-elements-lock", dest="elements_lock", action="store_false", default=True,
+                   help="skip the elements lock (tests and fixtures only — never a real brief)")
+    s.add_argument("--no-footage", dest="footage", action="store_false", default=True,
+                   help="skip the footage step (our own clips first) — every B-roll scene is generated")
     s.add_argument("--bank")
     s.add_argument("--runs-root")
     s.add_argument("--cast-root", help="test/override root for a character's "
-                    "characters folder; defaults to brands/<brand>/ai-elements/characters/ "
-                    "(old name ai-cast/)")
+                    "cast folder; defaults to runs/ai-elements/<brand>/casting/ (element_paths.py)")
+    s.add_argument("--banks", help="a banks folder other than "
+                   "tools/video-production/banks (music + sfx index.json)")
+    s.add_argument("--no-clip-colour", dest="clip_colour", action="store_false",
+                   help="do not colour-match each clip the machine hand makes to "
+                        "the piece's first frame (on by default)")
 
     r = sub.add_parser("record")
     r.add_argument("run")
@@ -1444,6 +2577,13 @@ def build_parser() -> argparse.ArgumentParser:
                    help="record the machine hand's own clips from direct.json instead")
     r.add_argument("--no-parity", action="store_true",
                     help="skip the automatic line-parity check on downloaded clips")
+    r.add_argument("--no-clip-colour", dest="clip_colour", action="store_false",
+                   help="do not colour-match each recorded clip to the piece's "
+                        "first frame (on by default; the original is archived)")
+
+    m = sub.add_parser("models", help="the clip models a run can pick from")
+    m.add_argument("--station", action="append",
+                   help="motion (B-roll) or talking; both by default")
 
     p = sub.add_parser("pack")
     p.add_argument("run")
@@ -1461,6 +2601,8 @@ def main(argv=None) -> int:
             return cmd_record(a)
         if a.verb == "pack":
             return cmd_pack(a)
+        if a.verb == "models":
+            return cmd_models(a)
     except (SystemExit, ValueError, OSError) as e:
         if isinstance(e, SystemExit) and isinstance(e.code, int):
             return e.code

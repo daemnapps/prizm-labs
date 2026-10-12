@@ -1,0 +1,969 @@
+{
+ "_readme": "THE MODEL MANIFEST (card MDL-1, 2026-09-01). DEFINITIONS ONLY — this file IS the product; there is no engine and no emitted plane. One entry per model in use today, answering three questions in one place: what does it cost, what key does it spend, and is it approved. DATA, NEVER CODE — edit and commit, and the next consumer that reads it sees the change; no restart, no code change.\n\nKEY NAMES, NEVER KEY VALUES. `key_env` is the NAME of an environment variable and nothing else. `validate.py` refuses a value-shaped `key_env` by shape (see _field_notes.key_env) so a pasted secret fails the manifest loudly instead of riding into git.\n\nEVERYTHING SEEDS AS `draft`. Rule 6 of components/CLAUDE.md: the definition owner holds the approval gate. Curator is the developer; nothing here is `approved` until he says so, and a consumer that only runs approved models will find this file empty until then — deliberately.\n\nWHAT IS AND IS NOT HERE. Seeded from the two fragments MDL-1 was pointed at: the chain-runner's video-teardown chain.json model bindings, and the bench menu at new-workflow-design/builds/chain-qa/bench-models.json. NOT folded in yet, and each named so the hole is visible rather than silent: (fragment) the mini-worker's fal IMAGE menu (platform/workers/mini-worker/models.json + prices.json — 17 endpoints WITH real billed prices, the only priced model data the org has), (fragment) the atlas's hand-drawn model nodes, (fragment) the bench's `chain-head` arm, which is NOT a model at all (it is the chain's own runner inside the pinned clone) and should never gain an entry here. Each folds in under its own MDL-2 card, never one big-bang rewire. LETTERING NOTE (2026-09-01, batch-20 finding 4): the CARD's lettering is authoritative — MDL-2 (a) bench-models.json, (b) chain.json bindings, (c) atlas manual nodes, (d) lora.json emits, (e) the worker's fal image menu (models.json + prices.json — ruled in 2026-09-01). An earlier local (a)(b)(c) here named a different list and is neutralized above.",
+ "schema": 1,
+ "_field_notes": {
+  "id": "The registry's canonical name for the model. Lowercase, id-shaped. This is the name a consumer should migrate TO. Unique across the file — including against every `aliases` entry.",
+  "aliases": "Other names the same model already answers to in code that landed before this registry existed. The chain-runner's seam ids (`opus`, …) are pattern-routed in components/chain-runner/runner/vendors.py and predate the registry — the CR-2b rider flagged exactly this. Listed here so MDL-2 (b) is a migration, not an archaeology exercise.",
+  "modality": "A LIST, because a model is not one thing: gemini-3-flash-preview is bound to video stages AND a text stage in the same chain. Closed vocabulary: text, image, video, audio.",
+  "cost": "EITHER the literal string \"unpriced\" — which REQUIRES `cost_reason` in words — OR an object of named numeric USD rates. Token models use explicit per-million names for every priced class the source exposes: `usd_per_1m_input`, `usd_per_1m_output`, and, when known, `usd_per_1m_reasoning`, `usd_per_1m_cache_read`, `usd_per_1m_cache_write`. An absent class is unknown, never zero. A bare number is refused (no unit = no answer), and a rate of 0 also requires `cost_reason`. This is the bench's own doctrine held as a schema rule: a zero and an unknown are different answers, and $__ is the one nobody may show for a model whose spend was never measured.",
+  "status": "draft | approved | deprecated (components/CLAUDE.md rule 6). The definition owner's gate. Seeded draft.",
+  "key_env": "The NAME of the environment variable the model spends, or null when it spends none. null means the model runs on a login rather than a key — the claude CLI's own — so there is no key to name. Shape-enforced: ^[A-Z][A-Z0-9_]{0,23}$ and no run of 3+ digits, which is what makes a pasted key value fail.",
+  "transport": "claude-cli | api | local — how the call actually leaves the machine. It is why `key_env` is null for the claude family, and it is a real cost fact: the CLI measures no per-run spend. `local` means the weights run on our own machine and the call never leaves it, so `key_env` must be null (a key name on a local entry is refused) and its zero rate carries a `cost_reason` (SI-172 (model id drafts)).",
+  "sources": "Where this entry was read off. Provenance, so a curator can check the seed rather than trust it.",
+  "request": "OPTIONAL. The REQUEST-LEVEL CONTROLS this entry declares, in the vendor's own spelling, because the consumer puts them on the request body UNCHANGED. Two controls and no more: `reasoning` ({effort, max_tokens, exclude, enabled, context, mode} — effort and max_tokens are mutually exclusive) and `provider` ({order, allow_fallbacks}). AN ENTRY THAT DECLARES NO `request` PRODUCES TODAY'S PAYLOAD BYTE FOR BYTE — the absence is the answer and there is no default to inherit. WHY IT EXISTS: on 2026-09-09 the identical request to deepseek-v4-flash-0731 ran twice at max_tokens 16000 and differed BY ROUTE — through Relace it stopped on `length` with 0 characters after 59,707 characters of hidden reasoning; through OpenInference it ANSWERED. The budget was never the lever. Pinning removes failover, so it is never assumed: an entry that wants a deterministic route says `allow_fallbacks: false` itself. Added MDL-5 (reasoning budget), 2026-09-09.",
+  "default_max_tokens": "OPTIONAL. The output budget a request that names none inherits FOR THIS MODEL. A text model spends its output budget on output; a reasoning model spends an unbounded prefix of it on thinking the caller never sees, so one global default cannot be right for both. The consumer's own ceiling still applies (`max_tokens_cap`) and is never raised to fit an entry; a request's own `max_tokens` still wins over this. Added MDL-5 (reasoning budget), 2026-09-09.",
+  "vendor_id": "The name the VENDOR answers to, when it differs from the registry `id` — an OpenRouter id carries a slash (`z-ai/glm-5.3-flash`), which the id shape (^[a-z0-9][a-z0-9._-]*$) forbids, and the registry's own name is what a consumer keys on. A consumer that makes the call sends `vendor_id` to the vendor and never a free-text string of its own; when absent, `id` IS the vendor's name. Added MDL-4 (openrouter vendor), 2026-09-09."
+ },
+ "models": [
+  {
+   "id": "claude-opus-5",
+   "label": "Claude Opus 5",
+   "vendor": "anthropic",
+   "aliases": [
+    "opus"
+   ],
+   "modality": [
+    "text"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "runs through the claude CLI on its own login (chain-runner vendors.py; bench transport ruled 2026-08-27) and the CLI reports no per-run cost. UNPRICED — not the same as free, and never $__.",
+   "status": "approved",
+   "key_env": null,
+   "transport": "claude-cli",
+   "sources": [
+    "components/chain-runner/chains/video-teardown/chain.json",
+    "new-workflow-design/builds/chain-qa/bench-models.json",
+    "platform/workers/mini-worker/models.json"
+   ],
+   "note": "The judgment-heavy default: 10 of the 15 video-teardown stages bind it as `opus`, and the workflow studio's generate/implement/delta/ui-gen/gut-check/write-prompt stages name it in full. FRAGMENT DISAGREEMENT, surfaced rather than resolved: bench-models.json declares key_env ANTHROPIC_API_KEY for this model while ALSO declaring transport claude-cli — i.e. it names a key the CLI path never spends. The registry records null (the CLI login) and leaves the reconciliation to the curator; MDL-2 (a) is where the bench either drops the key name or explains it."
+  },
+  {
+   "id": "claude-sonnet-5",
+   "label": "Claude Sonnet 5",
+   "vendor": "anthropic",
+   "aliases": [
+    "sonnet"
+   ],
+   "modality": [
+    "text"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "runs through the claude CLI on its own login and the CLI reports no per-run cost. UNPRICED — not the same as free, and never $__.",
+   "status": "approved",
+   "key_env": null,
+   "transport": "claude-cli",
+   "sources": [
+    "new-workflow-design/builds/chain-qa/bench-models.json",
+    "platform/workers/mini-worker/models.json"
+   ],
+   "note": "The pattern-work tier (studio add-card / demo / provenance / check-candidates). Same bench key_env disagreement as claude-opus-5. `sonnet` is an alias the chain-runner's vendors.py would route today; no chain.json stage binds it yet."
+  },
+  {
+   "id": "claude-haiku-4-5",
+   "label": "Claude Haiku 4.5",
+   "vendor": "anthropic",
+   "aliases": [
+    "haiku",
+    "claude-haiku-4-5-20251001"
+   ],
+   "modality": [
+    "text"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "runs through the claude CLI on its own login and the CLI reports no per-run cost. UNPRICED — not the same as free, and never $__.",
+   "status": "approved",
+   "key_env": null,
+   "transport": "claude-cli",
+   "sources": [
+    "new-workflow-design/builds/chain-qa/bench-models.json"
+   ],
+   "note": "The cheap rung. Bench-only today — no chain stage and no studio stage binds it. The dated alias is the full id the bench passes to the provider."
+  },
+  {
+   "id": "claude-opus-5-5",
+   "label": "Claude Opus 5.5",
+   "vendor": "anthropic",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "runs through the claude CLI on its own login; the CLI reports no per-run cost. UNPRICED — not the same as free, and never $__.",
+   "status": "draft",
+   "key_env": null,
+   "transport": "claude-cli",
+   "sources": [
+    "CQ-8 (minimum bench test 1) dispatch, lead, 2026-10-10"
+   ],
+   "note": "Split test 1A's saved-control model (medium effort, run twice) and its first blind judge, through the bench's split_test_models entry opus-5-5-medium. DRAFT: the bench may call draft rows for split tests only (the developer, 2026-10-10, \"yes may test draft models\"); promotion is the developer's. No alias: `opus` stays claude-opus-5's."
+  },
+  {
+   "id": "claude-haiku-5-5",
+   "label": "Claude Haiku 5.5",
+   "vendor": "anthropic",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "runs through the claude CLI on its own login; the CLI reports no per-run cost. UNPRICED — not the same as free, and never $__.",
+   "status": "draft",
+   "key_env": null,
+   "transport": "claude-cli",
+   "sources": [
+    "CQ-8 (minimum bench test 1) dispatch, lead, 2026-10-10"
+   ],
+   "note": "Split test 1A contender (1), high effort, through the bench's split_test_models entry haiku-5-5-high. DRAFT: split tests only until the developer promotes it. No alias: `haiku` stays claude-haiku-4-5's."
+  },
+  {
+   "id": "claude-sonnet-5-5",
+   "label": "Claude Sonnet 5.5",
+   "vendor": "anthropic",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "runs through the claude CLI on its own login; the CLI reports no per-run cost. UNPRICED — not the same as free, and never $__.",
+   "status": "draft",
+   "key_env": null,
+   "transport": "claude-cli",
+   "sources": [
+    "CQ-8 (minimum bench test 1) 1C dispatch, lead, 2026-10-10"
+   ],
+   "note": "Split test 1C contender, high effort, through the bench's split_test_models entry sonnet-5-5-high. DRAFT: split tests only until the developer promotes it. No alias: `sonnet` stays claude-sonnet-5's."
+  },
+  {
+   "id": "gemini-3-flash-preview",
+   "label": "Gemini 3 Flash (preview)",
+   "vendor": "google",
+   "aliases": [],
+   "modality": [
+    "text",
+    "video"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "NO TEXT RATE CARD IS ON FILE for any text model in this org (bench-models.json _pricing; the fix is a data-provenance decision, PROPOSALS-to-lead.md P5). platform/workers/mini-worker/prices.json prices fal IMAGE models only. An estimate before a run would have no basis, so this says so in words rather than showing a made-up number.",
+   "status": "approved",
+   "key_env": "GEMINI_API_KEY",
+   "transport": "api",
+   "sources": [
+    "components/chain-runner/chains/video-teardown/chain.json",
+    "new-workflow-design/builds/chain-qa/bench-models.json"
+   ],
+   "note": "Two modalities in one chain: stage0 (triage) and stage1 (teardown) feed it VIDEO; stage2 (replication) is text-only. It is what the video-teardown stage-1 goldens were actually produced by, so on that chain it is the incumbent, not an alternative."
+  },
+  {
+   "id": "gemini-3-pro-image",
+   "label": "Gemini 3 Pro Image",
+   "vendor": "google",
+   "aliases": [],
+   "modality": [
+    "image"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "no rate on file. prices.json covers fal-hosted image endpoints only, from fal's billed usage export; a Gemini image call is not in it and no other billing source has been read.",
+   "status": "approved",
+   "key_env": "GEMINI_API_KEY",
+   "transport": "api",
+   "sources": [
+    "components/chain-runner/chains/video-teardown/chain.json"
+   ],
+   "note": "The one image binding in the chain: stage6 (Frames). Routed by the same gemini-* pattern in vendors.py as the text/video calls — image parts come back inline on the same REST call."
+  },
+  {
+   "id": "glm-5.3-flash",
+   "label": "GLM 5.3 Flash (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "z-ai/glm-5.3-flash",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.15,
+    "usd_per_1m_output": 0.5,
+    "usd_per_1m_cache_read": 0.03
+   },
+   "cost_reason": "RE-SWEPT 2026-10-11T06:34Z by the dev-developer lead, read from OpenRouter's public list (GET /api/v1/models, no key), never relayed: input 0.15, output 0.5, cache read 0.03 USD per 1M — was 0.075/0.25. EARLIER READING: OpenRouter's public model list (GET /api/v1/models, read 2026-09-09T04:33Z, no key): prompt 0.000000075 USD/token, completion 0.00000025 USD/token, context 1,310,720. The rate is OpenRouter's list price, billed per call against OPENROUTER_API_KEY; the true spend per call is what the vendor's usage block reports and the infer record carries it. Re-read the list when a price looks stale — this is data, never a promise. BATCH LANE, checked 2026-09-15 in the same sweep: `z-ai/glm-5.3-flash:batch` costs EXACTLY THE SAME as interactive — $__/$__, cache read identical. It is not cheaper and not dearer. What it DOES buy is a max_completion_tokens of 943,718 against this row's 131,072, for a smaller context (1,048,576 against 1,310,720). So on this model a batch lane is a LENGTH decision, not a price one — which is worth knowing before anyone reaches for batch expecting a discount.",
+   "status": "approved",
+   "approved_by": "developer",
+   "approved_on": "2026-09-09",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "_request_note": "NO REQUEST CONTROLS AT ALL, AND `reasoning` WAS REMOVED ON 2026-09-10 BECAUSE THE VENDOR REFUSES IT. MDL-5 (reasoning budget) set `reasoning.enabled: false` here on the reading that it is the one knob every model supports. This endpoint says otherwise, in so many words: HTTP 400, \"Reasoning is mandatory for this endpoint and cannot be disabled\" (probe-glm-real, 2026-09-10T00:33:06Z). So the control did not merely fail to bound anything — IT BROKE EVERY CALL, turning a wasteful 200 into a hard 400. Removed so the entry works again at yesterday's behaviour. THAT BEHAVIOUR IS STILL NOT GOOD: this model has returned 0 characters through Novita, DigitalOcean and Z.AI at max_tokens 16000, spending the whole budget on reasoning it will not let us turn off. NO PROVIDER PIN, because no upstream has ever answered it with characters and inventing one would be a guess the registry does not make. The open question is whether a budget large enough for reasoning AND an answer exists at a price worth paying — carded as MDL-6 (glm reasoning mandatory), and until it is answered this entry is approved but useless.",
+   "sources": [
+    "components/models/CLAUDE.md"
+   ],
+   "note": "THE FIRST STANDING INFERENCE VENDOR — the text parallel to fal.ai for images (the developer, 2026-09-09: \"a parallel to fal.ai but for inference models … include it in the models component to be used more generally\"). One of the two outside reviewers the model-stack pilot names. Z.ai's own endpoint is marked Private on OpenRouter (batch 80). Reached only through the worker's `infer` action (WM-34 (infer action)) under the scoped grant; no other OpenRouter client exists in the org. DRAFT until the curator blesses it — that is the gate, not a placeholder."
+  },
+  {
+   "id": "deepseek-v4-flash-0731",
+   "label": "DeepSeek V4 Flash (0731, via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "deepseek/deepseek-v4-flash-0731",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.0175,
+    "usd_per_1m_output": 0.64,
+    "usd_per_1m_cache_read": 0.0175
+   },
+   "cost_reason": "RE-SWEPT 2026-10-11T06:34Z by the dev-developer lead, read from OpenRouter's public list (GET /api/v1/models, no key), never relayed: input 0.0175, output 0.64, cache read 0.0175 USD per 1M — was 0.06/0.12. EARLIER READING: RE-READ AND CORRECTED 2026-09-15 by the lead, sweeping every openrouter row against the live list: prompt 0.00000006, completion 0.00000012 — $__/M in and $__/M out. THE ROW HAD $__/$__, read on 2026-09-09; the output rate has fallen 33% since. Nothing was wrong when it was filed — A PRICE IS A READING WITH A DATE ON IT, and this row proves a registry row goes stale on its own, with no edit and no mistake. Every cost comparison run against this row between 09-09 and now OVERSTATED DeepSeek 0731 by a third on output. The 09-09 reading is kept here rather than erased: 'prompt 0.000000065, completion 0.00000018, context 1,310,720; DISAGREES with the per-provider figure read in the browser the same day (batch 80: $__/M in, $__/M out) — that was one provider's rate, the list price is the model's headline.' No time-of-day overrides on this id, checked in the same sweep. Billed per call against OPENROUTER_API_KEY; the infer record carries what the vendor's usage block reports.",
+   "status": "approved",
+   "approved_by": "developer",
+   "approved_on": "2026-09-09",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "request": {
+    "reasoning": {
+     "enabled": false
+    },
+    "provider": {
+     "order": [
+      "OpenInference"
+     ],
+     "allow_fallbacks": false
+    }
+   },
+   "_request_note": "PINNED TO ONE UPSTREAM, FALLBACKS OFF, ON ONE MEASURED SUCCESS. The identical request ran twice on 2026-09-09 at max_tokens 16000 and differed by ROUTE: through Relace it returned finish_reason `length`, 0 characters of reply, 59,707 characters of hidden reasoning, $__ spent for nothing; through OpenInference it returned finish_reason `stop` and 2,087 characters of ANSWER on near-identical reasoning volume. So the budget is survivable and the ROUTE decides — which is why fallbacks are off: a gate that passes on a lucky route tests nothing. The evidence is ONE success and is thin. THE SLUG IS THE NAME THE VENDOR REPORTED BACK on that record (`provider: OpenInference`); it was NOT checked against OpenRouter's provider-slug list, which needs network the maker had none of. If the slug is wrong the pin fails CLOSED — a refusal naming it, never a silent reroute. `reasoning.enabled: false` may bound nothing on this vendor (effort is OpenAI/Grok, reasoning.max_tokens is Anthropic/Gemini); it is sent so the probe is a bounded one, never as proof. MDL-5 (reasoning budget), 2026-09-09.",
+   "sources": [
+    "components/models/CLAUDE.md"
+   ],
+   "note": "The second outside reviewer the model-stack pilot names. DATA-POLICY FACT: DeepSeek's first-party endpoint TRAINS on prompts (batch 80); the account's data policy excludes training providers (the developer's click, batch 100), so whether a non-training provider serves this id under that policy is UNCHECKED until the infer action's first call — a `no provider` refusal on that call is the answer, and this entry comes out rather than the policy loosening (MDL-4 (openrouter vendor) kill-condition). The dated id pins the snapshot; `deepseek/deepseek-v4-flash` (undated) also exists on the list and is deliberately not the one recorded. DRAFT until the curator blesses it."
+  },
+  {
+   "id": "deepseek-v4.1-flash",
+   "label": "DeepSeek V4.1 Flash (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "deepseek/deepseek-v4.1-flash",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.3,
+    "usd_per_1m_output": 1.2,
+    "usd_per_1m_cache_read": 0.006
+   },
+   "cost_reason": "RE-SWEPT 2026-10-11T06:34Z by the dev-developer lead, read from OpenRouter's public list (GET /api/v1/models, no key), never relayed: input 0.3, output 1.2, cache read 0.006 USD per 1M — was 0.15/0.6. The headline rate now equals the old weekday-peak rate, read on a Sunday — the base itself has doubled. EARLIER READING: OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-15T15:34Z, not relayed: prompt 0.00000015, completion 0.0000006 USD/token; context 1,048,576; max_completion_tokens 384,000; input modalities text+image; created 2026-09-10T06:21:25Z. THE HEADLINE RATE IS NOT WHAT WE WOULD PAY, and the list says so: this model carries TIME-OF-DAY PRICING OVERRIDES. Monday-Friday 01:00-04:00Z and 06:00-10:00Z the rate DOUBLES to prompt 0.0000003 / completion 0.0000012 (i.e. $__ and $__ per 1M). Weekends and all other hours are the base rate above. Our own scheduled work sits inside BOTH peak windows - the 03:13Z nightly QC sweep and the ~06:40-10:00Z verifier runs - so a measured pair scheduled the way today's jobs are scheduled would be billed at 2x the figure in `cost`, and a cost comparison against a flat-rate model is wrong by that factor unless it is run outside those hours or the doubling is stated. Cache reads are 0.000000003 ($__ per 1M), cheap enough to change how a repeated-context judge is designed. Billed per call against OPENROUTER_API_KEY; the infer record carries what the vendor's usage block reports.",
+   "status": "approved",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "team/plans/dev-developer.md batch 300 (2cc16b65c) — the drafting record",
+    "PLAN relay 2026-09-15 on the developer's \"Add to model component\"",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15T15:34Z"
+   ],
+   "note": "First registered model with native IMAGE input on the OpenRouter lane. Intended roles, all measure-only until RV-58 (kill needs a floor)'s floor is ruled: cross-family QC judge (diff vs card done-when) for Opus/Sonnet-built branches; second model in the pre-review measured pair, superseding deepseek-v4-flash-0731 there; screenshot-judgement candidate against Gemini Flash in the QC split test. NOT A MAKER: nothing on the mini runs an OpenRouter model agentically. APPROVED 2026-09-15 by the developer, verbatim \"Approve\", WITH the time-of-day fact in front of him — the row was filed `draft` precisely so his gate under rule 6 would close on the 2x peak-hours figure rather than on the headline. No `:batch` variant of this id exists on the list (checked 2026-09-15), so the peak windows cannot be dodged by lane and must be dodged by SCHEDULE. The deepseek-v4-flash-0731 row STAYS: it is on record in the pilot's 13 calls. No `request` block is declared, so the payload is today's byte for byte (MDL-5 (reasoning budget)); the 0731 row's provider pin is NOT copied here - that pin was earned by one measured success on that model and is not evidence about this one.",
+   "approved_by": "developer",
+   "approved_on": "2026-09-15"
+  },
+  {
+   "id": "gemini-3.8-flash",
+   "label": "Gemini 3.8 Flash (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "google/gemini-3.8-flash",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image",
+    "video",
+    "audio"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.75,
+    "usd_per_1m_output": 3.75,
+    "usd_per_1m_reasoning": 3.75,
+    "usd_per_1m_cache_read": 0.075
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-15, not relayed: prompt 0.00000075, completion 0.00000375 USD/token; context 1,048,576; max_completion_tokens 65,536; input modalities text+image+video+file+audio; created 2026-09-02T15:14:16Z. NO time-of-day overrides on this id — unlike deepseek-v4.1-flash, the headline rate is the rate. TWO FACTS THAT CHANGE WHAT A JUDGE COSTS, both from the same read: (1) `internal_reasoning` bills at 0.00000375 — THE SAME AS OUTPUT — so hidden thinking nobody ever reads is charged at the full output rate, and the 0731 row already records a run where 59,707 characters of hidden reasoning returned 0 characters of answer. (2) A HALF-PRICE BATCH LANE EXISTS: `google/gemini-3.8-flash:batch`, same context and modalities, prompt 0.000000375 / completion 0.000001875. Cache reads 0.000000075 ($__ per 1M) — 25x deepseek-v4.1-flash's $__, which matters for a judge that repeats one rubric prefix on every call. Billed per call against OPENROUTER_API_KEY; the infer record carries what the vendor's usage block reports.",
+   "status": "approved",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "team/plans/dev-developer.md batch 301 — the three-arm split test",
+    "PLAN relay 2026-09-15, figures confirmed exactly as given",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "Third arm of the QC split test (PLAN, batch 301): DeepSeek V4.1 Flash, this, and claude-sonnet-5 as BLIND SHADOW JUDGES on the same inputs, same rubric, same tick, none read before merge; scored at RV-58 (kill needs a floor)'s floor of 5, decided at 10, against the lead's hand fixes. Sonnet goes through the existing pre-review stage, this and DeepSeek through the OpenRouter infer action. NOT A MAKER: nothing on the mini runs an OpenRouter model agentically. APPROVED 2026-09-15 by the developer, verbatim \"Rv58 and start pilot\" — his go on the pilot closes the batch question the way the note below left it, so the gate closed on a settled lane rather than an open one. The `:batch` variant stays UNREGISTERED until the pilot decides. LANE RESOLVED 2026-09-15 (PLAN's proposal, batch 303; the developer's with the floor): during the pilot ALL THREE ARMS RUN ON THE STANDARD LANE in the same tick, Gemini included, so lane and latency are held constant and the comparison carries nothing silent. `google/gemini-3.8-flash:batch` at half price is the OPTIMISATION IF GEMINI WINS, applied after the decision at ten — never inside the measurement. So this row stays the pilot's row and no batch row is minted. The arms differ in TACTIC and not in lane: DeepSeek is scheduled outside its 2x windows because it has no batch variant; this one needs no schedule. The wiring card is RV-64 (three-arm judge pilot), minted held until the developer rules the floor.",
+   "approved_by": "developer",
+   "approved_on": "2026-09-15"
+  },
+  {
+   "id": "qwen3.8-flash",
+   "label": "Qwen3.8 Flash (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "qwen/qwen3.8-flash",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.15,
+    "usd_per_1m_output": 0.47,
+    "usd_per_1m_cache_read": 0.016,
+    "usd_per_1m_cache_write": 0.2
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-15, not relayed: prompt 0.00000015, completion 0.00000047 USD/token; context 1,000,000; max_completion_tokens 131,072; input modalities text+image+video; created 2026-08-26T19:37:40Z. NO TIME-OF-DAY OVERRIDES — checked explicitly, because deepseek-v4.1-flash carries them and the same tactic would otherwise be assumed here; this id needs no schedule. No `:batch` variant exists either. Cache read 0.000000016 ($__ per 1M) but cache WRITE 0.0000002 ($__ per 1M) — reading a cached prefix is cheap and PUTTING one there is not, which is the opposite shape to the read-side-only figures recorded on the other rows and matters for a judge that writes one rubric prefix per call. Billed per call against OPENROUTER_API_KEY; the infer record carries what the vendor's usage block reports.",
+   "status": "approved",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "PLAN relay 2026-09-15 on the developer's \"consider qwen flash and also the latest best in qwen family\"",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "FOURTH ARM of RV-64 (three-arm judge pilot) — the card title says three and the record says four, which is the developer's addition and PLAN's note. Runs through the same OpenRouter infer action as deepseek-v4.1-flash: same rubric, same schema, same tick, same ledger, standard lane. Both of that card's kills cover four arms unchanged, and its A-vs-B agreement check becomes PAIRWISE among the OpenRouter arms. NOT A MAKER: nothing on the mini runs an OpenRouter model agentically. APPROVED 2026-09-15 by the developer, verbatim \"Approve qwen\". THE GATE HELD UNDER A MAKER BEFORE IT CLOSED, which is the useful part: RV-64 (three-arm judge pilot)'s first dispatch REFUSED at 858s rather than build — \"the developer must approve qwen3.8-flash or explicitly change RV-64 from 'sent to four arms' to wired-but-not-running\" — because the card named a live arm whose row was still draft. Rule 6 is not documentation; a maker enforced it against a card the lead had written.",
+   "approved_by": "developer",
+   "approved_on": "2026-09-15"
+  },
+  {
+   "id": "qwen3.8-max-0902",
+   "label": "Qwen3.8 Max (0902, via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "qwen/qwen3.8-max-0902",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_1m_input": 2.0,
+    "usd_per_1m_output": 6.0
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-15: prompt 0.000002, completion 0.000006 USD/token; context 1,000,000; max_completion_tokens 131,072; input modalities text+image+video; created 2026-09-03T21:08:24Z — PLAN's relay said 09-02, which is the same unix timestamp read in a local zone; the UTC date is the 3rd. No time-of-day overrides and no `:batch` variant, both checked. Cache read 0.00000025, cache write 0.0000025. THIRTEEN TIMES qwen3.8-flash's input rate and nearly thirteen times its output — this is the expensive end of the family and the row exists to make that visible before anyone points a harness at it. Billed per call against OPENROUTER_API_KEY.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "PLAN relay 2026-09-15 on the developer's \"consider qwen flash and also the latest best in qwen family\"",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "The newest Qwen, registered as a CANDIDATE and nothing more. Intended role: first candidate for an OPENROUTER MAKER ROUTE — the move the 2026-09-11 codex ruling named for when the ChatGPT allowance caps. NOT A MAKER TODAY, and the reason is concrete rather than cautious: nothing on the mini runs an OpenRouter model agentically, and the gateway's opencode provider answered 401 on 2026-09-11 for want of an OpenCode Go key. THAT HARNESS IS ITS OWN CARD, unminted, and it comes after WM-70 (publisher process) and only on the developer's word — the lead has NOT minted it. DRAFT per rule 6. It is NOT in RV-64 (three-arm judge pilot): a judge pilot and a maker route are different questions, and adding a $__/$__ model to a measurement about cheap judges would answer neither."
+  },
+  {
+   "id": "claude-fable-5.1",
+   "label": "Claude Fable 5.1 (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "anthropic/claude-fable-5.1",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image"
+   ],
+   "cost": {
+    "usd_per_1m_input": 10.0,
+    "usd_per_1m_output": 50.0
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-16T05:20Z — NOT relayed: prompt 0.00001, completion 0.00005 USD/token, i.e. $__/$__ per 1M. Context 1,000,000; max_completion_tokens 128,000; input modalities text+image+file; created 2026-09-01 (epoch 1788285838). PLAN's relayed figures matched the list exactly this time and are CONFIRMED rather than corrected. THE BATCH LANE IS HALF PRICE: `anthropic/claude-fable-5.1:batch` at $__/$__ — the OPPOSITE of kimi-k3's batch variant, which is DEARER than its interactive rate. 'Batch is the cheap lane' is a per-model fact and never a rule; read the lane before pricing on it. A PRICE IS A READING WITH A DATE ON IT — re-sweep before pricing any decision here. Evidence that is not ceremony: kimi-k3 was re-read in this same sweep and is UNCHANGED at $__/$__, while on 2026-09-15 a deepseek row's output rate had fallen 33 percent since 09-09 with no edit and no mistake. Billed per call against OPENROUTER_API_KEY.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "the developer 2026-09-16, verbatim \"Also set up the registry\", relayed by PLAN",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-16T05:20Z (443 models on the list)"
+   ],
+   "note": "An ARM for the design bench (DB-1 (bench runner)). FILED `draft` DELIBERATELY: rule 6 seeds draft and the developer is the registry's curator, so \"set up the registry\" is read as an instruction to CREATE the rows, not to pass his own approval gate — he flips it in one word. Nothing is blocked meanwhile: the bench's OpenRouter arms run on a draft row via `allow_draft` on the request record. COST IN CONTEXT, which is the whole reason DB-1 (bench runner) takes a ROUTE PER ARM: a ~10k-token mock costs about $__ here versus $__ on the subscription route for the same family. Pay for this row when the point is a BLIND third-party comparison; use the subscription route when it is not. DUTY-6 FLAG, NOT A SILENT TRIM: OpenRouter's list declares input modalities text+image+FILE for this model, and `file` is NOT in the registry's allowed vocabulary (validate.py: text, image, video, audio), so this row records text+image and the vendor's third modality is dropped HERE and recorded in this sentence instead. Widening that vocabulary is a DEFINITIONS change on components/models/, whose curator is the developer — his ruling, not the lead's, which is why the row was filed valid rather than the schema bent to fit it."
+  },
+  {
+   "id": "gpt-6-astra",
+   "label": "GPT-6 Astra (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "openai/gpt-6-astra",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image"
+   ],
+   "cost": {
+    "usd_per_1m_input": 10.0,
+    "usd_per_1m_output": 50.0
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-16T05:20Z — NOT relayed: prompt 0.00001, completion 0.00005 USD/token, i.e. $__/$__ per 1M. Context 1,050,000; max_completion_tokens 128,000; input modalities text+image+file; created 2026-09-04 (epoch 1788552838). PLAN's relayed figures matched the list exactly this time and are CONFIRMED rather than corrected. THE BATCH LANE IS HALF PRICE: `openai/gpt-6-astra:batch` at $__/$__ — the OPPOSITE of kimi-k3's batch variant, which is DEARER than its interactive rate. 'Batch is the cheap lane' is a per-model fact and never a rule; read the lane before pricing on it. A PRICE IS A READING WITH A DATE ON IT — re-sweep before pricing any decision here. Evidence that is not ceremony: kimi-k3 was re-read in this same sweep and is UNCHANGED at $__/$__, while on 2026-09-15 a deepseek row's output rate had fallen 33 percent since 09-09 with no edit and no mistake. Billed per call against OPENROUTER_API_KEY.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "the developer 2026-09-16, verbatim \"Also set up the registry\", relayed by PLAN",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-16T05:20Z (443 models on the list)"
+   ],
+   "note": "An ARM for the design bench (DB-1 (bench runner)). FILED `draft` for the same reason as claude-fable-5.1 — the curator's gate is the developer's, and `allow_draft` unblocks the bench meanwhile. `openai/gpt-6-astra-pro` IS ALSO ON THE LIST AT THE IDENTICAL PRICE ($__/$__, context 1,050,000, created three seconds earlier on the list's own clock) and is NOT filed here: the bench arm is the non-pro id unless the developer says otherwise. That equal pricing is worth a second look before anyone picks between them — two ids at the same rate usually differ in something other than cost, and this row does not know what. DUTY-6 FLAG, NOT A SILENT TRIM: OpenRouter's list declares input modalities text+image+FILE for this model, and `file` is NOT in the registry's allowed vocabulary (validate.py: text, image, video, audio), so this row records text+image and the vendor's third modality is dropped HERE and recorded in this sentence instead. Widening that vocabulary is a DEFINITIONS change on components/models/, whose curator is the developer — his ruling, not the lead's, which is why the row was filed valid rather than the schema bent to fit it."
+  },
+  {
+   "id": "kimi-k3",
+   "label": "Kimi K3 (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "moonshotai/kimi-k3",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.8,
+    "usd_per_1m_output": 10.0,
+    "usd_per_1m_cache_read": 0.55
+   },
+   "cost_reason": "RE-SWEPT 2026-10-11T06:34Z by the dev-developer lead, read from OpenRouter's public list (GET /api/v1/models, no key), never relayed: input 0.8, output 10.0, cache read 0.55 USD per 1M — was 1.95/10.92. EARLIER READING: OpenRouter's public model list (GET /api/v1/models, no key), READ AND VERIFIED BY THE LEAD 2026-09-15: prompt 0.000002648138063, completion 0.00001328272425 USD/token; context 1,048,576; max_completion_tokens 943,718; input modalities text+image+video; created 2026-07-16T15:30:58Z; no time-of-day overrides; cache read 0.00000030264435. THE RELAYED FIGURES WERE $__/$__ AND THEY ARE NOT WHAT THE LIST SAYS — the real rates are 26% and 21% HIGHER. They are recorded here to the full precision the vendor publishes, unrounded, because the roundness is itself evidence: $__ and $__ are about 11.7% and 11.5% below a round $__ and $__, which is exactly Moonshot's own direct price. THAT LOOKS LIKE A DISCOUNT OFF LIST RATHER THAN A PRICE, and a discount can end — anyone pricing a long commitment on this row should re-read the list rather than trust this number's stability. AND THE BATCH VARIANT IS MORE EXPENSIVE, NOT LESS: `moonshotai/kimi-k3:batch` is a round $__/$__, ABOVE the interactive rate here. That is the opposite of gemini-3.8-flash, whose batch lane is half price, and it means 'batch is the cheap lane' is a per-model fact and never a rule. Billed per call against OPENROUTER_API_KEY. PRICE CORRECTED 2026-09-19, read live (GET /api/v1/models, no key) while checking the arithmetic behind the infer cap raise: prompt 0.00000195, completion 0.00001092 — i.e. $__/$__ per 1M, DOWN from the $__/$__ this row carried since 2026-09-15, about 26% on both sides. Found because a cost estimate was being computed FROM this row; a stale price is invisible until something multiplies by it. context_length 1,048,576 and max_completion_tokens 943,718 confirmed unchanged in the same read. BENCH DATUM 2026-09-19, so nobody repeats the ~$__ it cost to learn: this id stopped on finish_reason `length` on the SAME design brief at BOTH 16,000 and 40,000 max_tokens (design-bench runs pokedex-mobile-02 and -03, ~40 KB brief plus refs). The cap does not rise a third time. AND THE STOP IS NOT WHAT IT WAS ASSUMED TO BE, which is the part worth carrying. The truncated reply was read: it is VALID PARTIAL HTML, not reasoning overflow. Structure, styling and a documented comment header were complete by ~5,200 characters; the remaining ~12,600 went into an INLINE SPECIES ARRAY that was still at ndex 8 of a list the brief had already capped — the brief says \"sample data in refs/species-sample.json (40 rows; render the rest as repeating cells)\". The claude-fable-5.1 arm on the identical brief and budget emitted 43 rows and finished the page in one attempt, 38,955 characters. THAT DIAGNOSIS WAS WRONG AND IS CORRECTED HERE 2026-09-19, same day, by reading the field the lead had not looked at. The run record carries BOTH `reply_chars` 17,701 AND `reasoning_chars` 123,663 — hidden reasoning is 87% of everything the model produced, and the visible mock got what was left of a 40,000-token budget. The lead reasoned about how the VISIBLE characters were distributed (structure, then an inline species array) and never asked how much output existed OUTSIDE the reply, which the record states plainly in a named field. MDL-5 (reasoning budget) is the mechanism, the kill was written on the right hypothesis, and the inline-array observation is true but is only where the visible text happened to stop — not the cause. WHAT THIS DOES AND DOES NOT SAY ABOUT THE MODEL: it is one brief, one arm, two runs. It says kimi-k3 is unsuited to LONG-OUTPUT single-file briefs carrying a dataset. It says nothing about it as a judge or on short output, where it is untested here. CONTROL FITTED 2026-09-19 on the developer's \"I still want to test kimi\" (his own commit f5d9700887, batch 407): `reasoning.max_tokens` 8000, which infer_run puts on the body unchanged (REQUEST_CONTROLS, min 1024). 8,000 of a 40,000 budget leaves ~32,000 for the visible document, against the ~5,000 it got unaided. NO `provider` ROUTING IS SET AND THAT IS DELIBERATE: the suggestion was to route away from Together in case it caps output, but nothing here shows that — the stop was OUR max_tokens being consumed, not a vendor ceiling, so routing would be a change made on no evidence and would confound the one variable this run is testing. BATCH 338's CAUTION STANDS: the knob may bind nothing on Moonshot. The run is the test. KILL: length again with the knob on → k3 is out for this brief class.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "PLAN relay 2026-09-15 on the developer's \"consider kimi models as well\" — figures CORRECTED by the lead's own read",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "Moonshot's 2.8T open-weight flagship. Intended roles, neither live: JUDGE COHORT TWO, after RV-64 (three-arm judge pilot) decides at ten — deliberately NOT added to that card now, because four arms is the shape its two kills are built for and a fifth would change what a pairwise agreement floor means; and candidate flagship MAKER. WHAT MAKES KIMI DIFFERENT FROM EVERY OTHER ROW HERE: the gateway proxy on the mini already carries a native `kimi` provider (k2.6, k3, kimi-for-coding) beside the codex provider Sol runs on, so Kimi could be a maker WITHOUT the OpenRouter harness qwen3.8-max-0902 would need. That is a card — a third maker route — and it is UNMINTED and stays unminted until the developer says so, after WM-70 (publisher process); the spend is his, a third allowance independent of the Claude and ChatGPT limits. DRAFT per rule 6.",
+   "request": {
+    "reasoning": {
+     "max_tokens": 8000
+    }
+   }
+  },
+  {
+   "id": "kimi-k2.7-code",
+   "label": "Kimi K2.7 Code (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "moonshotai/kimi-k2.7-code",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.6712,
+    "usd_per_1m_output": 3.35,
+    "usd_per_1m_cache_read": 0.18
+   },
+   "cost_reason": "RE-SWEPT 2026-10-11T06:34Z by the dev-developer lead, read from OpenRouter's public list (GET /api/v1/models, no key), never relayed: input 0.6712, output 3.35, cache read 0.18 USD per 1M — was 0.71/3.5. EARLIER READING: OpenRouter's public model list, READ AND VERIFIED BY THE LEAD 2026-09-15: prompt 0.00000071, completion 0.0000035 USD/token; context 262,144; max_completion_tokens 235,929; input modalities text+image — NO VIDEO, unlike kimi-k3; created 2026-06-12T12:12:41Z; no time-of-day overrides; cache read 0.00000015. Relayed as $__/$__; the list says $__/$__, a small correction but recorded rather than rounded to the relay. No `:batch` variant exists for this id.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "PLAN relay 2026-09-15 on the developer's \"consider kimi models as well\" — figures corrected by the lead's own read",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "Coding-specialised Kimi. Intended role: CODING-SPECIALIST JUDGE in cohort two, after RV-64 (three-arm judge pilot) decides at ten. Not an arm of that card and not to be added to it. Its 262,144 context is a QUARTER of every other candidate's ~1M, which matters for a judge whose bundle carries a diff, a suite output and sometimes a screenshot — cohort two should size a real bundle against this limit BEFORE assuming the arm can run at all. DRAFT per rule 6."
+  },
+  {
+   "id": "glm-5.3",
+   "label": "GLM 5.3 (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "z-ai/glm-5.3",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.07,
+    "usd_per_1m_output": 4.8,
+    "usd_per_1m_cache_read": 0.05
+   },
+   "cost_reason": "RE-SWEPT 2026-10-11T06:34Z by the dev-developer lead, read from OpenRouter's public list (GET /api/v1/models, no key), never relayed: input 0.07, output 4.8, cache read 0.05 USD per 1M — was 1.4/4.4. The listed INPUT rate is unusually low against its output rate (as listed; possibly promotional) — re-check before pricing a decision on it. EARLIER READING: OpenRouter's public model list, READ BY THE LEAD 2026-09-15 (PLAN quoted no prices, by the convention filed the same day): prompt 0.0000014, completion 0.0000044 USD/token; context 1,310,720; max_completion_tokens 943,717; TEXT ONLY — no image, no video; created 2026-08-18T20:57:35Z; no time-of-day overrides; cache read 0.00000026. BATCH LANE: `z-ai/glm-5.3:batch` is HALF PRICE — $__/$__ — but its context is SMALLER, 1,048,576 against 1,310,720. Half the money for 80% of the window, which is a trade and not a free win. Billed per call against OPENROUTER_API_KEY.",
+   "status": "approved",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "PLAN relay 2026-09-15 on the developer's \"what about glm models\" — ids only, no prices quoted",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "Z.ai's flagship. Two intended roles, neither live: MAKER CANDIDATE via Z.ai's Coding Plan, and judge cohort two after RV-64 (three-arm judge pilot) decides at ten. TEXT ONLY, which rules it out of any vision judging — that is glm-5v-turbo's row and glm-5.3-flash's. THE DECISION-CHANGING FACT, and it is about the ROUTE rather than this row: Z.ai's GLM Coding Plan serves an ANTHROPIC-COMPATIBLE endpoint, so Claude Code runs against it on a base URL and a key alone — no proxy, no gateway provider, no harness. That is the codex route's exact shape minus the gateway: a ~/.anthropic.env.glm layered per job by WM-14 (scoped job env)'s mechanism, `glm` in IMPL_ROUTES, a models.glm.json stage map, WM-53 (maker route per card)'s route field, WM-66 (runner version refuse)'s stamp, first card pinned as the datum like Sol's. SMALLER than the Kimi route (no provider auth on the proxy) and far smaller than Qwen's (no harness exists at all). ◆ PLAN's judgement, which the lead shares: if the developer takes one third maker route, this is the one to try first and Kimi second. THE CARD IS UNMINTED and stays so until his word, after WM-70 (publisher process). Plan tiers were relayed as $__/$__/$__ a month with smaller usage limits than Anthropic's — UNREAD BY THE LEAD, flagged as an estimate, and his spend either way. DRAFT per rule 6. || APPROVED 2026-09-17 (the developer, verbatim \"Finish approve glm\"). PRICE RE-READ FROM THE LIVE OPENROUTER LIST AT APPROVAL, not carried from the row: $__/$__ per 1M, context 1,310,720 — MATCHES the 2026-09-15 reading exactly, so the figure is verified rather than merely old (the 09-15 rule: a price is a reading with a date on it). WHAT THIS APPROVAL DOES AND DOES NOT DO, because the two GLM access paths are easy to conflate: it opens THIS row's path — OpenRouter, per-call, billed against OPENROUTER_API_KEY — to the consumers that filter on `approved` (shadow_judge.py, infer_run.py). IT DOES NOT GATE THE MAKER ROUTE. The `glm` maker route added the same day spends Z.ai's CODING PLAN through the claude CLI (~/.anthropic.env.glm, ANTHROPIC_BASE_URL=api.z.ai) and reads models.glm.json; it never consults this file. SO THIS ROW'S PER-CALL PRICES MUST NEVER BE USED TO PRICE A MAKER RUN — that run costs plan window, not $__/1M, and a record saying otherwise is the relayed-number failure in its most believable form."
+  },
+  {
+   "id": "glm-5v-turbo",
+   "label": "GLM 5V Turbo (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "z-ai/glm-5v-turbo",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_1m_input": 1.2,
+    "usd_per_1m_output": 4.0
+   },
+   "cost_reason": "OpenRouter's public model list, READ BY THE LEAD 2026-09-15: prompt 0.0000012, completion 0.000004 USD/token; context 202,752; max_completion_tokens 131,072; input modalities image+text+video; created 2026-04-01T16:37:38Z; no time-of-day overrides; cache read 0.00000024. NO `:batch` variant exists for this id, checked. ITS CONTEXT IS THE FACT THAT DECIDES THINGS: 202,752 — a SIXTH of glm-5.3's 1,310,720 and a fifth of the ~1M every other judge candidate carries. A judge bundle holds a diff, a suite output and sometimes a screenshot; cohort two must size a REAL bundle against this before assuming the arm can run. RE-READ LIVE AT APPROVAL 2026-09-19 (GET /api/v1/models, no key): prompt 0.0000012, completion 0.000004, context 202752, input modalities image+text+video — IDENTICAL to the 09-15 reading, nothing moved. APPROVED ON the developer's OWN COMMIT 9e818a9a4 (batch 399), verbatim \"Let's add glm 5v row as well if needed\". WHAT THIS APPROVAL IS AND IS NOT: it approves the OpenRouter/judge path for this id. It does NOT put the id on the maker plan route — a PROVING CALL on 2026-09-19 under ~/.anthropic.env.glm returned [claude-code:unrecognized_model] {\"model\":\"glm-5v-turbo\"}, terminal_reason api_error, empty modelUsage, zero tokens, zero cost. THE CODING PLAN DOES NOT SERVE THIS ID. Same separation as glm-5.3's row: a registry approval is about price and provenance, never about which route can reach it.",
+   "status": "approved",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "PLAN relay 2026-09-15 on the developer's \"what about glm models\" — ids only, no prices quoted",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-09-15"
+   ],
+   "note": "Intended role: VISION JUDGE candidate for cohort two, and video for the teardown lanes. Not an arm of RV-64 (three-arm judge pilot) and not to be added to it. WORTH WEIGHING AGAINST THE INCUMBENT BEFORE ANYONE SPENDS ON IT: glm-5.3-flash, already registered and approved, is ALSO text+image+video, carries 1,310,720 of context against this row's 202,752, and costs $__/$__ against $__/$__ — sixteen times cheaper on input with six times the window. This row's case has to be made on judgement quality alone, because it loses on every other axis. DRAFT per rule 6."
+  },
+  {
+   "id": "gemini-3.1-pro-preview",
+   "label": "Gemini 3.1 Pro (preview)",
+   "vendor": "google",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image",
+    "video",
+    "audio"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "not read from the vendor's price list at filing (makers have no network); the curator prices it at approval",
+   "status": "draft",
+   "key_env": "GEMINI_API_KEY",
+   "transport": "api",
+   "sources": [
+    "components/audio-teardown/gemini.py:15",
+    "tools/image-teardown/tools/run.py:47",
+    "tools/video-teardown/machine/chain.py:332,336",
+    "tools/image-production/models.json:98"
+   ],
+   "note": "Used for audio (audio-teardown's first model), images (image-teardown's default; image-production's vision judge) and video (video-teardown's VIDEO_MODELS and fallbacks). DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "gemini-3.5-flash",
+   "label": "Gemini 3.5 Flash",
+   "vendor": "google",
+   "aliases": [],
+   "modality": [
+    "text",
+    "video",
+    "audio"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "not read from the vendor's price list at filing (makers have no network); the curator prices it at approval",
+   "status": "draft",
+   "key_env": "GEMINI_API_KEY",
+   "transport": "api",
+   "sources": [
+    "components/audio-teardown/gemini.py:15",
+    "components/audio-teardown/effects.py:61",
+    "tools/video-teardown/machine/chain.py:332"
+   ],
+   "note": "Used for audio (audio-teardown's second model and its effects read) and video (video-teardown's first fallback). DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "scribe_v1",
+   "label": "ElevenLabs Scribe v1",
+   "vendor": "elevenlabs",
+   "aliases": [],
+   "modality": [
+    "audio"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "not read from the vendor's price list at filing (makers have no network); the curator prices it at approval",
+   "status": "draft",
+   "key_env": "ELEVENLABS_API_KEY",
+   "transport": "api",
+   "sources": [
+    "tools/video-teardown/machine/transcript.py:87"
+   ],
+   "note": "Speech to text with diarization; video-teardown sends it as the form field `model_id=scribe_v1`. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "scribe_v2",
+   "label": "ElevenLabs Scribe v2",
+   "vendor": "elevenlabs",
+   "aliases": [],
+   "modality": [
+    "audio"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "not read from the vendor's price list at filing (makers have no network); the curator prices it at approval",
+   "status": "draft",
+   "key_env": "ELEVENLABS_API_KEY",
+   "transport": "api",
+   "sources": [
+    "components/audio-teardown/speakers.py:14"
+   ],
+   "note": "Speech to text; audio-teardown's speakers step names it as MODEL. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "eleven_multilingual_v2",
+   "label": "ElevenLabs Multilingual v2",
+   "vendor": "elevenlabs",
+   "aliases": [],
+   "modality": [
+    "audio"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "not read from the vendor's price list at filing (makers have no network); the curator prices it at approval",
+   "status": "draft",
+   "key_env": "ELEVENLABS_API_KEY",
+   "transport": "api",
+   "sources": [
+    "components/marketing-doctrine/spoken.json:938",
+    "tools/video-teardown/machine/cast_voice.py:43"
+   ],
+   "note": "Text to speech; video-teardown's cast voice TTS_MODEL, and the model marketing-doctrine's spoken rules name. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "gpt-image-2.5",
+   "label": "GPT Image 2.5",
+   "vendor": "openai",
+   "aliases": [
+    "gpt-image-2.5-sunburst",
+    "gpt_image_2_5"
+   ],
+   "modality": [
+    "image"
+   ],
+   "cost": "unpriced",
+   "cost_reason": "not read from the vendor's price list at filing (makers have no network); the curator prices it at approval",
+   "status": "draft",
+   "key_env": "OPENAI_API_KEY",
+   "transport": "api",
+   "sources": [
+    "tools/image-production/models.json:30",
+    "tools/image-production/models.json:55",
+    "components/objects/prompts/object-reference-v1-damon.md:5",
+    "components/objects/steps.json:4"
+   ],
+   "note": "One model, three spellings (B2 (triage design calls): \"one gpt-image-2.5 with aliases\"). image-production sends `gpt-image-2.5-sunburst` to OpenAI's images endpoints; objects reaches it through the Higgsfield connector as `gpt_image_2_5` (steps.json says \"GPT Image 2.5\"). No `vendor_id` is recorded: whether OpenAI answers to `gpt-image-2.5` as well as `gpt-image-2.5-sunburst` was not checked (no network), so a consumer migrating to this row keeps sending the spelling it sends today until the curator records the vendor's name. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "trellis.2-4b",
+   "label": "TRELLIS.2 4B (local)",
+   "vendor": "microsoft",
+   "aliases": [],
+   "modality": [
+    "image"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/3d/make3d.py:2"
+   ],
+   "note": "Repo string: `TRELLIS.2-4B` (components/3d/README.md:24: \"TRELLIS.2-4B (Microsoft, MIT)\"), run through the Apple-Silicon port trellis-mac. One picture in, a textured 3D mesh out; `3d` is not in the modality vocabulary, so this row records the input (image). DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "dinov3-vitl16-pretrain-lvd1689m",
+   "label": "DINOv3 ViT-L/16 (local, ungated mirror)",
+   "vendor": "meta",
+   "aliases": [],
+   "modality": [
+    "image"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/3d/make3d.py:13,26-29"
+   ],
+   "note": "Repo string: `facebook/dinov3-vitl16-pretrain-lvd1689m`, swapped at run time for the ungated mirror `camenduru/dinov3-vitl16-pretrain-lvd1689m` (same sha256, per make3d.py:13). The image encoder inside TRELLIS.2's pipeline. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "birefnet",
+   "label": "BiRefNet (local)",
+   "vendor": "zhengpeng7",
+   "aliases": [],
+   "modality": [
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/3d/make3d.py:26-29",
+    "components/local-studio/jobs/matte.py:10"
+   ],
+   "note": "Repo string: `ZhengPeng7/BiRefNet`. Background removal in make3d (replacing the gated `briaai/RMBG-2.0`) and local-studio's matte job, `--model full` (image or video). DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "birefnet-lite",
+   "label": "BiRefNet lite (local)",
+   "vendor": "zhengpeng7",
+   "aliases": [],
+   "modality": [
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/jobs/matte.py:10"
+   ],
+   "note": "Repo string: `ZhengPeng7/BiRefNet_lite`. local-studio's matte job, `--model lite`. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "faster-whisper-base.en",
+   "label": "faster-whisper base.en (local)",
+   "vendor": "systran",
+   "aliases": [],
+   "modality": [
+    "audio"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "tools/asset-index/machine/extract.py:112"
+   ],
+   "note": "Repo string: `base.en`, the name faster-whisper's WhisperModel takes (CPU, int8). The code names no publisher: `systran` is the faster-whisper library's publisher, inferred and unchecked. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "flux2-klein-4b-q4",
+   "label": "FLUX.2 klein 4B, 4-bit (local, MLX)",
+   "vendor": "mflux-community",
+   "aliases": [],
+   "modality": [
+    "image"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/local.py:50"
+   ],
+   "note": "Repo string: `mflux-community/flux2-klein-4b-mflux-q4` (base model `flux2-klein-4b`). local-studio's image and edit jobs. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "seedvr2-3b",
+   "label": "SeedVR2 3B (local)",
+   "vendor": "numz",
+   "aliases": [],
+   "modality": [
+    "image",
+    "video"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/local.py:51"
+   ],
+   "note": "Repo string: `seedvr2-3b`, a local weights folder; local.py:51's comment names its source as `numz/SeedVR2_comfyUI` (fp16 3B + VAE). local-studio's upscale job, `--engine seedvr2`. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "whisper-large-v3-turbo",
+   "label": "Whisper large-v3-turbo (local, MLX)",
+   "vendor": "mlx-community",
+   "aliases": [],
+   "modality": [
+    "audio"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/local.py:52"
+   ],
+   "note": "Repo string: `mlx-community/whisper-large-v3-turbo`. local-studio's stt job, word timestamps. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "kokoro-82m",
+   "label": "Kokoro 82M (local, MLX)",
+   "vendor": "mlx-community",
+   "aliases": [],
+   "modality": [
+    "audio"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/local.py:53"
+   ],
+   "note": "Repo string: `mlx-community/Kokoro-82M-bf16`. local-studio's tts job, stock voices only. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "ltx-2.5-mlx-q4",
+   "label": "LTX-2.5 distilled, 4-bit (local, MLX)",
+   "vendor": "lightricks",
+   "aliases": [],
+   "modality": [
+    "image",
+    "video",
+    "audio"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/local.py:46"
+   ],
+   "note": "Repo string: `ltx-2.5-mlx-q4`, a local weights pack run by `ltx-2-mlx`. local-studio's i2v job: an image in, video with audio out. The code names no publisher: `lightricks` is inferred from the LTX name and unchecked. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "sam2.1-hiera-small",
+   "label": "SAM 2.1 Hiera small (local)",
+   "vendor": "meta",
+   "aliases": [],
+   "modality": [
+    "video"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "components/local-studio/local.py:47"
+   ],
+   "note": "Repo string: `sam2.1_hiera_small.pt`, a local checkpoint file. local-studio's segment job (video tracking). The code names no publisher: `meta` is inferred from the SAM name and unchecked. DRAFT per rule 6 (SI-172 (model id drafts)); no consumer reads this row yet — readers are repointed by their own cards."
+  },
+  {
+   "id": "gpt-6-luna",
+   "label": "GPT-6 Luna (via OpenRouter; also on the Codex ChatGPT subscription)",
+   "vendor": "openrouter",
+   "vendor_id": "openai/gpt-6-luna",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.1,
+    "usd_per_1m_output": 0.5
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ BY THE LEAD 2026-10-10T01:49Z, not relayed: prompt 0.0000001, completion 0.0000005 USD/token, i.e. $__/$__ per 1M. Context 1,050,000; max_completion_tokens 128,000; input modalities text+image+file; created epoch 1790100786. The BATCH lane is half price: `openai/gpt-6-luna:batch` $__/$__. `openai/gpt-6-luna-pro` is on the list at the IDENTICAL price and is not filed here (the same open question as gpt-6-astra-pro). A price is a reading with a date on it: re-sweep before pricing a decision on it.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "the developer typed to the lead [05eca7] 2026-10-10 ~01:45Z: \"update codex on the mini to 0.162.1 now\"; and, relayed verbatim by ◆ PLAN [d8b809] at 01:36:32Z: \"Have lead update codex first and find out why we can't use other models and make updates accordingly\"",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-10-10T01:49Z (no key)",
+    "codex exec smoke on the mini, codex-cli 0.162.1, ChatGPT sign-in, 2026-10-10 ~01:46Z: \"Reply with exactly: ok\" → ok"
+   ],
+   "note": "REACH: (1) OpenRouter with OPENROUTER_API_KEY, at the price above; (2) the Codex CLI on the mini's ChatGPT subscription (quota, not dollars). On codex-cli 0.153.4 it was refused 400 \"not supported when using Codex with a ChatGPT account\" with \"Model metadata … not found\"; on 0.162.1 it answers, so the cause was the old client's catalog, not the plan tier or a rollout. Why it is here: the like-for-like GPT rival for claude-haiku-5-5 in ◆ PLAN's Haiku 5.5 split-test design (not yet ruled). Filed `draft`: the curator's gate is the developer's. DUTY-6 FLAG as on gpt-6-astra: the vendor's `file` modality is outside the registry vocabulary and is recorded here, not in `modality`."
+  },
+  {
+   "id": "gpt-6.1-sol",
+   "label": "GPT-6.1 Sol (via OpenRouter; also on the Codex ChatGPT subscription)",
+   "vendor": "openrouter",
+   "vendor_id": "openai/gpt-6.1-sol",
+   "aliases": [],
+   "modality": [
+    "text",
+    "image"
+   ],
+   "cost": {
+    "usd_per_1m_input": 2.0,
+    "usd_per_1m_output": 10.0
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ BY THE LEAD 2026-10-10T01:49Z, not relayed: prompt 0.000002, completion 0.00001 USD/token, i.e. $__/$__ per 1M. Context 1,050,000; max_completion_tokens 128,000; input modalities text+image+file; created epoch 1790702882. The BATCH lane is half price: `openai/gpt-6.1-sol:batch` $__/$__. `openai/gpt-6.1-sol-pro` is listed at the identical price and is not filed here. `openai/gpt-6-sol` (the 6.0 Sol) is listed at the same $__/$__ and is also not filed. A price is a reading with a date on it.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "default_max_tokens": 16000,
+   "sources": [
+    "the developer typed to the lead [05eca7] 2026-10-10 ~01:45Z: \"update codex on the mini to 0.162.1 now\"; and, relayed verbatim by ◆ PLAN [d8b809] at 01:36:32Z: \"Have lead update codex first and find out why we can't use other models and make updates accordingly\"",
+    "OpenRouter GET /api/v1/models, read by the lead 2026-10-10T01:49Z (no key)",
+    "codex exec smoke on the mini, codex-cli 0.162.1, ChatGPT sign-in, 2026-10-10 ~01:46Z: \"Reply with exactly: ok\" → ok"
+   ],
+   "note": "REACH: (1) OpenRouter with OPENROUTER_API_KEY; (2) the Codex CLI on the mini's ChatGPT subscription — refused on codex-cli 0.153.4 (old catalog), answers on 0.162.1. The Sol line is OpenAI's coding line; platform/workers/mini-worker/models.codex.json still runs every non-implement stage on gpt-5.6-sol (\"older coding model\"). Moving those stages is the developer's call and is proposed to him, not made here. Filed `draft`; DUTY-6 FLAG on `file` as on gpt-6-astra."
+  },
+  {
+   "id": "typhoon-translate-1.5-4b",
+   "label": "Typhoon Translate 1.5 4B (local, MLX)",
+   "vendor": "scb10x",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": {
+    "usd_per_run": 0
+   },
+   "cost_reason": "runs on our own machine; electricity only",
+   "status": "draft",
+   "key_env": null,
+   "transport": "local",
+   "sources": [
+    "~/models/typhoon-translate/ on the mini (hf/ weights, own venv: mlx 0.32.3, mlx_lm 0.32.0), installed by ◆ PLAN · dev-developer [481ef1] on the developer's \"Install 2 first\", 2026-10-10 03:39:05Z; decision log 2026-10-10 THE TRANSLATION BENCH"
+   ],
+   "note": "Repo string: `scb10x/typhoon-translate1.5-4b` (sha c6cc4d39, PLAN's reading). Thai<->English only. LICENSE CONFLICT INSIDE THE DOWNLOAD, lead-verified 2026-10-10: README front matter says `license: apache-2.0`, its body says Gemma License — settle before any commercial use. DRAFT: split tests only (CQ-10 (translation bench)).",
+   "local": {
+    "dir": "~/models/typhoon-translate",
+    "python": ".venv/bin/python",
+    "weights": "hf",
+    "note": "CQ-10 (translation bench): split_test.py runs the model as a one-off process per case with this venv's python (the developer 2026-10-11, decision log). MACHINE PATH, flagged against builder-card rule 3 (a target, not a wall): the mini only."
+   }
+  },
+  {
+   "id": "deepseek-v4-pro-0813",
+   "label": "DeepSeek V4 Pro 0813 (via OpenRouter)",
+   "vendor": "openrouter",
+   "vendor_id": "deepseek/deepseek-v4-pro-0813",
+   "aliases": [],
+   "modality": [
+    "text"
+   ],
+   "cost": {
+    "usd_per_1m_input": 0.66,
+    "usd_per_1m_output": 1.98,
+    "usd_per_1m_cache_read": 0.022
+   },
+   "cost_reason": "OpenRouter's public model list (GET /api/v1/models, no key), READ BY THE LEAD 2026-10-10T06:12Z: prompt 0.00000066, completion 0.00000198, cache read 0.000000022 USD/token; context 1,048,576; input text only; created 1786549364. TIME-OF-DAY OVERRIDE ON THE LIST: weekdays 01:00–04:00 UTC the rates DOUBLE (1.32/3.96); weekends and other weekday hours are the base rate. Providers range 0.30–1.06 in / 1.98–5.00 out (endpoints list, same read); none publishes a data policy there — the account's Data Policies setting (no training providers) is what governs.",
+   "status": "draft",
+   "key_env": "OPENROUTER_API_KEY",
+   "transport": "api",
+   "sources": [
+    "the developer typed to the dev-developer lead [c060bf] 2026-10-10: \"and deepseek\", adding a DeepSeek arm to the first design-bench run; the lead picked the pro tier for a design task",
+    "OpenRouter GET /api/v1/models and /models/deepseek/deepseek-v4-pro-0813/endpoints, read by the lead 2026-10-10T06:12Z"
+   ],
+   "note": "DRAFT: bench arms only (the design bench sets allow_draft); promotion is the developer's. DATA-POLICY FACT as for every DeepSeek row: DeepSeek's first-party endpoint trains on prompts — route only through the account's no-training setting."
+  }
+ ]
+}

@@ -1,0 +1,1017 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- components/keys/plans — a copy of the published page, for review in the repo. Open it in a browser. Names only: no key value appears anywhere in this file. -->
+<title>Team Key Ring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@creator;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@creator;500&display=swap">
+<style>
+:root{
+  --ground:#f4f6f5; --panel:#ffffff; --ink:#18202b; --muted:#5a6572; --rule:#d9dfe0;
+  --teal:#0e6464; --teal-soft:#e2efee; --brass:#9c7418; --brass-soft:#f4ecd8;
+  --good:#2c7a4b; --good-soft:#e3f1e8; --bad:#b0392a; --bad-soft:#f7e4e1; --warn:#9a6300; --warn-soft:#f6ecd6;
+  --code:#eef1f1;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#11161c; --panel:#171e26; --ink:#e4e9ee; --muted:#9aa6b2; --rule:#2a3440;
+    --teal:#5fbcb8; --teal-soft:#15302f; --brass:#d8b25c; --brass-soft:#2e2715;
+    --good:#6cc493; --good-soft:#163024; --bad:#f08a7a; --bad-soft:#3a1d19; --warn:#e2b25a; --warn-soft:#33280f;
+    --code:#1f2831; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#11161c; --panel:#171e26; --ink:#e4e9ee; --muted:#9aa6b2; --rule:#2a3440;
+  --teal:#5fbcb8; --teal-soft:#15302f; --brass:#d8b25c; --brass-soft:#2e2715;
+  --good:#6cc493; --good-soft:#163024; --bad:#f08a7a; --bad-soft:#3a1d19; --warn:#e2b25a; --warn-soft:#33280f;
+  --code:#1f2831; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:15px/1.6 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,5vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:700}
+h3{font-size:16px;font-weight:700}
+p{margin:0;max-width:68ch}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em}
+code{background:var(--code);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.eyebrow{font:600 11.5px/1 "IBM Plex Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+section{display:flex;flex-direction:column;gap:16px}
+.lede{display:flex;flex-direction:column;gap:14px}
+.status{display:flex;flex-wrap:wrap;gap:8px;font-size:12.5px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);color:var(--muted)}
+.pill b{color:var(--ink);font-weight:600}
+.answer{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--teal);padding:18px 20px;border-radius:6px;display:flex;flex-direction:column;gap:10px}
+.answer p{font-size:16px}
+.small{font-size:13px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);font-style:italic}
+
+/* diagram */
+.flow{display:grid;grid-template-columns:1fr 44px 1.15fr 44px 1fr;align-items:stretch;gap:0}
+.col{display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px}
+.col h3{font-size:14px}
+.col .sub{font-size:12.5px;color:var(--muted)}
+.chip{border:1px solid var(--rule);border-radius:6px;padding:7px 10px;font-size:13px;display:flex;justify-content:space-between;gap:8px;align-items:baseline;background:var(--ground)}
+.chip .mono{color:var(--muted);font-size:11.5px}
+.vault{border-color:var(--brass);background:var(--brass-soft)}
+.vault.mini{border-style:dashed}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:22px}
+.template{margin-top:4px;background:var(--code);border-radius:6px;padding:10px 12px;font:12px/1.55 "IBM Plex Mono",monospace;color:var(--ink);overflow-x:auto;white-space:pre}
+@media (max-width:760px){
+  .flow{grid-template-columns:1fr}
+  .arrow{transform:rotate(90deg);height:34px}
+}
+
+/* tables */
+.tablebox{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:720px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+th{font:600 11.5px/1.3 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--ground)}
+tr:last-child td{border-bottom:0}
+td.v{font-weight:600;white-space:nowrap}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.t-good{background:var(--good-soft);color:var(--good)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}
+.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-plain{background:var(--code);color:var(--muted)}
+.was{color:var(--bad)}
+.now{color:var(--good)}
+.grouprow td{background:var(--teal-soft);font:600 12px/1.3 "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+
+/* decisions */
+.decisions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.decisions{grid-template-columns:1fr}}
+.dec{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.dec.star{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset}
+.dec .id{font:700 12px/1 "IBM Plex Mono",monospace;color:var(--teal)}
+.dec dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13.5px}
+.dec dt{color:var(--muted);font-weight:500}
+.dec dd{margin:0}
+
+/* phases */
+.phases{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--rule);margin-left:8px}
+.phase{position:relative;padding:0 0 22px 22px;display:flex;flex-direction:column;gap:6px}
+.phase:last-child{padding-bottom:0}
+.phase::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:2px solid var(--teal)}
+.phase.now::before{background:var(--bad);border-color:var(--bad)}
+.phase .head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.phase .who{font-size:12.5px;color:var(--muted)}
+.phase ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px;max-width:72ch}
+
+/* roles */
+.roles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.roles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.roles{grid-template-columns:1fr}}
+.role{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.role ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:2px}
+.homes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.homes{grid-template-columns:1fr}}
+.home{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.home h3{font-size:14px}
+.home .sub{font-size:12.5px;color:var(--muted)}
+.home.nofile{border-style:dashed}
+.kind td:first-child{font-weight:600}
+.pri{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.p-now{background:var(--bad)}.p-roll{background:var(--warn)}.p-check{background:var(--muted)}
+.uses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.uses{grid-template-columns:1fr}}
+.use{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.use .top{display:flex;gap:10px;align-items:baseline}
+.use .n{font:700 12px/1 "IBM Plex Mono",monospace;color:var(--teal)}
+.use h3{font-size:15px}
+.route{display:grid;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr);align-items:stretch;gap:0}
+.node{border:1px solid var(--rule);border-radius:6px;padding:7px 9px;font-size:12.5px;line-height:1.35;background:var(--ground);display:flex;flex-direction:column;gap:2px}
+.node .lab{font:600 10.5px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.node.key{border-color:var(--brass);background:var(--brass-soft)}
+.node.key.none{border-style:dashed;background:var(--ground)}
+.node.to.write{border-color:var(--bad)}
+.link{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px}
+@media (max-width:480px){.route{grid-template-columns:1fr}.link{transform:rotate(90deg);height:16px}}
+.scene{font-size:13.5px}
+.traits{display:flex;flex-wrap:wrap;gap:6px}
+.trait{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--code);color:var(--muted)}
+.trait.y{background:var(--good-soft);color:var(--good)}
+.trait.r{background:var(--bad-soft);color:var(--bad)}
+.matrix td,.matrix th{text-align:center}
+.matrix td:first-child,.matrix th:first-child{text-align:left}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
+.d-yes{background:var(--teal)}
+.d-no{border:1.5px solid var(--rule)}
+.d-some{background:linear-gradient(90deg,var(--teal) 50%,transparent 50%);border:1.5px solid var(--teal)}
+.d-risk{background:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.journey{display:grid;grid-template-columns:repeat(5,minmax(170px,1fr));gap:10px;min-width:900px;padding:2px}
+.jscroll{overflow-x:auto;padding-bottom:6px}
+.stage{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;position:relative}
+.stage.personal{border-color:var(--brass);background:var(--brass-soft)}
+.stage.managed{border-color:var(--teal);background:var(--teal-soft)}
+.stage .step{font:700 11px/1 "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em}
+.stage h3{font-size:14px}
+.stage p{font-size:12.5px;line-height:1.45}
+.stage dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:12px}
+.stage dt{color:var(--muted)}
+.stage dd{margin:0}
+.branch{display:flex;flex-direction:column;gap:6px}
+.br{border:1px solid var(--rule);border-radius:6px;padding:6px 8px;font-size:12px;background:var(--panel)}
+.br b{display:block;font-size:12px}
+.band{display:grid;grid-template-columns:repeat(5,minmax(170px,1fr));gap:10px;min-width:900px;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:2px}
+.band span{padding:6px 8px;border-radius:4px}
+.band .bp{grid-column:1 / span 2;background:var(--brass-soft);color:var(--brass)}
+.band .bd{background:var(--code);color:var(--muted)}
+.band .bm{grid-column:4 / span 2;background:var(--teal-soft);color:var(--teal)}
+.mv{overflow-x:auto;padding-bottom:6px}
+.mvgrid{display:grid;grid-template-columns:150px repeat(3,minmax(190px,1fr));gap:10px 12px;min-width:780px;align-items:stretch}
+.mvstep{display:flex;flex-direction:column;gap:4px;padding-top:6px}
+.mvstep .k{font:700 11px/1 "IBM Plex Mono",monospace;color:var(--teal)}
+.mvstep b{font-size:13px;line-height:1.3}
+.mvstep span{font-size:12px;color:var(--muted);line-height:1.35}
+.mvhead{font:700 13px/1.2 Archivo,sans-serif;padding:8px 10px;border-radius:6px;background:var(--code);text-align:center}
+.mvcell{border:1px solid var(--rule);border-radius:6px;background:var(--panel);padding:8px 10px;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.mvspan{grid-column:2 / span 3;border:1px solid var(--rule);border-radius:6px;background:var(--panel);padding:10px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.org{border:1px solid var(--teal);border-radius:6px;padding:8px 10px;background:var(--teal-soft);display:flex;flex-direction:column;gap:6px;flex:1 1 220px}
+.org b{font-size:13px}
+.keys{display:flex;flex-wrap:wrap;gap:6px}
+.kc{font:500 11.5px/1 "IBM Plex Mono",monospace;padding:5px 8px;border-radius:4px;background:var(--brass-soft);border:1px solid var(--brass);color:var(--ink)}
+.envcard{font:11.5px/1.6 "IBM Plex Mono",monospace;background:var(--code);border-radius:6px;padding:8px 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.envcard .v{color:var(--brass);font-weight:500}
+.envcard .c{color:var(--muted)}
+.lp{border:1px dashed var(--brass);background:var(--brass-soft);align-self:start}
+.down{grid-column:2 / span 3;text-align:center;color:var(--muted);font-size:16px;line-height:1}
+.samediff{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.samediff{grid-template-columns:1fr}}
+.sd{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:12px 14px;font-size:13.5px;display:flex;flex-direction:column;gap:6px}
+.sd ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.sd.same h3{color:var(--teal)} .sd.diff h3{color:var(--brass)}
+.change{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.change{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.change{grid-template-columns:1fr}}
+.chg{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.chg .k{font:700 11px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+.orgband{background:var(--teal-soft);border-color:var(--teal)}
+.orgband .org{flex:1 1 180px;background:var(--panel)}
+.fan{flex-basis:100%;text-align:center;font-size:12.5px;color:var(--teal);font-weight:600}
+.holder{border-top:3px solid var(--teal)}
+.lab2{font:600 10.5px/1.3 "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:860px){.tr-grid{grid-template-columns:1fr}}
+.tr{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:13px}
+.tr .k{font:700 11px/1 "IBM Plex Mono",monospace;color:var(--teal)}
+.tr .s{font-size:12px;color:var(--muted)}
+.tr.safe{border-top:3px solid var(--good)} .tr.cut{border-top:3px solid var(--bad)}
+.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.twocol{grid-template-columns:1fr}}
+.panel{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.panel ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.panel.free{border-style:dashed;border-color:var(--brass)} .panel.free h3{color:var(--brass)}
+.panel.gate h3{color:var(--teal)}
+.foot{font-size:12.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.tracks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.tracks{grid-template-columns:1fr}}
+.track{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.track.a{border-top:4px solid var(--good)} .track.b{border-top:4px solid var(--teal)}
+.track ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.track .k{font:700 11px/1 "IBM Plex Mono",monospace;letter-spacing:.06em}
+.track.a .k{color:var(--good)} .track.b .k{color:var(--teal)}
+.newtag{display:inline-block;font:600 10.5px/1 "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:var(--brass-soft);color:var(--brass);vertical-align:middle;margin-left:6px}
+a{color:var(--teal)}
+a:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="lede">
+  <span class="eyebrow">Plan · keys and env files · for the developer, Operator B, the ops lead</span>
+  <h1>Team Key Ring</h1>
+  <div class="status">
+    <span class="pill"><b>Status</b> v13 · 9 Oct · Track A go given 9 Oct, with guards · D2–D5 filed 30 Sep · D1 deferred to the migration (the developer, 9 Oct) · D6: Operator B's dev jobs on her own subscription from 9 Oct; Remote Control fails on a token</span>
+    <span class="pill"><b>Drafted</b> 29 Sep 2026, ◆ PLAN · dev-developer · v13 by ◆ PLAN [fab344]</span>
+    <span class="pill"><b>Read at</b> workspace 51dce2bcd1 (v13)</span>
+    <span class="pill"><b>When</b> Track A now · Track B in Phase 5 (20 Oct → 2 Nov)</span>
+    <span class="pill"><b>Settles</b> I-101 (secrets stack), open since 5 Sep</span>
+  </div>
+  <div class="answer">
+    <p><b>Every machine gets the same key file, with its own keys.</b> A names-only template in git sets which variables exist. the ops lead and Operator B, both admins on the company accounts, create a key for each person and for the Mac mini, build each machine's file from the template, and send it. When keys change later, they send a replacement file. Anything else on a machine is that person's own setup: a personal file, the Keychain, several files. It isn't checked, and a replacement never touches it. Checks start only when a piece of work enters the system path.</p>
+    <p class="small">the developer's approach, 29 Sep, including leaving personal setups unchecked. How the files are sent securely, and where the admins keep a copy, is left open for later. D2–D5 were answered by the developer on 29–30 Sep and filed in the decision log on 30 Sep. Facts come from a repo and machine inventory (names only, no values read) and a vendor check done today; anything marked <i>unconfirmed</i> or <i>inferred</i> was not verified directly.</p>
+  </div>
+</header>
+
+<section id="split">
+  <span class="eyebrow">New in v13 · the split</span>
+  <h2>Two tracks: what unblocks work now, and what waits for the clean-up phase</h2>
+  <p>On 9 Oct nothing past the psql helper was built, and the phase-1 card had never been minted (keys#10). Yet the held issues need very little of the full plan: all six P0s need only the loader and the readers switched. None of them needs D1, the admins, per-person keys or the rotation wave. So the plan splits in two. <b>the developer gave Track A the go on 9 Oct, with three guards. Track B's scope is still ◆ PLAN's proposal.</b></p>
+  <div class="tracks">
+    <div class="track a">
+      <span class="k">TRACK A · NOW · GO GIVEN 9 OCT</span>
+      <h3>One loader, readers switched</h3>
+      <ul>
+        <li>The loader: the environment first, then the managed file, then the old locations (<code>~/.daemn</code>, <code>~/.gemini.env</code>, <code>~/.apify.env</code>) as a temporary fallback. <b>On the mini, a job's loader reads only its own environment.</b> The managed file is the worker's to read and scope per job; SI-193 (video-teardown keys reader) read it from disk, turned 2 granted keys into 13 and was reverted on 9 Oct, and SI-192b (loader skips key file) fixes it</li>
+        <li>The template: one name per secret (Higgsfield 5 → 1, database URL 2 → 1, Drive 3 → 1)</li>
+        <li>Readers switched, starting with video-teardown's <code>keys.py</code>, which three other components import. The per-file fixes are already written up on the Mini Key Blockers page (7 Oct, about 3–5 hours of build, <i>inferred</i>)</li>
+        <li>The two checks: every template name is in the worker's scoped list, and no key appears in a command line</li>
+        <li>Missing names added to the template, and their values put on the mini. Adding a name is a grant, so it's the developer's or Operator B's own commit; the values are the developer's hands on the mini</li>
+      </ul>
+      <p class="small"><b>Guards (the developer, 9 Oct: "go on Track A with the guards"):</b> (1) no renames: the loader maps old names to the new ones, and removing them waits for Track B; (2) the checks only report until the readers are switched; (3) merges into the owner's components land in his window, never while he is mid-run. the owner's own key helper in his home folder is not touched. Kill-condition: if a run reports a missing key after a Track A merge, that merge is reverted the same day.</p>
+      <p class="small"><b>Who:</b> the lead's makers build it; Operator B reviews as engine owner. <b>Closes:</b> 43 of the 44 key issues held on 7 Oct, all 6 P0s among them. Four components then run beyond the owner's Mac: video-teardown, video-production, video-edit and image-teardown.</p>
+    </div>
+    <div class="track b">
+      <span class="k">TRACK B · PHASE 5 · 20 OCT → 2 NOV</span>
+      <h3>Company accounts, per-person keys, and the two new pieces</h3>
+      <ul>
+        <li>Admins on every account, and a key per holder (phase 2)</li>
+        <li>D1, then the files are built and sent (phase 3)</li>
+        <li>The rotation wave (phase 4), then the standing process (phase 5)</li>
+        <li><a href="#drive">The future Google Drive setup</a> <span class="newtag">new</span>. the developer tied Drive to this phase on 7 Oct.</li>
+        <li><a href="#seats">Each person's Claude on the mini</a> <span class="newtag">new</span>. Its decision, D6, can start now, because the answer takes the longest to get.</li>
+        <li><b>Per-person keys for every vendor in lab runs</b> <span class="newtag">new</span>. the developer, 9 Oct: "post migration we would want to set up individual keys for all (apify, fal etc) not just claude for these runs". Until then, runs-lane jobs (lab, teardown, chain, bench, fit) bill the login and the company keys; WM-140 (runs lane token) is parked, built but not merged. Three prerequisites:
+          <ol>
+            <li>One per-person credential layer for every vendor, starting from WM-140 (runs lane token)'s <code>with_requester_token</code></li>
+            <li>The three runners that rebuild a job's environment pass it through: the teardown runner (<code>tools/video-teardown/machine/run.py</code> <code>_clean_env()</code>), chain-runner (<code>components/chain-runner/runner/vendors.py</code> <code>_claude_env()</code>) and the bench (<code>new-workflow-design/builds/chain-qa/bench_run.py</code> <code>harness_env()</code>)</li>
+            <li>A job's record names a credential only where the child process really receives it. As built, WM-140 (runs lane token) would have recorded <code>token:operator-b</code> on teardown and chain runs whose runners drop the token</li>
+          </ol>
+          Kill-condition: if her lab-run records (all <code>login</code>) show material Claude usage before Track B starts on 20 Oct, WM-140 (runs lane token) ships a second round as a stopgap, for lab runs only.</li>
+      </ul>
+      <p class="small"><b>Who:</b> the developer (accounts, the mini), the ops lead and Operator B (admins). <b>Closes:</b> the last key issue (keys#11, D1), the amber rotations, and I-101 (secrets stack).</p>
+    </div>
+  </div>
+  <h3>What the 7 Oct hold actually contains</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Group</th><th>Issues</th><th>What clears it</th><th>Track</th></tr></thead>
+    <tbody>
+      <tr><td class="v">Read every key by name</td><td>30, among them all 6 P0s: ad-handoff#1, image-teardown#1, triage#17, video-edit#21, video-production#1, video-teardown#1</td><td>The loader, and readers switched</td><td><span class="tag t-good">A</span></td></tr>
+      <tr><td class="v">The mini's names and grants</td><td>8</td><td>Template names (a grant), and key values on the mini</td><td><span class="tag t-good">A</span></td></tr>
+      <tr><td class="v">The migration's own items</td><td>6 (keys#3, #5, #10, #11, #12, run-kit#20)</td><td>The phase-1 card, the template and its tags; keys#11 is D1</td><td><span class="tag t-good">A</span> · keys#11 <span class="tag t-plain">B</span></td></tr>
+      <tr><td class="v">Not key work</td><td>22: run-kit#1, #5, #7 · video-teardown#6, #16 · ad-handoff#7 · asset-index#11 · audio-teardown#11, #21 · chain-runner#5 · meta-upload#15, #22 · qc-checks#13 · swipe-paid#3 · system-integration#8 · image-production#22 · video-production#2 · marketing-chain-checks#6, #20, #21 · image-edit#6 · video-edit#15</td><td>Normal triage: proposed to lift the hold on these now</td><td><span class="tag t-plain">unhold</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">66 unique issues (run-kit#20 is listed twice in the 7 Oct file). The "not key work" group is ◆ PLAN's reading of each issue's title; the lead re-checks each one before lifting its hold. Kill-condition for the split: if Track A turns out to need D1 or a per-person key to work at all, the plan returns to one sequence. Nothing found in the plan suggests it does. the developer's 7 Oct hold carries its own kill date: if the migration slips past 21 Oct, the P0s get looked at one by one. Track A lands well before that date; the whole plan would not.</p>
+</section>
+
+<section id="drive">
+  <span class="eyebrow">New in v13 · part of Track B</span>
+  <h2>The future Google Drive setup</h2>
+  <p>the developer, 7 Oct: "address all of the google drive component updates, future structure all together as part of the keys / clean up migration phase". The Drive work is part of this migration, and it changes which keys exist.</p>
+  <div class="twocol">
+    <div class="panel"><h3>Today</h3><ul>
+      <li>The Drive service-account key sits on the mini and on the owner's laptop, under three names</li>
+      <li>Person-run tools read the Drive mount (accepted for this phase: casting, naming, research-gatherer, video-edit, video-teardown, copywriter)</li>
+      <li>The mini reaches Drive through the API by file id (O9, ruled 7 Oct). Its Drive app fails on some brand folders ("Resource deadlock avoided"), so it must never depend on the mount</li>
+      <li>Company policy blocks new service-account keys, so rotating the key needs a brief policy override</li>
+    </ul></div>
+    <div class="panel gate"><h3>Proposed <i>(◆ PLAN, 7 Oct, not ruled)</i></h3><ul>
+      <li><b>One pipe, two sign-ins.</b> Everything goes through gdrive-creator. The mini signs in with the service account (one name, mini only). A person's script signs in as that person, with their own Google login, so no service-account key stays on a laptop</li>
+      <li>Sharing is company-only by default; "anyone with the link" happens only when a person chooses it</li>
+      <li>The engine gets its missing functions: update by id, export, list, rename</li>
+      <li>Callers store the file ids they write in their run records, and later reads go by id</li>
+      <li>The Drive tools index (<code>team/drive-tools.json</code>, ruled 9 Oct, the ops lead its only gate) lists the sheets and forms that count as team tools</li>
+    </ul></div>
+  </div>
+  <h3>What it changes on the key ring</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Key</th><th>Change</th><th>Kind</th></tr></thead>
+    <tbody>
+      <tr><td class="v">Drive service-account key</td><td>Mini only, one name. the owner's laptop copy is retired; the key is rotated once, with the policy override</td><td>Our platform, used by machines</td></tr>
+      <tr><td class="v">Google sign-in app (OAuth client) <span class="newtag">new</span></td><td>One per company, so people's scripts can sign in as themselves. A template name, shipped in the managed files</td><td>Our platform</td></tr>
+      <tr><td class="v">Each person's Google login</td><td>Cached on their own laptop by the sign-in step; never in a file anyone sends</td><td>Own sign-ins</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Open, not ruled: who owns gdrive-creator long term (the owner today; platform ownership by Operator B is the question); whether team tools must live on a shared drive; the swipe libraries' move and reads by id, due by 2 Nov. Unchecked: whether the company's Google Workspace lets an internal OAuth app read Drive without Google's app review.</p>
+</section>
+
+<section id="seats">
+  <span class="eyebrow">Updated 9 Oct · part of Track B · D6</span>
+  <h2>Each person's Claude, running their automation on the mini</h2>
+  <p>Today every Claude job on the mini runs on the developer's own logged-in session (there is no <code>~/.anthropic.env</code>). The aim, in the developer's words of 9 Oct: each person has their own Pro or Max account; the person who <b>requests</b> a job decides whose subscription runs it, whatever the slot or the work; no Mac user per person; and nobody else gets direct access to the mini. Test folder: <code>components/keys/plans/2026-10-09-claude-seats-test/</code> (handoff, checklist, results).</p>
+  <div class="tr-grid">
+    <div class="tr safe"><span class="k">1 · TOKEN</span><b>The admins get it, as with keys</b><span class="s">The person runs <code>claude setup-token</code> on their own laptop with the ops lead or Operator B. It lasts one year. It travels by the D1 method once the migration decides it; until then, by a one-time link or a password-manager share, never chat, Slack or email (how Operator B's moved)</span></div>
+    <div class="tr safe"><span class="k">2 · STORE</span><b>A per-person file on the mini</b><span class="s">Never the mini's shared key file: SI-193 (video-teardown keys reader) was reverted on 9 Oct for reading that file from disk. Whitespace stripped on save</span></div>
+    <div class="tr safe"><span class="k">3 · ROUTE</span><b>The job's requester picks the token</b><span class="s">The worker reads only that person's file (<code>~/.claude-tokens/&lt;requester&gt;</code>) at job start; <code>ANTHROPIC_API_KEY</code> is removed because it would outrank the token; no file keeps today's login until each person enrolls. Each job's record names the credential used. <b>Operator B first, from 9 Oct</b> (the developer's card)</span></div>
+    <div class="tr safe"><span class="k">4 · FENCE</span><b>The sandbox</b><span class="s"><code>Read(//…)</code> blocks on token and key paths, a canary read before each run, and a network allowlist</span></div>
+    <div class="tr cut"><span class="k">5 · NEVER</span><b>No standing access</b><span class="s">A person's token runs only <code>claude -p</code> jobs and supervised sessions; never <code>claude remote-control</code> service mode, never a LaunchAgent (ruled 9 Oct)</span></div>
+  </div>
+  <h3>Tested on the mini, 9 Oct</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Question</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td class="v">Does a token beat the developer's logged-in session?</td><td><span class="tag t-good">yes</span> <code>authMethod: oauth_token</code>, so the job bills to the token's owner</td></tr>
+      <tr><td class="v">Two jobs at once on one token</td><td><span class="tag t-good">both pass</span> in 50 seconds</td></tr>
+      <tr><td class="v">Sandbox blocks reading a token folder</td><td><span class="tag t-good">yes</span> the Read tool, <code>cat</code>, Python and a child process are all blocked, but <b>only with <code>//</code> absolute paths</b>; one slash silently allows everything, hence the canary</td></tr>
+      <tr><td class="v">Sandbox network</td><td><span class="tag t-warn">blocked by default</span>; the allowlist works per site</td></tr>
+      <tr><td class="v">A token copied from a terminal</td><td><span class="tag t-bad">breaks</span> it wraps at character 80; strip whitespace on save</td></tr>
+      <tr><td class="v">Revoking</td><td><span class="tag t-warn">partly</span> claude.ai → Settings → Claude Code has a trash icon per token; whether it takes effect immediately is untested</td></tr>
+      <tr><td class="v">Remote Control on a <code>setup-token</code> token</td><td><span class="tag t-bad">no</span> with Operator B's token, 9 Oct afternoon: "Claude.ai login was rejected — run /login, then /remote-control". Remote Control needs a full claude.ai login, not a token</td></tr>
+      <tr><td class="v">Does the developer's own setup load into a session started with her token?</td><td><span class="tag t-warn">yes</span> his auto mode, effort and status line came up, so a supervised session would need its own config folder</td></tr>
+      <tr><td class="v">Does a token job bill to the token owner's subscription?</td><td><span class="tag t-warn">not proven</span> <code>claude auth status</code> on her token says <code>oauth_token</code> / <code>firstParty</code> but names no account. the developer accepted the risk ("worse case it ends up using my subscription, which woudl have been the case anywyas"); each job's record now names the credential it used</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3>Routing: Operator B's dev jobs run on her subscription, from 9 Oct</h3>
+  <p>the developer, 9 Oct: "lets stop thinking this like a test, we might as well just set it up so she can actually use the dev slots with her usage from now on". His card to the lead, WM-138 (requester token routing): <code>claude_env</code> sets <code>CLAUDE_CODE_OAUTH_TOKEN</code> from <code>~/.claude-tokens/&lt;requester&gt;</code> when that file exists, strips whitespace, and unsets <code>ANTHROPIC_API_KEY</code> for that call. No file keeps today's login. Each job's status record names the credential used (<code>token:&lt;person&gt;</code> or <code>login</code>). A limit error fails as today, with no fallback to another subscription. It merges on the developer's word, with all slots idle. Jobs her own lead files carry her name and run on her token; work the dev-developer lead dispatches for her carries the developer's name and stays on his login. Operator B is first; everyone else is pending until they enroll. <b>Dev slots only:</b> her runs-lane jobs (lab, teardown, chain, bench, fit) stay on the login until Track B (ruled 9 Oct; WM-140 (runs lane token) parked). <b>Accepted gap:</b> until the sandbox card lands, any job on the mini can open her token file. Kill-condition: any other requester's job shows <code>token:operator-b</code> → revert the same day.</p>
+  <h3>Supervised sessions: CLI-36 (supervised mini sessions) stays held, because Remote Control needs a full login</h3>
+  <p><b>9 Oct test result:</b> Remote Control refused Operator B's token. Supervised sessions as designed don't work on a token. ◆ PLAN recommends keeping CLI-36 (supervised mini sessions) held, under the kill-condition below. The alternative, her full claude.ai login on the mini in a separate config folder, is a bigger grant, and whether its Keychain entry stays apart from the developer's is unchecked. That choice is the developer's. Routing jobs to each person's subscription doesn't depend on Remote Control and goes ahead once the usage-meter test confirms billing.</p>
+  <p>Sometimes the developer wants Operator B working on the mini through Claude, under his eye: he starts a <code>claude --remote-control</code> session in tmux with her token, she drives it from her own Claude app, and he ends it. She never logs in to the mini. The session runs as the developer's Mac user, and its approval prompts go to her, so its limits come from the session's profile. The test settles three profile questions: (i) a per-person config folder, if the developer's own setup (instructions, memory, the task greeting) loads into her session; (ii) her git name on the session; (iii) the sandbox. Once she edits and commits, she works in a clone of her own on the mini, the same pattern as the worker lanes. Setting up env files this way waits for D1's vault, so key values never pass through the chat.</p>
+  <p class="note">Docs (code.claude.com/docs/en/authentication): the token lasts one year and is read from <code>CLAUDE_CODE_OAUTH_TOKEN</code>; <code>ANTHROPIC_API_KEY</code> outranks it; <code>--bare</code> ignores subscriptions. Terms: an earlier plan session read the arrangement as not clearly against them, and the docs are silent. Kill-condition: if Remote Control won't run on a token, supervised sessions wait (no full claude.ai logins on the mini); routing jobs to each person's subscription stands either way. <b>Met on 9 Oct:</b> Remote Control refused the token.</p>
+</section>
+
+<section>
+  <span class="eyebrow">At a glance</span>
+  <h2>Every kind of key we hold, and how each is handled</h2>
+  <p>Eight kinds cover every credential found in today's inventory. If a key doesn't fit one of them, it's missing from this plan: tell the ops lead.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Kind</th><th>Examples</th><th>One per</th><th>Where it lives</th><th>Who manages it</th></tr></thead>
+    <tbody class="kind">
+      <tr><td>Paid AI services</td><td>Higgsfield, fal, Gemini, OpenAI, Apify, OpenRouter, the mini's model routes (ElevenLabs is shared: see D3)</td><td>person and machine, company-billed</td><td>Each machine's managed file</td><td>the ops lead and Operator B create keys; the developer owns billing</td></tr>
+      <tr><td>Our platform, used by machines</td><td>GitHub, Vercel, the full database login, Google Drive service account, Slack bot, the team review key</td><td>machine</td><td>The mini's managed file only; never a laptop</td><td>Operator B</td></tr>
+      <tr><td>The dashboard app's own settings</td><td>Sign-in secrets, GitHub App, the database login, the chat's Anthropic key, file storage</td><td>app</td><td>Vercel's settings (Production and Preview)</td><td>the developer or Operator B (a lead act today)</td></tr>
+      <tr><td>Brand data sync</td><td>Shopify, ShipHero, Gorgias, Meta, Next Commerce, brand-d</td><td>brand and system</td><td>The sync pipeline's GitHub secrets</td><td>Operator B</td></tr>
+      <tr><td>Reading brand data</td><td>Orders, tickets, ad spend, all in Supabase</td><td>person</td><td>A read-only database login in each managed file</td><td>Operator B creates it; the ops lead ships it</td></tr>
+      <tr><td>Acting on a brand system</td><td>Klaviyo sends, Meta uploads, Shopify themes, Junip</td><td>brand and system</td><td>The mini's managed file, narrowest scope</td><td>the ops lead or Operator B</td></tr>
+      <tr><td>Personal and trial keys</td><td>the owner's Gorgias MCP; any service someone is trying</td><td>person</td><td>That person's own setup (a file, the Keychain, anything); the mini never loads it</td><td>The person. Not checked until the work enters the system path</td></tr>
+      <tr><td>Own sign-ins (no key file)</td><td>Claude subscription, Google and Drive, GitHub account, Slack, each person's review key</td><td>person</td><td>The person's own login; never in a file. <b>v13:</b> a person's Claude token may also live on the mini, for their own jobs only (<a href="#seats">D6</a>)</td><td>The person; offboarding removes them</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Out of scope: the Telegram bridge's token (the personal lead's), and the worker running as its own Mac user.</p>
+</section>
+
+<section id="movement">
+  <span class="eyebrow">How the key file moves</span>
+  <h2>One company account, a key for each person, a file for each machine</h2>
+  <p>Three holders as the example: the ops lead, the owner and the Mac mini. Everyone else works the same way. The values shown are placeholders, never real keys.</p>
+  <div class="mv">
+  <div class="mvgrid" role="img" aria-label="Five steps: company accounts issue one key per holder; admins fill one file per holder from the template; each file is sent securely to its holder; the holder installs it as their managed file; usage bills the company and shows per holder.">
+    <div class="mvstep"><span class="k">1</span><b>Company accounts, one per service</b><span>the developer owns them; the ops lead and Operator B are admins. One bill each.</span></div>
+    <div class="mvspan orgband">
+      <div class="org"><b>fal · company team</b></div>
+      <div class="org"><b>Higgsfield · company org</b></div>
+      <div class="org"><b>Gemini · company billing</b></div>
+      <span class="fan">Each account issues a separate key to every holder ↓</span>
+    </div>
+    <div></div><div class="mvhead">the ops lead's laptop</div><div class="mvhead">the owner's laptop</div><div class="mvhead">Mac mini</div>
+    <div class="mvstep"><span class="k">&nbsp;</span><b>A key per holder</b><span>Created by an admin inside each company account.</span></div>
+    <div class="mvcell holder"><span class="lab2">the ops lead's keys, under the company accounts</span><div class="keys"><span class="kc">fal key “brand-editor”</span><span class="kc">Higgsfield project “brand-editor”</span><span class="kc">Gemini project “brand-editor”</span></div></div>
+    <div class="mvcell holder"><span class="lab2">the owner's keys, under the company accounts</span><div class="keys"><span class="kc">fal key “damon”</span><span class="kc">Higgsfield project “damon”</span><span class="kc">Gemini project “damon”</span></div></div>
+    <div class="mvcell holder"><span class="lab2">Mac mini's keys, under the company accounts</span><div class="keys"><span class="kc">fal key “mac-mini”</span><span class="kc">Higgsfield project “mac-mini”</span><span class="kc">Gemini project “mac-mini”</span></div></div>
+    <div></div><div class="down" aria-hidden="true">↓ each key goes into its holder's file ↓</div>
+
+    <div class="mvstep"><span class="k">2</span><b>Admins fill one file per holder</b><span>Same names from the template in git; each file carries only its holder's keys.</span></div>
+    <div class="mvcell"><div class="envcard">FAL_KEY=<span class="v">‹the ops lead’s›</span>
+HIGGSFIELD_KEY_ID=<span class="v">‹the ops lead’s›</span>
+GEMINI_API_KEY=<span class="v">‹the ops lead’s›</span>
+SUPABASE_READ_URL=<span class="v">‹the ops lead’s›</span>
+<span class="c"># KLAVIYO_BRAND A_KEY: mini only</span></div></div>
+    <div class="mvcell"><div class="envcard">FAL_KEY=<span class="v">‹the owner’s›</span>
+HIGGSFIELD_KEY_ID=<span class="v">‹the owner’s›</span>
+GEMINI_API_KEY=<span class="v">‹the owner’s›</span>
+SUPABASE_READ_URL=<span class="v">‹the owner’s›</span>
+<span class="c"># KLAVIYO_BRAND A_KEY: mini only</span></div></div>
+    <div class="mvcell"><div class="envcard">FAL_KEY=<span class="v">‹mini’s›</span>
+HIGGSFIELD_KEY_ID=<span class="v">‹mini’s›</span>
+GEMINI_API_KEY=<span class="v">‹mini’s›</span>
+KLAVIYO_BRAND A_KEY=<span class="v">‹send-only›</span>
+SUPABASE_DB_URL=<span class="v">‹full›</span></div></div>
+    <div></div><div class="down" aria-hidden="true">↓ sent securely, one file per holder ↓</div>
+
+    <div class="mvstep"><span class="k">3</span><b>Sent securely to that holder only</b><span>the ops lead or Operator B send it; the secure method is still to be decided. Never by chat, email, Slack or Drive.</span></div>
+    <div class="mvcell lp"><b>To the ops lead</b>her file only</div>
+    <div class="mvcell lp"><b>To the owner</b>his file only</div>
+    <div class="mvcell lp"><b>To the developer, for the mini</b>the mini's file only</div>
+    <div></div><div class="down" aria-hidden="true">↓ the holder saves it as their managed file ↓</div>
+
+    <div class="mvstep"><span class="k">4</span><b>Installed on the machine</b><span>The managed file is replaced whole; the person's own setup is never touched or checked.</span></div>
+    <div class="mvcell"><b>Managed file</b>the file she was sent<br><b>Her own setup</b>whatever she uses for trials</div>
+    <div class="mvcell"><b>Managed file</b>the file he was sent<br><b>His own setup</b>his Keychain: Gorgias trial, his own tools</div>
+    <div class="mvcell"><b>Managed file</b>installed by the developer<br><b>Own setup</b>none: the mini loads only its managed file</div>
+    <div></div><div class="down" aria-hidden="true">↓ tools read the files through one loader ↓</div>
+
+    <div class="mvstep"><span class="k">5</span><b>Usage lands on the company bill, per holder</b><span>the ops lead's monthly review reads these.</span></div>
+    <div class="mvcell">fal invoice: company<br>usage line: “brand-editor”</div>
+    <div class="mvcell">fal invoice: company<br>usage line: “damon”</div>
+    <div class="mvcell">fal invoice: company<br>usage line: “mac-mini”</div>
+  </div>
+  </div>
+  <div class="samediff">
+    <div class="sd same"><h3>The same for everyone</h3><ul><li>The variable names and the file layout (from the template in git)</li><li>The company account and its single bill</li><li>How the file arrives: built by the ops lead or Operator B, sent securely, saved as the managed file</li></ul></div>
+    <div class="sd diff"><h3>Different per holder</h3><ul><li>The key values: each holder's own key, under the company account</li><li>The label the vendor shows in usage reports</li><li>Which lines are filled: laptops carry AI keys and a read-only data login; brand action keys and the full database login stay on the mini</li></ul></div>
+  </div>
+  <h3>When one person's key changes</h3>
+  <div class="change">
+    <div class="chg"><span class="k">1 · VENDOR</span>An admin creates the owner's new fal key under the company team.</div>
+    <div class="chg"><span class="k">2 · FILE</span>The admin updates the owner's file and sends it to him securely. Nobody else gets a new file.</div>
+    <div class="chg"><span class="k">3 · MACHINE</span>the owner replaces his managed file with the new one. His own setup stays as it is.</div>
+    <div class="chg"><span class="k">4 · REVOKE</span>Once it works, the admin revokes his old fal key. the ops lead's and the mini's keys are untouched.</div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Use cases</span>
+  <h2>What each kind of key is for</h2>
+  <p>Each card follows one use from the person or job, through the key, to what it reaches. A red outline marks a key that can change what customers see.</p>
+  <div class="uses">
+    <div class="use">
+      <div class="top"><span class="n">1</span><h3>Paid AI services</h3></div>
+      <p class="small">Making things with an AI tool, billed to the company, visible per person.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A person or a mini job<span class="small">the ops lead on her laptop</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>Their own key<span class="small">managed file</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>The AI service<span class="small">Higgsfield, fal, Gemini…</span></div>
+      </div>
+      <p class="scene">the ops lead makes an image in Higgsfield with her own key. The company pays; the usage report shows “the ops lead”.</p>
+      <div class="traits"><span class="trait y">costs per use</span><span class="trait y">one per person</span><span class="trait y">laptops and mini</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">2</span><h3>Our platform, used by machines</h3></div>
+      <p class="small">How the mini signs in to our own tools, as itself, never as a person.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A mini job<span class="small">the worker</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>The mini's own key<span class="small">mini's managed file</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>Our own tools<span class="small">GitHub, Vercel, Drive, Slack bot, database</span></div>
+      </div>
+      <p class="scene">The mini files a record to GitHub and posts in Slack with its own keys. Nobody's personal account is involved, so nothing breaks when someone leaves.</p>
+      <div class="traits"><span class="trait ">one per machine</span><span class="trait r">never on a laptop</span><span class="trait ">mini only</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">3</span><h3>The dashboard app's settings</h3></div>
+      <p class="small">How the dashboard reaches its database and GitHub on everyone's behalf.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A person opens the dashboard<span class="small">signs in with Google</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>The app's own keys<span class="small">Vercel settings</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>Database, GitHub, chat<span class="small"></span></div>
+      </div>
+      <p class="scene">the ops lead opens the PM board. The app reads the database with its own login; the ops lead never sees or holds a key.</p>
+      <div class="traits"><span class="trait ">one per app</span><span class="trait y">people never hold it</span><span class="trait ">Vercel only</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">4</span><h3>Brand data sync</h3></div>
+      <p class="small">Copying each brand's store, shipping and support data into Supabase every day.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A scheduled sync job<span class="small">runs in GitHub</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>A per-brand sync key<span class="small">pipeline secrets</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>Brand system → Supabase<span class="small">Shopify, ShipHero, Gorgias…</span></div>
+      </div>
+      <p class="scene">Each morning the sync copies Brand A's Shopify orders into Supabase. Nobody runs it by hand.</p>
+      <div class="traits"><span class="trait ">one per brand</span><span class="trait y">read from the vendor</span><span class="trait ">GitHub secrets only</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">5</span><h3>Reading brand data</h3></div>
+      <p class="small">Asking questions of the synced data without touching the vendor or changing anything.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A person or their Claude<span class="small">Simon asking a question</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>Their read-only login<span class="small">managed file</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>Supabase<span class="small">read only</span></div>
+      </div>
+      <p class="scene">Simon asks Claude how many Brand A orders shipped late. His read-only login answers it; it cannot change a row.</p>
+      <div class="traits"><span class="trait y">one per person</span><span class="trait y">read only</span><span class="trait ">laptops</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">6</span><h3>Acting on a brand system</h3></div>
+      <p class="small">Doing things customers can see: sending email, uploading ads, changing the store.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A mini job<span class="small">a scheduled send</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>The brand's action key<span class="small">mini's managed file, narrowest scope</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to write"><span class="lab">Reaches</span>The brand system<span class="small">Klaviyo, Meta, Shopify</span></div>
+      </div>
+      <p class="scene">The mini schedules Brand A's email in Klaviyo with Brand A's send-only key. Only reviewed runs on the mini can reach customers.</p>
+      <div class="traits"><span class="trait ">one per brand</span><span class="trait r">customer-facing</span><span class="trait ">mini only</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">7</span><h3>Personal and trial keys</h3></div>
+      <p class="small">Trying a new service before the company commits to it.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A person exploring<span class="small">the owner</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key"><span class="lab">Key</span>Their own trial key<span class="small">their own setup</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>Any new service<span class="small">Gorgias MCP</span></div>
+      </div>
+      <p class="scene">the owner connects a Gorgias MCP to his own Claude with a key kept in his Keychain. Nobody checks it. If it becomes team work, the system path moves it onto a company key.</p>
+      <div class="traits"><span class="trait y">no approval</span><span class="trait y">not checked</span><span class="trait ">mini never loads it</span></div>
+    </div>
+    <div class="use">
+      <div class="top"><span class="n">8</span><h3>Own sign-ins</h3></div>
+      <p class="small">Each person being themselves in the tools we share. There's no key file at all.</p>
+      <div class="route">
+        <div class="node"><span class="lab">Who</span>A person<span class="small">Operator B</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node key none"><span class="lab">Key</span>Their own login<span class="small">no file</span></div>
+        <div class="link" aria-hidden="true">→</div>
+        <div class="node to"><span class="lab">Reaches</span>Claude, Google, GitHub, Slack<span class="small"></span></div>
+      </div>
+      <p class="scene">Operator B signs in to GitHub as herself. When someone leaves, removing their account removes their access everywhere.</p>
+      <div class="traits"><span class="trait y">one per person</span><span class="trait y">never in a file</span><span class="trait ">offboarding removes it</span></div>
+    </div>
+  </div>
+  <h3>How the eight compare</h3>
+  <div class="tablebox">
+  <table class="matrix">
+    <thead><tr><th>Kind</th><th>Costs per use</th><th>One per person</th><th>On laptops</th><th>On the mini</th><th>Reaches customers</th><th>Sent by the admins</th></tr></thead>
+    <tbody><tr><td>Paid AI services</td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td></tr><tr><td>Our platform, used by machines</td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td></tr><tr><td>The dashboard app's settings</td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td></tr><tr><td>Brand data sync</td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td></tr><tr><td>Reading brand data</td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td></tr><tr><td>Acting on a brand system</td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-risk" title="yes, customer-facing" aria-label="yes, customer-facing"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td></tr><tr><td>Personal and trial keys</td><td><span class="dot d-some" title="depends" aria-label="depends"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-some" title="depends" aria-label="depends"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td></tr><tr><td>Own sign-ins</td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-yes" title="yes" aria-label="yes"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td><td><span class="dot d-no" title="no" aria-label="no"></span></td></tr></tbody>
+  </table>
+  </div>
+  <div class="legend"><span><i class="dot d-yes"></i>yes</span><span><i class="dot d-some"></i>depends</span><span><i class="dot d-no"></i>no</span><span><i class="dot d-risk"></i>yes, customer-facing</span></div>
+  <p class="note">"Costs per use" means a usage bill; platform tools are billed flat. Personal keys cost whatever the person's own account costs. The dashboard's and the sync's keys are set directly in Vercel and GitHub, not sent as a file.</p>
+</section>
+
+<section>
+  <span class="eyebrow">How it works</span>
+  <h2>Where every key lives</h2>
+  <div class="flow" role="img" aria-label="Company accounts issue keys; the ops lead and Operator B build each machine's file and send it securely; each machine has a managed file beside the person's own setup.">
+    <div class="col">
+      <h3>Company accounts</h3>
+      <span class="sub">One bill per vendor. the developer owns; the ops lead and Operator B are admins, with two-factor sign-in.</span>
+      <div class="chip">Paid AI services <span class="mono">org · per key</span></div>
+      <div class="chip">Our platform <span class="mono">GitHub · Vercel · Supabase</span></div>
+      <div class="chip">Brand systems <span class="mono">per brand</span></div>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="col">
+      <h3>the ops lead and Operator B</h3>
+      <span class="sub">Create each machine's keys and fill its file from the template in git.</span>
+      <div class="chip vault">One file per machine <span class="mono">sent securely · method open</span></div>
+      <div class="chip">Sent to <span class="mono">that holder only</span></div>
+      <div class="chip">Register in git <span class="mono">names · holder · rotated</span></div>
+<div class="template">
+# keys.template (in git, names only)
+FAL_KEY=
+GEMINI_API_KEY=
+HIGGSFIELD_KEY_ID=
+SUPABASE_READ_URL=
+…
+</div>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="col">
+      <h3>Every machine</h3>
+      <span class="sub">The same names everywhere; each machine's own values.</span>
+      <div class="chip vault">Managed file <span class="mono">replaced whole · never edited</span></div>
+      <div class="chip vault mini">Own setup <span class="mono">file · Keychain · anything · not checked</span></div>
+      <div class="chip">Laptops <span class="mono">AI keys · read-only data login</span></div>
+      <div class="chip">Mac mini <span class="mono">AI · platform · brand actions</span></div>
+      <span class="sub">One loader takes whatever the person's own setup provides, then fills gaps from the managed file. It warns when a personal key overrides a company key. The mini loads only its managed file.</span>
+    </div>
+  </div>
+  <h3>Three more homes, outside the machines' files</h3>
+  <div class="homes">
+    <div class="home"><h3>Vercel settings</h3><span class="sub">The dashboard app's own secrets, Production and Preview. Changed by the developer or Operator B, then redeployed.</span></div>
+    <div class="home"><h3>Sync pipeline secrets</h3><span class="sub">The keys that pull brand data into Supabase every day. Set by Operator B in GitHub.</span></div>
+    <div class="home nofile"><h3>Own sign-ins</h3><span class="sub">Claude, Google, GitHub, Slack, review keys. Each person's own login; never in a file.</span></div>
+  </div>
+  <p class="note">Names are placeholders: the mini's file is <code>~/.workflow-worker.env</code> today, and <code>SUPABASE_READ_URL</code> stands for the per-person read-only login. The real names come from today's <code>env.template</code>, with one name per secret.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Per vendor</span>
+  <h2>Who gets their own key, and what we can see</h2>
+  <p>Paid AI services get a key per person and per machine so usage and spend show per holder. Brand systems (store, email, reviews, shipping) have no usage bill; a personal key there buys only an audit trail, so those stay one key per brand on the mini. People get a read-only key only when they actually need one. Services someone is only trying out stay in their own setup, on whatever account they choose, until the work enters the system path.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Service</th><th>Today</th><th>Proposed</th><th>Usage per person</th><th>Caveat</th></tr></thead>
+    <tbody>
+      <tr class="grouprow"><td colspan="5">Paid AI services: one key per person and per machine</td></tr>
+      <tr><td class="v">Higgsfield</td><td>One key pair on the mini, a copy in the owner's Keychain, five names for it. Whether the company or the owner holds it is still open.</td><td>Team org account with one balance and invoice. One project and key per holder, created by an admin.</td><td><span class="tag t-warn">per project</span></td><td>Keys are made by hand in the web app; no per-key view documented <i>(unconfirmed)</i>. Its API bill is separate from the subscription.</td></tr>
+      <tr><td class="v">fal</td><td>Company account on the mini; the owner holds a copy.</td><td>fal team. An admin creates one key per holder (only admins can create fal keys).</td><td><span class="tag t-good">per key</span></td><td>No spend cap per key <i>(unconfirmed)</i>.</td></tr>
+      <tr><td class="v">Gemini</td><td>Mini key; each teammate a separate <code>~/.gemini.env</code> <i>(inferred)</i>.</td><td>One Google billing account, one project per holder, with a spend cap on each.</td><td><span class="tag t-good">per project</span></td><td>Hitting the billing tier's monthly cap (~$__ on Tier 1) pauses <b>every</b> project. Check the tier first.</td></tr>
+      <tr><td class="v">OpenAI</td><td>the owner's key, handed to the ops lead.</td><td>Org with one project per holder, each with a hard monthly limit.</td><td><span class="tag t-good">per key</span></td><td>Limits sit on the project, not the key.</td></tr>
+      <tr><td class="v">Apify</td><td>Company token, with the owner's personal token as the fallback when the allowance runs out.</td><td>Org account; each member uses their own token.</td><td><span class="tag t-warn">per member</span> <i>(inferred)</i></td><td>The hard usage limit applies to the whole account.</td></tr>
+      <tr><td class="v">ElevenLabs</td><td>the owner's key.</td><td>One shared company key with a monthly quota (D3: personal keys need paid seats).</td><td><span class="tag t-warn">shared</span></td><td>Needs a multi-seat plan.</td></tr>
+      <tr><td class="v">OpenRouter</td><td>Mini only; minted by the developer 9 Sep.</td><td>A key per holder, each with a credit limit.</td><td><span class="tag t-warn">not checked</span></td><td>Per-key limits not verified today.</td></tr>
+      <tr><td class="v">Anthropic API</td><td>The dashboard chat (Vercel) and the model bench.</td><td>A workspace per use, each with its own cap. People use Claude subscriptions, not API keys.</td><td><span class="tag t-good">per key</span></td><td>Keys can only be created in the console, not by API.</td></tr>
+      <tr class="grouprow"><td colspan="5">Machines and the platform: service identities, never a person's key</td></tr>
+      <tr><td class="v">GitHub</td><td>Tokens on Vercel; the mini pushes with the developer's login.</td><td>A GitHub App for machines; a fine-grained token per person where needed.</td><td><span class="tag t-good">audit log</span></td><td>App tokens last one hour and are minted in code.</td></tr>
+      <tr><td class="v">Vercel</td><td>the developer's personal token used by the mini.</td><td>A token limited to one project, with an expiry.</td><td><span class="tag t-plain">n/a</span></td><td>Vercel tokens always belong to a person; it dies if that person leaves.</td></tr>
+      <tr><td class="v">Figma</td><td>the developer's personal token used by the mini.</td><td>Mark it as the developer's in the register. Moving it to a machine login is not checked.</td><td><span class="tag t-plain">n/a</span></td><td>Read-only.</td></tr>
+      <tr><td class="v">Slack</td><td>A shared bot token, plus the developer's own user token on the mini, which every spawned job can read.</td><td>Keep the bot. Put the user token behind the per-job grants.</td><td><span class="tag t-plain">n/a</span></td><td>Don't turn on Slack token rotation: it can't be turned off, and it kills the long-lived token.</td></tr>
+      <tr><td class="v">Database (Supabase)</td><td>One secret under two names; its password showed up in the mini's process list today.</td><td>One name. Rotate once WM-108 (no argv credential) merges.</td><td><span class="tag t-plain">n/a</span></td><td>Supabase's old <code>service_role</code> keys stop working by end of 2026.</td></tr>
+      <tr><td class="v">Google Drive</td><td>Service-account keys on the mini and on the owner's laptop; the credential has three names.</td><td>Machines only, one name. People's scripts sign in with their own Google login through gdrive-creator (<a href="#drive">v13</a>), so the laptop copy is retired.</td><td><span class="tag t-plain">n/a</span></td><td>Company policy blocks new service-account keys, so there is no per-person key.</td></tr>
+      <tr><td class="v">Review keys</td><td>Already one per person, plus the team key.</td><td>Keep. Move them into the managed files.</td><td><span class="tag t-good">per key</span></td><td>None.</td></tr>
+      <tr class="grouprow"><td colspan="5">Brand systems: one key per brand per job; where it lives depends on the job (next section)</td></tr>
+      <tr><td class="v">Shopify, ShipHero, Gorgias, Meta, Next Commerce, brand-d</td><td>Already synced into Supabase by the sync repo's scheduled jobs; their keys sit in that repo's GitHub secrets (local clone read, last commit 13 Aug, <i>unfetched</i>). the owner also holds his own Shopify and Meta keys.</td><td>Sync keys stay in the sync pipeline's secrets. People and scripts read the data from Supabase, not from the vendor.</td><td><span class="tag t-plain">no usage bill</span></td><td>New Shopify custom apps get 24-hour tokens. Meta moves to a system user.</td></tr>
+      <tr><td class="v">Klaviyo, Junip, Loop, Meta uploads, Shopify themes</td><td>Keys in the owner's Keychain and on the mini, with parallel names.</td><td>Keys that write or send go in the mini's managed file, one per brand, with the narrowest scope.</td><td><span class="tag t-plain">no usage bill</span></td><td>Removing a Klaviyo user does not revoke keys they made.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Brand systems</span>
+  <h2>Three homes for a brand key, and how an experiment becomes an integration</h2>
+  <p>A brand system's key belongs to the brand's account whoever holds it. What changes is the job it does, and the job decides where it lives. Most brand data already reaches us through Supabase, so for reading, the database credential matters more than the vendor key.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Job</th><th>Where the key lives</th><th>Who sets it</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td class="v">Sync data into Supabase</td><td>The sync pipeline's secrets (GitHub secrets today). Never on a laptop or the mini.</td><td>Operator B</td><td>Shopify, ShipHero, Gorgias, Meta, Next Commerce, brand-d</td></tr>
+      <tr><td class="v">Read synced data</td><td>A <b>read-only database login per person</b> in their managed file; the full-access database URL only on the mini and the sync pipeline <i>(PLAN proposal: Postgres roles in Supabase)</i>.</td><td>Operator B creates the login; the ops lead ships the file</td><td>the owner or Simon asking about orders, tickets, ad spend</td></tr>
+      <tr><td class="v">Act on the system (send, write, upload)</td><td>The mini's managed file, one key per brand, narrowest scope, behind the per-job grants.</td><td>the ops lead or Operator B</td><td>Klaviyo sends, Meta uploads, Shopify themes</td></tr>
+      <tr><td class="v">Explore a new integration</td><td>The explorer's own setup. No request, and not checked.</td><td>The explorer</td><td>the owner's Gorgias MCP today</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">How a trial key becomes one of these is shown step by step in <a href="#trial">Trying something new</a>.</p>
+</section>
+
+<section id="trial">
+  <span class="eyebrow">Trying something new</span>
+  <h2>From the owner's own test key to a managed key</h2>
+  <p>the owner's Gorgias MCP as the example. The same path works for any new service, including a paid AI tool. Nothing is checked while he explores. Checks start only when the work enters the system path. The variable name never changes, so once the company key arrives his own copy can simply go.</p>
+  <div class="jscroll">
+    <div class="band" aria-hidden="true"><span class="bp">His key, his file</span><span class="bd">Decision</span><span class="bm">Company key, managed file</span></div>
+    <div class="journey">
+      <div class="stage personal">
+        <span class="step">1 · TRY</span>
+        <h3>He tests it on his own</h3>
+        <p>Creates a scoped key in Gorgias, keeps <code>GORGIAS_API_KEY</code> in his own setup (Keychain or a file), and points the MCP at <code>${GORGIAS_API_KEY}</code>.</p>
+        <dl><dt>Approval</dt><dd>none</dd><dt>Lives</dt><dd>his laptop only</dd><dt>Pays</dt><dd>his account, or the brand's plan</dd></dl>
+      </div>
+      <div class="stage personal">
+        <span class="step">2 · SYSTEM PATH</span>
+        <h3>It becomes team work</h3>
+        <p><code>/system-fit</code> reads the work and flags the key: read from his Keychain, and missing from the template. This is the first check.</p>
+        <dl><dt>Before this</dt><dd>nothing is checked and no note is needed</dd><dt>Effort</dt><dd>one fit run</dd></dl>
+      </div>
+      <div class="stage">
+        <span class="step">3 · DECIDE</span>
+        <h3>Pick the route with Operator B</h3>
+        <div class="branch">
+          <div class="br"><b>Needs the data</b>A sync job into Supabase; he reads it with his read-only login. (Gorgias is already synced.)</div>
+          <div class="br"><b>Needs to act</b>A job on the mini with a per-brand key, for replies or tags.</div>
+          <div class="br"><b>Works live in his Claude</b>A scoped company key in his managed file.</div>
+          <div class="br"><b>Not worth it</b>It stays his own trial; nothing to close.</div>
+        </div>
+      </div>
+      <div class="stage managed">
+        <span class="step">4 · GRADUATE</span>
+        <h3>A fresh company key</h3>
+        <p><code>/system-ready</code> moves the read to the shared loader. the ops lead or Operator B create a new key for the route, add the name to the template, and ship the updated file (or set the sync or mini key).</p>
+        <dl><dt>Lives</dt><dd>his managed file, the mini, or the sync pipeline</dd><dt>Pays</dt><dd>company</dd></dl>
+      </div>
+      <div class="stage managed">
+        <span class="step">5 · CLEAN UP</span>
+        <h3>Retire the test key</h3>
+        <p>the owner's own copy can go; the managed value is used under the same name. If the test key was made under a company or brand account, an admin revokes it there, since it lived on a laptop.</p>
+        <dl><dt>If his copy stays</dt><dd>it keeps winning, with a warning, and the company's usage view misses it</dd></dl>
+      </div>
+    </div>
+  </div>
+  <h3>What changes when it graduates</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th></th><th>While testing (personal)</th><th>After graduating (managed)</th></tr></thead>
+    <tbody>
+      <tr><td class="v">Who creates the key</td><td>the owner</td><td>the ops lead or Operator B</td></tr>
+      <tr><td class="v">Where it lives</td><td>His own setup, his laptop only</td><td>The route's home: his managed file, the mini, or the sync pipeline</td></tr>
+      <tr><td class="v">Who pays</td><td>His own account, or the brand's existing plan <i>(who reimburses a personal trial is open)</i></td><td>The company account</td></tr>
+      <tr><td class="v">Usage visible to</td><td>Only the owner, in his own account</td><td>the ops lead's monthly review, per key or project</td></tr>
+      <tr><td class="v">Who else can use it</td><td>Nobody; the mini never loads anyone's own setup</td><td>Anyone the route serves: the whole team through Supabase, or the mini's jobs</td></tr>
+      <tr><td class="v">If it leaks</td><td>the owner revokes it at the vendor</td><td>The standard rotation: new key, updated file sent to the holder</td></tr>
+      <tr><td class="v">If the owner leaves</td><td>Admins check each company and brand account's key list in the vendor's console and revoke what he made there; Klaviyo, for one, doesn't do it on its own. Keys on his own accounts are his.</td><td>Nothing breaks: the key belongs to the route, not to him</td></tr>
+      <tr><td class="v">What the owner does</td><td>Everything, freely</td><td>Drops his own copy, or keeps it (it wins with a warning)</td></tr>
+      <tr><td class="v">What he may lose</td><td>Nothing</td><td>On the data route, live answers become answers as of the last daily sync</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Timing: the live route is same-day; a mini job needs a card and a per-job grant; a new sync job is Operator B's work, days rather than hours <i>(inferred)</i>.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Problems it addresses</span>
+  <h2>Key trouble we've already had, and what changes</h2>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>What happened</th><th>Where it's recorded</th><th>After this plan</th></tr></thead>
+    <tbody>
+      <tr><td class="was">The Junip store key was committed to git and never rotated ("don't worry about the rotation").</td><td class="mono">decision-log.md:212, :255; Operator B's open task</td><td class="now">Rotated in phase 4. Keys live only outside the repo, so a key anywhere in git is a mistake the wall check catches.</td></tr>
+      <tr><td class="was">Today the database password was readable in the mini's process list, from seven scripts.</td><td class="mono">WM-108 (no argv credential), lead 29 Sep</td><td class="now">WM-108 fixes it; phase 2 adds a repo-wide check that refuses a password in a command line; rotate after.</td></tr>
+      <tr><td class="was">Sessions said "key missing" while the key sat in one of three stores (files, <code>keys.env</code>, Keychain).</td><td class="mono">the team notes/ACCESS.md:15-23</td><td class="now">One managed file, one loader. A check compares a machine's managed file with the template (names only), so "missing" is visible.</td></tr>
+      <tr><td class="was">One secret under several names: Higgsfield (5), the database URL (2), Drive (3), Meta and Shopify (parallel). A rotation "misses half of itself".</td><td class="mono">env.template:219-224, :257-268</td><td class="now">One name per secret in the template; the aliases are removed in phase 2.</td></tr>
+      <tr><td class="was">Personal keys run shared work: the developer's Vercel, Figma and Slack tokens on the mini; the owner's OpenAI key given to the ops lead; the owner's Apify token as the company fallback.</td><td class="mono">env.template:131-134; marketing-calendar-kit.html:86-95; components/apify/CLAUDE.md:43</td><td class="now">Each holder has their own key; the mini has machine keys. Offboarding someone breaks nothing else.</td></tr>
+      <tr><td class="was">Nobody can tell who spent what: the company Apify allowance ran out; a metered key was double-charged through a race.</td><td class="mono">worker-multirepo/task-cards.md:1634</td><td class="now">Usage per key (fal, OpenAI, ElevenLabs) or per project (Gemini, Higgsfield); the ops lead reviews monthly.</td></tr>
+      <tr><td class="was">Higgsfield: whether the company or the owner holds the key was never settled.</td><td class="mono">identity-training/task-cards.md:10-16</td><td class="now">Company org account, individual keys. Settled in phase 3.</td></tr>
+      <tr><td class="was">Every session and job on the mini can read the plain key file (0600, auto-login, FileVault off).</td><td class="mono">I-101 (secrets stack); WM-103 (credential file unreadable to jobs)</td><td class="now">Not fixed: the mini keeps a plain key file readable by its own sessions. Stray copies are removed and rotation gets a routine. Full isolation means running the worker as its own Mac user, which is out of scope.</td></tr>
+      <tr><td class="was">Keychain doesn't work for the mini's jobs after a reboot or from tmux (logged "Not logged in").</td><td class="mono">mini-cockpit/task-cards.md:76; decision-log.md:1419</td><td class="now">A plain file works after a reboot, so the mini stays on a file and the "Keychain later" plan (R1, 27 Sep) is dropped.</td></tr>
+      <tr><td class="was">About seven scripts read the worker's key file by its path, and the owner's clone had no wall hooks.</td><td class="mono">R4 (keys by path); I-98</td><td class="now">Scripts read variables through one loader; the path readers go in phase 1.</td></tr>
+      <tr><td class="was">Stray copies on the mini: a readable-by-all file holding the Slack bot token and the Drive key, an old backup of the key file, and a pasted Supabase token line.</td><td class="mono">found in today's inventory</td><td class="now">Phase 0 deletes them and rotates what they held. After that, the mini holds exactly one key file.</td></tr>
+      <tr><td class="was">the developer's Slack user token reaches every job the worker starts, including AI makers.</td><td class="mono">job_env.py:32-67 (not in the scoped list)</td><td class="now">Every template name is scoped by default; a check fails when a name is missing from the list.</td></tr>
+      <tr><td class="was">Expired or wrong keys found late: a Shopify token returning 401; a "Brand B" ShipHero token reaching Brand A.</td><td class="mono">brand-b-pnl/task-cards.md:554, :690-726</td><td class="now">The register records scope, brand and next rotation; the ops lead's calendar catches expiry.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">For the developer</span>
+  <h2>Decisions: D2–D5 answered 29–30 Sep; D1, D6 and D7 open</h2>
+  <div class="decisions">
+    <div class="dec star">
+      <span class="id">★ D1 · secure delivery · deferred to the migration (the developer, 9 Oct: "skip D1 until the actual migration")</span>
+      <h3>How the ops lead and Operator B send each file, and where they keep a copy</h3>
+      <dl>
+        <dt>Settled</dt><dd>the ops lead or Operator B build each machine's file and send it to that holder only. Never by chat, email, Slack or Drive.</dd>
+        <dt>To decide</dt><dd>The secure sending method, and whether the admins keep a copy of each file. Without a copy, changing one key means re-collecting every other key in that file, and most vendors show a key only once.</dd>
+        <dt>Before phase 3</dt><dd>This has to be decided before the first files go out.</dd>
+      </dl>
+    </div>
+    <div class="dec">
+      <span class="id">D2 · the managed file beside each person's own setup · answered: yes</span>
+      <h3>Admins replace the managed file; everything else is the person's own, and not checked</h3>
+      <dl>
+        <dt>Why</dt><dd>Keeps the owner and others free to test new services in whatever setup they like, without a replacement wiping their keys.</dd>
+        <dt>Rule</dt><dd>Personal keys may override company ones, with a warning. The mini loads only its managed file.</dd>
+        <dt>Reverse if</dt><dd>Personal overrides hide real company usage for a month; then the loader refuses overrides of company names.</dd>
+      </dl>
+    </div>
+    <div class="dec">
+      <span class="id">D5 · checks start on the system path · answered: yes</span>
+      <h3>No checking of personal setups; <code>/system-fit</code>, <code>/system-ready</code> and <code>/system-review</code> check and migrate keys</h3>
+      <dl>
+        <dt>Why</dt><dd>Exploration stays free, as in <code>lab/</code>. Control of company keys lives in each vendor's admin console, so nothing on a laptop needs tracking.</dd>
+        <dt>Always on</dt><dd>The walls, the mini on its managed file only, and announced revocation dates for old shared or leaked keys.</dd>
+        <dt>Reverse if</dt><dd>A revocation breaks more than a couple of tools nobody knew depended on the old key; then add a voluntary "check my machine" command.</dd>
+      </dl>
+    </div>
+    <div class="dec">
+      <span class="id">D3 · personal or shared · answered 30 Sep (generalized)</span>
+      <h3>Personal only when who-used-it matters and is worth its cost; otherwise shared, with a named owner and a spend cap</h3>
+      <dl>
+        <dt>Personal when</dt><dd>It matters who used it (spend, accountability, reach, or it acts as the person) <b>and</b> that is worth more than the cost: extra seats or accounts, plus creating, rotating and revoking one key per person.</dd>
+        <dt>Otherwise shared</dt><dd>At the natural edge of the account: one per brand, per machine or service, or one for all of the team.</dd>
+        <dt>Today</dt><dd>Personal: Higgsfield, fal, OpenAI, Gemini, OpenRouter, Apify, the read-only database login. Shared: ElevenLabs (with a quota), brand systems, sync, the Drive account, the Slack bot, the full database login. Vercel and Figma: one token with a named owner.</dd>
+        <dt>Spend line</dt><dd>Not set; the developer deferred it on 30 Sep. Decide per service for now.</dd>
+        <dt>Reverse if</dt><dd>A shared key's spend spikes and its named owner can't explain it; then split it.</dd>
+      </dl>
+    </div>
+    <div class="dec">
+      <span class="id">D4 · admins on every company account · answered: yes</span>
+      <h3>the ops lead and Operator B as admins, the developer as owner, two-factor on all three</h3>
+      <dl>
+        <dt>Why</dt><dd>They can open accounts and manage keys without waiting on the developer, and each backs up the other.</dd>
+        <dt>Check</dt><dd>Some vendors limit admin roles (Anthropic creates keys only in its console; Vercel tokens always belong to a person).</dd>
+        <dt>Reverse if</dt><dd>An account change lands that neither admin can explain; then new vendors need the developer's approval again.</dd>
+      </dl>
+    </div>
+    <div class="dec">
+      <span class="id">D6 · Claude seats on the mini · design chosen 9 Oct, tested 9 Oct <span class="newtag">new</span></span>
+      <h3>Each person's own Pro or Max account, tokens managed by the admins, routed by requester; no Mac users; no Team plan (the developer, 9 Oct)</h3>
+      <dl>
+        <dt>Chosen</dt><dd>One Mac user, kept apart by the sandbox (tested 9 Oct). Tokens in per-person files, never the shared key file. Supervised sessions only, never the standing Remote Control service (ruled 9 Oct).</dd>
+        <dt>Tested</dt><dd>Remote Control does <b>not</b> run on a token: it needs a full claude.ai login. the developer's own setup loads into a session started with her token.</dd>
+        <dt>Live</dt><dd>Requester routing, the developer's own card (9 Oct): Operator B's dev jobs run on her token; everyone else stays on today's login until they enroll. Billing to her account is accepted, not proven.</dd>
+        <dt>Open</dt><dd>Supervised sessions: stay held, or allow her full login in a separate config folder (the developer's call; ◆ PLAN recommends holding). D1 (secure delivery) no longer gates this piece: the developer deferred it to the migration on 9 Oct.</dd>
+        <dt>Next</dt><dd>The prefix filter and the sandbox card (it closes the accepted gap on her token file). CLI-36 (supervised mini sessions) stays held.</dd>
+      </dl>
+    </div>
+    <div class="dec">
+      <span class="id">D7 · Drive sign-in for people · open <span class="newtag">new</span></span>
+      <h3>People's scripts reach Drive with their own Google login, and the service-account key leaves every laptop</h3>
+      <dl>
+        <dt>Needs</dt><dd>A company OAuth client in the template; gdrive-creator's sign-in path; an owner for gdrive-creator.</dd>
+        <dt>Recommend</dt><dd>Yes, in Track B, together with the swipe libraries' move by 2 Nov.</dd>
+        <dt>Reverse if</dt><dd>Workspace policy blocks an internal app from reading Drive. Then people keep the mount, and only the mini uses the API.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Held for this migration</span>
+  <h2>The issues held for this migration (69 on 7 Oct, 66 unique)</h2>
+  <p>the developer, 7 Oct: "hold keys all, and make sure these all get updated to the keys work coming up". Every key-related triage issue waits for this migration instead of being fixed one at a time: the list, with ids, is <code>components/keys/plans/2026-10-07-held-triage-issues.md</code>. The migration's done-check reads it: each held issue closes with the commit that fixes it. K4 (mini spend caps) and K5 (keys approach) stay open here. <b>v13:</b> 22 of them are not key work and are proposed to go back to normal triage, and Track A closes 43 of the other 44 (<a href="#split">the split</a>). Not held: keys#9 and research-gatherer#6 (password in the process list, fixed now with pg_argv), keys#7 (docs), and the Meta token renewal before 22 Oct (Operator B's list).</p>
+</section>
+
+<section>
+  <span class="eyebrow">Roles</span>
+  <h2>Who does what</h2>
+  <div class="roles">
+    <div class="role"><h3>the developer</h3><ul><li>Owns every company account and its billing</li><li>Adds the ops lead and Operator B as admins</li><li>Answered D2–D5 (29 Sep); D1 later</li><li>Phase 0 on the mini, and installs the mini's file</li></ul></div>
+    <div class="role"><h3>Operator B</h3><ul><li>Admin on the company accounts</li><li>Creates, rotates and revokes keys</li><li>The loader and template change</li><li>Runs the leak playbook</li></ul></div>
+    <div class="role"><h3>the ops lead</h3><ul><li>Admin on the company accounts</li><li>Builds and sends each machine's file</li><li>Keeps the register and rotation calendar</li><li>Monthly usage review per person</li></ul></div>
+    <div class="role"><h3>Everyone</h3><ul><li>Installs the file they are sent, never edits it</li><li>Tries new services freely in their own setup</li><li>Never pastes a key into chat or git</li><li>Reports a suspected leak at once</li></ul></div>
+  </div>
+</section>
+
+<section id="rotate">
+  <span class="eyebrow">Rotation list</span>
+  <h2>Keys to rotate, and in what order</h2>
+  <p>Red means exposed now: rotate without waiting for the rollout. Amber means the key was shared or copied; replace it during the rollout, so each key rotates once. Grey means check first. Every rotation follows the same steps: create the new key at the vendor, update every home it lives in, confirm it works, then revoke the old one.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Key</th><th>Why</th><th>Also update</th><th>Waits on</th><th>Who</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pri p-now"></span><b>Database password</b> (Supabase, the plane)</td><td>Printed in the mini's process list and a session transcript, 29 Sep</td><td>Mini file; Vercel <code>PLANE_DB_URL</code> (Production and Preview) + redeploy; <code>~/.ecom-analysis.env</code> on the mini; the owner's Keychain copy</td><td><b>Deferred by the developer, 29 Sep ("too disruptive").</b> The fix that stops new leaks: WM-108 (no argv credential), merged; WM-108b (other argv sites), running. Rotate at once on any sign of misuse.</td><td>the developer</td></tr>
+      <tr><td><span class="pri p-now"></span><b>Supabase access token</b></td><td>Pasted as a command line into <code>~/.ecom-analysis.env</code> on the mini; it controls the Supabase account, not just one database <i>(inferred)</i></td><td>Delete the line; any MCP set up with it</td><td>Nothing</td><td>the developer</td></tr>
+      <tr><td><span class="pri p-now"></span><b>Slack push bot token</b></td><td>In a file on the mini readable by every user since 26 Aug</td><td>Mini file; delete the stray file</td><td>Nothing</td><td>Operator B</td></tr>
+      <tr><td><span class="pri p-now"></span><b>Google Drive service-account key</b> (mini)</td><td>In the same readable file</td><td>Mini file</td><td>Company policy blocks new service-account keys: an admin overrides it briefly, then restores it</td><td>the developer</td></tr>
+      <tr><td><span class="pri p-now"></span><b>Junip store key</b></td><td>Committed to git on 17 Sep; still in history</td><td>the owner's Keychain</td><td>Nothing. If it really is the public storefront key, rotation matters less <i>(unchecked)</i></td><td>Operator B (her open task)</td></tr>
+      <tr><td><span class="pri p-now"></span><b>the developer's Slack user token</b></td><td>Readable by every job the mini starts, including AI makers</td><td>Mini file</td><td>The fix that hides it from jobs, then rotate</td><td>the developer</td></tr>
+      <tr><td><span class="pri p-roll"></span>fal key</td><td>One company key on the mini, with a copy in the owner's Keychain</td><td>Replaced by per-holder keys</td><td>Rollout</td><td>the ops lead or Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>Higgsfield key pair</td><td>Shared with the owner; five names for it; also in the old backup file</td><td>Replaced by per-holder keys</td><td>Rollout; the company org account</td><td>the ops lead or Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>OpenAI key</td><td>the owner's key, handed to the ops lead</td><td>Replaced by per-person projects; the owner's key revoked last</td><td>Rollout</td><td>the ops lead or Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>Gemini keys</td><td>Mini key plus separate personal files</td><td>Replaced by per-project keys</td><td>Rollout; check the billing tier cap first</td><td>the ops lead or Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>Apify tokens</td><td>Company token, plus the owner's personal token as the fallback</td><td>Replaced by per-member tokens</td><td>Rollout</td><td>the ops lead or Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>ElevenLabs, OpenRouter</td><td>A single holder each</td><td>OpenRouter: per-holder keys. ElevenLabs: one shared company key with a quota</td><td>Rollout</td><td>the ops lead or Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>Team review key</td><td>In the old backup file, and read by scripts from the mini's file by path</td><td>Mini file; Vercel</td><td>The loader change (phase 1)</td><td>Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>Vercel token</td><td>the developer's personal token, used by the mini</td><td>A project-scoped token with an expiry</td><td>Rollout</td><td>the developer</td></tr>
+      <tr><td><span class="pri p-roll"></span>Shopify admin token (sync)</td><td>Returning 401, so already dead</td><td>Sync pipeline secrets</td><td>Nothing</td><td>Operator B</td></tr>
+      <tr><td><span class="pri p-roll"></span>the owner's full database URL</td><td>A full-access login on a laptop</td><td>Replaced by his read-only login</td><td>Read-only logins created</td><td>Operator B</td></tr>
+      <tr><td><span class="pri p-check"></span>Figma token</td><td>the developer's personal read-only token, used by the mini</td><td>Keep and label, or replace</td><td>the developer's call</td><td>the developer</td></tr>
+      <tr><td><span class="pri p-check"></span>The mini's model-route tokens</td><td>Four files beside the key file, outside the per-job grants</td><td>Move into the managed file</td><td>Phase 1</td><td>Operator B</td></tr>
+      <tr><td><span class="pri p-check"></span>Anything in <code>PLATFORM-CONTEXT.md</code></td><td>36 lines match key patterns; likely false positives</td><td>Depends on the scan</td><td>A secret scan</td><td>Operator B</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Built from today's inventory (names only; no values read). Keys that only the owner holds for his own tools (BytePlus, Adplexity, Asana, WhatsApp, Cloudflare) stay in his own setup and aren't on this list unless they're shared.</p>
+</section>
+
+<section id="transition">
+  <span class="eyebrow">Transition</span>
+  <h2>Moving to the new setup without breaking anyone</h2>
+  <p>This is smaller than it looks, because most code reads a key by its variable name and never cares which file it came from. Two choices keep it small. <b>Keep the mini's file where it is and keep today's names</b>, renaming only true duplicates. <b>Let the loader fall back to the old locations</b> until each person has switched.</p>
+
+  <h3>Who reads keys today, and what each group has to change</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>How the script gets its key</th><th>Scripts <i>(rough count, outside lab/)</i></th><th>Change needed</th></tr></thead>
+    <tbody>
+      <tr><td>The mini's key file, by path</td><td>17 (12 inside the worker)</td><td><b>None on the mini:</b> its file stays <code>~/.workflow-worker.env</code> and becomes the mini's managed file. The 3–4 outside readers move to the loader.</td></tr>
+      <tr><td>the owner's Keychain helper</td><td>43, mostly his components</td><td><b>One file:</b> his helper asks the loader first and falls back to his Keychain, so all 43 keep working.</td></tr>
+      <tr><td><code>~/.gemini.env</code> and <code>~/.apify.env</code></td><td>12 (7 in a retired build <i>(inferred)</i>)</td><td>The loader reads these two files as a fallback during the transition.</td></tr>
+      <tr><td>Video production's own <code>.env</code></td><td>4</td><td>Moves to the loader; stop <code>serve.py</code> writing keys into it.</td></tr>
+      <tr><td>The environment, by name</td><td>everything else</td><td>None.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Five steps, each one safe to stop at</h3>
+  <div class="tr-grid">
+    <div class="tr safe"><span class="k">1 · ADD</span><b>The loader, with the old locations as a fallback</b><span class="s">Nothing breaks: every current setup still loads.</span></div>
+    <div class="tr safe"><span class="k">2 · ISSUE</span><b>Personal keys into managed files</b><span class="s">Old shared keys still work alongside, so nobody is cut off.</span></div>
+    <div class="tr safe"><span class="k">3 · SWITCH</span><b>Readers move to the loader</b><span class="s">The mini's worker and the owner's one-file helper first; everything else when it next goes through the system path.</span></div>
+    <div class="tr cut"><span class="k">4 · REVOKE</span><b>Old shared keys, on an announced date</b><span class="s">Only after a smoke test on each machine: one cheap call per vendor with its own key, pass or fail by name.</span></div>
+    <div class="tr safe"><span class="k">5 · TIDY</span><b>The fallback is turned off</b><span class="s">Per person, once nothing reads the old locations.</span></div>
+  </div>
+
+  <h3>What is checked, and when <i>(the developer, 29 Sep)</i></h3>
+  <div class="twocol">
+    <div class="panel free"><h3>Not checked: personal setups</h3><ul>
+      <li>Where someone keeps their own keys: a personal file, several files, the Keychain, shell exports</li>
+      <li>Trial keys and tools only one person uses</li>
+      <li>No note to anyone. Keys made under a company account show in that vendor's admin console, which the admins check when someone leaves.</li>
+    </ul></div>
+    <div class="panel gate"><h3>Checked: when work enters the system path</h3><ul>
+      <li><code>/system-fit</code> flags keys read by path or from a Keychain, and names missing from the template</li>
+      <li><code>/system-ready</code> moves those reads to the loader and has company keys issued for whoever runs the work</li>
+      <li><code>/system-review</code> does the same for components already in the workspace when they're next reviewed</li>
+    </ul></div>
+  </div>
+  <p><b>Always on, whatever the setup:</b></p>
+  <ul>
+    <li>The walls: no key in git, in chat, or read by path in code that enters the system.</li>
+    <li>The mini loads only its managed file.</li>
+    <li><b>Revocation dates.</b> When an old shared or leaked key stops working on its announced date, anything still using it stops too, however it was loaded. That date, backed by the smoke test, is the only thing that pushes a switch.</li>
+  </ul>
+
+  <h3>Risks, and how each is handled</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Risk</th><th>How it's handled</th></tr></thead>
+    <tbody>
+      <tr><td><b>A new key that doesn't work yet</b> (a Higgsfield project with no balance, a Gemini project not linked to billing, an Apify token without the right access)</td><td>Old and new keys overlap; the smoke test runs before any revocation.</td></tr>
+      <tr><td>Renaming a key name that config files also use (<code>models.json</code>, <code>brands/*/meta/account.json</code>, <code>brands/*/email/simple.json</code>)</td><td>Rename only duplicates of one secret, and keep the most-read name. Machines can't edit <code>brands/</code>, so brand files change by hand.</td></tr>
+      <tr><td>the owner mid-production</td><td>His switch is scheduled with him; his Keychain stays as the fallback through the overlap.</td></tr>
+      <tr><td>Jobs already running on the mini</td><td>The worker re-reads its file each minute. A running job keeps its key for up to an hour, so the mini's old keys are revoked only after those finish.</td></tr>
+      <tr><td>Setup docs that still point at old files</td><td>Update the video-teardown setup skill, the team setup guides, and <code>/system-ready</code>'s template path.</td></tr>
+      <tr><td>A revocation breaks tools nobody knew about</td><td>Kill-condition: if it breaks more than a couple, add a voluntary "check my machine" command before the next revocation.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Effort <i>(inferred)</i>: 2–3 days of build work (the loader, the owner's helper, removing duplicate names); about a day for the admins to issue roughly 40 keys; about 10 minutes per person; no downtime on the mini.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Rollout</span>
+  <h2>Phase 0 now, Track A next, Track B in Phase 5</h2>
+  <div class="phases">
+    <div class="phase now">
+      <div class="head"><h3>Phase 0 · today</h3><span class="who">the developer's hands on the mini · ~20 min · <b>v13: not checked whether done</b></span></div>
+      <ul>
+        <li>Delete <code>~/.workflow-worker.envprintf</code> (readable by all users, holds the Slack bot token and the Drive key) and the stale <code>~/.workflow-worker.env.bak-091107</code>.</li>
+        <li>Remove the pasted command line from <code>~/.ecom-analysis.env</code> and rotate that Supabase access token.</li>
+        <li>Start the red rows of the <a href="#rotate">rotation list</a>; the database password is deferred by the developer.</li>
+        <li>Secret-scan <code>PLATFORM-CONTEXT.md</code>: 36 lines match key patterns, likely false positives <i>(unchecked)</i>.</li>
+        <li>Card: put <code>SLACK_USER_TOKEN_DEVELOPER</code> behind the per-job grants.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="head"><h3>Phase 1 = Track A · one loader, readers switched · now</h3><span class="who">The lead's makers, Operator B reviewing as engine owner · a few days <i>(inferred)</i></span></div>
+      <ul>
+        <li><code>env.template</code> becomes the team template: one name per secret; the aliases go (Higgsfield 5, database URL 2, Drive 3).</li>
+        <li>One loader: the person's own environment first, then gaps filled from the managed file, with a temporary fallback to the old locations (see <a href="#transition">Transition</a>). The mini keeps its file where it is.</li>
+        <li>Checks: every template name is in the worker's scoped list, and no password or key appears in a command line.</li>
+        <li><b>v13:</b> the readers are switched in the same track, starting with video-teardown's <code>keys.py</code>. Missing template names are added (a grant) and their values put on the mini. This closes 43 of the 44 key issues held on 7 Oct.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="head"><h3>Track B · Phase 2 · admins and keys</h3><span class="who">the developer adds admins; the ops lead and Operator B create keys · ~1 week</span></div>
+      <ul>
+        <li>the ops lead and Operator B join every company account as admins, with two-factor sign-in.</li>
+        <li>Create a key or project per machine: Higgsfield first (custody still open), then OpenAI (the borrowed key), fal, Gemini (check the tier cap first), Apify, ElevenLabs, OpenRouter.</li>
+        <li>Each key gets a cap and a register row naming its holder.</li>
+        <li><b>v13:</b> the company OAuth client for Drive sign-in (D7), and each person's Claude token on the mini once D6 is answered.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="head"><h3>Track B · Phase 3 · build and send the files</h3><span class="who">the ops lead and Operator B · a day</span></div>
+      <ul>
+        <li>Fill each machine's managed file from the template and send it securely to its holder (method per D1).</li>
+        <li>Each person installs it and runs the check (names match the template; nothing missing).</li>
+        <li>The mini's file is installed by the developer, then the old file is removed.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="head"><h3>Track B · Phase 4 · rotation wave</h3><span class="who">the ops lead and Operator B, with each key's owner</span></div>
+      <ul>
+        <li>Work through the amber rows of the <a href="#rotate">rotation list</a>.</li>
+        <li>Folds into phase 3 where possible, so each key rotates once.</li>
+        <li><b>v13:</b> the Drive service-account key rotates once, when the owner's laptop copy retires.</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="head"><h3>Track B · Phase 5 · the standing process</h3><span class="who">the ops lead runs it</span></div>
+      <ul>
+        <li><b>New key:</b> the person asks; an admin creates it and sends that person a replacement managed file, and adds the register row.</li>
+        <li><b>Trying a service:</b> anyone uses their own key in their own setup: no request, no note, not checked. When the work enters the system path, <code>/system-fit</code> flags the key and <code>/system-ready</code> moves it onto a company account, a template name and a managed key.</li>
+        <li><b>Rotation:</b> on the calendar, and at once on any leak: rotate at the vendor, then send the holder a replacement file.</li>
+        <li><b>Leaving:</b> admins check each company account's key list in the vendor's console and revoke that person's keys; nothing shared breaks.</li>
+        <li><b>Review:</b> monthly spend per person per vendor.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span><b>Builds on:</b> env.template, WM-13 (venue file); the per-job grants in job_env.py, WM-14 (scoped subprocess env); the run grants in team/dispatch-grants.json; the system-ready key check. <b>Could be reused by:</b> the brand-d team's Sales-CS and toolkit repos, which will need the same template when they need keys.</span>
+  <span><b>Walls unchanged:</b> no secret in git, no key read by path, and no key in chat. A file is sent only by the secure method in D1, never by chat, email, Slack or Drive.</span>
+  <span><b>Out of scope:</b> running the worker as its own Mac user (full isolation from sessions); the Telegram bridge's own user (personal lead). <b>v13, 9 Oct:</b> the two-track split, the Drive setup (D7) and Claude seats on the mini (D6) added; the status corrected (D2–D5 filed 30 Sep). <b>Version 1</b> of this page proposed 1Password on every machine; the developer chose admin-built files instead (29 Sep).</span>
+</footer>
+
+</div>

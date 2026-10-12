@@ -180,7 +180,7 @@ Then give me one table with exactly these five columns, in this order:
   Words that exist as an object inside the photograph — a label printed on the
   bottle, a sign on the wall, a logo on a garment — belong to the picture. They
   are recorded in the **Visual Content** column as part of the object that
-  carries them (`clear pump bottle, yellow liquid, the word "evora" printed
+  carries them (`clear pump bottle, yellow liquid, the word "lumen" printed
   small in white near the base`), and **this column reads `none`.** A zone whose
   only words are in-world has `none` here — no exceptions, no parenthetical
   note explaining that the text is really in-world. Measured cause, 2026-08-19:

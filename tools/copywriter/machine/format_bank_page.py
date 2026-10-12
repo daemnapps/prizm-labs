@@ -155,7 +155,7 @@ def build():
          f'<small>at {ds.get("words",["—"])[0]} words</small></dd></div>',
          '</div>']
     p += [card(f, top, dflt) for f in fmts]
-    p.append('<footer>copy/formats.json · length bars share one scale, '
+    p.append('<footer>tools/copywriter/bank/formats.json · length bars share one scale, '
              f'0–{top} words<br>every format is written for every source; the source '
              'decides what goes in them, never which ones exist</footer></div>')
     OUT.write_text("".join(p), encoding="utf-8")

@@ -2,8 +2,8 @@
 
 Targeted skills an editor pulls into Higgsfield (or Claude) to change ONE thing
 on a finished picture, fast. Each one names the model it runs on and checks for
-a newer version of that model before every run. The engine that runs the same edits as
-commands is this tool, [`tools/image-edit`](../).
+a newer version of that model before every run. The machine-side engine for
+image edits is this component, `tools/image-edit`.
 
 | Skill | What it does | Model | Tested |
 |---|---|---|---|
@@ -12,14 +12,14 @@ commands is this tool, [`tools/image-edit`](../).
 | [avatar-swap](avatar-swap.md) | same ad, a different person from the brand's cast | GPT Image 2.5 | not yet |
 | [element-swap](element-swap.md) | one product, prop, badge or background changed, or one thing removed | GPT Image 2.5 | yes, 29 Sep |
 
-The video side's edit commands are the [Edit kit](../../video-edit-kit/).
+Video versions: `tools/video-edit/skills/`.
 
 ## Put them in Higgsfield (paste once)
 
 > Pull these skills from our GitHub and save each one as one of my skills, named as the file:
-> https://github.com/daemnapps/prizm-labs/blob/main/tools/image-edit/skills/resize-9x16.md
-> https://github.com/daemnapps/prizm-labs/blob/main/tools/image-edit/skills/logo-swap.md
-> https://github.com/daemnapps/prizm-labs/blob/main/tools/image-edit/skills/avatar-swap.md
-> https://github.com/daemnapps/prizm-labs/blob/main/tools/image-edit/skills/element-swap.md
+> https://github.com/brand-d-team/workspace/blob/main/tools/image-edit/skills/resize-9x16.md
+> https://github.com/brand-d-team/workspace/blob/main/tools/image-edit/skills/logo-swap.md
+> https://github.com/brand-d-team/workspace/blob/main/tools/image-edit/skills/avatar-swap.md
+> https://github.com/brand-d-team/workspace/blob/main/tools/image-edit/skills/element-swap.md
 >
 > Follow each one exactly whenever I use its trigger words. Always use the model the skill names, after its model check. Change one thing per run, never crop, never add bars. When a skill file on GitHub changes, pull it again.

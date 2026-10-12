@@ -4,18 +4,18 @@
     python3 motion.py <video>
 
 A still posted as a reel is a real mp4 with an audio track, so triage — which
-reads the file — calls it a video and the chain runs. Kerin's quote card got
+reads the file — calls it a video and the chain runs. Creator D's quote card got
 thirteen stages of Opus that way on 2026-08-26, and KZN-07 (a split-screen
 before/after photo) got five before a later stage caught it on the 27th.
 
 This answers the cheap version of the question in about a second, with ffmpeg
 rather than a model: sample frames across the clip and measure how much the
-picture changes. It reports; it does not gate. Damon ruled the call is his.
+picture changes. It reports; it does not gate. the owner ruled the call is his.
 
 WHAT IT CATCHES, HONESTLY. A frozen source scores near zero — KZN-07, a
 split-screen before/after photo, came in at 0.15. A genuine performance runs
 30-55. But a quote card over stock b-roll scores like a video, because the
-b-roll really is moving: Kerin's sunset card measured 9.91. So this closes the
+b-roll really is moving: Creator D's sunset card measured 9.91. So this closes the
 frozen-image half of the gap and not the other half. Catching "no person
 performs in this" needs eyes on a frame, not a difference metric, and belongs
 in triage where the model already looks at the video.

@@ -1,0 +1,19 @@
+# gdrive-creator — the Google client libraries, declared because a MISSING one
+# was invisible for weeks (found 2026-09-16 by the drive-pipe stream).
+#
+# `/usr/bin/python3` — the interpreter BOTH worker plists invoke, and NOT
+# homebrew's `python3`, which lacks these libs — had no google-api-python-client
+# at all. The engine imports them lazily, so the ImportError surfaced inside a
+# stage wrapped in a broad `except` and every affected run reported a SKIPPED
+# Doc stage. It was then installed BY HAND with `pip --user` to finish a test,
+# which is live-machine state with no repo record: exactly the shape that goes
+# wrong silently at the next reboot or on the next machine. This file is that
+# record.
+#
+#     /usr/bin/python3 -m pip install --user -r \
+#         components/gdrive-creator/requirements.txt
+#
+# google-auth is pulled in by google-api-python-client and is named anyway, so
+# the failure message that cites it points at a line somebody can read.
+google-api-python-client>=2.100
+google-auth>=2.30

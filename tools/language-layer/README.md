@@ -36,7 +36,20 @@ words appear verbatim in the brief. `results` is filled from per-ad spend and
 purchases joined on the ad name. The video chain's `mark_used.py` (stage 5u)
 writes these files; its hooks query asks for unused rows first.
 
-    python3 tests/test_used_lane.py
+    python3 -m unittest discover -s tests          # from tools/language-layer
+
+## Fresh first (2026-10-05)
+
+`for_stage(used="fresh")` hands a stage never-used rows first, ranked so the
+rows earlier runs were shown least come first (`shown={row id: times}`), plus a
+proven slice — up to `proven_share` (a quarter by default) — of rows already
+used in an asset. Proven words still work; they stop crowding out the rest, so
+runs rotate through the bank instead of every run reading the same top forty.
+
+Rows from a brand's own feedback forms carry `feedback: {stage, areas}`;
+`--area <business area>` and `--feedback-stage <stage>` keep only those rows.
+With no `AI_WORKSPACE` set, the engine resolves the checkout it sits in —
+never a home-folder guess.
 
 ## Awareness, sophistication, origin — and repeats
 

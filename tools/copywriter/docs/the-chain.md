@@ -1,7 +1,7 @@
 # The chain
 
-Ten stages, mirroring the video teardown chain (`components/video-teardown`) stage for
-stage. Rebuilt 2026-08-25 on Damon's call — the first shape was invented, this
+Ten stages, mirroring the video teardown chain (`tools/video-teardown`) stage for
+stage. Rebuilt 2026-08-25 on the owner's call — the first shape was invented, this
 one is derived from a chain that already worked.
 
 ## What goes in
@@ -12,8 +12,8 @@ One `source`, of either kind:
   or caption
 - **Raw copy** — a swipe
 
-There is no separate "existing copy" input and no bank-match stage. Damon's
-two live <brand> ads are swipes; existing copy is a source, not something to
+There is no separate "existing copy" input and no bank-match stage. the owner's
+two live Brand A ads are swipes; existing copy is a source, not something to
 match against. That collapse removed a whole stage.
 
 ## The stages
@@ -119,7 +119,7 @@ Lifted unchanged from the video chain's `ROUTES`.
 
 ## What was dropped, and why
 
-- **Compliance** — Damon's call, 2026-08-25. Pricing and offer are a separate
+- **Compliance** — the owner's call, 2026-08-25. Pricing and offer are a separate
   concern, not a copy-writing stage.
 - **Bank match** — dissolved when existing copy was understood as a source.
 - **Audit** — the video chain's stage 4e (seven checks, reports, gates

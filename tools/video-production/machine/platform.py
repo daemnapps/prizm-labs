@@ -13,6 +13,7 @@ Every provider and model slug lives in providers.json, never here.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import sys
@@ -20,6 +21,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 PROVIDERS_FILE = HERE / "providers.json"
+
+_spec = importlib.util.spec_from_file_location("vm_vp_keys", HERE / "vp_keys.py")
+vp_keys = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(vp_keys)
 
 
 def registry() -> dict:
@@ -29,11 +34,7 @@ def registry() -> dict:
 def _vault_key(name: str) -> bool:
     # A teammate's clone has no vault module and no Keychain entry; both are
     # simply "not found", never an error.
-    try:
-        import daemn_keys
-        return bool(daemn_keys.key(name))
-    except Exception:
-        return False
+    return bool(vp_keys.key(name))
 
 
 def _detect(conditions: dict) -> tuple[bool, list[str]]:
@@ -157,7 +158,7 @@ def rate_label(rate: dict | None) -> str:
 def machine_door(item: dict, reg: dict, forced: bool = False) -> dict | None:
     """The direct door the machine hand will call for this item, or None
     when the item goes to the editor house. Mirrors run.py's split: a
-    station whose door says hand=machine is the machine's — unless Damon
+    station whose door says hand=machine is the machine's — unless the owner
     forced a house with --provider, which takes motion/talking back."""
     kind = item.get("kind") or item_kind(item, reg)
     st = reg["station_of_kind"].get(kind or "")

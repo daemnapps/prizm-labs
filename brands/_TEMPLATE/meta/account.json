@@ -1,0 +1,19 @@
+{
+  "_what": "This brand's Meta account, read by components/meta-upload (brand.py, meta.py) and business.py. Ids are the brand's own; fill them in your copy of this folder, never in a tool.",
+  "account_id": "<META_AD_ACCOUNT_ID>",
+  "page_id": "<META_PAGE_ID>",
+  "pixel_id": "<META_PIXEL_ID>",
+  "instagram_id": "<INSTAGRAM_ACCOUNT_ID>",
+  "token_key": "PRIZM_META_TOKEN",
+  "campaign": {"budget": "cbo", "market": "us", "event": "purchase", "product": "<product-slug>"},
+  "call_to_action": "SHOP_NOW",
+  "inputs": {"pictures": "runs/image-teardown/<brand>", "copy": "runs/copywriter/<brand>", "pages": "", "roster": "", "adsets": "", "offers": ""},
+  "naming": {
+    "campaign": "campaign{sep}{brand}{sep}{market}{sep}{product}{sep}{funnel}{sep}{event}{sep}{budget}",
+    "campaign_sep": "_",
+    "ad_set": "adset{sep}{brand}{sep}{avatar}{sep}{angle}",
+    "ad_set_sep": "_",
+    "ad_set_by": ["avatar", "angle"]
+  },
+  "store": {"kind": "shopify", "name": "<store name shown on the business page>", "label": "<account_label in the warehouse, for kind nextcommerce>"}
+}

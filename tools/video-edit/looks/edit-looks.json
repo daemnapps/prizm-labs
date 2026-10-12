@@ -1,0 +1,35 @@
+{
+ "_what": "Looks and levels for the edit-map line (edit_map.py → render_map.py). SETTINGS, brand-agnostic: an ad picks a look by id in its decisions.json (`text_looks`, `option_cards.look_id`, `captions.look_id`); nothing about one brand, product or swipe lives in the code. Colours are RGBA 0-255; y is the share of the frame height from the top; sizes are pixels on a 1080x1920 frame.",
+ "text": {
+  "headline-plain": {"_what": "white bold words, dark outline, no box — the neutral default for an opening headline",
+                     "font": "heavy", "size": 58, "upper": false, "fill": [255, 255, 255, 255], "stroke": [0, 0, 0, 255],
+                     "stroke_w": 4, "box": null, "radius": 0, "y": 0.10, "line_h": 72, "pad": [30, 20], "max_w": 860},
+  "headline-pink-box": {"_what": "white caps on a pink box with a cyan edge (the an-earlier-run swipe's headline)",
+                        "font": "heavy", "size": 54, "upper": true, "fill": [255, 255, 255, 255], "stroke": [41, 211, 230, 255],
+                        "stroke_w": 3, "box": [232, 53, 140, 255], "radius": 10, "y": 0.10, "line_h": 66, "pad": [30, 20], "max_w": 860},
+  "swipe-card": {"_what": "the an-earlier-run creator's own cover card, matched off the cover (4 Oct 2026, the owner: 'you're missing the white in the text itself'): a hot-pink rounded box behind EACH line, blue caps with a white outline in a comic marker face. Ugly on purpose: it's what the creator did, and what stopped people",
+                 "font": "comic", "size": 76, "upper": true, "fill": [0, 148, 255, 255], "stroke": [255, 255, 255, 255], "stroke_w": 6,
+                 "box": [255, 20, 177, 255], "radius": 24, "y": 0.64, "line_h": 96, "pad": [30, 16], "max_w": 860, "per_line_box": true},
+  "thumb-bold": {"_what": "the thumbnail's words: big white type on a dark band in the middle-lower safe zone, clear of the face and the feed bars",
+                 "font": "heavy", "size": 92, "upper": false, "fill": [255, 255, 255, 255], "stroke": null, "stroke_w": 0,
+                 "box": [0, 0, 0, 205], "radius": 26, "y": 0.56, "line_h": 104, "pad": [44, 26], "max_w": 900},
+  "native-pop": {"_what": "a short bold word on a dark rounded box — a natively edited text pop (the owner, 3 Oct: 'option 1, option 2 … natively edited')",
+                 "font": "heavy", "size": 78, "upper": false, "fill": [255, 255, 255, 255], "stroke": null, "stroke_w": 0,
+                 "box": [0, 0, 0, 200], "radius": 22, "y": 0.16, "line_h": 88, "pad": [35, 16], "max_w": 900}
+ },
+ "captions": {
+  "ig-fb-native": {"_what": "Instagram / Facebook native: sentence case, white on a soft dark box, above the feed buttons (the owner, 3 Oct)",
+                   "font": "semibold", "size": 50, "fill": [255, 255, 255, 255], "box": [0, 0, 0, 158], "radius": 16,
+                   "y": 0.74, "y_closeup": 0.785, "line_h": 70, "max_w": 820, "words": 4}
+ },
+ "defaults": {"thumb": "thumb-bold", "hook headline": "headline-plain", "option card": "native-pop", "captions": "ig-fb-native",
+              "headline_seconds": 3.0, "option_seconds": 1.6},
+ "mix": {"music_under_voice_db": -19, "music_in_pauses_db": -12, "room_db": -50, "loudness_lufs": -14, "true_peak_db": -1},
+ "fonts": {"_what": "first file that exists wins; a looks/fonts file can be put first once installed",
+           "comic": ["/System/Library/Fonts/Supplemental/Comic Sans MS Bold.ttf", "/usr/share/fonts/truetype/msttcorefonts/Comic_Sans_MS_Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"],
+           "rounded": ["/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"],
+           "heavy": ["/System/Library/Fonts/SFNS.ttf", "/System/Library/Fonts/HelveticaNeue.ttc", "/System/Library/Fonts/Helvetica.ttc",
+                     "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"],
+           "semibold": ["/System/Library/Fonts/SFNS.ttf", "/System/Library/Fonts/HelveticaNeue.ttc", "/System/Library/Fonts/Helvetica.ttc",
+                        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"]}
+}

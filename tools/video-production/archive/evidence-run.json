@@ -1,0 +1,57 @@
+[
+ {
+  "stage": "",
+  "createdAt": 0,
+  "iso_date": "",
+  "id": "",
+  "model": "",
+  "type": "",
+  "params": {
+   "prompt": "",
+   "aspect_ratio": "",
+   "medias": [],
+   "width": 0,
+   "height": 0,
+   "quality": "",
+   "resolution": "",
+   "model": "",
+   "remove_bg": false,
+   "reference_elements": [],
+   "format": "",
+   "sample_rate": 0,
+   "speech_rate": 0,
+   "loudness_rate": 0,
+   "pitch_rate": 0,
+   "duration": 0,
+   "genre": "",
+   "generate_audio": true,
+   "multi_shots": false,
+   "multi_shot_mode": "",
+   "multi_prompt": [],
+   "speedramp": "",
+   "prompt_language": "",
+   "mode": "",
+   "bitrate_mode": "",
+   "expression_intensity": 0,
+   "mood": 0,
+   "batch_size": 0,
+   "seed": 0,
+   "is_inpaint": false,
+   "enhance_prompt": false,
+   "use_sage_attention": false,
+   "use_relax": false,
+   "style_id": "",
+   "style": {
+    "id": "",
+    "name": "",
+    "url": "",
+    "strength": null
+   },
+   "style_strength": null
+  },
+  "results": {
+   "rawUrl": "",
+   "thumbnailUrl": ""
+  }
+ }
+]

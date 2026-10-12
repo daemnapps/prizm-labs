@@ -18,7 +18,9 @@
    "source": "components/marketing-doctrine/delivery.json › reference_world",
    "extra": {
     "when": "Read for TIMING and CADENCE — where the beat sits, how long the pause runs, how the joke is set up. Used to set the humor dial, never to write a line."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "trust",
@@ -33,7 +35,9 @@
    "source": "components/marketing-doctrine/delivery.json › reference_world",
    "extra": {
     "when": "Read for the SHAPE of trusted delivery — how they open, whether they hedge, whether they show or tell. Used to set the delivery style."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "watch",
@@ -48,7 +52,9 @@
    "source": "components/marketing-doctrine/delivery.json › reference_world",
    "extra": {
     "when": "Read for FORMAT — the host medium the piece has to stop looking like an ad inside."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "quote",
@@ -63,7 +69,9 @@
    "source": "components/marketing-doctrine/delivery.json › reference_world",
    "extra": {
     "when": "Read for register and in-words — what the room sounds like when it is talking to itself."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "look",
@@ -78,7 +86,9 @@
    "source": "components/marketing-doctrine/delivery.json › reference_world",
    "extra": {
     "when": "Read for WHAT IS IN FRAME — styling, location, props."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "sound",
@@ -93,8 +103,13 @@
    "source": "components/marketing-doctrine/delivery.json › reference_world",
    "extra": {
     "when": "Read for the bed, the room tone and what the piece must NOT sound like."
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

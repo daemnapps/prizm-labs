@@ -193,6 +193,7 @@ def load_sheet(p: Path) -> dict:
 def pieces_for(sc: dict, heard: dict, keep: set[str]) -> list[dict]:
     """Source spans to keep from one talking clip, each with its punch."""
     lead, tail = S["cut"]["lead_s"], S["cut"]["tail_s"]
+    least = S["cut"].get("min_piece_s", 0.0)
     dur = heard["duration"]
     a = max(0.0, heard["talk_from"] - lead)
     out, n = [], 0
@@ -202,6 +203,16 @@ def pieces_for(sc: dict, heard: dict, keep: set[str]) -> list[dict]:
         out.append((a, min(dur, p["from"] + tail), p["id"]))
         a = max(0.0, p["to"] - lead)
     out.append((a, min(dur, heard["talk_to"] + tail), None))
+    # no flashes (edit line, 4 Oct: nothing on screen under half a second): a piece that short keeps the pause
+    # before it, so it joins the piece before
+    k = 1
+    while k < len(out):
+        if out[k][1] - out[k][0] < least:
+            out[k - 1:k + 1] = [(out[k - 1][0], out[k][1], out[k][2])]
+        else:
+            k += 1
+    if len(out) > 1 and out[0][1] - out[0][0] < least:
+        out[0:2] = [(out[0][0], out[1][1], out[1][2])]
     res = []
     for k, (s, e, cut_pause) in enumerate(out):
         z = S["punch"]["zoom"] if (k % 2 == 1 and sc.get("punch", True)) else 1.0
@@ -223,7 +234,9 @@ def render_piece(src: Path | None, still: Path | None, s: float, d: float, zoom:
            "-i", "anullsrc=r=48000:cl=stereo", "-vf", vf, "-map", "0:v", "-map", "1:a", *enc, "-shortest", out)
         return
     if has_audio:
-        ff("-ss", f"{s:.3f}", "-t", f"{d:.3f}", "-i", src, "-vf", vf, "-af", f"volume={gain_db:.2f}dB,aresample=48000",
+        fd = min(S["cut"].get("fade_s", 0.0), d / 4)          # de-click every join (edit line, 4 Oct)
+        fade = f",afade=t=in:d={fd:.3f},afade=t=out:st={max(0.0, d - fd):.3f}:d={fd:.3f}" if fd > 0 else ""
+        ff("-ss", f"{s:.3f}", "-t", f"{d:.3f}", "-i", src, "-vf", vf, "-af", f"volume={gain_db:.2f}dB,aresample=48000{fade}",
            "-map", "0:v", "-map", "0:a", *enc, out)
     else:
         ff("-ss", f"{s:.3f}", "-t", f"{d:.3f}", "-i", src, "-f", "lavfi", "-t", f"{d:.3f}", "-i", "anullsrc=r=48000:cl=stereo",
@@ -259,10 +272,12 @@ def do_cut(sheet_path: Path, out: Path, anyway: bool = False) -> dict:
             cut_off.append(f"{sc['id']} ({src.name}): the sound is still going at the clip's last frame - the line probably stops short")
         keep = set(sc.get("keep") or [])
         gain = round(target - heard["lufs"], 2) if heard.get("lufs") is not None else 0.0
+        pcs = pieces_for(sc, heard, keep)
+        cut_ids = {pc["after_cut"] for pc in pcs if pc["after_cut"]}
         for p in heard["pauses"]:
             pauses.append({"scene": sc["id"], "pause": p["id"], "length": p["length"], "at_source": p["from"],
-                           "action": "kept" if p["id"] in keep else "cut"})
-        for pc in pieces_for(sc, heard, keep):
+                           "action": "cut" if p["id"] in cut_ids else ("kept" if p["id"] in keep else "kept (a piece under 0.5 s)")})
+        for pc in pcs:
             plan.append({"scene": sc["id"], "src": str(src), **pc, "gain": gain, "audio": True})
     if cut_off and not anyway:
         raise SystemExit("STOP - a talking clip is cut off. It goes back to production, never edited around:\n  "
@@ -477,6 +492,11 @@ def do_captions(video: Path, words_json: Path | None, out: Path, report: Path | 
             p = round(14 * sc)
             box = (box[0] - p, box[1] - p, box[2] + p, box[3] + p)
             d.rounded_rectangle(box, radius=round(12 * sc), fill=_rgba(L["plate"]))
+        if L.get("word_box"):                                  # the word being said sits on its own box (the owner, 2026-10-10)
+            bp = round(6 * sc)
+            bx = x + sum(widths[:k]) + space * k
+            d.rounded_rectangle((int(bx - bp), int(y - bp), int(bx + widths[k] + bp), int(y + asc + desc + bp)),
+                                radius=round(8 * sc), fill=_rgba(L["word_box"]))
         for i, (t, wdt) in enumerate(zip(toks, widths)):
             col = L["highlight"] if i == k else L["color"]
             d.text((x, y), t, font=f, fill=_rgba(col), stroke_width=stroke, stroke_fill=_rgba(L["stroke"]))
@@ -656,12 +676,21 @@ def do_master(video: Path, out: Path) -> dict:
         shutil.copy(video, out)
         return {"mastered": False, "why": "no sound in the file"}
     af = f"loudnorm=I={lufs}:TP={tp - 0.5}:LRA=11"
-    err = sh(["ffmpeg", "-nostats", "-v", "info", "-i", video, "-vn", "-af", af + ":print_format=json", "-f", "null", "-"]).stderr
+    # a quiet room under everything, never digital silence (edit line, 4 Oct): brown noise, rumble and hiss cut,
+    # at settings room.db (the noise alone sits at about -28 dB RMS before the volume)
+    dur = probe(video)["duration"] + 0.5
+    room = ["-f", "lavfi", "-t", f"{dur:.3f}", "-i", "anoisesrc=color=brown:amplitude=0.25:sample_rate=48000:seed=7"]
+    room_db = (S.get("room") or {}).get("db")
+    pre = (f"[1:a]highpass=f=90,lowpass=f=2800,aformat=channel_layouts=stereo,volume={10 ** ((room_db + 28) / 20):.5f}[r];"
+           f"[0:a]aresample=48000,aformat=channel_layouts=stereo[s];[s][r]amix=inputs=2:normalize=0:duration=first,"
+           if room_db is not None else "[0:a]")
+    err = sh(["ffmpeg", "-nostats", "-v", "info", "-i", video, *room, "-filter_complex", pre + af + ":print_format=json[o]",
+              "-map", "[o]", "-f", "null", "-"]).stderr
     m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
     af2 = (af + f":measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
            f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
-    ff("-i", video, "-c:v", "copy", "-af", af2 + f",alimiter=limit={10 ** ((tp - 0.3) / 20):.4f}:level=false",
-       "-ar", "48000", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out)
+    ff("-i", video, *room, "-filter_complex", pre + af2 + f",alimiter=limit={10 ** ((tp - 0.3) / 20):.4f}:level=false[o]",
+       "-map", "0:v", "-map", "[o]", "-c:v", "copy", "-ar", "48000", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out)
     got = loudness(out)
     return {"mastered": True, "lufs": got[0], "true_peak_db": got[1]}
 

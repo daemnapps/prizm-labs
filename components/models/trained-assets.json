@@ -1,0 +1,15 @@
+{
+ "_readme": "THE TRAINED-ASSETS INDEX (card MDL-1, 2026-09-01). The home the `lora.json` records emitted by components/identity-training/train_identity.py did not have. That component's own CLAUDE.md says so in as many words: 'until it lands, the lora.json records ARE the index' — this is the landing.\n\nAN INDEX REFERENCES; IT NEVER COPIES. Each entry points at a `lora.json` record by repo-relative path and stops there. Nothing moved, nothing was rewritten, and no weights url is duplicated here — the record is the asset and the only place its fields live, so the index cannot drift from it. `validate.py` refuses an entry that inlines a `lora_url`, and refuses one whose `record` path does not exist.\n\nWHERE THE RECORDS ACTUALLY ARE. A record sits where the engine or a later move put it, and its entry points at it by repo-relative path. train_identity.py resolves `brands/<brand>/` only (the one brand home since 2026-09-02; `brands/` is gone) and writes the record beside the brand source, or under `--out`. On file today: the product record under `brands/<brand>/products/…`, and the deprecated character record under `runs/ai-elements/<brand>/casting/…`, where its archive moved it.\n\nWEIGHTS ARE NOT IN GIT. They live on fal (workspace rule 3, media never committed). What is in git is words about them — which is the whole point of an index.\n\nSTATUS IS THE CURATOR'S GATE, same as models.json (components/CLAUDE.md rule 6). Seeded `draft`. the owner certifies the training set; the developer holds the registry gate.",
+ "schema": 1,
+ "_field_notes": {
+  "id": "The registry's name for the trained identity. Unique across the file.",
+  "kind": "character | product — the two things train_identity.py trains. A character must be the same person in every scene; a product locks color, shape and logo.",
+  "brand": "The brand the identity belongs to. Brand facts enter from the brand folder only (workspace rule 7) — this is a pointer, not brand content.",
+  "trigger": "The trigger word the LoRA answers to, copied from the record for findability. <=24 chars, [a-z0-9] only, which is the shape the engine itself produces.",
+  "record": "Repo-relative path to the `lora.json` the engine wrote. THE source of truth for every other field of the asset — weights url, steps, training images, account, caveats. Must exist; a dangling reference fails the manifest.",
+  "trained": "YYYY-MM-DD, copied from the record so the index can be read without opening every file.",
+  "status": "draft | approved | deprecated. Seeded draft.",
+  "certified_by": "Who blessed the training SET (the owner's standard, ruled with IDT-1) — distinct from who holds the registry gate (the developer)."
+ },
+ "assets": []
+}

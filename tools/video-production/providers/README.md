@@ -44,18 +44,18 @@ example — the calls are the provider's; the piece is illustrative.
 ## The seven stations (2026-09-17; talking recipe updated with the course write-up)
 
 **One primary model per station per provider, at most one named fallback,
-and never a bare model name — a station.** Damon: "we have many providers
+and never a bare model name — a station.** the owner: "we have many providers
 and many models — streamline the models used so any tool, fal or
 Higgsfield, can do what's necessary." Full rulings, ceilings and evidence
 per pick: `../machine/providers.json`'s `_house` key and each model's
-`why`./`ceilings`. The principle layer behind every pick in that file is
+`why`/`ceilings`. The principle layer behind every pick in that file is
 `GENERATION-METHOD.md` (the reference carries the material;
 generate what must be photographic, composite what must be exact; never
 name the camera; judge by measurement, not taste). The course write-up
-(Damon, 09-14) corroborates the ruling and confirms the same model split:
+(the owner, 09-14) corroborates the ruling and confirms the same model split:
 realism of a person → GPT Image; edits → Nano Banana Pro.
 
-**Hand column added 2026-09-17** (Damon's "we scale tomorrow" ruling — the
+**Hand column added 2026-09-17** (the owner's "we scale tomorrow" ruling — the
 two hands, full detail in `../formats/RUN-PROTOCOL.md`). The one page an
 editor reads before touching Higgsfield: [`EDITOR-SHEET.md`](EDITOR-SHEET.md).
 
@@ -69,14 +69,14 @@ editor reads before touching Higgsfield: [`EDITOR-SHEET.md`](EDITOR-SHEET.md).
 | voice | machine, direct | the spoken line as audio, made first with ElevenLabs | `elevenlabs`, direct API — custom voice per character, generated before any picture *(alternates `fal-ai/elevenlabs/tts/multilingual-v2`, `fal-ai/elevenlabs/tts/eleven-v3`, `fal-ai/elevenlabs/voice-changer` — library voices only)* | `elevenlabs`, direct API, same recipe *(alternate `voice_change`, for re-voicing an existing clip)* |
 | audio | machine, direct | the song, for sung formats — otherwise the editor's | `fal-ai/lyria3/pro` *(alternates `lyria` — Gemini direct, returns timings natively — and `fal-ai/minimax-music/v2.6`; fallback `fal-ai/stable-audio`, effects only)* | `fal-ai/lyria3/pro`, same call *(same alternates)* |
 
-**The talking recipe** (proven 16 Sep on Higgsfield, Damon's 2026-09-17
-ruling; `mode` confirmed by the course write-up, Damon 09-14, §6):
+**The talking recipe** (proven 16 Sep on Higgsfield, the owner's 2026-09-17
+ruling; `mode` confirmed by the course write-up, the owner 09-14, §6):
 
 1. the approved still, uploaded, as media role `start_image`
 2. the ElevenLabs line, uploaded, as media role `audio`
 3. `mode: omni_reference`
 
-**The voice recipe** (Damon's 2026-09-17 ruling — the same on every provider,
+**The voice recipe** (the owner's 2026-09-17 ruling — the same on every provider,
 because ElevenLabs is called directly on neither):
 
 1. one custom ElevenLabs voice per character, bound in
@@ -91,10 +91,10 @@ because ElevenLabs is called directly on neither):
    endpoint — so the call is always direct, never through a provider
    wrapper
 
-**The song recipe** (Damon's 2026-09-17 ruling):
+**The song recipe** (the owner's 2026-09-17 ruling):
 
 1. `fal-ai/lyria3/pro` makes the song — up to 3 minutes, sings written
-   lyrics, ~$0.08
+   lyrics, ~$__
 2. `fal-ai/elevenlabs/speech-to-text` runs on the finished song for word
    timestamps — the timing sheet the cut is built to, since fal's Lyria
    returns none
@@ -109,10 +109,10 @@ rule holding. `cinematic_studio_3_0` is now the talking FALLBACK if sync
 drifts, not the primary route. Everything else THE-CINEMA-LINE.md rules —
 element injection, the receipts — still stands. This table's own cast/still
 row is superseded too: `soul_2` and Seedream-for-identity (ruled
-2026-08-31) gave way to GPT Image from reference on Damon's 2026-09-17
+2026-08-31) gave way to GPT Image from reference on the owner's 2026-09-17
 ruling; `soul_2` is now retired in `machine/providers.json`.
 
-**Audition, not yet in a station cell.** The course write-up (Damon, 09-14)
+**Audition, not yet in a station cell.** The course write-up (the owner, 09-14)
 proposes a routing rule — talking beats to Omni, silent shots to Grok. Both
 `gemini_omni_flash_1_1` and `grok_video_v15` carry `status: audition` in
 `machine/providers.json` on that strength alone; neither has a run against

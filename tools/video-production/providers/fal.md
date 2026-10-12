@@ -4,12 +4,12 @@
 
 # Building a song ad — the exact run
 
-**2026-09-03, worked end to end with Damon.** Not a summary: the actual
+**2026-09-03, worked end to end with the owner.** Not a summary: the actual
 calls, the actual parameters, the actual strings that produced a 30-second
 sung ad for a body scrub. Anyone should be able to rebuild it from this
 page alone.
 
-Total generation cost ≈ **$4.00**.
+Total generation cost ≈ **$__**.
 
 ---
 
@@ -51,7 +51,7 @@ roughly half**, not changing model:
 
     [chorus]
     Then a little brown jar
-    Turmeric and moringa
+    Vitamin C and centella
     I scrubbed and I rinsed
     And I didn't say a word
 
@@ -190,8 +190,8 @@ One short motion line each, describing movement only:
 
 Each ends with `Natural subtle motion, no cuts.`
 
-**Never animate before the stills are approved.** A still is ~$0.04, a clip
-~$0.62 — motion is 94% of the budget.
+**Never animate before the stills are approved.** A still is ~$__, a clip
+~$__ — motion is 94% of the budget.
 
 ## STEP 6 — Cut and mix
 
@@ -218,10 +218,10 @@ Same reference, same prompt, four models, judged side by side.
 
 | Job | Model | Price |
 |---|---|---|
-| People — default | `fal-ai/ideogram/character` | ~$0.04 |
+| People — default | `fal-ai/ideogram/character` | ~$__ |
 | People — peer | `fal-ai/bytedance/seedream/v4/edit` | — |
-| Change one thing in a finished frame | `fal-ai/nano-banana/edit` | $0.039 |
-| Motion | `fal-ai/bytedance/seedance/v1/pro/image-to-video` | ~$0.62 |
+| Change one thing in a finished frame | `fal-ai/nano-banana/edit` | $__ |
+| Motion | `fal-ai/bytedance/seedance/v1/pro/image-to-video` | ~$__ |
 | Song | `lyria-3-clip-preview` (Gemini key) | pennies |
 
 Nano Banana preserves what it is handed — the right **editor**, the wrong
@@ -232,11 +232,11 @@ returned landscape from a 9:16 source. Check output dimensions.
 
 | | each | ×  | total |
 |---|---|---|---|
-| Stills | $0.04 | 6 | $0.23 |
-| Clips | $0.62 | 6 | $3.72 |
-| Song | ~$0.02 | 2 | $0.05 |
+| Stills | $__ | 6 | $__ |
+| Clips | $__ | 6 | $__ |
+| Song | ~$__ | 2 | $__ |
 | Cut/mix | $0 | — | $0 |
-| | | | **≈ $4.00** |
+| | | | **≈ $__** |
 
 ---
 

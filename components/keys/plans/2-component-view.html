@@ -1,0 +1,289 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- components/keys/plans — a copy of the published page, for review in the repo. Open it in a browser. Names only: no key value appears anywhere in this file. -->
+<title>Keys on the Atlas</title>
+<style>
+:root{
+  --ground:#F6F8F7; --panel:#FFFFFF; --panel-2:#EDF2F0;
+  --ink:#17211D; --ink-2:#4A5A54; --ink-3:#6B7A74;
+  --rule:#D9E1DD; --rule-2:#E8EEEB;
+  --accent:#0E6B5C; --accent-soft:#E2EFEB;
+  --ok:#1D7A4C; --ok-bg:#E3F1E8;
+  --warn:#A66B06; --warn-bg:#F6EEDC;
+  --crit:#B3372E; --crit-bg:#F7E6E4;
+  --idle-ink:#6B7A74;
+  --shadow:0 1px 2px #17211d10, 0 8px 24px #17211d08;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1513; --panel:#161D1A; --panel-2:#1C2521;
+    --ink:#E4EBE8; --ink-2:#A2B0AA; --ink-3:#85938D;
+    --rule:#26312D; --rule-2:#1E2724;
+    --accent:#4FC5AC; --accent-soft:#173A33;
+    --ok:#4CC98A; --ok-bg:#15301F; --warn:#E0A33E; --warn-bg:#33270D; --crit:#E4776C; --crit-bg:#3A1613;
+    --idle-ink:#8FA09A; --shadow:0 1px 2px #0006, 0 10px 28px #0004; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1513; --panel:#161D1A; --panel-2:#1C2521;
+  --ink:#E4EBE8; --ink-2:#A2B0AA; --ink-3:#85938D;
+  --rule:#26312D; --rule-2:#1E2724;
+  --accent:#4FC5AC; --accent-soft:#173A33;
+  --ok:#4CC98A; --ok-bg:#15301F; --warn:#E0A33E; --warn-bg:#33270D; --crit:#E4776C; --crit-bg:#3A1613;
+  --idle-ink:#8FA09A; --shadow:0 1px 2px #0006, 0 10px 28px #0004; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.55;padding-inline:16px;padding-block:24px 60px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:750;letter-spacing:-.01em}
+h2{font-size:20px;font-weight:700}
+h3{font-size:14.5px;font-weight:700}
+p{margin:0;max-width:70ch}
+code,.mn{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+code{font-size:.86em;background:var(--panel-2);padding:1px 5px;border-radius:3px}
+.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+section{display:flex;flex-direction:column;gap:14px}
+.lede{display:flex;flex-direction:column;gap:12px}
+.lede p{font-size:16px;color:var(--ink-2)}
+.lede p b{color:var(--ink)}
+.status{display:flex;flex-wrap:wrap;gap:8px;font-size:12px}
+.pill{padding:3px 10px;border-radius:999px;border:1px solid var(--rule);background:var(--panel);color:var(--ink-2)}
+.pill.prop{border-style:dashed;border-color:var(--warn);color:var(--warn)}
+.note{font-size:12.5px;color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);align-items:center}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.sw{display:inline-block;width:14px;height:10px;border-radius:3px;border:1px solid var(--rule);background:var(--panel)}
+.sw.hit{border-color:var(--accent);background:var(--accent-soft)}
+.sw.new{border:1.5px dashed var(--warn);background:var(--warn-bg)}
+.sw.dark{border:1px dashed var(--crit)}
+
+/* chain canvas: eight named categories */
+.canvas{overflow-x:auto;border:1px solid var(--rule);border-radius:10px;background:var(--panel);box-shadow:var(--shadow)}
+.cols{display:grid;grid-template-columns:repeat(8,minmax(118px,1fr));gap:0;min-width:1000px}
+.col{border-right:1px solid var(--rule-2);padding:10px 8px;display:flex;flex-direction:column;gap:7px}
+.col:last-child{border-right:0}
+.chd{display:flex;flex-direction:column;gap:2px;padding-bottom:6px;border-bottom:1px solid var(--rule-2)}
+.chd b{font-size:12.5px}
+.chd .ord{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--ink-3)}
+.chd .m{font-size:10.5px;color:var(--ink-3);line-height:1.35}
+.nd{border:1px solid var(--rule);border-radius:6px;padding:6px 7px;font-size:11.5px;line-height:1.35;background:var(--panel-2);display:flex;flex-direction:column;gap:3px}
+.nd b{font-size:11.5px}
+.nd .d{color:var(--ink-3);font-size:10.5px}
+.nd.hit{border-color:var(--accent);background:var(--accent-soft)}
+.nd.new{border:1.5px dashed var(--warn);background:var(--warn-bg)}
+.nd.dark{border-style:dashed;border-color:var(--crit)}
+.bd{display:flex;gap:3px;flex-wrap:wrap}
+.b{font:700 9.5px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;border:1px solid var(--rule);color:var(--ink-2);background:var(--panel)}
+.b.H{color:var(--warn);border-color:var(--warn)} .b.A{color:var(--accent);border-color:var(--accent)} .b.T{color:var(--ink-2)}
+.b.st{font-weight:600;letter-spacing:.02em}
+.b.st.live{color:var(--ok);border-color:var(--ok)} .b.st.building{color:var(--warn);border-color:var(--warn)} .b.st.prop{color:var(--warn);border-style:dashed;border-color:var(--warn)} .b.st.nw{color:var(--crit);border-color:var(--crit)}
+.emptycat{font-size:11px;color:var(--ink-3);font-style:italic}
+
+/* component contract */
+.contract{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr) minmax(0,.9fr) 14px minmax(0,.9fr);gap:12px;align-items:stretch}
+@media (max-width:900px){.contract{grid-template-columns:1fr}.bline{height:10px;border-left:0 !important;border-top:2px dashed var(--crit)}}
+.zone{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px;display:flex;flex-direction:column;gap:8px}
+.zl{font:700 10.5px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:var(--ink-3)}
+.box{border:1.4px solid var(--ink-2);border-radius:5px;padding:8px 10px;display:flex;flex-direction:column;gap:3px;font-size:12.5px;background:var(--panel)}
+.box b{font-size:13px}
+.box .s{color:var(--ink-3);font-size:11.5px}
+.box.new{border:1.5px dashed var(--warn)}
+.gate{display:flex;gap:6px;align-items:center;font-size:11.5px;color:var(--warn)}
+.gate::before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid var(--warn);flex:none}
+.arrow{font-size:11.5px;color:var(--ink-3);text-align:center}
+.runs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bline{border-left:2px dashed var(--crit);position:relative}
+.bnote{font:700 10px/1.2 ui-monospace,Menlo,monospace;color:var(--crit);letter-spacing:.06em}
+.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:13.5px;max-width:80ch}
+.rules .why{display:block;color:var(--ink-3);font-size:12.5px}
+.kill{border:1px solid var(--rule);border-left:3px solid var(--crit);border-radius:6px;background:var(--panel);padding:10px 12px;font-size:13px}
+
+/* trace: station flow */
+.trace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.trace{grid-template-columns:1fr}}
+.flow{display:flex;flex-direction:column;align-items:stretch;gap:0}
+.stn{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow)}
+.stn.new{border:1.5px dashed var(--warn)}
+.stn .cat{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase}
+.stn .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.stn .does{font-size:12.5px;color:var(--ink-2)}
+.conn{display:flex;align-items:center;gap:8px;padding:6px 0 6px 22px;border-left:2px solid var(--ink-3);margin-left:20px;min-height:30px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--panel-2)}
+.chip .ic{font-size:13px;line-height:1}
+.chip.new{border-style:dashed;border-color:var(--warn)}
+.stages{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:st}
+.stages li{counter-increment:st;display:grid;grid-template-columns:24px 28px minmax(0,1fr);gap:8px;align-items:start;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 10px;font-size:13px}
+.stages li::before{content:counter(st);font:600 11px/1.6 ui-monospace,Menlo,monospace;color:var(--ink-3)}
+.stages li.unc{border-style:dashed;border-color:var(--warn)}
+.stages .u{display:inline-block;margin-left:6px;font:700 9.5px/1 ui-monospace,Menlo,monospace;color:var(--warn);border:1px dashed var(--warn);padding:2px 4px;border-radius:3px}
+.count{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2)}
+.count b{font-size:18px;color:var(--ink);display:block;font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="lede">
+  <span class="eyebrow">the team Atlas · a proposed component, drawn in the atlas's own shapes</span>
+  <h1>Keys on the Atlas</h1>
+  <div class="status">
+    <span class="pill prop">Proposal · not in the atlas yet</span>
+    <span class="pill">Component: <b>components/keys</b></span>
+    <span class="pill">Engine owner: Operator B · Definition owner: the ops lead</span>
+    <span class="pill">Drawn 29 Sep from manual-nodes.json at HEAD</span>
+  </div>
+  <p>A small component that holds the <b>names</b> of every key and never a value. It provides one loader every tool uses, the template every key file follows, the register of who holds which key, and checks that file their results as records. The page shows it three ways, each in the atlas's conventions: where it sits on the eight-category chain, its component contract, and one trace, a new key reaching the owner.</p>
+  <p class="note">This page is hand-drawn in the atlas's visual language, not atlas output. The real atlas shows the component only once its folder exists and its nodes are added to <code>manual-nodes.json</code>.</p>
+</header>
+
+<section>
+  <span class="eyebrow">1 · The chain</span>
+  <h2>Where it sits among the org's resources</h2>
+  <div class="legend">
+    <span><i class="sw hit"></i>existing node the component governs</span>
+    <span><i class="sw new"></i>proposed new node</span>
+    <span><i class="sw"></i>existing, for context</span>
+    <span><span class="b H">H</span> human</span><span><span class="b A">A</span> AI</span><span><span class="b T">T</span> tech</span>
+  </div>
+  <div class="canvas">
+  <div class="cols" role="img" aria-label="The eight atlas categories with the keys component and the nodes it touches highlighted.">
+    <div class="col">
+      <div class="chd"><span class="ord">0</span><b>Sources</b><span class="m">where keys are created: the company accounts</span></div>
+      <div class="nd hit"><b>fal.ai · Higgsfield</b><span class="d">a key per holder under the company team</span><div class="bd"><span class="b T">T</span><span class="b">MODEL</span><span class="b st live">live</span></div></div>
+      <div class="nd hit"><b>Google, Gemini</b><span class="d">a project per holder</span><div class="bd"><span class="b T">T</span><span class="b">MODEL</span><span class="b st live">live</span></div></div>
+      <div class="nd hit"><b>Apify</b><span class="d">a member token each</span><div class="bd"><span class="b T">T</span><span class="b">ACTION</span><span class="b st live">live</span></div></div>
+      <div class="nd"><b>Commerce &amp; 3PLs · Meta</b><span class="d">keys stay in the sync</span><div class="bd"><span class="b T">T</span><span class="b">DATA</span><span class="b st live">live</span></div></div>
+      <div class="nd dark"><b>Klaviyo</b><span class="d">per-brand action key</span><div class="bd"><span class="b T">T</span><span class="b">DATA</span><span class="b">ACTION</span><span class="b st nw">not wired</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">1</span><b>Integrations</b><span class="m">keys, connections, MCP servers</span></div>
+      <div class="nd hit"><b>Model API keys</b><span class="d">one shared key → one key per holder</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+      <div class="nd hit"><b>Warehouse connection</b><span class="d">full login on the mini, plus a read-only login per person</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+      <div class="nd hit"><b>Drive service account</b><span class="d">mini only</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+      <div class="nd"><b>Nightly sync connections</b><span class="d">sync pipeline secrets</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+      <div class="nd new"><b>Personal setups</b><span class="d">anyone's own keys: files, Keychain. Not checked until work enters the system path</span><div class="bd"><span class="b T">T</span><span class="b H">H</span><span class="b st prop">proposed</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">2</span><b>Runtime</b><span class="m">the machines each file lives on</span></div>
+      <div class="nd hit"><b>Mac mini</b><span class="d">managed file only</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+      <div class="nd new"><b>Team laptops</b><span class="d">managed file + the person's own setup</span><div class="bd"><span class="b T">T</span><span class="b H">H</span><span class="b st prop">proposed</span></div></div>
+      <div class="nd"><b>Vercel</b><span class="d">its own settings, not a file</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">3</span><b>Warehouses</b><span class="m">where names and results are held</span></div>
+      <div class="nd hit"><b>Repo data plane</b><span class="d">check results, names only</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+      <div class="nd"><b>Supabase warehouse</b><span class="d">read through the read-only login</span><div class="bd"><span class="b T">T</span><span class="b H">H</span><span class="b st live">live</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">4</span><b>AI resources</b><span class="m">sessions and the worker that load keys</span></div>
+      <div class="nd hit"><b>Dev sessions &amp; makers</b><span class="d">load keys through the one loader</span><div class="bd"><span class="b A">A</span><span class="b H">H</span><span class="b st live">live</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">5</span><b>Components</b><span class="m">what we build and own</span></div>
+      <div class="nd new"><b>keys</b><span class="d">loader · template · register · checks</span><div class="bd"><span class="b T">T</span><span class="b H">H</span><span class="b st prop">proposed</span></div></div>
+      <div class="nd hit"><b>metrics · video-teardown · …</b><span class="d">switch to the shared loader</span><div class="bd"><span class="b T">T</span><span class="b st live">live</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">6</span><b>Platform views</b><span class="m">what a person opens</span></div>
+      <div class="nd new"><b>Key health</b><span class="d">which files miss which names; rotations due</span><div class="bd"><span class="b H">H</span><span class="b st prop">proposed</span></div></div>
+    </div>
+    <div class="col">
+      <div class="chd"><span class="ord">7</span><b>People resources</b><span class="m">SOPs and human resources</span></div>
+      <div class="nd new"><b>Key SOP</b><span class="d">request · send · rotate · offboard. The column's first entry</span><div class="bd"><span class="b H">H</span><span class="b st prop">proposed</span></div></div>
+    </div>
+  </div>
+  </div>
+  <p class="note">Existing node names and notes are from <code>components/atlas/manual-nodes.json</code> at HEAD. The component would govern four integration nodes (Model API keys, Warehouse connection, Drive service account, and the new personal setups, which it deliberately leaves unchecked) and give People resources its first entry.</p>
+</section>
+
+<section>
+  <span class="eyebrow">2 · The component contract</span>
+  <h2>components/keys, in the Component Contract's shape</h2>
+  <p>This is the same anatomy the atlas uses for every component: definitions and engine inside, sources of record outside, results on the plane, and a consumption boundary that credentials never cross. Here the boundary holds more tightly than usual: key <b>values</b> never enter the component or the plane at all.</p>
+  <div class="contract" role="img" aria-label="Component contract: company accounts and machine key files outside; inside, the template and register curated by the ops lead and the loader and checks owned by Operator B; results on the plane; consumers read the plane only.">
+    <div class="zone">
+      <span class="zl">1 · SOURCES OF RECORD</span>
+      <div class="box"><b>Company accounts</b><span class="s">where every key is created and revoked</span></div>
+      <div class="box"><b>Each machine's key files</b><span class="s">the only place values live, outside the repo</span></div>
+      <span class="s note">never inside the component</span>
+    </div>
+    <div class="zone">
+      <span class="zl">2 · THE COMPONENT</span>
+      <div class="box new"><b>Definitions: names only</b><span class="s">the template (every name, grouped personal · common · mini only)<br>the register (name · vendor · holder · kind · scope · rotated · due)</span><span class="gate">the ops lead approves: draft → approved → deprecated</span></div>
+      <div class="arrow">executes ↓</div>
+      <div class="box new"><b>Engine: the code</b><span class="s">the loader: the person's own environment first, gaps filled from the managed file, a warning when a personal key overrides a company one<br>checks: a file against the template · no key in a command line · every name hidden from jobs. They run on the system path and on the mini, never on anyone's own setup.</span><span class="s">Operator B owns · env-first · writes only to --out</span></div>
+      <span class="zl">RUNS ON EITHER</span>
+      <div class="runs"><div class="box"><b>Mac mini</b><span class="s">every tool, every tick</span></div><div class="box"><b>Someone's laptop</b><span class="s">every tool they run</span></div></div>
+    </div>
+    <div class="zone">
+      <span class="zl">3 · THE PLANE</span>
+      <div class="box new"><b>Results</b><span class="s">check records per machine: names present and missing, never values</span></div>
+      <div class="box new"><b>Manifest</b><span class="s">the approved template and register</span></div>
+      <span class="arrow">emits ←</span>
+    </div>
+    <div class="bline" aria-hidden="true"></div>
+    <div class="zone">
+      <span class="zl">4 · ANYONE</span>
+      <div class="box"><b>Key health view</b><span class="s">the ops lead: who is missing what, what is due</span></div>
+      <div class="box"><b>The system path</b><span class="s">/system-fit flags keys read by path or Keychain · /system-ready moves them to the loader and a company key · /system-review does it for components already here</span></div>
+      <div class="box"><b>Other components</b><span class="s">call the loader, like a library</span></div>
+      <span class="bnote">CONSUMPTION BOUNDARY: no credentials to the right</span>
+    </div>
+  </div>
+  <h3>The four component rules, applied</h3>
+  <ol class="rules">
+    <li><b>Three data homes, never mixed.</b> Names and the register live in the component. Values live only in the vendors and each machine's files. Check results land on the plane.<span class="why">So nobody ever needs to open a key file to know what's missing.</span></li>
+    <li><b>Two owner roles, named separately.</b> Operator B owns the loader and checks; the ops lead owns the template and register and approves every change.<span class="why">A new key name is a definition change, so it passes the ops lead's gate like a new metric passes Operator B's.</span></li>
+    <li><b>Consumers touch planes and manifests only.</b> The key health view and /system-ready read results and the approved list, never a key file.<span class="why">Sharing the state of keys widely never means sharing keys.</span></li>
+    <li><b>Engines are machine-agnostic.</b> The loader reads the environment first, so the mini and a laptop run the same code.<span class="why">Four separate loaders today become one.</span></li>
+  </ol>
+  <div class="kill"><b>Kill-conditions, so this stays honest:</b> fewer than about five tools use the loader a month after phase 1 → fold it back into the worker as a helper. A key value ever lands in this folder or on the plane → stop, rotate that key, and fix the check that missed it.</div>
+</section>
+
+<section>
+  <span class="eyebrow">3 · One trace</span>
+  <h2>A new key reaches the owner</h2>
+  <p>This is drawn the way the atlas draws a selected workflow: stations top to bottom in hop order, integrations and machines as chips on the connectors they run through, and the end-to-end stage list typed H/A/T, with unruled human steps marked uncertain.</p>
+  <div class="trace">
+    <div class="flow" role="img" aria-label="Station flow: fal company team, the keys component, the Key SOP, the owner's laptop, the repo data plane, the key health view.">
+      <div class="stn"><span class="cat">Sources</span><div class="top"><b>fal.ai · company team</b><div class="bd"><span class="b T">T</span><span class="b">MODEL</span></div></div><span class="does">An admin creates the key “damon” under the company account.</span></div>
+      <div class="conn"><span class="chip"><span class="ic">🔌</span>Model API keys · FAL_KEY</span></div>
+      <div class="stn new"><span class="cat">Components</span><div class="top"><b>keys: the register</b><div class="bd"><span class="b T">T</span><span class="b H">H</span></div></div><span class="does">the ops lead adds the row: FAL_KEY · fal · damon · personal · rotate by a set date. The template already names the line.</span></div>
+      <div class="conn"></div>
+      <div class="stn new"><span class="cat">People resources</span><div class="top"><b>Key SOP</b><div class="bd"><span class="b H">H</span></div></div><span class="does">the ops lead fills the owner's managed file from the template and sends it securely. How it is sent is still open.</span></div>
+      <div class="conn"><span class="chip new"><span class="ic">🖥</span>the owner's laptop</span><span class="chip new"><span class="ic">🔌</span>his managed file</span></div>
+      <div class="stn new"><span class="cat">Components</span><div class="top"><b>keys: loader and check</b><div class="bd"><span class="b T">T</span></div></div><span class="does">Every tool starts from his own setup and fills the gaps from his managed file. The check finds no missing names in the managed file; his own setup isn't checked.</span></div>
+      <div class="conn"></div>
+      <div class="stn"><span class="cat">Warehouses</span><div class="top"><b>Repo data plane</b><div class="bd"><span class="b T">T</span></div></div><span class="does">One check record for “damon-laptop”: names present, none missing. No values.</span></div>
+      <div class="conn"></div>
+      <div class="stn new"><span class="cat">Platform views</span><div class="top"><b>Key health</b><div class="bd"><span class="b H">H</span></div></div><span class="does">the ops lead sees the owner's machine complete. Next month's usage review reads fal's “damon” line.</span></div>
+    </div>
+    <div class="flow">
+      <h3>End-to-end stages</h3>
+      <div class="count"><span><b>9</b>stages</span><span><b>6</b>human</span><span><b>3</b>tech</span><span><b>1</b>uncertain</span></div>
+      <ol class="stages">
+        <li><span class="b H">H</span><span>the owner needs a fal key, or the rollout reaches him.</span></li>
+        <li><span class="b H">H</span><span>the ops lead or Operator B create “damon” in the fal company team.</span></li>
+        <li><span class="b H">H</span><span>the ops lead adds the register row; it moves from draft to approved.</span></li>
+        <li><span class="b H">H</span><span>the ops lead fills his managed file from the template.</span></li>
+        <li class="unc"><span class="b H">H</span><span>She sends it securely.<span class="u">UNCERTAIN</span> The method is unruled (D1).</span></li>
+        <li><span class="b H">H</span><span>the owner saves it as his managed file.</span></li>
+        <li><span class="b T">T</span><span>Every tool loads through the one loader: his own setup first, then the managed file.</span></li>
+        <li><span class="b T">T</span><span>The check files a names-only record for his machine.</span></li>
+        <li><span class="b T">T</span><span>Key health shows it complete; fal's usage report shows “damon”.</span></li>
+      </ol>
+      <p class="note">No cards ride this trace yet: nothing is carded. When it is, the cards would sit on the keys node, as the atlas places them.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Companion pages</span>
+  <p class="note">Detail and rotation list: <a href="3-implementation-plan.html">Team Key Ring</a>. What changes for people: <a href="1-impact-on-damon.html">the owner's Key Map</a>. The component needs a lead card to exist: a new folder and CLAUDE.md are the lead's to create.</p>
+</section>
+
+</div>

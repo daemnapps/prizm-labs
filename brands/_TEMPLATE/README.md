@@ -29,6 +29,7 @@ on the Drive at the same path.
   competitors/          competitor brands, assigned per avatar
   variables/            every copy fill-in, one map per surface
   customer-experience/  support playbook, ticket themes, sentiment, NPS, social comments
+  operations/           the brand's own operating facts (brand.json, language-pulls.json — research-gatherer reads them)
   learnings/            results read and fed back into the rest of the folder
   briefs/               the editor brief queue
 ```
@@ -40,8 +41,8 @@ There is no single hook ledger: ads, email-sms and web each keep their own
 `hooks/`.
 
 **Team-only folders are not part of this kit.** A team running this kit may
-keep money, ad-account and working-notes folders beside these (`operations/`,
-`meta/`, `context/`); they are never shared and no public tool needs them.
+keep money, ad-account and working-notes folders beside these (`meta/`,
+`context/`); they are never shared and no public tool needs them.
 
 ## Old folder names still work
 

@@ -13,6 +13,7 @@ model — `python3 test_rollout.py`.
 
 import io
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -292,7 +293,7 @@ class RepoFiling(unittest.TestCase):
 
 class RealPathStillRuns(unittest.TestCase):
     """The live path — open_run, run_stage, the early-stop ending — with every
-    engine stubbed and the Drive, the My Feeds library and the bank fenced off.
+    engine stubbed and the Drive, the swipe library and the bank fenced off.
     Proves the two hooks fire where they were added and the run is unchanged."""
 
     def test_a_stubbed_run_to_1c_files_doctrine_elements_and_the_repo_record(self):
@@ -338,12 +339,14 @@ class RealPathStillRuns(unittest.TestCase):
                 mock.patch.object(FB, "refresh", lambda *a, **k: None), \
                 mock.patch.dict(sys.modules, {"motion": _Motion}), \
                 redirect_stdout(io.StringIO()) as buf:
-            ok = R.run_video(video, "zz-stub-run", NO_BRAND, stop="1c",
+            ok = R.run_video(video, "zz-stub-run", NO_BRAND, stop="1b",
                              extras={"brand_name": "X"})
         self.assertTrue(ok, buf.getvalue())
         d = _TMP_RUNS / C.run_slug("zz-stub-run")
+        # triage, the teardown, the culture read (stage 1k, 2026-10-05), the doctrine read
         self.assertEqual([c[0] for c in calls],
-                         ["gemini_video", "gemini_video", "claude"])
+                         ["gemini_video", "gemini_video", "gemini_video", "claude"])
+        self.assertTrue(calls[2][1].startswith("1k-"))
         self.assertTrue((d / "doctrine.json").is_file())
         el = json.loads((d / "elements.json").read_text())
         self.assertIn("doctrine/technique: time-travel", el["unknown"])
@@ -359,7 +362,7 @@ class Workspace(unittest.TestCase):
     def test_walks_up_to_the_folder_holding_components_and_brands(self):
         with tempfile.TemporaryDirectory() as t:
             root = Path(t).resolve() / "somewhere" / "a-checkout"
-            deep = root / "components" / "video-teardown" / "machine"
+            deep = root / "tools" / "video-teardown" / "machine"
             deep.mkdir(parents=True)
             (root / "brands").mkdir()
             self.assertEqual(C.workspace(start=deep, env=""), root)
@@ -379,10 +382,10 @@ class Workspace(unittest.TestCase):
     def test_the_old_default_is_the_last_resort(self):
         with tempfile.TemporaryDirectory() as t:
             self.assertEqual(C.workspace(start=Path(t), env=""),
-                             Path.home() / "Projects" / "ai-workspace")
+                             Path(os.environ.get("AI_WORKSPACE") or ".").resolve())
 
     def test_this_checkout_finds_itself(self):
-        self.assertTrue((C.WS / "components" / "video-teardown").is_dir())
+        self.assertTrue((C.WS / "tools" / "video-teardown").is_dir())
         self.assertTrue((C.WS / "brands").is_dir())
 
 

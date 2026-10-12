@@ -7,22 +7,26 @@ is current. Both are now resolved at run time.
   * The SHAPE of the chain comes from `chain_config.json` — the same file the
     team's runner reads. Add a stage there and it appears here.
   * The VERSION of each prompt is the highest one found across both prompt
-    homes: Damon's private build and the shared workspace folder. Each home is
+    homes: the owner's private build and the shared workspace folder. Each home is
     ahead on different stages, so neither alone is "newest".
 """
 
-import getpass, json, os, re
+import getpass, json, os, re, sys
 from pathlib import Path
 
 MACHINE = Path(__file__).resolve().parent
 CM = MACHINE.parent
 DAEMN = CM.parent
 
+if str(MACHINE) not in sys.path:
+    sys.path.append(str(MACHINE))
+import workdir                                         # noqa: E402  — the working folder, named once (SI-56)
+
 
 def workspace(start=None, env=None):
     """The workspace root, FOUND rather than assumed (2026-09-20).
 
-    It used to be `~/Projects/ai-workspace` typed here, so a second checkout —
+    It used to be `the workspace` typed here, so a second checkout —
     a worktree, another person's clone in another folder — read its brands
     and prompts from a DIFFERENT copy of the repo than the code it was running.
     Order: the `AI_WORKSPACE` environment variable when it points at a folder
@@ -37,14 +41,16 @@ def workspace(start=None, env=None):
     for d in [here, *here.parents]:
         if (d / "components").is_dir() and (d / "brands").is_dir():
             return d
-    return Path.home() / "Projects" / "ai-workspace"
+    return Path(os.environ.get("AI_WORKSPACE") or ".").resolve()
 
 
 WS = workspace()
+sys.path.insert(0, str(WS / "components" / "brandpath"))
+import brandpath as BP                                 # noqa: E402  — brand folders by their plan name
 
 BUILD = WS / "new-workflow-design/builds/video-teardown"
 # THE CHAIN'S OWN SHAPE, and it lives WITH the chain (2026-08-26).
-# It used to be read from lab/dayu/prompt-optimizer/regression/ — the shared
+# It used to be read from the developer's lab/prompt-optimizer/regression/ — the shared
 # chain plane — which was retired and DELETED on 2026-08-25 (3d78db6ea). That
 # deletion reasoned about the harness and the runner and never checked what the
 # graduated component read, so this file's disappearance made `stages()`
@@ -55,7 +61,7 @@ BUILD = WS / "new-workflow-design/builds/video-teardown"
 # the dependency the retirement correctly removed. Sits beside extra-stages.json,
 # which is the same kind of fact.
 CONFIG = MACHINE / "chain_config.json"
-# Stages Damon adds on top of the shared chain. The shared file is the team's;
+# Stages the owner adds on top of the shared chain. The shared file is the team's;
 # his additions live here and are appended after it.
 EXTRA = MACHINE / "extra-stages.json"
 
@@ -72,12 +78,12 @@ EXTRA = MACHINE / "extra-stages.json"
 # run belongs to; a run that cannot find a mount says so out loud and never
 # quietly writes somewhere only its author can see.
 CLOUD = "Library/CloudStorage"
-DRIVE_GLOB = "GoogleDrive-*@<brand>.com"
-SHARED_DRIVE = "Shared drives/Shared Assets"
+DRIVE_GLOB = "GoogleDrive-*"
+SHARED_DRIVE = os.environ.get("SHARED_DRIVE_NAME", "Shared drives/Team Drive")
 # Renamed 2026-08-31 with the lab naming pass — the Drive folder is now
-# video-teardown, matching the component's name. Folder ids
+# the team notes/video-teardown, matching the component's name. Folder ids
 # survive a Drive rename, so existing gdoc links keep working.
-RUNS_SUBPATH = ("lab", "damon", "video-teardown", "machine", "runs")
+RUNS_SUBPATH = tuple(p for p in os.environ.get("VT_DRIVE_RUNS_SUBPATH", "").split("/") if p) or ("video-teardown", "machine", "runs")
 
 
 class MountError(RuntimeError):
@@ -86,26 +92,26 @@ class MountError(RuntimeError):
 
 
 def drive_mounts():
-    """Every Upright Drive mount on this machine, in a stable order."""
+    """Every team Drive mount on this machine, in a stable order."""
     base = Path.home() / CLOUD
     return sorted(base.glob(DRIVE_GLOB)) if base.is_dir() else []
 
 
 def drive_root():
-    """The team's `Shared Assets` drive. Raises MountError rather than
+    """The team's `Team Drive` drive. Raises MountError rather than
     returning a stand-in — several matches is ambiguous, none is a wall."""
     found = drive_mounts()
     if not found:
         raise MountError(
             f"no Google Drive mount at ~/{CLOUD}/{DRIVE_GLOB} — sign in to "
-            "Google Drive for Desktop with your @<brand>.com account; "
+            "Google Drive for Desktop with your @<your-domain> account; "
             "nothing can reach the team until you do")
     if len(found) > 1:
         names = ", ".join(p.name for p in found)
         raise MountError(
             f"several Google Drive mounts match {DRIVE_GLOB} ({names}) — "
             "this machine cannot tell which account a run belongs to; leave "
-            "one Upright account signed in")
+            "one team account signed in")
     root = found[0] / SHARED_DRIVE
     if not root.is_dir():
         raise MountError(
@@ -120,9 +126,28 @@ def runs_mirror():
     return drive_root().joinpath(*RUNS_SUBPATH)
 
 
-def runs_root():
-    d = MACHINE / "runs"
-    d.mkdir(parents=True, exist_ok=True)
+_LEGACY_NAGGED = False
+
+
+def runs_root(create=True):
+    """The working folder, runs/video-teardown/_work/ (SI-56, 2026-10-08).
+    Never the old runs/ folder inside this machine: while that still holds
+    anything, say so once per process — the one-time move is move_runs.py,
+    a person's step. No fallback to the old folder.
+
+    `create=False` returns the same path and makes nothing — for a caller
+    that only names the folder at import, so a dry run leaves no folder
+    behind (SI-161 (teardown runs honest)); whoever writes makes it then."""
+    global _LEGACY_NAGGED
+    d = workdir.root(WS)
+    if create:
+        d.mkdir(parents=True, exist_ok=True)
+    if workdir.legacy_entries() and not _LEGACY_NAGGED:
+        print(f"note: the old {workdir.MACHINE.name}/runs folder "
+              f"({workdir.legacy()}) still holds runs; the board shows only "
+              f"{d} — run `python3 move_runs.py --go` once to carry them "
+              "across", file=sys.stderr)
+        _LEGACY_NAGGED = True
     return d
 
 
@@ -131,7 +156,7 @@ def run_mirror_dir(slug):
 
     Creator runs sit under creators/<handle>/, swipe research under swipes/,
     so a folder of runs reads as something rather than a flat list of slugs
-    (Damon, 2026-08-27). One function, because three call sites had the old
+    (the owner, 2026-08-27). One function, because three call sites had the old
     flat path built into them and would each have broken silently."""
     handle = ""
     rj = runs_root() / slug / "run.json"
@@ -141,7 +166,7 @@ def run_mirror_dir(slug):
         except Exception:
             handle = ""
     base = runs_mirror()
-    # creators/<handle>/ is the folder Damon hands to his content manager, who
+    # creators/<handle>/ is the folder the owner hands to his content manager, who
     # hands it to the creator — it holds BRIEFS and DELIVERABLES and nothing
     # else (2026-08-28). The working files live under work/, so sharing the
     # creator folder never exposes stage outputs or prompts.
@@ -160,7 +185,7 @@ def mirror_to_drive(slug):
     src = runs_root() / slug
     # A creator's runs sit under creators/<handle>/, the same shape as the
     # creator library one level up, so a folder full of runs is not a flat
-    # list of slugs nobody can place (Damon, 2026-08-27). Swipe research with
+    # list of slugs nobody can place (the owner, 2026-08-27). Swipe research with
     # no creator stays at the top.
     dest = run_mirror_dir(slug)
     if not src.exists():
@@ -191,7 +216,7 @@ def record_mirror_error(run_dir, st, err):
 # machine, is Batch 3's and is deliberately NOT written here yet.
 OWNER = "damon"
 VENUE_LOCAL = "local"
-# Machine accounts that ARE a known person. Damon's mac account is
+# Machine accounts that ARE a known person. the owner's mac account is
 # `damondixon` (machine/overnight.sh:11 has the path), and his runs must come
 # out byte-identical to the day before this card — bare slug, name `damon`.
 # Anyone not listed here passes through under their own account name.
@@ -211,7 +236,15 @@ def operator():
 
     An unreadable account answers `unknown`, which is a statement that we do
     not know rather than a guess at somebody's name: it never resolves to the
-    owner, so it never quietly inherits his unsuffixed slug."""
+    owner, so it never quietly inherits his unsuffixed slug.
+
+    A worker running the chain for someone else names them in TEARDOWN_RAN_BY
+    (platform/workers/mini-worker/teardown_run.py sets it), so the run lands
+    under the person who asked, not the mini's account (SI-161 (teardown runs
+    honest))."""
+    asked = (os.environ.get("TEARDOWN_RAN_BY") or "").strip()
+    if asked:
+        return person(asked)
     try:
         raw = getpass.getuser()
     except Exception:
@@ -220,14 +253,17 @@ def operator():
 
 
 def venue():
-    """Where the run happened. `local` today; `mini` is reserved (Batch 3)."""
-    return VENUE_LOCAL
+    """Where the run happened. `local` unless the worker that started it says
+    otherwise in TEARDOWN_VENUE (`mini`) — its readback finds runs by venue
+    (SI-161 (teardown runs honest))."""
+    asked = (os.environ.get("TEARDOWN_VENUE") or "").strip()
+    return asked or VENUE_LOCAL
 
 
 def run_slug(base, who=None):
     """The run's id, disambiguated by operator.
 
-    Damon's runs are UNCHANGED — bare slug, so his existing runs and every
+    the owner's runs are UNCHANGED — bare slug, so his existing runs and every
     record already filed under them keep their ids. Anybody else carries their
     own name, so two people tearing down the same video can never collide into
     one folder, one Drive mirror or one record."""
@@ -243,35 +279,63 @@ def attribution(who=None):
 
 
 
-# Every folder a current prompt may live in. Nested folders are Damon's build;
+# Every folder a current prompt may live in. Nested folders are the owner's build;
 # the flat one is the shared workspace folder.
+# THE FOUR STATIONS (the owner, 2026-09-30: "go ahead and make the move"). The
+# teardown's prompts (0, 1, 1c, 2, frames) stay in this component; the WRITING
+# prompts (1b, 2f, 3, 3v, 4a-4g, 4m, 5, 5m, 5n, 5u, 7, 7b, 8) live in the
+# copywriter, the writing station, under prompts/video/. The old folders stay
+# on the list after the move, so a version another session saves there is
+# still found — newest() picks the highest -vN- across every home.
+WRITING_PROMPTS = CM.parent / "copywriter" / "prompts" / "video"
+
 PROMPT_HOMES = [
-    CM / "prompts/stage-4-loop/4a-read",
+    WRITING_PROMPTS / "stage-4-loop/4a-read",
     CM / "prompts/stage-0-triage",
     CM / "prompts/stage-1-teardown",
     CM / "prompts/stage-1c-doctrine",
-    CM / "prompts/stage-1b-audience",
+    CM / "prompts/stage-1k-culture",   # the culture read (2026-10-05) — teardown side, brand-free
+    WRITING_PROMPTS / "stage-1b-audience",
     CM / "prompts/stage-2-replication",
-    CM / "prompts/stage-2f-compose",
-    CM / "prompts/stage-3-injection",
-    CM / "prompts/stage-4-loop/4c-placement",
-    CM / "prompts/stage-4-loop/4b-hook",
-    CM / "prompts/stage-4-loop/4d-expansion",
-    CM / "prompts/stage-4-loop/4e-close",
-    CM / "prompts/stage-5-brief/creator-lane",
-    CM / "prompts/stage-5-brief/ai-lane",
-    CM / "prompts/stage-5-brief/hook-asset",
+    WRITING_PROMPTS / "stage-2f-compose",
+    WRITING_PROMPTS / "stage-3-injection",
+    WRITING_PROMPTS / "stage-4-loop/4c-placement",
+    WRITING_PROMPTS / "stage-4-loop/4b-hook",
+    WRITING_PROMPTS / "stage-4-loop/4d-expansion",
+    WRITING_PROMPTS / "stage-4-loop/4e-close",
+    WRITING_PROMPTS / "stage-5-brief/creator-lane",
+    WRITING_PROMPTS / "stage-5-brief/ai-lane",
+    WRITING_PROMPTS / "stage-5-brief/hook-asset",
     CM / "prompts/stage-6-frames",
-    CM / "prompts/stage-4-loop/4f-audit",
-    CM / "prompts/stage-4-loop/4g-spice",
-    CM / "prompts/stage-7-inject",
-    CM / "prompts/stage-7b-page",
-    CM / "prompts/stage-8-profile",
-    CM / "prompts/stage-3v-control",
-    CM / "prompts/stage-4m-awareness-map",
-    CM / "prompts/stage-5u-mark-used",
+    WRITING_PROMPTS / "stage-4-loop/4f-audit",
+    WRITING_PROMPTS / "stage-4-loop/4g-spice",
+    WRITING_PROMPTS / "stage-7-inject",
+    WRITING_PROMPTS / "stage-7b-page",
+    WRITING_PROMPTS / "stage-8-profile",
+    WRITING_PROMPTS / "stage-3v-control",
+    WRITING_PROMPTS / "stage-4m-awareness-map",
+    WRITING_PROMPTS / "stage-5u-mark-used",
     CM / "prompts/parked",
     BUILD / "prompts",
+    CM / "prompts/stage-4-loop/4a-read",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-1b-audience",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-2f-compose",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-3-injection",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4-loop/4c-placement",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4-loop/4b-hook",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4-loop/4d-expansion",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4-loop/4e-close",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-5-brief/creator-lane",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-5-brief/ai-lane",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-5-brief/hook-asset",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4-loop/4f-audit",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4-loop/4g-spice",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-7-inject",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-7b-page",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-8-profile",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-3v-control",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-4m-awareness-map",   # legacy home: a version saved here before the move still counts
+    CM / "prompts/stage-5u-mark-used",   # legacy home: a version saved here before the move still counts
 ]
 
 GEMINI_MODEL = "gemini-3-flash-preview"
@@ -282,6 +346,10 @@ GEMINI_MODEL = "gemini-3-flash-preview"
 # run outright. Both of these were checked reading a real video the day this
 # was written; order is preference.
 GEMINI_FALLBACKS = ["gemini-3.5-flash", "gemini-3.1-pro-preview"]
+# Video reads (triage, the teardown record): strongest first — the record is the
+# foundation every later stage builds on (the owner, 2026-09-24: "the teardown record
+# should be that in all of its glory").
+VIDEO_MODELS = ["gemini-3.1-pro-preview", "gemini-3.5-flash", "gemini-3-flash-preview"]
 CLAUDE_MODEL = "opus"
 
 # What each stage is, in his words. Shape comes from the config; this is only
@@ -291,6 +359,10 @@ LOOK = {
                 "Cheap first look: which lane is this, and is a human really on camera."),
     "stage1":  ("Teardown",  "Read the video",
                 "One video in, one objective record out — scenes, mechanics, psychology."),
+    "stage1k": ("Culture",   "Read the video",
+                "What the audience recognizes in the swipe and why it lands: every "
+                "film, show, song, character, catchphrase or meme it borrows, named "
+                "only with receipts from the comments, the screen and a web search."),
     "stage1c": ("Doctrine",  "Read the video",
                 "The doctrine read of the source as swiped: its framework, the "
                 "sections it carries, the awareness it enters and exits on, the "
@@ -358,21 +430,26 @@ LOOK = {
 VERSION = re.compile(r"-v(\d+)(?:-|\.)")
 
 # The internal stage key ("stage4a" = placement, "stage4b" = hooks, etc.) is
-# Dayu's naming — chain_config.json binds variables like @stage4a and @stage4b
+# the developer's naming — chain_config.json binds variables like @stage4a and @stage4b
 # against those exact strings, so the key can never change without breaking
 # his file. But we run them in a different order (read, hooks, placement,
 # expansion, close, audit) than his letters suggest, which reads as a
 # contradiction on the board. This maps each internal key to the label shown
-# to Damon — the letter matching where the stage actually sits in the run.
+# to the owner — the letter matching where the stage actually sits in the run.
+# The FILE a stage writes keeps its long-standing name even when its label
+# moves: other components read these files by name (copywriter's library reads
+# stages/1b-audience.md; the doctrine's language map names "1b-audience").
+FILE_ID = {"stage1c": "1c", "stage1b": "1b"}
+
 DISPLAY_ID = {
-    "stage1c": "1c",  # doctrine — what the SOURCE is, in the doctrine's words
-    "stage1b": "1b",  # audience — who our version speaks to
+    "stage1c": "1b",  # doctrine — runs FIRST after the teardown, so it reads 1b (the owner, 2026-09-25)
+    "stage1b": "1c",  # audience — runs after the doctrine read, so it reads 1c
     "stage4r": "4a",   # reading — first in our order
     "stage4b": "4b",   # hooks
-    "stage4a": "4c",   # placement (Dayu's "4a" — his key, our third slot)
-    "stage4c": "4d",   # expansion (Dayu's "4c")
-    "stage4d": "4e",   # close (Dayu's "4d")
-    "stage4e": "4f",   # audit (Dayu's "4e")
+    "stage4a": "4c",   # placement (the developer's "4a" — his key, our third slot)
+    "stage4c": "4d",   # expansion (the developer's "4c")
+    "stage4d": "4e",   # close (the developer's "4d")
+    "stage4e": "4f",   # audit (the developer's "4e")
     "stage4g": "4g",   # spice — the creative pass, after the loop
     "stage7b": "7b",   # the page — the sheet, after the pictures go in
     "stage3v": "3v",   # the control — Variation video's stand-in for injection
@@ -445,15 +522,19 @@ ROUTES = {
         skip=[],
         why="organic source — the commercial structure has to be built from nothing",
         substitute={}),
+    # A still or a carousel is not this chain's: it is the image chain's, which
+    # since 2026-09-22 has the same branch this one has — who makes it x what it
+    # is — so the hand-off names the form and the run stops here with the exact
+    # next command instead of a dead end (TEARDOWN-CHAINS.md, "What the gap cost").
     "STATIC": dict(
         skip=None,
         why="a still, not a video — this belongs in the image lane",
-        substitute={}),
+        substitute={}, handoff="single"),
     "SEQUENTIAL": dict(
         skip=None,
         why="a carousel, not a video — this belongs in the image lane",
-        substitute={}),
-    # THE SECOND DOOR (Damon's ruling 2026-09-18): "with all of the different
+        substitute={}, handoff="sequence"),
+    # THE SECOND DOOR (the owner's ruling 2026-09-18): "with all of the different
     # sections we should begin to assemble actual frameworks to create ads
     # strategically." There is no swipe here. The run starts from a CHOICE —
     # avatar x awareness x format x framework — so the four stages that READ a
@@ -467,11 +548,11 @@ ROUTES = {
     # instead of abstracting it, in the same shape, so `@stage2` resolves to
     # the composed construct and stage 3 onward is untouched.
     "FRAMEWORK": dict(
-        skip=["stage0", "stage1", "stage1c", "stage1b", "stage2"],
+        skip=["stage0", "stage1", "stage1k", "stage1c", "stage1b", "stage2"],
         why="composed from a chosen framework — there is no swipe to read, so "
             "the construct is written rather than abstracted",
         substitute={"stage2": "stage2f"}),
-    # THE VARIATION VIDEO CHAIN (Damon, 2026-09-28): "we only run variation on
+    # THE VARIATION VIDEO CHAIN (the owner, 2026-09-28): "we only run variation on
     # proven assets." The source is our own proven ad, already torn down — so
     # stage 3 has nothing to substitute and is stood in for by 3v, the ad's own
     # script (VERSION 0). Expansion is NEVER skipped here even though most
@@ -502,8 +583,34 @@ def lane_from_triage(text):
     return m.group(1).strip() if m else None
 
 
+STYLE_LINE = re.compile(r"^\s*\**STYLE\**\s*:\s*\**\s*`?([a-z0-9][a-z0-9:_-]*)`?", re.I | re.M)
+FORMAT_LINE = re.compile(r"^\s*\**FORMAT\**\s*:\s*\**\s*`?([a-z0-9][a-z0-9:_-]*)`?", re.I | re.M)
+
+
+def style_format_from_triage(text):
+    """{style_id, format_id} from triage v3's STYLE and FORMAT lines — the
+    first token of each, an element-library id or `new:<name>`; absent → None."""
+    out = {}
+    for key, rx in (("style_id", STYLE_LINE), ("format_id", FORMAT_LINE)):
+        m = rx.search(text or "")
+        out[key] = m.group(1).strip().lower() if m else None
+    return out
+
+
 def route_for(lane):
     return ROUTES.get(lane or "", DEFAULT_ROUTE)
+
+
+def handoff_line(lane, brand="<brand>"):
+    """The one command that carries a still or a carousel on to the image
+    chain, with the form already decided by triage. Empty for a video lane."""
+    form = ROUTES.get(lane or "", {}).get("handoff")
+    if not form:
+        return ""
+    return (f"  next: python3 tools/image-teardown/chain.py start --brand {brand} "
+            f"--product <product> --avatar <avatar> --swipe <swipe> --form {form} "
+            f"[--route creator]   # the same swipe, torn down as a {form} — "
+            f"creator brief with --route creator, designer work order without")
 
 
 def newest(stage_key, fallback=None):
@@ -568,11 +675,11 @@ def load_config():
     cfg = json.loads(CONFIG.read_text())
     # Read ONCE and fail LOUD (2026-09-20). This used to be read twice, each
     # inside a bare `except: pass` — so one stray comma in extra-stages.json
-    # silently dropped every stage Damon added (doctrine, audience, spice, the
+    # silently dropped every stage the owner added (doctrine, audience, spice, the
     # page, the profile) and their order, and the chain ran on looking fine.
     extra = read_extra()
     cfg["stages"] = cfg["stages"] + extra.get("stages", [])
-    # bindings Damon adds to stages the shared config already defines
+    # bindings the owner adds to stages the shared config already defines
     for stage_key, add in (extra.get("stage_vars") or {}).items():
         for st in cfg["stages"]:
             if st["stage"] == stage_key:
@@ -585,7 +692,7 @@ def load_config():
 
 
 def engine_for(key):
-    if key in ("stage0", "stage1"):
+    if key in ("stage0", "stage1", "stage1k"):
         return "gemini-video"
     if key == "stage2":
         return "gemini-text"
@@ -634,7 +741,7 @@ def stages(brand="", asset_type="", route="", lane=""):
     stage there is — the prompt page, which shows prompts rather than runs.
 
     route is the production route for this run — founder, creator or ai.
-    The route picks the stage-5 brief (Damon, 2026-08-30): creator is the
+    The route picks the stage-5 brief (the owner, 2026-08-30): creator is the
     original brief and the default; ai is the generation brief; founder has
     no brief of its own yet and falls back to the creator brief while still
     carrying "founder" into {production_route}. A NONE verdict from 4a
@@ -643,29 +750,32 @@ def stages(brand="", asset_type="", route="", lane=""):
     cfg = load_config()
     out = []
 
-    # Triage is Damon's own pre-pass; it is not in the shared config.
+    # Triage is the owner's own pre-pass; it is not in the shared config.
     t_path, t_ver, _ = newest("stage0")
     if t_path:
         name, group, blurb = LOOK["stage0"]
         out.append(dict(key="stage0", id="0", name=name, group=group, blurb=blurb,
                         prompt=str(t_path), version=t_ver, engine="gemini-video",
-                        vars={}, role="stage"))
+                        # its bindings come from extra-stages.json like any stage's
+                        # (triage v3's {styles} and {formats}, 2026-10-09)
+                        vars=dict((read_extra().get("stage_vars") or {}).get("stage0") or {}),
+                        role="stage"))
 
     for st in cfg["stages"]:
         key = st["stage"]
-        # The AI route does not make stills. Damon, 2026-09-11, from the
-        # <brand> runs: "we don't need frames, what we need are the scenes
+        # The AI route does not make stills. the owner, 2026-09-11, from the
+        # Brand A runs: "we don't need frames, what we need are the scenes
         # clearly described" — generating a picture per beat ate credits and
         # produced drift, when a talking beat needs one banked still and a
         # voice take. Stage 5 emits the scenes; the video machine takes it
         # from there. The creator route still gets frames: a person filming
         # a brief needs to see the shot.
         #
-        # stage7b goes with it (2026-09-11, after Damon: "the same workflows
+        # stage7b goes with it (2026-09-11, after the owner: "the same workflows
         # are activating for both"). 7b writes "the page the maker reads" —
         # her folder, what she has to say, whether she is meant to film all of
         # it. On the AI route there is no maker and no her. The storyboard in
-        # video-production is what this route reads instead: the
+        # the team notes/video-production is what this route reads instead: the
         # scenes, their takes, and what is still missing.
         # stage7 (the frames injected into the creator brief) goes with them:
         # on the AI route the ai-lane brief IS the deliverable and the video
@@ -710,11 +820,14 @@ def stages(brand="", asset_type="", route="", lane=""):
             vars_["production_route"] = "=" + ("AI" if route.lower() == "ai"
                                                else route.lower())
         out.append(dict(
-            key=key, id=DISPLAY_ID.get(key, key.replace("stage", "")), name=name, group=group,
+            key=key, id=DISPLAY_ID.get(key, key.replace("stage", "")),
+            file_id=FILE_ID.get(key, DISPLAY_ID.get(key, key.replace("stage", ""))), name=name, group=group,
             blurb=blurb, prompt=str(path) if path else None, version=ver,
             engine=engine_for(key), vars=vars_,
             per_run=sorted(PER_RUN & set(vars_.keys())),
             role=st.get("role") or "stage",
+            # the model may search the web while it reads (stage 1k)
+            search=bool(st.get("search")),
             config_prompt=st.get("prompt")))
     return out
 
@@ -730,7 +843,7 @@ def variable_map(brand, surface="video"):
     while the brand had moved on, and nothing said so. The brand's own map
     outranks the config.
 
-    Read leniently. This is a document Damon edits by hand, so a missing file,
+    Read leniently. This is a document the owner edits by hand, so a missing file,
     a reordered table or a stray blank line must degrade to "no opinion", never
     to a failed run.
     """
@@ -773,6 +886,34 @@ def hook_lines(hooks_text, pick):
             f"own leaves):\n" + "\n".join(got))
 
 
+_SHOWN = {}
+
+
+def shown_counts(this_run=None):
+    """{row id: how many earlier runs' prompts handed it to a stage} — read
+    off the prompts every run already keeps (runs/<slug>/prompts/), so the
+    exposure record needs no new file. The current run is left out."""
+    import re as _re
+    key = str(this_run or "")
+    if key in _SHOWN:
+        return _SHOWN[key]
+    counts = {}
+    root = runs_root()
+    for d in root.iterdir() if root.is_dir() else []:
+        if not d.is_dir() or (this_run and d.resolve() == Path(this_run).resolve()):
+            continue
+        seen = set()
+        for f in (d / "prompts").glob("*.md"):
+            try:
+                seen |= set(_re.findall(r"\[(language_[a-z0-9_-]+)\]", f.read_text(errors="ignore")))
+            except OSError:
+                pass
+        for i in seen:
+            counts[i] = counts.get(i, 0) + 1
+    _SHOWN[key] = counts
+    return counts
+
+
 def resolve_source(src, brand, outputs, var=None):
     """The config's little variable language:
          @stageN   what that stage produced in this run
@@ -787,6 +928,47 @@ def resolve_source(src, brand, outputs, var=None):
             import datetime
             return (datetime.date.today().strftime("%A, %-d %B %Y"),
                     "today's date, from the machine")
+        if src[1:] == "structure_approvals":
+            import os as _os
+            v = _os.environ.get("DAEMN_STRUCTURE_APPROVALS", "").strip()
+            return ((f"the owner approved these structural changes for this run, by ELEMENT LEDGER number: {v}" if v
+                     else "none — keep every place, role and beat of the swipe exactly"),
+                    "the owner's structural approvals for this run (--approve-structure)")
+        if src[1:] == "post_talk":
+            # the swipe's own caption and comments (culture.py) — gathered by the
+            # run when stage 1k starts; never a brand file, never Apify
+            got = str(outputs.get("post_talk") or "").strip()
+            return ((got + "\n") if got else
+                    "NO POST TALK: not pulled yet — the run pulls the caption and comments "
+                    "when the culture read starts.\n",
+                    "the post's caption and comments (yt-dlp, pulled when stage 1k starts)")
+        if src[1:] == "culture_read":
+            # THE CULTURE READ (stage 1k, 2026-10-05). Soft on purpose: a run torn
+            # down before the stage existed, a composed run with no swipe, or a
+            # Variation leaf copied from an old run still writes — told plainly
+            # that there is no read, never handed a guess.
+            got = str(outputs.get("stage1k") or "").strip()
+            if got:
+                return got + "\n", "what stage 1k (culture read) produced"
+            return ("NO CULTURE READ for this run (stage 1k has not run on it). Treat the "
+                    "swipe as carrying no named cultural reference; never invent one.\n",
+                    "no culture read on this run")
+        if src[1:] in ("culture_map", "humor_map"):
+            # THE CULTURE MAP (the owner, 2026-10-06: "it's more about the foundational
+            # way to identify these cultural nuances"). What the run's avatar
+            # watches, trusts, quotes, cares about and laughs at — humor is one
+            # section of it. Replaces the humor map of humor rules v1 (an older
+            # prompt asking for humor_map gets the same file). Soft: no avatar
+            # decided yet, or no map, writes on with nothing cultural assumed.
+            who = str(outputs.get("avatar") or "").strip()
+            base = (WS / "brands" / brand / "core-avatars" / who) if (brand and who) else None
+            for name in ("culture-map.md", "humor-map.md"):
+                f = base / name if base is not None else None
+                if f is not None and f.is_file():
+                    return f.read_text(), f"brands/{brand}/core-avatars/{who}/{name}"
+            return ("NO CULTURE MAP for this avatar. Assume no shared reference and keep the "
+                    "piece straight unless the culture read carries a receipt of its own.\n",
+                    "no culture map for this run's avatar")
         raise KeyError(f"unknown computed value: {src}")
     if src == "?roster":
         # The avatars this brand actually has, with real counts. A stage
@@ -817,7 +999,7 @@ def resolve_source(src, brand, outputs, var=None):
         tp = outputs.get("_topics") or None
         try:
             # Hooks reach for words we have not used yet (the used lane,
-            # Damon 2026-09-28): a winning line stays live in its own ad, the
+            # the owner 2026-09-28): a winning line stays live in its own ad, the
             # next batch does not repeat it.
             stage = parts[0]
             # An opening that enters at the result is filled from the room's
@@ -825,8 +1007,19 @@ def resolve_source(src, brand, outputs, var=None):
             tgt = str(outputs.get("target_awareness") or "").lower()
             if stage == "hooks" and tgt.startswith(("solution", "product", "most")):
                 stage = "hooks-result"
-            txt = _L.for_stage(brand, stage, av, fn, tp, 40,
-                               used="no" if parts[0] == "hooks" else None)
+            # A Variation video branch asks for rows spoken at its own level
+            # first — the language bank upgrade, 2026-09-28. Unlabelled rows
+            # still come back, after the labelled ones.
+            lvl = tgt.split()[0] if tgt else None
+            # Variety over time (the owner, 2026-10-05: "we should've marked things
+            # by used and not used so over time we have some level of variance
+            # and variety with our copywriting. proven stuff works of course").
+            # Every stage now reads never-used words first plus a proven slice,
+            # and the lines earlier runs were already handed rank down — the
+            # same most-liked forty no longer reach every run.
+            txt = _L.for_stage(brand, stage, av, fn, tp, 40, used="fresh",
+                               shown=shown_counts(outputs.get("_run_dir")),
+                               awareness=lvl if parts[0] == "hooks" and lvl else None)
         except Exception as e:
             return (f"(language query failed: {e})", "language query — failed")
         return txt, f"language query · {parts[0]}" + (f" · {av}" if av else "")
@@ -843,7 +1036,7 @@ def resolve_source(src, brand, outputs, var=None):
     if src.startswith("@"):
         ref = src[1:].split("#")[0].rstrip("*")
         if "#pick" in src:
-            # A Variation video leaf writes one hook through (Damon, 2026-09-28:
+            # A Variation video leaf writes one hook through (the owner, 2026-09-28:
             # every hook gets its own placement, expansion, close, audit, spice
             # and brief). variation.py names it as `hook_pick` (V0…V5); every
             # other run takes the control, exactly as before.
@@ -861,7 +1054,7 @@ def resolve_source(src, brand, outputs, var=None):
     # It used to write a real brand name and rely on this line to overwrite
     # it, which reads as a default and behaves like one the moment a run has
     # no brand set (rule 4).
-    if src.startswith("brands/") and not brand:
+    if (src.startswith("brands/") or "<brand>" in src) and not brand:
         raise KeyError(f"no brand for this run, so {src} cannot be resolved")
 
     # The brand's own map wins over the config's conventional path. An
@@ -878,12 +1071,32 @@ def resolve_source(src, brand, outputs, var=None):
                 mapped = mapped.replace("<avatar>", who)
     path = (f"brands/{brand}/{mapped}" if mapped
             else re.sub(r"^brands/(<brand>|[^/]+)/", f"brands/{brand}/", src))
-    # v6 folder names (brand-identity/, ai-elements/characters/, email-sms/…):
-    # whichever of the new or old name this brand actually has
-    import brand_folders as BF
-    f = BF.resolve(WS / path)
-    if f != WS / path:
-        path = f.relative_to(WS).as_posix()
+    # `<brand>` is filled wherever it stands, not only under `brands/`. The
+    # rewrite above is brands/-shaped because it also has to overwrite a
+    # literal brand name someone typed there. When casting moved to
+    # `runs/casting/<brand>/CAST.md` (2026-09-21) that left the placeholder
+    # standing, and every run reported the sheet missing under its own
+    # literal name. Inputs leave `brands/` for `runs/` this phase, so paths
+    # that are not brand-shaped are now the ordinary case.
+    path = path.replace("<brand>", brand)
+    # A brand-shaped path goes through brandpath: the config and the brand's
+    # variable map still say today's folder names (`identity-anchors.md`,
+    # `products/`), and brandpath answers with the folder as it is on disk —
+    # the same one today, the renamed one after the folder plan lands.
+    if path.startswith(f"brands/{brand}/"):
+        resolved = BP.resolve_rel(brand, path[len(f"brands/{brand}/"):], root=WS / "brands")
+        path = resolved.relative_to(WS).as_posix()
+    # THE CAST SHEET IS REBUILT ON EVERY READ (2026-09-25). It is an index of
+    # the people and voices that exist; built by hand it lagged the people
+    # actually made (two voices shown as not made, a doctor missing).
+    if path.endswith("/CAST.md") and path.startswith("runs/casting/"):
+        try:
+            import subprocess as _sp
+            _sp.run([sys.executable, os.environ.get("CAST_BUILDER") or str(WS / "casting/build_cast.py"), "--brand", brand],
+                    capture_output=True, text=True, timeout=120, cwd="/tmp")
+        except Exception:
+            pass
+    f = WS / path
     # A folder means "the brand's file of this kind", so the config never has
     # to name one. It used to say `products/body-scrub.md` — a filename only
     # one brand has, in a variable filled at run time, which is the bug rule 4
@@ -905,8 +1118,8 @@ def resolve_source(src, brand, outputs, var=None):
 
         pick = str(outputs.get("product") or "").strip().lower()
         if pick and len(docs) > 1:
-            # Exact first. A brand with `flex.md` beside `flex-charging-case.md`
-            # and `flex-device-model.md` made `--product flex` match three
+            # Exact first. A brand with `widget.md` beside `widget-charging-case.md`
+            # and `flex-device-model.md` made `--product widget` match three
             # files, so neither branch fired and the run reported all
             # seventeen products as if nothing had been named at all.
             exact = [p for p in docs if label(p).lower() == pick]

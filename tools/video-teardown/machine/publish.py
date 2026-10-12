@@ -40,7 +40,7 @@ def build(slug=None, dest=None):
         for st in r["stage_list"]:
             html = st.get("output_html") or ""
             for m in set(re.findall(r'<img src="(runs/[^"]+)"', html)):
-                f = B.C.MACHINE / m
+                f = B.C.runs_root() / m[len("runs/"):]
                 if not f.exists():
                     continue
                 uri = shrink(f)

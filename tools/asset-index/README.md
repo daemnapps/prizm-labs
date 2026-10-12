@@ -9,7 +9,7 @@ Two halves, deliberately split:
 | Half | What it does | Cost |
 |---|---|---|
 | `extract.py` | frames + transcript + measurements, on this Mac | free |
-| the prompt | frames + transcript -> one JSON record | ~$0.002/clip |
+| the prompt | frames + transcript -> one JSON record | ~$__/clip |
 
 `content-machine/asset-index/prompts/index1-clip-v1-damon.md` is the prompt.
 
@@ -38,3 +38,20 @@ path, duration, dimensions, frame timestamps and the transcript.
 - **`base.en` is the model.** Good enough for indexing speech, fast on CPU.
   Bigger models cost hours across thousands of clips and change nothing about
   whether a clip is findable.
+
+## Our own footage first (the owner, 2026-10-06)
+
+Before production generates a B-roll scene, it asks the index whether we
+already own the shot:
+
+    python3 tools/asset-index/machine/search.py --brand <brand> "man runs fingertips along his jaw"
+
+`search.py` scores every SCENE inside every indexed clip — what it shows and
+what is said in it — against the description, with no service and no network.
+Same records and same words, same answer. It returns only clips that resolve to
+the shared drive everyone can open (`shared_paths.py`: each record's file is
+found there by name, confirmed by size; set `SHARED_ASSETS_ROOT` to that
+drive's folder holding `brands/<brand>/`). Each hit carries the clip, the time
+range, the shared path, the nearest frame and a score from 0 to 1.
+
+Tests: `python3 tools/asset-index/machine/test_index.py` (12, temp folders only).

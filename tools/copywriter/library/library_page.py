@@ -12,6 +12,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent / "pages" / "copy-library.html"
+# the index build_library.py writes, filed under runs/ (2026-10-08)
+REPO = next((d for d in HERE.parents
+             if (d / "components").is_dir() and (d / "brands").is_dir()), HERE.parents[2])
+INDEX = REPO / "runs/copywriter/_system/library/index.json"
 
 CHANNELS = [
     ("paid-social", "Paid social", "interrupted, skeptical, mid-scroll"),
@@ -123,7 +127,7 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 
 
 def build():
-    data = json.loads((HERE / "index.json").read_text(encoding="utf-8"))
+    data = json.loads(INDEX.read_text(encoding="utf-8"))
     rows = [r for r in data["rows"] if r["origin"] != "machine"]
     swiped = sum(1 for r in rows if r["origin"] == "swiped")
     ours = sum(1 for r in rows if r["origin"] == "ours")
@@ -182,10 +186,10 @@ def build():
                 shown += 1
             rest = len(frows) - shown
             if rest > 0:
-                p.append(f'<div class="more">+ {rest:,} more in library/index.json</div>')
+                p.append(f'<div class="more">+ {rest:,} more in runs/copywriter/_system/library/index.json</div>')
             p.append('</details>')
 
-    p.append('<footer>built from library/index.json · rebuild with '
+    p.append('<footer>built from runs/copywriter/_system/library/index.json · rebuild with '
              'build_library.py then this script · strongest heat signal first '
              'where one exists (live creatives, views)<br>'
              'origins: swiped = ran in the wild · ours = we shipped it · '

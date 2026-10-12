@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Cast a character's voice ONCE, and bind it — the voice half of identity.
 
-    python3 cast_voice.py --brand <brand> --character susan --audition
-    python3 cast_voice.py --brand <brand> --character susan --pick Matilda
+    python3 cast_voice.py --brand brand-a --character june --audition
+    python3 cast_voice.py --brand brand-a --character june --pick Matilda
 
 A face is held by a trained model (`lora.json`). A voice is held the same
 way: not by DESCRIBING it in every prompt — descriptions drift, and a
@@ -25,17 +25,23 @@ audition line and the register; nothing here names a brand.
 import argparse
 import json
 import re
+import os
 import sys
 import time
-import urllib.request
+import urllib.error, urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import keys
-import brand_folders as BF
 
-WS = Path.home() / "Projects" / "ai-workspace"
-TTS = "https://queue.fal.run/fal-ai/elevenlabs/tts/multilingual-v2"
+WS = Path(os.environ.get("AI_WORKSPACE") or ".").resolve()
+sys.path.insert(0, str(WS / "components" / "brandpath"))
+import brandpath as BP
+# ElevenLabs, through its own door. It used to be reached through fal; fal is
+# not a path any more (the owner, 2026-09-22), and the key for the direct call is
+# already in the Keychain — the same one research-gatherer transcribes with.
+ELEVEN = "https://api.elevenlabs.io/v1"
+TTS_MODEL = "eleven_multilingual_v2"
 
 # A spread to audition across, not a recommendation. The ear decides.
 CANDIDATES = ["Matilda", "Alice", "Charlotte", "Lily", "Jessica",
@@ -43,18 +49,19 @@ CANDIDATES = ["Matilda", "Alice", "Charlotte", "Lily", "Jessica",
               "Chris", "Daniel", "Eric", "George", "Roger"]
 
 
-def fal(url, data=None, key=None):
-    r = urllib.request.Request(
-        url, data=json.dumps(data).encode() if data is not None else None,
-        headers={"Authorization": f"Key {key}", "Content-Type": "application/json"})
-    with urllib.request.urlopen(r, timeout=300) as resp:
-        return json.loads(resp.read() or b"{}")
+def voice_ids(key):
+    """name -> id. The direct API speaks in ids; the cast list is names, and
+    a name is what he says out loud, so the names stay and this maps them."""
+    r = urllib.request.Request(f"{ELEVEN}/voices", headers={"xi-api-key": key})
+    with urllib.request.urlopen(r, timeout=60) as resp:
+        d = json.loads(resp.read() or b"{}")
+    return {v["name"]: v["voice_id"] for v in d.get("voices", [])}
 
 
 def character_home(brand, name):
-    d = BF.home(WS / "brands" / brand, "ai-elements/characters") / name   # old: ai-cast/
+    d = BP.brand_path(brand, "ai-elements/characters", name, root=WS / "brands")
     if not d.is_dir():
-        sys.exit(f"no character '{name}' in brands/{brand}/ai-elements/characters/")
+        sys.exit(f"no character '{name}' in brands/{BP.rel(brand, 'ai-elements/characters', root=WS / 'brands')}/")
     return d
 
 
@@ -76,19 +83,25 @@ def identity_block(home):
     return " ".join(block).strip() or None, (m.group(1).strip() if m else None)
 
 
-def speak(key, text, voice, dest):
-    job = fal(TTS, {"text": text, "voice": voice, "stability": 0.5,
-                    "similarity_boost": 0.75}, key)
-    while True:
-        st = fal(job["status_url"] + "?logs=0", key=key)
-        if st.get("status") in ("COMPLETED", "FAILED", "ERROR"):
-            break
-        time.sleep(3)
-    out = fal(job["response_url"], key=key)
-    url = (out.get("audio") or {}).get("url")
-    if not url:
+def speak(key, text, voice, dest, ids=None):
+    """One line, one voice, straight back as audio bytes — no queue to poll."""
+    ids = ids if ids is not None else voice_ids(key)
+    vid = ids.get(voice) or voice          # a raw id is accepted as-is
+    body = {"text": text, "model_id": TTS_MODEL,
+            "voice_settings": {"stability": 0.5, "similarity_boost": 0.75}}
+    r = urllib.request.Request(
+        f"{ELEVEN}/text-to-speech/{vid}", data=json.dumps(body).encode(),
+        headers={"xi-api-key": key, "Content-Type": "application/json",
+                 "Accept": "audio/mpeg"})
+    try:
+        with urllib.request.urlopen(r, timeout=300) as resp:
+            audio = resp.read()
+    except urllib.error.HTTPError as e:
+        print(f"    {voice}: {e.code} {e.read()[:160].decode('utf-8', 'replace')}")
         return None
-    urllib.request.urlretrieve(url, dest)
+    if not audio:
+        return None
+    Path(dest).write_bytes(audio)
     return dest
 
 
@@ -121,17 +134,23 @@ def main():
         print("Use --recast only when the character themselves changed.")
         return 0
 
-    key = keys.get("FAL_KEY")
+    key = keys.get("ELEVENLABS_API_KEY")
     if not key:
-        sys.exit("no FAL_KEY — the company key belongs in ~/.daemn/keys.env")
+        sys.exit("no ELEVENLABS_API_KEY in the Keychain vault")
 
     block, voice_note = identity_block(home)
     line = a.line or ("I've had these spots on my arms for years. "
                       "I stopped wearing anything short-sleeved.")
 
     if a.pick:
-        rec = {"voice": a.pick, "provider": "elevenlabs (via fal)",
-               "model": "multilingual-v2", "stability": 0.5,
+        ids = voice_ids(key)
+        vid = ids.get(a.pick)
+        if not vid:
+            sys.exit(f"'{a.pick}' is not a voice on the ElevenLabs account — "
+                     f"the ones there are: {', '.join(sorted(ids)[:20])}")
+        rec = {"voice": a.pick, "voice_id": vid, "provider": "elevenlabs",
+               "model": "multilingual-v2", "model_id": TTS_MODEL,
+               "stability": 0.5,
                "similarity_boost": 0.75,
                "cast": time.strftime("%Y-%m-%d"),
                "audition_line": line,

@@ -1,0 +1,48 @@
+{
+ "_readme": "One grade over the whole piece — a SETTING, like a caption look. It sits on the picture only; text layers are never graded. Production already colour-matches every clip to the first frame; this is the finish on top. Values are CSS filter strengths (1 = unchanged). Only the owner signs a row approved.",
+ "asset": "video",
+ "bank": "grade",
+ "updated": "2026-09-23",
+ "grades": [
+  {
+   "id": "none",
+   "name": "No grade",
+   "what": "The pictures exactly as production matched them.",
+   "filter": "none",
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "phone-natural",
+   "name": "Phone natural",
+   "what": "A touch of contrast and warmth, like a good phone camera. The house default.",
+   "filter": "contrast(1.05) saturate(1.06) sepia(0.04) brightness(1.01)",
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "clean-bright",
+   "name": "Clean bright",
+   "what": "Lifted and crisp, for demonstration and product close-ups.",
+   "filter": "brightness(1.05) contrast(1.04) saturate(1.02)",
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "warm-film",
+   "name": "Warm film",
+   "what": "Warmer and softer contrast, for a story told at home.",
+   "filter": "sepia(0.12) saturate(1.08) contrast(0.97) brightness(1.02)",
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "cool-clinical",
+   "name": "Cool clinical",
+   "what": "Cooler and cleaner, for an expert or a lab.",
+   "filter": "hue-rotate(-6deg) saturate(0.94) contrast(1.06)",
+   "status": "draft",
+   "signed": null
+  }
+ ]
+}

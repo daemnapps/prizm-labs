@@ -8,11 +8,20 @@ that call did, generalised so it runs on any scene, any brand, any format.
 If a prompt, a profile or a tool disagrees with this page about HOW a scene
 is made, this page is the process and that one is stale.
 
+**Superseded for clips and voices, 2026-10-03 (the owner) — `THE-CHAIN.md` is the process.** Clips are Omni Flash on fal at 1080p animating the approved GPT Image 2.5 picture (`run.py start … --clips` → `machine/omni_clips.py`); a person's clip always starts from the approved picture, never a clip's last frame; on-camera lines are said by Omni and turned into the cloned voice (speech-to-speech), off-camera lines are text-to-speech in the cloned voice — the voice-first workflow is retired. What follows is the 2026-09 per-scene method, kept as the record of the legacy doors (`--legacy-clips`).
+
+**Amended 2026-09-22** — the clip door moved to MiniMax H3 through
+Higgsfield after a live bake-off (the owner: *"MiniMax H3 looks pretty good and
+is super cheap… lip sync looks good… big savings. We'll use the 15-second
+pricing; most scenes should be 4–6 seconds with a few frames/movements."*).
+Step 4 below is that door; the stills and the voice are unchanged. Seedance
+2.5 is the alternate, for a scene that genuinely needs 15–30 s in one take.
+
 ---
 
 ## 0. The brief is the prompt (2026-09-19)
 
-Damon, that day: *"this brief is for the AI system to interpret, not for me
+the owner, that day: *"this brief is for the AI system to interpret, not for me
 as the human to read — format these briefs in a way that AI is able to
 directly build what it needs to build."*
 
@@ -70,7 +79,7 @@ piece whose cuts already match.
 
 ### B-roll is a scene (ruled 2026-09-19)
 
-Damon, reading a brief in which every scene was the same person talking to
+the owner, reading a brief in which every scene was the same person talking to
 the lens: ***"there is no B-roll."***
 
 Where the argument SHOWS something — the product in the hand, the jars on the
@@ -94,6 +103,56 @@ name. The rhythm a piece runs is a to-camera scene, then a B-roll scene
 carrying the next paragraph, the voice running unbroken across both; the
 sections that show (proof, product, failed solutions, the unique-mechanism
 demonstration) are the ones that take it.
+
+### B-roll after A-roll, `to_camera` always, cards as plates (ruled 2026-09-23)
+
+the owner: *"We need to ensure b-roll makes it into the actual production brief
+too, clearly AFTER a-roll is detailed, and it's carried through our process
+properly."* B-roll is ideated from the swipe and MADE here; so are cards.
+
+- **The brief's order.** The AI brief (v13) writes the A-roll first, then a
+  headed B-ROLL section — each scene with the swipe make-list row it comes
+  from, what it shows and the exact words under it — then CARDS, then a
+  ROLL SHEET CHECK. Its block stays ONE `scenes` list in play order.
+- **`to_camera` is said on every scene.** Missing, the scene is refused by id
+  before the voice is made. It used to default to talking whenever the scene
+  had a voice, so a B-roll scene could quietly become a face.
+- **No B-roll inside a talking scene, in any wording.** A shot that cuts away
+  from the speaker is its own `to_camera: false` scene over its slice of the
+  voice (the three-doctors run wrote two inside talking scenes; neither was made).
+- **A card is a scene of `kind: "card"`** — a text-free `plate`, its exact
+  `lines`, `lands_on` and `sfx`. It becomes ONE still, `<scene>-PLATE`, on the
+  first-frame door with the contract's clean line, and no clip. The words
+  travel in `plan.json` as `scene.card` for the edit to set on top.
+- **The roll sheet is checked.** Every make-list row maps to a scene of the
+  matching kind (B rows → `to_camera: false`, C rows → a card) or a drop
+  reason; otherwise the run stops, naming the row. A brief without the table
+  is older and is warned, not refused.
+
+### Every element, made here (ruled 2026-09-23 — `ELEMENTS.md`, brief v14)
+
+the owner: *"all these elements need to be green."* The teardown names every
+element, the brief carries it, **this machine makes it or pulls it from a
+bank**, the edit only assembles.
+
+- **Every scene names its `kind`** (talking · broll · card · screen · split ·
+  greenscreen · endcard) and `opens` (exactly one), `module`, `priority`
+  (1–3). A kind that disagrees with `to_camera` is refused by id.
+- **A screen** is one text-free plate (`<S>-PLATE`), like a card; its
+  `surface` and `lines` travel for the edit.
+- **A split** is two B-roll pictures: each side gets its own first frame,
+  last frame and one silent clip (`<S>-L`, `<S>-R`), timed off the split's
+  own slice of the read, which is laid under the pair once.
+- **A greenscreen is a talking scene** — its own frames, beats and voice —
+  plus one text-free background still (`<S>-BG`). The edit keys one over
+  the other.
+- **An endcard is an EDIT of the brand's real packshot** (`<S>-PACKSHOT`,
+  the fidelity door) — never a product drawn from words. Its offer lines and
+  guarantee must be in the brand's offer bank or say `[UNFILLED]`.
+- **Sound comes from the banks.** `music` and each `sfx` cue are picked from
+  `banks/` at `start`; a row that is not made yet stops the run, named.
+- **Every clip is colour-matched** to the piece's first frame when it lands,
+  the original kept in `media/versions/`.
 
 ### The beat grammar
 
@@ -147,7 +206,7 @@ exists**, because every timestamp downstream is read off it.
 
 **Station:** still · GPT Image 2.5, direct, a generation.
 **In:** the scene's FIRST FRAME written in the stills order —
-subject · composition · action · location · style · camera · lighting —
+subject · composition · action · location · style · camera · (viewpoint, required on a frame with no face in it: whose eyes the camera is + which edge every limb enters from, 2026-09-22) · lighting —
 plus the framing sentence for the piece's aspect, with the **cast sheet** as
 the identity reference.
 **Out:** one still. This is what the clip starts on, and what carries the
@@ -168,25 +227,57 @@ different shots the moment a clip runs from one to the other.
 
 ### Step 4 · The clip
 
-**Station:** motion / talking · Seedance 2.5 through Higgsfield, mode
-`omni_reference`. One call, one clip, the whole scene.
+**Station:** motion / talking · **MiniMax H3 through Higgsfield**
+(`minimax_h3`, ruled 2026-09-22). One call, one clip, the whole scene. 2K
+only (1440×2560 at 9:16), 4–15 s, 2 credits a second — 6 s = 12 cr ($__),
+10 s = 20 cr ($__), 15 s = 30 cr ($__).
 
-**What travels on the call, and nothing else:**
+**The door takes TWO shapes, and the scene decides which.** The backend's
+own refusal, verbatim: *"start_image/end_image cannot be mixed with
+reference media; audio_references require at least one image or video
+reference."* So:
 
-| | |
-|---|---|
-| `start_image` | the first frame |
-| `end_image` | the last frame |
-| `audio_references` | the scene's slice of the one voice track — a to-camera scene only. A B-roll scene carries none: its slice is laid under the picture at the edit |
-| `prompt` | the four blocks below |
-| `duration` | the slice, rounded up. Floor 4 s, ceiling 30 s |
-| `aspect_ratio` · `resolution` | the piece's, declared once |
-| `generate_audio` | true where the scene speaks |
+| | a TALKING scene (to camera) | a SILENT scene (B-roll) |
+|---|---|---|
+| the first frame | `image_references` | `start_image` |
+| the last frame | **not on the call** — still made (the next scene opens from it), but it travels as words: the last beat ends on its Change | `end_image` — the designed camera move lands on it |
+| the voice | `audio_references` — the scene's slice of the one voice track | none; the slice is laid under the picture at the edit |
+| `prompt` | the four blocks below, @Image1 + @Audio1 in the asset line | the four blocks, @Image1 + @Image2 in the asset line |
+| `duration` | the slice, rounded up. Floor 4 s, **ceiling 15 s** | the beats' own end, same floor and ceiling |
+| `aspect_ratio` | the piece's | the piece's |
+| `resolution` | `2K` — the only one this door makes; the piece's Resolution sizes the stills | `2K` |
+
+**The cost of no last frame on a talking scene:** the model decides where
+the clip ends, and with nothing to land on it can hold the final gesture
+longer than the brief wanted (the bake-off's scene 1 held the hand up). The
+last beat's *ending on …* words are the one place the clip is told where to
+stop — write them as the frame, not as a mood. A talking scene that must
+land an exact frame goes to the alternate.
+
+**The 15-second rule.** A scene longer than 15 s is refused by rule 12 by
+name — *split at a beat, or route to the alternate door (seedance_2_5, up to
+30 s)* — never quietly shortened. the owner's planning number: most scenes are
+4–6 s with a few movements.
+
+**The alternate: Seedance 2.5 on the same connector** — takes the first
+frame, the last frame and the voice slice together on one call, mode
+`omni_reference`, up to 30 s, 7 credits a second (3.5× the price). Chosen by
+flipping the registry's `doors.<station>.model`, never per scene; the
+machine builds the 2026-09-18 shape from that door's own row.
 
 **The cast sheet and the style frame do NOT travel on the clip.** The first
 frame already IS the cast, the wardrobe, the room and the light. A reference
 attached beside it is a second opinion about the same face, and the gate
 refuses it.
+
+**The subject zone holds at both ends, and Motion QC watches the middle**
+(2026-09-23). Every frame is measured into the centred 4:5 zone of the 9:16
+frame before a clip is made from it (`machine/safezone.py`; a frame still
+outside after one fix edit is held and no clip is made). The clip starts on
+the first frame and ends on the last, so the zone holds at both ends; what
+happens between them — a head rising into the top band on a push-in, a
+product sinking below — is checked by Motion QC, check 7 "Subject zone"
+(`prompts/stage-5b-motion-qc/stage5b-motion-qc-v2-damon.md`).
 
 ### Step 5 · The line check
 
@@ -206,17 +297,23 @@ scene means the scene is rewritten in the script, not re-rendered.
 
 ## 3. The prompt — four blocks, in this order
 
-1. **The assets** — what @Image1, @Image2 and @Audio1 are.
+1. **The assets** — what travels: @Image1 and @Audio1 on a talking scene;
+   @Image1 and @Image2 on a silent one. Never a media the call does not
+   carry.
 2. **One clean sentence** — who, where, what they do, the style, the camera.
    Built from labelled slots against a fixed template, never by gluing raw
    fields end to end.
 3. **The timeline** — one line per beat, one action each, its span read off
    the voice track. The first beat names the frame at @Image1; the last
-   settles on the framing of @Image2.
+   settles on the framing of @Image2 where @Image2 travels, and otherwise
+   *ends on* the LAST FRAME's Change, in words.
 4. **What holds** — the take, the setting, the light, the wardrobe, and the
    two negatives every clip carries.
 
-**The call that worked, verbatim** (a real scene, 9 s, line check 100%):
+**The call that worked, verbatim** (a real scene, 9 s, line check 100% —
+the 2026-09-18 shape with @Image2 attached, which is now the alternate
+door's; on the settled door a talking scene drops the @Image2 sentence and
+its last beat reads *…, ending on <the LAST FRAME's change>*):
 
 ```
 @Image1 is the first frame: the woman at her kitchen table, medium-close, left forearm resting on the table, eyes on the lens. @Image2 is the last frame: the camera has pushed in close, her left forearm face-up filling the lower half of the frame with her right fingertip resting on one brown spot, her face in the upper third looking straight into the lens. @Audio1 is her voice; she speaks the words in @Audio1 exactly, nothing else is said.
@@ -235,9 +332,10 @@ One continuous take, no cuts, the only camera movement is the slow push in. Same
 
 | Block | The template |
 |---|---|
-| assets | `@Image1 is the first frame: <the first frame in one line>. @Image2 is the last frame: <the delta>. @Audio1 is <who>'s voice; they speak the words in @Audio1 exactly, nothing else is said.` |
+| assets (talking) | `@Image1 is the first frame: <the first frame in one line>. @Audio1 is <who>'s voice; they speak the words in @Audio1 exactly, their lips moving with every word, nothing else is said.` |
+| assets (silent) | `@Image1 is the first frame: <the first frame in one line>. @Image2 is the last frame: <the delta>.` |
 | summary | `<who> at <setting> <what they do>, <the style>, <the camera in one phrase>.` |
-| timeline | `<start>-<end>s: <one action>` — plus the words playing over it on a silent scene, the frame at @Image1 on the first, settling on the framing of @Image2 on the last, and the performance in brackets at the end |
+| timeline | `<start>-<end>s: <one action>` — plus the words playing over it on a silent scene, the frame at @Image1 on the first, and on the last either `settling on the framing of @Image2` (silent) or `ending on <the LAST FRAME's change>` (talking), then the performance in brackets at the end |
 | consistency | `One continuous take, no cuts, <the camera sentence>. Same <setting>, same <light>, same wardrobe throughout. Natural lip movement matching the voice. No subtitles. No background music.` |
 
 The camera is one phrase, read off the LAST FRAME's own camera word:
@@ -275,16 +373,24 @@ own field, and **nothing submits red**:
 - a scene carrying **`Cutaways:`** or an **`(insert`** inside a beat —
   B-roll is a scene, not an insert;
 - a **B-roll scene with audio attached** to the clip;
+- a scene with **no `to_camera`** (named by id), a **card whose plate has
+  words in it** or that has no `lines`, and a **swipe make-list row** carried
+  to no scene with no drop reason, or to a scene of the wrong kind
+  (2026-09-23 — these three also stop `run.py start` before the voice);
 - a LAST FRAME whose **camera move names no framing** to land on;
-- a piece whose **aspect or resolution is not a value the doors take** — a
-  pixel pair where the clip door wants `720p`;
+- a piece whose **aspect is not a value the doors take**, or whose
+  resolution is a **pixel pair** — the clip door makes 2K and the still size
+  is resolved from the aspect;
 - a scene with **no first frame** — the clip has nothing to start on;
 - a scene with **no last frame** — nothing to land on;
 - a to-camera scene with **no slice of the voice track**;
 - a clip carrying **any other reference** — a cast sheet or a style frame
   attached beside the first frame;
-- **no duration**, or a paragraph **past 30 seconds** — which is split at a
-  beat boundary, never mid-sentence and never quietly shortened;
+- a talking clip carrying an **`end_image` beside its audio** — the door's
+  own 422, quoted back;
+- **no duration**, or a paragraph **past 15 seconds** — *split at a beat, or
+  route to the alternate door (seedance_2_5, up to 30 s)*; never quietly
+  shortened;
 - a beat naming **two actions**, or none;
 - **more than two stills** in one scene;
 - an edit with **one reference**, or whose first reference is not the frame
@@ -316,8 +422,9 @@ own field, and **nothing submits red**:
 - **No scene length as a number in the brief.** The read decides; a profile
   gives the philosophy, never the seconds.
 - **No second door.** One image door for every still and every edit; one
-  motion door for every clip. An alternate exists in the registry for the
-  day one is needed — it is not a choice made per scene.
+  motion door for every clip. The alternate (Seedance 2.5, 15–30 s in one
+  take) exists in the registry for the scene that needs it — it is a flip of
+  the registry, not a choice made per scene.
 - **No line-by-line voice.** One read for the piece, sliced. A call per line
   restarts the performance and the cut hears it.
 
@@ -329,11 +436,12 @@ now also holds `brief_schema` and `beat_grammar`) · `machine/scenes.py`
 `machine/model_inputs.py` (assembles every prompt, runs the gate) ·
 `machine/run.py` (builds the two stills and the one clip per scene) ·
 `machine/preflight.py` rule 12 · `machine/test_frames.py` (`TheGoldenCall`
-holds the chain to the call that worked).
+holds the chain to the settled door's two shapes; `TheSeedanceAlternate`
+holds the 2026-09-18 shape the alternate still takes).
 
 ## The spoken rule, ruled 2026-09-19 — the unit is the thought
 
-Damon heard the first spoken paragraph read as three clipped statements and
+the owner heard the first spoken paragraph read as three clipped statements and
 said it did not feel like one complete sentence, because it wasn't one. The
 rule that replaced "shorten and split":
 
@@ -350,9 +458,9 @@ person.
 | chopped, wrong | This is the old surface. It's still sitting on your hand. That's why the sunscreen hasn't worked. |
 | **spoken, right** | **This is the old surface still sitting on your hand... That's why the sunscreen hasn't worked!** |
 
-Measured on Susan's voice: the spoken line reads in 5 s with two breaths of
+Measured on June's voice: the spoken line reads in 5 s with two breaths of
 under half a second; the chopped one in 7 s with three full pauses. The rule
 lives in `components/marketing-doctrine/spoken.json` (`the_thought`), the
 spice pass writes to it (4g v3, rule 0), the brief's gate keeps the ellipsis
 and refuses the dash, and `voice.py` reads the ellipsis as the breath. The
-read Damon chose: stability 0.45 · style 0.3 · speed 1.0 · speaker boost off.
+read the owner chose: stability 0.45 · style 0.3 · speed 1.0 · speaker boost off.

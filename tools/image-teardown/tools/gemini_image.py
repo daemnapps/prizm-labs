@@ -11,11 +11,15 @@ Usage:
 
 Multiple --image flags are sent in one call, in the order given, each labeled
 "IMAGE 1", "IMAGE 2", ... so the prompt can refer to them by number.
-Reads GEMINI_API_KEY from ~/.gemini.env.
+Reads GEMINI_API_KEY by name through components/keys (tools/it_keys.py) —
+the environment, then, off the mini, the old places the loader names.
 """
 
 import argparse, base64, json, mimetypes, re, sys, time, urllib.request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import it_keys  # noqa: E402  SI-194 (readers use loader)
 
 BASE = "https://generativelanguage.googleapis.com"
 
@@ -47,10 +51,10 @@ def fill(template, pairs):
 
 
 def key():
-    for line in (Path.home() / ".gemini.env").read_text().splitlines():
-        if line.startswith("GEMINI_API_KEY="):
-            return line.split("=", 1)[1].strip()
-    sys.exit("GEMINI_API_KEY not found in ~/.gemini.env")
+    k = it_keys.key("GEMINI_API_KEY")
+    if not k:
+        sys.exit(it_keys.missing("GEMINI_API_KEY"))
+    return k
 
 
 def req(url, data, headers, tries=4):

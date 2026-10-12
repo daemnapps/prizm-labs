@@ -128,7 +128,7 @@ NO live-action look. The characters are flat hand-drawn cartoon cels, NOT real p
 
 **Why:** the reference images alone do not lock the style — the prompt text's other
 descriptors fight them. Without the lock, some clips resolve back toward photoreal
-(the user's exact complaint: "Susan still looks like a real person in some clips, you
+(the user's exact complaint: "June still looks like a real person in some clips, you
 didn't lock it in").
 
 ---

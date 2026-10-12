@@ -1,35 +1,422 @@
 {
- "_what": "Rows Damon has named that no source list holds yet. Each one is a draft until he defines and signs it; the 'what' says so rather than guessing a definition for him.",
+ "_what": "Rows the owner has named that no source list holds yet. Each one is a draft until he defines and signs it; the 'what' says so rather than guessing a definition for him.",
  "rows": [
   {
-   "element": "format",
+   "element": "structure",
    "asset": "video",
    "id": "storytelling",
-   "name": "Storytelling ad",
-   "what": "[TO DEFINE — named by Damon 2026-09-19 as a format we collect]",
-   "status": "draft",
-   "signed": null,
-   "evidence": "Damon, 2026-09-19: \"the storytelling ad\""
+   "name": "Storytelling",
+   "what": "One named person with one reason, told as a story: who he was before, the turn (he found out it was never his fault), who he is after — the beats are the story's, not a pitch's, and the product enters where the turn happens. Aimed at a buyer who already wants the outcome.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "evidence": "the owner 2026-09-19: 'the storytelling ad' — 'storytelling and intent over volume'. Moved from format/video 2026-09-28: it is a video structure (what the beats are), not a format. The 16 Sep 'storytelling' format draft was ruled the same piece as expert-consult on 17 Sep and retired; this row is the structure, not that draft.",
+   "why_it_works": "One swiped brand runs 100,000+ customers off 44 ads because every ad is one person's reason for switching, told in her own words; story and intent do the work volume does for everyone else.",
+   "note": "defined by the machine, review pending",
+   "examples": "A swiped brand's story ads — one person, one reason each; a brand's story block in brand-identity/story.md (SPINE · BEFORE · TURN · AFTER, the tellers)"
   },
   {
-   "element": "format",
-   "asset": "video",
+   "element": "delivery",
+   "asset": "delivery_style",
    "id": "holistic-healer-authority",
    "name": "Holistic healer authority",
-   "what": "[TO DEFINE — named by Damon 2026-09-19 as a format we collect]",
-   "status": "draft",
-   "signed": null,
-   "evidence": "Damon, 2026-09-19: \"the holistic healer authority\""
+   "what": "The claim is carried by an elder practitioner speaking from years of practice, not from a study — the kitchen, not the lab. Calm, unhurried, names ingredients she recognises (turmeric, ginger, chamomile), and the reader answers her rather than being sold to.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "evidence": "the owner 2026-09-19: 'the holistic healer authority'. Moved from format/video 2026-09-28: it is how the ad sounds (a delivery style), not a format. Backed by customer lines in one brand's language bank asking for what 'a holistic doctor would approve'.",
+   "why_it_works": "Her trust bar is 'can I find this in my kitchen?' and 'would my holistic doctor approve?' — the voice that already has her trust is the one that can make the claim.",
+   "note": "defined by the machine, review pending",
+   "examples": "A brand's story file naming the teller 'the kitchen, not the lab — the elder practitioner, with the reader answering'; a swiped ad written as a grandma's holistic blog"
   },
   {
    "element": "format",
    "asset": "image",
    "id": "native-facebook-image",
    "name": "Native Facebook image",
-   "what": "[TO DEFINE — named by Damon 2026-09-19 as a format we collect]",
+   "what": "A single photo dressed as someone's own Facebook post — phone-camera framing, the words as a post's caption line, nothing that announces an ad. A flat band top and bottom, a logo, a headline block or a plate kills it. Differs from bare-photo, which carries no words at all.",
+   "why_it_works": "It borrows the shape of what she already scrolls; the ad is read as a person before the defence goes up.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "evidence": "Named by the owner 2026-09-19; defined 2026-09-28 from the pipeline's native-post rule and the bare-photo row.",
+   "note": "defined by the machine, review pending",
+   "examples": "The image-production pipeline's band ruling: 'a flat bar top and bottom announces a native-looking post as an advertisement'; the owner 2026-09-19: 'a native-looking image on Facebook'"
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "temporal-selfie",
+   "name": "Dated native selfie",
+   "what": "A single unretouched native-style selfie with a bare year or date overlaid, the date alone implying a before/after timeline.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "styled-product-still",
+   "name": "Styled product still",
+   "what": "A single photographic product shot in a fully art-directed setting, carrying only a headline overlay and no other graphic device.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "progression-composite",
+   "name": "Progression composite",
+   "what": "Three or more identical faces or bodies in a row, each altered to show a different stage of change, with a timeline label under each stage.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "confession-hook",
+   "name": "Confession hook",
+   "what": "A warning icon and a headline admitting a mistake lead into a reveal, with the product below alongside speech-bubble offer badges and a closing guarantee.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "quote-over-product",
+   "name": "Quote over product",
+   "what": "A large testimonial line and short attribution sit above a centered product shot, with no other graphic device.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "torn-paper-clearance",
+   "name": "Torn-paper clearance overlay",
+   "what": "A staged product photograph topped by a scarcity headline, with a torn-paper graphic lower in frame framing a discount offer and close.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "before-after-split-claim",
+   "name": "Before/after split with claim stack",
+   "what": "Two side-by-side photos of the same subject in different states, a stacked multi-line text claim spanning the seam between them, and a product shot below.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" The seventh row of that batch — same ruling, same day. Name and definition are the labeller's own proposal, accepted unreviewed.",
+   "aliases": [
+    "before-after-splitclaim"
+   ]
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "bare-photo",
+   "name": "Bare photograph",
+   "what": "One full-bleed photograph carries the whole ad — no text, no overlay, no annotation, no product shot and no graphic device of any kind. The native-post formats live here.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" Stage 2b answered none-fits on eight more ads and proposed a row each; SEVEN of them described the same thing in different words (native-content-photo, bare-portrait, raw-native-photo, plain-photograph, bare-selfie, bare-photograph, plain-portrait), so they are ONE row — seven synonyms would make the format field useless for slicing a report, which is the only reason the field exists.",
+   "aliases": [
+    "barephoto"
+   ]
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "benefit-stack",
+   "name": "Benefit stack beside product",
+   "what": "A vertical column of paired bold/regular benefit lines running down one side of the frame with the product beside it.",
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "evidence": "the owner, 2026-09-23: \"just name them dude.\" The labeller's own proposal for p161, accepted unreviewed.",
+   "aliases": [
+    "benefitstack"
+   ]
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "apology",
+   "name": "Apology",
+   "what": "Straight to camera, one plain line, the guarantee bar under it. The format is risk reversal — it looks like the brand talking, not selling.",
+   "why_it_works": "The most-aware buyer knows the product; the only thing between him and the click is the fear of another purchase down the drain, so the guarantee leads.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "15 live ads of one brand (decision 8)",
+   "aliases": [],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "distressed-poster",
+   "name": "Distressed poster",
+   "what": "A torn poster on a wall — the verdict across the top ('none of it worked'), the failed products listed on cards below, the product at the end.",
+   "why_it_works": "The poster is already the list; the picture carries the whole history of failure so the copy can turn fast to the one reason.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "18 live ads of one brand (decision 8)",
+   "aliases": [
+    "distressedposter"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "portrait-void",
+   "name": "Portrait in the void",
+   "what": "One person on a matte black field, the headline in the empty space, the product held at the jaw. The format is a stare — nothing to look at but him and the problem.",
+   "why_it_works": "The picture names the man and his problem; nothing competes with the line.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "12 live ads of one brand (decision 8)",
+   "aliases": [
+    "portraitvoid"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "two-panel",
+   "name": "Two panel",
+   "what": "Two stacked frames — the damage in close-up on top, the fix pressed against the same skin below. The argument is entirely visual.",
+   "why_it_works": "It is before-and-after without a claim in words, so it reads as a demonstration rather than a promise.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "6 live ads of one brand (decision 8)",
+   "aliases": [
+    "twopanel"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "checklist",
+   "name": "Checklist",
+   "what": "A card listing everything he has already tried, one fix after another, and the product at the bottom. The list is the argument.",
+   "why_it_works": "He has been changing the wrong variable for years; the list makes that point before a word of copy does.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "6 live ads of one brand (decision 8)",
+   "aliases": [],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "mirror-selfie",
+   "name": "Mirror selfie",
+   "what": "Phone in hand at the bathroom mirror, the product at his jaw, the ad's line over the top. It reads like something he'd post himself.",
+   "why_it_works": "The most personal shape in the set — first person, no brand voice, a caption not an ad.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "3 live ads of one brand (decision 8). Not the same as style/image `mirror-selfie` (a look); this is the shape of the ad.",
+   "aliases": [
+    "mirrorselfie"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "product-void",
+   "name": "Product in the void",
+   "what": "The product alone on matte black with its specs set in type (speed, rating, uses per charge). No person in frame.",
+   "why_it_works": "The only shape with nobody in it, so the number in the picture opens the copy and the copy carries the story.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "0 live ads of one brand (decision 8). `illustrated` maps here — an illustrated product-only ad is this shape in a drawn style; illustrated is a style, not a format.",
+   "aliases": [
+    "productvoid"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "caption-box",
+   "name": "Caption box",
+   "what": "A quiet frame with one caption over it — no product pitch in the picture, just the line and the person.",
+   "why_it_works": "The least ad-shaped format in the set; if it reads like marketing it is dead.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "2 live ads of one brand (decision 8)",
+   "aliases": [
+    "captionbox"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "comment-reply",
+   "name": "Comment reply",
+   "what": "A screenshot of a comment, answered. The ad is the reply.",
+   "why_it_works": "The comment does the hooking, so the answer can be direct and one idea long without selling over the top of it.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "2 live ads of one brand (decision 8)",
+   "aliases": [
+    "commentreply"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "routine-label",
+   "name": "Routine label",
+   "what": "A label-style card ('every morning') with the product beside it. Instructional, calm, no drama.",
+   "why_it_works": "It sells the habit, not the problem — its job is to make one minute sound like nothing.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "1 live ads of one brand (decision 8)",
+   "aliases": [
+    "routinelabel"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "element": "format",
+   "asset": "image",
+   "id": "macro-texture",
+   "name": "Macro texture",
+   "what": "An extreme close-up of skin or surface texture carries the ad — the bumps, pores or grain are the picture; a short line sits over or beside it.",
+   "why_it_works": "Texture at that scale is a problem the reader recognises on sight, before any claim is made.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "evidence": "0 live ads of one brand (decision 8). Meaning read off the ad names — that brief was never written down, so the definition is the machine's; review pending.",
+   "aliases": [
+    "macrotexture"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias. defined by the machine, review pending"
+  },
+  {
+   "element": "structure",
+   "asset": "video",
+   "id": "timeline-turn",
+   "name": "Timeline turn",
+   "what": "Four beats. 1 PAST — open on a moment the viewer lived (a real customer line about then, from the avatar's language bank), shot so it looks like then. 2 RELATE — the problem they have now started back there; they see their own history. 3 THE TURN — one moment where the timeline changes: the younger self gets told, the tape rewinds, the 'continue?' screen. 4 FORWARD — the product is the new timeline; the last ask is the click.",
+   "why_it_works": "Most people don't think about the future, they live in the past. Starting where they already are lets them relate before any claim; the turn hands them the moment to change it, and that is what moves them forward.",
    "status": "draft",
    "signed": null,
-   "evidence": "Damon, 2026-09-19: \"a native-looking image on Facebook\""
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): real past memories (hand-sorted) are rare in two brands' language banks — about 1 line in 600 to 2,000 — present but rare; one brand's own 'growing up' post had millions of views. The one swiped structure on this idea with proof is era-stamped-upgrade-ladder (29.96M views). named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "letter-to-younger-self",
+   "name": "Letter to my younger self",
+   "what": "The person today talks to, or writes to, the kid they were — the old photo or the old moment on screen, today's face answering it. The timeline turn is the line they'd tell that kid.",
+   "why_it_works": "It is the turn in its purest form: the viewer is the younger self being told.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "then-and-now-photo",
+   "name": "Then and now photo",
+   "what": "An old photo from the avatar's era (film print, yearbook, disposable camera) held up or recreated today, same pose. The gap between the two is the story; the product closes it.",
+   "why_it_works": "Everyone has the photo; holding it up puts the viewer's own album in their head.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "home-video-flashback",
+   "name": "Home video flashback",
+   "what": "Opens as camcorder / family-video footage of the moment it started (the beach towel, the first shave, the first haircut), then cuts hard to today. Pairs with style vhs-camcorder.",
+   "why_it_works": "Home-video texture reads as memory, not ad, so the viewer drops their guard.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "classic-commercial-remake",
+   "name": "Classic commercial remake",
+   "what": "A beat-for-beat remake of a TV-ad genre the avatar grew up on — the period look, voice, jingle and pack shot — with our product and our words dropped in. Genre only, never another brand's ad, logo or trademark.",
+   "why_it_works": "A format people already remember gets attention for free; the viewer finishes the pattern in their head.",
+   "status": "draft",
+   "signed": null,
+   "examples": "To swipe: real period spots of the genre the avatar's age band watched.",
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "infomercial-throwback",
+   "name": "Infomercial throwback",
+   "what": "Late-night infomercial grammar: the black-and-white 'are you tired of…' struggle, the colour switch, the host, 'but wait', the number card — played straight or played for the laugh.",
+   "why_it_works": "Everyone over 30 knows every beat, so the turn (black-and-white to colour) lands without explaining.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "era-roll-call",
+   "name": "Era roll call",
+   "what": "'If you grew up in the [DECADE] you remember…' — a quick list of real things from the avatar's youth that ends on the one they still carry (the habit, the damage, the old fix), then the turn.",
+   "why_it_works": "Each item is a small 'that's me'; by the last one they're already nodding.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "game-continue",
+   "name": "Continue screen",
+   "what": "Video-game grammar: the old struggle plays as a level, it ends on GAME OVER / CONTINUE? — the product is pressing continue. Pairs with style pixel-16bit.",
+   "why_it_works": "The continue screen is a literal second chance at the timeline, in the language the avatar grew up playing.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "element": "format",
+   "asset": "video",
+   "id": "grandma-remedy",
+   "name": "Grandma's remedy",
+   "what": "What the family used to put on it — the kitchen, the jar, the older hands — then today's version of the same idea. Only where the product truly carries the old remedy (a traditional ingredient the product is really built on).",
+   "why_it_works": "It ties the product to a past the viewer trusts instead of a lab they don't.",
+   "status": "draft",
+   "signed": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
   }
  ]
 }

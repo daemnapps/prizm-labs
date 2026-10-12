@@ -9,7 +9,7 @@ can be public.
 
 | | |
 |---|---|
-| `machine/library.py` | reads the private workspace and writes: `SWIPE LIBRARY.md` at the root of the shared drive, and a `FEED.md` in every feed's folder on Drive. It does not write the site — `docs/feeds/` comes from the team workspace's `feedsexport.py` |
+| `machine/library.py` | reads the private workspace and writes: `SWIPE LIBRARY.md` at the root of the shared drive, and a `FEED.md` in every feed's folder on Drive. It does not write the site — `docs/feeds/` comes from `components/swipe-organic/feedsexport.py` |
 | `context/artifacts.md` | the pages that show this work |
 
 ## What is in the library, and where each half lives
@@ -17,9 +17,9 @@ can be public.
 | What | Public (this repo) | Team (Drive, read through Higgsfield) |
 |---|---|---|
 | **Organic formats** — the structure under posts that worked | `tools/my-feeds/organic/formats/` · the zip on the site | — |
-| **Swipe videos** — every post torn down, filed under its format | the rebuild sheets, text only | `lab/damon/swipe-organic/records/swipe-videos/<code>/` — the video, the sheet, the beat strip |
-| **My Feeds** — one feed per person: what that person watches | [daemn.co/feeds/](https://daemn.co/feeds/) — public since 1 Oct 2026 (Damon reversed the earlier "never"): top posts per person, read-only, from a static export with a no-secrets scan | `lab/damon/swipe-organic/records/avatar-feeds/<feed>/FEED.md` — every kept post, linked |
-| **Paid sweeps** — every competitor's live ads, blocked by angle | `tools/my-feeds/paid/angle-shapes/` — the recurring shapes, brands described not named | `lab/damon/swipe-paid/<brand>/angles/NN_…/` — video, photos, page captures |
+| **Swipe videos** — every post torn down, filed under its format | the rebuild sheets, text only | `<shared drive>/swipe-organic/records/swipe-videos/<code>/` — the video, the sheet, the beat strip |
+| **My Feeds** — one feed per person: what that person watches | [daemn.co/feeds/](https://daemn.co/feeds/) — public since 1 Oct 2026 (the owner reversed the earlier "never"): top posts per person, read-only, from a static export with a no-secrets scan | `<shared drive>/swipe-organic/records/avatar-feeds/<feed>/FEED.md` — every kept post, linked |
+| **Paid sweeps** — every competitor's live ads, blocked by angle | `tools/my-feeds/paid/angle-shapes/` — the recurring shapes, brands described not named | `<shared drive>/swipe-paid/<brand>/angles/NN_…/` — video, photos, page captures |
 | **The index** | this README | `SWIPE LIBRARY.md` — counts, every feed, every code by format, every sweep |
 
 Nothing private crosses the line. The packs carry formats, angle shapes and

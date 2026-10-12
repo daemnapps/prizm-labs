@@ -1,0 +1,4 @@
+{
+ "_what": "Who can approve or disapprove on the approval page. Add a person by name; each browser picks one once and it is written on every decision.",
+ "approvers": ["the owner"]
+}

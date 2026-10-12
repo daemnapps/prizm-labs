@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The second door — an ad composed from a CHOICE, not swiped.
 
-Damon's ruling, 2026-09-18: "with all of the different sections we should begin
+the owner's ruling, 2026-09-18: "with all of the different sections we should begin
 to assemble actual frameworks to create ads strategically. We use swipes as the
 baseline, but since we have a fundamental system and understanding of who we are
 speaking to and how and what formats they're receptive to, we can pump out
@@ -46,9 +46,11 @@ DOCTRINE = C.WS / "components" / "marketing-doctrine"
 AD_FRAMEWORKS = DOCTRINE / "ad-frameworks.json"
 FRAMEWORKS = DOCTRINE / "frameworks.json"
 # The format bank is definitions, curated where the video machine keeps them.
-# Shared infrastructure reads lab DATA as a matter of course (workspace rule 9);
-# what it never does is adopt lab instruction content.
-FORMAT_BANK = C.WS / "lab" / "damon" / "ai-video-production" / "formats" / "bank.json"
+# The video machine left the team notes/ai-video-production for
+# tools/video-production (2026-09-22) and this path was not moved with it,
+# so every compose refused: "the format bank is not at … — nothing can be
+# composed without it".
+FORMAT_BANK = C.WS / "tools" / "video-production" / "formats" / "bank.json"
 
 ROUTES = ("ai", "creator", "founder")
 FUNNELS = ("prospect", "lead", "customer", "churned")
@@ -267,7 +269,7 @@ def teardown_record(spec):
         "",
         "**%s** (`%s`) — %s" % (f["name"], f["id"], f["what"]),
         "",
-        "Source of the row: %s · status: %s" % (f["source"], f["status"]),
+        "Source of the row: %s · status: %s · state: %s" % (f["source"], f["status"], f.get("state", "—")),
         "",
         "## The beats it plans",
         "",
@@ -496,7 +498,7 @@ def extras_for(spec):
     f = spec["framework"]
     lines = ["# The framework this ad is composed from", "",
              "**%s** (`%s`) — %s" % (f["name"], f["id"], f["what"]), "",
-             "- **Status:** %s · **Source of the row:** %s" % (f["status"], f["source"]),
+             "- **Status:** %s · **State:** %s · **Source of the row:** %s" % (f["status"], f.get("state", "—"), f["source"]),
              "- **Awareness it plans:** `%s` → `%s`" % (f["awareness"]["entry"],
                                                         f["awareness"]["exit"]),
              "- **Sophistication stages it suits:** %s"
@@ -529,14 +531,14 @@ def extras_for(spec):
 
 # ------------------------------------------------------------------- resolving
 
-# `story` joined 2026-09-19: run.py fills it from brands/<brand>/brand-identity/story.md (old: story.md)
+# `story` joined 2026-09-19: run.py fills it from brands/<brand>/brand-identity/story.md
 # plus 1b's pick, [UNFILLED] for a brand with none.
 # `voiceprint` joined 2026-09-19: run.py fills it from the brand's measured
-# creator voiceprints (brands/<brand>/content-creators/VOICEPRINTS.md, old: creators/), [UNFILLED]
+# creator voiceprints (runs/research/<brand>/creators/VOICEPRINTS.md), [UNFILLED]
 # when the brand has none — the same shape as `research`.
 # `declared_audience` joined 2026-09-20: run.py fills it from --for-avatar /
 # --for-sub (a video from a sub-avatar's own organic feed), "NONE" otherwise.
-RUN_SUPPLIED = {"source_url", "research", "voiceprint", "story", "ad_framework", "declared_audience",
+RUN_SUPPLIED = {"source_url", "research", "voiceprint", "story", "frame_map", "ad_framework", "declared_audience",
                 "format_profile", "brief_count", "video_count", "product",
                 "brand_name", "profile_spec", "creator_record",
                 "teardown_material", "existing_profile", "handle",

@@ -1,0 +1,21 @@
+{
+ "schema": 1,
+ "status": "draft",
+ "what": "The labels a voice card may use. A value not on a list is recorded as unknown, never nudged onto the nearest one. Draft until the owner approves; delivery_style is NOT listed here — it is read from the doctrine's own delivery dial (components/marketing-doctrine/delivery.json), so the two never drift.",
+ "updated": "2026-09-25",
+ "sources": {
+  "read_style": "voice-over casting's standard read styles (announcer / conversational / real person / peer-to-peer / character)",
+  "texture": "voice-quality vocabulary (GRBAS: roughness, breathiness, strain; Laver's voice-quality settings; casting descriptors)",
+  "age_band": "casting brackets"
+ },
+ "lists": {
+  "read_style": ["announcer", "conversational", "real-person", "peer-to-peer", "character"],
+  "texture": ["warm", "bright", "dark", "clear", "rich", "thin", "husky", "raspy", "breathy", "nasal", "vocal-fry", "strained", "gravelly", "soft", "sharp"],
+  "pitch_band": ["low", "mid-low", "mid", "mid-high", "high"],
+  "energy": ["low", "medium", "high"],
+  "age_band": ["under-18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+  "gender_presentation": ["female", "male", "unclear"],
+  "mic_space": ["phone-close", "phone-arms-length", "lav", "studio", "room-echo", "outdoors", "phone-speaker"],
+  "talks_to": ["camera", "another-person", "themselves", "voiceover"]
+ }
+}

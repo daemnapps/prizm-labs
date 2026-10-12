@@ -1,6 +1,6 @@
 # components/research-gatherer — querying the open internet for a chain
 
-Extracted 2026-09-18 (RG-1), the day it was built, on Damon's ruling: *"the
+Extracted 2026-09-18 (RG-1), the day it was built, on the owner's ruling: *"the
 OS pulls COMPONENTS into workflows, so the research gatherer must be a
 resident component, not code inside one machine."* Same shape as the LL-1
 precedent (`components/language-layer/`) — an engine with no stage map, a
@@ -18,7 +18,7 @@ with permalinks, into that sub-avatar's own language bank. What it is not:
 anybody's chain. It holds no stage map, no brand and no opinion about which
 STAGE_USE keys a chain cares about.
 
-## Rooms are FOUND, not written down (Damon, 2026-09-18)
+## Rooms are FOUND, not written down (the owner, 2026-09-18)
 
 > *"He should never have to write down rooms - the system finds where the avatar talks on its own."*
 
@@ -35,7 +35,7 @@ entry for every new avatar. Now:
    means the gatherer goes and looks.** ONE search, in the avatar's own
    desire words (the words `desire_words()` already reads off the file), no
    subreddit named, **posts only**, sort and window from `research.json`'s
-   `discovery` block (`relevance` / `year` today), cap ~40 items (~$0.16).
+   `discovery` block (`relevance` / `year` today), cap ~40 items (~$__).
    The posts that come back are tallied by the room they came from,
    **weighted by score** — the loudest room, not merely the busiest — and
    the top 5 are the rooms.
@@ -55,7 +55,7 @@ entry for every new avatar. Now:
    on Reddit that happen to share a word, not the posts about the topic.
    Sort `relevance` on the same query, same cap, returned `r/skincare_ph`,
    `r/40PlusSkinCare`, `r/Blackskincare`, `r/SkincareAddicts` and
-   `r/indianbeautyyappers` for $0.028. Relevance finds the topical rooms;
+   `r/indianbeautyyappers` for $__. Relevance finds the topical rooms;
    the score weighting then picks the loudest of THOSE, which is what the
    weighting was always for. Both knobs live in `research.json` rather than
    in code, so the next correction is a config change; the cache key carries
@@ -86,15 +86,15 @@ entry for every new avatar. Now:
 move.** `components/video-teardown/machine/research.py` is now a thin shim
 over this engine: same CLI (`run --run <dir>`, `deep --brand … --avatar …
 --sub …`, `--all`, `--pick-thinnest`, `--dry-run`), same output, same cache.
-Nothing was asked of Damon and nothing changed on the video-teardown side.
+Nothing was asked of the owner and nothing changed on the video-teardown side.
 Any sibling chain adopts the same door by writing its own equally-thin shim
 — **`copy/machine/research.py` is the second one** (2026-09-18,
-Damon's ruling *"the live research gatherer runs in the copy machine too"*),
+the owner's ruling *"the live research gatherer runs in the copy machine too"*),
 binding the copy chain's own `depth`/`spice` keys, its own `for_stage`, and
 its own `results/<label>/` run folder; the copy chain's stages 6 (expansion)
 and 7 (close) read the packet as `{research}`.
 
-## Research is reconciled against the avatar's demographics (Damon, 2026-09-18)
+## Research is reconciled against the avatar's demographics (the owner, 2026-09-18)
 
 > Discovery for a sun-damage sub-avatar came back with `r/Blackskincare`,
 > `r/skincare_ph` and `r/indianbeautyyappers`. That brand's customers are none
@@ -146,9 +146,9 @@ without re-spending on the search.
 
 | question | answer |
 |---|---|
-| **engine + owner** | this folder's `research_gatherer/engine.py` — **Damon** (built as part of the Schwartz-backbone build, 2026-09-18; corrects to Dayu if the engine-ownership convention from LL-1/IDT-1 applies here instead) |
-| **definitions + curator** | **three kinds, none of them here.** (1) **Chain profiles** — which language STAGE_USE keys a chain wants queried (`language_stages`), the callable that runs that query (`language_for_stage`), and where a run's own output folder lives (`run_dir`) — are per-chain, curated by that chain's owner (Damon, for video-teardown) and live in the chain's shim, never here. (2) **Desire words** are avatar content, curated brand-side under `brands/<brand>/core-avatars/**/sub-avatars/*.md` — rule-9 (brand home). **Rooms are FOUND by this engine**, written back into that same file, and a person locks a block by adding `confirmed by: <name>` to it (see `brands/_TEMPLATE/core-avatars/README.md`); a person curates rooms only when they choose to. (3) **The Schwartz research questions** are the marketing-doctrine component's (`components/marketing-doctrine/frameworks.json`, `research_questions`), curated by Damon there; this engine falls back to a small built-in list, marked as a fallback, only when that file is missing or empty |
-| **the plane it emits** | **none, directly.** `inputs()` writes into the CALLING chain's own run folder (`<run>/research/{language,forums,comments,research}.md`), at the path that chain's `chain_profile["run_dir"]` names. `deep_for()` writes into the avatar's own bank (the sub-avatar's OWN folder beside its card — `brands/<brand>/core-avatars/<avatar>/sub-avatars/<card stem>/language/deep-research-<date>.json` (rows carry `sub`; the language layer reads every sub-avatar folder as part of the avatar's bank) plus the clean readable report at `…/<card stem>/research/<date>/` (research.md, rooms-found.json, rows.json — only what passed the gates) — Damon's 2026-09-18 exception, in this shape only, to "a person moves it") and a run record at the repo-root `runs/research/<brand>/<sub>-<date>/` (rows, receipts, two bands, spend) — **never inside this component**: run records don't live in a component (CLAUDE.md §1, `runs/README.md`), even though this engine is what writes them |
+| **engine + owner** | this folder's `research_gatherer/engine.py` — **the owner** (built as part of the Schwartz-backbone build, 2026-09-18; corrects to the developer if the engine-ownership convention from LL-1/IDT-1 applies here instead) |
+| **definitions + curator** | **three kinds, none of them here.** (1) **Chain profiles** — which language STAGE_USE keys a chain wants queried (`language_stages`), the callable that runs that query (`language_for_stage`), and where a run's own output folder lives (`run_dir`) — are per-chain, curated by that chain's owner (the owner, for video-teardown) and live in the chain's shim, never here. (2) **Desire words** are avatar content, curated brand-side under `brands/<brand>/core-avatars/**/sub-avatars/*.md` — rule-9 (brand home). **Rooms are FOUND by this engine**, written back into that same file, and a person locks a block by adding `confirmed by: <name>` to it (see `brands/_TEMPLATE/core-avatars/README.md`); a person curates rooms only when they choose to. (3) **The Schwartz research questions** are the marketing-doctrine component's (`components/marketing-doctrine/frameworks.json`, `research_questions`), curated by the owner there; this engine falls back to a small built-in list, marked as a fallback, only when that file is missing or empty |
+| **the plane it emits** | **none, directly.** `inputs()` writes into the CALLING chain's own run folder (`<run>/research/{language,forums,comments,research}.md`), at the path that chain's `chain_profile["run_dir"]` names. `deep_for()` writes into the avatar's own bank (the sub-avatar's OWN folder beside its card — `brands/<brand>/core-avatars/<avatar>/sub-avatars/<card stem>/language/deep-research-<date>.json` (rows carry `sub`; the language layer reads every sub-avatar folder as part of the avatar's bank) plus the clean readable report at `…/<card stem>/research/<date>/` (research.md, rooms-found.json, rows.json — only what passed the gates) — the owner's 2026-09-18 exception, in this shape only, to "a person moves it") and a run record at the repo-root `runs/research/<brand>/<sub>-<date>/` (rows, receipts, two bands, spend) — **never inside this component**: run records don't live in a component (CLAUDE.md §1, `runs/README.md`), even though this engine is what writes them |
 | **what the manifest declares per entry** | n/a — no manifest. `research.json` at the component root is config (actor ids, spend caps, cache days, and the `discovery` block's sort / window / posts-only / keep), not a definitions registry |
 
 ## Contract
@@ -233,7 +233,7 @@ python3 components/research-gatherer/gather.py voiceprint --brand B --creator H
 python3 components/research-gatherer/gather.py voiceprint --brand B --all [--dry-run]
 ```
 
-**`voiceprint`** (2026-09-19, Damon: "analyze our actual content creators
+**`voiceprint`** (2026-09-19, the owner: "analyze our actual content creators
 that we've worked with… analyze the audio specifically and create voice
 prints"): `research_gatherer/voiceprint.py`. For every ready post in the
 brand drive's newest `SELECTED-<date>.json` it pulls the audio with ffmpeg
@@ -258,6 +258,35 @@ confirmed it; `--dry-run` prints the search it would fire and spends
 nothing. A chain's shim exposes `run --run <dir>` on top of this same engine
 for its own research var.
 
+### `apply` — the bank tools' changes, written through the gatherer (2026-09-29)
+
+```
+python3 components/research-gatherer/gather.py apply --proposal runs/language-layer/<b>/<run>/proposal.json [--dry-run] [--root <tree>]
+```
+
+`brands/` is read-only to machines (decision-log 2026-09-17) and this
+component is the one machine ruled to write the bank (the owner 2026-09-18, the
+O5 carve-out: only what passed its gates). The language layer's bank tools
+(`tools/language-layer/tools/` — the labeller's backfill, the id
+renamer, the source mapper, the `keyword-cta` tagger, the origin rule) no
+longer write bank files: each writes a PROPOSAL under
+`runs/language-layer/<brand>/<run>/` and hands it here.
+`research_gatherer/bank_apply.py` checks it, then writes it with the same
+file writer new rows are filed with (`annotate._dump`: each file keeps its
+indent, escaping and newline).
+
+Its gates — REFUSED whole, nothing written: not a language-bank proposal or
+another brand's; a path outside `brands/<brand>/core-avatars/` or not a bank
+file (rows only in `language/`, used-lane marks only in `language/used/`,
+one whole file only: `core-avatars/language-sources.json`); a field the bank
+tools do not own (rows may set awareness, sophistication, lane_words,
+origin, voice, use, id, source — never the words); an id off the Naming
+Standard or two rows on one id; a source change that drops the row's link.
+SKIPPED row by row and listed: a row no longer there, words changed since
+the proposal read them, a label a person wrote. A proposal never adds or
+removes a row. It writes `applied.json` + `applied.md` beside the proposal.
+Test: `python3 components/research-gatherer/test_bank_apply.py`.
+
 ## Rules
 
 - **Brand-agnostic** (workspace rule 7): no brand, avatar or room name in
@@ -269,7 +298,7 @@ for its own research var.
   engine's.
 - **Reuses rather than re-implements**: `control-room/tools/
   reddit.py` (the Reddit door — actor, flags, cap, 403 handling) and
-  `swipe-organic/apify.py` (the shared token + spare-account
+  `components/apify/apify.py` (the shared token + spare-account
   layer, the per-platform comment actors), both loaded as modules and
   driven through their own existing contracts, never copied.
 - **Never raises.** No Apify key, a 403, or a missing actor never stops a
@@ -279,7 +308,7 @@ for its own research var.
   point of running it.
 - **Spend is capped and printed** on every pull (`research.json`); forum
   pulls cache 14 days per (brand, avatar, sub, words, rooms), comment pulls
-  per source_url, under the repo-root `runs/research-cache/` (never inside
+  per source_url, under the repo-root `runs/research-cache/_system/` (never inside
   this component — same reasoning as run records) — so repeat runs on the
   same avatar, from any chain, don't re-spend.
 - **A row with no permalink is never written.** The bank schema
@@ -328,7 +357,7 @@ behaviour back. Code: `research_gatherer/gates.py`; test:
 `CLAUDE.md`.
 
 The engine's workspace is now found — `AI_WORKSPACE`, else the checkout the
-file sits in, else `~/Projects/ai-workspace` — so a worktree no longer reads
+file sits in, else `~/Projects/workspace` — so a worktree no longer reads
 and writes the main checkout. A shim's `configure(workspace=...)` still wins.
 
 ## Kill-condition
@@ -341,7 +370,7 @@ reasoning: a component earns its wall by being shared, not by being tidy).
 ## Nightly (2026-09-19) — the bank grows on its own
 
 `~/.local/bin/daemn-research-nightly.sh`, scheduled by
-`~/Library/LaunchAgents/com.daemn.research-nightly.plist` at 02:30 on Damon's
+`~/Library/LaunchAgents/com.daemn.research-nightly.plist` at 02:30 on the owner's
 Mac. Per brand that has sub-avatars: `gather.py deep --brand <b> --pick-thinnest
 --cap 150` (per-brand `--pick-thinnest` landed the same day — with `--brand` the
 pick is narrowed to that brand's own sub-avatars, so a brand with a thick bank
@@ -350,3 +379,84 @@ produced>` and push. Nothing else in the tree is staged. `DRY=1` prints the
 queries and spends nothing. Log: `~/Library/Logs/daemn/research-nightly.log`.
 The script is machine setup, not a component: it lives on the Mac that runs it,
 like the hourly workspace pull, and this section is its record.
+
+## Daily language pull (2026-09-29) — the free sources, on a trigger
+
+the owner's ruling, 2026-09-29: automate only the sources that cost nothing. The
+2026-09-23 "no automatic Apify spend" stands — organic comment scraping, the
+top-ad scrape and Reddit deep pulls stay on request. `daily.py` runs every
+free source for every brand that has `brands/<brand>/operations/language-pulls.json`,
+files the rows through the same read as `ownvoice` (intake read + the
+language layer's labeller, `research_gatherer/voicepull.py`), then refreshes
+the source registry (`tools/language-layer/tools/map_sources.py`,
+proposal → `gather.py apply`) and rebuilds the bank page
+(`tools/bank_page.py` → `runs/language-layer/_system/bank.html` + `BANK.md`).
+
+| Source | Mode | What it reads | Schedule | Cursor (state file) |
+|---|---|---|---|---|
+| Ad comments (warehouse) | `ownvoice --no-scrape` | `meta_ad_comments` for the brand's Meta ad account | daily 05:30 | `runs/research/<b>/ownvoice-state.json` |
+| Support tickets (Gorgias) | `ownvoice --no-scrape` | warehouse `gorgias_ticket_*`, customer messages, only when `brand.json` › `accounts.helpdesk == "gorgias"` | daily 05:30 | `runs/research/<b>/ownvoice-state.json` |
+| Surveys (Google Forms) | `surveys` | each response sheet in `language-pulls.json` › `surveys`, first tab exported as CSV through the Drive API as the `GDRIVE_SA_KEY` service account | daily 05:30 | `runs/research/<b>/surveys-state.json` (newest response per survey) |
+| Store reviews | `reviews` | `language-pulls.json` › `reviews`: Junip public API (store key by name) or Judge.me API (shop domain + token by name) | daily 05:30 | `runs/research/<b>/reviews-state.json` (newest `created_at`) |
+| Interviews / panels | `interviews` | new `.md` / `.vtt` / `.txt` transcripts in `language-pulls.json` › `interviews.inbox`; customer turns only | daily 05:30 | `runs/research/<b>/interviews-state.json` (files ingested) |
+| Top-ad comments, organic comments, Reddit | `ownvoice` (scrape), `comments`, `deep` | Apify | **on request only** | — |
+
+```
+python3 components/research-gatherer/gather.py surveys    --brand B [--dry-run] [--since D] [--avatar A]
+python3 components/research-gatherer/gather.py reviews    --brand B [--dry-run] [--since D] [--avatar A]
+python3 components/research-gatherer/gather.py interviews --brand B [--dry-run] [--avatar A]
+python3 components/research-gatherer/daily.py [--brand B] [--dry-run] [--no-push]
+```
+
+Every row: source id by the Naming Standard (`survey_<b>_<survey>` with
+`question` `q-<nn>_<slug>` — the bank's own number when the question is
+already there — and `item` = a response id hashed from values never stored;
+`review_<platform>_<b>` with `item` = the review id and `signal.rating`;
+`interview_<b>_<date>` / `panel_<b>_<date>` with `item` = the turn), `origin`
+internal, de-duped against the avatar bank by `ref`. Lane: a verified buyer,
+a customer-survey answer or a customer interview is a customer by
+relationship; a refund-survey answer is churned (`"lane": "churned"`); the
+rest are read from the words. Emails, names and phone numbers are never read
+into a row. Every mode takes `--dry-run` (pull and count, read and file
+nothing) and writes the usual run record `runs/research/<b>/<mode>-<run>/`.
+A cursor moves only when nothing was held. Tests: `test_voicepull.py`.
+
+**Where it runs:** a launchd job on the owner's Mac, `com.daemn.language-daily`
+at 05:30 local, running `~/.local/bin/daemn-language-daily.sh` (copies of
+both in `schedule/`). The script reads `daily.py` from origin/main so the
+newest code always runs; `daily.py` makes a throwaway checkout off
+origin/main under `~/Library/Caches/daemn/language-daily/`, runs the pulls
+there, stages ONLY what the run produced (bank `language/` files, the source
+registry, `runs/research/**`, `runs/language-layer/**`), commits and pushes
+with rebase-retry, never force. A conflict leaves the checkout in place and
+names it in the log; the cursors did not move on origin, so the next run
+pulls the same rows again. The Mac, not the mini: the run needs `claude -p`
+on the owner's subscription, the warehouse URL, the Drive service account and
+the Junip key, and the mini's lab-run grant (`team/dispatch-grants.json`)
+reaches none of them without a gated edit. Summary per run:
+`runs/research/_system/daily/<run>.md`. Log: `~/Library/Logs/daemn/language-daily.log`.
+
+**Apify is fenced off, fail closed.** Inside the run every Apify host fails
+to resolve and the engine's Apify layer raises; one attempt and the run
+exits 3 with nothing committed.
+
+## The culture map — built bottom-up from real data (the owner, 2026-10-06)
+
+*"Our systems need to be fully dynamic and based on the real language only."*
+Each avatar's `core-avatars/<avatar>/culture-map.md` (what they watch, who they
+trust, their references and slang, what they care about, what they laugh at,
+what is off-limits) is written from evidence, not from the profile and a hunch:
+
+    python3 components/research-gatherer/culture_map.py --brand B --avatar A [--dry-run] [--pack-only]
+
+1. **Evidence pack** (no model): the bank's culture-tagged rows, loudest first
+   (through the language layer); the avatar's feeds (`VIEWER_FEEDS`: top posts,
+   authors, hashtags); any culture digs; the video teardown's culture reads
+   (`stages/1k-culture.json`). The profile is not evidence — it only seeds "To test".
+2. **Write** — `prompts/culture-map-v1-damon.md`, one Claude call; every line
+   ends in its evidence ids.
+3. **Verify** — a line that cites nothing, or an id not in the pack, is dropped
+   and counted in the footer. A hand-written map is kept once beside it.
+
+The marketing doctrine's humor and culture rules read this map as the RQ-17
+receipt. Tests: `python3 test_culture_map.py`.

@@ -83,8 +83,11 @@ def load(library_dir: Path | None = None):
     except Exception as e:                        # StopIteration from its REPO walk, etc.
         raise NoLibrary(f"{LIBRARY_MODULE} would not load ({type(e).__name__}: {e})")
     if library_dir is not None:
-        mod.LIBRARY = Path(library_dir)
-        mod._cache = {}
+        if hasattr(mod, "use"):                   # SI-100 (elements use seam)
+            mod.use(library_dir)
+        else:                                     # an elements from before use()
+            mod.LIBRARY = Path(library_dir)
+            mod._cache = {}
     if not mod.LIBRARY.is_dir():
         raise NoLibrary(f"no library folder at {mod.LIBRARY}")
     return mod

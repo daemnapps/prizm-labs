@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The test set as a page Damon reads and corrects: per awareness level, each
+"""The test set as a page the owner reads and corrects: per awareness level, each
 row's words, the label, the quoted reason, and the lane its words point to vs
 the lane it is filed in.
 

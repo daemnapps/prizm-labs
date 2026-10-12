@@ -1,3 +1,55 @@
+# The short form — folder, file and Meta ad (the owner, 2026-09-29)
+
+Ruled 2026-09-29. The 13-part name was too long to read in Ads Manager, and every detail it
+carried is already in the brief. So a name now says only what finds the ad; the rest is looked
+up by the brief number in `brands/<brand>/briefs/briefs.json` (`names.brief_header`).
+
+**Brief numbers count per brand and product.** the owner, 1 Oct 2026: "brief numbers count per brand AND product — each product starts at 1 inside its brand." Older briefs keep their numbers; a brief is
+brand + product + number, which the short name already carries. A bare number two products share is
+refused ("say which"), never guessed.
+
+| | Shape | Set by |
+|---|---|---|
+| **Delivery folder** | `brand_product_brief_batch` | the delivery rule, from the brief |
+| **File** | `brand_product_brief_batch_asset-NN` — **no funnel** | the delivery rule |
+| **Meta ad** | `brand_product_brief_batch_funnel` — **one per batch, no asset** | the upload tool at launch (`names.short_meta`) |
+
+```
+folder    <brand>_glow-body-scrub_brief-0136_batch-2026-09-27-a
+file      <brand>_glow-body-scrub_brief-0136_batch-2026-09-27-a_asset-01.mp4
+meta ad   <brand>_glow-body-scrub_brief-0136_batch-2026-09-27-a_body-scrub-cpk
+ad set    adset_<brand>_spot-cover_tone-memory          (avatar + angle, from the brief)
+campaign  campaign_<brand>_us_glow-body-scrub_body-scrub-cpk_purchase_cbo
+```
+
+- The file carries no funnel because one file can launch to several pages.
+- The Meta ad carries no asset: a batch's variations run under one name, and the batch is what
+  gets read. Each launch of a batch to a page is its own ad, named for that page.
+- Media, source, talent, avatar, problem, angle, concept, format and ratio live in the brief.
+  A report joins on the brief number.
+
+**The number is given when the brief is written (the owner, 2026-10-09).** An AI-route video brief gets
+its brief-NNNN from the register (`tools/image-teardown/tools/briefs.py open … --type video-ai`)
+the moment the teardown machine files it (`tools/video-teardown/machine/file_run.py number_brief`); the run.json
+of the teardown, the writing shelf and every production run made from it carry `brief`, and
+`tools/video-edit/deliver.py` names the delivery from that same field. One number, idea to Meta.
+
+**Editors and designers never name files.** They drop finished work into a folder named with the
+brief number, any file names. `delivery_rule.py` names the folder and every file from the brief,
+writes `naming.json` (old → new) and `READY-TO-LAUNCH.md` (deliveries grouped by ad set). A
+brief missing its product holds the delivery; a brief missing its angle is named but listed with
+no ad set until the angle is set. Nothing is guessed.
+
+**The landing page is picked at the brief (the owner, 2026-10-02).** `page_pick.py` chooses it when
+the brief is written — the page that sells the brief's product, carries its offer, is the same page
+type the swipe sent people to, and answers live — and writes it onto the brief as `landing_page`.
+Everything after (hand-off, delivery, the Meta ad's page part, `page_pick.meta_page`) inherits it.
+
+The 13-part form below still parses (old deliveries and live ads keep it); new names are short.
+
+---
+
+
 # Ad naming — the key that ties creative to spend
 
 **Applies to every lane: statics, video and carousels.** It lives here rather
@@ -47,12 +99,12 @@ So the asset id sits one level below the ad name:
 
 ```
 AD UNIT (this is what goes in Meta's Ad name field)
-<brand>-static-spothider-photostrip-turmericreset-9x16-260902a
+<brand>-static-spotcover-photostrip-turmericreset-9x16-260902a
    |      |       |          |            |        |      |
  brand  media  avatar     format       concept   ratio  batch
 
 ASSET (this is the filename — the ad name plus one field)
-<brand>-static-spothider-photostrip-turmericreset-9x16-260902a-a01.png
+<brand>-static-spotcover-photostrip-turmericreset-9x16-260902a-a01.png
                                                                 |
                                                               asset
 ```
@@ -65,7 +117,7 @@ the whole mechanism — no lookup table, no id to keep in sync.
 |---|---|---|
 | `brand` | the brand | `<brand>`, `<brand>` |
 | `media` | **static, video or carousel** — the first thing anyone slices a report by, and recoverable from no other field | `static`, `video`, `carousel` |
-| `avatar` | who it is aimed at — the core avatar's slug, no invention | `spothider` |
+| `avatar` | who it is aimed at — the core avatar's slug, no invention | `spotcover` |
 | `format` | the template it was built in — see `image-production/templates/` | `photostrip`, `confession`, `fullphoto` |
 | `concept` | the angle, not the headline — a claim family reused across many ads | `turmericreset`, `agespots` |
 | `ratio` | the frame, because the same concept ships in several | `9x16`, `1x1`, `4x5` |
@@ -75,8 +127,8 @@ the whole mechanism — no lookup table, no id to keep in sync.
 Rules that keep it joinable:
 
 1. **Lowercase `[a-z0-9]` inside a field. Hyphen only between fields.** A
-   hyphen inside a field breaks the parse, so `spot-hider` becomes
-   `spothider`.
+   hyphen inside a field breaks the parse, so `spot-cover` becomes
+   `spotcover`.
 2. **Seven fields in an ad name, eight in a filename.** Always all of them.
    A missing field shifts every field after it into the wrong column.
 3. **The name is a key, not a description.** It carries what you group by.
@@ -101,7 +153,7 @@ What the ad unit *can* answer, cleanly:
 - **which format earns** — group on field 4 with the concept held constant
 - **which frame earns** — field 6, the same concept at 9x16 against 1x1
 - **whether the avatar is right** — field 3 against
-  `meta_ad_insights_demographics.age` / `gender`. If `spothider` converts
+  `meta_ad_insights_demographics.age` / `gender`. If `spotcover` converts
   55+ women the avatar is real; if it converts 35s it is not, and that is
   the most valuable thing this can tell us.
 - **whether a batch regressed** — field 7 dates every change to the machine
@@ -139,7 +191,7 @@ either lane reaches Drive unnamed.
 | `ai-video-production/machine/deliver.py` | Video. Same standard, `media=video`, `talent` usually a creator or a trained identity. Refuses to guess a field the brief does not state. |
 | `image-teardown/build_ui.py` | The board shows each run's ad unit and each asset's name, so a picture on screen can be found in a report. |
 | stage-6 prompt | Declares `problem`, `angle`, `concept` in the brief, and is told never to coin an angle slug. |
-| `brands/<brand>/strategy/angles.json` | The angle vocabulary. Only Damon signs one active. |
+| `brands/<brand>/strategy/angles.json` | The angle vocabulary. Only the owner signs one active. |
 
 Run the self-check with:
 

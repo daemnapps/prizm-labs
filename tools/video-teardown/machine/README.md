@@ -3,7 +3,7 @@
 A competitor's video goes in one end. A brief comes out the other. Every
 prompt and every output is visible on the way through.
 
-Markdown mirror of the session artifact (2026-08-20). Damon reads the HTML
+Markdown mirror of the session artifact (2026-08-20). the owner reads the HTML
 board; this file is the version for anyone working in the repo.
 
 ## The conveyor
@@ -36,11 +36,11 @@ meet.
     python3 run.py <video> --from 4a           pick up where a stopped run left off
     python3 run.py --board                     just rebuild the page
 
-    --brand <brand>        which brand map to resolve variables from (chain.py)
+    --brand brand-a        which brand map to resolve variables from (chain.py)
     --lane general|creator which stage-5 prompt runs
     --var video_count=2    supply a run-time variable the creator lane needs
 
-Damon never runs these — a session runs them on his behalf. The interface he
+the owner never runs these — a session runs them on his behalf. The interface he
 uses is the sentence "run these five" and the board.
 
 ## What a run leaves behind
@@ -61,7 +61,7 @@ the work is reading the output and tightening the prompt that caused it.
 
 ## The framework bank
 
-Damon's ruling, 2026-09-18: *"every time we run a swipe, we'll run it through
+the owner's ruling, 2026-09-18: *"every time we run a swipe, we'll run it through
 a marketing doctrine step too so we have full awareness of it and can clearly
 identify the unique framework of that video and bank it for later."*
 
@@ -92,7 +92,7 @@ Regenerate, never hand-edit — a correction belongs on the run it came from.
 
 ## The second door — composing from a choice
 
-Damon's ruling, 2026-09-18: *"with all of the different sections we should
+the owner's ruling, 2026-09-18: *"with all of the different sections we should
 begin to assemble actual frameworks to create ads strategically. We use
 swipes as the baseline, but since we have a fundamental system and
 understanding of who we are speaking to and how and what formats they're
@@ -106,11 +106,11 @@ format and a framework (from
 the construct those four choices imply rather than abstracting one off a
 source.
 
-    python3 compose.py plan --brand <brand> --avatar spot-hider \
-        --sub sun-damage-reckoner --awareness problem-aware \
+    python3 compose.py plan --brand brand-a --avatar avatar-two \
+        --sub sub-one --awareness problem-aware \
         --format single-presenter --framework mechanism-led --route ai
     python3 compose.py run   ...same flags...          plan, then run the chain
-    python3 compose.py grid --brand <brand> --avatar spot-hider \
+    python3 compose.py grid --brand brand-a --avatar avatar-two \
         --awareness problem-aware,solution-aware \
         --formats single-presenter,demonstration \
         --frameworks mechanism-led,pas [--go]
@@ -133,8 +133,8 @@ onward runs completely unchanged. The board shows a FRAMEWORK run like any
 other.
 
 `framework_bank.py --promote <run-label>` copies a run's OBSERVED framework
-(its `doctrine.json`) into `ad-frameworks.json` as a new row, status `seed`.
-**Run this only on Damon's own word** — `ad-frameworks.json` is curated
+(its `doctrine.json`) into `ad-frameworks.json` as a new row, status `draft`, state `seed`.
+**Run this only on the owner's own word** — `ad-frameworks.json` is curated
 doctrine, not a compiled shelf, and the two must never quietly become the
 same file.
 
@@ -159,7 +159,7 @@ carries the same note.
 
 **Tests and the live `runs/` folder.** `test_compose.py` opens run folders
 exactly the way `compose.py run` does, and one of its tests uses the real
-default label of the <brand> / spot-hider / sun-damage-reckoner choice. On
+default label of the brand-a / avatar-two / sub-one choice. On
 2026-09-18 its tearDown removed a real, in-flight run under that label four
 times in one hour while another session was running the chain for real —
 "something keeps deleting the run folder". Since then the suite redirects
@@ -167,12 +167,12 @@ every run folder to a throwaway temp root at import (`run.RUNS` and
 `chain.runs_root`, patched before anything opens a folder) and its cleanup
 refuses to touch anything outside that root. What follows from it:
 
-- A test never opens a folder under `machine/runs/`. A new test patches the
+- A test never opens a folder under `runs/video-teardown/_work/`. A new test patches the
   root the way `test_compose.py` does, at import, before any folder opens.
 - `compose.py`'s default label is deterministic — two sessions running the
   same choice land in ONE folder and overwrite each other's `run.json`. Name
   the run with `--label` whenever that can happen.
-- Nothing else on this Mac prunes `machine/runs/`: no launchd job, not
+- Nothing else on this Mac prunes `runs/video-teardown/_work/`: no launchd job, not
   `board.py`, `serve.py` or `doctor.py`, and not the hourly pull (a plain
   fast-forward, never a clean). If a folder disappears, look first for a test
   or a tool holding the same label.
@@ -181,17 +181,17 @@ refuses to touch anything outside that root. What follows from it:
 
 - Scraping creators' top posts in automatically (Apify) — the machine starts
   from videos already on the machine. Next up: pulling in Instagram
-  influencer videos this way, straight into the My Feeds library, so the
-  teardown/brief chain can run on them (Damon, 2026-08-24).
+  influencer videos this way, straight into the swipe library, so the
+  teardown/brief chain can run on them (the owner, 2026-08-24).
 - The image lane is separate and already exists at `content-machine/image-lane/`.
 - Programmed editing — turning a finished brief into a cut asset — is the next
   half, and is not part of this conveyor yet.
-- **Editable, versioned briefs (Damon, 2026-08-24).** Right now a brief is
+- **Editable, versioned briefs (the owner, 2026-08-24).** Right now a brief is
   one shot: stage 5 writes it, stage 6 draws its frames, stage 7 assembles
   it, done. Wanted next: reopen a finished brief and regenerate a single
   scene's image without rebuilding the whole thing; edit the brief's own
   copy directly (not just re-prompting stage 5) and have that edit kept as
   its own version, same as a prompt change is; and have those hand-edits be
-  readable back — so a session can see what Damon actually changed on a
+  readable back — so a session can see what the owner actually changed on a
   brief and use that to tighten the stage 5/6 prompts, the way version
   tabs already let him compare prompt output today.

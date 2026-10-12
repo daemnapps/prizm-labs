@@ -18,7 +18,9 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Any beat carrying proof, the offer or the ask; any room whose subject is pain, money, health or loss; any piece whose speaker has to be believed more than liked."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "dry",
@@ -33,7 +35,9 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Rooms that prize being unimpressed; the beats where an annoyance is admitted rather than performed."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "wry",
@@ -48,7 +52,9 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Long-running annoyances the room has made peace with; the turn out of a failed-solutions beat."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "self-deprecating",
@@ -63,7 +69,9 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Openings into rooms that distrust advertising voice; identification beats; any beat immediately before a hard claim."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "observational",
@@ -78,7 +86,9 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Identification and problem beats, where being seen matters more than being amused."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "absurd",
@@ -93,7 +103,9 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Rooms that already know the category cold and will not sit through another straight opening."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "broad",
@@ -108,8 +120,13 @@
    "source": "components/marketing-doctrine/delivery.json › humor",
    "extra": {
     "when": "Placements with no shared in-words to rely on; the widest reach the piece is bought for."
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

@@ -59,6 +59,7 @@ def _load(name: str):
 
 platform = _load("platform")
 preflight = _load("preflight")
+vp_keys = _load("vp_keys")
 
 
 # --------------------------------------------------------------- the key
@@ -66,24 +67,13 @@ preflight = _load("preflight")
 def key() -> str:
     """FAL_KEY: env first, then the Keychain vault, then machine/.env — the
     same order platform.py's own vault check implies. A teammate's clone
-    with none of the three gets a plain, actionable error."""
-    k = os.environ.get("FAL_KEY")
+    with none of the three gets a plain, actionable error. machine/.env is
+    read on a person's machine only, never on the mini (vp_keys.py)."""
+    k = vp_keys.key("FAL_KEY", local_env=True)
     if k:
         return k
-    try:
-        import daemn_keys
-        k = daemn_keys.key("FAL_KEY")
-    except Exception:
-        k = None
-    if k:
-        return k
-    env = HERE / ".env"
-    if env.exists():
-        for line in env.read_text().splitlines():
-            if line.strip().startswith("FAL_KEY="):
-                return line.split("=", 1)[1].strip().strip('"').strip("'")
     raise SystemExit("No FAL_KEY — set it in the environment, the Keychain "
-                      "vault (daemn_keys), or machine/.env")
+                      "vault (~/.daemn), or machine/.env")
 
 
 # ----------------------------------------------------------- the transport

@@ -18,7 +18,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "Rooms that punish enthusiasm; any beat where the claim has to sound like a fact rather than a pitch."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "confessional",
@@ -33,7 +35,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "The beat where the viewer has to see themselves in the speaker before anything is claimed."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "teacher-explainer",
@@ -48,7 +52,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "A market sophisticated enough to demand a mechanism rather than a claim."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "rant",
@@ -63,7 +69,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "The beat where the alternatives get taken apart."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "storyteller",
@@ -78,7 +86,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "A claim the room will not accept stated, but will accept arrived at."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "hype",
@@ -93,7 +103,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "A room that runs hot itself, and only where the claim is already believed."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "plain-testimonial",
@@ -108,7 +120,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "The proof beat, and any room whose scepticism is aimed at production value itself."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "deadly-sincere",
@@ -123,7 +137,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "A market that has heard every claim in the category and believes none of them."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "understatement",
@@ -138,7 +154,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "Any room where the size of a claim is itself the reason it is disbelieved."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "interview-consult",
@@ -153,7 +171,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "Where the mechanism needs an authority and the authority needs someone to speak to."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "reaction-duet",
@@ -168,7 +188,9 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "Where the room's own native format is commentary rather than address."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "hands-and-voiceover",
@@ -183,8 +205,28 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "extra": {
     "when": "Where the thing itself is more persuasive than anyone describing it, and where no cast face is cleared."
-   }
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "holistic-healer-authority",
+   "name": "Holistic healer authority",
+   "what": "The claim is carried by an elder practitioner speaking from years of practice, not from a study — the kitchen, not the lab. Calm, unhurried, names ingredients she recognises (turmeric, ginger, chamomile), and the reader answers her rather than being sold to.",
+   "why_it_works": "Her trust bar is 'can I find this in my kitchen?' and 'would my holistic doctor approve?' — the voice that already has her trust is the one that can make the claim.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "examples": "A brand's story file naming the teller 'the kitchen, not the lab — the elder practitioner, with the reader answering'; a swiped ad written as a grandma's holistic blog",
+   "evidence": "the owner 2026-09-19: 'the holistic healer authority'. Moved from format/video 2026-09-28: it is how the ad sounds (a delivery style), not a format. Backed by customer lines in one brand's language bank asking for what 'a holistic doctor would approve'.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "defined by the machine, review pending"
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

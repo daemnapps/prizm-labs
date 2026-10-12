@@ -4,8 +4,8 @@
 > a run record.** Meme-style pieces ran on Higgsfield that day (the
 > collar-pull slap; one man across sprint, code, pole, sand and tablet
 > beats) but their records lived in the chat sandbox, so every line below
-> is what the reports let us infer. Damon corrects; the first run filed
-> under `runs/video-machine/` replaces the inference with evidence.
+> is what the reports let us infer. the owner corrects; the first run filed
+> under `runs/video-production/` replaces the inference with evidence.
 
 **Shape.** A swiped meme, re-made. The source's structure is the whole
 format: the scroll-stopper — one decisive physical action — and the beats

@@ -41,6 +41,17 @@ SESSION_ONLY = next(n for n, r in REG["providers"].items()
                     if r["detect"] == {"claudecode": True})
 HF = REG["providers"][FALLBACK]["stations"]
 MOTION = HF["motion"]
+
+
+def fixture_model(batch: str, item_id: str) -> str:
+    """The slug an old-shape fixture item names for itself — the batch
+    fixtures carry their own `params.model`, so a check about THAT item reads
+    the slug off the fixture rather than assuming it is the station default
+    (which moved on 2026-09-22)."""
+    d = json.loads((FIX / batch).read_text())
+    items = d.get("items", d) if isinstance(d, dict) else d
+    it = next(i for i in items if i.get("id") == item_id)
+    return it.get("model") or (it.get("params") or {}).get("model")
 KEYED_MOTION = REG["providers"][KEYED]["stations"]["motion"]
 PER_DOLLAR = REG["credits_per_dollar"][REG["providers"][FALLBACK]["family"]]
 
@@ -103,7 +114,8 @@ class Check(RunDir):
         self.assertIn("[rule 2] S2:", out)
         self.assertIn("[rule 3] S3:", out)
         self.assertIn("[rule 4] S4:", out)
-        self.assertIn(f"over {MOTION}'s {REG['models'][MOTION]['max_seconds']}s cap", out)
+        named = fixture_model("batch-bad.json", "S5")
+        self.assertIn(f"over {named}'s {REG['models'][named]['max_seconds']}s cap", out)
         self.assertIn("unverified frame 00000000-0000-4000-8000-0000000000a2", out)
         self.assertIn("[rule 8] S6:", out)
         self.assertIn("line L1 claimed more than once", out)
@@ -191,6 +203,24 @@ class Check(RunDir):
             code, out = run_cli(preflight, ["check", str(present), "--run", str(self.run),
                                             "--provider", FALLBACK, "--bank", str(FIX / "bank.json")])
         self.assertNotIn("[rule 11]", out)
+
+    def test_a_person_clip_from_a_made_frame_is_rule_1(self):
+        """No hand-offs for people (the owner, 2026-10-03): a person's clip starts from the approved
+        picture, never a clip's last frame — on any door."""
+        def item(start, chars):
+            return {"id": "G06-C2", "kind": "motion", "start_frame": start,
+                    "params": {"model": MOTION, "duration": 5,
+                               "prompt": "She nods. Single continuous take, no cuts or scene changes."},
+                    "medias": [{"value": start, "role": "start_image"}],
+                    "characters": chars, "products": [], "lines": []}
+        for start, chars, refused in (("G06-C1-LAST", ["HOST"], True), ("S6-F1", ["HOST"], False),
+                                      ("G06-C1-LAST", [], False)):
+            b = self.tmp / f"handoff-{start}-{len(chars)}.json"
+            b.write_text(json.dumps({"items": [item(start, chars)]}))
+            with env():
+                _, out = run_cli(preflight, ["check", str(b), "--run", str(self.run),
+                                             "--provider", FALLBACK, "--bank", str(FIX / "bank.json")])
+            self.assertEqual("a made frame" in out, refused, out)
 
     def test_missing_batch_is_bad_input(self):
         with env():
@@ -394,7 +424,7 @@ class Ledger(RunDir):
         self.assertIn("ambiguous", out)
 
         seeded = json.loads((run / "run.json").read_text())
-        self.assertEqual(seeded["machine"], "video-machine")
+        self.assertEqual(seeded["machine"], "video-production")
         self.assertEqual(seeded["brand"], "_fixture")
         self.assertEqual(seeded["label"], "fresh-run")
         self.assertIn("opened", seeded)
@@ -447,12 +477,47 @@ class Provider(unittest.TestCase):
             name, _, _ = platform.resolve_provider()
         self.assertEqual(name, SESSION_ONLY)
 
+    @contextlib.contextmanager
+    def _vault_home(self, marker: bool):
+        # Narrowed for SI-194 (readers use loader): a temp HOME holding a FAKE
+        # ~/.daemn/daemn_keys.py (fake value), plus the mini marker if asked.
+        home = Path(tempfile.mkdtemp(prefix="si194-preflight-home-"))
+        folder = str(home / ".daemn")
+        try:
+            (home / ".daemn").mkdir()
+            (home / ".daemn" / "daemn_keys.py").write_text(
+                "def key(n, required=False):\n"
+                f"    return 'fake-si194-vault' if n == {KEY_ENV!r} else None\n")
+            if marker:
+                (home / ".workflow-worker.env").write_text("")
+            with env(CLAUDECODE="1", HOME=str(home)):
+                os.environ.pop("KEYS_NO_FALLBACK", None)
+                sys.modules.pop("daemn_keys", None)
+                try:
+                    yield
+                finally:
+                    sys.modules.pop("daemn_keys", None)
+        finally:
+            while folder in sys.path:
+                sys.path.remove(folder)
+            shutil.rmtree(home, ignore_errors=True)
+
     def test_vault_key_counts(self):
-        with env(CLAUDECODE="1"):
-            sys.modules["daemn_keys"] = types.SimpleNamespace(key=lambda name, required=False: "secret")
+        # Narrowed for SI-194 (readers use loader)
+        with self._vault_home(marker=False):
             name, _, why = platform.resolve_provider()
         self.assertEqual(name, KEYED)
         self.assertIn(f"{KEY_ENV} in vault", why)
+
+    def test_vault_not_consulted_on_the_mini(self):
+        # Narrowed for SI-194 (readers use loader)
+        with self._vault_home(marker=True):
+            name, _, why = platform.resolve_provider()
+            imported = "daemn_keys" in sys.modules
+        self.assertFalse(imported, "the vault helper was imported on the mini")
+        self.assertNotEqual(name, KEYED)
+        self.assertEqual(name, SESSION_ONLY)
+        self.assertNotIn(f"{KEY_ENV} in vault", why)
 
     def test_flag_beats_env(self):
         with env(CLAUDECODE="1", AI_VIDEO_PROVIDER=SESSION_ONLY, **{KEY_ENV: "x"}):
@@ -469,7 +534,7 @@ class Provider(unittest.TestCase):
             code, out = run_cli(platform, ["--provider", FALLBACK, "--batch", str(FIX / "batch-good.json"), "--yes"])
             self.assertEqual(code, 0, out)
             self.assertIn(f"provider: {FALLBACK}", out)
-            self.assertIn(f"S3 · motion · {MOTION} · fast/1080p", out)
+            self.assertIn(f"S3 · motion · {fixture_model('batch-good.json', 'S3')} · fast/1080p", out)
             self.assertIn("TOTAL", out)
             code, out = run_cli(platform, ["--provider", FALLBACK, "--batch", str(FIX / "batch-good.json"),
                                            "--json", "--yes"])

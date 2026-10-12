@@ -8,7 +8,7 @@ that run's run.json, never pinned here. A run whose record does not say which
 brand, avatar or product it was written for is skipped with a line saying so
 (older runs predate the `product` field; re-run those through copy.py with
 --rerun-from stage8, which takes --product). Finds runs in both homes:
-runs/copy-machine/<brand>/<label>/ and results/<label>/.
+runs/copywriter/<brand>/<label>/ and results/<label>/.
 
 Uses the same brand variable map copy.py does (brands/<brand>/variables/copy.md).
 """
@@ -27,7 +27,7 @@ def brand_files(brand, avatar):
     """{language_bank, offer_file} for one brand + avatar, through the brand's
     own variables/copy.md — the same map copy.py reads."""
     root = P.WORKSPACE / "brands" / brand
-    rels = {"language_bank": "customer/language-bank.md", "offer_file": "offers/offer-bank.md"}
+    rels = {"language_bank": "customer-experience/language-bank.md", "offer_file": "products/offer-bank.md"}
     m = root / "variables" / "copy.md"
     if m.is_file():
         for hit in re.finditer(r"^\s*\|?\s*`\{?([a-z_]+)\}?`\s*\|\s*`([^`]+\.(?:md|json|/))`?",

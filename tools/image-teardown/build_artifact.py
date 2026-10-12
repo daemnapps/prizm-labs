@@ -3,7 +3,7 @@
 
     python3 build_artifact.py runs/<run-folder>
 
-Re-run after any prompt or output change. Damon reviews in HTML; the team
+Re-run after any prompt or output change. the owner reviews in HTML; the team
 reads the .md files this page is built from.
 """
 import base64, html, re, sys
@@ -244,7 +244,7 @@ def main():
     deltas = read(run.parent.parent / "STAGE-DELTAS.md")
 
     figs = [
-        ("ad-01_first-run-editorial-1x1.jpg", "Ad 01",
+        ("ad-01_thai-secret-editorial-1x1.jpg", "Ad 01",
          "1080×1086 · 1:1 · editorial layout · cream ground · no offer block"),
         ("ad-02_it-works-too-well-dark-1x1.jpg", "Ad 02",
          "1078×1090 · 1:1 · direct response · black ground · offer + guarantee"),
@@ -266,7 +266,7 @@ def main():
       "torn down against a new stage-1 prompt, and the map of what the rest of "
       "the chain has to change.</p>"
       "<div class='facts'>"
-      "<span>Run <b>2026-08-19 · <brand>-first-run</b></span>"
+      "<span>Run <b>2026-08-19 · brand-a-thai-secret</b></span>"
       "<span>Model <b>gemini-3.1-pro-preview</b></span>"
       "<span>Assets <b>1 video · 3 statics</b></span>"
       "<span>Prompts <b>8</b></span>"
@@ -355,7 +355,7 @@ def main():
          "The frame abstracted — brand stripped out, every element made "
          "injectable, positions kept as percentages."),
         ("05-stage3-injection.md", "Stage 3 · injection",
-         "<brand> substituted into the frame, zone for zone. Nothing rewritten, "
+         "Brand A substituted into the frame, zone for zone. Nothing rewritten, "
          "every missing fact left as a slot."),
         ("06-stage4a-placement.md", "Stage 4a · placement",
          "Lane, headline zone, ratios to build, awareness, the frame budget, "
@@ -377,9 +377,9 @@ def main():
     if live:
         A("<section id='run'>"
           "<div class='head'><span class='num'>05</span>"
-          "<h2>The chain, run on <brand></h2></div>"
+          "<h2>The chain, run on Brand A</h2></div>"
           "<p class='note'>Stage 1's teardown of Ad 02 carried through the "
-          "whole chain against the live <brand> brand files — avatar, language "
+          "whole chain against the live Brand A brand files — avatar, language "
           "bank, objection bank, product file, offer file, identity anchors. "
           "Every stage's raw output, nothing added.</p>")
         for fn, title, note in live:
@@ -411,7 +411,7 @@ def main():
       "Built by <code>build_artifact.py</code> from "
       "<code>content-machine/image-teardown/</code> · outputs and prompts are "
       "markdown files in the repo, this page is the read-through · "
-      "run folder <code>runs/2026-08-19-<brand>-first-run/</code>"
+      "run folder <code>runs/2026-08-19-brand-a-thai-secret/</code>"
       "</footer>")
     A("</div>")
 

@@ -1,25 +1,18 @@
 """The two-picture judge: the reference beside the result.
 
-image-production's judge sees one picture and answers "is this a good
-picture". An edit needs a second question that judge cannot ask: **did only
-the named thing change?** So this one puts BOTH pictures in front of a vision
-model, with the change that was asked for, the two standing tests, and
-whatever the fix or variation adds.
+`tools/image-production`'s judge sees one picture and answers "is this a
+good picture". An edit needs a second question that judge cannot ask: **did
+only the named thing change?** So this one sends BOTH pictures to the same
+vision model, with the change that was asked for, and the two standing tests
+plus whatever the fix or variation adds.
 
-Two ways it runs, one prompt and one reader for both:
-
-- **Gemini**, the same model and the same key image-production's judge uses
-  (`tools/image-production/tools/gemini_image.py`) — when the key is here.
-- **The session**: the prompt is written, filled in, into the edit's
-  `job.json`; the agent that made the picture can answer it and hand the reply
-  back with the result. Same tests, same JSON, same reader.
-
-`caller(prompt, paths, entry) -> str` is the seam; tests pass a stub.
+The model door and the transport are `image_production.judge`'s — this file
+adds the second image and nothing else. `caller(prompt, paths, entry) -> str`
+is the seam; tests pass a stub.
 """
 import base64
 import json
 import mimetypes
-import urllib.request
 from pathlib import Path
 
 from . import paths as P
@@ -33,10 +26,6 @@ STANDING = [
     "shows is expected and is NOT a change; judge the part IMAGE 1 shows. FAIL "
     "if anything inside that part is different.",
 ]
-
-ENTRY = {"model": "gemini-3.1-pro-preview",        # image-production's judge default
-         "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-         "temperature": 0.2}
 
 
 def latest(folder=None):
@@ -59,69 +48,76 @@ def body(path):
     return text.split("\n", 1)[1].lstrip() if text.startswith("#") else text
 
 
-def tests_for(extra_tests=()):
-    return list(STANDING) + list(extra_tests)
-
-
-def prompt_for(change, extra_tests=(), folder=None):
-    """The judge's prompt exactly as it is sent — written into job.json too."""
-    numbered = "\n".join(f"{i + 1}. {t}" for i, t in enumerate(tests_for(extra_tests)))
-    return body(latest(folder)).replace("{change}", change).replace("{tests}", numbered)
-
-
-def gemini_caller(prompt, paths, entry, transport=None):
-    """Both pictures inline, labelled, then the prompt. The key is read by
-    image-production's own reader; with no key this raises, and the caller
-    turns that into a HOLD."""
-    try:
-        key = P.gemini().key()
-    except SystemExit as e:                      # its reader stops when no key is set
-        raise RuntimeError(f"no judge key on this machine ({e})") from None
+def google_caller(prompt, paths, entry, transport=None, key=None):
+    """Both pictures inline, then the prompt — the judge's own door, twice the
+    pictures. Imported lazily so this module loads without the sibling."""
+    ip = P.image_production()
+    providers, R = ip.providers, ip.route
+    transport = transport or providers.http_transport
+    k = key if key is not None else R.key_value(entry.get("key"))
+    if not k:
+        raise SystemExit(f"no {entry.get('key')} on this machine — the compare judge "
+                         f"cannot run, so nothing is delivered.")
     parts = []
-    for i, p in enumerate(paths, 1):
+    for p in paths:
         p = Path(p)
         mime = mimetypes.guess_type(p.name)[0] or "image/png"
-        parts.append({"text": f"IMAGE {i}"})
         parts.append({"inline_data": {"mime_type": mime,
                                       "data": base64.b64encode(p.read_bytes()).decode()}})
     parts.append({"text": prompt})
-    payload = json.dumps({"contents": [{"parts": parts}],
-                          "generationConfig": {"temperature": entry.get("temperature", 0.2)}}).encode()
-    url = entry["endpoint"].replace("{model}", entry["model"]) + f"?key={key}"
-    if transport:
-        raw = transport(url, payload)
-    else:
-        req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=120) as r:
-            raw = r.read()
-    data = json.loads(raw.decode() if isinstance(raw, bytes) else raw)
+    payload = {"contents": [{"parts": parts}],
+               "generationConfig": {"temperature": entry.get("temperature", 0.2)}}
+    url = entry["endpoint"].replace("{model}", entry["vendor_model"]) + f"?key={k}"
+    status, _h, raw = transport("POST", url, {"Content-Type": "application/json"},
+                                json.dumps(payload).encode())
+    data = json.loads(raw.decode())
+    if status is not None and status >= 400:
+        raise RuntimeError(f"compare judge error {status}: {json.dumps(data)[:300]}")
     return "".join(x.get("text", "") for x in data["candidates"][0]["content"]["parts"])
 
 
-def read(raw, tests):
-    """(verdict, fails) from the judge's JSON reply."""
-    data = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
+def compare(reference, result, change, extra_tests=(), entry=None, caller=None, folder=None):
+    """(verdict, fails, tests, raw). The judge not running is a FAIL, never a
+    pass — the same rule the one-picture judge holds."""
+    tests = list(STANDING) + list(extra_tests)
+    numbered = "\n".join(f"{i + 1}. {t}" for i, t in enumerate(tests))
+    prompt = body(latest(folder)).replace("{change}", change).replace("{tests}", numbered)
+    caller = caller or google_caller
+    if entry is None:
+        entry = P.image_production().route.judge_entry()
+    try:
+        raw = caller(prompt, [str(reference), str(result)], entry)
+    except (Exception, SystemExit) as e:         # noqa: BLE001 — a missing key exits
+        return "reject", [f"compare judge did not run: {type(e).__name__}: {str(e)[:200]}"], tests, ""
+    try:
+        data = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
+    except Exception:                            # noqa: BLE001
+        return "reject", ["compare judge returned unreadable output"], tests, raw
+    # Exactly one PASS/FAIL per test asked. An answer to part of the test is
+    # not a pass: "no FAIL seen" on {} or one of N is how a skip got through.
+    got, bad = [], 0
+    for res in (data.get("results") if isinstance(data, dict) else None) or []:
+        try:
+            v, n = str(res.get("verdict", "")).upper(), int(res.get("test"))
+        except (AttributeError, TypeError, ValueError):
+            bad += 1
+            continue
+        if v in ("PASS", "FAIL"):
+            got.append(n)
+        else:
+            bad += 1
+    want = list(range(1, len(tests) + 1))
+    if bad or sorted(got) != want:
+        missing = [n for n in want if n not in got]
+        extra = sorted({n for n in got if n not in want or got.count(n) > 1})
+        return "reject", [f"judge answer incomplete: {len(got)} PASS/FAIL for {len(tests)} tests"
+                          + (f"; missing {', '.join(map(str, missing))}" if missing else "")
+                          + (f"; extra or repeated {', '.join(map(str, extra))}" if extra else "")
+                          + (f"; {bad} not a PASS/FAIL on a numbered test" if bad else "")], tests, raw
     fails = []
     for res in data.get("results", []):
         if str(res.get("verdict", "")).upper() != "PASS":
             i = int(res.get("test", 0)) - 1
             t = tests[i] if 0 <= i < len(tests) else f"test {res.get('test')}"
             fails.append(f"{t.split(' — ')[0]} — {res.get('evidence', '')}")
-    return ("reject" if fails else "pass"), fails
-
-
-def compare(reference, result, change, extra_tests=(), entry=None, caller=None, folder=None):
-    """(verdict, fails, tests, raw). The judge not running is a FAIL, never a
-    pass — the same rule the one-picture judge holds."""
-    tests = tests_for(extra_tests)
-    prompt = prompt_for(change, extra_tests, folder)
-    caller = caller or gemini_caller
-    try:
-        raw = caller(prompt, [str(reference), str(result)], entry or ENTRY)
-    except Exception as e:                       # noqa: BLE001
-        return "reject", [f"compare judge did not run: {type(e).__name__}: {str(e)[:200]}"], tests, ""
-    try:
-        verdict, fails = read(raw, tests)
-    except Exception:                            # noqa: BLE001
-        return "reject", ["compare judge returned unreadable output"], tests, raw
-    return verdict, fails, tests, raw
+    return ("reject" if fails else "pass"), fails, tests, raw

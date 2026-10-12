@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""timeline_page.py — the page Damon looks at, at each stop: every layer of the
+"""timeline_page.py — the page the owner looks at, at each stop: every layer of the
 edit as bars on one clock, with the draft video beside it.
 
     write(run, sheet, stage, video=None, checks=None) -> Path   (run/timeline.html)
@@ -18,6 +18,15 @@ STAGES = {"timeline": ("Stop 1 — the timeline", "Dead space is out, every laye
           "done": ("Exported", "The final file, with the machine's own checks.")}
 
 
+def _section_names() -> dict:
+    """Doctrine section id → its plain name, read from the doctrine itself."""
+    for p in [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]:
+        f = p / "components" / "marketing-doctrine" / "frameworks.json"
+        if f.exists():
+            return {r["id"]: r.get("name", r["id"]) for r in json.loads(f.read_text()).get("sections") or [] if isinstance(r, dict) and r.get("id")}
+    return {}
+
+
 def _bar(start, dur, end, label, cls, title=""):
     return f'<div class="bar {cls}" style="left:{start / end * 100:.3f}%;width:{max(dur / end * 100, .3):.3f}%" title="{E(title or label)}"><span>{E(label)}</span></div>'
 
@@ -29,6 +38,19 @@ def write(run: Path, sheet: dict, stage: str, video: Path | None = None, checks:
     def row(name, bars, note=""):
         rows.append(f'<div class="row"><div class="name">{E(name)}<small>{E(note)}</small></div><div class="lane">{"".join(bars)}</div></div>')
 
+    # the swap map: every part of the edit labelled with the doctrine section it represents
+    secmap = sheet.get("sections")
+    if secmap is None:
+        import assemble as _A
+        secmap = _A.section_map(sheet)
+    names = _section_names()
+    palette = ["#0E6B8A", "#A8650C", "#6B5CA5", "#1F7A4D", "#A33A2A", "#56606B", "#8A3F6B", "#3F6B1F"]
+    colour = {}
+    for r in secmap:
+        colour.setdefault(r["section"], palette[len(colour) % len(palette)])
+    sec_bars = [f'<div class="bar" style="left:{r["start"] / end * 100:.3f}%;width:{max((r["end"] - r["start"]) / end * 100, .3):.3f}%;background:{colour[r["section"]]}" title="{E(names.get(r["section"], r["section"]))}: {E(r.get("words", ""))}"><span>{E(names.get(r["section"], r["section"]))}</span></div>' for r in secmap]
+    fw = sheet.get("framework")
+    row("Sections", sec_bars, (f"framework: {fw}" if fw else "the doctrine's own sections") + " · the swap unit")
     for o_kind, title in (("hook", "Hook text"), ("label", "Labels"), ("end-card", "End card")):
         bars = [_bar(o["start"], o["duration"], end, o.get("text", o_kind), "ov") for o in sheet.get("overlays") or [] if o.get("kind") == o_kind]
         if bars:
@@ -54,7 +76,7 @@ def write(run: Path, sheet: dict, stage: str, video: Path | None = None, checks:
         row("Sound effects", [_bar(s["at"], .25, end, s["id"], "s", f'for {s["for"]}') for s in sheet["sfx"]])
 
     ticks = "".join(f'<i style="left:{t / end * 100:.3f}%">{t}s</i>' for t in range(0, int(end) + 1, max(1, int(end // 12) or 1)))
-    cuts = "".join(f'<tr><td>{E(c["id"])}</td><td>{"A-roll" if c["roll"] == "a" else "B-roll"}</td><td>{c["start"]:.2f}s</td><td>{c["duration"]:.2f}s</td><td>{E(c["why"])}</td></tr>' for c in sorted(sheet["picture"], key=lambda c: c["start"]))
+    cuts = "".join(f'<tr><td>{E(c["id"])}</td><td>{E(names.get(c.get("section") or "", c.get("section") or "—"))}</td><td>{"A-roll" if c["roll"] == "a" else "B-roll"}</td><td>{c["start"]:.2f}s</td><td>{c["duration"]:.2f}s</td><td>{E(c["why"])}</td></tr>' for c in sorted(sheet["picture"], key=lambda c: c["start"]))
     ctl = sheet.get("controls") or {}
     dials = "".join(f"<li><b>{E(k.replace('_', ' '))}</b> {E(str(v.get('value') if isinstance(v, dict) and 'value' in v else ''))}</li>" for k, v in ctl.items() if isinstance(v, dict) and "value" in v)
     chk = "".join(f'<li class="{"ok" if c["pass"] else "held"}">{"PASS" if c["pass"] else "HELD"} — {E(c["check"])}: {E(c["detail"])}</li>' for c in checks or [])
@@ -89,12 +111,19 @@ ul{{margin:0;padding-left:18px}} .ok{{color:var(--v)}} .held{{color:var(--s)}}
 <div class="top"><div>{vid}</div><div style="display:flex;flex-direction:column;gap:14px">
 <div class="say"><b>To change anything,</b> say it in plain words — "B-roll comes in a beat earlier", "lose the pause after 'sunscreen'", "captions in the clean look". It becomes a new version of the cut sheet; nothing is regenerated, and the reason is kept so the next cut starts closer.</div>
 <div><h2>The dials this edit ran under</h2><ul>{dials}</ul></div>
-{("<div><h2>The cutter’s notes for you</h2><ul>" + "".join(f"<li>{E(n)}</li>" for n in sheet.get("notes_for_damon") or []) + "".join(f"<li><b>Missing:</b> {E(n)}</li>" for n in sheet.get("missing") or []) + "</ul></div>") if (sheet.get("notes_for_damon") or sheet.get("missing")) else ""}
+{("<div><h2>The cutter’s notes for you</h2><ul>" + "".join(f"<li>{E(n)}</li>" for n in sheet.get("notes_for_damon") or []) + "".join(f"<li><b>Held out:</b> {E(str(h.get('clip')))} — {E(str(h.get('why')))}</li>" for h in sheet.get("held") or []) + "".join(f"<li><b>Missing:</b> {E(n)}</li>" for n in sheet.get("missing") or []) + "</ul></div>") if (sheet.get("notes_for_damon") or sheet.get("missing") or sheet.get("held")) else ""}
 {f'<div><h2>The machine’s checks</h2><ul>{chk}</ul></div>' if chk else ''}
 {f'<div><h2>What you have changed so far</h2><ul>{log}</ul></div>' if log else ''}</div></div>
 <div class="tl"><div class="inner"><div class="ruler">{ticks}</div>{''.join(rows)}</div></div>
-<div><h2>Every cut, and what it is for</h2><table><tr><th>Clip</th><th>Roll</th><th>In</th><th>Length</th><th>Why</th></tr>{cuts}</table></div>
+<div><h2>The sections — what each part of this ad is doing</h2><p class="soft">Named by the marketing doctrine. Each one is a unit that can be swapped for another version of the same section in a variation.</p><table><tr><th>Section</th><th>From</th><th>To</th><th>Scenes</th><th>What is said</th></tr>{"".join(f'<tr><td><b>{E(names.get(r["section"], r["section"]))}</b></td><td>{r["start"]:.2f}s</td><td>{r["end"]:.2f}s</td><td>{E(", ".join(r["scenes"]))}</td><td>{E(r.get("words", ""))}</td></tr>' for r in secmap)}</table></div>
+<div><h2>Every cut, and what it is for</h2><table><tr><th>Clip</th><th>Section</th><th>Roll</th><th>In</th><th>Length</th><th>Why</th></tr>{cuts}</table></div>
 </div>"""
     out = run / "timeline.html"
     out.write_text(page)
+    # the live timeline beside it: the video and every element on one clock (the owner, 23 Sep: "this is the sauce")
+    try:
+        import live_page
+        live_page.write(run, sheet, video, checks, out=run / "live.html")
+    except Exception as e:  # the review page never fails because the live one could not be drawn
+        (run / "live.html.error.txt").write_text(f"{type(e).__name__}: {e}")
     return out

@@ -1,6 +1,6 @@
 # The model house — which door for each model
 
-**2026-09-17.** Damon's rule: a sub-par access to a model quietly neuters the
+**2026-09-17.** the owner's rule: a sub-par access to a model quietly neuters the
 process, so every model we use was researched at each of its doors — the
 maker's own API, fal, Higgsfield — with the field names quoted from the
 official docs, before deciding where it is called from. This page is the
@@ -11,9 +11,9 @@ ruling and the evidence. The five full dossiers are in `research/`.
 | Station | Model | Primary door | Why the other doors are sub-par |
 |---|---|---|---|
 | cast · still | **GPT Image 2** (`gpt-image-2`) | **direct — OpenAI API** | `input_fidelity: "high"` ("faces are preserved far more accurately") and `moderation: "low"` (the setting that stops clean frames being blocked) exist **only** on the direct API. fal (`openai/gpt-image-2/edit`) and Higgsfield (`gpt_image_2`) expose neither. Direct also has the batch API. |
-| edit | **Nano Banana Pro** (`gemini-3-pro-image`) | **direct — Gemini API** (fal acceptable) | direct: per-category `safety_settings`, batch mode at 50% off ($0.067 a 2K edit). fal (`fal-ai/nano-banana-pro/edit`): same model, same references, one safety scalar — a fair backup. Higgsfield: the reference `medias` shape silently no-ops when wrong and 9:16 was ignored on a real run. |
-| motion (silent) | **Seedance 2.5** | **Higgsfield** (the editors' hand) — fal alternate, direct BytePlus equal | at 720p Higgsfield costs the same as direct for motion, so it is the editors' door (Damon's 2026-09-17 "we scale tomorrow" ruling); fal (`bytedance/seedance-2.5/image-to-video`) and direct BytePlus remain equal alternates — explicit first + last frame, 1080p, 4–30 s, `generate_audio: false`. |
-| talking | **Seedance 2.5** on Higgsfield · **OmniHuman 1.5** on fal | **both proven live 18 Sep** on the same still + line. Higgsfield: 6 s 720p 9:16, 39 credits (≈ $1.30–1.70). fal OmniHuman: $0.16/s ≈ $0.77, clip = the line's length, editor crops to 9:16. fal **Google Omni Flash 1.1**: 44 s, $0.10/s, lip-synced beautifully — **to words it made up** (10% match to the line by transcription). It has no audio input at all (the field was silently dropped). **But it can be controlled:** write the line into the prompt — it speaks it 100% — then swap the voice to the character's with ElevenLabs speech-to-speech, timing intact (100% again). Proven live on fal ($0.10/s, 43 s) and direct on Google (`gemini-omni-1.1-flash`, Interactions API, 41 s, price to be read from the first bill). **Line parity is now a gate**: every talking clip is transcribed (ElevenLabs Scribe) and must say its line ≥ 85%. fal's Seedance 2.5 refuses photoreal people — OmniHuman is fal's talking door. Direct BytePlus stays the one-command upgrade for Seedance | Only BytePlus documents feeding real audio into a lip-synced result (`reference_audio` role; the dubbing example). fal only takes audio on `reference-to-video`, sold as a timing signal, unproven for verbatim lines. Higgsfield's docs call `audio_references` a style reference — but the 16 Sep run held the voice, so it stays the proven door until BytePlus is set up and tested on one line. |
+| edit | **Nano Banana Pro** (`gemini-3-pro-image`) | **direct — Gemini API** (fal acceptable) | direct: per-category `safety_settings`, batch mode at 50% off ($__ a 2K edit). fal (`fal-ai/nano-banana-pro/edit`): same model, same references, one safety scalar — a fair backup. Higgsfield: the reference `medias` shape silently no-ops when wrong and 9:16 was ignored on a real run. |
+| motion (silent) | **Seedance 2.5** | **Higgsfield** (the editors' hand) — fal alternate, direct BytePlus equal | at 720p Higgsfield costs the same as direct for motion, so it is the editors' door (the owner's 2026-09-17 "we scale tomorrow" ruling); fal (`bytedance/seedance-2.5/image-to-video`) and direct BytePlus remain equal alternates — explicit first + last frame, 1080p, 4–30 s, `generate_audio: false`. |
+| talking | **Seedance 2.5** on Higgsfield · **OmniHuman 1.5** on fal | **both proven live 18 Sep** on the same still + line. Higgsfield: 6 s 720p 9:16, 39 credits (≈ $__). fal OmniHuman: $__/s ≈ $__, clip = the line's length, editor crops to 9:16. fal **Google Omni Flash 1.1**: 44 s, $__/s, lip-synced beautifully — **to words it made up** (10% match to the line by transcription). It has no audio input at all (the field was silently dropped). **But it can be controlled:** write the line into the prompt — it speaks it 100% — then swap the voice to the character's with ElevenLabs speech-to-speech, timing intact (100% again). Proven live on fal ($__/s, 43 s) and direct on Google (`gemini-omni-1.1-flash`, Interactions API, 41 s, price to be read from the first bill). **Line parity is now a gate**: every talking clip is transcribed (ElevenLabs Scribe) and must say its line ≥ 85%. fal's Seedance 2.5 refuses photoreal people — OmniHuman is fal's talking door. Direct BytePlus stays the one-command upgrade for Seedance | Only BytePlus documents feeding real audio into a lip-synced result (`reference_audio` role; the dubbing example). fal only takes audio on `reference-to-video`, sold as a timing signal, unproven for verbatim lines. Higgsfield's docs call `audio_references` a style reference — but the 16 Sep run held the voice, so it stays the proven door until BytePlus is set up and tested on one line. |
 | voice | **ElevenLabs** | **direct — ElevenLabs API** only | custom voices (`/v1/voices/add`, Voice Design), full `voice_settings`, audio tags on v3, character-level `alignment` timestamps, 10-voice dialogue, speech-to-speech. fal: presets only, `stability` only, no clone/design. Higgsfield: cannot import a voice; undocumented element cap. |
 | song | **Lyria 3 Pro** (`lyria-3-pro-preview`; `lyria-3-clip-preview` for 30 s; `lyria-3.5` newest) | **direct — Gemini API** only | `generateContent` with `[Verse]/[Chorus]` and time tags, image mood, WAV. fal (`fal-ai/lyria3/pro`): prompt + image in, plain lyrics out, no times, no lyric field. The timed sheet in Lyria's text part is observed behaviour, not documented — check with ElevenLabs Scribe (word timestamps; best on music-laden audio). |
 
@@ -25,7 +25,7 @@ until a direct door is opened and tested. The audio (voice line, song) is
 always made first and travels to whichever door makes the pictures as a
 plain file.
 
-**The two hands** (Damon's 2026-09-17 ruling): the machine — cast, still,
+**The two hands** (the owner's 2026-09-17 ruling): the machine — cast, still,
 edit, voice, song — runs direct, one command, nobody at a keyboard; the
 editors — motion, talking — run on Higgsfield, from the submit sheet the
 machine writes.
@@ -38,51 +38,51 @@ machine writes.
 | Gemini key | in the Keychain |
 | ElevenLabs key | in the Keychain |
 | fal key | in the Keychain |
-| BytePlus ModelArk account (AP region, `ark.ap-southeast.bytepluses.com`) | **not opened** — Damon's call; unlocks Seedance direct for the talking beat |
+| BytePlus ModelArk account (AP region, `ark.ap-southeast.bytepluses.com`) | **not opened** — the owner's call; unlocks Seedance direct for the talking beat |
 | Direct clients in the runner (OpenAI images, Gemini image, Gemini Lyria) | built and proven live 18 Sep |
 | Higgsfield API key pair (`daemn-HIGGSFIELD_KEY_ID` / `_SECRET`) | in the Keychain (18 Sep) — 91 endpoints answer; **$0 balance** — nothing prints until the console wallet is funded |
 
 ## The cost per door (read 2026-09-17, official price pages)
 
-**Images, voice, song — no difference.** GPT Image 2 ~$0.18 an image on fal
-vs ~$0.15–0.21 direct; Nano Banana Pro $0.15 on fal vs $0.134 direct
-($0.067 in batch); ElevenLabs $0.10 per 1,000 characters at both; Lyria
-$0.08 a song at both. Direct is equal or cheaper, and has the controls.
+**Images, voice, song — no difference.** GPT Image 2 ~$__ an image on fal
+vs ~$__ direct; Nano Banana Pro $__ on fal vs $__ direct
+($__ in batch); ElevenLabs $__ per 1,000 characters at both; Lyria
+$__ a song at both. Direct is equal or cheaper, and has the controls.
 
 **Motion is the whole difference, and it runs the other way:**
 
 | Seedance 2.5, per second of clip | 480p | 720p | 1080p |
 |---|---|---|---|
-| BytePlus direct | $0.10 | **$0.23** | $0.57 |
-| Higgsfield, Ultra plan (6.5 credits/s at 720p; 23–30 credits per $) | $0.10–0.13 | **$0.21–0.28** | not published |
-| fal | $0.22 | $0.47 | not sold (2.5 is 480/720p only on fal) — **and refuses any photoreal person** (live 18 Sep: the identical presenter still was blocked twice as a 'real-person likeness'); b-roll with nobody in frame only |
+| BytePlus direct | $__ | **$__** | $__ |
+| Higgsfield, Ultra plan (6.5 credits/s at 720p; 23–30 credits per $) | $__ | **$__** | not published |
+| fal | $__ | $__ | not sold (2.5 is 480/720p only on fal) — **and refuses any photoreal person** (live 18 Sep: the identical presenter still was blocked twice as a 'real-person likeness'); b-roll with nobody in frame only |
 
 **One 30-second ad at 720p**, line by line:
 
 | | Direct | Higgsfield (Ultra) | fal |
 |---|---|---|---|
-| Stills — GPT Image 2 × 9 | $1.71 | ~$0.30–0.40 (credit rate unclear) | $1.60 |
-| Edits — Nano Banana Pro × 3 | $0.40 ($0.20 in batch) | ~$0.25 | $0.45 |
-| **Motion — Seedance 2.5, 40 s incl. the talking beat** | **$9.24** | **$8.70–11.30** | **$18.92** |
-| Voice — ElevenLabs, 600 characters (direct at every door) | $0.06 | $0.06 | $0.06 |
-| **Total** | **≈ $11.4** | **≈ $9.5–12.0** | **≈ $21.0** |
-| + the song, if a song ad (Lyria, direct) | +$0.08 | +$0.08 | +$0.08 |
+| Stills — GPT Image 2 × 9 | $__ | ~$__ (credit rate unclear) | $__ |
+| Edits — Nano Banana Pro × 3 | $__ ($__ in batch) | ~$__ | $__ |
+| **Motion — Seedance 2.5, 40 s incl. the talking beat** | **$__** | **$__** | **$__** |
+| Voice — ElevenLabs, 600 characters (direct at every door) | $__ | $__ | $__ |
+| **Total** | **≈ $__** | **≈ $__** | **≈ $__** |
+| + the song, if a song ad (Lyria, direct) | +$__ | +$__ | +$__ |
 
 Direct and Higgsfield are a wash at 720p, so between them the choice is
 control and hands (direct = one command, nobody at a keyboard; Higgsfield =
-the editors' door). fal is ~$10 more per ad on the motion line alone — and, tested live 18 Sep, it will not animate a person at all: the same still Higgsfield turned into the talking beat was refused twice on fal's Seedance 2.5 ("likenesses of real people", partner validation). fal keeps product and scene b-roll on Seedance — and the talking beat on OmniHuman 1.5, which took the same still ($0.16/s ≈ $0.77 a line, about half Higgsfield's price). 1080p on the direct door is 2.5× the
-motion line — about $25 an ad — so 720p is the print resolution unless a
+the editors' door). fal is ~$__ more per ad on the motion line alone — and, tested live 18 Sep, it will not animate a person at all: the same still Higgsfield turned into the talking beat was refused twice on fal's Seedance 2.5 ("likenesses of real people", partner validation). fal keeps product and scene b-roll on Seedance — and the talking beat on OmniHuman 1.5, which took the same still ($__/s ≈ $__ a line, about half Higgsfield's price). 1080p on the direct door is 2.5× the
+motion line — about $__ an ad — so 720p is the print resolution unless a
 hero clip earns more.
 
 **A correction.** The 16 Sep receipts priced a Higgsfield credit at 18 per
 dollar; on the Ultra plan it is 23 (monthly) to 30 (annual). Every
-Higgsfield figure on The Road to $10 was about 1.5× too pessimistic.
+Higgsfield figure on The Road to $__ was about 1.5× too pessimistic.
 
 ## The fourth door — the Higgsfield API (re-run 2026-09-18)
 
 The 17 Sep ruling was made with three doors: the maker's API, fal, and
 Higgsfield **through the MCP / web app** (Ultra plan credits, a person or a
-session at the keyboard). On 18 Sep Damon minted a Higgsfield **API** key
+session at the keyboard). On 18 Sep the owner minted a Higgsfield **API** key
 pair at console.higgsfield.ai — a fourth door that did not exist for us
 when the ruling was made. Same analysis, run again with it in.
 
@@ -93,7 +93,7 @@ concurrent requests. `POST /estimate/<model>` prices a job before it runs;
 failed and `nsfw` results are not charged; outputs are kept 7 days (the
 client downloads on completion). Model list is `GET /models` — 78 live,
 91 endpoints answered our key on the 18 Sep probe. Tooling:
-`~/devel/daemn/tools/higgsfield/hf_client.py` (pull · probe · show · run ·
+`the team notes` (pull · probe · show · run ·
 poll). Page: Higgsfield Control.
 
 **Which of our five models it carries.** Checked two ways: the 78 in
@@ -122,30 +122,30 @@ reference, omni). `image-to-video` takes `image_url` + `end_image_url`
 
 **Price — the estimate endpoint is authoritative.** Seedance 2.5 on the
 API is token-metered: `ceil(seconds × W × H × 24 / 1024)` tokens at
-**$0.0214 per 1,000** (480p and 720p). That is the identical rate fal
+**$__ per 1,000** (480p and 720p). That is the identical rate fal
 charges. At 720p 9:16 (720×1280) it is 21,600 tokens a second:
 
 | Seedance 2.5, one second at 720p | $/s | 6 s talking beat | 40 s of motion (one ad) |
 |---|---|---|---|
-| BytePlus, direct (account not opened) | **$0.23** | $1.39 | **$9.24** |
-| Higgsfield MCP / app, Ultra credits (6.5 cr/s, 23–30 cr/$) | $0.21–0.28 | $1.30–1.70 | $8.70–11.30 |
-| **Higgsfield API**, list | $0.46 | $2.77 | $18.49 |
-| **Higgsfield API**, 15% default discount | $0.39 | $2.36 | $15.72 |
-| **Higgsfield API**, Seedance picked in the 7-day launch offer (30%) | $0.32 | $1.94 | $12.94 |
-| fal (Seedance; refuses people) | $0.47 | — | $18.92 |
-| fal OmniHuman 1.5 (talking only) | $0.16 | $0.77 | — |
+| BytePlus, direct (account not opened) | **$__** | $__ | **$__** |
+| Higgsfield MCP / app, Ultra credits (6.5 cr/s, 23–30 cr/$) | $__ | $__ | $__ |
+| **Higgsfield API**, list | $__ | $__ | $__ |
+| **Higgsfield API**, 15% default discount | $__ | $__ | $__ |
+| **Higgsfield API**, Seedance picked in the 7-day launch offer (30%) | $__ | $__ | $__ |
+| fal (Seedance; refuses people) | $__ | — | $__ |
+| fal OmniHuman 1.5 (talking only) | $__ | $__ | — |
 
-(The marketing page shows Seedance 2.5 at "$0.1234 / sec"; the estimate
-endpoint's own formula gives $0.46 at 720p. The endpoint is what bills —
+(The marketing page shows Seedance 2.5 at "$__ / sec"; the estimate
+endpoint's own formula gives $__ at 720p. The endpoint is what bills —
 the first funded run settles it.)
 
 **One 30-second ad at 720p, four doors:**
 
 | | Direct | Higgsfield MCP (Ultra) | **Higgsfield API** (15% / 30%) | fal |
 |---|---|---|---|---|
-| Stills, edits, voice — all direct | $2.17 | $2.17 | $2.17 | $2.17 |
-| Motion — Seedance 2.5, 40 s incl. talking | $9.24 | $8.70–11.30 | $15.72 / $12.94 | $18.92 |
-| **Total** | **≈ $11.4** | **≈ $10.9–13.5** | **≈ $17.9 / $15.1** | **≈ $21.1** |
+| Stills, edits, voice — all direct | $__ | $__ | $__ | $__ |
+| Motion — Seedance 2.5, 40 s incl. talking | $__ | $__ | $__ / $__ | $__ |
+| **Total** | **≈ $__** | **≈ $__** | **≈ $__ / $__** | **≈ $__** |
 
 **What the fourth door buys, and what it costs.**
 
@@ -156,24 +156,24 @@ the first funded run settles it.)
   webhooks, estimate-before-spend, cancel. That is the control direct was
   chosen for — on the one model where direct is not open yet (BytePlus).
 - **It is the most expensive Seedance door.** ~1.4–1.7× direct after
-  discounts, ≈ fal at list. On a 40 s motion line that is +$3.7 to +$6.5
-  an ad over direct BytePlus, and about +$4 over Ultra credits.
+  discounts, ≈ fal at list. On a 40 s motion line that is +$__ to +$__
+  an ad over direct BytePlus, and about +$__ over Ultra credits.
 - **It is a wallet, not a plan.** Ultra credits cannot be spent here; the
   API wallet is prepaid and its credits expire in a year.
 - **It opens the cheap-motion lever.** The same door serves Kling 3.0
-  std ($0.107/s list, $0.091 after 15%), Kling 3.0 turbo ($0.095), Wan 3.0
-  ($0.10 at 720p), MiniMax H3 ($0.11), LTX 2.5 ($0.09–0.12) — read from
+  std ($__/s list, $__ after 15%), Kling 3.0 turbo ($__), Wan 3.0
+  ($__ at 720p), MiniMax H3 ($__), LTX 2.5 ($__) — read from
   the estimate endpoint, 18 Sep. If the 34 s of *silent* motion per ad ran
   on Kling 3.0 std and only the 6 s talking beat stayed on Seedance, the
-  motion line is ≈ $5.45 and the ad ≈ $7.6 — under the $10 goal on this
-  door alone. Whether those models hold our formats is Damon's call and a
+  motion line is ≈ $__ and the ad ≈ $__ — under the $__ goal on this
+  door alone. Whether those models hold our formats is the owner's call and a
   bake-off, not a ruling.
 - **Not yet verified, because the wallet is empty:** that the API accepts
   a photoreal presenter still (the MCP did; fal's Seedance did not), that
   `audio_urls` dubs the line (the MCP's `audio_references` did), and that
-  9:16 is honoured. One talking-beat run (~$2.40) answers all three.
+  9:16 is honoured. One talking-beat run (~$__) answers all three.
 
-**The re-run ruling, for Damon to confirm.**
+**The re-run ruling, for the owner to confirm.**
 
 | Station | 17 Sep | 18 Sep, with the API |
 |---|---|---|
@@ -184,11 +184,11 @@ the first funded run settles it.)
 
 Net: the fourth door does not change *where* any model is called for
 control reasons — it removes the last reason a human had to be in the
-loop. The price of that, today, is about $4–6 an ad until BytePlus opens.
+loop. The price of that, today, is about $__ an ad until BytePlus opens.
 
 ## The talking beat ruled — the Omni door (2026-09-18, 15:05)
 
-Damon watched the same still + line through three doors — Higgsfield
+the owner watched the same still + line through three doors — Higgsfield
 Seedance 2.5, Google Omni direct (controlled recipe), fal Omni (controlled
 recipe) — and ruled: **"fal Omni came out the best for what I need and
 obviously it's cheaper."**
@@ -200,9 +200,9 @@ parity → ElevenLabs speech-to-speech into the character's voice → ffmpeg
 remux → parity again. **Proven as one command 2026-09-18:** 63 s wall
 clock, 100% parity before and after the swap, 720×1280, 6 s.
 
-**Price:** $0.10/s at 720p on fal + speech-to-speech on the clip's seconds
-— about $0.65 a 6-s beat, against $1.30–1.70 on Higgsfield credits and
-$2.36 on the Higgsfield API. Hands-off, US card, no wallet to fund beyond
+**Price:** $__/s at 720p on fal + speech-to-speech on the clip's seconds
+— about $__ a 6-s beat, against $__ on Higgsfield credits and
+$__ on the Higgsfield API. Hands-off, US card, no wallet to fund beyond
 the fal and ElevenLabs keys already in the Keychain.
 
 **BytePlus, for the record:** key minted and verified (the account
@@ -220,15 +220,181 @@ now; fal's Seedance for b-roll with nobody in frame.
 `research/seedance-2.5.md` · `research/elevenlabs.md` · `research/lyria.md`
 — each with the three doors' quoted fields, prices and limits, and the URLs.
 
-Prices, as read 2026-09-17: GPT Image 2 ~$0.01–0.21 per image by quality
-(direct); Nano Banana Pro $0.134 per 1K/2K image direct, $0.15 on fal;
-Seedance 2.5 ~$0.23/s at 720p, ~$0.57/s at 1080p direct, similar on fal;
-ElevenLabs ~$0.10 per 1,000 characters; Lyria 3 Pro $0.08 a song.
+Prices, as read 2026-09-17: GPT Image 2 ~$__ per image by quality
+(direct); Nano Banana Pro $__ per 1K/2K image direct, $__ on fal;
+Seedance 2.5 ~$__/s at 720p, ~$__/s at 1080p direct, similar on fal;
+ElevenLabs ~$__ per 1,000 characters; Lyria 3 Pro $__ a song.
 
 ## Ruling 2026-09-18 — one image door
 
-Damon: "we'll just do gpt for all image work both initial reference gen and edits." Every still — the first frame (generation with the cast sheet as the identity reference) and every edit (the last frame, `images/edits`, `input_fidelity: high`, two references: the previous frame first, the cast sheet second) — runs on GPT Image 2.5 direct, then is colour-matched to the first frame. Nano Banana Pro stays in the registry as an alternate: measured the same day, it held the face with the second reference but under-delivered a push-in.
+the owner: "we'll just do gpt for all image work both initial reference gen and edits." Every still — the first frame (generation with the cast sheet as the identity reference) and every edit (the last frame, `images/edits`, `input_fidelity: high`, two references: the previous frame first, the cast sheet second) — runs on GPT Image 2.5 direct, then is colour-matched to the first frame. Nano Banana Pro stays in the registry as an alternate: measured the same day, it held the face with the second reference but under-delivered a push-in.
 
 ## Ruling 2026-09-18 evening — motion and talking
 
-Damon: "let's just do the higgsfield seedance frame." Motion and the talking beat run on Seedance 2.5 through Higgsfield: `start_image` (first frame) + `end_image` (last frame) + `audio_references` (the scene's slice of the one voice track), mode omni_reference, up to 30 s. Proven live on Pigment Memory scene 1. fal Omni (the 15:05 ruling) and BytePlus direct stay as alternates.
+the owner: "let's just do the higgsfield seedance frame." Motion and the talking beat run on Seedance 2.5 through Higgsfield: `start_image` (first frame) + `end_image` (last frame) + `audio_references` (the scene's slice of the one voice track), mode omni_reference, up to 30 s. Proven live on Glow Lock scene 1. fal Omni (the 15:05 ruling) and BytePlus direct stay as alternates.
+
+## Ruling 2026-09-22 — MiniMax H3 is the clip door
+
+A live bake-off on one scene (Glow Lock scene 1): the same first frame,
+the same voice slice, the same four-block prompt, on four models through the
+Higgsfield connector. the owner, watching the four clips: **"MiniMax H3 looks
+pretty good and is super cheap… lip sync looks good… big savings. We'll use
+the 15-second pricing; most scenes should be 4–6 seconds with a few
+frames/movements."**
+
+| Model | Said the line | Face held | Hand landed | Frame | cr / 10 s | $ / 10 s |
+|---|---|---|---|---|---|---|
+| **MiniMax H3** (`minimax_h3`) — **the door** | 95% — words identical; the transcriber heard full stops where the ellipsis is | yes | held the hand up longer — no last frame to land on (see the hard rule) | 2K only, 1440×2560 at 9:16 | **20** (2 cr/s) | **$__** |
+| Seedance 2.5 (`seedance_2_5`) — the alternate | yes — the 09-18 door, 100% then | yes | lands: takes first + last + audio on one call | 720p | 70 (7 cr/s, the same with or without audio) | $__ |
+| Wan 3.0 (`wan3_0`) — alternate | passed | passed | no last frame with audio — the same restriction as MiniMax | not recorded | 17.5 | $__ |
+| Wan 2.7 (`wan2_7`) — alternate | passed | passed | lands — the one model that took first + last + audio together | not recorded | 15 | $__ |
+| MiniMax H3 Max (`minimax_h3_max`) — not chosen | — | — | — | 480p / 768p | 15 | $__ |
+
+Dollars at 23 credits per dollar (Ultra monthly). MiniMax H3 by length: 6 s
+= 12 cr ($__) · 10 s = 20 cr ($__) · 15 s = 30 cr ($__); a batch of 4
+is 4× (48 cr for 4 × 6 s). H3 Max was not chosen because it is lower
+resolution and not cheaper per second than H3 at 2K.
+
+**The hard rule, from the backend (a 422, verbatim):** *"start_image/end_image
+cannot be mixed with reference media; audio_references require at least one
+image or video reference."* So on MiniMax H3:
+
+- a **TALKING** scene = `image_references` [the first frame] +
+  `audio_references` [the voice slice], **no end_image** — the model decides
+  where the clip ends, which is why scene 1 held the hand up: the last beat
+  now says *ending on <the LAST FRAME's change>* in words;
+- a **SILENT** scene = `start_image` + `end_image`, no audio — the designed
+  camera move lands.
+
+MiniMax H3's listing, read live: duration 4–15 s · aspect ratios auto / 21:9
+/ 16:9 / 4:3 / 1:1 / 3:4 / 9:16 · batch_size 1–4 · media roles start_image ·
+end_image · image_references · video_references · audio_references.
+
+**The house after this ruling.** GPT Image 2.5 stays the door for every
+still; ElevenLabs the voice; **MiniMax H3 through Higgsfield the door for
+motion and talking**; Seedance 2.5 the alternate for a scene that genuinely
+needs 15–30 s in one take; Wan 2.7 and Wan 3.0 recorded as alternates with
+their numbers. The 2026-08-31 "MiniMax retired" line no longer binds this
+slug. Where it is wired: `machine/providers.json` (`doors.motion`,
+`doors.talking`, `models.minimax_h3`), `machine/model-inputs.json` (the two
+shapes, `door_rules.minimax_h3`), `SCENE-GENERATION.md` step 4.
+
+## Ruling 2026-09-22 (later) — the run picks
+
+the owner, after the first MiniMax B-roll came back: *"when we do video
+production we should have the ability to pick which models we want to run
+with because the b-roll on minimax came out weird… the water just magically
+turned on and the scrubbing motion was awkward and the scrub just magically
+came off but it didn't look realistic at all. Lipsync looks good for sure
+though."*
+
+So **the registry's door is the house default, not a lock.** One model for
+every scene is the wrong shape when the best lip sync in the house is also
+the worst at physical cause and effect.
+
+**Measured, this run** (Glow Lock, both scenes on `minimax_h3`):
+
+| scene | what it had to do | result |
+|---|---|---|
+| S2 · talking to the lens | say an attached 8.8 s voice take | line check **100%**, face held, lip sync good — **keep** |
+| S6 · hands and a substance | scrub worked in, tap turned on, colour changes, rinses off | the changes **appear** rather than being made: the water turns itself on, the scrubbing has no pressure, the scrub is simply gone — **not realistic** |
+
+**How a pick is made** (three levels, most specific wins):
+
+1. a scene's own `model` key, in the brief or the plan
+2. the run: `run.py start … --clip-model <id>`
+3. absent both, the registry's settled door
+
+`run.py models` prints the menu — every pickable model for motion and
+talking, what it is good at, what it is weak at, its credits a second and
+its dollar price at 6 s. The rows come off `providers.json`, so the day a
+model is measured the menu says so without a code change.
+
+A pick nothing answers to is **refused by name with the menu** and the clip
+is not submitted. It never falls back to the settled door silently — that is
+how a run quietly costs 3x what it was asked to.
+
+**Open:** no model in the house has yet been measured on a
+hands-and-substance scene. `seedance_2_5` is the first alternate to try
+(7 cr/s, first + last + audio on one call); `wan2_7` is cheaper than the
+settled door at 1.5 cr/s and passed the talking bake-off, untested on
+physical action.
+
+### The roster is two (the owner, 2026-09-22)
+
+*"I don't want to use wan at all, seedance and minimax are good for sure."*
+Wan 2.7 and Wan 3.0 passed the bake-off on price and on saying the line;
+they are retired anyway. `providers.json` → `picking.roster.clip` is the
+list, and `run.py models` shows only what is on it — a model in the book
+that is not on the roster is a record, not an offer.
+
+| | when |
+|---|---|
+| **minimax_h3** | the default, and it owns talking to the lens |
+| **seedance_2_5** | a scene that needs physical cause and effect, or one take past 15 s |
+
+### The bug underneath the B-roll (found 2026-09-22, same day)
+
+The first frame's Lighting for S6 ended *"no practicals, no fill, no running
+water"* — all three true **of that frame**. The consistency block takes the
+first frame's lighting verbatim, so the clip was told *"same … no running
+water … throughout"* while beat 4 said *"moves the hand under the running
+tap"*. The model obeyed both: the tap ran, and nobody turned it on.
+
+**The rule now:** a hold sentence says what does NOT change, so a **negation
+a beat undoes is dropped from it and named on the record**. Only a negation
+can be contradicted — "plain daylight across the counter" is a description
+of the light and holds all take; "no running water" is a claim a beat
+falsifies. `mi.hold_dropped(scene)` reports it, the item carries it, and the
+brief is the thing that gets fixed.
+
+So the first B-roll verdict was measured against a self-contradicting
+prompt. The re-run puts the corrected prompt through **both** models, which
+is the only comparison worth having.
+
+### The hands scene, both models, identical corrected prompt (2026-09-22)
+
+| | seedance_2_5 | minimax_h3 |
+|---|---|---|
+| scrubbing | real pressure, the skin moves under the fingers | spreads, flatter contact |
+| the tap | the hand reaches over and turns it on | the hand reaches over and turns it on |
+| rinsing | gold sheets off, runs brown into the basin | rinses, cleaner |
+| resolution | **786 × 1178** | **1440 × 2176** |
+| cost, 8 s | **$__** | **$__** |
+
+Seedance has the better physical weight; MiniMax has nearly 2x the pixels
+for under a third of the price, and most of the original fault was the
+prompt, not the model. **Open: which model owns a hands scene — the owner's
+call.** Until he rules, the default stands.
+
+## Ruling 2026-09-22 (evening) — Seedance is the clip door
+
+the owner, after four prompt-tuning takes on MiniMax against one Seedance take of
+the same hands scene: *"let's just run with seedance for now, the output is
+just way better and takes less tweaking."*
+
+**seedance_2_5 is the clip door for motion AND talking.** MiniMax H3 stays on
+the roster as the cheap alternate — 2 cr/s at 2K and the best lip sync
+measured — for a scene with no physical cause and effect in it.
+
+What the flip changes, beyond the picture:
+
+- **a talking scene keeps its last frame.** The MiniMax door refused an
+  end_image beside audio (its 422), so a talking clip was told where to end in
+  words. Seedance takes `start_image` + `end_image` + `audio_references`
+  together on one call, so every scene now lands on the frame the next one
+  opens from.
+- **up to 30 s in one take**, against MiniMax's 15 — a long paragraph no
+  longer has to split at a beat.
+- **1080p at bitrate high**, read live: 96 cr / 8 s = **12 cr/s** ($__/s).
+  720p is 7 cr/s. The house takes 1080p; the resolution was the one thing
+  Seedance lost on in the comparison and it was a setting, not a ceiling.
+
+**The cost, honestly:** 12 cr/s against MiniMax's 2. A 60-second ad's clips go
+from about $__ to about $__. `--clip-model minimax_h3` puts any scene back on
+the cheap door, and a `model` key on one scene does the same for that scene.
+
+The four tuning takes are on the record: physics vocabulary, fewer/longer
+beats, 12 s instead of 8, and declaring the material up front. Time per action
+was the only lever that moved the picture, and none of the four would land on
+the last frame — six actions is more than one MiniMax clip finishes.

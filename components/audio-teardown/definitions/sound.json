@@ -1,0 +1,325 @@
+{
+ "schema": 1,
+ "status": "draft",
+ "what": "The labels the music, effects and mix reads may use. A value not on a list is recorded as unknown, never nudged onto the nearest one. Draft until the owner approves.",
+ "updated": "2026-09-30",
+ "sources": {
+  "music": "music supervision and production-music tagging (genre, mood, energy, vocals, source); Michel Chion's film-sound vocabulary for how music sits against the picture (empathetic / anempathetic, in the scene / laid over)",
+  "effects": "the Universal Category System (UCS) — the film and games industry's standard effect names. Top-level categories as published on bigsoundbank.com/categories.html (80 listed there, checked 2026-09-30; the UCS site cites 82 in v8.2); subcategories to follow",
+  "jobs": "craft: what an added sound does in a short-form edit"
+ },
+ "lists": {
+  "music_source": [
+   "licensed-song",
+   "trending-sound",
+   "production-library",
+   "original-score",
+   "none",
+   "unknown"
+  ],
+  "vocals": [
+   "none",
+   "sung",
+   "rapped",
+   "chant",
+   "vocal-sample",
+   "humming"
+  ],
+  "energy": [
+   "low",
+   "medium",
+   "high"
+  ],
+  "valence": [
+   "dark",
+   "tense",
+   "neutral",
+   "warm",
+   "bright",
+   "euphoric"
+  ],
+  "arousal": [
+   "calm",
+   "steady",
+   "driving",
+   "intense"
+  ],
+  "in_scene": [
+   "laid-over",
+   "in-the-scene",
+   "unclear"
+  ],
+  "shape": [
+   "flat-loop",
+   "slow-build",
+   "build-and-drop",
+   "drops-out",
+   "switches-track",
+   "stops-dead",
+   "fades"
+  ],
+  "effect_job": [
+   "transition",
+   "emphasis",
+   "caption-pop",
+   "reveal",
+   "joke-beat",
+   "product-sound",
+   "tension",
+   "count-or-tick",
+   "notification",
+   "room",
+   "human-reaction",
+   "other"
+  ],
+  "ucs_category": [
+   "AIR",
+   "AIRCRAFT",
+   "ALARMS",
+   "AMBIENCE",
+   "ANIMALS",
+   "ARCHIVED",
+   "BEEPS",
+   "BELLS",
+   "BIRDS",
+   "BOATS",
+   "BULLETS",
+   "CARTOON",
+   "CERAMICS",
+   "CHAINS",
+   "CHEMICALS",
+   "CLOCKS",
+   "CLOTH",
+   "COMMUNICATIONS",
+   "COMPUTERS",
+   "CREATURES",
+   "CROWDS",
+   "DESIGNED",
+   "DESTRUCTION",
+   "DIRT & SAND",
+   "DOORS",
+   "DRAWERS",
+   "ELECTRICITY",
+   "EQUIPMENT",
+   "EXPLOSIONS",
+   "FARTS",
+   "FIGHT",
+   "FIRE",
+   "FIREWORKS",
+   "FOLEY",
+   "FOOD & DRINK",
+   "FOOTSTEPS",
+   "GAMES",
+   "GEOTHERMAL",
+   "GLASS",
+   "GORE",
+   "GUNS",
+   "HORNS",
+   "HUMAN",
+   "ICE",
+   "LASERS",
+   "LEATHER",
+   "LIQUID & MUD",
+   "MACHINES",
+   "MAGIC",
+   "MECHANICAL",
+   "METAL",
+   "MOTORS",
+   "MOVEMENT",
+   "MUSICAL",
+   "NATURAL DISASTER",
+   "OBJECTS",
+   "PAPER",
+   "PLASTIC",
+   "RAIN",
+   "ROBOTS",
+   "ROCKS",
+   "ROPE",
+   "RUBBER",
+   "SCIFI",
+   "SNOW",
+   "SPORTS",
+   "SWOOSHES",
+   "TOOLS",
+   "TOYS",
+   "TRAINS",
+   "USER INTERFACE",
+   "VEGETATION",
+   "VEHICLES",
+   "VOICES",
+   "WATER",
+   "WEAPONS",
+   "WEATHER",
+   "WHISTLES",
+   "WIND",
+   "WINDOWS",
+   "WINGS",
+   "WOOD"
+  ]
+ },
+ "audioset_to_ucs": {
+  "_what": "How a machine-found sound (Google's AudioSet name) is filed under a UCS category. First keyword that matches wins; anything unmatched is filed OBJECTS and flagged for the heard read to name.",
+  "rules": [
+   [
+    "whoosh|swoosh|swish",
+    "SWOOSHES"
+   ],
+   [
+    "zip|zipper",
+    "CLOTH"
+   ],
+   [
+    "pop",
+    "CARTOON"
+   ],
+   [
+    "boing|cartoon",
+    "CARTOON"
+   ],
+   [
+    "beep|bleep",
+    "BEEPS"
+   ],
+   [
+    "ding|chime|bell|jingle",
+    "BELLS"
+   ],
+   [
+    "tick|clock",
+    "CLOCKS"
+   ],
+   [
+    "click",
+    "USER INTERFACE"
+   ],
+   [
+    "camera|shutter",
+    "EQUIPMENT"
+   ],
+   [
+    "cash register|coin",
+    "OBJECTS"
+   ],
+   [
+    "typing|keyboard|computer|mouse",
+    "COMPUTERS"
+   ],
+   [
+    "telephone|ringtone|notification",
+    "COMMUNICATIONS"
+   ],
+   [
+    "water|splash|drip|pour|liquid|trickle|stream|fill",
+    "WATER"
+   ],
+   [
+    "spray|aerosol|hiss|steam",
+    "AIR"
+   ],
+   [
+    "squish|squelch|slosh",
+    "LIQUID & MUD"
+   ],
+   [
+    "glass|clink",
+    "GLASS"
+   ],
+   [
+    "door|knock",
+    "DOORS"
+   ],
+   [
+    "drawer",
+    "DRAWERS"
+   ],
+   [
+    "paper|tear|crumpl|rustl",
+    "PAPER"
+   ],
+   [
+    "plastic|crinkl",
+    "PLASTIC"
+   ],
+   [
+    "footstep|walk|run",
+    "FOOTSTEPS"
+   ],
+   [
+    "applause|clap|cheer|crowd|chatter|hubbub",
+    "CROWDS"
+   ],
+   [
+    "laugh|giggle|chuckle|gasp|sigh|breath|cough|sniff|scream|shout|yell|cry|baby|kiss|chew|gulp|burp|hiccup",
+    "HUMAN"
+   ],
+   [
+    "fart",
+    "FARTS"
+   ],
+   [
+    "whistl",
+    "WHISTLES"
+   ],
+   [
+    "horn|honk",
+    "HORNS"
+   ],
+   [
+    "car|vehicle|engine|traffic|motor",
+    "VEHICLES"
+   ],
+   [
+    "siren|alarm|buzzer",
+    "ALARMS"
+   ],
+   [
+    "explosion|boom|blast",
+    "EXPLOSIONS"
+   ],
+   [
+    "thump|thud|bang|slam|impact|smash|crash|hit",
+    "DESTRUCTION"
+   ],
+   [
+    "wind",
+    "WIND"
+   ],
+   [
+    "rain|thunder",
+    "WEATHER"
+   ],
+   [
+    "dog|cat|bark|meow|animal",
+    "ANIMALS"
+   ],
+   [
+    "bird|chirp|tweet",
+    "BIRDS"
+   ],
+   [
+    "fire|crackl",
+    "FIRE"
+   ],
+   [
+    "electric|buzz|hum",
+    "ELECTRICITY"
+   ],
+   [
+    "mechanis|ratchet|tool|drill|saw",
+    "TOOLS"
+   ],
+   [
+    "cutlery|dishes|pots|frying|sizzl|chopping|microwave",
+    "FOOD & DRINK"
+   ],
+   [
+    "reverse",
+    "DESIGNED"
+   ],
+   [
+    "silence|inside|outside|room|field recording|environmental noise|noise",
+    "AMBIENCE"
+   ]
+  ]
+ }
+}

@@ -1,0 +1,106 @@
+{
+ "_what": "What a picture is FOR. One row per purpose, and the row is the only thing that differs between an email hero, an ad frame and a page section — the models, the prompting structure and the context structure are identical for all of them. A purpose not on this list is REFUSED, naming the real ids (the element library's own rule, components/elements).",
+ "_why": "the owner, 2026-09-21: \"create a component for just image production that works regardless of whatever workflow it's in. That way, we go through the same models, the same prompting structures, and the same context structures to develop these images out for any of the assets that we create.\" Before this, an email hero was made one way (components/email-production/simple_email.py) and an ad frame another (tools/image-production/static), and the two disagreed about the frame, the reference and the judge.",
+ "_curator": "the owner. A new purpose is a row here, never a branch in code.",
+ "_fields": {
+  "id": "what a caller passes as `purpose`",
+  "name": "what we call it",
+  "what": "the job the picture does",
+  "aspect": "the default frame, when the request names none",
+  "people": "true when a person is normally in frame, false when not, \"maybe\" when it depends on the direction — read by the model route, never by a caller",
+  "product_reference": "none | optional | required — whether the REAL product photo is passed in as a reference so the product is ours and not redrawn",
+  "words": "never | when_asked — whether words may be rendered inside the frame",
+  "frame": "the purpose's own line in the prompt skeleton, slotted at {purpose_frame}",
+  "safe_zone": "true when the frame will be cropped in feed and the standing safe-zone clause applies",
+  "judge": "extra judge tests this purpose always runs, beyond the standing ones",
+  "status": "draft | approved | deprecated (components/CLAUDE.md rule 6)"
+ },
+ "purposes": {
+  "email-hero": {
+   "id": "email-hero",
+   "name": "Email hero",
+   "what": "The picture under the headline at the top of an email. It has to say what the headline says, at 600px wide, on a phone.",
+   "aspect": "3:2",
+   "people": "maybe",
+   "product_reference": "optional",
+   "words": "never",
+   "frame": "A wide photograph for the top of an email. It is seen small, on a phone, above the copy — one clear subject, read in half a second, nothing that only works at full size.",
+   "safe_zone": false,
+   "judge": [],
+   "status": "approved",
+   "source": "components/email-production/simple_email.py make_pictures() — the hero job, and its \"A wide photograph for the top of an email\" line, verbatim"
+  },
+  "email-offer": {
+   "id": "email-offer",
+   "name": "Email offer picture",
+   "what": "The product picture beside the offer and the button. Made FROM the real product photo, never drawn from a description.",
+   "aspect": "3:2",
+   "people": "maybe",
+   "product_reference": "required",
+   "words": "never",
+   "frame": "A wide photograph of the product, for the offer block of an email, above the button.",
+   "safe_zone": false,
+   "judge": [],
+   "status": "approved",
+   "source": "components/email-production/simple_email.py — the offer job, which is the one place the real product photo was already passed in as a reference"
+  },
+  "ad": {
+   "id": "ad",
+   "name": "Static ad frame",
+   "what": "A paid frame. It ships to a feed, so the frame shape and what survives the crop are part of the job.",
+   "aspect": "9:16",
+   "people": "maybe",
+   "product_reference": "optional",
+   "words": "when_asked",
+   "frame": "A single advertising frame, made to stop a scroll and to be understood before it is read.",
+   "safe_zone": true,
+   "judge": [],
+   "status": "approved",
+   "source": "tools/image-production/static — the static-ad tool this component was extracted from"
+  },
+  "page-section": {
+   "id": "page-section",
+   "name": "Landing-page section picture",
+   "what": "The picture inside one section of a landing page, beside that section's copy.",
+   "aspect": "16:9",
+   "people": "maybe",
+   "product_reference": "optional",
+   "words": "never",
+   "frame": "A wide photograph for one section of a landing page, sitting beside that section's own words and never repeating them.",
+   "safe_zone": false,
+   "judge": [],
+   "status": "draft",
+   "source": "the team notes/pages — the page machine is the caller this row is declared for; it has not run through here yet"
+  },
+  "video-still": {
+   "id": "video-still",
+   "name": "Scene still",
+   "what": "One generated frame standing for one scene of a video, so every scene has a picture.",
+   "aspect": "9:16",
+   "people": "maybe",
+   "product_reference": "optional",
+   "words": "never",
+   "frame": "A single frame from a scene, as a camera in the room would have caught it — a moment, not a poster.",
+   "safe_zone": true,
+   "judge": [],
+   "status": "draft",
+   "source": "tools/video-teardown/machine/frames.py — stage 6 generates a frame per scene; that tool is unchanged and this row is declared for the day it is switched over"
+  },
+  "product-shot": {
+   "id": "product-shot",
+   "name": "Product alone",
+   "what": "The product on a controlled ground, with nothing else in frame.",
+   "aspect": "1:1",
+   "people": false,
+   "product_reference": "required",
+   "words": "never",
+   "frame": "The product alone on a controlled ground. Nothing else is in frame and nothing else is being said.",
+   "safe_zone": false,
+   "judge": [
+    "The product occupies the frame as the only subject. FAIL if a second object, a hand, a person or a background scene competes with it."
+   ],
+   "status": "approved",
+   "source": "tools/image-production/static/style-packs.json `studio-object` — the register this purpose exists to serve"
+  }
+ }
+}

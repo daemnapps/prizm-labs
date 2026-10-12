@@ -1,62 +1,115 @@
 {
-  "run": "sample-run",
-  "items": [
+ "run": "sample-run",
+ "items": [
+  {
+   "id": "S1",
+   "kind": "still",
+   "params": {
+    "model": "nano_banana_2",
+    "prompt": "A woman at a kitchen table in morning light, looking down at her hands."
+   },
+   "medias": [],
+   "characters": [
+    "lead"
+   ],
+   "products": []
+  },
+  {
+   "id": "S2",
+   "kind": "still",
+   "params": {
+    "model": "nano_banana_2",
+    "prompt": "A small tube on a wooden table among everyday clutter."
+   },
+   "medias": [],
+   "characters": [],
+   "products": [
+    "00000000-0000-4000-8000-0000000000d1"
+   ]
+  },
+  {
+   "id": "S3",
+   "kind": "still",
+   "params": {
+    "model": "nano_banana_2",
+    "prompt": "The presenter <<<00000000-0000-4000-8000-0000000000c1>>> in a picture-in-picture circle overlay with captions along the bottom."
+   },
+   "medias": [],
+   "characters": [
+    "lead"
+   ],
+   "products": []
+  },
+  {
+   "id": "S4",
+   "kind": "motion",
+   "params": {
+    "model": "seedance_2_5",
+    "prompt": "She turns her hands over slowly. Natural subtle motion, no cuts.",
+    "duration": 5
+   },
+   "medias": [
     {
-      "id": "S1",
-      "kind": "still",
-      "params": {"model": "nano_banana_2", "prompt": "A woman at a kitchen table in morning light, looking down at her hands."},
-      "medias": [],
-      "characters": ["lead"],
-      "products": []
-    },
-    {
-      "id": "S2",
-      "kind": "still",
-      "params": {"model": "nano_banana_2", "prompt": "A small tube on a wooden table among everyday clutter."},
-      "medias": [],
-      "characters": [],
-      "products": ["00000000-0000-4000-8000-0000000000d1"]
-    },
-    {
-      "id": "S3",
-      "kind": "still",
-      "params": {"model": "nano_banana_2", "prompt": "The presenter <<<00000000-0000-4000-8000-0000000000c1>>> in a picture-in-picture circle overlay with captions along the bottom."},
-      "medias": [],
-      "characters": ["lead"],
-      "products": []
-    },
-    {
-      "id": "S4",
-      "kind": "motion",
-      "params": {"model": "seedance_2_5", "prompt": "She turns her hands over slowly. Natural subtle motion, no cuts.", "duration": 5},
-      "medias": [{"value": "https://example.invalid/frames/s4.png", "role": "start_image"}],
-      "characters": [],
-      "products": [],
-      "lines": []
-    },
-    {
-      "id": "S5",
-      "kind": "motion",
-      "params": {"model": "seedance_2_5", "prompt": "She looks along the shelf and glances away. Slow drift.", "duration": 20},
-      "medias": [{"value": "00000000-0000-4000-8000-0000000000a2", "role": "start_image"}],
-      "characters": ["lead"],
-      "products": [],
-      "lines": ["L1"]
-    },
-    {
-      "id": "S6",
-      "kind": "motion",
-      "params": {"model": "fal-ai/bytedance/seedance/v1/pro/image-to-video", "prompt": "She reaches toward the tube and pauses. Slow push in.", "duration": 5},
-      "medias": [{"value": "00000000-0000-4000-8000-0000000000a1", "role": "start_image"}],
-      "characters": ["lead"],
-      "products": [],
-      "lines": ["L1"]
-    },
-    {
-      "id": "S7",
-      "kind": "still",
-      "params": {"model": "nano_banana_2", "prompt": "An empty porch at dusk."},
-      "medias": []
+     "value": "https://example.invalid/frames/s4.png",
+     "role": "start_image"
     }
-  ]
+   ],
+   "characters": [],
+   "products": [],
+   "lines": []
+  },
+  {
+   "id": "S5",
+   "kind": "motion",
+   "params": {
+    "model": "seedance_2_5",
+    "prompt": "She looks along the shelf and glances away. Slow drift.",
+    "duration": 40
+   },
+   "medias": [
+    {
+     "value": "00000000-0000-4000-8000-0000000000a2",
+     "role": "start_image"
+    }
+   ],
+   "characters": [
+    "lead"
+   ],
+   "products": [],
+   "lines": [
+    "L1"
+   ]
+  },
+  {
+   "id": "S6",
+   "kind": "motion",
+   "params": {
+    "model": "fal-ai/bytedance/seedance/v1/pro/image-to-video",
+    "prompt": "She reaches toward the tube and pauses. Slow push in.",
+    "duration": 5
+   },
+   "medias": [
+    {
+     "value": "00000000-0000-4000-8000-0000000000a1",
+     "role": "start_image"
+    }
+   ],
+   "characters": [
+    "lead"
+   ],
+   "products": [],
+   "lines": [
+    "L1"
+   ]
+  },
+  {
+   "id": "S7",
+   "kind": "still",
+   "params": {
+    "model": "nano_banana_2",
+    "prompt": "An empty porch at dusk."
+   },
+   "medias": []
+  }
+ ]
 }

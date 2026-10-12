@@ -4,7 +4,7 @@ Rollout, 2026-09-20. The gatherer already refused bad work (a row with no
 permalink is never written; a row from a room that plainly belongs to someone
 else is never filed; no rooms means nothing is pulled). What it did not do is
 SAY SO in the one place every tool says it. This module routes those holds
-through the shared `components/quality-checks` `hold(gate, problems, out_dir)`,
+through the shared `components/quality-checks` (marketing-chain-checks) `hold(gate, problems, out_dir)`,
 so a pull that files nothing leaves a gate-keyed `check.json` in its run folder
 and reads HELD — and it asks the one element library (`components/elements`)
 whether the doctrine terms a research question names are real ones.
@@ -40,7 +40,7 @@ def _repo():
         found.append(Path(env))
     found += list(HERE.parents)
     for d in found:
-        if (d / "components" / "quality-checks").is_dir():
+        if any((d / "components" / n).is_dir() for n in CHECKS_DIRS):
             return d
     return None
 
@@ -60,9 +60,18 @@ def _import_from(folder, name):
         return None
 
 
-def quality_checks():
+# Renamed marketing-chain-checks on 2026-10-02; the folder may carry either name.
+CHECKS_DIRS = ("marketing-chain-checks", "quality-checks")
+
+
+def marketing_chain_checks():
     repo = _repo()
-    return _import_from(repo / "components" / "quality-checks" if repo else None, "quality_checks")
+    folder = next((repo / "components" / n for n in CHECKS_DIRS
+                   if repo and (repo / "components" / n / "marketing_chain_checks").is_dir()), None)
+    return _import_from(folder, "marketing_chain_checks")
+
+
+quality_checks = marketing_chain_checks     # the old name, for callers that learned it
 
 
 def element_library():
@@ -145,7 +154,7 @@ def record(gate, problems, out_dir=None):
     """Write the gate's verdict into <out_dir>/check.json through the shared
     hold(). Returns the problems that HELD the work ([] on a pass). Never raises."""
     problems = [p for p in (problems or []) if p]
-    Q = quality_checks()
+    Q = marketing_chain_checks()
     if Q is not None:
         try:
             Q.hold(gate, problems, out_dir)

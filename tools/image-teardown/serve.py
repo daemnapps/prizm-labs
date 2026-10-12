@@ -10,7 +10,7 @@
     POST /api/clear        {id, key}           un-answer one
     POST /api/status       {id, status}        move it along the track
 
-Damon, 2026-09-13: *"make this an actual local tool, like a local page tool
+the owner, 2026-09-13: *"make this an actual local tool, like a local page tool
 with logic that's hooked up, so that way we can actually interact with it."*
 
 The static pages were a photograph of the register. This is the register.
@@ -20,7 +20,7 @@ remember to rebuild is one that is quietly out of date every time you open it.
 
 **The gate lives here on purpose.** Nothing turns a brief into a production
 spec on its own. A brief leaves `for review` only when a person moves it, and
-it cannot be moved while a decision that belongs to Damon is still open.
+it cannot be moved while a decision that belongs to the owner is still open.
 """
 import argparse, json, re, sys
 from datetime import datetime
@@ -34,7 +34,7 @@ import brief_page as BP
 
 BP.LINK = "/b/"
 
-TRACK = ["for-review", "approved", "in-production", "shipped"]
+TRACK = B.TRACK      # the track word lives in `state`; `status` is rule 6's
 
 
 def slugify(s):
@@ -42,7 +42,7 @@ def slugify(s):
 
 
 def open_decisions(rec, dec):
-    """The ones still waiting on Damon, after what he has already answered."""
+    """The ones still waiting on the owner, after what he has already answered."""
     answered = rec.get("decisions", {})
     return [d for d in dec
             if "damon" in d["who"].lower() and not d["settled"]
@@ -77,7 +77,7 @@ def panel(bid, rec):
             f'<tr class="{"mine" if mine else ""}"><td>{BP.H.escape(d["what"])}{box}</td>'
             f'<td>{BP.H.escape(d["who"])}</td><td>{state}</td></tr>')
 
-    i = TRACK.index(rec["status"]) if rec["status"] in TRACK else 0
+    i = TRACK.index(B.lifecycle(rec)) if B.lifecycle(rec) in TRACK else 0
     steps = "".join(
         f'<button class="step {"on" if n == i else ""}" '
         f'onclick="setStatus(\'{s}\')"{" disabled" if n and waiting else ""}>'
@@ -149,7 +149,7 @@ def fresh():
 def where():
     """Where every piece of a brief lives, and why two brands cannot collide.
 
-    Damon, 2026-09-14, before standing up a second brand: *"I need to make
+    the owner, 2026-09-14, before standing up a second brand: *"I need to make
     sure both brands have clear respective briefs, drafts, and generation
     pipelines that do not conflict with each other."*
     """
@@ -256,7 +256,7 @@ def where():
 def swipe_page(name, picks=None):
     """Every post in a swipe library, grouped by creator, hottest first.
 
-    Damon, 2026-09-14: *"pull up the top posts by each creator so we can
+    the owner, 2026-09-14: *"pull up the top posts by each creator so we can
     select the ones we want to swipe."* Data only — engagement, type, date,
     the caption as posted. No subject filter and no recommendation: a post
     about something other than the product is still a format, and for an
@@ -467,11 +467,11 @@ class App(BaseHTTPRequestHandler):
             if s not in TRACK:
                 return self.send(f"status must be one of {TRACK}", 400,
                                  "text/plain; charset=utf-8")
-            # No gate. Damon, 2026-09-14: "the system needs to run without
+            # No gate. the owner, 2026-09-14: "the system needs to run without
             # me." A brief that stops until someone answers a question is a
             # brief that does not ship, and the questions this chain raised
             # were answerable from the repo every time.
-            rec["status"] = s
+            B.set_lifecycle(rec, s)
         else:
             return self.send("not here", 404, "text/plain; charset=utf-8")
 

@@ -16,6 +16,29 @@ from .record import Record, now
 DRY = "[dry run — not written]"
 
 
+def creative_qc(tool, stage, run_dir, output, given, echo=print):
+    """THE CREATIVE QC LOOP for every chain built on run-kit (the owner, 2026-10-02:
+    "installed for each of my production tools … for all stages in the creation
+    process"): the stage's output against what it was given and its bars
+    (components/quality-checks/definitions/stages.json — marketing-chain-checks),
+    filed in qc-log/. Never stops the chain on its own."""
+    try:
+        import sys
+        q = next(str(p / n) for p in Path(__file__).resolve().parents
+                 for n in ("marketing-chain-checks", "quality-checks")
+                 if (p / n / "marketing_chain_checks").is_dir())
+        if q not in sys.path:
+            sys.path.insert(0, q)
+        from marketing_chain_checks import review
+        f = review.after_stage(tool, stage, run_dir, output=output,
+                               sources=[given] if Path(given).exists() else None)
+        bad = [k for k, v in f.items() if isinstance(v, dict) and v.get("severity") in ("BLOCKER", "FIX")]
+        if bad:
+            echo(f"  QC {stage}: {len(bad)} finding(s) — see qc-log/QC-LOG.md")
+    except Exception as e:
+        echo(f"  QC {stage}: review not run ({type(e).__name__})")
+
+
 class Chain:
     """
     steps: [{"key": "stage3", "name": "Writer", "tier": "designs", "label": "draft",
@@ -34,6 +57,7 @@ class Chain:
         self.dry, self.rerun_from = dry, rerun_from
         self.force_model, self.tiers, self.runner, self.echo = force_model, tiers, runner, echo
         self.record = Record(self.out, tool, brand, label, assignment)
+        self.tool = tool
         self.reran = set()
         self.calls = 0
 
@@ -86,7 +110,44 @@ class Chain:
                           prompt_sha256_12=psha, wants=sorted(fields), seconds=round(time.time() - t0, 1),
                           chars_in=len(filled), chars_out=len(text), out=out.name, sent=f"{key}--sent.md",
                           finished=now())
+        if not self.dry:
+            creative_qc(self.tool, key, self.out, out, self.out / f"{key}--sent.md", self.echo)
         return text
+
+    def deliver(self, *files, name=None):
+        """Put what this chain hands on where the standard says — the run's own
+        `deliverable/` (runs/README.md).
+
+        On the chain rather than in each machine, because machine-by-machine is
+        exactly how it failed: on 2026-09-23 an index over 198 runs found three
+        briefs filed correctly and 110 sitting under a name only their own code
+        knew. A chain that ends with `chain.deliver(the_brief)` cannot get it
+        wrong, and a chain that never calls it says so in its record instead of
+        being silently unfindable.
+
+        Called with no argument, it takes the LAST stage's output — which for
+        every teardown is the brief.
+        """
+        from . import filing
+        picked = [Path(f) for f in files if f]
+        if not picked:
+            for key in reversed(self.order):
+                step = self.steps[key]
+                out = self.out / f"{key}--{step['label']}.md"
+                if out.is_file():
+                    picked = [out]
+                    break
+        if not picked:
+            self.record.state["deliverable"] = {"files": [], "why": "nothing to deliver — no stage wrote an output"}
+            self.record.save()
+            return []
+        written = filing.deliver(self.out, picked, name=name)
+        self.record.state["deliverable"] = {
+            "files": [str(w.relative_to(self.out)) for w in written],
+            "from": [str(p.relative_to(self.out)) if p.is_relative_to(self.out) else str(p) for p in picked]}
+        self.record.save()
+        self.echo(f"     deliverable: {', '.join(w.name for w in written)}")
+        return written
 
     def skip(self, key, why):
         """A step that did not run is recorded with its reason, never left blank."""

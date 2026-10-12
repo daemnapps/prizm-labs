@@ -4,7 +4,7 @@
     preflight.py --brand <b> --product <p> --avatar <a> --swipe <s>
     preflight.py --audit                    the agnostic audit alone
 
-Damon, 2026-09-14: *"we're going to be running this every single day for
+the owner, 2026-09-14: *"we're going to be running this every single day for
 numerous brands and products that we stand up… there is no room for error or
 me needing to step in and answer specific questions at all."*
 
@@ -28,6 +28,11 @@ HERE = Path(__file__).resolve().parent
 LANE = HERE.parent
 sys.path.insert(0, str(HERE))
 import paths as P
+for _r in HERE.parents:                # the swipe home, one definition for both pools
+    if (_r / "components" / "swipe-paid" / "swipe_home.py").is_file():
+        sys.path.append(str(_r / "components" / "swipe-paid"))
+        break
+import swipe_home  # noqa: E402
 
 # The live path: what actually runs when a chain starts. Everything else in
 # the folder is history, and holding it to this bar would only teach people
@@ -41,8 +46,8 @@ LIVE = ["chain.py", "serve.py", "tools/run.py", "tools/briefs.py",
 def known_names():
     """Brand and swipe folder names only.
 
-    Product slugs are deliberately not scanned: short product names are
-    often CSS words too (`display:flex`, `core-avatars`), so matching
+    Product slugs are deliberately not scanned: `widget` and `core` are real
+    Brand B products and also `display:flex` and `core-avatars`, so matching
     them buries the real findings under CSS. A brand or swipe name appearing
     in code is the failure that actually misroutes a run.
     """
@@ -53,7 +58,7 @@ def known_names():
     # subfolders — and drowned the real findings again.
     if P.BRANDS.is_dir():
         names |= {d.name.lower() for d in P.BRANDS.iterdir()
-                  if (d / "products").is_dir() and not d.name.startswith("_")}   # _TEMPLATE is not a brand
+                  if (d / "products").is_dir()}
     for root, sub in ((P.SWIPE, "blocks"), (P.SWIPE_ORGANIC, "posts")):
         if root.is_dir():
             names |= {d.name.lower() for d in root.iterdir() if (d / sub).is_dir()}
@@ -145,7 +150,7 @@ def swipe_coverage(swipe):
     """How many of this library's blocks have a still on Drive.
 
     A block with no picture cannot be torn down, and the skip only showed
-    up mid-run: six picks went in, three runs came out (2026-09-14, froya —
+    up mid-run: six picks went in, three runs came out (2026-09-14, competitor-b —
     43 of 71 blocks had a still). Counted before anything starts now.
     """
     if not swipe:
@@ -180,12 +185,12 @@ def drive_swipe(swipe):
     never caught up."""
     if not swipe:
         return P.DRIVE
-    for lib in ("swipe-paid", "swipe-organic"):
+    for pool in swipe_home.POOLS:
         for folder in ("blocks", "angles", "posts"):
-            d = P.DRIVE / lib / swipe / folder
+            d = swipe_home.path(pool, swipe, folder)
             if d.is_dir():
                 return d
-    return P.DRIVE / "swipe-paid" / swipe / "blocks"
+    return swipe_home.path("paid", swipe, "blocks")
 
 
 def placeholders():

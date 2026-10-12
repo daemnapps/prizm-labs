@@ -5,13 +5,13 @@ enters only through these variables. **Where each variable resolves for a
 given brand is stated in exactly one place — the brand's chain-variables
 map.** Production home: `brands/<brand>/chain-variables.md`. While a brand's
 chain work is pre-production it lives in the owner's lab folder instead —
-**`<brand>/chain-variables.md`** (with the hook
-ledger beside it), per Damon's 2026-08-18 ruling that nothing from these
+**`the team notes/<brand>/chain-variables.md`** (with the hook
+ledger beside it), per the owner's 2026-08-18 ruling that nothing from these
 runs enters the brand folder before graduation. A run pulling from a path not in that
 map is a defect. Zero variance: a variable name in a prompt must appear in
 one of the tables below, spelled identically, or the prompt does not run.
 
-Audited 2026-08-18 against every current prompt (Damon's zero-variance
+Audited 2026-08-18 against every current prompt (the owner's zero-variance
 ruling). The audit's own lesson is encoded in the check at the bottom: the
 old grep pattern missed digits, which is how `{stage4_outputs}` went
 undocumented.
@@ -41,12 +41,12 @@ undocumented.
 | `{product_file}` | the product spec for the product being sold | 3, 4a, 4c, 4d, 5·all |
 | `{offer_file}` | prices, guarantee wording, never-pair rules | 3, 4c, 4d, 5·all |
 | `{hook_ledger}` | every hook already generated; human-owned statuses | 4b |
-| `{identity_anchors}` | who may appear on camera | 3 |
+| `{identity_anchors}` | who may appear on camera — read from the brand-identity folder (today: identity-anchors.md) | 3 |
 | `{position}` | the brand's `position.md` — its LINE, SPINE, MECHANISM, MARKET STAGE and what the stage LEADS WITH, as labelled slots (added 2026-09-19). The audience stage checks the swipe's market read against it; injection carries the mechanism in its named words; hooks are tested against LEADS WITH; placement budgets a beat for the line; compose makes the mechanism section mandatory when the stage leads with one | 1b, 2f, 3, 4a (placement), 4b |
 | `{story}` | the brand's `story.md` — its storytelling framework beside the position: SPINE, TELLERS, ENTRY, STORIES with their beats, tellers and the avatars each fits, REASON TO SWITCH, OPENS IN, PRODUCT ENTERS, PROOF, VOICE, NEVER (added 2026-09-19). Filled by the run (`~story`): `[UNFILLED]` for a brand with no file; after 1b, the run's pick (`THIS RUN'S STORY: STORY · TELLER`) is appended. The audience stage picks the story and teller; injection tells that story in that teller's mouth; compose gives every beat a phase; hooks open the story; expansion carries its middle; spice speaks it in the teller's voice | 1b, 2f, 3, 4b, 4d (expansion), 4g |
 | `{brand_name}` | literal value, not a file | 3 |
 
-`{hook_ledger}` (added 2026-08-18, Damon's anti-repetition ruling): 4b
+`{hook_ledger}` (added 2026-08-18, the owner's anti-repetition ruling): 4b
 treats a ledgered verbatim as spent and appends its own rows after each
 run. Measured cause: the cardigan-in-July verbatim hooked in four out of
 four runs before the ledger existed.
@@ -75,7 +75,7 @@ the per-brand map says where.
 
 Move 2 in stage 4c needs a **substantiated customer count**. It is not a
 missing file — it comes from the **store APIs, landing in a Supabase table**
-(Damon, 2026-08-15). Until that table is wired, 4c writes
+(the owner, 2026-08-15). Until that table is wired, 4c writes
 `[SLOT: substantiated customer count]` rather than inventing one; once it is,
 the number is read, never typed.
 
@@ -95,7 +95,7 @@ be swapped, which is what turns this from a pipeline into a matrix:
 Products × avatars × formats is the combination space. A format library is
 just a folder of `{replication_spec}` outputs.
 
-Two further axes, recorded 2026-08-18 (Damon) — context for design, not
+Two further axes, recorded 2026-08-18 (the owner) — context for design, not
 built:
 
 - **Awareness transforms.** A finished script or brief re-rendered for a
@@ -108,7 +108,7 @@ built:
   `{proven_messaging}` is the cautionary tale); when a per-brand
   market-research file lands, it becomes a 4b input.
 
-The end state Damon has named: every unique element of the system defined
+The end state the owner has named: every unique element of the system defined
 in a data file (MD/JSON) in this repo, so the whole thing runs dynamically
 and each role gets a clean surface over it. Build accordingly — anything
 minted here should be a file another pass can read, not prose trapped in a
@@ -131,7 +131,7 @@ swapping starts:
 
 ```bash
 grep -hoE '\{[a-z0-9_]+\}' stage*.md | sort -u   # every variable in use — pattern MUST include 0-9 ({stage4_outputs} hid from the old [a-z_] pattern for a week)
-grep -rniE '<brand>|<category terms>' stage*.md  # brand leak check
+grep -rniE 'brand-a|<category terms>' stage*.md  # brand leak check
 grep -c '^## ' stage*.md                         # must be 0 — house style has no md headers
 ```
 

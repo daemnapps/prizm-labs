@@ -1,0 +1,298 @@
+<title>Ad Signal Tools</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column. Part 1 = five big phone cards. Part 2 = the cloud, one picture you can run. */
+:root{
+  --bg:#F2F3F6; --panel:#FFFFFF; --fg:#16181D; --muted:#5D6270; --line:#DADDE4;
+  --accent:#2B54E8; --accent-soft:#E3E9FD; --pass:#1E7A4A; --pass-soft:#DFF2E7; --fail:#B4322A; --warn:#9A6400; --warn-soft:#F7EBD2;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111318;--panel:#1A1D24;--fg:#E9EBF0;--muted:#9BA1AF;--line:#2C303A;--accent:#7D9BFF;--accent-soft:#1F2945;--pass:#5FCB90;--pass-soft:#16301F;--fail:#F08479;--warn:#E3B055;--warn-soft:#352813;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111318;--panel:#1A1D24;--fg:#E9EBF0;--muted:#9BA1AF;--line:#2C303A;--accent:#7D9BFF;--accent-soft:#1F2945;--pass:#5FCB90;--pass-soft:#16301F;--fail:#F08479;--warn:#E3B055;--warn-soft:#352813;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body);margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:36px 72px;display:flex;flex-direction:column;gap:48px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+h1{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,4vw,2rem);font-weight:800}
+.sub{font-size:1.1rem;color:var(--muted);max-width:52ch;margin:0}
+.eyebrow{font:500 .72rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 14px 16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;color:var(--fg);font:inherit}
+.card:focus-visible,.btn:focus-visible,.sw:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card .n{font:500 .7rem/1 var(--mono);color:var(--muted)}
+.card h3{font-size:1.15rem}
+.card p{margin:0;font-size:.9rem;color:var(--muted)}
+.card .tag{align-self:flex-start;font:500 .66rem/1 var(--mono);padding:4px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.card .tag.rule{background:var(--warn-soft);color:var(--warn)}
+.ph{width:100%;max-width:190px;height:auto;display:block;margin:0 auto}
+.cut{display:flex;flex-wrap:wrap;gap:8px;font-size:.85rem;color:var(--muted)}
+.cut span{padding:5px 10px;border-radius:999px;border:1px dashed var(--line);text-decoration:line-through}
+/* cloud */
+.cloud{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.btn{font:700 .95rem/1 var(--display);padding:12px 20px;border-radius:999px;border:0;background:var(--fg);color:var(--bg);cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.meter{font:500 .85rem/1.2 var(--mono);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.meter b{font-size:1.1rem}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line);display:inline-block;vertical-align:-1px;margin-right:6px;transition:background .3s}
+.dot.on{background:var(--pass);box-shadow:0 0 0 4px var(--pass-soft)}
+.say{font:600 1.05rem/1.35 var(--body);min-height:2.7em}
+.diag{overflow-x:auto}
+.diag svg{width:100%;min-width:640px;height:auto;display:block}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fact{background:var(--bg);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.fact b{font:800 1.3rem/1.1 var(--display)}
+.fact span{font-size:.85rem;color:var(--muted)}
+/* modal */
+[hidden]{display:none!important}
+.mod{position:fixed;inset:0;background:rgba(10,12,16,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+.box{background:var(--panel);border-radius:20px;padding:20px;width:min(420px,100%);max-height:calc(100% - 32px);overflow:auto;display:flex;flex-direction:column;gap:12px;position:relative}
+.x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:1.2rem;cursor:pointer}
+.io{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.95rem;margin:0}
+.io dt{font:500 .7rem/1.7 var(--mono);text-transform:uppercase;color:var(--muted)}
+.io dd{margin:0}
+footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+/* animations */
+.a-heat{animation:fi 3.4s ease infinite}.a-pop{animation:pp 4.4s ease infinite;opacity:0}.a-pop2{animation:pp 4.4s ease infinite .9s;opacity:0}.a-pop3{animation:pp 4.4s ease infinite 1.8s;opacity:0}
+.a-move{animation:mv 4s ease-in-out infinite}.a-bar{animation:br 4s linear infinite}.a-gauge{animation:gg 4s ease infinite}
+.a-slide{animation:sl 4.4s ease infinite}.a-load{animation:ld 4.4s ease infinite}.a-lb{animation:lb 4.4s ease infinite}.a-thumb{animation:th 4.4s ease infinite}
+.a-b1{animation:b1 4s ease infinite}.a-b3{animation:b3 4s ease infinite}.a-mouth{animation:mo 4s ease infinite}
+@keyframes fi{0%{opacity:0}30%,85%{opacity:1}100%{opacity:0}}
+@keyframes pp{0%,10%{opacity:0;transform:translateY(4px)}25%,88%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes mv{0%,100%{transform:translateX(0)}50%{transform:translateX(28px)}}
+@keyframes br{from{width:0}to{width:176px}}
+@keyframes gg{0%{width:0}60%,90%{width:103px}100%{width:0}}
+@keyframes sl{0%,15%{opacity:0}35%,90%{opacity:1}100%{opacity:0}}
+@keyframes ld{0%,55%{opacity:0}75%,95%{opacity:1}100%{opacity:0}}
+@keyframes lb{0%{width:0}60%{width:150px}75%,100%{width:176px}}
+@keyframes th{0%,30%{transform:translate(0,0)}50%,90%{transform:translate(-6px,-50px)}100%{transform:translate(0,0)}}
+@keyframes b1{0%,20%{width:10px}40%,60%{width:80px}80%,100%{width:10px}}
+@keyframes b3{0%,20%{width:80px}40%,60%{width:15px}80%,100%{width:80px}}
+@keyframes mo{0%,20%{d:path("M78 140 q22 0 44 0")}40%,60%{d:path("M78 136 q22 22 44 0")}80%,100%{d:path("M78 140 q22 0 44 0")}}
+.flow{stroke-dasharray:6 6;animation:fl 1s linear infinite}
+@keyframes fl{to{stroke-dashoffset:-12}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.a-pop,.a-pop2,.a-pop3,.a-heat,.a-slide,.a-load{opacity:1!important}}
+@media (max-width:480px){.wrap{padding-inline:16px}}
+
+.test{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px}
+@media (max-width:700px){.test{grid-template-columns:1fr}}
+.stage{position:relative;width:100%;max-width:300px;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:var(--bg);border:3px solid var(--fg);margin:0 auto}
+.stage img,.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;color:var(--muted);font-size:.9rem;cursor:pointer}
+.drop b{font:800 1.1rem/1.2 var(--display);color:var(--fg)}
+.zone{position:absolute;background:rgba(180,50,42,.38);pointer-events:none}
+.ui{position:absolute;pointer-events:none}
+.ui .btnc{position:absolute;width:13%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.85);right:3%}
+.ui .cap{position:absolute;left:4%;height:1.6%;border-radius:3px;background:rgba(255,255,255,.9)}
+.safe45{position:absolute;left:0;right:0;border:2px dashed #2a6bff;pointer-events:none}
+.controls{display:flex;flex-direction:column;gap:14px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:600 .85rem/1 var(--body);padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.seg button:focus-visible,.pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pick{font:700 .9rem/1 var(--display);padding:11px 16px;border-radius:999px;border:0;background:var(--accent);color:var(--panel);cursor:pointer;align-self:flex-start}
+.note{font-size:.82rem;color:var(--muted)}
+.locked{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.lock{background:var(--bg);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+.lock b{font-family:var(--display);font-size:.98rem}
+.lock span{color:var(--muted)}
+</style>
+
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="eyebrow">Phone-first checks · open models · 2 Oct 2026</div>
+  <h1>Ad Signal Tools</h1>
+  <p class="sub">The checks we'd actually use on our ads, and how they'd run in the cloud. Tap a phone to see what it does.</p>
+</header>
+
+<section>
+  <h2>What we use</h2>
+  <div class="cards" id="cards"></div>
+  <div class="cut"><span>paid services</span><span>real-people panels</span><span>VideoScore2: production already checks clips</span><span>page on a phone</span><span>brain model</span><span>memorability</span><span>not made for phones</span></div>
+</section>
+
+<section>
+  <h2>What our avatar viewers already check</h2>
+  <p class="sub">The 5 viewers read a description of the ad, second by second. They don't see pixels. The models do.</p>
+  <div style="overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--panel)"><table style="border-collapse:collapse;width:100%;font-size:.92rem">
+    <thead><tr style="background:var(--bg)"><th style="text-align:left;padding:10px 12px;font:500 .7rem/1.2 var(--mono);text-transform:uppercase;color:var(--muted)">Question</th><th style="text-align:left;padding:10px 12px;font:500 .7rem/1.2 var(--mono);text-transform:uppercase;color:var(--muted)">Avatar viewers (live)</th><th style="text-align:left;padding:10px 12px;font:500 .7rem/1.2 var(--mono);text-transform:uppercase;color:var(--muted)">The four checks</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">Did their thumb stop?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ in the first 2 seconds, compared with the real posts around it</td><td style="padding:10px 12px;border-top:1px solid var(--line)">—</td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">When did they leave?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ the second they swiped, plus a retention curve</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ <b>Will they keep watching</b>, read off the real video (sound and picture)</td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">When did it feel like an ad, and why?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ the second, and what gave it away</td><td style="padding:10px 12px;border-top:1px solid var(--line)">—</td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">Would they tap or tell a friend?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ yes or no, and why, in their words</td><td style="padding:10px 12px;border-top:1px solid var(--line)">—</td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">What will they remember?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ the line or picture, and what they'd text a friend</td><td style="padding:10px 12px;border-top:1px solid var(--line)">—</td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">Where exactly are their eyes?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">❌ can't, they don't see pixels</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ <b>Where do eyes go</b></td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">Does the face show the right emotion?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">❌ they only read "a man smiles"</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ <b>What does the face show</b></td></tr>
+      <tr><td style="padding:10px 12px;border-top:1px solid var(--line)">Is anything under the app's buttons?</td><td style="padding:10px 12px;border-top:1px solid var(--line)">❌</td><td style="padding:10px 12px;border-top:1px solid var(--line)">✅ <b>Hidden by the app</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="sub" style="font-size:.9rem">The viewers judge the brief before anything is made. The four checks look at the real frames and the finished clip.</p>
+</section>
+
+<section>
+  <h2>Test it</h2>
+  <div class="test">
+    <div class="stage" id="stage">
+      <div class="drop" id="drop"><b>Drop a 9:16 picture or video</b>or tap to pick one. It stays on your device and isn't uploaded anywhere.</div>
+      <input type="file" id="file" accept="image/*,video/*" hidden>
+      <div id="layers"></div>
+    </div>
+    <div class="controls">
+      <div><div class="eyebrow" style="margin-bottom:8px">1 · Hidden by the app? · works now</div>
+        <div class="seg" id="plat"><button type="button" data-p="reels" aria-pressed="true">Reels</button><button type="button" data-p="tiktok" aria-pressed="false">TikTok</button><button type="button" data-p="shorts" aria-pressed="false">Shorts</button><button type="button" data-p="all" aria-pressed="false">All three</button></div></div>
+      <div class="seg" id="opts"><button type="button" data-o="ui" aria-pressed="true">Show the app's buttons</button><button type="button" data-o="red" aria-pressed="true">Show hidden areas</button><button type="button" data-o="safe45" aria-pressed="false">Our 4:5 zone</button></div>
+      <button class="pick" type="button" id="pickbtn">Pick a picture or video</button>
+      <p class="note" id="znote"></p>
+      <div><div class="eyebrow" style="margin-bottom:8px">Need installing first</div>
+        <div class="locked">
+          <div class="lock"><b>🔒 Where do eyes go?</b><span>about 1.6 GB with the shared setup</span></div>
+          <div class="lock"><b>🔒 Will they keep watching?</b><span>needs a graphics chip, about 16 GB</span></div>
+          <div class="lock"><b>🔒 What does the face show?</b><span>about 0.2 GB</span></div>
+        </div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>How it runs in the cloud</h2>
+  <p class="sub">One rented cloud computer with everything on it. You and the editors use it from anywhere. It switches off when nobody's working.</p>
+  <div class="cloud">
+    <div class="bar">
+      <button class="btn" id="run" type="button">▶ Run one ad through it</button>
+      <div class="meter"><span><i class="dot" id="pwr"></i><span id="pwrtxt">Off: $0</span></span><span>This ad: <b id="cost">$__</b></span></div>
+    </div>
+    <div class="say" id="say" aria-live="polite">Press run.</div>
+    <div class="diag"><svg id="diag" viewBox="0 0 760 360" role="img" aria-label="Cloud setup"></svg></div>
+    <div class="facts">
+      <div class="fact"><b>Nothing on your Mac</b><span>Models, Blender and rendering all live on the cloud computer</span></div>
+      <div class="fact"><b>Editors anywhere</b><span>Same tools and the same files, from any laptop</span></div>
+      <div class="fact"><b>~$__ / hour while on</b><span>$0 when switched off. Ballpark, not a quote</span></div>
+      <div class="fact"><b>Still calls out</b><span>Higgsfield, fal and Gemini are called from the cloud computer</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>Picked from the full research (all 39 tools are in this page's earlier versions). The animations show what each check does; their numbers are examples, because nothing has been run yet. Cloud costs are ballpark. Building it goes through the developer. Markdown copy: components/quality-checks/SIGNAL-TOOLS.md</footer>
+</div>
+
+<div class="mod" id="mod" hidden role="dialog" aria-modal="true"><div class="box"><button class="x" id="x" type="button" aria-label="Close">×</button><div class="eyebrow" id="mtag"></div><h3 id="mt" style="font-size:1.4rem"></h3><div id="mp"></div><dl class="io" id="mio"></dl></div></div>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+let uid=0;
+const phone=inner=>{const i=++uid;return `<svg viewBox="0 0 200 360" class="ph" aria-hidden="true"><defs><clipPath id="c${i}"><rect x="12" y="12" width="176" height="336" rx="20"/></clipPath><radialGradient id="h${i}"><stop offset="0" stop-color="#ff2a2a" stop-opacity=".85"/><stop offset=".45" stop-color="#ffb000" stop-opacity=".55"/><stop offset="1" stop-color="#2a6bff" stop-opacity="0"/></radialGradient></defs><rect x="6" y="6" width="188" height="348" rx="26" fill="var(--fg)"/><g clip-path="url(#c${i})"><rect x="12" y="12" width="176" height="336" fill="var(--panel)"/>${inner.replaceAll("HEAT",`url(#h${i})`)}</g></svg>`;};
+const ad=(px=86,py=120)=>`<rect x="12" y="12" width="176" height="336" fill="#E9E2D6"/><circle cx="${px}" cy="${py}" r="26" fill="#C68B59"/><rect x="${px-34}" y="${py+26}" width="68" height="110" rx="26" fill="#3D5A80"/><circle cx="${px-9}" cy="${py-4}" r="3" fill="#222"/><circle cx="${px+9}" cy="${py-4}" r="3" fill="#222"/><path d="M${px-9} ${py+9}q9 6 18 0" stroke="#222" stroke-width="2.5" fill="none"/><rect x="132" y="190" width="26" height="62" rx="6" fill="#fff" stroke="#999"/><rect x="28" y="40" width="120" height="12" rx="3" fill="#222"/><rect x="28" y="58" width="90" height="9" rx="3" fill="#555"/>`;
+const page=`<rect x="12" y="12" width="176" height="336" fill="var(--panel)"/><rect x="26" y="58" width="148" height="14" rx="3" fill="var(--fg)"/><rect x="26" y="78" width="110" height="10" rx="3" fill="var(--muted)"/><rect x="26" y="100" width="148" height="110" rx="10" fill="#E9E2D6"/><circle cx="70" cy="150" r="20" fill="#C68B59"/><rect x="40" y="270" width="120" height="36" rx="18" fill="var(--accent)"/><text x="100" y="293" text-anchor="middle" font-size="12" font-weight="700" fill="var(--panel)" font-family="IBM Plex Sans,sans-serif">Start quiz</text><rect x="150" y="18" width="18" height="18" rx="3" fill="var(--muted)"/>`;
+const tag=(x,y,t,c="var(--fg)",cls="a-pop")=>`<g class="${cls}"><rect x="${x-3}" y="${y-12}" width="${t.length*6.4+10}" height="17" rx="5" fill="var(--panel)" stroke="${c}"/><text x="${x+2}" y="${y}" font-size="10.5" font-family="IBM Plex Mono,monospace" fill="${c}">${t}</text></g>`;
+const TOOLS=[
+ {t:"Hidden by the app?",k:"rule",tool:"No model. A rule inside our tool",
+  give:"Each frame of the ad",back:"The app's buttons and caption drawn on top, with anything hidden flagged",us:"No face, words or product under TikTok, Reels or Shorts buttons",
+  svg:()=>phone(ad(86,250)+`<g class="a-slide"><rect x="12" y="12" width="176" height="47" fill="#000" opacity=".35"/><rect x="12" y="230" width="176" height="118" fill="#000" opacity=".35"/>${[150,190,230,270].map(y=>`<circle cx="166" cy="${y}" r="9" fill="#fff" opacity=".9"/>`).join("")}<rect x="22" y="300" width="120" height="8" rx="3" fill="#fff"/></g><g class="a-pop3"><rect x="50" y="222" width="72" height="62" rx="6" fill="none" stroke="var(--fail)" stroke-width="3"/></g>`+tag(24,214,"face under caption","var(--fail)","a-pop3"))},
+ {t:"Where do eyes go?",k:"model",tool:"MVFormer, trained on phone videos (UNISAL until its code is out)",
+  give:"The video",back:"A moving heat map: red is where eyes go",us:"In the first seconds, are eyes on the product?",
+  svg:()=>phone(`<g class="a-move">${ad()}</g><g class="a-move"><ellipse cx="86" cy="118" rx="55" ry="55" fill="HEAT"/></g><rect x="12" y="340" width="176" height="8" fill="var(--line)"/><rect class="a-bar" x="12" y="340" width="0" height="8" fill="var(--accent)"/>`+tag(22,326,"eyes on the face"))},
+ {t:"Will they keep watching?",k:"model",tool:"LMM-EVQA, trained on Snapchat phone videos",
+  give:"The video, with its sound and caption",back:"How many will keep watching past the first seconds",us:"Pick the strongest opening before we push one",
+  svg:()=>phone(ad()+`<rect x="12" y="292" width="176" height="56" fill="var(--panel)" opacity=".94"/><rect x="24" y="306" width="152" height="12" rx="6" fill="var(--line)"/><rect class="a-gauge" x="24" y="306" width="0" height="12" rx="6" fill="var(--pass)"/>`+tag(24,338,"68% keep watching","var(--pass)","a-pop2"))},
+ {t:"What does the face show?",k:"model",tool:"HSEmotion",
+  give:"Frames with a face",back:"The emotion on the face, moment by moment",us:"The face shows what the brief asks for, at the right moment",
+  svg:()=>phone(`<rect x="12" y="12" width="176" height="336" fill="#E9E2D6"/><circle cx="100" cy="120" r="56" fill="#C68B59"/><circle cx="82" cy="108" r="6" fill="#222"/><circle cx="118" cy="108" r="6" fill="#222"/><path class="a-mouth" d="M78 140 q22 0 44 0" stroke="#222" stroke-width="5" fill="none" stroke-linecap="round"/>${[["happy",236,"var(--pass)","a-b1"],["neutral",262,"var(--muted)","a-b3"]].map(b=>`<text x="24" y="${b[1]+10}" font-size="11" font-family="IBM Plex Mono,monospace" fill="var(--fg)">${b[0]}</text><rect x="84" y="${b[1]}" width="90" height="12" rx="6" fill="var(--line)"/><rect class="${b[3]}" x="84" y="${b[1]}" width="10" height="12" rx="6" fill="${b[2]}"/>`).join("")}`)}
+];
+$("cards").innerHTML=TOOLS.map((x,i)=>`<button class="card" type="button" data-i="${i}"><span class="n">${i+1}</span>${x.svg()}<h3>${x.t}</h3><span class="tag ${x.k==="rule"?"rule":""}">${x.k==="rule"?"rule, no model":"open model"}</span></button>`).join("");
+$("cards").addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const x=TOOLS[+c.dataset.i];
+ $("mtag").textContent=x.tool;$("mt").textContent=x.t;$("mp").innerHTML=x.svg();
+ $("mio").innerHTML=`<dt>You give it</dt><dd>${x.give}</dd><dt>It gives back</dt><dd>${x.back}</dd><dt>For us</dt><dd>${x.us}</dd>`;$("mod").hidden=false;$("x").focus();});
+$("mod").addEventListener("click",e=>{if(e.target.id==="mod"||e.target.id==="x")$("mod").hidden=true;});
+addEventListener("keydown",e=>{if(e.key==="Escape")$("mod").hidden=true;});
+
+// ── the cloud picture ──
+const N={
+ you:{x:20,y:40,w:130,h:56,t:"You",s:"any laptop"},
+ eds:{x:20,y:120,w:130,h:56,t:"Video editors",s:"anywhere"},
+ cloud:{x:210,y:20,w:330,h:320},
+ chains:{x:228,y:62,w:140,h:52,t:"Our chains",s:"teardown → brief"},
+ checks:{x:384,y:62,w:140,h:52,t:"Phone checks",s:"eyes · watch · face"},
+ blender:{x:228,y:132,w:140,h:52,t:"Blender",s:"3D objects"},
+ render:{x:384,y:132,w:140,h:52,t:"Edit + render",s:"cuts, captions"},
+ files:{x:228,y:202,w:296,h:46,t:"Files",s:"briefs, clips, renders"},
+ hf:{x:600,y:40,w:140,h:50,t:"Higgsfield",s:"video, images"},
+ fal:{x:600,y:110,w:140,h:50,t:"fal",s:"video models"},
+ gem:{x:600,y:180,w:140,h:50,t:"Gemini",s:"reading, viewers"},
+ drive:{x:600,y:270,w:140,h:50,t:"Google Drive",s:"finished ads"}
+};
+const box=(k,cls="")=>{const n=N[k];return `<g id="n-${k}" class="${cls}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="12" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/><text x="${n.x+12}" y="${n.y+23}" font-size="14" font-weight="700" font-family="Bricolage Grotesque,sans-serif" fill="var(--fg)">${n.t}</text><text x="${n.x+12}" y="${n.y+40}" font-size="11" font-family="IBM Plex Sans,sans-serif" fill="var(--muted)">${n.s}</text></g>`;};
+const line=(id,x1,y1,x2,y2)=>`<path id="l-${id}" d="M${x1} ${y1} L${x2} ${y2}" stroke="var(--line)" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>`;
+$("diag").innerHTML=`<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="var(--muted)"/></marker></defs>
+<g id="n-cloud"><rect x="210" y="20" width="330" height="320" rx="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6"/><text x="228" y="46" font-size="14" font-weight="800" font-family="Bricolage Grotesque,sans-serif" fill="var(--accent)">One cloud computer (with a graphics chip)</text><text x="228" y="300" font-size="11" font-family="IBM Plex Mono,monospace" fill="var(--muted)" id="cstate">asleep · $0</text>
+<g transform="translate(470 270)"><rect x="0" y="0" width="54" height="30" rx="15" fill="var(--line)" id="swbg"/><circle cx="15" cy="15" r="11" fill="var(--panel)" id="swk"/></g></g>
+${box("you")}${box("eds")}${box("chains")}${box("checks")}${box("blender")}${box("render")}${box("files")}${box("hf")}${box("fal")}${box("gem")}${box("drive")}
+${line("in1",150,68,226,88)}${line("in2",150,148,226,96)}${line("c1",368,88,382,88)}${line("c2",454,114,454,130)}${line("c3",368,158,382,158)}${line("c4",454,184,454,200)}
+${line("o1",524,80,598,65)}${line("o2",524,96,598,135)}${line("o3",524,104,598,205)}${line("o4",524,225,598,295)}`;
+const STEPS=[
+ ["in1","you","You press go on a swipe.",0],
+ [null,"cloud","The cloud computer wakes up.",0.02],
+ [null,"chains","Our chains tear it down and write the brief.",0.05],
+ ["o3","gem","Gemini reads and runs the 5 viewers.",0.08],
+ ["o1","hf","Higgsfield makes the clips.",0.15],
+ ["c1","checks","Phone checks: where eyes go, will they keep watching, the face.",0.25],
+ ["c3","render","Edit and render: cuts and captions.",0.35],
+ [null,"blender","Blender adds a 3D product shot.",0.45],
+ ["c4","files","Every file is saved in one place.",0.48],
+ ["o4","drive","The finished ad lands in Drive for the team.",0.5],
+ [null,null,"Nobody's working, so it switches off. $0 from here.",0.5]
+];
+const wait=ms=>new Promise(r=>setTimeout(r,matchMedia("(prefers-reduced-motion: reduce)").matches?80:ms));
+function power(on){$("pwr").className="dot"+(on?" on":"");$("pwrtxt").textContent=on?"On: ~$__/hr":"Off: $0";$("swbg").setAttribute("fill",on?"var(--pass)":"var(--line)");$("swk").setAttribute("cx",on?39:15);$("cstate").textContent=on?"awake · running":"asleep · $0";}
+function hi(id,on){const g=$("n-"+id);if(!g)return;const r=g.querySelector("rect");r.setAttribute("stroke",on?"var(--accent)":"var(--line)");r.setAttribute("stroke-width",on?3:2);}
+function flow(id,on){const l=$("l-"+id);if(!l)return;l.setAttribute("stroke",on?"var(--accent)":"var(--line)");l.classList.toggle("flow",on);}
+$("run").addEventListener("click",async()=>{
+ $("run").disabled=true;Object.keys(N).forEach(k=>hi(k,false));document.querySelectorAll("#diag path[id^=l-]").forEach(l=>flow(l.id.slice(2),false));
+ for(const [l,n,t,c] of STEPS){
+   if(n==="cloud")power(true);
+   if(l)flow(l,true);if(n&&n!=="cloud")hi(n,true);
+   $("say").textContent=t;$("cost").textContent="$__";
+   await wait(1400);
+ }
+ power(false);$("say").textContent="One ad, start to finish: about 15 minutes of cloud time, roughly $__. Example figures.";
+ $("run").disabled=false;
+});
+power(false);
+})();
+</script>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+// zones as % of a 1080x1920 frame: top, bottom, left, right
+const Z={
+ reels:{n:"Reels",top:14,bottom:35,left:6,right:6,src:"Meta's own numbers (Facebook Ads Guide)",right_ui:true},
+ tiktok:{n:"TikTok",top:8,bottom:26,left:4,right:14,src:"approximate: TikTok publishes overlay files, not numbers. Check against their file before relying on it",right_ui:true},
+ shorts:{n:"Shorts",top:10,bottom:25,left:4,right:10,src:"approximate: Google only shows a diagram",right_ui:true}
+};
+const state={p:"reels",ui:true,red:true,safe45:false};
+function draw(){
+ const plats=state.p==="all"?["reels","tiktok","shorts"]:[state.p];
+ let h="";
+ plats.forEach(k=>{const z=Z[k];const op=state.p==="all"?.45:1;
+  if(state.red){h+=`<div class="zone" style="top:0;left:0;right:0;height:${z.top}%;opacity:${op}"></div><div class="zone" style="bottom:0;left:0;right:0;height:${z.bottom}%;opacity:${op}"></div><div class="zone" style="top:${z.top}%;bottom:${z.bottom}%;left:0;width:${z.left}%;opacity:${op}"></div><div class="zone" style="top:${z.top}%;bottom:${z.bottom}%;right:0;width:${z.right}%;opacity:${op}"></div>`;}
+ });
+ if(state.ui&&state.p!=="all"){const z=Z[state.p];h+=`<div class="ui" style="inset:0">${[0,1,2,3].map(i=>`<div class="btnc" style="bottom:${z.bottom-2+i*9}%"></div>`).join("")}<div class="cap" style="bottom:${z.bottom-12}%;width:60%"></div><div class="cap" style="bottom:${z.bottom-16}%;width:45%"></div><div class="cap" style="bottom:${z.bottom-20}%;width:30%;height:2.2%"></div></div>`;}
+ if(state.safe45){const hh=100*(9/16)/(4/5);h+=`<div class="safe45" style="top:${(100-hh)/2}%;height:${hh}%"></div>`;}
+ $("layers").innerHTML=h;
+ $("znote").textContent=state.p==="all"?"Darker red is covered by more than one app.":`${Z[state.p].n}: top ${Z[state.p].top}%, bottom ${Z[state.p].bottom}%, sides ${Z[state.p].left}% / ${Z[state.p].right}%. Source: ${Z[state.p].src}.`;
+}
+function load(f){if(!f)return;const url=URL.createObjectURL(f);const st=$("stage");st.querySelectorAll("img,video").forEach(x=>x.remove());
+ const el=f.type.startsWith("video")?Object.assign(document.createElement("video"),{src:url,autoplay:true,muted:true,loop:true,playsInline:true,controls:false}):Object.assign(document.createElement("img"),{src:url,alt:"Your asset"});
+ st.insertBefore(el,$("layers"));$("drop").hidden=true;}
+$("drop").addEventListener("click",()=>$("file").click());$("pickbtn").addEventListener("click",()=>$("file").click());
+$("file").addEventListener("change",e=>load(e.target.files[0]));
+const st=$("stage");["dragover","dragenter"].forEach(ev=>st.addEventListener(ev,e=>{e.preventDefault();}));st.addEventListener("drop",e=>{e.preventDefault();load(e.dataTransfer.files[0]);});
+$("plat").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.p=b.dataset.p;$("plat").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));draw();});
+$("opts").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.o;state[k]=!state[k];b.setAttribute("aria-pressed",state[k]);draw();});
+draw();
+})();
+</script>

@@ -3,7 +3,7 @@
 
     python3 frames.py --brief <brief.md> --video <source.mp4> --out <dir>
 
-Damon's rule (2026-08-21): every scene gets a picture. The shared runner drops
+the owner's rule (2026-08-21): every scene gets a picture. The shared runner drops
 frames when the generated person does not match the seed still, or when it
 judges a scene unusable — this one does not. It generates for every scene, and
 if generation fails outright it falls back to the still cut from the video so
@@ -12,39 +12,66 @@ the scene still has something to look at.
 The seed still keeps the place and the light consistent between scenes.
 """
 
-import argparse, base64, json, os, re, subprocess, sys, threading, time, urllib.request
+import argparse, base64, json, os, re, subprocess, sys, tempfile, threading, time, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import keys
 
-# Best model, always (Damon, 2026-08-25). The 08-21 note below it chose the
+# ONE DOOR, GPT IMAGE (the owner, 2026-09-22: "brief frames need to run on gpt,
+# not nano banana"). This file names no model: it asks the one route table,
+# `tools/image-production/models.json`, which is where every picture in
+# the business is routed — stills, statics, email, pages and now these frames.
+# Today that resolves to GPT Image 2.5 on OpenAI's own door.
+#
+# The seed still, the face anchor and the product photographs all go IN as
+# references, which is the edit-first operation (2026-09-02, proven head to
+# head) done in that model's own door. Because GPT Image takes one prompt and
+# a LIST of pictures, the sentence that used to sit beside each reference is
+# written into the prompt as a numbered legend — see `legend()`.
+#
+# Gone the same day: fal (nano-banana/edit, flux-lora trained identities, the
+# packshot composite), ruled out 2026-09-11, restated 09-13 and again here.
+#
+# The history below is kept because it is why the frames look the way they do.
+# Best model, always (the owner, 2026-08-25). The 08-21 note below it chose the
 # cheapest tier because these were reference frames a creator glanced at.
 # They are becoming ad assets, so the job changed and the choice with it —
 # image generation is cheap next to video, so there is no reason to run
 # anything but the best. Override per run with --image-model.
+# Every frame records WHICH model drew it, in the manifest (2026-09-22, after
+# the owner asked the question off a brief page and nothing on the page answered
+# it). The run page reads that record; runs before this date carry none.
 #   gemini-3-pro-image        Nano Banana Pro   best, slowest, sometimes busy
 #   gemini-3.1-flash-image    Nano Banana 2     very good, fast
 #   gemini-3.1-flash-lite-image                 the old default
-# Pro is the default (Damon, 2026-08-25, revised same day). Flash held the
+# Pro is the default (the owner, 2026-08-25, revised same day). Flash held the
 # default for one afternoon because Pro's 250/day cap used to kill a whole run
 # the moment it was spent — topping up does not move it, it is a daily quota,
 # not credit. The per-frame fallback below now catches that case and finishes
 # the run on Flash, so the reason is gone and the frames were visibly cheaper
 # for it. At ~29 frames a video the cap is roughly eight videos a day; past
 # that the run finishes on Flash and says how many frames it had to hand over.
-MODEL = os.environ.get("FRAMES_MODEL", "gemini-3-pro-image")
+# Kept for the manifest and the run page: what a frame SAYS drew it. The real
+# id comes back from the engine; this is the row name asked for.
+MODEL = os.environ.get("FRAMES_MODEL", "gpt-image-person")
 
-# Whatever MODEL is, this is the other one to try before giving up on a frame.
-FALLBACK = ("gemini-3.1-flash-image"
-            if MODEL != "gemini-3.1-flash-image" else "gemini-3-pro-image")
+# There is no second door any more — one model, one look (the whole point of
+# the route table). FALLBACK stays equal to MODEL so the "try the other one"
+# branches below are inert rather than removed, and a future second row is one
+# line away.
+FALLBACK = MODEL
 
 # Vertical, to match the ads these frames are shot for. 2K is the useful
 # ceiling for a reference frame; Pro will go to 4K if ever needed.
 ASPECT = "9:16"
 SIZE = "2K"
-WORKERS = 6   # concurrent frames; higher starts drawing rate limits
+# GPT Image counts INPUT IMAGES per minute (limit 5 on this account) and every
+# frame attaches at least the seed still, so six at once fails five of them.
+# The gate below paces the calls; the workers just queue behind it.
+WORKERS = 3   # concurrent frames
+IMAGES_PER_MIN = int(os.environ.get("FRAMES_IMAGES_PER_MIN", "5"))
 BASE = "https://generativelanguage.googleapis.com"
 
 # Stated on every generation. Clothing and the product's real look are the two
@@ -56,13 +83,13 @@ BASE = "https://generativelanguage.googleapis.com"
 # It says nothing about WHERE. It used to: "available light from the windows
 # already in the room", "walls ... are plain and unmarked" — an interior
 # hardcoded into the one instruction appended to every frame. On a shoot that
-# happens entirely on a beach that put her in a bedroom (Damon, 2026-08-26).
+# happens entirely on a beach that put her in a bedroom (the owner, 2026-08-26).
 # The scene names the place; this only says how the picture is taken.
 GUARD = (
     # POSITIVE FRAMING, and it applies to the camera too. The old text said
     # "a phone photograph, handheld at chest height, the way someone filming
     # themselves would hold it" and got a hand holding a phone drawn into the
-    # shot, caption rendered on its little screen (Damon, 2026-08-26). Adding
+    # shot, caption rendered on its little screen (the owner, 2026-08-26). Adding
     # "no phone, no camera, no hand" made it worse for the reason already
     # written above: naming a thing puts it in front of the model. So neither
     # word appears here at all. This describes the LOOK — off-centre framing,
@@ -319,6 +346,29 @@ def img_part(f):
                             "data": base64.b64encode(f.read_bytes()).decode()}}
 
 
+class Pace:
+    """Lets at most N image calls start in any 60 seconds. A 429 for going too
+    fast is not a failure to report — it is a queue to join (learned live
+    2026-09-22: six workers, limit five, nine frames in and the run stopped)."""
+
+    def __init__(self, per_min):
+        self.per_min, self.at, self.lock = per_min, [], threading.Lock()
+
+    def wait(self):
+        while True:
+            with self.lock:
+                now = time.time()
+                self.at = [t for t in self.at if now - t < 60]
+                if len(self.at) < self.per_min:
+                    self.at.append(now)
+                    return
+                sleep = 60 - (now - self.at[0]) + 0.5
+            time.sleep(max(sleep, 0.5))
+
+
+PACE = Pace(IMAGES_PER_MIN)
+
+
 class OutOfCredit(Exception):
     """The key is out. Retrying cannot fix it, so the run stops and says so."""
 
@@ -440,7 +490,7 @@ QC_MODEL = os.environ.get("FRAMES_QC_MODEL", "gemini-3.5-flash")
 
 
 def qc_frame(k, png, named, cast_blocks, packshots, caption):
-    """THE QC LOOP's inspector (Damon's ruling 2026-08-31: every frame is
+    """THE QC LOOP's inspector (the owner's ruling 2026-08-31: every frame is
     QC'd in loop, and controlled if variated). One generated frame is held
     against ground truth — the real packshot for the product, the locked
     cast blocks for every character the scene names, the caption for
@@ -504,279 +554,119 @@ def qc_frame(k, png, named, cast_blocks, packshots, caption):
         return None if not str(e) else None
 
 
-# ------------------------------------------------------- trained identities
-# A LoRA is an identity TRAINED IN, not a reference photo shown and hoped
-# over. Proven 2026-08-31/09-01: a character holds across every scene with
-# no reference image at all; a product holds colour/shape/logo but wobbles
-# on micro-text at hero size, which is why a label-forward frame still
-# composites the real packshot. Identities are recorded as lora.json beside
-# the character/creator/product in the brand folder (train_identity.py).
-FAL_TXT2IMG = "https://queue.fal.run/fal-ai/flux-lora"
-FAL_IMG2IMG = "https://queue.fal.run/fal-ai/flux-lora/image-to-image"
+def engine():
+    """The shared image engine. Imported at CALL time so this module still
+    imports on a machine that has not got it."""
+    import chain as _C                                   # noqa: PLC0415
+    root = _C.workspace() / "tools" / "image-production"
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from image_production import providers, route          # noqa: PLC0415
+    return providers, route
 
 
-class NoIdentity(RuntimeError):
-    pass
-
-
-def fal_call(key, url, payload, tries=3):
-    for attempt in range(tries):
-        try:
-            r = urllib.request.Request(
-                url, data=json.dumps(payload).encode(),
-                headers={"Authorization": f"Key {key}",
-                         "Content-Type": "application/json"})
-            with urllib.request.urlopen(r, timeout=300) as resp:
-                job = json.loads(resp.read() or b"{}")
-            while True:
-                s = urllib.request.Request(
-                    job["status_url"] + "?logs=0",
-                    headers={"Authorization": f"Key {key}"})
-                with urllib.request.urlopen(s, timeout=120) as resp:
-                    st = json.loads(resp.read() or b"{}")
-                if st.get("status") in ("COMPLETED", "FAILED", "ERROR"):
-                    break
-                time.sleep(4)
-            if st.get("status") != "COMPLETED":
-                raise RuntimeError(st.get("status"))
-            g = urllib.request.Request(
-                job["response_url"], headers={"Authorization": f"Key {key}"})
-            with urllib.request.urlopen(g, timeout=120) as resp:
-                out = json.loads(resp.read() or b"{}")
-            with urllib.request.urlopen(out["images"][0]["url"],
-                                        timeout=120) as im:
-                return im.read()
-        except Exception:
-            if attempt == tries - 1:
-                return None
-            time.sleep(3 * (attempt + 1))
-    return None
-
-
-def generate_trained(key, prompt, loras, seed=None, strength=0.72):
-    """Generate with trained identities. With a seed still, this is
-    image-to-image so the source's framing and place carry over; without
-    one it is straight text-to-image."""
-    payload = {"prompt": prompt,
-               "loras": [{"path": u, "scale": s} for u, s in loras],
-               "image_size": {"width": 768, "height": 1344},
-               "num_inference_steps": 32, "guidance_scale": 3.5,
-               "enable_safety_checker": False}
-    if seed and Path(seed).exists():
-        payload["image_url"] = data_uri(Path(seed))
-        payload["strength"] = strength
-        return fal_call(key, FAL_IMG2IMG, payload)
-    return fal_call(key, FAL_TXT2IMG, payload)
-
-
-def data_uri(p):
-    import base64 as _b64
-    kind = "jpeg" if p.suffix.lower() in (".jpg", ".jpeg") else "png"
-    return f"data:image/{kind};base64," + \
-        _b64.b64encode(p.read_bytes()).decode()
-
-
-def composite_product(key, frame_png, packshot, note=""):
-    """Paste the REAL product into a generated frame — the label is never
-    drawn, it is the actual artwork. Nano Banana's editing role, on fal."""
-    payload = {
-        "prompt": ("Replace the product in this photograph with the exact "
-                   "product shown in the second image. Keep the scene, the "
-                   "hand, the pose, the lighting and the framing identical — "
-                   "change only the product, and reproduce its packaging, "
-                   "colour, logo and label wording exactly as the second "
-                   "image shows. " + note),
-        "image_urls": [data_uri_bytes(frame_png), data_uri(Path(packshot))],
-        "num_images": 1}
-    return fal_call(key, "https://queue.fal.run/fal-ai/nano-banana/edit",
-                    payload)
-
-
-def data_uri_bytes(b, kind="png"):
-    import base64 as _b64
-    return f"data:image/{kind};base64," + _b64.b64encode(b).decode()
-
-
-NANO_EDIT = "https://queue.fal.run/fal-ai/nano-banana/edit"
-
-
-def edit_frame(key, seed, instruction, products=()):
-    """EDIT-FIRST (Damon's ruling 2026-09-02, proven side by side).
-
-    The seed still already contains the framing, the blocking, the room,
-    the light and the lens. Generating from scratch throws all of that
-    away and rebuilds it from a paragraph — which is why the prompt kept
-    growing (4,262 characters on one frame) and kept drifting: every rule
-    was compensating for information we had and discarded.
-
-    This is what "recreate this image with these words" actually is: the
-    picture is the canvas, and the words describe only the CHANGE. Head
-    to head on the same scene, a 451-character edit beat a 4,262-character
-    generation on wardrobe, composition and — for the first time — a
-    legible caption.
-
-    An edit inherits the source's LOOK, which is the point when we are
-    reprinting an ad's structure. Where a different aesthetic is wanted,
-    that is the variation chain's style lock, not this stage's job.
-    """
-    if not (seed and Path(seed).exists()):
-        return None
-    urls = [data_uri(Path(seed))]
-    for q in list(products)[:2]:
-        if q and Path(q).exists():
-            urls.append(data_uri(Path(q)))
-    return fal_call(key, NANO_EDIT,
-                    {"prompt": instruction, "image_urls": urls,
-                     "num_images": 1})
-
-
-# Markup the brief writes for a human reader. It is direction ABOUT the
-# picture, not content IN it, and an edit instruction carrying it asks the
-# model to draw the word "Film:".
-MARKUP = re.compile(r"\*\*(?:Film|Say|Hear|Wearing|Text|Overlay)s?:?\*\*\s*", re.I)
-
-
-def edit_instruction(sc, who_line, wearing, caption, has_product,
-                     product_look, lead_in_frame=True):
-    """The DELTA, and nothing else. Everything the seed already shows —
-    the room, the framing, the light, the blocking — is named as kept, not
-    described.
-
-    Three defects fixed 2026-09-02, found by reading the machine's own
-    instruction beside a hand-written one that worked:
-
-      * IT DRESSED THE WRONG PERSON. The lead's identity and wardrobe were
-        applied to every frame regardless of who is actually on screen —
-        so a shot that is the lead's POV OF SOMEONE ELSE told the model to
-        make that someone else look like the lead. `lead_in_frame` gates it.
-      * IT LEAKED MARKUP. "**Film:**" reached the model as content.
-      * IT TRUNCATED MID-WORD, ending an instruction on "Shallow focus hol".
-        Cut on a sentence, or do not cut.
-
-    Order matters too: the CHANGE leads and the caption sits close behind
-    it. Burying the caption under a long "who" clause is how it went
-    missing on frames the hand test rendered perfectly.
-    """
-    bits = ["Keep this exact shot — same framing, same place, same lighting, "
-            "same composition and camera position. Change only what follows. "]
-    if lead_in_frame:
-        if who_line:
-            bits.append(f"The person is {who_line.rstrip('. ')}. ")
-        if wearing:
-            bits.append(f"They are wearing {wearing.rstrip('. ')}. ")
-    action = MARKUP.sub("", drop_rig(sc.get("on_screen") or ""))
-    action = " ".join(action.split())
-    if len(action) > 300:
-        cut = action[:300].rsplit(". ", 1)[0]
-        action = (cut + ".") if len(cut) > 80 else action[:300].rsplit(" ", 1)[0]
-    if action:
-        bits.append(f"What is happening: {action} ")
-    if has_product and product_look:
-        bits.append("The product in frame is exactly the one in the second "
-                    "image — same packaging, colour, logo and label wording. ")
-    if caption:
-        bits.append(f'Burned into the bottom of the picture, white sans-serif, '
-                    f'reading exactly: "{caption}". That wording, spelled as '
-                    "written, and no other lettering anywhere in the frame. ")
-    else:
-        bits.append("No lettering anywhere except the product's own label. ")
-    return "".join(bits)
+def legend(seed, products, face):
+    """GPT Image takes ONE prompt and a LIST of pictures — there is no slot to
+    hang a sentence on each reference the way Gemini's parts had. So the
+    relationships that used to sit beside each image are written into the
+    prompt as a numbered legend, in the exact order the images are attached.
+    The words themselves are unchanged; only where they sit moved."""
+    bits, n = [], 0
+    if face:
+        n += 1
+        bits.append(f"IMAGE {n} — {FACE_RELATIONSHIP}")
+    if seed:
+        n += 1
+        bits.append(f"IMAGE {n} — "
+                    + (SEED_RELATIONSHIP_WITH_FACE if face else SEED_RELATIONSHIP))
+    for _ in products:
+        n += 1
+        bits.append(f"IMAGE {n} — {PRODUCT_RELATIONSHIP}")
+    if not bits:
+        return ""
+    return ("The attached photographs are references, in this order:\n\n"
+            + "\n\n".join(bits) + "\n\n")
 
 
 def generate(k, seed, prompt, tries=4, model=None, products=(), face=None,
              why=None):
-    """`why` is an optional dict this fills in with the model's finishReason,
-    so a caller can tell "the reference photo was declined" apart from "the
-    call came back empty" — they need different answers and used to get the
-    same one."""
-    parts = []
-    # The person first: whoever is named first is the one the model holds on
-    # to when a later reference disagrees, and who she is matters more than
-    # which room she is standing in.
-    if face and Path(face).exists():
-        parts.append(img_part(Path(face)))
-        parts.append({"text": FACE_RELATIONSHIP})
-    if seed and seed.exists():
-        parts.append(img_part(seed))
-        seed_text = SEED_RELATIONSHIP_WITH_FACE if face else SEED_RELATIONSHIP
-        # The still is cut from SOMEBODY ELSE'S ad, so their product is often
-        # sitting in it — and "keep everything in it" was carrying that tub
-        # into our frame, where it blended with our product references
-        # (found 2026-08-31 on the strawberry-legs run). When our product is
-        # in the scene, the still's product is explicitly not.
-        if products:
-            seed_text += (
-                " Any words or captions burned into this location photograph are "
-                "not part of the scene either — the only caption is the one "
-                "named below, if any. One exception: any product, container, tube, jar or "
-                "packaging visible in this location photograph is NOT part "
-                "of the scene — ignore it completely. The only product that "
-                "may appear is the one in the product reference photographs.")
-        parts.append({"text": seed_text})
-    for p in products:
-        if p and Path(p).exists():
-            parts.append(img_part(Path(p)))
-            parts.append({"text": PRODUCT_RELATIONSHIP})
-    parts.append({"text": prompt})
-    body = {
-        "contents": [{"parts": parts}],
-        # Without this the model picks a shape per call — runs on 2026-08-21
-        # came back as a mix of 768x1365 and square 1024x1024. These are
-        # reference frames for vertical ads; a square one misleads the maker.
-        "generationConfig": {
-            "responseModalities": ["IMAGE"],
-            "imageConfig": {"aspectRatio": ASPECT, "imageSize": SIZE},
-        },
-    }
-    req = urllib.request.Request(
-        f"{BASE}/v1beta/models/{model or MODEL}:generateContent?key={k}",
-        data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
+    """One frame, on GPT Image (the owner, 2026-09-22: "brief frames need to run on
+    gpt, not nano banana"). Returns the PNG bytes, or None.
+
+    The model is not named here — it comes from the one route table in
+    `tools/image-production/models.json`, the same door every other
+    picture in the business goes through. `why` is filled with what came back
+    when a call fails, so a caller can tell a refused reference apart from an
+    empty answer, which is what the Gemini `finishReason` used to give.
+    """
+    providers, route = engine()
+    # `k` is the QC inspector's Gemini key, which every call site already had
+    # to hand — it is NOT this door's. The image key is resolved from the
+    # route's own entry, by name, so the two can never be crossed.
+    del k
+    refs = [str(p) for p in
+            ([face] if face and Path(face).exists() else [])
+            + ([seed] if seed and Path(seed).exists() else [])
+            + [q for q in products if q and Path(q).exists()]]
+    # An edit when there is a picture to work from — that is the route's own
+    # rule, and the edits endpoint is the only one that holds a reference.
+    req = {"from_image": refs[0] if refs else None, "people": True}
+    if model:
+        req["model"] = model
+    _, entry, _ = route.pick(req, {"purpose": {"id": "video-frame", "people": True}})
+    key = route.key_value(route.key_name(entry))
+    if not key:
+        say(f"      no {route.key_name(entry)} on this machine")
+        return None
+    full = legend(seed if seed and Path(seed).exists() else None,
+                  [q for q in products if q and Path(q).exists()],
+                  face if face and Path(face).exists() else None) + prompt
+    tmp = Path(tempfile.mkdtemp(prefix="frame-")) / "frame.png"
     for attempt in range(tries):
         try:
-            with urllib.request.urlopen(req, timeout=300) as r:
-                d = json.load(r)
-            for c in d.get("candidates", []):
-                if why is not None and c.get("finishReason"):
-                    why["reason"] = c["finishReason"]
-                for p in c.get("content", {}).get("parts", []):
-                    inl = p.get("inlineData") or p.get("inline_data")
-                    if inl and inl.get("data"):
-                        return base64.b64decode(inl["data"])
-            return None
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                body = e.read()[:300].decode("utf8", "replace")
-                raise OutOfCredit(body)
+            PACE.wait()
+            providers.generate(entry, full, refs, tmp, ASPECT, key=key)
+            return tmp.read_bytes()
+        except Exception as e:                              # noqa: BLE001
+            msg = str(e)
+            if why is not None:
+                why["reason"] = ("IMAGE_SAFETY"
+                                 if re.search(r"safety|moderation|rejected", msg, re.I)
+                                 else "ERROR")
+                why["said"] = msg[:300]
+            # 429 is two different things. "Rate limit ... try again in 12s"
+            # is a queue and clears by waiting; an exhausted balance or quota
+            # never clears, and only that one stops the run.
+            spent = re.search(r"insufficient_quota|billing|exceeded your current quota"
+                              r"|out of credit", msg, re.I)
+            if spent:
+                raise OutOfCredit(msg[:300])
+            if re.search(r"\b429\b|rate.?limit", msg, re.I):
+                m = re.search(r"try again in ([\d.]+)s", msg)
+                nap = min(float(m.group(1)) + 2 if m else 20 * (attempt + 1), 90)
+                say(f"      the door is pacing us — waiting {nap:.0f}s")
+                time.sleep(nap)
+                continue
             if attempt == tries - 1:
-                say(f"      generation failed: {str(e)[:90]}")
-                return None
-            time.sleep(5 * (attempt + 1))
-        except Exception as e:
-            if attempt == tries - 1:
-                say(f"      generation failed: {str(e)[:90]}")
+                say(f"      generation failed: {msg[:90]}")
                 return None
             time.sleep(5 * (attempt + 1))
     return None
+
 
 
 def run(brief_path, video, out_dir, product_look="", subject="", products=(),
         face=None,
         caption_style="", identities=(), limit=0):
     k = keys.get("GEMINI_API_KEY")
-    # identities: [(lora_url, scale, kind)] — the run's trained assets.
-    # When any are present the frames are generated WITH THE IDENTITY
-    # TRAINED IN rather than a reference photo shown alongside; that is the
-    # whole point of training them (Damon, 2026-09-01).
-    fal_key = keys.get("FAL_KEY")
-    trained = [(u, s) for u, s, _ in identities] if (identities and fal_key) else []
-    # A person LoRA means the lead is already in the weights — so the written
-    # identity must NOT also go in (Damon, 2026-09-02: subtraction).
-    face_is_trained = any(k in ("character", "creator") for _, _, k in identities) \
-        if trained else False
-    id_triggers = " ".join(t for _, _, t in identities) if trained else ""
-    if identities and not fal_key:
-        say("      trained identities present but NO FAL_KEY — falling back "
-            "to reference-photo generation")
+    # Trained identities (LoRAs) ran on fal and fal is not a path any more
+    # (the owner, 2026-09-11, restated 2026-09-13 and again 2026-09-22). The
+    # parameter stays because run.py passes it; an identity now enters the
+    # picture as a reference photo, which is what every other lane does.
+    face_is_trained = False
+    if identities:
+        say("      trained identities were a fal path and fal is gone — "
+            "these frames use the reference photo instead")
     md = Path(brief_path).read_text()
     scenes = parse(md)
     cast_blocks = parse_cast(md)
@@ -822,7 +712,7 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
             "to the person being photographed; show them doing it. — ",
             f"{drop_rig(sc['on_screen'])} ",
         ]
-        # SUBTRACTION, NOT MORE RULES (Damon, 2026-09-02). Every safeguard
+        # SUBTRACTION, NOT MORE RULES (the owner, 2026-09-02). Every safeguard
         # below was sensible alone and collectively made the prompt argue
         # with itself: one frame carried TWO different women (a trained
         # identity's description AND the brief's character), FIVE outfits,
@@ -905,53 +795,20 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
             # falling back to a still.
             why = {}
             data = None
-            # EDIT-FIRST. The seed still is the canvas; the words are the
-            # delta. This is the operation that actually works (2026-09-02,
-            # proven head to head) and it runs before anything rebuilds the
-            # scene from a paragraph.
-            if seed and Path(seed).exists() and fal_key:
-                # A name in the scene does NOT mean the person is in the
-                # picture. "Michelle's point of view down the aisle" puts
-                # her BEHIND the camera — dressing her there told the model
-                # to make the woman she is looking at into her (2026-09-02).
-                txt = sc.get("on_screen") or ""
-                lead_here = True
-                if lead_nm:
-                    named_here = bool(re.search(rf"\b{re.escape(lead_nm)}\b",
-                                                txt, re.I))
-                    behind_camera = bool(re.search(
-                        rf"(?:{re.escape(lead_nm)}\'?s?\s+(?:point of view|POV|"
-                        rf"eyeline)|from\s+{re.escape(lead_nm)}\'?s?\s+"
-                        rf"(?:point of view|POV|side)|over\s+"
-                        rf"{re.escape(lead_nm)}\'?s?\s+shoulder)", txt, re.I))
-                    # named elsewhere in the line as well? then she is both
-                    # behind the camera and in it only if named again after
-                    other = re.sub(
-                        rf"{re.escape(lead_nm)}\'?s?\s+(?:point of view|POV|"
-                        rf"eyeline)", "", txt, flags=re.I)
-                    still_named = bool(re.search(rf"\b{re.escape(lead_nm)}\b",
-                                                 other, re.I))
-                    lead_here = named_here and not (behind_camera and not still_named)
-                instr = edit_instruction(
-                    sc, who_line, sc.get("wearing") or "", cap,
-                    shows_product, product_look, lead_in_frame=lead_here)
-                (frames / "prompts" / f"{sc['key']}.edit.txt").write_text(instr)
-                data = edit_frame(fal_key, seed, instr, scene_products)
-                if data:
-                    with lock:
-                        state["from_edit"] = state.get("from_edit", 0) + 1
-            if data is None and trained:
-                # The identity leads the prompt: the trigger words are what
-                # the trained weights answer to.
-                data = generate_trained(
-                    fal_key, f"{id_triggers}. {prompt}", trained, seed=seed)
-                if data:
-                    with lock:
-                        state["from_identity"] = \
-                            state.get("from_identity", 0) + 1
+            # Which model actually drew this frame — the manifest records it, so
+            # nobody has to ask again (the owner, 2026-09-22: "what model is used").
+            drew = None
+            # EDIT-FIRST is still the operation (2026-09-02, proven head to
+            # head): the seed still is the canvas and the words are only the
+            # delta. It used to run through fal's nano-banana/edit; since fal
+            # was cut (2026-09-22) the same job is done by `generate` below,
+            # which hands the model the seed still as an image part with
+            # SEED_RELATIONSHIP — an edit, in Gemini's own door.
             if data is None:
                 data = generate(k, seed, prompt, products=scene_products,
                                 face=frame_face, why=why)
+                if data:
+                    drew = MODEL
             # A reference photo can be declined — most often a real person in
             # swimwear, which is most of an organic beach post. Retrying the
             # same call cannot pass and a still is not a generated frame, so
@@ -961,6 +818,7 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
             if not data and why.get("reason") == "IMAGE_SAFETY":
                 data = generate(k, None, prompt, tries=2)
                 if data:
+                    drew = MODEL
                     with lock:
                         state["from_description"] = \
                             state.get("from_description", 0) + 1
@@ -970,6 +828,8 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
                 time.sleep(3 * (attempt + 1))
                 data = generate(k, seed, prompt, tries=2, products=scene_products,
                                 face=frame_face)
+                if data:
+                    drew = MODEL
             # Pro is capacity-constrained and answers "high demand" in bursts.
             # A whole run failing because the best model was busy is worse
             # than the second-best model drawing this one frame.
@@ -977,6 +837,7 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
                 data = generate(k, seed, prompt, tries=2, model=FALLBACK,
                                 products=scene_products, face=frame_face)
                 if data:
+                    drew = FALLBACK
                     # Its own counter: "fell_back" already means "gave up on
                     # generating and used a still from the video". Reusing it
                     # would report a second-best model as a missing frame.
@@ -997,6 +858,8 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
                 try:
                     data = generate(k, seed, prompt, tries=2, model=FALLBACK,
                                     products=scene_products)
+                    if data:
+                        drew = FALLBACK
                 except OutOfCredit:
                     data = None
             if data:
@@ -1033,23 +896,11 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
                        + "; ".join(qc_problems))
                 # A LABEL failure is never fixed by drawing it again — no
                 # generator holds small type across re-rolls (26 re-rolls,
-                # 2026-08-31). Composite the real packshot in instead: the
-                # artwork stops being generated at all.
-                label_bad = any(
-                    re.search(r"label|wording|text|logo|packaging|brand",
-                              p, re.I) for p in qc_problems)
+                # 2026-08-31). The packshot used to be composited in on fal;
+                # with fal gone the real product goes to the model as a
+                # reference image (PRODUCT_RELATIONSHIP) and a label that
+                # still fails is flagged for the maker rather than faked.
                 redo = None
-                if label_bad and fal_key and scene_products:
-                    redo = composite_product(fal_key, data,
-                                             list(scene_products)[0])
-                    if redo:
-                        with lock:
-                            state["composited"] = \
-                                state.get("composited", 0) + 1
-                if not redo and trained:
-                    redo = generate_trained(
-                        fal_key, f"{id_triggers}. {prompt}{fix}", trained,
-                        seed=seed)
                 if not redo:
                     redo = generate(k, seed, prompt + fix, tries=2,
                                     products=scene_products, face=frame_face)
@@ -1085,7 +936,7 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
         return dict(key=sc["key"], concept=sc["concept"], scene=sc["n"],
                     span=sc["span"], seeded_from=sc["seed_at"],
                     output=dest.name if dest else None, kind=kind,
-                    qc=qc_problems)
+                    model=drew, qc=qc_problems)
 
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
         manifest = [m for m in pool.map(one, scenes) if m]
@@ -1097,15 +948,16 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
                "credit — topping up will not move it. It resets on its own; "
                "the error below says when."
                if daily else
-               "the Gemini key is out of credit. Top up at "
-               "https://ai.studio/projects.")
+               "the image account is out of credit — top it up on the "
+               "provider the route table names "
+               "(tools/image-production/models.json).")
         sys.exit(f"STOPPING — {why} Nothing was faked as a fallback.\n"
-                 f"Both {MODEL} and {FALLBACK} were tried.\n"
+                 f"The door was {MODEL}.\n"
                  "Re-run stage 6 with: --from 6\n\n" + err)
     if broke.is_set() and state["misses"] >= 3:
         sys.exit("STOPPING — three scenes came back with no image. Something is "
                  "wrong upstream; the rest would only produce more stills.")
-    # NO FRAME LEAVES THIS STAGE EMPTY (Damon, 2026-08-26: "NO BRIEF SHOULD BE
+    # NO FRAME LEAVES THIS STAGE EMPTY (the owner, 2026-08-26: "NO BRIEF SHOULD BE
     # EMPTY"). Everything above tries to make the right picture; this makes
     # sure there is A picture. In order of preference: the still cut for this
     # scene, then the nearest earlier scene's image, then the poster. Each one
@@ -1152,9 +1004,6 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
             f"because {MODEL} was busy or capped")
     say(f"  {made} generated, {fell_back} fell back to a still, "
         f"{len(scenes)} scenes covered")
-    if state.get("from_edit"):
-        say(f"  {state['from_edit']} frame(s) made by EDITING the source still "
-            "— the picture carried the framing, the words carried the change")
     if state.get("qc_rerolls") or state.get("qc_flagged"):
         say(f"  QC loop: {state.get('qc_rerolls', 0)} re-roll(s) forced, "
             f"{state.get('qc_flagged', 0)} frame(s) still flagged — flagged "
@@ -1164,12 +1013,6 @@ def run(brief_path, video, out_dir, product_look="", subject="", products=(),
             "frame(s) — those frames are UNINSPECTED, not passed")
     else:
         say("  QC loop: every frame passed inspection first time")
-    if state.get("from_identity"):
-        say(f"  trained identities: {state['from_identity']} frame(s) "
-            "generated with the identity trained in")
-    if state.get("composited"):
-        say(f"  product composite: {state['composited']} frame(s) had the "
-            "real packshot pasted in after a label failure")
     return manifest
 
 

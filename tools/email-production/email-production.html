@@ -1,0 +1,1248 @@
+<title>The Email System</title>
+<style>
+:root{--bg:#F0EFEB;--card:#FFF;--ink:#16181B;--mut:#61666E;--line:#D8D6D0;--hair:#E8E6E1;
+ --root:#2F5D50;--root-bg:#E0EBE7;
+ --built:#1D6A4B;--built-bg:#DFEEE7;--part:#8A5A10;--part-bg:#F4EBD8;
+ --miss:#4A5568;--miss-bg:#E6E8EC;--decide:#8A3A2E;--decide-bg:#F6E4DF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0D0F11;--card:#171A1D;--ink:#E5E8EB;--mut:#8D949C;--line:#262A2F;--hair:#1E2226;
+ --root:#6FB3A0;--root-bg:#132320;
+ --built:#5FBE94;--built-bg:#0F2520;--part:#D2A24C;--part-bg:#291F12;
+ --miss:#9AA5B4;--miss-bg:#1D2126;--decide:#DB8271;--decide-bg:#2A1714}}
+:root[data-theme="dark"]{
+ --bg:#0D0F11;--card:#171A1D;--ink:#E5E8EB;--mut:#8D949C;--line:#262A2F;--hair:#1E2226;
+ --root:#6FB3A0;--root-bg:#132320;
+ --built:#5FBE94;--built-bg:#0F2520;--part:#D2A24C;--part-bg:#291F12;
+ --miss:#9AA5B4;--miss-bg:#1D2126;--decide:#DB8271;--decide-bg:#2A1714}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:54px 22px 92px}
+.kick{font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.2em;
+ text-transform:uppercase;color:var(--mut)}
+h1{font-size:clamp(35px,6.2vw,56px);line-height:1.02;letter-spacing:-.034em;font-weight:800;
+ margin:14px 0 0;text-wrap:balance}
+.lede{font-size:19px;line-height:1.55;color:var(--mut);max-width:58ch;margin:16px 0 0}
+h2{font-size:26px;letter-spacing:-.024em;font-weight:780;margin:0}
+section{margin-top:60px}
+.sh{border-top:2px solid var(--ink);padding-top:13px;margin-bottom:22px}
+.sh h2{margin-top:6px}
+.sn{color:var(--mut);max-width:62ch;margin:10px 0 0;font-size:15.5px}
+
+/* the three-step spine */
+.spine{display:flex;flex-direction:column;gap:10px;margin-top:30px}
+.sp{background:var(--card);border:1px solid var(--line);border-radius:5px;
+ padding:18px 21px;display:flex;gap:16px;align-items:baseline}
+.sp.r{background:var(--root-bg);border-color:var(--root);border-left:4px solid var(--root)}
+.sp .n{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);
+ letter-spacing:.14em;text-transform:uppercase;min-width:74px}
+.sp.r .n{color:var(--root)}
+.sp h3{margin:0;font-size:21px;letter-spacing:-.018em;font-weight:750}
+.sp p{margin:5px 0 0;color:var(--mut);font-size:14.5px;max-width:52ch}
+.sp .tx{flex:1}
+.arw{text-align:center;color:var(--mut);font:600 13px/1 ui-monospace,monospace;margin:-4px 0}
+
+.grp{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:13px;margin-top:6px}
+.g{background:var(--card);border:1px solid var(--line);border-radius:5px;padding:17px 19px}
+.g h4{margin:0 0 4px;font-size:16px;font-weight:720}
+.g .badge{font:600 9.5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;
+ padding:5px 7px;border-radius:3px;float:right}
+.f-full{color:var(--built);background:var(--built-bg)}
+.f-thin{color:var(--part);background:var(--part-bg)}
+.f-stub{color:var(--decide);background:var(--decide-bg)}
+.f-none{color:var(--mut);background:var(--miss-bg)}
+.g ul{margin:9px 0 0;padding-left:17px;color:var(--mut);font-size:13.5px}
+.g li{margin-bottom:3px}
+
+.fill{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:8px}
+.fr{display:grid;grid-template-columns:110px 1fr 74px 78px;gap:0;align-items:center;
+ border-bottom:1px solid var(--hair);padding:9px 16px;font-size:13.5px}
+.fr:last-child{border-bottom:0}
+.fr .ln{font:600 11px/1 ui-monospace,monospace;color:var(--mut)}
+.fr .bn{font:11px/1 ui-monospace,monospace}
+.fr .bar{height:6px;background:var(--hair);border-radius:3px;overflow:hidden}
+.fr .bar i{display:block;height:100%;border-radius:3px;background:var(--mut)}
+.fr.full .bar i{background:var(--built)} .fr.thin .bar i{background:var(--part)}
+.fr.stub .bar i{background:var(--decide)}
+.fr .by{text-align:right;font:11px/1 ui-monospace,monospace;color:var(--mut);
+ font-variant-numeric:tabular-nums}
+.note{margin-top:16px;font-size:15px;max-width:62ch;border-left:3px solid var(--part);padding-left:14px}
+
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+ background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:18px 0}
+.dims .d{background:var(--card);padding:15px 17px}
+.dims .v{font:700 25px/1 ui-monospace,monospace;letter-spacing:-.02em;color:var(--root)}
+.dims .k{font:600 10px/1 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;
+ color:var(--mut);margin-top:8px}
+.dims .s{color:var(--mut);font-size:12.5px;margin-top:6px;line-height:1.45}
+
+.wfs{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:6px}
+.wf{display:grid;grid-template-columns:56px 1fr auto;border-bottom:1px solid var(--hair);align-items:start}
+.wf:last-child{border-bottom:0}
+.wid{font:700 11px/1 ui-monospace,monospace;color:var(--mut);padding:18px 0 0 18px}
+.wc{padding:16px 14px 16px 0}
+.wn{font-weight:680;font-size:16.5px}
+.wt{color:var(--mut);font-size:14.5px;margin-top:5px;max-width:54ch;line-height:1.55}
+.wt b{color:var(--ink)}
+.wm{padding:16px 17px 16px 0}
+.chip{font:600 9.5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;
+ padding:6px 8px;border-radius:3px;white-space:nowrap}
+.s-built{color:var(--built);background:var(--built-bg)}
+.s-part{color:var(--part);background:var(--part-bg)}
+.s-miss{color:var(--miss);background:var(--miss-bg)}
+.s-decide{color:var(--decide);background:var(--decide-bg)}
+code{font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--hair);
+ padding:1px 5px;border-radius:3px}
+
+.wells{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.well{background:var(--card);border:1px solid var(--line);border-radius:5px;padding:20px 22px}
+.well.empty{border-left:4px solid var(--decide)}
+.well.stocked{border-left:4px solid var(--built)}
+.wh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.wh h4{margin:0;font-size:19px;font-weight:750;letter-spacing:-.015em}
+.wh .does{font:600 10px/1 ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase;
+ color:var(--root);background:var(--root-bg);padding:6px 8px;border-radius:3px}
+.wh .stk{margin-left:auto;font:600 9.5px/1 ui-monospace,monospace;letter-spacing:.1em;
+ text-transform:uppercase;padding:6px 8px;border-radius:3px}
+.stocked .stk{color:var(--built);background:var(--built-bg)}
+.empty .stk{color:var(--decide);background:var(--decide-bg)}
+.well p{margin:10px 0 0;font-size:14.5px;max-width:60ch;line-height:1.55}
+.well .src{color:var(--mut)}
+.well .det{font:11.5px/1.5 ui-monospace,monospace;color:var(--mut);margin-top:11px;
+ background:var(--bg);border-radius:4px;padding:9px 11px}
+.well .nt{border-left:2px solid var(--line);padding-left:12px;color:var(--mut);font-size:14px}
+
+.axes{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:8px}
+.ax{display:grid;grid-template-columns:118px 56px 1fr;border-bottom:1px solid var(--hair);
+ padding:12px 17px;align-items:baseline;gap:6px}
+.ax:last-child{border-bottom:0}
+.ax .k{font-weight:670;font-size:15px}
+.ax .v{font:700 17px/1 ui-monospace,monospace;color:var(--root);font-variant-numeric:tabular-nums}
+.ax .s{color:var(--mut);font-size:13px;line-height:1.5}
+.space{margin-top:14px;background:var(--root-bg);border:1px solid var(--root);border-radius:5px;
+ padding:16px 19px;font-size:15px}
+.space b{font:700 21px/1 ui-monospace,monospace;color:var(--root);letter-spacing:-.02em}
+
+.rules{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:8px}
+.rl{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--hair);
+ padding:16px 19px;gap:14px;align-items:start}
+.rl:last-child{border-bottom:0}
+.rl .n{font-weight:690;font-size:16px}
+.rl p{margin:5px 0 0;color:var(--mut);font-size:14.5px;max-width:56ch;line-height:1.55}
+
+.brief{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:8px}
+.bf{display:grid;grid-template-columns:190px 1fr;border-bottom:1px solid var(--hair);padding:11px 18px;gap:12px}
+.bf:last-child{border-bottom:0}
+.bf .k{font:600 12px/1.4 ui-monospace,monospace;color:var(--ink)}
+.bf .v{color:var(--mut);font-size:14px}
+
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:11px;margin-top:8px}
+.ty{background:var(--card);border:1px solid var(--line);border-radius:5px;padding:15px 17px;
+ border-left:3px solid var(--line)}
+.ty.new{border-left-color:var(--root)} .ty.rare{border-left-color:var(--part)}
+.ty h5{margin:0;font-size:15.5px;font-weight:710;display:flex;align-items:baseline;gap:8px}
+.ty .u{font:600 9px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;
+ padding:4px 6px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.u-proven{color:var(--mut);background:var(--hair)}
+.u-rare{color:var(--part);background:var(--part-bg)}
+.u-new{color:var(--root);background:var(--root-bg)}
+.ty .w{margin:7px 0 0;font-size:13.5px;color:var(--mut);line-height:1.5}
+.ty .nt{margin:9px 0 0;font-size:13px;line-height:1.5;border-left:2px solid var(--hair);padding-left:10px}
+.wellhead{display:flex;align-items:baseline;gap:12px;margin:34px 0 6px;
+ border-bottom:1px solid var(--line);padding-bottom:9px;flex-wrap:wrap}
+.wellhead h3{margin:0;font-size:19px;font-weight:750;letter-spacing:-.015em}
+.wellhead .c{font:600 10px/1 ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--mut)}
+.fm{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:8px}
+.fmr{display:grid;grid-template-columns:200px 1fr 82px;border-bottom:1px solid var(--hair);
+ padding:12px 17px;gap:12px;align-items:baseline}
+.fmr:last-child{border-bottom:0}
+.fmr .k{font-weight:670;font-size:14.5px}
+.fmr .v{color:var(--mut);font-size:13.5px;line-height:1.5}
+.fmr .sd{font:600 9.5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;
+ color:var(--mut);text-align:right}
+.arcbox{background:var(--card);border:1px solid var(--line);border-radius:5px;padding:22px 24px;margin-top:8px}
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;
+ background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:16px}
+.roles .r{background:var(--card);padding:14px 16px}
+.roles .rk{font:700 10px/1 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--root)}
+.roles .rn{font:700 20px/1 ui-monospace,monospace;margin-top:9px;font-variant-numeric:tabular-nums}
+.roles .rd{color:var(--mut);font-size:13px;margin-top:7px;line-height:1.5}
+.chains{margin-top:18px}
+.ch{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:11px 0;
+ border-bottom:1px solid var(--hair);font:12px/1.4 ui-monospace,monospace}
+.ch:last-child{border-bottom:0}
+.ch b{background:var(--built-bg);color:var(--built);padding:6px 9px;border-radius:3px;font-weight:700}
+.ch b.a{background:var(--miss-bg);color:var(--miss)}
+.ch i{font-style:normal;color:var(--mut)}
+.ch .w{color:var(--mut);font:13px/1.5 system-ui,sans-serif;flex-basis:100%;margin-top:2px}
+.gaps{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:8px}
+.gp{display:grid;grid-template-columns:1fr 96px;border-bottom:1px solid var(--hair);
+ padding:17px 20px;gap:14px;align-items:start}
+.gp:last-child{border-bottom:0}
+.gp .n{font-weight:700;font-size:16.5px;letter-spacing:-.01em}
+.gp p{margin:6px 0 0;color:var(--mut);font-size:14.5px;max-width:58ch;line-height:1.55}
+.gp .v{font:600 9.5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;
+ padding:6px 8px;border-radius:3px;text-align:center;white-space:nowrap}
+.v-verified{color:var(--built);background:var(--built-bg)}
+.v-indicative{color:var(--part);background:var(--part-bg)}
+.v-unverified{color:var(--mut);background:var(--hair)}
+.parked{background:var(--card);border:1px solid var(--line);border-radius:5px;padding:20px 22px}
+.parked .p{padding:11px 0;border-bottom:1px solid var(--hair)}
+.parked .p:last-child{border-bottom:0;padding-bottom:0}
+.parked b{font-size:16px} .parked p{margin:4px 0 0;color:var(--mut);font-size:14.5px;max-width:60ch}
+
+.pr{background:var(--card);border:1px solid var(--line);border-radius:5px;margin-bottom:10px;overflow:hidden}
+.prh{display:flex;justify-content:space-between;gap:12px;padding:13px 18px;align-items:baseline}
+.prh h4{margin:0;font-size:15.5px;font-weight:700}
+.prh .fn{font:11px ui-monospace,monospace;color:var(--mut)}
+pre{margin:0;max-height:250px;overflow:auto;background:var(--bg);padding:16px 18px;
+ white-space:pre-wrap;word-wrap:break-word;border-top:1px solid var(--line);
+ font:12.5px/1.6 ui-monospace,monospace;color:var(--mut)}
+footer{margin-top:66px;border-top:1px solid var(--line);padding-top:18px;
+ font:12px/1.75 ui-monospace,monospace;color:var(--mut)}
+:focus-visible{outline:2px solid var(--root);outline-offset:2px}
+@media(max-width:620px){.wf{grid-template-columns:48px 1fr}.wm{grid-column:2;padding:0 16px 16px 0}
+ .fr{grid-template-columns:92px 1fr 60px}.fr .by{display:none}}
+</style>
+<div class="wrap">
+<div class="kick">Content machine &middot; campaigns &middot; the map, not the build</div>
+<h1>Brand to Email</h1>
+<p class="lede">Three steps and nothing else: read the brand, build a calendar
+out of it, produce the email. 9 workflows to name before anything gets
+built.</p>
+
+<div class="spine">
+  <div class="sp r"><span class="n">Root</span><div class="tx">
+    <h3>Brand context</h3><p>The folder everything reads and nothing writes.</p></div></div>
+  <div class="arw">&darr;</div>
+  <div class="sp"><span class="n">Step 1</span><div class="tx">
+    <h3>The dynamic calendar</h3><p>What is owed, to whom, and what job it does.</p></div></div>
+  <div class="arw">&darr;</div>
+  <div class="sp"><span class="n">Step 2</span><div class="tx">
+    <h3>Email production</h3><p>One slot in, a finished email out.</p></div></div>
+</div>
+
+<section>
+  <div class="sh"><div class="kick">The root</div><h2>What the brand folder actually holds</h2></div>
+  <p class="sn">The folder everything reads and nothing writes. Two lanes that never blend, each with its own avatar, objections, offers and language.</p>
+  <p class="sn"><code>chain-variables.md</code> is the contract: one variable, one file, zero variance. A run declares lane + lifecycle + product, and that picks the files. Nothing is guessed.</p>
+  <div class="grp"><div class="g"><span class="badge f-full">full</span><h4>Who</h4><ul><li>core.md — the avatar, per lane</li><li>11 sub-avatars (brotherhood)</li><li>identity-anchors.md — who may appear</li></ul></div><div class="g"><span class="badge f-thin">thin</span><h4>What they say</h4><ul><li>language/ — split 9 ways by lifecycle</li><li>prospect · lead · customer (base, one-time, repeat, loyal, vip, subscriber) · churned (×2)</li></ul></div><div class="g"><span class="badge f-full">full</span><h4>What stops them</h4><ul><li>core-avatars/objection-bank.md, per lane</li></ul></div><div class="g"><span class="badge f-full">full</span><h4>What we sell</h4><ul><li>14 product files</li><li>offers/offer-bank.md, per lane</li></ul></div><div class="g"><span class="badge f-stub">stub</span><h4>What we already said</h4><ul><li>hook-ledger.md, per lane</li></ul></div><div class="g"><span class="badge f-thin">thin</span><h4>What worked</h4><ul><li>existing-content/ — paid ads, organic posts, landing pages</li></ul></div></div>
+  <h3 style="margin:34px 0 4px;font-size:18px;letter-spacing:-.015em">How full is it, really</h3>
+  <p class="sn" style="margin-bottom:12px">Every file measured, not assumed.</p>
+  <div class="fill"><div class="fr full"><span class="ln">brotherhood</span><span class="bn">core</span><span class="bar"><i style="width:43%"></i></span><span class="by">14,685</span></div><div class="fr full"><span class="ln">brotherhood</span><span class="bn">objections</span><span class="bar"><i style="width:42%"></i></span><span class="by">14,402</span></div><div class="fr full"><span class="ln">brotherhood</span><span class="bn">offers</span><span class="bar"><i style="width:20%"></i></span><span class="by">6,660</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">hook ledger</span><span class="bar"><i style="width:2%"></i></span><span class="by">496</span></div><div class="fr thin"><span class="ln">brotherhood</span><span class="bn">prospect</span><span class="bar"><i style="width:5%"></i></span><span class="by">1,752</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">lead</span><span class="bar"><i style="width:2%"></i></span><span class="by">534</span></div><div class="fr full"><span class="ln">brotherhood</span><span class="bn">customer/base</span><span class="bar"><i style="width:90%"></i></span><span class="by">30,734</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">customer/one-time</span><span class="bar"><i style="width:2%"></i></span><span class="by">644</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">customer/repeat</span><span class="bar"><i style="width:2%"></i></span><span class="by">638</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">customer/loyal</span><span class="bar"><i style="width:2%"></i></span><span class="by">635</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">customer/vip</span><span class="bar"><i style="width:2%"></i></span><span class="by">629</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">customer/subscriber</span><span class="bar"><i style="width:2%"></i></span><span class="by">712</span></div><div class="fr stub"><span class="ln">brotherhood</span><span class="bn">churned ×2</span><span class="bar"><i style="width:2%"></i></span><span class="by">637</span></div><div class="fr full"><span class="ln">two-oh</span><span class="bn">core</span><span class="bar"><i style="width:30%"></i></span><span class="by">10,303</span></div><div class="fr full"><span class="ln">two-oh</span><span class="bn">objections</span><span class="bar"><i style="width:38%"></i></span><span class="by">12,963</span></div><div class="fr full"><span class="ln">two-oh</span><span class="bn">offers</span><span class="bar"><i style="width:15%"></i></span><span class="by">5,261</span></div><div class="fr full"><span class="ln">two-oh</span><span class="bn">prospect</span><span class="bar"><i style="width:100%"></i></span><span class="by">33,973</span></div><div class="fr stub"><span class="ln">two-oh</span><span class="bn">lead</span><span class="bar"><i style="width:2%"></i></span><span class="by">466</span></div><div class="fr none"><span class="ln">two-oh</span><span class="bn">customer/churned</span><span class="bar"><i style="width:2%"></i></span><span class="by">0</span></div></div>
+  <p class="note"><b>Each lane has exactly one full language bank and the rest are stubs.</b> brotherhood is deep on customers, two-oh is deep on cold prospects — which is right, they are at different stages. But it means lifecycle targeting is currently two banks, not nine. The fallback rules already handle it (<code>customer/*</code> falls back to <code>customer/base</code>), so nothing breaks — the calendar just cannot be more granular than the language behind it, and should not pretend to be.</p>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">Step 1, worked through</div>
+    <h2>What an email is for</h2></div>
+  <p class="sn">Four wells. Each one does something different to the
+  relationship, and the reason to keep them apart is that only one of them
+  asks for anything. Email, SMS and subscription are how a community gets
+  built &mdash; they remind people you are here, that you care, and that you
+  are real. A calendar that only asks is a channel that decays.</p>
+  <div class="space" style="margin:0 0 18px">One test settles every email:
+  <b>Whose material is this email made of?</b> There is exactly one answer, which is what stops the
+  categories bleeding into each other.</div>
+  <div class="wells"><div class="well stocked"><div class="wh"><h4>Promotional</h4><span class="does">Made of our offer</span><span class="stk">stocked</span></div><p>A discount, a launch, a restock, a deadline. The material is the offer itself.</p><p class="src">The offer bank, and the promo budget that says how many weeks a year may be one of these.</p><div class="det">offer-bank per lane · 6.7k brotherhood, 5.3k two-oh</div><p class="nt">The only category that asks for money. Every one spent here is paid for by the other four.</p></div><div class="well stocked"><div class="wh"><h4>Educational</h4><span class="does">Made of our expertise</span><span class="stk">stocked</span></div><p>The skin, the problem, the mechanism — described the way THEY describe it, never in category language.</p><p class="src">The language banks and the objection bank — 14,237 rows of real customer sentences, mined from 974 survey responses collected since April 2023 and still coming in.</p><div class="det">14,237 language rows · 35k objection bank · 11k offer bank</div><p class="nt">An education email that ends with a link is still educational. The test is what it is MADE of, not whether it links.</p></div><div class="well empty"><div class="wh"><h4>Cultural</h4><span class="does">Made of the world outside</span><span class="stk">empty</span></div><p>A moment, a season, a place, a subculture they are already inside. The summer sends that worked carried the NBA finals.</p><p class="src">A moments file, per lane, built from what these sub-avatars actually follow. It does not exist yet.</p><div class="det">nothing on disk — the one empty category</div><p class="nt">The barbershop belongs here, and so does Texas. It is the world around the list, not the list itself.</p></div><div class="well thin"><div class="wh"><h4>Community</h4><span class="does">Made of our customers</span><span class="stk">empty</span></div><p>A named person and what happened to them. Not a testimonial block — someone from the room.</p><p class="src">The quoted verbatims inside the language banks, each carrying its speaker and source. The 625-customer intelligence database that would stock this properly is NOT in this tree.</p><div class="det">verbatims yes · named customers with photos, results and transformation arcs: not here</div><p class="nt">Made of THEM — that is the line between this and Brand, and why mission does not live here. But a verbatim is not a person: this category needs customers with names, results and permission, and that source has not been brought into this tree.</p></div><div class="well thin"><div class="wh"><h4>Brand</h4><span class="does">Made of us</span><span class="stk">empty</span></div><p>What we believe, what we are building, how it is made, what went wrong, who is behind it. Mission, the founder, the pharmacist, the position taken out loud.</p><p class="src">Whatever is actually true and actually happening.</p><div class="det">a real founder and a real formulator · King&#x27;s Month is the nearest thing already sent</div><p class="nt">the owner asked whether mission is community. It is not: community is made of them, this is made of us. Same reason a founder note is not an education email even when it teaches something.</p></div></div>
+
+  <h3 style="margin:38px 0 4px;font-size:19px;letter-spacing:-.015em">Not categories &mdash; treatments</h3>
+  <p class="sn" style="margin-bottom:12px">These cut across all five, and
+  mistaking them for categories is what caused the overlap. A treatment has no
+  material of its own &mdash; that is the tell.</p>
+  <div class="parked"><div class="p"><b>Humour</b><p>Entertainment is not a category — it is how a category is played. It has no material of its own, which is the giveaway. Ask what a funny email is made of and the answer is always one of the five.</p></div><div class="p"><b>A question</b><p>Research — a poll, a survey, a vote. Also a mechanic rather than a category: asking about a product is promotional, asking about their skin is educational. Worth doing far more (2 sends in 308) but not a category of its own.</p></div><div class="p"><b>No ask</b><p>An email with deliberately nothing to click. A treatment, and a load-bearing one — it is what proves the other four are not a wind-up.</p></div><div class="p"><b>Proof</b><p>Photos, numbers, results. Attaches to any category rather than being one.</p></div></div>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">The space</div><h2>What a slot is picked from</h2></div>
+  <p class="sn">Every number below is real &mdash; counted off the brand folder
+  and the customer base, not estimated.</p>
+  <div class="axes"><div class="ax"><span class="k">Lane</span><span class="v">2</span><span class="s">brotherhood · two-oh. Never blended.</span></div><div class="ax"><span class="k">Segment</span><span class="v">6</span><span class="s">Loyal 225 · Returning 163 · One-Time 98 · VIP 76 · High-Value One-Time 51 · Prospect 8</span></div><div class="ax"><span class="k">Sub-avatar</span><span class="v">11</span><span class="s">barbershop regular · bald bumps · ingrown fighter · el rey cansado · el jefe · 3 teen avatars · 3 gift-buying moms</span></div><div class="ax"><span class="k">Awareness</span><span class="v">4</span><span class="s">Unaware 249 · Problem-Aware 230 · Solution-Aware 120 · Product-Aware 26</span></div><div class="ax"><span class="k">Pain point</span><span class="v">7</span><span class="s">the tagged conditions people actually reported</span></div><div class="ax"><span class="k">Product</span><span class="v">14</span><span class="s">each with its own file and offer</span></div><div class="ax"><span class="k">Angle</span><span class="v">10</span><span class="s">Identity 601 · Loyalty 301 · Sensation 274 · Social Proof 149 · Competitor Switch 120 · Results 112 · Emotional 110 · Timeline 43 · Body Zone 42 · Simplicity 37</span></div></div>
+  <div class="space">Crossed, that is <b>517,440</b> distinguishable slots.
+  Nobody needs all of them. The point is that <b>running out of things to say
+  is not the constraint</b> &mdash; choosing well is.</div>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">The engine</div><h2>How a month gets composed</h2></div>
+  <p class="sn">This is the difference between a dynamic calendar and a list of
+  dates someone filled in. Four rules, applied every cycle.</p>
+  <div class="rules"><div class="rl"><div><div class="n">Order, not ratio</div><p>How many emails ask is the low-level question. The real one is where a type sits in the arc — and whether that specific thing needs a follow-up. An ask that stands alone has nothing behind it; a question with no answer email was extraction. The arc governs order.</p></div><span class="chip s-miss">To build</span></div><div class="rl"><div><div class="n">Cadence is derived, never set</div><p>There is no target number of sends and no fixed share that may ask. What goes out is decided by measured responsiveness per segment and per avatar, and by what a send earns. Frequency is an output of the data, not an input to the plan.</p></div><span class="chip s-miss">To build</span></div><div class="rl"><div><div class="n">Coverage</div><p>The calendar tracks which cells of the space above have been cold longest — which sub-avatar has not been spoken to, which pain point has not been addressed, which awareness level is being skipped — and fills toward the gaps rather than repeating last month.</p></div><span class="chip s-miss">To build</span></div><div class="rl"><div><div class="n">Freshness</div><p>Nothing is proposed that the ledger records as spent. 308 subject lines are already on it, with their preview text.</p></div><span class="chip s-part">Partly</span></div><div class="rl"><div><div class="n">Fit</div><p>A slot only reaches a segment whose language bank can actually carry it. Today that is two real banks per lane, not nine — so the calendar must not promise a granularity the language cannot deliver.</p></div><span class="chip s-part">Partly</span></div></div>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">The output</div><h2>What production receives</h2></div>
+  <p class="sn">One brief per slot. Fully specified before a word is written
+  &mdash; which is what makes the writing stage a mechanical step rather than a
+  blank page.</p>
+  <div class="brief"><div class="bf"><span class="k">Date and segment</span><span class="v">when it goes and exactly who receives it</span></div><div class="bf"><span class="k">Well and occasion</span><span class="v">which well this draws from, and the specific occasion — this moment, this person, this problem</span></div><div class="bf"><span class="k">Audience</span><span class="v">lane · sub-avatar · awareness level, so the language resolves</span></div><div class="bf"><span class="k">Job</span><span class="v">what this email should do to the reader</span></div><div class="bf"><span class="k">Product</span><span class="v">what is being sold, or explicitly nothing</span></div><div class="bf"><span class="k">Offer permission</span><span class="v">what it may offer, or that it may not</span></div><div class="bf"><span class="k">The source</span><span class="v">the swiped email whose shape it is built on</span></div><div class="bf"><span class="k">What it may not reuse</span><span class="v">the ground the ledger says is spent</span></div></div>
+</section>
+
+
+<section>
+  <div class="sh"><div class="kick">The catalogue</div><h2>Every type of email we could send</h2></div>
+  <p class="sn">47 types across the four wells &mdash;
+  <b>19 never sent</b> and <b>10 sent only a handful of times</b>.
+  Marks come from a keyword pass over the 308 sends since January 2025, so
+  they are indicative rather than exact: read &ldquo;rare&rdquo; as a prompt to
+  look, not a verdict.</p>
+  <p class="sn">This is a data file, not a table someone keeps. Adding a type
+  is adding a row &mdash; no prompt edit, no code change.</p>
+  <p class="sn" style="margin-bottom:0"><b>A type earns its place by being
+  distinct under the test, never by filling out a column.</b> A thin category
+  is a finding, not a hole to pad.</p>
+  <div class="wellhead"><h3>Promotional</h3><span class="c">made of our offer</span><span class="c" style="margin-left:auto">13 types &middot; 5 not yet sent</span></div><div class="tgrid"><div class="ty proven"><h5>Sale window<span class="u u-proven">proven</span></h5><p class="w">A discount, open for a stated period.</p><p class="nt">The most-used type by a distance. Every one spent here is paid for by the other three wells.</p></div><div class="ty proven"><h5>Launch<span class="u u-proven">proven</span></h5><p class="w">A new product, or a new version of one.</p></div><div class="ty new"><h5>Anticipation<span class="u u-new">new</span></h5><p class="w">Before a launch, and selling nothing. Builds the wait so the launch does not have to arrive cold.</p><p class="nt">A launch with no run-up is one email doing two jobs.</p></div><div class="ty rare"><h5>Restock<span class="u u-rare">rare</span></h5><p class="w">A thing they wanted is available again.</p><p class="nt">Only three in eighteen months. The highest-intent ask there is — someone already decided.</p></div><div class="ty proven"><h5>Bundle<span class="u u-proven">proven</span></h5><p class="w">Two or more products argued as one purchase.</p></div><div class="ty proven"><h5>Last chance<span class="u u-proven">proven</span></h5><p class="w">A deadline they are about to miss.</p><p class="nt">Only honest when the deadline is real and in the offer file.</p></div><div class="ty rare"><h5>Subscription invite<span class="u u-rare">rare</span></h5><p class="w">Turn a repeat buyer into a standing order.</p><p class="nt">One send in eighteen months, on a brand that runs a subscription platform.</p></div><div class="ty rare"><h5>Early access<span class="u u-rare">rare</span></h5><p class="w">The Drop — this list sees it first.</p><p class="nt">There is already a list for it. It is a membership benefit, so it belongs as much to Community as to Ask.</p></div><div class="ty new"><h5>Gift guide<span class="u u-new">new</span></h5><p class="w">Written for the buyer, not the user.</p><p class="nt">Three of the eleven sub-avatars are gift-buying mothers. Nothing is written to them.</p></div><div class="ty proven"><h5>Product spotlight<span class="u u-proven">proven</span></h5><p class="w">One product, what it does, why now. No discount, no deadline — the product is the whole email.</p><p class="nt">Surfaced by the corpus 2026-08-28 — several sends were plain product pitches with no offer mechanic, and every offer type forced them wrong.</p></div><div class="ty proven"><h5>Risk reversal<span class="u u-proven">proven</span></h5><p class="w">The guarantee as the entire argument. Takes away the reason not to try it.</p><p class="nt">Its natural home is after an ask that stalled on doubt rather than on price.</p></div><div class="ty proven"><h5>Where to get it<span class="u u-proven">proven</span></h5><p class="w">A new place to buy it — a marketplace, a retailer, a channel.</p></div><div class="ty proven"><h5>Channel invite<span class="u u-proven">proven</span></h5><p class="w">Join us somewhere else — text, app, a list within the list.</p><p class="nt">An ask, but for attention rather than money. Cheap to say yes to, which is the point.</p></div></div><div class="wellhead"><h3>Educational</h3><span class="c">made of our expertise</span><span class="c" style="margin-left:auto">10 types &middot; 5 not yet sent</span></div><div class="tgrid"><div class="ty proven"><h5>Problem explainer<span class="u u-proven">proven</span></h5><p class="w">One condition, taken seriously, in their words.</p><p class="nt">Seven tagged pain points and 30.7k of language. This is the deepest well and the cheapest to draw.</p></div><div class="ty proven"><h5>Routine / how-to<span class="u u-proven">proven</span></h5><p class="w">How to actually use it, in what order, how often.</p></div><div class="ty proven"><h5>Why it works<span class="u u-proven">proven</span></h5><p class="w">The mechanism, only as far as the doubt requires.</p></div><div class="ty proven"><h5>Myth correction<span class="u u-proven">proven</span></h5><p class="w">A thing men are told about skin that is wrong.</p></div><div class="ty new"><h5>Mistake audit<span class="u u-new">new</span></h5><p class="w">Three things you are doing that cause the thing you hate.</p><p class="nt">Reads as help, lands as diagnosis. Every item points at a product without pitching one.</p></div><div class="ty rare"><h5>The switch<span class="u u-rare">rare</span></h5><p class="w">Against what they used before, honestly.</p><p class="nt">Competitor Switch is the fifth-largest angle in the customer data at 120 people, and the seventh-least-used type.</p></div><div class="ty new"><h5>Seasonal skin<span class="u u-new">new</span></h5><p class="w">What changes for skin in this weather.</p><p class="nt">The bridge between Education and Cultural — a real reason to send in a month with no occasion.</p></div><div class="ty new"><h5>Single objection<span class="u u-new">new</span></h5><p class="w">One belief, taken on end to end, nothing else in the email.</p><p class="nt">14.4k of objection bank. That is a lot of emails nobody has written.</p></div><div class="ty new"><h5>The stack<span class="u u-new">new</span></h5><p class="w">How the products work together — cross-sell as education, not as a bundle pitch.</p><p class="nt">14 products and no email explaining how they relate.</p></div><div class="ty proven"><h5>Product finder<span class="u u-proven">proven</span></h5><p class="w">A few questions that end on the right product for them.</p><p class="nt">Made of our expertise about which thing suits whom — not of the offer.</p></div></div><div class="wellhead"><h3>Cultural</h3><span class="c">made of the world outside</span><span class="c" style="margin-left:auto">6 types &middot; 4 not yet sent</span></div><div class="tgrid"><div class="ty proven"><h5>Moment tie-in<span class="u u-proven">proven</span></h5><p class="w">Something happening in the world they are already inside.</p><p class="nt">The NBA sends. Proven to work and currently sourced from nobody&#x27;s file.</p></div><div class="ty proven"><h5>Holiday, with an angle<span class="u u-proven">proven</span></h5><p class="w">A holiday that means something to this avatar, not every holiday.</p></div><div class="ty new"><h5>Seasonal ritual<span class="u u-new">new</span></h5><p class="w">Back to school, prom, the summer cut, the new-year reset.</p><p class="nt">Three teen sub-avatars and nothing written for the moments that structure a teenager&#x27;s year.</p></div><div class="ty new"><h5>Barbershop<span class="u u-new">new</span></h5><p class="w">The room they already sit in, monthly, talking about exactly this.</p><p class="nt">Sub-avatar 01 is literally the barbershop regular. This is the most obvious unwritten email in the account.</p></div><div class="ty new"><h5>Regional<span class="u u-new">new</span></h5><p class="w">Where they actually are.</p><p class="nt">Texas 71 · California 67 · Florida 51 · New York 38 · Georgia 31. Real concentrations, never used.</p></div><div class="ty new"><h5>Trend<span class="u u-new">new</span></h5><p class="w">What is circulating in their world right now — not an event with a date, the ambient thing everyone is talking about.</p><p class="nt">Distinct from a moment: a moment happens on a date, a trend is ambient. They need different sourcing and different timing, which is why they are two types.</p></div></div><div class="wellhead"><h3>Community</h3><span class="c">made of our customers</span><span class="c" style="margin-left:auto">8 types &middot; 6 not yet sent</span></div><div class="tgrid"><div class="ty rare"><h5>Customer spotlight<span class="u u-rare">rare</span></h5><p class="w">One named person and what happened to them.</p><p class="nt">THE GAP. 625 customers, every one with a written moment and a transformation, and roughly twelve sends in eighteen months use one.</p></div><div class="ty new"><h5>Someone like you<span class="u u-new">new</span></h5><p class="w">A customer matched to the reader&#x27;s own segment, pain point or state.</p><p class="nt">Only email can do this — it is the one channel that knows who is receiving.</p></div><div class="ty proven"><h5>Proof drop<span class="u u-proven">proven</span></h5><p class="w">Several results at once, named, nothing else.</p><p class="nt">611 customers have photos. 40 have video.</p></div><div class="ty new"><h5>Reader question<span class="u u-new">new</span></h5><p class="w">A real question someone asked, answered in public.</p></div><div class="ty new"><h5>Roll call<span class="u u-new">new</span></h5><p class="w">Welcoming the people who just joined, to the people already here.</p><p class="nt">Makes the list feel like a room rather than a broadcast.</p></div><div class="ty new"><h5>The room answered<span class="u u-new">new</span></h5><p class="w">We asked, and here is what four hundred of you said.</p><p class="nt">Made of their answers, so it is Community even though our question started it. It is also the natural second half of any email that carried the question treatment.</p></div><div class="ty new"><h5>Peer advice<span class="u u-new">new</span></h5><p class="w">What the guys who already solved this actually did.</p><p class="nt">Customers teaching customers. The same advice in our voice is an Educational email — different material, different type, and it reads nothing alike.</p></div><div class="ty proven"><h5>Content request<span class="u u-proven">proven</span></h5><p class="w">Asking customers for their photo, video or review.</p><p class="nt">What it collects becomes the Community well&#x27;s fuel, so it pays forward as well as now.</p></div></div><div class="wellhead"><h3>Brand</h3><span class="c">made of us</span><span class="c" style="margin-left:auto">8 types &middot; 7 not yet sent</span></div><div class="tgrid"><div class="ty new"><h5>Opinion<span class="u u-new">new</span></h5><p class="w">A position on something in the category, taken out loud.</p></div><div class="ty rare"><h5>Milestone<span class="u u-rare">rare</span></h5><p class="w">Six years, ten thousand of us, the hundredth batch. Our own count.</p><p class="nt">Moved out of Community 2026-08-27. The test settles it: an anniversary is made of OUR history. &#x27;The room reached it together&#x27; is framing, not material.</p></div><div class="ty rare"><h5>Founder note<span class="u u-rare">rare</span></h5><p class="w">the owner, writing as himself, about something that is actually true.</p><p class="nt">Plain or rich text with a name card. The form and the sender travel together.</p></div><div class="ty rare"><h5>The pharmacist<span class="u u-rare">rare</span></h5><p class="w">His father, the pharmacist who formulated it, speaking.</p><p class="nt">A second real voice most brands would have to invent.</p></div><div class="ty rare"><h5>Mission<span class="u u-rare">rare</span></h5><p class="w">What this is for and who it is for, stated as a position.</p><p class="nt">King&#x27;s Month is the closest thing already sent. Distinct from Cultural: that joins a moment happening anyway, this takes a position whether or not there is one.</p></div><div class="ty new"><h5>Behind the scenes<span class="u u-new">new</span></h5><p class="w">What we are building and how it is actually made.</p><p class="nt">A pharmacist formulating is a standing source most brands would have to invent.</p></div><div class="ty rare"><h5>What went wrong<span class="u u-rare">rare</span></h5><p class="w">A mistake, named, and what was done about it.</p><p class="nt">The cancelled colour way was already written this way. It is the most trust-dense email there is and almost nobody sends it on purpose.</p></div><div class="ty proven"><h5>Are you still there<span class="u u-proven">proven</span></h5><p class="w">A last email to someone who has stopped opening. Honest about being the last.</p><p class="nt">List hygiene run as a campaign. Made of us, because the thing being said is that we are going to stop.</p></div></div><div class="wellhead"><h3>Affiliate</h3><span class="c">made of a partner&#x27;s offer</span><span class="c" style="margin-left:auto">2 types &middot; 2 not yet sent</span></div><div class="tgrid"><div class="ty new"><h5>Affiliate feature<span class="u u-new">new</span></h5><p class="w">One partner product, recommended with our own commentary and a tracked link — their offer, not ours.</p></div><div class="ty new"><h5>Affiliate roundup<span class="u u-new">new</span></h5><p class="w">Several partner picks in one send, grouped around a theme (a season, a use case, a price point).</p></div></div>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">Called out</div><h2>Where it is thin, and why</h2></div>
+  <p class="sn">Gaps are information. Each one is marked by how solid the
+  evidence is: <b>verified</b> means measured off disk, <b>indicative</b> means
+  read off subject lines and worth confirming, <b>unverified</b> means it
+  cannot be answered from what exists yet.</p>
+  <div class="gaps"><div class="gp"><div><div class="n">Cultural has no source at all</div><p>Five of its six types have never been sent, and the reason is upstream: there is no moments file anywhere in the brand tree. The category cannot be drawn from until something stocks it.</p></div><span class="v v-verified">verified</span></div><div class="gp"><div><div class="n">The customer database is not in this tree</div><p>Community is the category with the most obvious fuel — named customers, photos, transformation arcs — and none of it is here. What is here are quoted verbatims inside the language banks, which support proof but not a person with a name and a face.</p></div><span class="v v-verified">verified</span></div><div class="gp"><div><div class="n">Nine-tenths of customer language is unsegmented</div><p>8,524 of avatar-one&#x27;s 9,525 customer rows sit in `unsegmented`. The source explains why: the survey has no order count and no subscription status, so voice cannot be split by one-time / repeat / loyal / VIP. The folders exist; the evidence to fill them does not. A slot cannot target a lifecycle the language cannot carry.</p></div><span class="v v-verified">verified</span></div><div class="gp"><div><div class="n">Two of the three avatars are thin, correctly</div><p>avatar-one 13,254 rows · avatar-two 753 · gift-buyer 230. That is not neglect — avatar-two is a market with almost no customers yet and gift-buyer is a small, distinct audience. It does mean a run against either is working from far less, and should say so.</p></div><span class="v v-verified">verified</span></div><div class="gp"><div><div class="n">No sender identity, no products, nothing to swipe</div><p>Three files that do not exist: `sender-identity.md`, a `products/` folder, and any email in `existing-content/emails/`. The last one is why the chain has never been run end to end.</p></div><span class="v v-verified">verified</span></div></div>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">Multiplied by</div><h2>Form, and who it comes from</h2></div>
+  <p class="sn">A type is <em>what the email is</em>. A form is <em>how it is
+  built</em> &mdash; and the form decides the sender, not the other way round.</p>
+  <div class="fm"><div class="fmr"><span class="k">Designed template</span><span class="v">Blocks, images, buttons. The default for anything from the Ask well.</span><span class="sd">brand</span></div><div class="fmr"><span class="k">Rich text with a name card</span><span class="v">Reads like a person wrote it, with a small identity card. The founder and pharmacist forms.</span><span class="sd">person</span></div><div class="fmr"><span class="k">Plain text</span><span class="v">No design at all. Highest reply rate, lowest production cost.</span><span class="sd">person</span></div><div class="fmr"><span class="k">Image led</span><span class="v">The picture carries it; copy is captioning. Needs the image lane.</span><span class="sd">brand</span></div><div class="fmr"><span class="k">Text led</span><span class="v">Designed, but the argument is in the words.</span><span class="sd">brand</span></div></div>
+  <h3 style="margin:32px 0 4px;font-size:18px;letter-spacing:-.015em">And by these</h3>
+  <p class="sn" style="margin-bottom:10px">Not types. Ways the same type
+  becomes a different email.</p>
+  <div class="fm"><div class="fmr"><span class="k">Rebroadcast to non-openers</span><span class="v">The same email, new subject, to the people who did not open. Already house practice — worth rules rather than habit.</span><span class="sd"></span></div><div class="fmr"><span class="k">Awareness variant</span><span class="v">The same type, rebuilt for a different awareness level. Unaware 249 and Product-Aware 26 are not the same email about the same thing.</span><span class="sd"></span></div><div class="fmr"><span class="k">Segment mirror</span><span class="v">The same occasion, resolved through a different lifecycle language bank.</span><span class="sd"></span></div></div>
+</section>
+
+
+<section>
+  <div class="sh"><div class="kick">The arc</div><h2>Where a type sits, and what follows it</h2></div>
+  <p class="sn">the owner, 2026-08-27: how many emails ask is a low-level question. The real one is where a type sits in the strategy, and whether that specific thing needs a follow-up. So a slot is a MOVE IN A SEQUENCE, never a standalone send.</p>
+  <div class="arcbox">
+    <div class="roles"><div class="r"><div class="rk">earns</div><div class="rn">30</div><div class="rd">Buys the right to ask later. Asks for nothing itself.</div></div><div class="r"><div class="rk">sets-up</div><div class="rn">1</div><div class="rd">Points at a specific ask that has not happened yet.</div></div><div class="r"><div class="rk">asks</div><div class="rn">10</div><div class="rd">The ask.</div></div><div class="r"><div class="rk">recovers</div><div class="rn">4</div><div class="rd">Runs after an ask that did not land. Never the first ask.</div></div><div class="r"><div class="rk">closes</div><div class="rn">2</div><div class="rd">The second half of something already sent.</div></div></div>
+    <p class="sn" style="margin-top:20px"><b>Cadence is not a rule. There is no target number of sends and no fixed share that may ask — the owner, 2026-08-27. What goes out is decided by measured responsiveness per segment and per avatar, and by what a send earns. The arc governs ORDER; the data governs FREQUENCY.</b></p>
+  </div>
+  <h3 style="margin:34px 0 4px;font-size:19px;letter-spacing:-.015em">What follows what</h3>
+  <p class="sn" style="margin-bottom:8px">Sixteen types name the move that
+  should come after them. Red is an ask.</p>
+  <div class="arcbox chains"><div class="ch"><b class="a">Sale window</b> <i>&rarr;</i> <b>Last chance</b><span class="w">An ask standing alone is an ask with nothing behind it.</span></div><div class="ch"><b class="a">Launch</b> <i>&rarr;</i> <b>Proof drop</b> <i>&rarr;</i> <b>Last chance</b><span class="w">A launch is the middle of an arc: anticipation before, proof after.</span></div><div class="ch"><b class="">Anticipation</b> <i>&rarr;</i> <b>Launch</b><span class="w">Its whole job is to make the launch not arrive cold.</span></div><div class="ch"><b class="a">Bundle</b> <i>&rarr;</i> <b>The stack</b><span class="w">The educational version of the same argument follows if it does not land.</span></div><div class="ch"><b class="a">Early access</b> <i>&rarr;</i> <b>Launch</b><span class="w">Sets up the public launch by giving the list first refusal.</span></div><div class="ch"><b class="a">Gift guide</b> <i>&rarr;</i> <b>Last chance</b><span class="w">Seasonal, so the deadline is real and the recovery is honest.</span></div><div class="ch"><b class="">Problem explainer</b> <i>&rarr;</i> <b>Single objection</b> <i>&rarr;</i> <b>Why it works</b></div><div class="ch"><b class="">Routine / how-to</b> <i>&rarr;</i> <b>The stack</b></div><div class="ch"><b class="">Myth correction</b> <i>&rarr;</i> <b>Single objection</b></div><div class="ch"><b class="">Mistake audit</b> <i>&rarr;</i> <b>Routine / how-to</b></div><div class="ch"><b class="">The switch</b> <i>&rarr;</i> <b>Proof drop</b><span class="w">Claims better; proof is what makes the claim survive.</span></div><div class="ch"><b class="">The stack</b> <i>&rarr;</i> <b>Bundle</b><span class="w">Teaches how the products relate; the bundle is the same argument with a price on it.</span></div><div class="ch"><b class="">Holiday, with an angle</b> <i>&rarr;</i> <b>Gift guide</b></div><div class="ch"><b class="">Customer spotlight</b> <i>&rarr;</i> <b>Proof drop</b><span class="w">One person makes the next ask believable.</span></div><div class="ch"><b class="">The pharmacist</b> <i>&rarr;</i> <b>Why it works</b></div><div class="ch"><b class="">Behind the scenes</b> <i>&rarr;</i> <b>Launch</b><span class="w">What is being built points at the thing being launched.</span></div><div class="ch"><b class="a">Product spotlight</b> <i>&rarr;</i> <b>Proof drop</b></div><div class="ch"><b class="">Product finder</b> <i>&rarr;</i> <b>Product spotlight</b></div><div class="ch"><b class="">Content request</b> <i>&rarr;</i> <b>Proof drop</b> <i>&rarr;</i> <b>Customer spotlight</b></div></div>
+</section>
+
+
+
+<section><div class="sh"><div class="kick">Step 1</div><h2>The dynamic calendar</h2></div><p class="sn">Brand context in, a list of slots out. A slot is one campaign, fully specified before anyone writes a word.</p><p class="note">A fixed calendar is a list of dates someone filled in. <b>A dynamic one composes slots out of the brand&#x27;s own dimensions</b> — which lane, which lifecycle, which product, which job — and covers that space deliberately instead of repeating whatever went out last month.</p><div class="dims"><div class="d"><div class="v">2</div><div class="k">Lane</div><div class="s">brotherhood · two-oh — never blended</div></div><div class="d"><div class="v">9</div><div class="k">Lifecycle</div><div class="s">structurally; 2 have real language today</div></div><div class="d"><div class="v">14</div><div class="k">Product</div><div class="s">each with its own file and offer</div></div><div class="d"><div class="v">—</div><div class="k">Job</div><div class="s">educate · prove · handle an objection · launch · offer</div></div></div><div class="wfs"><div class="wf"><div class="wid">C-1</div><div class="wc"><div class="wn">The year</div><div class="wt">The brand&#x27;s own moments and demand shape — which months lean, which maintain.</div></div><div class="wm"><span class="chip s-part">Partly</span></div></div><div class="wf"><div class="wid">C-2</div><div class="wc"><div class="wn">Responsiveness per segment</div><div class="wt">What each segment and avatar actually does when it is sent to — engagement, revenue per recipient, and what happens to both as frequency changes. This is what decides cadence; nothing is set by rule.</div></div><div class="wm"><span class="chip s-miss">To build</span></div></div><div class="wf"><div class="wid">C-3</div><div class="wc"><div class="wn">The audience vocabulary</div><div class="wt">A fixed named set of segments, each one mapped to exactly one lifecycle — so a slot can name who it is for and the right language bank follows.</div></div><div class="wm"><span class="chip s-decide">Your call</span></div></div><div class="wf"><div class="wid">C-4</div><div class="wc"><div class="wn">Compose the sequence</div><div class="wt">Not a list of independent sends — an ordered arc. Each move knows what it earns, what it sets up, and what must follow it. The dynamic part.</div></div><div class="wm"><span class="chip s-miss">To build</span></div></div><div class="wf"><div class="wid">C-5</div><div class="wc"><div class="wn">Choose the source</div><div class="wt">Which swiped email this slot gets built from.</div></div><div class="wm"><span class="chip s-miss">To build</span></div></div></div></section><section><div class="sh"><div class="kick">Step 2</div><h2>Email production</h2></div><p class="sn">One slot and one source in; subject lines and a finished email out.</p><div class="wfs"><div class="wf"><div class="wid">P-1</div><div class="wc"><div class="wn">Resolve the context</div><div class="wt">The slot&#x27;s lane, lifecycle and product select the exact brand files this email reads. Automatic — that is what <code>chain-variables.md</code> is for.</div></div><div class="wm"><span class="chip s-built">Built</span></div></div><div class="wf"><div class="wid">P-2</div><div class="wc"><div class="wn">Choose the email&#x27;s form</div><div class="wt">Founder note, designed promo, plain text, editorial. <b>This is where sender identity is decided</b> — a founder email is rich text with a name card and goes out under a person; a promo is a built template and goes out under the brand. The form decides the sender, not the other way round.</div></div><div class="wm"><span class="chip s-part">Partly</span></div></div><div class="wf"><div class="wid">P-3</div><div class="wc"><div class="wn">Run the chain</div><div class="wt">Ten stages: triage, read, spec, scout, inject, place, subject lines, expand, close, build, brief.</div></div><div class="wm"><span class="chip s-built">Built</span></div></div><div class="wf"><div class="wid">P-4</div><div class="wc"><div class="wn">The pick</div><div class="wt">You read the page, choose the subject line and its preview, approve or send it back.</div></div><div class="wm"><span class="chip s-miss">To build</span></div></div></div></section>
+
+<section>
+  <div class="sh"><div class="kick">Parked, not dropped</div><h2>The rest of it</h2></div>
+  <p class="sn">Real, and out of scope until the three steps above are settled.</p>
+  <div class="parked"><div class="p"><b>Delivery</b><p>Building it in the platform, images, links, QA, scheduling. Mechanical, and almost all of it is calls we can already make.</p></div><div class="p"><b>Feedback</b><p>What each send earned, back onto the slot that asked for it; subjects onto the ledger; winners back into the swipe file.</p></div><div class="p"><b>Flows</b><p>A different product entirely — installed once, sends forever on a trigger. Set up quarterly, and eventually per avatar.</p></div></div>
+</section>
+
+<section>
+  <div class="sh"><div class="kick">Step 2, in full</div><h2>The prompts that run today</h2></div>
+  <p class="sn">The files as they are on disk.</p>
+  <div class="pr"><div class="prh"><h4>0 · Triage</h4><span class="fn">stage0-triage-v1-damon.md</span></div><pre>Today is: {today}
+Here is the source: {source}
+Here is where it came from: {source_reference}
+Here are the formats this lane knows: {formats}
+
+Four answers. Everything downstream binds to them, so be decisive and say
+where you were unsure rather than hedging in the answer itself.
+
+**LANE:** `ALREADY AN AD` or `ORGANIC`
+
+The test is **not polish**. Every marketing email is polished. The test is
+whether this email was **built to sell inside itself** — whether it carries
+the argument that makes the case, or whether it is content with a link at the
+end of it.
+
+A sale, a launch, an abandoned-cart, a last-chance: `ALREADY AN AD`. A
+newsletter, a how-it-works, a founder&#x27;s note, a customer&#x27;s story told for its
+own sake: `ORGANIC`.
+
+When genuinely between, answer `ORGANIC`. Building structure that turns out
+redundant costs less than assuming structure that was never there.
+
+**FORMAT:** one key from the list above.
+
+What the source **is**, not what we might turn it into. If nothing fits,
+answer `unlisted` and describe the shape in one line — never force it into
+the nearest key, because every stage after this binds to the key.
+
+**VOICE:** whose mouth this comes out of, and the binding that follows.
+
+Name the speaker, then state the rules a later stage has to obey to keep
+sounding like them. Where the lane is organic these are binding, not
+stylistic.
+
+**SENDER:** the from-line, and what it licenses.
+
+Not metadata — part of the argument. Answer with which of these it is:
+
+- `BRAND` — the company is speaking
+- `PERSON` — a named human is speaking, and they are identifiable
+- `PERSON-AT-BRAND` — a named human, speaking for the company
+- `SUPPORT` — an operational address; a different kind of trust entirely
+
+Then one line on what that sender **may claim**. A named identifiable human
+can say &quot;I used it for three weeks&quot; and stand behind it. A brand cannot. This
+line is what stops a later stage writing a first-person claim nobody can own.
+
+Then, briefly:
+
+- **ABOUT** — what it is about
+- **DOING** — what it is doing to the reader
+- **LENGTH** — roughly how many phone screens it runs
+- **IDENTIFIABLE** — is the speaker a real, named, traceable person: yes or no
+
+Give me the four labelled answers first, then the brief lines. Nothing else.
+</pre></div><div class="pr"><div class="prh"><h4>1 · Read</h4><span class="fn">stage1-read-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the source: {source}
+
+An objective record of this email. **Observation only.** You are not saying
+what would work better, what is weak, or what we should do — a later stage
+does that and it needs a clean record to do it from.
+
+If the source is a teardown record from another lane rather than an email,
+read it as it stands. Do not redo it, do not contradict it, and do not
+translate it into email terms — stage 2 does that. Note what it does not
+cover and move on.
+
+Give me:
+
+**THE ENVELOPE**
+
+- From-name and the shape of the address
+- **Subject line, quoted exactly.** Character count.
+- **Preview text, quoted exactly.** If there is none, say `no preview text` —
+  that is a finding, not a blank.
+- What the pair does together: whether the preview completes the subject,
+  repeats it, or changes the subject entirely
+
+**THE BLOCKS, IN ORDER**
+
+Numbered, in the order they appear down the scroll. For each: the type
+(copy / image / button / review / product / divider / PS / footer), and its
+content **quoted, never paraphrased**. Copy blocks quoted in full. Image
+blocks described by what is in the frame and what it is doing.
+
+The opening line of body copy gets quoted in full and called out — it is the
+line the preview text was buying.
+
+**THE CTA CENSUS**
+
+Every button and every inline link: what it says, where it falls in the scroll,
+and where it goes. Then the count, and whether the first one comes before or
+after the argument has been made.
+
+**THE WEIGHT**
+
+Roughly how much of the email is image and how much is text. How many phone
+screens it runs. Where the fold falls — what a reader sees before scrolling at
+all.
+
+**THE OFFER**
+
+Where it appears, in what words, exactly. Where it conspicuously does not
+appear. If there is no offer, say so.
+
+**THE PROOF**
+
+Every specific: a number, a duration, a named person, a review, a study, a
+before-and-after. Quoted. Unspecific claims are not proof and do not go here.
+
+**VOICE MARKERS**
+
+Sentence length and rhythm. Punctuation habits. Vocabulary — the words this
+speaker reaches for and the register they sit in. Contractions or not. What
+this speaker **never** does.
+
+Where the lane is organic this is the most load-bearing section in the
+document; everything downstream depends on it being precise rather than
+flattering.
+
+**WHAT IT NEVER DOES**
+
+The things this email conspicuously avoids — a claim it could have made and
+didn&#x27;t, a beat it skipped, a word it stayed away from. Absences are structure
+too, and they are the part a replication most often loses.
+</pre></div><div class="pr"><div class="prh"><h4>2 · Spec</h4><span class="fn">stage2-spec-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the record of the source: {record}
+
+Turn the record into a **brand-free, medium-free construct** — the persuasion
+mechanics with both the brand and the delivery medium stripped out.
+
+**Read this first, because the copy lane&#x27;s v1 got it wrong and cost a rebuild.**
+The earlier version abstracted the source&#x27;s *physical form* — &quot;one card, two
+words&quot; — and every stage downstream faithfully rebuilt the source&#x27;s medium
+instead of making the argument. The same trap here is subject-line lengths,
+block counts, hero images and button placements.
+
+**What the source is made of is a fact about the source, not a constraint on
+us.** Blocks, buttons, hero images, subject lines, scroll positions — that is
+how an inbox carried the argument. The argument is what transfers.
+
+So: **no block counts, no button positions, no character limits, no &quot;hero&quot;, no
+&quot;above the fold&quot; anywhere in this document.** If you catch yourself writing
+one, you are describing the source instead of abstracting it.
+
+Give me:
+
+**THE MOVES** — numbered, in the source&#x27;s order. For each:
+
+1. **The job it does on the reader.** Stated so it could be performed in an
+   email, a caption, a video or a landing page without changing what it
+   accomplishes. &quot;Names a cost the reader is already paying and has stopped
+   noticing&quot; — never &quot;a headline over a lifestyle image.&quot;
+2. **What it needs to work.** The conditions the move depends on: that it
+   comes before the product is named; that it is shorter than what follows;
+   that it is stated flatly rather than argued. These survive any medium.
+3. **Its slots** — `[SLOT: name]`, each named by what it needs, with one line
+   on what would legitimately fill it.
+
+**THE SEQUENCE LOGIC** — why these moves in this order: what the opening buys,
+where the tension peaks, what the payoff spends it on, why the ending lands
+where it does. If a move were removed, this says what breaks. This is the part
+that actually transfers, so it is the part worth being precise about.
+
+**PROPORTION, RELATIVELY** — how the source distributed its weight, as shares
+rather than units. &quot;Roughly a third elapses before the product is named; the
+proof beat is the longest single stretch.&quot; Never in blocks, screens or words —
+a share can be re-expressed in any medium, a unit cannot.
+
+**THE VOICE CONSTRUCT** — the voice markers from the record restated as
+followable rules: sentence length, punctuation habits, vocabulary, what this
+speaker never does. Where the lane is organic these are **binding, not
+stylistic**.
+
+**LOAD-BEARING** — the two or three things this argument cannot survive
+losing, and what each carries. A later stage may substitute into these; it may
+not cut them.
+
+**WHAT IS INBOX-BOUND** — name the things the source did that **only work in
+an inbox**, and say what each was accomplishing, so a later stage can achieve
+the same end by other means.
+
+A subject line buys the open. A preview text buys the first line. A hero image
+has to survive being blocked. A button is a decision made without reading. Name
+the job, not the device — and note plainly that nothing downstream may treat
+&quot;it had a hero image&quot; as a structural requirement. The job is required; the
+device is one way of doing it.
+
+**The test for this whole document:** someone handed it, with no access to the
+source, should be able to write an email, a caption and a landing page from it
+— three different objects making the same argument. If it could only produce
+one shape, it is still a record, not a construct.
+</pre></div><div class="pr"><div class="prh"><h4>2B · Context scout</h4><span class="fn">stage1b-context-scout-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the brand-free construct built from the source: {spec}
+Here is everything this brand knows, file by file: {context_index}
+Already loaded on every run, so do not select these: {always_loaded}
+
+Choose what this specific source&#x27;s copy needs to be written well.
+
+The failure this stage exists to end: every source used to get the same four
+brand files, so every piece came out generically on-brand — true about the
+brand, indifferent to the source. A file that would have changed the copy and
+was never opened is the whole problem. So is loading everything, which buries
+the two files that mattered under twenty that didn&#x27;t.
+
+**Choose for THIS source, not for the brand in general.** The test on every
+file is a sentence you can actually finish: *&quot;the copy will be different
+because this was read, in this way.&quot;* If you cannot finish it, do not select
+the file. &quot;It&#x27;s relevant background&quot; is not finishing it.
+
+Work through the index in this order:
+
+1. **Who is actually in this source.** If the source names a creator, a
+   customer, or a person whose profile is in the index, that file is almost
+   always a selection — copy written in a specific person&#x27;s voice without
+   reading who they are is the template failure in its purest form.
+
+   **Only that person.** A creator profile for somebody with nothing to do
+   with this source is worse than loading nothing: it puts another person&#x27;s
+   habits, phrasing and posting history in front of a stage trying to write
+   as *this* speaker, and voice is the thing most easily contaminated. If the
+   source&#x27;s speaker is unnamed, select **no creator profile at all** and say
+   so — an unnamed speaker is a fact to respect, not a gap to fill with the
+   nearest roster entry.
+2. **What the video argues.** Objections it raises or leaves open, proof it
+   leans on, the mechanism it claims. Pull the files that hold our real
+   answers to those, not our general messaging.
+3. **What has already been said.** Any ledger of hooks, angles or verbatims
+   already spent. Copy that reuses a spent line is the same ad again with
+   new words, and this is the file that prevents it. Select it whenever one
+   exists.
+4. **What the market around this video looks like.** Competitor teardowns
+   and ad matrices, but only when the concept is doing something the
+   category also does — a differentiation claim, a mechanism, a price
+   argument. Not by default.
+5. **Raw evidence** — interviews, tickets, transcripts, focus groups. Big,
+   and where real language actually lives.
+
+   **Read the construct&#x27;s slots before deciding.** If ANY slot calls for a
+   customer&#x27;s own words — a found line, a quoted verdict, testimony, a
+   behaviour someone reported — then evidence is **required, not optional**,
+   and you select the file most likely to carry that kind of line. A slot
+   that needs a real human sentence cannot be filled from an avatar or a
+   language bank; those describe how customers speak, they are not customers
+   speaking.
+
+   Otherwise, when no slot needs a verbatim, select at most one and only when
+   the concept turns on customer phrasing rather than brand assertion.
+
+**Respect what a file says about itself.** The index carries each file&#x27;s own
+`status`, `contested` and `known-issues` lines. A PROVISIONAL or contested
+file is still usable — say so in one line when you select it, so the stages
+downstream know the ground they are standing on is not settled. A file whose
+known-issues describe exactly the claim this video makes is a file to flag
+loudly, not to quietly use.
+
+**Never select a file marked NOT LOADABLE.** Name it under what a person has
+to do instead, if it matters here.
+
+Keep the total selection under roughly 60,000 characters. If two files cover
+the same ground, take the better-sourced one and say why the other lost.
+
+Give me exactly this, and nothing else:
+
+**LOAD:**
+One workspace-relative path per line, no other text on the line.
+
+**WHY, file by file:**
+One line each, in the same order, finishing the sentence: what changes in the
+copy because this was read.
+
+**DELIBERATELY NOT LOADED:**
+The files a reasonable person would expect here and the one-line reason each
+was left out. This section is not optional — it is how the choice gets
+checked. If a file was skipped only because of the budget, say that rather
+than inventing a reason of substance.
+
+**STANDING TO CARRY FORWARD:**
+Anything the copy stages must know about the ground under a selected file —
+contested, provisional, a known issue that touches this concept. One line
+each, or &quot;nothing contested in this selection&quot;.
+
+**WHAT THE DATE MEANS HERE:**
+Today&#x27;s date is at the top. Say in one or two lines whether it constrains
+this copy at all — a season the video&#x27;s wardrobe or setting implies, a
+holiday the offer would collide with, a timeline claim that reads differently
+in this month than another. If the date genuinely does not bear on this
+concept, say exactly that. Do not invent a seasonal angle to have something
+to write.
+</pre></div><div class="pr"><div class="prh"><h4>3 · Injection</h4><span class="fn">stage3-injection-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the record of the source: {record}
+Here is the brand-free construct: {spec}
+Here is the brand context chosen for this source: {brand_context}
+Here is the brand name: {brand_name}
+Here is who this email comes from, and what they may claim: {sender_identity}
+Here is the avatar: {avatar}
+Here is how this customer talks: {language_bank}
+Here is the product: {product_file}
+Here is the specific argument the plan already chose for this send: {angle}
+
+Fill the slots. **Substitution, never rewriting.**
+
+**The angle, if one was given, is not one more input among many — it is the
+reason this segment is getting this avatar&#x27;s voice this month.** Someone
+already read the record and picked which of this avatar&#x27;s problems to
+foreground and why now; the language bank gives you that avatar&#x27;s real words,
+the angle tells you which of those words are load-bearing this time. Where
+the angle and a generic reading of the avatar profile would produce different
+emails, the angle wins. If none was given, reason from the avatar and
+language bank alone, same as before.
+
+The construct is the template. Every move stays, in its order, doing its job,
+at its relative weight. You are putting our nouns into someone else&#x27;s
+argument — not writing our version of a similar argument.
+
+**The failure this stage is judged against:** output that is true about our
+brand and shaped like our brand, in roughly the source&#x27;s direction. That is
+what happens when a stage writes *from* the construct instead of *into* it. If
+your output would read the same had the construct been a different one, you
+have not injected anything.
+
+**Slots with no honest filler**
+
+A slot we cannot fill truthfully becomes `[UNFILLED: what it needed]` and
+**the move stays standing.** A later stage can write around a marked hole. It
+cannot recover a deleted one, because it will not know anything was there.
+
+Never invent a number, a duration, a study, a customer or a result to fill a
+slot. An invented filler is the single most expensive thing this chain can
+produce, because it reads exactly like a real one.
+
+**Voice binds over house style**
+
+The voice construct is the rule. Where a phrasing from the language bank
+collides with a voice rule, **the voice rule wins** — and you log the
+collision in one line so the collision is visible rather than silently
+resolved.
+
+Where the lane is organic, this email is that named person speaking. Not brand
+copy with their name on it.
+
+**The sender binds too, and this is email-specific**
+
+Whatever the sender file licenses is the ceiling on first-person claims.
+
+- A named, identifiable person may say &quot;I used it for three weeks&quot; and stand
+  behind it — if the files say they did.
+- A brand may not. &quot;We&quot; is not a person and cannot have had an experience.
+- A support address speaks operationally and does not sell.
+
+A first-person line nobody in the files can own is a defect **at this stage**,
+not a note for a later one to catch. Write it as `[UNFILLED: needs a real
+person who can own this]` instead.
+
+Give me:
+
+**THE INJECTED PIECE** — the moves in order, slots filled, each move labelled
+with the construct&#x27;s number so it can be checked against the template.
+
+**THE SUBSTITUTIONS** — a short table: slot, what the source had there, what
+we put there, and where it came from. A filler with no source file named is
+a filler you invented.
+
+**UNFILLED** — every marked hole and what it would take to fill it honestly.
+
+**COLLISIONS** — every place a language-bank phrasing lost to a voice rule, or
+a brand claim lost to the sender&#x27;s ceiling. One line each, or &quot;none&quot;.
+</pre></div><div class="pr"><div class="prh"><h4>4 · Placement</h4><span class="fn">stage4-placement-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the record of the source: {record}
+Here is the brand-free construct: {spec}
+Here is the injected piece: {injection}
+Here is the product: {product_file}
+Here is the offer: {offer_file}
+Here is the objection bank: {objection_bank}
+
+**Decide. Write nothing.** No copy, no lines, no subject lines. This stage
+produces a plan the next stages have to obey, and a stage that starts writing
+here starts deciding by taste instead of by structure.
+
+Four decisions.
+
+**1 · WHERE THE PRODUCT ENTERS**
+
+The source&#x27;s own position is the default. Give it as a share of the piece —
+&quot;after the second move, roughly a third in&quot; — never as a block number.
+
+**Moving it earlier needs a stated reason**, and &quot;it is an email and people
+skim&quot; is not one. The source&#x27;s position is evidence; a preference is not. If
+you move it, say what in the construct or the offer makes the earlier position
+work, and say what you expect to lose.
+
+**2 · THE SCROLL BUDGET**
+
+How long this email runs, in phone screens, taken from the source&#x27;s own
+length and its proportions.
+
+**Room is never bought by compressing a source beat.** If everything the
+construct requires will not fit the source&#x27;s length, do not quietly trim — say
+by how much it overruns, in screens, and which move is the pressure. An
+overrun is escalated with a number, not absorbed.
+
+Then the shares: roughly what proportion goes to the opening, the argument,
+the proof, the close.
+
+**3 · THE CTA PLAN**
+
+How many buttons, and where each falls.
+
+The source&#x27;s count is the default. **Adding a CTA needs a reason** — an email
+that asks three times when the source asked once is a different email and
+usually a worse one.
+
+For each: where it falls in the scroll, and whether it comes before or after
+the argument has been made. A button above the argument is a legitimate move
+for a reader who is already sold and a wasted one otherwise; say which you
+think this is and why.
+
+Then: whether the copy links inline as well, or only through buttons. The
+source&#x27;s habit is the default here too.
+
+**4 · THE IMAGE PLAN**
+
+How many image blocks, and **what each one is for** — the job it does, in the
+construct&#x27;s terms.
+
+An image block with no stated job is not planned, and it does not go in the
+plan. &quot;Visual break&quot; is not a job.
+
+Every image here becomes a job for the image lane, so state each one as
+something that lane could actually build: what has to be true in the frame for
+this to do its job. Do not describe the picture — that is the image lane&#x27;s
+stage 3, not this one.
+
+**5 · THE OBJECTION AT THE FLINCH**
+
+From the objection bank: the one objection this reader will hit, and where in
+the scroll they hit it. Name the objection and the position. Stage 7 answers
+it; this stage only says where the flinch is.
+
+Give me the five decisions, labelled, each with its reason. Nothing else.
+</pre></div><div class="pr"><div class="prh"><h4>5 · Subject lines</h4><span class="fn">stage5-subjects-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the record of the source: {record}
+Here is the brand-free construct: {spec}
+Here is the injected piece: {injection}
+Here is the placement plan: {placement}
+Here is who this email comes from, and what they may claim: {sender_identity}
+Here are this avatar&#x27;s voice rules: {language_bank}
+Here is real customer language selected for this stage: {customer_language}
+Here is the brand context chosen for this source: {brand_context}
+Here is every subject line already sent: {hook_ledger}
+Subject variations owed: {subject_count}
+
+**The customer language above is queried, not dumped.** These rows were
+chosen because of what they ARE — the kind of thing this stage needs — and
+ranked by how loud they were and how well sourced. They are real sentences
+real people said, each carrying who said it and where it came from.
+
+Use their words. A row marked `ATTRIBUTION ASSUMED` is weaker evidence and a
+row from a paid panel is not a customer speaking; weigh them accordingly and
+never present either as something a customer said. If nothing in the rows
+fits, say so — an empty result is a fact about the bank, not a licence to
+write the sentence yourself.
+
+Write the opening. Everything the email can do depends on it being opened,
+and this is the only stage that writes it.
+
+**THE UNIT IS A PAIR. ALWAYS.**
+
+A subject line never ships alone. Every version below is a **subject line and
+the preview text that runs under it**, written together as one object.
+
+- The **subject** buys the open.
+- The **preview** buys the first line of the body. It is not a summary of the
+  subject and it is not a repeat of it. It is the second half of a two-part
+  opening, and the two are read in one glance.
+- The preview must not be the opening line of the body copy. A reader who has
+  already read that line has been given the first sentence twice.
+
+A version that ships a subject without its preview is incomplete and does not
+count toward the number owed.
+
+**VERSION 0 — THE CONTROL, SWIPED STRAIGHT**
+
+The source&#x27;s own subject line and its own preview text, substituted and
+nothing else. Same shape, same length, same rhythm, our nouns in place of
+theirs.
+
+This is the control and **it may not be improved.** If it reads plainer than
+the variations, that is the point — it is the version whose performance we
+already have evidence for, and a control that has been quietly upgraded
+measures nothing. Write it, label it VERSION 0, and leave it alone.
+
+If the source had no preview text, VERSION 0 has none either, and you say so.
+Adding one is an improvement, and improvements are what the variations are
+for.
+
+**THE VARIATIONS**
+
+Then {subject_count} more pairs, each doing a genuinely different job — not
+the same idea reworded. Before each, name in one line the move it makes and
+what it is betting on.
+
+Draw them from what the source and the brand context actually contain:
+
+- A different move of the construct promoted to the front
+- A customer&#x27;s own words, quoted, where the language bank or context carries
+  them
+- The turn stated up front instead of withheld
+- The objection said out loud before the reader can think it
+- A concrete number or duration the files support
+- The belief being contradicted, stated flatly as the belief
+- The plainest possible statement of what is inside — no device at all
+
+**Rules that bind every one of them:**
+
+- **The voice rules are absolute.** If the lane is organic, every pair is that
+  named person writing. A subject that sounds like a brand — even a great one
+  — is disqualified, and no amount of expected performance argues it back in.
+- **The sender&#x27;s ceiling binds.** A first-person subject line only exists if
+  the sender file says someone can own it.
+- **Never spend a subject on a claim the files do not carry.** A subject line
+  is the most-seen line we write; an unsupported one is the most expensive
+  place to put a claim we cannot stand behind.
+- **Never reuse ground the ledger records as spent.** If a line or an angle is
+  on the ledger, that ground is used, and building on it again is sending the
+  same email twice with new words. Say which you avoided and why.
+- **No manufactured urgency.** No deadline, no countdown, no scarcity that the
+  offer file does not carry.
+- **No fake-personal devices.** `Re:`, `Fwd:`, a false reply, an invented
+  first name, a fake typo. They buy one open and cost the relationship.
+
+**THE FROM-NAME**
+
+If triage&#x27;s sender answer leaves room for a variant — a person&#x27;s name where
+the brand normally sends, or the reverse — give it as a separate, clearly
+labelled option with one line on what it changes.
+
+Keep it separate on purpose. A from-name change and a subject change tested
+together tell you nothing about either.
+
+**The machine never picks.** All of them ship. Do not rank them, do not name a
+favourite, do not mark one recommended, do not predict open rates. Choosing is
+a human act and a stage that pre-empts it is deciding something it has no
+evidence for.
+
+Give me VERSION 0 first — subject, preview — then the variations, each with
+its one-line intent, then the from-name note. Nothing else.
+</pre></div><div class="pr"><div class="prh"><h4>6 · Expansion</h4><span class="fn">stage6-expansion-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the brand-free construct: {spec}
+Here is the injected piece: {injection}
+Here is the placement plan: {placement}
+Here is the product: {product_file}
+Here is our offer: {offer_file}
+Here are this avatar&#x27;s voice rules: {language_bank}
+Here is real customer language selected for this stage: {customer_language}
+Here is the brand context chosen for this source: {brand_context}
+
+**The customer language above is queried, not dumped.** These rows were
+chosen because of what they ARE — the kind of thing this stage needs — and
+ranked by how loud they were and how well sourced. They are real sentences
+real people said, each carrying who said it and where it came from.
+
+Use their words. A row marked `ATTRIBUTION ASSUMED` is weaker evidence and a
+row from a paid panel is not a customer speaking; weigh them accordingly and
+never present either as something a customer said. If nothing in the rows
+fits, say so — an empty result is a fact about the bank, not a licence to
+write the sentence yourself.
+
+**This stage only runs on an organic source.** If triage said the lane is
+`ALREADY AN AD`, the runner skips it: that source&#x27;s commercial structure
+already exists and was inherited at injection, and adding moves to it would be
+building a second argument on top of a working one. If you are reading this,
+the source was organic and there is no commercial structure yet — it has to be
+built from nothing.
+
+An organic source was not made to sell. It has attention and it has credibility
+and it has no argument. Your job is to add the smallest number of moves that
+turn it into one, **without disturbing what earned the attention.**
+
+**Every addition is gated.** For each move below, decide NEEDED or NOT NEEDED,
+and NOT NEEDED is the honest answer most of the time. A move that is not
+needed and gets added anyway costs length, dilutes the source&#x27;s shape, and
+makes the email read like an ad wearing a newsletter&#x27;s clothes — which is the
+exact failure an organic swipe exists to avoid.
+
+Consider, in this order:
+
+1. **The problem, named.** Gate: does the source leave the reader&#x27;s problem
+   implicit in a way that stops the product from meaning anything? Organic
+   posts often assume it. If the reader would not know what this solves,
+   name it — in the speaker&#x27;s own terms, never in category language.
+2. **Why it works.** Gate: is the reader going to think &quot;sure, but why would
+   that do anything?&quot; Add the mechanism only if that doubt is live, and only
+   as much of it as the doubt requires.
+3. **Proof.** Gate: is there a claim here a stranger has no reason to believe?
+   Add proof the files actually carry — a customer&#x27;s words, a duration, a
+   number. Never manufacture credibility with vague volume (&quot;thousands love
+   it&quot;).
+4. **The objection.** Gate: is there a specific reason this reader would not
+   act, and does the objection bank or brand context carry our real answer?
+   Handle one, at the place the reader would flinch. Not a list.
+5. **The ask.** Gate: the source had none. Does this email need one, and what
+   is the smallest version that works for this format? The placement plan
+   already set the CTA count — this gate decides whether the *words* around
+   it argue for the click or merely offer it. A `newsletter` may need nothing
+   more than a link that says where it goes.
+
+For each move, give: **NEEDED / NOT NEEDED**, the gate&#x27;s answer in one line,
+where it goes (after which move), what it costs in words, and — if needed —
+the actual lines, written in the construct&#x27;s voice rules.
+
+**What you may not do:**
+
+- **Never trim a source beat to pay for an addition.** The budget comes from
+  the placement plan. If the additions do not fit, say so and name what they
+  would cost — an overrun is escalated, never absorbed by cutting the thing
+  being replicated.
+- **Never change the voice.** These moves are the same speaker. An organic
+  source whose commercial beats arrive in brand voice is two pieces stapled
+  together and reads exactly like it.
+- **Never add a move to be thorough.** If three of the five are NOT NEEDED,
+  that is a good outcome and you say so plainly.
+
+Give me the gated list, then the expanded email in full with the needed moves
+in place — still as content, not as blocks. Stage 8 decides what is a block.
+</pre></div><div class="pr"><div class="prh"><h4>7 · Close</h4><span class="fn">stage7-close-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the email so far: {body}
+Here is who this email comes from, and what they may claim: {sender_identity}
+Here is the brand-free construct: {spec}
+Here is the placement plan: {placement}
+Here is the product: {product_file}
+Here is our offer: {offer_file}
+Here are this avatar&#x27;s voice rules: {language_bank}
+Here is real customer language selected for this stage: {customer_language}
+Here is the brand context chosen for this source: {brand_context}
+
+**The customer language above is queried, not dumped.** These rows were
+chosen because of what they ARE — the kind of thing this stage needs — and
+ranked by how loud they were and how well sourced. They are real sentences
+real people said, each carrying who said it and where it came from.
+
+Use their words. A row marked `ATTRIBUTION ASSUMED` is weaker evidence and a
+row from a paid panel is not a customer speaking; weigh them accordingly and
+never present either as something a customer said. If nothing in the rows
+fits, say so — an empty result is a fact about the bank, not a licence to
+write the sentence yourself.
+
+Land it. The email has done its work; this is where it ends and, if the
+placement plan says so, where it asks.
+
+**Write the ending the construct&#x27;s shape calls for — not the ending an ad
+would have.** The construct records how the source closed. A post that trailed
+off on a human note and a DR ad that closed on a guarantee are different
+endings, and replicating the first while bolting on the second produces a
+email that changes character in its last three lines. Readers feel that even
+when they cannot name it.
+
+**The objection, if the placement plan called for one.** One objection, at the
+point the reader actually flinches — which is usually just before the ask, not
+at the end. Take our real answer from the objection bank or brand context.
+Answer it in the speaker&#x27;s voice, in a sentence or two, and move on. An
+objection handled at length reads as defensiveness and introduces a doubt the
+reader had not yet had.
+
+**The ask, if there is one.** The placement plan decides whether this email
+asks at all, how many times, and how much of the offer it carries. Follow it.
+Write what the ask *says*; the plan already decided where it sits.
+
+- Every price, pack size and guarantee comes **verbatim from the offer file**.
+  Not rounded, not softened, not tightened, not paraphrased.
+- If the offer file records a condition on the guarantee, the condition
+  travels with it. A guarantee quoted without its condition is a different
+  promise from the one the business makes.
+- If the placement plan said this piece carries no offer, it carries none.
+  Do not add a price because the ending feels unfinished without one.
+
+**The voice rules still bind, and they bind hardest here.** The close is where
+replicated copy most often reverts to house style, because closes are the most
+formulaic thing anyone writes. If the lane is organic, this ending is that
+person ending their own post. No sign-off that they would not write.
+
+**What you may not do:**
+
+- **No urgency that the offer file does not carry.** No countdown, no
+  scarcity, no &quot;before it&#x27;s gone&quot; invented to lift a flat ending.
+- **No new claim in the close.** Everything asserted here has already been
+  earned earlier in the email or comes from the files. A close is not the
+  place to introduce a benefit.
+- **No fabricated deadline or promotion.** If a live promotion exists it is in
+  the offer file; if it is not there, this piece runs on the evergreen offer
+  and says nothing about timing.
+
+**THE PS — email has one more landing than anything else.**
+
+Optional, and the honest answer is usually that there isn&#x27;t one.
+
+A PS is **not** a second CTA and it is not the ask restated. It exists when
+there is a genuine second, weaker reason to act that would have cluttered the
+argument if it sat inside it — a detail about shipping, a note about the size
+that sells out, a line the speaker would actually add after signing off.
+
+If there is no such reason, write `NO PS` and say why in one line. A PS added
+because emails usually have one is padding at the most-read position in the
+email after the subject.
+
+Where the lane is organic, the PS is the same person still talking. A brand&#x27;s
+PS on a person&#x27;s email is where the mask slips most often.
+
+**This stage ends the ARGUMENT, not the email.** The built email does not
+exist yet and is not your job — stage 8 turns this into blocks. Write the
+ending as content, not as layout: no line-break decisions, no block types, no
+button styling, and above all none of the source&#x27;s own units.
+
+Give me:
+
+**THE CLOSE** — the closing content: the objection handled if one was called
+for, the landing, and the PS or `NO PS`. Written as prose in the bound voice.
+
+**THE EMAIL, END TO END** — every move in order from the opening through this
+close, as continuous content, so the whole thing exists in one place and can
+be read for whether it holds together. Still as content, not as blocks.
+
+**ONE LINE ON WHAT THIS ENDING DOES** — for the brief.
+</pre></div><div class="pr"><div class="prh"><h4>8 · Build</h4><span class="fn">stage8-build-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is the record of the source: {record}
+Here is the brand-free construct: {spec}
+Here is the placement plan: {placement}
+Here is the email, end to end: {close}
+Here is the subject set: {subject_set}
+Here is the product: {product_file}
+Here is our offer: {offer_file}
+Here are this avatar&#x27;s voice rules: {language_bank}
+Here is the brand context chosen for this source: {brand_context}
+
+Turn the argument into the email as it will actually be built.
+
+Everything before this stage was content. This stage is where it becomes an
+object with blocks in it — and **only** that. You are not rewriting the
+argument, not improving lines, not adding a beat. If a line has to change to
+fit a block, the block is wrong, not the line.
+
+**The placement plan is binding.** It already decided the scroll budget, how
+many buttons and where, how many images and what each is for. This stage
+executes that plan. A block count that does not match the plan is a defect —
+if the plan genuinely cannot be executed, say so with a number rather than
+quietly building something else.
+
+**THE BLOCK VOCABULARY**
+
+These are the only types. **Never invent one.** If this email needs something
+not on the list, build it from what is here and say in a note what was missing.
+
+| Type | What it carries |
+|---|---|
+| `preheader` | the preview text — always first, exactly once |
+| `headline` | the largest line on the screen |
+| `subhead` | a smaller line supporting a headline |
+| `copy` | body copy; one paragraph or a tight run of them |
+| `image` | a picture, with the direction to make it and its alt text |
+| `quote` | a review or a customer&#x27;s words, with who said it |
+| `bullets` | a short list, when the argument is genuinely a list |
+| `button` | a CTA, with what it says and where it goes |
+| `product` | a product card: picture, name, price, its own button |
+| `divider` | a rule, when the argument genuinely turns |
+| `ps` | the PS, if stage 7 wrote one |
+| `signoff` | who it is from, in their own words |
+| `footer` | unsubscribe and address — required, exactly once, last |
+
+**IMAGE BLOCKS ARE JOBS FOR THE IMAGE LANE**
+
+For every `image` and every `product`, write:
+
+- `image_brief` — what has to be true in the frame for this to do the job the
+  placement plan gave it. Written so it can be handed to the image lane&#x27;s
+  injection stage and built. Not a description of a nice picture.
+- `alt` — real alt text. Written as a sentence a person with images off should
+  be able to read and lose nothing structural. `alt` is not a filename and it
+  is not a caption for the sighted.
+
+An image whose alt text carries a claim that appears nowhere else in the email
+is a claim hidden from most readers. Move it into copy.
+
+**BUTTONS**
+
+`label` is what it says — in the bound voice, not house CTA language. `href` is
+where it goes; use the destination the placement plan or the product file
+names, and where none is named write `[UNFILLED: destination]` rather than
+inventing a URL.
+
+**Every price, pack size and guarantee comes verbatim from the offer file.**
+Not rounded, not softened, not paraphrased. A guarantee&#x27;s conditions travel
+with it.
+
+Give me, in this order:
+
+**THE EMAIL, BLOCK BY BLOCK** — human-readable. Each block numbered, typed,
+with its content in full. This is the version a person reads to check it.
+
+**NOTES** — anything the plan asked for that could not be built, anything left
+`[UNFILLED: …]`, any block type that was missing from the vocabulary. Plainly.
+If there is nothing, say &quot;nothing unresolved&quot;.
+
+**THE BLOCKS** — the same email as a fenced JSON array, in a code fence tagged
+exactly `BLOCKS`. This is the version that renders, so it must agree with the
+human-readable one exactly.
+
+```BLOCKS
+[
+  {&quot;type&quot;: &quot;preheader&quot;, &quot;text&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;image&quot;, &quot;image_brief&quot;: &quot;…&quot;, &quot;alt&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;headline&quot;, &quot;text&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;copy&quot;, &quot;text&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;quote&quot;, &quot;text&quot;: &quot;…&quot;, &quot;attribution&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;bullets&quot;, &quot;items&quot;: [&quot;…&quot;, &quot;…&quot;]},
+  {&quot;type&quot;: &quot;button&quot;, &quot;label&quot;: &quot;…&quot;, &quot;href&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;product&quot;, &quot;name&quot;: &quot;…&quot;, &quot;price&quot;: &quot;…&quot;, &quot;image_brief&quot;: &quot;…&quot;, &quot;alt&quot;: &quot;…&quot;, &quot;label&quot;: &quot;…&quot;, &quot;href&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;divider&quot;},
+  {&quot;type&quot;: &quot;ps&quot;, &quot;text&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;signoff&quot;, &quot;text&quot;: &quot;…&quot;},
+  {&quot;type&quot;: &quot;footer&quot;, &quot;text&quot;: &quot;…&quot;}
+]
+```
+
+The example above shows the fields each type takes. It is not a template for
+this email — build the array the placement plan calls for, in the order the
+argument runs, using only the types it actually needs.
+</pre></div><div class="pr"><div class="prh"><h4>9 · Brief</h4><span class="fn">stage9-brief-v1-damon.md</span></div><pre>Today is: {today}
+Here is what triage decided: {triage}
+Here is where the source came from: {source_reference}
+Here is the record of the source: {record}
+Here is the placement plan: {placement}
+Here is the subject set: {subject_set}
+Here is the email, block by block: {blocks}
+Here is our offer: {offer_file}
+
+The one document the person building this email opens. They have not read
+anything else in this run and they are not going to.
+
+Write it so it can be built from **this page alone** — and so a person
+skimming it can find any one thing without reading the rest.
+
+**WHAT THIS IS**
+
+- What it was built from, and whether that was an ad or an organic piece
+- The format, from triage
+- **Whose voice it is in**, and **whose name it goes out under** — two
+  different facts, both binding
+- How long it runs, in phone screens
+
+**THE SUBJECT LINES**
+
+Every pair — subject and its preview — with **the control clearly marked as
+the control**. In the order stage 5 gave them.
+
+Do not rank them. Do not recommend one. If a from-name variant exists, it goes
+in its own line, labelled as a separate test.
+
+**THE EMAIL**
+
+The blocks in order, ready to build. Copy verbatim, button labels verbatim,
+alt text included.
+
+**THE IMAGE JOBS**
+
+One row per image: where it sits, what it is for, and its brief — collected in
+one place so they can go to the image lane as a batch instead of being dug out
+of the layout.
+
+**THE OFFER**
+
+What this email carries, verbatim from the offer file, with any guarantee&#x27;s
+conditions attached. If it carries none, say so plainly — a builder who cannot
+find a price assumes it is missing.
+
+**WHAT TO WATCH**
+
+What this email is betting on, and what would tell us the bet was wrong. Not
+predictions and not targets — the specific thing to look at.
+
+**UNRESOLVED**
+
+Every `[UNFILLED: …]`, every place the plan could not be executed, every
+collision logged upstream, and anything a human has to decide before this
+sends. Stated plainly rather than smoothed over.
+
+If this section is empty, say &quot;nothing unresolved&quot; — never leave it out, or a
+reader cannot tell the difference between clean and unchecked.
+</pre></div>
+</section>
+
+<footer>
+  daemn &middot; content-machine &middot; generated from model.py &middot; 27 August 2026<br>
+  Scope: campaigns only. Sender identity sits with the email&rsquo;s form, not the brand.
+</footer>
+</div>

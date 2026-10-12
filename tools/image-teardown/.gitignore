@@ -1,5 +1,5 @@
-# Pictures never go in git. They live in the folder you set as PRIZM_MEDIA
-# (default: media/ beside this tool). That is the single
+# Media lives on the team Drive, never in git (workspace rule 3), at the
+# mirrored path: the shared drive/image-lane/runs/. That is the single
 # home for every picture this lane makes — full-res output, sources, all of it.
 #
 # The web-copy exception was tried on 2026-08-26 and reversed the same day
@@ -45,14 +45,20 @@ __pycache__/
 image-board.html
 board.json
 
-# Working runs, generated boards and retired tool snapshots stay out of git.
+# Carried over from the repo-root `the team notes/**` rules when the lane moved to
+# components/ (2026-10-01). Those rules stopped applying at the new path, so
+# without these the working runs, the per-brand boards and the superseded
+# snapshots would all have shown up as new files to commit.
 runs/
 board.html
 board-*.html
 *-board.html
-tools/superseded/
+superseded/
 *.webp
 *.gif
 
-# Your pictures (PRIZM_MEDIA unset) — never in git.
-media/
+# Public copy: records the chain writes (briefs pages, drafts, worksheets, run evidence) stay local.
+briefs/
+drafts/
+worksheets/
+evidence/*/

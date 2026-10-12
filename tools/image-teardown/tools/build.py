@@ -16,7 +16,7 @@ The steps, and what each writes:
 
 **Nothing leaves this tool with a defect anyone has already seen.** If a check
 fails, the fix happens here — the ad is not handed over with a note attached.
-Damon, 2026-08-31: "if you see the problem, then don't fucking deliver it."
+the owner, 2026-08-31: "if you see the problem, then don't fucking deliver it."
 A known flaw plus an apology is worse than nothing, because it moves the work
 of noticing onto the person who asked for it.
 
@@ -69,7 +69,7 @@ def step_check(run, brief, retry=2):
 
 
 def _unused_manual_check(run, brief):
-    """Superseded 2026-08-28: this asked Damon to mark plates PASS or FAIL.
+    """Superseded 2026-08-28: this asked the owner to mark plates PASS or FAIL.
     His ruling — the taste was choosing what to swipe; the rest is
     verification, and verification gets programmed."""
     tests = []
@@ -110,7 +110,10 @@ def passed(run, name):
         return False
     block = re.search(rf"## {re.escape(name)}\n(.+?)(?=\n## |\Z)",
                       f.read_text(), re.S)
-    return bool(block) and "PASS" in block.group(1).upper()
+    # The verdict line, not any PASS in the block — every block carries the
+    # "plate is a real image" PASS row, so an overall FAIL passed here
+    # (run_production.py reads it this way already; SI-147 (image engine honest)).
+    return bool(block) and bool(re.search(r"\*\*Verdict:\*\*\s*PASS", block.group(1), re.I))
 
 
 # -------------------------------------------------------- 9 · measure it

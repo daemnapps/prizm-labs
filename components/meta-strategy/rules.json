@@ -1,0 +1,102 @@
+{
+ "_what": "The Meta strategy as rules the machine checks. One file. Every rule says whose it is: `meta` = Meta's own published guidance (quote + source in components/creative-diversity/META.md), `ours` = our working rule built on it. audit.py grades each brand's account against this; the card gate grades each new creative.",
+ "_ruled": "the owner, 2026-10-07: 'this is just the Meta strategy … dial in on our process to make sure that we're hitting all of our points as well as we possibly can and playing to this algo.'",
+ "structure": [
+  {
+   "id": "one-campaign-per-offer",
+   "rule": "Campaign = the offer. Each offer runs in its own Advantage+ sales campaign, budget on the campaign (CBO). Every ad in it links to that offer's one page.",
+   "whose": "meta+ours",
+   "meta": "Advantage+ sales campaigns: 20% lower cost per result on average"
+  },
+  {
+   "id": "ad-set-is-who",
+   "rule": "Ad set = who the offer goes to: one avatar + one angle (adset_<brand>_<avatar>_<angle>). Few angles will hit; each gets its own ad set so its learning and spend read on their own.",
+   "whose": "ours (the owner, 28 Sep, reaffirmed 8 Oct)",
+   "note": "With Advantage+ Audience the ad sets share broad targeting, so Meta still finds people through the creative: the ad level carries the match."
+  },
+  {
+   "id": "ads-per-ad-set",
+   "rule": "6 to 10 live creatives per ad set; never above 50.",
+   "whose": "ours (Meta: fewer ads, max 50)",
+   "min": 6,
+   "max": 10,
+   "hard_max": 50
+  },
+  {
+   "id": "optimise-for-value",
+   "rule": "Optimise for purchase value; pixel + Conversions API send Purchase with value.",
+   "whose": "meta"
+  }
+ ],
+ "creative": [
+  {
+   "id": "diversification",
+   "rule": "Every new creative is 3+ moves from the nearest live creative. Inside one ad set the who (avatar) and angle are fixed by the ad set, so the moves come from awareness · format · face · setting · look.",
+   "whose": "ours (Meta: 'truly different in look, feel, storyline, and message'; no published threshold)",
+   "min_moves": 3
+  },
+  {
+   "id": "new-footage",
+   "rule": "A new creative uses an image or video the Page has not shown.",
+   "whose": "meta",
+   "meta": "fatigue counts 'all recent exposures of the ad's image or video, including those from other campaigns from your Page'"
+  },
+  {
+   "id": "one-offer",
+   "rule": "Links to the brand's one offer page and carries the core message.",
+   "whose": "ours"
+  },
+  {
+   "id": "sound-on-reels",
+   "rule": "Every 9:16 video has music or voiceover.",
+   "whose": "meta",
+   "meta": "up to 13% more incremental conversions"
+  },
+  {
+   "id": "safe-zone",
+   "rule": "Key messages inside the 9:16 safe zone.",
+   "whose": "meta"
+  },
+  {
+   "id": "creators-as-partnership",
+   "rule": "Creator content runs as a partnership ad.",
+   "whose": "meta",
+   "meta": "19% lower acquisition cost"
+  }
+ ],
+ "assets": [
+  {
+   "id": "flexible-ad",
+   "rule": "Each ad is a flexible ad carrying the creative in several shapes, up to 10 assets.",
+   "whose": "meta",
+   "max_assets": 10
+  },
+  {
+   "id": "format-mix",
+   "rule": "Each ad set holds at least one image, one video and one 9:16 video with audio.",
+   "whose": "meta",
+   "meta": "9.1% lower CPA; 7.3% lower CPA (Cyber 5 2025)"
+  },
+  {
+   "id": "vertical-audio-share",
+   "rule": "At least 20% of an ad set's assets are 9:16 video with audio.",
+   "whose": "meta",
+   "meta": "7% lower CPA",
+   "min_share": 0.2
+  }
+ ],
+ "budget": {
+  "rule": "Each ad set needs about 50 results a week to exit learning (Meta), so the campaign's daily budget is about 7 × cost per purchase × the number of live ad sets (ours). Below that, the ad sets stay 'learning limited'; add ad sets only as budget allows.",
+  "whose": "meta (50 results/week) + ours (the arithmetic)",
+  "results_per_week": 50,
+  "cpa_source": "lab/media-buying/<brand>-offer-lines.json (break_even_cpa) until real CPA exists"
+ },
+ "cadence": {
+  "rule": "Read Monday (one Meta pull) · brief to the gaps Tuesday · drop the week's new creatives into the ad set as one batch Thursday, take out what Meta marks creative limited/fatigue · no edits while learning.",
+  "whose": "ours (built on Meta's learning phase and fatigue guidance)",
+  "drop_day": "Thursday"
+ },
+ "offers": {
+  "_where": "Each brand's one offer lives in its own folder: brands/<brand>/meta/offer.json (shape: brands/_TEMPLATE/meta/offer.json). A brand listed here overrides it."
+ }
+}

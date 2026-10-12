@@ -1,7 +1,7 @@
 {
  "element": "style",
  "asset": "caption",
- "source": "video-edit/looks/bank.json",
+ "source": "tools/video-edit/looks/bank.json",
  "enforced_by": "the video edit's gate (cutsheet.py) refuses a caption look that is not a row",
  "note": "Caption looks — how the words on screen look and move. A setting, never a re-edit.",
  "rows": [
@@ -15,7 +15,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "video-edit/looks/bank.json",
+   "source": "tools/video-edit/looks/bank.json",
    "extra": {
     "font": "'Arial Black','Helvetica Neue',Arial,sans-serif",
     "size_px": 84,
@@ -25,7 +25,9 @@
     "y_pct": 66,
     "max_words": 3,
     "entrance": "pop"
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "clean-lower",
@@ -37,7 +39,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "video-edit/looks/bank.json",
+   "source": "tools/video-edit/looks/bank.json",
    "extra": {
     "font": "'Helvetica Neue',Arial,sans-serif",
     "size_px": 58,
@@ -47,7 +49,33 @@
     "y_pct": 72,
     "max_words": 5,
     "entrance": "rise"
-   }
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "word-box",
+   "name": "Word box",
+   "what": "Bold white capitals, 2–3 words at a time; the word being sung or said sits on a coloured box that moves word to word.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-edit/looks/bank.json",
+   "extra": {
+    "font": "'Montserrat','Arial Black','Helvetica Neue',Arial,sans-serif",
+    "size_px": 70,
+    "case": "upper",
+    "color": "#FFFFFF",
+    "highlight": "#FFFFFF",
+    "y_pct": 72,
+    "max_words": 3,
+    "entrance": "pop"
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "one-word",
@@ -59,7 +87,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "video-edit/looks/bank.json",
+   "source": "tools/video-edit/looks/bank.json",
    "extra": {
     "font": "'Arial Black','Helvetica Neue',Arial,sans-serif",
     "size_px": 128,
@@ -69,8 +97,13 @@
     "y_pct": 50,
     "max_words": 1,
     "entrance": "pop"
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

@@ -8,7 +8,7 @@ The board (`board.py`) was built when Higgsfield had no API on this
 machine: pressing Generate wrote a work order to `cinema/queue.json` and a
 Claude session drained it through the MCP, then `pull.py` wrote the URLs
 back. Since 2026-09-18 every station is a direct door, so the queue can be
-drained by code, on this machine, with nobody in a session — Damon:
+drained by code, on this machine, with nobody in a session — the owner:
 "we were just updating the modes, prompts, flows, and how it works
 together, so you need to make updates to the tools, not remove them."
 
@@ -31,7 +31,7 @@ One order at a time, oldest first:
   revoice  <scene id>   nothing to do on this door: an Omni take is already
                         in her voice. Marked done.
 
-Every replaced take is archived with the note Damon typed (pull.py's own
+Every replaced take is archived with the note the owner typed (pull.py's own
 `archive()`), the plan row gets `generate.status = completed`, `file`,
 `model`, `job_id`, `seconds_out`, and the parity verdicts; the order is
 marked done or failed with the reason. The board reads all of it live.
@@ -55,8 +55,28 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
+
 HERE = Path(__file__).resolve().parent
-WORKSPACE = HERE.parents[3]
+WORKSPACE = _workspace()
 EL = re.compile(r"<<<([0-9a-fA-F-]{36})>>>")
 
 
@@ -145,7 +165,7 @@ def cast_home(plan: dict) -> Path | None:
     name = (plan.get("cast") or {}).get("name") or ""
     if not brand or not name:
         return None
-    home = voice_mod.cast_root_of(brand) / voice_mod.slugify(name)
+    home = voice_mod.character_home(brand, voice_mod.slugify(name), None)
     return home if home.is_dir() else None
 
 

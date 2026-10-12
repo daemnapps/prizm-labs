@@ -2,9 +2,9 @@
 """
 line.py — the two production lines, and the one thing they share.
 
-    python3 machine/line.py teardown <video> --brand <brand>
-    python3 machine/line.py creator  --label <run> --brand <brand> --creator <handle>
-    python3 machine/line.py ai       --label <run> --brand <brand> --product flex
+    python3 machine/line.py teardown <video> --brand brand-b
+    python3 machine/line.py creator  --label <run> --brand brand-b --creator <handle>
+    python3 machine/line.py ai       --label <run> --brand brand-b --product widget
 
 **Reading a swiped video is one job. What you do with it is two.**
 
@@ -14,7 +14,7 @@ that does, and the two jobs have almost nothing in common: one ends with a
 person holding a phone in their own bathroom, the other with nobody on set at
 all.
 
-Ruled by Damon 2026-09-11, after a run where "the same workflows are
+Ruled by the owner 2026-09-11, after a run where "the same workflows are
 activating for both". Until then it was one chain with a `--route` flag, and
 the flag was a noun the stages repeated back rather than a fork they obeyed.
 A brief written for a generator went out reading "film this"; a stage that
@@ -50,6 +50,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+import workdir  # noqa: E402  — the working folder (SI-56)
 
 LINES = {
     # name: (stage range, route, what it ends with)
@@ -99,8 +100,21 @@ def main() -> None:
             if a == "--label" and i + 1 < len(passthru):
                 label = passthru[i + 1]
         if label:
-            src = HERE / "runs" / label / "source.mp4"
-            if src.exists():
+            # The run names its own copy (run.py open_run stores `source`,
+            # e.g. source.mov); only an older run without it is guessed at,
+            # in the order run.py would have written it (SI-161 (teardown
+            # runs honest)) — it used to look for source.mp4 alone.
+            import json
+            rd = workdir.run_dir(label)
+            named = None
+            try:
+                named = json.loads((rd / "run.json").read_text()).get("source")
+            except Exception:
+                named = None
+            cands = ([rd / Path(str(named)).name] if named else []) + [
+                rd / n for n in ("source.mp4", "source.mov", "source.m4v")]
+            src = next((c for c in cands if c.is_file()), None)
+            if src is not None:
                 passthru.insert(0, str(src))
             else:
                 sys.exit(f"no run called '{label}' — tear one down first:\n"
@@ -113,14 +127,29 @@ def main() -> None:
         label = next((passthru[i + 1] for i, a in enumerate(passthru)
                       if a == "--label"), None)
         if label:
-            run_dir = HERE / "runs" / label
-            vp = Path.home() / "Projects/ai-workspace/video-production/machine"
+            run_dir = workdir.run_dir(label)
+            # Found, not assumed. This was Path(os.environ.get("AI_WORKSPACE") or ".").resolve()
+            # pointing at the team notes/video-production — a home that only exists on
+            # one Mac, naming a folder renamed to ai-video-production on
+            # 2026-08-31, which then left lab entirely for
+            # tools/video-production on 2026-09-22. Both old homes are gone,
+            # so the search found nothing and the next-steps list silently
+            # stopped printing. The new home is searched for first, the old one
+            # kept behind it for a checkout that has not landed the move yet.
+            vp = next((d / rel for d in Path(__file__).resolve().parents
+                       for rel in (Path("components") / "video-production" / "machine",
+                                   Path("lab") / "damon" / "ai-video-production" / "machine")
+                       if (d / rel).is_dir()), None)
+            if vp is None:
+                print("\n▸ the AI video machine is not in this checkout — "
+                      "skipping the next-steps list.\n")
+                return code
             print("\n▸ next, in this order — the order is the point:\n")
             print(f"  1. ASK THE LIBRARY FIRST. Nothing is generated until this has run.\n"
                   f"       python3 {vp/'footage.py'} {run_dir}\n")
             print(f"  2. Generate only what it could not cover.\n")
             print(f"  3. Judge every plate before anyone sees it "
-                  f"(video-production/PLATE-CHECK.md).\n")
+                  f"({vp.parent / 'PLATE-CHECK.md'}).\n")
             print(f"  4. The board:\n"
                   f"       python3 {vp/'storyboard.py'} {run_dir}\n")
             print(f"  5. Assemble:\n"

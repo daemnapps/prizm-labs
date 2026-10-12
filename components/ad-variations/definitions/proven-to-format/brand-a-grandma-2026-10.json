@@ -1,0 +1,28 @@
+{
+ "_schema": "proven-to-format batch (ad-variations). One file per batch; copy it to start a new one. brand/product/avatar/offer/route/lane/link = what every square sells and how it is made; link = the catalog link id of the landing page the ads send people to (the editor hand-off and the brief register carry it). winners = proven video ads (rows): path = their video-teardown run, ad = the ad's own name (winner record). title = the line under the page heading. formats = fresh format swipes (columns): code = the post code, record = its swipe-organic record, format_id = its id in the format library (new:<id> when proposed, not yet in it), video = the swipe video on the Drive (relative to Shared Assets), post_url, handle, run_label = the chain run that takes it to 2 Spec (fmt-<name>-<code>), run = that run's folder once it exists (the chain lowercases the label). earlier_specs = squares that already carry a spec (the old one-step format swap), shown as written on the grid. Read by machine/proven_to_format.py.",
+ "batch": "brand-a-grandma-2026-10",
+ "opened": "2026-10-07",
+ "brand": "brand-a",
+ "product": "glow-face-scrub",
+ "avatar": "spot-cover",
+ "offer": "buy 2, get 1 free",
+ "route": "ai",
+ "lane": "video→video",
+ "link": "link_brand-a_cpk_glow-face-scrub_landing",
+ "title": "Brand A's Grandma × 4 AI formats · Brand A Face Scrub · spot-cover · buy 2, get 1 free",
+ "winners": [],
+ "formats": [],
+ "earlier_specs": [],
+ "sources": {
+  "winner_record": "the team notes",
+  "winner_videos": "the team notes",
+  "format_library": "components/swipe-organic/<creator>/format-read-prompt.md",
+  "earlier_spec_prompt": "components/ad-variations/prompts/stage-format-swap/stage-format-swap-v1-damon.md"
+ },
+ "banked": {
+  "batch": "brand-a-face-scrub-2026-10",
+  "note": "The other 6 winners × the same 4 formats (24 squares) are banked for later with their progress saved — the owner, 2026-10-07: focus on this one variation set."
+ },
+ "sub": "face-dark-marks",
+ "sub_note": "the owner 2026-10-07: face scrub launch, adapt to people with spots on the face — spot-cover sub-04 face-dark-marks (viewers on the core avatar said 'mine are on my hands and arms')."
+}

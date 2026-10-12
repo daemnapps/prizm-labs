@@ -1,3 +1,5 @@
+*v14 (2026-09-24): THE RECORD IN ALL ITS GLORY. the owner, reading a record that had one-line visuals, fragments for speech, "upbeat mid-tempo" for the music and no description of the people: "the more detail that we can extract from all of these assets, the better our reference-to-generation quality comes out … the teardown record should be that in all of its glory, because then, when we get to the actual character development, the actual writing, the actual spice, and the actual scene creation, it's so much easier." So: every person gets a casting sheet, every place a set sheet, every shot a scene-prompt-grade description, the music a real description. Everything in v13 stands.*
+
 Here are the sections an argument is built from — the only labels a scene
 may carry: {sections}
 
@@ -73,30 +75,84 @@ Where the form is SUNG or RAPPED, also give: the structure (verse,
 chorus, bridge — and which lines repeat), roughly where the hook line
 lands, and whether the vocal is one voice or several.
 
-Then a Character & Setting profile:
+**Then one line, labeled `Music:`** — the track under the piece as a whole,
+in exactly this shape: `energy: low | mid | high · tempo: ~⟨n⟩ bpm · mood:
+⟨two or three plain words⟩`, or `Music: none` if no track plays anywhere.
+The tempo is by ear and approximate — write the `~` — and if you cannot
+hear a steady beat, write `tempo: [UNCLEAR]` rather than a number. If the
+music changes energy partway (drops out, builds, switches track), add
+`· changes at ⟨timestamp⟩: ⟨what it becomes⟩` for each change. Name the
+track only if you can actually identify it. This is the line a music bank
+is searched by, so it has to be these three tags and not a paragraph.
 
-- Who appears — age range in brackets, physical description, hair
-  (color, style), makeup (be specific: what look, what products/effects
-  are visible), and voice: accent or nationality cues if audible, energy,
-  pace.
-- Exactly what they are wearing — every garment with its color,
-  material, pattern, trim, and fit ("red beaded dress" is not enough —
-  what pattern do the beads make, what's the neckline, what's the
-  outline). Every piece of jewelry: rings, bracelets, earrings, watches —
-  and the brand if identifiable.
-- Style label — name the aesthetic with a real reference point
-  ("Dolce & Gabbana-style baroque," "athleisure") rather than a vague
-  mood word. If it matches a known style, say which.
-- The setting, as it actually is — what kind of space this really
-  appears to be (judge from lighting, furniture age and color, finishes —
-  don't upgrade an ordinary room into an "upscale" one). Then inventory
-  the room: what is on the shelves, cabinets, walls — not just the focal
-  props. The whole setting is the set.
-- Props — every object that appears, with color/material detail.
+**Then one paragraph, labeled `Music, described:`** — the track as someone
+briefing a composer would describe it: genre and sub-genre, the instruments
+you can hear (drums, bass, synths, guitar, piano, strings…), whether there
+are vocals and what kind, the key feel (bright / dark), the era or reference
+("2010s tropical house", "lo-fi hip-hop"), how it is built (intro, drop,
+loop), how it sits under the voice (ducked, loud, gone during speech), and
+where it changes. Name the track and artist only if you can actually
+identify it; otherwise name two real tracks it sounds like, marked
+`(sounds like)`.
 
-Then give me one table with exactly these six columns, in this order:
+Then the CAST, the PLACES and the PROPS — at the depth of a production
+casting sheet and a set sheet, because every person and place here will be
+rebuilt from this record.
 
-`Timestamp | Roll | Visuals | On-Screen Text | Transcript | Sound`
+**CAST — one sheet per person who appears** (voice-only people too). Give
+each ONE name used everywhere (`Creator`, `Doctor 1` — or their real name if
+said), and under it, as labeled lines:
+
+- **Role and screen time** — who they are in the video, the timestamps they
+  are on screen, the timestamps they speak.
+- **Age** — one bracket, e.g. `[65-70]`, reused everywhere.
+- **Face** — shape, eyes (colour, shape, lids), brows, nose, lips, jaw and
+  chin, skin tone and undertone, skin texture (pores, lines, spots,
+  freckles, sun damage — where), any marks, glasses.
+- **Hair** — colour (and greys), length, texture, style, parting, how it
+  moves.
+- **Body** — build, apparent height relative to others or the room,
+  posture.
+- **Makeup** — what look, what is visible (lip colour, lash, liner, blush),
+  or none.
+- **Wardrobe, per scene** — every garment with colour, material, pattern,
+  trim, fit and neckline; shoes if seen; every piece of jewellery
+  (earrings, necklaces, rings, bracelets, watch) with its metal and style;
+  the brand only if identifiable. When they change outfits, one line per
+  outfit with the timestamps it is worn.
+- **Voice** — pitch (low / mid / high), accent or regional cues, pace,
+  timbre (warm, raspy, bright, nasal…), volume, how they laugh, filler and
+  verbal tics. Only what you can hear.
+- **Movement and manner** — gestures (what the hands do), expressions,
+  where they look (lens or away), how they hold or relate to the camera,
+  energy.
+- **Relation to others** — how they treat each other on screen (friendly,
+  deferential, teasing…), who touches whom.
+
+**PLACES — one sheet per location**, ONE name each (`Exterior sidewalk`,
+`Exam room A`):
+
+- **What it is** — the kind of space as it really appears (judge from
+  finishes; do not upgrade an ordinary room).
+- **Layout** — what is where relative to the camera: walls, doors,
+  windows, furniture.
+- **Surfaces** — wall, floor, ceiling: colour, material, pattern (tiles,
+  wood, paint).
+- **Fixtures and furniture** — every piece, with colour and material.
+- **Light** — every source you can see or infer (window, ceiling panel,
+  ring light, sun), its direction, hardness and colour temperature; time of
+  day for exteriors.
+- **Dressing** — everything on shelves, counters and walls, not just the
+  focal props; signage (words verbatim).
+- **Sound of the room** — room tone, echo, outside noise.
+- **Timestamps** — when we are here.
+
+**PROPS — every object that is handled or featured**: what it is, colour,
+material, size relative to a hand, brand if shown, who holds it and when.
+
+Then give me one table with exactly these eight columns, in this order:
+
+`Timestamp | Roll | Section | Visuals | On-Screen Text | Transcript | Sound | Layers`
 
 - **Timestamp** — start and end, e.g. `0:00 - 0:11`
 - **Roll** — what the PICTURE is doing against the words in this row. One
@@ -114,29 +170,81 @@ Then give me one table with exactly these six columns, in this order:
   - `B-silent` — **B-roll with no words at all.** Picture, with only music,
     sound effects or room sound under it.
   - `C` — **a card.** Not footage: a packshot on a plain ground, a title
-    card, a full-screen graphic, a screenshot, a text-only frame.
+    card, a full-screen graphic, a screenshot, a text-only frame. (A
+    screenshot of a review, comment, message, website, order page or
+    search is `S`, below; the closing offer / call-to-action frame is `E`.)
+  - `S` — **a screen.** The picture IS a screen's contents, filling the
+    frame: a review, a comment, a DM or text thread, a website, an order
+    page, a search. Screen-recorded or screenshotted, scrolled or still.
+  - `X` — **a split.** Two pictures on screen at once: side by side, one
+    above the other, or a wipe between two states — a before-and-after held
+    together in one frame is `X`. (A before shot followed by an after shot,
+    one after the other, is two `B` rows, not `X`.)
+  - `G` — **green-screen or picture-in-picture.** The presenter is cut out
+    over a background that is not their room (an article, a post, a product
+    page, a screenshot), or sits in a corner box over a full-frame
+    background. They may be speaking — it is still `G`, not `A`.
+  - `E` — **the end card.** The closing frame that carries the offer or the
+    call to action: packshot with the price, the guarantee, "shop now", the
+    link line. A mid-video packshot that is not the close is `C`.
   If the speaker is in frame but the words belong to someone else, or the
   lips are hidden the whole row, it is `B-vo`, not `A` — say who is in frame
   in Visuals. Never leave this column blank and never invent a label.
+  Where a row could carry two labels, the more specific one wins, in this
+  order: `E`, `G`, `X`, `S`, `C`, then the `B` labels, then `A`.
+  **The scroll-stopper.** Exactly one row in the table — the frame that stops
+  the scroll, almost always the first — carries `· opener: true` after its
+  label in this column (`A · opener: true`). No other row carries it.
   For every `B-over`, `B-vo` and `B-silent` row, the Visuals column must
   open with **what the picture is there to show** in three or four plain
   words before the description — `[shows: the problem, close]`,
   `[shows: product in hand]`, `[shows: before and after]` — so the row can
   be re-made as its own shot.
-- **Visuals** — only what is in frame, at the same level of detail as the
-  profile above: who is there, what they are doing, their facial
-  expression and reaction, camera work for this row — shot type, camera
-  angle, front-facing or rear camera, phone-grade or high-res — setting,
-  props, and effects. Every effect or transition gets its shape, size,
+  The four new labels open their Visuals the same way, with `[shows: …]`
+  AND one tag of their own, before the description:
+  - `S` → `[screen: review | comment | dm | site | order | search]` — one of
+    those six words, the one it is.
+  - `X` → `[split: side | top-bottom | wipe · left: ⟨what is on the left or
+    top⟩ · right: ⟨what is on the right or bottom⟩]`. Any labels written on
+    the two halves ("BEFORE" / "AFTER", "DAY 1" / "DAY 30") go in On-Screen
+    Text, as always.
+  - `G` → `[greenscreen: cutout | pip · background: ⟨what the background
+    is⟩ · presenter: ⟨who, and where in the frame⟩]`.
+  - `E` → `[endcard: ⟨what the plate is — packshot, on what ground⟩]`. The
+    offer words themselves go in On-Screen Text, verbatim.
+- **Section** — which part of the argument this row is doing: one section
+  id from the list at the top of this prompt, spelled exactly as that list
+  spells it, and nothing else. It is the same label THE SCENE MECHANICS
+  gives the scene this row falls in — every row carries its scene's
+  section id, so no row is ever blank here. The section is the unit the
+  edit swaps between versions, so it has to be the list's own word, never a
+  synonym or a shorter tag of your own. If the scene's section is a plain
+  description marked `(candidate for the bank)`, write that description
+  here too.
+- **Visuals** — only what is in frame, written the way a scene is
+  prompted for generation, in this order, each as a short labeled clause:
+  `Who:` (by their CAST name, with the outfit worn) · `Doing:` the action,
+  hands included · `Face:` expression and where they look · `Frame:` shot
+  size and where each person sits in the frame (left/centre/right, how
+  much of the height) · `Camera:` who holds it (handheld selfie, propped,
+  second person, mirror), front or rear camera, height and angle, distance,
+  movement, phone-grade or high-res · `Light:` source, direction, quality
+  · `Place:` the PLACES name and what of it is visible behind them ·
+  `Props:` what is in frame. Roughly 50–120 words per row; a row of a
+  dozen words is a failed row. Then effects and transitions, as before. Every effect or transition gets its shape, size,
   color, and a canonical name you reuse every time it recurs
   (`Transition-1: pink glowing heart, ~1/3 screen height`). No on-screen
   text in this column.
 - **On-Screen Text** — every overlay and caption, word for word, in
-  order, separated by `|`. Nothing else in this column. Write "none" if
+  order, separated by ` / ` (never `|` inside a cell — `|` is the table's column divider, and a pipe inside a cell breaks the table for every tool that reads it). Nothing else in this column. Write "none" if
   there is none. If a text element looks like an app or editor watermark
   rather than intentional content, mark it `[ARTIFACT: …]` — we must not
   copy junk into new videos.
-- **Transcript** — exactly what is SPOKEN, word for word. The transcript
+- **Transcript** — exactly what is SPOKEN, word for word, every word —
+  never "…" for words you heard. (After you, the machine replaces this
+  column with the audio transcription, turn by turn, so still write who
+  speaks; a machine transcript of the whole video is appended at the end.)
+  What follows still holds: The transcript
   is never the on-screen text — if they differ, the spoken words go here
   and the overlay stays in its own column. Label every line with its
   speaker (`Creator:`, `Doctor:`, name them if named) and, where it
@@ -145,7 +253,7 @@ Then give me one table with exactly these six columns, in this order:
   identify the actual track, name it. If speech is inaudible or garbled,
   mark `[UNCLEAR]` — never fill the gap with the overlay text or a guess.
 - **Sound** — everything in this row that is NOT speech, in three parts
-  separated by `|`, each written out or `none`:
+  separated by ` / `, each written out or `none`:
   `music: … | effects: … | room: …`
   - *music* — is a track playing under this row? Name it if you can;
     otherwise its feel, its tempo in a word, and whether it is rising,
@@ -159,12 +267,39 @@ Then give me one table with exactly these six columns, in this order:
   The Transcript column still carries the words and, when nobody speaks,
   the one-line description it always has; this column is where the music
   and the effects are itemised so they can be re-made.
+  Each effect opens with a **plain cue name** — one or two lower-case
+  words a sound library would file it under (`whoosh`, `pop`, `ding`,
+  `riser`, `ka-ching`, `stinger`, `record-scratch`, `click`, `swipe`) —
+  then what it lands on: `whoosh — on the cut in`. Use the same cue name
+  every time the same sound recurs.
+- **Layers** — everything laid ON TOP of the picture in this row that is
+  not the caption text itself, in four parts separated by ` / `, each written
+  out or `none`:
+  `lower third: … | annotation: … | platform: … | transition out: …`
+  - *lower third* — a name or title strap: `⟨the name⟩ / ⟨the title⟩`,
+    exactly as written on screen.
+  - *annotation* — every arrow, circle, underline or highlight drawn on the
+    picture: `⟨arrow | circle | underline | highlight⟩ → ⟨what it points
+    at⟩ on "⟨the spoken words it lands on⟩"` (or `on ⟨the action⟩` when no
+    one is speaking). One entry per mark, separated by `;`.
+  - *platform* — a platform's own interface laid over or framing the
+    video: `⟨comment_reply | stitch | duet | search | likes⟩: "⟨the text
+    it shows, verbatim⟩"` plus the handle if one is shown. A reply-to-a-
+    comment bubble over a talking head is a layer on an `A` row; a comment
+    filling the whole frame is an `S` row.
+  - *transition out* — how this row hands off to the NEXT row, only when
+    it is NOT a hard cut: `whip` · `match` · `zoom` · `flash`, plus the
+    canonical name from Visuals if the transition has one. A hard cut is
+    the default and is written `none`. A hand-off that is none of those
+    four is written with its canonical name and `(not whip, match, zoom or
+    flash)` — never forced into the nearest word.
 
 One row per frame — a change of speaker, camera setup, on-screen text, or
 **Roll** (the picture leaving the speaker, or coming back) starts a NEW frame; never merge adjacent moments into one frame, and
 never merge these columns. A speaker's single sentence that runs across
 an `A` row, a `B-over` row and back to `A` is three rows, with the words
-split where the picture actually changes. Frames group into scenes at the phase level
+split where the picture actually changes. A change of **Section** starts a
+new frame too. Frames group into scenes at the phase level
 in THE SCENE MECHANICS below; this table does not change because of that
 grouping.
 
@@ -304,7 +439,7 @@ have not proven, signs off with a verdict."*
 
 **5. THE INDEX**
 
-Close with three short registries:
+Close with six short registries:
 
 - **Definitions index** — every named technique and play used above, one
   line each: the canonical name, a one-line definition, and whether it is
@@ -314,11 +449,46 @@ Close with three short registries:
   the timestamps where it appears.
 - **Roll sheet** — first, one line of counts: how many rows and how many
   seconds sit under each Roll label (`A` · `B-over` · `B-vo` · `B-silent` ·
-  `C`). Then the make-list: every row that is NOT `A`, in order, one line
+  `C` · `S` · `X` · `G` · `E`). Then the make-list: every row that is NOT `A`, in order, one line
   each — its timestamp, its label, its `[shows: …]` tag, the first and last
   spoken words it covers (or `no words`), and its length. This is the list
   of shots someone has to go and make besides the speaker; if a row is
-  missing from it, that shot never gets made.
+  missing from it, that shot never gets made. `S`, `X`, `G` and `E` rows
+  are on the make-list like every other non-`A` row, and each also carries
+  its own tag (`[screen: …]`, `[split: …]`, `[greenscreen: …]`,
+  `[endcard: …]`) and its Section. Close the make-list with one line naming
+  the opener row: `Opener: ⟨timestamp⟩ · ⟨label⟩`.
+- **Layer sheet** — every layer from the Layers column, in time order, one
+  line each, tied to its row's timestamp: `⟨timestamp⟩ · lower third ·
+  ⟨name / title⟩`, `⟨timestamp⟩ · annotation · ⟨kind⟩ → ⟨target⟩ on
+  "⟨words⟩"`, `⟨timestamp⟩ · platform · ⟨kind⟩ · "⟨text⟩"`, `after
+  ⟨timestamp⟩ · transition · ⟨whip | match | zoom | flash⟩`. Then two
+  lines: `Hook text:` the on-screen words that sit on the opener row,
+  verbatim (or `none`), with `look:` its case, weight, colour, box or
+  outline, and where it sits; and `Captions:` how the running captions look
+  — case, weight, colour, whether the spoken word is highlighted and in
+  what colour, where they sit, how many words at a time (or `none`). Write
+  `Layer sheet: none` only if the video carries no layer at all.
+- **Sound sheet** — the `Music:` line again, then every added sound effect
+  in time order, one line each: `⟨timestamp of its row⟩ · ⟨cue name⟩ ·
+  ⟨what it lands on⟩`. Every effect in the Sound column appears here, and
+  nothing appears here that is not in the Sound column.
+- **Section map** — the section ids in play order with their timestamp
+  ranges, one line, each id spelled exactly as the list at the top of this
+  prompt spells it and matching the Section column row for row:
+  `⟨section id⟩ ⟨start⟩-⟨end⟩ · ⟨section id⟩ ⟨start⟩-⟨end⟩ · …`. A section
+  that recurs appears again at each place it recurs.
+
+**6. THE CORE MESSAGE** (the owner, 5 Oct 2026: "the point of all these ads is to clearly share a core message — on any format, any angle, any ad.")
+
+Strip away the format, the angle (the hook's frame, the story) and the specific problem the ad names. What is left is the message: the one thing the ad wants a stranger to believe by the end, whatever door it came in through. Write:
+
+- `Core message:` one plain sentence, in words a customer would say. Not a tagline. The belief the ad leaves behind.
+- `Beliefs under it:` the two to four things the viewer has to accept on the way for the message to land, one line each, each with the line from the ad that carries it, quoted exactly.
+- `Delivery:` how the message is carried, not what it says: who says it (and why we believe them), the voice, the proof (what is shown or said that makes it true), and how the offer arrives.
+- `Angle, not message:` the parts of this ad that could be swapped without changing the message (the hook frame, the named problem, the setting, the format), one line each.
+
+Quote only what the ad says. Invent nothing. If the message is unclear, say so.
 
 Give me a really clean output. I'm going to turn this into a brief that
 takes in my brand principles and then creates content for that.

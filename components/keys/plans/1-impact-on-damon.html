@@ -1,0 +1,494 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- components/keys/plans — a copy of the published page, for review in the repo. Open it in a browser. Names only: no key value appears anywhere in this file. -->
+<title>the owner's Key Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@creator;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@creator;500&display=swap">
+<style>
+:root{
+  --ground:#f4f6f5; --panel:#ffffff; --ink:#18202b; --muted:#5a6572; --rule:#d9dfe0;
+  --teal:#0e6464; --teal-soft:#e2efee; --brass:#9c7418; --brass-soft:#f4ecd8;
+  --plum:#6b3f8a; --plum-soft:#efe6f5; --red:#b0392a; --red-soft:#f7e4e1; --code:#eef1f1;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#11161c; --panel:#171e26; --ink:#e4e9ee; --muted:#9aa6b2; --rule:#2a3440;
+    --teal:#5fbcb8; --teal-soft:#15302f; --brass:#d8b25c; --brass-soft:#2e2715;
+    --plum:#c49be0; --plum-soft:#2a1f33; --red:#f08a7a; --red-soft:#3a1d19; --code:#1f2831; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#11161c; --panel:#171e26; --ink:#e4e9ee; --muted:#9aa6b2; --rule:#2a3440;
+  --teal:#5fbcb8; --teal-soft:#15302f; --brass:#d8b25c; --brass-soft:#2e2715;
+  --plum:#c49be0; --plum-soft:#2a1f33; --red:#f08a7a; --red-soft:#3a1d19; --code:#1f2831; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,-apple-system,sans-serif;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(28px,5vw,38px);font-weight:800}
+h2{font-size:21px;font-weight:700}
+h3{font-size:15px;font-weight:700}
+p{margin:0;max-width:66ch}
+code{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.84em;background:var(--code);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.eyebrow{font:600 11.5px/1 "IBM Plex Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+section{display:flex;flex-direction:column;gap:14px}
+.lede{display:flex;flex-direction:column;gap:12px}
+.lede p{font-size:16.5px}
+.note{font-size:12.5px;color:var(--muted)}
+
+/* two files */
+.files{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.files{grid-template-columns:1fr}}
+.file{border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;border:1px solid}
+.file.m{background:var(--teal-soft);border-color:var(--teal)}
+.file.p{background:var(--brass-soft);border-color:var(--brass);border-style:dashed}
+.file .tag{font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.file.m .tag{color:var(--teal)} .file.p .tag{color:var(--brass)}
+.file ul{margin:0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:2px}
+
+/* flowchart */
+.chart{display:grid;grid-template-columns:minmax(0,.9fr) 56px minmax(0,1.5fr);gap:0;align-items:stretch}
+.start{grid-column:1;justify-self:start;background:var(--ink);color:var(--ground);font:700 14px/1.2 Archivo,sans-serif;padding:10px 16px;border-radius:999px}
+.q{grid-column:1;border:2px solid var(--ink);border-radius:10px;padding:12px 14px;background:var(--panel);font-weight:600;font-size:14.5px;display:flex;flex-direction:column;gap:4px;align-self:center}
+.q small{font-weight:400;color:var(--muted);font-size:12.5px}
+.yes{grid-column:2;display:flex;align-items:center;justify-content:center;flex-direction:column;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);gap:4px}
+.yes::after{content:"";display:block;width:100%;height:2px;background:var(--ink)}
+.no{grid-column:1;display:flex;align-items:center;gap:8px;padding:6px 0 6px 22px;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-height:34px;border-left:2px solid var(--ink);margin-left:22px}
+.gap{grid-column:2 / span 2}
+.leaf{grid-column:3;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;border:1px solid}
+.leaf .where{font:600 11px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.leaf h3{font-size:15px}
+.leaf.ai{background:var(--teal-soft);border-color:var(--teal)} .leaf.ai .where{color:var(--teal)}
+.leaf.data{background:var(--teal-soft);border-color:var(--teal)} .leaf.data .where{color:var(--teal)}
+.leaf.act{background:var(--red-soft);border-color:var(--red)} .leaf.act .where{color:var(--red)}
+.leaf.sb{background:var(--plum-soft);border-color:var(--plum)} .leaf.sb .where{color:var(--plum)}
+.leaf.own{background:var(--brass-soft);border-color:var(--brass);border-style:dashed} .leaf.own .where{color:var(--brass)}
+.ex{display:flex;flex-direction:column;gap:6px}
+.e{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 10px;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.e b{font-weight:600}
+.e .ks{display:flex;flex-wrap:wrap;gap:4px}
+.leaf .pay{font-size:12.5px;color:var(--muted)}
+@media (max-width:700px){
+  .chart{grid-template-columns:1fr}
+  .start,.q,.leaf,.no,.yes,.gap{grid-column:1}
+  .yes{flex-direction:row;justify-content:flex-start;padding:6px 0 6px 24px;height:auto}
+  .yes::after{width:2px;height:14px}
+  .gap{display:none}
+}
+
+/* table */
+.tablebox{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--rule)}
+th{font:600 11px/1.3 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--ground)}
+tr:last-child td{border-bottom:0}
+.to-m{color:var(--teal);font-weight:600} .to-p{color:var(--brass);font-weight:600} .to-x{color:var(--red);font-weight:600}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+.box{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.box ul{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.route{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1.2fr) 30px minmax(0,.9fr) 30px minmax(0,1fr);align-items:stretch;gap:0}
+.rcol{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.rcol h3{font-size:13.5px}
+.rcol .lab{font:600 10.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rcol.pipe{background:var(--plum-soft);border-color:var(--plum)} .rcol.pipe .lab{color:var(--plum)}
+.rcol.db{background:var(--teal-soft);border-color:var(--teal)} .rcol.db .lab{color:var(--teal)}
+.rcol.me{border:2px solid var(--ink)}
+.row2{display:flex;justify-content:space-between;gap:6px;align-items:baseline;flex-wrap:wrap}
+.arr{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+@media (max-width:760px){.route{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:26px}}
+.lanes{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:stretch}
+@media (max-width:640px){.lanes{grid-template-columns:1fr}}
+.meta{grid-row:1 / span 2;border:2px solid var(--ink);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px;font:700 15px/1.2 Archivo,sans-serif;text-align:center;background:var(--panel)}
+.meta small{font:400 12px/1.3 "IBM Plex Sans",sans-serif;color:var(--muted)}
+@media (max-width:640px){.meta{grid-row:auto}}
+.lane{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border-radius:10px;padding:10px;border:1px solid}
+@media (max-width:760px){.lane{grid-template-columns:1fr 1fr}}
+.lane.read{background:var(--teal-soft);border-color:var(--teal)}
+.lane.write{background:var(--red-soft);border-color:var(--red)}
+.lane .lt{grid-column:1 / -1;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.lane.read .lt{color:var(--teal)} .lane.write .lt{color:var(--red)}
+.st{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 9px;font-size:12.5px;display:flex;flex-direction:column;gap:3px}
+.st .n{font:700 10.5px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+.callout{display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr) 34px minmax(0,1fr);gap:0;align-items:stretch}
+@media (max-width:760px){.callout{grid-template-columns:1fr}.callout .arr{transform:rotate(90deg);height:24px}}
+.cbox{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.cbox .lab{font:600 10.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cbox.raw{border-style:dashed}
+.cbox.cur{background:var(--plum-soft);border-color:var(--plum)} .cbox.cur .lab{color:var(--plum)}
+.cbox.cl{border:2px solid var(--ink)}
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.vs{grid-template-columns:1fr}}
+.vs .box h3{font-size:14px}
+.vs .bad h3{color:var(--red)} .vs .good h3{color:var(--teal)}
+.envwrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:760px){.envwrap{grid-template-columns:1fr}}
+.envfile{background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.envfile .bar{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;background:var(--code);font:500 12px/1.3 "IBM Plex Mono",monospace;color:var(--muted);flex-wrap:wrap}
+.envbody{font:12.5px/1.75 "IBM Plex Mono",ui-monospace,Menlo,monospace;padding:10px 0;overflow-x:auto}
+.ln{display:grid;grid-template-columns:6px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:0 12px 0 0;white-space:nowrap}
+.ln .sw{align-self:stretch}
+.ln .v{white-space:nowrap}
+.ln .badge{font:600 10px/1 "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border-radius:4px}
+.ln.cm{color:var(--muted);padding-left:16px;grid-template-columns:1fr;margin-top:6px}
+.ln.per .sw{background:var(--teal)} .ln.per .v{color:var(--teal)} .ln.per .badge{background:var(--teal-soft);color:var(--teal)}
+.ln.com .sw{background:var(--brass)} .ln.com .v{color:var(--brass)} .ln.com .badge{background:var(--brass-soft);color:var(--brass)}
+.ln.mini .sw{background:var(--red)} .ln.mini .v{color:var(--red)} .ln.mini .badge{background:var(--red-soft);color:var(--red)}
+.ln.new .badge.n{background:var(--plum-soft);color:var(--plum);margin-left:4px}
+.legend2{display:flex;flex-direction:column;gap:10px}
+.lg{border-radius:8px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:3px;border:1px solid}
+.lg b{font-family:Archivo,sans-serif;font-size:14px}
+.lg.per{background:var(--teal-soft);border-color:var(--teal)} .lg.per b{color:var(--teal)}
+.lg.com{background:var(--brass-soft);border-color:var(--brass)} .lg.com b{color:var(--brass)}
+.lg.mini{background:var(--red-soft);border-color:var(--red)} .lg.mini b{color:var(--red)}
+.lg.pf{background:var(--panel);border-color:var(--rule);border-style:dashed}
+.fill{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.fill table{min-width:600px}
+.fill td{font:12px/1.4 "IBM Plex Mono",monospace}
+.fill td:first-child{font-weight:500}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.tf{border-radius:8px;overflow:hidden;border:1px solid}
+.tf.m{border-color:var(--teal)} .tf.p{border-color:var(--brass);border-style:dashed}
+.tf .bar{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 12px;font:500 12px/1.3 "IBM Plex Mono",monospace}
+.tf.m .bar{background:var(--teal-soft);color:var(--teal)} .tf.p .bar{background:var(--brass-soft);color:var(--brass)}
+.tf .body{background:var(--panel);font:12.5px/1.75 "IBM Plex Mono",monospace;padding:10px 12px;white-space:pre;overflow-x:auto}
+.tf .body .c{color:var(--muted)} .tf .body .v{color:var(--teal)} .tf.p .body .v{color:var(--brass)} .tf .body .w{color:var(--red)}
+.tf .foot2{background:var(--panel);border-top:1px solid var(--rule);padding:8px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:3px}
+.loader{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.loader{grid-template-columns:1fr}}
+.ls{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:3px}
+.ls .k{font:700 11px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.route{display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1.2fr) 30px minmax(0,.9fr) 30px minmax(0,1fr);align-items:stretch;gap:0}
+.rcol{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.rcol h3{font-size:13.5px}
+.rcol .lab{font:600 10.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rcol.pipe{background:var(--plum-soft);border-color:var(--plum)} .rcol.pipe .lab{color:var(--plum)}
+.rcol.db{background:var(--teal-soft);border-color:var(--teal)} .rcol.db .lab{color:var(--teal)}
+.rcol.me{border:2px solid var(--ink)}
+.row2{display:flex;justify-content:space-between;gap:6px;align-items:baseline;flex-wrap:wrap}
+.arr{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+@media (max-width:760px){.route{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:26px}}
+.lanes{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:stretch}
+@media (max-width:640px){.lanes{grid-template-columns:1fr}}
+.meta{grid-row:1 / span 2;border:2px solid var(--ink);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px;font:700 15px/1.2 Archivo,sans-serif;text-align:center;background:var(--panel)}
+.meta small{font:400 12px/1.3 "IBM Plex Sans",sans-serif;color:var(--muted)}
+@media (max-width:640px){.meta{grid-row:auto}}
+.lane{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border-radius:10px;padding:10px;border:1px solid}
+@media (max-width:760px){.lane{grid-template-columns:1fr 1fr}}
+.lane.read{background:var(--teal-soft);border-color:var(--teal)}
+.lane.write{background:var(--red-soft);border-color:var(--red)}
+.lane .lt{grid-column:1 / -1;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.lane.read .lt{color:var(--teal)} .lane.write .lt{color:var(--red)}
+.st{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 9px;font-size:12.5px;display:flex;flex-direction:column;gap:3px}
+.st .n{font:700 10.5px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+.callout{display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr) 34px minmax(0,1fr);gap:0;align-items:stretch}
+@media (max-width:760px){.callout{grid-template-columns:1fr}.callout .arr{transform:rotate(90deg);height:24px}}
+.cbox{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.cbox .lab{font:600 10.5px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cbox.raw{border-style:dashed}
+.cbox.cur{background:var(--plum-soft);border-color:var(--plum)} .cbox.cur .lab{color:var(--plum)}
+.cbox.cl{border:2px solid var(--ink)}
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.vs{grid-template-columns:1fr}}
+.vs .box h3{font-size:14px}
+.vs .bad h3{color:var(--red)} .vs .good h3{color:var(--teal)}
+.envwrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:760px){.envwrap{grid-template-columns:1fr}}
+.envfile{background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.envfile .bar{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;background:var(--code);font:500 12px/1.3 "IBM Plex Mono",monospace;color:var(--muted);flex-wrap:wrap}
+.envbody{font:12.5px/1.75 "IBM Plex Mono",ui-monospace,Menlo,monospace;padding:10px 0;overflow-x:auto}
+.ln{display:grid;grid-template-columns:6px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:0 12px 0 0;white-space:nowrap}
+.ln .sw{align-self:stretch}
+.ln .v{white-space:nowrap}
+.ln .badge{font:600 10px/1 "IBM Plex Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border-radius:4px}
+.ln.cm{color:var(--muted);padding-left:16px;grid-template-columns:1fr;margin-top:6px}
+.ln.per .sw{background:var(--teal)} .ln.per .v{color:var(--teal)} .ln.per .badge{background:var(--teal-soft);color:var(--teal)}
+.ln.com .sw{background:var(--brass)} .ln.com .v{color:var(--brass)} .ln.com .badge{background:var(--brass-soft);color:var(--brass)}
+.ln.mini .sw{background:var(--red)} .ln.mini .v{color:var(--red)} .ln.mini .badge{background:var(--red-soft);color:var(--red)}
+.ln.new .badge.n{background:var(--plum-soft);color:var(--plum);margin-left:4px}
+.legend2{display:flex;flex-direction:column;gap:10px}
+.lg{border-radius:8px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:3px;border:1px solid}
+.lg b{font-family:Archivo,sans-serif;font-size:14px}
+.lg.per{background:var(--teal-soft);border-color:var(--teal)} .lg.per b{color:var(--teal)}
+.lg.com{background:var(--brass-soft);border-color:var(--brass)} .lg.com b{color:var(--brass)}
+.lg.mini{background:var(--red-soft);border-color:var(--red)} .lg.mini b{color:var(--red)}
+.lg.pf{background:var(--panel);border-color:var(--rule);border-style:dashed}
+.fill{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.fill table{min-width:600px}
+.fill td{font:12px/1.4 "IBM Plex Mono",monospace}
+.fill td:first-child{font-weight:500}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.tf{border-radius:8px;overflow:hidden;border:1px solid}
+.tf.m{border-color:var(--teal)} .tf.p{border-color:var(--brass);border-style:dashed}
+.tf .bar{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 12px;font:500 12px/1.3 "IBM Plex Mono",monospace}
+.tf.m .bar{background:var(--teal-soft);color:var(--teal)} .tf.p .bar{background:var(--brass-soft);color:var(--brass)}
+.tf .body{background:var(--panel);font:12.5px/1.75 "IBM Plex Mono",monospace;padding:10px 12px;white-space:pre;overflow-x:auto}
+.tf .body .c{color:var(--muted)} .tf .body .v{color:var(--teal)} .tf.p .body .v{color:var(--brass)} .tf .body .w{color:var(--red)}
+.tf .foot2{background:var(--panel);border-top:1px solid var(--rule);padding:8px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:3px}
+.loader{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.loader{grid-template-columns:1fr}}
+.ls{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:3px}
+.ls .k{font:700 11px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+.people{grid-template-columns:1fr}}
+.person{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 14px;font-size:13.5px}
+.person b{display:block;font-family:Archivo,sans-serif;font-size:14px}
+a{color:var(--teal)}
+</style>
+
+<div class="wrap">
+
+<header class="lede">
+  <span class="eyebrow">What changes for the people using keys · proposal, within ~2 weeks</span>
+  <h1>the owner's Key Map</h1>
+  <p>the ops lead or Operator B send the owner a <b>managed file</b>: his own keys under the company's accounts, which he never edits. Everything else is <b>his own setup</b>: a personal file, his Keychain, several files, whatever he likes. Nobody checks it. The chart below sorts which one a key comes from.</p>
+  <div class="files">
+    <div class="file m"><span class="tag">Managed file · sent to him</span><ul><li>His own key for each company-paid service</li><li>Usage shows as “damon” on the company bill</li><li>Replaced whole when something changes; he never edits it</li></ul></div>
+    <div class="file p"><span class="tag">His own setup · not checked</span><ul><li>Services he's trying, and tools only he uses</li><li>Kept wherever he likes: a file, the Keychain, both</li><li>No approval and no note; never overwritten by the managed file</li></ul></div>
+  </div>
+  <p class="note"><b>When checks start:</b> only when a piece of his work enters the system path. <code>/system-fit</code> flags keys read by path or from the Keychain; <code>/system-ready</code> moves them to the shared loader and a company key; <code>/system-review</code> does the same for components already in the workspace. Always on regardless: no key in git or chat, and old shared keys stop working on announced dates.</p>
+</header>
+
+<section>
+  <span class="eyebrow">The file itself</span>
+  <h2>The key file you know, with placeholders</h2>
+  <p>These are the mini's key file today, <code>~/.workflow-worker.env</code>: the same 13 names, grouped by kind. Lines marked <b>new</b> are added for the rollout. Every machine gets this exact layout; only the values differ. The values here are placeholders.</p>
+  <div class="envwrap">
+    <div class="envfile">
+      <div class="bar"><span>keys.template · the layout every file follows</span><span>names only in git</span></div>
+      <div class="envbody"><div class="ln cm"># Paid AI services — your own key, under the company account</div><div class="ln per"><span class="sw"></span><span>FAL_KEY=<span class="v">‹your fal key›</span></span><span><span class="badge">personal</span></span></div><div class="ln per"><span class="sw"></span><span>HIGGSFIELD_KEY_ID=<span class="v">‹your Higgsfield key id›</span></span><span><span class="badge">personal</span></span></div><div class="ln per"><span class="sw"></span><span>HIGGSFIELD_KEY_SECRET=<span class="v">‹your Higgsfield secret›</span></span><span><span class="badge">personal</span></span></div><div class="ln per"><span class="sw"></span><span>GEMINI_API_KEY=<span class="v">‹your Gemini key›</span></span><span><span class="badge">personal</span></span></div><div class="ln per"><span class="sw"></span><span>APIFY_TOKEN=<span class="v">‹your Apify token›</span></span><span><span class="badge">personal</span></span></div><div class="ln per"><span class="sw"></span><span>OPENROUTER_API_KEY=<span class="v">‹your OpenRouter key›</span></span><span><span class="badge">personal</span></span></div><div class="ln per new"><span class="sw"></span><span>OPENAI_API_KEY=<span class="v">‹your OpenAI key›</span></span><span><span class="badge">personal</span><span class="badge n">new</span></span></div><div class="ln com new"><span class="sw"></span><span>ELEVENLABS_API_KEY=<span class="v">‹shared company key›</span></span><span><span class="badge">common</span><span class="badge n">new</span></span></div><div class="ln cm"># Brand data — read-only, through Supabase</div><div class="ln per new"><span class="sw"></span><span>SUPABASE_READ_URL=<span class="v">‹your read-only login›</span></span><span><span class="badge">personal</span><span class="badge n">new</span></span></div><div class="ln cm"># Shared by the team — the same value in every file</div><div class="ln com"><span class="sw"></span><span>REVIEWER_KEY_TEAM=<span class="v">‹team review key›</span></span><span><span class="badge">common</span></span></div><div class="ln cm"># Mac mini only — left blank on laptops</div><div class="ln mini"><span class="sw"></span><span>SUPABASE_DB_URL=<span class="v">‹full database login›</span></span><span><span class="badge">mini only</span></span></div><div class="ln mini"><span class="sw"></span><span>GDRIVE_SA_KEY=<span class="v">‹Drive service account›</span></span><span><span class="badge">mini only</span></span></div><div class="ln mini"><span class="sw"></span><span>SLACK_PUSH_BOT_TOKEN=<span class="v">‹Slack bot›</span></span><span><span class="badge">mini only</span></span></div><div class="ln mini"><span class="sw"></span><span>VERCEL_TOKEN=<span class="v">‹project deploy token›</span></span><span><span class="badge">mini only</span></span></div><div class="ln mini"><span class="sw"></span><span>FIGMA_TOKEN=<span class="v">‹read-only design export›</span></span><span><span class="badge">mini only</span></span></div><div class="ln mini"><span class="sw"></span><span>SLACK_USER_TOKEN_DEVELOPER=<span class="v">‹posts as the developer›</span></span><span><span class="badge">mini only</span></span></div><div class="ln mini new"><span class="sw"></span><span>KLAVIYO_BRAND A_KEY=<span class="v">‹send key, per brand›</span></span><span><span class="badge">mini only</span><span class="badge n">new</span></span></div><div class="ln mini new"><span class="sw"></span><span>META_ADS_TOKEN=<span class="v">‹upload key, per brand›</span></span><span><span class="badge">mini only</span><span class="badge n">new</span></span></div></div>
+    </div>
+    <div class="legend2">
+      <div class="lg per"><b>Personal</b>Each holder's own key, under the company account. the ops lead, the owner and the mini each get a different value on the same line.</div>
+      <div class="lg com"><b>Common</b>One value, the same in every file: the team review key, and shared company keys like ElevenLabs.</div>
+      <div class="lg mini"><b>Mini only</b>Filled on the Mac mini, left blank on laptops: our platform, the full database login, and brand keys that send or upload.</div>
+      <div class="lg pf"><b>Not in this file</b><span>Trials and tools only one person uses, such as <code>GORGIAS_API_KEY</code> or <code>ASANA_TOKEN</code>. They stay in the person's own setup: a file, the Keychain, anything.</span></div>
+    </div>
+  </div>
+  <h3>The same lines, filled per machine</h3>
+  <div class="fill">
+  <table>
+    <thead><tr><th>Line</th><th>the ops lead's file</th><th>the owner's file</th><th>Mac mini's file</th></tr></thead>
+    <tbody>
+      <tr><td>FAL_KEY=</td><td>‹the ops lead's fal key›</td><td>‹the owner's fal key›</td><td>‹mini's fal key›</td></tr>
+      <tr><td>GEMINI_API_KEY=</td><td>‹the ops lead's›</td><td>‹the owner's›</td><td>‹mini's›</td></tr>
+      <tr><td>SUPABASE_READ_URL=</td><td>‹the ops lead's read-only›</td><td>‹the owner's read-only›</td><td>(uses the full login below)</td></tr>
+      <tr><td>REVIEWER_KEY_TEAM=</td><td>‹team key›</td><td>‹team key›</td><td>‹team key›</td></tr>
+      <tr><td>SUPABASE_DB_URL=</td><td>blank</td><td>blank</td><td>‹full login›</td></tr>
+      <tr><td>META_ADS_TOKEN=</td><td>blank</td><td>blank, or a narrow key if he uploads often</td><td>‹Brand A upload key›</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Grouping and the new names are proposals; the final names come from the template in git. Figma and the Slack user token are the developer's own tokens used by the mini today; both are on the Team Key Ring rotation list.</p>
+  <h3>The managed file, beside his own setup</h3>
+  <p>The layout above is the <b>managed file</b>. Beside it sits whatever the owner uses for his own keys, shown here as a personal file (his Keychain works just as well). When the ops lead or Operator B send a new managed file, it replaces the old one whole. His own setup is never touched, so his trials survive every update.</p>
+  <div class="two" role="img" aria-label="the owner's laptop holds the managed file sent to him, and his own setup for his own keys.">
+    <div class="tf m">
+      <div class="bar"><span>keys.env · managed</span><span>sent to him, never edited</span></div>
+<div class="body"><span class="c"># every line from the layout above</span>
+FAL_KEY=<span class="v">‹the owner's fal key›</span>
+GEMINI_API_KEY=<span class="v">‹the owner's Gemini key›</span>
+SUPABASE_READ_URL=<span class="v">‹the owner's read-only login›</span>
+REVIEWER_KEY_TEAM=<span class="v">‹team key›</span>
+SUPABASE_DB_URL=
+<span class="c">…</span></div>
+      <div class="foot2"><span><b>Who writes it:</b> the ops lead or Operator B, as a whole new file</span><span><b>When:</b> first setup, and whenever one of his keys changes</span></div>
+    </div>
+    <div class="tf p">
+      <div class="bar"><span>his own setup · e.g. a personal file</span><span>not checked · never replaced</span></div>
+<div class="body"><span class="c"># trials and tools only he uses</span>
+GORGIAS_API_KEY=<span class="v">‹his trial key›</span>
+ASANA_TOKEN=<span class="v">‹his own›</span>
+BYTEPLUS_API_KEY=<span class="v">‹his own›</span>
+<span class="c"># an override: his own key wins, with a warning</span>
+<span class="w">FAL_KEY=‹his personal fal account›</span></div>
+      <div class="foot2"><span><b>Who writes it:</b> the owner, any way he likes: this file, his Keychain, shell exports</span><span><b>Checked:</b> never, until the work enters the system path</span></div>
+    </div>
+  </div>
+  <div class="loader">
+    <div class="ls"><span class="k">1 · HIS OWN</span>Tools start with whatever his own setup already provides.</div>
+    <div class="ls"><span class="k">2 · MANAGED</span>The loader fills every gap from the managed file. If his own key overrides a company one, it warns.</div>
+    <div class="ls"><span class="k">3 · THE MINI</span>Loads the managed file only. Shared work never runs on anyone's personal keys.</div>
+  </div>
+  <p class="note">File names are placeholders. <b>Why keep the managed file separate:</b> mixing it with anyone's own lines would mean admins merging each replacement by hand around them. That is slow and error-prone, and the admins would see everyone's personal keys.</p>
+
+</section>
+
+<section>
+  <span class="eyebrow">Which key, for which job</span>
+  <h2>the owner starts a task: where does the key come from?</h2>
+  <div class="chart" role="img" aria-label="Decision flow: if the owner is trying something or it is his own tool, the key is in his own setup; if the data should route through Supabase, the vendor key stays in the sync pipeline and he reads with his read-only login; if it changes something customers see, it is a brand action key; otherwise it is his own company key for a paid AI service.">
+    <div class="start">the owner starts a task</div><div class="gap"></div>
+    <div class="no" aria-hidden="true">↓</div><div class="gap"></div>
+
+    <div class="q">Is it a service he's trying, or a tool only he uses?<small>Not yet something the company runs.</small></div>
+    <div class="yes">yes</div>
+    <div class="leaf own">
+      <span class="where">His own setup · not checked</span>
+      <h3>His own key, his own call</h3>
+      <div class="ex">
+        <div class="e"><b>Testing a Gorgias MCP</b><span class="ks"><code>GORGIAS_API_KEY</code></span></div>
+        <div class="e"><b>His control-room tools</b><span class="ks"><code>ASANA_TOKEN</code><code>WHATSAPP_TOKEN</code><code>CLOUDFLARE_API_TOKEN</code></span></div>
+        <div class="e"><b>Services only he uses today</b><span class="ks"><code>BYTEPLUS_API_KEY</code><code>ADPLEXITY_API_KEY</code></span></div>
+      </div>
+      <span class="pay">Paid by whoever owns that account. If it becomes team work, the system path (<code>/system-fit</code> → <code>/system-ready</code>) moves it to a fresh company key in the managed file.</span>
+    </div>
+    <div class="no">no ↓</div><div class="gap"></div>
+
+    <div class="q">Should the data route through Supabase?<small>Would a dashboard, a report, a teammate or an agent use it again? Is it pulled over and over? Brand data is always yes.</small></div>
+    <div class="yes">yes</div>
+    <div class="leaf sb">
+      <span class="where">Supabase route · the vendor key stays in the sync pipeline</span>
+      <h3>Pulled once into Supabase; the owner reads the copy</h3>
+      <div class="ex">
+        <div class="e"><b>Checking 3PL shipments</b><span class="ks"><code>DLX_ACCESS_TOKEN</code> in the pipeline</span></div>
+        <div class="e"><b>Meta ad performance</b><span class="ks"><code>META_ACCESS_TOKEN</code> in the pipeline</span></div>
+        <div class="e"><b>Gorgias tickets, Shopify orders</b><span class="ks">already synced</span></div>
+        <div class="e"><b>How the owner reads any of it</b><span class="ks"><code>SUPABASE_READ_URL</code> in his managed file</span></div>
+      </div>
+      <span class="pay"><b>Not synced yet?</b> Operator B adds a sync job; until then the owner can use a trial key in his own setup. <b>Why Supabase first:</b> it decides what Claude reads. Claude reads a few prepared tables instead of exploring each vendor's whole API. Dashboards, reports, Simon and Jet all read the same copy, and the vendor key lives in one place.</span>
+    </div>
+    <div class="no">no ↓</div><div class="gap"></div>
+
+    <div class="q">Does it send or change something customers see?<small>An ad upload, an email, the store, reviews.</small></div>
+    <div class="yes">yes</div>
+    <div class="leaf act">
+      <span class="where">Brand action key · one per brand</span>
+      <h3>Runs on the Mac mini, or a narrow key if he does it often</h3>
+      <div class="ex">
+        <div class="e"><b>Uploading Brand A's ads to Meta</b><span class="ks"><code>META_ADS_TOKEN</code></span></div>
+        <div class="e"><b>Building a Klaviyo email</b><span class="ks"><code>KLAVIYO_BRAND A_KEY</code><code>KLAVIYO_Brand B_KEY</code></span></div>
+        <div class="e"><b>Changing the Brand B store theme</b><span class="ks"><code>SHOPIFY_CLI_THEME_TOKEN</code></span></div>
+      </div>
+      <span class="pay">No usage bill. If he does it regularly, a scoped company key goes in his managed file; otherwise the job runs on the mini. The same system's data still comes through Supabase: Meta uses both routes.</span>
+    </div>
+    <div class="no">no ↓</div><div class="gap"></div>
+
+    <div class="q">It's a paid AI service the company uses.<small>Making images, video, voice; tearing down swipes.</small></div>
+    <div class="yes">then</div>
+    <div class="leaf ai">
+      <span class="where">Managed file · his own company key</span>
+      <h3>His key, the company's bill, his name on the usage</h3>
+      <div class="ex">
+        <div class="e"><b>A static ad image</b><span class="ks"><code>HIGGSFIELD_KEY_ID</code><code>FAL_KEY</code><code>OPENAI_API_KEY</code></span></div>
+        <div class="e"><b>Tearing down a competitor video</b><span class="ks"><code>GEMINI_API_KEY</code><code>APIFY_TOKEN</code></span></div>
+        <div class="e"><b>A voiceover</b><span class="ks"><code>ELEVENLABS_API_KEY</code> (one shared company key with a quota)</span></div>
+      </div>
+      <span class="pay">The company pays; the vendor's usage report shows “damon”.</span>
+    </div>
+  </div>
+  <p class="note">Key names are today's where they exist; <code>SUPABASE_READ_URL</code> is a placeholder for the new read-only login. BytePlus and Adplexity are placed as Damon-only because only his tools read them today <i>(inferred)</i>.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Keys he never holds</span>
+  <h2>The Supabase route in detail</h2>
+  <p>For the 3PL, the store, support tickets and ad data, the vendor keys live only in the sync pipeline. It copies each system into Supabase on a schedule. the owner reads the copy with his one read-only login, so he needs no 3PL or Shopify key at all.</p>
+  <div class="route" role="img" aria-label="Brand systems are read by the sync pipeline, which holds their keys, into Supabase; the owner reads Supabase with his read-only login.">
+    <div class="rcol"><span class="lab">Brand systems</span>
+      <div>3PL: DLX on ShipHero</div><div>Shopify</div><div>Gorgias</div><div>Meta (ads, comments, audiences)</div><div>Next Commerce</div><div>brand-d</div>
+    </div>
+    <div class="arr" aria-hidden="true">→</div>
+    <div class="rcol pipe"><span class="lab">Sync pipeline · holds the keys</span>
+      <div class="row2"><span>3PL</span><code>DLX_ACCESS_TOKEN</code></div>
+      <div class="row2"><span>Shopify</span><code>SHOPIFY_ADMIN_TOKEN</code></div>
+      <div class="row2"><span>Gorgias</span><code>GORGIAS_API_KEY</code></div>
+      <div class="row2"><span>Meta</span><code>META_ACCESS_TOKEN</code></div>
+      <div class="row2"><span>Next Commerce</span><code>NEXTCOMMERCE_ACCESS_TOKEN</code></div>
+      <div class="row2"><span>brand-d</span><code>brand-d_API_KEY</code></div>
+      <span class="note">Set by Operator B. Never on a laptop or the mini.</span>
+    </div>
+    <div class="arr" aria-hidden="true">→</div>
+    <div class="rcol db"><span class="lab">Supabase</span><h3>One copy of every brand's data</h3><span>orders, shipments, inventory, tickets, ad spend</span></div>
+    <div class="arr" aria-hidden="true">→</div>
+    <div class="rcol me"><span class="lab">the owner</span><code>SUPABASE_READ_URL</code><span>“Which Brand A orders are stuck at the 3PL?”</span><span>“What did Brand B spend on Meta last week?”</span></div>
+  </div>
+  <p class="note">Pipeline key names are from the sync repo's local copy (last change 13 Aug; not refreshed today). The pipeline pulls on a schedule, so answers are as fresh as the last sync.</p>
+
+  <h3>Supabase also sets what Claude reads</h3>
+  <p>We consolidate data in Supabase first so that Claude, in anyone's session, reads a small set of prepared tables rather than exploring each vendor's whole API. The orders table is the model: the metrics component builds it from each brand's raw store data, one row per order, the same columns for every brand.</p>
+  <div class="callout" role="img" aria-label="Raw store data from each brand is consolidated by the metrics component into one orders table, which is what Claude reads.">
+    <div class="cbox raw"><span class="lab">Raw, per system</span><span><code>shopify_orders</code>: 56 columns, including customer names, emails and the raw payload</span><span>Brand A's and Brand B's own order tables</span></div>
+    <div class="arr" aria-hidden="true">→</div>
+    <div class="cbox cur"><span class="lab">Consolidated by the metrics component</span><code>public.orders</code><span>One row per order, one set of columns for every brand, revenue in one currency with the original kept beside it (Operator B's sign-off pending). Refreshed by the daily metrics job (MET-C11 (orders chain)).</span></div>
+    <div class="arr" aria-hidden="true">→</div>
+    <div class="cbox cl"><span class="lab">What Claude reads</span><span>“How many Brand A orders last week, and what revenue?”</span><span>Answered from <code>orders</code>, the same way for everyone.</span></div>
+  </div>
+  <div class="vs">
+    <div class="box bad"><h3>Claude exploring the vendor's API</h3><ul><li>Needs the vendor key in the session</li><li>Every session can define "an order" or "revenue" differently</li><li>Reaches every field, customer details included</li><li>Many sessions calling the vendor, each against its rate limit</li></ul></div>
+    <div class="box good"><h3>Claude reading the consolidated table</h3><ul><li>Only a read-only data login</li><li>One definition, the one the dashboards use</li><li>Only the columns we chose to prepare</li><li>One pull, by the sync, for everyone</li></ul></div>
+  </div>
+  <p class="note">So for a new data source the question is which prepared table it should feed, not just whether it is synced. Whether the prepared tables leave out customer details is <i>(unchecked)</i>; the read-only login could also be limited to prepared tables only (Operator B's call).</p>
+
+  <h3>Some systems use both routes: Meta</h3>
+  <p>Reading Meta and changing Meta are two jobs, so they use two different keys on the same Meta account. Each is rotated on its own; losing one doesn't stop the other.</p>
+  <div class="lanes" role="img" aria-label="Meta: the read route goes through the sync pipeline into Supabase and the owner's read-only login; the write route goes from the owner through the mini or his scoped key to Meta.">
+    <div class="meta">Meta<small>one ad account per brand</small></div>
+    <div class="lane read">
+      <span class="lt">Read · through Supabase</span>
+      <div class="st"><span class="n">1</span>The sync pipeline pulls spend, comments and audiences<code>META_ACCESS_TOKEN</code></div>
+      <div class="st"><span class="n">2</span>Supabase holds the copy</div>
+      <div class="st"><span class="n">3</span>the owner asks which ads performed<code>SUPABASE_READ_URL</code></div>
+      <div class="st"><span class="n">4</span>He never holds a Meta key for this</div>
+    </div>
+    <div class="lane write">
+      <span class="lt">Write · through the mini, or his scoped key</span>
+      <div class="st"><span class="n">1</span>the owner finishes a batch of new ads</div>
+      <div class="st"><span class="n">2</span>A job on the mini uploads them, or he does it with a narrow key if he does it often</div>
+      <div class="st"><span class="n">3</span>The upload key<code>META_ADS_TOKEN</code></div>
+      <div class="st"><span class="n">4</span>New ads appear in Meta; the next sync reads them back</div>
+    </div>
+  </div>
+  <p class="note">Any system can end up like this: data read through Supabase, actions through the mini. Gorgias would, if the owner's trial turns into replying to tickets.</p>
+</section>
+
+<section>
+  <span class="eyebrow">His keys, before and after</span>
+  <h2>What happens to each key the owner holds today</h2>
+  <p>Today about 25 keys sit in his Mac Keychain, some of them copies of company keys and one lent to the ops lead.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Key today</th><th>How he holds it now</th><th>After</th></tr></thead>
+    <tbody>
+      <tr><td><code>FAL_KEY</code>, <code>HIGGSFIELD_KEY_ID</code> / <code>_SECRET</code></td><td>Copies of the company's single key</td><td class="to-m">His own company key, managed file</td></tr>
+      <tr><td><code>OPENAI_API_KEY</code></td><td>His key, also used by the ops lead</td><td class="to-m">His own company key; the ops lead gets hers</td></tr>
+      <tr><td><code>GEMINI_API_KEY</code></td><td>His own copy</td><td class="to-m">His own company key, managed file</td></tr>
+      <tr><td><code>ELEVENLABS_API_KEY</code></td><td>His own copy</td><td class="to-m">The shared company key with a quota, managed file (personal keys need paid seats)</td></tr>
+      <tr><td><code>APIFY_TOKEN</code> + <code>APIFY_TOKEN_PERSONAL</code></td><td>Company token, with his personal account as the fallback when it runs out</td><td class="to-m">His own member token under the company account</td></tr>
+      <tr><td><code>SUPABASE_DB_URL</code></td><td>Full access to the database</td><td class="to-m">Read-only login, managed file</td></tr>
+      <tr><td><code>META_ADS_TOKEN</code>, <code>KLAVIYO_*</code>, <code>SHOPIFY_Brand B_TOKEN</code>, <code>JUNIP_Brand B_KEY</code></td><td>Brand keys in his Keychain</td><td class="to-x">Brand action keys: the mini, or scoped keys in his managed file</td></tr>
+      <tr><td><code>GDRIVE_SA_KEY</code></td><td>His own copy of the Drive service account</td><td class="to-x">Leaves his laptop: Drive work uses his own Google login or runs on the mini <i>(which of his tools need it: to check)</i></td></tr>
+      <tr><td><code>ASANA_TOKEN</code>, <code>WHATSAPP_TOKEN</code>, <code>CLOUDFLARE_API_TOKEN</code>, <code>BYTEPLUS_API_KEY</code>, <code>ADPLEXITY_API_KEY</code></td><td>His own</td><td class="to-p">His own setup, as today (Keychain or a file: his choice)</td></tr>
+      <tr><td><code>GORGIAS_API_KEY</code></td><td>New: his trial</td><td class="to-p">His own setup; no note needed</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">For the owner, in practice</span>
+  <div class="cols">
+    <div class="box"><h3>What he does</h3><ul><li>Saves the managed file when the ops lead or Operator B send it, once and on each replacement</li><li>Keeps trials and his own tools however he likes; nobody checks</li><li>Runs a short smoke test before an old shared key's announced cut-off date</li><li>When a trial becomes team work, lets <code>/system-ready</code> move it onto a company key. The name stays the same, so his own copy can simply go.</li></ul></div>
+    <div class="box"><h3>What he stops doing</h3><ul><li>Holding copies of the company's shared keys</li><li>Lending his OpenAI key to the ops lead</li><li>Falling back to his personal Apify account</li><li>Hunting across Keychain, files and the mini for where a key lives</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Everyone else</span>
+  <h2>The same model, one line each</h2>
+  <div class="people">
+    <div class="person"><b>the ops lead</b>Her own keys in her managed file, including her own OpenAI key instead of the owner's. Also an admin: builds and sends everyone's files.</div>
+    <div class="person"><b>Operator B</b>Her own keys in her managed file. Admin with the ops lead; also sets the keys for the Supabase sync.</div>
+    <div class="person"><b>Simon, Jet</b>A read-only data login to start; AI keys only when their work needs them.</div>
+    <div class="person"><b>the developer</b>Owns the company accounts and installs the Mac mini's file.</div>
+  </div>
+  <p class="note">Details, rotation list and open decisions: <a href="3-implementation-plan.html">Team Key Ring</a>. Still open: how files are sent securely (D1).</p>
+</section>
+
+</div>

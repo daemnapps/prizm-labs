@@ -6,7 +6,8 @@
                                             give a finished run its id
     briefs.py open <run> --brand <brand> --type video-creator
                                             the same for a video-teardown creator
-                                            brief (runs/video-teardown/<brand>/<run>/brief.md)
+                                            brief (read from runs/video-writing/<brand>/<run>/deliverable/;
+                                            a teardown-shelf brief.md is frozen history)
     briefs.py open runs/<tool>/<brand>/<label> --brand <brand> --type <type>
                                             any other lane's finished run (it has
                                             a deliverable/); every lane run gets
@@ -15,15 +16,19 @@
                                             record the landing page(s) the brief
                                             sends people to, by catalog link id
     briefs.py link <id> <link id> [...]     add landing page(s) to an existing brief
+    briefs.py landing <id> [...]            choose the landing page for a brief that has none
+                                            (components/naming/page_pick.py; `open` does
+                                            this by itself unless --link names one)
     briefs.py show <id>                     one brief's record (p140 or brief-0140)
-    briefs.py next --brand <brand> [--type <type>]
+    briefs.py next --brand <brand> --product <product> [--type <type>]
                                             the id the next brief would get
+                                            (numbers count per brand AND product)
     briefs.py migrate                       write `id` + `brief` onto every entry
     briefs.py check                         every brief resolves under both spellings
 
 A brief id has been sitting in the ad name since the naming convention was
 written — the `brief` field, `p003` in
-`<brand>-<product>-static-ai-<cast>-…-<angle>-<concept>-p003-9x16-260907b`. It is
+`brand-b-widget-static-ai-ray-…-razornotproblem-faceoff-p003-9x16-260907b`. It is
 in the name rather than the manifest because a Meta report is often read by
 someone with no repo access, and "which briefs produce winners" is worth
 ranking.
@@ -34,20 +39,28 @@ guessed a number or wrote something off-convention (`braille`, 2026-09-13).
 This is that file: one record per brief, so the id resolves to the swipe it
 came from, the run that produced it, and the ads that carry it.
 
-Ids are per brand and sequential in the brand's own block, because that is
-how the live ones already read; the seeds live in briefs.json.
+PER BRAND AND PRODUCT (the owner, 2026-10-01): "brief numbers count per brand
+AND product — each product starts at 1 inside its brand." `next_id()` hands
+out 1 + the highest number already used by a brief of that brand and product
+(this register, retired rows included, and brands/<brand>/briefs/briefs.json).
+Every brief type counts in its product's one count. A brief with no product
+counts with its brand's other product-less briefs.
+
+Older briefs keep their numbers and their keys: up to 1 Oct every brand
+counted in one shared block (brand-b from p001, brand-a from p140), keyed on the
+old code `pNNN`. A brief numbered since is keyed `<brand>_<product>_brief-NNNN`
+(names.brief_key) — never `pNNN`, which would land on an old brief with the
+same number. `get()` finds both; `reg["briefs"][...]` by a bare number still
+means the old pNNN row.
 
 TWO SPELLINGS, ONE NUMBER (Master Plan v2, 3.3 — 2026-09-28). The id is
-`brief-NNNN`, type-first, for EVERY kind of brief — image, sequence, video,
-email, page, copy, concept — all counting in the brand's one block. `p140`
-is the same brief as `brief-0140`: the old code stays the register key (the
-worksheets, the drafts and the live ad names carry it) and every entry also
-carries `brief`, the new id. Readers take either; `next_id()` hands out the
-new one. See components/naming/brief-aliases.json.
+`brief-NNNN`, type-first, for EVERY kind of brief. `p140` is the same brief as
+`brief-0140` for the old records. See components/naming/brief-aliases.json.
 """
 import argparse, json, re, sys
 from datetime import date
 from pathlib import Path
+from typing import Optional
 
 HERE = Path(__file__).resolve().parent.parent
 REGISTER = HERE / "briefs.json"
@@ -56,53 +69,33 @@ REPO = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "bra
 # `tools/image-teardown/runs` is the pre-move home and is still looked in.
 RUNS = REPO / "runs" / "image-teardown"
 OLD_RUNS = HERE / "runs"
-# Video briefs are video-teardown runs: runs/video-teardown/<brand>/<run>/brief.md
-# + run.json. Creator briefs went out from there before they had a number
+# Video briefs are video-teardown runs: run.json on runs/video-teardown/<brand>/<run>/,
+# the brief read from the writing shelf, runs/video-writing/<brand>/<run>/deliverable/
+# (2026-10-08). A brief.md on the teardown shelf is frozen history, still read
+# last. Creator briefs went out from there before they had a number
 # (2026-09-29). They sat in tools/video-teardown/records/runs/ until
-# 2026-09-30 (system-blueprint/RUNS-MOVE-2026-09-30.md); that old
+# 2026-09-30 (the team notes/system-blueprint/RUNS-MOVE-2026-09-30.md); that old
 # home is still looked in for one release.
 VIDEO_RUNS = REPO / "runs" / "video-teardown"
-OLD_VIDEO_RUNS = REPO / "components" / "video-teardown" / "records" / "runs"
+VIDEO_WRITING = REPO / "runs" / "video-writing"
+OLD_VIDEO_RUNS = REPO / "tools" / "video-teardown" / "records" / "runs"
 VIDEO_TYPES = ("video-ai", "video-creator")
-ALIASES = REPO / "components" / "naming" / "brief-aliases.json"
+# Where naming writes a new alias: None = naming's own brief-aliases.json.
+# A seam for tests, which point it at a temp copy (SI-121 (teardown stops reaching)).
+ALIASES = None
 
 # APPENDED, never ahead of the lane: naming has its own deliver.py, and put
 # first it shadowed this lane's — `chain.py variations` (and pack, the
 # walkthrough, the designer page) imported naming's and died on
-# `deliver.newest_draft`. Same rule as paths.py's brandpath.
+# `deliver.newest_draft` (found 2026-10-01). Same rule as paths.py's brandpath.
 sys.path.append(str(REPO / "components" / "naming"))
 import names as N                                       # brief_id, brief_code
 
-# Every kind of brief the register issues an id for. One list, one number
-# range per brand — a video brief and an image brief for the same brand
-# count in the same block, so "brief-0145" is one thing whatever it briefs.
+# Every kind of brief the register issues an id for. A video brief and an
+# image brief for the same brand and product count in the same count.
 TYPES = ["image-ai", "image-creator", "sequence-ai", "sequence-creator",
          "video-ai", "video-creator", "email", "page", "copy", "concept"]
 DEFAULT_TYPE = "image-ai"                               # what this lane makes
-
-# Each brand gets its own hundred. The first two blocks are read off ids
-# already live in ad names — <brand> at p001, <brand> at p140 — and every brand
-# after them is allocated the next free hundred the first time it opens a
-# brief. It used to be a hand-written map, so standing up a new brand exited
-# and told somebody to edit this file, which is a person in the loop for no
-# reason (2026-09-14).
-BLOCK_SIZE = 100
-
-
-def block_for(reg, brand):
-    """This brand's hundred, allocated and remembered on first use."""
-    # The first blocks were read off ids already live in ad names and live in
-    # briefs.json as data. No brand is named in this file — a brand name in
-    # code is how the next brand's run quietly aims at the last brand.
-    blocks = reg.setdefault("blocks", {})
-    if brand not in blocks:
-        taken = set(blocks.values())
-        n = 1
-        while n in taken:
-            n += BLOCK_SIZE
-        blocks[brand] = n
-    return blocks[brand]
-
 
 class Briefs(dict):
     """The register's `briefs` (and `retired`) table: keyed on the old code
@@ -152,6 +145,25 @@ def save(reg):
     REGISTER.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")
 
 
+# components rule 6 (triage page 15, Option A): `status` holds only draft /
+# approved / deprecated; where a brief sits on the track lives in `state`.
+TRACK = ["for-review", "approved", "in-production", "shipped"]
+STATUS_OF = {"for-review": "draft", "approved": "approved",
+             "in-production": "approved", "shipped": "approved"}
+
+
+def lifecycle(rec):
+    """Where a brief sits on the track. A row written before the move carries
+    its track word in `status` and is read there."""
+    return rec.get("state") or rec.get("status")
+
+
+def set_lifecycle(rec, word):
+    """Move a brief along the track; its rule-6 status follows the word."""
+    rec["state"] = word
+    rec["status"] = STATUS_OF[word]
+
+
 def _number(k):
     """The number inside either spelling, or None."""
     m = N.BRIEF_OLD.match(str(k)) or N.BRIEF_NEW.match(str(k))
@@ -159,12 +171,14 @@ def _number(k):
 
 
 def taken_numbers(reg):
+    # The OLD shared count's numbers (pNNN keys, retired, never-used). Kept for
+    # check(); new numbers count per brand+product in next_id().
     """Every brief number that can never be issued again.
 
     Retired ids stay taken. A brief pulled off the board is not a free
     number: the id travels into ad names and creative records, and
     reissuing it would point two different ads at one row.
-    (Damon, 2026-09-15: "remove those" — p011-p014.) The three numbers that
+    (the owner, 2026-09-15: "remove those" — p011-p014.) The three numbers that
     were never used stay unused for the same reason — a number nobody can
     find a brief for must not suddenly have one."""
     keys = list(reg["briefs"]) + list(reg.get("retired", {}))
@@ -180,42 +194,77 @@ def check_type(kind):
     return kind
 
 
-def next_id(reg, brand, kind=None):
-    """The next free id in this brand's block, as `brief-NNNN`. Never reuses
-    one. `kind` is checked against TYPES and does not move the number: every
-    brief type counts in the brand's one block."""
+def count_rows(reg, brand):
+    """Every record that counts toward this brand's numbers: the register's
+    briefs and retired rows, and the brand's own briefs.json."""
+    rows = N.register_rows(brand, reg)
+    rows += [{**b, "brand": brand} for b in N.brand_briefs(brand)]
+    return rows
+
+
+def next_id(reg, brand, kind=None, product=None):
+    """The next id for this brand AND product, as `brief-NNNN` (the owner,
+    2026-10-01: each product starts at 1 inside its brand). Never reuses one
+    within a brand+product. `kind` is checked against TYPES and does not move
+    the number."""
     check_type(kind)
-    lo = block_for(reg, brand)
-    taken = taken_numbers(reg)
-    n = lo
-    while n in taken:
-        n += 1
-    if n >= lo + BLOCK_SIZE:
-        # Spill into the next free hundred rather than stopping. A full block
-        # is a counting problem, not a decision anybody needs to make.
-        return next_id({"briefs": reg["briefs"], "retired": reg.get("retired", {}),
-                        "blocks": {**reg.get("blocks", {}),
-                                   brand: max(reg.get("blocks", {}).values() or [0])
-                                   + BLOCK_SIZE}}, brand, kind)
-    return N.brief_id(n)
+    return N.brief_id(N.next_brief_number(count_rows(reg, brand), brand, product))
+
+
+def new_key(brand, product, new):
+    """The register key for a brief numbered per brand+product."""
+    return N.brief_key(brand, product, new)
 
 
 def key(any_id):
-    """The register key for either spelling: `brief-0140` -> `p140`."""
+    """The register key for either spelling: `brief-0140` -> `p140`. A
+    per-product key (`brand-b_gadget_brief-0004`) is its own key."""
     return N.brief_code(any_id)
 
 
-def get(reg, any_id):
-    """(key, record) for either spelling, or (key, None)."""
+def get(reg, any_id, brand=None, product=None):
+    """(key, record) for any spelling, or (key, None).
+
+    A per-product key finds its record. A bare number (`brief-0001`, `p001`)
+    can name an old brief AND a newer per-product one; `brand`/`product`
+    narrow it, the product decides. If more than one is left, it raises
+    names.AmbiguousBrief rather than guess."""
+    q = N.parse_brief_key(any_id)
+    if q:
+        k = str(any_id).strip().lower()
+        return k, dict.get(reg["briefs"], k)
     k = key(any_id)
-    rec = reg["briefs"].get(k)
-    if rec is None:
+    num = N.brief_number(N.brief_id(any_id))
+    if num is None:
+        return k, reg["briefs"].get(k)
+    cands = []
+    old = reg["briefs"].get(k)
+    if old is None:
         # a record filed under the new spelling, should one ever be
         want = N.brief_id(any_id)
-        for kk, r in reg["briefs"].items():
-            if kk == want or (isinstance(r, dict) and r.get("brief") == want):
-                return kk, r
-    return k, rec
+        old_k = next((kk for kk, r in dict.items(reg["briefs"]) if kk == want), None)
+        if old_k:
+            k, old = old_k, dict.__getitem__(reg["briefs"], old_k)
+    if old is not None:
+        cands.append((k, old))
+    for kk, r in dict.items(reg["briefs"]):
+        p = N.parse_brief_key(kk)
+        if p and int(p[2][6:]) == num:
+            cands.append((kk, r))
+    if brand:
+        cands = [c for c in cands if N.slug(c[1].get("brand") or "") == N.slug(brand)]
+    if product:
+        exact = [c for c in cands if N.slug(c[1].get("product") or "") == N.slug(product)]
+        # no brief of that product: an OLD brief still answers — its number was
+        # unique across the old shared count, whatever product it was written as
+        cands = exact or [c for c in cands if not N.parse_brief_key(c[0])]
+    if len(cands) > 1:
+        brands = {(c[1].get("brand") or "?").upper() for c in cands}
+        raise N.AmbiguousBrief(
+            f"{N.brief_id(any_id)} is used by more than one "
+            f"{'/'.join(sorted(brands))} {'product' if len(brands) == 1 else 'brand or product'} "
+            f"({', '.join(sorted(c[1].get('product') or 'no product' for c in cands))}) — say which")
+    return cands[0] if cands else (k, None)
 
 
 def ids(reg, wanted):
@@ -244,7 +293,7 @@ def stamp(reg):
     for k, rec in reg["briefs"].items():
         if not isinstance(rec, dict):
             continue
-        want = {"id": k, "brief": N.brief_id(k)}
+        want = {"id": k, "brief": N.brief_id(k)}       # brief_id reads a per-product key too
         if any(rec.get(f) != v for f, v in want.items()):
             # id and brief first, so the record reads as what it is
             rest = {f: v for f, v in rec.items() if f not in want}
@@ -253,22 +302,33 @@ def stamp(reg):
 
 
 def check(reg):
-    """Every brief resolves under both spellings; every number sits in the
-    alias file; no number is issued twice. Returns (ok, problems, n)."""
+    """Every old brief resolves under both spellings and sits in the alias
+    file; every per-product brief is keyed brand_product_brief-NNNN and agrees
+    with its record; no number is issued twice inside its count. Returns
+    (ok, problems, n)."""
     probs = []
     aliases = N.brief_aliases().get("aliases", {})
     seen = {}
     for k, rec in list(dict.items(reg["briefs"])):
+        q = N.parse_brief_key(k)
+        if q:
+            brand, product, new = q
+            if not isinstance(rec, dict) or (rec.get("id"), rec.get("brief")) != (k, new):
+                probs.append(f"{k}: record is not stamped id={k} brief={new}")
+            elif (N.slug(rec.get("brand") or ""), N.slug(rec.get("product") or "none")) != (brand, product):
+                probs.append(f"{k}: key says {brand}/{product}, record says {rec.get('brand')}/{rec.get('product')}")
+            continue
         old, new = N.brief_code(k), N.brief_id(k)
         if not N.BRIEF_OLD.match(k):
-            probs.append(f"{k}: register key is not the old code")
+            probs.append(f"{k}: register key is neither the old code nor brand_product_brief-NNNN")
         if aliases.get(old) != new:
             probs.append(f"{k}: not in brief-aliases.json as {old} -> {new}")
         if isinstance(rec, dict) and (rec.get("id") != old or rec.get("brief") != new):
             probs.append(f"{k}: record is not stamped id={old} brief={new}")
-        for spelling in (old, new, str(_number(k))):
-            kk, got = get(reg, spelling)
-            if got is not rec or kk != k:
+        if dict.get(reg["briefs"], old) is not rec:
+            probs.append(f"{k}: {old!r} does not resolve to it")
+        for spelling in (new, str(_number(k))):
+            if reg["briefs"].get(spelling) is not rec:
                 probs.append(f"{k}: {spelling!r} does not resolve to it")
         n = _number(k)
         if n in seen:
@@ -277,10 +337,6 @@ def check(reg):
     for k in list(reg.get("retired", {})) + N.brief_aliases().get("never_used", []):
         if _number(k) in seen:
             probs.append(f"{k}: retired/never-used number is also a live brief")
-    for brand in reg.get("blocks", {}):
-        nxt = _number(next_id(reg, brand))
-        if nxt in taken_numbers(reg):
-            probs.append(f"{brand}: next id {nxt} is already taken")
     return not probs, probs, len(reg["briefs"])
 
 
@@ -312,31 +368,42 @@ def read_run(run: Path):
 
 
 def add_alias(bid, new):
-    """Write `pNNN -> brief-NNNN` into brief-aliases.json, so `check` finds
-    every number it issued there."""
-    al = json.loads(ALIASES.read_text()) if ALIASES.is_file() else {"aliases": {}}
-    if al.setdefault("aliases", {}).get(bid) != new:
-        al["aliases"][bid] = new
-        ALIASES.write_text(json.dumps(al, indent=1, ensure_ascii=False) + "\n")
-        N._ALIASES = None
+    """Have naming write `pNNN -> brief-NNNN` into brief-aliases.json, so
+    `check` finds every number it issued there."""
+    if N.parse_brief_key(bid):
+        return              # the global map is the old shared count only (2026-10-01)
+    N.add_alias(bid, new, ALIASES)
 
 
-def read_video_run(run: Path):
+def video_brief(run, brand=None) -> Optional[Path]:
+    """A video-teardown run's brief: the writing shelf's final brief, then its
+    brief, then the run's own brief.md (frozen, flat and pre-move homes)."""
+    run = Path(run)
+    b = brand or run.parent.name
+    out = VIDEO_WRITING / b / run.name / "deliverable"
+    return next((f for f in (out / "7-final-brief.md", out / "5-brief.md", run / "brief.md")
+                 if f.is_file()), None)
+
+
+def read_video_run(run: Path, brand=None):
     """What a video-teardown run says it is: run.json, and the brief's title
-    (its first `# ` line). Nothing here is invented."""
+    (its first `# ` line; None when there is no brief). Nothing here is invented."""
     meta = json.loads((run / "run.json").read_text()) if (run / "run.json").is_file() else {}
-    title = next((l[2:].strip() for l in (run / "brief.md").read_text().splitlines()
-                  if l.startswith("# ")), None)
+    bf = video_brief(run, brand)
+    title = next((l[2:].strip() for l in bf.read_text().splitlines()
+                  if l.startswith("# ")), None) if bf else None
     return meta, title
 
 
 def video_run(run_name, brand=None):
     """Where a video-teardown run lives: runs/video-teardown/<brand>/<run>
-    first, then any brand, then the flat and the pre-move homes."""
+    first, then any brand, then the flat and the pre-move homes. _work/ holds
+    working runs (SI-56), never a filed one, so it is never looked in."""
     tries = ([VIDEO_RUNS / brand / run_name] if brand else [])
-    tries += sorted(VIDEO_RUNS.glob(f"*/{run_name}")) if VIDEO_RUNS.is_dir() else []
+    tries += sorted(t for t in VIDEO_RUNS.glob(f"*/{run_name}")
+                    if t.parent.name != "_work") if VIDEO_RUNS.is_dir() else []
     tries += [VIDEO_RUNS / run_name, OLD_VIDEO_RUNS / run_name]
-    return next((t for t in tries if (t / "brief.md").is_file()),
+    return next((t for t in tries if video_brief(t, brand) is not None),
                 next((t for t in tries if t.is_dir()), tries[0]))
 
 
@@ -359,20 +426,22 @@ def stamp_run(run, new):
 def open_video(run_name, brand, reg, product=None, avatar=None, kind="video-creator"):
     """A video-teardown brief's id. Same bank, same block, one id per run."""
     run = video_run(run_name, brand)
-    if not (run / "brief.md").is_file():
-        sys.exit(f"{run_name} has no brief.md in {VIDEO_RUNS} — a brief id is "
+    if video_brief(run, brand) is None:
+        sys.exit(f"{run_name} has no brief in {VIDEO_WRITING}/<brand>/<run>/deliverable/ "
+                 f"nor a brief.md in {VIDEO_RUNS} — a brief id is "
                  f"for a finished brief, not a run in progress")
-    meta, title = read_video_run(run)
+    meta, title = read_video_run(run, brand)
     if meta.get("brand") and meta["brand"] != brand:
         sys.exit(f"{run_name} is a {meta['brand']} run, not {brand}")
-    new = next_id(reg, brand, kind)
-    bid = key(new)
+    product = product or meta.get("product")
+    new = next_id(reg, brand, kind, product)
+    bid = new_key(brand, product, new)
     reg["briefs"][bid] = {
         "id": bid,
         "brief": new,
         "type": kind,
         "brand": brand,
-        "product": product or meta.get("product"),
+        "product": product,
         "avatar": avatar or (meta.get("audience") or {}).get("_avatar"),
         "run": run_name,
         "lane": "video-teardown",
@@ -384,7 +453,8 @@ def open_video(run_name, brand, reg, product=None, avatar=None, kind="video-crea
         "swipe": {},                        # the image lane's shape, so its readers
         "declares": {},                     # read a video row without tripping
         "stages": [],
-        "status": "for-review",
+        "status": "draft",
+        "state": "for-review",
         "ads": [],
     }
     save(reg)
@@ -415,11 +485,13 @@ def open_email(run_name, brand, reg, product=None, avatar=None):
     if meta.get("brand") and meta["brand"] != brand:
         sys.exit(f"{run.name} is a {meta['brand']} run, not {brand}")
     a = meta.get("assignment") or {}
-    new = next_id(reg, brand, "email")
-    bid = key(new)
+    product = product or a.get("product")
+    product = None if str(product or "").lower() in ("", "none") else product
+    new = next_id(reg, brand, "email", product)
+    bid = new_key(brand, product, new)
     reg["briefs"][bid] = {
         "id": bid, "brief": new, "type": "email", "brand": brand,
-        "product": product or a.get("product"),
+        "product": product,
         "avatar": avatar or a.get("avatar"),
         "run": rel, "lane": "email-production",
         "title": (a.get("occasion") or run.name)[:120],
@@ -431,7 +503,8 @@ def open_email(run_name, brand, reg, product=None, avatar=None):
         "declares": {"offer": None if str(a.get("offer") or "").lower() in ("", "none") else a.get("offer"),
                      "angle": a.get("angle")},
         "stages": sorted((meta.get("stages") or {}).keys()),
-        "status": "for-review",
+        "status": "draft",
+        "state": "for-review",
         "ads": [],
     }
     save(reg)
@@ -470,11 +543,12 @@ def open_page(run_name, brand, reg, product=None, avatar=None):
     meta = json.loads((run / "run.json").read_text()) if (run / "run.json").is_file() else {}
     if meta.get("brand") and meta["brand"] != brand:
         sys.exit(f"{run.name} is a {meta['brand']} run, not {brand}")
-    new = next_id(reg, brand, "page")
-    bid = key(new)
+    product = product_key(product or meta.get("product"))
+    new = next_id(reg, brand, "page", product)
+    bid = new_key(brand, product, new)
     reg["briefs"][bid] = {
         "id": bid, "brief": new, "type": "page", "brand": brand,
-        "product": product_key(product or meta.get("product")),
+        "product": product,
         "avatar": avatar or meta.get("avatar"),
         "run": rel, "lane": "page-machine",
         "title": meta.get("page_name") or run.name,
@@ -484,7 +558,8 @@ def open_page(run_name, brand, reg, product=None, avatar=None):
         "declares": {"angle": meta.get("angle"), "format": meta.get("format"), "next": meta.get("next")},
         "brief_file": str(brief.resolve().relative_to(REPO.resolve())),
         "stages": sorted((meta.get("stages") or {}).keys()),
-        "status": "for-review",
+        "status": "draft",
+        "state": "for-review",
         "ads": [],
     }
     save(reg)
@@ -528,11 +603,12 @@ def open_lane(run, brand, reg, product=None, avatar=None, kind=None):
                       if l.startswith("# ")), None)
         if title:
             break
-    new = next_id(reg, brand, kind)
-    bid = key(new)
+    product = product_key(product or meta.get("product"))
+    new = next_id(reg, brand, kind, product)
+    bid = new_key(brand, product, new)
     reg["briefs"][bid] = {
         "id": bid, "brief": new, "type": kind, "brand": brand,
-        "product": product_key(product or meta.get("product")),
+        "product": product,
         "avatar": avatar or meta.get("avatar"),
         "run": rel, "lane": lane,
         "title": title or run.name,
@@ -541,7 +617,8 @@ def open_lane(run, brand, reg, product=None, avatar=None, kind=None):
         "swipe": {},                        # the image lane's shape, so its readers
         "declares": {},                     # read a lane row without tripping
         "stages": [],
-        "status": "for-review",
+        "status": "draft",
+        "state": "for-review",
         "ads": [],
     }
     save(reg)
@@ -575,8 +652,8 @@ def open_brief(run_name, brand, reg=None, product=None, avatar=None, kind=None):
         sys.exit(f"{run_name} has no 06-brief.md — a brief id is for a "
                  f"finished brief, not a run in progress")
 
-    new = next_id(reg, brand, kind)
-    bid = key(new)                    # the register key stays the old code
+    new = next_id(reg, brand, kind, product)
+    bid = new_key(brand, product, new)  # brand_product_brief-NNNN; old pNNN keys stay as they are
     reg["briefs"][bid] = {
         "id": bid,
         "brief": new,
@@ -592,7 +669,8 @@ def open_brief(run_name, brand, reg=None, product=None, avatar=None, kind=None):
                   "drive": src.get("drive"), "why": src.get("why")},
         "declares": fields,           # problem / angle / concept, as stage 6 wrote them
         "stages": sorted(stages),
-        "status": "for-review",       # for-review -> approved -> in-production
+        "status": "draft",            # rule 6: draft / approved / deprecated only
+        "state": "for-review",        # for-review -> approved -> in-production
         "ads": [],                    # ad names that carry this brief id
     }
     save(reg)
@@ -604,13 +682,13 @@ def open_brief(run_name, brand, reg=None, product=None, avatar=None, kind=None):
     return bid, reg["briefs"][bid]
 
 
-def set_links(reg, any_id, links):
+def set_links(reg, any_id, links, brand=None, product=None):
     """Record the landing page(s) a brief sends people to, by catalog link id
     (`links`: a list of ids, kept in order, never duplicated). The hand-off
     reads them from here, so a clipper, creator or email hand-off needs no
     sidecar (2026-10-01). The id is checked against the catalog by the
     hand-off, not here — this file does not read the catalog."""
-    k, rec = get(reg, any_id)
+    k, rec = get(reg, any_id, brand, product)
     if rec is None:
         sys.exit(f"no brief {any_id}")
     have = [x if isinstance(x, str) else (x or {}).get("id") for x in rec.get("links") or []]
@@ -619,6 +697,34 @@ def set_links(reg, any_id, links):
             have.append(l)
     rec["links"] = [x for x in have if x]
     return k, rec
+
+
+def with_landing(bid, brand, product=None, fetch=None):
+    """The landing page, chosen when the brief is written (the owner, 2 Oct 2026).
+    For a brief with no page yet: components/naming/page_pick.py picks one by
+    product, offer and the swipe's page type, checks it answers 200, and it is
+    written onto the record as `landing_page` (with its why) and `links` — the
+    field the hand-off already reads. A brief that has links keeps them. Never
+    fatal: a pick that fails leaves the brief as it was and says so."""
+    try:
+        import page_pick as PP
+        reg = load()
+        k, rec = get(reg, bid, brand, product)
+        if rec is None or rec.get("landing_page") or rec.get("links"):
+            return rec, None
+        lp = PP.pick(brand, reg_rec=rec, header=None, product=product or rec.get("product"), fetch=fetch)
+        rec["landing_page"] = lp
+        if lp.get("link_ids"):
+            rec["links"] = list(lp["link_ids"])
+        save(reg)
+        return rec, lp
+    except Exception as e:                       # noqa: BLE001 — the brief is opened either way
+        return None, {"link_ids": [], "why": f"page pick failed: {str(e)[:160]}"}
+
+
+def say_landing(lp):
+    if lp is not None:
+        print(f"  landing page: {', '.join(lp.get('link_ids') or []) or 'NONE'} — {lp.get('why')}")
 
 
 def main():
@@ -631,9 +737,14 @@ def main():
     o.add_argument("--link", action="append", default=[],
                    help="catalog link id of the landing page this brief sends people to (repeatable)")
     lk = sub.add_parser("link"); lk.add_argument("id"); lk.add_argument("links", nargs="+")
+    ld = sub.add_parser("landing"); ld.add_argument("ids", nargs="+"); ld.add_argument("--brand", required=True)
+    ld.add_argument("--product")
     s = sub.add_parser("show"); s.add_argument("id")
     n = sub.add_parser("next"); n.add_argument("--brand", required=True)
+    n.add_argument("--product", help="numbers count per brand AND product (the owner, 2026-10-01)")
     n.add_argument("--type", default=DEFAULT_TYPE, choices=TYPES)
+    for p in (lk, s):
+        p.add_argument("--brand"); p.add_argument("--product")
     sub.add_parser("migrate")
     sub.add_parser("check")
     a = ap.parse_args()
@@ -644,27 +755,42 @@ def main():
             d = r.get("declares", {})
             # A reserved id has no run — it predates the register.
             run = r["run"] or "(before the register)"
-            print(f"{N.brief_id(bid)}  {bid:<5} {r['opened']:<20} {r['brand']:<8} {r['status']:<13} "
+            print(f"{r.get('brief') or N.brief_id(bid)}  {bid:<5} {r['opened']:<20} {r['brand']:<8} {lifecycle(r):<13} "
                   f"{run:<34} angle={d.get('angle') or '—'}")
     elif a.cmd == "open":
         bid, rec = open_brief(a.run, a.brand, reg, a.product, a.avatar, a.type)
+        lp = None
         if a.link:
             reg = load()
             bid, rec = set_links(reg, bid, a.link)
             save(reg)
-        print(f"{rec.get('brief', N.brief_id(bid))}  ({bid})  {rec['run']}  ({rec['status']})")
+        else:
+            _, lp = with_landing(bid, a.brand, a.product)
+        print(f"{rec.get('brief', N.brief_id(bid))}  ({bid})  {rec['run']}  ({lifecycle(rec)})")
+        say_landing(lp)
+    elif a.cmd == "landing":
+        for i in a.ids:
+            rec, lp = with_landing(i, a.brand, a.product)
+            print(f"{i}: " + ("already has " + ", ".join(rec.get("links") or []) if lp is None and rec else ""))
+            say_landing(lp)
     elif a.cmd == "show":
-        k, rec = get(reg, a.id)
+        try:
+            k, rec = get(reg, a.id, a.brand, a.product)
+        except N.AmbiguousBrief as e:
+            sys.exit(str(e))
         print(json.dumps(rec or f"no brief {a.id}", indent=1))
     elif a.cmd == "next":
-        print(next_id(reg, a.brand, a.type))
+        print(next_id(reg, a.brand, a.type, a.product))
     elif a.cmd == "migrate":
         n = stamp(reg)
         if n:
             save(reg)
         print(f"{n} entries stamped with id + brief · {len(reg['briefs'])} briefs")
     elif a.cmd == "link":
-        k, rec = set_links(reg, a.id, a.links)
+        try:
+            k, rec = set_links(reg, a.id, a.links, a.brand, a.product)
+        except N.AmbiguousBrief as e:
+            sys.exit(str(e))
         save(reg)
         print(f"{rec.get('brief', N.brief_id(k))}  links: {', '.join(rec['links'])}")
     elif a.cmd == "check":

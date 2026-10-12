@@ -5,21 +5,26 @@
 
 Deliberately narrow: the full creator-ingest component builds a dossier with
 transcripts and comments. This wants one still image and its permalink, and
-nothing else. Reads APIFY_TOKEN from ~/.apify.env.
+nothing else. Reads APIFY_TOKEN by name through components/keys
+(tools/it_keys.py) — the environment, then, off the mini, the old places
+(~/.apify.env among them) the loader names.
 
 Media never enters a git repo — point --out at an ignored folder.
 """
 import argparse, json, sys, urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import it_keys  # noqa: E402  SI-194 (readers use loader)
+
 BASE = "https://api.apify.com/v2"
 
 
 def token():
-    for line in (Path.home() / ".apify.env").read_text().splitlines():
-        if line.startswith("APIFY_TOKEN="):
-            return line.split("=", 1)[1].strip()
-    sys.exit("APIFY_TOKEN not found in ~/.apify.env")
+    tok = it_keys.key("APIFY_TOKEN")
+    if not tok:
+        sys.exit(it_keys.missing("APIFY_TOKEN"))
+    return tok
 
 
 def run_actor(tok, actor, payload, timeout=300):

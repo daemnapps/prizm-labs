@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The framework bank — every swipe's doctrine read, on one shelf.
 
-Damon's ruling, 2026-09-18: "every time we run a swipe, we'll run it through a
+the owner's ruling, 2026-09-18: "every time we run a swipe, we'll run it through a
 marketing doctrine step too so we have full awareness of it and can clearly
 identify the unique framework of that video and bank it for later." Stage 1c
 does the reading, one run at a time; this is the shelf those readings land on,
@@ -26,7 +26,7 @@ wrong.
 `--promote` is the one command here that writes somewhere else: it copies the
 framework a run OBSERVED (its doctrine.json) into
 components/marketing-doctrine/ad-frameworks.json as a new row, status
-'seed', source 'observed — <label>'. Run it ONLY on Damon's own word — the
+'draft' and state 'seed', source 'observed — <label>'. Run it ONLY on the owner's own word — the
 bank compiles what ran, ad-frameworks.json is curated doctrine, and the two
 must never quietly become the same file. A run compose.py opened (its
 doctrine.json is marked `composed: true`) has nothing observed to promote and
@@ -85,11 +85,13 @@ FILTERS = {
 
 
 def runs_root(override=None):
-    """Where the runs live. The machine's own `runs/` unless told otherwise —
-    which is what makes this testable against a temp tree."""
+    """Where the runs live. The machine's working folder,
+    runs/video-teardown/_work/ (workdir.py), unless told otherwise — which is
+    what makes this testable against a temp tree."""
     if override:
         return Path(override).expanduser().resolve()
-    return MACHINE / "runs"
+    import workdir
+    return workdir.root()
 
 
 def _text(v):
@@ -139,7 +141,7 @@ def _techniques(doc):
 def run_link(run_dir, state):
     """Where a person goes to see this run.
 
-    A path is not a link (Damon's rule), so the finished document wins when
+    A path is not a link (the owner's rule), so the finished document wins when
     the run has one and the creator's folder is next. The local folder is the
     last resort and goes out as a `file://` url, which opens from the page."""
     for key in ("gdoc_url", "creator_folder"):
@@ -429,12 +431,12 @@ def find_run(label, root=None):
 
 def promote(label, root=None):
     """Copy the framework a run OBSERVED (its doctrine.json) into
-    ad-frameworks.json as a new row: status 'seed', source
+    ad-frameworks.json as a new row: status 'draft', state 'seed', source
     'observed — <label>'. Re-promoting the same label updates that row in
     place rather than duplicating it — the label is the identity, not the id.
 
     This function is the mechanics only; the CLI's help text is the gate —
-    a session runs it on Damon's word, never on its own initiative.
+    a session runs it on the owner's word, never on its own initiative.
 
     -> (row, note) on success. Raises ValueError, naming the run, on any
     refusal: no such run, a run that filed an error instead of a reading, a
@@ -515,14 +517,15 @@ def promote(label, root=None):
         "sophistication": [stage_id] if stage_id else [],
         "formats_fit": ["any"],
         "source": source,
-        "status": "seed",
+        "status": "draft",
+        "state": "seed",
         "ref": [],
     }
     ad["frameworks"] = ([row if f is existing else f for f in ad["frameworks"]]
                         if existing else ad["frameworks"] + [row])
     ad["updated"] = time.strftime("%Y-%m-%d")
     AD_FRAMEWORKS_PATH.write_text(
-        json.dumps(ad, indent=2, ensure_ascii=False) + "\n")
+        json.dumps(ad, indent=1, ensure_ascii=False) + "\n")
     return row, why
 
 
@@ -538,7 +541,8 @@ def main(argv=None):
     ap.add_argument("--promote", metavar="RUN-LABEL",
                     help="copy this run's OBSERVED framework into "
                          "components/marketing-doctrine/ad-frameworks.json "
-                         "as a new 'seed' row. RUN ONLY ON DAMON'S OWN "
+                         "as a new row, status 'draft', state 'seed'. "
+                         "RUN ONLY ON THE OWNER'S OWN "
                          "WORD — ad-frameworks.json is curated doctrine, "
                          "not a compiled shelf, and a session promotes into "
                          "it only when he has said to.")
@@ -551,7 +555,7 @@ def main(argv=None):
             print(f"REFUSED — {e}")
             return 1
         print(f"promoted '{args.promote}' -> ad-frameworks.json id "
-              f"'{row['id']}', status seed")
+              f"'{row['id']}', status draft, state seed")
         print(f"  sophistication: {row['sophistication'] or '(none matched — %s)' % why}")
         print(f"  sections: {', '.join(s['id'] for s in row['sections'])}")
         return 0

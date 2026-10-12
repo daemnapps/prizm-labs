@@ -1,0 +1,13 @@
+{
+ "_what": "The brand's core avatars, one row each. ids match the folder names under core-avatars/. sub_avatars lists the ids under <folder>/sub-avatars/ (file sub-NN-<id>.md, prefix dropped).",
+ "_status": "approved = a signed core avatar; candidate = not signed. Only the brand owner changes a status.",
+ "avatars": [
+  {
+   "id": "<avatar-id>",
+   "label": "<The Avatar Name>",
+   "folder": "core-avatars/<avatar-id>",
+   "status": "candidate",
+   "sub_avatars": []
+  }
+ ]
+}

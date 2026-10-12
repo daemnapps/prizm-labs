@@ -82,7 +82,9 @@
      "micro-drama",
      "testimonial-montage"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "aida",
@@ -154,7 +156,9 @@
     "formats_fit": [
      "any"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "bab",
@@ -222,7 +226,9 @@
      "demonstration",
      "single-presenter"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "story-testimonial",
@@ -312,7 +318,9 @@
      "single-presenter",
      "micro-drama"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "mechanism-led",
@@ -391,7 +399,9 @@
      "single-presenter",
      "expert-consult"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "us-vs-them",
@@ -472,7 +482,9 @@
      "expert-consult",
      "meme"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "direct-offer",
@@ -525,7 +537,9 @@
      "single-presenter",
      "meme"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "identification-only",
@@ -588,8 +602,13 @@
      "single-presenter",
      "testimonial-montage"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

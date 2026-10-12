@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Every prompt in the chain, verbatim, on one page.
 
-Damon reads prompts as a page, never as a file path. Rebuilt after any
+the owner reads prompts as a page, never as a file path. Rebuilt after any
 prompt change — if a prompt moved, this moved with it.
 """
 import html, re, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
+import workdir
 
-OUT = Path(__file__).resolve().parent / "prompts.html"
+OUT = workdir.system() / "prompts.html"
 
 CSS = """
 :root{--bg:#f7f6f3;--card:#fff;--line:#e5e1d9;--ink:#221f1a;--body:#39352e;
@@ -98,7 +99,8 @@ def main(argv=None):
             + f"<span class='file'>{html.escape(Path(s['prompt']).name)}</span></div>"
             f"<p class='blurb'>{html.escape(s.get('blurb',''))}</p>"
             f"<pre>{render(Path(s['prompt']).read_text())}</pre></div>")
-    parts.append(f"<footer>{len(stages)} prompts · components/video-teardown/prompts/</footer></div>")
+    parts.append(f"<footer>{len(stages)} prompts · tools/video-teardown/prompts/</footer></div>")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(parts), encoding="utf-8")
     print(f"{OUT}  ({len(stages)} prompts)")
 

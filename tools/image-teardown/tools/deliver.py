@@ -4,7 +4,7 @@
     deliver.py --brand <brand>            every brief for that brand
     deliver.py --briefs p005,p006         just these
 
-Damon, 2026-09-14, after seeing they existed only on the laptop: *"you need
+the owner, 2026-09-14, after seeing they existed only on the laptop: *"you need
 to go ahead and put the images together properly in Google Drive. Everything
 needs to be organized properly, and then the register entries."*
 
@@ -15,7 +15,7 @@ unshareable and unbacked.
 
 **One folder per brief, named by the thing that joins everything**:
 
-    <media>/image-teardown/<brand>/<brief id>/
+    the shared drive/image-teardown/<brand>/<brief id>/
         source.jpg     the competitor's ad this came from
         draft.png      the whole ad, for review
         brief.md       the brief itself, so the folder stands alone
@@ -33,12 +33,12 @@ HERE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(HERE / "tools"))
 import paths as _P
 WS = _P.REPO                      # the workspace, found by walking up — not counted
-sys.path.insert(0, str(WS / "tools/gdrive-creator"))      # team-only — not in the public kit
+sys.path.insert(0, str(WS / "components/gdrive-creator"))
 sys.path.insert(0, str(WS / "tools/video-teardown/machine"))
 sys.path.insert(0, str(HERE / "tools"))
 import briefs as B
 
-ROOT = ["lab", "damon", "image-teardown"]
+ROOT = [*_P.DRIVE_SUBDIR, "image-teardown"]
 
 
 def service():
@@ -54,35 +54,21 @@ def folder(engine, svc, name, parent):
 
 
 def drive_root(engine, svc):
-    d = svc.drives().list(fields="drives(id,name)").execute()["drives"]
-    name = os.environ.get("PRIZM_SHARED_DRIVE")         # your shared drive's name
-    shared = next((x for x in d if name and x["name"] == name), None)
-    if not shared:
-        sys.exit("set PRIZM_SHARED_DRIVE to a shared drive this account can reach")
-    node = shared["id"]
+    node = engine.shared_drive_id("Team Drive", svc)
+    if not node:
+        sys.exit("no 'Team Drive' shared drive reachable by this account")
     for part in ROOT:
         node = folder(engine, svc, part, node)
     return node
 
 
 def upload(svc, path: Path, parent, name=None):
-    from googleapiclient.http import MediaFileUpload
-    name = name or path.name
-    # Update in place if it is already there: a new id would break every link
-    # already handed out.
-    q = (f"'{parent}' in parents and name='{name}' and trashed=false")
-    hit = svc.files().list(q=q, fields="files(id)", supportsAllDrives=True,
-                           includeItemsFromAllDrives=True).execute()["files"]
-    media = MediaFileUpload(str(path), resumable=False)
-    if hit:
-        fid = svc.files().update(fileId=hit[0]["id"], media_body=media,
-                                 supportsAllDrives=True, fields="id").execute()["id"]
-    else:
-        fid = svc.files().create(body={"name": name, "parents": [parent]},
-                                 media_body=media, fields="id",
-                                 supportsAllDrives=True).execute()["id"]
-    svc.permissions().create(fileId=fid, body={"role": "reader", "type": "anyone"},
-                             supportsAllDrives=True).execute()
+    # Update in place if it is already there (a new id would break every link
+    # already handed out), and anyone with the link reads it — both the
+    # engine's, which also escapes the name in its query.
+    from gdrive_creator import engine
+    fid, _ = engine.upload_file(path, name or path.name, parent, svc=svc)
+    engine.share(fid, "reader", svc)
     return fid
 
 
@@ -147,7 +133,7 @@ def main():
         if drf:
             put["draft"] = upload(svc, drf, here, "draft.png")
             # THE ASSET: 9:16, the draft taped down in the middle, the strips
-            # painted (Damon, 2026-09-22 — every step that puts out a picture).
+            # painted (the owner, 2026-09-22 — every step that puts out a picture).
             # Made once beside the draft and reused; the draft is the content.
             asset = finished_9x16(drf)
             if asset:
@@ -156,7 +142,7 @@ def main():
         if bf.is_file():
             put["brief"] = upload(svc, bf, here, "brief.md")
 
-        # The work order and its prompts. Damon, 2026-09-14: *"What the hell
+        # The work order and its prompts. the owner, 2026-09-14: *"What the hell
         # does my designer do from here? … They're in Higgsfield mostly."*
         # The brief is the argument; this is the job. It travels with the
         # brief because the designer never opens the repo.

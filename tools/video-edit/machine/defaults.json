@@ -1,13 +1,164 @@
 {
  "_what": "The dials. A run's controls.json overrides any of these; nothing else changes how an edit behaves.",
- "canvas": {"width": 1080, "height": 1920, "fps": 30},
- "pace": {"value": "tight", "options": {"tight": {"max_pause": 0.25}, "normal": {"max_pause": 0.4}, "breathing": {"max_pause": 0.7}}, "what": "the longest silence left in the voice track"},
- "caption_look": {"value": "bold-highlight", "what": "a row id from looks/bank.json, or 'match-swipe' to copy the teardown's caption read"},
- "captions": {"value": "on", "options": ["on", "off"]},
- "sound": {"voice_db": 0, "music_db": -18, "sfx_db": -8, "sfx_lead_frames": 2, "what": "music sits 18 dB under the voice; a sound effect lands two frames before its picture"},
- "transition": {"value": "cut", "what": "a row id from looks/transitions.json; a hard cut is the default"},
- "stills": {"value": "drift", "what": "a still picture never sits frozen: slow push or drift, direction alternating"},
- "safe_zone": {"top_pct": 12, "bottom_pct": 25, "side_pct": 6, "what": "where the app's own buttons cover the frame; captions and overlays stay out"},
- "outputs": {"value": ["9x16"], "options": ["9x16", "4x5", "1x1"]},
- "quality": "delivery"
+ "canvas": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30
+ },
+ "pace": {
+  "value": "tight",
+  "options": {
+   "tight": {
+    "max_pause": 0.25
+   },
+   "normal": {
+    "max_pause": 0.4
+   },
+   "breathing": {
+    "max_pause": 0.7
+   }
+  },
+  "what": "the longest silence left in the voice track"
+ },
+ "pauses": {
+  "mark_from_s": 0.35,
+  "what": "every mid-clip pause this long or longer (and every one the pace dial cuts) is marked on the live timeline's Pauses lane, cut or kept, for the owner to review there (T-3, 23 Sep: no separate stop); shorter gaps are breaths and are always kept"
+ },
+ "caption_look": {
+  "value": "bold-highlight",
+  "what": "a row id from looks/bank.json, or 'match-swipe' to copy the teardown's caption read",
+  "by_format": {"song-ad": "word-box"},
+  "by_format_why": "a kit of that format starts on that look unless the run's controls.json names one (the owner, 2026-10-10: a song ad's captions box each sung word)"
+ },
+ "captions": {
+  "value": "on",
+  "options": [
+   "on",
+   "off"
+  ]
+ },
+ "sound": {
+  "voice_db": 0,
+  "music_db": -18,
+  "sfx_db": -8,
+  "sfx_lead_frames": 2,
+  "what": "music sits 18 dB under the voice and comes up to its gap level only where nobody speaks; a sound effect lands two frames before its picture; room tone sits under every trimmed join and every silent scene",
+  "music_gap_db": -10,
+  "duck_attack_s": 0.08,
+  "duck_release_s": 0.35,
+  "room_tone_db": -30,
+  "room_tone_pad_s": 0.2
+ },
+ "transition": {
+  "value": "cut",
+  "what": "a row id from looks/transitions.json; a hard cut is the default"
+ },
+ "stills": {
+  "value": "drift",
+  "what": "a still picture never sits frozen: slow push or drift, direction alternating"
+ },
+ "safe_zone": {
+  "top_pct": 15,
+  "bottom_pct": 35,
+  "side_pct": 6,
+  "right_pct": 15,
+  "what": "the strictest of the surfaces this piece runs on (safe_zones.surfaces × platform_surfaces) — where the app's own buttons cover the frame; captions and overlays stay out. Kept for rows that still carry a raw y_pct; every text layer now names a zone in looks/placement.json"
+ },
+ "outputs": {
+  "value": [
+   "9x16"
+  ],
+  "options": [
+   "9x16"
+  ],
+  "what": "9:16 only (the owner, 2026-09-23). No 4:5 or 1:1 file is ever made"
+ },
+ "quality": "delivery",
+ "mix": {
+  "lufs": -14,
+  "true_peak_db": -1,
+  "what": "the finished file is mastered to −14 LUFS integrated with peaks no higher than −1 dBTP"
+ },
+ "grade": {
+  "value": "phone-natural",
+  "what": "a row id from looks/grades.json — one grade over the whole picture, never over the text"
+ },
+ "safe_zones": {
+  "9x16": {
+   "top_pct": 15,
+   "bottom_pct": 35,
+   "side_pct": 6,
+   "right_pct": 15
+  },
+  "content_4x5": {
+   "top_pct": 14.84,
+   "bottom_pct": 14.84,
+   "what": "the 22 Sep rule: the 9:16 frame is generated with its content in the centred 4:5 band (1080×1350 of 1080×1920) — nothing that matters sits above 14.84% or below 85.16%"
+  },
+  "surfaces": {
+   "tiktok": {
+    "top_pct": 8,
+    "bottom_pct": 25,
+    "left_pct": 5,
+    "right_pct": 14,
+    "what": "top: Following / For You bar and search; bottom: handle, caption, sound line and the ad's CTA button; right: avatar, like, comment, save, share rail"
+   },
+   "instagram-reels": {
+    "top_pct": 10,
+    "bottom_pct": 22,
+    "left_pct": 5,
+    "right_pct": 13,
+    "what": "top: Reels title and camera; bottom: handle, caption, audio; right: like, comment, share, more"
+   },
+   "meta-reels-ads": {
+    "top_pct": 14,
+    "bottom_pct": 35,
+    "left_pct": 6,
+    "right_pct": 13,
+    "what": "Meta's own guidance for Reels ads: keep the top 14% and bottom 35% free of text and logos — the sponsored label, CTA button and ad copy sit there; right: the reel's icon rail"
+   },
+   "youtube-shorts": {
+    "top_pct": 10,
+    "bottom_pct": 27,
+    "left_pct": 5,
+    "right_pct": 15,
+    "what": "top: search and menu; bottom: channel, title, subscribe and product shelf; right: like, dislike, comment, share, remix rail"
+   },
+   "meta-stories": {
+    "top_pct": 14,
+    "bottom_pct": 20,
+    "left_pct": 6,
+    "right_pct": 6,
+    "what": "Meta's Stories guidance: 14% top (profile, progress bar) and 20% bottom (reply bar / CTA) free"
+   }
+  },
+  "what": "9:16 only (the owner, 2026-09-23: \"I do not want 4:5 or 1:1 videos at all\"). Per platform surface, measured from each app's own layout — approximate, draft, re-measure when an app changes. The edit uses the strictest of the surfaces in platform_surfaces; every zone in looks/placement.json sits inside it and inside the content 4:5 band"
+ },
+ "cutdowns": {
+  "value": [
+   15,
+   30,
+   60
+  ],
+  "options": [
+   15,
+   30,
+   60
+  ],
+  "what": "seconds; the lowest-priority whole scenes come out first, a line is never cut mid-scene, priority 1 and the opener never come out"
+ },
+ "platform_surfaces": {
+  "value": [
+   "tiktok",
+   "instagram-reels"
+  ],
+  "options": [
+   "tiktok",
+   "instagram-reels",
+   "meta-reels-ads",
+   "youtube-shorts",
+   "meta-stories"
+  ],
+  "what": "the feeds this piece will run in; the safe box is the strictest of them. Organic by default (the owner, 2026-09-23: organic posts, not ads) — add meta-reels-ads etc. only for a paid run"
+ }
 }

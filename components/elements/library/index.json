@@ -1,5 +1,5 @@
 {
- "built_from": "components/elements/sources.json + additions.json",
+ "built_from": "components/elements/sources.json + additions.json + decisions.json",
  "lists": [
   {
    "element": "delivery",
@@ -10,6 +10,10 @@
    "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
    "rows": 2,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -19,8 +23,12 @@
    "source": "components/marketing-doctrine/delivery.json › delivery_style",
    "enforced_by": "the copywriter and the video teardown read it; nothing refuses an unknown value",
    "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
-   "rows": 12,
-   "approved": 0,
+   "rows": 13,
+   "approved": 1,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -32,6 +40,10 @@
    "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
    "rows": 7,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -43,6 +55,10 @@
    "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
    "rows": 5,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -54,6 +70,10 @@
    "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
    "rows": 6,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -65,6 +85,10 @@
    "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
    "rows": 6,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -76,6 +100,10 @@
    "note": null,
    "rows": 5,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -87,6 +115,10 @@
    "note": null,
    "rows": 15,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -98,6 +130,10 @@
    "note": null,
    "rows": 5,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -109,6 +145,10 @@
    "note": null,
    "rows": 7,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -116,10 +156,14 @@
    "asset": "carousel",
    "file": "library/format.carousel.json",
    "source": "components/elements/sources.json (inline)",
-   "enforced_by": null,
-   "note": "No carousel format list exists anywhere yet.",
-   "rows": 0,
+   "enforced_by": "intake (kind carousel → format/carousel)",
+   "note": "First carousel list, 2026-09-28 (Master Plan v2, 3.1) — proposed from the carousel swipes on file: 4 organic TikTok photo posts (intake 2026-09-20) and 4 Instagram carousels in the owner's saves (2026-09-22). Held inline until a carousel tool owns it. image-teardown's sequence lane reads a carousel slide by slide.",
+   "rows": 6,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -131,6 +175,10 @@
    "note": null,
    "rows": 4,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -142,17 +190,27 @@
    "note": "The seed every brand copies; a brand's own email/email-types.json may add types.",
    "rows": 46,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
    "element": "format",
    "asset": "image",
    "file": "library/format.image.json",
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "enforced_by": null,
    "note": null,
-   "rows": 26,
-   "approved": 0,
+   "rows": 46,
+   "approved": 12,
+   "aliases": 39,
+   "dropped": [
+    "mixed"
+   ],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -164,6 +222,10 @@
    "note": "Held as code in components/naming/classify_pages.py; listed here as rows.",
    "rows": 10,
    "approved": 0,
+   "aliases": 2,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -173,8 +235,12 @@
    "source": "ai-video-production/formats/bank.json",
    "enforced_by": "the AI video machine's preflight; the second door (compose.py)",
    "note": null,
-   "rows": 9,
+   "rows": 15,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -186,6 +252,10 @@
    "note": null,
    "rows": 8,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -197,6 +267,10 @@
    "note": "Where a piece runs — Meta primary text, a subject line, a landing page. Separate from format: the same format can run in several placements.",
    "rows": 16,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -206,30 +280,42 @@
    "source": "swipe-organic/formats.json",
    "enforced_by": null,
    "note": "Sorted automatically from organic swipes (swipe-organic formats.py). Most rows are unreviewed.",
-   "rows": 50,
-   "approved": 0,
+   "rows": 52,
+   "approved": 1,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
    "element": "style",
    "asset": "caption",
    "file": "library/style.caption.json",
-   "source": "video-edit/looks/bank.json",
+   "source": "tools/video-edit/looks/bank.json",
    "enforced_by": "the video edit's gate (cutsheet.py) refuses a caption look that is not a row",
    "note": "Caption looks — how the words on screen look and move. A setting, never a re-edit.",
-   "rows": 3,
+   "rows": 4,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
    "element": "style",
    "asset": "image",
    "file": "library/style.image.json",
-   "source": "image-production/style-packs.json",
+   "source": "tools/image-production/style-packs.json",
    "enforced_by": "image production; image teardown stage 6",
    "note": null,
    "rows": 8,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -240,7 +326,11 @@
    "enforced_by": null,
    "note": "The style bank (2026-09-20). Nothing refuses an unknown style yet — the variation chain should read this list next.",
    "rows": 32,
-   "approved": 0,
+   "approved": 1,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
@@ -252,17 +342,25 @@
    "note": null,
    "rows": 1,
    "approved": 1,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   },
   {
    "element": "template",
    "asset": "image",
    "file": "library/template.image.json",
-   "source": "image-production/templates/*.json",
+   "source": "tools/image-production/templates/*.json",
    "enforced_by": "image production's renderer",
    "note": null,
    "rows": 5,
    "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
    "duplicates": []
   }
  ]

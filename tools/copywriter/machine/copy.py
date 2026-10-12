@@ -10,11 +10,11 @@ captions, headlines). Stages 0-9, all Claude, all text. Makes no pictures.
     python3 copy.py <source.md> --brand <brand> --product <...> \
         --label <name> --rerun-from stage8                          # keeps 0-7
 
-Runs file at the repo root: runs/copy-machine/<brand>/<label>/ (paths.py).
+Runs file at the repo root: runs/copywriter/<brand>/<label>/ (paths.py).
 
 A prompt file per stage (prompts/, highest -vN- wins), {fields} substituted
 from the brand's own files, everything under the operator's own `claude`
-login. Lives in components/copywriter since 2026-09-19; reads brands/<brand>/
+login. Lives in tools/copywriter since 2026-09-19; reads brands/<brand>/
 and never writes there.
 
 Gates: formats are checked against the element library before anything runs;
@@ -64,7 +64,7 @@ DEFAULT_MODEL = "claude-opus-5"
 RUN_TIERS = dict(TIERS)          # --tier NAME=MODEL edits this copy, per run
 
 # --rerun-from <stage>: every stage before it is read back from the run folder
-# instead of bought again (same rule as components/email-production/email.py).
+# instead of bought again (same rule as tools/email-production/email.py).
 RERUN_FROM = None
 # --dry-run: a list the stages report into instead of calling a model.
 DRY = None
@@ -73,12 +73,12 @@ DRY_MARK = "[DRY RUN — this stage's output does not exist yet]"
 # The chain's shape, in one place. board.py reads this too, so the page and
 # the runner can never disagree about what a stage is called or what it does.
 # `group` is the phase heading the board prints above a run of stages.
-# Rebuilt 2026-08-25 against the video machine's chain, on Damon's call. The
+# Rebuilt 2026-08-25 against the video machine's chain, on the owner's call. The
 # old shape (concept brief → bank match → write → compliance → brief) was
-# invented; this one mirrors components/video-teardown/machine/chain.py stage for
+# invented; this one mirrors tools/video-teardown/machine/chain.py stage for
 # stage, because that chain already solved the same problem properly.
 #
-# Two things gone: COMPLIANCE (Damon's ruling — pricing and offer are a
+# Two things gone: COMPLIANCE (the owner's ruling — pricing and offer are a
 # separate concern, not a copy-writing stage) and BANK MATCH (dissolved: a
 # piece of existing copy is a SOURCE to swipe, not a thing to match against).
 # One thing added that the old shape never had: SPEC, the brand-free
@@ -119,6 +119,16 @@ STAGES = [
     dict(key="stage8", tier="designs", id="8", name="Render", group="WRITE THE COPY",
          label="render",
          blurb="Turns the argument into the actual copy, in each requested format, ready to paste."),
+    # Read-back and copy check (the owner, 2026-10-09: "it doesn't look like it actually gets spice or levels of
+    # humanization like I have with the video scripts … the copy needs to run through a check as well … it feels
+    # very, very staccato … real people read it and can visualize what's being read"). 8b rewrites for a reader,
+    # 8c is a fresh reader that never saw 8b's reasoning: pass, or one more 8b with its notes, or HELD.
+    dict(key="stage8b", tier="designs", id="8b", name="Read-back", group="WRITE THE COPY",
+         label="readback",
+         blurb="The copy rewritten for the person reading it: full sentences, a picture, on the product, the spice."),
+    dict(key="stage8c", tier="checks", id="8c", name="Copy check", group="WRITE THE COPY",
+         label="copycheck",
+         blurb="A reader who did not write it reads it cold: sentences, picture, on product, a person — pass or fail."),
     dict(key="stage9", tier="reads", id="9", name="Brief", group="WHAT SHIPS",
          label="brief",
          blurb="The one document a media buyer opens."),
@@ -247,7 +257,7 @@ def claude(prompt_text, model, label=None):
 def link_video(src, out_dir):
     """Put the source video where the board can play it, without copying it.
 
-    Damon's note, 2026-08-25: "when we're saying the copy pairs with this
+    the owner's note, 2026-08-25: "when we're saying the copy pairs with this
     video, we need to actually have the preview of the video very clear." A
     filename is not a preview — he has to see the thing the copy runs
     against, next to the copy.
@@ -366,7 +376,7 @@ def check_formats(wanted, brand_root=None):
 def live_prices(offer_bank_text):
     """Every price the brand's offer bank sells today, normalised to cents so
     `$49` in the copy and `$49.00` in the bank are the same price."""
-    import quality_checks as Q
+    import marketing_chain_checks as Q
     return {f"{float(p):.2f}" for p in Q.prices_in(offer_bank_text)}
 
 
@@ -378,10 +388,10 @@ def copy_gate(render_text, offer_bank_text, out_dir=None):
                       UNFILLED note
       price_check     every price in the copy is one the brand's offer bank
                       sells today. A run has no single offer key, so the copy
-                      is held to ALL live prices in offers/offer-bank.md.
+                      is held to ALL live prices in products/offer-bank.md.
 
-    Writes check.json via hold(); raises quality_checks.Held on a failure."""
-    import quality_checks as Q
+    Writes check.json via hold(); raises marketing_chain_checks.Held on a failure."""
+    import marketing_chain_checks as Q
     cut = re.search(r"^#{1,3}\s*CHECKS\b", render_text or "", re.M)
     finished = (render_text[:cut.start()] if cut else (render_text or "")).rstrip()
     said = " ".join("$" + f"{float(p):.2f}" for p in sorted(Q.prices_in(finished)))
@@ -449,6 +459,134 @@ def dry_stage(stage, model, fields, note=None):
     return f"{DRY_MARK} ({stage})"
 
 
+def creative_qc(tool, stage, run_dir, output, given=None, items=None):
+    """THE CREATIVE QC LOOP (the owner, 2026-10-02: "installed for each of my
+    production tools … for all stages in the creation process"): the output is
+    reviewed against what it was given and the stage's bars
+    (components/quality-checks/definitions/stages.json); the round is filed in
+    <run>/qc-log/. Never stops the run on its own."""
+    try:
+        here = Path(__file__).resolve()
+        comp = next(p for p in here.parents if (p / "quality-checks" / "marketing_chain_checks").is_dir())
+        q = str(comp / "quality-checks")
+        if q not in sys.path:
+            sys.path.insert(0, q)
+        from marketing_chain_checks import review
+        f = review.after_stage(tool, stage, run_dir, output=output, items=items,
+                               sources=[given] if given and Path(given).exists() else None)
+        bad = [k for k, v in f.items() if isinstance(v, dict) and v.get("severity") in ("BLOCKER", "FIX")]
+        if bad:
+            print(f"  QC {stage}: {len(bad)} finding(s) — see qc-log/QC-LOG.md")
+        return f
+    except Exception as e:
+        print(f"  QC {stage}: review not run ({type(e).__name__})")
+        return {}
+
+
+def clean_copy(text):
+    """The finished copy block of a read-back: from its first bold **FORMAT: line to the end."""
+    m = re.search(r"^\*\*`?FORMAT:", text or "", re.M)
+    return (text[m.start():] if m else text or "").strip()
+
+
+def _verdict(text):
+    try:
+        m = re.search(r"\{.*\}", text or "", re.S)
+        return json.loads(m.group(0)) if m else {}
+    except ValueError:
+        return {}
+
+
+KEEP_AT_LEAST = 3          # the card carries three primary texts (meta-upload card_words.CAP)
+
+
+def keep_passing(copy, v):
+    """The copy with only what the reader passed: failing bodies, headlines and descriptions are cut, a format left
+    with no body loses its heading. Returns (copy, primary kept, headlines kept, descriptions kept)."""
+    ok = lambda rows: {(r.get("n") or i + 1) for i, r in enumerate(rows or []) if r.get("pass")}
+    ok_p, ok_h, ok_d = ok(v.get("primary")), ok(v.get("headlines")), ok(v.get("descriptions"))
+    head = re.search(r"^\*\*HEADLINES\*\*", copy, re.M)
+    bodies_part, tail = (copy[:head.start()], copy[head.start():]) if head else (copy, "")
+    out, n = [], 0
+    for fmt in re.split(r"(?=^\*\*`?FORMAT:)", bodies_part, flags=re.M):
+        if not fmt.strip():
+            continue
+        parts = re.split(r"(?=^\*\*BODY [A-Z]\*\*)", fmt, flags=re.M)
+        kept = []
+        for b in parts[1:]:
+            n += 1
+            if n in ok_p:
+                kept.append(b)
+        if kept:
+            out.append(parts[0] + "".join(kept))
+    def numbered(section, keep):
+        m = re.search(r"^\*\*" + section + r"\*\*\s*\n(.*?)(?=^\*\*[A-Z]+\*\*|\Z)", tail, re.M | re.S)
+        rows = re.findall(r"^\s*(\d+)\.\s*(.+)$", m.group(1), re.M) if m else []
+        rows = [t for i, t in rows if int(i) in keep]
+        return rows, f"**{section}**\n\n" + "\n".join(f"{i}. {t}" for i, t in enumerate(rows, 1))
+    hl, h_txt = numbered("HEADLINES", ok_h)
+    ds, d_txt = numbered("DESCRIPTIONS", ok_d)
+    body = "".join(out).rstrip()
+    return (body + "\n\n" + h_txt + "\n\n" + d_txt).strip(), len([x for x in range(1, n + 1) if x in ok_p]), len(hl), len(ds)
+
+
+def _clear_hold(out_dir):
+    """A new read-back starts clean: an earlier run's copy-check hold in check.json is not this run's verdict."""
+    f = out_dir / "check.json"
+    try:
+        c = json.loads(f.read_text())
+    except (OSError, ValueError):
+        return
+    if c.get("gate") == "copy check":
+        for k in ("held", "gate", "why"):
+            c.pop(k, None)
+        f.write_text(json.dumps(c, indent=1)) if c else f.unlink()
+
+
+def read_back(out_dir, model, state, *, render, save, **fields):
+    """8b then 8c; a failing check gets one more 8b with the reader's notes, then HELD (exit 2 like the copy gate).
+    Returns the copy every later step reads."""
+    _clear_hold(out_dir)
+    notes = ""
+    for attempt in (1, 2):
+        rb = run_stage("stage8b", out_dir, model, state, render=render, reader_notes=notes or "none — first read", **fields)
+        copy = clean_copy(rb)
+        chk = run_stage("stage8c", out_dir, model, state, copy=copy, product_file=fields.get("product_file", ""))
+        v = _verdict(chk)
+        fails = [p for p in v.get("primary") or [] if not p.get("pass")] + \
+                [h for h in (v.get("headlines") or []) + (v.get("descriptions") or []) if not h.get("pass")]
+        state["read_check"] = {"attempt": attempt, "passed": bool(v) and not fails, "fix": v.get("fix", ""),
+                               "failing": len(fails)}
+        save()
+        if v and not fails:
+            (out_dir / "final--copy.md").write_text(copy + "\n")
+            print(f"     copy check: pass (attempt {attempt})")
+            return copy
+        notes = v.get("fix") or "the reader could not be read back — write it again for the person reading it"
+        print(f"     copy check: {len(fails) or 'no'} failing — {notes[:160]}")
+        if v and attempt == 2:                            # the second read: what passed ships, what failed never does
+            kept, np_, nh, nd = keep_passing(copy, v)
+            if np_ >= KEEP_AT_LEAST and nh and nd:
+                (out_dir / "final--copy.md").write_text(kept + "\n")
+                state["read_check"].update(passed=True, kept={"primary": np_, "headlines": nh, "descriptions": nd})
+                save()
+                print(f"     copy check: kept the {np_} text(s), {nh} headline(s), {nd} description(s) the reader "
+                      f"passed; the {len(fails)} that failed are cut")
+                return kept
+        if attempt == 1:                                  # a fresh 8b and 8c: the kept files are this run's own
+            for k in ("stage8b", "stage8c"):
+                f = out_dir / f"{k}--{SPEC[k]['label']}.md"
+                if f.exists():
+                    f.rename(out_dir / f"{k}--{SPEC[k]['label']}.r1.md")
+    state["gate"] = {"copy": "HELD", "problems": [f"the copy check failed twice: {notes}"]}
+    (out_dir / "check.json").write_text(json.dumps({"held": True, "gate": "copy check", "why": notes}, indent=1))
+    save()
+    print(f"\nHELD at the copy check: {notes}\nNothing reaches a card from this run. Fix the brief or the "
+          "prompts, then rerun with --rerun-from stage8b.")
+    _rebuild_board()
+    sys.exit(2)
+
+
 def run_stage(stage, out_dir, model, state, **fields):
     """`model` is a FORCED model (today's `--model X`), or None to let the
     stage's tier pick one."""
@@ -472,6 +610,15 @@ def run_stage(stage, out_dir, model, state, **fields):
         return saved.read_text().strip()
     prompt_file = latest_prompt(stage)
     filled = fill(prompt_file.read_text(), fields)
+    # >>> APPROVAL-PAGE LEARNINGS HOOK (components/meta-upload/learnings.py) — adds nothing unless learnings-hooks.json turns "copywriter" on
+    try:
+        import importlib.util as _iu
+        _ls = _iu.spec_from_file_location("meta_learnings", Path(__file__).resolve().parents[3] / "components" / "meta-upload" / "learnings.py")
+        _L = _iu.module_from_spec(_ls); _ls.loader.exec_module(_L)
+        if stage == "stage8": filled += _L.prompt_block("copywriter", 4, state.get("brand"))
+    except Exception:
+        pass
+    # <<< APPROVAL-PAGE LEARNINGS HOOK
     # The tier proposes, the measured prompt decides (run_kit.model.pick): a
     # small-window model handed a prompt past its window dies with an empty
     # stderr, so size escalates it. A forced model is never second-guessed.
@@ -490,6 +637,7 @@ def run_stage(stage, out_dir, model, state, **fields):
 
     out_path = out_dir / f"{stage}--{spec['label']}.md"
     out_path.write_text(output + "\n")
+    creative_qc("copywriter", stage, out_dir, out_path, sent_path)
     state["stages"][stage] = {
         "status": "done",
         "seconds": seconds,
@@ -521,6 +669,10 @@ def main(argv=None):
     ap.add_argument("--video", default=None,
                     help="an mp4 of the source, so the board can play it. "
                          "Defaults to one found next to the source.")
+    ap.add_argument("--ad", default=None,
+                    help="the finished ad this copy runs beside (a .md: its story, person, what is seen and said, "
+                         "its openings) — the source stays the proven framework, the ad supplies the nuance "
+                         "(the owner, 4 Oct 2026). Without it, the source is the only input, as before.")
     ap.add_argument("--hooks", default="5", help="how many hook variations beyond the control")
     ap.add_argument("--write-as", default="",
                     help="output format(s), comma-separated. Defaults to every format "
@@ -549,7 +701,7 @@ def main(argv=None):
                     help="skip the copy gate after stage 8 (prices + unfilled notes) on purpose")
     ap.add_argument("--brand-root", default=None,
                     help="tree holding brands/<brand>/ — defaults to the shared "
-                         "ai-workspace; point it elsewhere when brand context moves")
+                         "workspace; point it elsewhere when brand context moves")
     args = ap.parse_args(argv)
 
     import paths as P                    # this machine's own — see the note at the top
@@ -650,12 +802,12 @@ def main(argv=None):
     # to the conventional layout. Hardcoding one brand's folder shape is what
     # makes a tool work for exactly one brand.
     conventional = {
-        "avatar": "customer/avatar.md",
-        "language_bank": "customer/language-bank.md",
-        "offer_file": "offers/offer-bank.md",
+        "avatar": "customer-experience/avatar.md",
+        "language_bank": "customer-experience/language-bank.md",
+        "offer_file": "products/offer-bank.md",
     }
     declared = {}
-    # The brand's own map is the ONLY map (Damon, 2026-08-31): nothing
+    # The brand's own map is the ONLY map (the owner, 2026-08-31): nothing
     # brand-specific lives inside this machine. The map follows the
     # variables/ convention — one map per brand, PER SURFACE — so this
     # machine reads variables/copy.md and never email's or video's map.
@@ -738,6 +890,9 @@ def main(argv=None):
     print(f"copy chain: {label}  (brand={args.brand}, "
           f"model={args.model or 'by tier — ' + ', '.join(f'{k}={v}' for k, v in RUN_TIERS.items())})"
           + ("  [DRY RUN — nothing is spent, nothing is written]" if dry else ""))
+
+    the_ad = Path(args.ad).read_text() if args.ad else None
+    state["ad"] = args.ad
 
     # --- read the source ---------------------------------------------------
     import language as L
@@ -873,15 +1028,27 @@ def main(argv=None):
     # THE VIBE (2026-09-28): how the source feels, named at the read and
     # handed to every stage that writes — a funny source stays funny.
     vibe = vibe_of(record)
+    # HUMOR RULES v1 (the owner, 2026-10-06, "All six"): a straight source may take a
+    # planted joke only with a receipt from the room. The copy line has no
+    # culture-read stage of its own, so it says so plainly; the receipt it can
+    # use is the avatar's humor map. Both soft: missing never stops a run.
+    culture_read = ("NO CULTURE READ for this run (the copy line has no culture-read stage). "
+                    "Treat the source as carrying no named cultural reference; never invent one.")
+    # The avatar's CULTURE MAP (2026-10-06, renamed from the humor map: "it's
+    # more about the foundational way to identify these cultural nuances").
+    _cm = next((f for f in ((brand_root / "core-avatars" / avatar / n) for n in ("culture-map.md", "humor-map.md"))
+                if f.is_file()), None) if avatar else None
+    culture_map = (_cm.read_text() if _cm is not None else
+                   "NO CULTURE MAP for this avatar. Assume no shared reference and keep the copy straight.")
 
     spec = run_stage("stage2", out_dir, args.model, state,
                      today=today, triage=triage, record=record); save()
 
     # what the brand knows, and which of it THIS source needs
     always = {args.product,
-              f"brands/{args.brand}/customer/avatar.md",
-              f"brands/{args.brand}/customer/language-bank.md",
-              f"brands/{args.brand}/offers/offer-bank.md"}
+              f"brands/{args.brand}/customer-experience/avatar.md",
+              f"brands/{args.brand}/customer-experience/language-bank.md",
+              f"brands/{args.brand}/products/offer-bank.md"}
     scout = run_stage("stage1b", out_dir, args.model, state,
                       today=today, concept_brief=f"{triage}\n\n{spec}",
                       context_index=context.index(args.brand, always=always),
@@ -903,7 +1070,7 @@ def main(argv=None):
                           avatar=avatar_profile, language_bank=language_bank,
                           product_file=product_file, offer_file=offer_file,
                           brand_context=brand_context, brand_name=args.brand,
-                          vibe=vibe); save()
+                          vibe=vibe, culture_read=culture_read, culture_map=culture_map, the_ad=the_ad); save()
 
     placement = run_stage("stage4", out_dir, args.model, state,
                           today=today, triage=triage, injection=injection, spec=spec,
@@ -914,10 +1081,10 @@ def main(argv=None):
                       today=today, triage=triage, record=record, spec=spec,
                       injection=injection, placement=placement,
                       language_bank=language_bank, brand_context=brand_context,
-                      hook_count=args.hooks, vibe=vibe,
+                      hook_count=args.hooks, vibe=vibe, culture_read=culture_read, culture_map=culture_map,
                       awareness_levels=doctrine("awareness")); save()
 
-    # THE LIVE RESEARCH GATHERER (Damon, 2026-09-18: "the live research gatherer
+    # THE LIVE RESEARCH GATHERER (the owner, 2026-09-18: "the live research gatherer
     # runs in the copy machine too"). Resolved ONCE, here, because stages 6 and
     # 7 both read it and a second pull would be a second bill for the same
     # answer. The rooms are FOUND, not written down — nobody types a subreddit
@@ -966,7 +1133,7 @@ def main(argv=None):
                          offer_file=offer_file, language_bank=language_bank,
                          brand_context=brand_context,
                          sections=doctrine("sections"), techniques=doctrine("techniques"),
-                         vibe=vibe); save()
+                         vibe=vibe, culture_read=culture_read, culture_map=culture_map); save()
         if dry and lane is None and DRY and not DRY[-1].get("reused"):
             DRY[-1]["note"] = "runs only when triage reads the lane as ORGANIC — checked here either way"
     else:
@@ -984,7 +1151,7 @@ def main(argv=None):
                       placement=placement, product_file=product_file,
                       offer_file=offer_file, language_bank=language_bank,
                       brand_context=brand_context,
-                      offer_close=doctrine("offer-close"), vibe=vibe,
+                      offer_close=doctrine("offer-close"), vibe=vibe, culture_read=culture_read, culture_map=culture_map,
                       verification=doctrine("verification")); save()
 
     # --- write the copy ----------------------------------------------------
@@ -994,7 +1161,7 @@ def main(argv=None):
     state["channel"] = args.channel
     if not dry:
         print(f"     writing as: {args.write_as}  ({args.channel})")
-    # THE RECORD GOES TO RENDER (2026-08-31, Damon's finals). Stage 1 captures
+    # THE RECORD GOES TO RENDER (2026-08-31, the owner's finals). Stage 1 captures
     # the voice markers and calls them "the most load-bearing section on the
     # page" — and stage 8 was never given them. The writing stage had the
     # argument (injection, placement, hooks) and not the person, which is
@@ -1006,7 +1173,25 @@ def main(argv=None):
                        product_file=product_file, offer_file=offer_file,
                        language_bank=language_bank, brand_context=brand_context,
                        formats=formats, output_formats=args.write_as,
-                       channel=args.channel, vibe=vibe); save()
+                       channel=args.channel, vibe=vibe, culture_read=culture_read, culture_map=culture_map, the_ad=the_ad); save()
+
+    # READ-BACK + COPY CHECK (2026-10-09). The clean copy is the last block of 8b's output and is written to
+    # final--copy.md, which every card reader prefers over the stage 8 render (meta-upload card_words).
+    order = [x["key"] for x in STAGES]
+    past = RERUN_FROM and order.index(RERUN_FROM) > order.index("stage8c")   # --rerun-from stage9: nothing earlier bought
+    if past:
+        f = out_dir / "final--copy.md"
+        render = f.read_text().strip() if f.is_file() else render
+    elif not dry:
+        render = read_back(out_dir, args.model, state, render=render, product_file=product_file,
+                           brand_context=brand_context, record=record, the_ad=the_ad,
+                           language_bank=lang("render"), culture_read=culture_read, culture_map=culture_map,
+                           today=today, save=save)
+    else:  # a dry run checks both new stages' fields
+        for k in ("stage8b", "stage8c"):
+            run_stage(k, out_dir, args.model, state, render=render, product_file=product_file,
+                      brand_context=brand_context, record=record, the_ad=the_ad, language_bank=lang("render"),
+                      culture_read=culture_read, culture_map=culture_map, today=today, copy=render, reader_notes="")
 
     # THE COPY GATE (2026-09-20) — see copy_gate(). A held run keeps every
     # file it made and says why; what it does NOT get is the brief, because
@@ -1018,7 +1203,7 @@ def main(argv=None):
         state["gate"] = {"copy": "skipped on purpose (--no-gate)"}
         print("     copy gate: SKIPPED (--no-gate)")
     else:
-        import quality_checks as Q
+        import marketing_chain_checks as Q
         try:
             copy_gate(render, offer_file, out_dir)
             state["gate"] = {"copy": "pass"}

@@ -13,17 +13,19 @@ register, pacing, reference world and what gets avoided: {delivery}
 Here is the list of video formats, each with its id: {video_formats}
 Here is the list of video structures, each with its id: {video_structures}
 
-*v3 (live 2026-09-20, on Damon's word): two new labelled lines, FORMAT and
+*v4 (2026-09-30): no rule changes. The version notes below named three variables in braces, so every run pasted the formats, structures and delivery lists in a second time, inside the notes. The notes now name them in words. The lists this stage reads are also stripped of their record-keeping (which of our runs proved a row), so no brand reaches the teardown. Everything in v3 stands.*
+
+*v3 (live 2026-09-20, on the owner's word): two new labelled lines, FORMAT and
 STRUCTURE, after THE DELIVERY READ, and a `format` and a `structure` key in
 the fenced json block — so a teardown's format and structure are labelled
 from the same lists every other tool uses, in the read that already happens,
-with no extra model call. `{video_formats}` and `{video_structures}` are the
+with no extra model call. The video formats and video structures lists are the
 only new variables; every other variable, slot and rule of v2 is unchanged.*
 
 *v2 (2026-09-18): one new labelled block, THE DELIVERY READ, after MOOD,
-and a `delivery` key in the fenced json block — Damon's ruling that the
+and a `delivery` key in the fenced json block — the owner's ruling that the
 delivery layer is read at the teardown as well, before any writing stage,
-and banked. `{delivery}` is the only new variable; every other variable,
+and banked. The delivery slice is the only new variable; every other variable,
 slot and rule of v1 is unchanged.*
 
 ## THE DOCTRINE READ OF THE SOURCE

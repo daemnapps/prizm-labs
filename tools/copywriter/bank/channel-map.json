@@ -54,7 +54,7 @@
   ],
   "owners": [
     {"channels": "1–2", "name": "The copy machine", "line": "Social copy only, ruled 08-25. formats.json is its working spec."},
-    {"channels": "3", "name": "The email machine", "line": "Already running against the <brand> scrape."},
+    {"channels": "3", "name": "The email machine", "line": "Already running against the Brand B scrape."},
     {"channels": "4", "name": "Page work", "line": "The page factory and the swiped competitor pages."}
   ],
   "sequence": [

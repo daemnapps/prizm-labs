@@ -15,7 +15,7 @@ TWO SHAPES, ONE OUTPUT (2026-09-18).
     stills: a FIRST FRAME written in full in the stills order, and a LAST
     FRAME written as a delta from it. What happens between them is BEATS —
     timed spans written into the clip prompt's own timeline, one verb each,
-    never generated as pictures (Damon, 2026-09-18).
+    never generated as pictures (the owner, 2026-09-18).
 
         **Scene 3 · BATHROOM COUNTER**
 
@@ -28,7 +28,7 @@ TWO SHAPES, ONE OUTPUT (2026-09-18).
 Both come back in the same shape, so nothing downstream has to know which
 brief it was handed.
 
-THE BRIEF IS THE PROMPT (Damon, 2026-09-19: "this brief is for the AI system
+THE BRIEF IS THE PROMPT (the owner, 2026-09-19: "this brief is for the AI system
 to interpret, not for me as the human to read — format these briefs in a way
 that AI is able to directly build what it needs to build").
 
@@ -93,6 +93,7 @@ FRAME_FIELDS = {
     "location": r"^\*\*Location:\*\*\s*(.+)$",
     "style": r"^\*\*Style:\*\*\s*(.+)$",
     "camera": r"^\*\*Camera:\*\*\s*(.+)$",
+    "viewpoint": r"^\*\*Viewpoint:\*\*\s*(.+)$",
     "lighting": r"^\*\*Lighting:\*\*\s*(.+)$",
     "delta": r"^\*\*Change:\*\*\s*(.+)$",
     "beat": r"^\*\*Beat:\*\*\s*(.+)$",
@@ -140,7 +141,7 @@ def _yes(v: str) -> bool:
 def frames_of(body: str) -> list[dict]:
     """The scene's two frames — the first and the last — in order. A scene
     has exactly these two; everything between them is a beat, not a picture
-    (Damon, 2026-09-18)."""
+    (the owner, 2026-09-18)."""
     heads = list(FRAME_HEAD.finditer(body))
     out: list[dict] = []
     for i, m in enumerate(heads):
@@ -256,7 +257,7 @@ def _frames_from_block(row: dict) -> list[dict]:
                      [r.strip() for r in re.split(r"\s*·\s*|\s*;\s*",
                                                  str(refs or "")) if r.strip()]}
     for key in ("subject", "composition", "action", "location", "style",
-                "camera", "lighting"):
+                "camera", "viewpoint", "lighting"):
         first[key] = _one_line(ff.get(key))
     last = {"n": 2, "role": "last", "label": "LAST FRAME",
             "subject": "", "composition": "", "action": "", "location": "",
@@ -295,6 +296,23 @@ def scenes_from_block(doc: dict) -> list[dict]:
         if not isinstance(row, dict):
             continue
         sid = str(row.get("id") or f"S{i}")
+        kind = _one_line(row.get("kind")).lower()
+        if kind == "card":
+            out.append(_carry_element_fields(_card_from_block(row, sid, i), row))
+            continue
+        if kind in PLATE_KINDS:
+            out.append(_carry_element_fields(_plate_kind_from_block(row, sid, i, kind), row))
+            continue
+        if kind == "split":
+            worlds = [_one_line(w.get("id")) for w in doc.get("world") or []
+                      if isinstance(w, dict) and _one_line(w.get("id"))]
+            out.append(_carry_element_fields(_split_from_block(row, sid, i, worlds), row))
+            continue
+        # TO CAMERA IS SAID, NEVER GUESSED (the owner, 2026-09-23). A scene that
+        # does not carry it is marked, and the gate refuses it by id before
+        # anything is made; it is planned as B-roll only so nothing
+        # downstream crashes on the way to that refusal.
+        to_camera_missing = "to_camera" not in row
         to_camera = bool(row.get("to_camera"))
         sc = {
             "n": _n_of(sid, i), "id": sid, "shape": "scene",
@@ -315,6 +333,10 @@ def scenes_from_block(doc: dict) -> list[dict]:
             # lays them over the cast voice's own record for that chunk.
             "voice_settings": dict(row.get("voice_settings") or {})
             if isinstance(row.get("voice_settings"), dict) else {},
+            # A SUNG PIECE (brief v16, 2026-09-23): the lines sung over this
+            # scene, verbatim — the script song.py checks every lyric against.
+            "lyrics": [_one_line(x) for x in row.get("lyrics") or [] if _one_line(x)]
+            if isinstance(row.get("lyrics"), list) else [],
             "source": _one_line(row.get("source")),
             "happens": _one_line(row.get("happens")),
             "on_screen": _one_line(row.get("on_screen")),
@@ -326,6 +348,8 @@ def scenes_from_block(doc: dict) -> list[dict]:
             "beats": [] if _one_line(row.get("held")) else _beats_from_block(row),
         }
         sc["say"] = sc["voice"]
+        if to_camera_missing and not _one_line(row.get("held")):
+            sc["to_camera_missing"] = True
         # A HELD SCENE keeps its place and makes nothing (2026-09-19): the
         # brand's own files could not fill it, and the one fact that would
         # release it is written here rather than invented.
@@ -337,8 +361,222 @@ def scenes_from_block(doc: dict) -> list[dict]:
                        "two stills and one clip — the voice plays over it")
         sc["status"] = "empty"
         sc["takes"] = []
-        out.append(sc)
+        if kind in ("talking", "broll", "greenscreen"):
+            sc["kind"] = kind
+        if kind == "greenscreen":
+            # A GREENSCREEN IS A TALKING SCENE (brief v14): its own frames,
+            # beats and voice make the presenter's clip; the background is one
+            # more still, and the edit keys the one over the other.
+            g = kind_fields(row, "greenscreen")
+            sc["greenscreen"] = {"background": _one_line(g.get("background")),
+                                 "talker_scene": _one_line(g.get("talker_scene")) or sid,
+                                 "layout": _one_line(g.get("layout")),
+                                 "refs": _refs((row.get("greenscreen") or {}).get("refs"))
+                                 if isinstance(row.get("greenscreen"), dict) else []}
+            sc["needs"] += "; plus one background still, keyed behind it at the edit"
+        out.append(_carry_element_fields(sc, row))
     return out
+
+
+# ------------------------------------------------ the element kinds
+#
+# ELEMENTS.md §1 (2026-09-23): "teardown names every element, the AI brief
+# carries it, PRODUCTION MAKES IT, the edit only assembles." Beyond the
+# speaker, B-roll and the card, a scene may be a SCREEN (a plate of a review,
+# a comment, an order page — the legible text is set by the edit), a SPLIT
+# (two B-roll pictures side by side), a GREENSCREEN (a background plate the
+# presenter's talking scene is keyed over) or an ENDCARD (the brand's REAL
+# packshot, edited into a plate; the offer words set on top). Each kind's
+# fields may sit on the scene or nested under the kind's own name.
+
+PLATE_KINDS = ("screen", "endcard")
+ELEMENT_FIELDS = ("opens", "priority")
+
+
+def _module_renames() -> dict:
+    """v14's retired `module` → the doctrine section id it stood for. The map
+    lives in model-inputs.json (`elements.module_deprecated`), never here."""
+    try:
+        c = json.loads((Path(__file__).resolve().parent / "model-inputs.json").read_text())
+        return ((c.get("elements") or {}).get("module_deprecated") or {}).get("renames") or {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _carry_element_fields(sc: dict, row: dict) -> dict:
+    """`opens` and `priority` travel on every scene, untouched, for the edit
+    (the scroll-stopper, the order a cutdown cuts in); the scene's `section`
+    — a doctrine id — is the unit a version swaps. Absent stays absent. A v14
+    brief's retired `module` fills a MISSING section, never overrides one
+    (the gate warns about it)."""
+    for k in ELEMENT_FIELDS:
+        if k in row:
+            sc[k] = row[k]
+    if "module" in row and not _one_line(sc.get("section")):
+        v = _one_line(row.get("module")).lower()
+        sc["section"] = _module_renames().get(v, v)
+    return sc
+
+
+def kind_fields(row: dict, kind: str) -> dict:
+    """The kind's fields, whether written flat on the scene (the card's
+    shape) or nested under the kind's name (ELEMENTS.md's shape)."""
+    nested = row.get(kind)
+    return {**row, **nested} if isinstance(nested, dict) else dict(row)
+
+
+def _lines(v) -> list[str]:
+    if isinstance(v, list):
+        return [_one_line(x) for x in v if _one_line(x)]
+    return [_one_line(v)] if _one_line(v) else []
+
+
+def _refs(v) -> list[str]:
+    if isinstance(v, list):
+        return [_one_line(r) for r in v if _one_line(r)]
+    return [r.strip() for r in re.split(r"\s*·\s*|\s*;\s*", str(v or "")) if r.strip()]
+
+
+def _still_only(row: dict, sid: str, i: int, kind: str, typ: str, needs: str) -> dict:
+    voice = _one_line(row.get("voice"))
+    return {
+        "n": _n_of(sid, i), "id": sid, "shape": "scene", "kind": kind,
+        "start": None, "end": None, "seconds": 0.0, "type": typ,
+        "section": _one_line(row.get("section")),
+        "technique": "", "delivery": "", "emotion": "", "outcome": "",
+        "setting": "", "who": "", "to_camera": False,
+        "voice": voice, "say": voice, "voice_settings": {},
+        "source": _one_line(row.get("source")),
+        "happens": "", "on_screen": "", "hold": "",
+        "still": "", "camera": "", "refs": "", "hear": "", "product": "",
+        "frames": [], "beats": [], "held": "",
+        "needs": needs, "status": "empty", "takes": [],
+    }
+
+
+ROLL_LETTER = {"screen": "S", "greenscreen": "G", "endcard": "E", "split": "X"}
+
+
+def _plate_kind_from_block(row: dict, sid: str, i: int, kind: str) -> dict:
+    """SCREEN · GREENSCREEN · ENDCARD — one still each and no clip. What the
+    still IS comes from the kind's own field (`plate`, or a greenscreen's
+    `background`); every word that will be read on it travels as data."""
+    f = kind_fields(row, kind)
+    needs = {"screen": "one still — the screen, its words left blank; the edit sets them",
+             "endcard": "one edit of the brand's REAL packshot; the edit sets the offer"}[kind]
+    sc = _still_only(row, sid, i, kind, ROLL_LETTER[kind], needs)
+    if kind == "screen":
+        sc["screen"] = {"plate": _one_line(f.get("plate")),
+                        "surface": _one_line(f.get("surface")).lower(),
+                        "lines": _lines(f.get("lines")),
+                        "lands_on": _one_line(f.get("lands_on")),
+                        "refs": _refs(f.get("refs"))}
+    else:
+        sc["endcard"] = {"plate": _one_line(f.get("plate")),
+                         "product": _one_line(f.get("product")),
+                         "offer_lines": _lines(f.get("offer_lines")),
+                         "cta": _one_line(f.get("cta")),
+                         "guarantee": _one_line(f.get("guarantee")),
+                         "refs": _refs(f.get("refs"))}
+        sc["product"] = sc["endcard"]["product"]
+    return sc
+
+
+def _side_setting(side: dict, row: dict, worlds: list[str]) -> str:
+    """A split side's place: its own setting_id, the split's, else the world
+    block its first frame's location names (the brief v14 writes a side as
+    first_frame · beats · last_frame only). Read, never invented."""
+    own = _one_line(side.get("setting_id") or row.get("setting_id"))
+    if own:
+        return own
+    loc = _one_line((side.get("first_frame") or {}).get("location"))
+    for w in sorted(worlds, key=len, reverse=True):
+        if w and w.lower() in loc.lower():
+            return w
+    return loc.split(",")[0].strip()
+
+
+def _side_who(side: dict, row: dict) -> str:
+    own = _one_line(side.get("who") or row.get("who"))
+    if own:
+        return own
+    subj = _one_line((side.get("first_frame") or {}).get("subject"))
+    return subj.split(",")[0].strip()
+
+
+def _split_side(side, sid: str, letter: str, row: dict, worlds=()) -> dict:
+    """One side of a split — a B-roll picture in its own right: a setting,
+    its two frames and its beats. Its id is the split's plus L or R."""
+    side = side if isinstance(side, dict) else {}
+    return {
+        "n": 0, "id": f"{sid}-{letter}", "shape": "scene", "kind": "split-side",
+        "start": None, "end": None, "seconds": 0.0, "type": "B",
+        "section": _one_line(row.get("section")),
+        "technique": _one_line(side.get("technique") or row.get("technique")),
+        "delivery": _delivery_line(side.get("delivery") or row.get("delivery")),
+        "emotion": _one_line(side.get("emotion") or row.get("emotion")),
+        "outcome": _one_line(side.get("outcome") or row.get("outcome")),
+        "setting": _side_setting(side, row, list(worlds)),
+        "who": _side_who(side, row),
+        "to_camera": False, "voice": "", "say": "", "voice_settings": {},
+        "source": "", "happens": _one_line(side.get("happens")), "on_screen": "", "hold": "",
+        "still": "", "camera": "", "refs": "", "hear": "", "product": "",
+        "frames": _frames_from_block(side), "beats": _beats_from_block(side),
+        "held": "",
+    }
+
+
+def _split_from_block(row: dict, sid: str, i: int, worlds=()) -> dict:
+    """SPLIT — two B-roll pictures on one screen. Each side is made like
+    B-roll (a first frame, a last frame, one silent clip); the scene's own
+    voice paragraph is laid under both at the edit, once."""
+    f = kind_fields(row, "split")
+    sc = _still_only(row, sid, i, "split", "X",
+                     "two B-roll pictures — first and last frame and one silent clip a side")
+    sc["split"] = {"left": _split_side(f.get("left"), sid, "L", row, worlds),
+                   "right": _split_side(f.get("right"), sid, "R", row, worlds),
+                   "layout": _one_line(f.get("layout")).lower(),
+                   "labels": _lines(f.get("labels"))}
+    return sc
+
+
+def _card_from_block(row: dict, sid: str, i: int) -> dict:
+    """A CARD (the owner, 2026-09-23: cards are handled at production, not left
+    for the edit). Type is a layer, never a generation: the machine makes the
+    PLATE — the picture with no words in it — as one still and no clip, and
+    the card's exact words, the moment they land on and the sound they come
+    in on travel in `card` for the edit to set on top. Its fields may sit on
+    the scene (v13) or nested as `card: {...}` (ELEMENTS.md) — both read the
+    same."""
+    row = kind_fields(row, "card")
+    refs = row.get("refs")
+    lines = row.get("lines")
+    card = {
+        "plate": _one_line(row.get("plate")),
+        "lines": [_one_line(l) for l in lines] if isinstance(lines, list)
+                 else ([_one_line(lines)] if _one_line(lines) else []),
+        "lands_on": _one_line(row.get("lands_on")),
+        "sfx": _one_line(row.get("sfx")),
+        "refs": [_one_line(r) for r in refs if _one_line(r)]
+                if isinstance(refs, list) else
+                [r.strip() for r in re.split(r"\s*·\s*|\s*;\s*", str(refs or "")) if r.strip()],
+    }
+    voice = _one_line(row.get("voice"))
+    return {
+        "n": _n_of(sid, i), "id": sid, "shape": "scene", "kind": "card",
+        "start": None, "end": None, "seconds": 0.0, "type": "C",
+        "section": _one_line(row.get("section")),
+        "technique": "", "delivery": "", "emotion": "", "outcome": "",
+        "setting": "", "who": "", "to_camera": False,
+        "voice": voice, "say": voice, "voice_settings": {},
+        "source": _one_line(row.get("source")),
+        "happens": "", "on_screen": "", "hold": "",
+        "still": "", "camera": "", "refs": "", "hear": "", "product": "",
+        "frames": [], "beats": [], "held": "",
+        "card": card,
+        "needs": "one still — the plate, no words in it; the edit sets the card's words on it",
+        "status": "empty", "takes": [],
+    }
 
 
 def piece_from_block(doc: dict) -> dict:
@@ -355,7 +593,9 @@ def piece_from_block(doc: dict) -> dict:
                 break
     return {"aspect": _one_line(p.get("aspect_ratio") or p.get("aspect")),
             "resolution": _one_line(p.get("resolution")),
-            "style": style}
+            "style": style,
+            # an ad-framework id from the doctrine, or "observed — …" (v15)
+            "framework": _one_line(p.get("framework"))}
 
 
 def render_view(doc: dict) -> str:
@@ -394,8 +634,29 @@ def render_view(doc: dict) -> str:
     L += ["## The scenes", ""]
     for sc in scenes_from_block(doc):
         kind = "to camera" if sc["to_camera"] else "B-ROLL — the voice plays over it"
+        if sc.get("kind") == "card":
+            c = sc["card"]
+            L.append(f"**{sc['id']} · CARD** — made at production as a plate; "
+                     f"the edit sets the words on it")
+            L.append("")
+            L.append(f"**Plate:** {c['plate']}")
+            L.append(f"**Words:** {' / '.join(c['lines'])}")
+            L.append(f"**Lands on:** {c['lands_on']} · **Sound:** {c['sfx'] or 'none'}")
+            if sc["voice"]:
+                L.append(f"> {sc['voice']}")
+            L.append("")
+            continue
+        if sc.get("kind") in ("screen", "endcard", "split"):
+            L += _kind_view(sc)
+            continue
+        if sc.get("to_camera_missing"):
+            kind = "NO TO_CAMERA — refused until the brief says which"
         if sc.get("held"):
             kind = "HELD — nothing is made for it yet"
+        if sc.get("kind") == "greenscreen":
+            g = sc["greenscreen"]
+            kind = (f"GREENSCREEN ({g['layout'] or '?'}) — to camera, keyed over a "
+                    f"background plate: {g['background']}")
         L.append(f"**{sc['id']} · {sc['setting']}** — {kind}")
         if sc.get("held"):
             L.append("")
@@ -419,7 +680,77 @@ def render_view(doc: dict) -> str:
                      + (f" [{b['beat']}]" if b["beat"] else ""))
         L.append(f"**Last frame.** {last.get('camera', '')} — {last.get('delta', '')}")
         L.append("")
+    L += _piece_elements_view(doc)
+    rows = doc.get("roll_sheet")
+    if isinstance(rows, list) and rows:
+        L += ["## Roll sheet check", "",
+              "| Swipe row | Roll | Our scene | Or dropped, because |",
+              "|---|---|---|---|"]
+        for r in rows:
+            if isinstance(r, dict):
+                L.append(f"| {_one_line(r.get('row'))} | {_one_line(r.get('roll'))} | "
+                         f"{_one_line(r.get('scene'))} | {_one_line(r.get('dropped'))} |")
+        L.append("")
     return "\n".join(L)
+
+
+def _kind_view(sc: dict) -> list[str]:
+    tag = " · ".join(f"{k} {sc[k]}" for k in ("section",) + ELEMENT_FIELDS
+                     if _one_line(sc.get(k)) or k in ELEMENT_FIELDS and k in sc)
+    head = f"**{sc['id']} · {sc['kind'].upper()}**" + (f" ({tag})" if tag else "")
+    L = []
+    if sc["kind"] == "screen":
+        s = sc["screen"]
+        L += [f"{head} — a {s['surface'] or '?'} screen, made as a plate; the edit sets its words",
+              "", f"**Plate:** {s['plate']}", f"**Words:** {' / '.join(s['lines'])}",
+              f"**Lands on:** {s['lands_on']}"]
+    elif sc["kind"] == "endcard":
+        e = sc["endcard"]
+        L += [f"{head} — the REAL packshot of {e['product'] or '?'}, edited into a plate",
+              "", f"**Plate:** {e['plate']}", f"**Offer:** {' / '.join(e['offer_lines'])}",
+              f"**CTA:** {e['cta']} · **Guarantee:** {e['guarantee'] or 'none'}"]
+    else:
+        x = sc["split"]
+        L += [f"{head} — {x['layout'] or '?'}, two B-roll pictures"
+              + (f"; labels {' / '.join(x['labels'])}" if x["labels"] else ""), ""]
+        for side in ("left", "right"):
+            s = x[side]
+            first = next((f for f in s["frames"] if f["role"] == "first"), {})
+            last = next((f for f in s["frames"] if f["role"] == "last"), {})
+            L.append(f"**{side.title()} ({s['id']}) · {s['setting']}** — "
+                     f"{first.get('subject', '')} {first.get('action', '')}")
+            for b in s["beats"]:
+                L.append(f"- **B{b['n']}** {b['do']}")
+            L.append(f"**Last frame.** {last.get('camera', '')} — {last.get('delta', '')}")
+    if sc.get("voice"):
+        L.append(f"> {sc['voice']}")
+    L.append("")
+    return L
+
+
+def _piece_elements_view(doc: dict) -> list[str]:
+    """Layers, sound and versions — carried for the edit, shown here so the
+    person reading the brief sees every element it names."""
+    L = []
+    for key, title in (("layers", "Layers — set by the edit"), ("music", "Music"),
+                       ("sfx", "Sound effects"), ("hooks", "Hooks — one render each")):
+        v = doc.get(key)
+        if v in (None, "", [], {}):
+            continue
+        L += [f"## {title}", ""]
+        if key == "music" and isinstance(v, dict):
+            L.append(f"energy {v.get('energy', '?')} · {v.get('tempo_bpm', '?')} bpm · "
+                     f"{v.get('mood', '?')}")
+        elif key == "layers" and isinstance(v, dict):
+            for k, x in v.items():
+                L.append(f"- **{k}**: {json.dumps(x, ensure_ascii=False)}")
+        elif isinstance(v, list):
+            for x in v:
+                L.append(f"- {json.dumps(x, ensure_ascii=False)}")
+        else:
+            L.append(json.dumps(v, ensure_ascii=False))
+        L.append("")
+    return L
 
 
 # ---------------------------------------------------------------- scenes
@@ -466,8 +797,15 @@ def parse(brief: str) -> list[dict]:
             sc["setting"] = sc.get("setting") or m.group(2).strip()
             sc["frames"] = frames_of(body)
             sc["beats"] = beats_of(body)
-            sc["to_camera"] = _yes(sc.get("to_camera")) if sc.get("to_camera") \
-                else bool(sc["voice"])
+            # TO CAMERA IS SAID, NEVER GUESSED (the owner, 2026-09-23). It used
+            # to default to true whenever the scene had a voice — which every
+            # B-roll scene has too, so a B-roll shot silently became a face.
+            # A scene that does not say is marked, and the gate refuses it.
+            if sc.get("to_camera"):
+                sc["to_camera"] = _yes(sc.get("to_camera"))
+            else:
+                sc["to_camera"] = False
+                sc["to_camera_missing"] = True
             sc["type"] = "A" if sc["to_camera"] else "B"
         else:
             sc["setting"] = sc.get("setting") or ""

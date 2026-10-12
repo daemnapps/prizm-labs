@@ -104,14 +104,14 @@ and two more appeared during a single afternoon. Run `--check` before a pull;
 a row that contradicts itself gets said out loud rather than quietly doing
 nothing.
 
-### Views come first (Damon, 2026-08-27)
+### Views come first (the owner, 2026-08-27)
 
 Any list of creators or posts is sorted by view count, biggest first, before
 anything else is applied. Fit, usability and how many videos someone still
 owes are filters laid over that order — never a reordering. Reach is the thing
 being bought; a list re-sorted on someone's judgement hides it.
 
-### What counts as a source (Damon, 2026-08-27)
+### What counts as a source (the owner, 2026-08-27)
 
 Only **video ads** get torn down: the creator performing, on screen. A quote
 card over stock footage, a still, a carousel, or b-roll whose whole content is
@@ -170,20 +170,20 @@ number, nothing else to change or point anywhere.
 
 ## Where this lives
 
-> **PRIMARY, SETTLED 2026-08-25 (Dayu).** Nothing was ahead in
-> `~/devel/daemn` when this moved — confirmed by Dayu, not an open question.
+> **PRIMARY, SETTLED 2026-08-25 (the developer).** Nothing was ahead in
+> `~/devel/daemn` when this moved — confirmed by the developer, not an open question.
 > Work here directly; the sandbox mirror is retired for this build.
 >
-> **GRADUATED 2026-08-25 (Dayu ruling): THIS folder is primary.** The line
+> **GRADUATED 2026-08-25 (the developer ruling): THIS folder is primary.** The line
 > below recorded the pre-graduation state and is kept for history. From today
-> Damon works here directly — same prompts, same sessions, same board, new
-> path — and the `~/devel/daemn` mirror stops. Damon's correction pass on
+> the owner works here directly — same prompts, same sessions, same board, new
+> path — and the `~/devel/daemn` mirror stops. the owner's correction pass on
 > this note outranks it.
 
-Source of truth *(pre-graduation)*: `~/devel/daemn/video-teardown-machine/` (Damon's private
-repo). Mirrored into `ai-workspace/video-teardown-machine/` so the
+Source of truth *(pre-graduation)*: `~/devel/daemn/video-teardown-machine/` (the owner's private
+repo). Mirrored into `workspace/video-teardown-machine/` so the
 team can see it — that copy is a bridge, not a fork. Changes get made in
-daemn first, then re-bridged the same way; the ai-workspace copy is never
+daemn first, then re-bridged the same way; the workspace copy is never
 edited directly.
 
 ## Running it
@@ -199,7 +199,7 @@ every 10 minutes and flags anything it can't fix on its own.
 
 ## The Variation video chain (2026-09-28)
 
-Damon: "we only run variation on proven assets." A proven ad of ours, already
+the owner: "we only run variation on proven assets." A proven ad of ours, already
 torn down, grows into a tree: its own awareness level is the control, every
 other level gets a branch, each branch writes six hooks (4b), and **each hook
 is written through** — placement, expansion, close, audit, spice, its own
@@ -208,7 +208,7 @@ product, cast and structure stay locked.
 
 | New | What | Code |
 |---|---|---|
-| **0p** Proven gate | refuses a source with no proof on file; the bar is `machine/proven-bar.json` (Damon's call) | `machine/proven.py` |
+| **0p** Proven gate | refuses a source with no proof on file; the bar is `machine/proven-bar.json` (the owner's call) | `machine/proven.py` |
 | **3v** Control | the proven ad's own script in stage 3's shape — VERSION 0 | `machine/control.py` |
 | **4m** Awareness map | each level's section list, from the doctrine; ends in json → `tree.json` | `prompts/stage-4m-awareness-map/` |
 | **5u** Mark used | every chain: the language this asset used, into `language/used/` | `machine/mark_used.py` |

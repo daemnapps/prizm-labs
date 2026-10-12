@@ -1,0 +1,2 @@
+# sprite strips are rebuilt by `python3 machine/icons.py install` (≈44 MB) — kept out of git
+*.png

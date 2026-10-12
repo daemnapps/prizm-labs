@@ -5,7 +5,7 @@ source ids — and say exactly what does not fit.
     python3 tools/check_names.py --brand B         # report
     python3 tools/check_names.py --brand B --json  # the same, as data
 
-The rules (lab/damon/naming-standard, v5; brands/language-schema.md):
+The rules (the team notes, v5; brands/language-schema.md):
   a value is lowercase a–z 0–9, words joined by "-"; values joined by "_";
   the type first; the brand spelled in full.
   row id     language_<brand>_<avatar>_<lane>_<number>   number: 4 digits or more, never cut

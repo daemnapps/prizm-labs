@@ -25,7 +25,8 @@
     "needs": [
      "offer_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "launch",
@@ -49,7 +50,8 @@
      "product_file",
      "offer_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "anticipation",
@@ -71,7 +73,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "restock",
@@ -91,7 +94,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "bundle",
@@ -114,7 +118,8 @@
      "offer_file",
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "last-chance",
@@ -134,7 +139,8 @@
     "needs": [
      "offer_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "subscription-invite",
@@ -155,7 +161,8 @@
      "offer_file",
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "early-access",
@@ -177,7 +184,8 @@
     "needs": [
      "offer_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "gift-guide",
@@ -200,7 +208,8 @@
      "product_file",
      "offer_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "problem-explainer",
@@ -224,7 +233,8 @@
      "language_bank",
      "objection_bank"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "routine",
@@ -246,7 +256,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "mechanism",
@@ -266,7 +277,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "myth-correction",
@@ -289,7 +301,8 @@
      "objection_bank",
      "language_bank"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "mistake-audit",
@@ -312,7 +325,8 @@
      "objection_bank",
      "language_bank"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "switch",
@@ -334,7 +348,8 @@
     "needs": [
      "objection_bank"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "seasonal-skin",
@@ -354,7 +369,8 @@
     "needs": [
      "language_bank"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "objection-shot",
@@ -374,7 +390,8 @@
     "needs": [
      "objection_bank"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "stack",
@@ -396,7 +413,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "moment",
@@ -416,7 +434,8 @@
     "needs": [
      "cultural_moments"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "holiday",
@@ -438,7 +457,8 @@
     "needs": [
      "cultural_moments"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "ritual",
@@ -458,7 +478,8 @@
     "needs": [
      "cultural_moments"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "subculture",
@@ -478,7 +499,8 @@
     "needs": [
      "avatar"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "regional",
@@ -498,7 +520,8 @@
     "needs": [
      "cultural_moments"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "opinion",
@@ -518,7 +541,8 @@
     "needs": [
      "avatar"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "spotlight",
@@ -540,7 +564,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "someone-like-you",
@@ -560,7 +585,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "proof-drop",
@@ -580,7 +606,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "milestone",
@@ -600,7 +627,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "reader-question",
@@ -620,7 +648,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "founder-note",
@@ -640,7 +669,8 @@
     "needs": [
      "sender_identity"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "roll-call",
@@ -660,7 +690,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "mission",
@@ -680,7 +711,8 @@
     "needs": [
      "avatar"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "behind-the-scenes",
@@ -702,7 +734,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "what-went-wrong",
@@ -720,7 +753,8 @@
     "role": "earns",
     "then": [],
     "needs": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "trend",
@@ -740,7 +774,8 @@
     "needs": [
      "cultural_moments"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "room-answered",
@@ -760,7 +795,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "peer-advice",
@@ -780,7 +816,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "product-spotlight",
@@ -802,7 +839,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "guarantee",
@@ -822,7 +860,8 @@
     "needs": [
      "offer_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "availability",
@@ -842,7 +881,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "channel-invite",
@@ -860,7 +900,8 @@
     "role": "asks",
     "then": [],
     "needs": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "product-finder",
@@ -882,7 +923,8 @@
     "needs": [
      "product_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "content-request",
@@ -905,7 +947,8 @@
     "needs": [
      "customer_base"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "sunset",
@@ -923,7 +966,8 @@
     "role": "recovers",
     "then": [],
     "needs": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "affiliate-feature",
@@ -943,7 +987,8 @@
     "needs": [
      "affiliate_file"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "affiliate-roundup",
@@ -963,8 +1008,12 @@
     "needs": [
      "affiliate_file"
     ]
-   }
+   },
+   "aliases": []
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

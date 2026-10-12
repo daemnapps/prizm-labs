@@ -106,7 +106,7 @@ class Board(http.server.SimpleHTTPRequestHandler):
                 sys.path.insert(0, str(HERE))
                 import batch_status
                 importlib.reload(batch_status)
-                batch_status.build("ugc-andrea-v2", "Andrea v2 — voice fingerprint test")
+                batch_status.build("ugc-avatar-v2", "Avatar v2 — voice fingerprint test")
             except Exception as e:
                 print(f"  ! batch page rebuild failed, serving last good: {e}")
         return super().do_GET()

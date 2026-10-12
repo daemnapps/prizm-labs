@@ -1,6 +1,6 @@
 # Context awareness — why the chain got a scout
 
-Added 2026-08-24, on Damon's call: *"we need to start really building
+Added 2026-08-24, on the owner's call: *"we need to start really building
 contextual awareness and the ability to sift through all brand context when
 writing copy — this is the type of logic that turns our marketing from AI
 templates into true breakthrough."*
@@ -15,16 +15,16 @@ The chain read exactly four brand files, hard-wired into the runner:
 - the product file named on the command line
 
 That is ~61 KB out of ~400 KB of readable brand context. Everything else
-<brand> knows was invisible to the copy stages, on every run, regardless of
+Brand A knows was invisible to the copy stages, on every run, regardless of
 what the video was about:
 
 | Ignored | Why it mattered |
 |---|---|
 | `customer/objection-bank.md` | The real answers to the doubts a video leaves hanging. Copy was written without them. |
 | `creative/hook-ledger.md` | Exists **specifically** so a stage "treats a spent verbatim as ground it may not build on again." The video chain reads it; the copy chain didn't — so copy variations could recycle spent lines forever. This is the template failure in one file. |
-| `channels/creators/<person>.md` | The profile of the creator **in the video we ran twice**. Copy written in her voice, never having read who she is. |
+| `channels/creators/mara.md` | The profile of the creator **in the video we ran twice**. Copy written in her voice, never having read who she is. |
 | `identity-anchors.md` | Likeness rights and what may be claimed about whom. |
-| `competitive/evora/*` | A full competitor ad-library teardown and transfer matrix. |
+| `competitive/competitor-f/*` | A full competitor ad-library teardown and transfer matrix. |
 | `customer-language/evidence/*` | 86 KB of raw voice-of-customer — focus group, Gorgias tickets, interviews. Where real language actually lives. |
 
 Same four files every time is the definition of a template. The output was
@@ -54,7 +54,7 @@ past summer.
    and 4 as `{brand_context}`. Anything selected but not loaded is named in
    the bundle itself, so a stage can never mistake a dropped file for one it
    considered.
-4. Files too large for a prompt (the raw Evora JSON, the 243 KB ranked ad
+4. Files too large for a prompt (the raw competitor-f JSON, the 243 KB ranked ad
    CSV) are indexed as `NOT LOADABLE` rather than hidden — a stage should
    know they exist and that a person has to work through them.
 
@@ -81,5 +81,5 @@ hers — is a correctness failure, fixed like a bad claim.
 - **The budget is blunt.** 60 KB of selection, first-fit, no ranking within
   the cut. A scout that picks well and then loses the best file to arrival
   order is a real failure mode and has not been tested for.
-- **One brand.** Only <brand> has enough context files for the sifting to
-  mean anything. <brand> has none of this on file yet.
+- **One brand.** Only Brand A has enough context files for the sifting to
+  mean anything. Brand B has none of this on file yet.

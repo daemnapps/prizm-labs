@@ -19,7 +19,8 @@
    "extra": {
     "profile": "song-ad.md",
     "notes": "the first format run end to end; its two runs became providers/fal.md and providers/higgsfield.md"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "single-presenter",
@@ -35,7 +36,8 @@
    "extra": {
     "profile": "single-presenter.md",
     "notes": "the UGC shape — the workhorse; profile written 2026-09-02, not yet run end to end on this machine"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "meme",
@@ -45,13 +47,14 @@
    "status": "draft",
    "signed": null,
    "examples": null,
-   "evidence": "2026-09-16 on Higgsfield — record not in the repo (chat sandbox); profile drafted from the session's reports, for Damon to correct",
+   "evidence": "2026-09-16 on Higgsfield — record not in the repo (chat sandbox); profile drafted from the session's reports, for the owner to correct",
    "approved": false,
    "source": "ai-video-production/formats/bank.json",
    "extra": {
     "profile": "meme.md",
     "notes": "the source's scroll-stopper is the whole format; a softened action is a failed piece — the 16 Sep pack holds no record of this piece; kzn03 and <competitor>-06 are not it"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "expert-consult",
@@ -66,8 +69,9 @@
    "source": "ai-video-production/formats/bank.json",
    "extra": {
     "profile": "expert-consult.md",
-    "notes": "Damon 2026-09-17: the storytelling piece with Keri is this format, and expert-consult is its name. Was two draft rows; now one."
-   }
+    "notes": "the owner 2026-09-17: the storytelling piece with Keri is this format, and expert-consult is its name. Was two draft rows; now one."
+   },
+   "aliases": []
   },
   {
    "id": "demonstration",
@@ -83,7 +87,8 @@
    "extra": {
     "profile": "demonstration.md",
     "notes": "profile written 2026-09-02, not yet run end to end on this machine"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "micro-drama",
@@ -99,7 +104,8 @@
    "extra": {
     "profile": "micro-drama.md",
     "notes": "the method was first proven on this shape (2026-09-01 production); no piece has run this machine's route end to end"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "testimonial-montage",
@@ -115,34 +121,132 @@
    "extra": {
     "profile": "testimonial-montage.md",
     "notes": "profile written 2026-09-02, not yet run end to end on this machine"
-   }
+   },
+   "aliases": []
   },
   {
-   "id": "storytelling",
-   "name": "Storytelling ad",
-   "what": "[TO DEFINE — named by Damon 2026-09-19 as a format we collect]",
-   "why_it_works": null,
+   "id": "letter-to-younger-self",
+   "name": "Letter to my younger self",
+   "what": "The person today talks to, or writes to, the kid they were — the old photo or the old moment on screen, today's face answering it. The timeline turn is the line they'd tell that kid.",
+   "why_it_works": "It is the turn in its purest form: the viewer is the younger self being told.",
    "status": "draft",
    "signed": null,
    "examples": null,
-   "evidence": "Damon, 2026-09-19: \"the storytelling ad\"",
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
   },
   {
-   "id": "holistic-healer-authority",
-   "name": "Holistic healer authority",
-   "what": "[TO DEFINE — named by Damon 2026-09-19 as a format we collect]",
-   "why_it_works": null,
+   "id": "then-and-now-photo",
+   "name": "Then and now photo",
+   "what": "An old photo from the avatar's era (film print, yearbook, disposable camera) held up or recreated today, same pose. The gap between the two is the story; the product closes it.",
+   "why_it_works": "Everyone has the photo; holding it up puts the viewer's own album in their head.",
    "status": "draft",
    "signed": null,
    "examples": null,
-   "evidence": "Damon, 2026-09-19: \"the holistic healer authority\"",
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "id": "home-video-flashback",
+   "name": "Home video flashback",
+   "what": "Opens as camcorder / family-video footage of the moment it started (the beach towel, the first shave, the first haircut), then cuts hard to today. Pairs with style vhs-camcorder.",
+   "why_it_works": "Home-video texture reads as memory, not ad, so the viewer drops their guard.",
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "id": "classic-commercial-remake",
+   "name": "Classic commercial remake",
+   "what": "A beat-for-beat remake of a TV-ad genre the avatar grew up on — the period look, voice, jingle and pack shot — with our product and our words dropped in. Genre only, never another brand's ad, logo or trademark.",
+   "why_it_works": "A format people already remember gets attention for free; the viewer finishes the pattern in their head.",
+   "status": "draft",
+   "signed": null,
+   "examples": "To swipe: real period spots of the genre the avatar's age band watched.",
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "id": "infomercial-throwback",
+   "name": "Infomercial throwback",
+   "what": "Late-night infomercial grammar: the black-and-white 'are you tired of…' struggle, the colour switch, the host, 'but wait', the number card — played straight or played for the laugh.",
+   "why_it_works": "Everyone over 30 knows every beat, so the turn (black-and-white to colour) lands without explaining.",
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "id": "era-roll-call",
+   "name": "Era roll call",
+   "what": "'If you grew up in the [DECADE] you remember…' — a quick list of real things from the avatar's youth that ends on the one they still carry (the habit, the damage, the old fix), then the turn.",
+   "why_it_works": "Each item is a small 'that's me'; by the last one they're already nodding.",
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "id": "game-continue",
+   "name": "Continue screen",
+   "what": "Video-game grammar: the old struggle plays as a level, it ends on GAME OVER / CONTINUE? — the product is pressing continue. Pairs with style pixel-16bit.",
+   "why_it_works": "The continue screen is a literal second chance at the timeline, in the language the avatar grew up playing.",
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  },
+  {
+   "id": "grandma-remedy",
+   "name": "Grandma's remedy",
+   "what": "What the family used to put on it — the kitchen, the jar, the older hands — then today's version of the same idea. Only where the product truly carries the old remedy (a traditional ingredient the product is really built on).",
+   "why_it_works": "It ties the product to a past the viewer trusts instead of a lab they don't.",
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

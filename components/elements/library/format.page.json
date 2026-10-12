@@ -6,7 +6,7 @@
  "note": "Held as code in components/naming/classify_pages.py; listed here as rows.",
  "rows": [
   {
-   "id": "salespage",
+   "id": "sales-page",
    "name": "Sales page",
    "what": "a long page that makes the whole case and asks for the order",
    "why_it_works": null,
@@ -16,7 +16,11 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [
+    "salespage"
+   ],
+   "note": "The pages machine (classify_pages.py) still writes `salespage`; it resolves here through the alias."
   },
   {
    "id": "advertorial",
@@ -29,10 +33,12 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
-   "id": "prelander",
+   "id": "pre-lander",
    "name": "Pre-lander",
    "what": "a short page between the ad and the offer that continues the ad's sentence",
    "why_it_works": null,
@@ -42,7 +48,11 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [
+    "prelander"
+   ],
+   "note": "The pages machine (classify_pages.py) still writes `prelander`; it resolves here through the alias."
   },
   {
    "id": "listicle",
@@ -55,7 +65,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "quiz",
@@ -68,7 +80,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "comparison",
@@ -81,7 +95,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "review-page",
@@ -94,7 +110,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "blog",
@@ -107,7 +125,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "product-page",
@@ -120,7 +140,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "utility",
@@ -133,8 +155,14 @@
    "evidence": null,
    "approved": false,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "decisions": "components/elements/decisions.json",
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

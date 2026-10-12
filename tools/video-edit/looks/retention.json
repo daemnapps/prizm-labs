@@ -1,0 +1,112 @@
+{
+ "_readme": "The retention checks — what the edit measures on every run so the machine is dialled for attention and acquisition (the owner, 2026-09-23: 'we are literally programming ads for social media'). machine/retention.py reads these rows; every number is a DIAL the owner can change here (or per run in controls.json → retention.dials). NOTHING here blocks an export (the owner, 2026-09-23: 'don't worry about the feed ads run 6–15 seconds or hooks lands in the first 3 seconds'): the two evidence-backed rules are INFO lines in the report, every other rule is a WARN with a score. `evidence: evidence` = a platform study stands behind the number; `house-style` = common editor practice, no study found — our own number, tune it. Source for both: the social-edit-libraries research, 2026-09-23.",
+ "updated": "2026-09-23",
+ "placement": {
+  "value": "organic",
+  "what": "where this piece runs — only the length line in the report reads it; it never blocks",
+  "options": {
+   "organic": {"name": "Organic TikTok / Reels", "length_s": null, "note": "no length band — organic has no fixed sweet spot"},
+   "meta-feed": {"name": "Meta Feed ad", "length_s": [6, 15], "note": "Meta's own Feed guidance: 6–15 s when the format allows"},
+   "meta-reels": {"name": "Meta Reels ad", "length_s": [6, 30], "note": "house band for Reels ads"},
+   "tiktok-ad": {"name": "TikTok in-feed ad", "length_s": [9, 30], "note": "house band for TikTok ads"}
+  }
+ },
+ "rules": [
+  {
+   "id": "hook-3s",
+   "name": "Hook lands in the first 3 s",
+   "rule": "Hook text is on screen from frame one AND the hook line is spoken (or the hook text stays up long enough to read) by 3.0 s.",
+   "threshold": {"by_s": 3.0, "frame_one_s": 0.04, "read_s": 1.5},
+   "severity": "info",
+   "evidence": "evidence",
+   "source": "Facebook IQ via leadsbridge.com/blog/meta-ads-best-practices — 65% who reach 3 s go on to 10 s; 23% more brand recall when the brand is in the first 3 s",
+   "note": "Info only, never a gate (the owner, 2026-09-23)."
+  },
+  {
+   "id": "length-band",
+   "name": "Length fits the placement",
+   "rule": "The piece runs inside the placement's length band (placement dial above). Organic has no band.",
+   "threshold": {"placement": "organic"},
+   "severity": "info",
+   "evidence": "evidence",
+   "source": "Meta Feed creative guidance, 6–15 s (cinerads.com/blog/meta-ads-video-creative-best-practices)",
+   "note": "Info only, never a gate (the owner, 2026-09-23)."
+  },
+  {
+   "id": "static-hold",
+   "name": "No static hold",
+   "rule": "Something changes at least every N seconds: a cut, a zoom/punch-in, a new caption line, a sound effect or a graphic. A longer stretch is flagged at its seconds.",
+   "threshold": {"max_s": 2.5},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "MrBeast-style retention editing, observed practice (air.io retention-editing guide) — no study behind the number"
+  },
+  {
+   "id": "change-cadence",
+   "name": "Visual change cadence",
+   "rule": "At least one VISUAL change (cut, zoom, graphic, transition) every N seconds — captions and sound do not count here.",
+   "threshold": {"every_s": 4.0},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "'pattern interrupt every 3–5 s' — repeated across editor guides, no study cited (joyspace.ai)"
+  },
+  {
+   "id": "dead-air",
+   "name": "No dead air left in",
+   "rule": "No silence longer than N seconds between words while someone is on screen talking or the voice is running. Silent plates (cards, splits, end card) are silent on purpose and are not counted.",
+   "threshold": {"max_s": 0.4},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "top retention editors cut every pause (air.io) — practice, not measured"
+  },
+  {
+   "id": "sfx-pairing",
+   "name": "Caption pops carry a sound",
+   "rule": "Share of caption pops (each new caption line) with a sound effect landing within the window of it.",
+   "threshold": {"min_ratio": 0.5, "window_s": 0.2},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "'every word-pop gets an SFX hit' — editor practice; house style says every pop, the dial starts at half"
+  },
+  {
+   "id": "zoom-emphasis",
+   "name": "Zoom on the emphasis words",
+   "rule": "Share of emphasis words with a zoom (a punch-in cut, a zoom transition, a zoom move) within the window of the word. Emphasis = words marked `emphasis` on the sheet, else the loudest share of words in the rendered sound, else numbers / ALL CAPS / '!' words.",
+   "threshold": {"min_ratio": 0.5, "window_s": 0.25, "loudest_share": 0.15},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "'something changes every second, zoom on the stressed word' — editor practice, no number found"
+  },
+  {
+   "id": "broll-cadence",
+   "name": "Cutaways in talking runs",
+   "rule": "In a talking run (the presenter on screen with nothing laid over), a B-roll, insert or graphic at least every N seconds.",
+   "threshold": {"max_talking_s": 6.0},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "B-roll cadence — editor practice, no numeric source found; our own threshold"
+  },
+  {
+   "id": "text-hook-1s",
+   "name": "Words on screen within 1 s",
+   "rule": "Some text (the hook, a caption, a card) is on screen by N seconds.",
+   "threshold": {"by_s": 1.0},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "partly backed by the 3-second / brand-recall data (Facebook IQ); the 1 s figure itself is house style"
+  },
+  {
+   "id": "loop-ending",
+   "name": "Loop-friendly ending",
+   "rule": "How much the last frame looks like the first (SSIM 0–1, measured by ffmpeg on the rendered file). A score, not a must.",
+   "threshold": {"min_ssim": 0.5},
+   "severity": "warn",
+   "evidence": "house-style",
+   "source": "loop endings — common editor practice, no study found; an optional style flag"
+  }
+ ],
+ "beats": {
+  "snap_tolerance_s": 0.12,
+  "what": "machine/beats.py: B-roll hand-offs and graphic hits move to the nearest music beat when one is this close; talking cuts never move (the lips)"
+ }
+}

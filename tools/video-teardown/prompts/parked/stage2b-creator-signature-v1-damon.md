@@ -19,7 +19,7 @@ Two consequences to hold in mind:
   whoever writes the brief.
 - **Nothing here is filtered for relevance or format.** Whatever performed
   is in, including posts that are off-topic for our brand. Do not quietly
-  drop one because it doesn't suit us; if a post differs in kind
+  drop one because it doesn't suit us; if a post is an outlier in kind
   rather than degree, name it and say what it tells us.
 
 Work out this creator's **signature** — the way she actually makes videos,

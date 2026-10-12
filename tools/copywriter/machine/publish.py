@@ -6,18 +6,25 @@
 
 `results/` is the machine's working record — eleven stages, the prompt as
 sent, timings, the lot. Nobody trafficking an ad wants to open that. This
-writes the finished copy, and only the finished copy, into `output/`.
+writes the finished copy, and only the finished copy, beside the run that
+made it.
 
-The layout is the video library's, deliberately (components/video-teardown/
-machine/library.py): one folder per source, one file per version, a new
-version never overwrites an old one, and an index file that makes the folder
-readable on its own without opening anything else.
+WHERE IT LANDS (the owner ruled 2026-09-21, "finished copy goes in runs"): the
+deliverable sits inside its own run, which is what `runs/README.md:57` already
+asks for in phase 1 — the run folder then explains itself end to end, from the
+source to the thing you ship.
 
-    output/
-      <source-slug>/
-        copy.md            what shipped: every format, headlines, descriptions
-        v1.md, v2.md       one file per version — a re-run never overwrites
-        source.md          what it was built from, and what was open
+    runs/copywriter/<brand>/<label>/
+      stage0..stage9        the machine's working record
+      deliverable/
+        copy.md             what shipped: every format, headlines, descriptions
+        v1.md, v2.md        one per render of THIS run — a re-render never overwrites
+        source.md           what it was built from, and what was open
+
+`output/` is HISTORY, the same way `results/` is: 131 files published under
+the old per-source layout, still readable, never written to again. Versions
+used to stack there per source; now the run label carries that — comparing two
+prompt versions means comparing two runs.
 
 Text only, and in git. Unlike the teardowns there is no media here worth
 mirroring to Drive — copy is words, and words belong in the repo where they
@@ -33,7 +40,7 @@ import paths as P
 from paths import HERE
 
 RESULTS = HERE / "results"          # history; new runs file under runs/ — see paths.all_runs()
-OUTPUT = HERE / "output"
+OUTPUT = HERE / "output"        # HISTORY: published before 2026-09-21, read, never written
 
 
 def now():
@@ -76,14 +83,11 @@ def publish(run_dir):
     if not render.is_file():
         return None  # nothing finished to publish
 
-    # A source_reference that is only a stage file name ("01-teardown") names
-    # the kind of record, not the source. Nine different <brand> statics all
-    # carried "01-teardown" and were filed as nine versions of one piece
-    # (2026-09-16). Those fall back to the run's own slug, which is unique.
-    ref = st.get("source_reference") or ""
-    if not ref or re.fullmatch(r"\d{2}-[a-z-]+(\.md)?", ref.strip()):
-        ref = st.get("slug")
-    dest = OUTPUT / slug(ref)
+    # Filing by source_reference used to collapse unrelated pieces: nine
+    # Brand A statics all carried "01-teardown" and became nine versions of
+    # one piece (2026-09-16). Filing inside the run removes the question —
+    # a run is unique by construction.
+    dest = run_dir / "deliverable"
     dest.mkdir(parents=True, exist_ok=True)
     v = next_version(dest)
 
@@ -122,7 +126,6 @@ def publish(run_dir):
 
 
 def main():
-    OUTPUT.mkdir(exist_ok=True)
     want = sys.argv[1] if len(sys.argv) > 1 else None
     done = 0
     # Oldest run first, so version numbers follow the order the copy was
@@ -134,7 +137,7 @@ def main():
         except Exception:
             return ""
 
-    runs = P.all_runs()              # both homes: runs/copy-machine/<brand>/ and results/
+    runs = P.all_runs()              # both homes: runs/copywriter/<brand>/ and results/
     for d in sorted(runs, key=when):
         if want and d.name != want:
             continue

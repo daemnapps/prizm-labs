@@ -1,0 +1,69 @@
+{
+ "_readme": "HOW NUMBERS ARE SAID (the owner, 2026-09-23: \"we need to get phonetic spelling for numbers when spoken\"). The script keeps its digits — captions show \"$29\". Only the words SENT to the voice or the song model are converted, by machine/spoken_numbers.py, and ElevenLabs' own guessing is switched off (apply_text_normalization: off), so this table is the only thing that decides how a number is said. Rules run top to bottom; a row's `examples` are checked by test_spoken.py, so change an example and the test tells you whether the machine agrees. To change how something is said: edit the words tables below (units, symbols, fixed) or the examples, then run the tests.",
+ "rules": [
+  {"id": "fixed", "what": "whole phrases said one fixed way (the `fixed` table below)", "examples": [["open 24/7", "open twenty-four seven"]]},
+  {"id": "phone", "what": "a phone number: digit by digit, zero said \"oh\", a pause between groups", "examples": [["call (209) 444-2316", "call two oh nine, four four four, two three one six"]]},
+  {"id": "number_sign", "what": "#1 → number one", "examples": [["the #1 reason", "the number one reason"]]},
+  {"id": "money_range", "what": "a price range: the currency word once, at the end", "examples": [["laser at $300–600 a session", "laser at three hundred to six hundred dollars a session"]]},
+  {"id": "money", "what": "a price. Whole dollars get the word \"dollars\"; dollars and cents under $1,000 are said the way a person reads a price tag (\"twenty-nine ninety-nine\"); cents alone are \"cents\"; k / M / B after the figure are thousand / million / billion; 1,100–9,999 with hundreds is said \"twelve hundred\"", "examples": [["only $29", "only twenty-nine dollars"], ["$29.99 today", "twenty-nine ninety-nine today"], ["$1,200 of laser", "twelve hundred dollars of laser"], ["$0.99", "ninety-nine cents"], ["$1", "one dollar"], ["$29.00", "twenty-nine dollars"], ["$5.05", "five oh five"], ["$10k", "ten thousand dollars"], ["$1,000", "one thousand dollars"]]},
+  {"id": "time", "what": "a clock time. :00 is \"o'clock\" (or nothing before am/pm); :05 is \"oh five\"; am/pm said as letters", "examples": [["at 7:30", "at seven thirty"], ["7:05am", "seven oh five A M"], ["by 9:00", "by nine o'clock"], ["at 7pm", "at seven P M"]]},
+  {"id": "rating", "what": "a score out of something: 4.9/5 → four point nine out of five", "examples": [["4.9/5 stars", "four point nine out of five stars"]]},
+  {"id": "fraction", "what": "a simple fraction", "examples": [["1/2 a tube", "one half a tube"], ["3/4 of women", "three quarters of women"], ["2/3", "two thirds"]]},
+  {"id": "letters_then_number", "what": "letters said as letters, then the number: SPF 30 → S P F thirty; B3 → B three; IPX7 → I P X seven. Any 1–4 capital letters stuck to a figure are spelled out; the `letters` table lists the letter-words spelled out even with a space or no figure (SPF, UV)", "examples": [["with SPF 30", "with S P F thirty"], ["vitamin B3", "vitamin B three"], ["SPF30", "S P F thirty"], ["IPX7 waterproof", "I P X seven waterproof"], ["Sodium C14-16", "Sodium C fourteen to sixteen"], ["with UV", "with U V"]]},
+  {"id": "range", "what": "two figures joined by a dash are a range: \"to\"", "examples": [["every 28–40 days", "every twenty-eight to forty days"], ["1-2 times a week", "one to two times a week"], ["15–25%", "fifteen to twenty-five percent"]]},
+  {"id": "multiplier", "what": "2x / 3× → two times / three times", "examples": [["3× a week", "three times a week"], ["2x faster", "two times faster"]]},
+  {"id": "percent", "what": "N% → N percent", "examples": [["95% felt softer", "ninety-five percent felt softer"], ["2.5%", "two point five percent"]]},
+  {"id": "ordinal", "what": "1st, 2nd, 23rd → first, second, twenty-third", "examples": [["my 1st tube", "my first tube"], ["the 23rd", "the twenty-third"]]},
+  {"id": "magnitude", "what": "a figure with k / M / B stuck to it: 40B → forty billion, 10k → ten thousand", "examples": [["40B CFU", "forty billion CFU"], ["10k views", "ten thousand views"]]},
+  {"id": "unit", "what": "a measurement: the unit said in full, singular for exactly one (the `units` table)", "examples": [["100g tube", "one hundred grams tube"], ["3.53 oz", "three point five three ounces"], ["1 oz", "one ounce"], ["50ml", "fifty milliliters"], ["10 mg", "ten milligrams"], ["3.53 fl oz", "three point five three fluid ounces"]]},
+  {"id": "plus", "what": "a figure followed by + → \"plus\"", "examples": [["625+ men", "six hundred twenty-five plus men"]]},
+  {"id": "digits", "what": "a run of five or more digits with no commas is read digit by digit (a code, a zip) — unless it ends in 00, which is a count (12000 → twelve thousand)", "examples": [["NV 89101", "NV eight nine one oh one"], ["12000 RPM", "twelve thousand RPM"]]},
+  {"id": "year", "what": "a four-digit figure from 1100 to 2099 with no comma is read as a year", "examples": [["since 1998", "since nineteen ninety-eight"], ["in 2026", "in twenty twenty-six"], ["2005", "two thousand five"], ["1900", "nineteen hundred"]]},
+  {"id": "decimal", "what": "a decimal: \"point\", then each digit", "examples": [["4.9 stars", "four point nine stars"]]},
+  {"id": "integer", "what": "any other whole number, commas allowed; a hyphen after it stays (\"60-day\" → \"sixty-day\")", "examples": [["a 60-day guarantee", "a sixty-day guarantee"], ["64 women", "sixty-four women"], ["12,000 reviews", "twelve thousand reviews"], ["100", "one hundred"], ["1,250,000", "one million two hundred fifty thousand"]]}
+ ],
+ "fixed": {
+  "24/7": "twenty-four seven",
+  "365": "three sixty-five",
+  "2-in-1": "two-in-one",
+  "3-in-1": "three-in-one"
+ },
+ "currency": {
+  "$": ["dollar", "dollars", "cent", "cents"],
+  "£": ["pound", "pounds", "penny", "pence"],
+  "€": ["euro", "euros", "cent", "cents"]
+ },
+ "magnitudes": {
+  "k": "thousand",
+  "K": "thousand",
+  "M": "million",
+  "B": "billion"
+ },
+ "letters": ["SPF", "UV", "UVA", "UVB", "PH", "pH"],
+ "units": {
+  "fl oz": ["fluid ounce", "fluid ounces"],
+  "fl. oz": ["fluid ounce", "fluid ounces"],
+  "oz": ["ounce", "ounces"],
+  "mg": ["milligram", "milligrams"],
+  "mcg": ["microgram", "micrograms"],
+  "ml": ["milliliter", "milliliters"],
+  "mL": ["milliliter", "milliliters"],
+  "g": ["gram", "grams"],
+  "kg": ["kilogram", "kilograms"],
+  "lb": ["pound", "pounds"],
+  "lbs": ["pound", "pounds"],
+  "cm": ["centimeter", "centimeters"],
+  "mm": ["millimeter", "millimeters"],
+  "min": ["minute", "minutes"],
+  "mins": ["minute", "minutes"],
+  "hr": ["hour", "hours"],
+  "hrs": ["hour", "hours"],
+  "sec": ["second", "seconds"],
+  "secs": ["second", "seconds"]
+ },
+ "symbols": {
+  "™": "",
+  "®": "",
+  "©": ""
+ }
+}

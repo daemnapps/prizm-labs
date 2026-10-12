@@ -1,0 +1,6401 @@
+{
+ "_readme": "Every HyperFrames registry block and component, indexed by id so a teardown, a brief or the edit can name one. `fits` is our family for it. A sheet may name a row only once it is INSTALLED (`python3 machine/registry.py install <id>` → looks/registry/); the gate refuses an unknown id, and a known one that is not installed. Rebuilt by `registry.py index`.",
+ "source": "hyperframes catalog --json",
+ "hyperframes": "0.8.62",
+ "updated": "2026-09-23",
+ "count": 382,
+ "by_fits": {
+  "camera": 24,
+  "caption": 17,
+  "mock-ui": 37,
+  "other": 168,
+  "overlay": 61,
+  "particles": 5,
+  "transition": 70
+ },
+ "blocks": [
+  {
+   "id": "ai-chat-reveal",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "AI Chat Reveal",
+   "what": "A question is typed on a rising keyboard, sent, and answered by an AI that streams its reply word by word on a measured token rhythm - thinking dot, uneven bursts, bulleted list - before the app cuts to a branded closing card",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "ai",
+    "chat",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 19.3333,
+   "install_cmd": "python3 machine/registry.py install ai-chat-reveal"
+  },
+  {
+   "id": "animated-bar-chart",
+   "category": "component",
+   "fits": "other",
+   "title": "Animated Bar Chart",
+   "what": "A compact data card with deterministic bar growth and value callouts.",
+   "tags": [
+    "data"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install animated-bar-chart"
+  },
+  {
+   "id": "app-showcase",
+   "category": "block",
+   "fits": "other",
+   "title": "App Showcase",
+   "what": "Fitness app product showcase with three floating smartphone screens",
+   "tags": [
+    "showcase",
+    "app",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 5.5,
+   "install_cmd": "python3 machine/registry.py install app-showcase"
+  },
+  {
+   "id": "apple-money-count",
+   "category": "block",
+   "fits": "other",
+   "title": "Apple Money Count",
+   "what": "Apple-style finance counter that counts from $0 to $__ flashes green, and bursts money icons with sound.",
+   "tags": [
+    "showcase",
+    "finance",
+    "kinetic",
+    "youtube",
+    "sfx"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install apple-money-count"
+  },
+  {
+   "id": "arc-motion-path",
+   "category": "component",
+   "fits": "other",
+   "title": "Arc Motion Path",
+   "what": "A GSAP MotionPath primitive that flies a callout along a curved arc with autorotation.",
+   "tags": [
+    "video-primitive",
+    "motionpath",
+    "gsap-plugin",
+    "hyperframes-native"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install arc-motion-path"
+  },
+  {
+   "id": "ascii-render-pass",
+   "category": "component",
+   "fits": "overlay",
+   "title": "ASCII Render Pass",
+   "what": "A slotted scene renders as live ASCII: a canvas samples the source's luminance grid (rasterized once at mount) and draws glyphs from a density ramp charset; resolution steps coarse to fine as the piece resolves, then holds legible-fine.",
+   "tags": [
+    "motion-primitive",
+    "experiment",
+    "texture",
+    "ascii",
+    "quantize"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install ascii-render-pass"
+  },
+  {
+   "id": "ascii-trail-reveal",
+   "category": "component",
+   "fits": "other",
+   "title": "ASCII Trail Reveal",
+   "what": "An authored S-curve sweeps through a deterministic ASCII grid, flipping cells away to reveal a labeled panel.",
+   "tags": [
+    "motion-primitive",
+    "intro",
+    "reveal",
+    "ascii",
+    "trail",
+    "grid"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install ascii-trail-reveal"
+  },
+  {
+   "id": "aurora-drift",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Aurora Drift",
+   "what": "Three soft accent-derived aurora fields drift in an exact ambient loop over a deep base and faint vignette.",
+   "tags": [
+    "motion-primitive",
+    "background",
+    "aurora",
+    "gradient",
+    "ambient",
+    "loopable"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install aurora-drift"
+  },
+  {
+   "id": "avatar-cloud",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Avatar Cloud",
+   "what": "Lettermark avatars populate a loose elliptical cloud while fine SVG links draw between the community and its central proof label.",
+   "tags": [
+    "effects",
+    "avatars",
+    "community",
+    "network",
+    "social-proof",
+    "prove"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install avatar-cloud"
+  },
+  {
+   "id": "avatar-group-hover",
+   "category": "component",
+   "fits": "transition",
+   "title": "Avatar Group Hover",
+   "what": "A distance-falloff avatar group lift with bouncy hover return",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "avatar",
+    "hover"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install avatar-group-hover"
+  },
+  {
+   "id": "badge-pop",
+   "category": "component",
+   "fits": "transition",
+   "title": "Badge Pop",
+   "what": "A transitions.dev-inspired notification badge pop with elastic scale and count reveal",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "badge",
+    "microinteraction"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install badge-pop"
+  },
+  {
+   "id": "bar-chart-race",
+   "category": "block",
+   "fits": "other",
+   "title": "Bar Chart Race",
+   "what": "Ranked bars grow and overtake each other as a time series advances, with the axis rescaling as values climb and the accent handing over to whoever leads",
+   "tags": [
+    "data",
+    "chart",
+    "statistics",
+    "ranking"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install bar-chart-race"
+  },
+  {
+   "id": "beat-accent",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Beat Accent",
+   "what": "A single music-hit sting: impact flash, micro scale-pulse on the subject, immediate decay.",
+   "tags": [
+    "motion-primitive",
+    "effects",
+    "burst",
+    "sting",
+    "emphasize",
+    "impact"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install beat-accent"
+  },
+  {
+   "id": "beat-freeze-cut",
+   "category": "block",
+   "fits": "transition",
+   "title": "Beat Freeze Cut",
+   "what": "A beat-driven speed ramp, freeze-frame hit, and hard-cut sequence for music-led promos and montages.",
+   "tags": [
+    "transition",
+    "music",
+    "beat-driven",
+    "freeze-frame"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install beat-freeze-cut"
+  },
+  {
+   "id": "beat-pulse-background",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Beat Pulse Background",
+   "what": "An accent-derived backdrop pulses its glow intensity and saturation on a deterministic, supplied beat grid.",
+   "tags": [
+    "motion-primitive",
+    "background",
+    "beat",
+    "pulse",
+    "rhythmic",
+    "reactive"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install beat-pulse-background"
+  },
+  {
+   "id": "beat-timeline",
+   "category": "component",
+   "fits": "other",
+   "title": "Beat Timeline",
+   "what": "A paused master-timeline orchestration spine that pins titled beat rows to evenly spaced named labels. Each row enters on its label, holds with the sequence, then exits with the group.",
+   "tags": [
+    "orchestration",
+    "transitions",
+    "sequencing",
+    "bridge",
+    "timeline"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install beat-timeline"
+  },
+  {
+   "id": "before-after-wipe",
+   "category": "component",
+   "fits": "transition",
+   "title": "Before After Wipe",
+   "what": "Two full-bleed content slots compare before and after states as a persistent divider wipes the after layer over the before layer and rests at a configurable split. Callers fill the named before/after slot panels; token-styled defaults render when a slot is left empty.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "compare",
+    "holdable",
+    "before-after",
+    "wipe",
+    "slots"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install before-after-wipe"
+  },
+  {
+   "id": "blue-sweater-intro-video",
+   "category": "block",
+   "fits": "other",
+   "title": "Blue Sweater Intro Video",
+   "what": "Warm AI creator intro sequence that resolves into an X follow card for @_blue_sweater_.",
+   "tags": [
+    "showcase",
+    "ai",
+    "creator",
+    "sfx"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install blue-sweater-intro-video"
+  },
+  {
+   "id": "blur-in",
+   "category": "component",
+   "fits": "other",
+   "title": "Blur In",
+   "what": "An Operator Black word-level content reveal that resolves its own text from controlled blur",
+   "tags": [
+    "video-primitive",
+    "blur-in",
+    "text-effect"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install blur-in"
+  },
+  {
+   "id": "blur-out-up",
+   "category": "component",
+   "fits": "other",
+   "title": "Blur Out Up",
+   "what": "Words arrive clean and depart upward with increasing blur for airy exits.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install blur-out-up"
+  },
+  {
+   "id": "bottom-up-letters",
+   "category": "component",
+   "fits": "other",
+   "title": "Bottom Up Letters",
+   "what": "Splits text into letters and reveals each glyph from below with deterministic staggered timing",
+   "tags": [
+    "motion-primitive",
+    "text",
+    "letters",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install bottom-up-letters"
+  },
+  {
+   "id": "browser-device-stage",
+   "category": "component",
+   "fits": "other",
+   "title": "Browser Device Stage",
+   "what": "A generic app surface in token-native device chrome (browser, window, or phone). The screen is a slot for caller img/video/HTML with a token-styled skeleton default; one settle entrance, a readable hold, and an optional screen swap.",
+   "tags": [
+    "stage",
+    "product-demo",
+    "device",
+    "browser",
+    "phone",
+    "slot",
+    "chrome"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install browser-device-stage"
+  },
+  {
+   "id": "camcorder-hud",
+   "category": "block",
+   "fits": "camera",
+   "title": "Camcorder HUD",
+   "what": "Responsive REC, battery, editable date placeholder, and timeline-driven counter overlay for creator-camera and camcorder treatments",
+   "tags": [
+    "camcorder",
+    "camera",
+    "recording",
+    "hud",
+    "overlay",
+    "creator",
+    "media-treatment-overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install camcorder-hud"
+  },
+  {
+   "id": "camera-dolly-zoom",
+   "category": "block",
+   "fits": "camera",
+   "title": "Dolly Zoom (Vertigo Shot)",
+   "what": "Camera tracks toward or away from the subject while the field of view changes the opposite way, so the subject holds its frame size while the background collapses behind it or rushes in. Focal length is solved from dolly distance every frame against d * tan(FOV/2) = const, not keyframed beside it. Requires depth: the subject sits on the z = 0 plane and the content behind it must be layered or genuinely 3D (translateZ at two or more distinct depths) -- a flat element gains nothing from this move.",
+   "tags": [
+    "camera",
+    "depth",
+    "3d",
+    "cinematic"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install camera-dolly-zoom"
+  },
+  {
+   "id": "camera-rig-depth-stack",
+   "category": "component",
+   "fits": "other",
+   "title": "Camera Rig Depth Stack",
+   "what": "A 3D camera-rig-style card stack with depth, parallax, and focus shift.",
+   "tags": [
+    "advanced-motion",
+    "hyperframes-native"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install camera-rig-depth-stack"
+  },
+  {
+   "id": "camera-scan-gate",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Camera Scan Gate",
+   "what": "A camera and QR recognition moment with a viewfinder sweep, bracket lock, confirmation pulse, and verified next beat.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "camera",
+    "qr",
+    "scan",
+    "recognition",
+    "interaction",
+    "demonstrate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install camera-scan-gate"
+  },
+  {
+   "id": "camera-shake",
+   "category": "component",
+   "fits": "camera",
+   "title": "Camera Shake",
+   "what": "Procedural handheld, telephoto and rig camera shake for any wrapper: nine measured profiles with per-lens projection, closed-form and seek-safe",
+   "tags": [
+    "camera",
+    "shake",
+    "handheld",
+    "effect",
+    "cinematic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install camera-shake"
+  },
+  {
+   "id": "canopy-part-title",
+   "category": "block",
+   "fits": "camera",
+   "title": "Canopy Part Title",
+   "what": "Leaves sweep through the frame and part to reveal the headline.",
+   "tags": [
+    "3d-motion",
+    "title-card",
+    "leaves",
+    "organic",
+    "depth-of-field",
+    "two-headlines",
+    "sweep"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install canopy-part-title"
+  },
+  {
+   "id": "caption-blend-difference",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Blend Difference",
+   "what": "Auto-inverting text using mix-blend-mode: difference — flips between white and black per-pixel against the background",
+   "tags": [
+    "text",
+    "text-effect",
+    "effect",
+    "blend-mode",
+    "contrast",
+    "inversion"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-blend-difference"
+  },
+  {
+   "id": "caption-camera-follow",
+   "category": "component",
+   "fits": "caption",
+   "title": "Camera Follow Captions",
+   "what": "One sentence written across a world far larger than the frame. Each word is sized against everything already written, so the block grows geometrically and the camera pulls back at a steady rate to keep landing the new word at the same size. Old words stay lit and simply become small.",
+   "tags": [
+    "captions",
+    "caption-style",
+    "camera",
+    "typography",
+    "motion-primitive",
+    "portrait"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-camera-follow"
+  },
+  {
+   "id": "caption-clip-wipe",
+   "category": "component",
+   "fits": "caption",
+   "title": "Clip Wipe",
+   "what": "Left-to-right clip-path wipe reveal per word",
+   "tags": [
+    "captions",
+    "caption-style",
+    "wipe",
+    "clip-path",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-clip-wipe"
+  },
+  {
+   "id": "caption-editorial-emphasis",
+   "category": "component",
+   "fits": "caption",
+   "title": "Editorial Emphasis",
+   "what": "Dual-font system with dramatic size contrast for emphasis words",
+   "tags": [
+    "captions",
+    "caption-style",
+    "editorial",
+    "typography",
+    "emphasis"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-editorial-emphasis"
+  },
+  {
+   "id": "caption-emoji-pop",
+   "category": "component",
+   "fits": "caption",
+   "title": "Emoji Pop",
+   "what": "Emoji integration with stroked text and horizontal squeeze entrance",
+   "tags": [
+    "captions",
+    "caption-style",
+    "emoji",
+    "social"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-emoji-pop"
+  },
+  {
+   "id": "caption-glitch-rgb",
+   "category": "component",
+   "fits": "caption",
+   "title": "Glitch RGB",
+   "what": "RGB chromatic aberration with CRT scanline overlay",
+   "tags": [
+    "captions",
+    "caption-style",
+    "glitch",
+    "cyber",
+    "tech"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-glitch-rgb"
+  },
+  {
+   "id": "caption-gradient-fill",
+   "category": "component",
+   "fits": "caption",
+   "title": "Gradient Fill",
+   "what": "Gradient-clipped text with elastic bounce entrance",
+   "tags": [
+    "captions",
+    "caption-style",
+    "gradient",
+    "colorful"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-gradient-fill"
+  },
+  {
+   "id": "caption-highlight",
+   "category": "component",
+   "fits": "caption",
+   "title": "Highlight",
+   "what": "Red background sweep behind each active word, TikTok-style",
+   "tags": [
+    "captions",
+    "caption-style",
+    "highlight",
+    "social",
+    "tiktok"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-highlight"
+  },
+  {
+   "id": "caption-kinetic-slam",
+   "category": "component",
+   "fits": "caption",
+   "title": "Kinetic Slam",
+   "what": "Full-screen single-word display with alternating entrance directions",
+   "tags": [
+    "captions",
+    "caption-style",
+    "kinetic",
+    "typography",
+    "slam"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-kinetic-slam"
+  },
+  {
+   "id": "caption-matrix-decode",
+   "category": "component",
+   "fits": "caption",
+   "title": "Matrix Decode",
+   "what": "Character scramble animation before text reveal",
+   "tags": [
+    "captions",
+    "caption-style",
+    "matrix",
+    "scramble",
+    "decode"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-matrix-decode"
+  },
+  {
+   "id": "caption-neon-accent",
+   "category": "component",
+   "fits": "caption",
+   "title": "Neon Accent",
+   "what": "Multi-color neon glow accents with wiggle drift animation",
+   "tags": [
+    "captions",
+    "caption-style",
+    "neon",
+    "glow",
+    "accent"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-neon-accent"
+  },
+  {
+   "id": "caption-neon-glow",
+   "category": "component",
+   "fits": "caption",
+   "title": "Neon Glow",
+   "what": "Cyan and magenta neon glow with keyword accent colors",
+   "tags": [
+    "captions",
+    "caption-style",
+    "neon",
+    "glow",
+    "gaming"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-neon-glow"
+  },
+  {
+   "id": "caption-parallax-layers",
+   "category": "component",
+   "fits": "caption",
+   "title": "Parallax Layers",
+   "what": "Behind-subject 3D text layering with vertical stretch effect",
+   "tags": [
+    "captions",
+    "caption-style",
+    "parallax",
+    "3d",
+    "depth"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-parallax-layers"
+  },
+  {
+   "id": "caption-particle-burst",
+   "category": "component",
+   "fits": "caption",
+   "title": "Particle Burst",
+   "what": "Keyword words trigger colored particle explosions",
+   "tags": [
+    "captions",
+    "caption-style",
+    "particles",
+    "burst",
+    "effects"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-particle-burst"
+  },
+  {
+   "id": "caption-pill-karaoke",
+   "category": "component",
+   "fits": "caption",
+   "title": "Pill Karaoke",
+   "what": "Pill-shaped container with per-word karaoke color highlight",
+   "tags": [
+    "captions",
+    "caption-style",
+    "karaoke",
+    "pill"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-pill-karaoke"
+  },
+  {
+   "id": "caption-texture",
+   "category": "component",
+   "fits": "caption",
+   "title": "Texture",
+   "what": "Flowing texture mask over large uppercase text — ships with 6 textures (lava, marble, metal, wood, concrete, rock), configurable via the texture variable",
+   "tags": [
+    "captions",
+    "caption-style",
+    "texture",
+    "mask"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-texture"
+  },
+  {
+   "id": "caption-weight-shift",
+   "category": "component",
+   "fits": "caption",
+   "title": "Weight Shift",
+   "what": "Elegant font-weight transition between caption lines",
+   "tags": [
+    "captions",
+    "caption-style",
+    "minimal",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install caption-weight-shift"
+  },
+  {
+   "id": "card-resize",
+   "category": "component",
+   "fits": "transition",
+   "title": "Card Resize",
+   "what": "A transitions.dev-inspired card resize primitive that expands a compact card into a detail panel",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "card",
+    "layout"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install card-resize"
+  },
+  {
+   "id": "carousel-circle-1",
+   "category": "block",
+   "fits": "other",
+   "title": "Circle Carousel 1",
+   "what": "Image cards ride a circle with a size gradient by depth angle, sweeping in fast-slow-fast swings (Circle style 1); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-circle-1"
+  },
+  {
+   "id": "carousel-circle-2",
+   "category": "block",
+   "fits": "other",
+   "title": "Circle Carousel 2",
+   "what": "Image cards ride a circle with a size gradient by depth angle, sweeping in fast-slow-fast swings (Circle style 2); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-circle-2"
+  },
+  {
+   "id": "carousel-circle-3",
+   "category": "block",
+   "fits": "other",
+   "title": "Circle Carousel 3",
+   "what": "Image cards ride a circle with a size gradient by depth angle, sweeping in fast-slow-fast swings (Circle style 3); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-circle-3"
+  },
+  {
+   "id": "carousel-circle-4",
+   "category": "block",
+   "fits": "other",
+   "title": "Circle Carousel 4",
+   "what": "Image cards ride a circle with a size gradient by depth angle, sweeping in fast-slow-fast swings (Circle style 4); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-circle-4"
+  },
+  {
+   "id": "carousel-circle-5",
+   "category": "block",
+   "fits": "other",
+   "title": "Circle Carousel 5",
+   "what": "Image cards ride a circle with a size gradient by depth angle, sweeping in fast-slow-fast swings (Circle style 5); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-circle-5"
+  },
+  {
+   "id": "carousel-orbit-1",
+   "category": "block",
+   "fits": "camera",
+   "title": "Orbit Carousel 1",
+   "what": "Image cards on a spinning 3D Fibonacci sphere, billboarded to the camera, sized by camera distance (Orbit style 1); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "orbit",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-orbit-1"
+  },
+  {
+   "id": "carousel-orbit-2",
+   "category": "block",
+   "fits": "camera",
+   "title": "Orbit Carousel 2",
+   "what": "Image cards on a spinning 3D Fibonacci sphere, billboarded to the camera, sized by camera distance (Orbit style 2); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "orbit",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-orbit-2"
+  },
+  {
+   "id": "carousel-orbit-3",
+   "category": "block",
+   "fits": "camera",
+   "title": "Orbit Carousel 3",
+   "what": "Image cards on a spinning 3D Fibonacci sphere, billboarded to the camera, sized by camera distance (Orbit style 3); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "orbit",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-orbit-3"
+  },
+  {
+   "id": "carousel-orbit-4",
+   "category": "block",
+   "fits": "camera",
+   "title": "Orbit Carousel 4",
+   "what": "Image cards on a spinning 3D Fibonacci sphere, billboarded to the camera, sized by camera distance (Orbit style 4); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "orbit",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-orbit-4"
+  },
+  {
+   "id": "carousel-orbit-5",
+   "category": "block",
+   "fits": "camera",
+   "title": "Orbit Carousel 5",
+   "what": "Image cards on a spinning 3D Fibonacci sphere, billboarded to the camera, sized by camera distance (Orbit style 5); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "orbit",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-orbit-5"
+  },
+  {
+   "id": "carousel-path-1",
+   "category": "block",
+   "fits": "other",
+   "title": "Path Carousel 1",
+   "what": "Image cards ride an open bezier path (arc, V, diagonal, wave, S-curve) with depth scaling and tangent rotation (Path style 1); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "path"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-path-1"
+  },
+  {
+   "id": "carousel-path-2",
+   "category": "block",
+   "fits": "other",
+   "title": "Path Carousel 2",
+   "what": "Image cards ride an open bezier path (arc, V, diagonal, wave, S-curve) with depth scaling and tangent rotation (Path style 2); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "path"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-path-2"
+  },
+  {
+   "id": "carousel-path-3",
+   "category": "block",
+   "fits": "other",
+   "title": "Path Carousel 3",
+   "what": "Image cards ride an open bezier path (arc, V, diagonal, wave, S-curve) with depth scaling and tangent rotation (Path style 3); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "path"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-path-3"
+  },
+  {
+   "id": "carousel-path-4",
+   "category": "block",
+   "fits": "other",
+   "title": "Path Carousel 4",
+   "what": "Image cards ride an open bezier path (arc, V, diagonal, wave, S-curve) with depth scaling and tangent rotation (Path style 4); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "path"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-path-4"
+  },
+  {
+   "id": "carousel-path-5",
+   "category": "block",
+   "fits": "other",
+   "title": "Path Carousel 5",
+   "what": "Image cards ride an open bezier path (arc, V, diagonal, wave, S-curve) with depth scaling and tangent rotation (Path style 5); 24 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "path"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-path-5"
+  },
+  {
+   "id": "carousel-text-circle-1",
+   "category": "block",
+   "fits": "other",
+   "title": "Text + Circle Carousel 1",
+   "what": "A headline mask-reveals word by word while a circle carousel converges from off-frame and threads the line, collapses to centre, hard-cuts to a second line that arrives at 1.4× (Circle style 1).",
+   "tags": [
+    "carousel",
+    "title-card",
+    "kinetic-text",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install carousel-text-circle-1"
+  },
+  {
+   "id": "carousel-text-circle-2",
+   "category": "block",
+   "fits": "other",
+   "title": "Text + Circle Carousel 2",
+   "what": "A headline mask-reveals word by word while a circle carousel converges from off-frame and threads the line, collapses to centre, hard-cuts to a second line that arrives at 1.4× (Circle style 2).",
+   "tags": [
+    "carousel",
+    "title-card",
+    "kinetic-text",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install carousel-text-circle-2"
+  },
+  {
+   "id": "carousel-text-circle-3",
+   "category": "block",
+   "fits": "other",
+   "title": "Text + Circle Carousel 3",
+   "what": "A headline mask-reveals word by word while a circle carousel converges from off-frame and threads the line, collapses to centre, hard-cuts to a second line that arrives at 1.4× (Circle style 3).",
+   "tags": [
+    "carousel",
+    "title-card",
+    "kinetic-text",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install carousel-text-circle-3"
+  },
+  {
+   "id": "carousel-text-circle-4",
+   "category": "block",
+   "fits": "other",
+   "title": "Text + Circle Carousel 4",
+   "what": "A headline mask-reveals word by word while a circle carousel converges from off-frame and threads the line, collapses to centre, hard-cuts to a second line that arrives at 1.4× (Circle style 4).",
+   "tags": [
+    "carousel",
+    "title-card",
+    "kinetic-text",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install carousel-text-circle-4"
+  },
+  {
+   "id": "carousel-text-circle-5",
+   "category": "block",
+   "fits": "other",
+   "title": "Text + Circle Carousel 5",
+   "what": "A headline mask-reveals word by word while a circle carousel converges from off-frame and threads the line, collapses to centre, hard-cuts to a second line that arrives at 1.4× (Circle style 5).",
+   "tags": [
+    "carousel",
+    "title-card",
+    "kinetic-text",
+    "images",
+    "showcase",
+    "circle"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install carousel-text-circle-5"
+  },
+  {
+   "id": "carousel-vision-1",
+   "category": "block",
+   "fits": "other",
+   "title": "Vision Carousel 1",
+   "what": "A ring of large image cards tilted into a row under a 3D camera, each card turning toward the centre (Vision style 1); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "vision",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-vision-1"
+  },
+  {
+   "id": "carousel-vision-2",
+   "category": "block",
+   "fits": "other",
+   "title": "Vision Carousel 2",
+   "what": "A ring of large image cards tilted into a row under a 3D camera, each card turning toward the centre (Vision style 2); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "vision",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-vision-2"
+  },
+  {
+   "id": "carousel-vision-3",
+   "category": "block",
+   "fits": "other",
+   "title": "Vision Carousel 3",
+   "what": "A ring of large image cards tilted into a row under a 3D camera, each card turning toward the centre (Vision style 3); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "vision",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-vision-3"
+  },
+  {
+   "id": "carousel-vision-4",
+   "category": "block",
+   "fits": "other",
+   "title": "Vision Carousel 4",
+   "what": "A ring of large image cards tilted into a row under a 3D camera, each card turning toward the centre (Vision style 4); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "vision",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-vision-4"
+  },
+  {
+   "id": "carousel-vision-5",
+   "category": "block",
+   "fits": "other",
+   "title": "Vision Carousel 5",
+   "what": "A ring of large image cards tilted into a row under a 3D camera, each card turning toward the centre (Vision style 5); 12 image slots.",
+   "tags": [
+    "carousel",
+    "gallery",
+    "images",
+    "showcase",
+    "vision",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install carousel-vision-5"
+  },
+  {
+   "id": "char-slam-explode",
+   "category": "component",
+   "fits": "other",
+   "title": "Char Slam Explode",
+   "what": "Headline glyphs hold in a deterministic scatter, then reassemble with an overshooting slam and a three-frame landing shake.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "text-treatment",
+    "scatter",
+    "slam",
+    "impact"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install char-slam-explode"
+  },
+  {
+   "id": "chart-story",
+   "category": "component",
+   "fits": "other",
+   "title": "Chart Story",
+   "what": "One chart builds from data in reading order and lands the exact supplied values: staggered bars, a left-to-right line with area fill, a sweeping donut, or filling progress bars, with an accented value callout on the emphasized datum.",
+   "tags": [
+    "motion-primitive",
+    "proof",
+    "stats",
+    "chart",
+    "bars",
+    "line",
+    "donut",
+    "progress",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install chart-story"
+  },
+  {
+   "id": "chat-message",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Chat Message",
+   "what": "One message arrives on the measured entry - scale 0.75, 0.12s, growing from its sender's corner. The type is an enum switched like marker-highlight's style: a received or sent bubble with a real tail, a large emoji row, an image, or a link card with title and domain. The atom that chat-thread builds conversations from",
+   "tags": [
+    "video-primitive",
+    "chat",
+    "mock-ui",
+    "message"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install chat-message"
+  },
+  {
+   "id": "chat-thread",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Chat Thread",
+   "what": "The measured conversation as one mountable scene at full fidelity: status bar, back badge, avatar and name pill, bubbles with real iMessage tails, a Delivered receipt, large emoji rows, a media placeholder, a link card, and typing dots holding the beat. Every message picks its type by prefix - recv:/sent: text, emoji: a large row, img media, card:Title~domain a link card - and heights are measured at mount so any thread fits",
+   "tags": [
+    "motion-primitive",
+    "chat",
+    "mock-ui",
+    "conversation",
+    "vertical"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install chat-thread"
+  },
+  {
+   "id": "chatgpt-exchange",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "ChatGPT Exchange",
+   "what": "A portrait ChatGPT-style exchange types and sends a prompt, streams an answer, assembles a comparison table, and scrolls back through the result",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "ai",
+    "chat",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 14.9,
+   "install_cmd": "python3 machine/registry.py install chatgpt-exchange"
+  },
+  {
+   "id": "chromatic-aberration-wipe",
+   "category": "component",
+   "fits": "transition",
+   "title": "Chromatic Aberration Wipe",
+   "what": "A fast slide wipe with RGB channel split on peak frames.",
+   "tags": [
+    "video-primitive",
+    "transition-primitive"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install chromatic-aberration-wipe"
+  },
+  {
+   "id": "chromatic-radial-split",
+   "category": "block",
+   "fits": "transition",
+   "title": "Chromatic Radial Split",
+   "what": "Shader transition with chromatic aberration radial split",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install chromatic-radial-split"
+  },
+  {
+   "id": "cinematic-zoom",
+   "category": "block",
+   "fits": "transition",
+   "title": "Cinematic Zoom",
+   "what": "Shader transition with dramatic zoom blur",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install cinematic-zoom"
+  },
+  {
+   "id": "claude-exchange",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Claude Exchange",
+   "what": "A portrait Claude-style exchange types a prompt, works through search and reasoning steps, then streams a detailed answer with citations and actions",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "ai",
+    "chat",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 21.4,
+   "install_cmd": "python3 machine/registry.py install claude-exchange"
+  },
+  {
+   "id": "code-3d-extrude",
+   "category": "block",
+   "fits": "other",
+   "title": "Code 3D Extrude",
+   "what": "Syntax-highlighted code on a lit, beveled 3D slab that rotates through real space and settles to a readable rest — true WebGL depth and lighting, not a 2D transform.",
+   "tags": [
+    "code",
+    "code-animation",
+    "3d",
+    "webgl",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install code-3d-extrude"
+  },
+  {
+   "id": "code-diff",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Diff",
+   "what": "An edit shown as a colored diff — removed lines collapse in red, added lines expand in green.",
+   "tags": [
+    "code",
+    "code-animation",
+    "diff",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install code-diff"
+  },
+  {
+   "id": "code-highlight",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Highlight Sweep",
+   "what": "A highlight band sweeps across a target line while the surrounding context dims — draws the eye to one line.",
+   "tags": [
+    "code",
+    "code-animation",
+    "highlight",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install code-highlight"
+  },
+  {
+   "id": "code-morph",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Morph",
+   "what": "One snippet transforms into another — tokens glide between positions, leavers fade out, enterers fade in. Shiki Magic Move re-driven as a paused GSAP timeline.",
+   "tags": [
+    "code",
+    "code-animation",
+    "morph",
+    "refactor",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install code-morph"
+  },
+  {
+   "id": "code-particle-assemble",
+   "category": "block",
+   "fits": "particles",
+   "title": "Code Particle Assemble",
+   "what": "Thousands of GPU points scatter through space and fly to the exact glyph pixels of the code, resolving into readable syntax-highlighted text — a particle system, not a token tween.",
+   "tags": [
+    "code",
+    "code-animation",
+    "particles",
+    "gpu",
+    "webgl",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install code-particle-assemble"
+  },
+  {
+   "id": "code-scroll",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Scroll To Line",
+   "what": "The camera scrolls a long file to bring a target line to center and spotlights it — for walking through real modules.",
+   "tags": [
+    "code",
+    "code-animation",
+    "scroll",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install code-scroll"
+  },
+  {
+   "id": "code-shader-dissolve",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Code Shader Dissolve",
+   "what": "The code compiles into existence: a GPU fragment shader resolves it out of seeded noise with a chromatic dissolve front and edge glow, then holds crisp.",
+   "tags": [
+    "code",
+    "code-animation",
+    "shader",
+    "webgl",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install code-shader-dissolve"
+  },
+  {
+   "id": "code-slice-hero",
+   "category": "block",
+   "fits": "transition",
+   "title": "Code Slice Hero",
+   "what": "A tiled headline surface flips cell by cell under a sweeping depth field to reveal the rear headline.",
+   "tags": [
+    "3d-motion",
+    "transition",
+    "typography",
+    "tiles",
+    "flip",
+    "webgl2",
+    "shadows",
+    "two-headlines"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install code-slice-hero"
+  },
+  {
+   "id": "code-snippet-apple-terminal-pro",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Snippet - Apple Terminal Pro",
+   "what": "Apple Terminal Pro profile: black background with grey text and lime green cursor, per-character typing animation of a shell session.",
+   "tags": [
+    "code",
+    "developer",
+    "showcase",
+    "terminal",
+    "apple",
+    "apple-terminal"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install code-snippet-apple-terminal-pro"
+  },
+  {
+   "id": "code-snippet-dark-2026",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Snippet - Dark 2026",
+   "what": "VS Code workbench with per-character typing animation in the Dark 2026 theme. Full editor chrome with activity bar, sidebar, tabs, terminal, and status bar.",
+   "tags": [
+    "code",
+    "developer",
+    "showcase",
+    "vscode"
+   ],
+   "size": "1920x1080",
+   "seconds": 11,
+   "install_cmd": "python3 machine/registry.py install code-snippet-dark-2026"
+  },
+  {
+   "id": "code-snippet-dark-modern",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Snippet - Dark Modern",
+   "what": "VS Code workbench with per-character typing animation in the Dark Modern theme. Full editor chrome with activity bar, sidebar, tabs, terminal, and status bar.",
+   "tags": [
+    "code",
+    "developer",
+    "showcase",
+    "vscode"
+   ],
+   "size": "1920x1080",
+   "seconds": 11,
+   "install_cmd": "python3 machine/registry.py install code-snippet-dark-modern"
+  },
+  {
+   "id": "code-terminal-run",
+   "category": "component",
+   "fits": "other",
+   "title": "Code Terminal Run",
+   "what": "A token-chrome terminal panel runs one command: the prompt line types deterministically behind an integer-cycle caret, executes after a beat, and output lines print one per cue before a fresh prompt appears.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "terminal",
+    "typing",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install code-terminal-run"
+  },
+  {
+   "id": "code-typing",
+   "category": "block",
+   "fits": "other",
+   "title": "Code Typing",
+   "what": "Token-streamed typing reveal with a caret that tracks the frontier — deterministic, no CSS animation.",
+   "tags": [
+    "code",
+    "code-animation",
+    "typing",
+    "developer"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install code-typing"
+  },
+  {
+   "id": "colorama-wipe",
+   "category": "component",
+   "fits": "transition",
+   "title": "Colorama Wipe",
+   "what": "Headline reveal through a feathered, leaning wipe front that is blurred and colour-mapped as it passes, then settles to clean type and wipes off again — the After Effects masked-text + Compound Blur + Colorama 'shiny wipe' as a deterministic canvas effect on any text element",
+   "tags": [
+    "text",
+    "reveal",
+    "wipe",
+    "colorama",
+    "gradient",
+    "blur",
+    "headline",
+    "saas"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install colorama-wipe"
+  },
+  {
+   "id": "comparison-split",
+   "category": "component",
+   "fits": "transition",
+   "title": "Comparison Split",
+   "what": "Two full-bleed panels compare before and after states as a persistent divider wipes the vivid after layer over the muted before layer and rests at a configurable split.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "compare",
+    "holdable",
+    "before-after",
+    "wipe"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install comparison-split"
+  },
+  {
+   "id": "confetti",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Confetti",
+   "what": "A deterministic celebration burst with seeded particles and gravity.",
+   "tags": [
+    "effect"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install confetti"
+  },
+  {
+   "id": "conic-progress-ring",
+   "category": "component",
+   "fits": "other",
+   "title": "Conic Progress Ring",
+   "what": "A token-driven conic progress ring whose angular fill and center count settle together from one registered percentage.",
+   "tags": [
+    "data",
+    "progress",
+    "ring",
+    "conic-gradient",
+    "prove",
+    "demonstrate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install conic-progress-ring"
+  },
+  {
+   "id": "constellation-hub",
+   "category": "component",
+   "fits": "other",
+   "title": "Constellation Hub",
+   "what": "Feature nodes brighten in narration order as real-length SVG connectors draw outward from a fixed central hub, then settle into one lockup.",
+   "tags": [
+    "motion-primitive",
+    "feature-tour",
+    "hub",
+    "nodes",
+    "connector",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install constellation-hub"
+  },
+  {
+   "id": "cosmic-orb",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Cosmic Orb",
+   "what": "An iridescent soap-bubble planet: a slowly spinning sphere of nebula bands, dust lanes and twinkling stars wrapped in a refracting glass limb with chromatic aberration at the edge.",
+   "tags": [
+    "webgl",
+    "shader",
+    "background",
+    "showcase",
+    "3d"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install cosmic-orb"
+  },
+  {
+   "id": "count-up",
+   "category": "component",
+   "fits": "other",
+   "title": "Count Up",
+   "what": "A token-native stat counter that eases between values and lands with a restrained scale pulse.",
+   "tags": [
+    "motion-primitive",
+    "proof",
+    "stats",
+    "counter",
+    "number",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install count-up"
+  },
+  {
+   "id": "cross-warp-morph",
+   "category": "block",
+   "fits": "transition",
+   "title": "Cross Warp Morph",
+   "what": "Shader transition with cross-warped morphing",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install cross-warp-morph"
+  },
+  {
+   "id": "cta-close",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "CTA Close",
+   "what": "A display-scale action line lands per word and fills the frame with air, one generous CTA capsule pops beneath it with a single overshoot, and the finished close holds completely still.",
+   "tags": [
+    "motion-primitive",
+    "ui-props",
+    "cta",
+    "end-card",
+    "close",
+    "ask"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install cta-close"
+  },
+  {
+   "id": "cta-lockup",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "CTA Lockup",
+   "what": "A canonical closing lockup that reveals an action line, pops in an accent CTA capsule, settles supporting microcopy, and holds with confidence.",
+   "tags": [
+    "motion-primitive",
+    "ui-props",
+    "cta",
+    "end-card",
+    "lockup",
+    "ask"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install cta-lockup"
+  },
+  {
+   "id": "cuboid-carousel",
+   "category": "block",
+   "fits": "camera",
+   "title": "Cuboid Carousel",
+   "what": "A chain of bevelled cuboids rides a travelling wave as a content carousel.",
+   "tags": [
+    "3d-motion",
+    "carousel",
+    "cards",
+    "travelling-wave",
+    "pbr",
+    "shadows",
+    "room-environment"
+   ],
+   "size": "1920x1080",
+   "seconds": 6.67,
+   "install_cmd": "python3 machine/registry.py install cuboid-carousel"
+  },
+  {
+   "id": "cursor-glyph-trail",
+   "category": "component",
+   "fits": "other",
+   "title": "Cursor Glyph Trail",
+   "what": "An actor travels an authored path depositing small dithered glyphs at its past positions, each popping in and decaying in place, stamp rate scaling with the actor's velocity.",
+   "tags": [
+    "motion-primitive",
+    "demonstrate",
+    "trail",
+    "cursor",
+    "glyphs",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install cursor-glyph-trail"
+  },
+  {
+   "id": "cut-the-curve",
+   "category": "component",
+   "fits": "transition",
+   "title": "Cut the Curve",
+   "what": "A velocity-matched directional hard cut: the outgoing subject accelerates with power4.in, swaps at peak velocity, and the incoming subject continues in the same direction with power4.out.",
+   "tags": [
+    "transition",
+    "directional-cut",
+    "velocity-match",
+    "whip",
+    "bridge",
+    "demonstrate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install cut-the-curve"
+  },
+  {
+   "id": "data-chart",
+   "category": "block",
+   "fits": "other",
+   "title": "Data Chart",
+   "what": "Animated bar + line chart with staggered reveal, NYT-style typography, and value labels",
+   "tags": [
+    "data",
+    "chart",
+    "statistics"
+   ],
+   "size": "1920x1080",
+   "seconds": 15,
+   "install_cmd": "python3 machine/registry.py install data-chart"
+  },
+  {
+   "id": "decline-chart",
+   "category": "component",
+   "fits": "other",
+   "title": "Decline Chart",
+   "what": "A metric line draws downward as its value counts down and the ambient background darkens in lockstep.",
+   "tags": [
+    "motion-primitive",
+    "data",
+    "chart",
+    "decline",
+    "metric",
+    "problem"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install decline-chart"
+  },
+  {
+   "id": "device-frame-stage",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Device Frame Stage",
+   "what": "A phone or tablet mockup staged as a physical scene prop with a screen slot for arbitrary reconstructed UI, rising onto the stage, settling, and holding an idle float",
+   "tags": [
+    "prop",
+    "device",
+    "mobile",
+    "tablet",
+    "ui-props",
+    "holdable"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install device-frame-stage"
+  },
+  {
+   "id": "directional-wipe",
+   "category": "component",
+   "fits": "transition",
+   "title": "Directional Wipe",
+   "what": "A directional scene push that slides one panel over another.",
+   "tags": [
+    "transition-primitive"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install directional-wipe"
+  },
+  {
+   "id": "domain-warp-dissolve",
+   "category": "block",
+   "fits": "transition",
+   "title": "Domain Warp Dissolve",
+   "what": "Shader transition with fractal noise domain warping",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install domain-warp-dissolve"
+  },
+  {
+   "id": "drift-hold",
+   "category": "component",
+   "fits": "camera",
+   "title": "Drift Hold",
+   "what": "A centered content card stays subtly alive through loop-exact rotation, scale breathing, and a slow light sweep.",
+   "tags": [
+    "motion-primitive",
+    "camera",
+    "ambient",
+    "drift",
+    "hold",
+    "loopable"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install drift-hold"
+  },
+  {
+   "id": "dynamic-grid",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Dynamic Grid",
+   "what": "A responsive animated grid background driven by CSS variables for SaaS, code, and data scenes",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "background",
+    "grid",
+    "ui"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install dynamic-grid"
+  },
+  {
+   "id": "echo-trail",
+   "category": "component",
+   "fits": "other",
+   "title": "Echo Trail",
+   "what": "A moving element renders with N ghosted copies of itself at t minus i times delta, opacity stepped down per ghost; one traversal, echoes collapsing into the settled element at rest.",
+   "tags": [
+    "motion-primitive",
+    "demonstrate",
+    "trail",
+    "onion-skin",
+    "ghosts",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install echo-trail"
+  },
+  {
+   "id": "editorial-flash-overlay",
+   "category": "block",
+   "fits": "transition",
+   "title": "Editorial Flash Overlay",
+   "what": "Finite neutral-warm light layers for a seek-safe camera-flash cut or social reveal",
+   "tags": [
+    "flash",
+    "editorial",
+    "social",
+    "light",
+    "transition",
+    "overlay",
+    "media-treatment-overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install editorial-flash-overlay"
+  },
+  {
+   "id": "extended-keyframe",
+   "category": "component",
+   "fits": "other",
+   "title": "Extended Keyframe",
+   "what": "The never-fully-lands arrival: an element covers most of its move in the first fifth of the duration and creeps the rest to the last frame, exits along its arrival vector, and carries shutter motion blur — from any side or by scale, one call per element, plus the ease on its own for any tween",
+   "tags": [
+    "motion",
+    "ease",
+    "arrival",
+    "kinetic-type",
+    "text",
+    "motion-blur",
+    "after-effects",
+    "slide-in",
+    "scale-in"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install extended-keyframe"
+  },
+  {
+   "id": "facet-morph",
+   "category": "component",
+   "fits": "other",
+   "title": "Facet Morph",
+   "what": "A faceted low-poly mass of 36 triangles continuously reshapes between three authored silhouettes (blob, mark, badge) with per-facet flat shading that recomputes as the vertices move. Light reads from the upper left; lit facets lift toward a pale accent-tinted tone while turned-away facets fall toward near-black. One calm continuous morph, then a settled hold.",
+   "tags": [
+    "motion-primitive",
+    "intro",
+    "morph",
+    "low-poly",
+    "svg",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install facet-morph"
+  },
+  {
+   "id": "fade-through",
+   "category": "component",
+   "fits": "transition",
+   "title": "Fade Through",
+   "what": "A calm transition primitive that fades one layer out, passes through a wash, and reveals the next layer",
+   "tags": [
+    "motion-primitive",
+    "transition",
+    "fade",
+    "scene"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install fade-through"
+  },
+  {
+   "id": "flash-through-white",
+   "category": "block",
+   "fits": "transition",
+   "title": "Flash Through White",
+   "what": "Shader transition with white flash crossfade",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install flash-through-white"
+  },
+  {
+   "id": "flowchart",
+   "category": "block",
+   "fits": "other",
+   "title": "Flowchart",
+   "what": "Animated decision tree with SVG connectors, sticky-note nodes, cursor interaction, and typing correction",
+   "tags": [
+    "diagram",
+    "flowchart",
+    "interactive"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install flowchart"
+  },
+  {
+   "id": "flowchart-vertical",
+   "category": "block",
+   "fits": "other",
+   "title": "Flowchart Vertical",
+   "what": "Portrait animated decision tree with SVG connectors, sticky-note nodes, cursor interaction, and typing correction",
+   "tags": [
+    "diagram",
+    "flowchart",
+    "interactive",
+    "portrait"
+   ],
+   "size": "1440x2560",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install flowchart-vertical"
+  },
+  {
+   "id": "focus-blur-resolve",
+   "category": "component",
+   "fits": "other",
+   "title": "Focus Blur Resolve",
+   "what": "A premium focus pull from heavy blur to crisp text, then a soft blur-out exit.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install focus-blur-resolve"
+  },
+  {
+   "id": "focus-rack",
+   "category": "component",
+   "fits": "camera",
+   "title": "Focus Rack",
+   "what": "Focus shifts once between two cards at different apparent depths through synchronized blur, dimming, scale, and parallax.",
+   "tags": [
+    "motion-primitive",
+    "camera",
+    "focus",
+    "focus-rack",
+    "depth",
+    "parallax",
+    "emphasize"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install focus-rack"
+  },
+  {
+   "id": "focus-swap",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Focus Swap",
+   "what": "Moves attention between two side-by-side cards as one recedes with scale, blur, and dimming while the other advances to full focus.",
+   "tags": [
+    "effect",
+    "ui-props",
+    "focus",
+    "blur",
+    "attention",
+    "demonstrate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install focus-swap"
+  },
+  {
+   "id": "freeze-frame-dressing",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Freeze-Frame Dressing",
+   "what": "Timeline-driven paper, tape, and flash dressing for a freeze-frame or background-removed subject",
+   "tags": [
+    "freeze-frame",
+    "cutout",
+    "scrapbook",
+    "paper",
+    "social",
+    "overlay",
+    "media-treatment-overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install freeze-frame-dressing"
+  },
+  {
+   "id": "frost-sequence-camera-orbit",
+   "category": "block",
+   "fits": "particles",
+   "title": "Frost Sequence Camera Orbit",
+   "what": "An orbiting camera follows an ice logo as it breaks apart, reforms into two text moments, and fades.",
+   "tags": [
+    "3d-motion",
+    "ice",
+    "frost",
+    "camera-orbit",
+    "logo",
+    "particles",
+    "webgpu",
+    "two-headlines"
+   ],
+   "size": "1920x1080",
+   "seconds": 22.5,
+   "install_cmd": "python3 machine/registry.py install frost-sequence-camera-orbit"
+  },
+  {
+   "id": "gallery-tunnel",
+   "category": "block",
+   "fits": "camera",
+   "title": "Gallery Tunnel",
+   "what": "An infinite corridor of panels: a square tunnel receding to a vanishing point, its floor, ceiling and walls tiled with saturated colour slabs and caller-supplied images that swell toward camera and exit past you, the far end dissolving into fog.",
+   "tags": [
+    "webgl",
+    "3d",
+    "background",
+    "showcase",
+    "depth",
+    "loop"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install gallery-tunnel"
+  },
+  {
+   "id": "gesture-tap",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Gesture Tap",
+   "what": "A contact circle taps a mobile pill button, releases it into a new labeled accent state, and lifts away.",
+   "tags": [
+    "motion-primitive",
+    "gesture",
+    "tap",
+    "interaction",
+    "ui-props"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install gesture-tap"
+  },
+  {
+   "id": "glass-shard-title",
+   "category": "block",
+   "fits": "camera",
+   "title": "Glass Shard Title",
+   "what": "Glass shards fly in through fog and tile themselves into the headline.",
+   "tags": [
+    "3d-motion",
+    "title-card",
+    "glass",
+    "voronoi",
+    "shards",
+    "fog",
+    "hdr"
+   ],
+   "size": "1920x1080",
+   "seconds": 12.16,
+   "install_cmd": "python3 machine/registry.py install glass-shard-title"
+  },
+  {
+   "id": "glitch",
+   "category": "block",
+   "fits": "transition",
+   "title": "Glitch",
+   "what": "Shader transition with digital glitch artifacts",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install glitch"
+  },
+  {
+   "id": "gloss-sweep",
+   "category": "component",
+   "fits": "other",
+   "title": "Gloss Sweep",
+   "what": "A card lands with a restrained slam, catches one diagonal specular gloss, and holds perfectly still.",
+   "tags": [
+    "motion-primitive",
+    "celebration",
+    "gloss",
+    "card",
+    "badge",
+    "payoff"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install gloss-sweep"
+  },
+  {
+   "id": "grade-split-reveal",
+   "category": "component",
+   "fits": "other",
+   "title": "Grade Split Reveal",
+   "what": "The same picture twice, one flat and one finished, with a hard edge sweeping between them. It stops in the middle long enough to compare, then commits and the graded look takes the frame. Both looks are real HyperFrames color grading run through the WebGL shader, so the preview and the render match.",
+   "tags": [
+    "color-grading",
+    "media",
+    "compare",
+    "reveal",
+    "motion-primitive",
+    "grade"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install grade-split-reveal"
+  },
+  {
+   "id": "grain-field",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Grain Field",
+   "what": "A clearly visible accent-tinted dot field drifts over a subtle luminance gradient in an exact ambient loop.",
+   "tags": [
+    "motion-primitive",
+    "background",
+    "grain",
+    "dots",
+    "texture",
+    "ambient",
+    "loopable"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install grain-field"
+  },
+  {
+   "id": "grain-overlay",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Grain Overlay",
+   "what": "Animated film grain texture overlay using CSS keyframes — adds warmth and analog character to any composition",
+   "tags": [
+    "texture",
+    "grain",
+    "overlay",
+    "film"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install grain-overlay"
+  },
+  {
+   "id": "gravitational-lens",
+   "category": "block",
+   "fits": "transition",
+   "title": "Gravitational Lens",
+   "what": "Shader transition with gravitational lensing distortion",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install gravitational-lens"
+  },
+  {
+   "id": "grid-card-assemble",
+   "category": "component",
+   "fits": "other",
+   "title": "Grid Card Assemble",
+   "what": "N capability cards (thin-line icon that draws on, mono label, optional muted body) stagger-assemble into a grid or vertical list with a fade plus short slide into slot, then hold perfectly still.",
+   "tags": [
+    "motion-primitive",
+    "layout",
+    "grid",
+    "list",
+    "stagger",
+    "assemble",
+    "feature-tour"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install grid-card-assemble"
+  },
+  {
+   "id": "grid-pixelate-wipe",
+   "category": "component",
+   "fits": "transition",
+   "title": "Grid Pixelate Wipe",
+   "what": "Transition effect where the screen dissolves into a grid of squares that fade out with staggered timing — use between scenes",
+   "tags": [
+    "transition",
+    "wipe",
+    "grid",
+    "pixelate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install grid-pixelate-wipe"
+  },
+  {
+   "id": "halftone-dissolve",
+   "category": "component",
+   "fits": "transition",
+   "title": "Halftone Dissolve",
+   "what": "Scene A dissolves into scene B through a growing halftone dot field: accent ink dots pop onto a fixed grid smallest-first, each opens into a window onto B, until the windows merge and B fully replaces A.",
+   "tags": [
+    "motion-primitive",
+    "transition",
+    "texture",
+    "halftone",
+    "dissolve"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install halftone-dissolve"
+  },
+  {
+   "id": "halftone-field",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Halftone Field",
+   "what": "A full-bleed halftone light field: a grid of dots whose size and colour track a slow flowing simplex-noise field, so broad bands of light sweep across a mostly-black frame like a giant LED wall showing a plasma. Built to run under type.",
+   "tags": [
+    "webgl",
+    "shader",
+    "background",
+    "texture",
+    "halftone"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install halftone-field"
+  },
+  {
+   "id": "headline-slam",
+   "category": "component",
+   "fits": "other",
+   "title": "Headline Slam",
+   "what": "A heavyweight headline scales down into frame, lands with a deterministic three-frame shake, holds with subtle drift, and whips upward on exit.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "headline",
+    "slam",
+    "impact",
+    "exit"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install headline-slam"
+  },
+  {
+   "id": "heygen-avatar-promo-card",
+   "category": "block",
+   "fits": "other",
+   "title": "HeyGen Avatar Promo Card",
+   "what": "A portrait HeyGen offer card pairs a moving avatar mosaic with bold promotional typography and a branded callout",
+   "tags": [
+    "showcase",
+    "avatar",
+    "promotion",
+    "vertical"
+   ],
+   "size": "1080x1920",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install heygen-avatar-promo-card"
+  },
+  {
+   "id": "hw-arrow",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Hand-Drawn Arrow",
+   "what": "Wobbled draw-on arrow with straight, gentle, and swoop curve poses, a four-way stroke texture matrix (plain/soft/sharp/spray), and a travel-aligned head-arrival stretch pulse with spring recovery; boils while on screen",
+   "tags": [
+    "handwritten",
+    "annotation",
+    "arrow",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install hw-arrow"
+  },
+  {
+   "id": "hw-boil",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Hand-Drawn Boil",
+   "what": "Hand-drawn jitter that re-poses every N frames, as seek-safe helpers: pose derives from quantized timeline time through a seeded hash; includes the shared onUpdate dispatcher, a wobbled-ellipse path generator, the boil pose control (off/calm/lively over the family-locked frameDrop), a curvature-adaptive pen-velocity ease, and the completed stroke matrix (plain/soft/sharp/spray — spray is index-seeded deterministic dots, no turbulence) with texture-safe draw-on",
+   "tags": [
+    "handwritten",
+    "effect",
+    "annotation"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install hw-boil"
+  },
+  {
+   "id": "hw-box-label",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Hand-Drawn Box Label",
+   "what": "Wobbled rounded rectangle draws on — across the authored stroke matrix (plain/soft/sharp/spray) — or drops in and lands with a volume-true contact squash and bouncy spring recovery, with a handwritten label above or centered; boils",
+   "tags": [
+    "handwritten",
+    "annotation",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install hw-box-label"
+  },
+  {
+   "id": "hw-callout-circle",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Scribble Callout Circle",
+   "what": "Wobbled ellipse draws around a target with optional scribble fill and curved connector; the handwritten label pops in WITH momentum and the drawn shapes absorb the arrival with a volume-preserving contact squash; outline and connector take the family stroke matrix (plain/soft/sharp/spray); boils",
+   "tags": [
+    "handwritten",
+    "annotation",
+    "callout",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install hw-callout-circle"
+  },
+  {
+   "id": "hw-frame",
+   "category": "block",
+   "fits": "other",
+   "title": "Sketched Frame",
+   "what": "Media in a hand-drawn border with corner doodles and a handwritten caption; the unit tilts slightly and boils (images inside the block; keep live footage in the host)",
+   "tags": [
+    "handwritten",
+    "frame",
+    "media"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install hw-frame"
+  },
+  {
+   "id": "hw-path-text",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Text Along a Path",
+   "what": "Handwriting flowing along any SVG path with a per-character reveal; the path is the only geometry input",
+   "tags": [
+    "handwritten",
+    "typography",
+    "path",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install hw-path-text"
+  },
+  {
+   "id": "hw-pipeline",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Hand-Drawn Flowchart",
+   "what": "Wobbled boxes with handwritten labels joined by curved connectors, drawing on in sequence from a node list",
+   "tags": [
+    "handwritten",
+    "diagram",
+    "data-viz",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install hw-pipeline"
+  },
+  {
+   "id": "hw-scribble-transition",
+   "category": "block",
+   "fits": "transition",
+   "title": "Scribble Transition",
+   "what": "Overlay transition: scribble bands accumulate to cover the frame with a solid backstop, the host cuts beneath, and the scribble clears",
+   "tags": [
+    "handwritten",
+    "transition",
+    "wipe"
+   ],
+   "size": "1920x1080",
+   "seconds": 2.2,
+   "install_cmd": "python3 machine/registry.py install hw-scribble-transition"
+  },
+  {
+   "id": "hw-text-cloud",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Speech Bubble",
+   "what": "Hand-drawn speech bubble with a positionable tail: outline draws on, paper fill fades in, handwritten text types per character; boils",
+   "tags": [
+    "handwritten",
+    "speech-bubble",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install hw-text-cloud"
+  },
+  {
+   "id": "hw-title",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Handwritten Title",
+   "what": "Handwritten display text with a scalar-driven word-by-word highlight sweep and a seeded squiggle underline sized to the text; boils",
+   "tags": [
+    "handwritten",
+    "typography",
+    "title-card",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install hw-title"
+  },
+  {
+   "id": "hw-underline",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Squiggle Marks",
+   "what": "Hand-drawn squiggle underline, double-pass strikethrough, and bracket marks that draw on",
+   "tags": [
+    "handwritten",
+    "annotation",
+    "text-treatment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install hw-underline"
+  },
+  {
+   "id": "hw-write-title",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Handwritten Write-On Title",
+   "what": "True glyph write-on: filled Caveat letterforms revealed by baked per-glyph centerline strokes traced in real stroke order with a curvature-adaptive pen-velocity ease (fast on straights, slow into curves, inter-stroke pen lifts); optional squiggle underline; boils",
+   "tags": [
+    "handwritten",
+    "typography",
+    "title-card",
+    "write-on",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install hw-write-title"
+  },
+  {
+   "id": "icon-morph-beat",
+   "category": "component",
+   "fits": "other",
+   "title": "Icon Morph Beat",
+   "what": "An icon morphs between authored state silhouettes, shifts to an accent color, and marks completion with one restrained pulse.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "icon",
+    "morph",
+    "state-change",
+    "completion"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install icon-morph-beat"
+  },
+  {
+   "id": "icon-swap",
+   "category": "component",
+   "fits": "transition",
+   "title": "Icon Swap",
+   "what": "A scale-and-blur icon swap primitive for toolbar and action state changes",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "icon",
+    "swap"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install icon-swap"
+  },
+  {
+   "id": "ink-bleed-reveal",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Ink Bleed Reveal",
+   "what": "Liquid ink blooms through paper under a gooey blur-plus-threshold filter, merges, then contracts as a crisp slotted mark resolves beneath it, with static seeded paper grain riding the result.",
+   "tags": [
+    "motion-primitive",
+    "texture",
+    "reveal",
+    "gooey",
+    "svg-filter",
+    "deterministic",
+    "experiment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install ink-bleed-reveal"
+  },
+  {
+   "id": "inline-highlight",
+   "category": "component",
+   "fits": "other",
+   "title": "Inline Highlight",
+   "what": "A clean marker-style inline highlight that animates behind text using a CSS scale variable",
+   "tags": [
+    "motion-primitive",
+    "text",
+    "highlight",
+    "caption"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install inline-highlight"
+  },
+  {
+   "id": "input-feedback",
+   "category": "component",
+   "fits": "transition",
+   "title": "Input Feedback",
+   "what": "A transitions.dev-inspired input feedback primitive with shake, clear affordance, and success state",
+   "tags": [
+    "transition-primitive",
+    "transitions-dev-port",
+    "input",
+    "feedback"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install input-feedback"
+  },
+  {
+   "id": "instagram-follow",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Instagram Follow",
+   "what": "Animated Instagram follow overlay with profile card and follow button",
+   "tags": [
+    "social",
+    "overlay",
+    "instagram"
+   ],
+   "size": "1080x1920",
+   "seconds": 4.5,
+   "install_cmd": "python3 machine/registry.py install instagram-follow"
+  },
+  {
+   "id": "ios26-liquid-glass",
+   "category": "block",
+   "fits": "other",
+   "title": "iOS 26 Liquid Glass Home Screen",
+   "what": "3D iPhone with a normal iOS 26 home screen, liquid glass app icons, shader wallpaper, dock, and fluid glass notifications that drop from the status area onto a GLTF device model.",
+   "tags": [
+    "liquid-glass-html-in-canvas",
+    "webgpu",
+    "3d",
+    "iphone",
+    "ios26",
+    "notifications",
+    "gltf",
+    "html-in-canvas"
+   ],
+   "size": "1920x1080",
+   "seconds": 15,
+   "install_cmd": "python3 machine/registry.py install ios26-liquid-glass"
+  },
+  {
+   "id": "iris-reveal",
+   "category": "component",
+   "fits": "transition",
+   "title": "Iris Reveal",
+   "what": "A circle clip-path opens from an authored origin revealing state B over state A in one confident pass, then holds on B. Classic register dims and desaturates the before state so the after state lands in full color; a thin accent rim rides the iris edge. Callers fill the named before/after slot panels; token-styled defaults render when a slot is left empty.",
+   "tags": [
+    "transition",
+    "iris",
+    "circle-reveal",
+    "clip-path",
+    "bridge",
+    "slots"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install iris-reveal"
+  },
+  {
+   "id": "keyframe-scrub-stack",
+   "category": "component",
+   "fits": "other",
+   "title": "Keyframe Scrub Stack",
+   "what": "A keyframe-sequenced stack of cards with offset timing and easing presets.",
+   "tags": [
+    "advanced-motion",
+    "anime-inspired",
+    "hyperframes-native"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install keyframe-scrub-stack"
+  },
+  {
+   "id": "kinetic-center-build",
+   "category": "component",
+   "fits": "other",
+   "title": "Kinetic Center Build",
+   "what": "Words enter from the right and push the growing phrase left until the final line locks centered.",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "kinetic-type",
+    "reveal",
+    "remocn-port"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install kinetic-center-build"
+  },
+  {
+   "id": "kinetic-type-swap",
+   "category": "component",
+   "fits": "other",
+   "title": "Kinetic Type Swap",
+   "what": "A held sentence keeps its fixed text in place while one widest-word masked slot rolls through alternatives and settles on the final option.",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "kinetic-type",
+    "word-swap",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install kinetic-type-swap"
+  },
+  {
+   "id": "light-leak",
+   "category": "block",
+   "fits": "transition",
+   "title": "Light Leak",
+   "what": "Shader transition with cinematic light leak overlay",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install light-leak"
+  },
+  {
+   "id": "light-sweep-pass",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Light Sweep Pass",
+   "what": "A traveling key light re-shades a slotted scene: a soft diagonal gradient band crosses the frame once while every per-element highlight and shadow shifts in lockstep (all driven by one --light-x property), then the light settles into a resting key. Quiet, expensive-feeling; the scene itself never moves. Callers fill the named scene slot; a token hero-and-cards default renders when it is left empty.",
+   "tags": [
+    "motion-primitive",
+    "overlay",
+    "light",
+    "sweep",
+    "slots",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install light-sweep-pass"
+  },
+  {
+   "id": "line-by-line-slide",
+   "category": "component",
+   "fits": "other",
+   "title": "Line-by-Line Slide",
+   "what": "Each line enters from the left with staggered slide and exits to the right.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install line-by-line-slide"
+  },
+  {
+   "id": "line-swap",
+   "category": "component",
+   "fits": "other",
+   "title": "Line Swap",
+   "what": "A masked full-line beat replacement: line A holds center then exits up through an overflow-hidden mask as line B enters bottom-up on the same beat, with an optional accent underline drawing beneath one word of line B.",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "swap",
+    "beat",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install line-swap"
+  },
+  {
+   "id": "locked-nucleus-orbit",
+   "category": "component",
+   "fits": "camera",
+   "title": "Locked Nucleus Orbit",
+   "what": "A fixed center nucleus anchors deterministic satellite orbits that settle into a composed lockup.",
+   "tags": [
+    "motion-primitive",
+    "intro",
+    "reveal",
+    "orbit",
+    "lockup",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install locked-nucleus-orbit"
+  },
+  {
+   "id": "logo-brand-close",
+   "category": "component",
+   "fits": "other",
+   "title": "Logo Brand Close",
+   "what": "A display-scale wordmark cascades letter by letter into a centered lockup, the accent brand period lands last, an optional tagline and wide-tracked mono URL settle beneath, and the finished identity holds dead still to the end of the film.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "brand",
+    "logo",
+    "end-card",
+    "close"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install logo-brand-close"
+  },
+  {
+   "id": "logo-outro",
+   "category": "block",
+   "fits": "other",
+   "title": "Logo Outro",
+   "what": "Cinematic logo reveal with piece-by-piece assembly, glow bloom, tagline fade-in, and URL pill",
+   "tags": [
+    "branding",
+    "outro",
+    "logo"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install logo-outro"
+  },
+  {
+   "id": "logo-sting",
+   "category": "component",
+   "fits": "other",
+   "title": "Logo Sting",
+   "what": "A wordmark slams into its final scale, fires one accent ring and one white impact frame, then holds completely still.",
+   "tags": [
+    "motion-primitive",
+    "brand",
+    "logo",
+    "sting",
+    "impact",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install logo-sting"
+  },
+  {
+   "id": "logo-wall",
+   "category": "component",
+   "fits": "other",
+   "title": "Logo Wall",
+   "what": "A trusted-by wall of placeholder lettermark logos that fades and scales into place with a deterministic per-cell stagger.",
+   "tags": [
+    "data",
+    "logos",
+    "social-proof",
+    "stagger",
+    "prove"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install logo-wall"
+  },
+  {
+   "id": "lower-third-bild",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — BILD Style",
+   "what": "News-style lower third with tight-fit text boxes: white headline bar with red drop-shadow, red sub-line with white drop-shadow.",
+   "tags": [
+    "broadcast",
+    "lower-third",
+    "news",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install lower-third-bild"
+  },
+  {
+   "id": "lt-accent-underline",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Accent Underline",
+   "what": "Cardless lower third for footage overlay: name rises, an accent rule draws left-to-right, role fades in; text-shadowed for legibility",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-accent-underline"
+  },
+  {
+   "id": "lt-bold-block",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Bold Block",
+   "what": "High-energy podcast lower third: solid dark block wipes in, uppercase name slams up, accent tag pops",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "bold"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-bold-block"
+  },
+  {
+   "id": "lt-clean-bar",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Clean Bar",
+   "what": "Minimal white-card lower third for podcasts/interviews: accent tab, name + role, clip-wipe entrance",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-clean-bar"
+  },
+  {
+   "id": "lt-color-block",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Color Block",
+   "what": "High-energy lower third: bold accent-color block slides in with overshoot, condensed name + mono role",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "bold"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-color-block"
+  },
+  {
+   "id": "lt-dark-card",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Dark Card",
+   "what": "Charcoal card lower third for bright footage: name, drawn accent underline, role; slide-up entrance",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "dark"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-dark-card"
+  },
+  {
+   "id": "lt-kicker-name",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Kicker Name",
+   "what": "Cardless lower third with an accent eyebrow/kicker tag, heavy name, and a drawn baseline; for footage",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "bold"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-kicker-name"
+  },
+  {
+   "id": "lt-mask-reveal",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Mask Reveal",
+   "what": "Cardless lower third: an accent sweep crosses and clip-path-reveals a heavy name, role fades up; for footage",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "bold"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-mask-reveal"
+  },
+  {
+   "id": "lt-side-rule",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Side Rule",
+   "what": "Cardless lower third with a vertical accent bar; condensed display name + mono role, text-shadowed for footage",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-side-rule"
+  },
+  {
+   "id": "lt-soft-pill",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Soft Pill",
+   "what": "Rounded white pill lower third for podcasts/interviews: status dot, name + role, scale-pop entrance",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-soft-pill"
+  },
+  {
+   "id": "lt-stack-bars",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Lower Third — Stack Bars",
+   "what": "Two stacked bars: a dark name bar wipes from the left, an accent role bar wipes from the right",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "podcast",
+    "interview",
+    "bold"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.8,
+   "install_cmd": "python3 machine/registry.py install lt-stack-bars"
+  },
+  {
+   "id": "macos-notification",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "macOS Notification",
+   "what": "Animated macOS-style notification banner with app icon and message",
+   "tags": [
+    "social",
+    "overlay",
+    "notification"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install macos-notification"
+  },
+  {
+   "id": "macos-tahoe-liquid-glass",
+   "category": "block",
+   "fits": "other",
+   "title": "macOS Tahoe Liquid Glass Desktop",
+   "what": "3D MacBook with a macOS Tahoe-style desktop, glass menu bar, Finder window, dock, and cinematic device camera move.",
+   "tags": [
+    "html-in-canvas",
+    "3d",
+    "macos",
+    "tahoe",
+    "gltf"
+   ],
+   "size": "1920x1080",
+   "seconds": 15,
+   "install_cmd": "python3 machine/registry.py install macos-tahoe-liquid-glass"
+  },
+  {
+   "id": "marker-checklist-card",
+   "category": "component",
+   "fits": "other",
+   "title": "Marker Checklist Card",
+   "what": "A hand-lettered paper card: marker headline with an underline and a drawn ellipse around one word, then three checklist rows whose checks draw themselves on - typewriter labels, marker values. The paper-and-marker sibling of mk-specs-list's clean professional rows",
+   "tags": [
+    "motion-primitive",
+    "handwritten",
+    "checklist",
+    "paper",
+    "marker"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install marker-checklist-card"
+  },
+  {
+   "id": "marker-highlight",
+   "category": "component",
+   "fits": "other",
+   "title": "Marker Highlight",
+   "what": "Display text settles in, then one hand-drawn marker stroke (highlight, circle, underline, or scribble) draws over the emphasized word on cue.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "emphasis",
+    "marker",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install marker-highlight"
+  },
+  {
+   "id": "match-cut",
+   "category": "component",
+   "fits": "transition",
+   "title": "Match Cut",
+   "what": "A circle accelerates into a hard single-frame scene swap, matches the incoming circle exactly, and continues into a smaller resting pose.",
+   "tags": [
+    "motion-primitive",
+    "transition",
+    "match-cut",
+    "hard-cut",
+    "continuity"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install match-cut"
+  },
+  {
+   "id": "matrix-decode",
+   "category": "component",
+   "fits": "other",
+   "title": "Matrix Decode",
+   "what": "Random scramble resolves left-to-right into the target text.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install matrix-decode"
+  },
+  {
+   "id": "menu-morph",
+   "category": "component",
+   "fits": "transition",
+   "title": "Menu Morph",
+   "what": "A transitions.dev-inspired hamburger and plus-menu morph primitive for compact action menus",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "menu",
+    "morph"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install menu-morph"
+  },
+  {
+   "id": "mesh-gradient-bg",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Mesh Gradient Background",
+   "what": "A render-safe mesh gradient using animated radial layers.",
+   "tags": [
+    "effect"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install mesh-gradient-bg"
+  },
+  {
+   "id": "message-thread-reveal",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Message Thread Reveal",
+   "what": "A full text conversation plays out on a phone - bubbles popping in, typing indicators, a shared link card, emoji, delivered receipts - with the whole thread scrolling up beat by beat until a closing card lands. The complete chat ad-template, measured message by message",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "chat",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 25.7667,
+   "install_cmd": "python3 machine/registry.py install message-thread-reveal"
+  },
+  {
+   "id": "micro-transitions",
+   "category": "component",
+   "fits": "transition",
+   "title": "Micro Transitions",
+   "what": "A transitions.dev-inspired pack of badge, dropdown, modal, tabs, tooltip, and success-check micro transitions",
+   "tags": [
+    "transition-primitive",
+    "motion-primitive",
+    "transitions-dev-port",
+    "ui",
+    "transition",
+    "microinteraction"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install micro-transitions"
+  },
+  {
+   "id": "mk-background",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Minimal Gradient Background",
+   "what": "Procedural soft-blob gradient backdrop in a minimalist presentation style: two radial blobs drifting over a base color, with an animatable rounded-card bar mask and optional frosted-glass mode",
+   "tags": [
+    "background",
+    "gradient",
+    "minimal",
+    "professional",
+    "presentation"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install mk-background"
+  },
+  {
+   "id": "mk-callout-highlight",
+   "category": "block",
+   "fits": "caption",
+   "title": "Word-Sweep Highlight",
+   "what": "A sentence whose word-by-word emphasis is driven by a single scalar — tween it to sync the highlight with a voiceover",
+   "tags": [
+    "typography",
+    "karaoke",
+    "captions",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install mk-callout-highlight"
+  },
+  {
+   "id": "mk-clone-wall-transition",
+   "category": "block",
+   "fits": "transition",
+   "title": "Text Clone Wall Transition",
+   "what": "Overlay transition: a tiled word wall covers the frame, inverts via difference blending, and clears — hard-cut the content beneath while covered",
+   "tags": [
+    "transition",
+    "typography",
+    "wipe"
+   ],
+   "size": "1920x1080",
+   "seconds": 2.4,
+   "install_cmd": "python3 machine/registry.py install mk-clone-wall-transition"
+  },
+  {
+   "id": "mk-emphasis-type",
+   "category": "component",
+   "fits": "other",
+   "title": "Background Emphasis Type",
+   "what": "Oversized low-contrast background word drifting slowly behind the subject — typography as texture",
+   "tags": [
+    "typography",
+    "text-treatment",
+    "minimal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install mk-emphasis-type"
+  },
+  {
+   "id": "mk-line-graph",
+   "category": "block",
+   "fits": "other",
+   "title": "Minimal Line Graph",
+   "what": "One or two SVG series draw on with dots popping and value labels riding the draw front; dim baseline axis, x-labels, color-dot legend",
+   "tags": [
+    "data-viz",
+    "chart",
+    "graph",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install mk-line-graph"
+  },
+  {
+   "id": "mk-placeholder-grid",
+   "category": "block",
+   "fits": "other",
+   "title": "Rounded Media Grid",
+   "what": "N-up rounded-corner media grid (2-up, 3-up, 4-up, 3x2, hero plus two): per-cell inside-scale framing, staggered box-in entrance, slow settle",
+   "tags": [
+    "placeholder",
+    "media",
+    "grid",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install mk-placeholder-grid"
+  },
+  {
+   "id": "mk-progress-stat",
+   "category": "block",
+   "fits": "other",
+   "title": "Count-Up Stat Card",
+   "what": "Big-numeral statistic with count-up, label, thin progress track filling to value/max, and caption; light and dark schemes",
+   "tags": [
+    "data-viz",
+    "stat",
+    "minimal"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install mk-progress-stat"
+  },
+  {
+   "id": "mk-specs-list",
+   "category": "block",
+   "fits": "other",
+   "title": "Specs Checklist",
+   "what": "Left-aligned specs/traits checklist over footage or a board: rows slide in staggered with an accent underline sweep; light and dark schemes",
+   "tags": [
+    "data-viz",
+    "list",
+    "minimal",
+    "professional"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install mk-specs-list"
+  },
+  {
+   "id": "mk-usage-arc",
+   "category": "component",
+   "fits": "other",
+   "title": "Hairline Arc Gauge",
+   "what": "Thin circular gauge that draws on while its percentage counts up; one helper call drives both",
+   "tags": [
+    "data-viz",
+    "gauge",
+    "minimal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install mk-usage-arc"
+  },
+  {
+   "id": "modal-morph",
+   "category": "component",
+   "fits": "other",
+   "title": "Modal Morph",
+   "what": "A small card expands into a full panel, shared-element style: both layouts measured once at mount, the container morphs by transform only (never width/height tweens) while keyed children counter-scale and re-flow onto their own measured targets as pure functions of time.",
+   "tags": [
+    "motion-primitive",
+    "structure",
+    "flip",
+    "shared-element",
+    "modal",
+    "deterministic",
+    "experiment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install modal-morph"
+  },
+  {
+   "id": "morph-swap",
+   "category": "component",
+   "fits": "transition",
+   "title": "Morph Swap",
+   "what": "Two slotted siblings stacked at one shared center: A holds, then condenses or reshapes into B on a shared 50% 50% transform origin. Condense shrink-fades A exactly as B scales up; reshape morphs the silhouette on scaleX/scaleY, never width or height tweens. Token card defaults render when a slot is left empty.",
+   "tags": [
+    "transition",
+    "morph",
+    "swap",
+    "condense",
+    "reshape",
+    "holdable",
+    "slots"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install morph-swap"
+  },
+  {
+   "id": "morph-text",
+   "category": "component",
+   "fits": "other",
+   "title": "Morph Text",
+   "what": "Gooey text morph — cycles through an editable word list using SVG threshold + GSAP-driven blur for a fluid, satisfying transition effect",
+   "tags": [
+    "text",
+    "text-effect",
+    "typography",
+    "morph",
+    "gooey",
+    "kinetic",
+    "animation"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install morph-text"
+  },
+  {
+   "id": "motion-blur",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Motion Blur",
+   "what": "After Effects-style motion blur — integrates each element over a shutter window (shutter angle, phase, samples per frame) by sampling the GSAP timeline at sub-frame times and averaging equal-weight additive copies of the element along its real trajectory, so translation, scale, rotation, 3D rotation and skew all drive the smear",
+   "tags": [
+    "effect",
+    "motion-blur",
+    "shutter",
+    "after-effects",
+    "velocity",
+    "animation"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install motion-blur"
+  },
+  {
+   "id": "multi-device-splay",
+   "category": "component",
+   "fits": "other",
+   "title": "Multi Device Splay",
+   "what": "Phone, tablet, and desktop product mockups fan from a centered stack into a proud splayed arrangement with a subtle idle float.",
+   "tags": [
+    "motion-primitive",
+    "device",
+    "phone",
+    "tablet",
+    "desktop",
+    "splay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install multi-device-splay"
+  },
+  {
+   "id": "multiplayer-cursors",
+   "category": "component",
+   "fits": "other",
+   "title": "Multiplayer Cursors",
+   "what": "Labeled collaborator cursors with token-derived colors and soft glows drift from spread positions into a shared center zone, proving live multiplayer presence.",
+   "tags": [
+    "cursor",
+    "pointer",
+    "multiplayer",
+    "collaboration",
+    "presence",
+    "loop",
+    "prove"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install multiplayer-cursors"
+  },
+  {
+   "id": "native-notification-pop",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Native Notification Pop",
+   "what": "One system-faithful notification banner (iOS or macOS) drops in over any scene on an accurate interruptible spring: fast arrival, soft overshoot, settled mass, backdrop blur, app dot, title, one body line. Holds; tucks away only via exit.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "overlay",
+    "notification",
+    "spring"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install native-notification-pop"
+  },
+  {
+   "id": "news-ticker",
+   "category": "block",
+   "fits": "overlay",
+   "title": "News Ticker",
+   "what": "Premium broadcast-style lower-third ticker with live label, headline ribbon, and scrolling news crawl.",
+   "tags": [
+    "lower-third",
+    "overlay",
+    "news",
+    "ticker"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install news-ticker"
+  },
+  {
+   "id": "north-korea-locked-down",
+   "category": "block",
+   "fits": "overlay",
+   "title": "North Korea Locked Down",
+   "what": "Realistic map zoom into North Korea with a red scribble circle, locked-down pop-up label, and reddish editorial wash.",
+   "tags": [
+    "showcase",
+    "map",
+    "annotation",
+    "youtube",
+    "kinetic"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install north-korea-locked-down"
+  },
+  {
+   "id": "notes-reveal",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Notes Reveal",
+   "what": "A personal note is typed character by character in a notes app - caret riding every letter, the page scrolling up on measured settle curves as each line lands - then cuts to a hand-lettered paper card with a marker headline and a ticked checklist",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "notes",
+    "typing",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 24.85,
+   "install_cmd": "python3 machine/registry.py install notes-reveal"
+  },
+  {
+   "id": "notes-typing",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Notes Typing",
+   "what": "The notes-app confession as a mountable scene: a bold title, then body lines typed character by character on the measured human keystroke rhythm, the caret riding every landed character and jumping down at each paragraph. For a bare prompt line use typed-prompt; for an even mechanical reveal use typewriter",
+   "tags": [
+    "motion-primitive",
+    "notes",
+    "typing",
+    "mock-ui",
+    "vertical"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install notes-typing"
+  },
+  {
+   "id": "notification-cascade",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Notification Cascade",
+   "what": "Phone notifications land one after another and stack up the screen, each banner pushing the pile down as it arrives, before the whole stack lifts away into a closing card",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "notification",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 14,
+   "install_cmd": "python3 machine/registry.py install notification-cascade"
+  },
+  {
+   "id": "notification-pileup",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Notification Pileup",
+   "what": "Mobile notification cards arrive faster and faster, each new alert pushing the existing stack downward into a dense, anxious tower.",
+   "tags": [
+    "notification",
+    "mobile",
+    "ui-props",
+    "overload",
+    "pileup",
+    "loop",
+    "agitate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install notification-pileup"
+  },
+  {
+   "id": "notification-stack",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Notification Stack",
+   "what": "1 to 5 token notification cards slide-settle into a vertical stack on cues, newest on top; one card grows slightly and brightens as the focus while the rest dim by position.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "notification",
+    "stack",
+    "stagger"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install notification-stack"
+  },
+  {
+   "id": "number-pop-in",
+   "category": "component",
+   "fits": "transition",
+   "title": "Number Pop In",
+   "what": "A transitions.dev-inspired digit pop-in with blur, lift, and staggered value reveal",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "number",
+    "pop"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install number-pop-in"
+  },
+  {
+   "id": "number-wheel",
+   "category": "component",
+   "fits": "other",
+   "title": "Number Wheel",
+   "what": "A rolling digit counter primitive for metrics, prices, counts, and scoreboards",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "number",
+    "counter",
+    "data"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install number-wheel"
+  },
+  {
+   "id": "nyc-paris-flight",
+   "category": "block",
+   "fits": "other",
+   "title": "NYC Paris Flight",
+   "what": "Apple-style realistic map animation with a plane flying from New York to Paris, marker circle, landing pop, and sound effects.",
+   "tags": [
+    "showcase",
+    "travel",
+    "map",
+    "youtube",
+    "sfx"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install nyc-paris-flight"
+  },
+  {
+   "id": "offset-path-traveler",
+   "category": "component",
+   "fits": "other",
+   "title": "Offset Path Traveler",
+   "what": "A slotted traveler follows an authored path with tangent rotation, curved entry, and curved exit.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "path",
+    "traveler",
+    "auto-rotate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install offset-path-traveler"
+  },
+  {
+   "id": "onboarding-stepper-flow",
+   "category": "component",
+   "fits": "other",
+   "title": "Onboarding Stepper Flow",
+   "what": "A composed onboarding flow with milestone rail, active step card, and next-action button",
+   "tags": [
+    "ui-flow",
+    "onboarding",
+    "stepper"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install onboarding-stepper-flow"
+  },
+  {
+   "id": "orbit-card",
+   "category": "block",
+   "fits": "camera",
+   "title": "Orbit Card",
+   "what": "A single feature card orbits a dot sphere on approved Blender camera motion.",
+   "tags": [
+    "3d-motion",
+    "cards",
+    "feature-reveal",
+    "dots",
+    "orbit",
+    "blender-motion",
+    "sphere"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install orbit-card"
+  },
+  {
+   "id": "ordered-dither-pass",
+   "category": "component",
+   "fits": "transition",
+   "title": "Ordered Dither Pass",
+   "what": "Bayer-matrix ordered dithering quantizes a slotted scene (rasterized once at mount): the image emerges from pure 2-tone noise to clean, or dissolves the reverse. Stateless per frame, never error diffusion.",
+   "tags": [
+    "motion-primitive",
+    "experiment",
+    "texture",
+    "dither",
+    "transition",
+    "quantize"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install ordered-dither-pass"
+  },
+  {
+   "id": "organic-light-leak-overlay",
+   "category": "block",
+   "fits": "transition",
+   "title": "Organic Light Leak Overlay",
+   "what": "Finite CSS light-leak overlay for memory beats and motivated transitions",
+   "tags": [
+    "light-leak",
+    "film",
+    "memory",
+    "transition",
+    "overlay",
+    "media-treatment-overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install organic-light-leak-overlay"
+  },
+  {
+   "id": "oscilloscope-trace",
+   "category": "block",
+   "fits": "other",
+   "title": "Oscilloscope Trace",
+   "what": "CRT oscilloscope beam sweeping a waveform across a 10x8 graticule, with closed-form phosphor persistence: the tail decays as exp(-age/tau) and brightens where the beam slows",
+   "tags": [
+    "instrument",
+    "data",
+    "showcase",
+    "retro"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install oscilloscope-trace"
+  },
+  {
+   "id": "outline-draw",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Outline Draw",
+   "what": "A rounded outline that proves a callout by drawing clockwise as a hollow conic-gradient border with a clean closure.",
+   "tags": [
+    "motion-primitive",
+    "effects",
+    "outline",
+    "border",
+    "mask",
+    "proof"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install outline-draw"
+  },
+  {
+   "id": "oversized-cursor",
+   "category": "component",
+   "fits": "other",
+   "title": "Oversized Cursor",
+   "what": "A deliberately oversized macOS-style pointer that enters off-screen, travels to a target, clicks to ignite a visible response, then exits",
+   "tags": [
+    "motion-primitive",
+    "actor",
+    "cursor",
+    "pointer",
+    "interaction"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install oversized-cursor"
+  },
+  {
+   "id": "overwhelm-surround",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Overwhelm Surround",
+   "what": "Tasks, tabs, pings, and notification bubbles accelerate inward around a calm central subject, turning overload into visible spatial pressure.",
+   "tags": [
+    "effects",
+    "agitate",
+    "overwhelm",
+    "pressure",
+    "notifications"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install overwhelm-surround"
+  },
+  {
+   "id": "page-slide",
+   "category": "component",
+   "fits": "transition",
+   "title": "Page Slide",
+   "what": "A transitions.dev-inspired page slide primitive with outgoing and incoming panels",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "page",
+    "slide"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install page-slide"
+  },
+  {
+   "id": "pan-stations",
+   "category": "component",
+   "fits": "camera",
+   "title": "Pan Stations",
+   "what": "A lateral camera move across a continuous row of labeled feature stations, with a steady dwell at each stop before the next pan.",
+   "tags": [
+    "camera",
+    "pan",
+    "stations",
+    "features",
+    "exhibit",
+    "agitate",
+    "cross-shelved"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install pan-stations"
+  },
+  {
+   "id": "panel-reveal",
+   "category": "component",
+   "fits": "transition",
+   "title": "Panel Reveal",
+   "what": "A panel reveal primitive with height expansion and content fade",
+   "tags": [
+    "transition-primitive",
+    "transitions-dev-port",
+    "panel",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install panel-reveal"
+  },
+  {
+   "id": "parallax-device-dive",
+   "category": "component",
+   "fits": "transition",
+   "title": "Parallax Device Dive",
+   "what": "A canonical phone rises into view before the camera pushes through its screen and layered app UI expands to fill the frame.",
+   "tags": [
+    "motion-primitive",
+    "camera",
+    "device",
+    "phone",
+    "parallax",
+    "transition"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install parallax-device-dive"
+  },
+  {
+   "id": "parallax-unzoom",
+   "category": "component",
+   "fits": "transition",
+   "title": "Parallax Unzoom",
+   "what": "Reveal transition — focus card scales down from full frame as siblings parallax in to form a grid (reverse of parallax-zoom)",
+   "tags": [
+    "transition",
+    "reveal",
+    "unzoom",
+    "parallax",
+    "grid",
+    "hero"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install parallax-unzoom"
+  },
+  {
+   "id": "parallax-zoom",
+   "category": "component",
+   "fits": "transition",
+   "title": "Parallax Zoom",
+   "what": "Center card scales up to fill the frame while siblings parallax outward — inspired by the eBay Playbook hero transition",
+   "tags": [
+    "transition",
+    "zoom",
+    "parallax",
+    "grid",
+    "hero"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install parallax-zoom"
+  },
+  {
+   "id": "particle-image-reveal",
+   "category": "component",
+   "fits": "particles",
+   "title": "Particle Image Reveal",
+   "what": "A seeded deterministic particle field converges and settles while a slotted image reveals beneath it, the trail thinning until the image holds clean.",
+   "tags": [
+    "motion-primitive",
+    "intros-reveals",
+    "particles",
+    "reveal",
+    "canvas",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install particle-image-reveal"
+  },
+  {
+   "id": "particle-text-dissolve",
+   "category": "component",
+   "fits": "particles",
+   "title": "Particle Text Dissolve",
+   "what": "Text assembles from a seeded particle cloud (or dissolves into it): per-particle targets sampled once from the rendered text bitmap at mount, table-driven particles, zero per-particle tweens, one onUpdate painter.",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "particles",
+    "canvas",
+    "deterministic",
+    "experiment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install particle-text-dissolve"
+  },
+  {
+   "id": "per-word-crossfade",
+   "category": "component",
+   "fits": "other",
+   "title": "Per-Word Crossfade",
+   "what": "Words gently fade into place with a short vertical drift for calm keynote rhythm.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install per-word-crossfade"
+  },
+  {
+   "id": "per-word-rise",
+   "category": "component",
+   "fits": "other",
+   "title": "Per Word Rise",
+   "what": "Words or characters rise into place in a controlled blur-to-sharp cascade, settle softly on landing, and hold still until the cut (optional fade or up exit).",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "typography",
+    "stagger",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install per-word-rise"
+  },
+  {
+   "id": "perspective-marquee",
+   "category": "component",
+   "fits": "other",
+   "title": "Perspective Marquee",
+   "what": "A 3D tilted marquee with depth feel as items roll toward the horizon.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install perspective-marquee"
+  },
+  {
+   "id": "physical-exit",
+   "category": "component",
+   "fits": "other",
+   "title": "Physical Exit",
+   "what": "A card exits with physical momentum in toss, drop, or slide mode, carrying acceleration and rotation through the final offscreen pose without fading.",
+   "tags": [
+    "motion-primitive",
+    "exit",
+    "momentum",
+    "toss",
+    "drop",
+    "slide"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install physical-exit"
+  },
+  {
+   "id": "press-ripple",
+   "category": "component",
+   "fits": "other",
+   "title": "Press Ripple",
+   "what": "A cursor decel-arrives from off-stage, lands slightly off-center on a caller-positioned target, compresses with it in lockstep, releases with ink ripple rings, then exits off-stage while the pressed state holds.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "cursor",
+    "press",
+    "ripple",
+    "payoff"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install press-ripple"
+  },
+  {
+   "id": "pull-back-reveal",
+   "category": "component",
+   "fits": "camera",
+   "title": "Pull Back Reveal",
+   "what": "A tight stat detail holds, then one decelerating camera pull-back reveals the headline and supporting cards that recontextualize it.",
+   "tags": [
+    "motion-primitive",
+    "camera",
+    "pull-back",
+    "reveal",
+    "recontextualize"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install pull-back-reveal"
+  },
+  {
+   "id": "pull-to-refresh",
+   "category": "component",
+   "fits": "other",
+   "title": "Pull to Refresh",
+   "what": "A mobile list pulls through nonlinear rubber-band resistance, arms at a threshold, commits to a bounded loading indicator, then snaps exactly back to rest.",
+   "tags": [
+    "pointer",
+    "pointers",
+    "mobile",
+    "gesture",
+    "interaction",
+    "refresh",
+    "demonstrate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install pull-to-refresh"
+  },
+  {
+   "id": "push-in",
+   "category": "component",
+   "fits": "camera",
+   "title": "Push In",
+   "what": "A centered headline gains focus through one slow, continuous camera push and a gentle fade out.",
+   "tags": [
+    "motion-primitive",
+    "camera",
+    "push-in",
+    "focus",
+    "emphasize",
+    "holdable"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install push-in"
+  },
+  {
+   "id": "rack-focus",
+   "category": "block",
+   "fits": "camera",
+   "title": "Rack Focus",
+   "what": "A focus pull with real aperture bokeh: the focal plane travels from a near subject to a far one, so one resolves as the other blows into hard-edged polygon discs that clip to a cat's eye toward the corners. A focus pull only reads against content at two clearly separated depths, so this block carries its own depth-layered night exterior and puts both subject depths on variables.",
+   "tags": [
+    "webgl",
+    "shader",
+    "camera",
+    "depth",
+    "cinematic",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install rack-focus"
+  },
+  {
+   "id": "radial-surround",
+   "category": "component",
+   "fits": "other",
+   "title": "Radial Surround",
+   "what": "Labeled hairline chips assemble around a centered subject on an elliptical ring, then optionally converge inward with a subtle edge dim. The center never moves: surrounded, not zoomed.",
+   "tags": [
+    "motion-primitive",
+    "problem-setup",
+    "radial",
+    "ring",
+    "surround",
+    "converge"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install radial-surround"
+  },
+  {
+   "id": "reddit-post",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Reddit Post Card",
+   "what": "Animated Reddit post card overlay with upvotes and comments",
+   "tags": [
+    "social",
+    "overlay",
+    "reddit"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install reddit-post"
+  },
+  {
+   "id": "rgb-glitch-text",
+   "category": "component",
+   "fits": "other",
+   "title": "RGB Glitch Text",
+   "what": "RGB-offset text copies jitter briefly for a controlled glitch window.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install rgb-glitch-text"
+  },
+  {
+   "id": "ridged-burn",
+   "category": "block",
+   "fits": "transition",
+   "title": "Ridged Burn",
+   "what": "Shader transition with ridged turbulence burn effect",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install ridged-burn"
+  },
+  {
+   "id": "ripple-waves",
+   "category": "block",
+   "fits": "transition",
+   "title": "Ripple Waves",
+   "what": "Shader transition with concentric ripple wave distortion",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install ripple-waves"
+  },
+  {
+   "id": "rubber-band-bumper",
+   "category": "component",
+   "fits": "transition",
+   "title": "Rubber Band Bumper",
+   "what": "An outgoing panel pulls against increasing resistance, holds at tension, then snaps past an edge with overshoot as the incoming panel settles behind it.",
+   "tags": [
+    "motion-primitive",
+    "transition",
+    "rubber-band",
+    "resistance",
+    "overshoot"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install rubber-band-bumper"
+  },
+  {
+   "id": "scan-band",
+   "category": "component",
+   "fits": "other",
+   "title": "Scan Band",
+   "what": "A diagonal distortion band sweeps once across a clean wordmark, revealing clipped red and cyan offsets only inside the moving band.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "scan",
+    "chromatic",
+    "distortion",
+    "wordmark"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install scan-band"
+  },
+  {
+   "id": "scramble-reveal",
+   "category": "component",
+   "fits": "other",
+   "title": "Scramble Reveal",
+   "what": "A deterministic hacker-style text reveal that cycles fixed glyph rows and locks the target string from left to right.",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "scramble",
+    "reveal",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install scramble-reveal"
+  },
+  {
+   "id": "screen-flow-carousel",
+   "category": "component",
+   "fits": "other",
+   "title": "Screen Flow Carousel",
+   "what": "Two to five app screens ride a horizontal rail: one primary at center, neighbors receded, advancing on cues with a velocity-matched throw and a smooth long-tail catch while a mono caption swaps with each advance. Screens are slots with token skeleton defaults.",
+   "tags": [
+    "product-demo",
+    "feature-tour",
+    "carousel",
+    "rail",
+    "slot",
+    "screens"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install screen-flow-carousel"
+  },
+  {
+   "id": "scroll-camera-story",
+   "category": "component",
+   "fits": "camera",
+   "title": "Scroll Camera Story",
+   "what": "A compressed forced-scroll cinematic pass: a tall scene of slotted sections travels past the camera top to bottom, depth layers parallax at different rates, each section rises as the camera reaches it, and the pass decelerates into a held final section.",
+   "tags": [
+    "camera",
+    "scroll",
+    "parallax",
+    "story",
+    "sections",
+    "slot",
+    "servo"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install scroll-camera-story"
+  },
+  {
+   "id": "scroll-feed",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Scroll Feed",
+   "what": "A loop-friendly column of varied skeleton post cards scrolls upward with subtle motion trails and an agitated pace.",
+   "tags": [
+    "motion-primitive",
+    "effects",
+    "scroll",
+    "feed",
+    "loop",
+    "agitation"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install scroll-feed"
+  },
+  {
+   "id": "sdf-iris",
+   "category": "block",
+   "fits": "transition",
+   "title": "SDF Iris",
+   "what": "Shader transition with signed distance field iris reveal",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install sdf-iris"
+  },
+  {
+   "id": "segmentation-flood",
+   "category": "component",
+   "fits": "other",
+   "title": "Segmentation Flood",
+   "what": "Machine-vision read of a slotted subject: translucent accent segmentation masks flood on in quantized scanline steps, each region gets a thin bracket and mono label chip, a deterministic 2-frame HUD flicker rides the pass, then the labeled read settles clean.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "ai",
+    "hud",
+    "canvas",
+    "deterministic",
+    "experiment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install segmentation-flood"
+  },
+  {
+   "id": "separator",
+   "category": "component",
+   "fits": "other",
+   "title": "Separator",
+   "what": "A one-pixel structural separator with horizontal and vertical variants plus a seek-safe progress reveal",
+   "tags": [
+    "video-primitive",
+    "separator",
+    "layout"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install separator"
+  },
+  {
+   "id": "settings-toggle-flow",
+   "category": "component",
+   "fits": "other",
+   "title": "Settings Toggle Flow",
+   "what": "A composed settings flow with preference rows, toggle switches, and active-state feedback",
+   "tags": [
+    "ui-flow",
+    "settings",
+    "toggle"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install settings-toggle-flow"
+  },
+  {
+   "id": "share-sheet-carousel",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Share-Sheet Carousel",
+   "what": "A share sheet springs up from the bottom of the phone and cycles previews inside its card on a fast cut rhythm while the blurred ground swaps behind it, ending on an accept tap",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "share-sheet",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 7.2333,
+   "install_cmd": "python3 machine/registry.py install share-sheet-carousel"
+  },
+  {
+   "id": "shared-axis-y",
+   "category": "component",
+   "fits": "other",
+   "title": "Shared Axis Y",
+   "what": "Per-word vertical shared-axis transition for sharp editorial swaps.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install shared-axis-y"
+  },
+  {
+   "id": "shared-axis-z",
+   "category": "component",
+   "fits": "other",
+   "title": "Shared Axis Z",
+   "what": "Scale-based shared-axis transition for focus shifts and context depth.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install shared-axis-z"
+  },
+  {
+   "id": "sheet-spring-up",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Sheet Spring-Up",
+   "what": "A bottom sheet rushes up from below the frame on a real spring sampled frame by frame from reference footage, overshooting its resting place and settling back without an approximated ease",
+   "tags": [
+    "video-primitive",
+    "sheet",
+    "spring",
+    "mock-ui",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install sheet-spring-up"
+  },
+  {
+   "id": "shimmer-sweep",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Shimmer Sweep",
+   "what": "Animated light sweep across text or elements using a CSS gradient mask — ideal for AI accents and premium reveals",
+   "tags": [
+    "text",
+    "shimmer",
+    "highlight",
+    "effect"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install shimmer-sweep"
+  },
+  {
+   "id": "shutter-slam",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Shutter Slam",
+   "what": "One word thrown through six single-property beats under integrated shutter blur — two translate slams, a scale punch, then a full turn about each axis — on the measured easing of the After Effects export the shutter model was fitted to",
+   "tags": [
+    "effect",
+    "motion-blur",
+    "shutter",
+    "after-effects",
+    "slam",
+    "animation"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install shutter-slam"
+  },
+  {
+   "id": "signup-flow",
+   "category": "component",
+   "fits": "other",
+   "title": "Signup Flow",
+   "what": "A composed signup flow with social action, email field, password field, and submit button",
+   "tags": [
+    "ui-flow",
+    "signup",
+    "form"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install signup-flow"
+  },
+  {
+   "id": "simulated-cursor",
+   "category": "component",
+   "fits": "other",
+   "title": "Simulated Cursor",
+   "what": "A lightweight cursor pointer and click pulse for product walkthroughs and agent UI demos",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "cursor",
+    "ui",
+    "walkthrough"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install simulated-cursor"
+  },
+  {
+   "id": "skeleton-reveal",
+   "category": "component",
+   "fits": "transition",
+   "title": "Skeleton Reveal",
+   "what": "A skeleton loader transition that pulses, then cross-fades into content",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "skeleton",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install skeleton-reveal"
+  },
+  {
+   "id": "slack-notification-ad",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Slack Notification Ad",
+   "what": "A portrait lock screen fills with escalating Slack video requests before HeyGen delivers the payoff",
+   "tags": [
+    "showcase",
+    "mock-ui",
+    "notification",
+    "vertical",
+    "ad-template"
+   ],
+   "size": "1080x1920",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install slack-notification-ad"
+  },
+  {
+   "id": "slit-scan-reveal",
+   "category": "component",
+   "fits": "other",
+   "title": "Slit Scan Reveal",
+   "what": "The frame's rows sample an authored subject at offset times: a canvas painter draws row slices of one pure position function evaluated at t minus offset(row), smearing arrival through time until the offsets collapse to zero and the mark holds coherent.",
+   "tags": [
+    "motion-primitive",
+    "time",
+    "slit-scan",
+    "canvas",
+    "deterministic",
+    "experiment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install slit-scan-reveal"
+  },
+  {
+   "id": "slot-machine-roll",
+   "category": "component",
+   "fits": "other",
+   "title": "Slot Machine Roll",
+   "what": "A vertical reel scrolls characters from one value to another.",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install slot-machine-roll"
+  },
+  {
+   "id": "social-proof-card",
+   "category": "component",
+   "fits": "other",
+   "title": "Social Proof Card",
+   "what": "The app-store close as one mountable scene: wordmark, five stars, a proof line, three feature icons and a CTA capsule build in a quiet stagger and hold - measured from reference ad footage. For an animated star sweep use star-rating-fill; for a quote card use testimonial-proof-card; for a bare lockup use cta-lockup",
+   "tags": [
+    "motion-primitive",
+    "social-proof",
+    "end-card",
+    "cta",
+    "vertical"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install social-proof-card"
+  },
+  {
+   "id": "soft-blob-touch",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Soft Blob Touch",
+   "what": "A granular soft blob idles with slow internal drift; a scripted touch dot decel-arrives, the blob deforms toward it with an attraction bulge, then recovers with a velocity-preserving spring. No hard edges anywhere.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "material",
+    "blob",
+    "touch",
+    "grain"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install soft-blob-touch"
+  },
+  {
+   "id": "soft-blur-in",
+   "category": "component",
+   "fits": "other",
+   "title": "Soft Blur In",
+   "what": "A soft opacity, blur, and lift reveal for headlines, captions, and product UI callouts",
+   "tags": [
+    "motion-primitive",
+    "text",
+    "reveal",
+    "blur"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install soft-blur-in"
+  },
+  {
+   "id": "spain-map",
+   "category": "block",
+   "fits": "other",
+   "title": "Spain Map",
+   "what": "Animated Spain choropleth by autonomous community with staggered reveals and gradient legend — D3 conic conformal projection",
+   "tags": [
+    "data",
+    "map",
+    "geography",
+    "spain",
+    "europe",
+    "choropleth"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install spain-map"
+  },
+  {
+   "id": "spiral-galaxy",
+   "category": "block",
+   "fits": "particles",
+   "title": "Spiral Galaxy",
+   "what": "A spiral galaxy seen from outside, turning with real differential rotation: inner stars orbit faster than outer ones, so the arms wind up over the shot instead of spinning rigidly. 20,000 additive GPU sprites, seeded once and solved directly from time, so any frame can be rendered on its own.",
+   "tags": [
+    "hero",
+    "space",
+    "particles",
+    "webgl",
+    "background"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install spiral-galaxy"
+  },
+  {
+   "id": "split-flap-board",
+   "category": "block",
+   "fits": "other",
+   "title": "Split-Flap Board",
+   "what": "Solari-style departure board: every cell walks its drum forward through the intervening characters of a fixed alphabet until it lands on its target, so the text resolves as a mechanical cascade instead of a fade.",
+   "tags": [
+    "text",
+    "kinetic",
+    "mechanical",
+    "split-flap",
+    "solari",
+    "departure-board",
+    "reveal"
+   ],
+   "size": "1920x1080",
+   "seconds": 3.5,
+   "install_cmd": "python3 machine/registry.py install split-flap-board"
+  },
+  {
+   "id": "split-tilt-cards",
+   "category": "component",
+   "fits": "other",
+   "title": "Split Tilt Cards",
+   "what": "Two equal-weight cards arrive from opposite wings with mirrored rotateY book-open tilts under one shared perspective, pill badges spring-pop at each inner edge, and the pair holds with a barely-there phase-opposed idle float. Card bodies are content slots with token skeleton defaults.",
+   "tags": [
+    "motion-primitive",
+    "layout",
+    "compare",
+    "holdable",
+    "book-open",
+    "tilt",
+    "slots"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install split-tilt-cards"
+  },
+  {
+   "id": "spotify-card",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Spotify Now Playing",
+   "what": "Animated Spotify now-playing card with album art and progress bar",
+   "tags": [
+    "social",
+    "overlay",
+    "spotify"
+   ],
+   "size": "1080x1920",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install spotify-card"
+  },
+  {
+   "id": "spotlight-card",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Spotlight Card",
+   "what": "A card with a scripted cursor spotlight and lit border.",
+   "tags": [
+    "effect"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install spotlight-card"
+  },
+  {
+   "id": "spring-pop",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Spring Pop",
+   "what": "A badge pops in from a visible near-rest scale, overshoots full size once, and settles cleanly.",
+   "tags": [
+    "motion-primitive",
+    "effects",
+    "spring",
+    "overshoot",
+    "pop",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install spring-pop"
+  },
+  {
+   "id": "spring-stack-shuffle",
+   "category": "component",
+   "fits": "other",
+   "title": "Spring Stack Shuffle",
+   "what": "A stack of 3 to 5 slotted cards reshuffles on cues: the back card throws over the top and lands at the front with real mass, the rest compress and resettle; cues that land mid-flight redirect the moving cards with velocity preserved.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "physics",
+    "stack",
+    "interruptible-spring"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install spring-stack-shuffle"
+  },
+  {
+   "id": "stagger-cascade",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Stagger Cascade",
+   "what": "A responsive grid of tile cards that fades and travels into place with an evenly spaced per-item GSAP stagger. The ordered cascade is the only visual mechanic.",
+   "tags": [
+    "effects",
+    "grid",
+    "stagger",
+    "entrance",
+    "exhibit"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install stagger-cascade"
+  },
+  {
+   "id": "stagger-lattice",
+   "category": "component",
+   "fits": "other",
+   "title": "Stagger Lattice",
+   "what": "A staggered grid reveal inspired by Anime.js v4 stagger utilities, implemented with GSAP for HyperFrames.",
+   "tags": [
+    "advanced-motion",
+    "anime-inspired",
+    "hyperframes-native"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install stagger-lattice"
+  },
+  {
+   "id": "staggered-fade-up",
+   "category": "component",
+   "fits": "other",
+   "title": "Staggered Fade Up",
+   "what": "Words fade in and slide up one after another with configurable delay.",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install staggered-fade-up"
+  },
+  {
+   "id": "star-rating-fill",
+   "category": "component",
+   "fits": "other",
+   "title": "Star Rating Fill",
+   "what": "A token-driven star row whose colored layer sweeps to a rating, preserves the fractional final star, and can count the value in sync.",
+   "tags": [
+    "data",
+    "rating",
+    "stars",
+    "fractional",
+    "fill",
+    "prove"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install star-rating-fill"
+  },
+  {
+   "id": "state-chip-rail",
+   "category": "component",
+   "fits": "other",
+   "title": "State Chip Rail",
+   "what": "A rail of mono status chips advances a seek-safe data-state snap machine on a cue schedule: active chip ink on surface, done chips dim, pending chips hollow, optional badges pop beside one state.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "state-machine",
+    "status",
+    "chips",
+    "rail"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install state-chip-rail"
+  },
+  {
+   "id": "sticky-mock-swap",
+   "category": "component",
+   "fits": "other",
+   "title": "Sticky Mock Swap",
+   "what": "A pinned product mock cross-fades through accent-tinted feature states while matching captions rise, hold, and exit beside it.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "sticky",
+    "mock",
+    "crossfade",
+    "feature-tour"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install sticky-mock-swap"
+  },
+  {
+   "id": "stitched-text-draw",
+   "category": "component",
+   "fits": "other",
+   "title": "Stitched Text Draw",
+   "what": "Text drawn as thread stitches: a single-stroke display alphabet draws via attribute-driven dashoffset with stitch-tuned dash patterns, seeded angle jitter, needle-hole dots, a leading needle, and a thread-tail overshoot per letter.",
+   "tags": [
+    "motion-primitive",
+    "experiment",
+    "type",
+    "craft",
+    "stitch",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install stitched-text-draw"
+  },
+  {
+   "id": "stop-motion-cadence",
+   "category": "component",
+   "fits": "other",
+   "title": "Stop Motion Cadence",
+   "what": "The stepped-time law as a demo primitive: one driver quantizes timeline time to floor(t * fps) / fps and feeds ALL motion; four token paper-cut shapes throw-and-land with squash on hits, 2-frame boil jitter seeded per step, and sparkle accents living exactly 2 to 3 frames.",
+   "tags": [
+    "motion-primitive",
+    "time-law",
+    "stop-motion",
+    "stepped",
+    "boil",
+    "deterministic",
+    "experiment"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install stop-motion-cadence"
+  },
+  {
+   "id": "store-badge-lockup",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Store Badge Lockup",
+   "what": "Settles a short headline above equal-size App Store and Google Play badges as a token-driven mobile end-card call to action.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "mobile",
+    "store-badges",
+    "cta",
+    "ask"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install store-badge-lockup"
+  },
+  {
+   "id": "streaming-text",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Streaming Text",
+   "what": "Words arrive the way an AI answer streams - in uneven bursts on a measured token rhythm, each word landing grey and inking to full colour - rather than the even tick of a typewriter",
+   "tags": [
+    "video-primitive",
+    "text-effect",
+    "ai",
+    "chat"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install streaming-text"
+  },
+  {
+   "id": "strikethrough-replace",
+   "category": "component",
+   "fits": "other",
+   "title": "Strikethrough Replace",
+   "what": "Draw a strike line across old text, then reveal the replacement.",
+   "tags": [
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install strikethrough-replace"
+  },
+  {
+   "id": "success-check",
+   "category": "component",
+   "fits": "transition",
+   "title": "Success Check",
+   "what": "A success check primitive with ring pop, path draw, and subtle rotate blur",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "success",
+    "check"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install success-check"
+  },
+  {
+   "id": "svg-line-draw-loader",
+   "category": "component",
+   "fits": "other",
+   "title": "SVG Line Draw Loader",
+   "what": "An Anime.js-style path drawing loader implemented as a seekable GSAP stroke timeline.",
+   "tags": [
+    "video-primitive",
+    "advanced-motion",
+    "anime-inspired",
+    "hyperframes-native"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install svg-line-draw-loader"
+  },
+  {
+   "id": "svg-mask-reveal",
+   "category": "component",
+   "fits": "overlay",
+   "title": "SVG Mask Reveal",
+   "what": "A soft token-colored sweep reveals media only through an editable SVG wordmark mask.",
+   "tags": [
+    "effect",
+    "svg",
+    "mask",
+    "wordmark",
+    "reveal",
+    "exhibit"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install svg-mask-reveal"
+  },
+  {
+   "id": "svg-stroke-trace",
+   "category": "component",
+   "fits": "other",
+   "title": "SVG Stroke Trace",
+   "what": "An authored SVG path draws from its measured length, holds with subtle drift, and optionally fills when the path is closed.",
+   "tags": [
+    "motion-primitive",
+    "intro",
+    "reveal",
+    "svg",
+    "stroke",
+    "line-draw"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install svg-stroke-trace"
+  },
+  {
+   "id": "swipe-rail",
+   "category": "component",
+   "fits": "other",
+   "title": "Swipe Rail",
+   "what": "A contact circle leads a horizontal card rail through a fast drag, momentum carry, and settled snap to the next card.",
+   "tags": [
+    "motion-primitive",
+    "interaction",
+    "gesture",
+    "swipe",
+    "cards",
+    "rail"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install swipe-rail"
+  },
+  {
+   "id": "swirl-vortex",
+   "category": "block",
+   "fits": "transition",
+   "title": "Swirl Vortex",
+   "what": "Shader transition with swirling vortex distortion",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install swirl-vortex"
+  },
+  {
+   "id": "tabs-slide-indicator",
+   "category": "component",
+   "fits": "transition",
+   "title": "Tabs Slide Indicator",
+   "what": "A pill indicator transition that slides between active tabs",
+   "tags": [
+    "transition-primitive",
+    "transitions-dev-port",
+    "tabs",
+    "indicator"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install tabs-slide-indicator"
+  },
+  {
+   "id": "telemetry-hud",
+   "category": "component",
+   "fits": "other",
+   "title": "Telemetry HUD",
+   "what": "Quiet mono debug-HUD readouts frame a slotted subject: corner brackets draw on, label:value lines tick their values on cues, one readout emphasized in accent. The subject never moves; the HUD breathes zero.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "hud",
+    "telemetry",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install telemetry-hud"
+  },
+  {
+   "id": "terminal-simulator",
+   "category": "component",
+   "fits": "other",
+   "title": "Terminal Simulator",
+   "what": "A terminal window types commands and streams log output.",
+   "tags": [
+    "code-animation"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install terminal-simulator"
+  },
+  {
+   "id": "testimonial-card",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Testimonial Card",
+   "what": "Reveals a customer quote at reading pace, then settles its avatar, author name, and handle beneath as a clean proof beat.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "testimonial",
+    "social-proof",
+    "quote",
+    "prove"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install testimonial-card"
+  },
+  {
+   "id": "testimonial-proof-card",
+   "category": "component",
+   "fits": "other",
+   "title": "Testimonial Proof Card",
+   "what": "A quote card whose testimonial reveals per-line through a soft mask, with an avatar disc (initials default, image slot), mono name and role, an optional company text mark, and one emphasis substring underlined in accent ink after the quote lands.",
+   "tags": [
+    "motion-primitive",
+    "proof",
+    "testimonial",
+    "quote",
+    "social-proof",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install testimonial-proof-card"
+  },
+  {
+   "id": "text-match-cut",
+   "category": "component",
+   "fits": "transition",
+   "title": "Text Match Cut",
+   "what": "One line of text becomes another mid-move: both ride a single 85 % easy-ease curve and hard-swap at the speed peak, as scale, tracking, or a same-direction slide.",
+   "tags": [
+    "motion-primitive",
+    "transition",
+    "typography",
+    "match-cut",
+    "hard-cut",
+    "continuity"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install text-match-cut"
+  },
+  {
+   "id": "text-shimmer",
+   "category": "component",
+   "fits": "other",
+   "title": "Text Shimmer",
+   "what": "A static headline receives one clean specular gradient sweep through its glyphs, then returns to its ordinary text color.",
+   "tags": [
+    "motion-primitive",
+    "text-effects",
+    "shimmer",
+    "specular",
+    "emphasis"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install text-shimmer"
+  },
+  {
+   "id": "text-stagger",
+   "category": "component",
+   "fits": "transition",
+   "title": "Text Stagger",
+   "what": "A transitions.dev-inspired text stagger primitive with enter, shimmer, and exit-ready words",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "text",
+    "stagger"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install text-stagger"
+  },
+  {
+   "id": "text-state-swap",
+   "category": "component",
+   "fits": "transition",
+   "title": "Text State Swap",
+   "what": "A text state swap primitive with outgoing blur and incoming lift",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "text",
+    "swap"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install text-state-swap"
+  },
+  {
+   "id": "texture-mask-text",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Texture Mask Text",
+   "what": "CSS luminance masks that cut holes through letterforms - 66 pre-built texture masks from ambientCG PBR color maps",
+   "tags": [
+    "text",
+    "text-effect",
+    "effect",
+    "texture",
+    "mask"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install texture-mask-text"
+  },
+  {
+   "id": "thermal-distortion",
+   "category": "block",
+   "fits": "transition",
+   "title": "Thermal Distortion",
+   "what": "Shader transition with heat haze thermal distortion",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install thermal-distortion"
+  },
+  {
+   "id": "thread-message-stack",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Thread Message Stack",
+   "what": "A source-owned editable conversation stack with arbitrary incoming and outgoing messages",
+   "tags": [
+    "social",
+    "conversation",
+    "messages"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install thread-message-stack"
+  },
+  {
+   "id": "three-orbiting-cards",
+   "category": "component",
+   "fits": "other",
+   "title": "Three Orbiting Cards",
+   "what": "A Three.js-powered orbit scene driven by a paused GSAP timeline for deterministic renders.",
+   "tags": [
+    "video-primitive",
+    "three-js",
+    "webgl",
+    "hyperframes-native"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install three-orbiting-cards"
+  },
+  {
+   "id": "ticker-takeover",
+   "category": "component",
+   "fits": "other",
+   "title": "Ticker Takeover",
+   "what": "A mono ticker rolls through options, locks on a final word with an accent flash, and promotes it into a full-frame headline.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "ticker",
+    "slot-machine",
+    "headline",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install ticker-takeover"
+  },
+  {
+   "id": "tiktok-follow",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "TikTok Follow",
+   "what": "Animated TikTok follow overlay with profile card and follow button",
+   "tags": [
+    "social",
+    "overlay",
+    "tiktok"
+   ],
+   "size": "1080x1920",
+   "seconds": 4.5,
+   "install_cmd": "python3 machine/registry.py install tiktok-follow"
+  },
+  {
+   "id": "tilt-card",
+   "category": "component",
+   "fits": "transition",
+   "title": "Tilt Card",
+   "what": "A transitions.dev-inspired tilt card primitive with depth layers and hover-style parallax",
+   "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "card",
+    "tilt"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install tilt-card"
+  },
+  {
+   "id": "titlecard-calm",
+   "category": "component",
+   "fits": "other",
+   "title": "Titlecard Calm",
+   "what": "A restrained title card where a mono kicker and generous grotesque headline fade upward, drift almost imperceptibly, and exit cleanly.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "title-card",
+    "calm",
+    "orient"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install titlecard-calm"
+  },
+  {
+   "id": "titlecard-lockup",
+   "category": "component",
+   "fits": "other",
+   "title": "Titlecard Lockup",
+   "what": "The calm breather titlecard: an optional mono kicker fades up, the wordmark settles dead-center with one restrained move, a hairline rule draws left to right, a mono label fades beneath, and the lockup holds truly still.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "title-card",
+    "lockup",
+    "breather",
+    "orient"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install titlecard-lockup"
+  },
+  {
+   "id": "toggle-flip",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Toggle Flip",
+   "what": "An oversized UI toggle switch that flips with real physicality: thumb overshoot, track color crossfade, and a soft press-compress before release. The reference prop of the ui-props family.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "toggle",
+    "interaction",
+    "reference-prop",
+    "demonstrate"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install toggle-flip"
+  },
+  {
+   "id": "top-down-letters",
+   "category": "component",
+   "fits": "other",
+   "title": "Top-Down Letters",
+   "what": "Letters descend from above in a pronounced staircase with zero blur.",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install top-down-letters"
+  },
+  {
+   "id": "touch-indicator",
+   "category": "component",
+   "fits": "other",
+   "title": "Touch Indicator",
+   "what": "A translucent contact-circle gesture actor for mobile UI scenes: it touches the glass, causes a same-frame response, and lifts. Tap or swipe, picked by variable.",
+   "tags": [
+    "motion-primitive",
+    "mobile",
+    "gesture",
+    "touch",
+    "pointer"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install touch-indicator"
+  },
+  {
+   "id": "tracing-beam",
+   "category": "component",
+   "fits": "other",
+   "title": "Tracing Beam",
+   "what": "A glowing dash follows one SVG path through three UI elements, lifting and brightening each element in sequence.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "attention",
+    "beam",
+    "path",
+    "spotlight"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install tracing-beam"
+  },
+  {
+   "id": "tracking-in",
+   "category": "component",
+   "fits": "other",
+   "title": "Tracking In",
+   "what": "A precise letter-spacing reveal for premium headings and interface labels",
+   "tags": [
+    "motion-primitive",
+    "text",
+    "reveal",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install tracking-in"
+  },
+  {
+   "id": "transitions-3d",
+   "category": "block",
+   "fits": "transition",
+   "title": "3D Transitions",
+   "what": "Showcase of 3D perspective flip and rotate transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 11,
+   "install_cmd": "python3 machine/registry.py install transitions-3d"
+  },
+  {
+   "id": "transitions-blur",
+   "category": "block",
+   "fits": "transition",
+   "title": "Blur Transitions",
+   "what": "Showcase of blur-based transitions between scenes",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 20,
+   "install_cmd": "python3 machine/registry.py install transitions-blur"
+  },
+  {
+   "id": "transitions-cover",
+   "category": "block",
+   "fits": "transition",
+   "title": "Cover Transitions",
+   "what": "Showcase of cover/uncover slide transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 21,
+   "install_cmd": "python3 machine/registry.py install transitions-cover"
+  },
+  {
+   "id": "transitions-destruction",
+   "category": "block",
+   "fits": "transition",
+   "title": "Destruction Transitions",
+   "what": "Showcase of destructive break-apart transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 14,
+   "install_cmd": "python3 machine/registry.py install transitions-destruction"
+  },
+  {
+   "id": "transitions-dissolve",
+   "category": "block",
+   "fits": "transition",
+   "title": "Dissolve Transitions",
+   "what": "Showcase of dissolve and fade transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 24,
+   "install_cmd": "python3 machine/registry.py install transitions-dissolve"
+  },
+  {
+   "id": "transitions-distortion",
+   "category": "block",
+   "fits": "transition",
+   "title": "Distortion Transitions",
+   "what": "Showcase of warp and distortion transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 21,
+   "install_cmd": "python3 machine/registry.py install transitions-distortion"
+  },
+  {
+   "id": "transitions-grid",
+   "category": "block",
+   "fits": "transition",
+   "title": "Grid Transitions",
+   "what": "Showcase of grid-based tile transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 11,
+   "install_cmd": "python3 machine/registry.py install transitions-grid"
+  },
+  {
+   "id": "transitions-light",
+   "category": "block",
+   "fits": "transition",
+   "title": "Light Transitions",
+   "what": "Showcase of light-based glow and flash transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 21,
+   "install_cmd": "python3 machine/registry.py install transitions-light"
+  },
+  {
+   "id": "transitions-mechanical",
+   "category": "block",
+   "fits": "transition",
+   "title": "Mechanical Transitions",
+   "what": "Showcase of mechanical shutter and iris transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 15,
+   "install_cmd": "python3 machine/registry.py install transitions-mechanical"
+  },
+  {
+   "id": "transitions-other",
+   "category": "block",
+   "fits": "transition",
+   "title": "Other Transitions",
+   "what": "Showcase of miscellaneous creative transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 20,
+   "install_cmd": "python3 machine/registry.py install transitions-other"
+  },
+  {
+   "id": "transitions-push",
+   "category": "block",
+   "fits": "transition",
+   "title": "Push Transitions",
+   "what": "Showcase of push and slide transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 24,
+   "install_cmd": "python3 machine/registry.py install transitions-push"
+  },
+  {
+   "id": "transitions-radial",
+   "category": "block",
+   "fits": "transition",
+   "title": "Radial Transitions",
+   "what": "Showcase of radial wipe and reveal transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 20,
+   "install_cmd": "python3 machine/registry.py install transitions-radial"
+  },
+  {
+   "id": "transitions-scale",
+   "category": "block",
+   "fits": "transition",
+   "title": "Scale Transitions",
+   "what": "Showcase of scale and zoom transitions",
+   "tags": [
+    "transition",
+    "showcase"
+   ],
+   "size": "1920x1080",
+   "seconds": 15,
+   "install_cmd": "python3 machine/registry.py install transitions-scale"
+  },
+  {
+   "id": "trust-strip",
+   "category": "component",
+   "fits": "other",
+   "title": "Trust Strip",
+   "what": "A monochrome trust row of wide-tracked mono wordmarks that fade in with an opacity-only left-to-right stagger, then hold dead still.",
+   "tags": [
+    "motion-primitive",
+    "proof",
+    "trust",
+    "logo-strip",
+    "wordmarks"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install trust-strip"
+  },
+  {
+   "id": "type-match-cut",
+   "category": "component",
+   "fits": "transition",
+   "title": "Type Match Cut",
+   "what": "A headline splits vertically around an incoming panel, which grows from the negative space and takes the frame as the words exit through opposite edges.",
+   "tags": [
+    "motion-primitive",
+    "transition",
+    "typography",
+    "match-cut",
+    "continuity"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install type-match-cut"
+  },
+  {
+   "id": "typed-prompt",
+   "category": "component",
+   "fits": "other",
+   "title": "Typed Prompt",
+   "what": "A prompt line types itself in chunked human cadence behind a deterministic blinking caret, with optional backspace-and-retype correction of the final word.",
+   "tags": [
+    "motion-primitive",
+    "product-demo",
+    "typing",
+    "prompt",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install typed-prompt"
+  },
+  {
+   "id": "typewriter",
+   "category": "component",
+   "fits": "other",
+   "title": "Typewriter",
+   "what": "Character-by-character text reveal with a deterministic blinking cursor.",
+   "tags": [
+    "video-primitive",
+    "motion-primitive",
+    "typography"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install typewriter"
+  },
+  {
+   "id": "typing-indicator",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Typing Indicator",
+   "what": "The three-dot chat bubble that says someone is writing: it pops in at the thread's edge exactly as messaging apps do, holds while the reply is coming, and vanishes when the message lands",
+   "tags": [
+    "video-primitive",
+    "chat",
+    "mock-ui",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install typing-indicator"
+  },
+  {
+   "id": "ui-3d-reveal",
+   "category": "block",
+   "fits": "other",
+   "title": "3D UI Reveal",
+   "what": "Perspective 3D reveal animation for UI elements",
+   "tags": [
+    "showcase",
+    "3d",
+    "reveal"
+   ],
+   "size": "1920x1080",
+   "seconds": 13,
+   "install_cmd": "python3 machine/registry.py install ui-3d-reveal"
+  },
+  {
+   "id": "ui-focus-zoom",
+   "category": "component",
+   "fits": "camera",
+   "title": "UI Focus Zoom",
+   "what": "A full app surface establishes with one settle, then the camera zooms and pans to an anchored region on its cue and holds the zoomed state, with an optional soft focus halo at the anchor. The surface is a slot with a token-styled skeleton default.",
+   "tags": [
+    "camera",
+    "product-demo",
+    "zoom",
+    "focus",
+    "pan",
+    "slot",
+    "servo"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install ui-focus-zoom"
+  },
+  {
+   "id": "us-map",
+   "category": "block",
+   "fits": "other",
+   "title": "US Map",
+   "what": "Animated US choropleth map with staggered state reveals, value labels, and gradient legend — pure inline SVG with GSAP",
+   "tags": [
+    "data",
+    "map",
+    "geography",
+    "usa",
+    "choropleth"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install us-map"
+  },
+  {
+   "id": "us-map-bubble",
+   "category": "block",
+   "fits": "other",
+   "title": "US Bubble Map",
+   "what": "Animated US bubble map with proportional city markers, value callouts, and connection lines — composable with us-map",
+   "tags": [
+    "data",
+    "map",
+    "geography",
+    "usa",
+    "bubble",
+    "cities"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install us-map-bubble"
+  },
+  {
+   "id": "us-map-flow",
+   "category": "block",
+   "fits": "other",
+   "title": "US Flow Map",
+   "what": "Animated connection arcs between US cities over a base map — composable origin-destination flow visualization",
+   "tags": [
+    "data",
+    "map",
+    "geography",
+    "usa",
+    "flow",
+    "connections",
+    "arcs"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install us-map-flow"
+  },
+  {
+   "id": "us-map-hex",
+   "category": "block",
+   "fits": "other",
+   "title": "US Hex Grid Map",
+   "what": "Animated hexagonal tile grid map — each state as an equal-weight hex with data fill and abbreviation label",
+   "tags": [
+    "data",
+    "map",
+    "geography",
+    "usa",
+    "hexgrid",
+    "tilegrid"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install us-map-hex"
+  },
+  {
+   "id": "variable-axis-type",
+   "category": "component",
+   "fits": "other",
+   "title": "Variable Axis Type",
+   "what": "A locked one-line headline whose weight or width axis morphs into a decisive emphasis beat.",
+   "tags": [
+    "typography",
+    "variable-font",
+    "kinetic-type",
+    "axis",
+    "emphasize"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install variable-axis-type"
+  },
+  {
+   "id": "variable-font-flex",
+   "category": "component",
+   "fits": "other",
+   "title": "Variable Font Flex",
+   "what": "A word lands while its variable-font weight and width axes flex from hairline-condensed to black-wide with per-character stagger; font-size eases inversely so the letterforms gain mass while the box holds.",
+   "tags": [
+    "motion-primitive",
+    "experiment",
+    "type",
+    "variable-font",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install variable-font-flex"
+  },
+  {
+   "id": "vector-editor-rig",
+   "category": "component",
+   "fits": "mock-ui",
+   "title": "Vector Editor Rig",
+   "what": "A dark design-tool app chrome with a live vector pen path, sequential anchor points, bezier handles, a selection frame, and theme-driven blue accents.",
+   "tags": [
+    "prop",
+    "ui-props",
+    "demonstrate",
+    "vector",
+    "design-tool",
+    "pen-tool",
+    "bezier",
+    "app-chrome"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install vector-editor-rig"
+  },
+  {
+   "id": "velocity-throw-snap",
+   "category": "component",
+   "fits": "other",
+   "title": "Velocity Throw Snap",
+   "what": "A five-shot rail whips past on a fast decaying curve, then overshoots and snaps the selected hero shot exactly to center.",
+   "tags": [
+    "motion-primitive",
+    "feature-tour",
+    "rail",
+    "velocity",
+    "throw",
+    "snap",
+    "physics"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install velocity-throw-snap"
+  },
+  {
+   "id": "vfx-anamorphic-flare",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Anamorphic Streak Flare",
+   "what": "A drifting field of bright points, each one throwing the long horizontal blue-violet streak a real anamorphic cinema lens produces. Built from the measured filter constants: a 0.3 high-pass, 80 horizontal taps at quarter resolution, a samples/3 gain and a 0x7a8aff tint.",
+   "tags": [
+    "vfx",
+    "background",
+    "showcase",
+    "optical",
+    "canvas"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install vfx-anamorphic-flare"
+  },
+  {
+   "id": "vfx-liquid-background",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Liquid Background",
+   "what": "Organic liquid simulation with vertex displacement on a subdivided plane. HTML content floats above rippling fluid surface with real-time wave dynamics.",
+   "tags": [
+    "html-in-canvas",
+    "liquid",
+    "webgl",
+    "displacement",
+    "background"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install vfx-liquid-background"
+  },
+  {
+   "id": "vfx-liquid-glass",
+   "category": "block",
+   "fits": "other",
+   "title": "Liquid Glass",
+   "what": "VFX composition block",
+   "tags": [
+    "html-in-canvas",
+    "webgl"
+   ],
+   "size": "1920x1080",
+   "seconds": 20,
+   "install_cmd": "python3 machine/registry.py install vfx-liquid-glass"
+  },
+  {
+   "id": "vfx-magnetic",
+   "category": "block",
+   "fits": "other",
+   "title": "Magnetic",
+   "what": "VFX composition block",
+   "tags": [
+    "html-in-canvas",
+    "webgl"
+   ],
+   "size": "1920x1080",
+   "seconds": 15,
+   "install_cmd": "python3 machine/registry.py install vfx-magnetic"
+  },
+  {
+   "id": "vfx-portal",
+   "category": "block",
+   "fits": "other",
+   "title": "Portal",
+   "what": "VFX composition block",
+   "tags": [
+    "html-in-canvas",
+    "webgl"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install vfx-portal"
+  },
+  {
+   "id": "vfx-shatter",
+   "category": "block",
+   "fits": "other",
+   "title": "Shatter",
+   "what": "VFX composition block",
+   "tags": [
+    "html-in-canvas",
+    "webgl"
+   ],
+   "size": "1920x1080",
+   "seconds": 12,
+   "install_cmd": "python3 machine/registry.py install vfx-shatter"
+  },
+  {
+   "id": "vfx-text-cursor",
+   "category": "block",
+   "fits": "overlay",
+   "title": "VFX Text Cursor",
+   "what": "Dramatic text reveal with cursor glow, chromatic shadow rays, and directional lighting on a black stage. Canvas-based shader post-processing with spectral color edges.",
+   "tags": [
+    "html-in-canvas",
+    "text",
+    "shader",
+    "cursor",
+    "chromatic"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install vfx-text-cursor"
+  },
+  {
+   "id": "vignette",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Vignette",
+   "what": "Cinematic radial vignette overlay using a pure-CSS gradient — darkens the edges to pull focus toward the center",
+   "tags": [
+    "vignette",
+    "overlay",
+    "cinematic",
+    "effect"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install vignette"
+  },
+  {
+   "id": "vox-annotate",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Vox Annotate",
+   "what": "The Vox-style annotate gesture: a keyword in a held sentence gets a hand-drawn marker while a thin connector draws up to a mono callout label, all as one choreographed beat on the cue.",
+   "tags": [
+    "motion-primitive",
+    "typography",
+    "annotation",
+    "marker",
+    "deterministic"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install vox-annotate"
+  },
+  {
+   "id": "vpn-youtube-spot",
+   "category": "block",
+   "fits": "other",
+   "title": "VPN YouTube Spot",
+   "what": "Snappy Apple-style YouTube insert showing a phone finding and installing a friendly VPN app with sound effects.",
+   "tags": [
+    "app",
+    "showcase",
+    "youtube",
+    "sfx"
+   ],
+   "size": "1920x1080",
+   "seconds": 7,
+   "install_cmd": "python3 machine/registry.py install vpn-youtube-spot"
+  },
+  {
+   "id": "weight-wave",
+   "category": "block",
+   "fits": "other",
+   "title": "Weight Wave",
+   "what": "A crest of thickness travels along a headline: each character swells from light to black and leans forward as the wave passes, driven by the wght and slnt variable-font axes rather than by transforms.",
+   "tags": [
+    "typography",
+    "kinetic-type",
+    "title",
+    "variable-font",
+    "text"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install weight-wave"
+  },
+  {
+   "id": "whip-pan",
+   "category": "block",
+   "fits": "transition",
+   "title": "Whip Pan",
+   "what": "Shader transition simulating a fast camera whip pan",
+   "tags": [
+    "transition",
+    "shader"
+   ],
+   "size": "1920x1080",
+   "seconds": 4,
+   "install_cmd": "python3 machine/registry.py install whip-pan"
+  },
+  {
+   "id": "whip-pan-cut",
+   "category": "component",
+   "fits": "transition",
+   "title": "Whip Pan Cut",
+   "what": "A full-frame whip pan: scene A whips off laterally with capped directional motion blur while scene B enters in the same direction at matched velocity, on a speed-ramp profile with a decelerating catch. Both scenes ride one strip, so seam velocity is exact by construction. Callers fill the named before/after slot panels; token-styled defaults render when a slot is left empty.",
+   "tags": [
+    "transition",
+    "whip-pan",
+    "motion-blur",
+    "velocity-match",
+    "speed-ramp",
+    "bridge",
+    "slots"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install whip-pan-cut"
+  },
+  {
+   "id": "whiteboard-ink",
+   "category": "component",
+   "fits": "other",
+   "title": "Whiteboard Ink",
+   "what": "A whiteboard sketch draws one measured stroke at a time while a pen nib follows the active tip. Preset sketches (bulb, flow, rocket) or your own multi-stroke SVG paths via the strokes slot; a path marked data-ink=accent rides the accent token.",
+   "tags": [
+    "motion-primitive",
+    "intro",
+    "reveal",
+    "svg",
+    "whiteboard",
+    "line-draw",
+    "slot"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install whiteboard-ink"
+  },
+  {
+   "id": "wireframe-portal-title",
+   "category": "block",
+   "fits": "camera",
+   "title": "Wireframe Portal Title",
+   "what": "A wireframe portal bursts open, the title comes through, then its letters swap into a second phrase.",
+   "tags": [
+    "3d-motion",
+    "title-card",
+    "wireframe",
+    "portal",
+    "burst",
+    "typography",
+    "post-processing",
+    "phrase-swap"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install wireframe-portal-title"
+  },
+  {
+   "id": "wordmark-tiles",
+   "category": "component",
+   "fits": "other",
+   "title": "Wordmark Tiles",
+   "what": "A wordmark resolves from deterministic color noise into correctly cropped glyph tiles through a spatially modulated GSAP wave.",
+   "tags": [
+    "typography",
+    "wordmark",
+    "tiles",
+    "raster",
+    "reveal"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install wordmark-tiles"
+  },
+  {
+   "id": "world-map",
+   "category": "block",
+   "fits": "other",
+   "title": "World Map",
+   "what": "Animated world choropleth with country-by-country reveal, tooltip labels, and rotating globe inset — D3 Natural Earth projection",
+   "tags": [
+    "data",
+    "map",
+    "geography",
+    "world",
+    "choropleth"
+   ],
+   "size": "1920x1080",
+   "seconds": 14,
+   "install_cmd": "python3 machine/registry.py install world-map"
+  },
+  {
+   "id": "x-follow-card",
+   "category": "component",
+   "fits": "other",
+   "title": "X Follow Card",
+   "what": "A social follow card with avatar, handle, and follower motion.",
+   "tags": [
+    "social-overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install x-follow-card"
+  },
+  {
+   "id": "x-post",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "X Post Card",
+   "what": "Animated X/Twitter post card overlay with engagement metrics",
+   "tags": [
+    "social",
+    "overlay",
+    "twitter"
+   ],
+   "size": "1920x1080",
+   "seconds": 5,
+   "install_cmd": "python3 machine/registry.py install x-post"
+  },
+  {
+   "id": "yt-camera-move",
+   "category": "component",
+   "fits": "camera",
+   "title": "Camera Punch-In",
+   "what": "Dynamic zoom, slide, and 3D tilt-pan helpers for any wrapper (video, include, card) with cubic-easing defaults and an edge-defocus pulse overlay",
+   "tags": [
+    "camera",
+    "zoom",
+    "effect",
+    "creator"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install yt-camera-move"
+  },
+  {
+   "id": "yt-circle-pointer",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Pointer Circle + Countdown",
+   "what": "Draw-on annotation ellipse around a target plus a countdown chip that pulses each tick",
+   "tags": [
+    "annotation",
+    "countdown",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install yt-circle-pointer"
+  },
+  {
+   "id": "yt-comment-card",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "Comment Cards",
+   "what": "Social comments typing on over footage: avatar pop, username and time, per-character typewriter, likes row; image avatars or initials chips",
+   "tags": [
+    "social",
+    "comments",
+    "creator",
+    "overlay"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install yt-comment-card"
+  },
+  {
+   "id": "yt-feather-highlight",
+   "category": "component",
+   "fits": "overlay",
+   "title": "Feathered Spotlight",
+   "what": "Dims the frame except a feathered ellipse; the hole's position and size are CSS variables, so helpers glide the spotlight between targets",
+   "tags": [
+    "highlight",
+    "spotlight",
+    "effect",
+    "overlay"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install yt-feather-highlight"
+  },
+  {
+   "id": "yt-lcd-background",
+   "category": "block",
+   "fits": "overlay",
+   "title": "Scanline Board Background",
+   "what": "Textured paper board: scanlines with slow drift, optional pixel grid, static grain, and display text with a blur-focus entrance and chromatic-fringe title",
+   "tags": [
+    "background",
+    "texture",
+    "creator"
+   ],
+   "size": "1920x1080",
+   "seconds": 10,
+   "install_cmd": "python3 machine/registry.py install yt-lcd-background"
+  },
+  {
+   "id": "yt-logo-intro",
+   "category": "block",
+   "fits": "other",
+   "title": "Logo Intro Sequence",
+   "what": "Logo stamp pops on a lined board, a kicker line gives way to the title with an accent arrow chip; seeded line distortion",
+   "tags": [
+    "logo",
+    "intro",
+    "creator"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install yt-logo-intro"
+  },
+  {
+   "id": "yt-lower-third",
+   "category": "block",
+   "fits": "mock-ui",
+   "title": "YouTube Lower Third",
+   "what": "Animated YouTube subscribe lower third with avatar and channel info",
+   "tags": [
+    "social",
+    "overlay",
+    "youtube"
+   ],
+   "size": "1920x1080",
+   "seconds": 4.5,
+   "install_cmd": "python3 machine/registry.py install yt-lower-third"
+  },
+  {
+   "id": "yt-prism-title",
+   "category": "block",
+   "fits": "other",
+   "title": "Chromatic Fringe Title",
+   "what": "Display title on a transparent root: blur-focus entrance, red/blue fringe that settles then breathes, perspective bow, slow scale drift",
+   "tags": [
+    "typography",
+    "title-card",
+    "creator"
+   ],
+   "size": "1920x1080",
+   "seconds": 6,
+   "install_cmd": "python3 machine/registry.py install yt-prism-title"
+  },
+  {
+   "id": "yt-screen-warp",
+   "category": "component",
+   "fits": "overlay",
+   "title": "On-Screen Display Effect",
+   "what": "Grid, scanline, vignette, and sheen overlay plus a 3D-warp wrapper class that makes footage read as if playing on a physical display",
+   "tags": [
+    "effect",
+    "overlay",
+    "texture"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install yt-screen-warp"
+  },
+  {
+   "id": "yt-vertical-fill",
+   "category": "block",
+   "fits": "other",
+   "title": "Vertical Media Filler",
+   "what": "Portrait media filling a widescreen frame via blurred-scale, mirror, or copy side fills; grid texture and foreground contrast lift (images inside the block; keep live footage in the host)",
+   "tags": [
+    "placeholder",
+    "vertical",
+    "media"
+   ],
+   "size": "1920x1080",
+   "seconds": 8,
+   "install_cmd": "python3 machine/registry.py install yt-vertical-fill"
+  },
+  {
+   "id": "zoom-through-transition",
+   "category": "component",
+   "fits": "transition",
+   "title": "Zoom Through Transition",
+   "what": "A transition that zooms through a focal card into the next scene.",
+   "tags": [
+    "transition-primitive"
+   ],
+   "size": null,
+   "seconds": null,
+   "install_cmd": "python3 machine/registry.py install zoom-through-transition"
+  }
+ ]
+}

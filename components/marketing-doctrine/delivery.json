@@ -1,8 +1,8 @@
 {
  "schema": 1,
  "what": "Taste and delivery — the labelled dials that say HOW a line is said, who the room laughs at and trusts, and what it cringes at. The sections say what an ad argues; the techniques say how the argument is built; these say how it is performed.",
- "updated": "2026-09-18",
- "added": "2026-09-18 — Damon's ruling: 'at the spice level — do we have levels of humor, delivery styles? I want to get deeper into taste and actual creativity with delivery.' Until this file the creative pass had voice, a B-roll character, styling and a mood register, and nothing that named a humor level, a delivery style or the world the avatar's taste actually comes from.",
+ "updated": "2026-10-06",
+ "added": "2026-09-18 — the owner's ruling: 'at the spice level — do we have levels of humor, delivery styles? I want to get deeper into taste and actual creativity with delivery.' Until this file the creative pass had voice, a B-roll character, styling and a mood register, and nothing that named a humor level, a delivery style or the world the avatar's taste actually comes from. 2026-10-06 — the owner's ruling on the humor research ('All six'): planted jokes from the room, the personified problem, the product shown as the twist with plain proof after, and the avatar humor maps as the RQ-17 receipt. His words: 'it's less about being directly funny and more about being culturally funny through the actual memes that they're already consuming.' 2026-10-06, later — the owner: 'not every ad is funny' / 'it's more about the foundational way to identify these cultural nuances': straight is the default, the humor map became the avatar's culture map, and humor is one section of it.",
  "source": {
   "work": "Breakthrough Advertising (1966)",
   "line_range": [
@@ -18,8 +18,8 @@
    "id": "humor",
    "name": "Humor level",
    "what": "How funny the piece is allowed to be, and in which register the joke sits.",
-   "rule": "Humor is chosen from what the avatar's world already laughs at, never from the writer's taste — a joke the room does not make is a joke about the room. And humor stays out of the proof and the offer beats unless the room itself jokes there: a laugh over a claim reads as a hedge on the claim.",
-   "receipt_rule": "A research line answering RQ-17 (who they laugh at), or a bank row tagged `taste`. No receipt means the dial reads `none`.",
+   "rule": "Straight is the default: a testimonial, a before/after, a founder story, a demonstration and any piece about pain, health or money stays straight unless the source itself joked. Humor is chosen from what the avatar's world already laughs at, never from the writer's taste — a joke the room does not make is a joke about the room. A straight source may take a planted joke only when it comes from the room: a meme, format or reference the culture read or the avatar's culture map shows this audience already laughs at; the receipt is named, and a joke the writer invented is still a finding. The problem may be cast as a character (the spot, the breakout, the stubborn stain) — a PERSONIFIED PROBLEM, always the villain or the fool, never the customer. Humor stays off the proof and the offer: a laugh over a claim reads as a hedge on the claim. The twist beat may be the product doing its job, shown, not claimed, and a plain beat with the proof always follows it.",
+   "receipt_rule": "A research line answering RQ-17 (who they laugh at), a bank row tagged `taste`, or the humor section of the avatar's culture map (`core-avatars/<avatar>/culture-map.md`: what they watch, who they trust, their references, what they care about, what they laugh at, what is off-limits), which counts as the RQ-17 receipt until the avatar's own research replaces it. No receipt means the dial reads `none`.",
    "ref": "L3253-3872",
    "ref_why": "Identification — what a room laughs at is a role it claims, and borrowing the laugh of a different room is the same error as assigning a role nobody claims.",
    "values": [

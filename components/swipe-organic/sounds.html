@@ -1,0 +1,117 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trending Sounds</title>
+<style>
+/* Same system as My Feeds (desk.html): neutral zinc, colour for meaning only. */
+:root{color-scheme:dark;--bg:#09090b;--panel:#111113;--raise:#18181b;--line:#27272a;--line2:#3f3f46;
+--ink:#fafafa;--body:#d4d4d8;--mut:#8b8b94;--go:#22c55e;--hot:#f59e0b;--bad:#ef4444;
+--r:8px;--font:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){color-scheme:light;--bg:#fafafa;--panel:#fff;--raise:#f4f4f5;--line:#e4e4e7;--line2:#d4d4d8;
+--ink:#09090b;--body:#27272a;--mut:#71717a;--go:#16a34a;--hot:#d97706;--bad:#dc2626}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:14px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 60px}
+header{display:flex;align-items:center;gap:14px;padding:20px 0 4px;flex-wrap:wrap}
+h1{margin:0;font-size:18px;font-weight:600;color:var(--ink)}
+.sub{color:var(--mut);font-size:12.5px}
+a{color:inherit}
+button{font:inherit;cursor:pointer;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);padding:5px 11px;color:var(--ink);font-weight:500}
+button:hover{border-color:var(--line2);background:var(--raise)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--line);color:var(--mut);background:none}
+.seg button:last-child{border-right:0}.seg button.on{background:var(--raise);color:var(--ink)}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid var(--line)}
+.list{display:flex;flex-direction:column;gap:10px;padding-top:14px}
+.snd{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.snd.keep{border-color:color-mix(in srgb,var(--go) 60%,var(--line))}.snd.skip{opacity:.45}
+.cov{width:56px;height:56px;border-radius:8px;background:var(--raise);object-fit:cover}
+.t{color:var(--ink);font-weight:600}.a{color:var(--mut)}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.pill{font-size:11.5px;padding:1px 7px;border-radius:5px;border:1px solid var(--line);color:var(--mut)}
+.pill.up{color:var(--go);border-color:color-mix(in srgb,var(--go) 40%,var(--line))}
+.pill.new{color:var(--hot);border-color:color-mix(in srgb,var(--hot) 40%,var(--line))}
+.use{font-size:12.5px;margin-top:4px}
+audio{width:100%;height:32px;margin-top:8px}
+.act{display:flex;flex-direction:column;gap:6px}
+.act .k.on{background:var(--go);border-color:var(--go);color:#000}
+.act .s.on{background:var(--raise);color:var(--mut)}
+.empty{border:1px dashed var(--line2);border-radius:10px;padding:28px;text-align:center;color:var(--mut)}
+details{margin-top:18px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+summary{cursor:pointer;padding:10px 14px;color:var(--ink);font-weight:500}
+pre{margin:0;padding:12px 14px;white-space:pre-wrap;font:12px/1.55 var(--mono);color:var(--body);border-top:1px solid var(--line);overflow-x:auto}
+@media(max-width:560px){.snd{grid-template-columns:44px 1fr}.cov{width:44px;height:44px}.act{grid-column:1/-1;flex-direction:row}}
+</style></head><body><div class="wrap">
+<header><h1>Trending Sounds</h1><a class="sub" href="/">← My Feeds</a><span class="sub" id="stats" style="margin-left:auto"></span></header>
+<div class="sub">TikTok sounds in use right now, from TikTok's Explore page (US). "Sound made" says how new the sound itself is. Old meme sounds are hidden. Keep the ones you'd use; the kept list is what production picks from.</div>
+<div class="bar">
+  <span class="seg" id="show"><button data-v="all" class="on">This week</button><button data-v="keep">Kept</button><button data-v="open">Not decided</button><button data-v="skip">Skipped</button></span>
+  <button id="pull"></button><span class="sub" id="job"></span>
+  <span class="seg" id="sort"><button data-v="new" class="on">Newest</button><button data-v="rank">Explore order</button></span>
+</div>
+<div class="list" id="list"></div>
+<details><summary>The pulls</summary><pre id="pulls"></pre></details>
+<details><summary>The tagging prompt — exactly as written</summary><pre id="prompt"></pre></details>
+<details><summary>The tagging prompt — exactly as last sent</summary><pre id="sent"></pre></details>
+</div>
+<script>
+let S={rows:[]},show="all",sort="new";
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const n=v=>v==null?"":v>=1e6?(v/1e6).toFixed(1)+"M":v>=1e3?Math.round(v/1e3)+"K":v;
+async function load(){S=await (await fetch("/api/sounds")).json();draw()}
+function draw(){
+  let r=S.rows.filter(x=>show=="all"?x.pick!="skip":show=="open"?!x.pick:x.pick==show);
+  if(sort=="growth")r.sort((a,b)=>(b.growth??-1e9)-(a.growth??-1e9));
+  if(sort=="rank")r.sort((a,b)=>(a.rank??1e9)-(b.rank??1e9));
+  document.getElementById("stats").textContent=`${S.rows.length} sounds · ${S.kept} kept`;
+  document.getElementById("list").innerHTML=r.length?r.map(x=>{const t=x.tags||{};
+    const src=x.playable?`/sound-audio/${x.id}.mp3`:(x.stream||"");
+    return `<div class="snd ${x.pick||""}">
+      ${x.cover?`<img class="cov" src="${esc(x.cover)}" alt="" onerror="this.style.visibility='hidden'">`:`<div class="cov"></div>`}
+      <div><div><span class="t">${esc(x.title)}</span> <span class="a">· ${esc(x.artist)}</span></div>
+        <div class="meta">
+          ${(x.lanes||[]).includes("explore")?`<span class="pill up">on TikTok Explore</span>`:""}
+          ${x.made?`<span class="pill ${x.made>=new Date(Date.now()-90*864e5).toISOString().slice(0,10)?"new":""}">sound made ${x.made.slice(0,7)}</span>`:""}
+          ${x.rank?`<span class="pill">#${x.rank}</span>`:""}
+          ${x.growth!=null?`<span class="pill ${x.growth>0?"up":""}">${x.growth>0?"+":""}${x.growth}% this week</span>`:""}
+          ${x.usage?`<span class="pill">${n(x.usage)} videos</span>`:""}
+          ${t.mood?`<span class="pill">${esc(t.mood)}</span>`:""}${t.energy?`<span class="pill">${esc(t.energy)} energy</span>`:""}
+          ${t.category?`<span class="pill">${esc(t.category)}</span>`:""}${x.bpm?`<span class="pill">~${x.bpm} bpm</span>`:""}
+          ${x.days_on!=null?`<span class="pill">spotted ${x.days_on?x.days_on+"d ago":"today"}</span>`:""}
+          ${x.off_chart_since?`<span class="pill">off the chart</span>`:""}
+          <a class="pill" href="${esc(x.url)}" target="_blank">on TikTok ↗</a>
+        </div>
+        ${t.use?`<div class="use">${esc(t.use)}</div>`:""}
+        ${src?`<audio controls preload="none" src="${esc(src)}"></audio>`:`<div class="sub">no audio yet — open it on TikTok</div>`}
+      </div>
+      <div class="act"><button class="k ${x.pick=="keep"?"on":""}" data-id="${x.id}" data-p="keep">Keep</button>
+        <button class="s ${x.pick=="skip"?"on":""}" data-id="${x.id}" data-p="skip">Skip</button></div></div>`}).join("")
+    :`<div class="empty">${S.rows.length?"Nothing here in this view.":"No sounds pulled yet — press Pull to get this week's."}</div>`;
+  document.getElementById("pulls").textContent=S.pulls.length?S.pulls.map(p=>`${p.at.slice(0,16).replace("T"," ")}  got ${p.got} · new ${p.new} · aged out ${p.aged_out}${p.errors.length?" · "+p.errors.join("; "):""}`).reverse().join("\n"):"No pulls yet.";
+  document.getElementById("prompt").textContent=S.prompt;
+  document.getElementById("sent").textContent=S.prompt_sent||"Not sent yet.";
+  drawPull();
+}
+let armed=false,polling=null;
+function drawPull(){const b=document.getElementById("pull"),j=S.job,run=j&&j.status=="running";
+  const sp=S.spend||{},room=sp.cap!=null&&sp.used!=null?sp.cap-sp.used:null;
+  b.disabled=run||(room!=null&&room<0.5);
+  b.textContent=run?"Pulling…":armed?`Spend $${S.cost} — yes, pull`:`Pull this week's sounds · $${S.cost}`;
+  b.classList.toggle("on",armed);
+  document.getElementById("job").textContent=room!=null&&room<0.5?`Apify is at $${sp.used} of its $${sp.cap} monthly limit`:
+    j?`${j.status=="done"?"last pull":j.status}: ${(j.steps||[]).slice(-1)[0]?.say||""}`:"";
+  if(run&&!polling)polling=setInterval(async()=>{await load();if(!(S.job&&S.job.status=="running")){clearInterval(polling);polling=null}},4000)}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id=="pull"){if(!armed){armed=true;drawPull();setTimeout(()=>{armed=false;drawPull()},6000);return}
+    armed=false;const r=await (await fetch("/api/sounds-pull",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"})).json();
+    if(r.error){document.getElementById("job").textContent=r.error;return}
+    await load();return}
+  if(b.parentElement.id=="show"){show=b.dataset.v}
+  else if(b.parentElement.id=="sort"){sort=b.dataset.v}
+  else if(b.dataset.id){const row=S.rows.find(x=>x.id==b.dataset.id);const p=row.pick==b.dataset.p?null:b.dataset.p;
+    await fetch("/api/sound-verdict",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:row.id,pick:p})});
+    row.pick=p;S.kept=S.rows.filter(x=>x.pick=="keep").length;draw();return}
+  else return;
+  b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x==b));draw()});
+load();
+</script></body></html>

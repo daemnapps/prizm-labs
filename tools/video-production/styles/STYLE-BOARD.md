@@ -1,6 +1,6 @@
 # The Format Frontier — style board, the stack, the line, the edit hand
 
-Artifact: https://claude.ai/artifact/RUBXajrAH5uyiVH6eyJM5h (republish over it, never a second one). Printed by `render_board.py`; do not edit by hand.
+Artifact: (team page) (republish over it, never a second one). Printed by `render_board.py`; do not edit by hand.
 
 ## The test
 
@@ -316,7 +316,7 @@ Every one of these is its own bank with its own test. A finished ad is one pick 
 | Delivery | How does it sound? | humour · register · pacing |
 | Medium | What asset is it? | video · image · carousel · email · page |
 
-### The $30M-a-month ad you described, taken apart
+### The $__-a-month ad you described, taken apart
 
 - **Style:** Skeleton character, in Family 3D animation
 - **Format:** Song ad
@@ -375,8 +375,8 @@ Two triggers are yours: an idea of your own, or swipes sent to teardown. Everyth
 
 **Prompts:**
 
-- Teardown — stage 1, v11 (adds Roll and Sound per row, and the make-list): `components/video-teardown/prompts/stage-1-teardown/stage1-teardown-v11-damon.md`
-- AI brief — stage 5, v11 (uses the roll labels; adds the edit block): `components/video-teardown/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v11-damon.md`
+- Teardown — stage 1, v11 (adds Roll and Sound per row, and the make-list): `tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v11-damon.md`
+- AI brief — stage 5, v11 (uses the roll labels; adds the edit block): `tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v11-damon.md`
 
 **Built next, in order:**
 

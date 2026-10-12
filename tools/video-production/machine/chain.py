@@ -9,7 +9,7 @@ ENDS AT THE OFFER CARDS.
 
 Captions, the cut and delivery are NOT stages here. They belong to the
 editor's chain, downstream, and putting them on this board only made it look
-like this chain was failing at work it was never responsible for (Damon,
+like this chain was failing at work it was never responsible for (the owner,
 2026-09-13).
 
 What the editor DOES need from here is control: when a take is wrong he
@@ -92,7 +92,7 @@ def read(run: Path) -> list[dict]:
         "readbrief": "stage-0-read-brief/stage0-read-brief-v1-damon.md",
         "openings": "stage-1-openings/stage1-openings-v1-damon.md",
         "aroll": "stage-2-aroll/stage2-aroll-v2-damon.md",
-        "broll": "stage-3-broll/stage3-broll-v1-damon.md",
+        "broll": "stage-3-broll/stage3-broll-v2-damon.md",
         "offer": "stage-4-offer/stage4-offer-v2-damon.md",
     }
 
@@ -113,7 +113,7 @@ def read(run: Path) -> list[dict]:
     return [
         stage("brief", "The brief", "the spec every other stage answers to",
               1, 1 if t else 0,
-              f"{_n(r'^\*\*Scene ', t)} scenes · {_n(r'^\*\*Opening ', t)} openings"),
+              f"{_n(r'^[*][*]Scene ', t)} scenes · {_n(r'^[*][*]Opening ', t)} openings"),
         stage("readbrief", "Read the brief",
               "every item the brief asks for becomes a row — all of them",
               _n(r"^\*\*Opening \d+", t) + _n(r"^\*\*Scene ", t),

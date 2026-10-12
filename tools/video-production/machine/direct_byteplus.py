@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 direct_byteplus.py — the machine hand's Seedance door: motion and the talking
-beat on BytePlus ModelArk, direct (Damon's 2026-09-18 ruling: "let's just
+beat on BytePlus ModelArk, direct (the owner's 2026-09-18 ruling: "let's just
 set up BytePlus so we just have what we need" — the Higgsfield API is the
 same model at a higher price). Every field value (model id, host, roles,
 the talking prefix) comes from `providers.json`'s own `direct.byteplus`
@@ -30,7 +30,7 @@ for large files" — a still and a 30 s line are nowhere near that.
 
 Task lifecycle: POST /contents/generations/tasks → {id}; GET …/tasks/{id}
 until `succeeded` (video at content.video_url, downloaded to `out`) or
-`failed`./`cancelled`./`expired` (SystemExit with the API's own message).
+`failed`/`cancelled`/`expired` (SystemExit with the API's own message).
 
 Key: `BYTEPLUS_API_KEY` (an Ark API key), env first, then the Keychain
 vault (`daemn_keys`) — never a crash. A real call with no key is a
@@ -70,6 +70,7 @@ def _load(name: str):
 
 
 platform = _load("platform")
+vp_keys = _load("vp_keys")
 
 KEY_NAME = "BYTEPLUS_API_KEY"
 TERMINAL_BAD = ("failed", "cancelled", "canceled", "expired")
@@ -80,14 +81,7 @@ def cfg() -> dict:
 
 
 def key_of() -> str | None:
-    k = os.environ.get(KEY_NAME)
-    if k:
-        return k
-    try:
-        import daemn_keys
-        return daemn_keys.key(KEY_NAME) or None
-    except Exception:
-        return None
+    return vp_keys.key(KEY_NAME)
 
 
 def http_transport(method: str, url: str, headers: dict, body: bytes | None):

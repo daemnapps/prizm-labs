@@ -1,23 +1,23 @@
 # Format · expert-consult
 
-> **Name confirmed by Damon, 2026-09-17.** The 16 Sep piece with Keri, filed
-> at `runs/video-machine/<brand>/<run>/`, and the piece the bank had drafted
+> **Name confirmed by the owner, 2026-09-17.** The 16 Sep piece with Keri, filed
+> at `runs/video-production/<brand>/<run>/`, and the piece the bank had drafted
 > separately as "storytelling" (written from that same 16 Sep session's
 > reports, before its run record was filed) are one and the same format.
-> Damon ruled it, and ruled the name for it: **`expert-consult`** —
+> the owner ruled it, and ruled the name for it: **`expert-consult`** —
 > "Expert consultation" is lifted from the record's own description of
 > itself, as it already was here — the injection brief calls the source
 > "the multi-option expert consultation vlog using price anchoring and
 > expert dissonance" (`<run>-ai-brief.md`). Two draft bank rows are now one;
 > `formats/storytelling.md` is retired.
 
-> **Status draft — name ruled by Damon; the profile is written from the
+> **Status draft — name ruled by the owner; the profile is written from the
 > filed <run> record; sign when the next run confirms it.** <run> ran
 > 2026-09-16 on Higgsfield; its teardown chain (`teardown-v6.md`,
 > `reading-v3.md`, `hooks-v11.md`, `injection-v8.md`, `spec-v2.md`,
 > `close-v6.md`), its ai-brief and its editor handoff are what this profile
 > is built from — no other source. Where the record is silent, this file
-> says "not in the record" rather than guessing. Damon corrects.
+> says "not in the record" rather than guessing. the owner corrects.
 
 **Shape.** One presenter carries the same problem to three consultations in
 turn. Each consultation ends in a price card and a fixed cash-register cue —
@@ -104,7 +104,7 @@ gets from three credentialed opinions is, for us, currently unheld"
 or an unresolved third expert is shipping the ladder on paper, not in the
 asset.
 
-**The run it was proven on.** `runs/video-machine/<brand>/<run>`, filed
+**The run it was proven on.** `runs/video-production/<brand>/<run>`, filed
 2026-09-17 from a run on Higgsfield dated 2026-09-16.
 
 **What still fails.** Not in the record — the editor handoff QC ledger

@@ -618,7 +618,7 @@ rail(); render(); restore();
    A full reload threw away his scroll position and every open stage. This
    updates only the numbers, so he can keep reading while a stage runs.      */
 const EXPECTED = __EXPECTED__;
-// The label matches run order (4a..4f). The internal key matches Dayu's
+// The label matches run order (4a..4f). The internal key matches the developer's
 // shared config, which "4a"/"4b" refer to in his own file — see chain.py.
 const KEYMAP = {"0":"stage0","1":"stage1","2":"stage2","3":"stage3",
   "4a":"stage4r","4b":"stage4b","4c":"stage4a","4d":"stage4c","4e":"stage4d",

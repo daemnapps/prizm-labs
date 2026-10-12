@@ -19,10 +19,31 @@ typed at upload. An angle typed at upload is a guess by whoever is uploading;
 an angle in the brief is the one the script was written to.
 """
 import argparse, json, sys
+import os
 from pathlib import Path
 
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
+
 HERE = Path(__file__).resolve().parent
-WS = HERE.parents[3]                        # machine -> ai-video-production -> damon -> lab -> root
+WS = _workspace()
 sys.path.insert(0, str(WS / "components" / "naming"))
 import deliver as D
 import names as N
@@ -59,7 +80,7 @@ def read_brief(run):
 def main():
     a = argparse.ArgumentParser()
     a.add_argument("run", help="path to the run folder, e.g. "
-                               "runs/video-machine/<brand>/<label>")
+                               "runs/video-production/<brand>/<label>")
     for f in N.AD_FIELDS:
         if f != "batch":
             a.add_argument(f"--{f}")

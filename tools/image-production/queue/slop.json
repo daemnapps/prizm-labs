@@ -1,8 +1,0 @@
-{
- "_what": "Pictures a person or the audit flagged, keyed by file name → why. The page shows them as slop; the fix job re-edits each one (image-to-image, one change) under the same name. Automatic checks in queue.py add to this at read time; this file holds the human/audit list.",
- "<brand>-flex-static-ai-brett-fedupking-ingrowns-razornotproblem-faceoffbrett-faceoff-p003-9x16-260907b-a01.png": "guarantee line printed twice in the bar",
- "<brand>-flex-static-ai-omar-fedupking-folliculitis-razornotproblem-distressedposteromar-distressedposter-p003-9x16-260907c-a01.png": "poster card reads 'grow grow' — doubled word",
- "<brand>-flex-static-ai-ray-fedupking-razorbumps-unsigned-itwasover-captionbox-p002-9x16-260907a-a02.png": "drifted — different caption; re-shoot as a variation of a01",
- "<brand>-flex-static-ai-ray-fedupking-razorbumps-unsigned-itwasover-captionbox-p002-9x16-260907a-a03.png": "drifted — different caption; re-shoot as a variation of a01",
- "<brand>-flex-static-ai-hal-fedupking-razorbumps-unsigned-whatareyouusing-commentreply-p002-9x16-260907a-a03.png": "drifted — different comment; re-shoot as a variation of a01"
-}

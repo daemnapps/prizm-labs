@@ -42,7 +42,7 @@ not swapped here: type is set by the designer, not redrawn by a model.
    Words are the first thing to check. If anything else moved, run it again.
 4. Name it like the original with `-<what changed>` on the end.
 
-Tested 29 Sep in Higgsfield: a soap bar → a sprig of green leaves on a finished ad. The
+Tested 29 Sep in Higgsfield: soap bar → a sprig of green leaves on P178. The
 leaves landed on the same dish; headline, tube and every word held.
 
 ## Never
