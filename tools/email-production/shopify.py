@@ -21,7 +21,7 @@ Only `shop` is needed. The key names default to SHOPIFY_<BRAND>_CLIENT_ID,
 SHOPIFY_<BRAND>_APP and SHOPIFY_<BRAND>_TOKEN; the minted token is written back
 to the Keychain entry `shopify-ctrl-<brand>-token`, account `<brand>`.
 
-Auth comes from the machine Keychain via `daemn_keys`; no value is ever printed.
+Auth comes through the repo's key loader (environment, then .env); no value is ever printed.
 """
 import argparse
 import json
@@ -30,8 +30,6 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path.home() / ".daemn"))
-import daemn_keys                                          # noqa: E402
 from paths import WORKSPACE                                # noqa: E402
 
 VERSION = "2024-10"
@@ -67,10 +65,33 @@ def _need():
                  "there is no default brand")
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def _mint():
     _need()
-    cid = daemn_keys.key(CFG["client_id_key"], required=True)
-    sec = daemn_keys.key(CFG["app_key"], required=True)
+    cid = _shared_keys().lookup(CFG["client_id_key"], required=True)
+    sec = _shared_keys().lookup(CFG["app_key"], required=True)
     r = subprocess.run(["curl", "-fsSL", "--max-time", "25", "-X", "POST",
                         f"https://{SHOP}/admin/oauth/access_token",
                         "-H", "Content-Type: application/json",
@@ -93,7 +114,7 @@ def token():
     """A live token: the stored one while it lasts, a fresh one the moment it
     does not."""
     _need()
-    raw = daemn_keys.key(CFG["token_key"])
+    raw = _shared_keys().lookup(CFG["token_key"])
     try:
         d = json.loads(raw)
         if d.get("t") and int(d.get("exp") or 0) > time.time() + 60:

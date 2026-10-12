@@ -42,7 +42,8 @@ sys.path.insert(0, str(WS / "tools/video-teardown/machine"))
 
 
 def _vault():
-    """Every key lives in ~/.daemn/keys.env. Load it into the environment once,
+    """Load every key the key loader can see (environment, the repo .env, then
+    the owner's personal fallbacks) into the environment once,
     so the Drive pipe and the judge find their credentials without anyone
     exporting anything. Silent if the vault is not there — the callers already
     say what is missing."""

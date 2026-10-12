@@ -55,13 +55,34 @@ def _cfg():
 
 # ---------------------------------------------------------------- warehouse (read-only)
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def _vault(name):
     if os.environ.get(name):
         return os.environ[name]
     try:
-        sys.path.append(str(Path.home() / ".daemn"))
-        import daemn_keys  # noqa: E402
-        return daemn_keys.key(name)
+        return _shared_keys().lookup(name)
     except Exception:
         return None
 

@@ -31,6 +31,29 @@ GENERATE = "/higgsfield-ai/nano-banana-pro/text-to-image"
 EDIT = "/higgsfield-ai/nano-banana-pro/edit"
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def _keychain(service, account="damon"):
     r = subprocess.run(["security", "find-generic-password",
                         "-s", service, "-a", account, "-w"],
@@ -40,8 +63,9 @@ def _keychain(service, account="damon"):
 
 def key():
     """The Authorization header value, or None. Never printed, never logged."""
-    kid = _keychain("higgsfield-key-id")
-    sec = _keychain("higgsfield-key-secret")
+    K = _shared_keys()
+    kid = K.lookup("HIGGSFIELD_KEY_ID") or _keychain("higgsfield-key-id")
+    sec = K.lookup("HIGGSFIELD_KEY_SECRET") or _keychain("higgsfield-key-secret")
     if not (kid and sec):
         env = Path.home() / ".workflow-worker.env"
         if env.is_file():

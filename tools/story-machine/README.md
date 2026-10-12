@@ -1,5 +1,7 @@
 # story-machine
 
+**Keys this tool needs:** OPENAI_API_KEY, ELEVENLABS_API_KEY. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 Writes narrated story videos — the format where a voice reads a story at about
 double speed over satisfying footage, one word on screen at a time — in two
 lanes:

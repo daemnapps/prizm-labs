@@ -1,5 +1,7 @@
 # Edit kit
 
+**Keys this tool needs:** none. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 The edit, as small commands. An editor's agent runs them inside **Higgsfield
 Supercomputer** (its sandbox already has ffmpeg, Python, Pillow,
 faster-whisper and the caption fonts), or on any laptop with Python and

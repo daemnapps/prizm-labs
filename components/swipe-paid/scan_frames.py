@@ -44,20 +44,35 @@ BASE = "https://generativelanguage.googleapis.com"
 MODEL = "gemini-3-flash-preview"
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def key():
-    # By NAME: the variable first, then the Keychain. Never a path to a key
-    # file — every key moved into the Keychain on 2026-09-11 and ~/.gemini.env
-    # is history.
+    # By NAME: the variable first, then the repo .env (components/keys/loader.py).
     k = os.environ.get("GEMINI_API_KEY", "").strip()
     if k:
         return k
-    try:
-        import daemn_keys
-        k = (daemn_keys.key("GEMINI_API_KEY") or "").strip()
-    except Exception as e:
-        sys.exit(f"No GEMINI_API_KEY: {e}")
-    if not k:
-        sys.exit("No GEMINI_API_KEY in the environment or the Keychain.")
+    k = (_shared_keys().lookup("GEMINI_API_KEY", required=True) or "").strip()
     return k
 
 

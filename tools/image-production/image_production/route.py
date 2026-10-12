@@ -107,7 +107,8 @@ def key_name(entry):
 def key_value(name):
     """The key by NAME, through the one loader (`ip_keys`, components/keys —
     SI-194 (readers use loader)). The process environment first (that is how
-    the vault is loaded into a process), then — off the mini only — the old
+    the vault is loaded into a process), then the repo's .env, then — off the
+    mini only — the old
     places, in the loader's order: the macOS Keychain via `daemn_keys`, then
     ~/.daemn/keys.env, ~/.apify.env, ~/.gemini.env. On the mini (the marker
     ~/.workflow-worker.env exists) the environment is the only place.

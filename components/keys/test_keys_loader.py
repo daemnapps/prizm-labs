@@ -81,6 +81,38 @@ class LoaderCase(unittest.TestCase):
         self.write(".daemn/daemn_keys.py", "\n".join(lines) + "\n")
 
 
+class RepoDotenv(LoaderCase):
+    """Step 2: the repo's own .env, between the environment and the old places."""
+
+    def setUp(self):
+        super().setUp()
+        self.dotenv = self.home / "repo.env"
+        p = mock.patch.object(loader, "DOTENV", self.dotenv)
+        p.start()
+        self.addCleanup(p.stop)
+
+    def test_dotenv_used_when_env_empty(self):
+        self.dotenv.write_text(A + "=fake-dotenv\n")
+        self.assertEqual(loader.key(A), "fake-dotenv")
+
+    def test_env_beats_dotenv(self):
+        self.dotenv.write_text(A + "=fake-dotenv\n")
+        os.environ[A] = "fake-env"
+        self.assertEqual(loader.key(A), "fake-env")
+
+    def test_dotenv_beats_old_places(self):
+        self.dotenv.write_text(A + "=fake-dotenv\n")
+        self.write(".daemn/keys.env", A + "=fake-daemn\n")
+        self.helper({A: "fake-keychain"})
+        self.assertEqual(loader.key(A), "fake-dotenv")
+
+    def test_missing_message_is_plain(self):
+        with self.assertRaises(KeyError) as cm:
+            loader.key(MISSING)
+        self.assertTrue(cm.exception.args[0].startswith(
+            "This tool needs %s. Add it to .env (see .env.example)." % MISSING))
+
+
 class Order(LoaderCase):
     def test_env_wins_with_managed_file_present(self):
         self.write(".workflow-worker.env", A + "=fake-managed\n")

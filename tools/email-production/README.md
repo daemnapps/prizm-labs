@@ -1,5 +1,7 @@
 # email-production — brand context in, campaign emails out
 
+**Keys this tool needs:** OPENAI_API_KEY, GDRIVE_SA_KEY (optional), and per brand KLAVIYO_<BRAND>_KEY, LOOP_<BRAND>_KEY, <BRAND>_NEXTCOMMERCE_STORE / <BRAND>_NEXTCOMMERCE_ACCESS_TOKEN, SHOPIFY_<BRAND>_CLIENT_ID / SHOPIFY_<BRAND>_APP (only the ones your brand uses). Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 ## How to use it → (team dashboard)
 
 > **Current as of 2026-09-20: read `CLAUDE.md` first** — it has what this tool

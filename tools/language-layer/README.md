@@ -1,5 +1,7 @@
 # language-layer — the customer-language query engine
 
+**Keys this tool needs:** GEMINI_API_KEY. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 The query over a brand's customer-language banks: rows in, filtered and ranked
 rows out, per stage, provenance travelling on every row. It holds no stage map
 and no brand — each chain hands in its own map (see

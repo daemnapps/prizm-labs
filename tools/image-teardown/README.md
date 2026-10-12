@@ -1,5 +1,7 @@
 # Image teardown — the static-ad twin of the video chain
 
+**Keys this tool needs:** GEMINI_API_KEY, APIFY_TOKEN, GDRIVE_SA_KEY (optional). Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 **Image teardown** takes a picture ad (one still, or a carousel) and gives back
 its structure — what it is, element by element — and a brief to remake it for
 one of our brands. It does not make the picture; the draft standard and

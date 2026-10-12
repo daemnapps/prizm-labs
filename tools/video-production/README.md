@@ -1,5 +1,7 @@
 # AI video production
 
+**Keys this tool needs:** GEMINI_API_KEY, FAL_KEY, OPENAI_API_KEY, ELEVENLABS_API_KEY, BYTEPLUS_API_KEY (optional), ANTHROPIC_API_KEY (optional). Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 ## How to use it → (team dashboard)
 
 **A brief goes in. Finished clips come out — one command, nobody at a keyboard.**

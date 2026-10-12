@@ -18,6 +18,28 @@ from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 RULES = json.loads((HERE / "rules.json").read_text())
@@ -40,11 +62,10 @@ def structure(brand, day):
     f = out / "structure.json"
     if f.exists():
         return json.loads(f.read_text())
-    import daemn_keys
     acct = json.loads((ROOT / "brands" / brand / "meta" / "account.json").read_text())["account_id"]
     q = ("select ad_id, ad_name, adset_id, adset_name, campaign_id, campaign_name, effective_status "
          f"from meta_ads where account_id = '{acct}' and effective_status in ('ACTIVE','IN_PROCESS','WITH_ISSUES','PENDING_REVIEW')")
-    r = subprocess.run(["psql", daemn_keys.key("SUPABASE_DB_URL"), "-At", "-F", "\t", "-c", q],
+    r = subprocess.run(["psql", _shared_keys().lookup("SUPABASE_DB_URL", required=True), "-At", "-F", "\t", "-c", q],
                        capture_output=True, text=True, timeout=120)
     if r.returncode:
         sys.exit(f"warehouse read failed: {r.stderr[:300]}")

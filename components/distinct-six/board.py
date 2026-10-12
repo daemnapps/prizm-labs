@@ -29,6 +29,28 @@ sys.argv_backup = sys.argv
 sys.argv = ["x"]
 sys.path.insert(0, str(HERE))
 import run as R  # noqa: E402
+
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
 sys.argv = sys.argv_backup
 
 C = R.COLOR
@@ -69,10 +91,9 @@ def video_of(run, meta):
         return None, []
     if _TOKEN[0] is None:
         sys.path.insert(0, str(ROOT / "components" / "gdrive-creator"))
-        import daemn_keys
         from gdrive_creator import engine as G
         import google.auth.transport.requests as TR
-        G.configure(key_lookup=daemn_keys.key)
+        G.configure(key_lookup=_shared_keys().lookup)
         c = G._creds()
         c.refresh(TR.Request())
         _TOKEN[0] = c.token

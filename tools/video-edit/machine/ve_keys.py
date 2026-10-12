@@ -4,9 +4,9 @@
 SI-194 (readers use loader), dispatch 2: listen.py, music_bed.py and
 word_fix.py no longer import ~/.daemn/daemn_keys themselves. They ask
 key(NAME), which asks components/keys/loader.py: the environment first, then
-— only when the mini marker ~/.workflow-worker.env is absent — the old places
+the repo's .env, then — only when the mini marker ~/.workflow-worker.env is absent — the old places
 (the Keychain through ~/.daemn/daemn_keys.py, then ~/.daemn/keys.env,
-~/.apify.env, ~/.gemini.env). No local .env step: video-edit has none.
+~/.apify.env, ~/.gemini.env).
 
 key() never raises; a missing key is None. missing() is the reader's message
 for that case — the key and where the loader looked, never a value. The loader

@@ -3,7 +3,7 @@
 SI-194 (readers use loader), dispatch 4: `route.key_value` and
 `static/tools/gemini_image.py` no longer import ~/.daemn/daemn_keys or open
 ~/.gemini.env themselves. They ask key(NAME), which asks
-components/keys/loader.py: the environment first, then — only when the mini
+components/keys/loader.py: the environment first, then the repo's .env, then — only when the mini
 marker ~/.workflow-worker.env is absent — the old places (the Keychain through
 ~/.daemn/daemn_keys.py, then ~/.daemn/keys.env, ~/.apify.env, ~/.gemini.env).
 `judge.py`, `providers.py` and `dryrun.py` already ask `route.key_value`, so

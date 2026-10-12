@@ -28,6 +28,28 @@ Usage:
 import json, os, re, sqlite3, sys, urllib.request, urllib.parse, urllib.error
 from datetime import datetime, timezone
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 DB = os.path.join(HERE, "market.db")
 BASE = "https://app.adplexity.io/api/v2"
@@ -42,13 +64,7 @@ def _key():
     k = os.environ.get("ADPLEXITY_API_KEY")
     if k:
         return k
-    try:
-        import daemn_keys
-        k = daemn_keys.key("ADPLEXITY_API_KEY")
-    except Exception as e:
-        sys.exit(f"No ADPLEXITY_API_KEY: {e}")
-    if not k:
-        sys.exit("No ADPLEXITY_API_KEY in the environment or the Keychain.")
+    k = _shared_keys().lookup("ADPLEXITY_API_KEY", required=True)
     return k
 
 def call(path, params=None):

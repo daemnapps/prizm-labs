@@ -10,7 +10,7 @@ subscribed, on what cadence, at what price, how many cycles they have survived,
 and who cancelled. This is the retention half of the picture — the funnel half
 lives in Next Commerce.
 
-Auth: `LOOP_<BRAND>_KEY` from the machine's Keychain via `daemn_keys`. The key is
+Auth: `LOOP_<BRAND>_KEY` through the repo's key loader (environment, then .env). The key is
 never printed, never written to disk, never passed in a URL.
 """
 import argparse
@@ -21,8 +21,6 @@ import time
 from collections import Counter
 from pathlib import Path
 
-sys.path.insert(0, str(Path.home() / ".daemn"))
-import daemn_keys                                          # noqa: E402
 from paths import WORKSPACE                                # noqa: E402
 import facts_proposal                                      # noqa: E402
 
@@ -55,8 +53,31 @@ def key_name(brand):
     return d.get("loop_key") or f"LOOP_{brand.upper()}_KEY"
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def pull(brand, pages=10, size=50):
-    token = daemn_keys.key(key_name(brand), required=True)
+    token = _shared_keys().lookup(key_name(brand), required=True)
     rows, cursor = [], None
     for _ in range(pages):
         q = f"?pageSize={size}" + (f"&afterCursor={cursor}" if cursor else "")

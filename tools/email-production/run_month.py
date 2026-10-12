@@ -41,7 +41,7 @@ NO_IMAGES = False
 
 
 def have_picture_key():
-    """The pictures need OPENAI_API_KEY (env first, then the Keychain vault —
+    """The pictures need OPENAI_API_KEY (env first, then .env, then the key loader's fallbacks —
     the same order direct_openai.key_of() reads). Without it the email is laid
     out with no pictures and the log SAYS so, instead of the whole build dying
     at its first picture (2026-09-23, the email lead: "do sat 3 w/o images"). The
@@ -49,10 +49,32 @@ def have_picture_key():
     if os.environ.get("OPENAI_API_KEY"):
         return True
     try:
-        import daemn_keys
-        return bool(daemn_keys.key("OPENAI_API_KEY"))
+        return bool(_shared_keys().lookup("OPENAI_API_KEY"))
     except Exception:
         return False
+
+
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
 
 
 def one_run(label, argv, brand, logf):

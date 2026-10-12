@@ -62,12 +62,34 @@ def newest(stem: str) -> Path:
     return got[-1]
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def _key():
     k = os.environ.get("GEMINI_API_KEY", "").strip()
     if k:
         return k
-    import daemn_keys
-    return daemn_keys.key("GEMINI_API_KEY")
+    return _shared_keys().lookup("GEMINI_API_KEY")
 
 
 def _json(t: str) -> dict:
@@ -114,13 +136,12 @@ def _claude_cli(text: str, as_json: bool):
 
 
 def _openai(text: str, as_json: bool, model: str):
-    import daemn_keys
     body = {"model": model, "messages": [{"role": "user", "content": text}]}
     if as_json:
         body["response_format"] = {"type": "json_object"}
     req = urllib.request.Request("https://api.openai.com/v1/chat/completions", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json",
-                                          "Authorization": f"Bearer {daemn_keys.key('OPENAI_API_KEY')}"})
+                                          "Authorization": f"Bearer {_shared_keys().lookup('OPENAI_API_KEY')}"})
     with urllib.request.urlopen(req, timeout=300) as r:
         t = json.loads(r.read())["choices"][0]["message"]["content"] or ""
     return _json(t) if as_json else t.strip()

@@ -22,14 +22,35 @@ label. The transcript says so; the teardown's shot table says who is on screen.
 import hashlib, json, os, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path.home() / ".daemn"))
 STT = "https://api.elevenlabs.io/v1/speech-to-text"
 MARK = "### VERBATIM TRANSCRIPT"
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def _key():
-    import daemn_keys
-    return daemn_keys.key("ELEVENLABS_API_KEY")
+    return _shared_keys().lookup("ELEVENLABS_API_KEY")
 
 
 # THE AUDIO TEARDOWN (2026-09-25). Scribe alone dropped a Korean mother's lines

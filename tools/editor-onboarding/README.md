@@ -1,5 +1,7 @@
 # editor-onboarding
 
+**Keys this tool needs:** none. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 The front door for the people who make our ads — clippers, creators, video
 editors and graphic designers. They work from their own **Higgsfield
 Supercomputer** or **Claude Code** account, with these tools from GitHub. Work

@@ -11,13 +11,31 @@ import json, os, subprocess, sys, time, urllib.request, urllib.error
 HANDLES = sys.argv[1:] or [h for h in os.environ.get("PRIZM_CREATOR_HANDLES", "").split(",") if h]
 ACTOR = "shu8hvrXbJbY3Eb9W"          # apify/instagram-scraper
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def key(n="APIFY_TOKEN"):
-    if os.environ.get(n):
-        return os.environ[n]
-    r = subprocess.run(["security","find-generic-password","-a","damon","-s",f"daemn-{n}","-w"],
-                       capture_output=True, text=True)
-    if r.returncode: raise SystemExit(f"no keychain entry daemn-{n}")
-    return r.stdout.strip()
+    return _shared_keys().lookup(n, required=True).strip()
 
 def post(url, body, tok):
     req = urllib.request.Request(f"{url}?token={tok}", method="POST",

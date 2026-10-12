@@ -7,6 +7,9 @@ credentials.json
 .wrangler/
 
 # your work, not the toolkit
+# This public repo never holds a brand's data, so every brand folder is ignored
+# here. In YOUR OWN private copy, "activate Prizm Lab" adds a line
+# `!brands/<your-brand>/` just below `brands/*/` so your brand is saved there.
 brands/*/
 !brands/_TEMPLATE/
 runs/

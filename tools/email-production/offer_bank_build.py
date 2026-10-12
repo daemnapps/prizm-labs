@@ -25,8 +25,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path.home() / ".daemn"))
-import daemn_keys                                                  # noqa: E402
 from paths import WORKSPACE                                        # noqa: E402
 import facts_proposal                                              # noqa: E402
 import store as STORE                                              # noqa: E402
@@ -77,10 +75,33 @@ def from_shopify(brand):
     return out
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def from_next(brand):
     """Offers as the funnel sells them."""
-    s = daemn_keys.key(f"{brand.upper()}_NEXTCOMMERCE_STORE")
-    tok = daemn_keys.key(f"{brand.upper()}_NEXTCOMMERCE_ACCESS_TOKEN")
+    s = _shared_keys().lookup(f"{brand.upper()}_NEXTCOMMERCE_STORE")
+    tok = _shared_keys().lookup(f"{brand.upper()}_NEXTCOMMERCE_ACCESS_TOKEN")
     if not s or not tok:
         return []
     base = f"https://{s}.29next.store/api/admin/"

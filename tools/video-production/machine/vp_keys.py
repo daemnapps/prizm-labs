@@ -4,7 +4,7 @@
 SI-194 (readers use loader), dispatch 1: the readers in this folder no longer
 read keys themselves (no os.environ.get + daemn_keys of their own). They ask
 key(NAME), which asks components/keys/loader.py: the environment first, then
-— only when the mini marker ~/.workflow-worker.env is absent — the old places
+the repo's .env, then — only when the mini marker ~/.workflow-worker.env is absent — the old places
 (the Keychain through ~/.daemn/daemn_keys.py, then ~/.daemn/keys.env,
 ~/.apify.env, ~/.gemini.env). The environment still wins, then the Keychain,
 as every reader here always had it.

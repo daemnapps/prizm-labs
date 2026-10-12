@@ -18,6 +18,8 @@ performance, and the seven roles that carry it.
 
 ## How to use it — Higgsfield Supercomputer or Claude Code
 
+**New here? Read [START-HERE.md](START-HERE.md)** — your own copy, your own keys, and "activate Prizm Lab".
+
 The same three steps in either one:
 
 1. **Clone this repo** into Higgsfield Supercomputer, or open it in Claude
