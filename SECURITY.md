@@ -12,8 +12,18 @@ machine but their own.
 **Never public:** API keys, any brand's private data, the competitor sweep
 records, and anyone's email address. Those live outside this repo entirely.
 
-**Verified 2026-09-04:** no credential file has ever been added in this repo's
-history, and no key-shaped string exists in any tracked file.
+**What actually happened (corrected 2026-10-12):** no API key or other secret
+value has ever been committed — a scan of every commit for key-shaped strings
+found none. But one credential-type file *was* committed: on 2026-09-26 a
+Cloudflare Wrangler cache file (`.wrangler/cache/wrangler-account.json`) went
+in. It held a Cloudflare account id and the account owner's email address, not
+a token. It was removed from the tree on 2026-10-12 and `.wrangler/` is now
+ignored. The same cleanup removed three creators' email addresses that had
+come in with scraped captions, and internal notes about the company's key
+setup. All of that is gone from the current files but **still exists in this
+repo's history and in any copy made before the cleanup** — history was not
+rewritten. The earlier line here ("no credential file has ever been added",
+2026-09-04) was true when written and stopped being true on 2026-09-26.
 
 ## The commit guard
 
