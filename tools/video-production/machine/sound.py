@@ -51,7 +51,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-# the key vault the machines share (~/.daemn/keys.env)
+# keys by name through components/keys/loader.py (environment, then the repo .env)
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "video-teardown" / "machine"))   # this checkout's, never ~/Projects
 import keys
 
@@ -182,7 +182,7 @@ def main():
     fkey = keys.get("FAL_KEY")
     gkey = keys.get("GEMINI_API_KEY")
     if not fkey:
-        sys.exit("no FAL_KEY — the company key belongs in ~/.daemn/keys.env")
+        sys.exit("This tool needs FAL_KEY. Add it to .env (see .env.example).")
     out.mkdir(parents=True, exist_ok=True)
     made = 0
 

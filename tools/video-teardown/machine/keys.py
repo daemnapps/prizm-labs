@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Every key, read through the one loader in components/keys.
 
+Order: the environment, then this repo's .env, then (quietly, only where they
+exist) the owner's personal places below.
+
 SI-193 (video-teardown keys reader): this file no longer reads key files
 itself. It delegates to components/keys/loader.py — key(NAME) — which looks
 in the environment, then (only when the managed file ~/.workflow-worker.env
@@ -98,6 +101,7 @@ def all_keys():
     every name the old files and the Keychain hold; each value from the loader."""
     names = {n for n in os.environ if _is_key_name(n)}
     if not _loader.fallback_skipped():
+        names.update(_parse(getattr(_loader, "DOTENV", "")))
         for src in _loader.FALLBACK:
             if src != "keychain":
                 names.update(_parse(src))
@@ -131,9 +135,9 @@ def export():
 def status():
     ks = all_keys()
     if not ks:
-        return "No keys found — none in the Keychain and none in the old files"
+        return "No keys found — add yours to .env (see .env.example)"
     return "\n".join(f"  {k:<24} set ({len(v)} chars)" for k, v in sorted(ks.items()))
 
 
 if __name__ == "__main__":
-    print(f"Keys, from {VAULT}:\n{status()}")
+    print(f"Keys (environment, then .env):\n{status()}")

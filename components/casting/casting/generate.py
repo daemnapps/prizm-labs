@@ -37,17 +37,34 @@ KEY = "OPENAI_API_KEY"
 PNG = re.compile(r"(/\S+\.png)")
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def key_value(name=KEY):
-    """The key, by name. Environment first, then the Keychain. Never printed."""
-    v = os.environ.get(name)
-    if v:
-        return v
+    """The key, by name. Environment first, then the repo's .env (the key loader). Never printed."""
     try:
-        r = subprocess.run(["security", "find-generic-password",
-                            "-s", "daemn-%s" % name, "-a", "damon", "-w"],
-                           capture_output=True, text=True, timeout=10)
-        return (r.stdout or "").strip() or None
-    except (OSError, subprocess.SubprocessError):
+        return (_shared_keys().lookup(name) or "").strip() or None
+    except Exception:
         return None
 
 

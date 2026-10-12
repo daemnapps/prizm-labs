@@ -1,5 +1,7 @@
 # The video teardown machine
 
+**Keys this tool needs:** GEMINI_API_KEY, ELEVENLABS_API_KEY, APIFY_TOKEN, OPENAI_API_KEY (optional), AUDD_API_TOKEN (optional), ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN (optional), GDRIVE_SA_KEY (optional). Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 ## How to use it → (team dashboard)
 
 **Two lines, and the one thing they share.**

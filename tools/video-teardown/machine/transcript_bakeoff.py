@@ -23,8 +23,29 @@ import argparse, base64, difflib, json, re, subprocess, sys, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-sys.path.insert(0, str(Path.home() / ".daemn"))
-import daemn_keys  # noqa: E402
+
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
 
 HERE = Path(__file__).resolve().parent
 WS = HERE.parents[2]
@@ -66,7 +87,7 @@ def dur_of(a):
 
 def scribe(a, model):
     import transcript as T
-    d = curl(["-H", f"xi-api-key: {daemn_keys.key('ELEVENLABS_API_KEY')}",
+    d = curl(["-H", f"xi-api-key: {_shared_keys().lookup('ELEVENLABS_API_KEY')}",
               "-F", f"model_id={model}", "-F", "diarize=true", "-F", "timestamps_granularity=word",
               "-F", f"file=@{a}", "https://api.elevenlabs.io/v1/speech-to-text"])
     if "words" not in d:
@@ -75,7 +96,7 @@ def scribe(a, model):
 
 
 def openai(a, model):
-    k = daemn_keys.key("OPENAI_API_KEY")
+    k = _shared_keys().lookup("OPENAI_API_KEY")
     fmt = "diarized_json" if "diarize" in model else ("verbose_json" if model == "whisper-1" else "json")
     args = ["https://api.openai.com/v1/audio/transcriptions", "-H", f"Authorization: Bearer {k}",
             "-F", f"model={model}", "-F", f"file=@{a}", "-F", f"response_format={fmt}"]
@@ -102,7 +123,7 @@ GEMINI_ASK = (
 
 
 def gemini(a, model):
-    k = daemn_keys.key("GEMINI_API_KEY")
+    k = _shared_keys().lookup("GEMINI_API_KEY")
     body = {"contents": [{"parts": [
         {"inline_data": {"mime_type": "audio/mp3", "data": base64.b64encode(a.read_bytes()).decode()}},
         {"text": GEMINI_ASK}]}],

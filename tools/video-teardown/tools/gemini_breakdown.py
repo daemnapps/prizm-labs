@@ -4,7 +4,7 @@
 Usage: python3 gemini_breakdown.py <video.mp4> [--model gemini-flash-latest]
                                    [--out breakdown.json] [--context "..."]
 
-Reads GEMINI_API_KEY from the environment, falling back to ~/.gemini.env.
+Reads GEMINI_API_KEY from the environment, then the repo .env (components/keys/loader.py).
 Uploaded copy is ephemeral on
 Google's side (auto-expires ~48h). Output: structured JSON breakdown
 next to the video (or --out), consumable by the brief step.
@@ -47,18 +47,33 @@ or avoid when writing FOR THIS CREATOR, based only on this video
 """
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def key():
     # Environment first: keys travel by VARIABLE NAME, so any vault that
-    # exports GEMINI_API_KEY works. The file stays as the fallback.
-    env = os.environ.get("GEMINI_API_KEY", "").strip()
-    if env:
-        return env
-    f = Path.home() / ".gemini.env"
-    if f.exists():
-        for line in f.read_text().splitlines():
-            if line.startswith("GEMINI_API_KEY="):
-                return line.split("=", 1)[1].strip()
-    sys.exit("GEMINI_API_KEY not found in ~/.gemini.env")
+    # exports GEMINI_API_KEY works; then the repo's .env (components/keys/loader.py).
+    return _shared_keys().lookup("GEMINI_API_KEY", required=True).strip()
 
 
 def req(url, data=None, headers=None, method=None, raw=False, tries=4):

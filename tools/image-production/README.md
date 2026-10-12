@@ -1,5 +1,7 @@
 # image-production
 
+**Keys this tool needs:** GEMINI_API_KEY, GDRIVE_SA_KEY (optional), HIGGSFIELD_KEY_ID + HIGGSFIELD_KEY_SECRET (optional). Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 ## How to use it → (team dashboard)
 
 One image engine every workflow uses. An email hero, a static ad frame, a

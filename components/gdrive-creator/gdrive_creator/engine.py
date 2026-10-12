@@ -103,8 +103,8 @@ def configure(key_lookup=None, mount_lookup=None):
     own folder ids in.
 
     key_lookup(name)   consulted when `GDRIVE_SA_KEY` is not in the
-                       environment. The video machine passes `keys.get`, its
-                       `~/.daemn/keys.env` vault
+                       environment. The video machine passes `keys.get`, which
+                       reads through components/keys/loader.py
     mount_lookup()     returns the filesystem path, on the Drive mount, under
                        which `creator_share` hangs its `creators/` tree.
                        The video machine passes `chain.runs_mirror()`

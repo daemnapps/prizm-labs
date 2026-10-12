@@ -116,21 +116,42 @@ def product_names(brand):
         return brand
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def gemini_key():
     """GEMINI_API_KEY, by NAME, from the environment (the name the mini's
-    env.template and the dispatch grants know). A machine whose keys sit in a
-    local key helper may still have one importable as `daemn_keys`; it is asked
-    for the same NAME, never read from a path."""
+    env.template and the dispatch grants know), then the repo's .env, through
+    components/keys/loader.py — asked by NAME, never read from a path."""
     k = os.environ.get("GEMINI_API_KEY")
     if k:
         return k
     try:
-        import daemn_keys
-        k = daemn_keys.key("GEMINI_API_KEY")
+        k = _shared_keys().lookup("GEMINI_API_KEY")
     except Exception:
         k = None
     if not k:
-        raise RuntimeError("GEMINI_API_KEY is not set in the environment")
+        raise RuntimeError("This tool needs GEMINI_API_KEY. Add it to .env (see .env.example).")
     return k
 
 

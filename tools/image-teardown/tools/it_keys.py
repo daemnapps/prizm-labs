@@ -5,10 +5,9 @@ SI-194 (readers use loader), dispatch 3: gpt_drafts.py, draft_judge.py,
 carousel.py, gemini_image.py, gemini_text.py, pull_ig_image.py and check.py no
 longer import ~/.daemn/daemn_keys or open ~/.gemini.env / ~/.apify.env
 themselves. They ask key(NAME), which asks components/keys/loader.py: the
-environment first, then — only when the mini marker ~/.workflow-worker.env is
+environment first, then the repo's .env, then — only when the mini marker ~/.workflow-worker.env is
 absent — the old places (the Keychain through ~/.daemn/daemn_keys.py, then
-~/.daemn/keys.env, ~/.apify.env, ~/.gemini.env). No local .env step:
-image-teardown has none. tools/deliver.py is not a reader here — it imports
+~/.daemn/keys.env, ~/.apify.env, ~/.gemini.env). tools/deliver.py is not a reader here — it imports
 video-teardown's keys.py, which reads through the loader since SI-193
 (video-teardown keys reader).
 

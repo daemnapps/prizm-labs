@@ -1,5 +1,7 @@
 # video-edit
 
+**Keys this tool needs:** ELEVENLABS_API_KEY. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 ## How to use it → (team dashboard)
 
 Turns an approved kit — voice, A-roll, B-roll, music, sound effects — into the

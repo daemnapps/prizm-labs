@@ -1,5 +1,17 @@
 """The one key loader — key(NAME) and load(names).
 
+Everyone brings their own keys. A key is found in this order:
+  1. an environment variable with that name;
+  2. the `.env` file at the root of this repo (gitignored — copy
+     `.env.example` to `.env` and fill in your own keys);
+  3. only as a quiet last resort, the original owner's personal places
+     described below (a Mac Keychain helper and a few dotfiles). On anyone
+     else's machine those do not exist and are skipped silently.
+A missing key raises KeyError whose message starts:
+  "This tool needs NAME. Add it to .env (see .env.example)."
+
+Original notes:
+
 SI-192 (keys loader), keys Track A part 1: every reader that today opens a
 file in someone's home folder asks here by NAME instead. The order is
 (1) os.environ; (2) a TEMPORARY fallback to the old locations — the ~/.daemn
@@ -47,6 +59,9 @@ NO_FALLBACK_ENV = "KEYS_NO_FALLBACK"
 # the ~/.daemn/daemn_keys.py helper, used only when that file exists.
 FALLBACK = ("keychain", "~/.daemn/keys.env", "~/.apify.env", "~/.gemini.env")
 KEYCHAIN_DIR = "~/.daemn"
+# Step 2: the repo's own .env (components/keys/loader.py -> repo root).
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DOTENV = REPO_ROOT / ".env"
 
 _NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
@@ -118,6 +133,8 @@ def fallback_skipped():
 
 def _places(skipped):
     places = ["environment"]
+    if not skipped:
+        places.append(".env")
     if skipped:
         places.append("old locations skipped (managed file present or %s=1)"
                       % NO_FALLBACK_ENV)
@@ -134,6 +151,11 @@ def _lookup(name, skipped, cache):
             return os.environ[n]
     if skipped:
         return None
+    if "dotenv" not in cache:
+        cache["dotenv"] = _parse(str(DOTENV))
+    for n in names:
+        if cache["dotenv"].get(n):
+            return cache["dotenv"][n]
     for src in FALLBACK:
         if src == "keychain":
             v = _keychain(names)
@@ -153,8 +175,9 @@ def _missing(names, skipped):
     for n in names:
         aka = [a for a in _names(n) if a != n]
         looked.append(n + (" (or %s)" % ", ".join(aka) if aka else ""))
-    return KeyError("missing key %s; looked in: %s"
-                    % ("; ".join(looked), ", ".join(_places(skipped))))
+    return KeyError("This tool needs %s. Add it to .env (see .env.example). "
+                    "(looked in: %s)"
+                    % (" and ".join(looked), ", ".join(_places(skipped))))
 
 
 def key(name, required=True):
@@ -181,3 +204,30 @@ def load(names, required=True):
     if missing and required:
         raise _missing(missing, skipped)
     return out
+
+
+def lookup(name, required=False):
+    """For readers that used the old personal helper's `key(name, required=)`:
+    the value or None; with required=True a missing key exits with the plain
+    message ("This tool needs NAME. Add it to .env (see .env.example).")."""
+    skipped = fallback_skipped()
+    v = _lookup(name, skipped, {}) if name else None
+    if v is None and required:
+        sys.exit(_missing([name], skipped).args[0])
+    return v
+
+
+if __name__ == "__main__":
+    # Self-check: names only, never a value.
+    names = sys.argv[1:]
+    if not names:
+        print("usage: python3 components/keys/loader.py NAME [NAME ...]")
+        sys.exit(0)
+    bad = 0
+    for n in names:
+        if key(n, required=False):
+            print("  %-28s set" % n)
+        else:
+            bad += 1
+            print("  %-28s missing — add it to .env (see .env.example)" % n)
+    sys.exit(1 if bad else 0)

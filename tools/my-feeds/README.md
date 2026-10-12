@@ -1,5 +1,7 @@
 # My Feeds — what already works, organic and paid
 
+**Keys this tool needs:** none. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 The swipe end of Prizm Labs. In production this is **My Feeds**: one board of
 what people actually watch (organic) and what competitors are paying to show
 them (paid). This folder is the public half of it — the structure pulled out of

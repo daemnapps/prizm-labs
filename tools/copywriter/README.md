@@ -1,5 +1,7 @@
 # copy production
 
+**Keys this tool needs:** DATABASE_URL (optional — only for reading your own ad warehouse). Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 **copy-production** — takes **a source and a brief**, makes **the copy: primary
 text, captions, headlines**. Does not **make pictures**.
 

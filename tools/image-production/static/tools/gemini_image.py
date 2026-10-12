@@ -11,7 +11,7 @@ Usage:
 
 Multiple --image flags are sent in one call, in the order given, each labeled
 "IMAGE 1", "IMAGE 2", ... so the prompt can refer to them by number.
-Reads GEMINI_API_KEY from ~/.gemini.env.
+Reads GEMINI_API_KEY through components/keys/loader.py (environment, then the repo .env).
 """
 
 import argparse, os, base64, json, mimetypes, sys, time, urllib.request

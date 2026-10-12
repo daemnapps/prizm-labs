@@ -45,7 +45,6 @@ from paths import HERE, WORKSPACE, component
 # picture door needs (urllib -> http.client -> email.parser). Nothing below
 # imports from this folder again, so take it off the path.
 sys.path = [p for p in sys.path if Path(p or ".").resolve() != HERE]
-sys.path.insert(0, str(Path.home() / ".daemn"))
 # The checks and the hold are the shared ones (components/quality-checks); the
 # layout is asked of the element library (components/elements, template/email).
 sys.path.insert(0, str(component("marketing-chain-checks")))
@@ -427,11 +426,33 @@ def own_domains(brand):
 
 # ------------------------------------------------------------------ klaviyo
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def kl_key(lk):
-    import daemn_keys
-    k = daemn_keys.key(lk.get("klaviyo_key") or "")
+    k = _shared_keys().lookup(lk.get("klaviyo_key") or "")
     if not k:
-        sys.exit(f"no {lk.get('klaviyo_key')} in the Keychain — this brand's Klaviyo is not "
+        sys.exit(f"no {lk.get('klaviyo_key')} set (add it to .env) — this brand's Klaviyo is not "
                  "connected, so the email is built but not pushed")
     return k
 

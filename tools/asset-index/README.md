@@ -1,5 +1,7 @@
 # Asset index
 
+**Keys this tool needs:** none. Put your own in `.env` at the top of the repo — see [`.env.example`](../../.env.example).
+
 Turns a folder of footage into records you can search by what is *in* the
 clip, not what the file is called. `IMG_5476.MOV` becomes "man patting his
 face with a grey towel in a bathroom, profile reveal, usable as demo".

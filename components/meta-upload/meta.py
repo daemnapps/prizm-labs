@@ -32,19 +32,38 @@ BASE = "https://graph.facebook.com/v25.0"   # v24 expires 6 Oct 2026 (Marketing 
 #     m.get(f"act_{m.ACCOUNT}", fields="name")
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def token(name="PRIZM_META_TOKEN"):
-    """The environment first ($PRIZM_META_TOKEN), else straight from the Keychain.
+    """The environment first ($PRIZM_META_TOKEN), then the repo's .env (the key loader).
     Never cached to disk, never logged."""
-    if os.environ.get(name):
-        return os.environ[name]
-    out = subprocess.run(
-        ["security", "find-generic-password", "-a", "damon", "-s", f"daemn-{name}", "-w"],
-        capture_output=True, text=True)
-    if out.returncode:
+    v = _shared_keys().lookup(name)
+    if not v:
         raise SystemExit(
-            f"no Keychain entry daemn-{name}. The Meta token is a system-user "
-            "token from Business Settings -> System users -> Generate token.")
-    return out.stdout.strip()
+            f"This tool needs {name}. Add it to .env (see .env.example). The Meta token is a "
+            "system-user token from Business Settings -> System users -> Generate token.")
+    return v.strip()
 
 
 class Meta:

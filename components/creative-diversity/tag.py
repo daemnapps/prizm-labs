@@ -20,7 +20,29 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-import daemn_keys
+
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -183,7 +205,7 @@ def main(brand, day=None):
     assets = json.loads((run / "assets.json").read_text())["assets"]
     out = run / "tags.json"
     done = json.loads(out.read_text())["tags"] if out.exists() else {}
-    k = daemn_keys.key("GEMINI_API_KEY")
+    k = _shared_keys().lookup("GEMINI_API_KEY")
     prompt = fill(brand)
     (run / "prompt-filled.md").write_text(prompt)
     todo = [a for a in assets if a.get("file") and a["asset"] not in done]

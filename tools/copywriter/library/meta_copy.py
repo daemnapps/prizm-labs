@@ -286,12 +286,33 @@ def pull(brand, *, cpa_min_spend=500.0, cpa_min_buys=5, cpa_pages=3, say=print, 
 
 # ---------- from our own database: no Meta calls ----------
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def db_query(sql):
-    """One read-only query against the Supabase warehouse (SUPABASE_DB_URL in the Keychain) -> json."""
+    """One read-only query against the Supabase warehouse (SUPABASE_DB_URL, through the key loader) -> json."""
     import subprocess
-    sys.path.insert(0, str(Path.home() / ".daemn"))
-    import daemn_keys
-    r = subprocess.run(["psql", daemn_keys.key("SUPABASE_DB_URL"), "-At", "-v", "ON_ERROR_STOP=1",
+    r = subprocess.run(["psql", _shared_keys().lookup("SUPABASE_DB_URL", required=True), "-At", "-v", "ON_ERROR_STOP=1",
                         "-c", "set default_transaction_read_only = on; " + sql],
                        capture_output=True, text=True, timeout=180)
     if r.returncode:

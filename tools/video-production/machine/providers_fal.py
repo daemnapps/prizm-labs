@@ -65,15 +65,14 @@ vp_keys = _load("vp_keys")
 # --------------------------------------------------------------- the key
 
 def key() -> str:
-    """FAL_KEY: env first, then the Keychain vault, then machine/.env — the
+    """FAL_KEY: env first, then the repo .env (components/keys/loader.py), then machine/.env — the
     same order platform.py's own vault check implies. A teammate's clone
     with none of the three gets a plain, actionable error. machine/.env is
     read on a person's machine only, never on the mini (vp_keys.py)."""
     k = vp_keys.key("FAL_KEY", local_env=True)
     if k:
         return k
-    raise SystemExit("No FAL_KEY — set it in the environment, the Keychain "
-                      "vault (~/.daemn), or machine/.env")
+    raise SystemExit("This tool needs FAL_KEY. Add it to .env (see .env.example).")
 
 
 # ----------------------------------------------------------- the transport

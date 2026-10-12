@@ -41,8 +41,8 @@ def main():
                       ("GDRIVE_SA_KEY", "making the Google Doc"),
                       ("ELEVENLABS_API_KEY", "casting a character's voice")):
         check(f"{name} ({why})",
-              lambda n=name: (OK, "") if keys.get(n, required=False) else (BAD, "not in ~/.daemn/keys.env"),
-              "add it to ~/.daemn/keys.env")
+              lambda n=name: (OK, "") if keys.get(n, required=False) else (BAD, "not set"),
+              "add it to .env (see .env.example)")
 
     check("APIFY_TOKEN_PERSONAL (spare account)",
           lambda: (OK, "") if keys.get("APIFY_TOKEN_PERSONAL", required=False)

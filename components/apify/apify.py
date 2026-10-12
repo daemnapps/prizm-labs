@@ -27,24 +27,40 @@ HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parent.parent
 
 
+
+def _shared_keys():
+    """The repo's one key loader (components/keys/loader.py): the environment,
+    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+    import importlib.util
+    import sys as _sys
+    from pathlib import Path as _Path
+    mod = _sys.modules.get("shared_keys_loader")
+    if mod is None:
+        path = next(p / "components" / "keys" / "loader.py"
+                    for p in _Path(__file__).resolve().parents
+                    if (p / "components" / "keys" / "loader.py").is_file())
+        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        mod = importlib.util.module_from_spec(spec)
+        _sys.modules["shared_keys_loader"] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            _sys.modules.pop("shared_keys_loader", None)
+            raise
+    return mod
+
+
 def _vault(name):
     """The key, from wherever this machine keeps it.
 
     Order: the environment (cloud routines, a teammate's machine, CI), then
-    the macOS Keychain through `~/.daemn/daemn_keys.py`. This used to import
+    the repo's .env, through components/keys/loader.py. This used to import
     the video teardown machine's own `keys.py`, which made the Apify layer
     depend on another tool's internals and broke wherever that tool was not
     checked out beside it.
     """
-    v = os.environ.get(name)
-    if v:
-        return v
     try:
-        d = str(Path.home() / ".daemn")
-        if d not in sys.path:
-            sys.path.insert(0, d)
-        import daemn_keys
-        return daemn_keys.key(name) or None
+        return _shared_keys().lookup(name) or None
     except Exception:
         return None
 
@@ -70,12 +86,10 @@ def say(m):
 
 
 def token():
-    # Host-agnostic: an env var wins (cloud routines, teammate machines),
-    # the local keys file is the fallback (Damon's Mac).
+    # Host-agnostic: an env var wins, then the repo's .env.
     t = _vault("APIFY_TOKEN")
     if not t:
-        sys.exit("no APIFY_TOKEN — set the env var, or add it to the Keychain:\n"
-                 "    python3 ~/.daemn/daemn_keys.py --add APIFY_TOKEN")
+        sys.exit("This tool needs APIFY_TOKEN. Add it to .env (see .env.example).")
     return t
 
 

@@ -1,10 +1,11 @@
 #!/bin/bash
-# Take a key off the clipboard into the vault, without it ever being displayed.
+# Take a key off the clipboard into this repo's .env (gitignored), without it
+# ever being displayed. Set PRIZM_KEYS_FILE to write somewhere else.
 # Pasting a secret into a chat puts it in a transcript forever (workspace rule 6);
 # the clipboard keeps it out of everything but the file it belongs in.
 set -euo pipefail
 NAME="${1:?usage: add-key.sh KEY_NAME}"
-VAULT="$HOME/.daemn/keys.env"
+VAULT="${PRIZM_KEYS_FILE:-$(cd "$(dirname "$0")/../../.." && pwd)/.env}"
 VAL="$(pbpaste | tr -d '\r\n[:space:]')"
 [ -n "$VAL" ] || { echo "clipboard is empty"; exit 1; }
 mkdir -p "$(dirname "$VAULT")"; touch "$VAULT"; chmod 600 "$VAULT"
