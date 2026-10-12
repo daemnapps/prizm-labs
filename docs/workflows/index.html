@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EFE9E1">
+<meta name="description" content="A plain-language, playable guide to the difference between chatting with AI and running AI workflows, shown on the tools Prizm Labs actually built.">
+<title>Chat vs. Workflow — PRIZM LABS</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/studio.css?v=prizm16">
+<style>
+/* Page-specific LAYOUT only. The game floor is .fx in /studio.css. */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);margin-top:var(--s6)}
+.duo > *{min-width:0;display:grid;gap:var(--s3);align-content:start}
+.duo ul{padding-left:18px;display:grid;gap:4px;color:var(--ink-2);font-size:14.5px}
+.task{margin-top:var(--s6);display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center}
+.lane{background:var(--card);border:1px solid var(--line);border-radius:var(--r3);padding:var(--s5);display:grid;gap:var(--s4);align-content:start;min-width:0}
+.lane.hued{border-top:4px solid var(--hue)}
+.score{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.score div{background:var(--paper);border-radius:var(--r2);padding:var(--s2) var(--s3);display:grid;gap:2px}
+.score b{font-family:var(--display);font-weight:800;font-size:clamp(20px,2.6vw,28px);line-height:1.1;font-variant-numeric:tabular-nums}
+.feed{list-style:none;padding:0;display:grid;gap:var(--s2);max-height:380px;overflow-y:auto}
+.feed li{display:grid;grid-template-columns:auto 1fr auto;gap:var(--s3);align-items:start;padding:var(--s3);border-radius:var(--r2);background:var(--paper);font-size:14px;animation:fx-pop .3s both}
+.feed li .ib{width:28px;height:28px;padding:6px}
+.feed li p{color:var(--ink-2);font-size:13px;margin-top:2px}
+.feed .t{font-family:var(--mono);font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.feed .pill{margin-top:var(--s1)}
+.feed:empty::before{content:attr(data-empty);color:var(--ink-3);font-family:var(--mono);font-size:12px}
+.done-note{border-left:3px solid var(--hue);padding:var(--s2) var(--s3);font-size:14.5px}
+.verdict{margin-top:var(--s5)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:var(--s3);margin-top:var(--s6)}
+.four .card{display:grid;gap:var(--s2);align-content:start}
+.vs2{display:grid;gap:var(--s2);margin-top:var(--s2);padding-top:var(--s3);border-top:1px solid var(--line);font-size:14px}
+.vs2 span{display:block}
+.fx-out .tools{display:flex;flex-wrap:wrap;gap:6px}
+.fx-io{display:grid;grid-template-columns:auto 1fr;gap:4px var(--s3);font-size:14px}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);margin-top:var(--s6);align-items:end}
+.ladder button{appearance:none;text-align:left;font:inherit;color:inherit;cursor:pointer;display:grid;gap:var(--s2);align-content:start;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:var(--s4)}
+.ladder button:nth-child(1){min-height:150px}.ladder button:nth-child(2){min-height:190px}
+.ladder button:nth-child(3){min-height:230px}.ladder button:nth-child(4){min-height:270px}
+.ladder button[aria-pressed="true"]{border-color:var(--indigo);outline:2px solid var(--indigo)}
+.ladder button:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+.ladder b{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.2}
+.ladder small{color:var(--ink-2);font-size:13.5px;line-height:1.45}
+.next{margin-top:var(--s4)}
+.close{display:grid;gap:var(--s4);justify-items:start;padding-block:var(--s7) var(--s8)}
+@media (max-width:760px){
+  .duo{grid-template-columns:1fr}
+  .ladder{grid-template-columns:1fr 1fr}
+  .ladder button{min-height:0!important}
+  .score b{font-size:20px}
+}
+@media (max-width:420px){.ladder{grid-template-columns:1fr}}
+</style>
+
+<nav class="bar">
+  <a class="mark" href="/">PRIZM LABS</a>
+  <span class="links">
+      <a href="/how-it-works.html">How it works</a>
+      <a href="/briefs/">Briefs</a>
+      <a href="/feeds/">Feeds</a>
+      <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a>
+    </span>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">For business owners · AI, explained by playing it</p>
+    <h1 class="rise">Chat is a conversation. A workflow is a machine.</h1>
+    <p class="lede">Most people use AI by typing into a chat box. You ask, it answers, and you carry
+      the answer to the next place yourself. We built something else: a line of tools that does
+      the whole job in order, the same way every time, and only stops when it needs your yes.
+      This page lets you try both.</p>
+    <div class="btns">
+      <a class="btn" href="#race">Play the race</a>
+      <a class="btn ghost" href="#line">Run our line</a>
+    </div>
+
+    <div class="duo">
+      <div class="card hued" style="--hue:var(--amber)">
+        <p class="label hue">AI as a chat · waiting on you</p>
+        <h3>You are the engine.</h3>
+        <ul>
+          <li>It only moves when you type</li>
+          <li>You re-explain your business in every new chat</li>
+          <li>You copy answers in and out of every other app</li>
+          <li>You check every line for mistakes</li>
+        </ul>
+      </div>
+      <div class="card hued" style="--hue:var(--green)">
+        <p class="label hue">AI as a workflow · runs on its own</p>
+        <h3>You are the manager.</h3>
+        <ul>
+          <li>One instruction starts a whole chain of steps</li>
+          <li>Your business is written down once and read by every step</li>
+          <li>It works inside your tools: video, ads, email, files</li>
+          <li>It checks its own work and stops for your approval</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec" id="race">
+    <p class="eyebrow">01 · The race</p>
+    <h2>One job, done both ways.</h2>
+    <p class="lede">A competitor's video is selling well. You want the same kind of ad for your
+      own product, with a brief a filmmaker can shoot from. Press the left button once per message
+      you would have to send. Press the right button once, and watch.</p>
+
+    <div class="duo">
+      <div class="lane hued" style="--hue:var(--amber)" id="chat">
+        <div>
+          <p class="label hue">The chat way</p>
+          <h3>You send every message</h3>
+        </div>
+        <div class="score">
+          <div><span class="label">Your time</span><b data-k="time">0m</b></div>
+          <div><span class="label">Messages</span><b data-k="msgs">0</b></div>
+          <div><span class="label">Re-explained</span><b data-k="again">0</b></div>
+        </div>
+        <div class="btns"><button class="btn" type="button" data-a="send">Send the next message</button></div>
+        <ul class="feed" data-empty="Nothing has happened yet. A chat waits for you."></ul>
+      </div>
+
+      <div class="lane hued" style="--hue:var(--green)" id="flow">
+        <div>
+          <p class="label hue">The workflow way</p>
+          <h3>You press go once</h3>
+        </div>
+        <div class="score">
+          <div><span class="label">Your time</span><b data-k="you">0m</b></div>
+          <div><span class="label">Machine time</span><b data-k="clock">0:00</b></div>
+          <div><span class="label">Steps run</span><b data-k="steps">0</b></div>
+        </div>
+        <div class="btns"><button class="btn" type="button" data-a="run">Run the line</button></div>
+        <ul class="feed" data-empty="Press once. Every step after that runs by itself."></ul>
+      </div>
+    </div>
+    <div class="panel verdict" id="verdict" aria-live="polite" hidden></div>
+    <p class="meta" style="margin-top:var(--s3)"><span>Workflow times are the real medians of our last twelve runs</span><span>Chat times are our estimate of doing it by hand</span></p>
+  </section>
+
+  <section class="sec">
+    <p class="eyebrow">02 · What's inside</p>
+    <h2>A workflow is four things a chat doesn't have.</h2>
+    <p class="lede">The AI model is the same kind you already use. What changes is what
+      surrounds it. Here is each part, and the piece of our system that plays it.</p>
+
+    <div class="four">
+      <div class="card hued" style="--hue:var(--magenta)">
+        <i class="ib" data-i="folder"></i>
+        <p class="label hue">Memory</p>
+        <h3>The brand folder</h3>
+        <p>Product, customer, voice, claims we can and can't make. Written once. Every tool reads it before it starts.</p>
+        <div class="vs2"><span><b>In a chat:</b> you paste it again each time.</span><span><b>In ours:</b> one folder per brand, never explained twice.</span></div>
+      </div>
+      <div class="card hued" style="--hue:var(--violet)">
+        <i class="ib" data-i="list"></i>
+        <p class="label hue">The recipe</p>
+        <h3>A chain of prompts</h3>
+        <p>The job broken into steps, each with its own written instruction. The output of one step is the input of the next.</p>
+        <div class="vs2"><span><b>In a chat:</b> one prompt, and you improvise the rest.</span><span><b>In ours:</b> 18 stages from video to brief, each one readable on GitHub.</span></div>
+      </div>
+      <div class="card hued" style="--hue:var(--indigo)">
+        <i class="ib" data-i="plug"></i>
+        <p class="label hue">The keys</p>
+        <h3>Connections to your tools</h3>
+        <p>Developers call them APIs. Think of them as keys that let the AI open your apps and do the work there.</p>
+        <div class="vs2"><span><b>In a chat:</b> you are the copy and paste.</span><span><b>In ours:</b> Higgsfield for pictures and video, Meta for ads, Klaviyo for email, Google Drive for files.</span></div>
+      </div>
+      <div class="card hued" style="--hue:var(--coral)">
+        <i class="ib" data-i="shield"></i>
+        <p class="label hue">The checks</p>
+        <h3>Rules it can't skip</h3>
+        <p>Automatic checks after each step, and hard stops where a person has to say yes.</p>
+        <div class="vs2"><span><b>In a chat:</b> you are the quality control.</span><span><b>In ours:</b> 81 bad frames thrown out in one week, and nothing goes live without a click.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="line">
+    <p class="eyebrow">03 · The line we built</p>
+    <h2>Run one ad through our tools.</h2>
+    <p class="lede">These are the real stages and the real tools, with pictures from a real ad
+      that went through them. Press run, or tap any station. At the approval step, the line
+      waits for you.</p>
+    <div class="fx" id="factory" style="margin-top:var(--s6)"></div>
+    <p class="meta" style="margin-top:var(--s3)"><span>Want every station in detail?</span><a class="go ghost" href="/three-doctors/">Watch the full ad factory</a></p>
+  </section>
+
+  <section class="sec">
+    <p class="eyebrow">04 · The numbers</p>
+    <h2>What it does in practice.</h2>
+    <div class="stats">
+      <div class="stat"><span class="v" data-to="48" data-suf="m">48m</span><span class="k">Video in, brief out, nobody watching</span></div>
+      <div class="stat"><span class="v" data-to="52">52</span><span class="k">Ad briefs made in six days</span></div>
+      <div class="stat"><span class="v" data-to="81">81</span><span class="k">Bad frames it refused that week</span></div>
+      <div class="stat"><span class="v" data-to="1500" data-pre="$">$1,500</span><span class="k">A month to run, every tool included</span></div>
+    </div>
+    <p class="lede">A team or agency doing the same work costs us about $20,000 a month.
+      <a href="/machine.html">The build log</a> has every number and where it came from.</p>
+  </section>
+
+  <section class="sec">
+    <p class="eyebrow">05 · Where it stops</p>
+    <h2>A workflow is only as good as its stops.</h2>
+    <p class="lede">Running on its own is the easy part. Knowing when not to is what makes it safe to leave alone.</p>
+    <div class="rule" style="margin-top:var(--s5)">It never publishes, sends or spends without a person's go. It never invents
+      a customer quote or a medical claim. If the brand folder doesn't say something, it says
+      "I don't know" instead of guessing. These are written into the prompts as hard stops.</div>
+  </section>
+
+  <section class="sec">
+    <p class="eyebrow">06 · Your move</p>
+    <h2>Which step are you on?</h2>
+    <p class="lede">Nobody starts with a full line. Each step saves real time on its own. Tap the one that sounds like you.</p>
+    <div class="ladder" role="group" aria-label="Pick the step you are on">
+      <button type="button" aria-pressed="false" data-n="0"><span class="label">Step 1</span><b>I chat with it</b><small>Ideas, emails, captions. One question at a time.</small></button>
+      <button type="button" aria-pressed="false" data-n="1"><span class="label">Step 2</span><b>It knows my business</b><small>I saved my brand, products and voice so I stop repeating myself.</small></button>
+      <button type="button" aria-pressed="false" data-n="2"><span class="label">Step 3</span><b>It's connected to my tools</b><small>It can read my store, ads or inbox without me pasting.</small></button>
+      <button type="button" aria-pressed="false" data-n="3"><span class="label">Step 4</span><b>It runs whole jobs</b><small>Steps chained together, with checks and a stop for my yes.</small></button>
+    </div>
+    <div class="panel next" id="next" aria-live="polite">
+      <p class="label">Your next move</p>
+      <p>Tap a step above.</p>
+    </div>
+  </section>
+
+  <div class="close">
+    <p class="eyebrow">Keep going</p>
+    <h2>See how the whole thing fits together.</h2>
+    <div class="btns">
+      <a class="btn" href="/how-it-works.html">How it works</a>
+      <a class="btn ghost" href="/three-doctors/">One real ad, start to finish</a>
+    </div>
+    <p class="meta"><span>Prizm Labs is our internal system. It is not for sale.</span></p>
+  </div>
+</div>
+
+<footer class="bot">
+  <span>PRIZM LABS</span>
+  <span class="right"><a href="/onboarding.html">Onboarding</a> · <a href="/light.html">Light</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a> · <a href="https://github.com/daemnapps/prizm-labs" target="_blank" rel="noopener">Repo</a></span>
+</footer>
+<script src="/studio.js?v=8" defer></script>
+<script src="play.js?v=1" defer></script>
+</html>
