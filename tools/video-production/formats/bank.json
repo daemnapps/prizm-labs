@@ -1,12 +1,12 @@
 {
-  "_readme": "The format bank for video production: every format the video machine runs, one row each. A run's `format` (run.json) must equal a row's `id` or the run is refused (RUN-PROTOCOL.md, Intake). A row is a PROFILE — how a piece of this shape is built: what a scene contains, the beat shape, the stations, the references. It is the TEMPLATE layer in components/naming/FORMATS.md, addressed `format:video:format-profile:<id>` (components/naming/names.py format_ref). Profiles say what a scene contains; they never carry gates — RUN-PROTOCOL.md does. A new format: copy TEMPLATE.md, fill it, add the row here as `draft`, run `python3 formats/render_bank.py`. Only Damon signs a row `approved`.",
+  "_readme": "The format bank for AI video production: every format the video machine runs, one row each. A run's `format` (run.json) must equal a row's `id` or the run is refused (RUN-PROTOCOL.md, Intake). A row is a PROFILE — how a piece of this shape is built: what a scene contains, the beat shape, the stations, the references. It is the TEMPLATE layer in components/naming/FORMATS.md, addressed `format:video:format-profile:<id>` (components/naming/names.py format_ref). Profiles say what a scene contains; they never carry gates — RUN-PROTOCOL.md does. A new format: copy TEMPLATE.md, fill it, add the row here as `draft`, run `python3 formats/render_bank.py`. Only the owner signs a row `approved`.",
   "asset": "video",
   "bank": "format-profile",
   "scope": "AI-video PRODUCTION profiles only — how the machine builds a piece of a given shape. NOT the 50 organic-video structures (swipe-organic/formats.json — what a swiped post's structure is), not the copy styles, not the image build templates, not the email design formats. Map: components/naming/FORMATS.md",
   "updated": "2026-09-17",
   "status_values": {
     "draft": "written, not signed — may run, and the run is the evidence for signing",
-    "approved": "Damon signed it; the profile is the standard for this shape",
+    "approved": "the owner signed it; the profile is the standard for this shape",
     "deprecated": "kept for the record; a run may not name it"
   },
   "formats": [
@@ -17,7 +17,7 @@
       "profile": "song-ad.md",
       "status": "draft",
       "signed": null,
-      "proven_on": "2026-09-03 (fal) and 2026-09-04 (Higgsfield) — the calls are the provider pages; 2026-09-16 again on Higgsfield, record not in the repo; filed: runs/video-machine/<brand>/<run> (2026-09-16, Higgsfield)",
+      "proven_on": "2026-09-03 (fal) and 2026-09-04 (Higgsfield) — the calls are the provider pages; 2026-09-16 again on Higgsfield, record not in the repo; filed: runs/video-production/<brand>/<run> (2026-09-16, Higgsfield)",
       "notes": "the first format run end to end; its two runs became providers/fal.md and providers/higgsfield.md"
     },
     {
@@ -27,7 +27,7 @@
       "profile": "single-presenter.md",
       "status": "draft",
       "signed": null,
-      "proven_on": "2026-09-16 on Higgsfield with a demonstration beat inside it — runs/video-machine/<brand>/<run>",
+      "proven_on": "2026-09-16 on Higgsfield with a demonstration beat inside it — runs/video-production/<brand>/<run>",
       "notes": "the UGC shape — the workhorse; profile written 2026-09-02, not yet run end to end on this machine"
     },
     {
@@ -37,7 +37,7 @@
       "profile": "meme.md",
       "status": "draft",
       "signed": null,
-      "proven_on": "2026-09-16 on Higgsfield — record not in the repo (chat sandbox); profile drafted from the session's reports, for Damon to correct",
+      "proven_on": "2026-09-16 on Higgsfield — record not in the repo (chat sandbox); profile drafted from the session's reports, for the owner to correct",
       "notes": "the source's scroll-stopper is the whole format; a softened action is a failed piece — the 16 Sep pack holds no record of this piece; <run> and <run> are not it"
     },
     {
@@ -47,8 +47,8 @@
       "profile": "expert-consult.md",
       "status": "draft",
       "signed": null,
-      "proven_on": "2026-09-16 on Higgsfield — runs/video-machine/<brand>/<run>",
-      "notes": "Damon 2026-09-17: the storytelling piece with Keri is this format, and expert-consult is its name. Was two draft rows; now one."
+      "proven_on": "2026-09-16 on Higgsfield — runs/video-production/<brand>/<run>",
+      "notes": "the owner 2026-09-17: the storytelling piece with Keri is this format, and expert-consult is its name. Was two draft rows; now one."
     },
     {
       "id": "demonstration",

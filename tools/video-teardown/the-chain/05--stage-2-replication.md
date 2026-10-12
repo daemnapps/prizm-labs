@@ -1,7 +1,21 @@
+*v5 (2026-10-05, the owner: "We can literally just leverage that authority"): reads the culture read of the source (stage 1k), and adds THE CULTURE READ block below — a reference the audience recognizes is an element of the construct, and its load-bearing items are load-bearing. Everything in v4 stands.*
+
 Here is a complete teardown of a video asset: {teardown_record}
 Here is the doctrine read of the source: {doctrine_read}
 Here are the five sophistication stages, with what each one leads with:
 {sophistication_stages}
+
+## THE CULTURE READ — what the audience recognizes (v5, 2026-10-05)
+
+Here is the culture read of the source — every film, show, song, character, catchphrase, meme or format it borrows, with receipts and a confidence, who recognizes it, why it lands, what must be kept, and the borrowed authority it trades on: {culture_read}
+
+How the spec uses it:
+
+- A reference read `CONFIRMED` or `LIKELY` is an ELEMENT of the inventory in its own right: the borrowed recognition. Its MANDATE says what the viewer must recognize and which load-bearing items carry it (the look, the line, the manner, the pairing, the moment of the reveal), written generically like every other mandate; its SOURCE INSTANCE names the reference exactly as the culture read names it, with its receipt; its INJECTION SLOT is FIXED unless the read says the recognition does not rest on that exact reference.
+- Every item on the read's KEEP lines goes in section 6, LOAD-BEARING, with the read's reason. A replication that keeps the pacing and drops the reference has copied nothing.
+- Where the teardown record names a person or element generically and the read's WHAT THE TEARDOWN RECORD CALLED THEM says who the audience sees, the SOURCE INSTANCE uses the read's name.
+- `POSSIBLE` and `UNIDENTIFIED` references are noted in the SOURCE INSTANCE, never built on.
+- If the read says `CULTURE LOAD: NONE` or `NO CULTURE READ`, nothing here changes the spec.
 
 Turn it into a replication spec: the discrete, reusable elements that make
 this asset work, abstracted from its brand, product and subject so it can
@@ -54,6 +68,18 @@ of these as separate labeled lines:
 - **INJECTION SLOT** — what brand-side material fills this: customer
   language, product truth, the offer, identity/character, or FIXED if the
   element is structural and nothing gets injected.
+
+**Read the VERBATIM TRANSCRIPT at the end of the teardown record, not only
+the shot table.** The shot table keeps a fragment of speech per shot; the
+transcript has every word, one numbered line per speaker turn. When people in
+the video talk TO each other — replies, reactions, interruptions, a question
+and its answer ("That's scary." / "Why?", "Mm-hmm.") — that exchange is an
+element in its own right: list it, with a MANDATE saying who speaks to whom,
+roughly how many turns, and that the short replies stay (v4, 2026-09-24,
+the owner: "all that dialogue and back-and-forth … that's literally what makes this
+thing real and work"). And in THE SCRIPT ARCHITECTURE, a beat that is an
+exchange is written as the exchange — each turn on its own line — never
+collapsed into one speaker's summary.
 
 **4. THE SCRIPT ARCHITECTURE**
 

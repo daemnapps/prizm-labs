@@ -18,7 +18,7 @@ the same way:
 
     python3 machine/promptify.py <run folder> [--scene N] [--brand B]
 
-The cast is the BRAND's: brands/<brand>/core-avatars/casting. The brand is the
+The cast is the BRAND's: brands/<brand>/ai-cast/casting. The brand is the
 run's own — `--brand`, else the "brand" the run wrote in run.json or
 out/plan.json. A run that names none is refused; no brand is ever assumed.
 """
@@ -31,18 +31,41 @@ import re
 import sys
 from pathlib import Path
 
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
+
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import scenes as SC                                     # noqa: E402
 
 # who and what resolve to reference ids the generator can hold faithfully —
 # out of the casting folder of the brand the RUN names, never one written here
-WORKSPACE = Path(os.environ.get("AI_WORKSPACE") or HERE.parents[3])
+WORKSPACE = _workspace()
+sys.path.insert(0, str(WORKSPACE / "components" / "brandpath"))
+import brandpath as BP                                  # noqa: E402
 CAST_FILE: Path | None = None                 # set per run by use_brand()
 
 
 def cast_dir(brand: str) -> Path:
-    return WORKSPACE / "brands" / brand / "core-avatars" / "casting"
+    # (via brandpath) today: brands/<brand>/ai-cast/casting
+    return BP.brand_path(brand, "ai-elements/characters", "casting", root=WORKSPACE / "brands")
 
 
 def brand_of(run: Path, flag: str | None = None) -> str:
@@ -59,7 +82,7 @@ def brand_of(run: Path, flag: str | None = None) -> str:
     raise SystemExit(
         "This run does not name a brand.\n"
         "  Pass --brand <name>, or add \"brand\": \"<name>\" to the run's run.json.\n"
-        "  The cast is read from brands/<name>/core-avatars/casting.")
+        "  The cast is read from brands/<name>/ai-cast/casting.")
 
 
 def use_brand(brand: str) -> Path:
@@ -217,7 +240,7 @@ def build(sc: dict, elems: dict[str, str], place: str = "") -> str:
             parts.append(framing)
     blob = " ".join(str(sc.get(k) or "") for k in
                     ("happens", "product", "who", "camera", "hold"))
-    # "FLEX Pro Vibrating Face Brush" matched the person test on the word
+    # "the device Pro Vibrating Face Brush" matched the person test on the word
     # "face" and a product shot was told to render visible pores.
     blob_np = re.sub(r"\bface (brush|wash)\b", "", blob, flags=re.I)
     has_person = sc["type"] == "A" or (sc["type"] != "C" and bool(PERSON.search(blob_np)))

@@ -11,13 +11,18 @@
    "what": "logo, headline, one hero picture, the copy, an optional offer picture, one button, sign-off, footer — every brand, its look from brands/<brand>/email/simple.json",
    "why_it_works": null,
    "status": "approved",
-   "signed": "Damon 2026-09-19",
+   "signed": "the owner 2026-09-19",
    "examples": null,
-   "evidence": "Damon, 2026-09-19: \"it literally can just be the logo at the top, headline, an image that describes the headline, the copy\"",
+   "evidence": "the owner, 2026-09-19: \"it literally can just be the logo at the top, headline, an image that describes the headline, the copy\"",
    "approved": true,
    "source": "components/elements/sources.json (inline)",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

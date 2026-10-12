@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 lineparity.py — every talking clip is transcribed and checked against the
-line it was supposed to say. Damon, 2026-09-18: a talking clip from one door
+line it was supposed to say. the owner, 2026-09-18: a talking clip from one door
 lip-synced perfectly to the WRONG words — the model ignored the attached
 audio and invented speech. Transcribing the clip and comparing it to the
 line caught it (Higgsfield Seedance 2.5 and fal OmniHuman: 100% match; fal
@@ -18,7 +18,9 @@ joins the text of every line id in its own `lines` list (read from
 (lowercased, punctuation stripped, split into words,
 `difflib.SequenceMatcher.ratio()`). At or above the threshold (default
 0.85, or `providers.json`'s own `gates.line_parity.threshold`) the verdict
-is PASS; below it, FLAG — written into `<run>/verdicts.json[item]["parity"]`
+is PASS; below it, FLAG; and a clip whose line's last words are not heard
+at its end is CUT_OFF whatever its match (the owner, 2026-09-23: a clip that
+stops mid-line is made again, never edited around) — written into `<run>/verdicts.json[item]["parity"]`
 through `preflight.py`'s own `verdict()`, so a FLAG accumulates the same
 history every other layer does.
 
@@ -70,6 +72,7 @@ def _load(name: str):
 
 
 platform = _load("platform")
+vp_keys = _load("vp_keys")
 
 
 def now() -> str:
@@ -85,14 +88,7 @@ def read_json(p: Path, default=None):
 def key_of() -> str | None:
     """ELEVENLABS_API_KEY: env first, then the Keychain vault — never a
     crash, a teammate's clone with neither simply has no key."""
-    k = os.environ.get("ELEVENLABS_API_KEY")
-    if k:
-        return k
-    try:
-        import daemn_keys
-        return daemn_keys.key("ELEVENLABS_API_KEY") or None
-    except Exception:
-        return None
+    return vp_keys.key("ELEVENLABS_API_KEY")
 
 
 def threshold_of() -> float:
@@ -104,13 +100,57 @@ def threshold_of() -> float:
 # --------------------------------------------------------------- the words
 
 def normalize(text: str) -> list[str]:
-    text = (text or "").lower()
+    # the transcriber tags sounds in brackets ([singing], [laughs], [outro music]) —
+    # they are not words, and must never count against a line's ending
+    text = re.sub(r"\[[^\]]*\]", " ", text or "").lower()
     text = re.sub(r"[^\w\s]", " ", text)
     return text.split()
 
 
+def spoken(line: str) -> str:
+    """Only the words a person says: a speaker label (`NOVA:`) and a stage
+    direction in brackets are not heard, so they are not compared."""
+    line = re.sub(r"\([^)]*\)", " ", line or "")
+    line = re.sub(r"(^|[\s\"“])[A-Z][A-Z0-9 .'-]{1,30}:\s", " ", line)
+    return line
+
+
+_spoken_numbers = None
+
+
+def say_numbers(text: str) -> str:
+    """Every figure in words, by the one table (spoken_numbers.py /
+    spoken-rules.json). A text with no figures comes back unchanged."""
+    global _spoken_numbers
+    if _spoken_numbers is None:
+        _spoken_numbers = _load("spoken_numbers")
+    return _spoken_numbers.say(text or "")
+
+
 def compare(heard: str, line: str) -> float:
-    return difflib.SequenceMatcher(None, normalize(heard), normalize(line)).ratio()
+    return difflib.SequenceMatcher(None, normalize(heard), normalize(spoken(line))).ratio()
+
+
+ENDING_WORDS = 3   # the last words of the line that must be heard, in order
+ENDING_REACH = 4   # how far from the end of what was heard they may sit
+
+
+def ending_heard(heard: str, line: str, n: int = ENDING_WORDS, reach: int = ENDING_REACH) -> bool:
+    """Did the clip get to the END of its line? the owner, 2026-09-23: a clip that
+    stops mid-line is an error — it is made again, never edited around. The
+    overall match cannot see it: a sixteen-word line can lose "is a cop out"
+    and still score over 0.85. So the line's last words must be heard, in
+    order, at the end of what the clip says (a word may be misheard a little)."""
+    want = normalize(spoken(line))[-n:]
+    got = normalize(heard)
+    if not want:
+        return True
+    tail = got[-(len(want) + reach):]
+    i = 0
+    for w in tail:
+        if i < len(want) and difflib.SequenceMatcher(None, w, want[i]).ratio() >= 0.75:
+            i += 1
+    return i == len(want)
 
 
 def line_text_of(run: Path, item: dict) -> str:
@@ -196,10 +236,24 @@ def check(clip: Path, line: str, transport=None, key: str | None = None,
         raise RuntimeError(f"ElevenLabs speech-to-text error {status}: {json.dumps(data)[:400]}")
 
     heard = data.get("text") or ""
-    match = round(compare(heard, line), 4)
+    # figures are compared as the words they are said as (spoken_numbers,
+    # 2026-09-23): the line may say "$29" and the transcriber "twenty-nine
+    # dollars", or the other way round — the same rules turn both into words
+    h_cmp, l_cmp = say_numbers(heard), spoken(say_numbers(line))
+    match = round(compare(h_cmp, l_cmp), 4)
     threshold = threshold_of()
-    verdict = "PASS" if match >= threshold else "FLAG"
-    return {"heard": heard, "match": match, "verdict": verdict, "at": now()}
+    ending = ending_heard(h_cmp, l_cmp)
+    # CUT_OFF outranks a good match: the line did not finish, so the clip is
+    # made again (the remake step) — it is never a ceiling that ships flagged.
+    # Wrong words altogether stay a FLAG; CUT_OFF is the right words that
+    # stop short — what was heard matches the START of the line.
+    got, want = normalize(h_cmp), normalize(l_cmp)
+    starts_right = bool(got) and difflib.SequenceMatcher(None, got, want[:len(got) + 2]).ratio() >= 0.75
+    if not ending and starts_right:
+        verdict = "CUT_OFF"
+    else:
+        verdict = "PASS" if (match >= threshold and ending) else "FLAG"
+    return {"heard": heard, "match": match, "ending_heard": ending, "verdict": verdict, "at": now()}
 
 
 # ------------------------------------------------------------------ CLI

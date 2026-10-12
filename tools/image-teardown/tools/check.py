@@ -16,9 +16,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paths as P
+for _r in Path(__file__).resolve().parents:   # the swipe home, one definition for both pools
+    if (_r / "components" / "swipe-paid" / "swipe_home.py").is_file():
+        sys.path.append(str(_r / "components" / "swipe-paid"))
+        break
+import swipe_home  # noqa: E402
 
 LAB, LANE, DRIVE = P.LAB, P.LANE, P.DRIVE
-WS = P.REPO                                              # ai-workspace, for git — found, not counted
+WS = P.REPO                                              # workspace, for git — found, not counted
 
 
 def brands_asked():
@@ -48,18 +53,24 @@ def check(group, name, what):
 # ---------------------------------------------------------------- the swipes
 
 def swipe_records():
+    # blocks/ is the pool's one shape (the owner, 2026-10-08, I-196 (the owner notice
+    # and asks)); angles/ counts only for a brand with no blocks/.
     d = P.SWIPE
-    brands = sorted(p.name for p in d.iterdir()
-                    if p.is_dir() and not p.name.startswith("_")
-                    and (p / "angles").is_dir()) if d.is_dir() else []
-    if not brands:
-        return False, f"no brands with angle records under {d}"
-    n = sum(len(list((d / b / "angles").glob("*.md"))) for b in brands)
-    return True, f"{len(brands)} brands, {n} angle records — {', '.join(brands)}"
+    homes = {}
+    for p in (sorted(d.iterdir()) if d.is_dir() else []):
+        if not p.is_dir() or p.name.startswith("_"):
+            continue
+        home = next((p / s for s in ("blocks", "angles") if (p / s).is_dir()), None)
+        if home:
+            homes[p.name] = home
+    if not homes:
+        return False, f"no brands with block records under {d}"
+    n = sum(len(list(h.glob("*.md"))) for h in homes.values())
+    return True, f"{len(homes)} brands, {n} block records — {', '.join(homes)}"
 
 
 def swipe_media():
-    d = DRIVE / "swipe-paid"
+    d = swipe_home.root("paid")
     if not d.is_dir():
         return False, f"Drive not mounted at {d}"
     tot, ang = 0, 0
@@ -73,7 +84,7 @@ def swipe_media():
 
 
 def swipe_intake():
-    # the first swipe brand that has angle records (smooche's moved to blocks/)
+    # the first swipe brand that has angle records (competitor's moved to blocks/)
     d = P.SWIPE
     brand = next((p.name for p in sorted(d.iterdir()) if p.is_dir() and not p.name.startswith("_")
                   and any((p / "angles").glob("*.md"))), None) if d.is_dir() else None
@@ -165,19 +176,16 @@ def runners():
 
 
 def api_key():
-    """Keys by NAME, never by path — the vault, then the environment."""
-    import os
+    """Keys by NAME, never by path — asked of components/keys through
+    it_keys (SI-194 (readers use loader)); this opens no key file itself.
+    Presence only: the message names the key, never a value."""
+    import it_keys
     found, missing = [], []
-    vault = Path.home() / ".daemn/keys.env"
-    txt = vault.read_text() if vault.is_file() else ""
     for name in ("GEMINI_API_KEY",):
-        if os.environ.get(name) or f"{name}=" in txt:
+        if bool(it_keys.key(name)):
             found.append(name)
         else:
             missing.append(name)
-    if (Path.home() / ".gemini.env").is_file() and "GEMINI_API_KEY" not in found:
-        found.append("GEMINI_API_KEY")
-        missing = [m for m in missing if m != "GEMINI_API_KEY"]
     return (not missing), (", ".join(found) + " present" if not missing
                            else "missing: " + ", ".join(missing))
 
@@ -239,7 +247,7 @@ def runs():
 
 
 def lab_only():
-    """Nothing in the lane may read outside the repo. Ruled 2026-08-28."""
+    """Nothing in the lane may read outside the team notes. Ruled 2026-08-28."""
     hits = []
     # check.py states the rule and paths.py documents it — both name the old
     # root in prose. Everything else naming it is a real reach.
@@ -250,7 +258,7 @@ def lab_only():
             if "devel/daemn" in line and not line.lstrip().startswith("#"):
                 hits.append(f"{f.relative_to(LANE)}:{i}")
     return (not hits), ("reaches outside the lab: " + ", ".join(hits[:4])) if hits \
-        else "no tool reads outside the repo"
+        else "no tool reads outside the team notes"
 
 
 for g, n, f in [

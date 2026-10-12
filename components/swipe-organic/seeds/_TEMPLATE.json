@@ -1,0 +1,24 @@
+{
+ "brand": "<brand>",
+ "avatar": "<avatar>",
+ "sub_avatar": "_all",
+ "blend_rule": "Avatars never blend. This tree never mixes with another avatar's.",
+ "note": "SCAFFOLDING, not research. These exist only to reach comment sections where real people are. What this avatar actually consumes is whatever comes back when those people's own feeds are read — see METHOD.md. If the findings only contain what these seeds describe, the method failed.",
+ "sources": {
+  "profile": "brands/<brand>/core-avatars/<avatar>/profile.md"
+ },
+ "seeds": [
+  {
+   "kind": "search",
+   "platform": "tiktok",
+   "value": "<a search this avatar would type>",
+   "why": "profile L<n> — '<the profile line it comes from>'"
+  },
+  {
+   "kind": "hashtag",
+   "platform": "tiktok",
+   "value": "<a hashtag>",
+   "why": "profile L<n> — '<the profile line it comes from>'"
+  }
+ ]
+}

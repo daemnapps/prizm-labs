@@ -17,8 +17,12 @@ join.
 Stage outputs are NOT copied here — fourteen per run across fifty runs is
 twenty-odd megabytes of generated prose that nobody greps. They stay on the
 Drive and on the board, and run.json records which prompt version made each.
+The brief is not copied either: it lives on the writing shelf,
+runs/video-writing/<brand>/<run>/deliverable/ (file_run.py puts it there); a
+brief.md or page.md already on the teardown shelf is frozen history.
 """
-import json, shutil, sys
+import json, os, shutil, sys
+from typing import Optional
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -26,13 +30,43 @@ sys.path.insert(0, str(HERE))
 import chain as C, library as L
 
 REPO = HERE.parent / "records"
+# Each run's run.json is filed with the rest of the run at
+# runs/video-teardown/<brand>/<run>/ — the workspace's one home for run records
+# (runs/README.md). It sat under records/runs/ until 2026-09-30
+# (the team notes/system-blueprint/RUNS-MOVE-2026-09-30.md).
+RUNS_HOME = C.WS / "runs" / "video-teardown"
+
+
+def run_home(slug, st=None):
+    """runs/video-teardown/<brand>/<slug>/ — brand off the run itself."""
+    if st is None:
+        f = C.runs_root() / slug / "run.json"
+        st = json.loads(f.read_text()) if f.is_file() else {}
+    return RUNS_HOME / (st.get("brand") or "_unsorted") / slug
+
+
+# The only files runs() copies onto the teardown shelf. The brief and the page
+# stopped being copied 2026-10-08: the brief is read from the writing shelf.
+SHELF_COPIES = ("run.json",)
+
+
+def brief_file(home) -> Optional[Path]:
+    """The brief for the run filed at `home` (runs/video-teardown/<brand>/<slug>):
+    the writing shelf's final brief, then its brief, then the teardown shelf's
+    frozen brief.md; None when there is none."""
+    home = Path(home)
+    out = RUNS_HOME.parent / "video-writing" / home.parent.name / home.name / "deliverable"
+    for f in (out / "7-final-brief.md", out / "5-brief.md", home / "brief.md"):
+        if f.is_file():
+            return f
+    return None
 SELECTED = "creators/SELECTED-2026-08-27.json"
 
 
 def rel_drive(p):
     """A Drive path written the way a person can follow it."""
     s = str(p)
-    i = s.find("Shared Assets/")
+    i = s.find(os.environ.get("SHARED_DRIVE_NAME", "Shared drives/Team Drive").split("/")[-1] + "/")
     return s[i:] if i >= 0 else s
 
 
@@ -74,14 +108,11 @@ def runs():
         if not f.is_file():
             continue
         st = json.loads(f.read_text())
-        d = REPO / "runs" / rd.name
+        d = run_home(rd.name, st)
         d.mkdir(parents=True, exist_ok=True)
-        for name in ("brief-final.md", "run.json"):
+        for name in SHELF_COPIES:
             if (rd / name).is_file():
-                shutil.copy2(rd / name, d / name.replace("brief-final", "brief"))
-        # the page she reads, when the run wrote one (stage 7b)
-        if (rd / "stages" / "7b-page.md").is_file():
-            shutil.copy2(rd / "stages" / "7b-page.md", d / "page.md")
+                shutil.copy2(rd / name, d / name)
         got.append((rd.name, st))
     return got
 
@@ -99,8 +130,9 @@ def index(root, sel, ran):
             slug, st = next(
                 ((s, j) for lab, (s, j) in by_label.items()
                  if lab.startswith(i["id"].upper() + "-")), (None, {}))
-            brief = f"[brief](runs/{slug}/brief.md)" if slug and \
-                (REPO / "runs" / slug / "brief.md").is_file() else "—"
+            home = run_home(slug, st) if slug else None
+            bf = brief_file(home) if home else None
+            brief = f"[brief](../../../{bf.relative_to(C.WS).as_posix()})" if bf else "—"
             doc = f"[open]({st['gdoc_url']})" if st.get("gdoc_url") else "—"
             lines.append(
                 f"| `{i['id']}` | {c['creator']} | [post]({i['post']}) | {brief} | "

@@ -24,7 +24,8 @@
      "unit": "words"
     },
     "carries_offer": "optional"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "headline",
@@ -45,7 +46,8 @@
      "unit": "words"
     },
     "carries_offer": "rarely"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "description",
@@ -66,7 +68,8 @@
      "unit": "words"
     },
     "carries_offer": "guarantee-shorthand only"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "angle",
@@ -87,7 +90,8 @@
      "unit": "sentences"
     },
     "carries_offer": "never"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "overlay-text",
@@ -108,7 +112,8 @@
      "unit": "words per card"
     },
     "carries_offer": "only on the final card"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "video-script",
@@ -129,7 +134,8 @@
      "unit": "seconds"
     },
     "carries_offer": "in the close, exactly as the offer file words it"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "creator-caption",
@@ -150,7 +156,8 @@
      "unit": "words"
     },
     "carries_offer": "never"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "hook-overlay",
@@ -171,7 +178,8 @@
      "unit": "words"
     },
     "carries_offer": "never"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "organic-post",
@@ -192,7 +200,8 @@
      "unit": "words"
     },
     "carries_offer": "never on organic; late and soft when repurposed paid"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "organic-script",
@@ -213,7 +222,8 @@
      "unit": "seconds"
     },
     "carries_offer": "one aside at most — the lane dies if it sells"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "campaign-email",
@@ -234,7 +244,8 @@
      "unit": "words visible"
     },
     "carries_offer": "usually — but the treatment (story/proof/offer) is the concept brief's call"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "flow-email",
@@ -255,7 +266,8 @@
      "unit": "words visible"
     },
     "carries_offer": "per flow position — never in the first welcome"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "subject-preview",
@@ -276,7 +288,8 @@
      "unit": "words each"
     },
     "carries_offer": "only when the offer IS the news"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "landing-page",
@@ -297,7 +310,8 @@
      "unit": "words"
     },
     "carries_offer": "yes, staged — price appears after the mechanism, never before"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "quiz",
@@ -318,7 +332,8 @@
      "unit": "questions"
     },
     "carries_offer": "on the result page only"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pdp",
@@ -339,8 +354,12 @@
      "unit": "words above reviews"
     },
     "carries_offer": "yes — the canonical price, never a channel-specific one"
-   }
+   },
+   "aliases": []
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

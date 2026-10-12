@@ -1,12 +1,12 @@
 {
  "element": "format",
  "asset": "image",
- "source": "image-production/format-bank.json",
+ "source": "tools/image-production/format-bank.json",
  "enforced_by": null,
  "note": null,
  "rows": [
   {
-   "id": "stickynote",
+   "id": "sticky-note",
    "name": "Handwritten note, held",
    "what": "A hand holds a small handwritten note to camera beside the product, shallow focus, real surface. The claim is entirely in the handwriting.",
    "why_it_works": "Handwriting reads as a person, not a brand, so the claim lands before the defence goes up. Cheapest shape in the bank — no model, no studio, no retouching.",
@@ -15,7 +15,7 @@
    "examples": "https://drive.google.com/file/d/1dh5bcyJtexV675SQFxupYytQQd9X0gty/view",
    "evidence": "duplicated ×4 in the sample, across two different copy blocks",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -24,10 +24,14 @@
      "a plain result"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "stickynote"
+   ],
+   "note": null
   },
   {
-   "id": "ugcscreenshot",
+   "id": "ugc-screenshot",
    "name": "UGC post, screenshotted",
    "what": "A real woman at her mirror or holding her phone, shot as if it were her own post, with review cards or step panels laid over it. Often framed as a phone screen.",
    "why_it_works": "It is the closest thing in the paid set to what she already scrolls. The ad borrows the shape of organic content rather than interrupting it.",
@@ -36,7 +40,7 @@
    "examples": "https://drive.google.com/file/d/1VtT7oCLRuBYAW9wDQ2mkp3-37Iq78EqG/view",
    "evidence": "duplicated ×4 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -45,10 +49,14 @@
      "a routine"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "ugcscreenshot"
+   ],
+   "note": null
   },
   {
-   "id": "pricestrike",
+   "id": "price-strike",
    "name": "Struck price",
    "what": "Old price struck through, new price beside it, usually circled or in a pill. Product and little else.",
    "why_it_works": "Does one job with no argument at all, which is why it survives being run at volume alongside everything else.",
@@ -57,16 +65,20 @@
    "examples": "https://drive.google.com/file/d/1vLzT3UbhlzvDz9R1eVAog8oTU4g0_M0d/view",
    "evidence": "duplicated ×6 in the sample — the most repeated treatment overall, though it is an offer shape not an argument shape",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
      "an offer"
     ]
-   }
+   },
+   "aliases": [
+    "pricestrike"
+   ],
+   "note": null
   },
   {
-   "id": "splitdata",
+   "id": "split-data",
    "name": "Split with data labels",
    "what": "Two macro images side by side, each with one hard label in a black pill — a number, a name, a state. No sentence.",
    "why_it_works": "Asserts a difference without claiming a result, so it reads as information rather than advertising and survives review.",
@@ -75,7 +87,7 @@
    "examples": "https://drive.google.com/file/d/119QUO4WOKzxux_BWQ2GHtTgOqONni9_g/view",
    "evidence": "duplicated ×3 in the Froya science block",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -83,10 +95,14 @@
      "an ingredient comparison",
      "a why-the-others-failed"
     ]
-   }
+   },
+   "aliases": [
+    "splitdata"
+   ],
+   "note": null
   },
   {
-   "id": "redcircle",
+   "id": "red-circle",
    "name": "Red-circle annotation",
    "what": "A photograph with a hand-drawn red ellipse around the thing being pointed at, usually with a short pointer label.",
    "why_it_works": "The most recognisable 'look here' mark there is, borrowed from evidence rather than advertising.",
@@ -95,16 +111,20 @@
    "examples": "https://drive.google.com/file/d/1uMq-BVW7W7mtXhNuVR7otMJ6McRKIXFD/view",
    "evidence": "duplicated across BOTH advertisers — 4+ in the Froya science block, plus before/after use in <competitor>",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
      "anything needing one detail isolated"
     ]
-   }
+   },
+   "aliases": [
+    "redcircle"
+   ],
+   "note": "A device more than a format — it composes onto a split, a scan, a chart or a face."
   },
   {
-   "id": "notesapp",
+   "id": "notes-app",
    "name": "Phone notes list",
    "what": "A screenshot of the notes app: lowercase title, then five or six em-dash lines. No photography at all.",
    "why_it_works": "Reads as something she wrote for herself. A list carries six objections in one ad without feeling like a feature list.",
@@ -113,7 +133,7 @@
    "examples": "https://drive.google.com/file/d/1isCLC0eJJEIGTtzwrYcmeUKj51FxncD3/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -121,10 +141,14 @@
      "the routine a product ends"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "notesapp"
+   ],
+   "note": null
   },
   {
-   "id": "handannotated",
+   "id": "hand-annotated",
    "name": "Hand-annotated product",
    "what": "The product on a plain ground with pencil arrows and handwritten notes pointing at parts of it.",
    "why_it_works": "Same trick as the sticky note at spec-sheet scale — handwriting makes a claim list feel like a person explaining rather than a brand listing.",
@@ -133,7 +157,7 @@
    "examples": "https://drive.google.com/file/d/1zBsjNnS84PqWXYIclgOHVnwL4nfPfzKP/view",
    "evidence": "duplicated ×3 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -141,10 +165,14 @@
      "an ingredient list made visual"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "handannotated"
+   ],
+   "note": null
   },
   {
-   "id": "annotateddiagram",
+   "id": "annotated-diagram",
    "name": "Annotated diagram",
    "what": "A medical or technical illustration with leader lines to labelled parts, in textbook language rather than brand language.",
    "why_it_works": "Borrows the authority of the reference book, and carries a mechanism with no person in frame — so no casting problem.",
@@ -153,7 +181,7 @@
    "examples": "https://drive.google.com/file/d/1cxkN8g60VzMM7n6GFs7u5zSjCIho4sQB/view",
    "evidence": "duplicated ×2, plus near-relatives (histology grid, molecular render) in the same block",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -161,10 +189,14 @@
      "an ingredient story",
      "the anatomy of the problem"
     ]
-   }
+   },
+   "aliases": [
+    "annotateddiagram"
+   ],
+   "note": null
   },
   {
-   "id": "fakeeditorial",
+   "id": "fake-editorial",
    "name": "Editorial page",
    "what": "Laid out as a magazine or news page — masthead, standfirst, a highlighted passage — with the product inside the article.",
    "why_it_works": "Arrives as journalism. It is the static version of the advertorial the account already runs its winner through.",
@@ -173,7 +205,7 @@
    "examples": "https://drive.google.com/file/d/1X9MD5VTc4BpU_HUfD4qtSyfhU7IKqI2u/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -181,10 +213,14 @@
      "a study or mechanism",
      "a founder story"
     ]
-   }
+   },
+   "aliases": [
+    "fakeeditorial"
+   ],
+   "note": null
   },
   {
-   "id": "studyfigure",
+   "id": "study-figure",
    "name": "Study figure",
    "what": "An actual scientific chart — axes, error bars, significance stars — with one result circled.",
    "why_it_works": "The only shape in the set that looks like it was not made for the ad.",
@@ -193,16 +229,20 @@
    "examples": "https://drive.google.com/file/d/1Q9ZbDwmml58F3eDtlEMRBpw3WCal_Bgr/view",
    "evidence": "duplicated ×2 in the Froya science block",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
      "a mechanism with a real citation behind it"
     ]
-   }
+   },
+   "aliases": [
+    "studyfigure"
+   ],
+   "note": null
   },
   {
-   "id": "instore",
+   "id": "in-store",
    "name": "Shot in the shop",
    "what": "Documentary photograph at a counter or shelf — real lighting, real staff, nothing styled.",
    "why_it_works": "Reads as a photograph somebody took, not a set that was built. Strong pairing with the native long-form play.",
@@ -211,7 +251,7 @@
    "examples": "https://drive.google.com/file/d/1wnBWZEkXLWAq7DGc7vffJkujRhjtysQ9/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -219,10 +259,14 @@
      "a third-party endorsement"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "instore"
+   ],
+   "note": null
   },
   {
-   "id": "usvsthem",
+   "id": "us-vs-them",
    "name": "Us versus the shelf",
    "what": "Their whole category on one side — a wall of competing bottles — and one product on the other.",
    "why_it_works": "Turns the number of things she has already tried into the argument.",
@@ -231,17 +275,22 @@
    "examples": "https://drive.google.com/file/d/1eXU15S1aw81Dn0SjHokWzkOBiC_t7TSA/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
      "a why-everything-else-failed",
      "an accumulated list of failed fixes"
     ]
-   }
+   },
+   "aliases": [
+    "usvsthem",
+    "faceoff"
+   ],
+   "note": "Decision 8: `faceoff` (10 live ads of one brand) maps here — a split of every other fix against ours is the same shape as the shelf against the one product."
   },
   {
-   "id": "annotatedface",
+   "id": "annotated-face",
    "name": "Annotated face",
    "what": "One face, split or part-treated, with small callout labels naming each side and a headline in her voice.",
    "why_it_works": "",
@@ -250,17 +299,21 @@
    "examples": "https://drive.google.com/file/d/1rxJvd1yX56YxBrjlVqkiN-1xUB7jubMD/view",
    "evidence": "observed ×2 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a visible result",
      "a same-person comparison"
     ]
-   }
+   },
+   "aliases": [
+    "annotatedface"
+   ],
+   "note": null
   },
   {
-   "id": "ugcselfie",
+   "id": "ugc-selfie",
    "name": "Selfie with a review pinned",
    "what": "A real unretouched selfie with a single review card floating over it.",
    "why_it_works": "",
@@ -269,17 +322,21 @@
    "examples": "https://drive.google.com/file/d/1W34xyC8JW3Vn5SkMaKHAwYGI79vH4iGI/view",
    "evidence": "observed ×2",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "social proof at human scale"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "ugcselfie"
+   ],
+   "note": null
   },
   {
-   "id": "reviewcluster",
+   "id": "review-cluster",
    "name": "Review cluster",
    "what": "Three or four review cards scattered over a plain ground with one aggregate line under them.",
    "why_it_works": "",
@@ -288,16 +345,20 @@
    "examples": "https://drive.google.com/file/d/1dithP4vEqcB34VwxGuQpoPWhxIhJj98q/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "social proof at volume"
     ]
-   }
+   },
+   "aliases": [
+    "reviewcluster"
+   ],
+   "note": null
   },
   {
-   "id": "commentstat",
+   "id": "comment-stat",
    "name": "Comment plus number",
    "what": "A screenshotted comment pinned top-left, one very large percentage under it, and the panel it came from named.",
    "why_it_works": "",
@@ -306,16 +367,20 @@
    "examples": "https://drive.google.com/file/d/117SQSPbZEQaC5vHdoR3gO0Nfb9RbikBG/view",
    "evidence": "observed ×1, with a big-number-plus-model variant in a second block",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a claim that needs a denominator"
     ]
-   }
+   },
+   "aliases": [
+    "commentstat"
+   ],
+   "note": null
   },
   {
-   "id": "essaycard",
+   "id": "essay-card",
    "name": "Editorial essay card",
    "what": "A quiet interior photograph, a serif headline and three short paragraphs — a magazine page, not an ad.",
    "why_it_works": "",
@@ -324,7 +389,7 @@
    "examples": "https://drive.google.com/file/d/1pcfZr8mZc2McTvGTydfZULK_yu3lV0JD/view",
    "evidence": "observed ×2",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -332,10 +397,14 @@
      "anything needing length"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "essaycard"
+   ],
+   "note": null
   },
   {
-   "id": "specstarburst",
+   "id": "spec-starburst",
    "name": "Spec callouts",
    "what": "Product dead centre on white, five or six benefit labels radiating on thin leader lines.",
    "why_it_works": "",
@@ -344,16 +413,20 @@
    "examples": "https://drive.google.com/file/d/1kQNzsuWq_eRWwzhv8jhB2CbduYSWJMpg/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "the whole offer in one frame"
     ]
-   }
+   },
+   "aliases": [
+    "specstarburst"
+   ],
+   "note": null
   },
   {
-   "id": "abpoll",
+   "id": "ab-poll",
    "name": "A/B question",
    "what": "A single face split down the middle with a literal question and two buttons under it.",
    "why_it_works": "",
@@ -362,17 +435,21 @@
    "examples": "https://drive.google.com/file/d/1e53PjsnBVW8vuhhx7uWFFP2f1BYzGsn5/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a demonstration that invites a reply"
     ],
     "native_crossover": true
-   }
+   },
+   "aliases": [
+    "abpoll"
+   ],
+   "note": null
   },
   {
-   "id": "enemyheadline",
+   "id": "enemy-headline",
    "name": "Enemy headline",
    "what": "Heavy condensed type on black naming the thing that failed her, product small and low in frame.",
    "why_it_works": "",
@@ -381,16 +458,20 @@
    "examples": "https://drive.google.com/file/d/1VmaNBhWapEyuDvtc_uBIox4Ml6avXsOz/view",
    "evidence": "observed ×1, but it opens the most-duplicated Froya block",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a why-everything-else-failed"
     ]
-   }
+   },
+   "aliases": [
+    "enemyheadline"
+   ],
+   "note": null
   },
   {
-   "id": "splitstudyclaim",
+   "id": "split-study-claim",
    "name": "Split face with a study claim",
    "what": "A face split down the middle on black, with a percentage claim set across it.",
    "why_it_works": "",
@@ -399,17 +480,21 @@
    "examples": "https://drive.google.com/file/d/13Feoh5UKiukOP4Q5ScNNiIhPrqhiB2_B/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a mechanism",
      "a why-everything-else-failed"
     ]
-   }
+   },
+   "aliases": [
+    "splitstudyclaim"
+   ],
+   "note": null
   },
   {
-   "id": "scancompare",
+   "id": "scan-compare",
    "name": "Scan comparison",
    "what": "Two ultrasound or microscopy frames side by side, red circles on the difference, timeframes labelled.",
    "why_it_works": "",
@@ -418,17 +503,21 @@
    "examples": "https://drive.google.com/file/d/1AXyCk_nO1DCAmkrgVztt_FDbk2VvsoAF/view",
    "evidence": "observed ×2 in the Froya science block",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a mechanism",
      "a timeline"
     ]
-   }
+   },
+   "aliases": [
+    "scancompare"
+   ],
+   "note": null
   },
   {
-   "id": "darkbenefitlist",
+   "id": "dark-benefit-list",
    "name": "Dark benefit stack",
    "what": "Three or four benefit rows stacked over a dark, moody product photograph.",
    "why_it_works": "",
@@ -437,16 +526,20 @@
    "examples": "https://drive.google.com/file/d/1D55-oVyH2U-MqmQRYLif1tO_zoZ8ml_8/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "the whole offer in one frame"
     ]
-   }
+   },
+   "aliases": [
+    "darkbenefitlist"
+   ],
+   "note": null
   },
   {
-   "id": "authorityborrow",
+   "id": "authority-borrow",
    "name": "Borrowed authority",
    "what": "The product in the hands of someone whose uniform does the arguing.",
    "why_it_works": "",
@@ -455,16 +548,20 @@
    "examples": "https://drive.google.com/file/d/1vIdaYo7FAtZsFSQv9bVMgTSWICUEy_T7/view",
    "evidence": "observed ×3 in the sample",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
      "a trust claim"
     ]
-   }
+   },
+   "aliases": [
+    "authorityborrow"
+   ],
+   "note": null
   },
   {
-   "id": "bignumberpromo",
+   "id": "big-number-promo",
    "name": "Big number",
    "what": "The discount at enormous scale, product clustered under it.",
    "why_it_works": "",
@@ -473,27 +570,364 @@
    "examples": "https://drive.google.com/file/d/1mNni9zb5vriurSfaywaQKN3MYkMDlGwR/view",
    "evidence": "duplicated ×8 in the Froya clearance block — the single most repeated shape in that advertiser's set",
    "approved": false,
-   "source": "image-production/format-bank.json",
+   "source": "tools/image-production/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
      "an offer"
     ]
-   }
+   },
+   "aliases": [
+    "bignumberpromo"
+   ],
+   "note": null
   },
   {
    "id": "native-facebook-image",
    "name": "Native Facebook image",
-   "what": "[TO DEFINE — named by Damon 2026-09-19 as a format we collect]",
+   "what": "A single photo dressed as someone's own Facebook post — phone-camera framing, the words as a post's caption line, nothing that announces an ad. A flat band top and bottom, a logo, a headline block or a plate kills it. Differs from bare-photo, which carries no words at all.",
+   "why_it_works": "It borrows the shape of what she already scrolls; the ad is read as a person before the defence goes up.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "examples": "The image-production pipeline's band ruling: 'a flat bar top and bottom announces a native-looking post as an advertisement'; the owner 2026-09-19: 'a native-looking image on Facebook'",
+   "evidence": "Named by the owner 2026-09-19; defined 2026-09-28 from the pipeline's native-post rule and the bare-photo row.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "defined by the machine, review pending"
+  },
+  {
+   "id": "temporal-selfie",
+   "name": "Dated native selfie",
+   "what": "A single unretouched native-style selfie with a bare year or date overlaid, the date alone implying a before/after timeline.",
    "why_it_works": null,
    "status": "draft",
-   "signed": null,
+   "signed": "damon 2026-09-23",
    "examples": null,
-   "evidence": "Damon, 2026-09-19: \"a native-looking image on Facebook\"",
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
    "source": "components/elements/additions.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "styled-product-still",
+   "name": "Styled product still",
+   "what": "A single photographic product shot in a fully art-directed setting, carrying only a headline overlay and no other graphic device.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "progression-composite",
+   "name": "Progression composite",
+   "what": "Three or more identical faces or bodies in a row, each altered to show a different stage of change, with a timeline label under each stage.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "confession-hook",
+   "name": "Confession hook",
+   "what": "A warning icon and a headline admitting a mistake lead into a reveal, with the product below alongside speech-bubble offer badges and a closing guarantee.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "quote-over-product",
+   "name": "Quote over product",
+   "what": "A large testimonial line and short attribution sit above a centered product shot, with no other graphic device.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "torn-paper-clearance",
+   "name": "Torn-paper clearance overlay",
+   "what": "A staged product photograph topped by a scarcity headline, with a torn-paper graphic lower in frame framing a discount offer and close.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "before-after-split-claim",
+   "name": "Before/after split with claim stack",
+   "what": "Two side-by-side photos of the same subject in different states, a stacked multi-line text claim spanning the seam between them, and a product shot below.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" The seventh row of that batch — same ruling, same day. Name and definition are the labeller's own proposal, accepted unreviewed.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "before-after-splitclaim"
+   ],
+   "note": null
+  },
+  {
+   "id": "bare-photo",
+   "name": "Bare photograph",
+   "what": "One full-bleed photograph carries the whole ad — no text, no overlay, no annotation, no product shot and no graphic device of any kind. The native-post formats live here.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" Stage 2b answered none-fits on eight more ads and proposed a row each; SEVEN of them described the same thing in different words (native-content-photo, bare-portrait, raw-native-photo, plain-photograph, bare-selfie, bare-photograph, plain-portrait), so they are ONE row — seven synonyms would make the format field useless for slicing a report, which is the only reason the field exists.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "barephoto"
+   ],
+   "note": null
+  },
+  {
+   "id": "benefit-stack",
+   "name": "Benefit stack beside product",
+   "what": "A vertical column of paired bold/regular benefit lines running down one side of the frame with the product beside it.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": "damon 2026-09-23",
+   "examples": null,
+   "evidence": "the owner, 2026-09-23: \"just name them dude.\" The labeller's own proposal for p161, accepted unreviewed.",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "benefitstack"
+   ],
+   "note": null
+  },
+  {
+   "id": "apology",
+   "name": "Apology",
+   "what": "Straight to camera, one plain line, the guarantee bar under it. The format is risk reversal — it looks like the brand talking, not selling.",
+   "why_it_works": "The most-aware buyer knows the product; the only thing between him and the click is the fear of another purchase down the drain, so the guarantee leads.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "15 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "distressed-poster",
+   "name": "Distressed poster",
+   "what": "A torn poster on a wall — the verdict across the top ('none of it worked'), the failed products listed on cards below, the product at the end.",
+   "why_it_works": "The poster is already the list; the picture carries the whole history of failure so the copy can turn fast to the one reason.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "18 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "distressedposter"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "portrait-void",
+   "name": "Portrait in the void",
+   "what": "One person on a matte black field, the headline in the empty space, the product held at the jaw. The format is a stare — nothing to look at but him and the problem.",
+   "why_it_works": "The picture names the man and his problem; nothing competes with the line.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "12 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "portraitvoid"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "two-panel",
+   "name": "Two panel",
+   "what": "Two stacked frames — the damage in close-up on top, the fix pressed against the same skin below. The argument is entirely visual.",
+   "why_it_works": "It is before-and-after without a claim in words, so it reads as a demonstration rather than a promise.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "6 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "twopanel"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "checklist",
+   "name": "Checklist",
+   "what": "A card listing everything he has already tried, one fix after another, and the product at the bottom. The list is the argument.",
+   "why_it_works": "He has been changing the wrong variable for years; the list makes that point before a word of copy does.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "6 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "mirror-selfie",
+   "name": "Mirror selfie",
+   "what": "Phone in hand at the bathroom mirror, the product at his jaw, the ad's line over the top. It reads like something he'd post himself.",
+   "why_it_works": "The most personal shape in the set — first person, no brand voice, a caption not an ad.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "3 live ads of one brand (decision 8). Not the same as style/image `mirror-selfie` (a look); this is the shape of the ad.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "mirrorselfie"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "product-void",
+   "name": "Product in the void",
+   "what": "The product alone on matte black with its specs set in type (speed, rating, uses per charge). No person in frame.",
+   "why_it_works": "The only shape with nobody in it, so the number in the picture opens the copy and the copy carries the story.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "0 live ads of one brand (decision 8). `illustrated` maps here — an illustrated product-only ad is this shape in a drawn style; illustrated is a style, not a format.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "productvoid",
+    "illustrated"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "caption-box",
+   "name": "Caption box",
+   "what": "A quiet frame with one caption over it — no product pitch in the picture, just the line and the person.",
+   "why_it_works": "The least ad-shaped format in the set; if it reads like marketing it is dead.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "2 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "captionbox"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "comment-reply",
+   "name": "Comment reply",
+   "what": "A screenshot of a comment, answered. The ad is the reply.",
+   "why_it_works": "The comment does the hooking, so the answer can be direct and one idea long without selling over the top of it.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "2 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "commentreply"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "routine-label",
+   "name": "Routine label",
+   "what": "A label-style card ('every morning') with the product beside it. Instructional, calm, no drama.",
+   "why_it_works": "It sells the habit, not the problem — its job is to make one minute sound like nothing.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "1 live ads of one brand (decision 8)",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "routinelabel"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias."
+  },
+  {
+   "id": "macro-texture",
+   "name": "Macro texture",
+   "what": "An extreme close-up of skin or surface texture carries the ad — the bumps, pores or grain are the picture; a short line sits over or beside it.",
+   "why_it_works": "Texture at that scale is a problem the reader recognises on sight, before any claim is made.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "examples": null,
+   "evidence": "0 live ads of one brand (decision 8). Meaning read off the ad names — that brief was never written down, so the definition is the machine's; review pending.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [
+    "macrotexture"
+   ],
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 static formats from one brand's live ads added with hyphenated ids; the old squashed spelling is an alias. defined by the machine, review pending"
   }
  ],
- "duplicates": []
+ "dropped": {
+  "mixed": "not a format — a label for a swipe that had no one format. Tag each asset with its real format instead (Cleanup Plan decision 8, 25 Sep)."
+ },
+ "decisions": "components/elements/decisions.json",
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

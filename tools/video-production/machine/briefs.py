@@ -4,7 +4,7 @@
     briefs.py [port]          default 8458
 
 The cinema board and the storyboard each show ONE ad. Nothing showed the shelf:
-which briefs exist, which are half-built, which are waiting on a person. Damon,
+which briefs exist, which are half-built, which are waiting on a person. the owner,
 2026-09-14: "I need some sort of visual to let me know where things are at per
 generation of briefs."
 
@@ -25,7 +25,9 @@ from urllib.parse import unquote
 
 HERE = Path(__file__).resolve().parent
 RUNS = HERE.parent / "runs"
-WS = Path(os.environ.get("AI_WORKSPACE", Path.home() / "Projects/ai-workspace"))
+sys.path.append(str(Path(__file__).resolve().parents[2].parent / "components" / "run-kit"))   # beside this file
+from run_kit.paths import repo  # noqa: E402  the one workspace locator (triage page 12)
+WS = repo(Path(__file__))
 sys.path.insert(0, str(WS / "components" / "naming"))
 try:
     import names as NAMES

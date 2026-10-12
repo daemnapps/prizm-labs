@@ -23,9 +23,9 @@ Taste and delivery — the labelled dials that say HOW a line is said, who the r
 
 How funny the piece is allowed to be, and in which register the joke sits.
 
-**Rule.** Humor is chosen from what the avatar's world already laughs at, never from the writer's taste — a joke the room does not make is a joke about the room. And humor stays out of the proof and the offer beats unless the room itself jokes there: a laugh over a claim reads as a hedge on the claim.
+**Rule.** Straight is the default: a testimonial, a before/after, a founder story, a demonstration and any piece about pain, health or money stays straight unless the source itself joked. Humor is chosen from what the avatar's world already laughs at, never from the writer's taste — a joke the room does not make is a joke about the room. A straight source may take a planted joke only when it comes from the room: a meme, format or reference the culture read or the avatar's culture map shows this audience already laughs at; the receipt is named, and a joke the writer invented is still a finding. The problem may be cast as a character (the spot, the breakout, the stubborn stain) — a PERSONIFIED PROBLEM, always the villain or the fool, never the customer. Humor stays off the proof and the offer: a laugh over a claim reads as a hedge on the claim. The twist beat may be the product doing its job, shown, not claimed, and a plain beat with the proof always follows it.
 
-**Receipt.** A research line answering RQ-17 (who they laugh at), or a bank row tagged `taste`. No receipt means the dial reads `none`.
+**Receipt.** A research line answering RQ-17 (who they laugh at), a bank row tagged `taste`, or the humor section of the avatar's culture map (`core-avatars/<avatar>/culture-map.md`: what they watch, who they trust, their references, what they care about, what they laugh at, what is off-limits), which counts as the RQ-17 receipt until the avatar's own research replaces it. No receipt means the dial reads `none`.
 
 _Why that pointer:_ Identification — what a room laughs at is a role it claims, and borrowing the laugh of a different room is the same error as assigning a role nobody claims.
 

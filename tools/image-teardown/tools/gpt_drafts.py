@@ -2,16 +2,16 @@
 """Draft pictures for the briefs the chain already wrote.
 
     gpt_drafts.py --briefs p152,p153 --out drafts/<brand>/v1
-    gpt_drafts.py --brand <brand> --count 2
-    gpt_drafts.py --brand <brand> --match-swipe --out drafts/<brand>/v5
+    gpt_drafts.py --brand brand-a --count 2
+    gpt_drafts.py --brand brand-a --match-swipe --out drafts/<brand>/v5
 
-**The model — GPT Image 2.5, through OpenAI's own door** (Damon, 2026-09-22:
+**The model — GPT Image 2.5, through OpenAI's own door** (the owner, 2026-09-22:
 *"everything image needs to just be gpt now, literally that's it"*). One door
 for pictures means one look across a batch and one set of quirks. GPT Image
 2.5 takes ANY size whose sides both divide by 16, so 9:16 is 1152x2048 and 4:5
 is 1024x1280 natively (asked of the API that day).
 
-**fal is gone** (Damon, 2026-09-22: *"remove anything with fal or flux lora,
+**fal is gone** (the owner, 2026-09-22: *"remove anything with fal or flux lora,
 we decided to not use these tools"* — the third time it was ruled, after
 2026-09-11 and 09-13). This file used to carry `fal-ai/nano-banana-pro/edit`
 behind a `--door fal` flag "so a record that says fal is reproducible". The
@@ -19,7 +19,7 @@ flag, the queue client and the model id are all removed; the old records still
 name what drew them, and nothing here can reach fal again. Renamed off the fal
 name the same day.
 
-**--match-swipe** (Damon, 2026-09-17: *"the drafts are NOT close enough to
+**--match-swipe** (the owner, 2026-09-17: *"the drafts are NOT close enough to
 the inspiration, we need to be way closer"*). Until now the swipe never
 reached the generator — it saw the cast, the product and a paragraph, and a
 paragraph cannot carry a composition. With this flag `source.jpg` goes in as
@@ -44,20 +44,19 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(Path.home() / ".daemn"))
 import paths as P
 import briefs as B
+import it_keys    # every key by NAME through components/keys — SI-194 (readers use loader)
 sys.path.insert(0, str(P.IMAGE_PROD / "tools"))
 import product_geometry as PGEO
-import daemn_keys
 
 ROOT = HERE.parent
 MODEL = "gpt-image-2.5 (openai)"
-MODEL_WHY = ("one door for pictures (Damon, 2026-09-22). GPT Image 2.5 through "
+MODEL_WHY = ("one door for pictures (the owner, 2026-09-22). GPT Image 2.5 through "
              "OpenAI directly; it makes 9:16 and 4:5 natively.")
-# <media>/brands/<brand>/elements/... — the brand's element pictures, in
-# your media folder.
-ELEMENTS = P.DRIVE / "brands"
+# Team Drive/brands/<brand>/elements/... — the brand elements sit at the
+# Team Drive root, beside the lab subtree P.DRIVE points at, not under it.
+ELEMENTS = P.SHARED_ASSETS / "brands"
 
 
 def _uri_to_file(uri, outdir, bid, n):
@@ -149,7 +148,7 @@ MATCH = _prompt(MATCH_FILE).strip() + "\n"          # v2: filled by .replace()
 # swipe. Used whenever the brief carries a type layer. v2 stays for a swipe
 # whose text is incidental and has no layer to be specific from.
 #
-# It replaces v3 (plate-only + compose.py), retired by Damon on 2026-09-25
+# It replaces v3 (plate-only + compose.py), retired by the owner on 2026-09-25
 # the day it was demonstrated: "the nuance of the style of the creative is
 # lost… claymation-style text is going to look different than you just
 # writing text on an image." A font cannot be moulded clay, and the
@@ -162,7 +161,7 @@ NO_PERSON = _section(LEAVE_FILE, before="<the frame")
 def _product_notes(brand, slug):
     """What a product file does not say in a parseable line, the machine
     keeps in its own file: drafts/<brand>/products.json — treats, texture,
-    a clean picture. brands/ is read-only to machines (the workspace rules §5)."""
+    a clean picture. brands/ is read-only to machines (the team notes/CLAUDE.md §5)."""
     f = ROOT / "drafts" / brand / "products.json"
     return (json.loads(f.read_text()) if f.is_file() else {}).get(slug, {})
 
@@ -178,7 +177,11 @@ def brand_facts(brand, product=None):
     f = {"accent_name": "our accent", "accent_hex": "", "type_hex": "#111111",
          "treats": "the skin the product is for", "treats_short": "that skin",
          "texture": "our product's own texture", "identity": None, "range": []}
-    pal = b / "identity/palette.md"
+    # the v6 brand layout keeps it at brand-identity/palette.md (brandpath);
+    # read at the old path only, the brand's accent silently fell back to none
+    pal = P.brand(brand).get("palette") or b / "identity/palette.md"
+    if not Path(pal).is_file():
+        pal = b / "identity/palette.md"
     if pal.is_file():
         rows = re.findall(r"^\| \*\*(.+?)\*\* \| `(#[0-9A-Fa-f]{6})` \|", pal.read_text(), re.M)
         if rows:
@@ -213,7 +216,7 @@ def brand_facts(brand, product=None):
         me = d.get(slug) or {}
         # identity: the clean tube first, then the same product at an angle
         # in a scene and in a hand — one front view alone got pasted front-on
-        # into every scene (Damon, 2026-09-17: "the same cutout of the bottle
+        # into every scene (the owner, 2026-09-17: "the same cutout of the bottle
         # over and over again regardless of what the subject in the original")
         cands = [x for x in me.get("all", []) if "packshot-tube" in x] + \
                 [x for x in (me.get("hero"),) if x] + \
@@ -239,7 +242,7 @@ def brand_facts(brand, product=None):
 def offer_slots(brand, read, product=None):
     """THE OFFER SLOTS paragraph: the swipe's slots, each filled with ours.
 
-    Damon, 2026-09-17: "the offer is missing and one of the guarantees is
+    the owner, 2026-09-17: "the offer is missing and one of the guarantees is
     missing." A slot the swipe has is filled from the bank, never dropped."""
     facts = offer_facts(brand, product)
     price = next((x for x in facts if x.endswith(".00") and "tubes" not in x and "subscribe" not in x), "")
@@ -256,8 +259,8 @@ def offer_slots(brand, read, product=None):
         out.append(f"its guarantee reads exactly \"{guar_full}\"")
     if slots.get("discount_bar"):
         # The hero offer, and only the hero: the product at its own price
-        # with the guarantee. Damon, 2026-09-18, on a bar that read "3 for
-        # <price>": "we should just be focused on the core hero offer for
+        # with the guarantee. the owner, 2026-09-18, on a bar that read "3 tubes
+        # for $__": "we should just be focused on the core hero offer for
         # that specific product." The bank's hero slot is unruled, so the
         # one-tube price + guarantee stands in until he rules it; multi-tube
         # and subscribe prices never fill a bar on their own.
@@ -272,7 +275,7 @@ def offer_slots(brand, read, product=None):
 
 NOTE = re.compile(r"unchanged|art direction|imagery|§|no text|n/a|see (the|stage|conflicts)"
                   r"|placeholder|tbd|verify against", re.I)
-# A percentage is a discount claim. The bank has none (Damon, 2026-09-18: the
+# A percentage is a discount claim. The bank has none (the owner, 2026-09-18: the
 # hero offer only — the product at its price with the guarantee), so a words
 # entry that carries one is a brief computing a saving off the multi-tube
 # tiers, and it is dropped until he rules a discount into the bank.
@@ -326,14 +329,76 @@ def offer_facts(brand, product=None):
     return facts
 
 
-READ_VERSION = 4          # v4 adds `lettering` (Damon, 2026-09-25)
+READ_VERSION = 4          # v4 adds `lettering` (the owner, 2026-09-25)
+
+
+READ_QUESTION = ("Read this advertising image and reply with JSON only.\n"
+    "person: is an ADULT human the subject — an adult's face or body "
+    "the main thing in it? A baby or child as the subject is false; an "
+    "animal, object, product or scene is false; hands, legs or a lap at "
+    "the edge holding something do not count.\n"
+    "product: does it show a product — a bottle, tube, jar or package — "
+    "anywhere, held, standing or as a packshot?\n"
+    "product_count: how many distinct product units are shown (0 if none).\n"
+    "style: one of \"photograph\", \"illustration\", \"flat graphic\", "
+    "\"3d render\" — how the main image is made.\n"
+    "skin_proof: if skin is shown as the proof (a close-up, an inset "
+    "box, a before/after), which body part: \"face\", \"hands\", "
+    "\"arms\", \"chest\", \"legs\", \"neck\" — else \"none\".\n"
+    "offer_slots: {price: bool, guarantee: bool, discount_bar: bool} — "
+    "does it carry a price callout, a guarantee line or badge, a "
+    "discount/urgency bar?\n"
+    "product_texture: does it show the product's contents out of the "
+    "package — a smear, a swatch, a spread, a drop?\n"
+    "accent_hex: the one chromatic accent colour used on words, badges, "
+    "bars or arrows, as a hex, or \"none\".\n"
+    "lettering: HOW THE WORDS ARE MADE — the material, surface and "
+    "treatment of the letterforms, never a typeface name. Say what a "
+    "person would have to do to build them: e.g. \"flat vector sans, "
+    "solid fill, no effects\", \"moulded claymation letters, extruded "
+    "with soft shadow\", \"hand-lettered marker on paper, uneven "
+    "pressure\", \"chrome bevel with reflections\", \"white with a hard "
+    "black outline, social-caption style\", \"cut-paper collage\", "
+    "\"letterpress serif, slightly inked edges\", \"neon tube glow\", "
+    "\"typed system UI caption\". One phrase. If the image carries no "
+    "words at all, \"none\".\n"
+    "subject: three words.\n"
+    "{\"person\": true|false, \"product\": true|false, \"product_count\": n, "
+    "\"style\": \"...\", \"skin_proof\": \"...\", \"offer_slots\": {...}, \"product_texture\": true|false, "
+    "\"accent_hex\": \"...\", \"lettering\": \"...\", \"subject\": \"...\"}")
+
+
+def read_swipe(src, k=None):
+    """One picture, read the way every swipe is read (READ_QUESTION) — the
+    swipe's cover for a draft, or any one slide of a carousel. Returns the
+    record swipe-subjects.json keeps."""
+    import draft_judge as J
+    k = k or it_keys.key("GEMINI_API_KEY")
+    r = J.ask([Path(src)], READ_QUESTION, k)
+    return {
+        "v": READ_VERSION,
+        "person": bool(r.get("person", True)),
+        "product": bool(r.get("product", True)),
+        "product_count": int(r.get("product_count") or (1 if r.get("product") else 0)),
+        "style": r.get("style", "photograph"),
+        "skin_proof": r.get("skin_proof", "none"),
+        "offer_slots": r.get("offer_slots") or {},
+        "product_texture": bool(r.get("product_texture", False)),
+        "accent_hex": r.get("accent_hex", "none"),
+        # HOW the words are built, not which font. the owner, 2026-09-25:
+        # "claymation-style text is going to look different than you
+        # just writing text on an image." Nothing recorded this until
+        # now, so every draft's lettering was whatever the model felt
+        # like — which is exactly the slop the swipe was meant to stop.
+        "lettering": r.get("lettering", "plain set type"),
+        "subject": r.get("subject", "?")}
 
 
 def swipe_has_person(brand, jobs):
     """The swipe, read once and kept: who is in it, what it shows, how it is
     drawn, what slots it carries, what colour it leans on.
 
-    v1 asked two questions (adult? product?). v2 (Damon, 2026-09-17: "we
+    v1 asked two questions (adult? product?). v2 (the owner, 2026-09-17: "we
     need to take note of the style of the original", "the offer is missing",
     "the colour of the text is not on brand") asks the rest, because a thing
     the prompt never heard about is a thing the swipe fills in by default."""
@@ -341,62 +406,9 @@ def swipe_has_person(brand, jobs):
     known = json.loads(cache.read_text()) if cache.is_file() else {}
     todo = [j for j in jobs if known.get(j["brief"], {}).get("v") != READ_VERSION]
     if todo:
-        import draft_judge as J
-        k = daemn_keys.key("GEMINI_API_KEY")
-        q = ("Read this advertising image and reply with JSON only.\n"
-             "person: is an ADULT human the subject — an adult's face or body "
-             "the main thing in it? A baby or child as the subject is false; an "
-             "animal, object, product or scene is false; hands, legs or a lap at "
-             "the edge holding something do not count.\n"
-             "product: does it show a product — a bottle, tube, jar or package — "
-             "anywhere, held, standing or as a packshot?\n"
-             "product_count: how many distinct product units are shown (0 if none).\n"
-             "style: one of \"photograph\", \"illustration\", \"flat graphic\", "
-             "\"3d render\" — how the main image is made.\n"
-             "skin_proof: if skin is shown as the proof (a close-up, an inset "
-             "box, a before/after), which body part: \"face\", \"hands\", "
-             "\"arms\", \"chest\", \"legs\", \"neck\" — else \"none\".\n"
-             "offer_slots: {price: bool, guarantee: bool, discount_bar: bool} — "
-             "does it carry a price callout, a guarantee line or badge, a "
-             "discount/urgency bar?\n"
-             "product_texture: does it show the product's contents out of the "
-             "package — a smear, a swatch, a spread, a drop?\n"
-             "accent_hex: the one chromatic accent colour used on words, badges, "
-             "bars or arrows, as a hex, or \"none\".\n"
-             "lettering: HOW THE WORDS ARE MADE — the material, surface and "
-             "treatment of the letterforms, never a typeface name. Say what a "
-             "person would have to do to build them: e.g. \"flat vector sans, "
-             "solid fill, no effects\", \"moulded claymation letters, extruded "
-             "with soft shadow\", \"hand-lettered marker on paper, uneven "
-             "pressure\", \"chrome bevel with reflections\", \"white with a hard "
-             "black outline, social-caption style\", \"cut-paper collage\", "
-             "\"letterpress serif, slightly inked edges\", \"neon tube glow\", "
-             "\"typed system UI caption\". One phrase. If the image carries no "
-             "words at all, \"none\".\n"
-             "subject: three words.\n"
-             "{\"person\": true|false, \"product\": true|false, \"product_count\": n, "
-             "\"style\": \"...\", \"skin_proof\": \"...\", \"offer_slots\": {...}, \"product_texture\": true|false, "
-             "\"accent_hex\": \"...\", \"lettering\": \"...\", \"subject\": \"...\"}")
+        k = it_keys.key("GEMINI_API_KEY")
         for j in todo:
-            src = P.RUNS / j["run"] / "assets/source.jpg"
-            r = J.ask([src], q, k)
-            known[j["brief"]] = {
-                "v": READ_VERSION,
-                "person": bool(r.get("person", True)),
-                "product": bool(r.get("product", True)),
-                "product_count": int(r.get("product_count") or (1 if r.get("product") else 0)),
-                "style": r.get("style", "photograph"),
-                "skin_proof": r.get("skin_proof", "none"),
-                "offer_slots": r.get("offer_slots") or {},
-                "product_texture": bool(r.get("product_texture", False)),
-                "accent_hex": r.get("accent_hex", "none"),
-                # HOW the words are built, not which font. Damon, 2026-09-25:
-                # "claymation-style text is going to look different than you
-                # just writing text on an image." Nothing recorded this until
-                # now, so every draft's lettering was whatever the model felt
-                # like — which is exactly the slop the swipe was meant to stop.
-                "lettering": r.get("lettering", "plain set type"),
-                "subject": r.get("subject", "?")}
+            known[j["brief"]] = read_swipe(P.RUNS / j["run"] / "assets/source.jpg", k)
         cache.write_text(json.dumps(known, indent=1))
     return known
 
@@ -450,7 +462,7 @@ def assemble(job):
     # HANDS, not faces. A frame can say "no faces, no bodies" and still be
     # four hands holding the product — p186 is exactly that, and stripping
     # its in-hand reference took away the only picture we own of the correct
-    # grip, which is what made the hands look wrong (Damon, 2026-09-24:
+    # grip, which is what made the hands look wrong (the owner, 2026-09-24:
     # "hands are awkwardly holding the tubes"). Strip the skin references
     # only when the frame genuinely has no hands in it.
     # Test the FRAME'S OWN description, not the whole assembled prompt. Two
@@ -611,7 +623,7 @@ def _size(cap):
 def lettering_from(layer, fallback):
     """How this ad's letters are made, preferring what the teardown recorded.
 
-    Damon, 2026-09-25: *"we need to get really deep on the teardown record
+    the owner, 2026-09-25: *"we need to get really deep on the teardown record
     itself on these images."* The teardown looks at the swipe properly, once,
     and writes `letterform` per zone; the swipe read in this file is a second,
     shallower look taken only because nothing carried the first one forward.
@@ -651,8 +663,8 @@ def word_spec(layer, variant=None):
         # A PRODUCT'S OWN LABEL IS NOT THE AD'S TYPE. Stage 6 v5 marks any
         # element whose words sit on a package or object in the scene; drawing
         # those prints the ad's own copy across the front of our product. A
-        # tube carrying its real label (name, ingredients)
-        # came back tan, reading "<the swipe's own product name>" (2026-09-25 — Damon: "our tube is completely wrong…
+        # cream tube carrying its own name and label
+        # came back tan, reading "<the swipe's own product name>" (2026-09-25 — the owner: "our tube is completely wrong…
         # the product's gotta be the product").
         # Honoured in code as well as asked for in the prompt, so a brief that
         # carries the flag is safe whatever the generator decides to do.
@@ -753,8 +765,8 @@ def _engine():
     its key handling and its size table, so this file owns none of them."""
     here = Path(__file__).resolve()
     for d in here.parents:
-        if (d / "components" / "image-production" / "models.json").is_file():
-            path = str(d / "components" / "image-production")
+        if (d / "tools" / "image-production" / "models.json").is_file():
+            path = str(d / "tools" / "image-production")
             if path not in sys.path:
                 sys.path.append(path)
             import image_production as IP
@@ -806,6 +818,54 @@ def run_one(job, k, count, outdir, match=False):
     except Exception as e:                      # noqa: BLE001 — one brief's failure
         return bid, None, f"{type(e).__name__}: {str(e)[:200]}"
 
+
+# WORTH MAKING? (the owner, 2026-10-02: "if it's not ready for us to make, then
+# we're not going to even do it"). Drawing is where real credits go, so every
+# brief must have passed the viewer check — 5 people from its avatar scrolling
+# it inside their real feed — before a single roll. A brief never checked is
+# checked here first (text only, cents). One the viewers passed by is skipped
+# and says why; the owner passes one by hand with the `viewer` gate's V.
+def worth_making(brand, jobs, reg):
+    import os
+    if os.environ.get("QC_VIEWER", "1") == "0":
+        return jobs
+    import gates as G
+    G.quality()
+    from marketing_chain_checks import viewer as VW
+    keep = []
+    for j in jobs:
+        _, rec = B.get({"briefs": reg}, j["brief"], brand=brand)
+        run = B.run_dir(rec, brand) if rec else None
+        brief = (run / "out" / "06-brief.md") if run else None
+        if not brief or not brief.is_file():
+            print(f"  ✗ {j['brief']}  skipped — no finished brief on file to check")
+            continue
+        head = (run / "vars" / "avatar.md").read_text(errors="replace")[:300] if (run / "vars" / "avatar.md").is_file() else ""
+        m = re.search(r"The avatar:\s*([\w-]+)(?:\s*→\s*sub-avatar\s*([\w-]+))?", head)
+        avatar = m.group(1) if m else None
+        sub = m.group(2) if m and m.group(2) else None
+        if not avatar:
+            try:
+                avatar = P.avatar_profile(brand, None).parent.name
+            except SystemExit:
+                avatar = None
+        form = "single"
+        rf = run / "vars" / "route.json"
+        if rf.is_file():
+            try:
+                form = json.loads(rf.read_text()).get("form", "single")
+            except ValueError:
+                pass
+        try:
+            ok, why, _ = VW.worth_making(run, brand, avatar, brief,
+                                         kind="carousel" if form == "sequence" else "still image", sub=sub)
+        except Exception as e:
+            ok, why = False, f"the viewer check could not run ({type(e).__name__}: {str(e)[:100]})"
+        print(("  ✓ " if ok else "  ✗ ") + f"{j['brief']}  " + ("worth making — " if ok else "NOT worth making yet — ") + why)
+        if ok:
+            keep.append(j)
+    return keep
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--brand"); ap.add_argument("--briefs")
@@ -820,6 +880,10 @@ def main():
     jobs = [j for j in jobs if (not want or j["brief"] in want)]
     if not jobs:
         sys.exit("no jobs match")
+    print("worth making? — the viewer check, before any roll is paid for")
+    jobs = worth_making(a.brand, jobs, reg)
+    if not jobs:
+        sys.exit("nothing is worth making yet — every brief was passed by (see each run's viewer-check/)")
 
     if a.match_swipe:
         with_read(a.brand, jobs)

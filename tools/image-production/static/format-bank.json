@@ -1,0 +1,466 @@
+{
+  "schema": 1,
+  "asset": "static",
+  "axis": "picture shape",
+  "updated": "2026-09-12",
+  "_what": "Static picture formats as data — the SHAPE a still ad takes, independent of brand, angle and product. The copy banks cover the words; this covers the picture.",
+  "_sources": "Two paid advertisers only, both selling to women past fifty: <competitor> and <competitor B>. Nothing here is derived from our own past drops.",
+  "_sampling": "<competitor>: 216 distinct statics, 53 sampled across all 11 copy blocks. <competitor B>: 99 statics across 72 angle folders, science and clearance blocks read in full. Counts are of the SAMPLE and are a floor, not a total.",
+  "_provenance_rule": "duplicated = the same shape rebuilt N times in one advertiser's live set. Nobody re-executes a shape that is not working, so repetition is a spend decision someone else already paid for. observed = seen once or twice; kept so it is not rediscovered.",
+  "_native_crossover": "Rows flagged native_crossover borrow the look of organic content rather than advertising. These are the bridge to the native-static play: an ad shaped like what she already scrolls, carrying long-form copy underneath that reads as the post continuing.",
+  "formats": [
+    {
+      "key": "stickynote",
+      "name": "Handwritten note, held",
+      "what": "A hand holds a small handwritten note to camera beside the product, shallow focus, real surface. The claim is entirely in the handwriting.",
+      "why_it_works": "Handwriting reads as a person, not a brand, so the claim lands before the defence goes up. Cheapest shape in the bank — no model, no studio, no retouching.",
+      "evidence": "duplicated ×4 in the sample, across two different copy blocks",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "Turns out my 'tired face' was just skin waiting for peptides.",
+        "No needles. No freezing my face. Just this.",
+        "My eye bags packed up and left."
+      ],
+      "carries": [
+        "a first-person realisation",
+        "a rejection of the expensive alternative",
+        "a plain result"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-008.jpg"
+    },
+    {
+      "key": "ugcscreenshot",
+      "name": "UGC post, screenshotted",
+      "what": "A real woman at her mirror or holding her phone, shot as if it were her own post, with review cards or step panels laid over it. Often framed as a phone screen.",
+      "why_it_works": "It is the closest thing in the paid set to what she already scrolls. The ad borrows the shape of organic content rather than interrupting it.",
+      "evidence": "duplicated ×4 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "How I get even skin in 1 min",
+        "grwm: the foundation that finds my shade"
+      ],
+      "carries": [
+        "a demonstration",
+        "a first-person result",
+        "a routine"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-034.jpg"
+    },
+    {
+      "key": "pricestrike",
+      "name": "Struck price",
+      "what": "Old price struck through, new price beside it, usually circled or in a pill. Product and little else.",
+      "why_it_works": "Does one job with no argument at all, which is why it survives being run at volume alongside everything else.",
+      "evidence": "duplicated ×6 in the sample — the most repeated treatment overall, though it is an offer shape not an argument shape",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "$__ → $__",
+        "$__ → $__"
+      ],
+      "carries": [
+        "an offer"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-038.jpg"
+    },
+    {
+      "key": "splitdata",
+      "name": "Split with data labels",
+      "what": "Two macro images side by side, each with one hard label in a black pill — a number, a name, a state. No sentence.",
+      "why_it_works": "Asserts a difference without claiming a result, so it reads as information rather than advertising and survives review.",
+      "evidence": "duplicated ×3 in the <competitor B> science block",
+      "source": "components/swipe-paid/capture/assets/competitor-b/by-angle (99 statics across 72 angles)",
+      "provenance": "duplicated",
+      "examples": [
+        "50,000+ DALTONS | 240 DALTONS"
+      ],
+      "carries": [
+        "a mechanism",
+        "an ingredient comparison",
+        "a why-the-others-failed"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-b-02-162171803.jpg"
+    },
+    {
+      "key": "redcircle",
+      "name": "Red-circle annotation",
+      "what": "A photograph with a hand-drawn red ellipse around the thing being pointed at, usually with a short pointer label.",
+      "why_it_works": "The most recognisable 'look here' mark there is, borrowed from evidence rather than advertising.",
+      "evidence": "duplicated across BOTH advertisers — 4+ in the <competitor B> science block, plus before/after use in <competitor>",
+      "source": "both",
+      "provenance": "duplicated",
+      "carries": [
+        "anything needing one detail isolated"
+      ],
+      "note": "A device more than a format — it composes onto a split, a scan, a chart or a face.",
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-007.jpg"
+    },
+    {
+      "key": "notesapp",
+      "name": "Phone notes list",
+      "what": "A screenshot of the notes app: lowercase title, then five or six em-dash lines. No photography at all.",
+      "why_it_works": "Reads as something she wrote for herself. A list carries six objections in one ad without feeling like a feature list.",
+      "evidence": "duplicated ×2 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "note to self — your daughter was right about the foundation",
+        "things I stopped doing since switching foundations"
+      ],
+      "carries": [
+        "an accumulated list of failed fixes",
+        "the routine a product ends"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-002.jpg"
+    },
+    {
+      "key": "handannotated",
+      "name": "Hand-annotated product",
+      "what": "The product on a plain ground with pencil arrows and handwritten notes pointing at parts of it.",
+      "why_it_works": "Same trick as the sticky note at spec-sheet scale — handwriting makes a claim list feel like a person explaining rather than a brand listing.",
+      "evidence": "duplicated ×3 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "one shade, fair to medium",
+        "money-back if it doesn't match"
+      ],
+      "carries": [
+        "the whole offer in one frame",
+        "an ingredient list made visual"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-048.jpg"
+    },
+    {
+      "key": "annotateddiagram",
+      "name": "Annotated diagram",
+      "what": "A medical or technical illustration with leader lines to labelled parts, in textbook language rather than brand language.",
+      "why_it_works": "Borrows the authority of the reference book, and carries a mechanism with no person in frame — so no casting problem.",
+      "evidence": "duplicated ×2, plus near-relatives (histology grid, molecular render) in the same block",
+      "source": "components/swipe-paid/capture/assets/competitor-b/by-angle (99 statics across 72 angles)",
+      "provenance": "duplicated",
+      "examples": [
+        "YOUTHFUL FACE | AGING FACE, eleven labelled callouts"
+      ],
+      "carries": [
+        "a mechanism",
+        "an ingredient story",
+        "the anatomy of the problem"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-b-02-149375421.jpg"
+    },
+    {
+      "key": "fakeeditorial",
+      "name": "Editorial page",
+      "what": "Laid out as a magazine or news page — masthead, standfirst, a highlighted passage — with the product inside the article.",
+      "why_it_works": "Arrives as journalism. It is the static version of the advertorial the account already runs its winner through.",
+      "evidence": "duplicated ×2 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "K-BEAUTY DAILY",
+        "This single Korean base saved 100,000 women from bad skin."
+      ],
+      "carries": [
+        "a long argument",
+        "a study or mechanism",
+        "a founder story"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-027.jpg"
+    },
+    {
+      "key": "studyfigure",
+      "name": "Study figure",
+      "what": "An actual scientific chart — axes, error bars, significance stars — with one result circled.",
+      "why_it_works": "The only shape in the set that looks like it was not made for the ad.",
+      "evidence": "duplicated ×2 in the <competitor B> science block",
+      "source": "components/swipe-paid/capture/assets/competitor-b/by-angle (99 statics across 72 angles)",
+      "provenance": "duplicated",
+      "carries": [
+        "a mechanism with a real citation behind it"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-b-02-162321150.jpg"
+    },
+    {
+      "key": "instore",
+      "name": "Shot in the shop",
+      "what": "Documentary photograph at a counter or shelf — real lighting, real staff, nothing styled.",
+      "why_it_works": "Reads as a photograph somebody took, not a set that was built. Strong pairing with the native long-form play.",
+      "evidence": "duplicated ×2 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "carries": [
+        "a demonstration",
+        "a third-party endorsement"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-051.jpg"
+    },
+    {
+      "key": "usvsthem",
+      "name": "Us versus the shelf",
+      "what": "Their whole category on one side — a wall of competing bottles — and one product on the other.",
+      "why_it_works": "Turns the number of things she has already tried into the argument.",
+      "evidence": "duplicated ×2 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "duplicated",
+      "examples": [
+        "Others | COMPETITOR"
+      ],
+      "carries": [
+        "a why-everything-else-failed",
+        "an accumulated list of failed fixes"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-044.jpg"
+    },
+    {
+      "key": "annotatedface",
+      "name": "Annotated face",
+      "what": "One face, split or part-treated, with small callout labels naming each side and a headline in her voice.",
+      "why_it_works": "",
+      "evidence": "observed ×2 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "I divorced my orange jawline at 52."
+      ],
+      "carries": [
+        "a visible result",
+        "a same-person comparison"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-004.jpg"
+    },
+    {
+      "key": "ugcselfie",
+      "name": "Selfie with a review pinned",
+      "what": "A real unretouched selfie with a single review card floating over it.",
+      "why_it_works": "",
+      "evidence": "observed ×2",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "carries": [
+        "social proof at human scale"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-037.jpg"
+    },
+    {
+      "key": "reviewcluster",
+      "name": "Review cluster",
+      "what": "Three or four review cards scattered over a plain ground with one aggregate line under them.",
+      "why_it_works": "",
+      "evidence": "observed ×1",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "4.8/5 from 51,837 reviews"
+      ],
+      "carries": [
+        "social proof at volume"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-006.jpg"
+    },
+    {
+      "key": "commentstat",
+      "name": "Comment plus number",
+      "what": "A screenshotted comment pinned top-left, one very large percentage under it, and the panel it came from named.",
+      "why_it_works": "",
+      "evidence": "observed ×1, with a big-number-plus-model variant in a second block",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "97% said it instantly matched their skin tone"
+      ],
+      "carries": [
+        "a claim that needs a denominator"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-commentstat.jpg"
+    },
+    {
+      "key": "essaycard",
+      "name": "Editorial essay card",
+      "what": "A quiet interior photograph, a serif headline and three short paragraphs — a magazine page, not an ad.",
+      "why_it_works": "",
+      "evidence": "observed ×2",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "I did the math in the waiting room.",
+        "One shade. Your tone. 60 seconds."
+      ],
+      "carries": [
+        "a cost-of-the-alternative argument",
+        "anything needing length"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-012.jpg"
+    },
+    {
+      "key": "specstarburst",
+      "name": "Spec callouts",
+      "what": "Product dead centre on white, five or six benefit labels radiating on thin leader lines.",
+      "why_it_works": "",
+      "evidence": "observed ×1",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "carries": [
+        "the whole offer in one frame"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-011.jpg"
+    },
+    {
+      "key": "abpoll",
+      "name": "A/B question",
+      "what": "A single face split down the middle with a literal question and two buttons under it.",
+      "why_it_works": "",
+      "evidence": "observed ×1",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "which cheek has <competitor>?"
+      ],
+      "carries": [
+        "a demonstration that invites a reply"
+      ],
+      "native_crossover": true,
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-036.jpg"
+    },
+    {
+      "key": "enemyheadline",
+      "name": "Enemy headline",
+      "what": "Heavy condensed type on black naming the thing that failed her, product small and low in frame.",
+      "why_it_works": "",
+      "evidence": "observed ×1, but it opens the most-duplicated <competitor B> block",
+      "source": "components/swipe-paid/capture/assets/competitor-b/by-angle (99 statics across 72 angles)",
+      "provenance": "observed",
+      "examples": [
+        "RETINOL IS A SCAM — it smooths your face, then kills it"
+      ],
+      "carries": [
+        "a why-everything-else-failed"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-b-02-102587465.jpg"
+    },
+    {
+      "key": "splitstudyclaim",
+      "name": "Split face with a study claim",
+      "what": "A face split down the middle on black, with a percentage claim set across it.",
+      "why_it_works": "",
+      "evidence": "observed ×1",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "92% OF HEAVY FOUNDATIONS RUIN YOUR NATURAL GLOW"
+      ],
+      "carries": [
+        "a mechanism",
+        "a why-everything-else-failed"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-030.jpg"
+    },
+    {
+      "key": "scancompare",
+      "name": "Scan comparison",
+      "what": "Two ultrasound or microscopy frames side by side, red circles on the difference, timeframes labelled.",
+      "why_it_works": "",
+      "evidence": "observed ×2 in the <competitor B> science block",
+      "source": "components/swipe-paid/capture/assets/competitor-b/by-angle (99 statics across 72 angles)",
+      "provenance": "observed",
+      "examples": [
+        "Luxury cream — 6 months | 240 Dalton penetration — 4 weeks"
+      ],
+      "carries": [
+        "a mechanism",
+        "a timeline"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-b-02-164192807.jpg"
+    },
+    {
+      "key": "darkbenefitlist",
+      "name": "Dark benefit stack",
+      "what": "Three or four benefit rows stacked over a dark, moody product photograph.",
+      "why_it_works": "",
+      "evidence": "observed ×1",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "why it keeps selling out"
+      ],
+      "carries": [
+        "the whole offer in one frame"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-016.jpg"
+    },
+    {
+      "key": "authorityborrow",
+      "name": "Borrowed authority",
+      "what": "The product in the hands of someone whose uniform does the arguing.",
+      "why_it_works": "",
+      "evidence": "observed ×3 in the sample",
+      "source": "components/swipe-paid/competitor/_raw (216 distinct statics, 53 sampled across all 11 copy blocks)",
+      "provenance": "observed",
+      "examples": [
+        "Developed for the space program",
+        "If it can handle space it can handle you"
+      ],
+      "carries": [
+        "a trust claim"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-014.jpg"
+    },
+    {
+      "key": "bignumberpromo",
+      "name": "Big number",
+      "what": "The discount at enormous scale, product clustered under it.",
+      "why_it_works": "",
+      "evidence": "duplicated ×8 in the <competitor B> clearance block — the single most repeated shape in that advertiser's set",
+      "source": "components/swipe-paid/capture/assets/competitor-b/by-angle (99 statics across 72 angles)",
+      "provenance": "duplicated",
+      "examples": [
+        "UP TO 50% OFF",
+        "CLEAR50"
+      ],
+      "carries": [
+        "an offer"
+      ],
+      "drive": "(team Drive file)",
+      "drive_file": "competitor-b-01-156453661.jpg"
+    }
+  ],
+  "_drive": {
+    "folder": "(team Drive folder)",
+    "competitor": "(team Drive folder)",
+    "competitor-b": "(team Drive folder)",
+    "_what": "Every sampled swipe file, readable by anyone with the link. Each format row's `drive` points at its own exemplar."
+  }
+}

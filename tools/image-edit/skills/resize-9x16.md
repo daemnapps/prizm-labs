@@ -80,5 +80,5 @@ up on the edge of the safe zone.
 - Regenerating the picture at 9:16 from its prompt. It changes the picture.
 - The plain Outpaint tool for a static. It shrinks the picture.
 
-This is the Higgsfield copy of the team's `resize-9x16` skill. The finishing step
-in image production is `tools/image-production/tools/finish.py`.
+This is the Higgsfield copy of the team's `resize-9x16` skill. The version
+that runs on the team's own machines is `tools/image-production/finish.py`.

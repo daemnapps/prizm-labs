@@ -18,7 +18,9 @@
    "source": "components/marketing-doctrine/delivery.json › pacing",
    "extra": {
     "when": "A mechanism or a proof that needs room, in a placement that gives nothing away for free."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "escalating",
@@ -33,7 +35,9 @@
    "source": "components/marketing-doctrine/delivery.json › pacing",
    "extra": {
     "when": "Agitation into the offer, where the pressure is the argument."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "one-breath",
@@ -48,7 +52,9 @@
    "source": "components/marketing-doctrine/delivery.json › pacing",
    "extra": {
     "when": "Short pieces whose whole appeal is that nothing was edited."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "beat-and-pause",
@@ -63,7 +69,9 @@
    "source": "components/marketing-doctrine/delivery.json › pacing",
    "extra": {
     "when": "Deadpan and deadly-sincere reads, where the silence is what makes the line land."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "list-stack",
@@ -78,8 +86,13 @@
    "source": "components/marketing-doctrine/delivery.json › pacing",
    "extra": {
     "when": "Failed solutions, proof and the offer, where quantity is itself the argument."
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

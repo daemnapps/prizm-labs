@@ -12,12 +12,12 @@ people actually open with; a close asks for objections and refund reasons.
 Every row keeps its provenance, because a paid panellist and a refunding
 customer are not the same evidence.
 
-    python3 components/language-layer/query_language.py --brand <b> --avatars
-    python3 components/language-layer/query_language.py --brand <b> \
+    python3 tools/language-layer/query_language.py --brand <b> --avatars
+    python3 tools/language-layer/query_language.py --brand <b> \
         --stage hooks --profile <chain>.json
 
 ONE HOME (LL-1, 2026-09-01). This engine used to exist as two drifted copies
-— `components/video-teardown/machine/language.py` and the copy lab's — 103
+— `tools/video-teardown/machine/language.py` and the copy lab's — 103
 diff lines apart, with the render fix living only in one of them. Both are now
 thin shims over this file. The convergence was ruled: the copy lab's version
 is the base (it was the most recent; the drift was staleness), with the video
@@ -45,10 +45,19 @@ import json, re
 import os
 from pathlib import Path
 
-# Where the workspace sits when nobody says. A host that knows better hands
-# its own root to `configure(workspace=...)` — both shims do, which is how
-# each machine keeps resolving exactly the tree it always resolved.
-WORKSPACE = Path.home() / "Projects" / "ai-workspace"
+# Where the workspace sits when nobody says: `AI_WORKSPACE` if set, else the
+# checkout this file sits in (<ws>/tools/language-layer/language_layer/).
+# Never a home-folder guess, so the same code resolves the same tree on any
+# machine and for any person (brand-finder's `workspace()` rule, restated here
+# because this engine is stdlib-only and imports no other component). A host
+# that knows better hands its own root to `configure(workspace=...)` — both
+# shims do, which is how each machine keeps resolving the tree it always did.
+def _default_workspace():
+    named = os.environ.get("AI_WORKSPACE")
+    return Path(os.path.expanduser(named)) if named else Path(__file__).resolve().parents[2].parent
+
+
+WORKSPACE = _default_workspace()
 
 TIER_RANK = {"gold": 0, "silver": 1, "house": 2, "community": 3}
 
@@ -171,7 +180,7 @@ def load(brand, avatar=None, root=None):
     for d in dirs:
         # The avatar's own bank, plus every sub-avatar's own folder beside its
         # card (`sub-avatars/<sub-file-stem>/language/`) — one home per
-        # sub-avatar, Damon 2026-09-18. A sub folder's rows default their
+        # sub-avatar, the owner 2026-09-18. A sub folder's rows default their
         # `sub` to the folder's slug when the file does not say.
         banks = [(d / "language", None)]
         subs = d / "sub-avatars"
@@ -198,13 +207,13 @@ def load(brand, avatar=None, root=None):
     return rows
 
 
-# THE USED LANE (Damon, 2026-09-28): "anytime any of that language is used, we
+# THE USED LANE (Ruled 2026-09-28): "anytime any of that language is used, we
 # clearly mark it as used in X asset … index and search between things that
 # have been used and things that have not been used, and then … performance
 # metrics on what has been used." One folder beside the bank —
 # `<avatar>/language/used/` (and the same under a sub-avatar's own language
 # folder) — one file per asset a chain wrote. A bank row is never edited: its
-# `status` stays Damon's call. Shape: brands/language-schema.md, "The used lane".
+# `status` stays a person's call. Shape: brands/language-schema.md, "The used lane".
 USED_DIR = "used"
 RETIRED = ("dropped", "inactive", "retired", "burned")
 
@@ -223,9 +232,19 @@ def _lang_dirs(brand, avatar=None, root=None):
     return out
 
 
+def _proposal_files(brand, avatar=None, root=None):
+    """Open used-lane proposals a machine wrote under runs/ (K2 (brands write wall),
+    SI-97 (brand research proposals)) —
+    runs/video-writing/<brand>/<slug>/proposals/language-used/<avatar>/*.json."""
+    base = (Path(root) if root else WORKSPACE) / "runs" / "video-writing" / brand
+    return sorted(base.glob(f"*/proposals/language-used/{avatar or '*'}/*.json"))
+
+
 def load_used(brand, avatar=None, root=None):
     """Every used-lane record: one per (row, asset) — the row id, the words,
-    where it was used and in what. Newest file last."""
+    where it was used and in what. Newest file last. Open proposals under runs/
+    count too (`_proposal: True`), unless a person already committed the same
+    file into the brand's used lane — the accepted copy wins."""
     recs = []
     for lang in _lang_dirs(brand, avatar, root):
         u = lang / USED_DIR
@@ -243,6 +262,22 @@ def load_used(brand, avatar=None, root=None):
                 e.setdefault("chain", data.get("chain"))
                 e["_file"] = f.name
                 recs.append(e)
+    banks = bank_dir(brand_dir(brand, root))
+    for f in _proposal_files(brand, avatar, root):
+        if (banks / f.parent.name / "language" / USED_DIR / f.name).exists():
+            continue                                 # accepted copy wins; no double count
+        try:
+            data = json.loads(f.read_text())
+        except Exception:
+            continue
+        for e in data.get("used") or []:
+            e = dict(e)
+            e.setdefault("asset", data.get("asset"))
+            e.setdefault("run", data.get("run"))
+            e.setdefault("chain", data.get("chain"))
+            e["_file"] = f.name
+            e["_proposal"] = True
+            recs.append(e)
     return recs
 
 
@@ -251,9 +286,13 @@ def used_ids(brand, avatar=None, root=None):
     return {r.get("row_id") for r in load_used(brand, avatar, root) if r.get("row_id")}
 
 
-def _uses(row):
+def uses(row):
+    """A row's use tags, always a list — a single tag or a list, blanks dropped."""
     u = row.get("use")
     return [x for x in (u if isinstance(u, list) else [u]) if x]
+
+
+_uses = uses  # old private name, kept for callers
 
 
 def _same(text):
@@ -264,7 +303,8 @@ def _same(text):
 
 def query(rows, use=None, topics=None, funnel=None, speaker=None,
           contains=None, exclude_assumed=False, limit=40, used=None,
-          spent=None, awareness=None):
+          spent=None, awareness=None, area=None, feedback_stage=None,
+          shown=None):
     """Filter and rank. Ranking matters as much as filtering: with hundreds
     of candidate rows, which forty a stage sees is the whole difference
     between real language and arbitrary language.
@@ -272,12 +312,25 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
     used   None/"any" — ignore the used lane · "no" — only rows never used ·
            "yes" — only rows already used. `spent` is the set of used ids
            (`used_ids()`); without it "no"/"yes" have nothing to test.
-    Rows Damon retired or burned never come back (status is his call).
+    Rows retired or burned by a person never come back (status is a person's call).
+
+    shown  {row id: times handed to a stage before} — the exposure record
+           (the owner, 2026-10-05: "over time we have some level of variance and
+           variety with our copywriting"). Within the same tag rank, a row
+           shown fewer times comes first, so runs rotate through the bank
+           instead of every run reading the same most-liked forty.
 
     awareness  a level (or list of levels) the row's `awareness.level` must
                match — the language bank upgrade, 2026-09-28. Rows not yet
                labelled are kept, ranked after the labelled matches, so a bank
-               mid-backfill still answers."""
+               mid-backfill still answers.
+
+    area / feedback_stage  rows from the brand's own feedback forms carry
+               `feedback: {stage, areas}` (components/feedback-forms,
+               2026-09-29). `area` keeps rows whose question serves that
+               business area (marketing, product, operations, customer-service,
+               customer-experience, website); `feedback_stage` keeps rows from
+               that customer stage. Either one keeps feedback-form rows only."""
     want_use = list(use or [])
     want_top = {t.lower() for t in (topics or [])}
     spent = spent or set()
@@ -309,6 +362,12 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
             continue
         if contains and contains.lower() not in (r.get("text") or "").lower():
             continue
+        if area or feedback_stage:
+            fb = r.get("feedback") if isinstance(r.get("feedback"), dict) else {}
+            if area and area not in (fb.get("areas") or []):
+                continue
+            if feedback_stage and fb.get("stage") != feedback_stage:
+                continue
         aw = ((r.get("awareness") or {}).get("level") if isinstance(r.get("awareness"), dict) else None)
         if want_aw and aw and aw not in want_aw:
             continue
@@ -334,7 +393,8 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
         tier = TIER_RANK.get(sig.get("tier"), 9)
         assumed = 1 if r.get("attribution") == "assumed" else 0
         unlabelled = 1 if (want_aw and not aw) else 0
-        out.append(((unlabelled, use_rank, -len(rt & want_top), tier, loud, assumed), r))
+        times = (shown or {}).get(r.get("id"), 0)
+        out.append(((unlabelled, use_rank, -len(rt & want_top), times, tier, loud, assumed), r))
     out.sort(key=lambda x: x[0])
     return [r for _, r in out[:limit]]
 
@@ -373,8 +433,14 @@ def render(rows, header=""):
 
 def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
               limit=40, root=None, stage_use=None, widen=None, title=None,
-              used=None, awareness=None):
+              used=None, awareness=None, area=None, feedback_stage=None,
+              shown=None, proven_share=0.25):
     """The rows one stage should see. The whole point of the module.
+
+    used="fresh" (2026-10-05): never-used rows first, ranked so the rows
+    earlier runs were shown least come first (`shown`), plus a proven slice —
+    up to `proven_share` of the set — of rows already used in an asset.
+    Proven words still work; they just stop crowding out the rest.
 
     `stage_use`, `widen` and `title` default to whatever the host configured;
     they are per-chain definitions, so a caller may also pass them per call.
@@ -386,9 +452,21 @@ def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
 
     rows = load(brand, avatar, root)
     relaxed = []
-    spent = used_ids(brand, avatar, root) if used in ("no", "yes") else None
-    def q(rows, **kw):                   # every pass below keeps the used filter
-        return query(rows, used=used, spent=spent, awareness=awareness, **kw)
+    fresh = used == "fresh"
+    spent = used_ids(brand, avatar, root) if used in ("no", "yes", "fresh") else None
+    n_proven = int(limit * proven_share) if fresh else 0
+    def q(rows, limit=limit, **kw):      # every pass below keeps the used filter
+        if fresh:
+            new = query(rows, used="no", spent=spent, awareness=awareness, area=area,
+                        feedback_stage=feedback_stage, shown=shown, limit=limit, **kw)
+            old = query(rows, used="yes", spent=spent, awareness=awareness, area=area,
+                        feedback_stage=feedback_stage, shown=shown, limit=limit, **kw)
+            k_old = min(len(old), n_proven)          # the proven slice
+            k_new = min(len(new), limit - k_old)     # fresh fills the rest
+            k_old = min(len(old), limit - k_new)     # proven tops up a thin fresh set
+            return new[:k_new] + old[:k_old]
+        return query(rows, used=used, spent=spent, awareness=awareness,
+                     area=area, feedback_stage=feedback_stage, shown=shown, limit=limit, **kw)
     picked = q(rows, use=use, topics=topics, funnel=funnel, limit=limit)
     if widen == "ladder":
         # Narrow first, then widen only as far as needed. A funnel can be thin
@@ -417,7 +495,12 @@ def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
             + (f", never used before ({len(spent)} rows already used are held back)"
                if used == "no" else "")
             + (f", already used only" if used == "yes" else "")
-            + (f", spoken at the {awareness} level first" if awareness else "") + "._\n"
+            + (f", {sum(1 for r in picked if r.get('id') not in (spent or set()))} never used "
+               f"+ {sum(1 for r in picked if r.get('id') in (spent or set()))} proven (used before), "
+               f"least-shown first" if fresh else "")
+            + (f", spoken at the {awareness} level first" if awareness else "")
+            + (f", feedback-form rows serving {area}" if area else "")
+            + (f", from the {feedback_stage} feedback stage" if feedback_stage else "") + "._\n"
             + (f"\n**Widened:** too few rows matched, so the "
                f"{' and '.join(relaxed)} filter was relaxed to fill this set. "
                f"Treat the fit as looser than the header suggests.\n"
@@ -471,6 +554,13 @@ def main(argv=None):
                     help="list the used lane: every row, the asset it went into, where")
     ap.add_argument("--profile", default=None,
                     help="this chain's stage map (json); see load_profile")
+    ap.add_argument("--awareness", default=None,
+                    help="rows spoken at this awareness level first (unlabelled rows follow)")
+    ap.add_argument("--area", default=None,
+                    help="feedback-form rows only, whose question serves this business area "
+                         "(marketing, product, operations, customer-service, customer-experience, website)")
+    ap.add_argument("--feedback-stage", default=None,
+                    help="feedback-form rows only, from this customer stage (e.g. new-customer, churned-refund)")
     a = ap.parse_args(argv)
     root = Path(a.root).expanduser() if a.root else None
 
@@ -498,7 +588,8 @@ def main(argv=None):
     print(for_stage(a.brand, a.stage or "injection", a.avatar, a.funnel,
                     a.topics.split(",") if a.topics else None, a.limit, root,
                     stage_use=smap, widen=wdn, title=ttl,
-                    used="yes" if a.used else "no" if a.unused else None))
+                    used="yes" if a.used else "no" if a.unused else None,
+                    awareness=a.awareness, area=a.area, feedback_stage=a.feedback_stage))
 
 
 if __name__ == "__main__":

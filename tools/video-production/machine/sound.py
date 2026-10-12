@@ -1,6 +1,6 @@
 """RETIRED 2026-09-12 — THIS FILE RAN ON FAL. DO NOT USE IT.
 
-Damon, 2026-09-12: "Everything should have been done in Higgsfield. How are
+the owner, 2026-09-12: "Everything should have been done in Higgsfield. How are
 you using fal? Stop using fal. We're just using Higgsfield, and we're just
 using the models that we've already proven worked."
 
@@ -36,7 +36,7 @@ Reads the sound plan (stage 4b) and produces:
   * the EFFECTS — one file per row of the plan's table
   * ROOM TONE — one file per location
 
-Everything runs on the company account through one door (Damon's ruling
+Everything runs on the company account through one door (the owner's ruling
 2026-09-02: one place things get produced). Effects marked CHECK in the
 plan are skipped by default — a clip generated with audio already carries
 most on-camera sound, and generating over it doubles the sound.
@@ -52,7 +52,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 # the key vault the machines share (~/.daemn/keys.env)
-sys.path.insert(0, str(Path.home() / "Projects/ai-workspace/components/video-teardown/machine"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "video-teardown" / "machine"))   # this checkout's, never ~/Projects
 import keys
 
 # One roof. Music/song and effects both answer on the same account.

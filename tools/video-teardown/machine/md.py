@@ -32,7 +32,7 @@ def _inline(t):
     t = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)",
                r'<a href="\2" target="_blank" rel="noopener">\1</a>', t)
     # Bare URLs and brand domains become real links too — a Doc that says
-    # "<brand>.com" in plain text is a link she has to type (Damon,
+    # "brand-a.com" in plain text is a link she has to type (the owner,
     # 2026-09-18: "make sure any links are properly hyperlinked").
     t = re.sub(r'(?<!["=>/\w])(https?://[^\s<)]+?)(?=[.,;:!?]?(?:\s|$|<))',
                r'<a href="\1" target="_blank" rel="noopener">\1</a>', t)

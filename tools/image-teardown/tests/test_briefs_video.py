@@ -29,7 +29,7 @@ class VideoOpen(unittest.TestCase):
             (d / "run.json").write_text(json.dumps({
                 "brand": brand, "creator": creator, "product": "the-scrub",
                 "opened": "2026-08-27T10:00:00Z", "gdoc_url": "https://docs.google.com/document/d/abc/edit",
-                "audience": {"_avatar": "<avatar>"}}))
+                "audience": {"_avatar": "avatar-two"}}))
         (runs / "unfinished").mkdir()
         (self.td / "briefs.json").write_text(json.dumps(
             {"briefs": {"p140": {"brand": "brand-b", "run": None, "opened": "x"}},
@@ -44,19 +44,23 @@ class VideoOpen(unittest.TestCase):
 
     def test_a_creator_run_gets_the_next_number_and_its_record(self):
         bid, rec = B.open_brief("jen-01-x", "brand-b", kind="video-creator")
-        self.assertEqual((bid, rec["brief"], rec["type"]), ("p141", "brief-0141", "video-creator"))
+        # per brand AND product (2026-10-01): the-scrub has no brief yet, so it starts at 1
+        self.assertEqual((bid, rec["brief"], rec["type"]),
+                         ("brand-b_the-scrub_brief-0001", "brief-0001", "video-creator"))
         self.assertEqual(rec["title"], "Title of jen-01-x")
-        self.assertEqual((rec["creator"], rec["product"], rec["avatar"]), ("jen", "the-scrub", "<avatar>"))
+        self.assertEqual((rec["creator"], rec["product"], rec["avatar"]), ("jen", "the-scrub", "avatar-two"))
         self.assertEqual(rec["run_opened"], "2026-08-27T10:00:00Z")
         self.assertTrue(rec["gdoc_url"].startswith("https://docs.google.com/"))
-        self.assertIn("p141", B.load()["briefs"])
-        self.assertEqual(json.loads(B.ALIASES.read_text())["aliases"]["p141"], "brief-0141")
+        self.assertIn(bid, B.load()["briefs"])
+        self.assertIn("p140", B.load()["briefs"])                              # the old one untouched
+        self.assertEqual(json.loads(B.ALIASES.read_text())["aliases"], {})      # no new pNNN code
 
     def test_one_id_per_run_for_ever(self):
         first = B.open_brief("jen-01-x", "brand-b", kind="video-creator")[0]
         again = B.open_brief("jen-01-x", "brand-b", kind="video-creator")[0]
         self.assertEqual(first, again)
-        self.assertEqual(B.open_brief("gen-y", "brand-b", kind="video-creator")[0], "p142")
+        self.assertEqual(B.open_brief("gen-y", "brand-b", kind="video-creator")[0],
+                         "brand-b_the-scrub_brief-0002")
 
     def test_a_general_brief_has_no_creator(self):
         self.assertIsNone(B.open_brief("gen-y", "brand-b", kind="video-creator")[1]["creator"])

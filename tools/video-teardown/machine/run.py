@@ -15,10 +15,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
-import brand_folders as BF
 import library as L
+sys.path.insert(0, str(C.WS / "components" / "brandpath"))
+import brandpath as BP
 
-RUNS = C.runs_root()
+RUNS = C.runs_root(create=False)   # named only; open_run() makes it (SI-161 (teardown runs honest))
 QUEUE = C.MACHINE / "queue"
 TMP = C.MACHINE / ".tmp"
 
@@ -83,28 +84,21 @@ def update_doc(prev_url, html, title, home):
     """The Doc she already has is the one that gets updated.
 
     upload_doc matches by NAME in the folder, and the name carries the
-    concept. A full re-run can rename the concept — BEC-01 went from "Twice
+    concept. A full re-run can rename the concept — CRA-01 went from "Twice
     a week" to "One tube, four places" on 2026-09-02 — and then a second Doc
     appeared beside the first, which is exactly the pile of half-versions
-    Damon does not want in a creator's folder. So when the run already
+    the owner does not want in a creator's folder. So when the run already
     holds a Doc link, that file is updated in place, contents and title
     both, and the link she was sent keeps working. Only a run with no Doc
     yet, or one whose Doc has since been trashed, makes a new one."""
-    import io
     import drive as _drive
+    from gdrive_creator import engine as _engine   # on the path, and configured, once drive is imported
     m = re.search(r"/document/d/([A-Za-z0-9_-]+)", prev_url or "")
     if m:
         try:
-            from googleapiclient.http import MediaIoBaseUpload
-            svc = _drive.service()
-            media = MediaIoBaseUpload(io.BytesIO(Path(html).read_bytes()),
-                                      mimetype="text/html", resumable=False)
-            f = svc.files().update(fileId=m.group(1), body={"name": title},
-                                   media_body=media,
-                                   fields="id,webViewLink,trashed",
-                                   supportsAllDrives=True).execute()
-            if not f.get("trashed"):
-                return f["webViewLink"], False
+            link, trashed = _engine.update_doc(m.group(1), html, name=title)
+            if not trashed:
+                return link, False
             # Somebody trashed this brief's Doc on purpose — a retired variant
             # of a post that has a newer run. Re-creating it puts a Doc a
             # human removed back in the creator's folder (two came back on
@@ -144,8 +138,9 @@ def save(d, st):
 CREATORS = C.WS / "brands"
 
 
-def brand_media(brand, *parts):
-    """A brand image, wherever it actually is.
+def brand_media(brand, key, *parts):
+    """A brand image, wherever it actually is. `key` is the brand-folder
+    name from the plan (brandpath: "ai-elements/characters", "products", …).
 
     Brand media moved to the Drive on 2026-08-31 (workspace rule 3) and the
     Drive mirrors the repo's paths exactly, so the same relative path resolves
@@ -166,11 +161,11 @@ def brand_media(brand, *parts):
         return any(x.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")
                    for x in f.iterdir())
 
-    f = (C.WS / "brands" / brand).joinpath(*parts)
+    f = BP.brand_path(brand, key, *parts, root=C.WS / "brands")
     if usable(f):
         return f
     try:
-        f = (C.drive_root() / "brands" / brand).joinpath(*parts)
+        f = BP.brand_path(brand, key, *parts, root=C.drive_root() / "brands")
         return f if usable(f) else None
     except Exception:
         return None
@@ -178,12 +173,10 @@ def brand_media(brand, *parts):
 
 def creator_files(brand, handle):
     """A creator's profile and the likeness we are allowed to seed frames from."""
-    base = BF.home(CREATORS / brand, "content-creators")   # old: channels/creators
-    prof = base / f"{handle}.md"
-    face = base / "likeness" / f"{handle}.jpg"
+    prof = BP.brand_path(brand, "content-creators", f"{handle}.md", root=CREATORS)
+    face = BP.brand_path(brand, "content-creators", "likeness", f"{handle}.jpg", root=CREATORS)
     if not face.exists():
-        face = (brand_media(brand, "content-creators", "likeness", f"{handle}.jpg")
-                or brand_media(brand, "channels", "creators", "likeness", f"{handle}.jpg"))
+        face = brand_media(brand, "content-creators", "likeness", f"{handle}.jpg")
     return (prof if prof.exists() else None), (face if face and face.exists() else None)
 
 
@@ -192,18 +185,16 @@ def cast_files(brand, avatar):
     master (the ONE identity image — the variation rule: never a creator's
     face, never more than one identity reference) and their identity block.
 
-    Found by convention: brands/<brand>/ai-elements/characters/<character>/
-    (old name ai-cast/<character>/)
+    Found by convention: brands/<brand>/ai-cast/<character>/
     character.md carries an `- Avatar link:` line naming the avatar it
     embodies, and the master image sits beside it.
 
     Several cast members can serve one avatar (the swap frame: actors are a
     bank). The character who EMBODIES the avatar leads; `--cast <character>`
     swaps the actor for a run."""
-    # ONE brand home (Damon, 2026-09-02): brands merged into
+    # ONE brand home (the owner, 2026-09-02): brands merged into
     # brands/ and stopped existing, ahead of production.
-    base = BF.home(C.WS / "brands" / brand, "ai-elements/characters")  # old: ai-cast
-    cast_rel = base.relative_to(C.WS / "brands" / brand).parts
+    base = BP.brand_path(brand, "ai-elements/characters", root=C.WS / "brands")
     base = base if base.is_dir() else None
     if not (avatar and base):
         return []
@@ -223,7 +214,7 @@ def cast_files(brand, avatar):
         master = next((d / n for n in names if (d / n).is_file()), None)
         if not master:
             master = next((f for n in names
-                           if (f := brand_media(brand, *cast_rel, d.name, n))), None)
+                           if (f := brand_media(brand, "ai-elements/characters", d.name, n))), None)
         ident, started = [], False
         for line in text.splitlines():     # the FIRST blockquote is the block
             if line.startswith(">"):
@@ -233,7 +224,7 @@ def cast_files(brand, avatar):
                 break
         matches.append((d.name, master, " ".join(ident).strip() or None,
                         "embodied" in text.lower()))
-    # The avatar was assigned upstream, so it IS used, every run (Damon,
+    # The avatar was assigned upstream, so it IS used, every run (the owner,
     # 2026-08-31) — the character that EMBODIES the avatar leads the bank.
     matches.sort(key=lambda m: (not m[3], m[0]))
     return matches
@@ -262,6 +253,11 @@ def identity_of(*parts):
     # keeps them from pulling every frame toward a packshot.
     scale = 0.85 if rec.get("kind") == "product" else 1.0
     return f"{url}|{scale}|{trig}", rec
+
+
+def brand_parts(brand, key, *rest):
+    """A brand folder as repo-relative parts for identity_of (via brandpath)."""
+    return BP.brand_path(brand, key, *rest, root=C.WS / "brands").relative_to(C.WS).parts
 
 
 def brand_root_rel(brand):
@@ -313,13 +309,13 @@ def snapshot(d, st, from_stage):
 
 def open_run(video, label, brand, creator=None):
     # A run with NO source asset — the FRAMEWORK lane, where the ad is composed
-    # from a chosen framework rather than swiped (Damon, 2026-09-18). compose.py
+    # from a chosen framework rather than swiped (the owner, 2026-09-18). compose.py
     # opens the folder itself and hands it here already built; everything below
     # that touches the file is skipped, and nothing else about a run changes.
     video = Path(video).expanduser().resolve() if video else None
     if video is not None and not video.exists():
         sys.exit(f"no such video: {video}")
-    # WHO ran it, and therefore WHICH run this is (VT-4). Damon's own runs get
+    # WHO ran it, and therefore WHICH run this is (VT-4). the owner's own runs get
     # the bare slug they have always had; anyone else's carries their name, so
     # two people tearing down the same video never land in one folder.
     who = C.operator()
@@ -538,6 +534,12 @@ def with_retry(fn, what, tries=5, wait=30):
     raise last
 
 
+# Set for the length of one read whose stage says `search` (the culture read):
+# the model may use Google Search while it watches, and the searches and pages
+# it was grounded on are appended to its output as receipts.
+_SEARCH = False
+
+
 def gemini_video(prompt_path, video, out):
     """Read the video. If the best model is busy, use the next one that can.
 
@@ -546,14 +548,20 @@ def gemini_video(prompt_path, video, out):
     answers straight away. Reports which model actually read the video, because
     a brief built by the second-best model is a fact about that brief."""
     last = ""
-    for i, model in enumerate([C.GEMINI_MODEL] + list(getattr(C, "GEMINI_FALLBACKS", []))):
+    # The video is read by the STRONGEST model first (2026-09-24): Flash wrote a
+    # 9,500-character record of an 81-second video — fragments for speech, one
+    # line per shot for visuals — against a prompt that asks for a
+    # reproduction-grade record. Every stage downstream is only as good as this read.
+    models = list(getattr(C, "VIDEO_MODELS", [])) or [C.GEMINI_MODEL] + list(getattr(C, "GEMINI_FALLBACKS", []))
+    for i, model in enumerate(models):
         r = subprocess.run(["python3", str(C.CM / "tools" / "gemini_breakdown.py"),
                             str(video), "--prompt-file", str(prompt_path),
-                            "--model", model, "--out", str(out)],
+                            "--model", model, "--out", str(out)]
+                           + (["--search"] if _SEARCH else []),
                            capture_output=True, text=True)
         if not r.returncode and out.exists():
             if i:
-                say(f"      {C.GEMINI_MODEL} was busy — read by {model} instead")
+                say(f"      {models[0]} was busy — read by {model} instead")
             return model
         last = (r.stderr or r.stdout or "gemini failed")[-1200:]
         if "high demand" not in last and "503" not in last and "UNAVAILABLE" not in last:
@@ -587,16 +595,80 @@ def _clean_env():
     # USER is deliberately NOT passed: with the desktop session's USER value
     # the CLI looks up the wrong keychain entry and reports the session
     # expired; without it, it finds its own login (bisected 2026-09-03).
-    keep = ("HOME", "PATH", "TERM", "LOGNAME", "SHELL", "LANG", "LC_ALL",
+    keep = ("HOME", "PATH", "TERM", "USER", "LOGNAME", "SHELL", "LANG", "LC_ALL",
             "TMPDIR")
-    return {k: os.environ[k] for k in keep if k in os.environ}
+    env = {k: os.environ[k] for k in keep if k in os.environ}
+    # THE CHAIN'S OWN LONG-LIFE LOGIN (2026-10-07). The CLI's saved sign-in only
+    # stays alive while the CLI is used; idle a few days, it expires and every
+    # Claude stage stops with "OAuth session expired". A token made once with
+    # `claude setup-token` lasts a year; it lives in the Keychain like every key
+    # (daemn-CLAUDE_CODE_OAUTH_TOKEN) and is handed to each call here.
+    tok = os.environ.get("CLAUDE_CODE_OAUTH_TOKEN_CHAIN")
+    if not tok:
+        try:
+            sys.path.insert(0, str(Path.home() / ".daemn"))
+            import daemn_keys
+            tok = daemn_keys.key("CLAUDE_CODE_OAUTH_TOKEN")
+        except Exception:
+            tok = None
+    if tok and tok.startswith("sk-ant-"):   # a placeholder in the Keychain is not a token
+        env["CLAUDE_CODE_OAUTH_TOKEN"] = tok
+    # A COMPANY API KEY WINS when there is one (the owner, 2026-10-07: "why a specific
+    # account has to be the only one controlling this"). Billed to the company,
+    # never expires, runnable by anyone or the mini, and it keeps chain runs off
+    # any one person's subscription limit. Keychain: daemn-ANTHROPIC_API_KEY.
+    key = os.environ.get("ANTHROPIC_API_KEY_CHAIN")
+    if not key:
+        try:
+            sys.path.insert(0, str(Path.home() / ".daemn"))
+            import daemn_keys
+            key = daemn_keys.key("ANTHROPIC_API_KEY")
+        except Exception:
+            key = None
+    if key and key.startswith("sk-ant-api"):
+        env["ANTHROPIC_API_KEY"] = key
+        env.pop("CLAUDE_CODE_OAUTH_TOKEN", None)
+    return env
 
 
-def claude(prompt_text, out):
-    r = subprocess.run(["claude", "-p", "--model", C.CLAUDE_MODEL,
-                        "--allowed-tools", "", "--append-system-prompt", PURE_TEXT],
-                       input=prompt_text, capture_output=True, text=True,
-                       cwd=str(C.MACHINE), env=_clean_env())
+def _cli_model(m):
+    """A stage's configured model as the CLI's name for it (2026-10-07, the owner: the
+    right model per stage — reading and audit on the cheaper model, writing on the top one)."""
+    m = (m or C.CLAUDE_MODEL).lower()
+    return "haiku" if "haiku" in m else "sonnet" if "sonnet" in m else "opus"
+
+
+def claude(prompt_text, out, model_name=None):
+    # THE SESSION HAND (2026-09-24): when the CLI is locked out (weekly limit),
+    # a Claude session writes the stage instead. DAEMN_HAND_DIR names a folder:
+    # the filled prompt is left there as <stage>.prompt.md and the run stops;
+    # the session writes <stage> beside it and the run is resumed. Every check
+    # below still applies to what the session wrote.
+    hand = os.environ.get("DAEMN_HAND_DIR")
+    if hand:
+        hd = Path(hand); hd.mkdir(parents=True, exist_ok=True)
+        done = hd / out.name
+        if not done.exists():
+            (hd / (out.stem + ".prompt.md")).write_text(prompt_text)
+            raise RuntimeError(f"waiting for the session hand: {hd / (out.stem + '.prompt.md')}")
+        r = subprocess.CompletedProcess([], 0, done.read_text(), "")
+    else:
+        # A stalled call used to wait forever (2026-09-25: a close sat 25 minutes
+        # on a call that normally takes 3). Twelve minutes, one retry, then stop
+        # and say so.
+        limit = int(os.environ.get("VT_CLAUDE_TIMEOUT", "720"))
+        for attempt in (1, 2):
+            try:
+                r = subprocess.run(["claude", "-p", "--model", _cli_model(model_name),
+                                    "--allowed-tools", "", "--append-system-prompt", PURE_TEXT],
+                                   input=prompt_text, capture_output=True, text=True,
+                                   cwd=str(C.MACHINE), env=_clean_env(), timeout=limit)
+                break
+            except subprocess.TimeoutExpired:
+                if attempt == 2:
+                    raise RuntimeError(f"the writer stalled twice ({limit // 60} min each) — stopped rather than left waiting")
+                say(f"      the writer stalled ({limit // 60} min) — retrying once")
+    model = "session hand" if hand else _cli_model(model_name)
     if r.returncode or not r.stdout.strip():
         raise RuntimeError((r.stderr or r.stdout or "claude failed")[-1200:])
     body = r.stdout
@@ -621,7 +693,7 @@ def claude(prompt_text, out):
         raise RuntimeError("the document ends by talking to a reader rather "
                            "than with content — last line: " + lines[-1][:180])
     out.write_text(body)
-    return C.CLAUDE_MODEL
+    return model
 
 
 def frames(stage, d, st, vars_, out):
@@ -632,7 +704,7 @@ def frames(stage, d, st, vars_, out):
     if not brief_rec or brief_rec.get("status") != "done":
         raise RuntimeError("stage 5 has to finish first — frames go onto its brief")
     brief = d / brief_rec["out"]
-    # Damon's runner, not the shared one: every scene gets a frame, none dropped.
+    # the owner's runner, not the shared one: every scene gets a frame, none dropped.
     tool = C.MACHINE / "frames.py"
     work = d / "frames"
     work.mkdir(exist_ok=True)
@@ -724,7 +796,7 @@ def frames(stage, d, st, vars_, out):
     if shots:
         say(f"      product reference: {len(shots[:4])} real photo(s) — "
             + ", ".join(p.name for p in shots[:4]))
-    # TRAINED IDENTITIES ARE PARKED (Damon, 2026-09-02). They solved identity
+    # TRAINED IDENTITIES ARE PARKED (the owner, 2026-09-02). They solved identity
     # consistency, which edit-first now solves better — the source frame
     # carries the person. And they actively FIGHT a style conversion: a LoRA
     # trained on photoreal images encodes "photoreal", so asking it for an
@@ -732,12 +804,12 @@ def frames(stage, d, st, vars_, out):
     # The lora.json records stay on disk; nothing reads them unless asked.
     use_ids = bool(st.get("use_identities"))
     if use_ids and brand_name and prod:
-        got = identity_of(*brand_root_rel(brand_name), "products", prod)
+        got = identity_of(*brand_parts(brand_name, "products", prod))
         if got:
             cmd += ["--identity", got[0]]
             say(f"      TRAINED IDENTITY: {prod} — the packaging is trained "
                 "in; a label-forward frame still composites the real packshot")
-    # Likeness seeding restored 2026-08-25 (Damon): the mock-ups are of the
+    # Likeness seeding restored 2026-08-25 (the owner): the mock-ups are of the
     # creator, so her face has to be in them. It was removed on 08-21 after the
     # seed still and the anchor fought over who the person was; the fix is that
     # they no longer both answer that question — the still owns the room, the
@@ -745,10 +817,7 @@ def frames(stage, d, st, vars_, out):
     # Brand-agnostic: found by convention from the brand and the handle.
     if st.get("creator"):
         _, face = creator_files(st["brand"], st["creator"])
-        root = brand_root_rel(st["brand"])
-        cc = BF.home(C.WS.joinpath(*root), "content-creators").relative_to(C.WS.joinpath(*root)).parts
-        got = (identity_of(*root, *cc, st["creator"])
-               or identity_of(*root, "creators", st["creator"])) if use_ids else None
+        got = identity_of(*brand_parts(st["brand"], "content-creators", st["creator"])) if use_ids else None
         if got:
             cmd += ["--identity", got[0]]
             say(f"      TRAINED IDENTITY: {st['creator']} — generated with "
@@ -759,7 +828,7 @@ def frames(stage, d, st, vars_, out):
         else:
             say(f"      NO likeness anchor for {st['creator']} — the frames will "
                 f"show someone who merely fits the description. Cut one from her "
-                f"own video into brands/{st['brand']}/content-creators/likeness/")
+                f"own video into brands/{BP.rel(st['brand'], 'content-creators', 'likeness', root=C.WS / 'brands')}/")
     elif st.get("production_route") == "ai":
         # The AI route casts from the brand's AI cast, bound to the avatar
         # stage 1b assigned — the assignment is used, every run. Same identity
@@ -773,9 +842,7 @@ def frames(stage, d, st, vars_, out):
             if want else (matches[0] if matches else None)
         if picked and picked[1]:
             who, master, ident, _ = picked
-            root = brand_root_rel(st["brand"])
-            ch = BF.home(C.WS.joinpath(*root), "ai-elements/characters").relative_to(C.WS.joinpath(*root)).parts
-            got = identity_of(*root, *ch, who) if use_ids else None
+            got = identity_of(*brand_parts(st["brand"], "ai-elements/characters", who)) if use_ids else None
             if got:
                 cmd += ["--identity", got[0]]
                 say(f"      TRAINED IDENTITY: {who} — generated with her "
@@ -789,9 +856,9 @@ def frames(stage, d, st, vars_, out):
                 f"canonical master as the one identity image"
                 + (f" (also castable: {others} — rerun with --cast)" if others else ""))
         else:
-            say("      NO cast anchor — no AI character links to this "
+            say("      NO cast anchor — no ai-cast character links to this "
                 "run's avatar, so every frame will invent its own person. "
-                f"Cast one in brands/{st['brand']}/ai-elements/characters/")
+                f"Cast one in brands/{BP.rel(st['brand'], 'ai-elements/characters', root=C.WS / 'brands')}/")
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(C.MACHINE))
     if r.returncode:
         raise RuntimeError((r.stderr or r.stdout or "frames failed")[-1200:])
@@ -869,7 +936,7 @@ NO_LINE = ("nothing", "none", "n/a", "-", "—", "nothing — picture only",
 def transcript(brief):
     """Every spoken line, in order, on its own.
 
-    Damon, 2026-08-26: a creator should not have to read a shot list to find
+    the owner, 2026-08-26: a creator should not have to read a shot list to find
     out what to say. Built here rather than asked of stage 5 because the lines
     already exist — lifting them is mechanical, and a model asked to repeat
     itself paraphrases. This way the transcript cannot drift from the frames.
@@ -1035,9 +1102,380 @@ def inject(stage, d, st, out):
 
 # ---------------------------------------------------------------- one stage
 
+def doctrine_section_ids():
+    f = C.WS / "components" / "marketing-doctrine" / "frameworks.json"
+    return [r["id"] for r in json.loads(f.read_text()).get("sections") or [] if isinstance(r, dict) and r.get("id")]
+
+
+DISPLAY = getattr(C, "DISPLAY_ID", {})
+
+
+def structure_changes(body):
+    """Every ELEMENT LEDGER row the rewrite marked Adapted or Dropped, and every
+    row of its STRUCTURE QUESTIONS FOR DAMON block — numbered as written."""
+    out = []
+    led = re.search(r"##\s*ELEMENT LEDGER(.*?)(?:\n##\s|\Z)", body, re.S | re.I)
+    if led:
+        for line in led.group(1).splitlines():
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) >= 4 and re.match(r"^\d+$", cells[0]) and re.search(r"adapted|dropped", cells[2], re.I):
+                out.append({"n": cells[0], "element": cells[1], "status": cells[2].strip("* "), "why": cells[3]})
+    q = re.search(r"##\s*STRUCTURE QUESTIONS FOR DAMON(.*?)(?:\n##\s|\Z)", body, re.S | re.I)
+    if q:
+        for line in q.group(1).splitlines():
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) >= 3 and re.match(r"^\d+$", cells[0]):
+                out.append({"n": "Q" + cells[0], "element": cells[1], "status": "question", "why": " / ".join(cells[2:])})
+    return out
+
+
+def structure_gate(d, st, key, body):
+    """THE SWIPE'S STRUCTURE IS LOCKED (the owner, 2026-09-24: "literally this
+    cannot happen again UNLESS I DISCRETELY SAY SO. THE WHOLE POINT IS TO
+    TAKE A SWIPE AND ADAPT, not ruin it"). Any ELEMENT LEDGER row marked
+    Adapted or Dropped, and any STRUCTURE QUESTIONS the rewrite raised, hold
+    the stage — status "held", so nothing downstream runs and no later run
+    treats it as done — until the owner approves each by number
+    (`--approve-structure 2,Q1` or `all`)."""
+    if key == "stage4e":
+        # THE AUDIT HOLDS ON A FAIL (the owner, 2026-09-30: "do whatever is necessary
+        # to fix this problem" — a scene that staged a result the product does
+        # not deliver was reported by three passes and fixed by none). A verdict
+        # other than SHIP holds the step; each failed check is numbered A<n> and
+        # passes only on `--approve-structure A5` (or a fix and a re-run).
+        verdict = re.search(r"VERDICT\W*\s*(SHIP|RE-RUN|STOP)", body, re.I)
+        fails = []
+        for line in body.splitlines():
+            c = [x.strip().strip("*").strip() for x in line.strip().strip("|").split("|")]
+            if len(c) >= 3 and c[0].isdigit() and c[2].upper().startswith("FAIL"):
+                fails.append({"n": f"A{c[0]}", "element": c[1], "status": "Failed",
+                              "why": (c[3] if len(c) > 3 else "")[:300]})
+        if verdict and verdict.group(1).upper() != "SHIP" and not fails:
+            fails.append({"n": "A", "element": f"verdict {verdict.group(1).upper()}", "status": "Failed",
+                          "why": "the audit asked for a re-run"})
+        ok = approved_structure()
+        open_ = [c for c in fails if not (ok == "all" or c["n"] in ok)]
+        note = d / "AUDIT-HOLD.md"
+        if not open_:
+            st["stages"][key]["status"] = "done"
+            if note.exists():
+                note.rename(d / "AUDIT-HOLD-cleared.md")
+            save(d, st)
+            say("      audit: every check passes" if not fails else f"      audit: {len(fails)} fail(s), each approved by the owner")
+            return
+        note.write_text("# The audit failed a check\n\nNothing after the audit runs until the failed check is fixed "
+                        "and the audit re-run, or the owner passes it by number (`--approve-structure A5`).\n\n"
+                        "| # | Check | Evidence |\n|---|---|---|\n"
+                        + "".join(f"| {c['n']} | {c['element']} | {c['why']} |\n" for c in open_))
+        st["stages"][key]["status"] = "held"
+        save(d, st)
+        for c in open_:
+            say(f"      AUDIT {c['n']} · {c['element'][:60]} — {c['why'][:100]}")
+        raise RuntimeError(f"the audit failed {len(open_)} check(s) — HELD (AUDIT-HOLD.md).")
+    if key == "stage4b":
+        # THE HOOK IS A FORMAT (the owner, 2026-09-25) — every version keeps the
+        # source's opening word for word except its blanks. hook_format.py.
+        import importlib.util as _u
+        _hp = _u.spec_from_file_location("hook_format", Path(__file__).resolve().parent / "hook_format.py")
+        _hf = _u.module_from_spec(_hp); _hp.loader.exec_module(_hf)
+        body, _fixed = _hf.repair(d, body)
+        if _fixed:
+            (d / st["stages"][key]["out"]).write_text(body)
+            for n in _fixed:
+                say(f"      hook format repaired: {n}")
+        fmt, changes = _hf.check(d, body)
+        st["stages"][key]["hook_format"] = fmt
+        ok = approved_structure()
+        open_ = [c for c in changes if not (ok == "all" or c["n"] in ok)]
+        note = d / "HOOK-FORMAT.md"
+        if not open_:
+            st["stages"][key]["status"] = "done"
+            st.pop("hook_check", None)
+            if note.exists():
+                note.rename(d / "HOOK-FORMAT-approved.md")
+            save(d, st)
+            say(f"      hook format: every version keeps \"{(fmt.get('line') or '')[:90]}\"")
+            return
+        note.write_text("# A hook breaks the swipe's format\n\n"
+                        f"The format: `{fmt.get('line')}`\n\n"
+                        "Nothing after this step runs until the owner passes each by number "
+                        "(`--approve-structure H3`), or the step is re-run.\n\n"
+                        "| # | Version | Change | Why |\n|---|---|---|---|\n"
+                        + "".join(f"| {c['n']} | {c['element']} | {c['status']} | {c['why']} |\n" for c in open_))
+        st["stages"][key]["status"] = "held"
+        st["hook_check"] = {"open": open_, "at": now()}
+        save(d, st)
+        for c in open_:
+            say(f"      HOOK {c['n']}: {c['element'][:80]} — {c['why'][:100]}")
+        raise RuntimeError(f"{len(open_)} hook version(s) break the swipe's format — HELD for the owner (HOOK-FORMAT.md).")
+    if key == "stage5":
+        import importlib.util as _u
+        _sp = _u.spec_from_file_location("swipe_match", Path(__file__).resolve().parent / "swipe_match.py")
+        _sm = _u.module_from_spec(_sp); _sp.loader.exec_module(_sm)
+        passed, open_ = _sm.check(d, Path(st["stages"][key]["out"]).name)
+        st["stages"][key]["status"] = "done" if passed else "held"
+        st["swipe_match"] = "passed" if passed else {"open": open_, "at": now()}
+        save(d, st)
+        if passed:
+            say("      swipe match: the brief keeps the swipe's places, people, camera and order")
+            # THE MANIFEST (the owner, 2026-09-24: "a manifest at the end of every
+            # brief … before we can go into ai production — i do not have time
+            # to babysit this anymore"). The swipe's core elements, the cast and
+            # elements, every price — written onto the brief; production refuses
+            # it unless COMPLETE.
+            _mp = _u.spec_from_file_location("manifest", Path(__file__).resolve().parent / "manifest.py")
+            _mf = _u.module_from_spec(_mp); _mp.loader.exec_module(_mf)
+            ok_m, miss = _mf.check(d, st.get("brand"), Path(st["stages"][key]["out"]).name)
+            if ok_m:
+                say("      manifest: COMPLETE — every core element carried, every element banked, every price sourced")
+                return
+            _rec = json.loads((d / "manifest.json").read_text())
+            if not _rec.get("core_missing"):
+                # Only elements still to make — the normal state of a fresh brief.
+                # Production re-checks the manifest and refuses until they are banked.
+                say(f"      manifest: core elements all carried; to make before production: {', '.join(_rec.get('to_make') or [])[:200]}")
+                return
+            miss = _rec["core_missing"]
+            st["stages"][key]["status"] = "held"
+            st["manifest"] = {"missing": miss, "at": now()}
+            save(d, st)
+            raise RuntimeError(f"the manifest is missing {len(miss)} thing(s): {', '.join(miss)[:200]} — HELD. "
+                               f"Production refuses the brief until it is COMPLETE.")
+        for f in open_:
+            say(f"      SWIPE {f['n']} · {f['swipe']} → {', '.join(f['brief_scenes'])}: {'; '.join(f['changed'])[:120]}")
+        raise RuntimeError(f"the brief changes the swipe in {len(open_)} place(s) — HELD for the owner "
+                           f"(SWIPE-MATCH.md). Production refuses it until it passes.")
+    changes = structure_changes(body)
+    # EVERY LINE OF THE SWIPE (2026-09-24): the injected script must carry one
+    # row per numbered transcript line. A missing number is a structural
+    # change like any other — held for the owner.
+    tj = d / "transcript.json"
+    if tj.exists():
+        want = [l["id"] for l in json.loads(tj.read_text())]
+        m = re.search(r"\*\*1\.\s*THE INJECTED SCRIPT\*\*(.*?)(?=\n\*\*2\.|\Z)", body, re.S)
+        have = set(re.findall(r"^\|\s*(T\d+)\s*\|", m.group(1) if m else body, re.M))
+        lost = [x for x in want if x not in have]
+        if lost:
+            changes.append({"n": "LINES", "element": f"{len(lost)} of {len(want)} swipe lines missing from the injected script: {', '.join(lost[:20])}",
+                            "status": "Dropped", "why": "the injection must carry every numbered line of the verbatim transcript"})
+    else:
+        changes.append({"n": "LINES", "element": "no verbatim transcript in the run", "status": "Dropped",
+                        "why": "run transcript.py <run> — the injection cannot be held to the swipe's lines without it"})
+    ok = approved_structure()
+    open_ = [c for c in changes if not (ok == "all" or c["n"] in ok)]
+    note = d / "STRUCTURE-CHECK.md"
+    if not open_:
+        st["stages"][key]["status"] = "done"
+        if changes:
+            st["stages"][key]["structure_approved"] = [c["n"] for c in changes]
+            say(f"      structure: {len(changes)} change(s), every one approved by the owner")
+        st.pop("structure_check", None)
+        if note.exists():
+            note.rename(d / "STRUCTURE-CHECK-approved.md")
+        save(d, st)
+        return
+    note.write_text("# The rewrite wants to change the swipe's structure\n\n"
+                    "Nothing after this step runs until the owner approves each change by number "
+                    "(`--approve-structure <n,n|all>`), or the step is re-run.\n\n"
+                    "| # | Element | Change | How / why |\n|---|---|---|---|\n"
+                    + "".join(f"| {c['n']} | {c['element']} | {c['status']} | {c['why']} |\n" for c in open_))
+    st["stages"][key]["status"] = "held"
+    st["structure_check"] = {"open": open_, "at": now()}
+    save(d, st)
+    for c in open_:
+        say(f"      STRUCTURE {c['n']} · {c['status']}: {c['element'][:60]} — {c['why'][:100]}")
+    raise RuntimeError(f"the rewrite changes the swipe's structure in {len(open_)} place(s) — "
+                       f"STOPPED for the owner (STRUCTURE-CHECK.md). Nothing after stage 3 was written.")
+
+
+def approved_structure():
+    v = os.environ.get("DAEMN_STRUCTURE_APPROVALS", "").strip()
+    if v.lower() == "all":
+        return "all"
+    return {x.strip() for x in v.split(",") if x.strip()}
+
+
+def real_video(path):
+    """True when the file is a playable video with some duration — the transcript
+    and the deepen passes call paid services and are skipped for stubs (tests)."""
+    try:
+        r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                            "-of", "csv=p=0", str(path)], capture_output=True, text=True, timeout=20)
+        return float((r.stdout or "0").strip() or 0) > 0.5
+    except Exception:
+        return False
+
+
+def thin_visuals(body, floor=40):
+    """The median word count of the shot table's Visuals cells, when it is under
+    `floor` (0 = deep enough, or no table to judge)."""
+    body = body.split("### VERBATIM TRANSCRIPT")[0]
+    rows = [l for l in body.splitlines() if l.startswith("|")]
+    head = next((l for l in rows if "Visuals" in l and "Timestamp" in l), None)
+    if not head:
+        return 0
+    cols = [c.strip() for c in head.strip().strip("|").split("|")]
+    vi = cols.index("Visuals")
+    counts = []
+    for l in rows:
+        c = [x.strip() for x in l.strip().strip("|").split("|")]
+        if len(c) >= len(cols) and re.match(r"\d+:\d+", c[0]):
+            counts.append(len(c[vi].split()))
+    if not counts:
+        return 0
+    counts.sort()
+    med = counts[len(counts) // 2]
+    return med if med < floor else 0
+
+
+def off_doctrine_sections(body):
+    """The Section column of the teardown's table, checked against the
+    doctrine's ids. Returns every cell that is not one (empty = clean)."""
+    body = body.split("### VERBATIM TRANSCRIPT")[0]   # the transcript's Speaker column is not a section
+    ids = set(doctrine_section_ids())
+    col, bad = None, []
+    for line in body.splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if col is None:
+            low = [c.lower().strip("* ") for c in cells]
+            if "section" in low:
+                col = low.index("section")
+            continue
+        if set(line.replace("|", "").strip()) <= set("-: "):
+            continue
+        if col < len(cells):
+            v = cells[col].strip("*` ").lower()
+            if v and v not in ids:
+                bad.append(cells[col])
+    return bad
+
+
+def _rerun_stage1(d, st, stage, extras):
+    st["stages"][stage["key"]]["_section_retry"] = True
+    save(d, st)
+    return run_stage(d, st, stage, extras, redo=True)
+
+
+def creative_qc(stage, run_dir, output, given):
+    """The shared reviewer (components/quality-checks review.after_stage) — never
+    stops the run on its own; its findings are filed beside the run."""
+    try:
+        q = str(Path(__file__).resolve().parents[3] / "components" / "quality-checks")
+        if q not in sys.path:
+            sys.path.insert(0, q)
+        from marketing_chain_checks import review
+        f = review.after_stage("video-teardown", stage, run_dir, output=output,
+                               sources=[given] if Path(given).exists() else None)
+        bad = [k for k, v in f.items() if isinstance(v, dict) and v.get("severity") in ("BLOCKER", "FIX")]
+        if bad:
+            print(f"  QC {stage}: {len(bad)} finding(s) — see qc-log/QC-LOG.md")
+        return f
+    except Exception as e:
+        print(f"  QC {stage}: review not run ({type(e).__name__})")
+        return {}
+
+
+# THE VIEWER CHECK (the owner, 2026-10-02: "slide this into the chains and lets
+# ride it"; components/quality-checks/VIEWER-CHECK.md). The finished brief is
+# dropped into its avatar's real feed and scrolled by 3 fresh viewers who are
+# not marketers; code scores it against the real posts beside it. A fail goes
+# back to the writing step where they left, with their words, and a fresh set
+# reads the rewrite; after two fails it HOLDS for the owner. "Not for me" holds at
+# once — who an ad is for is his call. Passes on `--approve-structure V`.
+VIEWER_ROUTE = {"openings": "stage4b", "middle": "stage4a", "giveaway": "stage4a", "close": "stage4d",
+                # v2 (2026-10-02): fake-looking shot → placement · sales pitch → spice · sound off → placement (the on-screen words) · not believed → expansion (the mechanism and proof)
+                "staged": "stage4a", "words": "stage4g", "muted": "stage4a", "proof": "stage4c"}
+VIEWER_MAX_FAILS = 2
+
+
+def viewer_gate(d, st, key, out):
+    _ok = approved_structure()
+    if _ok == "all" or "V" in _ok:
+        st["viewer_check"] = {"passed": "approved by the owner (--approve-structure V)", "at": now()}
+        st.pop("viewer_redo", None)
+        try:   # the stamp production reads before it spends
+            q = str(Path(__file__).resolve().parents[3] / "components" / "quality-checks")
+            if q not in sys.path:
+                sys.path.insert(0, q)
+            from marketing_chain_checks import viewer as _vw
+            _vw.approve(d, out)
+        except Exception as e:
+            say(f"      viewer stamp could not be written ({type(e).__name__}) — production will ask again")
+        return
+    aud = st.get("audience") or {}
+    dec = st.get("declared_audience") or {}
+    avatar = dec.get("avatar") or aud.get("_avatar")
+    sub = dec.get("sub") or aud.get("_sub_avatar")
+    try:
+        q = str(Path(__file__).resolve().parents[3] / "components" / "quality-checks")
+        if q not in sys.path:
+            sys.path.insert(0, q)
+        from marketing_chain_checks import viewer as _vw
+        if os.environ.get("QC_VIEWER", "1") == "0" or "unittest" in sys.modules:
+            return
+        if not avatar:
+            raise RuntimeError("the run names no avatar (stage 1b)")
+        # THE WHOLE LOOP, AT THE GATE (the owner, 2026-10-03: "install this in the actual
+        # process so we can start pumping out briefs"): check → answers from real
+        # data → surgical rewrite → fresh check, up to 3 rewrites, never building on
+        # a worse version; a pass after a fail is learned. A passing rewrite becomes
+        # the brief and goes back through the swipe match.
+        before = Path(out).read_text()
+        r, text = _vw.run_loop(d / "viewer-chain", st["brand"], avatar, before, kind="video", sub=sub,
+                               label=st.get("label") or d.name, say=lambda m: say("      " + m.strip()))
+    except Exception as e:
+        st["stages"][key]["status"] = "held"
+        st["viewer_check"] = {"passed": False, "could_not_run": f"{type(e).__name__}: {str(e)[:200]}", "at": now()}
+        save(d, st)
+        raise RuntimeError(f"the viewer check could not run ({type(e).__name__}: {str(e)[:120]}) — HELD rather "
+                           "than skipped. Re-run stage 5 when it can, or --approve-structure V.")
+    st["viewer_check"] = {k: r.get(k) for k in ("passed", "checks", "fix_at", "at", "round", "folder", "history")}
+    st["viewer_check"]["checked"] = now()
+    if r["passed"]:
+        if text.strip() != before.strip():
+            Path(out).with_name(Path(out).stem + ".before-viewer.md").write_text(before)
+            Path(out).write_text(text)
+            say(f"      viewer check: the rewrite that passed is now the brief (was kept as {Path(out).stem}.before-viewer.md)")
+            structure_gate(d, st, key, text)          # the rewritten brief goes back through the swipe match
+        st.pop("viewer_redo", None)
+        save(d, st)
+        say(f"      viewer check: PASSED (round {r['round']}) — {d / 'viewer-chain'}/REPORT.html")
+        return
+    st["stages"][key]["status"] = "held"
+    st.pop("viewer_redo", None)
+    save(d, st)
+    why = ("the viewers said it isn't for them — who it's for is the owner's call" if r["fix_at"] == "audience"
+           else f"still failing after the rewrites — last at {_vw.say(r['fix_at'])}")
+    raise RuntimeError(f"VIEWER CHECK: {why} — HELD for the owner ({d / 'viewer-chain'}). --approve-structure V passes it.")
+
+
 def run_stage(d, st, stage, extras, redo=False):
     key, sid = stage["key"], stage["id"]
     rec = st["stages"].get(key, {})
+    if rec.get("status") == "held" and not redo and rec.get("out") and (d / rec["out"]).exists() \
+            and not (key == "stage5" and st.get("missed_checks")):   # a missed check re-runs the stage
+        # Held for the owner's structural approval: re-check the SAME rewrite
+        # against the approvals given now — never re-write it, which would
+        # renumber the changes he approved.
+        try:
+            structure_gate(d, st, key, (d / rec["out"]).read_text())
+            _vc = st.get("viewer_check") or {}
+            if key == "stage5" and _vc.get("passed") is not True and not str(_vc.get("passed") or "").startswith("approved"):
+                # A brief the viewers held stays held: only the owner's V, or a
+                # check that could not run being retried, moves it on.
+                _ok = approved_structure()
+                if _ok == "all" or "V" in _ok or _vc.get("could_not_run") or not _vc:
+                    viewer_gate(d, st, key, d / rec["out"])
+                else:
+                    raise RuntimeError("VIEWER CHECK failed — HELD for the owner "
+                                       f"({_vc.get('folder', 'viewer-check')}/VERDICT.md). --approve-structure V passes it.")
+        except RuntimeError as e:
+            say(f"  {sid:<3} {stage['name']:<11} HELD — {str(e)[:140]}")
+            save(d, st)
+            return False
+        return True
     if rec.get("status") == "done" and not redo:
         say(f"  {sid:<3} {stage['name']:<11} already done")
         return True
@@ -1062,10 +1500,10 @@ def run_stage(d, st, stage, extras, redo=False):
 
     t0 = time.time()
     # Fourteen numbered files loose in the run folder buried the one document
-    # anyone opens (Damon, 2026-08-27). They go in stages/. The name recorded
+    # anyone opens (the owner, 2026-08-27). They go in stages/. The name recorded
     # on the run stays relative to the run folder, which is how every reader
     # already resolves it — `d / rec["out"]` keeps working untouched.
-    out_name = f"stages/{sid}-{slug(stage['name'])}.md"
+    out_name = f"stages/{stage.get('file_id', sid)}-{slug(stage['name'])}.md"
     out = d / out_name
     out.parent.mkdir(parents=True, exist_ok=True)
     sent = d / "prompts" / Path(out_name).name
@@ -1073,13 +1511,14 @@ def run_stage(d, st, stage, extras, redo=False):
 
     try:
         pack = dict(extras)
+        pack["_run_dir"] = str(d)       # the language query leaves this run out of the shown count
         pack["source_url"] = (source_url(Path(st["video"]))
                               if st.get("video") else "") or "NONE"
         # Who stage 1b decided this run speaks to. The brand's variables map
         # resolves every avatar-shaped path through it, so without this the
         # map's <avatar> rows can never fill and the chain silently falls back
         # to the config's conventional path — which is how briefs were written
-        # from a two-week-old avatar while the run record said "spot-hider".
+        # from a two-week-old avatar while the run record said "avatar-two".
         _av = (st.get("audience") or {}).get("_avatar")
         if _av:
             pack["avatar"] = _av
@@ -1114,27 +1553,42 @@ def run_stage(d, st, stage, extras, redo=False):
                 say(f"      research: unavailable ({type(e).__name__}) — running clean")
             pack.setdefault("research",
                             "[UNFILLED: research gatherer not available]")
-        # ~voiceprint — the brand's measured creator voiceprints (Damon,
+        # ~voiceprint — the brand's measured creator voiceprints (the owner,
         # 2026-09-19: "analyze the audio specifically and create voice
-        # prints"). brands/<brand>/content-creators/VOICEPRINTS.md (old: creators/), written by
+        # prints"). runs/research/<brand>/creators/VOICEPRINTS.md, written by
         # `gather.py voiceprint`, keyed per avatar and sub-avatar; the spoken
         # script matches its rhythm. A brand with none runs on the register
         # recipe alone and the stage is told so — never a stopped run.
         if any(v == "~voiceprint" for v in (stage.get("vars") or {}).values()):
-            vf = BF.home(C.WS / "brands" / st["brand"], "content-creators") / "VOICEPRINTS.md"
-            if not vf.is_file():
-                vf = C.WS / "brands" / st["brand"] / "creators" / "VOICEPRINTS.md"
+            vf = C.WS / "runs" / "research" / st["brand"] / "creators" / "VOICEPRINTS.md"
             pack["voiceprint"] = (vf.read_text() if vf.is_file() else
                                   "[UNFILLED: no creator voiceprints on file for this "
                                   "brand — `gather.py voiceprint --brand <brand> --all` "
                                   "measures them off the creators' own audio]")
+        # ~frame_map — the swipe shot by shot and moment by moment (framemap.py,
+        # the owner 2026-10-01: "we should've done this level of frame analysis at the
+        # teardown stage … so by the time we get to the storyboard it's 10x
+        # faster"). The rewrite and the brief write from it: every cut, every
+        # insert, every on-screen word, which edge every arm enters from.
+        # !post_talk — the swipe's own caption and comments (culture.py, the owner
+        # 2026-10-05: the comments named the film character the teardown missed).
+        # yt-dlp, free, never Apify; nothing to pull is said in the text and the
+        # stage carries on.
+        if any(v == "!post_talk" for v in (stage.get("vars") or {}).values()):
+            import culture as _cu
+            pack["post_talk"] = _cu.post_talk(d, st)
+            say("      post talk: " + pack["post_talk"].splitlines()[0][:120])
+        if any(v == "~frame_map" for v in (stage.get("vars") or {}).values()):
+            ff = d / "framemap" / "FRAME-MAP.md"
+            pack["frame_map"] = (ff.read_text() if ff.is_file() else
+                                 "[UNFILLED: no frame map for this swipe — framemap.py <run> maps it]")
         # ~story — the brand's storytelling framework beside its position
-        # (Damon, 2026-09-19: "storytelling and intent over volume").
-        # brands/<brand>/brand-identity/story.md (old: story.md); after 1b has picked, the pick is appended
+        # (the owner, 2026-09-19: "storytelling and intent over volume").
+        # brands/<brand>/brand-identity/story.md; after 1b has picked, the pick is appended
         # so every later stage tells the same story in the same teller's
         # mouth. A brand with none runs as before — never a stopped run.
         if any(v == "~story" for v in (stage.get("vars") or {}).values()):
-            sf = BF.home(C.WS / "brands" / st["brand"], "brand-identity/story.md")
+            sf = C.WS / "brands" / st["brand"] / "brand-identity" / "story.md"
             if sf.is_file():
                 txt = sf.read_text()
                 ms = st.get("market_state") or {}
@@ -1145,7 +1599,7 @@ def run_stage(d, st, stage, extras, redo=False):
                 pack["story"] = txt
             else:
                 pack["story"] = ("[UNFILLED: this brand has no story.md yet — "
-                                 "`python3 story-builder/build.py --brand <brand>` drafts one]")
+                                 "`python3 $STORY_BUILDER --brand <brand>` drafts one]")
         # per-run bindings win over anything the shared config pins
         if st.get("creator"):
             prof, _ = creator_files(st["brand"], st["creator"])
@@ -1168,7 +1622,7 @@ def run_stage(d, st, stage, extras, redo=False):
             if src == "@stage6" and "stage6" not in pack:
                 filled_vars[var], sources[var] = "NONE — frames not run", "no frames"
                 continue
-            # The variables/ convention (Damon, 2026-08-31): a brand's own
+            # The variables/ convention (the owner, 2026-08-31): a brand's own
             # variables/video.md outranks the chain config's conventional
             # path for any variable it names. Avatar-shaped rows resolve
             # only once stage 1b has decided who the run speaks to; before
@@ -1183,6 +1637,9 @@ def run_stage(d, st, stage, extras, redo=False):
                     if cand.exists():
                         src = f"brands/{st['brand']}/{rel}"
             text, origin = C.resolve_source(src, st["brand"], pack, var=var)
+            if key in TEARDOWN_KEYS and src.endswith(".json") \
+                    and "components/elements/library/" in src:
+                text = brand_free_list(text)
             filled_vars[var], sources[var] = text, origin
 
         asks = set(re.findall(r"\{([a-z0-9_]+)\}", template))
@@ -1192,14 +1649,94 @@ def run_stage(d, st, stage, extras, redo=False):
 
         filled = template
         for var, text in filled_vars.items():
-            filled = filled.replace("{" + var + "}", text)
+            # ONE COPY OF EACH BLOCK (2026-10-07). Prompts name a block several
+            # times ("`{position}` is the brand's declared line…"), and every
+            # mention used to paste the whole block — the Injection prompt carried
+            # the position 6×, the story 4×, the product file 3×, ~550 KB a call.
+            # A long block now goes in once, at its first mention; later mentions
+            # point back to it. Short values (a name, a date) still fill everywhere.
+            tag = "{" + var + "}"
+            if len(text) > 400 and filled.count(tag) > 1:
+                head, _, rest = filled.partition(tag)
+                filled = head + text + rest.replace(tag, f"`{var}` (given in full above)")
+            else:
+                filled = filled.replace(tag, text)
+        # THE OWNER'S RULINGS FOR THIS RUN (2026-09-25). His decisions for this ad
+        # (the product, which roles stay, a line's shape, the offer) used to live
+        # in chat or in a session's head; a stage run by the machine never saw
+        # them and went back to the defaults. <run>/RULINGS.md is handed to every
+        # writing stage and outranks everything above it.
+        _rp = d / "RULINGS.md"
+        if key not in TEARDOWN_KEYS and _rp.exists() and _rp.read_text().strip():
+            # (not the triage, the teardown, the doctrine read or the spec — those
+            #  describe the SWIPE; rulings shape OUR version)
+            filled = (filled.rstrip() + "\n\n---\n\n## THE OWNER'S RULINGS FOR THIS RUN — they override anything above\n\n"
+                      "These are the owner's decisions for this exact ad. Where anything earlier in this prompt, in the "
+                      "brand's files or in an earlier stage's output says otherwise, these win. Do not raise them as "
+                      "questions; apply them.\n\n" + _rp.read_text().strip() + "\n")
+        # >>> APPROVAL-PAGE LEARNINGS HOOK (components/meta-upload/learnings.py) — adds nothing unless learnings-hooks.json turns "video-teardown" on
+        try:
+            import importlib.util as _iu
+            _ls = _iu.spec_from_file_location("meta_learnings", Path(__file__).resolve().parents[3] / "components" / "meta-upload" / "learnings.py")
+            _L = _iu.module_from_spec(_ls); _ls.loader.exec_module(_L)
+            if key not in TEARDOWN_KEYS: filled += _L.prompt_block("video-teardown", 2, st.get("brand"))
+        except Exception:
+            pass
+        # <<< APPROVAL-PAGE LEARNINGS HOOK
+        # WHAT GOT PAST THIS AVATAR BEFORE (the owner, 2026-10-02: "make sure you have
+        # updates in the chain itself with that context of what made it actually
+        # pass"). The viewer chain writes each pass-after-a-fail to
+        # marketing-chain-checks/records/learnings/<brand>--<avatar>.md; every
+        # writing stage reads it, so the next brief starts from what worked.
+        if key.startswith("stage4") or key in ("stage3", "stage5"):
+            try:
+                _aud = st.get("declared_audience") or {}
+                _au2 = st.get("audience") or {}
+                _who = _aud.get("sub") or _au2.get("_sub_avatar") or _aud.get("avatar") or _au2.get("_avatar")
+                _lf = Path(__file__).resolve().parents[3] / "components" / "quality-checks" / "records" / "learnings" / f"{st['brand']}--{_who}.md"
+                if _who and _lf.exists() and _lf.read_text().strip():
+                    filled = (filled.rstrip() + "\n\n---\n\n## WHAT GOT PAST THIS AVATAR BEFORE (the viewer chain's learnings)\n\n"
+                              "Real viewer checks on earlier briefs for this same person. Where a line or move here answered a doubt and "
+                              "then passed, use what worked; don't repeat what failed. These never override the swipe's structure or "
+                              "the owner's rulings.\n\n" + _lf.read_text()[-12000:].strip() + "\n")
+            except Exception:
+                pass
+        _vr = st.get("viewer_redo") or {}
+        if _vr.get("stage") == key and _vr.get("notes"):
+            filled = filled.rstrip() + "\n\n---\n\n" + _vr["notes"].strip() + "\n"
         sent.write_text(filled)
 
         # frames has its own model fallback and its own per-frame retries, so
         # it is left alone; the rest ride out a blip (see with_retry).
         label = stage["name"]
+        if stage["engine"] == "gemini-video" and key == "stage1" and real_video(st["video"]):
+            # THE TRANSCRIPT GOES IN FIRST (2026-09-24): the teardown model is
+            # handed every word and every voice before it watches, so it cannot
+            # miss a speaker who is only a hand in frame or compress the dialogue.
+            try:
+                import importlib.util as _ut0
+                _tsp0 = _ut0.spec_from_file_location("transcript", Path(__file__).resolve().parent / "transcript.py")
+                _tr0 = _ut0.module_from_spec(_tsp0); _tsp0.loader.exec_module(_tr0)
+                _l0 = _tr0.lines_of(_tr0.transcribe(Path(st["video"])))
+                (d / "transcript.json").write_text(json.dumps(_l0, indent=1, ensure_ascii=False) + "\n")
+                n_voices = len({x["speaker"] for x in _l0})
+                sent.write_text(sent.read_text() + "\n\n---\n\nHere is the machine transcript of this video's audio — every word, "
+                                f"one numbered line per speaker turn, {n_voices} distinct voice(s) (two people with similar voices can share "
+                                "a label). Use it as the ground truth for who speaks, when and what; every person who speaks must be "
+                                "in the CAST, even if they are only a hand or a voice on screen:\n\n" + _tr0.render(_l0))
+            except Exception as e:
+                say(f"      transcript before the read: could not run ({type(e).__name__}: {str(e)[:100]})")
         if stage["engine"] == "gemini-video":
-            model = with_retry(lambda: gemini_video(ppath, Path(st["video"]), out), label)
+            # The FILLED prompt, not the template (found 2026-09-23 on Mara's
+            # proof run: Gemini was handed the raw file, so stage 1 saw the
+            # literal "{sections}" placeholder and invented its own labels —
+            # "The Solution", "Social Proof" — instead of the doctrine's 15).
+            global _SEARCH
+            _SEARCH = bool(stage.get("search"))
+            try:
+                model = with_retry(lambda: gemini_video(sent, Path(st["video"]), out), label)
+            finally:
+                _SEARCH = False
         elif stage["engine"] == "gemini-text":
             tmp = TMP / f"{st['slug']}-{sid}.md"
             tmp.write_text(filled)
@@ -1217,7 +1754,7 @@ def run_stage(d, st, stage, extras, redo=False):
         elif stage["engine"] == "frames":
             model = frames(stage, d, st, filled_vars, out)
         else:
-            model = with_retry(lambda: claude(filled, out), label)
+            model = with_retry(lambda: claude(filled, out, stage.get("model")), label)
 
         body = re.sub(r"^<!--.*?-->\n\n", "", out.read_text(), count=1, flags=re.S)
         out.write_text(body)
@@ -1228,12 +1765,321 @@ def run_stage(d, st, stage, extras, redo=False):
             engine=stage["engine"], model=model, started=rec.get("started") or now(),
             finished=now(), seconds=round(time.time() - t0, 1), out=out_name,
             sent="prompts/" + Path(out_name).name, chars_out=len(body), sources=sources)
+        # THE CREATIVE QC LOOP (the owner, 2026-10-02: "installed for each of my
+        # production tools … for all stages in the creation process"): the
+        # stage's output is reviewed against exactly what it was given (the
+        # filled prompt) and the stage's bars; the round is filed in qc-log/.
+        creative_qc(key, d, out, d / "prompts" / Path(out_name).name)
+        if key == "stage1k":
+            # THE CULTURE READ AS DATA (2026-10-06, the bottom-up culture map):
+            # stages/1k-culture.json beside the read. Never fails the run.
+            try:
+                import culture_json as _cj
+                _cj.write(d, out)
+            except Exception as e:
+                say(f"      culture read not filed as data ({type(e).__name__}: {str(e)[:120]}) — the run carries on")
+        # REDOING A STAGE REDOES WHAT DEPENDS ON IT (2026-09-25). When a stage's
+        # output changes, every later stage that was done is marked STALE, so
+        # the next run rebuilds it instead of reporting it "already done" on an
+        # answer built from the old one (the doctrine and audience reads kept
+        # quoting a teardown that had been replaced).
+        import hashlib as _hl
+        _h = _hl.md5(body.encode()).hexdigest()[:12]
+        st["stages"][key]["_hash"] = _h
+        # Any new or changed output counts (a --redo clears the old record, so
+        # "no hash before" must count as changed; a fresh run has nothing later done).
+        if rec.get("_hash") != _h:
+            order = st.get("_order") or []
+            if key in order:
+                gone = []
+                for later in order[order.index(key) + 1:]:
+                    r2 = st["stages"].get(later)
+                    if r2 and r2.get("status") == "done":
+                        r2["status"] = "stale"; r2["stale_because"] = f"{sid} changed {now()}"
+                        gone.append(DISPLAY.get(later, later))
+                if gone:
+                    say(f"      {sid} changed — now out of date and redone on the next run: {', '.join(gone)}")
         say(f"  {sid:<3} {stage['name']:<11} done in {round(time.time()-t0)}s "
             f"— {len(body):,} chars")
 
+        if key == "stage3":
+            # SLOTS FILLED BY RESEARCH AT THE REWRITE (2026-09-25): brand files,
+            # then the web, every fill with a receipt — so the expansion and the
+            # brief are built on real facts. Can't run → the stage is held.
+            import importlib.util as _usr
+            _srp = _usr.spec_from_file_location("slot_research", Path(__file__).resolve().parent / "slot_research.py")
+            _sr = _usr.module_from_spec(_srp); _srp.loader.exec_module(_sr)
+            if _sr.holes(body):
+                try:
+                    _res = _sr.fill(d)
+                    body = (d / out_name).read_text()
+                    say(f"      slots: {len(_res['filled'])} of {_res['holes']} filled by research"
+                        + "".join(f"\n        {f['hole'][:60]} → {f['fill'][:80]}" for f in _res["filled"]))
+                except Exception as e:
+                    st["stages"][key]["status"] = "held"
+                    save(d, st)
+                    raise RuntimeError(f"the slot research could not run ({type(e).__name__}: {str(e)[:160]}) — HELD rather than left blank")
+            # THE SWIPE'S STRUCTURE IS LOCKED — see structure_gate.
+            structure_gate(d, st, key, body)
+        if key == "stage1":
+            # THE VERBATIM TRANSCRIPT (2026-09-24). The shot table keeps one
+            # fragment of speech per row; every later stage used to see only
+            # the fragments, and a swipe's back-and-forth vanished. Every word,
+            # every speaker, from the audio — appended to the record.
+            try:
+                if not real_video(d / "source.mp4"):
+                    raise RuntimeError("no playable source video (a stub)")
+                import importlib.util as _ut
+                _tsp = _ut.spec_from_file_location("transcript", Path(__file__).resolve().parent / "transcript.py")
+                _tr = _ut.module_from_spec(_tsp); _tsp.loader.exec_module(_tr)
+                # the transcript is checked against the video before it is attached
+                try:
+                    _dsp0 = _ut.spec_from_file_location("deepen", Path(__file__).resolve().parent / "deepen.py")
+                    _dp0 = _ut.module_from_spec(_dsp0); _dsp0.loader.exec_module(_dp0)
+                    _fx = _dp0.transcript_check_pass(d / "source.mp4", d)
+                    if _fx:
+                        say(f"      transcript checked: {len(_fx)} misheard line(s) corrected — "
+                            + "; ".join(f"{c['id']} \"{c['heard']}\" → \"{c['correct']}\"" for c in _fx)[:240])
+                except Exception as e:
+                    say(f"      transcript check could not run ({type(e).__name__}: {str(e)[:100]})")
+                _lines = _tr.attach(d)
+                say(f"      transcript: {len(_lines)} lines, every word, appended to the record")
+            except Exception as e:
+                say(f"      transcript: could not run ({type(e).__name__}: {str(e)[:120]}) — the line check will hold stage 3")
+            # THE FRAME MAP (2026-10-01): every cut found in the pixels, every shot
+            # watched moment by moment — the storyboard and the brief copy from it.
+            try:
+                if not real_video(d / "source.mp4"):
+                    raise RuntimeError("no playable source video (a stub)")
+                import importlib.util as _uf
+                _fsp = _uf.spec_from_file_location("framemap", Path(__file__).resolve().parent / "framemap.py")
+                _fm = _uf.module_from_spec(_fsp); _fsp.loader.exec_module(_fm)
+                _fd = _fm.build(d)
+                _bad = [s_["id"] for s_ in _fd["shots"] if not s_.get("map") or "error" in (s_.get("map") or {})]
+                say(f"      frame map: {len(_fd['shots'])} shots, {len(_fd['cuts'])} cuts"
+                    + (f" — NOT mapped: {', '.join(_bad)}" if _bad else ", every shot mapped"))
+            except Exception as e:
+                say(f"      frame map: could not run ({type(e).__name__}: {str(e)[:120]}) — the brief will say so")
+            # DEEPEN (2026-09-24): the people, every shot and the music are re-read
+            # from the video in passes of their own and written into the record.
+            try:
+                if not real_video(d / "source.mp4"):
+                    raise RuntimeError("no playable source video (a stub)")
+                import importlib.util as _ud
+                _dsp = _ud.spec_from_file_location("deepen", Path(__file__).resolve().parent / "deepen.py")
+                _dp = _ud.module_from_spec(_dsp); _dsp.loader.exec_module(_dp)
+                _res = _dp.deepen(d)
+                body = (d / out_name).read_text()
+                say(f"      deepened: people {'re-read' if _res['people'] else 'kept'} · visuals {_res['visuals']} shots re-read · music {'described' if _res['music'] else 'kept'}"
+                    + (f" · FAILED: {'; '.join(_res['errors'])}" if _res['errors'] else ""))
+            except Exception as e:
+                say(f"      deepen: could not run ({type(e).__name__}: {str(e)[:120]}) — the depth check decides")
+        if key == "stage1":
+            # Every row names one of the doctrine's sections, spelled as the
+            # doctrine spells it (the owner, 2026-09-23: "everything in my repo
+            # synced with the same language"). One re-read if not; then stop.
+            bad = off_doctrine_sections(body)
+            if bad and not rec.get("_section_retry"):
+                say(f"      sections not from the doctrine ({', '.join(sorted(set(bad))[:5])}) — reading again")
+                st["stages"][key] = dict(status="pending", _section_retry=True)
+                save(d, st)
+                return _rerun_stage1(d, st, stage, extras)
+            # THE DEPTH CHECK (2026-09-24): the record is the foundation — a
+            # shot table of one-line visuals is a failed read. One re-read when
+            # the median Visuals cell is under 40 words; then it stops.
+            thin = thin_visuals(body)
+            if thin and not bad and not rec.get("_depth_retry"):
+                say(f"      the record is thin (median {thin} words of visuals a shot) — reading again")
+                st["stages"][key] = dict(status="pending", _depth_retry=True, _section_retry=rec.get("_section_retry"))
+                save(d, st)
+                return _rerun_stage1(d, st, stage, extras)
+            if thin and not bad:
+                raise RuntimeError(f"stage 1 described each shot in a median of {thin} words — the record must be "
+                                   "reproduction-grade (the Visuals column asks for ~50–120 words a shot)")
+            if bad:
+                raise RuntimeError("stage 1 labelled rows with sections that are not the doctrine's: "
+                                   + ", ".join(sorted(set(bad))) + " — the section list is components/marketing-doctrine/frameworks.json")
+        _missed_checks = []
+        if key == "stage5" and "```" in body:
+            # Holes first (the owner, 2026-09-23: "this is why all of these should be an
+            # agnostic workflow"): every [SLOT]/[UNFILLED] in a spoken or on-screen line
+            # is filled from THIS brand's own product, offer and position files, quoted
+            # — or cut cleanly; a card whose own figure isn't in the files is flagged.
+            try:
+                import importlib.util as _u2
+                _sp2 = _u2.spec_from_file_location("slotfill", C.WS / "tools/video-production/machine/slotfill.py")
+                _sl = _u2.module_from_spec(_sp2); _sp2.loader.exec_module(_sl)
+                _fr = _sl.fill(out, st["brand"], st.get("product"))
+                st["slot_fill"] = {"changes": _fr.get("changes") or [], "flagged": _fr.get("flagged") or [], "at": now()}
+                for c in _fr.get("changes") or []:
+                    say(f"      hole {c['scene']}: {c['how'][:120]}")
+                for f in _fr.get("flagged") or []:
+                    say(f"      NEEDS DAMON {f['scene']}: a card's own figure isn't in the brand's files — {f['line'][:80]}")
+            except Exception as e:
+                say(f"      hole fill could not run ({type(e).__name__}: {str(e)[:100]})")
+                _missed_checks.append(f"hole fill: {type(e).__name__}: {str(e)[:120]}")
+            # Then every line is held to the brand's own claim rules (product files'
+            # Claims section + known-issues), fixing only the breaking words.
+            try:
+                _sp3 = _u2.spec_from_file_location("claimfix", C.WS / "tools/video-production/machine/claimfix.py")
+                _cf = _u2.module_from_spec(_sp3); _sp3.loader.exec_module(_cf)
+                _cfx = _cf.fix(out, st["brand"], st.get("product"))
+                st["claims_fixed"] = _cfx
+                for c in _cfx:
+                    say(f"      claim {c['scene']}: {c['now'][:100]} — {c['rule'][:80]}")
+            except Exception as e:
+                say(f"      claims check could not run ({type(e).__name__}: {str(e)[:100]})")
+                _missed_checks.append(f"claims check: {type(e).__name__}: {str(e)[:120]}")
+            # The section check, at the source (the owner, 2026-09-23: sections must
+            # match the script, through every production brief). Each scene's words
+            # are checked against the doctrine section it carries; a wrong label is
+            # corrected in the brief itself (words, scenes and order untouched) with
+            # a note saying why. Production checks again before it spends. Never fatal
+            # here: a check that cannot run is said, and production still gates.
+            try:
+                import importlib.util as _u
+                _sp = _u.spec_from_file_location("sectionfit", C.WS / "tools/video-production/machine/sectionfit.py")
+                _sf = _u.module_from_spec(_sp); _sp.loader.exec_module(_sf)
+                _res = _sf.check(_sf.plan_of(out), out_dir=d / "section-fit")
+                _ch = _sf.relabel(out, _res)
+                st["section_fit"] = {"relabelled": _ch, "order_notes": _res.get("order") or [], "at": now()}
+                say(f"      section check: {len(_ch)} label(s) corrected" + (f", {len(_res.get('order') or [])} order note(s)" if _res.get("order") else "") if _ch or _res.get("order") else "      section check: every scene fits its section")
+                for c in _ch:
+                    say(f"        {c[:140]}")
+            except SystemExit:
+                pass  # a brief with no scene block (the creator route) has nothing to check
+            except Exception as e:
+                say(f"      section check could not run ({type(e).__name__}: {str(e)[:100]})")
+                _missed_checks.append(f"section check: {type(e).__name__}: {str(e)[:120]}")
+        if key == "stage5" and not _missed_checks:
+            st.pop("missed_checks", None)
+        if key == "stage5" and _missed_checks:
+            # A CHECK THAT CANNOT RUN STOPS THE RUN (2026-09-25). They used to
+            # say "could not run" and carry on, so a brief left unchecked
+            # looked the same as one that passed — in a batch, nobody would see it.
+            st["stages"][key]["status"] = "held"
+            st["missed_checks"] = {"checks": _missed_checks, "at": now()}
+            save(d, st)
+            raise RuntimeError("a check could not run — HELD rather than skipped: " + "; ".join(_missed_checks)[:300]
+                               + ". Re-run stage 5 when it can.")
+        if key in ("stage3", "stage5"):
+            # EVERY WORD IN A SPOKEN LINE IS A WORD (the owner, 2026-10-01: "br- br-"
+            # was carried from the transcript and read aloud as "bar, bar").
+            import importlib.util as _u
+            _cp = _u.spec_from_file_location("spoken_check", Path(__file__).resolve().parent / "spoken_check.py")
+            _sc = _u.module_from_spec(_cp); _cp.loader.exec_module(_sc)
+            if key == "stage3":
+                _pairs = [(c[0], c[-1]) for c in ([x.strip() for x in l.strip().strip("|").split("|")]
+                          for l in body.splitlines() if re.match(r"\|\s*T\d+", l))]
+            else:
+                _blk = re.findall(r"```json\s*\n(.*?)\n```", body, re.S)
+                _doc = json.loads(_blk[-1]) if _blk else {}
+                _pairs = [(x.get("id"), x.get("voice") or "") for x in _doc.get("scenes") or []] + \
+                         [(o.get("id"), o.get("says") or "") for o in _doc.get("openings") or []]
+            _frag = _sc.check_lines(_pairs)
+            if _frag:
+                st["stages"][key]["status"] = "held"
+                st["spoken_check"] = {"lines": _frag, "at": now()}
+                save(d, st)
+                for f in _frag:
+                    say(f"      NOT A WORD {f['id']}: {'; '.join(f['found'])} — {f['text'][:90]}")
+                raise RuntimeError(f"{len(_frag)} spoken line(s) carry a fragment that is not a word — HELD. "
+                                   f"Write the stumble with real words or drop it, then re-run this step.")
+        if key == "stage5":
+            # EVERY PERSON IS THE SWIPE'S PERSON (the owner, 2026-10-01: "why did you
+            # make doctor 3 a woman if you knew it was a man?"). Each person in
+            # the brief is paired with the swipe person they stand in for; a
+            # gender that differs holds the brief (cast_match.py). Passes only on
+            # `--approve-structure P-<CAST ID>` or a recast.
+            import importlib.util as _u
+            _mp = _u.spec_from_file_location("cast_match", Path(__file__).resolve().parent / "cast_match.py")
+            _cm = _u.module_from_spec(_mp); _mp.loader.exec_module(_cm)
+            _pairs, _mis = _cm.check(d, Path(out_name).name)
+            _ok = approved_structure()
+            _open = [m for m in _mis if not (_ok == "all" or m["n"] in _ok)]
+            st["cast_match"] = {"pairs": _pairs, "open": _open, "at": now()}
+            if _open:
+                st["stages"][key]["status"] = "held"
+                save(d, st)
+                for m in _open:
+                    say(f"      CAST {m['n']}: {m['element']} — {m['why']}")
+                raise RuntimeError(f"{len(_open)} person(s) in the brief are not the swipe's — HELD. Recast, or "
+                                   f"--approve-structure {','.join(m['n'] for m in _open)}.")
+            # PRODUCTION'S OWN BRIEF CHECK RUNS HERE TOO (2026-10-01). The an earlier run
+            # brief passed every writing gate, was read and OK'd by the owner, and was
+            # then refused at the last check before spending — 15 hand shots with
+            # no viewpoint and a blank field. A brief production will refuse is
+            # not finished, so the same contract (video-production's
+            # model_inputs.brief_violations) holds the brief where it is written.
+            import re as _re
+            _blocks = _re.findall(r"```json\s*\n(.*?)\n```", body, _re.S)
+            if _blocks and '"scenes"' in _blocks[-1]:
+                _mi_p = _u.spec_from_file_location("model_inputs", Path(__file__).resolve().parents[2]
+                                                   / "video-production" / "machine" / "model_inputs.py")
+                _mi = _u.module_from_spec(_mi_p); _mi_p.loader.exec_module(_mi)
+                try:
+                    _bv = _mi.brief_violations(json.loads(_blocks[-1]))
+                except ValueError as e:
+                    _bv = [f"the brief's json block does not parse: {e}"]
+                st["production_contract"] = {"open": _bv, "at": now()}
+                if _bv:
+                    st["stages"][key]["status"] = "held"
+                    save(d, st)
+                    for v in _bv[:30]:
+                        say(f"      CONTRACT {v[:160]}")
+                    raise RuntimeError(f"{len(_bv)} thing(s) in the brief production would refuse — HELD. "
+                                       f"Fill them in the brief (machine/MODEL-INPUTS.md is the contract), then re-run this step.")
+            # THE SWIPE, SHOT BY SHOT (2026-10-01). The brief is held to the frame
+            # map: every insert the swipe cuts to, every word it puts on screen,
+            # and the edge every arm enters from. the owner: "if the swipe has it,
+            # that's what we do." Passes on a fix, or --approve-structure F3.
+            _sbp = _u.spec_from_file_location("storyboard_plan", Path(__file__).resolve().parents[2]
+                                              / "video-production" / "machine" / "storyboard_plan.py")
+            _sb = _u.module_from_spec(_sbp); _sbp.loader.exec_module(_sb)
+            try:
+                _fc = _sb.swipe_carry(d / out_name, d)
+            except Exception as e:
+                _fc = [{"n": "F0", "finding": f"the frame-map check could not run ({type(e).__name__}: {str(e)[:120]})"}]
+            _ok = approved_structure()
+            _fo = [f for f in _fc if not (_ok == "all" or f["n"] in _ok)]
+            st["frame_carry"] = {"open": _fo, "at": now()}
+            if _fo:
+                st["stages"][key]["status"] = "held"
+                save(d, st)
+                for f in _fo:
+                    say(f"      FRAME {f['n']}: {f['finding'][:170]}")
+                raise RuntimeError(f"{len(_fo)} thing(s) the swipe has, shot by shot, that the brief drops or changes — HELD. "
+                                   f"Carry them, or --approve-structure {','.join(f['n'] for f in _fo)}.")
+        if key == "stage4e":
+            structure_gate(d, st, key, body)
+        if key in ("stage4b", "stage4d"):
+            # Blanks the hooks (and the close's supply math) could not fill from the files are researched
+            # (brand files, then the web, each with a receipt), then every
+            # version is checked against the format.
+            import importlib.util as _u
+            _rp = _u.spec_from_file_location("slot_research", Path(__file__).resolve().parent / "slot_research.py")
+            _sr = _u.module_from_spec(_rp); _rp.loader.exec_module(_sr)
+            if _sr.markers(body):
+                try:
+                    _res = _sr.fill(d, stage_file=Path(out_name).name, find=_sr.markers)
+                    body = (d / out_name).read_text()
+                    say(f"      hook blanks: {len(_res['filled'])} of {_res['holes']} filled by research"
+                        + "".join(f"\n        {f['hole'][:60]} → {f['fill'][:80]}" for f in _res["filled"]))
+                except Exception as e:
+                    st["stages"][key]["status"] = "held"
+                    save(d, st)
+                    raise RuntimeError(f"the hook research could not run ({type(e).__name__}: {str(e)[:160]}) — HELD rather than left blank")
+            if key == "stage4b":
+                structure_gate(d, st, key, body)
+        if key == "stage5":
+            # SWIPE MATCH (2026-09-24) — the finished brief against the swipe,
+            # shot by shot. Holds the brief; production refuses it unstamped.
+            structure_gate(d, st, key, body)
+            # THE VIEWER CHECK — last, once every other gate has passed.
+            viewer_gate(d, st, key, out)
         if key == "stage7b":
             # The straight script, lifted from the spec so it cannot drift
-            # from the frames (Damon, 2026-09-03; kept 2026-09-18: "we still
+            # from the frames (the owner, 2026-09-03; kept 2026-09-18: "we still
             # want the script"). v5's concept has no pictures, so the block
             # simply closes the document.
             spec = ""
@@ -1249,7 +2095,7 @@ def run_stage(d, st, stage, extras, redo=False):
                     body = body.rstrip() + "\n\n" + block
                 out.write_text(body)
         if key == "stage1c":
-            # The doctrine read of the SOURCE, banked (Damon's ruling
+            # The doctrine read of the SOURCE, banked (the owner's ruling
             # 2026-09-18). The prose output stays the record a person reads;
             # this is the machine-readable row framework_bank.py compiles, so
             # the unique framework behind a swipe outlives the one brief it
@@ -1298,7 +2144,7 @@ def run_stage(d, st, stage, extras, redo=False):
                                            "sub": extras.get("declared_sub") or None}
             st["audience"] = aud
             # What 1b decided about the MARKET, kept beside what it decided
-            # about the reader (Damon's ruling 2026-09-18). The lead desire,
+            # about the reader (the owner's ruling 2026-09-18). The lead desire,
             # the awareness level and the sophistication stage are read by
             # every writing stage after this one through the doctrine slices;
             # the run records them so a finished run says what market it was
@@ -1330,14 +2176,12 @@ def run_stage(d, st, stage, extras, redo=False):
                         ("awareness", ms.get("awareness")),
                         ("stage", ms.get("sophistication")),
                     ) if v))
-            # The route recommended by 1b, for a run that did not name one.
-            # The default used to be a silent "creator" nobody chose.
+            # 1b may suggest a route; it never sets one (the route lock).
             rr = (ms or {}).get("route_recommended")
-            if rr and not st.get("route_chosen_by_hand"):
-                if st.get("production_route") != rr:
-                    say(f"      lane: {rr} — recommended by 1b"
-                        + (f" ({ms.get('route_why')})" if ms.get("route_why") else ""))
-                st["production_route"] = rr
+            if rr and rr != st.get("production_route"):
+                say(f"      route suggested by 1b: {rr}"
+                    + (f" ({ms.get('route_why')})" if ms.get("route_why") else "")
+                    + f" — the run stays on {st.get('production_route') or 'no route yet'}")
             av, fn = aud.get("_avatar"), aud.get("_funnel")
             tp = ", ".join(aud.get("_topics") or []) or "none"
             say(f"      avatar: {av or 'NONE FIT'} · funnel: {fn or '?'} · topics: {tp}")
@@ -1352,6 +2196,12 @@ def run_stage(d, st, stage, extras, redo=False):
                     "re-run pointed at a brand that owns this subject.")
         ok = True
     except Exception as e:
+        if st["stages"].get(key, {}).get("status") == "held":
+            # Held for the owner's structural approval, not broken: the rewrite
+            # stays on disk and in the record, waiting for his numbers.
+            say(f"  {sid:<3} {stage['name']:<11} HELD — {str(e)[:140]}")
+            save(d, st)
+            return False
         st["stages"][key] = dict(
             status="error", name=stage["name"], prompt_file=str(ppath),
             prompt_name=ppath.name, version=stage["version"],
@@ -1362,7 +2212,7 @@ def run_stage(d, st, stage, extras, redo=False):
         say(f"  {sid:<3} {stage['name']:<11} STOPPED — {str(e)[:140]}")
         ok = False
 
-    # The My Feeds library is a shelf of SOURCES. A composed run has none, so
+    # The swipe library is a shelf of SOURCES. A composed run has none, so
     # there is nothing to file there and nothing has gone wrong.
     # A Variation video run's source is already on the shelf (the proven ad's
     # own teardown); its tree of runs is filed with the tree, not the library.
@@ -1405,9 +2255,46 @@ def run_stage(d, st, stage, extras, redo=False):
         except Exception as e:
             st["stages"][key]["publish_error"] = str(e)[:400]
             say(f"      written in the run but NOT landed in the brand: {str(e)[:120]}")
+    if ok and key == "stage4r" and st.get("triage_lane"):
+        # ONE LANE, SET ONCE (2026-09-25). Triage (stage 0) decides the lane and
+        # the router acts on it; the reading re-labels it from the teardown and
+        # once called an organic post with cost-receipt graphics "ALREADY AN AD"
+        # — placement and expansion read that label and would plan nothing to
+        # build. The reading's label is overwritten with triage's, and says so.
+        p4 = d / out_name
+        txt = p4.read_text()
+        lanes = ["ALREADY AN AD", "ORGANIC", "STATIC", "SEQUENTIAL"]
+        m = re.search(r"(\*\*1\.\s*THE LANE\*\*\s*\n+\s*\*\*)([A-Z ]+?)(\*\*)", txt)
+        if m and m.group(2).strip() in lanes and m.group(2).strip() != st["triage_lane"]:
+            said = m.group(2).strip()
+            nxt = re.search(r"\n\s*\*\*2\.", txt[m.end(3):])
+            rest = txt[m.end(3):][nxt.start():] if nxt else txt[m.end(3):]
+            txt = txt[:m.start(2)] + st["triage_lane"] + txt[m.end(2):m.end(3)] + (
+                f"\n\nSet by the triage at stage 0, which routes this chain: "
+                + ((d / "stages" / "0-triage.md").read_text().split("\n")[0].strip() if (d / "stages" / "0-triage.md").exists() else st["triage_lane"])
+                + f". (This reading had said {said}; its reason for that is dropped so no later pass plans from it.)\n") + rest
+            p4.write_text(txt)
+            say(f"      lane held at {st['triage_lane']} (the reading said {said}; triage decides)")
     if ok and key == "stage0":
         st["triage_lane"] = C.lane_from_triage((d / out_name).read_text())
         say(f"      lane: {st['triage_lane']}")
+        # THE SWIPE'S STYLE AND FORMAT (the owner, 2026-10-09: a 3D-animated swipe
+        # came back as photoreal cast, and the doll ads before it — "it needs to
+        # be picked up so we're not wasting time on credits"). Triage v3 names
+        # both as element-library ids; the run carries them so every picture
+        # after it is made in the swipe's own look.
+        sf = C.style_format_from_triage((d / out_name).read_text())
+        for k in ("style_id", "format_id"):
+            if sf.get(k):
+                st[k] = sf[k]
+        if sf.get("style_id") or sf.get("format_id"):
+            say(f"      style: {sf.get('style_id') or '—'}  ·  format: {sf.get('format_id') or '—'}")
+        # THE FORMAT PLAYBOOK (the owner, 2026-10-10: "I need a system that can build
+        # out the specific workflows based off of the videos that come into the
+        # system"). A format with no playbook gets one — matched to a family first
+        # (a variant, never a duplicate), else drafted. In the background: it never
+        # slows or stops the teardown.
+        playbook_hook(d, sf.get("format_id"))
         # Record the routing the moment triage decides it. run_video reads the
         # lane BEFORE the plan starts, so on a first clean run there is nothing
         # to read yet — the lane only took effect on a second invocation. For
@@ -1425,11 +2312,29 @@ def run_stage(d, st, stage, extras, redo=False):
     return ok
 
 
+def playbook_hook(d, format_id):
+    """Start video-production's playbook builder (its public entry, run as its own
+    process) on this run when triage named a format. It matches the swipe to a
+    playbook family first; only a swipe like nothing we have drafts a new one.
+    Decisions are logged under runs/playbook-learn/. Never raises."""
+    builder = C.WS / "tools" / "video-production" / "machine" / "playbook_builder.py"
+    if not format_id or not builder.exists() or os.environ.get("VT_NO_PLAYBOOK"):
+        return None
+    try:
+        log = open(Path(d) / "playbook-builder.log", "a")
+        return subprocess.Popen([sys.executable, str(builder), str(d)], stdout=log, stderr=log,
+                                cwd=str(C.WS), start_new_session=True)
+    except Exception as e:
+        say(f"      playbook builder not started: {str(e)[:160]}")
+        return None
+
+
 def file_to_repo(d):
     """13. The run's WORDS, filed to the repo's one home for run records —
-    runs/video-teardown/<brand>/<slug>/ (runs/README.md; added 2026-09-20).
-    A COPY: machine/runs/<slug>/ stays the working folder the board and the
-    Drive mirror read, and nothing is moved. Text only, nothing over 1 MB.
+    runs/video-teardown/ + runs/video-writing/<brand>/<slug>/ (runs/README.md;
+    added 2026-09-20, split on two shelves 2026-09-30).
+    A COPY: runs/video-teardown/_work/<slug>/ (workdir.py, SI-56) stays the
+    working folder the board and the Drive mirror read, and nothing is moved. Text only, nothing over 1 MB.
     Never fatal — a filing that fails prints SKIPPED and the run is whole.
     Off with VT_NO_REPO_FILING=1."""
     try:
@@ -1449,7 +2354,7 @@ def _brand_video_map(brand):
     the chain config's conventional paths stand untouched."""
     if brand not in _VIDEO_MAPS:
         rows = {}
-        f = C.WS / "brands" / brand / "variables" / "video.md"
+        f = BP.brand_file(brand, "variables", "video.md", root=C.WS / "brands")
         if f.is_file():
             for m in re.finditer(r"^\s*\|?\s*`\{?([a-z_]+)\}?`\s*\|\s*`([^`]+)`",
                                  f.read_text(), re.M):
@@ -1460,11 +2365,63 @@ def _brand_video_map(brand):
     return _VIDEO_MAPS[brand]
 
 
+# THE ROUTE LOCK (the owner, 2026-09-25: the four stations). Station 1 reads the
+# swipe and needs no route; everything after it is Writing, and Writing starts
+# only on a route a person picked — never a default, never a model's switch.
+# "It kept going and wrote for the wrong thing" was the default "creator" and
+# 1b's ROUTE RECOMMENDED taking over mid-run. 1b may still SUGGEST; it is
+# printed and kept on run.json as market_state.route_recommended, nothing more.
+# stage1k, the culture read (2026-10-05), reads the swipe too: brand-free, no route needed.
+TEARDOWN_KEYS = {"stage0", "stage1", "stage1k", "stage1c", "stage2"}
+
+
+# The teardown is brand-free (the owner, 2026-09-30: "teardown should always just
+# be whatever"). The shared element lists carry record-keeping next to each
+# definition — which of our runs proved a row, which brand file it came from —
+# and those name our brands and products. A teardown stage gets the
+# definitions only.
+LIST_RECORD_KEEPING = {"evidence", "examples", "source", "signed", "approved", "status"}
+
+
+def brand_free_list(text):
+    """An element list with its record-keeping fields taken out."""
+    def strip(o):
+        if isinstance(o, dict):
+            return {k: strip(v) for k, v in o.items() if k not in LIST_RECORD_KEEPING}
+        if isinstance(o, list):
+            return [strip(x) for x in o]
+        return o
+    try:
+        return json.dumps(strip(json.loads(text)), indent=1, ensure_ascii=False)
+    except ValueError:
+        return text
+
+
+def route_declared(st, route=None):
+    """The route this run writes for, or None when nobody picked one.
+
+    Picked = `--route` now, or a route picked by hand on an earlier pass. A run
+    that was already written on a route before the lock keeps that route, so
+    re-running a stage of an old run never stops to ask (old runs untouched)."""
+    if route:
+        return route.lower()
+    if st.get("route_chosen_by_hand") and st.get("production_route"):
+        return st["production_route"]
+    written = any((rec or {}).get("status") == "done"
+                  for k, rec in (st.get("stages") or {}).items()
+                  if k not in TEARDOWN_KEYS and k != "stage1b")
+    if written and st.get("production_route"):
+        return st["production_route"]
+    return None
+
+
 def run_video(video, label, brand, only=None, start=None, stop=None,
               redo=False, extras=None, creator=None, want_frames=True,
               route=None, cast=None, product=None,
               use_identities=False):
     d, st = open_run(video, label, brand, creator=creator)
+    if (extras or {}).get("post_url"):       # the post's own link, for the culture read (1k)
+        st["post_url"] = extras["post_url"]
     if cast:
         st["cast"] = cast.lower()
     st["use_identities"] = bool(use_identities)
@@ -1474,19 +2431,20 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
     # never the config's (it pins "=creator", which is how nothing ever
     # reached the ai lane). Default: creator, the original brief. It picks
     # the stage-5 brief and fills {production_route} at stages 3 and 5.
-    if route:
-        st["production_route"] = route.lower()
+    # No default and no 1b takeover any more (the route lock, above): with no
+    # route picked the teardown runs and every Writing stage waits.
+    declared = route_declared(st, route)
+    if declared:
+        st["production_route"] = declared
         st["route_chosen_by_hand"] = True
-    elif (st.get("market_state") or {}).get("route_recommended"):
-        # --route was not given, but 1b has already run and recommended one.
-        # In Claude Code this printed line is the yes/no nobody has to answer.
-        st["production_route"] = st["market_state"]["route_recommended"]
+        st.pop("waiting_for", None)
+    else:
+        st.pop("production_route", None)
         st["route_chosen_by_hand"] = False
-    st.setdefault("production_route", "creator")
-    prod_route = st["production_route"]
-    why_route = ("chosen" if st.get("route_chosen_by_hand") else
-                 "recommended by 1b" if (st.get("market_state") or {}).get(
-                     "route_recommended") == prod_route else "the default")
+    # the plan needs a route to resolve against; with none picked, nothing
+    # past the teardown runs, so which one it resolves against changes nothing
+    prod_route = declared or "creator"
+    why_route = "chosen" if declared else "NOT PICKED — teardown only"
     if not st.get("triage_lane"):
         rec = st["stages"].get("stage0") or {}
         if rec.get("status") == "done" and rec.get("out"):
@@ -1495,9 +2453,11 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
                 st["triage_lane"] = C.lane_from_triage(f.read_text())
     say(f"\n▶ {st['label']}  ({brand})"
         + (f"  ·  {st['triage_lane']}" if st.get("triage_lane") else "")
-        + f"  ·  via {prod_route} ({why_route})")
+        + (f"  ·  via {prod_route} ({why_route})" if declared
+           else f"  ·  route {why_route}"))
     plan = C.stages(brand, st.get("asset_type", ""), prod_route,
                 st.get("triage_lane") or "")
+    st["_order"] = [s["key"] for s in plan]   # the whole chain, for what-depends-on-what (J)
 
     # what stage 0 decided about this video now decides what runs.
     # On a first run the lane is not known yet — triage is the first stage of
@@ -1509,16 +2469,30 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
         if route["skip"] is None:
             say(f"  lane: {lane} — {route['why']}")
             say("  not running the video chain on this one.")
-            st["route"] = dict(lane=lane, why=route["why"], skipped=["everything"])
+            h = C.handoff_line(lane, brand)
+            if h:
+                say(h)
+            st["route"] = dict(lane=lane, why=route["why"], skipped=["everything"],
+                               handoff=route.get("handoff"))
             save(d, st)
             return False
-        if route["skip"] and not only:
+        route_skip = list(route["skip"] or [])
+        # A CLAIMS-EXHAUSTED MARKET KEEPS ITS EXPANSION (2026-10-02) — the same
+        # rule as the post-triage path below, applied here too, because this is
+        # the branch a re-run takes (triage does not run again, so the lane is
+        # read off run.json and never reaches that path). Missing it here is why
+        # the first attempt at this fix printed "skipping stage4c" anyway.
+        if "stage4c" in route_skip and claims_exhausted(st, d):
+            route_skip.remove("stage4c")
+            say("  Expansion KEPT — the market's claims are exhausted and the "
+                "mechanism must lead; only Expansion writes ours")
+        if route_skip and not only:
             say(f"  lane: {lane} — {route['why']}")
-            say(f"  skipping {', '.join(route['skip'])}")
+            say(f"  skipping {', '.join(route_skip)}")
             # record it as skipped, with the reason. "Waiting" reads as still
             # coming, which is the opposite of what happened.
             for s in plan:
-                if s["key"] in route["skip"]:
+                if s["key"] in route_skip:
                     # A stage the run already holds an output for is NOT
                     # skipped — it was stood in for before the chain started
                     # (compose.py does exactly this on the FRAMEWORK lane).
@@ -1538,7 +2512,7 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
     # Pre-flight: is this source actually moving? Cheap, and it would have
     # stopped KZN-07 (a before/after photo) before five stages ran. It reports
     # and never gates — no stage checks whether a format SHOULD be replicated
-    # and that call is Damon's (2026-08-20).
+    # and that call is the owner's (2026-08-20).
     if not only and not start:
         try:
             import motion as _motion
@@ -1552,16 +2526,52 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
         except Exception:
             pass
 
-    if not want_frames and not only:
-        plan = [s for s in plan if s["engine"] != "frames"]
+    # No more frames (the owner, 2026-09-30: "no more frames, only the brief and
+    # swipe file link"). The frames stage never runs, for any route; the
+    # assemble step takes the brief as it is and the brief carries the link.
+    # want_frames stays as a parameter so every caller keeps working.
+    plan = [s for s in plan if s["engine"] != "frames"]
     ids = [s["id"] for s in plan]
+    # ONE STEP AT A TIME (2026-09-25, the owner: "you have to stop after every stage,
+    # for sure" — while he checks each one by hand): run only the next stage
+    # that is not done (a stale one counts as not done), then stop.
+    if os.environ.get("DAEMN_ONE_STEP") and not only:
+        nxt = next((s for s in plan if (st["stages"].get(s["key"]) or {}).get("status") not in ("done", "skipped")), None)
+        if not nxt:
+            say("  every stage is done — nothing to step to")
+            return True
+        say(f"  one step: {nxt['id']} {nxt['name']}, then stop")
+        plan = [nxt]
     if only:
         plan = [s for s in plan if s["id"] in only]
     else:
         if start:
+            # A --from for a stage this route never plans used to die on a bare
+            # ValueError from list.index, which says nothing about which id or
+            # why (2026-10-02: `--from 4d` on a lane that skips Expansion).
+            # Say what happened and what the run actually holds.
+            if start not in ids:
+                raise SystemExit(
+                    f"--from {start}: this run's plan has no stage {start}. "
+                    f"It plans: {', '.join(ids)}. A stage the lane skips is not "
+                    f"in the plan — run it with --only {start} to override, or "
+                    f"start from one of the ids above.")
             plan = plan[ids.index(start):]
         if stop:
             k = [s["id"] for s in plan]
+            if stop not in k:
+                # A stop this route never reaches (--to 7b on the ai route,
+                # --to 6 now frames never run): stop at the last stage of
+                # this plan that comes before it in the whole chain, instead
+                # of crashing (found 2026-09-30 by the chain replay).
+                full = [x["id"] for x in C.stages(brand, st.get("asset_type", ""), "creator",
+                                                    st.get("triage_lane") or "")]
+                upto = set(full[:full.index(stop) + 1]) if stop in full else set()
+                reach = [i for i in k if i in upto]
+                if not reach:
+                    say(f"  no stage {stop} in this chain")
+                    return False
+                stop = reach[-1]
             plan = plan[:k.index(stop) + 1]
     # Anything about to be redone stops claiming it is done. Stale "done"
     # badges from the previous run made finished-looking stages that had not
@@ -1571,7 +2581,8 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
             rec = st["stages"].get(x["key"])
             if rec and rec.get("status") in ("done", "error"):
                 st["stages"][x["key"]] = dict(status="waiting", name=x["name"],
-                                              engine=x["engine"], version=x["version"])
+                                              engine=x["engine"], version=x["version"],
+                                              _hash=rec.get("_hash"))   # J compares against it
         save(d, st)
 
     # anything about to be rebuilt gets filed as a version first
@@ -1590,11 +2601,15 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
     # chosen; anything the new route drops is recorded skipped rather than
     # silently run.
     replan, route_dropped = {}, set()
+    held_for_route = []
     for s in plan:
         # The lane may only now be known: on a first run triage IS the first
         # stage in this loop, so the routing above had nothing to read. Honour
         # it here or an ALREADY AN AD source gets Expansion run on it anyway.
         if s["key"] in skipped_by_lane:
+            continue
+        if not declared and s["key"] not in TEARDOWN_KEYS:
+            held_for_route.append(s["id"])
             continue
         if s["key"] in route_dropped:
             st["stages"][s["key"]] = dict(
@@ -1631,6 +2646,22 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
                 say(f"  {s['id']:<3} {s['name']:<11} skipped — {why}")
                 continue
         if not run_stage(d, st, s, extras or {}, redo=redo):
+            _vr = st.get("viewer_redo") or {}
+            if _vr.get("pending"):
+                # The viewer check sent it back: the step where the viewers left
+                # and everything after it are re-made, then a fresh set reads it.
+                _vr["pending"] = False
+                order = st.get("_order") or []
+                for later in order[order.index(_vr["stage"]):] if _vr["stage"] in order else []:
+                    r2 = st["stages"].get(later)
+                    if r2 and r2.get("status") in ("done", "held"):
+                        r2["status"] = "stale"; r2["stale_because"] = f"viewer check round {_vr['round']} {now()}"
+                save(d, st)
+                _sid = next((x["id"] for x in plan if x["key"] == _vr["stage"]), DISPLAY.get(_vr["stage"], _vr["stage"]))
+                say(f"  viewer check: re-making from {_sid} ({_vr['fix_at']})")
+                return run_video(video, label, brand, start=_sid, stop=stop, extras=extras,
+                                 creator=creator, want_frames=want_frames, route=route, cast=cast,
+                                 product=product, use_identities=use_identities)
             # A brief is never lost to a profile: stage 8 failing leaves the
             # run going — the Doc still gets made — and says how to re-run it.
             if s.get("role") == "profile":
@@ -1638,6 +2669,17 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
                     f"re-run it alone with --only {s['id']}")
                 continue
             say(f"  stopped at {s['id']} — fix it and re-run with --from {s['id']}")
+            # A stopped run still reaches the plane, with a true state
+            # (SI-161 (teardown runs honest)): it used to return here before
+            # the filing, so a held or failed run was invisible.
+            st["stopped_at"] = s["id"]
+            st["state"] = ("held" if (st["stages"].get(s["key"]) or {})
+                           .get("status") == "held" else "failed")
+            save(d, st)
+            try:
+                file_to_repo(d)
+            except Exception as e:
+                say(f"      record not filed ({e}) — it is safe on disk")
             return False
         if s["key"] == "stage1b" and not only \
                 and st.get("production_route") != prod_route:
@@ -1654,11 +2696,36 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
             if r["skip"] is None:
                 say(f"  lane: {st.get('triage_lane')} — {r['why']}")
                 say("  not running the video chain on this one.")
+                h = C.handoff_line(st.get("triage_lane"), brand)
+                if h:
+                    say(h)
+                st["route"] = dict(lane=st.get("triage_lane"), why=r["why"],
+                                   skipped=["everything"], handoff=r.get("handoff"))
+                st["stopped_at"] = s["id"]
+                st["state"] = "routed"
                 save(d, st)
+                try:
+                    file_to_repo(d)
+                except Exception as e:
+                    say(f"      record not filed ({e}) — it is safe on disk")
                 return False
-            if r["skip"]:
-                say(f"  skipping {', '.join(r['skip'])} — {r['why']}")
-                skipped_by_lane = set(r["skip"])
+            skip_now = list(r["skip"] or [])
+            # A CLAIMS-EXHAUSTED MARKET KEEPS ITS EXPANSION (2026-10-02).
+            # The ALREADY AN AD lane skips Expansion because the source's
+            # structure is inherited rather than rebuilt — right for structure,
+            # wrong for the mechanism, because Expansion is the only stage that
+            # writes OUR mechanism rung. At sophistication stage 3 the doctrine
+            # says the mechanism must LEAD, so the chain was skipping the step
+            # that makes the thing the audit then fails the run for not having.
+            # Found when the same A11 failure held three briefs off one swipe
+            # set, every one of which was a competitor's own ad.
+            if "stage4c" in skip_now and claims_exhausted(st, d):
+                skip_now.remove("stage4c")
+                say("  Expansion KEPT — the market's claims are exhausted and "
+                    "the mechanism must lead; only Expansion writes ours")
+            if skip_now:
+                say(f"  skipping {', '.join(skip_now)} — {r['why']}")
+                skipped_by_lane = set(skip_now)
                 for x in plan:
                     if x["key"] in skipped_by_lane:
                         st["stages"][x["key"]] = dict(
@@ -1668,6 +2735,25 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
                             why=f"{st.get('triage_lane')} — {r['why']}",
                             finished=now())
                 save(d, st)
+    if held_for_route:
+        st["waiting_for"] = "route"
+        save(d, st)
+        try:
+            C.mirror_to_drive(st["slug"])
+        except Exception as e:
+            say(f"      record not mirrored yet ({e}) — it is safe on disk")
+        try:
+            import framework_bank as _fb
+            _fb.refresh()
+        except Exception:
+            pass
+        file_to_repo(d)
+        rr = (st.get("market_state") or {}).get("route_recommended")
+        say(f"  ✔ torn down — writing waits for a route "
+            f"({', '.join(held_for_route)} not started)."
+            + (f" 1b suggests {rr}." if rr else "")
+            + " Pick one: creator, ai or founder, then re-run with --route.")
+        return True
     # Last step: the brief as a document, not a markdown file. It is the only
     # form anyone outside this machine actually opens, so it is part of a run
     # finishing rather than something remembered afterwards. Mirroring first is
@@ -1767,13 +2853,13 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
             say("  10  Doc         SKIPPED — the Drive never synced this run")
         else:
             # The Doc goes in one folder per creator, not in the run folder.
-            # Damon shares that folder with his content manager, who passes it
+            # the owner shares that folder with his content manager, who passes it
             # straight to the creator — so it holds finished briefs and
             # nothing else (2026-08-28). The run folder keeps the working
             # files, which nobody outside needs to see.
             try:
                 # A swipe run written to no one is a GENERAL brief — any
-                # creator can film it (Damon, 2026-09-18). It goes in the
+                # creator can film it (the owner, 2026-09-18). It goes in the
                 # brand's own shared folder beside the creators' folders.
                 sh = _drive.creator_share(st.get("creator") or GENERAL, brand=st["brand"])
             except Exception as e:
@@ -1781,7 +2867,7 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
                 say(f"      (could not set up her folder: {str(e)[:70]})")
             home = sh["briefs"] if sh else parent
             # The video the brief was built on goes up FIRST, so the brief
-            # can end with a link to it (Damon, 2026-09-18). Straight through
+            # can end with a link to it (the owner, 2026-09-18). Straight through
             # the API, never via the mount.
             vurl = ""
             import simplify as _simp
@@ -1805,7 +2891,7 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
                 st["creator_folder"] = sh["link"]
                 say(f"      her folder: {sh['link']}")
             # Her folder opens with one Start-here Doc — the brand's four
-            # shared sections (Christine, 2026-09-18) — refreshed on every
+            # shared sections (the creator manager, 2026-09-18) — refreshed on every
             # run so its count of briefs stays right.
             if sh:
                 try:
@@ -1832,16 +2918,29 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
 
     # The copy pack alongside it: her caption and the comments the post drew,
     # so ad copy can be written the moment the creator delivers rather than
-    # starting from the finished cut (Damon, 2026-08-27).
+    # starting from the finished cut (the owner, 2026-08-27).
     try:
         import copy_source as _cs
         _cs.build()
     except Exception as e:
         say(f"  11  Copy source SKIPPED — {str(e)[:120]}")
 
+    # The ad's own words — primary text, headlines, descriptions — for the
+    # brief just written, through the copywriter's chain and prompts unchanged
+    # (tools/copywriter/machine/brief_words.py, 2 Oct 2026). The script is
+    # what is said in the video; this is what Meta shows beside it. Never fatal;
+    # off for one run with NO_AD_WORDS=1.
+    try:
+        if st.get("production_route") and st.get("product"):
+            sys.path.append(str(C.WS / "tools/copywriter/machine"))
+            import brief_words as _bw
+            _bw.for_writing_run(d, brand, st.get("product"), say=lambda m: say("  11b " + m.strip()))
+    except Exception as e:
+        say(f"  11b Ad words    SKIPPED — {str(e)[:120]}")
+
     # The framework bank: every swipe's doctrine read on one shelf, so the
     # framework behind a video outlives the brief it was torn down for
-    # (Damon's ruling 2026-09-18). It only compiles what stage 1c already
+    # (the owner's ruling 2026-09-18). It only compiles what stage 1c already
     # filed, so it never raises and never costs a run anything.
     try:
         import framework_bank as _fb
@@ -1860,6 +2959,29 @@ def run_video(video, label, brand, only=None, start=None, stop=None,
 VIDEO_EXT = (".mp4", ".mov", ".m4v", ".webm")
 
 
+def claims_exhausted(st, d):
+    """Is this market at stage 3 or beyond — the rungs where the MECHANISM leads?
+
+    Read from wherever it actually is. `market_state["sophistication"]` is the
+    tidy answer but it comes back empty on a run that has been re-run from a
+    late stage (2026-10-02: one brief crashed `--from 4d` for exactly this,
+    because the Expansion rule below never fired and 4d stayed out of the plan).
+    The audience stage always writes it in prose, so fall back to its file.
+    """
+    v = str((st.get("market_state") or {}).get("sophistication") or "").strip().lower()
+    if v:
+        return v in ("stage-3", "stage-4", "stage-5")
+    for name in ("1c-audience.md", "1b-doctrine.md"):
+        f = Path(d) / "stages" / name
+        if not f.is_file():
+            continue
+        m = re.search(r"^SOPHISTICATION:\s*(.+)$", f.read_text(), re.M)
+        if m:
+            s = m.group(1).lower()
+            return bool(re.search(r"\bstage-?\s*[345]\b|\b[345]\.\s", s)) or "exhaust" in s
+    return False
+
+
 def drive_id(video: Path):
     """Google Drive stores each synced file's id in an extended attribute, so a
     file on the mounted Drive can name itself without a lookup."""
@@ -1875,7 +2997,7 @@ def drive_id(video: Path):
 def source_url(video: Path):
     """The link that goes at the top of the brief.
 
-    The Drive copy wins (Damon, 2026-08-21). A brief goes out days or weeks
+    The Drive copy wins (the owner, 2026-08-21). A brief goes out days or weeks
     after the swipe, once the learnings are in it — by then the original post
     may be deleted, gone private, or edited, and a creator opening a dead link
     has nothing to work from. The Drive copy is the version the teardown was
@@ -1958,7 +3080,7 @@ def walk_source(folder: Path):
 
 def already_done(label):
     # The same id `open_run()` would use — asking under the bare slug would
-    # tell a second user that Damon's run of this video is theirs, and skip it.
+    # tell a second user that the owner's run of this video is theirs, and skip it.
     f = RUNS / C.run_slug(slug(label)) / "run.json"
     if not f.exists():
         return False
@@ -1979,11 +3101,14 @@ def main():
     ap.add_argument("--again", action="store_true",
                     help="with --source, re-run videos that already finished")
     ap.add_argument("--label")
+    ap.add_argument("--post-url", dest="post_url",
+                    help="the post's own link (Instagram, TikTok …), so the culture read (1k) "
+                         "can read its caption and comments. Kept on run.json.")
     ap.add_argument("--brand", required=True,
                     help="which brand this run is for. Named every time — a default here would quietly hand one brand's files to another (rule 4).")
     ap.add_argument("--use-identities", action="store_true",
                     help="hand the trained LoRA identities to the frames "
-                         "stage. PARKED by default (Damon, 2026-09-02): "
+                         "stage. PARKED by default (the owner, 2026-09-02): "
                          "edit-first carries the person from the source "
                          "frame, and a LoRA trained on photoreal images "
                          "fights any style conversion. The lora.json records "
@@ -2009,13 +3134,19 @@ def main():
                     "written unassigned and no frames are made.")
     ap.add_argument("--route", choices=["founder", "creator", "ai"],
                     help="how this one gets produced — picks the stage-5 brief. "
-                         "Default: creator, the original content-creator brief. "
+                         "No default: without it the teardown runs and writing "
+                         "waits for a route (the route lock). creator gets the "
+                         "content-creator brief; "
                          "ai gets the generation brief; founder uses the creator "
                          "brief until a founder brief is cut.")
     ap.add_argument("--only")
     ap.add_argument("--from", dest="start")
     ap.add_argument("--to", dest="stop")
     ap.add_argument("--redo", action="store_true")
+    ap.add_argument("--step", action="store_true",
+                    help="run only the next stage that is not done (stale counts as not done), then stop — one stage at a time for review")
+    ap.add_argument("--approve-structure", dest="approve_structure", default="",
+                    help="structural changes the owner approved, by ELEMENT LEDGER number (e.g. 2,5) or 'all' — without it the chain stops after stage 3 on any change to the swipe's places, roles or story")
     ap.add_argument("--video-count", default="3",
                     help="how many videos this creator owes — the creator lane only; "
                          "the general teardown brief no longer takes it")
@@ -2030,6 +3161,10 @@ def main():
                          "that nothing supplies. No model is called, no run folder "
                          "is opened. Exits non-zero when anything is missing.")
     a = ap.parse_args()
+    if a.step:
+        os.environ["DAEMN_ONE_STEP"] = "1"
+    if a.approve_structure:
+        os.environ["DAEMN_STRUCTURE_APPROVALS"] = a.approve_structure
 
     if a.stages:
         C.report(); return
@@ -2039,13 +3174,14 @@ def main():
     if not a.dry:
         stay_awake()
     # The brand names itself. It used to be a literal in the shared
-    # config ("=<brand>"), which every brand's run then inherited.
+    # config ("=Brand A"), which every brand's run then inherited.
     extras = {"video_count": a.video_count,
               "brand_name": a.brand.replace("-", " ").title(),
               "product": a.product or "",
               # Declared upstream or not at all — the slot is always filled, so
               # the prompt never sees a bare placeholder.
               "declared_avatar": a.for_avatar or "",
+              "post_url": a.post_url or "",
               "declared_sub": a.for_sub or "",
               "declared_audience": (
                   f"\nDECLARED AVATAR: {a.for_avatar}\nDECLARED SUB-AVATAR: {a.for_sub or 'none'}\n"

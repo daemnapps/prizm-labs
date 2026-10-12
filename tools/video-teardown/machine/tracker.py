@@ -5,7 +5,7 @@
     python3 tracker.py --sync      rewrite creators.json from the sheet
 
 `creators.json` was a copy of the tracker somebody typed by hand, once. The
-sheet kept moving; the copy did not. Pam was a signed partner sitting on the
+sheet kept moving; the copy did not. Creator C was a signed partner sitting on the
 sheet marked "waiting for brief" and the machine had never heard of her — found
 on 2026-08-27 only because two lists were compared by eye. Her top post turned
 out to be the biggest on the whole roster.
@@ -21,16 +21,17 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import drive as D
+import workdir
 
 # The tracker lives in the brand's own folder, never hard-coded per brand:
-# brands/<brand>/tracker.json names the sheet. Falls back to the id below only
-# for <brand>, which is what exists today.
-CREATORS = HERE / "creators.json"
+# brands/<brand>/context/tracker.json names the sheet. Falls back to the id below only
+# for brand-a, which is what exists today.
+CREATORS = workdir.system() / "creators.json"   # runs/video-teardown/_system/ (SI-56)
 PARTNER_TAB_HINT = "Handle"
 
 
 def sheet_id(brand):
-    f = HERE.parent.parent.parent / "brands" / brand / "tracker.json"
+    f = HERE.parent.parent.parent / "brands" / brand / "context" / "tracker.json"
     if f.is_file():
         return json.loads(f.read_text()).get("sheet_id")
     return None
@@ -120,7 +121,7 @@ def main():
     ap = argparse.ArgumentParser(description="The creator tracker, read directly.")
     ap.add_argument("--brand", required=True,
                     help="which brand's creator tracker to read "
-                         "(brands/<brand>/tracker.json names the sheet). "
+                         "(brands/<brand>/context/tracker.json names the sheet). "
                          "Named every time — there is no default brand (rule 4).")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--sync", action="store_true")
@@ -149,6 +150,7 @@ def main():
         for h, c in cur.items():
             if not c.get("partner"):
                 out.append(c)
+        CREATORS.parent.mkdir(parents=True, exist_ok=True)
         CREATORS.write_text(json.dumps(out, indent=2) + "\n")
         print(f"  creators.json rewritten from the sheet — "
               f"{sum(1 for c in out if c.get('partner'))} partners")

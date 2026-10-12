@@ -1,0 +1,5 @@
+{
+ "_what": "the owner's go, per hand-off. upload.py --go refuses anything not listed here, and refuses everything until first_go is set. A session writes a line here only on the owner's own words in chat, quoted in `said`. start: PAUSED (default) or ACTIVE. links: which landing pages; empty = every page in the hand-off.",
+ "first_go": null,
+ "approved": []
+}

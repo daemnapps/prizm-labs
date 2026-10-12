@@ -21,7 +21,7 @@ sys.modules.pop("copy", None)        # the stdlib module of the same name, if lo
 import copy as C                     # noqa: E402  this machine's runner
 import context                       # noqa: E402
 import paths as P                    # noqa: E402
-import quality_checks as Q           # noqa: E402  (copy.py put it on the path)
+import marketing_chain_checks as Q           # noqa: E402  (copy.py put it on the path)
 
 BRAND = "testbrand"
 OFFERS = "# Offers\n\n## core — The one offer\n- Price: **$49.00**\n- Subscribed: **$37.00**\n"
@@ -45,7 +45,7 @@ class Base(unittest.TestCase):
         b = tree / "brands" / BRAND
         (b / "offers").mkdir(parents=True)
         (b / "products").mkdir()
-        (b / "offers" / "offer-bank.md").write_text(OFFERS)
+        (b / "products" / "offer-bank.md").write_text(OFFERS)
         (b / "products" / "thing.md").write_text("# The thing\nIt does a job.\n")
         self.tree, self.product = tree, str(b / "products" / "thing.md")
         self.source = self.tmp / "source.md"
@@ -233,6 +233,11 @@ class BothHomes(Base):
         self.assertTrue((P.RESULTS / "t-run" / "stage8--render.md").is_file())   # history is left alone
 
 
+PASS_8C = json.dumps({"primary": [{"n": 1, "pass": True}], "headlines": [], "descriptions": [], "fix": ""})
+FAIL_8C = json.dumps({"primary": [{"n": 1, "pass": False}], "headlines": [], "descriptions": [],
+                      "fix": "text 1 talks about legs in a face ad"})
+
+
 class Gate(Base):
     def test_a_price_the_offer_bank_does_not_sell_holds_the_copy(self):
         out = self.tmp / "run"; out.mkdir()
@@ -254,7 +259,9 @@ class Gate(Base):
         def fake(prompt, model, label=None):
             self.calls.append(label)
             return {"stage0": "LANE: ALREADY AN AD\nFORMAT: caption",
-                    "stage8": "# FORMAT: `caption`\nOnly $12 this week.\n\n## CHECKS\nok"}.get(label, f"out {label}")
+                    "stage8": "# FORMAT: `caption`\nOnly $12 this week.\n\n## CHECKS\nok",
+                    "stage8b": "**FORMAT: caption**\n\n**BODY A**\n\nOnly $12 this week.\n\n*4 words.*",
+                    "stage8c": PASS_8C}.get(label, f"out {label}")
         C.claude = fake
         import research
         keep, research.text_for = research.text_for, lambda **kw: "no research in a test"
@@ -270,6 +277,110 @@ class Gate(Base):
         st = json.loads((run / "run.json").read_text())
         self.assertEqual(st["gate"]["copy"], "HELD")
         self.assertIn("$12.00", text)
+
+
+class ReadBack(Base):
+    """8b + 8c (2026-10-09): the copy is read back by a reader who did not write it; a pass writes final--copy.md,
+    which the card reads; two fails HOLD the run and nothing reaches a card."""
+    def run_with(self, check):
+        def fake(prompt, model, label=None):
+            self.calls.append(label)
+            return {"stage0": "LANE: ALREADY AN AD\nFORMAT: caption",
+                    "stage8": "# FORMAT: `caption`\nClipped. Short. Lines.\n\n## CHECKS\nok",
+                    "stage8b": "slots…\n\n**FORMAT: caption**\n\n**BODY A**\n\nA full sentence she can picture.\n\n*6 words.*",
+                    "stage8c": check}.get(label, f"out {label}")
+        C.claude = fake
+        import research
+        keep, research.text_for = research.text_for, lambda **kw: "no research in a test"
+        try:
+            return quiet(C.main, self.argv())
+        finally:
+            research.text_for = keep
+
+    def test_a_pass_writes_the_final_copy_the_card_reads(self):
+        got, text = self.run_with(PASS_8C)
+        run = P.RUNS / BRAND / "t-run"
+        self.assertEqual(self.calls.count("stage8b"), 1)
+        self.assertIn("A full sentence she can picture.", (run / "final--copy.md").read_text())
+        self.assertNotIn("slots", (run / "final--copy.md").read_text())
+
+    def test_two_fails_hold_the_run_and_nothing_ships(self):
+        got, text = self.run_with(FAIL_8C)
+        run = P.RUNS / BRAND / "t-run"
+        self.assertIsInstance(got, SystemExit)
+        self.assertEqual(got.code, 2)
+        self.assertEqual(self.calls.count("stage8b"), 2)               # one more read-back with the notes, then held
+        self.assertNotIn("stage9", self.calls)
+        self.assertFalse((run / "final--copy.md").exists())
+        self.assertIn("legs", text)
+        self.assertTrue(json.loads((run / "check.json").read_text())["held"])
+
+    def test_a_rerun_that_passes_clears_the_earlier_hold(self):
+        run = P.RUNS / BRAND / "t-run"
+        self.run_with(FAIL_8C)
+        self.assertTrue(json.loads((run / "check.json").read_text())["held"])
+        self.calls.clear()
+        self.run_with(PASS_8C)
+        self.assertNotIn("held", json.loads((run / "check.json").read_text()) if (run / "check.json").exists() else {})
+        self.assertTrue((run / "final--copy.md").exists())
+
+    def test_a_second_read_ships_only_what_the_reader_passed(self):
+        copy = ("**FORMAT: short-form**\n\n**BODY A**\n\nKeep one.\n\n---\n\n**BODY B**\n\nCut me, I talk about legs.\n\n---\n\n"
+                "**FORMAT: caption**\n\n**BODY A**\n\nKeep two.\n\n---\n\n**BODY B**\n\nKeep three.\n\n---\n\n"
+                "**HEADLINES**\n\n1. **Fine one**\n2. **A pun**\n3. **Fine two**\n\n**DESCRIPTIONS**\n\n1. **Deal**\n2. **Refund**")
+        v = {"primary": [{"n": 1, "pass": True}, {"n": 2, "pass": False}, {"n": 3, "pass": True}, {"n": 4, "pass": True}],
+             "headlines": [{"n": 1, "pass": True}, {"n": 2, "pass": False}, {"n": 3, "pass": True}],
+             "descriptions": [{"n": 1, "pass": True}, {"n": 2, "pass": True}]}
+        kept, np_, nh, nd = C.keep_passing(copy, v)
+        self.assertEqual((np_, nh, nd), (3, 2, 2))
+        for t in ("Keep one.", "Keep two.", "Keep three.", "1. **Fine one**", "2. **Fine two**", "**FORMAT: caption**"):
+            self.assertIn(t, kept)
+        self.assertNotIn("legs", kept)
+        self.assertNotIn("A pun", kept)
+
+
+class LabEntry(Base):
+    """The mini's door (lab_entry.py): lab-run's --name value pairs reach
+    copy.py's real parser, and the run folder lands in $OUT (ready.md G2, G3)."""
+    def setUp(self):
+        super().setUp()
+        import lab_entry as E
+        self.E, self.keep_repo = E, E.REPO
+        E.REPO = self.tree                   # brand context from the temp tree
+        self.out = self.tmp / "lab-out" / "mini-1"
+        self.out.mkdir(parents=True)
+        self.env = {"BRAND": BRAND, "OUT": str(self.out)}
+
+    def tearDown(self):
+        self.E.REPO = self.keep_repo
+        super().tearDown()
+
+    def door(self, run, *extra):
+        pairs = ["--source", str(self.source), "--product", self.product, *extra]
+        return quiet(self.E.main, pairs, self.env, run)
+
+    def test_lab_run_pairs_reach_copy_py_and_the_run_lands_in_out(self):
+        self.forbid_calls()
+        seen = []
+        def through(cmd):                    # [interpreter, copy.py, *args] → copy.py's own main
+            seen.append(cmd)
+            got = C.main(cmd[2:])
+            return 0 if got is None else got
+        code, text = self.door(through, "--dry_run", "yes")
+        self.assertEqual(code, 0, text)
+        self.assertIn("--dry-run", seen[0])
+        self.assertEqual(seen[0][seen[0].index("--label") + 1], "mini-1")
+        self.assertEqual(self.calls, [])
+        self.assertEqual(list(self.out.iterdir()), [])     # a dry run carries nothing out
+
+        def made(cmd):                       # a real run, stubbed: copy.py's folder, then exit 0
+            run = P.run_dir(BRAND, "mini-1")
+            run.mkdir(parents=True)
+            (run / "run.json").write_text("{}")
+            return 0
+        code, text = self.door(made)
+        self.assertEqual(code, 0, text)
+        self.assertTrue((self.out / "run.json").is_file())
 
 
 if __name__ == "__main__":

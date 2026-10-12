@@ -20,8 +20,8 @@ SWIPE ─► TEARDOWN ─► INJECT ─► THE DR LOOP ─► AI BRIEF ─► CA
  winner    actually is  brand   close, audit    shot type   and how
 ```
 
-Two machines, joined today. `components/video-teardown/` carries swipe through
-brief. `this folder` carries scenes through clips. The AI brief
+Two machines, joined today. `tools/video-teardown/` carries swipe through
+brief. `tools/video-production/` carries scenes through clips. The AI brief
 is the seam, and it is the thing that had to change.
 
 ---
@@ -46,7 +46,7 @@ paying to keep alive.
 |---|---|---|
 | **0 Triage** | 33s | Calls the lane. `ALREADY AN AD` skips expansion — the source has hook, proof and offer, so structure is inherited, not rebuilt. |
 | **1 Teardown** | 35s | The source shot by shot: timestamp, visuals, on-screen text, transcript. |
-| **1b Audience** | 15s | Reads the avatar off the source. Came back `fed-up-king` — which is FLEX's own lane, arrived at independently. |
+| **1b Audience** | 15s | Reads the avatar off the source. Came back `avatar-one` — which is the device's own lane, arrived at independently. |
 | **2 Spec** | 15s | Brand and product stripped out. What remains is the reusable machine: phases, durations, what flexes and what is fixed. |
 
 ## 3 · Inject — stage 3
@@ -86,7 +86,7 @@ before anything else. The type decides what gets written:
 
 First run: **17 scenes — 6 A, 9 B, 2 C.**
 
-### Why this changed (Damon, 2026-09-11)
+### Why this changed (the owner, 2026-09-11)
 
 > *"We don't need frames. What we need are the scenes clearly described. I
 > experienced this creating AI video ads for the brand and that was one of the
@@ -143,7 +143,7 @@ Nobody is invented at brief time if the brand has already built them.
 is the first thing to try; the synthetic cast exists for the beats the footage
 does not contain.
 
-**Then the bank.** `core-avatars/casting/` holds the handles, `ai-cast/` holds
+**Then the bank.** `ai-cast/casting/` holds the handles, `ai-cast/` holds
 the bible, `CAST.md` is generated from the records and is what the brief reads.
 
 Each character carries two handles, because no single one works everywhere:
@@ -172,14 +172,14 @@ Direction is attitude only — `[confident, easy, like she's mid-conversation]`,
 `[a flick of amusement]`, `[certain, landing it]` — and it ships **inside the
 brief**, on every type-A scene.
 
-> Damon, on why the real shoot was unusable despite being right on every other
+> the owner, on why the real shoot was unusable despite being right on every other
 > axis: *"she was just reading it as she was saying it, and she couldn't really
 > read and say it with emotion."* A clone inherits the read. Direction is the
 > fix, and it belongs in the brief rather than in an editor's lap.
 
 ## 7 · Scenes → Motion
 
-Hands off to `./` stations 3 and 4. Re-rolling is the
+Hands off to `tools/video-production/` stations 3 and 4. Re-rolling is the
 iteration: keep the same (still, voice) pair and re-roll until the motion
 lands. **The pair is the asset.**
 
@@ -216,7 +216,7 @@ stage that writes the page a creator reads ran on a line with no creator.
 
 > *"When it comes to content creator briefs, just some baseline frames are
 > fine. When it comes to actual ad production, the brief you need to give is
-> set up differently."* — Damon, 2026-09-11
+> set up differently."* — the owner, 2026-09-11
 
 The chain enforces it: `--route ai` skips stage 6.
 
@@ -255,7 +255,7 @@ The chain enforces it: `--route ai` skips stage 6.
 
 ## The failure worth studying
 
-Damon, looking at the first generated scenes: *"why are we using such a sterile
+the owner, looking at the first generated scenes: *"why are we using such a sterile
 looking background and we're not showing the actual products guys are using
 like the swipe had?"*
 

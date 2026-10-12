@@ -1,0 +1,711 @@
+<title>The Image Chain</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#eff0ec; --surface:#fbfbf9; --sunk:#e5e7e1;
+  --ink:#14171b; --ink-2:#3d444b; --mid:#6b7279; --faint:#9aa1a7;
+  --rule:#d4d7cf; --rule-2:#c2c6bc;
+  --live:#1b6a51; --live-bg:#dfece6; --live-rule:#a9cfbe;
+  --flag:#9b3320; --flag-bg:#f3e2dd; --flag-rule:#ddb3a7;
+  --bar:#b9bfb5;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121417; --surface:#1a1d21; --sunk:#23272c;
+    --ink:#e9eae4; --ink-2:#c3c7c1; --mid:#8d949b; --faint:#6d747b;
+    --rule:#2b3035; --rule-2:#3a4046;
+    --live:#5cbd99; --live-bg:#17302a; --live-rule:#2e5c4c;
+    --flag:#e8836a; --flag-bg:#31201c; --flag-rule:#5e352c;
+    --bar:#454c52;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121417; --surface:#1a1d21; --sunk:#23272c;
+  --ink:#e9eae4; --ink-2:#c3c7c1; --mid:#8d949b; --faint:#6d747b;
+  --rule:#2b3035; --rule-2:#3a4046;
+  --live:#5cbd99; --live-bg:#17302a; --live-rule:#2e5c4c;
+  --flag:#e8836a; --flag-bg:#31201c; --flag-rule:#5e352c;
+  --bar:#454c52;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:Newsreader,Georgia,serif; font-size:17px; line-height:1.6;
+  margin:0;
+}
+.wrap{max-width:1040px; margin:0 auto; padding-inline:20px; padding-block:clamp(36px,7vw,72px) 96px}
+.col{max-width:680px}
+
+h1,h2,h3,.lab,.badge,th{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(34px,6.4vw,56px); font-weight:700; letter-spacing:-.03em; line-height:1.02; margin:0 0 .5em; text-wrap:balance}
+h2{font-size:clamp(20px,3.2vw,25px); font-weight:700; letter-spacing:-.02em; line-height:1.15; margin:0 0 .2em; text-wrap:balance}
+h3{font-size:17px; font-weight:600; letter-spacing:-.01em; margin:0 0 .35em}
+p{margin:0 0 1em}
+a{color:var(--live)}
+
+.lab{
+  font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--mid); margin:0 0 .9em;
+}
+.mono{font-family:"DM Mono",ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums}
+.dek{font-size:clamp(18px,2.6vw,21px); line-height:1.5; color:var(--ink-2); max-width:640px}
+.dek strong{color:var(--ink); font-weight:500}
+
+header{border-bottom:2px solid var(--ink); padding-bottom:clamp(28px,5vw,44px); margin-bottom:clamp(34px,6vw,56px)}
+.stamp{
+  display:inline-flex; gap:10px; align-items:baseline; margin-bottom:22px;
+  font-family:"DM Mono",monospace; font-size:11.5px; letter-spacing:.06em;
+  color:var(--mid); text-transform:uppercase;
+}
+.stamp span:not(:first-child)::before{content:"· "; color:var(--faint)}
+
+section{margin-top:clamp(46px,8vw,78px)}
+.shead{display:flex; flex-direction:column; gap:2px; margin-bottom:clamp(20px,3vw,28px)}
+.shead .sub{font-size:16px; color:var(--mid); line-height:1.45; max-width:640px}
+
+/* ── the verdict block ───────────────────────────── */
+.verdict{
+  background:var(--surface); border:1px solid var(--rule); border-left:4px solid var(--live);
+  padding:clamp(20px,3.4vw,30px); margin-top:clamp(28px,5vw,40px);
+}
+.verdict p:last-child{margin-bottom:0}
+.verdict .q{font-style:italic; color:var(--ink-2); border-left:2px solid var(--rule-2); padding-left:14px; margin:0 0 1em}
+
+/* ── the funnel ──────────────────────────────────── */
+.funnel{margin-top:6px}
+.fbar{
+  position:relative; height:58px; background:var(--bar); border:1px solid var(--rule-2);
+  display:flex; align-items:stretch; overflow:hidden;
+}
+.fbar i{display:block; background:var(--live); border-right:1px solid var(--rule-2); flex:0 0 4.5%}
+.fnums{display:flex; flex-wrap:wrap; gap:8px 30px; margin-top:12px}
+.fnum{display:flex; flex-direction:column; gap:1px}
+.fnum b{font-family:"DM Mono",monospace; font-size:24px; font-weight:500; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.1}
+.fnum s{text-decoration:none; font-size:12.5px; color:var(--mid); font-family:Archivo,sans-serif; letter-spacing:.04em; text-transform:uppercase; font-weight:600}
+.fnum.live b{color:var(--live)}
+
+/* ── the chain track ─────────────────────────────── */
+.phase{
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  margin:clamp(30px,5vw,44px) 0 0; padding-bottom:8px; border-bottom:1px solid var(--ink);
+}
+.phase h3{margin:0; font-size:15px; letter-spacing:.06em; text-transform:uppercase}
+.phase .note{font-family:"DM Mono",monospace; font-size:12px; color:var(--mid); margin-left:auto}
+
+.track{display:grid; gap:0}
+.step{
+  display:grid; grid-template-columns:52px 1fr 190px 132px; gap:0 18px;
+  align-items:start; padding:15px 0; border-bottom:1px solid var(--rule);
+}
+.step:last-child{border-bottom:none}
+.step .id{font-family:"DM Mono",monospace; font-size:13px; color:var(--mid); padding-top:2px}
+.step .what h3{margin-bottom:2px}
+.step .what p{margin:0; font-size:15.5px; line-height:1.45; color:var(--ink-2)}
+.step .what .who{font-family:"DM Mono",monospace; font-size:12px; color:var(--faint); margin-top:4px; letter-spacing:.02em}
+
+.size{padding-top:3px}
+.size .n{font-family:"DM Mono",monospace; font-size:13px; color:var(--ink-2); font-variant-numeric:tabular-nums; display:block; margin-bottom:5px}
+.size .g{height:7px; background:var(--sunk); border:1px solid var(--rule)}
+.size .g i{display:block; height:100%; background:var(--bar)}
+.size .g.on i{background:var(--live)}
+.size .none{font-family:"DM Mono",monospace; font-size:13px; color:var(--faint)}
+
+.badge{
+  display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.09em;
+  text-transform:uppercase; padding:5px 8px; border:1px solid var(--rule-2);
+  background:var(--sunk); color:var(--mid); line-height:1.25; margin-top:2px;
+}
+.badge.on{background:var(--live-bg); border-color:var(--live-rule); color:var(--live)}
+.badge.hot{background:var(--flag-bg); border-color:var(--flag-rule); color:var(--flag)}
+
+/* ── tables ──────────────────────────────────────── */
+.scroll{overflow-x:auto; margin-top:8px}
+table{border-collapse:collapse; width:100%; min-width:600px; font-size:15.5px}
+th{
+  text-align:left; font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--mid); padding:0 14px 8px 0; border-bottom:2px solid var(--ink); vertical-align:bottom;
+}
+td{padding:13px 14px 13px 0; border-bottom:1px solid var(--rule); vertical-align:top; line-height:1.45; color:var(--ink-2)}
+td:first-child,th:first-child{padding-left:0}
+td strong{color:var(--ink); font-weight:500}
+tr:last-child td{border-bottom:none}
+.verd{font-family:Archivo,sans-serif; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap}
+.verd.keep{color:var(--live)}
+.verd.cut{color:var(--flag)}
+.verd.move{color:var(--mid)}
+
+/* ── two-up ──────────────────────────────────────── */
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:18px; margin-top:8px}
+.card{background:var(--surface); border:1px solid var(--rule); padding:20px 20px 18px}
+.card.on{border-left:3px solid var(--live)}
+.card h3{font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--mid); margin-bottom:12px}
+.card ol,.card ul{margin:0; padding-left:20px; font-size:15.5px; line-height:1.5; color:var(--ink-2)}
+.card li{margin-bottom:8px}
+.card li:last-child{margin-bottom:0}
+.card li strong{color:var(--ink); font-weight:500}
+
+/* ── the four levers ─────────────────────────────── */
+.levers{display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule); margin-top:8px}
+.lever{background:var(--surface); padding:18px 20px; display:grid; grid-template-columns:38px 1fr; gap:0 16px; align-items:start}
+.lever .r{font-family:"DM Mono",monospace; font-size:22px; color:var(--live); line-height:1}
+.lever h3{margin-bottom:3px}
+.lever p{margin:0; font-size:15.5px; line-height:1.45; color:var(--ink-2)}
+.lever .ev{font-family:"DM Mono",monospace; font-size:12.5px; color:var(--mid); margin-top:6px; line-height:1.5}
+
+/* ── break list ──────────────────────────────────── */
+.brk{border-top:2px solid var(--flag); margin-top:8px}
+.brkrow{padding:18px 0; border-bottom:1px solid var(--rule); display:grid; grid-template-columns:1fr 300px; gap:4px 26px}
+.brkrow:last-child{border-bottom:none}
+.brkrow h3{margin-bottom:4px}
+.brkrow p{margin:0; font-size:15.5px; line-height:1.45; color:var(--ink-2)}
+.brkrow .ev{background:var(--sunk); border-left:2px solid var(--flag-rule); padding:10px 13px; font-family:"DM Mono",monospace; font-size:12.5px; line-height:1.55; color:var(--ink-2)}
+
+.call{background:var(--flag-bg); border:1px solid var(--flag-rule); padding:clamp(18px,3vw,26px); margin-top:22px}
+.call h3{color:var(--flag); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px}
+.call p:last-child{margin-bottom:0}
+
+footer{margin-top:clamp(52px,9vw,84px); padding-top:24px; border-top:1px solid var(--rule); font-family:"DM Mono",monospace; font-size:12.5px; color:var(--mid); line-height:1.75}
+
+@media (max-width:740px){
+  .step{grid-template-columns:44px 1fr; gap:0 14px}
+  .step .size,.step .badge{grid-column:2}
+  .step .size{margin-top:10px; max-width:220px}
+  .brkrow{grid-template-columns:1fr}
+  .brkrow .ev{margin-top:10px}
+}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="stamp"><span>25 Sep 2026</span><span>read off 65 runs on disk</span><span>brand-a · brand-b</span></div>
+  <h1>The Image Chain</h1>
+  <p class="dek">Every step from a swiped ad to a finished draft, in run order — <strong>who runs it, what it writes, and whether any of it reaches the picture.</strong> Built to answer one question: what can be cut.</p>
+</header>
+
+<div class="verdict col">
+  <p class="q">“You don’t even need to remake the image itself first… all the next prompt needs to do is go through the process of creating a brief for that image of what needs to be in the image. We then just write that prompt using the reference image. All this other stuff — the compositor, all this other crap — I really don’t think it matters.”</p>
+  <p><strong>You’re right about the picture.</strong> Seven writing stages run before a single picture is made. They produce about <span class="mono">62,800</span> characters per swipe. Exactly one section of one stage reaches the generator — the plate prompt, <span class="mono">2,807</span> characters on the median brief. Everything else is read by the next stage, by the copy layer, or by a person.</p>
+  <p><strong>And the quality lever was never the stage count.</strong> The four things that actually decide whether a draft comes back right are all attachments and file lookups, not writing passes. They’re listed further down.</p>
+</div>
+
+<section>
+  <div class="shead">
+    <p class="lab">The number</p>
+    <h2>62,800 characters written. 2,807 used.</h2>
+    <p class="sub">Per swipe, averaged across the 65 completed runs. The green sliver is the only part the image model ever sees.</p>
+  </div>
+  <div class="funnel">
+    <div class="fbar"><i></i></div>
+    <div class="fnums">
+      <div class="fnum"><b>62,779</b><s>written, 7 model calls</s></div>
+      <div class="fnum live"><b>2,807</b><s>reaches the generator</s></div>
+      <div class="fnum"><b>4.5%</b><s>of the words survive</s></div>
+      <div class="fnum"><b>21,873</b><s>the brief alone</s></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">In run order</p>
+    <h2>What happens, and when</h2>
+    <p class="sub">One command per stage so every output gets read. A stage’s bar is how much it writes; the badge is where those words go.</p>
+  </div>
+
+  <div class="phase"><h3>Before anything</h3><span class="note">no model</span></div>
+  <div class="track">
+    <div class="step">
+      <div class="id">0</div>
+      <div class="what">
+        <h3>Pick the swipe</h3>
+        <p>The most-duplicated angle in the swipe library, then the most-cloned still inside it. A competitor who rebuilt one ad eighty-five times made a spend decision we read for free.</p>
+        <div class="who">swipe-paid ranks by duplication · swipe-organic by engagement</div>
+      </div>
+      <div class="size"><span class="none">—</span></div>
+      <div><span class="badge">sets the target</span></div>
+    </div>
+  </div>
+
+  <div class="phase"><h3>The writing</h3><span class="note">7 model calls · ~63,000 characters</span></div>
+  <div class="track">
+
+    <div class="step">
+      <div class="id">1</div>
+      <div class="what">
+        <h3>Teardown</h3>
+        <p>The swipe goes to a vision model and comes back as an objective record: zones with percentages, what’s in frame, the words, the light.</p>
+        <div class="who">Gemini 3.1 Pro reads the picture · prompt 23,138 chars</div>
+      </div>
+      <div class="size"><span class="n">9,526</span><div class="g"><i style="width:44%"></i></div></div>
+      <div><span class="badge">stage 2 reads it</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">2</div>
+      <div class="what">
+        <h3>Replication spec</h3>
+        <p>The same ad stripped of its brand, product and subject — the layout skeleton and the element inventory, as a format any brand could execute.</p>
+        <div class="who">Gemini 3.1 Pro · prompt 14,729 chars</div>
+      </div>
+      <div class="size"><span class="n">8,160</span><div class="g"><i style="width:37%"></i></div></div>
+      <div><span class="badge">stages 3 and 5 read it</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">2b</div>
+      <div class="what">
+        <h3>Element labels</h3>
+        <p>Which rows in the element library this ad <em>is</em>. Then the elements gate: every label is a real row, or an honest <span class="mono">none-fits</span>.</p>
+        <div class="who">Claude · prompt 3,208 chars · GATE: elements</div>
+      </div>
+      <div class="size"><span class="n">small</span><div class="g"><i style="width:4%"></i></div></div>
+      <div><span class="badge">bookkeeping only</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">3</div>
+      <div class="what">
+        <h3>Injection</h3>
+        <p>Our brand put through that format — our product, our customer, our claim, in the skeleton stage 2 abstracted.</p>
+        <div class="who">Claude · prompt 11,187 chars · queries the language bank</div>
+      </div>
+      <div class="size"><span class="n">6,964</span><div class="g"><i style="width:32%"></i></div></div>
+      <div><span class="badge">stages 5 and 6 read it</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">4</div>
+      <div class="what">
+        <h3>Headlines</h3>
+        <p>Six, each moving on its own axis. These are words, not pictures — they go to the type layer and the copy, never into the plate.</p>
+        <div class="who">Claude · prompt 13,457 chars</div>
+      </div>
+      <div class="size"><span class="n">9,199</span><div class="g"><i style="width:42%"></i></div></div>
+      <div><span class="badge">the words, not the picture</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">5</div>
+      <div class="what">
+        <h3>Picture variations</h3>
+        <p>Given this layout, which genuinely different pictures could sit in it — one variable moved each time. Becomes the designer’s three extra prompts and the variation rows.</p>
+        <div class="who">Claude · prompt 5,346 chars</div>
+      </div>
+      <div class="size"><span class="n">7,057</span><div class="g"><i style="width:32%"></i></div></div>
+      <div><span class="badge">later, not now</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">6</div>
+      <div class="what">
+        <h3>The brief</h3>
+        <p>Everything, before anyone builds — the argument, the bets, the conflicts, the anchors, the type layer, and near the end one section headed <strong>The plate prompt</strong>. Then the copy gate: no unfilled notes, no price the offer bank doesn’t sell.</p>
+        <div class="who">Claude · prompt 22,609 chars · GATE: copy</div>
+      </div>
+      <div class="size"><span class="n">21,873</span><div class="g on"><i style="width:100%"></i></div></div>
+      <div><span class="badge on">one section is the picture</span></div>
+    </div>
+
+  </div>
+
+  <div class="phase"><h3>The picture</h3><span class="note">3 rolls, judged · up to 4 rounds</span></div>
+  <div class="track">
+
+    <div class="step">
+      <div class="id">7</div>
+      <div class="what">
+        <h3>Pull the plate prompt</h3>
+        <p>One regex lifts <strong>The plate prompt</strong> out of the brief and nothing else. Median <span class="mono">2,807</span> characters; the shortest is <span class="mono">1,958</span>, the longest <span class="mono">3,548</span>. This is the whole of the brief that reaches a generator.</p>
+        <div class="who">no model · 47 jobs measured</div>
+      </div>
+      <div class="size"><span class="n">2,807</span><div class="g on"><i style="width:13%"></i></div></div>
+      <div><span class="badge on">this is the prompt</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">8</div>
+      <div class="what">
+        <h3>Three rolls</h3>
+        <p>The swipe goes in as <strong>IMAGE 1</strong> with the instruction to reproduce its framing, pose, crop, angle, light and layout exactly. The product photos ride along. Where the brief disagrees with the swipe about framing, the swipe wins.</p>
+        <div class="who">GPT Image 2.5 · 4:5 content, 1024×1280 · ~4 min for 21 briefs</div>
+      </div>
+      <div class="size"><span class="none">the picture</span></div>
+      <div><span class="badge on">the picture happens here</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">9</div>
+      <div class="what">
+        <h3>The judge</h3>
+        <p>Every roll in front of a vision model with the swipe and the product photos: eleven tests, plus a 1–5 match score. A hedge is a fail. No passing roll → roll again, up to four rounds of three, then the best roll ships flagged with what it failed.</p>
+        <div class="who">Gemini 3.1 Pro · prompt 5,920 chars · ~6 min for 21 briefs</div>
+      </div>
+      <div class="size"><span class="none">verification</span></div>
+      <div><span class="badge on">catches the checkable slop</span></div>
+    </div>
+
+    <div class="step">
+      <div class="id">10</div>
+      <div class="what">
+        <h3>The tall frame</h3>
+        <p>The draft is the 4:5 content. The asset is 9:16 — content taped down in the middle, only the strips above and below painted. Made once, reused.</p>
+        <div class="who">image-production finish · 1080×1920 out</div>
+      </div>
+      <div class="size"><span class="none">—</span></div>
+      <div><span class="badge on">your frame rule</span></div>
+    </div>
+
+  </div>
+
+  <div class="phase"><h3>After the draft</h3><span class="note">no model except the variation judge</span></div>
+  <div class="track">
+    <div class="step">
+      <div class="id">11</div>
+      <div class="what">
+        <h3>Out the door</h3>
+        <p>Draft and swipe into the brief’s own Drive folder · the brand’s pack re-zipped · the work order and four paste-ready prompts written for the designer · the Brief Board republished.</p>
+        <div class="who">deliver · pack · worksheet · board</div>
+      </div>
+      <div class="size"><span class="none">—</span></div>
+      <div><span class="badge">delivery</span></div>
+    </div>
+    <div class="step">
+      <div class="id">12</div>
+      <div class="what">
+        <h3>Variations, names, handoff</h3>
+        <p>One delta per variation off the judged draft, each judged against it. Then the naming convention, then the handoff gate — seven checks that refuse a drop missing its pictures, its copy or its folder link.</p>
+        <div class="who">reference-edit · naming · ad-handoff</div>
+      </div>
+      <div class="size"><span class="none">—</span></div>
+      <div><span class="badge">scale</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">The whole input</p>
+    <h2>What the generator actually gets</h2>
+    <p class="sub">Four things. That’s it. Nothing else from the sixty-three thousand characters is in the room.</p>
+  </div>
+  <div class="two">
+    <div class="card on">
+      <h3>1 · The swipe, as IMAGE 1</h3>
+      <p style="margin:0; font-size:15.5px; line-height:1.5; color:var(--ink-2)">The original still. Reproduce its framing, pose, crop, angle, light and layout exactly; the person, the product and the words are the only things that change.</p>
+    </div>
+    <div class="card on">
+      <h3>2 · The plate prompt</h3>
+      <p style="margin:0; font-size:15.5px; line-height:1.5; color:var(--ink-2)">About 2,800 characters lifted out of the brief — the subject, the setting, the framing, the light, the negatives, and the crop line.</p>
+    </div>
+    <div class="card on">
+      <h3>3 · Our real photographs</h3>
+      <p style="margin:0; font-size:15.5px; line-height:1.5; color:var(--ink-2)">The clean tube from three angles, the range where the swipe shows several. Attached, never described — and stripped out when the frame has no hands in it.</p>
+    </div>
+    <div class="card on">
+      <h3>4 · Facts read from files</h3>
+      <p style="margin:0; font-size:15.5px; line-height:1.5; color:var(--ink-2)">Price, guarantee and discount bar out of the offer bank; the accent colour out of the brand palette. Looked up, not written.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">Side by side</p>
+    <h2>Your version, and what runs</h2>
+  </div>
+  <div class="two">
+    <div class="card on">
+      <h3>What you described</h3>
+      <ol>
+        <li>Take the swipe</li>
+        <li><strong>Identify its elements</strong> — the words, the person, the product</li>
+        <li><strong>Write a brief for our version</strong> of that picture</li>
+        <li><strong>Generate, using the reference image</strong></li>
+        <li>Hit the aspect ratio and the safe zone</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>The picture path today</h3>
+      <ol>
+        <li>Swipe picked off duplication</li>
+        <li><strong>Stage 1</strong> — the teardown, which is the element read</li>
+        <li><strong>Stage 6’s plate prompt</strong>, ~2,800 chars, which is the brief for our version</li>
+        <li><strong>Three rolls with the swipe as IMAGE 1</strong> plus our product photos</li>
+        <li>4:5 content, finished to 9:16 · judge · re-roll</li>
+      </ol>
+    </div>
+  </div>
+  <p class="col" style="margin-top:22px">The picture path is already your five steps. What sits on top of it is <strong>stages 2, 2b, 4 and 5 — about 25,000 characters per swipe that no generator ever reads</strong> — plus roughly 19,000 characters of stage 6 that aren’t the plate prompt.</p>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">The cut list</p>
+    <h2>What each stage is actually buying</h2>
+    <p class="sub">Your call on every row. The middle column is what breaks if it goes.</p>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th style="width:23%">Stage</th><th style="width:45%">What is lost if it goes</th><th>Call</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1 · Teardown</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">9,526 chars</span></td>
+          <td>The element read itself — step 2 of your own version. Everything downstream is built on it, and it is the one stage a person can check against the picture.</td>
+          <td><span class="verd keep">keep</span></td>
+        </tr>
+        <tr>
+          <td><strong>2 · Replication spec</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">8,160 chars</span></td>
+          <td>The brand-free format. This is what makes <em>“same swipes, new product and offer”</em> cost nothing — stages 1 and 2 are copied, not re-run, on a variant. Paid once per swipe, reused for every product after.</td>
+          <td><span class="verd keep">keep</span></td>
+        </tr>
+        <tr>
+          <td><strong>2b · Element labels</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">small + a gate</span></td>
+          <td>Nothing in the picture. It files the ad against the element library and holds the run if a label is invented. Library hygiene, sitting inside the picture chain.</td>
+          <td><span class="verd cut">cut from here</span></td>
+        </tr>
+        <tr>
+          <td><strong>3 · Injection</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">6,964 chars</span></td>
+          <td>Our brand’s material placed in the format. Stage 6 writes the plate prompt off this, so cutting it means the plate prompt is written straight off the teardown.</td>
+          <td><span class="verd move">could fold into 6</span></td>
+        </tr>
+        <tr>
+          <td><strong>4 · Headlines</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">9,199 chars</span></td>
+          <td>The words. Needed for the ad, useless to the plate — a headline swap is a recomposite, not a generation. Belongs in the copy line, not in the picture chain.</td>
+          <td><span class="verd move">move to copy</span></td>
+        </tr>
+        <tr>
+          <td><strong>5 · Picture variations</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">7,057 chars</span></td>
+          <td>The designer’s three extra prompts and the variation rows. It runs before there is a draft to vary — which is backwards; it is only ever used after.</td>
+          <td><span class="verd move">run it after the draft</span></td>
+        </tr>
+        <tr>
+          <td><strong>6 · The brief</strong><br><span class="mono" style="font-size:12.5px; color:var(--mid)">21,873 chars</span></td>
+          <td>The plate prompt (2,807) is load-bearing. The other ~19,000 is an argument nobody downstream reads — and it is the single biggest writing cost in the chain.</td>
+          <td><span class="verd cut">cut to the plate</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">Where the quality actually comes from</p>
+    <h2>Four levers, none of them a stage</h2>
+    <p class="sub">Ranked by what the runs on disk show. Each one changed the pass rate; no writing pass ever did.</p>
+  </div>
+  <div class="levers">
+    <div class="lever">
+      <div class="r">1</div>
+      <div>
+        <h3>The swipe goes in as a picture</h3>
+        <p>For months it didn’t. The generator saw the cast, the product and a paragraph — and a paragraph cannot carry a composition.</p>
+        <div class="ev">before: “not close enough to the inspiration” · after: 20 of 21 passed</div>
+      </div>
+    </div>
+    <div class="lever">
+      <div class="r">2</div>
+      <div>
+        <h3>The right reference photos — and only those</h3>
+        <p>A wrong attachment beats every word in the prompt. The model copies the reference rather than the swipe.</p>
+        <div class="ev">p187–p190: a skin photo on a person-free frame → all 12 rolls came back as a woman applying product, offer text gone · p186: stripping the in-hand photo took away the only correct grip we own</div>
+      </div>
+    </div>
+    <div class="lever">
+      <div class="r">3</div>
+      <div>
+        <h3>Offer, colour and product read out of files</h3>
+        <p>Price, guarantee, discount bar, accent colour. Looked up from the brand’s own folders, so nothing is invented and nothing is dropped.</p>
+        <div class="ev">“60% off · ends soon” becomes “3 tubes for $__ · 60-Day Money Back”</div>
+      </div>
+    </div>
+    <div class="lever">
+      <div class="r">4</div>
+      <div>
+        <h3>4:5 content inside a 9:16 frame</h3>
+        <p>Content generated at 4:5 and taped into the tall frame, only the strips painted. Asking a model not to reflow does not work.</p>
+        <div class="ev">13 live rolls reflowed a 4:5 layout to fill 9:16 when merely asked not to</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">Troubleshooting</p>
+    <h2>The three things that actually break</h2>
+    <p class="sub">None of them is the number of stages.</p>
+  </div>
+  <div class="brk">
+    <div class="brkrow">
+      <div>
+        <h3>References outrank words</h3>
+        <p>Whatever photo is attached is what comes back. The rule the runs taught: attach our real thing when the change touches it, and strip it when the frame doesn’t contain it.</p>
+      </div>
+      <div class="ev">two incidents, both 24 Sep, both caught by the judge and both avoidable at attach time</div>
+    </div>
+    <div class="brkrow">
+      <div>
+        <h3>Models redraw words every single roll</h3>
+        <p>An image model regenerates rather than edits, so any text in frame is re-drawn — including text nobody asked to change. This is the one place a composite beats a generation, because a composite is exact and costs nothing.</p>
+      </div>
+      <div class="ev">“Centela” for Centella · “188 g” for 180 g · “4.52 OZ” for 3.53 OZ · a masked edit that passed the judge carried a doubled headline</div>
+    </div>
+    <div class="brkrow">
+      <div>
+        <h3>A brief that never passes keeps rolling</h3>
+        <p>Four rounds of three is up to twelve generations on one brief. Two briefs have never produced a passing roll; they ship flagged, which is the design, but they are also the bill.</p>
+      </div>
+      <div class="ev">p153 — every roll cloned her face or mangled the hands · p162 — the tube comes out flat-on with a smear the swipe never had</div>
+    </div>
+  </div>
+
+  <div class="call col">
+    <h3>Correction to what I told you first</h3>
+    <p>I said the compositor “isn’t switched on everywhere.” That was too vague, and the truth matters here: <strong>the half that clears the space is switched on. The half that sets the words was never wired.</strong> Full picture in the next section.</p>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">What the compositor actually is</p>
+    <h2>It isn’t a third model. It’s typesetting.</h2>
+    <p class="sub">Two models run in this chain and that doesn’t change: GPT Image 2.5 paints, Gemini reads and judges. The compositor is neither — it’s software on the Mac that sets type on a picture, the way a design program does.</p>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h3>What you guessed</h3>
+      <p style="margin:0 0 10px; font-size:15.5px; line-height:1.5; color:var(--ink-2)"><em>“A step inside of the generation prompt saying, hey, composite this thing in this space.”</em></p>
+      <p style="margin:0; font-size:15.5px; line-height:1.5; color:var(--ink-2)"><strong>Half right, and the half that’s already built.</strong> The generation prompt does exactly that — it hands the model measured rectangles and says leave these empty.</p>
+    </div>
+    <div class="card on">
+      <h3>The other half</h3>
+      <p style="margin:0; font-size:15.5px; line-height:1.5; color:var(--ink-2)">Asking the <em>model</em> to place exact words is the version that never works — that’s what turns Centella into “Centela.” After the picture comes back, the words get <strong>set on top as real text</strong>, from the list the brief already wrote. Nothing is guessing. It’s typing.</p>
+    </div>
+  </div>
+
+  <div class="shead" style="margin-top:38px; margin-bottom:14px">
+    <h2 style="font-size:20px">Where the loop stops</h2>
+    <p class="sub">Three pieces. Two are built and running. The third was never connected.</p>
+  </div>
+  <div class="levers">
+    <div class="lever">
+      <div class="r" style="color:var(--live)">✓</div>
+      <div>
+        <h3>The brief writes the words down as data</h3>
+        <p>Every headline, price and guarantee with its exact position, size, colour and alignment. <strong>44 of 66 briefs carry one.</strong></p>
+        <div class="ev">stage 6 · the type layer</div>
+      </div>
+    </div>
+    <div class="lever">
+      <div class="r" style="color:var(--live)">✓</div>
+      <div>
+        <h3>The picture is generated with the words left out</h3>
+        <p>“<strong>NO TEXT. NOT ANY.</strong> The words are set afterwards by a compositor, not by you.” Plus the measured rectangles that stay clean. Sent automatically on every brief that has a type layer.</p>
+        <div class="ev">stage 7 · plate-only prompt, live since 24 Sep</div>
+      </div>
+    </div>
+    <div class="lever">
+      <div class="r" style="color:var(--flag)">✗</div>
+      <div>
+        <h3>The words get set on the picture</h3>
+        <p>Never wired. The tool exists and is tested; nothing in the draft run calls it. So the plate comes back with clean empty space where the headline goes — and the words that were already written down are never placed.</p>
+        <div class="ev">compose.py · built, tested, not called by draft.py or deliver.py</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shead" style="margin-top:38px; margin-bottom:12px">
+    <h2 style="font-size:20px">What it costs you right now</h2>
+    <p class="sub">Your latest batch, read off the judge’s own record. Six briefs carried words.</p>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th style="width:12%">Brief</th><th style="width:44%">What the model did with the words</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">p171</td><td>Drew “<strong>2016</strong>” — a number nobody asked for.</td><td><span class="verd cut">fail</span></td></tr>
+        <tr><td class="mono">p179</td><td>Drew “<strong>WEEK 1 / WEEK 3 / WEEK 6</strong>” as separate labels that weren’t on the allowed list.</td><td><span class="verd cut">fail</span></td></tr>
+        <tr><td class="mono">p183</td><td>Copied <strong>the competitor’s own quote</strong> straight off the swipe into our ad.</td><td><span class="verd cut">fail</span></td></tr>
+        <tr><td class="mono">p176</td><td>Got them right.</td><td><span class="verd keep">pass</span></td></tr>
+        <tr><td class="mono">p177</td><td>Got them right.</td><td><span class="verd keep">pass</span></td></tr>
+        <tr><td class="mono">p182</td><td>Got them right.</td><td><span class="verd keep">pass</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col" style="margin-top:20px"><strong>Three of six — a coin flip on the words — when the correct words were sitting in a file beside the picture the whole time.</strong> Every brief with no words passed. Every failure was a brief that had words. Connecting the last step removes this failure mode completely, costs no model call and adds no wait.</p>
+</section>
+
+<section>
+  <div class="shead">
+    <p class="lab">The split</p>
+    <h2>Three folders, the same shape as video</h2>
+    <p class="sub">Video already runs this way. Image is the one that never got split — teardown, writing, drafting, judging, delivery and the board all sit in one folder.</p>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th style="width:20%">Folder</th><th style="width:16%">Takes</th><th style="width:16%">Makes</th><th>What lives there</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Image teardown</strong><br><span class="mono" style="font-size:12px; color:var(--mid)">↔ video teardown</span></td>
+          <td>a swipe</td>
+          <td>a brief</td>
+          <td>Stages 1–6 and the writing. <strong>Stops at the brief.</strong> Makes no pictures. 16 tools.</td>
+        </tr>
+        <tr>
+          <td><strong>Image production</strong><br><span class="mono" style="font-size:12px; color:var(--mid)">↔ video production</span></td>
+          <td>a brief</td>
+          <td>a finished ad</td>
+          <td>Every picture: the draft, the judge, <strong>the type layer set on the plate</strong>, the 9:16 finish, the variation run, delivery, the packs, the board. 19 tools, plus the engine that already lives here.</td>
+        </tr>
+        <tr>
+          <td><strong>Image editing</strong><br><span class="mono" style="font-size:12px; color:var(--mid)">↔ video editing</span></td>
+          <td>a finished ad</td>
+          <td>an adjusted ad</td>
+          <td>One change at a time, judged against what it came from. <strong>The final-final</strong> — same seat as video editing.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="call col" style="background:var(--live-bg); border-color:var(--live-rule)">
+    <h3 style="color:var(--live)">On image editing — my read</h3>
+    <p><strong>Yes, and it’s already built.</strong> The engine that does one-change-at-a-time edits with a two-picture judge exists and has been running since 22 September. It literally files its own work under the name <span class="mono">image-edit</span> — it just isn’t called that out loud anywhere.</p>
+    <p style="margin-bottom:0">So this is a naming and placement job, not a build: give it the name, and put it at the end of production where video editing sits. That’s the third folder above, and it costs nothing to stand up.</p>
+  </div>
+
+  <div class="shead" style="margin-top:38px; margin-bottom:12px">
+    <h2 style="font-size:20px">What the move actually costs</h2>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h3>Clean</h3>
+      <ul>
+        <li>The tools <strong>already separate 16 / 19</strong> along the seam — almost nothing is genuinely shared</li>
+        <li>Production has a folder already; it just isn’t where the drafting happens</li>
+        <li>No prompt changes, no model changes, nothing about how the work is done</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>The bill</h3>
+      <ul>
+        <li><strong>36 files elsewhere</strong> point at the old location and have to be repointed</li>
+        <li>2.9&nbsp;GB of drafts and 284&nbsp;MB of runs move with it</li>
+        <li>Best done in one pass when nothing else is mid-flight in the repo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Measured 25 Sep 2026 off 65 completed runs and 47 generation jobs in the image chain’s own run folders.<br>
+  Character counts are per-swipe averages of the stage files actually on disk; the plate-prompt figures are the real prompts sent.<br>
+  Mirror: <span class="mono">tools/image-teardown/IMAGE-CHAIN.md</span> · source <span class="mono">image-chain.html</span>
+</footer>
+
+</div>

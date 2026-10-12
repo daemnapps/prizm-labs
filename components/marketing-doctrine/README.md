@@ -1,6 +1,6 @@
 # components/marketing-doctrine — the marketing doctrine every machine cites
 
-**Owner: Damon** (definitions), engine shared. Resident since 2026-09-18.
+**Owner: the owner** (definitions), engine shared. Resident since 2026-09-18.
 
 The creative layer runs on one doctrine, and this folder is where it lives:
 mass desire, the five awareness levels, the five sophistication stages, the
@@ -21,7 +21,7 @@ any file here.
 | `lint_prompts.py` | the pronoun gate, usable from any machine's test suite |
 | `test_doctrine.py` | the declared test — counts, ids, pointers, idempotence, lint |
 
-The book itself is in the repo at `components/marketing-doctrine/source/breakthrough-advertising-eugene-schwartz.txt` (Damon's ruling, 2026-09-18: "put the book in the repo too"); every `[L####]` pointer below is a line number in that file.
+The book itself is in the repo at `components/marketing-doctrine/source/breakthrough-advertising-eugene-schwartz.txt` (the owner's ruling, 2026-09-18: "put the book in the repo too"); every `[L####]` pointer below is a line number in that file.
 never committed — it is a copyrighted book. The `[L####]` pointers exist so a
 claim can be checked against it in seconds. Nothing is copied out of it; quotes
 stay under 12 words.
@@ -67,7 +67,7 @@ second name for any of them.
 
 ## The taste layer — delivery.json
 
-Damon's ruling, 2026-09-18: *"at the spice level — do we have levels of
+the owner's ruling, 2026-09-18: *"at the spice level — do we have levels of
 humor, delivery styles? I want to get deeper into taste and actual
 creativity with delivery."*
 
@@ -97,7 +97,33 @@ Three rules travel with it and none of them is negotiable:
   timing, cadence and world — never a likeness, never a sound. The voice is
   always a cast voice, cloned then adjusted, rights on file.
 - **Humor never sits over a claim.** It stays out of the proof and offer
-  beats unless the room itself jokes there.
+  beats unless the room itself jokes there. The twist beat may be the
+  product doing its job, shown, not claimed, and a plain beat with the
+  proof always follows it.
+
+The humor rules, ruled by the owner 2026-10-06 ("All six", on the humor
+research):
+
+- **A planted joke comes from the room.** A straight source may take one only
+  when the culture read or the avatar's culture map shows this audience already
+  laughs at that meme, format or reference. The receipt is named. A joke the
+  writer invented is still a finding.
+- **The problem may be a character.** The spot, the breakout, the stubborn
+  stain, cast as a PERSONIFIED PROBLEM: the problem given a face, not a new
+  person. Always the villain or the fool, never the customer.
+- **The humor rung.** 0 straight · 1 problem only · 2 product as a prop · 3
+  product is the punchline · 4 full ad wearing the meme. **0 is the default**
+  (the owner, later the same day: "not every ad is funny"). A piece leaves 0 only
+  when the swipe itself is funny, or the culture read names a meme or format
+  this audience already laughs at and the problem fits in it. Rung 1 and 2
+  pieces are organic posts and may carry no product. Rung 3 and 4 are ads.
+- **Culture is the foundation; humor is one use of it.** Each avatar has a
+  culture map, `core-avatars/<avatar>/culture-map.md`: what they watch, who
+  they trust, their references and slang, what they care about, what they
+  laugh at, what is off-limits. Its humor section counts as the RQ-17 receipt
+  until the avatar's own research replaces it. The culture read tags every
+  reference by what it does: laugh · trust · belonging · nostalgia ·
+  aspiration · authority · relief · rebellion.
 
 Where Schwartz names a row it carries the pointer — camouflage
 `[L5436-5661]` for the styles that hide the gear change, mood
@@ -112,7 +138,7 @@ carry the answers, `taste` and `cringe` (`brands/language-schema.md`).
 
 ## The spoken layer — spoken.json
 
-Damon's ruling, 2026-09-19: *"humans don't use em dashes when speaking —
+the owner's ruling, 2026-09-19: *"humans don't use em dashes when speaking —
 trigger deeper research on actual English-speaking human speech patterns
 and round up levels of colloquialisms that we can use per sub-avatar as
 well to ensure we are matching the delivery of these voices precisely."*
@@ -149,7 +175,7 @@ in both `language.py` STAGE_USE maps.
 
 ## The second door — ad-frameworks.json
 
-Damon's ruling, 2026-09-18: *"with all of the different sections we should
+the owner's ruling, 2026-09-18: *"with all of the different sections we should
 begin to assemble actual frameworks to create ads strategically. We use
 swipes as the baseline, but since we have a fundamental system and
 understanding of who we are speaking to and how and what formats they're
@@ -171,11 +197,11 @@ Two ways a row gets here:
 - **Promoted** — `python3 components/video-teardown/machine/framework_bank.py
   --promote <run-label>` copies the framework a run OBSERVED (its
   `doctrine.json`) in as a new row, `status: "seed"`, `source: "observed —
-  <label>"`. **Run this only on Damon's own word.** This file is curated
+  <label>"`. **Run this only on the owner's own word.** This file is curated
   doctrine; the framework bank is a compiled projection of runs, and a bank
   row walking in unasked is how the two stop being different things.
 
-Only Damon moves a row's `status` from `seed` to `proven` — after the ads it
+Only the owner moves a row's `status` from `seed` to `proven` — after the ads it
 produced were judged. No coined names anywhere in this file: a promoted row
 takes its crosswalk row's name or a plain description, never an invented one.
 
@@ -212,8 +238,8 @@ component's file set.
 
 | question | answer |
 |---|---|
-| **engine + owner** | `render.py` + `lint_prompts.py` — two stdlib scripts, no state, no credential. Shared engine; Damon's chain is the first caller |
-| **definitions + curator** | `frameworks.json` — **Damon curates.** It is doctrine, so a change to a framework is a ruling, not a maker's judgment. The line pointers are the audit trail |
+| **engine + owner** | `render.py` + `lint_prompts.py` — two stdlib scripts, no state, no credential. Shared engine; the owner's chain is the first caller |
+| **definitions + curator** | `frameworks.json` — **the owner curates.** It is doctrine, so a change to a framework is a ruling, not a maker's judgment. The line pointers are the audit trail |
 | **the plane it emits** | **none — `slices/` is a rendered projection of the definitions, not a run record.** Nothing here writes outside this folder and there is no run to file |
 | **what the manifest declares per entry** | every row carries `ref` (its `[L####]` pointer), and every technique additionally carries `when`, `owning_stage`, `research_question` and `scene_shape`; every research question carries `framework`, `tags` and the `stages` it feeds |
 

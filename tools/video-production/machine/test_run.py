@@ -113,7 +113,7 @@ class TempRuns(unittest.TestCase):
         a = ["start", str(FIX / "run-plan.json"),
              "--brand", "_fixture", "--format", "fixture-format", "--label", "t1",
              "--bank", str(FIX / "bank.json"), "--runs-root", str(self.tmp),
-             "--cast-root", str(FIX / "cast-root")]
+             "--cast-root", str(FIX / "cast-root"), "--composed"]
         for k, v in over.items():
             flag = f"--{k.replace('_', '-')}"
             if v is True:
@@ -123,7 +123,7 @@ class TempRuns(unittest.TestCase):
         return run.build_parser().parse_args(a)
 
     def run_dir(self):
-        return self.tmp / "video-machine" / "_fixture" / "t1"
+        return self.tmp / "video-production" / "_fixture" / "t1"
 
 
 class StartHiggsfield(TempRuns):
@@ -219,7 +219,7 @@ class StartFal(TempRuns):
 
 
 class StartMachineHand(TempRuns):
-    """The two hands (Damon's 2026-09-17 ruling): cast/still/edit/song run
+    """The two hands (the owner's 2026-09-17 ruling): cast/still/edit/song run
     direct, before the editor sees anything. This plan is its own fixture
     (not fixtures/run-plan.json) so the existing fal/Higgsfield tests above,
     which assert exact media/ledger counts, are never affected by it."""
@@ -354,9 +354,9 @@ class StartMachineHand(TempRuns):
 
 class Record(TempRuns):
     def make_bare_run(self, provider="higgsfield-ui"):
-        r = self.tmp / "video-machine" / "_fixture" / "rec1"
+        r = self.tmp / "video-production" / "_fixture" / "rec1"
         (r / "batches").mkdir(parents=True)
-        run.write_json(r / "run.json", {"machine": "video-machine", "brand": "_fixture",
+        run.write_json(r / "run.json", {"machine": "video-production", "brand": "_fixture",
                                         "label": "rec1", "format": "fixture-format",
                                         "provider": provider, "opened": "2026-09-17T00:00:00+00:00"})
         reg = platform.registry()
@@ -429,9 +429,9 @@ class RecordParity(TempRuns):
     clip that carries a line and writes the verdict, automatically."""
 
     def make_run_with_lines(self, provider="higgsfield-ui"):
-        r = self.tmp / "video-machine" / "_fixture" / "rec-parity"
+        r = self.tmp / "video-production" / "_fixture" / "rec-parity"
         (r / "batches").mkdir(parents=True)
-        run.write_json(r / "run.json", {"machine": "video-machine", "brand": "_fixture",
+        run.write_json(r / "run.json", {"machine": "video-production", "brand": "_fixture",
                                         "label": "rec-parity", "format": "fixture-format",
                                         "provider": provider, "opened": "2026-09-17T00:00:00+00:00"})
         run.write_json(r / "lines.json", {"L1": "Wake up and choose greatness."})
@@ -506,9 +506,9 @@ class RecordParity(TempRuns):
 
 class Pack(TempRuns):
     def make_bare_run(self):
-        r = self.tmp / "video-machine" / "_fixture" / "pack1"
+        r = self.tmp / "video-production" / "_fixture" / "pack1"
         r.mkdir(parents=True)
-        run.write_json(r / "run.json", {"machine": "video-machine", "brand": "_fixture",
+        run.write_json(r / "run.json", {"machine": "video-production", "brand": "_fixture",
                                         "label": "pack1", "format": "fixture-format",
                                         "provider": "higgsfield-ui",
                                         "opened": "2026-09-17T00:00:00+00:00"})
@@ -626,7 +626,7 @@ class ProductsOf(unittest.TestCase):
         shutil.rmtree(self.tmp, ignore_errors=True)
 
     def test_tags_only_product_elements(self):
-        facts_dir = self.tmp / "brands" / "acme"
+        facts_dir = self.tmp / "brands" / "acme" / "ai-elements"
         facts_dir.mkdir(parents=True)
         (facts_dir / "element-facts.json").write_text(json.dumps({"elements": {
             "00000000-0000-4000-8000-0000000000d1": {"kind": "product"},
@@ -648,6 +648,101 @@ class NoSlugs(unittest.TestCase):
             src = (HERE / fname).read_text()
             for slug in slugs:
                 self.assertNotIn(slug, src, f"{fname} names model slug {slug!r}")
+
+
+class StartRefusesAnUnreadyBrief(TempRuns):
+    """THE PRODUCTION GATE (the owner, 2026-09-23). `start` on a brief checks,
+    before a voice or a frame is paid for and --dry-run included, that every
+    scene says to_camera, every card is a plate and its words, and every row
+    of the swipe's make-list is carried or dropped with a reason."""
+
+    def cast_root(self):
+        root = self.tmp / "cast"
+        (root / "the-speaker").mkdir(parents=True)
+        shutil.copy2(FIX / "cast-root" / "lead" / "voice.json",
+                     root / "the-speaker" / "voice.json")
+        return root
+
+    def brief_args(self, brief: Path, **over):
+        a = ["start", str(brief), "--brand", "_fixture", "--format", "fixture-format",
+             "--label", "t1", "--bank", str(FIX / "bank.json"),
+             "--runs-root", str(self.tmp), "--cast-root", str(self.cast_root()),
+             "--provider", "higgsfield-ui", "--yes", "--dry-run"]
+        if over.get("composed", True):
+            a.append("--composed")
+        return run.build_parser().parse_args(a)
+
+    def test_a_brief_never_checked_against_its_swipe_is_refused(self):
+        with env():
+            code, out = run_quiet(run.cmd_start, self.brief_args(FIX / "brief-v13.md", composed=False))
+        self.assertEqual(code, 2)
+        self.assertIn("REFUSED swipe match: it was never checked against its swipe", out)
+
+    def test_a_brief_damon_has_not_read_is_refused(self):
+        import importlib.util as iu
+        sp = iu.spec_from_file_location("swipe_match", HERE.parents[1] / "video-teardown" / "machine" / "swipe_match.py")
+        sm = iu.module_from_spec(sp); sp.loader.exec_module(sm)
+        brief = self.tmp / "b.md"
+        text = (FIX / "brief-v13.md").read_text()
+        h = sm.brief_hash(text)
+        brief.write_text(f"<!-- swipe-match: PASSED · {h} -->\n" + text
+                         + f"\n<!-- manifest -->\nMANIFEST: COMPLETE · {h}\n<!-- /manifest -->\n")
+        with env():
+            code, out = run_quiet(run.cmd_start, self.brief_args(brief, composed=False))
+        self.assertEqual(code, 2)
+        self.assertIn("REFUSED the owner has not read this brief", out)
+
+    def test_a_brief_whose_manifest_is_not_complete_is_refused(self):
+        import importlib.util as iu
+        sp = iu.spec_from_file_location("swipe_match", HERE.parents[1] / "video-teardown" / "machine" / "swipe_match.py")
+        sm = iu.module_from_spec(sp); sp.loader.exec_module(sm)
+        brief = self.tmp / "b.md"
+        text = (FIX / "brief-v13.md").read_text()
+        h = sm.brief_hash(text)
+        brief.write_text(f"<!-- swipe-match: PASSED · {h} -->\n" + text
+                         + f"\n<!-- manifest -->\nMANIFEST: MISSING — E6 · {h}\n<!-- /manifest -->\n")
+        with env():
+            code, out = run_quiet(run.cmd_start, self.brief_args(brief, composed=False))
+        self.assertEqual(code, 2)
+        self.assertIn("REFUSED the brief's manifest is not complete — MANIFEST: MISSING — E6", out)
+
+    def test_a_v13_brief_plans_its_b_roll_and_its_card(self):
+        with env():
+            code, out = run_quiet(run.cmd_start, self.brief_args(FIX / "brief-v13.md"))
+        self.assertEqual(code, 0, out)
+        r = self.run_dir()
+        plan = json.loads((r / "plan.json").read_text())
+        card = next(s for s in plan["scenes"] if s["id"] == "S3")
+        self.assertEqual(card["kind"], "card")
+        self.assertEqual(card["card"]["sfx"], "a till ding")
+        items = [it for bf in sorted((r / "batches").glob("*.json"))
+                 for it in json.loads(bf.read_text())["items"]]
+        ids = [it["id"] for it in items]
+        self.assertIn("S3-PLATE", ids)
+        self.assertNotIn("S3", ids)
+        # a silent card claims no slice of the read
+        self.assertNotIn("S3", json.loads((r / "lines.json").read_text()))
+        self.assertIn("[UNFILLED]", out)
+
+    def test_a_lost_make_list_row_stops_the_run_before_the_voice(self):
+        text = (FIX / "brief-v13.md").read_text().replace(
+            "the street is the source creator's own town; nothing of ours stands in for it", "")
+        brief = self.tmp / "brief-lost-row.md"
+        brief.write_text(text)
+        with env():
+            code, out = run_quiet(run.cmd_start, self.brief_args(brief))
+        self.assertEqual(code, 2, out)
+        self.assertIn("REFUSED roll sheet row '0:25 · [shows: the street outside]'", out)
+        r = self.run_dir()
+        self.assertFalse((r / "lines.json").exists())
+        self.assertFalse((r / "vo").exists())
+        self.assertFalse(any((r / "batches").glob("*.json")))
+
+    def test_an_old_brief_with_no_roll_sheet_still_plans(self):
+        with env():
+            code, out = run_quiet(run.cmd_start, self.brief_args(FIX / "brief-block.md"))
+        self.assertEqual(code, 0, out)
+        self.assertIn("WARNING the brief carries no roll sheet", out)
 
 
 if __name__ == "__main__":

@@ -159,7 +159,7 @@ function openStyle(id){
     <figure>${DATA.base?`<img src="${DATA.base}" alt="original">`:""}<figcaption class="mono">original</figcaption></figure>
     <figure>${s._img?`<img src="${s._img}" alt="${h(s.name)}">`:""}<figcaption class="mono">${h(s.id)}</figcaption></figure></div>
     <div class="body"><button class="x" id="dx">Close</button>
-    <div><span class="eyebrow">${h(s.family)} · ${h(s.status)}</span><h2>${h(s.name)}</h2></div>
+    <div><span class="eyebrow">${h(s.family)} · ${h(s.state || s.status)}</span><h2>${h(s.name)}</h2></div>
     <p>${h(s.what)}</p>
     <div><span class="eyebrow">The style lock</span><pre>${h(s.formula)}</pre></div>
     <div><span class="eyebrow">How it moves</span><p>${h(s.motion)}</p></div>

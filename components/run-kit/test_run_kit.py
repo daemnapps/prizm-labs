@@ -2,11 +2,13 @@
 """python3 test_run_kit.py — stdlib unittest, no network, no model call."""
 import sys
 import tempfile
+import json
+import shutil
 import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from run_kit import model, paths, pool, prompts          # noqa: E402
+from run_kit import filing, index, model, paths, pool, prompts, stage   # noqa: E402
 from run_kit.stage import DRY, Chain                     # noqa: E402
 
 STEPS = [{"key": "stage1", "name": "Read", "tier": "reads", "label": "record"},
@@ -113,6 +115,106 @@ class Kit(unittest.TestCase):
         self.assertEqual(out["a"], ("done", 1))
         self.assertEqual(out["b"][0], "failed")
 
+
+
+class TestChainDelivers(unittest.TestCase):
+    """The chain files its own deliverable. On the chain rather than in each
+    machine — machine-by-machine is how 110 briefs ended up unfindable."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="runkit-chain-"))
+        self.prompts = self.tmp / "prompts"; self.prompts.mkdir()
+        (self.prompts / "stage1-read-v1-damon.md").write_text("read {x}")
+        (self.prompts / "stage2-brief-v1-damon.md").write_text("brief {x}")
+        self.steps = [{"key": "stage1", "name": "Read", "tier": "checks", "label": "read"},
+                      {"key": "stage2", "name": "Brief", "tier": "designs", "label": "brief"}]
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def chain(self):
+        return stage.Chain("t", "acme", "run-1", self.tmp / "out", self.prompts,
+                           self.steps, echo=lambda *a: None)
+
+    def test_with_no_argument_it_delivers_the_last_stage_written(self):
+        c = self.chain()
+        (c.out / "stage1--read.md").write_text("the read")
+        (c.out / "stage2--brief.md").write_text("the brief")
+        got = c.deliver()
+        self.assertEqual([p.name for p in got], ["stage2--brief.md"])
+        self.assertEqual((c.out / "deliverable" / "stage2--brief.md").read_text(), "the brief")
+
+    def test_it_takes_a_named_file_and_a_name(self):
+        c = self.chain()
+        (c.out / "stage2--brief.md").write_text("the brief")
+        c.deliver(c.out / "stage2--brief.md", name="06-brief.md")
+        self.assertTrue((c.out / "deliverable" / "06-brief.md").is_file())
+
+    def test_a_chain_with_nothing_to_deliver_says_so_in_its_record(self):
+        c = self.chain()
+        self.assertEqual(c.deliver(), [])
+        self.assertIn("nothing to deliver", json.loads(
+            (c.out / "run.json").read_text())["deliverable"]["why"])
+
+    def test_the_record_names_what_was_delivered(self):
+        c = self.chain()
+        (c.out / "stage2--brief.md").write_text("x")
+        c.deliver()
+        rec = json.loads((c.out / "run.json").read_text())
+        self.assertEqual(rec["deliverable"]["files"], ["deliverable/stage2--brief.md"])
+
+
+class TestIndexAndDeliver(unittest.TestCase):
+    """The runs plane read as one thing — and the brief put where the standard
+    says. Added 2026-09-23 after an index over every run found 198 runs and
+    three briefs actually filed in `deliverable/`; a tool that wanted briefs had
+    reached into another machine's folders instead, and deleting that machine
+    nearly took six briefs with it."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="runkit-index-"))
+        r = self.tmp / "runs" / "image-teardown" / "acme" / "run-one"
+        (r / "out").mkdir(parents=True)
+        (r / "out" / "06-brief.md").write_text("# the brief\n")
+        (r / "prompts").mkdir()
+        (r / "prompts" / "5-brief.md").write_text("# the PROMPT, not the brief\n")
+        (r / "run.json").write_text(json.dumps({"state": "filed"}))
+        self.run = r
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_a_brief_outside_deliverable_is_reported_as_misfiled(self):
+        rows = index.scan(self.tmp / "runs")
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["briefs"], [])
+        self.assertIn("out/06-brief.md", rows[0]["briefs_misfiled"])
+
+    def test_the_prompt_as_sent_is_never_counted_as_a_brief(self):
+        rows = index.scan(self.tmp / "runs")
+        self.assertNotIn("prompts/5-brief.md", rows[0]["briefs_misfiled"])
+
+    def test_deliver_puts_it_where_the_standard_says_and_keeps_the_original(self):
+        filing.deliver(self.run, [self.run / "out" / "06-brief.md"])
+        self.assertTrue((self.run / "deliverable" / "06-brief.md").is_file())
+        self.assertTrue((self.run / "out" / "06-brief.md").is_file())
+        rows = index.scan(self.tmp / "runs")
+        self.assertEqual(rows[0]["briefs"], ["deliverable/06-brief.md"])
+        self.assertEqual(rows[0]["briefs_misfiled"], [])
+
+    def test_health_counts_the_column_that_matters(self):
+        h = index.health(self.tmp / "runs")
+        self.assertEqual(h["image-teardown"]["misfiled"], 1)
+        filing.deliver(self.run, [self.run / "out" / "06-brief.md"])
+        h = index.health(self.tmp / "runs")
+        self.assertEqual((h["image-teardown"]["misfiled"], h["image-teardown"]["with_brief"]), (0, 1))
+
+    def test_briefs_answers_by_brand_without_knowing_any_machine(self):
+        filing.deliver(self.run, [self.run / "out" / "06-brief.md"])
+        got = index.briefs(brand="acme", root=self.tmp / "runs")
+        self.assertEqual(len(got), 1)
+        self.assertTrue(got[0]["filed"])
+        self.assertEqual(index.briefs(brand="nobody", root=self.tmp / "runs"), [])
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

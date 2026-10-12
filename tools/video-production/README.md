@@ -1,4 +1,6 @@
-# Video production
+# AI video production
+
+## How to use it → (team dashboard)
 
 **A brief goes in. Finished clips come out — one command, nobody at a keyboard.**
 
@@ -11,7 +13,7 @@ the twin of `image-production`, which is stage two for statics.
 
 Full detail: `formats/RUN-PROTOCOL.md`.
 
-1. **Teardown classifies and injects** → a baseline brief (`components/video-teardown`, its own machine).
+1. **Teardown classifies and injects** → a baseline brief (`tools/video-teardown`, its own machine).
 2. **At stage 5 the route is decided** — creator (a real person) or AI. This protocol reads that decision; it never re-decides it.
 3. **Stages 5–8 build the brief** for whichever route was picked.
 4. **Creator route** → the brief goes to the person through the Google Sheet system. This machine stops.
@@ -38,10 +40,10 @@ of every door ruling: `machine/providers.json`.
 | `"brand": "<brand>"` | `brands/<brand>/element-facts.json` — what is true of each product, and which elements are blocked |
 | `cast.presenter` / `cast.who` / `cast.says` | the prompt shape names nobody; the identity comes from the plan |
 | `cast.face` / `.room` | the cast sheet and the room reference the stills are seeded from |
-| `brands/<brand>/ai-cast/<name>/voice.json` | the character's cloned ElevenLabs `voice_id` |
+| `runs/ai-elements/<brand>/casting/<name>/voice.json` | the character's cloned ElevenLabs `voice_id` |
 | — | Drive `Shared Assets/brands/<brand>/finals/<run>/` |
 
-**To add a brand:** create `brands/<brand>/element-facts.json`, build its
+**To add a brand:** create `brands/<brand>/ai-elements/element-facts.json`, build its
 cast (`building-the-cast.md`) with a `voice.json` per character, and point
 a run at it. There is no code to change.
 
@@ -70,24 +72,9 @@ Full detail, including which gates each verb runs: `formats/RUN-PROTOCOL.md`.
 | 11 | Naming gate |
 | 12 | Editor pack |
 
-### One hand (2026-09-18)
-
-Every station is made by the machine, directly, in one command — the
-17 Sep "two hands" folded when the talking beat and silent motion moved to
-fal's Omni (Damon: "we don't need Higgsfield MCP for any of this now").
-
-| Station | Door | Proof |
-|---|---|---|
-| voice | ElevenLabs, direct — cloned voice per character, made first | live 18 Sep |
-| cast · still | OpenAI, direct — GPT Image 2.5 sunburst, fidelity high, moderation low | live 18 Sep |
-| edit | Google, direct — Nano Banana Pro | live 18 Sep |
-| song | Google Lyria, direct | live 18 Sep |
-| **talking** | **fal Omni** → ElevenLabs speech-to-speech → remux · parity ≥85% twice (`machine/omni.py`) | live 18 Sep, one call, 63 s |
-| **motion** (silent) | **fal Omni**, sound stripped | dry-run; first real cutaway proves it |
-
-Wired and waiting: Seedance direct on BytePlus (`machine/direct_byteplus.py`)
-— blocked on US billing. Declined: the Higgsfield API. Forced houses only:
-Higgsfield (MCP / app), fal-as-a-house. Full ruling: `providers/MODEL-HOUSE.md`.
+Which door each station uses: `machine/providers.json` (the code's map).
+The process: `THE-CHAIN.md` (since 2026-10-03, the owner).
+What the gate enforces on each model's inputs: `machine/model-inputs.json`.
 
 **The prompts are files.** `prompts/stage-0-read-brief` … `stage-6-handoff`,
 versioned, on the teardown machine's convention. Each carries one fenced
@@ -99,8 +86,8 @@ nobody can correct.
 ### Running it
 
     python3 machine/run.py start <brief.md> --brand B --format F --label L
-    python3 machine/run.py record runs/video-machine/B/L --direct
-    python3 machine/run.py pack   runs/video-machine/B/L
+    python3 machine/run.py record runs/video-production/B/L --direct
+    python3 machine/run.py pack   runs/video-production/B/L
 
 Or from the board — `python3 machine/board.py runs/<run>/` (:8456): press
 Generate on a card and `machine/drain.py` makes the take on the direct
@@ -111,13 +98,7 @@ from a house), `ship.py` (→ Drive finals) are unchanged in role.
 
 ## How a scene is generated (2026-09-18)
 
-One setting, one paragraph of voice, one clip up to thirty seconds; two stills
-(first and last) and the middle as timed beats. Voice first as one continuous
-take with timestamps → first frame (GPT Image 2.5, cast sheet as reference) →
-last frame (GPT edit, two references, colour-matched) → the clip (Seedance 2.5
-on Higgsfield: start image + end image + the voice slice + the four-block
-prompt) → line check → director. The method: `SCENE-GENERATION.md`; the
-contract the gate enforces: `machine/model-inputs.json`.
+The process is `THE-CHAIN.md` (since 2026-10-03); the per-scene method is `SCENE-GENERATION.md`.
 
 ## The doctrine and the research (2026-09-18)
 
@@ -137,11 +118,12 @@ as stage inputs on every run. Record: `PROMPT-CHANGES.md`.
 
 ## Where output goes
 
-`runs/video-machine/<brand>/<label>/`, per the repo-root `runs/README.md`
+`runs/video-production/<brand>/<label>/`, per the repo-root `runs/README.md`
 (2026-09-17 ruling): `run.json`, `frames.json`, `lines.json`, `batches/`,
 `ledger.json`, `deliverable/`. Media never enters git; `.gitignore` enforces
-it. The local `M/runs/` and `machine/runs/` folders are gitignored media from
-before that ruling — not the live destination.
+it. The local `M/runs/` and `machine/runs/` folders are media from before that
+ruling, both gitignored — not the live destination. The style board and the
+pipeline view render to `runs/video-production/_system/` (ignored).
 
 ## The map of this folder
 
@@ -171,7 +153,7 @@ before that ruling — not the live destination.
 | `ROADMAP.md` | the plan — three legs, in order | live |
 | `archive/` | history — process, workplan, stages/, sequence-flow, evidence, parked-v1, the Cinema line, the editor sheet, Higgsfield house rules, See `archive/README.md` | archive |
 | `runs/` | local pre-ruling media, gitignored | archive (superseded) |
-| repo-root `runs/video-machine/` | where filed runs land, per `runs/README.md` — now holds the three filed 16 Sep runs | live |
+| repo-root `runs/video-production/` | where filed runs land, per `runs/README.md` — now holds the three filed 16 Sep runs | live |
 
 ## What is next
 

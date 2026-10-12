@@ -18,7 +18,7 @@ TRANSIENT = ("overloaded", "rate limit", "429", "500", "502", "503", "529", "tim
              "timed out", "connection", "temporarily", "econnreset")
 PURE_TEXT = ("You are one stage of a document pipeline. Return only the deliverable text. "
              "No tools, no preamble, no report about what you did.")
-KEEP_ENV = ("HOME", "PATH", "TERM", "LOGNAME", "SHELL", "LANG", "LC_ALL", "TMPDIR")
+KEEP_ENV = ("HOME", "PATH", "TERM", "USER", "LOGNAME", "SHELL", "LANG", "LC_ALL", "TMPDIR")  # USER: the CLI finds whoever is signed in on this machine by it — any account, never one hard-wired (2026-10-07)
 
 
 class UsageLimit(Exception):
@@ -53,6 +53,22 @@ def call(prompt_text, model, label="?", tries=4, wait=30, timeout=1800, runner=N
                             "--append-system-prompt", PURE_TEXT],
                            input=p, capture_output=True, text=True, env=_clean_env(), timeout=timeout)
         return r.returncode, r.stdout, r.stderr
+    # THE SESSION HAND (2026-09-30): when the CLI's login is capped, a Claude
+    # session answers instead. DAEMN_HAND_DIR names a folder: the prompt is left
+    # there as <label>-<hash>.prompt.md and the call stops; the session writes
+    # <label>-<hash>.md beside it, and the re-run reads it. Every check on the
+    # answer still applies.
+    hand = os.environ.get("DAEMN_HAND_DIR")
+    if hand and runner is None:
+        import hashlib, re as _re
+        from pathlib import Path as _P
+        hd = _P(hand); hd.mkdir(parents=True, exist_ok=True)
+        stem = _re.sub(r"[^a-z0-9]+", "-", str(label).lower()).strip("-") + "-" + hashlib.md5(prompt_text.encode()).hexdigest()[:8]
+        done = hd / (stem + ".md")
+        if done.exists() and done.read_text().strip():
+            return done.read_text().strip()
+        (hd / (stem + ".prompt.md")).write_text(prompt_text)
+        raise StageFailed(f"waiting for the session hand: {hd / (stem + '.prompt.md')}")
     runner = runner or default
     last = ""
     for attempt in range(1, tries + 1):

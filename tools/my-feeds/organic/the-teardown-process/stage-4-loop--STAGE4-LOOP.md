@@ -18,7 +18,7 @@
 | Pass | Does | Stops for a human? |
 |---|---|---|
 | **4a placement** | Lane · where the product enters · awareness entry → exit · whole-asset runtime budget | No — but read it, it's one page and everything depends on it |
-| **4b hook** | A control + five variants, each a line **plus scroll stopper**, citing a customer verbatim | **QA only** (changed 2026-08-18, Damon — was "human picks one"). **All approved hooks ship to test**; 4c builds one body that carries any of them and flags misfits |
+| **4b hook** | A control + five variants, each a line **plus scroll stopper**, citing a customer verbatim | **QA only** (changed 2026-08-18, the owner — was "human picks one"). **All approved hooks ship to test**; 4c builds one body that carries any of them and flags misfits |
 | **4c expansion** | The gated moves — each earns its way in against the baseline or stays out. Length is priced against 4a's budget, never doubled by default | No |
 | **4d close** | Moves 6–7. The objection line, the offer. Optional move 8 as a separate variation | No |
 | **4e audit** | Seven checks against the source and the rules. Returns SHIP, RE-RUN *specific pass*, or STOP | **Yes on RE-RUN** |
@@ -62,5 +62,5 @@ spine.** 4e check 1 exists to enforce exactly this.
 ## Not yet true of any of this
 
 **Stage 4 has never been run as a prompt.** It has been run twice by hand, by
-Damon, and once by me on Elena's Rank 5. These five files encode those runs;
+the owner, and once by me on Creator F's Rank 5. These five files encode those runs;
 the first real execution will find things they get wrong.

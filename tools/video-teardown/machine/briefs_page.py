@@ -9,10 +9,11 @@ import base64, html, json, re, subprocess, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import md
+import workdir
 
 HERE = Path(__file__).resolve().parent
-RUNS = HERE / "runs"
-OUT = HERE / "briefs.html"
+RUNS = workdir.root()
+OUT = workdir.system() / "briefs.html"
 
 # Reference frames are ~14MB of PNG each run. A published page cannot reach a
 # file on the machine that made it, so they are inlined — downscaled, because
@@ -98,10 +99,10 @@ def main():
     SKIP = {"ai-swipe-luxe-foundation", "graduation-test"}
     # Focused on one run while it is being worked on. Clear ONLY to show
     # every current brief again.
-    ONLY = {"<person>-06-dbtdq1qon4a"}
+    ONLY = {"mara-creator-06-dbtdq1qon4a"}
     briefs = []
-    for d in sorted(RUNS.iterdir()):
-        if d.name in SKIP or (ONLY and d.name not in ONLY):
+    for d in sorted(RUNS.iterdir()) if RUNS.is_dir() else []:
+        if not d.is_dir() or d.name in SKIP or (ONLY and d.name not in ONLY):
             continue
         f = d / "brief-final.md"
         if not f.is_file():
@@ -137,7 +138,8 @@ def main():
             f"<div class='brief' id='{html.escape(slug)}'>"
             f"<div class='head'><div class='meta'>{html.escape(meta or slug)}</div></div>"
             f"<div class='doc'>{body}</div></div>")
-    parts.append("<footer>components/video-teardown/machine/runs/</footer></div>")
+    parts.append("<footer>runs/video-teardown/_work/</footer></div>")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(parts), encoding="utf-8")
     print(f"{OUT}  ({len(briefs)} briefs)")
 

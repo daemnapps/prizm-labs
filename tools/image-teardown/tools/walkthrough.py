@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """The designer's walkthrough of the Brief Board — one page, dumb simple.
 
-    walkthrough.py --brand <brand> --out walkthrough-<brand>.html
+    walkthrough.py --brand brand-a --out walkthrough-brand-a.html
 
-Damon, 2026-09-18: "a dumb simple hand off walkthrough artifact for this
+the owner, 2026-09-18: "a dumb simple hand off walkthrough artifact for this
 brief board, what it is, how it works, each component, any direct prompts
 the designer should use."
 

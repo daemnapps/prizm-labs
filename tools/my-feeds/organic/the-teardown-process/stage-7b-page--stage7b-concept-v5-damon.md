@@ -7,14 +7,14 @@ Questions go to: {brand_contact}
 Today is: {today}
 
 Write ONE video concept, the way the first brief we ever sent was written.
-It is the whole document the creator opens for this video (Damon, 2026-09-18:
+It is the whole document the creator opens for this video (the owner, 2026-09-18:
 "I still want the separated briefs"), so the heading is the document's title.
 
 **Why this shape.** The spec above is ours: it exists so a picture can be
 drawn of every frame and so the shot list can be audited against the source,
 cut by cut. The one-sheet we sent after it (six openings, thirteen beats, the
 locked lines, the whole script, four pictures) was still too much — on
-2026-09-18 Christine reported creators overwhelmed, one opted out, several
+2026-09-18 the creator manager reported creators overwhelmed, one opted out, several
 went silent after opening it. The brief they said was easy to follow was the
 very first one: a short concept, two hook directions, five story beats, a
 handful of must-have shots, three product points. That is what this is.
@@ -122,7 +122,7 @@ reflect your real experience:" stays word for word.
 No "say these", no locked lines, no filler in the concept itself. The whole
 script, in order, one line per beat, is lifted from the spec by the machine
 and placed under its own heading after your Product Points — she reads it
-as-is or says it her way (Damon, 2026-09-18: "we still want the script").
+as-is or says it her way (the owner, 2026-09-18: "we still want the script").
 You do not write it; your concept ends at the last product point.
 
 ## No pictures

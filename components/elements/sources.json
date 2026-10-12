@@ -1,6 +1,6 @@
 {
-  "_what": "Every element list in the system, and where it lives. build.py reads each one where it is and writes the library in one shape; it never edits a source. A list is changed at its source, then build.py runs.",
-  "_rule": "Damon, 2026-09-20: every element defined once, every row the same fields, every one enforced — a value that is not on a list is refused, not guessed.",
+  "_what": "Every element list in the system, and where it lives. machine/elements.py build reads each one where it is and writes the library in one shape; it never edits a source. A list is changed at its source, then machine/elements.py build runs.",
+  "_rule": "the owner, 2026-09-20: every element defined once, every row the same fields, every one enforced — a value that is not on a list is refused, not guessed.",
   "sources": [
     {
       "element": "format",
@@ -24,7 +24,7 @@
     {
       "element": "format",
       "asset": "image",
-      "path": "image-production/format-bank.json",
+      "path": "tools/image-production/format-bank.json",
       "rows": "formats",
       "id": "key",
       "fields": {
@@ -44,9 +44,58 @@
     {
       "element": "format",
       "asset": "carousel",
-      "inline": [],
-      "enforced_by": null,
-      "note": "No carousel format list exists anywhere yet."
+      "inline": [
+        {
+          "id": "tip-stack",
+          "name": "Tip stack",
+          "status": "proposed",
+          "what": "The cover names the count ('4 tips…'), then one tip per slide, numbered; the last slide is the ask or the product.",
+          "why_it_works": "A number on the cover is a promise of how long it takes; each swipe pays one tip, so the whole thing gets read.",
+          "examples": "An Instagram creator's '4 tips to master animated ads' carousel (saved 2026-09-22); organic TikTok photo posts tagged #glowup #skincare (intake 2026-09-20, kind carousel)"
+        },
+        {
+          "id": "text-card-thread",
+          "name": "Text-card thread",
+          "status": "proposed",
+          "what": "Plain text cards, one thought per slide, no photography — the slides read as a thread; the account's name is the only picture.",
+          "why_it_works": "Reads as someone thinking out loud, not as an ad; the swipe is the page turn.",
+          "examples": "An Instagram motivation-mindset account's text-card carousel (saved 2026-09-22)"
+        },
+        {
+          "id": "step-tutorial",
+          "name": "Step tutorial",
+          "status": "proposed",
+          "what": "A how-to: the result on the cover, one step per slide with the screen or the hands shown, and a 'comment X for the file' close.",
+          "why_it_works": "Every slide is proof the result is reachable; the comment gate turns readers into a list.",
+          "examples": "An Instagram creator's 'Comment CLAYMATION for the skill' carousel (saved 2026-09-22)"
+        },
+        {
+          "id": "before-after-swipe",
+          "name": "Before/after swipe",
+          "status": "proposed",
+          "what": "Slide one is the before; the swipe reveals the after; the slides that follow are the routine that got there.",
+          "why_it_works": "The reader performs the reveal herself, which is the strongest way to show change without a claim in words.",
+          "examples": "Organic TikTok photo posts tagged #jawline #debloat #glowup (intake 2026-09-20 — 4 carousels routed to image-teardown, sequence form)"
+        },
+        {
+          "id": "caption-joke-series",
+          "name": "Caption joke series",
+          "status": "proposed",
+          "what": "The same joke set-up carried across slides — one captioned photo per slide, the punchline on the last.",
+          "why_it_works": "Comedy relatability that gets shared; the last slide is where the account or the product sits.",
+          "examples": "An Instagram comedy-relatable account's 'How to say … in Chinese?' carousel (saved 2026-09-22)"
+        },
+        {
+          "id": "product-slide-set",
+          "name": "Product slide set",
+          "status": "proposed",
+          "what": "One product, ingredient or benefit per slide, each with one hard label; the cover is the claim, the last slide the offer. The paid-carousel default.",
+          "why_it_works": "Lets one ad carry six objections without a feature list; Meta shows the slide that earns the tap.",
+          "examples": "none on file yet — intake routes every paid `media: carousel` ad here; the first one swiped fills this row"
+        }
+      ],
+      "enforced_by": "intake (kind carousel → format/carousel)",
+      "note": "First carousel list, 2026-09-28 (Master Plan v2, 3.1) — proposed from the carousel swipes on file: 4 organic TikTok photo posts (intake 2026-09-20) and 4 Instagram carousels in the owner's saves (2026-09-22). Held inline until a carousel tool owns it. image-teardown's sequence lane reads a carousel slide by slide."
     },
     {
       "element": "format",
@@ -211,7 +260,7 @@
     {
       "element": "style",
       "asset": "image",
-      "path": "image-production/style-packs.json",
+      "path": "tools/image-production/style-packs.json",
       "rows": "packs",
       "id": "@key",
       "fields": {
@@ -255,7 +304,7 @@
     {
       "element": "style",
       "asset": "caption",
-      "path": "video-edit/looks/bank.json",
+      "path": "tools/video-edit/looks/bank.json",
       "rows": "looks",
       "id": "id",
       "fields": {
@@ -300,7 +349,7 @@
     {
       "element": "template",
       "asset": "image",
-      "glob": "image-production/templates/*.json",
+      "glob": "tools/image-production/templates/*.json",
       "id": "@stem",
       "fields": {
         "name": "name",
@@ -322,8 +371,8 @@
           "name": "The simple email",
           "what": "logo, headline, one hero picture, the copy, an optional offer picture, one button, sign-off, footer — every brand, its look from brands/<brand>/email/simple.json",
           "status": "approved",
-          "signed": "Damon 2026-09-19",
-          "evidence": "Damon, 2026-09-19: \"it literally can just be the logo at the top, headline, an image that describes the headline, the copy\""
+          "signed": "the owner 2026-09-19",
+          "evidence": "the owner, 2026-09-19: \"it literally can just be the logo at the top, headline, an image that describes the headline, the copy\""
         }
       ]
     },

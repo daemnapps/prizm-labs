@@ -1,7 +1,7 @@
 {
  "element": "template",
  "asset": "image",
- "source": "image-production/templates/*.json",
+ "source": "tools/image-production/templates/*.json",
  "enforced_by": "image production's renderer",
  "note": null,
  "rows": [
@@ -15,7 +15,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/templates/*.json",
+   "source": "tools/image-production/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -36,7 +36,9 @@
       "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning — every line of type, the product — must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
      }
     }
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "confession",
@@ -48,7 +50,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/templates/*.json",
+   "source": "tools/image-production/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -76,7 +78,9 @@
      },
      "product_asset": "packshot-tube.png"
     }
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "full-photo",
@@ -88,7 +92,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/templates/*.json",
+   "source": "tools/image-production/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -114,7 +118,9 @@
      },
      "product_asset": "packshot-lockup.png"
     }
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "pedestal",
@@ -126,7 +132,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/templates/*.json",
+   "source": "tools/image-production/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -160,7 +166,9 @@
      ],
      "_adaptive_note": "headline and punch follow the picture: they are laid into the quietest band the plate actually has, not a fixed percentage. The type sits where there is nothing to read over."
     }
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "photo-strip",
@@ -172,7 +180,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "image-production/templates/*.json",
+   "source": "tools/image-production/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -218,8 +226,13 @@
      },
      "product_asset": "packshot-lockup.png"
     }
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

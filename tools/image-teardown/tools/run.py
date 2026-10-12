@@ -73,7 +73,7 @@ def file_letterforms(run):
     Written beside the stage output so a proposed row is findable rather than
     buried in nine thousand characters of prose. `letterforms.json` travels
     with the filed record; `python3 tools/letterforms.py` lists every
-    proposal across every run, which is the list Damon signs from.
+    proposal across every run, which is the list the owner signs from.
     """
     got = EL.letterforms_used(run)
     if not (got["used"] or got["proposed"]):
@@ -111,7 +111,7 @@ def version_of(path):
     return int(m.group(1)) if m else 0
 
 
-# THE BRANCH (Damon 2026-09-15 / 2026-09-22; TEARDOWN-CHAINS.md). A run is
+# THE BRANCH (the owner 2026-09-15 / 2026-09-22; TEARDOWN-CHAINS.md). A run is
 # opened on a route (who makes it: ai · creator) and a form (what it is:
 # single · sequence), written to vars/route.json by chain.py. Two stages read
 # it: stage 1 reads a sequence slide by slide, and stage 6 — the brief, the one
@@ -125,7 +125,7 @@ BRANCH_PROMPTS = {
     ("6", "ai", "single"):        "stage6-image-brief*",
     ("6", "ai", "sequence"):      "stage6-ai-sequence-brief*",
     ("6", "creator", "single"):   "stage6-creator-static-brief*",
-    # Carousels are AI only (Damon, 2026-10-01) — a creator-route sequence
+    # Carousels are AI only (the owner, 2026-10-01) — a creator-route sequence
     # gets the AI sequence brief; the creator sequence prompt is retired.
     ("6", "creator", "sequence"): "stage6-ai-sequence-brief*",
 }
@@ -205,7 +205,7 @@ def swipe_angle(run):
     src = _json.loads(f.read_text())
     # Paid keeps its angles in blocks/, organic keeps its posts in posts/.
     # Looking only in the paid library left stage 6 with no swipe_angle for
-    # every organic run, and nine <brand> runs finished five stages and then
+    # every organic run, and nine Brand A runs finished five stages and then
     # produced no brief at all (2026-09-14).
     for lib, sub in ((P.SWIPE, "blocks"), (P.SWIPE_ORGANIC, "posts")):
         q = lib / str(src.get("swipe", "")) / sub / str(src.get("block_file", ""))
@@ -246,6 +246,80 @@ def later(why):
     p = Missing(why)
     p.ok = True
     return p
+
+
+def avatar_input(run, brand, avatar, dry=False):
+    """The avatar a brand-side stage reads. With a sub-avatar named on the run
+    (`vars/sub_avatar.md`, written by `--sub`), it is the core profile, the
+    sub's card and the sub's newest profile, put together fresh every time a
+    stage runs — so a profile rewritten yesterday reaches today's brief without
+    anyone re-opening the run (the owner, 2026-10-02)."""
+    core = P.avatar_profile(brand, avatar)
+    f = run / "vars" / "sub_avatar.md"
+    sub = f.read_text().strip() if f.is_file() else (PLANNED_SUB or "")
+    if not sub:
+        return core
+    card, prof = P.sub_avatar(brand, avatar or core.parent.name, sub)
+    gone = [x for x in (core, card, prof) if not x.is_file()]
+    if gone:
+        return Missing("sub-avatar file missing: " + ", ".join(str(x) for x in gone))
+    if dry:
+        return later(f"core + sub {sub} (card + newest profile), put together at run time")
+    out = run / "vars" / "avatar.md"
+    out.write_text(
+        f"# The avatar: {core.parent.name} → sub-avatar {sub}\n\n"
+        "Write for the SUB-AVATAR. The core profile is who she is underneath; "
+        "the sub-avatar card and its profile are who this ad is for, in her own "
+        "words. Where they differ, the sub-avatar wins.\n\n"
+        f"## Core avatar profile\n\n{core.read_text()}\n\n"
+        f"## Sub-avatar card\n\n{card.read_text()}\n\n"
+        f"## Sub-avatar profile (newest)\n\n{prof.read_text()}\n")
+    return out
+
+
+PLANNED_SUB = None
+PLANNED_ASK = None
+
+
+def offer_input(run, b, dry=False):
+    """The offer a stage reads. With an ask named on the run (`vars/ask.md`
+    holds the ask record's path, written by `--ask`), the ask's own offer and
+    moment go on top of the brand's offer bank: the lines this ad may say, the
+    lines it may never say, and the deadline. The bank is what the brand
+    allows; the ask is what this ad was ordered with, and it wins where they
+    differ (the owner, 2026-10-02 — Halloween ads, no price on the ad)."""
+    f = run / "vars" / "ask.md"
+    ask = f.read_text().strip() if f.is_file() else (PLANNED_ASK or "")
+    if not ask:
+        return b["offer"]
+    a = Path(ask)
+    if not a.is_absolute():
+        a = P.REPO / a
+    if not a.is_file() or not Path(b["offer"]).is_file():
+        return Missing(f"ask or offer bank missing: {a}")
+    if dry:
+        return later(f"the ask's offer + moment ({a.name}) on top of the offer bank")
+    rec = json.loads(a.read_text())
+    off, mom = rec.get("offer") or {}, rec.get("moment") or {}
+    lines = "\n".join(f"- \"{x}\"" for x in off.get("lines", []))
+    never = "\n".join(f"- {x}" for x in off.get("never", []))
+    when = "\n".join(f"- \"{x}\"" for x in mom.get("lines", []))
+    out = run / "vars" / "offer.md"
+    out.write_text(
+        f"# THIS AD'S OFFER — from the ask `{rec.get('ask', a.parent.name)}`\n\n"
+        "These rules come from the order this ad was made for. Where they differ "
+        "from the offer bank below, THESE WIN. A line the bank allows but the "
+        "ask's NEVER list forbids is not used anywhere in the ad.\n\n"
+        f"Funnel: {rec.get('funnel', '')}\n\n"
+        + "".join(f"Made by ({k.replace('_', ' ')}): {v}\n" for k, v in (rec.get("makers") or {}).items())
+        + "\n"
+        f"## Lines this ad may say, word for word\n\n{lines}\n\n"
+        f"## Never on this ad\n\n{never}\n\n"
+        f"## The moment and its deadline ({mom.get('key', '')}, {mom.get('window', '')})\n\n"
+        f"Every ad in this ask carries one of these, word for word:\n\n{when}\n\n"
+        f"---\n\n# The brand's offer bank (for reference under the rules above)\n\n"
+        f"{Path(b['offer']).read_text()}\n")
+    return out
 
 
 def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
@@ -290,7 +364,7 @@ def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
         # Stage 1 is the only stage that sees the picture, so it is the only
         # one that can say how the letters are made. Same shape as 2b's:
         # rendered from the library at run time, never pasted into a prompt
-        # where it would go stale (Damon, 2026-09-25).
+        # where it would go stale (the owner, 2026-09-25).
         v["letterform_candidates"] = (later("rendered from components/elements/library at run time")
                                       if dry else EL.write_letterform_candidates(run))
         if dry:
@@ -318,9 +392,9 @@ def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
     if stage in ("3",):
         v["brand_name"] = own("vars/brand_name.md", "written when the run opens")
         v["production_route"] = own("vars/production_route.md", "written when the run opens")
-        v["avatar"] = guarded(P.avatar_profile, brand, avatar)
+        v["avatar"] = guarded(avatar_input, run, brand, avatar, dry)
         v["product_file"] = P.product(brand, product) if product else Missing("no --product given")
-        v["offer_file"] = b["offer"]
+        v["offer_file"] = guarded(offer_input, run, b, dry)
         v["identity_anchors"] = b["identity"]
         # Who actually exists. Without it the injection described men the
         # roster does not have — "a Black man in his early 30s" when no such
@@ -332,7 +406,7 @@ def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
             v["roster"] = roster_or_note(b, run)
         v["palette"] = b["palette"]
     if stage == "4":
-        v["avatar"] = guarded(P.avatar_profile, brand, avatar)
+        v["avatar"] = guarded(avatar_input, run, brand, avatar, dry)
         v["hook_ledger"] = b["hook_ledger"]
         v["identity_anchors"] = b["identity"]
         # THE RUNG TEST checks every headline against its entry rung's
@@ -340,6 +414,10 @@ def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
         v["awareness_levels"] = P.DOCTRINE / "awareness.md"
     if stage == "5":
         v["product_file"] = P.product(brand, product) if product else Missing("no --product given")
+    if stage == "6" and "{brief_standard}" in prompt_for("6", run=run).read_text():
+        # Document one is the standard brief, filled in (the owner, 2026-10-02:
+        # "we need a standardized briefing document literally").
+        v["brief_standard"] = P.BRIEF_STANDARD
     if stage == "6":
         # The prompt has always told stage 6 to take the angle from the
         # brand's own angle bank. Nothing passed it the bank, so every brief
@@ -351,7 +429,7 @@ def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
         # how stage 6 wrote "[VERIFY against style-packs.json]" into seven
         # briefs out of nine, and invented two pack names in the other two —
         # the same fault as the angle bank a day earlier (2026-09-14).
-        v["style_packs"] = P.REPO / "tools/image-production/style-packs.json"   # image-production is a component now
+        v["style_packs"] = P.REPO / "tools/image-production/static/style-packs.json"   # image-production is a component now
         # Their angle, in their words. The swipe library has named every one
         # of them, with clone counts and the verbatim copy — and no stage had
         # ever been handed one, so the chain judged a competitor's argument
@@ -360,7 +438,7 @@ def inputs_for(run, stage, brand, avatar, product, dry=False, planned=()):
                             if dry and not run.is_dir() else swipe_angle(run))
         v["brand_name"] = own("vars/brand_name.md", "written when the run opens")
         v["product_file"] = P.product(brand, product) if product else Missing("no --product given")
-        v["offer_file"] = b["offer"]
+        v["offer_file"] = guarded(offer_input, run, b, dry)
         v["palette"] = b["palette"]
         # Technique per element in the brief — bound from the doctrine.
         v["techniques"] = P.DOCTRINE / "techniques.md"
@@ -399,6 +477,33 @@ def source_images(run):
     return [one] if one else []
 
 
+def run_ledger(run):
+    """Where a brand with no hook ledger gets its empty one: this run's vars/."""
+    return Path(run) / "vars" / "hook-ledger.md"
+
+
+def open_ledger(run, brand, ledger):
+    """The hook ledger stage 4 reads. A brand's own ledger is read, never
+    written. A ledger that does not exist yet means "no hooks spent", not
+    "stop" — but the empty one opens in the RUN, never under brands/: brands/
+    is read-only to machines, and a brand-file change is a person's commit
+    (K2, 2026-10-06; SI-24)."""
+    if ledger.is_file():
+        return ledger
+    f = run_ledger(run)
+    if not f.is_file():
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(
+            f"# {brand} hook ledger\n\n"
+            "Opened in this run because the brand has no ledger — empty "
+            "because nothing has been generated yet. Stage 4 reads it before "
+            "writing: a verbatim already mapped to a hook here is spent. A "
+            f"person adds brands/{brand}/ads/hooks/hook-ledger.md by commit.\n\n"
+            "| verbatim | hook | status | run |\n|---|---|---|---|\n")
+        print(f"  opened an empty hook ledger for {brand} in this run — {f}")
+    return f
+
+
 def run_stage(run, stage, brand, avatar, product, gates="hold"):
     b = P.brand(brand)
     o = run / "out"
@@ -419,7 +524,7 @@ def run_stage(run, stage, brand, avatar, product, gates="hold"):
         subprocess.run(cmd, check=True)
         # What this teardown used from the letterform bank, and what it had to
         # name for itself. Never a gate: a proposed row must not stop a run
-        # (Damon, 2026-09-25 — "give it a name so we can keep things moving
+        # (the owner, 2026-09-25 — "give it a name so we can keep things moving
         # forward"). Written down so it can be signed later.
         #
         # IT LIVES HERE, NOT BESIDE THE 2b GATE. Stage 1 is the only stage
@@ -445,20 +550,8 @@ def run_stage(run, stage, brand, avatar, product, gates="hold"):
         if got:
             v["language_bank"] = got
 
-    # A ledger that does not exist yet means "no hooks spent", not "stop".
-    # A brand's first run has no history to avoid repeating, and refusing to
-    # start until someone hand-creates an empty file is a gate with nothing
-    # behind it.
-    ledger = v.get("hook_ledger")
-    if ledger and not Path(ledger).exists():
-        Path(ledger).parent.mkdir(parents=True, exist_ok=True)
-        Path(ledger).write_text(
-            f"# {brand} hook ledger\n\n"
-            "Opened by the chain on its first run for this brand — empty "
-            "because nothing has been generated yet. Stage 4 reads it before "
-            "writing: a verbatim already mapped to a hook here is spent.\n\n"
-            "| verbatim | hook | status | run |\n|---|---|---|---|\n")
-        print(f"  opened a hook ledger for {brand} — first run")
+    if v.get("hook_ledger"):
+        v["hook_ledger"] = open_ledger(run, brand, Path(v["hook_ledger"]))
 
     missing = [k for k, p in v.items() if is_missing(p)]
     if missing:
@@ -476,8 +569,34 @@ def run_stage(run, stage, brand, avatar, product, gates="hold"):
     engine = ENGINE[stage]
     runner = P.CLAUDE_TEXT if engine == "claude" else P.GEMINI_TEXT
     model, _why = model_for(stage)
+    pf = prompt_for(stage, run=run)
+    if stage in ("3", "4", "5", "6"):
+        # WHAT GOT PAST THIS AVATAR BEFORE — the viewer chain's learnings (2026-10-02)
+        try:
+            G.quality()
+            from marketing_chain_checks import viewer as _VW
+            head = (run / "vars" / "avatar.md").read_text(errors="replace")[:300] if (run / "vars" / "avatar.md").is_file() else ""
+            m = re.search(r"The avatar:\s*([\w-]+)(?:\s*→\s*sub-avatar\s*([\w-]+))?", head)
+            who = (m.group(2) or m.group(1)) if m else avatar
+            lt = _VW.learnings(brand, who) if who else ""
+            if lt.strip():
+                tmp = run / "vars" / f"_prompt-{stage}-learned.md"
+                tmp.parent.mkdir(parents=True, exist_ok=True)
+                tmp.write_text(pf.read_text().rstrip() + "\n\n---\n\n## WHAT GOT PAST THIS AVATAR BEFORE (the viewer chain's learnings)\n\n"
+                               "Real viewer checks on earlier briefs for this same person: use what worked, don't repeat what failed. "
+                               "Never overrides the swipe's structure or the owner's rulings.\n\n" + lt.strip() + "\n")
+                pf = tmp
+        except Exception:
+            pass
+    notes = run / "vars" / f"viewer-notes-{stage}.md"
+    if notes.is_file():
+        # THE VIEWER CHECK sent this step back: the viewers' own words ride on
+        # the end of its prompt for this one re-make (viewer_step, below).
+        tmp = run / "vars" / f"_prompt-{stage}-viewer.md"
+        tmp.write_text(pf.read_text().rstrip() + "\n\n---\n\n" + notes.read_text().strip() + "\n")
+        pf = tmp
     cmd = [sys.executable, str(runner), "--model", model,
-           "--prompt-file", str(prompt_for(stage, run=run))]
+           "--prompt-file", str(pf)]
     if stage == "2b":
         cmd += ["--min-chars", "120"]      # four ids and four reasons is a short, whole answer
     for k, p in v.items():
@@ -538,8 +657,13 @@ def dry_stage(run, stage, brand, avatar, product, planned):
         if ok:
             wants.discard("language_bank")
     for k, p in v.items():
-        if k == "hook_ledger" and not isinstance(p, Missing) and not Path(p).exists():
-            rows.append((k, "none yet — opened empty on this brand's first run", True))
+        if k == "hook_ledger" and not isinstance(p, Missing) and not Path(p).is_file():
+            f = run_ledger(run)
+            try:
+                f = f.relative_to(P.REPO)
+            except ValueError:
+                pass
+            rows.append((k, f"none on the brand — opens empty at {f}", True))
             continue
         if isinstance(p, Missing):
             rows.append((k, str(p), not is_missing(p)))
@@ -589,6 +713,50 @@ LABEL = {"1": "teardown", "2": "the format", "2b": "element labels", "3": "injec
          "4": "headlines", "5": "picture variations", "6": "the brief"}
 
 
+# THE VIEWER CHECK (the owner, 2026-10-02: "slide this into the chains and lets
+# ride it"; components/quality-checks/VIEWER-CHECK.md). Last, after the brief's
+# copy gate and before any picture is drawn: the brief is dropped into its
+# avatar's real feed and scrolled by 3 fresh viewers who are not marketers;
+# code scores it against the real posts beside it. A fail re-makes the step
+# where they passed it by, with their words, and a fresh set reads it again.
+# Two fails, or "not for me", HOLD at the `viewer` gate for the owner.
+VIEWER_ROUTE = {"openings": "4", "middle": "5", "giveaway": "5", "close": "6",
+                "staged": "5", "words": "4", "muted": "4", "proof": "6"}   # v2 (2026-10-02)
+
+
+def viewer_step(run, brand, avatar, product, gates="hold", quiet=False):
+    import os
+    if os.environ.get("QC_VIEWER", "1") == "0" or "unittest" in sys.modules:
+        return
+    G.quality()
+    from marketing_chain_checks import viewer as VW
+    if not avatar:
+        avatar = P.avatar_profile(brand, None).parent.name
+    _, form, _ = route_of(run)
+    kind = "carousel" if form == "sequence" else "still image"
+    sf = run / "vars" / "sub_avatar.md"          # the ad is judged by who it was written for
+    sub = sf.read_text().strip().splitlines()[0].strip() if sf.is_file() and sf.read_text().strip() else None
+    if sub and sub.lower().startswith(("none", "(none", "-")):
+        sub = None
+    # THE WHOLE LOOP (the owner, 2026-10-03: "install this in the actual process"):
+    # check → answers from real data → surgical rewrite → fresh check, up to 3
+    # rewrites, never on a worse version; a pass after a fail is learned. A
+    # passing rewrite becomes the brief.
+    bf = run / "out" / "06-brief.md"
+    before = bf.read_text()
+    r, text = VW.run_loop(run / "viewer-chain", brand, avatar, before, kind=kind, sub=sub, label=run.name,
+                          say=lambda m: print("  " + m.strip()))
+    if r["passed"]:
+        if text.strip() != before.strip():
+            (run / "out" / "06-brief.before-viewer.md").write_text(before)
+            bf.write_text(text)
+            print("  viewer check: the rewrite that passed is now the brief (kept 06-brief.before-viewer.md)")
+        return G._gate("viewer", [], run, gates)
+    why = ("the viewers said it isn't for them — who it's for is the owner's call" if r["fix_at"] == "audience"
+           else f"still failing after the rewrites — last at {VW.say(r['fix_at'])}")
+    return G._gate("viewer", [f"{why} (viewer-chain/REPORT.html)"], run, gates)
+
+
 def one_run(run, stages, brand, avatar, product, quiet=False, gates="hold"):
     """Every stage for one run, in order — stage n reads stage n-1.
 
@@ -604,6 +772,8 @@ def one_run(run, stages, brand, avatar, product, quiet=False, gates="hold"):
             done.append(out)
             if not quiet:
                 print(f"  → {out.relative_to(P.REPO)}")
+            if s == "6":
+                viewer_step(run, brand, avatar, product, gates, quiet)
     finally:
         if (run / "out").is_dir() and any((run / "out").glob("0*.md")):
             dst = G.file_record(brand, run.name)
@@ -643,6 +813,10 @@ def main():
     # default value.
     ap.add_argument("--avatar", help="the core avatar's folder name")
     ap.add_argument("--product", help="the product's slug")
+    ap.add_argument("--ask", help="the ask record (ask.json) this ad was ordered "
+                    "with; its offer and moment go on top of the offer bank")
+    ap.add_argument("--sub", help="the sub-avatar's name under the core's sub-avatars/; "
+                    "written onto each run, so every later stage reads it")
     ap.add_argument("--serial", action="store_true",
                     help="one run at a time, for reading the output as it goes")
     ap.add_argument("--dry-run", "--dry", dest="dry_run", action="store_true",
@@ -673,6 +847,18 @@ def main():
         runs.append(run)
 
     stages = a.stage
+    global PLANNED_SUB
+    PLANNED_SUB = a.sub
+    global PLANNED_ASK
+    PLANNED_ASK = a.ask
+    if a.ask and not a.dry_run:
+        for run in runs:
+            (run / "vars").mkdir(exist_ok=True)
+            (run / "vars" / "ask.md").write_text(a.ask + "\n")
+    if a.sub and not a.dry_run:
+        for run in runs:
+            (run / "vars").mkdir(exist_ok=True)
+            (run / "vars" / "sub_avatar.md").write_text(a.sub + "\n")
 
     if a.dry_run:
         sys.exit(dry_run(runs, stages, a.brand, a.avatar, a.product))

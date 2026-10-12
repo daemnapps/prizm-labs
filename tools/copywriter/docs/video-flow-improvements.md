@@ -1,12 +1,12 @@
 # What the copy build learned that the video build should take
 
-Written 2026-08-26, after building `ad-copy` against the same
-problem the video chain already solved. Damon's ask: identify the creative
+Written 2026-08-26, after building `the team notes` against the same
+problem the video chain already solved. the owner's ask: identify the creative
 and copy improvements the video flow can take from it, especially at
 **injection, hooks and expansion**.
 
 Everything below was checked against the live prompts in
-`components/video-teardown/prompts/` and its `chain_config.json` — not
+`tools/video-teardown/prompts/` and its `chain_config.json` — not
 assumed. Where the video chain already does something better, that is said.
 
 ---
@@ -38,8 +38,8 @@ language_bank : brands/<brand>/customer/language-bank.md     (39 KB of prose)
 avatar        : brands/<brand>/customer/avatar.md
 ```
 
-Damon rebuilt the language layer on 2026-08-25/26. It now holds **14,593
-sourced rows** at `brands/<brand>/core-avatars/<avatar>/
+the owner rebuilt the language layer on 2026-08-25/26. It now holds **14,593
+sourced rows** at `the team notes
 language/*.json`, every row carrying `use`, `topics`, `speaker`, `funnel`,
 `source{name,type,date}`, `signal{likes,tier}` and an `attribution` flag.
 
@@ -78,7 +78,7 @@ order decides, which is the same as arbitrary.
 
 ## 3 · Provenance has to travel into the prompt
 
-This is the one that matters most for what Damon actually wants — *"it needs
+This is the one that matters most for what the owner actually wants — *"it needs
 to be 100% real words."*
 
 The brand files deliberately record the difference between:
@@ -116,7 +116,7 @@ The video chain reads the same avatar file at stage 3 and has no date to
 check it against. The bug is live there now.
 
 **The rule that worked**, after one that did not: an absolute ban was wrong —
-Damon's correction was *"use the context of months but it needs to be the
+the owner's correction was *"use the context of months but it needs to be the
 real month."* So:
 
 > A month in the copy must be the real one. Today's date is data, exactly
@@ -131,9 +131,9 @@ list — see §6.
 
 ## 5 · Two decisions nobody is making: which avatar, which funnel
 
-**Avatar.** The config names one avatar file. <brand> has **three** core
+**Avatar.** The config names one avatar file. Brand B has **three** core
 avatars — Fed-Up King (13,254 rows), Glow-Up Kid (753), Gift Buyer (230) —
-and they are different people. Pointing the video chain at <brand> today means
+and they are different people. Pointing the video chain at Brand B today means
 whichever avatar the config happens to name.
 
 Copy moved this into triage: the roster with real row counts goes into the
@@ -218,5 +218,5 @@ be. **Keep the truth, drop the frame.**
 1, 3, 4 and 7 are cheap and independent. 2 and 5 are the ones that change
 what the chain can do.
 
-`ad-copy/language.py` is brand-agnostic and reusable as-is — it was
-written against the schema, not against <brand>.
+`the team notes` is brand-agnostic and reusable as-is — it was
+written against the schema, not against Brand A.

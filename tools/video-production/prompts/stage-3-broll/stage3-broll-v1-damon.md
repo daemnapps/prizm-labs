@@ -62,6 +62,6 @@ put **water beads on the bristles** — now the movement has a witness.
 "A man's jaw at the beard line" returns whoever the model reaches for, and it
 reached for a white man four times in one set, for a base that reads Black
 33%. **Every shot of a customer's skin attaches the core avatar as an
-element**, the way every talking beat attaches Nina. The roster is
-`brands/<brand>/core-avatars/casting/roster.json`; a face is cast from it,
+element**, the way every talking beat attaches Ivy. The roster is
+`brands/<brand>/ai-elements/characters/casting/roster.json`; a face is cast from it,
 never left to the prompt.

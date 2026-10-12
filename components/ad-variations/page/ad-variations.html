@@ -1,0 +1,661 @@
+<title>Ad Variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--ground:#F2F3EF;--card:#FFFFFF;--ink:#1C211E;--mut:#5B655F;--line:#D5D9D2;--hair:#E6E9E3;--accent:#0F6A5B;--accent-bg:#E1EFEA;
+--lock:#34407A;--lock-bg:#E3E6F4;--lever:#9A5410;--lever-bg:#F6EADC;--new:#6B3E8C;--new-bg:#EFE6F5;--bad:#9B2C2C;--bad-bg:#F8E5E3;--bar:#0F6A5B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--ground:#121614;--card:#1A201D;--ink:#E4E9E5;--mut:#9AA59E;--line:#2E3632;--hair:#252C28;--accent:#5DC0AA;--accent-bg:#183229;
+--lock:#A9B4F0;--lock-bg:#232A48;--lever:#F0B070;--lever-bg:#3A2A18;--new:#D1A8EE;--new-bg:#322540;--bad:#F0A0A0;--bad-bg:#3C1E1E;--bar:#5DC0AA}}
+:root[data-theme="dark"]{color-scheme:dark;--ground:#121614;--card:#1A201D;--ink:#E4E9E5;--mut:#9AA59E;--line:#2E3632;--hair:#252C28;--accent:#5DC0AA;--accent-bg:#183229;
+--lock:#A9B4F0;--lock-bg:#232A48;--lever:#F0B070;--lever-bg:#3A2A18;--new:#D1A8EE;--new-bg:#322540;--bad:#F0A0A0;--bad-bg:#3C1E1E;--bar:#5DC0AA}
+*{box-sizing:border-box}body{background:var(--ground);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px}
+h1,h2,h3,h4,h5{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;text-wrap:balance;margin:0}
+h1{font-size:40px;letter-spacing:-.01em}h2{font-size:26px;margin-bottom:6px}h3{font-size:22px}h4{font-size:18px;margin:26px 0 10px}h5{font-size:16px}
+code,pre,.route,.st-n,.vid,.eyebrow,.lbl,dt{font-family:"IBM Plex Mono",ui-monospace,monospace}
+code{font-size:12.5px;background:var(--hair);padding:1px 5px;border-radius:4px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lede{max-width:72ch;color:var(--mut);font-size:16px;margin:8px 0 18px}.lede2{max-width:80ch}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);display:flex;flex-wrap:wrap;gap:6px;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:22px}
+nav.tabs a{font-size:14px;text-decoration:none;color:var(--ink);padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card)}
+nav.tabs a[aria-selected="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+nav.tabs a:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.strip{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.st{padding:14px 14px 16px;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:4px;position:relative}
+.st:last-child{border-right:0}.st b{font-family:"Bricolage Grotesque",sans-serif;font-size:16px}.st span{font-size:13.5px}.st em{font-style:normal;font-size:12px;color:var(--mut)}
+.st-n{font-size:12px;color:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:18px}
+.facts div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}.facts p{margin:4px 0 0;font-size:14px;color:var(--mut)}
+.run{margin-bottom:56px}.run-h{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.kpis{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0}.kpis div{min-width:80px}dt{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}dd{margin:0;font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table.grid{border-collapse:collapse;width:100%;font-size:13.5px}table.grid th{text-align:left;font-weight:600;font-size:12px;color:var(--mut);padding:9px 10px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0}
+table.grid td{padding:9px 10px;border-bottom:1px solid var(--hair);vertical-align:top}.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.vars{font-size:12.5px;min-width:190px}.sub{color:var(--mut);font-size:13px;margin:4px 0}
+.pill{display:inline-block;font:600 11px "IBM Plex Mono",monospace;letter-spacing:.06em;padding:3px 8px;border-radius:99px}
+.pill.lock,.pill.lock-leaning{background:var(--lock-bg);color:var(--lock)}.pill.lever{background:var(--lever-bg);color:var(--lever)}
+.rule{color:var(--bad);background:var(--bad-bg);font-size:13px;padding:6px 9px;border-radius:6px;margin:6px 0}
+.warn{background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:10px 14px;margin:14px 0}.warn ul{margin:6px 0 0}
+.note{color:var(--mut);font-size:13px;margin:-4px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card.ctrl{border-style:dashed}.card.new{border-color:var(--new)}
+.card header{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:baseline}
+.vid{font-size:13px;color:var(--accent);font-weight:600}.card.new .vid{color:var(--new)}.cost{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.card p{margin:0;font-size:14px}.changes{margin:0;padding-left:18px;font-size:13.5px}.changes s{color:var(--mut)}
+.badge{align-self:flex-start;font:600 11px "IBM Plex Mono",monospace;background:var(--new-bg);color:var(--new);padding:3px 8px;border-radius:99px}
+.recipe{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;background:var(--ground);border-radius:8px;padding:8px 10px}
+@media (max-width:560px){.recipe{grid-template-columns:1fr}.cards{grid-template-columns:1fr}h1{font-size:30px}}
+.recipe ul{margin:4px 0 0;padding-left:16px}.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+.route{font-size:12px;color:var(--mut)}.test{font-size:13px;background:var(--lever-bg);color:var(--lever);padding:6px 9px;border-radius:6px}
+.gates{font-size:13px;padding-left:18px;margin:6px 0}summary{cursor:pointer;font-size:13.5px;font-weight:600}
+details.more{margin-top:16px}.decides{background:var(--accent-bg);border-radius:10px;padding:4px 16px 10px;margin-top:18px}.decides h4{margin-top:12px}
+.att{font:600 11px "IBM Plex Mono",monospace;color:var(--accent)}.foot{font-size:12.5px;color:var(--mut);margin-top:12px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.filters button{font:13px "IBM Plex Sans",sans-serif;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:5px 11px;border-radius:99px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.filters label{font-size:12px;color:var(--mut);align-self:center;margin-right:4px;min-width:60px}
+#ixq{font:14px "IBM Plex Sans",sans-serif;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:min(360px,100%);margin-bottom:12px}
+.var{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:8px}
+.var summary{display:grid;grid-template-columns:110px 1fr auto auto;gap:10px;align-items:center;padding:10px 14px;font-weight:400}
+.var summary code{background:none;padding:0;color:var(--accent)}.var .body{padding:0 14px 12px}
+.vals{width:100%;border-collapse:collapse;font-size:13px}.vals td{padding:5px 6px;border-top:1px solid var(--hair);vertical-align:middle}
+.barc{width:34%;min-width:90px}.bar{height:8px;background:var(--bar);border-radius:4px;min-width:1px}
+@media (max-width:640px){.var summary{grid-template-columns:1fr auto}.var summary .fam,.var summary .cc{display:none}}
+.prompt{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;padding:10px 14px}.prompt summary span{font:400 12px "IBM Plex Mono",monospace;color:var(--mut);margin-left:8px}
+pre{white-space:pre-wrap;word-break:break-word;font-size:12.8px;line-height:1.55;background:var(--ground);border:1px solid var(--hair);border-radius:8px;padding:14px;margin:10px 0 2px}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.howto section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px 16px 12px}
+.say{font-family:"Bricolage Grotesque",sans-serif;font-size:19px}
+.panel[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}}
+</style>
+<div class="wrap">
+<p class="eyebrow">the team · components/ad-variations</p>
+<h1>Ad Variations</h1>
+<p class="lede">One ad that already worked goes in. Out comes the plan: every element marked keep or test, with the brand's own numbers behind it; one-lever variations, highest impact first; new formats built from parts the brand has already proven; which seconds of the original get reused, what AI makes, what it costs, and what each one must pass. It plans — nothing is generated here.</p>
+<nav class="tabs" aria-label="Sections"><a href="#how">How it works</a><a href="#runs">Test runs</a><a href="#index">Variable Index</a><a href="#prompts">Prompts</a><a href="#calibration">Against the hand-made spec</a><a href="#run">How to run it</a></nav>
+
+<section class="panel" id="how"><h2>How it works</h2><p class="note">Each stage is its own prompt, so each can be read and tightened on its own. Numbers never come from a model: the index counts them, and the machine prices every recipe from the route list.</p>
+<ol class="strip"><li class="st"><span class="st-n">index</span><b>Variable Index</b><span>Every teardown the brand has, counted</span><em>rule reads + a Sonnet coder per post, cached</em></li><li class="st"><span class="st-n">0</span><b>Measure</b><span>The file&#x27;s own clock: cuts, loudness, fps</span><em>ffmpeg — no model, $0</em></li><li class="st"><span class="st-n">1</span><b>Anatomy → elements</b><span>The ad by the second, on nineteen fixed elements</span><em>Claude Opus</em></li><li class="st"><span class="st-n">2</span><b>Locks vs levers</b><span>Keep or test each element, ranked by estimated impact</span><em>Claude Opus · numbers from the index</em></li><li class="st"><span class="st-n">3</span><b>Variation matrix</b><span>N variations, one lever each, highest impact first</span><em>Claude Opus</em></li><li class="st"><span class="st-n">4</span><b>New formats</b><span>Proven parts recombined into formats not yet run</span><em>Claude Opus</em></li><li class="st"><span class="st-n">5</span><b>Merge recipe</b><span>Seconds reused, what AI makes, route — the machine prices it</span><em>Claude Opus · $ from routes.json</em></li><li class="st"><span class="st-n">6</span><b>QC gates</b><span>The gates each variation must pass</span><em>Claude Opus · forced gates from routes</em></li><li class="st"><span class="st-n">7</span><b>Congruence</b><span>The static and page section each variation feeds</span><em>Claude Opus</em></li></ol>
+<div class="facts">
+<div><b>Input</b><p>A finished video teardown of a post (triage, record + verbatim transcript, doctrine read, audience read, replication spec), the post's views and saves, and the brand folder.</p></div>
+<div><b>Output</b><p><code>variation-plan.json</code> — the plan; no component reads it yet — plus a Markdown copy and this page.</p></div>
+<div><b>Planning cost</b><p>—; the brand's Variable Index costs ≈$__ once for 60 posts and then only codes new posts.</p></div>
+<div><b>Routes it may plan on</b><p>GPT Image direct via OpenAI · Seedance on Higgsfield · Genjutsu motion transfer (Wan 2.2 Animate and Kling Motion Control flagged TEST) · the local studio for cut-outs, tracking, interpolation, stems, captions · ElevenLabs voice.</p></div>
+</div>
+<h4>Runs on this page</h4><ul></ul></section>
+
+<section class="panel" id="runs" hidden><h2>Test runs</h2><p>No runs yet.</p></section>
+
+<section class="panel" id="index" hidden><h2>Variable Index</h2>
+<div class="filters" id="fb" data-label="Brand"></div><div class="filters" id="ff" data-label="Family"></div><div class="filters" id="ft" data-label="Call"></div>
+<input id="ixq" type="search" placeholder="Search a variable or a value" aria-label="Search the index">
+<p class="sub" id="ixmeta"></p><div id="ixlist"></div></section>
+
+<section class="panel" id="prompts" hidden><h2>Every stage prompt, verbatim</h2><p class="note">Read from the prompt files as they are right now. A change is always a new numbered file; the old one is kept in that stage's archive.</p><details class="prompt" id="p-stage0c"><summary><b>Variable Index</b><span>prompts/stage-0c-coder/stage0c-coder-v1-damon.md · 275 words</span></summary><pre>You are coding one finished video teardown into fixed values, so that every
+video a brand has posted can be counted the same way. You read; you do not
+judge. Every example below is illustrative — none of it names a real brand.
+
+Here is the teardown record (the objective record, the shot table, the
+verbatim transcript, the voices):
+{teardown_record}
+
+Here is the replication spec written from it:
+{replication_spec}
+
+Here is the doctrine read, as filed:
+{doctrine_json}
+
+Here are the variables to code. Each line is `key — what it means — allowed
+values`. For a categorical key, give one of the allowed values exactly as
+written. If none fits, write `other: &lt;two to four words&gt;` — never force the
+nearest value; a new value is how the list learns. For a numeric key, give a
+number of seconds or a count, or `null` if the record does not show it. For a
+text key, quote the record&#x27;s own words.
+{coder_vocabulary}
+
+Rules:
+- Read only what the record shows. If the record does not show a thing, the
+  value is `null` and the evidence says &quot;not in the record&quot;.
+- Seconds come from the shot table&#x27;s timestamps or the transcript&#x27;s T-number
+  times — never estimated from pacing prose.
+- &quot;Product&quot; means the thing the video sells. A competitor&#x27;s product in frame
+  is not it.
+- The lead is the person with the most screen time speaking; if nobody
+  speaks, the person with the most screen time.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;codes&quot;: {
+    &quot;&lt;key&gt;&quot;: {&quot;value&quot;: &lt;value&gt;, &quot;evidence&quot;: &quot;&lt;the row time or T-number and a few quoted words&gt;&quot;}
+  }
+}
+```
+</pre></details><details class="prompt" id="p-stage1"><summary><b>Anatomy → elements</b><span>prompts/stage-1-elements/stage1-elements-v3-damon.md · 696 words</span></summary><pre>You are stage 1 of the ad-variations chain: ANATOMY → ELEMENTS. One proven ad
+has already been torn down. Your job is to map it onto a fixed list of
+elements, by the second, so every ad from any brand lands in the same shape.
+You describe; you do not recommend. Every example in this prompt is
+illustrative and names no real brand or product.
+
+THE AD&#x27;S METRICS
+{metrics}
+
+THE TEARDOWN RECORD (objective record, shot table, verbatim transcript, voices)
+{teardown_record}
+
+THE REPLICATION SPEC (the reusable construct)
+{replication_spec}
+
+THE DOCTRINE READ
+{doctrine_read}
+
+THE AUDIENCE READ
+{audience_read}
+
+THE FILE&#x27;S OWN CLOCK (stage 0 — measured with ffmpeg and a music stem; no model)
+{measurement}
+
+You cannot see the video. The measurement gives you WHERE the cuts are and HOW
+LOUD each half-second is; the record gives you WHAT is on screen. So:
+- A measured cut that falls inside one record row splits that row&#x27;s picture;
+  a measured shot that spans several record rows merges them. Never move a
+  picture across a measured cut the record&#x27;s own times do not support — when
+  you cannot tell which side of a cut a picture belongs to, say so in `why`
+  and mark the beat&#x27;s picture &quot;from the record, placement uncertain&quot;.
+- Sound comes from the measurement first. The music stem is the truth about
+  music: where it is at or above −45 dB there is a bed or a hit, whatever the
+  record&#x27;s Music line says. Name the stem&#x27;s loudest window and any window
+  where the stem hits while the voice is silent — that is usually a planned
+  sound hit on a reveal.
+
+THIS AD&#x27;S VALUES IN THE VARIABLE INDEX (the shared vocabulary — id · name · value)
+{ad_values}
+
+THE FIXED ELEMENT LIST (key · name · the index variables it covers)
+{element_list}
+
+Do three things.
+
+1. BEATS. Walk the ad beat by beat on the MEASURED shots when they exist (the
+   record&#x27;s rows when they do not). One beat per measured shot; merge only
+   shots that are one continuous action. For each: start and end in seconds
+   (two decimals, the file&#x27;s clock), the section, what is on screen, the words
+   (T-number and verbatim), the sound (mix and music stem — name the loudest
+   and the quietest stretches, and where the music enters, drops and hits),
+   and the share of the runtime the beat starts at, and an attention call: WON (the first
+   beat that stops the scroll), HELD, RE-WON (a new cut, place, sound or
+   register that re-earns attention), or CLOSE.
+
+2. ELEMENTS. Fill every key of the fixed list — all nineteen, no more, no
+   fewer. For each: what this ad does, in plain words, with the seconds; the
+   variable ids it covers with this ad&#x27;s value for each (copy the index value;
+   if the index value is wrong for this ad — the measurement contradicts it,
+   or the record contradicts itself — give the right one and say why in
+   `note`); and `source`: record, measured, or both. Where an element is made
+   of parts production could change separately (who is on screen, the words
+   on a sticker, the clip behind a picture-in-picture, a public figure named
+   in a line), list each part in `parts` with its own seconds.
+
+3. RECORD VS FILE. List every place where the teardown record and the
+   measurement disagree (a cut the record does not have, a music line the
+   loudness contradicts, a speaker the voice card contradicts, a timestamp off
+   by more than 0.3 s). State both sides; do not resolve them.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;beats&quot;: [
+    {&quot;n&quot;: 1, &quot;start&quot;: 0.0, &quot;end&quot;: 0.0, &quot;section&quot;: &quot;&quot;, &quot;picture&quot;: &quot;&quot;, &quot;words&quot;: &quot;&quot;, &quot;sound&quot;: &quot;&quot;, &quot;attention&quot;: &quot;WON | HELD | RE-WON | CLOSE&quot;, &quot;why&quot;: &quot;&quot;}
+  ],
+  &quot;elements&quot;: [
+    {&quot;key&quot;: &quot;hook_visual&quot;, &quot;what&quot;: &quot;&quot;, &quot;seconds&quot;: &quot;0.00–0.00&quot;, &quot;variables&quot;: {&quot;V-hook.01&quot;: &quot;&quot;}, &quot;source&quot;: &quot;record | measured | both&quot;, &quot;note&quot;: &quot;&quot;,
+     &quot;parts&quot;: [{&quot;part&quot;: &quot;&quot;, &quot;seconds&quot;: &quot;&quot;, &quot;what&quot;: &quot;&quot;}]}
+  ],
+  &quot;record_vs_file&quot;: [&quot;the record says … ; the file shows …&quot;]
+}
+```
+</pre></details><details class="prompt" id="p-stage2"><summary><b>Locks vs levers</b><span>prompts/stage-2-locks/stage2-locks-v3-damon.md · 735 words</span></summary><pre>You are stage 2 of the ad-variations chain: LOCKS VS LEVERS. Every element of
+one proven ad is on the table below. For each one, say whether it is a proven
+LOCK (keep it exactly) or a LEVER (a variation may move it), and rank the
+levers by estimated impact. Every example here is illustrative.
+
+THE AD&#x27;S METRICS
+{metrics}
+
+THE ELEMENTS (stage 1)
+{elements}
+
+THE EVIDENCE — computed by the machine from the brand&#x27;s whole teardown corpus
+(the Variable Index), not by a model. For each variable: this ad&#x27;s value, how
+many of the brand&#x27;s posts share it, the share of all views and saves those
+posts hold, their save rate against the rest, and the index&#x27;s lock/lever
+tendency.
+{evidence}
+
+THE CLOSEST POSTS IN THE BRAND&#x27;S OWN CORPUS — computed: the posts that share
+the most of what a viewer sees and hears with this ad, their views, and every
+variable they differ on. A near-twin that differs on one or two variables is
+the brand&#x27;s own half-run test of those variables: if its views differ a lot,
+those variables have been seen to move results.
+{siblings}
+
+THE BRAND&#x27;S RULES (position, story, likeness, compliance)
+{brand_rules}
+
+Call the PARTS, not only the elements. Where stage 1 split an element into
+parts (who reacts, the sticker&#x27;s words, the clip behind a picture-in-picture,
+a named public figure), give each part its own row: the layout can be a lock
+while the person in it is a lever.
+
+Call it twice when the cuts differ. The brand&#x27;s corpus is organic posts. A
+paid cut plays muted by default, is cropped to 4:5, and has to carry an
+offer; an element that is a lock for the organic cut can be a lever for the
+paid cut (captions, the end frame, the ask, a subject outside the 4:5 zone).
+Say which cut each call is for: `cut` = both, organic or paid.
+
+The element key is always one of the nineteen keys in the elements above.
+A call about order, awareness or framing goes under the nearest key
+(problem_line, ask_placement, camouflage) with the part named.
+
+How to call it:
+- LOCK when the corpus shows the brand&#x27;s top posts converge on this ad&#x27;s value
+  (tendency lock-leaning) AND no near-twin moved results by changing it, or
+  when changing it would break what the replication spec marks load-bearing,
+  or when a brand rule fixes it.
+- LEVER when the top posts vary on it; when a near-twin differs on it and its
+  views differ (quote the twin&#x27;s rank and views); when this ad&#x27;s value
+  conflicts with the audience read or a brand rule; or when the paid cut
+  needs it moved. A value the whole corpus shares is not evidence that it
+  works — only that nothing else was tried; say so rather than calling it a
+  lock on count alone.
+- Evidence is quoted ONLY from the evidence table and the records above —
+  numbers exactly as given, with the variable id. Never invent a number.
+- Rank the ten levers with the highest estimated impact, 1 to 10. Every
+  other lever keeps `impact_rank` null and `impact` &quot;later&quot; — it is still a
+  lever, just not in the first set.
+- Nothing in the corpus isolates one variable at a time. The impact rank is
+  therefore an ESTIMATE, and says what it weighs: how much of the first three
+  seconds the element controls, whether the brand&#x27;s posts show it moving
+  results, and what it costs to test (cost class from the evidence table).
+- If a lever needs a ruling before it can move (a real person&#x27;s likeness, a
+  voice clone, a public figure, a claim), name the ruling in `needs_ruling`.
+  Do not decide it.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;calls&quot;: [
+    {&quot;element&quot;: &quot;hook_visual&quot;, &quot;part&quot;: &quot;who reacts | null&quot;, &quot;cut&quot;: &quot;both | organic | paid&quot;, &quot;call&quot;: &quot;LOCK | LEVER&quot;, &quot;variables&quot;: [&quot;V-hook.07&quot;], &quot;what_this_ad_does&quot;: &quot;&quot;,
+     &quot;evidence&quot;: &quot;V-hook.07 comment-reply: 17 posts, 41.3% of views, save rate 0.85% vs …&quot;,
+     &quot;needs_ruling&quot;: null, &quot;impact_rank&quot;: null, &quot;impact&quot;: &quot;high | medium | low | null&quot;,
+     &quot;impact_basis&quot;: &quot;ESTIMATE — …&quot;}
+  ],
+  &quot;lever_order&quot;: [&quot;element keys, highest estimated impact first&quot;],
+  &quot;damon_decides&quot;: [&quot;a question only the owner can answer, with the fact that raises it&quot;]
+}
+```
+</pre></details><details class="prompt" id="p-stage3"><summary><b>Variation matrix</b><span>prompts/stage-3-matrix/stage3-matrix-v3-damon.md · 599 words</span></summary><pre>You are stage 3 of the ad-variations chain: THE VARIATION MATRIX. From one
+proven ad&#x27;s locks and levers, plan {n} variations. Each changes ONE lever — at
+most two index variables, and two only when they cannot move apart — so every
+result stays readable against the original. A variation that changes three
+variables is two variations. New formats are the next stage&#x27;s job: nothing
+here changes the ad&#x27;s format, framework or structure. Every example here is illustrative.
+
+THE AD&#x27;S METRICS
+{metrics}
+
+THE ELEMENTS (stage 1)
+{elements}
+
+THE LOCKS AND LEVERS (stage 2), with the lever order
+{calls}
+
+THE CLOSEST POSTS IN THE BRAND&#x27;S CORPUS (computed)
+{siblings}
+
+THE AUDIENCE READ (who the ad speaks to, and how our audience differs)
+{audience_read}
+
+THE AVATARS AND SUB-AVATARS
+{avatars}
+
+THE CUSTOMER&#x27;S OWN WORDS (any new line, sticker or caption is taken from here
+verbatim, with its id)
+{language}
+
+THE CAST WE MAY USE (synthetic, cleared) 
+{cast}
+
+THE PRODUCTS
+{products}
+
+THE BRAND&#x27;S RULES
+{brand_rules}
+
+Rules:
+- Start with V00, the CONTROL: the original rebuilt only as much as paid
+  placement needs (safe zones, a clean plate). Every variation is read against
+  it. If the original needs no rebuild, V00 is the original as-is.
+- Then V01…V{n}, highest estimated impact first, following the lever order —
+  cheaper tests of an equal lever go first. Cover the levers, not one lever
+  many ways: no two variations move the same variable unless they aim it at
+  different sub-avatars (two different cast members for the same person-lever
+  is the one common case).
+- Check the paid cut&#x27;s needs before planning: sound-off viewing (captions),
+  the 4:5 zone, one offer and one button at the end, the hero SKU. Each need
+  the original does not meet is a lever and gets its own variation.
+- Read the products: when the brand names more than one hero SKU and the ad
+  shows only one, one variation tests the ad on another hero, and says which
+  lines stay true.
+- A person-lever (who reacts, who pitches, who demonstrates) is cast from the
+  cleared cast list above by name, matched to a sub-avatar. A real
+  creator&#x27;s or customer&#x27;s likeness is never regenerated — it goes in
+  `needs_ruling`.
+- Each change is written against the Variable Index: variable id, from (this
+  ad&#x27;s value), to (the new value). A change with no variable id is not
+  allowed; if the lever has no index variable, use the closest id and say so.
+- New words are verbatim from the customer&#x27;s words above, with their ids. If
+  nothing there fits, write [BANK LINE NEEDED: what it must say] — never
+  invent customer language.
+- A variation that needs a ruling (a real person&#x27;s likeness, a cloned voice, a
+  public figure, a retail claim) says so in `needs_ruling` and still gets
+  planned; the ruling is the owner&#x27;s.
+- Name the avatar and sub-avatar each variation is aimed at, and whether it is
+  a paid cut, an organic cut, or both.
+- Hypotheses are INFERENCE: say what result would confirm or kill each one.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;variations&quot;: [
+    {&quot;id&quot;: &quot;V00&quot;, &quot;title&quot;: &quot;&quot;, &quot;kind&quot;: &quot;control | variation&quot;,
+     &quot;changes&quot;: [{&quot;variable&quot;: &quot;V-hook.11&quot;, &quot;element&quot;: &quot;on_screen_text&quot;, &quot;from&quot;: &quot;&quot;, &quot;to&quot;: &quot;&quot;, &quot;bank_ids&quot;: []}],
+     &quot;locked&quot;: [&quot;element keys that must not move&quot;],
+     &quot;hypothesis&quot;: &quot;INFERENCE — …&quot;, &quot;confirms_if&quot;: &quot;&quot;, &quot;kills_if&quot;: &quot;&quot;,
+     &quot;audience&quot;: {&quot;avatar&quot;: &quot;&quot;, &quot;sub_avatar&quot;: &quot;&quot;, &quot;cut&quot;: &quot;paid | organic | both&quot;},
+     &quot;order_reason&quot;: &quot;&quot;, &quot;needs_ruling&quot;: null}
+  ]
+}
+```
+</pre></details><details class="prompt" id="p-stage4"><summary><b>New formats</b><span>prompts/stage-4-formats/stage4-formats-v2-damon.md · 333 words</span></summary><pre>You are stage 4 of the ad-variations chain: NEW FORMATS. The brand&#x27;s whole
+corpus has been counted into the Variable Index. Recombine elements the corpus
+already proves into formats this brand has NOT run — for example the hook of
+one family with the proof structure of another. Every example here is
+illustrative.
+
+THE SOURCE AD&#x27;S ELEMENTS (stage 1)
+{elements}
+
+THE PROVEN VALUES, family by family (from the Variable Index — the brand&#x27;s
+posts, weighted by views and saves)
+{index_summary}
+
+THE COMBINATIONS THE BRAND HAS ALREADY RUN (hook sub-type × proof type ×
+format, with post counts and view share). A format that appears here is not
+new.
+{combos}
+
+THE AVATARS
+{avatars}
+
+THE BRAND&#x27;S RULES
+{brand_rules}
+
+Propose {k} new formats. For each:
+- a short name and one line on what the viewer sees;
+- its parts: at least three, each a Variable Index id with a value the corpus
+  shows, and that value&#x27;s evidence exactly as the index gives it (posts, view
+  share, save rate);
+- `status`: always &quot;NEW — untested&quot;. The combination has not run for this
+  brand; say which existing combination it is closest to;
+- why it might work, labelled INFERENCE;
+- what owned footage could seed it (a post rank or id from the corpus, and the
+  seconds, when the parts already exist on film), and what would have to be
+  made;
+- the avatar and sub-avatar it is aimed at.
+Do not propose a combination listed as already run. Do not use a value the
+index does not show.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;formats&quot;: [
+    {&quot;id&quot;: &quot;F01&quot;, &quot;name&quot;: &quot;&quot;, &quot;what_the_viewer_sees&quot;: &quot;&quot;,
+     &quot;parts&quot;: [{&quot;variable&quot;: &quot;V-hook.04&quot;, &quot;value&quot;: &quot;&quot;, &quot;evidence&quot;: &quot;&quot;}],
+     &quot;status&quot;: &quot;NEW — untested&quot;, &quot;closest_existing&quot;: &quot;&quot;, &quot;why&quot;: &quot;INFERENCE — …&quot;,
+     &quot;seed_footage&quot;: &quot;&quot;, &quot;to_make&quot;: &quot;&quot;, &quot;audience&quot;: {&quot;avatar&quot;: &quot;&quot;, &quot;sub_avatar&quot;: &quot;&quot;}}
+  ]
+}
+```
+</pre></details><details class="prompt" id="p-stage5"><summary><b>Merge recipe</b><span>prompts/stage-5-recipe/stage5-recipe-v3-damon.md · 594 words</span></summary><pre>You are stage 5 of the ad-variations chain: THE MERGE RECIPE. For every planned
+variation, say which seconds of the ORIGINAL footage are reused as-is and what
+has to be made, on which production route, in what units. You do not price
+anything: the machine multiplies your units by the route&#x27;s rate. Every example
+here is illustrative.
+
+THE BEATS AND THE FILE&#x27;S CLOCK (stage 1 + stage 0)
+{beats}
+
+THE VARIATIONS (stage 3)
+{variations}
+
+THE NEW FORMATS (stage 4) — give a recipe for each too; seed footage first
+{formats}
+
+THE ROUTES YOU MAY NAME (id · what · unit · rate · locked or TEST)
+{routes}
+
+THE CAST WE MAY USE
+{cast}
+
+THE BRAND&#x27;S LIKENESS AND CLAIM RULES
+{brand_rules}
+
+Rules:
+- Seconds are on the original&#x27;s clock, two decimals, and land on measured cut
+  points where one is near.
+- Reuse first. Anything already on film is cut, not generated.
+- Name a route only by its id from the list. Units match the route&#x27;s unit:
+  stills for gpt-image (rolls are added by the machine), seconds of finished
+  clip for seedance-hf / wan-animate-fal / kling-mc-fal (overshoot is added by
+  the machine), 4-second clips for genjutsu-hf, thousands of characters for
+  elevenlabs-tts, jobs for local routes.
+- Every AI video clip is followed by a local-interp job (de-duplicate,
+  interpolate, conform to the master&#x27;s frame rate).
+- Where a TEST route could replace a locked route at lower cost, give it as
+  `cheaper_test`: the route it replaces, the TEST route and its units —
+  flagged TEST, never the default.
+- Chained clips are made in order. When a variation joins two or more
+  generated clips back to back (a morph, a change of person or outfit, one
+  scene into the next), number them in `chain_order` and make them one after
+  another: each next clip starts from the ACTUAL last frame pulled from the
+  previous rendered clip — never from the original still it was aimed at.
+  Start- and end-frame video models do not land exactly on the images they
+  are given, so a join built from the stills jumps. Say which frame each
+  chained clip starts from in `start_frame`.
+- The fix for a join that still jumps is to make the next clip again from the
+  real last frame. Only when it cannot be made again, name the repair in
+  `seam_repair`: an optical-flow bridge across the last ~10 frames of one clip
+  and the first ~10 of the next (local-interp). It is the fallback, never the
+  plan.
+- A generated before-and-after, a generated real customer, or a generated
+  creator likeness is not made unless the brand rules above allow it; if a
+  variation needs one, write it in `blocked_by`.
+- List what is made once and used across the set, with the variations that use
+  it, so it is costed once.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;recipes&quot;: [
+    {&quot;id&quot;: &quot;V01&quot;,
+     &quot;reuse&quot;: [{&quot;seconds&quot;: &quot;0.00–6.97&quot;, &quot;what&quot;: &quot;&quot;}],
+     &quot;make&quot;: [{&quot;what&quot;: &quot;&quot;, &quot;route&quot;: &quot;gpt-image&quot;, &quot;units&quot;: 1, &quot;shared&quot;: null,
+               &quot;chain_order&quot;: null, &quot;start_frame&quot;: &quot;the still S1 | the real last frame of clip 1 | null&quot;}],
+     &quot;seam_repair&quot;: null,
+     &quot;cheaper_test&quot;: {&quot;replaces_route&quot;: &quot;genjutsu-hf&quot;, &quot;route&quot;: &quot;wan-animate-fal&quot;, &quot;units&quot;: 0, &quot;why&quot;: &quot;&quot;},
+     &quot;blocked_by&quot;: null}
+  ],
+  &quot;shared&quot;: [{&quot;key&quot;: &quot;S1&quot;, &quot;piece&quot;: &quot;&quot;, &quot;route&quot;: &quot;local-matte&quot;, &quot;units&quot;: 1, &quot;used_by&quot;: [&quot;V01&quot;], &quot;why&quot;: &quot;&quot;}]
+}
+```
+In `make`, an item that is one of the shared pieces carries `&quot;shared&quot;: &quot;S1&quot;`
+and is costed only in `shared`.
+</pre></details><details class="prompt" id="p-stage6"><summary><b>QC gates</b><span>prompts/stage-6-gates/stage6-gates-v3-damon.md · 275 words</span></summary><pre>You are stage 6 of the ad-variations chain: QC GATES. Each planned variation
+must pass the gates that apply to it before it ships. Write, per variation,
+which gates apply and the pass line for THIS variation — what exactly is
+checked, on which seconds. Every example here is illustrative.
+
+THE VARIATIONS AND THEIR RECIPES (stages 3 and 5)
+{variations}
+
+THE GATES (id · what passes · the automatic check that exists today)
+{gates}
+
+GATES THE MACHINE ALREADY FORCES (from the routes each recipe uses — keep
+every one of these)
+{forced}
+
+THE BRAND&#x27;S RULES
+{brand_rules}
+
+Rules:
+- Keep every forced gate. Add any other gate the variation needs; say why.
+- &quot;Doesn&#x27;t look like an ad&quot; applies to every cut meant to pass as native
+  content.
+- The pass line names the seconds and the thing checked (&quot;the new reactor&#x27;s
+  face in 0.00–6.97 matches his cast sheet&quot;), not the gate&#x27;s general wording.
+- Every join between two generated clips (items with a `chain_order`) gets
+  the seams gate, with its pass line naming the join: the frame-to-frame
+  change across the cut stays within about twice the clip&#x27;s own median frame
+  step. Say which clips meet at which second.
+- If no automatic check exists for something that must be checked, say
+  &quot;manual&quot; and what a person looks at.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;gates&quot;: [
+    {&quot;id&quot;: &quot;V01&quot;, &quot;apply&quot;: [{&quot;gate&quot;: &quot;safe-zones&quot;, &quot;pass_line&quot;: &quot;&quot;, &quot;check&quot;: &quot;automatic | manual&quot;}]}
+  ]
+}
+```
+</pre></details><details class="prompt" id="p-stage7"><summary><b>Congruence</b><span>prompts/stage-7-congruence/stage7-congruence-v2-damon.md · 191 words</span></summary><pre>You are stage 7 of the ad-variations chain: CONGRUENCE. Each planned
+variation&#x27;s hook has to carry through to the static ad and the landing-page
+section that inherit it. List them — do not write them. Every example here is
+illustrative.
+
+THE VARIATIONS (stage 3)
+{variations}
+
+THE STATIC FORMATS THE ELEMENT LIBRARY HOLDS
+{static_formats}
+
+THE PAGE FORMATS THE ELEMENT LIBRARY HOLDS
+{page_formats}
+
+THE BRAND&#x27;S FUNNELS AND ANY CAMPAIGN PLAN SUPPLIED FOR THIS RUN
+{funnels}
+
+For each variation: one static format (by the library&#x27;s id) and what carries
+over word for word or frame for frame; one landing-page destination (a page
+format id, and a section of the campaign plan when one is supplied) and what
+carries over. If the plan names no page, say &quot;page not on file&quot; rather than
+inventing one.
+
+The json must parse. Inside any string value write quotation marks as curly
+quotes (“ ”) or escape them (\&quot;); a straight double quote inside a value
+breaks the whole block.
+
+Return one fenced json block and nothing else:
+
+```json
+{
+  &quot;links&quot;: [
+    {&quot;id&quot;: &quot;V01&quot;, &quot;static&quot;: {&quot;format&quot;: &quot;&quot;, &quot;carries&quot;: &quot;&quot;}, &quot;page&quot;: {&quot;format&quot;: &quot;&quot;, &quot;section&quot;: &quot;&quot;, &quot;carries&quot;: &quot;&quot;}}
+  ]
+}
+```
+</pre></details></section>
+
+<section class="panel" id="calibration" hidden><h2>Against the hand-made spec</h2><p class="lede2">The first prompts found the elements and the corpus numbers, but locked too much, bundled several changes into one variation and read the sound wrong. Three passes later the automatic plan covers seven of the hand spec&#x27;s ten levers (not the problem line, the demo bodies or the pitcher swap) with the same structure (a paid base plus one-lever variations, cast from the roster), finds the music bed and the reveal hit, and finds post #3 as the same template. What it still cannot do is see the frames: the picture for each beat comes from the teardown record, so it cannot spot reused footage the way the hand spec did.</p><div class="tw"><table class="grid"><thead><tr><th>What</th><th>Hand-made Asset 01</th><th>Automatic, first prompts</th><th>What changed in the prompts</th><th>Automatic, after</th></tr></thead><tbody><tr><td><b>Cuts and beats</b></td><td>12 beats from ffmpeg scene detection — hard cuts at 2.13, 4.09, 6.34, 6.97, 9.93, 10.80, 11.64, 14.89, 16.02 s and a dissolve at 13.37 s; a thumbnail on every beat.</td><td>10 hard cuts measured — every hand-spec hard cut except 4.09 (found as a soft change) and the 13.37 dissolve, plus one at 0.46 s. Pictures come from the record: 6.34–6.97 s was placed in the store aisle, where the hand spec shows the in-stitch payoff. No thumbnails.</td><td>Stage 1 v2 is told it cannot see: never move a picture across a measured cut the record does not support; mark uncertain placement.</td><td>Same cuts; the 6.34–6.97 s picture is still read from the record. Seeing frames needs a vision step — not built.</td></tr><tr><td><b>Sound</b></td><td>Music stem: a quiet bed 7.0–10.8 s, near silence 11–14 s, the loudest hit of the video at 14.5–15.5 s on the reveal.</td><td>Mix loudness only — concluded there was no music bed.</td><td>Stage 0 now separates the music stem on the local Demucs and measures it; stage 1 reads the stem before the record&#x27;s Music line.</td><td>Bed found at 7.0–10.5 s and the hit at 14.5–15.0 s; the record&#x27;s own contradiction (header says phonk, rows say none) is reported.</td></tr><tr><td><b>The brand&#x27;s own test</b></td><td>Post #3 (9.4M) is the same template with a different reactor — the brand already moved the reactor and went 9.4M → 16.4M. The hook&#x27;s background is post #6&#x27;s footage.</td><td>Not found.</td><td>A computed &#x27;closest posts&#x27; table — same values on what a viewer sees and hears, the same first line or sticker wording counted four times — goes to stages 2 and 3.</td><td>#3 is the closest post (73%), with #10 (the same &#x27;heck is that&#x27; opener) also listed. Reuse of #6&#x27;s footage is not visible without frames.</td></tr><tr><td><b>Locks and levers</b></td><td>10 ranked levers (reactor, sticker text, stitched clip, problem line, captions, end frame + paid ask, demo bodies, pitcher, SKU, benchmark line), 14 locks.</td><td>7 levers. Locked the whole hook layout including who reacts, and locked captions, SKU, talent and end frame on corpus counts alone.</td><td>v2: call the parts (who reacts, the sticker words, the clip behind the PIP), call organic and paid separately, and a value everyone shares is not proof it works. That swung to 33 ranked levers, so v3: ten ranked levers, the rest &#x27;later&#x27;, the nineteen fixed keys only.</td><td>Ten ranked levers: the borrowed clip, the first line, who reacts, the PIP layout, the named public figure, product in frame one, the sticker wording, the dominant roll, captions, the product naming.</td></tr><tr><td><b>The variations</b></td><td>A paid base plus 10, each moving one lever; two reactor swaps cast from the roster (Marcus 29, Ray 61); captions; an offer end card; the King Set; faceless inserts; a motion-transfer pitch swap.</td><td>A control plus 10, but 8 of 11 changed three variables and two were really new formats.</td><td>v2/v3: at most two variables per variation, no format changes in the matrix, check the paid cut&#x27;s needs (sound-off, 4:5, one offer), cast person-levers from the roster by name, and test a second hero SKU.</td><td>A paid base (4:5, captions, one offer) plus 10: new borrowed clip, new first line, Marcus as reactor, Omar as reactor, the benchmark swapped for a customer&#x27;s own aspiration, product out of frame one, new sticker wording, the dominant roll, captions, the Vitals Set named early. Not planned: the problem line (the v2 run had it), faceless demo inserts, the motion-transfer pitch swap. Added that the hand spec did not have: the dominant-roll test and the product held out of frame one.</td></tr><tr><td><b>Cost of the set</b></td><td>$__ machine cost; $__ if the cheaper motion route passes; ≈15 h.</td><td>$__ ($__ with TEST routes), priced by the machine from routes.json.</td><td>Rates written into routes.json once; the model gives units only.</td><td>$__ on the locked routes — the two reactor swaps run on Genjutsu at ≈$__ each — or $__ when the TEST motion routes (Wan 2.2 Animate, Kling Motion Control) replace it; ≈18 h.</td></tr><tr><td><b>Gates</b></td><td>8 gates, each tied to a check that exists (safezone.py, claimfix.py, syncheck.py, voice_qc.py, gates 4/5).</td><td>The same 8, with variation-specific pass lines; gates forced by the routes a recipe uses.</td><td>the owner&#x27;s seam rule added (27 Sep): chained clips are made in order from the real last frame, a seams gate at every join (≤ ~2× the median frame step), an optical-flow bridge only as the fallback.</td><td>9 gates; the seams gate is forced wherever a recipe chains generated clips.</td></tr><tr><td><b>the owner decides</b></td><td>10 open calls (order, hero SKU, likeness, motion from a creator, voice cloning, the comment handle, &#x27;Will Smith&#x27;, the store shelf, the offer, organic vs paid).</td><td>5 — the public figure, a real result vs the gag, the close&#x27;s blame line, the close technique, the borrowed clip.</td><td>No prompt change aimed here.</td><td>6, overlapping the hand spec on the borrowed clip, the public figure and the offer; adds the read style, the market stage and the signature neck asset.</td></tr><tr><td><b>New formats</b></td><td>Not in Asset 01&#x27;s scope.</td><td>5 per ad, each part an index value with its evidence, marked NEW — untested.</td><td>—</td><td>5 per ad.</td></tr><tr><td><b>Time and spend to plan</b></td><td>A working session with frame pulls and hand analysis.</td><td>≈20 minutes, ≈$__ of Claude per ad.</td><td>—</td><td>≈20–25 minutes, ≈$__ of Claude per ad at list price; the Variable Index was $__ once for the 60 posts.</td></tr></tbody></table></div><p class="foot">Hand-made spec: the team notes (page (team page))</p></section>
+
+<section class="panel" id="run" hidden><h2>How to run it on any ad</h2>
+<div class="howto">
+<section><h4>Say it</h4><p class="say">“Run ad variations on &lt;brand&gt; post &lt;post id&gt;.”</p>
+<p>Any post that has been torn down works — a post id, or the name of its teardown run. Add what you want: “twelve variations”, “only paid cuts”, “use the relaunch plan for the page sections”.</p></section>
+<section><h4>What the session does</h4><ol>
+<li>Checks the post has a finished teardown (triage, record, doctrine, audience, spec). If it doesn't, it runs the teardown first.</li>
+<li>Refreshes the brand's Variable Index — only posts torn down since the last build get coded, so it takes seconds when nothing is new.</li>
+<li>Runs a free dry run: every prompt filled, nothing spent, the planning cost estimated.</li>
+<li>Runs the seven stages, then adds the run to this page and republishes it — same link.</li></ol></section>
+<section><h4>What comes back</h4><ul>
+<li>A new set of cards on the Test runs tab: locks and levers, the variations, new formats, costs, gates.</li>
+<li><code>variation-plan.json</code> in the run folder — the plan; no component reads it yet.</li>
+<li>A Markdown copy for the team beside it.</li></ul></section>
+<section><h4>Where it stops and asks you</h4><ul>
+<li>Anything under “the owner decides” — likeness, voice cloning, public figures, the hero SKU, the offer.</li>
+<li>A variation marked “Needs a ruling” is planned but never produced until you rule.</li></ul></section>
+</div></section>
+<p class="foot">Rebuilt from the component's files by <code>components/ad-variations/machine/page.py</code> · Markdown copy <code>components/ad-variations/AD-VARIATIONS-damon.md</code></p>
+</div>
+<script type="application/json" id="ixdata">{}</script>
+<script>
+const tabs=[...document.querySelectorAll('nav.tabs a')];
+function show(id){tabs.forEach(a=>a.setAttribute('aria-selected',a.hash==='#'+id));document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!==id);try{localStorage.setItem('av-tab',id)}catch(e){}}
+tabs.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(a.hash.slice(1));history.replaceState(null,'',a.hash)}));
+let start=location.hash.slice(1);if(!document.getElementById(start)){try{start=localStorage.getItem('av-tab')||''}catch(e){start=''}}
+show(document.getElementById(start)?start:'how');
+const IX=JSON.parse(document.getElementById('ixdata').textContent);
+const st={brand:Object.keys(IX)[0],fam:'all',ten:'all',q:''};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pc=x=>x==null?'—':(x*100).toFixed(1)+'%';
+function btns(el,items,key){el.innerHTML='<label>'+el.dataset.label+'</label>'+items.map(([v,l])=>`<button type="button" data-v="${esc(v)}" aria-pressed="${st[key]===v}">${esc(l)}</button>`).join('');
+ el.querySelectorAll('button').forEach(b=>b.onclick=()=>{st[key]=b.dataset.v;render()})}
+function render(){const ix=IX[st.brand];if(!ix)return;
+ btns(document.getElementById('fb'),Object.keys(IX).map(b=>[b,b.toUpperCase()]),'brand');
+ btns(document.getElementById('ff'),[['all','All families'],...Object.entries(ix.families).map(([k,v])=>[k,v.split(' — ')[0]])],'fam');
+ btns(document.getElementById('ft'),[['all','Both'],['lock-leaning','Lock-leaning'],['lever','Lever']],'ten');
+ const q=st.q.toLowerCase();
+ const vs=ix.variables.filter(v=>(st.fam==='all'||v.family===st.fam)&&(st.ten==='all'||v.tendency===st.ten)&&(!q||(v.id+' '+v.name+' '+v.values.map(x=>x.value).join(' ')).toLowerCase().includes(q)));
+ document.getElementById('ixmeta').textContent=`${vs.length} of ${ix.variables.length} variables · ${ix.runs} posts, ${(ix.total_views/1e6).toFixed(1)}M views · built ${ix.built}`;
+ const mx=v=>Math.max(...v.values.map(x=>x.view_share||0),0.0001);
+ document.getElementById('ixlist').innerHTML=vs.map(v=>`<details class="var"><summary><code>${esc(v.id)}</code><span><b>${esc(v.name)}</b> <span class="sub">— ${esc(v.type)}</span></span><span class="pill ${esc(v.tendency)}">${esc(v.tendency==='lock-leaning'?'LOCK-LEANING':'LEVER')}</span><span class="cc sub">${esc(v.cost_class)}</span></summary>
+ <div class="body"><p class="sub">${esc(v.tendency_why)}.</p><p class="sub"><b>Read from:</b> ${esc(v.read_from.join('; '))} <code>${esc(v.how)}</code></p>
+ <p class="sub"><b>Changed in production by:</b> ${v.change_by.map(r=>'<code>'+esc(r)+'</code>').join(' ')} · cost class ${esc(v.cost_class)} (${esc(ix.cost_classes[v.cost_class]||'')})</p>
+ ${v.numeric?`<p class="sub">Median ${v.numeric.median} · range ${v.numeric.min}–${v.numeric.max}</p>`:''}
+ <div class="tw"><table class="vals"><tr><td class="sub">Value</td><td class="sub">Posts</td><td class="sub barc">Share of views</td><td class="sub">Views</td><td class="sub">Saves</td><td class="sub">Save rate</td></tr>
+ ${v.values.map(x=>x.count==null?`<tr><td colspan="6" class="sub">${esc(x.value)}</td></tr>`:`<tr><td>${esc(x.value)}</td><td class="num">${x.count}</td><td class="barc"><div class="bar" style="width:${(x.view_share/mx(v)*100).toFixed(1)}%"></div></td><td class="num">${pc(x.view_share)}</td><td class="num">${pc(x.save_share)}</td><td class="num">${pc(x.save_rate)}</td></tr>`).join('')}</table></div></div></details>`).join('')}
+document.getElementById('ixq').addEventListener('input',e=>{st.q=e.target.value;render()});render();
+</script>

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Query the language layer instead of reading it.
 
-    python3 language.py --brand <brand> --stage hooks
-    python3 language.py --brand <brand> --avatars
+    python3 language.py --brand brand-a --stage hooks
+    python3 language.py --brand brand-b --avatars
 
-SHIM (LL-1, 2026-09-01). The engine moved to `components/language-layer/` so
+SHIM (LL-1, 2026-09-01). The engine moved to `tools/language-layer/` so
 the query over the banks has ONE home — this file and the copy lab's copy had
 drifted 103 lines apart, and the header here said that drift was the signal to
 give it one home rather than to patch both. This file is the same command it
@@ -24,8 +24,13 @@ from pathlib import Path
 try:
     from paths import WORKSPACE
 except ImportError:                      # the video machine has no paths.py
-    from pathlib import Path as _P
-    WORKSPACE = _P.home() / "Projects" / "ai-workspace"
+    # AI_WORKSPACE if set, else the checkout this file sits in
+    # (<ws>/tools/video-teardown/machine/) — the language engine's own
+    # rule; never a home-folder guess.
+    import os as _os
+    _named = _os.environ.get("AI_WORKSPACE")
+    WORKSPACE = (Path(_os.path.expanduser(_named)) if _named
+                 else Path(__file__).resolve().parents[3])
 
 _COMPONENT = Path(__file__).resolve().parents[2] / "language-layer"
 sys.path.append(str(_COMPONENT))        # appended, never ahead of this machine
@@ -85,7 +90,7 @@ STAGE_USE = {
                     "role-claimed", "mechanism",
                     "post-use-feeling", "result-language",
                     "transformation-reaction"],
-    # 2f-compose — the second door (Damon's ruling 2026-09-18). It writes a
+    # 2f-compose — the second door (the owner's ruling 2026-09-18). It writes a
     # whole construct from a chosen framework rather than abstracting one off
     # a swipe, so it needs the whole ladder in one query: the problem in their
     # words, the belief a gradualization chain can start from, the mechanism a
@@ -100,7 +105,7 @@ STAGE_USE = {
                     "tried-and-failed", "alternative-solution", "objection",
                     "why-bought", "result-language", "transformation-reaction",
                     "subculture", "in-word"],
-    # The spoken pass (2026-09-19, Damon: "humans don't use em dashes when
+    # The spoken pass (2026-09-19, the owner: "humans don't use em dashes when
     # speaking — trigger deeper research on actual English-speaking human
     # speech patterns and round up levels of colloquialisms that we can use
     # per sub-avatar"). RQ-22..24 in components/marketing-doctrine/

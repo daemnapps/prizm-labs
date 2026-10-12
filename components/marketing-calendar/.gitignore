@@ -1,0 +1,20 @@
+# Planned months are run OUTPUT, not source — same rule the email chain's
+# results/ has always followed. What survives a run is the record on the
+# platform plane (platform/data/records/calendar-run/), which carries counts
+# and a pointer to wherever the month was written.
+runs/*
+!runs/.gitkeep
+# EXCEPT a month's plan and review (EP-2 (month in the repo), the email lead "save
+# the month in the repo", 2026-09-29): the mini reads them after a pull.
+!runs/*/
+runs/*/*
+!runs/*/slots.json
+!runs/*/run.json
+!runs/*/review.json
+
+# Rebuilt from slots.json + review.json on every load of the board.
+**/board.html
+**/copy.log
+
+machine/__pycache__/
+**/__pycache__/

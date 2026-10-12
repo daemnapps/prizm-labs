@@ -3,7 +3,8 @@
 
 The replication spec takes a teardown record and returns a spec — no video
 involved, so `gemini_breakdown.py` (which requires a file upload) can't run
-it. Same key file, same model default, same output convention.
+it. Same key, same model default, same output convention. GEMINI_API_KEY is
+read by name through components/keys (tools/it_keys.py).
 
 Usage:
   python3 gemini_text.py --prompt-file prompts/replication-v1.txt \
@@ -17,14 +18,17 @@ the run stops before spending anything.
 import argparse, json, re, sys, time, urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import it_keys  # noqa: E402  SI-194 (readers use loader)
+
 BASE = "https://generativelanguage.googleapis.com"
 
 
 def key():
-    for line in (Path.home() / ".gemini.env").read_text().splitlines():
-        if line.startswith("GEMINI_API_KEY="):
-            return line.split("=", 1)[1].strip()
-    sys.exit("GEMINI_API_KEY not found in ~/.gemini.env")
+    k = it_keys.key("GEMINI_API_KEY")
+    if not k:
+        sys.exit(it_keys.missing("GEMINI_API_KEY"))
+    return k
 
 
 def req(url, data=None, headers=None, tries=4):
@@ -50,7 +54,7 @@ def main():
                     metavar="NAME=PATH",
                     help="fill {NAME} in the prompt with the contents of PATH")
     ap.add_argument("--model", default="gemini-3-flash-preview")
-    ap.add_argument("--out")
+    ap.add_argument("--out", required=True)
     a = ap.parse_args()
 
     pf = Path(a.prompt_file)
@@ -89,9 +93,7 @@ def main():
     header = (f"<!-- prompt: {pf.name} | model: {a.model} | "
               f"vars: {','.join(supplied) or 'none'} | run: "
               f"{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} -->\n\n")
-    out = Path(a.out) if a.out else (
-        Path(__file__).parent / "results" /
-        f"{pf.stem}--{a.model}.txt")
+    out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(header + txt)
     print(txt[:2000])

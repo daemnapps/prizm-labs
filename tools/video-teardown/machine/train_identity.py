@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Train a brand asset into a LoRA identity on fal — character or product.
 
-    python3 train_identity.py --brand <brand> --character susan
-    python3 train_identity.py --brand <brand> --product brilliance-body-scrub
+    python3 train_identity.py --brand brand-a --character june
+    python3 train_identity.py --brand brand-a --product glow-body-scrub
 
 SHIM (IDT-1, 2026-09-01). The engine moved to
 `components/identity-training/` so trained identities are a curated asset
@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import keys
 
-_COMPONENT = Path(__file__).resolve().parents[2] / "identity-training"
+_COMPONENT = Path(__file__).resolve().parents[3] / "components" / "identity-training"
 sys.path.append(str(_COMPONENT))        # appended, never ahead of this machine
 from identity_training import engine as _engine      # noqa: E402
 

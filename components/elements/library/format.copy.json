@@ -32,7 +32,8 @@
      "tiktok",
      "shorts"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "caption",
@@ -60,7 +61,8 @@
      "meta-reels",
      "instagram"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "long-form",
@@ -88,7 +90,8 @@
      "instagram",
      "email"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "social-proof",
@@ -115,8 +118,12 @@
      "meta-feed",
      "instagram"
     ]
-   }
+   },
+   "aliases": []
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

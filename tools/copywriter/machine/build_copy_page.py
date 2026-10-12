@@ -9,12 +9,13 @@ nothing else in the way — no stages, no prompts, no receipts.
 """
 import html, json, re
 from paths import HERE
+import paths as P
 
 OUT = HERE / "pages" / "copy-page.html"
 
 
 def parse(md):
-    """output/<x>/copy.md → [(format, [(label, text, note)])]"""
+    """a deliverable's copy.md → [(format, [(label, text, note)])]"""
     md = re.sub(r"^<!--.*?-->\s*", "", md, flags=re.S)
     blocks, fmt, cur = [], None, []
     label = note = None
@@ -30,7 +31,7 @@ def parse(md):
 
     for line in md.splitlines():
         # The format header has three vintages: **`FORMAT: x`**, **FORMAT: x**
-        # and, from stage-8 v2, a markdown heading `# FORMAT: \`x\`./`. The last
+        # and, from stage-8 v2, a markdown heading `# FORMAT: \`x\``. The last
         # one silently parsed to nothing — a finished run reached output/ and
         # the page showed none of it, with no error anywhere. Accept all three.
         m = re.match(r"^#{0,3}\s*\*{0,2}`?FORMAT:?\s*`?([a-z-]+)`?", line)
@@ -129,10 +130,8 @@ def page_title():
     """Named after the brands whose copy is actually on the page — read from
     each published source's own record, never typed here."""
     brands = set()
-    for d in sorted((HERE / "output").iterdir()) if (HERE / "output").is_dir() else []:
+    for _name, d in P.all_deliverables():
         src = d / "source.md"
-        if not (d / "copy.md").is_file():
-            continue
         m = re.search(r"\*\*Brand\*\*\s+([a-z0-9-]+)", src.read_text()) if src.is_file() else None
         if m:
             brands.add(m.group(1))
@@ -151,10 +150,8 @@ def main():
              "<p class='sub'>Every finished body, headline and description. "
              "Tap any block to copy it.</p></header>"]
 
-    for d in sorted((HERE / "output").iterdir()):
+    for _name, d in P.all_deliverables():
         cf = d / "copy.md"
-        if not cf.is_file():
-            continue
         meta = ""
         sf = d / "source.md"
         if sf.is_file():
@@ -192,7 +189,7 @@ def main():
                     + (f"<div class='note'>{html.escape(note)}</div>" if note else "")
                     + "</div>")
 
-    parts.append("<footer>generated from output/ · daemn/content-machine/copy</footer></div>")
+    parts.append("<footer>generated from every run's deliverable/ plus the legacy output/ · daemn/content-machine/copy</footer></div>")
     parts.append(f"<script>{JS}</script>")
     OUT.write_text("\n".join(parts), encoding="utf-8")
     return OUT

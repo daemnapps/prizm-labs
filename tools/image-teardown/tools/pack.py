@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """One zip a brand's briefs go to the graphic designer in.
 
-    pack.py --brand <brand>                 build <brand>-brief-pack.zip
-    pack.py --brand <brand> --upload        and put it on Drive, link recorded
+    pack.py --brand brand-a                 build <brand>-brief-pack.zip
+    pack.py --brand brand-a --upload        and put it on Drive, link recorded
 
 The zip and its README land at runs/image-teardown/<brand>/brief-pack-<date>/
 deliverable/ (the zip is gitignored there); on Drive the zip sits at the
-mirrored path, <media>/runs/image-teardown/<brand>/brief-pack-<date>/.
+mirrored path, Team Drive/runs/image-teardown/<brand>/brief-pack-<date>/.
 
-Damon, 2026-09-17: *"create a download pack to give to our graphic designer
+the owner, 2026-09-17: *"create a download pack to give to our graphic designer
 so she can just plug it into Higgsfield and start to generate the variations
 the brief calls for. All the work has already been done."*
 
@@ -33,7 +33,7 @@ The README repeats nothing a work order says better; it lists the briefs so
 she can see the whole batch and tick them off, and names the two settings
 that are the same for every one so she sets them once.
 """
-import argparse, json, os, re, shutil, sys, tempfile, zipfile
+import argparse, json, re, shutil, sys, tempfile, zipfile
 from datetime import date
 from pathlib import Path
 
@@ -44,7 +44,7 @@ WS = _P.REPO                      # the workspace, found by walking up — not c
 import briefs as B
 import deliver as D
 
-# Where a machine's output lands (the workspace rules, 2026-09-17): the
+# Where a machine's output lands (the team notes/CLAUDE.md, 2026-09-17): the
 # record in git at runs/<machine>/<brand>/<run-label>/, media on Drive at the
 # mirrored path. The zip is media; the README is its record.
 MACHINE = "image-teardown"
@@ -209,12 +209,11 @@ def upload_big(svc, path, parent):
     on. Same update-in-place and anyone-with-the-link rules, sent in chunks."""
     import socket
     from googleapiclient.http import MediaFileUpload
+    from gdrive_creator import engine
     socket.setdefaulttimeout(600)
-    q = f"'{parent}' in parents and name='{path.name}' and trashed=false"
-    hit = svc.files().list(q=q, fields="files(id)", supportsAllDrives=True,
-                           includeItemsFromAllDrives=True).execute()["files"]
+    hit = engine.find_file(svc, path.name, parent)
     media = MediaFileUpload(str(path), resumable=True, chunksize=8 * 1024 * 1024)
-    req = (svc.files().update(fileId=hit[0]["id"], media_body=media,
+    req = (svc.files().update(fileId=hit["id"], media_body=media,
                               supportsAllDrives=True, fields="id") if hit else
            svc.files().create(body={"name": path.name, "parents": [parent]},
                               media_body=media, fields="id",
@@ -225,20 +224,16 @@ def upload_big(svc, path, parent):
         if status:
             print(f"  {int(status.progress() * 100)}%", end="\r", flush=True)
     fid = done["id"]
-    svc.permissions().create(fileId=fid, body={"role": "reader", "type": "anyone"},
-                             supportsAllDrives=True).execute()
+    engine.share(fid, "reader", svc)
     return fid
 
 
 def upload(brand, label, zp):
-    """Drive, at the mirrored runs path: <media>/runs/<machine>/<brand>/<label>/."""
+    """Drive, at the mirrored runs path: Team Drive/runs/<machine>/<brand>/<label>/."""
     engine, svc = D.service()
-    d = svc.drives().list(fields="drives(id,name)").execute()["drives"]
-    name = os.environ.get("PRIZM_SHARED_DRIVE")         # your shared drive's name
-    shared = next((x for x in d if name and x["name"] == name), None)
-    if not shared:
-        sys.exit("set PRIZM_SHARED_DRIVE to a shared drive this account can reach")
-    node = shared["id"]
+    node = engine.shared_drive_id("Team Drive", svc)
+    if not node:
+        sys.exit("no 'Team Drive' shared drive reachable by this account")
     for part in ("runs", MACHINE, brand, label):
         node = D.folder(engine, svc, part, node)
     fid = upload_big(svc, zp, node)

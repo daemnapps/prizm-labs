@@ -1,0 +1,21 @@
+results/
+calendar/brands/*-derived.json
+email-system.html
+email-system.md
+learnings.html
+pull/.*-image-pool/
+.thumbs/
+# Public copy: generated from your own runs, never shipped
+dashboard.html
+dashboard.md
+notes/
+# a brand's own design bank (its boards, wordmark, licensed font files) lives with the brand
+design/format-bank/index.html
+design/format-bank/library.html
+design/format-bank/assets/
+design/format-bank/fonts/
+design/fonts/
+design/*.svg
+send-plan.html
+SEND-PLAN.md
+SECTIONS.md

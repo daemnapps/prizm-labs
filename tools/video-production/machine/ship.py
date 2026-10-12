@@ -66,27 +66,40 @@ def provenance(run: Path) -> list[str]:
     return bad
 
 
-GDRIVE = Path.home() / "Library/CloudStorage"
-
-
 def destination(brand: str) -> Path | None:
     """Find the shared brand folder, or None.
 
-    Looks where a shared-and-shortcut folder actually lands, then falls back
-    to any mounted shared drive of that name. drive.json wins over both.
+    Looks in the mounted Shared Assets drive (brandpath's one mount helper),
+    then where a shared-and-shortcut folder lands on any Drive account.
+    drive.json wins over both.
     """
     if CONF.exists():
         r = Path(json.loads(CONF.read_text())["root"]).expanduser()
         return r if r.parent.exists() else None
-    for acct in GDRIVE.glob("GoogleDrive-*"):
-        for base in (acct / ".shortcut-targets-by-id", acct / "Shared drives"):
-            if not base.is_dir():
-                continue
-            for pat in (f"*/Shared Assets/brands/{brand}",
-                        f"Shared Assets/brands/{brand}"):
-                for hit in base.glob(pat):
-                    return hit / "rushes"
+    # editor hand-offs live in the brand's briefs/ (the v6 map; the owner
+    # 2026-09-29) — resolved through brandpath
+    DI = _drive_index()
+    m = DI.mount()
+    if m and (m / "brands" / brand).is_dir():
+        return _brandpath().brand_path(brand, "briefs", root=m / "brands")
+    for acct in DI.accounts():
+        for hit in (acct / ".shortcut-targets-by-id").glob(f"*/Shared Assets/brands/{brand}"):
+            return _brandpath().brand_path(brand, "briefs", root=hit.parent)
     return None
+
+
+def _brandpath():
+    """components/brandpath — one door into a brand's folders."""
+    sys.path.insert(0, str(HERE.parent.parent.parent / "components" / "brandpath"))
+    import brandpath
+    return brandpath
+
+
+def _drive_index():
+    """components/brandpath's drive_index — the one way to the Drive mount."""
+    sys.path.insert(0, str(HERE.parent.parent.parent / "components" / "brandpath"))
+    import drive_index
+    return drive_index
 
 
 def main():

@@ -5,7 +5,7 @@
 
 Reads the teardown runs and the copy runs for every label starting with the
 prefix and draws where each ad stands: record → copy stages → published.
-Written for Jackie's 7-ad delivery; works for any ads_to_copy.sh batch.
+Written for an editor's 7-ad delivery; works for any ads_to_copy.sh batch.
 """
 import html, json, sys, time
 from pathlib import Path
@@ -15,9 +15,25 @@ ROOT = HERE.parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 import paths as P                                # noqa: E402  both run homes
+
+
+def _vt_workdir():
+    """video-teardown's working-folder module, loaded by file (SI-56)."""
+    m = sys.modules.get("vt_workdir")
+    if m is None:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "vt_workdir", P.repo() / "tools" / "video-teardown" / "machine" / "workdir.py")
+        m = importlib.util.module_from_spec(spec)
+        sys.modules["vt_workdir"] = m
+        spec.loader.exec_module(m)
+    return m
+
+
 # Found from the repo root, not counted up from this file — the count went
 # stale when this tool moved from lab/ to components/ (2026-09-19).
-VT_RUNS = P.repo() / "components" / "video-teardown" / "machine" / "runs"
+# The teardown's live runs: runs/video-teardown/_work/ (SI-56, 2026-10-08).
+VT_RUNS = _vt_workdir().root(P.repo())
 
 COPY_STAGES = ["stage0", "stage1", "stage1b", "stage2", "stage3", "stage4",
                "stage5", "stage7", "stage8", "stage9"]
@@ -30,6 +46,20 @@ def esc(s):
     return html.escape(str(s))
 
 
+def _filed_teardown(label):
+    """The filed shelf's teardown record for this label, or None."""
+    kit = str(P.repo() / "components" / "run-kit")
+    if kit not in sys.path:
+        sys.path.append(kit)
+    from run_kit import index as RKI
+    for row in RKI.scan():
+        if row["machine"] == "video-teardown" and row["label"] == label:
+            f = P.repo() / row["path"] / "stages" / "1-teardown.md"
+            if f.is_file():
+                return f
+    return None
+
+
 def ad_state(label):
     rec = None
     for cand in (VT_RUNS / label / "stages" / "1-teardown.md",
@@ -37,7 +67,9 @@ def ad_state(label):
         if cand.is_file():
             rec = cand
             break
-    home = P.find_run(label)          # runs/copy-machine/<brand>/<label>, else results/<label>
+    if rec is None:
+        rec = _filed_teardown(label)
+    home = P.find_run(label)          # runs/copywriter/<brand>/<label>, else results/<label>
     r = (home or ROOT / "results" / label) / "run.json"
     stages = {}
     if r.is_file():
@@ -46,7 +78,7 @@ def ad_state(label):
         except Exception:
             pass
     published = any(p.is_dir() and label.split("-", 1)[-1] in p.name.replace("-", "")
-                    for p in (ROOT / "output").iterdir()) if (ROOT / "output").is_dir() else False
+                    for _n, p in P.all_deliverables())
     # publish naming is slug-of-reference; simpler: copy.md fresh within batch
     return dict(label=label, record=bool(rec), stages=stages, published=published)
 
@@ -125,4 +157,4 @@ def build(prefix, title):
 
 if __name__ == "__main__":
     build(sys.argv[1] if len(sys.argv) > 1 else "jax-",
-          sys.argv[2] if len(sys.argv) > 2 else "Jackie's 7 — teardown to copy")
+          sys.argv[2] if len(sys.argv) > 2 else "an editor's 7 — teardown to copy")

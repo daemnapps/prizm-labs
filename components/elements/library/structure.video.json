@@ -27,7 +27,8 @@
     ],
     "text_behaviour": "one line, top third, same words start to finish, casual + an emoji or two; some instances land the line once on the opening beat and drop it, which does not break the format — what matters is that the text never changes and never argues",
     "camera": "handheld phone, vertical, subject-height, natural window light, no cuts to face"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "objection-flip-collection",
@@ -50,7 +51,8 @@
     ],
     "text_behaviour": "two lines pinned all runtime: the quoted objection in quotes, then 'Us:' + emoji answer",
     "camera": "handheld, close orbit of the collection, natural interior light"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "forbidden-tease-dark-reveal",
@@ -73,7 +75,8 @@
     ],
     "text_behaviour": "act one: 'Don't show this to a {identity}' + soft emoji · act two: 'Share this with a {identity}' — the switch lands on the cut",
     "camera": "act one handheld daylight; act two locked or slow drift, exposure for the glow, everything else black"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "word-per-beat-procedure",
@@ -98,7 +101,8 @@
     ],
     "text_behaviour": "one word per beat, centre-low, all caps or lowercase consistently, one word in a colour for emphasis; the words read as a sentence in order and are still unfinished at the last sampled beat",
     "camera": "zero camera movement — usually locked overhead on a reclined or seated subject, sometimes a locked frontal frame with the problem held at the edge of shot; even indoor light"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "filth-extraction-montage",
@@ -121,7 +125,8 @@
     ],
     "text_behaviour": "none, or a single small caption; a running spoken-caption track is tolerated, but nothing is ever pinned as a promise — the visual is the hook and text would steal from it",
     "camera": "handheld, close on the contact point, daylight or plain interior light, cuts on each surface change"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "locked-frame-escalating-caption",
@@ -144,7 +149,8 @@
     ],
     "text_behaviour": "small quoted text, same position every beat, changing length each time — usually shrinking to a trail-off, sometimes lengthening into insistence; the change itself is the joke",
     "camera": "tripod-locked wide, identical framing every beat, daylight through a window, never moves"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "character-sketch",
@@ -167,7 +173,8 @@
     ],
     "text_behaviour": "none on screen at any beat — the platform caption carries the quoted line of dialogue as the punchline",
     "camera": "handheld, tight on the character, shot-reverse to a reacting cast where there is one, travelling wides where the character moves between locations"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "running-caption-borrowed-cutaways",
@@ -191,7 +198,8 @@
     ],
     "text_behaviour": "one caption box in the same position all runtime, its words changing every beat as a continuous narration; each card cut off mid-sentence, often with one word highlighted; nothing is ever pinned unchanged",
     "camera": "no camera of its own for most of the runtime — full-frame borrowed sources cut against a fixed studio or desk plate; the presenter panel never moves"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "split-screen-mechanism-verdict",
@@ -214,7 +222,8 @@
     ],
     "text_behaviour": "one headline pinned across the seam for the whole runtime, or a caption per beat running correction → name → mechanism → verdict; the text is always about the evidence in the other band",
     "camera": "locked — neither band moves. The evidence band is a held clinical close-up, an instrument view or a sourced clip; the presenter band is a fixed desk or cut-out over black"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "day-count-self-test",
@@ -237,7 +246,8 @@
     ],
     "text_behaviour": "one day or interval stamp per beat in the identical position ('Day 1' → 'Day 14' → 'Day 30' → 'Day 90'); often a pinned POV promise on the opening beat; the stamp is an index, never an argument",
     "camera": "one repeated framing — a selfie front camera or a fixed high angle — identical distance and angle at every stamp, same room, same light"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "reaction-panel-repost",
@@ -260,7 +270,8 @@
     ],
     "text_behaviour": "one pinned punchline caption sitting across the seam for the whole runtime, or the borrowed clip's own burned-in caption; the reactor adds no text of their own",
     "camera": "a locked vertical split or three-band composite that never changes — the reactor's webcam frame is static, the borrowed clip plays inside its band with whatever camera it came with"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pinned-line-acted-out",
@@ -284,7 +295,8 @@
     ],
     "text_behaviour": "one line — usually a 'pov:' premise, often trailing off in an ellipsis — pinned unchanged in the same spot all runtime, or landed once on the opening beat and dropped; it never escalates and is never answered in words",
     "camera": "no fixed rule and that is the point — a locked wide interior, a floor-level angle, or a freely roaming handheld covering a chain of gags; whatever holds the performance"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "deadpan-reaction-hold",
@@ -307,7 +319,8 @@
     ],
     "text_behaviour": "zero on-screen text, or one short pinned line or two-word label that never changes and often drops before the hold begins",
     "camera": "tripod-locked, square-on, zero camera movement and zero reframing; identical framing from first frame to last"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "wordless-pov-procedure",
@@ -330,7 +343,8 @@
     ],
     "text_behaviour": "none at any beat — no hook line, no labels, no captions; the post caption carries anything that has to be said",
     "camera": "close handheld at the reclined subject's own level or straight over the hands, reframing continuously with the work, no cuts away and no tripod"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "unfinished-line-real-payoff",
@@ -354,7 +368,8 @@
     ],
     "text_behaviour": "one line (often two, quoted) pinned unchanged in the same spot for the entire runtime, ending on an ellipsis, an open colon or a mid-word cut; it is never completed in words at any point",
     "camera": "one unbroken take — locked, sideline or handheld close — that holds the answer; no cut to a talking head and no second source"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "labelled-cutaway-mechanism",
@@ -377,7 +392,8 @@
     ],
     "text_behaviour": "a fixed headline plus a grid of labels — ingredients on one axis, problems on the other — set on frame one and never changed for the rest of the runtime",
     "camera": "absolutely locked; a 3D cross-section or a single unmoving real setup, no push, no pan, no cut for the whole runtime"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "stunt-funnel-reveal",
@@ -400,7 +416,8 @@
     ],
     "text_behaviour": "all the text lives in act one — a POV line, a data card, an argument; act two carries none at all, and the switch lands on the cut",
     "camera": "act one is ugly and handheld — phone selfie, cut-out composite, real public location; act two is polished and stable — clean room, considered light, no visible phone look"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pinned-headline-monologue",
@@ -423,7 +440,8 @@
     ],
     "text_behaviour": "one headline in an identical position (often a white box, top third) unchanged from first frame to last, plus burned-in rolling speech captions that change every beat below it",
     "camera": "one locked or arm's-length frame on the speaker, same seat and same room throughout; no cuts, no cutaway, no second angle"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "opening-line-self-demo",
@@ -447,7 +465,8 @@
     ],
     "text_behaviour": "one line on the opening beat — pinned unchanged for the runtime, or dropped after the first beat and never replaced; no per-beat captions, no labels",
     "camera": "one fixed front camera on the operator's own face or body, same distance and angle all runtime; no cutaway, no second location"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "era-stamped-upgrade-ladder",
@@ -470,7 +489,8 @@
     ],
     "text_behaviour": "a year or era stamp in the identical top position at every beat, plus a 'Vs...' pivot card; the stamps are labels, never arguments, and the last one is held for the rest of the runtime",
     "camera": "no continuity — each rung is separately sourced footage in its own room with its own camera; cuts land on the stamp change"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "concern-list-proof-photos",
@@ -493,7 +513,8 @@
     ],
     "text_behaviour": "one big label per beat naming a single item, in the identical position every time; the label changes on every cut and nothing is ever pinned across beats",
     "camera": "one unchanging frame or repeated composite unit — the same corridor, the same shelf angle, the same two-shot — reused identically for every item on the list"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "wordless-pov-handoff-transformation",
@@ -516,7 +537,8 @@
     ],
     "text_behaviour": "none at any beat — no captions, no labels, no hook line",
     "camera": "arm's-length POV from the camera-holder, no creator face; handheld, follows the stranger through the whole exchange with no cut away"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pinned-line-stranger-sighting",
@@ -540,7 +562,8 @@
     ],
     "text_behaviour": "one lowercase or meme line, often unfinished, pinned top-centre and unchanged for the entire runtime; nothing else on screen",
     "camera": "handheld phone, candid, at a distance that reads as caught rather than staged; cuts on each new sighting, no setup shots"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "locked-macro-debris-lift",
@@ -563,7 +586,8 @@
     ],
     "text_behaviour": "zero on-screen text, or a single line pinned unchanged for the entire runtime; nothing changes and nothing escalates",
     "camera": "absolutely locked extreme macro on one site; no reframe, no cut, no pull-back for the whole runtime"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "found-clip-reaction-cut",
@@ -586,7 +610,8 @@
     ],
     "text_behaviour": "zero on-screen text at any beat — the post caption credits the borrowed clip and carries anything else that needs saying",
     "camera": "act one is whatever the borrowed footage was shot on, full-frame and uncut; act two is a handheld selfie in a bare room, no set, no props"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "captioned-steps-comment-gate",
@@ -609,7 +634,8 @@
     ],
     "text_behaviour": "running speech subtitles, one clause per beat in the same position, opening mid-sentence; the terminal beats carry the comment-to-get gate",
     "camera": "one locked frame on the practitioner performing to camera for the body of the runtime, with brief hand-offs to a render or inset; back to the locked frame for the close"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "word-per-beat-internal-reveal",
@@ -634,7 +660,8 @@
     ],
     "text_behaviour": "one bold word per beat, centre frame, building a single sentence in order; no other text at any point",
     "camera": "fully rendered — the camera reframes between every beat, moving between angles and travelling into the body; never locked, no hands, no product, no room"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "silent-build-to-placed-reveal",
@@ -657,7 +684,8 @@
     ],
     "text_behaviour": "none at any beat — no captions, no labels, no address to camera; the post caption carries everything",
     "camera": "one location, tightening monotonically across the runtime from wide to macro; no cutaway, no second location, no talking head"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "one-product-three-worlds",
@@ -680,7 +708,8 @@
     ],
     "text_behaviour": "none that does any persuasive work — at most a fixed legal disclaimer sitting in the same place all runtime, which the viewer reads past",
     "camera": "the same shot composed identically in each world, cut hard on every location change; no establishing shots and no transitions"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "public-reaction-repeat-demo",
@@ -703,7 +732,8 @@
     ],
     "text_behaviour": "none anywhere — at most a fixed product disclaimer; no hook line, no labels, no captions in either act",
     "camera": "act one handheld and candid in the real venue with bystanders in shot; act two tight and wordless on the contact point, cutting on each new body or zone"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pinned-line-borrowed-intercut",
@@ -727,7 +757,8 @@
     ],
     "text_behaviour": "one caption, usually two lines ending on an open colon, word-for-word identical in the same position at every single beat; never completed, never escalated",
     "camera": "two visibly different sources alternating — the poster's own plain full-frame shot against letterboxed or differently-graded borrowed footage; a cross-dissolve at the seam is common"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "deadpan-caption-evidence-montage",
@@ -750,7 +781,8 @@
     ],
     "text_behaviour": "one claim stated once and never changed — either a meme caption pinned all runtime or nothing on screen at all with the claim in the post caption; no per-beat captions",
     "camera": "no continuity between beats: separately sourced or separately shot close shots, cut hard on each new instance, no shared location and no establishing shot"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "caption-only-single-take",
@@ -773,7 +805,8 @@
     ],
     "text_behaviour": "none on screen at any beat — the post caption is the only text anywhere in the piece",
     "camera": "one distant or held vantage for the whole runtime, no cutaway, no reframe, no second angle; at most one scale change at the very open"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "flat-label-damage-reaction",
@@ -796,7 +829,8 @@
     ],
     "text_behaviour": "a flat label or set of labels pinned over the first half only, dropping out at the turn and never replaced; zero text over the payoff and the closing reaction",
     "camera": "handheld on the demonstration for act one; hard cut to a locked square-on selfie frame for the closing reaction, which does not move"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "subtitled-monologue-evidence-cutaways",
@@ -821,7 +855,8 @@
     ],
     "text_behaviour": "one continuous narration burned in as speech captions — one clause, or one spoken word, per beat in the identical position, cut off mid-sentence every time; sometimes a hook line over the opening beat that never returns, but nothing is ever pinned across the runtime",
     "camera": "one fixed frame on the speaker — arm's-length selfie or a locked chest-up — identical every time it comes back, cut against full-frame evidence inserts or panels pasted into the top third or one side of that same frame; no second location and no second angle on the speaker"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "subtitled-monologue-angle-cuts",
@@ -845,7 +880,8 @@
     ],
     "text_behaviour": "rolling burned-in speech captions, one clause per beat in the identical position, always cut off mid-sentence, often with the spoken word highlighted; nothing is pinned across the runtime — at most one hook card on the opening beat that is gone from every beat after it",
     "camera": "one speaker in one place all runtime — either absolutely locked with a pixel-identical background every beat, or cut between two or three fixed angles of the same setup; no cutaway, no product, no second location, no camera move inside a beat"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "clause-chain-mechanism-demo",
@@ -869,7 +905,8 @@
     ],
     "text_behaviour": "one short clause per beat in the identical position, replaced on every cut and reading in order as a single sentence; no pinned line, no labels and no headline",
     "camera": "no single camera behaviour — the format cuts between four shot types, one per beat: a real body at head height, a hands-only macro over a dark surface, a macro of the product itself, and a rendered cutaway; each shot locked or near-locked with no move inside it"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "spoken-caption-applied-demo",
@@ -892,7 +929,8 @@
     ],
     "text_behaviour": "the narrator's own speech transcribed — two-to-four-word karaoke cards with the spoken word highlighted, or one plain annotation per beat — bracketing the runtime and absent entirely through the application; nothing is ever pinned",
     "camera": "one fixed camera on the narrator's own face or body for the whole runtime, same distance and angle throughout, no cutaway and no second location; handheld drift is allowed, reframing is not"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "personified-mechanism-explainer",
@@ -915,7 +953,8 @@
     ],
     "text_behaviour": "one word of the voiceover per beat, centred, heavy caps with a hard outline, swapping on every stressed word and never completing the sentence on screen; no labels and no pinned line",
     "camera": "fully rendered with no real footage anywhere — the camera reframes between beats from wide to macro and moves between worlds; no hands, no room, no locked frame"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "transformation-hook-mechanism-explainer",
@@ -939,7 +978,8 @@
     ],
     "text_behaviour": "the opening carries a card, a year-stamp pair or a composited before/after panel that is gone after the first beats; everything after it is a running claim caption, one clause per beat in a fixed position, never pinned and never repeated",
     "camera": "two visibly different halves — the transformation half is phone footage in real rooms with no continuity between the two states, and the mechanism half is rendered animation or a pasted labelled diagram with no camera of its own"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "word-per-beat-scene-chain",
@@ -964,7 +1004,8 @@
     ],
     "text_behaviour": "one word or a two-word fragment centred at mid-frame, replaced on every cut, building a single narration that is never on screen whole and never completes",
     "camera": "no relationship between beats — each world is its own self-contained shot, rendered or filmed, with its own light and framing; no transitions, no establishing shots, no locked frame"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "dropped-hook-roaming-monologue",
@@ -987,7 +1028,8 @@
     ],
     "text_behaviour": "one hook line on the opening beat only — a PSA, a warning, a promise — dropped and never replaced or restated; most beats carry no text at all",
     "camera": "handheld on the speaker throughout with the framing jumping freely between beats — close, wide, low, a different corner of the same room, or a setting that travels behind them; no cutaway, no product, no second source"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "instruction-card-routine",
@@ -1011,7 +1053,8 @@
     ],
     "text_behaviour": "permanent overlay furniture in fixed slots — the full numbered list with only the current item struck, a hold-time badge, a labelled diagram and a move-name banner — with only the named item changing per beat",
     "camera": "one room, a fixed low or wide angle held for the whole of each move, repositioned slightly between moves and never during one; the demonstrator in full frame with the top of the frame left empty for the overlay"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "captioned-screen-walkthrough",
@@ -1034,7 +1077,8 @@
     ],
     "text_behaviour": "a hook card in the top third on the opening beat only, dropped and never brought back; every beat after it carries one clause of speech caption in the same position, each cut off mid-sentence",
     "camera": "one selfie beat at arm's length, then a phone handheld over a real monitor at an off-axis angle for the rest of the runtime, framed tighter beat by beat; no screen capture, no cutaway"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "logo-stamp-crowd-coverage",
@@ -1057,7 +1101,8 @@
     ],
     "text_behaviour": "one small logo lockup on the opening beat only — the brand over a short tagline — and no on-screen text at any point after it",
     "camera": "roaming handheld coverage of one real event from five or six visibly different setups at head height, pushed in among the bodies; no locked frame, no talking head, no establishing shot"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pinned-line-reaction-cut",
@@ -1081,7 +1126,8 @@
     ],
     "text_behaviour": "one line pinned word-for-word in the identical position on every single beat including the final cut, ending on an open colon and never completed in words",
     "camera": "whatever camera the borrowed footage came with, held full-frame and uncut for most of the runtime, then a hard cut to a fixed front-camera close in an ordinary room that does not move"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "locked-frame-screen-readout",
@@ -1104,7 +1150,8 @@
     ],
     "text_behaviour": "one short line pinned in the identical position from first frame to last, never changed and never argued; everything else that gets read belongs to the document inside the frame",
     "camera": "absolutely locked for the whole runtime — same framing, same background, same light — with the subject filling one side of frame and the screen the other; no cut, no reframe, no cutaway"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "multicam-monologue-crowd-cutaway",
@@ -1129,7 +1176,8 @@
     ],
     "text_behaviour": "burned-in word-synced speech captions, centre-low, running continuously under every angle with the currently spoken words highlighted; nothing pinned and nothing authored",
     "camera": "one continuous live take covered from four or more fixed positions — tight close, full-stage wide, audience reverse, from the back of the room — each near-locked; the edit changes angle rather than the camera moving"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "operator-service-montage",
@@ -1154,7 +1202,8 @@
     ],
     "text_behaviour": "product names appear as plain labels the moment each is used and disappear when it is done — never a claim, never a sentence; the operator's handle and location pinned throughout; a discount code sometimes lands once in the middle, never at the open",
     "camera": "handheld, vertical, third-person over the operator's shoulder or beside the chair; alternating close-up on hands and product with medium on the client; real shop light, no cuts to the operator talking to camera"
-   }
+   },
+   "aliases": []
   },
   {
    "id": "stranger-answer-montage",
@@ -1178,8 +1227,42 @@
     ],
     "text_behaviour": "burned-in rolling captions on every line of speech, question and answer both, in the creator's own rough typing; no headline, no pinned claim — the captions are transcription, not copy",
     "camera": "handheld, vertical, medium on the stranger with the creator's shoulder or mic in frame; wide when walking up so the approach reads as real; daylight public space, no lighting, ambient sound"
-   }
+   },
+   "aliases": []
+  },
+  {
+   "id": "storytelling",
+   "name": "Storytelling",
+   "what": "One named person with one reason, told as a story: who he was before, the turn (he found out it was never his fault), who he is after — the beats are the story's, not a pitch's, and the product enters where the turn happens. Aimed at a buyer who already wants the outcome.",
+   "why_it_works": "One swiped brand runs 100,000+ customers off 44 ads because every ad is one person's reason for switching, told in her own words; story and intent do the work volume does for everyone else.",
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "examples": "A swiped brand's story ads — one person, one reason each; a brand's story block in brand-identity/story.md (SPINE · BEFORE · TURN · AFTER, the tellers)",
+   "evidence": "the owner 2026-09-19: 'the storytelling ad' — 'storytelling and intent over volume'. Moved from format/video 2026-09-28: it is a video structure (what the beats are), not a format. The 16 Sep 'storytelling' format draft was ruled the same piece as expert-consult on 17 Sep and retired; this row is the structure, not that draft.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "defined by the machine, review pending"
+  },
+  {
+   "id": "timeline-turn",
+   "name": "Timeline turn",
+   "what": "Four beats. 1 PAST — open on a moment the viewer lived (a real customer line about then, from the avatar's language bank), shot so it looks like then. 2 RELATE — the problem they have now started back there; they see their own history. 3 THE TURN — one moment where the timeline changes: the younger self gets told, the tape rewinds, the 'continue?' screen. 4 FORWARD — the product is the new timeline; the last ask is the click.",
+   "why_it_works": "Most people don't think about the future, they live in the past. Starting where they already are lets them relate before any claim; the turn hands them the moment to change it, and that is what moves them forward.",
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): real past memories (hand-sorted) are rare in two brands' language banks — about 1 line in 600 to 2,000 — present but rare; one brand's own 'growing up' post had millions of views. The one swiped structure on this idea with proof is era-stamped-upgrade-ladder (29.96M views). named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

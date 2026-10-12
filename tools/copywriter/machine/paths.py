@@ -15,7 +15,7 @@ moved to `components/brand-finder/` so rule-9's "where is brands/" has one
 home; it had three, converging by copy-paste. This file is the same file it
 always was: same names, same answers, same command. **The default below stays
 HERE**, because it is this machine's own policy: it differs from
-`email-production/paths.py`'s, and BH-1 forbids a shared locator
+`the team notes`'s, and BH-1 forbids a shared locator
 picking a winner between them. The component has no default of its own.
 """
 
@@ -26,7 +26,12 @@ from pathlib import Path
 # station (bank, prompts, results, output, pages, library) hangs off it.
 HERE = Path(__file__).resolve().parent.parent
 
-_DEFAULT_WS = Path.home() / "Projects" / "ai-workspace"
+# The checkout this file sits in (<ws>/tools/copywriter/machine/) — found
+# by walking up to the folder that holds both components/ and brands/, never
+# a home-folder guess. AI_WORKSPACE still wins (brand-finder's rule).
+_DEFAULT_WS = next((d for d in Path(__file__).resolve().parents
+                    if (d / "components").is_dir() and (d / "brands").is_dir()),
+                   Path(__file__).resolve().parents[3])
 
 _COMPONENT = next((d for d in Path(__file__).resolve().parents if (d / "components" / "brand-finder").is_dir()), Path(__file__).resolve().parents[2].parent) / "components" / "brand-finder"
 if not _COMPONENT.is_dir():                  # a workspace mounted elsewhere
@@ -45,11 +50,11 @@ WORKSPACE = workspace()
 
 # ---------------------------------------------------------------- run folders
 # WHERE A RUN LIVES (rollout, 2026-09-20). New runs file at the repo root —
-# `runs/copy-machine/<brand>/<label>/` (runs/README.md; that folder name is the
-# spoken one and is fixed). `results/<label>/` beside the code is HISTORY: it
+# `runs/copywriter/<brand>/<label>/` (runs/README.md; that folder name is the
+# spoken one — the owner ruled `copywriter` 2026-09-21, replacing `copy-machine`). `results/<label>/` beside the code is HISTORY: it
 # is still read everywhere a run is looked up, and never written to again.
 # Every reader goes through the functions below, so no page can see only one.
-TOOL = "copy-machine"
+TOOL = "copywriter"
 RESULTS = HERE / "results"
 
 
@@ -67,6 +72,60 @@ RUNS = repo() / "runs" / TOOL
 def run_dir(brand, label):
     """The home of a NEW run. Not created here — a dry run leaves no trace."""
     return RUNS / brand / label
+
+
+def find_archived(slug):
+    """A parked run by slug, from whichever archive container holds it."""
+    for a in archive_dirs():
+        d = a / slug
+        if d.is_dir():
+            return d
+    return RESULTS / "archive-v1-chain" / slug      # the old shape, for a caller that expects a path
+
+
+def archive_dirs():
+    """Every `archive*` container holding parked runs, in BOTH homes.
+
+    Archived runs used to sit only in `results/archive-v1-chain/`. The 2026-09-22
+    sweep moved them to `runs/copywriter/<brand>/`, so a reader that globs only
+    RESULTS now finds nothing — silently, because an empty glob is not an error.
+    Go through here instead of either constant.
+    """
+    out = []
+    if RESULTS.is_dir():
+        out += [a for a in sorted(RESULTS.glob("archive*")) if a.is_dir()]
+    if RUNS.is_dir():
+        for brand in sorted(b for b in RUNS.iterdir() if b.is_dir()):
+            out += [a for a in sorted(brand.glob("archive*")) if a.is_dir()]
+    return out
+
+
+OUTPUT = HERE / "output"            # HISTORY: published per source before 2026-09-21
+
+
+def all_deliverables():
+    """Every published deliverable, from BOTH homes, newest home first.
+
+    Since 2026-09-21 (the owner: "finished copy goes in runs") publish.py writes
+    `<run>/deliverable/`. `output/<source-slug>/` holds everything published
+    before that and is still read, never written — the same arrangement
+    `results/` has with `runs/`. Readers go through here so no page can see
+    only one home and quietly go stale.
+
+    Yields (name, folder) where folder holds copy.md / v*.md / source.md.
+    """
+    seen, out = set(), []
+    for run in all_runs():
+        d = run / "deliverable"
+        if (d / "copy.md").is_file():
+            seen.add(run.name)
+            out.append((run.name, d))
+    if OUTPUT.is_dir():
+        for d in sorted(p for p in OUTPUT.iterdir() if p.is_dir()):
+            if d.name not in seen and (d / "copy.md").is_file():
+                seen.add(d.name)
+                out.append((d.name, d))
+    return out
 
 
 def all_runs():
@@ -89,7 +148,7 @@ def all_runs():
 
 
 def find_run(label, brand=None):
-    """One run by label: runs/copy-machine/<brand>/<label> first, then
+    """One run by label: runs/copywriter/<brand>/<label> first, then
     results/<label>. None when neither home has it."""
     if RUNS.is_dir():
         homes = [RUNS / brand] if brand else sorted(p for p in RUNS.iterdir() if p.is_dir())

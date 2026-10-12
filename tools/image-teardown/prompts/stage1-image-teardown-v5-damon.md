@@ -171,7 +171,7 @@ Then give me one table with exactly these five columns, in this order:
   Words that exist as an object inside the photograph — a label printed on the
   bottle, a sign on the wall, a logo on a garment — belong to the picture. They
   are recorded in the **Visual Content** column as part of the object that
-  carries them (`clear pump bottle, yellow liquid, the word "evora" printed
+  carries them (`clear pump bottle, yellow liquid, the word "lumen" printed
   small in white near the base`), and **this column reads `none`.** A zone whose
   only words are in-world has `none` here — no exceptions, no parenthetical
   note explaining that the text is really in-world. Measured cause, 2026-08-19:
@@ -191,7 +191,7 @@ Then give me one table with exactly these five columns, in this order:
   (main)`, `Zone F — jar label text (brand)` and `Zone G — jar label text
   (volume)`. The brief injected our ad copy into all three, and the generator
   printed "<the swipe's own product name>" across the
-  front of our own tube in place of its real label. Damon: *"our tube is
+  front of our own tube in place of its real label. the owner: *"our tube is
   completely wrong… the product's gotta be the product."*
 - **Type & Treatment** — for every text element: typeface class (and any
   specific name marked `(inferred)`), **width class**, weight, case,
@@ -224,7 +224,7 @@ Then give me one table with exactly these five columns, in this order:
   `none-fits` grows it.** Nothing waits on a signature — the proposed row
   travels with the record and the run carries on.
 
-  Ruled by Damon, 2026-09-25: *"when we redo teardown, if something doesn't
+  Ruled by the owner, 2026-09-25: *"when we redo teardown, if something doesn't
   exist in the bank just yet — just like we have with format and stuff — give
   it a name so we can keep things moving forward."*
 

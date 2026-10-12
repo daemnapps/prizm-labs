@@ -39,7 +39,7 @@ def main():
     for name, why in (("GEMINI_API_KEY", "the video-reading stages"),
                       ("APIFY_TOKEN", "pulling a creator's posts"),
                       ("GDRIVE_SA_KEY", "making the Google Doc"),
-                      ("FAL_KEY", "some image work")):
+                      ("ELEVENLABS_API_KEY", "casting a character's voice")):
         check(f"{name} ({why})",
               lambda n=name: (OK, "") if keys.get(n, required=False) else (BAD, "not in ~/.daemn/keys.env"),
               "add it to ~/.daemn/keys.env")
@@ -56,12 +56,12 @@ def main():
         except Exception as e:
             return BAD, str(e)[:80]
         return (OK, str(r)[-46:]) if r and r.exists() else (BAD, "not mounted")
-    check("Shared Assets mounted", drive,
+    check("Team Drive mounted", drive,
           "sign in to Google Drive for Desktop")
 
     def lib():
         import library as L
-        r = L.root() / "creators"
+        r = L.creators_root()
         n = len([d for d in r.iterdir() if d.is_dir()]) if r.exists() else 0
         return (OK, f"{n} creators") if n else (WARN, "no creators pulled yet")
     check("creator library", lib)

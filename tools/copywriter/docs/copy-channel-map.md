@@ -131,7 +131,7 @@ The reader let us in. The inbox is personal space — copy reads as written to o
 - **Reads as:** written to one person who already let us in
 - **Requires:** a concept brief and a segment — the email machine's contract
 - **Variations:** 1
-- **Provenance:** proven — email machine; 309 shipped <brand> sends classified in library
+- **Provenance:** proven — email machine; 309 shipped Brand B sends classified in library
 
 ### Flow email
 - **What:** A triggered send — welcome, abandon, post-purchase, winback.
@@ -141,7 +141,7 @@ The reader let us in. The inbox is personal space — copy reads as written to o
 - **Carries the offer:** per flow position — never in the first welcome
 - **Reads as:** a reply to something the reader just did
 - **Variations:** 1
-- **Provenance:** drafted — flow sends sit inside the <brand> scrape, not yet split out
+- **Provenance:** drafted — flow sends sit inside the Brand B scrape, not yet split out
 
 ### Subject + preview
 - **What:** The open decision — two fragments doing one job.
@@ -176,7 +176,7 @@ The reader clicked through. Copy's job shifts from attention to conviction.
 - **Carries the offer:** on the result page only
 - **Reads as:** a diagnosis, not a funnel
 - **Variations:** 1
-- **Provenance:** proven — quiz-funnel skill + 1 shipped <brand> quiz; <competitor> runs quiz.<competitor>.com as its whole front door
+- **Provenance:** proven — quiz-funnel skill + 1 shipped brand-a quiz; competitor-c runs quiz.competitor-c.com as its whole front door
 
 ### PDP
 - **What:** The product's own page — where every funnel eventually lands.

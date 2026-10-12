@@ -1,0 +1,128 @@
+Here is a baseline injection — our brand substituted into a format that
+performs: {baseline_injection}
+
+Here is the teardown record it came from: {teardown_record}
+Here is its replication spec: {replication_spec}
+Here is the product: {product_file}
+Here is our objection bank: {objection_bank}
+Here is the reading of the source — its lane, its opening beat and its
+awareness entry: {source_reading}
+Here is the hook set that will open our version: {hook_set}
+
+Plan the direct-response transformation. The lane, the opening beat and the
+awareness entry are already decided and handed to you above — do not re-derive
+them, do not overrule them. Your job starts after the opening.
+
+**You can see the opening now, which is the point of this order.** The hooks
+were written straight off the source before anyone decided where the product
+goes. So place the product against the opening that actually exists, not
+against an imagined one: find the beat the format itself re-engages attention,
+and check it still works given how the hook set enters.
+
+Two rules govern everything below:
+
+**The product enters where the format already re-engages attention.** Not at
+the end by default. Find the beat the source itself builds toward — an
+escalation phrase, a payoff, a structural cut, a reveal, the resolution of a
+bait or a question.
+
+**Runtime decides how many rungs the asset can carry.** Under about fifteen
+seconds an asset carries one. It stops at problem-awareness and earns a click
+rather than compressing four rungs into thirteen seconds.
+
+Give me these four sections.
+**2. PRODUCT PLACEMENT**
+
+The beat where the product enters, quoted from the teardown record, and what
+makes it that beat.
+
+If the format has no such beat, say so — some formats make no promise and
+cannot carry a pitch; they are openings that hand off to another asset.
+That is a real finding for the owner, and the chain still completes.
+
+**5. THE RUNTIME BUDGET**
+
+**This number is a hard ceiling for every pass after you, so budget the
+whole asset** — the passes downstream add body beats *and* an objection
+line *and* a close, and a budget that covers only the body guarantees an
+overshoot nobody chose. Give it as a small ledger:
+
+- the source runtime;
+- seconds reserved for body additions, and at which beat they land;
+- seconds reserved for the objection line;
+- seconds reserved for the close — and if the spec marks the source's
+  ending device fixed or load-bearing, the close is a continuation *after*
+  that device, so its seconds are additional, not swapped in;
+- the total the finished asset may reach.
+
+Reserve a beat's seconds only if the transformation plausibly needs the
+beat — a reserve for every imaginable addition is the doubling rule
+wearing a ledger. Say plainly if the budget cannot carry the rungs; a
+format that cannot fit its message inside a runtime the format survives
+is a real answer, and it is yours to give, not the later passes' to
+discover.
+
+**6. THE DEVICE CHECK**
+
+The format's central device — the physical action or gimmick that makes it
+work — read against the objection bank.
+
+A device can contradict a brand as hard as a sentence can, and it will not
+show up as a claim. Destroying a product on camera in front of a customer
+whose live objection is that she does not get enough of it is a device
+problem, not a copy problem. Name every collision, cite the file and rule
+it collides with, and say whether the format survives without the device.
+
+**Collisions are reported, never ruled on.** However many devices collide,
+however load-bearing they are, your output is the report — the chain
+completes every pass, the collisions ride forward in the flags, and the
+owner decides what runs, what gets rewritten, and what dies. You do not
+stop the chain, and you do not editorialize about whether the format
+deserves to run. DECIDED 2026-08-18 (the owner): the machine executes and
+flags; only a human kills a run.
+
+**7. THE RISK**
+
+The one thing most likely to go wrong in this specific asset. A weak
+placement beat, a runtime too short for the climb, a format with nothing to
+build toward.
+
+Write no script lines. The next pass does that.
+
+---
+
+Renumber them 1–4: **1. PRODUCT PLACEMENT**, **2. THE RUNTIME BUDGET**,
+**3. THE DEVICE CHECK**, **4. THE RISK**. The lane, opening beat and awareness
+were handed to you — restate each in one line at the top so the plan is
+readable on its own, then do not revisit them.
+
+---
+
+## THE VERDICT LINE — the first line of your output
+
+Before anything else, print one line, exactly one of these two shapes:
+
+```
+PRODUCT ENTRY: 0:14 — the cut into the wide shot
+```
+```
+PRODUCT ENTRY: NONE — this format hands off; nothing downstream may add one
+```
+
+Then the four sections.
+
+**Why this line exists.** On the Mara run this pass concluded, correctly and
+twice, that the format had no beat a product could enter. That finding was
+written in prose, nothing downstream could read it, and the brief went on to
+build three concepts and thirty-six seconds of ad out of a seven-second
+attention asset — the exact thing this pass said could not be done.
+
+`NONE` is not a failure and not a hedge. Plenty of organic content is an
+opening that earns a click or a comment and sells nowhere. Saying so is the
+finding. What follows it is a different kind of brief, not a worse one.
+
+Use `NONE` when: the beat that would take a product contradicts its own job
+(a taboo reveal, a flaw admission, a resolution mantra), or the asset is too
+short to carry a rung, or the source makes no promise for a product to answer.
+
+Never pick the least-bad beat to avoid writing `NONE`.

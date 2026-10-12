@@ -1,0 +1,135 @@
+{
+ "_what": "The ONE model route. Every caller — email, static ads, pages, video — routes through this table, so nobody chooses a model in their own code any more. It is read, never hard-coded: `image_production/route.py` walks `route` top to bottom and takes the first row whose `when` matches, then looks the model up in `models`.",
+ "_why": "Two implementations disagreed. components/email-production/simple_email.py sent every email picture to OpenAI's GPT Image (through the video machine's door) and overrode the frame per call; tools/image-production/static/tools/plates.py split on whether a PERSON is in frame — gpt_image_2 for people, nano_banana_pro for everything else — and generated through a session on the Higgsfield MCP because there is no Higgsfield key. This table keeps the SPLIT (it is the measured one) and drops Higgsfield (there is no key, and there is not going to be one — the owner, 2026-09-14), routing both arms to the two doors we actually hold keys for.",
+ "_curator": "the owner holds the approval gate on this table (components/CLAUDE.md rule 6). the developer curates components/models/models.json, which is a DIFFERENT thing and is never edited from here: it says what the company may call; this says what a picture routes to. Every row below names its registry entry, or says plainly that the registry has none.",
+ "_keys": "A key is read by NAME, never by path: the process environment first, then the macOS Keychain via `daemn_keys.key(\"<NAME>\")` (service `daemn-<NAME>`, account `damon`). No key is ever read out of a file in the repo or the home folder, printed, logged or written into a run record.",
+ "route": [
+  {
+   "when": {
+    "forced": true
+   },
+   "model": "@forced",
+   "why": "named by the caller — a measured exception outranks a default"
+  },
+  {
+   "when": {
+    "edit": true
+   },
+   "model": "gpt-image-edit",
+   "why": "an edit of an existing picture: the approved frame goes back in and ONE thing moves. It is also the only door that takes a mask, so a region edit and the 9:16 finish live here"
+  },
+  {
+   "when": {},
+   "model": "gpt-image-person",
+   "why": "every picture goes to GPT Image (the owner, 2026-09-22) — one door, one look, one set of quirks. It makes 9:16 natively (1152x2048); the content is still made at 4:5 and finished to 9:16 by the masked outpaint, which is the frame rule and is what keeps faces and words inside the zone"
+  }
+ ],
+ "models": {
+  "gpt-image-person": {
+   "provider": "openai",
+   "vendor_model": "gpt-image-2.5-sunburst",
+   "key": "OPENAI_API_KEY",
+   "registry": "not listed in components/models/models.json — that registry holds no OpenAI image entry today. Declared here from tools/video-production/machine/providers.json `direct.openai`, proven live 2026-09-18. REPORT IT TO DEVELOPER rather than adding it there: that manifest is his.",
+   "endpoints": {
+    "generate": "https://api.openai.com/v1/images/generations",
+    "edit": "https://api.openai.com/v1/images/edits"
+   },
+   "params": {
+    "quality": "high",
+    "moderation": "low",
+    "output_format": "png"
+   },
+   "sizes": {
+    "9:16": "1152x2048",
+    "4:5": "1024x1280",
+    "1:1": "1024x1024",
+    "3:2": "1536x1024",
+    "16:9": "2048x1152",
+    "3:4": "1152x1536"
+   },
+   "note": "SIZES CORRECTED 2026-09-22, asked of the API rather than assumed: this model takes ANY size whose width and height both divide by 16 (1080x1920 is refused for that reason, 1024x1792 is accepted). Every row above is now the EXACT ratio — 9:16 is 1152x2048, not the 1024x1536 (2:3) it used to say. That wrong row is what made a 9:16 request come back 2:3 and get side-cropped, which clipped a headline on a live run the same day. gpt-image-2.5 REJECTS input_fidelity (verified absent 2026-09-18), so it is not sent. quality is `high`, not the video machine's `xhigh`: a month of email heroes at the top tier is spend nobody sees at 600px (components/email-production/simple_email.py EMAIL_IMAGE).",
+   "status": "approved"
+  },
+  "gpt-image-edit": {
+   "provider": "openai",
+   "vendor_model": "gpt-image-2.5-sunburst",
+   "key": "OPENAI_API_KEY",
+   "registry": "not listed in components/models/models.json — see gpt-image-person",
+   "endpoints": {
+    "generate": "https://api.openai.com/v1/images/generations",
+    "edit": "https://api.openai.com/v1/images/edits"
+   },
+   "params": {
+    "quality": "high",
+    "moderation": "low",
+    "output_format": "png"
+   },
+   "sizes": {
+    "9:16": "1152x2048",
+    "4:5": "1024x1280",
+    "1:1": "1024x1024",
+    "3:2": "1536x1024",
+    "16:9": "2048x1152",
+    "3:4": "1152x1536"
+   },
+   "note": "SIZES CORRECTED 2026-09-22, asked of the API rather than assumed: this model takes ANY size whose width and height both divide by 16 (1080x1920 is refused for that reason, 1024x1792 is accepted). Every row above is now the EXACT ratio — 9:16 is 1152x2048, not the 1024x1536 (2:3) it used to say. That wrong row is what made a 9:16 request come back 2:3 and get side-cropped, which clipped a headline on a live run the same day. The same model on the edits endpoint. It is a separate row because the JOB is different and the route says so out loud: references in, one thing changed.",
+   "status": "approved"
+  },
+  "gemini-image-object": {
+   "provider": "google",
+   "vendor_model": "gemini-3-pro-image",
+   "key": "GEMINI_API_KEY",
+   "registry": "components/models/models.json → `gemini-3-pro-image`, status approved, key_env GEMINI_API_KEY, transport api",
+   "endpoints": {
+    "generate": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+   },
+   "params": {
+    "imageSize": "2K"
+   },
+   "sizes": {},
+   "note": "ALTERNATE, not routed to (the owner, 2026-09-22 — one door, GPT Image). Forceable with `model` and kept declared because run records name it. It takes NO MASK — so it can never serve a region edit or the 9:16 finish. Aspect goes in `generationConfig.imageConfig.aspectRatio`, not a pixel size (tools/video-production/machine/providers.json `direct.google`, tools/video-teardown/machine/frames.py).",
+   "status": "approved",
+   "routed": false
+  }
+ },
+ "judge": {
+  "model": "gemini-judge",
+  "provider": "google",
+  "vendor_model": "gemini-3.1-pro-preview",
+  "key": "GEMINI_API_KEY",
+  "registry": "not listed in components/models/models.json — the registry has no vision-judge entry. Lifted from tools/image-production/static/tools/gemini_image.py, whose default this is.",
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+  "temperature": 0.2,
+  "timeout_seconds": 120,
+  "note": "One judge call is a prompt and one picture. It answers in seconds or it is stuck — a 900s timeout once held a queue 48 minutes with nothing in the log (2026-09-10).",
+  "status": "approved"
+ },
+ "aspects": {
+  "_what": "The frames a request may ask for. A ratio not on this list is refused at the inputs gate, naming these.",
+  "9:16": {
+   "w": 9,
+   "h": 16
+  },
+  "4:5": {
+   "w": 4,
+   "h": 5
+  },
+  "1:1": {
+   "w": 1,
+   "h": 1
+  },
+  "3:2": {
+   "w": 3,
+   "h": 2
+  },
+  "16:9": {
+   "w": 16,
+   "h": 9
+  },
+  "3:4": {
+   "w": 3,
+   "h": 4
+  }
+ },
+ "_route_ruling": "ONE DOOR FOR PICTURES (the owner, 2026-09-22): \"everything image needs to just be gpt now, literally that's it — it's going to make all of our work easier.\" So the person/object split of 2026-09-14 is RETIRED: every picture, with a person in it or not, fresh or an edit, goes to GPT Image. One model means one look across a batch, one set of quirks to learn, and one prompt style. gemini-image-object stays declared as an ALTERNATE — forceable with `model`, never routed to — because run records name it It takes no mask, which is why it cannot be the door for edits: a region edit needs one."
+}

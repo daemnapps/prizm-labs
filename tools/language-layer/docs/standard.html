@@ -1,0 +1,213 @@
+<title>Language Bank Upgrade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{color-scheme:light;--bg:#f3f1ec;--panel:#fffdf8;--ink:#1a1814;--ink2:#58534a;--ink3:#8a8478;--line:#e1dcd1;--acc:#2d5bd0;--ok:#2f6f5e;--warn:#b8732a;--soft:#e9eefb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121212;--panel:#1b1b1a;--ink:#efece5;--ink2:#b2ada3;--ink3:#827c72;--line:#2e2d2a;--acc:#7ea2ff;--ok:#5bb89d;--warn:#e0a453;--soft:#1f2433}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121212;--panel:#1b1b1a;--ink:#efece5;--ink2:#b2ada3;--ink3:#827c72;--line:#2e2d2a;--acc:#7ea2ff;--ok:#5bb89d;--warn:#e0a453;--soft:#1f2433}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Instrument Sans",system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:40px 72px}
+.kick{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin:0 0 8px}
+h1{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:clamp(38px,6.5vw,64px);line-height:.95;margin:0 0 14px;letter-spacing:-.02em}
+h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:clamp(23px,3.2vw,30px);margin:0 0 10px;text-wrap:balance}
+p{max-width:68ch;margin:0 0 12px}
+.lede{font-size:clamp(17px,2vw,20px);color:var(--ink2)}
+.note{font-size:13px;color:var(--ink3);border-left:3px solid var(--line);padding-left:10px;max-width:none}
+section{padding-top:36px}
+code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:4px;color:var(--ink);overflow-wrap:anywhere}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.nav a{font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--ink);text-decoration:none}
+.why{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px}
+.why div{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:10px;padding:12px 14px;color:var(--ink2);font-size:15px}
+.why b{color:var(--ink);display:block}
+.tbl{overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.tbl table{border-collapse:collapse;width:100%;font-size:14px;min-width:640px}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+.tbl th{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);background:var(--bg)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td{color:var(--ink2)} .tbl td b{color:var(--ink)}
+.tbl td.q{font-style:italic}
+.steps{counter-reset:s;display:grid;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--ink2)}
+.steps li::before{content:counter(s);font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;color:var(--acc);line-height:1.1}
+.steps b{color:var(--ink)}
+pre{margin:12px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;font:13px/1.55 "JetBrains Mono",monospace}
+.dec{display:grid;gap:8px;margin-top:12px;padding:0;list-style:none}
+.dec li{display:flex;gap:10px;align-items:baseline;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.dec li::before{content:"";flex:none;width:10px;height:10px;border-radius:3px;border:2px solid var(--acc)}
+.tag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--ink3);margin-left:6px}
+</style>
+<div class="wrap">
+<p class="kick">Approved 28 Sep and running · 5 · Sources added for your call</p>
+<h1>Language Bank Upgrade</h1>
+<p class="lede">File each line by what the words say, not only by who said it. Put the doctrine's awareness level and a sophistication signal on every row. Then every hook, body and close pulls words spoken from the exact level it's writing for.</p>
+<nav class="nav"><a href="#why">Why</a><a href="#doctrine">The doctrine's definitions</a><a href="#lanes">1 · Lanes by language</a><a href="#fields">2 · Two new fields</a><a href="#use">3 · How the system uses them</a><a href="#backfill">4 · Backfill</a><a href="#sources">5 · Sources</a><a href="#verified">Verified</a><a href="#decide">You decide</a></nav>
+<p class="note" style="margin-top:14px">the owner, 28 Sep: "if they are clearly using language that does not speak to being a customer in some way then it should be a prospect, then if they show interest in their query then we can note them as lead language … this is what actually helps us run a clean system."</p>
+
+<section id="why">
+<h2>Why</h2>
+<div class="why">
+ <div><b>Lanes follow the relationship, not the words</b>The rule on file files by who the speaker is to us. 21 TikTok comments sit in <code>customers/unsegmented</code> today, hand-typed from the brand's notes, with no link to the comment.</div>
+ <div><b>No row says what its speaker knows</b>0 of Brand B's 14,243 rows carry an awareness level or a sophistication signal. On its first run, a solution-aware joke hook was handed only problem rows.</div>
+</div>
+</section>
+
+<section id="doctrine">
+<h2>The doctrine's own definitions</h2>
+<p>Verbatim from <code>components/marketing-doctrine/frameworks.json</code>. Every row gets read against the "Knows" column.</p>
+<div class="tbl"><table>
+<tr><th>Level</th><th>Knows</th><th>Where the ad may begin</th></tr>
+<tr><td><b>Unaware</b></td><td class="q">"Does not know the desire or the need exists — or will not admit it."</td><td class="q">"At the person — a portrait, nothing sold in the opening at all."</td></tr>
+<tr><td><b>Problem-aware</b></td><td class="q">"Feels a need but has not connected it to any product category."</td><td class="q">"At the problem — the need, stated and felt, before anything is offered."</td></tr>
+<tr><td><b>Solution-aware</b></td><td class="q">"Carries the desire and knows a result is possible, but does not know a product delivers it."</td><td class="q">"At the desire or the result — the product arrives after the proof."</td></tr>
+<tr><td><b>Product-aware</b></td><td class="q">"Knows the product exists but is not sold on it."</td><td class="q">"At the product, but on the gap between knowing it and wanting it."</td></tr>
+<tr><td><b>Most-aware</b></td><td class="q">"Knows the product, wants it, simply has not bought yet."</td><td class="q">"At the product itself — name and terms in the opening beat."</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Sophistication stage</th><th>The market has heard</th></tr>
+<tr><td><b>1 · First in the market</b></td><td class="q">"Nothing — no one has made this claim here before."</td></tr>
+<tr><td><b>2 · The claim is in the market</b></td><td class="q">"The plain claim, now from competitors."</td></tr>
+<tr><td><b>3 · Claims exhausted</b></td><td class="q">"Claims pushed to their limit, and it discounts about half of what it hears."</td></tr>
+<tr><td><b>4 · The mechanism is in the market</b></td><td class="q">"A mechanism, from a competitor."</td></tr>
+<tr><td><b>5 · Exhausted field</b></td><td class="q">"Every claim and every mechanism, and believes none of them."</td></tr>
+</table></div>
+<p class="note" style="margin-top:10px">In the doctrine, "the product" means <b>our</b> product. Someone who has tried a competitor knows a product category exists but not ours, so by these definitions they read as solution-aware, not product-aware.</p>
+</section>
+
+<section id="lanes">
+<h2>1 · The lane follows the language</h2>
+<p>Decided in this order; the first match wins.</p>
+<ol class="steps">
+ <li><div><b>Known relationship wins.</b> An order on file goes to <code>customers/</code> (by segment when known); refunded, cancelled or lapsed goes to <code>churned/</code>. Unchanged.</div></li>
+ <li><div><b>Otherwise the words decide.</b> Words that show they <b>own or use</b> it ("mine came yesterday") go to <code>customers/unsegmented</code>, marked <code>attribution: "assumed"</code>. Words that show <b>interest in getting it</b> ("link?", "where do I get this", "how much") go to <code>leads</code>. Everything else (reactions, jokes, opinions, stories) goes to <code>prospects</code>.</div></li>
+ <li><div><b>The reason is recorded.</b> Every row keeps its id and gets <code>"lane_by": "relationship" | "language"</code>.</div></li>
+</ol>
+<p style="margin-top:12px">First use: the 21 comment rows in <code>customers/unsegmented</code>. The joke reactions ("&lt;a joke reaction&gt;", "&lt;another joke reaction&gt;") go to prospects, and anything asking for the product goes to leads. Once the research gatherer can re-pull those two videos' comments with links, <b>the linked rows replace them</b> rather than the unlinked ones being moved.</p>
+</section>
+
+<section id="fields">
+<h2>2 · Two new fields on every row</h2>
+<pre>"awareness":      {"level": "problem-aware", "why": "&lt;the row's own words that show it&gt;"},
+"sophistication": {"signal": "claim-heard",  "why": "&lt;the row's own words that show it&gt;"}</pre>
+<div class="tbl"><table>
+<tr><th>Awareness level</th><th>The row's words show…</th><th>Tags that often carry it (a hint, not the rule)</th></tr>
+<tr><td><b>unaware</b></td><td>the person with no need named, or a need denied or joked away</td><td><code>self-descriptor</code> <code>emotion-identity</code> <code>cope</code></td></tr>
+<tr><td><b>problem-aware</b></td><td>the need, felt and named, with no fix category in sight</td><td><code>problem-language</code></td></tr>
+<tr><td><b>solution-aware</b></td><td>the want and that a result is possible: fixes tried, other brands or methods named, but not our product</td><td><code>tried-and-failed</code> <code>alternative-solution</code> <code>competitor-brand</code> <code>method-name</code></td></tr>
+<tr><td><b>product-aware</b></td><td>our product known but not sold: doubts, questions, objections to it</td><td><code>objection</code> <code>comment-objection</code> <code>unanswered-question</code> <code>why-interested</code></td></tr>
+<tr><td><b>most-aware</b></td><td>our product wanted, just not bought</td><td><code>buy-trigger</code> <code>product-ask</code> "link?"</td></tr>
+<tr><td><b>post-purchase</b> <span class="tag">ours, not the doctrine's</span></td><td>already bought: past the five levels, which describe a buyer before the purchase</td><td>proof, transformation and objections come from these rows; they are never an entry level</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Sophistication signal</th><th>The row's words show…</th><th>Evidence for</th></tr>
+<tr><td><b>none</b></td><td>nothing about other claims</td><td>—</td></tr>
+<tr><td><b>claim-heard</b></td><td>the plain claim, heard from others ("every brush says that")</td><td>stage 2</td></tr>
+<tr><td><b>claim-discounted</b></td><td>claims heard and half-believed ("they all say that and none work")</td><td>stage 3</td></tr>
+<tr><td><b>mechanism-heard</b></td><td>a competitor's how, named ("the silicone ones that vibrate")</td><td>stage 4</td></tr>
+<tr><td><b>believes-none</b></td><td>every claim and every how dismissed</td><td>stage 5</td></tr>
+</table></div>
+<p class="note" style="margin-top:10px">A single row can't set a market's stage. That stays one call per brand, in <code>position.md</code> → <code>MARKET STAGE</code>. The signals let that call be checked against what the rows actually say they've heard.</p>
+</section>
+
+<section id="use">
+<h2>3 · How the system uses them</h2>
+<div class="tbl"><table>
+<tr><th>Where</th><th>Today</th><th>With the fields</th></tr>
+<tr><td><b>Hooks (4b), per awareness branch</b></td><td>queried by tag; result-level hooks get reaction tags (fixed 28 Sep)</td><td>rows at <b>that branch's level</b> first: a problem-aware hook is filled from problem-aware words</td></tr>
+<tr><td><b>Awareness map (4m)</b></td><td>reads the doctrine only</td><td>also counts the bank's rows at each level; a level with none is a level we can't write in their words yet</td></tr>
+<tr><td><b>Expansion and close (4d, 4e)</b></td><td>objections and proof by tag</td><td>objections from product-aware rows; proof and transformation from post-purchase rows</td></tr>
+<tr><td><b>The used lane</b></td><td>used vs unused</td><td>used vs unused <b>per level</b></td></tr>
+<tr><td><b>Brand position</b></td><td><code>MARKET STAGE</code> set by hand</td><td>checked against the rows' sophistication signals</td></tr>
+<tr><td><b>Research gatherer</b></td><td>files rows with links</td><td>writes the lane-by-language, awareness and sophistication fields on every new row when it pulls</td></tr>
+</table></div>
+<p class="note" style="margin-top:10px">Engine change: <code>query(awareness=…)</code> beside <code>used=</code>, and the hooks query passes the branch's target level.</p>
+</section>
+
+<section id="backfill">
+<h2>4 · Backfill the 14,243 rows already in the bank</h2>
+<ol class="steps">
+ <li><div><b>Test set first.</b> I draft labels for 20 rows per level (120), you correct them. The pass must agree with your labels before it runs on the whole bank.</div></li>
+ <li><div><b>The pass.</b> A model reads each row's text against the definitions and writes both fields, each with a quoted "why". It runs in batches of 100 with a cheap model, saves each batch as it goes, and never overwrites anything a person set.</div></li>
+ <li><div><b>Lanes are never moved silently.</b> Only rows whose speaker isn't a customer but sit in <code>customers/</code> (21 today) are listed for you first.</div></li>
+ <li><div><b>The report.</b> Rows per level, per lane and per sub-avatar, with the thin levels named: where we can't yet write in the audience's words.</div></li>
+</ol>
+</section>
+
+<section id="sources">
+<h2>5 · Every source named by the Naming Standard</h2>
+<p>The Naming Standard (v5) already names the <b>rows</b>: <code>language_brand-a_avatar-four_customer_0192</code>. The <b>sources</b> are still free text. Brand B's 14,243 rows come from <b>164 differently-written source names</b>, and some point at a file on one person's laptop.</p>
+<pre>"source": {
+  "id":       "post_tiktok_creator-handle_7501234567890123456",
+  "kind":     "post",
+  "property": "creator-handle",
+  "question": null,
+  "ref":      "https://www.tiktok.com/@creator-handle/video/…?comment=…",
+  "pulled":   "2026-08-14",
+  "name":     "TikTok comments, campaign post #1 @creator-handle (1,800,000 views)"
+}</pre>
+<div class="tbl"><table>
+<tr><th>Kind</th><th>Shape</th><th>Example from Brand B's bank</th></tr>
+<tr><td><b>Survey</b></td><td><code>survey_&lt;brand&gt;_&lt;survey&gt;</code> + question <code>q-&lt;nn&gt;_&lt;slug&gt;</code></td><td><code>survey_brand-b_brand-improvement-customers</code> · <code>q-02_what-do-you-like-most-about-the-device</code></td></tr>
+<tr><td><b>Post</b> (its comments)</td><td><code>post_&lt;platform&gt;_&lt;account&gt;_&lt;post id&gt;</code></td><td><code>post_tiktok_brand-b_7000000000000000001</code> (#1's comments)</td></tr>
+<tr><td><b>Support</b></td><td><code>ticket_&lt;brand&gt;_&lt;system&gt;</code></td><td><code>ticket_brand-b_gorgias</code></td></tr>
+<tr><td><b>Review</b></td><td><code>review_&lt;site&gt;_&lt;whose product&gt;</code></td><td><code>review_amazon_&lt;competitor&gt;</code></td></tr>
+<tr><td><b>Community</b></td><td><code>community_&lt;site&gt;_&lt;room&gt;</code></td><td><code>community_reddit_wicked-edge</code></td></tr>
+<tr><td><b>Our own copy</b></td><td><code>copy_&lt;account&gt;_&lt;what&gt;</code> (voice: brand)</td><td><code>copy_creator-handle_podium-slide</code></td></tr>
+<tr><td><b>Database</b></td><td><code>database_&lt;brand&gt;_&lt;name&gt;</code></td><td><code>database_brand-b_research-hub</code></td></tr>
+</table></div>
+<h3 style="margin-top:18px">Post comments: TikTok, Instagram and Facebook first</h3>
+<p>The gatherer already pulls all three, plus Meta's own ad-comments table. One shape per platform, with the platform's own post id last:</p>
+<div class="tbl"><table>
+<tr><th>Platform</th><th>Source id</th><th>The post id is</th></tr>
+<tr><td><b>TikTok</b></td><td><code>post_tiktok_&lt;account&gt;_&lt;video id&gt;</code></td><td>the number in <code>/video/&lt;id&gt;</code>, e.g. <code>post_tiktok_brand-b_7000000000000000001</code></td></tr>
+<tr><td><b>Instagram</b></td><td><code>post_instagram_&lt;account&gt;_&lt;shortcode&gt;</code></td><td>the code in <code>/p/&lt;code&gt;</code> or <code>/reel/&lt;code&gt;</code></td></tr>
+<tr><td><b>Facebook</b></td><td><code>post_facebook_&lt;page&gt;_&lt;post id&gt;</code></td><td>the post number in <code>/&lt;page&gt;/posts/&lt;id&gt;</code></td></tr>
+</table></div>
+<ol class="steps">
+ <li><div><b>Account names follow your creator rule.</b> Lowercase, with dots and underscores turned into hyphens: <code>jayy_cross0</code> becomes <code>jayy-cross0</code>, because <code>_</code> separates the values.</div></li>
+ <li><div><b>A post running as a Meta ad also carries the ad</b>, as <code>live_meta_&lt;ad id&gt;</code>. One ad usually has a Facebook post and an Instagram post; both carry the same ad id, so every comment rolls up to the ad and its spend.</div></li>
+ <li><div><b>Every comment keeps its own link</b>, its likes and the date it was pulled.</div></li>
+ <li><div><b>Our accounts on each platform</b> are listed in the brand's own-accounts file. A comment on any of them is internal.</div></li>
+</ol>
+<ol class="steps">
+ <li><div><b>Internal or external reads off the property.</b> A property on the brand's own-accounts list is internal; anything else is external. No guessing from free text.</div></li>
+ <li><div><b>Stats per source.</b> Rows, the awareness split and how much has been used, per survey, post and room, so you can see which sources carry hook-grade language.</div></li>
+ <li><div><b>Joins.</b> A <code>post_</code> id is the same post the swipe files and teardowns name (#1 = <code>7000000000000000001</code>), so language sits beside that post's views and saves.</div></li>
+ <li><div><b>One registry per brand.</b> Every source, its owner (ours or theirs), dates and row count. It's generated, never hand-edited.</div></li>
+</ol>
+<p class="note" style="margin-top:10px">Runs <b>after</b> Brand B's id rename (in its own session) finishes: two tools writing the same bank files at once would overwrite each other. <code>post_</code> and <code>copy_</code> are new kinds for the Naming Standard.</p>
+</section>
+
+<section id="verified">
+<h2>Verified: clear, clean and scalable?</h2>
+<p>Checked by code against both banks (<code>tools/check_names.py</code>), not by reading the rules.</p>
+<div class="why">
+ <div style="border-left-color:var(--ok)"><b>Row ids: clean</b>Brand A is 1,118 of 1,118 on the standard, with no duplicates. Brand B isn't renamed yet; until then the gatherer keeps the bank's current shape, so nothing collides.</div>
+ <div style="border-left-color:var(--ok)"><b>Source ids: mostly clean</b>Brand A's gatherer rows already carry them: <code>post_facebook_brand-a_100000000000000001</code>, <code>ticket_brand-a_gorgias</code>.</div>
+</div>
+<div class="tbl"><table>
+<tr><th>#</th><th>Found</th><th>Fix</th></tr>
+<tr><td>1</td><td>Instagram's shortcode has capitals: <code>…_AbCdEfGhIjK</code> fails the lowercase rule (1 Brand A row)</td><td>Use Instagram's <b>numeric media id</b> (decoded from the shortcode): all digits, always clean</td></tr>
+<tr><td>2</td><td><code>source.post</code> means two things: a raw Meta post id, or "gorgias ticket 100000001"</td><td>One field with one meaning: <code>item</code> = the platform's own raw id</td></tr>
+<tr><td>3</td><td><b>The 4-digit number runs out.</b> Brand B's biggest lane already has 9,525 rows</td><td><b>At least 4 digits, never cut</b> (<code>_9999</code> → <code>_10000</code>). The Brand B rename must follow this</td></tr>
+<tr><td>4</td><td>Missing kinds: customer interview, paid creator panel, Amazon reviews, non-Reddit forums</td><td>Add <code>interview_</code> and <code>panel_</code>; forums use <code>community_&lt;site&gt;_&lt;room&gt;</code></td></tr>
+<tr><td>5</td><td>One row drawn from several subreddits at once</td><td><code>community_reddit_several</code> + <code>rooms: […]</code>, plus <code>hand: firsthand | secondhand</code></td></tr>
+<tr><td>6</td><td>752 Brand B rows point to a file on one laptop</td><td>Every link is a web address or a path inside the workspace</td></tr>
+<tr><td>7</td><td>Campaign comments name the post by number ("post #1 @creator-handle"), not by id</td><td>One lookup from #1–#13 to the TikTok video ids, done once</td></tr>
+<tr><td>8</td><td>Hyphenating handles can merge two accounts (<code>jay.x</code> and <code>jay_x</code>)</td><td>Keep the raw handle alongside: <code>property_raw</code></td></tr>
+</table></div>
+<p style="margin-top:12px"><b>Verdict:</b> the shape is clear (type first, brand in full, one meaning per value) and scales across brands, platforms and sources once 1–8 are in. The checker runs on every bank and prints exactly what's off.</p>
+</section>
+
+<section id="decide">
+<h2>You decide</h2>
+<ul class="dec">
+ <li>The lane rule, including rows filed as customers by their words, marked <code>attribution: "assumed"</code>.</li>
+ <li><code>post-purchase</code> for buyers' rows (our value, outside the doctrine's five), or leave those rows without a level.</li>
+ <li>The five sophistication signals.</li>
+ <li>Go on the backfill, starting with the 120 test rows: I draft, you correct. <b>Running.</b></li>
+ <li><b>New:</b> the source kinds and shapes in section 5, including <code>post_</code> and <code>copy_</code> as new kinds for the Naming Standard.</li>
+</ul>
+</section>
+</div>

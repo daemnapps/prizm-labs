@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Renders every copy run into one page: board.html.
 
-Same shape as the video-teardown machine's board (
-components/video-teardown/machine/board.py) and deliberately so — left, the
+Same shape as the video-teardown machine's board (the team notes
+tools/video-teardown/machine/board.py) and deliberately so — left, the
 runs; click one and you get its five stages, and for each stage the prompt
 that ran and the output it produced, side by side. That pairing is the whole
 point: the prompt is the thing being tuned.
@@ -123,10 +123,10 @@ def collect():
     # Current runs first, then anything parked in an archive folder. Archived
     # runs stay visible — they are real output and the record of how the tool
     # got here — but they never sit above the work in hand.
-    # BOTH HOMES (2026-09-20): new runs file under runs/copy-machine/<brand>/,
+    # BOTH HOMES (2026-09-20): new runs file under runs/copywriter/<brand>/,
     # older ones are still in results/ — paths.all_runs() reads the two.
     dirs = [(d, False) for d in P.all_runs()]
-    for a in (sorted(P.RESULTS.glob("archive*")) if P.RESULTS.is_dir() else []):
+    for a in P.archive_dirs():
         if a.is_dir():
             dirs += [(d, True) for d in sorted(a.iterdir()) if d.is_dir()]
 
@@ -163,7 +163,7 @@ def collect():
 
             # the prompt: whatever version actually ran, else the current head
             pname = rec.get("prompt_name") or ""
-            # Runs made back in ai-workspace recorded this against that tree;
+            # Runs made back in workspace recorded this against that tree;
             # runs made here record it against the build. Try both.
             pf = None
             for base in (HERE, WORKSPACE):
@@ -279,7 +279,7 @@ def embed_media(runs, budget=11_000_000):
     `results/…/source.mp4` resolves to nothing there, which is why the video
     was invisible on the artifact while working perfectly on the board.
 
-    Media is deduped by source path — five runs share one <person> video, and
+    Media is deduped by source path — five runs share one Mara video, and
     inlining it five times would blow the size cap for no gain. Returns a
     {id: dataURI} map; runs carry the id.
     """
@@ -308,7 +308,7 @@ def embed_media(runs, budget=11_000_000):
         # copy each here, and two videos already put the page over the 16MB
         # publish cap. The live board still plays every one of them.
         d = Path(r["run_dir"]) if r.get("run_dir") else (
-            (RESULTS / "archive-v1-chain" / r["slug"]) if r.get("archived") else (RESULTS / r["slug"]))
+            P.find_archived(r["slug"]) if r.get("archived") else P.find_run(r["slug"]))
         if r.get("poster"):
             r["poster_id"] = add(d / r["poster"], "image/jpeg")
         if r.get("video") and not r.get("archived"):

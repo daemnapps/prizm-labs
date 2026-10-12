@@ -1,0 +1,32 @@
+{
+ "_fixture": "The Nova proof song (2026-09-23) as a v16 sung plan: the script is the scenes' `lyrics`, the song block orders them into sections and names one style row. Used by test_song.py and by the one real proof call.",
+ "brand": "brand-a",
+ "shape": "scene",
+ "scenes": [
+  {"id": "S1", "kind": "broll", "to_camera": false, "voice": "", "lyrics": []},
+  {"id": "S2", "kind": "talking", "to_camera": true, "voice": "",
+   "lyrics": ["Three dermatologists, three different answers",
+              "One said a peel, one said a laser",
+              "He said taking the top layer off is a cop out"]},
+  {"id": "S3", "kind": "talking", "to_camera": true, "voice": "",
+   "lyrics": ["I'm sixty-four and still not lasering my legs",
+              "The third opinion's in a tube",
+              "Twenty-nine dollars, that's the proof"]}
+ ],
+ "song": {
+  "style_id": "neo-soul-90s",
+  "vocal": "female",
+  "bpm": null,
+  "sections": [
+   {"name": "intro", "scene": "S1", "seconds": 4, "lines": []},
+   {"name": "verse", "scene": "S2", "seconds": 12,
+    "lines": ["Three dermatologists, three different answers",
+              "One said a peel, one said a laser",
+              "He said taking the top layer off is a cop out"]},
+   {"name": "chorus", "scene": "S3", "seconds": 14,
+    "lines": ["I'm sixty-four and still not lasering my legs",
+              "The third opinion's in a tube",
+              "Twenty-nine dollars, that's the proof"]}
+  ]
+ }
+}

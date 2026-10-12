@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Swipe in, briefs and draft pictures out. The whole of stage one, one command.
 
-    chain.py start  --brand <brand> --product <product> --avatar <avatar> \
+    chain.py start  --brand brand-b --product widget --avatar avatar-one \
                     --swipe marsmen --count 3
     chain.py start  ... --dry-run               resolve everything, spend nothing
     chain.py drafts --briefs p005,p006          write the generation jobs
     chain.py ingest --results results.json      file what came back
 
-Damon, 2026-09-13: *"have these briefs done, and the initial versions of the
+the owner, 2026-09-13: *"have these briefs done, and the initial versions of the
 images generated too, for each of these swipes. That's what we hand off to the
 graphic designer, and then establish this as a chain."*
 
@@ -37,10 +37,15 @@ import paths as P
 import briefs as B
 import brief_page as BP
 import gates as G
+for _r in HERE.parents:                # the swipe home, one definition for both pools
+    if (_r / "components" / "swipe-paid" / "swipe_home.py").is_file():
+        sys.path.append(str(_r / "components" / "swipe-paid"))
+        break
+import swipe_home  # noqa: E402
 
 DRAFTS = HERE / "drafts"
 
-# Damon, 2026-09-14: *"Hey, what model are you using to generate these
+# the owner, 2026-09-14: *"Hey, what model are you using to generate these
 # images?" … "Let's use GPT Image 2."*
 #
 # The id is `gpt_image_2_5`, not `gpt_image_2`, and the difference is not
@@ -68,7 +73,7 @@ def library(swipe):
     **Organic** (`swipe-organic/<x>/posts/`) has no duplication at all — a
     creator posts once. Engagement is the substitute and it is weaker: a post
     can earn its numbers on subject matter with nothing to do with the
-    product. The top <brand> post by engagement is a creator's dog dying.
+    product. The top Brand A post by engagement is a creator's dog dying.
     So the rank opens the door; the caption decides.
     """
     for root, sub, kind in ((P.SWIPE, "blocks", "paid"),
@@ -112,6 +117,9 @@ def blocks(swipe):
     return sorted(out, key=lambda b: -b["heat"])
 
 
+_SAID = set()                 # notes all_stills has already printed this process
+
+
 def all_stills(block, swipe):
     """Every still the block holds, in order, off the Drive mirror — one for
     a static, several for a carousel or slideshow.
@@ -119,11 +127,19 @@ def all_stills(block, swipe):
     Drive names the folder `blocks` for some paid brands and `angles` for
     others, and `posts` for organic. All three are read rather than one
     being declared correct after the fact.
+
+    With no Drive mount there is nothing to read; that is said once per
+    process, not once per block.
     """
+    if not P.DRIVE_MOUNTED:
+        if P.NO_MOUNT_NOTE not in _SAID:
+            _SAID.add(P.NO_MOUNT_NOTE)
+            print(P.NO_MOUNT_NOTE, file=sys.stderr)
+        return []
     stem = Path(block["file"]).stem
-    for lib in ("swipe-paid", "swipe-organic"):
+    for pool in swipe_home.POOLS:
         for folder in ("blocks", "angles", "posts"):
-            d = P.DRIVE / lib / swipe / folder / stem / "photos"
+            d = swipe_home.path(pool, swipe, folder, stem, "photos")
             if d.is_dir():
                 stills = sorted(q for q in d.iterdir()
                                 if q.suffix.lower() in (".jpg", ".jpeg", ".png"))
@@ -138,7 +154,7 @@ def pick_still(block, swipe):
     return stills[0] if stills else None
 
 
-# THE ROUTE DECISION (Damon, 2026-09-15 and 2026-09-22; TEARDOWN-CHAINS.md).
+# THE ROUTE DECISION (the owner, 2026-09-15 and 2026-09-22; TEARDOWN-CHAINS.md).
 # Two axes, and they are not the same question. WHO MAKES IT decides what the
 # brief has to say: a creator with a phone, or the machine. WHAT IT IS decides
 # how it is read: one still, or a sequence of them (a carousel, a slideshow).
@@ -191,6 +207,15 @@ def read_route(run):
     return {"route": "ai", "form": "single", "slides": 1, "why": "opened before the branch existed"}
 
 
+def brief_type(run):
+    """The register type a run's brief is filed as: `sequence-ai` for a
+    carousel or slideshow (the queue's carousel row), else the lane's default."""
+    r = read_route(run)
+    if r.get("form") == "sequence":
+        return f"sequence-{r.get('route') or 'ai'}"
+    return f"image-{r.get('route') or 'ai'}"
+
+
 def route_for(a, stills):
     """(route, form, slides) for one pick. `--form auto` reads the swipe."""
     route = (getattr(a, "route", None) or "ai").lower()
@@ -201,7 +226,7 @@ def route_for(a, stills):
         sys.exit(f"--form is one of {', '.join(FORMS)}")
     if form == "auto":
         form = "sequence" if len(stills) > 1 else "single"
-    # CAROUSELS ARE AI ONLY (Damon, 2026-10-01): "all of these carousels are
+    # CAROUSELS ARE AI ONLY (the owner, 2026-10-01): "all of these carousels are
     # going to be made with AI ... remove the content creator filming
     # himself." A sequence is always the machine's; the creator sequence brief
     # is retired and a --route creator on a carousel is overridden, loudly.
@@ -233,7 +258,7 @@ def start(a):
     # — marsmen's top three by clone count are all "50% Off + Free Gifts" —
     # so taking the top N straight off the list returns the same argument
     # three times and calls it three shapes.
-    # Named picks beat the ranking. Damon reads the feed and chooses; the
+    # Named picks beat the ranking. the owner reads the feed and chooses; the
     # heat order is what he reads it in, not a substitute for reading it.
     wanted = {int(x) for x in re.findall(r"\d+", a.picks)} if getattr(a, "picks", None) else None
     if wanted:
@@ -281,6 +306,10 @@ def run_py(runs, stages, a, extra=()):
            "--brand", a.brand, "--product", a.product]
     if getattr(a, "avatar", None):
         cmd += ["--avatar", a.avatar]
+    if getattr(a, "sub", None):
+        cmd += ["--sub", a.sub]
+    if getattr(a, "ask", None):
+        cmd += ["--ask", a.ask]
     if getattr(a, "dry_run", False):
         cmd += ["--dry-run"]
     if getattr(a, "gates", None):
@@ -302,8 +331,8 @@ def say_held(slug):
 def named_stills(block, swipe, want):
     """The stills of this block whose filename stem is named in `want`.
 
-    A block is not one picture. Froya's clearance block holds twenty-six
-    different plates of the SAME offer, and Damon picks plates, not blocks
+    A block is not one picture. <competitor B>'s clearance block holds twenty-six
+    different plates of the SAME offer, and the owner picks plates, not blocks
     (2026-09-24, off the swipe wall). `--stills` names them; without it the
     chain behaves exactly as before, one run per block off the first still.
     """
@@ -338,7 +367,7 @@ def _open_and_run(a, picked):
         # The brand leads the slug. Without it, two brands tearing down the
         # same swipe block write to the same run folder and the second
         # silently overwrites the first — proved 2026-09-14, when a test
-        # brand ate a finished <brand> run.
+        # brand ate a finished Brand B run.
         slug = f"{a.brand}-{a.swipe}-{Path(b['file']).stem.split('_')[0]}-" \
                + re.sub(r"[^a-z0-9]+", "-", (b["title"] or "").lower()).strip("-")[:24]
         if want:
@@ -416,13 +445,18 @@ def _open_and_run(a, picked):
         if getattr(a, "gates", "hold") == "hold" and say_held(slug):
             continue
         if (P.RUNS / slug / "out/06-brief.md").is_file():
-            bid, _ = B.open_brief(slug, a.brand, B.load(), a.product, a.avatar)
+            # A sequence is filed as one: the queue reads `sequence-*` as a
+            # carousel row for the designer (2026-10-02); filed as image-ai it
+            # landed as a single picture.
+            bid, _ = B.open_brief(slug, a.brand, B.load(), a.product, a.avatar,
+                                  kind=brief_type(P.RUNS / slug))
             print(f"  {bid}  {slug}")
+            B.say_landing(B.with_landing(bid, a.brand, a.product)[1])   # the landing page, at the brief
         else:
             print(f"  ! {slug} produced no brief")
     pages()
 
-    # The chain does not end at a brief. Damon, 2026-09-14: "you have the
+    # The chain does not end at a brief. the owner, 2026-09-14: "you have the
     # drafts and the final brief — everything needs to be ready for the
     # designer." So `start` always writes the draft prompts, and always says
     # what is still missing rather than leaving it to be noticed.
@@ -448,19 +482,30 @@ def _open_and_run(a, picked):
         print(f"  {len(creator_single)} creator brief(s) — the draft that follows is the "
               f"reference picture the person matches, not a work order: {', '.join(creator_single)}")
     if ai_sequence:
-        print(f"  {len(ai_sequence)} AI sequence brief(s) — slide one is drafted below; slides two "
-              f"onward are edits off it: the image-edit tool's sequence.py (team-only) <slide-one draft> "
-              f"--brand {a.brand} --deltas <the brief>  ({', '.join(ai_sequence)})")
+        # THE CAROUSEL ROAD (the owner, 2026-10-02): a sequence does not stop at
+        # slide one. `chain.py carousel` makes slide one by the draft standard,
+        # every later slide as one change off it judged against the swipe's
+        # own slide, and files the finished carousel as a delivery and a card.
+        print(f"  {len(ai_sequence)} AI sequence brief(s) — the carousel road runs on each: "
+              f"slide one by the draft standard, slides two onward as one-change edits, "
+              f"filed as a delivery and a card ({', '.join(ai_sequence)})")
+        for b in ai_sequence:
+            carousel(argparse.Namespace(brand=a.brand, product=a.product, avatar=a.avatar,
+                                        run=reg[b]["run"], file=None, links=None, words=None,
+                                        rounds=None, swipe_for=None, dry_run=False, no_card=False))
+        ai_sequence = []
     if ai_single or ai_sequence:
         drafts(argparse.Namespace(brand=a.brand, briefs=",".join(sorted(ai_single + ai_sequence))))
         # The work order and its prompts, so the pack and the Drive folder are
         # complete the moment the draft lands.
         worksheet(argparse.Namespace(brand=a.brand, briefs=",".join(sorted(ai_single + ai_sequence))))
+    if ai_sequence or creator_sequence:
+        sequence_words(a.brand, ai_sequence + creator_sequence, reg)
     new_ids = sorted(ai_single + ai_sequence + creator_single)
     if not new_ids:
         ready(argparse.Namespace(brand=a.brand))
         return
-    # THE DRAFT STANDARD. Damon, 2026-09-17: "put this in chain." The chain
+    # THE DRAFT STANDARD. the owner, 2026-09-17: "put this in chain." The chain
     # does not stop at a prompt for a session to run somewhere else — it
     # generates three rolls with the swipe as the reference, judges every
     # roll, ships the best passing one to Drive, the pack and the board, and
@@ -475,7 +520,7 @@ def _open_and_run(a, picked):
 def open_files(a):
     """Open ONE run on files handed over — the batch's door into this chain.
 
-    `start` opens runs off a swipe library's blocks; a batch (Damon,
+    `start` opens runs off a swipe library's blocks; a batch (the owner,
     2026-09-25: "literally ingest tens of videos and images at a time") hands
     over files that may sit in no library at all. Same run folder, same vars,
     same route as `start` — the slides of one post stay one sequence — and the
@@ -583,7 +628,7 @@ def write_baseline(a):
     """The one cast and one product this brand's batch uses, named once.
 
     **A cast a person chose is never re-chosen.** The first version of this
-    picked by fewest-uses on every run and promptly replaced the man Damon
+    picked by fewest-uses on every run and promptly replaced the man the owner
     had just named, which is the churn the baseline exists to stop
     (2026-09-14). `--cast` pins him; a later run without `--cast` keeps him.
     `--recast` is the only way to let the tool choose again.
@@ -709,7 +754,7 @@ def fill(a):
         run_py(group, s, a)
 
     # Issue an id to anything that now has a brief. `start` did this and
-    # `fill` did not, so nine <brand> runs finished all six stages and were
+    # `fill` did not, so nine Brand A runs finished all six stages and were
     # invisible to the briefs tool — no id, no page (2026-09-14).
     reg = B.load()
     known = {r.get("run") for r in reg["briefs"].values()}
@@ -719,14 +764,36 @@ def fill(a):
         if (r / "out/06-brief.md").is_file() and r.name not in known:
             bid, _rec = B.open_brief(r.name, a.brand, B.load(), a.product, a.avatar)
             print(f"  {bid}  {r.name}")
+            B.say_landing(B.with_landing(bid, a.brand, a.product)[1])   # the landing page, at the brief
     pages()
 
+
+
+def sequence_words(brand, ids, reg=None):
+    """A sequence brief carries per-slide words and a caption, not the ad's own
+    primary text, headlines and descriptions. Those come from the copywriter's
+    chain, unchanged (tools/copywriter/machine/brief_words.py), one run per
+    brief, side by side. Off for one run with NO_AD_WORDS=1. Never fatal."""
+    from concurrent.futures import ThreadPoolExecutor
+    try:
+        sys.path.append(str(P.REPO / "tools" / "copywriter" / "machine"))
+        import brief_words as BW
+    except Exception as e:                      # noqa: BLE001
+        print(f"  ad words SKIPPED — {str(e)[:120]}")
+        return
+    reg = reg or B.load()["briefs"]
+    print(f"  ad words for {len(ids)} sequence brief(s) — the copywriter, side by side")
+    with ThreadPoolExecutor(max_workers=max(1, min(len(ids), 6))) as pool:
+        for bid in ids:
+            rec = reg[bid]
+            pool.submit(BW.auto, brand, rec.get("brief") or bid, rec.get("product"),
+                        say=lambda m, b=bid: print(f"  {b}{m}"))
 
 
 def copy(a):
     """Every finished teardown through the copy machine, all at once.
 
-    Damon, 2026-09-14: *"I just want simultaneous activations — a lot of the
+    the owner, 2026-09-14: *"I just want simultaneous activations — a lot of the
     chains and briefs can just get pumped out now, we have pretty strong
     workflows."*
 
@@ -769,7 +836,7 @@ def pack_keys():
     """The style packs' own keys — the only legal values for `pack`."""
     f = P.IMAGE_PROD / "style-packs.json"
     if not f.is_file():
-        f = P.REPO / "tools/image-production/style-packs.json"
+        f = P.REPO / "tools/image-production/static/style-packs.json"
     try:
         d = json.loads(f.read_text())
         return set(d.get("packs") or d)
@@ -786,7 +853,7 @@ def slots_from_brief(run, brand):
     Done by hand twice and it went wrong both times — once because the
     heading differs between briefs, once because the pack laid over the
     prompt contradicted it. It is code now, and it is part of the chain
-    rather than something a person remembers to do (Damon, 2026-09-14:
+    rather than something a person remembers to do (the owner, 2026-09-14:
     "this needs to always be what is done").
     """
     t = (run / "out/06-brief.md").read_text()
@@ -830,7 +897,7 @@ def slots_from_brief(run, brand):
     # its negatives with it, and the pack's negatives are where "no phone in
     # frame" and "no better than the source" live. One decision, three
     # symptoms: a phone in a selfie, drafts far cleaner than the swipe, and
-    # no negatives sent at all (Damon, 2026-09-14).
+    # no negatives sent at all (the owner, 2026-09-14).
     low = body.lower()
     # THE LABEL WINS OVER THE KEYWORDS. Stage 2b already asked the element
     # library which style register this ad IS, and its answer was checked
@@ -890,9 +957,9 @@ def slots_from_brief(run, brand):
     # This read stage 1 — the words the SOURCE carried — which is right for
     # an organic swipe whose text is incidental (p149's "2016") and
     # catastrophic for a paid one, where the source's words are a
-    # competitor's ad copy. The froya batch was one step from rendering
+    # competitor's ad copy. The competitor-b batch was one step from rendering
     # "FRØYK/ORGANICS" and "Arctic Botanicals that erase wrinkles" into
-    # <brand> ads — a third-party brand name in frame, which every brief
+    # Brand A ads — a third-party brand name in frame, which every brief
     # here calls an automatic reject.
     #
     # Stage 3 had already written ours. Its zone table's last column IS the
@@ -927,7 +994,7 @@ def slots_from_brief(run, brand):
                 continue
             # A cell naming a colour, a fill or an edge is art direction that
             # wandered into the copy column. Words that go in the frame do
-            # not carry hex codes. (froya, 2026-09-14)
+            # not carry hex codes. (competitor-b, 2026-09-14)
             if re.search(r"#[0-9A-Fa-f]{6}\b", w):
                 continue
             if re.search(r"\b(?:fill|gradient|opacity|padding|margin|px)\b", w, re.I):
@@ -947,12 +1014,12 @@ def slots_from_brief(run, brand):
     # --- which Elements this frame actually needs ------------------------
     # This used to attach the cast to every brief and the product to almost
     # none: cast went on unconditionally, and the product only if stage 6
-    # happened to paste its uuid into the prose. The froya batch showed both
+    # happened to paste its uuid into the prose. The competitor-b batch showed both
     # halves failing at once — p154 and p156 are product-only frames that
     # were about to be generated carrying a woman's face, and neither
     # carried the product Element, so the tube would have been invented.
     #
-    # An invented product is the exact failure Damon ruled on 2026-09-09
+    # An invented product is the exact failure the owner ruled on 2026-09-09
     # ("go look at the device… all you need to do is swap the device"), and
     # a person in a packshot is the same mistake pointing the other way. So
     # the frame is read, and each Element goes on only when it is in shot.
@@ -1006,8 +1073,8 @@ def slots_from_brief(run, brand):
     # looks like an ad.
     #
     # **The discriminator is words in the frame, not paid versus organic.**
-    # I routed this on swipe_kind first and the froya batch disproved it the
-    # same hour: froya is a paid library, and its most-cloned plate is a bare
+    # I routed this on swipe_kind first and the competitor-b batch disproved it the
+    # same hour: competitor-b is a paid library, and its most-cloned plate is a bare
     # UGC selfie with no text on it at all — the headline lives in the post
     # caption. A paid swipe is not necessarily a typeset frame.
     #
@@ -1024,7 +1091,7 @@ def slots_from_brief(run, brand):
         "pack": pack,
         "swipe_kind": kind,
         "ratio_route": route,
-        # Either way the finished asset is 9:16 — Damon, 2026-09-14: *"the
+        # Either way the finished asset is 9:16 — the owner, 2026-09-14: *"the
         # full images should always be 9x16 so we can hit all placement."*
         # The only question is whether the generator is handed the tall
         # canvas or the safe one. See the route decided above.
@@ -1045,8 +1112,8 @@ def drafts(a):
     reg = B.load()
     # SAY WHO IS BEING CAST. The baseline is one file per BRAND but the thing
     # it describes is one BATCH, and a pinned cast survives into the next batch
-    # in silence. On 2026-09-14 four 4bu_m <avatar> briefs were built carrying
-    # the cast member pinned for an earlier batch —
+    # in silence. On 2026-09-14 four 4bu_m avatar-three briefs were built carrying
+    # marcus — the avatar-one razor-bump man pinned for the marsmen batch —
     # stapled to the front of every prompt, contradicting the subject each
     # brief had just described. Nothing said so. Now it does.
     if a.brand:
@@ -1128,7 +1195,7 @@ def drafts(a):
 
 
 def variant(a):
-    """The same swipes, a different product (and its offer). Damon, 2026-09-18:
+    """The same swipes, a different product (and its offer). the owner, 2026-09-18:
     "just use the same swipes, we're just adjusting the product and offer …
     establish that so whenever in the future we need to run a new product
     or offer with our swipes where we've already completed teardown work
@@ -1201,12 +1268,13 @@ def variant(a):
         if (P.RUNS / run_name / "out/06-brief.md").is_file():
             bid, r = B.open_brief(run_name, a.brand, B.load(), a.product, avatar)
             reg = B.load(); reg["briefs"][bid]["variant_of"] = sid; B.save(reg)
+            B.say_landing(B.with_landing(bid, a.brand, a.product)[1])   # the landing page, at the brief
             new_ids.append(bid); print(f"  {bid}  ← {sid}  {run_name}")
         else:
             print(f"  ! {run_name} produced no brief")
     if not new_ids:
         sys.exit("no briefs")
-    # The record goes where the workspace rules says output goes:
+    # The record goes where the team notes/CLAUDE.md says output goes:
     # runs/<machine>/<brand>/<run-label>/ at the repo root, in git. The lane's
     # own runs/ is ignored by rule, so a run that only lives there is a run
     # that vanished in the next squash (2026-09-17, thirty-one of them).
@@ -1237,7 +1305,7 @@ def record(brand, run_name):
 def variations(a):
     """The variation batch, as the chain's own step: tools/variations.py.
 
-    Damon, 2026-09-23: the stage ends at named pictures and one list — no ad
+    the owner, 2026-09-23: the stage ends at named pictures and one list — no ad
     copy, no import sheet. VARIATION-STANDARD.md is the ruling."""
     cmd = [sys.executable, str(HERE / "tools/variations.py"), "--brand", a.brand]
     for flag in ("product", "briefs", "batch", "drop"):
@@ -1263,6 +1331,37 @@ def draft(a):
     subprocess.run(cmd, check=False)
 
 
+def carousel(a):
+    """THE CAROUSEL ROAD — tools/carousel.py: slide one by the draft standard,
+    every later slide one change off it judged against the swipe's own slide,
+    filed in order as a delivery and a card (the owner, 2026-10-02)."""
+    cmd = [sys.executable, str(HERE / "tools/carousel.py"), "--brand", a.brand, "--product", a.product]
+    if getattr(a, "avatar", None):
+        cmd += ["--avatar", a.avatar]
+    if getattr(a, "sub", None):
+        cmd += ["--sub", a.sub]
+    if getattr(a, "ask", None):
+        cmd += ["--ask", a.ask]
+    if getattr(a, "run", None):
+        cmd += ["--run", a.run]
+    for f in getattr(a, "file", None) or []:
+        cmd += ["--file", f]
+    if getattr(a, "links", None):
+        cmd += ["--links", *a.links]
+    if getattr(a, "words", None):
+        cmd += ["--words", a.words]
+    if getattr(a, "rounds", None):
+        cmd += ["--rounds", str(a.rounds)]
+    for x in getattr(a, "swipe_for", None) or []:
+        cmd += ["--swipe-for", x]
+    if getattr(a, "no_card", False):
+        cmd += ["--no-card"]
+    if getattr(a, "dry_run", False):
+        cmd += ["--dry-run"]
+    sys.stdout.flush()
+    return subprocess.run(cmd, check=False).returncode
+
+
 def worksheet(a):
     """The designer's work order for every brief: prompts, settings, rules."""
     cmd = [sys.executable, str(HERE / "tools/worksheet.py")]
@@ -1280,7 +1379,7 @@ def ready(a):
     a page, a folder on Drive and a work order. Anything short of that is not
     ready, and the page must not say it is.
 
-    The work order joined the list on 2026-09-14, when Damon asked the
+    The work order joined the list on 2026-09-14, when the owner asked the
     question the previous definition had no answer to: *"What the hell does
     my designer do from here?"* A brief with a draft and no work order is
     finished for us and unstartable for them, which is not finished.
@@ -1358,6 +1457,8 @@ if __name__ == "__main__":
     s = sub.add_parser("start")
     s.add_argument("--brand", required=True); s.add_argument("--product", required=True)
     s.add_argument("--avatar", required=True); s.add_argument("--swipe", required=True)
+    s.add_argument("--sub", help="the sub-avatar this ad is for; its newest profile is read at every stage")
+    s.add_argument("--ask", help="the ask record (ask.json); its offer and moment win over the offer bank")
     s.add_argument("--count", type=int, default=3)
     s.add_argument("--picks", help="ranks to run, e.g. 1,2,5 — overrides --count")
     s.add_argument("--stills", help="plate stems inside the picked block(s), comma "
@@ -1385,6 +1486,8 @@ if __name__ == "__main__":
     fl = sub.add_parser("fill")
     fl.add_argument("--brand", required=True); fl.add_argument("--product", required=True)
     fl.add_argument("--avatar", required=True)
+    fl.add_argument("--sub", help="the sub-avatar this ad is for; its newest profile is read at every stage")
+    fl.add_argument("--ask", help="the ask record (ask.json); its offer and moment win over the offer bank")
     fl.add_argument("--labels", action="store_true",
                     help="also fill the element labels (stage 2b) on runs that lack them")
     fl.add_argument("--dry-run", "--dry", **DRY); fl.add_argument("--gates", **GATES)
@@ -1415,11 +1518,19 @@ if __name__ == "__main__":
     op.add_argument("--name"); op.add_argument("--source")
     op.add_argument("--route", choices=list(ROUTES), default="ai"); op.add_argument("--form", default="auto")
     op.add_argument("--again", action="store_true")
+    ca = sub.add_parser("carousel", help="the carousel road: swipe → brief → slide 1 by the standard → "
+                        "one-change slides judged against the swipe's → delivery + card")
+    ca.add_argument("--brand", required=True); ca.add_argument("--product", required=True)
+    ca.add_argument("--avatar"); ca.add_argument("--run", help="a run already torn down")
+    ca.add_argument("--file", action="append", help="the swipe's slides, in order (opens a new run)")
+    ca.add_argument("--links", nargs="*"); ca.add_argument("--words"); ca.add_argument("--rounds", type=int)
+    ca.add_argument("--swipe-for", action="append", default=[], metavar="N=M")
+    ca.add_argument("--no-card", action="store_true"); ca.add_argument("--dry-run", "--dry", action="store_true")
     i = sub.add_parser("ingest"); i.add_argument("--results", required=True)
     sub.add_parser("pages")
     a = ap.parse_args()
     {"start": start, "baseline": write_baseline, "fill": fill, "copy": copy,
      "drafts": drafts, "ready": ready, "ingest": ingest,
      "worksheet": worksheet, "draft": draft, "variant": variant,
-     "variations": variations, "open": open_files,
+     "variations": variations, "open": open_files, "carousel": carousel,
      "pages": lambda _: pages()}[a.cmd](a)

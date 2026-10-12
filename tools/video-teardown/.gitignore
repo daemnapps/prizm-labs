@@ -1,0 +1,26 @@
+# All run output — briefs, frames, run state — lives on the team Drive at
+# the shared drive/video-teardown-machine/machine/runs/, mirroring
+# this tree. It travels as one bundle (words + images together) so anyone
+# can open a finished brief without git. Never committed here.
+machine/runs/
+
+# Generated — rebuilt from runs/ on every run. Regenerate, never hand-edit.
+machine/board.html
+machine/board.json
+machine/status.json
+machine/health.json
+machine/.ghost-memo.json
+machine/*.log
+
+# Working scratch — local to whichever machine is running the tool.
+machine/.tmp/
+machine/queue/*
+!machine/queue/.gitkeep
+
+machine/__pycache__/
+**/__pycache__/
+
+# Generated per run for review — rebuilt by compare.py, never hand-edited.
+machine/compare-*.html
+machine/*-gdoc.html
+machine/drive-ids.json

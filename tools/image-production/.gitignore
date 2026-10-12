@@ -1,0 +1,11 @@
+# The Drive inventory is a generated index, not source. brand-b alone is 53 MB
+# across 79,930 files — workspace rule 3 puts anything over 10 MB on Drive, not
+# in git. Rebuild it with `machine_inventory.py <brand>`; it is resumable and
+# reads the Drive without writing to it.
+inventory/*.json
+inventory/
+
+# Public copy: run records stay local.
+static/runs-history/
+static/retired/
+static/queue/kit/

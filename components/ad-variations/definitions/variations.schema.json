@@ -1,0 +1,43 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "ad-variations/1",
+ "title": "variation-plan.json — the ad-variations contract",
+ "description": "One proven ad's variation plan. Production components read this file. Every change names a Variable Index id; every cost is units × the rate in definitions/routes.json. Nothing in it has been generated.",
+ "type": "object",
+ "required": ["schema", "brand", "source", "index", "elements", "variations", "formats", "shared", "totals", "damon_decides", "problems", "run"],
+ "properties": {
+  "schema": {"const": "ad-variations/1"},
+  "brand": {"type": "string"},
+  "source": {"type": "object", "required": ["teardown_run", "metrics"],
+   "properties": {"teardown_run": {"type": "string"}, "post_id": {"type": ["string", "null"]}, "url": {"type": ["string", "null"]},
+    "metrics": {"type": "object"}, "video": {"type": ["string", "null"], "description": "the source file on Drive, for production to cut from"}}},
+  "index": {"type": "object", "required": ["path", "built", "runs"]},
+  "measurement": {"type": "object", "description": "stage 0: duration, fps, measured shots, soft changes, loudest and quiet windows — or `skipped` with the reason"},
+  "beats": {"type": "array", "items": {"type": "object", "required": ["n", "start", "end", "attention"]}},
+  "elements": {"type": "array", "description": "the nineteen fixed elements (definitions/elements.json)",
+   "items": {"type": "object", "required": ["key", "what", "variables", "call"],
+    "properties": {"key": {"type": "string"}, "call": {"enum": ["LOCK", "LEVER", null]}, "variables": {"type": "object"},
+     "impact_rank": {"type": ["integer", "null"]}, "impact_basis": {"type": ["string", "null"], "description": "always labelled ESTIMATE"}}}},
+  "variations": {"type": "array",
+   "items": {"type": "object", "required": ["id", "title", "changes", "recipe", "cost", "gates"],
+    "properties": {
+     "id": {"type": "string", "description": "V00 is the control; V01… in order, highest estimated impact first"},
+     "changes": {"type": "array", "items": {"type": "object", "required": ["variable", "from", "to"],
+      "properties": {"variable": {"type": "string", "pattern": "^V-[a-z]+\\.\\d\\d$"}, "from": {}, "to": {}, "bank_ids": {"type": "array"}}}},
+     "recipe": {"type": "object", "properties": {
+      "reuse": {"type": ["array", "null"], "items": {"type": "object", "required": ["seconds", "what"]}},
+      "make": {"type": ["array", "null"], "items": {"type": "object", "required": ["what", "route", "units"],
+       "properties": {"route": {"type": "string", "description": "an id in definitions/routes.json"}, "usd": {"type": ["number", "null"]}, "shared": {"type": ["string", "null"]}}}},
+      "cheaper_test": {"type": ["object", "null"]}, "blocked_by": {"type": ["string", "null"]}}},
+     "cost": {"type": ["object", "null"], "properties": {"usd_own": {"type": "number"}, "usd_standalone": {"type": "number"}, "usd_with_test": {"type": ["number", "null"]}, "hours": {"type": "number"}}},
+     "gates": {"type": "array", "items": {"type": "object", "required": ["gate", "pass_line"], "properties": {"gate": {"type": "string", "description": "an id in definitions/gates.json"}, "forced": {"type": "boolean"}}}},
+     "congruence": {"type": ["object", "null"]}}}},
+  "formats": {"type": "array", "items": {"type": "object", "required": ["id", "name", "parts", "status"],
+   "properties": {"status": {"const": "NEW — untested"}, "parts": {"type": "array", "items": {"type": "object", "required": ["variable", "value", "evidence"]}}}}},
+  "shared": {"type": "array", "items": {"type": "object", "required": ["key", "piece", "route", "units", "used_by"]}},
+  "totals": {"type": "object", "required": ["usd", "usd_with_tests", "hours"]},
+  "damon_decides": {"type": "array", "items": {"type": "string"}},
+  "problems": {"type": "array", "items": {"type": "string"}, "description": "what the machine's own checks found — an unknown variable id, a missing recipe"},
+  "run": {"type": "object", "required": ["stages", "llm_cost"]}
+ }
+}

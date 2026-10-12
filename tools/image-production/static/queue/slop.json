@@ -1,0 +1,3 @@
+{
+ "_what": "Pictures a person or the audit flagged, keyed by file name \u2192 why. The page shows them as slop; the fix job re-edits each one (image-to-image, one change) under the same name. Automatic checks in queue.py add to this at read time; this file holds the human/audit list."
+}

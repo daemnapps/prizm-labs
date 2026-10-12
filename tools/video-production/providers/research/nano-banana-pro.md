@@ -40,13 +40,13 @@ conflate the two — Higgsfield's console also separates `nano_banana_pro` from
   BLOCK_LOW_AND_ABOVE`. Google states core child-safety protections cannot be
   disabled regardless of setting.
 - **Pricing** (ai.google.dev/gemini-api/docs/pricing): Gemini 3 Pro Image —
-  input $2.00/M tokens (~$0.0011/image), output **$0.134 per 1K/2K image**,
-  **$0.24 per 4K image** (priced as $120/M output tokens, ~1,120 tokens/image).
-  Nano Banana 2 (3.1 Flash Image) — $0.045 (0.5K) / $0.067 (1K) / $0.101 (2K) /
-  $0.151 (4K) per image.
+  input $__/M tokens (~$__/image), output **$__ per 1K/2K image**,
+  **$__ per 4K image** (priced as $__/M output tokens, ~1,120 tokens/image).
+  Nano Banana 2 (3.1 Flash Image) — $__ (0.5K) / $__ (1K) / $__ (2K) /
+  $__ (4K) per image.
 - **Batch mode**: supported ("Batch API" listed as a capability on the 3 Pro
   Image model card) and carries a flat **50% discount** — 2K drops to
-  $0.067/image, 4K to $0.12/image.
+  $__/image, 4K to $__/image.
 - **Rate limits**: Google no longer publishes a full numeric table since
   ~March 2026; quota is per-project across RPM/TPM/RPD/IPM and tier-gated
   (free tier reports being far lower than paid Tier 1, which several
@@ -86,8 +86,8 @@ as a single tunable knob instead of five per-category ones), `sync_mode`
 The plain generation endpoint (`fal-ai/nano-banana-pro`) has the identical
 parameter set minus `image_urls`.
 
-**Pricing**: **$0.15/image** flat for 1K/2K generation or edit, **$0.30 for
-4K**, +$0.015 if `enable_web_search` is on.
+**Pricing**: **$__/image** flat for 1K/2K generation or edit, **$__ for
+4K**, +$__ if `enable_web_search` is on.
 
 **What's missing vs. direct**: no `imageConfig`-style structured object (it's
 flattened into top-level fields, functionally equivalent); no per-category
@@ -112,7 +112,7 @@ https://fal.ai/docs/model-api-reference/image-generation-api/nano-banana-pro
   `image_references` field. One community skill doc calls this out explicitly:
   *"The medias field requires `{value: string, role: string}`, not `{url: ...,
   roles: [...]}`"* and *"Use `value` (not `url`) for the media reference."*
-  This lines up with what your runs hit — a request shaped with `url`./`roles`
+  This lines up with what your runs hit — a request shaped with `url`/`roles`
   or an `image_references` key will pass whatever loose validation Higgsfield
   does and come back with the reference simply not attached (empty), because
   the field the model actually reads (`medias[].value` / `medias[].role`) was
@@ -138,7 +138,7 @@ https://fal.ai/docs/model-api-reference/image-generation-api/nano-banana-pro
 - **Pricing**: in **credits**, not USD directly — third-party trackers report
   "a single Nano Banana Pro generation consumes about 4–5 credits" on
   Higgsfield's own plans (credit-to-dollar rate depends on your plan tier);
-  resellers proxying the same model (APIYI, Segmind) charge $0.05–$0.23/call,
+  resellers proxying the same model (APIYI, Segmind) charge $__–$__/call,
   which is not Higgsfield's own price and not a reliable proxy for it.
 - **Concurrency**: not published in any doc surfaced (docs.higgsfield.ai's
   request-lifecycle/polling pages describe the mechanics of async jobs and
@@ -154,7 +154,7 @@ https://help.apiyi.com/en/higgsfield-nano-banana-pro-api-low-cost-alternative-en
 
 | Capability | Direct (Gemini API) | fal.ai | Higgsfield |
 |---|---|---|---|
-| Multi-reference (2nd image = packshot) | Yes, documented 6 object/5 character refs | Yes, same model, `image_urls` list | Yes, `medias[]`, but shape is easy to get wrong (must be `value`./`role`, not `url`./`roles`) |
+| Multi-reference (2nd image = packshot) | Yes, documented 6 object/5 character refs | Yes, same model, `image_urls` list | Yes, `medias[]`, but shape is easy to get wrong (must be `value`/`role`, not `url`/`roles`) |
 | 2K output | Yes, `imageSize: "2K"` | Yes, `resolution: "2K"` | Yes on paper (`resolution: "2k"`), same backing model |
 | Exact aspect ratio | Yes, `aspectRatio` enum, applied reliably (it's Google's own API) | Yes, same enum, applied reliably (thin pass-through) | Field exists but **your runs found 9:16 ignored** — unreliable |
 | Identity preservation across edit | Same model everywhere — no difference | Same | Same |
@@ -168,7 +168,7 @@ https://help.apiyi.com/en/higgsfield-nano-banana-pro-api-low-cost-alternative-en
    coarser).
 2. Higgsfield is the odd one out: your own runs already found its aspect-ratio
    handling unreliable (9:16 ignored) and its reference-image field has a
-   documented gotcha (`medias[].value`./`role`, not `url`./`roles` or
+   documented gotcha (`medias[].value`/`role`, not `url`/`roles` or
    `image_references`) that silently no-ops if you get the shape wrong.
 3. Direct Gemini API is the only door with fine-grained safety control and a
    confirmed batch discount (50% off at scale) — worth it only if you're

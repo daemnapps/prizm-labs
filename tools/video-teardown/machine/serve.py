@@ -4,15 +4,32 @@
 The plain server sends no cache headers, so a browser holds on to the last
 board.html it saw — which looks exactly like a page that has stopped updating.
 """
-import functools, http.server, os, re, socketserver
+import functools, http.server, os, re, socketserver, sys, urllib.parse
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
+import workdir                                         # noqa: E402
 
 
 class NoCache(http.server.SimpleHTTPRequestHandler):
     """Adds byte-range support. Without it a browser will not scrub a video,
     and Safari often refuses to play one at all."""
+
+    def translate_path(self, path):
+        """/runs/<slug>/… is the working folder, runs/video-teardown/_work/
+        (SI-56), so board.html's relative runs/ links keep working. A path
+        that climbs out of that folder maps to one that does not exist."""
+        path = path.split("?", 1)[0].split("#", 1)[0]
+        if path.startswith("/runs/"):
+            root = str(workdir.root())
+            rest = urllib.parse.unquote(path[len("/runs/"):])
+            p = os.path.normpath(os.path.join(root, rest))
+            if p != root and not p.startswith(root + os.sep):
+                return str(workdir.root() / "__outside__")
+            return p
+        return super().translate_path(path)
 
     def send_head(self):
         rng = self.headers.get("Range")

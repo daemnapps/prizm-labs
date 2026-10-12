@@ -28,7 +28,7 @@ from pathlib import Path
 # It was 1500, tuned to the failure it was written for: a 597-byte reply that
 # talked ABOUT the brief instead of being it. But an organic photograph has
 # one zone and no copy in it at all, so a legitimate injection for one is
-# genuinely short — two of nine <brand> runs produced 1408 and 1439 characters
+# genuinely short — two of nine Brand A runs produced 1408 and 1439 characters
 # of correct work and had it thrown away (2026-09-14).
 #
 # So the floor drops to what could not possibly be a document, and the real

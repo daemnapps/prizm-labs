@@ -104,5 +104,23 @@ sentence); a lyric that names a jar when the product is a tube; wardrobe
 drifting between shots. From 16 Sep: singing lip-sync is a ceiling of the
 motion model — it ships flagged, never re-rolled.
 
-**Cost.** ≈ $4 for 30 seconds. Motion is 94% of it (~$0.62 a clip against
-~$0.04 a still), which is why stills are approved before anything moves.
+**Cost.** ≈ $__ for 30 seconds. Motion is 94% of it (~$__ a clip against
+~$__ a still), which is why stills are approved before anything moves.
+
+## Ruled 2026-10-10 — how a song ad runs straight through
+
+the owner, after the first end-to-end song ad (`runs/video-production/<brand>/<run>`,
+edit `runs/video-edit/<brand>/<run>`), which needed five hand workarounds. Each is
+now in the machine:
+
+| | the rule | where it lives |
+|---|---|---|
+| **Timing** | The storyboard is clocked from the song, not from voice lines (a song ad has none): one scene = one sung line = one section, starting on its line in `song/timing.json` (else the song transcript's word times). A scene with no line of its own shares the time before the next sung line; the last runs to the end of the song; a `make: "reuse:S11"` chorus plays the clip already made. `storyboard_plan.py <run>` needs no `--teardown` for a song ad. | `machine/storyboard_plan.py` `build_song` |
+| **Every clip** | B-roll is ALL clips — no stills, no holds. A song-ad section with no clip stops the clip plan. | `providers.json` `direct.omni_route.by_format.song-ad.every_section_a_clip` |
+| **Resolution** | Omni Flash at 360p (~$__/s), upscaled on this Mac to 1080×1920 by local-studio's `upscale` job — no fal upscale, no cost. | `providers.json` `direct.omni_route.by_format.song-ad`; `machine/omni_clips.py` `upscale_local` |
+| **Prompts** | Every clip prompt starts with the run's style lock (the style row's STYLE LOCK line + its motion, `make_character.style_lock`) and carries each scene's action — its `happens`, else its first picture brought gently alive. | `machine/omni_clips.py` `style_line`, `build_prompt` |
+| **Start pictures** | Sent to Omni at 9:16, centre-cropped (a 2:3 picture was refused as "third-party content" ~14 times at 360p); the approved picture in `media/` is untouched. | `providers.json` `direct.omni_route.start_picture`; `omni_clips.py` `to_aspect` |
+| **Captions** | The sung word sits on a box that moves word to word. A song-ad kit starts on the `word-box` look unless the run's controls name another. | `tools/video-edit/looks/bank.json` `word-box`; `machine/defaults.json` `caption_look.by_format` |
+
+Tests: `machine/test_song_ad.py`; `tools/video-edit/tests/test_word_box.py`;
+`components/local-studio/test_esrgan_path.py`.

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Query the language layer instead of reading it.
 
-    python3 language.py --brand <brand> --stage hooks
-    python3 language.py --brand <brand> --avatars
+    python3 language.py --brand brand-a --stage hooks
+    python3 language.py --brand brand-b --avatars
 
-SHIM (LL-1, 2026-09-01). The engine moved to `components/language-layer/` so
+SHIM (LL-1, 2026-09-01). The engine moved to `tools/language-layer/` so
 the query over the banks has ONE home — this file and the video machine's copy
 had drifted 103 lines apart, and the render fix of 2026-08-31 lived only here.
 This file is the same command it always was: it re-exports the component's
@@ -25,9 +25,9 @@ from pathlib import Path
 
 from paths import WORKSPACE
 
-_COMPONENT = next((d for d in Path(__file__).resolve().parents if (d / "components" / "language-layer").is_dir()), Path(__file__).resolve().parents[2].parent) / "components" / "language-layer"
+_COMPONENT = next((d for d in Path(__file__).resolve().parents if (d / "tools" / "language-layer").is_dir()), Path(__file__).resolve().parents[2].parent) / "tools" / "language-layer"
 if not _COMPONENT.is_dir():                  # a workspace mounted elsewhere
-    _COMPONENT = Path(WORKSPACE) / "components" / "language-layer"
+    _COMPONENT = Path(WORKSPACE) / "tools" / "language-layer"
 sys.path.append(str(_COMPONENT))        # appended, never ahead of this machine
 from language_layer import engine as _engine     # noqa: E402
 
@@ -52,7 +52,7 @@ STAGE_USE = {
     # opening. It used to borrow "proof" alone, so the stage responsible for
     # the first line never saw a single self-label — its own opening check
     # reported "there was no such row available" while `old lady hands` sat
-    # in prospects.json (Damon, 2026-08-31). A stage cannot reach for
+    # in prospects.json (the owner, 2026-08-31). A stage cannot reach for
     # language it was never handed.
     "render":      ["self-descriptor", "problem-language", "identity",
                     "why-bought", "post-use-feeling", "what-they-like",
@@ -85,7 +85,7 @@ STAGE_USE = {
                     "role-claimed", "mechanism",
                     "post-use-feeling", "result-language",
                     "transformation-reaction"],
-    # The spoken pass (2026-09-19, Damon: "humans don't use em dashes when
+    # The spoken pass (2026-09-19, the owner: "humans don't use em dashes when
     # speaking — trigger deeper research on actual English-speaking human
     # speech patterns and round up levels of colloquialisms that we can use
     # per sub-avatar"). RQ-22..24 in components/marketing-doctrine/

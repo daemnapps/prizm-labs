@@ -1,5 +1,5 @@
 {
- "_readme": "The style bank for video production: every STYLE the video machine can render a piece in, one row each. A style answers ONE question — what does it look like? It never changes what the film says, who carries it, or its beats; any format can be made in any style. A row is a STYLE LOCK: `formula` is the one canonical string the variation chain (format-variation.md, machine/restyle.py) prepends byte-identical to every asset and clip; `motion` is the movement language, a separate axis. `seen_as` is what the internet calls it, kept only so a swipe can be matched to a row — never used as a name. `ip_flag` is printed on any row whose common name is someone's trademark; the rule is the generic look, never their characters or logos. Swatches are the SAME approved frame restyled through the image door, so the only thing that differs between two swatches is the style. Only Damon signs a row approved. `keeps_proof` is read off the swatch by eye: does the skin problem in the original frame survive the restyle (yes / faint / no). A 'no' style can carry a hook, a story or a mechanism scene, never a before-and-after.",
+ "_readme": "The style bank for AI video production: every STYLE the video machine can render a piece in, one row each. A style answers ONE question — what does it look like? It never changes what the film says, who carries it, or its beats; any format can be made in any style. A row is a STYLE LOCK: `formula` is the one canonical string the variation chain (format-variation.md, machine/restyle.py) prepends byte-identical to every asset and clip; `motion` is the movement language, a separate axis. `seen_as` is what the internet calls it, kept only so a swipe can be matched to a row — never used as a name. `ip_flag` is printed on any row whose common name is someone's trademark; the rule is the generic look, never their characters or logos. Swatches are the SAME approved frame restyled through the image door, so the only thing that differs between two swatches is the style. Only the owner signs a row approved. `keeps_proof` is read off the swatch by eye: does the skin problem in the original frame survive the restyle (yes / faint / no). A 'no' style can carry a hook, a story or a mechanism scene, never a before-and-after.",
  "asset": "video",
  "bank": "style",
  "updated": "2026-09-20",
@@ -11,10 +11,12 @@
   "photoreal": "looks filmed — the grade, the lens and the era do the work"
  },
  "status_values": {
-  "unreviewed": "named, not yet looked at by Damon",
-  "draft": "Damon has looked; may run, and the run is the evidence",
-  "approved": "Damon signed it",
+  "draft": "not yet signed by the owner; may run, and the run is the evidence (components rule 6)",
+  "approved": "the owner signed it",
   "deprecated": "kept for the record"
+ },
+ "state_values": {
+  "unreviewed": "named, not yet looked at by the owner — status stays draft; drop the state once he has looked"
  },
  "styles": [
   {
@@ -32,10 +34,10 @@
     "micro-drama"
    ],
    "swatch": "swatches/claymation.jpg",
-   "status": "unreviewed",
+   "status": "draft",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -53,10 +55,11 @@
     "demonstration"
    ],
    "swatch": "swatches/paper-cutout.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -74,10 +77,11 @@
     "song-ad"
    ],
    "swatch": "swatches/crochet.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -92,10 +96,11 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/needle-felt.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "faint",
    "proof_note": null
   },
@@ -113,10 +118,11 @@
     "micro-drama"
    ],
    "swatch": "swatches/felt-puppet.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -134,10 +140,11 @@
     "testimonial-montage"
    ],
    "swatch": "swatches/brick-figure.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -152,10 +159,11 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/miniature-diorama.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -173,10 +181,11 @@
     "single-presenter"
    ],
    "swatch": "swatches/anime.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -193,10 +202,11 @@
     "micro-drama"
    ],
    "swatch": "swatches/cel-1950s.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -214,10 +224,11 @@
     "meme"
    ],
    "swatch": "swatches/adult-cartoon.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -235,10 +246,11 @@
     "testimonial-montage"
    ],
    "swatch": "swatches/comic-panel.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -256,10 +268,11 @@
     "expert-consult"
    ],
    "swatch": "swatches/whiteboard-sketch.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -274,10 +287,11 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/storybook-watercolour.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -296,10 +310,11 @@
     "talking-object"
    ],
    "swatch": "swatches/family-3d.jpg",
-   "status": "unreviewed",
-   "signed": null,
-   "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "status": "approved",
+   "state": "reviewed",
+   "signed": "the owner, 2026-10-09: \"the creative format itself is supposed to look like Pixar\" (Brand C song-ad swipe)",
+   "proven_on": "brand-c-song-02 (Brand C \"My whole crew knew\" song/story ad — the whole film is this style)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "faint",
    "proof_note": null
   },
@@ -317,10 +332,11 @@
     "expert-consult"
    ],
    "swatch": "swatches/cutaway-3d.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": "It did more than keep the spots — it lit them up and added a magnified skin inset. The natural home for a mechanism scene."
   },
@@ -339,10 +355,11 @@
     "demonstration"
    ],
    "swatch": "swatches/skeleton-3d.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": "No skin, so no skin proof. It carries the story and the hook; the proof scene has to cut to a real-skin style."
   },
@@ -360,10 +377,11 @@
     "demonstration"
    ],
    "swatch": "swatches/low-poly.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -378,10 +396,11 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/pixel-16bit.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -398,10 +417,11 @@
     "demonstration"
    ],
    "swatch": "swatches/hypermotion-cinematic.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -420,10 +440,11 @@
     "demonstration"
    ],
    "swatch": "swatches/phone-ugc.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -441,10 +462,11 @@
     "meme"
    ],
    "swatch": "swatches/horror.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -459,10 +481,11 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/vhs-camcorder.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "yes",
    "proof_note": null
   },
@@ -480,10 +503,11 @@
     "demonstration"
    ],
    "swatch": "swatches/fight-night-broadcast.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": "The swatch changed her clothes and her pose, not only the rendering — this one behaves like a world she is dropped into, closer to a format. Watch it."
   },
@@ -498,10 +522,11 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/glass-asmr.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
-   "source": "named by Damon 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
+   "source": "named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list)",
    "keeps_proof": "no",
    "proof_note": null
   },
@@ -516,7 +541,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/macro-commercial.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (25 prompts of the ~270 readable)",
@@ -534,7 +560,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/studio-hero.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (10 prompts of the ~270 readable)",
@@ -552,7 +579,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/dark-luxury.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (5 prompts of the ~270 readable)",
@@ -570,7 +598,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/archival-16mm.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (5 prompts of the ~270 readable)",
@@ -588,7 +617,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/neon-noir.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (4 prompts of the ~270 readable)",
@@ -606,7 +636,8 @@
    "ip_flag": "Magazine names are trademarks — generic look only.",
    "fits_formats": [],
    "swatch": "swatches/fashion-editorial.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (3 prompts of the ~270 readable)",
@@ -624,7 +655,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/oil-painting.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (2 prompts of the ~270 readable)",
@@ -642,7 +674,8 @@
    "ip_flag": null,
    "fits_formats": [],
    "swatch": "swatches/ink-wash.jpg",
-   "status": "unreviewed",
+   "status": "draft",
+   "state": "unreviewed",
    "signed": null,
    "proven_on": null,
    "source": "found in the open Seedance / ad prompt libraries 2026-09-20 (3 prompts of the ~270 readable)",
@@ -650,5 +683,5 @@
    "proof_note": null
   }
  ],
- "swatch_base": "runs/video-machine/<brand>/pigment-memory-01/media/S1-F1.png (an approved first frame; read only)"
+ "swatch_base": "runs/video-production/<brand>/<run> (an approved first frame; read only)"
 }

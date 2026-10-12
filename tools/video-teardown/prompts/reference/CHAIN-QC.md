@@ -8,9 +8,11 @@ fixes silently. Record PASS / FAIL / N/A per line, per run.
 **Stage 1 — teardown**
 - [ ] All four sections present: Objective Record, Scene Mechanics, Psychology, Index
 - [ ] Character & Setting profile covers who / wardrobe / setting / props
-- [ ] Table has all six columns (Timestamp · Roll · Visuals · On-Screen Text · Transcript · Sound), no merged rows, one row per frame
-- [ ] Every row carries one Roll label (A · B-over · B-vo · B-silent · C); every non-A row opens Visuals with its `[shows: …]` tag
-- [ ] The record closes with a Roll sheet — the counts and the make-list of every shot that is not the speaker
+- [ ] `Music:` line under `Sound form:` — energy · ~tempo · mood, or none
+- [ ] Table has all eight columns (Timestamp · Roll · Section · Visuals · On-Screen Text · Transcript · Sound · Layers), no merged rows, one row per frame
+- [ ] Every row carries one Roll label (A · B-over · B-vo · B-silent · C · S · X · G · E) and one Section — a section id from the doctrine's `{sections}` list, spelled as that list spells it, the same as its scene's Section line; every non-A row opens Visuals with its `[shows: …]` tag, and S / X / G / E rows with their own tag too
+- [ ] Exactly one row carries `opener: true`
+- [ ] The record closes with a Roll sheet — the counts and the make-list of every shot that is not the speaker, S / X / G / E included — then the Layer sheet, the Sound sheet and the Section map (section ids in play order)
 - [ ] Transcript and on-screen text kept separate
 - [ ] `Breaks if cut:` present per phase; `Belief shift:` present per play
 - [ ] Accuracy markers used where footage is unclear — or their absence plausible

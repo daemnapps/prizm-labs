@@ -1,0 +1,271 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Feeds</title>
+<style>
+/* Design system — neutral zinc, one accent, 1px hairlines, 8px radius. In the
+   family of shadcn/ui · Radix · Geist: colour is for meaning only. */
+:root{color-scheme:dark;--bg:#09090b;--panel:#111113;--raise:#18181b;--line:#27272a;--line2:#3f3f46;
+--ink:#fafafa;--body:#d4d4d8;--mut:#8b8b94;--go:#22c55e;--hot:#f59e0b;--bad:#ef4444;--blue:#60a5fa;
+--r:8px;--font:"Geist","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){color-scheme:light;--bg:#fafafa;--panel:#fff;--raise:#f4f4f5;--line:#e4e4e7;--line2:#d4d4d8;
+--ink:#09090b;--body:#27272a;--mut:#71717a;--go:#16a34a;--hot:#d97706;--bad:#dc2626;--blue:#2563eb}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:14px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1440px;margin:0 auto;padding:0 28px}
+header{display:flex;align-items:center;gap:16px;padding:20px 0 0}
+h1{margin:0;font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.sub{color:var(--mut);font-size:12.5px}
+header .sub{margin-left:auto}
+.mainnav{display:flex;gap:4px;margin-top:14px;border-bottom:1px solid var(--line)}
+.mainnav button{background:none;border:0;border-bottom:2px solid transparent;border-radius:0;padding:8px 12px;color:var(--mut);font-weight:500;margin-bottom:-1px}
+.mainnav button.on{color:var(--ink);border-bottom-color:var(--ink)}
+button,select,input,textarea{font:inherit;color:var(--ink)}
+button{cursor:pointer;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);padding:6px 12px;font-weight:500;transition:background .12s,border-color .12s}
+button:hover{background:var(--raise);border-color:var(--line2)}
+button.go{background:var(--ink);border-color:var(--ink);color:var(--bg)}button.go:hover{opacity:.9;background:var(--ink)}
+button:disabled{opacity:.45;cursor:default}
+select,input[type=search],textarea{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:7px 10px;outline:none}
+select:focus,input:focus,textarea:focus{border-color:var(--line2);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 8%,transparent)}
+select{padding-right:28px;max-width:320px}
+.ask{margin:16px 0 0}
+.ask label{display:block;font-size:12px;color:var(--mut);margin-bottom:6px}
+.row{display:flex;gap:8px}.row textarea{flex:1;min-height:38px;height:38px;resize:vertical}
+.job{margin-top:10px;font-size:12.5px;border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;background:var(--panel)}
+.job b{color:var(--ink);font-weight:600}.job .steps{color:var(--mut);white-space:pre-wrap;margin-top:4px;font-family:var(--mono);font-size:11.5px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;background:var(--mut)}
+.dot.running{background:var(--hot);animation:p 1s infinite}.dot.done{background:var(--go)}.dot.failed{background:var(--bad)}
+@keyframes p{50%{opacity:.3}}
+.bar{display:flex;gap:10px;padding:14px 0;flex-wrap:wrap;align-items:center;position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);z-index:5;border-bottom:1px solid var(--line);margin-top:16px}
+.bar input[type=search]{flex:1;min-width:220px}
+.bar2{display:flex;gap:10px;padding:10px 0 0;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--panel)}
+.seg .chip{border:0;border-radius:0;border-right:1px solid var(--line);padding:6px 11px;color:var(--mut);background:none;font-size:13px}
+.seg .chip:last-child{border-right:0}.seg .chip.on{background:var(--raise);color:var(--ink)}
+.chip{border:1px solid var(--line);border-radius:var(--r);padding:5px 11px;font-size:13px;color:var(--mut);background:var(--panel)}
+.chip.on{color:var(--ink);border-color:var(--line2);background:var(--raise)}
+.spacer{flex:1}
+.feedhead{margin:14px 0 0;font-size:12.5px;color:var(--mut);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--panel)}
+.feedhead:empty{display:none}
+.feedhead .askline{color:var(--ink);font-size:14px;margin-bottom:6px}
+.feedhead details{margin-top:8px}.feedhead summary{cursor:pointer}
+.src{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin:2px 3px 2px 0;font-size:11.5px;font-family:var(--mono)}
+.src.pro{border-style:dashed;color:var(--hot)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;padding:16px 0 60px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .12s}
+.card:hover{border-color:var(--line2)}.card.out{opacity:.4}
+.thumb{position:relative;aspect-ratio:9/13;background:var(--raise);display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pb{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;color:#fff;background:rgba(0,0,0,.72)!important;backdrop-filter:blur(4px);letter-spacing:.04em}
+.badges{position:absolute;bottom:8px;left:8px;right:8px;display:flex;gap:4px;flex-wrap:wrap}
+.bd{font-size:10.5px;font-weight:600;padding:2px 6px;border-radius:5px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);color:#fff}
+.bd.rise{color:#4ade80}.bd.punch{color:#fbbf24}.bd.new{color:#93c5fd}
+.body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.author{font-weight:600;font-size:13px;color:var(--ink)}.what{font-size:13px;color:var(--body)}
+.cap{font-size:12px;color:var(--mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{font-size:11.5px;color:var(--mut)}.fmt{font-size:11px;color:var(--blue)}
+.why{font-size:11.5px;color:var(--mut)}
+.acts{display:flex;gap:6px;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+.acts .pick{flex:1 1 40%}
+.acts button,.acts a{flex:1;text-align:center;font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:none;color:var(--body);text-decoration:none;font-weight:500}
+.acts button:hover,.acts a:hover{background:var(--raise)}
+.empty{padding:60px 0;color:var(--mut);text-align:center}
+.drawer{margin:0 0 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.drawer summary{padding:11px 14px;cursor:pointer;font-weight:500;color:var(--ink)}
+.drawer .in{padding:0 14px 14px;font-size:13px}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:12px;font:11.5px/1.55 var(--mono);overflow:auto;max-height:520px}
+table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:6px 10px 6px 0;border-bottom:1px solid var(--line);font-size:12.5px;vertical-align:top}
+th{color:var(--mut);font-weight:500}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 0}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer}
+.st:hover{border-color:var(--line2)}.st.on{border-color:var(--ink)}
+.st .n{font-size:11px;color:var(--mut)}.st .nm{font-weight:600;font-size:15px;margin:2px 0;color:var(--ink)}
+.st .d{font-size:12px;color:var(--mut)}.st .big{font-size:17px;font-weight:600;margin-top:8px;color:var(--ink)}
+.st .mdl{font-size:11px;color:var(--mut);margin-top:4px;font-family:var(--mono)}
+.stage{margin:12px 0 40px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.stage h3{margin:0 0 4px;color:var(--ink);font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.two h4{margin:12px 0 6px;font-size:12px;color:var(--mut);font-weight:500}
+.bq{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:20px;margin:16px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.bq.yes{border-color:var(--go)}.bq.no{opacity:.45}
+.bq img{width:100%;border-radius:var(--r);display:block;margin-bottom:10px}
+.bq .tag{display:inline-block;font-size:11px;font-weight:500;border-radius:5px;padding:2px 7px;margin:0 4px 4px 0;background:var(--raise);border:1px solid var(--line);color:var(--body)}
+.bq .brieftext{max-height:460px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:14px;font-size:13px;white-space:pre-wrap;line-height:1.6}
+.bq .verdict{display:flex;gap:8px;margin-top:12px;align-items:center}.bq .verdict .no{color:var(--bad)}
+.kp{color:var(--go)}.dr{color:var(--bad)}
+@media(max-width:800px){.pipe{grid-template-columns:1fr 1fr}.two,.bq{grid-template-columns:1fr}}
+@media(max-width:600px){.wrap{padding:0 16px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}select{max-width:100%}}
+</style></head><body>
+<div class="wrap">
+<header><h1>My Feeds</h1><a class="chip" href="/formats" target="_blank">Format library</a><a class="chip" href="/sounds" target="_blank">Trending sounds</a><span class="sub" id="stats"></span></header>
+<div id="feedsbox">
+  <div class="ask">
+    <label>Start a dig — say whose scroll you want, it becomes a feed</label>
+    <div class="row"><textarea id="ask" placeholder="Whose scroll is it? Who are they, what do they laugh at, what do they send their friends?"></textarea>
+    <button class="go" id="go">Dig</button></div>
+    <div id="jobsbox"><div id="jobs"></div></div>
+  </div>
+  <div class="bar">
+    <span class="seg" id="brands"></span>
+    <select id="avatarsel" aria-label="Avatar"></select>
+    <input type="search" id="q" placeholder="Search every post — captions, creators, hashtags, formats">
+  </div>
+  <div class="bar2">
+    <span class="seg" id="lanes"></span>
+    <span class="seg" id="shapes"></span>
+    <span class="seg" id="plats"></span>
+    <span class="seg" id="wins"></span>
+    <span class="spacer"></span>
+    <select id="sortsel" aria-label="Sort"></select>
+    <button class="chip" id="dropped">Show thrown out</button>
+  </div>
+  <div class="feedhead" id="feedhead"></div>
+  <div class="grid" id="grid"></div>
+  <div id="chainbox" style="display:none"></div>
+  <details class="drawer"><summary>The nightly run</summary><div class="in" id="daily"></div></details>
+  <details class="drawer"><summary>The prompts — exactly as sent</summary><div class="in" id="prompts"></div></details>
+</div>
+</div>
+
+<script>
+let view="feed", stageOn=1, CH=null;
+let brand="all";
+let S=null, feed="all", sort="in", plat="all", win="all", showOut=false, lane="entertainment", shape="all";
+const P={tiktok:["TIKTOK",""],instagram:["REEL",""],youtube:["YOUTUBE",""]};
+const SORTS=[["in","Just in"],["sent","Most sent"],["rise","Rising"],["punch","Punching above"],["views","Most viewed"],["new","Newest post"]];
+const WINS=[["7","7d"],["30","30d"],["90","90d"],["all","All time"]];
+const esc=s=>(s??"").toString().replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>n==null?"":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?Math.round(n/1e3)+"K":""+n;
+const ago=s=>{if(!s)return "never";const h=(Date.now()-new Date(s))/36e5;return h<1?"just now":h<48?Math.round(h)+"h ago":Math.round(h/24)+"d ago"};
+function chips(el,opts,cur,set){el.innerHTML=opts.map(([v,l])=>`<button class="chip ${v==cur?"on":""}" data-v="${v}">${l}</button>`).join(" ");
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{set(b.dataset.v);draw()})}
+
+function draw(){
+  if(!S)return;
+  const sp=S.spend, newToday=S.cards.filter(c=>c.seen_days===0&&c.keep!==false).length;
+  stats.textContent=`${S.feeds.length} feeds · ${S.cards.length.toLocaleString()} posts · ${newToday} new today`+(sp.used!=null?` · scraping $${sp.used} of $${sp.cap} this month`:"");
+  // brand → avatar: two controls instead of a wall of tabs
+  const bl=[...new Set(S.feeds.map(f=>f.core&&f.brand!="damon"?f.brand:"general"))].sort((x,y)=>(x=="general")-(y=="general")||x.localeCompare(y));
+  chips(brands,[["all","All brands"],...bl.map(b=>[b,b=="general"?"General":b.toUpperCase()])],brand,v=>{brand=v;feed="all";view="feed"});
+  const fb=f=>f.core&&f.brand!="damon"?f.brand:"general";
+  // A feed with no avatar of its own (his saves) is never filtered out by a
+  // brand chip — each of its cards carries the brand it was saved for.
+  const own=f=>!f.core, inBrand=S.feeds.filter(f=>brand=="all"||own(f)||fb(f)==brand);
+  const count=f=>S.cards.filter(c=>c.feed==f.id&&c.keep!==false&&(lane=="all"||!c.lane||c.lane==lane)).length;
+  const cores={}; inBrand.forEach(f=>{const g=fb(f)=="general"?"General":(brand=="all"?f.brand.toUpperCase()+" · ":"")+(f.core||"").replace(/-/g," ");(cores[g]=cores[g]||[]).push(f)});
+  avatarsel.innerHTML=`<option value="all">All avatars${brand=="all"?"":" in "+(brand=="general"?"General":brand.toUpperCase())}</option>`+
+    Object.keys(cores).sort().map(g=>`<optgroup label="${esc(g)}">${cores[g].sort((x,y)=>(x.sub?1:0)-(y.sub?1:0)).map(f=>
+      `<option value="${f.id}" ${feed==f.id?"selected":""}>${esc(f.sub?f.title:f.title+(fb(f)=="general"?"":" — core"))} (${count(f)})</option>`).join("")}</optgroup>`).join("");
+  avatarsel.onchange=()=>{feed=avatarsel.value;if(feed=="all")view="feed";draw()};
+  sortsel.innerHTML=SORTS.map(([v,l])=>`<option value="${v}" ${v==sort?"selected":""}>Sort: ${l}</option>`).join("");
+  sortsel.onchange=()=>{sort=sortsel.value;draw()};
+  chips(lanes,[["entertainment","Entertainment"],["educational","Educational"],["all","Both"]],lane,v=>lane=v);
+  chips(wins,WINS,win,v=>win=v);
+  chips(plats,[["all","All"],["tiktok","TikTok"],["instagram","Instagram"],["youtube","YouTube"]],plat,v=>plat=v);
+  // his saves carry their own read — ad-shaped or culture. Other feeds have none
+  // and are never hidden by this chip.
+  chips(shapes,[["all","Any shape"],["swipe","Ad-shaped"],["organic","Culture"]],shape,v=>shape=v);
+  dropped.classList.toggle("on",showOut);
+
+  const f=S.feeds.find(x=>x.id==feed);
+  feedhead.innerHTML=f?`${f.whose?`<div class="askline">${esc(f.whose)}</div>`:f.ask?`<div class="askline">“${esc(f.ask.slice(0,240))}”</div>`:""}
+    ${f.sources} sources${f.probation?` · ${f.probation} on trial (found by following winners)`:""} · ${f.sweeps} pulls so far
+    · <button class="chip" id="pull">Pull now</button> <button class="chip ${view=="chain"?"on":""}" id="chainbtn">The research chain</button>
+    <details><summary>What it watches, and why</summary>${f.source_list.map(s=>`<span class="src ${s.status=="probation"?"pro":""}" title="${esc(s.receipt)}">${s.platform.slice(0,2).toUpperCase()} ${s.kind=="hashtag"?"#":s.kind=="account"?"@":"“"}${esc(s.value)}${s.kind=="search"?"”":""}</span>`).join("")}</details>`:"";
+  if(f){pull.onclick=()=>post("/api/pull",{feed:f.id});chainbtn.onclick=()=>{view=view=="chain"?"feed":"chain";draw()}}
+  if(f&&view=="chain"){grid.style.display="none";chainbox.style.display="";drawChain(f.id)}else{grid.style.display="";chainbox.style.display="none"}
+
+  const words=q.value.toLowerCase().split(/\s+/).filter(Boolean);
+  const okFeeds=new Set(inBrand.map(f=>f.id));
+  const ownFeeds=new Set(S.feeds.filter(f=>!f.core).map(f=>f.id));
+  let cs=S.cards.filter(c=>(feed=="all"?okFeeds.has(c.feed):c.feed==feed)&&(plat=="all"||c.platform==plat)
+    &&(showOut||c.keep!==false)&&(lane=="all"||showOut||!c.lane||c.lane==lane)&&(win=="all"||(c.age!=null&&c.age<=+win))
+    &&(shape=="all"||!c.swipe_lane||c.swipe_lane==shape)
+    &&(brand=="all"||!ownFeeds.has(c.feed)||!c.brand_fit||c.brand_fit==brand||(brand=="general"&&c.brand_fit=="general")));
+  if(words.length)cs=cs.filter(c=>{const hay=[c.author,c.caption,c.what,c.format,c.why,c.source,(c.tags||[]).join(" ")].join(" ").toLowerCase();return words.every(w=>hay.includes(w))});
+  const key={in:c=>[-(c.seen_days??999),c.views||0],rise:c=>[c.rise??-1,c.views||0],sent:c=>[c.sent??-1,c.views||0],punch:c=>[c.punch??-1,c.views||0],
+    views:c=>[c.views||0,0],new:c=>[-(c.age??9999),c.views||0]}[sort];
+  cs.sort((a,b)=>{const x=key(a),y=key(b);return y[0]-x[0]||y[1]-x[1]});
+  const seen=new Set(); cs=cs.filter(c=>!seen.has(c.key)&&seen.add(c.key));
+  grid.innerHTML=cs.length?cs.slice(0,240).map((c,i)=>{const [b,col]=P[c.platform]||["?","#999"];
+    return `<div class="card ${c.keep===false?"out":""}"><a class="thumb" href="${esc(c.url)}" target="_blank">
+    ${c.cover?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(c.cover)}" onerror="this.remove()">`:""}
+    <span class="pb" style="background:${col}">${b}</span><span class="badges">
+    ${c.seen_days===0?`<span class="bd new">NEW</span>`:""}${c.rise>=5?`<span class="bd rise">▲ ${Math.round(c.rise)}%/day</span>`:""}
+    ${c.sent>=5?`<span class="bd rise">↗ sent ${c.sent}/1K views</span>`:""}${c.punch>=3?`<span class="bd punch">${c.punch>=100?Math.round(c.punch):c.punch}× their following</span>`:""}</span></a>
+    <div class="body"><div class="author">@${esc(c.author)}${c.kind?` <span class="sub">· ${esc(c.kind)}</span>`:""}</div>
+    ${c.what?`<div class="what">${esc(c.what)}</div>`:""}<div class="cap">${esc(c.caption)}</div>
+    <div class="meta">${[c.views?fmt(c.views)+" views":"",c.likes?fmt(c.likes)+" likes":"",c.posted||"",c.age!=null?c.age+"d old":""].filter(Boolean).join(" · ")}</div>
+    ${c.format&&c.format!="unread"?`<div class="fmt">format: ${esc(c.format)}</div>`:""}
+    ${c.why?`<div class="why">${esc(c.why)}</div>`:""}
+    <div class="acts"><a href="${esc(c.url)}" target="_blank">Open</a>
+    ${c.platform=="instagram"?`<a href="/handoff/${esc(c.key.split(":").pop())}" target="_blank">Sheet</a>`:""}
+    <button data-i="${i}" class="tear">Tear down</button></div></div></div>`}).join("")
+    :`<div class="empty">Nothing matches. ${S.feeds.length?"":"Start a dig above — that's the whole setup."}</div>`;
+  const send=async(b,c,brand,route)=>{b.disabled=true;b.textContent="Running…";
+    const r=await post("/api/tear",{feed:c.feed,item:c.key,brand,route});
+    // the run shows in the strip at the top of the page, with a link to it
+    if(r&&r.job){b.textContent="Running — see the top";jobsbox.scrollIntoView({behavior:"smooth",block:"nearest"})}
+    setTimeout(()=>tick(true),1500)};
+  // The route lock (the owner, 2026-09-30): writing starts only on a route he
+  // picks. Teardown only = the swipe is torn down and waits for a route.
+  const askRoute=(b,c,brand)=>{const acts=b.parentElement;
+    acts.querySelectorAll(".pick").forEach(x=>x.remove());
+    b.textContent="Which route?";b.disabled=true;
+    [["creator","CREATOR"],["ai","AI"],["founder","FOUNDER"],["","TEARDOWN ONLY"]].forEach(([r,t])=>{
+      const p=document.createElement("button");p.className="tear pick";p.textContent=t;
+      p.onclick=()=>{acts.querySelectorAll(".pick").forEach(x=>x.remove());send(b,c,brand,r)};
+      acts.appendChild(p)})};
+  grid.querySelectorAll(".tear").forEach(b=>b.onclick=()=>{const c=cs[+b.dataset.i];
+    // A feed tied to one avatar already knows its brand. His saves don't — so
+    // the card asks which brand to inject, the way Swipe Studio did.
+    const f=S.feeds.find(f=>f.id==c.feed);
+    if(f&&f.core)return askRoute(b,c);
+    const acts=b.parentElement;
+    acts.querySelectorAll(".pick").forEach(x=>x.remove());
+    b.textContent="Which brand?";b.disabled=true;
+    (S.brands||[]).forEach(br=>{const p=document.createElement("button");p.className="tear pick";
+      p.textContent=br.toUpperCase();p.onclick=()=>askRoute(b,c,br);acts.appendChild(p)})});
+  daily.innerHTML=S.daily.length?`<table><tr><th>when</th><th>feeds pulled</th><th>new posts</th><th>kept</th><th>scraping</th><th>trouble</th></tr>${
+    S.daily.slice().reverse().map(d=>`<tr><td>${ago(d.at)}</td><td>${d.feeds.length}</td><td>${d.feeds.reduce((a,f)=>a+(f.new||0),0)}</td><td>${d.feeds.reduce((a,f)=>a+(f.kept||0),0)}</td><td>${d.spend!=null?"$"+d.spend.toFixed(2):"—"}</td><td>${esc(d.feeds.flatMap(f=>f.errors||[]).join("; ")||"none")}</td></tr>`).join("")}</table>`
+    :"Switched off for now. Pull now refreshes a feed; Tear down on any card sends it through the chain.";
+  prompts.innerHTML=Object.entries(S.prompts).map(([n,t])=>`<h4>${esc(n)}</h4><pre>${esc(t)}</pre>`).join("");
+  drawJobs(S.jobs);
+}
+async function drawChain(id){
+  if(!CH||CH.feed!=id){chainbox.innerHTML='<div class="empty">Reading the chain…</div>';CH=await(await fetch("/api/chain/"+id)).json()}
+  const st=CH.stages, o=n=>st[n-1].output;
+  const big=[o(1)?["TIKTOK_SEARCHES","TIKTOK_HASHTAGS","INSTAGRAM_HASHTAGS","YOUTUBE_SEARCHES"].reduce((a,k)=>a+(o(1)[k]||[]).length,0)+" searches":"built by hand",
+    o(2)?`${o(2).new} new of ${Object.values(o(2).by_source||{}).reduce((a,x)=>a+x.returned,0)||o(2).observed} returned`:"not yet",
+    (()=>{const k=Object.values(o(3).kinds);const a=k.reduce((x,y)=>x+y.kept,0),d=k.reduce((x,y)=>x+y.dropped,0);return a+d?`${a} in · ${d} out`:"not sifted"})(),
+    `${o(4).length} creators found`,`${o(5).pulls_so_far} pulls so far`];
+  chainbox.innerHTML=`<div class="pipe">${st.map((x,i)=>`<div class="st ${stageOn==x.n?"on":""}" data-n="${x.n}"><div class="n">Stage ${x.n}</div><div class="nm">${x.name}</div><div class="d">${esc(x.does)}</div><div class="big">${big[i]}</div><div class="mdl">${esc(x.model)}</div></div>`).join("")}</div><div class="stage" id="stagebox"></div>`;
+  chainbox.querySelectorAll(".st").forEach(e=>e.onclick=()=>{stageOn=+e.dataset.n;drawChain(id)});
+  const x=st[stageOn-1]; let out="";
+  if(x.n==1)out=x.output?`<table>${Object.entries(x.output).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(Array.isArray(v)?v.map(y=>typeof y=="object"?JSON.stringify(y):y).join(" · "):v)}</td></tr>`).join("")}</table>`:"This feed's sources were seated by hand from the avatar's receipts — no plan stage ran.";
+  if(x.n==2)out=x.output?`<p class="sub">Door rules: nothing older than ${x.entry?.max_age_days??"—"} days · search finds need ${fmt(x.entry?.hashtag_min_views)} views or ${fmt(x.entry?.hashtag_min_likes)} likes · declared ads never enter</p>
+    <table><tr><th>source</th><th>returned</th><th>new in</th><th>ads</th><th>too old</th><th>too small</th></tr>${Object.entries(x.output.by_source||{}).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.returned}</td><td class="kp">${v.new}</td><td>${v.ad}</td><td>${v.too_old}</td><td>${v.too_small}</td></tr>`).join("")}</table>${(x.output.errors||[]).length?`<p class="dr">${esc(x.output.errors.join("; "))}</p>`:""}`:"Hasn't pulled yet.";
+  if(x.n==3){const rows=l=>l.map(r=>`<tr><td><a href="${esc(r.url)}" target="_blank" style="color:var(--blue)">@${esc(r.author)}</a></td><td>${esc(r.kind)}</td><td>${esc(r.why)}</td></tr>`).join("");
+    out=Object.keys(x.output.kinds).length?`<table><tr><th>kind</th><th>kept</th><th>thrown out</th></tr>${Object.entries(x.output.kinds).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="kp">${v.kept||""}</td><td class="dr">${v.dropped||""}</td></tr>`).join("")}</table>
+    <div class="two"><div><h4 class="kp">Kept — and why</h4><table>${rows(x.output.kept)}</table></div><div><h4 class="dr">Thrown out — and why</h4><table>${rows(x.output.dropped)}</table></div></div>`:"No sift on this feed — it has no ask to sift against."}
+  if(x.n==4)out=x.output.length?`<table>${x.output.map(d=>`<tr><td>${esc(d.platform||"")}</td><td>@${esc(d.value||d.handle||"")}</td><td>${esc(d.receipt||d.why||"")}</td></tr>`).join("")}</table>`:"Nothing followed yet.";
+  if(x.n==5)out=`Runs on its own at 5:30 every morning. The log is in “The daily run” at the bottom of this page.`;
+  stagebox.innerHTML=`<h3>Stage ${x.n} — ${x.name}</h3><div class="sub">${esc(x.does)}</div>
+    <div class="two"><div><h4>What it was sent${x.prompt_file?` — ${x.prompt_file}`:""}</h4>${x.prompt?`<pre>${esc(x.prompt)}</pre>`:`<div class="sub">No prompt at this stage.</div>`}</div>
+    <div><h4>What came back</h4>${out}</div></div>`;
+}
+function drawJobs(js){
+  const live=js.filter(j=>j.status=="running"), fresh=js.filter(j=>j.status!="running"&&Date.now()-new Date(j.updated||j.started)<6e5).slice(0,1), show=(live.length?live:fresh).slice(0,3);
+  jobs.innerHTML=show.map(j=>`<div class="job"><span class="dot ${j.status}"></span><b>${esc(j.title||j.ask||j.feed||j.label||j.kind)}</b>
+    <span class="sub"> · ${j.kind} · ${ago(j.started)}</span>
+    ${j.kind=="teardown"&&j.label?`<span class="sub"> · <a href="/run/${esc(j.label)}" target="_blank">open the run →</a></span>`:""}
+    <div class="steps">${esc((j.steps||[]).slice(-5).map(s=>s.say).join("\n"))}</div></div>`).join("");
+  go.disabled=live.some(j=>j.kind=="dig");
+}
+async function post(u,b){const r=await fetch(u,{method:"POST",body:JSON.stringify(b)});const j=await r.json();if(j.error)alert(j.error);tick(true);return j}
+let wasLive=false;
+async function load(){S=await(await fetch("/api/state")).json();draw()}
+async function tick(force){const js=(await(await fetch("/api/jobs")).json()).jobs;const live=js.some(j=>j.status=="running");
+  if(force||wasLive&&!live){CH=null;await load()}else drawJobs(js);wasLive=live}
+go.onclick=()=>{if(ask.value.trim()){post("/api/dig",{ask:ask.value.trim()});ask.value=""}};
+q.oninput=draw; dropped.onclick=()=>{showOut=!showOut;draw()};
+load();setInterval(tick,4000);setInterval(load,300000);
+</script></body></html>

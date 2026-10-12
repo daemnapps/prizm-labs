@@ -1,5 +1,5 @@
 {
- "_readme": "The video machine's chain: a BRIEF from the teardown machine goes in, cut-ready scenes come out. This is the route AFTER teardown — teardown makes the brief, this turns the brief into output (Damon, 2026-09-02). Stages run in order for one piece. Var syntax matches the teardown machine so the two read alike: '=literal' · '@stageN' a prior stage's output · '!today' · anything else is a workspace-relative path, with 'brands/<brand>/...' filled from the run's brand at run time (rule 7). Stage 5 runs once PER SCENE ('scope': 'scene'); every other writing stage runs once per piece. Machine steps are named here so the chain reads as the whole process. The generation sequence every scene runs — voice, then the two stills, then the one clip, then the checks — is SCENE-GENERATION.md, the method page; the stages below are that sequence in the chain's own shape (2026-09-18 evening).",
+ "_readme": "The video machine's chain: a BRIEF from the teardown machine goes in, cut-ready scenes come out. This is the route AFTER teardown — teardown makes the brief, this turns the brief into output (the owner, 2026-09-02). Stages run in order for one piece. Var syntax matches the teardown machine so the two read alike: '=literal' · '@stageN' a prior stage's output · '!today' · anything else is a workspace-relative path, with 'brands/<brand>/...' filled from the run's brand at run time (rule 7). Stage 5 runs once PER SCENE ('scope': 'scene'); every other writing stage runs once per piece. Machine steps are named here so the chain reads as the whole process. The generation sequence every scene runs — voice, then the two stills, then the one clip, then the checks — is SCENE-GENERATION.md, the method page; the stages below are that sequence in the chain's own shape (2026-09-18 evening).",
  "build_dir": "",
  "stages": [
   {
@@ -173,7 +173,7 @@
    "stage": "stage5b",
    "name": "Motion QC",
    "runner": "vision-judge",
-   "prompt": "stage5b-motion-qc-v1-damon.md",
+   "prompt": "stage5b-motion-qc-v2-damon.md",
    "prompt_dir": "stage-5b-motion-qc",
    "scope": "scene",
    "why": "identity hold, product constancy, anatomy, camera motivation, lip-sync class — every clip before it ships",
@@ -215,7 +215,7 @@
    "prompt_dir": "stage-6-handoff"
   }
  ],
- "_variation_readme": "THE VARIATION CHAIN (Damon 2026-09-02, from the format-variation playbook — method-05). A variation is NOT a new film: the screenplay, blocking, dialogue, mechanics and edit are FROZEN, and only the rendering swaps. It runs AFTER a production is approved, and one approved production feeds unlimited variations — that is the scale multiplier. Stage v3 is deliberately MECHANICAL (machine/restyle.py, not a model): handing approved prompts to a model to restyle is what produced the slop run — it re-planned the film. Note the axis distinction: a VARIATION changes how the film looks. Changing the avatar, problem or angle changes what the film SAYS, which is a new production through stage0b with different inputs, never a variation.",
+ "_variation_readme": "THE VARIATION CHAIN (the owner 2026-09-02, from the format-variation playbook — method-05). A variation is NOT a new film: the screenplay, blocking, dialogue, mechanics and edit are FROZEN, and only the rendering swaps. It runs AFTER a production is approved, and one approved production feeds unlimited variations — that is the scale multiplier. Stage v3 is deliberately MECHANICAL (machine/restyle.py, not a model): handing approved prompts to a model to restyle is what produced the slop run — it re-planned the film. Note the axis distinction: a VARIATION changes how the film looks. Changing the avatar, problem or angle changes what the film SAYS, which is a new production through stage0b with different inputs, never a variation.",
  "variation_stages": [
   {
    "stage": "v0",

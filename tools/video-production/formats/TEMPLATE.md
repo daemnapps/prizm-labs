@@ -57,7 +57,7 @@ that points at the protocol gate it extends, never as its own gate.>
 **The failure this format invites.** <Every format has one thing it gets
 wrong first. Name it, and the fix.>
 
-**The run it was proven on.** <`runs/video-machine/<brand>/<label>/`, with
+**The run it was proven on.** <`runs/video-production/<brand>/<label>/`, with
 the date, or: not yet run end to end.>
 
 **What still fails.** <Named honestly rather than quietly shipped: the
@@ -66,7 +66,7 @@ ceilings hit, the things the cut still gets wrong.>
 ## The scene contract (universal) — rewritten 2026-09-18
 
 **A scene is one setting, one section of the argument, one PARAGRAPH of
-voice — and ONE clip.** Damon's ruling that day: "the scenes are not
+voice — and ONE clip.** the owner's ruling that day: "the scenes are not
 generated with detail — that is what causes the poor scene output and
 frames within them; there is no clean voice-over — shooting line by line
 comes out choppy. Fewer scenes, more frames within the scene describing
@@ -77,7 +77,7 @@ So a scene carries these slots, and no model, provider or brand word
 appears in any of them:
 
 **And since 2026-09-19 the brief carries those slots as a fenced `json`
-block, which IS the brief** (Damon: *"format these briefs in a way that AI is
+block, which IS the brief** (the owner: *"format these briefs in a way that AI is
 able to directly build what it needs to build"*). The Markdown above the
 block is the readable view; nothing downstream parses it. The block's shape
 is `brief_schema` in `machine/model-inputs.json`, printed in
@@ -93,14 +93,14 @@ is `brief_schema` in `machine/model-inputs.json`, printed in
 | Setting | `setting_id` | the one world block it plays in — a scene never changes place |
 | Who | `who` | who is in it, by name; the cast block already describes them |
 | **Voice** | `voice` | **the paragraph** — a few sentences, byte-identical to the script. Not a line. This is the unit the one continuous voice track is chunked on |
-| **FIRST FRAME** | `first_frame` | a full still description in the stills order — subject · composition · action · location · style · camera · lighting — with the references it uses (cast sheet, packshot, style frame) |
+| **FIRST FRAME** | `first_frame` | a full still description in the stills order — subject · composition · action · location · style · camera · lighting — with the references it uses (cast sheet, packshot, style frame). A frame with **no face in it** (hands, the product) also carries a `viewpoint`: whose eyes the camera is and which frame edge every limb enters from, elbows off-frame — required there, absent on a face frame (2026-09-22) |
 | **BEATS** | `beats[]` | what happens between the two frames: one line each, ONE verb, the camera only where it moves, the words from the paragraph playing over it, the feeling it carries. Their timestamps come from the voice track, never from a guess. **A beat is not a picture** — it is written into the clip's timeline |
 | **LAST FRAME** | `last_frame` | a still description written as a DELTA from the first, and nothing else — plus its camera, one of exactly `same` · `push-in to <framing>` · `pull-out to <framing>` · `new angle to <framing>` |
 | To camera | `to_camera` | whether this scene is spoken to the lens. True: its audio is its own slice of the one continuous track and the clip lip-syncs to it. False: it is a B-roll scene and the same slice is laid under it at the edit |
 
 ### B-ROLL IS A SCENE (ruled 2026-09-19)
 
-Damon, that day: ***"there is no B-roll."*** Where a format's argument SHOWS
+the owner, that day: ***"there is no B-roll."*** Where a format's argument SHOWS
 something — the product in the hand, the row of things already tried, the
 mechanism demonstrated, a before and after, a behaviour ending — that is a
 scene of its own, not a note inside somebody else's:

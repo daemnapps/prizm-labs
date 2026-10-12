@@ -26,7 +26,28 @@ import shutil
 import sys
 import tempfile
 import unittest
+import os
 from pathlib import Path
+
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
 
 HERE = Path(__file__).resolve().parent
 FIX = HERE / "fixtures"
@@ -179,7 +200,7 @@ class CastPerBrand(unittest.TestCase):
 
     def test_cast_file_resolves_per_brand(self):
         a = self.pm.use_brand("_fixture-a")
-        self.assertEqual(a, FIX / "cast-workspace/brands/_fixture-a/core-avatars/casting")
+        self.assertEqual(a, FIX / "cast-workspace/brands/_fixture-a/ai-cast/casting")
         self.assertEqual(self.pm.elements()["lead-a"], "00000000-0000-4000-8000-0000000000a1")
         self.pm.use_brand("_fixture-b")
         got = self.pm.elements()
@@ -230,7 +251,7 @@ class LivePrompts(unittest.TestCase):
             self.assertTrue(f.read_text().startswith(self.GUARD), f.name)
 
     def test_neither_names_a_brand_or_a_price(self):
-        brands = [p.name for p in (HERE.parents[3] / "brands").iterdir()
+        brands = [p.name for p in (_workspace() / "brands").iterdir()
                   if p.is_dir() and not p.name.startswith(("_", "."))]
         for f in (self.OFFER, self.AROLL):
             text = f.read_text()

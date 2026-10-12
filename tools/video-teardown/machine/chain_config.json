@@ -1,32 +1,32 @@
 {
-  "_readme": "E2e regression chain (T-15.3; extended through stage 5 for the outer quality loop, T-40). Stages run in order per video; claude-text stages run under the machine owner's `claude` login and skip loudly if it is absent. Prompts resolve against the build's prompts/ at head \u2014 a version bump changes the hash, which is exactly what a regression run is for; chain_run warns when a newer version file exists than the one pinned here. Brand enters via this run-config (rule 7: machinery stays brand-agnostic; the config names the brand at run time). Var syntax: '=literal' \u00b7 '@stageN' prior stage \u00b7 '@stageN#pick' its derived pick \u00b7 '@stageN*' every group video's output concatenated \u00b7 '#video_count' \u00b7 anything else = workspace-relative path. Stage 4b's human hook pick has no human in a regression run: 'pick': 'control' takes VERSION 0 and records the deviation in the run manifest. Stage 4e carries 'role': 'judge' \u2014 it runs and records, it gates nothing (green is human-calibrated only). Stage 5 carries 'scope': 'group' \u2014 a fan-in: one brief per brief_groups entry, which is what the outer e2e loop judges. drive_id is the Drive file id of the source video \u2014 the id only, never the media (workspace rule 3). Viewers embed it the way the blind-cal app does: drive.google.com/file/d/<id>/preview.",
+  "_readme": "E2e regression chain (T-15.3; extended through stage 5 for the outer quality loop, T-40). Stages run in order per video; claude-text stages run under the machine owner's `claude` login and skip loudly if it is absent. Prompts resolve against the build's prompts/ at head — a version bump changes the hash, which is exactly what a regression run is for; chain_run warns when a newer version file exists than the one pinned here. Brand enters via this run-config (rule 7: machinery stays brand-agnostic; the config names the brand at run time). Var syntax: '=literal' · '@stageN' prior stage · '@stageN#pick' its derived pick · '@stageN*' every group video's output concatenated · '#video_count' · anything else = workspace-relative path. Stage 4b's human hook pick has no human in a regression run: 'pick': 'control' takes VERSION 0 and records the deviation in the run manifest. Stage 4e carries 'role': 'judge' — it runs and records, it gates nothing (green is human-calibrated only). Stage 5 carries 'scope': 'group' — a fan-in: one brief per brief_groups entry, which is what the outer e2e loop judges. drive_id is the Drive file id of the source video — the id only, never the media (workspace rule 3). Viewers embed it the way the blind-cal app does: drive.google.com/file/d/<id>/preview.",
   "build_dir": "new-workflow-design/builds/video-teardown",
   "stages": [
     {
       "stage": "stage1",
       "card": "3.1",
       "runner": "gemini-video",
-      "prompt": "stage1-teardown-v5-damon.md",
+      "prompt": "stage1-teardown-v14-damon.md",
       "model": "gemini-3-flash-preview"
     },
     {
       "stage": "stage1b",
       "card": "audience",
       "runner": "claude-text",
-      "prompt": "stage1b-audience-v1-damon.md",
+      "prompt": "stage1b-audience-v10-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "today": "!today",
         "teardown_record": "@stage1",
         "avatars": "?roster"
       },
-      "note": "Who our version speaks to. Runs AFTER the breakdown because a video has to be torn down before anyone can say who it speaks to \u2014 the copy chain can decide this at triage only because its source is already words. Before stage 2 because the spec is deliberately brand-free, and before stage 3 because injection is the first consumer and a stage cannot choose its own inputs."
+      "note": "Who our version speaks to. Runs AFTER the breakdown because a video has to be torn down before anyone can say who it speaks to — the copy chain can decide this at triage only because its source is already words. Before stage 2 because the spec is deliberately brand-free, and before stage 3 because injection is the first consumer and a stage cannot choose its own inputs."
     },
     {
       "stage": "stage2",
       "card": "3.1b",
       "runner": "gemini-text",
-      "prompt": "stage2-replication-v2-damon.md",
+      "prompt": "stage2-replication-v4-damon.md",
       "model": "gemini-3-flash-preview",
       "vars": {
         "teardown_record": "@stage1"
@@ -36,33 +36,35 @@
       "stage": "stage3",
       "card": "4.2a",
       "runner": "claude-text",
-      "prompt": "stage3-injection-v3-damon.md",
+      "prompt": "stage3-injection-v14-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "teardown_record": "@stage1",
         "replication_spec": "@stage2",
-        "avatar": "brands/<brand>/customer/avatar.md",
-        "language_bank": "brands/<brand>/customer/language-bank.md",
+        "avatar": "brands/<brand>/customer-experience/avatar.md",
+        "language_bank": "brands/<brand>/customer-experience/language-bank.md",
         "product_file": "brands/<brand>/products/",
         "identity_anchors": "brands/<brand>/brand-identity/identity-anchors.md",
         "brand_name": "#brand_name",
         "production_route": "=creator",
         "today": "!today",
-        "sound_form": "@stage0"
+        "sound_form": "@stage0",
+        "structure_approvals": "!structure_approvals",
+        "casting": "runs/casting/<brand>/CAST.md"
       }
     },
     {
       "stage": "stage4a",
       "card": "4.2b",
       "runner": "claude-text",
-      "prompt": "stage4a-placement-v3-damon.md",
+      "prompt": "stage4a-placement-v12-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "baseline_injection": "@stage3",
         "teardown_record": "@stage1",
         "replication_spec": "@stage2",
         "product_file": "brands/<brand>/products/",
-        "objection_bank": "brands/<brand>/customer/objection-bank.md",
+        "objection_bank": "brands/<brand>/customer-experience/objection-bank.md",
         "today": "!today"
       }
     },
@@ -70,13 +72,13 @@
       "stage": "stage4b",
       "card": "4.2c",
       "runner": "claude-text",
-      "prompt": "stage4b-hook-v4-damon.md",
+      "prompt": "stage4b-hook-v16-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "baseline_injection": "@stage3",
         "teardown_record": "@stage1",
-        "language_bank": "brands/<brand>/customer/language-bank.md",
-        "avatar": "brands/<brand>/customer/avatar.md",
+        "language_bank": "brands/<brand>/customer-experience/language-bank.md",
+        "avatar": "brands/<brand>/customer-experience/avatar.md",
         "replication_spec": "@stage2",
         "today": "!today"
       },
@@ -86,7 +88,7 @@
       "stage": "stage4c",
       "card": "4.2d",
       "runner": "claude-text",
-      "prompt": "stage4c-expansion-v4-damon.md",
+      "prompt": "stage4c-expansion-v14-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "placement_plan": "@stage4a",
@@ -94,8 +96,8 @@
         "baseline_injection": "@stage3",
         "teardown_record": "@stage1",
         "product_file": "brands/<brand>/products/",
-        "language_bank": "brands/<brand>/customer/language-bank.md",
-        "offer_file": "brands/<brand>/offers/offer-bank.md",
+        "language_bank": "brands/<brand>/customer-experience/language-bank.md",
+        "offer_file": "brands/<brand>/products/offer-bank.md",
         "hook_set": "@stage4b",
         "replication_spec": "@stage2",
         "today": "!today"
@@ -105,14 +107,14 @@
       "stage": "stage4d",
       "card": "4.2e",
       "runner": "claude-text",
-      "prompt": "stage4d-close-v3-damon.md",
+      "prompt": "stage4d-close-v8-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "expanded_script": "@stage4c",
         "baseline_injection": "@stage3",
         "product_file": "brands/<brand>/products/",
-        "objection_bank": "brands/<brand>/customer/objection-bank.md",
-        "offer_file": "brands/<brand>/offers/offer-bank.md",
+        "objection_bank": "brands/<brand>/customer-experience/objection-bank.md",
+        "offer_file": "brands/<brand>/products/offer-bank.md",
         "placement_plan": "@stage4a",
         "replication_spec": "@stage2",
         "today": "!today"
@@ -122,48 +124,48 @@
       "stage": "stage4e",
       "card": "4.3",
       "runner": "claude-text",
-      "prompt": "stage4e-audit-v1-damon.md",
-      "model": "claude-opus-5",
+      "prompt": "stage4e-audit-v4-damon.md",
+      "model": "claude-sonnet-5-5",
       "vars": {
         "full_script": "@stage4d",
         "teardown_record": "@stage1",
         "replication_spec": "@stage2",
         "placement_plan": "@stage4a",
         "product_file": "brands/<brand>/products/",
-        "offer_file": "brands/<brand>/offers/offer-bank.md",
-        "objection_bank": "brands/<brand>/customer/objection-bank.md",
-        "language_bank": "brands/<brand>/customer/language-bank.md",
+        "offer_file": "brands/<brand>/products/offer-bank.md",
+        "objection_bank": "brands/<brand>/customer-experience/objection-bank.md",
+        "language_bank": "brands/<brand>/customer-experience/language-bank.md",
         "today": "!today"
       },
       "scope": "per-video",
-      "note": "RESTORED 2026-08-19 (Damon), after being removed the same day. The chain needs a gate before a brief is written on top of a drifted script. Two known defects it still carries: it has never run, and its SHIP condition passes a script with slots flagged-not-filled \u2014 so as written it approves rather than holds (audit finding 1). Fix both or the gate is decorative."
+      "note": "RESTORED 2026-08-19 (the owner), after being removed the same day. The chain needs a gate before a brief is written on top of a drifted script. Two known defects it still carries: it has never run, and its SHIP condition passes a script with slots flagged-not-filled — so as written it approves rather than holds (audit finding 1). Fix both or the gate is decorative."
     },
     {
       "stage": "stage5",
       "card": "4.2f",
       "runner": "claude-text",
-      "prompt": "stage5-brief-v8-damon.md",
+      "prompt": "stage5-brief-v23-damon.md",
       "model": "claude-opus-5",
       "vars": {
         "stage4_outputs": "@stage4d*",
         "creator_profile": "=UNASSIGNED. The run supplies this when it is a creator's own post. Never name a creator here.",
         "product_file": "brands/<brand>/products/",
-        "offer_file": "brands/<brand>/offers/offer-bank.md",
-        "language_bank": "brands/<brand>/customer/language-bank.md",
+        "offer_file": "brands/<brand>/products/offer-bank.md",
+        "language_bank": "brands/<brand>/customer-experience/language-bank.md",
         "production_route": "=creator",
         "video_count": "#video_count",
         "today": "!today",
         "sound_form": "@stage0",
-        "casting": "brands/<brand>/core-avatars/casting/CAST.md"
+        "casting": "runs/casting/<brand>/CAST.md"
       },
       "scope": "group",
-      "note": "stage0's triage ruling reaches the brief here. Without this wiring the SOUND FORM line dies at triage and a sung source produces a spoken brief \u2014 exactly what happened on swipe-resilia-song-160986941 (2026-09-02)."
+      "note": "stage0's triage ruling reaches the brief here. Without this wiring the SOUND FORM line dies at triage and a sung source produces a spoken brief — exactly what happened on swipe-brand-c-song-160986941 (2026-09-02)."
     },
     {
       "stage": "stage6",
       "card": "5.2",
       "runner": "scene-frames",
-      "prompt": "stage6-frames-v1-damon.md",
+      "prompt": "stage6-frames-v2-damon.md",
       "model": "gemini-3-pro-image",
       "scope": "group",
       "role": "stage",
@@ -171,35 +173,35 @@
         "brief": "@stage5",
         "product_look": "brands/<brand>/products/reference/look.md"
       },
-      "why": "Stage 5 requires a frame on every scene but is a text pass and cannot cut a still or run an image model, so the brief shipped with none. This stage does it: her own video first, generation only for what it lacks, every frame recorded unchecked. product_look is empty until the product file describes the product \u2014 while it is empty, scenes holding the product are skipped rather than generated with invented packaging."
+      "why": "Stage 5 requires a frame on every scene but is a text pass and cannot cut a still or run an image model, so the brief shipped with none. This stage does it: her own video first, generation only for what it lacks, every frame recorded unchecked. product_look is empty until the product file describes the product — while it is empty, scenes holding the product are skipped rather than generated with invented packaging."
     }
   ],
   "videos": [
     {
-      "label": "gold-jackie03",
-      "path": "~/Library/CloudStorage/GoogleDrive-dayu@<brand>.com/Shared drives/Shared Assets/lab/dayu/prompt-optimizer/cal2-videos/jackie-03.mp4",
-      "why": "cal2-04 \u2014 both reviewers shipped its v5 teardown (golden)",
-      "drive_id": "1eiwqFd5qRG34GRICQ8VPXhh60Qsf_7Ta"
+      "label": "gold-calib03",
+      "path": "${SHARED_DRIVE}/prompt-optimizer/cal2-videos/calib-03.mp4",
+      "why": "cal2-04 — both reviewers shipped its v5 teardown (golden)",
+      "drive_id": ""
     },
     {
-      "label": "gold-jackie02",
-      "path": "~/Library/CloudStorage/GoogleDrive-dayu@<brand>.com/Shared drives/Shared Assets/lab/dayu/prompt-optimizer/cal2-videos/jackie-02.mp4",
-      "why": "cal2-06 \u2014 both reviewers shipped its v5 teardown (golden)",
-      "drive_id": "1_k5ZYwTE3n2BwMPEvClnYum4QsJwiGa-"
+      "label": "gold-calib02",
+      "path": "${SHARED_DRIVE}/prompt-optimizer/cal2-videos/calib-02.mp4",
+      "why": "cal2-06 — both reviewers shipped its v5 teardown (golden)",
+      "drive_id": ""
     }
   ],
   "brief_groups": [
     {
       "id": "elena",
-      "label": "Elena \u00b7 both golden formats",
+      "label": "Creator F · both golden formats",
       "videos": [
-        "gold-jackie03",
-        "gold-jackie02"
+        "gold-calib03",
+        "gold-calib02"
       ],
-      "why": "The faithful artifact: stage 5 is a fan-in \u2014 several source formats become ONE creator brief, which is what actually leaves the building and what Damon's hand-made briefs are. A second brief is one entry here (another creator profile, or a subset of videos) \u2014 grouping is a config line, not a code change."
+      "why": "The faithful artifact: stage 5 is a fan-in — several source formats become ONE creator brief, which is what actually leaves the building and what the owner's hand-made briefs are. A second brief is one entry here (another creator profile, or a subset of videos) — grouping is a config line, not a code change."
     }
   ],
   "known_deviations": [
-    "source formats are jackie's videos while the creator profile is Elena's \u2014 stage 5's rule 'name which of HER OWN posts the structure came from' cannot be satisfied by this fixture set, and the 2026-08-17 run fabricated a citation at exactly this point. Judge that section knowing the input made it unanswerable."
+    "source formats are creator-g's videos while the creator profile is Creator F's — stage 5's rule 'name which of HER OWN posts the structure came from' cannot be satisfied by this fixture set, and the 2026-08-17 run fabricated a citation at exactly this point. Judge that section knowing the input made it unanswerable."
   ]
 }

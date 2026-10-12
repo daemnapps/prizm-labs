@@ -1,66 +1,61 @@
 """The request in, the edited picture out — judged against the reference.
 
     import image_edit as RE
-    RE.edit({"brand": "…", "picture": "…/draft-01.png",
+    RE.edit({"brand": "…", "picture": "…/p152-01.png",
              "change": "the tube is in her left hand, not her right"})
     RE.edit({"brand": "…", "picture": "…", "fix": "logo"})
-    RE.vary({"brand": "…", "baseline": "…/draft-01.png",
+    RE.edit({"brand": "…", "picture": "…", "fix": "text",
+             "args": {"was": "SAALE", "now": "SALE"}})
+    RE.vary({"brand": "…", "baseline": "…/p152-01.png",
              "variations": [{"id": "headline", "args": {"headline": "…"}},
                             {"id": "person",   "args": {"who": "woman in her fifties"}}]})
-    RE.ingest("runs/image-edit/<brand>/<label>", {"<slug>": "…/result.png"})
-
-Two halves, the same shape as image-production's plates (`plates.py prepare`
-/ `ingest`): the pictures are made on **Higgsfield**, whose image models are
-reached by the agent in the session (Higgsfield Supercomputer, or Claude Code
-with the Higgsfield connector) — a script cannot call them. So:
-
-    edit / vary / sequence   resolve the ONE change, refuse a bad one, write
-                             job.json: the instruction exactly as it is sent,
-                             the model, the frame, the references in order,
-                             and the judge's prompt. Nothing is spent.
-    (the session)            generates each job on Higgsfield and writes
-                             results.json: {slug: picture}
-    ingest                   both pictures to the two-picture judge, the
-                             result filed as a NEW version, or held under
-                             rejected/ with the reason
-
-A caller that can make the picture itself passes `maker(job) -> [paths]` and
-the two halves run as one; the tests do exactly that.
 
 One request shape. A field nothing here names is REFUSED, not ignored.
 
     brand       required   a folder under brands/
     picture     required   the reference — a file on this machine (`baseline` for vary)
+    region      optional   left,top,right,bottom as PERCENTAGES — the only part of the
+                           picture that may differ. Everything outside it is put back
+                           from the original, pixel for pixel, so it cannot drift
+                           (the tube label redrew itself on every roll, 2026-09-22)
     change      one of     free words: the ONE thing to change
     fix         one of     a row in library/fixes — `args` fills its slots
     args        optional   the slots a fix or variation needs
-    region      optional   left,top,right,bottom as PERCENTAGES — the only part of the
-                           picture that may differ. Everything outside it is put back
-                           from the original, pixel for pixel, when the result comes in
     kind        optional   which default split: picture (default) · slide · frame-A/B/C
     keep        optional   extra things that must not move, in words
-    elements    optional   element ids the change is about (<<<id>>> rides along)
+    elements    optional   element ids the change is about (their bank reference rides along)
     product     optional   a product the brand declares (its photo rides along)
-    aspect      optional   the frame to edit at; default read off the reference
+    purpose     optional   image-production purpose, default `ad`
+    aspect      optional   default: 9:16 for a 4:5 or 9:16 reference (assets are
+                           9:16 only — a 4:5 reference is the content and the
+                           scene is extended above and below); else the
+                           reference's own frame
     count       optional   rolls per edit, default 1
     label       optional   the run label; default from the picture's name
     out         optional   default runs/image-edit/<brand>/<label>/
-    dry_run     optional   resolve and print, write the record, no job
-    model       optional   a different Higgsfield model for this one edit
+    dry_run     optional   resolve and print, spend nothing
+    model       optional   force one image model; it still has to be a declared row
     references  optional   more reference pictures on this machine — the real logo file,
                            the product photo — reproduced exactly, never described
     words       optional   the words the result carries, verbatim (a list of lines) — a
-                           carousel slide's own words
-    purpose     optional   kept for parity with image-production; recorded only
+                           carousel slide's own words. Added to the change as
+                           `the words change to "…"`; the guard counts the change
+                           as written, not the words (kind `slide` lists the words as
+                           what may change)
 
-The rule this file adds to the discipline: a result is a NEW version filed
-beside the record — the original is never written to.
+The generation is `tools/image-production`'s (`from_image` → the edit
+model, the keep-everything clause, its own one-picture judge, the gates, the
+Drive mirror). This file adds what that engine does not know: the delta
+discipline, the fix and variation libraries, the two-picture judge, and the
+rule that a result is a NEW version filed beside the record — the original
+is never written to.
 """
 import json
 import re
 import shutil
 import struct
 from datetime import datetime
+import sys
 from pathlib import Path
 
 from . import compare as CMP, discipline as D, paths as P
@@ -70,18 +65,6 @@ OPTIONAL = ("change", "fix", "args", "kind", "keep", "elements", "product", "pur
             "aspect", "count", "label", "out", "dry_run", "checks", "model", "references",
             "region", "words")
 FIELDS = set(REQUIRED) | set(OPTIONAL)
-
-# The model the edit runs on — the same one the editing skills name
-# (skills/logo-swap.md, avatar-swap.md, element-swap.md), so a skill run in
-# Higgsfield and a run of this tool are the same edit. Before a run the agent
-# looks for a NEWER version of this same model and uses it; never a different
-# maker on its own.
-MODEL = {"model": "gpt_image_2_5", "variant": "sunburst", "quality": "high", "resolution": "2k"}
-
-# The frames an edit is sent at. A reference keeps its own frame.
-ASPECTS = {k: {"w": w, "h": h} for k, (w, h) in {
-    "1:1": (1, 1), "4:5": (4, 5), "9:16": (9, 16), "16:9": (16, 9),
-    "2:3": (2, 3), "3:2": (3, 2), "3:4": (3, 4), "4:3": (4, 3)}.items()}
 
 
 class BadRequest(SystemExit):
@@ -132,7 +115,7 @@ def fill(text, args):
 
 def dims(path):
     """(w, h) read off the file header — PNG and JPEG, no library. None when
-    the file is neither."""
+    the file is neither; the purpose's default frame is used then."""
     b = Path(path).read_bytes()
     if b[:8] == b"\x89PNG\r\n\x1a\n":
         w, h = struct.unpack(">II", b[16:24])
@@ -141,8 +124,7 @@ def dims(path):
         i = 2
         while i < len(b) - 9:
             if b[i] != 0xFF:
-                i += 1
-                continue
+                i += 1; continue
             marker = b[i + 1]
             if marker in (0xC0, 0xC1, 0xC2):
                 h, w = struct.unpack(">HH", b[i + 5:i + 9])
@@ -152,46 +134,30 @@ def dims(path):
     return None
 
 
-def _is(wh, w, h, tol):
-    return bool(wh) and abs(wh[1] / wh[0] - h / w) < tol
-
-
 def deliver_frame(picture):
-    """The frame the result leaves in. Assets are 9:16 only, faces and words
-    inside the centred 4:5 zone: a 4:5 or 9:16 reference leaves at 9:16. Any
-    other frame (a sheet, a square) is edited as it is. "9:16" or None."""
+    """The frame the result leaves in. the owner, 2026-09-22: assets are generated
+    at 9:16 only, faces and words inside a centred 4:5 zone. A 4:5 or 9:16
+    reference leaves at 9:16 — a 4:5 one is the content, and the model extends
+    the scene above and below it. Any other frame (a sheet, a square) is
+    edited as it is. Returns "9:16" or None."""
     wh = dims(picture)
-    if _is(wh, 4, 5, 0.02) or _is(wh, 9, 16, 0.03):
+    if not wh:
+        return None
+    w, h = wh
+    if abs(h / w - 1.25) < 0.02 or abs(h / w - 16 / 9) < 0.03:
         return "9:16"
     return None
 
 
-def nearest_aspect(wh, table=None):
+def nearest_aspect(wh, table):
     """The declared aspect closest to the picture's own. An edit keeps the
-    frame it was given."""
-    table = table or ASPECTS
-    if not wh:
+    frame it was given; the engine measures the result against it."""
+    if not wh or not table:
         return None
-    got = wh[1] / wh[0]
-    return min(table.items(), key=lambda kv: abs(kv[1]["h"] / kv[1]["w"] - got))[0]
-
-
-def frame_for(picture, asked=None):
-    """(aspect to edit at, finish step or None).
-
-    A 4:5 reference is edited AT 4:5 — the content — and then finished to 9:16
-    by `skills/resize-9x16.md` (the picture untouched, the background continued
-    above and below). Feeding a padded 9:16 back in makes the model read the
-    bands as picture (image-production PIPELINE.md §4a). A 9:16 reference is
-    edited at 9:16. Anything else keeps its own frame."""
-    if asked:
-        return asked, None
-    wh = dims(picture)
-    if _is(wh, 4, 5, 0.02):
-        return "4:5", "resize-9x16"
-    if _is(wh, 9, 16, 0.03):
-        return "9:16", None
-    return nearest_aspect(wh), None
+    w, h = wh
+    got = h / w
+    best = min(table.items(), key=lambda kv: abs(kv[1]["h"] / kv[1]["w"] - got))
+    return best[0]
 
 
 # --------------------------------------------------------------- the request
@@ -200,18 +166,13 @@ def resolve(req, fix_table=None, var_table=None, split_table=None):
     """Everything one edit means, worked out without spending anything."""
     unknown = sorted(set(req) - FIELDS - {k for k in req if k.startswith("_")})
     if unknown:
-        raise BadRequest(f"the request carries fields this tool does not take: "
+        raise BadRequest(f"the request carries fields this component does not take: "
                          f"{', '.join(unknown)} — the contract is: {', '.join(sorted(FIELDS))}")
     missing = [f for f in REQUIRED if not req.get(f)]
     if missing:
         raise BadRequest(f"the request is missing: {', '.join(missing)}")
     if bool(req.get("change")) == bool(req.get("fix")):
         raise BadRequest("give exactly one of `change` (free words) or `fix` (a library row)")
-    if not (P.brands() / req["brand"]).is_dir():
-        have = sorted(p.name for p in P.brands().iterdir()
-                      if p.is_dir() and not p.name.startswith((".", "_"))) if P.brands().is_dir() else []
-        raise BadRequest(f"no brand folder brands/{req['brand']} — have: {', '.join(have) or 'none yet'} "
-                         f"(a brand is set up from brands/_TEMPLATE/)")
 
     pic = Path(req["picture"]).expanduser()
     if not pic.is_file():
@@ -227,9 +188,10 @@ def resolve(req, fix_table=None, var_table=None, split_table=None):
         row = table.get(req["fix"])
         if not row:
             raise BadRequest(f"`{req['fix']}` is not a fix — have: {', '.join(sorted(table))}")
-        if row.get("status") == "parked":
-            raise BadRequest(f"fix `{row['id']}` is parked, not run — {row.get('what', '')}")
-        need = [n for n in row.get("needs", []) if n not in args]
+        if row.get("status") not in ("draft", "approved"):
+            raise BadRequest(f"fix `{row.get('id', req['fix'])}` is {row.get('status') or 'without a status'}"
+                             f" — only a draft or approved fix runs")
+        need =[n for n in row.get("needs", []) if n not in args]
         if need:
             raise BadRequest(f"fix `{row['id']}` needs: {', '.join(need)} — pass them in `args`")
         change = fill(row["delta"], args)
@@ -255,8 +217,14 @@ def resolve(req, fix_table=None, var_table=None, split_table=None):
     if words:
         change = change.rstrip().rstrip(".") + "; the words change to " + \
             " / ".join(f'"{w}"' for w in words)
-    text = D.instruction(split["keep"], change, req.get("elements"),
-                         extra_keep + list(req.get("keep") or []))
+    if region:
+        # A masked edit: the words describe what goes IN the rectangle. The
+        # mask holds everything else, so the keep clause would only tell the
+        # model to reproduce what is already there — and it did (2026-09-22).
+        text = D.region_instruction(change)
+    else:
+        text = D.instruction(split["keep"], change, req.get("elements"),
+                             extra_keep + list(req.get("keep") or []))
     refused = D.guard(guarded, text)
 
     label = req.get("label") or f"{pic.stem}--{(req.get('fix') or 'edit')}"
@@ -273,131 +241,6 @@ def resolve(req, fix_table=None, var_table=None, split_table=None):
         "references": [str(Path(x).expanduser()) for x in (req.get("references") or [])],
     }
 
-
-def _brand_refs(brand, wanted, product):
-    """Which brand files ride along: the logo for a logo fix, the product
-    photo for a product fix — found by image-production's own brand paths, so
-    the lookup rules live in one place."""
-    if not wanted:
-        return [], []
-    PP = P.production()
-    refs, notes = [], []
-    for w in wanted:
-        if w == "logo":
-            b = PP.brand(brand)
-            cands = [b["logo_white"], b["logo_dark"]] + sorted(Path(b["identity"]).glob("*logo*.png")) \
-                + sorted((Path(b["root"]) / "brand-assets").glob("*logo*.png"))
-            hit = next((c for c in cands if Path(c).is_file()), None)
-            if hit:
-                refs.append(str(hit))
-            else:
-                notes.append(f"brands/{brand}/brand-identity holds no logo file — the logo fix has "
-                             f"nothing to swap in (never let the model draw a logo from memory)")
-        elif w == "product":
-            if not product:
-                notes.append("this swaps the product — name `product` on the request")
-                continue
-            try:
-                photo = PP.product_cutout(brand, product)
-            except SystemExit as e:
-                notes.append(str(e))
-                continue
-            if photo and Path(photo).is_file():
-                refs.append(str(photo))
-            else:
-                notes.append(f"the photo for `{product}` is not a file on this machine — it must be "
-                             f"in brands/{brand}/products/ (products/images.json `cutout`)")
-    return refs, notes
-
-
-def _version(out, stem):
-    """The next version number for this stem under this run root — a result
-    is a new version beside the record, never the original overwritten."""
-    root = out.parent
-    n = 0
-    if root.is_dir():
-        for f in root.rglob(f"{stem}--*-v*"):
-            try:
-                n = max(n, int(f.stem.rsplit("-v", 1)[1].split("-")[0]))
-            except (IndexError, ValueError):
-                pass
-        for f in root.rglob("edit.json"):
-            try:
-                rec = json.loads(f.read_text())
-            except ValueError:
-                continue
-            if Path(rec.get("picture", "")).stem == stem:
-                n = max(n, int(rec.get("version") or 0))
-    return n + 1
-
-
-def _file(out, r):
-    """The record. `edit.json` is this tool's own; `run.json` is the smallest
-    shape a run index reads to know a run happened at all."""
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "edit.json").write_text(json.dumps(r, indent=1))
-    (out / "run.json").write_text(json.dumps(
-        {"machine": P.TOOL, "brand": r.get("brand"), "label": r.get("label"),
-         "state": r.get("state"), "opened": r.get("at")}, indent=1))
-
-
-def _job(r, refs, aspect, finish):
-    """One generation, exactly as the session sends it to Higgsfield."""
-    m = dict(MODEL)
-    if r.get("model"):
-        m = {"model": r["model"]}
-    return {
-        "slug": r["label"], "out": r["out"], **m,
-        "aspect_ratio": aspect, "count": r["count"],
-        "prompt": r["instruction"],
-        "references": [r["picture"]] + refs,
-        "references_role": "image_references — the reference picture FIRST, then each file in order",
-        "finish": finish,
-        "region": r["region"],
-        "judge_prompt": CMP.prompt_for(r["asked"], r["checks"]),
-    }
-
-
-def edit(req, maker=None, compare_caller=None, fix_table=None, var_table=None, split_table=None):
-    """One edit: the instruction, the job, and — once the picture is back —
-    the judge and the record. Writes only under `out`."""
-    r = resolve(req, fix_table, var_table, split_table)
-    out = Path(r["out"])
-    out.mkdir(parents=True, exist_ok=True)
-    r["at"] = datetime.now().isoformat(timespec="seconds")
-    r["version"] = _version(out, Path(r["picture"]).stem)
-
-    if r["refused"]:
-        r["state"] = "refused"
-        _file(out, r)
-        return r
-
-    refs, notes = _brand_refs(r["brand"], r["brand_refs"], r["product"])
-    r["notes"] = notes
-    if r["brand_refs"] and not refs:
-        r["state"] = "refused"
-        r["refused"] = "; ".join(notes)
-        _file(out, r)
-        return r
-    refs = refs + [x for x in r.get("references", []) if x not in refs]
-
-    aspect, finish = frame_for(r["picture"], r["aspect"])
-    r["job"] = _job(r, refs, aspect, finish)
-
-    if req.get("dry_run"):
-        r["state"] = "dry"
-        _file(out, r)
-        return r
-
-    (out / "job.json").write_text(json.dumps({"jobs": [r["job"]]}, indent=1))
-    r["state"] = "ready"
-    _file(out, r)
-    if maker is None:
-        return r
-    return ingest_one(out, maker(r["job"]), compare_caller=compare_caller)
-
-
-# ------------------------------------------------------------------- ingest
 
 def _restore_outside(original, result, region):
     """Put the original back everywhere outside the region, at the result's own
@@ -419,145 +262,245 @@ def _restore_outside(original, result, region):
     return f"only {box[0]},{box[1]}–{box[2]},{box[3]} of {w}x{h} could change; the rest is the original"
 
 
-def _entries(given):
-    """A result as the session hands it back: a path, a list of paths, or
-    {content, file, judge} per roll — `content` is the edit at the frame it
-    was made, `file` the finished 9:16 when there is one, `judge` the session's
-    own answer to the job's judge_prompt."""
-    if isinstance(given, (str, Path, dict)):
-        given = [given]
-    out = []
-    for g in given:
-        if isinstance(g, dict):
-            c = g.get("content") or g.get("file")
-            out.append({"content": str(c), "file": str(g.get("file") or c), "judge": g.get("judge")})
+def _version(out, stem):
+    """The next version number for this stem under this run root — a result
+    is a new version beside the record, never the original overwritten."""
+    root = out.parent
+    n = 0
+    if root.is_dir():
+        for f in root.rglob(f"{stem}--*-v*.png"):
+            # `-v1` and a multi-roll `-v1-01` are both version 1
+            m = re.search(r"-v(\d+)(?:-\d{2})?$", f.stem)
+            if m:
+                n = max(n, int(m.group(1)))
+    return n + 1
+
+
+def _brand_refs(ip, brand, wanted, product):
+    """Which brand files ride along: the logo for a logo fix, the product
+    photo for a product fix. Read through the engine's own context so the
+    lookup rules are one place."""
+    if not wanted:
+        return [], []
+    ctx = ip.context.build({"brand": brand, "purpose": "ad", "_purpose": ip.purposes()["ad"],
+                            "direction": "", "out": "", "product": product,
+                            "assets": False, "people": False}, library=None)
+    refs, notes = [], []
+    for w in wanted:
+        if w == "logo":
+            if ctx.get("logo"):
+                refs.append(ctx["logo"][0])
+            else:
+                where = Path(ip.paths.brand(brand)["identity"])
+                try:
+                    where = where.relative_to(P.repo()).as_posix()
+                except ValueError:
+                    pass
+                notes.append(f"{where} holds no logo file (nor does the Drive mirror's logos/)"
+                             " — the logo fix has nothing to swap in")
+        elif w == "product":
+            photo = ctx["product"].get("photo")
+            if photo and ctx["product"].get("photo_on_machine"):
+                refs.append(photo)
+            else:
+                notes.append("the product's photo is not a file on this machine — name `product` "
+                             "on the request, and its picture must be in the brand")
+    return refs, notes
+
+
+def _file_qc_round(out, kept, rejected):
+    """File the compare judge's verdicts as one QC round (qc-log/ beside the run)."""
+    try:
+        here = Path(__file__).resolve()
+        comp = next(p for p in here.parents if (p / "components" / "quality-checks" / "marketing_chain_checks").is_dir())
+        q = str(comp / "components" / "quality-checks")
+        if q not in sys.path:
+            sys.path.append(q)
+        from marketing_chain_checks import qc_log
+        f = {k["name"]: {"ok": True, "severity": "none"} for k in kept}
+        f.update({k["name"]: {"ok": False, "severity": "FIX", "problems": k.get("fails") or []} for k in rejected})
+        qc_log.add(out, "image-edit · edit", "compare judge", f, method="each result against the reference and the one change asked")
+    except Exception as e:
+        print(f"  QC: round not filed ({type(e).__name__})")
+
+
+def _file(out, r):
+    """The record, on both names it is read by.
+
+    `edit.json` is this machine's own record and its readers depend on it
+    (tools/image-teardown/tools/variations.py `_state`, once
+    bulk_variations.py; image-teardown/tools/carousel.py; this component's
+    tests), so it keeps its name. `run.json` is
+    what run_kit.index reads to know a run happened at all — without it this
+    machine showed up as fourteen runs with no record, which reads as
+    stateless. Same folder, same moment, smallest shape the index consumes.
+    """
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "edit.json").write_text(json.dumps(r, indent=1))
+    (out / "run.json").write_text(json.dumps(
+        {"machine": P.TOOL, "brand": r.get("brand"), "label": r.get("label"),
+         "state": r.get("state"), "opened": r.get("at")}, indent=1))
+
+
+def _learnings(r, load=None):
+    """The approval-page learnings, appended to the instruction INSIDE the
+    700-char band (SI-144, image-edit#20). `prompt_block` is the header plus
+    up to 8 digest lines, newest first; the header and as many lines, in that
+    order, as `D.fits` allows are kept — not even the header and one line
+    fitting appends nothing. `load` is a seam returning the learnings module;
+    by default components/meta-upload/learnings.py, by path (that folder's
+    module names would shadow ours on sys.path). A failure is said, once, on
+    stderr and in `r["learnings"]`; the edit goes on without it."""
+    try:
+        if load is None:
+            import importlib.util as _iu
+            _ls = _iu.spec_from_file_location("meta_learnings", Path(__file__).resolve().parents[3] / "components" / "meta-upload" / "learnings.py")
+            _L = _iu.module_from_spec(_ls); _ls.loader.exec_module(_L)
         else:
-            out.append({"content": str(g), "file": str(g), "judge": None})
-    return out
+            _L = load()
+        block = _L.prompt_block("image-edit", 7, r.get("brand"))
+        if not block:
+            return
+        lead = block[:len(block) - len(block.lstrip("\n"))]
+        rows = block.strip("\n").split("\n")
+        head, lines = lead + rows[0] + "\n", rows[1:]
+        base = r["instruction"] or ""
+        kept = 0
+        while kept < len(lines) and D.fits(base, head + "\n".join(lines[:kept + 1]) + "\n"):
+            kept += 1
+        text = base + (head + "\n".join(lines[:kept]) + "\n" if kept else "")
+        r["instruction"], r["chars"] = text, len(text)
+        r["learnings"] = {"kept": kept, "dropped": len(lines) - kept}
+    except Exception as e:
+        err = f"{type(e).__name__}: {e}"
+        print(f"learnings hook failed: {err} — instruction sent without it", file=sys.stderr, flush=True)
+        r["learnings"] = {"error": err}
 
 
-def _frame_name(path):
-    wh = dims(path) if Path(path).is_file() else None
-    if _is(wh, 9, 16, 0.03):
-        return "9:16"
-    return nearest_aspect(wh)
+def edit(req, transport=None, judge_caller=None, compare_caller=None, mirror=True,
+         fix_table=None, var_table=None, split_table=None, library=None):
+    """One edit: the instruction, the engine, both judges, the record.
+    Returns the record dict. Writes only under `out` and the Drive mirror."""
+    r = resolve(req, fix_table, var_table, split_table)
+    out = Path(r["out"])
+    out.mkdir(parents=True, exist_ok=True)
+    r["at"] = datetime.now().isoformat(timespec="seconds")
+    r["version"] = _version(out, Path(r["picture"]).stem)
 
+    if r["refused"]:
+        r["state"] = "refused"
+        _file(out, r)
+        return r
 
-def ingest_one(out, given, compare_caller=None):
-    """The picture(s) back from Higgsfield: both pictures to the judge, a pass
-    filed as a new version, anything else held under rejected/ with the why."""
-    out = Path(out)
-    r = json.loads((out / "edit.json").read_text())
-    if r.get("state") in ("refused", "dry"):
-        raise BadRequest(f"{out.name} is {r['state']} — there is no job to bring back")
+    ip = P.image_production()
+    refs, notes = _brand_refs(ip, r["brand"], r["brand_refs"], r["product"])
+    r["notes"] = notes
+    if r["brand_refs"] and not refs:
+        r["state"] = "refused"
+        r["refused"] = "; ".join(notes)
+        _file(out, r)
+        return r
+
+    content = r["picture"]
+    aspect = r["aspect"] or deliver_frame(content) or nearest_aspect(dims(content), ip.route.aspects())
+    # A 4:5 or 9:16 reference leaves at 9:16 — the image engine edits the
+    # content at 4:5 and finishes it: content taped down, strips painted
+    # (image_production.providers.finish_9x16, the owner 2026-09-22).
+    # >>> APPROVAL-PAGE LEARNINGS HOOK (components/meta-upload/learnings.py) — adds nothing unless learnings-hooks.json turns "image-edit" on
+    _learnings(r)
+    # <<< APPROVAL-PAGE LEARNINGS HOOK
+    ip_req = {"brand": r["brand"], "purpose": r["purpose"], "direction": r["instruction"],
+              "out": str(out / "engine"), "from_image": content, "count": r["count"],
+              "label": r["label"], "assets": False}
+    if aspect:
+        ip_req["aspect"] = aspect
+    refs = refs + [x for x in r.get("references", []) if x not in refs]
+    if refs:
+        ip_req["references"] = refs
+    if r["product"]:
+        ip_req["product"] = r["product"]
+    if r.get("model"):
+        ip_req["model"] = r["model"]
+    if r["region"]:
+        # The model may paint only inside the rectangle — the shared engine
+        # does it with a mask (providers.edit_in_region), which is the one
+        # thing that held on 2026-09-22. The forced model is dropped: a
+        # masked edit goes through the edit door whatever else was named.
+        ip_req["region"] = r["region"]
+        ip_req.pop("model", None)
+    r["engine_request"] = {k: v for k, v in ip_req.items()}
+
+    if req.get("dry_run"):
+        r["state"] = "dry"
+        _file(out, r)
+        return r
+
+    made = ip.make(ip_req, library=library, transport=transport, judge_caller=judge_caller,
+                   mirror=False)
+    r["engine"] = {"model": made["model"], "prompt": made["prompt"],
+                   "pictures": made["pictures"], "held": made["held"]}
+
     stem = Path(r["picture"]).stem
-    entries = _entries(given)
-    kept, rejected = list(r.get("delivered") or []), list(r.get("rejected") or [])
-    for i, e in enumerate(entries, 1):
-        content, final = Path(e["content"]).expanduser(), Path(e["file"]).expanduser()
-        if not content.is_file() or not final.is_file():
-            r.setdefault("missing", []).append(str(content if not content.is_file() else final))
-            continue
-        if r.get("region"):
-            # "Nothing else moved" made a fact about the file, not a hope about
-            # the model: outside the rectangle, the original's own pixels.
-            r.setdefault("region_notes", []).append(_restore_outside(r["picture"], content, r["region"]))
-            if final != content:
-                r["region_notes"].append("the finished file was made before the paste-back — "
-                                         "finish the delivered version again with resize-9x16")
-        caller = compare_caller
-        if e.get("judge"):
-            answer = e["judge"] if isinstance(e["judge"], str) else json.dumps(e["judge"])
-            caller = lambda *_a, _x=answer: _x            # noqa: E731
-        verdict, fails, tests, raw = CMP.compare(r["picture"], content, r["asked"], r["checks"],
-                                                 caller=caller)
-        n = len(kept) + len(rejected) + 1
-        name = f"{stem}--{r['fix'] or 'edit'}-v{r['version']}" + \
-            (f"-{n:02d}" if (r["count"] > 1 or len(entries) > 1 or n > 1) else "") + (final.suffix or ".png")
-        row = {"name": name, "from": str(final), "content": str(content),
-               "delivered_at": _frame_name(final), "judged_by": "session" if e.get("judge") else "gemini",
+    kept, rejected = [], []
+    rows = {row["file"]: row for row in made["pictures"] if row.get("file")}
+    for i, p in enumerate(made["delivered"], 1):
+        seen_as = rows.get(p, {}).get("content") or p
+        if r["region"]:
+            # BELT AND BRACES. The engine masked the call so the model could
+            # only paint inside the rectangle; this puts the original back
+            # outside it anyway, so "nothing else moved" is a fact about the
+            # file rather than a hope about the model.
+            note = _restore_outside(r["picture"], p, r["region"])
+            r.setdefault("region_notes", []).append(note)
+            if seen_as != p:
+                _restore_outside(r["picture"], seen_as, r["region"])
+        verdict, fails, tests, raw = CMP.compare(content, seen_as, r["asked"], r["checks"],
+                                                 caller=compare_caller)
+        name = f"{stem}--{r['fix'] or 'edit'}-v{r['version']}" + (f"-{i:02d}" if r["count"] > 1 else "") + ".png"
+        row = {"name": name, "from": p, "content": seen_as, "delivered_at": aspect,
                "verdict": verdict, "fails": fails, "tests": tests}
-        if r.get("job", {}).get("finish") and final == content:
-            row["note"] = "not finished to 9:16 yet — run skills/resize-9x16.md on this version"
+        # A file already at the destination is never copied over: the row is
+        # not delivered, it is held with the reason.
+        if verdict == "pass" and (out / name).exists():
+            row["verdict"], row["fails"] = "reject", [f"destination exists: {name} — never overwritten"]
+            verdict, fails = row["verdict"], row["fails"]
         if verdict == "pass":
-            shutil.copy2(final, out / name)
+            shutil.copy2(p, out / name)
             row["file"] = str(out / name)
             kept.append(row)
         else:
             rej = out / "rejected"
             rej.mkdir(exist_ok=True)
-            shutil.copy2(final, rej / name)
-            (rej / f"{Path(name).stem}-why.md").write_text(
-                "# " + name + " — did not hold the reference\n\n" +
-                "\n".join(f"- {f}" for f in fails) +
-                "\n\nAn edit that moved something else is a delta to narrow, not a picture to patch.\n"
-                + (f"\n<details><summary>judge, raw</summary>\n\n```\n{raw.strip()}\n```\n</details>\n" if raw else ""))
-            row["file"] = str(rej / name)
+            if (rej / name).exists():
+                fails.append(f"destination exists: rejected/{name} — never overwritten")
+                row["file"] = str(p)
+            else:
+                shutil.copy2(p, rej / name)
+                (rej / f"{Path(name).stem}-why.md").write_text(
+                    "# " + name + " — did not hold the reference\n\n" +
+                    "\n".join(f"- {f}" for f in fails) +
+                    "\n\nAn edit that moved something else is a delta to narrow, not a picture to patch.\n"
+                    + (f"\n<details><summary>judge, raw</summary>\n\n```\n{raw.strip()}\n```\n</details>\n" if raw else ""))
+                row["file"] = str(rej / name)
             rejected.append(row)
     r["delivered"], r["rejected"] = kept, rejected
-    r["state"] = "filed" if kept else ("held" if rejected else "ready")
-    r["ingested"] = datetime.now().isoformat(timespec="seconds")
+    r["state"] = "filed" if kept else "held"
+    # THE CREATIVE QC LOOP (2026-10-02): the compare judge above is this stage's
+    # reviewer; every round is filed beside the run
+    _file_qc_round(out, kept, rejected)
+
+    if mirror and kept:
+        copied, note = ip.filing.mirror([Path(k["file"]) for k in kept], r["brand"], r["label"],
+                                        tool=P.TOOL)
+        r["drive"] = {"copied": copied, "note": note}
     _file(out, r)
     return r
-
-
-def ingest(folder, results, compare_caller=None):
-    """Bring a whole run back: one edit (job.json) or a set (jobs.json).
-    `results` is {slug: picture | [pictures] | {content, file, judge}}, or the
-    path of a json file holding that. Slugs not in `results` stay ready."""
-    folder = Path(folder).expanduser()
-    if not isinstance(results, dict):
-        results = json.loads(Path(results).expanduser().read_text())
-    src = folder / "job.json" if (folder / "job.json").is_file() else folder / "jobs.json"
-    if not src.is_file():
-        raise BadRequest(f"no job.json or jobs.json in {folder} — nothing was prepared here")
-    jobs = json.loads(src.read_text())["jobs"]
-    known = {j["slug"] for j in jobs}
-    unknown = sorted(set(results) - known)
-    if unknown:
-        raise BadRequest(f"results name jobs this run does not have: {', '.join(unknown)} — "
-                         f"have: {', '.join(sorted(known))}")
-    done, waiting = [], []
-    for j in jobs:
-        if j["slug"] in results:
-            rec = ingest_one(j["out"], results[j["slug"]], compare_caller=compare_caller)
-            done.append({"slug": j["slug"], "state": rec["state"],
-                         "delivered": [d["file"] for d in rec.get("delivered", [])],
-                         "rejected": [d["file"] for d in rec.get("rejected", [])]})
-        else:
-            waiting.append(j["slug"])
-    for name in ("variations.json", "sequence.json"):
-        if (folder / name).is_file():
-            _refresh(folder, name)
-    return {"folder": str(folder), "ingested": done, "waiting": waiting}
 
 
 # ---------------------------------------------------------------- variations
 
 VARY_REQUIRED = ("brand", "baseline", "variations")
-VARY_OPTIONAL = ("kind", "keep", "product", "purpose", "aspect", "count", "label", "out", "dry_run",
-                 "model", "references", "region")
-
-
-def _row(rec):
-    return {"state": rec["state"],
-            "delivered": [d["file"] for d in rec.get("delivered", [])],
-            "rejected": [d["file"] for d in rec.get("rejected", [])],
-            "refused": rec.get("refused"), "record": str(Path(rec["out"]) / "edit.json")}
-
-
-def _totals(summary, rows):
-    summary["delivered"] = sum(len(r["delivered"]) for r in rows)
-    summary["rejected"] = sum(len(r["rejected"]) for r in rows)
-    summary["refused"] = sum(1 for r in rows if r["refused"])
-    summary["ready"] = sum(1 for r in rows if r["state"] == "ready")
-    return summary
-
-
-def _jobs(root, results):
-    jobs = [rec["job"] for rec in results if rec.get("state") == "ready" and rec.get("job")]
-    if jobs:
-        (root / "jobs.json").write_text(json.dumps({"jobs": jobs}, indent=1))
+VARY_OPTIONAL = ("kind", "keep", "product", "purpose", "aspect", "count", "label", "out", "dry_run", "model", "references", "region")
 
 
 def vary(req, **kw):
@@ -575,8 +518,9 @@ def vary(req, **kw):
     base = Path(req["baseline"]).expanduser()
     label = req.get("label") or f"{base.stem}--variations"
     root = Path(req["out"]) if req.get("out") else P.runs(req["brand"], label)
+    root.mkdir(parents=True, exist_ok=True)
 
-    planned = []
+    rows, results = [], []
     for v in req["variations"]:
         v = {"id": v} if isinstance(v, str) else dict(v)
         row = table.get(v.get("id"))
@@ -586,14 +530,8 @@ def vary(req, **kw):
         need = [n for n in row.get("needs", []) if n not in args]
         if need:
             raise BadRequest(f"variation `{row['id']}` needs: {', '.join(need)} — pass them in `args`")
-        if "product" in row.get("references", []) and not req.get("product"):
-            raise BadRequest(f"variation `{row['id']}` swaps the product — name `product` on the request")
-        planned.append((row, args))
-
-    root.mkdir(parents=True, exist_ok=True)
-    rows, results = [], []
-    for row, args in planned:
-        one = {"brand": req["brand"], "picture": str(base), "change": fill(row["delta"], args),
+        change = fill(row["delta"], args)
+        one = {"brand": req["brand"], "picture": str(base), "change": change,
                "kind": req.get("kind") or "picture",
                "keep": [fill(k, args) for k in row.get("keep", [])] + list(req.get("keep") or []),
                "checks": [fill(c, args) for c in row.get("checks", [])],
@@ -602,41 +540,39 @@ def vary(req, **kw):
         for k in ("product", "purpose", "aspect", "model", "references", "region"):
             if req.get(k):
                 one[k] = req[k]
+        if "product" in row.get("references", []) and not req.get("product"):
+            raise BadRequest(f"variation `{row['id']}` swaps the product — name `product` on the request")
         if row.get("references"):
             one["_brand_refs"] = row["references"]
-        rec = edit(one, **kw)
-        rows.append({"id": row["id"], "args": args, **_row(rec)})
+        rec = edit(one, split_table=kw.get("split_table"), **{k: x for k, x in kw.items() if k != "split_table"})
+        rows.append({"id": row["id"], "args": args, "state": rec["state"],
+                     "delivered": [d["file"] for d in rec.get("delivered", [])],
+                     "rejected": [d["file"] for d in rec.get("rejected", [])],
+                     "refused": rec.get("refused"), "record": str(Path(rec["out"]) / "edit.json")})
         results.append(rec)
-    _jobs(root, results)
-    summary = _totals({"brand": req["brand"], "baseline": str(base), "label": label, "out": str(root),
-                       "at": datetime.now().isoformat(timespec="seconds"), "variations": rows}, rows)
+    summary = {"brand": req["brand"], "baseline": str(base), "label": label, "out": str(root),
+               "at": datetime.now().isoformat(timespec="seconds"), "variations": rows,
+               "delivered": sum(len(r["delivered"]) for r in rows),
+               "rejected": sum(len(r["rejected"]) for r in rows),
+               "refused": sum(1 for r in rows if r["refused"])}
     _file_batch(root, summary, "variations.json")
     return summary
 
 
 def _file_batch(root, summary, name):
-    """A batch's own record, at the run-label folder an index reads. `state`
-    is what the batch amounted to, not any one edit's."""
+    """A batch's own record, at the run-label folder the index actually reads.
+
+    vary() and sequence() each write one summary beside a folder of edits.
+    The index looks only at run-label depth and never descends, so without a
+    run.json here the whole batch is invisible while its children are filed
+    one level down. `state` is what the batch amounted to, not any one edit's.
+    """
     (root / name).write_text(json.dumps(summary, indent=1))
     state = ("filed" if summary.get("delivered")
-             else "ready" if summary.get("ready")
              else "refused" if summary.get("refused") else "held")
     (root / "run.json").write_text(json.dumps(
         {"machine": P.TOOL, "brand": summary.get("brand"), "label": summary.get("label"),
          "state": state, "opened": summary.get("at")}, indent=1))
-
-
-def _refresh(root, name):
-    """Re-read every edit in a set after an ingest and recount the set."""
-    summary = json.loads((root / name).read_text())
-    rows = summary["variations" if name == "variations.json" else "slides"]
-    for row in rows:
-        f = Path(row["record"])
-        if f.is_file():
-            rec = json.loads(f.read_text())
-            row.update(_row(rec))
-    _file_batch(root, _totals(summary, rows), name)
-    return summary
 
 
 # ------------------------------------------------------------------ sequences
@@ -680,7 +616,7 @@ def deltas_from(source):
 
 
 # What every slide of a sequence shares with slide one — the compare judge's
-# extra test for a slide.
+# extra test for a slide (sequence() here, the carousel road in image-teardown).
 THREAD = ("the same person and face", "the same product, held the same way",
           "the same palette", "the same framing and camera distance")
 
@@ -692,8 +628,8 @@ def thread_check(n):
 
 def sequence(req, **kw):
     """A sequence off one plate: slide one is the reference for every later
-    slide; each is ONE delta, judged against slide one for the thread.
-    Records under `<out>/slide-NN/`."""
+    slide; each is ONE delta, judged against slide one for the thread, and
+    finished like any other asset. Records under `<out>/slide-NN/`."""
     unknown = sorted(set(req) - set(SEQ_REQUIRED) - set(SEQ_OPTIONAL))
     if unknown:
         raise BadRequest(f"sequence does not take: {', '.join(unknown)}")
@@ -719,12 +655,17 @@ def sequence(req, **kw):
             if req.get(k):
                 one_req[k] = req[k]
         rec = edit(one_req, **kw)
-        slides.append({"slide": n, "change": one_req["change"], "type": r.get("type"), **_row(rec)})
+        slides.append({"slide": n, "change": one_req["change"], "state": rec["state"],
+                       "delivered": [d["file"] for d in rec.get("delivered", [])],
+                       "rejected": [d["file"] for d in rec.get("rejected", [])],
+                       "refused": rec.get("refused"), "type": r.get("type"),
+                       "record": str(Path(rec["out"]) / "edit.json")})
         results.append(rec)
-    _jobs(root, results)
-    summary = _totals({"brand": req["brand"], "slide_one": str(one), "label": label, "out": str(root),
-                       "at": datetime.now().isoformat(timespec="seconds"), "slides": slides,
-                       "note": "slide one is the plate as given; type per slide is carried in `type` for the compositor"},
-                      slides)
+    summary = {"brand": req["brand"], "slide_one": str(one), "label": label, "out": str(root),
+               "at": datetime.now().isoformat(timespec="seconds"), "slides": slides,
+               "delivered": sum(len(s["delivered"]) for s in slides),
+               "rejected": sum(len(s["rejected"]) for s in slides),
+               "refused": sum(1 for s in slides if s["refused"]),
+               "note": "slide one is the plate as given; type per slide is carried in `type` for the compositor"}
     _file_batch(root, summary, "sequence.json")
     return summary

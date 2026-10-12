@@ -1,0 +1,11 @@
+{
+  "note": "Where each brand's sending account lives. DATA, not code — lab rule 7: no build hard-codes a brand. Adding a brand is adding a row here.",
+  "brands": {
+    "<brand>": {
+      "account": "<KLAVIYO_ACCOUNT_ID>",
+      "timezone": "US/Eastern",
+      "placed_order": "<PLACED_ORDER_METRIC_ID>",
+      "placed_order_note": "<which store integration this metric comes from, and the date it was confirmed live>"
+    }
+  }
+}

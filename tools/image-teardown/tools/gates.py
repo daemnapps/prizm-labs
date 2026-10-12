@@ -36,7 +36,7 @@ def quality():
     """The shared checks — components/quality-checks."""
     if str(P.QUALITY) not in sys.path:
         sys.path.insert(0, str(P.QUALITY))
-    import quality_checks as Q
+    import marketing_chain_checks as Q
     return Q
 
 
@@ -79,12 +79,46 @@ def copy_problems(brief, bank_text, product):
     return problems
 
 
+def standard_problems(brief):
+    """Document one against the standard brief: the title line, every box
+    label and every section heading, in the template's order. A brief that
+    moved, renamed or dropped one is not the standard (the owner, 2026-10-02)."""
+    t = P.BRIEF_STANDARD.read_text()
+    tpl = t.split("\n=====\n")[1]
+    want = [l.strip() for l in tpl.splitlines() if l.startswith("## ")]
+    box = re.findall(r"^\| \*\*([^*]+)\*\* \|", tpl, flags=re.M)
+    one = brief.split("DOCUMENT TWO")[0]
+    probs = []
+    if not re.search(r"^# BRIEF · ", one, flags=re.M):
+        probs.append("standard brief: no '# BRIEF · …' title line")
+    for b in box:
+        if f"| **{b}** |" not in one:
+            probs.append(f"standard brief: box row '{b}' missing")
+    at = 0
+    for h in want:
+        i = one.find("\n" + h, at)
+        if i < 0:
+            probs.append(f"standard brief: '{h}' missing or out of order")
+        else:
+            at = i + 1
+    return probs
+
+
 def copy_gate(run, brand, product, mode="hold"):
     run = Path(run)
     brief = (run / "out/06-brief.md").read_text(errors="replace")
     bank = P.brand(brand)["offer"]
     bank_text = bank.read_text(errors="replace") if bank.is_file() else ""
-    return _gate("copy", copy_problems(brief, bank_text, product), run, mode)
+    problems = copy_problems(brief, bank_text, product)
+    if "DOCUMENT ONE" in brief and _uses_standard(run):
+        problems += standard_problems(brief)
+    return _gate("copy", problems, run, mode)
+
+
+def _uses_standard(run):
+    """Only the brief prompt that asks for the standard is held to it."""
+    import run as R
+    return "{brief_standard}" in R.prompt_for("6", run=run).read_text()
 
 
 def state(run):

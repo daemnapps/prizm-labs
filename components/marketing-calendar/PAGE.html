@@ -1,0 +1,997 @@
+<title>The Marketing Calendar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F1F0EA; --card:#FFFFFF; --ink:#191B1D; --mut:#676C73; --dim:#9A9E9C;
+  --line:#DBD9D2; --hair:#E9E7E1; --acc:#2E5D50; --acc-bg:#DFEBE6;
+  --warn:#8A5A12; --warn-bg:#F5E9D2; --bad:#8E3B2F; --bad-bg:#F3DFDB;
+  --code:#F7F6F1;
+  --sans:"Instrument Sans",system-ui,-apple-system,sans-serif;
+  --serif:Fraunces,Georgia,serif;
+  --mono:"Spline Sans Mono",ui-monospace,SFMono-Regular,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1012; --card:#16191C; --ink:#E6E8EA; --mut:#8E959D; --dim:#6B7278;
+    --line:#272B30; --hair:#1E2226; --acc:#74B4A2; --acc-bg:#12251F;
+    --warn:#D6A55B; --warn-bg:#2A2113; --bad:#E08877; --bad-bg:#2B1714;
+    --code:#101316;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1012; --card:#16191C; --ink:#E6E8EA; --mut:#8E959D; --dim:#6B7278;
+  --line:#272B30; --hair:#1E2226; --acc:#74B4A2; --acc-bg:#12251F;
+  --warn:#D6A55B; --warn-bg:#2A2113; --bad:#E08877; --bad-bg:#2B1714;
+  --code:#101316;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+     font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:56px 24px 110px;
+      display:flex;flex-direction:column;gap:54px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(38px,7vw,66px);
+   line-height:1;margin:0;letter-spacing:-.025em;text-wrap:balance}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(23px,3.4vw,30px);
+   margin:0;letter-spacing:-.016em;text-wrap:balance}
+h3{font-family:var(--serif);font-weight:600;font-size:18px;margin:0}
+p{margin:0;max-width:64ch}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+         text-transform:uppercase;color:var(--mut)}
+.lede{font-size:19px;color:var(--mut);max-width:58ch;margin-top:14px}
+section{display:flex;flex-direction:column;gap:18px}
+.sh{border-top:2px solid var(--ink);padding-top:13px;display:flex;
+    flex-direction:column;gap:7px}
+code{font-family:var(--mono);font-size:.87em;background:var(--hair);
+     padding:1.5px 5px;border-radius:5px}
+a{color:var(--acc);text-underline-offset:2px}
+
+/* pull quote */
+.pull{background:var(--acc-bg);border-left:4px solid var(--acc);
+      border-radius:0 12px 12px 0;padding:19px 23px;display:flex;
+      flex-direction:column;gap:9px}
+.pull q{font-family:var(--serif);font-size:20px;font-weight:400;line-height:1.36;
+        quotes:'"' '"'}
+.pull .who{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+           text-transform:uppercase;color:var(--acc)}
+
+/* layers */
+.layers{background:var(--card);border:1px solid var(--line);border-radius:14px;
+        overflow:hidden}
+.lay{display:grid;grid-template-columns:36px 148px 1fr 92px;gap:14px;
+     padding:12px 16px;align-items:baseline;border-top:1px solid var(--hair)}
+.lay:first-child{border-top:0}
+.lay.ai{background:var(--acc-bg)}
+.lay .n{font-family:var(--mono);font-size:12px;color:var(--dim);
+        font-variant-numeric:tabular-nums}
+.lay .nm{font-weight:600;font-size:14.5px}
+.lay .d{font-size:13.5px;color:var(--mut);line-height:1.45}
+.lay .by{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+         text-transform:uppercase;text-align:right}
+.by.think{color:var(--acc);font-weight:500}
+.by.code{color:var(--dim)}
+
+/* tree + sequence */
+.tree{background:var(--card);border:1px solid var(--line);border-radius:13px;
+      padding:15px 17px;font-family:var(--mono);font-size:13px}
+.tt{font-weight:500;padding-bottom:9px;margin-bottom:5px;
+    border-bottom:1px solid var(--hair)}
+.tr{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:4.5px 0;
+    align-items:baseline}
+.tr .f{color:var(--acc)}
+.tr .c{font-family:var(--sans);font-size:13.5px;color:var(--mut)}
+.tr .c b{color:var(--ink);font-weight:600}
+.seq{display:flex;flex-wrap:wrap;gap:7px}
+.sq{background:var(--card);border:1px solid var(--line);border-radius:9px;
+    padding:8px 11px;display:flex;flex-direction:column;gap:2px;flex:1 1 148px}
+.sq b{font-family:var(--mono);font-size:12px;font-weight:500}
+.sq span{font-family:var(--mono);font-size:10.5px;color:var(--dim);word-break:break-word}
+.sq.ai{background:var(--acc-bg);border-color:var(--acc)}
+.sq.ai b,.sq.ai span{color:var(--acc)}
+.sq.out{border-style:dashed;border-color:var(--ink);background:transparent}
+
+/* prompts */
+.pr{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden}
+.pr summary{cursor:pointer;padding:16px 18px;display:grid;
+            grid-template-columns:36px 1fr auto;gap:14px;align-items:baseline}
+.pr summary::-webkit-details-marker{display:none}
+.pr summary:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.pr .pn{font-family:var(--mono);font-size:12px;color:var(--acc)}
+.pr .ph{font-family:var(--serif);font-weight:600;font-size:18px}
+.pr .ph em{font-style:normal;font-family:var(--sans);font-weight:400;
+           font-size:13.5px;color:var(--mut);display:block;margin-top:2px}
+.pr .pf{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.pr[open] summary{border-bottom:1px solid var(--hair)}
+.inputs{padding:14px 18px;border-bottom:1px solid var(--hair);
+        display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.inputs .il{font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+            text-transform:uppercase;color:var(--dim);margin-right:4px}
+.inputs i{font-style:normal;font-family:var(--mono);font-size:11px;
+          background:var(--acc-bg);color:var(--acc);border-radius:5px;padding:2px 7px}
+pre{margin:0;padding:18px;background:var(--code);overflow-x:auto;
+    font-family:var(--mono);font-size:12.5px;line-height:1.62;
+    color:var(--ink);white-space:pre-wrap;word-wrap:break-word}
+.prnote{padding:13px 18px;border-top:1px solid var(--hair);font-size:13.5px;
+        color:var(--mut)}
+
+/* moments */
+.streams{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;display:flex;flex-direction:column;gap:5px;
+    border-top:3px solid var(--line)}
+.st.s1{border-top-color:var(--acc)} .st.s2{border-top-color:#6E8FA8}
+.st.s3{border-top-color:var(--warn)} .st.s4{border-top-color:var(--bad)}
+.st b{font-family:var(--mono);font-size:12px}
+.st span{font-size:13px;color:var(--mut);line-height:1.42}
+.anat{background:var(--card);border:1px solid var(--line);border-radius:13px;
+      overflow:hidden}
+.af{display:grid;grid-template-columns:112px 1fr;gap:14px;padding:11px 16px;
+    border-top:1px solid var(--hair);align-items:baseline}
+.af:first-child{border-top:0}
+.af .k{font-family:var(--mono);font-size:12px;color:var(--acc)}
+.af .v{font-size:13.5px;color:var(--mut);line-height:1.45}
+.af .v b{color:var(--ink);font-weight:600}
+.ev{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.eg{border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+    display:flex;flex-direction:column;gap:4px;background:var(--card)}
+.eg .n{font-family:var(--serif);font-size:30px;font-weight:700;line-height:1}
+.eg .t{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+       text-transform:uppercase}
+.eg p{font-size:13px;color:var(--mut);line-height:1.42}
+.eg.g1{background:var(--acc-bg);border-color:var(--acc)}
+.eg.g1 .n,.eg.g1 .t{color:var(--acc)}
+.eg.g3{background:var(--warn-bg);border-color:var(--warn)}
+.eg.g3 .n,.eg.g3 .t{color:var(--warn)}
+.avt{width:100%;border-collapse:collapse;background:var(--card);
+     border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px}
+.avt th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+        text-transform:uppercase;color:var(--mut);padding:11px 14px;
+        border-bottom:1px solid var(--line);font-weight:400}
+.avt td{padding:11px 14px;border-bottom:1px solid var(--hair);
+        font-variant-numeric:tabular-nums}
+.avt tr:last-child td{border-bottom:0}
+.avt td.nm{font-weight:600;font-family:var(--mono);font-size:13px}
+.avt td.bar span{display:inline-block;height:8px;border-radius:4px;
+                 background:var(--acc);vertical-align:middle;margin-right:8px}
+.avt td.warnc{color:var(--warn);font-weight:600}
+
+/* inside-a-layer cards */
+.ins{display:flex;flex-direction:column;gap:12px}
+.ilay{background:var(--card);border:1px solid var(--line);border-radius:13px;
+    padding:15px 17px;display:grid;grid-template-columns:30px 1fr;gap:14px}
+.ilay.think{background:var(--acc-bg);border-color:var(--acc)}
+.ilay .nn{font-family:var(--mono);font-size:13px;color:var(--dim);padding-top:2px}
+.ilay.think .nn{color:var(--acc)}
+.ilay h3{margin-bottom:6px}
+.ilay .flow{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+.ilay .fl{display:grid;grid-template-columns:74px 1fr;gap:12px;font-size:13.4px;
+        align-items:baseline}
+.ilay .fl em{font-style:normal;font-family:var(--mono);font-size:10px;
+           letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.ilay .fl span{color:var(--mut);line-height:1.45}
+.ilay .fl span b{color:var(--ink);font-weight:600}
+@media(max-width:800px){
+  .streams,.ev{grid-template-columns:1fr 1fr}
+  .af,.ilay .fl{grid-template-columns:1fr;gap:3px}
+  .ilay{grid-template-columns:1fr}
+}
+@media(max-width:520px){.streams,.ev{grid-template-columns:1fr}}
+
+/* readiness */
+.rd{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13.5px}
+.rd th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+       text-transform:uppercase;color:var(--mut);padding:10px 13px;font-weight:400;
+       border-bottom:1px solid var(--line)}
+.rd td{padding:9px 13px;border-bottom:1px solid var(--hair);vertical-align:top}
+.rd tr:last-child td{border-bottom:0}
+.rd td.ly{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.rd td.nm{font-weight:600}
+.pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+      text-transform:uppercase;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.pill.ok{background:var(--acc-bg);color:var(--acc)}
+.pill.dg{background:var(--warn-bg);color:var(--warn)}
+.rd td.loses{color:var(--mut);font-size:13px;line-height:1.4}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.half{background:var(--card);border:1px solid var(--line);border-radius:13px;
+      padding:16px 18px;display:flex;flex-direction:column;gap:8px;
+      border-top:3px solid var(--line)}
+.half.code{border-top-color:var(--acc)}
+.half.web{border-top-color:#6E8FA8}
+.half .hh{font-family:var(--serif);font-weight:600;font-size:17px}
+.half .tagl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+            text-transform:uppercase;color:var(--dim)}
+.half p{font-size:13.5px;color:var(--mut);line-height:1.45}
+.half p b{color:var(--ink);font-weight:600}
+.find{background:var(--acc-bg);border-left:4px solid var(--acc);
+      border-radius:0 12px 12px 0;padding:17px 21px;display:flex;
+      flex-direction:column;gap:7px}
+.find .big{font-family:var(--serif);font-size:clamp(24px,4vw,33px);font-weight:600;
+           line-height:1.2;color:var(--ink)}
+.find p{font-size:14px;color:var(--mut)}
+.find code{background:rgba(0,0,0,.06)}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+
+/* three things */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.th{background:var(--card);border:1px solid var(--line);border-radius:13px;
+    padding:16px 18px;display:flex;flex-direction:column;gap:7px;
+    border-top:3px solid var(--line)}
+.th.a{border-top-color:var(--dim)} .th.b{border-top-color:var(--acc)}
+.th.c{border-top-color:#6E8FA8}
+.th .w{font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+       text-transform:uppercase;color:var(--dim)}
+.th .hh{font-family:var(--serif);font-weight:600;font-size:17px;line-height:1.2}
+.th p{font-size:13.5px;color:var(--mut);line-height:1.45}
+.th p b{color:var(--ink);font-weight:600}
+.th .eg{background:transparent;border:0;padding:0;font-family:var(--mono);
+        font-size:11.5px;color:var(--acc);margin-top:auto;padding-top:6px}
+.warnbox{background:var(--warn-bg);border-left:4px solid var(--warn);
+         border-radius:0 12px 12px 0;padding:16px 20px;display:flex;
+         flex-direction:column;gap:7px}
+.warnbox .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+            text-transform:uppercase;color:var(--warn)}
+.warnbox p{font-size:14px;color:var(--mut)}
+.warnbox p b{color:var(--ink);font-weight:600}
+@media(max-width:800px){.three{grid-template-columns:1fr}}
+
+/* board bits */
+.can{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ci{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;display:flex;flex-direction:column;gap:5px}
+.ci .t{font-weight:600;font-size:15px}
+.ci p{font-size:13.5px;color:var(--mut);line-height:1.45}
+
+/* test */
+.tests{display:flex;flex-direction:column;gap:10px}
+.te{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 17px;display:grid;grid-template-columns:26px 1fr;gap:13px;
+    align-items:start}
+.te .mk{font-family:var(--serif);font-size:20px;color:var(--acc);line-height:1.1}
+.te .t{font-weight:600;margin-bottom:3px}
+.te p{font-size:13.8px;color:var(--mut)}
+
+.open{border:1px dashed var(--line);border-radius:12px;padding:16px 18px}
+.open ul{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:7px}
+.open li{font-size:14.5px;color:var(--mut)}
+.open li b{color:var(--ink);font-weight:600}
+footer{color:var(--dim);font-size:13px;font-family:var(--mono);
+       border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:800px){
+  .can{grid-template-columns:1fr}
+  .lay{grid-template-columns:30px 1fr;gap:6px}
+  .lay .d{grid-column:1/-1;padding-left:30px}
+  .lay .by{grid-column:2;text-align:left}
+  .tr{grid-template-columns:1fr;gap:2px}
+  .pr summary{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">The calendar · nine layers · two of them thinking</div>
+    <h1>The Marketing Calendar</h1>
+    <p class="lede">The machine that decides what runs, when, and why. This page is
+      the calendar and nothing else — the sequence, the words inside it, and how
+      to test both.</p>
+  </header>
+
+  <div class="pull">
+    <q>We need to perfect the calendar, and we need to test the calendar, the
+      chains, and the words that are in that chain.</q>
+    <span class="who">the owner · 13 September</span>
+  </div>
+
+  <section>
+    <div class="sh">
+      <h2>The nine layers</h2>
+      <p style="color:var(--mut)">Each one is finished and written down before the
+        next goes on top. Seven are plain arithmetic — free, re-runnable all day.
+        Two think, and those two are where the words live.</p>
+    </div>
+    <div class="layers"><div class="lay"><span class="n">1</span><span class="nm">The holidays</span><span class="d">The public holidays that land in this month, at their real dates. Calendar facts — the same for every brand.</span><span class="by code">code</span></div><div class="lay"><span class="n">2</span><span class="nm">The brand's moments</span><span class="d">The brand's own cultural moments, each resolved to a real date from its anchor. A moment falling outside the month belongs to the month it falls in.</span><span class="by code">code</span></div><div class="lay ai"><span class="n">3</span><span class="nm">Who is live</span><span class="d">Which segments and avatars are in play this month and which rest. No counts, no ceiling, no floor — every why cites the record.</span><span class="by think">thinks</span></div><div class="lay"><span class="n">4</span><span class="nm">The anchors</span><span class="d">Every dated holiday and moment laid on the month at its real date, as one send to each live segment it fits. A retail holiday becomes a full arc — a build-up scaled by what it earned before, the ask, the close.</span><span class="by code">code</span></div><div class="lay ai"><span class="n">5</span><span class="nm">The concepts</span><span class="d">The rest of the month, in order: an offer for every anchored ask, then the concepts the month makes timely, then education and the other categories.</span><span class="by think">thinks</span></div><div class="lay"><span class="n">6</span><span class="nm">Typed</span><span class="d">Every send typed against the brand's own catalogue; any offer-carrying ask completed into its full arc. A type the catalogue does not know is dropped, never invented around.</span><span class="by code">code</span></div><div class="lay"><span class="n">7</span><span class="nm">Offers checked</span><span class="d">Every offer checked against the brand's offer bank — the only place an offer may come from. An offer no variant can carry is stripped; an arc left with no offer collapses to its holiday send.</span><span class="by code">code</span></div><div class="lay"><span class="n">8</span><span class="nm">The affiliate floor</span><span class="d">One affiliate partner a week, every week, if the brand has any on file.</span><span class="by code">code</span></div><div class="lay"><span class="n">9</span><span class="nm">The order</span><span class="d">Dates resolved around the anchors, then hours, sources and links. One send a day. No send budget exists — the only thing ever refused is an exact duplicate.</span><span class="by code">code</span></div></div>
+    <p style="color:var(--mut)">The sequence is declared in exactly one file.
+      The docs print their table from it, the run's own record is written through
+      it, and the review board draws it from the same list — so the chain can't
+      say one thing in one place and something else in another.</p>
+  </section>
+
+  <section id="moments">
+    <div class="sh">
+      <h2>What a brand moment actually is</h2>
+      <p style="color:var(--mut)">Layer 2 is the one that carries the brand's own
+        judgement, so it's worth understanding before the rest. A <em>moment</em> is
+        a recurring thing in the customer's world the brand has a right to speak
+        into. Not a holiday — the holidays are layer 1 and they're the same for
+        everybody. A moment is <em>this</em> brand's claim on a piece of the year,
+        for <em>one</em> of its avatars.</p>
+    </div>
+
+    <p style="color:var(--mut)">They come in four kinds, and the difference is
+      how much of it you can know in advance:</p>
+
+    <div class="streams">
+      <div class="st s1"><b>fixed</b><span>A date known a year out. Plan it.
+        Father's Day, King's Month.</span></div>
+      <div class="st s2"><b>sports</b><span>The season's shape is known, the
+        outcome isn't. Plan the window, write on the day.</span></div>
+      <div class="st s3"><b>seasonal</b><span>A rhythm rather than a date. Plan
+        the fortnight. Summer heat, the new-year reset.</span></div>
+      <div class="st s4"><b>live</b><span>Can't be planned at all. Hold slots
+        open and catch it. A trade, a viral routine.</span></div>
+    </div>
+
+    <p style="color:var(--mut)"><b style="color:var(--ink)">A calendar that plans
+      all four is lying about the fourth.</b> The moments that have worked hardest
+      couldn't have been scheduled — so the chain deliberately leaves slots empty
+      rather than filling them with something plannable.</p>
+
+    <h3 style="margin-top:8px">What each one carries</h3>
+    <div class="anat">
+      <div class="af"><span class="k">key</span><span class="v"><b>super-bowl</b> — the name everything else refers to it by</span></div>
+      <div class="af"><span class="k">stream</span><span class="v">which of the four kinds above</span></div>
+      <div class="af"><span class="k">window</span><span class="v">"early February" — in plain words, for a person</span></div>
+      <div class="af"><span class="k">anchor</span><span class="v"><b>How it becomes a real date.</b> Either a public-holiday key (it takes that holiday's computed date), a fixed window like <code>02-01 → 02-14</code>, a window with a peak inside it, <code>any</code> (no date of its own), or <code>live</code> (uncatchable).</span></div>
+      <div class="af"><span class="k">audience</span><span class="v">which avatar it belongs to. <b>One moment, one avatar</b> — what lands for the barbershop regular isn't what lands for a fifteen-year-old, or for his mother buying his Christmas present.</span></div>
+      <div class="af"><span class="k">evidence</span><span class="v">why we believe it — and this is the part worth arguing about</span></div>
+      <div class="af"><span class="k">sent</span><span class="v">the actual past emails that prove it, by date and subject line. The receipt.</span></div>
+    </div>
+
+    <h3 style="margin-top:14px">How they were identified — the honest answer</h3>
+    <p style="color:var(--mut)"><b style="color:var(--ink)">Nothing sifts for
+      them.</b> There's no tool. A session read the brand's send history and its
+      avatar profiles on <b style="color:var(--ink)">2 September</b> and wrote the
+      file by hand. It hasn't been re-run since, and nothing notices when a new
+      moment appears in the sends. That's the biggest gap in this layer.</p>
+    <p style="color:var(--mut)">What it does have is a grading, so you can see
+      which parts are real:</p>
+
+    <div class="ev">
+      <div class="eg g1"><span class="n">17</span><span class="t">proven</span>
+        <p>The brand already sent into it, and the entry names the email. These
+          are facts.</p></div>
+      <div class="eg g2"><span class="n">9</span><span class="t">territory</span>
+        <p>The avatar's own profile says this is their world, but nothing has
+          been sent into it yet. A reasonable bet.</p></div>
+      <div class="eg g3"><span class="n">9</span><span class="t">proposed</span>
+        <p>Somebody thought it up. No evidence at all behind these.</p></div>
+    </div>
+
+    <p style="color:var(--mut)">I checked the receipts against the real send
+      library — 308 emails, January 2025 to July 2026. <b style="color:var(--ink)">29
+      of 32 citations land on the exact email they name.</b> Two of the misses are
+      just shorthand ("King's Month" for "Happy King's Month: Let's Celebrate Your
+      WIDGET Results"). One is genuinely wrong: <code>fathers-day</code> cites
+      21 June 2026, and that day's send was "Brand B is Pharmacist Formulated By My
+      Dad" — a Father's Day email, but not the one named.</p>
+
+    <h3 style="margin-top:14px">The thing I'd want you to see</h3>
+    <p style="color:var(--mut)">Split the evidence by avatar and the picture
+      changes completely:</p>
+
+    <table class="avt">
+      <tr><th>Avatar</th><th>Moments</th><th>Proven</th><th></th></tr>
+      <tr><td class="nm">avatar-one</td><td>23</td><td>16</td>
+          <td class="bar"><span style="width:139px"></span>70%</td></tr>
+      <tr><td class="nm">avatar-two</td><td>7</td><td class="warnc">1</td>
+          <td class="bar"><span style="width:28px"></span>14%</td></tr>
+      <tr><td class="nm">gift-buyer</td><td>5</td><td class="warnc">0</td>
+          <td class="bar">—</td></tr>
+    </table>
+
+    <p style="color:var(--mut)">The calendar's evidence is almost entirely about
+      one avatar. The king's year is real and earned. The other two are guesses
+      wearing the same clothes — and because nothing downstream can tell the
+      difference, a proposed moment gets planned exactly as confidently as a
+      proven one. <b style="color:var(--ink)">That's a decision to make, not a
+      bug to fix:</b> either send into them and find out, or stop planning them.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>The words in the chain</h2>
+      <p style="color:var(--mut)">Both thinking layers, verbatim. Open one, read it,
+        tell me what's wrong with it. The <i style="font-style:normal;font-family:var(--mono);font-size:12px;background:var(--acc-bg);color:var(--acc);border-radius:4px;padding:1px 5px">{braces}</i>
+        are where the brand's own record gets poured in before it's sent.</p>
+    </div>
+    <details class="pr"><summary><span class="pn">Layer 3</span><span class="ph">Who is live<em>Decides which segments and avatars get spoken to this month, and which rest.</em></span><span class="pf">cal3-cells-v7-damon.md</span></summary><div class="inputs"><span class="il">Reads</span><i>{today}</i><i>{month}</i><i>{state}</i><i>{skeleton}</i></div><pre>Today is: {today}
+The month being planned: {month}
+Here is the state of the brand, assembled from its own record: {state}
+Here is the month's dated skeleton — every public holiday and cultural moment that actually lands in it, with its real dates: {skeleton}
+
+Decide WHO gets spoken to this month. Nothing else — no emails, no
+occasions, no copy, no counts. This is the decision everything after it is
+built on, so it is decided from the record and defended against the record.
+No human signs it off; the checker verifies it and the state sheet is the
+only evidence that counts.
+
+## The targeting model (RULED, the owner, 2026-08-31)
+
+**The segment is the targetable unit.** Segments are real, live, and sized —
+the platform knows exactly who is in them.
+
+**Sub-avatars do not appear at this level at all** (RULED, the owner,
+2026-08-31). No profile carries a sub-avatar tag and the language bank's sub
+tags cover a fraction of rows too small to plan on. They are not a targeting
+unit and not a variant unit. Do not name one.
+
+**AVATARS ride as VARIANTS.** A segment holds every avatar mixed together
+and nobody can tell who is who. So a send to a segment carries one variant
+per avatar worth reaching — same occasion, same offer, the argument written
+through that avatar's own world and language. Everyone in the segment gets
+one of them; the split test reports which won.
+
+**One variant addresses one avatar.** Never blend two — that rule holds
+inside a variant exactly as it holds for a whole email.
+
+**This is how the missing data gets made.** Which variant wins IS the
+measurement of which avatar dominates that segment. Plan the month so it
+produces that evidence, and say so in the why.
+
+**Variant count is capped by two things, and you state both:**
+1. **Audience** — each variant needs enough people to mean anything. Roughly:
+   over 50,000 in the segment supports 4 · 10,000–50,000 supports 3 ·
+   3,000–10,000 supports 2 · under 3,000 supports 1 (no test). Platform
+   guidance is a maximum of 4 variants per test.
+2. **Language depth** — a variant only exists for an avatar with language
+   to write it from. An avatar with a few hundred rows cannot carry a
+   variant against one with thousands; give it its own small send or let it
+   rest. Never promise a voice the brand cannot carry.
+
+**Variant count is therefore usually small: the number of avatars with real
+depth, capped by the audience band.** Two honest variants beat four thin
+ones.
+
+## How to decide, and on what evidence
+
+- The coldness table is the arithmetic. A cell or type never spoken to is
+  the strongest claim on attention there is. Cite the line.
+- The findings are the economics. Cite the finding id ([F3]).
+- What sending EARNS per audience — revenue per recipient against
+  unsubscribe cost — is the frequency signal. It decides which segments are
+  live and which rest. It is not a quota.
+- Serving every segment every month is not the goal. A deliberate rest with
+  a reason beats a thin obligatory send.
+- The skeleton tells you what the month IS — a month with Black Friday in it
+  wakes segments a quiet month would let rest. Say so when it does.
+
+**You do not decide how many emails anyone gets.** Email is programmatic;
+there is no budget, no ceiling and no floor (RULED, the owner, 2026-09-01). The
+month's volume is built later from what is actually happening — the dated
+holidays, the moments, the cold ground. What you decide about a segment is
+only this: is it live this month, or does it rest.
+
+**Never invent.** No segment, avatar or sub-avatar that is not in the state
+sheet. Nothing here proposes email content — that is a later stage's job.
+
+## A dated angle must sit inside its own window
+
+RULED 2026-09-10 (the owner: "I still see some labor day email in the figma for
+late september"). An angle that names a holiday, a season or an event is a
+promise about WHEN the send goes out. This stage wrote one `labor-day` angle
+and handed it to every variant of that avatar for the whole month, including
+sends three weeks after Labor Day.
+
+- An angle may name a moment **only if that moment's window contains the dates
+  this cell will actually be sent on.** The month's live windows are above.
+- One angle per variant, written for THAT variant. Do not reuse a single angle
+  across a month because it fits the avatar — it has to fit the send.
+- An angle with no moment in it is always safe. Reach for a dated one only
+  when the timing is the argument.
+- The code drops any angle whose moment lies outside the send's window and
+  records the break, so a stale one costs the send its argument entirely.
+
+## Return exactly this
+
+```json
+{
+  "serve": [
+    {"segment": "...", "audience": 83871, "live": true, "avatar": "... or mixed",
+     "variants": [
+       {"avatar": "...", "angle": "the problem this variant argues from"}
+     ],
+     "variant_cap_reason": "audience N supports X; language depth allows Y",
+     "why": "cites [F#] or a coldness line"}
+  ],
+  "cold": [
+    {"cell": "segment or avatar", "why": "the reason it rests this month"}
+  ],
+  "learning": "which avatar dominates which segment — the thing the brand cannot currently measure"
+}
+```
+
+Then **THE CALL, READ ALOUD** — four lines or fewer: which segments are live
+and which rest, what the split tests will teach, and what the record says
+about serving the live ones.
+</pre><div class="prnote">Its answer becomes <code>cells.json</code>, which layer 4 anchors against and layer 5 plans around. Every other layer inherits who is live from here — so this is the one place where getting the words wrong costs the whole month.</div></details><details class="pr"><summary><span class="pn">Layer 5</span><span class="ph">The concepts<em>Fills in everything the holidays and moments did not already claim.</em></span><span class="pf">cal5-concepts-v1-damon.md</span></summary><div class="inputs"><span class="il">Reads</span><i>{today}</i><i>{month}</i><i>{skeleton}</i><i>{anchored}</i><i>{cells}</i><i>{types}</i><i>{products}</i><i>{offers}</i><i>{coldness}</i><i>{findings}</i></div><pre>Today is: {today}
+The month being planned: {month}
+Here is the month's dated skeleton — the public holidays and cultural moments that actually land in it, with real dates: {skeleton}
+Here are the sends ALREADY ANCHORED to those dates by code — the holiday arcs, day by day, per live segment. They exist; do not propose them again: {anchored}
+Here are the live segments, each with its avatar variants: {cells}
+Here are the kinds of email this brand knows, each with its arc role: {types}
+Here are the products: {products}
+Here are the offers, per avatar — the ONLY offers that exist: {offers}
+Here is how cold every type is, computed from the record: {coldness}
+Here is the evidence, as numbered findings: {findings}
+
+The holidays are placed. The cultural moments are placed. Now fill in the
+rest of the month — in this order, because that is the order the month is
+built in (the owner, 2026-09-02):
+
+1. **Assign an offer to every anchored ask marked `[ASSIGN]`.** A holiday arc
+   is ONE send to every segment listed on it — one sale, one offer, the
+   variants carrying each avatar's angle. Pick the one offer from the bank
+   the moment calls for and the listed variants can carry. Return these as
+   `offer_assignments`. An offer is a key under `###` in the offers list —
+   never a type name, never a sentence. An avatar with no section in the
+   bank carries no offers: if none of the variants can carry any offer,
+   answer `none` and the arc becomes a single holiday send — say so.
+
+2. **The concepts that make sense** — sends built on what is actually
+   happening this month that the anchors do not already cover: a cultural
+   moment in its window that has no anchored arc (sports seasons, seasonal
+   rhythms), a recorded problem the month makes timely, a live vein worth a
+   held-open slot.
+
+3. **Then the educational and other categories** — Educational, Community,
+   Brand sends that keep the month from being all asks. The coldest types and
+   the findings say which. Cover the ground the record says is cold.
+
+For every send you propose, name a **preferred date** inside the month. Code
+resolves collisions — it will not put two sends to one segment on the same
+day, and it keeps the anchored days clear for their arcs.
+
+**The rules that bind every move:**
+
+- **Dates are real.** A moment may only be used inside its window as printed
+  in the skeleton. A moment not in the skeleton is not in this month — using
+  it is a rule break, not a creative choice.
+- **Every ask carrying an offer arrives as a full arc** — warm-up, ask,
+  cool-down — to the same segment (RULED 2026-08-31). Code completes any arc
+  you leave half-built, so err toward naming the moment.
+- **The type comes from the catalogue** — never invented, never forced. A
+  cold or never-sent type serving the need beats the habitual one; cite the
+  coldness line when that is the reason.
+- **Offers come from the bank, product keys from the products list** — a
+  key, or the exact word `none`. Never a sentence.
+- **Every why cites** — a finding id, a moment key from the skeleton, or a
+  coldness line. An uncited why is a hunch and the checker will flag it.
+- There is **no send budget and no cap** (RULED 2026-09-01). Volume is the
+  result of what is happening this month, not a constraint on it.
+- Leave at least two slots `HELD OPEN — live` across the month for what
+  cannot be planned.
+- **Never invent.** Nothing enters that is not in the material above. A move
+  that needs something missing is marked `[UNFILLED: what it needed]`.
+
+**Return exactly this:**
+
+```json
+{
+  "offer_assignments": [
+    {"anchor_id": "the id printed on the anchored ask", "offer": "offer-key or none",
+     "why": "why this offer, for these variants, on this moment"}
+  ],
+  "moves": [
+    {"cell": {"segment": "...", "avatar": "mixed or one avatar"},
+     "type": "...", "category": "...", "role": "...",
+     "occasion": "a moment key from the skeleton, a recorded problem, or HELD OPEN — live",
+     "preferred_date": "YYYY-MM-DD",
+     "product": "... or none", "offer": "... or none",
+     "why": "cites its evidence"}
+  ]
+}
+```
+
+Then **THE MIX, READ ALOUD** — three lines: the category balance against the
+evidence, which never-sent types get their first outing, and anything left
+`[UNFILLED]`.
+</pre><div class="prnote">Its answer becomes <code>concepts.json</code>. Layers 6 and 7 then check it against the brand's own type catalogue and offer bank, so anything it invents is caught rather than shipped.</div></details>
+    <p style="color:var(--mut)">Every run saves the prompt <em>as it was actually
+      sent</em> — braces filled, brand facts in — next to the full answer it got
+      back, and stamps the prompt file's fingerprint into the record. So any month
+      can say exactly which words decided it, and the board puts both one click
+      away.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>Inside each layer</h2>
+      <p style="color:var(--mut)">What each one reads, the decision it actually
+        makes, and what it hands on. The seven code layers are rules you can
+        argue with; the two thinking layers are the prompts above.</p>
+    </div>
+
+    <div class="ins">
+
+      <div class="ilay"><span class="nn">1</span><div>
+        <h3>The holidays</h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>nothing — it computes. Easter by the actual algorithm, Thanksgiving as the fourth Thursday, and so on, for any year.</span></div>
+          <div class="fl"><em>decides</em><span>which land in this month, and what <b>kind</b> each is: <b>retail</b> (people expect an offer), <b>observance</b> (a day people mark, not a shopping day), <b>season-open</b> (a date that opens a season more than it is a day). That kind is what decides later whether it becomes a full arc or a single send.</span></div>
+          <div class="fl"><em>hands on</em><span>a dated list. Facts, not opinions — when Thanksgiving falls is the same for every brand, which is why it lives in the tool and not in the brand folder.</span></div>
+        </div></div></div>
+
+      <div class="ilay"><span class="nn">2</span><div>
+        <h3>The brand's moments</h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>the brand's moments file, and the holiday table from layer 1.</span></div>
+          <div class="fl"><em>decides</em><span>where each moment actually falls <b>this</b> month. A holiday-anchored moment takes the computed date. A window crossing the year end resolves correctly. And a holiday landing in the first ten days of <b>next</b> month is planned from this one, because its run-up lives here.</span></div>
+          <div class="fl"><em>hands on</em><span>the <b>skeleton</b> — the month's real dates, with each holiday marked either "planned against" or <b>"NOT in this brand's calendar — available, unclaimed"</b>. That unclaimed list is worth reading on its own: it's what the brand is leaving on the table.</span></div>
+        </div></div></div>
+
+      <div class="ilay think"><span class="nn">3</span><div>
+        <h3>Who is live <span style="font-family:var(--mono);font-size:11px;color:var(--acc)">· thinks</span></h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>a state sheet built from the brand's own record — segments and their sizes, how cold each one has gone, what the evidence says — plus the skeleton.</span></div>
+          <div class="fl"><em>decides</em><span>which segments are live this month and which rest, and how many variants each carries. The cap is two things it has to state out loud: <b>audience size</b> (under 3,000 supports no test at all) and <b>language depth</b> (an avatar with a few hundred recorded lines can't carry a variant against one with thousands).</span></div>
+          <div class="fl"><em>hands on</em><span>the live segments with their avatar variants and an angle each. Everything after this inherits who is live from here.</span></div>
+        </div></div></div>
+
+      <div class="ilay"><span class="nn">4</span><div>
+        <h3>The anchors — where the real arithmetic is</h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>the dated moments, who's live, and <b>every past send whose campaign or subject names this holiday</b>, joined to what it actually earned.</span></div>
+          <div class="fl"><em>decides</em><span>how long the build-up is, by what the holiday has earned before — mean revenue per recipient against the brand's own median. <b>No history → one send. Weak (under 0.8×) → two. At par → three. Strong (1.2× or more) → four.</b> That's your "fully liquidate the list in that window" rule, made arithmetic.</span></div>
+          <div class="fl"><em>hands on</em><span>the arcs, laid at their real dates, one send per live segment. Offers are left marked <code>[ASSIGN]</code> — layer 5 fills them from the bank.</span></div>
+        </div></div></div>
+
+      <div class="ilay think"><span class="nn">5</span><div>
+        <h3>The concepts <span style="font-family:var(--mono);font-size:11px;color:var(--acc)">· thinks</span></h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>the skeleton, what's already anchored, who's live, the brand's send types, its products, its offer bank, how cold every type has gone, and the evidence as numbered findings.</span></div>
+          <div class="fl"><em>decides</em><span>in a fixed order: an offer for every anchored ask first, then the concepts the month makes timely, then the educational and community sends that stop the month being all asks. Every reason has to cite a finding id, a moment key or a coldness line.</span></div>
+          <div class="fl"><em>hands on</em><span>the rest of the month, each with a preferred date. It's told to leave at least two slots <b>held open</b> for what can't be planned.</span></div>
+        </div></div></div>
+
+      <div class="ilay"><span class="nn">6</span><div>
+        <h3>Typed</h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>the brand's own catalogue of send types.</span></div>
+          <div class="fl"><em>decides</em><span>a type the catalogue doesn't know is <b>dropped, not invented around</b>. Any offer-carrying ask left half-built gets completed into its full arc — warm-up, ask, cool-down.</span></div>
+        </div></div></div>
+
+      <div class="ilay"><span class="nn">7</span><div>
+        <h3>Offers checked</h3>
+        <div class="flow">
+          <div class="fl"><em>reads</em><span>the brand's offer bank — the only place an offer may come from.</span></div>
+          <div class="fl"><em>decides</em><span>an offer no variant in that slot can actually carry is <b>stripped</b>. An arc left with no offer collapses back to a single holiday send. This is the layer that stops an invented discount reaching a customer.</span></div>
+        </div></div></div>
+
+      <div class="ilay"><span class="nn">8</span><div>
+        <h3>The affiliate floor</h3>
+        <div class="flow">
+          <div class="fl"><em>decides</em><span>one partner a week, every week, if the brand has any on file. A floor, not a ceiling.</span></div>
+        </div></div></div>
+
+      <div class="ilay"><span class="nn">9</span><div>
+        <h3>The order</h3>
+        <div class="flow">
+          <div class="fl"><em>decides</em><span>anchored sends keep their real dates; everything else takes its preferred date or the nearest free day. <b>One send a day</b>, month-wide. Two sends to one segment never land on adjacent days. The hour comes from the brand's own best-evidenced hour in the findings. An exact duplicate is the only thing ever refused.</span></div>
+          <div class="fl"><em>hands on</em><span>the finished month, plus a source email for each send to write from — <b>and this picker is the weakest thing in the chain.</b> It takes the newest sent email of the same type, falling back to the same category. It's blind to what the email is about.</span></div>
+        </div></div></div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>What a brand actually has to have</h2>
+      <p style="color:var(--mut)">You asked why the chain would mention affiliates
+        for a brand that has none. Fair — it was skipping the layer correctly and
+        saying nothing useful about it. Every layer now declares what it needs,
+        whether that's required or optional, and <em>what it does instead</em>
+        when it's missing.</p>
+    </div>
+
+    <p style="color:var(--mut)"><b style="color:var(--ink)">That last part is the
+      whole point.</b> Here's Brand A:</p>
+
+    <table class="rd">
+      <tr><th>Layer</th><th></th><th></th><th>What it loses</th></tr>
+      <tr><td class="ly">1–2</td><td class="nm">Holidays · Moments</td>
+          <td><span class="pill ok">full</span></td><td class="loses">—</td></tr>
+      <tr><td class="ly">3</td><td class="nm">Who is live</td>
+          <td><span class="pill dg">degraded</span></td>
+          <td class="loses">No learnings file. Every reason is uncited, and nothing grounds live-or-rest in money.</td></tr>
+      <tr><td class="ly">4</td><td class="nm">The anchors</td>
+          <td><span class="pill dg">degraded</span></td>
+          <td class="loses"><b style="color:var(--ink)">Every holiday gets a one-send arc.</b> No ledger, no performance — so a holiday that liquidates the list is planned exactly like one that does nothing.</td></tr>
+      <tr><td class="ly">5</td><td class="nm">The concepts</td>
+          <td><span class="pill dg">degraded</span></td>
+          <td class="loses">Plans on coldness alone, with no economics.</td></tr>
+      <tr><td class="ly">6–8</td><td class="nm">Typed · Offers · Affiliate</td>
+          <td><span class="pill ok">full</span></td><td class="loses">—</td></tr>
+      <tr><td class="ly">9</td><td class="nm">The order</td>
+          <td><span class="pill dg">degraded</span></td>
+          <td class="loses">Falls back to 17:00 for every send — a guess wearing the same clothes as a measurement.</td></tr>
+    </table>
+
+    <p style="color:var(--mut)"><b style="color:var(--ink)">Brand A has been
+      planned this way the whole time, and nothing said so.</b> Four of nine
+      layers working blind, producing a month that looked exactly as confident as
+      Brand B's. It now prints a warning on every run, lands in the run's record,
+      and opens the board's panel with the layers marked.</p>
+
+    <p style="color:var(--mut)"><b style="color:var(--ink)">On affiliates
+      specifically:</b> the answer is that the weekly slot is a commitment for
+      brands that <em>have</em> partners, not a rule about what a month must
+      contain. A brand with no roster gets no affiliate sends and the run says
+      so in those words. And looking properly turned up a real bug — Brand B keys
+      its roster one way, Brand A keyed it another, and the reader only knew one.
+      A partner added to Brand A would have been ignored forever, silently. Fixed,
+      and a roster under an unknown key is now reported with its count instead of
+      read as empty.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>Where the moments come from now</h2>
+      <p style="color:var(--mut)">Twenty-four jobs in the Control Room, six of them
+        research — and the moments file was the one piece of brand context nothing
+        made. It was typed by hand on 2 September and never re-ran. It has a
+        producer now, and it's two jobs because it's two genuinely different
+        questions.</p>
+    </div>
+
+    <div class="two">
+      <div class="half code">
+        <span class="tagl">code · free · safe to run weekly</span>
+        <span class="hh">What the brand already does</span>
+        <p>Reads the brand's own sends. Finds what it has been speaking into —
+          either matched to a real holiday's date, or a theme that came back at
+          the same point in a later year — and joins each one to
+          <b>what it actually earned</b> against the brand's median.</p>
+        <p>Everything it finds is <b>proven</b> by construction, because the
+          receipts are the brand's own emails.</p>
+      </div>
+      <div class="half web">
+        <span class="tagl">research · the open web</span>
+        <span class="hh">What his year contains that you've never touched</span>
+        <p>Goes looking for the part of the year that belongs to <em>him</em> —
+          the seasons of what he follows, the weeks his rooms organise around,
+          the arguments that come back every year.</p>
+        <p>It reads the mined file first, so it can't spend the run rediscovering
+          what you already know. And <b>it may never grade a finding "proven"</b> —
+          that grade belongs to the sends, never to research.</p>
+      </div>
+    </div>
+
+    <p style="color:var(--mut)">A finding has to pass four tests to count as a
+      moment: it <b style="color:var(--ink)">recurs</b> (shown in two different
+      years, with sources), it has a <b style="color:var(--ink)">window you can
+      date</b> ("summer" isn't one, "the fortnight before the season opens" is),
+      it's <b style="color:var(--ink)">his and not the category's</b>, and the
+      brand could say something <b style="color:var(--ink)">true</b> into it.</p>
+
+    <div class="find">
+      <span class="big">Cyber Monday earns 7× the brand's median — and the
+        calendar has never heard of it.</span>
+      <p>First run of the miner on Brand B: nine moments found, four of them
+        missing from the moments file. <code>cyber-monday</code> at <b>7.0×</b>
+        and <code>cyber-week</code> at <b>5.0×</b> are the two best-earning things
+        in the record and neither is claimed. Meanwhile <code>fathers-day</code>
+        <em>is</em> claimed and comes in at 0.7× — below median.</p>
+      <p>Brand A's record returns nothing. That's correct, not broken: 90 sends
+        and no repeat yet. It has no habit to find, which is exactly what the
+        research half is for.</p>
+    </div>
+
+    <p style="color:var(--mut)"><b style="color:var(--ink)">The mined half now
+      files itself.</b> You said it isn't a decision for you, and you were right:
+      research is a judgement and needs you, but the record is arithmetic and
+      doesn't. A moment your own emails prove, more than once, with its own
+      performance attached, isn't an opinion anybody has to sign.</p>
+
+    <p style="color:var(--mut)">It added Cyber Monday, Cyber Week and Easter —
+      and it <b style="color:var(--ink)">corrected</b> two entries that were
+      wrong. <code>black-friday</code> was sitting there graded "territory" with
+      a note reading <em>"not yet run under its own name"</em>, while your record
+      held nine Black Friday emails earning 1.7× your median. A claim typed once
+      and never re-checked. <b style="color:var(--ink)">35 moments to 44, 17
+      proven to 28.</b></p>
+
+    <p style="color:var(--mut)">What it won't file on its own: a <em>recurring
+      theme</em> (the record can't say which avatar a send was for, and guessing
+      puts it in front of people it was never about), and anything with only one
+      send — proven means a habit, not that you mentioned something once. The
+      research half still never writes into the brand.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>Three different things, and one of them had a confusing name</h2>
+      <p style="color:var(--mut)">You said you didn't know what anchors were.
+        That's on me — the word was doing two jobs. Here's the whole vocabulary,
+        which is only three ideas.</p>
+    </div>
+
+    <div class="three">
+      <div class="th a">
+        <span class="w">the same for everybody</span>
+        <span class="hh">A holiday</span>
+        <p>A calendar fact. When Thanksgiving falls doesn't depend on your brand,
+          so the tool computes it. Each one is tagged <b>retail</b> (people expect
+          an offer), <b>observance</b> (a day people mark) or <b>season-open</b>.</p>
+        <span class="eg">layer 1</span>
+      </div>
+      <div class="th b">
+        <span class="w">yours, and one avatar's</span>
+        <span class="hh">A moment</span>
+        <p>Your claim on a piece of the year. NBA season for the fed-up king.
+          Every moment carries <b>an anchor</b> — the rule that turns it into
+          real dates: a holiday's key, a fixed window, a window with a peak,
+          or "can't be planned".</p>
+        <span class="eg">layer 2</span>
+      </div>
+      <div class="th c">
+        <span class="w">the act, not the rule</span>
+        <span class="hh">Pinning</span>
+        <p>Putting actual sends on those dates. A retail holiday becomes a full
+          arc — build-up, the ask, the close — and <b>how long the build-up is
+          comes from what that holiday earned before</b>.</p>
+        <span class="eg">layer 4 — called "the anchors" until yesterday</span>
+      </div>
+    </div>
+
+    <p style="color:var(--mut)">So layer 2 asks every moment <em>when are
+      you?</em> — and the anchor is what answers. Layer 4 then says <em>a send
+      goes there, and here's how many.</em> Two things, one word, which is why
+      it read as nonsense. Layer 4 is <b style="color:var(--ink)">"Pinned to the
+      date"</b> now.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>Every send is written off a format</h2>
+      <p style="color:var(--mut)">You're right that this is where agnostic
+        actually gets tested. A send isn't written from nothing — it borrows the
+        shape of a real email. Layer 9 picks one per slot: the newest of the same
+        type from the brand's own sent emails, then the same category.</p>
+    </div>
+
+    <div class="warnbox">
+      <span class="t">what was broken</span>
+      <p><b>A brand that has never sent anything has no formats, so its whole
+        month came out empty — silently.</b> The chain didn't check, didn't say
+        so, and produced a month that looked finished.</p>
+    </div>
+
+    <p style="color:var(--mut)">Now the chain declares that it needs formats,
+      says out loud when a brand has none, and there's a written way through:
+      a brand can <b style="color:var(--ink)">declare that it borrows shapes from
+      another brand</b> — with who approved it and why.</p>
+
+    <p style="color:var(--mut)"><b style="color:var(--ink)">No brand is named
+      anywhere in the tool.</b> Borrowing is a per-brand decision that lives in
+      that brand's own folder and is empty by default. And a borrowed slot
+      records where the shape came from, so the writer reads the right email
+      while the send stays the borrowing brand's.</p>
+
+    <p style="color:var(--mut)">I proved it: Brand A borrowing from Brand B
+      filled four slots for types Brand A has never sent, each one pointing at a
+      real Brand B email. Then I reverted the declaration — nobody borrows by
+      default.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>Where it lives</h2>
+      <p style="color:var(--mut)">In the lab for now, as its own folder — not back
+        inside the email machine. It already has the shape it needs to graduate:
+        moving it is a rename and one line in a register.</p>
+    </div>
+
+    <div class="tree">
+      <div class="tt">lab/marketing-calendar/</div>
+      <div class="tr"><span class="f">machine/chain.py</span><span class="c">the nine layers, declared. <b>The one copy.</b></span></div>
+      <div class="tr"><span class="f">machine/calendar.py</span><span class="c">runs them, in order</span></div>
+      <div class="tr"><span class="f">machine/board.py · serve.py</span><span class="c">the review page and the server behind it</span></div>
+      <div class="tr"><span class="f">machine/review.py</span><span class="c">the human's layer — status, rewrites, notes</span></div>
+      <div class="tr"><span class="f">machine/records.py</span><span class="c">files each run to the dashboard</span></div>
+      <div class="tr"><span class="f">prompts/</span><span class="c">the two thinking layers — the words above</span></div>
+      <div class="tr"><span class="f">definitions/</span><span class="c">the starter list of send types a new brand copies</span></div>
+      <div class="tr"><span class="f">handoff.json</span><span class="c">what "write the copy" runs</span></div>
+      <div class="tr"><span class="f">runs/</span><span class="c">every month it has planned</span></div>
+    </div>
+
+    <p style="color:var(--mut)">Each layer writes into its own numbered folder
+      inside the month, so you can open any step and read what it decided:</p>
+
+    <div class="seq">
+      <div class="sq"><b>1-holidays</b><span>holidays.md</span></div>
+      <div class="sq"><b>2-cultural</b><span>moments.md</span></div>
+      <div class="sq ai"><b>3-cells</b><span>prompt sent · reasoning · cells.json</span></div>
+      <div class="sq"><b>4-anchors</b><span>anchors.md</span></div>
+      <div class="sq ai"><b>5-concepts</b><span>prompt sent · reasoning · concepts.json</span></div>
+      <div class="sq"><b>6-catalogue</b><span>catalogue.md</span></div>
+      <div class="sq"><b>7-offers</b><span>offers.md</span></div>
+      <div class="sq"><b>8-affiliate</b><span>affiliate.json</span></div>
+      <div class="sq"><b>9-order</b><span>order.md</span></div>
+      <div class="sq out"><b>the month</b><span>slots.json · checks.md · board.html</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>How to test it</h2>
+      <p style="color:var(--mut)">Four ways in, cheapest first. Three of them cost
+        nothing at all.</p>
+    </div>
+    <div class="tests">
+      <div class="te"><span class="mk">1</span><div>
+        <div class="t">Check a brand is ready — free, instant</div>
+        <p>Asks what each layer needs from the brand and whether it's actually
+          there, before a run hits a missing file halfway through. Both brands
+          pass right now.</p></div></div>
+      <div class="te"><span class="mk">2</span><div>
+        <div class="t">Re-run the arithmetic — free</div>
+        <p>Layers 4–9, or just layer 9, replayed from what's already on disk. No
+          model, no cost. This is the loop for changing a rule: change it, replay,
+          read the month, change it again.</p></div></div>
+      <div class="te"><span class="mk">3</span><div>
+        <div class="t">Read what the words produced — free</div>
+        <p>Every run keeps the filled-in prompt and the full answer. That's the
+          real test of a prompt: not whether it sounds right, but what it made
+          the machine decide.</p></div></div>
+      <div class="te"><span class="mk">4</span><div>
+        <div class="t">Plan a month properly — costs a run</div>
+        <p>The whole chain on a real brand and month. The checker then lists
+          every rule the month breaks, and those sit at the top of the board
+          in red.</p></div></div>
+    </div>
+    <p style="color:var(--mut)">The checker is the other half of testing: stale
+      angles, a promotional ask with no warm-up, an offer that doesn't exist, two
+      sends on one day. It reports breaks rather than quietly fixing them, so
+      what's wrong stays visible.</p>
+  </section>
+
+  <section>
+    <div class="sh">
+      <h2>The board at the end</h2>
+      <p style="color:var(--mut)">A month arrives as a calendar, not a list, so the
+        spacing is something you see. One card per send underneath, each carrying
+        the reason the machine chose it.</p>
+    </div>
+    <div class="can">
+      <div class="ci"><span class="t">Rewrite anything</span>
+        <p>Date, hour, segment, type, offer, product, what it's about — and the
+          angle, the line the copy has to carry. The machine's original stays on
+          screen beside the change.</p></div>
+      <div class="ci"><span class="t">Cut what shouldn't run</span>
+        <p>A cut send is never written. Your decisions live in their own file, so
+          re-planning the month can't undo them.</p></div>
+      <div class="ci"><span class="t">Leave a note</span>
+        <p>It reaches the writing stage and outranks both the plan and the source
+          the email was built from.</p></div>
+      <div class="ci"><span class="t">See how it was built</span>
+        <p>The nine layers at the top of the page, what each produced, and both
+          prompts one click away.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>What's still open on the calendar</h2></div>
+    <div class="open">
+      <ul>
+        <li><b>Brand A needs three files before its months mean anything</b> —
+          ledger, performance, learnings. Until then four of its nine layers
+          work blind.</li>
+        <li><b>Brand A's year has to come from the web.</b> The miner found
+          nothing, correctly — 90 sends, no repeat yet. No habit to find.</li>
+        <li><b>The source picker is blind to topic.</b> Layer 9 hands the writer
+          the newest email of the same type — the mechanism behind the football
+          email that had no football in it. Now that formats can be borrowed
+          across brands, this matters more, not less.</li>
+        <li><b>The words themselves.</b> Both prompts are above and have never had
+          a proper read-through.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    lab/marketing-calendar · 9 layers · 2 prompts · runs on any brand
+  </footer>
+
+</div>

@@ -5,7 +5,7 @@ edit.py — a regen is an EDIT off the plate, never a fresh shot.
     python3 machine/edit.py <run> --scene 1 --change "she is front-on, not in profile"
     python3 machine/edit.py <run> --scene 1 --show     # the split and the last instruction
 
-**Damon's ruling, frames-by-edit.md, 2026-09-02.** Measured on a real run:
+**the owner's ruling, frames-by-edit.md, 2026-09-02.** Measured on a real run:
 
     generate from a description        4,262 chars   wrong wardrobe, blended faces
     edit, but still describing it      766-1,133     composition better, caption wrong
@@ -39,29 +39,28 @@ from __future__ import annotations
 
 import argparse
 import json
+import re as _re
+import sys
 from datetime import datetime
 from pathlib import Path
 
-DELTA_MIN, DELTA_MAX = 120, 400        # measured band, with a little headroom
-MAX_CHANGES = 2                        # an edit moves one thing, two at a push
+# The discipline — the band, the one-change rule, the instruction shape — was
+# lifted out of this file into `tools/image-edit` on 2026-09-22 so the
+# image side runs the same rules (the owner: "effectively the same mechanics as
+# making scene / frame adjustments"). This file is its first caller. Found by
+# walking up, never counted; appended, never inserted at 0.
+def _components():
+    here = Path(__file__).resolve()
+    for d in here.parents:
+        if (d / "tools" / "image-edit" / "splits.json").is_file():
+            return d / "tools" / "image-edit"
+    raise SystemExit("tools/image-edit is not beside this workspace")
 
-# Length was only ever the symptom. A 349-character instruction that changes
-# the room, the wardrobe, the shelves, the light and adds a person is five
-# edits wearing one sentence, and when it comes back wrong nothing says which
-# of the five did it. Damon's rule, 2026-09-11: change one thing, and only one,
-# so the next result answers a question.
-import re as _re
-_SPLIT = _re.compile(r",\s+|\band\b|\bthen\b|;\s*", _re.I)
-_VERB = _re.compile(
-    r"\b(is|are|make[s]?|move[s]?|change[s]?|put[s]?|add[s]?|remove[s]?|swap[s]?|"
-    r"turn[s]?|face[s]?|hold[s]?|look[s]?|stand[s]?|sit[s]?|open[s]?|close[s]?|"
-    r"lift[s]?|drop[s]?|bring[s]?|show[s]?|lose[s]?|keep[s]?)\b", _re.I)
+sys.path.append(str(_components()))
+from image_edit import discipline as _D  # noqa: E402
 
-
-def count_changes(change: str) -> int:
-    """How many separate alterations this asks for."""
-    parts = [p.strip() for p in _SPLIT.split(change) if p.strip()]
-    return max(1, sum(1 for p in parts if _VERB.search(p) or len(p.split()) > 4))
+DELTA_MIN, DELTA_MAX, MAX_CHANGES = _D.DELTA_MIN, _D.DELTA_MAX, _D.MAX_CHANGES
+count_changes = _D.count_changes
 
 # What is load-bearing is a property of the shot type, and these are the
 # defaults a scene inherits until somebody writes a better split for it.
@@ -104,7 +103,9 @@ ASSETS = {
     "flex": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
     "brush": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
     "device": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
-    "nina": "4157e549-dd65-450e-995d-cc50e369d107",
+    # A cast member is read from the brand's casting registry, never pinned
+    # here. (The Brand B esthetician that used to sit on this map was retired
+    # 2026-09-29 — no casting sheet.)
 }
 
 
@@ -125,16 +126,10 @@ def instruction(s: dict, change: str) -> str:
     An edit off the plate alone re-derives whatever the plate got wrong. A
     brush face that came back as coarse ridges stays coarse ridges, because
     the only picture in the room still shows ridges. When the change is ABOUT
-    a banked thing, the bank comes too (2026-09-11 — Damon: "you should be
+    a banked thing, the bank comes too (2026-09-11 — the owner: "you should be
     using the actual flex model in higgsfield").
     """
-    sp = split_for(s)
-    keep = "; ".join(sp["keep"])
-    text = (f"Keep the reference image exactly as it is — {keep} — and change "
-            f"only this: {change.strip().rstrip('.')}.")
-    for eid in assets_in(change):
-        text += f" The {'' if False else ''}<<<{eid}>>> is reproduced exactly from its own reference."
-    return text
+    return _D.instruction(split_for(s)["keep"], change, assets_in(change))
 
 
 def edit(run: Path, n: int, change: str, dry: bool = False) -> dict:
@@ -151,14 +146,7 @@ def edit(run: Path, n: int, change: str, dry: bool = False) -> dict:
 
     text = instruction(s, change)
     moves = count_changes(change)
-    note = None
-    if moves > MAX_CHANGES:
-        note = (f"this asks for {moves} changes at once. An edit moves one thing "
-                f"so the next plate answers a question — run them one at a time, "
-                f"starting with whichever is most wrong.")
-    elif len(text) > DELTA_MAX:
-        note = (f"instruction is {len(text)} chars, past the {DELTA_MAX} band — "
-                "it has started describing the scene again. Narrow the change.")
+    note = _D.guard(change, text)
     req = {"scene": n, "asked": change, "instruction": text,
            "chars": len(text), "changes": moves, "reference_job": base["job_id"],
            "keep": split_for(s)["keep"], "at": datetime.now().isoformat(timespec="seconds")}

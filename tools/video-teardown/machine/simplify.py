@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Rebuild a creator's briefs in the simplified shape (Damon's rulings, 2026-09-18).
+"""Rebuild a creator's briefs in the simplified shape (the owner's rulings, 2026-09-18).
 
-    python3 simplify.py --brand <brand> --creator jeneeclaytonrdh    stage hers
-    python3 simplify.py --brand <brand> --all                         every creator
-    python3 simplify.py --brand <brand> --creator <h> --send          into her BRIEFS folder
-    python3 simplify.py --brand <brand> --all --no-rerun              keep v5 concepts already written
+    python3 simplify.py --brand brand-a --creator creator-handle    stage hers
+    python3 simplify.py --brand brand-a --all                         every creator
+    python3 simplify.py --brand brand-a --creator <h> --send          into her BRIEFS folder
+    python3 simplify.py --brand brand-a --all --no-rerun              keep v5 concepts already written
 
-Christine (18 Sep): the briefs overwhelm; one creator opted out, some went
-silent; go back to the first brief's shape. Damon's rulings on the sample:
+the creator manager (18 Sep): the briefs overwhelm; one creator opted out, some went
+silent; go back to the first brief's shape. the owner's rulings on the sample:
 "I still want the separated briefs" · "we still want the script" · "remove
 the image from the google doc itself" — no pictures at all.
 
@@ -17,10 +17,10 @@ So, per creator, her folder holds:
     <Concept> — <handle> · <brand> brief             one per video: the concept + the script
     <Concept> — inspiration video.mp4                the video the brief was built on
 
-No pictures anywhere (Damon: "we literally don't need the pictures in the
+No pictures anywhere (the owner: "we literally don't need the pictures in the
 google doc"). The inspiration is the source video itself — her own post on
 the creator lane, the swipe on the general one — uploaded beside the brief
-(Damon, 2026-09-18: "find the inspiration videos for each of these briefs
+(the owner, 2026-09-18: "find the inspiration videos for each of these briefs
 and put those in the folder too").
 
 This does, for every run of hers that reached a final brief:
@@ -34,7 +34,7 @@ This does, for every run of hers that reached a final brief:
    IN PLACE (same link, new contents, same title) and puts the Start-here Doc
    beside it in BRIEFS. Nothing is trashed.
 
-The intro comes from `brands/<brand>/content-creators/brief-intro.md` (old: channels/creators/);
+The intro comes from `brands/<brand>/content-creators/brief-intro.md`;
 the concept from the machine; nothing here writes a word of its own.
 """
 import argparse, json, re, sys, time
@@ -42,10 +42,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C
-import brand_folders as BF
+import workdir
 import md as MD
 import gdoc as G
 import run as R
+sys.path.insert(0, str(C.WS / "components" / "brandpath"))
+import brandpath as BP
 
 FRONT = re.compile(r"\A---\n.*?\n---\n", re.S)
 LOG = C.runs_root() / "_simplified"
@@ -126,7 +128,7 @@ def product_of(rd, st):
     """A run from before `--product` existed does not say which product it
     sells; its own spec does. The product folder whose name the spec uses
     most is the one — recorded on the run so it is never guessed twice."""
-    base = C.WS / "brands" / st["brand"] / "products"
+    base = BP.brand_path(st["brand"], "products", root=C.WS / "brands")
     slugs = [d.name for d in base.iterdir() if d.is_dir() and d.name != "reference"] if base.is_dir() else []
     if len(slugs) == 1:
         return slugs[0]
@@ -150,10 +152,10 @@ def product_of(rd, st):
 
 
 def first_name(handle):
-    """Her first name — from the tracker (creators.json, Christine's sheet)
+    """Her first name — from the tracker (creators.json, the creator manager's sheet)
     first, then her own profile in the creator library. Fancy unicode is
-    flattened; a tracker row holding only a surname ("Patton") loses to the
-    profile ("Mrs Patton" → the handle's own first name is not guessed)."""
+    flattened; a tracker row holding only a surname ("Lane") loses to the
+    profile ("Mrs Lane" → the handle's own first name is not guessed)."""
     import unicodedata
     def plain(x):
         return re.sub(r"[^a-z0-9]", "", (x or "").lower())
@@ -161,14 +163,14 @@ def first_name(handle):
         x = unicodedata.normalize("NFKC", x or "").split("|")[0].strip()
         x = re.sub(r"[^\w' .-]", "", x).strip()
         toks = x.split()
-        # "Mrs Patton" is how she names herself — keep it whole rather than
+        # "Mrs Lane" is how she names herself — keep it whole rather than
         # address her by a surname alone
         if len(toks) >= 2 and toks[0].lower().rstrip(".") in ("mrs", "mr", "ms", "dr"):
             return f"{toks[0].rstrip('.')} {toks[1]}"
         return toks[0].strip("'’.") if toks else ""
     cands = []
     try:
-        for row in json.loads((C.MACHINE / "creators.json").read_text()):
+        for row in json.loads((workdir.system(C.WS) / "creators.json").read_text()):
             parts = [plain(x) for x in (row.get("url") or "").split("/")[3:]]
             if plain(handle) in parts and row.get("name"):
                 cands.append(first(row["name"]))
@@ -194,7 +196,7 @@ def first_name(handle):
 
 
 def intro_html(brand, name, n, products, contact):
-    f = BF.home(C.WS / "brands" / brand, "content-creators") / "brief-intro.md"
+    f = BP.brand_file(brand, "content-creators", "brief-intro.md", root=C.WS / "brands")
     if not f.is_file():
         raise RuntimeError(f"no shared intro for {brand}: {f}")
     body = FRONT.sub("", f.read_text(), count=1).strip()
@@ -247,12 +249,12 @@ def brand_label(brand):
 
 
 def contact_for(brand):
-    f = BF.home(C.WS / "brands" / brand, "content-creators") / "contact.md"
+    f = BP.brand_file(brand, "content-creators", "contact.md", root=C.WS / "brands")
     if not f.is_file():
         return ""
     t = f.read_text().strip()
     m = re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", t)
-    # <brand>' file says OPEN and names an address it forbids printing
+    # brand-b' file says OPEN and names an address it forbids printing
     return m.group(0) if (m and t.count("\n") < 3) else ""
 
 
@@ -335,10 +337,22 @@ def start_here(brand, who, home):
     import drive as _drive
     runs = [(rd, st) for rd, st in runs_for(brand, who)
             if not doc_trashed(st.get("gdoc_url") or "")]
+    # HOW MANY SHE ACTUALLY HAS. This counted every run the repo holds for the
+    # brand, so a folder of 10 briefs opened with "this brief includes 47 video
+    # concepts" — the number nobody could reconcile (the owner, 2026-10-02). The
+    # folder is the truth: count the Docs sitting in it.
+    n_folder = 0
+    try:
+        import drive as _d
+        n_folder = len([f for f in _d.list_folder(home)
+                        if "document" in f.get("mimeType", "")
+                        and f["name"].rstrip().endswith("brief")])
+    except Exception:
+        pass
     name = first_name(who) if who else "there"
     LOG.mkdir(parents=True, exist_ok=True)
     ih = LOG / f"{brand}-{who}-intro.html"
-    ih.write_text(intro_html(brand, name, max(len(runs), 1), products_of(runs),
+    ih.write_text(intro_html(brand, name, max(n_folder or len(runs), 1), products_of(runs),
                              contact_for(brand)))
     title = (f"Start here — {brand_label(brand)} Content Brief — {name}" if who
              else f"Start here — {brand_label(brand)} Content Brief")

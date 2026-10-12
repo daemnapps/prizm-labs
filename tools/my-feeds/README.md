@@ -32,7 +32,7 @@ make your own in three steps:
 
 **How the page gets its posts.** Nothing on it is live and nothing on it can
 spend. It reads a static export in `docs/feeds/data/`, written by
-`components/swipe-organic/feedsexport.py` in the team workspace:
+[`components/swipe-organic/feedsexport.py`](../../components/swipe-organic/feedsexport.py) (in this repo since 12 Oct 2026):
 
 | File | What it holds |
 |---|---|
@@ -46,7 +46,7 @@ The export copies an allow-list of fields and nothing else, re-keys every feed
 by person (no brand name anywhere), and refuses to write unless a no-secrets
 scan and a size check pass (pictures under 40 MB; one run changes under 3 MB).
 It reads what is already pulled — it never pulls, so it never spends. It runs
-after each Pull on the team's board; `components/swipe-organic/feeds-publish.sh`
+after each Pull on the board; [`components/swipe-organic/feeds-publish.sh`](../../components/swipe-organic/feeds-publish.sh)
 exports, commits and pushes in one go.
 
 **Full breakdowns of one brand's ads** — every live ad, the words they keep,

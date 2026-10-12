@@ -1,0 +1,45 @@
+# Media never enters git — it lives on the team Drive at
+# the shared drive/swipe-paid/<brand>/, mirroring this tree.
+*.mp4
+*.mov
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+
+# Page captures live on Drive too; only _PAGE.md stays here.
+page.html
+page.txt
+
+# Derived and disposable — rebuilt from each brand's angles.json + pages.json
+# by `build.py db`. Never migrated, always rebuilt.
+swipe.db
+
+# Walked-quiz captures live on Drive with the rest of the media.
+steps/
+
+# Our own ads are a cache of the ecom_data_sync tables, not a record: one
+# command rebuilds them and the numbers move daily. Same reason swipe.db is
+# not in here — derived and disposable is rebuilt, never migrated.
+own/*/ads.json
+.build/thumbs/
+own/*/pages.json
+own/produced/ads.json
+own/live/ads.json
+own/live/pages.json
+
+# Capture working set — the sweep JSON is filed per brand in <brand>/_raw/,
+# the pulled pages and media are on Drive. None of it belongs in git.
+capture/assets/
+capture/raw/
+capture/market.db
+capture/.build/
+
+# Public copy: every advertiser folder (and own/, organic/, refs/) is a record and stays local; only the code folders ship.
+/*/
+!/_TEMPLATE/
+!/capture/
+!/teardown/
+!/prompts/
+!/context/

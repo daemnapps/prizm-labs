@@ -29,13 +29,34 @@ from __future__ import annotations
 import json
 import re
 import sys
+import os
 from pathlib import Path
+
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
 
 
 # --------------------------------------------------------- element facts
 #
 # Every slop round so far has been a fact the repo already held and the
-# prompt did not send: the FLEX standing on a base it does not have, bristles
+# prompt did not send: the the device standing on a base it does not have, bristles
 # on a back that has none, invented bottles beside a real product element.
 #
 # So the facts live with the element, in element-facts.json, and ANY prompt
@@ -45,7 +66,7 @@ from pathlib import Path
 # Brand data lives with the BRAND. The lane is brand-agnostic: a run names its
 # brand in plan.json and the facts are read from there, so the same chain runs
 # the brand, or a brand that does not exist yet, without a line of it changing.
-WORKSPACE = Path(__file__).resolve().parents[4]
+WORKSPACE = _workspace()
 BRAND: str | None = None      # set per run by use_brand(), from the plan
 
 
@@ -54,9 +75,9 @@ def facts_file() -> Path:
         raise SystemExit(
             "This run does not name a brand.\n"
             '  Add  "brand": "<name>"  to the run\'s out/plan.json.\n'
-            "  The lane reads brands/<name>/element-facts.json from it, and "
+            "  The lane reads brands/<name>/ai-elements/element-facts.json from it, and "
             "ships to that brand's Drive folder.")
-    return WORKSPACE / "brands" / BRAND / "element-facts.json"
+    return WORKSPACE / "brands" / BRAND / "ai-elements" / "element-facts.json"
 
 
 def use_brand(name: str) -> None:
@@ -123,7 +144,7 @@ PROMPTS = Path(__file__).resolve().parent.parent / "prompts"
 STAGE_PROMPT = {
     "openings": "stage-1-openings/stage1-openings-v1-damon.md",
     "aroll":    "stage-2-aroll/stage2-aroll-v2-damon.md",
-    "broll":    "stage-3-broll/stage3-broll-v1-damon.md",
+    "broll":    "stage-3-broll/stage3-broll-v2-damon.md",
     "offer":    "stage-4-offer/stage4-offer-v2-damon.md",
 }
 _SHAPE = re.compile(r"```shape\n(.*?)```", re.S)
@@ -145,7 +166,7 @@ MODEL = "cinematic_studio_3_0"
 CEILING = 15          # Cinema Studio's hard duration ceiling, seconds
 
 # The no-cut line — every video prompt this lane builds carries it, without
-# exception (the course write-up, Damon 09-14, §7): a model that invents a
+# exception (the course write-up, the owner 09-14, §7): a model that invents a
 # cut mid-sentence is a dead generation, and it is one line. preflight.py's
 # rule 11 gates on it; this is where it gets INTO the prompt, so `run.py
 # start` produces compliant batches without a session having to remember.

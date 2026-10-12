@@ -215,6 +215,18 @@ def render() -> str:
         if docs:
             L.append("Read from: " + " · ".join(docs))
             L.append("")
+    # THE PICTURE RULES (2026-10-02): every rule a still prompt carries, verbatim,
+    # so the page shows the words the machine sends
+    fr = c.get("frame_rules") or {}
+    cp = c.get("card_plate") or {}
+    if fr or cp:
+        L += ["## The picture rules — said in every still that qualifies", "",
+              "| Rule | Applies to | The words sent | Why |", "|---|---|---|---|"]
+        for k, r in fr.items():
+            L.append(f"| {k} | {r.get('applies_to') or r.get('required_when', '')} | {r.get('says', '')} | {r.get('why', '')} |")
+        if cp.get("clean_line"):
+            L.append(f"| card_plate | every card plate | {cp['clean_line']} | {cp.get('why_surface', '')} |")
+        L.append("")
     return "\n".join(L).rstrip() + "\n"
 
 

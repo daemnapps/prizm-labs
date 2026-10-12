@@ -1,0 +1,29 @@
+{
+ "_what": "The Disapprove reasons on the approval page. Each reason points at the upstream step(s) that caused it — as far upstream as it goes — and the tool that owns that step. A tool can differ by lane: {\"video\": ..., \"image\": ..., \"carousel\": ..., \"creator\": ..., \"*\": fallback}. Add a reason by adding a row; ids never change once used (learnings.jsonl keeps them). Steps are the twelve shared steps (lab/work-queue/WORK-QUEUE-damon.md).",
+ "steps": {
+  "1": "Swipe", "2": "Teardown", "3": "Route", "4": "Brief", "5": "Produce", "6": "Queue",
+  "7": "Make", "8": "Deliver", "9": "Check", "10": "Approve", "11": "Live", "12": "Performance"
+ },
+ "reasons": [
+  {"id": "idea", "label": "Not our swipe / wrong idea",
+   "upstream": [{"step": 1, "tool": "feeds"},
+                {"step": 2, "tool": {"video": "video-teardown", "creator": "video-teardown", "*": "image-teardown"}}]},
+  {"id": "hook", "label": "Hook weak / doesn't stop the scroll",
+   "upstream": [{"step": 2, "tool": {"video": "video-teardown", "creator": "video-teardown", "*": "image-teardown"}},
+                {"step": 4, "tool": "copywriter"}]},
+  {"id": "words", "label": "Words wrong / off-brand / claim not allowed",
+   "upstream": [{"step": 4, "tool": "copywriter"}]},
+  {"id": "product", "label": "Wrong product or offer",
+   "upstream": [{"step": 4, "tool": "catalog"}]},
+  {"id": "page", "label": "Landing page wrong",
+   "upstream": [{"step": 4, "tool": "landing-page"}]},
+  {"id": "looks", "label": "Person or product looks wrong / AI slop / faces",
+   "upstream": [{"step": 5, "tool": {"video": "video-production", "creator": "video-production", "*": "image-teardown"}}]},
+  {"id": "edit", "label": "Cut, pacing, captions or sound",
+   "upstream": [{"step": 7, "tool": "video-edit"}]},
+  {"id": "frame", "label": "Frame / 9:16 / safe zone",
+   "upstream": [{"step": 7, "tool": {"video": "video-edit", "creator": "video-edit", "*": "image-edit"}}]},
+  {"id": "other", "label": "Something else (say it in the note)",
+   "upstream": [{"step": 0, "tool": "lead"}]}
+ ]
+}

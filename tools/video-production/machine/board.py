@@ -52,6 +52,26 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
+
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import chain as CH
@@ -67,7 +87,13 @@ EDITABLE_CUT = {"place", "subject", "action", "look", "why", "change"}
 
 # ----------------------------------------------------------------- state
 def plan_path() -> Path:
-    return RUN / "out" / "plan.json"
+    # the runner writes <run>/plan.json; out/plan.json is an old run's
+    # layout, read only when the run has no plan of its own (SI-156 (video pack gates))
+    p = RUN / "plan.json"
+    if p.exists():
+        return p
+    old = RUN / "out" / "plan.json"
+    return old if old.exists() else p
 
 
 def load() -> dict:
@@ -167,7 +193,7 @@ def cast_html(d: dict) -> str:
 def change_box(row: dict, kind: str) -> str:
     """What is wrong with the take that is on the card right now.
 
-    Damon writes it here, in his words, and presses Regenerate. The note is
+    the owner writes it here, in his words, and presses Regenerate. The note is
     kept against the take it rejects, so the card carries its own history of
     what was wrong and what was done about it — instead of that history living
     in a chat that gets archived.
@@ -187,7 +213,7 @@ def change_box(row: dict, kind: str) -> str:
       <span class="slot">what needs changing &mdash; plain words</span>
       <textarea class="fx" data-id="{e(row['id'])}" data-kind="{kind}"
         data-k="change" rows="2"
-        placeholder="e.g. the FLEX is standing up, it has a rounded bottom">{e(row.get('change'))}</textarea>
+        placeholder="e.g. the the device is standing up, it has a rounded bottom">{e(row.get('change'))}</textarea>
       <div class="acts">
         <button class="go regen" data-id="{e(row['id'])}" data-kind="{kind}">Regenerate with this note</button>
       </div>
@@ -491,7 +517,7 @@ def kit_html(d: dict) -> str:
     """The product kit: which elements exist, what is true of each, which
     shots use it, and which are blocked and why.
 
-    This panel exists because the FLEX was wrong in three different ways
+    This panel exists because the the device was wrong in three different ways
     across three shots and there was nowhere on the board to SEE which
     element was attached. A control surface that hides the inputs is not one.
     """
@@ -594,7 +620,7 @@ HEAD = """<!doctype html><meta charset="utf-8">
 <style>
 :root{--f:#16181A;--f2:#101214;--f3:#1E2226;--c:#E6E8EA;--sg:#9AA0A6;
  --ms:#5C6368;--g:#7FA8D0;--g2:#A8C8E6;--r:rgba(154,160,166,.22)}
-/* Neutral by rule (Damon, 2026-09-14): this surface serves every brand, so it
+/* Neutral by rule (the owner, 2026-09-14): this surface serves every brand, so it
    carries none of their colour. A board painted in one brand's green reads as
    that brand's tool and quietly stops being used for the others. */
 *{box-sizing:border-box}
@@ -919,13 +945,16 @@ class H(BaseHTTPRequestHandler):
             try:
                 import json as _j
                 brand = load().get("brand")
-                ws = Path(__file__).resolve().parents[4]
-                idx = _j.loads((ws / "brands" / brand / "elements" / "index.json").read_text())
+                ws = _workspace()
+                sys.path.insert(0, str(ws / "components" / "brandpath"))
+                import brandpath as BP
+                import drive_index as DI
+                idx = _j.loads(BP.brand_path(brand, "ai-elements", "index.json", root=ws / "brands").read_text())
                 items = idx.get("elements") if isinstance(idx.get("elements"), list) else \
                     [v for v in idx.values() if isinstance(v, dict)]
                 src = next((x["source"] for x in items if x.get("element_id") == eid), None)
-                dr = (_drive_root() / "Shared drives" / "Shared Assets"
-                      / "brands" / brand / src) if src else None
+                m = DI.mount()
+                dr = (m / "brands" / brand / src) if (src and m) else None
                 if dr and dr.is_file():
                     ct = {"png": "image/png", "jpg": "image/jpeg",
                           "webp": "image/webp"}.get(dr.suffix.lstrip(".").lower(), "image/png")
@@ -1042,7 +1071,7 @@ def main():
         sys.exit(__doc__)
     RUN = Path(sys.argv[1]).expanduser().resolve()
     if not plan_path().exists():
-        sys.exit(f"no cinema/plan.json in {RUN}")
+        sys.exit(f"no plan.json in {RUN} — looked for {RUN / 'plan.json'} and {RUN / 'out' / 'plan.json'}")
     # Bind the run's brand before serving. prompt.py keeps BRAND as module
     # state and its own load() sets it — but this board reads the plan itself,
     # so nothing set it and every page build died on SystemExit inside the

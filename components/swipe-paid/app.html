@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swipe</title>
+<style>
+  /* Tokens lifted from the Competitor A teardown so the live tool and the
+     written teardowns read as one system. */
+  :root{
+    --paper:#E9ECEF;--surface:#FAFBFC;--sunk:#F1F4F7;--ink:#15181D;--ink2:#626873;
+    --ink3:#8A919C;--rule:#CDD3DA;
+    --teal:#1F5F4E;--tealbg:#DCE9E4;          /* "good" — top of funnel */
+    --ochre:#B0451C;--ochrebg:#F0DDD3;        /* accent — bottom of funnel */
+    --plum:#5C4A7D;--plumbg:#E4DEEC;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(21,24,29,.06),0 8px 24px -12px rgba(21,24,29,.14);
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --paper:#101317;--surface:#171B21;--sunk:#1C2128;--ink:#E6E9ED;--ink2:#8C949F;
+    --ink3:#6E7681;--rule:#2A3038;
+    --teal:#5FAE95;--tealbg:#16302A;
+    --ochre:#E0733F;--ochrebg:#3A2318;
+    --plum:#A99BC9;--plumbg:#251F33;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);}}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:14px;line-height:1.45}
+  .mono{font-family:var(--mono)}
+
+  header{display:flex;align-items:center;gap:1.25rem;padding:.85rem 1.25rem;
+    border-bottom:1px solid var(--rule);background:var(--surface);
+    position:sticky;top:0;z-index:20;flex-wrap:wrap}
+  .logo{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;font-size:1.15rem}
+  .brands{display:flex;gap:.4rem}
+  .bt{padding:.4rem .8rem;border:1px solid var(--rule);background:var(--paper);
+    color:var(--ink2);border-radius:2px;cursor:pointer;font-size:.82rem;font-weight:560}
+  .bt:hover{border-color:var(--ink3)}
+  .bt[aria-selected=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .lanes{display:flex;gap:.25rem;padding:.2rem;background:var(--sunk);
+    border:1px solid var(--rule);border-radius:3px}
+  .lane-bt{padding:.35rem .8rem;border:0;background:none;color:var(--ink3);
+    cursor:pointer;font:inherit;font-size:.78rem;font-weight:600;border-radius:2px;
+    display:flex;align-items:baseline;gap:.4rem}
+  .lane-bt b{font-variant-numeric:tabular-nums;font-weight:700}
+  .lane-bt small{font-family:var(--mono);font-size:.6rem;opacity:.75}
+  .lane-bt[aria-selected=true]{background:var(--surface);color:var(--ink);
+    box-shadow:var(--shadow)}
+  .counts{margin-left:auto;color:var(--ink3);font-size:.76rem}
+  .counts b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .tlab{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+  .sep{width:1px;height:1.1rem;background:var(--rule)}
+  .chip.media[aria-pressed=true]{background:var(--ink2);border-color:var(--ink2);color:var(--paper)}
+  .railnav{display:flex;border-bottom:1px solid var(--rule);background:var(--surface);
+    position:sticky;top:0;z-index:5}
+  .railnav button{flex:1;padding:.55rem .5rem;border:none;background:none;cursor:pointer;
+    color:var(--ink3);font:inherit;font-size:.74rem;letter-spacing:.08em;
+    text-transform:uppercase;font-weight:600;border-bottom:2px solid transparent}
+  .railnav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ochre)}
+  .prow{padding:.7rem .95rem;border-bottom:1px solid var(--rule);cursor:pointer;
+    display:grid;grid-template-columns:3rem 1fr;gap:.7rem;align-items:center}
+  .prow:hover{background:var(--surface)}
+  .prow[aria-selected=true]{background:var(--sunk);box-shadow:inset 3px 0 0 var(--ink)}
+  .prow img{width:3rem;height:3.6rem;object-fit:cover;object-position:top;
+    border:1px solid var(--rule);background:var(--sunk);display:block}
+  .syn{padding:1.4rem 1.6rem 4rem;max-width:74ch}
+  .syn h2{font-family:var(--serif);font-size:1.7rem;font-weight:600;letter-spacing:-.02em;margin:0 0 .2rem}
+  .syn .dom{font-family:var(--mono);font-size:.76rem;color:var(--ink3);margin-bottom:1.1rem}
+  .syn h4{font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);
+    margin:1.9rem 0 .6rem;font-weight:600;border-bottom:1px solid var(--rule);padding-bottom:.35rem}
+  .syn p,.syn li{color:var(--ink2)}
+  .syn strong{color:var(--ink)}
+  .mixbar{display:flex;height:2rem;border-radius:2px;overflow:hidden;margin:.5rem 0 .4rem}
+  .mixbar div{display:grid;place-items:center;font-size:.68rem;font-weight:660;color:#fff}
+  .mixkey{display:flex;gap:1rem;font-size:.7rem;color:var(--ink3);flex-wrap:wrap}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:.9rem;
+    padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .railhead{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);
+    padding:.7rem .95rem .4rem;font-weight:600}
+  .prow.cmp{grid-template-columns:1fr}
+  .prow.cmp.on{background:var(--sunk);box-shadow:inset 3px 0 0 var(--ochre)}
+  .cbar{height:.3rem;background:var(--rule);border-radius:2px;overflow:hidden;margin:.4rem 0 .25rem}
+  .cbar span{display:block;height:100%;background:var(--teal)}
+  .shot{max-width:340px;border:1px solid var(--rule);box-shadow:var(--shadow);display:block}
+  .toolbar{display:flex;gap:.5rem;align-items:center;padding:.6rem 1.25rem;
+    border-bottom:1px solid var(--rule);flex-wrap:wrap;background:var(--surface)}
+  .chip{padding:.3rem .65rem;border:1px solid var(--rule);border-radius:99px;
+    background:var(--paper);color:var(--ink2);cursor:pointer;font-size:.75rem}
+  .chip[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip.top[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
+  .chip.mid[aria-pressed=true]{background:var(--plum);border-color:var(--plum);color:#fff}
+  .chip.bottom[aria-pressed=true]{background:var(--ochre);border-color:var(--ochre);color:#fff}
+  select,input[type=search]{padding:.32rem .5rem;border:1px solid var(--rule);
+    background:var(--paper);color:var(--ink);border-radius:2px;font:inherit;font-size:.78rem}
+  input[type=search]{min-width:12rem}
+
+  main{display:grid;grid-template-columns:minmax(19rem,26rem) 1fr;height:calc(100vh - 6.6rem)}
+  @media (max-width:820px){main{grid-template-columns:1fr;height:auto}}
+
+  .list{overflow-y:auto;border-right:1px solid var(--rule)}
+  .block{padding:.7rem .95rem;border-bottom:1px solid var(--rule);cursor:pointer;
+    display:grid;grid-template-columns:minmax(2.6rem,max-content) 1fr;gap:.9rem;
+    align-items:start}
+  .block:hover{background:var(--surface)}
+  .block[aria-selected=true]{background:var(--sunk);box-shadow:inset 3px 0 0 var(--ink)}
+  .vbox{text-align:center}
+  /* A money figure needs more room than a variant count, and the rail column
+     is sized for "104". Without this the spend runs under the headline. */
+  .block:has(.vlab:not(:empty)) .vbox{min-width:4.6rem}
+  .vbox:has(.vlab) .vnum{white-space:nowrap}
+  .vnum{font-weight:680;font-variant-numeric:tabular-nums;font-size:1rem;
+    letter-spacing:-.02em;white-space:nowrap}
+  .vlab{font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+  .ahead{font-weight:560;margin-bottom:.2rem}
+  .ameta{font-size:.71rem;color:var(--ink3);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+  .tag{padding:.05rem .38rem;border-radius:2px;font-size:.63rem;font-weight:640;
+    letter-spacing:.04em;text-transform:uppercase}
+  .tag.top{background:var(--tealbg);color:var(--teal)}
+  .tag.mid{background:var(--plumbg);color:var(--plum)}
+  .tag.bottom{background:var(--ochrebg);color:var(--ochre)}
+  .tag.unclassified{background:var(--sunk);color:var(--ink3)}
+  .tag.season{background:var(--ochre);color:#fff}
+
+  .detail{overflow-y:auto;padding:1.25rem 1.4rem 4rem}
+  .dhead{font-family:var(--serif);font-size:1.5rem;font-weight:600;letter-spacing:-.015em;line-height:1.2;margin:0 0 .5rem;max-width:60ch}
+  .stats{display:flex;gap:1.4rem;flex-wrap:wrap;margin:.75rem 0 1rem;
+    padding:.7rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .st{display:flex;flex-direction:column}
+  .stn{font-weight:660;font-variant-numeric:tabular-nums;font-size:1.05rem}
+  .stl{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+  .copy{font-family:var(--serif);font-size:1rem;line-height:1.55;background:var(--surface);border-left:3px solid var(--ochre);padding:.8rem .95rem;
+    margin:0 0 1.1rem;max-width:70ch;white-space:pre-wrap}
+  .lp{font-size:.8rem;color:var(--ink2);margin-bottom:1.1rem;word-break:break-all}
+  .lp a{color:var(--teal)}
+
+  h3{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);
+    margin:1.5rem 0 .7rem;font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.7rem}
+  .cell{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+    overflow:hidden;cursor:pointer;position:relative;box-shadow:var(--shadow)}
+  .cell:hover{border-color:var(--ink3)}
+  .cell img,.cell video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:var(--sunk)}
+  .cell .vb{position:absolute;top:.35rem;right:.35rem;background:rgba(0,0,0,.72);color:#fff;
+    font-size:.62rem;padding:.1rem .35rem;border-radius:2px;font-weight:640}
+  .cell .pl{position:absolute;inset:0;display:grid;place-items:center;
+    font-size:1.6rem;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6);pointer-events:none}
+  .cell figcaption{padding:.3rem .4rem;font-size:.62rem;color:var(--ink3)}
+
+  .pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.8rem}
+  .page{background:var(--surface);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+  .page img{width:100%;height:230px;object-fit:cover;object-position:top;display:block;background:var(--sunk)}
+  .page .pb{padding:.5rem .6rem}
+  .page .pt{font-weight:560;font-size:.8rem;word-break:break-all}
+  .page .pm{font-size:.68rem;color:var(--ink3);margin-top:.15rem}
+
+  dialog{border:none;padding:0;background:transparent;max-width:min(94vw,520px)}
+  dialog::backdrop{background:rgba(0,0,0,.78)}
+  dialog video,dialog img{width:100%;border-radius:4px;display:block}
+  .dlbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    color:#fff;font-size:.75rem;padding:.5rem .1rem}
+  .dlbar button{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;
+    border-radius:2px;padding:.2rem .55rem;cursor:pointer;font:inherit}
+  .empty{color:var(--ink3);padding:2rem 0}
+  .cell .noimg,.cell.noshot::after{position:absolute;inset:0;display:grid;place-items:center;
+    font-size:.62rem;color:var(--ink3);background:var(--sunk);text-align:center;padding:.4rem}
+  .cell.noshot::after{content:"frame expired"}
+  .cell.noshot img{visibility:hidden}
+  /* judging */
+  .jq{display:flex;flex-direction:column;gap:2px}
+  .jq button{display:grid;grid-template-columns:2.2rem 1fr auto;gap:.6rem;align-items:baseline;
+    background:none;border:0;border-bottom:1px solid var(--rule);padding:.5rem .6rem;
+    text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%}
+  .jq button:hover{background:var(--panel2)}
+  .jq button[aria-selected=true]{background:var(--panel2);box-shadow:inset 2px 0 0 var(--accent)}
+  .jq .n{font-family:var(--mono);font-size:.7rem;color:var(--ink3)}
+  .jq .h{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.86rem}
+  .jq .todo{font-family:var(--mono);font-size:.7rem;color:var(--accent)}
+  .jq .done{font-family:var(--mono);font-size:.7rem;color:var(--ink3)}
+  .judge{display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:22px;align-items:start}
+  @media(max-width:900px){.judge{grid-template-columns:1fr}}
+  .judge .stage video,.judge .stage img{width:100%;border-radius:6px;display:block;background:#000}
+  .judge .meta{font-family:var(--mono);font-size:.72rem;color:var(--ink3);
+    display:flex;flex-wrap:wrap;gap:.3rem .9rem;margin-top:.5rem}
+  .jf{display:grid;grid-template-columns:5.5rem 1fr;gap:.5rem .7rem;align-items:center}
+  .jf label{font-family:var(--mono);font-size:.72rem;color:var(--ink3);text-transform:uppercase;
+    letter-spacing:.08em}
+  .jf input{font:inherit;padding:.4rem .55rem;border:1px solid var(--rule);border-radius:4px;
+    background:var(--panel);color:var(--ink);width:100%}
+  .jf input:focus{outline:2px solid var(--accent);outline-offset:-1px}
+  .jf input.derived{color:var(--ink3);background:var(--panel2)}
+  .jbtns{display:flex;gap:.5rem;margin-top:1rem;align-items:center;flex-wrap:wrap}
+  .jbtns button{font:inherit;padding:.5rem 1rem;border-radius:4px;cursor:pointer;
+    border:1px solid var(--rule);background:var(--panel);color:var(--ink)}
+  .jbtns .swipe{border-color:var(--accent);color:var(--accent);font-weight:600}
+  .jbtns .pass{color:var(--ink3)}
+  .jbtns kbd{font-family:var(--mono);font-size:.65rem;border:1px solid var(--rule);
+    border-radius:3px;padding:0 .25rem;color:var(--ink3)}
+  .jnote{font-size:.78rem;color:var(--ink3);margin-top:.6rem}
+  .jdone{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">Swipe</span>
+  <div class="lanes" id="lanes" role="tablist"></div>
+  <div class="brands" id="brands" role="tablist"></div>
+  <span class="counts" id="counts"></span>
+</header>
+
+<div class="toolbar">
+  <span class="mono tlab">stage</span>
+  <button class="chip top"    data-stage="top"    aria-pressed="true">top</button>
+  <button class="chip mid"    data-stage="mid"    aria-pressed="true">mid</button>
+  <button class="chip bottom" data-stage="bottom" aria-pressed="true">bottom</button>
+  <button class="chip"        data-stage="unclassified" aria-pressed="true">unclassified</button>
+  <span class="sep"></span>
+  <span class="mono tlab">media</span>
+  <button class="chip media" data-media="video"  aria-pressed="true">video</button>
+  <button class="chip media" data-media="static" aria-pressed="true">static</button>
+  <span class="sep"></span>
+  <button class="chip" id="seasonchip" aria-pressed="false"
+     title="Dated promos (Back To School, Black Friday) are volume plays, not strategy">hide dated promos</button>
+  <span class="sep"></span>
+  <select id="sort">
+    <option value="variants">sort: variants (belief)</option>
+    <option value="creatives">sort: creatives (volume)</option>
+  </select>
+  <input type="search" id="find" placeholder="search headline or copy…">
+  <span id="shown" class="counts"></span>
+</div>
+
+<main>
+  <div class="list" id="list">
+    <div class="railnav" id="railnav">
+      <button data-view="brand" aria-selected="true">Synopsis</button>
+      <button data-view="blocks">Blocks</button>
+      <button data-view="pages">Pages</button>
+      <button data-view="judge">Judge</button>
+    </div>
+    <div id="rows"></div>
+  </div>
+  <div class="detail" id="detail"><p class="empty">Pick a copy block.</p></div>
+</main>
+
+<dialog id="viewer">
+  <div class="dlbar"><span id="dlname"></span><button id="dlclose">close</button></div>
+  <div id="dlbody"></div>
+</dialog>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// What each lane is, in the words the tool uses everywhere else.
+const LANE_LABEL = {own:'Ours', paid:'Competitors', organic:'Organic'};
+const state = {brand:null, angles:[], pages:[], sel:null, view:'brand', psel:null,
+               stages:new Set(['top','mid','bottom','unclassified']),
+               media:new Set(['video','static']), hideSeason:false, sort:'variants', find:'',
+               vocab:null, jqueue:[], jslug:null, jads:[], ji:0,
+               lane:'paid', lanes:[]};
+
+async function get(u){ const r = await fetch(u); return r.json(); }
+
+// Conviction is measured in whatever the lane actually spends: a competitor's
+// cloned variants, our dollars, a creator's share of the room. Used by the
+// synopsis, the block rail and the page detail, so it lives at the top rather
+// than inside whichever view happened to need it first.
+const belief = a => Number(a.belief ?? a.variants ?? 0);
+const beliefLabel = () => (state.blocks[0] && state.blocks[0].belief_label) || 'vars';
+const fmtB = v => beliefLabel() === 'spend' ? money(v) : Number(v).toLocaleString();
+
+// drive_file is stored with its full Drive prefix ("the shared drive/
+// swipe-paid/<brand>/…") but /media/ is already rooted at that folder. Strip
+// the prefix rather than matching a folder name: this folder has been renamed
+// once (swipe -> swipe-paid) and a hardcoded name silently broke every image
+// and video in the app without erroring anywhere.
+const mediaPath = f => (f||'').replace(/^.*?\/swipe-paid\//, '')
+                              .replace(/^.*?\/swipe\//, '');
+
+async function boot(){
+  state.lanes = await get('/api/lanes');
+  $('#lanes').innerHTML = state.lanes.map(l =>
+    `<button class="lane-bt" role="tab" data-lane="${esc(l.lane)}"
+       aria-selected="${String(l.lane === state.lane)}"
+       title="${l.known} described · ${l.swiped} swiped">
+       ${esc(LANE_LABEL[l.lane] || l.lane)} <b>${l.creatives}</b>${
+         l.spend > 0 ? `<small>$${Number(l.spend).toLocaleString()}</small>` : ''}
+     </button>`).join('');
+  $('#lanes').onclick = e => {
+    const b = e.target.closest('[data-lane]'); if(!b) return;
+    pickLane(b.dataset.lane);
+  };
+  const brands = await get('/api/brands?lane=' + state.lane);
+  $('#brands').innerHTML = brands.map(b =>
+    `<button class="bt" role="tab" data-b="${esc(b.brand)}">${esc(b.brand)}</button>`).join('');
+  $('#brands').onclick = e => { const b = e.target.closest('[data-b]'); if(b) pick(b.dataset.b); };
+  document.querySelectorAll('.chip[data-stage]').forEach(c => c.onclick = () => {
+    const s = c.dataset.stage, on = c.getAttribute('aria-pressed') === 'true';
+    c.setAttribute('aria-pressed', String(!on));
+    on ? state.stages.delete(s) : state.stages.add(s);
+    if(state.view === 'blocks') render();
+  });
+  document.querySelectorAll('.chip[data-media]').forEach(c => c.onclick = () => {
+    const m = c.dataset.media, on = c.getAttribute('aria-pressed') === 'true';
+    c.setAttribute('aria-pressed', String(!on));
+    on ? state.media.delete(m) : state.media.add(m);
+    if(state.view === 'blocks'){ render(); if(state.sel) openBlock(state.sel); }
+  });
+  $('#railnav').onclick = e => {
+    const b = e.target.closest('[data-view]'); if(!b) return;
+    state.view = b.dataset.view;
+    document.querySelectorAll('#railnav button').forEach(x =>
+      x.setAttribute('aria-selected', String(x.dataset.view === state.view)));
+    refresh();
+  };
+  $('#seasonchip').onclick = () => {
+    state.hideSeason = !state.hideSeason;
+    $('#seasonchip').setAttribute('aria-pressed', String(state.hideSeason));
+    if(state.view === 'blocks') render();
+  };
+  $('#sort').onchange = e => { state.sort = e.target.value; if(state.view==='blocks') render(); };
+  $('#find').oninput = e => { state.find = e.target.value.toLowerCase(); if(state.view==='blocks') render(); };
+  $('#dlclose').onclick = () => { $('#viewer').close(); $('#dlbody').innerHTML=''; };
+  $('#viewer').addEventListener('close', () => $('#dlbody').innerHTML = '');
+  pick(brands[0].brand);
+}
+
+async function pickLane(lane){
+  state.lane = lane; state.sel = null; state.jslug = null; state.psel = null;
+  document.querySelectorAll('[data-lane]').forEach(b =>
+    b.setAttribute('aria-selected', String(b.dataset.lane === lane)));
+  const srcs = await get(`/api/sources?lane=${encodeURIComponent(lane)}`);
+  $('#brands').innerHTML = srcs.map(s =>
+    `<button class="bt" role="tab" data-b="${esc(s.source)}">${esc(s.label || s.source)}</button>`).join('');
+  // Only the competitor lane has a written teardown, its own block records and
+  // captured pages. The other two get the browse-and-judge view, which is the
+  // part every lane shares.
+  // Every lane now has a synopsis. Angles are the competitor lane's own record
+  // format; pages only exist where there is a funnel, which organic has not.
+  const paid = lane === 'paid';
+  const allowed = ['brand','blocks','pages','judge'];
+  document.querySelectorAll('.railnav [data-view]').forEach(b => {
+    b.hidden = !allowed.includes(b.dataset.view);
+  });
+  if(!allowed.includes(state.view)) state.view = 'brand';
+  state.brand = srcs.length ? srcs[0].source : null;
+  document.querySelectorAll('#brands [data-b]').forEach(b =>
+    b.setAttribute('aria-selected', String(b.dataset.b === state.brand)));
+  if(state.brand) pick(state.brand);
+}
+
+function refresh(){
+  // Both panes must come from the same call. Refreshing only the rail on a
+  // brand switch left the detail pane showing the previous brand.
+  if(state.view === 'judge'){ renderJudge(); return; }
+  if(state.view === 'brand'){ renderBrand(); return; }
+  if(state.view === 'pages'){
+    renderPages();
+    if(state.psel) openPage(state.psel);
+    else $('#detail').innerHTML = '<p class="empty">Pick a page.</p>';
+    return;
+  }
+  render();
+  if(state.sel) openBlock(state.sel);
+  else $('#detail').innerHTML = '<p class="empty">Pick a copy block.</p>';
+}
+
+async function pick(brand){
+  state.brand = brand; state.sel = null;
+  document.querySelectorAll('.bt').forEach(b =>
+    b.setAttribute('aria-selected', String(b.dataset.b === brand)));
+  const L = '&lane=' + encodeURIComponent(state.lane);
+  [state.blocks, state.pages] = await Promise.all(
+    [get('/api/blocks?brand='+encodeURIComponent(brand)+L),
+     get('/api/pages?brand='+encodeURIComponent(brand)+L)]);
+  const bl = beliefLabel();
+  const tot = state.blocks.reduce((n,a)=>n+Number(a.belief ?? a.variants ?? 0),0);
+  const ads = state.blocks.reduce((n,a)=>n+a.creatives,0);
+  $('#counts').innerHTML =
+    `<b>${ads}</b> creatives · <b>${state.blocks.length}</b> blocks · `
+    + `<b>${bl==='spend'?money(tot):tot.toLocaleString()}</b> ${bl} · `
+    + `<b>${state.pages.length}</b> pages`;
+  state.psel = null;
+  refresh();
+}
+
+function visible(){
+  let a = state.blocks.filter(x => state.stages.has(x.stage||'unclassified'));
+  // A block survives if it ran at least one creative of a checked media type.
+  a = a.filter(x => (state.media.has('video')  && x.video_count > 0) ||
+                    (state.media.has('static') && x.image_count > 0));
+  if(state.hideSeason) a = a.filter(x => !x.seasonal);
+  if(state.find) a = a.filter(x =>
+    (x.headline||'').toLowerCase().includes(state.find) ||
+    (x.primary_text||'').toLowerCase().includes(state.find));
+  return a.sort((p,q) => q[state.sort] - p[state.sort]);
+}
+
+function render(){
+  const rows = visible();
+  const tot = state.blocks.reduce((n,a)=>n+a.variants,0) || 1;
+  const share = Math.round(100 * rows.reduce((n,a)=>n+a.variants,0) / tot);
+  $('#shown').innerHTML = `<b>${rows.length}</b> blocks shown · <b>${share}%</b> of variant weight`;
+  $('#rows').innerHTML = rows.map(a => `
+    <div class="block" data-slug="${esc(a.slug)}" ${state.sel===a.slug?'aria-selected="true"':''}>
+      <div class="vbox">
+        <div class="vnum">${a[state.sort]}</div>
+        <div class="vlab">${state.sort==='variants'?'vars':'ads'}</div>
+      </div>
+      <div>
+        <div class="ahead">${esc(a.headline)||'<em>no title</em>'}</div>
+        <div class="ameta">
+          <span class="tag ${a.stage||'unclassified'}">${a.stage||'?'}</span>
+          ${a.seasonal?'<span class="tag season">dated promo</span>':''}
+          <span>${a.creatives} creatives</span>
+          <span>${a.video_count}v / ${a.image_count}s</span>
+          ${a.page_type?`<span>→ ${esc(a.page_type)}</span>`:''}
+        </div>
+      </div>
+    </div>`).join('') || '<p class="empty" style="padding:1.25rem">Nothing matches.</p>';
+  $('#rows').onclick = e => {
+    const el = e.target.closest('[data-slug]'); if(el) openBlock(el.dataset.slug);
+  };
+}
+
+async function openBlock(slug){
+  state.sel = slug; render();
+  const a = state.blocks.find(x => x.slug === slug);
+  let ads = await get(`/api/ads?brand=${encodeURIComponent(state.brand)}&block=${encodeURIComponent(slug)}&lane=${encodeURIComponent(state.lane)}`);
+  ads = ads.filter(x => state.media.has(x.media_type === 'video' ? 'video' : 'static'));
+  const cells = ads.map(ad => {
+    // Swiped media is a file we hold: drive_file is "the shared drive/
+    // swipe-paid/<brand>/…" and /media/ is rooted above it, so the prefix goes.
+    // Our own ads have no local file — the frame is Meta's hosted image and the
+    // only playable copy is behind the preview link. Falling back to those is
+    // the difference between a wall of pictures and a wall of empty boxes.
+    const f = mediaPath(ad.drive_file);
+    const local = !!f;
+    const poster = local
+      ? '/media/' + (ad.media_type === 'video' ? f.replace(/\.mp4$/, '_poster.jpg') : f)
+      : mediaSrc(ad.thumb);
+    return `<figure class="cell" data-file="${esc(f)}" data-type="${ad.media_type}"
+             data-remote="${esc(local ? '' : (ad.url || ''))}">
+        ${poster ? `<img loading="lazy" src="${esc(poster)}" alt=""
+             onerror="this.closest('.cell').classList.add('noshot')">`
+                 : '<span class="noimg">no frame held</span>'}
+        ${ad.variants>1?`<span class="vb">${ad.variants}×</span>`:''}
+        ${ad.media_type==='video'?'<span class="pl">▶</span>':''}
+        <figcaption>${esc(ad.ad_id)}</figcaption>
+      </figure>`;
+  }).join('');
+
+  $('#detail').innerHTML = `
+    <h2 class="dhead">${esc(a.headline)}</h2>
+    <div class="stats">
+      <div class="st"><span class="stn">${a.variants}</span><span class="stl">variants</span></div>
+      <div class="st"><span class="stn">${a.max_variants}×</span><span class="stl">top clone</span></div>
+      <div class="st"><span class="stn">${a.creatives}</span><span class="stl">creatives</span></div>
+      <div class="st"><span class="stn">${a.video_count}</span><span class="stl">video</span></div>
+      <div class="st"><span class="stn">${a.image_count}</span><span class="stl">static</span></div>
+      <div class="st"><span class="stn">${a.nn}</span><span class="stl">rank</span></div>
+    </div>
+    <p class="copy">${esc(a.primary_text)||'<em>no primary text</em>'}</p>
+    <p class="lp">→ ${a.landing_page?`<a href="${esc(a.landing_page)}" target="_blank" rel="noopener">${esc(a.landing_page)}</a>`:'no landing page'}
+       ${a.page_type?` · <span class="tag ${a.stage}">${esc(a.page_type)}</span> ${a.page_height?a.page_height+'px':''}`:''}</p>
+    <h3>The creative wall · ${ads.length}</h3>
+    <div class="grid" id="cells">${cells}</div>`;
+
+  $('#cells').onclick = e => {
+    const c = e.target.closest('[data-file]'); if(!c) return;
+    // Nothing held locally means the only copy is Meta's — open it there
+    // rather than showing an empty player.
+    if(!c.dataset.file){
+      if(c.dataset.remote) window.open(c.dataset.remote, '_blank', 'noopener');
+      return;
+    }
+    const src = `/media/${c.dataset.file}`;
+    $('#dlname').textContent = c.dataset.file.split('/').pop();
+    $('#dlbody').innerHTML = c.dataset.type === 'video'
+      ? `<video src="${src}" controls autoplay playsinline></video>`
+      : `<img src="${src}" alt="">`;
+    $('#viewer').showModal();
+  };
+}
+
+async function renderBrand(){
+  $('#shown').innerHTML = '';
+  // The rail is dead space on this tab otherwise. Put the other brands
+  // there so you can read one synopsis against the rest.
+  const all = await get('/api/brands?lane=' + state.lane);
+  $('#rows').innerHTML =
+    `<div class="railhead">All brands</div>` + all.map(x => `
+      <div class="prow cmp ${x.brand===state.brand?'on':''}" data-b2="${esc(x.brand)}">
+        <div>
+          <div class="ahead">${esc(x.brand)}</div>
+          <div class="ameta"><span>${x.creatives} creatives</span><span>${x.blocks} blocks</span>
+            <span>${x.pages} pages</span></div>
+          <div class="cbar">
+            <span style="width:${Math.round(100*x.video/(x.creatives||1))}%"></span>
+          </div>
+          <div class="ameta"><span>${Math.round(100*x.video/(x.creatives||1))}% video</span>
+            <span>${x.per_block} per block</span></div>
+        </div>
+      </div>`).join('');
+  $('#rows').onclick = e => {
+    const b = e.target.closest('[data-b2]'); if(b) pick(b.dataset.b2);
+  };
+  const b = state.brand;
+  const brief = await get('/api/brief?lane=' + state.lane + '&brand=' + encodeURIComponent(b));
+  const A = state.blocks, P = state.pages;
+  // Conviction is measured in whatever that lane actually spends: a
+  // competitor's cloned variants, our dollars, a creator's share of the room.
+  const bl = beliefLabel();
+  const tot = A.reduce((n,a)=>n+belief(a),0) || 1;
+  const byStage = st => A.filter(a=>a.stage===st).reduce((n,a)=>n+belief(a),0);
+  const pct = v => Math.round(100*v/tot);
+  const mix = [['top',byStage('top'),'var(--teal)'],['mid',byStage('mid'),'var(--plum)'],
+               ['bottom',byStage('bottom'),'var(--ochre)']];
+  const season = A.filter(a=>a.seasonal);
+  const ever = A.filter(a=>!a.seasonal).sort((x,y)=>belief(y)-belief(x));
+  const ptypes = {}; P.forEach(p => ptypes[p.page_type]=(ptypes[p.page_type]||0)+1);
+  const md = t => esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$__</strong>')
+                        .replace(/`(.+?)`/g,'<code>$__</code>')
+                        .replace(/^\s*[-*]\s+/gm,'• ').replace(/\n/g,'<br>');
+  const sec = k => brief.sections && brief.sections[k] ? md(brief.sections[k]) : '<em>not written</em>';
+
+  $('#detail').innerHTML = `<div class="syn">
+    <h2>${esc(b)}</h2>
+    <div class="dom">${esc((brief.meta||'').match(/\*\*Query:\*\* \`search_query=([^\`,]+)/)?.[1] || '')}</div>
+
+    <div class="kpis">
+      <div class="st"><span class="stn">${A.reduce((n,a)=>n+a.creatives,0)}</span><span class="stl">creatives</span></div>
+      <div class="st"><span class="stn">${A.length}</span><span class="stl">copy blocks</span></div>
+      <div class="st"><span class="stn">${fmtB(tot)}</span><span class="stl">${bl}</span></div>
+      <div class="st"><span class="stn">${(A.reduce((n,a)=>n+a.creatives,0)/A.length).toFixed(1)}</span><span class="stl">per block</span></div>
+      <div class="st"><span class="stn">${P.length}</span><span class="stl">pages</span></div>
+      <div class="st"><span class="stn">${Math.round(100*A.reduce((n,a)=>n+a.video_count,0)/A.reduce((n,a)=>n+a.creatives,0))}%</span><span class="stl">video</span></div>
+    </div>
+
+    <h4>Where the conviction sits</h4>
+    <div class="mixbar">${mix.filter(m=>m[1]>0).map(m =>
+      `<div style="width:${pct(m[1])}%;background:${m[2]}">${pct(m[1])}%</div>`).join('')}</div>
+    <div class="mixkey">${mix.map(m=>`<span>${m[0]} — ${fmtB(m[1])} ${bl}</span>`).join('')}
+      ${season.length?`<span style="color:var(--ochre)">+ ${season.length} dated promo (${fmtB(season.reduce((n,a)=>n+belief(a),0))}) held out</span>`:''}</div>
+
+    <h4>${state.lane==='own'?'The blocks we are betting on'
+            :state.lane==='organic'?'The creators the room watches'
+            :'The blocks they are betting on'}</h4>
+    ${ever.slice(0,5).map(a=>`<div class="block" data-goto="${esc(a.slug)}" style="padding-left:0">
+       <div class="vbox"><div class="vnum">${fmtB(belief(a))}</div><div class="vlab">${bl}</div></div>
+       <div><div class="ahead">${esc(a.headline)}</div>
+       <div class="ameta"><span class="tag ${a.stage}">${a.stage}</span>
+       <span>${a.creatives} creatives</span>${a.page_type?`<span>→ ${esc(a.page_type)}</span>`:''}</div></div></div>`).join('')}
+
+    <h4>Where traffic lands</h4>
+    <p>${Object.entries(ptypes).sort((a,b)=>b[1]-a[1])
+        .map(([k,v])=>`<strong>${v}</strong> ${esc(k)}`).join(' · ')} —
+       ${P.length} pages, ${(A.length/P.length).toFixed(1)} blocks per page.</p>
+
+    <h4>Structural findings</h4><p>${sec('Structural findings')}</p>
+    <h4>Offer mechanics</h4><p>${sec('Offer mechanics')}</p>
+    <h4>Their stack</h4><p>${sec('Their stack')}</p>
+    <h4>What to take, and what to beat</h4><p>${sec('What to take, and what to beat')}</p>
+  </div>`;
+  $('#detail').onclick = e => {
+    const g = e.target.closest('[data-goto]'); if(!g) return;
+    state.view='blocks';
+    document.querySelectorAll('#railnav button').forEach(x =>
+      x.setAttribute('aria-selected', String(x.dataset.view==='blocks')));
+    render(); openBlock(g.dataset.goto);
+  };
+}
+
+// ---------------------------------------------------------------- judge ---
+// The one view every lane shares. Competitor ads arrive knowing nothing about
+// themselves, our own ads arrive already named, organic posts arrive knowing
+// their platform — but all three are the same object, so one loop reads them.
+const isUrl = u => /^https?:\/\//.test(u || '');
+// A remote cover goes through the server: those hosts refuse a hotlink and
+// their signatures expire, so fetching server-side (and caching) is what makes
+// the organic lane show a picture at all.
+const mediaSrc = u => !u ? null
+  : (isUrl(u) ? '/thumb?u=' + encodeURIComponent(u) : '/media/' + u);
+const money = n => n ? '$' + Number(n).toLocaleString(undefined,{maximumFractionDigits:0}) : '';
+
+// PROFILE.md is headings, tables, bold, code and paragraphs — nothing else.
+// Rendering exactly that keeps the synopsis one file, read by both the page
+// and anyone who opens the repo.
+function md(t){
+  const esc2 = x => esc(x).replace(/`([^`]+)`/g,'<code>$__</code>')
+                          .replace(/\*\*([^*]+)\*\*/g,'<strong>$__</strong>');
+  const out=[]; let tbl=null;
+  for(const line of (t||'').split('\n')){
+    const row = line.trim().startsWith('|') && line.trim().endsWith('|');
+    if(row){
+      const cells = line.trim().slice(1,-1).split('|').map(c=>c.trim());
+      if(cells.every(c=>/^:?-{2,}:?$/.test(c))) continue;
+      if(!tbl){ tbl=[]; tbl.head=cells; continue; }
+      tbl.push(cells); continue;
+    }
+    if(tbl){
+      out.push('<div class="tw"><table><tr>'
+        + tbl.head.map(h=>`<th>${esc2(h)}</th>`).join('') + '</tr>'
+        + tbl.map(r=>'<tr>'+r.map(c=>`<td>${esc2(c)}</td>`).join('')+'</tr>').join('')
+        + '</table></div>');
+      tbl=null;
+    }
+    const m = line.match(/^(#{1,4})\s+(.*)$/);
+    if(m){ const n=Math.min(m[1].length+1,4); out.push(`<h${n}>${esc2(m[2])}</h${n}>`); }
+    else if(line.trim()) out.push(`<p>${esc2(line)}</p>`);
+  }
+  if(tbl) out.push('<div class="tw"><table><tr>'
+    + tbl.head.map(h=>`<th>${esc2(h)}</th>`).join('') + '</tr>'
+    + tbl.map(r=>'<tr>'+r.map(c=>`<td>${esc2(c)}</td>`).join('')+'</tr>').join('')+'</table></div>');
+  return out.join('');
+}
+
+async function renderLaneSynopsis(){
+  $('#rows').innerHTML = '<div class="railhead">this lane</div>'
+    + state.jqueue.slice(0,0).join('');
+  const [t, b] = await Promise.all([
+    get(`/api/profile?lane=${encodeURIComponent(state.lane)}&source=${encodeURIComponent(state.brand||'')}&doc=teardown`),
+    get(`/api/profile?lane=${encodeURIComponent(state.lane)}&source=${encodeURIComponent(state.brand||'')}&doc=brand`)]);
+  $('#rows').innerHTML = '';
+  const parts = [t.md && md(t.md), b.md && md(b.md)].filter(Boolean);
+  $('#detail').innerHTML = parts.length ? `<div class="syn">${parts.join('<hr class="rule">')}</div>`
+    : '<p class="empty">No records yet — run lane_profile.py.</p>';
+}
+
+async function renderLanePages(){
+  const rows = await get(`/api/lanepages?lane=${encodeURIComponent(state.lane)}&source=${encodeURIComponent(state.brand||'')}`);
+  $('#rows').innerHTML = '<div class="jq">' + rows.map(r =>
+    `<button data-slug="${esc(r.slug)}"><span class="n">${r.ads}</span>
+       <span class="h">${esc(r.slug)}</span>
+       <span class="${r.spend ? 'todo' : 'done'}">${r.spend ? '$'+Number(r.spend).toLocaleString() : r.type}</span>
+     </button>`).join('') + '</div>';
+  $('#rows').onclick = e => {
+    const b = e.target.closest('[data-slug]'); if(!b) return;
+    const r = rows.find(x => x.slug === b.dataset.slug);
+    $('#detail').innerHTML = `
+      <h2 class="dhead">${esc(r.slug)}</h2>
+      <p class="lp">→ <a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.url)}</a></p>
+      <div class="stats">
+        <div class="st"><span class="stn">${r.ads}</span><span class="stl">ads here</span></div>
+        <div class="st"><span class="stn">${r.spend ? '$'+Number(r.spend).toLocaleString() : '—'}</span><span class="stl">spend behind it</span></div>
+        <div class="st"><span class="stn">${r.height||'?'}px</span><span class="stl">height</span></div>
+        <div class="st"><span class="stn">${esc(r.type||'?')}</span><span class="stl">type</span></div>
+      </div>
+      <img class="shot" src="/media/../swipe-paid/own/${encodeURIComponent(state.brand)}/_pages/${encodeURIComponent(r.slug)}/page.png"
+           alt="" onerror="this.replaceWith(Object.assign(document.createElement('p'),{className:'empty',textContent:'capture not on this machine'}))">`;
+  };
+  $('#detail').innerHTML = '<p class="empty">Pick a page.</p>';
+}
+
+async function renderJudge(){
+  if(!state.vocab) state.vocab = await get('/api/vocab');
+  state.jqueue = await get(
+    `/api/groups?lane=${encodeURIComponent(state.lane)}&source=${encodeURIComponent(state.brand||'')}`);
+  $('#shown').innerHTML = '';
+  $('#rows').innerHTML = '<div class="jq">' + state.jqueue.map(r => `
+    <button data-slug="${esc(r.group_slug)}" aria-selected="${String(r.group_slug===state.jslug)}">
+      <span class="n">${r.creatives}</span>
+      <span class="h">${esc(r.group_label || r.group_slug) || '<em>no label</em>'}</span>
+      <span class="${r.unjudged ? 'todo' : 'done'}">${
+        r.spend > 0 ? money(r.spend)
+        : r.unjudged ? r.unjudged + ' to judge'
+        : '✓ ' + r.swiped + ' swiped'}</span>
+    </button>`).join('') + '</div>';
+  $('#rows').onclick = e => {
+    const b = e.target.closest('[data-slug]'); if(!b) return;
+    openJudge(b.dataset.slug);
+  };
+  if(state.jslug) openJudge(state.jslug);
+  else $('#detail').innerHTML =
+    '<p class="empty">Pick a group. Heaviest first — spend where we ran it, volume where they did.</p>';
+}
+
+async function openJudge(slug){
+  state.jslug = slug;
+  document.querySelectorAll('.jq [data-slug]').forEach(b =>
+    b.setAttribute('aria-selected', String(b.dataset.slug === slug)));
+  const base = `/api/creatives?lane=${encodeURIComponent(state.lane)}`
+             + `&source=${encodeURIComponent(state.brand||'')}`
+             + `&group=${encodeURIComponent(slug)}`;
+  state.jads = await get(base + '&unjudged=1');
+  if(!state.jads.length) state.jads = await get(base);
+  state.ji = 0;
+  if(!state.jads.length){ $('#detail').innerHTML = '<p class="empty">Nothing here.</p>'; return; }
+  drawJudge();
+}
+
+function drawJudge(){
+  const ad = state.jads[state.ji];
+  if(!ad){
+    $('#detail').innerHTML = '<p class="empty jdone">Group done. Pick the next one.</p>';
+    renderJudge();
+    return;
+  }
+  const v = state.vocab;
+  const src = mediaSrc(ad.file || ad.thumb);
+  const isVid = /\.(mp4|mov)$/i.test(ad.file || '');
+  const named = ad.known === 'named';
+  const list = (name, vals) => `<datalist id="dl-${name}">${
+    (vals||[]).map(x => `<option value="${esc(x)}">`).join('')}</datalist>`;
+  const row = (name) => {
+    const closed = v.closed[name];
+    const seen = closed || (name === 'angle'
+      ? [].concat(...Object.values(v.signed_angles||{}), v.seen[name]||[])
+      : v.seen[name]);
+    const cur = ad[name === 'source' ? 'source_f' : name];
+    const val = (cur === v.unclassified ? '' : (cur || ''));
+    return `<label for="jf-${name}">${name}</label>
+      <input id="jf-${name}" data-f="${name}" value="${esc(val)}"
+             list="dl-${name}" autocomplete="off" ${named ? 'readonly class="derived"' : ''}
+             placeholder="${closed ? closed.join(' · ') : 'unclassified'}">
+      ${list(name, seen)}`;
+  };
+  const perf = ad.spend > 0
+    ? `<span>${money(ad.spend)} spent</span><span>${Number(ad.impressions||0).toLocaleString()} impressions</span>`
+      + (ad.revenue > 0 ? `<span>${(ad.revenue/ad.spend).toFixed(2)}× ROAS</span>` : '')
+    : '';
+  $('#detail').innerHTML = `
+    <h2 class="dhead">${esc(ad.title) || '<em>no copy</em>'}</h2>
+    <div class="judge">
+      <div class="stage">
+        ${src ? (isVid ? `<video src="${esc(src)}" controls autoplay loop muted playsinline></video>`
+                       : `<img src="${esc(src)}" alt="" loading="lazy"
+                            onerror="this.replaceWith(Object.assign(document.createElement('p'),
+                              {className:'empty', textContent:'cover expired — open the post to see it'}))">`)
+              : '<p class="empty">no picture held</p>'}
+        <div class="meta">
+          <span>${esc(ad.swipe_id)}</span>
+          ${ad.variants > 1 ? `<span>${ad.variants}× cloned</span>` : ''}
+          <span>${esc(ad.media)}${ad.ratio && ad.ratio !== 'unknown' ? ' · ' + esc(ad.ratio) : ''}</span>
+          ${perf}
+          <span>${state.ji + 1} of ${state.jads.length}</span>
+          ${ad.url ? `<a href="${esc(ad.url)}" target="_blank" rel="noopener">open →</a>` : ''}
+        </div>
+        <p class="jnote">${esc((ad.body||'').slice(0,320))}${(ad.body||'').length>320?'…':''}</p>
+      </div>
+      <div>
+        <div class="jf">${v.judged_fields.map(row).join('')}</div>
+        <div class="jbtns">
+          <button class="swipe" id="jswipe">${named ? 'Mark to reuse' : 'Swipe it'} <kbd>s</kbd></button>
+          <button class="pass"  id="jpass">Pass <kbd>p</kbd></button>
+          <button id="jskip">Skip <kbd>→</kbd></button>
+          <span class="jnote" id="jstatus"></span>
+        </div>
+        <p class="jnote">${named
+          ? 'This is one of ours — its fields were parsed out of the ad name, so they are shown, not typed.'
+          : 'media and ratio were derived from the file. An angle the brand has not signed is still recorded; the namer warns, it never blocks.'}</p>
+      </div>
+    </div>`;
+  $('#jswipe').onclick = () => saveJudge('swipe');
+  $('#jpass').onclick  = () => saveJudge('pass');
+  $('#jskip').onclick  = () => { state.ji++; drawJudge(); };
+  const first = $('#jf-source'); if(first && !named) first.focus();
+}
+
+async function saveJudge(verdict){
+  const ad = state.jads[state.ji];
+  const fields = {};
+  document.querySelectorAll('.jf [data-f]').forEach(i => {
+    if(i.value.trim() && !i.readOnly) fields[i.dataset.f] = i.value.trim();
+  });
+  $('#jstatus').textContent = 'saving…';
+  const r = await fetch('/api/judge', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({swipe_id: ad.swipe_id, fields, verdict})
+  }).then(x => x.json());
+  if(r.error){ $('#jstatus').textContent = r.error; return; }
+  state.ji++;
+  drawJudge();
+}
+
+// s / p decide, → skips. Typing in a field must not trigger them.
+document.addEventListener('keydown', e => {
+  if(state.view !== 'judge' || e.metaKey || e.ctrlKey) return;
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) return;
+  if(e.key === 's'){ e.preventDefault(); $('#jswipe')?.click(); }
+  if(e.key === 'p'){ e.preventDefault(); $('#jpass')?.click(); }
+  if(e.key === 'ArrowRight'){ e.preventDefault(); $('#jskip')?.click(); }
+});
+
+function renderPages(){
+  $('#shown').innerHTML = `<b>${state.pages.length}</b> pages · <b>${state.pages.reduce((n,p)=>n+p.ads_served,0)}</b> creatives land on them`;
+  $('#rows').innerHTML = state.pages.map(p => `
+    <div class="prow" data-page="${esc(p.slug)}" ${state.psel===p.slug?'aria-selected="true"':''}>
+      <img loading="lazy" src="/media/${esc(state.brand)}/_pages/${esc(p.slug)}/page.png" alt="">
+      <div>
+        <div class="ahead">${esc(p.slug)}</div>
+        <div class="ameta">
+          <span class="tag ${p.page_type==='quiz'?'top':(p.page_type==='advertorial'?'mid':'bottom')}">${esc(p.page_type)}</span>
+          <span>${p.blocks_served} blocks</span><span>${p.ads_served} creatives</span>
+          <span>${p.height?p.height+'px':'—'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+  $('#rows').onclick = e => {
+    const el = e.target.closest('[data-page]'); if(el) openPage(el.dataset.page);
+  };
+}
+
+async function openPage(slug){
+  state.psel = slug; renderPages();
+  const p = state.pages.find(x => x.slug === slug);
+  const landing = state.blocks.filter(a => a.page_slug === slug)
+                              .sort((x,y) => y.variants - x.variants);
+  const steps = p.page_type === 'quiz'
+    ? await get(`/api/steps?brand=${encodeURIComponent(state.brand)}&page=${encodeURIComponent(slug)}`)
+    : [];
+  $('#detail').innerHTML = `
+    <h2 class="dhead">${esc(p.slug)}</h2>
+    <div class="stats">
+      <div class="st"><span class="stn">${p.ads_served}</span><span class="stl">creatives</span></div>
+      <div class="st"><span class="stn">${p.blocks_served}</span><span class="stl">blocks</span></div>
+      <div class="st"><span class="stn">${p.height||'—'}</span><span class="stl">px tall</span></div>
+      <div class="st"><span class="stn">${esc(p.page_type)}</span><span class="stl">type</span></div>
+    </div>
+    <p class="lp">→ <a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a></p>
+    ${steps.length ? `<h3>The quiz, all the way through · ${steps.length} steps</h3>
+      <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">` +
+      steps.map(st => `<figure class="cell" data-file="${esc(st.png)}" data-type="image">
+          <img loading="lazy" src="/media/${esc(st.png)}" alt="">
+          <span class="vb">${esc(st.step)}</span>
+          <figcaption>${esc(st.text.split('\n')[0].slice(0,42))}</figcaption>
+        </figure>`).join('') + '</div>' : ''}
+    <h3>Copy blocks that land here · ${landing.length}</h3>
+    ${landing.map(a => `<div class="block" data-goto="${esc(a.slug)}">
+        <div class="vbox"><div class="vnum">${fmtB(belief(a))}</div><div class="vlab">${beliefLabel()}</div></div>
+        <div><div class="ahead">${esc(a.headline)}</div>
+          <div class="ameta"><span class="tag ${a.stage||'unclassified'}">${a.stage||'?'}</span>
+          <span>${a.creatives} creatives</span><span>${a.video_count}v / ${a.image_count}s</span></div>
+        </div></div>`).join('')}
+    <h3>The page</h3>
+    <div class="railnav" style="max-width:340px;border:1px solid var(--rule);border-bottom:none">
+      <button data-shot="page" aria-selected="true">Page</button>
+      ${p.popup?'<button data-shot="popup">Pop-up</button>':''}
+    </div>
+    <img class="shot" id="shot" loading="lazy"
+         src="/media/${esc(state.brand)}/_pages/${esc(slug)}/page.png" alt="">`;
+  $('#detail').onclick = e => {
+    const sh = e.target.closest('[data-shot]');
+    if(sh){
+      document.querySelectorAll('[data-shot]').forEach(x =>
+        x.setAttribute('aria-selected', String(x === sh)));
+      $('#shot').src = `/media/${state.brand}/_pages/${slug}/${sh.dataset.shot}.png`;
+      return;
+    }
+    const g = e.target.closest('[data-goto]');
+    if(g){ state.view='blocks';
+      document.querySelectorAll('#railnav button').forEach(x =>
+        x.setAttribute('aria-selected', String(x.dataset.view==='blocks')));
+      render(); openBlock(g.dataset.goto); return; }
+    const c = e.target.closest('[data-file]');
+    if(c){ $('#dlname').textContent = c.dataset.file.split('/').pop();
+      $('#dlbody').innerHTML = `<img src="/media/${c.dataset.file}" alt="">`;
+      $('#viewer').showModal(); }
+  };
+}
+
+function showPages(){
+  const html = state.pages.map(p => `
+    <div class="page">
+      <img loading="lazy" src="/media/${esc(state.brand)}/_pages/${esc(p.slug)}/page.png" alt="">
+      <div class="pb">
+        <div class="pt">${esc(p.slug)}</div>
+        <div class="pm">${esc(p.page_type)} · ${p.height?p.height+'px':'—'} · ${p.blocks_served} blocks · ${p.ads_served} creatives</div>
+        <div class="pm"><a href="${esc(p.url)}" target="_blank" rel="noopener">open live →</a>
+          ${p.page_type==='quiz'?` · <a href="#" data-steps="${esc(p.slug)}">walk it →</a>`:''}</div>
+      </div>
+    </div>`).join('');
+  const box = document.createElement('div');
+  box.innerHTML = `<h3>The funnel, page by page · ${state.pages.length}</h3><div class="pages">${html}</div>`;
+  $('#detail').innerHTML = '';
+  $('#detail').append(box);
+  box.onclick = async e => {
+    const a = e.target.closest('[data-steps]'); if(!a) return;
+    e.preventDefault();
+    const steps = await get(`/api/steps?brand=${encodeURIComponent(state.brand)}&page=${encodeURIComponent(a.dataset.steps)}`);
+    if(!steps.length){ a.textContent = 'not walked yet'; return; }
+    $('#detail').innerHTML =
+      `<h2 class="dhead">${esc(a.dataset.steps)} — the quiz, all the way through</h2>
+       <h3>${steps.length} steps</h3>
+       <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">` +
+      steps.map(s => `<figure class="cell" data-file="${esc(s.png)}" data-type="image">
+          <img loading="lazy" src="/media/${esc(s.png)}" alt="">
+          <span class="vb">${esc(s.step)}</span>
+          <figcaption>${esc(s.text.split('\n')[0].slice(0,44))}</figcaption>
+        </figure>`).join('') + '</div>';
+    $('#detail').querySelector('.grid').onclick = ev => {
+      const c = ev.target.closest('[data-file]'); if(!c) return;
+      $('#dlname').textContent = c.dataset.file.split('/').pop();
+      $('#dlbody').innerHTML = `<img src="/media/${c.dataset.file}" alt="">`;
+      $('#viewer').showModal();
+    };
+  };
+}
+boot();
+</script>
+</body>
+</html>

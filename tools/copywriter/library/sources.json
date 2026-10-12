@@ -1,58 +1,80 @@
 {
  "schema": 1,
- "note": "The sourcing layer — WHO each corpus source was written for, and which of our brand/avatar pairs may draw on it. Copy inherits its audience from where it was sourced: a swipe aimed at a 54-year-old woman never feeds copy aimed at a 15-year-old. `market` is evidenced from the source itself; `fits` is a RULING — only Damon fills it, and an empty fits list means the source is quarantined from injection until he does.",
+ "note": "The sourcing layer — WHO each corpus source was written for, and which of our brand/avatar pairs may draw on it. Copy inherits its audience from where it was sourced: a swipe aimed at a 54-year-old woman never feeds copy aimed at a 15-year-old. `market` is evidenced from the source itself; `fits` is a RULING — only the owner fills it, and an empty fits list means the source is quarantined from injection until he does.",
  "sources": {
-  "<competitor>": {
+  "competitor-a": {
    "kind": "adplexity-sweep",
    "market": "women 45+, aging skin — foundation/serum angles ('at 52', collagen, jowls, wrinkles)",
-   "evidence": "swipe-paid/<competitor>/_BRAND.md + angle titles",
+   "evidence": "components/swipe-paid/competitor-a/_BRAND.md + angle titles",
    "fits": []
   },
-  "<competitor>": {
+  "competitor-b": {
    "kind": "adplexity-sweep",
    "market": "teens / young adults, acne — 'teen hormonal acne', 'understand your acne type'",
-   "evidence": "swipe-paid/<competitor>/_BRAND.md + angle titles",
+   "evidence": "components/swipe-paid/competitor-b/_BRAND.md + angle titles",
    "fits": []
   },
-  "<competitor>": {
+  "competitor-c": {
    "kind": "adplexity-sweep",
    "market": "older men, aging face and neck — 'best-selling men's face treatment in Italy', 'old man', 'masculine neck definition'; Italian-origin brand, roughly half the angles in Italian",
-   "evidence": "swipe-paid/<competitor>/angles/ primary texts, verbatim",
-   "fits": []
+   "evidence": "components/swipe-paid/competitor-c/angles/ primary texts, verbatim",
+   "fits": [],
+   "removed": {
+    "by": "the owner",
+    "on": "2026-10-02",
+    "why": "\"remove all of the competitor-c stuff and competitor-d stuff\" — the first swipes for ad copy are Brand B's own ads in its ad account",
+    "names": [
+     "competitor-c",
+     "competitor-c"
+    ]
+   }
   },
   "damon-saves": {
    "kind": "saved-posts-capture",
    "market": "mixed — saved for market-opportunity / viral / novel-format signal, not one audience; per-row avatar_fit and bucket tags carry what is known",
-   "evidence": "swipe-organic/records/damon-saves/catalog.json",
+   "evidence": "components/swipe-organic/records/damon-saves/catalog.json",
    "fits": []
   },
-  "<brand>-email": {
+  "brand-b-email": {
    "kind": "our-shipped-sends",
-   "market": "<brand>'s own list — men, grooming/skincare",
-   "evidence": "brands/<brand>/email-sms/",
-   "evidence_old_name": "brands/<brand>/email/",
+   "market": "Brand B's own list — men, grooming/skincare",
+   "evidence": "the team notes",
    "fits": [
     {
-     "brand": "<brand>"
+     "brand": "brand-b"
     }
    ]
   },
   "video-teardowns": {
    "kind": "teardown-runs",
    "market": "per-run — each run's audience stage names the avatar and funnel it was torn down for; rows carry that verdict",
-   "evidence": "components/video-teardown/machine/runs/*/stages/1b-audience.md",
+   "evidence": "runs/video-writing/*/*/stages/1b-audience.md",
    "fits": "per-row"
   },
-  "<brand>-pages": {
+  "brand-a-pages": {
    "kind": "our-pages",
-   "market": "<brand>'s own market — women 45+, body skin",
-   "evidence": "brands/<brand>/intake/",
-   "evidence_old_name": "brands/<brand>/existing-content/",
+   "market": "Brand A's own market — women 45+, body skin",
+   "evidence": "the team notes",
    "fits": [
     {
-     "brand": "<brand>"
+     "brand": "brand-a"
     }
    ]
+  },
+  "competitor-d": {
+   "kind": "adplexity-sweep",
+   "market": "men, skin and grooming",
+   "evidence": "components/swipe-paid/competitor-d/",
+   "fits": [],
+   "removed": {
+    "by": "the owner",
+    "on": "2026-10-02",
+    "why": "\"remove all of the competitor-c stuff and competitor-d stuff\" — the first swipes for ad copy are Brand B's own ads in its ad account",
+    "names": [
+     "competitor-d",
+     "competitor-d"
+    ]
+   }
   }
  }
 }

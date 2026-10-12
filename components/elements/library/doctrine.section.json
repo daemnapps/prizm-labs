@@ -16,7 +16,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "problem",
@@ -29,7 +31,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "failed-solutions",
@@ -42,7 +46,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "root-cause",
@@ -55,7 +61,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "unique-mechanism",
@@ -68,7 +76,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "solution",
@@ -81,7 +91,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "product",
@@ -94,7 +106,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "offer",
@@ -107,7 +121,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "call-to-action",
@@ -120,7 +136,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "identification",
@@ -133,7 +151,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "agitation",
@@ -146,7 +166,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "proof",
@@ -159,7 +181,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "transformation",
@@ -172,7 +196,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "objections",
@@ -185,7 +211,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "urgency",
@@ -198,8 +226,13 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

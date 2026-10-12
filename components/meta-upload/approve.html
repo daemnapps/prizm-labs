@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approve to Meta</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* The standard approval card (After the Edit, 1 Oct 2026): brand · lane + state, media, words, pages, where it goes, checks, Paused/On, Approve / Disapprove (reasons → the upstream step) · Learnings tab */
+:root{
+  --bg:#f2f4f7; --panel:#ffffff; --ink:#161b24; --soft:#5b6575; --line:#d8dee8;
+  --accent:#3554c8; --accent-soft:#e6ebfa;
+  --ok:#1f7a4a; --ok-bg:#e2f3e8; --wait:#9a6200; --wait-bg:#fbf0d9; --stop:#a23b2a; --stop-bg:#f8e4df;
+  --display:"Familjen Grotesk",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11141a; --panel:#181d26; --ink:#e5e9f0; --soft:#9aa4b5; --line:#2a3240;
+  --accent:#8fa6f5; --accent-soft:#1e2846;
+  --ok:#74d39c; --ok-bg:#183327; --wait:#e8b45a; --wait-bg:#3a2d12; --stop:#f08d7a; --stop-bg:#3d1f19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11141a; --panel:#181d26; --ink:#e5e9f0; --soft:#9aa4b5; --line:#2a3240;
+  --accent:#8fa6f5; --accent-soft:#1e2846;
+  --ok:#74d39c; --ok-bg:#183327; --wait:#e8b45a; --wait-bg:#3a2d12; --stop:#f08d7a; --stop-bg:#3d1f19; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body)}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 16px 80px;display:grid;gap:18px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--display);font-size:2rem;margin:0;line-height:1.1}
+.lede{color:var(--soft);margin:4px 0 0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tab,.chip{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:9px 16px;font:600 .95rem var(--body);cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--accent);color:var(--panel);border-color:transparent}
+.chip{padding:6px 12px;font-size:.85rem}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.tab .n{opacity:.75;font-weight:500;margin-left:4px}
+.sep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:18px;align-items:start}
+.empty{color:var(--soft);background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.ok{color:var(--ok);background:var(--ok-bg)} .wait{color:var(--wait);background:var(--wait-bg)} .stop{color:var(--stop);background:var(--stop-bg)} .live{color:var(--accent);background:var(--accent-soft)}
+.modal{border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.08);background:var(--panel);overflow:hidden;min-width:0}
+.modal .top{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);gap:8px}
+.modal .top b{font-family:var(--display);font-size:1.08rem}
+.modal .top small{color:var(--soft);font-weight:500;margin-left:6px}
+.media{display:flex;gap:6px;padding:12px 14px;overflow-x:auto}
+.media a,.media video{flex:0 0 auto}
+.media img,.media video{height:192px;width:108px;object-fit:cover;border-radius:6px;background:var(--accent-soft);display:block}
+.media .n{font-size:.7rem;color:var(--soft);text-align:center}
+.rows{display:grid;gap:9px;padding:0 14px 12px}
+.row{display:grid;grid-template-columns:104px 1fr;gap:8px;font-size:.9rem;min-width:0}
+.row>span:first-child{color:var(--soft)}
+.row>div{min-width:0}
+.mono{font-family:var(--mono);font-size:.82em;overflow-wrap:anywhere}
+.text{white-space:pre-wrap;overflow-wrap:anywhere}
+.text.clip{max-height:7.5em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 65%,transparent)}
+.more{border:0;background:none;color:var(--accent);font:600 .82rem var(--body);padding:2px 0;cursor:pointer}
+.alt{border-top:1px dashed var(--line);margin-top:6px;padding-top:6px}
+.goes{display:grid;gap:4px}
+.goes .g{border-left:3px solid var(--accent-soft);padding-left:8px}
+.checks{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.checks li{font-size:.85rem}
+.checks li.bad{color:var(--stop)}
+.checks li.bad b{display:block}
+details.all summary{cursor:pointer;color:var(--soft);font-size:.82rem;margin-top:4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--panel);color:var(--ink);padding:9px 18px;font:600 .95rem var(--body);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.seg button.on[aria-pressed="true"]{background:var(--ok);color:var(--panel)}
+.hint{color:var(--soft);font-size:.8rem;margin-top:4px}
+.btns{display:flex;gap:10px;padding:14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.b{border-radius:10px;padding:14px 22px;font:700 1.02rem var(--body);border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.b.go{background:var(--ok);color:var(--panel);border-color:transparent;flex:1 1 200px}
+.b.back{flex:0 1 auto}
+.b.warn{background:var(--stop);color:var(--panel);border-color:transparent}
+.b:disabled{opacity:.4;cursor:not-allowed}
+.note{display:none;padding:0 14px 14px;gap:8px}
+.note.open{display:grid}
+.note textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:15px/1.4 var(--body);padding:10px}
+.result{margin:0 14px 14px;padding:10px 12px;border-radius:8px;font-size:.88rem;overflow-wrap:anywhere;white-space:pre-wrap}
+.result.ok{background:var(--ok-bg);color:var(--ink)} .result.err{background:var(--stop-bg);color:var(--ink)}
+.busy{opacity:.55;pointer-events:none}
+.foot{color:var(--soft);font-size:.82rem}
+.theme{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font:500 .85rem var(--body)}
+.fake{background:var(--wait-bg);color:var(--wait);border-radius:8px;padding:8px 12px;font-weight:600}
+a{color:var(--accent)}
+.who{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.who select{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 .85rem var(--body)}
+.pick{background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.why{display:grid;gap:6px}
+.why label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:.9rem;background:var(--bg)}
+.why label:has(input:checked){border-color:var(--stop);background:var(--stop-bg)}
+.why input{margin-top:3px;accent-color:var(--stop)}
+.why .to{display:block;color:var(--soft);font-size:.76rem;margin-top:1px}
+.lsteps{display:grid;gap:14px}
+.lstep{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.lstep>.top{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.lstep>.top b{font-family:var(--display);font-size:1.15rem}
+.ltools{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr))}
+.ltool{padding:12px 14px;display:grid;gap:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.ltool h3{margin:0;font:700 1rem var(--body)}
+.bars{display:grid;gap:4px}
+.barrow{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:.86rem;align-items:center}
+.barrow i{display:block;height:6px;border-radius:3px;background:var(--stop);opacity:.75;margin-top:2px}
+.lnote{border-left:3px solid var(--stop-bg);padding-left:8px;font-size:.86rem}
+.lnote small{color:var(--soft);display:block}
+@media (max-width:480px){.row{grid-template-columns:1fr}.media img,.media video{height:160px;width:90px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Approve → Meta</h1>
+      <p class="lede">Every finished ad, on one card. Nothing goes into Meta until you hit Approve.</p>
+    </div>
+    <div class="who"><span id="who"></span><button class="theme" id="theme" type="button">Light / dark</button></div>
+  </header>
+  <div id="fake"></div>
+  <div class="bar" id="views"></div>
+  <div class="bar" id="filters"></div>
+  <div class="grid" id="grid"><div class="empty">Loading…</div></div>
+  <p class="foot" id="root"></p>
+</div>
+<script>
+const VIEWS=[["check","To check"],["approved","Approved"],["live","Live"],["sent-back","Sent back"],["learnings","Learnings"]];
+const LANE={video:"Video",image:"Image",carousel:"Carousel",creator:"Creator"};
+const PILL={"1-check":["wait","Waiting for you"],"2-approved":["ok","Approved — going in"],"3-live":["live","Live in Meta"],"sent-back":["stop","Sent back"]};
+const S={view:"check",brand:"",lane:"",start:{},by:""};
+try{const t=localStorage.getItem("approve-theme");if(t)document.documentElement.dataset.theme=t;const v=localStorage.getItem("approve-view");if(v)S.view=v;S.by=localStorage.getItem("approve-by")||""}catch(e){}
+document.getElementById("theme").onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark";try{localStorage.setItem("approve-theme",r.dataset.theme)}catch(e){}};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const host=u=>{try{const x=new URL(u);return x.host+x.pathname}catch(e){return u||""}};
+
+async function load(){
+  const q=new URLSearchParams({view:S.view,brand:S.brand,lane:S.lane});
+  let d;
+  try{d=await (await fetch((S.view==="learnings"?"/api/learnings?":"/api/cards?")+q)).json()}catch(e){document.getElementById("grid").innerHTML='<div class="empty">The page lost its connection — reload.</div>';return}
+  if(d.counts)S.counts=d.counts;if(d.reasons)S.reasons=d.reasons;
+  S.d=d;render();
+}
+/* who is deciding: picked once per browser, written on every approve / disapprove */
+function setBy(v){S.by=v;try{localStorage.setItem("approve-by",v)}catch(e){};render()}
+function whoBar(d){
+  const names=d.approvers||[];
+  if(names.length===1&&S.by!==names[0])S.by=names[0];
+  if(S.by&&!names.includes(S.by))S.by="";
+  document.getElementById("who").innerHTML=names.length>1
+    ?`Deciding as <select onchange="setBy(this.value)"><option value="">pick your name</option>${names.map(n=>`<option ${n===S.by?"selected":""}>${esc(n)}</option>`).join("")}</select>`
+    :`<span class="foot">Deciding as <b>${esc(S.by)}</b></span>`;
+}
+function render(){
+  const d=S.d;
+  whoBar(d);
+  bar(d);
+  if(S.view==="learnings")return renderLearnings(d);
+  document.getElementById("fake").innerHTML=d.fake?'<div class="fake">Trial mode: nothing is sent to Meta.</div>':"";
+  document.getElementById("root").textContent="Cards: "+d.root;
+  const g=document.getElementById("grid");
+  const pick=!S.by?`<div class="pick" style="grid-column:1/-1"><b>Who is deciding?</b><div class="bar">${(d.approvers||[]).map(n=>`<button class="chip" onclick="setBy('${esc(n)}')">${esc(n)}</button>`).join("")}</div><span class="hint">Asked once on this browser. Your name goes on every approve and disapprove.</span></div>`:"";
+  g.innerHTML=pick+(d.cards.length?d.cards.map(card).join(""):`<div class="empty">${S.view==="check"?"Nothing waiting for you.":"Nothing here."}</div>`);
+}
+function bar(d){
+  const n=v=>v==="learnings"?(S.view==="learnings"?d.total:""):((S.counts||{})[v]??0);
+  document.getElementById("views").innerHTML=VIEWS.map(([v,l])=>`<button class="tab" aria-pressed="${S.view===v}" onclick="setView('${v}')">${l}<span class="n">${n(v)}</span></button>`).join("");
+  const b=[["","All brands"],...d.brands.map(x=>[x.id,x.label])].map(([v,l])=>`<button class="chip" aria-pressed="${S.brand===v}" onclick="setF('brand','${v}')">${esc(l)}</button>`).join("");
+  const l=[["","All lanes"],...d.lanes.map(x=>[x,LANE[x]||x])].map(([v,t])=>`<button class="chip" aria-pressed="${S.lane===v}" onclick="setF('lane','${v}')">${esc(t)}</button>`).join("");
+  document.getElementById("filters").innerHTML=b+'<span class="sep"></span>'+l;
+}
+function setView(v){S.view=v;try{localStorage.setItem("approve-view",v)}catch(e){};load()}
+function setF(k,v){S[k]=v;load()}
+
+function texts(list){
+  if(!list||!list.length)return '<span class="pill stop">None</span>';
+  return list.map((t,i)=>{const long=t.length>260;const id="t"+Math.random().toString(36).slice(2);
+    return `<div class="${i?"alt":""}"><div class="text${long?" clip":""}" id="${id}">${esc(t)}</div>${long?`<button class="more" onclick="more('${id}',this)">Show all</button>`:""}</div>`}).join("");
+}
+function more(id,btn){const e=document.getElementById(id);e.classList.toggle("clip");btn.textContent=e.classList.contains("clip")?"Show all":"Show less"}
+
+function card(c){
+  const [pc,pt]=PILL[c.state]||["wait",c.state];
+  const media=c.media.map((m,i)=>m.kind==="video"
+    ?`<div><video src="${esc(m.src)}"${m.cover?` poster="${esc(m.cover)}"`:""} controls preload="metadata" playsinline></video><div class="n">${i+1}${m.cover?" · thumbnail":""}</div></div>`
+    :`<div><a href="${esc(m.src)}" target="_blank" rel="noopener"><img src="${esc(m.thumb)}" loading="lazy" alt="${c.format==="carousel"?"slide":"picture"} ${i+1}"></a><div class="n">${c.format==="carousel"?"slide ":""}${i+1}</div></div>`).join("");
+  const w=c.words||{};
+  const pages=(c.goes.length?c.goes:c.pages).map(g=>g.error?`<span class="pill stop">${esc(g.error)}</span>`:`<div><a class="mono" href="${esc(g.url)}" target="_blank" rel="noopener">${esc(host(g.url))}</a></div>`).join("")||'<span class="pill stop">None</span>';
+  const goes=c.goes.filter(g=>!g.error).map(g=>`<div class="g"><div>${esc(c.account)} · <span class="mono">${esc(g.campaign||"no campaign")}</span></div><div class="mono">${esc(g.ad_set||"no ad set")}</div><div class="mono" style="color:var(--soft)">ad: ${esc(g.meta_ad_name)}</div></div>`).join("");
+  const bad=c.checks.filter(x=>!x.ok);
+  const checks=!c.checks.length?'<span class="pill wait">Not run</span>'
+    :bad.length?`<ul class="checks">${bad.map(x=>`<li class="bad"><b>✕ ${esc(x.label)}</b>${esc(x.why)}</li>`).join("")}</ul>`
+    :'<span class="pill ok">All passed</span>';
+  const all=c.checks.length?`<details class="all"><summary>Every check</summary><ul class="checks">${c.checks.map(x=>`<li class="${x.ok?"":"bad"}">${x.ok?"✓":"✕"} ${esc(x.label)} — ${esc(x.why)}</li>`).join("")}</ul></details>`:"";
+  const start=S.start[c.id]||"PAUSED";
+  let rows=`
+    <div class="row"><span>Ad name</span><div class="mono">${esc(c.ad_name)}</div></div>
+    <div class="row"><span>Primary text</span><div>${texts(w.primary)}</div></div>
+    <div class="row"><span>Headlines</span><div>${(w.headlines||[]).length?esc(w.headlines.join(" · ")):'<span class="pill stop">None</span>'}</div></div>
+    <div class="row"><span>Descriptions</span><div>${(w.descriptions||[]).length?esc(w.descriptions.join(" · ")):'<span style="color:var(--soft)">none</span>'}</div></div>
+    <div class="row"><span>Landing page${c.goes.length>1?"s":""}</span><div>${pages}</div></div>
+    <div class="row"><span>Goes into</span><div class="goes">${goes||'<span class="pill stop">Nowhere yet</span>'}</div></div>`;
+  if(c.state!=="3-live"&&c.state!=="sent-back")rows+=`<div class="row"><span>Machine checks</span><div>${checks}${all}</div></div>`;
+  if(c.state==="1-check")rows+=`<div class="row"><span>Starts</span><div class="hint">You choose on the button: <b>On</b> starts spending as soon as Meta approves it (its new ad set goes on with it). <b>Paused</b> waits in Meta until someone switches it on.</div></div>`;
+  if(c.approval){const a=c.approval;const no=a.decision!=="approve";
+    rows+=`<div class="row"><span>${a.decision==="disapprove"?"Disapproved":no?"Sent back":"Approved"}</span><div>${esc(a.by)} · ${esc((a.at||"").replace("T"," "))}${a.start?" · starts "+(a.start==="ACTIVE"?"On":"Paused"):""}${(a.reasons||[]).length?`<div style="margin-top:4px">${a.reasons.map(r=>`<div><span class="pill stop">${esc(r.label)}</span> <span style="color:var(--soft);font-size:.8rem">→ step ${esc(r.step)} · ${esc(r.tool)}</span></div>`).join("")}</div>`:""}${a.note?`<div class="text" style="margin-top:4px"><b>Note:</b> ${esc(a.note)}</div>`:""}</div></div>`}
+  if(c.meta&&c.meta.length)rows+=`<div class="row"><span>In Meta</span><div class="goes">${c.meta.map(m=>`<div class="g"><div class="mono">${esc(m.meta_ad_name)}</div><div>ad id <a class="mono" target="_blank" rel="noopener" href="https://adsmanager.facebook.com/adsmanager/manage/ads?act=${esc(c.account_id)}&selected_ad_ids=${esc(m.ad_id)}">${esc(m.ad_id)}</a> · ${m.status==="ACTIVE"?"On":'<span class="pill stop">Paused — not spending</span>'}${m.delivery?` · Meta says: ${esc(m.delivery.toLowerCase().replace(/_/g," "))}`:""}</div></div>`).join("")}${(c.start_warnings||[]).map(x=>`<div class="pill stop" style="margin-top:6px">${esc(x)}</div>`).join("")}</div></div>`;
+  if(c.made_by&&c.made_by.tool)rows+=`<div class="row"><span>Made by</span><div style="color:var(--soft)">${esc(c.made_by.tool)}${c.made_by.creator?" · "+esc(c.made_by.creator):""}</div></div>`;
+  let btns="";
+  if(c.state==="1-check")btns=`<div class="btns"><button class="b go" ${c.passed?"":"disabled title='A machine check is failing'"} onclick="approve('${esc(c.id)}',this,'ACTIVE')">Approve → On</button><button class="b" ${c.passed?"":"disabled title='A machine check is failing'"} onclick="approve('${esc(c.id)}',this,'PAUSED')">Approve → Paused</button><button class="b back" onclick="openNote('${esc(c.id)}')">Disapprove</button></div>`;
+  if(c.state==="2-approved")btns=`<div class="btns"><button class="b go" onclick="retry('${esc(c.id)}',this)">Try again → Meta</button><button class="b back" onclick="openNote('${esc(c.id)}')">Disapprove</button></div>`;
+  const why=(S.reasons||[]).map(r=>`<label><input type="checkbox" value="${esc(r.id)}"><span>${esc(r.label)}<span class="to">goes back to ${esc(r.steps.join(" + "))}</span></span></label>`).join("");
+  const note=(c.state==="1-check"||c.state==="2-approved")?`<div class="note" id="note-${esc(c.id)}"><b>What's wrong? Pick one or more.</b><div class="why">${why}</div><textarea placeholder="Say what needs to change (required)"></textarea><div class="bar"><button class="b warn" onclick="disapprove('${esc(c.id)}',this)">Disapprove</button><button class="b" onclick="openNote('${esc(c.id)}')">Cancel</button></div></div>`:"";
+  const err=c.upload_error?`<div class="result err">Meta said no (${esc(c.upload_error.at.replace("T"," "))}):\n${esc(c.upload_error.error)}</div>`:"";
+  return `<article class="modal" id="card-${esc(c.id)}">
+    <div class="top"><b>${esc(c.brand_label)} · ${esc(LANE[c.lane]||c.lane)}<small>${c.format==="carousel"?"carousel ad":"flexible ad"}</small></b><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${c.state==="1-check"?(c.copy_checked?'<span class="pill ok">Copy checked · ready</span>':'<span class="pill stop">Copy not checked yet · don\'t upload</span>'):""}<span class="pill ${pc}">${pt}</span></span></div>
+    <div class="media">${media||'<span class="pill stop">No media</span>'}</div>
+    <div class="rows">${rows}</div>${err}<div class="slot"></div>${btns}${note}</article>`;
+}
+function setStart(id,v){S.start[id]=v;render()}
+function openNote(id){const n=document.getElementById("note-"+id);n.classList.toggle("open");if(n.classList.contains("open"))n.querySelector("textarea").focus()}
+function cardEl(id){return document.getElementById("card-"+id)}
+function show(id,ok,html){const el=cardEl(id);if(!el)return;el.querySelector(".slot").innerHTML=`<div class="result ${ok?"ok":"err"}">${html}</div>`}
+async function post(url,body){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});return r.json()}
+async function approve(id,btn,start){
+  if(!S.by){show(id,false,"Pick who is deciding first (top of the page).");return}
+  const label=btn.textContent;
+  const el=cardEl(id);el.classList.add("busy");btn.textContent="Sending to Meta…";
+  const r=await post("/api/approve",{id,start,by:S.by}).catch(e=>({ok:false,error:String(e)}));
+  el.classList.remove("busy");
+  if(r.ok){show(id,true,`${start==="ACTIVE"?"In Meta and switched on":"In Meta, paused. It won't spend until someone switches it on"} — ${r.meta.map(m=>esc(m.meta_ad_name)+" → ad "+esc(m.ad_id)).join("<br>")}`);setTimeout(load,2500)}
+  else{show(id,false,`${r.state==="2-approved"?"Approved, but Meta said no — it's waiting under Approved to try again.\n":""}${esc(r.error)}`);btn.textContent=label;if(r.state==="2-approved")setTimeout(load,4000)}
+}
+async function retry(id,btn){
+  const el=cardEl(id);el.classList.add("busy");btn.textContent="Sending to Meta…";
+  const r=await post("/api/retry",{id}).catch(e=>({ok:false,error:String(e)}));
+  el.classList.remove("busy");
+  if(r.ok){show(id,true,`Live in Meta — ${r.meta.map(m=>esc(m.meta_ad_name)+" → ad "+esc(m.ad_id)).join("<br>")}`);setTimeout(load,2500)}
+  else{show(id,false,esc(r.error));btn.textContent="Try again → Meta"}
+}
+async function disapprove(id,btn){
+  const box=document.getElementById("note-"+id);
+  const reasons=[...box.querySelectorAll("input:checked")].map(x=>x.value);
+  const note=box.querySelector("textarea").value.trim();
+  if(!S.by){show(id,false,"Pick who is deciding first (top of the page).");return}
+  if(!reasons.length){show(id,false,"Pick at least one reason.");return}
+  if(!note){show(id,false,"Say what needs to change first.");return}
+  btn.disabled=true;
+  const r=await post("/api/disapprove",{id,reasons,note,by:S.by}).catch(e=>({ok:false,error:String(e)}));
+  if(r.ok){show(id,true,"Disapproved. Sent back to: "+r.to.map(esc).join(", "));setTimeout(load,1800)}else{show(id,false,esc(r.error));btn.disabled=false}
+}
+
+/* the Learnings tab: what keeps going wrong, by the step and tool that caused it */
+function renderLearnings(d){
+  document.getElementById("fake").innerHTML=d.fake?'<div class="fake">Trial mode: nothing is sent to Meta.</div>':"";
+  document.getElementById("root").textContent="Learnings: "+d.root+"/learnings.jsonl · digests per step in "+d.root+"/learnings/";
+  const g=document.getElementById("grid");
+  if(!d.steps.length){g.innerHTML='<div class="empty" style="grid-column:1/-1">No disapprovals yet.</div>';return}
+  g.innerHTML=`<div class="lsteps" style="grid-column:1/-1"><p class="lede" style="margin:0">${d.total} disapproval${d.total===1?"":"s"}, sorted by the step that caused them — furthest upstream first.</p>${d.steps.map(st=>{
+    const top=Math.max(...st.tools.flatMap(t=>t.reasons.map(r=>r.count)));
+    return `<section class="lstep"><div class="top"><b>${st.step?`Step ${st.step} · ${esc(st.name)}`:"Not sorted"}</b><span class="pill stop">${st.count}</span></div><div class="ltools">${st.tools.map(t=>`<div class="ltool"><h3>${esc(t.tool)} <span style="color:var(--soft);font-weight:500">· ${t.count}</span></h3><div class="bars">${t.reasons.map(r=>`<div class="barrow"><div>${esc(r.label)}<i style="width:${Math.round(100*r.count/top)}%"></i></div><b>${r.count}</b></div>`).join("")}</div><div style="color:var(--soft);font-size:.78rem;margin-top:4px">Newest notes</div>${t.notes.map(n=>`<div class="lnote">“${esc(n.note)}”<small>${esc((n.at||"").replace("T"," ").slice(0,16))} · ${esc(n.by)} · ${esc(n.brand)} ${esc(LANE[n.lane]||n.lane)} · <span class="mono">${esc(n.unit)}</span></small></div>`).join("")}</div>`).join("")}</div></section>`}).join("")}</div>`;
+}
+load();
+</script>
+</body>
+</html>

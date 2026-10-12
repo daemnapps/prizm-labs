@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """THE VARIATION VIDEO CHAIN — one proven ad, grown into a tree of briefs.
 
-Damon, 2026-09-28: "Once you've hit a winner, regardless of where it's at,
+the owner, 2026-09-28: "Once you've hit a winner, regardless of where it's at,
 you're going to control for that existing awareness stage for sure. In this,
 we want to also do the other awareness stages, and then each of those is
 going to go through the rest of its writing process. Each of them is going to
@@ -64,7 +64,7 @@ def base_for(src, level=None, hook=None):
 
 
 def slug_for(src, level=None, hook=None):
-    """The run's folder name: the label, plus the operator for anyone but Damon."""
+    """The run's folder name: the label, plus the operator for anyone but the owner."""
     return C.run_slug(base_for(src, level, hook))
 
 
@@ -168,8 +168,8 @@ def read_map(root):
     if not blocks:
         raise SystemExit("4m printed no json block — the map cannot be read")
     m = json.loads(blocks[-1])
-    fw = C.WS / "components" / "marketing-doctrine" / "frameworks.json"
-    known = {r["id"] for r in json.loads(fw.read_text()).get("sections") or [] if isinstance(r, dict) and r.get("id")}
+    import run as R
+    known = set(R.doctrine_section_ids())
     got = [lv.get("level") for lv in m.get("levels") or []]
     if sorted(got) != sorted(LEVELS):
         raise SystemExit(f"4m's map must carry each of the five levels once — it carries {got}")

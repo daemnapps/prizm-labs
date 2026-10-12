@@ -17,7 +17,8 @@
    "carries_offer": "optional",
    "reads_as": "something a person typed, not something a brand approved",
    "variations": 3,
-   "provenance": "proven — copy machine `caption` row; 216 swiped examples in corpus"
+   "provenance": "proven — copy machine `caption` row; 216 swiped examples in corpus",
+   "status": "draft"
   },
   {
    "key": "headline",
@@ -34,7 +35,8 @@
    "carries_offer": "rarely",
    "reads_as": "the thing you'd repeat to a friend verbatim",
    "variations": 2,
-   "provenance": "evidenced — 15 real AdPlexity titles in corpus ('Collagen creams can't absorb. This serum can.')"
+   "provenance": "evidenced — 15 real AdPlexity titles in corpus ('Collagen creams can't absorb. This serum can.')",
+   "status": "draft"
   },
   {
    "key": "description",
@@ -51,7 +53,8 @@
    "carries_offer": "guarantee-shorthand only",
    "reads_as": "a whispered aside",
    "variations": 2,
-   "provenance": "proven — copy machine defaults (2 at 3 words)"
+   "provenance": "proven — copy machine defaults (2 at 3 words)",
+   "status": "draft"
   },
   {
    "key": "angle",
@@ -70,7 +73,8 @@
    "requires": "a heat signal before imitation — live creatives and variant count, per METHOD.md",
    "variations": 1,
    "provenance": "evidenced — 223 swiped angles across four brands, ranked by heat",
-   "misfiled": "not a copy format — an ANGLE is a CLAIM, the second axis of the model, and it lives in brands/<brand>/strategy/angles.json. Filed here it makes a claim look like a slot. Damon's ruling 2026-09-11; left in place rather than deleted so nothing reading this bank breaks, and marked so nothing reads it as a surface."
+   "misfiled": "not a copy format — an ANGLE is a CLAIM, the second axis of the model, and it lives in brands/<brand>/strategy/angles.json. Filed here it makes a claim look like a slot. the owner's ruling 2026-09-11; left in place rather than deleted so nothing reading this bank breaks, and marked so nothing reads it as a surface.",
+   "status": "draft"
   },
   {
    "key": "overlay-text",
@@ -87,7 +91,8 @@
    "carries_offer": "only on the final card",
    "reads_as": "what the video is saying, not a summary of it",
    "variations": 2,
-   "provenance": "evidenced — 46 overlay sets extracted from teardowns; music-only sources carry the whole script this way"
+   "provenance": "evidenced — 46 overlay sets extracted from teardowns; music-only sources carry the whole script this way",
+   "status": "draft"
   },
   {
    "key": "video-script",
@@ -105,7 +110,8 @@
    "reads_as": "a person talking, whose sentences you could interrupt",
    "requires": "a teardown record — scripts are rebuilt from structure, never freestyled",
    "variations": 6,
-   "provenance": "proven — the video-teardown chain end to end (hooks v11, close v6)"
+   "provenance": "proven — the video-teardown chain end to end (hooks v11, close v6)",
+   "status": "draft"
   },
   {
    "key": "creator-caption",
@@ -123,7 +129,8 @@
    "reads_as": "the person who filmed it, typing on their phone",
    "requires": "the creator's own voice evidence — captions are theirs, not the brand's",
    "variations": 2,
-   "provenance": "evidenced — 360 real captions in corpus with views/likes signals"
+   "provenance": "evidenced — 360 real captions in corpus with views/likes signals",
+   "status": "draft"
   },
   {
    "key": "hook-overlay",
@@ -141,7 +148,8 @@
    "reads_as": "how a person starts a sentence, never how an ad does",
    "requires": "a verbatim seam — every hook traces to a real row or it gets cut",
    "variations": 6,
-   "provenance": "proven — video-teardown 4b (entry test, four-word test, photograph test)"
+   "provenance": "proven — video-teardown 4b (entry test, four-word test, photograph test)",
+   "status": "draft"
   },
   {
    "key": "organic-post",
@@ -158,7 +166,8 @@
    "carries_offer": "never on organic; late and soft when repurposed paid",
    "reads_as": "a post someone wrote because they wanted to",
    "variations": 3,
-   "provenance": "proven — copy machine short-form + long-form rows"
+   "provenance": "proven — copy machine short-form + long-form rows",
+   "status": "draft"
   },
   {
    "key": "organic-script",
@@ -176,7 +185,8 @@
    "reads_as": "the creator's own post, with our subject swapped in",
    "requires": "a teardown record with lane ORGANIC",
    "variations": 6,
-   "provenance": "proven — video-teardown ORGANIC lane (expansion stage gated in)"
+   "provenance": "proven — video-teardown ORGANIC lane (expansion stage gated in)",
+   "status": "draft"
   },
   {
    "key": "campaign-email",
@@ -194,7 +204,8 @@
    "reads_as": "written to one person who already let us in",
    "requires": "a concept brief and a segment — the email machine's contract",
    "variations": 1,
-   "provenance": "proven — email machine; 309 shipped <brand> sends classified in corpus"
+   "provenance": "proven — email machine; 309 shipped Brand B sends classified in corpus",
+   "status": "draft"
   },
   {
    "key": "flow-email",
@@ -211,7 +222,8 @@
    "carries_offer": "per flow position — never in the first welcome",
    "reads_as": "a reply to something the reader just did",
    "variations": 1,
-   "provenance": "drafted — flow sends sit inside the <brand> scrape, not yet split out"
+   "provenance": "drafted — flow sends sit inside the Brand B scrape, not yet split out",
+   "status": "draft"
   },
   {
    "key": "subject-preview",
@@ -228,7 +240,8 @@
    "carries_offer": "only when the offer IS the news",
    "reads_as": "a text from someone you know",
    "variations": 2,
-   "provenance": "evidenced — 309 subject+preview pairs indexed in the send catalogue"
+   "provenance": "evidenced — 309 subject+preview pairs indexed in the send catalogue",
+   "status": "draft"
   },
   {
    "key": "landing-page",
@@ -246,7 +259,8 @@
    "reads_as": "an editorial that happens to end in a decision",
    "requires": "the angle that sent the click — page and ad are one argument",
    "variations": 1,
-   "provenance": "evidenced — 47 swiped pages captured (incl. a 21,490px advertorial), 4 of ours"
+   "provenance": "evidenced — 47 swiped pages captured (incl. a 21,490px advertorial), 4 of ours",
+   "status": "draft"
   },
   {
    "key": "quiz",
@@ -263,7 +277,8 @@
    "carries_offer": "on the result page only",
    "reads_as": "a diagnosis, not a funnel",
    "variations": 1,
-   "provenance": "proven — quiz-funnel skill + 1 shipped <brand> quiz; <competitor> runs quiz.<competitor>.com as its whole front door"
+   "provenance": "proven — quiz-funnel skill + 1 shipped brand-a quiz; competitor-c runs quiz.competitor-c.com as its whole front door",
+   "status": "draft"
   },
   {
    "key": "pdp",
@@ -280,11 +295,12 @@
    "carries_offer": "yes — the canonical price, never a channel-specific one",
    "reads_as": "the calm, complete answer after the ad's excitement",
    "variations": 1,
-   "provenance": "drafted — brand product files exist; no PDP spec has been exercised by a machine yet"
+   "provenance": "drafted — brand product files exist; no PDP spec has been exercised by a machine yet",
+   "status": "draft"
   }
  ],
  "asset": "copy",
  "axis": "surface",
  "scope": "Copy SURFACES only — WHERE the words go: the headline, the description, the hook line, the subject line. One asset uses several at once. This is NOT the style bank (HOW the copy is written — short-form, long-form story, social proof), which is formats.json in this folder and a different axis entirely. Every ad has a surface AND a style; they are not rivals. The model: components/naming/MODEL.md",
- "updated": "2026-09-11"
+ "updated": "2026-10-07"
 }

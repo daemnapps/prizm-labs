@@ -212,7 +212,7 @@ The same brief, in the form a builder executes. No prose.
 
   **The words ARE drawn by the model now, and that is why every field above
   matters.** This reverses the 2026-09-14 rule that said never ask a model to
-  draw them — Damon retired the compositor on 2026-09-25, having watched it
+  draw them — the owner retired the compositor on 2026-09-25, having watched it
   work: *"the nuance of the style of the creative is lost because a lot of
   these swipes have specific styles. Claymation-style text is going to look
   different than you just writing text on an image… there's going to be some
@@ -294,7 +294,7 @@ The same brief, in the form a builder executes. No prose.
   **the way they are made does not**, because that belongs to the format we
   swiped, not to the sentence.
 
-  Ruled 2026-09-25 (Damon): *"things like the colour of the font, the style of
+  Ruled 2026-09-25 (the owner): *"things like the colour of the font, the style of
   the font… we need to get really deep on the teardown record itself."* The
   teardown was already writing this and the type layer was dropping it, so
   every draft's lettering was whatever the model felt like. If the teardown
@@ -446,7 +446,7 @@ name. They are a hierarchy, not one thing:
 ```json
 {
   "problem": "darkspots",
-  "angle": "pigmentmemory",
+  "angle": "tonememory",
   "concept": "handsapplication"
 }
 ```
@@ -486,7 +486,7 @@ name. They are a hierarchy, not one thing:
      `angle` as `proposed`, and add a `proposed_angle` block: a kebab-case
      `id`, a `name` in the voice of the bank's other names, and a `what` of
      two or three sentences saying what it claims and to whom. Say which
-     signed angle is nearest and what makes this one different. **Damon signs
+     signed angle is nearest and what makes this one different. **the owner signs
      it or he does not — you are proposing, never adding.**
   3. **You cannot tell.** Write `unsigned` and say what is missing.
 
@@ -496,7 +496,7 @@ name. They are a hierarchy, not one thing:
   fitting our bank is a finding, not a failure.
 
   **Never coin a slug into the bank.** A proposal lives in the brief until it
-  is signed — the angle vocabulary is Damon's.
+  is signed — the angle vocabulary is the owner's.
 
 - **`concept`** — the ideation and execution of that angle. The creative idea
   itself: `handsapplication`, `beforeafter`, `twostep`.

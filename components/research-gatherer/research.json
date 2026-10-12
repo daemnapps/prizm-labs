@@ -4,11 +4,12 @@
     "forums": "trudax~reddit-scraper-lite",
     "comments": {
       "instagram": "apify~instagram-comment-scraper",
-      "tiktok": "clockworks~tiktok-comments-scraper"
+      "tiktok": "clockworks~tiktok-comments-scraper",
+      "facebook": "apify~facebook-comments-scraper"
     }
   },
   "caps": {
-    "_note": "forums_per_run is the ~research var's own pull (cheap, cached 14 days); forums_per_deep is the deep-research trigger's default --cap, split across however many Schwartz questions fire; comments_per_post covers the swiped post's own thread; discovery is the ONE unrestricted search that finds which rooms an avatar actually talks in — small on purpose (~40 items ~ $0.16), cached like every other pull.",
+    "_note": "forums_per_run is the ~research var's own pull (cheap, cached 14 days); forums_per_deep is the deep-research trigger's default --cap, split across however many Schwartz questions fire; comments_per_post covers the swiped post's own thread; discovery is the ONE unrestricted search that finds which rooms an avatar actually talks in — small on purpose (~40 items ~ $__), cached like every other pull.",
     "forums_per_run": 40,
     "forums_per_deep": 150,
     "comments_per_post": 60,
@@ -23,7 +24,7 @@
     "keep": 5
   },
   "demographic_fit": {
-    "_note": "THE MARKER TABLE — Damon ruled it 2026-09-18 after room discovery for a sun-damage sub-avatar returned three communities for a different set of people entirely: research has to be reconciled against the avatar's demographics or it is irrelevant for that avatar. Each row maps a marker found in a ROOM NAME to the demographic signal that room name carries. No brand, avatar or room of ours is named here (workspace rule 7) — these are generic community-naming conventions, the same ones any brand's discovery would hit, and the avatar's own demographics arrive at run time from brands/<brand>/core-avatars/**. A room whose name carries no marker is `general` and is always kept: the table can say a room is plainly for someone else, never that it is plainly for us.",
+    "_note": "THE MARKER TABLE — the owner ruled it 2026-09-18 after room discovery for a sun-damage sub-avatar returned three communities for a different set of people entirely: research has to be reconciled against the avatar's demographics or it is irrelevant for that avatar. Each row maps a marker found in a ROOM NAME to the demographic signal that room name carries. No brand, avatar or room of ours is named here (workspace rule 7) — these are generic community-naming conventions, the same ones any brand's discovery would hit, and the avatar's own demographics arrive at run time from brands/<brand>/core-avatars/**. A room whose name carries no marker is `general` and is always kept: the table can say a room is plainly for someone else, never that it is plainly for us.",
     "markers": [
       {
         "id": "black",
@@ -278,5 +279,16 @@
   "gates": {
     "_note": "How a gate behaves when it fails (research_gatherer/gates.py). elements: hold = an unknown doctrine technique or delivery dial named by a research question stops the pull before anything is spent; record = write it into check.json and pull anyway (the behaviour before 2026-09-20). inputs and delivery have no mode: they record what the engine already refused.",
     "elements": "hold"
+  },
+  "skip_feed_prefixes": [
+    "damon--"
+  ],
+  "ownvoice": {
+    "_note": "gather.py ownvoice — our own audience (ad comments + support emails) into the avatar's bank. Brand sources come from brands/<brand>/operations/brand.json, never from here. model = the Claude model the sort prompt (prompts/ownvoice-sort.md) runs on; posts_per_run = how many top-spend ad posts are scraped for comments; first_run_since = where a brand's first run starts when it has no state yet.",
+    "model": "claude-sonnet-5",
+    "posts_per_run": 15,
+    "comments_per_post": 400,
+    "batch": 30,
+    "first_run_since": "2026-07-01"
   }
 }

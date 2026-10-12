@@ -1,0 +1,16 @@
+{
+  "_fixture": "Shape of brands/<brand>/meta/account.json, ids invented. The test copies this tree to <temp workspace>/brands/zzbrand/.",
+  "account_id": "000000000000000",
+  "page_id": "000000000000001",
+  "pixel_id": "000000000000002",
+  "campaign": {"budget": "cbo", "market": "us", "event": "purchase", "product": "glow-balm"},
+  "call_to_action": "SHOP_NOW",
+  "inputs": {"pictures": "runs/image-teardown/zzbrand", "copy": "runs/copywriter/zzbrand", "pages": "", "roster": "", "adsets": "", "offers": ""},
+  "naming": {
+    "campaign": "campaign{sep}{brand}{sep}{market}{sep}{product}{sep}{funnel}{sep}{event}{sep}{budget}",
+    "campaign_sep": "_",
+    "ad_set": "adset{sep}{brand}{sep}{avatar}{sep}{angle}",
+    "ad_set_sep": "_",
+    "ad_set_by": ["avatar", "angle"]
+  }
+}

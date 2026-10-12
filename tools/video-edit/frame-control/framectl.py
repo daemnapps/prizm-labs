@@ -2,9 +2,9 @@
 """FRAME CONTROL — the moves that made the music-video edit smooth, as one
 brand-free toolkit an editor runs locally on any clip.
 
-Written fresh for the workspace (2026-09-28, Damon: "all those video editing
+Written fresh for the workspace (2026-09-28, the owner: "all those video editing
 elements that we created need to go inside the actual AI workspace repo").
-What each move is and when to reach for it: FRAME-CONTROL.md beside
+What each move is and when to reach for it: FRAME-CONTROL-damon.md beside
 this file. Needs ffmpeg, numpy and opencv-python (cv2). No model, no network.
 
     python3 framectl.py clean   in.mp4 out.mp4 [--fps 30]

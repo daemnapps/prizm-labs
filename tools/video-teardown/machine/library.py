@@ -32,12 +32,13 @@ import chain as C
 # The mount is resolved in ONE place — chain.py. This file used to carry a
 # byte-identical copy of the hardcoded path, and the two of them are how a
 # second person's library silently became a folder on one laptop.
-# Creator work moved out of `swipe/` on 2026-08-27 (Damon) — it was buried
+# Creator work moved out of `swipe/` on 2026-08-27 (the owner) — it was buried
 # under four unrelated swipe projects. It stays inside the lab: everything of
 # his does, and a top-level folder was the wrong read. Creators now sit at
-# creators/<handle>, with the picking selections beside them. The
+# the team notes/creators/<handle>, with the picking selections beside them. The
 # old swipe folder keeps its other projects and is no longer reached from here.
 ROOT_SUBPATH = ("lab", "damon")
+CREATORS_SUBPATH = ("lab", "damon", "creators")
 
 
 def root():
@@ -48,6 +49,11 @@ def root():
     a personal sandbox nobody else can see, so the work did not block, it just
     never arrived. Blocking with a sentence is the better failure."""
     return C.drive_root().joinpath(*ROOT_SUBPATH)
+
+
+def creators_root():
+    """Where every creator folder sits — the one line that moves if creators do."""
+    return C.drive_root().joinpath(*CREATORS_SUBPATH)
 
 
 def now():
@@ -61,7 +67,7 @@ def slug(s, n=48):
 # ------------------------------------------------------------- creators
 
 def creator_dir(handle, make=True):
-    d = root() / "creators" / slug(handle)
+    d = creators_root() / slug(handle)
     if make:
         (d / "posts").mkdir(parents=True, exist_ok=True)
     return d

@@ -82,7 +82,7 @@ class PromptSort(unittest.TestCase):
 
 
 class Branch(unittest.TestCase):
-    """The route decision (Damon 2026-09-15 / 09-22): who makes it x what it
+    """The route decision (the owner 2026-09-15 / 09-22): who makes it x what it
     is picks the read (stage 1) and the brief (stage 6); nothing else moves."""
 
     def setUp(self):
@@ -104,7 +104,7 @@ class Branch(unittest.TestCase):
     def test_each_branch_picks_its_own_brief(self):
         want = {("ai", "single"): "stage6-image-brief", ("ai", "sequence"): "stage6-ai-sequence-brief",
                 ("creator", "single"): "stage6-creator-static-brief",
-                # carousels are AI only (Damon, 2026-10-01): a creator-route sequence gets the AI sequence brief
+                # carousels are AI only (the owner, 2026-10-01): a creator-route sequence gets the AI sequence brief
                 ("creator", "sequence"): "stage6-ai-sequence-brief"}
         for (route, form), stem in want.items():
             self.route(route, form)
@@ -154,10 +154,30 @@ class Paths(unittest.TestCase):
     def test_found_by_walking_up(self):
         self.assertTrue((P.REPO / "components").is_dir() and (P.REPO / "brands").is_dir())
         self.assertEqual(P.LANE, LANE)
-        self.assertEqual(P.LAB, LANE.parent)
+        self.assertEqual(P.LAB, P.REPO / "tools")
         self.assertEqual(LANE, P.REPO / "tools" / "image-teardown")
         self.assertEqual(P.BRANDS, P.REPO / "brands")
         self.assertEqual(P.RECORDS, P.REPO / "runs" / "image-teardown")
+
+    def test_leftovers_carried_over_never_overwritten(self):
+        """The lane moved to components/ on 2026-10-01; files git does not
+        track stay at the old lab path on pull and are moved across on first
+        use — never over a file already here, never while the old lane is
+        still a live checkout."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d); old, new = d / "old", d / "new"
+            (old / "runs/r1").mkdir(parents=True); (old / "runs/r1/a.md").write_text("old")
+            (old / "drafts").mkdir(); (old / "drafts/p.png").write_text("old")
+            (old / "README.md").write_text("shim")
+            (new / "drafts").mkdir(parents=True); (new / "drafts/p.png").write_text("new")
+            with mock.patch.object(P, "OLD_LANE", old), mock.patch.object(P, "LANE", new):
+                self.assertEqual(P.carry_over(), ["runs/r1/a.md"])
+                self.assertEqual((new / "drafts/p.png").read_text(), "new")
+                self.assertTrue((old / "README.md").is_file())
+                (old / "tools").mkdir(); (old / "tools/paths.py").write_text("")
+                (old / "runs/r2").mkdir(); (old / "runs/r2/b.md").write_text("x")
+                self.assertEqual(P.carry_over(), [])
 
     def test_every_exported_name_still_there(self):
         for name in ("LANE LAB SWIPE SWIPE_ORGANIC BRANDS DOCTRINE ADCOPY PROMPTS TOOLS RUNS "
@@ -168,7 +188,11 @@ class Paths(unittest.TestCase):
             self.assertTrue(f.is_file(), f)
         self.assertTrue(P.DOCTRINE.is_dir())
         self.assertTrue((P.ELEMENTS / "machine/elements.py").is_file())
-        self.assertTrue((P.QUALITY / "quality_checks").is_dir())
+        if str(P.QUALITY) not in sys.path:
+            sys.path.append(str(P.QUALITY))
+        import marketing_chain_checks as Q
+        self.assertTrue(hasattr(Q, "hold"))
+        self.assertTrue(hasattr(Q, "Held"))
 
     def test_nothing_counts_parents_to_find_the_workspace(self):
         for f in (LANE / "tools/paths.py", LANE / "tools/run.py", LANE / "chain.py",
@@ -406,6 +430,49 @@ class Filing(unittest.TestCase):
                 with self.assertRaises(Held):
                     quiet(R.one_run, run, ["6"], "brandx", None, None, True)
             self.assertTrue((d / "runs/image-teardown/brandx/r2/check.json").is_file())
+
+
+class HookLedger(unittest.TestCase):
+    """A brand with no hook ledger gets one in the run, never in brands/ (SI-24)."""
+
+    def test_missing_brand_ledger_opens_in_the_run(self):
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            (d / "brands/fx").mkdir(parents=True)
+            run = d / "r"
+            run.mkdir()
+            f, _ = quiet(R.open_ledger, run, "fx", d / "brands/fx/ads/hooks/hook-ledger.md")
+            self.assertEqual(f, run / "vars" / "hook-ledger.md")
+            self.assertTrue(f.is_file())
+            self.assertIn("| verbatim | hook | status | run |", f.read_text())
+            self.assertFalse((d / "brands/fx/ads").exists(), "a ledger was opened under brands/")
+
+    def test_existing_brand_ledger_is_used_and_untouched(self):
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            ledger = d / "brands/fx/ads/hooks/hook-ledger.md"
+            ledger.parent.mkdir(parents=True)
+            ledger.write_text("kept\n")
+            run = d / "r"
+            run.mkdir()
+            f, _ = quiet(R.open_ledger, run, "fx", ledger)
+            self.assertEqual(f, ledger)
+            self.assertEqual(ledger.read_text(), "kept\n")
+            self.assertFalse((run / "vars" / "hook-ledger.md").exists())
+
+    def test_dry_row_names_the_run_path(self):
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            (d / "brands/fx/core-avatars").mkdir(parents=True)
+            run = d / "r"
+            (run / "vars").mkdir(parents=True)
+            with mock.patch.object(P, "BRANDS", d / "brands"), mock.patch("subprocess.run", no_calls):
+                _, out = quiet(R.dry_stage, run, "4", "fx", None, None, ["4"])
+            line = [l for l in out.splitlines() if "hook_ledger" in l][0]
+            self.assertIn("vars/hook-ledger.md", line)
+            self.assertIn("OK", line)
+            self.assertEqual(sorted(p.relative_to(d) for p in (d / "brands").rglob("*")),
+                             [Path("brands/fx"), Path("brands/fx/core-avatars")])
 
 
 if __name__ == "__main__":

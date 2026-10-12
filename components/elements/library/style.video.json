@@ -10,11 +10,11 @@
    "name": "Claymation",
    "what": "Everything is hand-sculpted modelling clay, shot frame by frame on a tabletop set.",
    "why_it_works": null,
-   "status": "unreviewed",
-   "signed": null,
-   "examples": "swatches/claymation.jpg",
-   "evidence": null,
-   "approved": false,
+   "status": "approved",
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "examples": "A paid swipe: a claymation health explainer, 4 variants; two saved carousels on how claymation ads are made (2026-09-22)",
+   "evidence": "Named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list); one paid swipe on file, two saves on how the ads are made.",
+   "approved": true,
    "source": "ai-video-production/styles/bank.json",
    "extra": {
     "family": "handmade",
@@ -27,7 +27,9 @@
      "song-ad",
      "micro-drama"
     ]
-   }
+   },
+   "aliases": [],
+   "note": "defined by the machine, review pending"
   },
   {
    "id": "paper-cutout",
@@ -50,7 +52,8 @@
      "song-ad",
      "demonstration"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "crochet",
@@ -73,7 +76,8 @@
      "talking-object",
      "song-ad"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "needle-felt",
@@ -93,7 +97,8 @@
     "seen_as": "(extension of crochet)",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "felt-puppet",
@@ -116,7 +121,8 @@
      "fake-podcast",
      "micro-drama"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "brick-figure",
@@ -139,7 +145,8 @@
      "micro-drama",
      "testimonial-montage"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "miniature-diorama",
@@ -159,7 +166,8 @@
     "seen_as": "(adjacent to brick figure)",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "anime",
@@ -182,7 +190,8 @@
      "micro-drama",
      "single-presenter"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "cel-1950s",
@@ -204,7 +213,8 @@
     "fits_formats": [
      "micro-drama"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "adult-cartoon",
@@ -227,7 +237,8 @@
      "fake-podcast",
      "meme"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "comic-panel",
@@ -250,7 +261,8 @@
      "meme",
      "testimonial-montage"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "whiteboard-sketch",
@@ -273,7 +285,8 @@
      "demonstration",
      "expert-consult"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "storybook-watercolour",
@@ -293,7 +306,8 @@
     "seen_as": "(extension)",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "family-3d",
@@ -317,7 +331,8 @@
      "micro-drama",
      "talking-object"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "cutaway-3d",
@@ -340,7 +355,8 @@
      "demonstration",
      "expert-consult"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "skeleton-3d",
@@ -364,7 +380,8 @@
      "micro-drama",
      "demonstration"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "low-poly",
@@ -387,7 +404,8 @@
      "micro-drama",
      "demonstration"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "pixel-16bit",
@@ -407,7 +425,8 @@
     "seen_as": "(extension)",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "hypermotion-cinematic",
@@ -429,7 +448,8 @@
     "fits_formats": [
      "demonstration"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "phone-ugc",
@@ -453,7 +473,8 @@
      "testimonial-montage",
      "demonstration"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "horror",
@@ -476,7 +497,8 @@
      "micro-drama",
      "meme"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "vhs-camcorder",
@@ -496,7 +518,8 @@
     "seen_as": "(extension)",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "fight-night-broadcast",
@@ -519,7 +542,8 @@
      "meme",
      "demonstration"
     ]
-   }
+   },
+   "aliases": []
   },
   {
    "id": "glass-asmr",
@@ -539,7 +563,8 @@
     "seen_as": "(AI-native trend)",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "macro-commercial",
@@ -559,7 +584,8 @@
     "seen_as": "Macro product / beauty commercial",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "studio-hero",
@@ -579,7 +605,8 @@
     "seen_as": "Studio product hero",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "dark-luxury",
@@ -599,7 +626,8 @@
     "seen_as": "Dark-marble luxury commercial",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "archival-16mm",
@@ -619,7 +647,8 @@
     "seen_as": "Vintage 16mm archival documentary",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "neon-noir",
@@ -639,7 +668,8 @@
     "seen_as": "Neon-noir cyberpunk",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "fashion-editorial",
@@ -659,7 +689,8 @@
     "seen_as": "Luxury editorial / fashion campaign",
     "ip_flag": "Magazine names are trademarks — generic look only.",
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "oil-painting",
@@ -679,7 +710,8 @@
     "seen_as": "Van Gogh oil-painting animation",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   },
   {
    "id": "ink-wash",
@@ -699,8 +731,13 @@
     "seen_as": "Ink-wash transformation",
     "ip_flag": null,
     "fits_formats": []
-   }
+   },
+   "aliases": []
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "decisions": "components/elements/decisions.json",
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

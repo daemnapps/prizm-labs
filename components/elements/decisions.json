@@ -1,0 +1,72 @@
+{
+ "_what": "the owner's rulings over the source lists — a rename (the id changes, the old spelling stays as an alias), an alias (another spelling for an existing row), a dropped id (refused with the reason), a status ruling. elements.py build applies these to the library; the source list is never touched. Keys are element/asset.",
+ "_rule": "An id is lowercase with '-' between words, never squashed. Every old spelling is an alias on its row, so the tools that still write it resolve to the same row (Master Plan v2, 3.1, 2026-09-28).",
+ "lists": {
+  "format/image": {
+   "renames": {
+    "stickynote": "sticky-note",
+    "ugcscreenshot": "ugc-screenshot",
+    "pricestrike": "price-strike",
+    "splitdata": "split-data",
+    "redcircle": "red-circle",
+    "notesapp": "notes-app",
+    "handannotated": "hand-annotated",
+    "annotateddiagram": "annotated-diagram",
+    "fakeeditorial": "fake-editorial",
+    "studyfigure": "study-figure",
+    "instore": "in-store",
+    "usvsthem": "us-vs-them",
+    "annotatedface": "annotated-face",
+    "ugcselfie": "ugc-selfie",
+    "reviewcluster": "review-cluster",
+    "commentstat": "comment-stat",
+    "essaycard": "essay-card",
+    "specstarburst": "spec-starburst",
+    "abpoll": "ab-poll",
+    "enemyheadline": "enemy-headline",
+    "splitstudyclaim": "split-study-claim",
+    "scancompare": "scan-compare",
+    "darkbenefitlist": "dark-benefit-list",
+    "authorityborrow": "authority-borrow",
+    "bignumberpromo": "big-number-promo"
+   },
+   "aliases": {
+    "faceoff": "us-vs-them",
+    "illustrated": "product-void"
+   },
+   "dropped": {
+    "mixed": "not a format — a label for a swipe that had no one format. Tag each asset with its real format instead (Cleanup Plan decision 8, 25 Sep)."
+   },
+   "rulings": {
+    "us-vs-them": {
+     "note": "Decision 8: `faceoff` (10 live ads of one brand) maps here — a split of every other fix against ours is the same shape as the shelf against the one product."
+    }
+   }
+  },
+  "format/page": {
+   "renames": {
+    "salespage": "sales-page",
+    "prelander": "pre-lander"
+   },
+   "rulings": {
+    "sales-page": {
+     "note": "The pages machine (classify_pages.py) still writes `salespage`; it resolves here through the alias."
+    },
+    "pre-lander": {
+     "note": "The pages machine (classify_pages.py) still writes `prelander`; it resolves here through the alias."
+    }
+   }
+  },
+  "style/video": {
+   "rulings": {
+    "claymation": {
+     "status": "approved",
+     "signed": "damon 2026-09-25 (approved as recommended)",
+     "note": "defined by the machine, review pending",
+     "examples": "A paid swipe: a claymation health explainer, 4 variants; two saved carousels on how claymation ads are made (2026-09-22)",
+     "evidence": "Named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list); one paid swipe on file, two saves on how the ads are made."
+    }
+   }
+  }
+ }
+}

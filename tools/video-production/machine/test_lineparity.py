@@ -103,6 +103,32 @@ class Check(unittest.TestCase):
         self.assertEqual(result["verdict"], "FLAG")
         self.assertLess(result["match"], 0.85)
 
+    def test_line_cut_off_at_the_end_is_cut_off_even_with_a_good_match(self):
+        line = "NOVA: \"Doctor — he's like a friend — said taking the top layer off is a cop out.\""
+        fake = FakeTranscriber("Doctor, he's like a friend, said taking the top layer off")
+        result = lineparity.check(self.clip, line, transport=fake, key="test-key")
+        self.assertGreaterEqual(result["match"], 0.85)
+        self.assertFalse(result["ending_heard"])
+        self.assertEqual(result["verdict"], "CUT_OFF")
+
+    def test_speaker_labels_and_stage_directions_are_not_words(self):
+        line = 'NOVA: "And final." (to camera, as the assessment) "Honestly nice even tone."'
+        fake = FakeTranscriber("And final. Honestly, nice even tone.")
+        result = lineparity.check(self.clip, line, transport=fake, key="test-key")
+        self.assertEqual(result["match"], 1.0)
+        self.assertEqual(result["verdict"], "PASS")
+
+    def test_a_slightly_misheard_last_word_still_counts_as_finished(self):
+        self.assertTrue(lineparity.ending_heard("so that little bit makes a huge diference", "That little bit makes a huge difference."))
+        self.assertFalse(lineparity.ending_heard("I'm at the skin clinic, which is crazy.",
+                                                 "I'm at the skin clinic which is crazy because I'm going to ask them about getting my brown spots lasered off."))
+
+    def test_sound_tags_are_not_words(self):
+        fake = FakeTranscriber("[singing] Twenty-nine dollars, that's the proof. [outro music]")
+        result = lineparity.check(self.clip, "Twenty-nine dollars, that's the proof.", transport=fake, key="test-key")
+        self.assertTrue(result["ending_heard"])
+        self.assertEqual(result["verdict"], "PASS")
+
     def test_punctuation_and_case_are_ignored(self):
         fake = FakeTranscriber("wake up and choose greatness")
         result = lineparity.check(self.clip, "Wake up, and choose greatness!",

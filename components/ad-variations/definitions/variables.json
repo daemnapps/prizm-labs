@@ -1,0 +1,1736 @@
+{
+ "_what": "The Variable Index definitions: every adjustable variable the teardown records, where it is read from, its type, and how production can change it. Observed values are NOT here — they are computed per brand into runs/ad-variations/<brand>/variable-index/. A value the coder cannot place on a vocab list is kept as 'other: <label>' and shows in the index as a new value, never dropped.",
+ "status": "draft",
+ "curator": "the owner",
+ "families": {
+  "hook": "Hook — the first seconds",
+  "structure": "Structure — framework, order, awareness",
+  "audience": "Audience — who it speaks to (the audience read)",
+  "proof": "Proof — how it shows it works",
+  "product": "Product — what is shown, when",
+  "talent": "Talent — who is on screen and how they sound",
+  "look": "Look — places, wardrobe, camera",
+  "sound": "Sound — voice, music, delivery",
+  "edit": "Edit rhythm — length, shots, cuts",
+  "text": "Text — captions and on-screen words",
+  "ask": "Offer and ask — the close"
+ },
+ "cost_classes": {
+  "free": "$0 — local on the Mac or a text layer",
+  "$": "under $__ per variation",
+  "$$": "$__ per variation",
+  "$$$": "over $__ per variation",
+  "reshoot": "needs a person to film it again"
+ },
+ "lock_lever_rule": "Computed per brand, not decided here. Among the brand's top-quartile posts by views: if one value holds 60% or more of their views, the variable is LOCK-LEANING (the winners converge on it); otherwise LEVER (the winners vary, so it can move). Text variables are always LEVER (wording). Numeric variables are read on their bins.",
+ "variables": [
+  {
+   "id": "V-hook.01",
+   "name": "Opening roll type",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Roll column, first row"
+   ],
+   "type": "categorical",
+   "how": "rule:first_roll",
+   "change_by": [
+    "local-edit",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "note": "A = speaker to camera · G = greenscreen / picture-in-picture · B-silent / B-vo / B-over = b-roll · C = card",
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.02",
+   "name": "First spoken word at (s)",
+   "family": "hook",
+   "read_from": [
+    "transcript.json → first line start"
+   ],
+   "type": "numeric",
+   "how": "rule:first_words_at",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    0.5,
+    1,
+    2,
+    4,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.03",
+   "name": "Hook line (first spoken line)",
+   "family": "hook",
+   "read_from": [
+    "transcript.json → T1"
+   ],
+   "type": "text",
+   "how": "rule:hook_line",
+   "change_by": [
+    "elevenlabs-tts",
+    "lipsync-sync",
+    "creator-reshoot"
+   ],
+   "cost_class": "$",
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.04",
+   "name": "Hook sub-type",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → rows 0–3 s",
+    "stages/2-spec.md → beat 1"
+   ],
+   "type": "categorical",
+   "how": "coder:hook_subtype",
+   "change_by": [
+    "creator-reshoot",
+    "seedance-hf",
+    "local-text"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "reaction-disbelief",
+    "question",
+    "bold-claim",
+    "problem-callout",
+    "how-to-promise",
+    "result-first",
+    "story-open",
+    "skit-scene",
+    "command-interrupt",
+    "list-promise",
+    "relatable-moment",
+    "curiosity-gap",
+    "demo-in-motion"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.05",
+   "name": "First-frame composition",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → first shot row, Visuals"
+   ],
+   "type": "categorical",
+   "how": "coder:first_frame",
+   "change_by": [
+    "local-edit",
+    "gpt-image",
+    "seedance-hf"
+   ],
+   "cost_class": "$",
+   "vocab": [
+    "face-to-lens",
+    "product-in-hand",
+    "product-close-up",
+    "picture-in-picture",
+    "result-close-up",
+    "text-card",
+    "action-mid-motion",
+    "body-part-close-up",
+    "environment-wide"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.06",
+   "name": "Product in the first frame",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → first shot row, Visuals + Props"
+   ],
+   "type": "categorical",
+   "how": "coder:first_frame_product",
+   "change_by": [
+    "local-edit",
+    "gpt-image"
+   ],
+   "cost_class": "$",
+   "vocab": [
+    "yes",
+    "no"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.07",
+   "name": "Platform furniture in the hook",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Layers column, rows 0–3 s"
+   ],
+   "type": "categorical",
+   "how": "rule:hook_platform",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.08",
+   "name": "Reaction source (who reacts, to what)",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → CAST + hook rows"
+   ],
+   "type": "categorical",
+   "how": "coder:reaction_source",
+   "change_by": [
+    "gpt-image",
+    "seedance-hf",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "none",
+    "reacts-to-another-video",
+    "reacts-to-own-result",
+    "second-person-reacts-live",
+    "answers-a-comment"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.09",
+   "name": "Public figure / benchmark named",
+   "family": "hook",
+   "read_from": [
+    "transcript.json",
+    "stages/1-teardown.md → Script beats"
+   ],
+   "type": "categorical",
+   "how": "coder:benchmark",
+   "change_by": [
+    "elevenlabs-tts",
+    "lipsync-sync",
+    "local-edit"
+   ],
+   "cost_class": "$",
+   "vocab": [
+    "named",
+    "not named"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.10",
+   "name": "Hook techniques",
+   "family": "hook",
+   "read_from": [
+    "doctrine.json → techniques where section = first section"
+   ],
+   "type": "multi",
+   "how": "rule:hook_techniques",
+   "change_by": [
+    "local-edit",
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-hook.11",
+   "name": "Hook on-screen text (wording)",
+   "family": "hook",
+   "read_from": [
+    "stages/1-teardown.md → Layer sheet, Hook text + platform lines"
+   ],
+   "type": "text",
+   "how": "rule:hook_text",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.01",
+   "name": "Lane (triage)",
+   "family": "structure",
+   "read_from": [
+    "stages/0-triage.md → LANE"
+   ],
+   "type": "categorical",
+   "how": "rule:lane",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.02",
+   "name": "Framework (crosswalk row)",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → crosswalk_row"
+   ],
+   "type": "categorical",
+   "how": "rule:framework",
+   "change_by": [
+    "creator-reshoot",
+    "seedance-hf"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.03",
+   "name": "Section order",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → sections_carried"
+   ],
+   "type": "text",
+   "how": "rule:section_order",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.04",
+   "name": "Awareness at entry",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → awareness.entry"
+   ],
+   "type": "categorical",
+   "how": "rule:aw_entry",
+   "change_by": [
+    "local-edit",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.05",
+   "name": "Awareness at exit",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → awareness.exit"
+   ],
+   "type": "categorical",
+   "how": "rule:aw_exit",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.06",
+   "name": "Sophistication signature",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → sophistication_signature"
+   ],
+   "type": "categorical",
+   "how": "rule:soph",
+   "change_by": [
+    "elevenlabs-tts",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.07",
+   "name": "Video format",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → format"
+   ],
+   "type": "categorical",
+   "how": "rule:format",
+   "change_by": [
+    "creator-reshoot",
+    "seedance-hf"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.08",
+   "name": "Section count",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → sections_carried"
+   ],
+   "type": "numeric",
+   "how": "rule:section_count",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    3,
+    5,
+    7,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.09",
+   "name": "Problem placement",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → sections_carried"
+   ],
+   "type": "categorical",
+   "how": "rule:problem_placement",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-struct.10",
+   "name": "Mass desire (words)",
+   "family": "structure",
+   "read_from": [
+    "doctrine.json → mass_desire.words"
+   ],
+   "type": "text",
+   "how": "rule:mass_desire",
+   "change_by": [
+    "local-text",
+    "elevenlabs-tts"
+   ],
+   "cost_class": "$",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.01",
+   "name": "Avatar",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → AVATAR"
+   ],
+   "type": "categorical",
+   "how": "rule:avatar",
+   "change_by": [
+    "local-text",
+    "gpt-image",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.02",
+   "name": "Funnel stage",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → FUNNEL"
+   ],
+   "type": "categorical",
+   "how": "rule:funnel",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.03",
+   "name": "Story",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → STORY"
+   ],
+   "type": "categorical",
+   "how": "rule:story",
+   "change_by": [
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.04",
+   "name": "Topics",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → TOPICS"
+   ],
+   "type": "multi",
+   "how": "rule:topics",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.05",
+   "name": "Route recommended",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → ROUTE RECOMMENDED"
+   ],
+   "type": "categorical",
+   "how": "rule:route",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.06",
+   "name": "Awareness (audience read)",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → AWARENESS"
+   ],
+   "type": "categorical",
+   "how": "rule:aud_awareness",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-aud.07",
+   "name": "Lead desire",
+   "family": "audience",
+   "read_from": [
+    "stages/1b-audience.md → LEAD DESIRE"
+   ],
+   "type": "text",
+   "how": "rule:lead_desire",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-proof.01",
+   "name": "Proof type (primary)",
+   "family": "proof",
+   "read_from": [
+    "stages/1-teardown.md → phases + section map",
+    "stages/2-spec.md → element inventory"
+   ],
+   "type": "categorical",
+   "how": "coder:proof_type",
+   "change_by": [
+    "creator-reshoot",
+    "seedance-hf",
+    "gpt-image"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "live-demo",
+    "before-after",
+    "transformation-gag",
+    "testimonial",
+    "reaction-as-proof",
+    "expert-authority",
+    "numbers-social-proof",
+    "retail-reality",
+    "mechanism-explained",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-proof.02",
+   "name": "Result framing",
+   "family": "proof",
+   "read_from": [
+    "stages/1-teardown.md → transformation / result rows"
+   ],
+   "type": "categorical",
+   "how": "coder:result_framing",
+   "change_by": [
+    "creator-reshoot",
+    "local-edit"
+   ],
+   "cost_class": "reshoot",
+   "vocab": [
+    "literal-result",
+    "exaggerated-comedic",
+    "implied",
+    "felt-not-shown",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-proof.03",
+   "name": "Demo step count",
+   "family": "proof",
+   "read_from": [
+    "stages/1-teardown.md → shot table rows in product / solution sections"
+   ],
+   "type": "numeric",
+   "how": "coder:demo_steps",
+   "change_by": [
+    "local-edit",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "bins": [
+    0,
+    1,
+    3,
+    5,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-proof.04",
+   "name": "Bodies using the product",
+   "family": "proof",
+   "read_from": [
+    "stages/1-teardown.md → CAST + Props"
+   ],
+   "type": "numeric",
+   "how": "coder:bodies",
+   "change_by": [
+    "seedance-hf",
+    "gpt-image",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$",
+   "bins": [
+    0,
+    1,
+    2,
+    3,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-proof.05",
+   "name": "Transformation beat present",
+   "family": "proof",
+   "read_from": [
+    "doctrine.json → sections_carried"
+   ],
+   "type": "categorical",
+   "how": "rule:has_transformation",
+   "change_by": [
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-proof.06",
+   "name": "Mechanism",
+   "family": "proof",
+   "read_from": [
+    "stages/1-teardown.md → transcript + solution rows"
+   ],
+   "type": "categorical",
+   "how": "coder:mechanism",
+   "change_by": [
+    "elevenlabs-tts",
+    "local-text",
+    "seedance-hf"
+   ],
+   "cost_class": "$",
+   "vocab": [
+    "shown-silent",
+    "explained-spoken",
+    "shown-and-explained",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-prod.01",
+   "name": "Product first on screen (s)",
+   "family": "product",
+   "read_from": [
+    "stages/1-teardown.md → shot table, first row with the product in Visuals/Props"
+   ],
+   "type": "numeric",
+   "how": "coder:product_on_screen_s",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    0.5,
+    2,
+    6,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-prod.02",
+   "name": "Product named at (s)",
+   "family": "product",
+   "read_from": [
+    "transcript.json → first line naming the product"
+   ],
+   "type": "numeric",
+   "how": "coder:product_named_s",
+   "change_by": [
+    "elevenlabs-tts",
+    "local-text"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    3,
+    10,
+    20,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-prod.03",
+   "name": "Product / SKU on screen",
+   "family": "product",
+   "read_from": [
+    "stages/1-teardown.md → PROPS"
+   ],
+   "type": "text",
+   "how": "coder:sku",
+   "change_by": [
+    "gpt-image",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-prod.04",
+   "name": "Product reveal type",
+   "family": "product",
+   "read_from": [
+    "stages/1-teardown.md → first product row"
+   ],
+   "type": "categorical",
+   "how": "coder:reveal_type",
+   "change_by": [
+    "gpt-image",
+    "seedance-hf",
+    "local-edit"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "in-use",
+    "in-hand-to-lens",
+    "unboxing",
+    "retail-shelf",
+    "packshot",
+    "on-counter",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-prod.05",
+   "name": "Acquisition beat",
+   "family": "product",
+   "read_from": [
+    "stages/1-teardown.md → product rows"
+   ],
+   "type": "categorical",
+   "how": "coder:acquisition",
+   "change_by": [
+    "gpt-image",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "store-shelf",
+    "delivery-package",
+    "unboxing",
+    "online-cart",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.01",
+   "name": "People on screen",
+   "family": "talent",
+   "read_from": [
+    "stages/1-teardown.md → CAST"
+   ],
+   "type": "numeric",
+   "how": "rule:cast_count",
+   "change_by": [
+    "seedance-hf",
+    "gpt-image",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$",
+   "bins": [
+    0,
+    1,
+    2,
+    3,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.02",
+   "name": "Voices",
+   "family": "talent",
+   "read_from": [
+    "sound-sheet.json → voices"
+   ],
+   "type": "numeric",
+   "how": "rule:voices",
+   "change_by": [
+    "elevenlabs-tts"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    1,
+    2,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.03",
+   "name": "Lead voice gender (by ear)",
+   "family": "talent",
+   "read_from": [
+    "sound-sheet.json → voice_cards[lead].gender_presentation"
+   ],
+   "type": "categorical",
+   "how": "rule:lead_gender",
+   "change_by": [
+    "elevenlabs-sts",
+    "genjutsu-hf"
+   ],
+   "cost_class": "$$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.04",
+   "name": "Lead voice age band",
+   "family": "talent",
+   "read_from": [
+    "sound-sheet.json → voice_cards[lead].age_band"
+   ],
+   "type": "categorical",
+   "how": "rule:lead_age",
+   "change_by": [
+    "elevenlabs-sts",
+    "genjutsu-hf"
+   ],
+   "cost_class": "$$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.05",
+   "name": "Lead talent type",
+   "family": "talent",
+   "read_from": [
+    "stages/1-teardown.md → CAST roles",
+    "stages/1b-audience.md"
+   ],
+   "type": "categorical",
+   "how": "coder:talent_type",
+   "change_by": [
+    "genjutsu-hf",
+    "gpt-image",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$$",
+   "vocab": [
+    "creator",
+    "founder-or-staff",
+    "customer",
+    "expert",
+    "skit-character",
+    "faceless-hands-only",
+    "ai-generated"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.06",
+   "name": "Lead read style",
+   "family": "talent",
+   "read_from": [
+    "sound-sheet.json → voice_cards[lead].read_style"
+   ],
+   "type": "categorical",
+   "how": "rule:read_style",
+   "change_by": [
+    "elevenlabs-sts",
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.07",
+   "name": "Lead accent",
+   "family": "talent",
+   "read_from": [
+    "sound-sheet.json → voice_cards[lead].accent"
+   ],
+   "type": "categorical",
+   "how": "rule:accent",
+   "change_by": [
+    "elevenlabs-sts"
+   ],
+   "cost_class": "$",
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.08",
+   "name": "Character archetype",
+   "family": "talent",
+   "read_from": [
+    "stages/1-teardown.md → 3. THE PSYCHOLOGY, Character archetype"
+   ],
+   "type": "text",
+   "how": "rule:char_archetype",
+   "change_by": [
+    "creator-reshoot",
+    "genjutsu-hf"
+   ],
+   "cost_class": "$$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-tal.09",
+   "name": "Lead traits (visual)",
+   "family": "talent",
+   "read_from": [
+    "stages/1-teardown.md → CAST, lead card"
+   ],
+   "type": "text",
+   "how": "coder:talent_traits",
+   "change_by": [
+    "gpt-image",
+    "genjutsu-hf"
+   ],
+   "cost_class": "$$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-look.01",
+   "name": "Settings",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → PLACES, What it is"
+   ],
+   "type": "multi",
+   "how": "rule:settings",
+   "change_by": [
+    "gpt-image",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-look.02",
+   "name": "Place count",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → PLACES"
+   ],
+   "type": "numeric",
+   "how": "rule:place_count",
+   "change_by": [
+    "local-edit",
+    "gpt-image"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    1,
+    2,
+    3,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-look.03",
+   "name": "Lead wardrobe (garment)",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → CAST, lead Wardrobe"
+   ],
+   "type": "categorical",
+   "how": "coder:wardrobe_garment",
+   "change_by": [
+    "gpt-image",
+    "genjutsu-hf",
+    "creator-reshoot"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "plain-tee",
+    "graphic-tee",
+    "hoodie-sweatshirt",
+    "tank-sleeveless",
+    "shirtless",
+    "collared-shirt",
+    "jacket",
+    "towel-robe",
+    "athletic",
+    "workwear-uniform",
+    "not-visible"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-look.04",
+   "name": "Lead wardrobe (colour)",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → CAST, lead Wardrobe"
+   ],
+   "type": "categorical",
+   "how": "coder:wardrobe_colour",
+   "change_by": [
+    "gpt-image",
+    "genjutsu-hf"
+   ],
+   "cost_class": "$$",
+   "vocab": [
+    "white",
+    "black",
+    "grey",
+    "colour",
+    "pattern",
+    "not-visible"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-look.05",
+   "name": "Camera grade",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Camera"
+   ],
+   "type": "categorical",
+   "how": "rule:camera_grade",
+   "change_by": [
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-look.06",
+   "name": "Camera mode (dominant)",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Camera"
+   ],
+   "type": "categorical",
+   "how": "rule:camera_mode",
+   "change_by": [
+    "creator-reshoot",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-look.07",
+   "name": "AI tells (triage)",
+   "family": "look",
+   "read_from": [
+    "stages/0-triage.md → AI ASSESSMENT"
+   ],
+   "type": "categorical",
+   "how": "rule:ai_assessment",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-look.08",
+   "name": "Aesthetic archetype",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → 3. THE PSYCHOLOGY, Aesthetic archetype"
+   ],
+   "type": "text",
+   "how": "rule:aesthetic",
+   "change_by": [
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-look.09",
+   "name": "Props count",
+   "family": "look",
+   "read_from": [
+    "stages/1-teardown.md → PROPS"
+   ],
+   "type": "numeric",
+   "how": "rule:props_count",
+   "change_by": [
+    "gpt-image"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    1,
+    2,
+    4,
+    99
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.01",
+   "name": "Sound form",
+   "family": "sound",
+   "read_from": [
+    "stages/0-triage.md → SOUND FORM"
+   ],
+   "type": "categorical",
+   "how": "rule:sound_form",
+   "change_by": [
+    "elevenlabs-tts",
+    "local-stems"
+   ],
+   "cost_class": "$",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.02",
+   "name": "Music bed (as recorded)",
+   "family": "sound",
+   "read_from": [
+    "stages/1-teardown.md → Music line"
+   ],
+   "type": "categorical",
+   "how": "rule:music_bed",
+   "change_by": [
+    "local-stems",
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "note": "The record's own Music line. Stage 0 measures the file; where they differ, the measurement is reported beside it.",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.03",
+   "name": "Music source",
+   "family": "sound",
+   "read_from": [
+    "stages/1-teardown.md → Music, described (AudD)"
+   ],
+   "type": "categorical",
+   "how": "rule:music_source",
+   "change_by": [
+    "local-stems"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.04",
+   "name": "Lead talk share (%)",
+   "family": "sound",
+   "read_from": [
+    "sound-sheet.json → measured.talk_share_percent"
+   ],
+   "type": "numeric",
+   "how": "rule:talk_share",
+   "change_by": [
+    "local-edit",
+    "elevenlabs-tts"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    25,
+    50,
+    75,
+    90,
+    101
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.05",
+   "name": "Lead pace (words/min)",
+   "family": "sound",
+   "read_from": [
+    "sound-sheet.json → measured.words_per_minute"
+   ],
+   "type": "numeric",
+   "how": "rule:wpm",
+   "change_by": [
+    "elevenlabs-sts",
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "bins": [
+    0,
+    150,
+    200,
+    250,
+    300,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.06",
+   "name": "Lead delivery style",
+   "family": "sound",
+   "read_from": [
+    "sound-sheet.json → voice_cards[lead].delivery_style"
+   ],
+   "type": "categorical",
+   "how": "rule:delivery_voice",
+   "change_by": [
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.07",
+   "name": "Humor",
+   "family": "sound",
+   "read_from": [
+    "doctrine.json → delivery.humor"
+   ],
+   "type": "categorical",
+   "how": "rule:humor",
+   "change_by": [
+    "creator-reshoot"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.08",
+   "name": "Register",
+   "family": "sound",
+   "read_from": [
+    "doctrine.json → delivery.register"
+   ],
+   "type": "categorical",
+   "how": "rule:register",
+   "change_by": [
+    "creator-reshoot",
+    "elevenlabs-sts"
+   ],
+   "cost_class": "reshoot",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.09",
+   "name": "Pacing",
+   "family": "sound",
+   "read_from": [
+    "doctrine.json → delivery.pacing"
+   ],
+   "type": "categorical",
+   "how": "rule:pacing",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.10",
+   "name": "Spoken lines",
+   "family": "sound",
+   "read_from": [
+    "transcript.json"
+   ],
+   "type": "numeric",
+   "how": "rule:lines",
+   "change_by": [
+    "local-edit",
+    "elevenlabs-tts"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    1,
+    4,
+    8,
+    12,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-sound.11",
+   "name": "Added sound effects",
+   "family": "sound",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Sound column (effects)"
+   ],
+   "type": "categorical",
+   "how": "rule:sfx",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.01",
+   "name": "Runtime (s)",
+   "family": "edit",
+   "read_from": [
+    "metrics manifest (runs/swipe-*/<brand>/*/manifest.json) → duration_s",
+    "stages/0-triage.md → RUNTIME"
+   ],
+   "type": "numeric",
+   "how": "rule:runtime",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    15,
+    24,
+    45,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.02",
+   "name": "Length band",
+   "family": "edit",
+   "read_from": [
+    "metrics manifest (runs/swipe-*/<brand>/*/manifest.json) → duration_s"
+   ],
+   "type": "categorical",
+   "how": "rule:length_band",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.03",
+   "name": "Shot count",
+   "family": "edit",
+   "read_from": [
+    "stages/1-teardown.md → shot table rows"
+   ],
+   "type": "numeric",
+   "how": "rule:shot_count",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    4,
+    8,
+    12,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.04",
+   "name": "Average shot (s)",
+   "family": "edit",
+   "read_from": [
+    "stages/1-teardown.md → shot table timestamps"
+   ],
+   "type": "numeric",
+   "how": "rule:avg_shot",
+   "change_by": [
+    "local-edit",
+    "local-interp"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    1.5,
+    2.5,
+    4,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.05",
+   "name": "Silent b-roll (s)",
+   "family": "edit",
+   "read_from": [
+    "stages/1-teardown.md → Roll sheet, B-silent"
+   ],
+   "type": "numeric",
+   "how": "rule:silent_broll",
+   "change_by": [
+    "local-edit",
+    "seedance-hf"
+   ],
+   "cost_class": "$",
+   "bins": [
+    0,
+    0.1,
+    3,
+    7,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.06",
+   "name": "Dominant roll",
+   "family": "edit",
+   "read_from": [
+    "stages/1-teardown.md → Roll sheet"
+   ],
+   "type": "categorical",
+   "how": "rule:dominant_roll",
+   "change_by": [
+    "local-edit",
+    "seedance-hf"
+   ],
+   "cost_class": "$$",
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.07",
+   "name": "Non-cut transitions",
+   "family": "edit",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Layers, transition out"
+   ],
+   "type": "numeric",
+   "how": "rule:transitions",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    1,
+    2,
+    999
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-edit.08",
+   "name": "Mood arc",
+   "family": "edit",
+   "read_from": [
+    "doctrine.json → mood"
+   ],
+   "type": "text",
+   "how": "rule:mood",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-text.01",
+   "name": "Running captions",
+   "family": "text",
+   "read_from": [
+    "stages/1-teardown.md → Layer sheet, Captions"
+   ],
+   "type": "categorical",
+   "how": "rule:captions",
+   "change_by": [
+    "local-captions"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-text.02",
+   "name": "On-screen text share (% of shots)",
+   "family": "text",
+   "read_from": [
+    "stages/1-teardown.md → shot table, On-Screen Text"
+   ],
+   "type": "numeric",
+   "how": "rule:ost_share",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "bins": [
+    0,
+    1,
+    34,
+    67,
+    101
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-text.03",
+   "name": "Platform furniture anywhere",
+   "family": "text",
+   "read_from": [
+    "stages/1-teardown.md → Layer sheet, platform lines"
+   ],
+   "type": "categorical",
+   "how": "rule:platform_any",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-text.04",
+   "name": "On-screen text position",
+   "family": "text",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Layers"
+   ],
+   "type": "categorical",
+   "how": "coder:text_position",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "vocab": [
+    "top",
+    "center",
+    "bottom",
+    "mixed",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-text.05",
+   "name": "Post caption",
+   "family": "text",
+   "read_from": [
+    "metrics manifest (runs/swipe-*/<brand>/*/manifest.json) → caption"
+   ],
+   "type": "text",
+   "how": "rule:post_caption",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-text.06",
+   "name": "On-screen text style",
+   "family": "text",
+   "read_from": [
+    "stages/1-teardown.md → Layer sheet"
+   ],
+   "type": "categorical",
+   "how": "coder:text_style",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "vocab": [
+    "native-platform",
+    "bold-title",
+    "notes-handwritten",
+    "subtitle-style",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-text.07",
+   "name": "Platform sticker wording",
+   "family": "text",
+   "read_from": [
+    "stages/1-teardown.md → shot table, Layers (platform: … \"text\") + Layer sheet"
+   ],
+   "type": "text",
+   "how": "rule:platform_text",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "note": "The words on a comment-reply or other platform sticker — separate from the ad's own hook text.",
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.01",
+   "name": "Spoken ask present",
+   "family": "ask",
+   "read_from": [
+    "doctrine.json → sections_carried"
+   ],
+   "type": "categorical",
+   "how": "rule:has_cta",
+   "change_by": [
+    "elevenlabs-tts",
+    "local-text"
+   ],
+   "cost_class": "$",
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.02",
+   "name": "Ask position",
+   "family": "ask",
+   "read_from": [
+    "doctrine.json → first call-to-action span ÷ runtime"
+   ],
+   "type": "categorical",
+   "how": "rule:ask_position",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.03",
+   "name": "Ask type",
+   "family": "ask",
+   "read_from": [
+    "transcript.json → lines in the call-to-action section"
+   ],
+   "type": "categorical",
+   "how": "coder:ask_type",
+   "change_by": [
+    "local-text",
+    "elevenlabs-tts"
+   ],
+   "cost_class": "$",
+   "vocab": [
+    "command-to-buy",
+    "name-drop-only",
+    "link-or-shop-tab",
+    "comment-prompt",
+    "follow-prompt",
+    "learn-more-or-quiz",
+    "none"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.04",
+   "name": "Ask wording",
+   "family": "ask",
+   "read_from": [
+    "transcript.json → the ask line, verbatim"
+   ],
+   "type": "text",
+   "how": "coder:ask_line",
+   "change_by": [
+    "elevenlabs-tts",
+    "lipsync-sync",
+    "local-text"
+   ],
+   "cost_class": "$",
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.05",
+   "name": "Price or offer stated",
+   "family": "ask",
+   "read_from": [
+    "transcript.json",
+    "stages/1-teardown.md → On-Screen Text"
+   ],
+   "type": "categorical",
+   "how": "coder:offer_stated",
+   "change_by": [
+    "local-text"
+   ],
+   "cost_class": "free",
+   "vocab": [
+    "none",
+    "price",
+    "discount",
+    "free-gift",
+    "guarantee"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.06",
+   "name": "End frame",
+   "family": "ask",
+   "read_from": [
+    "stages/1-teardown.md → last shot row"
+   ],
+   "type": "categorical",
+   "how": "coder:end_frame",
+   "change_by": [
+    "local-text",
+    "gpt-image",
+    "local-edit"
+   ],
+   "cost_class": "$",
+   "vocab": [
+    "product-to-lens",
+    "face-to-lens",
+    "packshot",
+    "end-card-or-logo",
+    "result-shot",
+    "action-cut",
+    "text-card"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "V-ask.07",
+   "name": "Close techniques",
+   "family": "ask",
+   "read_from": [
+    "doctrine.json → techniques where section = call-to-action"
+   ],
+   "type": "multi",
+   "how": "rule:close_techniques",
+   "change_by": [
+    "local-edit"
+   ],
+   "cost_class": "free",
+   "status": "draft"
+  }
+ ]
+}

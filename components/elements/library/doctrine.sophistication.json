@@ -19,7 +19,9 @@
    "extra": {
     "stage": 1,
     "lead_with": "The plain claim, stated simply and with no embellishment."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "stage-2",
@@ -35,7 +37,9 @@
    "extra": {
     "stage": 2,
     "lead_with": "The same claim, enlarged to the edge of what is still believable."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "stage-3",
@@ -51,7 +55,9 @@
    "extra": {
     "stage": 3,
     "lead_with": "A NEW MECHANISM — how the result happens, not what the result is. The mechanism leads the opening."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "stage-4",
@@ -67,7 +73,9 @@
    "extra": {
     "stage": 4,
     "lead_with": "The same mechanism, enlarged, made easier, faster or more complete."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "stage-5",
@@ -83,8 +91,13 @@
    "extra": {
     "stage": 5,
     "lead_with": "Drop claim and mechanism both and sell on identification alone — the same move as the Unaware level."
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

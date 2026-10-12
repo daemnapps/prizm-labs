@@ -3,15 +3,15 @@
 and 7 read, and the deep-research trigger's CLI, over the shared component.
 
     python3 research.py run --run results/<label>
-    python3 research.py deep --brand <brand> --avatar spot-hider --sub sun-damage-reckoner
-    python3 research.py rooms --brand <brand> --avatar spot-hider --sub sun-damage-reckoner
-    python3 research.py deep --brand <brand> --all
+    python3 research.py deep --brand brand-a --avatar avatar-four --sub sun-damage-reckoner
+    python3 research.py rooms --brand brand-a --avatar avatar-four --sub sun-damage-reckoner
+    python3 research.py deep --brand brand-a --all
     python3 research.py deep --pick-thinnest --cap 150
-    python3 research.py deep --brand <brand> --avatar spot-hider --sub sun-damage-reckoner --dry-run
+    python3 research.py deep --brand brand-a --avatar avatar-four --sub sun-damage-reckoner --dry-run
 
-SHIM (2026-09-18, Damon's ruling: *"the live research gatherer runs in the
+SHIM (2026-09-18, the owner's ruling: *"the live research gatherer runs in the
 copy machine too"*). Exactly the shape of
-`components/video-teardown/machine/research.py` — the LL-1 precedent, the
+`tools/video-teardown/machine/research.py` — the LL-1 precedent, the
 same one `language.py` and `paths.py` in this folder already follow. The
 engine lives once, in `components/research-gatherer/`; this file is only
 THIS chain's definitions on top of it:
@@ -26,7 +26,7 @@ THIS chain's definitions on top of it:
 Nothing brand-specific lives here (workspace rule 7). Rooms and desire words
 arrive at run time from `brands/<brand>/core-avatars/**`, and since
 2026-09-18 the gatherer FINDS the rooms itself when nobody has confirmed a
-`### rooms` block — Damon should never have to write down where an avatar
+`### rooms` block — the owner should never have to write down where an avatar
 talks.
 """
 import sys
@@ -58,7 +58,7 @@ def _run_dir(st):
     if not slug:
         return None
     # Both homes (2026-09-20): a run that exists is found where it is —
-    # runs/copy-machine/<brand>/<label> first, then results/<label>. One that
+    # runs/copywriter/<brand>/<label> first, then results/<label>. One that
     # does not exist yet is a new run, and new runs file under runs/.
     # Another tool that imports this shim (email production) has ITS OWN
     # module called `paths` loaded, which knows neither function — it always

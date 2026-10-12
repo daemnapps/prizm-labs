@@ -1,0 +1,19 @@
+{
+ "note": "FIXTURE \u2014 an invented brand for the machine's tests. Nothing here is a real product.",
+ "products": {
+  "_fixture-product": {
+   "title": "Fixture Balm",
+   "hero": "products/_fixture-product/images/packshot-hero.png",
+   "cutout": null,
+   "all": [
+    "products/_fixture-product/images/packshot-hero.png"
+   ]
+  },
+  "_fixture-other": {
+   "title": "Fixture Wash",
+   "hero": "products/_fixture-other/images/missing.png",
+   "cutout": null,
+   "all": []
+  }
+ }
+}

@@ -1,0 +1,14 @@
+{
+ "_readme": "THE FIXED LIST OF TASK KINDS a split test may measure (CQ-8 (minimum bench test 1) part 6, seeded 2026-10-10 from the developer's card). New kinds are added by the developer or the bench owner, never by a run: new-workflow-design/builds/chain-qa/split_test.py refuses a test card whose task_kind is not on this list, by name, before any spend. Findings in each split-test run record carry one of these words, so evidence about a model can be gathered by task kind across runs.",
+ "schema": 1,
+ "kinds": [
+  "judging code issues",
+  "extracting facts",
+  "format/rule checking",
+  "creative writing",
+  "watching video",
+  "reading images",
+  "building code",
+  "translating"
+ ]
+}

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """The five headline variations stage 4 wrote for a brief, as data.
 
-    headline_sets.py --brand <brand>                 every brief
-    headline_sets.py --brand <brand> --briefs p158   just these
-    headline_sets.py --brand <brand> --json          for a runner
+    headline_sets.py --brand brand-a                 every brief
+    headline_sets.py --brand brand-a --briefs p158   just these
+    headline_sets.py --brand brand-a --json          for a runner
 
-Damon, 2026-09-23: *"body scrub ads are still pumping for us right now, I
+the owner, 2026-09-23: *"body scrub ads are still pumping for us right now, I
 want you to bulk the variation briefs for each of these ads so I can load
 them in the account."* Stage 4 already wrote five headline variations per
 brief, each measured against the layout's character ceiling — that is the
@@ -13,7 +13,7 @@ fuel for a headline swap off the winning draft (`image-variation`). It was
 never machine-readable, because stage 4 is a writing prompt and every run
 laid its variations out slightly differently.
 
-**Six shapes, one meaning.** Across twenty-one <brand> briefs stage 4 wrote
+**Six shapes, one meaning.** Across twenty-one Brand A briefs stage 4 wrote
 the same thing six ways — a fenced block, a line table, `- Line 1: "…"`,
 `- Zone A: "…"`, a bold slash-separated string, `**Line:** …`, or only a
 quoted title in the heading. They are read in order of how much they can be

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One change reaches every chain (Damon, 2026-09-28: "when I'm making updates,
+"""One change reaches every chain (the owner, 2026-09-28: "when I'm making updates,
 they're affecting all the tools that are using them").
 
 Every chain — New video (ALREADY AN AD, ORGANIC), Variation video, Framework —
@@ -18,6 +18,7 @@ import chain as C  # noqa: E402
 CHAINS = {"New video · already an ad": "ALREADY AN AD", "New video · organic": "ORGANIC",
           "Variation video": "VARIATION", "Framework": "FRAMEWORK"}
 PROMPTS = (C.CM / "prompts").resolve()
+WRITING = C.WRITING_PROMPTS.resolve()   # the writing station's home since 2026-09-30
 
 
 def plan(lane, route="creator"):
@@ -47,7 +48,7 @@ class SharedStages(unittest.TestCase):
                 if not s["prompt"]:
                     continue
                 p = Path(s["prompt"]).resolve()
-                self.assertTrue(str(p).startswith(str(PROMPTS)) and "archive" not in p.parts
+                self.assertTrue(str(p).startswith((str(PROMPTS), str(WRITING))) and "archive" not in p.parts
                                 and "parked" not in p.parts,
                                 f"{name} · {key} runs {p}, outside the one home")
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Pull a swipe out of the swipe library and open a run on it.
 
-    swipe_intake.py --list smooche
-    swipe_intake.py --brand smooche --angle 03
-    swipe_intake.py --brand smooche --angle 03 --ad 151224660 --run 2026-08-29-serum
+    swipe_intake.py --list competitor
+    swipe_intake.py --brand competitor --angle 03
+    swipe_intake.py --brand competitor --angle 03 --ad 151224660 --run 2026-08-29-serum
 
 The image lane used to take a file path someone remembered. That meant a run
 could not say what it was a copy of, and the same ad could arrive twice under
@@ -11,7 +11,7 @@ two names. The swipe library already records every angle a brand runs — the
 copy verbatim, the landing page, how many creatives it carries and how often
 one got cloned — so a run starts from a swipe id, not a path.
 
-**Code in the repo, pictures on Drive** (`the workspace rules`). The angle
+**Code in the repo, pictures on Drive** (`the team notes/README.md`). The angle
 records live here in git; the creatives live at the mirrored Drive path. This
 reads the record from git and copies the one picture it needs off Drive into
 the run, so the run holds the ad it was built from and nothing else.
@@ -22,11 +22,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paths as _P
-LAB = _P.LAB                                              # tools/
+LAB = _P.LAB                                              # the team notes — named from the repo root
 # The library split into swipe-paid / swipe-organic; plain "swipe" has not
 # existed since, so intake could not open a single run from a swipe id.
-SWIPE = _P.SWIPE                                          # tools/my-feeds/paid
-DRIVE = _P.DRIVE / "swipe-paid"                           # the swipe pictures, in your media folder
+SWIPE = _P.SWIPE                                          # components/swipe-paid (moved out of the team notes 2026-09-22)
+for _r in Path(__file__).resolve().parents:               # the swipe home, one definition for both pools
+    if (_r / "components" / "swipe-paid" / "swipe_home.py").is_file():
+        sys.path.append(str(_r / "components" / "swipe-paid"))
+        break
+import swipe_home  # noqa: E402
+DRIVE = swipe_home.root("paid")
 RUNS = _P.RUNS
 
 
@@ -114,7 +119,8 @@ def main():
     src = next((p for p in pics if p.stem == a.ad), None)
     if not src:
         sys.exit(f"ad {a.ad!r} not on Drive for this angle "
-                 f"({len(pics)} there). Is Drive mounted?")
+                 f"({len(pics)} there). Is Drive mounted?"
+                 + ("" if _P.DRIVE_MOUNTED else f" — {_P.NO_MOUNT_NOTE}"))
 
     run = RUNS / (a.run or f"{brand}-{hit['rank']}-{a.ad}")
     (run / "assets").mkdir(parents=True, exist_ok=True)
@@ -126,7 +132,7 @@ def main():
                 headline=hit["headline"], landing_page=hit["page"],
                 statics_in_angle=hit["image"], most_cloned=hit["cloned"],
                 swipe_record=hit["record"], drive=hit["drive"],
-                pulled_from="tools/my-feeds/paid via Drive mirror")
+                pulled_from="components/swipe-paid via Drive mirror")
     (run / "assets" / "source.json").write_text(json.dumps(prov, indent=2) + "\n")
     print(f"run opened: {run.relative_to(_P.REPO)}")
     print(f"  source:  assets/source{src.suffix}")

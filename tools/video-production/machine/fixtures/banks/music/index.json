@@ -1,0 +1,163 @@
+{
+ "_readme": [
+  "FIXTURE — a copy of the real music bank's rows with a few marked made, so the tests and the v14 dry-run can pick from it. The files named here do not exist; nothing reads them."
+ ],
+ "bank": "music",
+ "drive_root": "Shared Assets/banks/music",
+ "tempo_tolerance_bpm": 20,
+ "rows": [
+  {
+   "id": "music-low-calm-80",
+   "tags": [
+    "low",
+    "calm",
+    "instrumental"
+   ],
+   "energy": "low",
+   "tempo_bpm": 80,
+   "mood": "calm",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, calm mood, low energy, 80 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-low-warm-80",
+   "tags": [
+    "low",
+    "warm",
+    "instrumental"
+   ],
+   "energy": "low",
+   "tempo_bpm": 80,
+   "mood": "warm",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, warm mood, low energy, 80 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-low-tense-80",
+   "tags": [
+    "low",
+    "tense",
+    "instrumental"
+   ],
+   "energy": "low",
+   "tempo_bpm": 80,
+   "mood": "tense",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, tense mood, low energy, 80 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-mid-warm-104",
+   "tags": [
+    "mid",
+    "warm",
+    "instrumental"
+   ],
+   "energy": "mid",
+   "tempo_bpm": 104,
+   "mood": "warm",
+   "seconds": 60.0,
+   "file": "Shared Assets/banks/music/music-mid-warm-104.mp3",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "made",
+   "prompt": "instrumental background bed for a short vertical social video ad, warm mood, mid energy, 104 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-mid-confident-104",
+   "tags": [
+    "mid",
+    "confident",
+    "instrumental"
+   ],
+   "energy": "mid",
+   "tempo_bpm": 104,
+   "mood": "confident",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, confident mood, mid energy, 104 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-mid-playful-104",
+   "tags": [
+    "mid",
+    "playful",
+    "instrumental"
+   ],
+   "energy": "mid",
+   "tempo_bpm": 104,
+   "mood": "playful",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, playful mood, mid energy, 104 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-high-upbeat-128",
+   "tags": [
+    "high",
+    "upbeat",
+    "instrumental"
+   ],
+   "energy": "high",
+   "tempo_bpm": 128,
+   "mood": "upbeat",
+   "seconds": 60.0,
+   "file": "Shared Assets/banks/music/music-high-upbeat-128.mp3",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "made",
+   "prompt": "instrumental background bed for a short vertical social video ad, upbeat mood, high energy, 128 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-high-urgent-128",
+   "tags": [
+    "high",
+    "urgent",
+    "instrumental"
+   ],
+   "energy": "high",
+   "tempo_bpm": 128,
+   "mood": "urgent",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, urgent mood, high energy, 128 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  },
+  {
+   "id": "music-high-confident-128",
+   "tags": [
+    "high",
+    "confident",
+    "instrumental"
+   ],
+   "energy": "high",
+   "tempo_bpm": 128,
+   "mood": "confident",
+   "seconds": 60.0,
+   "file": "",
+   "source": "elevenlabs music",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "instrumental background bed for a short vertical social video ad, confident mood, high energy, 128 BPM, steady groove, no vocals, sits under a spoken voiceover, clean ending"
+  }
+ ]
+}

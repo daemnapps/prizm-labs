@@ -15,11 +15,14 @@ purpose: `**/runs/` is gitignored and these must be committed.
 | `cinema-payloads.json` | the bare-list shape `prompt.py payloads` prints, elements in the prompts, `characters` set — green |
 | `batch-negation.json` | a still whose prompt forbids subtitles, captions, title cards — must PASS rule 3 |
 | `brief-frames.md` | the SCENE SHAPE brief — two scenes, each a paragraph with a first frame, beats and a last frame; the first scene's beat spans are the ones from the scene run by hand on 2026-09-18. Exercised by `test_frames.py` |
+| `brief-v13.md` | the v13 brief shape (2026-09-23): A-roll, then B-roll, then a card, then a roll sheet — S1 to camera, S2 B-roll, S3 a `kind: card` scene (text-free plate, its words as `lines`), and a `roll_sheet` carrying two make-list rows and dropping one. Exercised by `test_frames.py` and `test_run.py` |
+| `brief-v14.md` | the RETIRED v14 shape (2026-09-23): every scene tagged with v14's six-word `module`, one section off the doctrine (`mechanism`) and a coined framework. Kept only so `test_elements.py` proves the gate catches it — `module` warned, the section and framework refused naming the doctrine's real ids |
+| `brief-v15.md` | the v15 brief shape (2026-09-23): one scene of every kind (talking, B-roll, card, screen, split, greenscreen, endcard), every scene's `section` a marketing-doctrine section id and the piece's `framework` an ad-framework id (`pas`), plus `layers`, `music`, `sfx`, `hooks` and a roll sheet. Exercised by `test_elements.py` |
 | `vo-timing.json` | the timing sheet that brief is planned against — the shape `voice.py` writes to `<run>/vo/timing.json` (8.92 s of voice, four sentence windows), with invented ids |
 | `run-plan.json` | `run.py`'s own fixture — brand `_fixture`, format `fixture-format`, invented uuids, two scenes + one cutaway; exercised by `test_run.py`, not `test_preflight.py` |
 | `element-library/` | a test-only copy of the element library's shape (`format.video`, `style.video`, four `delivery.*` lists) with invented rows — one defined, one named-only (`[TO DEFINE`), one deprecated. `test_rollout.py` points preflight at it with `--library` |
 | `plan-library-good.json` · `plan-library-bad.json` | a brief's json block as rule 13 reads it — delivery dials and a `style_id` that are all on the fixture lists, and one with three that are not |
-| `cast-workspace/` | two invented brands, each with its own `core-avatars/casting/roster.json` — shows `promptify.py`'s cast lookup follows the run's brand |
+| `cast-workspace/` | two invented brands, each with its own `ai-cast/casting/roster.json` — shows `promptify.py`'s cast lookup follows the run's brand |
 
 Running `check` on any of these by hand needs the fixture bank:
 

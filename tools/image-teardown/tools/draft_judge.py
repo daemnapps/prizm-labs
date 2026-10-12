@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Judge every roll of a draft against its swipe, keep the best one that passes.
 
-    draft_judge.py --brand <brand> --dir drafts/<brand>/v6
-    draft_judge.py --brand <brand> --dir drafts/<brand>/v6 --briefs p143,p158
+    draft_judge.py --brand brand-a --dir drafts/brand-a/v6
+    draft_judge.py --brand brand-a --dir drafts/brand-a/v6 --briefs p143,p158
 
-Damon, 2026-09-17, after the v5 drafts reached him unjudged: a blue tube, a
+the owner, 2026-09-17, after the v5 drafts reached him unjudged: a blue tube, a
 "DermaWise" tube, Margaret in a golden doodle's pose, a neck-brace man cloned
 off the swipe. *"There is product bottle slop, awkward usage of the avatar."*
 Every one of those is a checkable fact, and the production flow has had a
@@ -24,11 +24,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(Path.home() / ".daemn"))
 import paths as P
 import briefs as B
 import gpt_drafts as F
-import daemn_keys
+import it_keys    # every key by NAME through components/keys — SI-194 (readers use loader)
 
 ROOT = HERE.parent
 BASE = "https://generativelanguage.googleapis.com"
@@ -106,6 +105,15 @@ def judge_brief(bid, job, rolls, swipe, products, k, prior=None):
               .replace("{type_hex}", bf["type_hex"])
               .replace("{swipe_accent}", str(read.get("accent_hex", "unknown")))
               .replace("{treats}", bf["treats"]).replace("{treats_short}", bf["treats_short"]))
+    # >>> APPROVAL-PAGE LEARNINGS HOOK (components/meta-upload/learnings.py) — adds nothing unless learnings-hooks.json turns "image-teardown" on
+    try:
+        import importlib.util as _iu
+        _ls = _iu.spec_from_file_location("meta_learnings", Path(__file__).resolve().parents[3] / "components" / "meta-upload" / "learnings.py")
+        _L = _iu.module_from_spec(_ls); _ls.loader.exec_module(_L)
+        prompt += _L.prompt_block("image-teardown", 5, job.get("brand"))
+    except Exception:
+        pass
+    # <<< APPROVAL-PAGE LEARNINGS HOOK
     # A verdict, once given, stands. Re-judging a roll flipped p153's roll 6
     # from PASS to FAIL on a second look (2026-09-18) and un-shipped a draft
     # that had passed. Only rolls with no verdict on record are judged.
@@ -118,7 +126,7 @@ def judge_brief(bid, job, rolls, swipe, products, k, prior=None):
 
 
 def best_available(a):
-    """Damon, 2026-09-17: "if a draft didn't make it then you need to
+    """the owner, 2026-09-17: "if a draft didn't make it then you need to
     generate." After the rounds are spent, the best roll ships anyway —
     highest match, then fewest fails — and `flags.json` says what it failed,
     which the board shows beside the picture. Never an empty slot."""
@@ -173,7 +181,11 @@ def main():
     jobs = {j["brief"]: j for j in
             json.loads((ROOT / "drafts" / a.brand / "jobs.json").read_text())["jobs"]}
     want = {x.strip() for x in a.briefs.split(",")} if a.briefs else set(jobs)
-    k = daemn_keys.key("GEMINI_API_KEY")
+    # only the briefs being judged are read: reading every job of the brand
+    # needed every old run's swipe on this machine, and one missing picture
+    # stopped a one-brief judge (2026-10-02)
+    jobs = {b: j for b, j in jobs.items() if b in want}
+    k = it_keys.key("GEMINI_API_KEY")
     subj = F.swipe_has_person(a.brand, list(jobs.values()))
     for bid, j in jobs.items():
         slot = ROOT / "drafts" / a.brand / "slots" / f"{bid}.json"

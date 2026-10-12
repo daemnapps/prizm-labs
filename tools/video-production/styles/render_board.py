@@ -3,18 +3,46 @@
 board-content.json (the written sections). One self-contained HTML file, pictures
 inlined, so it publishes as an artifact and opens from disk.
 
-    python3 styles/render_board.py            # -> styles/style-board.html
+    python3 styles/render_board.py            # -> runs/video-production/_system/style-board.html
 
 The bank is the truth; this page is a print of it. Change a style in bank.json,
 change a written section in board-content.json, run this, republish over the
-same artifact (link in ~/devel/daemn/context/artifacts.md — The Format Frontier).
+same artifact (link in the team notes — The Format Frontier).
 """
 import base64, html, json
+import os
 from pathlib import Path
 
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in the team notes The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
+
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[3]
+REPO = _workspace()
+# The page is output, so it lives on the runs plane (ignored there), never
+# beside the code — SI-57 (production pages home).
+OUT_PARTS = ("runs", "video-production", "_system", "style-board.html")
 E = html.escape
+
+
+def out_path():
+    return REPO.joinpath(*OUT_PARTS)
 
 
 def img(rel):
@@ -32,7 +60,7 @@ def lib(name):
 def mirror(bank, C):
     """The Markdown copy of the page, for the team."""
     L = ["# The Format Frontier — style board, the stack, the line, the edit hand", "",
-         "Artifact: https://claude.ai/artifact/RUBXajrAH5uyiVH6eyJM5h (republish over it, never a second one). Printed by `render_board.py`; do not edit by hand.", "",
+         "Artifact: (team page) (republish over it, never a second one). Printed by `render_board.py`; do not edit by hand.", "",
          "## The test", "", bank["the_test"], "", "## The style bank", "",
          "| Style | Family | Looks like | The internet calls it | Keeps the proof | Flag |", "|---|---|---|---|---|---|"]
     for s in bank["styles"]:
@@ -105,12 +133,13 @@ def main():
             missing.append(str(f.relative_to(HERE)))
             pr[k] = ""
     data = {
-        "styles": [{k: s.get(k) for k in ("id", "name", "what", "family", "formula", "motion", "seen_as", "ip_flag", "fits_formats", "status", "keeps_proof", "proof_note", "_img")} for s in styles],
+        "styles": [{k: s.get(k) for k in ("id", "name", "what", "family", "formula", "motion", "seen_as", "ip_flag", "fits_formats", "status", "state", "keeps_proof", "proof_note", "_img")} for s in styles],
         "families": bank["families"], "test": bank["the_test"], "base": base,
         "shows": sf["shows"], "roles": sf["roles"], "formats": formats, "frameworks": frameworks, "content": content,
     }
     page = (HERE / "board-template.html").read_text().replace("/*__DATA__*/", "const DATA = " + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + ";")
-    out = HERE / "style-board.html"
+    out = out_path()
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(page)
     for s in styles:
         if not s["_img"]:

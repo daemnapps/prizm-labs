@@ -3,10 +3,10 @@
 deep-research trigger's CLI, over the shared component.
 
     python3 research.py run --run runs/<slug>
-    python3 research.py deep --brand <brand> --avatar fed-up-king --sub bald-bumps-guy
-    python3 research.py deep --brand <brand> --all
+    python3 research.py deep --brand brand-b --avatar avatar-one --sub sub-two
+    python3 research.py deep --brand brand-b --all
     python3 research.py deep --pick-thinnest --cap 150
-    python3 research.py deep --brand <brand> --avatar fed-up-king --sub bald-bumps-guy --dry-run
+    python3 research.py deep --brand brand-b --avatar avatar-one --sub sub-two --dry-run
 
 SHIM (RG-1, 2026-09-18). The engine moved to `components/research-gatherer/`
 so the query-the-open-internet logic has ONE home — the LL-1 precedent
@@ -31,7 +31,7 @@ sys.path.insert(0, str(HERE))
 import chain as C          # noqa: E402  WS, MACHINE, runs_root()
 import language as L       # noqa: E402  this chain's STAGE_USE (depth, spice)
 
-_COMPONENT = Path(__file__).resolve().parents[2] / "research-gatherer"
+_COMPONENT = Path(__file__).resolve().parents[3] / "components" / "research-gatherer"
 if not _COMPONENT.is_dir():                     # a workspace mounted elsewhere
     _COMPONENT = Path(C.WS) / "components" / "research-gatherer"
 sys.path.append(str(_COMPONENT))                # appended, never ahead of this machine

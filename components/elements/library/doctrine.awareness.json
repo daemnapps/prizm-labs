@@ -25,7 +25,9 @@
      "Explain anything",
      "Re-sell a want that is already there"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "product-aware",
@@ -47,7 +49,9 @@
      "Reintroduce the category from scratch",
      "Talk as if the product were new"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "solution-aware",
@@ -69,7 +73,9 @@
      "Mention price",
      "Assume the product name means anything yet"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "problem-aware",
@@ -91,7 +97,9 @@
      "Assume a solution is already known",
      "Lead with a category the audience has not entered"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "unaware",
@@ -114,8 +122,13 @@
      "Name the product",
      "State the direct claim or the desire itself"
     ]
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

@@ -3,7 +3,7 @@
 
     python3 drive.py <html> --name "<title>" --parent <drive-folder-id>
 
-SHIM (DP-1, 2026-09-02). The pipe moved to `components/gdrive-creator/` so it
+SHIM (GC-1 (gdrive creator), 2026-09-02). The pipe moved to `components/gdrive-creator/` so it
 has ONE home: it lived here, inside this machine's internals, and the copy lab
 reached in through a `sys.path.insert` into this folder — a dependency that
 would have broken on any refactor here. This file is the same command it always
@@ -22,7 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import keys
 
-_COMPONENT = Path(__file__).resolve().parents[2] / "gdrive-creator"
+_COMPONENT = Path(__file__).resolve().parents[3] / "components" / "gdrive-creator"
 sys.path.append(str(_COMPONENT))        # appended, never ahead of this machine
 from gdrive_creator import engine as _engine     # noqa: E402
 
@@ -57,3 +57,23 @@ main = _engine.main
 
 if __name__ == "__main__":
     main()
+
+
+def list_folder(folder_id):
+    """Everything sitting in one Drive folder — id, name, mimeType.
+
+    Added 2026-10-02 so the Start-here Doc can count the briefs actually in
+    her folder instead of every run the repo holds for the brand. A folder of
+    ten opened with "this brief includes 47 video concepts" until it did.
+    """
+    svc = _engine.service()
+    out, tok = [], None
+    while True:
+        r = svc.files().list(q=f"'{folder_id}' in parents and trashed=false",
+                             fields="nextPageToken,files(id,name,mimeType)",
+                             pageSize=300, pageToken=tok, supportsAllDrives=True,
+                             includeItemsFromAllDrives=True).execute()
+        out += r.get("files", [])
+        tok = r.get("nextPageToken")
+        if not tok:
+            return out

@@ -1,0 +1,138 @@
+<title>The Edit Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F3F4F1; --panel:#FFFFFF; --ink:#1A1E23; --soft:#5A626B; --line:#D6D9D4; --line2:#BFC4BE;
+  --aroll:#23706E; --broll:#A86A12; --text:#72467F; --insert:#B2452D; --audio:#3C7447;
+  --accent:#2C4A86; --built:#2F6B3A; --builtbg:#E3EFE3; --fix:#8A5A08; --fixbg:#F6EBD5; --none:#6B6F75; --nonebg:#E9EAE8;
+  --decbg:#EEF1F8;
+  --sans:"IBM Plex Sans",-apple-system,"Helvetica Neue",Arial,sans-serif; --disp:"Archivo","Arial Narrow",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark; --ground:#14171B; --panel:#1C2026; --ink:#E7EAEE; --soft:#9AA3AD; --line:#2C323A; --line2:#3A424C;
+  --aroll:#4FB3AF; --broll:#E0A24A; --text:#B98BC7; --insert:#E27A60; --audio:#79B685;
+  --accent:#8FA9E3; --built:#8ED39A; --builtbg:#1E3324; --fix:#EBC074; --fixbg:#3A2E17; --none:#A7ACB3; --nonebg:#2A2F36; --decbg:#1F2636;}}
+:root[data-theme="dark"]{
+  color-scheme:dark; --ground:#14171B; --panel:#1C2026; --ink:#E7EAEE; --soft:#9AA3AD; --line:#2C323A; --line2:#3A424C;
+  --aroll:#4FB3AF; --broll:#E0A24A; --text:#B98BC7; --insert:#E27A60; --audio:#79B685;
+  --accent:#8FA9E3; --built:#8ED39A; --builtbg:#1E3324; --fix:#EBC074; --fixbg:#3A2E17; --none:#A7ACB3; --nonebg:#2A2F36; --decbg:#1F2636;}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:16px/1.6 var(--sans);padding-inline:20px;padding-block:28px 72px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.7rem;font-weight:800}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.lede{font-size:1.1rem;color:var(--soft)}
+header{display:flex;flex-direction:column;gap:14px}
+.tc{font-family:var(--mono);font-variant-numeric:tabular-nums}
+/* timeline */
+.tl{background:var(--panel);border:1px solid var(--line);overflow-x:auto}
+.tl-inner{min-width:720px}
+.ruler,.trk{display:grid;grid-template-columns:132px 1fr}
+.ruler{border-bottom:1px solid var(--line)}
+.ruler .lab{border-right:1px solid var(--line)}
+.ticks{position:relative;height:26px}
+.ticks i{position:absolute;top:0;bottom:0;border-left:1px solid var(--line);font:400 11px/26px var(--mono);font-style:normal;color:var(--soft);padding-left:4px}
+.trk{border-bottom:1px solid var(--line)} .trk:last-child{border-bottom:0}
+.trk .lab{border-right:1px solid var(--line);padding:8px 10px;font:500 .78rem/1.25 var(--mono)}
+.trk .lab small{display:block;font-family:var(--sans);font-weight:400;color:var(--soft);font-size:.72rem}
+.lane{position:relative;height:44px}
+.blk{position:absolute;top:8px;height:28px;border-radius:2px;color:#fff;font:500 .7rem/28px var(--sans);padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blk.ghost{background:transparent!important;border:1.5px dashed currentColor;line-height:25px}
+.k-a{background:var(--aroll)} .k-b{background:var(--broll)} .k-t{background:var(--text)} .k-i{background:var(--insert)} .k-s{background:var(--audio)}
+.c-i{color:var(--insert)} .c-s{color:var(--audio)}
+.tl-note{font-size:.85rem;color:var(--soft);padding:10px 12px;border-top:1px solid var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.85rem;color:var(--soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend b{display:inline-block;width:12px;height:12px;border-radius:2px}
+/* phase */
+.phase{display:flex;flex-direction:column;gap:18px}
+.phase-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.phase-head p{color:var(--soft);font-size:.95rem}
+.stage{background:var(--panel);border:1px solid var(--line);display:grid;grid-template-columns:200px 1fr}
+@media (max-width:760px){.stage{grid-template-columns:1fr}}
+.stage-side{padding:18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+@media (max-width:760px){.stage-side{border-right:0;border-bottom:1px solid var(--line)}}
+.stage-id{font:500 .78rem/1 var(--mono);color:var(--soft);letter-spacing:.06em}
+.tracks{display:flex;flex-wrap:wrap;gap:6px}
+.tracks span{font:500 .7rem/1 var(--mono);padding:4px 6px;border-radius:2px;color:#fff}
+.chip{align-self:flex-start;font:600 .72rem/1 var(--sans);padding:5px 8px;border-radius:999px;letter-spacing:.02em}
+.chip.built{background:var(--builtbg);color:var(--built)} .chip.fix{background:var(--fixbg);color:var(--fix)} .chip.none{background:var(--nonebg);color:var(--none)}
+.who{font-size:.85rem;color:var(--soft)}
+.stage-main{padding:18px 20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:600px){.io{grid-template-columns:1fr}}
+.io div{display:flex;flex-direction:column;gap:4px}
+.k{font:500 .72rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+ul.rules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.decs{display:flex;flex-direction:column;gap:10px}
+.dec{background:var(--decbg);padding:12px 14px;display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:start}
+.dec .n{font:600 .82rem/1.5 var(--mono);color:var(--accent)}
+.dec p{max-width:none}
+.dec .now{display:block;font-size:.85rem;color:var(--soft);margin-top:4px}
+details{border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:600;color:var(--accent)}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--ground);border:1px solid var(--line);padding:14px;font:400 .8rem/1.55 var(--mono);margin:10px 0 0;max-height:520px;overflow:auto}
+.how{background:var(--panel);border:1px solid var(--line);padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.foot{font-size:.85rem;color:var(--soft)}
+.etab{overflow-x:auto;background:var(--panel);border:1px solid var(--line)}
+.etab table{border-collapse:collapse;width:100%;min-width:760px;font-size:.88rem}
+.etab th{text-align:left;font:500 .7rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft);padding:10px 12px;border-bottom:1px solid var(--line2)}
+.etab td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.etab td small{display:block;color:var(--soft);font-size:.8rem;margin-top:3px}
+.etab tr.grp td{font:800 1rem/1 var(--disp);padding-top:18px;border-bottom:2px solid var(--ink)}
+.etab .chip{display:inline-block}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">The AI video machine · swipe to finished ad</div>
+  <h1>The Edit Line</h1>
+  <p class="lede">The whole machine that turns a swiped video into finished, programmed ads with no editor. First, where every stage stands today. Then every element a video carries, the variation engine, and the cut and dress stages in detail with your open calls.</p>
+  <p class="foot">Updated 23 Sep 2026 · every open decision has a code (T-1, A-2…) so you can answer in one line, e.g. “T-1: per format”.</p>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:12px">
+  <h2>Which stage fills which track</h2>
+  <p class="lede" style="font-size:1rem">Laid out like an editor's timeline. The first 20 seconds of an example ad. Solid blocks are built today. Dashed blocks are stages that don't exist yet.</p>
+  <div class="legend">
+    <span><b class="k-a"></b>Cut 1–2 · talking clips</span><span><b class="k-b"></b>Cut 3 · B-roll</span><span><b class="k-t"></b>Dress 1 · text</span><span><b class="k-i"></b>Dress 2 · inserts</span><span><b class="k-s"></b>Dress 3 · sound</span>
+  </div>
+  <div class="tl"><div class="tl-inner">
+    <div class="ruler"><div class="lab"></div><div class="ticks">__TICKS__</div></div>
+    <div class="trk"><div class="lab">T2<small>captions</small></div><div class="lane">
+      <div class="blk k-t" style="left:1%;width:13%">3 DERMATOLOGISTS</div><div class="blk k-t" style="left:15%;width:12%">3 ANSWERS</div><div class="blk k-t" style="left:28%;width:14%">I'M 64 AND…</div><div class="blk k-t" style="left:46%;width:16%">SO THE PEEL…</div><div class="blk k-t" style="left:64%;width:14%">SIX SESSIONS</div><div class="blk k-t" style="left:82%;width:16%">A COP OUT</div></div></div>
+    <div class="trk"><div class="lab">T1<small>hook · cards</small></div><div class="lane">
+      <div class="blk k-t" style="left:0;width:24%">Hook, on from frame one</div><div class="blk k-t" style="left:54%;width:18%">“THE SPOTS”</div></div></div>
+    <div class="trk"><div class="lab">V3<small>inserts</small></div><div class="lane">
+      <div class="blk ghost c-i" style="left:72%;width:7%">receipt</div></div></div>
+    <div class="trk"><div class="lab">V2<small>B-roll</small></div><div class="lane">
+      <div class="blk k-b" style="left:36%;width:12%">cutaway</div></div></div>
+    <div class="trk"><div class="lab">V1<small>talking clips</small></div><div class="lane">
+      <div class="blk k-a" style="left:0;width:12%">s01-1</div><div class="blk k-a" style="left:12.3%;width:12%">s01-2</div><div class="blk k-a" style="left:24.6%;width:17%">s02-1</div><div class="blk k-a" style="left:41.9%;width:12%">s02-2</div><div class="blk k-a" style="left:54.2%;width:18%">s03-1</div><div class="blk k-a" style="left:72.5%;width:7%">…</div><div class="blk k-a" style="left:79.8%;width:20%">s05-1</div></div></div>
+    <div class="trk"><div class="lab">A1<small>own sound</small></div><div class="lane">
+      <div class="blk k-a" style="left:0;width:72%;opacity:.55">each clip's own voice, cut with its picture, so the lips stay in sync</div><div class="blk k-a" style="left:79.8%;width:20%;opacity:.55">own voice</div></div></div>
+    <div class="trk"><div class="lab">A2<small>music</small></div><div class="lane">
+      <div class="blk ghost c-s" style="left:0;width:100%">music bed, 18 dB under the voice</div></div></div>
+    <div class="trk"><div class="lab">A3<small>sound effects</small></div><div class="lane">
+      <div class="blk ghost c-s" style="left:71.6%;width:5%">ka-ching</div></div></div>
+  </div>
+  <div class="tl-note">Every gap between s01-1 and s01-2 is dead air Cut 1 removed. Clip names come from the an-earlier-run handoff. The machine names each piece of a cut clip -1, -2, -3.</div>
+  </div>
+</section>
+
+__PHASES__
+
+<section class="how">
+  <h3>Before the cut: reading the handoff (built, parked for now)</h3>
+  <p>A prompt reads the handoff doc the way an editor would and turns it into the edit plan: scene order, whose sound is kept, which card sits on which clip, and what QC held back or left missing. It ran once on an-earlier-run and came back clean. Its prompt is here so you can see it. We'll come back to it after cut and dress are settled.</p>
+  <details><summary>The handoff reader prompt, word for word (stage 1 · v1)</summary><pre>__PROMPT_READ__</pre></details>
+</section>
+
+<p class="foot">Source files: the stages live in the video-edit folder of the team workspace (tools/video-edit). The Markdown copy of this page is EDIT-LINE.md in the same folder. Engine: HyperFrames.</p>
+</div>

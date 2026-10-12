@@ -118,11 +118,10 @@ renders as candid UGC or flat vector by changing one word.
 | identity anchors, palette | `brands/<brand>/` | the run stops |
 | angle bank | `brands/<brand>/strategy/angles.json` | stage 6 proposes angles instead of matching |
 | casting roster | `brands/<brand>/ai-cast/casting/` | nobody is cast; formats without a person still run |
-| swipe library | `tools/my-feeds/paid/<swipe>/blocks/` | there is nothing to tear down |
-| the swipe on Drive | `<media>/swipe-paid/<swipe>/` | no stills to open a run on. Drive names this folder `blocks` for some brands and `angles` for others; both are read |
+| swipe library | `components/swipe-paid/<swipe>/blocks/` | there is nothing to tear down |
+| the swipe on Drive | `the shared drive/swipe-paid/<swipe>/` | no stills to open a run on. Drive names this folder `blocks` for some brands and `angles` for others; both are read |
 
-Brief ids come out of a per-brand block, allocated on first use. Nothing to
-set up.
+Brief ids count per brand and product (the owner, 1 Oct 2026: "brief numbers count per brand AND product — each product starts at 1 inside its brand."). Nothing to set up.
 
 ## The chain always ends the same way
 
@@ -133,7 +132,7 @@ every time, for every brand:
 | | |
 |---|---|
 | six stages | the teardown through to the brief |
-| an id | `pNNN`, out of the brand's own block, for life |
+| an id | `brief-NNNN`, the next number for its brand and product, for life (older briefs keep their `pNNN`) |
 | a draft picture | the swipe reproduced with our woman, our tube and our words — judged, best passing roll (`DRAFT-STANDARD.md`) |
 | a page | on the briefs tool, under its brand |
 | a folder on Drive | source, draft and brief together |
@@ -144,10 +143,10 @@ missing. `chain.py ready --brand <b>` answers the same question any time.
 **The pages do not claim readiness they do not have.** A brief missing its
 draft says *"Waiting on a draft picture"*, not *"Ready for the designer"* —
 that claim was printed on every card regardless until 2026-09-14, which is
-how nine <brand> briefs showed as ready while none of them had reached
+how nine Brand A briefs showed as ready while none of them had reached
 Drive.
 
-**The draft is made by the chain, not by a session** (Damon, 2026-09-17:
+**The draft is made by the chain, not by a session** (the owner, 2026-09-17:
 "put this in chain"). `start` ends by running the draft standard —
 `chain.py draft --brand <brand>` on its own — which generates three rolls
 per brief with the swipe as the reference, judges every roll, ships the best

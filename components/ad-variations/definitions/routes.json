@@ -1,0 +1,207 @@
+{
+ "_what": "Production routes a variation's recipe may name, with the rate the machine multiplies. The recipe stage (5) names a route id and the units; the machine does the arithmetic from this file, so a price change is one edit here and never a prompt edit. Rates are research facts from the Model Map v1 (27 Sep 2026) and the locked choices (GPT Image direct via OpenAI; Seedance on Higgsfield; editing jobs on the local studio).",
+ "curator": "the owner",
+ "higgsfield_credit_usd": 0.05,
+ "video_overshoot": 0.3,
+ "still_rolls": 3,
+ "routes": [
+  {
+   "id": "local-edit",
+   "name": "Recut from the original footage",
+   "where": "local, any editor",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.25,
+   "locked": true,
+   "note": "Trim, reorder, drop or repeat seconds already shot.",
+   "status": "draft"
+  },
+  {
+   "id": "local-text",
+   "name": "Text layer (sticker, title, card)",
+   "where": "local",
+   "unit": "layer",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.05,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "local-captions",
+   "name": "Word-timed captions",
+   "where": "local, from the teardown's Scribe word timings",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.25,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "local-matte",
+   "name": "Cut-out / matte (BiRefNet)",
+   "where": "local studio on the owner's Mac",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.25,
+   "locked": true,
+   "note": "≈0.5 s per frame, full model.",
+   "status": "draft"
+  },
+  {
+   "id": "local-track",
+   "name": "Segment + track (SAM 2.1)",
+   "where": "local studio on the owner's Mac",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.2,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "local-interp",
+   "name": "De-duplicate + interpolate (mpdecimate + RIFE), conform to the master's fps",
+   "where": "local studio on the owner's Mac",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.15,
+   "locked": true,
+   "note": "Runs on every AI clip before it is cut in (continuous-motion rule, 27 Sep).",
+   "status": "draft"
+  },
+  {
+   "id": "local-stems",
+   "name": "Stems (Demucs)",
+   "where": "local studio on the owner's Mac",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.1,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "local-upscale",
+   "name": "Upscale (Real-ESRGAN / SeedVR2)",
+   "where": "local studio on the owner's Mac",
+   "unit": "job",
+   "usd_per_unit": 0,
+   "hours_per_unit": 0.3,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "gpt-image",
+   "name": "GPT Image, direct via OpenAI (high)",
+   "where": "OpenAI API",
+   "unit": "still",
+   "usd_per_unit": 0.21,
+   "rolls": 3,
+   "hours_per_unit": 0.2,
+   "locked": true,
+   "note": "$__ per still at high; 3 rolls per still are costed.",
+   "status": "draft"
+  },
+  {
+   "id": "seedance-hf",
+   "name": "Seedance 2.5 on Higgsfield, 720p",
+   "where": "Higgsfield",
+   "unit": "second",
+   "usd_per_unit": 0.35,
+   "overshoot": true,
+   "hours_per_unit": 0.08,
+   "locked": true,
+   "note": "28 credits per 4 s; +30% overshoot allowed for re-rolls.",
+   "status": "draft"
+  },
+  {
+   "id": "genjutsu-hf",
+   "name": "Genjutsu motion transfer on Higgsfield, 1080p",
+   "where": "Higgsfield",
+   "unit": "clip-4s",
+   "usd_per_unit": 2.2,
+   "overshoot": true,
+   "hours_per_unit": 0.4,
+   "locked": true,
+   "note": "44 credits per ~4 s clip as charged. 24 fps output → de-dup + interpolate.",
+   "status": "draft"
+  },
+  {
+   "id": "wan-animate-fal",
+   "name": "Wan 2.2 Animate Replace on fal, 720p",
+   "where": "fal",
+   "unit": "second",
+   "usd_per_unit": 0.12,
+   "overshoot": true,
+   "hours_per_unit": 0.3,
+   "locked": false,
+   "test": true,
+   "note": "TEST — cheaper motion-transfer candidate. $__ per billed second, billed = frames ÷ 16 → ≈$__ per real second at 23.976 fps. Keeps the video's own background, relit.",
+   "status": "draft"
+  },
+  {
+   "id": "kling-mc-fal",
+   "name": "Kling 3.0 Motion Control on fal, 720p",
+   "where": "fal",
+   "unit": "second",
+   "usd_per_unit": 0.126,
+   "overshoot": true,
+   "hours_per_unit": 0.3,
+   "locked": false,
+   "test": true,
+   "note": "TEST — cheaper motion-transfer candidate.",
+   "status": "draft"
+  },
+  {
+   "id": "elevenlabs-tts",
+   "name": "ElevenLabs voice (text to speech)",
+   "where": "ElevenLabs",
+   "unit": "1k-chars",
+   "usd_per_unit": 0.1,
+   "hours_per_unit": 0.1,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "elevenlabs-sts",
+   "name": "ElevenLabs speech to speech",
+   "where": "ElevenLabs",
+   "unit": "minute",
+   "usd_per_unit": 0.12,
+   "hours_per_unit": 0.1,
+   "locked": true,
+   "status": "draft"
+  },
+  {
+   "id": "lipsync-sync",
+   "name": "Lip-sync (sync.so lipsync-2-pro)",
+   "where": "sync.so",
+   "unit": "second",
+   "usd_per_unit": 0.083,
+   "hours_per_unit": 0.2,
+   "locked": false,
+   "note": "Not on the locked list; price from the Model Map.",
+   "status": "draft"
+  },
+  {
+   "id": "scribe",
+   "name": "ElevenLabs Scribe (words)",
+   "where": "ElevenLabs",
+   "unit": "hour",
+   "usd_per_unit": 0.22,
+   "hours_per_unit": 0.05,
+   "locked": true,
+   "note": "The teardown already holds word timings — usually $0.",
+   "status": "draft"
+  },
+  {
+   "id": "creator-reshoot",
+   "name": "A creator films it",
+   "where": "a person",
+   "unit": "shoot",
+   "usd_per_unit": null,
+   "hours_per_unit": 1.0,
+   "locked": true,
+   "note": "Creator fee not on file — not in the machine cost.",
+   "status": "draft"
+  }
+ ]
+}

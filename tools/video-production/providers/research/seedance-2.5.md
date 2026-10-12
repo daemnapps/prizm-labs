@@ -16,7 +16,7 @@ Official: [Create a video generation task](https://docs.byteplus.com/en/docs/Mod
 - **Resolution**: 480p/720p/1080p (2.5); 2.0 adds 4K.
 - **Aspect ratio (`ratio`)**: 16:9, 4:3, 1:1, 3:4, 9:16, 21:9, adaptive.
 - **Other params**: `seed` `[-1, 2147483647]`, `camera_fixed` (bool, default false), `watermark` (bool, default **false**), `output_format`: mp4/mov (2.5 only), `return_last_frame` (PNG, for chaining), `omni_reference_task_type`: auto/reference/edit/extend.
-- **Price** (token-based, formula = (in+out duration)×W×H×fps/1024): 2.5 ≈ $0.103/s @480p, $0.231/s @720p, $0.569/s @1080p (1080p at −28% through 2026-09-17). 2.0 ≈ $0.07/$0.15/$0.37/$0.78 per sec at 480p/720p/1080p/4K.
+- **Price** (token-based, formula = (in+out duration)×W×H×fps/1024): 2.5 ≈ $__/s @480p, $__/s @720p, $__/s @1080p (1080p at −28% through 2026-09-17). 2.0 ≈ $__/$__/$__/$__ per sec at 480p/720p/1080p/4K.
 - **Rate limits / concurrency**: not published in any fetched doc — would need console/account page.
 
 ## 2. fal.ai
@@ -26,7 +26,7 @@ Official model pages fetched today: [seedance-2.5/image-to-video](https://fal.ai
 - **`bytedance/seedance-2.5/image-to-video`**: `image_url` (start frame, required), `end_image_url`, `resolution` (480p/720p/1080p), `duration` 4–30 or auto, `aspect_ratio` (currently "auto" only on this endpoint), `generate_audio`, `bitrate_mode`. **No audio input field** — this endpoint cannot take our voice line.
 - **`bytedance/seedance-2.5/reference-to-video`** — the door that matters: `image_urls[]`, `video_urls[]`, **`audio_urls[]`** ("audio references for rhythm, timing, and voice"), `resolution` (480p/720p only here), `duration`, `aspect_ratio`, `generate_audio`, `seed`. Docs describe audio as living "in the same latent space" as video, generated jointly — sold as a **timing signal**, not confirmed as verbatim dubbing/lip-sync of the exact input line. Up to 50 references total.
 - **v1/v1.5 pro image-to-video**: `image_url`, `end_image_url`, `duration`, `resolution`, `aspect_ratio`, `seed`, `camera_fixed`; **no audio field at all**, no `generate_audio`. Older, silent-only.
-- **Price**: v1 pro 1080p/5s ≈ $0.62 ($2.50/M tokens). Seedance 2.5 base ≈ $0.0214/1K tokens at 480/720p (~$0.47/s images-only, ~$0.28/s with a video reference, per fal's own worked numbers).
+- **Price**: v1 pro 1080p/5s ≈ $__ ($__/M tokens). Seedance 2.5 base ≈ $__/1K tokens at 480/720p (~$__/s images-only, ~$__/s with a video reference, per fal's own worked numbers).
 - **Gap vs direct**: no first+last-frame *and* audio-reference combo in one call; audio support only on the multi-reference endpoint, not the plain image-to-video one; no explicit "this reproduces your track verbatim" claim anywhere in fal's copy.
 
 ## 3. Higgsfield
@@ -34,7 +34,7 @@ Official model pages fetched today: [seedance-2.5/image-to-video](https://fal.ai
 Official: [docs.higgsfield.ai](https://docs.higgsfield.ai/docs) (general API — auth, polling, billing; **no Seedance-specific param page indexed**), [console.higgsfield.ai/explore](https://console.higgsfield.ai/explore) (model catalog, thin on params publicly), [higgsfield.ai/seedance/2.5](https://higgsfield.ai/seedance/2.5), [creator-hub help](https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-seedance). Field-level detail below is **third-party** (community skill repo [OSideMedia/higgsfield-ai-prompt-skill](https://github.com/OSideMedia/higgsfield-ai-prompt-skill)) — treat as unverified until cross-checked against an actual account/API key.
 
 - **Modes**: `t2v`, `omni_reference`, `video_edit`, `video_extension` (extension needs `extension_mode`: forward/backward).
-- **Medias**: reportedly **no `start_image`./`end_image` roles on 2.5** — first/last frame is done by prompt language (`@Image1 is the first frame`), only `image_references`, `video_references`, `audio_references` exist as media roles. This is a real regression vs the direct API's explicit `first_frame`./`last_frame` roles — confirm before building on it.
+- **Medias**: reportedly **no `start_image`/`end_image` roles on 2.5** — first/last frame is done by prompt language (`@Image1 is the first frame`), only `image_references`, `video_references`, `audio_references` exist as media roles. This is a real regression vs the direct API's explicit `first_frame`/`last_frame` roles — confirm before building on it.
 - **The audio_references trap**: community docs describe `audio_references` as carrying "voice, dialogue, ambience, or music" character/style, with dialogue text instead entered via a separate `{}` bracket syntax in the prompt — i.e. **the audio you attach may be read as a style/character reference, not literally played back and lip-synced**. Higgsfield's own marketing copy says Seedance "generates... lip-synced speech" and dialogue "in double quotes... generates both the lip movement and voice for it" — that's model-generated speech from text, which is a different mechanism than dubbing a pre-made ElevenLabs line.
 - **Duration/resolution**: 4–30s (default 5s, ignored in video_edit); 480p/720p only on Higgsfield (no 1080p/4K natively — upscale add-on).
 - **Pricing (credits)**: 8s @720p ≈ 52 credits, @480p ≈ 24 credits (higgsfield.ai blog); no official std-vs-fast split or concurrency cap found in official docs.
@@ -45,7 +45,7 @@ Official: [docs.higgsfield.ai](https://docs.higgsfield.ai/docs) (general API —
 |---|---|---|---|
 | 2.5 available via API today | Yes, AP+EU | Yes | Yes |
 | Open to non-China business | Yes (BytePlus intl) | Yes | Yes |
-| First frame + last frame | Yes (`first_frame`./`last_frame` roles) | Yes (`image_url`+`end_image_url`) | No explicit roles — prompt-only (unverified) |
+| First frame + last frame | Yes (`first_frame`/`last_frame` roles) | Yes (`image_url`+`end_image_url`) | No explicit roles — prompt-only (unverified) |
 | Accepts our audio for lip-sync | Yes, `reference_audio` role; edit-task dubbing example shown | Only on `reference-to-video` (`audio_urls`), sold as timing signal not confirmed verbatim | Uncertain — `audio_references` may be style-only, not dubbing |
 | Silent motion (image→video) | Yes (`generate_audio:false`) | Yes | Yes |
 | Duration | 4–30s | 4–30s (varies by endpoint) | 4–30s |

@@ -1,0 +1,66 @@
+{
+  "_fixture": "Trimmed, brand-neutral copy of an ad-uploader hand-off's SHAPE (SI-126). Two ads, two pages. Pictures are written by the test, never committed.",
+  "schema": "handoff/1",
+  "name": "ad-uploader-handoff_zzbrand_2026-10-01",
+  "role": "ad-uploader",
+  "brand": "zzbrand",
+  "date": "2026-10-01",
+  "batch": "batch-2026-10-01-a",
+  "briefs": [
+    {
+      "id": "brief-0901",
+      "old_code": "p901",
+      "status": "for-review",
+      "product_id": "product_zzbrand_glow-balm",
+      "offer_ids": [],
+      "link_ids": ["link_zzbrand_glow_landing", "link_zzbrand_glow_lip-balm_landing"],
+      "part_ids": [],
+      "ads": [
+        {
+          "ad_name": "zzbrand_glow-balm_brief-0901_batch-2026-10-01-a",
+          "old_name": "zzbrand-glowbalm-static-ai-none-nightworker-dryskin-slowreset-kitchen-starburst-p901-9x16-261001a",
+          "meta_ad_names": [
+            "zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_glow-landing",
+            "zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_glow-lip-balm-landing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brief-0902",
+      "old_code": "p902",
+      "status": "for-review",
+      "product_id": "product_zzbrand_glow-balm",
+      "offer_ids": [],
+      "link_ids": ["link_zzbrand_glow_landing", "link_zzbrand_glow_lip-balm_landing"],
+      "part_ids": [],
+      "ads": [
+        {
+          "ad_name": "zzbrand_glow-balm_brief-0902_batch-2026-10-01-a",
+          "old_name": "zzbrand-glowbalm-static-ai-none-nightworker-dryskin-slowreset-notebook-listicle-p902-9x16-261001a",
+          "meta_ad_names": [
+            "zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_glow-landing",
+            "zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_glow-lip-balm-landing"
+          ]
+        }
+      ]
+    }
+  ],
+  "ids": {
+    "products": ["product_zzbrand_glow-balm"],
+    "offers": [],
+    "links": ["link_zzbrand_glow_landing", "link_zzbrand_glow_lip-balm_landing"],
+    "parts": []
+  },
+  "assets": [
+    "assets/ads/zzbrand_glow-balm_brief-0901_batch-2026-10-01-a/zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_asset-01.png",
+    "assets/ads/zzbrand_glow-balm_brief-0902_batch-2026-10-01-a/zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_asset-01.png"
+  ],
+  "checks_passed": true,
+  "returned": {
+    "expected": ["live-ids.json — ad name → Meta ad id (null until it exists)"],
+    "received": []
+  },
+  "stops_at": "publishing to Meta",
+  "created": "2026-10-01T00:00:00Z"
+}

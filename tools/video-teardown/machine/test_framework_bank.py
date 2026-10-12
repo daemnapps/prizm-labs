@@ -104,12 +104,12 @@ class Bank(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = tree(self.tmp.name, {
             "aaa-the-scrub": (CLEAN, {
-                "label": "AAA-the-scrub", "brand": "<brand>", "lane": "swipe",
+                "label": "AAA-the-scrub", "brand": "brand-a", "lane": "swipe",
                 "triage_lane": "ALREADY AN AD",
                 "origin_url": "https://example.invalid/p/AAA",
                 "gdoc_url": "https://docs.example.invalid/d/AAA/edit"}),
             "bbb-the-deal": (SECOND, {
-                "label": "BBB-the-deal", "brand": "<brand>", "lane": "creator",
+                "label": "BBB-the-deal", "brand": "brand-b", "lane": "creator",
                 "triage_lane": "ORGANIC"}),
         })
 
@@ -127,7 +127,7 @@ class Bank(unittest.TestCase):
         self.assertEqual(a["awareness_exit"], "product-aware")
         self.assertEqual(a["signature"], "a mechanism")
         self.assertEqual(a["desire"], "stop it coming back every month")
-        self.assertEqual(a["brand"], "<brand>")
+        self.assertEqual(a["brand"], "brand-a")
         self.assertEqual(a["source_url"], "https://example.invalid/p/AAA")
         # the finished document is the link, never the folder path
         self.assertEqual(a["link"], "https://docs.example.invalid/d/AAA/edit")

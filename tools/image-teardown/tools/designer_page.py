@@ -2,9 +2,9 @@
 """The one page the graphic designer opens — the instructions and every brief.
 
     designer_page.py --out <file.html>              every finished brief
-    designer_page.py --brand <brand> --out <f>      one brand's
+    designer_page.py --brand brand-a --out <f>      one brand's
 
-Damon, 2026-09-14: *"turn this brief page and the working a brief page into
+the owner, 2026-09-14: *"turn this brief page and the working a brief page into
 an artifact that I can share with the graphic designer so I can get her
 feedback."* Then, when the first build shipped one brief as a sample:
 *"you didn't even put those other briefs that literally just generated in
@@ -219,9 +219,9 @@ def panel(bid, rec, n):
 </div>'''
 
 
-GITHUB = "https://github.com/daemnapps/prizm-labs/tree/main/"
-DRIVE_LAB = "<media>/image-teardown/"
-DRIVE_RUNS = "<media>/runs/image-teardown/"
+GITHUB = "https://github.com/brand-d-team/workspace/tree/main/"
+DRIVE_LAB = "the shared drive/image-teardown/"
+DRIVE_RUNS = "Team Drive/runs/image-teardown/"
 
 
 def where(reg, only=None):
@@ -268,7 +268,7 @@ def where(reg, only=None):
 
 def standard():
     """The draft standard, on the page he reads — the steps and the prompts
-    verbatim. Damon, 2026-09-17: "LOCK IN THE PROMPT / WORKFLOW." A prompt he
+    verbatim. the owner, 2026-09-17: "LOCK IN THE PROMPT / WORKFLOW." A prompt he
     cannot see is a prompt he cannot correct."""
     doc = (ROOT / "DRAFT-STANDARD.md").read_text()
     steps = re.search(r"## The six steps\n\n(\|.*?)\n\n", doc, re.S)
@@ -305,7 +305,7 @@ def build(out_path, brand=None, part="all"):
            and (ROOT / "worksheets" / r["brand"] / b / "work-order.md").is_file()]
 
     # The chips group by PRODUCT on a one-brand board and by brand otherwise
-    # (Damon, 2026-09-18: "update the board so the products are separated").
+    # (the owner, 2026-09-18: "update the board so the products are separated").
     # The first group is selected on load, so a board opens on one product's
     # briefs, never on a mix. Each chip carries a thumbnail of our draft
     # ("I also need thumbnails of our versions in the board").
@@ -359,7 +359,7 @@ def build(out_path, brand=None, part="all"):
 
     tpl = (HERE / "designer-page.html").read_text()
 
-    # Damon, 2026-09-14: *"Give me a sharable artifact for each page we
+    # the owner, 2026-09-14: *"Give me a sharable artifact for each page we
     # made."* One combined page was the wrong unit — the instructions are
     # read once and the briefs are worked through fifteen times, so they are
     # two links he can send separately. They share this template because they
@@ -374,7 +374,7 @@ def build(out_path, brand=None, part="all"):
                           "<title>The Brief Board</title>")
 
     # The pack: one zip per brand holding every folder on this page, built
-    # by tools/pack.py and recorded in briefs.json. Damon, 2026-09-17: "a
+    # by tools/pack.py and recorded in briefs.json. the owner, 2026-09-17: "a
     # download pack to give to our graphic designer so she can just plug it
     # into Higgsfield". The board is where she reads; the pack is what she
     # downloads — so the link sits at the top, one per brand that has one.
@@ -391,7 +391,7 @@ def build(out_path, brand=None, part="all"):
         packs += ('<p class="pack-note">One zip per brand: a folder per brief with the '
                   'swipe, our draft, the work order, the brief and its prompts, plus a '
                   'README listing the batch and the settings to set once.</p>')
-        # Damon, 2026-09-17: "separate <brand> from <brand> and show me the
+        # the owner, 2026-09-17: "separate brand-b from brand-a and show me the
         # paths in both github and google drive of where these live." One row
         # per brand, each place named by what it holds and linked where a
         # link exists. Read off the register and the pack's run.json, so the

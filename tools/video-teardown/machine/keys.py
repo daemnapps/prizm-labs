@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
-"""One place for every key: the macOS Keychain.
+"""Every key, read through the one loader in components/keys.
 
-Keys live in the Keychain, encrypted at rest — service `daemn-<NAME>`, account
-`damon`, read through `~/.daemn/daemn_keys.py`. They used to sit in plain text
-in `~/.daemn/keys.env`; that file moved on 2026-09-11 and anything still
-reading it found an empty file and reported every key as missing.
+SI-193 (video-teardown keys reader): this file no longer reads key files
+itself. It delegates to components/keys/loader.py — key(NAME) — which looks
+in the environment, then (only when the managed file ~/.workflow-worker.env
+is absent) the old places: the Keychain (service `daemn-<NAME>`, account
+`damon`, through `~/.daemn/daemn_keys.py`), then `~/.daemn/keys.env`, then
+`~/.apify.env`, then `~/.gemini.env`. That is the order this file always
+used: the environment wins, then the Keychain.
 
-The old files are still read first as a fallback, so a machine that has not
-migrated keeps working. The Keychain wins wherever both have a name.
+The managed file is NEVER opened or parsed here — its existence only marks
+the mini. On the mini a job sees exactly its own environment's keys
+(WM-14 (scoped job env)): all_keys() lists the environment's credential-
+looking names and nothing else.
+
+The public names stay — VAULT, LEGACY, KEYCHAIN, all_keys, get, export,
+status — so every caller is unchanged. No value is ever printed.
 """
 
+import importlib.util
 import os, sys
 from pathlib import Path
 
@@ -17,62 +26,99 @@ VAULT = Path.home() / ".daemn" / "keys.env"
 LEGACY = [Path.home() / ".gemini.env", Path.home() / ".apify.env"]
 KEYCHAIN = Path.home() / ".daemn"
 
+# components/keys/loader.py, by path under its own module name — never on
+# sys.path, so it cannot shadow or be shadowed by another `loader`.
+_REPO = Path(__file__).resolve().parents[3]
+_LOADER_PATH = _REPO / "components" / "keys" / "loader.py"
+_LOADER_NAME = "shared_keys_loader"
 
-def _keychain():
-    """Every key the Keychain holds. Silent if it is not set up on this Mac."""
+
+def _load_loader():
+    mod = sys.modules.get(_LOADER_NAME)
+    if mod is None:
+        spec = importlib.util.spec_from_file_location(_LOADER_NAME, str(_LOADER_PATH))
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[_LOADER_NAME] = mod
+        try:
+            spec.loader.exec_module(mod)
+        except Exception:
+            sys.modules.pop(_LOADER_NAME, None)
+            raise
+    return mod
+
+
+_loader = _load_loader()
+
+# An environment name is a key when it looks like one.
+_KEY_SUFFIXES = ("_KEY", "_TOKEN", "_SECRET", "_KEY_ID", "_KEY_SECRET", "_DB_URL")
+
+
+def _is_key_name(n):
+    return (n.endswith(_KEY_SUFFIXES) or n == "DATABASE_URL"
+            or n in _loader.ALIASES or n in _loader.ALIASES.values())
+
+
+def _keychain_names():
+    """The names the Keychain helper knows. Silent if it is not set up."""
+    folder = Path(os.path.expanduser(_loader.KEYCHAIN_DIR))
+    if not (folder / "daemn_keys.py").is_file():
+        return []
     try:
-        if str(KEYCHAIN) not in sys.path:
-            sys.path.insert(0, str(KEYCHAIN))
+        if str(folder) not in sys.path:
+            sys.path.insert(0, str(folder))
         import daemn_keys
     except Exception:
-        return {}
-    out = {}
+        return []
     try:
-        names = daemn_keys.names()
+        return list(daemn_keys.names())
     except Exception:
         try:
-            names = list(daemn_keys.KNOWN)
+            return list(daemn_keys.KNOWN)
         except Exception:
-            return {}
-    for n in names:
-        try:
-            v = daemn_keys.key(n)
-        except Exception:
-            v = None
-        if v:
-            out[n] = v
-    return out
+            return []
 
 
 def _parse(p):
-    out = {}
-    if not p.exists():
+    """The NAMES in a NAME=value file; values are read by the loader."""
+    out = set()
+    try:
+        text = Path(os.path.expanduser(str(p))).read_text()
+    except Exception:
         return out
-    for line in p.read_text().splitlines():
+    for line in text.splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
-        k, _, v = line.partition("=")
-        out[k.strip()] = v.strip().strip('"').strip("'")
+        out.add(line.partition("=")[0].strip())
     return out
 
 
 def all_keys():
+    """{name: value} for the environment's key names, plus — off the mini —
+    every name the old files and the Keychain hold; each value from the loader."""
+    names = {n for n in os.environ if _is_key_name(n)}
+    if not _loader.fallback_skipped():
+        for src in _loader.FALLBACK:
+            if src != "keychain":
+                names.update(_parse(src))
+        names.update(_keychain_names())
     found = {}
-    for p in LEGACY:
-        found.update(_parse(p))
-    found.update(_parse(VAULT))
-    found.update(_keychain())         # the Keychain wins
-    found.update({k: v for k, v in os.environ.items() if k in found})
+    for n in sorted(names):
+        v = _loader.key(n, required=False)
+        if v:
+            found[n] = v
     return found
 
 
 def get(name, required=True):
-    v = all_keys().get(name) or os.environ.get(name)
+    v = _loader.key(name, required=False)
     if not v and required:
-        sys.exit(f"No {name} yet. It belongs in the Keychain:\n\n"
-                 f"    python3 "
-                 f"email-production/secrets.py --add {name}\n")
+        try:
+            _loader.key(name)
+            why = "not found"
+        except KeyError as e:
+            why = e.args[0] if e.args else "not found"
+        sys.exit(f"No {name} yet — {why}\n")
     return v
 
 

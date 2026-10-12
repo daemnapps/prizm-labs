@@ -1,6 +1,6 @@
 # Frames are made by EDITING, not by generating
 
-**Damon's ruling, 2026-09-02**, reached by working one scene until it was
+**the owner's ruling, 2026-09-02**, reached by working one scene until it was
 right. This supersedes the "describe the scene and generate it" approach in
 the frames stage. Everything below was proven on a real run — the <run>
 song ad, torn down for the brand — and every number in it is measured, not
@@ -67,7 +67,7 @@ instruction beside a hand-written one that worked exposed three:
 2. **It leaked markup.** `**Film:**` reached the model as content.
 3. **It truncated mid-word**, ending an instruction on *"Shallow focus hol"*.
 
-## The chain that solves it (Damon, same day)
+## The chain that solves it (the owner, same day)
 
 **Use the image teardown to UNDERSTAND the frame, then use that
 understanding as the reference for the edit.** The frames stage stops
@@ -103,7 +103,7 @@ it, leaving a clean character plate.
 `image-teardown/tools/compose.py` already sets a type layer over a
 plate. Both halves existed; they were simply not connected.
 
-## The model house for PEOPLE (Damon's ruling, 2026-09-03)
+## The model house for PEOPLE (the owner's ruling, 2026-09-03)
 
 Chosen by bake-off, not by argument: the same reference and the same prompt
 through four models, judged side by side.
@@ -174,12 +174,12 @@ Each was a rule compensating for information we had and discarded.
 
 - **The casting collision.** The brief invents its own characters while the
   machine casts from the brand's AI cast, and neither knows the other exists.
-  Both fired on this run: the brief wrote Michelle, the machine cast Susan.
-  Damon's call, unresolved: does the cast list feed the brief, or does the
+  Both fired on this run: the brief wrote Michelle, the machine cast June.
+  the owner's call, unresolved: does the cast list feed the brief, or does the
   brief cast freely and an identity get trained per story?
 - **Wiring the image teardown into the frames stage** so the understand →
   spec → edit chain runs per frame automatically. Proven by hand, not yet
   built.
 - **Cloning versus making it ours.** A faithful edit of a frame whose cast
-  was inherited wholesale from the source reproduces the source. Damon's
+  was inherited wholesale from the source reproduces the source. the owner's
   current call is clone first; the cast becoming ours is the later move.

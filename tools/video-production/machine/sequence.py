@@ -1,6 +1,6 @@
 """RETIRED 2026-09-12 — THIS FILE RAN ON FAL. DO NOT USE IT.
 
-Damon, 2026-09-12: "Everything should have been done in Higgsfield. How are
+the owner, 2026-09-12: "Everything should have been done in Higgsfield. How are
 you using fal? Stop using fal. We're just using Higgsfield, and we're just
 using the models that we've already proven worked."
 
@@ -39,16 +39,20 @@ in git; stills/, vo/, clips/ and draft media are generated local state.
 Auth: FAL_KEY env var, or FAL_KEY=... in machine/.env.
 """
 
-import base64, json, os, subprocess, sys, time, urllib.request, urllib.error
+import base64, importlib.util, json, os, subprocess, sys, time, urllib.request, urllib.error
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 QUEUE = "https://queue.fal.run"
 
-# MODEL RULING (Damon, 2026-08-31): minimize the model set. Approved
+_spec = importlib.util.spec_from_file_location("vm_vp_keys", HERE / "vp_keys.py")
+vp_keys = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(vp_keys)
+
+# MODEL RULING (the owner, 2026-08-31): minimize the model set. Approved
 # families ONLY: Google Omni · ByteDance Seedance/Seedream · GPT models.
 # MiniMax and Kling are RETIRED.
-# Each model plays to its strengths (Damon 2026-08-31):
+# Each model plays to its strengths (the owner 2026-08-31):
 #   Seedream    — character/scene stills + identity-chained edits
 #   Nano Banana — EDITING: layout-exact recreations, compositing real
 #                 artifacts into shots (screens, packshots, inserts)
@@ -58,23 +62,17 @@ QUEUE = "https://queue.fal.run"
 MODEL_STILL_T2I = "fal-ai/bytedance/seedream/v4.5/text-to-image"
 MODEL_STILL_EDIT = "fal-ai/bytedance/seedream/v4.5/edit"
 MODEL_EDIT_COMPOSITE = "fal-ai/nano-banana/edit"
-# Voice slot: ElevenLabs (Damon, 2026-08-31 — "constantly solid").
+# Voice slot: ElevenLabs (the owner, 2026-08-31 — "constantly solid").
 MODEL_VO = "fal-ai/elevenlabs/tts/multilingual-v2"
 MODEL_CLIP = "fal-ai/bytedance/seedance/v1/pro/image-to-video"
-# Omni is a first-class clip model in its own right (Damon 2026-08-31 —
+# Omni is a first-class clip model in its own right (the owner 2026-08-31 —
 # NOT a "cheap drafts" tier): first+last-frame transitions, generation,
 # upscale. Pick per shot on the merits.
 MODEL_CLIP_OMNI = "google/gemini-omni-flash/v1.1/image-to-video"
 
 
 def key():
-    k = os.environ.get("FAL_KEY")
-    if not k:
-        env = HERE / ".env"
-        if env.exists():
-            for line in env.read_text().splitlines():
-                if line.strip().startswith("FAL_KEY="):
-                    k = line.split("=", 1)[1].strip().strip('"').strip("'")
+    k = vp_keys.key("FAL_KEY", local_env=True)
     if not k:
         sys.exit("No FAL_KEY. Export it or put FAL_KEY=... in machine/.env")
     return k

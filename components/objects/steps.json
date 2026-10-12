@@ -1,0 +1,11 @@
+{
+ "_what": "The steps of making a 3D object, in order. run.py and the page read this list.",
+ "steps": [
+  {"id": "ref", "who": "claude:higgsfield", "prompt": "prompts/object-reference-v1-damon.md", "what": "One clean reference image (GPT Image 2.5 on the Higgsfield connector), a real photo attached when one exists; people come from their character sheet."},
+  {"id": "mesh", "who": "claude:higgsfield", "what": "Image → 3D on the Higgsfield connector (default); --local runs make3d, free, for background props"},
+  {"id": "finish", "who": "machine", "what": "The house finish from definitions/finish.json (satin), centred, colours kept."},
+  {"id": "check", "who": "machine+claude", "what": "A Blender still; Claude looks at it next to the reference before it counts."},
+  {"id": "web", "who": "machine", "what": "A small copy the artifact page can spin."},
+  {"id": "record", "who": "machine", "what": "A row in <project>/3d/catalogue.json with the prompt, cost and files."}
+ ]
+}

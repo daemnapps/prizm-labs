@@ -4,8 +4,8 @@
     /usr/bin/python3 machine/gdoc_out.py <output-slug> --folder <drive-folder-id>
     /usr/bin/python3 machine/gdoc_out.py --all --folder <drive-folder-id>
 
-Damon's ruling (2026-08-31): copy also lives as a Google Doc, the way the
-video brief does. This takes a published source from output/<slug>/copy.md,
+the owner's ruling (2026-08-31): copy also lives as a Google Doc, the way the
+video brief does. This takes a published deliverable's copy.md (either home),
 renders it as a document, and uploads it through the shared Drive plumbing
 (service account, update-in-place: same name in the same folder updates
 rather than duplicating).
@@ -38,11 +38,11 @@ sys.path = [q for q in sys.path if Path(q or ".").resolve() != HERE]
 import importlib.util
 _spec = importlib.util.spec_from_file_location("md", HERE / "md.py")
 MD = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(MD)
-_COMPONENT = ROOT.parent.parent.parent / "components" / "gdrive-creator"
-if not _COMPONENT.is_dir():                  # a workspace mounted elsewhere
-    _COMPONENT = Path.home() / "Projects" / "ai-workspace" / "components" / "gdrive-creator"
+_COMPONENT = next((d for d in Path(__file__).resolve().parents if (d / "components" / "gdrive-creator").is_dir()), Path(__file__).resolve().parents[2].parent) / "components" / "gdrive-creator"
 sys.path.append(str(_COMPONENT))        # appended, never ahead of this machine
 from gdrive_creator import engine as drive
+_pspec = importlib.util.spec_from_file_location("paths", HERE / "paths.py")
+P = importlib.util.module_from_spec(_pspec); _pspec.loader.exec_module(P)
 
 
 STYLE = """<style>
@@ -56,13 +56,22 @@ hr{border:0;border-top:1px solid #dadce0;margin:12pt 0}
 </style>"""
 
 
+def _folder(slug):
+    """The deliverable for a name, from either home (paths.all_deliverables)."""
+    for name, d in P.all_deliverables():
+        if name == slug:
+            return d
+    return None
+
+
 def build_html(slug):
-    src = ROOT / "output" / slug / "copy.md"
-    if not src.is_file():
-        sys.exit(f"no published copy at output/{slug}/copy.md — run publish.py first")
+    d = _folder(slug)
+    src = (d / "copy.md") if d else None
+    if not src or not src.is_file():
+        sys.exit(f"no published copy for {slug} — run publish.py first")
     body = MD.render(src.read_text(encoding="utf-8"))
     title = f"Copy — {slug}"
-    html_path = ROOT / "output" / slug / "copy-gdoc.html"
+    html_path = d / "copy-gdoc.html"
     html_path.write_text(f"<html><head><meta charset='utf-8'>{STYLE}"
                          f"</head><body>{body}</body></html>", encoding="utf-8")
     return html_path, title
@@ -76,10 +85,9 @@ def main():
                     help="Drive folder id the docs land in")
     a = ap.parse_args()
 
-    slugs = ([d.name for d in (ROOT / "output").iterdir() if (d / "copy.md").is_file()]
-             if a.all else [a.slug])
+    slugs = ([n for n, _d in P.all_deliverables()] if a.all else [a.slug])
     if not slugs or slugs == [None]:
-        sys.exit("name an output slug, or pass --all")
+        sys.exit("name a published run, or pass --all")
 
     svc = drive.service()
     parent = a.folder

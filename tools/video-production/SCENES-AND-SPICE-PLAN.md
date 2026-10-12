@@ -1,6 +1,6 @@
 # Scenes and spice — the plan (not yet applied)
 
-**2026-09-18.** Damon's read of `copy-scene-implementation.md` (written in
+**2026-09-18.** the owner's read of `copy-scene-implementation.md` (written in
 Higgsfield after another run) plus his rulings in chat. Format-, brand- and
 tool-agnostic; every change lands at the place in the chain that owns it.
 Nothing below is installed until he says go.
@@ -37,7 +37,7 @@ Nothing below is installed until he says go.
 | A5 director pass: "THE SCENE LANDED" (feeling readable, delta moved, outcome reached) | **adopt** (v2 → v3) | `prompts/stage-5c-director/` |
 | A6 scene-arc table in the edit doc | **adopt** | `handoff-and-edit.md` |
 | A7 CLAUDE.md ruling paragraph | **adopt**, agnostic wording (no song-ad sentence) | `CLAUDE.md` hard rules |
-| B1 4a read: "WHAT THE SOURCE KNEW" (private moment · bias · cultural rule, cited) | **adopt** (stage4r-read v3 → v4) | `components/video-teardown/prompts/stage-4-loop/4a-read/` |
+| B1 4a read: "WHAT THE SOURCE KNEW" (private moment · bias · cultural rule, cited) | **adopt** (stage4r-read v3 → v4) | `tools/copywriter/prompts/video/stage-4-loop/4a-read/` |
 | B2 4b hooks: private moment + bias + cultural rule per variation; THE KNOWN TEST | **adopt** (stage4b-hook v11 → v12) | `…/4b-hook/` |
 | B3 close: name the flinch before the offer | **adopt** (stage4d-close v6 → v7 — the doc's file names are off by one stage; the real files are `stage4d-close`, `stage4e-audit`, `stage4r-read`) | `…/4e-close/` |
 | B4 audit: checks 8–10 (KNOWN, SOURCE, BIAS) | **adopt** (stage4e-audit v3 → v4) | `…/4f-audit/` |
@@ -45,16 +45,16 @@ Nothing below is installed until he says go.
 | B6 stage-3 rule 8 "the copy is the spine" | **adopt** (same v4 as A4) | `prompts/stage-3-scenes/` |
 | B7 handoff: THE LOOP + the scene arc in THE INTENDED SHAPE | **adopt** (v2 → v3) | `prompts/stage-6-handoff/` |
 
-## What the document does not have — Damon's additions
+## What the document does not have — the owner's additions
 
 ### N1 · Granular ingestion — teardown stage 1 → v9, with a section vocabulary
-- **The section vocabulary** (a bank, not prose — Damon's own list, in his
+- **The section vocabulary** (a bank, not prose — the owner's own list, in his
   words): hook · problem · failed solutions · root cause · unique mechanism
   · solution · product · offer · call to action. A swipe whose scene fits
   none is labelled with the teardown's plain description and **flagged as
   a candidate row** — never coined into the bank by a session.
-  Lives at `components/video-teardown/banks/sections.json` (brand-agnostic;
-  the teardown component is Damon's).
+  Lives at `tools/video-teardown/banks/sections.json` (brand-agnostic;
+  the teardown component is the owner's).
 - **Stage 1 records per scene:** its section label · its frames (one row
   per distinct visual change, as today) · the eight scene-contract fields
   *as observed in the source* · every element present: characters,
@@ -78,7 +78,7 @@ Nothing below is installed until he says go.
   stage picks and writes the sheet.
 - **What the sheet may hold:** voice direction (which cast voice, cloned
   and then adjusted — pitch, pace, register — with its rights entry on file
-  in the brand's cast folder; the guard is rights, not a ban — Damon,
+  in the brand's cast folder; the guard is rights, not a ban — the owner,
   2026-09-18: "we are cloning people's voices and then adjusting them"), a
   lookalike-type character for a B-roll beat
   (written identity only, deliberately different face — the variation
@@ -110,5 +110,5 @@ Nothing below is installed until he says go.
 ## Deliberately not done
 - No numbers on scene length anywhere.
 - No song-ad-specific rule outside the song-ad profile.
-- No coined section names — the vocabulary is Damon's list; gaps are flagged.
+- No coined section names — the vocabulary is the owner's list; gaps are flagged.
 - No real person's face or voice, in the spice or anywhere.

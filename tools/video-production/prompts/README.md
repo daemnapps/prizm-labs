@@ -18,7 +18,7 @@ the brief's own counts.
 | 0 · Read the brief | `stage-0-read-brief/` *(mechanical, no model)* | the plan, covering every item the brief asks for |
 | 1 · Openings | `stage-1-openings/stage1-openings-v1-damon.md` | one hook per opening in the brief |
 | 2 · A-roll | `stage-2-aroll/stage2-aroll-v2-damon.md` | the talking spine |
-| 3 · B-roll | `stage-3-broll/stage3-broll-v1-damon.md` | the cutaways |
+| 3 · B-roll | `stage-3-broll/stage3-broll-v2-damon.md` | the cutaways |
 | 4 · Offer cards | `stage-4-offer/stage4-offer-v2-damon.md` | price and guarantee on screen |
 
 **These files are the product.** The shape a prompt takes is what makes the

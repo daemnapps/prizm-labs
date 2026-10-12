@@ -16,6 +16,7 @@ import briefs as B  # noqa: E402
 class RunsRoot(unittest.TestCase):
     def test_runs_root_is_the_repo_runs_folder(self):
         self.assertEqual(B.RUNS, B.REPO / "runs" / "image-teardown")
+        self.assertTrue(B.RUNS.is_dir())
 
     def test_brand_folder_first_then_unbranded_then_old_home(self):
         with tempfile.TemporaryDirectory() as d:
@@ -34,8 +35,7 @@ class RunsRoot(unittest.TestCase):
         recs = reg.get("briefs", reg) if isinstance(reg, dict) else reg
         recs = list(recs.values()) if isinstance(recs, dict) else recs
         found = [r for r in recs if isinstance(r, dict) and r.get("run") and B.run_dir(r).is_dir()]
-        if not found:
-            self.skipTest("no brief run on disk yet — the public kit starts empty")
+        self.assertTrue(found, "no registered brief has a run folder on disk")
         for r in found:
             self.assertTrue(B.run_dir(r).is_relative_to(B.RUNS) or B.run_dir(r).is_relative_to(B.OLD_RUNS))
 

@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-"""Every path image teardown uses. One file, so there is one place to look.
+"""Every path the image lane uses. One file, so there is one place to look.
 
-Prizm Labs' public copy of the production tool (`tools/image-teardown/`). It
-reads this repo's own homes — `brands/<brand>/` (laid out like
-`brands/_TEMPLATE/`, whose `FOLDERS.json` names every folder, new and old),
-the shared parts in `components/`, and the other tools in `tools/`. Nothing
-outside the repo, except one folder for pictures you choose yourself
-(`PRIZM_MEDIA`, below). Pictures are content; code and text are the repo.
+**Image teardown is a component** (`tools/image-teardown/`, moved out of
+`tools/image-teardown/` on the owner's word, 2026-10-01: "move image teardown
+to components"). It reads the workspace's own homes — `brands/`, the other
+components — and nothing outside the repo: no `~/devel/daemn`, no integration
+desk. The old lab folder keeps a README and two forwarding shims for one
+release; working files a checkout still holds there are carried over on first
+use (`carry_over()` below).
 
-    from paths import LANE, SWIPE, DRIVE, brand
+The one exception is Drive, and it is not an exception to the rule so much as
+the other half of it: `the team notes/README.md` says code in the repo, content on
+Drive at the mirrored path. Pictures are content.
+
+    from paths import LAB, LANE, SWIPE, DRIVE, brand
 """
 
-import json
 import os
 import sys
 from pathlib import Path
@@ -33,64 +37,44 @@ def _up(start, test, what):
 
 
 def _repo(start):
-    env = os.environ.get("AI_WORKSPACE")
-    if env and (Path(env) / "brands").is_dir() and (Path(env) / "components").is_dir():
-        return Path(env)
-    return _up(start, lambda d: (d / "components").is_dir() and (d / "brands").is_dir(),
-               "workspace (a folder holding components/ and brands/)")
+    """The workspace root, by run-kit's one walk (SI-108 (teardown one locator)).
+    run-kit is found beside the lane, appended, never ahead of it."""
+    sys.path.append(str(LANE.parent.parent / "components" / "run-kit"))
+    from run_kit import paths as RK
+    return RK.repo(start)
 
 
 # The lane is the folder that holds chain.py and prompts/ — found, not counted.
 LANE = _up(__file__, lambda d: (d / "chain.py").is_file() and (d / "prompts").is_dir(),
            "image-teardown lane")                 # tools/image-teardown
 REPO = _repo(LANE)                                # the workspace root
-LAB = LANE.parent                                 # tools/
+# the owner's lab — still home to mirror.py and the lab pages. Not the lane's
+# parent any more (the lane graduated to components/ on 2026-10-01), so it is
+# named from the repo root rather than walked to.
+LAB = REPO / "tools"
+OLD_LANE = LAB / "image-teardown"                 # the pre-2026-10-01 home; a shim now
 TOOL = "image-teardown"                           # its name under runs/
 RECORDS = REPO / "runs" / TOOL                    # runs/image-teardown/<brand>/<label>/
 ELEMENTS = REPO / "components/elements"           # the element library
-# One constant for image production, not three paths: three readers once
-# pointed at an old folder and every draft job failed with "can't open file".
-IMAGE_PROD = REPO / "tools/image-production"
+# image-production graduated out of the team notes into components/ and three
+# readers were left pointing at the old path, so every draft job failed
+# with "can't open file" (2026-09-24). One constant now, not three paths.
+IMAGE_PROD = REPO / "tools/image-production/static"
 QUALITY = REPO / "components/quality-checks"      # the shared checks and hold()
 RUN_KIT = REPO / "components/run-kit"             # tiers, numeric prompt versions
 
-# The swipe library: one folder per advertiser (paid) or account (organic).
-SWIPE = REPO / "tools" / "my-feeds" / "paid"
-SWIPE_ORGANIC = REPO / "tools" / "my-feeds" / "organic"
-BRANDS = REPO / "brands"                          # brand truth — one folder per brand
-
-
-def _folder_names():
-    """new folder name -> old names, from brands/_TEMPLATE/FOLDERS.json."""
-    f = BRANDS / "_TEMPLATE" / "FOLDERS.json"
-    try:
-        d = json.loads(f.read_text())
-    except (OSError, ValueError):
-        return {}
-    return {k: v for k, v in d.items() if not k.startswith("_") and isinstance(v, list)}
-
-
-class _BrandPath:
-    """A brand file by its folder's name today, falling back to its old name
-    (FOLDERS.json) so a brand folder that has not moved yet still works."""
-
-    def brand_path(self, name, *keys, root=None):
-        b = Path(root or BRANDS) / name
-        rel = "/".join(keys)
-        names = _folder_names()
-        cands = [rel]
-        for new, olds in sorted(names.items(), key=lambda kv: -len(kv[0])):
-            if rel == new or rel.startswith(new + "/"):
-                tail = rel[len(new):]
-                cands += [o.rstrip("/") + tail for o in olds]
-                break
-        for c in cands:
-            if (b / c).exists():
-                return b / c
-        return b / rel
-
-
-BP = _BrandPath()
+# The library split into paid and organic; "swipe" has not existed since.
+# Three connection checks reported the whole swipe library missing.
+SWIPE = REPO / "components" / "swipe-paid"        # the swipe library — a component since 2026-09-22 (was the team notes/swipe-paid)
+SWIPE_ORGANIC = REPO / "components" / "swipe-organic"   # likewise moved 2026-09-22
+# Brand truth left the lab on 2026-09-02: the two homes were
+# consolidated into the repo-root brands/. These paths pointed at the
+# lab copy, so the packshot stopped existing and the product silently
+# vanished from six finished ads.
+BRANDS = REPO / "brands"                          # brand truth
+sys.path.append(str(REPO / "components" / "brandpath"))  # appended, never ahead of this lane
+import brandpath as BP                                 # noqa: E402  — brand folders by their plan name
+import drive_index as DI                               # noqa: E402  — the shared Drive mount helper
 # Same repo-root exception as BRANDS above: the marketing-doctrine component
 # is the one home for Schwartz's frameworks (awareness, sophistication,
 # desire, techniques), read by path, never restated in a prompt.
@@ -99,14 +83,74 @@ ADCOPY = REPO / "tools" / "copywriter"                          # the copy tool,
 
 PROMPTS = LANE / "prompts"
 TOOLS = LANE / "tools"
+# The standard brief every static brief is filled into (the owner, 2026-10-02).
+BRIEF_STANDARD = LANE / "templates" / "brief-standard-static-damon.md"
 
+
+# Working files git does not track (runs/, the draft pictures, worksheet
+# media, the board files) stay behind at the old lab path when a checkout
+# pulls the move — git only moves what it tracks. On first use they are moved
+# across, file by file, never over a file already here. The old lane still
+# being a live checkout (its own tools/paths.py present) means nothing moved
+# yet, so nothing is touched.
+# REMOVE WITH THE SHIM (SI-36 (teardown lab mirror), 2026-10-07): delete carry_over() and its import-time call below in the same commit that deletes the team notes/image-teardown/ — the team notes/image-teardown/README.md says when; that deletion is the owner's call. tests/test_drive_link.py fails until both go.
+_LEFTOVER_SKIP = {"README.md", "chain.py", "serve.py", "__pycache__", ".DS_Store"}
+
+
+def carry_over(verbose=False):
+    old = OLD_LANE
+    if not old.is_dir() or (old / "tools" / "paths.py").is_file() or old.resolve() == LANE.resolve():
+        return []
+    moved = []
+    for src in sorted(old.rglob("*")):
+        rel = src.relative_to(old)
+        if rel.parts[0] in _LEFTOVER_SKIP or "__pycache__" in rel.parts or not src.is_file():
+            continue
+        dst = LANE / rel
+        if dst.exists():
+            continue
+        try:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(src, dst)
+            moved.append(str(rel))
+        except OSError:
+            continue                              # another process got there first
+    if verbose and moved:
+        print(f"image-teardown: carried {len(moved)} working file(s) over from {old}")
+    return moved
+
+
+try:
+    carry_over()
+except Exception:                                 # never let tidying stop a run
+    pass
 
 RUNS = LANE / "runs"
 REFERENCE = LANE / "reference"                    # the visual lexicon
 
-# Where pictures live: any folder you choose, set once as PRIZM_MEDIA.
-# Unset, it is a `media/` folder beside this tool (kept out of git).
-DRIVE = Path(os.environ.get("PRIZM_MEDIA") or (LANE / "media"))
+# Team Drive is found through the shared mount helper, not typed with one
+# person's account (SI-39 (teardown mount helper), 2026-10-07). With no mount
+# it is a named path that does not exist, so every reader's is_dir()/is_file()
+# answers no — same as tools/image-production/static/tools/paths.py.
+NO_MOUNT = Path.home() / "Library/CloudStorage/_no-drive-mounted/Team Drive"
+NO_MOUNT_NOTE = ("no Team Drive Drive mount on this machine (components/brandpath "
+                 "drive_index.mount() found none) — the swipe stills and brand "
+                 "elements on the Drive cannot be read here")
+
+
+def _shared_assets():
+    """Team Drive on this machine's Drive mount, else NO_MOUNT (a path that
+    does not exist). An OSError from the mount is NO_MOUNT too."""
+    try:
+        return DI.mount() or NO_MOUNT
+    except OSError:
+        return NO_MOUNT
+
+
+SHARED_ASSETS = _shared_assets()
+DRIVE_MOUNTED = SHARED_ASSETS != NO_MOUNT
+DRIVE_SUBDIR = tuple(p for p in os.environ.get("PRIZM_DRIVE_SUBDIR", "prizm").split("/") if p)   # the folder on the shared drive this repo mirrors to
+DRIVE = SHARED_ASSETS.joinpath(*DRIVE_SUBDIR)
 
 # runners
 GEMINI_TEXT = TOOLS / "gemini_text.py"      # reads pictures, writes records
@@ -123,7 +167,7 @@ LEXICON = REFERENCE / "visual-lexicon.md"
 
 
 def brand(name):
-    """Everything the chain reads about one brand, all under brands/<brand>/.
+    """Everything the chain reads about one brand, all under the lab.
 
     Returns paths whether or not they exist — the caller reports what is
     missing rather than silently falling back to somewhere else, which is how
@@ -164,6 +208,16 @@ def avatar_profile(name, avatar):
             f"{name} has {len(found)} avatars — name one with --avatar: "
             + ", ".join(sorted(d.parent.name for d in found)))
     return root / avatar / "profile.md"
+
+
+def sub_avatar(name, avatar, sub):
+    """The sub-avatar's two files: its card (`sub-avatars/<sub>.md`) and its
+    newest profile (`sub-avatars/<sub>/profile.md`, written over each time the
+    profile prompt runs; the history is in git). the owner, 2026-10-02: briefs are
+    always written off the most up-to-date avatar, so a run names its sub and
+    reads these fresh at every stage, never a copy taken when the run opened."""
+    d = BRANDS / name / "core-avatars" / avatar / "sub-avatars"
+    return d / f"{sub}.md", d / sub / "profile.md"
 
 
 def product(name, slug):

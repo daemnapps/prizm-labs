@@ -1,7 +1,7 @@
 # The run protocol — the one run every format follows
 
 **2026-09-17.** Written after six pieces ran the route end to end on
-2026-09-16 across three formats and cost ~$55 an ad against a $3–4 floor.
+2026-09-16 across three formats and cost ~$__ an ad against a $__ floor.
 Every dollar of the gap was a gate that did not exist: wrong-person frames
 sent to motion, labels invented from prose, post-effects baked into
 generation, re-rolls chasing what a model cannot do, lines dropped, spend
@@ -16,7 +16,7 @@ teammate who clones the repo runs it on their own accounts.
 ## The spine
 
 1. **Teardown classifies and injects → a baseline brief.**
-   `components/video-teardown`, its own machine.
+   `tools/video-teardown`, its own machine.
 2. **At stage 5 the route is decided** — creator (a real person) or AI. The
    teardown records `production_route`. This protocol *reads* it; it never
    re-decides.
@@ -28,10 +28,10 @@ teammate who clones the repo runs it on their own accounts.
 
 ## Intake
 
-A run home at `runs/video-machine/<brand>/<label>/` (per `runs/README.md`)
+A run home at `runs/video-production/<brand>/<label>/` (per `runs/README.md`)
 holding `run.json`:
 
-    machine: video-machine · brand · label · format · source_brief
+    machine: video-production · brand · label · format · source_brief
 
 `format` must be a row in `formats/bank.json`. An unknown format is
 refused — a new one is written from `formats/TEMPLATE.md` and added to the
@@ -51,10 +51,12 @@ that carries a line).
 
 ## The scene shape (2026-09-18) — what a run is made of
 
+**Superseded for clips and voices, 2026-10-03 (the owner) — `THE-CHAIN.md` is the process.** Clips are Omni Flash on fal at 1080p animating the approved GPT Image 2.5 picture (`run.py start … --clips` → `machine/omni_clips.py`); a person's clip always starts from the approved picture, never a clip's last frame; on-camera lines are said by Omni and turned into the cloned voice (speech-to-speech), off-camera lines are text-to-speech in the cloned voice — the voice-first workflow is retired. What follows is the 2026-09 per-scene method, kept as the record of the legacy doors (`--legacy-clips`).
+
 **How a scene is actually generated, step by step, is `../SCENE-GENERATION.md`
 — the method page; this section is the run's checklist of it.**
 
-Damon's ruling that day, in one line: **a scene is a paragraph, and the
+the owner's ruling that day, in one line: **a scene is a paragraph, and the
 things inside it are frames, not scenes.** What that means for a run:
 
 1. **VOICE FIRST, AS ONE TRACK.** The whole piece is read once, chunked per
@@ -100,7 +102,7 @@ in `machine/providers.json`.
 
 ## The doors, as ruled 2026-09-18 evening
 
-Damon's ruling, 2026-09-17 ("we scale tomorrow"), put motion and the talking
+the owner's ruling, 2026-09-17 ("we scale tomorrow"), put motion and the talking
 beat with the editors. **On 2026-09-18, twice:** the morning put every image
 call on one door, and the evening put motion AND the talking beat on Seedance
 2.5 through Higgsfield — "let's just do the higgsfield seedance frame" —
@@ -148,7 +150,7 @@ passed is not a gate that was skipped; it is a batch that did not run.
 | 4 | **QC each still.** Mode `glance` on every frame. `deep` only on product-hero frames. Every problem carries a `defect_class`. | `prompts/stage-5-qc/stage5-qc-v2-damon.md` with `{mode}` and `{ceilings}` pasted **(machine)** |
 | 5 | **Verify each still against its cast sheet.** A check not written down did not happen. | `python3 machine/preflight.py verify --run <run-dir> <media-uuid> --shot <id> --by <who>` **(machine)** |
 | 6 | **Motion, only on verified frames.** Batch ≤ cap. Fast tier unless the frame is a hero. **A ceiling ships FLAGGED with zero re-rolls**; a fixable defect gets one re-prompt, then a re-composition, never a third try on the same composition. **Every submission goes to the ledger**, billing-ambiguous ones (blocked, refused, stuck) with their status. | `python3 machine/preflight.py ledger --run <run-dir> --model <slug> --job <id> --seconds N --status done\|nsfw\|ip_detected` (run.py record) **(editor)** |
-| 7 | **Motion QC.** Every clip checked: identity hold, product constancy, anatomy window, camera motivation, one-action, lip-sync class. Ceilings FLAG and ship, never re-roll. · **line parity**: the clip is transcribed and must say its line (≥ 85% match); a clip that says other words is not the clip. | `prompts/stage-5b-motion-qc/stage5b-motion-qc-v1-damon.md` · `python3 machine/lineparity.py --run <run-dir> <item-id> --clip <path>` (run.py record, automatic) **(machine)** |
+| 7 | **Motion QC.** Every clip checked: identity hold, product constancy, anatomy window, camera motivation, one-action, lip-sync class. Ceilings FLAG and ship, never re-roll. · **line parity**: the clip is transcribed and must say its line (≥ 85% match); a clip that says other words is not the clip. | `prompts/stage-5b-motion-qc/stage5b-motion-qc-v2-damon.md` · `python3 machine/lineparity.py --run <run-dir> <item-id> --clip <path>` (run.py record, automatic) **(machine)** |
 | 8 | **Director pass.** Every scene read by the director's eye: half-second answer, scroll-stopper, dramatization, the motion read ACROSS its frames (first frame held, last frame reached, the delta happened), format register · believability bar · the delivery across the whole paragraph, with no restart between sentences. Two director FLAGs on one scene = rework the scene in the script, not the render. | `prompts/stage-5c-director/stage5c-director-v5-damon.md` **(machine)** |
 | 9 | **Coverage gate.** Every line in `lines.json` is carried by exactly one clip. An uncovered line is an undeliverable pack. | `python3 machine/preflight.py coverage --run <run-dir>` (run.py pack) **(machine)** |
 | 10 | **Receipt.** Jobs, credits, dollars, of which re-rolls, ambiguous jobs separate, model slugs as recorded — from `ledger.json`, never from memory. | rendered into the handoff's THE RECEIPT (run.py pack) **(machine)** |

@@ -1,0 +1,10 @@
+{
+  "_what": "What good and bad look like for THIS brand's ads — read by components/meta-upload/standard.py and ad_filter.py. Every number comes from replaying the brand's own ads; fill them from your own data.",
+  "read_accuracy": {"base": 0, "3": 0, "5": 0, "10": 0, "winner_days": {"3": 0, "5": 0, "10": 0}},
+  "kill": {"decision_cpa_x": 4, "stats": {"ads_killed": 0, "winners_killed": 0, "winners_total": 0, "top1_killed": 0, "saved": 0, "saved_pct_of_waste": 0}},
+  "signs_of_life": {"rules": [["share", 4, "still getting {v}% of its campaign's spend"], ["atc", 8, "{v} add to carts"]],
+                    "history": {"kill_triggers": 0, "pulled_up": 0, "auto_killed": 0, "winners_auto_killed": 0, "months": 0}},
+  "avatars": ["<avatar-slug>"],
+  "parts": [{"rule": "<an ad-parts rule seen in this brand's winners>", "evidence": "<winners n of m, losers n of m>", "status": "seen in winners, not required", "note": ""}],
+  "parts_note": ""
+}

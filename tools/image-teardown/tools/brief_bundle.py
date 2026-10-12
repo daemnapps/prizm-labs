@@ -3,8 +3,8 @@
 
     brief_bundle.py --out briefs.html
 
-Damon, 2026-09-14: *"We had that page where we had all the <brand> briefs
-and the <brand> briefs, and you just click into <brand> or <brand>."*
+the owner, 2026-09-14: *"We had that page where we had all the Brand A briefs
+and the Brand B briefs, and you just click into Brand A or Brand B."*
 
 That page is `briefs/` — eighteen files served on 8792, and the thing he
 actually uses. An artifact is one file, so this folds the whole site into
@@ -47,6 +47,7 @@ def build(out):
     order = ["index"]
     order += sorted(p.stem for p in PAGES.glob("brand-*.html"))
     order += sorted(p.stem for p in PAGES.glob("p[0-9]*.html"))
+    order += sorted(p.stem for p in PAGES.glob("*_brief-[0-9]*.html"))     # numbered per brand+product
 
     css_seen, fonts, sections, titles = [], [], [], {}
     for name in order:
@@ -60,8 +61,8 @@ def build(out):
         for u in fnt:
             if u not in fonts:
                 fonts.append(u)
-        # index.html → brand-<brand>.html → p143.html become #index,
-        # #brand-<brand>, #p143. Nothing else about the markup moves.
+        # index.html → brand-brand-a.html → p143.html become #index,
+        # #brand-brand-a, #p143. Nothing else about the markup moves.
         body = re.sub(r'href="([A-Za-z0-9_-]+)\.html"', r'href="#\1"', body)
         sections.append(
             f'<div class="pg" id="pg-{name}" data-title="{html.escape(title)}"'

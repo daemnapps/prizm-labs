@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import chain as C                                            # noqa: E402
 
 # What run.py itself fills while a stage is running (run_stage), by name.
-RUN_FILLS = {"source_url", "research", "voiceprint", "story"}
+RUN_FILLS = {"source_url", "research", "voiceprint", "story", "frame_map"}
 # Filled only on a Variation video run (variation.py hands them in); empty on
 # every other run, and the prompts read empty as "not a variation run".
 VARIATION_FILLS = {"target_awareness", "branch_sections"}
@@ -178,6 +178,12 @@ def resolve(video, label, brand, extras=None, route=None, creator=None,
                     else:
                         status, origin = MISSING, (
                             f"wants stage {n}, which is not in this chain")
+                elif src == "!culture_read" and "stage1k" not in on_disk \
+                        and "stage1k" in will_run:
+                    status, origin = LATER, "from stage 1k (not run)"
+                elif src == "!post_talk":
+                    origin = ("the post's caption and comments — pulled free (yt-dlp) "
+                              "when the stage starts; none to pull is said in the text")
                 elif src.startswith("~"):
                     name = src[1:]
                     if name in pack:

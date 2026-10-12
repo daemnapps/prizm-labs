@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """The variation batch — every brief's written variations, made off its winner.
 
-    variations.py --brand <brand> --product <product>
-    variations.py --brand <brand> --product … --briefs p158,p159
-    variations.py --brand <brand> --product … --dry-run
-    variations.py --brand <brand> --product … --no-name      stop before naming
+    variations.py --brand brand-a --product glow-body-scrub
+    variations.py --brand brand-a --product … --briefs p158,p159
+    variations.py --brand brand-a --product … --dry-run
+    variations.py --brand brand-a --product … --no-name      stop before naming
 
-Damon, 2026-09-23: *"we need to just focus on this image editing so we can
+the owner, 2026-09-23: *"we need to just focus on this image editing so we can
 get our batch of variations from the briefs, that's the whole point of this
 stage specifically."*
 
@@ -27,6 +27,8 @@ account can only be the thing that moved.
     5  name      the convention, one ad unit per brief, assets a01…aNN
     6  list      drop.csv — every asset, its ad name, the headline it carries
     7  mirror    Drive, at the mirrored runs path
+    8  to check  only with --to-check --links …: every ad as a card in
+                 Team Drive/meta/<brand>/1-check/image/ (meta-upload/feed_image.py)
 
 **One call per variation, never one call with five.** The engine names a
 result's folder after the row it ran, so five `headline` rows in one call
@@ -40,7 +42,7 @@ A brief whose stage 4 wrote no variations is a text-free ad: it is listed as
 skipped and nothing is invented for it. Its variations are pictures, which
 is a generation, not an edit.
 """
-import argparse, csv, json, re, shutil, subprocess, sys, time
+import argparse, csv, json, os, re, shutil, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
@@ -56,7 +58,12 @@ N = B.N                            # components/naming/names — parse_any
 
 WS = P.REPO
 ROOT = P.LANE                      # the lane: worksheets, drafts, runs
+# A drop is image-teardown's own run, not image-edit's (image-edit#9, #14;
+# the developer's triage page 9 ruling, 2026-10-07).
+DROPS = WS / "runs" / P.TOOL                  # runs/image-teardown/<brand>/<drop>/
+LEGACY_DROPS = WS / "runs" / "image-edit"     # drops filed before 2026-10-07: read in place, never written
 VARY = WS / "tools/image-edit/vary.py"
+MACHINE = P.TOOL   # its segment under runs/ on both planes
 
 
 def wanted(rec):
@@ -64,7 +71,7 @@ def wanted(rec):
 
     Stage 4 writes headline variations for an ad that carries a headline;
     stage 5 writes PICTURE variations — a body part, a setting, a different
-    person — for one that does not. Damon, 2026-09-23: "run the variations
+    person — for one that does not. the owner, 2026-09-23: "run the variations
     for what needs a variation." Both are one delta off the winner; only the
     delta differs, so both run through the same stage."""
     hs = HS.for_brief(rec)
@@ -109,7 +116,7 @@ def one(brand, bid, v, baseline, drop, dry, tries=3):
     """One variation, retried. The image provider rate-limits a burst — six
     at once refused fifty-four of sixty on 2026-09-23 and every one of them
     succeeded alone, so a refusal is retried before it is believed."""
-    out = WS / "runs/image-edit" / brand / drop / "working" / bid / f"h{v['n']}"
+    out = DROPS / brand / drop / "working" / bid / f"h{v['n']}"
     done, _ = _state(out, dry)
     if done == "pass":
         # resume, never re-spend — and a dry run stops HERE rather than
@@ -189,7 +196,7 @@ def stage_one(brand, bid, vs, baseline, out, folder_name=None):
 
     The folder is named for the AD UNIT once it has one, so the folder a
     person opens to load from carries the name they paste into Meta; a brief
-    id names it only until the run is named (Damon, 2026-09-23: "I don't see
+    id names it only until the run is named (the owner, 2026-09-23: "I don't see
     you've used the proper naming conventions for this step")."""
     d = out / "deliverable" / (folder_name or bid)
     d.mkdir(parents=True, exist_ok=True)
@@ -270,16 +277,65 @@ def write_list(brand, out, by, named):
     return f, rows
 
 
-def mirror(out, brand, drop):
-    """Drive, at the mirrored runs path (the workspace rules §1)."""
-    sa = P.DRIVE / "runs" / "image-edit" / brand / drop
-    if not sa.parent.parent.exists():
-        return None
-    sa.mkdir(parents=True, exist_ok=True)
-    if (sa / "deliverable").exists():
-        shutil.rmtree(sa / "deliverable")
-    shutil.copytree(out / "deliverable", sa / "deliverable")
-    return sa
+def _service():
+    """(engine, svc, None), or (None, None, note) when this machine has no
+    Drive key. A key that is present while gdrive-creator still exits (a
+    missing Google package) is a failure, never a skip: it is raised."""
+    try:
+        engine, svc = DV.service()
+    except SystemExit as e:
+        if os.environ.get("GDRIVE_SA_KEY"):
+            raise
+        return (None, None,
+                "SKIP the Drive mirror — no GDRIVE_SA_KEY on this machine ("
+                + str(e) + "). The drop is on disk; nothing on Drive was touched.")
+    return engine, svc, None
+
+
+def _drive_folder(engine, svc, parts):
+    """The folder id of Team Drive/<parts…>, walked by name from the drive
+    — the same walk ad-handoff verifies the deliverable folder with."""
+    node = engine.shared_drive_id("Team Drive", svc)
+    if not node:
+        raise SystemExit("no 'Team Drive' shared drive reachable by this account")
+    for p in parts:
+        node = engine.folder(p, node, svc=svc)
+    return node
+
+
+def mirror(out, brand, drop, engine, svc):
+    """Drive, at Team Drive/runs/image-teardown/<brand>/<drop>/deliverable.
+    Returns (deliverable folder id, {relative path: file id}).
+
+    Every file is updated in place by name and nothing is ever deleted, so
+    the folder and the files keep their ids and links already handed out
+    keep opening. A file removed locally stays on Drive."""
+    dest = _drive_folder(engine, svc, ["runs", MACHINE, brand, drop, "deliverable"])
+    return dest, engine.mirror_tree(Path(out) / "deliverable", dest, svc)
+
+
+def to_check(brand, drop, links):
+    """Step 8 (behind --to-check): every ad of the drop into 1-check as a card."""
+    sys.path.insert(0, str(WS / "components/meta-upload"))
+    import feed_image as FI
+    try:
+        res = FI.feed(brand, drop, links)
+    except FI.T.Refused as e:
+        print(f"\nto check: REFUSED  {e}")
+        return
+    print(f"\nto check · {sum(1 for p, _, _ in res if p)} card(s) → meta/{brand}/1-check/image/")
+    for p, why, _ in res:
+        print("  " + (FI.T.show(p).replace("\n", "\n  ") if p else f"REFUSED {why}"))
+
+
+def drop_home(brand, drop):
+    """This drop's one home, runs/image-teardown/<brand>/<drop>/. A drop already
+    filed at the legacy home is refused, never continued."""
+    if (LEGACY_DROPS / brand / drop / "drop.json").is_file() and not (DROPS / brand / drop).exists():
+        print(f"refused: drop {drop} is filed at runs/image-edit/{brand}/{drop}/ (before 2026-10-07) "
+              f"and is frozen there — name a new --drop or --batch", file=sys.stderr)
+        raise SystemExit(2)
+    return DROPS / brand / drop
 
 
 def main():
@@ -295,7 +351,12 @@ def main():
     ap.add_argument("--name-only", action="store_true",
                     help="steps 4-7 only: stage, name, list, mirror what is already made")
     ap.add_argument("--batch", help="the batch id (default: the next free one today)")
+    ap.add_argument("--to-check", action="store_true",
+                    help="step 8: file every ad of the drop into meta/<brand>/1-check/image/ for the owner's approval")
+    ap.add_argument("--links", nargs="+", default=[], help="with --to-check: the catalog link ids the ads go to")
     a = ap.parse_args()
+    if a.to_check and not a.links:
+        ap.error("--to-check needs --links (catalog link ids)")
 
     # The label is the BATCH ID — the convention's own key for a day's run,
     # and the last field of every filename in it. A long descriptive label
@@ -306,6 +367,7 @@ def main():
                             "next-batch", a.brand], capture_output=True, text=True, cwd=str(WS))
         batch = r.stdout.strip().splitlines()[-1].strip() if r.returncode == 0 else None
     drop = a.drop or batch or f"{(a.product or a.brand)}-{date.today()}"
+    home = drop_home(a.brand, drop)
     reg = B.load()
     want = set(B.ids(reg, a.briefs.split(","))) if a.briefs else None   # either spelling
 
@@ -327,7 +389,7 @@ def main():
             jobs.append((bid, {**v, "kind": kind, "headline": v["label"]}, baseline))
 
     print(f"{len(jobs)} variations · {len({j[0] for j in jobs})} ads · "
-          f"{a.workers} at a time → runs/image-edit/{a.brand}/{drop}/")
+          f"{a.workers} at a time → runs/{P.TOOL}/{a.brand}/{drop}/")
     for bid, why in skipped:
         print(f"  – {bid}  {why}")
     print()
@@ -347,7 +409,7 @@ def main():
             print(f"  {mark} {bid} h{v['n']}  {v['headline'][:52]}"
                   + (f"   {note[:60]}" if note else ""))
 
-    rec = WS / "runs/image-edit" / a.brand / drop / "drop.json"
+    rec = home / "drop.json"
     rec.parent.mkdir(parents=True, exist_ok=True)
     # The record accumulates. A `--briefs p158` run wrote it with five rows
     # and dropped the other fifty-five (2026-09-23); a partial run is normal
@@ -373,9 +435,10 @@ def main():
 
     # ---- 4-7: stage, name, list, mirror ---------------------------------
     named, refused = {}, []
+    drive, failed = None, None
     if n and not (a.dry_run or a.no_name):
         # EVERY ad goes in the batch, not only the ones that had variations.
-        # Damon, 2026-09-23: "not all of them need headlines but I need all
+        # the owner, 2026-09-23: "not all of them need headlines but I need all
         # ads and their variations in this deliverables folder so I can
         # upload everything." A text-free ad ships its winner alone.
         made = {b: [] for b, _ in [(x[0], x) for x in
@@ -413,19 +476,30 @@ def main():
                 seen[d["n"]] = d
         allpass = {b: sorted(v.values(), key=lambda x: x["n"]) for b, v in allpass.items()}
         csvf, rows = write_list(a.brand, rec.parent, allpass, named)
-        sa = mirror(rec.parent, a.brand, drop)
-        print(f"\n{len(rows)} assets · {len(named)} ad units · list: "
-              f"{csvf.relative_to(WS)}" + (f" · mirrored to Drive" if sa else ""))
+        try:
+            engine, svc, note = _service()
+            fid, ids = mirror(rec.parent, a.brand, drop, engine, svc) if svc else (None, {})
+        except SystemExit as e:
+            fid, ids, note, failed = None, {}, "FAILED the Drive mirror — " + str(e), str(e)
+        drive = {"deliverable": fid, "files": ids} if fid else {"not_mirrored": note}
+        print(f"\n{len(rows)} assets · {len(named)} ad units · list: {csvf.relative_to(WS)}")
+        print(f"Drive: https://drive.google.com/drive/folders/{fid} · {len(ids)} file(s), updated in place"
+              if fid else f"Drive: {note}")
+        if a.to_check:
+            to_check(a.brand, drop, a.links)
 
     (rec.parent / "run.json").write_text(json.dumps(
-        {"machine": "image-edit", "brand": a.brand, "label": drop,
+        {"machine": P.TOOL, "brand": a.brand, "label": drop,
          "state": "filed" if n else ("held" if done else "refused"),
          "ad_units": named, "unnamed": [{"brief": b, "why": w} for b, w in refused],
+         "drive": drive,
          "opened": date.today().isoformat()}, indent=1) + "\n")
     print(f"\n{n} of {len(done)} delivered · "
           f"{sum(1 for d in done if d['state'] == 'held')} held · "
           f"{sum(1 for d in done if d['state'] not in ('pass', 'held', 'dry'))} refused")
     print(f"record: {rec.relative_to(WS)}")
+    if failed:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

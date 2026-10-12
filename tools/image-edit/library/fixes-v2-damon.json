@@ -1,6 +1,6 @@
 {
  "_what": "The named spot fixes image-edit handles. Each is ONE delta with slots, the extra keeps it adds to the kind's split, what the caller must supply, which brand file rides along as a reference, and the test the two-picture judge adds. A fix is a delta template, never a description of the picture.",
- "_curator": "Damon. Status per row: draft / approved / deprecated. A changed fix is a NEW file -v<N+1>-damon.json beside this one; highest wins.",
+ "_curator": "the owner. Status per row: draft / approved / deprecated. A changed fix is a NEW file -v<N+1>-damon.json beside this one; highest wins.",
  "fixes": [
   {
    "id": "logo",
@@ -24,7 +24,7 @@
    "id": "text",
    "status": "parked",
    "name": "Wrong words",
-   "what": "one line of type says the wrong thing, or is garbled. PARKED 2026-09-22: a model cannot be trusted to re-letter type. Four live attempts on one line: twice it redrew the product's own label, once it re-composed the frame, once it painted the masked band black. This agrees with the standing doctrine — type is composited over a clean plate, never generated. The route for wrong words is the COMPOSITOR: change the words in the brief's type layer and recompose (tools/image-production/tools/compose.py), which is exact and free.",
+   "what": "one line of type says the wrong thing, or is garbled. PARKED 2026-09-22: a model cannot be trusted to re-letter type. Four live attempts on one line: twice it redrew the product's own label, once it re-composed the frame, once it painted the masked band black. This agrees with the standing doctrine — type is composited over a clean plate, never generated (GENERATION-METHOD.md). The route for wrong words is the COMPOSITOR: change the words in the brief's type layer and recompose (tools/image-production/static/tools/compose.py), which is exact and free.",
    "delta": "re-letter the text that reads \"{was}\" so it reads \"{now}\" — same typeface, same size, same colour, same position",
    "keep": [
     "every other word in the picture"
@@ -43,10 +43,10 @@
    "id": "product",
    "status": "draft",
    "name": "Wrong product",
-   "what": "the product is drawn wrong, or is the wrong one — swap it for the brand's real product from the attached photo, at the same angle and size, in the same hand or spot",
-   "delta": "replace the product with the attached product photo, at the same angle, the same size, in the same position",
+   "what": "the product is drawn wrong, or is the wrong one — replace the WHOLE object with the brand's real product from the attached photo: its own outline, proportions, cap, label and colour, at its real size against the hand or surface — not a relabel or a recolour of the wrong one",
+   "delta": "replace the whole product with the one in the attached product photo — its outline, proportions, cap, label and colour — at its real size in the hand, same angle",
    "keep": [
-    "the hand or surface holding it",
+    "the hand or surface holding it (fingers re-wrapped around the new shape only where needed)",
     "the light on it"
    ],
    "needs": [],
@@ -54,9 +54,12 @@
     "product"
    ],
    "checks": [
-    "The product now matches the attached product photo — its shape, colour, cap and label — at the same angle and size, in the same position."
+    "The product's OUTLINE and proportions now match the attached product photo (not only its label and colour) — same cap, same shape, label exact.",
+    "The product is its real size against the hand holding it, never larger than the hand.",
+    "No trace of the old product's outline remains."
    ],
-   "region_hint": "the product's own box"
+   "region_hint": "the product's own box, widened to fit the real product's outline and size",
+   "note": "2026-10-02, the owner: a swap with the designer 'technically did a label swap and a color-of-the-bottle swap, but it didn't actually do a proper, real bottle swap' — the old row kept the wrong product's size and box, so the model repainted inside the old outline. Now the whole object is replaced at the real product's own outline and size (same rule as video-production frame_rules.product_scale)."
   },
   {
    "id": "layout",

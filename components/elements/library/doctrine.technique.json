@@ -16,7 +16,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "identification",
@@ -29,7 +31,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "gradualization",
@@ -42,7 +46,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "redefinition",
@@ -55,7 +61,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "mechanization",
@@ -68,7 +76,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "concentration",
@@ -81,7 +91,9 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   },
   {
    "id": "camouflage",
@@ -94,8 +106,13 @@
    "evidence": null,
    "approved": false,
    "source": "components/marketing-doctrine/frameworks.json",
-   "extra": {}
+   "extra": {},
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }

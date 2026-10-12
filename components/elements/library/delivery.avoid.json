@@ -18,7 +18,9 @@
    "source": "components/marketing-doctrine/delivery.json › avoid",
    "extra": {
     "when": "Every section, every level. It is checked against the chosen register and delivery style before anything is written."
-   }
+   },
+   "aliases": [],
+   "note": null
   },
   {
    "id": "ad-voice-tells",
@@ -33,8 +35,13 @@
    "source": "components/marketing-doctrine/delivery.json › avoid",
    "extra": {
     "when": "Every piece, and hardest wherever the room's scepticism toward advertising is the main barrier."
-   }
+   },
+   "aliases": [],
+   "note": null
   }
  ],
- "duplicates": []
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
 }
