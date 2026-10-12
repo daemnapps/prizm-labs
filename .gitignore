@@ -4,6 +4,7 @@
 .gemini.env
 *.key
 credentials.json
+.wrangler/
 
 # your work, not the toolkit
 brands/*/
