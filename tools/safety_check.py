@@ -58,7 +58,7 @@ def main():
     base, head = (sys.argv[1:3] + ["origin/main", "HEAD"])[:2]
     rules, problems = allowed(), []
     for path, n, line in added_lines(base, head):
-        if path.startswith("tools/safety_check.py") or path.startswith(".githooks/"):
+        if path in ("tools/safety_check.py", ".github/safety-allow.txt") or path.startswith(".githooks/"):
             continue                                   # the rules themselves
         ok = lambda text: any(path.startswith(p) and t.lower() in text.lower() for p, t in rules)
         for m in KEYS.finditer(line):
