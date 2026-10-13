@@ -17,6 +17,12 @@
 >
 > A format's reference set is: her master + the crops from her boards.
 > Nothing else, and nothing invented.
+>
+> **Every person is cast at their best** (the owner, 2026-10-13: "always show
+> an improved version of whoever we cast"). Same age, height, frame and kind
+> of person as the real reference, shown as the best-looking, most
+> put-together version of them, the one the viewer looks up to. Real skin,
+> never retouched. The cast-sheet prompt (v3) does this on every master.
 
 A character has to be the same person in the first scene and the last, and the same
 person again in next month's ad. That is one problem solved in two
