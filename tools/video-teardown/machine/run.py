@@ -2003,6 +2003,24 @@ def run_stage(d, st, stage, extras, redo=False):
                     say(f"      NOT A WORD {f['id']}: {'; '.join(f['found'])} — {f['text'][:90]}")
                 raise RuntimeError(f"{len(_frag)} spoken line(s) carry a fragment that is not a word — HELD. "
                                    f"Write the stumble with real words or drop it, then re-run this step.")
+            # NO MACHINE TELLS IN WHAT WE SAY (the owner, 2026-10-13: "completely
+            # eliminate AI sounding / looking generative output"). The hard tells
+            # of components/marketing-doctrine/tells.json — machine vocabulary,
+            # ad-template phrases, stacked exclamation marks — in the same spoken
+            # lines. A phrase the swipe itself says is the swipe's, never a tell.
+            _tp = _u.spec_from_file_location("tells", C.WS / "components/marketing-doctrine/tells.py")
+            _tl = _u.module_from_spec(_tp); _tp.loader.exec_module(_tl)
+            _swipe = "".join(f.read_text() for f in (d / "stages").glob("1-*.md")) if (d / "stages").is_dir() else ""
+            _tells = [dict(t, line_id=i, text=x) for i, x in _pairs
+                      for t in _tl.check_text(x or "", swipe=_swipe)]
+            if _tells:
+                st["stages"][key]["status"] = "held"
+                st["tells_check"] = {"found": _tells, "at": now()}
+                save(d, st)
+                for t in _tells:
+                    say(f"      TELL {t['id']} in {t['line_id']}: \"{t['match']}\" ({t['name']}) — {t['fix']}")
+                raise RuntimeError(f"{len(_tells)} machine tell(s) in what we say — HELD. "
+                                   f"Rewrite each line in the room's own words, then re-run this step.")
         if key == "stage5":
             # EVERY PERSON IS THE SWIPE'S PERSON (the owner, 2026-10-01: "why did you
             # make doctor 3 a woman if you knew it was a man?"). Each person in

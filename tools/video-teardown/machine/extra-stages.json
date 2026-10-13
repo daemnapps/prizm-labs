@@ -156,6 +156,7 @@
  "_vars_note": "source_url and hook_set are bound per run, not from the shared config. HUMOR RULES v1 (the owner, 2026-10-06, 'All six'): culture_read now reaches audience, placement, expansion, close, audit and spice too; culture_map (the run's avatar's core-avatars/<avatar>/culture-map.md — renamed from humor_map 2026-10-06, 'it's more about the foundational way to identify these cultural nuances'; soft when missing) reaches injection, hooks, placement, expansion, close, audit, spice and the brief.",
  "stage_vars": {
   "stage5": {
+   "tells": "components/marketing-doctrine/slices/tells.md",
    "delivery": "components/marketing-doctrine/slices/delivery.md",
    "hook_set": "@stage4b",
    "source_url": "~source_url",
@@ -196,6 +197,7 @@
    "culture_map": "!culture_map"
   },
   "stage3": {
+   "tells": "components/marketing-doctrine/slices/tells.md",
    "language": "?injection",
    "techniques": "components/marketing-doctrine/slices/techniques.md",
    "position": "brands/<brand>/brand-identity/position.md",
@@ -276,6 +278,7 @@
    "story": "~story"
   },
   "stage4g": {
+   "tells": "components/marketing-doctrine/slices/tells.md",
    "story": "~story",
    "culture_read": "!culture_read",
    "culture_map": "!culture_map"

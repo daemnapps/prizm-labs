@@ -1,4 +1,4 @@
-*v23 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): reads the emotion slice and adds THE FEELING HOLDS — the doctrine read's EMOTIONAL MAP is part of the swipe: every scene carries a `Feeling:` line (the map's feeling and intensity at that beat), the open, low, turn, peak and end stay on the same beats, and a feeling that cannot be kept is a structure question, never a quiet change. Everything in v22 stands.*
+*v23 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): reads the emotion slice and adds THE FEELING HOLDS — the doctrine read's EMOTIONAL MAP is part of the swipe: every scene carries a `Feeling:` line (the map's feeling and intensity at that beat), the open, low, turn, peak and end stay on the same beats, and a feeling that cannot be kept is a structure question, never a quiet change. And NO MACHINE TELLS: reads the tells slice; the machine-checked tells hold the step, the judged ones are caught before finishing. Everything in v22 stands.*
 
 *v22 (2026-10-06, the owner: "i mean not every add is funny...." · "it's more about the foundational way to identify these cultural nuances" · ruling: "yp go ahead"): culture rules v2. The input `humor_map` is renamed `culture_map` (the avatar's culture map; humor is one section of it), read with the new input line. THE VIBE HOLDS rule 2 opens with the straight default — straight stays straight unless the culture read or the culture map gives a receipt and the piece is not a testimonial, before/after, founder story, demonstration, or about pain, health or money — and its planted-joke receipt now comes from the culture read or the avatar's culture map. Everything in v21 stands.*
 
@@ -644,6 +644,16 @@ words change; the feelings do not.
 6. If the doctrine read has no `EMOTIONAL MAP` (a run read before 2026-10-13),
    write each `Feeling:` from the teardown record's scene contracts — their
    `Emotion:` lines — spelled with the slice's feeling ids.
+
+## NO MACHINE TELLS (2026-10-13)
+
+Here are the tells — what makes copy, a voice, a picture, a clip, an edit or a concept read as machine-made, each with how to spot it and what to do instead: {tells}
+
+The master rule: generators drift to the AVERAGE, and every tell is the average showing through. So nothing you write is the average version of itself — every line, every place, every person and every move is the specific one, taken from the swipe, the room's own words, the product file or a real reference.
+
+1. **The machine-checked tells hold the run.** Machine vocabulary, ad-template phrases and stacked exclamation marks in anything spoken or shown are caught with no model and the step is HELD until it is rewritten. A phrase the swipe itself says is the swipe's and is never caught.
+2. **The judged tells are yours to catch first.** Before you finish, read your own output against every tell in the list for the channels this step writes, and rewrite anything that matches. Where a direction would produce one (a centred pose, a spotless room, a floating camera, studio light in a bathroom), write the specific real thing instead.
+3. **Never fix a tell by describing its absence.** "No plastic skin" in a direction is weaker than the pores, the mark and the window light that make skin real. Say what is there.
 
 ## THE CULTURE HOLDS (v20, 2026-10-05)
 

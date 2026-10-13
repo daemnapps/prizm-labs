@@ -188,7 +188,7 @@
    "stage": "stage5c",
    "name": "Director pass",
    "runner": "vision-judge",
-   "prompt": "stage5c-director-v5-damon.md",
+   "prompt": "stage5c-director-v6-damon.md",
    "prompt_dir": "stage-5c-director",
    "scope": "scene",
    "why": "the creative QC the inspector is forbidden from offering — half-second, scroll stopper, dramatization, motion, format register, delivery landed",
@@ -198,7 +198,8 @@
     "format_profile": "~format_profile",
     "techniques": "components/marketing-doctrine/slices/techniques.md",
     "mood": "components/marketing-doctrine/slices/mood.md",
-    "delivery": "components/marketing-doctrine/slices/delivery.md"
+    "delivery": "components/marketing-doctrine/slices/delivery.md",
+    "tells": "components/marketing-doctrine/slices/tells.md"
    }
   },
   {

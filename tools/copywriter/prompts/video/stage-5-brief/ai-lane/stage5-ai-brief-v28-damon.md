@@ -1,4 +1,4 @@
-<!-- v28 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): reads {emotion}, the emotional map doctrine. Every scene's `emotion` is now spelled `⟨feeling id⟩ ⟨intensity⟩[ · ⟨point⟩] — ⟨the moment⟩`, taken from the injection's `Feeling:` line, so the swipe's open, low, turn, peak and end stay on their beats; the piece names its `arc`. The machine reads both against the swipe's own map. Everything in v27 stands. -->
+<!-- v28 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): reads the emotion slice, the emotional map doctrine. Every scene's `emotion` is now spelled `⟨feeling id⟩ ⟨intensity⟩[ · ⟨point⟩] — ⟨the moment⟩`, taken from the injection's `Feeling:` line, so the swipe's open, low, turn, peak and end stay on their beats; the piece names its `arc`. The machine reads both against the swipe's own map. And NO MACHINE TELLS: reads the tells slice; the machine-checked tells in any `voice` or `says` hold the brief, and every direction is written specific, never average. Everything in v27 stands. -->
 
 <!-- v27 (2026-10-08, the owner: "this is just the Meta strategy … playing to this algo"; "I want to be very, very clear on exactly how the prompts are structured … leveraging the same exact elements and variables"): the `piece` block now carries the seven moves in the system's own fields — the existing `avatar`, `sub`, `awareness`, `format`, plus `angle` (from {angles}), `setting` (from {settings}), `lead` (the lead's bank_id from the banked cast) and `style_id` (an id from the style list) — read by components/creative-diversity/check.py. Two new inputs: {angles}, {settings}. Replaces v26 (archived: it declared the moves in a second block with new words). Everything in v25 stands. -->
 
@@ -1927,6 +1927,16 @@ The test: if a change alters what a viewer **learns**, it is out of scope.
 If it only alters how hard that lands, it is the job.
 
 ---
+
+## NO MACHINE TELLS (2026-10-13)
+
+Here are the tells — what makes copy, a voice, a picture, a clip, an edit or a concept read as machine-made, each with how to spot it and what to do instead: {tells}
+
+The master rule: generators drift to the AVERAGE, and every tell is the average showing through. So nothing you write is the average version of itself — every line, every place, every person and every move is the specific one, taken from the swipe, the room's own words, the product file or a real reference.
+
+1. **The machine-checked tells hold the run.** Machine vocabulary, ad-template phrases and stacked exclamation marks in anything spoken or shown are caught with no model and the step is HELD until it is rewritten. A phrase the swipe itself says is the swipe's and is never caught.
+2. **The judged tells are yours to catch first.** Before you finish, read your own output against every tell in the list for the channels this step writes, and rewrite anything that matches. Where a direction would produce one (a centred pose, a spotless room, a floating camera, studio light in a bathroom), write the specific real thing instead.
+3. **Never fix a tell by describing its absence.** "No plastic skin" in a direction is weaker than the pores, the mark and the window light that make skin real. Say what is there.
 
 ## NOTHING IN THIS PROMPT IS CONTENT
 
