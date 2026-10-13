@@ -13,6 +13,7 @@ any file here.
 |---|---|
 | `frameworks.json` | **the truth.** The labelled slots, every row carrying its `[L####]` line pointer |
 | `delivery.json` | **the taste layer.** The labelled delivery dials — humor level, delivery style, register, pacing, reference world, avoid — each value carrying what it does, when it fits, its risk and the receipt it needs |
+| `tells.json` | **the tells.** What makes copy, a voice, a picture, a clip, an edit or a concept read as machine-made — each with how to spot it, why it gives the work away, and what to do instead; `hard` ones carry patterns `tells.py` runs with no model |
 | `emotion.json` | **the emotional layer.** The emotional map — the feelings a beat is spelled in, intensity 1–5, the five points every map names (open · low · turn · peak · end), the arcs a whole piece runs, the director's levers that carry a feeling, the rules, and the receipts behind them |
 | `spoken.json` | **the spoken layer.** The rules of spoken copy (written-vs-spoken, each with its receipt URL), the five colloquialism levels as a dial, a register recipe per delivery style with the voice-model settings that match it, the punctuation map for the voice model the track is made on, and the demographic bands a colloquialism is keyed to — options tied to the profile's `### demographics` block, researched, and measured against the brand's own creators |
 | `ad-frameworks.json` | **the second door.** Assembled frameworks — an ad's plan, chosen rather than read off a swipe — each row naming its sections, in order, with the technique that builds each one and the scene shape that beat takes |
@@ -59,6 +60,7 @@ lane (lane doctrine §2, one vocabulary):
 | `{delivery}` | `components/marketing-doctrine/slices/delivery.md` |
 | `{spoken}` | `components/marketing-doctrine/slices/spoken.md` |
 | `{emotion}` | `components/marketing-doctrine/slices/emotion.md` |
+| `{tells}` | `components/marketing-doctrine/slices/tells.md` |
 
 Three more names travel with them and are NOT served from here: `{research}`
 (the run's own gathered answers), `{spice_sheet}` (the creative pass's
@@ -205,6 +207,30 @@ where the swipe breaks a rule, the swipe wins. Receipts: Fredrickson &
 Kahneman 1993 (peak-end), Teixeira, Wedel & Pieters 2012 (emotion and
 attention in video ads), Reagan et al. 2016 (emotional arcs), McKee 1997 (a
 scene turns), Binet & Field 2013 (emotional advertising and long-term effect).
+
+## The tells — tells.json
+
+the owner, 2026-10-13: *"we are at the point of having full control of the
+content we make … so we completely eliminate AI sounding / looking generative
+output."*
+
+**The master rule: generators drift to the average** — the average face, the
+average sentence, the average kitchen, the average camera move. Every tell is
+the average showing through, and the fix is always a specific detail taken
+from something real: the swipe, the room's own words, a real reference, the
+brand's own footage.
+
+Six channels — words, voice, picture, motion, edit, concept — and 25 tells,
+each `W1`… `C2` with how to spot it, why it reads as machine, and the fix.
+Three are `hard`: machine vocabulary, ad-template phrases and exclamation
+stacking, caught by `tells.py` with no model (`check_text(text, swipe=)`).
+The rest are `judge`: read by a person or a judge prompt and named by id.
+**A tell is something we added** — a phrase or a shot the swipe itself has is
+the swipe's and is never flagged.
+
+Receipts: Kobak et al. 2024 (the vocabulary language models made common),
+Nightingale & Farid 2022 (generated faces drift to the average), IAB 2026
+(the gap between how consumers and advertisers feel about AI-made ads).
 
 ## The second door — ad-frameworks.json
 

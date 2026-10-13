@@ -551,6 +551,35 @@ def emotion(d):
     return "\n".join(out)
 
 
+TELLS_JSON_PATH = HERE / "tells.json"
+
+
+def tells(d):
+    """The tells — components/marketing-doctrine/tells.json: what gives work
+    away as machine-made, channel by channel. `hard` rows are the patterns
+    tells.py runs; `judge` rows are read against this list by a person or a
+    judge prompt."""
+    b = json.loads(TELLS_JSON_PATH.read_text())
+    out = [_open("The tells \u2014 what makes work read as machine-made", "tells", b["what"])]
+    out.append("**The master rule.** %s\n" % b["master_rule"])
+    out.append("**How a tell is held.** %s\n" % b["hold_rule"])
+    out.append("**Why it matters.** %s _(%s)_\n" % (b["why_it_matters"]["rule"], b["why_it_matters"]["source"]))
+    for ch in b["channels"]:
+        rows = [t for t in b["tells"] if t["channel"] == ch["id"]]
+        out.append("## %s \u2014 %s\n" % (ch["name"], ch["what"]))
+        for t in rows:
+            out.append("### %s \u00b7 %s (%s)\n" % (t["id"], t["name"],
+                       "machine-checked" if t["check"] == "hard" else "judged"))
+            out.append("- **Spot it:** %s" % t["spot"])
+            out.append("- **Why it reads as machine:** %s" % t["why"])
+            out.append("- **Instead:** %s" % t["fix"])
+            out.append("- **Source:** %s\n" % t["source"])
+    out.append("## Receipts\n")
+    for r in b["receipts"]:
+        out.append("- `%s` \u2014 %s %s %s" % (r["id"], r["cite"], r["url"], r["what"]))
+    return "\n".join(out)
+
+
 RENDERERS = [
     ("desire.md", desire),
     ("awareness.md", awareness),
@@ -565,6 +594,7 @@ RENDERERS = [
     ("delivery.md", delivery),
     ("spoken.md", spoken),
     ("emotion.md", emotion),
+    ("tells.md", tells),
 ]
 
 

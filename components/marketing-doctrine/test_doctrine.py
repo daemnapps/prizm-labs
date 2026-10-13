@@ -179,7 +179,7 @@ def main():
 
     section("3. every line pointer is inside the book (1-%d)" % BOOK_LINES)
     bad = []
-    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json",
+    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json", HERE / "tells.json",
                  HERE / "SCHWARTZ.md"] + \
                 [HERE / "slices" / n for n in SLICE_NAMES]:
         if not path.exists():
@@ -370,6 +370,46 @@ def main():
         check("emotion.md is bound as {emotion}",
               "{emotion}" in (HERE / "slices" / "emotion.md").read_text()
               if (HERE / "slices" / "emotion.md").exists() else False)
+
+    section("10. tells.json — what makes work read as machine-made")
+    tl_path = HERE / "tells.json"
+    if not tl_path.exists():
+        check("tells.json exists", False, "not built yet")
+    else:
+        tl = json.loads(tl_path.read_text())
+        chans = [c["id"] for c in tl["channels"]]
+        check("the six channels are present, in order",
+              chans == ["words", "voice", "picture", "motion", "edit", "concept"], str(chans))
+        ids = [t["id"] for t in tl["tells"]]
+        check("tell ids are unique", len(ids) == len(set(ids)))
+        check("every tell names a real channel, its check, spot, why, fix and source",
+              all(t["channel"] in chans and t["check"] in ("hard", "judge") and t.get("spot")
+                  and t.get("why") and t.get("fix") and t.get("source") for t in tl["tells"]))
+        check("every channel has at least one tell",
+              all(any(t["channel"] == c for t in tl["tells"]) for c in chans))
+        hard = [t for t in tl["tells"] if t["check"] == "hard"]
+        check("a hard tell carries patterns and they compile",
+              all(t.get("patterns") and all(re.compile(p_) for p_ in t["patterns"]) for t in hard))
+        check("a judge tell carries no patterns",
+              not any(t.get("patterns") for t in tl["tells"] if t["check"] == "judge"))
+        rows = tl["tells"] + [tl["why_it_matters"]]
+        rec_ids = {r["id"] for r in tl["receipts"]}
+        cited = {r["source"].split("\u2014", 1)[1].strip() for r in rows
+                 if r["source"].startswith("research")}
+        check("every research row cites a receipt that exists", cited <= rec_ids, str(sorted(cited - rec_ids)))
+        check("every receipt is cited and carries a url",
+              rec_ids <= cited and all(r.get("url") for r in tl["receipts"]))
+        check("the master rule and the hold rule are both stated",
+              bool(tl.get("master_rule")) and bool(tl.get("hold_rule")))
+        import tells as T  # noqa: E402
+        hits = T.check_text("A real game changer!!\nI use it at night.", swipe="")
+        check("the checker finds a template phrase and stacked exclamation marks",
+              {"W2", "W3"} <= {h["id"] for h in hits}, str(hits))
+        check("the checker leaves a phrase the swipe itself says",
+              not T.check_text("say goodbye to it", swipe="okay, say goodbye to it"))
+        check("tells.md is bound as {tells}",
+              "{tells}" in (HERE / "slices" / "tells.md").read_text()
+              if (HERE / "slices" / "tells.md").exists() else False)
 
     section("the position gate — every brand's position.md has the template's shape (2026-09-19)")
     import lint_position      # noqa: E402

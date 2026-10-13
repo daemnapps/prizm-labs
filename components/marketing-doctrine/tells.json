@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "what": "The tells — what makes copy, a voice, a picture, a clip or an edit read as machine-made, how to spot each one, and what a human maker would do instead. Every layer of this doctrine says what to make; this one says what gives it away. A tell is not a style choice: viewers punish work they read as AI-made, and the gap between how advertisers and consumers feel about it is widening.",
+  "updated": "2026-10-13",
+  "added": "2026-10-13 — the owner: 'install deeper doctrines surround the emotional / visual / creative make up of our work because we are at the point of having full control of the content we make … so we completely eliminate AI sounding / looking generative output.'",
+  "source": {
+    "rule": "A row marked `research` names the work in `receipts` it rests on. Every other row is craft — observed practice in generated media and commercial production, marked `source: \"craft\"`."
+  },
+  "why_it_matters": {"rule": "Consumers already feel worse about AI-made ads than advertisers think, and the gap is growing; a tell costs trust before the message is heard.", "source": "research — iab-2026"},
+  "master_rule": "Generators drift to the AVERAGE — the average face, the average sentence, the average kitchen, the average camera move. Every tell is the average showing through. The fix is never 'make it look less AI'; it is always a SPECIFIC detail taken from something real: the swipe, the room's own words, a real reference photo, the brand's own footage. Specific reads as human. Average reads as machine.",
+  "hold_rule": "A `hard` tell is caught by the machine with no model and is removed before the work moves on. A `judge` tell is read by a person or a judge prompt against this list and named with its id. Where the swipe itself does the thing — the source speaks in that phrase, shoots that way — it is the swipe's and stays: a tell is something WE added.",
+  "channels": [
+    {"id": "words", "name": "Words", "what": "The script, on-screen text and captions."},
+    {"id": "voice", "name": "Voice", "what": "How the words are read."},
+    {"id": "picture", "name": "Picture", "what": "Every still: cast sheets, frames, plates."},
+    {"id": "motion", "name": "Motion", "what": "Every generated clip."},
+    {"id": "edit", "name": "Edit and structure", "what": "How the piece is cut and shaped."},
+    {"id": "concept", "name": "Concept", "what": "The idea itself — the first, obvious, average idea."}
+  ],
+  "tells": [
+    {
+      "id": "W1", "channel": "words", "check": "hard", "name": "Machine vocabulary",
+      "spot": "Words generators reach for and people rarely say out loud.",
+      "why": "These words rose sharply in text after language models arrived; readers have learned to hear them as machine-made.",
+      "fix": "Say the plain thing the room would say. Quote the language bank.",
+      "patterns": ["\\bdelv(e|es|ing)\\b", "\\btapestry\\b", "\\brealm\\b", "\\btestament to\\b", "\\bembark(s|ing)?\\b", "\\bunleash(es|ing)?\\b", "\\bunlock(s|ing)? (the|your)\\b", "\\belevate(s|d)? (your|the)\\b", "\\bseamless(ly)?\\b", "\\bholistic\\b", "\\bmeticulous(ly)?\\b", "\\bunderscore(s|d)?\\b", "\\bshowcas(e|es|ing)\\b", "\\bnavigat(e|ing) the\\b", "\\bin the ever[- ]evolving\\b", "\\bharness(es|ing)? the power\\b"],
+      "source": "research — kobak-2024"
+    },
+    {
+      "id": "W2", "channel": "words", "check": "hard", "name": "Ad-template phrases",
+      "spot": "Stock lines every generated ad reuses.",
+      "why": "A line the viewer has heard in a hundred ads tells them this is one more ad, and a generated one.",
+      "fix": "Replace with the swipe's own line shape filled from the bank, or cut it.",
+      "patterns": ["\\bgame[- ]changer\\b", "\\bin today'?s fast[- ]paced world\\b", "\\blook no further\\b", "\\bsay goodbye to\\b", "\\bsay hello to\\b", "\\btake (it|your \\w+) to the next level\\b", "\\bnext[- ]level\\b", "\\brevolutioni[sz]e\\b", "\\bcutting[- ]edge\\b", "\\bdiscover the (power|secret|magic)\\b", "\\bmeet your new\\b", "\\bwhether you'?re an? .{1,30} or an?\\b", "\\bbuckle up\\b", "\\blet'?s dive in\\b", "\\bit'?s not just an? .{1,30}, it'?s\\b", "\\bthe ultimate\\b", "\\bmust[- ]have\\b", "\\bbest[- ]kept secret\\b", "\\bwhat are you waiting for\\b"],
+      "source": "craft"
+    },
+    {
+      "id": "W3", "channel": "words", "check": "hard", "name": "Exclamation stacking",
+      "spot": "Two or more exclamation marks in a row, or more than one in a single line.",
+      "why": "Manufactured energy; people show excitement in the voice, not the punctuation.",
+      "fix": "Full stops. Let the delivery carry the energy.",
+      "patterns": ["!{2,}", "![^.?\\n]*!"],
+      "source": "craft"
+    },
+    {
+      "id": "W4", "channel": "words", "check": "judge", "name": "The tidy triple",
+      "spot": "Three parallel adjectives or clauses in a row — fast, easy and effective.",
+      "why": "Generators default to the rule of three; real speech is lopsided.",
+      "fix": "Keep the one that is true and specific. Drop the other two.",
+      "source": "craft"
+    },
+    {
+      "id": "W5", "channel": "words", "check": "judge", "name": "The generic claim",
+      "spot": "A benefit that would fit any product in the category — 'feel your best', 'glowing skin', 'results you can see'.",
+      "why": "The average claim; it is the clearest sign nobody looked at this product or this customer.",
+      "fix": "The product file's specific fact, or the customer's own words about the specific moment.",
+      "source": "craft"
+    },
+    {
+      "id": "W6", "channel": "words", "check": "judge", "name": "Over-explaining",
+      "spot": "A line that tells the viewer what they just saw or how to feel about it.",
+      "why": "Generators narrate; people let the picture land.",
+      "fix": "Cut the line. If the picture does not carry it, fix the picture.",
+      "source": "craft"
+    },
+    {
+      "id": "V1", "channel": "voice", "check": "judge", "name": "Even prosody",
+      "spot": "Every sentence the same pitch shape and speed, no breath, no restart, no filler.",
+      "why": "Real speech is uneven: it speeds up, trails off, restarts once.",
+      "fix": "The spoken slice's register recipe — fragments, one restart, fillers at the start of a thought — and the voice settings that allow variation.",
+      "source": "craft"
+    },
+    {
+      "id": "V2", "channel": "voice", "check": "judge", "name": "The announcer lift",
+      "spot": "The voice rises into a sell on the product name or the offer.",
+      "why": "Nobody talks to a friend like that; the lift says 'ad' before the words do.",
+      "fix": "Read the product line flat, the way the rest of the paragraph is read.",
+      "source": "craft"
+    },
+    {
+      "id": "P1", "channel": "picture", "check": "judge", "name": "Plastic skin",
+      "spot": "Skin with no pores, no texture, an even sheen; waxy or airbrushed.",
+      "why": "The commonest picture tell; generators smooth skin toward an average.",
+      "fix": "Real reference, the realism block (visible pores, fine lines, matte skin), the subject's own detail crops.",
+      "source": "craft"
+    },
+    {
+      "id": "P2", "channel": "picture", "check": "judge", "name": "The average face",
+      "spot": "A face that is perfectly symmetrical, flawless and forgettable — model-pretty with nothing particular about it.",
+      "why": "Generated faces drift toward the average face, which is why they read as trustworthy and anonymous at once.",
+      "fix": "Build from a real reference and keep its particulars — the asymmetry, the mark, the uneven brow.",
+      "source": "research — nightingale-farid-2022"
+    },
+    {
+      "id": "P3", "channel": "picture", "check": "judge", "name": "Studio light everywhere",
+      "spot": "Even, glowing, shadowless light in a place that would never have it — a bathroom lit like a product shoot.",
+      "why": "Generators light for beauty, not for the place; real rooms have one window and a bad ceiling light.",
+      "fix": "Light from the world block: where the window is, what the lamp does, the shadow it throws.",
+      "source": "craft"
+    },
+    {
+      "id": "P4", "channel": "picture", "check": "judge", "name": "The sterile room",
+      "spot": "A spotless, empty, catalogue room with nothing personal in it.",
+      "why": "The average room; real places have clutter, wear and someone's life in them.",
+      "fix": "The swipe's room inventory, sharper — the believable clutter, the worn surface.",
+      "source": "craft"
+    },
+    {
+      "id": "P5", "channel": "picture", "check": "judge", "name": "Dead centre, perfect pose",
+      "spot": "Subject centred, square to camera, smiling, holding the product up.",
+      "why": "The stock-photo pose; nobody holds a bottle beside their face in real life.",
+      "fix": "The swipe's framing and its real gesture — caught mid-action, off-centre where the source was.",
+      "source": "craft"
+    },
+    {
+      "id": "P6", "channel": "picture", "check": "judge", "name": "New-out-of-the-box wardrobe",
+      "spot": "Clothes with no creases, no wear, a perfect fit; hair with no stray strand.",
+      "why": "Generated clothes are ironed by default; real clothes have been worn.",
+      "fix": "Name the wear in the look: creases, a pushed-up sleeve, hair as it actually sits.",
+      "source": "craft"
+    },
+    {
+      "id": "P7", "channel": "picture", "check": "judge", "name": "The grade",
+      "spot": "Teal-and-orange, oversaturated, HDR glow, fake shallow focus on a phone shot.",
+      "why": "A 'cinematic' default laid over a format that was shot on a phone.",
+      "fix": "The camera block's realness dial — no cinematic grading — taken from the swipe.",
+      "source": "craft"
+    },
+    {
+      "id": "P8", "channel": "picture", "check": "judge", "name": "Broken detail",
+      "spot": "Wrong fingers or hands, garbled text, a label that changes, impossible reflections or shadows, jewellery melting into skin.",
+      "why": "The detail a viewer's eye catches in a second, and the one that ends trust in everything else.",
+      "fix": "Type is a layer, never generated; the product only from its real packshot; regenerate the frame, never ship it.",
+      "source": "craft"
+    },
+    {
+      "id": "M1", "channel": "motion", "check": "judge", "name": "The floating camera",
+      "spot": "A perfectly smooth, slow glide or push-in on a shot that should be handheld or locked off.",
+      "why": "The generator's default move; no phone and no person moves like that.",
+      "fix": "The swipe's own camera: handheld with its shake, or locked off and still.",
+      "source": "craft"
+    },
+    {
+      "id": "M2", "channel": "motion", "check": "judge", "name": "Slow drift and morph",
+      "spot": "Everything moving a little too slowly; faces, hands, products or backgrounds that shift shape across the clip.",
+      "why": "Temporal drift is the signature failure of generated video.",
+      "fix": "Shorter clips, first and last frame pinned, the product from its packshot; a morphing clip is remade, never shipped.",
+      "source": "craft"
+    },
+    {
+      "id": "M3", "channel": "motion", "check": "judge", "name": "Wrong physics",
+      "spot": "Liquid, cloth, hair or skin that moves wrong; contact with no weight; a gesture that never quite lands.",
+      "why": "The body knows physics before the mind does.",
+      "fix": "Beat-by-beat directions with the real action from the swipe's frame map.",
+      "source": "craft"
+    },
+    {
+      "id": "M4", "channel": "motion", "check": "judge", "name": "The dead stare",
+      "spot": "Unblinking eyes, a fixed smile, lip-sync drifting off the words, a background that does not move.",
+      "why": "Faces are what people read hardest; a still face in a moving clip is uncanny.",
+      "fix": "Line parity on every talking clip; a reaction beat on the face; motion QC names it.",
+      "source": "craft"
+    },
+    {
+      "id": "E1", "channel": "edit", "check": "judge", "name": "Metronome cuts",
+      "spot": "Every shot the same length; every scene the same shape.",
+      "why": "A machine cuts on a grid; an editor cuts on the feeling.",
+      "fix": "Cut to the emotional map: fast where the feeling builds, held where it lands.",
+      "source": "craft"
+    },
+    {
+      "id": "E2", "channel": "edit", "check": "judge", "name": "Too clean",
+      "spot": "No imperfection anywhere — no stumble, no off-frame moment, no real-world noise.",
+      "why": "Polish is the tell in a feed of phone footage; perfection reads as fake.",
+      "fix": "Keep the anti-perfection budget: the swipe's own roughness, carried on purpose.",
+      "source": "craft"
+    },
+    {
+      "id": "E3", "channel": "edit", "check": "judge", "name": "The music swell",
+      "spot": "Stock music that rises on the product reveal and resolves on the call to action.",
+      "why": "The template's emotional shortcut — the viewer hears the formula.",
+      "fix": "The swipe's sound: its own bed, its drop-outs, its silence.",
+      "source": "craft"
+    },
+    {
+      "id": "C1", "channel": "concept", "check": "judge", "name": "The first idea",
+      "spot": "The obvious version anyone would write first — the generic setting, the generic person, the generic problem.",
+      "why": "A generator's first answer is the average answer by construction.",
+      "fix": "Start from the swipe and the room, not from the category; change one thing on purpose.",
+      "source": "craft"
+    },
+    {
+      "id": "C2", "channel": "concept", "check": "judge", "name": "No specific human detail",
+      "spot": "Nothing in the piece that only this audience would recognise — no in-joke, no real habit, no particular object.",
+      "why": "Specific detail is the strongest signal a person made this for a person.",
+      "fix": "One detail from the culture read or the culture map, named with its receipt.",
+      "source": "craft"
+    }
+  ],
+  "receipts": [
+    {"id": "kobak-2024", "cite": "Kobak, D., González-Márquez, R., Horvát, E.-Á. & Lause, J. (2024). Delving into ChatGPT usage in academic writing through excess vocabulary. arXiv:2406.07016.", "url": "https://arxiv.org/abs/2406.07016", "what": "Style words such as 'delves', 'showcasing' and 'underscores' rose far above their pre-LLM trend in 2024 abstracts — the vocabulary readers now hear as machine-made."},
+    {"id": "nightingale-farid-2022", "cite": "Nightingale, S. J. & Farid, H. (2022). AI-synthesized faces are indistinguishable from real faces and more trustworthy. PNAS, 119(8).", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8872790", "what": "Synthetic faces fooled viewers at chance and were rated more trustworthy; the authors suggest because they look more like average faces."},
+    {"id": "iab-2026", "cite": "IAB (2026). The AI Ad Gap Widens.", "url": "https://www.iab.com/insights/the-ai-ad-gap-widens/", "what": "Consumers feel more negative about AI-generated ads than advertisers think, and the gap grew from 32 points in 2024 to 37 in 2026."}
+  ]
+}
