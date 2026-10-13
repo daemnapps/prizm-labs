@@ -59,7 +59,7 @@
   },
   {
    "stage": "stage1c",
-   "prompt": "stage1c-doctrine-v4-damon.md",
+   "prompt": "stage1c-doctrine-v5-damon.md",
    "role": "stage",
    "note": "The doctrine read of the SOURCE AS SWIPED (the owner's ruling 2026-09-18): 'every time we run a swipe, we'll run it through a marketing doctrine step too so we have full awareness of it and can clearly identify the unique framework of that video and bank it for later.' It reads the framework, the sections carried, the awareness the source enters and exits on, the stage-move it runs, the desire it rides, the techniques visible per section, the mood, and — from v2 — the DELIVERY READ (how the source is performed: humor level, delivery style, register, pacing, the reference world it visibly leans on and what it avoids) — all off the teardown record, cited, never improved. It decides nothing about our version: 1b answers for OUR reader and takes the source's reading from here rather than re-deriving it. Its fenced json block is filed as <run>/doctrine.json and compiled into the framework bank by framework_bank.py.",
    "vars": {
@@ -167,6 +167,7 @@
    "sections": "components/marketing-doctrine/slices/sections.md",
    "ad_frameworks": "components/marketing-doctrine/slices/ad-frameworks.md",
    "frame_map": "~frame_map",
+   "emotion": "components/marketing-doctrine/slices/emotion.md",
    "culture_read": "!culture_read",
    "culture_map": "!culture_map",
    "angles": "brands/<brand>/strategy/angles.json",
@@ -200,6 +201,7 @@
    "position": "brands/<brand>/brand-identity/position.md",
    "story": "~story",
    "doctrine_read": "@stage1c",
+   "emotion": "components/marketing-doctrine/slices/emotion.md",
    "culture_read": "!culture_read",
    "culture_map": "!culture_map"
   },
@@ -228,7 +230,8 @@
    "techniques": "components/marketing-doctrine/slices/techniques.md",
    "desire_dimensions": "components/marketing-doctrine/slices/desire.md",
    "mood": "components/marketing-doctrine/slices/mood.md",
-   "delivery": "components/marketing-doctrine/slices/delivery.md"
+   "delivery": "components/marketing-doctrine/slices/delivery.md",
+   "emotion": "components/marketing-doctrine/slices/emotion.md"
   },
   "stage1b": {
    "doctrine_read": "@stage1c",

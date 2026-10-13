@@ -62,6 +62,12 @@ CLEAN = {
                  "register": "plain-flat", "pacing": "beat-and-pause",
                  "reference_world": ["a hands-and-voiceover shape, 0:12-0:26"],
                  "avoid": ["no announcer lift anywhere"]},
+    "emotional_map": {"arc": "dip-and-rise", "beats": [
+        {"n": 1, "span": "0:00-0:03", "scene": "open", "feeling": "recognition",
+         "intensity": 3, "carriers": ["performance"], "moment": "the mark, close"}],
+        "open": {"feeling": "recognition", "beat": 1}, "low": None, "turn": None,
+        "peak": {"feeling": "recognition", "beat": 1},
+        "end": {"feeling": "recognition", "beat": 1, "attached_to": "the product"}},
     "unique": "a mechanism carried entirely by a one-take demonstration",
 }
 

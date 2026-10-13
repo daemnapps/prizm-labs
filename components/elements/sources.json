@@ -327,6 +327,40 @@
       "note": "Caption looks — how the words on screen look and move. A setting, never a re-edit."
     },
     {
+      "element": "emotion",
+      "asset": "feeling",
+      "path": "components/marketing-doctrine/emotion.json",
+      "rows": "feelings",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what"
+      },
+      "extra": [
+        "valence",
+        "on_screen"
+      ],
+      "enforced_by": "the video teardown's doctrine read (the emotional map); recorded as unknown, never refused",
+      "note": "The emotional map's feelings (the owner, 2026-10-13) — the only words a beat's feeling is spelled in."
+    },
+    {
+      "element": "emotion",
+      "asset": "arc",
+      "path": "components/marketing-doctrine/emotion.json",
+      "rows": "arcs",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what"
+      },
+      "extra": [
+        "shape",
+        "frameworks"
+      ],
+      "enforced_by": "the video teardown's doctrine read (the emotional map); recorded as unknown, never refused",
+      "note": "The shape of a piece's feeling, start to end."
+    },
+    {
       "element": "delivery",
       "asset": "@group",
       "path": "components/marketing-doctrine/delivery.json",

@@ -13,6 +13,7 @@ any file here.
 |---|---|
 | `frameworks.json` | **the truth.** The labelled slots, every row carrying its `[L####]` line pointer |
 | `delivery.json` | **the taste layer.** The labelled delivery dials — humor level, delivery style, register, pacing, reference world, avoid — each value carrying what it does, when it fits, its risk and the receipt it needs |
+| `emotion.json` | **the emotional layer.** The emotional map — the feelings a beat is spelled in, intensity 1–5, the five points every map names (open · low · turn · peak · end), the arcs a whole piece runs, the director's levers that carry a feeling, the rules, and the receipts behind them |
 | `spoken.json` | **the spoken layer.** The rules of spoken copy (written-vs-spoken, each with its receipt URL), the five colloquialism levels as a dial, a register recipe per delivery style with the voice-model settings that match it, the punctuation map for the voice model the track is made on, and the demographic bands a colloquialism is keyed to — options tied to the profile's `### demographics` block, researched, and measured against the brand's own creators |
 | `ad-frameworks.json` | **the second door.** Assembled frameworks — an ad's plan, chosen rather than read off a swipe — each row naming its sections, in order, with the technique that builds each one and the scene shape that beat takes |
 | `SCHWARTZ.md` | the human-readable doctrine, in our words, in chain order — for people, not machines |
@@ -57,6 +58,7 @@ lane (lane doctrine §2, one vocabulary):
 | `{ad_frameworks}` | `components/marketing-doctrine/slices/ad-frameworks.md` |
 | `{delivery}` | `components/marketing-doctrine/slices/delivery.md` |
 | `{spoken}` | `components/marketing-doctrine/slices/spoken.md` |
+| `{emotion}` | `components/marketing-doctrine/slices/emotion.md` |
 
 Three more names travel with them and are NOT served from here: `{research}`
 (the run's own gathered answers), `{spice_sheet}` (the creative pass's
@@ -172,6 +174,37 @@ Three research questions feed it — `RQ-22` to `RQ-24`: how the room phrases
 things out loud, what it calls things, how it reacts — under the tags
 `in-word`, `subculture`, `community-voice` and `taste`, and a `spoken` key
 in both `language.py` STAGE_USE maps.
+
+## The emotional layer — emotion.json
+
+the owner, 2026-10-13: *"let's install a full map proper fundamentally in the
+system similar to the marketing doctrine."* The sections say what an ad
+argues, the techniques how it is built, the dials how it is performed;
+`emotion.json` says what each beat must make the viewer **feel**. A director
+plans a commercial this way: the feeling first, the picture second.
+
+| Part | What it is |
+|---|---|
+| `feelings` | the 15 words a beat's feeling is spelled in — curiosity · surprise · recognition · frustration · unease · empathy · amusement · relief · hope · desire · trust · belonging · satisfaction · urgency · calm — each with what on screen makes it, where it fits and its risk |
+| `intensity` | 1 trace · 2 noticed · 3 felt · 4 strong · 5 the peak (exactly one beat) |
+| `points` | open · low · turn · peak · end — the five every map names |
+| `arcs` | dip-and-rise · steady-climb · reveal · held-warmth · contrast, each tied to the ad frameworks it fits |
+| `carriers` | the director's levers: performance, framing, camera move, light and colour, sound, cut rhythm, the held beat, words and voice |
+| `map_format` | the exact block a stage prints |
+
+**Where it runs.** Stage 1c (doctrine read v5) reads the swipe's map and files
+it in `doctrine.json` as `emotional_map`; the element library carries the
+feelings and arcs (`emotion/feeling`, `emotion/arc`) and the elements check
+records any unknown one. The script step (injection v23) keeps it — a
+`Feeling:` line on every scene, the five points on the same beats, and a
+feeling that cannot be kept is a structure question. The AI brief (v28)
+spells every scene's `emotion` from it and names the piece's `arc`.
+
+**The rule that outranks the rest:** the map is read off the swipe and kept;
+where the swipe breaks a rule, the swipe wins. Receipts: Fredrickson &
+Kahneman 1993 (peak-end), Teixeira, Wedel & Pieters 2012 (emotion and
+attention in video ads), Reagan et al. 2016 (emotional arcs), McKee 1997 (a
+scene turns), Binet & Field 2013 (emotional advertising and long-term effect).
 
 ## The second door — ad-frameworks.json
 

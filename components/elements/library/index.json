@@ -152,6 +152,36 @@
    "duplicates": []
   },
   {
+   "element": "emotion",
+   "asset": "arc",
+   "file": "library/emotion.arc.json",
+   "source": "components/marketing-doctrine/emotion.json",
+   "enforced_by": "the video teardown's doctrine read (the emotional map); recorded as unknown, never refused",
+   "note": "The shape of a piece's feeling, start to end.",
+   "rows": 5,
+   "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
+   "duplicates": []
+  },
+  {
+   "element": "emotion",
+   "asset": "feeling",
+   "file": "library/emotion.feeling.json",
+   "source": "components/marketing-doctrine/emotion.json",
+   "enforced_by": "the video teardown's doctrine read (the emotional map); recorded as unknown, never refused",
+   "note": "The emotional map's feelings (the owner, 2026-10-13) — the only words a beat's feeling is spelled in.",
+   "rows": 15,
+   "approved": 0,
+   "aliases": 0,
+   "dropped": [],
+   "off_rule": [],
+   "unresolved": [],
+   "duplicates": []
+  },
+  {
    "element": "format",
    "asset": "carousel",
    "file": "library/format.carousel.json",

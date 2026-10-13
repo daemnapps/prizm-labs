@@ -77,6 +77,16 @@ SPOKEN_RULES = ["no-em-dash", "no-semicolon", "no-parenthesis", "ellipsis-is-the
                 "one-idea-per-sentence", "fragments-allowed", "contractions-on",
                 "pause-is-punctuation", "direct-address", "questions-to-the-viewer",
                 "restart-once", "fillers-at-the-start"]
+# The emotional map (the owner, 2026-10-13: "let's install a full map proper
+# fundamentally in the system similar to the marketing doctrine"). Declared
+# here so a feeling, a point or an arc quietly disappearing is a failing test.
+EMOTION_FEELINGS = ["curiosity", "surprise", "recognition", "frustration", "unease",
+                    "empathy", "amusement", "relief", "hope", "desire", "trust",
+                    "belonging", "satisfaction", "urgency", "calm"]
+EMOTION_POINTS = ["open", "low", "turn", "peak", "end"]
+EMOTION_ARCS = ["dip-and-rise", "steady-climb", "reveal", "held-warmth", "contrast"]
+EMOTION_CARRIERS = ["performance", "framing", "camera-move", "light-colour", "sound",
+                    "cut-rhythm", "silence", "words"]
 SPOKEN_MARKS = [",", ".", "?", "!", "...", "\u2014", "\u2013", ";", "(", "[tag]"]
 PROFILE_SLOTS = {"age", "gender", "skin tone / ethnicity", "region", "language"}
 
@@ -169,7 +179,7 @@ def main():
 
     section("3. every line pointer is inside the book (1-%d)" % BOOK_LINES)
     bad = []
-    for path in [HERE / "frameworks.json", HERE / "delivery.json",
+    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json",
                  HERE / "SCHWARTZ.md"] + \
                 [HERE / "slices" / n for n in SLICE_NAMES]:
         if not path.exists():
@@ -311,6 +321,55 @@ def main():
               str([q["framework"] for q in taste_qs]))
         check("the taste questions use the two new language tags",
               {"taste", "cringe"} <= {t_ for q in taste_qs for t_ in q["tags"]})
+
+    section("9. emotion.json — the emotional map")
+    em_path = HERE / "emotion.json"
+    if not em_path.exists():
+        check("emotion.json exists", False, "not built yet")
+    else:
+        em = json.loads(em_path.read_text())
+        check("the feelings are present, in order",
+              [f["id"] for f in em["feelings"]] == EMOTION_FEELINGS,
+              str([f["id"] for f in em["feelings"]]))
+        check("the five points are present, in order",
+              [p_["id"] for p_ in em["points"]] == EMOTION_POINTS)
+        check("the arcs are present, in order",
+              [a["id"] for a in em["arcs"]] == EMOTION_ARCS)
+        check("the carriers are present, in order",
+              [c["id"] for c in em["carriers"]] == EMOTION_CARRIERS)
+        check("intensity runs 1 to 5",
+              [i["level"] for i in em["intensity"]] == [1, 2, 3, 4, 5])
+        check("every feeling says valence, what, on screen, risk and source",
+              all(f.get("valence") in ("positive", "negative", "neutral") and f.get("what")
+                  and f.get("on_screen") and f.get("risk") and f.get("source")
+                  for f in em["feelings"]))
+        check("every feeling names real sections",
+              all(x in SECTION_IDS for f in em["feelings"] for x in f["fits"]["sections"]),
+              str(sorted({x for f in em["feelings"] for x in f["fits"]["sections"]} - set(SECTION_IDS))))
+        check("every feeling names real awareness levels",
+              all(x in AWARENESS_IDS for f in em["feelings"] for x in f["fits"]["awareness"]))
+        fw_ids = set()
+        if (HERE / "ad-frameworks.json").exists():
+            fw_ids = {f_["id"] for f_ in json.loads((HERE / "ad-frameworks.json").read_text())["frameworks"]}
+        check("every arc names real ad frameworks",
+              all(x in fw_ids for a in em["arcs"] for x in a["frameworks"]),
+              str(sorted({x for a in em["arcs"] for x in a["frameworks"]} - fw_ids)))
+        rows = em["feelings"] + em["points"] + em["arcs"] + em["rules"]
+        rec_ids = {r["id"] for r in em["receipts"]}
+        cited = {r["source"].split("\u2014", 1)[1].strip() for r in rows
+                 if r["source"].startswith("research")}
+        check("every research row cites a receipt that exists",
+              cited <= rec_ids, str(sorted(cited - rec_ids)))
+        check("every receipt is cited by some row", rec_ids <= cited, str(sorted(rec_ids - cited)))
+        check("a schwartz row carries a ref, a craft or research row does not",
+              all(bool(r.get("ref")) == (r["source"] == "schwartz") for r in rows))
+        check("the map format names the arc and all five points",
+              all(("%s:" % x.upper()) in em["map_format"] for x in ["arc"] + EMOTION_POINTS))
+        check("the read-off-the-swipe and shown-not-said rules are both stated",
+              bool(em.get("rule")) and bool(em.get("show_rule")))
+        check("emotion.md is bound as {emotion}",
+              "{emotion}" in (HERE / "slices" / "emotion.md").read_text()
+              if (HERE / "slices" / "emotion.md").exists() else False)
 
     section("the position gate — every brand's position.md has the template's shape (2026-09-19)")
     import lint_position      # noqa: E402

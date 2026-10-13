@@ -1,0 +1,281 @@
+{
+  "schema": 1,
+  "what": "The emotional map — what the viewer should FEEL at each beat of a piece, before anything decides what they see or hear. The sections say what an ad argues, the techniques how the argument is built, the delivery dials how it is performed; the map says what each beat must make the viewer feel, where the feeling turns, where it peaks and what it leaves them with. A director plans a commercial this way: the feeling first, the picture second.",
+  "updated": "2026-10-13",
+  "added": "2026-10-13 — the owner, on how directors think about scenes: 'let's install a full map proper fundamentally in the system similar to the marketing doctrine.' Until this file a scene could name an Emotion and an Outcome, but nothing read the swipe's feelings beat by beat, named its turn, its peak and its ending, or made our version keep them.",
+  "source": {
+    "rule": "A row marked `research` names the work in `receipts` it rests on. A row marked `schwartz` carries a line pointer into the book. Every other row is craft — observed practice in commercial directing and story structure, marked `source: \"craft\"`, carrying no pointer it has not earned."
+  },
+  "rule": "The map is READ OFF THE SWIPE, never invented. The swipe already proved which feelings, in which order, hold this audience; our version keeps its map — the same feeling at each beat, the same turn, the same peak, the same ending — and only the words and the product change. A feeling moved, dropped or added is a structure change, exactly like a moved scene. Where the swipe itself breaks a rule below, the swipe wins: keep it and note it, never fix it.",
+  "show_rule": "A feeling is SHOWN, never said. It arrives through a face, a sound, a frame, a cut or a held silence — never through a line that names it. A script that tells the viewer how to feel has given up on making them feel it.",
+  "feelings": [
+    {
+      "id": "curiosity",
+      "name": "Curiosity",
+      "valence": "neutral",
+      "what": "An open question the viewer wants closed — 'wait, what is that?'",
+      "on_screen": "Something unexplained or out of place, an action cut before it finishes, a claim with the reason held back.",
+      "fits": {"sections": ["hook", "root-cause", "unique-mechanism"], "awareness": ["unaware", "problem-aware", "solution-aware"]},
+      "risk": "A question never answered reads as clickbait and costs trust at the close.",
+      "source": "research — teixeira-2012"
+    },
+    {
+      "id": "surprise",
+      "name": "Surprise",
+      "valence": "neutral",
+      "what": "A jolt — the expected thing does not happen.",
+      "on_screen": "A pattern set up and broken, an unexpected person or place, a sudden cut, sound or reveal.",
+      "fits": {"sections": ["hook", "unique-mechanism", "transformation"], "awareness": ["unaware", "problem-aware", "solution-aware", "product-aware"]},
+      "risk": "Surprise with nothing behind it spends the attention it bought; the next beat has to pay it off.",
+      "source": "research — teixeira-2012"
+    },
+    {
+      "id": "recognition",
+      "name": "Recognition",
+      "valence": "neutral",
+      "what": "'That's me' — the viewer sees their own life, habit or moment on screen.",
+      "on_screen": "A specific, true-to-life detail of the avatar's day, said or done the way they do it.",
+      "fits": {"sections": ["hook", "identification", "problem"], "awareness": ["unaware", "problem-aware", "solution-aware"]},
+      "risk": "A detail that is almost right reads as an outsider guessing; it has to come from the room's own words.",
+      "source": "schwartz",
+      "ref": "L3253-3872"
+    },
+    {
+      "id": "frustration",
+      "name": "Frustration",
+      "valence": "negative",
+      "what": "The itch of the problem — annoyance at something that keeps not working.",
+      "on_screen": "The failed attempt shown, the sigh, the thing thrown down, the same struggle repeated.",
+      "fits": {"sections": ["problem", "failed-solutions", "agitation"], "awareness": ["problem-aware", "solution-aware"]},
+      "risk": "Held too long it becomes the viewer's mood about the ad, not about the problem.",
+      "source": "craft"
+    },
+    {
+      "id": "unease",
+      "name": "Unease",
+      "valence": "negative",
+      "what": "Tension — a quiet worry that something is wrong or about to go wrong.",
+      "on_screen": "A held close-up, a pause before an answer, a detail noticed that should not be there, sound dropping out.",
+      "fits": {"sections": ["problem", "root-cause", "agitation"], "awareness": ["problem-aware", "solution-aware"]},
+      "risk": "Fear the product cannot resolve is a scare, not an ad; on health, money or the body it needs the plainest touch.",
+      "source": "craft"
+    },
+    {
+      "id": "empathy",
+      "name": "Empathy",
+      "valence": "negative",
+      "what": "Feeling for the person on screen — 'oh, I know how that feels.'",
+      "on_screen": "A real, unperformed moment of the person struggling or exposed, held long enough to land.",
+      "fits": {"sections": ["identification", "problem", "transformation"], "awareness": ["unaware", "problem-aware"]},
+      "risk": "Performed sadness reads as manipulation; it must look caught, not acted.",
+      "source": "craft"
+    },
+    {
+      "id": "amusement",
+      "name": "Amusement",
+      "valence": "positive",
+      "what": "A laugh or a smirk.",
+      "on_screen": "Whatever the humor dial and the room's own references allow — never over a claim.",
+      "fits": {"sections": ["hook", "problem", "failed-solutions", "objections"], "awareness": ["unaware", "problem-aware", "solution-aware", "product-aware"]},
+      "risk": "Governed by the humor dial in the delivery slice: straight is the default, and a joke must come from the room.",
+      "source": "craft"
+    },
+    {
+      "id": "relief",
+      "name": "Relief",
+      "valence": "positive",
+      "what": "The exhale — the problem finally lets go.",
+      "on_screen": "The struggle stops, the shoulders drop, the easy version of the moment that was hard a beat ago.",
+      "fits": {"sections": ["solution", "product", "transformation"], "awareness": ["problem-aware", "solution-aware", "product-aware"]},
+      "risk": "Relief from a result the product does not deliver is a false promise in pictures.",
+      "source": "craft"
+    },
+    {
+      "id": "hope",
+      "name": "Hope",
+      "valence": "positive",
+      "what": "'Maybe this could work for me.'",
+      "on_screen": "Someone like the viewer trying it, a first small change, the mechanism making sense.",
+      "fits": {"sections": ["unique-mechanism", "solution", "proof"], "awareness": ["problem-aware", "solution-aware"]},
+      "risk": "Hope without proof behind it turns into doubt at the offer.",
+      "source": "craft"
+    },
+    {
+      "id": "desire",
+      "name": "Desire",
+      "valence": "positive",
+      "what": "'I want that' — wanting the life, the look or the result on screen.",
+      "on_screen": "The after shown at its best: the person at ease, the result in use, the product handled with care.",
+      "fits": {"sections": ["product", "transformation", "offer"], "awareness": ["solution-aware", "product-aware", "most-aware"]},
+      "risk": "Desire for something the product does not give sells the wrong thing.",
+      "source": "schwartz",
+      "ref": "L6260-6361"
+    },
+    {
+      "id": "trust",
+      "name": "Trust",
+      "valence": "positive",
+      "what": "Belief — 'this is real, these people are straight with me.'",
+      "on_screen": "Proof shown plainly: a real result, a real person, a demonstration with nothing hidden, a calm unhurried read.",
+      "fits": {"sections": ["proof", "objections", "offer"], "awareness": ["solution-aware", "product-aware", "most-aware"]},
+      "risk": "Trust is killed by hype; it needs the plainest delivery in the piece.",
+      "source": "craft"
+    },
+    {
+      "id": "belonging",
+      "name": "Belonging",
+      "valence": "positive",
+      "what": "Pride of membership — 'people like me do this.'",
+      "on_screen": "The avatar's own people, references and world; the product as part of who they already are.",
+      "fits": {"sections": ["identification", "transformation", "call-to-action"], "awareness": ["unaware", "product-aware", "most-aware"]},
+      "risk": "Borrowed from a room that is not theirs, it reads as an outsider dressing up.",
+      "source": "schwartz",
+      "ref": "L3253-3872"
+    },
+    {
+      "id": "satisfaction",
+      "name": "Satisfaction",
+      "valence": "positive",
+      "what": "The click of something working exactly right.",
+      "on_screen": "A clean demonstration, a perfect fit, a before-and-after that resolves, a sound that lands.",
+      "fits": {"sections": ["product", "proof", "transformation"], "awareness": ["solution-aware", "product-aware"]},
+      "risk": "Shown faster than the product really works, it is a false demonstration.",
+      "source": "craft"
+    },
+    {
+      "id": "urgency",
+      "name": "Urgency",
+      "valence": "neutral",
+      "what": "'I should do this now.'",
+      "on_screen": "A real deadline or scarcity from the offer file, the cost of waiting shown, the pace picking up into the close.",
+      "fits": {"sections": ["urgency", "offer", "call-to-action"], "awareness": ["product-aware", "most-aware"]},
+      "risk": "Invented urgency is a lie; only what the offer file states may be urgent.",
+      "source": "craft"
+    },
+    {
+      "id": "calm",
+      "name": "Calm",
+      "valence": "positive",
+      "what": "Settled ease — nothing is pushing.",
+      "on_screen": "Slow, steady shots, soft light, room tone, an unhurried voice.",
+      "fits": {"sections": ["solution", "proof", "transformation", "call-to-action"], "awareness": ["product-aware", "most-aware"]},
+      "risk": "Calm at the open loses the scroll; it belongs after a turn.",
+      "source": "craft"
+    }
+  ],
+  "intensity": [
+    {"level": 1, "what": "A trace — present, not felt."},
+    {"level": 2, "what": "Noticed — the viewer registers it."},
+    {"level": 3, "what": "Felt — it shows on the viewer's face."},
+    {"level": 4, "what": "Strong — the moment they would tell someone about."},
+    {"level": 5, "what": "The peak — the single strongest moment of the piece. Exactly one beat carries a 5."}
+  ],
+  "points": [
+    {
+      "id": "open",
+      "name": "The open",
+      "what": "The feeling of the first one to three seconds — what stops the scroll.",
+      "rule": "The open is curiosity, surprise or recognition. A piece that opens on calm, trust or desire has nothing yet to earn them with.",
+      "source": "research — teixeira-2012"
+    },
+    {
+      "id": "low",
+      "name": "The low",
+      "what": "The deepest negative beat — where the problem is felt most.",
+      "rule": "The low is the avatar's own pain, in the room's own words. Not every piece has one; a piece that does must resolve it before the end.",
+      "source": "research — reagan-2016"
+    },
+    {
+      "id": "turn",
+      "name": "The turn",
+      "what": "The one beat where the feeling flips — problem to relief, doubt to 'oh'.",
+      "rule": "The turn is one beat, not a stretch. It is only as strong as the contrast into it: a turn with no low before it lands flat.",
+      "source": "research — mckee-1997"
+    },
+    {
+      "id": "peak",
+      "name": "The peak",
+      "what": "The single strongest feeling in the piece — intensity 5.",
+      "rule": "Viewers remember the peak and the end, not the average. The peak sits on the product working or on the payoff — never on a claim, a price or a disclaimer.",
+      "source": "research — fredrickson-kahneman-1993"
+    },
+    {
+      "id": "end",
+      "name": "The end",
+      "what": "The feeling the last beat leaves — the one attached to the brand.",
+      "rule": "The end is a positive feeling the product really delivers. Never end at the low.",
+      "source": "research — fredrickson-kahneman-1993"
+    }
+  ],
+  "arcs": [
+    {
+      "id": "dip-and-rise",
+      "name": "Dip and rise",
+      "shape": "recognition → frustration or unease (the low) → turn → relief or satisfaction → desire",
+      "what": "Fall into the problem, climb out with the product. The commonest shape in direct response.",
+      "frameworks": ["pas", "bab", "story-testimonial", "mechanism-led"],
+      "source": "research — reagan-2016"
+    },
+    {
+      "id": "steady-climb",
+      "name": "Steady climb",
+      "shape": "curiosity → hope → desire → urgency",
+      "what": "No low: each beat raises the feeling a step until the close.",
+      "frameworks": ["aida", "direct-offer"],
+      "source": "craft"
+    },
+    {
+      "id": "reveal",
+      "name": "Set-up and reveal",
+      "shape": "calm or recognition → surprise (the turn) → amusement or satisfaction",
+      "what": "A normal moment broken by something unexpected; the reveal is the peak.",
+      "frameworks": ["mechanism-led"],
+      "source": "craft"
+    },
+    {
+      "id": "held-warmth",
+      "name": "Held warmth",
+      "shape": "recognition → belonging, held and deepened",
+      "what": "No problem and no turn; the piece stays in the viewer's world and lets them feel at home in it.",
+      "frameworks": ["identification-only"],
+      "source": "craft"
+    },
+    {
+      "id": "contrast",
+      "name": "Contrast",
+      "shape": "frustration (them) ↔ satisfaction (us), alternating, ending on us",
+      "what": "Two feelings cut against each other; the side the piece ends on wins.",
+      "frameworks": ["us-vs-them"],
+      "source": "craft"
+    }
+  ],
+  "carriers": [
+    {"id": "performance", "name": "Performance", "what": "The face and body — a real reaction, a glance, an exhale. Carries more than any line."},
+    {"id": "framing", "name": "Framing and distance", "what": "Close is intimate and 'this is me'; wide is watching someone else; selfie framing is a friend talking."},
+    {"id": "camera-move", "name": "Camera movement", "what": "Handheld is raw and present; locked-off is calm and certain; a push-in raises intensity."},
+    {"id": "light-colour", "name": "Light and colour", "what": "Cool, flat, dim for the low; warm, soft, open for the after — the change in light can carry the turn alone."},
+    {"id": "sound", "name": "Sound and music", "what": "Music sets the feeling before the picture does; a sound dropping out makes tension, a sound landing makes satisfaction."},
+    {"id": "cut-rhythm", "name": "Cut rhythm", "what": "Fast cuts build energy or anxiety; a held shot lets a feeling land."},
+    {"id": "silence", "name": "The held beat", "what": "A pause before the answer or after the reveal — the space the feeling happens in."},
+    {"id": "words", "name": "Words and voice", "what": "How the line is said, never what it names. The voice carries the feeling; the words carry the meaning."}
+  ],
+  "rules": [
+    {"id": "read-off-the-swipe", "rule": "Every map starts as the swipe's own map, read beat by beat off the teardown and the frame map, with the moment on screen that makes each feeling. Ours keeps it.", "source": "craft"},
+    {"id": "one-feeling-per-beat", "rule": "Each beat names ONE feeling from this palette and one intensity. Two feelings in one beat is two beats or one muddle.", "source": "craft"},
+    {"id": "every-beat-moves", "rule": "Each beat changes the feeling — its kind or its intensity. A beat that leaves it where the last one left it is a transition: merge it or cut it.", "source": "research — mckee-1997"},
+    {"id": "one-peak", "rule": "Exactly one beat is the peak (intensity 5), and it sits on the product working or on the payoff.", "source": "research — fredrickson-kahneman-1993"},
+    {"id": "contrast-makes-the-turn", "rule": "The relief is only as big as the low before it. Keep the low as deep as the swipe made it — softening it weakens the turn.", "source": "research — reagan-2016"},
+    {"id": "negatives-resolve", "rule": "Every negative feeling raised is paid off before the end, by what the product actually does. Never end at the low; never make the viewer the joke.", "source": "craft"},
+    {"id": "claims-sit-calm", "rule": "A claim, a price and a guarantee land in a plain beat — trust or calm — never inside the peak or a laugh.", "source": "craft"},
+    {"id": "receipted-to-the-room", "rule": "The low and the desire are the avatar's own, in the room's own words; a feeling the writer imagines for them is a finding.", "source": "schwartz", "ref": "L3253-3872"},
+    {"id": "emotion-builds-memory", "rule": "Feeling is not decoration: emotionally led advertising builds more long-term effect than purely rational advertising. The map is load-bearing.", "source": "research — binet-field-2013"}
+  ],
+  "map_format": "EMOTIONAL MAP\nARC: <one arc id>\n| # | time | scene | feeling | intensity | carried by | what on screen makes it |\n|---|---|---|---|---|---|---|\n| 1 | 0:00–0:02 | <scene> | <feeling id> | <1–5> | <carrier ids> | <the moment, concretely> |\nOPEN: <feeling id> — beat <#>\nLOW: <feeling id> — beat <#>, or none\nTURN: <from> → <to> — beat <#>, or none\nPEAK: <feeling id> — beat <#>\nEND: <feeling id> — beat <#> — <what it leaves attached to>",
+  "receipts": [
+    {"id": "fredrickson-kahneman-1993", "cite": "Fredrickson, B. L. & Kahneman, D. (1993). Duration neglect in retrospective evaluations of affective episodes. Journal of Personality and Social Psychology, 65(1), 45–55.", "what": "People judge an experience by its most intense moment and its end, not its length or average — the peak-end rule."},
+    {"id": "teixeira-2012", "cite": "Teixeira, T., Wedel, M. & Pieters, R. (2012). Emotion-induced engagement in internet video advertisements. Journal of Marketing Research, 49(2), 144–159.", "what": "Measured on viewers' faces: surprise concentrates attention and joy keeps people watching — the open has to earn the next second."},
+    {"id": "reagan-2016", "cite": "Reagan, A. J., Mitchell, L., Kiley, D., Danforth, C. M. & Dodds, P. S. (2016). The emotional arcs of stories are dominated by six basic shapes. EPJ Data Science, 5, 31.", "what": "Stories follow a few emotional shapes; the fall-then-rise ('man in a hole') is among the most common."},
+    {"id": "mckee-1997", "cite": "McKee, R. (1997). Story: Substance, Structure, Style and the Principles of Screenwriting. ReganBooks.", "what": "A scene turns a value — the viewer leaves it feeling differently than they entered; a scene that does not turn is a non-event."},
+    {"id": "binet-field-2013", "cite": "Binet, L. & Field, P. (2013). The Long and the Short of It. IPA.", "what": "Across the IPA effectiveness databank, emotional campaigns outperform rational ones on long-term business effects."}
+  ]
+}

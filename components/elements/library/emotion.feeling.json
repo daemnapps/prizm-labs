@@ -1,0 +1,283 @@
+{
+ "element": "emotion",
+ "asset": "feeling",
+ "source": "components/marketing-doctrine/emotion.json",
+ "enforced_by": "the video teardown's doctrine read (the emotional map); recorded as unknown, never refused",
+ "note": "The emotional map's feelings (the owner, 2026-10-13) — the only words a beat's feeling is spelled in.",
+ "rows": [
+  {
+   "id": "curiosity",
+   "name": "Curiosity",
+   "what": "An open question the viewer wants closed — 'wait, what is that?'",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "neutral",
+    "on_screen": "Something unexplained or out of place, an action cut before it finishes, a claim with the reason held back."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "surprise",
+   "name": "Surprise",
+   "what": "A jolt — the expected thing does not happen.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "neutral",
+    "on_screen": "A pattern set up and broken, an unexpected person or place, a sudden cut, sound or reveal."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "recognition",
+   "name": "Recognition",
+   "what": "'That's me' — the viewer sees their own life, habit or moment on screen.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "neutral",
+    "on_screen": "A specific, true-to-life detail of the avatar's day, said or done the way they do it."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "frustration",
+   "name": "Frustration",
+   "what": "The itch of the problem — annoyance at something that keeps not working.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "negative",
+    "on_screen": "The failed attempt shown, the sigh, the thing thrown down, the same struggle repeated."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "unease",
+   "name": "Unease",
+   "what": "Tension — a quiet worry that something is wrong or about to go wrong.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "negative",
+    "on_screen": "A held close-up, a pause before an answer, a detail noticed that should not be there, sound dropping out."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "empathy",
+   "name": "Empathy",
+   "what": "Feeling for the person on screen — 'oh, I know how that feels.'",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "negative",
+    "on_screen": "A real, unperformed moment of the person struggling or exposed, held long enough to land."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "amusement",
+   "name": "Amusement",
+   "what": "A laugh or a smirk.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "Whatever the humor dial and the room's own references allow — never over a claim."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "relief",
+   "name": "Relief",
+   "what": "The exhale — the problem finally lets go.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "The struggle stops, the shoulders drop, the easy version of the moment that was hard a beat ago."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "hope",
+   "name": "Hope",
+   "what": "'Maybe this could work for me.'",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "Someone like the viewer trying it, a first small change, the mechanism making sense."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "desire",
+   "name": "Desire",
+   "what": "'I want that' — wanting the life, the look or the result on screen.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "The after shown at its best: the person at ease, the result in use, the product handled with care."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "trust",
+   "name": "Trust",
+   "what": "Belief — 'this is real, these people are straight with me.'",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "Proof shown plainly: a real result, a real person, a demonstration with nothing hidden, a calm unhurried read."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "belonging",
+   "name": "Belonging",
+   "what": "Pride of membership — 'people like me do this.'",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "The avatar's own people, references and world; the product as part of who they already are."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "satisfaction",
+   "name": "Satisfaction",
+   "what": "The click of something working exactly right.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "A clean demonstration, a perfect fit, a before-and-after that resolves, a sound that lands."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "urgency",
+   "name": "Urgency",
+   "what": "'I should do this now.'",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "neutral",
+    "on_screen": "A real deadline or scarcity from the offer file, the cost of waiting shown, the pace picking up into the close."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "calm",
+   "name": "Calm",
+   "what": "Settled ease — nothing is pushing.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "valence": "positive",
+    "on_screen": "Slow, steady shots, soft light, room tone, an unhurried voice."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

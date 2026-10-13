@@ -479,6 +479,78 @@ def spoken(d):
     return "\n".join(out)
 
 
+EMOTION_JSON_PATH = HERE / "emotion.json"
+
+
+def emotion(d):
+    """The emotional map — components/marketing-doctrine/emotion.json, a
+    sibling of delivery.json. `d` (frameworks.json) is read only to flag a
+    section or awareness level a feeling names that the doctrine no longer
+    carries; ad-frameworks.json to flag an arc's framework that is gone."""
+    b = json.loads(EMOTION_JSON_PATH.read_text())
+    known_sec = {s["id"] for s in d.get("sections", [])}
+    known_aw = {l["id"] for l in d.get("awareness", {}).get("levels", [])}
+    known_fw = set()
+    if AD_JSON_PATH.exists():
+        known_fw = {f["id"] for f in json.loads(AD_JSON_PATH.read_text())["frameworks"]}
+    rec = {r["id"]: r for r in b["receipts"]}
+
+    def flag(ids, known):
+        return ", ".join("`%s`%s" % (x, "" if x in known else " \u26a0") for x in ids) or "\u2014"
+
+    def src(row):
+        return ("%s %s" % (row["source"], _ref(row.get("ref")))).rstrip()
+
+    out = [_open("The emotional map \u2014 what each beat makes the viewer feel", "emotion", b["what"])]
+    out.append("**Read off the swipe.** %s\n" % b["rule"])
+    out.append("**Shown, never said.** %s\n" % b["show_rule"])
+    out.append("## 1. The rules\n")
+    for r in b["rules"]:
+        out.append("- **%s** \u2014 %s _(%s)_" % (r["id"], r["rule"], src(r)))
+    out.append("")
+    out.append("## 2. The five points every map names\n")
+    for p_ in b["points"]:
+        out.append("- **%s** (`%s`) \u2014 %s %s _(%s)_" % (p_["name"], p_["id"], p_["what"], p_["rule"], src(p_)))
+    out.append("")
+    out.append("## 3. The feelings \u2014 the only words a beat's feeling is spelled in\n")
+    out.append("| Feeling | Valence | What the viewer feels | What on screen makes it |")
+    out.append("|---|---|---|---|")
+    for f in b["feelings"]:
+        out.append("| `%s` | %s | %s | %s |" % (f["id"], f["valence"], f["what"], f["on_screen"]))
+    out.append("")
+    for f in b["feelings"]:
+        out.append(("### `%s` %s" % (f["id"], _ref(f.get("ref")))).rstrip() + "\n")
+        out.append("- **Fits:** sections %s \u00b7 levels %s" % (
+            flag(f["fits"]["sections"], known_sec), flag(f["fits"]["awareness"], known_aw)))
+        out.append("- **Risk:** %s" % f["risk"])
+        out.append("- **Source:** %s\n" % f["source"])
+    out.append("## 4. Intensity\n")
+    for i in b["intensity"]:
+        out.append("- **%d** \u2014 %s" % (i["level"], i["what"]))
+    out.append("")
+    out.append("## 5. The arcs \u2014 the shape of the whole piece\n")
+    for a in b["arcs"]:
+        out.append("- **%s** (`%s`) \u2014 %s %s Frameworks: %s. _(%s)_" % (
+            a["name"], a["id"], a["shape"] + ".", a["what"], flag(a["frameworks"], known_fw), a["source"]))
+    out.append("")
+    out.append("## 6. What carries a feeling \u2014 the director's levers\n")
+    for c in b["carriers"]:
+        out.append("- **%s** (`%s`) \u2014 %s" % (c["name"], c["id"], c["what"]))
+    out.append("")
+    out.append("## 7. The map, exactly as a stage prints it\n")
+    out.append("```\n%s\n```\n" % b["map_format"])
+    out.append("## 8. Receipts\n")
+    for r in b["receipts"]:
+        out.append("- `%s` \u2014 %s %s" % (r["id"], r["cite"], r["what"]))
+    used = {x.split("\u2014", 1)[1].strip() for x in
+            [row["source"] for row in b["feelings"] + b["points"] + b["arcs"] + b["rules"]]
+            if x.startswith("research")}
+    missing = sorted(used - set(rec))
+    if missing:
+        out.append("\n\u26a0 cited but not in receipts: %s" % ", ".join(missing))
+    return "\n".join(out)
+
+
 RENDERERS = [
     ("desire.md", desire),
     ("awareness.md", awareness),
@@ -492,6 +564,7 @@ RENDERERS = [
     ("ad-frameworks.md", ad_frameworks),
     ("delivery.md", delivery),
     ("spoken.md", spoken),
+    ("emotion.md", emotion),
 ]
 
 

@@ -1,0 +1,117 @@
+{
+ "element": "emotion",
+ "asset": "arc",
+ "source": "components/marketing-doctrine/emotion.json",
+ "enforced_by": "the video teardown's doctrine read (the emotional map); recorded as unknown, never refused",
+ "note": "The shape of a piece's feeling, start to end.",
+ "rows": [
+  {
+   "id": "dip-and-rise",
+   "name": "Dip and rise",
+   "what": "Fall into the problem, climb out with the product. The commonest shape in direct response.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "shape": "recognition → frustration or unease (the low) → turn → relief or satisfaction → desire",
+    "frameworks": [
+     "pas",
+     "bab",
+     "story-testimonial",
+     "mechanism-led"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "steady-climb",
+   "name": "Steady climb",
+   "what": "No low: each beat raises the feeling a step until the close.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "shape": "curiosity → hope → desire → urgency",
+    "frameworks": [
+     "aida",
+     "direct-offer"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "reveal",
+   "name": "Set-up and reveal",
+   "what": "A normal moment broken by something unexpected; the reveal is the peak.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "shape": "calm or recognition → surprise (the turn) → amusement or satisfaction",
+    "frameworks": [
+     "mechanism-led"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "held-warmth",
+   "name": "Held warmth",
+   "what": "No problem and no turn; the piece stays in the viewer's world and lets them feel at home in it.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "shape": "recognition → belonging, held and deepened",
+    "frameworks": [
+     "identification-only"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "contrast",
+   "name": "Contrast",
+   "what": "Two feelings cut against each other; the side the piece ends on wins.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/emotion.json",
+   "extra": {
+    "shape": "frustration (them) ↔ satisfaction (us), alternating, ending on us",
+    "frameworks": [
+     "us-vs-them"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

@@ -194,6 +194,35 @@ FORMAT: <one id from the video-format list, or a plain description (no format ro
 STRUCTURE: <one id from the video-structure list, or a plain description (no structure row)> · <the spans that make it this one>
 ```
 
+**THE EMOTIONAL MAP:** what the viewer FEELS at every beat of the source,
+from the first frame to the last — the map our version will keep. Read it off
+the record: each scene contract's `Emotion:` and `Outcome:` lines, the
+transcript, the faces and the music the record describes, and THE PSYCHOLOGY's
+end state. One row per beat, where a beat is a stretch with one feeling — a
+scene, or part of one where the feeling changes inside it. Spell every feeling
+with an id from the emotion slice's feelings and nothing else, give it an
+intensity from 1 to 5, name what carries it with the slice's carrier ids, and
+say concretely what on screen makes it, citing the span. Then name the five
+points. Exactly one beat is a 5. A source with no low or no turn says `none`
+— that is a finding about its arc, not a gap. Where the source breaks a rule
+in the slice (opens on calm, ends low), record what it does and say so; this
+is the source's map, never a corrected one.
+
+Print it exactly in the slice's map shape:
+
+```
+EMOTIONAL MAP
+ARC: <one arc id from the slice, or a plain description (no arc row)>
+| # | time | scene | feeling | intensity | carried by | what on screen makes it |
+|---|---|---|---|---|---|---|
+| 1 | <span> | <scene> | <feeling id> | <1–5> | <carrier ids> | <the moment> |
+OPEN: <feeling id> — beat <#>
+LOW: <feeling id> — beat <#>, or none
+TURN: <from> → <to> — beat <#>, or none
+PEAK: <feeling id> — beat <#>
+END: <feeling id> — beat <#> — <what it leaves attached to>
+```
+
 **WHAT MAKES IT UNIQUE:** one line. The thing about this framework worth
 banking — the **combination** that makes it worth pulling off the shelf
 later: a shape carrying a signature it does not usually carry, a technique

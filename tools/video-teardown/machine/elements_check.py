@@ -172,6 +172,24 @@ def label(doc, E=None):
             out[f"delivery/{dial}"] = [_entry(E, "delivery", dial, x) for x in v]
         else:
             out[f"delivery/{dial}"] = _entry(E, "delivery", dial, v)
+
+    # the emotional map (stage 1c v5, 2026-10-13): its arc and every beat's
+    # feeling, looked up like any other label — an unknown one is recorded
+    em = doc.get("emotional_map") if isinstance(doc.get("emotional_map"), dict) else None
+    if em is not None:
+        arc = em.get("arc")
+        e = _entry(E, "emotion", "arc", arc if isinstance(arc, str) else "")
+        if not e["known"] and isinstance(arc, str) and "(no arc row)" in arc:
+            e["note"] = "the read named no arc row — a shape in plain words is a candidate row"
+        out["emotion/arc"] = e
+        feels, seen = [], set()
+        for b in em.get("beats") or []:
+            v = b.get("feeling") if isinstance(b, dict) else None
+            if _norm(v) in seen:
+                continue
+            seen.add(_norm(v))
+            feels.append(_entry(E, "emotion", "feeling", v))
+        out["emotion/feeling"] = feels
     return out
 
 
