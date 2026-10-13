@@ -38,6 +38,27 @@ class Wired(unittest.TestCase):
         self.assertIn("emotional_map", R.DOCTRINE_KEYS)
 
 
+class Visual(unittest.TestCase):
+    VSLICE = "components/marketing-doctrine/slices/visual.md"
+
+    def test_visual_slice_bound_to_1c_and_5(self):
+        sv = json.loads((HERE / "extra-stages.json").read_text())["stage_vars"]
+        for k in ("stage1c", "stage5"):
+            self.assertEqual(sv[k].get("visual"), self.VSLICE, k)
+
+    def test_1c_reads_the_swipes_look_and_files_it(self):
+        txt = C.newest("stage1c")[0].read_text()
+        self.assertIn("{visual}", txt)
+        self.assertIn("THE VISUAL READ", txt)
+        self.assertIn("visual", R.DOCTRINE_KEYS)
+
+    def test_visual_values_are_labelled_and_unknowns_recorded(self):
+        out = EC.label({"visual": {"shot": ["close", "dutch"], "capture": "phone"}})
+        self.assertEqual([(e["value"], e["known"]) for e in out["visual/shot"]],
+                         [("close", True), ("dutch", False)])
+        self.assertTrue(out["visual/capture"][0]["known"])
+
+
 class Labelled(unittest.TestCase):
     def test_feelings_and_arc_are_looked_up_and_unknowns_recorded(self):
         doc = {"emotional_map": {"arc": "dip-and-rise", "beats": [

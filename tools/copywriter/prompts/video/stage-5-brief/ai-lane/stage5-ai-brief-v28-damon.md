@@ -1,4 +1,4 @@
-<!-- v28 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): reads the emotion slice, the emotional map doctrine. Every scene's `emotion` is now spelled `⟨feeling id⟩ ⟨intensity⟩[ · ⟨point⟩] — ⟨the moment⟩`, taken from the injection's `Feeling:` line, so the swipe's open, low, turn, peak and end stay on their beats; the piece names its `arc`. The machine reads both against the swipe's own map. And NO MACHINE TELLS: reads the tells slice; the machine-checked tells in any `voice` or `says` hold the brief, and every direction is written specific, never average. Everything in v27 stands. -->
+<!-- v28 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): reads the emotion slice, the emotional map doctrine. Every scene's `emotion` is now spelled `⟨feeling id⟩ ⟨intensity⟩[ · ⟨point⟩] — ⟨the moment⟩`, taken from the injection's `Feeling:` line, so the swipe's open, low, turn, peak and end stay on their beats; the piece names its `arc`. The machine reads both against the swipe's own map. And NO MACHINE TELLS: reads the tells slice; the machine-checked tells in any `voice` or `says` hold the brief, and every direction is written specific, never average. And THE PICTURE HOLDS: reads the visual slice; every frame's composition, camera and lighting open with the slice's values, kept from the swipe's visual read and chosen for the beat's feeling. Everything in v27 stands. -->
 
 <!-- v27 (2026-10-08, the owner: "this is just the Meta strategy … playing to this algo"; "I want to be very, very clear on exactly how the prompts are structured … leveraging the same exact elements and variables"): the `piece` block now carries the seven moves in the system's own fields — the existing `avatar`, `sub`, `awareness`, `format`, plus `angle` (from {angles}), `setting` (from {settings}), `lead` (the lead's bank_id from the banked cast) and `style_id` (an id from the style list) — read by components/creative-diversity/check.py. Two new inputs: {angles}, {settings}. Replaces v26 (archived: it declared the moves in a second block with new words). Everything in v25 stands. -->
 
@@ -871,13 +871,13 @@ present:
  "lyrics": [⟨ONLY on a SUNG or RAPPED piece: the lyric lines sung over this scene, one string per line, word for word as the WHAT TO SAY lyrics carry them — and then `voice` is "". On a spoken piece leave the key out⟩],
  "first_frame": {
   "subject": "⟨who or what is in it, by name, and what the body is doing — never a re-description of the face⟩",
-  "composition": "⟨how it is framed and how much of the frame each thing occupies⟩",
+  "composition": "⟨`⟨shot id⟩ · ⟨composition id⟩ — ` then how it is framed, how much of the frame each thing occupies, and the one thing the eye goes to (THE PICTURE HOLDS)⟩",
   "action": "⟨the single action visible at this instant⟩",
   "location": "⟨the world block, by name, plus the one detail that anchors it⟩",
   "style": "⟨the piece's grade sentence⟩",
-  "camera": "⟨the result — how high, how close, how much depth. Never a device⟩",
+  "camera": "⟨`⟨angle id⟩ · ⟨camera id⟩ — ` then the result — how high, how close, how much depth. Never a device⟩",
   "viewpoint": "⟨REQUIRED whenever the scene's `who` is someone's hands, arm or body part, or the product — that person's face is out of frame, EVEN WHEN another person's face is in the shot — and on any frame with no face at all: whose eyes the camera is, and which edge of the frame every limb enters from, elbows off-frame. \"Her own point of view: the camera is where her eyes are, looking down. Both forearms enter from the bottom edge of the frame, elbows out of frame, angled slightly toward the basin. No arm enters from any other edge.\" Leave the key out only when everyone in the frame is shown with their face⟩",
-  "lighting": "⟨where the light comes from and how flat it is⟩",
+  "lighting": "⟨`⟨light id⟩ · ⟨colour id⟩ — ` then where the light comes from in the place and how flat it is⟩",
   "refs": ["⟨the references this frame is built from, in order — the cast sheet, then the packshot where the product is in frame, then the style frame⟩"]
  },
  "beats": [
@@ -1938,6 +1938,18 @@ The master rule: generators drift to the AVERAGE, and every tell is the average 
 1. **The machine-checked tells hold the run.** Machine vocabulary, ad-template phrases and stacked exclamation marks in anything spoken or shown are caught with no model and the step is HELD until it is rewritten. A phrase the swipe itself says is the swipe's and is never caught.
 2. **The judged tells are yours to catch first.** Before you finish, read your own output against every tell in the list for the channels this step writes, and rewrite anything that matches. Where a direction would produce one (a centred pose, a spotless room, a floating camera, studio light in a bathroom), write the specific real thing instead.
 3. **Never fix a tell by describing its absence.** "No plastic skin" in a direction is weaker than the pores, the mark and the window light that make skin real. Say what is there.
+
+## THE PICTURE HOLDS (2026-10-13)
+
+Here is the visual language — the shot, angle, camera, composition, light, colour and capture values, what each one serves, and how it looks for real: {visual}
+
+The doctrine read's THE VISUAL READ says how the swipe is shot. Ours is shot the same way: the same shot sizes in the same places, the same camera, the same capture. Inside that, the scene's feeling in the emotional map picks the frame — closer as it builds, the closest frame on the peak, a change of light or framing on the turn — and contrast between shots rises at the turn and the peak.
+
+Every frame spells its look with the slice's values first, then the specific:
+- `composition` opens with a shot id and a composition id — `close · off-centre — the face on the left third, the open cabinet behind` — and says the one thing the eye goes to.
+- `camera` opens with an angle id and a camera id — `eye-level · handheld-selfie — arm's length, the frame drifting with each breath`.
+- `lighting` opens with a light id and a colour id — `window · mixed — daylight from the left, the warm bulb over the mirror on`.
+The ids are the decision; the words after them are what the generator sees. A value the swipe does not use is a SWAP, and the scene says why in the same field. Every light has a source in the world block, and every frame carries one specific real detail of the place.
 
 ## NOTHING IN THIS PROMPT IS CONTENT
 

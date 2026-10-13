@@ -460,7 +460,7 @@ def json_block(text):
 
 DOCTRINE_KEYS = ("framework", "crosswalk_row", "sections_carried", "awareness",
                  "sophistication_signature", "mass_desire", "techniques",
-                 "mood", "delivery", "emotional_map", "unique")
+                 "mood", "delivery", "emotional_map", "visual", "unique")
 
 
 def file_doctrine(d, body):

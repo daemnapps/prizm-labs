@@ -619,6 +619,48 @@ def creativity(d):
     return "\n".join(out)
 
 
+VISUAL_JSON_PATH = HERE / "visual.json"
+
+
+def visual(d):
+    """Visual language — components/marketing-doctrine/visual.json: the shot
+    vocabulary, each value tied to the feelings it serves in emotion.json."""
+    b = json.loads(VISUAL_JSON_PATH.read_text())
+    feel = set()
+    if EMOTION_JSON_PATH.exists():
+        feel = {f["id"] for f in json.loads(EMOTION_JSON_PATH.read_text())["feelings"]}
+
+    def flag(ids):
+        return ", ".join("`%s`%s" % (x, "" if x in feel else " \u26a0") for x in ids) or "\u2014"
+
+    out = [_open("Visual language \u2014 how each frame is made", "visual", b["what"])]
+    out.append("**The master rule.** %s\n" % b["master_rule"])
+    out.append("_%s_\n" % b["examples_note"])
+    out.append("## 1. The rules\n")
+    for r in b["rules"]:
+        out.append("- **%s** \u2014 %s _(%s)_" % (r["id"], r["rule"], r["source"]))
+    out.append("")
+    out.append("## 2. A frame, spelled\n")
+    out.append("```\n%s\n```\n" % b["frame_format"])
+    out.append("| Dimension | Values |")
+    out.append("|---|---|")
+    for dm in b["dimensions"]:
+        out.append("| **%s** (`%s`) | %s |" % (dm["name"], dm["id"], " \u00b7 ".join("`%s`" % v["id"] for v in dm["values"])))
+    out.append("")
+    for dm in b["dimensions"]:
+        out.append("## %s (`%s`)\n" % (dm["name"], dm["id"]))
+        out.append("%s\n" % dm["what"])
+        out.append("**Rule.** %s\n" % dm["rule"])
+        for v in dm["values"]:
+            out.append("- **`%s`** \u2014 %s _Real:_ %s _Serves:_ %s. _(%s)_" % (
+                v["id"], v["what"], v["real"], flag(v["serves"]), v["source"]))
+        out.append("")
+    out.append("## Receipts\n")
+    for r in b["receipts"]:
+        out.append("- `%s` \u2014 %s %s %s" % (r["id"], r["cite"], r["url"], r["what"]))
+    return "\n".join(out)
+
+
 RENDERERS = [
     ("desire.md", desire),
     ("awareness.md", awareness),
@@ -635,6 +677,7 @@ RENDERERS = [
     ("emotion.md", emotion),
     ("tells.md", tells),
     ("creativity.md", creativity),
+    ("visual.md", visual),
 ]
 
 

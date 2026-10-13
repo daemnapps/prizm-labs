@@ -1,0 +1,145 @@
+{
+ "element": "visual",
+ "asset": "light",
+ "source": "components/marketing-doctrine/visual.json › light",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "window",
+   "name": "window",
+   "what": "Daylight from one side through a window.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › light",
+   "extra": {
+    "serves": [
+     "calm",
+     "trust",
+     "relief",
+     "hope"
+    ],
+    "real": "One side brighter, a soft shadow on the other, the window sometimes blown out."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "overhead-room",
+   "name": "overhead-room",
+   "what": "The room's own ceiling light.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › light",
+   "extra": {
+    "serves": [
+     "frustration",
+     "unease",
+     "recognition"
+    ],
+    "real": "Top-down, slightly green or yellow, shadows under the eyes."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "practical-lamp",
+   "name": "practical-lamp",
+   "what": "A lamp in the shot lighting the scene.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › light",
+   "extra": {
+    "serves": [
+     "calm",
+     "empathy",
+     "belonging"
+    ],
+    "real": "Warm pool of light, dark corners, mixed with the screen's glow."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "golden-hour",
+   "name": "golden-hour",
+   "what": "Low warm sun.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › light",
+   "extra": {
+    "serves": [
+     "hope",
+     "desire",
+     "belonging"
+    ],
+    "real": "Long shadows, lens flare, faces warm on one side."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "car-daylight",
+   "name": "car-daylight",
+   "what": "Daylight through a car windscreen.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › light",
+   "extra": {
+    "serves": [
+     "recognition",
+     "amusement",
+     "trust"
+    ],
+    "real": "Even but directional, the seat and window in frame."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "ring-light",
+   "name": "ring-light",
+   "what": "A creator's ring light — even, frontal, a ring in the eyes.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › light",
+   "extra": {
+    "serves": [
+     "trust",
+     "urgency"
+    ],
+    "real": "Only where the swipe is a creator at a desk; catchlight ring visible."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

@@ -223,6 +223,24 @@ PEAK: <feeling id> — beat <#>
 END: <feeling id> — beat <#> — <what it leaves attached to>
 ```
 
+**THE VISUAL READ:** how the source is SHOT, one labelled line per
+dimension, spelled with the visual slice's values and nothing else, each with
+the spans that show it. Read it off the record — its camera and setting
+notes, the scene contracts' `Camera:` and `Staging:` lines. A source that uses
+more than one value (a wide that cuts to a close) lists each with its span,
+in order. A dimension the record does not settle is `not shown in the
+record`. This is the source's look, never a plan for ours.
+
+```
+SHOT: <value id> · <span>, <value id> · <span> …
+ANGLE: <value id> · <span> …
+CAMERA: <value id> · <the whole piece, or each span>
+COMPOSITION: <value id> · <span> …
+LIGHT: <value id> · <where it comes from> · <span> …
+COLOUR: <value id> · <span> …
+CAPTURE: <value id>
+```
+
 **WHAT MAKES IT UNIQUE:** one line. The thing about this framework worth
 banking — the **combination** that makes it worth pulling off the shelf
 later: a shape carrying a signature it does not usually carry, a technique

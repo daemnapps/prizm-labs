@@ -361,6 +361,27 @@
       "note": "The shape of a piece's feeling, start to end."
     },
     {
+      "element": "visual",
+      "asset": "@group",
+      "path": "components/marketing-doctrine/visual.json",
+      "id": "id",
+      "fields": {
+        "name": "id",
+        "what": "what"
+      },
+      "extra": [
+        "serves",
+        "real"
+      ],
+      "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+      "groups": {
+        "path": "dimensions",
+        "id": "id",
+        "rows": "values"
+      },
+      "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension."
+    },
+    {
       "element": "delivery",
       "asset": "@group",
       "path": "components/marketing-doctrine/delivery.json",

@@ -1,0 +1,121 @@
+{
+ "element": "visual",
+ "asset": "colour",
+ "source": "components/marketing-doctrine/visual.json › colour",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "true",
+   "name": "true",
+   "what": "The colours as the phone saw them.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › colour",
+   "extra": {
+    "serves": [
+     "trust",
+     "recognition"
+    ],
+    "real": "Auto white balance, slightly off in mixed light."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "warm",
+   "name": "warm",
+   "what": "Leaning yellow-orange.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › colour",
+   "extra": {
+    "serves": [
+     "calm",
+     "belonging",
+     "relief",
+     "desire"
+    ],
+    "real": "From the light source — a lamp, the sun — never from a filter."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "cool",
+   "name": "cool",
+   "what": "Leaning blue.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › colour",
+   "extra": {
+    "serves": [
+     "unease",
+     "frustration"
+    ],
+    "real": "Morning light, a screen, an overcast window."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "mixed",
+   "name": "mixed",
+   "what": "Two temperatures in one frame.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › colour",
+   "extra": {
+    "serves": [
+     "recognition",
+     "curiosity"
+    ],
+    "real": "Window daylight and a warm lamp together, as real rooms are."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "punchy",
+   "name": "punchy",
+   "what": "High saturation, bright — the meme and entertainment register.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › colour",
+   "extra": {
+    "serves": [
+     "amusement",
+     "surprise",
+     "urgency"
+    ],
+    "real": "Only where the swipe runs it; phone 'vivid' mode, not a cinema grade."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

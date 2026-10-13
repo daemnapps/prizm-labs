@@ -12,10 +12,12 @@ Here are the taste and delivery dials — humor level, delivery style,
 register, pacing, reference world and what gets avoided: {delivery}
 Here is the emotional map doctrine — the feelings, the five points, the arcs,
 what carries a feeling, and the exact shape a map is printed in: {emotion}
+Here is the visual language doctrine — the shot, angle, camera, composition,
+light, colour and capture values, each with what it serves: {visual}
 Here is the list of video formats, each with its id: {video_formats}
 Here is the list of video structures, each with its id: {video_structures}
 
-*v5 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): one new labelled block, THE EMOTIONAL MAP, after STRUCTURE, and an `emotional_map` key in the fenced json block — what the viewer feels at every beat of the source, its open, low, turn, peak and end, read off the record in the emotion slice's own words. The emotion slice is the only new variable; every other variable, slot and rule of v4 is unchanged.*
+*v5 (2026-10-13, the owner: "let's install a full map proper fundamentally in the system similar to the marketing doctrine"): one new labelled block, THE EMOTIONAL MAP, after STRUCTURE, and an `emotional_map` key in the fenced json block — what the viewer feels at every beat of the source, its open, low, turn, peak and end, read off the record in the emotion slice's own words; and THE VISUAL READ with a `visual` key — how the source is shot, in the visual slice's own values (2026-10-13, same ruling: "the emotional / visual / creative make up of our work"). The emotion and visual slices are the only new variables; every other variable, slot and rule of v4 is unchanged.*
 
 *v4 (2026-09-30): no rule changes. The version notes below named three variables in braces, so every run pasted the formats, structures and delivery lists in a second time, inside the notes. The notes now name them in words. The lists this stage reads are also stripped of their record-keeping (which of our runs proved a row), so no brand reaches the teardown. Everything in v3 stands.*
 
@@ -227,6 +229,24 @@ PEAK: <feeling id> — beat <#>
 END: <feeling id> — beat <#> — <what it leaves attached to>
 ```
 
+**THE VISUAL READ:** how the source is SHOT, one labelled line per
+dimension, spelled with the visual slice's values and nothing else, each with
+the spans that show it. Read it off the record — its camera and setting
+notes, the scene contracts' `Camera:` and `Staging:` lines. A source that uses
+more than one value (a wide that cuts to a close) lists each with its span,
+in order. A dimension the record does not settle is `not shown in the
+record`. This is the source's look, never a plan for ours.
+
+```
+SHOT: <value id> · <span>, <value id> · <span> …
+ANGLE: <value id> · <span> …
+CAMERA: <value id> · <the whole piece, or each span>
+COMPOSITION: <value id> · <span> …
+LIGHT: <value id> · <where it comes from> · <span> …
+COLOUR: <value id> · <span> …
+CAPTURE: <value id>
+```
+
 **WHAT MAKES IT UNIQUE:** one line. The thing about this framework worth
 banking — the **combination** that makes it worth pulling off the shelf
 later: a shape carrying a signature it does not usually carry, a technique
@@ -288,6 +308,12 @@ never given a value of a different type.
     "peak": {"feeling": "a feeling id", "beat": 4},
     "end": {"feeling": "a feeling id", "beat": 5, "attached_to": "what it leaves attached to"}
   },
+  "visual": {
+    "shot": ["a shot value id"], "angle": ["an angle value id"],
+    "camera": ["a camera value id"], "composition": ["a composition value id"],
+    "light": ["a light value id"], "colour": ["a colour value id"],
+    "capture": "a capture value id, or not shown in the record"
+  },
   "unique": "one line — the combination worth banking"
 }
 ```
@@ -298,7 +324,9 @@ empty; `delivery` is an object and every one of its six keys is present, the
 first four as strings and the last two as lists — a list may be empty, a key
 is never dropped. `emotional_map` is an object with all seven keys; `low` and
 `turn` are `null` when the source has none, and every `intensity` and `beat`
-is a number. Every other key is a string. The values above are shape, not
+is a number. `visual` is an object with all seven keys: six lists of
+value ids (each in the order the source uses them, no repeats; a list may be
+empty) and `capture` a string. Every other key is a string. The values above are shape, not
 content — every one of them is replaced by what this asset actually does.
 
 ---

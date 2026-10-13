@@ -41,6 +41,9 @@ NOT_SHOWN = ("not shown in the record", "not shown", "none observed", "none",
 # The delivery dials stage 1c reads, each its own list in the library.
 DELIVERY_DIALS = ("humor", "delivery_style", "register", "pacing",
                   "reference_world", "avoid")
+# The visual read's dimensions (marketing-doctrine/visual.json), each its own list.
+VISUAL_DIMENSIONS = ("shot", "angle", "camera", "composition", "light",
+                     "colour", "capture")
 
 
 def library():
@@ -190,6 +193,15 @@ def label(doc, E=None):
             seen.add(_norm(v))
             feels.append(_entry(E, "emotion", "feeling", v))
         out["emotion/feeling"] = feels
+
+    # the visual read (stage 1c v5, 2026-10-13): every value, per dimension
+    vi = doc.get("visual") if isinstance(doc.get("visual"), dict) else None
+    if vi is not None:
+        for dim in VISUAL_DIMENSIONS:
+            v = vi.get(dim)
+            vs = v if isinstance(v, list) else [v]
+            out[f"visual/{dim}"] = [_entry(E, "visual", dim, x) for x in vs
+                                    if isinstance(x, str)]
     return out
 
 

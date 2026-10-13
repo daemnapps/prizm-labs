@@ -1,0 +1,121 @@
+{
+ "element": "visual",
+ "asset": "angle",
+ "source": "components/marketing-doctrine/visual.json › angle",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "eye-level",
+   "name": "eye-level",
+   "what": "Level with the eyes — talking to an equal.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › angle",
+   "extra": {
+    "serves": [
+     "recognition",
+     "trust",
+     "empathy"
+    ],
+    "real": "The phone at face height, held or propped."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "high",
+   "name": "high",
+   "what": "Looking down on the subject — small, exposed.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › angle",
+   "extra": {
+    "serves": [
+     "empathy",
+     "unease",
+     "frustration"
+    ],
+    "real": "The selfie held above the face, the classic phone angle."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "low",
+   "name": "low",
+   "what": "Looking up — bigger, confident.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › angle",
+   "extra": {
+    "serves": [
+     "desire",
+     "belonging",
+     "urgency"
+    ],
+    "real": "Phone low on a counter, tilted up."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "top-down",
+   "name": "top-down",
+   "what": "Straight down on a surface — a demonstration.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › angle",
+   "extra": {
+    "serves": [
+     "satisfaction",
+     "curiosity"
+    ],
+    "real": "Phone held flat over the counter, the light from the room above."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pov",
+   "name": "pov",
+   "what": "The subject's own eyes — the viewer's hands in frame.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › angle",
+   "extra": {
+    "serves": [
+     "recognition",
+     "satisfaction"
+    ],
+    "real": "Arms enter from the bottom edge, elbows off frame."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

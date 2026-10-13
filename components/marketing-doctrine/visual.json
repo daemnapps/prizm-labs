@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "what": "Visual language — how a director decides what each frame looks like: how close, from where, how the camera moves, where the eye goes, where the light comes from, what colour the world is and what it was captured on. The emotional map says what a beat must make the viewer feel; this layer is how the picture makes them feel it. The style id says what world the piece is drawn in; this layer says how each shot inside that world is made.",
+  "updated": "2026-10-13",
+  "added": "2026-10-13 — the owner: 'install deeper doctrines surround the emotional / visual / creative make up of our work because we are at the point of having full control of the content we make.'",
+  "source": {
+    "rule": "A row marked `research` names the work in `receipts` it rests on. Every other row is craft — the working vocabulary of directors and cinematographers, marked `source: \"craft\"`."
+  },
+  "master_rule": "THE SWIPE'S CAMERA, THE BEAT'S FEELING. Every visual value starts as the swipe's own — read off the frame map, shot by shot — and ours keeps it, because how a format is shot is part of why it works. Inside that, each shot's choices are made for the feeling its beat carries in the emotional map: closer for intimacy, wider for watching, a change in light or framing to carry the turn. A visual choice that serves neither the swipe nor the feeling is decoration, and decoration is where the average gets in.",
+  "examples_note": "Every example here is illustrative — the shape of a choice, never content for a brief.",
+  "dimensions": [
+    {
+      "id": "shot", "name": "Shot size", "what": "How much of the subject the frame holds — which is how close the viewer stands.",
+      "rule": "Shot size is distance: the closer the frame, the more personal the moment. Cut closer as the feeling builds and hold the closest frame for the peak.",
+      "values": [
+        {"id": "extreme-close", "what": "One detail fills the frame — an eye, a texture, a drop.", "serves": ["surprise", "satisfaction", "unease"], "real": "Phone macro: slight focus hunting, the texture itself sharp.", "source": "research — hall-1966"},
+        {"id": "close", "what": "The face, or the hands and the product, fill the frame.", "serves": ["recognition", "empathy", "relief", "trust"], "real": "Selfie distance: arm's length, slight wide-lens stretch near the edges.", "source": "research — hall-1966"},
+        {"id": "medium", "what": "Waist up — a person and what they are doing.", "serves": ["curiosity", "hope", "amusement"], "real": "A propped phone on a counter or shelf, framed a little loose.", "source": "research — hall-1966"},
+        {"id": "wide", "what": "The whole person in their place.", "serves": ["calm", "belonging", "frustration"], "real": "Phone propped across the room; the place's clutter in frame.", "source": "research — hall-1966"},
+        {"id": "insert", "what": "A cutaway to an object or an action — the product, the hands, the screen.", "serves": ["curiosity", "satisfaction"], "real": "Rear camera held over the action, shadow of the hand sometimes in frame.", "source": "craft"}
+      ]
+    },
+    {
+      "id": "angle", "name": "Angle", "what": "Where the camera is relative to the subject's eyes.",
+      "rule": "Eye level is the default and reads as equal. A high angle makes the subject smaller, a low angle bigger; a top-down angle is a demonstration's angle. Change angle only with the beat.",
+      "values": [
+        {"id": "eye-level", "what": "Level with the eyes — talking to an equal.", "serves": ["recognition", "trust", "empathy"], "real": "The phone at face height, held or propped.", "source": "research — mascelli-1965"},
+        {"id": "high", "what": "Looking down on the subject — small, exposed.", "serves": ["empathy", "unease", "frustration"], "real": "The selfie held above the face, the classic phone angle.", "source": "research — mascelli-1965"},
+        {"id": "low", "what": "Looking up — bigger, confident.", "serves": ["desire", "belonging", "urgency"], "real": "Phone low on a counter, tilted up.", "source": "research — mascelli-1965"},
+        {"id": "top-down", "what": "Straight down on a surface — a demonstration.", "serves": ["satisfaction", "curiosity"], "real": "Phone held flat over the counter, the light from the room above.", "source": "craft"},
+        {"id": "pov", "what": "The subject's own eyes — the viewer's hands in frame.", "serves": ["recognition", "satisfaction"], "real": "Arms enter from the bottom edge, elbows off frame.", "source": "craft"}
+      ]
+    },
+    {
+      "id": "camera", "name": "Camera", "what": "What the camera is held on and how it moves.",
+      "rule": "One camera per piece, taken from the swipe. A move happens only when something motivates it — the subject moves, the beat turns. A move for its own sake is the floating camera.",
+      "values": [
+        {"id": "handheld-selfie", "what": "Front camera, held at arm's length; small natural shake.", "serves": ["recognition", "empathy", "trust"], "real": "Micro-shake, the frame drifting with the breath, a re-frame now and then.", "source": "craft"},
+        {"id": "handheld-rear", "what": "Rear camera held by someone, or by the subject over an action.", "serves": ["curiosity", "satisfaction"], "real": "Shake, a quick re-focus, auto-exposure catching up.", "source": "craft"},
+        {"id": "propped", "what": "Phone leaned on something; the frame does not move.", "serves": ["calm", "amusement", "trust"], "real": "Slightly crooked horizon, the subject a little off-centre.", "source": "craft"},
+        {"id": "locked-off", "what": "Tripod; a composed, still frame.", "serves": ["calm", "trust", "satisfaction"], "real": "Level and still, the only movement inside the frame.", "source": "craft"},
+        {"id": "walk-and-talk", "what": "The camera moves with a walking subject.", "serves": ["urgency", "curiosity", "belonging"], "real": "Footstep bounce, the background passing, wind noise.", "source": "craft"},
+        {"id": "push-in", "what": "The frame moves closer during the shot.", "serves": ["unease", "desire", "surprise"], "real": "Done by a hand on a phone: uneven speed, a small overshoot.", "source": "research — block-2008"}
+      ]
+    },
+    {
+      "id": "composition", "name": "Composition", "what": "Where things sit in the frame and where the eye goes first.",
+      "rule": "The eye goes to ONE thing per frame — the thing the beat is about — and composition, focus and light all point at it. Off-centre is the default; centred is for direct address and for a format that is centred in the swipe.",
+      "values": [
+        {"id": "off-centre", "what": "The subject on a third, room on the other side.", "serves": ["calm", "curiosity", "recognition"], "real": "Never perfectly on the third — a little loose, as a person frames it.", "source": "research — mascelli-1965"},
+        {"id": "centred", "what": "The subject dead centre, square to camera.", "serves": ["trust", "urgency"], "real": "Only for direct address to the lens; the selfie is naturally centred.", "source": "craft"},
+        {"id": "foreground-frame", "what": "Something in the foreground frames the subject — a doorway, a shelf, a shoulder.", "serves": ["curiosity", "empathy"], "real": "The foreground soft and slightly out of focus.", "source": "craft"},
+        {"id": "negative-space", "what": "Empty space around a small subject.", "serves": ["unease", "calm"], "real": "A real empty wall or sky, never a backdrop.", "source": "research — block-2008"},
+        {"id": "lived-in", "what": "A full, real frame — the place's clutter around the subject.", "serves": ["recognition", "belonging"], "real": "The objects the avatar actually owns, a little untidy.", "source": "craft"}
+      ]
+    },
+    {
+      "id": "light", "name": "Light", "what": "Where the light comes from and what it does.",
+      "rule": "Every light has a source in the place — a window, a lamp, the ceiling, the sun — and the world block names it. Changing the light is one of the strongest ways to carry the turn: flat and cool for the low, warm and open for the after.",
+      "values": [
+        {"id": "window", "what": "Daylight from one side through a window.", "serves": ["calm", "trust", "relief", "hope"], "real": "One side brighter, a soft shadow on the other, the window sometimes blown out.", "source": "craft"},
+        {"id": "overhead-room", "what": "The room's own ceiling light.", "serves": ["frustration", "unease", "recognition"], "real": "Top-down, slightly green or yellow, shadows under the eyes.", "source": "craft"},
+        {"id": "practical-lamp", "what": "A lamp in the shot lighting the scene.", "serves": ["calm", "empathy", "belonging"], "real": "Warm pool of light, dark corners, mixed with the screen's glow.", "source": "craft"},
+        {"id": "golden-hour", "what": "Low warm sun.", "serves": ["hope", "desire", "belonging"], "real": "Long shadows, lens flare, faces warm on one side.", "source": "craft"},
+        {"id": "car-daylight", "what": "Daylight through a car windscreen.", "serves": ["recognition", "amusement", "trust"], "real": "Even but directional, the seat and window in frame.", "source": "craft"},
+        {"id": "ring-light", "what": "A creator's ring light — even, frontal, a ring in the eyes.", "serves": ["trust", "urgency"], "real": "Only where the swipe is a creator at a desk; catchlight ring visible.", "source": "craft"}
+      ]
+    },
+    {
+      "id": "colour", "name": "Colour", "what": "The temperature and saturation of the world.",
+      "rule": "Colour is the place's, not a grade laid on top. Real rooms mix temperatures — daylight and a lamp, a screen's blue. A colour shift across the piece can carry the arc; a grade that matches no room anyone lives in is a tell.",
+      "values": [
+        {"id": "true", "what": "The colours as the phone saw them.", "serves": ["trust", "recognition"], "real": "Auto white balance, slightly off in mixed light.", "source": "craft"},
+        {"id": "warm", "what": "Leaning yellow-orange.", "serves": ["calm", "belonging", "relief", "desire"], "real": "From the light source — a lamp, the sun — never from a filter.", "source": "research — block-2008"},
+        {"id": "cool", "what": "Leaning blue.", "serves": ["unease", "frustration"], "real": "Morning light, a screen, an overcast window.", "source": "research — block-2008"},
+        {"id": "mixed", "what": "Two temperatures in one frame.", "serves": ["recognition", "curiosity"], "real": "Window daylight and a warm lamp together, as real rooms are.", "source": "craft"},
+        {"id": "punchy", "what": "High saturation, bright — the meme and entertainment register.", "serves": ["amusement", "surprise", "urgency"], "real": "Only where the swipe runs it; phone 'vivid' mode, not a cinema grade.", "source": "craft"}
+      ]
+    },
+    {
+      "id": "capture", "name": "Capture", "what": "What the picture was recorded on — the texture of the image itself.",
+      "rule": "The capture is the swipe's. A phone format keeps the phone's texture — deep focus, grain in the shadows, compression, exposure that shifts — and never gets shallow cinema focus or a film grade.",
+      "values": [
+        {"id": "phone", "what": "A phone camera.", "serves": ["recognition", "trust", "empathy"], "real": "Deep focus, wide lens, sensor noise in the shadows, auto-exposure shifts, compression.", "source": "craft"},
+        {"id": "camera", "what": "A dedicated camera — a produced piece.", "serves": ["desire", "satisfaction", "calm"], "real": "Shallow focus, clean shadows, a chosen lens.", "source": "craft"},
+        {"id": "screen", "what": "A screen recording.", "serves": ["curiosity", "trust"], "real": "The interface, the notification, the thumb tapping.", "source": "craft"}
+      ]
+    }
+  ],
+  "rules": [
+    {"id": "read-off-the-swipe", "rule": "Every visual value starts as the swipe's own, read from the frame map shot by shot. Ours keeps it; a change is a SWAP with a reason, never a drift.", "source": "craft"},
+    {"id": "feeling-picks-the-frame", "rule": "Within the swipe's shots, the beat's feeling in the emotional map picks the frame: closer as it builds, the closest on the peak, a change of light or framing on the turn.", "source": "research — block-2008"},
+    {"id": "contrast-is-intensity", "rule": "Visual contrast between shots — in size, angle, light, colour, movement — raises intensity; sameness lowers it. Keep shots alike through a calm stretch and break them at the turn and the peak.", "source": "research — block-2008"},
+    {"id": "one-camera", "rule": "One camera per piece. Scenes never argue with it.", "source": "craft"},
+    {"id": "motivated-movement", "rule": "The camera moves only when something motivates it.", "source": "research — mascelli-1965"},
+    {"id": "light-has-a-source", "rule": "Every light comes from something in the place, and the world block names it.", "source": "craft"},
+    {"id": "one-thing-per-frame", "rule": "Composition, focus and light all point at the one thing the beat is about.", "source": "research — mascelli-1965"},
+    {"id": "continuity", "rule": "Light direction, time of day, wardrobe and the state of the room hold from shot to shot unless the story moves them.", "source": "research — mascelli-1965"},
+    {"id": "one-real-detail", "rule": "Every frame carries one specific real detail from the swipe's room or the avatar's world — the average frame has none.", "source": "craft"}
+  ],
+  "frame_format": "<shot id> · <angle id> · <camera id> — then the specific: how close, what fills the frame, where the eye goes; light: <light id> — where it comes from; colour: <colour id>",
+  "receipts": [
+    {"id": "block-2008", "cite": "Block, B. (2008). The Visual Story: Creating the Visual Structure of Film, TV and Digital Media (2nd ed.). Focal Press.", "url": "https://www.routledge.com/The-Visual-Story-Creating-the-Visual-Structure-of-Film-TV-and-Digital-Media/Block/p/book/9781138014152", "what": "The principle of contrast and affinity: visual contrast between shots raises the audience's emotional intensity, visual affinity lowers it — in space, line, colour, tone and movement."},
+    {"id": "mascelli-1965", "cite": "Mascelli, J. V. (1965). The Five C's of Cinematography: Motion Picture Filming Techniques. Cine/Grafic Publications.", "url": "https://archive.org/search?query=%22Five+C%27s+of+Cinematography%22", "what": "Camera angles, continuity, cutting, close-ups and composition — the working grammar of the shot: what each angle does to the subject, why a move must be motivated, how continuity holds a scene together."},
+    {"id": "hall-1966", "cite": "Hall, E. T. (1966). The Hidden Dimension. Doubleday.", "url": "https://archive.org/search?query=%22The+Hidden+Dimension%22+Hall", "what": "Proxemics: intimate, personal, social and public distance carry different relationships — the logic behind shot size as how close the viewer stands."}
+  ]
+}

@@ -1,4 +1,4 @@
-*v33 (2026-10-13, the owner: "completely eliminate AI sounding / looking generative output"): reads the tells slice and adds NO MACHINE TELLS — the machine-checked tells in anything the maker says hold the brief, and every frame direction is written specific, never average. Everything in v32 stands.*
+*v33 (2026-10-13, the owner: "completely eliminate AI sounding / looking generative output"): reads the tells slice and adds NO MACHINE TELLS — the machine-checked tells in anything the maker says hold the brief, and every frame direction is written specific, never average. And HOW EACH FRAME IS SHOT: reads the visual slice and decides each frame from the swipe's visual read and the beat's feeling, written to the maker in plain words. Everything in v32 stands.*
 
 *v32 (2026-10-08): the brief ends with a `piece` block carrying the seven moves in the system's own field names — the same names the AI lane's `piece` block uses — read by components/creative-diversity/check.py. Two new inputs: {angles}, {settings}. Replaces v31 (archived: new words for the same thing). Everything in v30 stands.*
 
@@ -630,6 +630,12 @@ The master rule: generators drift to the AVERAGE, and every tell is the average 
 1. **The machine-checked tells hold the run.** Machine vocabulary, ad-template phrases and stacked exclamation marks in anything spoken or shown are caught with no model and the step is HELD until it is rewritten. A phrase the swipe itself says is the swipe's and is never caught.
 2. **The judged tells are yours to catch first.** Before you finish, read your own output against every tell in the list for the channels this step writes, and rewrite anything that matches. Where a direction would produce one (a centred pose, a spotless room, a floating camera, studio light in a bathroom), write the specific real thing instead.
 3. **Never fix a tell by describing its absence.** "No plastic skin" in a direction is weaker than the pores, the mark and the window light that make skin real. Say what is there.
+
+## HOW EACH FRAME IS SHOT (v33, 2026-10-13)
+
+Here is the visual language — the shot, angle, camera, composition, light, colour and capture values, what each one serves, and how it looks for real: {visual}
+
+The doctrine read's THE VISUAL READ says how the swipe is shot, and the maker shoots ours the same way. Use the slice to DECIDE each frame — the shot size, the angle, how the phone is held, where the light comes from — keeping the swipe's choices and letting the beat's feeling pick the frame (closer as it builds, closest on the peak). Then write it in each frame's `Film:` line in plain words the maker can follow, never the ids: "Hold the phone at arm's length, front camera, level with your eyes, the window to your left." Name the light by its source in the room, and the one real thing in the room that should be in frame.
 
 ## THE PIECE BLOCK — THE SEVEN MOVES, FOR THE MACHINE (v32, 2026-10-08)
 

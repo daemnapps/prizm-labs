@@ -13,6 +13,7 @@ any file here.
 |---|---|
 | `frameworks.json` | **the truth.** The labelled slots, every row carrying its `[L####]` line pointer |
 | `delivery.json` | **the taste layer.** The labelled delivery dials — humor level, delivery style, register, pacing, reference world, avoid — each value carrying what it does, when it fits, its risk and the receipt it needs |
+| `visual.json` | **the visual language.** Seven dimensions — shot, angle, camera, composition, light, colour, capture — each value with how it looks for real and the feelings it serves from the emotional map; the rules and the way a frame is spelled |
 | `creativity.json` | **the combination layer.** Keep the proven core and combine one or two things into it — the axes a combination can move (and which the creative pass may apply), eight moves, the rules, and the sheet the creative pass prints |
 | `tells.json` | **the tells.** What makes copy, a voice, a picture, a clip, an edit or a concept read as machine-made — each with how to spot it, why it gives the work away, and what to do instead; `hard` ones carry patterns `tells.py` runs with no model |
 | `emotion.json` | **the emotional layer.** The emotional map — the feelings a beat is spelled in, intensity 1–5, the five points every map names (open · low · turn · peak · end), the arcs a whole piece runs, the director's levers that carry a feeling, the rules, and the receipts behind them |
@@ -63,6 +64,7 @@ lane (lane doctrine §2, one vocabulary):
 | `{emotion}` | `components/marketing-doctrine/slices/emotion.md` |
 | `{tells}` | `components/marketing-doctrine/slices/tells.md` |
 | `{creativity}` | `components/marketing-doctrine/slices/creativity.md` |
+| `{visual}` | `components/marketing-doctrine/slices/visual.md` |
 
 Three more names travel with them and are NOT served from here: `{research}`
 (the run's own gathered answers), `{spice_sheet}` (the creative pass's
@@ -256,6 +258,31 @@ Receipts: Young 1940 (an idea is a new combination of old elements), Koestler
 1964 (two frames that never met), Uzzi et al. 2013 (conventional work with an
 intrusion of the unusual is twice as likely to be a hit), Hekkert et al. 2003
 (most advanced, yet acceptable).
+
+## Visual language — visual.json
+
+the owner, 2026-10-13: *"install deeper doctrines surround the emotional /
+visual / creative make up of our work."*
+
+**The swipe's camera, the beat's feeling.** Every visual value starts as the
+swipe's own; inside it, the emotional map picks each frame — closer as the
+feeling builds, the closest frame on the peak, a change of light or framing
+on the turn. Seven dimensions: shot (extreme-close · close · medium · wide ·
+insert), angle, camera (handheld-selfie · handheld-rear · propped ·
+locked-off · walk-and-talk · push-in), composition, light (every light has a
+source in the place), colour (the place's, never a grade) and capture (a
+phone format keeps the phone's texture). Each value says how it looks when a
+real person shoots it and which feelings it serves.
+
+**Where it runs.** The doctrine read (v5) files THE VISUAL READ as `visual` in
+`doctrine.json`, labelled in the element library (`visual/<dimension>`). The
+AI brief (v28) opens every frame's composition, camera and lighting with the
+slice's values; the creator brief (v33) decides each frame with them and
+writes it to the maker in plain words.
+
+Receipts: Block 2008 (contrast and affinity — visual contrast raises
+intensity), Mascelli 1965 (the five C's), Hall 1966 (proxemics — shot size is
+how close the viewer stands).
 
 ## The second door — ad-frameworks.json
 

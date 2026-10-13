@@ -68,6 +68,8 @@ CLEAN = {
         "open": {"feeling": "recognition", "beat": 1}, "low": None, "turn": None,
         "peak": {"feeling": "recognition", "beat": 1},
         "end": {"feeling": "recognition", "beat": 1, "attached_to": "the product"}},
+    "visual": {"shot": ["close", "insert"], "angle": ["eye-level"], "camera": ["handheld-selfie"],
+               "composition": ["off-centre"], "light": ["window"], "colour": ["true"], "capture": "phone"},
     "unique": "a mechanism carried entirely by a one-take demonstration",
 }
 

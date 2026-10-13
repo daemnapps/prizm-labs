@@ -1,0 +1,78 @@
+{
+ "element": "visual",
+ "asset": "capture",
+ "source": "components/marketing-doctrine/visual.json › capture",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "phone",
+   "name": "phone",
+   "what": "A phone camera.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › capture",
+   "extra": {
+    "serves": [
+     "recognition",
+     "trust",
+     "empathy"
+    ],
+    "real": "Deep focus, wide lens, sensor noise in the shadows, auto-exposure shifts, compression."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "camera",
+   "name": "camera",
+   "what": "A dedicated camera — a produced piece.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › capture",
+   "extra": {
+    "serves": [
+     "desire",
+     "satisfaction",
+     "calm"
+    ],
+    "real": "Shallow focus, clean shadows, a chosen lens."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "screen",
+   "name": "screen",
+   "what": "A screen recording.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › capture",
+   "extra": {
+    "serves": [
+     "curiosity",
+     "trust"
+    ],
+    "real": "The interface, the notification, the thumb tapping."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

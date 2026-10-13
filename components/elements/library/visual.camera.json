@@ -1,0 +1,144 @@
+{
+ "element": "visual",
+ "asset": "camera",
+ "source": "components/marketing-doctrine/visual.json › camera",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "handheld-selfie",
+   "name": "handheld-selfie",
+   "what": "Front camera, held at arm's length; small natural shake.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › camera",
+   "extra": {
+    "serves": [
+     "recognition",
+     "empathy",
+     "trust"
+    ],
+    "real": "Micro-shake, the frame drifting with the breath, a re-frame now and then."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "handheld-rear",
+   "name": "handheld-rear",
+   "what": "Rear camera held by someone, or by the subject over an action.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › camera",
+   "extra": {
+    "serves": [
+     "curiosity",
+     "satisfaction"
+    ],
+    "real": "Shake, a quick re-focus, auto-exposure catching up."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "propped",
+   "name": "propped",
+   "what": "Phone leaned on something; the frame does not move.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › camera",
+   "extra": {
+    "serves": [
+     "calm",
+     "amusement",
+     "trust"
+    ],
+    "real": "Slightly crooked horizon, the subject a little off-centre."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "locked-off",
+   "name": "locked-off",
+   "what": "Tripod; a composed, still frame.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › camera",
+   "extra": {
+    "serves": [
+     "calm",
+     "trust",
+     "satisfaction"
+    ],
+    "real": "Level and still, the only movement inside the frame."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "walk-and-talk",
+   "name": "walk-and-talk",
+   "what": "The camera moves with a walking subject.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › camera",
+   "extra": {
+    "serves": [
+     "urgency",
+     "curiosity",
+     "belonging"
+    ],
+    "real": "Footstep bounce, the background passing, wind noise."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "push-in",
+   "name": "push-in",
+   "what": "The frame moves closer during the shot.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › camera",
+   "extra": {
+    "serves": [
+     "unease",
+     "desire",
+     "surprise"
+    ],
+    "real": "Done by a hand on a phone: uneven speed, a small overshoot."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

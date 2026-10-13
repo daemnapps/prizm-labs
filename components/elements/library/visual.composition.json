@@ -1,0 +1,119 @@
+{
+ "element": "visual",
+ "asset": "composition",
+ "source": "components/marketing-doctrine/visual.json › composition",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "off-centre",
+   "name": "off-centre",
+   "what": "The subject on a third, room on the other side.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › composition",
+   "extra": {
+    "serves": [
+     "calm",
+     "curiosity",
+     "recognition"
+    ],
+    "real": "Never perfectly on the third — a little loose, as a person frames it."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "centred",
+   "name": "centred",
+   "what": "The subject dead centre, square to camera.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › composition",
+   "extra": {
+    "serves": [
+     "trust",
+     "urgency"
+    ],
+    "real": "Only for direct address to the lens; the selfie is naturally centred."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "foreground-frame",
+   "name": "foreground-frame",
+   "what": "Something in the foreground frames the subject — a doorway, a shelf, a shoulder.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › composition",
+   "extra": {
+    "serves": [
+     "curiosity",
+     "empathy"
+    ],
+    "real": "The foreground soft and slightly out of focus."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "negative-space",
+   "name": "negative-space",
+   "what": "Empty space around a small subject.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › composition",
+   "extra": {
+    "serves": [
+     "unease",
+     "calm"
+    ],
+    "real": "A real empty wall or sky, never a backdrop."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "lived-in",
+   "name": "lived-in",
+   "what": "A full, real frame — the place's clutter around the subject.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › composition",
+   "extra": {
+    "serves": [
+     "recognition",
+     "belonging"
+    ],
+    "real": "The objects the avatar actually owns, a little untidy."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}

@@ -179,7 +179,7 @@ def main():
 
     section("3. every line pointer is inside the book (1-%d)" % BOOK_LINES)
     bad = []
-    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json", HERE / "tells.json", HERE / "creativity.json",
+    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json", HERE / "tells.json", HERE / "creativity.json", HERE / "visual.json",
                  HERE / "SCHWARTZ.md"] + \
                 [HERE / "slices" / n for n in SLICE_NAMES]:
         if not path.exists():
@@ -445,6 +445,38 @@ def main():
         check("creativity.md is bound as {creativity}",
               "{creativity}" in (HERE / "slices" / "creativity.md").read_text()
               if (HERE / "slices" / "creativity.md").exists() else False)
+
+    section("12. visual.json — how each frame is made")
+    vi_path = HERE / "visual.json"
+    if not vi_path.exists():
+        check("visual.json exists", False, "not built yet")
+    else:
+        vi = json.loads(vi_path.read_text())
+        dims = [x["id"] for x in vi["dimensions"]]
+        check("the seven dimensions are present, in order",
+              dims == ["shot", "angle", "camera", "composition", "light", "colour", "capture"], str(dims))
+        vals = [(x["id"], v) for x in vi["dimensions"] for v in x["values"]]
+        check("value ids are unique within a dimension",
+              all(len({v["id"] for v in x["values"]}) == len(x["values"]) for x in vi["dimensions"]))
+        check("every dimension states its rule", all(x.get("rule") for x in vi["dimensions"]))
+        check("every value says what, how it looks for real, what it serves and its source",
+              all(v.get("what") and v.get("real") and v.get("serves") and v.get("source") for _, v in vals))
+        feel = set(EMOTION_FEELINGS)
+        check("every value serves real feelings from the emotional map",
+              all(x in feel for _, v in vals for x in v["serves"]),
+              str(sorted({x for _, v in vals for x in v["serves"]} - feel)))
+        rows = [v for _, v in vals] + vi["rules"]
+        rec_ids = {r["id"] for r in vi["receipts"]}
+        cited = {r["source"].split("\u2014", 1)[1].strip() for r in rows
+                 if r["source"].startswith("research")}
+        check("every research row cites a receipt that exists", cited <= rec_ids, str(sorted(cited - rec_ids)))
+        check("every receipt is cited and carries a url",
+              rec_ids <= cited and all(r.get("url") for r in vi["receipts"]))
+        check("the master rule, examples note and frame format are stated",
+              all(vi.get(k) for k in ("master_rule", "examples_note", "frame_format")))
+        check("visual.md is bound as {visual}",
+              "{visual}" in (HERE / "slices" / "visual.md").read_text()
+              if (HERE / "slices" / "visual.md").exists() else False)
 
     section("the position gate — every brand's position.md has the template's shape (2026-09-19)")
     import lint_position      # noqa: E402

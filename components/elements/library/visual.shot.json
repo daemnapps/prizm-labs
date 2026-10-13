@@ -1,0 +1,123 @@
+{
+ "element": "visual",
+ "asset": "shot",
+ "source": "components/marketing-doctrine/visual.json › shot",
+ "enforced_by": "the video teardown's doctrine read and the AI brief's frames; recorded as unknown, never refused",
+ "note": "One list per visual dimension — shot, angle, camera, composition, light, colour, capture (the owner, 2026-10-13); the asset is the dimension.",
+ "rows": [
+  {
+   "id": "extreme-close",
+   "name": "extreme-close",
+   "what": "One detail fills the frame — an eye, a texture, a drop.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › shot",
+   "extra": {
+    "serves": [
+     "surprise",
+     "satisfaction",
+     "unease"
+    ],
+    "real": "Phone macro: slight focus hunting, the texture itself sharp."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "close",
+   "name": "close",
+   "what": "The face, or the hands and the product, fill the frame.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › shot",
+   "extra": {
+    "serves": [
+     "recognition",
+     "empathy",
+     "relief",
+     "trust"
+    ],
+    "real": "Selfie distance: arm's length, slight wide-lens stretch near the edges."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "medium",
+   "name": "medium",
+   "what": "Waist up — a person and what they are doing.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › shot",
+   "extra": {
+    "serves": [
+     "curiosity",
+     "hope",
+     "amusement"
+    ],
+    "real": "A propped phone on a counter or shelf, framed a little loose."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "wide",
+   "name": "wide",
+   "what": "The whole person in their place.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › shot",
+   "extra": {
+    "serves": [
+     "calm",
+     "belonging",
+     "frustration"
+    ],
+    "real": "Phone propped across the room; the place's clutter in frame."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "insert",
+   "name": "insert",
+   "what": "A cutaway to an object or an action — the product, the hands, the screen.",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/visual.json › shot",
+   "extra": {
+    "serves": [
+     "curiosity",
+     "satisfaction"
+    ],
+    "real": "Rear camera held over the action, shadow of the hand sometimes in frame."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "unresolved": []
+}
