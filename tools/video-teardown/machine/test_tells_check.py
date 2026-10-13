@@ -40,6 +40,16 @@ class Wired(unittest.TestCase):
         self.assertIn('st["tells_check"]', src)
 
 
+class Combination(unittest.TestCase):
+    def test_creativity_reaches_the_spice_pass(self):
+        sv = json.loads((HERE / "extra-stages.json").read_text())["stage_vars"]
+        self.assertEqual(sv["stage4g"].get("creativity"),
+                         "components/marketing-doctrine/slices/creativity.md")
+        txt = C.newest("stage4g")[0].read_text()
+        self.assertIn("{creativity}", txt)
+        self.assertIn("THE COMBINATION", txt)
+
+
 class Caught(unittest.TestCase):
     def test_a_template_line_is_caught(self):
         got = T.check_text("Honestly this serum is a game changer.")

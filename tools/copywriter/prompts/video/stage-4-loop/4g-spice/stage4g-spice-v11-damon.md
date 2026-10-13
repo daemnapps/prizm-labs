@@ -1,4 +1,4 @@
-*v11 (2026-10-13, the owner: "completely eliminate AI sounding / looking generative output"): reads the tells slice and adds NO MACHINE TELLS — the spoken script is the words the voice reads, so a machine-checked tell here holds the brief two steps later; catch every tell here first. Everything in v10 stands.*
+*v11 (2026-10-13, the owner: "completely eliminate AI sounding / looking generative output"): reads the tells slice and adds NO MACHINE TELLS — the spoken script is the words the voice reads, so a machine-checked tell here holds the brief two steps later; catch every tell here first. And THE COMBINATION (the owner: "creativity which is simply combining concepts … formats that already work but they're innovative"): reads the creativity slice; the sheet writes three combinations, picks one inside its remit and prints the rest as alternates or proposals. Everything in v10 stands.*
 
 *v10 (2026-10-09, the owner: "we need to stop producing fragments because this just makes the copy worse over time. I'm pretty sure these types of fragments are also in our main copywriting for the scripts too, because this happens all the time."): the lines that still taught the chop are rewritten, all in the direction of his 2026-09-19 ruling (rule 0, THE UNIT IS THE THOUGHT). The mood line no longer asks for "staccato and stacked": a climbing beat runs shorter, quicker WHOLE sentences. "They speak in short sentences and fragments" becomes whole thoughts joined the way speech joins them. Rule 2's fragment allowance is at most one a paragraph, only for real effect, and its own example is now said whole. The measured fragment rate is a ceiling, never a target. Everything in v9 stands.*
 
@@ -22,6 +22,7 @@ Here is what the research gatherer found for this run, with a receipt on
 every claim: {research}
 Here are the body techniques and what each is for: {techniques}
 Here are the mood rules — how rhythm and register carry feeling: {mood}
+Here is creativity as combination — keep the proven core, combine one or two things into it: the axes, the moves, the rules and the exact sheet to print: {creativity}
 Here are the taste and delivery dials, with what each value does, when it
 fits, its risk and the receipt it needs: {delivery}
 Here is the doctrine read of the SOURCE, including how the source itself
@@ -129,6 +130,20 @@ From the answers above and the section-labelled scene record, write:
   climbs (still whole sentences, never a row of fragments), plain and flat where the claim lands — the rhythm carries the
   feeling, and a viewer who notices the technique means it failed.
 
+- **THE COMBINATION — the one thing that makes ours new.** The swipe's
+  structure, emotional map and argument stay. Into that proven core, combine
+  ONE thing (two at most) the viewer will recognise both halves of, from the
+  creativity slice's moves and axes. Write three combinations first — the
+  first one is the average idea — then pick the one furthest from what this
+  brand already runs that is still instantly recognisable. Each half carries
+  its receipt (the swipe, the culture read, the culture map, a bank row); only
+  the combination is ours. Put it where attention is won — the opening
+  picture, the setting, the look, the reference world — never on the claim,
+  the proof or the offer. A move inside this pass's remit is applied in the
+  sections below; a move on the format, order, roles, argument or emotional
+  map is printed under PROPOSALS FOR THE OWNER and never applied. Print it in
+  the slice's sheet shape, exactly.
+
 - **A lookalike-type character for one B-roll beat.** Written identity only,
   per the variation rule — **deliberately a different face, never a reference
   person's photograph.** Name which scene it belongs to, by its section label
@@ -235,6 +250,10 @@ From the answers above and the section-labelled scene record, write:
   row or a bank row tagged `in-word`, `subculture`, `community-voice` or
   `taste`, quoted with its receipt. A room's word the writer supplied is the
   writer's word, and it is cut back to the level the rows do support.
+- **One combination, receipted, inside the remit.** THE COMBINATION names a
+  move and an axis from the creativity slice, both halves carry receipts, and
+  it says itself in one line. A combination that changes the structure is a
+  proposal, never applied; one with an unreceipted half is cut.
 - **Every dial is a value the dials carry.** A coined humor level, an
   invented delivery style, a register nobody declared: not available. The
   value is one of the listed ones, spelled as they spell it, or the line is

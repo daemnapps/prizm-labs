@@ -13,6 +13,7 @@ any file here.
 |---|---|
 | `frameworks.json` | **the truth.** The labelled slots, every row carrying its `[L####]` line pointer |
 | `delivery.json` | **the taste layer.** The labelled delivery dials — humor level, delivery style, register, pacing, reference world, avoid — each value carrying what it does, when it fits, its risk and the receipt it needs |
+| `creativity.json` | **the combination layer.** Keep the proven core and combine one or two things into it — the axes a combination can move (and which the creative pass may apply), eight moves, the rules, and the sheet the creative pass prints |
 | `tells.json` | **the tells.** What makes copy, a voice, a picture, a clip, an edit or a concept read as machine-made — each with how to spot it, why it gives the work away, and what to do instead; `hard` ones carry patterns `tells.py` runs with no model |
 | `emotion.json` | **the emotional layer.** The emotional map — the feelings a beat is spelled in, intensity 1–5, the five points every map names (open · low · turn · peak · end), the arcs a whole piece runs, the director's levers that carry a feeling, the rules, and the receipts behind them |
 | `spoken.json` | **the spoken layer.** The rules of spoken copy (written-vs-spoken, each with its receipt URL), the five colloquialism levels as a dial, a register recipe per delivery style with the voice-model settings that match it, the punctuation map for the voice model the track is made on, and the demographic bands a colloquialism is keyed to — options tied to the profile's `### demographics` block, researched, and measured against the brand's own creators |
@@ -61,6 +62,7 @@ lane (lane doctrine §2, one vocabulary):
 | `{spoken}` | `components/marketing-doctrine/slices/spoken.md` |
 | `{emotion}` | `components/marketing-doctrine/slices/emotion.md` |
 | `{tells}` | `components/marketing-doctrine/slices/tells.md` |
+| `{creativity}` | `components/marketing-doctrine/slices/creativity.md` |
 
 Three more names travel with them and are NOT served from here: `{research}`
 (the run's own gathered answers), `{spice_sheet}` (the creative pass's
@@ -231,6 +233,29 @@ the swipe's and is never flagged.
 Receipts: Kobak et al. 2024 (the vocabulary language models made common),
 Nightingale & Farid 2022 (generated faces drift to the average), IAB 2026
 (the gap between how consumers and advertisers feel about AI-made ads).
+
+## Creativity — creativity.json
+
+the owner, 2026-10-13: *"creativity which is simply combining concepts and
+processing a slightly more unique outcome than the previous idea. that leads
+to formats that already work but they're innovative."*
+
+**Keep the proven core, combine one or two things into it.** The swipe's
+structure, emotional map and argument stay; the newness is one deliberate
+combination the viewer recognises both halves of, said in one line —
+`<the proven thing>, but <the thing combined into it>`. Eight moves
+(one-axis swap · category transplant · reference collision · the literal
+metaphor · inversion · a new lens · honest exaggeration · the problem given a
+face), ten axes, and a remit: the look, setting, reference world, delivery,
+a B-roll face, the sound and the opening picture are the creative pass's to
+change; the format, argument and emotional arc are proposals for the owner.
+Three combinations are written and one is picked — the first idea is the
+average one.
+
+Receipts: Young 1940 (an idea is a new combination of old elements), Koestler
+1964 (two frames that never met), Uzzi et al. 2013 (conventional work with an
+intrusion of the unusual is twice as likely to be a hit), Hekkert et al. 2003
+(most advanced, yet acceptable).
 
 ## The second door — ad-frameworks.json
 

@@ -51,7 +51,7 @@
     },
     {
       "id": "W5", "channel": "words", "check": "judge", "name": "The generic claim",
-      "spot": "A benefit that would fit any product in the category — 'feel your best', 'glowing skin', 'results you can see'.",
+      "spot": "A benefit that would fit any product in the category — 'feel your best', 'results you can see', 'made for you'.",
       "why": "The average claim; it is the clearest sign nobody looked at this product or this customer.",
       "fix": "The product file's specific fact, or the customer's own words about the specific moment.",
       "source": "craft"

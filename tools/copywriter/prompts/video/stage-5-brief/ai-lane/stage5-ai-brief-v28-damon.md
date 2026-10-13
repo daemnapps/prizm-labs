@@ -1696,8 +1696,9 @@ key present, on every object.
   "setting": "⟨where the piece takes place: one id from the settings list — the place the world block writes; `new:<short-name>` only when no id fits⟩",
   "lead": "⟨the `bank_id` of the person who carries the piece, from the banked cast — `NEW` for a cast-new lead, `none` when no person is shown⟩",
   "style_id": "⟨the look: one id from the style list (the elements library's video or image styles) — `new:<short-name>` only when none fits⟩",
+  "combination": "⟨THE COMBINATION from the spice sheet, its PICKED line verbatim: `⟨move id⟩ · ⟨axis id⟩ — ⟨the proven thing⟩, but ⟨the thing combined into it⟩`, or `none` when the sheet picked none⟩",
   "arc": "⟨the emotional arc this piece runs: the arc id the doctrine read's EMOTIONAL MAP named for the swipe, spelled as the emotion slice spells it — the swipe's arc, kept⟩",
- "framework": "⟨the framework this piece runs: one id from the ad frameworks list, spelled exactly as that list spells it — the row whose sections, in order, the scenes above actually run (a section the awareness level drops does not change the row). Where the piece follows none of the rows, `observed — ⟨a plain description of the order it runs⟩`. Never a coined name⟩",
+  "framework": "⟨the framework this piece runs: one id from the ad frameworks list, spelled exactly as that list spells it — the row whose sections, in order, the scenes above actually run (a section the awareness level drops does not change the row). Where the piece follows none of the rows, `observed — ⟨a plain description of the order it runs⟩`. Never a coined name⟩",
   "style": "⟨the one grade sentence, the same words in every frame of the piece⟩"
  },
  "edit": {

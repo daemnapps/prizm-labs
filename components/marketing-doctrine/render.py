@@ -580,6 +580,45 @@ def tells(d):
     return "\n".join(out)
 
 
+CREATIVITY_JSON_PATH = HERE / "creativity.json"
+
+
+def creativity(d):
+    """Creativity as combination — components/marketing-doctrine/creativity.json:
+    keep the proven core, combine one or two things into it."""
+    b = json.loads(CREATIVITY_JSON_PATH.read_text())
+    axes = {a["id"]: a for a in b["axes"]}
+    out = [_open("Creativity \u2014 a proven core, one new combination", "creativity", b["what"])]
+    out.append("**The master rule.** %s\n" % b["master_rule"])
+    out.append("**The one-line test.** %s\n" % b["one_line_test"])
+    out.append("**What this pass may change.** %s\n" % b["remit_rule"])
+    out.append("_%s_\n" % b["examples_note"])
+    out.append("## 1. The rules\n")
+    for r in b["rules"]:
+        out.append("- **%s** \u2014 %s _(%s)_" % (r["id"], r["rule"], r["source"]))
+    out.append("")
+    out.append("## 2. The axes a combination can move\n")
+    out.append("| Axis | What it is | Creative pass may apply it |")
+    out.append("|---|---|---|")
+    for a in b["axes"]:
+        out.append("| `%s` | %s | %s |" % (a["id"], a["what"], "yes" if a["in_remit"] else "no \u2014 a proposal"))
+    out.append("")
+    out.append("## 3. The moves\n")
+    for m in b["moves"]:
+        out.append("### `%s` \u2014 %s\n" % (m["id"], m["name"]))
+        out.append("- **What:** %s" % m["what"])
+        out.append("- **How:** %s" % m["how"])
+        out.append("- **For example:** %s" % m["example"])
+        out.append("- **Risk:** %s" % m["risk"])
+        out.append("- **Source:** %s\n" % m["source"])
+    out.append("## 4. The combination, exactly as the sheet prints it\n")
+    out.append("```\n%s\n```\n" % b["sheet_format"])
+    out.append("## 5. Receipts\n")
+    for r in b["receipts"]:
+        out.append("- `%s` \u2014 %s %s %s" % (r["id"], r["cite"], r["url"], r["what"]))
+    return "\n".join(out)
+
+
 RENDERERS = [
     ("desire.md", desire),
     ("awareness.md", awareness),
@@ -595,6 +634,7 @@ RENDERERS = [
     ("spoken.md", spoken),
     ("emotion.md", emotion),
     ("tells.md", tells),
+    ("creativity.md", creativity),
 ]
 
 

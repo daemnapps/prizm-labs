@@ -278,6 +278,7 @@
    "story": "~story"
   },
   "stage4g": {
+   "creativity": "components/marketing-doctrine/slices/creativity.md",
    "tells": "components/marketing-doctrine/slices/tells.md",
    "story": "~story",
    "culture_read": "!culture_read",

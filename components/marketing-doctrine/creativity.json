@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "what": "Creativity as combination — how a piece stays a format that already works and still comes out new. Every idea is a new combination of things that already exist; the craft is choosing which proven core to keep and which one or two things to combine into it. The tells layer removes the average; this layer replaces it with something the viewer has not seen in quite this way before.",
+  "updated": "2026-10-13",
+  "added": "2026-10-13 — the owner: 'it actually leverages creativity which is simply combining concepts and processing a slightly more unique outcome than the previous idea. that leads to formats that already work but they're innovative.'",
+  "source": {
+    "rule": "A row marked `research` names the work in `receipts` it rests on. Every other row is craft, marked `source: \"craft\"`."
+  },
+  "master_rule": "KEEP THE PROVEN CORE, COMBINE ONE OR TWO THINGS INTO IT. The work that lands hardest is mostly conventional with a small intrusion of the unusual — and people prefer what is novel and still recognisable. So the swipe's structure, its emotional map and its argument stay; the newness comes from one or two deliberate combinations the viewer can recognise both halves of.",
+  "one_line_test": "Every combination can be said in one line: `<the proven thing>, but <the thing combined into it>`. A combination that needs a paragraph is two ideas or none.",
+  "remit_rule": "The creative pass changes how a piece looks, sounds and what it leans on — the look, the setting's dressing, the reference world, the delivery style, a B-roll face, the opening picture, the sound. A move that would change the structure — the format, the order, the roles, the argument, the emotional map — is printed as a PROPOSAL for the owner and never applied; the structure lock decides it.",
+  "axes": [
+    {"id": "look", "name": "The look", "what": "The visual style the piece is made in.", "in_remit": true},
+    {"id": "setting", "name": "The setting", "what": "Where it takes place, and how that place is dressed.", "in_remit": true},
+    {"id": "reference-world", "name": "The reference world", "what": "The show, format, meme or world the piece leans on for timing and feel.", "in_remit": true},
+    {"id": "delivery", "name": "The delivery", "what": "How it is performed — the delivery style and register.", "in_remit": true},
+    {"id": "face", "name": "Who carries a beat", "what": "The person, character or object a B-roll beat is given to.", "in_remit": true},
+    {"id": "sound", "name": "The sound", "what": "The bed, the drop-outs, the one sound that lands.", "in_remit": true},
+    {"id": "open", "name": "The opening picture", "what": "What is on screen in the first second.", "in_remit": true},
+    {"id": "format", "name": "The format", "what": "What kind of video it is.", "in_remit": false},
+    {"id": "argument", "name": "The argument", "what": "The angle the piece argues.", "in_remit": false},
+    {"id": "arc", "name": "The emotional arc", "what": "The shape of the feeling across the piece.", "in_remit": false}
+  ],
+  "moves": [
+    {
+      "id": "one-axis-swap", "name": "One-axis swap",
+      "what": "Keep everything and change exactly one axis on purpose.",
+      "how": "Pick the axis the audience will notice first — usually the setting or the look — and move it somewhere they know but have never seen this format in.",
+      "example": "A routine filmed in a bathroom, moved to a car parked outside work at 7am.",
+      "risk": "A swap the audience does not recognise is just a strange choice.",
+      "source": "research — uzzi-2013"
+    },
+    {
+      "id": "category-transplant", "name": "Category transplant",
+      "what": "A format proven in another category, carried onto our product.",
+      "how": "The chain already does this when the swipe comes from another category: the structure is theirs, the product is ours, and the friction between them is the newness.",
+      "example": "A cooking-video format used for a product that is not food — everything laid out, measured, combined.",
+      "risk": "Carried without translation, the format's own category leaks through and confuses what is being sold.",
+      "source": "research — young-1940"
+    },
+    {
+      "id": "reference-collision", "name": "Reference collision",
+      "what": "Two worlds the audience already knows, meeting where they never met.",
+      "how": "Take one reference from the culture read or culture map and play the piece in its frame — its narration, its camera, its music — while the content stays ours.",
+      "example": "A nature-documentary narration over someone choosing what to wear.",
+      "risk": "Works only when the room knows BOTH frames; a reference they don't share is noise.",
+      "source": "research — koestler-1964"
+    },
+    {
+      "id": "literal-metaphor", "name": "The literal metaphor",
+      "what": "Stage the room's own phrase literally on screen.",
+      "how": "Find a phrase the avatar actually uses about the problem in the language bank, and film it as if it were true.",
+      "example": "A room that says it is 'drowning in it' — shown as a person standing fully dressed in a slowly filling bath.",
+      "risk": "A phrase the writer invented is not the room's; it has to be quoted from the bank.",
+      "source": "craft"
+    },
+    {
+      "id": "inversion", "name": "Inversion",
+      "what": "Flip one expected role or order.",
+      "how": "The skeptic is the expert, the result comes first and the problem last, the product is the underdog — one flip, inside the swipe's roles.",
+      "example": "The before-and-after told backwards: the result first, then the morning it started.",
+      "risk": "An inversion of the structure is a proposal, not a creative-pass change.",
+      "source": "craft"
+    },
+    {
+      "id": "new-lens", "name": "A new lens",
+      "what": "The same moment seen from somewhere unexpected.",
+      "how": "The mirror's view, the bystander's phone, the object on the shelf — the camera's position changes, the story does not.",
+      "example": "The routine filmed from inside the bathroom cabinet as it opens and closes.",
+      "risk": "A lens that hides the product or the face the beat depends on loses the beat.",
+      "source": "craft"
+    },
+    {
+      "id": "honest-exaggeration", "name": "Honest exaggeration",
+      "what": "One true detail scaled up until it is funny or striking — the claim stays exactly true.",
+      "how": "Take a real, specific frustration and show it bigger than life; never exaggerate a result.",
+      "example": "The pile of products that did not work, stacked to the ceiling.",
+      "risk": "Exaggerating the product's result is a false claim; only the problem may be scaled.",
+      "source": "craft"
+    },
+    {
+      "id": "personified-problem", "name": "The problem given a face",
+      "what": "The problem cast as a character — always the villain or the fool, never the customer.",
+      "how": "Governed by the humor rules in the delivery slice.",
+      "example": "The problem as an uninvited houseguest who will not leave.",
+      "risk": "A problem character the customer could read as themself turns the joke on them.",
+      "source": "craft"
+    }
+  ],
+  "rules": [
+    {"id": "conventional-core", "rule": "Mostly conventional, a small intrusion of the unusual: one combination, two at most. Five new things at once is no format at all.", "source": "research — uzzi-2013"},
+    {"id": "recognisable-halves", "rule": "Most advanced, yet acceptable: the viewer must recognise both halves of a combination. Each half comes from the swipe, the culture read, the culture map or the bank, with its receipt; only the combination is ours.", "source": "research — hekkert-2003"},
+    {"id": "three-then-one", "rule": "Write three combinations, never one. The first is the average idea by construction. Pick the one that is furthest from what this brand has made and still instantly recognisable; print the other two as the alternates.", "source": "research — young-1940"},
+    {"id": "novelty-where-attention-is-won", "rule": "Put the combination where attention is decided — the opening picture, the setting, the look, the reference world. Never on the claim, the proof or the offer: those stay plain.", "source": "craft"},
+    {"id": "inside-the-remit", "rule": "A move inside the creative pass's remit is applied. A move on the format, order, roles, argument or emotional map is printed as a proposal for the owner and never applied.", "source": "craft"},
+    {"id": "new-against-what-we-made", "rule": "A combination is new against the brand's own work, not against the category: name what it differs from in what is already running, and leave the scoring to the creative-diversity check.", "source": "craft"},
+    {"id": "specific-not-strange", "rule": "Newness comes from a specific real thing in an unexpected place — never from randomness. A combination that is only strange is the generator's average in a costume.", "source": "craft"}
+  ],
+  "examples_note": "Every example here is illustrative — the shape of a move, never content for a brief. What fills a move comes from the swipe, the room and the brand files.",
+  "sheet_format": "THE COMBINATION\nPICKED: <move id> · <axis id> — <the proven thing>, but <the thing combined into it>\nHALVES: <half 1> (<receipt>) + <half 2> (<receipt>)\nWHERE: <the section or scene it lands in>\nNEW AGAINST: <what this brand already runs that it differs from>\nALTERNATES: <move id> — <one line> · <move id> — <one line>\nPROPOSALS FOR THE OWNER: <a move outside the remit, one line each, or none>",
+  "receipts": [
+    {"id": "young-1940", "cite": "Young, J. W. (1940). A Technique for Producing Ideas. Advertising Publications.", "url": "https://archive.org/search?query=%22A+Technique+for+Producing+Ideas%22", "what": "An idea is nothing more nor less than a new combination of old elements — and the first ones produced are rarely the good ones."},
+    {"id": "koestler-1964", "cite": "Koestler, A. (1964). The Act of Creation. Hutchinson.", "url": "https://archive.org/search?query=%22The+Act+of+Creation%22+Koestler", "what": "Bisociation: creative leaps come from connecting two frames of reference that had never met."},
+    {"id": "uzzi-2013", "cite": "Uzzi, B., Mukherjee, S., Stringer, M. & Jones, B. (2013). Atypical combinations and scientific impact. Science, 342(6157), 468–472.", "url": "https://www.kellogg.northwestern.edu/faculty/uzzi/htm/papers/Science-2013-Uzzi-468-72.pdf", "what": "Across 17.9 million papers, the highest-impact work was grounded in conventional combinations with an intrusion of unusual ones — and twice as likely to be a hit."},
+    {"id": "hekkert-2003", "cite": "Hekkert, P., Snelders, D. & van Wieringen, P. C. W. (2003). 'Most advanced, yet acceptable': Typicality and novelty as joint predictors of aesthetic preference in industrial design. British Journal of Psychology, 94, 111–124.", "url": "https://www.jimdavies.org/summaries/HekkertSneldersVanwieringen2003.html", "what": "People prefer designs that are both typical and novel at once — Loewy's MAYA principle, measured."}
+  ]
+}

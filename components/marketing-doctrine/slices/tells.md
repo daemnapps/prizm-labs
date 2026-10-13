@@ -44,7 +44,7 @@ The tells — what makes copy, a voice, a picture, a clip or an edit read as mac
 
 ### W5 · The generic claim (judged)
 
-- **Spot it:** A benefit that would fit any product in the category — 'feel your best', 'glowing skin', 'results you can see'.
+- **Spot it:** A benefit that would fit any product in the category — 'feel your best', 'results you can see', 'made for you'.
 - **Why it reads as machine:** The average claim; it is the clearest sign nobody looked at this product or this customer.
 - **Instead:** The product file's specific fact, or the customer's own words about the specific moment.
 - **Source:** craft

@@ -647,6 +647,7 @@ brief in the system:
   "format": "⟨the format this run was composed in⟩",
   "lead": "⟨the creator's handle or bank_id⟩",
   "setting": "⟨one id from the settings list — where she films it⟩",
+  "combination": "⟨THE COMBINATION from the spice sheet, its PICKED line verbatim, or `none`⟩",
   "style_id": "⟨one id from the style list, e.g. phone-ugc⟩"
 }}
 ```

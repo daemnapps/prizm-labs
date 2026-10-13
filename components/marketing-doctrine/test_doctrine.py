@@ -179,7 +179,7 @@ def main():
 
     section("3. every line pointer is inside the book (1-%d)" % BOOK_LINES)
     bad = []
-    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json", HERE / "tells.json",
+    for path in [HERE / "frameworks.json", HERE / "delivery.json", HERE / "emotion.json", HERE / "tells.json", HERE / "creativity.json",
                  HERE / "SCHWARTZ.md"] + \
                 [HERE / "slices" / n for n in SLICE_NAMES]:
         if not path.exists():
@@ -410,6 +410,41 @@ def main():
         check("tells.md is bound as {tells}",
               "{tells}" in (HERE / "slices" / "tells.md").read_text()
               if (HERE / "slices" / "tells.md").exists() else False)
+
+    section("11. creativity.json — a proven core, one new combination")
+    cr_path = HERE / "creativity.json"
+    if not cr_path.exists():
+        check("creativity.json exists", False, "not built yet")
+    else:
+        cr = json.loads(cr_path.read_text())
+        moves = [m["id"] for m in cr["moves"]]
+        check("the eight moves are present, in order",
+              moves == ["one-axis-swap", "category-transplant", "reference-collision",
+                        "literal-metaphor", "inversion", "new-lens",
+                        "honest-exaggeration", "personified-problem"], str(moves))
+        check("every move says what, how, example, risk and source",
+              all(m.get("what") and m.get("how") and m.get("example") and m.get("risk")
+                  and m.get("source") for m in cr["moves"]))
+        axes = {a["id"]: a for a in cr["axes"]}
+        check("the structure axes are outside the creative pass's remit",
+              all(not axes[x]["in_remit"] for x in ("format", "argument", "arc")))
+        check("the look and setting are inside it",
+              axes["look"]["in_remit"] and axes["setting"]["in_remit"])
+        rows = cr["moves"] + cr["rules"]
+        rec_ids = {r["id"] for r in cr["receipts"]}
+        cited = {r["source"].split("\u2014", 1)[1].strip() for r in rows
+                 if r["source"].startswith("research")}
+        check("every research row cites a receipt that exists", cited <= rec_ids, str(sorted(cited - rec_ids)))
+        check("every receipt is cited and carries a url",
+              rec_ids <= cited and all(r.get("url") for r in cr["receipts"]))
+        check("the sheet format carries every line the creative pass prints",
+              all(x in cr["sheet_format"] for x in ("PICKED:", "HALVES:", "WHERE:", "NEW AGAINST:",
+                                                     "ALTERNATES:", "PROPOSALS FOR THE OWNER:")))
+        check("the master, one-line and remit rules are stated",
+              all(cr.get(k) for k in ("master_rule", "one_line_test", "remit_rule", "examples_note")))
+        check("creativity.md is bound as {creativity}",
+              "{creativity}" in (HERE / "slices" / "creativity.md").read_text()
+              if (HERE / "slices" / "creativity.md").exists() else False)
 
     section("the position gate — every brand's position.md has the template's shape (2026-09-19)")
     import lint_position      # noqa: E402
