@@ -3,8 +3,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#EFE9E1">
-<meta name="description" content="Make It Rain — how AI turns one piece of content into customers, shown on one real ad. University of Mary Washington, 14 Oct 2026.">
-<title>Make It Rain — PRIZM LABS</title>
+<meta name="description" content="Don't start from a blank page — a different way to think about creating: start from what people already can't stop watching, find out why, and make your own. University of Mary Washington, 14 Oct 2026.">
+<title>Don't Start From a Blank Page — PRIZM LABS</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -20,7 +20,7 @@ nav.bar,footer.bot,.askbtn{display:none}
 .stormbox:active{cursor:grabbing}
 .storm{position:absolute;inset:0;width:100%;height:100%}
 .stormbox .label{position:absolute;left:50%;bottom:0;transform:translateX(-50%);white-space:nowrap}
-.stormbox .till{position:absolute;left:50%;top:0;transform:translateX(-50%);font-family:var(--display);font-size:clamp(28px,min(4vw,6vh),56px);color:var(--green);font-variant-numeric:tabular-nums}
+.stormbox .till{position:absolute;left:50%;top:0;transform:translateX(-50%);white-space:nowrap;z-index:1;font-family:var(--display);font-size:clamp(28px,min(4vw,6vh),56px);color:var(--green);font-variant-numeric:tabular-nums}
 .deck{position:fixed;inset:0;z-index:1;overflow:hidden}
 .slide{height:100%;max-width:1480px;margin:0 auto;padding:clamp(34px,7vh,80px) clamp(20px,5vw,80px) clamp(64px,10vh,96px);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:minmax(0,1fr);gap:clamp(20px,5vw,96px)}
 .txt{align-self:center;animation:rise .5s both;min-height:0}
@@ -59,6 +59,8 @@ nav.bar,footer.bot,.askbtn{display:none}
 .photo .ai{position:absolute;left:10px;bottom:10px;--hue:var(--ink-2);background:var(--card)}
 .duo{display:flex;gap:var(--s4);align-items:center;justify-content:center;height:100%;width:100%;min-height:0}
 .duo>.fit{flex:0 1 auto;height:100%;max-width:45%}
+.grid3.g2{grid-template-columns:repeat(2,minmax(0,1fr));aspect-ratio:9/16}
+.stops.say .fix{text-transform:none;letter-spacing:0;font-family:var(--body);font-size:clamp(14px,min(1.2vw,2vh),18px);color:var(--ink-2)}.stops.say button.open .fix{max-height:160px}
 .qr{background:var(--card);padding:var(--s2);border-radius:var(--r2);line-height:0;display:inline-block}
 @media(max-aspect-ratio:1/1){.slide{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:var(--s4)}.txt{align-self:end}.txt .ex,.tip{display:none}}
 </style>
@@ -79,7 +81,7 @@ nav.bar,footer.bot,.askbtn{display:none}
 <div class="ctl"><button id="prev" aria-label="Previous">←</button><button id="next" aria-label="Next">→</button><button id="fs">Present</button><button id="snd">Sound off</button></div>
 
 <footer class="bot">
-  <span>PRIZM LABS · Make It Rain · UMW, 14 Oct 2026</span>
+  <span>PRIZM LABS · Don't Start From a Blank Page · UMW, 14 Oct 2026</span>
   <span class="right"><a href="/machine.html">The machine</a> · <a href="/three-doctors/">The ad factory</a></span>
 </footer>
 
@@ -97,21 +99,21 @@ const PAIRS = [['sw-1', 'p-s1-f1'], ['sw-5', 'p-s8-f1'], ['sw-7', 'p-s21-f1']];
    `rain` sets how hard it rains behind the slide, 0–6. */
 const SLIDES = [
   { rain: 0, hue: 'indigo', eyebrow: 'UMW · 14 Oct 2026 · Damon Dixon, class of 2019',
-    h: 'Make it rain.',
-    p: 'How AI turns one piece of content into customers, shown on one real ad.',
-    tip: 'Press and hold the storm to make it rain',
-    show: () => `<div class="stormbox" role="img" aria-label="A hurricane of digital dollar bills"><canvas class="storm"></canvas><span class="label">Press and hold to make it rain</span></div>` },
+    h: 'Don\'t start from a blank page.',
+    p: 'A different way to think about creating, and the machine we built around it.',
+    tip: 'Press and hold the storm',
+    show: () => `<div class="stormbox" role="img" aria-label="A storm of video frames"><canvas class="storm"></canvas><span class="label">Press and hold: every frame is an idea</span></div>` },
   { rain: 0, hue: 'indigo', eyebrow: 'Who\'s talking',
     h: 'Damon Dixon.',
-    p: 'Twenty years of making content, and learning exactly how it turns into money.',
+    p: 'Twenty years of making things, and watching what people actually do with them.',
     show: () => photo('gold-shirt.jpg', 'Damon Dixon') },
   { rain: 0, hue: 'amber', eyebrow: 'Growing up',
     h: 'It started with YouTube.',
-    p: 'I made my first videos at nine. Unlike TV, you could see exactly who watched what you made.',
+    p: 'I made my first videos at nine. Unlike TV, you could see exactly who watched, and where they stopped.',
     show: () => photo('school.jpg', 'Damon as a kid, school portrait', false, 'Me, school picture day') },
   { rain: 0, hue: 'amber', eyebrow: 'College',
     h: 'Beats on YouTube.',
-    p: 'Midway through college I was making music and selling beats on YouTube, and realised I could make money from a laptop.',
+    p: 'Midway through college I was making music and putting beats on YouTube. Every upload was an experiment I could read back.',
     tip: 'Tap the video for sound',
     show: () => `<div class="fit photo"><video id="v" src="${L}singing-2017.mp4" poster="${L}singing-2017.jpg" muted autoplay loop playsinline></video><span class="pill ai">Me singing, 2017</span></div>` },
   { rain: 0, hue: 'amber', eyebrow: 'Class of 2019',
@@ -119,17 +121,23 @@ const SLIDES = [
     p: 'Business administration, a few credits short of a double major in music. Music is what pulled me into creativity.',
     show: () => photo('umw-2023.jpg', 'Damon back at UMW', false, 'Back at UMW, 2023') },
   { rain: 0, hue: 'amber', eyebrow: 'Right out of college',
-    h: 'One ad. One million dollars.',
-    p: 'My first business did a million in sales off one ad. I didn\'t know why it worked. I just knew a better video sold more.',
-    show: () => photo('whiteboard-2019.jpg', 'Damon\'s whiteboard, July 2019: 22-year-old millionaire, $1M in revenue', false, 'My whiteboard, July 2019') },
+    h: 'One video changed everything.',
+    p: 'Right out of college, one ad carried my first business. I had no idea why it worked. That question is the rest of this talk.',
+    show: () => photo('whiteboard-2019.jpg', 'Damon\'s whiteboard, July 2019', false, 'My whiteboard, July 2019') },
   { rain: 0, hue: 'amber', eyebrow: 'Since then',
-    h: 'About $20 million.',
-    p: 'Everything after came from getting better at one thing: programming an outcome from the fundamentals of marketing and data.',
+    h: 'Why does one thing work?',
+    p: 'Every product, every factory, every ad since has been me chasing that one question. It turns out the answer has a shape.',
     show: () => photo('china-2023.jpg', 'Damon at a factory in China under a sign that reads Welcome Damon', false, 'Factory visit, China, 2023') },
   { rain: 0, hue: 'indigo', eyebrow: 'Now',
     h: 'Bangkok.',
-    p: 'Building AI that runs e-commerce brands, with a partner whose fulfillment company is based in Shenzhen. Here\'s how it works.',
+    p: 'Building AI that lets a small team make what used to take a whole studio. Here\'s how it thinks.',
     show: () => `<div class="grid3">${[1, 2, 3, 4, 5, 6].map(i => `<figure><img src="${L}padel-${i}.jpg" alt="Damon playing padel in Bangkok"></figure>`).join('')}</div>` },
+  { rain: 1, hue: 'violet', eyebrow: 'The big idea',
+    h: 'Nothing starts from nothing.',
+    p: 'Every song you love borrowed a structure. Every meme is a template. The skill isn\'t inventing from zero. It\'s noticing why something works, then making it yours.',
+    ex: ['Try it today', 'Next time you can\'t stop watching something, ask: what exactly kept me here?'],
+    tip: 'Tap each word to open it',
+    show: () => `<div class="stops">${[['Notice', 'What already holds people?'], ['Name', 'Why does it work? Say it in one line.'], ['Remake', 'Keep the why. Change everything else.']].map(([a, b]) => `<button><span class="big" style="font-size:clamp(34px,min(5vw,8vh),72px)">${a}</span><span class="fix">${b}</span></button>`).join('')}</div>` },
   { rain: 1, hue: 'violet', eyebrow: 'Step 1 of 7 · Swipe',
     h: 'Start from what already works.',
     p: 'We collect posts people already can\'t stop watching. The market tested them for free.',
@@ -160,22 +168,46 @@ const SLIDES = [
     tip: 'Tap a stop to see the fix',
     show: () => `<div class="duo"><div class="fit"><img src="${M}cover-g01-h5.jpg" alt="A cover where the words landed on her face"></div><div class="stops">${[['Her mouth moved on someone else\'s voice', 'Covered with a close-up'], ['A word got cut off: "Guaranteed"', 'Re-voiced, heard back whole'], ['The music stopped before the end', 'Music under the whole ad'], ['The cover\'s words landed on her face', 'Moved to a clear spot'], ['The post showed a price the site didn\'t', 'Taken out']].map(([a, b]) => `<button><span class="pill stop">Stop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div></div>` },
   { rain: 6, hue: 'green', eyebrow: 'Step 6 of 7 · Learn',
-    h: 'The market picks the winner.',
-    p: 'One click sends six openings to Meta. Each person sees the one that holds them, and the winner feeds the next swipe.',
+    h: 'The audience picks.',
+    p: 'Six openings go out at once. People vote with their thumbs, and whatever holds them feeds the next idea.',
     tip: 'Tap an opening to hear it',
     show: () => `<div class="grid3">${COVERS.map(c => `<figure><video src="${M}open-${c}.mp4" poster="${M}cover-${c}.jpg" muted autoplay loop playsinline></video><figcaption><span class="pill ready">● Live</span></figcaption></figure>`).join('')}</div>` },
   { rain: 6, hue: 'amber', eyebrow: 'Step 7 of 7 · Close the loop',
-    h: 'Now we see the money.',
-    p: 'The Outlier app ties every ad the machine made to its own sales and cost per customer, so we know which one actually paid.',
-    ex: ['Building now', 'The winners get remade into new variations, and those go back into the machine.'],
+    h: 'See what actually landed.',
+    p: 'The Outlier app ties every ad the machine made back to what people actually did with it, so we learn which one truly connected.',
+    ex: ['Building now', 'The standouts get remade into new variations, and those go back into the machine.'],
     tip: 'Live demo: the Outlier app',
-    show: () => `<div class="stops">${[['Every AI-made ad goes live with its own tracking', 'Each sale traces back to one ad'], ['Sales and cost per customer come back for each ad', 'Real money, not views'], ['The Outlier app flags the ads that beat the rest', 'The outliers are the winners'], ['Winners get remade as new variations', 'Being built right now']].map(([a, b]) => `<button><span class="pill ready">Loop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div>` },
+    show: () => `<div class="stops">${[['Every AI-made ad goes out with its own tracking', 'Every response traces back to one ad'], ['What people did comes back for each ad', 'Real behaviour, not just views'], ['The Outlier app flags the ads that beat the rest', 'The outliers teach the next round'], ['Standouts get remade as new variations', 'Being built right now']].map(([a, b]) => `<button><span class="pill ready">Loop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div>` },
+  { rain: 5, hue: 'violet', eyebrow: 'Finished this week · theirs → ours',
+    h: 'Keep the shock. Give it a reason.',
+    p: 'Nine seconds of a stranger\'s fire facial, flames and all, for no reason at all. We kept the jolt and gave it one: a woman who has tried everything for her dark spots.',
+    ex: ['The lesson', 'What made people stop (the shock) and what makes them stay (a reason to care) are two different jobs.'],
+    tip: 'Tap a video for sound',
+    show: () => `<div class="duo"><div class="fit photo"><video src="${L}fire-swipe.mp4" poster="${L}fire-swipe.jpg" muted autoplay loop playsinline></video><span class="pill swipe ai">Theirs</span></div><div class="fit photo"><video src="${L}fire-ours.mp4" poster="${L}fire-ours.jpg" muted autoplay loop playsinline></video><span class="pill brief ai">Ours · AI-made</span></div></div>` },
+  { rain: 5, hue: 'magenta', eyebrow: 'Finished this week',
+    h: 'Then we wrote it a song.',
+    p: 'A country song about a grandmother who went down for one and came home with three. Written, sung and cut to the lyrics by the machine, checked line by line.',
+    ex: ['Why a song', 'Nobody skips a song the way they skip an ad.'],
+    tip: 'Tap the video for sound',
+    show: () => `<div class="fit photo"><video id="v" src="${L}song-ours.mp4" poster="${L}song-ours.jpg" muted autoplay loop playsinline></video><span class="pill ai">Made with AI</span></div>` },
+  { rain: 6, hue: 'cyan', eyebrow: 'Iterate, don\'t perfect',
+    h: 'Make four. Let them choose.',
+    p: 'Same song, four different first seconds: the flex, a punch-in, the fan first, a slow-mo swing. Don\'t argue about which is best. Make all four.',
+    ex: ['The mindset', 'A draft you can test beats a masterpiece you\'re still guessing about.'],
+    tip: 'Tap an opening to hear it',
+    show: () => `<div class="grid3 g2">${[['v1-control', 'The flex'], ['v2-punch-in', 'Punch-in'], ['v3-fan-first', 'Fan first'], ['v4-slowmo-swing', 'Slow-mo']].map(([v, n]) => `<figure><video src="${L}song-${v}.mp4" poster="${L}song-${v}.jpg" muted autoplay loop playsinline></video><figcaption><span class="pill video">${n}</span></figcaption></figure>`).join('')}</div>` },
+  { rain: 6, hue: 'amber', eyebrow: 'The other door · your own idea',
+    h: 'Don\'t trust your idea. Interrogate it.',
+    p: 'Another new tool starts from a half-formed thought, not someone else\'s video, and asks it every question a good teacher would before anything gets made.',
+    ex: ['The idea that went in', '"Women in colder climates are going to feel really dry skin on their face this winter. Face scrub."'],
+    tip: 'Tap each question to see its answer',
+    show: () => `<div class="stops say">${[['Who is it really for?', 'She wants to look normal in winter. Not younger, just not flaky, and not a face her makeup won\'t sit on.'], ['What does she already know?', 'She can name the problem (tight, flaky, crispy) but hasn\'t tied it to any product. So never open on the product.'], ['What belief has to change?', 'From "I need a richer cream" to "there\'s a flaky layer on top, and taking it off is the step I\'ve been skipping."'], ['Where could it start?', 'Open on the calendar, not the face: it\'s October, and she already knows what the next four months do to her skin.'], ['What can\'t we prove?', 'It lists every gap out loud: no winter before-and-after exists yet, and a "93% felt smoother" line has nothing behind it.'], ['Who says go?', 'A person. Nothing gets made until someone reads it and signs off.']].map(([a, b]) => `<button><span class="pill wait">?</span> ${a}<span class="fix">${b}</span></button>`).join('')}</div>` },
   { rain: 6, hue: 'indigo', eyebrow: 'Your turn',
     h: 'The tools are basically free.',
-    p: 'One semester of weekends could get you a first sale. My brother is 21. Within months he landed a $2,000 retainer building websites with AI.',
+    p: 'One semester of weekends is enough to make something real. My brother is 21. Within months he was building websites with AI for his first steady client.',
     ex: ['Choose your destiny', 'There\'s never been a time like this.'],
-    tip: 'Press and hold the storm to make it rain',
-    show: () => `<div class="duo">${photo('finale.jpg', 'Damon')}<div style="display:flex;flex-direction:column;align-items:center;gap:var(--s3);height:100%;flex:1 1 0;min-width:0"><div class="stormbox" style="flex:1 1 auto"><b class="till" id="till">$0</b><canvas class="storm"></canvas></div><div class="btns" style="align-items:center"><span class="qr" id="qr"></span><span class="label">Make it rain<br>on your phone<br><b>daemn.co/umw</b></span></div></div></div>` },
+    tip: 'Press and hold the storm',
+    show: () => `<div class="duo">${photo('finale.jpg', 'Damon')}<div style="display:flex;flex-direction:column;align-items:center;gap:var(--s3);height:100%;flex:1 1 0;min-width:0"><div class="stormbox" style="flex:1 1 auto"><b class="till" id="till">0</b><canvas class="storm"></canvas></div><div class="btns" style="align-items:center"><span class="qr" id="qr"></span><span class="label">Play with it<br>on your phone<br><b>daemn.co/umw</b></span></div></div></div>` },
 ];
 
 const $ = s => document.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -202,6 +234,7 @@ function wire(sl) {
   const objs = sl.querySelectorAll('.obj[data-obj]');
   (function m(n) { if (!objs.length) return; if (window.daemnObjects) objs.forEach(el => window.daemnObjects.mount(el)); else if (n < 40) setTimeout(() => m(n + 1), 250); })(0);
   const v = sl.querySelector('#v'); if (v) v.onclick = () => { v.muted = !v.muted; };
+  sl.querySelectorAll('.duo video').forEach(v => v.onclick = () => { sl.querySelectorAll('.duo video').forEach(o => o.muted = o !== v || !v.muted); });
   sl.querySelectorAll('figure.hide').forEach(f => f.onclick = () => { f.classList.remove('hide'); thunder(.2); });
   sl.querySelectorAll('figure[data-c]').forEach(f => f.onclick = () => {
     const c = f.dataset.c; f.innerHTML = `<video src="${M}open-${c}.mp4" autoplay playsinline controls></video>`; delete f.dataset.c;
@@ -262,34 +295,26 @@ function thunder(k) {
   const g = ac.createGain(); g.gain.value = .8 * k; s.connect(lp).connect(g).connect(ac.destination); s.start();
 }
 
-/* ── the money hurricane: digital dollar bills spun up a funnel, drawn in the PRIZM spectrum ── */
+/* ── the idea storm: little video frames spun up a funnel, each in a stop of the PRIZM spectrum ── */
 let storms = [], money = 0, shown = 0;
-function billSprite(back) {
-  const c = document.createElement('canvas'), w = 240, h = 108; c.width = w; c.height = h;
-  const g = c.getContext('2d'), G = tok('green'), K = tok('card'), I = tok('ink');
-  g.fillStyle = G; g.beginPath(); g.roundRect(0, 0, w, h, 10); g.fill();
-  const sheen = g.createLinearGradient(0, 0, w, h);
-  SPEC.forEach((k, i) => sheen.addColorStop(i / 6, tok(k)));
-  g.globalAlpha = .28; g.fillStyle = sheen; g.fillRect(0, h * .62, w, h * .16); g.globalAlpha = 1;
-  g.strokeStyle = K; g.globalAlpha = .65; g.lineWidth = 2; g.strokeRect(9, 9, w - 18, h - 18); g.globalAlpha = 1;
-  if (back) {
-    g.fillStyle = I; g.globalAlpha = .18; g.fillRect(0, 0, w, h); g.globalAlpha = 1;
-    g.fillStyle = K; g.font = '500 18px "DM Mono", monospace'; g.textAlign = 'center'; g.fillText('PRIZM LABS', w / 2, h / 2 + 6);
-  } else {
-    g.fillStyle = K; g.globalAlpha = .22; g.beginPath(); g.arc(w / 2, h / 2, 34, 0, Math.PI * 2); g.fill(); g.globalAlpha = 1;
-    g.font = '800 46px "Unbounded", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('$', w / 2, h / 2 + 2);
-    g.font = '500 16px "DM Mono", monospace'; g.fillText('100', 30, 26); g.fillText('100', w - 30, h - 24);
-  }
+function frameSprite(hue, back) {
+  const c = document.createElement('canvas'), w = 108, h = 192; c.width = w; c.height = h;
+  const g = c.getContext('2d'), K = tok('card'), I = tok('ink');
+  g.fillStyle = I; g.beginPath(); g.roundRect(0, 0, w, h, 14); g.fill();
+  g.fillStyle = tok(hue); g.beginPath(); g.roundRect(6, 6, w - 12, h - 12, 10); g.fill();
+  if (back) { g.fillStyle = I; g.globalAlpha = .25; g.fillRect(6, 6, w - 12, h - 12); g.globalAlpha = 1; return c; }
+  g.fillStyle = K; g.globalAlpha = .9; g.beginPath(); g.moveTo(w / 2 - 14, h / 2 - 20); g.lineTo(w / 2 + 20, h / 2); g.lineTo(w / 2 - 14, h / 2 + 20); g.closePath(); g.fill();
+  g.globalAlpha = .5; g.fillRect(16, h - 30, w - 32, 4); g.globalAlpha = 1; g.fillRect(16, h - 30, (w - 32) * .4, 4);
   return c;
 }
 function storm(box) {
   const cv = box.querySelector('canvas'), cx = cv.getContext('2d'), DPR = Math.min(2, devicePixelRatio || 1);
-  const FRONT = billSprite(false), BACK = billSprite(true);
+  const SPR = SPEC.map(k => [frameSprite(k, false), frameSprite(k, true)]);
   let W = 0, H = 0, boost = 0, want = 0, live = true, last = performance.now();
   const fit = () => { W = box.clientWidth; H = box.clientHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); };
   const ro = new ResizeObserver(fit); ro.observe(box); fit();
   const N = W < 360 ? 70 : 140;
-  const bills = Array.from({ length: N }, () => ({ h: Math.random(), th: Math.random() * Math.PI * 2, r: .75 + Math.random() * .5, flip: Math.random() * 6, fv: 2 + Math.random() * 5, s: .5 + Math.random() * .5 }));
+  const bills = Array.from({ length: N }, () => ({ h: Math.random(), th: Math.random() * Math.PI * 2, r: .75 + Math.random() * .5, c: Math.floor(Math.random() * SPEC.length), flip: Math.random() * 6, fv: 2 + Math.random() * 5, s: .5 + Math.random() * .5 }));
   box.addEventListener('pointerdown', e => { want = 1; box.setPointerCapture(e.pointerId); thunder(.35); });
   const up = () => { want = 0; }; box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
   function frame(t) {
@@ -308,7 +333,7 @@ function storm(box) {
     const speed = 1.4 + boost * 3.2, rise = .07 + boost * .22;
     const drawn = bills.map(b => {
       b.h += dt * rise * (.6 + b.s * .8);
-      if (b.h > 1) { b.h = 0; b.th = Math.random() * Math.PI * 2; if (boost > .3 || cur === SLIDES.length - 1) money += 100; }
+      if (b.h > 1) { b.h = 0; b.th = Math.random() * Math.PI * 2; if (boost > .3 || cur === SLIDES.length - 1) money += 1; }
       const R = (base + (top - base) * Math.pow(b.h, 1.35)) * b.r;
       b.th += dt * speed * (1.6 - b.h) * (top / Math.max(R, 1)) * .18;
       b.flip += dt * b.fv * (1 + boost);
@@ -316,9 +341,9 @@ function storm(box) {
       return { b, x: W / 2 + sway + Math.cos(b.th) * R, y: floor - b.h * span + z * R * .22, z };
     }).sort((p, q) => p.z - q.z);
     for (const { b, x, y, z } of drawn) {
-      const depth = (z + 1) / 2, sc = (.18 + .22 * b.s) * (.55 + .45 * depth) * Math.min(1.4, W / 520 + .4), fx = Math.cos(b.flip);
+      const depth = (z + 1) / 2, sc = (.22 + .26 * b.s) * (.55 + .45 * depth) * Math.min(1.4, W / 520 + .4), fx = Math.cos(b.flip);
       cx.save(); cx.translate(x, y); cx.rotate(Math.cos(b.th) * .7 + Math.sin(b.flip * .5) * .3); cx.scale(sc * (Math.abs(fx) < .08 ? .08 : fx), sc);
-      cx.globalAlpha = .35 + .65 * depth; cx.drawImage(fx >= 0 ? FRONT : BACK, -120, -54); cx.restore();
+      cx.globalAlpha = .35 + .65 * depth; cx.drawImage(SPR[b.c][fx >= 0 ? 0 : 1], -54, -96); cx.restore();
     }
     cx.globalAlpha = 1;
     if (sound && rainGain) rainGain.gain.value = .05 + boost * .35;
@@ -329,7 +354,7 @@ function storm(box) {
 }
 (function till(t) {
   shown += (money - shown) * .12;
-  const el = $('#till'); if (el) el.textContent = '$' + Math.round(shown).toLocaleString();
+  const el = $('#till'); if (el) el.textContent = Math.round(shown).toLocaleString() + ' ideas';
   requestAnimationFrame(till);
 })();
 

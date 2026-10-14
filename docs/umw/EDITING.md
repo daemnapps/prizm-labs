@@ -1,4 +1,4 @@
-# Make It Rain — the UMW talk (14 Oct 2026)
+# Don't Start From a Blank Page — the UMW talk (14 Oct 2026)
 
 One copy, edited by Damon and Angie: `docs/umw/index.html` plus pictures in
 `docs/umw/media/`. It is live at https://daemn.co/umw/ as soon as a change is
