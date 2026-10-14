@@ -46,6 +46,7 @@ nav.bar,footer.bot,.askbtn{display:none}
 .show .obj{width:min(100%,62vh);max-width:none;flex:0 1 auto}
 .stops{display:grid;gap:var(--s3);width:min(100%,600px)}
 .stops button{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--coral);border-radius:var(--r2);padding:var(--s3) var(--s5);font-size:clamp(15px,min(1.4vw,2.3vh),20px)}
+.stops .ib{vertical-align:middle;margin-right:var(--s2)}
 .stops .fix{display:block;max-height:0;overflow:hidden;opacity:0;transition:all .35s;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green)}
 .stops button.open{border-left-color:var(--green)}.stops button.open .fix{max-height:40px;opacity:1;margin-top:var(--s2)}
 .prog{position:fixed;top:0;left:0;right:0;z-index:3;display:flex;gap:4px;padding:12px clamp(20px,5vw,80px)}
@@ -137,7 +138,7 @@ const SLIDES = [
     p: 'Every song you love borrowed a structure. Every meme is a template. The skill isn\'t inventing from zero. It\'s noticing why something works, then making it yours.',
     ex: ['Try it today', 'Next time you can\'t stop watching something, ask: what exactly kept me here?'],
     tip: 'Tap each word to open it',
-    show: () => `<div class="stops">${[['Notice', 'What already holds people?'], ['Name', 'Why does it work? Say it in one line.'], ['Remake', 'Keep the why. Change everything else.']].map(([a, b]) => `<button><span class="big" style="font-size:clamp(34px,min(5vw,8vh),72px)">${a}</span><span class="fix">${b}</span></button>`).join('')}</div>` },
+    show: () => `<div class="stops">${[['eye', 'Notice', 'What already holds people?'], ['pen', 'Name', 'Why does it work? Say it in one line.'], ['loop', 'Remake', 'Keep the why. Change everything else.']].map(([i, a, b]) => `<button><i class="ib lg" data-i="${i}"></i> <span class="big" style="font-size:clamp(34px,min(5vw,8vh),72px)">${a}</span><span class="fix">${b}</span></button>`).join('')}</div>` },
   { rain: 1, hue: 'violet', eyebrow: 'Step 1 of 7 · Swipe',
     h: 'Start from what already works.',
     p: 'We collect posts people already can\'t stop watching. The market tested them for free.',
@@ -166,7 +167,7 @@ const SLIDES = [
     h: 'It refuses bad work.',
     p: 'Every mistake the machine catches becomes a rule it checks on every ad after.',
     tip: 'Tap a stop to see the fix',
-    show: () => `<div class="duo"><div class="fit"><img src="${M}cover-g01-h5.jpg" alt="A cover where the words landed on her face"></div><div class="stops">${[['Her mouth moved on someone else\'s voice', 'Covered with a close-up'], ['A word got cut off: "Guaranteed"', 'Re-voiced, heard back whole'], ['The music stopped before the end', 'Music under the whole ad'], ['The cover\'s words landed on her face', 'Moved to a clear spot'], ['The post showed a price the site didn\'t', 'Taken out']].map(([a, b]) => `<button><span class="pill stop">Stop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div></div>` },
+    show: () => `<div class="duo"><div class="fit"><img src="${M}cover-g01-h5.jpg" alt="A cover where the words landed on her face"></div><div class="stops">${[['Her mouth moved on someone else\'s voice', 'Covered with a close-up'], ['A word got cut off: "Guaranteed"', 'Re-voiced, heard back whole'], ['The music stopped before the end', 'Music under the whole ad'], ['The cover\'s words landed on her face', 'Moved to a clear spot'], ['The post showed a price the site didn\'t', 'Taken out']].map(([a, b]) => `<button><i class="ib" data-i="shield"></i> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div></div>` },
   { rain: 6, hue: 'green', eyebrow: 'Step 6 of 7 · Learn',
     h: 'The audience picks.',
     p: 'Six openings go out at once. People vote with their thumbs, and whatever holds them feeds the next idea.',
@@ -177,7 +178,7 @@ const SLIDES = [
     p: 'The Outlier app ties every ad the machine made back to what people actually did with it, so we learn which one truly connected.',
     ex: ['Building now', 'The standouts get remade into new variations, and those go back into the machine.'],
     tip: 'Live demo: the Outlier app',
-    show: () => `<div class="stops">${[['Every AI-made ad goes out with its own tracking', 'Every response traces back to one ad'], ['What people did comes back for each ad', 'Real behaviour, not just views'], ['The Outlier app flags the ads that beat the rest', 'The outliers teach the next round'], ['Standouts get remade as new variations', 'Being built right now']].map(([a, b]) => `<button><span class="pill ready">Loop</span> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div>` },
+    show: () => `<div class="stops">${[['send', 'Every AI-made ad goes out with its own tracking', 'Every response traces back to one ad'], ['eye', 'What people did comes back for each ad', 'Real behaviour, not just views'], ['target', 'The Outlier app flags the ads that beat the rest', 'The outliers teach the next round'], ['loop', 'Standouts get remade as new variations', 'Being built right now']].map(([i, a, b]) => `<button><i class="ib" data-i="${i}"></i> ${a}<span class="fix">✓ ${b}</span></button>`).join('')}</div>` },
   { rain: 5, hue: 'violet', eyebrow: 'Finished this week · theirs → ours',
     h: 'Keep the shock. Give it a reason.',
     p: 'Nine seconds of a stranger\'s fire facial, flames and all, for no reason at all. We kept the jolt and gave it one: a woman who has tried everything for her dark spots.',
@@ -196,12 +197,30 @@ const SLIDES = [
     ex: ['The mindset', 'A draft you can test beats a masterpiece you\'re still guessing about.'],
     tip: 'Tap an opening to hear it',
     show: () => `<div class="grid3 g2">${[['v1-control', 'The flex'], ['v2-punch-in', 'Punch-in'], ['v3-fan-first', 'Fan first'], ['v4-slowmo-swing', 'Slow-mo']].map(([v, n]) => `<figure><video src="${L}song-${v}.mp4" poster="${L}song-${v}.jpg" muted autoplay loop playsinline></video><figcaption><span class="pill video">${n}</span></figcaption></figure>`).join('')}</div>` },
+  { rain: 6, hue: 'violet', eyebrow: 'Just for fun · scroll stopper 1 of 3',
+    h: 'A street fight, recast.',
+    p: 'Same punches, same crowd, same chaos. In ours, the guy in black is the product and the one getting knocked down is a razor bump.',
+    ex: ['The joke', 'The fight was never the point. Who is fighting is the story.'],
+    tip: 'Tap a video for sound',
+    show: () => `<div class="duo"><div class="fit photo"><video src="${L}dx-fight-theirs.mp4" poster="${L}dx-fight-theirs.jpg" muted autoplay loop playsinline></video><span class="pill swipe ai">Theirs</span></div><div class="fit photo"><video src="${L}dx-fight-ours.mp4" poster="${L}dx-fight-ours.jpg" muted autoplay loop playsinline></video><span class="pill brief ai">Ours · AI-made</span></div></div>` },
+  { rain: 6, hue: 'violet', eyebrow: 'Just for fun · scroll stopper 2 of 3',
+    h: 'A sidewalk quiz, our card.',
+    p: 'Two guys, a stack of cards, fill in the blank. We kept the whole format and played one round on a word our customers live with.',
+    ex: ['The format', 'A format is a container. Anything can go inside it.'],
+    tip: 'Tap a video for sound',
+    show: () => `<div class="duo"><div class="fit photo"><video src="${L}dx-quiz-theirs.mp4" poster="${L}dx-quiz-theirs.jpg" muted autoplay loop playsinline></video><span class="pill swipe ai">Theirs</span></div><div class="fit photo"><video src="${L}dx-quiz-ours.mp4" poster="${L}dx-quiz-ours.jpg" muted autoplay loop playsinline></video><span class="pill brief ai">Ours · AI-made</span></div></div>` },
+  { rain: 6, hue: 'violet', eyebrow: 'Just for fun · scroll stopper 3 of 3',
+    h: 'A man riding a dog.',
+    p: 'Same ride, same friend filming. Our guy, our hoodie, our device. The AI can\'t draw a logo sharp, so an editor tracks the real one in.',
+    ex: ['Machine + human', 'The machine does the volume. A person does the last ten percent.'],
+    tip: 'Tap a video for sound',
+    show: () => `<div class="duo"><div class="fit photo"><video src="${L}dx-dog-theirs.mp4" poster="${L}dx-dog-theirs.jpg" muted autoplay loop playsinline></video><span class="pill swipe ai">Theirs</span></div><div class="fit photo"><video src="${L}dx-dog-ours.mp4" poster="${L}dx-dog-ours.jpg" muted autoplay loop playsinline></video><span class="pill brief ai">Ours · AI-made</span></div></div>` },
   { rain: 6, hue: 'amber', eyebrow: 'The other door · your own idea',
     h: 'Don\'t trust your idea. Interrogate it.',
     p: 'Another new tool starts from a half-formed thought, not someone else\'s video, and asks it every question a good teacher would before anything gets made.',
     ex: ['The idea that went in', '"Women in colder climates are going to feel really dry skin on their face this winter. Face scrub."'],
     tip: 'Tap each question to see its answer',
-    show: () => `<div class="stops say">${[['Who is it really for?', 'She wants to look normal in winter. Not younger, just not flaky, and not a face her makeup won\'t sit on.'], ['What does she already know?', 'She can name the problem (tight, flaky, crispy) but hasn\'t tied it to any product. So never open on the product.'], ['What belief has to change?', 'From "I need a richer cream" to "there\'s a flaky layer on top, and taking it off is the step I\'ve been skipping."'], ['Where could it start?', 'Open on the calendar, not the face: it\'s October, and she already knows what the next four months do to her skin.'], ['What can\'t we prove?', 'It lists every gap out loud: no winter before-and-after exists yet, and a "93% felt smoother" line has nothing behind it.'], ['Who says go?', 'A person. Nothing gets made until someone reads it and signs off.']].map(([a, b]) => `<button><span class="pill wait">?</span> ${a}<span class="fix">${b}</span></button>`).join('')}</div>` },
+    show: () => `<div class="stops say">${[['Who is it really for?', 'She wants to look normal in winter. Not younger, just not flaky, and not a face her makeup won\'t sit on.'], ['What does she already know?', 'She can name the problem (tight, flaky, crispy) but hasn\'t tied it to any product. So never open on the product.'], ['What belief has to change?', 'From "I need a richer cream" to "there\'s a flaky layer on top, and taking it off is the step I\'ve been skipping."'], ['Where could it start?', 'Open on the calendar, not the face: it\'s October, and she already knows what the next four months do to her skin.'], ['What can\'t we prove?', 'It lists every gap out loud: no winter before-and-after exists yet, and a "93% felt smoother" line has nothing behind it.'], ['Who says go?', 'A person. Nothing gets made until someone reads it and signs off.']].map(([a, b], j) => `<button><i class="ib" data-i="${['user', 'book', 'zap', 'play', 'alert', 'check'][j]}"></i> ${a}<span class="fix">${b}</span></button>`).join('')}</div>` },
   { rain: 6, hue: 'indigo', eyebrow: 'Your turn',
     h: 'The tools are basically free.',
     p: 'One semester of weekends is enough to make something real. My brother is 21. Within months he was building websites with AI for his first steady client.',
@@ -233,6 +252,7 @@ function wire(sl) {
   storms.forEach(stop => stop()); storms = [...sl.querySelectorAll('.stormbox')].map(storm);
   const objs = sl.querySelectorAll('.obj[data-obj]');
   (function m(n) { if (!objs.length) return; if (window.daemnObjects) objs.forEach(el => window.daemnObjects.mount(el)); else if (n < 40) setTimeout(() => m(n + 1), 250); })(0);
+  (function ic(n) { if (window.studioIcon) sl.querySelectorAll('[data-i]').forEach(el => { if (!el.firstChild) el.innerHTML = window.studioIcon(el.dataset.i); }); else if (n < 40) setTimeout(() => ic(n + 1), 150); })(0);
   const v = sl.querySelector('#v'); if (v) v.onclick = () => { v.muted = !v.muted; };
   sl.querySelectorAll('.duo video').forEach(v => v.onclick = () => { sl.querySelectorAll('.duo video').forEach(o => o.muted = o !== v || !v.muted); });
   sl.querySelectorAll('figure.hide').forEach(f => f.onclick = () => { f.classList.remove('hide'); thunder(.2); });
