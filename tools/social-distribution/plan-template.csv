@@ -1,0 +1,5 @@
+phone,platform,video,caption,title,at
+de-mybrand-tt-1,tiktok,videos/hook-a-v1.mp4,"Caption with #hashtags",,2026-10-21T12:00
+de-mybrand-tt-1,tiktok-carousel,slides/a1.jpg|slides/a2.jpg|slides/a3.jpg,"Carousel caption",Carousel title,2026-10-21T19:00
+de-mybrand-ig-1,instagram,videos/hook-a-v1.mp4,"Reels caption",,2026-10-21T18:30
+de-mybrand-yt-1,youtube,videos/hook-a-v1.mp4,"#shorts",Short title,2026-10-21T17:00
