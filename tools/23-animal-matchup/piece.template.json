@@ -1,0 +1,15 @@
+{
+ "name": "<piece name, used for the phone file>",
+ "src": "src.mp4",
+ "fps": 24,
+ "hit": 0.0,
+ "beat": 0.7663,
+ "clip_volume": 0.4,
+ "shots": [["charge-final.mp4", 0, "hit+1"], ["multi.mp4", 0, 8], ["v2.mp4", 0.3, 4], ["v3.mp4", 0.3, 4]],
+ "hero_shot": 2,
+ "song": "trans-scratch-<D>.wav",
+ "sus_from": 0.3,
+ "master": "master.png",
+ "person_comp": {"person_top": 0.42, "animal_at": 0.0, "safe_below": 0.56, "side_x": 0.0, "cut": 0.0},
+ "out": "<slug>-FINAL.mp4"
+}

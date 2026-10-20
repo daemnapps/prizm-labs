@@ -1,0 +1,123 @@
+{
+ "chain": "animal-matchup",
+ "what": "Real human-vs-animal clip plays to the hit, then a music video of the animal in the brand: silent until the hit, Sus piano on the hit, DJ scratch into meaningful love on the hero shot, cow-reel camera moves, the lead in every human role. 1080x1920, 24 fps, ~19 s, no fade.",
+ "account": "Use your own generation account. Pass declined_preset_id 24bae836-2c4a-48e0-89b6-49fcc0b21612 on every Higgsfield call.",
+ "made_with": [
+  "a past piece (knight goat, FINAL v2)",
+  "a past piece (gas bear, FINAL v4)"
+ ],
+ "stages": [
+  {
+   "key": "pick",
+   "title": "Pick the clip, the hit and the outfit",
+   "tool": "by hand (the lead's call)",
+   "do": "A real animal going head to head with a person, one take, already viral (goat vs human, bear vs human). Mark the hit frame. The owner picks the outfit by number from the review page. Write piece.json (copy piece.template.json).",
+   "gate": "the lead has said which clip and which outfit."
+  },
+  {
+   "key": "cast",
+   "title": "Cast: use the built character, or build it once",
+   "tool": "cast folders (video-production cast sheets)",
+   "do": "the lead = brands/<brand>/ai-cast/<lead> (master, sheets, identity block — paste the block, never re-describe). Each animal = brands/<brand>/ai-cast/<animal>/ (master, turnaround, angles). A character not cast yet is built first, once, with the cast-sheet prompts, and the lead approves the sheet. Every generation attaches the character's master plus the sheet panel for its angle (profile, back, close-up) and pastes its identity block.",
+   "gate": "Every character in the piece has a cast folder with a master and sheets in which every core element shows from every angle."
+  },
+  {
+   "key": "frames",
+   "title": "Pull the frames",
+   "tool": "ffmpeg",
+   "do": "src.mp4 at full resolution; the frame just after the hit (the location); the person's first frame; the animal mid-charge. 9:16 decided now: if the source is another shape, extend the frame in the stills.",
+   "gate": "Every frame is the source's own, full size."
+  },
+  {
+   "key": "master",
+   "title": "The master look",
+   "tool": "GPT Image 2.5 -> Seedance 2.5",
+   "prompt": "01-hero-still.md",
+   "do": "Hero still (x2, pick one), then its hero video (prompt 05). master.png = a frame of the hero VIDEO. Write OUTFIT_WORDS from what the video shows.",
+   "gate": "One master per character and outfit. Nothing else is generated before it."
+  },
+  {
+   "key": "stills",
+   "title": "Every other still, matched to the master",
+   "tool": "GPT Image 2.5",
+   "prompt": "02-matched-still.md",
+   "do": "Centred still (for the camera moves), mid-charge still (for dressing the charge), any extra hero angle. Two takes each.",
+   "gate": "qc.py suit master.png + each take: same colour, fabric, lapels, trousers. Reject any take that differs. Core check: every core element from the cast folder's character.md is there in every take and every frame (close-ups and profiles too). One missing = reject. Identity checked against the cast PICTURE, not the words (stage-5 QC check 1), on every take. Every still also runs the plate check (PLATE-CHECK.md: anatomy, continuity, physical sense…)."
+  },
+  {
+   "key": "hero_motion",
+   "title": "Hero shots in motion",
+   "tool": "Seedance 2.5 omni_reference, 5 s",
+   "prompt": "05-hero-motion.md",
+   "do": "One video per hero still. Shots after the drop run 4 beats each.",
+   "gate": "qc.py suit: garment matches the master in every shot. Core check: every core element from the cast folder's character.md is there in every take and every frame (close-ups and profiles too). One missing = reject. Identity checked against the cast PICTURE, not the words (stage-5 QC check 1), on every take."
+  },
+  {
+   "key": "camera_moves",
+   "title": "The cow-reel camera moves",
+   "tool": "Seedance 2.5 omni_reference + cow reel, 7 s",
+   "prompt": "06-camera-moves.md",
+   "do": "From the centred still. Placed right after the hit, 8 beats.",
+   "gate": "qc.py scrub: the animal is never hidden, no glitch frame. qc.py suit against the master. If the shade is off, match_grade.py to the hero shot. Core check: every core element from the cast folder's character.md is there in every take and every frame (close-ups and profiles too). One missing = reject. Identity checked against the cast PICTURE, not the words (stage-5 QC check 1), on every take."
+  },
+  {
+   "key": "dress_charge",
+   "title": "Dress the animal through the charge",
+   "tool": "Kling Omni Edit (kling_video_edit, pro)",
+   "prompt": "07-dress-the-charge.md",
+   "do": "On the ORIGINAL clip, refs = mid-charge still + master. If the garment colour drifts, garment_grade.py. If the model invents a figure before the animal enters, seam.py splices the real frames.",
+   "gate": "qc.py zoom on the charge: dressed in every frame, trousers on, colour matches the master, nobody invented. Core check: every core element from the cast folder's character.md is there in every take and every frame (close-ups and profiles too). One missing = reject. Identity checked against the cast PICTURE, not the words (stage-5 QC check 1), on every take."
+  },
+  {
+   "key": "swap",
+   "title": "the lead into the human role",
+   "tool": "GPT Image 2.5 -> Genjutsu hf_mult_motion_control -> Kling hair lock",
+   "prompt": "03-lead-still.md, 04-lead-motion.md, 04b-hair-lock.md",
+   "do": "Locked still (x2) -> motion (x2) -> hair lock on both if the original person has a bun, ponytail or long hair. One change per pass; never swap and dress in one pass.",
+   "gate": "qc.py hair on every take: the lead's core elements from the cast folder's character.md (hair, beard, glasses, build) on every frame, never a bun, never the original person back. Pick the take that passes. Identity checked against the cast PICTURE, not the words (stage-5 QC check 1), on every take. face_lock.py against the lead's master on the final take."
+  },
+  {
+   "key": "comp",
+   "title": "Paste the lead onto the dressed charge",
+   "tool": "person_comp.py",
+   "do": "person_comp.py dressed.mp4 swap.mp4 orig.mp4 charge-final.mp4 with the piece's zones (record them in piece.json). Use --score to pick --cut where the held object matches.",
+   "gate": "qc.py zoom on: the animal while it crosses the paste (no ghost legs); anything he holds at the paste edge (one hose, not two); the hand-back (no double object, no pop). qc.py jumps over the charge: only the hit itself may flag."
+  },
+  {
+   "key": "voice",
+   "title": "the lead's voice",
+   "tool": "ElevenLabs speech-to-speech",
+   "prompt": "09-voice.md",
+   "do": "Only when the swapped person talks.",
+   "gate": "whisper-cli shows the words survived."
+  },
+  {
+   "key": "song",
+   "title": "The song, timed to the picture",
+   "tool": "your song-blend tools",
+   "do": "Run cut.py once without a song to MEASURE the hero cut: D = hero cut - hit. Then: blend_drop.py D blend-drop-D.mp3 SUS_FROM; transitions.py D SUS_FROM -> trans-scratch-D.wav. SUS_FROM 0.3 by default; 6.0 when the build is short (Sus pauses at ~4.5 s and would sit before the scratch as dead air).",
+   "gate": "Drums and chords enter exactly on the hero shot's first frame (check the onset in the mix). Never change the picture to fix the music."
+  },
+  {
+   "key": "cut",
+   "title": "Cut",
+   "tool": "cut.py piece.json --song trans-scratch-D.wav",
+   "do": "Clip sound x0.4 until the hit, song from the hit, whole-beat shots, loudness -14 LUFS, hard cut at the end.",
+   "gate": "qc.py held = 0. Hero cut measured = the D the song was built on."
+  },
+  {
+   "key": "final_checks",
+   "title": "The final checks — all of them, every time",
+   "tool": "qc.py",
+   "do": "Core elements of every character on every shot (qc.py core: one frame per second from every shot); Suit side by side from every shot vs the master; hair on every frame of the swap; camera moves scrubbed; the animal's legs and anything held during the paste, frame by frame; pops; held frames.",
+   "gate": "Any failure = say \"not final\" and list what's left. Never send a cut that fails one."
+  },
+  {
+   "key": "deliver",
+   "title": "Deliver",
+   "tool": "deliver.py",
+   "do": "machine/deliver.py: the full-size phone copy (1080x1920 ~8.2 Mbps, under 30 MB) to whoever posts it, and a 540x960 copy for the review page. Every prompt used goes in the piece's notes, verbatim.",
+   "gate": "He gets the full-size file, not the preview."
+  }
+ ]
+}
