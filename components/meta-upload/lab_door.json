@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "THE SHEET ONLY: build.py --brand --lane --run --out $OUT/<label>; never approve.py, upload.py or any Meta call (LD-1 (shared lab door))",
+  "script": "components/meta-upload/build.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"lane": "--lane", "run": "--run", "funnel": "--funnel"},
+  "bool_flags": {},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": ["approve", "upload", "live", "active", "handoff"]
+}

@@ -1,0 +1,29 @@
+{
+ "_readme": "THIS CHAIN'S language-layer definition, in the component's own chain-profile schema (tools/language-layer/CLAUDE.md §3). Resolved verbatim from lab/damon/copy/machine/language.py :: STAGE_USE — the copy lab's copy, which the owner confirmed canonical, and which is why the `render` entry is here and is not in the video chain's map. The engine ships no stage map on purpose; what a stage is looking for is the CHAIN's definition and the owner curates it. Changing a line here is a conversation with him, not an edit. The caller runs the query with this profile and passes each rendered block in as the run-config variable named below; chain-runner itself never reads this file, because an engine that ran a query would not be a chain engine.",
+ "stage_use": {
+  "injection": ["problem-language", "self-descriptor", "identity",
+                "tried-and-failed", "alternative-solution", "cope"],
+  "hooks": ["hook", "hook-headline", "caption-hook", "one-liner",
+            "problem-language", "competitor-annoyance", "self-descriptor"],
+  "placement": ["buying-criteria", "buy-trigger", "why-interested"],
+  "expansion": ["why-bought", "buying-criteria", "competitor-annoyance",
+                "alternative-solution", "why-interested"],
+  "close": ["objection", "refund-reason", "expectation-gap",
+            "comment-objection", "objection-answer", "churn-risk"],
+  "proof": ["why-bought", "post-use-feeling", "what-they-like",
+            "result-language", "transformation-reaction", "comment-proof"],
+  "render": ["self-descriptor", "problem-language", "identity",
+             "why-bought", "post-use-feeling", "what-they-like",
+             "result-language", "transformation-reaction", "comment-proof"]
+ },
+ "widen": "once",
+ "title": "Customer language for this stage",
+ "_stage_map": {
+  "_readme": "Which chain stage reads which entry above, and the run-config variable the rendered block arrives as. `placement` and `proof` are carried because they are HIS map and his to prune; his runner calls neither today, so no stage here binds them.",
+  "stage3": {"uses": "injection", "var": "language_injection"},
+  "stage5": {"uses": "hooks", "var": "language_hooks"},
+  "stage6": {"uses": "expansion", "var": "language_expansion"},
+  "stage7": {"uses": "close", "var": "language_close"},
+  "stage8": {"uses": "render", "var": "language_render"}
+ }
+}

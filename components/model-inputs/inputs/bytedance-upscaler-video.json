@@ -1,0 +1,209 @@
+{
+ "model": "bytedance-upscaler-video",
+ "medium": "upscale",
+ "_readme": [
+  "The alternate upscaler. Maker documentation is split between Higgsfield's help page and the upstream API pages; the sheet says where they disagree.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "ByteDance video upscaler (Higgsfield)",
+ "registry_id": "bytedance-upscaler-video",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_tool": "bytedance_video_upscale",
+  "door": "higgsfield"
+ },
+ "sources": [
+  "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do",
+  "https://fal.ai/models/fal-ai/bytedance-upscaler/upscale/video/llms.txt",
+  "https://replicate.com/bytedance/video-upscaler",
+  "[ours] components/generative-model-house/MODEL-HOUSE.md (HOUSE-UP-1)"
+ ],
+ "limits": {
+  "target_resolutions": [
+   "1080p",
+   "2k",
+   "4k"
+  ],
+  "higgsfield_claims_up_to": "8K for video (Higgsfield help page); the upstream API stops at 4K and errors above it: the two disagree, so 4K is the safe ceiling",
+  "input_resolutions": [
+   "480p",
+   "720p",
+   "1080p"
+  ],
+  "frame_rate_max": 60,
+  "formats": [
+   "mp4",
+   "mov",
+   "webm",
+   "m4v",
+   "gif"
+  ],
+  "typical_time": "1 to 5 minutes",
+  "max_duration": "not stated by any source",
+  "house": {
+   "use": "the alternate when local Real-ESRGAN is not good enough"
+  }
+ },
+ "qualities": [
+  "1080p",
+  "2k",
+  "4k"
+ ],
+ "inputs": [
+  {
+   "name": "video",
+   "what": "The clip to upscale.",
+   "allowed": "mp4, mov, webm, m4v, gif",
+   "we_send": "the kept take",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://replicate.com/bytedance/video-upscaler",
+    "https://fal.ai/models/fal-ai/bytedance-upscaler/upscale/video/llms.txt"
+   ]
+  },
+  {
+   "name": "target_resolution",
+   "what": "Output size.",
+   "allowed": "1080p, 2k, 4k (Higgsfield also lists 8K, unconfirmed upstream)",
+   "we_send": "1080p for a 9:16 ad",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://fal.ai/models/fal-ai/bytedance-upscaler/upscale/video/llms.txt",
+    "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do"
+   ]
+  },
+  {
+   "name": "frame rate",
+   "what": "Output rate (up to 60 fps).",
+   "allowed": "up to 60 fps",
+   "we_send": "keep the clip's own rate",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://replicate.com/bytedance/video-upscaler"
+   ]
+  },
+  {
+   "name": "preset / detail tuning",
+   "what": "Preset-tuned detail for video.",
+   "allowed": "Higgsfield presets",
+   "we_send": "default",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do"
+   ]
+  },
+  {
+   "name": "scale factor",
+   "what": "Options depend on the selected model.",
+   "allowed": "set on the door",
+   "we_send": "the one that reaches 1080p",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do"
+   ]
+  },
+  {
+   "name": "duration",
+   "what": "Clip length.",
+   "allowed": "no cap found",
+   "we_send": "the whole kept take (4 to 10 s)",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do"
+   ]
+  },
+  {
+   "name": "aspect",
+   "what": "Shape.",
+   "allowed": "kept from the input",
+   "we_send": "9:16",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://replicate.com/bytedance/video-upscaler"
+   ]
+  },
+  {
+   "name": "audio",
+   "what": "Sound track.",
+   "allowed": "not documented",
+   "we_send": "re-attach the original audio at the edit",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-edit"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "only-as-alternate",
+   "rule": "The local Real-ESRGAN is first; use this only as the alternate.",
+   "ours": "HOUSE-UP-1",
+   "status": "draft",
+   "source": "[ours] MODEL-HOUSE.md"
+  },
+  {
+   "id": "stay-at-4k",
+   "rule": "Treat 4K as the ceiling: the upstream API errors above it.",
+   "ours": "1080p in practice",
+   "status": "draft",
+   "source": "https://fal.ai/models/fal-ai/bytedance-upscaler/upscale/video/llms.txt"
+  },
+  {
+   "id": "low-in",
+   "rule": "Feed 480p to 1080p sources.",
+   "ours": "480p take",
+   "status": "draft",
+   "source": "https://replicate.com/bytedance/video-upscaler"
+  },
+  {
+   "id": "allow-minutes",
+   "rule": "A video upscale takes 1 to 5 minutes; a stuck job is a retry, not a new spend.",
+   "ours": "wait then retry once",
+   "status": "draft",
+   "source": "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do"
+  },
+  {
+   "id": "check-the-look",
+   "rule": "Check the result keeps the swipe's grain and the face.",
+   "ours": "judge after",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V38"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "upscale-an-unapproved-take",
+   "text": "Upscaling before the take is kept.",
+   "status": "draft",
+   "source": "[ours] MODEL-HOUSE.md"
+  },
+  {
+   "id": "trust-8k",
+   "text": "Trusting the 8K claim without testing.",
+   "status": "draft",
+   "source": "https://higgsfield.ai/creator-hub/help-center/troubleshooting/my-video-upscale-is-stuck-or-failed-what-should-i-do vs https://fal.ai/models/fal-ai/bytedance-upscaler/upscale/video/llms.txt"
+  },
+  {
+   "id": "above-4k",
+   "text": "A target above 4K on the API: it errors.",
+   "status": "draft",
+   "source": "https://fal.ai/models/fal-ai/bytedance-upscaler/upscale/video/llms.txt"
+  },
+  {
+   "id": "assume-audio-survives",
+   "text": "Assuming the sound track survives the upscale.",
+   "status": "draft",
+   "source": "no source states it"
+  }
+ ]
+}

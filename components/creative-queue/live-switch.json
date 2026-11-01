@@ -1,0 +1,4 @@
+{
+ "_what": "The live queue switch. While this says off, cq.py refuses any --root that is the live runs/queue/ (exit 2). Only a person's own commit (the team's or the team's) sets it to exactly \"on\", after QB-4 (joint queue test) passes. A missing file, bad JSON or any other value reads as off.",
+ "live": "off"
+}

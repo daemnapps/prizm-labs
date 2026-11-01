@@ -1,0 +1,8 @@
+{
+  "voice_id": "fixture-voice-id-0001",
+  "model_id": "eleven_multilingual_v2",
+  "stability": 0.5,
+  "similarity_boost": 0.75,
+  "cast": "2026-09-17",
+  "note": "test fixture only — never a real ElevenLabs voice id"
+}

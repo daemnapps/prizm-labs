@@ -1,0 +1,9 @@
+{
+ "schema": 1,
+ "kind": "email",
+ "report": ["components/creative-queue/contract.py", "report"],
+ "detail": ["components/creative-queue/contract.py", "detail"],
+ "apply": ["components/creative-queue/contract.py", "apply"],
+ "words": ["words", "ok", "go"],
+ "kind_words": {"go": "make the draft"}
+}

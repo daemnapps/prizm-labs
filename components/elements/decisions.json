@@ -1,0 +1,157 @@
+{
+ "_what": "the owner's rulings over the source lists — a rename (the id changes, the old spelling stays as an alias), an alias (another spelling for an existing row), a dropped id (refused with the reason), a status ruling. elements.py build applies these to the library; the source list is never touched. Keys are element/asset.",
+ "_rule": "An id is lowercase with '-' between words, never squashed. Every old spelling is an alias on its row, so the tools that still write it resolve to the same row (Master Plan v2, 3.1, 2026-09-28).",
+ "lists": {
+  "format/image": {
+   "renames": {
+    "stickynote": "sticky-note",
+    "ugcscreenshot": "ugc-screenshot",
+    "pricestrike": "price-strike",
+    "splitdata": "split-data",
+    "redcircle": "red-circle",
+    "notesapp": "notes-app",
+    "handannotated": "hand-annotated",
+    "annotateddiagram": "annotated-diagram",
+    "fakeeditorial": "fake-editorial",
+    "studyfigure": "study-figure",
+    "instore": "in-store",
+    "usvsthem": "us-vs-them",
+    "annotatedface": "annotated-face",
+    "ugcselfie": "ugc-selfie",
+    "reviewcluster": "review-cluster",
+    "commentstat": "comment-stat",
+    "essaycard": "essay-card",
+    "specstarburst": "spec-starburst",
+    "abpoll": "ab-poll",
+    "enemyheadline": "enemy-headline",
+    "splitstudyclaim": "split-study-claim",
+    "scancompare": "scan-compare",
+    "darkbenefitlist": "dark-benefit-list",
+    "authorityborrow": "authority-borrow",
+    "bignumberpromo": "big-number-promo"
+   },
+   "aliases": {
+    "faceoff": "us-vs-them",
+    "illustrated": "product-void"
+   },
+   "dropped": {
+    "mixed": "not a format — a label for a swipe that had no one format. Tag each asset with its real format instead (Cleanup Plan decision 8, 25 Sep)."
+   },
+   "rulings": {
+    "us-vs-them": {
+     "note": "Decision 8: `faceoff` (10 live BRAND-A ads) maps here — a split of every other fix against ours is the same shape as the shelf against the one product."
+    }
+   }
+  },
+  "format/page": {
+   "renames": {
+    "salespage": "sales-page",
+    "prelander": "pre-lander"
+   },
+   "rulings": {
+    "sales-page": {
+     "note": "The pages machine (classify_pages.py) still writes `salespage`; it resolves here through the alias."
+    },
+    "pre-lander": {
+     "note": "The pages machine (classify_pages.py) still writes `prelander`; it resolves here through the alias."
+    }
+   }
+  },
+  "style/video": {
+   "rulings": {
+    "claymation": {
+     "status": "approved",
+     "signed": "damon 2026-09-25 (approved as recommended)",
+     "note": "defined by the machine, review pending",
+     "examples": "Nuora ad 110221229 'The truth about odor' — a claymation health explainer, 4 variants (components/swipe-paid/nuora/format-read.md); the owner's saves: davidaistar's claymation-ad carousels, 2026-09-22 (components/swipe-organic/records/damon-saves/catalog.json)",
+     "evidence": "Named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list); one paid swipe on file (Nuora 110221229), two saves on how the ads are made."
+    }
+   }
+  },
+  "format/video": {
+   "renames": {
+    "grandma-remedy": "remedy"
+   },
+   "rulings": {
+    "remedy": {
+     "name": "Remedy",
+     "what": "What people used to put on it at home — the kitchen, the jar, the older hands — then today's version of the same idea. Only where the product truly carries the old remedy.",
+     "note": "Renamed from 'Grandma's remedy' by the owner 2026-10-18: no gender-specific format names. · RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+    }
+   }
+  },
+  "structure/video": {
+   "rulings": {
+    "clause-chain-mechanism-demo": {
+     "name": "One sentence, many proof shots"
+    },
+    "subtitled-monologue-evidence-cutaways": {
+     "name": "Talking head + proof cutaways"
+    },
+    "opening-line-self-demo": {
+     "name": "Selfie demo on myself"
+    },
+    "spoken-caption-applied-demo": {
+     "name": "Talk while I apply it"
+    },
+    "captioned-steps-comment-gate": {
+     "name": "Full recipe, step by step"
+    },
+    "transformation-hook-mechanism-explainer": {
+     "name": "Before/after first, then why"
+    },
+    "running-caption-borrowed-cutaways": {
+     "name": "Voiceover over borrowed clips"
+    },
+    "one-product-three-worlds": {
+     "name": "Same product, three places, no words"
+    },
+    "storytelling": {
+     "name": "Before → turn → after story"
+    },
+    "pinned-line-acted-out": {
+     "name": "One caption, acted out"
+    },
+    "sticky-line-maker-demo": {
+     "name": "One caption over a hands-only demo"
+    },
+    "stunt-funnel-reveal": {
+     "name": "Weird stunt, then the pitch"
+    },
+    "concern-list-proof-photos": {
+     "name": "Concern list with real photos"
+    },
+    "flat-label-damage-reaction": {
+     "name": "Label, then it goes wrong"
+    },
+    "subtitled-monologue-angle-cuts": {
+     "name": "Talking head, no cutaways"
+    },
+    "pinned-headline-monologue": {
+     "name": "Talking head under a fixed headline"
+    },
+    "operator-service-montage": {
+     "name": "Pro does it on a client"
+    },
+    "filth-extraction-montage": {
+     "name": "Gross gunk pulled out"
+    },
+    "reaction-panel-repost": {
+     "name": "Reacting to someone else's clip"
+    },
+    "wordless-pov-procedure": {
+     "name": "Silent close-up how-to"
+    },
+    "labelled-cutaway-mechanism": {
+     "name": "Labelled cross-section animation"
+    },
+    "public-reaction-repeat-demo": {
+     "name": "Done in public, then repeated"
+    },
+    "multicam-monologue-crowd-cutaway": {
+     "name": "Live stage talk, many cameras"
+    }
+   }
+  }
+ }
+}

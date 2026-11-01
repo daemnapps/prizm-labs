@@ -1,0 +1,1727 @@
+{
+ "schema": "creative-glossary.v1",
+ "updated": "2026-10-29",
+ "what": "The literature: what practitioners and researchers actually call the moves we make in copy, video and pictures. Every term with a plain definition, the field it comes from, the medium it applies to and how well it was checked. A term the controls already use is marked; the rest are names we had not used yet.",
+ "source": "Researched 2026-10-23 on the owner's word (\"research the actual naming conventions for creativity across these different domains ... put definitions to all of these things and get ones that I haven't even named\"): Goldenberg, Mazursky & Solomon; Phillips & McQuarrie; Forceville; Smith & Yang; Pricken; McQuarrie & Mick; rhetoric; comedy craft; visual art and internet aesthetics; film and editing; platform craft; copywriting craft.",
+ "terms": [
+  {
+   "term": "Creativity template",
+   "what": "An abstract, repeatable pattern that successful ads share; usable as an ideation recipe",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Pictorial Analogy (template I)",
+   "what": "Bring a symbol that carries the message into the product's space",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Replacement (version of Pictorial Analogy)",
+   "what": "The product, or one of its traits, replaces a symbol that already carries the message",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Extreme analogy (version)",
+   "what": "Same as above but the symbol is pushed to an extreme instead of just transplanted",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Extreme Situation (template II)",
+   "what": "An unrealistic scenario that makes one product attribute impossible to miss",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Absurd alternative (version)",
+   "what": "Show an unrealistic substitute doing the product's job, so the real product looks obviously better",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Extreme attribute / extreme worth (versions)",
+   "what": "The attribute, or the value of the product, is exaggerated to unrealistic size",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Consequences (template III)",
+   "what": "Show what happens if you do, or do not, take the advised action",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Extreme consequences (version)",
+   "what": "The consequence is pushed to an absurd size",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Inverted consequences (version)",
+   "what": "Show the bad outcome of NOT using the product",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Competition (template IV)",
+   "what": "Put the product in a contest with something from a different class that should beat it",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Attribute in competition / worth in competition",
+   "what": "The contest is about a product trait, or about whether the product is worth having",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Uncommon use (version)",
+   "what": "The contest is a surprising use of the product",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Interactive Experiment (template V)",
+   "what": "Make the viewer do something with the medium so they feel the benefit",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Activation / imaginary experiment (versions)",
+   "what": "Viewer actually acts, or is asked to imagine acting",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Dimensionality Alteration (template VI)",
+   "what": "Change the product's dimension relative to its surroundings",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "New parameter connection",
+   "what": "Two unrelated parameters become linked (e.g. speed shown by shrinking an ocean)",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Multiplication / division",
+   "what": "Duplicate the product and compare the copies, or split it into parts and relate them",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Time leap",
+   "what": "Jump the product across time to show a trait",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Later re-cut (2007-ish book): Unification, Activation, Metaphor, Subtraction, Extreme consequence, Absurd alternative, Inversion, Extreme effort, Attribute-value mapping",
+   "what": "A newer list of named templates from the same research line. Only the chapter names were seen",
+   "domain": "Creativity templates (Goldenberg et al.)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Juxtaposition (visual structure)",
+   "what": "Two things shown side by side, equal weight",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Fusion (visual structure)",
+   "what": "Two things merged into one object",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Replacement (visual structure)",
+   "what": "One thing is absent; the viewer infers it from what stands in its place",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Meaning operation: Connection",
+   "what": "The picture says \"A goes with B\" (association)",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video, copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Meaning operation: Comparison, similarity",
+   "what": "The picture says \"A is like B\"",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video, copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Meaning operation: Comparison, opposition",
+   "what": "The picture says \"A is not like B\"",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video, copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Structure complexity ladder",
+   "what": "Juxtaposition < fusion < replacement in how much the viewer must infer; authors predicted harder puzzles are liked and remembered more. A later test found only partial support",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Van Enschot et al. replacement subtype 1: source without target context",
+   "what": "The stand-in object appears alone with no cue from the product's world",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Subtype 2: source in target context",
+   "what": "The stand-in object sits inside the product's setting",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Subtype 3: target in source context",
+   "what": "The product appears inside the stand-in object's setting. Rated most fluent and pleasing in that study (secondary report)",
+   "domain": "Visual rhetoric (Phillips & McQuarrie)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Target / source / mappable feature",
+   "what": "The thing being described, the thing it is likened to, and the quality carried over",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Hybrid metaphor",
+   "what": "Target and source fused into one impossible object (e.g. a planet that is half candle)",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Contextual metaphor",
+   "what": "Target is placed in a scene that makes you think of the absent source (a bottle in an ice bucket for sparkling wine)",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Pictorial simile",
+   "what": "Target and source both fully shown, linked by a shared visual trait (posture, colour, shape)",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Integrated metaphor",
+   "what": "The target itself is posed or shaped so it evokes the source, with nothing else shown",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Source and note on mapping",
+   "what": "Forceville maps contextual to P&M \"replacement\", simile to \"juxtaposition\", hybrid to \"fusion\". Warns that hybrid and integrated types alter the product and can look like damage",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Verbo-pictorial metaphor",
+   "what": "Metaphor carried by picture plus words together (1996 term)",
+   "domain": "Picture metaphor (Forceville)",
+   "media": "picture, copy",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Divergence",
+   "what": "How far an ad departs from the usual; the umbrella for the five factors below",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Relevance (meaningfulness)",
+   "what": "How well the ad's unusual parts still connect to the message and the buyer. Creativity perception depends on divergence AND relevance together",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Originality",
+   "what": "Rare, surprising elements that move away from the obvious",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Flexibility",
+   "what": "Several ideas, or ideas that jump from one subject to another",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Elaboration",
+   "what": "Unexpected added detail; a basic idea built out into something more complex",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Synthesis",
+   "what": "Joining things normally unrelated",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Artistic value",
+   "what": "Pleasing language, colour or shape; craft",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "copy, video, picture",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Practitioner vs consumer split",
+   "what": "One study found professionals weight divergence more; consumers weight relevance, craftsmanship and humor more",
+   "domain": "Ad creativity research (Smith & Yang)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Without words",
+   "what": "Tell it entirely visually, no copy",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Mixing and matching",
+   "what": "Combine two unlike things",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Comparative juxtaposition (2008 ed.: \"compare and contrast\")",
+   "what": "Set the product against something that makes the benefit obvious at a glance",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Repetition and accumulation",
+   "what": "Show the same thing many times so volume carries the point",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Exaggeration",
+   "what": "Blow one trait up past believable",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Turn it right around",
+   "what": "Invert the expected logic or roles",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Omission and suggestion",
+   "what": "Leave out the key thing and let the viewer supply it",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Pricken: Paradoxes and optical illusions",
+   "what": "Impossible objects or tricks of seeing",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "D&AD judging questions",
+   "what": "Inspiring idea, brilliantly executed, fit for purpose; for crafts: is it brilliantly crafted and does craft lift the idea",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "D&AD craft categories",
+   "what": "Animation, casting, cinematography, direction, editing, illustration, photography, production design, sound design and use of music, typography, visual effects, plus writing",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Cannes Craft: \"execution\"",
+   "what": "The stated main judging criterion for craft Lions is how well the idea is executed",
+   "domain": "Ad craft (Pricken, award bodies)",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Artful deviation",
+   "what": "A figure is a purposeful departure from what the audience expects, in a repeatable pattern",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "copy, picture, video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Scheme",
+   "what": "A figure built by arranging form: repetition (simple) or reversal (complex)",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Trope",
+   "what": "A figure that changes meaning: substitution (simple) or destabilization (complex)",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Visual rhyme",
+   "what": "Two different things pictured with a similar form so the eye links them",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "picture, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Visual antithesis",
+   "what": "Two opposed things pictured in parallel",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Visual metaphor / visual pun",
+   "what": "Picture says A is B; picture reads two ways at once",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Finding: visual figures help",
+   "what": "Ads with these figures drew more elaboration and a better attitude toward the ad, without being harder to understand. Visual figures worked even with casual exposure; verbal ones only when people were told to study",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "picture, copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Finding: cultural competence",
+   "what": "Metaphor and pun benefits faded for viewers lacking the cultural knowledge the ad assumed",
+   "domain": "Rhetorical figures in ads (McQuarrie & Mick)",
+   "media": "picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Hyperbole",
+   "what": "Deliberate exaggeration for effect",
+   "domain": "Rhetoric",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Understatement / litotes",
+   "what": "Saying less than the truth; litotes does it by negating the opposite",
+   "domain": "Rhetoric",
+   "media": "copy, video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Metonymy",
+   "what": "Naming a thing by something attached to it",
+   "domain": "Rhetoric",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Synecdoche",
+   "what": "A part stands for the whole",
+   "domain": "Rhetoric",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Irony (verbal, situational, dramatic)",
+   "what": "Presenting the reverse of what is expected or meant",
+   "domain": "Rhetoric",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Antithesis",
+   "what": "Opposites in parallel structure",
+   "domain": "Rhetoric",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Personification",
+   "what": "Human traits on a non-human thing",
+   "domain": "Rhetoric",
+   "media": "copy, video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Zeugma",
+   "what": "One word governs several others, read differently each time",
+   "domain": "Rhetoric",
+   "media": "copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Oxymoron / paradox",
+   "what": "Contradiction inside a phrase or situation",
+   "domain": "Rhetoric",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Pun",
+   "what": "Wordplay on multiple meanings",
+   "domain": "Rhetoric",
+   "media": "copy, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Rhetorical question",
+   "what": "Question asked to persuade, not to get an answer",
+   "domain": "Rhetoric",
+   "media": "copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Anaphora",
+   "what": "Same opening words repeated across phrases",
+   "domain": "Rhetoric",
+   "media": "copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Bathos",
+   "what": "A drop from high to low register for comic or deflating effect",
+   "domain": "Rhetoric",
+   "media": "copy, video",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Game of the scene",
+   "what": "The one unusual pattern a scene is built around; find it, then play it",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "First unusual thing",
+   "what": "The first moment that departs from normal; usually becomes the game",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Heightening",
+   "what": "Raise the stakes or push the behavior to extremes, one beat at a time",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Exploring",
+   "what": "Dig into why the character does it (psychology)",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "\"If this is true, then what else is true\"",
+   "what": "A drill for heightening and exploring the game",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Escalation",
+   "what": "Keep raising absurdity or stakes until tension forces a resolution; static characters kill the joke",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Rule of three",
+   "what": "Two items set a pattern, the third breaks it; also a rhythm rule in plain prose",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Misdirection",
+   "what": "Lead the listener down one path, then reveal the other",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Callback",
+   "what": "A joke that points back to an earlier joke in the same piece",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Running gag",
+   "what": "A callback repeated again and again",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Nakamura",
+   "what": "A running gag whose first instance failed, dooming the rest (TV writers' slang)",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Button (also \"blow\")",
+   "what": "The closing joke of a scene that earns the cut",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Tag",
+   "what": "An extra punchline stacked on the same setup",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Subversion (reversal of expectation)",
+   "what": "Set up a familiar expectation, deliver a different outcome",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Anti-humor",
+   "what": "Joke form whose punchline is withheld or deliberately obvious; the letdown is the joke. Types: shaggy dog, obvious punchline, deliberately bad performance",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Deadpan",
+   "what": "Flat, expressionless delivery; the joke is the gap between calm delivery and ridiculous content",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Cringe comedy",
+   "what": "Laughs from social awkwardness; obliviousness of the character makes the audience squirm",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Non sequitur",
+   "what": "A remark or action with no logical link to what came before",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Surreal / absurdist humour",
+   "what": "Comedy that deliberately breaks cause-and-effect; tools: juxtaposition, non sequitur, nonsense, subverted expectation",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Absurdism (philosophy)",
+   "what": "A different thing sharing the name: how people react to a meaningless world. Not a joke style",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Status play",
+   "what": "Characters constantly raise or lower their standing through words and body; comedy comes from status mismatches",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Offer / accept / block (\"yes, and\")",
+   "what": "Accept what a partner gives and add to it, instead of denying it",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Specificity (jokes)",
+   "what": "Named, numbered, odd detail beats generic; each detail must serve the surprise",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Setup / punch",
+   "what": "A joke is an assumption set up, then violated",
+   "domain": "Comedy writing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Surrealism",
+   "what": "Dreamlike, illogical scenes; core tool is juxtaposition of distant realities",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Juxtaposition (surrealist)",
+   "what": "The farther apart the two joined realities, the stronger the image (Reverdy)",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Magic realism",
+   "what": "The impossible placed in a grounded world and treated as routine; contrast surrealism, which is inward/dream",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Hyperrealism",
+   "what": "Sharper, more detailed than a photo, often with narrative or emotion",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Photorealism",
+   "what": "Faithful copy of a photo; precise, usually unemotional",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Trompe l'oeil",
+   "what": "Realistic detail that fools the eye into seeing 3D on a flat surface",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Defamiliarization (ostranenie, Shklovsky 1917)",
+   "what": "Show the ordinary in an unfamiliar way so habit-dulled perception wakes up",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Scale distortion",
+   "what": "Everyday objects blown up (Oldenburg) or shrunk until they read as monuments",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "The Treachery of Images (Magritte, 1929)",
+   "what": "A picture of an object labeled as not the object; picture-vs-word contradiction",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Kitsch",
+   "what": "Mass-market sentimental style, sincere",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Camp",
+   "what": "Knowing, ironic love of artifice and excess; \"naive\" (accidental) vs \"deliberate\" camp (Sontag)",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Uncanny / uncanny valley",
+   "what": "Almost-human or almost-right things provoke unease",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Maximalism",
+   "what": "\"More is more\": dense, layered, ornamented",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Minimalism",
+   "what": "\"Less is more\": reduced to essentials",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Liminal space",
+   "what": "Empty transitional places (corridors, waiting rooms) whose missing people feel eerie or nostalgic",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Backrooms",
+   "what": "A liminal-space fiction: endless empty yellow rooms",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Cursed image",
+   "what": "A photo that feels eerie because of its subject, poor quality, or both",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Blursed image",
+   "what": "Both blessed and cursed: funny and deeply uncomfortable at once",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Deep-fried meme",
+   "what": "Image repeatedly filtered or recompressed: heavy distortion, oversaturation, compression artifacts",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Shitposting",
+   "what": "Deliberately bad, ironic, trolling-quality posting; compared to Dada's context-free nonsense",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Surreal memes",
+   "what": "Memes built on layers of irony until odd and senseless; an escape from mainstream meme trends",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Brainrot (and \"Italian brainrot\" AI-character meme genre)",
+   "what": "Slang for low-quality compulsive short-form content; a 2025 meme genre of AI-generated absurd characters",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "-core suffix",
+   "what": "Tag for a named aesthetic (cottagecore, normcore, corecore...)",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Lo-fi",
+   "what": "Deliberately unpolished look: phone footage, plain text, rough sound",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Visual pun",
+   "what": "One image that reads two ways",
+   "domain": "Visual art and internet aesthetics",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Shot scale (extreme long, long, full, medium long, medium, medium close-up, close-up, extreme close-up)",
+   "what": "How much of the subject fills the frame",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Social distance (Kress and van Leeuwen)",
+   "what": "Frame size reads as relationship: head-and-face intimate, waist-up personal, full figure social",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Demand vs offer image",
+   "what": "Subject looks at the viewer (demand) or is displayed to be looked at (offer)",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Vertical angle and power",
+   "what": "Low angle reads dominant, high angle reads smaller",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Point-of-view shot",
+   "what": "Scene as a character sees it",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Over-the-shoulder / two shot / reverse shot",
+   "what": "Standard conversation framings",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Dutch angle (canted, Dutch tilt)",
+   "what": "Camera rolled so horizon slants; unease, disorientation; heavy-handed if overused",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Average shot length / cutting rate",
+   "what": "Mean shot duration; short = urgent and fast, long = relaxed",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Jump cut",
+   "what": "Cut that removes the middle of one take so the subject leaps; abrupt, fast, calls attention to editing",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Match cut",
+   "what": "Cut between shots lined up by action or subject so it flows",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Graphic match",
+   "what": "Match by shape, colour or movement, inviting comparison between two scenes. Video cousin of visual rhyme",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Match on action",
+   "what": "Cut mid-movement to hide the edit",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Whip pan",
+   "what": "Pan so fast it smears; used as a transition or to signal time passing or chaos",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Kuleshov effect",
+   "what": "Meaning comes from two shots side by side more than from either alone; the editing version of juxtaposition",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Found footage",
+   "what": "Material that appears to be recorded by the characters: handheld, shaky, improvised, amateur look",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Lens and distance (wide lens exaggerates depth and distortion; telephoto compresses depth)",
+   "what": "How focal length and camera distance change the look and intimacy",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Handheld vs locked-off camera",
+   "what": "Shake and drift read as amateur/real; steady reads produced",
+   "domain": "Film and editing",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Native / platform-first",
+   "what": "Looks and feels like what normally lives in that feed; made for the platform, not repurposed",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "DIY / casual user-made look",
+   "what": "Not overly polished; blends into the feed",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Creator-led",
+   "what": "Real creators, employees or customers on camera",
+   "domain": "Native and platform",
+   "media": "video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Trend-driven",
+   "what": "Built on current sounds, memes or challenges",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Hook",
+   "what": "The opening seconds built to stop the scroll; TikTok says land it in 6 seconds",
+   "domain": "Native and platform",
+   "media": "video, picture, copy",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Early proposition",
+   "what": "State the core message in the first 3 seconds",
+   "domain": "Native and platform",
+   "media": "video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Text overlay density",
+   "what": "On-screen words per second (TikTok suggests about 5 to 10)",
+   "domain": "Native and platform",
+   "media": "video",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Thumbstop rate = hook rate",
+   "what": "3-second plays divided by impressions",
+   "domain": "Native and platform",
+   "media": "video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Hold rate",
+   "what": "Share who keep watching past the hook; definition varies by tool (15-second, ThruPlay or full view over 3-second plays)",
+   "domain": "Native and platform",
+   "media": "video",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Pattern interrupt",
+   "what": "Opening beat that breaks the viewer's scroll rhythm; warning that an unconnected weird first frame buys curiosity but weak intent",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Ugly ads / lo-fi",
+   "what": "Deliberately low-polish creative that does not read as an ad; a vendor report claims it is over-represented among top DTC ads",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "UGC ad",
+   "what": "Low-production ad that looks like it came from a real customer or creator",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Partnership / whitelisted ad",
+   "what": "Ad run through a creator's account",
+   "domain": "Native and platform",
+   "media": "video",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Creative fatigue",
+   "what": "Performance drop when the audience has seen the same ad too often",
+   "domain": "Native and platform",
+   "media": "video, picture",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Concept",
+   "what": "The core creative idea (testimonial, demo, founder message)",
+   "domain": "Native and platform",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Angle",
+   "what": "The message bet (reason to buy); some sources treat it as the same as concept",
+   "domain": "Native and platform",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Format",
+   "what": "The container: UGC video, studio, static, carousel",
+   "domain": "Native and platform",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Variant / iteration",
+   "what": "A small change to a concept (new hook, colour, opening clip)",
+   "domain": "Native and platform",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Creative diversification",
+   "what": "Ad delivery now treats near-identical creatives as one; vendors say vary concept, hook, persona, format. No official similarity number exists",
+   "domain": "Native and platform",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Creative refresh / library",
+   "what": "Add new creatives when results sag; keep a stockpile",
+   "domain": "Native and platform",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Specificity (Sugarman trigger, also Hopkins)",
+   "what": "Real figures and named particulars persuade; platitudes leave no impression",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Reason-why copy (Hopkins)",
+   "what": "Research the product and give concrete reasons",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Slippery slide (Sugarman)",
+   "what": "Copy so smooth the reader cannot stop; first sentence exists to get the second read",
+   "domain": "Copywriting craft",
+   "media": "picture",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Seeds of curiosity (Sugarman)",
+   "what": "Short teasers like \"more on this later\" that pull the reader on",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Sugarman triggers",
+   "what": "24-item list incl. curiosity, specificity, simplicity, exclusivity, urgency, honesty, hope, guilt",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "A-pile / B-pile (Halbert)",
+   "what": "Mail sorted over the bin: personal-looking survives, ad-looking is binned",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Starving crowd (Halbert)",
+   "what": "Market hunger beats clever product",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Five stages of awareness (Schwartz)",
+   "what": "Unaware, problem aware, solution aware, product aware, most aware",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Market sophistication levels (Schwartz)",
+   "what": "How many claims the market has already heard; later levels need mechanism and proof",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Mass desire / channeling",
+   "what": "Aim copy at a desire people already hold",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Tone of voice, four axes (Nielsen Norman Group)",
+   "what": "Formal-casual, serious-funny, respectful-irreverent, matter-of-fact-enthusiastic; each a continuum",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "read in the source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Anchorage (Barthes)",
+   "what": "Words steer which meaning of an image you take",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Relay (Barthes)",
+   "what": "Words and picture each carry part of the story",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Voice vs tone vs register",
+   "what": "Voice = steady personality; tone = mood for the moment; register = formality level of the language",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Show, don't tell / sensory language",
+   "what": "Concrete scene and senses instead of stated claims",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "\"The one reader\"",
+   "what": "Write as to one specific person; Halbert's personal-envelope idea is the closest sourced cousin",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Intertextual devices in ads: quotation, allusion, parody, pastiche",
+   "what": "Borrowing from a known text or image; parody is humorous reinterpretation, pastiche is homage-style",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Détournement / subvertising",
+   "what": "Reuse an existing image or ad and change its meaning",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "secondary source",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Ad humor taxonomy (Speck 1991)",
+   "what": "Five humor types and three processes (incongruity-resolution, arousal-safety, disparagement). Category names not retrieved",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Executional frameworks (lecture vs drama, slice of life, demonstration, testimonial, fantasy)",
+   "what": "Textbook list of ways to present a message. The owner's \"dramatisation\" lives here",
+   "domain": "Copywriting craft",
+   "media": "",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Previsualisation (previs) / blockout",
+   "what": "A scene built roughly in 3D before the real shoot or render, to lock camera, sizes, depth and light",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Set dressing",
+   "what": "The objects, surfaces and finishes placed in a set to say where and when the scene is",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Production design",
+   "what": "The whole designed world of a piece: sets, props, palette and signage working as one idea",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Hero prop",
+   "what": "The one object the camera and the story revolve around, built and lit with the most care",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  },
+  {
+   "term": "Diegetic text (in-world signage)",
+   "what": "Words that exist inside the scene, on a sign, flag, label or screen, rather than laid over the picture",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Moment marketing (topical advertising)",
+   "what": "Creative tied to a season, holiday or live cultural moment, dressed in its look and colours",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Colour script / palette",
+   "what": "A planned set of colours for a scene or a moment, chosen for what they signal",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": true,
+   "status": "draft"
+  },
+  {
+   "term": "Motivated light",
+   "what": "Light whose direction and colour come from a source that exists in the scene (a window, a lamp), so it reads as real",
+   "domain": "Set and production design",
+   "media": "picture",
+   "checked": "from memory, check before quoting",
+   "in_the_controls": false,
+   "status": "draft"
+  }
+ ]
+}

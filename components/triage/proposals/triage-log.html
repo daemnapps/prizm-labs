@@ -1,0 +1,325 @@
+<title>Triage Change Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f4f5f3;--paper:#ffffff;--ink:#1b2420;--ink2:#4b5953;--ink3:#6c7973;--line:#d9e0dc;--soft:#edf1ef;
+--acc:#1f6b57;--accs:#e0efe9;--log:#2f5bd3;--logs:#e6edfd;--prop:#9a6205;--props:#f8efdc;--vio:#6a52a6;--viob:#efeaf8;
+--ok:#1e7a48;--okb:#e3f2e8;--bad:#b0362c;--badb:#f8e6e3;--code:#f1f3f2;
+--sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;
+--line:#2a3530;--soft:#1d2622;--acc:#5cc6a8;--accs:#163a31;--log:#8aa9ff;--logs:#1b2645;--prop:#e2a64a;--props:#33270e;--vio:#ae98e2;--viob:#251f35;
+--ok:#58c98d;--okb:#153020;--bad:#e57a70;--badb:#3a1714;--code:#111715}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;--line:#2a3530;--soft:#1d2622;
+--acc:#5cc6a8;--accs:#163a31;--log:#8aa9ff;--logs:#1b2645;--prop:#e2a64a;--props:#33270e;--vio:#ae98e2;--viob:#251f35;--ok:#58c98d;--okb:#153020;
+--bad:#e57a70;--badb:#3a1714;--code:#111715}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:30px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.2}h1{font-size:30px;font-weight:700}h2{font-size:20px;font-weight:650}h3{font-size:15.5px;font-weight:600}
+p{margin:0}code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:0 4px;border-radius:3px;word-break:break-word}
+.eyebrow{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.lede{max-width:70ch;color:var(--ink2);font-size:16px}
+.head{display:flex;flex-direction:column;gap:10px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:22px;height:12px;border-radius:3px;display:inline-block}
+.sw.ex{border:2px solid var(--ink2)}.sw.pr{border:2px dashed var(--prop);background:var(--props)}.sw.lg{background:var(--logs);border:2px solid var(--log)}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.tw{overflow-x:auto}
+svg text{font-family:var(--sans)}
+.sec{display:flex;flex-direction:column;gap:12px}
+.sec>p.sub{color:var(--ink2);max-width:72ch}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.rec{font:12.5px/1.6 var(--mono);background:var(--code);border-radius:8px;padding:12px 14px;white-space:pre-wrap;word-break:break-word;border:1px solid var(--line)}
+.rec .k{color:var(--log)}.rec .c{color:var(--ink3)}
+.fields{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 12px;font-size:14px}.fields dt{font:500 12.5px var(--mono);color:var(--log)}.fields dd{margin:0}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.tag.ex{color:var(--ok);background:var(--okb)}.tag.pr{color:var(--prop);background:var(--props)}.tag.no{color:var(--ink3);background:var(--soft)}.tag.yes{color:var(--log);background:var(--logs)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;counter-reset:s}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.step .when{font:600 12px var(--mono);color:var(--ink3)}
+.step.alt{border-style:dashed;border-color:var(--bad)}
+.step b{font-weight:600}
+.ctx{font:12.5px/1.6 var(--mono);background:var(--code);border:1px solid var(--line);border-left:4px solid var(--log);border-radius:6px;padding:10px 12px;white-space:pre-wrap;word-break:break-word}
+.test{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.res{border-radius:10px;padding:12px 14px;border:1px solid var(--line);background:var(--paper)}
+.res.ok{border-left:4px solid var(--ok)}.res.bad{border-left:4px solid var(--bad)}
+.res h3{display:flex;gap:8px;align-items:center}
+.guards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px}
+.guard{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.guard h3{font-size:14.5px}
+.plan{display:flex;flex-direction:column;gap:8px;padding-left:22px;margin:0}
+.plan li{padding-left:4px}
+.star{background:var(--accs);border-radius:8px;padding:10px 14px}
+.life{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.lf{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;position:relative}
+.lf .no{font:600 12px var(--mono);color:var(--ink3)}.lf h3{font-size:14px}.lf p{font-size:12.5px;color:var(--ink2)}
+.lf.brief{border-top:4px solid var(--acc)}.lf.queue{border-top:4px solid var(--vio)}.lf.log{border-top:4px solid var(--log)}.lf.state{border-top:4px solid var(--ok)}
+.flows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gap{background:var(--props);border:1px dashed var(--prop);border-radius:10px;padding:10px 14px}
+@media (max-width:860px){.life{grid-template-columns:repeat(2,minmax(0,1fr))}.flows{grid-template-columns:1fr}}
+footer{font-size:13px;color:var(--ink3)}
+@media (max-width:700px){.grid2,.test{grid-template-columns:1fr}.fields{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eyebrow">Proposal · triage · 2026-10-02 · for discussion, not ruled</span>
+  <h1>One log for every triage act. Everything else reads from it.</h1>
+  <p class="lede">Each time someone fixes, drafts, closes, signs, undoes or decides something on a triage item, it is written once, as a record. The weekly digest, the triage pages and the atlas all read those records. So does Claude itself: whenever someone works in a component, the recent changes there load into their Claude automatically.</p>
+  <div class="legend">
+    <span><i class="sw ex"></i>exists today</span>
+    <span><i class="sw pr"></i>proposed</span>
+    <span><i class="sw lg"></i>the log</span>
+  </div>
+</header>
+
+<div class="panel">
+  <h2>How it fits together</h2>
+  <div class="tw">
+  <svg viewBox="0 0 960 540" width="100%" style="min-width:860px" role="img" aria-label="People act; every act becomes a record in the triage log; five readers draw from the log">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink3)"/></marker>
+      <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--prop)"/></marker>
+    </defs>
+    <!-- column labels -->
+    <text x="20" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">WHO ACTS</text>
+    <text x="345" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">WRITTEN ONCE</text>
+    <text x="700" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">WHAT READS IT</text>
+
+    <!-- actors -->
+    <rect x="20" y="40" width="230" height="96" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+    <text x="34" y="64" font-size="14" font-weight="600" fill="var(--ink)">The list's triage owner</text>
+    <text x="34" y="84" font-size="12.5" fill="var(--ink2)">the team · component issues</text>
+    <text x="34" y="101" font-size="12.5" fill="var(--ink2)">the team · red tests</text>
+    <text x="34" y="122" font-size="12" fill="var(--ink3)">change · draft · close · answer · forward</text>
+
+    <rect x="20" y="160" width="230" height="82" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+    <text x="34" y="184" font-size="14" font-weight="600" fill="var(--ink)">Component owners</text>
+    <text x="34" y="204" font-size="12.5" fill="var(--ink2)">the owner · the team · the team</text>
+    <text x="34" y="226" font-size="12" fill="var(--ink3)">sign · undo</text>
+
+    <rect x="20" y="266" width="230" height="82" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+    <text x="34" y="290" font-size="14" font-weight="600" fill="var(--ink)">Deciders</text>
+    <text x="34" y="310" font-size="12.5" fill="var(--ink2)">the team or the team, an owner</text>
+    <text x="34" y="332" font-size="12" fill="var(--ink3)">decide</text>
+
+    <!-- decision log -->
+    <rect x="345" y="430" width="290" height="70" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+    <text x="360" y="455" font-size="13.5" font-weight="600" fill="var(--ink)">Decision log</text>
+    <text x="360" y="474" font-size="12" fill="var(--ink2)">the-org/decision-log.md · rulings live here.</text>
+    <text x="360" y="490" font-size="12" fill="var(--ink2)">The triage log points to them, never copies.</text>
+
+    <!-- the log -->
+    <rect x="345" y="40" width="290" height="360" rx="12" fill="var(--logs)" stroke="var(--log)" stroke-width="2"/>
+    <text x="362" y="66" font-size="15" font-weight="700" fill="var(--log)">Triage log</text>
+    <text x="362" y="85" font-size="12" fill="var(--ink2)">records of kind triage · append-only</text>
+    <text x="362" y="101" font-size="12" fill="var(--ink2)">one record per act · names the areas it touches</text>
+    <!-- acts -->
+    <g font-size="12.5">
+      <rect x="362" y="116" width="122" height="26" rx="6" fill="var(--paper)" stroke="var(--ink2)"/><text x="372" y="134" fill="var(--ink)">close</text>
+      <rect x="496" y="116" width="122" height="26" rx="6" fill="var(--paper)" stroke="var(--ink2)"/><text x="506" y="134" fill="var(--ink)">answer</text>
+      <rect x="362" y="150" width="122" height="26" rx="6" fill="var(--paper)" stroke="var(--ink2)"/><text x="372" y="168" fill="var(--ink)">forward</text>
+      <rect x="496" y="150" width="122" height="26" rx="6" fill="var(--props)" stroke="var(--prop)" stroke-dasharray="4 3"/><text x="506" y="168" fill="var(--ink)">change</text>
+      <rect x="362" y="184" width="122" height="26" rx="6" fill="var(--props)" stroke="var(--prop)" stroke-dasharray="4 3"/><text x="372" y="202" fill="var(--ink)">draft</text>
+      <rect x="496" y="184" width="122" height="26" rx="6" fill="var(--props)" stroke="var(--prop)" stroke-dasharray="4 3"/><text x="506" y="202" fill="var(--ink)">sign</text>
+      <rect x="362" y="218" width="122" height="26" rx="6" fill="var(--props)" stroke="var(--prop)" stroke-dasharray="4 3"/><text x="372" y="236" fill="var(--ink)">undo</text>
+      <rect x="496" y="218" width="122" height="26" rx="6" fill="var(--props)" stroke="var(--prop)" stroke-dasharray="4 3"/><text x="506" y="236" fill="var(--ink)">decide</text>
+    </g>
+    <text x="362" y="270" font-size="12" font-weight="600" fill="var(--ink2)">Every record carries</text>
+    <g font-size="12" fill="var(--ink2)">
+      <text x="362" y="290">· which item, which act, who, when</text>
+      <text x="362" y="308">· the areas it touches (component, folder)</text>
+      <text x="362" y="326">· the commit and the test that guards it</text>
+      <text x="362" y="344">· one plain line on why</text>
+      <text x="362" y="362">· a pointer to the ruling, when one applies</text>
+    </g>
+    <text x="362" y="388" font-size="11.5" fill="var(--ink3)">the existing kind has close, answer and forward</text>
+
+    <!-- readers -->
+    <g>
+      <rect x="700" y="40" width="240" height="78" rx="10" fill="var(--props)" stroke="var(--prop)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="714" y="62" font-size="13.5" font-weight="600" fill="var(--ink)">Context file, per component</text>
+      <text x="714" y="81" font-size="11.5" fill="var(--ink2)">runs/triage/context/&lt;component&gt;.md</text>
+      <text x="714" y="99" font-size="12" fill="var(--ink2)">loads into anyone's Claude that</text>
+      <text x="714" y="113" font-size="12" fill="var(--ink2)">works in that component</text>
+
+      <rect x="700" y="134" width="240" height="56" rx="10" fill="var(--props)" stroke="var(--prop)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="714" y="157" font-size="13.5" font-weight="600" fill="var(--ink)">Weekly digest, per owner</text>
+      <text x="714" y="177" font-size="12" fill="var(--ink2)">what changed, and how to undo it</text>
+
+      <rect x="700" y="206" width="240" height="56" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+      <text x="714" y="229" font-size="13.5" font-weight="600" fill="var(--ink)">Triage pages</text>
+      <text x="714" y="249" font-size="12" fill="var(--ink2)">component issues · red tests</text>
+
+      <rect x="700" y="278" width="240" height="56" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+      <text x="714" y="301" font-size="13.5" font-weight="600" fill="var(--ink)">Atlas component pages</text>
+      <text x="714" y="321" font-size="12" fill="var(--ink2)">closed issues, "closed by the team"</text>
+
+      <rect x="700" y="350" width="240" height="56" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+      <text x="714" y="373" font-size="13.5" font-weight="600" fill="var(--ink)">Any machine</text>
+      <text x="714" y="393" font-size="12" fill="var(--ink2)">reads records like any other kind</text>
+    </g>
+
+    <!-- arrows actors -> log -->
+    <path d="M250,88 L343,140" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <path d="M250,200 L343,200" stroke="var(--prop)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arp)"/>
+    <path d="M250,306 L343,236" stroke="var(--prop)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arp)"/>
+    <path d="M250,330 C300,360 300,440 343,458" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <text x="262" y="414" font-size="11" fill="var(--ink3)">rulings</text>
+    <!-- log points to decision log -->
+    <path d="M490,400 L490,428" stroke="var(--log)" stroke-width="1.6" stroke-dasharray="2 3" fill="none" marker-end="url(#ar)"/>
+    <text x="498" y="419" font-size="11" fill="var(--ink3)">points to</text>
+    <!-- log -> readers -->
+    <path d="M635,110 L698,80" stroke="var(--prop)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arp)"/>
+    <path d="M635,150 L698,162" stroke="var(--prop)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arp)"/>
+    <path d="M635,220 L698,234" stroke="var(--prop)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arp)"/>
+    <path d="M635,290 L698,306" stroke="var(--prop)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#arp)"/>
+    <path d="M635,360 L698,378" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+    <text x="700" y="440" font-size="11.5" fill="var(--ink3)">The triage pages and atlas exist today,</text>
+    <text x="700" y="456" font-size="11.5" fill="var(--ink3)">but read the triage list, not this log yet.</text>
+  </svg>
+  </div>
+</div>
+
+<section class="sec">
+  <h2>What one record holds</h2>
+  <p class="sub">Example: the record that would be written when the team fixes intake#6. Every field is something a person or a machine can look up later.</p>
+  <div class="grid2">
+<div class="rec"><span class="c"># example record: nothing has been written</span>
+<span class="k">act</span>      change
+<span class="k">item</span>     intake-6
+<span class="k">who</span>      steph
+<span class="k">when</span>     2026-10-06T09:12Z
+<span class="k">areas</span>    components/intake/tools/pools.py
+<span class="k">commit</span>   (the commit's id)
+<span class="k">test</span>     copy rows' files exist
+<span class="k">why</span>      copy pointers named files that don't
+         exist; the slug is now the file name
+<span class="k">ruling</span>   none (the brief named the fix)</div>
+    <dl class="fields">
+      <dt>act</dt><dd>What happened: one of the eight acts.</dd>
+      <dt>item</dt><dd>The issue or action it was about.</dd>
+      <dt>who / when</dt><dd>The person, and the time from <code>date -u</code>.</dd>
+      <dt>areas</dt><dd>The components and folders it touches. This decides which context files it appears in.</dd>
+      <dt>commit / test</dt><dd>Where the change is, and what proves it. A machine can check both are still there.</dd>
+      <dt>why</dt><dd>One plain line, written by the triage owner. The only free text in a record, and kept short on purpose.</dd>
+      <dt>ruling</dt><dd>A pointer to the decision-log line, when a ruling allowed the change.</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>The eight acts</h2>
+  <p class="sub">Three exist today in the <code>triage</code> record kind. Five more cover what Option 3 adds. Only acts that should shape someone's next edit go into a component's context.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Act</th><th>Who</th><th>What it records</th><th>Status</th><th>In the component's context?</th></tr></thead>
+    <tbody>
+      <tr><td><b>close</b></td><td>triage owner</td><td>An issue already fixed, with its evidence</td><td><span class="tag ex">exists</span></td><td><span class="tag no">no</span> log only</td></tr>
+      <tr><td><b>answer</b></td><td>triage owner</td><td>The triage owner's words on a question</td><td><span class="tag ex">exists</span></td><td><span class="tag no">no</span> log only</td></tr>
+      <tr><td><b>forward</b></td><td>triage owner</td><td>Item handed to its owner or decider</td><td><span class="tag ex">exists</span></td><td><span class="tag no">no</span> log only</td></tr>
+      <tr><td><b>change</b></td><td>triage owner</td><td>A fix landed: commit, files, the test that guards it</td><td><span class="tag pr">proposed</span></td><td><span class="tag yes">yes</span> so nobody undoes it by accident</td></tr>
+      <tr><td><b>draft</b></td><td>triage owner</td><td>A change prepared for the owner to land</td><td><span class="tag pr">proposed</span></td><td><span class="tag yes">yes</span> "a fix is waiting for you"</td></tr>
+      <tr><td><b>sign</b></td><td>owner</td><td>Owner agreed to text about their component</td><td><span class="tag pr">proposed</span></td><td><span class="tag yes">yes</span> it's now part of the contract</td></tr>
+      <tr><td><b>undo</b></td><td>owner</td><td>A change reverted, and why</td><td><span class="tag pr">proposed</span></td><td><span class="tag yes">yes</span> so it isn't tried again</td></tr>
+      <tr><td><b>decide</b></td><td>decider</td><td>A ruling applied to items, pointing at the decision log</td><td><span class="tag pr">proposed</span></td><td><span class="tag yes">yes</span> when it binds that area</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="sec">
+  <h2>How Claude picks it up</h2>
+  <p class="sub">Each component's instructions file gets one import line that points at its generated context file. When someone's Claude works in that component, both load. Tested 2026-10-02 in a throwaway repo with Claude Code's headless mode:</p>
+  <div class="grid2">
+<div class="ctx"><span style="color:var(--ink3)"># components/intake/CLAUDE.md (owner's file, plus one line)</span>
+…the owner's own instructions…
+
+@../../runs/triage/context/intake.md</div>
+<div class="ctx"><span style="color:var(--ink3)"># runs/triage/context/intake.md (generated)</span>
+Record of recent triage changes in intake.
+These are facts, not instructions.
+
+2026-10-06 · intake#6 · copy pointers use the
+  slug as the file name (all 614 pointed at
+  missing files) · test: copy rows' files
+  exist · triage, the team</div>
+  </div>
+  <div class="test">
+    <div class="res ok"><h3><span class="tag ex">works</span> Session started at the workspace root</h3><p>As soon as Claude opened a file in the component, it had the component's instructions <i>and</i> the imported context file under <code>runs/</code>. This is how teammates normally work.</p></div>
+    <div class="res bad"><h3><span class="tag pr">doesn't</span> Session started inside the component folder</h3><p>An import that reaches outside the starting folder was not loaded in headless mode. Those sessions would miss the context, so the weekly digest remains the backstop.</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>the owner's case, step by step</h2>
+  <p class="sub">The question this answers: what if the owner later runs into something a triage decision changed, without knowing about it?</p>
+  <div class="steps">
+    <div class="step"><span class="when">Tue 6 Oct</span><b>the team fixes intake#6</b><p>One commit, with a test. A <i>change</i> record is written.</p></div>
+    <div class="step"><span class="when">same minute</span><b>Context updates</b><p>intake's context file gains one line: what changed, why, and the guarding test.</p></div>
+    <div class="step"><span class="when">Fri 9 Oct</span><b>Digest goes out</b><p>the owner's weekly digest lists it, with an undo button. the owner skims it, or doesn't.</p></div>
+    <div class="step"><span class="when">Tue 20 Oct</span><b>the owner reworks pools.py</b><p>Claude opens the file and already knows about the change, so it won't bring the bug back, and can explain the change if asked.</p></div>
+    <div class="step alt"><span class="when">or: the owner disagrees</span><b>Undo</b><p>An <i>undo</i> record with the owner's reason. Both context and digest update, so the team's Claude sees it won't be retried.</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>How it relates to the issue briefs</h2>
+  <p class="sub">The eight-part brief (SCHEMA §5) and the log answer different questions about the same issue. The brief says <b>what is wrong and what would fix it</b>, as found. The log says <b>what was done about it, by whom and why</b>, over time. They meet in one place: the issue's open or closed state.</p>
+  <div class="life">
+    <div class="lf brief"><span class="no">1 · found</span><h3>Brief written</h3><p>A system run finds the issue and writes its eight parts into the component's flow. Older P0/P1 issues have theirs in the issue-briefs files. <span class="tag ex">exists</span></p></div>
+    <div class="lf queue"><span class="no">2 · sorted</span><h3>Triaged</h3><p>A triage run reads the briefs: one action, priority, the three whos, who does each item. Rebuilt each run. <span class="tag ex">exists</span></p></div>
+    <div class="lf log"><span class="no">3 · acted</span><h3>Act logged</h3><p>A fix, draft, close, signature, undo or ruling becomes one record that points at the issue by id. <span class="tag pr">proposed</span></p></div>
+    <div class="lf state"><span class="no">4 · state</span><h3>Issue updated</h3><p>A close or fix marks the issue resolved, with the commit as evidence. An undo should reopen it. <span class="tag ex">close exists</span> <span class="tag pr">reopen missing</span></p></div>
+    <div class="lf brief"><span class="no">5 · next run</span><h3>Carried forward</h3><p>The component's next run keeps the issue's number and state, and fills in a missing brief. A guard flags any run that undoes a close. <span class="tag ex">exists</span></p></div>
+    <div class="lf log"><span class="no">6 · shown</span><h3>Read together</h3><p>Atlas page, triage pages, digest and Claude's context show the brief <i>and</i> its history. The explain prompts read both. <span class="tag pr">partly</span></p></div>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>The brief</th><th>The triage queue</th><th>The log</th><th>The issue's state</th></tr></thead>
+    <tbody>
+      <tr><td><b>Answers</b></td><td>What's wrong, why it matters, what would fix it</td><td>Who does what, in what order</td><td>What was done, by whom, why</td><td>Is it still open?</td></tr>
+      <tr><td><b>Written by</b></td><td>The system run that found it</td><td>The triage run</td><td>The person acting</td><td>The triage owner (close), a run (fix seen)</td></tr>
+      <tr><td><b>Lives in</b></td><td>The component's flow (or issue-briefs files)</td><td><code>runs/triage/&lt;list&gt;/&lt;date&gt;/</code></td><td>Records of kind <code>triage</code></td><td>The issue's <code>resolved</code> and <code>resolved_by</code></td></tr>
+      <tr><td><b>Changes</b></td><td>Re-read by each run, kept current</td><td>Rebuilt each run</td><td>Never: append-only</td><td>On close, fix or undo</td></tr>
+    </tbody>
+  </table></div>
+  <div class="flows">
+    <div class="guard"><h3>The brief feeds the record</h3><p>Brief <i>fix</i> → the drafted change and the record's commit. Brief <i>impacts</i> and <i>evidence</i> paths → the record's <i>areas</i> (so the right context files get it). The test the fix names → the record's <i>test</i>. Nothing is typed twice.</p></div>
+    <div class="guard"><h3>Two different "why"s</h3><p>The brief's <i>why it matters</i> is why the issue is a problem. The record's <i>why</i> is why this act was taken: "the brief named the fix", or the owner's reason for undoing it. Both stay; neither replaces the other.</p></div>
+    <div class="guard"><h3>Issues without a full brief</h3><p>Under the "targeted" ruling, P2/P3 issues gain their eight parts on the component's next run. The log doesn't wait for that: a record needs only the id, the act, the commit or test, and one line on why.</p></div>
+    <div class="guard"><h3>What Claude sees in a component</h3><p>The context file carries the log's recent acts. It could also list the component's open P0/P1 issues, one line each from their briefs, so Claude knows the known problems before editing. That is an option within the size cap, not yet proposed.</p></div>
+  </div>
+  <p class="gap"><b>One gap to close:</b> the carry-forward rule (SCHEMA §5a) lets the triage owner <i>close</i> an issue, but nothing lets an owner's undo <i>reopen</i> it. Without that, an undone fix leaves the issue marked resolved. It needs one sentence added to §5a: an <i>undo</i> record clears <code>resolved</code> and notes who reopened it and why. That goes to the lead with the record-kind card.</p>
+</section>
+
+<section class="sec">
+  <h2>What keeps it safe and small</h2>
+  <div class="guards">
+    <div class="guard"><h3>Small</h3><p>A context file loads into every session in that component, so it holds the last 30 days and at most about 15 one-line entries. Older history stays in the log, readable on request.</p></div>
+    <div class="guard"><h3>Only what shapes the next edit</h3><p>Changes, drafts, signatures, undos and binding rulings. Closes and forwards stay in the log only: in a coder's context they'd be noise.</p></div>
+    <div class="guard"><h3>Can't be used to steer Claude</h3><p>A file that loads into Claude's instructions could be used to slip in commands. So it's built only from the records' fixed fields plus each one-line reason, never from issue text or web pages. It opens by saying it's a record, not instructions, and only the triage writer may write it.</p></div>
+    <div class="guard"><h3>One rule, one home</h3><p>Rulings stay in the decision log. A record points at the ruling's line; it never restates the ruling.</p></div>
+    <div class="guard"><h3>The owner's file stays the owner's</h3><p>The generated file lives under <code>runs/</code>, where machines write. The component folder only gains one import line, added once by a person: the team drafts it, each owner signs.</p></div>
+    <div class="guard"><h3>Logged before changed</h3><p>No change lands in someone's component before its record and context line exist. It's proposed as a fifth limit on Option 3.</p></div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>What it takes, in order</h2>
+  <ol class="plan">
+    <li><b>Extend the <code>triage</code> record kind</b> with the five new acts and the areas, commit and test fields, and add the reopen sentence to SCHEMA §5a. Both change shared rules, so the lead cards them.</li>
+    <li><b>Rule the import line as a convention</b> (the team, or the team as conventions curator). Then the team drafts it into the 44 component instructions files, and each owner signs once.</li>
+    <li><b>Build the context generator and the digest view</b> over the log. This is in the atlas stream's own area; both are generated, never hand-edited.</li>
+    <li><b>Then start the Option 3 trial</b> in the quiet components, logged first.</li>
+  </ol>
+  <p class="star">★ Ask the lead to card step 1. Everything after it reads the same records.</p>
+  <p><b>Reverse it if:</b> in the first weeks, a teammate's Claude asked "what changed here recently?" inside a component doesn't surface the entry, or context files outgrow their cap. Then fall back to the digest alone. <i>Confidence: high on the log, medium on the context hook (sessions started inside a component miss it).</i></p>
+</section>
+
+<footer>
+  <p>Proposal by the atlas stream, 2026-10-02, for the team's discussion. Related: the Option 3 proposal (<code>triage/proposals/triage-owner-scope.json</code>), the example owner digest (<code>triage/proposals/owner-digest-example.html</code>), the <code>triage</code> record kind (<code>platform/data/kinds/triage.json</code>, ATL-28 (triage record kind)). The intake#6 entries are examples. That issue is real; no record or change has been made.</p>
+</footer>
+
+</div>

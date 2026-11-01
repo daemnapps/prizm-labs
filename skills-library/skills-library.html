@@ -1,0 +1,278 @@
+<title>Skills Library</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a tool wall — job chips at top, one panel per job, each tool a row with what it does for him */
+:root{
+  --bg:#F3F4EE; --panel:#FFFFFF; --ink:#13201A; --mute:#5D6B62; --line:#DCE1D6;
+  --accent:#0F5B33; --gold:#B8862B; --chip:#E6EBDF;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1511; --panel:#13201A; --ink:#EAF0E4; --mute:#9AA99F; --line:#26352D;
+  --accent:#5FC48C; --gold:#E0B357; --chip:#1B2A22; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C1511; --panel:#13201A; --ink:#EAF0E4; --mute:#9AA99F; --line:#26352D;
+  --accent:#5FC48C; --gold:#E0B357; --chip:#1B2A22; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--body)}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:22px}
+h1{font:700 clamp(34px,6vw,56px)/1 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lede{color:var(--mute);max-width:60ch;margin:6px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips a{font:600 13px var(--body);color:var(--ink);background:var(--chip);border:1px solid var(--line);
+  border-radius:999px;padding:6px 13px;text-decoration:none}
+.chips a:hover,.chips a:focus-visible{border-color:var(--accent);outline:none}
+.flow{background:var(--accent);color:#fff;border-radius:18px;padding:18px 20px;display:grid;gap:10px}
+.flow h2{font:700 13px var(--body);letter-spacing:.12em;text-transform:uppercase;margin:0;opacity:.85}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:grid;gap:4px;font-size:14px}
+.steps li::before{content:counter(s);font:700 26px/1 var(--display);color:var(--gold)}
+.steps b{font-weight:600}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .flow{color:#0C1511}}
+:root[data-theme="dark"] .flow{color:#0C1511}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px;align-items:start}
+section.job{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 18px 14px;display:grid;gap:10px;min-width:0}
+.job header{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.job h3{font:700 22px/1.1 var(--display);margin:0}
+.count{font:500 12px var(--mono);color:var(--mute)}
+.tools{display:grid;margin:0;padding:0;list-style:none}
+.tools li{display:grid;grid-template-columns:minmax(0,170px) 1fr;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+.tools li:first-child{border-top:0}
+.name{font:500 12.5px/1.4 var(--mono);color:var(--accent);word-break:break-word}
+.what{font-size:14px;color:var(--ink)}
+.plug{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--mute)}
+.plug span{font:600 12px var(--body);color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:3px 10px}
+.route{font-size:13.5px;background:var(--chip);border-radius:12px;padding:10px 12px}
+.route b{color:var(--accent)}
+.refs{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.refs li{font-size:14px}
+.refs b{font-weight:600}
+.tpl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tpl span{font:500 12px var(--mono);background:var(--chip);border-radius:6px;padding:3px 8px}
+.wide{grid-column:1/-1}
+@media (max-width:520px){.tools li{grid-template-columns:1fr;gap:2px}}
+.say{display:grid;gap:8px;padding:22px 20px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.say__k{margin:0;font:700 11px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.say__big{margin:0;font:700 clamp(26px,4.4vw,40px)/1.05 var(--display);letter-spacing:-.015em;color:var(--accent);text-wrap:balance}
+.say__sub{margin:0;color:var(--mute);max-width:70ch}
+.stats{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:4px;font-size:13px;color:var(--mute)}
+.stats b{font:700 20px var(--display);color:var(--ink);margin-right:4px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font:600 11px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding:6px 10px 8px 0}
+td{padding:8px 10px 8px 0;border-top:1px solid var(--line);vertical-align:top}
+td:first-child{font-weight:600;white-space:nowrap}
+td i{font:600 12px var(--body);font-style:normal;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.ok{background:var(--accent);color:var(--panel)}
+.in{border:1px solid var(--gold);color:var(--gold)}
+.add{border:1px solid var(--line);color:var(--mute)}
+.hf{background:var(--gold);color:var(--panel)}
+@media (max-width:520px){td:first-child{white-space:normal}}
+</style>
+
+<div class="wrap">
+  <div>
+    <h1>Skills Library</h1>
+    <p class="lede">Everything this Mac can make with, and the one front door that runs it. Nothing built from scratch: every tool is an existing skill, plugin or repo, wired into how we work.</p>
+  </div>
+
+  <nav class="chips" aria-label="Jobs">
+    <a href="#higgsfield">Higgsfield</a><a href="#recipes">Recipes</a><a href="#map">Tool map</a><a href="#found">Research</a>
+    <a href="#pages">Pages &amp; UI</a><a href="#funnels">Funnels &amp; upsells</a><a href="#icons">Icons &amp; game art</a>
+    <a href="#games">Gamified pages</a><a href="#mobile">Mobile apps</a><a href="#video">Video</a><a href="#ops">Store ops</a><a href="#own">Yours</a>
+  </nav>
+
+  <div class="say">
+    <p class="say__k">How it works now</p>
+    <p class="say__big">Say the job. It runs the chain.</p>
+    <p class="say__sub">"Make the team a brand for veteran supplements." "Build the team an app that feels like FarmVille." "A landing page that looks like Apple." One front door reads the job, opens the recipe, pulls the right skills out of the library, and runs every stage — stopping only for your picks and for anything that spends, goes live or sends.</p>
+    <div class="stats"><span><b>1,037</b> skills indexed</span><span><b>82</b> of them your team chains, read in place</span><span><b>7</b> job recipes</span><span><b>~120</b> Higgsfield models</span></div>
+    <p class="say__sub"><b>Home: Prizm Labs (private).</b> Your experiments live here. The team workspace is read, never written to — they don't see what happens in Prizm.</p>
+  </div>
+
+  <section class="job wide" id="recipes">
+    <header><h3>Job recipes</h3><span class="count">each one = stages + tools + where you pick</span></header>
+    <ul class="tools">
+      <li><span class="name">Ad from a swipe</span><span class="what">Swipe → strip the structure → inject our message (you pick) → Ad Multiplier re-shoots it with our product → frame check (you pick) → banked</span></li>
+      <li><span class="name">Premium landing page</span><span class="what">Reference pull → copy → 3 looks (you pick) → GSAP scroll motion, product reveals, 3D spins → phone + desktop check → live on your go</span></li>
+      <li><span class="name">Brand from zero</span><span class="what">Audience facts → positioning (you pick) → name + availability (you pick) → StoryBrand message → 3 identity directions (you pick) → style guide → packaging → launch page, ads, emails</span></li>
+      <li><span class="name">Game-feel mobile app</span><span class="what">Feel references → core loop → art style sheet (you pick) → Expo app in the simulator → coins, growth, level-up juice → TestFlight on your go</span></li>
+      <li><span class="name">Ship a web app</span><span class="what">Spec → screens → build → logins + database → payments (test first) → emails → click-tested → live → measured</span></li>
+      <li><span class="name">Motion piece</span><span class="what">Beat plan → assets → build → frame check (you pick) → sound + captions → full size to your phone</span></li>
+      <li><span class="name">Icon / game-art set</span><span class="what">References (you pick) → one style sheet (you pick) → full set → transparent PNG + SVG → icon grid page</span></li>
+    </ul>
+  </section>
+
+  <section class="job wide" id="higgsfield">
+    <header><h3>Higgsfield goes first</h3><span class="count">Ultra plan · 7,190 credits</span></header>
+    <p class="route">Before any outside tool, the system checks Higgsfield. It already has 15 full workflows, ~120 models and hundreds of presets — most of what the research found is already inside it.</p>
+    <ul class="tools">
+      <li><span class="name">Websites &amp; games</span><span class="what">Hosted sites with a scroll-scrubbed film (the Apple-style page), apps, and playable browser games with multiplayer rooms</span></li>
+      <li><span class="name">Game art pipeline</span><span class="what">One style formula for every asset, animated sprite sheets, tiles, rigged 3D characters with 696 animations, game music and SFX</span></li>
+      <li><span class="name">Brand</span><span class="what">Logos, identity, brandbook, packaging, mockups, decks; SVG marks from Ideogram Vector and Recraft styles</span></li>
+      <li><span class="name">Ads</span><span class="what">Ad Multiplier turns one ad into many, or re-shoots it for a new product, cast, market or language; Ads Studio for statics</span></li>
+      <li><span class="name">Product &amp; UGC</span><span class="what">Product photoshoots, 80 product presets, creator-style UGC, try-on, unboxing, website tours</span></li>
+      <li><span class="name">3D</span><span class="what">Text or image to 3D (Meshy, Tripo, Hunyuan), rigging, cloud Blender scenes, local Blender with no add-on</span></li>
+      <li><span class="name">Video &amp; motion</span><span class="what">Kling 4, Veo 3.1, Seedance 2.5, Wan 3, Cinematic Studio (camera, light, grade), Genjutsu, Higgsedit, Match Cut's 28 effects</span></li>
+      <li><span class="name">Sound</span><span class="what">ElevenLabs v4 voices, cloning, dubbing, music, sound effects</span></li>
+    </ul>
+  </section>
+
+  <section class="job wide" id="map">
+    <header><h3>Tool map — one tool per kind of work</h3><span class="count">Higgsfield · Ready · Sign in once</span></header>
+    <div class="tbl"><table>
+      <tr><th>Kind of work</th><th>Tool</th><th>State</th></tr>
+      <tr><td>Apple-style scroll pages</td><td>Higgsfield website builder — Animated (scroll-scrubbed film page)</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Browser games</td><td>Higgsfield game builder + its art pipeline (sprites, tiles, rigged 3D, music, SFX)</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Brand, logos, packaging</td><td>Higgsfield brand-asset-creation, Ideogram Vector, Recraft styles</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Ads from a swipe</td><td>Higgsfield Ad Multiplier (recreate / edit), Marketing Studio ad reference</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Static ads</td><td>Higgsfield Ads Studio, Marketing Studio</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Product photography</td><td>Higgsfield product-photoshoot + 80 presets</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>UGC videos</td><td>Higgsfield ugc-video</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Characters, avatars</td><td>Higgsfield character-sheet, Soul Cast, AI Influencer</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>3D models, rigging, animation</td><td>Higgsfield 3D (Meshy, Tripo, Hunyuan; 696 animations)</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>3D scenes and renders</td><td>Higgsfield 3D Jutsu (cloud Blender) or Blender on this Mac</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Motion and editing</td><td>Higgsfield Cinematic Studio, Genjutsu, Higgsedit, Match Cut, Katana</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Voice, music, sound effects</td><td>Higgsfield ElevenLabs v4, Sonilo, Mirelo, dubbing</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Thumbnails, covers</td><td>Higgsfield thumbnail-generation</td><td><i class="hf">Higgsfield</i></td></tr>
+      <tr><td>Native mobile apps</td><td>Expo + iPhone simulator (art from Higgsfield)</td><td><i class="ok">Ready</i></td></tr>
+      <tr><td>Copy, offers, CRO, SEO</td><td>52 marketing skills + Anthropic marketing</td><td><i class="ok">Ready</i></td></tr>
+      <tr><td>Your established chains</td><td>Team workspace skills, read in place (82)</td><td><i class="ok">Ready</i></td></tr>
+      <tr><td>Testing pages and funnels</td><td>Playwright, Chrome DevTools</td><td><i class="ok">Ready</i></td></tr>
+      <tr><td>Web apps with logins + payments</td><td>Supabase, Stripe, Resend</td><td><i class="in">Sign in once</i></td></tr>
+      <tr><td>Design files, Canva layouts</td><td>Figma, Canva</td><td><i class="in">Sign in once</i></td></tr>
+      <tr><td>Hosting, analytics</td><td>Vercel, PostHog — switched off until a job ships</td><td><i class="in">Sign in once</i></td></tr>
+    </table></div>
+  </section>
+
+  <section class="job wide" id="found">
+    <header><h3>What the research found</h3><span class="count">28 Oct 2026 · sources in the mirror</span></header>
+    <ul class="refs">
+      <li><b>Apple-style pages are a technique, not a template:</b> GSAP ScrollTrigger pinning + a canvas image sequence or scroll-scrubbed video. GSAP is free incl. all plugins; its official skills have 17.4k stars.</li>
+      <li><b>Supabase:</b> over 60% of new databases are started by AI tools, Claude Code the largest single source (CEO, Jun 2026).</li>
+      <li><b>Veterans (Census ACS 2024):</b> 15.7M; 70.9% non-Hispanic White; 29.1% aged 75+; Vietnam era 31.3%, post-9/11 29.9%.</li>
+      <li><b>Supplement claims:</b> FTC 2022 guidance asks for competent and reliable scientific evidence, generally human RCTs; FDA 21 CFR 101.93 sets the structure/function disclaimer.</li>
+      <li><b>Game features in trading apps:</b> Massachusetts v. Robinhood (confetti, gamified prompts) settled Jan 2024 for $7.5M; SEC's 2023 engagement-practices proposal was withdrawn Jun 2025.</li>
+      <li><b>Skill limits:</b> Claude reads every skill's description to pick one, and the list gets about 1% of its memory — so the 955-skill library is read on demand through the front door, not all loaded at once.</li>
+    </ul>
+  </section>
+
+  <div class="flow">
+    <h2>Every design job, from now on</h2>
+    <ol class="steps">
+      <li><b>Pull the reference</b>The store's WAR routine box, a CPK template, or the page you point at. Never a blank page.</li>
+      <li><b>Load frontend-design</b>Before any page, upsell, landing page or board.</li>
+      <li><b>Match its look</b>Same colours, corners and type as the reference.</li>
+      <li><b>Show you at phone size</b>Screenshot first. Nothing goes live before you see it.</li>
+    </ol>
+  </div>
+
+  <div class="grid">
+    <section class="job" id="pages">
+      <header><h3>Pages, UI &amp; boards</h3><span class="count">5 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">frontend-design</span><span class="what">Gives a page a deliberate look so it doesn't read as a template</span></li>
+        <li><span class="name">theme-factory</span><span class="what">10 ready colour + font themes, or a new one on the spot</span></li>
+        <li><span class="name">web-artifacts-builder</span><span class="what">Bigger interactive pages — tabs, state, components — as one link</span></li>
+        <li><span class="name">artifact-design</span><span class="what">House rules for every page we publish</span></li>
+        <li><span class="name">dataviz</span><span class="what">Charts, KPI tiles and dashboards that read cleanly light or dark</span></li>
+      </ul>
+      <div class="plug">Switch on: <span>Design</span><span>ui-consistency</span></div>
+    </section>
+
+    <section class="job" id="funnels">
+      <header><h3>Funnels, upsells &amp; landing pages</h3><span class="count">10 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">next-campaigns-setup</span><span class="what">Starts a new funnel from a starter template</span></li>
+        <li><span class="name">next-campaigns-create</span><span class="what">Builds the campaign, packages and offers in Next</span></li>
+        <li><span class="name">next-campaigns-build</span><span class="what">Assembles the funnel pages from a brief</span></li>
+        <li><span class="name">next-campaigns-polish</span><span class="what">Visual pass before testing</span></li>
+        <li><span class="name">next-campaigns-qa</span><span class="what">Test order through the whole funnel</span></li>
+        <li><span class="name">next-campaigns-os</span><span class="what">Runs the full funnel lifecycle end to end</span></li>
+        <li><span class="name">quiz-funnel-page</span><span class="what">Quiz or product-finder page from one config</span></li>
+        <li><span class="name">next-theme-design</span><span class="what">Captures a live page at desktop, tablet, phone to rebuild</span></li>
+        <li><span class="name">next-theme-dev</span><span class="what">Storefront theme build</span></li>
+        <li><span class="name">next-theme-figma</span><span class="what">Brings a Figma design into the store</span></li>
+      </ul>
+    </section>
+
+    <section class="job wide" id="refs">
+      <header><h3>Reference library</h3><span class="count">5 repos on this Mac</span></header>
+      <ul class="refs">
+        <li><b>CPK starter templates</b> — 9 ready funnels plus a landing-page section library.
+          <div class="tpl"><span>Apollo · recommended</span><span>Olympus</span><span>Apollo multi-variant</span><span>Olympus multi-variant</span><span>Olympus two-step</span><span>Demeter</span><span>Shop single-step</span><span>Shop three-step</span><span>Landing sections</span></div></li>
+        <li><b>Campaign Page Kit</b> — the funnel builder itself.</li>
+        <li><b>Spark</b> — Next's storefront theme, with its design guide.</li>
+        <li><b>Next skills</b> — where the next-* tools come from.</li>
+        <li><b>Anthropic skills</b> — where the design tools come from.</li>
+      </ul>
+    </section>
+
+    <section class="job" id="icons">
+      <header><h3>Icons, game art &amp; posters</h3><span class="count">4 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">Higgsfield images</span><span class="what">Icon sets and game art off one style reference (personal Higgsfield workspace)</span></li>
+        <li><span class="name">canvas-design</span><span class="what">Finished posters and static art as PNG or PDF</span></li>
+        <li><span class="name">algorithmic-art</span><span class="what">Generative patterns, textures, backgrounds</span></li>
+        <li><span class="name">objects</span><span class="what">3D props with a spinnable web copy</span></li>
+      </ul>
+      <div class="plug">Switch on: <span>Icons8</span><span>Streamline Icons</span></div>
+      <p class="route"><b>the team's game icons:</b> his references → you pick → one style sheet → Higgsfield makes the set on that sheet → backgrounds off → icon grid page.</p>
+    </section>
+
+    <section class="job" id="games">
+      <header><h3>Gamified pages</h3><span class="count">4 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">web-artifacts-builder</span><span class="what">Interactive, scored, stateful game-like pages</span></li>
+        <li><span class="name">quiz-funnel-page</span><span class="what">Quiz mechanics with a result</span></li>
+        <li><span class="name">slideshow</span><span class="what">Live clickable talks — talks are games, not slides</span></li>
+        <li><span class="name">algorithmic-art</span><span class="what">Motion and visual play</span></li>
+      </ul>
+    </section>
+
+    <section class="job" id="mobile">
+      <header><h3>Mobile apps</h3><span class="count">2 plugins</span></header>
+      <div class="plug">Switch on: <span>Mobile Design System</span><span>Mobile App Design (iOS)</span></div>
+      <p class="route">The desktop app runs and screenshots iPhone apps in the simulator, so you see every screen.</p>
+    </section>
+
+    <section class="job" id="video">
+      <header><h3>Video</h3><span class="count">19 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">hyperframes</span><span class="what">Start here for any video</span></li>
+        <li><span class="name">general-video</span><span class="what">Multi-scene pieces, reels, montages</span></li>
+        <li><span class="name">motion-graphics</span><span class="what">Short kinetic type, stat hits, logo stings</span></li>
+        <li><span class="name">music-to-video</span><span class="what">Beat-synced cuts to a track</span></li>
+        <li><span class="name">talking-head-recut</span><span class="what">Graphic overlays on creator footage</span></li>
+        <li><span class="name">embedded-captions</span><span class="what">Captions, plain to cinematic</span></li>
+        <li><span class="name">+ 13 more</span><span class="what">product-launch, faceless-explainer, media-use, figma, animation, audio, keyframes, registry, studio…</span></li>
+      </ul>
+    </section>
+
+    <section class="job" id="ops">
+      <header><h3>Store operations</h3><span class="count">4 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">next-ops-scan</span><span class="what">Daily risky-order and stuck-shipment scan</span></li>
+        <li><span class="name">next-bulk-subscription</span><span class="what">Pause, cancel, shift renewals in bulk</span></li>
+        <li><span class="name">next-bulk-fulfill</span><span class="what">Sync tracking numbers from a sheet</span></li>
+        <li><span class="name">next-bulk-move</span><span class="what">Move orders between warehouses</span></li>
+      </ul>
+    </section>
+
+    <section class="job" id="own">
+      <header><h3>Yours</h3><span class="count">5 tools</span></header>
+      <ul class="tools">
+        <li><span class="name">handoffs</span><span class="what">Where you left off, and the prompt to pick it up</span></li>
+        <li><span class="name">tella-pull</span><span class="what">Reads your Tella recordings and acts on them</span></li>
+        <li><span class="name">book-a-flight</span><span class="what">Flights found and set up to the payment page</span></li>
+        <li><span class="name">objects</span><span class="what">3D objects for your productions</span></li>
+        <li><span class="name">video-remake-benchmark</span><span class="what">Same-prompt model tests on the FLEX remake</span></li>
+      </ul>
+    </section>
+  </div>
+</div>

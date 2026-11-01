@@ -1,0 +1,68 @@
+[
+ {
+  "id": "K2",
+  "tag": "brands write wall",
+  "date": "2026-10-06",
+  "source": "the-org/decision-log.md, 2026-10-06 — K2 (WALL CHANGE): the 2026-09-17 output rule's gaps closed",
+  "text": "a script a person runs is a machine; machine output goes under runs/; a brand change is a proposal under runs/ that a person commits; trained identities go to runs/ai-elements/; research-gatherer's exception retired.",
+  "patterns": [
+   "Option A: everything a machine writes goes under runs/{c}\\.",
+   "Two parts must be explicit: a script a person runs counts as a machine{c}\\.",
+   "the team or the team: rule the output-home Option A \\(gates{c};",
+   "{c}Whether a script a person runs counts as a machine has never been ruled{c}[.;]?",
+   " ?\\(scope: whether a script a person runs counts as a machine\\)",
+   ",? and nobody has ruled whether a person running this script counts as a machine write",
+   "the team or the team rule one line: either the 09-18 carve-out is widened{s}Option A\\.",
+   " under the pending output-home ruling",
+   " \\(after the output-home ruling\\)",
+   "the team or the team: may casting's finished builds write pictures into brands/{c}\\?"
+  ],
+  "residue": [
+   "counts as a machine",
+   "output-home (?:Option A|ruling)",
+   "rule where machine output",
+   "nobody has ruled whether a person running",
+   "09-18 carve-out is widened",
+   "may [^?]* write [^?]*into brands/[^?]*\\?"
+  ]
+ },
+ {
+  "id": "K3",
+  "tag": "the team triage reach",
+  "date": "2026-10-06",
+  "source": "the-org/decision-log.md, 2026-10-06 — K3: the team, as components triage owner, may apply a ruled default or a brief-spelled fix inside any owner's component",
+  "text": "the team applies ruled or brief-spelled fixes in any owner's component, the owner's included, with the owner told and able to object.",
+  "patterns": [
+   " ?\\b1\\.(?= The ruling must say the team may apply a ruled default)",
+   " ?\\b2\\.(?= the owner's yes on the team committing in the owner's components)",
+   "Two things make the team the doer here, not the owner\\.",
+   "{c}\\b[Mm]ay the team\\b{c}\\btold\\b{c}\\?",
+   "\\), and say whether the team may apply a ruled default{c}\\.",
+   "May the team correct two pointers in the owner's register{c}\\?",
+   ", so the team's drafted conditions bar it until the owner says yes",
+   "Without it, the 13 marked 'after' fall back to the owner\\.",
+   "The 4 code fixes wait on it\\.",
+   "After the notice ruling, ",
+   " ?\\(or the notice ruling lands\\)",
+   " and the notice ruling lands",
+   "{c}apply a ruled default with a notice{c}[.;]?",
+   "{c}the owner's yes or the team's ruling{c}[.;]?",
+   "{c}the owner's yes on the team committing in the owner's components{c}[.;]?",
+   "{c}the owner's 09-27 keep-out{c}[.;]?",
+   "{c}the owner's decks were also kept out of lead-run sweeps on 09-27\\.",
+   "{c}the team's code changes here also need the owner's yes{c}[.;]?",
+   "Whether the team may land this in the owner's folder is the open L-image-production question\\.",
+   "{c}\\b[Ww]ithout both\\b{c}[.;]?"
+  ],
+  "residue": [
+   "may the team\\b[^?]*\\btold\\b",
+   "ruled default with a notice",
+   "the owner's yes or the team's ruling",
+   "the owner's yes on the team committing",
+   "the owner's 09-27 keep-out",
+   "default-with-notice",
+   "notice ruling",
+   "the team's (?:code )?lane"
+  ]
+ }
+]

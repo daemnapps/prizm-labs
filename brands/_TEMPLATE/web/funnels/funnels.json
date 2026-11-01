@@ -1,0 +1,15 @@
+{
+ "_what": "Every funnel this brand runs: where it answers and which product it sells. Read by components/naming/page_pick.py to pick a brief's landing page (the page must sell the brief's product).",
+ "_id_rule": "A funnel's id is product + funnel, two-mark (e.g. glow-serum-quiz). It is also its folder name here.",
+ "funnels": [
+  {
+   "id": "<product>-<funnel>",
+   "name": "<what it is>",
+   "product": "<product-id>",
+   "status": "in use",
+   "url": "https://<your-funnel-host>/<path>/",
+   "aliases": [],
+   "pages": ["adv", "checkout"]
+  }
+ ]
+}

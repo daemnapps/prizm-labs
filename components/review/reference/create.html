@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="review-reference" content="1">
+<meta name="review-kind" content="review">
+<title>REFERENCE · file a review request</title>
+<!--
+  A REFERENCE PAGE, NOT A PRODUCT — card RV-6 (reference panels).
+
+  It exists to be READ and OPTIMIZED FROM, not shipped: it is deliberately
+  plain, it is NOT in team/promoted-surfaces.json, and no session may put it
+  there (a promotion is a human act). What it is honest about is the GRAMMAR of
+  the `review` kind: the body it posts is the frozen manifest's `event: request`
+  body, composed by `reviewRequestBody()` in _reference.js, which the declared
+  test compares field for field against `request_verdict()` in
+  components/review/review_request.py.
+-->
+<link rel="stylesheet" href="_reference.css">
+</head>
+<body>
+<p class="ref"><b>REFERENCE, NOT A PRODUCT.</b>
+  <code>components/review/reference/create.html</code> — a working example of
+  filing a request on the <code>review</code> kind, kept plain on purpose and
+  never promoted. Copy it, rewrite the look, keep the grammar.</p>
+
+<h1>File a review request</h1>
+<p class="faint">One record, <code>event: request</code>, onto
+  <code>platform/data/records/review/</code> through <code>POST /api/review</code>.
+  The id is minted here (<code>RQ-&lt;stamp&gt;-&lt;slug&gt;</code>) because request ids
+  are the requester's, never the manifest's. Nothing beyond the frozen block is
+  put in the body; a field beyond it is a ruling, not a page's judgment.</p>
+
+<div id="app"></div>
+
+<!-- The viewers' ONE credential module (CP-8), loaded rather than copied. A
+     page moved into platform/views/viewers/ must INLINE it instead — that route
+     serves one html file per request and cannot fetch a sibling. -->
+<script src="../../../platform/views/viewers/_templates/_session-bootstrap.js"></script>
+<script src="_reference.js"></script>
+<script>
+// The page IS this line: the form, the composer and the one POST all live in
+// _reference.js, so create.html and the four panels never drift apart.
+mountReviewCreate(document.getElementById("app"));
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+ "_what": "Who can approve or send back on the email approval page. the owner adds people.",
+ "approvers": [
+  "the owner",
+  "the team"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "schema": 1,
+ "kind": "static",
+ "report": ["components/creative-queue/contract.py", "report"],
+ "detail": ["components/creative-queue/contract.py", "detail"],
+ "apply": ["components/creative-queue/contract.py", "apply"],
+ "words": ["words", "ok"]
+}

@@ -1,0 +1,266 @@
+{
+ "element": "letterform",
+ "asset": "image",
+ "source": "tools/image-production/static/letterform-bank.json",
+ "enforced_by": "the image teardown (stage 1) — every text element carries a letterform id or none-fits with a proposed row",
+ "note": null,
+ "rows": [
+  {
+   "id": "flat-digital",
+   "name": "Flat digital type",
+   "what": "Set type with no depth of any kind: solid fill, hard clean edge, no shadow, bevel, texture or outline. The most common answer and a real one — most direct-response statics are this.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "The letter edge is mathematically clean at full zoom and the fill is one unbroken colour. Nothing separates the letter from its ground except the colour change."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "extruded-3d",
+   "name": "Extruded 3D",
+   "what": "Letters pushed back into space with a visible side wall, usually bevelled at the front edge and casting a shadow onto what is behind them.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "A second colour runs down one side of every stroke — the extrusion — consistently to the same vanishing direction across all letters."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "moulded-clay",
+   "name": "Moulded clay",
+   "what": "Letters that read as modelled by hand out of a soft solid — claymation lettering. Rounded, slightly irregular, lit as a real object in the scene.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "Every stroke has its own soft highlight and contact shadow, thickness varies where a hand would have pressed, and no two identical letters are truly identical."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "hand-marker",
+   "name": "Hand-lettered marker",
+   "what": "Written by hand with a marker, brush or pen on a real surface. Stroke weight follows pressure and speed, and the ends of strokes show the tool.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "Line weight changes within a single stroke, ends taper or blot, and the baseline wanders."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "hand-drawn-textured",
+   "name": "Hand-drawn, textured fill",
+   "what": "Drawn letterforms whose fill carries a texture — hatching, stipple, grain, risograph — rather than a flat colour, often with a drawn shadow offset behind.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "The fill is not uniform at zoom: it is made of marks. A shadow, where present, is drawn rather than rendered."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "cut-paper",
+   "name": "Cut paper",
+   "what": "Letters that read as cut or torn from sheet material and laid on the ground, lifting slightly off it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "A thin hard shadow hugs one side of each letter, edges show a cut or torn quality, and the paper's own surface catches light differently from the ground."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "embossed",
+   "name": "Embossed into the surface",
+   "what": "Letters pressed into or raised out of the material they sit on, carrying no colour of their own — they are the same material as the ground.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "The letters are legible only through highlight and shadow along their edges; sample the fill and it matches the background."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "letterpress",
+   "name": "Letterpress",
+   "what": "Printed with a physical impression: ink slightly heavier at the edge of each stroke, the paper visibly indented.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "Ink pools at stroke edges and thins in the middle, and the paper texture shows through the fill."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "chrome",
+   "name": "Chrome",
+   "what": "Metallic letters with a bevelled edge reflecting an environment — a horizon line across the face of the letter is the tell.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "The fill is a gradient that inverts partway down every stroke, and the same reflection pattern repeats across all letters."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "neon",
+   "name": "Neon tube",
+   "what": "Letters as glowing tube, with light spilling onto the surface behind them.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "Stroke width is constant, the core is brighter than the edge, and the ground immediately around the letters is lit by them."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "chalk",
+   "name": "Chalk or dust",
+   "what": "Letters drawn in a dry medium on a dark ground, edges dusty and broken rather than clean.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "Coverage is uneven within strokes, edges fade rather than stop, and the ground's texture breaks through."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "knockout-bar",
+   "name": "Knockout through a bar",
+   "what": "Letters cut out of a solid panel so the picture or ground shows through them, or the panel colour shows through the letters.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "A hard-edged rectangle of solid colour holds the line, and the letters are the absence of that colour rather than a colour of their own."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "caption-outline",
+   "name": "Outlined social caption",
+   "what": "White (or bright) letters with a hard contrasting outline or drop shadow so they stay legible over any footage — the native look of social captions and memes.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "A uniform stroke of a second colour follows every letter's contour at constant width, regardless of what is behind it."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "system-caption",
+   "name": "Native system caption",
+   "what": "Type rendered by a device or app rather than designed — a screenshot's own UI text, a native story caption, a search bar, a comment.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/letterform-bank.json",
+   "extra": {
+    "how_to_see_it": "It sits in a platform's own chrome at the platform's own size, and the typeface is a system face rather than a chosen one."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

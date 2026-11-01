@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="review-reference" content="1">
+<meta name="review-kind" content="review">
+<title>REFERENCE · review panel — image</title>
+<!--
+  A REFERENCE PAGE, NOT A PRODUCT — card RV-6 (reference panels).
+
+  The panel for `type: image` on the `review` kind. The picture is RV-5 (media
+  renderer)'s to produce — `render(pointer, type) -> element`, routed by
+  `pointer.warehouse` (repo -> /api/file, drive -> /api/media, blob -> the url).
+  RV-5 HAS MERGED, so this page loads it: the engine
+  (components/media-render/media-render.js) and then the page shim
+  (platform/views/viewers/_templates/_media.js), which binds the api base and
+  this page's authenticated fetch and exposes `pageMedia` — the global
+  `reviewRenderer()` in _reference.js looks up. No url is guessed and no type
+  sniffed: the type comes off the record. NOT in team/promoted-surfaces.json;
+  a promotion is a human act.
+-->
+<link rel="stylesheet" href="_reference.css">
+</head>
+<body>
+<p class="ref"><b>REFERENCE, NOT A PRODUCT.</b>
+  <code>components/review/reference/panel-image.html</code> — a working panel for
+  <code>type: image</code>, kept plain on purpose and never promoted. Copy it,
+  rewrite the look, keep the grammar.</p>
+
+<h1>Review panel — image</h1>
+<p class="faint">Open it as <code>panel-image.html?item=RQ-…</code>. The picture is
+  rendered by RV-5 (media renderer), which routes on the warehouse the record
+  declared and refuses one it has no route for BY NAME rather than guessing a
+  url. A public blob points straight at its url; gated bytes are read with this
+  page's own credential and given back when the panel re-mounts. Status is
+  FOLDED from the records on every render, never remembered between them.</p>
+
+<div id="app"></div>
+
+<!-- The viewers' ONE credential module (CP-8), loaded rather than copied. A
+     page moved into platform/views/viewers/ must INLINE it instead — that route
+     serves one html file per request and cannot fetch a sibling. -->
+<script src="../../../platform/views/viewers/_templates/_session-bootstrap.js"></script>
+<!-- RV-5 (media renderer), WIRED. The ENGINE first, then the page-side shim
+     that binds this page's api base and authenticated fetch and exposes
+     `pageMedia` — the global reviewRenderer() looks up.
+     THE ORDER IS LOAD-BEARING: _media.js throws by name at load if the engine
+     is not already there, and it is the only thing on the pair that may hold a
+     credential. A page under platform/views/viewers/ cannot load two siblings
+     (that route serves one html file per request) and INLINES the pair with
+     `python3 components/media-render/bundle.py --out <block.js>`; this folder
+     is served as plain files, so it loads them as they are. -->
+<script src="../../media-render/media-render.js"></script>
+<script src="../../../platform/views/viewers/_templates/_media.js"></script>
+<script src="_reference.js"></script>
+<script>
+// THE TYPE THIS PAGE IS THE REFERENCE FOR. The block keys on it; a request of
+// another declared type is refused BY NAME rather than rendered by the wrong
+// panel, and an undeclared one is sent to panel-link.html, which is where the
+// manifest's degrade-to-a-link rule lives.
+const PANEL_TYPE = "image";
+mountReviewPanel(PANEL_TYPE, document.getElementById("app"));
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+{
+  "name": "full-photo",
+  "use": "The photograph fills the whole frame, the wordmark sits on top of it, a white frame is drawn around the damage, and the claim sits in a panel beneath. Best when the picture alone carries the proof and the copy is one hard claim.",
+  "canvas": {
+    "w": 768,
+    "h": 1344
+  },
+  "layout": {
+    "ground": "#FFFFFF",
+    "picture": {
+      "treatment": "full_bleed"
+    },
+    "blocks": [],
+    "keep_clear": [],
+    "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning \u2014 every line of type, the product \u2014 must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
+    },
+    "product": {
+      "top": 58,
+      "bottom": 84,
+      "left": 58,
+      "right": 95
+    },
+    "product_asset": "packshot-lockup.png"
+  },
+  "elements": [
+    {
+      "element": "wordmark",
+      "kind": "logo",
+      "tone": "light",
+      "top_pct": 15.5,
+      "left_pct": 0,
+      "right_pct": 100,
+      "align": "center",
+      "span_pct": 30
+    },
+    {
+      "element": "frame",
+      "kind": "frame",
+      "color": "#FFFFFF",
+      "stroke_px": 5,
+      "top_pct": 27.0,
+      "bottom_pct": 47.0,
+      "left_pct": 12,
+      "right_pct": 72,
+      "find": "damage",
+      "span_pct": 44,
+      "search_to": 0.47,
+      "search_from": 0.23
+    },
+    {
+      "element": "claim",
+      "slot": "claim",
+      "top_pct": 48.6,
+      "left_pct": 12,
+      "right_pct": 72,
+      "align": "left",
+      "cap_pct": 2.1,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "standard",
+      "font": "grotesque",
+      "color": "#141414",
+      "max_lines": 3,
+      "leading": 1.22,
+      "box": {
+        "fill": "#FFFFFF",
+        "pad_pct": 1.4
+      }
+    },
+    {
+      "element": "kicker",
+      "slot": "kicker",
+      "top_pct": 77.0,
+      "left_pct": 8,
+      "right_pct": 52,
+      "align": "center",
+      "cap_pct": 1.4,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "wide",
+      "font": "grotesque",
+      "color": "#FFFFFF",
+      "max_lines": 1,
+      "box": {
+        "fill": "#61514A",
+        "pad_pct": 1.0
+      }
+    }
+  ],
+  "fixed_stickers": [
+    {
+      "slot": "offer_sticker",
+      "color": "#61514A",
+      "text_color": "#FFFFFF",
+      "top_pct": 20.0,
+      "left_pct": 58,
+      "span_pct": 32,
+      "rotate_deg": -9
+    }
+  ]
+}

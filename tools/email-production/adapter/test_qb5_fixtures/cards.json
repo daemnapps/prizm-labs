@@ -1,0 +1,29 @@
+{
+ "_what": "One klaviyo/card.json per email state for QB-5 (production contract)'s email adapter test; the test builds a run per entry (design/email.json from email.json beside this file) and expects `expect`. `no_design` runs get no design/email.json and are never reported.",
+ "runs": {
+  "fx-checks": {"expect": ["making", "checks-pending"],
+                "card": {"status": "draft", "subjects": [{"subject": "Checks still to run"}]}},
+  "fx-held": {"expect": ["making", "held"],
+              "card": {"status": "draft", "subjects": [{"subject": "Held one"}],
+                       "product_check": [{"result": "ok", "detail": "fine"}],
+                       "final_check": [{"result": "fail", "detail": "a price the offer bank does not sell"},
+                                       {"result": "ok", "detail": "links answer"}]}},
+  "fx-ready": {"expect": ["final-needs-you", "ready"],
+               "card": {"status": "draft", "subjects": [{"subject": "Ready one"}], "sections_ok": [1],
+                        "final_check": [{"result": "ok", "detail": "all good"}]}},
+  "fx-eve": {"expect": ["final-needs-you", "eve-done"],
+             "card": {"status": "draft", "subjects": [{"subject": "the team finished"}],
+                      "final_check": [{"result": "ok", "detail": "all good"}],
+                      "eve_done": {"by": "the team", "at": "2026-10-21T10:00:00+00:00"}}},
+  "fx-draft": {"expect": ["launch", "klaviyo-draft"],
+               "card": {"status": "approved", "subjects": [{"subject": "In Klaviyo"}],
+                        "final_check": [{"result": "ok", "detail": "all good"}],
+                        "klaviyo": {"campaign_id": "fixture-campaign"}}},
+  "fx-scheduled": {"expect": ["launch", "scheduled"],
+                   "card": {"status": "scheduled", "subjects": [{"subject": "Scheduled one"}],
+                            "final_check": [{"result": "ok", "detail": "all good"}],
+                            "klaviyo": {"campaign_id": "fixture-campaign-2"},
+                            "scheduled": {"by": "the team", "at": "2026-10-21T11:00:00+00:00"}}},
+  "fx-old": {"no_design": true, "card": {"status": "draft"}}
+ }
+}

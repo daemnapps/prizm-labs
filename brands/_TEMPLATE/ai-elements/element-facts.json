@@ -1,0 +1,8 @@
+{
+  "_brand": "<brand>",
+  "_what": "What is TRUE of each banked element, in the element's own terms. Any prompt that references an element gets these lines appended, so the knowledge lives with the element instead of in whoever writes the prompt that day.",
+  "_rule": "Only facts read off the real element (its photos, its product file). Nothing invented; an unknown stays out.",
+  "elements": {
+    "<element-id>": ["<one true fact per line — e.g. what it can and cannot physically do>"]
+  }
+}

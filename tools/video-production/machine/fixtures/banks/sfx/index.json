@@ -1,0 +1,292 @@
+{
+ "_readme": [
+  "FIXTURE — a copy of the real sfx bank's rows with a few marked made, so the tests and the v14 dry-run can pick from it. The files named here do not exist; nothing reads them."
+ ],
+ "bank": "sfx",
+ "drive_root": "Shared Assets/banks/sfx",
+ "rows": [
+  {
+   "id": "whoosh",
+   "tags": [
+    "transition",
+    "swipe",
+    "air"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 1.0,
+   "file": "Shared Assets/banks/sfx/whoosh.mp3",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "made",
+   "prompt": "a fast clean whoosh of air past the microphone, short, no tail",
+   "loop": false
+  },
+  {
+   "id": "pop",
+   "tags": [
+    "reveal",
+    "bubble",
+    "ui"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 0.5,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a single soft pop, like a bubble or a UI element appearing, dry",
+   "loop": false
+  },
+  {
+   "id": "riser",
+   "tags": [
+    "build",
+    "tension",
+    "transition"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 3.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a short tension riser building upward for three seconds, ending abruptly",
+   "loop": false
+  },
+  {
+   "id": "ka-ching",
+   "tags": [
+    "cash",
+    "register",
+    "offer",
+    "price"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 1.0,
+   "file": "Shared Assets/banks/sfx/ka-ching.mp3",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "made",
+   "prompt": "a cash register ka-ching, bright bell and drawer, one hit",
+   "loop": false
+  },
+  {
+   "id": "stinger",
+   "tags": [
+    "hit",
+    "reveal",
+    "impact"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 1.5,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a short cinematic impact stinger, one deep hit with a quick decay",
+   "loop": false
+  },
+  {
+   "id": "swoosh-soft",
+   "tags": [
+    "transition",
+    "gentle",
+    "air"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 1.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a soft gentle swoosh of fabric-like air, quiet, no tail",
+   "loop": false
+  },
+  {
+   "id": "click",
+   "tags": [
+    "ui",
+    "tap",
+    "button"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 0.5,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a single crisp phone screen tap click, dry, close",
+   "loop": false
+  },
+  {
+   "id": "swipe",
+   "tags": [
+    "ui",
+    "phone",
+    "transition"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 0.5,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a quick phone screen swipe, soft finger on glass, short",
+   "loop": false
+  },
+  {
+   "id": "record-scratch",
+   "tags": [
+    "stop",
+    "comedy",
+    "interrupt"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 1.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a vinyl record scratch that stops the music, short",
+   "loop": false
+  },
+  {
+   "id": "ding",
+   "tags": [
+    "bell",
+    "notification",
+    "card"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 1.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "a single clean bright ding, like a till or notification bell, one hit",
+   "loop": false
+  },
+  {
+   "id": "room-tone-kitchen",
+   "tags": [
+    "room-tone",
+    "kitchen"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 30.0,
+   "file": "Shared Assets/banks/sfx/room-tone-kitchen.mp3",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "made",
+   "prompt": "room tone, steady and seamless, a quiet home kitchen: fridge hum, faint distant street, no voices",
+   "loop": true
+  },
+  {
+   "id": "room-tone-bathroom",
+   "tags": [
+    "room-tone",
+    "bathroom"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 30.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "room tone, steady and seamless, a small tiled bathroom: soft extractor fan hum, tight reflections, no water running",
+   "loop": true
+  },
+  {
+   "id": "room-tone-clinic",
+   "tags": [
+    "room-tone",
+    "clinic"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 30.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "room tone, steady and seamless, a quiet clinic room: air conditioning hum, distant muffled corridor, no voices",
+   "loop": true
+  },
+  {
+   "id": "room-tone-street",
+   "tags": [
+    "room-tone",
+    "street"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 30.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "room tone, steady and seamless, a calm city street: distant traffic wash, light footsteps far off, no horns",
+   "loop": true
+  },
+  {
+   "id": "room-tone-bedroom",
+   "tags": [
+    "room-tone",
+    "bedroom"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 30.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "room tone, steady and seamless, a quiet carpeted bedroom: very low room hum, faint distant outside, no voices",
+   "loop": true
+  },
+  {
+   "id": "room-tone-car",
+   "tags": [
+    "room-tone",
+    "car"
+   ],
+   "energy": null,
+   "tempo_bpm": null,
+   "mood": null,
+   "seconds": 30.0,
+   "file": "",
+   "source": "elevenlabs sound-generation",
+   "licence": "ElevenLabs paid plan — commercial use per ElevenLabs terms (confirm the plan tier when made)",
+   "status": "to make",
+   "prompt": "room tone, steady and seamless, inside a parked car: muffled outside, faint cabin hum, engine off",
+   "loop": true
+  }
+ ]
+}

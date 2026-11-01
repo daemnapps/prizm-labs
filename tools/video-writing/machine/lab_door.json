@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "station 2 of the video line on the mini (2026-10-19): mini_step.py --brand --label --out [--route] [--dry-run] — fetches the teardown station's run by the same label from Shared Assets, runs v2 writing and its swipe match, hands the run on through Shared Assets runs/video-writing/<brand>/<label>/ (run_kit.station)",
+  "script": "tools/video-writing/machine/mini_step.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"label": "--label", "route": "--route"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": ["approve", "structure", "allow", "sandbox"]
+}

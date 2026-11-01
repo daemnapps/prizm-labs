@@ -1,0 +1,84 @@
+{
+  "name": "pedestal",
+  "use": "A rendered world with the product standing on a pedestal in the lower half and the claim written across the sky above it. The Norse claymation shape. Best when the pattern interrupt IS the ad \u2014 an unusual made world that stops the scroll before a word is read.",
+  "canvas": {
+    "w": 768,
+    "h": 1344
+  },
+  "layout": {
+    "ground": "#1A1A1A",
+    "picture": {
+      "treatment": "full_bleed"
+    },
+    "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops 9x16 to 4x5 in feed. Every line of type and the product sit inside this window so one asset covers every placement."
+    },
+    "product": {
+      "top": 52,
+      "bottom": 80,
+      "left": 30,
+      "right": 70
+    },
+    "blocks": [],
+    "_measured_from": "The swipe's own teardown: type strictly in the upper 45%, product pedestal 45-90% top and 25-75% wide, centre axis, unequal gaps grouping the type as one unit, the punch word angled ~5 degrees.",
+    "product_stands_on": "pedestal",
+    "product_width_of_top": 0.46,
+    "product_asset": "crush-clay.png",
+    "_product_note": "The product is MORPHED INTO THE WORLD'S MATERIAL, not composited photoreal. Made by handing the real cutout to the edit model and asking for the same object sculpted in clay \u2014 which keeps the label exact while matching the set. Compositing the storefront photo into a clay diorama was the mismatch, 2026-09-02.",
+    "adaptive": [
+      "headline",
+      "punch"
+    ],
+    "_adaptive_note": "headline and punch follow the picture: they are laid into the quietest band the plate actually has, not a fixed percentage. The type sits where there is nothing to read over."
+  },
+  "elements": [
+    {
+      "element": "headline",
+      "slot": "headline",
+      "top_pct": 16.0,
+      "left_pct": 10,
+      "right_pct": 90,
+      "align": "center",
+      "cap_pct": 3.6,
+      "case": "sentence",
+      "weight": "bold",
+      "tracking": "tight",
+      "font": "grotesque",
+      "color": "#F5F2EC",
+      "max_lines": 3,
+      "leading": 1.06
+    },
+    {
+      "element": "kicker",
+      "slot": "kicker",
+      "top_pct": 81.0,
+      "left_pct": 14,
+      "right_pct": 86,
+      "align": "center",
+      "cap_pct": 1.5,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "wide",
+      "font": "grotesque",
+      "color": "#1A1A1A",
+      "max_lines": 1,
+      "box": {
+        "fill": "#F0D860",
+        "pad_pct": 1.1
+      }
+    }
+  ],
+  "fixed_stickers": [
+    {
+      "slot": "punch",
+      "color": "#F0D860",
+      "text_color": "#1A1A1A",
+      "top_pct": 35.5,
+      "left_pct": 34,
+      "span_pct": 32,
+      "rotate_deg": -5
+    }
+  ]
+}

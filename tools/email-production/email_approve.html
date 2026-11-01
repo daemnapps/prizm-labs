@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email approval</title>
+<style>
+  body { font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; background: #f4f4f2; color: #1d1d1b; }
+  header { position: sticky; top: 0; background: #1d1d1b; color: #fff; padding: 10px 18px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; z-index: 2; }
+  header h1 { font-size: 17px; margin: 0 12px 0 0; }
+  header select, header button { font: inherit; }
+  .tabs button { background: transparent; color: #ccc; border: 0; padding: 4px 8px; cursor: pointer; }
+  .tabs button.on { color: #fff; border-bottom: 2px solid #fff; }
+  .banner { padding: 8px 18px; font-weight: 600; }
+  .banner.fake { background: #ffd84d; }
+  .banner.off { background: #f3c1bb; }
+  main { padding: 16px 18px; display: grid; gap: 16px; }
+  .card { background: #fff; border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 2px rgba(0,0,0,.08); display: grid; grid-template-columns: minmax(280px, 1fr) 380px; gap: 16px; }
+  .card h2 { font-size: 17px; margin: 0 0 4px; }
+  .muted { color: #6b6b66; }
+  .facts { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; margin: 10px 0; }
+  .facts b { font-weight: 600; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  td { border-top: 1px solid #eee; padding: 3px 6px; vertical-align: top; word-break: break-word; }
+  td.PROBLEM { color: #b3261e; font-weight: 600; }
+  iframe { width: 100%; height: 560px; border: 1px solid #ddd; border-radius: 6px; background: #fff; }
+  .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .actions button { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid #1d1d1b; background: #fff; cursor: pointer; }
+  .actions button.go { background: #1d6b3f; color: #fff; border-color: #1d6b3f; }
+  .actions button:disabled { opacity: .45; cursor: not-allowed; }
+  .sendback { margin-top: 10px; padding: 10px; background: #faf7f2; border-radius: 6px; display: none; }
+  .sendback.open { display: block; }
+  .sendback label { display: inline-block; margin: 0 12px 4px 0; }
+  .sendback textarea { width: 100%; min-height: 60px; font: inherit; }
+  .msg { margin-top: 8px; font-weight: 600; }
+  .msg.bad { color: #b3261e; }
+  .msg.good { color: #1d6b3f; }
+  .empty { color: #6b6b66; padding: 30px 0; text-align: center; }
+  @media (max-width: 800px) { .card { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Email approval</h1>
+  <span class="tabs" id="tabs"></span>
+  <label>Deciding: <select id="who"></select></label>
+</header>
+<div id="banners"></div>
+<main id="list"><div class="empty">Loading…</div></main>
+<script>
+"use strict";
+const TABS = [["waiting", "Waiting"], ["approved", "Approved (retry)"], ["scheduled", "Scheduled"], ["sent-back", "Sent back"]];
+let view = "waiting", data = null;
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v !== null && v !== undefined) e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()) if (k !== null && k !== undefined) e.append(k instanceof Node ? k : String(k));
+  return e;
+}
+
+function who() { return document.getElementById("who").value; }
+
+async function post(path, body) {
+  const r = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  let out = {};
+  try { out = await r.json(); } catch (e) { out = { ok: false, error: "no answer" }; }
+  return out;
+}
+
+function tabs() {
+  const t = document.getElementById("tabs");
+  t.replaceChildren(...TABS.map(([k, label]) => el("button", { class: k === view ? "on" : "", onclick: () => { view = k; load(); } }, label)));
+}
+
+function banners() {
+  const b = document.getElementById("banners");
+  b.replaceChildren();
+  if (data.fake) b.append(el("div", { class: "banner fake" }, "FAKE Klaviyo — a trial; nothing reaches Klaviyo."));
+  if (data.switch !== "on") b.append(el("div", { class: "banner off" }, "The email off-switch is OFF (send-switch.json) — every Approve → Schedule is refused until the team turns it on."));
+}
+
+function approvers() {
+  const s = document.getElementById("who");
+  const keep = localStorage.getItem("email-approve-who") || "";
+  s.replaceChildren(el("option", { value: "" }, "— pick —"), ...data.approvers.map(n => el("option", { value: n, selected: n === keep }, n)));
+  s.onchange = () => localStorage.setItem("email-approve-who", s.value);
+}
+
+function when(c) {
+  const st = (c.send || {}).strategy || {};
+  const local = ((st.options || {}).is_local) ? "each recipient's own time" : "one time for everyone";
+  return `${st.datetime || "no time"} (${local}); first recipients at ${(c.send || {}).earliest_utc || "?"} UTC`;
+}
+
+function card(c) {
+  const msg = el("div", { class: "msg" });
+  const say = (text, good) => { msg.className = "msg " + (good ? "good" : "bad"); msg.textContent = text; };
+  const facts = el("div", { class: "facts" },
+    el("b", {}, "Subject"), el("span", {}, c.subject || ""),
+    el("b", {}, "Preview"), el("span", {}, c.preview || ""),
+    el("b", {}, "Audience"), el("span", {}, (c.audience || []).map(a => `${a.segment} (${a.id})`).join(", ")),
+    el("b", {}, "Send"), el("span", {}, when(c)),
+    el("b", {}, "Campaign"), el("span", {}, el("a", { href: c.klaviyo_link, target: "_blank", rel: "noopener" }, c.campaign_id || "")),
+  );
+  if (c.approval) facts.append(el("b", {}, "Decision"), el("span", {}, `${c.approval.decision} by ${c.approval.by} at ${c.approval.at}` + (c.approval.note ? ` — ${c.approval.note}` : "")));
+  if (c.scheduled) facts.append(el("b", {}, "Scheduled"), el("span", {}, `${c.scheduled.at} — Klaviyo: ${c.scheduled.klaviyo_status}`));
+  if (c.schedule_error) facts.append(el("b", {}, "Klaviyo error"), el("span", { class: "msg bad" }, `${c.schedule_error.at}: ${c.schedule_error.error}`));
+  const checks = el("table", {}, ...(c.checks || []).map(r => el("tr", {}, el("td", {}, r.check), el("td", { class: r.result }, r.result), el("td", {}, r.detail))));
+
+  const actions = el("div", { class: "actions" });
+  const box = el("div", { class: "sendback" });
+  if (c.state === "waiting" || c.state === "approved") {
+    const off = data.switch !== "on" || !c.checks_ok;
+    const go = el("button", { class: "go", disabled: off, title: off ? "the off-switch is off, or a check failed when the card was made" : "" },
+      c.state === "approved" ? "Retry schedule" : "Approve → Schedule");
+    go.onclick = async () => {
+      go.disabled = true; say("Re-running every check and reading Klaviyo…", true);
+      const out = await post(c.state === "approved" ? "/api/retry" : "/api/approve", { id: c.id, by: who() });
+      if (out.ok) { say(`Scheduled in Klaviyo (campaign ${out.campaign_id}).`, true); setTimeout(load, 1200); }
+      else { say(out.error || "refused", false); go.disabled = false; }
+    };
+    const back = el("button", {}, "Send back");
+    back.onclick = () => box.classList.toggle("open");
+    actions.append(go, back);
+    const picks = data.reasons.map(r => el("label", {}, el("input", { type: "checkbox", value: r.id }), " " + r.label));
+    const note = el("textarea", { placeholder: "What is wrong — the note goes on the card" });
+    const send = el("button", {}, "Send back");
+    send.onclick = async () => {
+      const reasons = picks.map(l => l.querySelector("input")).filter(i => i.checked).map(i => i.value);
+      const out = await post("/api/send-back", { id: c.id, by: who(), reasons, note: note.value });
+      if (out.ok) { say("Sent back. The draft stays in Klaviyo.", true); setTimeout(load, 1200); }
+      else say(out.error || "refused", false);
+    };
+    box.append(el("div", {}, ...picks), note, el("div", { class: "actions" }, send));
+  }
+  return el("section", { class: "card" },
+    el("div", {},
+      el("h2", {}, c.campaign_name || c.email || c.id),
+      el("div", { class: "muted" }, `${c.id} · ${c.state}` + (c.checks_ok ? "" : " · a check failed")),
+      facts, actions, box, msg,
+      el("details", {}, el("summary", {}, `Checks (${(c.checks || []).length})`), checks)),
+    el("iframe", { src: c.preview_url, sandbox: "", title: "the email as Klaviyo holds it" }));
+}
+
+async function load() {
+  tabs();
+  const r = await fetch(`/api/cards?state=${encodeURIComponent(view)}`);
+  data = await r.json();
+  banners();
+  approvers();
+  const list = document.getElementById("list");
+  list.replaceChildren(...(data.cards.length ? data.cards.map(card) : [el("div", { class: "empty" }, "Nothing here.")]));
+}
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Make a Picture Ad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--card:#fff;--fg:#09090b;--mut:#71717a;--line:#e4e4e7;--soft:#f4f4f5;--pri:#18181b;--prifg:#fff;--ok:#15803d;--okbg:#dcfce7;--no:#b91c1c;--nobg:#fee2e2;--run:#b45309}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#09090b;--card:#141416;--fg:#fafafa;--mut:#a1a1aa;--line:#2a2a2e;--soft:#1c1c1f;--pri:#fafafa;--prifg:#09090b;--ok:#4ade80;--okbg:#052e16;--no:#f87171;--nobg:#450a0a}}
+:root[data-theme=dark]{--bg:#09090b;--card:#141416;--fg:#fafafa;--mut:#a1a1aa;--line:#2a2a2e;--soft:#1c1c1f;--pri:#fafafa;--prifg:#09090b;--ok:#4ade80;--okbg:#052e16;--no:#f87171;--nobg:#450a0a}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:18px/1.45 Inter,-apple-system,sans-serif;padding-bottom:110px}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:14px 16px}
+.top .in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.dots{display:flex;gap:8px;margin-left:auto}.dots i{width:12px;height:12px;border-radius:99px;background:var(--line)}.dots i.on{background:var(--pri)}
+.step{font-weight:800;font-size:20px}
+main{max-width:1000px;margin:0 auto;padding:18px 16px}
+h1{font-size:30px;line-height:1.15;margin:4px 0 6px;letter-spacing:-.01em}
+.sub{color:var(--mut);margin:0 0 16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.big{font:inherit;font-weight:600;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:14px;padding:12px 20px;cursor:pointer;min-height:52px}
+.big.on{border-color:var(--pri);background:var(--pri);color:var(--prifg)}
+input.search{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+@media(max-width:480px){.cards{grid-template-columns:1fr 1fr;gap:10px}}
+.card{border:0;background:var(--card);border-radius:16px;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:inherit;padding:0;box-shadow:0 0 0 1px var(--line)}
+.card *{pointer-events:none}
+.card .im{aspect-ratio:4/5;background:var(--soft) center/cover no-repeat;position:relative}
+.card .done{position:absolute;top:8px;left:8px;background:var(--okbg);color:var(--ok);font-weight:700;font-size:14px;border-radius:99px;padding:3px 10px}
+.card b{display:block;padding:4px 12px 14px;font-size:18px;line-height:1.25}
+.rdy{display:inline-block;margin:10px 12px 0;border-radius:99px;padding:3px 10px;font-weight:700;font-size:14px;line-height:1.3}.rdy.ok{background:var(--okbg);color:var(--ok)}.rdy.no{background:var(--nobg);color:var(--no)}.rdy.rev{background:var(--line);color:var(--fg)}.card .qst{display:block;margin:2px 12px 10px;color:var(--mut);font-weight:600;font-size:13px}.bar button:disabled{opacity:.4;cursor:default}
+.pics{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+@media(max-width:480px){.pics{grid-template-columns:1fr 1fr;gap:10px}}
+.pic{border-radius:16px;overflow:hidden;background:var(--card);box-shadow:0 0 0 1px var(--line);cursor:pointer;position:relative}
+.pic.off{opacity:.38}
+.pic .im{aspect-ratio:4/5;background:var(--soft) center/contain no-repeat}
+.pic .tick{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:12px;background:var(--pri);color:var(--prifg);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800}
+.pic.off .tick{background:var(--card);color:transparent;box-shadow:0 0 0 2px var(--line)}
+.pic b{display:block;padding:10px 12px 14px;font-size:17px}
+.add{border:2px dashed var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:240px;cursor:pointer;background:none;font:inherit;color:var(--fg);font-weight:600;gap:6px}
+.add span{font-size:46px;line-height:1}
+.msg{border-radius:14px;padding:14px 16px;font-weight:600;margin:0 0 16px}
+.msg.ok{background:var(--okbg);color:var(--ok)}.msg.no{background:var(--nobg);color:var(--no)}
+.field{background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.field .lab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:700;font-size:19px;margin-bottom:10px}
+.field .lab a{font-weight:500;font-size:16px;color:var(--mut);cursor:pointer;text-decoration:underline}
+.field input,.field textarea{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg)}
+.field textarea{min-height:150px;resize:vertical;font-size:17px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.two .big{width:100%}
+details{background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:14px 16px}
+summary{font-weight:700;cursor:pointer}
+details pre{white-space:pre-wrap;font:14px/1.55 ui-monospace,Menlo,monospace;margin:12px 0 0}
+.makebtn{width:100%;font:inherit;font-size:22px;font-weight:800;border:0;border-radius:16px;padding:22px;background:var(--pri);color:var(--prifg);cursor:pointer}
+.makebtn:disabled{opacity:.35;cursor:default}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}@media(max-width:480px){.facts{grid-template-columns:1fr}}
+.fact{background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:14px 16px}.fact small{display:block;color:var(--mut);font-size:15px}.fact b{font-size:20px}
+.result img{width:100%;max-width:460px;border-radius:16px;display:block;margin:16px auto;box-shadow:0 0 0 1px var(--line)}
+.wait{text-align:center;padding:40px 0;font-weight:700;color:var(--run)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.bar .in{max-width:1000px;margin:0 auto;display:flex;gap:10px}
+.bar button{flex:1;font:inherit;font-weight:700;border-radius:14px;padding:16px;min-height:58px;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--fg)}
+.bar button.go{background:var(--pri);color:var(--prifg);border-color:var(--pri)}
+.bar button:disabled{opacity:.35}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:9;align-items:flex-end;justify-content:center}
+.sheet.on{display:flex}
+.sheet .box{background:var(--bg);width:100%;max-width:760px;max-height:85vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px 30px}
+.empty{color:var(--mut);text-align:center;padding:40px 0}
+.hint{color:var(--mut);font-size:15px;margin:4px 0 10px;font-weight:400}
+.part{font-size:24px;margin:30px 0 12px}
+.grp{font-size:16px;color:var(--mut);margin:16px 0 8px}
+.lvl{font-weight:600;font-size:16px;background:var(--soft);border-radius:99px;padding:3px 12px}
+input[type=range]{width:100%;height:36px;accent-color:var(--pri);padding:0;border:0}
+.ends{display:flex;justify-content:space-between;color:var(--mut);font-size:15px}
+.adds{margin-top:10px;font-size:15px;background:var(--soft);border-radius:12px;padding:10px 12px}.adds.ch{background:var(--okbg)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tagb{font:inherit;text-align:left;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:8px 12px;cursor:pointer;max-width:100%}
+.tagb b{display:block;font-size:16px}.tagb span{font-size:14px;color:var(--mut)}.tagb.on{border-color:var(--pri);background:var(--soft)}
+.lock{background:var(--soft);border-radius:99px;padding:6px 12px;font-size:15px}
+details{margin-bottom:12px}details summary{font-size:19px;padding:4px 0}
+details ul{padding-left:20px;margin:6px 0 12px}details li{margin-bottom:6px;font-size:16px}
+.lab.small{font-size:16px;margin:14px 0 6px}
+details input:not([type]),details input[type=text],details textarea,.field input:not([type=range]):not([type=checkbox]){font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);margin-bottom:8px}
+details textarea{min-height:160px;font-size:16px}
+.tick{display:flex;gap:10px;align-items:center;font-size:17px;margin:8px 0}.tick input{width:24px;height:24px}
+.addl{margin-top:4px}
+textarea.sent{min-height:84px!important;font-size:16px}
+.lab.small{display:flex;justify-content:space-between;gap:10px}.lab.small a{font-weight:500;color:var(--mut);text-decoration:underline;cursor:pointer;white-space:nowrap}
+textarea.words{min-height:64px!important;font-size:18px}
+.check{margin:0 0 18px}.verdict{border-radius:14px;padding:14px 16px;font-weight:700;margin-bottom:10px}.verdict.ok{background:var(--okbg);color:var(--ok)}.verdict.no{background:var(--nobg);color:var(--no)}
+.crow{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;font:inherit;color:inherit;background:var(--card);border:0;box-shadow:0 0 0 1px var(--line);border-radius:12px;padding:10px 12px;margin-bottom:6px;cursor:pointer}
+.crow i{font-style:normal;flex:0 0 28px;height:28px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.crow.ok i{background:var(--okbg);color:var(--ok)}.crow.na i{background:var(--soft);color:var(--mut)}.crow.no i{background:var(--nobg);color:var(--no)}.crow.wait i{background:var(--soft);color:var(--run)}
+.crow.amber i{background:#fef3c7;color:var(--run)}.crow.amber{box-shadow:0 0 0 2px var(--run);cursor:default}
+.crow.no{box-shadow:0 0 0 2px var(--no)}.crow span{min-width:0}.crow b{display:block;font-size:17px}.crow small{display:block;color:var(--mut);font-size:15px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.crow[data-var=words] small{white-space:pre-line;-webkit-line-clamp:6}
+.vclips{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}.vclips figure{margin:0}.vbig video{width:100%;border-radius:10px;display:block;background:#000}.vclips video{width:100%;border-radius:10px;display:block;background:#000}.keepbtn{margin-top:4px;width:100%;padding:6px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:12px}.vclips figcaption{font-size:12px;opacity:.75;padding-top:3px}.vbreak{margin:8px 0;padding:10px 12px;border:1px solid #e3e3e3;border-radius:10px;font-size:13px}.vbreak summary{cursor:pointer}.vbreak dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:8px 0 0}.vbreak dt{font-weight:600;opacity:.8}.vbreak dd{margin:0}.vbreak .must{margin:8px 0 0}.vreview{margin:0 0 12px;padding:12px;border:2px solid #1f8a4c;border-radius:12px;display:grid;gap:6px}.vrow{display:grid;grid-template-columns:80px 1fr 80px 110px;gap:8px;padding:6px 8px;border-radius:8px;background:#f2f8f4;color:inherit;text-decoration:none;font-size:13px}.vnew{margin-left:8px;padding:2px 8px;border-radius:999px;background:#1f8a4c;color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em}.vnow{margin:10px 0 4px}.vnow>b{display:block;margin-bottom:6px;color:#1f8a4c}.vold{margin:6px 0 10px;font-size:13px}.vold summary{cursor:pointer;opacity:.75}.vplay{margin:0 0 14px;padding:12px;border:1px solid #e3e3e3;border-radius:12px}.vplay video{width:100%;max-width:320px;border-radius:10px;display:block;background:#000}.vrowclips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:8px}.vrowclips figure{margin:0}.vrowclips video{max-width:none}.vrowclips figcaption{font-size:12px;opacity:.75;padding-top:3px}@media (max-width:640px){.vrowclips{grid-template-columns:repeat(2,minmax(0,1fr))}}.vclips .why{font-size:11px;line-height:1.35;padding-top:3px;opacity:.9}.vclips figure.kept video{outline:3px solid #1f8a4c}
+.vscene{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px;margin-bottom:16px;display:grid;gap:10px}
+.vhead{display:flex;justify-content:space-between;align-items:center}.vhead .ok{color:#1a7f37;font-weight:600}
+.vbig{display:grid;grid-template-columns:1fr 2fr;gap:10px;align-items:start}.vbig figure{margin:0}.vbig img,.vbig .vnone{width:100%;max-width:100%;border-radius:12px;display:block}
+.vbig .vnone{aspect-ratio:9/16;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center}.vbig figcaption{font-size:12px;opacity:.7;text-align:center;padding-top:4px}
+.vshot{display:grid;grid-template-columns:auto 1fr;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px;margin-bottom:12px}
+.vpics{display:flex;gap:6px}.vpics figure{margin:0;text-align:center;font-size:11px;color:var(--mut, #888)}.vpics img,.vnone{width:96px;aspect-ratio:9/16;object-fit:cover;border-radius:8px;display:block}
+.vnone{border:1px dashed var(--line);display:flex;align-items:center;justify-content:center}.vcol{min-width:0;display:grid;gap:6px;align-content:start}.vline{margin:0}
+.vfx{border-left:3px solid var(--line);padding-left:8px;font-size:13px}@media (max-width:520px){.vshot{grid-template-columns:1fr}}
+.clips{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;margin-bottom:10px}
+.clipt{flex:0 0 108px;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:14px;padding:4px;font:inherit;text-align:left;cursor:pointer}
+.clipt *{pointer-events:none}.clipt.on{border-color:var(--pri);box-shadow:0 0 0 2px var(--pri)}
+.clipt .im{aspect-ratio:9/16;border-radius:10px;background:var(--soft) center/cover no-repeat}.clipt b{display:block;font-size:16px;margin:4px 4px 0}.clipt span{display:block;font-size:13px;color:var(--mut);margin:0 4px 4px}
+.recipe{border-top:1px solid var(--line);padding:14px 0}.recipe ul{margin:6px 0 10px;padding-left:20px}
+.swtop{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:18px;align-items:start;margin-bottom:8px}@media(max-width:600px){.swtop{grid-template-columns:1fr}}
+.pic.swipe .im{aspect-ratio:9/16;background-size:cover}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{background:var(--soft);border-radius:99px;padding:6px 12px;font-size:15px}
+.swrow{background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.swrow .ft{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;font-size:18px;margin-bottom:10px}.swrow .from{color:var(--mut)}.swrow .arr{color:var(--mut);font-weight:700}
+.needs{display:flex;gap:10px;flex-wrap:wrap}.pic.th{width:130px}.pic.th .im{aspect-ratio:1}.pic.th b{font-size:14px;padding:6px 8px 10px}.pic.th .tick{width:30px;height:30px;font-size:18px;top:6px;right:6px}
+.pic.miss{box-shadow:0 0 0 2px var(--no);cursor:default}.pic.miss .im{display:flex;align-items:center;justify-content:center}.nf{color:var(--no);font-weight:700;font-size:14px}
+.pill{display:inline-block;background:var(--soft);border-radius:99px;padding:6px 14px;font-weight:600;font-size:15px;margin-bottom:8px}.pill.ok{background:var(--okbg);color:var(--ok)}.pill.no{background:var(--nobg);color:var(--no)}
+.wordsq{font-size:18px;font-weight:600}.wordsq div{margin-top:6px}
+.mx{display:flex;flex-direction:column;gap:10px}
+.mxrow{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1.3fr) 150px;gap:12px;align-items:start;background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:12px}
+.brow{display:grid;grid-template-columns:28px minmax(0,1fr) 92px;gap:12px;align-items:start;background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;padding:12px;margin-bottom:8px}
+.bnum{font-weight:800;font-size:18px}.bhead{font-weight:800;font-size:15px;line-height:1.25;margin-top:2px}
+.bin{width:100%;font:inherit;font-weight:700;padding:8px 10px;border-radius:10px;border:0;box-shadow:0 0 0 1px var(--line);margin:4px 0;background:transparent;color:inherit}
+.bpic{width:92px;aspect-ratio:9/16;border-radius:10px;background-size:cover;background-position:center;box-shadow:0 0 0 1px var(--line)}.bpic.empty{display:grid;place-items:center;font-size:11px;color:var(--mut);text-align:center}
+.mxcat{display:grid;gap:8px;margin:0 0 14px}.mxcath{display:flex;align-items:baseline;gap:10px;margin-top:6px}.mxcath b{font-size:17px}.mxcath .cnt{color:var(--mut);font-size:13px}.mxcat>.hint{margin:-4px 0 2px}
+.qi{font-style:normal;font-size:11px;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;box-shadow:0 0 0 1px var(--line);color:var(--mut);vertical-align:1px;cursor:help}
+.dtnote{grid-column:1/-1;color:var(--mut);font-size:12.5px;margin:-4px 0 4px 2px}
+.mxrow.stay{opacity:.8;padding:10px 12px}.mxrow.stay .mxfrom b{font-weight:500;font-size:16px}
+.mxrow small{display:block;color:var(--mut);font-size:13px;font-weight:600;margin-bottom:4px}
+.mxin{font:inherit;font-size:16px;width:100%;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);resize:vertical}
+.seg2{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--line);border-radius:12px;overflow:hidden;align-self:center}
+.seg2 button{font:inherit;font-size:15px;font-weight:700;border:0;padding:10px 0;background:var(--card);color:var(--mut);cursor:pointer}.seg2 button.on{background:var(--pri);color:var(--prifg)}
+.kinds{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.kinds button,.cp{font:inherit;font-size:14px;font-weight:600;border:2px solid var(--line);border-radius:99px;padding:5px 12px;background:var(--card);color:var(--fg);cursor:pointer}
+.kinds button.on,.cp.on{border-color:var(--pri);background:var(--pri);color:var(--prifg)}
+.castpick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:260px;overflow:auto}.cgh{width:100%;font-size:12px;font-weight:700;color:var(--mut);margin-top:6px;text-transform:uppercase;letter-spacing:.05em}.cp small{font-weight:400;color:var(--mut);margin-left:2px}.cp.dead{opacity:.5}.cp{display:flex;align-items:center;gap:6px;padding:3px 10px 3px 3px}.cp span{width:26px;height:26px;border-radius:99px;background:var(--soft) center/cover}
+.mxpic .pic{width:100%}.mxpic .pic .tick{width:30px;height:30px;font-size:18px}.mxpic .pic b{font-size:13px}.mxpic{display:flex;flex-direction:column;gap:6px}
+@media(max-width:820px){.mxrow{grid-template-columns:1fr}.seg2{max-width:220px}.mxpic{flex-direction:row}.mxpic .pic{width:110px}}
+.dt{background:var(--card);box-shadow:0 0 0 1px var(--line);border-radius:16px;overflow:hidden}
+.dth,.dtr{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr);gap:8px;align-items:center;padding:8px 12px}
+.dth{font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line)}
+.dtg{font-size:14px;font-weight:700;color:var(--mut);padding:12px 12px 2px;border-top:1px solid var(--line)}
+.dtr small{display:block;color:var(--mut);font-size:12.5px}.dtr.ch{background:var(--soft)}
+.cell{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:var(--bg);color:var(--fg);cursor:pointer;text-align:left}.cell.hot{border-color:var(--run);color:var(--run);font-weight:700}
+.step{display:flex;align-items:center;gap:6px}.step b{flex:1;text-align:center;font-size:14px}.step button{font:inherit;font-weight:800;width:34px;height:34px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+@media(max-width:620px){.dth{display:none}.dtr{grid-template-columns:1fr 1fr}.dtr>span:first-child{grid-column:1/-1}}
+.swtop.mxtop{grid-template-columns:200px 1fr}
+.chip small{color:var(--mut);font-weight:700;margin-right:4px}.lnk{cursor:pointer;text-decoration:underline}
+</style></head><body>
+<div class="top"><div class="in"><span class="step" id="steplabel">Make a picture ad</span><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div></div></div>
+<main id="main"><div class="empty">Loading…</div></main>
+<div class="bar"><div class="in"><button id="back">Back</button><button id="restart">Restart</button><button class="go" id="next">Next</button></div></div>
+<div class="sheet" id="sheet"><div class="box" id="sheetbox"></div></div>
+<input type="file" id="file" accept="image/png,image/jpeg" style="display:none">
+<script>
+function breakdownBox(b){if(!b||!Object.keys(b).length)return '';const N={camera:'Camera',gaze:'Where she looks',manner:'How things are handled',props:'Props',continuity:'What goes where',actions:'What each action lands on',sound:'Sound',atmosphere:'Atmosphere',explainer:'Explainer',captions:'Captions',pace:'Pace'};return `<details class="vbreak" open><summary><b>The swipe, broken down</b> · what this scene must copy</summary>${(b.judge_checks||[]).length?`<p class="must"><b>The judge checks every take for:</b> ${b.judge_checks.map(esc).join(' · ')}</p>`:''}<dl>${Object.keys(N).filter(k=>(b[k]||[]).length).map(k=>`<dt>${N[k]}</dt><dd>${b[k].map(esc).join('<br>')}</dd>`).join('')}</dl></details>`}
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LOADED=Date.now(),url=p=>'/file?path='+encodeURIComponent(p)+'&v='+LOADED,   // a picture re-set in place must show new on a reload, never the browser's old copy
+bg=p=>p?`background-image:url('${url(p)}')`:'';
+const TITLES=['Pick a brief','Pick the elements','The words and the check','Make it'];
+const CTITLES=['Pick a video','Pick what goes in','Change what you want','Make it'];
+const JOB=()=>KIND==='clip'?((SEL&&SEL.job)||'clips.seedance'):'pictures.generate';   // a video made from a swipe names its own job (Genjutsu)
+const FAILS={'seedream-5-pro-edit':'Seedream','gemini-3-pro-image':'Nano Banana','gpt-image-2.5':'GPT Image'};
+let KIND='pic',ORIG={},O=null,STEP=0,BRAND=null,ONLYNEW=false,ONLYREADY=true,SORT='new',Q='',SEL=null,B={},R=null,T=null,OUT=null;
+
+// every step has Back, Restart and Next (2026-10-27): on step 1 Next returns to the
+// brief you had open; on the last step there is nothing after, so Next is off
+function dots(){document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i<=STEP));
+ $('#steplabel').textContent=(STEP+1)+' · '+(KIND==='clip'?CTITLES:TITLES)[STEP];
+ $('#back').disabled=!STEP;
+ $('#next').disabled=(STEP===0&&!SEL)||STEP===3||(STEP===1&&R&&tooMany());
+ $('#next').textContent='Next'}
+// the board remembers the ad you had open and the step you were on, so a reload comes back to it (2026-10-27)
+function keep(){try{localStorage.setItem('pb.open',JSON.stringify(SEL&&STEP?{kind:KIND,run:SEL.run,brand:SEL.brand,step:STEP}:null))}catch(e){}}
+function go(n){STEP=n;dots();(KIND==='clip'?[s1,c2,c3,s4]:[s1,s2,s3,s4])[n]();scrollTo(0,0);keep()}
+$('#back').onclick=()=>go(Math.max(0,STEP-1));$('#next').onclick=()=>go(STEP+1);
+$('#restart').onclick=()=>{SEL=null;B={};R=null;T=null;OUT=null;Q='';try{localStorage.removeItem('pb.open')}catch(e){}go(0)};
+
+// 1 · pick a brief
+const LIST=()=>KIND==='clip'?O.videos:O.pictures;
+function s1(){const brands=[...new Set(LIST().map(p=>p.brand))];if(!brands.includes(BRAND))BRAND=brands[0];
+ // in order, each labelled (2026-10-27)
+ const lab=(n,t)=>`<h2 class="part" style="margin:18px 0 8px">${n} · ${t}</h2>`;
+ let h=`<h1>Which ${KIND==='clip'?'video':'ad'} do you want to make?</h1>`+lab(1,'Kind of ad')+`<div class="row"><button class="big ${KIND==='pic'?'on':''}" data-k="pic">Picture ad</button><button class="big ${KIND==='clip'?'on':''}" data-k="clip">Video ad</button></div>`+
+  lab(2,'Brand')+`<div class="row">`+brands.map(b=>`<button class="big ${b===BRAND?'on':''}" data-b="${b}">${b==='<brand>'?'<brand>':b[0].toUpperCase()+b.slice(1)}</button>`).join('')+`</div>`+
+  lab(3,'Which ones to show')+`<div class="row"><button class="big ${ONLYNEW?'on':''}" id="onlynew">Only ones not made yet</button>${KIND==='pic'?`<button class="big ${ONLYREADY?'on':''}" id="onlyready">Ready only</button>`:''}</div>
+  <div class="row"><span class="hint" style="margin:0">Sort:</span>${[['new','Newest first'],['old','Oldest first'],['num','Brief number']].map(([k,t])=>`<button class="big ${SORT===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}</div>
+  <p class="hint" style="margin:0">Anything already in Meta or live is not shown here. It is done.</p>`+
+  lab(4,'New deliveries')+`<div class="row"><button class="big" id="deliv">Check for new deliveries</button><span class="hint" style="margin:0">${esc(delivWho())}</span></div>`+
+  lab(5,'Pick a brief')+`<div class="row"><input class="search" id="q" placeholder="Search, e.g. grandma, razor bumps, 0213" value="${esc(Q)}"></div><div class="cards" id="cards"></div>`;
+ $('#main').innerHTML=h;
+ document.querySelectorAll('[data-b]').forEach(e=>e.onclick=()=>{BRAND=e.dataset.b;s1()});
+ const dvb=$('#deliv');if(dvb)dvb.onclick=delivCheck;
+ $('#onlynew').onclick=()=>{ONLYNEW=!ONLYNEW;s1()};
+ document.querySelectorAll('[data-sort]').forEach(e=>e.onclick=()=>{SORT=e.dataset.sort;s1()});const orb=$('#onlyready');if(orb)orb.onclick=()=>{ONLYREADY=!ONLYREADY;s1()};
+ document.querySelectorAll('[data-k]').forEach(e=>e.onclick=()=>{KIND=e.dataset.k;dots();s1()});
+ $('#q').oninput=e=>{Q=e.target.value;cards()};cards()}
+function cards(){const q=Q.toLowerCase().split(/\s+/).filter(Boolean);
+ const list=LIST().filter(p=>p.brand===BRAND&&(!ONLYNEW||!p.made)&&(KIND!=='pic'||!ONLYREADY||p.ready)&&q.every(w=>(p.name+' '+p.run+' '+(p.brief||'')).toLowerCase().includes(w)))
+  // sort (2026-10-27): newest written first by default
+  .sort((a,b)=>SORT==='num'?(+(b.brief||0))-(+(a.brief||0)):SORT==='old'?(a.t||0)-(b.t||0):(b.t||0)-(a.t||0)).slice(0,90);
+ // each card says its brief number and its stage in the Queue; a real customer review says so, its words are the customer's
+ $('#cards').innerHTML=list.map((p,i)=>`<button class="card" data-i="${i}"><div class="im" style="${bg(p.thumb)}">${p.made?'<span class="done">Made</span>':''}</div>${p.ready===undefined?'':p.ready?'<span class="rdy ok">Ready</span>':`<span class="rdy no">Not ready: ${esc(p.first)}</span>`}${p.review?'<span class="rdy rev">Real review: nothing made up</span>':''}<b>${esc(p.name)}</b>${p.brief||p.stage?`<small class="qst">${p.brief?'Brief '+esc(p.brief):''}${p.brief&&p.stage?' · ':''}${esc(p.stage||'')}</small>`:''}</button>`).join('')||`<div class="empty">Nothing matches.${KIND==='pic'&&ONLYREADY?' Tap Ready only to see the ones that are not ready.':''}</div>`;
+ document.querySelectorAll('.card').forEach(e=>e.onclick=()=>{e.style.opacity=.5;e.querySelector('b').textContent='Opening…';SEL=list[+e.dataset.i];B=KIND==='clip'?{run:SEL.run,skip:[]}:{brand:SEL.brand,run:SEL.run,product:SEL.product,skip:[],added:[]};OUT=null;R=null;load().then(()=>{if(KIND==='clip')snapOrig();go(1)})})}
+
+// new deliveries (2026-10-27). One press:
+// image-edit's delivery check reads the returned/ folder in each role's brief hand-off folders, takes the brief from the
+// folder's name and brings each file to the same path in the repo; each brief then goes to the Meta approval page with
+// one more press. Named by role; who fills it today is shown beside it. The board only shows.
+let DV=null;
+const today=x=>x.filled_by?` (${x.filled_by} today)`:'';
+function delivWho(){const p=(O&&O.deliverers)||[];return p.map(x=>`${x.name}${today(x)}`).join(' · ')}
+async function djob(path,body,after){const r=await fetch(path,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json());
+ if(r.error){DV={...(DV||{}),state:'failed',error:r.error};return delivDraw()}
+ const poll=async()=>{const j=await fetch('/api/prompt-job?id='+r.id).then(r=>r.json());if(j.state==='running')return setTimeout(poll,3000);after(j)};poll()}
+function delivCheck(){DV={state:'running'};$('#sheet').classList.add('on');delivDraw();
+ djob('/api/prompt-delivery',{brand:BRAND},j=>{DV=j.state==='failed'?{state:'failed',error:j.error}:{state:'done',result:j.result,delivered:j.delivered};delivDraw()})}
+function delivSend(label){DV.sending=label;DV.sent=null;DV.senderr=null;delivDraw();
+ djob('/api/prompt-delivery-card',{brand:BRAND,label},j=>{DV.sending=null;if(j.state==='failed')DV.senderr={label,error:j.error};else{DV.delivered=j.delivered;DV.sent=label}delivDraw()})}
+const vid=p=>'/media?path='+encodeURIComponent(p);
+function delivTile(f){return /\.(mp4|mov|m4v)$/i.test(f)?`<video src="${vid(f)}#t=0.5" preload="metadata" muted playsinline controls style="flex:0 0 120px;width:120px;aspect-ratio:9/16;border-radius:10px;background:#000"></video>`:`<div class="bpic" style="flex:0 0 92px;${bg(f)}"></div>`}
+function delivDraw(){const box=$('#sheetbox');
+ let h=`<div class="row" style="justify-content:space-between;flex-wrap:nowrap"><h1 style="margin:0">New deliveries</h1><button class="big" id="dvclose">Close</button></div>`;
+ if(!DV||DV.state==='running'){box.innerHTML=h+`<div class="wait">Checking the hand-off folders on the Drive: ${esc(delivWho())}…</div>`;return wireDv()}
+ if(DV.state==='failed'){box.innerHTML=h+`<div class="msg no">It stopped: ${esc(DV.error)}</div>`;return wireDv()}
+ const rows=DV.delivered||[];
+ (DV.result.roles||[]).forEach(r=>{const who='the '+r.words,kind=r.delivers,one=kind.replace(/s$/,''),nw=new Set((r.new||[]).map(n=>n.label));
+  h+=`<h2 class="part">${esc(kind[0].toUpperCase()+kind.slice(1))} from ${esc(who)}${esc(today(r))}</h2><p class="hint">They go in returned/ inside each brief's folder: ${esc(r.folder)}/&lt;brief&gt;/returned${r.confirmed?'':' · the team is confirming this folder'}</p>`;
+  if(!r.found)h+=`<div class="msg no">No hand-off folder for ${esc(who)} on the Drive yet.</div>`;
+  else if(r.new.length){const n=r.new.reduce((a,x)=>a+x.count,0);h+=`<div class="msg ok">✓ ${n} new ${n===1?one:kind} for ${r.new.length} brief${r.new.length===1?'':'s'}, matched and filed.</div>`}
+  else h+=`<div class="msg ok">Nothing new from ${esc(who)} since the last check.</div>`;
+  if(r.untagged&&r.untagged.length){const u=r.untagged.length;h+=`<div class="msg no">${u} ${u===1?one+' is':kind+' are'} in a folder that is not one of this brand's briefs, so ${u===1?'it was':'they were'} left where ${u===1?'it is':'they are'}:<ul style="margin:6px 0 0;font-weight:400">${r.untagged.map(x=>`<li>${esc(x.file)}: ${esc(x.why)}</li>`).join('')}</ul></div>`}
+  rows.filter(d=>d.role===r.role).forEach(d=>{const c=d.card,sent=DV.sent===d.label,err=DV.senderr&&DV.senderr.label===d.label;
+   h+=`<div class="field"><div class="lab"><span>${esc(d.brief)} <span class="hint">${esc(d.product||'')}</span></span>${nw.has(d.label)?'<span class="pill ok">New</span>':''}</div>
+   <div class="clips">${d.files.map(delivTile).join('')}</div>`;
+   if(sent&&c)h+=`<div class="msg ok">✓ Sent. The ${c.files} ${c.files===1?one:kind} are on the Meta approval page, in To check (${esc(c.name)}). Nothing goes live until you press Approve there.<br><a href="http://localhost:8795" target="_blank" rel="noopener">Open the Meta approval page</a></div>`;
+   else if(c)h+=`<p class="hint">On the Meta approval page, in To check: ${esc(c.name)} · sent ${esc((c.at||'').replace('T',' '))}</p>`;
+   if(err)h+=`<div class="msg no">It stopped: ${esc(DV.senderr.error)}</div>`;
+   h+=DV.sending===d.label?`<div class="wait">Sending to the Meta approval page… about a minute</div>`:`<button class="makebtn" data-dvsend="${esc(d.label)}"${DV.sending?' disabled':''}>${c?'Send again (updates the card in To check)':`Send the ${d.files.length} to the Meta approval page`}</button>`;
+   h+=`</div>`})});
+ box.innerHTML=h;wireDv()}
+function wireDv(){const c=$('#dvclose');if(c)c.onclick=()=>$('#sheet').classList.remove('on');
+ document.querySelectorAll('[data-dvsend]').forEach(e=>e.onclick=()=>delivSend(e.dataset.dvsend))}
+
+// the check, after every change
+async function load(){try{if(B&&B.run)localStorage.setItem('pb.brief',JSON.stringify(B))}catch(e){}const r=await fetch('/api/prompt-preview',{method:'POST',body:JSON.stringify({job:JOB(),brief:B,quote:false})}).then(r=>r.json());
+ if(r.error){R={error:r.error};return}R=r}
+function relo(after){clearTimeout(T);T=setTimeout(async()=>{await load();after()},450)}
+function tooMany(){return R&&R.findings&&R.findings.some(f=>f.id==='max-images')}
+function plain(f){if(f.id==='max-images'){const m=f.say.match(/(\d+) images.*\((\d+)\)/);return m?`Too many pictures: ${m[1]}, the most is ${m[2]}. Untick one.`:f.say}
+ if(f.id==='prompt-length')return 'The words are too long. Make "What is happening" shorter.';
+ if(f.id==='image-format')return 'One picture is the wrong kind of file. Untick it.';
+ if(f.id==='image-size')return 'One picture is too big a file. Untick it.';
+ let t=String(f.say||'').replace(/\s*\((?:[A-Z]{2,4}-\d+)[^()]*(?:\([^)]*\))?[^()]*\)/g,'').replace(/\s+\./g,'.');
+ if(/^(Who exactly|Their age|Their look|What they wear): missing/i.test(t))return 'Pick who is in it: one of our cast, or say who in a swap row.';
+ return t}
+function status(){if(!R||R.error)return `<div class="msg no">Fix this first: ${esc(R&&R.error||'this brief could not be read.')}</div>`;
+ const e=R.findings.filter(f=>f.level==='error');return e.length?`<div class="msg no">Fix this first: ${esc(plain(e[0]))}</div>`:`<div class="msg ok">✓ Ready</div>`}
+
+// 2 · the matrix: every element of the swipe (keep it or swap it, and what for), every dial (the swipe, ours, the winners)
+// and every other variable, on one screen. A change to an element rebuilds the swap words from these rows.
+const KINDS=[['cast','Our cast'],['product','Our product'],['drawn','Drawn from words'],['words','Words'],['library','Library photo']];
+const KIND_TIP={cast:'Our banked person: their photo goes in, so the face is theirs',product:'Our real product photos go in; the model never draws the product',drawn:'Made from the words only; no extra picture goes in',words:'The words on the ad: set on top after, or drawn into the picture',library:'A banked prop or set photo goes in'};
+// the element groups, in the order you pick them (2026-10-27)
+const CATS=[
+ ['person','The person','Who is in it: their face, age, hair. A cast swap brings our person\'s photo.',/\b(woman|man|girl|boy|person|she|he|her|his|grand|mother|father|lady|guy|model|face shape|hair|skin tone|age)\b/i],
+ ['problem','The problem on screen','What is wrong and how big it is: the thing the eye hits first.',/\b(spot|spots|lips|swollen|bump|acne|wrinkle|pore|scar|rash|patch|pigment|anomaly|problem|overfilled|bulge|bulging)\b/i],
+ ['props','Props and wardrobe','What she wears and holds: jewellery, clothes, objects. Swap anything that names another brand.',/\b(pendant|chain|necklace|earring|ring|garment|fur|shirt|jacket|hat|cap|glasses|bag|bottle|jar|tube|box|prop|object|tag|pouch|cup|towel|razor|brush|scrubber|device)\b/i],
+ ['set','The set and the light','Where it is and how it is lit: wall, room, background, light.',/\b(wall|room|background|set|floor|ceiling|light|lit|shadow|lamp|window|bathroom|kitchen|street|texture|colou?r)\b/i],
+ ['camera','The camera and the frame','How it is shot: crop, angle, distance, pose, grain.',/\b(crop|frame|framing|angle|camera|lens|shot|close|wide|high|low|pose|tilt|head|gaze|profile|9:16|4:5|grain|phone|selfie|mouth|expression|softness|blur|focus|contact point)\b/i],
+ ['words','The words','The caption, headline or any text and graphics on the ad.',/\b(caption|headline|text|words|title|overlay|lettering|stroke|typography|font|attribution|stars|review|margin|margins|badge|logo)\b/i]];
+function catOf(text,kind){if(kind==='cast')return 'person';if(kind==='words')return 'words';if(kind==='product')return 'props';
+ const order=['words','problem','camera','person','props','set'];const byId=Object.fromEntries(CATS.map(c=>[c[0],c[3]]));
+ for(const id of order)if(byId[id].test(text||''))return id;return 'set'}
+function M(){const f=(R&&R.fields)||{};if(!B.swap_list){const o=f.swap_list_original||f.swap_list;if(!o)return null;B.swap_list=JSON.parse(JSON.stringify({swaps:o.swaps||[],stays:o.stays||[],words:o.words,kept_back:[]}))}return B.swap_list}
+function edited(){const f=(R&&R.fields)||{};return !!f.swap_edited}
+function lvName(id,lv){return lv==null?'–':scaleName(id,lv)}
+function win(id){const a=(O.anatomy&&O.anatomy.dials||{})[id];return a&&a.winners_level!=null?Math.round(a.winners_level):null}
+function thumb(c,big){if(!c)return'';const miss=c.exists===false;
+ return `<div class="pic ${big?'swipe':'th'} ${c.on?'':'off'} ${miss?'miss':''}" data-k="${c.key}"><div class="im" style="${miss?'':bg(c.path)}">${miss?'<span class="nf">Not on file</span>':''}</div>${miss?'':'<div class="tick">✓</div>'}<b>${esc(c.label)}</b></div>`}
+function s2(){const ch=(R&&R.choices)||[],f=(R&&R.fields)||{};const n=ch.filter(c=>c.on).length;const by=Object.fromEntries(ch.map(c=>[c.key,c]));
+ let h=`<h1>${esc(SEL.name)}</h1>`+notesHTML();const m=M();
+ if(!m){h+=`<div class="msg no">No swap list for this ad yet, so nothing can be made. The teardown writes it.</div><div class="pics">`+ch.map(c=>thumb(c)).join('')+`</div>`;$('#main').innerHTML=h;dots();wire2();return}
+ h+=topMsg();
+ h+=`<div class="swtop mxtop">${thumb(by.swipe,true)}<div><p class="sub" style="margin:0">Every part of the swipe is a row. <b>Keep</b> it as it is, or <b>Swap</b> it and say what it becomes. The pictures that go in follow from the rows.</p>${edited()?`<p class="hint">You changed the rows, so the swap words are rebuilt from them. <a id="mxreset" class="lnk">Put the teardown's rows back</a></p>`:''}</div></div>`;
+ // A · the elements
+ h+=`<h2 class="part">The elements</h2><p class="sub">Grouped the way you build the ad: the person first, then the problem, props, set, camera and words. Hover any button for what it does.</p><div class="mx">`;
+ const rowSwap=(r,i)=>{const kinds=KINDS.filter(([k])=>k!=='library'||r.kind==='library'||r.ref&&String(r.ref).includes('/'));
+  let pic='';if(r.kind==='cast'){const c=by['cast:'+r.ref],s=by['cast-sheet:'+r.ref];pic=c?[c,s].filter(Boolean).map(x=>thumb(x)).join(''):`<div class="pill no">Pick who</div>`}
+  else if(r.kind==='library'){const c=ch.find(x=>x.key.startsWith('library:')&&x.for&&x.for.includes(r.to.slice(0,30)));pic=c?thumb(c):'<div class="pill no">Library photo not on file</div>'}
+  else pic=`<div class="pill">${r.kind==='words'?((m.words==='set_on_top')?'Set on top after':'Drawn in the picture'):r.kind==='product'?'Real product photos':'Drawn from words'}</div>`;
+  const cast=r.kind==='cast'?`<div class="castpick">`+castHTML(O.cast[SEL.brand]||[],c=>`<button class="cp ${r.ref===c.id?'on':''} ${c.working?'':'dead'}" data-cast="${i}" data-id="${c.id}" data-nm="${esc(c.name)}" title="Use ${esc(c.label||c.name)}: their photo goes in and the face stays theirs"><span style="${bg(c.thumb)}"></span>${esc(c.label||c.name)} <small>${esc(castTag(c))}</small></button>`)+`</div>`:'';
+  return `<div class="mxrow"><div class="mxfrom"><small>In the swipe</small><textarea class="mxin" data-from="${i}" rows="2">${esc(r.from)}</textarea></div>
+  <div class="seg2"><button data-keepi="${i}" title="Keep it exactly as the swipe has it">Keep</button><button class="on" title="Change it into what you write on the right">Swap</button></div>
+  <div class="mxto"><small>Becomes</small><textarea class="mxin" data-to="${i}" rows="2" placeholder="Say what it becomes">${esc(r.to)}</textarea>
+  <div class="kinds">${kinds.map(([k,l])=>`<button class="${r.kind===k?'on':''}" data-kind="${i}" data-k2="${k}" title="${esc(KIND_TIP[k]||'')}">${l}</button>`).join('')}</div>${cast}</div>
+  <div class="mxpic">${pic}</div></div>`};
+ const rowStay=(x,j)=>`<div class="mxrow stay"><div class="mxfrom"><small>In the swipe</small><b>${esc(x)}</b></div><div class="seg2"><button class="on" title="Keep it exactly as the swipe has it">Keep</button><button data-swapj="${j}" title="Turn this into a swap and say what it becomes">Swap</button></div><div class="mxto"><span class="hint">Same as the swipe</span></div><div class="mxpic"></div></div>`;
+ for(const [cid,cname,ctip] of CATS){const sw=m.swaps.map((r,i)=>[r,i]).filter(([r])=>catOf(r.from+' '+r.to,r.kind)===cid);const st=m.stays.map((x,j)=>[x,j]).filter(([x])=>catOf(x,'')===cid);
+  if(!sw.length&&!st.length)continue;
+  h+=`<div class="mxcat"><div class="mxcath"><b>${cname}</b><span class="cnt">${sw.length} swap${sw.length===1?'':'s'} · ${st.length} kept</span></div><p class="hint">${esc(ctip)}</p>`+sw.map(([r,i])=>rowSwap(r,i)).join('')+st.map(([x,j])=>rowStay(x,j)).join('')+`</div>`}
+ h+=`</div><button class="big addl" id="mxadd">+ Swap something else</button>`;
+ // the product and the words
+ const prod=ch.filter(c=>c.key.startsWith('product:'));const pa=String(f.product_answer||'');
+ h+=`<div class="field" style="margin-top:14px"><div class="lab">Our product in this ad</div><div class="two"><button class="big ${prodOn()?'on':''}" data-s="on" title="Our real product photos go in, only the sides the swap list names">In the picture</button><button class="big ${prodOn()?'':'on'}" data-s="off" title="No product in this picture; nothing of it goes in">Not in it</button></div>${pa?`<p class="hint">The teardown says: ${esc(pa)}</p>`:''}${prodOn()&&prod.length?`<div class="needs">${prod.map(c=>thumb(c)).join('')}</div>`:''}</div>`;
+ const wp=f.words_plain||[];
+ h+=`<div class="field"><div class="lab">The words</div><div class="two"><button class="big ${m.words==='set_on_top'?'on':''}" data-wm="set_on_top" title="The picture is made with no words; ours are set on top exactly, in the swipe's style">Set on top after</button><button class="big ${m.words==='drawn'?'on':''}" data-wm="drawn" title="The model draws the words into the picture, for words that belong on an object">Drawn by the model</button></div>${wp.length?`<div class="wordsq">${wp.map(w=>`<div>“${esc(w).replace(/\n/g,'<br>')}”</div>`).join('')}</div><p class="hint">Change the words on the next screen.</p>`:'<p class="hint">No words on this one.</p>'}</div>`;
+ h+=`<div class="field"><div class="lab">Who is in it</div><div class="two">${(f.cast||[]).length?`<button class="big ${f.people==='cast'?'on':''}" data-p="cast">${esc(f.cast.map(x=>x.split(',')[0]).join(' and '))}, our cast</button>`:''}<button class="big ${f.people==='lookalike'?'on':''}" data-p="lookalike" title="A new person who looks like the one in the swipe">Look like the person in the swipe</button><button class="big ${f.people==='made-up'?'on':''}" data-p="made-up" title="A realistic made-up person, described in the swaps">A made-up person</button></div>
+  <div class="lab" style="margin-top:12px">Or put one of our cast in it</div><div class="castpick">`+castHTML(O.cast[SEL.brand]||[],c=>{const on=(m.swaps||[]).some(r=>r.kind==='cast'&&r.ref===c.id);return `<button class="cp ${on?'on':''} ${c.working?'':'dead'}" data-who="${c.id}" data-nm="${esc(c.name)}" title="${esc(c.label||c.name)} takes the swipe person's place: their photo goes in and the face stays theirs"><span style="${bg(c.thumb)}"></span>${esc(c.label||c.name)} <small>${esc(castTag(c))}</small></button>`})+`</div>${(O.cast[SEL.brand]||[]).length?'':'<p class="hint">This brand has no banked cast yet.</p>'}
+  ${(m.swaps||[]).some(r=>r.kind==='cast')?`<div class="row" style="margin-top:10px"><button class="big ${f.cast_age==='swipe'?'on':''}" id="young" title="The cast member's face, made younger to the age of the person in the ad we copy: her own younger self, the same woman, dark spots kept">As young as the person in the ad</button><button class="big ${f.cast_age!=='swipe'?'on':''}" id="asis" title="The cast member at her own age, as her photo shows">At their own age</button></div>`:''}</div>`;
+ h+=`<div class="pics" style="margin-top:6px">`+ch.filter(c=>c.key.startsWith('added:')).map(c=>thumb(c)).join('')+`<button class="add" id="add" style="min-height:120px"><span>+</span>Add a picture</button></div>`;
+ // B · the dials
+ const sd=f.swipe_dials||{};const hasWin=!!(O.anatomy&&O.anatomy.dials);
+ h+=`<h2 class="part">The dials</h2><p class="sub">Each dial: what the swipe does, what we set, and what our <b>top swipes</b> do (our best-performing third). Tap any level to use it for ours.</p><div class="row">`+O.controls.presets.map(p=>`<button class="big" data-pre="${p.id}" title="${esc(p.what||'')}">${esc(p.name)}</button>`).join('')+`<button class="big" data-pre="">As the brief has it</button><button class="big" data-pre="__swipe">Same as the swipe</button>${hasWin?'<button class="big" data-pre="__win" title="Every dial set the way our best-performing swipes have it">Like the top swipes</button>':''}</div>`;
+ h+=`<div class="dt"><div class="dth"><span>Dial</span><span>The swipe</span><span>Ours</span><span title="${hasWin?'What our best-performing swipes do: the top third, ranked on real views (organic) or days the ad ran (paid). Tap a level to use it.':''}">${hasWin?'Top swipes':''}</span></div>`;
+ for(const [g,ids] of [['The big five',MAIN]].concat(GROUPS)){h+=`<div class="dtg">${g}</div>`;
+  for(const id of ids){const d=dial(id);if(!d)continue;const ours=level(id),sw=sd[id],w=win(id),ch_=B.dials&&B.dials[id]!==undefined;const snd=(O.dial_send||{})[id]||'writing';
+   const lvTip=v=>{const x=(d.scale||[]).find(y=>y.level===v);return x?`${x.name}: ${x.what}`:''};
+   h+=`<div class="dtr ${ch_?'ch':''}"><span title="${esc(d.what||'')}"><b>${esc(d.name)} <i class="qi">?</i></b><small>${snd==='picture'?'changes the picture':'changes the writing'}</small></span>
+   <button class="cell" data-copy="${id}" data-v="${sw==null?'':sw}" title="The swipe: ${esc(lvTip(sw))}. Tap to use it">${esc(lvName(id,sw))}</button>
+   <span class="step" title="${esc(lvTip(ours))}"><button data-dn="${id}" title="One level down">−</button><b>${esc(lvName(id,ours))}</b><button data-up="${id}" title="One level up">+</button></span>
+   ${hasWin?`<button class="cell ${w!=null&&w!==ours?'hot':''}" data-copy="${id}" data-v="${w==null?'':w}" title="The winning swipes: ${esc(lvTip(w))}. Tap to use it">${esc(lvName(id,w))}</button>`:'<span></span>'}</div>
+   ${(()=>{const t=lvTip(ours);return t?`<div class="dtnote">${esc(t)}</div>`:''})()}`}}
+ const nd=hasWin?Math.max(0,...Object.values(O.anatomy.dials).map(d=>Object.values(d.levels||{}).reduce((a,x)=>a+(x.count||0),0))):0;
+ h+=`</div>${hasWin?`<p class="hint">Winners = the top third of our swipes, ranked against the same brand and kind on real views (organic) or days the ad ran (paid). Read from the ${nd} swipes that have their dials read; older teardowns have none yet.</p>`:'<p class="hint">The winners column fills in once the scoreboard is built.</p>'}`;
+ // C · everything else
+ const lb=f.labels||{};const LBN={'format/image':'Format','style/image':'Style','framework/all':'Framework','doctrine/awareness':'Awareness'};
+ h+=`<h2 class="part">Everything else</h2><div class="field"><div class="lab">What the swipe is</div><div class="chips">`+Object.entries(lb).map(([k,v])=>{const a=(((O.anatomy||{}).labels||{})[k]||{})[v];return `<span class="chip"><small>${esc(LBN[k]||k)}</small> ${esc(v)}${a&&a.avg_score!=null?` · scores ${Math.round(a.avg_score*100)}`:''}</span>`}).join('')+`</div><p class="hint">Read off the swipe by the teardown.</p></div>`;
+ h+=`<details data-o="feel" ${OPEN.has('feel')?'open':''}><summary>The feeling and the technique</summary><p class="hint">Optional. The brief already picked these; change them only to push the ad a different way. The feeling is the one emotion the picture should hit. The technique is how the ad plays the trick. Tap to turn one on or off.</p><h3 class="grp">The feeling</h3><div class="tags">`+O.controls.emotions.map(e=>`<button class="tagb ${(B.emotions||[]).includes(e.id)?'on':''}" data-em="${e.id}"><b>${esc(e.name)}</b><span>${esc(e.what)}</span></button>`).join('')+`</div><h3 class="grp">The technique</h3><div class="tags">`+O.controls.techniques.map(e=>`<button class="tagb ${(B.techniques||[]).includes(e.id)?'on':''}" data-te="${e.id}"><b>${esc(e.name)}</b><span>${esc(e.what)}</span></button>`).join('')+`</div></details>`;
+ h+=`<div class="field" style="margin-top:14px"><div class="lab">Always protected</div><div class="tags">`+O.controls.guards.map(g=>`<span class="lock" title="${esc(g.what)}">🔒 ${esc(g.name)}</span>`).join('')+`</div></div>`;
+ $('#main').innerHTML=h;dots();wire2()}
+function topMsg(){const ch=(R&&R.choices)||[];const n=ch.filter(c=>c.on).length;const e=((R&&R.findings)||[]).filter(f=>f.level==='error');
+ if(e.length)return `<div class="msg no">Fix this first: ${esc(plain(e[0]))}</div>`;return `<div class="msg ok">${n} picture${n===1?'':'s'} going in, worked out from the rows below</div>`}
+function refresh2(){const m=document.querySelector('#main .msg');if(m)m.outerHTML=topMsg()}
+function redo2(){load().then(s2)}
+function setDial(id,v){const d=dial(id);if(!d||v==null||v==='')return;const lo=d.scale[0].level,hi=d.scale[d.scale.length-1].level;v=Math.max(lo,Math.min(hi,+v));B.dials={...(B.dials||{})};if(own()[id]&&own()[id].level===v)delete B.dials[id];else B.dials[id]=v}
+function wire2(){document.querySelectorAll('.pic[data-k]').forEach(e=>e.onclick=()=>{const k=e.dataset.k;if(e.classList.contains('miss'))return;
+  if(k.startsWith('added:')){B.added.splice(+k.split(':')[1],1)}else{B.skip=B.skip.includes(k)?B.skip.filter(x=>x!==k):[...B.skip,k]}
+  e.classList.toggle('off');redo2()});
+ const ad=$('#add');if(ad)ad.onclick=addSheet;
+ const m=B.swap_list;if(!m)return;
+ document.querySelectorAll('textarea.mxin').forEach(t=>{const fit=()=>{t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'};fit();t.addEventListener('input',fit)});
+ document.querySelectorAll('[data-to]').forEach(e=>e.oninput=()=>{m.swaps[+e.dataset.to].to=e.value;relo(refresh2)});
+ document.querySelectorAll('[data-from]').forEach(e=>e.oninput=()=>{m.swaps[+e.dataset.from].from=e.value;relo(refresh2)});
+ document.querySelectorAll('[data-keepi]').forEach(e=>e.onclick=()=>{const r=m.swaps.splice(+e.dataset.keepi,1)[0];if(r.from){m.stays.push(r.from);m.kept_back=[...(m.kept_back||[]),r.from]}redo2()});
+ document.querySelectorAll('[data-swapj]').forEach(e=>e.onclick=()=>{const x=m.stays.splice(+e.dataset.swapj,1)[0];m.kept_back=(m.kept_back||[]).filter(k=>k!==x);m.swaps.push({from:x,to:'',kind:'drawn',ref:null});s2();const t=document.querySelector(`[data-to="${m.swaps.length-1}"]`);if(t)t.focus()});
+ $('#mxadd').onclick=()=>{m.swaps.push({from:'',to:'',kind:'drawn',ref:null});s2();const t=document.querySelector(`[data-from="${m.swaps.length-1}"]`);if(t)t.focus()};
+ document.querySelectorAll('[data-kind]').forEach(e=>e.onclick=()=>{const r=m.swaps[+e.dataset.kind];r.kind=e.dataset.k2;if(r.kind!=='cast'&&r.kind!=='library')r.ref=null;redo2()});
+ document.querySelectorAll('[data-cast]').forEach(e=>e.onclick=()=>{const r=m.swaps[+e.dataset.cast];const old=(r.to||'').split(',')[0].trim();r.ref=e.dataset.id;
+  r.to=e.dataset.nm+(r.to&&old?r.to.slice(r.to.indexOf(',')>-1?r.to.indexOf(','):r.to.length):', our cast member, in the same pose and crop');redo2()});
+ document.querySelectorAll('[data-wm]').forEach(e=>e.onclick=()=>{m.words=e.dataset.wm;redo2()});
+ const rs=$('#mxreset');if(rs)rs.onclick=()=>{delete B.swap_list;redo2()};
+ document.querySelectorAll('[data-p]').forEach(e=>e.onclick=()=>{B.people=e.dataset.p;redo2()});
+ const yg=$('#young'),ai=$('#asis');if(yg)yg.onclick=()=>{B.cast_age='swipe';relo(s2)};if(ai)ai.onclick=()=>{delete B.cast_age;relo(s2)};
+ document.querySelectorAll('[data-who]').forEach(e=>e.onclick=()=>{const id=e.dataset.who,nm=e.dataset.nm,to=nm+', our cast member, in the same pose and crop';
+  let r=m.swaps.find(x=>x.kind==='cast')||m.swaps.find(x=>catOf(x.from+' '+x.to,x.kind)==='person');
+  if(!r){const j=m.stays.findIndex(x=>catOf(x,'')==='person');if(j>=0){const x=m.stays.splice(j,1)[0];r={from:x,to:'',kind:'cast',ref:null};m.swaps.push(r)}}
+  if(!r){r={from:'The person in the swipe',to:'',kind:'cast',ref:null};m.swaps.push(r)}
+  r.kind='cast';r.ref=id;r.to=to;B.people='cast';redo2()});
+ document.querySelectorAll('[data-s]').forEach(e=>e.onclick=()=>{B.show_product=e.dataset.s==='on';B.product=SEL.product||(O.products[SEL.brand]||[])[0]||'';redo2()});
+ document.querySelectorAll('[data-up],[data-dn]').forEach(e=>e.onclick=()=>{const id=e.dataset.up||e.dataset.dn;const cur=level(id);const d=dial(id);setDial(id,(cur==null?d.scale[0].level:cur)+(e.dataset.up?1:-1));redo2()});
+ document.querySelectorAll('[data-copy]').forEach(e=>e.onclick=()=>{if(e.dataset.v==='')return;setDial(e.dataset.copy,+e.dataset.v);redo2()});
+ document.querySelectorAll('[data-pre]').forEach(e=>e.onclick=()=>{const k=e.dataset.pre;B.dials={};const sd=(R.fields&&R.fields.swipe_dials)||{};
+  if(k==='__swipe'){for(const [id,v] of Object.entries(sd))if(dial(id)&&v!=null)setDial(id,v)}
+  else if(k==='__win'){for(const d of O.controls.dials){const w=win(d.id);if(w!=null)setDial(d.id,w)}}
+  else{const p=O.controls.presets.find(x=>x.id===k);if(p)for(const [id,v] of Object.entries(p.levels))if(dial(id))setDial(id,v)}redo2()});
+ document.querySelectorAll('[data-em]').forEach(e=>e.onclick=()=>{const k=e.dataset.em;B.emotions=(B.emotions||[]).includes(k)?B.emotions.filter(x=>x!==k):[...(B.emotions||[]),k];redo2()});
+ document.querySelectorAll('[data-te]').forEach(e=>e.onclick=()=>{const k=e.dataset.te;B.techniques=(B.techniques||[]).includes(k)?B.techniques.filter(x=>x!==k):[...(B.techniques||[]),k];redo2()});
+ document.querySelectorAll('details[data-o]').forEach(d=>d.ontoggle=()=>d.open?OPEN.add(d.dataset.o):OPEN.delete(d.dataset.o))}
+function addSheet(){const kit=(O.kit[SEL.brand]||[]);const cast=(O.cast[SEL.brand]||[]);
+ $('#sheetbox').innerHTML=`<h1>Add a picture</h1><div class="row"><button class="big on" id="fromfile">From my files</button><button class="big" id="close">Cancel</button></div>
+  ${cast.length?`<p class="sub">Our cast (to put a person in, pick them under "Who is in it"; this adds the photo as a look reference):</p><div class="pics">`+cast.map((c,i)=>`<div class="pic" data-c="${i}"><div class="im" style="${bg(c.thumb)}"></div><b>${esc(c.name)}</b></div>`).join('')+`</div>`:''}
+  <p class="sub">A real product photo:</p><div class="pics">`+kit.map((k,i)=>`<div class="pic" data-i="${i}"><div class="im" style="${bg(k.path)}"></div><b>${esc(k.label)}</b></div>`).join('')+`</div>`;
+ $('#sheet').classList.add('on');$('#close').onclick=()=>$('#sheet').classList.remove('on');
+ $('#fromfile').onclick=()=>$('#file').click();
+ $('#sheetbox').querySelectorAll('.pic[data-i]').forEach(e=>e.onclick=()=>{const k=kit[+e.dataset.i];B.added.push({path:k.path,label:'Real product, '+k.label});$('#sheet').classList.remove('on');load().then(s2)});
+ $('#sheetbox').querySelectorAll('.pic[data-c]').forEach(e=>e.onclick=()=>{const c=cast[+e.dataset.c];B.added.push({path:c.thumb,label:c.name+', our cast (a look reference)'});$('#sheet').classList.remove('on');load().then(s2)})}
+$('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=async()=>{
+ const r=await fetch('/api/prompt-upload',{method:'POST',body:JSON.stringify({name:f.name,data:rd.result})}).then(r=>r.json());
+ $('#sheet').classList.remove('on');if(r.path){B.added.push({path:r.path,label:'Your picture'});await load()}s2()};rd.readAsDataURL(f);e.target.value=''};
+
+
+// the check: every variable filled, not applicable with a reason, or missing
+const APPROVAL='cost_approval';
+function shown(v){if(v==null)return'';if(Array.isArray(v))return v.map(x=>x&&typeof x==='object'?`${x.from} → ${x.to}${x.needs?' ('+x.needs+')':''}`:x).join(' · ');return String(v)}
+function rowState(r){if(r.id===APPROVAL)return 'wait';if(r.problem)return 'no';return r.state==='filled'?'ok':r.state==='not_applicable'?'na':'no'}
+function rowHTML(r){const st=rowState(r);const val=st==='na'?'Not applicable: '+(r.reason||''):st==='wait'?'Given when you press Make the picture':st==='no'?(r.problem||'Missing').replace(r.name+': ',''):shown(r.value);
+ return `<button class="crow ${st}" data-var="${r.id}"><i>${st==='ok'?'✓':st==='na'?'–':st==='wait'?'…':'!'}</i><span><b>${esc(r.name)}</b><small>${esc(val).slice(0,180)}</small></span></button>`}
+function checkHTML(){const sh=R.sheet;if(!sh)return'';const rows=sh.rows;const fl=(sh.flags||[]).map(f=>`<div class="crow amber"><i>!</i><span><b>Flag, does not stop anything</b><small>${esc(f.say)}</small></span></div>`).join('');const bad=rows.filter(r=>rowState(r)==='no');const done=rows.filter(r=>['ok','na'].includes(rowState(r))).length;
+ let h=`<div class="check"><div class="verdict ${bad.length?'no':'ok'}">${bad.length?`✕ ${bad.length} item${bad.length>1?'s':''} to fill before anything is made`:`✓ Every item is set (${done} of ${rows.length}). The system can make this ${KIND==="clip"?"clip":"picture"} cleanly.`}</div>`;
+ if(bad.length)h+=bad.map(rowHTML).join('');h+=fl;
+ h+=`<details data-o="checkall" ${OPEN.has('checkall')?'open':''}><summary>See every item (${rows.length})</summary>`+sh.groups.map(g=>{const rs=rows.filter(r=>r.group===g.id);return rs.length?`<h3 class="grp">${esc(g.name)}</h3>`+rs.map(rowHTML).join(''):''}).join('')+`</details></div>`;return h}
+function wireCheck(){document.querySelectorAll('[data-var]').forEach(e=>e.onclick=()=>fixSheet(R.sheet.rows.find(r=>r.id===e.dataset.var)))}
+function fixSheet(r){if(!r||r.id===APPROVAL)return;let body='';
+ if(r.id==='words'&&KIND==='pic'){if(STEP!==2)go(2);const w=document.querySelector('[data-c]');if(w){w.scrollIntoView({block:'center'});w.focus()}return}
+ if(r.kind==='level'){body=`<div class="tags">`+r.allowed.map(l=>`<button class="tagb ${r.value===l?'on':''}" data-set="${l}"><b>${esc((r.scale||{})[l]||l)}</b></button>`).join('')+`</div>`}
+ else if(r.allowed&&r.kind!=='list'){body=`<div class="tags">`+r.allowed.map(a=>`<button class="tagb ${r.value===a?'on':''}" data-set="${esc(a)}"><b>${esc(a)}</b></button>`).join('')+`</div>`}
+ else if(r.allowed&&r.kind==='list'){const on=new Set(r.value||[]);body=`<div class="tags">`+r.allowed.map(a=>`<button class="tagb ${on.has(a)?'on':''}" data-tog="${esc(a)}"><b>${esc(a)}</b></button>`).join('')+`</div><button class="makebtn" id="fsave" style="margin-top:14px">Save</button>`}
+ else{body=`<textarea id="fval" class="search" style="min-height:120px">${esc(r.kind==='list'&&Array.isArray(r.value)?r.value.join('\n'):(r.value||''))}</textarea>${r.kind==='list'?'<p class="hint">One per line.</p>':''}<button class="makebtn" id="fsave" style="margin-top:14px">Save</button>`}
+ if((r.na||[]).length)body+=`<p class="hint" style="margin-top:18px">Or, not applicable because:</p><div class="tags">`+r.na.map(x=>`<button class="tagb ${r.reason===x?'on':''}" data-na="${esc(x)}"><b>${esc(x)}</b></button>`).join('')+`</div>`;
+ $('#sheetbox').innerHTML=`<h1>${esc(r.name)}</h1><p class="sub">${esc(r.means)}</p>${body}<div class="row" style="margin-top:16px"><button class="big" id="fclose">Cancel</button></div>`;$('#sheet').classList.add('on');
+ const put=e=>{B.sheet={...(B.sheet||{}),[r.id]:{...e,source:'person'}};$('#sheet').classList.remove('on');load().then(()=>(KIND==='clip'?[s1,c2,c3,s4]:[s1,s2,s3,s4])[STEP]())};
+ $('#fclose').onclick=()=>$('#sheet').classList.remove('on');
+ $('#sheetbox').querySelectorAll('[data-set]').forEach(e=>e.onclick=()=>put({state:'filled',value:r.kind==='level'?+e.dataset.set:e.dataset.set}));
+ $('#sheetbox').querySelectorAll('[data-na]').forEach(e=>e.onclick=()=>put({state:'not_applicable',reason:e.dataset.na}));
+ $('#sheetbox').querySelectorAll('[data-tog]').forEach(e=>e.onclick=()=>e.classList.toggle('on'));
+ const fs=$('#fsave');if(fs)fs.onclick=()=>{if(r.allowed&&r.kind==='list')return put({state:'filled',value:[...$('#sheetbox').querySelectorAll('[data-tog].on')].map(x=>x.dataset.tog)});
+  const v=$('#fval').value;put({state:'filled',value:r.kind==='list'?v.split('\n').map(x=>x.trim()).filter(Boolean):v.trim()})}}
+
+// 3 · change what you want
+const OPEN=new Set();let VAR=null;
+const MAIN=['intensity','absurdity','humor','realism','stopping_power'];
+const GROUPS=[['How far it goes',['valence','dramatisation','edge','irony','cringe','uncanny']],['What it looks like',['ad_likeness','degradation','density','scale_distortion','parody_marks','metaphor','rhyme','borrowedness','anchorage']],['How it is shot',['shot_scale','camera','eye_contact']],['Who is in it',['cultural_casting']],['What it says',['specificity','relevance','coherence']]];
+const SECTIONS=[['THE PICTURE','What to draw','The scene, the swap and the words. This is the main instruction.'],['INPUTS','The pictures that go in','Tells the model which picture is which.'],['THE PRODUCT','The real product','Keeps our product exact and the right size.'],['THE PEOPLE','The people','Lookalikes of the ad, or made-up people.'],['THE FRAME','The shape','Tall 9:16, with everything that matters in the safe middle.'],['RULES','Do not do','What the model must not change or add.']];
+const dial=id=>O.controls.dials.find(d=>d.id===id);
+const own=()=>(R.fields&&R.fields.dials_brief)||{};
+function level(id){if(B.dials&&B.dials[id]!==undefined)return B.dials[id];const e=R.sheet&&R.sheet.recipe.sheet['dial.'+id];return e&&e.state==='filled'?e.value:null}
+function words(id,lv){const sent=(R.fields&&R.fields.dials_sent||{})[id];if(sent&&!(B.dials&&B.dials[id]!==undefined))return sent;const d=dial(id),o=own()[id];if(o&&o.level===lv)return o.line;const sc=d.scale.find(x=>x.level===lv);return sc?sc.what:''}
+function scaleName(id,lv){const sc=dial(id).scale.find(x=>x.level===lv);return sc?sc.name:'not set'}
+function sections(){const out={};let cur=null;for(const l of R.prompt.split('\n')){const h=SECTIONS.find(x=>x[0]===l.trim());if(h){cur=h[0];out[cur]=[]}else if(cur&&l.trim())out[cur].push(...l.split(/(?<=[.!?])\s+(?=[A-Z*"“])/))}return out}
+function adds(id,lv,changed){const e=R.sheet&&R.sheet.recipe.sheet['dial.'+id];const sent=(R.fields&&R.fields.dials_sent||{})[id];
+ if(e&&e.state==='not_applicable')return '<b>Not sent:</b> '+esc(e.reason);
+ if(sent)return (changed?'<b>Changed. Sent to the model:</b> ':'<b>Sent to the model:</b> ')+esc(sent);
+ return changed?'<b>Changed.</b> This dial shapes the writing; it changes the picture when the brief is written again.':'<b>Recorded.</b> This dial shapes the writing; it reaches the picture through the swaps and the words.'}
+function sliderCard(id){const d=dial(id);if(!d)return'';const lv=level(id);const sc=d.scale;const lo=sc[0],hi=sc[sc.length-1];const changed=B.dials&&B.dials[id]!==undefined;
+ return `<div class="field dial" data-d="${id}"><div class="lab">${esc(d.name)} <span class="lvl">${esc(lv==null?'not set':scaleName(id,lv))}</span></div>
+ <input type="range" min="${lo.level}" max="${hi.level}" step="1" value="${lv==null?lo.level:lv}" data-r="${id}"><div class="ends"><span>${esc(lo.name)}</span><span>${esc(hi.name)}</span></div>
+ <div class="adds ${changed?'ch':''}">${adds(id,lv,changed)}</div></div>`}
+function sentences(t){return String(t||'').replace(/\*\*/g,'').split(/(?<=[.!?:])\s+(?=[A-Z"“])/).filter(x=>x.trim())}
+function spot(w){const m=String(w||'').match(/(\d+)%\s*top/i);if(!m)return'';const t=+m[1];return 'Sits '+(t<30?'near the top':t<60?'in the middle':'near the bottom')+' of the picture.'}
+// what the chain has learned from your reviews (lessons.json): rules for every ad, applied to this one too, never notes for one ad
+function notesHTML(){const L=(R&&R.fields&&R.fields.lessons)||[];return L.length?`<details class="field" style="border-left:4px solid var(--ok)"><summary class="lab">What the system has learned from your reviews (${L.length}), applied to every ad</summary>${L.map(x=>`<div style="margin-top:10px"><b>${esc(x.rule)}</b><div class="hint">You: “${esc(x.said)}” · ${esc(x.source)}${x.status==='approved'?'':' · not approved yet'}</div></div>`).join('')}</details>`:''}
+function barsHTML(){const b=(R&&R.fields&&R.fields.bars)||{};if(!(b.top||b.bottom))return '';return `<div class="field"><div class="lab">Black bars, top and bottom</div><p class="hint">The ad we copy has them (${b.top}% top, ${b.bottom}% bottom). They go on our picture the same.</p><div class="row"><button class="big ${b.on!==false?'on':''}" id="barson">Keep the bars</button><button class="big ${b.on===false?'on':''}" id="barsoff">No bars</button></div></div>`}
+function s3(){const f=R.fields||{};const oc=f.words_plain||[],where=f.zones_where||[];
+ let h=`<h1>${esc(SEL.name)}</h1>`+checkHTML()+notesHTML()+`<p class="sub">Change anything. Leave it if it looks right.</p>`+barsHTML();
+ h+=`<div class="field"><div class="lab">The words on the picture <a id="cw">put it back</a></div>`+(f.words_mode==='set on top after'&&oc.length?'<p class="hint">Set on top after the picture is made. The picture itself has no writing.</p>':'')+(oc.length?oc.map((c,i)=>`<textarea data-c="${i}" class="words">${esc(c)}</textarea><p class="hint">${spot(where[i])}</p>`).join(''):'<p class="sub">No words on this one.</p>')+`</div>`;
+ h+=`<p class="hint">The elements, the dials, the feeling and who is in it are on the matrix. <a class="lnk" id="tomx">Back to the matrix</a></p>`;
+  // every part
+ h+=`<h2 class="part">Every part of what we send</h2>`;const sec=sections();
+ h+=SECTIONS.map(([k,name,mean])=>{const lines=sec[k]||[];let inner='';
+  if(k==='THE PICTURE'){inner+=`<div class="lab small">What changes from the ad, one idea per box <a id="sw">put it back</a></div>`+sentences(f.swaps).map((x,i)=>`<textarea class="sent" data-sw="${i}">${esc(x)}</textarea>`).join('')+
+    [['scene','The scene'],['subject','Who or what it is about'],['details','The details'],['place_light','The place and the light'],['photo_style','The photo style'],['colours','The colours']].map(([i,l])=>`<div class="lab small">${l}</div><input data-ing="${i}" placeholder="Same as the ad we copy" value="${esc((B.ingredients||{})[i]||'')}">`).join('')+
+    `<label class="tick"><input type="checkbox" id="stays" ${B.send_stays?'checked':''}> Also send what stays the same from the ad (place, light, colours)</label>`+addLines('draw_lines')}
+  else if(k==='INPUTS'){inner+=`<ul>`+lines.map(l=>`<li>${esc(l)}</li>`).join('')+`</ul><button class="big" id="topics">Change the pictures</button>`}
+  else if(k==='THE PRODUCT'){inner+=(prodOn()?`<ul>`+lines.map(l=>`<li>${esc(l)}</li>`).join('')+`</ul>`+addLines('product_lines'):'<p class="hint">The product is off.</p>')}
+  else if(k==='THE PEOPLE'){inner+=`<ul>`+lines.map(l=>`<li>${esc(l)}</li>`).join('')+`</ul>`+addLines('people_lines','Lands at the end of "What to draw".')}
+  else if(k==='THE FRAME'){inner+=`<ul>`+lines.map(l=>`<li>${esc(l)}</li>`).join('')+`</ul><p class="hint">Fixed for every picture.</p>`}
+  else{inner+=`<ul>`+lines.map(l=>`<li>${esc(l)}</li>`).join('')+`</ul><div class="lab small">Keep exactly as in the ad</div>`+[['face','The face'],['label','The product label'],['background','The background']].map(([i,l])=>`<label class="tick"><input type="checkbox" data-keep="${i}" ${(B.keep||[]).includes(i)?'checked':''}> ${l}</label>`).join('')+addLines('do_not','Lands at the end of "What to draw".')}
+  return `<details data-o="${k}" ${OPEN.has(k)?'open':''}><summary>${name}<span class="hint"> · ${esc(mean)}</span></summary>${inner}</details>`}).join('');
+ // recipe
+ h+=`<h2 class="part">Save it as a recipe</h2><div class="field">${VAR?`<p class="hint">A variation of <b>${esc(VAR.of)}</b>: change one thing only.</p>`:''}<div id="varmsg"></div><div class="row"><input class="search" id="rname" placeholder="Name it, e.g. more absurd" style="flex:1"><button class="big on" id="rsave">Save</button></div><div id="rlist"></div></div>`;
+ h+=`<details><summary>See exactly what we send</summary><pre>${esc(R.prompt)}</pre></details>`;
+ $('#main').innerHTML=h;dots();wire3();recipeList()}
+function prodOn(){const f=R.fields||{};return f.swap_list?!!f.product_in_frame:!!B.product}
+function addLines(key,note){const v=B[key]||[];return v.map((x,i)=>`<input data-al="${key}" data-ai="${i}" value="${esc(x)}">`).join('')+`<button class="big addl" data-add="${key}">+ Add your own line</button>${note?`<p class="hint">${note}</p>`:''}`}
+function wire3(){
+ wireCheck();
+ const bo=$('#barson'),bf=$('#barsoff');if(bo)bo.onclick=()=>{delete B.bars;relo(s3)};if(bf)bf.onclick=()=>{B.bars=false;relo(s3)};
+ document.querySelectorAll('textarea.sent,textarea.words').forEach(t=>{const fit=()=>{t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'};fit();t.addEventListener('input',fit)});
+ document.querySelectorAll('details[data-o]').forEach(d=>d.addEventListener('toggle',()=>d.querySelectorAll('textarea.sent').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'})));
+ document.querySelectorAll('details[data-o]').forEach(d=>d.ontoggle=()=>d.open?OPEN.add(d.dataset.o):OPEN.delete(d.dataset.o));
+ document.querySelectorAll('[data-c]').forEach(e=>e.oninput=()=>{B.our_copy=[...document.querySelectorAll('[data-c]')].map(x=>x.value.trim().split('\n').map(l=>l.trim()).filter(Boolean).join(' / '));relo(refresh3)});
+ const cw=$('#cw');if(cw)cw.onclick=()=>{delete B.our_copy;load().then(s3)};
+ document.querySelectorAll('[data-sw]').forEach(e=>e.oninput=()=>{B.swaps=[...document.querySelectorAll('[data-sw]')].map(x=>x.value.trim()).filter(Boolean).join(' ');relo(refresh3)});$('#sw').onclick=()=>{delete B.swaps;load().then(s3)};
+ document.querySelectorAll('[data-ing]').forEach(e=>e.oninput=()=>{B.ingredients={...(B.ingredients||{}),[e.dataset.ing]:e.value};relo(refresh3)});
+ $('#stays').onchange=e=>{B.send_stays=e.target.checked;load().then(refresh3)};
+ if($('#hookpart')){const w=S.workflow;const showChange=()=>{const part=$('#hookpart').value,impact=w.change_impacts[part];$('#hookvaluebox').innerHTML=part==='motion_reference'?`<label>Reference <select id="hookvalue"><option value="">Automatic selection</option><option value="none">No movement reference</option>${w.movements.map(m=>`<option value="${esc(m.id)}">${esc(m.id)} · ${esc(m.does.join(', '))}</option>`).join('')}</select></label>`:`<label>Replacement <textarea id="hookvalue" rows="4" style="width:100%">${esc(part==='spoken_line'?w.line:w.motion)}</textarea></label>`;if(part==='motion_reference')$('#hookvalue').value=w.movement_id;$('#hookimpact').innerHTML=`<p><b>Reuse:</b> ${impact.reuse.map(esc).join(', ')}.</p><p><b>Rebuild after saving:</b> ${impact.rebuild.map(esc).join(', ')}.</p>`};$('#hookpart').onchange=showChange;showChange();$('#hooksave').onclick=async()=>{const e=$('#hooksave');e.disabled=true;const r=await fetch('/api/prompt-hook-update',{method:'POST',body:JSON.stringify({run:SEL.run,part:$('#hookpart').value,value:$('#hookvalue').value})}).then(r=>r.json());if(r.error){$('#hookmsg').textContent=r.error;e.disabled=false;return}await shotsView();$('#hookmsg').textContent=r.unchanged?'No change saved; all files reused.':'Saved. No generation started. Reuse: '+r.impact.reuse.join(', ')+'. Rebuild: '+r.impact.rebuild.join(', ')+'.'}}
+ document.querySelectorAll('[data-keep]').forEach(e=>e.onchange=()=>{B.keep=[...document.querySelectorAll('[data-keep]:checked')].map(x=>x.dataset.keep);load().then(refresh3)});
+ document.querySelectorAll('[data-add]').forEach(e=>e.onclick=()=>{const k=e.dataset.add;B[k]=[...(B[k]||[]),''];s3();const ins=document.querySelectorAll(`[data-al="${k}"]`);ins[ins.length-1].focus()});
+ document.querySelectorAll('[data-al]').forEach(e=>e.oninput=()=>{B[e.dataset.al][+e.dataset.ai]=e.value;relo(refresh3)});
+ document.querySelectorAll('[data-p]').forEach(e=>e.onclick=()=>{B.people=e.dataset.p;load().then(s3)});
+ document.querySelectorAll('[data-s]').forEach(e=>e.onclick=()=>{const on=e.dataset.s==='on';if(R.fields&&R.fields.swap_list){B.show_product=on;B.product=SEL.product||(O.products[SEL.brand]||[])[0]||''}else B.product=on?(SEL.product||(O.products[SEL.brand]||[])[0]||''):'';load().then(s3)});
+ document.querySelectorAll('[data-r]').forEach(e=>e.oninput=()=>{const id=e.dataset.r,v=+e.value;B.dials={...(B.dials||{})};
+  if(own()[id]&&own()[id].level===v)delete B.dials[id];else B.dials[id]=v;
+  const card=e.closest('.dial');card.outerHTML=sliderCard(id);wire3();relo(refresh3)});
+ document.querySelectorAll('[data-pre]').forEach(e=>e.onclick=()=>{const p=O.controls.presets.find(x=>x.id===e.dataset.pre);B.dials={};
+  if(p)for(const [k,v] of Object.entries(p.levels)){if(dial(k)&&!(own()[k]&&own()[k].level===v))B.dials[k]=v}load().then(s3)});
+ document.querySelectorAll('[data-em]').forEach(e=>e.onclick=()=>{const k=e.dataset.em;B.emotions=(B.emotions||[]).includes(k)?B.emotions.filter(x=>x!==k):[...(B.emotions||[]),k];load().then(s3)});
+ document.querySelectorAll('[data-te]').forEach(e=>e.onclick=()=>{const k=e.dataset.te;B.techniques=(B.techniques||[]).includes(k)?B.techniques.filter(x=>x!==k):[...(B.techniques||[]),k];load().then(s3)});
+ const tp=$('#topics');if(tp)tp.onclick=()=>go(1);const tm=$('#tomx');if(tm)tm.onclick=()=>go(1);
+ $('#rsave').onclick=saveRecipe}
+function refresh3(){const c=document.querySelector('.check');if(c){const open=OPEN.has('checkall');c.outerHTML=checkHTML();wireCheck()}const m=document.querySelector('.msg');if(m)m.outerHTML=status();const p=document.querySelector('details:not([data-o]) pre');if(p)p.textContent=R.prompt;
+ const sec=sections();for(const [k] of SECTIONS){const d=document.querySelector(`details[data-o="${k}"] ul`);if(d&&k!=='THE PICTURE')d.innerHTML=(sec[k]||[]).map(l=>`<li>${esc(l)}</li>`).join('')}}
+// recipes
+const PLAIN={our_copy:'The words',swaps:'What changes from the ad',people:'Who is in it',product:'The product',skip:'Pictures left out',added:'Pictures added',dials:'Dials',emotions:'Feeling',techniques:'Technique',ingredients:'Details',keep:'Keep exactly',do_not:'Do not do',draw_lines:'Extra lines',product_lines:'Product lines',people_lines:'People lines',send_stays:'What stays'};
+function summary(b){const out=[];
+ if(b.product==='')out.push('Product off');if(b.people==='made-up')out.push('A made-up person');
+ if(b.our_copy)out.push('Words: '+b.our_copy.join(' / '));if(b.swaps)out.push('Its own "what changes" text');
+ for(const [k,v] of Object.entries(b.dials||{}))out.push(`${dial(k)?dial(k).name:k}: ${scaleName(k,v)}`);
+ if((b.emotions||[]).length)out.push('Feeling: '+b.emotions.join(', '));if((b.techniques||[]).length)out.push('Technique: '+b.techniques.join(', '));
+ if((b.skip||[]).length)out.push(`${b.skip.length} picture(s) left out`);if((b.added||[]).length)out.push(`${b.added.length} picture(s) added`);
+ for(const [k,v] of Object.entries(b.ingredients||{}))if(v)out.push(`${k.replace('_',' ')}: ${v}`);
+ if((b.keep||[]).length)out.push('Keep exactly: '+b.keep.join(', '));for(const k of ['do_not','draw_lines','product_lines','people_lines'])for(const x of b[k]||[])if(x)out.push(`${PLAIN[k]}: ${x}`);
+ return out.length?out:['As the brief has it']}
+function diff(a,b){const keys=new Set([...Object.keys(a),...Object.keys(b)]);const out=[];
+ for(const k of keys){if(['brand','run'].includes(k))continue;if(k==='dials'){const d=new Set([...Object.keys(a.dials||{}),...Object.keys(b.dials||{})]);for(const x of d)if((a.dials||{})[x]!==(b.dials||{})[x])out.push(dial(x)?dial(x).name:x);continue}
+  if(JSON.stringify(a[k]??null)!==JSON.stringify(b[k]??null)&&!(isEmpty(a[k])&&isEmpty(b[k])))out.push(PLAIN[k]||k)}return out}
+const isEmpty=v=>v==null||v===''||(Array.isArray(v)&&!v.filter(Boolean).length)||(typeof v==='object'&&!Array.isArray(v)&&!Object.values(v).filter(Boolean).length);
+async function saveRecipe(){const name=$('#rname').value.trim();let changed=null;
+ if(VAR){changed=diff(VAR.base,B);if(changed.length!==1){$('#varmsg').innerHTML=`<div class="msg no">${changed.length?'A variation changes one thing. This changes: '+changed.join(', ')+'.':'Change one thing first.'}</div>`;return}}
+ const r=await fetch('/api/prompt-recipe',{method:'POST',body:JSON.stringify({name,brief:B,variation_of:VAR&&VAR.of,changed})}).then(r=>r.json());
+ $('#varmsg').innerHTML=r.error?`<div class="msg no">${esc(r.error)}</div>`:`<div class="msg ok">Saved.</div>`;if(!r.error){VAR=null;$('#rname').value='';recipeList()}}
+async function recipeList(){const d=await fetch(`/api/prompt-recipes?brand=${SEL.brand}&run=${SEL.run}`).then(r=>r.json());const el=$('#rlist');if(!el)return;
+ el.innerHTML=d.recipes.map((r,i)=>`<div class="recipe"><b>${esc(r.name)}</b>${r.variation_of?`<span class="hint"> · variation of ${esc(r.variation_of)}, changes ${esc((r.changed||[]).join(', '))}</span>`:''}<ul>${summary(r.brief).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="two"><button class="big" data-use="${i}">Use it</button><button class="big" data-var="${i}">Make a variation</button></div></div>`).join('')||'<p class="hint">No recipes for this brief yet.</p>';
+ el.querySelectorAll('[data-use]').forEach(e=>e.onclick=()=>{B=JSON.parse(JSON.stringify(d.recipes[+e.dataset.use].brief));VAR=null;load().then(s3)});
+ el.querySelectorAll('[data-var]').forEach(e=>e.onclick=()=>{const r=d.recipes[+e.dataset.var];B=JSON.parse(JSON.stringify(r.brief));VAR={of:r.name,base:JSON.parse(JSON.stringify(r.brief))};load().then(()=>{s3();scrollTo(0,0)})})}
+
+// 4 · make it
+async function lastMade(){if(KIND==='clip'||OUT!==null)return;try{const st=await fetch('/api/prompt-batch?run='+encodeURIComponent(B.run)).then(r=>r.json());
+ const f=st.approved_picture||st.newest_picture;if(f&&OUT===null){OUT={state:'done',file:f,liked:!!st.approved_picture,rung:null};s4()}}catch(e){}}
+function s4(){if(OUT===null&&KIND!=='clip'&&s4.asked!==B.run){s4.asked=B.run;lastMade()}const ok=R&&!R.error&&R.ok;const bk=(R.sheet&&R.sheet.recipe.sheet.backups&&R.sheet.recipe.sheet.backups.value)||[];const fails=bk.filter(x=>!/^Try again/.test(x)&&!/^Keep the best/.test(x));
+ if(!R.quoted&&!R.error){R.quoted=true;fetch('/api/prompt-preview',{method:'POST',body:JSON.stringify({job:JOB(),brief:B,quote:true})}).then(r=>r.json()).then(q=>{if(q.cost&&STEP===3&&OUT===null){R.cost=q.cost;s4()}})}
+ const cost=R.cost&&R.cost.credits!=null?`${R.cost.credits} credits`:(R.quoted&&!(R.cost&&R.cost.say&&R.cost.say!=='quote skipped')?'Asking Higgsfield…':'Pay as you go');const what=KIND==='clip'?'clip':'picture';
+ let h=`<h1>${esc(SEL.name)}</h1>`+checkHTML();
+ const F=(R&&R.fields)||{};   // a video already made shows what it made: the clip, then each version with its headline
+ if(KIND==='clip'&&OUT===null&&F.made){h+=`<h2 class="part">Made</h2><div class="result"><video controls playsinline src="/media?path=${encodeURIComponent(F.made)}" style="width:260px;border-radius:12px"></video></div>`+((F.finals||[]).length?`<h2 class="part">With the headline and the song</h2><div class="row" style="flex-wrap:wrap;gap:10px">${F.finals.map(f=>`<video controls playsinline src="/media?path=${encodeURIComponent(f)}" style="width:180px;border-radius:12px"></video>`).join('')}</div>`:'')}
+ if(OUT===null){h+=`<button class="makebtn" id="make" ${ok?'':'disabled'}>Make the ${what}</button>
+  <div class="facts"><div class="fact"><small>Cost</small><b>${cost}</b></div><div class="fact"><small>${KIND==='clip'?'One take':'If it fails'}</small><b>${KIND==='clip'?'judged and shown here; keep it or press again':'we try again'+(fails.length?', then '+esc(fails.join(', then ')):'')}</b></div></div>`}
+ else if(OUT.state==='running'){h+=`<div class="wait">Making your ${what}… ${KIND==='clip'?'a few minutes':'about a minute'}</div>`}
+ else if(OUT.state==='done'){h+=(OUT.rung&&!['gpt','seedance-2.5','picture-set'].includes(OUT.rung)?`<div class="msg ok">Made by the backup: ${esc({backup:'Seedream 5 Pro',third:'Nano Banana Pro','openai-net':'GPT Image 2.5 (OpenAI direct)','kling-4.0':'Kling'}[OUT.rung]||OUT.rung)}</div>`:'')+`<div class="result">${KIND==='clip'?`<video controls playsinline src="/media?path=${encodeURIComponent(OUT.file)}" style="width:100%;max-width:460px;display:block;margin:16px auto;border-radius:16px"></video>`:`<img src="${url(OUT.file)}">`}</div><div class="two" style="grid-template-columns:1fr 1fr 1fr"><button class="big" id="again">Make another</button><button class="big" id="change">Change something</button><button class="big on" id="good">${OUT.liked?'Approved ✓':'Looks good'}</button></div>`}
+ else{h+=`<div class="msg no">It didn't work: ${esc(OUT.error)}</div><button class="makebtn" id="make">Try again</button>`}
+ if(KIND!=='clip'&&OUT?.state!=='running')h+='<div id="batch"></div>';
+ if(KIND==='clip'&&OUT?.state!=='running')h+='<div id="handbox"></div>';
+ $('#main').innerHTML=h;dots();
+ const mk=$('#make');if(mk)mk.onclick=make;
+ const a=$('#again');if(a)a.onclick=()=>{OUT=null;make()};
+ const c=$('#change');if(c)c.onclick=()=>{OUT=null;go(2)};
+ const g=$('#good');if(g)g.onclick=async()=>{await fetch('/api/prompt-good',{method:'POST',body:JSON.stringify({file:OUT.file,brief:B})});OUT.liked=true;s4()};
+ if($('#batch'))batchPanel();if($('#handbox'))handBox()}
+// THE BATCH (2026-10-27): the approved picture + 5 one-change variations, their headlines editable, then the Meta card
+let BT=null,BJ=null;
+async function batchPanel(){const el=$('#batch');if(!el)return;BT=await fetch('/api/prompt-batch?run='+encodeURIComponent(B.run)).then(r=>r.json());
+ if(!BT.approved_picture){el.innerHTML='';return}
+ const vs=BT.variations||[];let h=`<h2 class="part">The 5 variations</h2><p class="hint">Type <b>/</b> where you want a new line. A long line also breaks by itself instead of shrinking.</p>`;
+ if(BJ&&BJ.state==='running'){h+=`<div class="wait">${esc(BJ.say)}</div>`;el.innerHTML=h;return}
+ if(BJ&&BJ.state==='failed')h+=`<div class="msg no">It stopped: ${esc(BJ.error)}</div>`;
+ // the confirmation after Send (2026-10-27): first
+ // thing in the panel, scrolled to, with where the card is and a link to the approval page
+ const SENT=BJ&&BJ.state==='done'&&BJ.kind==='card'&&BT.card;
+ if(SENT){const C=BT.card;h+=`<div class="msg ok" id="bsent" style="font-size:17px">✓ Sent. The ${C.pictures} pictures are on the Meta approval page, in To check.<br><span style="font-weight:400">${esc(C.name)} · ${C.primary!=null?`${C.primary} primary texts, ${C.headlines} headlines, ${C.descriptions} descriptions, each from one of our winning ads`:''}${C.pages===0?' · no landing page on it yet':''}. Nothing goes live until you press Approve there.</span><br><a href="http://localhost:8795" target="_blank" rel="noopener">Open the Meta approval page</a></div>`}
+ if(!vs.length){h+=`<p class="sub">Five versions of this ad, each one change. The headline keeps your approved headline's shape and fills its blanks from her real words.</p><button class="makebtn" id="bwrite">Write the 5 variations</button>`;el.innerHTML=h;$('#bwrite').onclick=()=>bjob('/api/prompt-batch-write','Writing the 5 variations… about two minutes');return}
+ const done=vs.every(v=>BT.made[v.id]);
+ h+=`<p class="sub">All 6 headlines. Change any line, then approve. Your approval is the copy sign-off; nothing is made from words you have not seen.</p>`;
+ h+=`<div class="brow"><div class="bnum">1</div><div><small>Your approved picture</small>${(BT.approved_words||[]).map(w=>`<div class="bhead">${esc(w).replace(/ \/ /g,'<br>')}</div>`).join('')}</div>${BT.approved_picture?`<div class="bpic" style="${bg(BT.approved_picture)}"></div>`:''}</div>`;
+ vs.forEach((v,i)=>{h+=`<div class="brow"><div class="bnum">${i+2}</div><div style="min-width:0"><small>${esc(v.label)}</small>${(v.words||[]).map((w,z)=>`<input class="bin" data-bv="${v.id}" data-bz="${z}" value="${esc(w)}">`).join('')}<p class="hint">${esc(v.picture||'Words only: the approved picture gets these words.')}</p></div>${BT.made[v.id]?`<div class="bpic" style="${bg(BT.made[v.id])}"></div>`:'<div class="bpic empty">not made yet</div>'}</div>`});
+ const CD=BT.card;if(done&&CD&&!SENT)h+=`<div class="msg ok">On the Meta approval page, in To check: ${esc(CD.name)}. ${CD.pictures} pictures${CD.primary!=null?`, ${CD.primary} primary texts, ${CD.headlines} headlines, ${CD.descriptions} descriptions`:''}${CD.pages===0?'. No landing page on it yet':''}. Sent ${esc((CD.at||'').replace('T',' '))}.</div>`;
+ h+=done?`<button class="makebtn" id="bcard">${CD?'Send again (updates the card in To check)':'Send the 6 to the Meta approval page'}</button><p class="hint">They land in To check on the approval page. Nothing goes live until you press Approve there.</p>`:`<button class="makebtn" id="bmake">Approve these words and make the 5</button><p class="hint">About 5 pictures at 2.75 credits each. Each is an edit of your approved picture, checked against it.</p>`;
+ // the handoff (2026-10-27): the same 5, packaged for the graphic designer to make by hand; image-edit writes it.
+ // Named by the role, never the person (the owner: "make this name agnostic")
+ const HO=BT.handoff,WHO='the graphic designer';
+ h+=`<h2 class="part">Or hand the 5 to ${esc(WHO)}</h2><p class="hint">One Drive folder with everything to make them by hand in Higgsfield Supercomputer: each prompt, the pictures it names, the words, the rules and a one-page how-to. Nothing is made or spent.</p>`;
+ if(HO&&HO.link)h+=`<div class="msg ok" id="bhanded">✓ Handed off. <a href="${esc(HO.link)}" target="_blank" rel="noopener">Open the Drive folder</a></div>`;
+ h+=`<button class="makebtn" id="bhand">${HO?'Hand off again (updates the folder)':`Hand off to ${esc(WHO)}`}</button>`;
+ el.innerHTML=h;
+ const hb=$('#bhand');if(hb)hb.onclick=()=>bjob('/api/prompt-handoff',`Packing the handoff for ${WHO} and copying it to the Drive… about three minutes`,'handoff');
+ const mk=$('#bmake');if(mk)mk.onclick=()=>{const words={};document.querySelectorAll('[data-bv]').forEach(e=>{(words[e.dataset.bv]=words[e.dataset.bv]||[])[+e.dataset.bz]=e.value});bjob('/api/prompt-batch-make','Making the 5 variations… a few minutes',{words})};
+ const cd=$('#bcard');if(cd)cd.onclick=()=>bjob('/api/prompt-batch-card','Sending the 6 to the Meta approval page… about a minute. It uses the copy already written for this ad (it writes copy only when there is none).','card')}
+// the video handoff (2026-10-27): the same front door as the pictures' (image-edit handoff.py), the brief's lane read from
+// the register; the editor's package is video-edit's. The board only presses it and shows the Drive link.
+let HJ=null;
+async function handBox(){const el=$('#handbox');if(!el)return;const who='the video editor';
+ const st=await fetch('/api/prompt-handoff?kind=clip&run='+encodeURIComponent(B.run)).then(r=>r.json()).catch(()=>({}));
+ let h=`<h2 class="part">Hand this video to ${esc(who)}</h2><p class="hint">One Drive folder with everything to edit it by hand: the brief, every scene's clip, stills and voice, the music and sound, and a one-page how-to. Nothing is made or spent.</p>`;
+ if(HJ&&HJ.state==='running'){el.innerHTML=h+`<div class="wait">Packing the handoff for ${esc(who)} and copying it to the Drive… a few minutes</div>`;return}
+ if(HJ&&HJ.state==='failed')h+=`<div class="msg no">It stopped: ${esc(HJ.error)}</div>`;
+ if(st.link)h+=`<div class="msg ok" id="hhanded">✓ Handed off${st.brief?' ('+esc(st.brief)+')':''}. <a href="${esc(st.link)}" target="_blank" rel="noopener">Open the Drive folder</a></div>`;
+ h+=`<button class="makebtn" id="hgo">${st.link?'Hand off again (updates the folder)':`Hand off to ${esc(who)}`}</button>`;el.innerHTML=h;
+ $('#hgo').onclick=async()=>{HJ={state:'running'};handBox();
+  const r=await fetch('/api/prompt-handoff',{method:'POST',body:JSON.stringify({run:B.run,kind:'clip'})}).then(r=>r.json());
+  if(r.error){HJ={state:'failed',error:r.error};return handBox()}
+  const poll=async()=>{const j=await fetch('/api/prompt-job?id='+r.id).then(r=>r.json());if(j.state==='running')return setTimeout(poll,4000);HJ=j.state==='failed'?j:null;await handBox();const m=$('#hhanded')||$('#handbox .msg.no');if(m)m.scrollIntoView({behavior:'smooth',block:'center'})};poll()}}
+async function bjob(path,say,extra,kind){if(typeof extra==='string'){kind=extra;extra=null}BJ={state:'running',say,kind};batchPanel().then(()=>{const w=$('#batch .wait');if(w)w.scrollIntoView({behavior:'smooth',block:'center'})});
+ const r=await fetch(path,{method:'POST',body:JSON.stringify({run:B.run,brand:SEL.brand,product:SEL.product,...(extra||{})})}).then(r=>r.json());
+ if(r.error){BJ={state:'failed',error:r.error};return batchPanel()}
+ const poll=async()=>{const j=await fetch('/api/prompt-job?id='+r.id).then(r=>r.json());if(j.state==='running')return setTimeout(poll,4000);BJ=j.state==='failed'?j:{state:'done',kind};await batchPanel();const s=$('#bsent')||(kind==='handoff'&&$('#bhanded'))||$('#batch .msg.no');if(s)s.scrollIntoView({behavior:'smooth',block:'center'})};poll()}
+async function make(){OUT={state:'running'};s4();
+ const r=await fetch('/api/prompt-make',{method:'POST',body:JSON.stringify({brief:B,job:JOB()})}).then(r=>r.json());
+ if(r.error){OUT={state:'failed',error:r.error};return s4()}
+ const poll=async()=>{const j=await fetch('/api/prompt-job?id='+r.id).then(r=>r.json());if(j.state==='running')return setTimeout(poll,3000);OUT=j;s4()};poll()}
+
+// the video ad: 2 · pick what goes in
+const CAMS=[['hold','Still, propped'],['selfie','Selfie'],['mirror','Mirror selfie'],['handheld','Handheld'],['push-in','Slow push in'],['pan','Pan'],['tilt','Tilt'],['arc','Arc around']];
+const VMAIN=['intensity','absurdity','humor','realism','cutting_rate'];
+// the cast, grouped by the avatar they serve, each with what their description says and whether a chain can cast them
+function castTag(c){return [c.age,c.sex,c.ethnicity].filter(Boolean).join(' · ')+(c.working?'':' · '+(c.why||'not ready'))}
+function castHTML(list,btn){let h='',last=null;for(const c of list){const g=c.avatar||'no avatar yet';if(g!==last){h+=`<div class="cgh">${esc(g)}</div>`;last=g}h+=btn(c)}return h}
+function snapOrig(){ORIG={};const sh=R.sheet?R.sheet.recipe.sheet:{};for(const [k,e] of Object.entries(sh))if(k.startsWith('dial.')&&e.state==='filled')ORIG[k.slice(5)]=e.value}
+// THE SHOTS STEP (2026-10-27): a video with no start pictures yet shows its shots, one per swipe cut. Each start picture
+// is made on the picture steps from the swipe's own frame; effects are listed, made on their own, laid on in the edit.
+function editView(S,shots){
+ const seq=shots.flatMap(s=>(s.clips||[]).filter(c=>c.kept&&c.file).map(c=>({n:s.n,f:c.file,t:c.take})));
+ const when=t=>new Date(t*1000).toLocaleString([],{weekday:'short',hour:'numeric',minute:'2-digit'});
+ let h=`<h1>Edit · ${esc(SEL.name)}</h1><p class="sub">The next step after the scenes: the ${seq.length} scene clips in order, every effect laid in over its words, captions on. Camera moves and sharpening wait for the hand-off.</p>`;
+ h+=`<div class="vplay"><b>1 · The scenes going in</b><div class="vrowclips">${seq.map(x=>`<figure><video controls playsinline preload="metadata" src="/media?path=${encodeURIComponent(x.f)}"></video><figcaption>Scene ${x.n} · ${esc(x.t)}</figcaption></figure>`).join('')}</div></div>`;
+ h+=`<div class="vplay"><b>2 · The effects going in</b><div class="vrowclips">${(S.effects_made||[]).map(x=>`<figure><video controls playsinline loop muted preload="metadata" src="/media?path=${encodeURIComponent(x.file)}"></video><figcaption>${esc(x.id)}</figcaption></figure>`).join('')||'<div class="sub">No effects made yet.</div>'}</div></div>`;
+ h+=S.editing?`<div class="wait">Cutting the video… several minutes. It runs on its own; the board can close.</div>`:`<button class="big on" id="editgo" ${S.workflow?.stages&&!S.workflow.can_edit?'disabled':''}>${S.cut?'Make the cut again with these':'Make the cut'}</button>`;
+ if(S.edit_error)h+=`<div class="msg">The last cut stopped: ${esc(S.edit_error)}</div>`;
+ h+=S.cut?`<div class="vplay"><b>3 · The cut</b> · made ${when(S.cut_at)}<video controls playsinline preload="metadata" src="/media?path=${encodeURIComponent(S.cut)}&t=${S.cut_at}"></video></div>`:'';
+ h+=`<button class="big" id="backscenes">← Back to the scenes</button>`;
+ $('#main').innerHTML=h;dots();
+ $('#backscenes').onclick=()=>{window._view='';shotsView()};
+ if($('#editgo'))$('#editgo').onclick=async()=>{$('#editgo').disabled=true;$('#editgo').textContent='Starting…';const r=await fetch('/api/prompt-edit-make',{method:'POST',body:JSON.stringify({run:SEL.run})}).then(r=>r.json());if(r.error){$('#editgo').textContent=r.error;return}shotsView()};
+ clearTimeout(window._shotT);if(S.editing)window._shotT=setTimeout(shotsView,10000)}
+function openingFlow(S){
+ const w=S.workflow;if(!w||!w.stages)return '';
+ let h='<div class="vreview"><h2>Opening workflow</h2><p>Complete each check in order. Approvals apply to the exact file reviewed.</p>';
+ h+=w.stages.map((x,i)=>`<div><b>${i+1} · ${esc(x.name)} · ${x.complete?'✓':'Pending'}</b>${x.count?` · ${x.count} references`:''}${x.complete?'':`<div class="hint">${(x.issues||[]).map(esc).join(' ')}</div>`}</div>`).join('');
+ h+=`<details><summary>Hook, core format and creative dials</summary><p><b>Line:</b> ${esc(w.line)}</p><p><b>Scroll stopper:</b> ${esc(w.scroll)}</p>${Object.entries(w.format||{}).map(([k,v])=>`<p><b>${esc(k)}:</b> ${esc(v)}</p>`).join('')}<p><b>Body join:</b> ${esc(w.body_join)}</p><table><thead><tr><th>Dial</th><th>Level</th><th>Execution</th></tr></thead><tbody>${Object.entries(w.controls||{}).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.level??'N/A'}</td><td>${esc(v.evidence||v.not_applicable)}${v.exception?'<br>'+esc(v.exception):''}</td></tr>`).join('')}</tbody></table></details>`;
+ const busy=(S.workflow_job||{}).state==='running';
+ if(busy)h+='<p class="wait">Checking this opening… the job continues if the board closes.</p>';
+ else h+='<div class="row">'+[['make_voice','Make revised voice'],['reuse_control_frame','Reuse approved control picture (no generation)'],['check_frame','Check start frame'],['approve_frame','Approve start frame'],['check_clip','Check finished clip'],['approve_clip','Approve finished clip']].map(([a,l])=>`<button class="big" data-hookaction="${a}" ${w['can_'+a]?'':'disabled'}>${l}</button>`).join('')+'</div>';
+ if((S.workflow_job||{}).error)h+=`<p class="msg">${esc(S.workflow_job.error)}</p>`;
+ h+=`<details><summary>Change one element</summary><p>Save one change without generating anything. Other elements keep their current files.</p><label>Element <select id="hookpart"><option value="spoken_line">Spoken hook line</option><option value="motion">Action and gestures</option><option value="motion_reference">Reusable motion reference</option></select></label><div id="hookvaluebox"></div><div id="hookimpact" class="hint"></div><button class="big" id="hooksave" ${busy?'disabled':''}>Save this change (no generation)</button></details>`;
+ return h+'<div id="hookmsg"></div></div>';
+}
+async function shotsView(){clearTimeout(window._shotT);const S=await fetch('/api/prompt-shots?run='+encodeURIComponent(SEL.run)).then(r=>r.json()).catch(e=>({error:String(e)}));
+ if(STEP!==1||KIND!=='clip')return;
+ if(S.error){$('#main').innerHTML=`<h1>${esc(SEL.name)}</h1><div class="msg">${esc(S.error)}</div>`;return}
+ const shots=S.shots.filter(s=>!s.card),cards=S.shots.filter(s=>s.card);
+ if(window._view==='edit')return editView(S,shots);
+ let h=`<h1>${esc(SEL.name)}</h1><p class="sub">${S.workflow?.stages?'One opening variation, joined to the approved body after review. The cast, oversized face models and room stay tied to the approved references. Review the elements that changed.':shots.length+" shots, cut where the swipe cuts. Each starts from the swipe frame with our person, place and props swapped in. Effects are made separately and laid on in the edit."}</p>`;
+ h+=openingFlow(S);
+ if((S.openings||[]).length)h+=`<div class="vreview"><h2>Opening variations</h2><p>Each opening follows the same reference, frame, clip and edit checks.</p>${S.openings.map(o=>`<a class="lnk" href="/prompt#open=${encodeURIComponent(o.run)}&step=1" data-openhook="${esc(o.run)}"><b>${esc(o.name)}</b> · ${o.complete}/5 checks${o.cut?' · cut ready':''}<br>${esc(o.line)}</a>`).join('')}</div>`;
+ const seq=shots.flatMap(s=>(s.clips||[]).filter(c=>c.kept&&c.file).map(c=>({n:s.n,f:c.file,t:c.take})));
+ const day=Date.now()/1000-86400,hm=t=>new Date(t*1000).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+ const fresh=shots.map(s=>({s,c:(s.clips||[]).filter(c=>c.file&&c.made_at).sort((a,b)=>b.made_at-a.made_at)[0]})).filter(x=>x.c&&x.c.made_at>day).sort((a,b)=>b.c.made_at-a.c.made_at);
+ window._fresh=new Set(fresh.map(x=>x.s.id));
+ h+=fresh.length?`<div class="vreview"><b>Needs your review</b> · made in the last day, newest first${fresh.map(x=>`<a href="#sc-${x.s.id}" class="vrow"><span>Scene ${x.s.n}</span><span>${esc(x.c.take)}</span><span>${hm(x.c.made_at)}</span><span>${x.c.kept?'in the cut':'not in the cut'}</span></a>`).join('')}</div>`:`<div class="vreview"><b>Nothing new to review</b> · nothing made in the last day</div>`;
+ if(S.cut)h+=`<div class="vplay" style="border:2px solid #1f8a4c"><b>The latest cut</b> · made ${new Date(S.cut_at*1000).toLocaleString([],{weekday:'short',hour:'numeric',minute:'2-digit'})} <button class="keepbtn" id="gotoedit" style="width:auto;margin-left:8px">Open the Edit step →</button><video controls playsinline preload="metadata" src="/media?path=${encodeURIComponent(S.cut)}&t=${S.cut_at}" style="max-width:360px"></video></div>`;
+ if(seq.length)h+=`<div class="vplay"><b>The scenes in order</b> · ${seq.length} clips as they stand now (no edit, no captions) <button class="keepbtn" id="vplayall" style="width:auto;margin-left:8px">▶ Play all in order</button><div class="vrowclips">${seq.map((x,i)=>`<figure><video data-seq="${i}" controls playsinline preload="metadata" src="/media?path=${encodeURIComponent(x.f)}"></video><figcaption>Scene ${x.n} · ${esc(x.t)}</figcaption></figure>`).join('')}</div></div>`;
+ window._seq=seq;
+ h+=shots.map(s=>{const st=s.picture_state;
+  const make=s.same_as?`<p class="hint">Uses the picture from ${esc(s.same_as)}: same shot, only the words change.</p>`:st==='ready'?(s.made?'':`<button class="big on" data-shotmake="${s.id}">Make the start picture</button>`):st==='opening'?`<div class="wait">Getting the swipe frame ready… a few minutes</div>`:st==='failed'?`<div class="msg">${esc(s.error)}</div><button class="big" data-shotopen="${s.id}">Try again</button>`:`<button class="big" data-shotopen="${s.id}">Get the swipe frame ready</button>`;
+  const review=!S.workflow?.stages&&s.made&&!s.remaking?`<div class="two" style="grid-template-columns:1fr 1fr"><button class="big ${s.approved?'on':''}" data-shotok="${s.id}">${s.approved?'Approved ✓':(s.body&&s.body.ok===false?'Approve anyway':'Approve')}</button><button class="big" data-shotfix="${s.id}">Change it</button></div><div class="vfix" id="fix-${s.id}" hidden><textarea rows="3" placeholder="What should change in this scene?" style="width:100%;font:inherit;border-radius:10px;padding:8px"></textarea><button class="big on" data-shotfixgo="${s.id}">Remake this scene with it</button></div>`:s.remaking?`<div class="wait">Remaking this scene with your note… about two minutes</div>`:'';
+  return `<div class="vscene" id="sc-${s.id}"><div class="vhead"><b>Scene ${s.n} · ${Math.round(s.seconds||0)} s</b>${window._fresh&&window._fresh.has(s.id)?'<span class="vnew">NEW · review</span>':''}${s.approved?'<span class="ok">approved</span>':''}</div><div class="vbig"><figure>${s.swipe_video&&s.swipe_span.length?`<video controls playsinline preload="metadata" poster="${url(s.swipe_frame)}" src="/media?path=${encodeURIComponent(s.swipe_video)}#t=${s.swipe_span[0]},${s.swipe_span[1]}"></video>`:`<img src="${url(s.swipe_frame)}">`}<figcaption>${S.workflow?.stages?'approved control':'the swipe'}${s.swipe_span.length?` · ${s.swipe_span[0].toFixed(1)}–${s.swipe_span[1].toFixed(1)} s`:''}</figcaption></figure><figure>${s.made?`<img src="${url(s.made)}">`:'<div class="vnone">not made yet</div>'}<figcaption>ours</figcaption></figure></div>${s.lines.map(l=>`<p class="vline">“${esc(l)}”</p>`).join('')}${s.body&&s.body.ok===false?`<div class="msg"><b>Body check: wrong.</b> ${esc((s.body.problems||[]).slice(0,2).join(' · '))} Remake this picture before making its clip.</div>`:s.body&&s.body.ok?'<div class="sub">Body check: ✓ two arms, two hands, right size</div>':''}${breakdownBox(s.breakdown)}${s.keeping?'<div class="wait">Finishing the kept take (sharpening it on this Mac)… a few minutes. It runs on its own; the board can close.</div>':''}${(s.effects||[]).map(e=>`<div class="vfx"><b>Effect · made on its own</b> ${esc(e.ours).slice(0,200)}</div>`).join('')}${(s.clips||[]).length?(()=>{const now=s.clips.filter(c=>c.kept&&c.file),rest=s.clips.filter(c=>!(c.kept&&c.file)).slice().reverse();const fig=c=>`<figure class="${c.kept?'kept':''}">${c.file?`<video controls playsinline preload="metadata" src="/media?path=${encodeURIComponent(c.file)}"></video>`:'<div class="vnone">not made</div>'}<figcaption><b>${esc(c.take)}</b>${c.kept?' · <b class="ok">in the cut</b>':''}${c.score!=null&&c.file?` · judge ${c.score}/10 ${c.pass?'✓':'✗'}`:''}${c.file?` · words ${c.words==='PASS'?'✓':'✗'}`:''}${c.heard?` · voice ${c.heard.audio&&(c.heard.mean_db==null||c.heard.mean_db>=-45)?'✓':'✗'}`:''}${(c.why||[]).length?`<div class="why">${c.why.map(esc).join('<br>')}</div>`:''}</figcaption>${c.kept||c.review_only||!c.file||/-bk$/.test(c.take)?'':`<button class="keepbtn" data-keep="${esc(c.take)}">Keep this take</button>`}</figure>`;return `<div class="vnow"><b>${now.length?'Now in the cut':'No approved clip yet'}</b><div class="vclips">${now.map(fig).join('')}${(s.effect_clips||[]).slice(0,1).map(f=>`<figure><video controls playsinline loop muted preload="metadata" src="/media?path=${encodeURIComponent(f)}"></video><figcaption>effect</figcaption></figure>`).join('')}${(s.effect_ids||[]).map(id=>(s.effecting||[]).includes(id)?`<div class="wait">Making effect ${esc(id)} on our own scene… a few minutes</div>`:`<button class="keepbtn" data-fxmake="${esc(id)}">Remake effect ${esc(id)}</button>`).join('')}</div></div>${rest.length||(s.effect_clips||[]).length>1?`<details class="vold" ${now.length?'':'open'}><summary>${now.length?'Earlier tries':'Clips to review'} (${rest.length}) · newest first</summary><div class="vclips">${rest.map(fig).join('')}${(s.effect_clips||[]).slice(1).map(f=>`<figure><video controls playsinline loop muted preload="metadata" src="/media?path=${encodeURIComponent(f)}"></video><figcaption>effect · ${esc(f.split('/').slice(-2).join('/').replace('versions/','').replace('.mp4',''))}</figcaption></figure>`).join('')}</div></details>`:''}`})():''}${(s.notes||[]).length?`<div class="vfx"><b>Your notes on this scene</b> ${s.notes.map(esc).join(' · ')}</div>`:''}${review}${s.picture_recipe&&s.picture_recipe.brief?`<button class="big" data-shotrecipe="${s.id}">Review start picture inputs</button>`:make}</div>`}).join('');
+ h+=`<button class="big on" id="toedit" ${S.workflow?.stages&&!S.workflow.can_edit?'disabled':''}>Next: edit the video →</button><p class="hint">The edit puts the scenes' current clips in order, lays each effect in over its words, and adds the captions.</p>`;
+ const allMade=S.workflow?.stages?S.workflow.can_make_clip:shots.some(s=>s.made&&s.approved);h+=`<button class="big ${allMade?'on':''}" id="toclips" ${allMade?'':'disabled'}>${allMade?'Make the clips of the approved scenes':'Approve a scene first'}</button>`;
+ if(cards.length)h+=`<p class="hint">${cards.map(c=>'Card: “'+esc(c.lines[0]||'')+'” is a layer on top, made with the edit.').join(' ')}</p>`;
+ $('#main').innerHTML=h;{const vs=[...document.querySelectorAll('video[data-seq]')];vs.forEach((v,i)=>v.onended=()=>{if(window._playall&&vs[i+1]){vs[i+1].currentTime=0;vs[i+1].play()}else window._playall=false});const pa=document.getElementById('vplayall');if(pa)pa.onclick=()=>{window._playall=true;vs.forEach(v=>{v.pause();v.currentTime=0});vs[0].play()}}dots();
+ if(S.workflow?.stages)$('#next').disabled=!S.workflow.can_make_clip;
+ document.querySelectorAll('[data-openhook]').forEach(e=>e.onclick=ev=>{ev.preventDefault();location.hash='open='+encodeURIComponent(e.dataset.openhook)+'&step=1';location.reload()});
+ document.querySelectorAll('[data-hookaction]').forEach(e=>e.onclick=async()=>{e.disabled=true;const r=await fetch('/api/prompt-hook-action',{method:'POST',body:JSON.stringify({run:SEL.run,action:e.dataset.hookaction})}).then(r=>r.json());if(r.error){$('#hookmsg').textContent=r.error;return}shotsView()});
+ if($('#hookpart')){const w=S.workflow;const showChange=()=>{const part=$('#hookpart').value,impact=w.change_impacts[part];$('#hookvaluebox').innerHTML=part==='motion_reference'?`<label>Reference <select id="hookvalue"><option value="">Automatic selection</option><option value="none">No movement reference</option>${w.movements.map(m=>`<option value="${esc(m.id)}">${esc(m.id)} · ${esc(m.does.join(', '))}</option>`).join('')}</select></label>`:`<label>Replacement <textarea id="hookvalue" rows="4" style="width:100%">${esc(part==='spoken_line'?w.line:w.motion)}</textarea></label>`;if(part==='motion_reference')$('#hookvalue').value=w.movement_id;$('#hookimpact').innerHTML=`<p><b>Reuse:</b> ${impact.reuse.map(esc).join(', ')}.</p><p><b>Rebuild after saving:</b> ${impact.rebuild.map(esc).join(', ')}.</p>`};$('#hookpart').onchange=showChange;showChange();$('#hooksave').onclick=async()=>{const e=$('#hooksave');e.disabled=true;const r=await fetch('/api/prompt-hook-update',{method:'POST',body:JSON.stringify({run:SEL.run,part:$('#hookpart').value,value:$('#hookvalue').value})}).then(r=>r.json());if(r.error){$('#hookmsg').textContent=r.error;e.disabled=false;return}await shotsView();$('#hookmsg').textContent=r.unchanged?'No change saved; all files reused.':'Saved. No generation started. Reuse: '+r.impact.reuse.join(', ')+'. Rebuild: '+r.impact.rebuild.join(', ')+'.'}}
+ document.querySelectorAll('[data-keep]').forEach(e=>e.onclick=async()=>{e.disabled=true;e.textContent='Keeping…';await fetch('/api/prompt-shot-keep',{method:'POST',body:JSON.stringify({run:SEL.run,take:e.dataset.keep})});shotsView()});
+ if($('#toedit'))$('#toedit').onclick=()=>{window._view='edit';shotsView()};
+ if($('#gotoedit'))$('#gotoedit').onclick=()=>{window._view='edit';shotsView()};
+ document.querySelectorAll('[data-fxmake]').forEach(e=>e.onclick=async()=>{e.disabled=true;e.textContent='Starting…';await fetch('/api/prompt-effect-make',{method:'POST',body:JSON.stringify({run:SEL.run,effect:e.dataset.fxmake})});shotsView()});
+ document.querySelectorAll('[data-shotok]').forEach(e=>e.onclick=async()=>{e.disabled=true;await fetch('/api/prompt-shot-approve',{method:'POST',body:JSON.stringify({run:SEL.run,section:e.dataset.shotok})});shotsView()});
+ document.querySelectorAll('[data-shotfix]').forEach(e=>e.onclick=()=>{const b=document.getElementById('fix-'+e.dataset.shotfix);b.hidden=!b.hidden;if(!b.hidden)b.querySelector('textarea').focus()});
+ document.querySelectorAll('[data-shotfixgo]').forEach(e=>e.onclick=async()=>{const gid=e.dataset.shotfixgo,note=document.querySelector('#fix-'+gid+' textarea').value.trim();if(!note)return;e.disabled=true;e.textContent='Sending…';const r=await fetch('/api/prompt-shot-change',{method:'POST',body:JSON.stringify({run:SEL.run,section:gid,note})}).then(r=>r.json());if(r.error){e.textContent=r.error;return}shotsView()});
+ if($('#toclips'))$('#toclips').onclick=()=>{B={...B,toclips:true};load().then(c2)};
+ document.querySelectorAll('[data-shotrecipe]').forEach(e=>e.onclick=async()=>{const s=S.shots.find(x=>x.id===e.dataset.shotrecipe),rec=s.picture_recipe,nm=SEL.name;KIND='pic';SEL={brand:rec.brief.brand,run:rec.brief.run,product:rec.brief.product,name:'Start frame · '+nm};B={...rec.brief,sheet:rec.sheet||{},video_shot:{run:S.run,picture:s.picture},skip:rec.brief.skip||[],added:rec.brief.added||[]};OUT=null;await load();go(1)});
+ document.querySelectorAll('[data-shotopen]').forEach(e=>e.onclick=async()=>{e.disabled=true;e.textContent='Starting…';await fetch('/api/prompt-shot-open',{method:'POST',body:JSON.stringify({run:SEL.run,section:e.dataset.shotopen})});shotsView()});
+ document.querySelectorAll('[data-shotmake]').forEach(e=>e.onclick=async()=>{const s=S.shots.find(x=>x.id===e.dataset.shotmake),nm=SEL.name;KIND='pic';SEL={brand:S.brand,run:s.picture_run,product:S.product,name:'Shot '+s.n+' start · '+nm};B={brand:S.brand,run:s.picture_run,product:S.product,skip:[],added:[],video_shot:{run:S.run,picture:s.picture}};OUT=null;await load();go(1)});
+ clearTimeout(window._shotT);if(S.workflow_job?.state==='running'||shots.some(s=>s.picture_state==='opening'||s.remaking||s.keeping||(s.effecting||[]).length))window._shotT=setTimeout(shotsView,8000)}
+function c2(){const f=R.fields||{};const calls=R.calls||[];
+ if(SEL&&!String(SEL.run).startsWith('swap:')&&(!calls.length||!B.toclips))return shotsView();
+ let h=`<h1>${esc(SEL.name)}</h1><p class="sub">Pick the clip, then what goes in.</p><div class="clips">`+calls.map((c,i)=>`<button class="clipt ${c.id===f.call?'on':''}" data-call="${c.id}"><div class="im" style="${bg(c.start)}"></div><b>Clip ${i+1}</b><span>${c.seconds} s · ${c.talking?'speaks':'silent'}</span></button>`).join('')+`</div>`;
+ h+=`<div class="pics">`+(R.choices||[]).map(c=>{const vis=c.kind==='audio'?`<div class="im" style="display:flex;align-items:center;justify-content:center"><audio controls src="/media?path=${encodeURIComponent(c.path)}" style="width:92%"></audio></div>`:c.kind==='video'?`<div class="im"><video muted loop playsinline controls src="/media?path=${encodeURIComponent(c.path)}" style="width:100%;height:100%;object-fit:contain"></video></div>`:`<div class="im" style="${bg(c.path)}"></div>`;
+  return `<div class="pic ${c.on?'':'off'}" data-ck="${c.key}" data-fixed="${c.fixed?1:''}">${vis}<div class="tick">✓</div><b>${esc(c.label)}${c.fixed?' <span class="hint">· always in</span>':''}</b></div>`}).join('')+`</div>`;
+ const RF=(R.fields||{}).recipe;
+ if(SEL&&String(SEL.job||'').startsWith('swipe_footage')&&RF)h+=`<h2 class="part">The start frame</h2><p class="hint">Its elements and dials are the picture steps: every Keep and Swap row, the dials and the same checks. Making it there makes this video's start frame.</p><button class="big" id="framepick">Change the start frame</button>`;
+ $('#main').innerHTML=h;dots();
+ if($('#framepick'))$('#framepick').onclick=async()=>{const vj=String(SEL.run).split(':')[1],nm=SEL.name;KIND='pic';SEL={brand:RF.brief.brand,run:RF.brief.run,product:RF.brief.product,name:'Start frame · '+nm};B={...RF.brief,sheet:RF.sheet||{},video_job:vj,skip:RF.brief.skip||[],added:RF.brief.added||[]};OUT=null;await load();go(1)};
+ document.querySelectorAll('[data-call]').forEach(e=>e.onclick=()=>{B={run:SEL.run,call:e.dataset.call,skip:[],toclips:true};load().then(()=>{snapOrig();c2()})});
+ document.querySelectorAll('[data-ck]').forEach(e=>e.onclick=ev=>{if(e.dataset.fixed||ev.target.closest('audio,video'))return;const k=e.dataset.ck;B.skip=B.skip.includes(k)?B.skip.filter(x=>x!==k):[...B.skip,k];load().then(c2)})}
+// 3 · change what you want
+function vlevel(id){if(B.dials&&B.dials[id]!==undefined)return B.dials[id];return ORIG[id]??null}
+function vslider(id){const d=dial(id);if(!d)return'';const lv=vlevel(id),sc=d.scale,lo=sc[0],hi=sc[sc.length-1],ch=B.dials&&B.dials[id]!==undefined;const e=R.sheet&&R.sheet.recipe.sheet['dial.'+id];
+ const note=e&&e.state==='not_applicable'?'<b>Not sent:</b> '+esc(e.reason):ch?'<b>Changed. Added to the look as:</b> '+esc((sc.find(x=>x.level===lv)||{}).name+', '+((sc.find(x=>x.level===lv)||{}).what||'').toLowerCase()):'<b>Recorded.</b> Reaches the clip through the scene\'s face, hands and camera.';
+ return `<div class="field dial" data-d="${id}"><div class="lab">${esc(d.name)} <span class="lvl">${esc(lv==null?'not set':(sc.find(x=>x.level===lv)||{}).name)}</span></div><input type="range" min="${lo.level}" max="${hi.level}" step="1" value="${lv==null?lo.level:lv}" data-vr="${id}"><div class="ends"><span>${esc(lo.name)}</span><span>${esc(hi.name)}</span></div><div class="adds ${ch?'ch':''}">${note}</div></div>`}
+function c3(){const f=R.fields||{};
+ let h=`<h1>${esc(SEL.name)}</h1>`+checkHTML()+`<p class="sub">Change anything. Leave it if it looks right.</p>`;
+ h+=`<div class="field"><div class="lab">What happens <a data-reset="scene">put it back</a></div><textarea data-v="scene">${esc(f.scene)}</textarea><p class="hint">One visible action every few seconds. The words she says are never typed here; they go in as her voice.</p></div>`;
+ h+=`<div class="field"><div class="lab">The face <a data-reset="face">put it back</a></div><textarea class="sent" data-v="face">${esc(f.face)}</textarea></div>`;
+ h+=`<div class="field"><div class="lab">The hands <a data-reset="gestures">put it back</a></div><textarea class="sent" data-v="gestures">${esc(f.gestures)}</textarea></div>`;
+ h+=`<div class="field"><div class="lab">The camera</div><div class="tags">`+CAMS.map(([k,l])=>`<button class="tagb ${(B.camera_move||f.camera)===k?'on':''}" data-cam="${k}"><b>${l}</b></button>`).join('')+`</div></div>`;
+ h+=`<div class="field"><div class="lab">The look <a data-reset="style">put it back</a></div><textarea class="sent" data-v="style">${esc(f.style)}</textarea></div>`;
+ h+=`<div class="field"><div class="lab">How lived-in</div><div class="tags">`+[[1,'Clean'],[2,'Lived-in'],[3,'Fully lived']].map(([k,l])=>`<button class="tagb ${(B.spice??f.spice)==k?'on':''}" data-spice="${k}"><b>${l}</b></button>`).join('')+`</div></div>`;
+ h+=`<h2 class="part">Dial it in</h2><div class="row">`+O.controls.presets.map(p=>`<button class="big" data-vpre="${p.id}">${esc(p.name)}</button>`).join('')+`<button class="big" data-vpre="">As it is</button></div>`+VMAIN.map(vslider).join('');
+ h+=`<details data-o="vfeel" ${OPEN.has('vfeel')?'open':''}><summary>Feeling and technique</summary><div class="tags">`+O.controls.emotions.map(e=>`<button class="tagb ${(B.emotions||[]).includes(e.id)?'on':''}" data-vem="${e.id}"><b>${esc(e.name)}</b><span>${esc(e.what)}</span></button>`).join('')+`</div></details>`;
+ h+=`<details><summary>See exactly what we send</summary><pre>${esc(R.prompt)}</pre></details>`;
+ $('#main').innerHTML=h;dots();wireCheck();
+ document.querySelectorAll('textarea.sent').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'});
+ document.querySelectorAll('[data-v]').forEach(e=>e.oninput=()=>{B[e.dataset.v]=e.value;relo(c3keep)});
+ document.querySelectorAll('[data-reset]').forEach(e=>e.onclick=()=>{delete B[e.dataset.reset];load().then(c3)});
+ document.querySelectorAll('[data-cam]').forEach(e=>e.onclick=()=>{B.camera_move=e.dataset.cam;load().then(c3)});
+ document.querySelectorAll('[data-spice]').forEach(e=>e.onclick=()=>{B.spice=+e.dataset.spice;load().then(c3)});
+ document.querySelectorAll('[data-vr]').forEach(e=>e.oninput=()=>{const id=e.dataset.vr,v=+e.value;B.dials={...(B.dials||{})};if(ORIG[id]===v)delete B.dials[id];else B.dials[id]=v;e.closest('.dial').outerHTML=vslider(id);relo(c3)});
+ document.querySelectorAll('[data-vpre]').forEach(e=>e.onclick=()=>{const p=O.controls.presets.find(x=>x.id===e.dataset.vpre);B.dials={};if(p)for(const [k,v] of Object.entries(p.levels))if(ORIG[k]!==undefined&&ORIG[k]!==v)B.dials[k]=v;load().then(c3)});
+ document.querySelectorAll('[data-vem]').forEach(e=>e.onclick=()=>{const k=e.dataset.vem;B.emotions=(B.emotions||[]).includes(k)?B.emotions.filter(x=>x!==k):[...(B.emotions||[]),k];load().then(c3)});
+ document.querySelectorAll('details[data-o]').forEach(d=>d.ontoggle=()=>d.open?OPEN.add(d.dataset.o):OPEN.delete(d.dataset.o))}
+function c3keep(){const c=document.querySelector('.check');if(c){c.outerHTML=checkHTML();wireCheck()}const p=document.querySelector('details:not([data-o]) pre');if(p)p.textContent=R.prompt}
+
+fetch('/api/prompt-options').then(r=>r.json()).then(async o=>{O=o;let k=null;try{k=JSON.parse(localStorage.getItem('pb.open')||'null')}catch(e){}
+ // a link can open one ad: /prompt#open=<run>[&step=N] (a session hands the owner the ad it just fixed)
+ const hm=location.hash.match(/open=([^&]+)(?:&step=(\d))?/);if(hm){k={kind:o.pictures.some(p=>p.run===decodeURIComponent(hm[1]))?'pic':'clip',run:decodeURIComponent(hm[1]),step:+(hm[2]||2)}}
+ const hit=k&&(k.kind==='clip'?o.videos:o.pictures).find(p=>p.run===k.run);
+ if(!hit)return go(0);
+ KIND=k.kind;BRAND=hit.brand;SEL=hit;B=KIND==='clip'?{run:SEL.run,skip:[]}:{brand:SEL.brand,run:SEL.run,product:SEL.product,skip:[],added:[]};try{const sb=JSON.parse(localStorage.getItem('pb.brief')||'null');if(sb&&sb.run===SEL.run)B=sb}catch(e){}
+ await load();if(KIND==='clip')snapOrig();go(Math.min(3,k.step||1))});
+</script></body></html>

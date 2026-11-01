@@ -1,0 +1,16 @@
+{
+ "lane": "video",
+ "status": "draft",
+ "about": "An AI or creator video brief: video-teardown -> video-writing -> filing + number -> video-production -> video-edit -> the approval card -> the Queue. Paths from the code (survey 2026-10-25): working folder runs/video-teardown/_work/<slug>/, filed copies runs/video-teardown/<brand>/<slug>/ and runs/video-writing/<brand>/<slug>/.",
+ "resolve": "the register row's run is the bare slug (lane video-teardown); production runs are those whose run.json brief_from contains /<slug>/; edit runs are those whose edit-map.json from_run is that production run; cards carry brief_id brief-NNNN + product",
+ "steps": [
+  {"id": "teardown", "name": "teardown (stages 0-2)", "checks": ["file:{work}/stages/2-spec.md"], "fix": "cmd:python3 tools/video-teardown/machine/run.py {work} --brand {brand}"},
+  {"id": "writing", "name": "writing (stages 3-5)", "checks": ["json:{work}/run.json:stages.stage5.status=done"], "fix": "cmd:python3 tools/video-writing/machine/run.py {work}"},
+  {"id": "filed", "name": "filed + brief number", "checks": ["json:{writing}/run.json:brief", "glob:{writing}/deliverable/*-brief.md"], "fix": null,
+   "why_no_fix": "filing runs at the end of a teardown run (file_run.py); a creator brief is numbered with briefs.py open --type video-creator"},
+  {"id": "production", "name": "production (voice, stills, clips)", "checks": ["file:{production}/clips/plan.json", "glob:{production}/clips/*.mp4"], "fix": null,
+   "why_no_fix": "production starts on a person's go (two OKs: production, then the final ad)"},
+  {"id": "edit", "name": "edit (the cut)", "checks": ["json:{edit}/line.json:ok=true"], "fix": "cmd:python3 tools/video-edit/machine/line.py {production}"},
+  {"id": "card", "name": "the approval card", "checks": ["card"], "fix": null, "why_no_fix": "the edit line's step 7 files the card (to_check.py)"}
+ ]
+}

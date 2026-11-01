@@ -1,0 +1,69 @@
+{
+ "_readme": "VIDEO PRODUCTION v2 — runs BESIDE v1 (run.py stays the default). Start it with machine/run_v2.py; same arguments as run.py. Everything v2 changes is set here, so one file says how v2 differs. Built 2026-10-18 from the chain audit (picture checks were ~$41/video of Claude sessions; 5 of 6 safe-area repairs failed; pictures one at a time).",
+ "version": "v2",
+ "checks": {
+  "_readme": "One direct API call per check — no Claude session, no prompt cache written. Every answer is kept by a fingerprint of the picture + the question, so an unchanged picture or voice take is never checked twice.",
+  "zone_model": "house:behind.judge",
+  "review_model": "house:behind.judge",
+  "usd_per_m": {
+   "gemini-3-flash-preview": {
+    "in": 0.5,
+    "out": 3.0
+   },
+   "gemini-3.1-pro-preview": {
+    "in": 2.0,
+    "out": 12.0
+   }
+  },
+  "timeout_s": 300,
+  "_models": "2026-10-21 (P26, VIDEO-RULINGS V2/V3): every check asks the house judge (components/generative-model-house models.json behind.judge, Gemini 3.1 Pro) — v2_checks.model_of reads it. The zone check was Gemini 3 Flash; cost is never a reason (V17)."
+ },
+ "safe_area": {
+  "_readme": "The 4:5 rule goes in the FIRST picture prompt as its own labelled slot, at the top. v1 prompts said '10–90% height', which is outside the 4:5 zone (15–85%) — the source of 303 of 340 fixes. No paid repair edit: a miss goes into the reviewer's one list of problems.",
+  "slot": "SAFE AREA (hard rule, read first): this picture is cropped to 4:5 for the feed. Every face, hand and product sits inside the middle box — between 20% and 80% of the picture's width and between 22% and 78% of its height. Nothing that matters in the top fifth or bottom fifth, nothing touching a side edge. Leave plain background (wall, sky, floor) around the subject on every side.",
+  "strip": "(?:[Hh]ead and shoulders |[Ff]ace |[Ss]ubject )?(?:at )?\\d+\\s*[–-]\\s*\\d+%\\s*width and \\d+\\s*[–-]\\s*\\d+%\\s*height,?"
+ },
+ "pictures": {
+  "parallel": 6,
+  "versions": 1,
+  "_versions": "ONE version of each start picture (the owner, 2026-10-24: \"Stop doing 3 versions each, remove that from the process\"), after the pastor barber body spent $21.67 on pictures and $18.54 checking them. Replaces P10 (VIDEO-RULINGS V5, three versions, the best kept). The reviewer still checks the one picture and sends it back; run_v2._three runs only if this is ever set above 1.",
+  "in_flight": 12,
+  "_in_flight": "P53 (2026-10-21): every version of every picture is made side by side, at most this many requests at once; a 429 is the picture door's own wait / overflow.",
+  "_versions_v33": "2026-10-21 (VIDEO-RULINGS V33, the owner: \"just do 1 per to save cost, we need to focus on prompt efficiency and only do retries if absolutely needed\"): ONE picture per start picture; a retry is only the review's send-back remake (review.max_rounds). Set 3 to go back to three versions."
+ },
+ "review": {
+  "_readme": "ONE fixed reviewer (no fallback chain). It sees the picture, the scene's words from the brief, and the banked cast LOOK (master + outfit references) — a banked look is correct by definition. It returns every problem in one list; a 'sent back' picture is remade once from itself (image-to-image) with the whole list. At most 2 rounds.",
+  "prompt": "tools/video-production/prompts/v2/picture-review-v8-damon.md",
+  "_v8": "2026-10-21 (P72, VIDEO-RULINGS V32): hard fail G, decor or writing from another culture than the presenter's (read per run from their character file); every brand, product, person, ingredient and culture word taken out of the prompt.",
+  "max_rounds": 2,
+  "_v3": "2026-10-20: impossible objects, props held to their banked size, real foreign writing is fine (the remedy reels)",
+  "_held": "2026-10-21 (P42, E32): a picture still FLAGGED after max_rounds is HELD — its sign-off is taken back, so no clip is made from it until it is remade or a person overrules it; the edit never covers it.",
+  "_v4": "2026-10-21 (P59, VIDEO-RULINGS V24): absurd-on-purpose (oversized, gross, hyper-detailed, the over-the-top demo the brief asks for) passes; slop (malformed hands, a prop off its size, an object nobody asked for) still fails; a softened or generic version of the brief's depiction is a problem.",
+  "_v5": "2026-10-21 (P68): five hard fails checked first — the swipe's things not ours, any words, a drawn product, not the cast member, the set not ours.",
+  "_v6": "2026-10-21 (P68 add): the product in the hands must be the brand's real product (pasted from its real photograph); any other product or held object the brief does not define fails.",
+  "_v7": "2026-10-21 (P69): a sixth hard fail — the person's skin or clothes drift from the cast master's tone. Before the review every start picture is graded to ONE anchor frame (machine/tone_anchor.py)."
+ },
+ "style": {
+  "_readme": "The look comes from the elements style list BY NAME (components/elements/library/style.video.json, its formula, verbatim). Production never writes a look as a fresh sentence.",
+  "bank": "components/elements/library/style.video.json"
+ },
+ "clips": {
+  "_readme": "Seedance 2.5 for every clip at 480p, upscaled on this Mac (ruled 2026-10-23; 480p since 2026-10-26), voice and picture in one call; cost never decides (components/generative-model-house/MODEL-HOUSE.md, Clips). Each take is scored by the clip judge (machine/clip_judge.py); none passing = the clip is HELD, never shipped and never left for the edit to cover (E32). History: 2026-10-20 had every take at 360p (V6), retired by the 10-23 ruling.",
+  "resolution": "480p",
+  "takes": 1,
+  "upscale_local": {
+   "launcher": "components/local-studio/local.py",
+   "job": "upscale",
+   "engine": "esrgan",
+   "target_height": 1920
+  },
+  "max_tries": 3,
+  "_v34": "2026-10-21 (VIDEO-RULINGS V34, the owner: \"cut video to 1 try please. i think in genreal we should just do 3 tries max if there is failur but that's it. the goal is the first shot is the most accruate thing we can build with all the elments that owuld make it killer\"): ONE take, judged; another take only when it fails, up to max_tries in all (clips_run.make_picked). Was three takes side by side (V5/V6)."
+ },
+ "voice": {
+  "reads": 1,
+  "max_tries": 3,
+  "_v34": "2026-10-21 (VIDEO-RULINGS V34): ONE read of every line, heard back; read again only when its words check fails, up to max_tries in all (voice.TRIES). Was three reads, the best locked (V5).",
+  "_readme": "P13 (VIDEO-RULINGS V5): every line is read three times on ElevenLabs v3 with its delivery tag, each read heard back word for word, the best one locked (voice.READS, vo/locks.json)."
+ }
+}

@@ -1,0 +1,390 @@
+{
+ "model": "suno",
+ "medium": "music",
+ "_readme": [
+  "Suno makes the song in every song ad (the owner, 2026-10-28: \"for all song ads, we're just using Suno. It's the best.\"). It has no API: the song-ad chain writes the boxes from this sheet (tools/video-production/machine/song.py --suno) and a person or a browser session types them into suno.com; the take comes back through the song gate (song.py --from-file).",
+  "Registry id `suno` (components/models, transport manual); the Generative Model House's sound.song names it.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "Suno (v5 / v5.5, by hand, no API)",
+ "registry_id": "suno",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "door": "manual: typed into suno.com from song/suno-inputs.json; the Model House job sound.song",
+  "versions": "v6 seen in the app on 2026-10-28 (the newest; limits above were tested on v5 / v5.5 and are unconfirmed on v6); v5, v5.5, v4.5 still selectable"
+ },
+ "sources": [
+  "https://help.suno.com/en/articles/6141377",
+  "https://github.com/mttkllr/suno-field-guide",
+  "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026",
+  "https://roo.beehiiv.com/p/suno-prompting",
+  "https://jackrighteous.com/en-us/blogs/guides-using-suno-ai-music-creation/advanced-suno-prompt-engineering-guide",
+  "[ours] tools/video-production/SONG-CHAIN.md",
+  "[ours] tools/video-production/formats/song-ad.md"
+ ],
+ "limits": {
+  "style_box_chars": "about 1,000 on v5 / v5.5 (community-tested; Suno publishes no limits table); older v4 about 200; text past the limit is cut silently",
+  "lyrics_box_chars": "sources conflict: about 3,000 or up to 5,000; stay near 2,500",
+  "title_chars": "about 100 (one third-party source)",
+  "style_descriptors": "3 to 5 simple, 8 to 15 detailed, about 20 maximum; sweet spot 4 to 7",
+  "genres_max": 3,
+  "exclusions_max": "about 2 to 3",
+  "syllables_per_line": [
+   6,
+   10
+  ],
+  "lines_per_section": "4 standard, 8 longer",
+  "pipe_stack_max": 7,
+  "voices_upload_seconds": [
+   15,
+   240
+  ],
+  "voices_kept_seconds": 120,
+  "custom_models": "6 tracks minimum, 3 per account (Pro or Premier)",
+  "numbers_are": "community figures except the sliders, which are Suno's own help page; confirm in the app before a batch",
+  "house": {
+   "how": "the chain writes style, exclude, lyrics (a section tag over every part) and sliders from the brief's song block and its style row's `suno` line; the take goes through the same song gate as any song ad (words heard in order, last line finished)",
+   "door": "manual (registry transport), by hand on suno.com"
+  }
+ },
+ "qualities": [
+  "weirdness 10-30 (safe)",
+  "weirdness 50 (default)",
+  "weirdness 70-100 (experimental)",
+  "style influence 70-100 (strict)",
+  "style influence 40-60 (specific tags)",
+  "style influence 10-30 (loose)"
+ ],
+ "inputs": [
+  {
+   "name": "style of music",
+   "what": "The sound of the song: genre, tempo, mood, instruments, vocal, era.",
+   "allowed": "comma-separated tags, about 1,000 characters; earlier tags weigh more",
+   "we_send": "genre + BPM + mood + 2-3 instruments + vocal + era, 4 to 7 descriptors, front-loaded",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026",
+    "https://github.com/mttkllr/suno-field-guide",
+    "https://roo.beehiiv.com/p/suno-prompting"
+   ]
+  },
+  {
+   "name": "lyrics",
+   "what": "The words sung, with section tags.",
+   "allowed": "text with [Verse] [Chorus] style tags; never empty",
+   "we_send": "the brief's song lines word for word, 6 to 10 syllables a line, 4 lines a section",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide",
+    "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026",
+    "[ours] tools/video-production/formats/song-ad.md"
+   ]
+  },
+  {
+   "name": "title",
+   "what": "Song name.",
+   "allowed": "about 100 characters",
+   "we_send": "a plain working name",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://roo.beehiiv.com/p/suno-prompting"
+   ]
+  },
+  {
+   "name": "exclude styles",
+   "what": "What to keep out.",
+   "allowed": "short list; more reliable than 'no X' in the style box; do not overload",
+   "we_send": "2 to 3 named recurring faults",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide",
+    "https://jackrighteous.com/en-us/blogs/guides-using-suno-ai-music-creation/advanced-suno-prompt-engineering-guide"
+   ]
+  },
+  {
+   "name": "weirdness",
+   "what": "Safe to chaotic; 50 is the normal result.",
+   "allowed": "0 to 100 slider",
+   "we_send": "20 to 30 for a song ad (commercial, safe)",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://help.suno.com/en/articles/6141377",
+    "https://github.com/mttkllr/suno-field-guide"
+   ]
+  },
+  {
+   "name": "style influence",
+   "what": "How strictly the style box is followed.",
+   "allowed": "0 to 100 slider, loose to strong",
+   "we_send": "70 to 90 for vague tags, 40 to 60 for specific ones",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://help.suno.com/en/articles/6141377",
+    "https://github.com/mttkllr/suno-field-guide"
+   ]
+  },
+  {
+   "name": "audio influence",
+   "what": "How much an uploaded audio steers the result (appears with an upload).",
+   "allowed": "slider",
+   "we_send": "only when a reference is uploaded",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://help.suno.com/en/articles/6141377"
+   ]
+  },
+  {
+   "name": "vocal gender",
+   "what": "Male or female voice.",
+   "allowed": "set explicitly",
+   "we_send": "set to the song's vocal",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide"
+   ]
+  },
+  {
+   "name": "instrumental",
+   "what": "No singing.",
+   "allowed": "toggle, or [Instrumental] in the style box",
+   "we_send": "off for a song ad",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+   ]
+  },
+  {
+   "name": "model version",
+   "what": "Which engine.",
+   "allowed": "v5, v5.5, earlier",
+   "we_send": "v5 for steadiness; v5.5 is more expressive but can drift to generic pop mid-track",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide",
+    "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+   ]
+  },
+  {
+   "name": "Voices / Personas",
+   "what": "A cloned or saved voice.",
+   "allowed": "upload 15 s to 4 min (best 2 min kept); paid tier",
+   "we_send": "not used unless a voice is ruled for the brand",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide"
+   ]
+  },
+  {
+   "name": "Extend / Cover",
+   "what": "Lengthen a song or re-sing it on another model.",
+   "allowed": "tools in the app",
+   "we_send": "generate on v5, then Cover on v5.5 if more expression is wanted",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide"
+   ]
+  },
+  {
+   "name": "structure tags",
+   "what": "Section labels: Intro, Verse, Pre-Chorus, Chorus, Bridge, Break, Solo, Build, Outro, End.",
+   "allowed": "in the lyrics box; [Instrumental Break] is more reliable than [Bridge]",
+   "we_send": "one per section; Bridge and Outro once each",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/mttkllr/suno-field-guide",
+    "https://roo.beehiiv.com/p/suno-prompting"
+   ]
+  },
+  {
+   "name": "vocal tags",
+   "what": "[Male Vocal] [Female Vocal] [Whisper] [Falsetto] [Choir] [Harmonies].",
+   "allowed": "either box; a mid-song change goes in the lyrics just before that section",
+   "we_send": "style box for the main vocal, lyrics for a change",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+   ]
+  },
+  {
+   "name": "BPM",
+   "what": "A numeric tempo anchor.",
+   "allowed": "number, always with a mood word",
+   "we_send": "from the ruled style row",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "formula",
+   "rule": "Style box order: genre, tempo, mood, instruments, vocal style, era, reference. Put what matters most first.",
+   "ours": "style row",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "four-to-seven",
+   "rule": "Use 4 to 7 descriptors; cut any two that say the same thing; stacking 15 or more dilutes it.",
+   "ours": "style row length",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-prompting ; https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "one-main-genre",
+   "rule": "One primary genre plus one modifier, three at most; strong genres (pop, rock, electronic) override weak ones (grunge, math rock, swing).",
+   "ours": "style row",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "two-three-instruments",
+   "rule": "Name specific instruments, two or three core textures only.",
+   "ours": "style row",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "bpm-with-mood",
+   "rule": "Give BPM as a number and always pair it with a mood word.",
+   "ours": "style row",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "structure-tags-always",
+   "rule": "Put a section tag over every part of the lyrics; without them the whole song sits at one energy.",
+   "ours": "lyrics from the brief's sections",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026 ; https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "vocal-in-style",
+   "rule": "Set the main vocal in the style box and the gender explicitly; use the lyrics box for a change within the song.",
+   "ours": "style row + vocal gender",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026 ; https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "exclude-field",
+   "rule": "Use the Exclude field for unwanted traits rather than 'no X' in the style box, and keep it to two or three.",
+   "ours": "exclude from the style row",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "sliders-one-at-a-time",
+   "rule": "Move one slider at a time; weirdness low for commercial work; style influence high when the tags are vague.",
+   "ours": "weirdness 20-30",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide ; https://help.suno.com/en/articles/6141377"
+  },
+  {
+   "id": "short-lines",
+   "rule": "Write 6 to 10 syllable lines and 4-line sections; shorter lyrics make shorter songs, use Extend for length.",
+   "ours": "lyrics from the brief",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "change-one-thing",
+   "rule": "When a take misses, change one thing before regenerating; the same prompt again gives the same result.",
+   "ours": "remake note",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "words-checked",
+   "rule": "Whatever Suno makes goes through the same song gate as any song ad: every script line heard in order, last line finished. Suno may sing words the lyrics do not hold.",
+   "ours": "song gate on the downloaded file",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "lyric-bleed",
+   "text": "Short poetic lines, ALL CAPS phrases or quotes in the style box: they get sung.",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "empty-lyrics",
+   "text": "An empty lyrics box.",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "dont-phrasing",
+   "text": "'Don't' or 'no X' phrasing inside the style box.",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "contradictions",
+   "text": "Contradictory tags such as calm with aggressive, or more than three genres.",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-prompting ; https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "bpm-alone",
+   "text": "A BPM with no mood word.",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "vocal-only-in-lyrics",
+   "text": "Putting the vocal style only in the lyrics box.",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "too-many-instruments",
+   "text": "More than three or four instruments.",
+   "status": "draft",
+   "source": "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026"
+  },
+  {
+   "id": "unreliable-words",
+   "text": "Relying on 'ethereal', 'crescendo' or 'realistic', and on chorus modifiers: they are often ignored or overridden.",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "tag-overload",
+   "text": "More than about seven elements in one pipe-stacked tag, or Bridge/Outro/Build used more than once.",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide"
+  },
+  {
+   "id": "drift-on-v55",
+   "text": "Trusting v5.5 to hold the style the whole way: it can drift to generic pop or change when extended.",
+   "status": "draft",
+   "source": "https://github.com/mttkllr/suno-field-guide ; https://roo.beehiiv.com/p/suno-prompting"
+  },
+  {
+   "id": "artist-names",
+   "text": "Naming a living artist as the style: the song-ad style is a ruled row, no free text.",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+  }
+ ]
+}

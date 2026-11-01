@@ -1,0 +1,363 @@
+{
+ "model": "gpt-image-2.5",
+ "medium": "image",
+ "_readme": [
+  "THE MODEL INPUTS — everything a picture or clip model takes, the prompt structure OpenAI (or the maker) says works, and what to avoid. One file per model. Chains bind the rendered slice and never restate a limit or a rule in their own prompt; the engine reads its limits from here and refuses a request outside them.",
+  "RULE INPUTS-1: every picture or clip model has one file here with every input, its limits, the prompt structure the maker says works and what to avoid, each row carrying its source; every entry is draft until approved.",
+  "No brand, product, person or format word appears in this file."
+ ],
+ "label": "GPT Image 2.5",
+ "registry_id": "gpt-image-2.5",
+ "read": "2026-10-26",
+ "status": "draft",
+ "vendor_ids": {
+  "quality": "gpt-image-2.5-sunburst",
+  "fast": "gpt-image-2.5-flare"
+ },
+ "sources": [
+  "https://developers.openai.com/api/reference/cli/resources/images/methods/edit/index.md",
+  "https://developers.openai.com/api/reference/cli/resources/images/methods/generate/index.md",
+  "https://developers.openai.com/api/docs/guides/image-prompting",
+  "https://developers.openai.com/api/docs/guides/image-generation"
+ ],
+ "limits": {
+  "max_images": 16,
+  "image_formats": [
+   "png",
+   "webp",
+   "jpg",
+   "jpeg"
+  ],
+  "max_image_mb": 50,
+  "max_prompt_chars": 32000,
+  "mask_max_mb": 4,
+  "n_range": [
+   1,
+   10
+  ],
+  "size": {
+   "multiple_of": 16,
+   "max_edge": 3840,
+   "max_ratio": 3,
+   "min_pixels": 655360,
+   "max_pixels": 8294400,
+   "experimental_above_pixels": 3686400
+  }
+ },
+ "qualities": [
+  "low",
+  "medium",
+  "high",
+  "xhigh",
+  "max",
+  "auto"
+ ],
+ "house": {
+  "quality": "high",
+  "quality_video_stills": "xhigh",
+  "size": {
+   "9:16": "1152x2048"
+  },
+  "frame": "9:16, centre 4:5 is the safe zone, top and bottom 15% bleed",
+  "moderation": "low",
+  "output_format": "png",
+  "input_fidelity": "never sent: gpt-image-2.x processes every input at high fidelity"
+ },
+ "inputs": [
+  {
+   "name": "model",
+   "what": "Which picture model.",
+   "allowed": "gpt-image-2.5-sunburst (best quality), gpt-image-2.5-flare (fast, about GPT Image 2 quality); also gpt-image-2, 1.5, 1-mini.",
+   "we_send": "sunburst; flare is not in the model house",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "prompt",
+   "what": "The words that describe the picture.",
+   "allowed": "up to 32,000 characters",
+   "we_send": "1,500 to 5,000",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "image",
+   "what": "The pictures the model looks at; each is a numbered input.",
+   "allowed": "up to 16, each png, webp or jpg under 50 MB",
+   "we_send": "3 to 6",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "mask",
+   "what": "Marks the only area an edit may change.",
+   "allowed": "one png under 4 MB, same size as image 1, fully transparent = change here; guidance, not exact",
+   "we_send": "region edits only",
+   "use": "edits",
+   "status": "draft"
+  },
+  {
+   "name": "size",
+   "what": "The picture's pixel size.",
+   "allowed": "WxH, both multiples of 16, each edge up to 3840, ratio up to 3:1, 655,360 to 8,294,400 pixels; above 3,686,400 experimental",
+   "we_send": "1152x2048",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "quality",
+   "what": "How much detail and effort.",
+   "allowed": "low, medium, high, xhigh, max, auto (xhigh and max on 2.5 only); use high for small text and labels; raise only if a real requirement fails",
+   "we_send": "high statics, xhigh video stills",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "n",
+   "what": "How many pictures one call makes.",
+   "allowed": "1 to 10",
+   "we_send": "1",
+   "use": "maybe",
+   "status": "draft"
+  },
+  {
+   "name": "output_format, output_compression",
+   "what": "File type; compression for jpeg and webp.",
+   "allowed": "png, jpeg, webp; 0 to 100",
+   "we_send": "png",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "background",
+   "what": "Transparent or solid background.",
+   "allowed": "auto, opaque, transparent (png or webp); also ask in the prompt",
+   "we_send": "auto",
+   "use": "cut-outs only",
+   "status": "draft"
+  },
+  {
+   "name": "moderation",
+   "what": "How strict the safety filter is.",
+   "allowed": "low, auto",
+   "we_send": "low",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "input_fidelity",
+   "what": "How tightly to copy the input's faces and style.",
+   "allowed": "low or high on gpt-image-1 and 1.5 only; omit on 2.x",
+   "we_send": "left out",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "stream, partial_images",
+   "what": "Progress pictures while it renders.",
+   "allowed": "0 to 3 partials",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "safety_identifier",
+   "what": "An end-user id for abuse monitoring.",
+   "allowed": "a hashed string",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "style, response_format, user",
+   "what": "Retired or deprecated.",
+   "allowed": "not supported on GPT image models; describe style in the prompt",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft"
+  }
+ ],
+ "structure": [
+  {
+   "id": "result-first",
+   "rule": "Say what the picture is first: subject, what it is for, composition, aspect ratio, where things sit.",
+   "ours": "THE PICTURE and THE FRAME",
+   "status": "draft"
+  },
+  {
+   "id": "labelled-sections",
+   "rule": "Use labelled sections: scene, subject, details, constraints.",
+   "ours": "INPUTS, THE PICTURE, THE PRODUCT, THE PEOPLE, THE FRAME, RULES, same order every time",
+   "status": "draft"
+  },
+  {
+   "id": "number-inputs",
+   "rule": "Number every input and give it a role; say how they combine and what moves where.",
+   "ours": "INPUTS names every image; the bench asks for a role on each extra one",
+   "status": "draft"
+  },
+  {
+   "id": "preserve-then-change",
+   "rule": "Name what must not change (face, skin tone, labels, proportions, background, camera angle), say 'change only X', add 'do not change anything else'.",
+   "ours": "THE PRODUCT and RULES",
+   "status": "draft"
+  },
+  {
+   "id": "exact-words",
+   "rule": "Put exact words in quotes with position and typography; ask for no extra text; say how many times it appears ('exactly once'); spell odd brand names letter by letter.",
+   "ours": "THE PICTURE carries the quoted copy, RULES forbids other writing; 'exactly once' is not in yet",
+   "status": "draft"
+  },
+  {
+   "id": "plain-photo",
+   "rule": "Ask for a real photo in plain words: 'photorealistic', 'real photograph', real texture and wear; avoid cinematic, studio or staged wording.",
+   "ours": "set per picture by the chain step; not forced",
+   "status": "draft"
+  },
+  {
+   "id": "people",
+   "rule": "Describe people concretely: body framing ('full body, feet included'), gaze, scale, how hands hold things.",
+   "ours": "from the brief; THE PEOPLE sets lookalike or made-up",
+   "status": "draft"
+  },
+  {
+   "id": "frame-zone",
+   "rule": "State the aspect ratio and what must stay clear of the edges.",
+   "ours": "THE FRAME",
+   "status": "draft"
+  },
+  {
+   "id": "one-change",
+   "rule": "Iterate one change at a time: feed the last picture back, change one thing, restate what to keep. Repeated edits drift.",
+   "ours": "edits keep the same RULES line each time",
+   "status": "draft"
+  },
+  {
+   "id": "not-pixel-exact",
+   "rule": "Do not rely on the prompt for pixel-exact parts: composite the approved piece into the original.",
+   "ours": "real before-and-afters go in as images and are told 'never redrawn'",
+   "status": "draft"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "mood-only",
+   "text": "Mood words with no scale, atmosphere or colour.",
+   "status": "draft"
+  },
+  {
+   "id": "unlisted-exclusions",
+   "text": "Unlisted exclusions: say 'no watermark, no extra text, no logos'.",
+   "status": "draft"
+  },
+  {
+   "id": "studio-wording",
+   "text": "Studio, cinematic or staged wording when you want a real photo.",
+   "pattern": "cinematic|studio lighting|studio polish|professional modeling|8k|masterpiece|ultra[- ]high realism|trending on|vfx|aaa game",
+   "status": "draft"
+  },
+  {
+   "id": "tiny-text",
+   "text": "Tiny text; use quality high for small labels.",
+   "status": "draft"
+  },
+  {
+   "id": "higher-always-better",
+   "text": "Assuming a higher quality setting always gives a better result.",
+   "status": "draft"
+  },
+  {
+   "id": "old-model-settings",
+   "text": "Copying settings from an older model unchanged.",
+   "status": "draft"
+  },
+  {
+   "id": "trust-text",
+   "text": "Trusting the text in the result without reading it.",
+   "status": "draft"
+  },
+  {
+   "id": "author-quotes",
+   "text": "A person's name, a date or a quote from our own rulings inside the prompt: the model draws it as picture content.",
+   "pattern": "\\([A-Z][a-z]+,? 20\\d\\d|\\b[A-Z][a-z]+, 20\\d\\d-\\d\\d-\\d\\d",
+   "status": "draft"
+  }
+ ],
+ "doors": {
+  "openai": {
+   "note": "the limits above (OpenAI's own references)"
+  },
+  "higgsfield": {
+   "vendor_id": "gpt_image_2_5",
+   "read": "2026-10-26",
+   "status": "draft",
+   "source": "`higgsfield model get gpt_image_2_5` (Higgsfield command line 1.2.2), 2026-10-26; one live low-quality picture by the video-prompting session confirmed the call shape",
+   "variants": [
+    "flare",
+    "sunburst"
+   ],
+   "variant_default": "flare",
+   "qualities": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+   ],
+   "quality_default": "low",
+   "resolutions": [
+    "1k",
+    "2k",
+    "4k"
+   ],
+   "resolution_default": "1k",
+   "backgrounds": [
+    "auto",
+    "opaque",
+    "transparent"
+   ],
+   "aspect_ratios": [
+    "auto",
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "16:9",
+    "9:16",
+    "21:9",
+    "27:16",
+    "16:27",
+    "9:8",
+    "8:9",
+    "4:5",
+    "5:4"
+   ],
+   "references": "role image_references; Higgsfield publishes no maximum for this model (its rules list is empty), so OpenAI's 16 is assumed until a live call shows otherwise",
+   "not_available": [
+    "mask (no region edit)",
+    "n",
+    "moderation",
+    "output_format",
+    "custom WxH size (a resolution tier and an aspect ratio instead)",
+    "input_fidelity"
+   ],
+   "house": {
+    "variant": "sunburst",
+    "quality": "high",
+    "resolution": "2k",
+    "aspect_ratio": "9:16"
+   },
+   "differs_from_openai": "A call that sends nothing gets flare at low quality and 1k, the cheapest picture. Our calls must name sunburst, high and the resolution every time.",
+   "how": "through the Higgsfield command line, installed and signed in on the machine: higgsfield generate create gpt_image_2_5 --prompt ... --variant sunburst --aspect_ratio 9:16 --quality high --resolution 2k --image-references <path> --wait --json (not the keyed HTTP API, which does not sell this model)",
+   "tier_sizes": "9:16 at 1k came out 752x1344; the 2k tier gives a larger frame, which the engine resizes to 1080x1920",
+   "cost_credits": "quoted free by `higgsfield generate cost`: sunburst, 9:16, high: 1.5 at 1k, 2.75 at 2k"
+  }
+ },
+ "history": [
+  {
+   "where": "_readme[1]",
+   "was": "the owner, 2026-10-26: 'we need to have the full awareness of all the inputs we can put in ... install this into our system itself, similar to marketing doctrine and the creativity dials.' Every row carries its source URL; every entry is status draft until the owner approves it."
+  }
+ ]
+}

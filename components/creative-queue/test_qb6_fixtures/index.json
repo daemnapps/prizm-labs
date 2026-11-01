@@ -1,0 +1,15 @@
+{
+ "built": "2026-10-22T02:00:00+00:00",
+ "people": ["the owner", "the team", "the team", "Christine"],
+ "words": {"stages": [{"id": "idea", "name": "Teardown"}]},
+ "batches": [],
+ "errors": [],
+ "entries": [
+  {"id": "fxbrand_fx_brief-0001", "brand": "fxbrand", "type": "video-ad", "title": "A video", "stage": "making", "flag": null, "since": "2026-10-01", "thumb": null, "links": [{"label": "Open in Approve to Meta", "url": "http://127.0.0.1:8795/"}], "email_run": null, "updated": "2026-10-22T01:00:00"},
+  {"id": "fxbrand_fx_brief-0048", "brand": "fxbrand", "type": "image-ad", "title": "Brief 0048 · fx", "stage": "final-needs-you", "flag": "stuck", "since": "2026-10-16", "thumb": "http://127.0.0.1:8795/thumb/fx.png", "links": [{"label": "Open in Launch to Meta", "url": "http://127.0.0.1:8795/"}, {"label": "The brief", "url": "https://docs.google.com/document/d/fx/edit"}], "email_run": null, "updated": "2026-10-22T01:00:00"},
+  {"id": "fxbrand_fx_carousel-0002", "brand": "fxbrand", "type": "carousel", "title": "Five slides", "stage": "making", "flag": null, "since": "2026-10-18", "thumb": null, "links": [{"label": "Board", "url": "http://localhost:8870/board"}], "email_run": null, "updated": "2026-10-22T01:00:00"},
+  {"id": "fxbrand_email_fxbrand-oct-20", "brand": "fxbrand", "type": "email", "title": "October twenty", "stage": "final-needs-you", "flag": null, "since": "2026-10-20", "thumb": "/qthumb/fx.jpg", "links": [], "email_run": "fxbrand-oct-20", "updated": "2026-10-22T01:00:00"},
+  {"id": "fxbrand_page_fx-cpk-01", "brand": "fxbrand", "type": "landing-page", "title": "fx-cpk-01", "stage": "brief", "flag": null, "since": "2026-09-17", "thumb": null, "links": [], "updated": "2026-10-18T14:26:44", "gone": "2026-10-18T14:26:54"},
+  {"id": "fxbrand_idea_old-static", "brand": "fxbrand", "type": "image-ad", "title": "Dropped by the owner", "stage": "brief", "flag": null, "since": "2026-09-30", "thumb": null, "links": [], "removed": true, "removed_at": "2026-10-18T10:30:21", "updated": "2026-10-18T10:30:23"}
+ ]
+}

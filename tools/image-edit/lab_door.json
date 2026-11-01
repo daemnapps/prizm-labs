@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "edit.py <picture> --brand --change|--fix [--dry-run], written to $OUT/<label> (LD-1 (shared lab door))",
+  "script": "tools/image-edit/edit.py",
+  "subcommand": null,
+  "positionals": ["picture"],
+  "flags": {"change": "--change", "fix": "--fix"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": []
+}

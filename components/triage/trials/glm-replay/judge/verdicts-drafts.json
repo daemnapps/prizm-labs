@@ -1,0 +1,208 @@
+[
+ {
+  "issue": "apify#11",
+  "A": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "no component tests exist; manual: imported reddit.py from a brands-less copy, base raises FileNotFoundError, patched imports OK and --help runs",
+   "errors": [
+    {
+     "what": "adds no test: nothing proves reddit.py now imports without brands/ (verified by hand only: base raises FileNotFoundError, patched imports)",
+     "where": "components/apify/reddit.py (no test file added)"
+    }
+   ]
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "same manual check as A: brands-less import OK after patch, --help runs",
+   "errors": [
+    {
+     "what": "adds no test: nothing proves reddit.py now imports without brands/ (verified by hand only: base raises FileNotFoundError, patched imports)",
+     "where": "components/apify/reddit.py (no test file added)"
+    }
+   ]
+  },
+  "pick": "equal",
+  "reason": "Functionally identical (same deletions, same doc fixes; B's docstring also names ~/.daemn/daemn_keys.py, which matches apify.py:33-47), and neither adds the test a landing needs."
+ },
+ {
+  "issue": "elements#1",
+  "A": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "machine/test_elements.py: base 11 OK, patched 12 OK; committed library.html == page.render() and contains letterform; new test fails without the change (render() absent / letterform tile missing)",
+   "errors": [
+    {
+     "what": "does not fold in sources.json:2 ('build.py') and :119 (email folder) as the brief's fix requires",
+     "where": "components/elements/sources.json:2,119 (untouched)"
+    }
+   ]
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "machine/test_elements.py: base 11 OK, patched 13 OK; new tests fail without the change",
+   "errors": [
+    {
+     "what": "does not fold in sources.json:2 ('build.py') and :119 (email folder) as the brief's fix requires",
+     "where": "components/elements/sources.json:2,119 (untouched)"
+    },
+    {
+     "what": "library.html is not re-rendered: the committed page still shows 254 rows in 23 lists and no letterform until someone runs `elements.py build`, so the brief's stated impact (page shows 25 lists / 328 rows) is not delivered by the diff",
+     "where": "components/elements/library.html (not in diff)"
+    }
+   ]
+  },
+  "pick": "A",
+  "reason": "Both fix page.py, build and CLAUDE.md with meaningful tests, but A also ships the re-rendered library.html (verified equal to render output) so the page is truthful on landing; both miss the sources.json fold-in."
+ },
+ {
+  "issue": "image-production#22",
+  "A": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "tests/test_image_production: base 59 ran, 7 errors, 11 skipped; patched 61 OK (11 skipped); TestKeyGuard 2/2 ok",
+   "errors": []
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "tests/test_image_production: patched 60 OK (11 skipped); TestKeyGuard 1/1 ok",
+   "errors": [
+    {
+     "what": "guard test passes key='' explicitly, so it bypasses R.key_value (env then Keychain) and cannot show that the Base env stubbing leaves the real no-key lookup refusing",
+     "where": "tests/test_image_production.py TestKeyGuard hunk @@ -730 (key=\"\")"
+    },
+    {
+     "what": "brief asks the guard be proven to fire AND release (I-102 (test convention)); B has no release case",
+     "where": "tests/test_image_production.py TestKeyGuard hunk @@ -730"
+    }
+   ]
+  },
+  "pick": "A",
+  "reason": "Both clear the 7 keyless errors with a restore-safe stub, but only A proves the refusal through the real lookup path (env cleared, empty HOME) and proves release; caveat (inferred): on a machine where daemn_keys is already importable in-process A's real-transport test could find a real key."
+ },
+ {
+  "issue": "image-teardown#2",
+  "A": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "tests/test_image_teardown: base 35 OK, patched 37 OK; tests-only applied to base -> 1 FAIL (meaningful)",
+   "errors": []
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "tests/test_image_teardown: base 35 OK, patched 37 OK; tests-only applied to base -> 2 ERROR (open_ledger absent; the no-brands assertion is meaningful)",
+   "errors": []
+  },
+  "pick": "equal",
+  "reason": "Both move the empty ledger into <run>/vars and repoint v['hook_ledger'] with correct dry-run rows; A's test drives run_stage end to end and asserts nothing written outside the run, B's extracts a testable open_ledger() that also skips Missing and won't rewrite an existing run ledger — trade-offs that cancel."
+ },
+ {
+  "issue": "marketing-doctrine#6",
+  "A": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "test_doctrine.py: new 3 checks ok; tests-only on base -> all 3 FAIL; one pre-existing unrelated FAIL (brand-b/position.md template) at base and patched",
+   "errors": []
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "test_doctrine.py: new 3 checks ok; tests-only on base -> all 3 FAIL; same pre-existing unrelated FAIL",
+   "errors": []
+  },
+  "pick": "B",
+  "reason": "Code is the same CommonMark rule; B's third check asserts prose after a properly closed block IS linted, whereas all three of A's checks expect [] and would pass an implementation that never closes a fence."
+ },
+ {
+  "issue": "run-kit#15",
+  "A": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "TEMPLATE/tests/test_template.py 2 OK; run-kit test_run_kit.py OK; a copy of TEMPLATE into a temp workspace dry-runs both stages (rc 0) and the copied tool's own test passes",
+   "errors": [
+    {
+     "what": "the brief asks for 'a dry-run test, so a copy runs --dry-run out of the box'; A's test only statically checks prompts exist and ask for supplied fields — it never runs --dry-run",
+     "where": "components/run-kit/TEMPLATE/tests/test_template.py"
+    }
+   ]
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "TEMPLATE/tests/test_dry_run.py 1 OK in place; run-kit test_run_kit.py OK; a copy dry-runs both stages, BUT the copied tool's own test FAILS ('the real run-kit is not beside this template')",
+   "errors": [
+    {
+     "what": "REAL = TEMPLATE.parent is components/run-kit only at authoring time; in any copied tool it is components/, so REAL.parent/'run-kit' does not exist and the shipped test is red in every new tool",
+     "where": "components/run-kit/TEMPLATE/tests/test_dry_run.py:21,35-37"
+    }
+   ]
+  },
+  "pick": "A",
+  "reason": "Both stub sets make a copy dry-run (verified), but B's shipped test breaks in every copy — the exact first-use friction the issue is about — while A's narrower test stays green in copies."
+ },
+ {
+  "issue": "identity-training#2",
+  "A": {
+   "applies": null,
+   "case_only_rename": false,
+   "test_ran": "n/a (not drafted); verified its claims: fixture builds ai-cast/ at test_identity_training.py:172, and the engine half alone leaves the declared test red",
+   "errors": []
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": false,
+   "test_ran": "new-workflow-design/builds/identity-training/test_identity_training.py: base many FAILs (ModuleNotFoundError brandpath); patched still red (same FAIL set, now ValueError at relative_to)",
+   "errors": [
+    {
+     "what": "declared test stays red: the fixture half (ai-cast/ -> ai-elements/characters/) lives outside the folder and is untouched, so the brief's response is not carried out",
+     "where": "new-workflow-design/builds/identity-training/test_identity_training.py:172 (untouched)"
+    },
+    {
+     "what": "no test added or turned green to prove the change",
+     "where": "components/identity-training (no test in diff)"
+    },
+    {
+     "what": "for the components-less AI_WORKSPACE B targets, brandpath.repo() ignores AI_WORKSPACE (needs components/ too) and resolves to the engine's own repo, so character_source now raises ValueError at relative_to instead of ImportError; the summary's /var-symlink explanation is not the observed failure",
+     "where": "components/identity-training/identity_training/engine.py hunk @@ -140 (rel = base.resolve().relative_to(WS.resolve())); components/brandpath/brandpath.py:78-85"
+    }
+   ]
+  },
+  "pick": "A",
+  "reason": "Declining was right: the change that turns the test green is outside the folder, and B's in-folder half only swaps the import crash for a relative_to crash with no passing test."
+ },
+ {
+  "issue": "run-kit#16",
+  "A": {
+   "applies": null,
+   "case_only_rename": false,
+   "test_ran": "n/a (not drafted); verified RULES.md:23 names components/run-kit/TEMPLATE/ and CLAUDE.md:27 says copy `TEMPLATE/`",
+   "errors": [
+    {
+     "what": "reason calls RULES.md:23 the 'one reader outside the folder'; lab/damon/control-room/registry/machines.json:680,685 also names components/run-kit/TEMPLATE",
+     "where": "reason text; lab/damon/control-room/registry/machines.json:680,685"
+    }
+   ]
+  },
+  "B": {
+   "applies": true,
+   "case_only_rename": true,
+   "test_ran": "git apply --check FAILS in the worktree on this case-insensitive FS ('template/CLAUDE.md already exists'); --check --cached (index, case-sensitive) OK; no test exists or was added",
+   "errors": [
+    {
+     "what": "does not repoint lab/damon/system-blueprint/briefs/RULES.md:23 (brief: same commit), leaving it pointing at a folder that no longer exists (machines.json:680,685 too)",
+     "where": "lab/damon/system-blueprint/briefs/RULES.md:23 (untouched)"
+    },
+    {
+     "what": "no test proves the rename or the repoint",
+     "where": "diff (no test)"
+    }
+   ]
+  },
+  "pick": "A",
+  "reason": "Declining was right: the brief requires the lab reader to move in the same commit (outside the folder), the case-only rename does not apply on macOS working trees, and it should follow run-kit#15 (template slots), which adds files under TEMPLATE/."
+ }
+]

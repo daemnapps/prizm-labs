@@ -1,0 +1,24 @@
+{
+ "schema": 1,
+ "brand": "<brand>",
+ "lane": null,
+ "scope": "Angles ONLY — a claim family, what this brand argues. An angle is CHANNEL-FREE and FORMAT-FREE: the same claim runs as a paid static, an organic video, an email and a landing page. A thing that only works in one container is a FORMAT and belongs in a format bank, not here. An angle is aimed at exactly one core avatar and may serve several sub-avatars, declared per asset. The model: components/naming/MODEL.md",
+ "source": "<where these came from — a teardown pass, a proven record, a workshop. Never blank.>",
+ "updated": "<yyyy-mm-dd>",
+ "note": "The one angle source for this brand. ONLY the brand's owner signs an angle active; a session may propose a candidate and may never sign one. An entry with no receipt that resolves is not an angle, it is a hope.",
+ "angles": [
+  {
+   "id": "<kebab-case, the claim family — never the headline>",
+   "name": "<the claim in a few words>",
+   "what": "<ONE sentence a customer could agree or disagree with. If you cannot write that sentence, this is not an angle.>",
+   "avatar": "<exactly one core avatar, from core-avatars/>",
+   "subs_served": [],
+   "status": "draft",
+   "signed": null,
+   "receipts": [
+    {"claim": "<what is being claimed as proof>",
+     "source": "<a path that RESOLVES, or a dated quote from the owner. An unfollowable receipt is indistinguishable from a fabricated one.>"}
+   ]
+  }
+ ]
+}

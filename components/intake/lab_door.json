@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "tools/run.py --brand [--source --kind --label --limit --gates] [--dry-run]; run.py files its own index under runs/intake/<brand>/<label>/ in this checkout (LD-7 (four more doors))",
+  "script": "components/intake/tools/run.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"source": "--source", "kind": "--kind", "label": "--label", "limit": "--limit", "gates": "--gates"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": null, "runs_root_flag": null, "run_dir": null},
+  "refuse": []
+}

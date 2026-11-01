@@ -1,0 +1,1827 @@
+{
+ "what": "Blind back-test of the triage engine on the 54 suites that were red on main between 2026-09-20 and 2026-10-01 and later cleared. Engine: three blind passes (history up to each suite's went-red commit only). Truth: the commit that actually cleared each suite, found separately.",
+ "rows": [
+  {
+   "id": "C01",
+   "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_links.py",
+   "red": [
+    "2026-09-21T09:36:43Z",
+    "2026-09-21T10:34:19Z"
+   ],
+   "engine": [
+    {
+     "id": "C01",
+     "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_links.py",
+     "class": "ENV",
+     "cause": "check_live.sh takes the machine-wide lock /tmp/qc-check-live.lock before the key check; the test ran while the mini's real QC sweep (started 09:32:13Z, verdicts committed through 09:36:41Z) held that lock, so the 'allowed' run exited 3 'another run is in progress' instead of reaching the REVIEWER_KEY_TEAM refusal.",
+     "causing_commit": null,
+     "fix": "Give the test a private lock (check_live.sh honours a lock-path env override that the test sets to its temp dir) so a live sweep cannot collide with it.",
+     "fix_group": "qc-test-private-lock",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C01",
+    "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_links.py",
+    "clearing_commit": null,
+    "clearing_subject": null,
+    "how": "ENV",
+    "action": "No relevant commit; the keyless-machine check fails when a live check_live.sh run holds the shared lock (exit 3 before the key check), and it passed once no run held it.",
+    "card": null,
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C02",
+   "suite": "new-workflow-design/builds/dashboard/test_performance_viewer.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-24T10:23:06Z"
+   ],
+   "engine": [
+    {
+     "id": "C02",
+     "suite": "new-workflow-design/builds/dashboard/test_performance_viewer.py",
+     "class": "REAL",
+     "cause": "MET-C16 (ac3b0cedd) routed the baseline vc check through a new off() helper that rounds 'mine' to 2 decimals before comparing with a 0.0011 tolerance, while vc is a 3-decimal share. 0.356 becomes 0.36, a difference of 0.004, so the check fails whenever the live baseline's third decimal is not near 0 ('vc 0.356 vs 0.356'). The fixture's 0.381 happens to pass. The bug is in the test, not the dashboard.",
+     "causing_commit": "ac3b0cedd",
+     "fix": "Compare vc at its own precision: give off() a rounding-places argument, or compare vc without off()'s round(\u2026, 2).",
+     "fix_group": "fix-after-ac3b0cedd",
+     "severity": "P1",
+     "lane": "maker",
+     "decider": "the team (metrics/dashboard owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C02",
+    "suite": "new-workflow-design/builds/dashboard/test_performance_viewer.py",
+    "clearing_commit": "842eb66ee",
+    "clearing_subject": "dashboard refresh: brand-a-inventory, brand-a-performance, brand-a-routes, brand-b-inventory, brand-b-performance \u2014 numbers moved",
+    "how": "ENV",
+    "action": "No fix; the scheduled dashboard data refresh rewrote the brand-b performance data.json and the baseline comparison then matched.",
+    "card": null,
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C03",
+   "suite": "new-workflow-design/builds/brand-a-pnl/test_brand_a_performance_source.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-24T10:23:06Z"
+   ],
+   "engine": [
+    {
+     "id": "C03",
+     "suite": "new-workflow-design/builds/brand-a-pnl/test_brand_a_performance_source.py",
+     "class": "REAL",
+     "cause": "Its single problem is that it executes the brand-b test test_performance_viewer.py (C02), which is red because of the off() rounding bug.",
+     "causing_commit": "ac3b0cedd",
+     "fix": "Clears when the C02 helper is fixed; no change of its own.",
+     "fix_group": "fix-after-ac3b0cedd",
+     "severity": "P1",
+     "lane": "maker",
+     "decider": "the team (metrics owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C03",
+    "suite": "new-workflow-design/builds/brand-a-pnl/test_brand_a_performance_source.py",
+    "clearing_commit": "842eb66ee",
+    "clearing_subject": "dashboard refresh: brand-a-inventory, brand-a-performance, brand-a-routes, brand-b-inventory, brand-b-performance \u2014 numbers moved",
+    "how": "ENV",
+    "action": "No fix; the same scheduled data refresh turned test_performance_viewer green, which this suite runs as one of its brand-b tests.",
+    "card": null,
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C04",
+   "suite": "new-workflow-design/builds/mini-cockpit/test_cockpit_actions.py",
+   "red": [
+    "2026-09-25T01:26:28Z",
+    "2026-09-25T07:25:51Z"
+   ],
+   "engine": [
+    {
+     "id": "C04",
+     "suite": "new-workflow-design/builds/mini-cockpit/test_cockpit_actions.py",
+     "class": "STALE",
+     "cause": "It pins the lead seat command as '--model opus' (the 2026-09-04 pilot). e40a82f66 changed the lead and plan cells in seat_kinds.sh to claude-opus-5-5 on the team's pilot ruling.",
+     "causing_commit": "e40a82f66",
+     "fix": "Read the expected model from the seat_kinds.sh row, not a literal.",
+     "fix_group": "repin-after-e40a82f66",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (cockpit owner; the pilot is his ruling)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C04",
+    "suite": "new-workflow-design/builds/mini-cockpit/test_cockpit_actions.py",
+    "clearing_commit": "b338108ba",
+    "clearing_subject": "lead: six seat tests read the model from seat_kinds.sh's table instead of pinning the pilot's literals; CLI-23 (seat desk) re-dispatched on the green suite",
+    "how": "REPINNED",
+    "action": "The lead changed the seat tests to read the model from seat_kinds.sh's table instead of the Opus 5.5 pilot's pinned literal.",
+    "card": "CLI-23",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C05",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_infer_action.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-26T03:00:15Z"
+   ],
+   "engine": [
+    {
+     "id": "C05",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_infer_action.py",
+     "class": "STALE",
+     "cause": "Same refactor as C06: b7365c566 replaced the inline pickup tuple with REQUEST_ACTIONS, so src.index('if r.get(\"verdict\", {}).get(\"action\") in (\"generate\"') raises ValueError; 'infer' is still in the pickup list.",
+     "causing_commit": "b7365c566",
+     "fix": "Assert 'infer' in worker.REQUEST_ACTIONS instead of slicing the source.",
+     "fix_group": "repin-after-b7365c566",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (worker owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C05",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_infer_action.py",
+    "clearing_commit": "b25bd27fa",
+    "clearing_subject": "lead: ten stale red suites narrowed to intent, test files only \u2014 rv18, rv22, rv3, infer_action, rv23, rv34, rv47, test_pm_view, cs_tick, cs_digest go green",
+    "how": "REPINNED",
+    "action": "The lead narrowed ten stale tests to their intent; this one now reads the pickup's named REQUEST_ACTIONS list.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C06",
+   "suite": "new-workflow-design/builds/review-component/test_rv18_folder_inventory.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-26T03:59:30Z"
+   ],
+   "engine": [
+    {
+     "id": "C06",
+     "suite": "new-workflow-design/builds/review-component/test_rv18_folder_inventory.py",
+     "class": "STALE",
+     "cause": "b7365c566 lifted the queue-pickup tuple into a REQUEST_ACTIONS constant, so the inline `.get(\"action\") in (` the RV-18 (folder inventory) test parses no longer exists; read-folder is still picked up.",
+     "causing_commit": "b7365c566",
+     "fix": "Re-point the test's pickup reader at worker.REQUEST_ACTIONS (membership check).",
+     "fix_group": "repin-after-b7365c566",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (worker owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C06",
+    "suite": "new-workflow-design/builds/review-component/test_rv18_folder_inventory.py",
+    "clearing_commit": "b25bd27fa",
+    "clearing_subject": "lead: ten stale red suites narrowed to intent, test files only \u2014 rv18, rv22, rv3, infer_action, rv23, rv34, rv47, test_pm_view, cs_tick, cs_digest go green",
+    "how": "REPINNED",
+    "action": "The lead narrowed ten stale tests to their intent; the dispatch/pickup check now reads REQUEST_ACTIONS by name.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C07",
+   "suite": "new-workflow-design/builds/review-component/test_rv22_teardown_filing.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-26T03:59:30Z"
+   ],
+   "engine": [
+    {
+     "id": "C07",
+     "suite": "new-workflow-design/builds/review-component/test_rv22_teardown_filing.py",
+     "class": "STALE",
+     "cause": "_queue_pickup_actions() finds the queue tuple by the text needle '.get(\"action\") in ('. b7365c566 (WM-34 part 2) replaced the inline tuple with REQUEST_ACTIONS, so the needle occurs 0 times (it occurred once before) and the helper asserts. Its own docstring says it was lifted from test_rv18_folder_inventory.py, so that suite is probably red for the same reason (unchecked).",
+     "causing_commit": "b7365c566",
+     "fix": "Read the REQUEST_ACTIONS tuple (AST or import) in place of the inline-tuple needle.",
+     "fix_group": "repin-after-b7365c566",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (review engine / worker owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C07",
+    "suite": "new-workflow-design/builds/review-component/test_rv22_teardown_filing.py",
+    "clearing_commit": "b25bd27fa",
+    "clearing_subject": "lead: ten stale red suites narrowed to intent, test files only \u2014 rv18, rv22, rv3, infer_action, rv23, rv34, rv47, test_pm_view, cs_tick, cs_digest go green",
+    "how": "REPINNED",
+    "action": "The lead narrowed ten stale tests to their intent; the dispatch/pickup check now reads REQUEST_ACTIONS by name.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C08",
+   "suite": "new-workflow-design/builds/review-component/test_rv23_manifest_fields.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-26T03:59:30Z"
+   ],
+   "engine": [
+    {
+     "id": "C08",
+     "suite": "new-workflow-design/builds/review-component/test_rv23_manifest_fields.py",
+     "class": "ENV",
+     "cause": "TheOldBehaviour asserts that no record on the LIVE review plane carries verdict.anchors or asset.at, a premise true only before the features were used. RV-36's machine text check began filing anchored verdicts on 2026-09-16 (first: 522730866, claude-prereview on the brilliance landing page), so live data broke the premise.",
+     "causing_commit": "522730866",
+     "fix": "Scope the old-behaviour corpus to records created before RV-23's merge (or to a frozen fixture), not to every record on the plane.",
+     "fix_group": "unique",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (review engine owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C08",
+    "suite": "new-workflow-design/builds/review-component/test_rv23_manifest_fields.py",
+    "clearing_commit": "b25bd27fa",
+    "clearing_subject": "lead: ten stale red suites narrowed to intent, test files only \u2014 rv18, rv22, rv3, infer_action, rv23, rv34, rv47, test_pm_view, cs_tick, cs_digest go green",
+    "how": "REPINNED",
+    "action": "The lead narrowed ten stale tests to their intent; the no-anchors corpus now stops before prereview records began carrying anchors.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C09",
+   "suite": "new-workflow-design/builds/review-component/test_rv3_on_accept.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-26T03:59:30Z"
+   ],
+   "engine": [
+    {
+     "id": "C09",
+     "suite": "new-workflow-design/builds/review-component/test_rv3_on_accept.py",
+     "class": "STALE",
+     "cause": "worker_actions() finds the dispatch list by AST, looking for a Compare whose comparator is a literal tuple containing 'generate' and 'implement'. WM-34 part 2 (b7365c566) deliberately lifted that tuple into the constant REQUEST_ACTIONS, so the comparator is now a Name and the helper raises 'dispatch action tuple was not found'.",
+     "causing_commit": "b7365c566",
+     "fix": "Read the REQUEST_ACTIONS assignment, not an inline tuple, in worker_actions().",
+     "fix_group": "repin-after-b7365c566",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (review engine / worker owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C09",
+    "suite": "new-workflow-design/builds/review-component/test_rv3_on_accept.py",
+    "clearing_commit": "b25bd27fa",
+    "clearing_subject": "lead: ten stale red suites narrowed to intent, test files only \u2014 rv18, rv22, rv3, infer_action, rv23, rv34, rv47, test_pm_view, cs_tick, cs_digest go green",
+    "how": "REPINNED",
+    "action": "The lead narrowed ten stale tests to their intent; the dispatcher-action check now reads REQUEST_ACTIONS by name.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C10",
+   "suite": "new-workflow-design/builds/dashboard/test_brand_files.py",
+   "red": [
+    "2026-09-21T18:02:06Z",
+    "2026-09-26T06:05:34Z"
+   ],
+   "engine": [
+    {
+     "id": "C10",
+     "suite": "new-workflow-design/builds/dashboard/test_brand_files.py",
+     "class": "REAL",
+     "cause": "10b511880 (2026-09-22, the brand template filled out) added brands/_TEMPLATE/operations/brand.json and products.json with emptied values and _note keys. check_brand_files.py and brand_paths.brand_names() treat any folder holding operations/brand.json as a brand, so _TEMPLATE is validated, fails with exit 2, and every brand is refused with it. load_brand_files.py runs the same check first and refuses the whole load, and build_reorder_planner iterates brand_names(), so live runs are affected too (inferred).",
+     "causing_commit": "10b511880",
+     "fix": "Make brand_paths.brand_names() and check_brand_files.py skip '_'-prefixed folders (the template), with a fixture case proving it.",
+     "fix_group": "unique",
+     "severity": "P0",
+     "lane": "owner",
+     "decider": "the team (metrics owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C10",
+    "suite": "new-workflow-design/builds/dashboard/test_brand_files.py",
+    "clearing_commit": "f13c712f0",
+    "clearing_subject": "lead: brands/_TEMPLATE is not a brand \u2014 the shared brand lookup and the two direct scans skip _/. folders",
+    "how": "FIXED-CODE",
+    "action": "The brand lookup and brand-file checker stopped counting the brands/_TEMPLATE folder as a brand.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C11",
+   "suite": "new-workflow-design/builds/dashboard/test_load_brand_files.py",
+   "red": [
+    "2026-09-21T18:02:06Z",
+    "2026-09-26T06:05:34Z"
+   ],
+   "engine": [
+    {
+     "id": "C11",
+     "suite": "new-workflow-design/builds/dashboard/test_load_brand_files.py",
+     "class": "REAL",
+     "cause": "10b511880 added brands/_TEMPLATE/operations/brand.json (empty placeholder), and components/metrics/brand_paths.brand_names() treats any brands/<dir> with operations/brand.json as a brand, so load_brand_files picks up _TEMPLATE and refuses its placeholder values (non-zero exit). The same discovery feeds build_reorder_planner.py (live inventory path).",
+     "causing_commit": "10b511880",
+     "fix": "Make brand_names() skip '_'-prefixed folders (the template), then re-run the suite and the reorder-planner build.",
+     "fix_group": "unique",
+     "severity": "P0",
+     "lane": "owner",
+     "decider": "the team (components/metrics owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C11",
+    "suite": "new-workflow-design/builds/dashboard/test_load_brand_files.py",
+    "clearing_commit": "f13c712f0",
+    "clearing_subject": "lead: brands/_TEMPLATE is not a brand \u2014 the shared brand lookup and the two direct scans skip _/. folders",
+    "how": "FIXED-CODE",
+    "action": "The shared brand lookup that load_brand_files reads stopped counting brands/_TEMPLATE as a brand.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C12",
+   "suite": "new-workflow-design/builds/teardown-integration/test_ti13u3_red_reporter.py",
+   "red": [
+    "2026-09-20T20:01:45Z",
+    "2026-09-26T12:51:15Z"
+   ],
+   "engine": [
+    {
+     "id": "C12",
+     "suite": "new-workflow-design/builds/teardown-integration/test_ti13u3_red_reporter.py",
+     "class": "ENV",
+     "cause": "Check h drives red_tests.sweep with a 0.01 s wall-clock budget and expects exactly one suite measured; it measured two on the mini, so the outcome depends on real time.time() and spawn speed, not on the code (green 53/53 at the TI-13 (six reds on main) unit-3 merge 540d85d91, red on its first run on the mini). Why the first spawn finished inside 10 ms is not explained from history.",
+     "causing_commit": "7949a75a7",
+     "fix": "Give sweep()'s budget check an injectable clock and drive check h with a fake clock instead of a 0.01 s real budget.",
+     "fix_group": "unique",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (red reporter owner)",
+     "confidence": "low"
+    }
+   ],
+   "truth": {
+    "id": "C12",
+    "suite": "new-workflow-design/builds/teardown-integration/test_ti13u3_red_reporter.py",
+    "clearing_commit": null,
+    "clearing_subject": null,
+    "how": "ENV",
+    "action": "No relevant commit; the check uses a 0.01 s budget, so how many suites a pass reaches depends on machine load, and it passed on a later run.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C13",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_plane_loader.py",
+   "red": [
+    "2026-09-27T03:42:24Z",
+    "2026-09-27T05:31:39Z"
+   ],
+   "engine": [
+    {
+     "id": "C13",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_plane_loader.py",
+     "class": "STALE",
+     "cause": "At 34e605525 the COMMITTED plane_schema.sql passes every assertion in this test (verified string by string; no DELETE or DROP outside comments). The reporter sweeps the worker's own clone (red_tests.py says so), and the PM-55 card filed a minute earlier (1c3068e6c) orders PM-55a's fix: an idempotent 'ALTER ... DROP NOT NULL' in plane_schema.sql. The in-flight, uncommitted edit trips this test's blanket 'no DROP ' rule (inferred).",
+     "causing_commit": null,
+     "fix": "Narrow the no-DROP check to 'nothing that loses data' (exempt DROP NOT NULL), as the sibling schema-discipline tests get it.",
+     "fix_group": "narrow-no-drop-for-pm55a",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (records plane / worker owner)",
+     "confidence": "medium",
+     "blindness_note": "C22's window (657826c4c) shows b04d717b4 committing exactly this and 0b3d39876 narrowing this file for it. That is outside C13's window and was not used for the call above."
+    }
+   ],
+   "truth": {
+    "id": "C13",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_plane_loader.py",
+    "clearing_commit": "0b3d39876",
+    "clearing_subject": "lead: test_plane_loader red on main since PM-55a (removal never freezes) \u2014 its no-DROP rule narrowed to \"nothing that loses data\" as its three siblings were; a real DROP is still caught; green under python3 and /usr/bin/python3",
+    "how": "REPINNED",
+    "action": "The lead narrowed the schema test's no-DROP rule to allow PM-55a's DROP NOT NULL, which loses no data.",
+    "card": "PM-55a",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C14",
+   "suite": "new-workflow-design/builds/dashboard/test_dashboard_tick.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T08:45:51Z"
+   ],
+   "engine": [
+    {
+     "id": "C14a",
+     "suite": "new-workflow-design/builds/dashboard/test_dashboard_tick.py",
+     "class": "ENV",
+     "cause": "WM-29 (tick isolation)'s EnvNotLoaded rail in dashboard_adapter.py reads the real ~/.workflow-worker.env; on the mini that file exists with 12 keys, and test_missing_credential's scoped env holds none of them, so refresh_and_file raises instead of filing the missing-credential record. It passes on a machine without the file.",
+     "causing_commit": "d3ed8ac6a",
+     "fix": "Point da.WORKER_ENV (or HOME) at a temp path in the test so the rail does not see the machine's credential file.",
+     "fix_group": "stub-worker-env-file",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    },
+    {
+     "id": "C14b",
+     "suite": "new-workflow-design/builds/dashboard/test_dashboard_tick.py",
+     "class": "STALE",
+     "cause": "The plist check requires every plist in mini-worker/ to start with com.company.workflow-worker; WM-70 (publisher process) deliberately added com.company.workflow-publisher.plist.",
+     "causing_commit": "521fa46d3",
+     "fix": "Narrow to intent: no dashboard-specific plist exists (allow the declared worker and publisher plists).",
+     "fix_group": "repin-launchagent-census",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C14",
+    "suite": "new-workflow-design/builds/dashboard/test_dashboard_tick.py",
+    "clearing_commit": "62e338848",
+    "clearing_subject": "lead: merge TI-16 (tests off machine state) under duty 5 \u2014 impl/teardown-integration-TI-16-20260927T074409Z fe14c37d96; declared tests green under python3 and /usr/bin/python3 on a copy of main, must-stay-green suites green, known reds unchanged",
+    "how": "REPINNED",
+    "action": "TI-16 gave the test a temporary empty HOME and changed the LaunchAgent check to 'no dashboard plist', so it no longer reads machine state.",
+    "card": "TI-16",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C15",
+   "suite": "new-workflow-design/builds/pm-tool/test_corrections_batch.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T09:08:53Z"
+   ],
+   "engine": [
+    {
+     "id": "C15",
+     "suite": "new-workflow-design/builds/pm-tool/test_corrections_batch.py",
+     "class": "STALE",
+     "cause": "batch_records() json.loads every file in platform/data/records/inbox/ before filtering by via; three mini-worker filed-index records (20260902T111356Z, 20260903T103706Z, 20260904T103713Z) were written truncated at the 16KB cap by candidate_scan and WM-24 (index truncation) ruled they stay on disk (create-never-edit), so the check raises JSONDecodeError ('could not run').",
+     "causing_commit": "e8185ba91",
+     "fix": "Make the reader skip unparseable records (or allowlist the three known-corrupt names exactly as test_index_cap.py does) before filtering by via; alternatively the team rules PLANE-10 (record refusal)'s open 'regenerate the three files' question.",
+     "fix_group": "tolerate-three-corrupt-index-records",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C15",
+    "suite": "new-workflow-design/builds/pm-tool/test_corrections_batch.py",
+    "clearing_commit": "fca50ca88",
+    "clearing_subject": "lead: merge PM-57 (corrections reader skips unreadable) under duty 5 \u2014 impl/pm-tool-PM-57-20260927T074859Z 04ab78e46e; declared tests green under python3 and /usr/bin/python3 on a copy of main, must-stay-green suites green, known reds unchanged",
+    "how": "REPINNED",
+    "action": "PM-57 made the test's record reader skip a truncated, unreadable record (named once on stderr) instead of crashing.",
+    "card": "PM-57",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C16",
+   "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_kick.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T09:28:07Z"
+   ],
+   "engine": [
+    {
+     "id": "C16",
+     "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_kick.py",
+     "class": "STALE",
+     "cause": "The 'no new scheduler' check pins the workers README table's LaunchAgent labels to exactly {workflow-worker, tmux-server}; labels were added deliberately since (claude-remote-control 94e9ddf98, workflow-worker-s2, model-gateway-proxy WM-59, workflow-publisher WM-70, workflow-worker-runs WM-71).",
+     "causing_commit": "94e9ddf98",
+     "fix": "Narrow the pin to its intent: QG-5 (records-plane kick) adds no qc-specific label (no label beyond those declared by other cards), instead of an exact set.",
+     "fix_group": "repin-launchagent-census",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C16",
+    "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_kick.py",
+    "clearing_commit": "62e338848",
+    "clearing_subject": "lead: merge TI-16 (tests off machine state) under duty 5 \u2014 impl/teardown-integration-TI-16-20260927T074409Z fe14c37d96; declared tests green under python3 and /usr/bin/python3 on a copy of main, must-stay-green suites green, known reds unchanged",
+    "how": "REPINNED",
+    "action": "TI-16 changed the one-scheduler check from an exact LaunchAgent label set to 'no qc label', and matched the kick's sub-job row by its prefix.",
+    "card": "TI-16",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C17",
+   "suite": "new-workflow-design/builds/review-component/test_rv59_folder_request_not_image.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T09:28:07Z"
+   ],
+   "engine": [
+    {
+     "id": "C17",
+     "suite": "new-workflow-design/builds/review-component/test_rv59_folder_request_not_image.py",
+     "class": "ENV",
+     "cause": "The test runs prereview() over the three LIVE batch requests' records; four minutes after RV-63 (batch pre-review) merged, the live worker filed claude-prereview verdicts on all three (0abc6ccc9 and siblings), so prereview now raises Refused('already-prereviewed') and the subtests ERROR.",
+     "causing_commit": "0abc6ccc9",
+     "fix": "Read the three batches' records as fixtures frozen before the machine verdict (or drop claude-prereview records from the live read) so the test stops depending on the worker's own later output.",
+     "fix_group": "fixture-live-review-records",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C17",
+    "suite": "new-workflow-design/builds/review-component/test_rv59_folder_request_not_image.py",
+    "clearing_commit": "62e338848",
+    "clearing_subject": "lead: merge TI-16 (tests off machine state) under duty 5 \u2014 impl/teardown-integration-TI-16-20260927T074409Z fe14c37d96; declared tests green under python3 and /usr/bin/python3 on a copy of main, must-stay-green suites green, known reds unchanged",
+    "how": "REPINNED",
+    "action": "TI-16 committed the three live batches as fixtures, so the test no longer reads machine-local review state.",
+    "card": "TI-16",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C18",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_replay_base.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T09:46:12Z"
+   ],
+   "engine": [
+    {
+     "id": "C18",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_replay_base.py",
+     "class": "STALE",
+     "cause": "The WM-60a (budget pause) implementation landed on main as c5c6cce05; process_implement now calls post_status(..., extra=running_extra) and a post-claim git_sync(), but the test's stubs (post_status lambda without 'extra', no git_sync stub) predate it, so run_implement errors and cap['report']/cap['prompt'] are never set.",
+     "causing_commit": "c5c6cce05",
+     "fix": "Widen run_implement's stubs: post_status accepting **kw/extra and a git_sync stub returning True.",
+     "fix_group": "repin-after-c5c6cce05",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (worker owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C18",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_replay_base.py",
+    "clearing_commit": "0ae27e1d7",
+    "clearing_subject": "lead: merge WM-104 (worker suites current) under duty 5 \u2014 impl/worker-multirepo-WM-104-20260927T083213Z 7160f019ee; declared tests green under python3 and /usr/bin/python3 on a copy of main, known reds by name no worse than main",
+    "how": "REPINNED",
+    "action": "WM-104 brought five stale worker-multirepo suites up to the worker's current behaviour, with test-only edits.",
+    "card": "WM-104",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C19",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_replay_isolation.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T09:46:12Z"
+   ],
+   "engine": [
+    {
+     "id": "C19",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_replay_isolation.py",
+     "class": "STALE",
+     "cause": "WM-66 (runner version refuse) made the pre-worktree refusal call post_status(item, 'failed', detail, extra=refusal_facts); the test's stub `lambda it, st, detail=\"\"` takes no `extra`, so the submodule-refusal case raises TypeError (ERROR).",
+     "causing_commit": "481b32299",
+     "fix": "Widen the test's post_status stub to accept **kw (and record extra).",
+     "fix_group": "repin-after-481b32299",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C19",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_replay_isolation.py",
+    "clearing_commit": "0ae27e1d7",
+    "clearing_subject": "lead: merge WM-104 (worker suites current) under duty 5 \u2014 impl/worker-multirepo-WM-104-20260927T083213Z 7160f019ee; declared tests green under python3 and /usr/bin/python3 on a copy of main, known reds by name no worse than main",
+    "how": "REPINNED",
+    "action": "WM-104 brought five stale worker-multirepo suites up to the worker's current behaviour, with test-only edits.",
+    "card": "WM-104",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C20",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_test_suffixes.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T09:46:12Z"
+   ],
+   "engine": [
+    {
+     "id": "C20",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_test_suffixes.py",
+     "class": "STALE",
+     "cause": "WM-48 (test result truncation) made every failing impl_test_run_one result attach git status/log diagnostics via sh() -> subprocess.run, so the fake run records git calls and the 'no launch' assertion (fake.calls == []) fails although no interpreter is launched.",
+     "causing_commit": "670912b39",
+     "fix": "Narrow the assertion to 'no interpreter launch' (filter out the git diagnostic argv) or stub sh() in the test.",
+     "fix_group": "repin-after-670912b39",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (worker owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C20",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_test_suffixes.py",
+    "clearing_commit": "0ae27e1d7",
+    "clearing_subject": "lead: merge WM-104 (worker suites current) under duty 5 \u2014 impl/worker-multirepo-WM-104-20260927T083213Z 7160f019ee; declared tests green under python3 and /usr/bin/python3 on a copy of main, known reds by name no worse than main",
+    "how": "REPINNED",
+    "action": "WM-104 brought five stale worker-multirepo suites up to the worker's current behaviour, with test-only edits.",
+    "card": "WM-104",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C21",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_maker_slots.py",
+   "red": [
+    "2026-09-25T02:02:44Z",
+    "2026-09-27T09:46:12Z"
+   ],
+   "engine": [
+    {
+     "id": "C21",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_maker_slots.py",
+     "class": "STALE",
+     "cause": "The test asserts worker.py contains 'os.O_CREAT | os.O_EXCL' exactly once (the WM-26a (per-job claim) claim); WM-82 (loud worker failure) deliberately added two more O_EXCL latches (quarantine stop file, snapshot-age alarm), making the count 3.",
+     "causing_commit": "f894d6a34",
+     "fix": "Narrow the pin to claim_job's body (one O_EXCL inside claim_job) instead of a whole-file token count.",
+     "fix_group": "repin-after-f894d6a34",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C21",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_maker_slots.py",
+    "clearing_commit": "0ae27e1d7",
+    "clearing_subject": "lead: merge WM-104 (worker suites current) under duty 5 \u2014 impl/worker-multirepo-WM-104-20260927T083213Z 7160f019ee; declared tests green under python3 and /usr/bin/python3 on a copy of main, known reds by name no worse than main",
+    "how": "REPINNED",
+    "action": "WM-104 brought five stale worker-multirepo suites up to the worker's current behaviour, with test-only edits.",
+    "card": "WM-104",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C22",
+   "suite": "new-workflow-design/builds/records-plane/test_plane4a_index_views.py",
+   "red": [
+    "2026-09-27T07:14:10Z",
+    "2026-09-27T10:58:10Z"
+   ],
+   "engine": [
+    {
+     "id": "C22",
+     "suite": "new-workflow-design/builds/records-plane/test_plane4a_index_views.py",
+     "class": "STALE",
+     "cause": "PM-55d (8a8d95ffb) added pointer_guard to plane_loader.run(): any pointer-moving load whose plane pointer is not proven an ancestor via git merge-base returns status 'refused'. The suite's second loads (SHA_B after SHA_A) use git stub (128, '') or no git at all in a temp root, so they are now refused, and load() asserts status in (ok, parity-miss). The maker updated plane15 and wm85 for this but not plane4a. PM-55a's DROP NOT NULL (b04d717b4) was already narrowed in this file.",
+     "causing_commit": "8a8d95ffb",
+     "fix": "Give the fixture's re-loads a git stub that answers merge-base with 0 (or pass pointer_override=True) so the guard sees a descendant checkout.",
+     "fix_group": "repin-after-8a8d95ffb",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (records plane / worker owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C22",
+    "suite": "new-workflow-design/builds/records-plane/test_plane4a_index_views.py",
+    "clearing_commit": "ad9862dad",
+    "clearing_subject": "lead: merge PLANE-17 (harness loads twice) under duty 5 \u2014 impl/records-plane-PLANE-17-20260927T085048Z 242b7b7d56; declared and must-stay-green suites green under python3 and /usr/bin/python3 on a copy of main, known reds by name identical to main",
+    "how": "REPINNED",
+    "action": "PLANE-17 (test-only) made the SQLite view harness's fakes answer the stale-pointer guard's merge-base call, so the harness loads twice again.",
+    "card": "PLANE-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C23",
+   "suite": "new-workflow-design/builds/records-plane/test_plane6_schema_dialect.py",
+   "red": [
+    "2026-09-27T07:14:10Z",
+    "2026-09-27T10:58:10Z"
+   ],
+   "engine": [
+    {
+     "id": "C23",
+     "suite": "new-workflow-design/builds/records-plane/test_plane6_schema_dialect.py",
+     "class": "STALE",
+     "cause": "Its only failure is Plane4aStillPasses: it runs test_plane4a_index_views.py whole, which is red (see C22).",
+     "causing_commit": "8a8d95ffb",
+     "fix": "Clears when C22 is fixed; no change of its own.",
+     "fix_group": "repin-after-8a8d95ffb",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (records plane / worker owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C23",
+    "suite": "new-workflow-design/builds/records-plane/test_plane6_schema_dialect.py",
+    "clearing_commit": "ad9862dad",
+    "clearing_subject": "lead: merge PLANE-17 (harness loads twice) under duty 5 \u2014 impl/records-plane-PLANE-17-20260927T085048Z 242b7b7d56; declared and must-stay-green suites green under python3 and /usr/bin/python3 on a copy of main, known reds by name identical to main",
+    "how": "REPINNED",
+    "action": "Same PLANE-17 harness fix (fakes answer merge-base); this suite asserts the whole plane4a suite is green.",
+    "card": "PLANE-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C24",
+   "suite": "new-workflow-design/builds/review-component/test_rv8_index_view.py",
+   "red": [
+    "2026-09-27T07:14:10Z",
+    "2026-09-27T10:58:10Z"
+   ],
+   "engine": [
+    {
+     "id": "C24",
+     "suite": "new-workflow-design/builds/review-component/test_rv8_index_view.py",
+     "class": "STALE",
+     "cause": "PM-55d (force really recovers) added a stale-pointer guard to every pointer-writing plane load; RV-8 (review queue index view)'s re-load at SHA_B passes a git stub that answers 128, which the guard reads as 'pointer unknown to this clone' and refuses, so load() sees status 'refused'.",
+     "causing_commit": "ddea7ff21",
+     "fix": "Give the SHA_B re-loads a git stub that answers the ancestor check with 0 while still failing the diff (or pass pointer_override in the fixture).",
+     "fix_group": "repin-after-ddea7ff21",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (records-plane / review engine owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C24",
+    "suite": "new-workflow-design/builds/review-component/test_rv8_index_view.py",
+    "clearing_commit": "ad9862dad",
+    "clearing_subject": "lead: merge PLANE-17 (harness loads twice) under duty 5 \u2014 impl/records-plane-PLANE-17-20260927T085048Z 242b7b7d56; declared and must-stay-green suites green under python3 and /usr/bin/python3 on a copy of main, known reds by name identical to main",
+    "how": "REPINNED",
+    "action": "Same PLANE-17 harness fix (fakes answer merge-base); this suite imports test_plane4a_index_views as its runner.",
+    "card": "PLANE-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C25",
+   "suite": "new-workflow-design/builds/pm-tool/test_pm6_report.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T12:40:55Z"
+   ],
+   "engine": [
+    {
+     "id": "C25a",
+     "suite": "new-workflow-design/builds/pm-tool/test_pm6_report.py",
+     "class": "REAL",
+     "cause": "inline_report.py (PM-6 (report affordance)) annotates `def inlined(text: str) -> str | None` with no `from __future__ import annotations`, so importing it under the worker's ruled /usr/bin/python3 3.9.6 raises TypeError and the suite cannot run.",
+     "causing_commit": "88b5aa2a3",
+     "fix": "Add `from __future__ import annotations` to inline_report.py (or use Optional[str]).",
+     "fix_group": "py39-pep604-annotations",
+     "severity": "P1",
+     "lane": "owner",
+     "decider": "the team",
+     "confidence": "high"
+    },
+    {
+     "id": "C25b",
+     "suite": "new-workflow-design/builds/pm-tool/test_pm6_report.py",
+     "class": "REAL",
+     "cause": "INV-C13c (planner page swap) replaced inventory.html without its inlined report-affordance block (present at e2e01b8a9, gone at a6374f84e), so the live inventory viewer has no way to report.",
+     "causing_commit": "a6374f84e",
+     "fix": "Re-run new-workflow-design/builds/pm-tool/inline_report.py over inventory.html and commit the restored block.",
+     "fix_group": "fix-after-a6374f84e",
+     "severity": "P1",
+     "lane": "owner",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C25",
+    "suite": "new-workflow-design/builds/pm-tool/test_pm6_report.py",
+    "clearing_commit": "525a2b75c",
+    "clearing_subject": "lead: merge INV-C22 (inventory report control) \u2014 inventory carries the report affordance; two the team suites narrowed per the ruling",
+    "how": "FIXED-CODE",
+    "action": "INV-C22 put the report-affordance block back on the inventory viewer template.",
+    "card": "INV-C22",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C26",
+   "suite": "new-workflow-design/builds/chain-qa/test_review_round.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T13:24:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C26",
+     "suite": "new-workflow-design/builds/chain-qa/test_review_round.py",
+     "class": "STALE",
+     "cause": "I-54 (e2e outer loop) was ruled RETIRE and d4f4e9894 moved the e2e-brief manifest to kinds-retired/; the chain-qa review-round test still runs a round on kind 'e2e-brief', which round_plane correctly refuses as nonexistent.",
+     "causing_commit": "d4f4e9894",
+     "fix": "Re-point the test at a live review kind, or retire the suite with the outer loop if the round mechanism is retired too.",
+     "fix_group": "repin-after-d4f4e9894",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (re-point vs retire)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C26",
+    "suite": "new-workflow-design/builds/chain-qa/test_review_round.py",
+    "clearing_commit": "21108d2b0",
+    "clearing_subject": "lead: merge TI-17 (stale singles) part 1 \u2014 chain-run adapter expects the runs lane, dashboard move points at components/metrics, mytasks expects the no-key exit 0; test_review_round retired with its parked deck as the card rules",
+    "how": "TEST-REMOVED",
+    "action": "TI-17 part 1 deleted test_review_round.py along with its parked deck, as the card ruled.",
+    "card": "TI-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C27",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_env_template.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T13:45:59Z"
+   ],
+   "engine": [
+    {
+     "id": "C27",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_env_template.py",
+     "class": "REAL",
+     "cause": "env.template is missing 13 names that the worker code reads: REVIEW_ADAPTER_LOCK(_WAIT) (RV-3/RV-7, 73e3f4acd), RV11_PROJECTION and RV11_API_TIMEOUT (RV-11, eb0fbd85f), NODE_BIN (RV-35, 2035b4cc9), and eight RED_TESTS_* knobs (TI-13 reporter, 7949a75a7). Each build added a reader without the template line, so a rotation or mini setup cannot see them.",
+     "causing_commit": "73e3f4acd",
+     "fix": "Add the 13 names, with no values, to platform/workers/mini-worker/env.template.",
+     "fix_group": "unique",
+     "severity": "P1",
+     "lane": "owner",
+     "decider": "the team (worker / machine credential inventory)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C27",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_env_template.py",
+    "clearing_commit": "dc8d3d857",
+    "clearing_subject": "lead: merge WM-105 (env.template names) \u2014 sixteen tuning names added below the not-secrets heading",
+    "how": "FIXED-CODE",
+    "action": "WM-105 added the sixteen tuning names the worker code reads to env.template, plus a one-line test tweak for the fulfilled Drive-writer line.",
+    "card": "WM-105",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C28",
+   "suite": "new-workflow-design/builds/chain-qa/test_adapter_video.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C28",
+     "suite": "new-workflow-design/builds/chain-qa/test_adapter_video.py",
+     "class": "STALE",
+     "cause": "The test pins exactly two golden videos for the video-teardown chain; BV-1 deliberately added two more fixtures (kerin-01, creator-a-01).",
+     "causing_commit": "ec0fc2a8d",
+     "fix": "Assert at least the two original goldens are declared (or re-pin to four), not an exact count of two.",
+     "fix_group": "repin-after-ec0fc2a8d",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C28",
+    "suite": "new-workflow-design/builds/chain-qa/test_adapter_video.py",
+    "clearing_commit": "abcb51d70",
+    "clearing_subject": "lead: merge TI-14 (census pins intent) part 1 \u2014 the atlas, adapter-video and view-menu suites pin what they mean (registry-read census, blessed-only completeness) instead of a count that goes red whenever a tool is added",
+    "how": "REPINNED",
+    "action": "TI-14 part 1 changed the adapter-video golden check from an exact count of two to the blessed-only intent.",
+    "card": "TI-14",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C29",
+   "suite": "new-workflow-design/builds/chain-runner/test_chain_run_adapter.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C29",
+     "suite": "new-workflow-design/builds/chain-runner/test_chain_run_adapter.py",
+     "class": "STALE",
+     "cause": "WM-71 (runs lane) deliberately moved bench, teardown-run, chain-run and lab-run from the dev lane to the new 'runs' lane; the CR-4 (runner dispatch) test still asserts lane == 'dev'. The change landed inside 65049954b, whose message is about a copy-machine rename (unrelated worker change swept into it).",
+     "causing_commit": "65049954b",
+     "fix": "Re-pin the assertion to lane == 'runs' (intent: never the live lane).",
+     "fix_group": "repin-after-65049954b",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (worker owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C29",
+    "suite": "new-workflow-design/builds/chain-runner/test_chain_run_adapter.py",
+    "clearing_commit": "21108d2b0",
+    "clearing_subject": "lead: merge TI-17 (stale singles) part 1 \u2014 chain-run adapter expects the runs lane, dashboard move points at components/metrics, mytasks expects the no-key exit 0; test_review_round retired with its parked deck as the card rules",
+    "how": "REPINNED",
+    "action": "TI-17 part 1 changed the chain-run adapter test to expect the runs lane.",
+    "card": "TI-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C30",
+   "suite": "new-workflow-design/builds/consumer-plane/test_view_menu.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C30",
+     "suite": "new-workflow-design/builds/consumer-plane/test_view_menu.py",
+     "class": "STALE",
+     "cause": "The test hardcodes the viewer census as the eight templates of 2026-08-26; ten viewers were added deliberately since (engine-room first at 62c811df6, then cards, cs, performance, atlas, inventory, review, routes and the -fb twins), so the equality fails.",
+     "causing_commit": "62c811df6",
+     "fix": "Replace the hardcoded EXPECTED set with the discovered template set and keep the real intent: every discovered viewer carries the shared menu.",
+     "fix_group": "repin-viewer-census",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C30",
+    "suite": "new-workflow-design/builds/consumer-plane/test_view_menu.py",
+    "clearing_commit": "abcb51d70",
+    "clearing_subject": "lead: merge TI-14 (census pins intent) part 1 \u2014 the atlas, adapter-video and view-menu suites pin what they mean (registry-read census, blessed-only completeness) instead of a count that goes red whenever a tool is added",
+    "how": "REPINNED",
+    "action": "TI-14 part 1 changed the view-menu census from a fixed list of eight viewers to a census read from the registry.",
+    "card": "TI-14",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C31",
+   "suite": "new-workflow-design/builds/cs-loop/test_cs_viewer.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C31",
+     "suite": "new-workflow-design/builds/cs-loop/test_cs_viewer.py",
+     "class": "STALE",
+     "cause": "PM-6 (report affordance) inlined the report widget into every viewer template, adding five fetch calls (/api/health, /api/review, /api/mint ...) to cs.html; the GORG-C2b (cs viewer) test strips only the session-bootstrap block and still requires exactly one fetch.",
+     "causing_commit": "88b5aa2a3",
+     "fix": "Strip the shared report-widget block before counting fetches (as is done for the session bootstrap), keeping the one-gated-read rule for the page's own code.",
+     "fix_group": "repin-after-88b5aa2a3",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (cs-loop owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C31",
+    "suite": "new-workflow-design/builds/cs-loop/test_cs_viewer.py",
+    "clearing_commit": "3cd255eaa",
+    "clearing_subject": "lead: merge TI-19 (outage reads outage) \u2014 during a records-plane outage the cs page says the plane did not answer, not \"Pick a CS run.\"",
+    "how": "FIXED-CODE",
+    "action": "TI-19 made cs.html show the outage state when the records plane is down; TI-15 part 1 (a3eec5286), merged earlier in the same window, had already re-pinned the listed fetch-count line.",
+    "card": "TI-19",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C32",
+   "suite": "new-workflow-design/builds/dashboard/test_dashboard_move.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C32",
+     "suite": "new-workflow-design/builds/dashboard/test_dashboard_move.py",
+     "class": "STALE",
+     "cause": "The test pins the DASH-C1 move into components/dashboard/; DASH-C6 renamed the component to components/metrics/ on 2026-08-31, so its file, artifacts.md and CLAUDE.md checks fail.",
+     "causing_commit": "bc877e51b",
+     "fix": "Repoint COMPONENT to components/metrics (keeping the ruling/owner/origin checks), or retire the suite as superseded by DASH-C6.",
+     "fix_group": "repin-after-bc877e51b",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C32",
+    "suite": "new-workflow-design/builds/dashboard/test_dashboard_move.py",
+    "clearing_commit": "21108d2b0",
+    "clearing_subject": "lead: merge TI-17 (stale singles) part 1 \u2014 chain-run adapter expects the runs lane, dashboard move points at components/metrics, mytasks expects the no-key exit 0; test_review_round retired with its parked deck as the card rules",
+    "how": "REPINNED",
+    "action": "TI-17 part 1 pointed the dashboard-move test at components/metrics.",
+    "card": "TI-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C33",
+   "suite": "new-workflow-design/builds/feedback-twins/test_view_feedback.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C33",
+     "suite": "new-workflow-design/builds/feedback-twins/test_view_feedback.py",
+     "class": "RULING",
+     "cause": "FT-1 (view-feedback kind)'s hard constraint is that no main view reads view-feedback; PLANE-1b (my day section) deliberately put view-feedback rows into pm.html's one-call feed (FEED_KIND_LABEL plus prose), so the absence grep hits pm.html.",
+     "causing_commit": "2daf820b1",
+     "fix": "Rule whether the my-day feed may show view-feedback (then carve the feed out of the absence check) or the feed drops the kind.",
+     "fix_group": "unique",
+     "severity": "P2",
+     "lane": "decision",
+     "decider": "the team",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C33",
+    "suite": "new-workflow-design/builds/feedback-twins/test_view_feedback.py",
+    "clearing_commit": "7e6747d3d",
+    "clearing_subject": "lead: merge TI-17 (stale singles) part 2 \u2014 chat-usage allows the priced cache-read row, view-feedback lets the parent name the kind, dispatch-skill compares person sets, model-budget pins the raised cap; a residue test holds the two uncarded reds by name",
+    "how": "REPINNED",
+    "action": "TI-17 part 2 let the view-feedback test accept the parent template naming the kind.",
+    "card": "TI-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C34",
+   "suite": "new-workflow-design/builds/atlas/test_atl9_definitions.py",
+   "red": [
+    "2026-09-21T07:26:31Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C34",
+     "suite": "new-workflow-design/builds/atlas/test_atl9_definitions.py",
+     "class": "STALE",
+     "cause": "ATL-9 (53d1c19ce) pinned TOOLS_AT_HEAD = 52, the live-tree count on the day it was written; new tool folders landed hours later without moving the pin (tools/image-production c808e39a5; components/system-integration 2aee7d34f is the likely second). The count keeps rising (54, 55, 56), and the compiler walks the folders on disk, so untracked folders count too (inferred).",
+     "causing_commit": "c808e39a5",
+     "fix": "Replace the exact pin with a floor (or a count derived from the tracked tree) so a folder landing does not turn the suite red.",
+     "fix_group": "unique",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (atlas engine owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C34",
+    "suite": "new-workflow-design/builds/atlas/test_atl9_definitions.py",
+    "clearing_commit": "abcb51d70",
+    "clearing_subject": "lead: merge TI-14 (census pins intent) part 1 \u2014 the atlas, adapter-video and view-menu suites pin what they mean (registry-read census, blessed-only completeness) instead of a count that goes red whenever a tool is added",
+    "how": "REPINNED",
+    "action": "TI-14 part 1 changed the atlas tool-node check from a fixed 52 to a census read from the registry.",
+    "card": "TI-14",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C35",
+   "suite": "new-workflow-design/builds/mini-cockpit/test_dispatch_skill.py",
+   "red": [
+    "2026-09-22T11:56:38Z",
+    "2026-09-27T14:05:27Z"
+   ],
+   "engine": [
+    {
+     "id": "C35",
+     "suite": "new-workflow-design/builds/mini-cockpit/test_dispatch_skill.py",
+     "class": "ENV",
+     "cause": "Not reproducible from history: evaluated at 83a3c431c, team/dispatch-grants.json (incl. the team's new runs-only row a422c8b1f) passes every assertion of the seeded-grant test. The reporter runs suites in the worker's live clone, so the likeliest cause is that clone's working-tree state during the pass (unpulled or mid-edit grants file).",
+     "causing_commit": null,
+     "fix": "Re-run once on a clean, pulled clone; if green, record as transient and move the reporter toward a clean worktree; if red, inspect the clone's grants file diff.",
+     "fix_group": "unique",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "low"
+    }
+   ],
+   "truth": {
+    "id": "C35",
+    "suite": "new-workflow-design/builds/mini-cockpit/test_dispatch_skill.py",
+    "clearing_commit": "7e6747d3d",
+    "clearing_subject": "lead: merge TI-17 (stale singles) part 2 \u2014 chat-usage allows the priced cache-read row, view-feedback lets the parent name the kind, dispatch-skill compares person sets, model-budget pins the raised cap; a residue test holds the two uncarded reds by name",
+    "how": "REPINNED",
+    "action": "TI-17 part 2 changed the dispatch-skill grant test to compare sets of people.",
+    "card": "TI-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C36",
+   "suite": "new-workflow-design/builds/pm-tool/test_mytasks.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-27T14:30:16Z"
+   ],
+   "engine": [
+    {
+     "id": "C36",
+     "suite": "new-workflow-design/builds/pm-tool/test_mytasks.py",
+     "class": "STALE",
+     "cause": "48a91ace9 deliberately made /mytasks work with no key inside a workspace clone (reads the local records); the test runs inside the clone with an empty key and still expects the old exit 3 'NOT no open tasks'.",
+     "causing_commit": "48a91ace9",
+     "fix": "Re-pin the no-key test to the no-key-AND-no-clone case (stub repo_root() to None) and add a case for the in-clone local read.",
+     "fix_group": "repin-after-48a91ace9",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (pm-tool owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C36",
+    "suite": "new-workflow-design/builds/pm-tool/test_mytasks.py",
+    "clearing_commit": "21108d2b0",
+    "clearing_subject": "lead: merge TI-17 (stale singles) part 1 \u2014 chain-run adapter expects the runs lane, dashboard move points at components/metrics, mytasks expects the no-key exit 0; test_review_round retired with its parked deck as the card rules",
+    "how": "REPINNED",
+    "action": "TI-17 part 1 changed the mytasks test to expect exit 0 when the key is missing.",
+    "card": "TI-17",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C37",
+   "suite": "new-workflow-design/builds/language-layer/test_language_layer.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-28T10:48:44Z"
+   ],
+   "engine": [
+    {
+     "id": "C37",
+     "suite": "new-workflow-design/builds/language-layer/test_language_layer.py",
+     "class": "STALE",
+     "cause": "The test pins the owner's live copy-lab file lab/damon/copy/machine/language.py and its public surface; the owner moved the copy machine to tools/copywriter (ec7321d2f), so the file is gone (FileNotFoundError), and the surface lists (bank_dir, later load_used/used_ids) drifted with his deliberate edits.",
+     "causing_commit": "ec7321d2f",
+     "fix": "Repoint DAMON_LIVE to tools/copywriter/machine/language.py and re-pin DAMON_PUBLIC/PUBLIC to the current surfaces (or assert pins cover the surface rather than equal it).",
+     "fix_group": "repin-after-ec7321d2f",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C37",
+    "suite": "new-workflow-design/builds/language-layer/test_language_layer.py",
+    "clearing_commit": "ec1ece0de",
+    "clearing_subject": "Language bank upgrade: lanes by language, awareness + sophistication on every row \u2014 the rules, the engine, the labeler, the test set",
+    "how": "REPINNED",
+    "action": "the owner's language-bank upgrade added the new used-lane names (load_used, used_ids) to the suite's pinned surface.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C38",
+   "suite": "new-workflow-design/builds/cards-portfolio/test_cards_viewer.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-09-30T06:44:03Z"
+   ],
+   "engine": [
+    {
+     "id": "C38",
+     "suite": "new-workflow-design/builds/cards-portfolio/test_cards_viewer.py",
+     "class": "STALE",
+     "cause": "The test requires cards.html to carry exactly one line-start <script> block; PM-6 (report affordance) deliberately inlined the report control as its own second <script> into every viewer. The second failing line (pm.html kanban block) is not in the test as of the red sha, so its cause cannot be determined from history up to it.",
+     "causing_commit": "88b5aa2a3",
+     "fix": "Narrow the count to 'one page script plus the inlined report-affordance block' (exclude the BEGIN/END report block from the count).",
+     "fix_group": "repin-after-88b5aa2a3",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C38",
+    "suite": "new-workflow-design/builds/cards-portfolio/test_cards_viewer.py",
+    "clearing_commit": "be1b07b40",
+    "clearing_subject": "lead: merge CARDS-12 (slots lens) under duty 5 \u2014 a Slots lens on the Cards board, per the worker-slots mock",
+    "how": "REPINNED",
+    "action": "CARDS-12 re-anchored the pm.html kanban-copy check by CSS selector instead of line number, which PM-60 had shifted, and added Slots to the lens order.",
+    "card": "CARDS-12",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C39",
+   "suite": "new-workflow-design/builds/pm-tool/test_pm7_fields.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-10-01T01:39:21Z"
+   ],
+   "engine": [
+    {
+     "id": "C39",
+     "suite": "new-workflow-design/builds/pm-tool/test_pm7_fields.py",
+     "class": "STALE",
+     "cause": "The PM-7 (her three fields) node harness cuts taskPool/backlogPool out of pm.html by name; PM-24 (external assignee) added a top-level `toutside` filter and isExternal() to both, and PM-25 (estimate in days) added effectiveDue() to sortTasks, none of which the hand-widened harness carries, so the snooze harness dies on a ReferenceError.",
+     "causing_commit": "985a0ebac",
+     "fix": "Widen the harness: stub `var toutside = false` and add isExternal/effectiveDue (and their helpers) to VIEW_FNS.",
+     "fix_group": "repin-after-985a0ebac",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (pm-tool owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C39",
+    "suite": "new-workflow-design/builds/pm-tool/test_pm7_fields.py",
+    "clearing_commit": null,
+    "clearing_subject": null,
+    "how": "ENV",
+    "action": "No relevant commit; the snooze check is time-of-day dependent, going red each evening (UTC) and clearing overnight.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C40",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_scoped_env.py",
+   "red": [
+    "2026-09-26T22:49:00Z",
+    "2026-10-01T05:14:36Z"
+   ],
+   "engine": [
+    {
+     "id": "C40",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_scoped_env.py",
+     "class": "STALE",
+     "cause": "The lead's WM-86 grant (8f1aa0568, one minute before the red) added a 'worker-heartbeat' row to job_env.JOB_ENV, ruled by the team's 'Go', but did not add it to this test's EXPECTED. The coverage test does exactly its job. The second line (a spawn site with no env=) does not reproduce on the committed tree at 76f0071af: every subprocess call in SPAWN_FILES and push.py carries env=, so that failure comes from a later observation.",
+     "causing_commit": "8f1aa0568",
+     "fix": "Add \"worker-heartbeat\": {\"PLANE_DB_URL\", \"SUPABASE_DB_URL\"} to EXPECTED.",
+     "fix_group": "repin-after-8f1aa0568",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (job_env grant surface)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C40",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_scoped_env.py",
+    "clearing_commit": "267d761f8",
+    "clearing_subject": "lead: merge WM-123 (lend seam scoped env) under duty 5 \u2014 verified merged together on a copy of main: every worker-multirepo, atlas and si17/si19 suite under 3.9.6 and 3.14 \u2014 the only reds (wm49, atl8, atl10 preview self-containment, and the 5 s compile bound in atl11/atl19/atl20 at ~5.9 s) are red on plain main too, from fits adding flows; no grant, auth or promoted surface; no human acceptance criterion",
+    "how": "FIXED-CODE",
+    "action": "WM-123 gave the lend-seam psql spawn in worker.py a scoped env, so no spawn inherits the full environment.",
+    "card": "WM-123",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C41",
+   "suite": "new-workflow-design/builds/atlas/test_atl11_flows.py",
+   "red": [
+    "2026-09-30T10:50:31Z",
+    "2026-10-01T08:09:07Z"
+   ],
+   "engine": [
+    {
+     "id": "C41a",
+     "suite": "new-workflow-design/builds/atlas/test_atl11_flows.py",
+     "class": "STALE",
+     "cause": "SI-19 (ready drafts flow) taught the compiler a second flow source, runs/system-integration/*/*/flow.json, where the newest run flow displaces the pilot file for the same target; the test still pins system.flows == exactly the files in builds/atlas/flows/.",
+     "causing_commit": "3118ec83c",
+     "fix": "Re-pin the live check to the SI-19 rule: every pilot file is carried unless a run flow for its target displaces it, plus every ranked run flow.",
+     "fix_group": "repin-after-3118ec83c",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    },
+    {
+     "id": "C41b",
+     "suite": "new-workflow-design/builds/atlas/test_atl11_flows.py",
+     "class": "ENV",
+     "cause": "The 5 s wall-clock bound is measured over the live tree on the loaded mini: compile was 1.5 s at the ATL-11 merge, then 5.54 s and 12.60 s once run flows from system-fit runs entered the tree, so it moves with live data volume and machine load (lead later measured ~5.9 s unloaded).",
+     "causing_commit": null,
+     "fix": "Measure the bound over a fixed fixture tree (or CPU time) and keep the live-tree timing as report-only; separately decide whether the run-flow read path needs a speed-up.",
+     "fix_group": "atlas-compile-5s-bound",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C41",
+    "suite": "new-workflow-design/builds/atlas/test_atl11_flows.py",
+    "clearing_commit": "64a1e42ed",
+    "clearing_subject": "lead: merge ATL-22 (compile under budget) under duty 5 \u2014 verified merged together with WM-121b (keys through calls) on a copy of main under /usr/bin/python3: every worker-multirepo, atlas and si17/si19 suite green except wm49 and atl8 (red at base) and atl22's own 2.5 s headroom bound at 2.58 s under full lane load (green on its branch; the pinned 5 s bounds in atl11/atl19/atl20 are GREEN again \u2014 compile ~6 s \u2192 ~2.6 s); no grant, auth or promoted surface",
+    "how": "FIXED-CODE",
+    "action": "ATL-22 sped up the atlas flow-claims compile so the 5 s bound holds; the merge note says atl11, atl19 and atl20 went green.",
+    "card": "ATL-22",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C42",
+   "suite": "new-workflow-design/builds/atlas/test_atl10_commands_honest.py",
+   "red": [
+    "2026-10-01T03:49:32Z",
+    "2026-10-01T08:09:07Z"
+   ],
+   "engine": [
+    {
+     "id": "C42",
+     "suite": "new-workflow-design/builds/atlas/test_atl10_commands_honest.py",
+     "class": "REAL",
+     "cause": "preview.py's audit flags any NETWORK_CALLS token outside comments, including inside the inlined atlas payload string; the apify system-fit flow (6bf0c621e) says 'fetched by fetch()', the compiler carried it verbatim into data.json (first at 3e969022d), and the default preview now refuses as 'not self-contained'.",
+     "causing_commit": "6bf0c621e",
+     "fix": "Escape network tokens inside the rendered payload (as render_payload already does for </script> and /api/) or exempt the JSON payload span from the audit.",
+     "fix_group": "fix-preview-payload-network-tokens",
+     "severity": "P1",
+     "lane": "owner",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C42",
+    "suite": "new-workflow-design/builds/atlas/test_atl10_commands_honest.py",
+    "clearing_commit": "44592cf54",
+    "clearing_subject": "lead: merge ATL-23 (preview data not calls) under duty 5 \u2014 verified merged together with WM-121b (keys through calls) on a copy of main under /usr/bin/python3: every worker-multirepo, atlas and si17/si19 suite green except wm49 and atl8 (red at base) and atl22's own 2.5 s headroom bound at 2.58 s under full lane load (green on its branch; the pinned 5 s bounds in atl11/atl19/atl20 are GREEN again \u2014 compile ~6 s \u2192 ~2.6 s); no grant, auth or promoted surface",
+    "how": "FIXED-CODE",
+    "action": "ATL-23 made preview.py treat 'fetch(' inside inlined data as data rather than a live call, so HEAD's real template renders.",
+    "card": "ATL-23",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C43",
+   "suite": "new-workflow-design/builds/atlas/test_atl19_stage_per_tool.py",
+   "red": [
+    "2026-10-01T03:49:32Z",
+    "2026-10-01T08:53:10Z"
+   ],
+   "engine": [
+    {
+     "id": "C43",
+     "suite": "new-workflow-design/builds/atlas/test_atl19_stage_per_tool.py",
+     "class": "ENV",
+     "cause": "A 5 s wall-clock assertion on a compile of the LIVE tree, measured inside the reporter's sweep on the busy mini (6.33 s, 14.74 s). components/atlas/compile.py is unchanged between ATL-19's landing (77cad4625) and the red sha, so the code did not slow down; the load did (inferred).",
+     "causing_commit": "77cad4625",
+     "fix": "Drop the live-tree wall-clock assertion, or move the budget to the fixture compile / CPU time with headroom.",
+     "fix_group": "unique",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (atlas engine owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C43",
+    "suite": "new-workflow-design/builds/atlas/test_atl19_stage_per_tool.py",
+    "clearing_commit": "64a1e42ed",
+    "clearing_subject": "lead: merge ATL-22 (compile under budget) under duty 5 \u2014 verified merged together with WM-121b (keys through calls) on a copy of main under /usr/bin/python3: every worker-multirepo, atlas and si17/si19 suite green except wm49 and atl8 (red at base) and atl22's own 2.5 s headroom bound at 2.58 s under full lane load (green on its branch; the pinned 5 s bounds in atl11/atl19/atl20 are GREEN again \u2014 compile ~6 s \u2192 ~2.6 s); no grant, auth or promoted surface",
+    "how": "FIXED-CODE",
+    "action": "ATL-22 sped up the atlas compile under its budget, bringing the live-tree compile under 5 s.",
+    "card": "ATL-22",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C44",
+   "suite": "new-workflow-design/builds/atlas/test_atl20_derived_workflows.py",
+   "red": [
+    "2026-10-01T05:52:59Z",
+    "2026-10-01T08:53:10Z"
+   ],
+   "engine": [
+    {
+     "id": "C44",
+     "suite": "new-workflow-design/builds/atlas/test_atl20_derived_workflows.py",
+     "class": "ENV",
+     "cause": "Same live-tree 5 s wall-clock bound as atl11: 13.50 s on the loaded mini while system-check runs were going; the lead measured ~5.9 s on an idle copy of main and attributed the growth to fits adding flows, red on plain main too.",
+     "causing_commit": null,
+     "fix": "Measure the bound over a fixed fixture tree (or CPU time) and keep the live-tree timing as report-only.",
+     "fix_group": "atlas-compile-5s-bound",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C44",
+    "suite": "new-workflow-design/builds/atlas/test_atl20_derived_workflows.py",
+    "clearing_commit": "64a1e42ed",
+    "clearing_subject": "lead: merge ATL-22 (compile under budget) under duty 5 \u2014 verified merged together with WM-121b (keys through calls) on a copy of main under /usr/bin/python3: every worker-multirepo, atlas and si17/si19 suite green except wm49 and atl8 (red at base) and atl22's own 2.5 s headroom bound at 2.58 s under full lane load (green on its branch; the pinned 5 s bounds in atl11/atl19/atl20 are GREEN again \u2014 compile ~6 s \u2192 ~2.6 s); no grant, auth or promoted surface",
+    "how": "FIXED-CODE",
+    "action": "ATL-22 sped up the atlas compile under its budget, bringing the live-tree compile under 5 s.",
+    "card": "ATL-22",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C45",
+   "suite": "new-workflow-design/builds/atlas/test_atl17_spec_gate.py",
+   "red": [
+    "2026-10-01T08:29:33Z",
+    "2026-10-01T13:20:13Z"
+   ],
+   "engine": [
+    {
+     "id": "C45",
+     "suite": "new-workflow-design/builds/atlas/test_atl17_spec_gate.py",
+     "class": "ENV",
+     "cause": "The suite runs the full headless-Chrome gate and documents 148 s on the mini (budgeted to the worker's 300 s kill), but the red reporter kills any unlisted suite at SUITE_TIMEOUT 90 s; it is not in SLOW_SUITE_TIMEOUTS. Red from its first reporter run after the ATL-17 (visual spec gate) merge.",
+     "causing_commit": "f4227a365",
+     "fix": "Add the suite to red_tests.SLOW_SUITE_TIMEOUTS (~300 s), as was done for test_pm_view.",
+     "fix_group": "slow-suite-timeouts",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (red reporter owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C45",
+    "suite": "new-workflow-design/builds/atlas/test_atl17_spec_gate.py",
+    "clearing_commit": "d7f4ad763",
+    "clearing_subject": "lead: merge ATL-17e (gate runs faster) \u2014 duty 5; worker done 4/4 under /usr/bin/python3; lead re-ran all four on a copy of main under python3: self-pass 53 s, today 64 s, doctored 34 s, cleanup 9 s (was ~235 s per full run), 0 browsers left",
+    "how": "FIXED-CODE",
+    "action": "ATL-17e made the visual spec gate faster (self-pass ~235 s down to 53 s), so the suite finishes inside the reporter's 90 s cap.",
+    "card": "ATL-17e",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C46",
+   "suite": "new-workflow-design/builds/fulfillment-routes/test_routes_contract.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-10-01T13:46:07Z"
+   ],
+   "engine": [
+    {
+     "id": "C46",
+     "suite": "new-workflow-design/builds/fulfillment-routes/test_routes_contract.py",
+     "class": "REAL",
+     "cause": "Its single problem is that it executes test_brand_a_performance_source.py (C03), which executes test_performance_viewer.py (C02), which is red. The defect is in C02's comparison helper, not in the routes run.",
+     "causing_commit": "ac3b0cedd",
+     "fix": "Clears when the C02 helper is fixed; no change of its own.",
+     "fix_group": "fix-after-ac3b0cedd",
+     "severity": "P1",
+     "lane": "maker",
+     "decider": "the team (metrics owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C46",
+    "suite": "new-workflow-design/builds/fulfillment-routes/test_routes_contract.py",
+    "clearing_commit": "1863a1972",
+    "clearing_subject": "lead: merge PO-C5 (test date ageless) under duty 5 \u2014 verified on a copy of main together with the other three (declared tests re-run under /usr/bin/python3 3.9.6 and node; must-stay-green suites green; test_pm_view.py 255/258 = base reds); no promoted-surfaces, auth or grant change; index.json written_at side effect dropped",
+    "how": "REPINNED",
+    "action": "PO-C5 made test_inventory_run's date ageless; this suite runs that test as one of its OTHER_TESTS.",
+    "card": "PO-C5",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C47",
+   "suite": "new-workflow-design/builds/inventory-supply/test_inventory_run.py",
+   "red": [
+    "2026-09-30T00:46:13Z",
+    "2026-10-01T13:46:07Z"
+   ],
+   "engine": [
+    {
+     "id": "C47",
+     "suite": "new-workflow-design/builds/inventory-supply/test_inventory_run.py",
+     "class": "ENV",
+     "cause": "Date bomb: test_block_validation_refuses_a_malformed_level expects an @stock as_of of '2026-09-30' to be refused as 'after the cutoff', but refresh.py refuses as_of only when it is later than TODAY (datetime.now), so from 2026-09-30 UTC the row publishes and the check fails; the suite went red at 00:46Z that day with no relevant code change.",
+     "causing_commit": null,
+     "fix": "Make the fixture's future as_of relative to today (e.g. today + 2 days) or far-future, and relabel it 'in the future' to match what refresh.py actually checks.",
+     "fix_group": "relative-dates-in-tests",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C47",
+    "suite": "new-workflow-design/builds/inventory-supply/test_inventory_run.py",
+    "clearing_commit": "1863a1972",
+    "clearing_subject": "lead: merge PO-C5 (test date ageless) under duty 5 \u2014 verified on a copy of main together with the other three (declared tests re-run under /usr/bin/python3 3.9.6 and node; must-stay-green suites green; test_pm_view.py 255/258 = base reds); no promoted-surfaces, auth or grant change; index.json written_at side effect dropped",
+    "how": "REPINNED",
+    "action": "PO-C5 replaced the test's hard-coded date, which had aged out, with an ageless one.",
+    "card": "PO-C5",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C48",
+   "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_baselines.py",
+   "red": [
+    "2026-10-01T11:05:24Z",
+    "2026-10-01T15:01:05Z"
+   ],
+   "engine": [
+    {
+     "id": "C48",
+     "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_baselines.py",
+     "class": "STALE",
+     "cause": "The ATL-13 (atlas shell and list) merge deliberately kept the old page as _templates/atlas-legacy.html, so viewer discovery now lists team/atlas-legacy, which is neither in the test's pinned 27-tool list nor in qc-tools.json external_tools.",
+     "causing_commit": "603fe7689",
+     "fix": "Re-pin the expected tool list (or exclude the unserved atlas-legacy template from discovery / qc-tools.json) \u2014 atlas-legacy has no promoted surface yet, so pinning it as a live tool would point the gate at a page that is not served.",
+     "fix_group": "repin-after-603fe7689",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (qc-gate-runner / atlas engine owner)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C48",
+    "suite": "new-workflow-design/builds/qc-gate-runner/test_qc_baselines.py",
+    "clearing_commit": "7444c200e",
+    "clearing_subject": "lead: merge ATL-16 (retire old views) round 2 \u2014 duty 5; worker done 4/4; verified on a copy of main, python3 and /usr/bin/python3 (atl16 5, atl13 32, preview 39, atl10 72, compile 344). atlas-legacy.html deleted (recoverable from git); legacy-only data listed for a follow-on",
+    "how": "FIXED-CODE",
+    "action": "ATL-16 deleted the retired atlas-legacy.html viewer, so discovery no longer finds an undeclared team/atlas-legacy page.",
+    "card": "ATL-16",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C49",
+   "suite": "new-workflow-design/builds/atlas/test_atl14_overview_pane.py",
+   "red": [
+    "2026-10-01T12:33:43Z",
+    "2026-10-01T15:59:17Z"
+   ],
+   "engine": [
+    {
+     "id": "C49",
+     "suite": "new-workflow-design/builds/atlas/test_atl14_overview_pane.py",
+     "class": "ENV",
+     "cause": "A headless-Chrome suite whose own budget is 'under 250 s' (load-sensitive per its merge note) exceeds the red reporter's 90 s per-suite kill; it is not in SLOW_SUITE_TIMEOUTS. Red from its first reporter run after the ATL-14 (atlas overview pane) round-2 merge.",
+     "causing_commit": "0bf12e932",
+     "fix": "Add the suite to red_tests.SLOW_SUITE_TIMEOUTS (~300 s).",
+     "fix_group": "slow-suite-timeouts",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (red reporter owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C49",
+    "suite": "new-workflow-design/builds/atlas/test_atl14_overview_pane.py",
+    "clearing_commit": "46f464451",
+    "clearing_subject": "lead: merge ATL-18 (the map) round 4 \u2014 duty 5; worker done 5/5; lead verified EVERY gate-using atlas suite on a copy of main under python3 (atl13 32, atl14 35, atl15 167, atl15c 101, atl17 self 7 / today 5 / doctored 13 / cleanup 13, atl18 61, preview 39, atl10 72), 0 browsers left",
+    "how": "FIXED-CODE",
+    "action": "ATL-18 round 4 restored spec_gate.Chrome's lazy-connect contract, turning the gate-using atlas suites (atl13, atl14, atl15) green again.",
+    "card": "ATL-18",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C50",
+   "suite": "new-workflow-design/builds/atlas/test_atl17_doctored.py",
+   "red": [
+    "2026-10-01T12:56:58Z",
+    "2026-10-01T16:17:44Z"
+   ],
+   "engine": [
+    {
+     "id": "C50",
+     "suite": "new-workflow-design/builds/atlas/test_atl17_doctored.py",
+     "class": "ENV",
+     "cause": "ATL-17d round 2 (afc8c3c2b) ruled this headless-Chrome suite a 250 s budget (an internal 240 s deadline; the worker kills at 300 s). The red reporter kills any suite not listed in SLOW_SUITE_TIMEOUTS at 90 s, so 'HUNG' is the reporter's cap, not a hang.",
+     "causing_commit": "afc8c3c2b",
+     "fix": "Add test_atl17_doctored.py to red_tests.py SLOW_SUITE_TIMEOUTS at 300 s or more.",
+     "fix_group": "unique",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (worker / reporter owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C50",
+    "suite": "new-workflow-design/builds/atlas/test_atl17_doctored.py",
+    "clearing_commit": "d7f4ad763",
+    "clearing_subject": "lead: merge ATL-17e (gate runs faster) \u2014 duty 5; worker done 4/4 under /usr/bin/python3; lead re-ran all four on a copy of main under python3: self-pass 53 s, today 64 s, doctored 34 s, cleanup 9 s (was ~235 s per full run), 0 browsers left",
+    "how": "FIXED-CODE",
+    "action": "ATL-17e made each doctored gate copy run only its own check (~34 s), under the 90 s cap.",
+    "card": "ATL-17e",
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C51",
+   "suite": "new-workflow-design/builds/consumer-plane/test_session_viewers.py",
+   "red": [
+    "2026-09-20T15:43:37Z",
+    "2026-10-01T16:53:43Z"
+   ],
+   "engine": [
+    {
+     "id": "C51",
+     "suite": "new-workflow-design/builds/consumer-plane/test_session_viewers.py",
+     "class": "RULING",
+     "cause": "The census pins the eight 08-26 viewers; ten viewers added since (engine-room first, 62c811df6) are 'unexpected'. The PM-6 (report affordance) merge 68d2a092f tried widening it, found the newer viewers use a different no-key idiom and fail the eight-viewer checks for real, reverted, and left it as 'a card, not a merge delta'. The second failing line (atlas-legacy.html) cannot be explained at this sha \u2014 that template does not exist yet, so the line was captured on a later run.",
+     "causing_commit": "62c811df6",
+     "fix": "Rule whether every viewer must take the shared session bootstrap + views menu (then card the conversions) or the census is scoped to the eight, then re-pin the census to match.",
+     "fix_group": "rule-viewer-census-idiom",
+     "severity": "P2",
+     "lane": "decision",
+     "decider": "the team (consumer-plane owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C51",
+    "suite": "new-workflow-design/builds/consumer-plane/test_session_viewers.py",
+    "clearing_commit": "7444c200e",
+    "clearing_subject": "lead: merge ATL-16 (retire old views) round 2 \u2014 duty 5; worker done 4/4; verified on a copy of main, python3 and /usr/bin/python3 (atl16 5, atl13 32, preview 39, atl10 72, compile 344). atlas-legacy.html deleted (recoverable from git); legacy-only data listed for a follow-on",
+    "how": "FIXED-CODE",
+    "action": "ATL-16 deleted atlas-legacy.html, the page that still absorbed the share link's #k=.",
+    "card": "ATL-16",
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C52",
+   "suite": "new-workflow-design/builds/atlas/test_atl24_readme_fill.py",
+   "red": [
+    "2026-10-01T13:46:07Z",
+    "2026-10-01T16:53:43Z"
+   ],
+   "engine": [
+    {
+     "id": "C52",
+     "suite": "new-workflow-design/builds/atlas/test_atl24_readme_fill.py",
+     "class": "REAL",
+     "cause": "e2ca5e741 added a new component, components/editor-skills, with a hand-written README.md that lacks the atlas link line ATL-24 (README fill) requires, so plan() over the live tree has a pending 'insert the line' row.",
+     "causing_commit": "e2ca5e741",
+     "fix": "Run the atlas readme_fill generator to insert the link line into components/editor-skills/README.md.",
+     "fix_group": "unique",
+     "severity": "P1",
+     "lane": "maker",
+     "decider": "the owner (editor-skills author)",
+     "confidence": "high"
+    }
+   ],
+   "truth": {
+    "id": "C52",
+    "suite": "new-workflow-design/builds/atlas/test_atl24_readme_fill.py",
+    "clearing_commit": "161a8690b",
+    "clearing_subject": "lead: components/editor-skills README gains its generated link line \u2014 readme_fill.py --apply (rule 2; components rule 10); the only pending row at HEAD; turns test_atl24 green on main",
+    "how": "FIXED-CODE",
+    "action": "The lead added the generated link line to components/editor-skills/README.md, the one pending row readme_fill found.",
+    "card": null,
+    "confidence": "high"
+   }
+  },
+  {
+   "id": "C53",
+   "suite": "new-workflow-design/builds/mini-cockpit/test_mini_verbs.py",
+   "red": [
+    "2026-09-25T01:26:28Z",
+    "2026-10-01T17:14:38Z"
+   ],
+   "engine": [
+    {
+     "id": "C53",
+     "suite": "new-workflow-design/builds/mini-cockpit/test_mini_verbs.py",
+     "class": "STALE",
+     "cause": "test_both_hats_mint_the_same_shape pins the plan seat's argv as '--model fable'. e40a82f66 (the team: 'Plan and lead both use opus 5.5', the weekend pilot) changed the seat_kinds.sh model cells for lead and plan to claude-opus-5-5. The separate HUNG observation (killed at the reporter's 90 s cap) cannot be explained from history up to this sha.",
+     "causing_commit": "e40a82f66",
+     "fix": "Have the test read the model from the seat_kinds.sh row, not a literal, so the pilot and its revert both stay green; re-check the HUNG once this is green.",
+     "fix_group": "repin-after-e40a82f66",
+     "severity": "P2",
+     "lane": "maker",
+     "decider": "the team (cockpit owner; the pilot is his ruling)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C53",
+    "suite": "new-workflow-design/builds/mini-cockpit/test_mini_verbs.py",
+    "clearing_commit": null,
+    "clearing_subject": null,
+    "how": "ENV",
+    "action": "No relevant commit; the suite timed out under load and passed when next measured; the only change in the window was slots.py, which is unrelated.",
+    "card": null,
+    "confidence": "medium"
+   }
+  },
+  {
+   "id": "C54",
+   "suite": "new-workflow-design/builds/worker-multirepo/test_tick_isolation.py",
+   "red": [
+    "2026-09-21T04:37:31Z",
+    "2026-10-01T18:12:08Z"
+   ],
+   "engine": [
+    {
+     "id": "C54",
+     "suite": "new-workflow-design/builds/worker-multirepo/test_tick_isolation.py",
+     "class": "ENV",
+     "cause": "WM-29 snapshots the mtimes of the REAL platform/data and the worker's .*.json cursors around each suite. The reporter runs suites inside the live worker clone, where other worker processes and pulls write records and cursors at the same time. The 'leaking' suite changes from run to run (demo_lane_gate, terminal_notify, wm114), which points at concurrent writers, not at a leak in any one suite (inferred).",
+     "causing_commit": null,
+     "fix": "Run the sweep (or this suite) in a clean throwaway worktree, or watch a hermetic copy instead of the live plane, so other writers cannot move what it measures.",
+     "fix_group": "unique",
+     "severity": "P3",
+     "lane": "maker",
+     "decider": "the team (worker owner)",
+     "confidence": "medium"
+    }
+   ],
+   "truth": {
+    "id": "C54",
+    "suite": "new-workflow-design/builds/worker-multirepo/test_tick_isolation.py",
+    "clearing_commit": null,
+    "clearing_subject": null,
+    "how": "ENV",
+    "action": "No relevant commit; the snapshot of real records and cursors races the live worker's own writes, so the check flaps and passed on a quiet run.",
+    "card": null,
+    "confidence": "high"
+   }
+  }
+ ]
+}

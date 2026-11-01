@@ -1,0 +1,261 @@
+{
+ "schema": 1,
+ "note": "Every closed vocabulary in the repo that something picks from, and its address. A bank listed here can be asked for by name instead of by file path — which is the point: the organic-video library rendered blank for days because every consumer hard-coded a path and nothing noticed. Written 2026-09-11 from the survey in components/naming/FORMATS.md.",
+ "rules": [
+  "address = format:<asset>:<id> for a brand-agnostic bank, format:<brand>:<asset>:<id> for a per-brand one. Same shape as the swipe: grammar in names.py, brand in the same position.",
+  "kind = what the thing IS. template = how it is built. section = what it is built FROM. style = how it is played. structure = its beat order. evidence = observed instances.",
+  "An EVIDENCE bank has no address and no entry fields. There is nothing to pick, so there is nothing to name, and giving it the shape of a choice is how it ends up in a menu.",
+  "This list is a FLOOR. It went 11 -> 17 -> 25 in one afternoon and every rise came from a different search angle. A vocabulary that was never called a format will not be found by searching for the word.",
+  "A per-brand bank must exist for EVERY brand, and the selfcheck tests every one. A brand that is genuinely missing a bank is recorded in brands_missing with the reason, so the gap is visible and stays visible. A gap that is NOT recorded fails the check — which is how the second brand stops being an afterthought.",
+  "The addressing axis is `asset`, never `lane`. `lane` already means two other things — the source lane (paid | own | organic, swipe-paid/corpus.py) and the brand positioning lane (Brotherhood / 2.0) — and an address built on a word with three meanings is the collision this registry exists to prevent."
+ ],
+ "updated": "2026-09-11",
+ "banks": [
+  {
+   "asset": "page",
+   "id": "page-format",
+   "layer": "kind",
+   "entries": 10,
+   "path": "components/naming/classify_pages.py",
+   "brand": null,
+   "what": "What kind of page it structurally is. Decided by the classifier reading the page, never chosen."
+  },
+  {
+   "asset": "page",
+   "id": "section",
+   "layer": "section",
+   "entries": 82,
+   "path": "<funnel-repo>/src/icon/_includes/landing/",
+   "brand": null,
+   "what": "The blocks a page is assembled from. Brand-agnostic by the rule — hero-1 would build any brand's page unchanged — but it physically lives inside one brand's funnel repo, which is the one place the rule and the location disagree.",
+   "location_conflict": "Lives at brand-a-icon/src/icon/_includes/landing/ while being true of any brand. The second brand's funnel will either copy these 82 files or reach across to another brand's repo; both are wrong. Ruling needed before a Brand-B funnel is built, not after."
+  },
+  {
+   "asset": "organic-video",
+   "id": "format",
+   "layer": "structure",
+   "entries": 50,
+   "path": "components/swipe-organic/formats.json",
+   "brand": null,
+   "what": "Organic video structures reverse-engineered from swipes. Organic video ONLY."
+  },
+  {
+   "asset": "image-ad",
+   "id": "template",
+   "layer": "template",
+   "entries": 5,
+   "path": "tools/image-production/static/templates/",
+   "brand": null,
+   "what": "The build template an image ad is rendered in."
+  },
+  {
+   "asset": "email",
+   "id": "design-format",
+   "layer": "template",
+   "entries": 9,
+   "path": "brands/<brand>/email-sms/design-formats/components.json",
+   "brand": "per-brand",
+   "what": "FMT-01.. — the brand's own email templates. Per brand because they ARE the brand's design system."
+  },
+  {
+   "asset": "email",
+   "id": "module",
+   "layer": "section",
+   "entries": 4,
+   "path": "brands/<brand>/email-sms/design-formats/components.json",
+   "brand": "per-brand",
+   "what": "The reusable parts every email template shares."
+  },
+  {
+   "asset": "email",
+   "id": "type",
+   "layer": "kind",
+   "entries": 47,
+   "path": "brands/<brand>/email-sms/email-types.json",
+   "brand": "per-brand",
+   "what": "What the email IS. The file states the model the whole repo should follow: type x form x treatment x awareness."
+  },
+  {
+   "asset": "email",
+   "id": "form",
+   "layer": "template",
+   "entries": 5,
+   "path": "brands/<brand>/email-sms/email-types.json",
+   "brand": "per-brand",
+   "what": "How the email is built."
+  },
+  {
+   "asset": "email",
+   "id": "treatment",
+   "layer": "style",
+   "entries": 4,
+   "path": "brands/<brand>/email-sms/email-types.json",
+   "brand": "per-brand",
+   "what": "How it is played — humour, a question, proof, no ask."
+  },
+  {
+   "asset": "email",
+   "id": "modifier",
+   "layer": "style",
+   "entries": 3,
+   "path": "brands/<brand>/email-sms/email-types.json",
+   "brand": "per-brand",
+   "what": "Applied on top of a type."
+  },
+  {
+   "asset": "email",
+   "id": "arc",
+   "layer": "structure",
+   "entries": 3,
+   "path": "brands/<brand>/email-sms/email-types.json",
+   "brand": "per-brand",
+   "what": "The shape a sequence moves through."
+  },
+  {
+   "asset": "copy",
+   "id": "surface",
+   "layer": "section",
+   "entries": 16,
+   "path": "tools/copywriter/bank/format-bank.json",
+   "brand": null,
+   "what": "WHERE the words go — headline, description, hook line. One ad uses several at once."
+  },
+  {
+   "asset": "copy",
+   "id": "style",
+   "layer": "style",
+   "entries": 4,
+   "path": "tools/copywriter/bank/formats.json",
+   "brand": null,
+   "what": "HOW the copy is written — short-form, long-form story, social proof. A different axis from surface, not a rival to it."
+  },
+  {
+   "asset": "copy",
+   "id": "channel",
+   "layer": "kind",
+   "entries": 4,
+   "path": "tools/copywriter/bank/channel-map.json",
+   "brand": null,
+   "what": "Where the copy runs."
+  },
+  {
+   "asset": "video",
+   "id": "format-profile",
+   "layer": "template",
+   "entries": 7,
+   "path": "tools/video-production/formats/bank.json",
+   "brand": null,
+   "what": "The production profiles a video is made against — one row per format, each with a profile file beside it; a run must name one. Status draft/approved/deprecated, only the owner signs.",
+   "updated": "2026-09-17"
+  },
+  {
+   "asset": "ad",
+   "id": "media",
+   "layer": "kind",
+   "entries": 3,
+   "path": "components/naming/names.py MEDIA",
+   "brand": null,
+   "what": "static | video | carousel. A field of every ad name."
+  },
+  {
+   "asset": "ad",
+   "id": "source",
+   "layer": "kind",
+   "entries": 4,
+   "path": "components/naming/names.py SOURCE",
+   "brand": null,
+   "what": "ai | ugc | studio | mixed. A field of every ad name."
+  },
+  {
+   "asset": "offer",
+   "id": "offer",
+   "layer": "kind",
+   "entries": 6,
+   "path": "brands/<brand>/products/offer-bank.md",
+   "brand": "per-brand",
+   "what": "The offer an asset sells."
+  },
+  {
+   "asset": "offer",
+   "id": "guarantee",
+   "layer": "kind",
+   "entries": 2,
+   "path": "brands/<brand>/offers/guarantees.json",
+   "brand": "per-brand",
+   "what": "The guarantee wording, verbatim per surface."
+  },
+  {
+   "asset": "swipe-capture",
+   "id": "channel-tag",
+   "layer": "kind",
+   "entries": 6,
+   "path": "components/naming/classify_pages.py CHANNEL",
+   "brand": null,
+   "what": "Read off a captured page's slug."
+  },
+  {
+   "asset": "swipe-capture",
+   "id": "product-tag",
+   "layer": "kind",
+   "entries": 4,
+   "path": "components/naming/classify_pages.py PRODUCT",
+   "brand": null,
+   "what": "Read off a captured page's slug."
+  },
+  {
+   "asset": "swipe-capture",
+   "id": "variant-tag",
+   "layer": "kind",
+   "entries": 9,
+   "path": "components/naming/classify_pages.py VARIANT",
+   "brand": null,
+   "what": "Read off a captured page's slug."
+  },
+  {
+   "asset": "swipe-capture",
+   "id": "audience-tag",
+   "layer": "kind",
+   "entries": 11,
+   "path": "components/naming/classify_pages.py AUDIENCE",
+   "brand": null,
+   "what": "Read off a captured page's slug."
+  }
+ ],
+ "evidence": [
+  {
+   "path": "brands/<brand>/email-sms/design-formats/layouts.json",
+   "entries": 239,
+   "what": "Clusters over 381 real sends. Observed, never a choice."
+  },
+  {
+   "path": "brands/<brand>/email-sms/design-formats/figma-templates.json",
+   "entries": 87,
+   "what": "A copy of frames already built. Observed, never a choice."
+  },
+  {
+   "path": "brands/<brand>/email-sms/design-formats/census.json",
+   "what": "Per-send family tallies. Observed, never a choice."
+  },
+  {
+   "path": "components/swipe-paid/<brand>/blocks.json",
+   "entries": 2626,
+   "what": "Competitor ads as captured. brand here means the COMPETITOR, not ours."
+  },
+  {
+   "path": "components/swipe-organic/records/format-digest.json",
+   "what": "Format ids the machine proposed from swipes. Proposals, not a menu."
+  }
+ ],
+ "not_ours": [
+  {
+   "name": "page_type",
+   "path": "<funnel-repo> front matter",
+   "what": "product | checkout | upsell | receipt. A runtime role rendered into <meta name=\"next-page-type\"> for the Campaign Cart SDK — the repo's own words are 'it tells the SDK how to behave on this page'. Not a vocabulary we choose from, and it collides by name only with classify_pages.py:page_type()."
+  },
+  {
+   "name": "page_layout",
+   "path": "<funnel-repo>/src/icon/_layouts/",
+   "what": "base | base-presell | base-landing. Which wrapper renders the page. A build detail, not a creative choice."
+  }
+ ]
+}

@@ -1,0 +1,206 @@
+{
+ "model": "real-esrgan",
+ "medium": "upscale",
+ "_readme": [
+  "Real-ESRGAN is the first upscaler (HOUSE-UP-1). The maker's page documents images; the video script's options are not described there, so the video rows are marked draft.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "Real-ESRGAN (local video upscale)",
+ "registry_id": "real-esrgan",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "door": "local",
+  "models": "realesr-animevideov3 (animation video), RealESRGAN_x4plus (general)"
+ },
+ "sources": [
+  "https://github.com/xinntao/Real-ESRGAN",
+  "[ours] components/generative-model-house/MODEL-HOUSE.md (HOUSE-UP-1)"
+ ],
+ "limits": {
+  "native_scale": 4,
+  "outscale": "any final factor; the model runs x4 and resizes",
+  "tile_default": 0,
+  "precision_default": "fp16",
+  "formats": [
+   "png",
+   "jpg",
+   "webp"
+  ],
+  "house": {
+   "use": "the first upscaler: a 480p clip is made, then upscaled locally to 1080x1920",
+   "alternate": "bytedance-upscaler-video"
+  }
+ },
+ "qualities": [
+  "x4plus",
+  "animevideov3",
+  "fp16",
+  "fp32"
+ ],
+ "inputs": [
+  {
+   "name": "input frames/video",
+   "what": "What is upscaled.",
+   "allowed": "frames (jpg, png, webp) or a video through inference_realesrgan_video.py",
+   "we_send": "the kept 480p take",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "model_name",
+   "what": "Which weights.",
+   "allowed": "RealESRGAN_x4plus (general), realesr-animevideov3 (animation video)",
+   "we_send": "RealESRGAN_x4plus for live-action looking clips",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "outscale",
+   "what": "Final factor.",
+   "allowed": "number; model runs x4 then resizes",
+   "we_send": "to 1080x1920 from 480p",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "tile",
+   "what": "Split a frame to save memory.",
+   "allowed": "0 = off; tiling can leave block seams",
+   "we_send": "0 unless memory fails",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "face_enhance",
+   "what": "GFPGAN face restoration.",
+   "allowed": "boolean, off by default",
+   "we_send": "off: it changes the cast member's face",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "fp32",
+   "what": "Full precision.",
+   "allowed": "boolean, default fp16",
+   "we_send": "off",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "ext",
+   "what": "Output type.",
+   "allowed": "auto, jpg, png",
+   "we_send": "png frames then encode",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  },
+  {
+   "name": "frame rate",
+   "what": "Keep the clip's rate.",
+   "allowed": "set at encode",
+   "we_send": "unchanged (V40: probed, chosen)",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-production/VIDEO-RULINGS.md V40"
+   ]
+  },
+  {
+   "name": "denoise strength",
+   "what": "Blend of the general model.",
+   "allowed": "listed for the general-wdn model in the repo docs",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/xinntao/Real-ESRGAN"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "make-low-upscale-later",
+   "rule": "Generate at 480p and upscale locally; the upscaler adds pixels, not new content.",
+   "ours": "upscale step after the kept take",
+   "status": "draft",
+   "source": "[ours] components/generative-model-house/MODEL-HOUSE.md (generate at 480p, upscale locally)"
+  },
+  {
+   "id": "animevideo-for-animation",
+   "rule": "Use realesr-animevideov3 for animated footage; x4plus for general.",
+   "ours": "model_name per style",
+   "status": "draft",
+   "source": "https://github.com/xinntao/Real-ESRGAN"
+  },
+  {
+   "id": "tile-if-memory",
+   "rule": "Tile only when memory fails, knowing seams can appear.",
+   "ours": "tile 0 default",
+   "status": "draft",
+   "source": "https://github.com/xinntao/Real-ESRGAN"
+  },
+  {
+   "id": "no-face-enhance",
+   "rule": "Leave face enhancement off: it changes a face the face gate already approved.",
+   "ours": "off",
+   "status": "draft",
+   "source": "https://github.com/xinntao/Real-ESRGAN ; [ours] face gate"
+  },
+  {
+   "id": "check-after",
+   "rule": "Check the upscaled clip for smoothing of grain and text; the swipe's grain is part of the look.",
+   "ours": "judge reads the upscaled clip",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V38"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "face-enhance-on-cast",
+   "text": "GFPGAN on a cast member.",
+   "status": "draft",
+   "source": "https://github.com/xinntao/Real-ESRGAN"
+  },
+  {
+   "id": "upscale-before-approval",
+   "text": "Upscaling a take that is not yet kept.",
+   "status": "draft",
+   "source": "[ours] MODEL-HOUSE.md"
+  },
+  {
+   "id": "ncnn-for-outscale",
+   "text": "Assuming the NCNN build supports every Python option such as outscale.",
+   "status": "draft",
+   "source": "https://github.com/xinntao/Real-ESRGAN"
+  },
+  {
+   "id": "grain-added-after",
+   "text": "Adding grain or a filter after upscaling to fix a smooth look.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+  }
+ ]
+}

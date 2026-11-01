@@ -1,0 +1,36 @@
+{
+ "element": "style",
+ "asset": "video",
+ "source": "fixture",
+ "enforced_by": null,
+ "note": "TEST-ONLY. Invented rows; the real lists are components/elements/library/.",
+ "rows": [
+  {
+   "id": "fixture-look",
+   "name": "fixture-look",
+   "what": "a defined look",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "fixture-look-named-only",
+   "name": "fixture-look-named-only",
+   "what": "[TO DEFINE \u2014 a look with a name and no definition]",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  }
+ ],
+ "duplicates": []
+}

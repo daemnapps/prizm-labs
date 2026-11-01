@@ -1,0 +1,563 @@
+[
+ {
+  "issue": "atlas#6",
+  "issue_text": "Untagged ids in CLAUDE.md",
+  "tier": "P2",
+  "A": {
+   "why": "Confirmed at BASE. components/atlas/CLAUDE.md names ATL-1 bare at :19 and :82, BV-10 at :62, ATL-3(b) at :85 and :96, ATL-3(a) at :336 and ATL-3 at :352. The workspace rule wants a tag on every mention. team/id-tags.json stores ATL-1 (atlas first slice) and ATL-3 (preview shim) but nothing for ATL-3(a), ATL-3(b) or BV-10, so those need coining. :336 is a section heading, not a card header, so the header exemption does not cover it (inferred). Whether CLI-13 (id-tag lint) scans this file is unchecked.",
+   "impacts": {
+    "people": [
+     "the team"
+    ],
+    "components": [
+     "atlas"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/atlas/CLAUDE.md:18-19@0fabb40eb",
+    "components/atlas/CLAUDE.md:62@0fabb40eb",
+    "components/atlas/CLAUDE.md:80-82@0fabb40eb",
+    "components/atlas/CLAUDE.md:85@0fabb40eb",
+    "components/atlas/CLAUDE.md:96@0fabb40eb",
+    "components/atlas/CLAUDE.md:352@0fabb40eb"
+   ],
+   "fix": "In components/atlas/CLAUDE.md, tag each mention: 'ATL-1 (atlas first slice)' at :19 and :82, 'ATL-3 (preview shim)' at :352, and coined tags for ATL-3(a), ATL-3(b) and BV-10, added to team/id-tags.json in the same commit. Best folded into the atlas CLAUDE.md true-up with issue 8 (stale route words).",
+   "fix_impact": "A reader of the atlas contract knows what each card id refers to without opening the deck, and CLI-13 (id-tag lint) stays quiet on the file.",
+   "if_ignored": "Readers who don't know the cards meet seven bare ids, and the next fit flags the same lines again.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the team (component owner; the flow names no decider, inferred)"
+  },
+  "B": {
+   "why": "CLAUDE.md names ids without their parentheticals at :19 (ATL-1), :62 (BV-10), :82, :85, :96 (ATL-3(b)), :336 (ATL-3(a)) and :352 — against the id-tag rule (every mention carries its 1-3 word tag, stored in team/id-tags.json; a card header is the only exemption) that CLI-13 lints at commit.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "atlas"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/atlas/CLAUDE.md:19@0fabb40eb",
+    "components/atlas/CLAUDE.md:62@0fabb40eb",
+    "components/atlas/CLAUDE.md:96@0fabb40eb",
+    "components/atlas/CLAUDE.md:336@0fabb40eb"
+   ],
+   "fix": "Tag every mention from team/id-tags.json (coin-and-add any missing) in one sweep — the file that the org's map lives in should model the org's own grammar.",
+   "fix_impact": "The atlas's contract file passes the lint the rest of the repo lives under; readers stop opening records to know what ATL-3(b) is.",
+   "if_ignored": "CLI-13 keeps flagging the org's most-read component file, and every session reading it re-derives the ids cold.",
+   "lane": "steph",
+   "severity": "P2",
+   "decider": "the team"
+  }
+ },
+ {
+  "issue": "copywriter#6",
+  "issue_text": "Two side tools read the video teardown's working folder",
+  "tier": "P2",
+  "A": {
+   "why": "machine/batch_status.py:20 and library/build_library.py:226 point at tools/video-teardown/machine/runs — the teardown's pre-components working folder, untracked — instead of its runs/ shelves at runs/video-teardown/. On any clone without that working folder both tools silently report nothing.",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "copywriter",
+     "video-teardown"
+    ],
+    "machines": [
+     "Mac mini",
+     "any teammate's clone"
+    ]
+   },
+   "evidence": [
+    "tools/copywriter/machine/batch_status.py:20@0fabb40eb",
+    "tools/copywriter/library/build_library.py:226@0fabb40eb"
+   ],
+   "fix": "Point both at runs/video-teardown/ (the filed shelves) and fail loudly when the folder is empty, instead of reporting zero.",
+   "fix_impact": "Batch status and the library builder see every filed teardown on any clone; the untracked working-folder dependency ends.",
+   "if_ignored": "Both tools' counts depend on one machine's untracked folder; a fresh clone rebuilds a library that misses every teardown.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner"
+  },
+  "B": {
+   "why": "Still true at base. batch_status.py:20 and build_library.py:226 both point at tools/video-teardown/machine/runs. That folder is gitignored (video-teardown .gitignore:5) and absent in a fresh clone, while the shelves live at runs/video-teardown/. ads_to_copy.sh:19 and :29 read the same working folder (a third reader the flow does not list). Effect: batch_status shows no teardown state anywhere but the owner's machine (inferred). build_library.py:228 calls iterdir() on the missing folder with no guard, so it would crash there (inferred, not run).",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "copywriter",
+     "video-teardown"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "tools/copywriter/machine/batch_status.py:20@0fabb40eb",
+    "tools/copywriter/library/build_library.py:225-228@0fabb40eb",
+    "tools/copywriter/machine/ads_to_copy.sh:29-30@0fabb40eb",
+    "tools/video-teardown/.gitignore:1-5@0fabb40eb"
+   ],
+   "fix": "Repoint batch_status.py:20 and build_library.py:226 to the repo-root runs/video-teardown/<brand>/ shelves (through video-teardown's declared contract), and guard the iterdir with is_dir(). Do the same for ads_to_copy.sh:29-30 in the same side-tool pass.",
+   "fix_impact": "The batch status page and the copy library see teardowns from any clone and the mini, not just the owner's working copy. Rule 2 (contract only) holds for these readers.",
+   "if_ignored": "The status page shows nothing for teardowns on every machine but the owner's. The library build can't complete in a fresh clone (inferred). Any internal move in video-teardown breaks these three readers without warning.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner (the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "copywriter#10",
+  "issue_text": "copy.py keeps its own model call and prompt picker beside run-kit's",
+  "tier": "P2",
+  "A": {
+   "why": "claude() at copy.py:206 and latest_prompt() at :188 duplicate run_kit.model.call (run_kit/model.py:48) and run_kit.prompts.latest (run_kit/prompts.py:17); is_usage_limit at :200-203 is already a word-for-word copy by its own docstring. A retry, timeout or usage-limit fix landing in run-kit never reaches the copy machine.",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "copywriter",
+     "run-kit"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "tools/copywriter/machine/copy.py:188@0fabb40eb",
+    "tools/copywriter/machine/copy.py:206@0fabb40eb",
+    "components/run-kit/run_kit/model.py:48@0fabb40eb",
+    "components/run-kit/run_kit/prompts.py:17@0fabb40eb"
+   ],
+   "fix": "Import run_kit.model.call and run_kit.prompts.latest in copy.py and delete the local copies (the component already ships beside run-kit).",
+   "fix_impact": "One model-call implementation to fix; the copy machine inherits every runner improvement the day it lands.",
+   "if_ignored": "The two runners drift: the next outage-timeout or usage-limit change in run-kit silently skips the copy machine.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner"
+  },
+  "B": {
+   "why": "Still true at base. copy.py defines its own latest_prompt() (:188-197) and claude() (:206 onward), while components/run-kit ships prompts.latest (prompts.py:17) and model.call (model.py:48). copy.py:200-201 even says its usage-limit test is 'run_kit.model's test, word for word', so the copy has to be kept in sync by hand. The scanner counts (8 and 5 copies) are taken from the flow, unchecked.",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "copywriter",
+     "run-kit"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "tools/copywriter/machine/copy.py:188-197@0fabb40eb",
+    "tools/copywriter/machine/copy.py:200-206@0fabb40eb",
+    "components/run-kit/run_kit/prompts.py:17@0fabb40eb",
+    "components/run-kit/run_kit/model.py:48@0fabb40eb"
+   ],
+   "fix": "In copy.py, replace latest_prompt() with run_kit.prompts.latest(PROMPTS, stage), and claude() with run_kit.model.call. Keep copy.py's UsageLimit stop by catching run-kit's equivalent. Run test_rollout.py to confirm.",
+   "fix_impact": "Retry, timeout and usage-limit behaviour come from one place for every run-kit tool, and a fix in run-kit reaches the copywriter automatically.",
+   "if_ignored": "The two model-call paths drift: the copywriter keeps three tries with no timeout while run-kit has moved on to four tries and a 30-minute timeout. Fixes land in one and not the other.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner (the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "image-teardown#14",
+  "issue_text": "Depends on a lab script and moves lab files at import",
+  "tier": "P2",
+  "A": {
+   "why": "drive_link.py:27-29 runs lab/damon/mirror.py at every invocation, and tools/paths.py:54-55 defines LAB and the OLD_LANE shim, with carry_over() (:98) called at import (:122) moving lab files as a side effect. A component's runtime depending on lab code is backwards under quarantine — infrastructure may use lab data, not depend on lab instruction content surviving.",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "image-teardown"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "tools/image-teardown/tools/drive_link.py:27-29@0fabb40eb",
+    "tools/image-teardown/tools/paths.py:54-55@0fabb40eb",
+    "tools/image-teardown/tools/paths.py:98@0fabb40eb",
+    "tools/image-teardown/tools/paths.py:122@0fabb40eb"
+   ],
+   "fix": "Absorb the mirror step into the component (or route it through gdrive-creator with #3), and drop carry_over() once no clone still needs the move.",
+   "fix_impact": "The lane owns its whole runtime; lab refactorings stop breaking delivery; import time stops mutating anything.",
+   "if_ignored": "mirror.py's next lab edit breaks every delivery link, and each fresh clone re-runs a file move nobody asked for.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner"
+  },
+  "B": {
+   "why": "drive_link.py mirror() runs lab/damon/mirror.py as a subprocess and then reads the mount. paths.py carry_over() runs on every import and os.replace's untracked files from lab/damon/image-teardown into the component, with every error swallowed. The lab shim at BASE holds only README.md, chain.py and serve.py, with no tools/paths.py, so the guard lets carry_over walk the shim on every import. Workspace rule 9 says live infrastructure does not depend on lab once others depend on it.",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "image-teardown",
+     "gdrive-creator"
+    ],
+    "machines": [
+     "the owner's Mac",
+     "the mini"
+    ]
+   },
+   "evidence": [
+    "tools/image-teardown/tools/drive_link.py:27-29@0fabb40eb",
+    "tools/image-teardown/tools/drive_link.py:35-37@0fabb40eb",
+    "tools/image-teardown/tools/paths.py:98-123@0fabb40eb",
+    "tools/image-teardown/tools/paths.py:54-55@0fabb40eb"
+   ],
+   "fix": "(1) Replace drive_link.py mirror() and the mount read with gdrive-creator (engine.mirror_tree / find by id), the same shared action as image-teardown #3 (Drive through mount). (2) Give carry_over() a removal date tied to deleting the one-release lab shim, then delete it and its import-time call from paths.py.",
+   "fix_impact": "Importing paths.py stops moving files as a side effect. Drive links work without the lab folder or the mount, on any machine.",
+   "if_ignored": "The component keeps breaking if lab/damon/mirror.py moves or is quarantined, and every import keeps silently moving files from lab.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner (owner; the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "image-teardown#15",
+  "issue_text": "The briefs register pins an old brief prompt",
+  "tier": "P2",
+  "A": {
+   "why": "components/briefs/briefs.json:66 declares the static brief's prompt as stage6-image-brief-v2-damon.md, but the folder runs to v6 and the chain resolves by glob — tests/test_image_teardown.py:100 asserts glob_for('6') == 'stage6-image-brief*' — so what runs is v6 while the register says v2 (the atlas flow's own label records the mismatch).",
+   "impacts": {
+    "people": [
+     "the owner",
+     "the team"
+    ],
+    "components": [
+     "briefs",
+     "image-teardown"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/briefs/briefs.json:66@0fabb40eb",
+    "tools/image-teardown/tests/test_image_teardown.py:100@0fabb40eb",
+    "tools/image-teardown/prompts/stage6-image-brief-v6-damon.md:1@0fabb40eb"
+   ],
+   "fix": "Re-pin briefs.json to the version the glob resolves (v6), or make the register store the glob and resolve exactly as the chain does so it cannot drift again.",
+   "fix_impact": "The briefs register tells the truth about what produced each brief; prompt archaeology stops disagreeing with the register.",
+   "if_ignored": "Every brief's provenance line names a prompt two major versions stale, and the register keeps lying by four versions.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner"
+  },
+  "B": {
+   "why": "components/briefs/briefs.json pins static--designer to stage6-image-brief-v2-damon.md (98 runs). The prompts folder holds v2 through v6, and run.py prompt_for() picks the highest -vN-, so the chain now runs v6. v6 was added in 858db0f33 on 2026-10-02, so the gap has grown since the fit, which said v5. Anyone reading the register sees a prompt four versions old.",
+   "impacts": {
+    "people": [
+     "the owner",
+     "the team"
+    ],
+    "components": [
+     "briefs",
+     "image-teardown",
+     "atlas"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/briefs/briefs.json:62-73@0fabb40eb",
+    "tools/image-teardown/tools/run.py:161-162@0fabb40eb",
+    "tools/image-teardown/prompts/stage6-image-brief-v6-damon.md:1@0fabb40eb",
+    "components/briefs/CLAUDE.md:70-71@0fabb40eb"
+   ],
+   "fix": "Repin components/briefs/briefs.json:66 to stage6-image-brief-v6-damon.md. Better: have components/briefs/tools/briefs.py resolve the stage's highest version the way run.py prompt_for() does, so the pin cannot go stale again.",
+   "fix_impact": "The register and the atlas show the prompt the chain actually runs, and later prompt bumps stop creating drift.",
+   "if_ignored": "The register stays wrong after every prompt bump, and anyone auditing a brief reads the wrong prompt.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner (owner of components/briefs and of image-teardown; the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "intake#4",
+  "issue_text": "A corrupt pool file passes the inputs gate as an empty index",
+  "tier": "P2",
+  "A": {
+   "why": "_load (pools.py:66-70) swallows OSError and ValueError into None, and found() (:252-261) counts file NAMES, not readable content — so a truncated blocks.json or posts.json passes the inputs gate and the run files an index with that pool silently empty. Reproduced by the 2026-09-27 sweep (per the fit, unchecked here).",
+   "impacts": {
+    "people": [
+     "the owner",
+     "the team"
+    ],
+    "components": [
+     "intake"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/intake/tools/pools.py:66-70@0fabb40eb",
+    "components/intake/tools/pools.py:252-261@0fabb40eb"
+   ],
+   "fix": "Name every unreadable pool file in the inputs gate and hold (the INTAKE-1 card's own next step): _load's failure becomes a gate finding, not a shrug.",
+   "fix_impact": "A corrupt pool stops the run with the file named, instead of shipping an index that undercounts and looks complete.",
+   "if_ignored": "The next bad pool files an index that silently misses every swipe in it — the lost-swipes class INTAKE-1 was carded over.",
+   "lane": "decision",
+   "severity": "P2",
+   "decider": "the owner"
+  },
+  "B": {
+   "why": "_load() returns None on any OSError or JSON error and every reader turns that into {} with no message, while found() counts file names, not readable files, so the inputs gate passes. Verified at base, and it is wider than the title: one corrupt blocks.json, items.json or posts.json silently drops that whole advertiser or feed from an otherwise normal index, and a corrupt judgements.json silently drops every person's format call.",
+   "impacts": {
+    "people": [
+     "the owner",
+     "the team"
+    ],
+    "components": [
+     "intake",
+     "swipe-paid",
+     "swipe-organic"
+    ],
+    "machines": [
+     "the owner's Mac",
+     "any teammate's clone",
+     "the mini"
+    ]
+   },
+   "evidence": [
+    "components/intake/tools/pools.py:66-70@0fabb40eb",
+    "components/intake/tools/pools.py:107-116@0fabb40eb",
+    "components/intake/tools/pools.py:252-261@0fabb40eb",
+    "components/intake/tools/gates.py:44-55@0fabb40eb"
+   ],
+   "fix": "components/intake/tools/pools.py: have _load record each unreadable path in a module list (or raise), and have found() report it; components/intake/tools/gates.py inputs_problems(): add one problem line per unreadable pool file so the always-hold inputs gate stops the run; add a test with a truncated blocks.json. Part of INTAKE-1 (intake index honest).",
+   "fix_impact": "A broken pool file stops the run and is named, instead of yielding a short index that looks complete; the owner learns which file to repair.",
+   "if_ignored": "An interrupted sweep or a bad merge in either pool produces an index that is missing swipes and still says filed; teardowns routed from it never see them.",
+   "lane": "decision",
+   "severity": "P2",
+   "decider": "the owner (owner; the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "media-render#3",
+  "issue_text": "The two pre-extraction copies still run beside it",
+  "tier": "P3",
+  "A": {
+   "why": "teardowns.html:843 builds its own media API url and :892-895 mints object urls itself; review.html:657-659 does the same — two private copies of the extraction the component exists to own, and teardowns sends no kind, leaning on the route default the component refuses (per the fit, unchecked here). CLAUDE.md:146 still lists teardowns as a consumer on this basis.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "media-render"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "platform/views/viewers/_templates/teardowns.html:843@0fabb40eb",
+    "platform/views/viewers/_templates/teardowns.html:892-895@0fabb40eb",
+    "platform/views/viewers/_templates/review.html:657-659@0fabb40eb",
+    "components/media-render/CLAUDE.md:146@0fabb40eb"
+   ],
+   "fix": "The lead cards folding both onto pageMedia with kind teardown-runs — the first non-review consumer — and the two private fetch/mint blocks are deleted.",
+   "fix_impact": "One extraction path to fix; #1's consumer count becomes honest; the renderer's refusal of defaulting kinds covers teardowns too.",
+   "if_ignored": "Every media fix lands three times (component + two copies) or, more often, twice is skipped — the copies drift from the contract.",
+   "lane": "owner",
+   "severity": "P3",
+   "decider": "the team"
+  },
+  "B": {
+   "why": "Confirmed at BASE. teardowns.html builds its own /api/media url with no kind parameter (:842-843) and mints object urls itself (:892-895). review.html does the same (:657-659). Leaving out kind relies on the route's default to teardown-runs, which media-render's CLAUDE.md:82-84 refuses to do. CLAUDE.md:145-146 still lists teardowns as a consumer although teardowns never calls the component. Whether this gets carded depends on media-render #1 (keep or fold).",
+   "impacts": {
+    "people": [
+     "the team",
+     "the lead"
+    ],
+    "components": [
+     "media-render"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "platform/views/viewers/_templates/teardowns.html:842-843@0fabb40eb",
+    "platform/views/viewers/_templates/teardowns.html:892-895@0fabb40eb",
+    "platform/views/viewers/_templates/review.html:657-659@0fabb40eb",
+    "components/media-render/CLAUDE.md:82-84@0fabb40eb",
+    "components/media-render/CLAUDE.md:142-146@0fabb40eb"
+   ],
+   "fix": "If media-render #1 (keep or fold) comes out as keep, the lead cards this. teardowns.html inlines bundle.py's block and replaces mediaHref/loadMedia (:842-899) with pageMedia.render using drive pointers {warehouse:'drive', kind:'teardown-runs', item, name}, releasing on repaint. review.html:650-662 folds the same way, or is struck from the plan with a stated reason.",
+   "fix_impact": "teardowns becomes the first consumer outside review (which also bears on the kill count), its media requests name their kind explicitly, and two hand-rolled copies of object-url code are retired.",
+   "if_ignored": "Three implementations of gated-media display drift apart. teardowns keeps relying on the route default, and a change to that default would silently break its media. The kill count stays at one consumer.",
+   "lane": "owner",
+   "severity": "P3",
+   "decider": "the team (component owner; the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "media-render#4",
+  "issue_text": "The PM board never gives object urls back",
+  "tier": "P3",
+  "A": {
+   "why": "Confirmed in code at BASE. Both paint paths in _pm-review-panel.js call pageMedia.render, then clear the host with innerHTML = '' and append the new node, and never call pageMedia.release on the node they replace (:702-706 and :1180-1184). The reference panel does give it back, through reviewReleaseMedia (_reference.js:398-405). media-render's contract leaves release to the caller (CLAUDE.md:116-120), so each repaint of a gated image or video leaks one object url. This is the caller half of RV-5c (release while loading). The leak was inferred from code, not reproduced.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "media-render",
+     "review"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "platform/views/viewers/_templates/_pm-review-panel.js:702-706@0fabb40eb",
+    "platform/views/viewers/_templates/_pm-review-panel.js:1180-1184@0fabb40eb",
+    "components/review/reference/_reference.js:398-405@0fabb40eb",
+    "components/media-render/CLAUDE.md:116-120@0fabb40eb"
+   ],
+   "fix": "In _pm-review-panel.js, keep the last rendered node per host (a WeakMap, as in _reference.js:398) and call pageMedia.release(old) before host.innerHTML = '' at :704 and :1182. Regenerate pm.html, pm-fb.html and steph/pm.html, which inline the panel, and add a seam test that a repaint releases the node it replaced.",
+   "fix_impact": "A PM board session that flips through review popups stops piling up blob urls, so memory stays flat for the team, the team and anyone else working the board.",
+   "if_ignored": "A long PM board session leaks one blob per repaint of a gated image or video. It is small per click but grows with use and is invisible until a tab slows down (inferred).",
+   "lane": "owner",
+   "severity": "P3",
+   "decider": "the team (PM tool owner since 2026-10-01; the flow names no decider, inferred)"
+  },
+  "B": {
+   "why": "_pm-review-panel.js:703-706 and :1181-1184 replace the host (innerHTML = \"\") and render a new node without pageMedia.release on the old one — each repaint of a gated image or video leaks one object url. The library half (release while loading) closed in the library; this caller half is open (inferred from code, not reproduced).",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "media-render"
+    ],
+    "machines": [
+     "Mac mini",
+     "a teammate's browser"
+    ]
+   },
+   "evidence": [
+    "platform/views/viewers/_templates/_pm-review-panel.js:703-706@0fabb40eb",
+    "platform/views/viewers/_templates/_pm-review-panel.js:1181-1184@0fabb40eb"
+   ],
+   "fix": "A small card: capture the old node and pageMedia.release it before the replace, at both sites.",
+   "fix_impact": "A long review session stops accumulating one leaked url per repaint; the memory profile flattens.",
+   "if_ignored": "Day-long board sessions degrade and eventually drop frames or crash the tab, and the blame lands on the renderer that already fixed its half.",
+   "lane": "owner",
+   "severity": "P3",
+   "decider": "the team"
+  }
+ },
+ {
+  "issue": "media-render#6",
+  "issue_text": "The shim and the tests depend on names outside the four-method contract",
+  "tier": "P3",
+  "A": {
+   "why": "_media.js:105-106 re-exports WAREHOUSES and TYPES to every page, and four test files read TYPES or bundle() (e.g. test_rv18_folder_inventory.py:437 asserts against rr.TYPES) — both names live outside the declared contract, 'render(pointer, type) -> element' plus url/ready/release, so the contract text does not cover what the fleet actually touches.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "media-render"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "platform/views/viewers/_templates/_media.js:105-106@0fabb40eb",
+    "new-workflow-design/builds/review-component/test_rv18_folder_inventory.py:437@0fabb40eb"
+   ],
+   "fix": "Declare both names as API in CLAUDE.md's contract section, or drop them from the shim and regenerate the pages — one of the two, so the contract is the whole truth.",
+   "fix_impact": "The contract matches the real surface; an internals rename stops breaking three pages and four tests it never promised to hold.",
+   "if_ignored": "The next refactor of WAREHOUSES/TYPES breaks consumers the contract says do not exist.",
+   "lane": "owner",
+   "severity": "P3",
+   "decider": "the team"
+  },
+  "B": {
+   "why": "The contract is render, url, ready and release, and 'Nothing outside this folder may depend on anything else in it' (CLAUDE.md:33-36). Yet the engine exports WAREHOUSES and TYPES (media-render.js:355-356), the shim re-exports both into every page that inlines it (_media.js:105-106), and tests read them or bundle(): test_rv34 :249, test_rv47 :316, test_rv5 :572. The flow's fourth file (pm-tool/test_pm_view.py) was not re-read (unchecked). I-102 (test shape convention) points the same way.",
+   "impacts": {
+    "people": [
+     "the team"
+    ],
+    "components": [
+     "media-render",
+     "review"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/media-render/CLAUDE.md:33-36@0fabb40eb",
+    "components/media-render/media-render.js:350-357@0fabb40eb",
+    "platform/views/viewers/_templates/_media.js:100-107@0fabb40eb",
+    "new-workflow-design/builds/review-component/test_rv34_url_viewport.py:249@0fabb40eb",
+    "new-workflow-design/builds/review-component/test_rv47_type_page.py:316@0fabb40eb",
+    "new-workflow-design/builds/review-component/test_rv5_media_render.py:572@0fabb40eb"
+   ],
+   "fix": "Pick one. (a) Declare WAREHOUSES, TYPES and bundle.bundle() as public API in a 'Public names' line under components/media-render/CLAUDE.md's contract, the qc-checks pattern. (b) Drop them from _media.js:105-106, keep them engine-only, and repoint the tests to assert through render/url behaviour. Then regenerate the inlined pages. (a) is the cheaper of the two.",
+   "fix_impact": "The contract matches what callers actually use, so a maker can rename internals without silently breaking three pages and four tests.",
+   "if_ignored": "A tidy-up inside media-render.js breaks pages and tests that rely on names the contract says nobody may use, and the break shows up far from the edit.",
+   "lane": "owner",
+   "severity": "P3",
+   "decider": "the team (engine owner; the flow names no decider, inferred)"
+  }
+ },
+ {
+  "issue": "meta-upload#11",
+  "issue_text": "One brand has no funnels registry",
+  "tier": "P2",
+  "A": {
+   "why": "Checked at 0fabb40eb: fixed. brands/brand-a/web/funnels/funnels.json now exists with two funnels, icon and store, each with a URL and product. It was added by aed8f7989 on 2026-10-01, after the fit's 2ed20b4e5. So page_for (upload.py:74-79) can match that brand's pages, and the hand-off and card roads no longer hold every ad. Tier looks high: nothing is left to do, so this is the team's call to close with that evidence.",
+   "impacts": {
+    "people": [
+     "the owner",
+     "the team"
+    ],
+    "components": [
+     "meta-upload"
+    ],
+    "machines": [
+     "the owner's Mac"
+    ]
+   },
+   "evidence": [
+    "brands/brand-a/web/funnels/funnels.json:1-28@0fabb40eb",
+    "components/meta-upload/upload.py:61-63@0fabb40eb",
+    "components/meta-upload/upload.py:74-79@0fabb40eb"
+   ],
+   "fix": "the team closes it: resolved = aed8f7989 (or brands/brand-a/web/funnels/funnels.json:3@0fabb40eb), resolved_by steph. No code or brand change is needed.",
+   "fix_impact": "One fewer open issue on the meta-upload atlas page, and the brand-content shared action has one item left (#10, pages input).",
+   "if_ignored": "The page keeps showing a fixed gap as open, and the next run spends time checking it again.",
+   "lane": "steph",
+   "severity": "P2",
+   "decider": "the owner (the flow names no decider, inferred)"
+  },
+  "B": {
+   "why": "build.py:60-64 resolves --funnel against brands/<brand>/web/funnels/funnels.json — brand-a carries one, brand-b has no funnels file at all (verified by listing) — so a brand-b campaign name carrying the funnel cannot resolve, and the fit recorded upload holding every ad for that brand (inferred from the fit; not reproduced here).",
+   "impacts": {
+    "people": [
+     "the owner"
+    ],
+    "components": [
+     "meta-upload"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/meta-upload/build.py:60-64@0fabb40eb",
+    "brands/brand-a/web/funnels/funnels.json:1@0fabb40eb"
+   ],
+   "fix": "the owner writes brand-b's funnels registry, or records in the account file that brand-b campaign names never carry the funnel.",
+   "fix_impact": "Funnel-carrying campaign names work for both brands; the registry check stops being brand-a-only machinery.",
+   "if_ignored": "The first brand-b funnel campaign dies at name resolution, and the ads sit held with no named reason.",
+   "lane": "owner",
+   "severity": "P2",
+   "decider": "the owner (brand content)"
+  }
+ }
+]

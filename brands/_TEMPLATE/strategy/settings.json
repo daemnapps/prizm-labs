@@ -1,0 +1,15 @@
+{
+  "_what": "Where this brand's ads take place — the 'setting' big move in the creative-diversity rule (components/creative-diversity/dimensions.json). Every row is a draft until the brand owner signs it.",
+  "status": "draft",
+  "born": "<yyyy-mm-dd>",
+  "settings": [
+    {
+      "id": "<setting-id>",
+      "name": "<Setting name>",
+      "what": "<one line: what the viewer sees>",
+      "avatars": ["<avatar-id>"],
+      "source": "<where this setting came from>",
+      "bank": []
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "_what": "This brand's one offer, read by components/meta-upload/cards.py (strategy_offer) and components/meta-strategy/audit.py.",
+  "product": "<product-slug>",
+  "page": "https://<your-offer-page>/",
+  "match": ["<a url fragment that marks a link as this offer>"],
+  "campaign_product": "<product-slug>",
+  "cpa_offer": "<the offer-lines group whose break-even CPA applies>"
+}

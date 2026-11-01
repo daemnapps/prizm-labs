@@ -1,0 +1,34 @@
+{
+ "apify#11": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "elements#1": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "image-production#22": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "image-teardown#2": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "marketing-doctrine#6": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "run-kit#15": {
+  "A": "opus",
+  "B": "glm"
+ },
+ "identity-training#2": {
+  "A": "opus",
+  "B": "glm"
+ },
+ "run-kit#16": {
+  "A": "opus",
+  "B": "glm"
+ }
+}

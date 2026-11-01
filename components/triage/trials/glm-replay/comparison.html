@@ -1,0 +1,135 @@
+<title>GLM Replay Verdict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f4f5f3;--paper:#fff;--ink:#1b2420;--ink2:#4b5953;--ink3:#6c7973;--line:#d9e0dc;--soft:#edf1ef;
+--opus:#5b3fb8;--opuss:#efeafb;--glm:#0f6f8a;--glms:#e2f1f5;--pos:#1e7a48;--posb:#e3f2e8;--neg:#b0362c;--negb:#f8e6e3;--mid:#9a6205;--midb:#f8efdc;--code:#f1f3f2;
+--sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;--line:#2a3530;--soft:#1d2622;
+--opus:#b29cf0;--opuss:#251d3d;--glm:#6cc6dd;--glms:#132d35;--pos:#58c98d;--posb:#153020;--neg:#e57a70;--negb:#3a1714;--mid:#e2a64a;--midb:#33270e;--code:#111715}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;--line:#2a3530;--soft:#1d2622;
+--opus:#b29cf0;--opuss:#251d3d;--glm:#6cc6dd;--glms:#132d35;--pos:#58c98d;--posb:#153020;--neg:#e57a70;--negb:#3a1714;--mid:#e2a64a;--midb:#33270e;--code:#111715}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.2}h1{font-size:30px;font-weight:700}h2{font-size:20px;font-weight:650}h3{font-size:15.5px;font-weight:600}
+p{margin:0}code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:0 4px;border-radius:3px;overflow-wrap:anywhere}
+.eyebrow{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.head{display:flex;flex-direction:column;gap:10px}.lede{color:var(--ink2);font-size:16.5px;max-width:72ch}
+.verdict{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);background:var(--paper)}
+.v .big{font-size:22px;font-weight:700}.v.fail .big{color:var(--neg)}.v.mixed .big{color:var(--mid)}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.sub{color:var(--ink2);max-width:74ch}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+td.n{text-align:right;white-space:nowrap}
+.o{color:var(--opus);font-weight:600}.g{color:var(--glm);font-weight:600}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.pass{color:var(--pos);background:var(--posb)}.fail{color:var(--neg);background:var(--negb)}.mid{color:var(--mid);background:var(--midb)}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:150px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13.5px}
+.track{height:14px;background:var(--soft);border-radius:4px;overflow:hidden}.fillo{height:100%;background:var(--opus)}.fillg{height:100%;background:var(--glm)}
+ol,ul{margin:0;padding-left:20px}li{margin:4px 0}
+.star{background:var(--posb);border-radius:8px;padding:10px 14px}
+footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:4px}
+@media (max-width:720px){.verdict{grid-template-columns:1fr}.bar{grid-template-columns:110px minmax(0,1fr) 40px}}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eyebrow">Triage · GLM replay · 2026-10-02 · blind, against the Opus originals</span>
+  <h1>GLM writes the shape, not the truth: triage write-ups stay on Opus</h1>
+  <p class="lede">Two recent atlas worker jobs were rerun exactly on <span class="g">glm-5.3</span>: the same instruction, the same base commit, only the model changed. They were scored against the <span class="o">Opus</span> originals by Opus's own tests and a blind judge. GLM's issue summaries carry 7 factual errors where Opus's carry 1. Its code drafts are as good as Opus's when drafting is the right call, but it also drafts the wrong things.</p>
+</header>
+
+<div class="verdict">
+  <div class="v fail"><span class="eyebrow">Issue summaries · ATL-31 (remaining issue briefs) part F</span><span class="big">Fail: stay on Opus</span><p class="sub">Opus wins all 10 blind picks. Factual errors: GLM 7, Opus 1.</p></div>
+  <div class="v mixed"><span class="eyebrow">Code drafts · ATL-29 (drafted changes) round 2 part A</span><span class="big">Fail on the line, promising underneath</span><p class="sub">On the 6 drafts both made, GLM is as good or better (3 errors to 6). On the 2 that Opus rightly declined, GLM drafted anyway and got both wrong.</p></div>
+</div>
+
+<section class="panel">
+  <h2>Against the team's decision line</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Criterion</th><th>Needed</th><th>Result</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Opus's own test, summaries</td><td>pass</td><td>274 / 274, same as Opus (273 raw: the replay copy names the base differently; verified to be the same tree)</td><td><span class="tag pass">pass</span></td></tr>
+      <tr><td>Summaries judged equal or better</td><td>8 or more of 10</td><td>0 of 10</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td>Factual errors in the 10 summaries</td><td>no more than Opus</td><td>GLM 7 · Opus 1</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td>Every GLM draft applies</td><td>all</td><td>7 of 8 on our Macs. run-kit#16 is a letter-case-only rename that git refuses on a case-insensitive disk</td><td><span class="tag fail">fail</span></td></tr>
+      <tr><td>Opus's own test, drafts</td><td>pass</td><td>53 pass, 10 fail. All 10 check two fields Opus added on its own; the instruction never asks for them, so they are not counted against GLM</td><td><span class="tag mid">not a fair gate</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="panel">
+  <h2>Issue summaries: 10 pre-registered briefs, judged blind</h2>
+  <div class="bars" role="img" aria-label="Factual errors across 10 briefs: GLM 7, Opus 1. Blind picks: Opus 10, GLM 0.">
+    <div class="bar"><span>Factual errors · <span class="g">GLM</span></span><div class="track"><div class="fillg" style="width:70%"></div></div><b>7</b></div>
+    <div class="bar"><span>Factual errors · <span class="o">Opus</span></span><div class="track"><div class="fillo" style="width:10%"></div></div><b>1</b></div>
+    <div class="bar"><span>Blind picks · <span class="o">Opus</span></span><div class="track"><div class="fillo" style="width:100%"></div></div><b>10</b></div>
+    <div class="bar"><span>Blind picks · <span class="g">GLM</span></span><div class="track"><div class="fillg" style="width:0%"></div></div><b>0</b></div>
+  </div>
+  <p class="sub">Bars are on a scale of 10 (the sample).</p>
+  <h3>Two GLM errors that would send the triage owner the wrong way (re-checked against the code)</h3>
+  <ol>
+    <li><b>meta-upload#11.</b> GLM says <brand> has no funnel list. <code>brands/<brand>/web/funnels/funnels.json</code> exists at the base with 5 funnels. The gap was <brand>'s, and aed8f7989 already fixed it, so GLM's response asks for work that is done. Opus routed it to a close.</li>
+    <li><b>atlas#6.</b> GLM says the id-tag lint flags the component's instructions file. The lint only scans the decision log, PLATFORM-CONTEXT and <code>team/plans/</code> (<code>.githooks/id-tag-lint.py:35-38</code>).</li>
+  </ol>
+  <p class="sub">The pattern matches the earlier blind test on red-test summaries (TI-24 (red-test summaries GLM)): 8 factual errors to Claude's 2. GLM passes every structural check and gets facts about the code wrong. It also cited less: 164 new evidence lines against Opus's 252.</p>
+</section>
+
+<section class="panel">
+  <h2>Code drafts: 8 items, judged blind and test-applied</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Item</th><th><span class="o">Opus</span></th><th><span class="g">GLM</span></th><th>Judge's pick</th><th class="n">Errors O · G</th></tr></thead>
+    <tbody>
+      <tr><td>apify#11</td><td>diff</td><td>diff</td><td>equal</td><td class="n">1 · 1</td></tr>
+      <tr><td>elements#1</td><td>diff</td><td>diff</td><td class="g">GLM</td><td class="n">2 · 1</td></tr>
+      <tr><td>image-production#22</td><td>diff</td><td>diff</td><td class="g">GLM</td><td class="n">2 · 0</td></tr>
+      <tr><td>image-teardown#2</td><td>diff</td><td>diff</td><td>equal</td><td class="n">0 · 0</td></tr>
+      <tr><td>marketing-doctrine#6</td><td>diff</td><td>diff</td><td class="o">Opus</td><td class="n">0 · 0</td></tr>
+      <tr><td>run-kit#15</td><td>diff</td><td>diff</td><td class="o">Opus</td><td class="n">1 · 1</td></tr>
+      <tr><td>identity-training#2</td><td>declined</td><td>diff</td><td class="o">Opus: declining was right</td><td class="n">0 · 3</td></tr>
+      <tr><td>run-kit#16</td><td>declined</td><td>diff</td><td class="o">Opus: declining was right</td><td class="n">1 · 2</td></tr>
+      <tr><td><b>All 8</b></td><td></td><td></td><td>Opus 4 · GLM 2 · equal 2</td><td class="n"><b>7 · 8</b></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><b>Where both drafted</b>, GLM matches or beats Opus. In image-production#22, Opus's new test passes an empty key straight in, so it never exercises the real key lookup. In elements#1, Opus leaves the rendered library page stale.</li>
+    <li><b>Where GLM drafted and Opus declined</b>, GLM is wrong both times. identity-training#2's test stays red after the change. run-kit#16 renames a folder by letter case only, which won't apply on our Macs, and it misses a reader of the old name.</li>
+    <li>GLM took 2,226 s against Opus's 447 s on this job, about 5x the wall time, on the GLM plan.</li>
+  </ul>
+</section>
+
+<section class="panel">
+  <h2>Recommendation</h2>
+  <ol>
+    <li><b>Keep every triage write-up on Opus:</b> issue summaries, action summaries and decision options. Two independent blind tests now agree that GLM's factual error rate on our code is several times Opus's. Confidence: high. Reverse if a newer GLM model is replayed on the same 10 briefs and makes no more errors than Opus.</li>
+    <li><b>Drafts are worth one narrower trial, not a move.</b> GLM writes a good diff when the decision to draft is already made. Split the job: Opus decides draft-or-decline and writes the reason; GLM writes the diff only for items marked "draft"; every diff must apply and pass its test before anyone sees it. Rerun on the next round's drafts and move GLM to diff-writing only if it matches Opus there. Confidence: medium, because 6 shared diffs is a small sample.</li>
+  </ol>
+  <p class="star">★ Decide whether to run the split-drafts trial on the next round of ATL-29 (drafted changes). It is the one remaining place GLM could take real volume off your Claude plan.</p>
+</section>
+
+<section class="panel">
+  <h2>How it was run</h2>
+  <ul>
+    <li><b>Whole jobs, rerun exactly.</b> Each replay used the original request's instruction verbatim, at its original base commit (0fabb40eb, e6d8103826), in an isolated copy that cannot see later commits. Branches sit under <code>replay/glm/</code> and are never merged.</li>
+    <li><b>Same tools as Opus had.</b> Both ran under the worker's ordinary maker permissions, so the permission flags were identical.</li>
+    <li><b>Sample fixed in advance.</b> The 10 briefs were picked by seed 20261002 (one per component, at least one P3) before any GLM output existed.</li>
+    <li><b>Blind judge.</b> One independent Opus reviewer saw each pair as A and B in random order; the key was kept apart. GLM's commit name was swapped for the base's so it couldn't give the writer away. The judge checked claims only at the base commit and test-applied every diff in its own copy.</li>
+    <li><b>Judge bias guard.</b> The deciding measure is cited, checkable errors, not preference. The stream re-checked two GLM errors itself.</li>
+    <li><b>Not available.</b> No triage-owner acts exist yet in the decision log to score against.</li>
+    <li><b>One judge side effect.</b> While cleaning up, the drafts judge pruned one stale worktree record in the shared repo. The record belonged to another session, its folder was already gone, and no files changed.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Files: <code>components/triage/trials/glm-replay/</code>: <code>README.md</code> (spec), <code>sample-briefs.json</code>, <code>RESULT-briefs.md</code>, <code>judge/</code> (pairs, keys, verdicts). Run folders: <code>runs/triage/glm-replay/20261002T1047Z/{briefs,drafts}/</code>.</p>
+  <p>Asked by the team ("replay", 10:05Z, via ◆ PLAN [6beb2b]); dispatched by the lead; scored by ≈ STREAM · atlas [6941d8]. Nothing was carded or merged from the replay.</p>
+</footer>
+
+</div>

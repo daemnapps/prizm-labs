@@ -1,0 +1,370 @@
+{
+ "model": "seedance-2.0",
+ "medium": "video",
+ "_readme": [
+  "Seedance 2.0: the earlier clip model, the sibling of seedance-2.5.json (Higgsfield API; BytePlus ModelArk is the maker's own door). Filled 2026-10-28 from BytePlus's Seedance 2.0 series tutorial and prompt guide, in the same shape as seedance-2.5.json so one library, one slice renderer and one checker serve both.",
+  "The 2.0 series is three models: standard (dreamina-seedance-2-0-260128), fast and mini. This sheet is the standard model. Fast and mini take the same inputs but output 480p or 720p only.",
+  "Anything marked UNCONFIRMED came only from a reseller's page or could not be read on the maker's own page; check it before a chain depends on it. Every row carries its source; every entry is status draft until it is approved. No brand, product, person or format word appears in this file.",
+  "Not yet in the Model House: no job names registry id seedance-2.0, so for_job() never reaches this sheet. A chain can load('seedance-2.0') by name until a row is added."
+ ],
+ "label": "Seedance 2.0",
+ "registry_id": "seedance-2.0",
+ "read": "2026-10-28",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_reference": "bytedance/seedance-2.0/reference-to-video",
+  "higgsfield_image": "bytedance/seedance-2.0/image-to-video",
+  "higgsfield_text": "bytedance/seedance-2.0/text-to-video",
+  "byteplus": "dreamina-seedance-2-0-260128",
+  "byteplus_fast": "dreamina-seedance-2-0-fast-260128",
+  "byteplus_mini": "dreamina-seedance-2-0-mini-260615"
+ },
+ "sources": [
+  "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0",
+  "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide",
+  "https://docs.byteplus.com/en/docs/modelark/create-video-generation-task-api",
+  "https://docs.byteplus.com/docs/ModelArk/1544106",
+  "lab/damon/higgsfield-catalogue/catalogue/api-models.json",
+  "https://shortgenius.com/models/bytedance-seedance-2.0-reference-to-video",
+  "https://www.pixmax.ai/product-updates/update-1.html"
+ ],
+ "limits": {
+  "duration_seconds": [
+   4,
+   15
+  ],
+  "aspect_ratios": "21:9, 16:9, 4:3, 1:1, 3:4, 9:16 or adaptive (a fixed list, not 2.5's free 0.4 to 2.5 range)",
+  "max_images": 9,
+  "max_videos": 3,
+  "max_video_seconds_total": 15,
+  "max_audio_clips": 3,
+  "max_audio_seconds_total": 15,
+  "max_references_total": 15,
+  "best_references_total": [
+   4,
+   5
+  ],
+  "stable_people_max": 4,
+  "resolutions": [
+   "480p",
+   "720p",
+   "1080p",
+   "4k"
+  ],
+  "resolutions_fast_and_mini": [
+   "480p",
+   "720p"
+  ],
+  "output_format": "mp4 (4k comes out 10-bit H.265)",
+  "audio_needs_a_picture_or_video": true,
+  "real_faces_blocked": "reference pictures or videos with a real human face are refused by the maker's moderation unless they are the account's own model outputs, the maker's preset characters or authorized portrait assets",
+  "house": {
+   "resolution": "480p, upscaled on this Mac (same as 2.5)",
+   "aspect": "9:16",
+   "duration": "4 to 15 s, the model's own range; a talking take longer than 15 s must be split"
+  },
+  "price": "UNCONFIRMED, USD, maker's direct price: a 5 s clip with no video input 0.35 at 480p (about 0.07 per second), 0.76 at 720p, 1.87 at 1080p; fast 0.28 at 480p. Billed in tokens = (input video seconds + output seconds) x width x height x frame rate / 1024, so a reference video raises the cost. Read from a search summary of https://docs.byteplus.com/docs/ModelArk/1544106, which could not be opened directly. Higgsfield's credit price is not in the local catalogue (base_credits 0.0000).",
+  "audio_clip_seconds": [
+   2,
+   15
+  ],
+  "audio_clip_mb": 15,
+  "audio_formats": [
+   "mp3",
+   "wav"
+  ],
+  "image_formats": [
+   "png",
+   "jpg",
+   "jpeg",
+   "webp"
+  ],
+  "max_image_mb": 30,
+  "unconfirmed": "(1) audio_clip_seconds (2 s minimum per clip), audio_clip_mb, audio_formats, image_formats and max_image_mb come from reseller pages, not the maker's own page; (2) max_references_total: the maker lists 0-9 images, 0-3 videos and 0-3 audio, one reseller caps all files at 12 together; (3) whether Higgsfield's 2.0 reference-to-video lets a first/last-frame role sit beside audio (the 2.5 door refuses it with a 422); (4) whether a supplied voice track is lip-synced word for word: the maker says audio passes on its timbre, melody and dialogue content, and its examples type the line in the prompt with the voice taken from Audio n.",
+  "note": "On the maker's API, a first_frame / last_frame role is its own task type (image-to-video); inside a reference task a picture called 'the first frame' in the words is followed approximately. Text + audio alone, or audio alone, is refused."
+ },
+ "qualities": [],
+ "inputs": [
+  {
+   "name": "prompt",
+   "what": "The words: who is which file, Shot 1 / Shot 2 / Shot 3 in event order, look, constraints.",
+   "allowed": "no stated limit; the guide warns a whole script as the prompt confuses the model",
+   "we_send": "same builder as 2.5, with shots in place of second windows",
+   "use": "yes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "name": "image (first frame)",
+   "what": "The approved start picture. As role first_frame it is an image-to-video task; inside a reference task it is 'Image 1' named as the opening frame.",
+   "allowed": "role first_frame (strict) or reference_image named as the opening frame (approximate); crop it to the output size or use ratio adaptive, or frames stretch and jump",
+   "we_send": "one",
+   "use": "yes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "image (reference)",
+   "what": "A face, body, product, room, logo or look reference, each bound by number and job.",
+   "allowed": "0 to 9 reference images; a headshot plus one full-body photo per person; never a multi-view sheet or a collage; 4 people at most for a stable count",
+   "we_send": "none in the chain; the bench can add them to test",
+   "use": "test",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "name": "image (last frame)",
+   "what": "Where a silent clip settles.",
+   "allowed": "role last_frame with first_frame (image-to-video task), or named in the words of a reference task",
+   "we_send": "silent clips only, only when different from the first",
+   "use": "sometimes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "video (reference)",
+   "what": "Motion, camera, effect or style from a clip; or the clip to edit or extend.",
+   "allowed": "0 to 3 videos, 15 s together; with or without their own sound",
+   "we_send": "the swipe's blurred clips, up to 3, 15 s together, 'camera movement only'",
+   "use": "yes where the swipe's movement is the point",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "name": "audio (reference)",
+   "what": "A voice timbre, music or rhythm; 'Character says: {line}, voice references Audio n'. Needs at least one picture or video beside it.",
+   "allowed": "0 to 3 clips, 15 s together; mp3 or wav, 15 MB each (UNCONFIRMED, reseller)",
+   "we_send": "the line's locked read, one clip, bound as the speaker's voice; a read over 15 s cannot go in whole",
+   "use": "test until word-for-word lip sync to a supplied read is proven",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "duration",
+   "what": "Seconds of video.",
+   "allowed": "4 to 15 on 2.0 (4 to 30 on 2.5)",
+   "we_send": "the read's length + 0.6, 4 to 15",
+   "use": "yes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "resolution",
+   "what": "Output size.",
+   "allowed": "480p, 720p, 1080p, 4k (10-bit H.265) on standard; 480p or 720p on fast and mini",
+   "we_send": "480p, upscaled locally",
+   "use": "yes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "aspect_ratio",
+   "what": "Output shape.",
+   "allowed": "21:9, 16:9, 4:3, 1:1, 3:4, 9:16 or adaptive (a fixed list, not 2.5's free 0.4 to 2.5 range)",
+   "we_send": "9:16",
+   "use": "yes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "generate_audio",
+   "what": "Whether the clip carries sound made in the same pass (speech, effects, music).",
+   "allowed": "true or false (default true on the maker's API)",
+   "we_send": "true on talking clips, false on silent",
+   "use": "yes",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/create-video-generation-task-api"
+  },
+  {
+   "name": "return_last_frame",
+   "what": "Hands back the clip's last frame, to start the next clip from it.",
+   "allowed": "true or false",
+   "we_send": "not sent",
+   "use": "test",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "name": "output_format",
+   "what": "File type.",
+   "allowed": "mp4 on 2.0 (2.5 also offers mov)",
+   "we_send": "mp4",
+   "use": "no",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  }
+ ],
+ "structure": [
+  {
+   "id": "bind-every-file",
+   "rule": "Name every file as type + number in upload order ('Image 1', 'Video 2', 'Audio 1'), counted within its own type; never by asset ID. Put the file that must be followed most precisely first.",
+   "ours": "seedance_prompt.build assets block (same as 2.5)",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "id": "define-subjects",
+   "rule": "Define each subject once by 2 to 3 stable features ('the woman in the red dress in Image 1 as Subject 1') and use that same label, or 'name@Image 1', every time it appears.",
+   "ours": "the image role lines",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "formula",
+   "rule": "Order: subject + action details + scene + light and colour + camera move + style + image quality + constraints.",
+   "ours": "the summary block, then the shots, then constants",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "shots-not-seconds",
+   "rule": "Write a storyboard as Shot 1 / Shot 2 / Shot 3 in event order (camera, action and expression, position, sound). Do not pin seconds: 2.0's precise timing ('0-3 s') is unstable and forcing it breaks the clip. This differs from 2.5's whole-second windows.",
+   "ours": "the timeline written as shots when the model is 2.0",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "one-camera-move",
+   "rule": "One camera move per shot, in standard terms ('slow push-in', 'fixed shot'); push, pull, pan and track together make the picture unstable.",
+   "ours": "CAMERA phrases from the shot's camera_move",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "small-body-moves",
+   "rule": "Name the body part, range, speed and force ('slowly raise a hand'); prefer slow, small, continuous movements and say how one action flows into the next.",
+   "ours": "the shot's face and gestures",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "performance",
+   "rule": "Replace an emotion word with what the body visibly does (sad: head lowered, shoulders trembling, eyes reddening).",
+   "ours": "the emotion label is not sent",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "sound-marks",
+   "rule": "Mark sound by bracket: music in ( ), sound effects in < >, dialogue in { }, on-screen subtitles in 【 】; a language other than Chinese or English is named before the line. Keep all dialogue in one language.",
+   "ours": "dialogue braces on lines the model must speak",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "voice-from-audio",
+   "rule": "To use a voice: 'Character says: {line}, voice timbre references Audio n'; to place a sound: its timing + 'Audio n'. Describe the voice too ('the low, warm male voice of Audio 1') and keep the line's tone close to the reference.",
+   "ours": "Audio 1 bound as the speaker's voice",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "id": "constraints-last",
+   "rule": "End with short constraints: 'keep it subtitle-free', 'do not generate a logo', 'do not generate a watermark', and, with several people, 'no duplicate characters'.",
+   "ours": "the 'Constant throughout' block",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "few-references",
+   "rule": "Use 4 to 5 files, not the full limit: 1 to 2 character pictures + 1 scene picture + 1 camera video + 1 audio clip. Too many files blur which one matters.",
+   "ours": "one picture, one voice, one clip",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "edit-and-extend-wording",
+   "rule": "To edit or extend, call it 'Video n' directly ('Extend Video 1 backward', 'strictly edit Video 1'), never 'reference Video n', which turns it into a reference task; name what stays unchanged.",
+   "ours": "not used by the chain yet",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "pinned-seconds",
+   "text": "Exact timestamps per shot ('0-3 seconds'): 2.0 follows them unreliably and the clip breaks.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "multi-view-sheets",
+   "text": "Multi-view or three-view character sheets and mixed collages: read as several people, causing face drift and twins. Use a separate headshot and one full-body photo.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "real-faces",
+   "text": "A photo or video of a real human face that is not the account's own model output, a preset character or an authorized asset: refused at input moderation.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "id": "emotion-words",
+   "text": "Abstract emotion words ('very sad', 'extremely angry'): show the body instead.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "big-moves",
+   "text": "Sprints, big jumps, violent rolls: high-burst actions are unstable.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "stacked-camera",
+   "text": "Push, pull, pan and track in the same shot.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "too-many-people",
+   "text": "More than 4 referenced people in one clip: wrong head count and duplicates. Group them into pictures of 4 or fewer first.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "text-in-references",
+   "text": "References carrying words you do not want: they raise the chance of burnt-in subtitles. Portrait clips get subtitles more often than landscape; no prompt removes them 100%.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "mixed-languages",
+   "text": "Mixing languages in the dialogue (proper nouns aside).",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "audio-alone",
+   "text": "Text + audio only, or audio only: refused; an audio file needs a picture or video beside it.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/ModelArk/seedance-2-0"
+  },
+  {
+   "id": "whole-script",
+   "text": "Pasting the whole script as the prompt: redundant words confuse subjects; keep only what this clip shows.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  },
+  {
+   "id": "stacked-extensions",
+   "text": "Extending a model-made clip again and again: quality degrades with each pass, faces blotch. A narrated clip can also click at its end: fade the last audio out in the edit.",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-0-prompt-guide"
+  }
+ ],
+ "history": [
+  {
+   "who": "the owner",
+   "date": "2026-10-26",
+   "said": "we are also going to do this for seedance too so we always get the best quality image and image to video",
+   "about": "why this rulebook exists"
+  },
+  {
+   "who": "session",
+   "date": "2026-10-28",
+   "about": "2.0 sheet filled from the maker's 2.0 tutorial and prompt guide so the chain can prompt 2.0 as precisely as 2.5; draft until approved"
+  }
+ ]
+}

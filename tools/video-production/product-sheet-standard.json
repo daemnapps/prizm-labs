@@ -1,0 +1,288 @@
+{
+ "what": "The one layout for every product casting sheet. Six fixed views in a fixed order, then a row of how-the-product-works pictures that changes per product. Read by machine/product_sheet.py.",
+ "why": "Sheets are the base for producing ads, so every product carries the same elements in the same order. The bottle sheets set the layout.",
+ "views": [
+  [
+   "front",
+   "FRONT"
+  ],
+  [
+   "three-quarter",
+   "THREE QUARTER"
+  ],
+  [
+   "side",
+   "SIDE"
+  ],
+  [
+   "back",
+   "BACK"
+  ],
+  [
+   "from-below",
+   "FROM BELOW"
+  ],
+  [
+   "from-above-three-quarter",
+   "FROM ABOVE"
+  ]
+ ],
+ "products": {
+  "brand-a/core-supplement": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER OPEN",
+     "model/sheet/jutsu-v2/three-quarter-open.png"
+    ]
+   ]
+  },
+  "brand-a/crush-bump-eliminator": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER OPEN",
+     "model/sheet/jutsu-v2/three-quarter-open.png"
+    ]
+   ]
+  },
+  "brand-a/flex-charging-case": {
+   "tiles": {
+    "front": "model/sheet/master-v4/front-closed-photoreal.png",
+    "three-quarter": "model/sheet/master-v4/three-quarter-closed-photoreal.png",
+    "side": "model/sheet/master-v4/side-closed-photoreal.png",
+    "back": "model/sheet/master-v4/back-closed-photoreal.png",
+    "from-below": "model/sheet/master-v4/from-below-closed-photoreal.png",
+    "from-above-three-quarter": "model/sheet/master-v4/from-above-three-quarter-closed-photoreal.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER OPEN",
+     "model/sheet/master-v4/three-quarter-open-photoreal.png"
+    ],
+    [
+     "FRONT OPEN",
+     "model/sheet/master-v4/front-open-photoreal.png"
+    ],
+    [
+     "TOP DOWN OPEN",
+     "model/sheet/master-v4/top-down-open-photoreal.png"
+    ],
+    [
+     "FLEX CLOSEUP",
+     "model/sheet/master-v4/flex-closeup-photoreal.png"
+    ],
+    [
+     "SIDE OPEN",
+     "model/sheet/master-v4/side-open-photoreal-try2.png"
+    ],
+    [
+     "TRAY EMPTY",
+     "model/sheet/master-v4/tray-empty-photoreal-try2.png"
+    ],
+    [
+     "CHARGING",
+     "model/sheet/master-v4/charging-closed-photoreal.png"
+    ]
+   ]
+  },
+  "brand-a/flex-face-brush": {
+   "tiles": {
+    "front": {
+     "old_sheet_cell": [
+      0,
+      0
+     ]
+    },
+    "three-quarter": {
+     "old_sheet_cell": [
+      1,
+      0
+     ]
+    },
+    "side": {
+     "old_sheet_cell": [
+      2,
+      0
+     ]
+    },
+    "back": {
+     "old_sheet_cell": [
+      0,
+      1
+     ]
+    },
+    "from-below": {
+     "old_sheet_cell": [
+      1,
+      1
+     ]
+    },
+    "from-above-three-quarter": {
+     "old_sheet_cell": [
+      2,
+      1
+     ]
+    }
+   },
+   "use": [
+    [
+     "ON CHARGING BASE",
+     "model/physics/seat-on-charging-base/*"
+    ]
+   ]
+  },
+  "brand-a/miro-face-towel": {
+   "tiles": {
+    "front": {
+     "old_sheet_cell": [
+      0,
+      0
+     ]
+    },
+    "three-quarter": {
+     "old_sheet_cell": [
+      1,
+      0
+     ]
+    },
+    "side": {
+     "old_sheet_cell": [
+      2,
+      0
+     ]
+    },
+    "back": {
+     "old_sheet_cell": [
+      0,
+      1
+     ]
+    },
+    "from-below": {
+     "file": "model/sheet/from-below.png",
+     "trim": true
+    },
+    "from-above-three-quarter": {
+     "file": "model/sheet/from-above.png",
+     "trim": true
+    }
+   },
+   "use": [
+    [
+     "HUNG ON A RAIL",
+     "model/physics/hang-on-rail/*"
+    ]
+   ]
+  },
+  "brand-a/prime-face-quench": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER PRESSED",
+     "model/sheet/jutsu-v2/three-quarter-pressed.png"
+    ]
+   ]
+  },
+  "brand-a/war-face-wash": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER PRESSED",
+     "model/sheet/jutsu-v2/three-quarter-pressed.png"
+    ]
+   ]
+  },
+  "brand-b/brilliance-body-scrub": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER CAP OFF",
+     "model/sheet/jutsu-v2/three-quarter-cap-off.png"
+    ]
+   ]
+  },
+  "brand-b/brilliance-face-scrub": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER LID OPEN",
+     "model/sheet/jutsu-v2/three-quarter-lid-open.png"
+    ]
+   ]
+  },
+  "brand-b/radiance-body-cream": {
+   "tiles": {
+    "front": "model/sheet/jutsu-v2/front-closed.png",
+    "three-quarter": "model/sheet/jutsu-v2/three-quarter-closed.png",
+    "side": "model/sheet/jutsu-v2/side-closed.png",
+    "back": "model/sheet/jutsu-v2/back-closed-from-print-clean.png",
+    "from-below": "model/sheet/jutsu-v2/from-below-closed.png",
+    "from-above-three-quarter": "model/sheet/jutsu-v2/from-above-three-quarter-closed.png"
+   },
+   "use": [
+    [
+     "THREE QUARTER CAP OFF",
+     "model/sheet/jutsu-v2/three-quarter-cap-off.png"
+    ]
+   ]
+  },
+  "brand-b/travel-pouch": {
+   "tiles": {
+    "front": "sources/Brand-B-products-November-20240050.jpg.jpg",
+    "three-quarter": "sources/Brand-B-products-November-20240049.jpg.jpg",
+    "side": "model/local-3d/side-photoreal.png",
+    "back": "model/local-3d/back-photoreal.png",
+    "from-below": "model/local-3d/from-below-photoreal-final.png",
+    "from-above-three-quarter": "sources/Brand-B-products-November-20240054.jpg.jpg"
+   },
+   "use": [
+    [
+     "TUBE TAKEN OUT",
+     "model/physics/tube-taken-out/*"
+    ]
+   ]
+  }
+ }
+}

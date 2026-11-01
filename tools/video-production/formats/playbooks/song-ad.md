@@ -1,0 +1,220 @@
+# Playbook · Song ad (sung story, animated) (`song-ad`)
+
+**Status:** approved · **state:** proven on 8 cut runs, 2026-10-09/10
+**Family:** sung-story
+
+**Signed:** the owner 2026-10-10 — his rulings of 2026-10-09/10 cover every line (cited per line under rulings): punch first + shorter + flow (SONG-WRITING.md); match the swipe's style; nobody talks, all clips, no stills, Seedance 480p one take + local upscale; product never drawn; cost down "even more".
+
+A dramatic first-person story told as a real song (2:30–3:15). The song is made first and the whole cut follows it: every sung line is a silent clip in the swipe's animated style, nobody talks on screen, the product arrives late, rendered in the film's style from the real product photo, and only the end card is the real packshot.
+
+*Rendered from the .json beside this page by `machine/playbook.py` — edit the .json.*
+
+> Which model does what: `../../../generative-model-house/MODEL-HOUSE.md` (the only rule, 2026-10-20). The clip model below is today's default; per-format model choices are ruled there.
+
+## Structural signature
+
+| | |
+|---|---|
+| audio | song |
+| speakers | 0 |
+| address | none |
+| settings | 6 |
+| product_role | insert |
+| pacing | fast |
+| capture | animated |
+| story | narrative |
+
+## What is specialised, and why
+
+- **the song is made and passed before any picture** — the cut is derived from the song's timing; SONG-WRITING.md (the owner 2026-10-10)
+- **song flow: gaps up to 3.5 s, dead air up to 10%, 6 beats a rapped line / 8 a ballad line** — the owner 2026-10-10: the first tight pass sounded rushed — "it needs to actually sound like a song, just efficient"
+- **the product is rendered in the film's style from the real product photo, held by the cast; only the end card is the real packshot** — the owner 2026-10-10: "you shouldn't be using real b-roll for this" — in an animated ad real footage breaks the film. This OVERRIDES the general 'product is never drawn → real footage' route for stylised formats; that route still holds for real-footage / UGC formats
+- **nobody talks; every scene is a silent clip — no stills ever** — attention-first song ads; a held still reads as slop (the owner 2026-10-10)
+- **Seedance 2.5 at 480p, one take, then local Real-ESRGAN upscale** — ~$0.13/s at 480p vs about $0.57/s at 1080p; sloppy B-roll is fine under a song (the owner 2026-10-10)
+- **pictures at high quality on the house picture model (2026-10-21, VIDEO-RULINGS V17 — was medium on the fast tier), made at 9:16, no framing-fix calls** — pictures were $3.5–7/ad of the spend on xhigh 2:3 + zone-fix remakes; the clips are 480p so xhigh detail is thrown away (cost ruling 2026-10-10)
+- **scenes are set-ups, never lyric lines (VIDEO-RULINGS V35): one place and camera set-up per scene, a clear start and stop, the lyric beats played inside it; one start picture per scene, a returning set-up reuses its picture** — one picture per line made 40–57 pictures an ad (and 33 frames on 21 Oct); the owner 2026-10-23: "less frames and more just describing what's in the scene"
+- **recurring cast and sets across stories** — the 10-09/10 runs already re-used banked family-3d people; a new cast per story is wasted spend
+- **hooks are cut from existing clips, never generated** — h-a..h-d were 3 s scroll stoppers from the story's shocking beats, $0 extra
+
+## Stage order
+
+idea (concept or swipe) → picks (awareness → arc → sections) → writing (video-writing → the brief) → brief review (the owner) → song first (production start → song.py) → cast and 3D rooms → scene pictures (board, the owner OKs each) → hand-off (video editor) → clips and the cut (the team) → upscale (bulk) → launch (the owner's click)
+
+## Stage settings
+
+**audio**
+- first: song
+- song_model: suno
+- voice_model: the shared chain's own
+- nobody_talks: off
+- song_how: made by hand in Suno from song.py --suno (model-inputs suno sheet + the style row's suno line); brought back with song.py --from-file through the song gate (the owner, 2026-10-28)
+- sung_on_camera: the singer sings his lines on camera like a musical: each sung scene's slice of the song (song.py sung_reads → vo/<scene>.mp3) is that scene's read, and its clip is a lip-synced talking clip; story shots stay silent over the song (the owner, 2026-10-28)
+
+**song**
+- length_s: 150, 195
+- punch_first: the story's most shocking line sung in the first second — no intro, no humming, no beat-only bar
+- sections: fit (lines × beats_per_line + tail beats at the row's tempo) — never a hand-written number
+- flow: first_word_s: 1.0; max_gap_s: 3.5; dead_air_ratio: 0.1; ignore_tail_s: 4.0; beats_per_line: 6; tail_beats: 1; shrink: 0.85
+- brand_line: said plainly once in the bridge and in the outro tag; a dropped tag is fixed by crossfading an 8 s tag in the same style
+- master_true_peak_dbtp: -1.0
+- loudness_lufs: -14
+- beats_per_line_by_style: story-rap-soul: 6; dramatic-pop-ballad: 8; cinematic-orchestral-ballad: 8
+- sound: it needs to actually sound like a song, just efficient: a melody, a sung hook, fewer syllables per line; short musical breaks are fine (under the 3.5 s gap)
+- flow_why: the owner 2026-10-10 (second pass): max gap 3.5 s, dead air ≤10%, first word ≤1 s; rap 6 beats a line, ballads 8 — "it needs to actually sound like a song, just efficient"
+
+**pictures**
+- door: direct.openai
+- model_key: the shared chain's own
+- quality: high
+- size: 864x1536
+- aspect: 9:16
+- made_at: 9:16 directly at 864x1536 — exact 9:16, both sides divide by 16 (the API takes any such size: tools/image-production/models.json note, 2026-09-22); the clip is 480p so a bigger picture is thrown away
+- fix_calls: off
+- style_lock: the swipe's style row, formula first (family-3d on every run so far)
+- send_size: the shared chain's own
+- start_only: on
+- max_references: 3
+- product: image-to-image from the real product photo, restyled into the swipe's style; shape, colour and label exact
+
+**clips**
+- model: seedance-2.0
+- endpoint: image-to-video
+- resolution: 720p
+- seconds: 4, 4
+- clips_per_picture: 2, 3
+- takes: 1
+- audio: silent
+- upscale: local Real-ESRGAN realesr-animevideov3 x3 to 1080x1920, crf 15
+- stills_allowed: off
+- short_clip: slow to no less than 0.75x, then play the rest in reverse (ping-pong) — never hold a frame
+- send_size: 432x768
+- send_format: jpeg q90, centre-cropped to 9:16
+- prompt_order: action line + style lock FIRST, then motion; nothing else
+- refused_every_try: the same prompt and references to the backup door (VIDEO-RULINGS V21); never the neighbour clip punched in (VIDEO-RULINGS V15)
+- max_tries: 3
+- _seedance: 2026-10-26: every clip is Seedance 2.5 at 480p, one take and three tries at most (VIDEO-RULINGS V34, MODEL-HOUSE.md); a clip is 4 s at the least
+- _model_why: the owner, 2026-10-29: Seedance 2.0 for song ads (generative-model-house clips.song_ad); every other format stays Seedance 2.5
+
+**cast**
+- reuse: banked people and sets in the swipe's style first, across stories
+- recurring: on
+- product: ANIMATED STYLE RULE: the product is rendered IN THE FILM'S STYLE, image-to-image from the real product photo (shape, colour and label kept exact), held by the banked cast and animated like every other scene; only the end card is the real packshot. Real archive footage and studio renders in the body are refused for an animated style.
+
+**hooks**
+- shape: ~3 s scroll stopper cut from the story's most shocking clip, punched in 1.10→1.30x, a lyric line as text + one bank SFX, then into the first sung line
+- count: 4
+- generated: off
+
+**captions**
+- look: lyric lines in the swipe's caption look; the control opens on the first sung line with a headline at 16% from the top
+
+**gates**
+- apply: song line gate, song flow gate, style lock, clip words check (no words on the picture), loudness/true peak, product in the film's style from the real photo (no real footage in the body)
+- skip: voice per speaker, lip-sync / line parity on clips (nobody talks), talking-scene audio slice
+
+**edit**
+- method: video-edit machine cut on the song's clock (renders on python3.14)
+- reuse: second chorus and outro reuse earlier clips whole — never punched in (VIDEO-RULINGS V15)
+- end_card: camera move on the real packshot / studio render — the ONLY real product pixels in an animated song ad
+- garbled_background_text: blur at the edit (gblur sigma 22), never a punch-in past it (VIDEO-RULINGS V15)
+- loudness: -14 LUFS, true peak ≤ -1 dBTP (limit the song first)
+- versions: control + 4 hook versions
+
+**copy**
+- source: AD-SCRIPT.md — the sung lyrics
+- why: the copywriter drifts to the story plot from the brand files otherwise
+
+## Known failures → fixes
+
+- **songs 5½–6 min with 35–90 s dead air; first word 12 s in** → punch line first, sections fit from lines × beats_per_line, every take listened to by song.py flow()  _(from runs/video-production/<brand>/resilia-cheating-<brand> (song/LYRICS-damon.md); stage song)_
+- **brand line / last line dropped or blurred by the music model** → cut before it and crossfade an 8 s tag in the same style  _(from runs/video-production/<brand>/reddit-wrong-size-<brand>; stage song)_
+- **cast made photoreal for an animated swipe** → the teardown names the style row; every element and frame is made in it (family-3d)  _(from runs/video-production/<brand>/resilia-cheating-<brand>; stage elements)_
+- **The clip model 'could not generate' on a full-size PNG start picture** → send the start picture centre-cropped to 9:16 as a 432x768 JPEG q90  _(from runs/video-production/<brand>/reddit-the-fan-<brand>; stage clips)_
+- **The clip model re-framed a 2:3 picture / refused it** → the picture goes in at 9:16; a 9:16 crop passed where the 2:3 was refused  _(from runs/video-production/<brand>/resilia-cheating-<brand> (ledger probe-G01-crop); stage clips)_
+- **clip refusals (prohibited / third-party / safety)** → action line + style lock first; reword the action, never resend the same request; shorten to action + style + motion  _(from runs/video-production/<brand>/resilia-cheating-<brand> (clips/gate-refusals.json); stage clips)_
+- **a clip refused on every try** → the same prompt and references to the backup door (VIDEO-RULINGS V21); never the neighbour clip punched in (VIDEO-RULINGS V15)  _(from runs/video-production/<brand>/reddit-wrong-size-<brand> (S28→S25); stage edit)_
+- **clip shorter than its lyric window filled with a still push-in** → slow to ≥0.75x then reverse (ping-pong); never a still  _(from runs/video-production/<brand>/reddit-it-was-me-<brand>; stage edit)_
+- **garbled background signs and labels** → blur on the start picture, or at the edit (gblur 22) — never a punch-in past it (VIDEO-RULINGS V15)  _(from runs/video-production/<brand>/reddit-it-was-me-<brand> (covered_at_edit); stage edit)_
+- **real brands drawn in pictures (snacks, batteries)** → remade unbranded  _(from runs/video-production/<brand>/reddit-it-was-me-<brand>; stage pictures)_
+- **shower scenes refused by the picture filter** → reword to the sink  _(from runs/video-production/<brand>/reddit-you-imagined-it-<brand> (S37); stage pictures)_
+- **product label misspelt / a stranger drawn into the packshot** → the product is restyled image-to-image from the real product photo with its label kept exact (never drawn from words); end card = camera push on the real packshot  _(from runs/video-production/<brand>/reddit-wrong-size-<brand>; stage edit)_
+- **copywriter cards drifted to the story plot** → name AD-SCRIPT.md (the sung lyrics) as the copy source  _(from runs/video-production/<brand>/reddit-you-imagined-it-<brand> (ad_words); stage copy)_
+- **control and a hook version held at -0.7/-0.8 dBTP** → limit the song first (alimiter 0.6) and master to ≤ -1 dBTP  _(from runs/video-edit/<brand>/reddit-it-was-me-<brand> (deliverable/checks.json); stage edit)_
+- **zone-fix picture remakes unbilled on the ledger and doubling picture calls** → make at 9:16 directly; framing-fix calls off  _(from runs/video-production/<brand>/reddit-it-was-me-<brand> (41 zone-fix rows); stage pictures)_
+- **real archive B-roll / studio renders cut into an animated film** → refused for animated styles — the product is rendered in the film's style from the real photo, held by the banked cast  _(from runs/video-production/<brand>/reddit-it-was-me-<brand> (inserts.json product_rule) — ruled out by the owner 2026-10-10; stage edit)_
+
+## Cost
+
+- target per ad: $10
+- cap_usd_per_ad: the shared chain's own
+- _cap: 2026-10-21 (P40, VIDEO-RULINGS V17: cost is never a reason): no dollar cap stops an ad; three of every element, the best kept.
+- measured: ledger $9.67–16.31 an ad on 8 runs (pictures $3.49–7.02, clips $6.18–10.38) — pictures understated (zone-fix rows unbilled), element sheets ~$2.40–4.70 more, song not on the ledger; ~$18–27 all in
+- how: pictures high on the house picture model at 9:16 (V17, 2026-10-21 — was medium on the fast tier), no fix calls, 2–3 clips per picture (~20 pictures not ~50); clips 3–4 s at 480p (~45 × 3.5 s × $0.13 ≈ $20 for a 2:45 song); cast and sets reused (element sheets ≈ $0); hooks cut from clips ($0)
+
+## Quality bar — not slop
+
+- the first sung word lands inside 1 s and it is the story's punch line
+- no gap over 2 s between sung words; dead air under 5% (song.py flow)
+- every picture in the swipe's style row — no photoreal person in an animated ad
+- every shot moves: no still, no frozen frame, no held last frame
+- no readable garbage text anywhere on screen (blurred, never punched past)
+- no stranger, no merged faces, no real third-party brand in frame
+- every clip sits under the lyric it illustrates
+- master ≤ -1 dBTP at -14 LUFS
+- the brand line is heard plainly once in the bridge and in the outro
+- the product matches the real photo exactly (shape, colour, label) AND is in the film's style — no real footage in the body; the end card is the real packshot
+- it sounds like a song: a melody and a sung hook, not a rushed list of lines
+- the story is real: real cheating, real scandal, real stakes; never a softened version (the owner, 2026-10-28: "I want the cheating to be real")
+- innuendo and sus pushed right up to the edge line (Story Playbook): double meanings, 'pause', near-curses; never over it
+- every scene has one shocking thing a viewer would screenshot
+- it watches like a music video and a movie at once: the singer's performance shots intercut with the story, shot sizes varied (wide, medium, close), every shot staged and lit like film
+- depth in every scene: built from its 3D room with a real lens and light, never a flat backdrop
+- the clip model is used to its limit: camera moves, physical acting, emotion travelling through the shot; never a held pose
+- upscaled to 1080x1920 before launch; nothing ships at the clip model's working resolution
+
+## The workflow — start it by name
+
+The song-ad line, station by station, on the components. Start it by name ('run the song-ad workflow'); every station is a component's own command, and the run stops at every gate for the person named.
+
+`python3 machine/workflow.py status song-ad --label <label> --brand <brand>` says where a run is and what runs next.
+
+- **Door scratch:** Our own story, no swipe: a concept from the research bank (deliverable/CONCEPT-BRIEF.md) goes in with the picks.
+- **Door swipe:** A swipe that already works: video-teardown takes it apart first, and its record replaces the picks' structure.
+
+| # | Station | Component | Does | Signs off |
+|---|---|---|---|---|
+| 1 | The idea | research-gatherer (scratch) · video-teardown (swipe) | A concept from the research bank, or a swipe torn down | damon |
+| 2 | Awareness and arc | marketing-doctrine · creative-controls | The awareness level picks the arc; the arc's beats are the section plan (creative_controls.arcs_for / section_plan) (recorded in the run when scratch.py or the teardown opens it) | damon |
+| 3 | Writing | video-writing | Injection, hooks, script, audit, spice and the brief; dials, spice, culture and the Story Playbook read in | — |
+| 4 | Brief review | the board | the owner reads the brief and OKs it; the production run opens only after his OK, so it is the mark that he did | damon |
+| 5 | Song first (Suno) | video-production song.py (Suno inputs) · suno.com by hand · the song gate | Production start writes song/suno-inputs.json from the brief's song block (model-inputs suno sheet) and waits; the song is made in Suno, then brought in and gated: every line heard in order, the flow listened to, the timing kept for the scenes | damon |
+| 6 | Cast and rooms | casting · objects / 3d | The cast in the film's style (banked first) and a 3D room for every set, so each scene has depth and a lens | — |
+| 7 | Scene pictures | the board (model-inputs · image-production) | One picture per scene from its room, cast and lens; the owner OKs every one | damon |
+| 8 | Hand-off | image-edit/handoff.py (front door) → video-edit | The brief, the song and every approved picture in one folder, here and on the Drive | — |
+| 9 | Clips and the cut | video-production clips · video-edit | the team: every shot of the singer is a lip-synced clip on the song (the singer sings his line, a musical), story shots silent over it; B-roll, effects, the cut under the song | ahmed |
+| 10 | Upscale | local-studio (upscale) | Every finished cut to 1080x1920 in one batch before launch | — |
+| 11 | Launch | ad-review · naming · meta-upload | the owner's review, the names, the approval card; only the owner's click goes live | damon |
+
+## Built from
+
+- runs/video-production/<brand>/resilia-cheating-<brand>
+- runs/video-production/<brand>/reddit-wrong-size-<brand>
+- runs/video-production/<brand>/reddit-it-was-me-<brand>
+- runs/video-production/<brand>/reddit-you-imagined-it-<brand>
+- runs/video-production/<brand>/reddit-on-principle-<brand>
+- runs/video-production/<brand>/resilia-cheating-<brand>
+- runs/video-production/<brand>/reddit-the-fan-<brand>
+- runs/video-production/<brand>/reddit-two-more-years-<brand>
+- runs/video-edit/<brand>/* and runs/video-edit/<brand>/* (the matching edits + -h-* hook versions)
+
+## Rulings behind it
+
+- the owner 2026-10-10 (SONG-WRITING.md): "the opening line needs to start with the punch … these songs need to be shorter … the songs need to flow"
+- the owner 2026-10-09 (THE-CHAIN.md): "the creative format itself is supposed to look like Pixar" — the swipe's style is the lock
+- the owner 2026-10-10 (memory: song ads all clips, cheap): no stills ever; Seedance 480p + local upscale; sloppy B-roll is fine
+- the owner 2026-10-10 (attention-first song ads): no voiceover, silent scenes follow the sung story
+- the owner 2026-10-09/10 (CLAUDE.md, product never drawn): "all this slop stuff is gone … so we can print ads"
+- the owner 2026-10-10: "how can we get our cost down even more" — the cost defaults above
+- the owner 2026-10-10: "we cannot have AI slop" — the quality bar
+- the owner 2026-10-10: "you shouldn't be using real b-roll for this" — animated formats render the product in the film's style from the real photo; only the end card is real
+- the owner 2026-10-10: "it needs to actually sound like a song, just efficient" — max gap 3.5 s, dead air ≤10%, rap 6 / ballad 8 beats a line

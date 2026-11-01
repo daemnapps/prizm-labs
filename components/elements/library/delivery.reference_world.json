@@ -1,0 +1,122 @@
+{
+ "element": "delivery",
+ "asset": "reference_world",
+ "source": "components/marketing-doctrine/delivery.json › reference_world",
+ "enforced_by": "the copywriter and the video teardown read it; nothing refuses an unknown value",
+ "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
+ "rows": [
+  {
+   "id": "laugh-at",
+   "name": "laugh-at",
+   "what": "The comedians, creators and formats this room actually laughs at.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › reference_world",
+   "extra": {
+    "when": "Read for TIMING and CADENCE — where the beat sits, how long the pause runs, how the joke is set up. Used to set the humor dial, never to write a line."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "trust",
+   "name": "trust",
+   "what": "The creators, experts and peers this room believes when it believes anyone.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › reference_world",
+   "extra": {
+    "when": "Read for the SHAPE of trusted delivery — how they open, whether they hedge, whether they show or tell. Used to set the delivery style."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "watch",
+   "name": "watch",
+   "what": "The shows, channels and content formats this room watches without being sold to.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › reference_world",
+   "extra": {
+    "when": "Read for FORMAT — the host medium the piece has to stop looking like an ad inside."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "quote",
+   "name": "quote",
+   "what": "The lines, catchphrases and running jokes this room repeats to each other.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › reference_world",
+   "extra": {
+    "when": "Read for register and in-words — what the room sounds like when it is talking to itself."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "look",
+   "name": "look",
+   "what": "The visual world: wardrobe, setting, the objects around, the actual state of the room.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › reference_world",
+   "extra": {
+    "when": "Read for WHAT IS IN FRAME — styling, location, props."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "sound",
+   "name": "sound",
+   "what": "The sound world: what is playing, what the room sounds like, what a person there would have on in the background.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › reference_world",
+   "extra": {
+    "when": "Read for the bed, the room tone and what the piece must NOT sound like."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

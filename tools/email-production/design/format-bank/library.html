@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<script src="./image-slot.js"></script>
+<script src="./module-fixes.js"></script>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  body { margin: 0; background: rgb(46,46,46); }
+  a { color: rgb(199,207,173); } a:hover { color: rgb(242,246,234); }
+</style>
+</helmet>
+<div style="font-family: 'Untitled Sans', -apple-system, 'Helvetica Neue', Arial, sans-serif; color: rgb(242,246,234); padding: 60px 70px 140px;">
+  <div style="display: flex; flex-direction: column; gap: 12px; max-width: 980px;">
+    <div style="font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: rgb(199,207,173);"><brand> · design system for email</div>
+    <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 64px; line-height: 0.95;">Format Library</div>
+    <div style="font-size: 19px; line-height: 1.45; color: rgba(242,246,234,0.65);">The recurring layouts from a year of approved sends, deduped and rebuilt as clean, reusable 600px templates. Every text block is editable in place; dashed frames are drop-in image slots, prefilled here with the store's own product and lifestyle photos so the formats read as real. Reference formats by code (FMT-xx) in briefs. Source boards live in the <a href="<brand>%20Email%20Format%20Bank.dc.html">Format Bank</a>.</div>
+  </div>
+  <div style="margin-top: 64px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242,246,234,0.5);">Email formats</div>
+    <div style="display: flex; gap: 56px; align-items: flex-start;">
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-01">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-01 · HERO ANNOUNCEMENT (DARK)</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <div style="position: absolute; left: -220px; top: 320px; width: 700px; height: 700px; opacity: 0.28; border-radius: 50%; background: radial-gradient(350px 350px at 50% 50%, rgb(187,199,158) 0%, rgba(187,199,158,0.3) 59%, rgba(187,199,158,0) 100%); pointer-events: none;"></div>
+          <img src="assets/<brand>.svg" alt="<brand>" style="width: 120px; margin: 50px 0 0; filter: invert(1) brightness(2);">
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 64px; line-height: 1; text-align: center; color: rgb(242,246,234); margin-top: 56px; width: 500px;">Something Big Is Coming</div>
+          <div style="font-size: 24px; font-weight: 500; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 480px; margin-top: 28px;">One line of setup copy that frames the announcement and earns the first click.</div>
+          <div style="width: 450px; margin-top: 32px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 20px 0;">Primary CTA</div>
+          <div style="width: 440px; height: 420px; margin-top: 48px; position: relative;">
+            <image-slot id="fmt01-product" shape="rect" placeholder="Product / hero shot" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/FLEX_1_-min.jpg?v=1776377750"></image-slot>
+          </div>
+          <div style="font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 480px; margin-top: 44px;">Two to three sentences of body copy. State the promise plainly, then get out of the way.</div>
+          <div style="width: 450px; margin-top: 36px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 20px 0;">Repeat CTA</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-02">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-02 · BENEFITS STACK (GLASS ROWS)</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <div style="position: absolute; right: -260px; top: 120px; width: 640px; height: 640px; opacity: 0.24; border-radius: 50%; background: radial-gradient(320px 320px at 50% 50%, rgb(187,199,158) 0%, rgba(187,199,158,0) 100%); pointer-events: none;"></div>
+          <img src="assets/<brand>.svg" alt="<brand>" style="width: 120px; margin: 50px 0 0; filter: invert(1) brightness(2);">
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-style: italic; font-size: 60px; line-height: 1; text-align: center; color: rgb(242,246,234); margin-top: 52px; width: 500px;">What You Unlock</div>
+          <div style="font-size: 24px; font-weight: 500; line-height: 1.25; text-align: center; color: rgb(242,246,234); width: 460px; margin-top: 26px;">Short intro that frames the list. Here is what you now have access to.</div>
+          <div style="display: flex; flex-direction: column; gap: 22px; margin-top: 40px;">
+            <div style="width: 500px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3); display: flex; align-items: center; gap: 22px; padding: 26px 28px; box-sizing: border-box;">
+              <div style="width: 61px; height: 61px; border-radius: 50%; background: rgb(199,207,173); flex-shrink: 0;"></div>
+              <div style="font-size: 24px; font-weight: 500; line-height: 1.2; color: rgb(242,246,234);">Locked in pricing<br>Your rate stays protected. No surprises.</div>
+            </div>
+            <div style="width: 500px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3); display: flex; align-items: center; gap: 22px; padding: 26px 28px; box-sizing: border-box;">
+              <div style="width: 61px; height: 61px; border-radius: 50%; background: rgb(199,207,173); flex-shrink: 0;"></div>
+              <div style="font-size: 24px; font-weight: 500; line-height: 1.2; color: rgb(242,246,234);">First access<br>New releases reach you before anyone else.</div>
+            </div>
+            <div style="width: 500px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3); display: flex; align-items: center; gap: 22px; padding: 26px 28px; box-sizing: border-box;">
+              <div style="width: 61px; height: 61px; border-radius: 50%; background: rgb(199,207,173); flex-shrink: 0;"></div>
+              <div style="font-size: 24px; font-weight: 500; line-height: 1.2; color: rgb(242,246,234);">Priority fulfillment<br>When inventory tightens, your order is secured.</div>
+            </div>
+          </div>
+          <div style="font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 480px; margin-top: 40px;">Everything is adjustable. You stay in control.</div>
+          <div style="width: 450px; margin-top: 32px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 20px 0;">Access Your Portal</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-03">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-03 · BIG TYPE + ROUTINE STEPS</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <img src="assets/<brand>.svg" alt="<brand>" style="width: 120px; margin: 50px 0 0; filter: invert(1) brightness(2);">
+          <div style="font-size: 44px; letter-spacing: 0.12em; line-height: 1.1; text-align: center; color: rgb(242,246,234); text-transform: uppercase; margin-top: 44px;">Your Skincare<br>Routine,</div>
+          <div style="position: relative; width: 600px; margin-top: 18px;">
+            <div style="position: absolute; inset: 0; opacity: 0.2; background: linear-gradient(90deg, rgba(12,16,15,0) 0%, rgb(242,246,234) 50%, rgba(12,16,15,0) 100%);"></div>
+            <div style="position: relative; font-size: 86px; font-weight: 500; line-height: 1.2; text-align: center; color: rgb(199,207,173); text-transform: uppercase;">Simplified</div>
+          </div>
+          <div style="font-size: 24px; font-weight: 500; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 495px; margin-top: 30px;">Works best when used consistently. Here is the simple, effective routine.</div>
+          <div style="position: relative; width: 540px; margin-top: 44px; height: 480px;">
+            <div style="position: absolute; left: 70px; top: 0; width: 440px; height: 220px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3);"></div>
+            <div style="position: absolute; left: 0; top: 40px; width: 140px; height: 140px; border-radius: 50%; background: rgb(199,207,173); display: flex; align-items: center; justify-content: center; font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 56px; color: rgb(6,43,20);">1</div>
+            <div style="position: absolute; left: 170px; top: 58px; width: 320px; font-size: 32px; font-weight: 500; line-height: 1.1; text-align: center; color: rgb(242,246,234);">Cleanse with<br>WAR&trade; Face Wash</div>
+            <div style="position: absolute; left: 170px; top: 148px; width: 320px; font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234);">Start fresh every day.</div>
+            <div style="position: absolute; left: 30px; top: 260px; width: 440px; height: 220px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3);"></div>
+            <div style="position: absolute; right: 0; top: 300px; width: 140px; height: 140px; border-radius: 50%; background: rgb(199,207,173); display: flex; align-items: center; justify-content: center; font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 56px; color: rgb(6,43,20);">2</div>
+            <div style="position: absolute; left: 50px; top: 318px; width: 330px; font-size: 32px; font-weight: 500; line-height: 1.1; text-align: center; color: rgb(242,246,234);">Exfoliate with<br>FLEX&trade; Face Brush</div>
+            <div style="position: absolute; left: 50px; top: 408px; width: 330px; font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234);">Remove dirt and dead skin.</div>
+          </div>
+          <div style="font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 400px; margin-top: 40px;">Built for men who want clarity, not clutter.</div>
+          <div style="width: 450px; margin-top: 32px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 20px 0;">View Your Guide</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-04">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-04 · SOCIAL PROOF (COLLAGE + QUOTES)</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <img src="assets/<brand>.svg" alt="<brand>" style="width: 120px; margin: 50px 0 0; filter: invert(1) brightness(2);">
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-style: italic; font-size: 64px; line-height: 1; text-align: center; color: rgb(242,246,234); margin-top: 52px; width: 500px;">Transformed Their Skin</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 165px); grid-auto-rows: 180px; gap: 12px; margin-top: 40px;">
+            <div style="position: relative;"><image-slot id="fmt04-p1" shape="rounded" radius="16" placeholder="Customer 1" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/PRIMEonFace2_1x1-min.jpg?v=1754598200"></image-slot></div>
+            <div style="position: relative;"><image-slot id="fmt04-p2" shape="rounded" radius="16" placeholder="Customer 2" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/WARinHand_1x1-min.jpg?v=1754598114"></image-slot></div>
+            <div style="position: relative;"><image-slot id="fmt04-p3" shape="rounded" radius="16" placeholder="Customer 3" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/PRIMEinHand_1x1-min_1.jpg?v=1754598200"></image-slot></div>
+            <div style="position: relative;"><image-slot id="fmt04-p4" shape="rounded" radius="16" placeholder="Customer 4" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/WARSqueezeFLEX_1x1-min.jpg?v=1754598114"></image-slot></div>
+            <div style="position: relative;"><image-slot id="fmt04-p5" shape="rounded" radius="16" placeholder="Customer 5" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/Damon_BnA_2019-2022_1x1-min_1.jpg"></image-slot></div>
+            <div style="position: relative;"><image-slot id="fmt04-p6" shape="rounded" radius="16" placeholder="Customer 6" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/TheVitalsSetFLEXTouch_1x1-min_1621babe-88d5-47db-b27c-f849117a8da0.jpg?v=1754598200"></image-slot></div>
+          </div>
+          <div style="font-size: 24px; font-weight: 500; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 460px; margin-top: 40px;">Here's what real Kings are saying:</div>
+          <div style="display: flex; flex-direction: column; gap: 26px; margin-top: 30px; width: 520px;">
+            <div style="position: relative; align-self: flex-start; width: 400px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3); padding: 30px 28px 34px; box-sizing: border-box;">
+              <div style="font-size: 24px; line-height: 1.2; color: rgb(242,246,234);">"From the first day, my face became much smoother and softer."</div>
+              <svg width="60" height="43" viewBox="0 0 60 42.542" style="position: absolute; right: -18px; bottom: -14px;" fill="rgb(199,207,173)"><path d="M 5.254 16.61 L 5.254 0 L 23.729 0 L 23.729 18.814 C 23.729 32.881 15.254 42.542 0 42.542 L 0 34.068 C 8.644 34.068 13.898 30 13.898 18.983 L 13.898 16.61 L 5.254 16.61 Z M 41.525 16.61 L 41.525 0 L 60 0 L 60 18.814 C 60 32.881 51.525 42.542 36.271 42.542 L 36.271 34.068 C 44.915 34.068 50.169 30 50.169 18.983 L 50.169 16.61 L 41.525 16.61 Z" fill-rule="nonzero"></path></svg>
+            </div>
+            <div style="position: relative; align-self: flex-end; width: 400px; border-radius: 20px; background: linear-gradient(270deg, rgba(12,16,15,0.5) 0%, rgba(199,207,173,0.3) 100%); box-shadow: inset 0 0 0 1px rgba(242,246,234,0.3); padding: 30px 28px 34px; box-sizing: border-box;">
+              <div style="font-size: 24px; line-height: 1.2; color: rgb(242,246,234);">"I stopped guessing and started seeing results."</div>
+              <svg width="60" height="43" viewBox="0 0 60 42.542" style="position: absolute; right: -18px; bottom: -14px;" fill="rgb(199,207,173)"><path d="M 5.254 16.61 L 5.254 0 L 23.729 0 L 23.729 18.814 C 23.729 32.881 15.254 42.542 0 42.542 L 0 34.068 C 8.644 34.068 13.898 30 13.898 18.983 L 13.898 16.61 L 5.254 16.61 Z M 41.525 16.61 L 41.525 0 L 60 0 L 60 18.814 C 60 32.881 51.525 42.542 36.271 42.542 L 36.271 34.068 C 44.915 34.068 50.169 30 50.169 18.983 L 50.169 16.61 L 41.525 16.61 Z" fill-rule="nonzero"></path></svg>
+            </div>
+          </div>
+          <div style="font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 420px; margin-top: 40px;">Be the next King to experience it.</div>
+          <div style="width: 450px; margin-top: 30px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 20px 0;">Start Your Transformation</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-05">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-05 · OFFER COUNTDOWN (GIANT TYPE)</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <div style="position: absolute; left: 180px; top: 420px; width: 720px; height: 720px; opacity: 0.3; border-radius: 50%; background: radial-gradient(360px 360px at 50% 50%, rgb(187,199,158) 0%, rgba(187,199,158,0) 100%); pointer-events: none;"></div>
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 50px; line-height: 1; text-align: center; color: rgb(199,207,173); margin-top: 90px;">This Exclusive Offer</div>
+          <div style="font-size: 138px; font-weight: 500; letter-spacing: 0.04em; line-height: 0.9; text-align: center; color: rgb(242,246,234); text-transform: uppercase; margin-top: 22px;">Ends<br>Soon</div>
+          <div style="font-size: 24px; font-weight: 500; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 440px; margin-top: 34px;">Your free gift is waiting. Included with your order while supplies last.</div>
+          <div style="width: 420px; height: 430px; margin-top: 40px; position: relative;">
+            <image-slot id="fmt05-product" shape="rect" placeholder="Offer product shot" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/TheKingSet_Updated_1x1-min.jpg?v=1756256541"></image-slot>
+          </div>
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-style: italic; font-size: 54px; line-height: 1.1; text-align: center; color: rgb(242,246,234); margin-top: 44px;">What's included:</div>
+          <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 30px; width: 390px;">
+            <div style="display: flex; gap: 18px; align-items: flex-start;">
+              <svg width="33" height="26" viewBox="0 0 33.151 26" style="flex-shrink: 0; margin-top: 3px;" fill="rgb(199,207,173)"><path d="M 0 14.948 L 3.904 11.044 L 11.055 18.192 L 29.247 0 L 33.151 3.904 L 11.052 26 L 0 14.948 Z" fill-rule="nonzero"></path></svg>
+              <div style="font-size: 24px; line-height: 1.2; color: rgb(242,246,234);">FLEX&trade; Face Brush</div>
+            </div>
+            <div style="display: flex; gap: 18px; align-items: flex-start;">
+              <svg width="33" height="26" viewBox="0 0 33.151 26" style="flex-shrink: 0; margin-top: 3px;" fill="rgb(199,207,173)"><path d="M 0 14.948 L 3.904 11.044 L 11.055 18.192 L 29.247 0 L 33.151 3.904 L 11.052 26 L 0 14.948 Z" fill-rule="nonzero"></path></svg>
+              <div style="font-size: 24px; line-height: 1.2; color: rgb(242,246,234);">Free WAR&trade; Face Wash</div>
+            </div>
+            <div style="display: flex; gap: 18px; align-items: flex-start;">
+              <svg width="33" height="26" viewBox="0 0 33.151 26" style="flex-shrink: 0; margin-top: 3px;" fill="rgb(199,207,173)"><path d="M 0 14.948 L 3.904 11.044 L 11.055 18.192 L 29.247 0 L 33.151 3.904 L 11.052 26 L 0 14.948 Z" fill-rule="nonzero"></path></svg>
+              <div style="font-size: 24px; line-height: 1.2; color: rgb(242,246,234);">90-Day Level-Up Guarantee</div>
+            </div>
+          </div>
+          <div style="width: 450px; margin-top: 44px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 22px 0;">Claim It Now</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-06">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-06 · RESULTS TIMELINE</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <img src="assets/<brand>.svg" alt="<brand>" style="width: 120px; margin: 50px 0 0; filter: invert(1) brightness(2);">
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 54px; line-height: 1.1; text-align: center; color: rgb(242,246,234); margin-top: 52px;">Why consistency<br>matters:</div>
+          <div style="width: 500px; margin-top: 40px; border-radius: 30px; background: linear-gradient(-34deg, rgba(242,246,234,0) 0%, rgba(242,246,234,0.2) 100%); padding: 44px 40px; box-sizing: border-box; display: flex; flex-direction: column;">
+            <div style="display: flex; gap: 22px; align-items: flex-start;">
+              <svg width="30" height="29" viewBox="0 0 30 29.168" style="flex-shrink: 0; margin-top: 6px;" fill="rgb(199,207,173)"><path d="M 22.822 12.709 L 12.764 2.652 L 15.416 0 L 30 14.584 L 15.416 29.168 L 12.764 26.516 L 22.822 16.459 L 0 16.459 L 0 12.709 L 22.822 12.709 Z" fill-rule="nonzero"></path></svg>
+              <div style="font-size: 24px; font-weight: 500; line-height: 1.2; color: rgb(242,246,234);">30 Days<br><span style="font-weight: 400;">Noticeable reduction in bumps and irritation.</span></div>
+            </div>
+            <div style="height: 1px; background: rgba(242,246,234,0.2); margin: 30px 0;"></div>
+            <div style="display: flex; gap: 22px; align-items: flex-start;">
+              <svg width="30" height="29" viewBox="0 0 30 29.168" style="flex-shrink: 0; margin-top: 6px;" fill="rgb(199,207,173)"><path d="M 22.822 12.709 L 12.764 2.652 L 15.416 0 L 30 14.584 L 15.416 29.168 L 12.764 26.516 L 22.822 16.459 L 0 16.459 L 0 12.709 L 22.822 12.709 Z" fill-rule="nonzero"></path></svg>
+              <div style="font-size: 24px; font-weight: 500; line-height: 1.2; color: rgb(242,246,234);">90 Days<br><span style="font-weight: 400;">Visibly smoother, healthier skin.</span></div>
+            </div>
+            <div style="height: 1px; background: rgba(242,246,234,0.2); margin: 30px 0;"></div>
+            <div style="display: flex; gap: 22px; align-items: flex-start;">
+              <svg width="30" height="29" viewBox="0 0 30 29.168" style="flex-shrink: 0; margin-top: 6px;" fill="rgb(199,207,173)"><path d="M 22.822 12.709 L 12.764 2.652 L 15.416 0 L 30 14.584 L 15.416 29.168 L 12.764 26.516 L 22.822 16.459 L 0 16.459 L 0 12.709 L 22.822 12.709 Z" fill-rule="nonzero"></path></svg>
+              <div style="font-size: 24px; font-weight: 500; line-height: 1.2; color: rgb(242,246,234);">6 Months<br><span style="font-weight: 400;">The difference shows everywhere.</span></div>
+            </div>
+          </div>
+          <div style="font-size: 24px; line-height: 1.2; text-align: center; color: rgb(242,246,234); width: 460px; margin-top: 40px;">Your journey starts here, King.</div>
+          <div style="width: 450px; margin-top: 32px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 22px 0;">Start Today</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-07">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-07 · LIGHT EDITORIAL (CREAM)</div>
+        <div style="width: 600px; background: rgb(242,246,234); overflow: hidden; display: flex; flex-direction: column; align-items: center; padding: 0 0 60px;">
+          <img src="assets/<brand>.svg" alt="<brand>" style="width: 120px; margin: 50px 0 0;">
+          <div style="font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 58px; line-height: 1; text-align: center; color: rgb(6,43,20); margin-top: 54px; width: 480px;">A Calmer Kind of Sell</div>
+          <div style="font-size: 24px; line-height: 1.3; text-align: center; color: rgb(6,43,20); width: 470px; margin-top: 28px;">Editorial format for education, founder notes, and myth-busting. Long-form copy reads comfortably on cream.</div>
+          <div style="width: 480px; height: 380px; margin-top: 40px; position: relative;">
+            <image-slot id="fmt07-photo" shape="rounded" radius="20" placeholder="Lifestyle / product photo" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/PRIMEonFace_1x1-min.jpg?v=1754598200"></image-slot>
+          </div>
+          <div style="font-size: 24px; line-height: 1.3; text-align: center; color: rgb(6,43,20); width: 470px; margin-top: 40px;">Body copy continues here. Keep paragraphs short. One idea per block, one link per idea.</div>
+          <div style="width: 450px; margin-top: 40px; background: rgb(6,43,20); color: rgb(242,246,234); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 22px 0;">Read The Full Story</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;" data-screen-label="FMT-08">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">FMT-08 · FULL-BLEED LIFESTYLE HERO</div>
+        <div style="width: 600px; background: rgb(12,16,15); overflow: hidden; display: flex; flex-direction: column;">
+          <div style="position: relative; width: 600px; height: 760px;">
+            <image-slot id="fmt08-hero" shape="rect" placeholder="Full-bleed lifestyle photo" src="https://cdn.shopify.com/s/files/1/0412/2804/2399/files/wModel1_1x1-min_69f70f49-53a0-4d47-bb38-a377aebacd29.jpg?v=1754598114"></image-slot>
+            <div style="position: absolute; left: 0; right: 0; top: 0; height: 220px; background: linear-gradient(rgba(12,16,15,0.75), rgba(12,16,15,0)); pointer-events: none;"></div>
+            <img src="assets/<brand>.svg" alt="<brand>" style="position: absolute; left: 240px; top: 46px; width: 120px; filter: invert(1) brightness(2); pointer-events: none;">
+            <div style="position: absolute; left: 50px; top: 110px; width: 500px; font-family: 'GT Super Ds Trial', Georgia, serif; font-size: 60px; line-height: 1; text-align: center; color: rgb(242,246,234); pointer-events: none;">Earned Confidence</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; padding: 44px 0 60px;">
+            <div style="font-size: 24px; line-height: 1.25; text-align: center; color: rgb(242,246,234); width: 470px;">One short block under the photo carries the message. The image does the selling.</div>
+            <div style="width: 450px; margin-top: 34px; background: rgb(199,207,173); color: rgb(0,0,0); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; text-transform: uppercase; text-align: center; padding: 22px 0;">Shop The System</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div style="margin-top: 90px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242,246,234,0.5);">Shared modules — from the Figma component library</div>
+    <div style="display: flex; gap: 56px; align-items: flex-start; flex-wrap: wrap;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">MOD-01 · PREHEADER + HEADER</div>
+        <div style="width: 600px; background: rgb(12,16,15);">
+          <x-import component-from-global-scope="PreheaderHeader" from="./components/Components.bundle.js" hint-size="600px,160px"></x-import>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">MOD-02 · NAV</div>
+        <div style="width: 600px; background: rgb(12,16,15);">
+          <x-import component-from-global-scope="Nav" from="./components/Components.bundle.js" hint-size="600px,80px"></x-import>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">MOD-03 · FOOTER</div>
+        <div style="width: 600px; background: rgb(12,16,15);">
+          <x-import component-from-global-scope="Footer" from="./components/Components.bundle.js" hint-size="600px,400px"></x-import>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="align-self: flex-start; background: rgb(199,207,173); color: rgb(6,43,20); font-weight: 500; font-size: 15px; padding: 8px 14px; letter-spacing: 0.05em;">MOD-04 · CTA + LINK CTAS</div>
+        <div style="width: 600px; background: rgb(12,16,15); display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 40px 0;">
+          <x-import component-from-global-scope="CTA" from="./components/Components.bundle.js" hint-size="450px,62px"></x-import>
+          <x-import component-from-global-scope="Component1" from="./components/Components.bundle.js" hint-size="450px,62px"></x-import>
+          <x-import component-from-global-scope="LinkCTA1" from="./components/Components.bundle.js" hint-size="120px,30px"></x-import>
+          <x-import component-from-global-scope="LinkCTA2" from="./components/Components.bundle.js" hint-size="120px,30px"></x-import>
+          <x-import component-from-global-scope="LinkCTA3" from="./components/Components.bundle.js" hint-size="120px,30px"></x-import>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

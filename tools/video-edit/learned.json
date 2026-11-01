@@ -1,0 +1,80 @@
+{
+ "_what": "What the owner has taught the cut. The cut prompt reads `rules` as {learned}, and they outrank its own rules. A rule is here because he SAID it as a rule, or because the same change was seen twice (prompts/stage-9-learn). `observations` are single changes — kept, not yet binding.",
+ "rules": [
+  {
+   "id": "headline-on-frame-one",
+   "rule": "When there is a hook headline, it is on screen from the very first frame. It never fades or slides in.",
+   "scope": "every edit",
+   "his_words": "Whenever you have the hook-headline combo going on, that headline should begin at the beginning as well. Don't have it fade in; it should be at the start.",
+   "at": "2026-09-20"
+  },
+  {
+   "id": "talking-a-roll-keeps-its-lips",
+   "rule": "Never rebuild or re-voice talking A-roll in the edit. It is already good; the edit only puts B-roll on top of it, with its own sound kept so the lips match.",
+   "scope": "every edit",
+   "his_words": "you didn't even regenerate the A-roll. It was already good. It was just more about putting B-roll on top of it.",
+   "at": "2026-09-20"
+  },
+  {
+   "id": "words-off-faces-and-stuff",
+   "rule": "The hook headline and the captions never cover a face, a chin, lips or hands. The caption look is picked by format (else the app the piece pretends to be made in) and holds its own height — low in the frame by default, at the neck for edits-glow — moving only off a face or mouth read in the picture. The headline sits above the subject; the captions stay off while it is up. Same rule the thumbnails follow. (Updated 2026-10-21 against V13 and the 2026-10-12 two-places rule.)",
+   "scope": "every edit",
+   "his_words": "The scroll stopper and opening scenes that you have on these song ads are covering up people's faces and stuff. You're not really thinking through how it needs to be designed like we did with the other ones.",
+   "at": "2026-10-11"
+  },
+  {
+   "id": "no-blur-patches",
+   "rule": "No blur patches in a shot, ever. Garbled writing in a picture gets punched in past or the picture is remade without writing.",
+   "scope": "every edit",
+   "his_words": "We need to remove those blurs, I don't know what that is.",
+   "at": "2026-10-11"
+  },
+  {
+   "id": "mouths-never-covered",
+   "rule": "A caption never sits on a face or a mouth, checked on the finished frame. The caption look matches the app the piece pretends to be made in, down to font and motion.",
+   "scope": "every edit",
+   "his_words": "It can never look like it's being edited off of the phone · you need awareness of the subject to ensure their mouths are never covered",
+   "at": "2026-10-20"
+  },
+  {
+   "id": "not-mechanical",
+   "rule": "Cut between shots, never mid-breath. No zoom-ins or punch-ins the swipe does not have; calm cutaways. The edit cuts, it does not repair.",
+   "scope": "every edit",
+   "his_words": "I don't want it to look mechanical at all",
+   "at": "2026-10-20"
+  },
+  {
+   "id": "sound-only-when-called",
+   "rule": "Music, sound effects and room tone only when the swipe or the brief calls for them. Never assumed.",
+   "scope": "every edit",
+   "his_words": "Music and sound effects are only relevant if that's what's being called for … don't just assume",
+   "at": "2026-10-20"
+  },
+  {
+   "id": "audit-every-cut",
+   "rule": "Every cut is audited before anyone watches it: every word whole, lips on every word, sync on every talking shot, words off every face and mouth.",
+   "scope": "every edit",
+   "his_words": "check every single frame for lip and sound",
+   "at": "2026-10-20"
+  }
+ ],
+ "observations": [
+  {
+   "id": "scroll-stopper-is-the-opening-clause",
+   "saw": "On the pigment hook he wanted the scroll stopper to run the length of the opening hook line — about four seconds — then cut to the rest of the A-roll, with a second B-roll over 'is why the sunscreen hasn't worked'. The model's first cut ran the stopper over the whole sentence and dropped the second clip.",
+   "points_to": "The scroll stopper covers the opening clause of the hook, not the whole sentence, and leaves room for the next B-roll.",
+   "scope": "this format",
+   "seen": 1,
+   "at": "2026-09-20"
+  },
+  {
+   "id": "headline-and-the-face",
+   "saw": "He flagged that the headline has no safe zone against where her face sits in the frame. To be talked through later.",
+   "points_to": "Text placement should know where the face is.",
+   "scope": "open question",
+   "seen": 1,
+   "at": "2026-09-20",
+   "settled": "2026-10-11 → rule words-off-faces-and-stuff"
+  }
+ ]
+}

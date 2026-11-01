@@ -1,0 +1,297 @@
+{
+ "model": "higgsfield-object-swap",
+ "medium": "video",
+ "_readme": [
+  "Genjutsu object swap (Higgsfield `hf_mult_replace_object`): put OUR cast or product into the swipe's own shot, keeping its motion. It is the FALLBACK for a swipe ad, behind motion control.",
+  "Rewritten 2026-10-27: the old 'never the master alone / send the whole sheet' rule is replaced by the baseline rule (the owner, 2026-10-27), and the finding that a swap replaces and never adds is kept. Maker documentation is thin; the rows that rest on our findings say so.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "Genjutsu object swap",
+ "registry_id": "higgsfield-object-swap",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_model_id": "hf_mult_replace_object",
+  "path": "higgsfield/genjutsu/object-swap/v1.0 (the one path proven on our door)",
+  "lite": "hf_mult_replace_object_flash (Genjutsu Lite, Kling 4.0 based, 720p or 1080p)"
+ },
+ "sources": [
+  "https://higgsfield.ai/blog/higgsfield-genjutsu",
+  "https://app.therundown.ai/guides/swap-the-product-and-keep-the-performance-with-higgsfield",
+  "[vendor, live] Higgsfield connector model list (models_explore get), read 2026-10-26",
+  "[ours] tools/video-production/SHOT-ROUTES.md",
+  "[ours] tools/video-production/CLAUDE.md 'A swap is the whole character'",
+  "[ours] tools/video-production/VIDEO-RULINGS.md V38 to V41",
+  "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+ ],
+ "limits": {
+  "duration_seconds": [
+   4,
+   30
+  ],
+  "max_images": 8,
+  "max_videos": 1,
+  "resolutions": [
+   "480p",
+   "720p",
+   "1080p"
+  ],
+  "min_shot_seconds": "a clean shot of at least about 2 s with no cut inside (ours); the model's minimum is 4 s, a shorter shot is played forward-back-forward to reach it and trimmed (ours, 18 Oct)",
+  "price_per_second_usd": "from 0.159 (list 0.318) at Genjutsu; about 8.3 credits a second measured at 1080p (ours)",
+  "maker_documentation": "Higgsfield publishes no step-by-step page for Object Swap; its blog describes the mode and a third-party guide tested it. Limits above the vendor's list are OURS, measured.",
+  "house": {
+   "resolution": "480p, upscaled locally (the house size)",
+   "per_shot": "one swap per shot, never one pass over a clip with cuts",
+   "person": "a cast member's BASELINE (headshot, look, details, expressions), never the master (the owner, 2026-10-27; replaces the earlier 'send the whole sheet' line)"
+  },
+  "never_send_stems": [
+   "master"
+  ],
+  "min_video_seconds": 4,
+  "image_formats": [
+   "jpg",
+   "jpeg",
+   "png",
+   "webp"
+  ]
+ },
+ "qualities": [
+  "480p",
+  "720p",
+  "1080p",
+  "lite 720p",
+  "lite 1080p"
+ ],
+ "inputs": [
+  {
+   "name": "video_references",
+   "what": "The swipe's own shot to take the motion and the scene from.",
+   "allowed": "one video, a clean single shot, model minimum 4 s",
+   "we_send": "one shot cut on the frame map's boundaries",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/blog/higgsfield-genjutsu",
+    "[ours] tools/video-production/SHOT-ROUTES.md"
+   ]
+  },
+  {
+   "name": "image_references",
+   "what": "What goes in: the cast member's BASELINE pictures (headshot, look, details, expressions), or the product photo.",
+   "allowed": "several pictures",
+   "we_send": "the baseline pictures that fit the shot (headshot and look at least); never the master alone and never the master as the person",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "components/model-inputs/VIDEO-PATH-damon.md",
+    "[ours] tools/video-production/machine/cast_swap.py"
+   ]
+  },
+  {
+   "name": "prompt",
+   "what": "The standard swap words: who is replaced by whom, the before or after state, every accessory to remove.",
+   "allowed": "text; the maker says presets can do the job with no prompt",
+   "we_send": "the standard prompt (cast_swap.py prompt --state before|after)",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/blog/higgsfield-genjutsu",
+    "[ours] tools/video-production/CLAUDE.md"
+   ]
+  },
+  {
+   "name": "resolution",
+   "what": "Output size.",
+   "allowed": "480p, 720p, 1080p",
+   "we_send": "480p",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "[vendor, live] Higgsfield connector model list"
+   ]
+  },
+  {
+   "name": "preset",
+   "what": "A ready swap recipe (person, outfit, product).",
+   "allowed": "Higgsfield presets",
+   "we_send": "not used: the standard prompt is ours",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/blog/higgsfield-genjutsu"
+   ]
+  },
+  {
+   "name": "target element",
+   "what": "Which single thing is replaced.",
+   "allowed": "named in the prompt: one subject, outfit or product",
+   "we_send": "one subject per run",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/blog/higgsfield-genjutsu",
+    "https://app.therundown.ai/guides/swap-the-product-and-keep-the-performance-with-higgsfield"
+   ]
+  },
+  {
+   "name": "lite variant",
+   "what": "Genjutsu Lite, a Kling 4.0 based swap.",
+   "allowed": "720p or 1080p",
+   "we_send": "not used (only the v1.0 path is proven on our door)",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "[vendor, live] Higgsfield connector model list"
+   ]
+  },
+  {
+   "name": "audio",
+   "what": "Our voice line.",
+   "allowed": "none: the swap keeps the original mouth and sound",
+   "we_send": "not available: a line of ours is laid under at the edit",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-production/SHOT-ROUTES.md"
+   ]
+  },
+  {
+   "name": "mask",
+   "what": "Mark the area to change.",
+   "allowed": "none on this model",
+   "we_send": "not available",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "[vendor, live] Higgsfield connector model list"
+   ]
+  },
+  {
+   "name": "duration",
+   "what": "Length of the output.",
+   "allowed": "follows the source shot; model minimum 4 s",
+   "we_send": "the swipe shot's length, looped forward-back-forward when under 4 s",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-production/VIDEO-RULINGS.md V39"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "replaces-never-adds",
+   "rule": "A swap replaces something that is already in the shot and never adds. Whatever must be on a counter, in a hand or on a wall has to be in the SOURCE shot already, or come from a scene still made first; the swap will not put it there.",
+   "ours": "a product on a counter comes from the scene still (motion control), not the swap",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SHOT-ROUTES.md ; https://app.therundown.ai/guides/swap-the-product-and-keep-the-performance-with-higgsfield (the swapped prop did not land and the original stayed)"
+  },
+  {
+   "id": "baseline-not-master",
+   "rule": "The cast member goes in from the BASELINE pictures, never the master. A swap given the master alone is a face swap; the baseline gives the face, the look, the details and the expressions the shot needs.",
+   "ours": "cast_swap.refs lists the baseline files",
+   "status": "draft",
+   "source": "components/model-inputs/VIDEO-PATH-damon.md (the owner 2026-10-27)"
+  },
+  {
+   "id": "one-shot-one-swap",
+   "rule": "Split at the cuts and swap one shot at a time; a whole-clip pass missed people in 4 of 16 shots and put the wrong subject on the wrong person.",
+   "ours": "per-shot swaps on the frame map's boundaries",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V39"
+  },
+  {
+   "id": "before-after",
+   "rule": "State the before and the after state from the brief; everything else, body included, stays identical.",
+   "ours": "cast_swap prompt --state",
+   "status": "draft",
+   "source": "[ours] tools/video-production/CLAUDE.md"
+  },
+  {
+   "id": "name-every-accessory",
+   "rule": "Name every accessory of the original that must go, not only a colour; a headwrap's tails survived when only its colour was removed.",
+   "ours": "named in the prompt",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+  },
+  {
+   "id": "built-in-the-shot",
+   "rule": "A recast subject is built inside the shot's own light and look, not laid in from a studio sheet.",
+   "ours": "references show her in a real setting",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+  },
+  {
+   "id": "check-the-face",
+   "rule": "Every swap is checked against the baseline before it is kept; when the swap kept the original person's face, send the same shot to motion control instead (9 of 9 kept it).",
+   "ours": "face gate, then motion control",
+   "status": "draft",
+   "source": "tools/video-production/SHOT-ROUTES.md"
+  },
+  {
+   "id": "short-shot-loop",
+   "rule": "A shot under the 4 s minimum is played forward-back-forward and trimmed; trim the loop seam off.",
+   "ours": "swap_run.py",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V39"
+  },
+  {
+   "id": "try-the-pair",
+   "rule": "Before a batch, find a clip and object pair that works reliably: try a different prop in the same source clip, hold the action fixed and compare at the same moment.",
+   "ours": "one test shot first",
+   "status": "draft",
+   "source": "https://app.therundown.ai/guides/swap-the-product-and-keep-the-performance-with-higgsfield"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "expect-our-line",
+   "text": "Expecting our line from a swap: it keeps the original mouth, so it carries no line of ours.",
+   "status": "draft",
+   "source": "tools/video-production/SHOT-ROUTES.md"
+  },
+  {
+   "id": "expect-adding",
+   "text": "Expecting it to add things: it replaces, never adds; the product goes only where the swipe already has something in hand.",
+   "status": "draft",
+   "source": "tools/video-production/SHOT-ROUTES.md ; https://app.therundown.ai/guides/swap-the-product-and-keep-the-performance-with-higgsfield"
+  },
+  {
+   "id": "whole-clip-pass",
+   "text": "One swap pass over a clip with several cuts.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V39"
+  },
+  {
+   "id": "master-only",
+   "text": "Sending the master as the person: it is a face swap, and the baseline is the rule.",
+   "status": "draft",
+   "source": "components/model-inputs/VIDEO-PATH-damon.md"
+  },
+  {
+   "id": "shot-under-minimum",
+   "text": "A shot shorter than the model's minimum without playing it forward-back-forward.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V39"
+  },
+  {
+   "id": "color-only-removal",
+   "text": "Removing an accessory by naming only its colour.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+  },
+  {
+   "id": "studio-sheet-laid-in",
+   "text": "A studio-backdrop sheet as the only reference: it reads pasted on.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+  },
+  {
+   "id": "unchecked-face",
+   "text": "Keeping a swap without checking the face: 9 of 9 kept the original person.",
+   "status": "draft",
+   "source": "tools/video-production/SHOT-ROUTES.md"
+  }
+ ]
+}

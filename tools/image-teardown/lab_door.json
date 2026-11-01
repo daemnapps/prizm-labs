@@ -1,0 +1,107 @@
+{
+  "status": "draft",
+  "about": "three routes over chain.py, picked with --command (default start): start --brand --product --avatar --swipe [--route --form --count --picks] [--dry-run]; variations --brand [--product --briefs --batch --drop --workers] [--dry-run] [--no-name]; draft --brand [--product --briefs] [--no-ship] \u2014 draft has no --dry-run, every draft run spends. chain.py names its own runs, so they land in this checkout (LD-1 (shared lab door), LD-8 (teardown door routes)); pick --brand --product --avatar --pick --ask [--sub --source] [--dry-run] \u2014 one Swipe Bank pick fetched from Shared Assets/swipe/picks/<brand>/ and run through every stage (the owner 2026-10-23: picks go to the mini).",
+  "script": "tools/image-teardown/chain.py",
+  "default_route": "start",
+  "routes": {
+    "start": {
+      "script": "tools/image-teardown/chain.py",
+      "subcommand": "start",
+      "positionals": [],
+      "flags": {
+        "product": "--product",
+        "avatar": "--avatar",
+        "swipe": "--swipe",
+        "route": "--route",
+        "form": "--form",
+        "count": "--count",
+        "picks": "--picks",
+        "ask": "--ask",
+        "sub": "--sub"
+      },
+      "bool_flags": {
+        "dry_run": "--dry-run"
+      },
+      "brand_flag": "--brand",
+      "out": {
+        "flag": null,
+        "runs_root_flag": null,
+        "run_dir": null
+      },
+      "refuse": [
+        "gates"
+      ]
+    },
+    "variations": {
+      "script": "tools/image-teardown/chain.py",
+      "subcommand": "variations",
+      "positionals": [],
+      "flags": {
+        "product": "--product",
+        "briefs": "--briefs",
+        "batch": "--batch",
+        "drop": "--drop",
+        "workers": "--workers"
+      },
+      "bool_flags": {
+        "dry_run": "--dry-run",
+        "no_name": "--no-name"
+      },
+      "brand_flag": "--brand",
+      "out": {
+        "flag": null,
+        "runs_root_flag": null,
+        "run_dir": null
+      },
+      "refuse": [
+        "gates"
+      ]
+    },
+    "draft": {
+      "script": "tools/image-teardown/chain.py",
+      "subcommand": "draft",
+      "positionals": [],
+      "flags": {
+        "product": "--product",
+        "briefs": "--briefs"
+      },
+      "bool_flags": {
+        "no_ship": "--no-ship"
+      },
+      "brand_flag": "--brand",
+      "out": {
+        "flag": null,
+        "runs_root_flag": null,
+        "run_dir": null
+      },
+      "refuse": [
+        "gates"
+      ]
+    },
+    "pick": {
+      "script": "tools/image-teardown/chain.py",
+      "positionals": [],
+      "flags": {
+        "product": "--product",
+        "avatar": "--avatar",
+        "pick": "--pick",
+        "ask": "--ask",
+        "sub": "--sub",
+        "source": "--source"
+      },
+      "bool_flags": {
+        "dry_run": "--dry-run"
+      },
+      "brand_flag": "--brand",
+      "out": {
+        "flag": null,
+        "runs_root_flag": null,
+        "run_dir": null
+      },
+      "refuse": [
+        "gates"
+      ],
+      "subcommand": "pick"
+    }
+  }
+}

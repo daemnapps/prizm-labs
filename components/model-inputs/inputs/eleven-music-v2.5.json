@@ -1,0 +1,290 @@
+{
+ "model": "eleven-music-v2.5",
+ "medium": "music",
+ "_readme": [
+  "Music v2.5 makes the song for a sung ad: the house door is `song.py` in video-production, pinned by SONG-CHAIN.md.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "ElevenLabs Music v2.5",
+ "registry_id": "eleven-music-v2.5",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "model_id": "music_v2_5",
+  "endpoint": "POST /v1/music?output_format=mp3_44100_192"
+ },
+ "sources": [
+  "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
+  "https://elevenlabs.io/docs/api-reference/music/create-composition-plan/llms.txt",
+  "[ours] tools/video-production/SONG-CHAIN.md"
+ ],
+ "limits": {
+  "duration_seconds": [
+   3,
+   600
+  ],
+  "sections_max": 30,
+  "section_seconds": [
+   3,
+   120
+  ],
+  "styles_per_section_max": 50,
+  "negative_styles_per_section_max": 50,
+  "lines_max_house": 30,
+  "chars_per_line_max_house": 200,
+  "music_length_ms": [
+   3000,
+   600000
+  ],
+  "style_language": "styles must be English; lyrics may be any language",
+  "house": {
+   "context_adherence": "high",
+   "seed": 1,
+   "format": "mp3_44100_192",
+   "level": "-14 LUFS copy",
+   "remake": "once, seed + 1",
+   "style": "one ruled row from banks/music-styles/index.json, no free text"
+  }
+ },
+ "qualities": [
+  "context_adherence low",
+  "context_adherence medium",
+  "context_adherence high"
+ ],
+ "inputs": [
+  {
+   "name": "composition_plan",
+   "what": "An ordered list of sections, each with its own length, styles and lyrics.",
+   "allowed": "up to 30 sections of 3 to 120 s, 3 s to 10 min total; music_v2 or music_v2_5",
+   "we_send": "one section per song part, built mechanically from the brief",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  },
+  {
+   "name": "prompt",
+   "what": "A plain text brief for the whole piece.",
+   "allowed": "text; mutually exclusive with a composition plan",
+   "we_send": "not used: the plan is",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+   ]
+  },
+  {
+   "name": "music_length_ms",
+   "what": "Total length for a prompt call.",
+   "allowed": "3,000 to 600,000",
+   "we_send": "from the plan's sections",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+   ]
+  },
+  {
+   "name": "model_id",
+   "what": "Which music model.",
+   "allowed": "music_v2_5 (also music_v2)",
+   "we_send": "music_v2_5",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+   ]
+  },
+  {
+   "name": "section text (lyrics)",
+   "what": "The words sung in a section.",
+   "allowed": "text; curly braces for directions like {instrumental break}, never parentheses",
+   "we_send": "the section's lines as sung, brand words swapped for say_as, figures in words",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  },
+  {
+   "name": "positive_styles",
+   "what": "What the section should sound like.",
+   "allowed": "up to 50, English; the first section sets genre and tone for the whole song, so 6 to 7 or more early",
+   "we_send": "the ruled style row + BPM + the row's line for that section",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  },
+  {
+   "name": "negative_styles",
+   "what": "What to keep out.",
+   "allowed": "up to 50 per section, English",
+   "we_send": "the style row's list",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  },
+  {
+   "name": "duration_ms per section",
+   "what": "Length of each section.",
+   "allowed": "3,000 to 120,000",
+   "we_send": "seconds x 1000 from the brief",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+   ]
+  },
+  {
+   "name": "respect_sections_durations",
+   "what": "Follow section times strictly (true) or let quality win (false).",
+   "allowed": "boolean; default strict",
+   "we_send": "default",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+   ]
+  },
+  {
+   "name": "context_adherence",
+   "what": "How closely to follow the plan.",
+   "allowed": "low, medium, high (default high)",
+   "we_send": "high",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  },
+  {
+   "name": "seed",
+   "what": "Repeat a result.",
+   "allowed": "integer",
+   "we_send": "1, then seed + 1 for the one remake",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  },
+  {
+   "name": "output_format",
+   "what": "File type.",
+   "allowed": "mp3_44100_192 and others",
+   "we_send": "mp3_44100_192",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-production/SONG-CHAIN.md"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "plan-not-prompt",
+   "rule": "Use a composition plan for control; a plan and a text prompt cannot be mixed.",
+   "ours": "build_plan in song.py",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "first-section-sets-the-song",
+   "rule": "The first section's styles set genre and tone for the whole piece: load it with 6 to 7 or more specific styles.",
+   "ours": "style row opens section one",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "be-specific",
+   "rule": "Name what you hear ('warm acoustic guitar with light fingerpicking', '80 BPM'), not moods alone.",
+   "ours": "style row + BPM",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "negatives-liberally",
+   "rule": "Use negative styles liberally to keep unwanted sounds out.",
+   "ours": "style row negatives",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "curly-braces",
+   "rule": "Put inline directions in curly braces inside the text, never parentheses.",
+   "ours": "section text",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "section-bounds",
+   "rule": "Every section 3 to 120 s, at most 30 sections, 10 minutes total; the house caps lines at 200 characters and 30 lines.",
+   "ours": "refused by name in song.py",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans ; [ours] tools/video-production/SONG-CHAIN.md"
+  },
+  {
+   "id": "words-checked-both-ways",
+   "rule": "Every sung line must be a script line and every script line sung; the song is transcribed and each line must be heard at 0.75 or better.",
+   "ours": "song gate",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+  },
+  {
+   "id": "remake-once",
+   "rule": "A failed gate remakes ONCE with seed + 1, then stops naming the missing line.",
+   "ours": "song.py",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "copyrighted-styles",
+   "text": "Copyrighted names or content in styles: the plan is rejected as bad_composition_plan.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "parentheses",
+   "text": "Parentheses for inline directions.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "mixed-plan-and-prompt",
+   "text": "A plan and a prompt in one call.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "generic-first-section",
+   "text": "A thin first section: the whole song comes out generic.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  },
+  {
+   "id": "free-text-style",
+   "text": "A free-text style instead of the ruled row.",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+  },
+  {
+   "id": "non-english-styles",
+   "text": "Styles in another language.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans"
+  }
+ ]
+}

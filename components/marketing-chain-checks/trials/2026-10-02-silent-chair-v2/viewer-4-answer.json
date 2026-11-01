@@ -1,0 +1,125 @@
+{
+ "posts": [
+  {
+   "n": 1,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "too pretty, just a fan edit of some actress i don't know.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "don't care about turkish tv."
+  },
+  {
+   "n": 2,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "10 minutes is a lie, probably just telling me to wash my face.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "seen a million of these 'easy' tutorials."
+  },
+  {
+   "n": 3,
+   "stop": "no",
+   "left_at": "2",
+   "felt": "way too much text, i'm not reading a book on my fyp.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "it's just generic motivation quotes."
+  },
+  {
+   "n": 4,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "8 minutes? absolutely not.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "nobody watches an 8 minute video on tiktok."
+  },
+  {
+   "n": 5,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "car stuff, doesn't help my face.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "not into cars."
+  },
+  {
+   "n": 6,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "sigma stuff is so corny now.",
+   "got_it": "no",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "looks like bait."
+  },
+  {
+   "n": 7,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "brainrot fruit stories, skip.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "i'm too old for this."
+  },
+  {
+   "n": 8,
+   "stop": "no",
+   "left_at": "2",
+   "felt": "caption sounds like a bot wrote it.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "hashtags are doing too much."
+  },
+  {
+   "n": 9,
+   "stop": "yes",
+   "left_at": "end",
+   "felt": "wait his neck actually has marks on it, that's real skin.",
+   "got_it": "yes",
+   "ad_at": "8",
+   "ad_tell": "holding the product up like that and the 'sponsored' tag at the top.",
+   "tap": "yes",
+   "tap_why": "to see if people in the comments say it actually works for razor bumps.",
+   "believe": "not sure",
+   "doubt": "it's still an ad so it might be staged, but the skin looks real.",
+   "fake": "no",
+   "fake_what": "",
+   "pitch": "yes",
+   "pitch_line": "FLEX™ — $69.99 / 90 days. If your skin doesn't transform, full refund.",
+   "for_me": "yes",
+   "do": "save",
+   "comment": "",
+   "remember": "the close up of the skin marks and the line about nobody's neck clearing in one cut.",
+   "text_friend": "look at this neck thing, it actually shows real skin for once instead of filters."
+  },
+  {
+   "n": 10,
+   "stop": "no",
+   "left_at": "1",
+   "felt": "another gym girl 'hack' that isn't a hack.",
+   "got_it": "yes",
+   "ad_at": "no",
+   "ad_tell": "",
+   "tap": "no",
+   "tap_why": "she's just fishing for views."
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "_what": "How the uploader paces itself so it moves like a person in Ads Manager, not a script (the owner, 21 Oct 2026: \"think through actual human-like movement for this uploading process … it's not human the way we're uploading these massive files\"). Read by pace.py. Seconds unless named. Set META_PACE=off only in tests.",
+ "_why": "21 Oct 2026: three 6-minute song ads (five ~350 MB versions each) went up back to back, ~3 GB in under an hour; Meta's video server answered 503 and the uploader quit on the first one.",
+ "between_chunks_s": [1.5, 4.0],
+ "between_videos_s": [25, 75],
+ "between_ads_s": [180, 420],
+ "per_hour": {"bytes": 1200000000, "videos": 8},
+ "busy_retry": {
+  "http_codes": [500, 502, 503, 504],
+  "meta_codes": [1, 2, 4, 17, 32, 341, 613, 80004, 1487390],
+  "waits_s": [45, 120, 300, 600],
+  "jitter": 0.25
+ },
+ "log": "runs/meta-upload/<brand>/pace.jsonl"
+}

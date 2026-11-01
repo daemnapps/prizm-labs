@@ -1,0 +1,33 @@
+<title>Belief Index</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#F2F3F6;--panel:#fff;--fg:#16181D;--muted:#5D6270;--line:#DADDE4;--accent:#2B54E8;--warn:#9A6400;--warn-soft:#F7EBD2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111318;--panel:#1A1D24;--fg:#E9EBF0;--muted:#9BA1AF;--line:#2C303A;--accent:#7D9BFF;--warn:#E3B055;--warn-soft:#352813;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111318;--panel:#1A1D24;--fg:#E9EBF0;--muted:#9BA1AF;--line:#2C303A;--accent:#7D9BFF;--warn:#E3B055;--warn-soft:#352813;color-scheme:dark}
+*{box-sizing:border-box}body{background:var(--bg);color:var(--fg);font:16px/1.5 "IBM Plex Sans",system-ui,sans-serif;margin:0}
+.w{max-width:860px;margin:0 auto;padding-inline:18px;padding-block:34px 70px;display:flex;flex-direction:column;gap:22px}
+h1{font:800 clamp(2.2rem,7vw,3.2rem)/1.05 "Bricolage Grotesque",system-ui;margin:0}h2{font:800 1.3rem/1.2 "Bricolage Grotesque",system-ui;margin:0}
+.ey{font:500 .72rem/1 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.q0{font-size:1.15rem;border-left:4px solid var(--accent);padding:6px 14px;margin:0}
+.th{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.th summary{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto auto;gap:12px;align-items:center;cursor:pointer;list-style:none}
+.th summary::-webkit-details-marker{display:none}.nm{font-weight:600}
+.bar{height:10px;border-radius:5px;background:var(--bg);overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.th b{font:800 1.1rem/1 "Bricolage Grotesque",system-ui;min-width:42px;text-align:right}.ct{font-size:.78rem;color:var(--muted);min-width:70px}
+.qs{display:flex;flex-direction:column;gap:6px;margin-top:10px}.qs q{display:block;font-size:.9rem;color:var(--muted)}
+.note{background:var(--warn-soft);border:1px solid var(--warn);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}.note p{margin:0;font-size:.92rem}
+@media (max-width:560px){.th summary{grid-template-columns:1fr auto}.bar,.ct{display:none}}
+</style>
+<div class="w">
+<div class="ey">&lt;brand&gt; · real customer answers · the core belief index</div>
+<h1>Belief Index</h1>
+<p class="q0">"What gut instinct made you buy &lt;the product&gt; from us over other products on the market?"</p>
+<p style="margin:0;color:var(--muted)">&lt;N&gt; real customers answered (&lt;your survey&gt;). This is what made them believe and buy. Tap a reason to read their own words. The viewer chain passes belief only when an ad gives at least 2 of the top reasons.</p>
+<h2>Why they bought</h2>
+<details class="th" open><summary><span class="nm">&lt;a reason&gt;</span><span class="bar"><i style="width:100%"></i></span><b>—%</b><span class="ct">— people</span></summary><div class="qs"><q>&lt;a real customer's answer, word for word, with its row id&gt;</q></div></details>
+<div class="note"><h2>Worth knowing</h2>
+<p>&lt;what the non-buyers said would help them buy, counted&gt;</p>
+<p>&lt;which avatars these buyers are&gt;</p>
+<p>&lt;how many answers didn't fit a reason&gt;</p></div>
+<p style="font-size:.8rem;color:var(--muted)">Counted in code from the language bank, so each quote is a real survey answer with its row id. File: components/quality-checks/records/belief-index/&lt;brand&gt;.json (yours, not shipped).</p>
+</div>

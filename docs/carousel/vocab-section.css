@@ -1,0 +1,8 @@
+/* The vocabulary section (vocab-section.html): theme tokens only. */
+.gj-vocab figcaption .gj-vocab-def{display:block;margin-top:4px;font-family:var(--body);font-size:12px;
+  letter-spacing:0;text-transform:none;line-height:1.35;color:var(--ink-3)}
+.gj-vocab .gj-cards figure.wide{grid-column:span 2}
+.gj-vocab .gj-cards figure.wide video{aspect-ratio:9/8;object-fit:contain}
+.gj-vocab-note{margin:calc(-1 * var(--s2)) 0 var(--s3);color:var(--ink-3);max-width:50ch}
+.gj-vocab-demos video{border-style:dashed;border-color:var(--line-2)}
+.gj-vocab-demos figcaption b{color:var(--ink-3)}

@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "station 4 of the video line on the mini (2026-10-19): mini_v2.py --brand --label --out [--dry-run] — the production station's run by the same label (Shared Assets runs/video-production/<brand>/<label>/), taken only when production finished it (production-done.json, every listed clip made); line.py, the one edit path (edit map, lips, render, words, the audit on every version, the card in 1-check), handed on through Shared Assets runs/video-edit/<brand>/<label>/ (run_kit.station) only when the line exits 0. --dry-run plans the edit only (edit_map.py — free, no render). Beside the v1 door (lab_entry.py), not in it.",
+  "script": "tools/video-edit/machine/mini_v2.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"label": "--label"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": ["yes", "approve", "note", "controls", "versions", "cut", "hook"]
+}

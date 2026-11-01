@@ -1,0 +1,244 @@
+{
+ "element": "template",
+ "asset": "image",
+ "source": "tools/image-production/static/templates/*.json",
+ "enforced_by": "image production's renderer",
+ "note": null,
+ "rows": [
+  {
+   "id": "confession-lora",
+   "name": "confession-lora",
+   "what": "Same shape as confession, but the plate is generated with the product LoRA so the tube is photographed in the scene rather than composited onto it. No product is pasted on.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/templates/*.json",
+   "extra": {
+    "canvas": {
+     "w": 768,
+     "h": 1344
+    },
+    "layout": {
+     "ground": "#FFFFFF",
+     "picture": {
+      "treatment": "band",
+      "top_pct": 40,
+      "bottom_pct": 72
+     },
+     "blocks": [],
+     "keep_clear": [],
+     "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning — every line of type, the product — must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
+     }
+    }
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "confession",
+   "name": "confession",
+   "what": "Opens with an apology or admission, gives the reason, then the product with sticker callouts and a close. Best when the angle is a confession that turns into the offer.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/templates/*.json",
+   "extra": {
+    "canvas": {
+     "w": 768,
+     "h": 1344
+    },
+    "layout": {
+     "ground": "#FFFFFF",
+     "picture": {
+      "treatment": "band",
+      "top_pct": 42,
+      "bottom_pct": 70
+     },
+     "blocks": [],
+     "keep_clear": [],
+     "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning — every line of type, the product — must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
+     },
+     "product": {
+      "top": 40,
+      "bottom": 71,
+      "left": 60,
+      "right": 88
+     },
+     "product_asset": "packshot-tube.png"
+    }
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "full-photo",
+   "name": "full-photo",
+   "what": "The photograph fills the whole frame, the wordmark sits on top of it, a white frame is drawn around the damage, and the claim sits in a panel beneath. Best when the picture alone carries the proof and the copy is one hard claim.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/templates/*.json",
+   "extra": {
+    "canvas": {
+     "w": 768,
+     "h": 1344
+    },
+    "layout": {
+     "ground": "#FFFFFF",
+     "picture": {
+      "treatment": "full_bleed"
+     },
+     "blocks": [],
+     "keep_clear": [],
+     "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning — every line of type, the product — must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
+     },
+     "product": {
+      "top": 58,
+      "bottom": 84,
+      "left": 58,
+      "right": 95
+     },
+     "product_asset": "packshot-lockup.png"
+    }
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pedestal",
+   "name": "pedestal",
+   "what": "A rendered world with the product standing on a pedestal in the lower half and the claim written across the sky above it. The Norse claymation shape. Best when the pattern interrupt IS the ad — an unusual made world that stops the scroll before a word is read.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/templates/*.json",
+   "extra": {
+    "canvas": {
+     "w": 768,
+     "h": 1344
+    },
+    "layout": {
+     "ground": "#1A1A1A",
+     "picture": {
+      "treatment": "full_bleed"
+     },
+     "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops 9x16 to 4x5 in feed. Every line of type and the product sit inside this window so one asset covers every placement."
+     },
+     "product": {
+      "top": 52,
+      "bottom": 80,
+      "left": 30,
+      "right": 70
+     },
+     "blocks": [],
+     "_measured_from": "The swipe's own teardown: type strictly in the upper 45%, product pedestal 45-90% top and 25-75% wide, centre axis, unequal gaps grouping the type as one unit, the punch word angled ~5 degrees.",
+     "product_stands_on": "pedestal",
+     "product_width_of_top": 0.46,
+     "product_asset": "crush-clay.png",
+     "_product_note": "The product is MORPHED INTO THE WORLD'S MATERIAL, not composited photoreal. Made by handing the real cutout to the edit model and asking for the same object sculpted in clay — which keeps the label exact while matching the set. Compositing the storefront photo into a clay diorama was the mismatch, 2026-09-02.",
+     "adaptive": [
+      "headline",
+      "punch"
+     ],
+     "_adaptive_note": "headline and punch follow the picture: they are laid into the quietest band the plate actually has, not a fixed percentage. The type sits where there is nothing to read over."
+    }
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "photo-strip",
+   "name": "photo-strip",
+   "what": "Headline on white at the top, the photograph as a strip across the middle, the offer in a colour bar at the foot. Best when the proof is a close-up of the product being used.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "tools/image-production/static/templates/*.json",
+   "extra": {
+    "canvas": {
+     "w": 768,
+     "h": 1344
+    },
+    "layout": {
+     "ground": "#FFFFFF",
+     "picture": {
+      "treatment": "band",
+      "top_pct": 33,
+      "bottom_pct": 60
+     },
+     "band_feather_px": 0,
+     "blocks": [
+      {
+       "name": "offer",
+       "color": "#61514A",
+       "top_pct": 62,
+       "bottom_pct": 100,
+       "left_pct": 0,
+       "right_pct": 100
+      }
+     ],
+     "keep_clear": [
+      {
+       "name": "subject",
+       "top": 30,
+       "bottom": 62,
+       "left": 0,
+       "right": 100
+      }
+     ],
+     "product": {
+      "top": 50,
+      "bottom": 76,
+      "left": 58,
+      "right": 94
+     },
+     "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning — every line of type, the product — must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
+     },
+     "product_asset": "packshot-lockup.png"
+    }
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

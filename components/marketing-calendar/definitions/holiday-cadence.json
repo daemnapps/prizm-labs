@@ -1,0 +1,11 @@
+{
+  "what": "Holiday periods: the days the list is worked hardest. Inside each moment's sale window the calendar sends 2 to 3 emails a day (3 on the peak days), every extra send a promotional one carrying the period's offer. The sale opens lead_days before the moment's own window: Black Friday goes live a full week ahead of Black Friday itself (Nov 20 for Nov 27; Cyber Week, which opens on Thanksgiving, takes 6 so both land on the same day). Extra sends go only to engaged segments: never to a segment whose name says churned, unengaged, lapsed or sunset (no mass sends to the unengaged, the owner 2026-10-05). Ruled by the owner 2026-10-09: \"I need 2-3 emails / day go out on holiday periods so we milk the list\" and \"we need to have black friday go live at least 1 week ahead of time\". Supersedes one-send-a-day (2026-09-10) inside these windows only.",
+  "moments": ["black-friday", "cyber-week", "cyber-monday", "christmas"],
+  "lead_days": {"black-friday": 7, "cyber-week": 6},
+  "sends_per_day": 2,
+  "sends_on_peak_days": 3,
+  "peak_moments": ["black-friday", "cyber-monday"],
+  "push_types": ["sale-window", "product-spotlight", "proof-drop", "guarantee", "bundle", "objection-shot", "stack", "gift-guide", "availability"],
+  "hours": [9, 13, 19],
+  "skip_segments_matching": ["churn", "unengaged", "lapsed", "sunset"]
+}

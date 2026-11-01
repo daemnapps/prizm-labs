@@ -1,0 +1,23 @@
+{
+ "status": "draft",
+ "about": "The written criteria a judged step must meet. A cheap reader (the run-kit 'reads' tier) answers pass or fail against them; only a failure calls the 'checks' tier, to write the fix note. the owner's: change a criterion here, never in code.",
+ "criteria": {
+  "brand_native": {
+   "step": "the brand step (stage 3) of a static ad remade from a swipe",
+   "lines": [
+    "If the swipe is a NATIVE post (its record says swipe_kind organic, or the teardown describes a person's post, meme, screenshot or show still), THE SWAPS change no colour, no light and no set look: only the elements that carry the meaning.",
+    "The swipe's setting, framing and camera stay: no new location (a backyard skit stays a backyard skit, a podcast stays that podcast's room).",
+    "The picture carries the joke about the problem: at least one visible swap (a character, an object, the skin itself) makes it about razor bumps on first look. Keeping the swipe's setting never means swapping nothing.",
+    "The product is put in the picture only where the swipe has a place for it (a product shot or tile, or an object the scene revolves around that it replaces). If the swipe has no such place, the brand step puts no product anywhere in the picture.",
+    "On a NATIVE post, our brand name or logo does not appear in the words or the picture unless the swipe itself names a brand in that same spot.",
+    "Our words sit in the swipe's own word zones: the same number of zones and lines, in the same places. A swipe with no words gives an ad with no words.",
+    "No long dash (em dash or en dash) in any words that go on the ad."
+   ],
+   "evidence": [
+    "assets/source.json",
+    "out/01-teardown.md:2500",
+    "out/03-injection.md:6000"
+   ]
+  }
+ }
+}

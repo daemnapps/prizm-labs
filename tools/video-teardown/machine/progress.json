@@ -1,0 +1,1506 @@
+{
+ "at": "2026-10-09T16:45:28.128631+00:00",
+ "runs": [
+  {
+   "label": "cellimure-almost-out-brand-b",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The Canceled Date",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T12:21:30Z",
+     "finished": "2026-10-09T12:21:30Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T12:22:45Z",
+     "finished": "2026-10-09T12:22:45Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T12:44:23Z",
+     "finished": "2026-10-09T12:44:23Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T12:46:11Z",
+     "finished": "2026-10-09T12:46:11Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-09T12:47:46Z",
+     "finished": "2026-10-09T12:47:46Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T12:48:20Z",
+     "finished": "2026-10-09T12:48:20Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-09T16:30:41Z",
+     "finished": "2026-10-09T16:30:41Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-09T16:31:52Z",
+     "finished": "2026-10-09T16:31:52Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T16:35:08Z",
+     "finished": "2026-10-09T16:35:08Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T16:36:39Z",
+     "finished": "2026-10-09T16:36:39Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "done",
+     "started": "2026-10-09T16:40:27Z",
+     "finished": "2026-10-09T16:40:27Z"
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "held",
+     "started": "2026-10-09T16:43:38Z",
+     "finished": "2026-10-09T16:43:38Z"
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5u",
+     "name": "Mark used",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    }
+   ],
+   "holds": [
+    "AUDIT-HOLD.md"
+   ],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "none",
+     "card": "none",
+     "scroll": "Brand-B, Pixar-style 3D in grey tee, black shorts, messy bun and gold hoops, leans on the grey fabric sofa eating popcorn from a grey ceramic bowl. Her phone lies dark on the black coffee table, beige blinds are behind her, and the light is warm and dim. Medium shot, centred, eye level, static.",
+     "thumb": "the first frame. Brand-B centred on the sofa, hand in the popcorn bowl, phone dark on the table in the lower third. No words."
+    },
+    {
+     "v": 1,
+     "take": "the late-evening scroll",
+     "line": "none",
+     "card": "none",
+     "scroll": "Brand-B hangs upside down off the sofa seat, legs up over the backrest. Her phone is held above her face, her thumb flicks a feed, and the screen glow lights her face. The grey popcorn bowl wobbles, balanced on her raised shins.",
+     "thumb": "the inverted Brand-B filling the vertical frame, phone glow on her face, the bowl tipped on her shins at the top of the frame. No words."
+    },
+    {
+     "v": 2,
+     "take": "made from scratch",
+     "line": "none",
+     "card": "none",
+     "scroll": "At the dark kitchen island, Brand-B tips a lidded pot and a column of fresh, steaming popcorn pours into the grey bowl, overflowing it. Kernels bounce across the island top.",
+     "thumb": "the popcorn column frozen mid-pour into the overflowing bowl, Brand-B's delighted face soft behind the steam, under a pendant light. No words."
+    },
+    {
+     "v": 3,
+     "take": "the TV gets her",
+     "line": "none",
+     "card": "none",
+     "scroll": "Brand-B is doubled over laughing at the TV, hugging a cushion and sliding off the sofa. The popcorn bowl shakes in her lap and the TV's blue flicker plays across her.",
+     "thumb": "Brand-B mid-laugh, eyes squeezed shut, half off the sofa with the cushion hugged, the TV glow from frame left. No words."
+    },
+    {
+     "v": 4,
+     "take": "tending the plant",
+     "line": "none",
+     "card": "none",
+     "scroll": "Brand-B kneels on the sofa arm, misting the potted olive tree beside it with a spray bottle. The popcorn bowl is wedged in the crook of her other elbow, and droplets catch the warm lamp light.",
+     "thumb": "a side view. Brand-B reaching to the olive tree, a bright arc of spray droplets between her and the leaves, the bowl in her elbow. No words."
+    },
+    {
+     "v": 5,
+     "take": "the satisfying pour",
+     "line": "none",
+     "card": "none",
+     "scroll": "A top-down close shot: a thin ribbon of melted butter drizzles from a small jug over the popcorn in the grey bowl. Her fingers toss it, and each kernel glistens. Her face is out of frame.",
+     "thumb": "top-down, the butter ribbon mid-fall onto the popcorn in the centred grey bowl, her fingers at the rim. No words."
+    }
+   ],
+   "updated": "2026-10-09T16:43:38+00:00"
+  },
+  {
+   "label": "cellimure-almost-out",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "Canceled Plans",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T10:07:31Z",
+     "finished": "2026-10-09T10:07:31Z"
+    },
+    {
+     "key": "stage4c",
+     "name": "Expansion",
+     "status": "done",
+     "started": "2026-10-09T16:40:12Z",
+     "finished": "2026-10-09T16:40:12Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T10:09:52Z",
+     "finished": "2026-10-09T10:09:52Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T10:31:32Z",
+     "finished": "2026-10-09T10:31:32Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T10:33:16Z",
+     "finished": "2026-10-09T10:33:16Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-09T10:34:43Z",
+     "finished": "2026-10-09T10:34:43Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T10:35:26Z",
+     "finished": "2026-10-09T10:35:26Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-09T16:30:46Z",
+     "finished": "2026-10-09T16:30:46Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-09T16:31:35Z",
+     "finished": "2026-10-09T16:31:35Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T16:35:29Z",
+     "finished": "2026-10-09T16:35:29Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T16:37:18Z",
+     "finished": "2026-10-09T16:37:18Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "running",
+     "started": "2026-10-09T16:40:57Z",
+     "finished": null
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "held",
+     "started": "2026-10-09T15:34:47Z",
+     "finished": "2026-10-09T15:34:47Z"
+    }
+   ],
+   "holds": [],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "none",
+     "card": "none",
+     "scroll": "Medium shot, centred, propped camera front-on at eye level, static, warm dim interior light · Creator-A in an oversized light grey tee, black mid-thigh shorts and white crew socks leans against the grey fabric sofa in the living room, eating popcorn from a grey ceramic bowl, relaxed, looking forward, TV murmur under · a dark grey smartphone on the dark coffee table lights up · cut to a close-up of the phone screen",
+     "thumb": "the source's first frame. Creator-A on the grey sofa, centred, popcorn bowl in her lap, the phone glowing on the coffee table bottom right. No words."
+    },
+    {
+     "v": 1,
+     "take": "wrapping the granddaughter's birthday present",
+     "line": "none",
+     "card": "none",
+     "scroll": "Medium shot from the front. Creator-A sits hunched over a half-wrapped gift box on her lap, bun toward the camera, face down in concentration. Long strips of tape have stuck to all her fingers and stretch from her hands to the box like a web. A pink bow is stuck crooked on her bun. The popcorn bowl is wedged on the cushion beside her, and the phone lies face-up on the coffee table. A sharp tape screech is the first sound. The phone lights up and we cut to the screen.",
+     "thumb": "Medium shot. The half-wrapped box on her lap, tape sagging in strands from her hands to the paper, the pink bow crooked on her bun, the popcorn bowl at frame left. No words."
+    },
+    {
+     "v": 2,
+     "take": "home yoga, wobbling",
+     "line": "none",
+     "card": "none",
+     "scroll": "Wide full-body shot from the front, her face small in frame. Creator-A stands on the rug in front of the grey sofa in a tree pose, one sock pressed to her knee. Her arms are out to the sides and she is wobbling hard. The grey popcorn bowl is balanced on top of her bun. A floorboard creaks with each wobble. The phone on the coffee table lights up and we cut to the screen.",
+     "thumb": "Wide shot. Creator-A mid-wobble in a tree pose, arms out, the popcorn bowl tilting on her head, the sofa behind her. No words."
+    },
+    {
+     "v": 3,
+     "take": "popcorn made from scratch, still popping",
+     "line": "none",
+     "card": "none",
+     "scroll": "Medium side shot. Creator-A sits on the sofa holding a steaming stovetop pot over the grey bowl in her lap, lid tipped open, face turned down into the pot. The popcorn is still popping, and kernels burst up out of the pot and bounce off her bun. A loud pop is the first sound. The phone lights up on the coffee table and we cut to the screen.",
+     "thumb": "Side shot. Popcorn erupting out of an open pot in a white burst over the bowl, steam rising, her bun catching a kernel. No words."
+    },
+    {
+     "v": 4,
+     "take": "the evening phone scroll, laughing at a funny-grandma clip",
+     "line": "none",
+     "card": "none",
+     "scroll": "Over-the-shoulder shot from behind the sofa. Creator-A's phone fills the right half of the frame, playing a short clip of a grandma pulling a prank. Her shoulders shake with silent laughter and her head is thrown back, face out of frame. The popcorn bowl sits in her lap. A muffled snort is the first sound. A text banner drops over the clip on the same phone and we cut to the screen.",
+     "thumb": "Over the shoulder. The phone screen showing a laughing grandma, Creator-A's shaking shoulders and grey bun at frame left, popcorn in the bowl below. No words."
+    },
+    {
+     "v": 5,
+     "take": "slow-dancing alone to a TV romance",
+     "line": "none",
+     "card": "none",
+     "scroll": "Wide side shot. Creator-A stands on the rug in front of the sofa, eyes closed, swaying in a slow-dance hold with a sofa cushion pressed to her cheek. Her other hand holds the popcorn bowl out like a dance partner's hand. The TV glow flickers on her and the TV murmurs a romance scene. The phone lights up on the coffee table and we cut to the screen.",
+     "thumb": "Wide side shot. Creator-A in a dance hold with a sofa cushion, eyes closed, the bowl held out at arm's length, TV glow on her. No words."
+    }
+   ],
+   "updated": "2026-10-09T16:40:57+00:00"
+  },
+  {
+   "label": "cellimure-passport",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The Passport Photo",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T10:07:34Z",
+     "finished": "2026-10-09T10:07:34Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T10:26:29Z",
+     "finished": "2026-10-09T10:26:29Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T10:32:50Z",
+     "finished": "2026-10-09T10:32:50Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T10:34:53Z",
+     "finished": "2026-10-09T10:34:53Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-09T10:36:09Z",
+     "finished": "2026-10-09T10:36:09Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T10:36:43Z",
+     "finished": "2026-10-09T10:36:43Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "held",
+     "started": "2026-10-09T16:30:19Z",
+     "finished": "2026-10-09T16:30:19Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5u",
+     "name": "Mark used",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    }
+   ],
+   "holds": [
+    "STRUCTURE-CHECK.md"
+   ],
+   "hooks": [],
+   "updated": "2026-10-09T16:30:19+00:00"
+  },
+  {
+   "label": "cellimure-passport-brand-b",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The passport photo",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T12:21:28Z",
+     "finished": "2026-10-09T12:21:28Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T12:24:00Z",
+     "finished": "2026-10-09T12:24:00Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T12:29:54Z",
+     "finished": "2026-10-09T12:29:54Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T12:31:55Z",
+     "finished": "2026-10-09T12:31:55Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-09T12:33:38Z",
+     "finished": "2026-10-09T12:33:38Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T12:34:09Z",
+     "finished": "2026-10-09T12:34:09Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "held",
+     "started": "2026-10-09T16:30:01Z",
+     "finished": "2026-10-09T16:30:01Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    },
+    {
+     "key": "stage5u",
+     "name": "Mark used",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    }
+   ],
+   "holds": [
+    "STRUCTURE-CHECK.md"
+   ],
+   "hooks": [],
+   "updated": "2026-10-09T16:30:01+00:00"
+  },
+  {
+   "label": "resilia-song-02-brand-a",
+   "brand": "brand-a",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The Crew Knew",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T13:32:56Z",
+     "finished": "2026-10-09T13:32:56Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T13:36:18Z",
+     "finished": "2026-10-09T13:36:18Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T14:12:04Z",
+     "finished": "2026-10-09T14:12:04Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T14:14:57Z",
+     "finished": "2026-10-09T14:14:57Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T14:15:40Z",
+     "finished": "2026-10-09T14:28:41Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-09T14:18:01Z",
+     "finished": "2026-10-09T14:35:31Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-09T14:27:56Z",
+     "finished": "2026-10-09T14:27:56Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-09T14:37:52Z",
+     "finished": "2026-10-09T14:39:11Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T14:42:54Z",
+     "finished": "2026-10-09T14:42:54Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T14:44:47Z",
+     "finished": "2026-10-09T14:44:47Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "done",
+     "started": "2026-10-09T14:48:31Z",
+     "finished": "2026-10-09T14:48:31Z"
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "done",
+     "started": "2026-10-09T14:52:31Z",
+     "finished": "2026-10-09T14:52:31Z"
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "done",
+     "started": "2026-10-09T15:01:17Z",
+     "finished": "2026-10-09T15:01:17Z"
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "held",
+     "started": "2026-10-09T15:25:32Z",
+     "finished": "2026-10-09T15:39:46Z"
+    }
+   ],
+   "holds": [],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "My whole crew knew my wife was cheating for two years. Nobody told me. When I found out why they stayed quiet, it broke me worse than she did.",
+     "card": "none",
+     "scroll": "Sunny backyard party, medium shot, front, eye level, static: the man in the teal-and-orange floral shirt holds a plate of food, smiles, then the smile drops into confusion while the circle mingles behind him under the bunting.",
+     "thumb": "the source's first frame: the man at the buffet table, plate in hand, smile breaking to confusion, guests behind him; no words beyond the running caption."
+    },
+    {
+     "v": 1,
+     "take": "the funeral, six hours in",
+     "line": "My father had been in the ground six hours when my cousin pulled me aside. Everybody been knowing about my wife and my best friend. Everybody but me.",
+     "card": "running caption only, first chunk: \"My father had been\"",
+     "scroll": "Funeral reception, marble floor, soft window light: mid-handshake with a mourner, a hand grabs the man's black suit sleeve and pulls him out of the line, the paper cup in his other hand sloshing over.",
+     "thumb": "the man in his black suit, his cousin's mouth at his ear, his eyes fixed past her on a couple standing close across the hall; words \"AT MY FATHER'S FUNERAL\""
+    },
+    {
+     "v": 2,
+     "take": "Thanksgiving, carving with a smile",
+     "line": "Thanksgiving, my house. I carved the turkey and smiled the whole meal. I'd already seen his hand on her back through the kitchen glass. The whole circle knew before me.",
+     "card": "running caption only, first chunk: \"Thanksgiving, my house.\"",
+     "scroll": "Thanksgiving table, warm evening light: the carving knife sinks into the turkey on the first word while he holds a wide, fixed smile; over his shoulder, soft through the frosted kitchen door, a man's hand slides down a woman's back.",
+     "thumb": "wide from the far end of the table, the man standing at the head with the knife over the turkey, every face at the table turned toward him smiling; words \"SMILED THE WHOLE MEAL\""
+    },
+    {
+     "v": 3,
+     "take": "the drive home",
+     "line": "End of the night, I drove him home like we were still best friends. He'd been with my wife two years. Whole crew been knowing.",
+     "card": "running caption only, first chunk: \"End of the night,\"",
+     "scroll": "Night, car interior, streetlights strobing across two faces: the passenger throws his head back laughing; the driver's knuckles tighten white on the wheel and his eyes never leave the road.",
+     "thumb": "two-shot through the windshield at night, the passenger mid-laugh, the driver stone-faced with a streetlight across his eyes; words \"I DROVE HIM HOME\""
+    },
+    {
+     "v": 4,
+     "take": "the friend's excuse at the diner",
+     "line": "One of the guys finally told me straight up. Two years they didn't know how to tell me about my wife. Said I seemed cool with it. I wasn't cool with it. I was just invisible.",
+     "card": "running caption only, first chunk: \"One of the guys\"",
+     "scroll": "Diner booth, warm light: the friend across the table says it and looks away; the man's coffee cup stops an inch from his lips, and he sets it down without drinking.",
+     "thumb": "the man alone in the diner booth, the seat across from him empty, his coffee untouched; words \"THEY SAID I SEEMED COOL WITH IT\""
+    },
+    {
+     "v": 5,
+     "take": "fresh cut, last to know",
+     "line": "Every two weeks, same chair, fresh cut, laughing with the whole shop. Two years of that. The whole circle been knowing about my wife. Nobody told me.",
+     "card": "running caption only, first chunk: \"Every two weeks, same chair,\"",
+     "scroll": "Barbershop, afternoon light: the barber whips the cape off and spins the chair to face the mirror; the man grins at his fresh cut, and in the mirror two men from the circle on the waiting bench trade a look and go quiet. No blade in frame; the camera stays on his face and the mirror, never on his neck.",
+     "thumb": "the barbershop mirror: his grin up front, the two men on the bench behind him looking away; words \"FRESH CUT. LAST TO KNOW.\""
+    }
+   ],
+   "updated": "2026-10-09T15:39:46+00:00"
+  },
+  {
+   "label": "resilia-song-03-brand-b",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": null,
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T15:26:42Z",
+     "finished": "2026-10-09T15:26:42Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "running",
+     "started": "2026-10-09T15:26:53Z",
+     "finished": null
+    }
+   ],
+   "holds": [],
+   "hooks": [],
+   "updated": "2026-10-09T15:26:53+00:00"
+  },
+  {
+   "label": "resilia-song-02-brand-b",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": null,
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T13:32:53Z",
+     "finished": "2026-10-09T13:32:53Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T13:33:00Z",
+     "finished": "2026-10-09T13:57:04Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T14:49:37Z",
+     "finished": "2026-10-09T14:49:37Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T14:52:26Z",
+     "finished": "2026-10-09T14:52:26Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T14:53:16Z",
+     "finished": "2026-10-09T14:53:16Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-09T15:02:40Z",
+     "finished": "2026-10-09T15:02:40Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-09T15:04:02Z",
+     "finished": "2026-10-09T15:04:02Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T15:06:36Z",
+     "finished": "2026-10-09T15:06:36Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T15:08:39Z",
+     "finished": "2026-10-09T15:08:39Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "done",
+     "started": "2026-10-09T15:14:01Z",
+     "finished": "2026-10-09T15:14:01Z"
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "held",
+     "started": "2026-10-09T15:17:32Z",
+     "finished": "2026-10-09T15:17:32Z"
+    }
+   ],
+   "holds": [
+    "AUDIT-HOLD.md"
+   ],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "My whole crew knew my wife was cheating for two years. Nobody told me. When I found out why they stayed quiet, it broke me worse than she did.",
+     "card": "My whole crew knew my wife was cheating",
+     "scroll": "A sunny upscale backyard party with a yellow tablecloth and bunting. The protagonist, in the teal-and-orange tropical shirt, holds a plate and smiles, then turns right in shock. Medium shot, centred, static, hard midday sun.",
+     "thumb": "The source's first frame. The protagonist at the backyard party, plate in hand, caught in his turn to shock. The words \"MY WHOLE CREW KNEW MY WIFE WAS CHEATING\" sit in purple on a white box, centred."
+    },
+    {
+     "v": 1,
+     "take": "Thanksgiving: he made a toast anyway",
+     "line": "I watched my best friend put his hand on my wife's back in my own kitchen. Then I carved the turkey like nothing happened. Made a toast.",
+     "card": "I CARVED THE TURKEY / LIKE NOTHING HAPPENED",
+     "scroll": "Close-up of a carving knife sinking into a roast turkey. Focus racks past the blade to the glass kitchen door behind, where a man's hand slides onto a woman's back.",
+     "thumb": "The protagonist at the head of the Thanksgiving table with his glass raised mid-toast, smiling, eyes wet. Deshawn and Alicia sit side by side at the far end. Words: \"I MADE A TOAST.\""
+    },
+    {
+     "v": 2,
+     "take": "the funeral, six hours in",
+     "line": "My father had been in the ground six hours when my cousin pulled me aside. Man, I'm sorry, but everyone's been knowing.",
+     "card": "SIX HOURS AFTER / MY FATHER'S FUNERAL",
+     "scroll": "A funeral reception hall with gold chairs and white roses. The protagonist, in a black suit, is mid-handshake in the receiving line when a woman's hand grips his arm and pulls him out of it.",
+     "thumb": "The protagonist's face in a black suit and tie, white roses behind him, the cousin's mouth at his ear. Words: \"EVERYONE'S BEEN KNOWING.\""
+    },
+    {
+     "v": 3,
+     "take": "the cover story",
+     "line": "She said she was going to yoga. She was going to a hotel. Two years, and the whole circle knew.",
+     "card": "SHE SAID YOGA / SHE WAS GOING TO A HOTEL",
+     "scroll": "Alicia kisses his cheek at the front door with a rolled yoga mat on her shoulder. Match cut: the same mat drops onto a made hotel bed.",
+     "thumb": "A rolled yoga mat on a hotel bed, a key card on top. Words: \"SHE SAID YOGA.\""
+    },
+    {
+     "v": 4,
+     "take": "the barbecue: everybody watched him not know",
+     "line": "One of the guys finally told me straight up. Man, you seemed happy. Like you were cool with it.",
+     "card": "YOU SEEMED HAPPY / LIKE YOU WERE COOL WITH IT",
+     "scroll": "At a backyard grill, he flips a burger and laughs. Behind him, every guest's eyes slide from him to Deshawn and Alicia standing close by the cooler, then back to him.",
+     "thumb": "A wide shot of the yard with every face turned toward him at the grill. He is the only one smiling. Words: \"THEY WATCHED ME NOT KNOW.\""
+    },
+    {
+     "v": 5,
+     "take": "twenty-two years of photos",
+     "line": "His name is Deshawn. Best friends since high school, twenty-two years. He's been with my wife for two.",
+     "card": "BEST FRIENDS / SINCE HIGH SCHOOL",
+     "scroll": "Polaroids fall one by one onto a wooden table: two boys in basketball jerseys, two young men at a wedding. The last one to land shows Deshawn and Alicia leaning close.",
+     "thumb": "A single polaroid from his wedding: him and Deshawn arm in arm, Alicia between them, Deshawn's hand on her waist behind his back. Words: \"22 YEARS.\""
+    }
+   ],
+   "updated": "2026-10-09T15:17:32+00:00"
+  },
+  {
+   "label": "resilia-song-01-brand-a",
+   "brand": "brand-a",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": null,
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T13:12:24Z",
+     "finished": "2026-10-09T13:12:24Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "running",
+     "started": "2026-10-09T15:12:15Z",
+     "finished": null
+    }
+   ],
+   "holds": [],
+   "hooks": [],
+   "updated": "2026-10-09T15:12:15+00:00"
+  },
+  {
+   "label": "resilia-song-03-brand-a",
+   "brand": "brand-a",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": null,
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T14:18:34Z",
+     "finished": "2026-10-09T14:18:34Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-09T14:21:54Z",
+     "finished": "2026-10-09T14:21:54Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-09T15:06:39Z",
+     "finished": "2026-10-09T15:06:39Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-09T15:09:04Z",
+     "finished": "2026-10-09T15:09:04Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-09T15:09:50Z",
+     "finished": "2026-10-09T15:09:50Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "error",
+     "started": "2026-10-09T15:12:15Z",
+     "finished": "2026-10-09T15:12:15Z"
+    }
+   ],
+   "holds": [],
+   "hooks": [],
+   "updated": "2026-10-09T15:12:15+00:00"
+  },
+  {
+   "label": "resilia-song-01-brand-b",
+   "brand": "brand-b",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": null,
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-09T13:12:12Z",
+     "finished": "2026-10-09T13:12:12Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "running",
+     "started": "2026-10-09T13:12:36Z",
+     "finished": null
+    }
+   ],
+   "holds": [],
+   "hooks": [],
+   "updated": "2026-10-09T13:12:36+00:00"
+  },
+  {
+   "label": "sprtn-not-done-yet",
+   "brand": "brand-a",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The curl, not the wash",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-05T08:13:03Z",
+     "finished": "2026-10-05T08:13:03Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-05T08:15:36Z",
+     "finished": "2026-10-05T08:15:36Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-06T09:31:17Z",
+     "finished": "2026-10-06T09:31:17Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-05T08:20:08Z",
+     "finished": "2026-10-06T09:31:44Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-05T08:21:42Z",
+     "finished": "2026-10-06T09:32:44Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-05T08:22:58Z",
+     "finished": "2026-10-06T09:33:18Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-06T09:56:16Z",
+     "finished": "2026-10-06T10:00:01Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-06T10:01:11Z",
+     "finished": "2026-10-06T10:02:18Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T08:31:13Z",
+     "finished": "2026-10-09T08:31:13Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T09:15:03Z",
+     "finished": "2026-10-09T09:15:03Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "done",
+     "started": "2026-10-09T09:38:59Z",
+     "finished": "2026-10-09T09:38:59Z"
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "done",
+     "started": "2026-10-09T09:19:47Z",
+     "finished": "2026-10-09T09:41:41Z"
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "done",
+     "started": "2026-10-09T09:47:18Z",
+     "finished": "2026-10-09T09:47:18Z"
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "held",
+     "started": "2026-10-09T09:52:45Z",
+     "finished": "2026-10-09T09:52:45Z"
+    },
+    {
+     "key": "stage5u",
+     "name": "Mark used",
+     "status": "waiting",
+     "started": null,
+     "finished": null
+    }
+   ],
+   "holds": [],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "If you're noticing your razor bumps slowly getting worse, your face wash might be cleaning your face, but doing absolutely nothing as to why they keep coming back.",
+     "card": "How do I stop razor bumps?",
+     "scroll": "Propped phone, front camera, medium close-up at eye level: he sits centred at his desk under the blue LED strip, tilts his chin up and runs two fingers along the razor bumps on the side of his neck to show them, the card near the top of frame.",
+     "thumb": "The source's first frame, held: him mid-gesture with two fingers on the bumps along his neck, eyes on the lens, \"How do I stop razor bumps?\" in bold white at the top."
+    },
+    {
+     "v": 1,
+     "take": "right after the shave, one swipe",
+     "line": "One swipe and the razor bumps are already starting. The hair is growing right back into your skin, and your face wash never gets there.",
+     "card": "One swipe. / Razor bumps already.",
+     "scroll": "At the desk under the blue LED, he drags a razor once down the side of his neck toward the lens, lowers it, and tilts his chin so the line of red bumps along that one stroke faces the camera.",
+     "thumb": "The razor frozen mid-stroke on his neck, a line of red bumps just behind the blade, his eyes on the lens; \"ONE SWIPE.\" in bold white top centre."
+    },
+    {
+     "v": 2,
+     "take": "two days after a clean shave",
+     "line": "You can shave your neck clean and a day or two later it looks like this again. Razor bumps, right back, and your face wash never touched why.",
+     "card": "Shaved clean. / 2 days later.",
+     "scroll": "He runs the backs of his fingers slowly up his neck against the grain, they catch on the bumps, and he stops and holds on the roughest patch under his jaw.",
+     "thumb": "A tight crop of his knuckles stopped on a patch of razor bumps and dark marks under the jaw, with the crewneck collar and silver chain in frame; \"2 DAYS AFTER THE SHAVE\" in bold white."
+    },
+    {
+     "v": 3,
+     "take": "hiding the neck",
+     "line": "If you keep pulling your shirt up so nobody sees the razor bumps, your face wash never got to why they're there.",
+     "card": "Still hiding / the razor bumps?",
+     "scroll": "He grabs the neckline of his grey crewneck with both hands and pulls it up over his neck to his chin, holds it, then lets it drop so the bumps and dark marks show.",
+     "thumb": "Both hands holding the crewneck up to his chin, only his eyes and a strip of bumped jaw above it, looking into the lens; \"STILL HIDING IT?\" in bold white."
+    },
+    {
+     "v": 4,
+     "take": "tried every razor, late at night after a bad shave",
+     "line": "Five blade, single blade, rotary, foil. Makes no difference. The razor bumps still come back, because none of them reach the hair already under my skin.",
+     "card": "Every razor. / Same razor bumps.",
+     "scroll": "After dark, the room lit only by the blue LED and his front light, he sets four razors on the desk one after another, slaps the last one down, and points straight at the bumps on his neck.",
+     "thumb": "Four razors in a row on the desk in the blue light, him behind them pointing at his neck; \"TRIED EVERY RAZOR\" in bold white."
+    },
+    {
+     "v": 5,
+     "take": "the same spot, every shave",
+     "line": "Same spot, every single time you shave. The razor bumps come back right where they were, and washing with your hands never gets under there.",
+     "card": "Same spot. / Every shave.",
+     "scroll": "With one fingertip he traces a small circle around one patch of bumps and dark marks under his jaw, then taps the middle of it three times, eyes on the lens.",
+     "thumb": "An extreme close-up of a fingertip circling one patch of razor bumps and dark marks under the jaw; \"THE SAME SPOT. EVERY TIME.\" in bold white."
+    }
+   ],
+   "updated": "2026-10-09T09:52:45+00:00"
+  },
+  {
+   "label": "sprtn-18000-men",
+   "brand": "brand-a",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The Year He Stopped Hiding",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-05T08:13:05Z",
+     "finished": "2026-10-05T08:13:05Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-05T08:15:12Z",
+     "finished": "2026-10-05T08:15:12Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-05T17:48:05Z",
+     "finished": "2026-10-05T17:48:05Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-05T08:36:12Z",
+     "finished": "2026-10-05T17:49:25Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-05T08:38:26Z",
+     "finished": "2026-10-05T17:49:51Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-05T08:40:20Z",
+     "finished": "2026-10-05T17:50:31Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-06T10:04:14Z",
+     "finished": "2026-10-06T10:04:14Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-06T10:03:48Z",
+     "finished": "2026-10-06T10:05:59Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T08:32:20Z",
+     "finished": "2026-10-09T08:32:20Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T09:14:57Z",
+     "finished": "2026-10-09T09:14:57Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "done",
+     "started": "2026-10-09T09:18:42Z",
+     "finished": "2026-10-09T09:18:42Z"
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "done",
+     "started": "2026-10-09T09:21:20Z",
+     "finished": "2026-10-09T09:24:14Z"
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "done",
+     "started": "2026-10-09T09:29:12Z",
+     "finished": "2026-10-09T09:29:12Z"
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "done",
+     "started": "2026-10-09T09:36:29Z",
+     "finished": "2026-10-09T09:36:29Z"
+    },
+    {
+     "key": "stage5u",
+     "name": "Mark used",
+     "status": "done",
+     "started": "2026-10-09T09:51:26Z",
+     "finished": "2026-10-09T09:51:26Z"
+    }
+   ],
+   "holds": [],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "You can turn away, but I will never hide my face.",
+     "card": "2025 / how sad could it be...",
+     "scroll": "Office: he leans in to kiss her cheek and she pushes him away with her hand, disgusted, looking away; razor bumps and dark marks along his neck and jaw catch the warm overhead light.",
+     "thumb": "The push-away at the moment her hand meets his jaw, man left and woman right, with \"2025 / how sad could it be...\" centred in lowercase white with a black outline."
+    },
+    {
+     "v": 1,
+     "take": "the razor drawer — every kind of blade, the same bumps",
+     "line": "Every blade I try, and it rises up again.",
+     "card": "2025 / five blades. one blade. same razor bumps",
+     "scroll": "Bathroom mirror, tight on his neck: the razor lifts off mid-stroke under the jaw, and the strip it just cleared is already red and raised with bumps; a row of different unbranded razors (cartridge, single blade, electric) lines the counter edge in frame.",
+     "thumb": "Extreme close-up of the bumped stroke line under the jaw with the blade at the frame edge, \"2025\" at the top and \"same razor bumps\" at the bottom."
+    },
+    {
+     "v": 2,
+     "take": "the hider — the beard he grew so nobody sees",
+     "line": "Let it grow and cover every mark I hold inside.",
+     "card": "2025 / grew the beard to hide the razor bumps",
+     "scroll": "Bathroom: two of his fingers part his jaw beard and press at a raised bump at the skin under the hair that will not come out; his face in the mirror behind, jaw set, frustrated.",
+     "thumb": "Close crop of the two fingers parting the beard, the bump visible at the skin, with \"grew the beard to hide it.\""
+    },
+    {
+     "v": 3,
+     "take": "the pile — everything he bought for it",
+     "line": "Every bottle that I bought, every promise falling down.",
+     "card": "2025 / tried everything. still got razor bumps",
+     "scroll": "Kitchen (the source's kitchen): he turns a plastic bag upside down and a heap of unlabelled creams, aftershaves and razors spills across the white counter, one bottle rolling off the edge; his other hand rubs the bumps under his jaw.",
+     "thumb": "Top-down view of the spilled pile on the white counter with his hand at the frame edge, and \"tried everything.\""
+    },
+    {
+     "v": 4,
+     "take": "the shower — scrubbing with his hands",
+     "line": "Wash it all away, but it's buried where I can't reach.",
+     "card": "2025 / my hands don't cut it on these razor bumps",
+     "scroll": "Shower, water running: both his hands scrub hard at his neck and jaw in a lather; he drops his hands and the foam slides off, and the bumps are exactly where they were.",
+     "thumb": "Wet neck close-up with soap foam sliding off the raised bumps and his hands blurred at the edge, with \"my hands don't cut it.\""
+    },
+    {
+     "v": 5,
+     "take": "the barber's chair — the fresh cut the neck undoes (STORY OPENER)",
+     "line": "Sharp lines in the chair, but the mirror tells the truth.",
+     "card": "2025 / fresh line up. razor bumps right under it",
+     "scroll": "Barbershop chair: the barber whips off the cape and holds up the hand mirror, and in it the lineup is razor-sharp while along the neck below it runs a row of red razor bumps; the man's eyes drop.",
+     "thumb": "The hand mirror filling the frame (sharp lineup over the red-bumped neck), with \"fresh line up.\""
+    }
+   ],
+   "updated": "2026-10-09T09:51:26+00:00"
+  },
+  {
+   "label": "alphainfuse-2025-2026",
+   "brand": "brand-a",
+   "route": "ALREADY AN AD",
+   "opening_at": null,
+   "title": "The Year His Neck Cleared",
+   "steps": [
+    {
+     "key": "stage0",
+     "name": "Triage",
+     "status": "done",
+     "started": "2026-10-05T08:13:28Z",
+     "finished": "2026-10-05T08:13:28Z"
+    },
+    {
+     "key": "stage1",
+     "name": "Teardown",
+     "status": "done",
+     "started": "2026-10-05T08:16:49Z",
+     "finished": "2026-10-05T08:16:49Z"
+    },
+    {
+     "key": "stage1k",
+     "name": "Culture",
+     "status": "done",
+     "started": "2026-10-05T17:57:02Z",
+     "finished": "2026-10-05T17:57:02Z"
+    },
+    {
+     "key": "stage1c",
+     "name": "Doctrine",
+     "status": "done",
+     "started": "2026-10-06T10:00:36Z",
+     "finished": "2026-10-06T10:00:36Z"
+    },
+    {
+     "key": "stage1b",
+     "name": "Audience",
+     "status": "done",
+     "started": "2026-10-06T10:01:10Z",
+     "finished": "2026-10-06T10:02:34Z"
+    },
+    {
+     "key": "stage2",
+     "name": "Spec",
+     "status": "done",
+     "started": "2026-10-06T10:03:08Z",
+     "finished": "2026-10-06T10:03:08Z"
+    },
+    {
+     "key": "stage3",
+     "name": "Injection",
+     "status": "done",
+     "started": "2026-10-06T10:03:19Z",
+     "finished": "2026-10-06T10:09:00Z"
+    },
+    {
+     "key": "stage4r",
+     "name": "Reading",
+     "status": "done",
+     "started": "2026-10-06T10:10:13Z",
+     "finished": "2026-10-06T10:10:42Z"
+    },
+    {
+     "key": "stage4b",
+     "name": "Hooks",
+     "status": "done",
+     "started": "2026-10-09T08:31:50Z",
+     "finished": "2026-10-09T08:31:50Z"
+    },
+    {
+     "key": "stage4a",
+     "name": "Placement",
+     "status": "done",
+     "started": "2026-10-09T08:34:54Z",
+     "finished": "2026-10-09T08:34:54Z"
+    },
+    {
+     "key": "stage4d",
+     "name": "Close",
+     "status": "done",
+     "started": "2026-10-09T09:18:48Z",
+     "finished": "2026-10-09T09:18:48Z"
+    },
+    {
+     "key": "stage4e",
+     "name": "Audit",
+     "status": "done",
+     "started": "2026-10-09T08:45:48Z",
+     "finished": "2026-10-09T09:30:57Z"
+    },
+    {
+     "key": "stage4g",
+     "name": "Spice",
+     "status": "done",
+     "started": "2026-10-09T09:36:01Z",
+     "finished": "2026-10-09T09:36:01Z"
+    },
+    {
+     "key": "stage5",
+     "name": "Brief",
+     "status": "done",
+     "started": "2026-10-09T09:42:11Z",
+     "finished": "2026-10-09T09:42:11Z"
+    },
+    {
+     "key": "stage5u",
+     "name": "Mark used",
+     "status": "done",
+     "started": "2026-10-09T09:51:06Z",
+     "finished": "2026-10-09T09:51:06Z"
+    }
+   ],
+   "holds": [],
+   "hooks": [
+    {
+     "v": 0,
+     "take": "control",
+     "line": "[SUNG LINE: the stand-in track's first verse line, sung at 0:00.8, defiance over the rejection; never the source song's words]",
+     "card": "2025 / How sad it could be...",
+     "scroll": "In the office, he leans toward her with a sad look; she scrunches her face in disgust and pushes his chest away with her right hand, with razor bumps visible along his neck and jaw.",
+     "thumb": "The source's first frame, held: her hand on his chest mid-push, her face mid-recoil, the card \"2025 / How sad it could be...\" centred."
+    },
+    {
+     "v": 1,
+     "take": "the neck a day or two after the shave",
+     "line": "[SUNG LINE: alternate verse line, low and lingering, about what still shows after you clean it up; never the source song's words]",
+     "card": "2025 / Razor bumps a day or two after every shave / what i wash with can't reach it 😔",
+     "scroll": "In the narrow beige hallway, in navy compression shorts, he tips his chin up and turns his head to the side, and the overhead light rakes across his neck: two-day stubble pushing up through a band of raised red razor bumps from his Adam's apple to his jaw.",
+     "thumb": "A tight profile crop of the lifted neck, the bumps lit from above, with the words \"a day or two later 😔\" across the top third."
+    },
+    {
+     "v": 2,
+     "take": "one swipe of the razor",
+     "line": "[SUNG LINE: alternate verse line, tense, about it starting the second you try; never the source song's words]",
+     "card": "2025 / One swipe and the razor bumps start / the face wash just sits on top 😔",
+     "scroll": "At the upscale bathroom mirror, a razor finishes one upward stroke on his neck, and along the clean strip it leaves, small red bumps are already standing up; he freezes with the razor still against his skin.",
+     "thumb": "A mirror crop of the razor resting on his neck at the top of the red strip, with the words \"one swipe 😔\"."
+    },
+    {
+     "v": 3,
+     "take": "collar up so she won't see",
+     "line": "[SUNG LINE: alternate verse line, about hiding what you can't stop showing; never the source song's words]",
+     "card": "2025 / Collar up so she won't see the razor bumps / washed it with my hands. Wasn't effective for me 😔",
+     "scroll": "At the office desk, the woman sits down beside him and he yanks the collar of his work shirt up to his jaw in one quick move; razor bumps still show above the edge, and her eyes drop straight to them.",
+     "thumb": "His fist gripping the collar up under his jaw, bumps peeking over the fabric, her glance blurred behind, with the words \"collar up 😔\"."
+    },
+    {
+     "v": 4,
+     "take": "midnight, after a bad shave",
+     "line": "[SUNG LINE: alternate verse line, quiet and late, about trying again and getting the same answer; never the source song's words]",
+     "card": "2025 / Midnight shave. No matter what I do, razor bumps / using my hands does not cut it enough 😔",
+     "scroll": "In the cramped bathroom under the harsh fluorescent tube, his lathered fingers scrub face wash up and down his neck; he splashes it off, and the razor bumps are exactly where they were, with water running down over them.",
+     "thumb": "His wet neck with foam sliding off and every bump still there, his hand dropping out of frame, with the words \"No matter what I do 😔\"."
+    },
+    {
+     "v": 5,
+     "take": "the pile of creams that didn't work",
+     "line": "[SUNG LINE: alternate verse line, about being done with what failed you; never the source song's words]",
+     "card": "2025 / Razor bumps on my neck / most of them just sold creams 😔",
+     "scroll": "On the light oak desk with the black taper candle and the plant, an unseen hand sweeps a row of half-used, unbranded face washes and bump creams off the edge, and they topple and roll out of frame.",
+     "thumb": "An overhead shot of the knocked-over bottles fanned across the oak, one tube still spinning, with the words \"most of them just sold creams 😔\"."
+    }
+   ],
+   "updated": "2026-10-09T09:51:06+00:00"
+  }
+ ]
+}

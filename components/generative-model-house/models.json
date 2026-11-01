@@ -1,0 +1,196 @@
+{
+ "_readme": "The Generative Model House, read by code: what each model does. Human page: MODEL-HOUSE.md beside this file; reader: model_house.py. Change a model here and every tool follows (the owner, 2026-10-20). Each job names its model BY REGISTRY ID (`registry`, an id in components/models/models.json), the `door` it is sold through and the `capability` the job needs; the vendor's name, the key and the cost come from the registry, never from here (MDL-8 (registry-linked house), 2026-10-22). model_house.model(job) answers the vendor's name under the same keys as before.",
+ "status": "approved",
+ "pictures": {
+  "generate": {
+   "registry": "gpt-image-2.5",
+   "door": "higgsfield",
+   "capability": "image-generate",
+   "rule": "HOUSE-PIC-1: GPT Image 2.5 first, through the Higgsfield command line (sunburst variant, quality high, 2k tier, 9:16 named on every call). The picture ladder is GPT, one more try on GPT when busy or broken, Seedream 5 Pro when GPT refuses, Nano Banana Pro, then OpenAI direct as the last rung. The run record says which rung made each picture.",
+   "history": [
+    {
+     "who": "the owner",
+     "date": "2026-10-26",
+     "said": "all generative access through Higgsfield; pictures use the Higgsfield command line"
+    }
+   ]
+  },
+  "edit": {
+   "registry": "gpt-image-2.5",
+   "door": "higgsfield",
+   "capability": "image-edit",
+   "rule": "HOUSE-PIC-2: every edit of a picture is GPT Image 2.5 on the Higgsfield command line. There is no mask on this door: a partial fix is an ordinary edit that names the one area that changes, with the approved original pasted back outside it.",
+   "history": [
+    {
+     "who": "the owner",
+     "date": "2026-10-20",
+     "said": "for image editing we're still gonna use GPT"
+    }
+   ]
+  },
+  "backup": {
+   "registry": "seedream-5-pro-edit",
+   "door": "higgsfield",
+   "capability": "image-edit",
+   "rule": "HOUSE-PIC-3: second rung. Used when GPT Image refuses a picture we are allowed to make; same prompt, same references (at most 10), same frame. Seedream's own content rules still apply.",
+   "verified": "2026-10-26 on `higgsfield model get seedream_v5_pro` (command line 1.2.2): prompt + image_references (at most 10), aspect_ratio, resolution 1k/1.5k/2k.",
+   "record": "the run record says which model made each picture",
+   "history": [
+    {
+     "who": "the owner",
+     "date": "2026-10-21",
+     "said": "let's set up back ups for sure because I want full control over this creative output"
+    }
+   ]
+  },
+  "object": {
+   "registry": "gemini-3-pro-image",
+   "door": "higgsfield",
+   "capability": "image-generate",
+   "rule": "HOUSE-PIC-4: third rung, Nano Banana Pro on the Higgsfield command line (at most 14 references). Used when GPT and Seedream both fail.",
+   "status": "draft"
+  },
+  "safety_net": {
+   "registry": "gpt-image-2.5",
+   "door": "openai",
+   "capability": "image-edit",
+   "state": "last rung",
+   "rule": "HOUSE-PIC-5: OpenAI direct is the LAST rung of the picture ladder only, so the work still gets done when every Higgsfield rung has failed. It is removed once the Higgsfield rungs have made real pictures."
+  }
+ },
+ "clips": {
+  "seedance": {
+   "registry": "seedance-2.5",
+   "door": "higgsfield",
+   "capability": "video-from-image",
+   "good_at": "strongest motion, takes our voice slice",
+   "bad_at": "cinematic look when not told otherwise — the prompt asks for the shot's own look (phone footage where the swipe is phone footage)"
+  },
+  "backup": {
+   "registry": "kling-4.0",
+   "door": "higgsfield",
+   "capability": "video-from-image",
+   "good_at": "a silent clip from the approved picture when Seedance has failed three takes, been refused or is down",
+   "bad_at": "cannot take our voice read: its clip is silent and a talking line is laid under it, not lip-synced; no 480p",
+   "role": "backup behind clips.seedance, wired in clips_run.make_backup (ruled 2026-10-26)"
+  },
+  "ruled_2026_10_23": {
+   "talking": "seedance",
+   "motion": "seedance",
+   "resolution": "480p",
+   "takes": "as many as the finished product needs — never fewer to save money",
+   "seedance_paths": {
+    "talking": "bytedance/seedance-2.5/reference-to-video (the approved start picture + the line's own voice read, made together)",
+    "motion": "bytedance/seedance-2.5/image-to-video (the approved start picture, end picture where there is one)"
+   },
+   "door": "higgsfield API (tools/video-production/machine/higgsfield_api.py, HIGGSFIELD_KEY_ID/SECRET)",
+   "why": "Every clip is Seedance 2.5, with the voice and the picture made together by the one model; cost does not decide the model. Resolution is 480p, upscaled on this Mac. Frontier models are used for generative work (provenance: history below).",
+   "history": [
+    {
+     "who": "the owner",
+     "date": "2026-10-23",
+     "said": "the owner, 2026-10-23: \"we always need to use the frontier models for generative work. We can't focus on making things as cheap as possible … we can use the 720P version of seed dance … GPT … is the best in the world and seed dance is the best video in the world.\" Voice and picture are made together by one model; cost never decides."
+    }
+   ]
+  },
+  "song_ad": {
+   "registry": "seedance-2.0",
+   "door": "higgsfield",
+   "capability": "video-from-image",
+   "how": "every on-camera singing clip of a song ad (the singer's slice of the Suno song is the read); the song itself is laid in the edit, so the clip's own sound is not kept",
+   "ruled": "the owner, 2026-10-29: Seedance 2.0 for song ads, officially. Every other clip stays Seedance 2.5."
+  }
+ },
+ "swipe_footage": {
+  "swap": {
+   "registry": "higgsfield-object-swap",
+   "door": "higgsfield",
+   "capability": "video-object-swap",
+   "api": "higgsfield/genjutsu/object-swap/v1.0",
+   "_api": "the same Genjutsu object swap on Higgsfield's cloud API (machine/higgsfield_api.py) — the path swap_run.py submits to; hf_mult_replace_object is its name on the session's Higgsfield door"
+  },
+  "motion_transfer": {
+   "registry": "higgsfield-motion-control",
+   "door": "higgsfield",
+   "capability": "video-motion-transfer",
+   "when": "the swap kept the original person's face"
+  }
+ },
+ "sound": {
+  "voice": {
+   "registry": "eleven-v3",
+   "door": "elevenlabs",
+   "capability": "voice-tts",
+   "how": "each line is its own read, with that shot's delivery as an audio tag; never one long take for the whole piece"
+  },
+  "voice_design": {
+   "registry": "eleven-ttv-v3",
+   "door": "elevenlabs",
+   "capability": "voice-design",
+   "how": "designs a cast member's own voice from their description and a real reference recording (tools/video-production/machine/make_voice.py); the only ElevenLabs design model that takes a reference recording",
+   "ruled": "the voice rule (one custom voice per character, VIDEO-RULINGS V4); job added 2026-10-21 so make_voice reads its model here"
+  },
+  "music_bed": {
+   "registry": "eleven-music-v2.5",
+   "door": "elevenlabs",
+   "capability": "music",
+   "ruled": "MODEL-HOUSE.md: music beds and sound effects = ElevenLabs Music and Sound Effects. No separate bed model is ruled, so a bed is made on the ruled music model (the song's, music_v2_5); added 2026-10-21 (CHANGES.md P62) so code reads it here"
+  },
+  "song": {
+   "registry": "suno",
+   "door": "suno",
+   "capability": "music",
+   "how": "made by hand in Suno from the inputs the song-ad chain writes (video-production song.py --suno, by components/model-inputs/inputs/suno.json); the take comes back through the song gate (song.py --from-file)",
+   "ruled": "the owner, 2026-10-28: \"for all song ads, we're just using Suno. It's the best.\" Was ElevenLabs Music v2.5 (still the music bed)."
+  },
+  "words": {
+   "registry": "scribe_v1",
+   "door": "elevenlabs",
+   "capability": "transcribe"
+  },
+  "speakers": {
+   "registry": "scribe_v2",
+   "door": "elevenlabs",
+   "capability": "diarize",
+   "how": "who speaks when on a swipe's audio: speaker labels and word timings (diarize). Its words are not trusted outside English; the audio teardown merges them with the judge's heard lines (components/audio-teardown/speakers.py)"
+  }
+ },
+ "behind": {
+  "judge": {
+   "registry": "gemini-3.1-pro-preview",
+   "door": "google",
+   "capability": "judge-vision"
+  },
+  "upscale": {
+   "registry": "real-esrgan",
+   "door": "local",
+   "capability": "upscale-video"
+  },
+  "upscale_alternate": {
+   "registry": "bytedance-upscaler-video",
+   "door": "higgsfield",
+   "capability": "upscale-video",
+   "rule": "HOUSE-UP-1: the local Real-ESRGAN is the first upscaler; the alternate is ByteDance's video upscaler on Higgsfield (`bytedance_video_upscale`)."
+  },
+  "3d": {
+   "registry": "trellis.2-4b",
+   "door": "local",
+   "capability": "3d-from-image"
+  },
+  "judge_busy": {
+   "registry": [
+    "gemini-3.5-flash",
+    "gemini-3-flash-preview"
+   ],
+   "door": "google",
+   "capability": "judge-vision",
+   "how": "when the judge answers 'high demand', the next model that can read a video, in this order — a busy-model fallback, never a cost choice (VIDEO-RULINGS V17); the teardown's video reads and the audio teardown's heard reads"
+  },
+  "fast_read": {
+   "registry": "gemini-3-flash-preview",
+   "door": "google",
+   "capability": "judge-vision",
+   "how": "a hand tool's quick test read of one prompt against one video (video-teardown tools/run-prompt.sh, gemini_breakdown.py, gemini_text.py run by hand); every read inside a run is behind.judge"
+  }
+ }
+}

@@ -1,0 +1,5 @@
+{
+ "_readme": "job -> builder, for preview.py: \"path/under/components/file.py:function\". The function takes the brief and returns {prompt, inputs, settings, fields, medium}.",
+ "swipe_footage.motion_transfer": "video-production/machine/swap_bench.py:motion_transfer",
+ "swipe_footage.swap": "video-production/machine/swap_bench.py:swap"
+}

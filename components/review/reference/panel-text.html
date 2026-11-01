@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="review-reference" content="1">
+<meta name="review-kind" content="review">
+<title>REFERENCE · review panel — text</title>
+<!--
+  A REFERENCE PAGE, NOT A PRODUCT — card RV-6 (reference panels).
+
+  The panel for `type: text` on the `review` kind. It shows one request off the
+  real records plane, folds its status out of the records (never stores one),
+  and files a verdict. Deliberately plain, and NOT in
+  team/promoted-surfaces.json — a promotion is a human act and no session
+  writes that file.
+-->
+<link rel="stylesheet" href="_reference.css">
+</head>
+<body>
+<p class="ref"><b>REFERENCE, NOT A PRODUCT.</b>
+  <code>components/review/reference/panel-text.html</code> — a working panel for
+  <code>type: text</code>, kept plain on purpose and never promoted. Copy it,
+  rewrite the look, keep the grammar.</p>
+
+<h1>Review panel — text</h1>
+<p class="faint">Open it as <code>panel-text.html?item=RQ-…</code>. The words come
+  from the pointer's warehouse — the repo mirror through <code>/api/file</code>, or
+  public blob bytes with no credential on the request. Status is FOLDED from the
+  records on every render, never remembered between them.</p>
+
+<div id="app"></div>
+
+<!-- The viewers' ONE credential module (CP-8), loaded rather than copied. A
+     page moved into platform/views/viewers/ must INLINE it instead — that route
+     serves one html file per request and cannot fetch a sibling. -->
+<script src="../../../platform/views/viewers/_templates/_session-bootstrap.js"></script>
+<script src="_reference.js"></script>
+<script>
+// THE TYPE THIS PAGE IS THE REFERENCE FOR. The block keys on it; a request of
+// another declared type is refused BY NAME rather than rendered by the wrong
+// panel, and an undeclared one is sent to panel-link.html, which is where the
+// manifest's degrade-to-a-link rule lives.
+const PANEL_TYPE = "text";
+mountReviewPanel(PANEL_TYPE, document.getElementById("app"));
+</script>
+</body>
+</html>

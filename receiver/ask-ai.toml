@@ -1,0 +1,11 @@
+name = "daemn-ask"
+main = "ask-ai.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+ORIGIN    = "https://daemn.co"
+KNOWLEDGE = "https://daemn.co/ask/knowledge.json"
+MODEL     = "gemini-3.6-flash"
+
+# secret: GEMINI_API_KEY  (npx wrangler secret put GEMINI_API_KEY -c receiver/ask-ai.toml)
+# optional: a KV namespace bound as RATE for the per-visitor limit

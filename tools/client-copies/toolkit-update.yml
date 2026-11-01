@@ -1,0 +1,38 @@
+# Lives in every client copy as .github/workflows/toolkit-update.yml (new_client.py puts it there).
+# Every morning it fetches the latest tools and prompts from Prizm Labs and saves them here.
+# The client's brand folder is never touched. PRIZM_TOOLKIT_KEY is a read-only key to Prizm Labs,
+# shared with every client copy from the clients' team space.
+name: toolkit-update
+on:
+  schedule:
+    - cron: "23 11 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: toolkit-update
+  cancel-in-progress: false
+jobs:
+  toolkit-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the latest toolkit
+        env:
+          PRIZM_TOOLKIT_KEY: ${{ secrets.PRIZM_TOOLKIT_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$PRIZM_TOOLKIT_KEY" > ~/.ssh/toolkit_key
+          chmod 600 ~/.ssh/toolkit_key
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/toolkit_key -o StrictHostKeyChecking=accept-new"
+          git clone --depth 1 --filter=blob:none --sparse git@github.com:daemnapps/prizm-labs.git ../prizm
+          git -C ../prizm sparse-checkout set --no-cone tools/client-copies/
+          git -C ../prizm sparse-checkout set --no-cone $(grep -v '^#' ../prizm/tools/client-copies/toolkit-paths.txt | sed 's|^|/|')
+          python3 ../prizm/tools/client-copies/apply_toolkit.py ../prizm .
+      - name: Save it
+        run: |
+          git add -A
+          if git diff --cached --quiet; then echo "Already up to date"; exit 0; fi
+          git -c user.name="toolkit-update" -c user.email="toolkit-update@users.noreply.github.com" \
+            commit -m "Latest tools and prompts from Prizm Labs"
+          git push

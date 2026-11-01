@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "make.py --brand --purpose --direction --out $OUT/<label> [--dry-run] (LD-1 (shared lab door))",
+  "script": "tools/image-production/make.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"purpose": "--purpose", "direction": "--direction", "label": "--label"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": ["gates", "request"]
+}

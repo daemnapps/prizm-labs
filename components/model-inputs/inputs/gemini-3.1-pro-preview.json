@@ -1,0 +1,236 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "medium": "judge",
+ "_readme": [
+  "The judge reads every clip and picture for the video gates. Preview model; the gate wording lives in the machine files, not here.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "Gemini 3.1 Pro (the judge)",
+ "registry_id": "gemini-3.1-pro-preview",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "door": "google"
+ },
+ "sources": [
+  "https://ai.google.dev/gemini-api/docs/video-understanding",
+  "[ours] tools/video-production/VIDEO-RULINGS.md V17",
+  "[ours] components/generative-model-house/MODEL-HOUSE.md"
+ ],
+ "limits": {
+  "file_api_gb_paid": 20,
+  "file_api_gb_free": 2,
+  "inline_mb": 100,
+  "request_total_mb_inline": 20,
+  "videos_per_request": 10,
+  "default_fps": 1,
+  "tokens_per_second": {
+   "low_media_resolution": 100,
+   "high_media_resolution": 300
+  },
+  "context_video_hours": {
+   "low": 3,
+   "high": 1
+  },
+  "formats": [
+   "mp4",
+   "mpeg",
+   "mov",
+   "avi",
+   "x-flv",
+   "mpg",
+   "webm",
+   "wmv",
+   "3gpp"
+  ],
+  "house": {
+   "busy_fallback": [
+    "gemini-3.5-flash",
+    "gemini-3-flash-preview"
+   ],
+   "fallback_rule": "when the judge answers 'high demand' (V17), never a cost choice"
+  }
+ },
+ "qualities": [
+  "low media resolution",
+  "high media resolution"
+ ],
+ "inputs": [
+  {
+   "name": "video",
+   "what": "The clip or swipe to read.",
+   "allowed": "File API for over 100 MB or reused files; inline under about 20 MB request total",
+   "we_send": "File API upload",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "text prompt",
+   "what": "The question or rubric.",
+   "allowed": "text, placed AFTER the video part",
+   "we_send": "the judge's check list for this stage",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "fps",
+   "what": "Sampling rate.",
+   "allowed": "default 1 fps; custom fps and clipping only in static mode",
+   "we_send": "raise only for fast action",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "start_offset / end_offset",
+   "what": "Read only a span.",
+   "allowed": "static mode",
+   "we_send": "a shot's span",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "media_resolution",
+   "what": "Detail per frame.",
+   "allowed": "low about 100 tokens/s, high about 300",
+   "we_send": "high for text on screen and faces",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "timestamps",
+   "what": "Refer to moments.",
+   "allowed": "MM:SS",
+   "we_send": "used in the rubric and answers",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "YouTube URL",
+   "what": "Read a public video by link.",
+   "allowed": "public only, preview",
+   "we_send": "not used: files are local",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "multiple videos",
+   "what": "Compare clips.",
+   "allowed": "up to 10 on 2.5 and later",
+   "we_send": "the take vs the swipe",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://ai.google.dev/gemini-api/docs/video-understanding"
+   ]
+  },
+  {
+   "name": "response schema",
+   "what": "Structured answer.",
+   "allowed": "JSON schema",
+   "we_send": "the verdict shape each gate reads",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "[ours] tools/video-production/machine/clip_judge.py"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "video-then-text",
+   "rule": "Put the video part first and the text prompt after it.",
+   "ours": "judge calls",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  },
+  {
+   "id": "ask-by-timestamp",
+   "rule": "Refer to moments with MM:SS so the answer points at a place.",
+   "ours": "rubric",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  },
+  {
+   "id": "one-question-per-gate",
+   "rule": "One check per read (face, product, leftover person, slop); a verdict that names the timestamp.",
+   "ours": "clip_judge, face_gate, product_check",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V41"
+  },
+  {
+   "id": "file-api-for-big",
+   "rule": "Use the File API above 100 MB or for reuse.",
+   "ours": "upload",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  },
+  {
+   "id": "busy-fallback",
+   "rule": "On 'high demand' fall back in order to the next model that can read video.",
+   "ours": "model house behind.judge_busy",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V17"
+  },
+  {
+   "id": "fps-for-fast",
+   "rule": "Raise fps or clip the span for fast action; 1 fps misses it.",
+   "ours": "hand check",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "text-first",
+   "text": "Putting the prompt before the video.",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  },
+  {
+   "id": "1fps-on-fast-hands",
+   "text": "Judging fast hands at the default 1 fps.",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  },
+  {
+   "id": "trust-without-evidence",
+   "text": "Accepting a pass with no timestamp.",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V41"
+  },
+  {
+   "id": "judge-approves",
+   "text": "Letting the judge approve: the owner approves status, the judge only checks.",
+   "status": "draft",
+   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+  },
+  {
+   "id": "agentic-with-custom-fps",
+   "text": "Custom fps or clipping in agentic mode: not supported.",
+   "status": "draft",
+   "source": "https://ai.google.dev/gemini-api/docs/video-understanding"
+  }
+ ]
+}

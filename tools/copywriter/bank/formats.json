@@ -1,0 +1,112 @@
+{
+ "schema": 1,
+ "note": "Output formats as DATA, not as a hand-kept table. Same principle as the language layer: the machine queries rows, it does not read prose. A new format is a new row here — no code change, no prompt edit. Brand- or channel-specific variants override by key.",
+ "defaults": {
+  "variations": 3,
+  "headlines": {
+   "count": 2,
+   "words": [
+    4,
+    5
+   ]
+  },
+  "descriptions": {
+   "count": 2,
+   "words": [
+    3,
+    3
+   ]
+  }
+ },
+ "formats": [
+  {
+   "key": "short-form",
+   "status": "approved",
+   "name": "Short-form",
+   "what": "The punchy one. Scroll-stopper, one idea, out.",
+   "length": {
+    "min": 25,
+    "max": 60,
+    "unit": "words"
+   },
+   "form": "A few short sentences. Hard first line. No wind-up, no build.",
+   "opens_with": "the sharpest single line the argument contains",
+   "carries_offer": "rarely",
+   "reads_as": "someone saying one true thing and stopping",
+   "channels": [
+    "meta-feed",
+    "meta-reels",
+    "tiktok",
+    "shorts"
+   ],
+   "variations": 3
+  },
+  {
+   "key": "caption",
+   "status": "approved",
+   "name": "Caption / Meta primary text",
+   "what": "The words above the creative in the feed.",
+   "length": {
+    "min": 50,
+    "max": 120,
+    "unit": "words"
+   },
+   "form": "Real sentences. First line stands alone, then short paragraphs, one idea each, blank line between.",
+   "opens_with": "a line that works with the creative not yet seen",
+   "carries_offer": "optional",
+   "reads_as": "something a person typed, not something a brand approved",
+   "channels": [
+    "meta-feed",
+    "meta-reels",
+    "instagram"
+   ],
+   "variations": 3
+  },
+  {
+   "key": "long-form",
+   "status": "approved",
+   "name": "Long-form story",
+   "what": "A story that earns its length — the middle included, not skipped.",
+   "length": {
+    "min": 150,
+    "max": 350,
+    "unit": "words"
+   },
+   "form": "Paragraphs. Full prose. A reader who stops for it finishes it.",
+   "opens_with": "a promise the length will be worth it",
+   "carries_offer": "usually, late",
+   "reads_as": "a post someone wrote because they wanted to",
+   "channels": [
+    "meta-feed",
+    "instagram",
+    "email"
+   ],
+   "variations": 2
+  },
+  {
+   "key": "social-proof",
+   "status": "approved",
+   "name": "Social proof",
+   "what": "Built on other people's words — what customers actually said.",
+   "length": {
+    "min": 80,
+    "max": 200,
+    "unit": "words"
+   },
+   "form": "Quotes on their own lines, connective sentences between them.",
+   "opens_with": "the strongest quote, or the claim the quotes will settle",
+   "carries_offer": "optional",
+   "reads_as": "evidence stacked, not argued",
+   "requires": "real sourced verbatims — this format cannot be written without them",
+   "channels": [
+    "meta-feed",
+    "instagram"
+   ],
+   "variations": 2
+  }
+ ],
+ "asset": "copy",
+ "axis": "style",
+ "scope": "Copy STYLES only — HOW the copy is written: short-form, long-form story, social proof. This is NOT the surface bank (WHERE the words go — headline, description, hook line), which is format-bank.json in this folder and a different axis entirely. A tool needing a slot reads format-bank.json; a tool needing a voice reads this. The model: components/naming/MODEL.md",
+ "updated": "2026-09-21"
+}

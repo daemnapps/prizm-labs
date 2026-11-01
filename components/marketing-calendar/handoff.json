@@ -1,0 +1,13 @@
+{
+  "_note": "What 'Write the copy' runs, per kind of month. The planner plans; something else writes. A pattern matching the run folder's name wins, else `default`. {run} = the run folder, {run_name} = its bare name, {slots} = the comma-joined slot ids the reviewer picked. `cwd` is relative to the WORKSPACE ROOT (not to this file), so moving this tool between lab/ and components/ never breaks the hand-off.",
+  "default": {
+    "cwd": "tools/email-production",
+    "argv": [
+      "python3",
+      "run_month.py",
+      "{run}",
+      "--only",
+      "{slots}"
+    ]
+  }
+}

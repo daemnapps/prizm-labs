@@ -1,0 +1,54 @@
+{
+ "title": "For discussion: what may a triage owner change without asking first?",
+ "status": "Ruled 2026-10-02: option 3. the owner said yes to the first-step question (relayed by the team: \"damon decided yes on option 3\"). Changes in owners' components wait for the decision log's change and undo acts (open issue triage #14).",
+ "question": "When the fix is already clear, may the list's triage owner change code in someone else's component, with the owner told rather than asked first?",
+ "stakes": "It decides who does the 297 component issues tagged \"after a ruling\": about 197 in the owner's components, 70 in the team's, 18 in the team's, and 29 with no owner on record. (The counts overlap where an issue names two owners.)",
+ "options": [
+  {
+   "code": "1",
+   "name": "No: owners are asked first (today)",
+   "means": "All 297 stay with their owners. The triage owner sorts and forwards.",
+   "examples": [
+    "feedback-forms#1 (P0, the owner's): two scripts write into brand folders. Even after the output-home ruling, the fix waits in the owner's queue, and the wall breach stays open until then.",
+    "copywriter#20 (P1, the owner's): gdoc_out.py --help crashes and keeps a Drive test red. The likely fix is one import line. the owner was asked on 09-27 (I-132 (gdoc_out crash ask)) and the file hasn't been touched since."
+   ]
+  },
+  {
+   "code": "2",
+   "name": "Narrow: ruled defaults only",
+   "means": "The triage owner may apply what a ruling or convention already settles: output to runs/, keys read by name, the README link line. Plain bug fixes still go to owners.",
+   "examples": [
+    "feedback-forms#1 becomes the team's: move the two writers and the three readers the issue names in one commit, add a test that nothing lands in a brand folder, and tell the owner.",
+    "chain-runner#1 (the team's): once runs/ is ruled over ~/chain-runner-runs, the team changes one constant in three files, and the team gets the notice.",
+    "apify#5 stays with the owner: --subreddits strips letters, not a prefix, so 'running' loses its 'r'. It's a one-line fix plus a test, but it's a bug fix, not a ruled default. The writers flagged at least 40 of the 297 as plain fixes like this (the exact split is inferred)."
+   ]
+  },
+  {
+   "code": "3",
+   "name": "Broad: ruled defaults plus fixes the brief already spells out",
+   "recommended": true,
+   "means": "Option 2, plus fixing a bug when the issue's brief already names the change and a test proves it.",
+   "examples": [
+    "apify#5, apify#4 (reddit.json can be left half-written: write to a temp file, then rename) and copywriter#20 become the team's, each with a test.",
+    "intake#4 is where the risk is. A corrupt pool file currently passes the inputs gate as if it were empty. The right fix makes the gate stop and name the file, which changes how the owner's live runs behave. Limit 3 below keeps it as the team drafts, the owner lands.",
+    "naming#2: the fix edits two test assertions that pin the wrong values. A change that edits a test can make a check pass without fixing anything. Limit 2 below sends it back to the owner."
+   ]
+  }
+ ],
+ "limits": [
+  "The issue's brief already names the change, and a test proves it.",
+  "No test assertion is weakened or removed. Adding checks is fine.",
+  "Nothing changes the behaviour of a live pipeline (a run a person or the mini depends on today). Those stay as triage owner drafts, owner lands.",
+  "Every change is one record in the decision log, with a one-line way to undo it; each owner can see every change in their components there and undo any of them."
+ ],
+ "implications": [
+  "Workload: Options 2 and 3 put up to about 527 items on the team (230 doable today plus 297 after a ruling). Grouped by action, that is about 70 sittings, not 527. ATL-29 (drafted changes) turns the 230 into review-and-commit. The ruled kill already covers overload: if anything waits on a triage owner for more than a week, that list goes back to the owners.",
+  "the owner: the owner's decks were kept out of the lead's sweeps on 09-27. Options 2 and 3 mean the team changing code in the owner's components (about 197 items). the team can rule it, but it lands better with the owner's yes first.",
+  "Owners stop doing the work but still need to know what changed. The decision log, with an undo for each change, keeps the code theirs without twenty separate notices.",
+  "The test requirement is what stands in for knowing the code. the team works through Claude, so the rule has to forbid weakening a test (limit 2)."
+ ],
+ "kill": "A change a triage owner lands breaks an owner's live run twice: changes to running code go back to the owner's yes. Also: the owner objects to more than a handful of notices in the first two weeks, which means the briefs aren't specific enough to act on without the owner.",
+ "confidence": "medium",
+ "first_step": "Ask the owner one question before ruling: \"Can the team, through Claude, fix things in your components when the brief already spells out the fix and a test proves it, with every change in the decision log so you can undo from?\" If yes, about 197 items leave the owner's list. If no, rule Option 2.",
+ "red_tests_note": "On the red-tests list the team is the triage owner, so the same rule covers the team changing the owner's or the team's code: R9 and R27 (the owner's live code) are triage owner drafts, owner lands under every option."
+}

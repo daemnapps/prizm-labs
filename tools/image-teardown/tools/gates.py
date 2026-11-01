@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+"""The gates this chain runs, and the record every run files.
+
+Two of the five shared gates (`components/marketing-chain-checks`) apply to a teardown:
+
+    elements   after stage 2b   every label is a real row in the element
+                                library, or an honest `none-fits`
+    copy       after stage 6    the brief carries no UNFILLED note, and every
+                                price in the part that gets built is one the
+                                brand's own offer bank sells today
+
+`hold()` writes `check.json` into the run and raises `Held`. **A held run says
+why**: the problems are in `check.json`, printed when it happens, and carried
+into the filed record.
+
+    gates.py <run>              print a run's check.json, plainly
+
+Filing: every completed run's record goes to
+`runs/image-teardown/<brand>/<label>/` at the repo root — stage text,
+`elements.json`, `source.json`, `run.json`, `check.json`. Never media.
+"""
+import json
+import re
+import shutil
+import sys
+import time
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths as P
+
+MODES = ("hold", "warn")
+
+
+def quality():
+    """The shared checks — components/marketing-chain-checks."""
+    if str(P.QUALITY) not in sys.path:
+        sys.path.insert(0, str(P.QUALITY))
+    import marketing_chain_checks as Q
+    return Q
+
+
+def _gate(name, problems, run, mode):
+    """Run one gate. `hold` raises Held; `warn` records the same check.json,
+    prints why, and lets the run carry on."""
+    Q = quality()
+    try:
+        Q.hold(name, problems, Path(run))
+        return True
+    except Q.Held as e:
+        print(f"  ✗ {e}")
+        if mode == "hold":
+            raise
+        print(f"  (gates are on warn — carrying on; check.json still says HELD)")
+        return False
+
+
+def elements_gate(run, problems, mode="hold"):
+    return _gate("elements", problems, run, mode)
+
+
+def built_part(brief):
+    """Documents one and two — what a designer builds from. Document three is
+    the internal evidence table, which quotes the SOURCE ad and the market
+    (a competitor's price, what a clinic charges) and is not our copy."""
+    m = re.search(r"^##\s*DOCUMENT THREE\b", brief, re.M | re.I)
+    return brief[:m.start()] if m else brief
+
+
+def copy_problems(brief, bank_text, product):
+    Q = quality()
+    problems = list(Q.unfilled_check(brief))
+    block = Q.offer_block(bank_text, product) if product else ""
+    label = product if block else None
+    # No entry under this product's key is not "no offer": brands key their
+    # bank differently, so fall back to the whole bank rather than holding
+    # every brief of a brand whose keys differ from its product slugs.
+    problems += Q.price_check(built_part(brief), block or bank_text, label)
+    problems += dash_problems(brief)
+    return problems
+
+
+def dash_problems(brief):
+    """No long dash in words that go ON the ad (the owner, 2026-10-23: "We have
+    hyphens in here. That does not look like a human typed it."). The on-ad
+    words are the backticked strings of documents one and two."""
+    out = []
+    for words in re.findall(r"`([^`\n]+)`", built_part(brief)):
+        if re.search(r"[—–]|\w - \w", words):
+            out.append(f"long dash in words on the ad: `{words}` (use a period or a comma)")
+    return out
+
+
+def standard_problems(brief):
+    """Document one against the standard brief: the title line, every box
+    label and every section heading, in the template's order. A brief that
+    moved, renamed or dropped one is not the standard (the owner, 2026-10-02)."""
+    t = P.BRIEF_STANDARD.read_text()
+    tpl = t.split("\n=====\n")[1]
+    want = [l.strip() for l in tpl.splitlines() if l.startswith("## ")]
+    box = re.findall(r"^\| \*\*([^*]+)\*\* \|", tpl, flags=re.M)
+    one = brief.split("DOCUMENT TWO")[0]
+    probs = []
+    if not re.search(r"^# BRIEF · ", one, flags=re.M):
+        probs.append("standard brief: no '# BRIEF · …' title line")
+    for b in box:
+        if f"| **{b}** |" not in one:
+            probs.append(f"standard brief: box row '{b}' missing")
+    at = 0
+    for h in want:
+        i = one.find("\n" + h, at)
+        if i < 0:
+            probs.append(f"standard brief: '{h}' missing or out of order")
+        else:
+            at = i + 1
+    return probs
+
+
+def copy_gate(run, brand, product, mode="hold"):
+    run = Path(run)
+    brief = (run / "out/06-brief.md").read_text(errors="replace")
+    bank = P.brand(brand)["offer"]
+    bank_text = bank.read_text(errors="replace") if bank.is_file() else ""
+    problems = copy_problems(brief, bank_text, product)
+    if "DOCUMENT ONE" in brief and _uses_standard(run):
+        problems += standard_problems(brief)
+    return _gate("copy", problems, run, mode)
+
+
+def _uses_standard(run):
+    """Only the brief prompt that asks for the standard is held to it."""
+    import run as R
+    return "{brief_standard}" in R.prompt_for("6", run=run).read_text()
+
+
+def state(run):
+    f = Path(run) / "check.json"
+    try:
+        return json.loads(f.read_text()) if f.is_file() else {}
+    except ValueError:
+        return {}
+
+
+def held(run, gates=None):
+    """{gate: [problems]} for every gate this run is held at."""
+    return {g: v.get("problems", []) for g, v in state(run).items()
+            if v.get("result") == "HELD" and (gates is None or g in gates)}
+
+
+# ------------------------------------------------------------------ filing
+
+def file_record(brand, run_name):
+    """Copy a run's record — stage text, labels, the swipe's index, the gates —
+    to runs/image-teardown/<brand>/<label>/ at the repo root (git). Since
+    2026-10-28 the run WORKS in that same folder (paths.run_dir), so the record
+    is filed beside its working files; a file already in place is left as is.
+    Pictures never travel into the record."""
+    src = P.run_dir(run_name, brand)
+    dst = P.RECORDS / brand / run_name
+    dst.mkdir(parents=True, exist_ok=True)
+
+    def copy(a, b):
+        if Path(a).resolve() != Path(b).resolve():   # the working file IS the record file
+            shutil.copy(a, b)
+
+    for f in sorted(src.glob("out/0*.md")):
+        copy(f, dst / f.name)
+    for f in ("variant.json", "check.json", "out/elements.json"):
+        if (src / f).is_file():
+            copy(src / f, dst / Path(f).name)
+    if (src / "assets/source.json").is_file():
+        copy(src / "assets/source.json", dst / "source.json")
+    # THE BRIEF GOES WHERE THE STANDARD SAYS (runs/README.md, since 2026-09-17:
+    # the thing a person traffics lives in `deliverable/`). Added 2026-09-23
+    # after an index over every run found 198 runs and three briefs actually
+    # filed there — the other 110 were inside their own machine's folders,
+    # findable only by reading that machine's code. That is how the Clipper Kit
+    # came to read its briefs out of a cloned lane's private runs folder, and
+    # how deleting that lane took six briefs with it.
+    brief = src / "out/06-brief.md"
+    if brief.is_file():
+        (dst / "deliverable").mkdir(exist_ok=True)
+        copy(brief, dst / "deliverable" / "06-brief.md")
+    try:
+        lane_run = str(src.relative_to(P.REPO))
+    except ValueError:
+        lane_run = str(src)
+    h = held(src)
+    # a re-file keeps what others wrote on the record (its brief number, above all): 2026-10-27, re-running one
+    # step on 166 runs wiped every "brief" key, and a brief with no number cannot be handed off
+    try:
+        kept = json.loads((dst / "run.json").read_text())
+    except (OSError, ValueError):
+        kept = {}
+    (dst / "run.json").write_text(json.dumps(
+        {**kept, "machine": P.TOOL, "brand": brand, "label": run_name,
+         "lane_run": lane_run,
+         "stages": sorted(f.name for f in dst.glob("0*.md")),
+         "state": "held" if h else "filed", "held": h,
+         "filed": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
+        indent=1, ensure_ascii=False) + "\n")
+    return dst
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit(__doc__)
+    r = Path(sys.argv[1])
+    r = P.run_dir(r if r.is_absolute() else r.name)
+    st = state(r)
+    if not st:
+        print(f"{r.name}: no gate has run yet")
+    for g, v in st.items():
+        print(f"{g}: {v.get('result')}")
+        for p in v.get("problems", []):
+            print(f"   - {p}")

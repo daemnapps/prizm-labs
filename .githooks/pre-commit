@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# GUARD — this repo is public.
+# Guarded paths:
+#   docs/          → copied to the public site (daemn.co) on every change
+#   the toolkit    → copied into every client's private copy (tools/client-copies/toolkit-paths.txt)
+# Those two may not carry our brand names or a home path. Everywhere: no keys, no
+# credential files, nothing over 2 MB.
+#   Install once:  git config core.hooksPath .githooks
+#   Skip once, only on Damon's say-so:  git commit --no-verify
+set -uo pipefail
+
+BRANDS='smooche|serlino|pasnida|douxds|norse[ -]?organics|ecommops|upright ?commerce|kerri[ -]?zane|volubalm'
+OURS='pasnida|douxds|ecommops|upright ?commerce|kerri[ -]?zane|volubalm'   # docs/swipes names competitors on purpose
+KEYS='(^|[^A-Za-z0-9])sk-(proj-|ant-api03-|ant-)?[A-Za-z0-9_]{20,}|AIza[0-9A-Za-z_-]{30,}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]{10,}|apify_api_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|glpat-[A-Za-z0-9_-]{20,}|figd_[A-Za-z0-9_-]{20,}'
+HOME_PATH='/Users/[a-z0-9._-]+/'
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged" ] && exit 0
+
+# what ships outward: the public site plus every path a client copy receives
+outward() {
+  case "$1" in docs/*) return 0;; esac
+  while IFS= read -r p; do
+    p="${p%%#*}"; p="${p// /}"; [ -z "$p" ] && continue
+    case "$1" in "$p"|"$p"*) return 0;; esac
+  done < tools/client-copies/toolkit-paths.txt
+  return 1
+}
+
+hits=""
+while IFS= read -r f; do
+  [ -n "$f" ] && [ -f "$f" ] || continue
+  case "$f" in
+    *.env|*.key|*.pem|*.p12|*credentials*.json|*service-account*.json|.npmrc|.netrc)
+      hits="$hits
+  $f  → a credential file; add it to .gitignore"; continue;;
+  esac
+  sz=$(stat -f%z "$f" 2>/dev/null || echo 0)
+  if [ "$sz" -gt 2000000 ]; then
+    hits="$hits
+  $f  → $((sz/1048576)) MB; media stays out of the repo"; continue
+  fi
+  grep -Iq . "$f" 2>/dev/null || continue
+  if grep -qE "$KEYS" "$f"; then
+    hits="$hits
+  $f  → something shaped like a live key; if real, rotate it"; continue
+  fi
+  if outward "$f"; then
+    pat="$BRANDS"; case "$f" in docs/swipes/*) pat="$OURS";; esac
+    if grep -qEi "$pat" "$f"; then
+      hits="$hits
+  $f  → names our brand ($(grep -oEi "$pat" "$f" | sort -u | head -3 | tr '\n' ' ')) in a file that leaves the repo"; continue
+    fi
+    if grep -qE "$HOME_PATH" "$f"; then
+      hits="$hits
+  $f  → a home path in a file that leaves the repo"; continue
+    fi
+  fi
+done <<< "$staged"
+
+if [ -n "$hits" ]; then
+  printf '\n\033[1;31m  BLOCKED\033[0m — nothing was committed.\n%s\n\n' "$hits"
+  exit 1
+fi
+
+# daemn.co has one design system; a site page that ignores it never reaches the site
+if echo "$staged" | grep -qE '^docs/.*\.html$|^docs/studio\.css$'; then
+  if ! python3 tools/design-check.py --staged; then
+    printf '\n\033[1;31m  BLOCKED — off the design system\033[0m (docs/DESIGN.md)\n\n'
+    exit 1
+  fi
+fi
+exit 0

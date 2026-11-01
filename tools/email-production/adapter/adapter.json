@@ -1,0 +1,14 @@
+{
+ "_what": "email-production's adapter manifest under the production contract, QB-5 (production contract): components/creative-queue/contract.schema.json. Engine the owner (told after); checked by `components/creative-queue/contract.py check`.",
+ "schema": 1,
+ "kind": "email",
+ "report": ["tools/email-production/adapter/adapter.py", "report"],
+ "detail": ["tools/email-production/adapter/adapter.py", "detail"],
+ "apply": ["tools/email-production/adapter/adapter.py", "apply"],
+ "try": ["tools/email-production/adapter/adapter.py", "try"],
+ "words": ["words", "picture", "redo", "move", "remove", "ok", "note", "fill"],
+ "try_words": ["picture"],
+ "kind_words": {
+  "fill": "the system fills every gap the brand's files answer (offer-bank prices, unmade pictures, missing words), rebuilds, and says what still needs a person — whole email, part -"
+ }
+}

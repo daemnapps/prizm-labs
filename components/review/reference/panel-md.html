@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="review-reference" content="1">
+<meta name="review-kind" content="review">
+<title>REFERENCE · review panel — md</title>
+<!--
+  A REFERENCE PAGE, NOT A PRODUCT — card RV-6 (reference panels).
+
+  The panel for `type: md` on the `review` kind. It shows the markdown SOURCE
+  and does not render it: a markdown renderer is a look, and a look chosen here
+  is the styling investment the card says a panel author must not have to undo.
+  The grammar half — the fold, the verdict write, the type keying — is the part
+  to keep. NOT in team/promoted-surfaces.json; a promotion is a human act.
+-->
+<link rel="stylesheet" href="_reference.css">
+</head>
+<body>
+<p class="ref"><b>REFERENCE, NOT A PRODUCT.</b>
+  <code>components/review/reference/panel-md.html</code> — a working panel for
+  <code>type: md</code>, kept plain on purpose and never promoted. Copy it,
+  rewrite the look, keep the grammar.</p>
+
+<h1>Review panel — md</h1>
+<p class="faint">Open it as <code>panel-md.html?item=RQ-…</code>. The markdown is
+  shown AS SOURCE, deliberately: which renderer, and what it looks like, is the
+  panel author's decision and not this page's. Status is FOLDED from the records
+  on every render, never remembered between them.</p>
+
+<div id="app"></div>
+
+<!-- The viewers' ONE credential module (CP-8), loaded rather than copied. A
+     page moved into platform/views/viewers/ must INLINE it instead — that route
+     serves one html file per request and cannot fetch a sibling. -->
+<script src="../../../platform/views/viewers/_templates/_session-bootstrap.js"></script>
+<script src="_reference.js"></script>
+<script>
+// THE TYPE THIS PAGE IS THE REFERENCE FOR. The block keys on it; a request of
+// another declared type is refused BY NAME rather than rendered by the wrong
+// panel, and an undeclared one is sent to panel-link.html, which is where the
+// manifest's degrade-to-a-link rule lives.
+const PANEL_TYPE = "md";
+mountReviewPanel(PANEL_TYPE, document.getElementById("app"));
+</script>
+</body>
+</html>

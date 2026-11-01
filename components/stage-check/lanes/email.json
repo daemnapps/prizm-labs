@@ -1,0 +1,13 @@
+{
+ "lane": "email",
+ "status": "draft",
+ "about": "One email: marketing-calendar month -> email.py (stages to stage9--brief.md) -> simple_email.py (email.json, preview, delivery gate) -> brief number -> the Queue. Paths from the code (survey 2026-10-25).",
+ "resolve": "the register row's run is the repo-relative email-production run folder; the month is run.json assignment.send_date[:7]",
+ "steps": [
+  {"id": "month", "name": "the calendar month", "checks": ["file:runs/marketing-calendar/{brand}/{month}/slots.json"], "fix": null, "why_no_fix": "the month is planned on the calendar, a person's review"},
+  {"id": "copy", "name": "the email's stages", "checks": ["file:{email_run}/stage9--brief.md"], "fix": null, "why_no_fix": "re-run through run_month.py --only <slot>, which knows the slot's arguments"},
+  {"id": "built", "name": "built + delivery check", "checks": ["file:{email_run}/deliverable/email.json", "json:{email_run}/deliverable/check.json:delivery.result=pass"],
+   "fix": "cmd:python3 tools/email-production/simple_email.py {email_run} --brand {brand}"},
+  {"id": "number", "name": "the brief number", "checks": ["json:{email_run}/run.json:brief"], "fix": "cmd:python3 tools/image-teardown/tools/briefs.py open {email_run} --brand {brand} --type email"}
+ ]
+}

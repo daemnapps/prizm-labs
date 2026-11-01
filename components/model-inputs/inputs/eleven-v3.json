@@ -1,0 +1,260 @@
+{
+ "model": "eleven-v3",
+ "medium": "voice",
+ "_readme": [
+  "Eleven v3 is the speech model for the voice-over and every spoken line of a video ad.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "ElevenLabs Eleven v3 (speech)",
+ "registry_id": "eleven-v3",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "model_id": "eleven_v3",
+  "door": "elevenlabs"
+ },
+ "sources": [
+  "https://elevenlabs.io/docs/best-practices/prompting",
+  "https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-do-audio-tags-work-with-eleven-v3-alpha",
+  "https://elevenlabs.io/docs/overview/capabilities/text-to-dialogue",
+  "[ours] tools/video-production/VOICE-CHAIN.md",
+  "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+ ],
+ "limits": {
+  "max_prompt_chars": 5000,
+  "max_prompt_chars_note": "5,000 comes from a third-party review only; ElevenLabs' own prompting page gives no number. Confirm before relying on it.",
+  "min_prompt_chars_advised": 250,
+  "output_formats": "mp3 and pcm tiers (set by output_format)",
+  "languages": "70+ (third-party review)",
+  "house": {
+   "reads": "each line is its own read with that shot's delivery as an audio tag; never one long take for the whole piece",
+   "voice": "one custom voice per character (V4)"
+  }
+ },
+ "qualities": [
+  "creative",
+  "natural",
+  "robust"
+ ],
+ "inputs": [
+  {
+   "name": "text",
+   "what": "The words to speak plus audio tags and punctuation for delivery.",
+   "allowed": "text; very short prompts give inconsistent output, over 250 characters is encouraged",
+   "we_send": "one line per read with its delivery tag",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "voice_id",
+   "what": "Which voice. The maker calls this the most important parameter.",
+   "allowed": "a voice from the library or our designed voice",
+   "we_send": "the character's own voice",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting",
+    "[ours] tools/video-production/VOICE-CHAIN.md"
+   ]
+  },
+  {
+   "name": "model_id",
+   "what": "Which speech model.",
+   "allowed": "eleven_v3",
+   "we_send": "eleven_v3",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "stability",
+   "what": "How much the read follows direction. Creative and Natural respond to tags; Robust reduces responsiveness.",
+   "allowed": "creative, natural, robust",
+   "we_send": "natural",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "audio tags",
+   "what": "Bracketed delivery: emotions, [whispers], [sighs], [laughs], sound effects like [applause].",
+   "allowed": "short, clear tags matched to the voice",
+   "we_send": "one tag per shot's delivery",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "punctuation",
+   "what": "Ellipses add pauses and weight, capitals add emphasis, standard marks set rhythm.",
+   "allowed": "plain text",
+   "we_send": "used for pace",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "language_code",
+   "what": "Force a language.",
+   "allowed": "ISO code",
+   "we_send": "not sent: the text sets it",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "seed",
+   "what": "Repeat a read.",
+   "allowed": "integer",
+   "we_send": "not pinned: a bad read is remade",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "output_format",
+   "what": "File type and rate.",
+   "allowed": "mp3_44100_128 and others",
+   "we_send": "mp3",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  },
+  {
+   "name": "text-to-dialogue",
+   "what": "Several speakers in one call.",
+   "allowed": "multi-speaker script",
+   "we_send": "not used: each line is its own read",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/overview/capabilities/text-to-dialogue"
+   ]
+  },
+  {
+   "name": "SSML break tags",
+   "what": "Timed pauses.",
+   "allowed": "NOT supported on v3",
+   "we_send": "never sent",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/best-practices/prompting"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "one-line-one-read",
+   "rule": "Each line is its own read with that shot's delivery as a tag; never one long take for the whole piece.",
+   "ours": "voice chain",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VOICE-CHAIN.md"
+  },
+  {
+   "id": "voice-first",
+   "rule": "Choose the voice first; a tag only works if the delivery already exists in the voice. A whisper tag fails on a loud voice.",
+   "ours": "voice cast before tags",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "match-tag-to-voice",
+   "rule": "Match tags to the voice's character: a serious voice does not respond well to playful tags.",
+   "ours": "tags from the shot's delivery",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "tags-short",
+   "rule": "Keep tags short, clear and about emotion, tone, pace or action; describe voice quality so it cannot be read as a sound cue.",
+   "ours": "one tag per line",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "long-enough",
+   "rule": "Give it enough text; very short inputs are inconsistent.",
+   "ours": "lines over 250 characters are grouped or padded with context",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "punctuate-for-pace",
+   "rule": "Use ellipses for weight, capitals for emphasis and normal punctuation for rhythm instead of break tags.",
+   "ours": "lexicon.for_model",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "stability-creative",
+   "rule": "For the most expressive read use Creative or Natural stability.",
+   "ours": "natural",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "say-as",
+   "rule": "Write brand words and figures the way they are spoken; the text is the only lever.",
+   "ours": "lexicon.for_model, spoken-rules.json",
+   "status": "draft",
+   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "ssml-breaks",
+   "text": "SSML break tags: v3 ignores them.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "playful-on-serious",
+   "text": "Playful tags on a serious voice.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "professional-clone-on-v3",
+   "text": "A Professional Voice Clone on v3 when clone quality matters: not fully optimised.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "one-long-take",
+   "text": "One long take for the whole piece.",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VOICE-CHAIN.md"
+  },
+  {
+   "id": "tiny-prompt",
+   "text": "A one-word or very short prompt.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  },
+  {
+   "id": "tags-as-words",
+   "text": "Tags the voice reads aloud because they read like speech.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/best-practices/prompting"
+  }
+ ]
+}

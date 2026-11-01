@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- TEMPLATE: launchd expands no variables. Install with
+     sed "s#__HOME__#$HOME#g" components/research-gatherer/schedule/com.daemn.language-daily.plist > ~/Library/LaunchAgents/com.daemn.language-daily.plist
+     then launchctl unload/load it. -->
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.daemn.language-daily</string>
+  <key>ProgramArguments</key>
+  <array><string>__HOME__/.local/bin/daemn-language-daily.sh</string></array>
+  <key>StartCalendarInterval</key><dict><key>Hour</key><integer>5</integer><key>Minute</key><integer>30</integer></dict>
+  <key>StandardOutPath</key><string>__HOME__/Library/Logs/daemn/language-daily.out</string>
+  <key>StandardErrorPath</key><string>__HOME__/Library/Logs/daemn/language-daily.err</string>
+</dict></plist>

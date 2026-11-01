@@ -1,0 +1,271 @@
+<title>The Format Frontier</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EDF0F3; --panel:#F8FAFB; --ink:#15202B; --soft:#566575; --line:#CBD3DB;
+  --accent:#0E6B8A; --accent-ink:#FFFFFF; --go:#1F7A4D; --part:#A8650C; --skip:#6B7986;
+  --go-bg:#DDF0E5; --part-bg:#F6E8CF; --skip-bg:#E1E6EB; --hot:#0E6B8A1a; --flag:#A33A2A; --flag-bg:#F7E1DC;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#10171E; --panel:#18222C; --ink:#E6ECF1; --soft:#93A2B1; --line:#2B3946;
+  --accent:#5CC0E0; --accent-ink:#0B141B; --go:#6FD3A0; --part:#EDB45C; --skip:#93A2B1;
+  --go-bg:#16362A; --part-bg:#3A2C12; --skip-bg:#232F3A; --hot:#5CC0E01f; --flag:#F0907F; --flag-bg:#3B1E19;
+}}
+:root[data-theme="dark"]{
+  --ground:#10171E; --panel:#18222C; --ink:#E6ECF1; --soft:#93A2B1; --line:#2B3946;
+  --accent:#5CC0E0; --accent-ink:#0B141B; --go:#6FD3A0; --part:#EDB45C; --skip:#93A2B1;
+  --go-bg:#16362A; --part-bg:#3A2C12; --skip-bg:#232F3A; --hot:#5CC0E01f; --flag:#F0907F; --flag-bg:#3B1E19;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:400 16px/1.55 "IBM Plex Sans",system-ui,sans-serif;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 72px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:1.55rem;font-weight:700}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0;max-width:68ch}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow,.mono{font:500 .72rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.soft{color:var(--soft)}
+.head{display:flex;flex-direction:column;gap:10px}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--ground);z-index:5;padding-top:6px}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font-weight:600;color:var(--soft)}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.view{display:flex;flex-direction:column;gap:24px}
+.chip{font:500 .68rem/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;white-space:nowrap;background:var(--skip-bg);color:var(--skip);display:inline-block}
+.chip.go{background:var(--go-bg);color:var(--go)} .chip.part{background:var(--part-bg);color:var(--part)} .chip.flag{background:var(--flag-bg);color:var(--flag)} .chip.acc{background:var(--hot);color:var(--accent)}
+.test{background:var(--hot);border-left:4px solid var(--accent);padding:16px 18px;font-size:1.08rem}
+/* style grid */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filters button{border:1px solid var(--line);background:var(--panel);padding:7px 12px;border-radius:999px;font-size:.88rem}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);padding:0;text-align:left;display:flex;flex-direction:column;overflow:hidden}
+.card:hover{border-color:var(--accent)}
+.card .pic{aspect-ratio:2/3;background:var(--skip-bg);display:flex;align-items:center;justify-content:center;max-width:100%}
+.card .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.card .cap{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px}
+.card .cap b{font-family:"Bricolage Grotesque",sans-serif;font-size:1rem;line-height:1.15}
+.card .cap span{font-size:.78rem;color:var(--soft)}
+.card.base{border-style:dashed}
+dialog{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:0;max-width:min(920px,94vw);width:100%}
+dialog::backdrop{background:#0009}
+.dlg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:0}
+.dlg .pics{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line)}
+.dlg .pics figure{margin:0;background:var(--panel);display:flex;flex-direction:column}
+.dlg .pics img{width:100%;display:block}
+.dlg .pics figcaption{padding:6px 8px}
+.dlg .body{padding:22px;display:flex;flex-direction:column;gap:14px}
+.dlg pre{white-space:pre-wrap;font:400 .82rem/1.5 "IBM Plex Mono",monospace;background:var(--ground);padding:12px;margin:0;border:1px solid var(--line)}
+.dlg .x{align-self:flex-end;background:none;border:1px solid var(--line);padding:4px 10px}
+@media (max-width:720px){.dlg{grid-template-columns:1fr}}
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:620px;background:var(--panel);font-size:.94rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .7rem/1 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+tr.edge td{background:var(--hot)}
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.stack div{background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:6px}
+.stack b{font-family:"Bricolage Grotesque",sans-serif;font-size:1.05rem}
+.stack i{font-style:normal;color:var(--soft);font-size:.86rem}
+.stack em{font-style:normal;color:var(--accent);font-weight:600;font-size:.9rem}
+.mixer{background:var(--panel);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:16px}
+.mixer .row{display:flex;gap:12px;flex-wrap:wrap}
+.mixer label{display:flex;flex-direction:column;gap:4px;flex:1 1 170px}
+.mixer select{font:inherit;padding:8px;background:var(--ground);color:var(--ink);border:1px solid var(--line)}
+.mixout{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.mixout img{width:120px;aspect-ratio:2/3;object-fit:cover;border:1px solid var(--line)}
+.mixout p{font-family:"Bricolage Grotesque",sans-serif;font-size:1.35rem;line-height:1.25;flex:1 1 300px}
+.mixout p u{text-decoration-color:var(--accent);text-underline-offset:4px}
+.shows{display:flex;flex-direction:column;gap:16px}
+.show{display:grid;grid-template-columns:minmax(0,260px) 1fr;background:var(--panel);border:1px solid var(--line)}
+.show .pic{background:var(--skip-bg);display:flex;align-items:center;justify-content:center;min-height:200px}
+.show .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.show .body{padding:18px;display:flex;flex-direction:column;gap:10px}
+.show dl{display:grid;grid-template-columns:110px 1fr;gap:6px 14px;margin:0;font-size:.93rem}
+.show dt{font:500 .7rem/1.6 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.show dd{margin:0}
+@media (max-width:720px){.show{grid-template-columns:1fr}.show dl{grid-template-columns:1fr}.show dd{margin-bottom:6px}}
+/* generic cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.box{background:var(--panel);border:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:10px}
+.box.lead{border:2px solid var(--accent)}
+.box .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.box ul,.box ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:.94rem}
+.steps{display:flex;flex-direction:column;border:1px solid var(--line);counter-reset:s}
+.step{display:grid;grid-template-columns:48px 1fr;gap:14px;background:var(--panel);padding:16px;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step::before{counter-increment:s;content:counter(s);font:700 1.6rem/1 "Bricolage Grotesque",sans-serif;color:var(--accent)}
+.step p{color:var(--soft);font-size:.95rem;margin-top:3px}
+.proof{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:20px;align-items:start}
+.proof video,.proof img{width:100%;border:1px solid var(--line);display:block}
+@media (max-width:720px){.proof{grid-template-columns:1fr}}
+pre.prompt{white-space:pre-wrap;font:400 .82rem/1.55 "IBM Plex Mono",monospace;background:var(--ground);padding:14px;margin:10px 0 0;border:1px solid var(--line);overflow-x:auto}
+details summary{cursor:pointer}
+footer{color:var(--soft);font-size:.84rem;border-top:1px solid var(--line);padding-top:16px}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <span class="eyebrow" id="stamp"></span>
+    <h1>The Format Frontier</h1>
+    <p class="soft">The style bank you can see, the definitions that keep a style from being a format, the new edit hand, what we mined from the free tools, and the plan for finding the next style before an agency packages it.</p>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main id="view" class="view"></main>
+  <footer id="foot"></footer>
+</div>
+<dialog id="dlg"></dialog>
+
+<script>
+/*__DATA__*/
+const C = DATA.content, $ = (s,el=document)=>el.querySelector(s);
+const h = (s)=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TABS = [["styles","Style board"],["shows","Show formats"],["stack","The stack"],["line","The line"],["edit","The edit"],["tools","Tools mined"],["plan","Style research plan"],["land","Landscape"]];
+let tab = "styles", fam = "all";
+try{ tab = localStorage.getItem("ff-tab") || tab }catch(e){}
+
+function renderTabs(){
+  $("#tabs").innerHTML = TABS.map(([k,n])=>`<button role="tab" id="tab-${k}" aria-selected="${k===tab}" data-k="${k}">${n}</button>`).join("");
+  $("#tabs").onclick = e=>{ const k=e.target.dataset.k; if(!k) return; tab=k; try{localStorage.setItem("ff-tab",k)}catch(e){} renderTabs(); render(); window.scrollTo({top:0}) };
+}
+const chip = (t,c="")=>`<span class="chip ${c}">${h(t)}</span>`;
+
+function vStyles(){
+  const fams = Object.keys(DATA.families);
+  const rows = DATA.styles.filter(s=>fam==="all"||s.family===fam);
+  return `
+  <div class="test"><b>The test.</b> ${h(DATA.test)}</div>
+  <p class="soft">Every picture below is the <b>same approved frame</b> from one of your ads, pushed through the image door with one style lock. Nothing else changed, so what you are looking at is only the style. Tap one to see the lock.</p>
+  <div class="filters" role="group" aria-label="Family">
+    <button aria-pressed="${fam==="all"}" data-f="all">All ${DATA.styles.length}</button>
+    ${fams.map(f=>`<button aria-pressed="${fam===f}" data-f="${f}" title="${h(DATA.families[f])}">${h(f)} · ${DATA.styles.filter(s=>s.family===f).length}</button>`).join("")}
+  </div>
+  <div class="grid">
+    ${DATA.base&&fam==="all"?`<div class="card base"><div class="pic"><img src="${DATA.base}" alt="The original frame"></div><div class="cap"><b>The original frame</b><span>what every style started from</span></div></div>`:""}
+    ${rows.map(s=>`<button class="card" data-s="${s.id}"><div class="pic">${s._img?`<img src="${s._img}" alt="${h(s.name)}" loading="lazy">`:`<span class="mono">picture pending</span>`}</div><div class="cap"><b>${h(s.name)}</b><span>${h(s.seen_as||"")}</span><span>${s.keeps_proof==="yes"?chip("keeps the proof","go"):s.keeps_proof==="faint"?chip("proof is faint","part"):chip("loses the proof","")} ${s.ip_flag?chip("trademarked name","flag"):""}</span></div></button>`).join("")}
+  </div>`;
+}
+function openStyle(id){
+  const s = DATA.styles.find(x=>x.id===id); if(!s) return;
+  const d = $("#dlg");
+  d.innerHTML = `<div class="dlg"><div class="pics">
+    <figure>${DATA.base?`<img src="${DATA.base}" alt="original">`:""}<figcaption class="mono">original</figcaption></figure>
+    <figure>${s._img?`<img src="${s._img}" alt="${h(s.name)}">`:""}<figcaption class="mono">${h(s.id)}</figcaption></figure></div>
+    <div class="body"><button class="x" id="dx">Close</button>
+    <div><span class="eyebrow">${h(s.family)} · ${h(s.state || s.status)}</span><h2>${h(s.name)}</h2></div>
+    <p>${h(s.what)}</p>
+    <div><span class="eyebrow">The style lock</span><pre>${h(s.formula)}</pre></div>
+    <div><span class="eyebrow">How it moves</span><p>${h(s.motion)}</p></div>
+    ${s.fits_formats?.length?`<div><span class="eyebrow">Formats it suits first</span><p>${s.fits_formats.map(f=>chip(f,"acc")).join(" ")}</p></div>`:""}
+    <p>${s.keeps_proof==="yes"?chip("keeps the proof","go"):s.keeps_proof==="faint"?chip("proof is faint","part"):chip("loses the proof","")} <span class="soft">${s.keeps_proof==="yes"?"Her spots survived the restyle, so this style can carry a before-and-after.":s.keeps_proof==="faint"?"The spots are barely there. Fine for story, weak for proof.":"The skin problem disappeared. Use it for the hook, the story or the mechanism — cut to a real-skin style for proof."} ${h(s.proof_note||"")}</span></p>
+    ${s.ip_flag?`<p>${chip("flag","flag")} ${h(s.ip_flag)}</p>`:""}
+    </div></div>`;
+  d.showModal(); $("#dx").onclick=()=>d.close(); d.onclick=e=>{ if(e.target===d) d.close() };
+}
+
+function vShows(){
+  const W=C.shows;
+  return `<h2>${h(W.title)}</h2><p class="soft">${h(W.intro)}</p>
+  <div class="test"><b>Brand injection is the role map.</b> ${h(W.roles_intro)}</div>
+  <div class="stack">${DATA.roles.map(r=>`<div><b>${h(r.name)}</b><i>${h(r.what)}</i></div>`).join("")}</div>
+  <h2>${h(W.example.title)}</h2>
+  <div class="stack">${W.example.rows.map(r=>`<div><b>${h(r.role)}</b><em>${h(r.value)}</em></div>`).join("")}</div>
+  <h2>The candidates</h2><p class="soft">${h(W.cards_intro)}</p>
+  <div class="shows">${DATA.shows.map(x=>`<article class="show"><div class="pic">${x._img?`<img src="${x._img}" alt="${h(x.name)}" loading="lazy">`:`<span class="mono">picture pending</span>`}</div>
+    <div class="body"><div><h3>${h(x.name)}</h3><p>${h(x.what)}</p></div><p class="soft">${h(x.why_it_works)}</p>
+    <dl>${DATA.roles.map(r=>`<dt>${h(r.name)}</dt><dd>${h(x.roles[r.id])}</dd>`).join("")}<dt>Sound</dt><dd>${h(x.sound)}</dd></dl>
+    <p>${x.pairs_with_styles.map(i=>chip((DATA.styles.find(s=>s.id===i)||{name:i}).name,"acc")).join(" ")}</p>
+    <p class="soft">${chip("a guess to check","part")} Who watches: ${h(x.who_watches_hypothesis)}</p></div></article>`).join("")}</div>`;
+}
+function vStack(){
+  const S=C.stack;
+  return `
+  <h2>One ad is a stack of separate choices</h2>
+  <p class="soft">${h(S.intro)}</p>
+  <div class="stack">${S.elements.map(e=>`<div><b>${h(e.name)}</b><i>${h(e.question)}</i><em>${h(e.example)}</em></div>`).join("")}</div>
+  <h2>${h(S.thirty.title)}</h2>
+  <p class="soft">${h(S.thirty.intro)}</p>
+  <div class="stack">${S.thirty.rows.map(e=>`<div><b>${h(e.element)}</b><em>${h(e.value)}</em></div>`).join("")}</div>
+  <h2>Mix your own</h2>
+  <div class="mixer">
+    <div class="row">
+      <label><span class="mono">Format</span><select id="m-format">${DATA.formats.map(f=>`<option>${h(f.name)}</option>`).join("")}${S.new_formats.map(f=>`<option>${h(f)} (new)</option>`).join("")}</select></label>
+      <label><span class="mono">Style</span><select id="m-style">${DATA.styles.map(s=>`<option value="${s.id}">${h(s.name)}</option>`).join("")}</select></label>
+      <label><span class="mono">Argument</span><select id="m-fw">${DATA.frameworks.map(f=>`<option>${h(f.name.split(" (")[0])}</option>`).join("")}</select></label>
+      <label><span class="mono">Medium</span><select id="m-med">${S.mediums.map(m=>`<option>${h(m)}</option>`).join("")}</select></label>
+    </div>
+    <div class="mixout"><img id="m-img" alt=""><p id="m-out"></p></div>
+    <span class="soft">${h(S.mixer_note)}</span>
+  </div>
+  <h2>The Instagram list of 21, sorted</h2>
+  <p class="soft">${h(S.sorted_intro)}</p>
+  <div class="tablewrap"><table><tr><th>#</th><th>They call it</th><th>It really is</th><th>Where it goes</th></tr>
+  ${S.sorted21.map(r=>`<tr><td>${r.n}</td><td>${h(r.name)}</td><td>${r.is.map(x=>chip(x,x==="style"?"acc":x==="format"?"go":x==="cast"?"part":"")).join(" ")}</td><td>${h(r.goes)}</td></tr>`).join("")}</table></div>`;
+}
+function mix(){
+  const s = DATA.styles.find(x=>x.id===$("#m-style").value);
+  $("#m-img").src = s._img||DATA.base||""; $("#m-img").alt=s.name;
+  $("#m-out").innerHTML = `A <u>${h($("#m-format").value.replace(" (new)",""))}</u>, rendered in <u>${h(s.name)}</u>, arguing <u>${h($("#m-fw").value)}</u>, shipped as <u>${h($("#m-med").value)}</u>.`;
+}
+
+function vEdit(){
+  const E=C.edit, who={machine:["machine",""],model:["model","part"],you:["your eye","acc"]};
+  return `<h2>${h(E.title)}</h2><p class="soft">${h(E.intro)}</p>
+  <div class="test">${h(E.principle)}</div>
+  <div class="proof"><div><video controls playsinline src="${E.proof.video}"></video></div><div class="box"><p>${h(E.proof.note)}</p><ul>${E.proof.points.map(p=>`<li>${h(p)}</li>`).join("")}</ul><img src="${E.proof.img}" alt="The timeline page" style="border:1px solid var(--line);margin-top:6px"></div></div>
+  ${E.model_note?`<div class="box"><h3>${h(E.model_note.title)}</h3><p class="soft">${h(E.model_note.text)}</p></div>`:""}
+  <h2>The steps</h2><div class="steps">${E.steps.map(r=>`<div class="step"><div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><h3>${h(r.t)}</h3>${chip(who[r.who][0],who[r.who][1])}</div><p>${h(r.d)}</p></div></div>`).join("")}</div>
+  <h2>${h(E.controls_title)}</h2><div class="cards">${E.controls.map(b=>`<div class="box"><h3>${h(b.name)}</h3><p class="soft">${h(b.note)}</p></div>`).join("")}</div>
+  <h2>${h(E.elements_title)}</h2><div class="cards">${E.elements.map(b=>`<div class="box"><h3>${h(b.name)}</h3><p class="soft">${h(b.note)}</p></div>`).join("")}</div>
+  <h2>The editing rules</h2><p class="soft">${h(E.rules_intro)}</p>
+  <div class="steps">${E.rules.map(r=>`<div class="step"><div><h3>${h(r.t)}</h3><p>${h(r.d)}</p></div></div>`).join("")}</div>
+  <h2>The prompts, word for word</h2>${E.prompts.map(p=>`<details class="box"><summary><b>${h(p.name)}</b> <span class="mono">${h(p.file)}</span></summary><pre class="prompt">${h(p.text)}</pre></details>`).join("")}
+  <h2>${h(E.gaps_title)}</h2><div class="box"><ul>${E.gaps.map(g=>`<li>${h(g)}</li>`).join("")}</ul></div>`;
+}
+function vLine(){
+  const L=C.line;
+  return `<h2>${h(L.title)}</h2><p class="soft">${h(L.intro)}</p>
+  <div class="steps">${L.steps.map(r=>`<div class="step"><div><div class="top" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><h3>${h(r.t)}</h3>${r.you?chip("your eye","acc"):""}${chip(r.state,r.cls)}</div><p>${h(r.d)}</p></div></div>`).join("")}</div>
+  ${L.sound_note?`<div class="box"><h3>${h(L.sound_note.title)}</h3><p class="soft">${h(L.sound_note.text)}</p></div>`:""}
+  <h2>The labels the teardown now puts on every row</h2>
+  <div class="tablewrap"><table><tr><th>Label</th><th>Means</th><th>The test</th></tr>${L.labels.map(r=>`<tr><td>${chip(r[0],r[0]==="A"?"acc":"part")}</td><td>${h(r[1])}</td><td>${h(r[2])}</td></tr>`).join("")}</table></div>
+  <h2>The prompts, word for word</h2>${L.prompts.map(p=>`<details class="box"><summary><b>${h(p.name)}</b> <span class="mono">${h(p.file)}</span></summary><pre class="prompt">${h(p.text)}</pre></details>`).join("")}
+  <h2>What gets built next, in order</h2><div class="steps">${L.next.map(n=>`<div class="step"><div><h3>${h(n)}</h3></div></div>`).join("")}</div>`;
+}
+function vTools(){
+  return `<h2>What we mined</h2><p class="soft">${h(C.tools.intro)}</p>
+  <div class="cards">${C.tools.rows.map(t=>`<div class="box ${t.lead?"lead":""}"><div class="top"><h3><a href="${h(t.url)}">${h(t.name)}</a></h3>${chip(t.verdict,t.cls)}</div><span class="mono">${h(t.meta)}</span><p>${h(t.what)}</p><div><span class="eyebrow">Lifted for us</span><ul>${t.lifted.map(x=>`<li>${h(x)}</li>`).join("")}</ul></div></div>`).join("")}</div>`;
+}
+function vPlan(){
+  const P=C.plan;
+  return `<h2>${h(P.title)}</h2><p class="soft">${h(P.intro)}</p>
+  <div class="cards">${P.doors.map(d=>`<div class="box ${d.lead?"lead":""}"><div class="top"><h3>${h(d.name)}</h3>${chip(d.tag,d.lead?"go":"part")}</div><p class="soft">${h(d.what)}</p></div>`).join("")}</div>
+  <h2>${h(P.steps_title)}</h2>
+  <div class="steps">${P.steps.map(r=>`<div class="step"><div><h3>${h(r.t)}</h3><p>${h(r.d)}</p></div></div>`).join("")}</div>
+  <h2>The three tests a style has to pass</h2>
+  <div class="cards">${P.tests.map(b=>`<div class="box"><h3>${h(b.name)}</h3><p class="soft">${h(b.note)}</p></div>`).join("")}</div>
+  <h2>What already exists, so this is small</h2>
+  <div class="tablewrap"><table><tr><th>Piece</th><th>State</th><th>What is missing</th></tr>${P.exists.map(r=>`<tr><td>${h(r.piece)}</td><td>${chip(r.state,r.cls)}</td><td>${h(r.gap)}</td></tr>`).join("")}</table></div>`;
+}
+function vLand(){
+  const L=C.land;
+  return `<h2>The ladder: what is free now, and what is not</h2><p class="soft">${h(L.intro)}</p>
+  <div class="tablewrap"><table><tr><th>Rung</th><th>Everyone</th><th>You</th></tr>${L.rows.map(r=>`<tr class="${r.edge?"edge":""}"><td>${h(r.rung)}</td><td>${h(r.all)}</td><td>${h(r.you)}</td></tr>`).join("")}</table></div>`;
+}
+function render(){
+  const v=$("#view");
+  v.innerHTML = {styles:vStyles,shows:vShows,stack:vStack,line:vLine,edit:vEdit,tools:vTools,plan:vPlan,land:vLand}[tab]();
+  if(tab==="styles"){ v.onclick=e=>{ const f=e.target.closest("[data-f]"); if(f){fam=f.dataset.f;render();return} const c=e.target.closest("[data-s]"); if(c) openStyle(c.dataset.s) } } else v.onclick=null;
+  if(tab==="stack"){ ["m-format","m-style","m-fw","m-med"].forEach(id=>$("#"+id).onchange=mix); $("#m-format").value=C.stack.mix_default.format; $("#m-style").value=C.stack.mix_default.style; mix(); }
+}
+$("#stamp").textContent = C.stamp; $("#foot").innerHTML = C.foot;
+if(!TABS.some(t=>t[0]===tab)) tab="styles";
+renderTabs(); render();
+</script>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Connect GeeLark</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#17212b;background:#f4f7fa;color-scheme:light}*{box-sizing:border-box}body{margin:0;padding:32px 20px}main{max-width:440px;margin:32px auto}small{color:#526174}h1{font-size:30px;letter-spacing:-1px;margin:14px 0}p{line-height:1.55;color:#526174}label{display:block;margin:24px 0 8px;font-weight:600}input{width:100%;padding:15px;border:1px solid #b9c5cf;border-radius:10px;font:inherit;min-height:48px}button{margin-top:28px;width:100%;border:0;border-radius:10px;padding:16px;background:#1566da;color:white;font:inherit;font-weight:600;min-height:50px}button:disabled{opacity:.5}.status{margin-top:22px;line-height:1.5}footer{margin-top:32px;font-size:13px;line-height:1.5;color:#526174}
+</style></head><body><main>
+<small>PRIZM LABS · PRIVATE CONNECTION</small><h1>Connect GeeLark</h1><p>Copy the Token / Bearer token from GeeLark’s API settings. Paste only its value below, without the word Bearer. An API Key or App ID will not work in this field. This form closes after one save.</p>
+<form id="secret-form" autocomplete="off">
+<label for="token">GeeLark bearer token</label><input id="token" type="password" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Paste the bearer token, not the API key">
+<label for="proxy">German proxy URL <small>(optional)</small></label><input id="proxy" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="socks5://user:pass@host:port">
+<button id="save" type="submit">Save securely to my Mac</button></form>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<footer>Your browser encrypts the credentials for this Mac before sending them. They are stored in the repo’s private .env file, never returned to this page. Keep this link private.</footer>
+</main><script>
+(()=>{
+let ticket=location.hash.slice(1);history.replaceState(null,'',location.pathname);
+const form=document.getElementById('secret-form'), button=document.getElementById('save'), status=document.getElementById('status');
+if(!ticket){button.disabled=true;status.textContent='Open the complete private link from the chat.';}
+const b64=bytes=>btoa(String.fromCharCode(...new Uint8Array(bytes)));
+form.addEventListener('submit',async e=>{
+e.preventDefault();button.disabled=true;status.textContent='Encrypting and saving…';
+try{
+const token=document.getElementById('token').value.trim(), proxy=document.getElementById('proxy').value.trim();
+const values={GEELARK_API_TOKEN:token};if(proxy)values.PROXY_DE_1=proxy;
+if(Object.values(values).some(v=>!v||v.length>4096||/[^\x21-\x7e]|['"\\]/.test(v)))throw Error('Remove spaces and quotes. URL-encode special characters in proxy credentials.');
+const spki=Uint8Array.from(atob('__PUBLIC_KEY__'), c=>c.charCodeAt(0));
+const pub=await crypto.subtle.importKey('spki',spki,{name:'RSA-OAEP',hash:'SHA-256'},false,['encrypt']);
+const aes=await crypto.subtle.generateKey({name:'AES-GCM',length:256},true,['encrypt']);
+const iv=crypto.getRandomValues(new Uint8Array(12));
+const ciphertext=await crypto.subtle.encrypt({name:'AES-GCM',iv},aes,new TextEncoder().encode(JSON.stringify(values)));
+const wrappedKey=await crypto.subtle.encrypt({name:'RSA-OAEP'},pub,await crypto.subtle.exportKey('raw',aes));
+const result=await fetch('/save',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+ticket},body:JSON.stringify({wrappedKey:b64(wrappedKey),iv:b64(iv),ciphertext:b64(ciphertext)})});
+const data=await result.json();if(!result.ok)throw Error(data.error||'Unable to save.');
+form.reset();form.hidden=true;ticket='';status.textContent='Saved to your Mac. This form is now closed. Return to the chat and say “saved”.';
+}catch(error){status.textContent=error.message||'Connection failed. Please retry.';button.disabled=false;}
+});
+})();
+</script></body></html>

@@ -1,0 +1,1264 @@
+{
+ "component": "triage",
+ "target": "components/triage",
+ "stage": null,
+ "kind": "engine",
+ "drafted": {
+  "by": "≈ STREAM · atlas [6941d8], for the team (engine owner). Redrawn 2026-10-02 for the two-theme round: components / atlas (the team) and operations (the team); red tests set aside",
+  "at": "2026-10-02T06:41Z",
+  "read_from": "875026873"
+ },
+ "character": "an engine · any list, read through its theme pack, in; a ranked queue of actions with summaries, three whos and cross-references out · decides nothing · PROPOSED, run by hand on two themes",
+ "sources": [
+  {
+   "group": "People",
+   "items": [
+    {
+     "id": "towner",
+     "label": "The theme's triage owner runs /triage <theme> from a session (proposed); today the atlas stream renders each queue by hand",
+     "home": "session",
+     "proposed": true,
+     "cite": "components/triage/CONTRACT-themes.md@fc6ea100c"
+    },
+    {
+     "id": "lead",
+     "label": "a lead or a stream asks for a dry run over one theme (how both themes ran on 2026-10-02)",
+     "home": "session",
+     "cite": "new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c"
+    }
+   ]
+  },
+  {
+   "group": "Automated",
+   "items": [
+    {
+     "id": "tick",
+     "label": "a tick on the mini per theme: weekly for components, daily for operations as the metrics data refreshes daily",
+     "home": "mini",
+     "proposed": true,
+     "cite": "components/triage/CONTRACT-themes.md@fc6ea100c"
+    }
+   ]
+  },
+  {
+   "group": "Themes it triages (one adapter each)",
+   "items": [
+    {
+     "id": "atlas",
+     "label": "components / atlas: open issues on the component pages, from the compiled atlas (685 open on 48 components)",
+     "home": "repo",
+     "component": "atlas",
+     "cite": "new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c"
+    },
+    {
+     "id": "ops",
+     "label": "operations: signals the detectors build from the metrics dashboards' data (13 on 2026-10-02)",
+     "home": "repo",
+     "component": "metrics",
+     "cite": "new-workflow-design/builds/atlas/tools/metrics_insights.py@fc6ea100c"
+    },
+    {
+     "id": "pnl",
+     "label": "operations, next: the P&L systems the team is building, joined as they land",
+     "home": "repo",
+     "proposed": true,
+     "cite": "components/triage/themes/operations.json@fc6ea100c"
+    }
+   ]
+  },
+  {
+   "group": "Reference sources (indexed, not triaged)",
+   "items": [
+    {
+     "id": "refsrc",
+     "label": "cards, inbox, PM tasks and brand folders, for cross-references; Slack channels to be decided (the Brand-B workspace saw 39 human messages in 30 days)",
+     "home": "repo",
+     "proposed": true,
+     "cite": "components/triage/themes/slack-brand-b/channel-census-2026-10-02.json@fc6ea100c"
+    }
+   ]
+  }
+ ],
+ "engine": {
+  "id": "passes",
+  "label": "nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme's own rules · priority, by the theme's own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act",
+  "plain": "A sorting desk for any long list. It reads a theme's list through that theme's adapter, drops what is already fixed, checks every item carries its summary, names each cause and what blocks it, then groups items into actions by the theme's own grouping rules (components by fix, operations by detector and brand). It ranks actions by the theme's own priority list (neither grouping nor priority is built into the engine), says who decides, who can do it (the triage owner first) and who is affected, links each item to related work elsewhere, and logs every act. The engine names no person, path or priority rule: all of that comes from the theme pack.",
+  "home": "repo",
+  "path": "components/triage/",
+  "node": "component:triage",
+  "runs_on": "a session, or a tick per theme on the mini",
+  "definitions": {
+   "id": "packs",
+   "label": "themes/<theme>.json: the theme pack. Item word, adapter, summary fields, cause classes, priority rule, owners, lanes, refs it carries. One per theme, curated by the theme owner: atlas.json (the team), operations.json (the team)",
+   "home": "repo",
+   "path": "components/triage/themes/",
+   "cite": "components/triage/themes/atlas.json@fc6ea100c"
+  },
+  "binding": {
+   "id": "standard",
+   "label": "the eight-part summary (SCHEMA §5): why, impacts, evidence, response (a fix, or a follow-up on a positive signal), what the response changes, if ignored, lane, severity, on every item and every action",
+   "home": "repo",
+   "path": "new-workflow-design/builds/atlas/flows/SCHEMA.md",
+   "cite": "new-workflow-design/builds/atlas/flows/SCHEMA.md@fc6ea100c"
+  }
+ },
+ "outputs": [
+  {
+   "id": "queue",
+   "label": "one queue page per theme, the same format for every theme: actions ranked, each item clickable into its summary, the three whos, explain and do prompts for Claude",
+   "home": "repo",
+   "cite": "new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c"
+  },
+  {
+   "id": "summ",
+   "label": "summaries on everything, from the start: operations 13 signals and 5 actions; components all 656 open issues and all 83 actions (60 built from their issues' summaries by tools/triage_fill.py)",
+   "home": "repo",
+   "cite": "new-workflow-design/builds/atlas/triage/queue/model-operations-2026-10-02.json@fc6ea100c"
+  },
+  {
+   "id": "drafts",
+   "label": "drafted fixes and option cards: 113 ATL-29 (drafted changes), 48 ATL-30 (decision option cards), components only",
+   "home": "repo",
+   "cite": "new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c"
+  },
+  {
+   "id": "refs",
+   "label": "cross-references on every item: typed refs, one shared resolver per type; text-matched today, declared refs proposed",
+   "home": "repo",
+   "cite": "new-workflow-design/builds/atlas/tools/triage_refs.py@fc6ea100c"
+  },
+  {
+   "id": "records",
+   "label": "the decision log: one `triage` record per act (close, answer, forward, change, draft, sign, undo, decide; ATL-28 (triage record kind), ATL-32 (triage change trail)), filed by components/triage/tools/file_record.py; append-only. Queue pages, the atlas and per-area context files for Claude read it (the readers are proposed)",
+   "home": "repo",
+   "cite": "components/triage/tools/file_record.py@fc6ea100c"
+  }
+ ],
+ "used_by": [
+  {
+   "group": "People",
+   "items": [
+    {
+     "id": "u-towner",
+     "label": "The triage owner (the team for components / atlas, the team for operations): works the list first, does what is marked theirs, closes with evidence, forwards the rest",
+     "home": "session",
+     "writes_back": {
+      "who": "the triage owner",
+      "events": [
+       "confirm",
+       "clear",
+       "close",
+       "forward"
+      ]
+     }
+    },
+    {
+     "id": "u-owners",
+     "label": "owners and deciders: see every change in their areas in the decision log, each with a one-line undo; answer, sign or undo",
+     "home": "session",
+     "proposed": true,
+     "writes_back": {
+      "who": "the decider",
+      "events": [
+       "sign",
+       "undo",
+       "decide"
+      ]
+     }
+    },
+    {
+     "id": "u-lead",
+     "label": "the lead: an action with many items behind it becomes one card",
+     "home": "session"
+    }
+   ]
+  },
+  {
+   "group": "Components",
+   "items": [
+    {
+     "id": "u-atlas",
+     "label": "atlas: each issue shows its action, priority and clears-with count; closes read back from SCHEMA §5a",
+     "home": "repo",
+     "component": "atlas",
+     "proposed": true
+    },
+    {
+     "id": "u-claude",
+     "label": "anyone's Claude: the explain prompts on the queue, and the per-area context files once built",
+     "home": "session",
+     "proposed": true
+    }
+   ]
+  }
+ ],
+ "borrowed": {
+  "from": "review",
+  "words": [
+   "the decision record shape (verdict, reviewer, notes)",
+   "a person's verdict is the only close"
+  ],
+  "note": "proposed: decisions land as records beside review's, not a second voting system"
+ },
+ "gates": [
+  {
+   "id": "towner-first",
+   "label": "The theme's triage owner works the list before anything reaches an owner (the team, ruled 2026-10-02, 981094a4a; generalised the same day)",
+   "who": "towner",
+   "cite": "components/triage/CONTRACT-themes.md@fc6ea100c"
+  },
+  {
+   "id": "duty",
+   "label": "what the triage owner may change alone in someone else's component: Option 3, ruled 2026-10-02 (the owner said yes), under four limits",
+   "who": "dayu",
+   "cite": "components/triage/proposals/triage-owner-scope.json@fc6ea100c"
+  }
+ ],
+ "who": [
+  [
+   "the engine (the nine passes, the shared page, log and resolvers)",
+   "the team, for now (the team, 2026-10-02)"
+  ],
+  [
+   "the components / atlas theme: its pack and its triage",
+   "the team: theme owner and triage owner"
+  ],
+  [
+   "the operations theme: its pack and its triage",
+   "the team: theme owner and triage owner"
+  ],
+  [
+   "an adapter (how a list is read and written back)",
+   "its theme owner"
+  ],
+  [
+   "the summary standard",
+   "SCHEMA §5, ruled 2026-10-02"
+  ],
+  [
+   "the walls",
+   "the team or the team; no pack may relax one"
+  ]
+ ],
+ "outcomes": {
+  "fold": "every item ends in exactly one of these. The machine never closes an item by judgment: a close is the triage owner's with evidence, or the source's own next run.",
+  "exits": [
+   {
+    "id": "fixed",
+    "label": "already fixed: a closure proposed back to the list",
+    "to": "sources"
+   },
+   {
+    "id": "selfclear",
+    "label": "cleared by the source's next run (operations signals): it leaves the queue on its own",
+    "to": "sources"
+   },
+   {
+    "id": "cleared",
+    "label": "the triage owner clears it, under the lane's conditions",
+    "to": "workflow"
+   },
+   {
+    "id": "owner",
+    "label": "an owner's yes or no, in the weekly message",
+    "to": "workflow"
+   },
+   {
+    "id": "decision",
+    "label": "a decision: options and a suggested answer go to the decider",
+    "to": "workflow"
+   },
+   {
+    "id": "parked",
+    "label": "parked with a review date: little use on record",
+    "to": "stop"
+   }
+  ]
+ },
+ "refuses": [
+  {
+   "code": "no-pack",
+   "means": "a list with no theme pack: no item word, causes, priority rule or owners to sort by"
+  },
+  {
+   "code": "no-summary-at-birth",
+   "means": "creating an item, action group or issue without its eight-part summary (the team, 2026-10-02: a standing rule)"
+  },
+  {
+   "code": "no-decider",
+   "means": "an action with no one named to decide: it never leaves the queue as 'none'"
+  },
+  {
+   "code": "write-to-source",
+   "means": "any change to the list it reads; closes go back through the list's own writer"
+  },
+  {
+   "code": "unverified-close",
+   "means": "closing an item whose evidence it could not check"
+  },
+  {
+   "code": "pack-relaxes-wall",
+   "means": "a theme pack that loosens a wall; walls bind every theme"
+  },
+  {
+   "code": "guessed-as-declared",
+   "means": "a text-matched cross-reference shown as if it were declared"
+  }
+ ],
+ "facts": {
+  "Status": "proposed design · run by hand on two themes (components / atlas, operations) · renderer, detectors and ref resolver live in the atlas build; components/triage/ not built",
+  "Run": "/triage <theme> (proposed); today: tools/triage_page.py renders a theme's queue model",
+  "Emits": "a queue page per theme, summaries, drafts and option cards, cross-references; every act to the decision log (proposed)",
+  "Contract": "a theme pack and an adapter per theme (CONTRACT-themes.md); the eight-part summary (SCHEMA §5)"
+ },
+ "table": {
+  "title": "Themes: what each list brings",
+  "lede": "The nine passes stay the same. Each theme brings a pack and an adapter, and its owner changes them without asking. Status 2026-10-02.",
+  "cite": "components/triage/CONTRACT-themes.md@fc6ea100c",
+  "columns": [
+   "",
+   "Components / atlas",
+   "Operations"
+  ],
+  "rows": [
+   [
+    "Theme owner and triage owner",
+    "the team",
+    "the team"
+   ],
+   [
+    "An item is",
+    "an issue, component#n",
+    "a signal, detector:brand[:product]"
+   ],
+   [
+    "Read from",
+    "the compiled atlas: each component's newest system run",
+    "the metrics dashboards' data, refreshed daily; P&L systems next"
+   ],
+   [
+    "Already fixed?",
+    "the next system run re-reads it; the team may close with evidence (SCHEMA §5a)",
+    "clears itself when the next run no longer shows it; data health runs first and holds stale brands"
+   ],
+   [
+    "Summary",
+    "the eight parts on all 656 open issues (ATL-31 (remaining issue briefs)); the 29 that look fixed close instead",
+    "the eight parts on all 13 signals and all 5 actions"
+   ],
+   [
+    "Summary at birth (rule)",
+    "met: 83 of 83 actions, 656 of 656 open issues",
+    "met: 13 signals, 5 actions"
+   ],
+   [
+    "Cause classes",
+    "26 mechanisms: moved paths, output home, keys…",
+    "data health, movement, sell-out before resupply, patterns over time"
+   ],
+   [
+    "Grouping",
+    "close-out → shared fix across components (24) → decision group (11) → local batch per component (47); first match wins",
+    "one action per detector per brand, data health first (5)"
+   ],
+   [
+    "Priority",
+    "issue weight (P0 8 · P1 4 · P2 2 · P3 1); age raises it, never past P1; no P0 without live use",
+    "money at stake a month (P0 ≥ $10k · P1 ≥ $2k · P2 ≥ $500)"
+   ],
+   [
+    "Who decides",
+    "owners from the Residents table (4 disputes open); the team for walls",
+    "each brand's ads owner (not yet named); the team for the P&L"
+   ],
+   [
+    "What the triage owner may do alone",
+    "Option 3, ruled 2026-10-02 (the owner said yes): ruled defaults and fixes the summary spells out, a test proving each, every change in the decision log with an undo",
+    "read and flag; acting on spend is the ads owner's"
+   ],
+   [
+    "Cross-references",
+    "component · folder · brand folder · card",
+    "brand · product · SKU · metric run · P&L table · card"
+   ],
+   [
+    "Both",
+    "PM tasks · inbox items · Slack (to be decided)",
+    "PM tasks · inbox items · Slack (to be decided)"
+   ],
+   [
+    "Evaluation",
+    "the team, 10-02 → 10-16, findings tagged theme or engine",
+    "the team, 10-02 → 10-16, findings tagged theme or engine"
+   ]
+  ]
+ },
+ "howto": {
+  "source": "components/triage/CONTRACT-themes.md",
+  "generated": "≈ STREAM · atlas [6941d8], 2026-10-02, proposed",
+  "in_readme": false,
+  "parts": [
+   [
+    "What it does",
+    "takes one theme's list through its pack and adapter: drops what's already fixed, checks summaries, names each cause, groups items by the one action that clears them, ranks the actions, names who decides, who can do it and who is affected, and links related work. Out comes one queue page for the triage owner (proposed as a component; run by hand today)."
+   ],
+   [
+    "Before you start",
+    "a theme pack (themes/<theme>.json) with every key filled or set to null with a reason, and an adapter that can read the list and tell whether an item still holds. A named theme owner and triage owner."
+   ],
+   [
+    "The command",
+    "today, by hand: python3 tools/metrics_insights.py writes the operations model; /usr/bin/python3 tools/triage_page.py <model> renders any theme's page. Proposed: /triage <theme>."
+   ],
+   [
+    "What you get",
+    "triage/queue/model-<theme>-<date>.json and its page: actions ranked, items clickable into summaries, prompts to paste into Claude."
+   ],
+   [
+    "When to stop and ask",
+    "an action that bundles unrelated causes, a P0 without live-use evidence, or a stale source (data health fails): the triage owner confirms before anything goes to an owner."
+   ],
+   [
+    "Confirm with",
+    "the team for the engine; the team for components / atlas; the team for operations."
+   ]
+  ]
+ },
+ "picture": {
+  "columns": {
+   "in": "Sources",
+   "recipe": "Inputs",
+   "engine": "Engine",
+   "out": "Outputs",
+   "use": "Used by"
+  },
+  "groups": [
+   {
+    "col": "in",
+    "icon": "👤",
+    "title": "People",
+    "items": [
+     {
+      "name": "triage owner",
+      "sub": "/triage <theme>",
+      "covers": [
+       "towner"
+      ],
+      "state": "proposed"
+     },
+     {
+      "name": "a lead or stream",
+      "sub": "a dry run",
+      "covers": [
+       "lead"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "in",
+    "icon": "⚙",
+    "title": "Automated",
+    "home": "mini",
+    "items": [
+     {
+      "name": "tick per theme",
+      "sub": "weekly · daily",
+      "covers": [
+       "tick"
+      ],
+      "state": "proposed"
+     }
+    ]
+   },
+   {
+    "col": "in",
+    "icon": "🧩",
+    "title": "Themes",
+    "items": [
+     {
+      "name": "components / atlas",
+      "sub": "685 issues",
+      "covers": [
+       "atlas"
+      ]
+     },
+     {
+      "name": "operations",
+      "sub": "13 signals",
+      "covers": [
+       "ops"
+      ]
+     },
+     {
+      "name": "P&L systems",
+      "sub": "next",
+      "covers": [
+       "pnl"
+      ],
+      "state": "proposed"
+     }
+    ]
+   },
+   {
+    "col": "in",
+    "home": "repo",
+    "title": "Reference sources",
+    "state": "proposed",
+    "items": [
+     {
+      "name": "cards · inbox · tasks",
+      "sub": "links only",
+      "covers": [
+       "refsrc"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "recipe",
+    "home": "repo",
+    "title": "theme packs",
+    "items": [
+     {
+      "name": "atlas.json",
+      "sub": "the team",
+      "covers": [
+       "packs"
+      ]
+     },
+     {
+      "name": "operations.json",
+      "sub": "the team",
+      "covers": [
+       "packs"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "recipe",
+    "home": "repo",
+    "title": "the summary standard",
+    "state": "binding",
+    "items": [
+     {
+      "name": "SCHEMA §5",
+      "sub": "the eight parts",
+      "covers": [
+       "standard"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "engine",
+    "title": "nine passes",
+    "state": "proposed",
+    "items": [
+     {
+      "name": "intake · still true?",
+      "sub": "the adapter",
+      "covers": [
+       "passes"
+      ]
+     },
+     {
+      "name": "summary · cause · group",
+      "sub": "theme's grouping",
+      "covers": [
+       "passes"
+      ]
+     },
+     {
+      "name": "priority · three whos",
+      "sub": "triage owner first",
+      "covers": [
+       "passes"
+      ]
+     },
+     {
+      "name": "refs · outputs · log",
+      "sub": "every act",
+      "covers": [
+       "passes"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "out",
+    "home": "repo",
+    "title": "for the triage owner",
+    "items": [
+     {
+      "name": "queue page",
+      "sub": "one per theme",
+      "covers": [
+       "queue"
+      ]
+     },
+     {
+      "name": "summaries",
+      "sub": "items · actions",
+      "covers": [
+       "summ"
+      ]
+     },
+     {
+      "name": "drafts · options",
+      "sub": "components",
+      "covers": [
+       "drafts"
+      ]
+     },
+     {
+      "name": "cross-refs",
+      "sub": "text-matched",
+      "covers": [
+       "refs"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "out",
+    "home": "repo",
+    "title": "on the plane",
+    "state": "proposed",
+    "items": [
+     {
+      "name": "decision log",
+      "sub": "every act, once",
+      "covers": [
+       "records"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "use",
+    "icon": "👤",
+    "title": "People",
+    "items": [
+     {
+      "name": "triage owner",
+      "sub": "the team · the team",
+      "covers": [
+       "u-towner"
+      ]
+     },
+     {
+      "name": "owners and deciders",
+      "sub": "read the log · undo",
+      "covers": [
+       "u-owners"
+      ],
+      "state": "proposed"
+     },
+     {
+      "name": "the lead",
+      "sub": "one card per action",
+      "covers": [
+       "u-lead"
+      ]
+     }
+    ]
+   },
+   {
+    "col": "use",
+    "icon": "🧩",
+    "title": "Components",
+    "items": [
+     {
+      "name": "atlas",
+      "sub": "action · priority",
+      "covers": [
+       "u-atlas"
+      ],
+      "state": "proposed"
+     },
+     {
+      "name": "anyone's Claude",
+      "sub": "prompts · context",
+      "covers": [
+       "u-claude"
+      ],
+      "state": "proposed"
+     }
+    ]
+   }
+  ],
+  "links": [],
+  "bands": {
+   "never": {
+    "title": "What it never does",
+    "items": [
+     {
+      "name": "close by judgment",
+      "sub": "a close is the triage owner's, with evidence"
+     },
+     {
+      "name": "edit the list it reads",
+      "sub": "only through the list's own writer"
+     },
+     {
+      "name": "go to an owner first",
+      "sub": "the triage owner sees it first"
+     },
+     {
+      "name": "leave an action with no decider",
+      "sub": "'none' is refused"
+     }
+    ]
+   },
+   "owners": {
+    "title": "Who owns what",
+    "items": [
+     {
+      "name": "the engine",
+      "sub": "nine passes, page, log",
+      "who": "the team, for now"
+     },
+     {
+      "name": "components / atlas",
+      "sub": "pack · triage",
+      "who": "the team"
+     },
+     {
+      "name": "operations",
+      "sub": "pack · triage",
+      "who": "the team"
+     },
+     {
+      "name": "the walls",
+      "sub": "bind every theme",
+      "who": "the team · the team"
+     }
+    ]
+   }
+  }
+ },
+ "issues": [
+  {
+   "n": 1,
+   "text": "No one owns the engine yet",
+   "affects": "the whole component: who builds it, who keeps the passes the same across domains",
+   "owner": "the team",
+   "kind": "decision",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Rule the owner",
+   "why": "Without an owner, each list grows its own copy of these passes, which is the drift this component exists to remove.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/PROPOSAL-issue-briefs.html@2d3842169"
+   ],
+   "fix": "Name an owner. The suggestion is the team: she owns the PM tool, the likeliest third domain, and the system-integration engine.",
+   "fix_impact": "One owner builds the first version and approves domain adapters.",
+   "if_ignored": "Two lists (component issues and red tests) keep running as one-off scripts.",
+   "lane": "decision",
+   "severity": "P1",
+   "resolved": "the team owns the engine (the team \"I own engine\", decision log 981094a4a)"
+  },
+  {
+   "n": 2,
+   "text": "What the triage owner may do alone is not ruled",
+   "affects": "the triage owner's lane on every list",
+   "owner": "the team",
+   "kind": "decision",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Decide at the team's meeting today. Ask the owner first: may the team, through Claude, fix spelled-out issues in the owner's components with every change in the decision log and a one-line undo? Yes → Option 3; no → Option 2.",
+   "why": "Until it is ruled, every item still ends in an owner's yes, which is the bandwidth problem this was meant to solve.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team",
+     "the owner"
+    ],
+    "components": [
+     "triage",
+     "atlas"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/PROPOSAL-issue-briefs.html@2d3842169",
+    "new-workflow-design/builds/atlas/flows/SCHEMA.md@fc6ea100c"
+   ],
+   "fix": "Proposed (for discussion, not ruled): Option 3. A triage owner may apply a ruled default, or a fix the issue's brief already spells out, in an owner's component, with the owner told rather than asked. Four limits: the brief names the change and a test proves it; no test assertion is weakened or removed; nothing changes how a live pipeline behaves (those stay \"triage owner drafts, owner lands\"); every change is a decision-log record with a one-line undo, and owners see their areas' changes there. The alternatives were Option 1 (owners asked first, as today) and Option 2 (ruled defaults only). Full text with examples: triage/proposals/triage-owner-scope.json.",
+   "fix_impact": "Decides who does the 297 component issues tagged \"after a ruling\" (about 197 in the owner's components, 70 in the team's, 18 in the team's, 29 with no owner); the triage owner clears that lane, and owners see what changed in their area in the decision log.",
+   "if_ignored": "The triage owner keeps asking owners about issues they would agree with anyway.",
+   "lane": "decision",
+   "severity": "P1",
+   "resolved": "Ruled 2026-10-02: option 3. the owner said yes to the first-step question (relayed by the team: \"damon decided yes on option 3\"). Limits: the summary names the fix and a test proves it; no test check weakened; no live-pipeline change; every change in the decision log with a one-line undo."
+  },
+  {
+   "n": 3,
+   "text": "The definitions mix up an item's cause with what blocks it",
+   "affects": "definitions file for red tests: 'a card awaiting approval is a ruling'",
+   "owner": "the definitions curator",
+   "kind": "plain",
+   "decider": "the lead",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Split cause from blocked_by in the definitions schema",
+   "why": "The red-test trial mislabelled 4 of 34 suites because of that one line, even though it reached the right action.",
+   "impacts": {
+    "people": [
+     "the lead"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/triage/history/red-tests/DEFINITIONS-red-tests.md@fc6ea100c",
+    "components/triage/history/red-tests/trial-2026-10-02.html@fc6ea100c"
+   ],
+   "fix": "Give every item two fields: a cause class (what is wrong) and blocked_by (an unapproved card, a pending decision, or nothing).",
+   "fix_impact": "Every domain's definitions file changes shape once; the passes don't.",
+   "if_ignored": "Cards awaiting approval keep being reported as rulings, and the counts mislead.",
+   "lane": "owner",
+   "severity": "P2",
+   "resolved": "cause and blocked_by are two fields (the team \"ok\", 4b36a7a90); applied to red-tests/DEFINITIONS-red-tests.md pass 2"
+  },
+  {
+   "n": 4,
+   "text": "Nothing can close an issue on a component page except that component's next run",
+   "affects": "39 component issues already fixed by the README fill, still open",
+   "owner": "the lead",
+   "kind": "decision",
+   "decider": "the team and the lead",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Choose the write-back path for closures",
+   "why": "Triage finds fixed items but cannot retire them, so the queue carries dead weight until each component happens to run again.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the lead"
+    ],
+    "components": [
+     "triage",
+     "atlas",
+     "system-integration"
+    ],
+    "machines": [
+     "the mini"
+    ]
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/dryrun-2026-10-02.json@2d3842169",
+    "new-workflow-design/builds/atlas/flows/SCHEMA.md@fc6ea100c"
+   ],
+   "fix": "Either let the next system run read triage's closure proposals, or let the team mark an issue closed with its evidence.",
+   "fix_impact": "Fixed items leave the queue within a week instead of whenever a run comes.",
+   "if_ignored": "The 39 stay open, and every report shows them again.",
+   "lane": "decision",
+   "severity": "P1",
+   "resolved": "the team may mark an issue closed with its evidence: SCHEMA §5a, decision log 981094a4a; render.py f25c4dac3, crosscheck.py 0a414be2d"
+  },
+  {
+   "n": 5,
+   "text": "Where triage's records live is not decided",
+   "affects": "its runs and the decisions people make on its asks",
+   "owner": "the lead",
+   "kind": "plain",
+   "decider": "the lead",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Card the two record kinds",
+   "why": "Decisions need to be findable later (who said yes to what) without becoming a second voting system beside review.",
+   "impacts": {
+    "people": [
+     "the lead",
+     "the team"
+    ],
+    "components": [
+     "triage",
+     "review"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/review/review_request.py@bfe1ae1a4"
+   ],
+   "fix": "Add two kinds, triage-runs and triage-decisions, with written_by: triage; reuse review's record shape.",
+   "fix_impact": "Two new kind files and the review shape borrowed.",
+   "if_ignored": "Decisions stay in chat and handoff notes and can't be counted.",
+   "lane": "owner",
+   "severity": "P2",
+   "resolved": "one `triage` record kind, runs under runs/triage/<list>/<date>/ (the team \"ok\", 4b36a7a90); kind file live in ATL-28 (triage record kind), 9c1367b81"
+  },
+  {
+   "n": 6,
+   "text": "Priority is guessed from keywords",
+   "affects": "the P0 tier on the component-issue dry run: 101 items",
+   "owner": "the engine owner",
+   "kind": "plain",
+   "decider": "the engine owner",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Atlas actions are now weighted by issue tier (P0 8 · P1 4 · P2 2 · P3 1), but issue tiers still come from the dry run's keyword rules; moves into atlas.json with the refactor (#11).",
+   "why": "In a sample of 7 P0s, 2 were false. A wrong P0 spends the triage owner's first hour on the wrong thing.",
+   "impacts": {
+    "people": [
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/dryrun-2026-10-02.json@2d3842169",
+    "new-workflow-design/builds/atlas/triage/SPEC-briefs-targeted.md@e295ff859"
+   ],
+   "fix": "Read severity from the brief the run writes (SCHEMA §5 severity) and use keywords only when it is missing.",
+   "fix_impact": "P0 becomes a judgement made by whoever read the code.",
+   "if_ignored": "The queue keeps opening with false alarms.",
+   "lane": "owner",
+   "severity": "P1"
+  },
+  {
+   "n": 7,
+   "text": "Untested at scale",
+   "affects": "the largest run so far: 685 items, about 7 agents and roughly 0.5–1 million tokens (inferred)",
+   "owner": "the engine owner",
+   "kind": "plain",
+   "decider": "the engine owner",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Measure a weekly run",
+   "why": "A weekly tick over several lists has to fit the slots and a budget.",
+   "impacts": {
+    "people": [
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": [
+     "the mini"
+    ]
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/clusters-2026-10-02.json@eb4121ac1",
+    "components/triage/history/red-tests/trial-2026-10-02.html@fc6ea100c"
+   ],
+   "fix": "Measure one full weekly run per domain before turning on the tick; cap tokens per run.",
+   "fix_impact": "The tick runs inside the slot budget, or it waits.",
+   "if_ignored": "Cost surprises once three or four lists run weekly.",
+   "lane": "owner",
+   "severity": "P2",
+   "resolved": "the team: \"ignore this one\" (decision log 981094a4a)"
+  },
+  {
+   "n": 8,
+   "text": "Customer service may not need an adapter at all",
+   "affects": "tickets live in the helpdesk, outside the workspace",
+   "owner": "the team",
+   "kind": "decision",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Set aside this round: two themes only (components / atlas, operations).",
+   "why": "Helpdesks like Zendesk, Gorgias and Intercom already triage with AI; pulling tickets in may duplicate that.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the CS lead"
+    ],
+    "components": [
+     "triage",
+     "cs-metrics"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/PROPOSAL-issue-briefs.html@2d3842169"
+   ],
+   "fix": "Check the helpdesk's own triage first; feed its themes into the weekly asks rather than copying tickets in.",
+   "fix_impact": "Either no adapter, or a thin one that reads themes.",
+   "if_ignored": "An adapter built for a job the helpdesk already does.",
+   "lane": "decision",
+   "severity": "P3"
+  },
+  {
+   "n": 9,
+   "text": "The red-test reporter sometimes shows the wrong failing line",
+   "affects": "the reporter's first_failing_line on 2 of 34 suites: a passing docstring, and a line that didn't reproduce",
+   "owner": "the lead",
+   "kind": "plain",
+   "decider": "the lead",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "c0ce1a03f"
+   },
+   "next": "Card the reporter fix",
+   "why": "The red-test adapter reads that line first, so a wrong line sends the first look the wrong way.",
+   "impacts": {
+    "people": [
+     "the lead"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": [
+     "the mini"
+    ]
+   },
+   "evidence": [
+    "components/triage/history/red-tests/trial-2026-10-02.html@fc6ea100c",
+    "platform/data/records/red-tests/20261001T235436Z--mini-worker--builds.json@4fe73da98"
+   ],
+   "fix": "Have the reporter record the first failing assertion, not the first line starting with FAIL.",
+   "fix_impact": "One change in the reporter; every red-test reader benefits.",
+   "if_ignored": "Readers chase the wrong line.",
+   "lane": "owner",
+   "severity": "P2",
+   "resolved": "reporter records the first failing assertion: TI-22 (first failing assertion), merged 80d5854a5"
+  },
+  {
+   "n": 10,
+   "text": "Queue pages are one-day snapshots",
+   "affects": "both themes' two-week evaluation",
+   "owner": "the atlas stream",
+   "kind": "plain",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "875026873"
+   },
+   "next": "Re-run both themes for 10-09 and 10-16 by hand; a tick on the mini is a deploy, to card after the evaluation.",
+   "why": "An evaluation on a stale page measures the page, not the job.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c"
+   ],
+   "fix": "Re-render both queues on fresh data for 10-09 and 10-16.",
+   "fix_impact": "the team and the team judge the list as it is that week.",
+   "if_ignored": "Feedback describes a list that moved on.",
+   "lane": "triage owner",
+   "severity": "P2"
+  },
+  {
+   "n": 11,
+   "text": "Theme-specific code still lives in the engine's tools",
+   "affects": "every new theme",
+   "owner": "the atlas stream",
+   "kind": "plain",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "875026873"
+   },
+   "next": "Refactor triage_page.py and triage_dryrun.py to read people, labels, weights and paths from the packs (about a day, inferred), after the 10-16 findings.",
+   "why": "The contract says the engine names no person, path or rule; the renderer still does.",
+   "impacts": {
+    "people": [
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/triage/CONTRACT-themes.md@fc6ea100c"
+   ],
+   "fix": "Move the list of people, brief labels, sidecar paths, weights and the item word into the packs.",
+   "fix_impact": "A third theme needs only a pack and an adapter.",
+   "if_ignored": "Each new theme edits the engine.",
+   "lane": "triage owner",
+   "severity": "P2"
+  },
+  {
+   "n": 12,
+   "text": "Cross-references are guessed from text",
+   "affects": "both themes' 'Related elsewhere'",
+   "owner": "the team",
+   "kind": "decision",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "875026873"
+   },
+   "next": "Rule whether cards and PM tasks carry a declared refs: line when filed.",
+   "why": "Text matching found 8 related cards for email-production#1, of which 3 were real.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/tools/triage_refs.py@fc6ea100c"
+   ],
+   "fix": "A refs: line on cards and tasks at filing; text matching stays as a labelled fallback.",
+   "fix_impact": "Related work shown is real, so re-filing stops.",
+   "if_ignored": "Owners learn to ignore the column.",
+   "lane": "decision",
+   "severity": "P2"
+  },
+  {
+   "n": 13,
+   "text": "Operations has no targets and no ads owner per brand",
+   "affects": "the operations theme's thresholds and its spend signals",
+   "owner": "the team",
+   "kind": "decision",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "875026873"
+   },
+   "next": "Name each brand's ads owner and any targets during the evaluation.",
+   "why": "Without targets signals compare a brand only with its own history; without an ads owner two spend signals have no decider.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/triage/themes/operations-FINDINGS.md@fc6ea100c"
+   ],
+   "fix": "Name the ads owner per brand in operations.json; add targets as they are set.",
+   "fix_impact": "Spend signals reach someone who can act.",
+   "if_ignored": "They sit in the queue with 'decider: not named'.",
+   "lane": "decision",
+   "severity": "P2"
+  },
+  {
+   "n": 14,
+   "text": "The decision log's five proposed acts and the reopen rule are not carded",
+   "affects": "the decision log every theme writes, and every close",
+   "owner": "the lead",
+   "kind": "card",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "875026873"
+   },
+   "next": "Carded and dispatched as ATL-32 (triage change trail), a3b9ac629. No triage-owner change lands in an owner's component until it merges.",
+   "why": "A close with no reopen rule can't be undone through the record.",
+   "impacts": {
+    "people": [
+     "the team",
+     "the team"
+    ],
+    "components": [
+     "triage"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "components/triage/proposals/triage-log.html@fc6ea100c"
+   ],
+   "fix": "Extend the kind from ATL-28 (triage record kind) and add the reopen sentence.",
+   "fix_impact": "Every act is on the record and reversible.",
+   "if_ignored": "Acts live only in pages and commits.",
+   "lane": "triage owner",
+   "severity": "P1",
+   "tie": "ATL-32",
+   "resolved": "ATL-32 (triage change trail) merged 2026-10-02: change, draft, sign, undo and decide acts with required-when rules; SCHEMA §5a undo reopens. Writer: components/triage/tools/file_record.py (7 tests)."
+  },
+  {
+   "n": 15,
+   "text": "60 of 83 component actions were created without a summary",
+   "affects": "the components queue: the actions the team works",
+   "owner": "the atlas stream",
+   "kind": "plain",
+   "decider": "the team",
+   "origin": {
+    "who": "≈ STREAM · atlas [6941d8]",
+    "when": "2026-10-02",
+    "commit": "76eb340b8"
+   },
+   "next": "Derive the 60 from their issues' summaries once ATL-31 (remaining issue briefs) lands, the way operations does; from now on no action is created without one.",
+   "why": "The rule since 2026-10-02 is that anything triage creates is born with its eight parts; these predate it.",
+   "impacts": {
+    "people": [
+     "the team"
+    ],
+    "components": [
+     "triage",
+     "atlas"
+    ],
+    "machines": []
+   },
+   "evidence": [
+    "new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c"
+   ],
+   "fix": "Build each action's eight parts from its issues' summaries (why, who, evidence, fix, what changes, if ignored, lane, priority across them), as tools/metrics_insights.py does for operations.",
+   "fix_impact": "Every action on the components queue explains itself, like operations' do.",
+   "if_ignored": "the team opens 60 actions with only a headline to go on.",
+   "lane": "triage owner",
+   "severity": "P2",
+   "resolved": "2026-10-02: ATL-31 (remaining issue briefs) merged; tools/triage_fill.py built the 60 action summaries from their issues' summaries. 83 of 83 actions carry one."
+  }
+ ],
+ "issues_next": 16
+}

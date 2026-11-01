@@ -1,0 +1,540 @@
+{
+ "_readme": "THE PICTURE VARIABLE SHEET: every input a picture chain takes, in the order of the prompt's sections. A recipe is this sheet filled in. Rules: see `rules` (PSH-1 to PSH-11). The 29 creative dials and the 9 guards are added from components/creative-controls/controls.json when the sheet loads. Kinds: text (a non-empty line), choice (one of `allowed`), list (a list; `allowed` limits its items when given), level (a dial level), on (a guard: only 'on'), yesno ('yes: <where>' or 'no: <reason>'), swaps (the swap rows).",
+ "status": "draft",
+ "version": 1,
+ "groups": [
+  {
+   "id": "brief",
+   "name": "From the brief"
+  },
+  {
+   "id": "inputs",
+   "name": "The pictures that go in"
+  },
+  {
+   "id": "picture",
+   "name": "What to draw"
+  },
+  {
+   "id": "product",
+   "name": "The real product"
+  },
+  {
+   "id": "people",
+   "name": "The people"
+  },
+  {
+   "id": "frame",
+   "name": "The shape"
+  },
+  {
+   "id": "rules",
+   "name": "Do not do"
+  },
+  {
+   "id": "creative",
+   "name": "The creative dials"
+  },
+  {
+   "id": "guards",
+   "name": "Always protected"
+  },
+  {
+   "id": "run",
+   "name": "The run"
+  }
+ ],
+ "variables": [
+  {
+   "id": "brand",
+   "group": "brief",
+   "name": "Brand",
+   "means": "Whose ad this is.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "product",
+   "group": "brief",
+   "name": "Product",
+   "means": "The product the ad sells.",
+   "kind": "text",
+   "na": [
+    "brand awareness ad, no product",
+    "upper funnel, the product is left out on purpose"
+   ]
+  },
+  {
+   "id": "avatar",
+   "group": "brief",
+   "name": "Who it is for",
+   "means": "The customer the ad speaks to.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "angle",
+   "group": "brief",
+   "name": "The angle",
+   "means": "The one idea the ad says.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "offer",
+   "group": "brief",
+   "name": "The offer",
+   "means": "The deal on the ad, if there is one.",
+   "kind": "text",
+   "na": [
+    "no offer on this ad"
+   ]
+  },
+  {
+   "id": "swipe",
+   "group": "brief",
+   "name": "The ad we copy",
+   "means": "The real post this ad is built on.",
+   "kind": "text",
+   "na": [
+    "made from the written plan alone, no ad copied"
+   ]
+  },
+  {
+   "id": "pictures_in",
+   "group": "inputs",
+   "name": "Pictures going in",
+   "means": "Every picture sent with the prompt, each with its job.",
+   "kind": "list",
+   "na": [
+    "a fresh picture with no reference pictures"
+   ]
+  },
+  {
+   "id": "swap_list",
+   "group": "inputs",
+   "name": "The swap list",
+   "means": "The teardown's list of what stays, what is swapped and what each swap needs (out/swaps.json). The pictures that go in are worked out from it, never a fixed set.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "product_in_frame",
+   "group": "inputs",
+   "name": "Product in this picture",
+   "means": "Yes with where it sits and the sides shown, or no with the brief's reason. Product photos go in only on yes.",
+   "kind": "yesno",
+   "na": []
+  },
+  {
+   "id": "swaps",
+   "group": "inputs",
+   "name": "The swaps",
+   "means": "One row per swap: in the swipe, becomes, its kind, and the picture it needs. A cast or library swap whose picture is not on file stops before any spend.",
+   "kind": "swaps",
+   "na": [
+    "the swipe is copied with nothing swapped"
+   ]
+  },
+  {
+   "id": "stays",
+   "group": "inputs",
+   "name": "What stays",
+   "means": "What is kept from the swipe as it is.",
+   "kind": "list",
+   "na": [
+    "the swap list names nothing that stays"
+   ]
+  },
+  {
+   "id": "words_mode",
+   "group": "inputs",
+   "name": "The words",
+   "means": "Set on top after (the picture is made with no writing) or drawn into the picture.",
+   "kind": "choice",
+   "allowed": [
+    "set on top after",
+    "drawn"
+   ],
+   "na": [
+    "no words on this ad"
+   ]
+  },
+  {
+   "id": "scene",
+   "group": "picture",
+   "name": "What changes from the ad",
+   "means": "The swap: what is drawn instead of what the ad shows.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "subject",
+   "group": "picture",
+   "name": "Who or what it is about",
+   "means": "The one thing the eye hits first.",
+   "kind": "text",
+   "na": [
+    "kept from the ad we copy"
+   ]
+  },
+  {
+   "id": "details",
+   "group": "picture",
+   "name": "The details",
+   "means": "Small things that must be there.",
+   "kind": "text",
+   "na": [
+    "kept from the ad we copy",
+    "the swap names every detail"
+   ]
+  },
+  {
+   "id": "words",
+   "group": "picture",
+   "name": "The words on the picture",
+   "means": "The exact words and where each one sits (set on top after, or drawn, as the swap list says).",
+   "kind": "list",
+   "na": [
+    "no words on this ad"
+   ]
+  },
+  {
+   "id": "place_light",
+   "group": "picture",
+   "name": "The place and the light",
+   "means": "Where it happens and how it is lit.",
+   "kind": "text",
+   "na": [
+    "kept from the ad we copy"
+   ]
+  },
+  {
+   "id": "photo_style",
+   "group": "picture",
+   "name": "The photo style",
+   "means": "What kind of photo it looks like.",
+   "kind": "text",
+   "na": [
+    "kept from the ad we copy"
+   ]
+  },
+  {
+   "id": "colours",
+   "group": "picture",
+   "name": "The colours",
+   "means": "The colours that must be there.",
+   "kind": "text",
+   "na": [
+    "kept from the ad we copy"
+   ]
+  },
+  {
+   "id": "camera",
+   "group": "picture",
+   "name": "The camera set-up",
+   "means": "Where the camera is, how far, at what height.",
+   "kind": "text",
+   "na": [
+    "kept from the ad we copy"
+   ]
+  },
+  {
+   "id": "product_kit",
+   "group": "product",
+   "name": "The product kit",
+   "means": "Which real product photos are used.",
+   "kind": "text",
+   "na": [
+    "the product is not in this picture"
+   ]
+  },
+  {
+   "id": "product_sides",
+   "group": "product",
+   "name": "Which sides of the product",
+   "means": "The product photos ticked to go in.",
+   "kind": "list",
+   "na": [
+    "the product is not in this picture"
+   ]
+  },
+  {
+   "id": "product_size",
+   "group": "product",
+   "name": "The product's real size",
+   "means": "So it is never drawn too small.",
+   "kind": "text",
+   "na": [
+    "the product is not in this picture",
+    "the kit has no measured size yet"
+   ]
+  },
+  {
+   "id": "people_mode",
+   "group": "people",
+   "name": "Who is in it",
+   "means": "Lookalikes of the people in the ad, made-up people, or our cast members (a cast swap).",
+   "kind": "choice",
+   "allowed": [
+    "lookalike",
+    "made-up",
+    "cast"
+   ],
+   "na": [
+    "no people in this picture"
+   ]
+  },
+  {
+   "id": "people_who",
+   "group": "people",
+   "name": "Who exactly",
+   "means": "The person or cast member shown.",
+   "kind": "text",
+   "na": [
+    "lookalike of the person in the ad",
+    "no people in this picture"
+   ]
+  },
+  {
+   "id": "people_age",
+   "group": "people",
+   "name": "Their age",
+   "means": "How old they look.",
+   "kind": "text",
+   "na": [
+    "lookalike of the person in the ad",
+    "no people in this picture",
+    "the cast photo sets it"
+   ]
+  },
+  {
+   "id": "people_look",
+   "group": "people",
+   "name": "Their look",
+   "means": "Hair, clothes, build.",
+   "kind": "text",
+   "na": [
+    "lookalike of the person in the ad",
+    "no people in this picture",
+    "the cast photo sets it"
+   ]
+  },
+  {
+   "id": "wardrobe",
+   "group": "people",
+   "name": "What they wear",
+   "means": "The clothes and accessories, the same in every picture of a scene.",
+   "kind": "text",
+   "na": [
+    "lookalike of the person in the ad",
+    "no people in this picture",
+    "the cast photo sets it"
+   ]
+  },
+  {
+   "id": "shape",
+   "group": "frame",
+   "name": "The shape",
+   "means": "Tall 9:16, made that way from the start.",
+   "kind": "choice",
+   "allowed": [
+    "9:16"
+   ],
+   "na": []
+  },
+  {
+   "id": "safe_zone",
+   "group": "frame",
+   "name": "The safe middle",
+   "means": "Everything that matters sits in the centre 4:5.",
+   "kind": "choice",
+   "allowed": [
+    "centre 4:5"
+   ],
+   "na": []
+  },
+  {
+   "id": "keep_exactly",
+   "group": "rules",
+   "name": "Keep exactly",
+   "means": "What must not change from the ad we copy.",
+   "kind": "list",
+   "allowed": [
+    "everything the swap does not change",
+    "the face",
+    "the product label",
+    "the background"
+   ],
+   "na": [
+    "made from the written plan alone, no ad copied"
+   ]
+  },
+  {
+   "id": "no_other_writing",
+   "group": "rules",
+   "name": "No other writing",
+   "means": "Only the exact words are written on the picture.",
+   "kind": "choice",
+   "allowed": [
+    "yes"
+   ],
+   "na": []
+  },
+  {
+   "id": "preset",
+   "group": "creative",
+   "name": "The preset",
+   "means": "The set of dial levels the brief aimed for.",
+   "kind": "choice",
+   "allowed_from": "presets",
+   "na": []
+  },
+  {
+   "id": "emotion",
+   "group": "creative",
+   "name": "The feeling",
+   "means": "The emotion the picture should land.",
+   "kind": "list",
+   "allowed_from": "emotions",
+   "na": []
+  },
+  {
+   "id": "techniques",
+   "group": "creative",
+   "name": "The techniques",
+   "means": "The picture moves the ad uses.",
+   "kind": "list",
+   "allowed_from": "techniques",
+   "na": [
+    "the swap is a straight copy of the ad's own moves"
+   ]
+  },
+  {
+   "id": "backups",
+   "group": "run",
+   "name": "If it fails",
+   "means": "Which models take over, in order.",
+   "kind": "list",
+   "na": []
+  },
+  {
+   "id": "run_label",
+   "group": "run",
+   "name": "The run name",
+   "means": "Where the picture is filed.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "cost_approval",
+   "group": "run",
+   "name": "Cost approved by",
+   "means": "Who said yes to spending on this picture.",
+   "kind": "text",
+   "na": []
+  }
+ ],
+ "dial_na": [
+  "not used in a still picture",
+  "not applicable to the picture prompt: acts on the writing, already carried by the swaps and the words",
+  "the brief sets no level for this dial and the ad does not use it"
+ ],
+ "required_dials": [
+  "intensity",
+  "absurdity",
+  "humor",
+  "dramatisation",
+  "stopping_power"
+ ],
+ "required_dials_why": "PSH-3 (guard dials set): the guards relevance, legibility and never-sterile read these dials.",
+ "locked_in_a_set": [
+  "people_mode",
+  "people_who",
+  "people_age",
+  "people_look",
+  "wardrobe",
+  "product_kit",
+  "product_sides",
+  "product_size",
+  "place_light",
+  "photo_style",
+  "colours",
+  "camera",
+  "shape",
+  "safe_zone",
+  "brand",
+  "product",
+  "preset",
+  "product_in_frame",
+  "words_mode"
+ ],
+ "locked_why": "PSH-7 (one sheet per scene): these stay identical across a frame set; only the declared change differs.",
+ "free_in_a_set": [
+  "pictures_in",
+  "run_label",
+  "cost_approval",
+  "backups"
+ ],
+ "rules": [
+  {
+   "id": "PSH-1",
+   "tag": "inputs all set",
+   "rule": "Every variable is FILLED with an allowed value or NOT_APPLICABLE with an allowed reason. A MISSING variable stops the chain before any spend, with one plain line naming it."
+  },
+  {
+   "id": "PSH-2",
+   "tag": "defaults first",
+   "rule": "fill_defaults fills every variable the brief, its brand step and the house files already state, so the sheet is complete before the gate runs; only what no file states is left for a person or the strategy."
+  },
+  {
+   "id": "PSH-3",
+   "tag": "guard dials set",
+   "rule": "The dials the guards read (intensity, absurdity, humor, dramatisation, stopping power) and every guard are never not-applicable."
+  },
+  {
+   "id": "PSH-4",
+   "tag": "sterile floor",
+   "rule": "A floor dial is never set under the never-sterile floor in controls.json."
+  },
+  {
+   "id": "PSH-5",
+   "tag": "chosen references",
+   "rule": "A picture the system made may go into another picture only with a chosen record (its recipe beside it, marked chosen). A below_criteria flag on it is allowed and travels downstream."
+  },
+  {
+   "id": "PSH-6",
+   "tag": "every input sent",
+   "rule": "Every FILLED variable reaches the model: the dials, feelings, techniques and keep lines go in labelled lines of THE PICTURE, inside the prompt length limit. NOT_APPLICABLE variables are recorded and not sent."
+  },
+  {
+   "id": "PSH-7",
+   "tag": "one sheet per scene",
+   "rule": "Pictures that feed one video scene come from one sheet: the locked variables stay identical and only the declared change differs."
+  },
+  {
+   "id": "PSH-8",
+   "tag": "outputs never stop",
+   "rule": "Output checks (the judge, the frame-pair match) score attempts and never stop a flow: up to `output_checks.max_attempts` attempts, then the best-scoring one is chosen and marked below_criteria with the plain names of the checks it failed."
+  },
+  {
+   "id": "PSH-9",
+   "tag": "draw-only prompt",
+   "rule": "The picture model is sent only what to draw: no markdown, tables, explanations, the source's old words, counts or self-checks."
+  },
+  {
+   "id": "PSH-10",
+   "tag": "dials as picture words",
+   "rule": "A dial with a visual meaning for a still goes to the model as one concrete picture instruction (picture-dials.json); a dial that acts on the writing stays on the sheet and reaches the picture through the swaps and words; film dials are not applicable to a still; a dial's level definition is never sent verbatim."
+  },
+  {
+   "id": "PSH-11",
+   "tag": "inputs from the swaps",
+   "rule": "The pictures that go in are worked out from the run's swap list: the swipe as the layout, one cast photo per cast swap (and its reference sheet when the rulebook takes its file type), product photos only when the product is in the frame and only the sides named, one library photo per library swap, nothing for a drawn or words swap. A run with no swap list, or a cast or library swap whose picture is not on file, is MISSING. A cast swap says the person in IMAGE n is the cast member and keeps the face; a lookalike line is only for a lookalike. Words set on top after: the prompt asks for no writing anywhere and the words block is left out."
+  }
+ ],
+ "output_checks": {
+  "max_attempts": 3
+ },
+ "history": "2026-10-26: created; inputs hard, outputs scored (decision recorded in the-org/decision-log.md by its owners). 2026-10-26: swap list rows added (PSH-11 (inputs from the swaps)): swap list, product in this picture, the swaps, what stays, the words."
+}

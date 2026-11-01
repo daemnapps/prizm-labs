@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D3BF5"/><stop offset="0.2" stop-color="#2F5BFF"/><stop offset="0.38" stop-color="#00A8CC"/><stop offset="0.54" stop-color="#12A06F"/><stop offset="0.7" stop-color="#F09000"/><stop offset="0.85" stop-color="#F04A2E"/><stop offset="1" stop-color="#DB2A8C"/></linearGradient>
+<linearGradient id="hl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#171512" stop-opacity=".45"/><stop offset="1" stop-color="#171512" stop-opacity=".7"/></linearGradient>
+<clipPath id="tile"><rect width="64" height="64" rx="15"/></clipPath></defs>
+<rect width="64" height="64" rx="15" fill="#EFE9E1"/>
+<g clip-path="url(#tile)" opacity=".9"><polygon points="40.95,29.90 64.00,19.30 64.00,22.90 40.95,30.30" fill="#6D3BF5"/><polygon points="40.95,30.30 64.00,22.90 64.00,26.50 40.95,30.70" fill="#2F5BFF"/><polygon points="40.95,30.70 64.00,26.50 64.00,30.10 40.95,31.10" fill="#00A8CC"/><polygon points="40.95,31.10 64.00,30.10 64.00,33.70 40.95,31.50" fill="#12A06F"/><polygon points="40.95,31.50 64.00,33.70 64.00,37.30 40.95,31.90" fill="#F09000"/><polygon points="40.95,31.90 64.00,37.30 64.00,40.90 40.95,32.30" fill="#F04A2E"/><polygon points="40.95,32.30 64.00,40.90 64.00,44.50 40.95,32.70" fill="#DB2A8C"/></g>
+<polygon points="26.00,14.00 45.00,50.00 54.00,45.00 35.00,9.00" fill="url(#s)"/>
+<polygon points="26.00,14.00 45.00,50.00 54.00,45.00 35.00,9.00" fill="url(#sh)" stroke="#171512" stroke-width="2.4" stroke-linejoin="round"/>
+<polygon points="26.00,14.00 45.00,50.00 7.00,50.00" fill="url(#s)" stroke="#171512" stroke-width="2.4" stroke-linejoin="round"/>
+<polygon points="26.00,14.00 16.50,32.00 26.00,32.00" fill="url(#hl)"/>
+</svg>

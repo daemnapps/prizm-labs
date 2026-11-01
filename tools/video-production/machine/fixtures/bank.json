@@ -1,0 +1,6 @@
+{
+  "_readme": "Test-only format bank. The real one is formats/bank.json.",
+  "formats": [
+    {"name": "fixture-format", "profile": "fixture", "scenes": "one still, one motion"}
+  ]
+}

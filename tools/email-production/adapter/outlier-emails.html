@@ -1,0 +1,341 @@
+<title>Outlier Emails</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Layout: Outlier for the team, emails only. Header (brand, I'm the team / I'm the team) → email strip → the open email:
+   the whole email on the left with every section clickable, the selected section's editor on the right (its words,
+   its pictures, its place), the whole-email calls under it. Every call is a row the team's Claude applies (README). */
+:root{
+  --bg:#F6F3ED; --panel:#FFFFFF; --sunk:#EFEBE3; --ink:#16161A; --muted:#6A6A72; --line:#E3DED4; --accent:#2546D9;
+  --ok:#2E7D4F; --hold:#B5492F; --wait:#9A7A1E;
+  --display:"Newsreader",Georgia,serif; --body:"Geist","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121214; --panel:#1B1B1F; --sunk:#232329; --ink:#EEECE7; --muted:#9C9CA5; --line:#2C2C33; --accent:#7D93FF;
+  --ok:#5FBF86; --hold:#EE8A70; --wait:#D9B65A; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121214; --panel:#1B1B1F; --sunk:#232329; --ink:#EEECE7; --muted:#9C9CA5; --line:#2C2C33; --accent:#7D93FF;
+  --ok:#5FBF86; --hold:#EE8A70; --wait:#D9B65A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-block:22px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+h1,h2,h3{font-family:var(--display);font-weight:500;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(28px,4.6vw,42px);line-height:1}
+h2{font-size:24px;line-height:1.1}
+h3{font-size:19px;line-height:1.2}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eye{font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.note{color:var(--muted);font-size:13.5px}
+.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--panel);padding:3px;gap:2px}
+.seg button{border:0;background:none;border-radius:999px;padding:7px 13px;font-size:13.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.card{flex:0 0 220px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:9px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px}
+.card img,.card .ph{width:44px;height:58px;object-fit:cover;object-position:top;border-radius:5px;background:var(--line);display:block}
+.card b{font-weight:500;font-size:13.5px;line-height:1.25;display:block;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card small{color:var(--muted);font-size:11.5px}
+.card[aria-current="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--accent)}
+.pill{display:inline-block;font:600 10.5px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:4px}
+.p-ready{color:var(--ok);background:color-mix(in srgb,var(--ok) 13%,transparent)}
+.p-held{color:var(--hold);background:color-mix(in srgb,var(--hold) 13%,transparent)}
+.p-wait{color:var(--wait);background:color-mix(in srgb,var(--wait) 15%,transparent)}
+.p-done{color:var(--muted);background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.open{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.open{grid-template-columns:minmax(0,1fr)}}
+.email{position:sticky;top:max(12px,env(safe-area-inset-top,0px));background:var(--panel);border:1px solid var(--line);border-radius:12px;max-height:calc(100vh - 24px);overflow:auto}
+@media (max-width:900px){.email{position:relative;max-height:70vh}}
+.paper{position:relative}
+.paper img{display:block;width:100%;height:auto}
+.zone{position:absolute;left:0;right:0;border:0;background:transparent;padding:0;cursor:pointer}
+.zone:hover{background:color-mix(in srgb,var(--accent) 10%,transparent);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accent) 55%,transparent)}
+.zone[aria-current="true"]{box-shadow:inset 0 0 0 3px var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.zone .tag{position:absolute;right:6px;top:6px;font:600 10.5px/1 var(--body);padding:4px 6px;border-radius:4px;background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.18);display:none}
+.zone:hover .tag,.zone[aria-current="true"] .tag,.zone.has .tag{display:block}
+.zone.has .tag{background:var(--wait);color:#fff}
+.zone.okd .tag{display:block;background:var(--ok);color:#fff}
+.side{display:grid;gap:14px;align-content:start;min-width:0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.held{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--hold);font-size:14px}
+.secnav{display:flex;flex-wrap:wrap;gap:5px}
+.secnav button{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:5px 8px;font-size:12.5px;color:var(--muted)}
+.secnav button[aria-current="true"]{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--panel))}
+.secnav button.has{color:var(--wait);border-color:color-mix(in srgb,var(--wait) 50%,var(--line))}
+.secnav button.okd{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 50%,var(--line))}
+.crop{border:1px solid var(--line);border-radius:8px;overflow:hidden;max-width:360px}
+.crop img{display:block;width:100%}
+.part{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.part > .eye{color:var(--ink)}
+label{font-size:12.5px;color:var(--muted);display:grid;gap:4px}
+input,textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+textarea{min-height:44px;resize:vertical;field-sizing:content}
+textarea.changed{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 5%,var(--bg))}
+.pic{display:grid;gap:6px;background:var(--sunk);border-radius:8px;padding:10px}
+.pic small{color:var(--muted);font-size:12.5px}
+.rec{font-size:13px;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:8px 10px}
+.rec summary{cursor:pointer;font-weight:500;color:var(--accent)}
+.rec dl{display:grid;grid-template-columns:minmax(0,110px) minmax(0,1fr);gap:6px 10px;margin:10px 0 0}
+.rec dt{color:var(--muted)}.rec dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.rec ul{margin:0;padding-left:16px;display:grid;gap:3px}
+.rec a{color:var(--accent)}
+.rec pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Menlo,monospace;background:var(--sunk);padding:10px;border-radius:6px;max-height:320px;overflow:auto;margin:8px 0 0}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 13px;font-weight:500;font-size:14px}
+.btn.go{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.btn.warn{color:var(--hold);border-color:color-mix(in srgb,var(--hold) 45%,var(--line))}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.said{font-size:13.5px;color:var(--ok)}
+.err{font-size:13.5px;color:var(--hold)}
+.log{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;font-size:13.5px;border-top:1px solid var(--line);padding-top:8px}
+.row .who{font-weight:600}
+.row .st{grid-column:2;color:var(--muted);font-size:12.5px}
+.lock{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:8px;padding:8px 10px}
+.vtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;flex-wrap:wrap}
+.vtabs button{border:0;background:none;padding:9px 14px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.vtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.made{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.made{grid-template-columns:minmax(0,1fr)}}
+.tl{display:grid;gap:14px;position:sticky;top:max(12px,env(safe-area-inset-top,0px));max-height:calc(100vh - 24px);overflow:auto}
+@media (max-width:900px){.tl{position:static;max-height:none}}
+.tlg{display:grid;gap:3px}
+.tlg small{color:var(--muted);font-size:12px;margin-bottom:4px}
+.tl button{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:8px;align-items:center;text-align:left;border:1px solid transparent;background:none;border-radius:7px;padding:6px 8px;font-size:13.5px}
+.tl button:hover{background:var(--panel);border-color:var(--line)}
+.tl button[aria-current="true"]{background:var(--panel);border-color:var(--accent)}
+.tl .n{font:600 11px/1 var(--body);color:var(--muted);font-variant-numeric:tabular-nums}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}.dot.ok{background:var(--ok)}.dot.bad{background:var(--hold)}.dot.skip{background:var(--line)}
+.stepv{min-width:0}
+pre.txt{white-space:pre-wrap;overflow-wrap:anywhere;font:12.5px/1.55 ui-monospace,Menlo,monospace;background:var(--sunk);padding:12px;border-radius:8px;max-height:480px;overflow:auto;margin:0}
+.gaps{border:1px solid color-mix(in srgb,var(--hold) 40%,var(--line));background:color-mix(in srgb,var(--hold) 5%,var(--panel));border-radius:10px;padding:12px;display:grid;gap:8px}
+.gaps ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.linkish{border:0;background:none;padding:0;color:var(--accent);text-decoration:underline;font:inherit;cursor:pointer}
+.empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:28px;display:grid;gap:8px;text-align:center;justify-items:center}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div style="display:grid;gap:6px">
+      <span class="eye">Outlier · emails · the team and the team</span>
+      <h1>Emails waiting on you</h1>
+      <p class="note">Click any part of the email to adjust just that section. the team: pictures, look and order. the team: the words and the send. Every change teaches the next emails.</p>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Brand" id="brandSeg"></div>
+      <div class="seg" role="group" aria-label="Who you are" id="whoSeg"></div>
+    </div>
+  </header>
+  <div id="status" class="note" aria-live="polite">Loading the emails…</div>
+  <nav class="strip" id="strip" aria-label="Emails"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+const BRANDS={all:"All brands",<brand>:"<brand>",<brand>:"<brand>"};
+const PEOPLE={the team:"I'm the team",the team:"I'm the team"};
+const STATUS={ready:["ready for the team","p-ready"],held:["held","p-held"],redoing:["being redone","p-wait"],
+  draft:["Klaviyo draft · the team's turn","p-wait"],scheduled:["scheduled","p-done"]};
+const NICE={title:"Title",sub:"Line under it",cta:"Button",text:"Words",quote:"Quote",who:"Who said it",ask:"Line after it",
+  head:"Heading",line:"Line",name:"Name",price:"Price",was:"Was",caption:"Caption",close:"Closing line",eyebrow:"Small heading",
+  greeting:"Greeting",paras:"Paragraph",label:"Button",lead:"Line above the button",lines:"Line",tiles:"Tile",rows:"Row",items:"Item",note:"Note"};
+let db=null,me=null,EMAILS=[],CALLS=[],STEPS={},view="sections",step=null,sel=null,sec=null,brand="all",who="the team";
+try{brand=localStorage.getItem("oe-brand")||"all";who=localStorage.getItem("oe-who")||"the team"}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const plain=s=>String(s??"").replace(/<[^>]+>/g,"");
+function remember(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function fieldName(p){const a=p.split(".");if(a.length===1)return NICE[a[0]]||a[0];
+  if(a.length===2)return `${NICE[a[0]]||a[0]} ${+a[1]+1}`;return `${NICE[a[0]]||a[0]} ${+a[1]+1} · ${(NICE[a[2]]||a[2]).toLowerCase()}`}
+
+function seg(el,map,val,set){el.innerHTML=Object.entries(map).map(([k,v])=>`<button type="button" data-k="${k}" aria-pressed="${k===val}">${v}</button>`).join("");
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>set(b.dataset.k));}
+function shown(){return EMAILS.filter(e=>brand==="all"||e.brand===brand).sort((a,b)=>String(a.send_day||"").localeCompare(String(b.send_day||"")))}
+const open=c=>c.state!=="applied";
+function callsFor(id,i){return CALLS.filter(c=>c.email===id&&(i===undefined||c.section===i))}
+
+function drawTop(){
+  seg($("brandSeg"),BRANDS,brand,k=>{brand=k;remember("oe-brand",k);sel=null;sec=null;draw()});
+  seg($("whoSeg"),PEOPLE,who,k=>{who=k;remember("oe-who",k);draw()});
+}
+function drawStrip(){
+  $("strip").innerHTML=shown().map(e=>{const [w,c]=STATUS[e.status]||[e.status||"",""];const n=callsFor(e.id).filter(open).length;
+    return `<button type="button" class="card" data-id="${esc(e.id)}" aria-current="${e.id===sel}">${e.thumb?`<img src="${esc(e.thumb)}" alt="">`:`<span class="ph"></span>`}
+    <span><b>${esc(e.title)}</b><small>${esc(BRANDS[e.brand]||e.brand)} · ${esc(e.send_day||"no day yet")}</small><br><span class="pill ${c}">${esc(w)}</span>${n?` <span class="pill p-wait">${n} to apply</span>`:""}</span></button>`}).join("");
+  $("strip").querySelectorAll(".card").forEach(b=>b.onclick=()=>{sel=b.dataset.id;sec=null;step=null;if(view==="made")loadSteps(sel);draw()});
+}
+
+function secState(e,s){const c=callsFor(e.id,s.i).filter(open);return c.length?"has":s.ok||callsFor(e.id,s.i).some(x=>x.action==="ok")?"okd":""}
+function cropOf(e,s){const h=Math.max(.001,s.bottom-s.top);return `<div class="crop" style="aspect-ratio:${(1/(h*(e.ratio||9.25))).toFixed(4)}"><img src="${esc(e.image)}" alt="" style="transform:translateY(-${(s.top*100).toFixed(3)}%)"></div>`}
+
+function how(h){
+  if(!h) return "";
+  if(!h.made) return `<details class="rec"><summary>Where it came from</summary><p class="note">A real picture: ${esc(h.from)}</p></details>`;
+  if(!h.record) return `<p class="note">${esc(h.note||"No record for this picture.")}</p>`;
+  const st={made:"made",held:"held by the judge",refused:"refused"}[h.state]||h.state||"";
+  return `<details class="rec"><summary>How it was made${h.edits?` · edited ${h.edits} time${h.edits>1?"s":""}`:""} · ${esc(st)}</summary>
+    <dl>
+      <dt>Job</dt><dd>${esc(h.purpose||"")}${h.model?` · ${esc(h.model)}`:""}${h.made_at?` · ${esc(String(h.made_at).replace("T"," ").slice(0,16))}`:""}</dd>
+      <dt>${h.edit_of?"The change asked":"What was asked"}</dt><dd>${esc(h.direction||"")}</dd>
+      <dt>References (${(h.references||[]).length})</dt><dd><ul>${(h.references||[]).map(r=>`<li><b>${esc(r.kind)}</b> · ${r.pin?`<a href="${esc(r.pin)}" target="_blank" rel="noopener">${esc(r.pin_title||r.name)}</a>`:esc(r.name)}</li>`).join("")||"<li>none</li>"}</ul></dd>
+      <dt>Judge</dt><dd>${esc(h.judge||"no verdict on file")}${h.held?`<br><span class="err">${esc(typeof h.held==="string"?h.held:JSON.stringify(h.held)).slice(0,400)}</span>`:""}</dd>
+    </dl>
+    ${h.prompt?`<details><summary>The prompt exactly as sent</summary><pre>${esc(h.prompt)}</pre></details>`:""}</details>`;
+}
+function sectionEditor(e,s){
+  const steph=who==="the team", eve=who==="the team";
+  const pend=callsFor(e.id,s.i).filter(open);
+  const words=(s.fields||[]).length?`<div class="part"><span class="eye">The words</span>
+     ${steph?"":`<p class="lock">the team does the final wording. Write a note in Send back if a line bothers you.</p>`}
+     ${s.fields.map((f,k)=>`<label>${esc(fieldName(f.path))}<textarea data-f="${k}" ${steph?"":"readonly"}>${esc(plain(f.value))}</textarea></label>`).join("")}
+     ${steph?`<div class="btns"><button type="button" class="btn go" id="saveWords" disabled>Save the new words</button><span class="note" id="wcount"></span></div>`:""}</div>`:"";
+  const pics=(s.pictures||[]).length?`<div class="part"><span class="eye">${s.pictures.length>1?"The pictures":"The picture"}</span>
+     ${s.pictures.map((p,k)=>`<div class="pic"><b style="font-weight:500">${s.pictures.length>1?`Picture ${k+1}: `:""}${esc(p.alt)}</b><small>${esc(p.source||"")}</small>
+       ${how(p.how)}
+       ${eve?`<textarea data-pic="${k}" placeholder="ONE change, said plainly: make the pen ring red · move the mug out of frame · warmer light"></textarea>
+       <div class="btns"><button type="button" class="btn" data-picgo="${k}">${p.how&&p.how.record?"Edit this picture":"Remake with this change"}</button>
+       <span class="note">${p.how&&p.how.record?"Edited from its record: same references, everything else kept.":"No record yet: remade from its brief."}</span></div>`:""}</div>`).join("")}</div>`:"";
+  const look=eve?`<div class="part"><span class="eye">The look and the order</span>
+     <label>Change how this section looks<textarea id="lookNote" placeholder="e.g. more room around the price, swap the cream card for the gold rule"></textarea></label>
+     <div class="btns"><button type="button" class="btn" id="lookGo">Redesign this section</button>
+       <button type="button" class="btn" data-move="up" ${s===e.sections[0]?"disabled":""}>Move up</button>
+       <button type="button" class="btn" data-move="down" ${s===e.sections[e.sections.length-1]?"disabled":""}>Move down</button>
+       <button type="button" class="btn warn" id="rmGo">Remove this section</button></div></div>`:"";
+  return `<div class="box" id="secbox">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+      <div><span class="eye">Section ${e.sections.indexOf(s)+1} of ${e.sections.length}</span><h3>${esc(s.kind)}</h3></div>
+      <button type="button" class="btn ok" id="okGo">${secState(e,s)==="okd"?"✓ Marked right":"This section is right ✓"}</button></div>
+    ${e.image?cropOf(e,s):""}
+    ${(e.gaps||[]).filter(g=>(e.sections||[])[g.section]?.i===s.i).map(g=>`<p class="err">Gap · ${esc(g.field)}: ${esc(g.why)}${g.ask?` · ${esc(g.ask)}`:""}</p>`).join("")}
+    ${pend.length?`<p class="note" style="color:var(--wait)">${pend.length} change${pend.length>1?"s":""} on this section waiting to apply.</p>`:""}
+    ${words}${pics}${look}
+    ${!(s.fields||[]).length&&!(s.pictures||[]).length&&!eve?`<p class="note">Nothing to word here. Mark it right, or move on.</p>`:""}
+    <div id="secSaid" aria-live="polite"></div></div>`;
+}
+
+function drawMain(){
+  const L=shown(), e=L.find(x=>x.id===sel)||L[0];
+  if(!e){$("main").innerHTML=`<div class="empty"><h2>No emails here yet</h2><p class="note">Emails appear here once the chain has designed them and the team's Claude has added them to this page.</p></div>`;return}
+  if(e.id!==sel){step=null} sel=e.id; const S=e.sections||[]; let s=S.find(x=>x.i===sec)||S.find(x=>x.fields?.length||x.pictures?.length)||S[0]; sec=s?.i;
+  const [w,c]=STATUS[e.status]||[e.status||"",""];
+  const log=callsFor(e.id).sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+  const tabs=`<div class="vtabs" role="tablist">${[["sections","Sections"],["made","How it was made"],["changes","Changes"]].map(([k,v])=>`<button type="button" role="tab" data-view="${k}" aria-selected="${view===k}">${v}${k==="made"&&STEPS[e.id]?` · ${STEPS[e.id].length} steps`:""}${k==="changes"?` · ${callsFor(e.id).length}`:""}</button>`).join("")}</div>`;
+  if(view==="made"){ $("main").innerHTML=tabs+madeView(e); wireMade(e); return }
+  if(view==="changes"){ $("main").innerHTML=tabs+`<div class="box"><span class="eye">Every change asked on this email</span><div class="log">${changeRows(e)}</div></div>`; wireTabs(); return }
+  $("main").innerHTML=tabs+`<div class="open">
+   <div class="email" id="email" aria-label="The whole email; click a section to adjust it"><div class="paper">${e.image?`<img src="${esc(e.image)}" alt="${esc(e.title)}" id="paperImg">`:`<p class="note" style="padding:16px">No picture of this email yet.</p>`}
+     ${S.map(x=>`<button type="button" class="zone ${secState(e,x)}" data-sec="${x.i}" aria-current="${x.i===sec}" style="top:${(x.top*100).toFixed(3)}%;height:${((x.bottom-x.top)*100).toFixed(3)}%" aria-label="${esc(x.kind)}"><span class="tag">${secState(e,x)==="has"?"change waiting":secState(e,x)==="okd"?"✓ ":""}${esc(x.kind)}</span></button>`).join("")}</div></div>
+   <div class="side">
+    <div class="box"><span class="eye">${esc(BRANDS[e.brand]||e.brand)} · ${esc(e.send_day||"")}</span><h2>${esc(e.title)}</h2>
+      ${e.preview?`<p class="note">${esc(e.preview)}</p>`:""}
+      <div class="btns"><span class="pill ${c}">${esc(w)}</span><span class="note">${S.filter(x=>secState(e,x)==="okd").length} of ${S.length} sections marked right</span></div>
+      ${(e.held||[]).length?`<ul class="held">${e.held.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>`:""}
+      ${gapBox(e)}
+      <div class="secnav" aria-label="Sections">${S.map((x,k)=>`<button type="button" data-sec="${x.i}" aria-current="${x.i===sec}" class="${secState(e,x)}">${k+1} · ${esc(x.kind)}</button>`).join("")}</div></div>
+    ${s?sectionEditor(e,s):""}
+    <div class="box"><span class="eye">The whole email</span>
+      ${who==="the team"?`<p class="note">Go makes the Klaviyo draft with the pictures uploaded. Nothing is scheduled or sent; it goes to the team.</p>
+        <label>Send it back (a note for the whole email; it becomes a rule for later emails)<textarea id="backNote"></textarea></label>
+        <div class="btns"><button type="button" class="btn go" id="goGo" ${e.status==="held"?"disabled":""}>Go · make the Klaviyo draft</button><button type="button" class="btn warn" id="backGo">Send it back</button></div>
+        ${e.status==="held"?`<p class="err">Held: fix what's listed above before the Go.</p>`:""}`
+      :`<p class="note">Once the draft is in Klaviyo and the words are final, schedule it there, then mark it here.</p>
+        <label>Send it back (a note for the whole email)<textarea id="backNote"></textarea></label>
+        <div class="btns"><button type="button" class="btn go" id="schedGo" ${e.status!=="draft"?"disabled":""}>I scheduled it in Klaviyo</button><button type="button" class="btn warn" id="backGo">Send it back</button></div>`}
+      <div id="mailSaid" aria-live="polite">${db?"":`<p class="err">This view can't save. Open the page signed in to Claude.</p>`}</div></div>
+   </div></div>`;
+  wire(e,s); wireTabs();
+}
+function gapBox(e){
+  const G=e.gaps||[]; if(!G.length) return `<p class="note" style="color:var(--ok)">No gaps: every price, picture and line is filled.</p>`;
+  const asked=callsFor(e.id).some(c=>c.action==="fill"&&open(c));
+  return `<div class="gaps"><span class="eye" style="color:var(--hold)">${G.length} gap${G.length>1?"s":""} the system found</span>
+    <ul>${G.map(g=>`<li><button type="button" class="linkish" data-sec="${(e.sections||[])[g.section]?.i??g.section}">Section ${g.section+1} · ${esc((e.sections||[])[g.section]?.kind||g.type)}</button> ${esc(g.field)}: ${esc(g.why)}${g.ask?`<br><span class="note">${esc(g.ask)}</span>`:""}</li>`).join("")}</ul>
+    <div class="btns"><button type="button" class="btn go" id="fillGo" ${asked?"disabled":""}>${asked?"Waiting for the system":"Let the system fill these first"}</button>
+    <span class="note">It fills what the brand's own files answer and says what still needs a person.</span></div><div id="fillSaid"></div></div>`;
+}
+function changeRows(e){const log=callsFor(e.id).sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+  return log.length?log.map(x=>`<div class="row"><span class="who">${esc(x.by)}</span><span>${esc(label(e,x))}</span><span class="st">${x.state==="applied"?"done":x.state==="failed"?"didn't apply: "+esc(x.result||""):"waiting for the team's Claude"}${x.at?" · "+esc(String(x.at).slice(0,16).replace("T"," ")):""}</span></div>`).join(""):`<p class="note">Nothing yet.</p>`}
+function wireTabs(){document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;if(view==="made")loadSteps(sel);drawMain()})}
+async function loadSteps(id){
+  if(!db||STEPS[id])return;
+  try{const q=await db.collection("steps").where("email","==",id).get();STEPS[id]=q.docs.map(d=>d.data()).sort((a,b)=>a.order-b.order);drawMain()}
+  catch(err){STEPS[id]=[];drawMain()}
+}
+const GROUP_NOTE={Plan:"What the calendar asked for",Research:"What we learned about her before writing",Copy:"The writing chain, step by step",
+  Design:"The moment, the job card and the layout",Pictures:"Every picture made or edited, with its full record","Build & check":"Built for Klaviyo and checked",Learnings:"What this email taught every later email"};
+function madeView(e){
+  const L=STEPS[e.id];
+  if(!L) return `<div class="box"><p class="note">Loading the record of every step…</p></div>`;
+  if(!L.length) return `<div class="box"><p class="note">No step-by-step record for this email on the page yet. Emails made from now on carry one.</p></div>`;
+  const groups=[...new Set(L.map(x=>x.group))];
+  const cur=L.find(x=>x.order===step)||L[0]; step=cur.order;
+  const ok=r=>r?(r.ok?`<span class="pill p-ready">passed review</span>`:`<span class="pill p-held">${esc(r.severity||"flagged")}</span>`):"";
+  return `<div class="made">
+    <nav class="tl" aria-label="Steps">${groups.map(g=>`<div class="tlg"><span class="eye">${esc(g)}</span><small>${esc(GROUP_NOTE[g]||"")}</small>
+      ${L.filter(x=>x.group===g).map(x=>`<button type="button" data-step="${x.order}" aria-current="${x.order===step}"><span class="n">${x.order}</span><span>${esc(x.name)}${x.section!=null?` · section ${(e.sections||[]).findIndex(s=>s.i==x.section)+1}`:""}</span>${x.review?(x.review.ok?`<i class="dot ok"></i>`:`<i class="dot bad"></i>`):x.status==="skipped"?`<i class="dot skip"></i>`:""}</button>`).join("")}</div>`).join("")}</nav>
+    <article class="box stepv">
+      <span class="eye">${esc(cur.group)} · step ${cur.order} of ${L.length}</span><h2>${esc(cur.name)}</h2>
+      <div class="btns">${cur.by?`<span class="pill p-done">${esc(cur.by)}</span>`:""}${cur.status?`<span class="pill p-wait">${esc(cur.status)}</span>`:""}${ok(cur.review)}${cur.seconds?`<span class="note">${esc(cur.seconds)}s</span>`:""}${cur.when?`<span class="note">${esc(String(cur.when).replace("T"," ").slice(0,16))}</span>`:""}</div>
+      ${cur.why?`<p class="note">${esc(cur.why)}</p>`:""}
+      ${cur.review&&cur.review.problems&&cur.review.problems.length?`<div class="part"><span class="eye">What the reviewer said${cur.review.by?` (${esc(cur.review.by)})`:""}</span><ul class="held">${cur.review.problems.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`:""}
+      ${cur.references?`<div class="part"><span class="eye">References (${cur.references.length})</span><ul>${cur.references.map(r=>`<li><b>${esc(r.kind)}</b> · ${r.pin?`<a href="${esc(r.pin)}" target="_blank" rel="noopener">${esc(r.name)}</a>`:esc(r.name)}</li>`).join("")}</ul></div>`:""}
+      ${cur.output?`<div class="part"><span class="eye">${cur.group==="Pictures"?"What was asked":"What came out"}</span><pre class="txt">${esc(cur.output)}</pre></div>`:""}
+      ${cur.prompt?`<details class="part"><summary class="eye" style="cursor:pointer;color:var(--accent)">The prompt${cur.prompt_kind?` (${esc(cur.prompt_kind)})`:""}${cur.prompt_name?` · ${esc(cur.prompt_name)}`:""}</summary><pre class="txt">${esc(cur.prompt)}</pre></details>`:""}
+      ${cur.sources?`<details class="part"><summary class="eye" style="cursor:pointer;color:var(--accent)">Sources</summary><pre class="txt">${esc(cur.sources)}</pre></details>`:""}
+      ${(cur.files||[]).length?`<p class="note">On file: ${cur.files.map(esc).join(" · ")}</p>`:""}
+      <div class="btns"><button type="button" class="btn" data-stepmove="-1" ${cur.order===L[0].order?"disabled":""}>← Previous step</button><button type="button" class="btn" data-stepmove="1" ${cur.order===L[L.length-1].order?"disabled":""}>Next step →</button></div>
+    </article></div>`;
+}
+function wireMade(e){wireTabs();
+  document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{step=+b.dataset.step;drawMain()});
+  document.querySelectorAll("[data-stepmove]").forEach(b=>b.onclick=()=>{const L=STEPS[e.id];const i=L.findIndex(x=>x.order===step)+ +b.dataset.stepmove;if(L[i]){step=L[i].order;drawMain()}});
+}
+function label(e,x){
+  const sn=x.section==null?"":`${(e.sections||[]).find(s=>s.i===x.section)?.kind||"Section"}: `;
+  return sn+({fill:"let the system fill the gaps"+(x.result&&x.state!=="waiting"?` (${x.result})`:""),words:`new words (${(x.edits||[]).length} line${(x.edits||[]).length===1?"":"s"})`,picture:`picture ${(+x.picture||0)+1}: ${x.note}`,look:`look: ${x.note}`,
+    move:`move ${x.dir}`,remove:"remove",ok:"marked right",go:"Go · make the Klaviyo draft",scheduled:"scheduled in Klaviyo",send_back:`sent back: ${x.note}`}[x.action]||x.action);
+}
+function wire(e,s){
+  document.querySelectorAll("[data-sec]").forEach(b=>b.onclick=()=>{sec=+b.dataset.sec;drawMain();if(innerWidth<900)$("secbox")?.scrollIntoView({behavior:"smooth"})});
+  if(!s) return;
+  const say=(id,t,bad)=>{$(id).innerHTML=`<p class="${bad?"err":"said"}">${esc(t)}</p>`};
+  const tas=[...document.querySelectorAll("[data-f]")];
+  tas.forEach(t=>t.oninput=()=>{const ch=tas.filter(x=>x.value.trim()!==plain(s.fields[+x.dataset.f].value).trim());
+    tas.forEach(x=>x.classList.toggle("changed",ch.includes(x)));if($("saveWords")){$("saveWords").disabled=!ch.length;$("wcount").textContent=ch.length?`${ch.length} changed`:""}});
+  $("saveWords")&&($("saveWords").onclick=()=>{const edits=tas.filter(x=>x.value.trim()!==plain(s.fields[+x.dataset.f].value).trim()).map(x=>({path:s.fields[+x.dataset.f].path,before:plain(s.fields[+x.dataset.f].value),value:x.value.trim()}));
+    put({email:e,section:s.i,action:"words",edits},"secSaid")});
+  document.querySelectorAll("[data-picgo]").forEach(b=>b.onclick=()=>{const k=+b.dataset.picgo,n=document.querySelector(`[data-pic="${k}"]`).value.trim();
+    if(!n)return say("secSaid","Say the one change first.",1);put({email:e,section:s.i,action:"picture",picture:k,note:n},"secSaid")});
+  $("lookGo")&&($("lookGo").onclick=()=>{const n=$("lookNote").value.trim();if(!n)return say("secSaid","Say what should change first.",1);put({email:e,section:s.i,action:"look",note:n},"secSaid")});
+  document.querySelectorAll("[data-move]").forEach(b=>b.onclick=()=>put({email:e,section:s.i,action:"move",dir:b.dataset.move},"secSaid"));
+  $("rmGo")&&($("rmGo").onclick=()=>{const b=$("rmGo");if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Press again to remove it";return}put({email:e,section:s.i,action:"remove"},"secSaid")});
+  $("okGo").onclick=()=>put({email:e,section:s.i,action:"ok"},"secSaid");
+  $("goGo")&&($("goGo").onclick=()=>put({email:e,action:"go"},"mailSaid"));
+  $("fillGo")&&($("fillGo").onclick=()=>put({email:e,action:"fill"},"fillSaid"));
+  $("schedGo")&&($("schedGo").onclick=()=>put({email:e,action:"scheduled"},"mailSaid"));
+  $("backGo").onclick=()=>{const n=$("backNote").value.trim();if(!n)return say("mailSaid","Say what should change first.",1);put({email:e,action:"send_back",note:n},"mailSaid")};
+}
+async function put(c,where){
+  if(!db){$(where).innerHTML=`<p class="err">This view can't save. Open the page signed in to Claude.</p>`;return}
+  const e=c.email; delete c.email;
+  try{
+    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    await db.collection("calls").doc(id).set(Object.assign({email:e.id,brand:e.brand,label:e.label||"",section:null,note:"",by:who,by_id:me||"",at:new Date().toISOString(),state:"waiting"},c));
+    $(where).innerHTML=`<p class="said">Saved. the team's Claude applies it on her next run, and it becomes a rule for later emails.</p>`;
+  }catch(err){$(where).innerHTML=`<p class="err">Not saved: ${esc(err.message||err.code||err)}. You may only have view access to this page.</p>`}
+}
+function draw(){drawTop();drawStrip();drawMain();
+  const w=CALLS.filter(open).length;
+  $("status").textContent=db?(EMAILS.length?`${shown().length} email${shown().length===1?"":"s"} · ${w} change${w===1?"":"s"} waiting for the team's Claude to apply`:"No emails yet."):"Showing what's on this page. Sign in to Claude to make changes.";}
+
+draw();
+(async()=>{
+  db=await claude.use("db"); const user=await claude.use("user");
+  try{me=user?await user.id():null}catch(e){}
+  if(!db){draw();return}
+  db.collection("emails").onSnapshot(s=>{EMAILS=s.docs.map(d=>Object.assign({id:d.id},d.data()));draw()},err=>{$("status").textContent="The emails couldn't load: "+(err.message||err.code)});
+  db.collection("calls").onSnapshot(s=>{CALLS=s.docs.map(d=>Object.assign({id:d.id},d.data()));draw()});
+})();
+</script>

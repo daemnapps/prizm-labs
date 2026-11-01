@@ -1,0 +1,8 @@
+{
+ "schema": 1,
+ "kind": "email",
+ "report": ["components/creative-queue/contract.py", "report"],
+ "detail": ["components/creative-queue/contract.py", "detail"],
+ "apply": ["lab/someone/apply.py", "apply"],
+ "words": ["words", "ok"]
+}

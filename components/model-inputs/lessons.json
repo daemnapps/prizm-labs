@@ -1,0 +1,921 @@
+{
+ "_readme": "What the picture chain has learned from reviews, as rules for ANY brand, product, avatar or ad (the owner, 2026-10-27: \"all of these notes must be agnostic feedback ... if we can get any level of automation out of this, feedback needs to be rolled up into the chain and agnostic so the next run is even better\"). A note from a review becomes one row here, in the same change that makes the chain obey it: `said` is the note word for word with where it came from, `rule` is it written for every ad, `enforced_by` is where the chain applies it (`file :: a line of that file`, checked by test_preview.py). Never a note kept for one ad. Every row is `draft` until the owner approves it; a rule he strikes becomes `deprecated` with its code removed in the same change.",
+ "status": "draft",
+ "lessons": [
+  {
+   "id": "L-1",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "Tella review, 'Building Advanced AI Ad Workflows', 18:37",
+   "said": "First and foremost, you're missing the black box at the top and bottom.",
+   "rule": "A swipe posted with black bars top and bottom keeps them: they are measured on the swipe and put on our picture at the same heights (a switch on the board turns them off).",
+   "enforced_by": "components/model-inputs/preview.py :: def swipe_bars(src):",
+   "status": "draft"
+  },
+  {
+   "id": "L-2",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "Tella review, 18:37",
+   "said": "The quality is completely different. This should not feel high quality. At all. This is really grainy. It's supposed to be grainy.",
+   "rule": "A picture made from a swipe has the swipe's photo quality: its grain, softness, filter, colour cast and compression. Never sharper, cleaner or more polished than the swipe.",
+   "enforced_by": "components/model-inputs/preview.py :: THE PHOTO QUALITY is IMAGE 1's exactly",
+   "status": "draft"
+  },
+  {
+   "id": "L-3",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "Tella review, 18:37",
+   "rule": "A cast member's photo gives their face, skin, age and hair colour only. Their hairstyle, clothes, jewellery and anything on their head come from the swipe's person.",
+   "enforced_by": "components/model-inputs/preview.py :: {ps} hairstyle, clothes, jewellery and anything on {ps} head are IMAGE 1's person's",
+   "status": "draft",
+   "said": "A cast member's photo gives their face, skin, age and hair colour only. Their hairstyle, clothes, jewellery and anything on their head come from the swipe's person."
+  },
+  {
+   "id": "L-4",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "When the swipe's person is a different age from our cast member, they can be made their own younger (or older) self at the swipe person's age: the same person, the problem on their skin kept. A choice on the board, 'As young as the person in the ad'.",
+   "enforced_by": "components/model-inputs/preview.py :: if brief.get(\"cast_age\") == \"swipe\":",
+   "status": "approved",
+   "approved": {
+    "by": "the owner",
+    "at": "2026-10-27",
+    "said": "That is literal perfection. ... we can use AI to transform it without creating a brand new casting sheet ... we could just apply a younger version to this image."
+   },
+   "said": "When the swipe's person is a different age from our cast member, they can be made their own younger (or older) self at the swipe person's age: the same person, the problem on their skin kept. A choice on the board, 'As young as the person in the ad'."
+  },
+  {
+   "id": "L-5",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s-filter picture",
+   "said": "That image was not realistic to the swipe.",
+   "rule": "A picture made from a swipe keeps the swipe's own look (its dial read): the every-ad preset aim never overrides it. Only a level a person sets, or one the writing step wrote for this picture, sends a look line.",
+   "enforced_by": "components/model-inputs/preview.py :: SWIPE_LOOK = \"the swipe, as IMAGE 1 shows it (no line sent)\"",
+   "status": "draft"
+  },
+  {
+   "id": "L-6",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s-filter picture",
+   "said": "That image was not realistic to the swipe.",
+   "rule": "In a picture made from a swipe, the light is the swipe's: a dial line's light words are dropped. The never-sterile floor still holds; a calmer swipe is raised to it.",
+   "enforced_by": "components/model-inputs/preview.py :: the light is IMAGE 1's, so a dial line's light words go",
+   "status": "draft"
+  },
+  {
+   "id": "L-7",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s-filter picture",
+   "rule": "One face per person: with a cast member in the picture, no other saved face goes in beside them.",
+   "enforced_by": "components/model-inputs/preview.py :: One face per person",
+   "status": "draft",
+   "said": "One face per person: with a cast member in the picture, no other saved face goes in beside them."
+  },
+  {
+   "id": "L-8",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the braille picture",
+   "said": "I can barely read the top line.",
+   "rule": "Words set on a picture are widened to the frame before they are shrunk, and a long line breaks onto a second line before it goes under four-fifths of its size; the line under it keeps its place.",
+   "enforced_by": "tools/image-production/static/tools/compose.py :: Widen before shrinking",
+   "status": "draft"
+  },
+  {
+   "id": "L-9",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the braille variations",
+   "said": "We should be able to create new line breaks in copy as needed.",
+   "rule": "A line break typed in the words (' / ') is a line, never a reason to shrink.",
+   "enforced_by": "tools/image-production/static/tools/compose.py :: A line break a person typed",
+   "status": "draft"
+  },
+  {
+   "id": "L-10",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s-filter picture",
+   "said": "That image was not realistic to the swipe.",
+   "rule": "Only the words go on the picture: a writer's notes about the type beside them never do, nor an emoji the caption font cannot draw.",
+   "enforced_by": "components/model-inputs/preview.py :: def set_words(cell):",
+   "status": "draft"
+  },
+  {
+   "id": "L-11",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "Tella review, 18:37",
+   "rule": "A cast member's face comes from their plain headshot (no glasses, hat or styling) when their sheet has one, never from a styled look photo that hides the face.",
+   "enforced_by": "components/model-inputs/preview.py :: return d / \"sheets\" / \"headshot.jpg\" if (d / \"sheets\" / \"headshot.jpg\").is_file()",
+   "status": "draft",
+   "said": "A cast member's face comes from their plain headshot (no glasses, hat or styling) when their sheet has one, never from a styled look photo that hides the face."
+  },
+  {
+   "id": "L-12",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "standing rule parody-never-block, the creative controls' parody-not-copy guard",
+   "said": "just make a funny version of it",
+   "rule": "A real brand name, logo or famous mark in a picture becomes a parody of it, never kept real and never blanked out.",
+   "enforced_by": "tools/image-production/image_production/plain.py :: Any real brand name or logo becomes a parody of it",
+   "status": "draft"
+  },
+  {
+   "id": "L-13",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s batch",
+   "said": "Just adjust the caption, that's it, then run the other versions.",
+   "rule": "A words-only variation is delivered like every made picture: at the delivered frame, with the swipe's black bars.",
+   "enforced_by": "tools/image-edit/image_edit/engine.py :: a words-only variation went out at the plate's size with no bars",
+   "status": "draft"
+  },
+  {
+   "id": "L-14",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s batch",
+   "said": "Run the other versions.",
+   "rule": "The variations read the approved picture's words from any caption cell, the quoted words only, the same way the picture sets them.",
+   "enforced_by": "tools/image-writing/tools/writing.py :: sw(cells[-1])",
+   "status": "draft"
+  },
+  {
+   "id": "L-15",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "standing rule: every language pull is the run's avatar at the swipe's awareness level",
+   "said": "awareness levels and verbatims and spice are the foundation of what we're doing here",
+   "rule": "A step re-run on one ad, from the board or by hand, pulls the language of the avatar that ad was opened for, never every avatar's.",
+   "enforced_by": "tools/image-teardown/tools/run.py :: a re-run of one step, from the",
+   "status": "draft"
+  },
+  {
+   "id": "L-16",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, on the 80s batch",
+   "said": "Why did it not have a brief number?",
+   "rule": "A brief gets its number the moment it is written, however the writing was run (the chain's commands, one step by hand, or the board); the Meta card never waits on one.",
+   "enforced_by": "tools/image-writing/tools/writing.py :: def number_brief(run, brand, product, avatar=None):",
+   "status": "draft"
+  },
+  {
+   "id": "L-17",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "standing rules one-picture-version and V33",
+   "said": "Stop doing 3 versions each, remove that from the process.",
+   "rule": "The chain makes one picture each; another is made only when a person asks or a check sends it back.",
+   "enforced_by": "tools/image-teardown/tools/pictures.py :: ap.add_argument(\"--count\", type=int, default=1)",
+   "status": "draft"
+  },
+  {
+   "id": "L-18",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "rules audit (V28: words are set on afterwards)",
+   "said": "establish these fucking rules",
+   "rule": "A picture whose words could not be set is never delivered without them.",
+   "enforced_by": "tools/image-teardown/tools/pictures.py :: so it is held back",
+   "status": "draft"
+  },
+  {
+   "id": "L-19",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "standing rule picture-batch-is-six",
+   "said": "6 total images in that batch: 5 unique variations from the initial one that we made.",
+   "rule": "Every check and every card counts the six as the approved first picture plus its five one-change variations, never a set remade from the swipe.",
+   "enforced_by": "components/stage-check/stage_check.py :: def six_pictures(piece):",
+   "status": "draft"
+  },
+  {
+   "id": "L-20",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "standing rule agnostic-on-every-axis",
+   "said": "All these prompts need to run on any given piece of content.",
+   "rule": "No step names a brand's avatar or product in its code: each reads them from the ad itself (its run or the brief register).",
+   "enforced_by": "tools/image-teardown/tools/worker.py :: def product_of(item, run):",
+   "status": "draft"
+  },
+  {
+   "id": "L-21",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "chat, the rules audit's first open question (V29/V31 against the swipe's set)",
+   "said": "default to swipe, ours can be established after successful swipe, this keeps our fidelity honest",
+   "rule": "A picture made from a swipe keeps the swipe's room, light, props, look and a lookalike of its person, except what the brief swaps; our own set and props come only after the swipe-based ad has proven itself.",
+   "enforced_by": "tools/image-production/image_production/plain.py :: Apart from what THE PICTURE changes, do not change anything else in IMAGE 1.",
+   "status": "approved",
+   "approved": {
+    "by": "the owner",
+    "at": "2026-10-27",
+    "said": "default to swipe"
+   }
+  },
+  {
+   "id": "L-23",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "the owner's Tella recording, 2026-10-27 (vid_cmvqe2nrr006908l8a5ulcv74), 15:00 and 33:11",
+   "said": "focus on getting from swipe into draft. And then from here we're just gonna hand off brief for Higgsfield execution because the team is gonna go into Supercomputer and handle the rest of the variations, and checking and things like that.",
+   "rule": "When an approved picture's variations are handed to a designer to make by hand, the handoff carries the chain's own prompt for each one, its reference pictures numbered as that prompt names them, the words with their type settings, the bars and the rules, so the designer writes no prompt of their own; each finished picture is named with its brief ID.",
+   "enforced_by": "tools/image-edit/image_edit/handoff.py :: \"dry_run\": True, \"out\": str(scratch)})",
+   "status": "draft"
+  },
+  {
+   "id": "L-22",
+   "medium": "copy",
+   "date": "2026-10-27",
+   "source": "Tella, 'Ad Copy and Scaling Preparation', 0:45 and 1:31, on brief 0325's copy",
+   "said": "we got to put in our actual elements that make sense, that are relevant to the brief itself ... We don't want to do anything from scratch. We're always gonna use proven assets and go from there.",
+   "rule": "Every primary text, headline and description is a proven copy format whose elements (who, era, moment, problem, angle, the picture) are this ad's; a format's story from another ad is an element and is replaced. Each line is checked against the ad's elements before it reaches the approval page.",
+   "enforced_by": "tools/copywriter/machine/format_copy.py :: def story_check(checked, elements, ask):",
+   "status": "draft"
+  },
+  {
+   "id": "L-24",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "the owner, typed 2026-10-27 while reading the handoffs page on his phone (relayed verbatim by the Tella video ingestion session)",
+   "said": "make this name agnostic. and the name of the folders need to be the same for both repo and drive. these are the discrepancies that cause issues at scale. briefs should come from final stages of the chains, not some random set up.",
+   "rule": "A lane, folder, file path, command and button is named by its role (graphic designer, video editor), never by the person who fills it; who fills a role is one setting, and only page text may name them.",
+   "enforced_by": "tools/image-edit/image_edit/handoff.py :: ROLE = \"graphic-designer\"",
+   "status": "approved",
+   "approved": {
+    "by": "the owner",
+    "at": "2026-10-27",
+    "said": "make this name agnostic. and the name of the folders need to be the same for both repo and drive. these are the discrepancies that cause issues at scale. briefs should come from final stages of the chains, not some random set up."
+   }
+  },
+  {
+   "id": "L-25",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "the owner, typed 2026-10-27 while reading the handoffs page on his phone (relayed verbatim by the Tella video ingestion session)",
+   "said": "make this name agnostic. and the name of the folders need to be the same for both repo and drive. these are the discrepancies that cause issues at scale. briefs should come from final stages of the chains, not some random set up. / standardization is the default.",
+   "rule": "Standardization is the default: one name, one shape and one place per thing across brands, roles, repo and Drive. A Drive folder carries the same words as its repo path; an existing name or path is reused before a new one is invented, and two pieces that disagree are made to match rather than given a variant.",
+   "enforced_by": "tools/image-edit/image_edit/handoff.py :: def drive_parts(folder, repo=None):",
+   "status": "approved",
+   "approved": {
+    "by": "the owner",
+    "at": "2026-10-27",
+    "said": "standardization is the default"
+   }
+  },
+  {
+   "id": "L-26",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "the owner, typed 2026-10-27 while reading the handoffs page on his phone (relayed verbatim by the Tella video ingestion session)",
+   "said": "make this name agnostic. and the name of the folders need to be the same for both repo and drive. these are the discrepancies that cause issues at scale. briefs should come from final stages of the chains, not some random set up.",
+   "rule": "A handoff takes only a brief that came out of its chain's final stage, read from the chain's own record; a brief set up by hand, a test run, or a run short of the last stage is refused by name.",
+   "enforced_by": "tools/image-edit/image_edit/handoff.py :: why = final_stage(run, brand, repo) if check_stage else None",
+   "status": "approved",
+   "approved": {
+    "by": "the owner",
+    "at": "2026-10-27",
+    "said": "make this name agnostic. and the name of the folders need to be the same for both repo and drive. these are the discrepancies that cause issues at scale. briefs should come from final stages of the chains, not some random set up."
+   }
+  },
+  {
+   "id": "L-27",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "A picture made from a swipe keeps the swipe's own light, grain and quality; an element swapped in from a reference photo (a room, a wardrobe, a prop) takes IMAGE 1's light and quality and never brings its own.",
+   "enforced_by": "components/model-inputs/preview.py :: takes IMAGE 1's light and quality",
+   "status": "draft",
+   "said": "A picture made from a swipe keeps the swipe's own light, grain and quality; an element swapped in from a reference photo (a room, a wardrobe, a prop) takes IMAGE 1's light and quality and never brings its own."
+  },
+  {
+   "id": "L-28",
+   "medium": "video",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "Every object the swipe's movement uses or touches must already be in the start frame; the start frame changes only what is swapped, and a product is added beside what the movement needs, never in its place.",
+   "enforced_by": "components/model-inputs/inputs/higgsfield-motion-control.json :: props-in-the-still",
+   "status": "draft",
+   "said": "Every object the swipe's movement uses or touches must already be in the start frame; the start frame changes only what is swapped, and a product is added beside what the movement needs, never in its place."
+  },
+  {
+   "id": "L-29",
+   "medium": "video",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "Before the start frame, plan where the subject's hands and props move; product props sit on the side away from that path, and the motion words say whether each prop the hands pass stays in front or behind.",
+   "enforced_by": "components/model-inputs/inputs/higgsfield-motion-control.json :: props-away-from-hands",
+   "status": "draft",
+   "said": "Before the start frame, plan where the subject's hands and props move; product props sit on the side away from that path, and the motion words say whether each prop the hands pass stays in front or behind."
+  },
+  {
+   "id": "L-30",
+   "medium": "video",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "The number of product units on screen matches the offer.",
+   "enforced_by": "tools/video-production/machine/swipe_swap_job.py :: offer units match the offer",
+   "status": "draft",
+   "said": "The number of product units on screen matches the offer."
+  },
+  {
+   "id": "L-31",
+   "medium": "video",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "The start frame carries brand set dressing: the logo in the scene and more product in the background.",
+   "enforced_by": "tools/video-production/machine/swipe_swap_job.py :: the brand dresses the set",
+   "status": "draft",
+   "said": "The start frame carries brand set dressing: the logo in the scene and more product in the background."
+  },
+  {
+   "id": "L-32",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "A product in a hand or on skin is drawn from its kit's in-use pictures (its back and a real hand holding it), never from its shown-on-its-own front photos; the front photos go in only when the product is shown on its own.",
+   "enforced_by": "components/model-inputs/preview.py :: if use and in_use(sw):",
+   "status": "draft",
+   "said": "A product in a hand or on skin is drawn from its kit's in-use pictures (its back and a real hand holding it), never from its shown-on-its-own front photos; the front photos go in only when the product is shown on its own."
+  },
+  {
+   "id": "L-33",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "Every picture with a product in it carries how that product is really held and what it never does (its kit's behaviour), beside its real pictures and true size.",
+   "enforced_by": "tools/image-production/image_production/plain.py :: held = f\"How the real {name} is held",
+   "status": "draft",
+   "said": "Every picture with a product in it carries how that product is really held and what it never does (its kit's behaviour), beside its real pictures and true size."
+  },
+  {
+   "id": "L-34",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "Every picture with a product in it carries that product's casting sheet first: every side, labelled, at its true size.",
+   "enforced_by": "tools/image-production/image_production/plain.py :: refs = [(sheet, SHEET_SAYS)] + refs",
+   "status": "draft",
+   "said": "Every picture with a product in it carries that product's casting sheet first: every side, labelled, at its true size."
+  },
+  {
+   "id": "L-35",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "A cast member's face comes only from their headshot and their angles-and-expressions sheet; any outfit, look or body picture of them goes in with every face blanked.",
+   "enforced_by": "components/model-inputs/preview.py :: return headless(p)",
+   "status": "draft",
+   "said": "A cast member's face comes only from their headshot and their angles-and-expressions sheet; any outfit, look or body picture of them goes in with every face blanked."
+  },
+  {
+   "id": "L-36",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "A caller that already decided the picture (a video shot, an email, a product picture) hands over its own swap list; its swaps and words are used and the picture chain's own concept never reaches the prompt.",
+   "enforced_by": "components/model-inputs/preview.py :: swaps0, words0 = matrix_text(sw0, []), \"\"",
+   "status": "draft",
+   "said": "A caller that already decided the picture (a video shot, an email, a product picture) hands over its own swap list; its swaps and words are used and the picture chain's own concept never reaches the prompt."
+  },
+  {
+   "id": "L-37",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "When the caller's brief directs the face and feeling for the picture's moment, that direction is the mood line; the picture chain's generic mood lines are dropped.",
+   "enforced_by": "components/model-inputs/preview.py :: extra.append(\"THE FEELING: \"",
+   "status": "draft",
+   "said": "When the caller's brief directs the face and feeling for the picture's moment, that direction is the mood line; the picture chain's generic mood lines are dropped."
+  },
+  {
+   "id": "L-38",
+   "medium": "image",
+   "date": "2026-10-27",
+   "source": "owner review, 2026-10-27",
+   "rule": "An effect that shows the product, its paste or its ingredients carries the product's own in-use photos and never-show lines; its colours never come from the swipe's effect.",
+   "enforced_by": "tools/video-production/machine/effects.py :: def product_refs(",
+   "status": "draft",
+   "said": "An effect that shows the product, its paste or its ingredients carries the product's own in-use photos and never-show lines; its colours never come from the swipe's effect."
+  },
+  {
+   "id": "L-39",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every picture of one of our people takes the face from their ONE headshot, a real macro-detail photograph, and carries the real-people line: pores, peach fuzz, fine lines, real eyes with feeling; never smoothed.",
+   "enforced_by": "components/model-inputs/preview.py :: sk = cast_skin(brand, r[\"ref\"])",
+   "status": "draft",
+   "said": "Every picture of one of our people takes the face from their ONE headshot, a real macro-detail photograph, and carries the real-people line: pores, peach fuzz, fine lines, real eyes with feeling; never smoothed."
+  },
+  {
+   "id": "L-40",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A picture with one of our people gets a skin-only realism pass (the made picture plus their headshot) and then the medium's lens pass, after it is made.",
+   "enforced_by": "components/model-inputs/preview.py :: finished = finish_people(out, s[\"brand\"], b, r)",
+   "status": "draft",
+   "said": "A picture with one of our people gets a skin-only realism pass (the made picture plus their headshot) and then the medium's lens pass, after it is made."
+  },
+  {
+   "id": "L-41",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A cast member's face keeps its headshot's width and roundness in every picture and in the realism pass; the swipe person's face shape never carries over.",
+   "enforced_by": "components/model-inputs/preview.py :: The person's FACE SHAPE is IMAGE 2's",
+   "status": "draft",
+   "said": "A cast member's face keeps its headshot's width and roundness in every picture and in the realism pass; the swipe person's face shape never carries over."
+  },
+  {
+   "id": "L-42",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every clip with a person on screen is sent a real person's performance from the movement bank as a movement-only reference (no sound, no colour); the head, neck, face and arms move like it, the hands go where the prompt says.",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: REAL HUMAN MOVEMENT",
+   "status": "draft",
+   "said": "Every clip with a person on screen is sent a real person's performance from the movement bank as a movement-only reference (no sound, no colour); the head, neck, face and arms move like it, the hands go where the prompt says."
+  },
+  {
+   "id": "L-43",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A clip whose speech doubles a word or phrase the line says once fails its word check (REPEAT) and is made again.",
+   "enforced_by": "tools/video-production/machine/lineparity.py :: a stutter is made again",
+   "status": "draft",
+   "said": "A clip whose speech doubles a word or phrase the line says once fails its word check (REPEAT) and is made again."
+  },
+  {
+   "id": "L-44",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Camera moves glide: the framing follows its aim through two critically damped springs, pans across between close moves instead of pulling out, keeps creeping while it holds and never pulls out at the cut.",
+   "enforced_by": "tools/video-production/machine/camera_moves.py :: Two springs in a row, so it eases in AND out",
+   "status": "draft",
+   "said": "Camera moves glide: the framing follows its aim through two critically damped springs, pans across between close moves instead of pulling out, keeps creeping while it holds and never pulls out at the cut."
+  },
+  {
+   "id": "L-45",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "In a talking clip every beat starts on the words it is written over (the brief's `over`), never before them; the timeline is built from those words, not from even time slots.",
+   "enforced_by": "tools/video-production/machine/seedance_prompt.py :: THE BEATS ON THEIR WORDS",
+   "status": "draft",
+   "said": "In a talking clip every beat starts on the words it is written over (the brief's `over`), never before them; the timeline is built from those words, not from even time slots."
+  },
+  {
+   "id": "L-46",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A clip's length follows the model it is made on (Seedance 2.5: 4 to 30 s), never a retired model's cap; a talking take gets room for the model's own pauses so its last words are said.",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: ROOM TO FINISH",
+   "status": "draft",
+   "said": "A clip's length follows the model it is made on (Seedance 2.5: 4 to 30 s), never a retired model's cap; a talking take gets room for the model's own pauses so its last words are said."
+  },
+  {
+   "id": "L-47",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every scene's camera starts and ends on the full frame; the last move lets go in time to settle before the cut, so the next scene starts where this one ended.",
+   "enforced_by": "tools/video-production/machine/camera_moves.py :: EVERY SCENE IS A LOOP",
+   "status": "draft",
+   "said": "Every scene's camera starts and ends on the full frame; the last move lets go in time to settle before the cut, so the next scene starts where this one ended."
+  },
+  {
+   "id": "L-48",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "the scene 2 clip, 28 Oct 2026 (3 of 3 refused)",
+   "rule": "A clip refused on content safety while a real person's movement is attached is made again at once without that movement; a movement reference refused like this is retired from the bank.",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: a content-safety refusal with a real person's movement attached",
+   "status": "draft",
+   "said": "A clip refused on content safety while a real person's movement is attached is made again at once without that movement; a movement reference refused like this is retired from the bank."
+  },
+  {
+   "id": "L-49",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A person picks the kept take on the board (Keep this take); the pick becomes the scene's clip, finished the same way as the chain's own pick. Camera moves wait for the edit (L-57).",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: A PERSON'S PICK",
+   "status": "draft",
+   "said": "A person picks the kept take on the board (Keep this take); the pick becomes the scene's clip, finished the same way as the chain's own pick. Camera moves wait for the edit (L-57)."
+  },
+  {
+   "id": "L-50",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every scene of the swipe is read to its smallest elements before its clip is made: the camera's hand drift, where the person looks, each prop's state and lift, where each ingredient goes and its texture, what each action lands on, the sound effects, the atmosphere, the explainer's style, the captions' look and place. The clip prompt states them and the clip judge checks them.",
+   "enforced_by": "tools/video-production/machine/scene_breakdown.py :: def read(run: Path, gid: str, ask=None) -> dict:",
+   "status": "draft",
+   "said": "Every scene of the swipe is read to its smallest elements before its clip is made: the camera's hand drift, where the person looks, each prop's state and lift, where each ingredient goes and its texture, what each action lands on, the sound effects, the atmosphere, the explainer's style, the captions' look and place. The clip prompt states them and the clip judge checks them."
+  },
+  {
+   "id": "L-51",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Whether the swipe's phone is held or propped is measured on its frames, never read by a model; a held phone's subtle drift goes into the clip prompt.",
+   "enforced_by": "tools/video-production/machine/scene_breakdown.py :: def camera_drift(f: Path) -> dict:",
+   "status": "draft",
+   "said": "Whether the swipe's phone is held or propped is measured on its frames, never read by a model; a held phone's subtle drift goes into the clip prompt."
+  },
+  {
+   "id": "L-52",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "An explainer the swipe draws on an object in the scene is drawn on the matching object in our own scene picture, in the swipe's style; never a separate diagram on black.",
+   "enforced_by": "tools/video-production/machine/effects.py :: def our_picture(run: Path, section: str):",
+   "status": "draft",
+   "said": "An explainer the swipe draws on an object in the scene is drawn on the matching object in our own scene picture, in the swipe's style; never a separate diagram on black."
+  },
+  {
+   "id": "L-53",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Props make physical sense: a lid comes off before anything is taken out, every ingredient goes somewhere visible and stays the same thing and texture. Every clip prompt says so and the clip judge checks it.",
+   "enforced_by": "tools/video-production/machine/seedance_prompt.py :: Every lid comes off before anything is taken out",
+   "status": "draft",
+   "said": "Props make physical sense: a lid comes off before anything is taken out, every ingredient goes somewhere visible and stays the same thing and texture. Every clip prompt says so and the clip judge checks it."
+  },
+  {
+   "id": "L-54",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Each action lands on the object the shot names, and that object stays the same object through the take; the clip judge checks it.",
+   "enforced_by": "tools/video-production/prompts/v2/clip-judge-v4-damon.md :: **The action lands on the right object.**",
+   "status": "draft",
+   "said": "Each action lands on the object the shot names, and that object stays the same object through the take; the clip judge checks it."
+  },
+  {
+   "id": "L-55",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A talking take must carry the voice: its sound is measured on every take, a silent one fails, and a talking clip never goes to the silent backup.",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: no voice: the take has no sound",
+   "status": "draft",
+   "said": "A talking take must carry the voice: its sound is measured on every take, a silent one fails, and a talking clip never goes to the silent backup."
+  },
+  {
+   "id": "L-56",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "On the board, one take per press: it is judged and shown, and the person keeps it or presses for another.",
+   "enforced_by": "tools/video-production/machine/providers.json :: \"max_tries\": 1,",
+   "status": "draft",
+   "said": "On the board, one take per press: it is judged and shown, and the person keeps it or presses for another."
+  },
+  {
+   "id": "L-57",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Camera moves are not cut into a kept clip; they wait for the edit.",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: no camera moves here: they wait for the edit",
+   "status": "draft",
+   "said": "Camera moves are not cut into a kept clip; they wait for the edit."
+  },
+  {
+   "id": "L-58",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "No low-resolution shot reaches the edit: an effect clip is upscaled on this Mac like every scene clip, the made clip kept beside it.",
+   "enforced_by": "tools/video-production/machine/effects.py :: NO LOW-RESOLUTION SHOT",
+   "status": "draft",
+   "said": "No low-resolution shot reaches the edit: an effect clip is upscaled on this Mac like every scene clip, the made clip kept beside it."
+  },
+  {
+   "id": "L-59",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "An object an earlier approved scene already drew is taken from that scene's picture in every later scene that shows it, so it stays the same object.",
+   "enforced_by": "tools/video-production/machine/shot_swaps.py :: THE SAME OBJECT ALL THE WAY THROUGH",
+   "status": "draft",
+   "said": "An object an earlier approved scene already drew is taken from that scene's picture in every later scene that shows it, so it stays the same object."
+  },
+  {
+   "id": "L-60",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every prop the person picks up or holds later in a scene is already in that scene's start picture, lying within reach, so nothing appears from nowhere.",
+   "enforced_by": "tools/video-production/machine/shot_swaps.py :: ready to pick up later",
+   "status": "draft",
+   "said": "Every prop the person picks up or holds later in a scene is already in that scene's start picture, lying within reach, so nothing appears from nowhere."
+  },
+  {
+   "id": "L-61",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every start picture and every take gets a body check: each hand traced to a shoulder, at most two arms and two hands, no oversized or fused hand. A wrong body is a hard fail on the take and a red stop on the picture before its clip is made.",
+   "enforced_by": "tools/video-production/machine/clips_run.py :: THE BODY CHECK",
+   "status": "draft",
+   "said": "Every start picture and every take gets a body check: each hand traced to a shoulder, at most two arms and two hands, no oversized or fused hand. A wrong body is a hard fail on the take and a red stop on the picture before its clip is made."
+  },
+  {
+   "id": "L-62",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "The movement bar for every clip with a person: hands keep doing the real task, unhurried and continuous, one action flowing into the next with no frozen hold; eyes drop to the hands while they work and come back to the lens between actions; the head moves with the words; the material visibly moves.",
+   "enforced_by": "tools/video-production/machine/seedance_prompt.py :: THE MOVEMENT BAR",
+   "status": "draft",
+   "said": "The movement bar for every clip with a person: hands keep doing the real task, unhurried and continuous, one action flowing into the next with no frozen hold; eyes drop to the hands while they work and come back to the lens between actions; the head moves with the words; the material visibly moves."
+  },
+  {
+   "id": "L-63",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "When the swipe is an offer ad (a sale, a clearance, a deal, a price, an event), the reason for the sale is the swipe's idea: keep it, put our product and our offer into it, and make the goods on sale our product. Never turn an offer ad into a problem ad.",
+   "enforced_by": "tools/image-writing/prompts/stage4b-image-hook-v6-damon.md :: WHEN THE SWIPE IS A SALE, THE SALE IS THE IDEA",
+   "status": "draft",
+   "said": "When the swipe is an offer ad (a sale, a clearance, a deal, a price, an event), the reason for the sale is the swipe's idea: keep it, put our product and our offer into it, and make the goods on sale our product. Never turn an offer ad into a problem ad."
+  },
+  {
+   "id": "L-64",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "When our product goes into the swipe's line, fix the words around it so the line reads right for our product: a brand name takes 'much', a product people count takes 'many'; count, gender, plural and verb follow our product, not the swipe's.",
+   "enforced_by": "tools/image-writing/prompts/stage4b-image-hook-v7-damon.md :: Then make it read right for OUR product",
+   "status": "draft",
+   "said": "When our product goes into the swipe's line, fix the words around it so the line reads right for our product: a brand name takes 'much', a product people count takes 'many'; count, gender, plural and verb follow our product, not the swipe's."
+  },
+  {
+   "id": "L-65",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A product held up, shown or resting in a picture is the REAL product: its real cut-out is swapped in over the drawn one (fingers kept on top), on the picture and its plate. Packaging with no real photo is plain real-world packaging, and the product itself shown inside carries the brand.",
+   "enforced_by": "components/model-inputs/preview.py :: THE REAL PRODUCT",
+   "status": "draft",
+   "said": "A product held up, shown or resting in a picture is the REAL product: its real cut-out is swapped in over the drawn one (fingers kept on top), on the picture and its plate. Packaging with no real photo is plain real-world packaging, and the product itself shown inside carries the brand."
+  },
+  {
+   "id": "L-66",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Once the script, the voice and the clips are approved, the edit only cuts them together: its word, mouth and sync findings are listed for a person, never a stop, and nothing upstream is regenerated from the edit.",
+   "enforced_by": "tools/video-edit/machine/render_map.py :: def _lenient() -> bool:",
+   "status": "draft",
+   "said": "Once the script, the voice and the clips are approved, the edit only cuts them together: its word, mouth and sync findings are listed for a person, never a stop, and nothing upstream is regenerated from the edit."
+  },
+  {
+   "id": "L-67",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A take that skips three or more words of its line fails its word check (MISSING) and is made again, like a cut-off line.",
+   "enforced_by": "tools/video-production/machine/lineparity.py :: a phrase of the line never said is made again",
+   "status": "draft",
+   "said": "A take that skips three or more words of its line fails its word check (MISSING) and is made again, like a cut-off line."
+  },
+  {
+   "id": "L-68",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Boxes or packs in the swipe become our brand's real box (its banked library picture: wrap and finish), same shape, size, stacking and places as the swipe's, and CLOSED: never open boxes showing rows of our product, which would all be drawn. Our product appears only where the swipe's hero product is, and it is the real one.",
+   "enforced_by": "tools/image-writing/prompts/stage3-image-injection-v10-damon.md :: THE SWIPE'S BOXES BECOME OUR BRAND'S REAL BOXES, CLOSED",
+   "status": "draft",
+   "said": "Boxes or packs in the swipe become our brand's real box (its banked library picture: wrap and finish), same shape, size, stacking and places as the swipe's, and CLOSED: never open boxes showing rows of our product, which would all be drawn. Our product appears only where the swipe's hero product is, and it is the real one."
+  },
+  {
+   "id": "L-69",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "The swipe's type is copied as it is drawn: outline or filled box, rounded corners, a shadow behind letters, true weight (black is black), the emoji, and any arrow or icon travelling with its line. The layout read records each one and the word-setter draws each one.",
+   "enforced_by": "tools/image-teardown/prompts/stage2-image-replication-v2-damon.md :: Draw what the type sits in, exactly",
+   "status": "draft",
+   "said": "The swipe's type is copied as it is drawn: outline or filled box, rounded corners, a shadow behind letters, true weight (black is black), the emoji, and any arrow or icon travelling with its line. The layout read records each one and the word-setter draws each one."
+  },
+  {
+   "id": "L-70",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A phrase a kept take never said is cut only when a person accepts it: decisions.json `cut_words` names the words and carries the person's own words; any other missing phrase holds the cut.",
+   "enforced_by": "tools/video-edit/machine/render_map.py :: def accepted_cut(out: Path, script: str) -> bool:",
+   "status": "draft",
+   "said": "A phrase a kept take never said is cut only when a person accepts it: decisions.json `cut_words` names the words and carries the person's own words; any other missing phrase holds the cut."
+  },
+  {
+   "id": "L-71",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A scene a person takes out of an ad goes in decisions.json `drop_sections` with their words; it is not in the cut and the edit notes say why.",
+   "enforced_by": "tools/video-edit/machine/edit_map.py :: def dropped_sections(dec: dict | None) -> dict:",
+   "status": "draft",
+   "said": "A scene a person takes out of an ad goes in decisions.json `drop_sections` with their words; it is not in the cut and the edit notes say why."
+  },
+  {
+   "id": "L-72",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "The captions follow the swipe: the edit picks the bank look nearest the swipe's own captions as the scene breakdown reads them (box or none, outline, place, words at a time, case), before the format's default.",
+   "enforced_by": "tools/video-edit/machine/map_sheet.py :: LK.from_swipe(LK.swipe_captions(vm)) or LK.pick_caption(fmt, app)",
+   "status": "draft",
+   "said": "The captions follow the swipe: the edit picks the bank look nearest the swipe's own captions as the scene breakdown reads them (box or none, outline, place, words at a time, case), before the format's default."
+  },
+  {
+   "id": "L-73",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "The opening is set in the caption look like every other line; a separate headline look only when the swipe itself shows one (a title, a banner, static top text).",
+   "enforced_by": "tools/video-edit/machine/edit_map.py :: if plain_open and x.get(\"kind\") == \"hook headline\":",
+   "status": "draft",
+   "said": "The opening is set in the caption look like every other line; a separate headline look only when the swipe itself shows one (a title, a banner, static top text)."
+  },
+  {
+   "id": "L-74",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Single opening words are one phrase, read as one line that wraps, never one word per line; a card's list of lines keeps one per line.",
+   "enforced_by": "tools/video-edit/machine/map_sheet.py :: single words are one phrase, read as a line that wraps",
+   "status": "draft",
+   "said": "Single opening words are one phrase, read as one line that wraps, never one word per line; a card's list of lines keeps one per line."
+  },
+  {
+   "id": "L-75",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "An effect that did not come out well stays out of the ad's cut: its placement moves from decisions.json `broll.place` to `broll_removed` with the person's words; the hand-off still carries it for the editor.",
+   "enforced_by": "tools/video-production/VIDEO-PROCESS.md :: `broll_removed`",
+   "status": "draft",
+   "said": "An effect that did not come out well stays out of the ad's cut: its placement moves from decisions.json `broll.place` to `broll_removed` with the person's words; the hand-off still carries it for the editor."
+  },
+  {
+   "id": "L-76",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every opening carries the existing shared video creative controls with concrete execution evidence and retains the core demonstration objects, scale and interaction. Production consumes the full scroll event and its shot-set references, never a thumbnail alone.",
+   "enforced_by": "tools/video-writing/machine/writing_v2.py :: matrix, problems = hook_matrix.from_text",
+   "status": "draft",
+   "said": "Every opening carries the existing shared video creative controls with concrete execution evidence and retains the core demonstration objects, scale and interaction. Production consumes the full scroll event and its shot-set references, never a thumbnail alone."
+  },
+  {
+   "id": "L-77",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A variation carries its own first-moment gesture and expression into the picture builder; a parent shot's old spoken-word gestures must not override the new demonstration.",
+   "enforced_by": "components/model-inputs/preview.py :: fe = brief.get(\"shot_direction\") or sw0.get(\"feeling\") or {}",
+   "status": "draft",
+   "said": "A variation carries its own first-moment gesture and expression into the picture builder; a parent shot's old spoken-word gestures must not override the new demonstration."
+  },
+  {
+   "id": "L-78",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Opening variations use the same ordered chain checks on and off the board. Reference recipes and creative controls must be populated before frame approval; failed anatomy blocks approval; changed frames, recipes or clips invalidate their prior approvals; only a reviewed clip can join the approved body.",
+   "enforced_by": "tools/video-production/machine/hook_workflow.py :: def require_clip",
+   "status": "draft",
+   "said": "Opening variations use the same ordered chain checks on and off the board. Reference recipes and creative controls must be populated before frame approval; failed anatomy blocks approval; changed frames, recipes or clips invalidate their prior approvals; only a reviewed clip can join the approved body."
+  },
+  {
+   "id": "L-79",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "A saved opening change lists reused and dependent assets before spending. Copy edits retain approved pictures and references; motion edits retain voice. Motion references are pinned by bank ID and prepared once by source and settings. Each requested opening generation makes one attempt and preserves the prior clip version.",
+   "enforced_by": "tools/video-production/machine/hook_workflow.py :: def change_impact",
+   "status": "draft",
+   "said": "A saved opening change lists reused and dependent assets before spending. Copy edits retain approved pictures and references; motion edits retain voice. Motion references are pinned by bank ID and prepared once by source and settings. Each requested opening generation makes one attempt and preserves the prior clip version."
+  },
+  {
+   "id": "L-80",
+   "medium": "video",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "For each video brief our side ends at the scene pictures the owner approved; the hand-off to the video editor carries the brief, the approved pictures and each scene's clip prompt, and the clips, the edit, B-roll and effects are the editor's.",
+   "enforced_by": "tools/video-production/VIDEO-PROCESS.md :: Our side ends at the scene pictures the owner approved (stage 4).",
+   "status": "draft",
+   "said": "For each video brief our side ends at the scene pictures the owner approved; the hand-off to the video editor carries the brief, the approved pictures and each scene's clip prompt, and the clips, the edit, B-roll and effects are the editor's."
+  },
+  {
+   "id": "L-82",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Gold type and gold buttons set on top of a picture are metallic, a vertical shine of the same gold, never a flat fill; and a swipe's bright accent colour becomes the brand's accent, never the nearest dull swatch.",
+   "enforced_by": "tools/image-production/static/tools/compose.py :: def metallic(png, color):",
+   "status": "draft",
+   "said": "Gold type and gold buttons set on top of a picture are metallic, a vertical shine of the same gold, never a flat fill; and a swipe's bright accent colour becomes the brand's accent, never the nearest dull swatch."
+  },
+  {
+   "id": "L-83",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "The five variations of an approved offer ad stay about the sale, each changing one thing about the sale; they are written off the approved picture's own swaps and words, never the injection's first idea.",
+   "enforced_by": "tools/image-writing/tools/writing.py :: def approved_picture(run, brand):",
+   "status": "draft",
+   "said": "The five variations of an approved offer ad stay about the sale, each changing one thing about the sale; they are written off the approved picture's own swaps and words, never the injection's first idea."
+  },
+  {
+   "id": "L-84",
+   "medium": "image",
+   "date": "2026-10-28",
+   "source": "owner review, 2026-10-28",
+   "rule": "Every image ad, and always an offer or seasonal one, is built on one concept borrowed from the avatar's culture map and crossed with the moment: the concept dresses the swipe's set, props, palette and type while the swipe's layout stays, and the headline is the concept talking, with one spice device, never a plain statement of dates or terms.",
+   "enforced_by": "tools/image-writing/prompts/stage3-image-injection-v13-damon.md :: ## THE CONCEPT: NEVER GENERIC (the owner, 2026-10-28) — do this before the swap",
+   "status": "draft",
+   "said": "Every image ad, and always an offer or seasonal one, is built on one concept borrowed from the avatar's culture map and crossed with the moment: the concept dresses the swipe's set, props, palette and type while the swipe's layout stays, and the headline is the concept talking, with one spice device, never a plain statement of dates or terms."
+  },
+  {
+   "id": "L-85",
+   "medium": "image",
+   "date": "2026-10-31",
+   "source": "owner review, 2026-10-31",
+   "rule": "A flat product is shot straight-on and turned only in its own plane; a side or over-the-top angle makes it read thicker than it is, and any other view has to be asked for by name.",
+   "enforced_by": "tools/image-production/flex_sets_blender.py :: def _flat_view(p, tilt, rolls):",
+   "status": "draft",
+   "said": "Owner review: a product shot from above looked wrong and too thick; it should read flat, slightly rotated."
+  },
+  {
+   "id": "L-86",
+   "medium": "image",
+   "date": "2026-10-31",
+   "source": "owner review, 2026-10-31",
+   "rule": "A picture set carries the brief's concept and dial levels into the print, read from the brand step, so the scene gets the creative level the writing asked for.",
+   "enforced_by": "tools/image-production/scene_templates.py :: def concept_of(run):",
+   "status": "draft",
+   "said": "Owner review: the scene had too little going on and the creative dials did not reach the picture."
+  },
+  {
+   "id": "L-87",
+   "medium": "image",
+   "date": "2026-10-31",
+   "source": "owner review, 2026-10-31",
+   "rule": "Scene dressing such as confetti never lands in the band kept clear for the words.",
+   "enforced_by": "tools/image-production/flex_sets_blender.py :: if any(t <= fy <= u for t, u in b.get(\"clear\") or []):",
+   "status": "draft",
+   "said": "Owner review: a confetti speck sat inside a headline."
+  },
+  {
+   "id": "L-88",
+   "medium": "image",
+   "date": "2026-10-31",
+   "source": "owner review, 2026-10-31",
+   "rule": "A picture brief reads the same dated moments as the email chain, so an ad with no moment in its order takes the nearest fitting one, never one past its end date.",
+   "enforced_by": "tools/image-writing/tools/writing.py :: def moments_input(brand, avatar, run, today=None, ahead=45):",
+   "status": "draft",
+   "said": "Owner asked that the creative system know holidays the way the email chain does."
+  },
+  {
+   "id": "L-89",
+   "medium": "image",
+   "date": "2026-10-31",
+   "source": "owner review, 2026-10-31",
+   "rule": "The product in a 3D blockout is only a placeholder for place and size; the print takes every detail of it from the casting sheet, and the print's words say so.",
+   "enforced_by": "tools/image-production/picture_sets.py :: \"its place and size: none of its stripes, bands or base shapes are real, and every detail comes from the sheet.\")",
+   "status": "draft",
+   "said": "Owner review: the ring light, marks and base in the print were not the real product."
+  },
+  {
+   "id": "L-90",
+   "medium": "image",
+   "date": "2026-10-31",
+   "source": "owner review, 2026-10-31",
+   "rule": "A set's kept print always has the whole product casting sheet as its reference; a crop of the sheet or a real photo pasted over the print is a side path and is refused.",
+   "enforced_by": "tools/image-production/picture_sets.py :: raise ValueError(f\"{name}: a kept print needs the product casting sheet as its reference",
+   "status": "draft",
+   "said": "Owner review: run the set process as it stands, with no side steps."
+  }
+ ]
+}

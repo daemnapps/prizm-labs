@@ -1,0 +1,1200 @@
+#!/usr/bin/env python3
+"""python3 machine/test_frames.py — from any cwd. Stdlib unittest only.
+
+THE SCENE SHAPE, end to end, on a fixture brief that names no brand, product
+or person: a scene is one setting, one paragraph of voice, TWO stills (the
+first frame and the last) and ONE clip whose timeline is written from the
+beats. Plus the contract gate — every defect refused by its own name — and
+the old timed shape, still planning.
+"""
+from __future__ import annotations
+
+import importlib.util
+import json
+import re
+import unittest
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+FIXTURES = HERE / "fixtures"
+
+
+def load(name: str):
+    spec = importlib.util.spec_from_file_location(f"test_vm_{name}", HERE / f"{name}.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+run = load("run")
+mi = load("model_inputs")
+scenes = load("scenes")
+
+TIMING = json.loads((FIXTURES / "vo-timing.json").read_text())
+
+
+def plan_of():
+    return run.build_plan_from_brief(FIXTURES / "brief-frames.md", "_fixture")
+
+
+def items_of():
+    return run.batches_of(plan_of(), "_fixture", TIMING)
+
+
+def by_id(items):
+    return {it["id"]: it for it in items}
+
+
+class TheSceneShape(unittest.TestCase):
+    def test_the_piece_declares_aspect_and_resolution_once(self):
+        piece = plan_of()["piece"]
+        self.assertEqual(piece["aspect"], "9:16")
+        self.assertEqual(piece["resolution"], "720p")
+        # and no scene restates them
+        for s in plan_of()["scenes"]:
+            self.assertNotIn("aspect", s)
+            self.assertNotIn("resolution", s)
+
+    def test_a_scene_is_one_paragraph_and_no_length(self):
+        s = plan_of()["scenes"][0]
+        self.assertTrue(s["voice"].startswith("It comes back in the same place"))
+        self.assertEqual(s["seconds"], 0.0)      # never a number the brief chose
+        self.assertIsNone(s["start"])
+        self.assertTrue(s["to_camera"])
+
+    def test_two_stills_per_scene_and_nothing_between_them(self):
+        items = items_of()
+        stills = [it for it in items if it["kind"] in ("still", "edit")]
+        self.assertEqual([it["id"] for it in stills],
+                         ["S1-F1", "S1-FLAST", "S2-F1", "S2-FLAST"])
+        self.assertEqual([it["kind"] for it in stills],
+                         ["still", "edit", "still", "edit"])
+
+    def test_the_first_frame_is_a_generation_in_the_stills_order(self):
+        it = by_id(items_of())["S1-F1"]
+        order = mi.station("still-generate")["assembly"]["order"]
+        prompt = it["params"]["prompt"]
+        at = [prompt.find(x) for x in
+              ("THE SPEAKER, seated", "medium-close", "looking straight into the lens",
+               "A TABLE", "flat daylight", "square on at chest height",
+               "soft directional daylight")]
+        self.assertEqual(at, sorted(at), f"{order} order not held: {prompt}")
+        self.assertEqual(it["params"]["size"], mi.size_for("9:16"))
+        self.assertEqual([m["value"] for m in it["medias"]],
+                         ["the cast sheet for THE SPEAKER", "the style frame"])
+
+    def test_the_last_frame_is_an_edit_of_the_first_naming_only_the_delta(self):
+        it = by_id(items_of())["S1-FLAST"]
+        self.assertEqual(it["edit_of"], "S1-F1")
+        self.assertEqual(it["medias"][0]["value"], "S1-F1")
+        self.assertTrue(it["params"]["prompt"].startswith(
+            "the camera has pushed in close, the forearm face-up filling the lower "
+            "half of the frame"), it["params"]["prompt"])
+        # the delta, then the one line that says what may NOT change
+        self.assertTrue(it["params"]["prompt"].endswith(
+            "Keep the person, wardrobe, setting, colour, white balance and light "
+            "exactly as in the reference. Change nothing else."))
+        for word in ("A TABLE", "daylight", "medium-close"):
+            self.assertNotIn(word, it["params"]["prompt"])
+
+    def test_every_edit_sends_two_references_in_order(self):
+        for iid in ("S1-FLAST", "S2-FLAST"):
+            it = by_id(items_of())[iid]
+            refs = [m["value"] for m in it["medias"]
+                    if m["role"] == "image_references"]
+            self.assertEqual(len(refs), 2, refs)
+            self.assertEqual(refs[0], it["edit_of"])
+            self.assertIn("cast sheet", refs[1])
+
+    def test_every_edit_routes_to_the_fidelity_door(self):
+        import tempfile
+        # scene 1 already pushes in; give scene 2 a new angle, so both camera
+        # words are exercised and both still land on the one image door
+        text = (FIXTURES / "brief-frames.md").read_text().replace(
+            "**LAST FRAME**\n**Camera:** same\n**Change:** the arm is back",
+            "**LAST FRAME**\n**Camera:** new angle to a wide\n**Change:** the arm is back")
+        tmp = Path(tempfile.mkdtemp()) / "brief.md"
+        tmp.write_text(text)
+        items = by_id(run.batches_of(run.build_plan_from_brief(tmp, "_fixture"),
+                                     "_fixture", TIMING))
+        pushed, plain = items["S1-FLAST"], items["S2-FLAST"]
+        # 2026-09-18, the owner: one image door — EVERY edit goes to the GPT
+        # fidelity door, push-in or not; the camera word is kept for the record.
+        self.assertEqual(pushed["contract"], "still-edit-fidelity")
+        self.assertEqual(pushed["params"]["input_fidelity"], "high")
+        self.assertEqual(plain["contract"], "still-edit-fidelity")
+        self.assertEqual(plain["params"]["input_fidelity"], "high")
+        # and both still send two references, the edited frame first
+        for it in (pushed, plain):
+            refs = [m["value"] for m in it["medias"]]
+            self.assertEqual(refs[0], it["edit_of"])
+            self.assertEqual(len(refs), 2)
+
+    def test_one_clip_per_scene_carrying_both_frames(self):
+        items = items_of()
+        clips = [it for it in items if it["kind"] in ("motion", "talking")]
+        self.assertEqual([it["id"] for it in clips], ["S1", "S2"])
+        s1, s2 = by_id(items)["S1"], by_id(items)["S2"]
+        self.assertEqual(s1["kind"], "talking")          # to camera
+        self.assertEqual(s2["kind"], "motion")
+        # both stills are MADE for every scene, and on the settled door
+        # (Seedance, 2026-09-22) BOTH scenes attach the last frame: it takes
+        # first + last + the voice slice together on one call, which is why
+        # a talking scene keeps the frame it lands on
+        self.assertEqual(s1["start_frame"], "S1-F1")
+        self.assertEqual(s1["last_frame"], "S1-FLAST")
+        self.assertEqual(s1["end_frame"], "S1-FLAST")
+        self.assertEqual([m["role"] for m in s1["medias"]],
+                         ["start_image", "end_image", "audio_references"])
+        self.assertEqual(s2["end_frame"], "S2-FLAST")
+        self.assertIn({"role": "end_image", "value": "S2-FLAST"}, s2["medias"])
+        # the settled door carries its mode and never makes its own audio
+        self.assertEqual(s1["params"]["mode"], "omni_reference")
+        self.assertFalse(s1["params"]["generate_audio"])
+        self.assertFalse(s2["params"]["generate_audio"])
+
+    def test_the_clip_is_assembled_in_the_makers_four_blocks(self):
+        prompt = by_id(items_of())["S1"]["params"]["prompt"]
+        blocks = prompt.split("\n\n")
+        self.assertEqual(len(blocks), 4, prompt)
+        self.assertTrue(blocks[0].startswith("@Image1 is the first frame:"))
+        # on the settled door a talking scene DOES name @Image2 — the last
+        # frame travels on the call beside the audio
+        self.assertIn("@Image2 is the last frame:", blocks[0])
+        self.assertIn("@Audio1 is THE SPEAKER's voice", blocks[0])
+        self.assertIn("A TABLE", blocks[1])
+        self.assertEqual(len(blocks[2].splitlines()), 4)
+        self.assertTrue(blocks[3].startswith("One continuous take, no cuts,"))
+
+    def test_the_timeline_is_timed_off_the_one_voice_track(self):
+        prompt = by_id(items_of())["S1"]["params"]["prompt"]
+        spans = [l.split(":")[0] for l in prompt.split("\n\n")[2].splitlines()]
+        self.assertEqual(spans, ["0-2.54s", "3.18-4.55s", "4.59-6.69s", "7.06-8.92s"])
+
+    def test_a_talking_clip_never_writes_the_words_twice(self):
+        prompt = by_id(items_of())["S1"]["params"]["prompt"]
+        self.assertNotIn("the words playing", prompt.split("\n\n")[2])
+        self.assertNotIn("It comes back in the same place", prompt)
+        self.assertIn("they speak the words in @Audio1 exactly, their lips moving with every word, nothing else is said",
+                      prompt)
+        # a silent scene DOES carry its words, because nothing else will
+        self.assertIn("the words playing:",
+                      by_id(items_of())["S2"]["params"]["prompt"])
+
+    def test_the_clip_runs_as_long_as_its_paragraph(self):
+        s1 = by_id(items_of())["S1"]
+        self.assertEqual(s1["params"]["duration"], 9)     # 8.92s of voice, rounded up
+        self.assertEqual(s1["params"]["aspect_ratio"], "9:16")
+        # the clip door makes ONE resolution (2026-09-22); the piece's
+        # sized the stills and is not what the clip asks for
+        self.assertEqual(s1["params"]["resolution"], "480p")
+        self.assertTrue(s1["resolution_fixed"])
+
+    def test_the_door_is_named_and_the_last_frame_lands_where_the_door_lets_it(self):
+        """On the settled door BOTH scenes attach the last frame. Where a
+        door refuses it beside audio, `TheMinimaxShape` holds that shape and
+        the clip is told where to end in words instead."""
+        items = by_id(items_of())
+        for station_name, sid in (("motion", "S2"), ("talking", "S1")):
+            door_id, attached, how = mi.end_image_door(station_name)
+            self.assertTrue(attached, station_name)
+            self.assertEqual(items[sid]["door"], door_id)
+            self.assertIn("end_image", items[sid]["end_frame_how"])
+
+
+class PinsAModel:
+    """Each shape class pins ITS OWN model, so it keeps asserting that shape
+    whichever one the registry settles on. Which model is the default is a
+    ruling, and `TheSettledDoor` is the one class that asserts it."""
+
+    MODEL = ""
+
+    def setUp(self):
+        import copy
+        platform = load("provider_platform")
+        reg = copy.deepcopy(platform.registry())
+        for st in ("motion", "talking"):
+            reg["doors"][st]["model"] = self.MODEL
+            for prov in ("higgsfield-mcp", "higgsfield-ui"):
+                reg["providers"][prov]["stations"][st] = self.MODEL
+        self._saved = (run.mi.platform.registry, mi.platform.registry)
+        run.mi.platform.registry = lambda: copy.deepcopy(reg)
+        mi.platform.registry = lambda: copy.deepcopy(reg)
+
+    def tearDown(self):
+        run.mi.platform.registry, mi.platform.registry = self._saved
+
+
+class TheSettledDoor(unittest.TestCase):
+    """WHICH MODEL IS THE DEFAULT is a ruling, not a shape. the owner,
+    2026-09-22, after four prompt-tuning takes on MiniMax against one
+    Seedance take of the same hands scene: "let's just run with seedance for
+    now, the output is just way better and takes less tweaking." """
+
+    def test_seedance_is_the_clip_door_for_both_stations(self):
+        self.assertEqual(mi.model_of("motion"), "seedance_2_5")
+        self.assertEqual(mi.model_of("talking"), "seedance_2_5")
+
+    def test_seedance_is_the_whole_roster(self):
+        menu = {r["model"]: r for r in mi.clip_models("motion")}
+        self.assertEqual(sorted(menu), ["seedance_2_5"])        # MiniMax is out of the chain (the owner, 2026-10-26)
+        self.assertTrue(menu["seedance_2_5"]["settled"])
+
+
+class TheSeedanceShape(PinsAModel, unittest.TestCase):
+    """THE SETTLED CLIP DOOR since 2026-09-22. Seedance 2.5 on the connector
+    takes the first frame, the last frame AND the voice slice on ONE call,
+    up to 30 s — so a talking scene keeps its last frame, which the MiniMax
+    door could not. Flipping the registry's slug flips the shape; nothing in
+    the code names either model."""
+
+    ALT = MODEL = "seedance_2_5"
+
+    def test_the_alternate_row_is_picked_off_the_slug(self):
+        self.assertEqual(mi.door_of("talking")["id"], f"higgsfield:connector:{self.ALT}")
+        self.assertEqual(mi.door_of("motion")["id"], f"higgsfield:connector:{self.ALT}")
+        self.assertEqual(mi.duration_span("talking"), [4, 30])
+
+    def test_a_talking_clip_carries_first_last_and_audio_together(self):
+        s1 = by_id(items_of())["S1"]
+        self.assertEqual([m["role"] for m in s1["medias"]],
+                         ["start_image", "end_image", "audio_references"])
+        self.assertEqual([m["value"] for m in s1["medias"]],
+                         ["S1-F1", "S1-FLAST", "vo/S1.mp3"])
+        self.assertEqual(s1["end_frame"], "S1-FLAST")
+        p = s1["params"]
+        self.assertEqual(p["mode"], "omni_reference")
+        self.assertFalse(p["generate_audio"])         # the voice is ours, on the call
+        self.assertEqual(p["bitrate_mode"], "high")
+        self.assertEqual(p["duration"], 9)
+        self.assertEqual(p["resolution"], "480p")    # the door's own, fixed (the owner 2026-10-26)
+        self.assertEqual(mi.violations(s1), [])
+
+    def test_the_prompt_names_image2_and_settles_on_it(self):
+        blocks = by_id(items_of())["S1"]["params"]["prompt"].split("\n\n")
+        self.assertEqual(sorted(set(re.findall(r"@\w+", blocks[0]))),
+                         ["@Audio1", "@Image1", "@Image2"])
+        self.assertIn("@Image2 is the last frame:", blocks[0])
+        self.assertIn("settling on the framing of @Image2", blocks[2].splitlines()[-1])
+        self.assertNotIn("ending on", blocks[2])
+
+    def test_a_silent_clip_is_first_and_last_with_generate_audio_off(self):
+        s2 = by_id(items_of())["S2"]
+        self.assertEqual([m["role"] for m in s2["medias"]], ["start_image", "end_image"])
+        self.assertFalse(s2["params"]["generate_audio"])
+        self.assertEqual(mi.violations(s2), [])
+
+    def test_a_thirty_second_scene_passes_here_and_not_on_the_alternate(self):
+        s1 = by_id(items_of())["S1"]
+        s1["params"]["duration"] = 30
+        self.assertFalse(any("ceiling" in b for b in mi.violations(s1)))
+
+
+class TheContractGate(unittest.TestCase):
+    """Every defect refused by name — nothing submits red."""
+
+    def clip(self):
+        """The assembled clip — it already carries its slice; the shape puts
+        it there rather than a test remembering to."""
+        return by_id(items_of())["S1"]
+
+    def test_a_complete_clip_is_green(self):
+        self.assertEqual(mi.violations(self.clip()), [])
+
+    def test_a_to_camera_scene_with_no_audio_slice_is_refused(self):
+        it = self.clip()
+        it["medias"] = [m for m in it["medias"] if m["role"] != "audio_references"]
+        bad = mi.violations(it)
+        self.assertTrue(any("audio_references" in b for b in bad), bad)
+        self.assertTrue(any("no audio slice" in b for b in bad), bad)
+
+    def test_a_reference_attached_beside_the_first_frame_is_refused(self):
+        """The dry run that found this bug had sent the cast sheet and the
+        style frame on the clip and no first frame at all."""
+        it = self.clip()
+        it["medias"].append({"role": "omni_reference", "value": "the cast sheet"})
+        bad = mi.violations(it)
+        self.assertTrue(any("omni_reference" in b and "takes only" in b for b in bad), bad)
+
+    def test_a_clip_that_attaches_no_first_frame_is_refused(self):
+        # the first frame's role is the DOOR's — start_image on the settled
+        # door, image_references on a talking scene where the door refuses a
+        # frame beside audio. Read it, never name it.
+        role = mi.first_frame_role("talking")
+        it = self.clip()
+        it["medias"] = [m for m in it["medias"] if m["role"] != role]
+        bad = mi.violations(it)
+        self.assertTrue(any(f"attaches no {role!r}" in b for b in bad), bad)
+        it = by_id(items_of())["S2"]
+        it["medias"] = [m for m in it["medias"] if m["role"] != "start_image"]
+        bad = mi.violations(it)
+        self.assertTrue(any("attaches no 'start_image'" in b for b in bad), bad)
+
+    def test_a_clip_with_no_duration_is_refused(self):
+        it = self.clip()
+        it["params"].pop("duration")
+        self.assertTrue(any("no duration" in b for b in mi.violations(it)))
+
+    def test_a_beat_with_two_verbs_is_refused(self):
+        it = self.clip()
+        it["beats"][1]["do"] = "turns the forearm up and taps it twice"
+        bad = mi.violations(it)
+        self.assertTrue(any("more than one action" in b for b in bad), bad)
+
+    def test_a_beat_with_no_action_is_refused(self):
+        it = self.clip()
+        it["beats"][0]["do"] = ""
+        self.assertTrue(any("names no action" in b for b in mi.violations(it)))
+
+    def test_more_beats_than_the_maker_takes_is_refused(self):
+        it = self.clip()
+        cap = mi.station("talking")["limits"]["max_beats"]
+        it["beats"] = [{"n": i, "do": "turns"} for i in range(cap + 2)]
+        bad = mi.violations(it)
+        self.assertTrue(any(f"limit of {cap}" in b for b in bad), bad)
+
+    def test_a_clip_with_no_beats_is_refused(self):
+        it = self.clip()
+        it["beats"] = []
+        self.assertTrue(any("no beats" in b for b in mi.violations(it)))
+
+    def test_a_last_frame_the_door_takes_and_the_item_lacks_is_refused(self):
+        # the SILENT scene is where the door takes the last frame
+        it = by_id(items_of())["S2"]
+        it["end_frame"] = None
+        bad = mi.violations(it)
+        self.assertTrue(any("'end_image'" in b for b in bad), bad)
+        it = by_id(items_of())["S2"]
+        it["medias"] = [m for m in it["medias"] if m["role"] != "end_image"]
+        bad = mi.violations(it)
+        self.assertTrue(any("attaches no 'end_image'" in b for b in bad), bad)
+
+    def test_a_missing_first_or_last_frame_is_refused(self):
+        it = self.clip()
+        it["start_frame"] = None
+        self.assertTrue(any("no FIRST FRAME" in b for b in mi.violations(it)))
+        it = self.clip()
+        it["last_frame"] = None
+        self.assertTrue(any("no LAST FRAME" in b for b in mi.violations(it)))
+
+    def test_a_third_still_in_a_scene_is_refused(self):
+        it = self.clip()
+        it["frames"] = ["S1-F1", "S1-F2", "S1-FLAST"]
+        bad = mi.violations(it)
+        self.assertTrue(any("exactly 2" in b for b in bad), bad)
+
+    def test_a_paragraph_past_the_doors_ceiling_is_refused(self):
+        it = self.clip()
+        cap = mi.duration_span("talking")[1]
+        it["params"]["duration"] = cap + 5
+        bad = mi.violations(it)
+        self.assertTrue(any("ceiling" in b for b in bad), bad)
+
+    def test_a_frame_with_no_delta_is_refused(self):
+        it = by_id(items_of())["S1-FLAST"]
+        self.assertEqual(mi.violations(it), [])
+        it["delta"] = ""
+        bad = mi.violations(it)
+        self.assertTrue(any("no delta" in b for b in bad), bad)
+
+    def test_an_edit_with_one_reference_is_refused(self):
+        it = by_id(items_of())["S1-FLAST"]
+        it["medias"] = it["medias"][:1]
+        bad = mi.violations(it)
+        self.assertTrue(any("fewer than two references" in b for b in bad), bad)
+
+    def test_an_edit_whose_first_reference_is_not_the_frame_is_refused(self):
+        it = by_id(items_of())["S1-FLAST"]
+        it["medias"] = list(reversed(it["medias"]))
+        bad = mi.violations(it)
+        self.assertTrue(any("first reference" in b for b in bad), bad)
+
+    def test_an_old_shape_item_is_not_asked_for_scene_shape_fields(self):
+        item = {"id": "A1", "kind": "motion", "params": {"prompt": "x"},
+                "medias": [], "characters": [], "products": [], "lines": []}
+        self.assertEqual(mi.violations(item), [])
+
+    def test_every_required_field_names_itself_when_missing(self):
+        it = self.clip()
+        it["params"].pop("prompt")
+        bad = mi.violations(it)
+        self.assertTrue(any("'prompt'" in b for b in bad), bad)
+
+
+class NothingSubmitsRed(unittest.TestCase):
+    """The gate where it actually runs — `preflight.py check` on a batch."""
+
+    def setUp(self):
+        import shutil
+        import tempfile
+        self.tmp = Path(tempfile.mkdtemp(prefix="vm-gate-"))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.run_dir = self.tmp / "sample-run"
+        shutil.copytree(FIXTURES / "sample-run", self.run_dir)
+        (self.run_dir / "lines.json").write_text(json.dumps(
+            {"S1": "the paragraph", "S2": "the other paragraph"}))
+        self.preflight = load("preflight")
+
+    def check(self, items):
+        p = self.tmp / "batch.json"
+        p.write_text(json.dumps({"items": items}))
+        return self.preflight.check(p, self.run_dir, "higgsfield-ui",
+                                    FIXTURES / "bank.json")
+
+    def batch(self):
+        return items_of()
+
+    def test_a_scene_shape_batch_is_green(self):
+        fails, _ = self.check(self.batch())
+        self.assertEqual(fails, [], fails)
+
+    def test_the_gate_names_the_field_and_the_rule(self):
+        items = self.batch()
+        clip = next(it for it in items if it["kind"] == "talking")
+        clip["medias"] = [m for m in clip["medias"] if m["role"] != "audio_references"]
+        clip["beats"][0]["do"] = "turns the arm over and taps it"
+        fails, _ = self.check(items)
+        text = "\n".join(fails)
+        self.assertIn("[rule 12]", text)
+        self.assertIn("audio_references", text)
+        self.assertIn("more than one action", text)
+
+
+class TheBriefIsThePrompt(unittest.TestCase):
+    """THE BRIEF IS THE PROMPT (the owner, 2026-09-19). A brief's truth is the
+    fenced json block at the end of it; the prose above is the view a person
+    reads, and nothing downstream parses it."""
+
+    BRIEF = FIXTURES / "brief-block.md"
+
+    def plan(self):
+        return run.build_plan_from_brief(self.BRIEF, "_fixture")
+
+    def items(self):
+        return by_id(run.batches_of(self.plan(), "_fixture", TIMING))
+
+    def block(self):
+        doc, why = scenes.json_block(self.BRIEF.read_text())
+        self.assertIsNone(why, why)
+        return doc
+
+    def test_the_block_is_read_and_the_prose_is_not(self):
+        plan = self.plan()
+        self.assertEqual(plan["piece"]["aspect"], "9:16")
+        self.assertEqual([s["id"] for s in plan["scenes"]], ["S1", "S2"])
+        self.assertEqual(plan["scenes"][0]["setting"], "A TABLE")
+        self.assertTrue(plan["scenes"][0]["voice"].startswith(
+            "It comes back in the same place"))
+        self.assertEqual(plan["scenes"][0]["delivery"],
+                         "dry · plain-flat · low · beat-and-pause")
+
+    def test_a_block_brief_assembles_the_same_four_blocks(self):
+        it = self.items()["S1"]
+        self.assertTrue(it["params"]["prompt"].startswith("@Image1 is the first frame:"))
+        self.assertIn("One continuous take, no cuts, the only camera movement "
+                      "is the slow push in.", it["params"]["prompt"])
+        self.assertEqual(mi.violations(it), [])
+
+    def test_the_human_view_is_rendered_from_the_block(self):
+        view = scenes.render_view(self.block())
+        self.assertIn("A Fixture Piece, As A Block", view)
+        self.assertIn("B-ROLL — the voice plays over it", view)
+        self.assertIn("It comes back in the same place", view)
+
+    def test_a_complete_block_is_green(self):
+        self.assertEqual(mi.brief_violations(self.BRIEF.read_text()), [])
+
+    def test_a_missing_key_is_named(self):
+        doc = self.block()
+        del doc["scenes"][0]["outcome"]
+        del doc["piece"]["resolution"]
+        doc["scenes"][1]["first_frame"].pop("lighting")
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("scene S1 is missing 'outcome'" in b for b in bad), bad)
+        self.assertTrue(any("'piece' is missing 'resolution'" in b for b in bad), bad)
+        self.assertTrue(any("first_frame' is missing 'lighting'" in b for b in bad), bad)
+
+    def test_a_to_camera_that_is_not_a_boolean_is_refused(self):
+        doc = self.block()
+        doc["scenes"][0]["to_camera"] = "yes"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("'to_camera' is 'yes'" in b for b in bad), bad)
+
+    def test_a_setting_that_names_no_world_block_is_refused(self):
+        doc = self.block()
+        doc["scenes"][0]["setting_id"] = "A ROOM NOBODY BUILT"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("names no world block" in b for b in bad), bad)
+
+    def test_a_brief_with_no_block_still_plans(self):
+        """Every run already on disk was written before the block existed."""
+        self.assertEqual(mi.brief_violations(
+            (FIXTURES / "brief-frames.md").read_text()), [])
+        self.assertEqual([s["id"] for s in plan_of()["scenes"]], ["S1", "S2"])
+
+
+class BRollIsAScene(unittest.TestCase):
+    """the owner, 2026-09-19: "there is no B-roll" — every scene was the speaker
+    to camera. A B-roll scene is a scene of its own: its own setting, its own
+    two frames, its own beats, and the slice of the one read that plays OVER
+    it at the edit."""
+
+    def items(self):
+        return by_id(run.batches_of(
+            run.build_plan_from_brief(FIXTURES / "brief-block.md", "_fixture"),
+            "_fixture", TIMING))
+
+    def test_a_b_roll_scene_is_motion_with_no_audio(self):
+        it = self.items()["S2"]
+        self.assertEqual(it["kind"], "motion")
+        self.assertFalse(it["to_camera"])
+        self.assertEqual([m["role"] for m in it["medias"]],
+                         ["start_image", "end_image"])
+        self.assertEqual(it["lines"], [])
+        self.assertEqual(mi.violations(it), [])
+
+    def test_its_duration_is_its_own_slice_of_the_one_track(self):
+        it = self.items()["S2"]
+        # vo/timing.json: S2 runs 8.92 → 14.92, its own 6.0 s of the one read
+        self.assertEqual(it["params"]["duration"], 6)
+
+    def test_the_voice_is_still_recorded_and_laid_over_at_the_edit(self):
+        it = self.items()["S2"]
+        self.assertEqual(it["vo_over"], "vo/S2.mp3")
+
+    def test_the_prompt_drops_the_lip_line_and_says_nobody_speaks(self):
+        prompt = self.items()["S2"]["params"]["prompt"]
+        self.assertNotIn("Natural lip movement", prompt)
+        self.assertIn("Nobody speaks.", prompt)
+        self.assertNotIn("@Audio1", prompt)
+
+    def test_a_b_roll_scene_with_audio_attached_is_refused(self):
+        it = self.items()["S2"]
+        it["medias"].append({"role": "audio_references", "value": "vo/S2.mp3"})
+        bad = mi.violations(it)
+        self.assertTrue(any("B-roll scene with audio attached" in b for b in bad), bad)
+
+    def test_an_insert_inside_another_scenes_beat_is_refused(self):
+        it = self.items()["S1"]
+        it["beats"][2]["do"] = ("*(insert, cut over the running voice)* seated "
+                                "at the other table")
+        bad = mi.violations(it)
+        self.assertTrue(any("B-roll is a scene, not an insert" in b for b in bad), bad)
+
+    def test_a_scene_that_lists_cutaways_is_refused(self):
+        it = self.items()["S1"]
+        it["cutaways"] = "the tube in the hand, the jars on the shelf"
+        bad = mi.violations(it)
+        self.assertTrue(any("B-roll is a scene, not an insert" in b for b in bad), bad)
+        self.assertTrue(any("Cutaways" in b for b in bad), bad)
+
+
+class TheHoldSentenceCannotContradictABeat(unittest.TestCase):
+    """Live 2026-09-22: the first frame's Lighting honestly ended "no
+    practicals, no fill, no running water" — true of that frame — and the
+    consistency block then told the clip "same … no running water …
+    throughout" while beat 4 moved the hand under the running tap. The clip
+    obeyed both and ran the tap with nobody turning it on (the owner: "the water
+    just magically turned on"). A hold sentence says what does NOT change,
+    so a negation a beat undoes is dropped from it and named."""
+
+    def scene(self, lighting, dos):
+        return {"id": "SX", "setting": "A ROOM", "to_camera": False,
+                "frames": [{"role": "first", "lighting": lighting},
+                           {"role": "last", "camera": "same", "delta": "the hand is down"}],
+                "beats": [{"do": d} for d in dos]}
+
+    def test_a_negation_a_beat_undoes_is_dropped_and_named(self):
+        sc = self.scene("plain daylight across the counter, flat, no fill, "
+                        "no running water",
+                        ["moves the hand under the running tap"])
+        held, _ = mi.consistency_of(sc, talking=False)
+        self.assertNotIn("no running water", held)
+        self.assertEqual(mi.hold_dropped(sc), ["no running water"])
+
+    def test_the_rest_of_the_light_still_holds(self):
+        sc = self.scene("plain daylight across the counter, flat, no fill, "
+                        "no running water",
+                        ["moves the hand under the running tap"])
+        held, _ = mi.consistency_of(sc, talking=False)
+        self.assertIn("plain daylight across the counter", held)
+        self.assertIn("no fill", held)
+
+    def test_a_description_is_never_dropped_only_a_negation(self):
+        # "across" appears in both; a description of the light is not a
+        # claim a beat can falsify
+        sc = self.scene("daylight across the counter",
+                        ["works the fingertips across the back of the hand"])
+        self.assertEqual(mi.hold_dropped(sc), [])
+
+    def test_an_uncontradicted_negation_holds(self):
+        sc = self.scene("flat, no practicals, no fill",
+                        ["lifts the hand clear of the water"])
+        held, _ = mi.consistency_of(sc, talking=False)
+        self.assertIn("no practicals", held)
+        self.assertEqual(mi.hold_dropped(sc), [])
+
+
+class TheRunPicksTheModel(unittest.TestCase):
+    """the owner, 2026-09-22, after the first MiniMax B-roll: "when we do video
+    production we should have the ability to pick which models we want to
+    run with… the water just magically turned on and the scrubbing motion
+    was awkward… Lip sync looks good for sure though." One door for every
+    scene is the wrong shape when the best lip sync in the house is the
+    worst at physical cause and effect. The scene's pick beats the run's,
+    the run's beats the registry's, and a name nothing answers to is
+    refused."""
+
+    def plan(self):
+        return run.build_plan_from_brief(FIXTURES / "brief-block.md", "_fixture")
+
+    def clip(self, sid, model=None, scene_model=None):
+        plan = self.plan()
+        sc = next(s for s in plan["scenes"] if s["id"] == sid)
+        if scene_model:
+            sc = {**sc, "model": scene_model}
+        return run.clip_item_of(sc, plan.get("cast", {}), plan.get("piece", {}),
+                                "_fixture", TIMING, model)
+
+    def test_with_no_pick_the_registry_settles_it(self):
+        it = self.clip("S1")
+        self.assertEqual(it["model"], "seedance_2_5")
+        self.assertFalse(it["model_picked"])
+        self.assertEqual(it["model_pick_by"], "the registry")
+
+    def test_the_settled_door_keeps_the_last_frame_beside_the_audio(self):
+        it = self.clip("S1")
+        self.assertEqual([m["role"] for m in it["medias"]],
+                         ["start_image", "end_image", "audio_references"])
+
+    def test_a_name_nothing_answers_to_is_refused_with_the_menu(self):
+        it = self.clip("S1", model="sounds_made_up")
+        bad = it["model_missing"] + mi.violations(it)
+        self.assertTrue(any("sounds_made_up" in b and "seedance_2_5" in b
+                            for b in bad), bad)
+
+    def test_the_menu_prices_every_model_it_offers(self):
+        menu = mi.clip_models("motion")
+        settled = [r for r in menu if r["settled"]]
+        self.assertEqual([r["model"] for r in settled], ["seedance_2_5"])
+        for row in menu:
+            self.assertTrue(row["good_at"] and row["weak_at"], row["model"])
+            self.assertTrue(row["credits_per_second"], row["model"])
+
+
+class AFacelessFrameSaysWhereTheBodyIs(unittest.TestCase):
+    """the owner, 2026-09-22, on S6's first frame: "tell me how this angle makes
+    sense, the arms are so odd" — the left arm dropped in from the top-left
+    corner and the right hand came up from the bottom-right. A frame with no
+    face in it carries a `viewpoint`: whose eyes the camera is and which edge
+    every limb enters from. The edit keeps it; the gate refuses without it."""
+
+    VP = ("Her own point of view: the camera is where her eyes are, looking "
+          "down. Both forearms enter from the bottom edge of the frame, elbows "
+          "out of frame, angled slightly toward the basin. No arm enters from "
+          "any other edge.")
+
+    def items(self):
+        return by_id(run.batches_of(
+            run.build_plan_from_brief(FIXTURES / "brief-block.md", "_fixture"),
+            "_fixture", TIMING))
+
+    def test_the_first_frame_prompt_carries_the_viewpoint_after_the_camera(self):
+        prompt = self.items()["S2-F1"]["params"]["prompt"]
+        self.assertIn(self.VP, prompt)
+        self.assertLess(prompt.index("chest height"), prompt.index("point of view"))
+
+    def test_the_last_frame_edit_keeps_the_viewpoint(self):
+        prompt = self.items()["S2-FLAST"]["params"]["prompt"]
+        self.assertIn("The viewpoint does not change: " + self.VP, prompt)
+
+    def test_a_face_frame_needs_no_viewpoint(self):
+        # S1 is the speaker to camera — the face anchors the body
+        it = self.items()["S1-F1"]
+        self.assertNotIn("point of view", it["params"]["prompt"])
+        self.assertEqual(it["prompt_missing"], [])
+
+    def test_a_faceless_frame_without_one_is_refused(self):
+        text = (FIXTURES / "brief-block.md").read_text()
+        block = json.loads(re.search(r"```json\n(.*?)\n```", text, re.S).group(1))
+        s2 = next(sc for sc in block["scenes"] if sc["id"] == "S2")
+        s2["first_frame"].pop("viewpoint")
+        bad = mi.record_violations(block) if hasattr(mi, "record_violations") else \
+            mi.brief_violations(text.replace(self.VP, ""))
+        self.assertTrue(any("carries no 'viewpoint'" in b for b in bad), bad)
+
+
+class TheBeatGrammar(unittest.TestCase):
+    """One visible action, one verb, present tense. How a line is delivered
+    belongs in the bracket; a pause is a beat whose action is `holds`."""
+
+    def doc(self):
+        return scenes.json_block((FIXTURES / "brief-block.md").read_text())[0]
+
+    def test_a_beat_with_two_verbs_is_refused_by_name(self):
+        doc = self.doc()
+        doc["scenes"][0]["beats"][1]["do"] = "says the two words and shrugs"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("names more than one action" in b for b in bad), bad)
+        self.assertTrue(any("B2 of scene S1" in b for b in bad), bad)
+
+    def test_a_delivery_note_is_not_an_action(self):
+        doc = self.doc()
+        doc["scenes"][0]["beats"][1]["do"] = "stops"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("that is a delivery note, not an action" in b.lower()
+                            for b in bad), bad)
+
+    def test_a_pause_is_a_beat_and_holds_is_an_action(self):
+        self.assertEqual(mi.delivery_note("holds"), "")
+        self.assertEqual(mi.beat_faults({"n": 2, "do": "holds", "over": "the pause"}), [])
+
+    def test_what_counts_as_two_actions_and_what_does_not(self):
+        """The table these rules were tuned against — every line a real beat
+        from a brief written to this grammar (2026-09-19)."""
+        one = ["taps the back of her right hand once with her left fingertip",
+               "steadies the tube front-on and square to the lens",
+               "sets the tube down front-on and square to the lens",
+               "presses the grains flat until they break down",
+               "turns the forearm face-up", "nods once, small", "holds",
+               "counts four off on the fingers, one clause each"]
+        two = ["says the two words and shrugs, small, after them",
+               "taps one finger against the tube, then a second",
+               "brings the hand out from under the tap, and turns it to camera",
+               "stands and walks out of frame",
+               "takes the hand out of frame and leaves the tube standing"]
+        for t in one:
+            self.assertEqual(mi.action_count(t), 1, t)
+        for t in two:
+            self.assertGreater(mi.action_count(t), 1, t)
+
+    def test_a_voice_paragraph_with_a_dash_is_refused_by_name(self):
+        """the owner, 2026-09-19: humans don't use em dashes when speaking. The
+        voice model read every dash as 1.3-1.7 s of silence; the gate refuses
+        the written marks rather than letting a take carry them."""
+        doc = self.doc()
+        doc["scenes"][0]["voice"] = "This \u2014 the old surface \u2014 is why; it failed (again)."
+        bad = mi.brief_violations(doc)
+        names = [b for b in bad if "scene S1's 'voice' carries" in b]
+        self.assertEqual(len(names), 4, bad)
+        self.assertTrue(any("'em-dash' (2\u00d7)" in b for b in names), names)
+        self.assertTrue(any("'semicolon'" in b for b in names), names)
+        self.assertTrue(any("'opening parenthesis'" in b for b in names), names)
+        self.assertTrue(any("'closing parenthesis'" in b for b in names), names)
+
+    def test_an_ellipsis_in_the_voice_is_the_breath_and_passes(self):
+        # the owner, 2026-09-19: the ellipsis is the mid-thought breath — kept
+        doc = self.doc()
+        doc["scenes"][1]["voice"] = "Reaching for the top shelf... and checking first."
+        bad = mi.brief_violations(doc)
+        self.assertFalse(any("ellipsis" in b for b in bad), bad)
+
+    def test_a_spoken_paragraph_is_green(self):
+        doc = self.doc()
+        doc["scenes"][0]["voice"] = ("It comes back in the same place, every time. "
+                                     "That's not the product failing. Right? "
+                                     "That's the thing underneath it, doing what it does.")
+        self.assertEqual([b for b in mi.brief_violations(doc) if "'voice'" in b], [])
+        self.assertEqual(mi.voice_faults(doc["scenes"][0]["voice"]), [])
+        self.assertEqual([r["name"] for r in mi.voice_forbidden()][:2], ["em-dash", "en-dash"])
+
+    def test_per_scene_voice_settings_are_checked_against_the_model_limits(self):
+        doc = self.doc()
+        doc["scenes"][0]["voice_settings"] = {"stability": 0.6, "style": 0.1, "speed": 1.0}
+        self.assertEqual([b for b in mi.brief_violations(doc) if "voice_settings" in b], [])
+        doc["scenes"][0]["voice_settings"] = {"stability": 1.4, "speed": 0.5, "pitch": 2}
+        bad = [b for b in mi.brief_violations(doc) if "voice_settings" in b]
+        self.assertEqual(len(bad), 3, bad)
+        self.assertTrue(any("stability is 1.4" in b for b in bad), bad)
+        self.assertTrue(any("speed is 0.5" in b for b in bad), bad)
+        self.assertTrue(any("carries 'pitch'" in b for b in bad), bad)
+        plan = scenes.scenes_from_block(doc)
+        self.assertEqual(plan[0]["voice_settings"], {"stability": 1.4, "speed": 0.5, "pitch": 2})
+        self.assertEqual(plan[1]["voice_settings"], {})
+
+    def test_a_last_frame_camera_without_its_framing_is_refused(self):
+        doc = self.doc()
+        doc["scenes"][0]["last_frame"]["camera"] = "new angle"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("needs 'new angle to <framing>'" in b for b in bad), bad)
+
+    def test_a_camera_word_the_door_does_not_take_is_refused(self):
+        doc = self.doc()
+        doc["scenes"][0]["last_frame"]["camera"] = "a slow orbit"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("it is one of:" in b for b in bad), bad)
+
+    def test_all_four_camera_words_assemble(self):
+        for word, expect in (("same", "a locked frame"),
+                             ("push-in to close", "one slow push-in"),
+                             ("pull-out to a wide", "one slow pull-out"),
+                             ("new angle to a wide", "one move to a new angle")):
+            self.assertEqual(mi.camera_fault(word), "", word)
+            scene = {"frames": [
+                {"role": "first", "composition": "medium-close, chest up"},
+                {"role": "last", "camera": word}]}
+            phrase, sentence, missing = mi.camera_of(scene)
+            self.assertEqual(missing, [], word)
+            self.assertIn(expect, phrase, word)
+
+
+class TheGateReadsTheBrief(unittest.TestCase):
+    """rule 12's other half — `preflight.py check` reads the run's own brief
+    and names the key its block is missing."""
+
+    def setUp(self):
+        import shutil
+        import tempfile
+        self.tmp = Path(tempfile.mkdtemp(prefix="vm-brief-"))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.run_dir = self.tmp / "sample-run"
+        shutil.copytree(FIXTURES / "sample-run", self.run_dir)
+        (self.run_dir / "lines.json").write_text(json.dumps(
+            {"S1": "the paragraph", "S2": "the other paragraph"}))
+        self.preflight = load("preflight")
+
+    def check(self, brief_text):
+        (self.run_dir / "brief.md").write_text(brief_text)
+        p = self.tmp / "batch.json"
+        p.write_text(json.dumps({"items": []}))
+        return self.preflight.check(p, self.run_dir, "higgsfield-ui",
+                                    FIXTURES / "bank.json")[0]
+
+    def test_a_good_block_passes_the_gate(self):
+        fails = self.check((FIXTURES / "brief-block.md").read_text())
+        self.assertEqual([f for f in fails if "[rule 12]" in f], [], fails)
+
+    def test_the_gate_names_the_missing_key(self):
+        text = (FIXTURES / "brief-block.md").read_text().replace(
+            '"emotion": "recognition",', "")
+        fails = "\n".join(self.check(text))
+        self.assertIn("[rule 12]", fails)
+        self.assertIn("scene S1 is missing 'emotion'", fails)
+
+    def test_a_block_that_will_not_parse_is_refused(self):
+        text = (FIXTURES / "brief-block.md").read_text().replace(
+            '"lane": "ai",', '"lane": "ai",,')
+        fails = "\n".join(self.check(text))
+        self.assertIn("will not parse", fails)
+
+
+class TheEditorSheet(unittest.TestCase):
+    """What the editor receives per scene: the two frames by name, the door,
+    and the prompt exactly as the model gets it."""
+
+    def sheet(self):
+        import shutil
+        import tempfile
+        tmp = Path(tempfile.mkdtemp(prefix="vm-sheet-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        items = items_of()
+        clips = [it for it in items if it["kind"] in ("motion", "talking")]
+        stills = [it for it in items if it["kind"] not in ("motion", "talking")]
+        manifest = {it["id"]: {"file": f"media/{it['id']}.png", "model": "fixture-model"}
+                    for it in stills}
+        platform = load("provider_platform")
+        reg = platform.registry()
+        _, prov, _ = platform.resolve_provider("higgsfield-ui")
+        run.write_submit_md(tmp, clips, prov, reg, direct_manifest=manifest,
+                            still_for=run.still_for_map(stills))
+        return (tmp / "SUBMIT.md").read_text()
+
+    def test_the_sheet_names_both_frames_the_door_and_the_prompt(self):
+        text = self.sheet()
+        self.assertIn("**start_image (upload first)**: `media/S1-F1.png`", text)
+        # on the settled door the talking scene's last frame is uploaded too
+        self.assertIn("**end image (upload too)**: `media/S1-FLAST.png`", text)
+        self.assertIn("**start_image (upload first)**: `media/S2-F1.png`", text)
+        self.assertIn("**end image (upload too)**: `media/S2-FLAST.png`", text)
+        self.assertIn("higgsfield:connector", text)
+        self.assertIn("**beats**: 4", text)
+        self.assertIn("**Prompt — exactly as the model receives it:**", text)
+        prompt = by_id(items_of())["S1"]["params"]["prompt"]
+        self.assertIn(prompt, text)
+
+    def test_the_sheet_prints_the_exact_call(self):
+        """Every media by its role, in order, and every param — so what is
+        printed is what is sent, with nothing to look up."""
+        text = self.sheet()
+        block = text[text.index("## S1"):text.index("## S2")]
+        self.assertIn("- **medias** (in this order):", block)
+        self.assertIn("- **start_image**: `media/S1-F1.png` (S1-F1)", block)
+        self.assertIn("- **end_image**: `media/S1-FLAST.png` (S1-FLAST)", block)
+        self.assertIn("- **audio_references**: `vo/S1.mp3`", block)
+        for param in ("**duration**: 9", "**aspect_ratio**: 9:16",
+                      "**mode**: omni_reference", "**generate_audio**: False",
+                      "**resolution**: 480p — the only resolution this door makes"):
+            self.assertIn(param, block)
+        block2 = text[text.index("## S2"):]
+        self.assertIn("- **start_image**: `media/S2-F1.png` (S2-F1)", block2)
+        self.assertIn("- **end_image**: `media/S2-FLAST.png` (S2-FLAST)", block2)
+
+    def test_the_sheet_never_lists_a_frame_as_its_own_editor_block(self):
+        text = self.sheet()
+        self.assertNotIn("## S1-F1", text)
+        self.assertNotIn("## S1-FLAST", text)
+
+
+class TheColourMatch(unittest.TestCase):
+    """Every edit is held to the frame it came from — resized, then matched
+    per channel. Pure PIL; skipped where PIL is not installed."""
+
+    def setUp(self):
+        self.cm = load("colour_match")
+        if not self.cm.HAVE_PIL:
+            self.skipTest("no PIL on this machine")
+        import tempfile
+        self.tmp = Path(tempfile.mkdtemp(prefix="vm-cm-"))
+
+    def images(self):
+        from PIL import Image
+        ref = Image.new("RGB", (40, 60), (120, 130, 140))
+        src = Image.new("RGB", (20, 30), (30, 200, 60))   # wrong size, wrong colour
+        return src, ref
+
+    def test_the_edit_is_resized_and_matched_to_the_frame(self):
+        src, ref = self.images()
+        out = self.cm.colour_match(src, ref)
+        self.assertEqual(out.size, ref.size)
+        self.assertEqual(out.getpixel((1, 1)), ref.getpixel((1, 1)))
+
+    def test_match_file_writes_in_place_and_never_raises(self):
+        src, ref = self.images()
+        s, r = self.tmp / "edit.png", self.tmp / "first.png"
+        src.save(s)
+        ref.save(r)
+        self.assertTrue(self.cm.match_file(s, r))
+        from PIL import Image
+        with Image.open(s) as got:
+            self.assertEqual(got.size, ref.size)
+        self.assertFalse(self.cm.match_file(self.tmp / "nope.png", r))
+
+    def test_the_machine_hand_matches_an_edit_to_the_frame_it_edits(self):
+        seen = {}
+        saved = run.colour_match_to
+        item = {"id": "S1-FLAST", "edit_of": "S1-F1"}
+        manifest = {"S1-F1": {"file": "media/S1-F1.png"}}
+        self.assertFalse(run.colour_match_to(item, None, manifest))     # nothing made
+        self.assertFalse(run.colour_match_to({"id": "S1-F1"}, "x.png", {}))  # not an edit
+        run.colour_match_to = saved
+        del seen
+
+
+class TheOldShapeStillPlans(unittest.TestCase):
+    def test_a_timed_brief_still_parses_as_one_frame_one_line(self):
+        text = (FIXTURES / "brief-frames.md").read_text()
+        timed = ("**Scene 1 · 0:00–0:05 · 5s · TYPE A**\n\n"
+                 "**Who:** THE SPEAKER · **Still:** new — a table, chest up\n"
+                 "> **Say:** \"One line only.\"\n"
+                 "**Delivery:** [flat]\n")
+        ss = scenes.parse(timed)
+        self.assertEqual(len(ss), 1)
+        self.assertEqual(ss[0]["shape"], "timed")
+        self.assertEqual(ss[0]["seconds"], 5.0)
+        self.assertEqual(len(ss[0]["frames"]), 1)
+        self.assertEqual(ss[0]["beats"], [])
+        self.assertEqual(ss[0]["voice"], "One line only.")
+        self.assertNotEqual(scenes.parse(text)[0]["shape"], "timed")
+
+    def test_an_old_plan_still_makes_the_old_items(self):
+        plan = json.loads((FIXTURES / "run-plan.json").read_text())
+        run.prompt_mod.use_brand(plan.get("brand") or "_fixture")
+        items = run.batches_of(plan, "_fixture")
+        self.assertTrue(items)
+        self.assertTrue(all(it["kind"] in ("motion", "still", "cast", "edit", "audio")
+                            for it in items))
+        self.assertFalse(any("beats" in it for it in items))
+
+
+class BRollAndCardsAreMadeAtProduction(unittest.TestCase):
+    """the owner, 2026-09-23: "We need to ensure b-roll makes it into the actual
+    production brief too, clearly AFTER a-roll is detailed, and it's carried
+    through our process properly." B-roll and cards are MADE at production;
+    the edit only composes type. The v13 fixture: S1 to camera, S2 B-roll, S3
+    a card, and a roll sheet carrying two make-list rows and dropping one."""
+
+    BRIEF = FIXTURES / "brief-v13.md"
+
+    def text(self):
+        return self.BRIEF.read_text()
+
+    def block(self):
+        doc, why = scenes.json_block(self.text())
+        self.assertIsNone(why, why)
+        return doc
+
+    def with_block(self, doc):
+        head = self.text().split("```json")[0]
+        return head + "```json\n" + json.dumps(doc, indent=1) + "\n```\n"
+
+    def plan(self, text=None):
+        if text is None:
+            return run.build_plan_from_brief(self.BRIEF, "_fixture")
+        p = Path(self._tmp()) / "brief.md"
+        p.write_text(text)
+        return run.build_plan_from_brief(p, "_fixture")
+
+    def _tmp(self):
+        import shutil
+        import tempfile
+        d = tempfile.mkdtemp(prefix="vm-v13-")
+        self.addCleanup(shutil.rmtree, d, True)
+        return d
+
+    def items(self):
+        return by_id(run.batches_of(self.plan(), "_fixture", TIMING))
+
+    # ---- the brief as written
+
+    def test_the_v13_brief_is_green_and_only_warns_on_the_unsettled_figure(self):
+        self.assertEqual(mi.brief_violations(self.text()), [])
+        fails, warns = mi.production_gate(self.text(), self.plan()["scenes"])
+        self.assertEqual(fails, [])
+        self.assertTrue(any("[UNFILLED]" in w for w in warns), warns)
+
+    def test_the_scene_list_is_one_list_in_play_order(self):
+        plan = self.plan()
+        self.assertEqual([(s["id"], s["type"]) for s in plan["scenes"]],
+                         [("S1", "A"), ("S2", "B"), ("S3", "C")])
+
+    # ---- what production makes
+
+    def test_b_roll_is_a_silent_clip_and_the_card_is_one_plate_and_no_clip(self):
+        items = self.items()
+        self.assertEqual(items["S1"]["kind"], "talking")
+        self.assertEqual(items["S2"]["kind"], "motion")
+        self.assertFalse(items["S2"]["to_camera"])
+        self.assertEqual(items["S2"]["vo_over"], "vo/S2.mp3")
+        plate = items["S3-PLATE"]
+        self.assertEqual(plate["kind"], "still")
+        self.assertEqual(plate["contract"], "still-generate")
+        self.assertEqual(plate["for"], "S3")
+        self.assertNotIn("S3", items)          # no clip for a card
+        self.assertEqual([i for i in items if i.startswith("S3")], ["S3-PLATE"])
+        self.assertEqual(mi.violations(plate), [])
+
+    def test_the_card_words_travel_as_data_and_never_enter_the_prompt(self):
+        plate = self.items()["S3-PLATE"]
+        prompt = plate["params"]["prompt"]
+        for line in ("FOUR TRIES", "ONE ANSWER"):
+            self.assertNotIn(line, prompt)
+        self.assertIn(mi.card_plate()["clean_line"], prompt)
+        self.assertTrue(prompt.startswith("a plain white till receipt"))
+        self.assertEqual(plate["card"], {
+            "lines": ["FOUR TRIES", "ONE ANSWER", "FROM [UNFILLED]"],
+            "lands_on": "That is the part nobody says out loud.",
+            "sfx": "a till ding"})
+        card = next(s for s in self.plan()["scenes"] if s["id"] == "S3")["card"]
+        self.assertEqual(card["lines"], plate["card"]["lines"])
+        self.assertEqual(card["sfx"], "a till ding")
+
+    def test_the_plate_passes_the_post_effects_rule(self):
+        preflight = load("preflight")
+        prompt = self.items()["S3-PLATE"]["params"]["prompt"]
+        self.assertEqual(preflight.post_effect_hits(prompt), [])
+
+    def test_the_view_shows_the_card_and_the_roll_sheet(self):
+        view = scenes.render_view(self.block())
+        self.assertIn("**S3 · CARD**", view)
+        self.assertIn("FOUR TRIES / ONE ANSWER", view)
+        self.assertIn("## Roll sheet check", view)
+
+    # ---- cards refused by name
+
+    def test_a_card_with_words_in_its_plate_is_refused(self):
+        doc = self.block()
+        doc["scenes"][2]["plate"] = 'a receipt reading "FOUR TRIES" on a counter'
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("card S3's plate has words in it" in b for b in bad), bad)
+
+    def test_a_card_line_copied_into_the_plate_is_refused(self):
+        doc = self.block()
+        doc["scenes"][2]["plate"] += ", printed with four tries across the top"
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("plate has words in it" in b for b in bad), bad)
+
+    def test_a_card_with_no_words_or_on_camera_is_refused(self):
+        doc = self.block()
+        doc["scenes"][2]["lines"] = []
+        doc["scenes"][2]["to_camera"] = True
+        bad = mi.brief_violations(doc)
+        self.assertTrue(any("card S3's 'lines'" in b for b in bad), bad)
+        self.assertTrue(any("card S3's 'to_camera'" in b for b in bad), bad)
+
+    # ---- to_camera is said, never guessed
+
+    def test_a_block_scene_with_no_to_camera_is_refused_by_id(self):
+        doc = self.block()
+        del doc["scenes"][1]["to_camera"]
+        text = self.with_block(doc)
+        self.assertTrue(any("scene S2 is missing 'to_camera'" in b
+                            for b in mi.brief_violations(text)))
+        plan = self.plan(text)
+        s2 = next(s for s in plan["scenes"] if s["id"] == "S2")
+        self.assertTrue(s2["to_camera_missing"])
+        fails, _ = mi.production_gate(text, plan["scenes"])
+        self.assertTrue(any(f.startswith("scene S2 does not say to_camera") for f in fails), fails)
+        clip = by_id(run.batches_of(plan, "_fixture", TIMING))["S2"]
+        self.assertTrue(any("does not say to_camera" in v for v in mi.violations(clip)))
+
+    def test_a_markdown_scene_with_no_to_camera_is_refused_not_defaulted_to_talking(self):
+        text = (FIXTURES / "brief-frames.md").read_text().replace(
+            "**Who:** THE SPEAKER · **To camera:** no", "**Who:** THE SPEAKER")
+        parsed = scenes.parse(text)
+        s2 = next(s for s in parsed if s["id"] == "S2")
+        self.assertTrue(s2["voice"])                 # it has a voice ...
+        self.assertFalse(s2["to_camera"])            # ... and is NOT made a face
+        self.assertTrue(s2["to_camera_missing"])
+        fails, _ = mi.production_gate(text, parsed)
+        self.assertTrue(any("scene S2 does not say to_camera" in f for f in fails), fails)
+
+    # ---- the roll sheet
+
+    def fails_for(self, doc):
+        text = self.with_block(doc)
+        return mi.production_gate(text, scenes.parse(text))[0]
+
+    def test_a_make_list_row_with_no_scene_and_no_reason_is_refused_by_row(self):
+        doc = self.block()
+        doc["roll_sheet"][2]["dropped"] = ""
+        fails = self.fails_for(doc)
+        self.assertTrue(any("'0:25 · [shows: the street outside]'" in f and
+                            "maps to no scene" in f for f in fails), fails)
+
+    def test_a_b_row_on_a_talking_scene_is_refused(self):
+        doc = self.block()
+        doc["roll_sheet"][0]["scene"] = "S1"
+        fails = self.fails_for(doc)
+        self.assertTrue(any("maps to S1, which is a to-camera scene" in f for f in fails), fails)
+
+    def test_a_c_row_on_a_b_roll_scene_is_refused(self):
+        doc = self.block()
+        doc["roll_sheet"][1]["scene"] = "S2"
+        fails = self.fails_for(doc)
+        self.assertTrue(any("a C row is made as a card scene" in f for f in fails), fails)
+
+    def test_a_row_naming_a_scene_that_does_not_exist_is_refused(self):
+        doc = self.block()
+        doc["roll_sheet"][0]["scene"] = "S9"
+        fails = self.fails_for(doc)
+        self.assertTrue(any("names scene 'S9'" in f for f in fails), fails)
+        # and the preflight brief gate says the same thing, as rule 12
+        self.assertTrue(any("names scene 'S9'" in b for b in mi.brief_violations(doc)))
+
+    def test_the_views_table_is_read_when_the_block_has_none(self):
+        doc = self.block()
+        del doc["roll_sheet"]
+        rows = mi.roll_sheet_of(self.with_block(doc))
+        self.assertEqual([r["scene"] for r in rows], ["S2", "S3", ""])
+        self.assertEqual(self.fails_for(doc), [])
+
+    def test_an_old_brief_with_no_roll_sheet_is_warned_never_refused(self):
+        text = (FIXTURES / "brief-block.md").read_text()
+        fails, warns = mi.production_gate(text, scenes.parse(text))
+        self.assertEqual(fails, [])
+        self.assertTrue(any("carries no roll sheet" in w for w in warns), warns)
+        self.assertEqual(mi.brief_violations(text), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

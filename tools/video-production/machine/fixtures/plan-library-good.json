@@ -1,0 +1,27 @@
+{
+ "_readme": "TEST-ONLY. A brief block whose every named element is a defined row in fixtures/element-library/. 'unfilled' and an empty dial are dials nobody set, and pass.",
+ "piece": {
+  "style": "a grade sentence, never an id \u2014 not asked about",
+  "style_id": "fixture-look"
+ },
+ "scenes": [
+  {
+   "id": "S1",
+   "delivery": {
+    "humor": "none",
+    "style": "deadpan",
+    "register": "plain-flat",
+    "pacing": "unfilled"
+   }
+  },
+  {
+   "id": "S2",
+   "delivery": {
+    "humor": "dry",
+    "style": "storyteller",
+    "register": "warm-unhurried",
+    "pacing": ""
+   }
+  }
+ ]
+}

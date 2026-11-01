@@ -1,0 +1,125 @@
+{
+ "_readme": "Every variable this chain needs from OUTSIDE itself, and the source the owner's machine resolves it from. A parity run (CM-2) fills the values by running HIS resolution over these source strings for the brand under test, then passes the result as --config. It is a TEMPLATE, not a config: it names no brand and holds no value (workspace rule 7, rule-9 (brand home)), and the engine never reads it. Brand-shaped values are files under brands/<brand>/ — the chain declares that home as the root `brand_home` and the run supplies the read text; nothing brand-substituted is stored in this chain.",
+ "vars": {
+  "today": {
+   "damon_source": "!today",
+   "means": "computed by his machine at run time",
+   "used_by": ["stage0", "stage1", "stage2", "stage1b", "stage3", "stage4",
+               "stage5", "stage6", "stage7", "stage8", "stage9"]
+  },
+  "source": {
+   "damon_source": "~source",
+   "means": "supplied by the run — the teardown record, or raw copy to swipe. His positional argument, read through his multi-shape path probe",
+   "used_by": ["stage0", "stage1"]
+  },
+  "formats": {
+   "damon_source": "?formats",
+   "means": "rendered from his bank by machine/formats.py against the brand root; data, not a hand-kept table, which is why the bank was not resolved into this chain",
+   "used_by": ["stage0", "stage8"]
+  },
+  "avatars": {
+   "damon_source": "?roster",
+   "means": "a query against the brand's language banks — the avatar roster line his runner builds, or the no-banks sentinel",
+   "used_by": ["stage0"]
+  },
+  "concept_brief": {
+   "damon_source": "=@stage0 + blank line + @stage2",
+   "means": "his triage and spec outputs joined; a derived value here only because inputs bind one reference per name — see provenance.gaps",
+   "used_by": ["stage1b"]
+  },
+  "context_index": {
+   "damon_source": "?context.index(brand, always=...)",
+   "means": "the index of everything the brand knows, built by his machine/context.py",
+   "used_by": ["stage1b"]
+  },
+  "always_loaded": {
+   "damon_source": "?always",
+   "means": "the files loaded regardless of what the scout picks — the product file and the brand's avatar, language and offer banks",
+   "used_by": ["stage1b"]
+  },
+  "avatar": {
+   "damon_source": "brands/<brand>/customer-experience/avatar.md",
+   "means": "a brand-home file, read by his machine AFTER triage names the avatar; his brand map (variables/copy.md) may redirect it",
+   "used_by": ["stage3"]
+  },
+  "language_bank": {
+   "damon_source": "brands/<brand>/customer-experience/language-bank.md",
+   "means": "a brand-home file, read by his machine; his brand map may redirect it",
+   "used_by": ["stage3", "stage5", "stage6", "stage7", "stage8"]
+  },
+  "product_file": {
+   "damon_source": "brands/<brand>/products/",
+   "means": "a brand-home file, named by the run",
+   "used_by": ["stage3", "stage4", "stage6", "stage7", "stage8"]
+  },
+  "offer_file": {
+   "damon_source": "brands/<brand>/products/offer-bank.md",
+   "means": "a brand-home file, read by his machine; his brand map may redirect it",
+   "used_by": ["stage3", "stage4", "stage6", "stage7", "stage8", "stage9"]
+  },
+  "brand_context": {
+   "damon_source": "?context.load(picked)",
+   "means": "the brand files the scout picked, loaded and concatenated by his machine",
+   "used_by": ["stage3", "stage5", "stage6", "stage7", "stage8"]
+  },
+  "brand_name": {
+   "damon_source": "#brand_name",
+   "means": "supplied when the run started",
+   "used_by": ["stage3"]
+  },
+  "language_injection": {
+   "damon_source": "?language:injection",
+   "means": "the language layer queried for the `injection` entry of language-profile.json",
+   "used_by": ["stage3"]
+  },
+  "language_hooks": {
+   "damon_source": "?language:hooks",
+   "means": "the language layer queried for the `hooks` entry of language-profile.json",
+   "used_by": ["stage5"]
+  },
+  "language_expansion": {
+   "damon_source": "?language:expansion",
+   "means": "the language layer queried for the `expansion` entry of language-profile.json",
+   "used_by": ["stage6"]
+  },
+  "language_close": {
+   "damon_source": "?language:close",
+   "means": "the language layer queried for the `close` entry of language-profile.json",
+   "used_by": ["stage7"]
+  },
+  "language_render": {
+   "damon_source": "?language:render",
+   "means": "the language layer queried for the `render` entry of language-profile.json",
+   "used_by": ["stage8"]
+  },
+  "hook_count": {
+   "damon_source": "#hooks",
+   "means": "supplied when the run started; his default is 5",
+   "used_by": ["stage5"]
+  },
+  "output_formats": {
+   "damon_source": "#write_as",
+   "means": "supplied when the run started; his default is every format in the bank — what we are WRITING, not what the source was",
+   "used_by": ["stage8"]
+  },
+  "channel": {
+   "damon_source": "#channel",
+   "means": "supplied when the run started; where the copy runs",
+   "used_by": ["stage8"]
+  },
+  "source_reference": {
+   "damon_source": "~source_reference",
+   "means": "supplied by the run — the link or name of the source, for the brief; his default is the source filename stem",
+   "used_by": ["stage9"]
+  }
+ },
+ "roots": {
+  "brand_home": {
+   "declared": "brands",
+   "means": "the one brand home (rule-9). The chain declares it; a run points it elsewhere with --root brand_home=PATH, which the same check judges"
+  }
+ },
+ "models_bound": {
+  "claude": "claude-opus-5"
+ }
+}

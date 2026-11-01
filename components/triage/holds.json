@@ -1,0 +1,43 @@
+{
+ "_schema": "ATL-50 (holds carried): {\"holds\": [{\"id\", \"ruling\", \"source\", \"issues\": [\"<component>#<n>\", ...]}]}. Read by new-workflow-design/builds/atlas/tools/triage_rulings.py (--holds) on every refresh: each listed issue is marked held, an action whose not-fixed issues are all held shows held. Owner: the triage engine owner.",
+ "holds": [
+  {
+   "id": "keys-migration",
+   "ruling": "Held for the keys migration (decision log 2026-10-07, narrowed 2026-10-09; re-checked 2026-10-12): waits on the rest of SI-194 (readers use loader), SI-195 (template canonical names) or Track B",
+   "source": "components/keys/plans/2026-10-07-held-triage-issues.md",
+   "issues": [
+    "ad-handoff#1",
+    "audio-teardown#11",
+    "audio-teardown#15",
+    "audio-teardown#2",
+    "audio-teardown#3",
+    "casting#3",
+    "email-production#7",
+    "email-production#9",
+    "image-edit#4",
+    "image-production#1",
+    "image-production#3",
+    "image-production#7",
+    "keys#1",
+    "keys#11",
+    "keys#5",
+    "keys#6",
+    "keys#8",
+    "marketing-chain-checks#15",
+    "marketing-chain-checks#29",
+    "meta-upload#26",
+    "meta-upload#3",
+    "research-gatherer#2",
+    "run-kit#20",
+    "swipe-organic#4",
+    "swipe-paid#9",
+    "video-edit#15",
+    "video-production#1",
+    "video-production#6",
+    "video-teardown#1",
+    "video-teardown#22",
+    "video-teardown#23"
+   ]
+  }
+ ]
+}

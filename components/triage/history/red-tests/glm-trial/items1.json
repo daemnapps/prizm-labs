@@ -1,0 +1,86 @@
+[
+ {
+  "id": "R1",
+  "suite": "new-workflow-design/builds/atlas/test_atl8_deck_universe.py",
+  "first_failing_line": "FAIL LIVE: the shed rows come back as `unrecorded`, one per shed row \u2014 427 unrecorded vs 441 shed",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R2",
+  "suite": "new-workflow-design/builds/brand-home/test_brand_home.py",
+  "first_failing_line": "ValueError: '~/Projects/workspace' is not in the subpath of '/var/folders/g9/mr1j38hj77bg9nhrb3zfh8xm0000gn/T/bh1-8uj6o7qo/home/pinned' OR one path is relative and the other is absolute.",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R3",
+  "suite": "new-workflow-design/builds/chain-qa/test_chain_spec.py",
+  "first_failing_line": "FAIL the dead config value 'gemini-3-pro-image' appears nowhere in the payload",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R4",
+  "suite": "new-workflow-design/builds/chain-qa/test_fixture_manifests.py",
+  "first_failing_line": "FAIL EMPTY IS NOT A PASS is not reached: no fail says the matrix would run nowhere",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R5",
+  "suite": "new-workflow-design/builds/consumer-plane/test_inline_bootstrap.py",
+  "first_failing_line": "FAIL test_check_either_covers_the_copies_or_says_it_did_not",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R6",
+  "suite": "new-workflow-design/builds/cs-loop/test_cs_digest.py",
+  "first_failing_line": "FAIL \u2014 GORG-C3 the CS weekly digest",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R7",
+  "suite": "new-workflow-design/builds/cs-loop/test_cs_tick.py",
+  "first_failing_line": "FAIL no new LaunchAgent plist was added \u2014 ['com.company.workflow-worker-system.plist', 'com.company.workflow-worker-atlas.plist', 'com.company.workflow-worker-s2.plist', 'com.company.workflow-worker.plist', 'com.company.workflow-worke\u2026",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R8",
+  "suite": "new-workflow-design/builds/dashboard/test_viewer_brand_names.py",
+  "first_failing_line": "FAIL \u2014 viewer sources contain brand keys or labels:",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R9",
+  "suite": "new-workflow-design/builds/drive-pipe/test_gdrive_creator.py",
+  "first_failing_line": "FAIL gdoc_out.py --help runs, so the new import chain resolves \u2014 Traceback (most recent call last):",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R10",
+  "suite": "new-workflow-design/builds/feedback-twins/test_chat_usage.py",
+  "first_failing_line": "FAIL: test_manifest_validates_clean (__main__.TheManifest)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R11",
+  "suite": "new-workflow-design/builds/feedback-twins/test_fb_view.py",
+  "first_failing_line": "FAIL CLOSED, exercised through the generator's own reader. ... ok",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R12",
+  "suite": "new-workflow-design/builds/identity-training/test_identity_training.py",
+  "first_failing_line": "FAIL shim: dry character run exits 0 \u2014 ne 142, in character_source",
+  "exit_code": 1,
+  "kind": "red"
+ }
+]

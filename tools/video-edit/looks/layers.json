@@ -1,0 +1,174 @@
+{
+ "_readme": "How each layer the edit sets on top LOOKS and where it SITS — settings, never per-video decisions, and never a brand name. Fonts are ids from looks/fonts.json (`font` for body, `font_heavy` for display). Where a layer sits is a `zone` id from looks/placement.json — never a raw height; every zone already clears the platforms' buttons (machine/defaults.json → safe_zones.surfaces) and moves off a face when production marks one. `text` holds the spacing every text layer uses (one normal space between words). Platform UI styles live in looks/platform_ui.json, icons in looks/icons.json. A layer's words come from the plan, never from here. Only the owner signs a row approved.",
+ "asset": "video",
+ "bank": "layer-style",
+ "updated": "2026-09-23",
+ "font": "inter",
+ "font_heavy": "montserrat",
+ "hook": {
+  "zone": "top-headline",
+  "font": "montserrat",
+  "weight": 900,
+  "size_px": 64,
+  "ink": "#111111",
+  "paper": "#FFFFFF"
+ },
+ "card": {
+  "zone": "center-block",
+  "font": "montserrat",
+  "weight": 900,
+  "size_px": 76,
+  "ink": "#FFFFFF",
+  "stroke": "#000000",
+  "stroke_px": 8,
+  "stagger_s": 0.35,
+  "hold_s_per_word": 0.32,
+  "hold_min_s": 1.4
+ },
+ "screen": {
+  "zone": "center-block",
+  "font": "inter",
+  "size_px": 40,
+  "surfaces": {
+   "review": {
+    "what": "A review card: five stars, a name, the review text.",
+    "paper": "#FFFFFF",
+    "ink": "#16181D",
+    "accent": "#F5B301"
+   },
+   "comment": {
+    "what": "A social comment: round avatar, handle, the comment in a bubble.",
+    "paper": "#FFFFFF",
+    "ink": "#16181D",
+    "accent": "#8A8F98"
+   },
+   "dm": {
+    "what": "A text thread: bubbles alternating them / us, newest last.",
+    "paper": "#E9E9EB",
+    "ink": "#111111",
+    "accent": "#0A84FF"
+   },
+   "site": {
+    "what": "A web page: an address bar and the page's headline block.",
+    "paper": "#FFFFFF",
+    "ink": "#111111",
+    "accent": "#E6E8EC"
+   },
+   "order": {
+    "what": "An order confirmation: a tick, 'Order confirmed', the rows.",
+    "paper": "#FFFFFF",
+    "ink": "#111111",
+    "accent": "#1FAA59"
+   },
+   "search": {
+    "what": "A search bar with the query typed in, results under it.",
+    "paper": "#FFFFFF",
+    "ink": "#202124",
+    "accent": "#DADCE0"
+   }
+  }
+ },
+ "split": {
+  "divider_px": 6,
+  "divider": "#FFFFFF",
+  "label_size_px": 44,
+  "label_ink": "#111111",
+  "label_paper": "#FFFFFF",
+  "label_y_pct": 20,
+  "wipe_s": 0.6,
+  "font": "montserrat"
+ },
+ "greenscreen": {
+  "pip_width_pct": 40,
+  "pip_bottom_pct": 26,
+  "pip_right_pct": 6,
+  "cutout_height_pct": 58,
+  "cutout_bottom_pct": 24
+ },
+ "endcard": {
+  "zone": "center-block",
+  "font": "montserrat",
+  "offer_size_px": 70,
+  "cta_size_px": 54,
+  "guarantee_size_px": 34,
+  "ink": "#FFFFFF",
+  "cta_ink": "#111111",
+  "cta_paper": "#FFFFFF",
+  "stagger_s": 0.25
+ },
+ "lower_third": {
+  "zone": "lower-third",
+  "font": "inter",
+  "name_size_px": 46,
+  "title_size_px": 32,
+  "paper": "rgba(10,10,10,.78)",
+  "ink": "#FFFFFF",
+  "accent": "#FFFFFF",
+  "hold_s": 3.0
+ },
+ "annotation": {
+  "stroke_px": 10,
+  "ink": "#FF3B30",
+  "highlight": "rgba(255,216,74,.55)",
+  "draw_s": 0.35,
+  "hold_s": 1.6,
+  "anchors": {
+   "center": {
+    "x_pct": 50,
+    "y_pct": 48,
+    "w_pct": 40,
+    "h_pct": 18
+   },
+   "upper": {
+    "x_pct": 50,
+    "y_pct": 30,
+    "w_pct": 40,
+    "h_pct": 14
+   },
+   "lower": {
+    "x_pct": 50,
+    "y_pct": 60,
+    "w_pct": 40,
+    "h_pct": 14
+   },
+   "left": {
+    "x_pct": 30,
+    "y_pct": 48,
+    "w_pct": 30,
+    "h_pct": 18
+   },
+   "right": {
+    "x_pct": 70,
+    "y_pct": 48,
+    "w_pct": 30,
+    "h_pct": 18
+   }
+  }
+ },
+ "platform_ui": {
+  "_moved": "looks/platform_ui.json — one style row per kind, each with its own drawn spec, font id and zone"
+ },
+ "disclaimer": {
+  "zone": "fine-print",
+  "font": "inter",
+  "size_px": 26,
+  "ink": "rgba(255,255,255,.92)",
+  "shadow": "0 1px 4px rgba(0,0,0,.8)",
+  "min_s": 2.0
+ },
+ "text": {
+  "word_spacing": "normal",
+  "letter_spacing": "0",
+  "what": "every text layer: one normal space between words, the font's own letter spacing"
+ },
+ "icons": {
+  "zone": "left-rail",
+  "size": "m",
+  "hold_s": 1.6,
+  "ink": "#FFFFFF",
+  "accent": "#FF3B30",
+  "gold": "#F5B301",
+  "paper": "#FFFFFF",
+  "font": "montserrat"
+ }
+}

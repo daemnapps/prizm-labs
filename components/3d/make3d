@@ -1,0 +1,17 @@
+#!/bin/bash
+# make3d <image.png> <out.glb>  — local, free image-to-3D (TRELLIS.2 on Apple Silicon)
+# Install: bash components/3d/setup.sh --install --fetch  (trellis-mac/ here, weights in the Hugging Face cache).
+# LOCAL_STUDIO_FALLBACK may name an older tools folder whose 3d/trellis-mac is used when this one has none.
+HERE="$(cd "$(dirname "$0")" && pwd)"
+TRELLIS_DIR="${TRELLIS_DIR:-$HERE/trellis-mac}"
+if [ ! -x "$TRELLIS_DIR/.venv/bin/python" ] && [ -n "${LOCAL_STUDIO_FALLBACK:-}" ] \
+   && [ -x "$LOCAL_STUDIO_FALLBACK/3d/trellis-mac/.venv/bin/python" ]; then
+    TRELLIS_DIR="$LOCAL_STUDIO_FALLBACK/3d/trellis-mac"
+fi
+if [ ! -x "$TRELLIS_DIR/.venv/bin/python" ]; then
+    echo "make3d: TRELLIS.2 is not installed ($TRELLIS_DIR). Run: bash $HERE/setup.sh --install --fetch" >&2
+    exit 1
+fi
+export TRELLIS_DIR
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"  # weights are cached; skip slow Hub checks
+PYTHONUNBUFFERED=1 exec "$TRELLIS_DIR/.venv/bin/python" "$HERE/make3d.py" "$@"

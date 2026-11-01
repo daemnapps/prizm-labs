@@ -1,0 +1,25 @@
+{
+ "_what": "The fixed element list stage 1 maps every ad onto — the same nineteen keys for any ad from any brand, each tied to the Variable Index ids it covers. An element is what an editor or a producer touches; a variable is what the index counts.",
+ "curator": "the owner",
+ "elements": [
+  {"key": "hook_visual", "name": "Hook visual (layout)", "variables": ["V-hook.01", "V-hook.07", "V-hook.08", "V-edit.06"], "status": "draft"},
+  {"key": "hook_line", "name": "Hook line", "variables": ["V-hook.02", "V-hook.03", "V-hook.04", "V-hook.09"], "status": "draft"},
+  {"key": "first_frame", "name": "First frame", "variables": ["V-hook.05", "V-hook.06"], "status": "draft"},
+  {"key": "on_screen_text", "name": "On-screen text and platform furniture", "variables": ["V-hook.11", "V-text.02", "V-text.03", "V-text.04", "V-text.06"], "status": "draft"},
+  {"key": "product_reveal", "name": "Product reveal timing", "variables": ["V-prod.01", "V-prod.02", "V-prod.04", "V-prod.05"], "status": "draft"},
+  {"key": "demo_steps", "name": "Demo steps", "variables": ["V-proof.03", "V-proof.04", "V-proof.06"], "status": "draft"},
+  {"key": "result_shot", "name": "Result shot", "variables": ["V-proof.01", "V-proof.02", "V-proof.05"], "status": "draft"},
+  {"key": "problem_line", "name": "Problem line", "variables": ["V-struct.09", "V-struct.10"], "status": "draft"},
+  {"key": "captions", "name": "Captions", "variables": ["V-text.01"], "status": "draft"},
+  {"key": "sound", "name": "Sound (voice, music, effects)", "variables": ["V-sound.01", "V-sound.02", "V-sound.03", "V-sound.06", "V-sound.08", "V-sound.11"], "status": "draft"},
+  {"key": "pacing", "name": "Pacing and cut rhythm", "variables": ["V-edit.03", "V-edit.04", "V-edit.05", "V-sound.05", "V-sound.09"], "status": "draft"},
+  {"key": "length", "name": "Length", "variables": ["V-edit.01", "V-edit.02"], "status": "draft"},
+  {"key": "ask_placement", "name": "Ask placement and wording", "variables": ["V-ask.01", "V-ask.02", "V-ask.03", "V-ask.04", "V-ask.05"], "status": "draft"},
+  {"key": "talent", "name": "Talent", "variables": ["V-tal.01", "V-tal.02", "V-tal.03", "V-tal.04", "V-tal.05", "V-tal.09"], "status": "draft"},
+  {"key": "setting", "name": "Setting", "variables": ["V-look.01", "V-look.02", "V-look.05", "V-look.06"], "status": "draft"},
+  {"key": "wardrobe", "name": "Wardrobe", "variables": ["V-look.03", "V-look.04"], "status": "draft"},
+  {"key": "sku", "name": "Product / SKU", "variables": ["V-prod.03"], "status": "draft"},
+  {"key": "end_frame", "name": "End frame", "variables": ["V-ask.06"], "status": "draft"},
+  {"key": "camouflage", "name": "Camouflage (brand marks, AI tells, the 'not an ad' read)", "variables": ["V-look.07", "V-struct.01", "V-look.08"], "status": "draft"}
+ ]
+}

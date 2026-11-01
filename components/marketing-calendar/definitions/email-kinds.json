@@ -1,0 +1,19 @@
+{
+  "_what": "Which sends are DESIGNED emails and which stay LETTERS, decided at the calendar for every brand (the owner, 2026-10-17: \"when we do the marketing calendar every 2 weeks, we can also determine which emails become design and which ones stay less design. All mapping and context and runs need to operate on the same principles\"). Read by machine/kinds.py at layer 9 and by a two-week re-run. A brand may override a type in brands/<brand>/email-sms/email-kinds.json (same shape, its own types only).",
+  "_kinds": {
+    "design": "A short landing page: 5 to 8 pictures, no block over 30 words, about 90 in all; opens on big type + product or a photo hero; ends on the product card or the guarantee. For product spotlights, offers, objections, the guarantee, proof, moments.",
+    "letter": "A note from a person: 1 photo hero, maybe a customer quote; 3 or 4 short paragraphs, about 120 words; one button, one ask. For thank-yous, the mission, asking for his story, a founder's note."
+  },
+  "status": "draft",
+  "letter": [
+    "content-request",
+    "mission",
+    "founder-note",
+    "what-went-wrong",
+    "sunset",
+    "reader-question",
+    "affiliate-feature"
+  ],
+  "_letter": "Every type not listed here is DESIGN. A letter type is one whose job is a relationship (his story, the mission, a note from a person, a goodbye, a question back) rather than a product argument. Source: the BRAND-A week of 12 Oct 2026 (Mon VIP content-request, Wed loyal mission, Fri 30 personal Halloween note were letters; everything selling was designed).",
+  "default": "design"
+}

@@ -1,0 +1,36 @@
+{
+ "element": "delivery",
+ "asset": "delivery_style",
+ "source": "fixture",
+ "enforced_by": null,
+ "note": "TEST-ONLY. Invented rows; the real lists are components/elements/library/.",
+ "rows": [
+  {
+   "id": "deadpan",
+   "name": "deadpan",
+   "what": "level",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "storyteller",
+   "name": "storyteller",
+   "what": "told in order",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  }
+ ],
+ "duplicates": []
+}

@@ -1,0 +1,140 @@
+{
+ "element": "doctrine",
+ "asset": "awareness",
+ "source": "components/marketing-doctrine/frameworks.json",
+ "enforced_by": "every chain that binds the awareness slice",
+ "note": null,
+ "rows": [
+  {
+   "id": "most-aware",
+   "name": "Most Aware",
+   "what": "Knows the product, wants it, simply has not bought yet.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "level": 1,
+    "must": [
+     "State the product and the price or the deal, and stop."
+    ],
+    "must_not": [
+     "Explain anything",
+     "Re-sell a want that is already there"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "product-aware",
+   "name": "Product-Aware",
+   "what": "Knows the product exists but is not sold on it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "level": 2,
+    "must": [
+     "Do one of seven named jobs on the claim already in the market"
+    ],
+    "must_not": [
+     "Reintroduce the category from scratch",
+     "Talk as if the product were new"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "solution-aware",
+   "name": "Solution-Aware",
+   "what": "Carries the desire and knows a result is possible, but does not know a product delivers it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "level": 3,
+    "must": [
+     "Crystallise the desire or its solution in one line, then prove it"
+    ],
+    "must_not": [
+     "Mention price",
+     "Assume the product name means anything yet"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "problem-aware",
+   "name": "Problem-Aware",
+   "what": "Feels a need but has not connected it to any product category.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "level": 4,
+    "must": [
+     "Name the problem or the need directly, in the words the audience uses"
+    ],
+    "must_not": [
+     "Assume a solution is already known",
+     "Lead with a category the audience has not entered"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "unaware",
+   "name": "Unaware",
+   "what": "Does not know the desire or the need exists — or will not admit it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "level": 5,
+    "must": [
+     "Open on pure identification: describe the audience to itself until it is recognised"
+    ],
+    "must_not": [
+     "Mention price",
+     "Name the product",
+     "State the direct claim or the desire itself"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

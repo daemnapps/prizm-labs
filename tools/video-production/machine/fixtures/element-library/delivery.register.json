@@ -1,0 +1,36 @@
+{
+ "element": "delivery",
+ "asset": "register",
+ "source": "fixture",
+ "enforced_by": null,
+ "note": "TEST-ONLY. Invented rows; the real lists are components/elements/library/.",
+ "rows": [
+  {
+   "id": "plain-flat",
+   "name": "plain-flat",
+   "what": "ordinary",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "warm-unhurried",
+   "name": "warm-unhurried",
+   "what": "soft",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  }
+ ],
+ "duplicates": []
+}

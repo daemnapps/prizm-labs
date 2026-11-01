@@ -1,0 +1,303 @@
+{
+ "_readme": "The video machine's chain: a BRIEF from the teardown machine goes in, cut-ready scenes come out. This is the route AFTER teardown — teardown makes the brief, this turns the brief into output (the owner, 2026-09-02). Stages run in order for one piece. Var syntax matches the teardown machine so the two read alike: '=literal' · '@stageN' a prior stage's output · '!today' · anything else is a workspace-relative path, with 'brands/<brand>/...' filled from the run's brand at run time (rule 7). Stage 5 runs once PER SCENE ('scope': 'scene'); every other writing stage runs once per piece. Machine steps are named here so the chain reads as the whole process. The generation sequence every scene runs — voice, then the two stills, then the one clip, then the checks — is SCENE-GENERATION.md, the method page; the stages below are that sequence in the chain's own shape (2026-09-18 evening).",
+ "build_dir": "tools/video-production",
+ "stages": [
+  {
+   "stage": "stage0a",
+   "name": "Format read",
+   "runner": "claude-text",
+   "prompt": "stage0a-format-read-v1-damon.md",
+   "why": "rule the shape, and name what the brief has not decided",
+   "vars": {
+    "brief": "~brief",
+    "format_profiles": "tools/video-production/formats"
+   },
+   "prompt_dir": "stage-0-format-read"
+  },
+  {
+   "stage": "stage0b",
+   "name": "Production document",
+   "runner": "claude-text",
+   "prompt": "stage0b-production-document-v1-damon.md",
+   "why": "every fact decided once, before generation costs anything",
+   "vars": {
+    "brief": "~brief",
+    "format_read": "@stage1",
+    "format_profile": "~format_profile",
+    "brand_name": "~brand_name",
+    "product_file": "brands/<brand>/products",
+    "avatar": "brands/<brand>/core-avatars/<avatar>/profile.md",
+    "language_bank": "brands/<brand>/core-avatars/<avatar>/language/rules.md",
+    "today": "!today"
+   },
+   "prompt_dir": "stage-0-production-document"
+  },
+  {
+   "stage": "stage1",
+   "name": "Cast",
+   "runner": "image",
+   "prompt_dir": "stage-1-cast",
+   "prompt": "stage1-character-sheet-v2-damon.md",
+   "why": "the character sheets and boards a new cast member needs before training"
+  },
+  {
+   "stage": "stage1b",
+   "name": "Identity plan",
+   "runner": "claude-text",
+   "prompt": "stage1b-identity-plan-v1-damon.md",
+   "why": "what must be trained before a frame is worth generating",
+   "vars": {
+    "production_document": "@stage2",
+    "existing_identities": "~existing_identities",
+    "brand_assets": "brands/<brand>"
+   },
+   "prompt_dir": "stage-1b-identity-plan"
+  },
+  {
+   "stage": "stage1c",
+   "name": "Train identities",
+   "runner": "identity-training",
+   "why": "the plan's TRAINABLE rows, executed by components/identity-training",
+   "note": "machine work, not a prompt — one training run per subject, recorded as lora.json beside the asset in the brand folder"
+  },
+  {
+   "stage": "stage2",
+   "name": "Voice — the one read",
+   "runner": "voice",
+   "prompt_dir": "stage-2-voices",
+   "why": "the whole piece read ONCE, one custom voice per speaking role, chunked per scene paragraph and stitched so the read never restarts — never a call per line",
+   "note": "machine work. It runs BEFORE anything else generates: the track, its timing sheet and one slice per scene are what every beat downstream is timed against, and what a to-camera clip attaches."
+  },
+  {
+   "stage": "stage2b",
+   "name": "Ledgers",
+   "runner": "claude-text",
+   "prompt": "stage2b-ledgers-v1-damon.md",
+   "why": "consolidate the anti-drift tables and check them against each other",
+   "vars": {
+    "production_document": "@stage2",
+    "format_profile": "~format_profile"
+   },
+   "prompt_dir": "stage-2b-ledgers"
+  },
+  {
+   "stage": "stage3",
+   "name": "Scene prompts",
+   "runner": "claude-text",
+   "prompt": "stage3-scene-prompts-v6-damon.md",
+   "why": "assemble one eleven-section prompt per scene; sections 1-8 verbatim; section 9 is the first frame, the timeline and the last frame, each in its own door's order",
+   "vars": {
+    "production_document": "@stage2",
+    "ledgers": "@stage4",
+    "format_profile": "~format_profile",
+    "techniques": "components/marketing-doctrine/slices/techniques.md",
+    "mood": "components/marketing-doctrine/slices/mood.md",
+    "delivery": "components/marketing-doctrine/slices/delivery.md",
+    "model_inputs": "tools/video-production/machine/MODEL-INPUTS.md"
+   },
+   "prompt_dir": "stage-3-scenes"
+  },
+  {
+   "stage": "stage4p",
+   "name": "Platform + preflight",
+   "runner": "preflight",
+   "why": "the platform detected and the models shown; the batch refused until every gate is green",
+   "note": "machine/provider_platform.py then machine/preflight.py check — see formats/RUN-PROTOCOL.md"
+  },
+  {
+   "stage": "stage4",
+   "name": "Generate frames",
+   "runner": "scene-generator",
+   "why": "TWO stills a scene and no more — the FIRST FRAME generated, the LAST FRAME an edit of it naming only the delta — the whole set in ONE batch, because look and identity drift between batches, never within one",
+   "note": "machine work, not a prompt. The first frame carries the cast sheet; the edit carries two references, the frame first, and is colour-matched back to it. What happens between the two frames is beats on the clip's timeline — a beat is never generated as a still (SCENE-GENERATION.md)."
+  },
+  {
+   "stage": "stage4b",
+   "name": "Sound plan",
+   "runner": "claude-text",
+   "prompt_dir": "stage-4b-sound",
+   "prompt": "stage4b-sound-plan-v1-damon.md",
+   "why": "the bed, the effects and the room tone — everything heard that is not a spoken line",
+   "vars": {
+    "production_document": "@stage0b",
+    "scene_prompts": "@stage3",
+    "format_profile": "~format_profile"
+   }
+  },
+  {
+   "stage": "stage4c",
+   "name": "Generate sound",
+   "runner": "audio",
+   "why": "the bed (or the song), the effects and the room tone, generated from the plan",
+   "note": "machine work. A SUNG piece generates the song instead of a bed and carries its own vocal — never both. Effects marked CHECK are held until the clips exist, so nothing is doubled over sound a clip already carries."
+  },
+  {
+   "stage": "stage5",
+   "name": "QC",
+   "runner": "vision-judge",
+   "prompt": "stage5-qc-v2-damon.md",
+   "scope": "scene",
+   "why": "inspect every generated scene against what was specified",
+   "vars": {
+    "generated_scene": "@stage5g",
+    "scene_prompt": "@stage5",
+    "ground_truth": "~ground_truth",
+    "mode": "=glance",
+    "ceilings": "tools/video-production/machine/providers.json"
+   },
+   "prompt_dir": "stage-5-qc"
+  },
+  {
+   "stage": "stage5r",
+   "name": "Re-roll",
+   "runner": "scene-generator",
+   "why": "a flagged scene regenerates with its deviations named, up to twice; a label failure composites the real packshot instead of redrawing it",
+   "note": "machine work, not a prompt. What still fails after two re-rolls ships FLAGGED, never silently."
+  },
+  {
+   "stage": "stage5p",
+   "name": "Platform + preflight",
+   "runner": "preflight",
+   "why": "the platform detected and the models shown; the batch refused until every gate is green",
+   "note": "machine/provider_platform.py then machine/preflight.py check — see formats/RUN-PROTOCOL.md"
+  },
+  {
+   "stage": "stage5m",
+   "name": "Motion — one clip a scene",
+   "runner": "video",
+   "prompt_dir": "stage-4-motion",
+   "why": "the scene's two approved frames become ONE clip: the first frame as start_image, the last as end_image, and — to camera — the scene's own slice of the voice track as audio_references, with the prompt in the maker's four blocks. The step that costs real money, run last and only on frames that cleared QC",
+   "note": "machine work. Nothing else travels on the clip: the first frame already carries the identity, the wardrobe, the room and the light. Duration is the paragraph's, rounded up; no number is chosen here."
+  },
+  {
+   "stage": "stage5b",
+   "name": "Motion QC",
+   "runner": "vision-judge",
+   "prompt": "stage5b-motion-qc-v2-damon.md",
+   "prompt_dir": "stage-5b-motion-qc",
+   "scope": "scene",
+   "why": "identity hold, product constancy, anatomy, camera motivation, lip-sync class — every clip before it ships",
+   "vars": {
+    "generated_clip": "@stage5m",
+    "scene_prompt": "@stage3",
+    "start_frame": "@stage4",
+    "ceilings": "tools/video-production/machine/providers.json"
+   }
+  },
+  {
+   "stage": "stage5c",
+   "name": "Director pass",
+   "runner": "vision-judge",
+   "prompt": "stage5c-director-v5-damon.md",
+   "prompt_dir": "stage-5c-director",
+   "scope": "scene",
+   "why": "the creative QC the inspector is forbidden from offering — half-second, scroll stopper, dramatization, motion, format register, delivery landed",
+   "vars": {
+    "generated_scene": "@stage5m",
+    "scene_prompt": "@stage3",
+    "format_profile": "~format_profile",
+    "techniques": "components/marketing-doctrine/slices/techniques.md",
+    "mood": "components/marketing-doctrine/slices/mood.md",
+    "delivery": "components/marketing-doctrine/slices/delivery.md"
+   }
+  },
+  {
+   "stage": "stage6",
+   "name": "Handoff",
+   "runner": "claude-text",
+   "prompt": "stage6-handoff-v3-damon.md",
+   "why": "the pack the editor receives, and what it guarantees",
+   "vars": {
+    "production_document": "@stage2",
+    "scene_manifest": "@stage5g",
+    "qc_report": "@stage6"
+   },
+   "prompt_dir": "stage-6-handoff"
+  }
+ ],
+ "_variation_readme": "THE VARIATION CHAIN (the owner 2026-09-02, from the format-variation playbook — method-05). A variation is NOT a new film: the screenplay, blocking, dialogue, mechanics and edit are FROZEN, and only the rendering swaps. It runs AFTER a production is approved, and one approved production feeds unlimited variations — that is the scale multiplier. Stage v3 is deliberately MECHANICAL (machine/restyle.py, not a model): handing approved prompts to a model to restyle is what produced the slop run — it re-planned the film. Note the axis distinction: a VARIATION changes how the film looks. Changing the avatar, problem or angle changes what the film SAYS, which is a new production through stage0b with different inputs, never a variation.",
+ "variation_stages": [
+  {
+   "stage": "v0",
+   "name": "Style gate",
+   "runner": "human",
+   "why": "the person names the target style — one question, no debate",
+   "note": "machine work is downstream of a human choice; nothing generates until a style is named"
+  },
+  {
+   "stage": "v1",
+   "name": "Style formula",
+   "runner": "claude-text",
+   "prompt_dir": "stage-v1-style-formula",
+   "prompt": "stagev1-style-formula-v1-damon.md",
+   "why": "one canonical string, used byte-identical everywhere, plus the strip table",
+   "vars": {
+    "target_style": "~target_style",
+    "production_document": "@stage0b"
+   }
+  },
+  {
+   "stage": "v2",
+   "name": "Convert assets",
+   "runner": "claude-text",
+   "prompt_dir": "stage-v2-convert-identities",
+   "prompt": "stagev2-convert-identities-v1-damon.md",
+   "why": "characters, world and product converted FROM the refined sources — never re-described",
+   "vars": {
+    "style_formula": "@v1",
+    "production_document": "@stage0b",
+    "approved_assets": "~approved_assets"
+   }
+  },
+  {
+   "stage": "v2g",
+   "name": "Generate converted assets",
+   "runner": "image",
+   "why": "the conversion instructions executed — one styled design per asset",
+   "note": "machine work. Each conversion is an image EDIT off the approved source, never a fresh generation from text — that is the failure the playbook names."
+  },
+  {
+   "stage": "v3",
+   "name": "Restyle the prompts",
+   "runner": "restyle.py",
+   "why": "style lock prepended · media swapped · photoreal descriptors stripped — and nothing else",
+   "note": "MECHANICAL BY DESIGN, not a model. Every approved word survives; the tool prints its own diff so the guarantee is auditable."
+  },
+  {
+   "stage": "v4",
+   "name": "Generate",
+   "runner": "scene-generator",
+   "why": "the restyled set, one batch, exactly as the original run",
+   "note": "machine work"
+  },
+  {
+   "stage": "v5",
+   "name": "Variation QC",
+   "runner": "vision-judge",
+   "prompt_dir": "stage-v5-variation-qc",
+   "prompt": "stagev5-variation-qc-v1-damon.md",
+   "scope": "scene",
+   "why": "style hold is the failure this gate exists for — plus identity, product, geometry, blocking, dialogue",
+   "vars": {
+    "generated_clip": "@v4",
+    "style_formula": "@v1",
+    "converted_assets": "@v2g",
+    "approved_clip": "@stage3"
+   }
+  },
+  {
+   "stage": "v5r",
+   "name": "Re-roll",
+   "runner": "scene-generator",
+   "why": "a style-slipped clip regenerates with the slip named; still failing after two, it ships FLAGGED",
+   "note": "machine work"
+  },
+  {
+   "stage": "v6",
+   "name": "Assemble",
+   "runner": "edit",
+   "why": "the same edit decision list and gates as the original — the edit transfers unchanged",
+   "note": "machine work"
+  }
+ ]
+}

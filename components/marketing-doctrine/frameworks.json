@@ -1,0 +1,1556 @@
+{
+ "schema": 1,
+ "what": "The marketing doctrine every machine binds to: labelled slots, in our words, pointing back at the source by line.",
+ "source": {
+  "work": "Breakthrough Advertising (1966)",
+  "line_range": [
+   1,
+   6407
+  ],
+  "copy": "a private copy on the operator's own machine; NOT committed to this repo",
+  "rule": "refs are pointers for verification only — never copy a passage; quotes stay under 12 words"
+ },
+ "desire": {
+  "ref": [
+   "L312-320",
+   "L347-348",
+   "L364-382"
+  ],
+  "rule": "Copy never manufactures a want. It finds a want enough people already carry and channels it onto one product. Ride an existing mass desire and the spend is amplified; fight one and the ad dies.",
+  "sources_of_desire": [
+   {
+    "id": "permanent-forces",
+    "what": "Mass instinct and long-unsolved problems — the wants that do not move.",
+    "ref": "L383-426",
+    "status": "draft"
+   },
+   {
+    "id": "forces-of-change",
+    "what": "Trend cycles and mass imitation working through a population — the wants that are moving right now.",
+    "ref": "L383-426",
+    "status": "draft"
+   }
+  ],
+  "dimensions": [
+   {
+    "id": "urgency",
+    "name": "Urgency",
+    "measures": "How hard the want demands satisfaction today, not eventually.",
+    "test": "Would this audience act on it this week if a route opened?",
+    "ref": "L438-447",
+    "status": "draft"
+   },
+   {
+    "id": "staying-power",
+    "name": "Staying power",
+    "measures": "How well the want resists being satisfied once — whether it returns.",
+    "test": "After one purchase, is the want gone or back tomorrow?",
+    "ref": "L438-447",
+    "status": "draft"
+   },
+   {
+    "id": "scope",
+    "name": "Scope",
+    "measures": "How many people inside the market carry the want at all.",
+    "test": "Is this a whole-market want or one slice of it?",
+    "ref": "L438-447",
+    "status": "draft"
+   }
+  ],
+  "lead_desire_rule": {
+   "rule": "A product touches several desires; exactly ONE leads the ad, and the headline picks it. Every later decision inherits that choice, so getting it wrong sinks everything downstream.",
+   "ref": "L448-459"
+  },
+  "physical_vs_functional": {
+   "rule": "The physical product is what the thing is made of and never the sell. The functional product is what it DOES, and that is the only thing that sells.",
+   "physical_facts_may": [
+    "justify the price",
+    "document the quality claim",
+    "promise durability",
+    "sharpen the mental picture",
+    "supply a fresh believability mechanism"
+   ],
+   "ref": "L479-529"
+  },
+  "dominant_trait": {
+   "rule": "Every product carries one dominant trait that should summarise it in the headline; the remaining traits blend in underneath, never alongside.",
+   "ref": "L1967-1990"
+  },
+  "owning_stage": [
+   "1b-audience",
+   "3-injection"
+  ]
+ },
+ "awareness": {
+  "ref": [
+   "L667-972",
+   "L884-896"
+  ],
+  "rule": "Each level sits behind a wall from the level next to it. A line written for one level is invisible or stale to the others, so the level decides where the ad is ALLOWED to begin its argument — at the product, at the desire, or at the problem.",
+  "entry_exit_rule": {
+   "rule": "The level sets the point of entry, not the destination. Copy opens where the audience already stands and walks them forward one rung at a time.",
+   "ref": "L2064-2069"
+  },
+  "levels": [
+   {
+    "id": "most-aware",
+    "level": 1,
+    "name": "Most Aware",
+    "knows": "Knows the product, wants it, simply has not bought yet.",
+    "must": [
+     "State the product and the price or the deal, and stop."
+    ],
+    "must_not": [
+     "Explain anything",
+     "Re-sell a want that is already there"
+    ],
+    "where_the_ad_may_begin": "At the product itself — name and terms in the opening beat.",
+    "ref": "L667-695",
+    "status": "draft"
+   },
+   {
+    "id": "product-aware",
+    "level": 2,
+    "name": "Product-Aware",
+    "knows": "Knows the product exists but is not sold on it.",
+    "must": [
+     "Do one of seven named jobs on the claim already in the market"
+    ],
+    "the_seven_jobs": [
+     "reinforce",
+     "sharpen",
+     "extend",
+     "document",
+     "new mechanism",
+     "remove a limitation",
+     "reposition"
+    ],
+    "must_not": [
+     "Reintroduce the category from scratch",
+     "Talk as if the product were new"
+    ],
+    "where_the_ad_may_begin": "At the product, but on the gap between knowing it and wanting it.",
+    "ref": "L696-772",
+    "status": "draft"
+   },
+   {
+    "id": "solution-aware",
+    "level": 3,
+    "name": "Solution-Aware",
+    "knows": "Carries the desire and knows a result is possible, but does not know a product delivers it.",
+    "must": [
+     "Crystallise the desire or its solution in one line, then prove it"
+    ],
+    "must_not": [
+     "Mention price",
+     "Assume the product name means anything yet"
+    ],
+    "where_the_ad_may_begin": "At the desire or the result — the product arrives after the proof.",
+    "ref": "L773-829",
+    "status": "draft"
+   },
+   {
+    "id": "problem-aware",
+    "level": 4,
+    "name": "Problem-Aware",
+    "knows": "Feels a need but has not connected it to any product category.",
+    "must": [
+     "Name the problem or the need directly, in the words the audience uses"
+    ],
+    "must_not": [
+     "Assume a solution is already known",
+     "Lead with a category the audience has not entered"
+    ],
+    "where_the_ad_may_begin": "At the problem — the need, stated and felt, before anything is offered.",
+    "ref": "L830-872",
+    "status": "draft"
+   },
+   {
+    "id": "unaware",
+    "level": 5,
+    "name": "Unaware",
+    "knows": "Does not know the desire or the need exists — or will not admit it.",
+    "must": [
+     "Open on pure identification: describe the audience to itself until it is recognised"
+    ],
+    "must_not": [
+     "Mention price",
+     "Name the product",
+     "State the direct claim or the desire itself"
+    ],
+    "where_the_ad_may_begin": "At the person — a portrait, nothing sold in the opening at all.",
+    "ref": "L873-972",
+    "status": "draft"
+   }
+  ],
+  "headline_rule": {
+   "rule": "The opening line has one job: force the next line to be read. It does not sell and does not carry the offer — the single exception is a Most Aware audience being shown a price cut.",
+   "ref": "L603-645",
+   "verbalization": {
+    "rule": "Once the content is fixed — the desire plus the entry rung — dramatising it is a separate craft: measure it, compare it, dramatise it, ask it, state it as a paradox. These are phrasings of an idea already chosen, never a substitute for choosing one.",
+    "ref": "L1673-1846"
+   }
+  },
+  "owning_stage": [
+   "4a-read",
+   "4b-hook",
+   "4e-close"
+  ]
+ },
+ "sophistication": {
+  "ref": [
+   "L1305-1649"
+  ],
+  "rule": "A separate question from awareness: how many competing products has this market already been pitched? The answer decides what the ad must lead with, independent of what the audience knows about itself.",
+  "stages": [
+   {
+    "id": "stage-1",
+    "stage": 1,
+    "name": "First in the market",
+    "market_has_heard": "Nothing — no one has made this claim here before.",
+    "lead_with": "The plain claim, stated simply and with no embellishment.",
+    "ref": "L1315-1360",
+    "status": "draft"
+   },
+   {
+    "id": "stage-2",
+    "stage": 2,
+    "name": "The claim is in the market",
+    "market_has_heard": "The plain claim, now from competitors.",
+    "lead_with": "The same claim, enlarged to the edge of what is still believable.",
+    "ref": "L1361-1404",
+    "status": "draft"
+   },
+   {
+    "id": "stage-3",
+    "stage": 3,
+    "name": "Claims exhausted",
+    "market_has_heard": "Claims pushed to their limit, and it discounts about half of what it hears.",
+    "lead_with": "A NEW MECHANISM — how the result happens, not what the result is. The mechanism leads the opening.",
+    "ref": "L1405-1470",
+    "status": "draft"
+   },
+   {
+    "id": "stage-4",
+    "stage": 4,
+    "name": "The mechanism is in the market",
+    "market_has_heard": "A mechanism, from a competitor.",
+    "lead_with": "The same mechanism, enlarged, made easier, faster or more complete.",
+    "ref": "L1471-1521",
+    "status": "draft"
+   },
+   {
+    "id": "stage-5",
+    "stage": 5,
+    "name": "Exhausted field",
+    "market_has_heard": "Every claim and every mechanism, and believes none of them.",
+    "lead_with": "Drop claim and mechanism both and sell on identification alone — the same move as the Unaware level.",
+    "ref": "L1522-1649",
+    "status": "draft"
+   }
+  ],
+  "category_reset": {
+   "rule": "A genuine category reset — a new form of the product, not a new claim about the old one — restarts the clock at stage 1, and the plain claim becomes the right lead again. Opening a demographic that was never addressed does the same on identification alone.",
+   "ref": "L1542-1649"
+  },
+  "owning_stage": [
+   "1b-audience",
+   "2-replication",
+   "4d-expansion"
+  ]
+ },
+ "techniques": [
+  {
+   "id": "intensification",
+   "name": "Intensification",
+   "definition": "Keep generating fresh, concrete pictures of the desire already fulfilled — never the same picture twice; vary the angle so repetition reinforces instead of tiring.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Blunt, fully detailed direct description of the product or the result",
+     "ref": "L2336"
+    },
+    {
+     "n": 2,
+     "what": "Put the claim into action — show the mechanism operating",
+     "ref": "L2448"
+    },
+    {
+     "n": 3,
+     "what": "Bring the viewer in — narrate the first-use moment as lived",
+     "ref": "L2510"
+    },
+    {
+     "n": 4,
+     "what": "Turn the claim into a test the viewer can run and verify alone",
+     "ref": "L2541"
+    },
+    {
+     "n": 5,
+     "what": "Stretch the benefit across time — weeks and months, not one moment",
+     "ref": "L2603"
+    },
+    {
+     "n": 6,
+     "what": "Bring in an audience — testimonials and case histories of ordinary people",
+     "ref": "L2646"
+    },
+    {
+     "n": 7,
+     "what": "Bring in experts, and show the surprise on their side",
+     "ref": "L2693"
+    },
+    {
+     "n": 8,
+     "what": "Compare and contrast against the old way to prove superiority",
+     "ref": "L2723"
+    },
+    {
+     "n": 9,
+     "what": "Picture the dark side too — before and after, the cost of doing nothing",
+     "ref": "L2761"
+    },
+    {
+     "n": 10,
+     "what": "Show how easy the benefit is to obtain",
+     "ref": "L2821"
+    },
+    {
+     "n": 11,
+     "what": "Use metaphor, analogy and personification",
+     "ref": "L2847"
+    },
+    {
+     "n": 12,
+     "what": "Summarise before closing — the catalog, horizontal (more applications) or vertical (desire piled on desire)",
+     "ref": "L2880"
+    },
+    {
+     "n": 13,
+     "what": "Turn the guarantee itself into the closing summary of every promise made",
+     "ref": "L3013"
+    }
+   ],
+   "campaign_level": {
+    "rule": "Across a series, hold ONE dominant image and vary only its disguise, so every asset deepens the same picture.",
+    "ref": "L3066-3249"
+   },
+   "when": "Building desire anywhere in the body, heaviest at the open and at the close.",
+   "owning_stage": [
+    "4d-expansion",
+    "4b-hook",
+    "4e-close"
+   ],
+   "research_question": "Every distinct way this audience describes living the fulfilled desire — different settings, timeframes and onlookers — so each beat is a new angle rather than a repeat.",
+   "scene_shape": "One fresh fulfilment moment per scene; emotion builds anticipation into awe; the delta is the same desire at escalating vividness.",
+   "ref": "L2244-3250",
+   "status": "draft"
+  },
+  {
+   "id": "identification",
+   "name": "Identification",
+   "definition": "Build a saleable personality into the product by attaching roles the audience wants to be seen playing. The product then does double duty: physical satisfaction plus a badge of identity.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Character roles — adjectives, who the person IS",
+     "ref": "L3253-3400"
+    },
+    {
+     "n": 2,
+     "what": "Achievement roles — nouns, the status or position attained",
+     "ref": "L3253-3400"
+    }
+   ],
+   "method": [
+    {
+     "n": 1,
+     "what": "Find the product's existing primary image in the audience's mind first",
+     "ref": "L3401-3560"
+    },
+    {
+     "n": 2,
+     "what": "If that image is favourable, intensify it — stack several expressions of the same trait",
+     "ref": "L3561-3700"
+    },
+    {
+     "n": 3,
+     "what": "If it is neutral or negative, do not contradict it — use it as the base and bridge to better images layered on top; never demand an identity jump the audience cannot make",
+     "ref": "L3701-3872"
+    }
+   ],
+   "when": "Parity products, price-insensitive categories, and anywhere physical performance no longer separates the product from the field.",
+   "owning_stage": [
+    "4d-expansion",
+    "1b-audience"
+   ],
+   "research_question": "Which character and achievement roles this audience already claims in its own self-descriptions, and what the product's current unprompted image is — favourable, neutral or negative.",
+   "scene_shape": "The product appears as a visible marker inside a life moment; emotion is pride or recognition, ideally witnessed by someone else in frame; the delta runs from unlabelled self to clearly identified self.",
+   "ref": "L3253-3872",
+   "status": "draft"
+  },
+  {
+   "id": "gradualization",
+   "name": "Gradualization",
+   "definition": "Belief is structural, not only a matter of content. A claim's strength equals its own content plus how far the copy has already prepared the audience to accept it — so build a chain of acceptances from a fact already believed, each step earning the next.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Inclusion question — a question the intended audience answers yes to, starting a habit of agreement",
+     "ref": "L4359"
+    },
+    {
+     "n": 2,
+     "what": "Detailed identification — symptoms described specifically enough to be recognised as lived",
+     "ref": "L4377"
+    },
+    {
+     "n": 3,
+     "what": "Contradiction of a present false belief — used only with strong authority behind it",
+     "ref": "L4402"
+    },
+    {
+     "n": 4,
+     "what": "The language of logic — phrasing that signals reasoning and carries conviction by association",
+     "ref": "L4424"
+    },
+    {
+     "n": 5,
+     "what": "Syllogistic thinking — a real chain, A causes B and B causes C, that makes the product's working feel inevitable",
+     "ref": "L4485"
+    },
+    {
+     "n": 6,
+     "what": "Other belief forms — contingency phrasing, repeated-proof echo, promise and proof alternation, paragraph parallelism",
+     "ref": "L4519"
+    }
+   ],
+   "when": "Whenever the real claim would be unbelievable stated cold — start where belief already exists and walk forward.",
+   "owning_stage": [
+    "4d-expansion",
+    "4b-hook",
+    "4e-close",
+    "5-brief"
+   ],
+   "research_question": "The one fact or complaint this audience already accepts as true, and the shortest path of accepted steps from there to the actual claim.",
+   "scene_shape": "A short sequence of small-truth beats before the reveal; each beat lands as recognition; the delta is incremental and never a jump.",
+   "ref": "L3876-4539",
+   "status": "draft"
+  },
+  {
+   "id": "redefinition",
+   "name": "Redefinition",
+   "definition": "Give the product, or the problem, a new definition that removes an objection before it is consciously raised.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Simplification — for products that read as too complicated: relabel the intimidating process in familiar terms",
+     "ref": "L4595"
+    },
+    {
+     "n": 2,
+     "what": "Escalation — for products with too narrow an appeal: connect the small thing to a larger outcome, or show the need is constant rather than occasional",
+     "ref": "L4760"
+    },
+    {
+     "n": 3,
+     "what": "Price reduction — for products that read as too expensive: change the comparison anchor rather than defend the number",
+     "ref": "L4823"
+    },
+    {
+     "n": 4,
+     "what": "The direct flip — turn a liability into the proof of an asset with a single idea",
+     "ref": "L4569"
+    }
+   ],
+   "when": "A specific known objection is blocking the sale: too hard, too small a deal, or too pricey.",
+   "owning_stage": [
+    "4e-close",
+    "4d-expansion"
+   ],
+   "research_question": "The exact objection wording that appears in reviews and comments, and the real anchor this product is being compared against.",
+   "scene_shape": "The feared frame appears on screen and is relabelled inside the same beat; emotion is relief; the delta runs feared-big to actually-small.",
+   "ref": "L4544-4894",
+   "status": "draft"
+  },
+  {
+   "id": "mechanization",
+   "name": "Mechanization",
+   "definition": "Verbal proof of HOW the product delivers — reason-why copy answering the silent question of how the thing works.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Name it only — the market already understands and accepts the mechanism, so label it and compete on price or features",
+     "ref": "L4969"
+    },
+    {
+     "n": 2,
+     "what": "Describe it — the market does not know it yet: promise first, then explain the mechanism in selling language",
+     "ref": "L4988"
+    },
+    {
+     "n": 3,
+     "what": "Feature it — the market is saturated with parity claims, so the mechanism itself becomes the lead claim, the new way",
+     "ref": "L5046"
+    }
+   ],
+   "price_cut_rule": {
+    "rule": "A price cut needs a mechanism of its own — a believable reason the price is lower — or the discount itself is not believed.",
+    "ref": "L5079-5131"
+   },
+   "when": "Whenever how-does-it-work or why-is-it-this-price is the live objection; depth scales with how familiar the category already is.",
+   "owning_stage": [
+    "4d-expansion",
+    "4b-hook"
+   ],
+   "research_question": "Whether this audience already accepts a mechanism for the category — so it need only be named — or does not, so it must be described or featured; and what the real point of mechanical difference is.",
+   "scene_shape": "A clear visual demonstration of the mechanism working, inside-the-product or before-and-after; emotion is the click of understanding; the delta runs unexplained result to visible cause and effect.",
+   "ref": "L4896-5132",
+   "status": "draft"
+  },
+  {
+   "id": "concentration",
+   "name": "Concentration",
+   "definition": "Destroy the alternate ways of satisfying the desire — a direct attack on the competing option or on the status quo.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Point-by-point bad and good contrast — parallel structure, each weakness answered immediately by the matching strength",
+     "ref": "L5219-5313"
+    },
+    {
+     "n": 2,
+     "what": "Before-and-after time sequence — narrate the familiar failure pattern of the old approach, then the same sequence succeeding",
+     "ref": "L5316-5416"
+    }
+   ],
+   "rule": "Never attack a weakness without supplying the fix for that exact weakness in the same breath, or the attack reads as bias.",
+   "when": "The budget is smaller than the incumbent's, or most of the audience is already loyal to an alternative that has to be cracked first. Skip it when the category is already dominated — do not hand a competitor free attention.",
+   "owning_stage": [
+    "4d-expansion",
+    "4e-close"
+   ],
+   "research_question": "Which specific alternatives this audience names and what their actual, sourced weaknesses are — never invented ones — plus the failed-solution stories the audience tells about itself.",
+   "scene_shape": "The alternative fails at a relatable moment, immediately followed by the same moment succeeding; frustration into relief, back to back; the delta is the same task with the opposite outcome, repeated a few beats.",
+   "ref": "L5136-5432",
+   "status": "draft"
+  },
+  {
+   "id": "camouflage",
+   "name": "Camouflage",
+   "definition": "Borrow believability from the medium the ad lives in. Editorial and organic content is trusted more than advertising voice, so minimise the gear change between the two.",
+   "sub_methods": [
+    {
+     "n": 1,
+     "what": "Format — match the host medium's real layout, headline type, sub-heads and illustration style",
+     "ref": "L5474-5542"
+    },
+    {
+     "n": 2,
+     "what": "Phraseology — adopt the host medium's stock language and tone",
+     "ref": "L5544-5574"
+    },
+    {
+     "n": 3,
+     "what": "Register — understatement (plain, short, adjective-light, self-deprecating) or deadly sincerity (admit a real limitation openly, so the claim that follows lands harder)",
+     "ref": "L5575-5661"
+    }
+   ],
+   "when": "Scepticism toward advertising voice is the main barrier, or a native placement is available.",
+   "owning_stage": [
+    "3-injection",
+    "4c-placement"
+   ],
+   "research_question": "What genuinely top-performing organic content in this exact placement looks like structurally — pacing, captions, camera — rather than what native is assumed to look like.",
+   "scene_shape": "Shot and voiced exactly like the platform's own organic top content — handheld, plain talk, imperfect; it reads as a person saying something; the delta runs perceived-as-ad to perceived-as-content with the same claim underneath.",
+   "ref": "L5436-5661",
+   "status": "draft"
+  }
+ ],
+ "mood": {
+  "definition": "The deliberate-for-the-writer, invisible-for-the-audience use of word choice and sentence rhythm to set a tone — excitement, sincerity, urgency — without the mechanism being noticed.",
+  "rules": [
+   {
+    "id": "invisible-or-rewrite",
+    "rule": "If the audience consciously spots the mood words, the copy has failed and gets rewritten.",
+    "ref": "L6260-6361",
+    "status": "draft"
+   },
+   {
+    "id": "rhythm-carries-mood",
+    "rule": "Rhythm carries mood independently of content: short staccato lines and long plain ones do different work.",
+    "ref": "L6260-6361",
+    "status": "draft"
+   },
+   {
+    "id": "register-is-a-choice",
+    "rule": "The register is chosen against the swipe, not inherited by accident — either match its rhythm or diverge from it on purpose.",
+    "ref": "L6260-6361",
+    "status": "draft"
+   }
+  ],
+  "owning_stage": [
+   "4d-expansion",
+   "5-brief"
+  ],
+  "research_question": "Which rhythm and register the winning swipe runs on — staccato claim-stacking or plain understatement — and whether the brand voice matches it or diverges on purpose.",
+  "scene_shape": "The cut rhythm and delivery pace carry the emotion; the delta is a tonal shift across the scene, calm and plain at the open into urgent stacking at the climax.",
+  "ref": "L6260-6361"
+ },
+ "verification": {
+  "definition": "The placement and arrangement of proof so it is accepted — proof lands where doubt peaks, not where it is convenient.",
+  "three_distinct_things": [
+   {
+    "id": "mechanization",
+    "what": "Logical demonstration — needs no outside facts.",
+    "ref": "L5694-5808",
+    "status": "draft"
+   },
+   {
+    "id": "documentation",
+    "what": "Any external proof: statistics, tests, testimonials, authorities.",
+    "ref": "L5694-5808",
+    "status": "draft"
+   },
+   {
+    "id": "verification",
+    "what": "Where and how that documentation is placed for maximum acceptance.",
+    "ref": "L5694-5808",
+    "status": "draft"
+   }
+  ],
+  "rules": [
+   {
+    "id": "placement",
+    "rule": "Proof goes where the audience already, unconsciously, demands it — never front-loaded because it is proof.",
+    "ref": "L5694-5808",
+    "status": "draft"
+   },
+   {
+    "id": "proof-is-selling-copy",
+    "rule": "Proof copy is written as selling copy — dramatic, specific and short — never as dry fact.",
+    "ref": "L5694-5808",
+    "status": "draft"
+   }
+  ],
+  "owning_stage": [
+   "4f-audit",
+   "4e-close"
+  ],
+  "research_question": "What independently verifiable proof actually exists, and at which beat of the current draft the demand for proof genuinely peaks.",
+  "scene_shape": "Proof lands as its own beat — a number, a document, a visible result — exactly where doubt would otherwise creep in; the delta runs claim to confirmed claim.",
+  "ref": "L5694-5808"
+ },
+ "offer_close": {
+  "what": "Not a standalone chapter — the close is intensification's guarantee climax plus redefinition's price reframe.",
+  "rules": [
+   {
+    "id": "guarantee-is-the-final-intensification",
+    "rule": "The guarantee is the last intensification beat: it restates every promise already made, wrapped inside the risk reversal.",
+    "ref": "L3013-3065",
+    "status": "draft"
+   },
+   {
+    "id": "price-against-an-anchor",
+    "rule": "Price is always set against a bigger anchor — a cumulative cost, a hand-made equivalent, the cost of doing nothing — and never stated bare or defended on its own.",
+    "ref": "L4823-4886",
+    "status": "draft"
+   },
+   {
+    "id": "a-discount-needs-its-mechanism",
+    "rule": "A lower price carries a believable reason for being lower, or the discount is not believed.",
+    "ref": "L5079-5131",
+    "status": "draft"
+   },
+   {
+    "id": "action-as-the-only-step-left",
+    "rule": "The ask is the conclusion of the accepted-step chain — by the time it arrives, acting is the only step remaining.",
+    "ref": "L4485-4518",
+    "status": "draft"
+   }
+  ],
+  "owning_stage": [
+   "4e-close"
+  ],
+  "ref": [
+   "L3013-3065",
+   "L4823-4886"
+  ]
+ },
+ "sections": [
+  {
+   "id": "hook",
+   "name": "Hook",
+   "what": "The point of entry. One job: force the next beat to be watched. Its content is set by the awareness level and the sophistication stage, not by taste.",
+   "techniques": [
+    "intensification",
+    "camouflage"
+   ],
+   "ref": [
+    "L603-645",
+    "L462-473"
+   ],
+   "awareness": {
+    "needed_at": [
+     "every level"
+    ],
+    "note": "content set by the level: product/deal at most-aware; the gap at product-aware; the desire at solution-aware; the problem at problem-aware; identification only at unaware"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "problem",
+   "name": "Problem",
+   "what": "The need named and felt, described in enough specific detail that the audience recognises its own situation before anything is offered.",
+   "techniques": [
+    "intensification",
+    "gradualization"
+   ],
+   "ref": [
+    "L830-872",
+    "L4377"
+   ],
+   "awareness": {
+    "needed_at": [
+     "problem-aware",
+     "unaware"
+    ],
+    "usually_skipped_at": [
+     "most-aware",
+     "product-aware"
+    ]
+   },
+   "status": "draft"
+  },
+  {
+   "id": "failed-solutions",
+   "name": "Failed solutions",
+   "what": "The alternatives already tried, each failing at a moment the audience recognises — every named weakness answered immediately by the matching strength.",
+   "techniques": [
+    "concentration"
+   ],
+   "ref": [
+    "L5136-5432"
+   ],
+   "awareness": {
+    "needed_at": [
+     "problem-aware",
+     "solution-aware"
+    ],
+    "usually_skipped_at": [
+     "most-aware"
+    ]
+   },
+   "status": "draft"
+  },
+  {
+   "id": "root-cause",
+   "name": "Root cause",
+   "what": "The real reason the problem persists, reframed so it is a different problem than the audience thought, and reached by steps already accepted.",
+   "techniques": [
+    "redefinition",
+    "gradualization"
+   ],
+   "ref": [
+    "L4544-4894",
+    "L3876-4539"
+   ],
+   "awareness": {
+    "needed_at": [
+     "problem-aware",
+     "solution-aware"
+    ],
+    "usually_skipped_at": [
+     "most-aware"
+    ]
+   },
+   "status": "draft"
+  },
+  {
+   "id": "unique-mechanism",
+   "name": "Unique mechanism",
+   "what": "How the product produces the result — named, described or featured, at the depth the market's sophistication stage demands. At stage 3 and above the mechanism leads.",
+   "techniques": [
+    "mechanization"
+   ],
+   "ref": [
+    "L4896-5132",
+    "L1405-1521"
+   ],
+   "awareness": {
+    "needed_at": [
+     "solution-aware",
+     "product-aware"
+    ],
+    "note": "and at any level once the market is at sophistication stage 3 or higher — then it leads"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "solution",
+   "name": "Solution",
+   "what": "The product in action and the desire fulfilled, stretched across time, carrying the role the audience wants to be seen in.",
+   "techniques": [
+    "intensification",
+    "identification"
+   ],
+   "ref": [
+    "L2448-2645",
+    "L3253-3872"
+   ],
+   "awareness": {
+    "needed_at": [
+     "solution-aware",
+     "problem-aware",
+     "unaware"
+    ],
+    "usually_skipped_at": [
+     "most-aware"
+    ]
+   },
+   "status": "draft"
+  },
+  {
+   "id": "product",
+   "name": "Product",
+   "what": "What the thing actually is — the physical facts, used only to justify price, document quality, promise durability or sharpen the picture, never as the lead sell.",
+   "techniques": [
+    "redefinition",
+    "identification"
+   ],
+   "ref": [
+    "L479-529",
+    "L4823-4886"
+   ],
+   "awareness": {
+    "needed_at": [
+     "product-aware",
+     "solution-aware"
+    ],
+    "note": "at most-aware the name alone is the section"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "offer",
+   "name": "Offer",
+   "what": "The terms: price set against a bigger anchor, and the guarantee restating every promise as the final intensification beat.",
+   "techniques": [
+    "intensification",
+    "redefinition"
+   ],
+   "ref": [
+    "L3013-3065",
+    "L4823-4886"
+   ],
+   "awareness": {
+    "needed_at": [
+     "most-aware",
+     "product-aware"
+    ],
+    "note": "never leads below product-aware — price too early is the level's must_not"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "call-to-action",
+   "name": "Call to action",
+   "what": "The conclusion of the accepted-step chain — the single step still left once every prior step has been agreed to.",
+   "techniques": [
+    "gradualization"
+   ],
+   "ref": [
+    "L4485-4518"
+   ],
+   "awareness": {
+    "needed_at": [
+     "every level"
+    ]
+   },
+   "status": "draft"
+  },
+  {
+   "id": "identification",
+   "name": "Identification",
+   "what": "Who this is for. The call-out that names the viewer to themselves — their situation, their role, their words — before any problem is stated or anything is offered. At unaware this is the only opening allowed; everywhere else it is the beat that earns the right to name the problem.",
+   "techniques": [
+    "identification"
+   ],
+   "ref": [
+    "L873-972",
+    "L3253-3872"
+   ],
+   "awareness": {
+    "needed_at": [
+     "unaware",
+     "problem-aware"
+    ],
+    "usually_skipped_at": [
+     "most-aware",
+     "product-aware"
+    ],
+    "note": "at unaware it is the whole opening — price, product name and the direct claim are that level's must_not, so describing the viewer to themselves is the only move left"
+   },
+   "added": "2026-09-18 — on the owner's ask; strike any",
+   "status": "draft"
+  },
+  {
+   "id": "agitation",
+   "name": "Agitation",
+   "what": "The stakes. What it costs to leave the problem alone, and the future that arrives if nothing changes — the black side of the picture, reached one already-accepted step at a time rather than asserted.",
+   "techniques": [
+    "intensification",
+    "gradualization"
+   ],
+   "ref": [
+    "L2761",
+    "L830-872",
+    "L4377"
+   ],
+   "awareness": {
+    "needed_at": [
+     "problem-aware",
+     "solution-aware"
+    ],
+    "usually_skipped_at": [
+     "most-aware"
+    ],
+    "note": "a viewer who already wants the product does not need the cost of inaction rehearsed at them"
+   },
+   "added": "2026-09-18 — on the owner's ask; strike any",
+   "status": "draft"
+  },
+  {
+   "id": "proof",
+   "name": "Proof",
+   "what": "Evidence placed at the beat where doubt peaks, never front-loaded because it happens to be proof: results, testimonials, authority, demonstration, before and after — and written as selling copy, dramatic and specific, not as a dry fact block.",
+   "techniques": [
+    "intensification",
+    "mechanization"
+   ],
+   "ref": [
+    "L5694-5808",
+    "L2541",
+    "L2646",
+    "L2693"
+   ],
+   "awareness": {
+    "needed_at": [
+     "solution-aware",
+     "product-aware"
+    ],
+    "usually_skipped_at": [
+     "unaware"
+    ],
+    "note": "placement is the verification rule, not a section rule — the beat is wherever the viewer's demand for it actually peaks"
+   },
+   "added": "2026-09-18 — on the owner's ask; strike any",
+   "status": "draft"
+  },
+  {
+   "id": "transformation",
+   "name": "Transformation",
+   "what": "The after. The fulfilled desire pictured — the first-use moment lived, the benefit stretched across weeks and months, and the role the viewer gets to be seen playing once it has happened.",
+   "techniques": [
+    "intensification",
+    "identification"
+   ],
+   "ref": [
+    "L2510",
+    "L2603",
+    "L3253-3872"
+   ],
+   "awareness": {
+    "needed_at": [
+     "solution-aware",
+     "problem-aware",
+     "unaware"
+    ],
+    "usually_skipped_at": [
+     "most-aware"
+    ],
+    "note": "distinct from solution: solution is the product working, transformation is the life on the other side of it"
+   },
+   "added": "2026-09-18 — on the owner's ask; strike any",
+   "status": "draft"
+  },
+  {
+   "id": "objections",
+   "name": "Objections",
+   "what": "The flinch answered. The specific reasons not to buy — named in the viewer's own words — redefined or resolved before the ask, never after it.",
+   "techniques": [
+    "redefinition"
+   ],
+   "ref": [
+    "L4544-4894",
+    "L5694-5808"
+   ],
+   "awareness": {
+    "needed_at": [
+     "product-aware",
+     "most-aware"
+    ],
+    "usually_skipped_at": [
+     "unaware",
+     "problem-aware"
+    ],
+    "note": "answer the objection sitting at the level the asset is trying to land on, not only the one at the level it opened on"
+   },
+   "added": "2026-09-18 — on the owner's ask; strike any",
+   "status": "draft"
+  },
+  {
+   "id": "urgency",
+   "name": "Urgency",
+   "what": "Why now. The reason to act in this moment rather than later — real and receipted: a dated deal, a real limit, a cost that compounds. Invented scarcity is never this section.",
+   "techniques": [
+    "gradualization",
+    "intensification"
+   ],
+   "ref": [
+    "L667-695",
+    "L3013-3065"
+   ],
+   "awareness": {
+    "needed_at": [
+     "most-aware",
+     "product-aware"
+    ],
+    "usually_skipped_at": [
+     "unaware",
+     "problem-aware"
+    ],
+    "note": "most-aware is where the deal itself is the message; below product-aware a reason to act now arrives before there is anything to act on"
+   },
+   "added": "2026-09-18 — on the owner's ask; strike any",
+   "status": "draft"
+  }
+ ],
+ "research_questions": [
+  {
+   "id": "RQ-01",
+   "question": "Which desire scores highest on urgency, staying power and scope for this audience right now — and is that the desire the swipe is actually running on, or a different one to inject instead?",
+   "framework": "desire",
+   "tags": [
+    "problem-language",
+    "why-bought",
+    "why-interested",
+    "self-descriptor"
+   ],
+   "stages": [
+    "1b-audience",
+    "3-injection"
+   ],
+   "ref": "L438-459",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-02",
+   "question": "What has this market already been promised, with what mechanism, and which sophistication stage is the swipe itself running?",
+   "framework": "sophistication",
+   "tags": [
+    "competitor-annoyance",
+    "alternative-solution",
+    "mechanism",
+    "accepted-belief"
+   ],
+   "stages": [
+    "2-replication"
+   ],
+   "ref": "L1315-1649",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-03",
+   "question": "What is this product's one dominant trait for the chosen desire, and which physical facts document it without becoming the sell?",
+   "framework": "desire",
+   "tags": [
+    "what-they-like",
+    "why-bought",
+    "buying-criteria"
+   ],
+   "stages": [
+    "3-injection"
+   ],
+   "ref": "L479-533, L1967-1990",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-04",
+   "question": "Where does this audience sit today — most aware through unaware — for this exact desire, and which rung must the asset land them on?",
+   "framework": "awareness",
+   "tags": [
+    "problem-language",
+    "self-descriptor",
+    "accepted-belief",
+    "why-interested"
+   ],
+   "stages": [
+    "4a-read"
+   ],
+   "ref": "L667-972",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-05",
+   "question": "Does this opening break the forbidden move for its entry rung — price, product name or the direct claim landing too early?",
+   "framework": "awareness",
+   "tags": [
+    "hook",
+    "hook-headline",
+    "caption-hook",
+    "one-liner"
+   ],
+   "stages": [
+    "4b-hook",
+    "4f-audit"
+   ],
+   "ref": "L621-645, L917-935",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-06",
+   "question": "What mechanism language does real customer speech use when it wants a fresh explanation of how a result happens in this category?",
+   "framework": "sophistication",
+   "tags": [
+    "mechanism",
+    "accepted-belief",
+    "buying-criteria"
+   ],
+   "stages": [
+    "4d-expansion"
+   ],
+   "ref": "L1405-1521",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-07",
+   "question": "Which unresolved objection sits at the rung the asset is trying to land on, rather than the rung it opened on?",
+   "framework": "awareness",
+   "tags": [
+    "objection",
+    "comment-objection",
+    "expectation-gap",
+    "refund-reason"
+   ],
+   "stages": [
+    "4e-close"
+   ],
+   "ref": "L873-972",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-08",
+   "question": "Every distinct way this audience pictures living the fulfilled desire — settings, timeframes, who notices — so each beat is a genuinely new angle.",
+   "framework": "techniques.intensification",
+   "tags": [
+    "result-language",
+    "post-use-feeling",
+    "transformation-reaction",
+    "what-they-like"
+   ],
+   "stages": [
+    "4d-expansion",
+    "4b-hook",
+    "4e-close"
+   ],
+   "ref": "L2244-3250",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-09",
+   "question": "Which character and achievement roles does this audience already claim for itself, and what is the product's current unprompted image — favourable, neutral or negative?",
+   "framework": "techniques.identification",
+   "tags": [
+    "role-claimed",
+    "identity",
+    "self-descriptor",
+    "subculture"
+   ],
+   "stages": [
+    "4d-expansion",
+    "1b-audience"
+   ],
+   "ref": "L3253-3872",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-10",
+   "question": "What is the one fact or complaint this audience already accepts as true to open on, and the shortest accepted-step path from there to the real claim?",
+   "framework": "techniques.gradualization",
+   "tags": [
+    "accepted-belief",
+    "problem-language",
+    "cope",
+    "in-word"
+   ],
+   "stages": [
+    "4d-expansion",
+    "4b-hook",
+    "4e-close"
+   ],
+   "ref": "L3876-4539",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-11",
+   "question": "What exact objection wording shows up in reviews and comments — too complicated, not worth it, overpriced — and what anchor is this product really being compared against?",
+   "framework": "techniques.redefinition",
+   "tags": [
+    "objection",
+    "comment-objection",
+    "objection-answer",
+    "expectation-gap"
+   ],
+   "stages": [
+    "4e-close",
+    "4d-expansion"
+   ],
+   "ref": "L4544-4894",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-12",
+   "question": "Does this audience already accept a mechanism for the category — so it need only be named — or must one be described or featured; and what is the actual point of mechanical difference?",
+   "framework": "techniques.mechanization",
+   "tags": [
+    "mechanism",
+    "accepted-belief",
+    "buying-criteria",
+    "why-bought"
+   ],
+   "stages": [
+    "4d-expansion",
+    "4b-hook"
+   ],
+   "ref": "L4896-5132",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-13",
+   "question": "Which alternatives does this audience name, with what sourced weaknesses, and what failed-solution stories does it tell about itself?",
+   "framework": "techniques.concentration",
+   "tags": [
+    "tried-and-failed",
+    "alternative-solution",
+    "competitor-annoyance",
+    "cope"
+   ],
+   "stages": [
+    "4d-expansion",
+    "4e-close"
+   ],
+   "ref": "L5136-5432",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-14",
+   "question": "What does genuinely top-performing organic content in this exact placement look like structurally — pacing, captions, camera — as observed, not assumed?",
+   "framework": "techniques.camouflage",
+   "tags": [
+    "subculture",
+    "in-word",
+    "one-liner"
+   ],
+   "stages": [
+    "3-injection",
+    "4c-placement"
+   ],
+   "ref": "L5436-5661",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-15",
+   "question": "Which rhythm and register does the winning swipe run on — staccato claim-stacking or plain understatement — and does the brand voice match it or diverge on purpose?",
+   "framework": "mood",
+   "tags": [
+    "in-word",
+    "subculture",
+    "one-liner"
+   ],
+   "stages": [
+    "4d-expansion",
+    "5-brief"
+   ],
+   "ref": "L6260-6361",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-16",
+   "question": "What independently verifiable proof exists, and at which beat of the current draft does the demand for proof actually peak?",
+   "framework": "verification",
+   "tags": [
+    "comment-proof",
+    "result-language",
+    "objection",
+    "buy-trigger"
+   ],
+   "stages": [
+    "4f-audit",
+    "4e-close"
+   ],
+   "ref": "L5694-5808",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-17",
+   "question": "Who does this audience actually laugh at — which comedians, creators and content formats — and what shape is the joke when they do?",
+   "framework": "delivery.humor",
+   "tags": [
+    "taste",
+    "subculture",
+    "in-word"
+   ],
+   "stages": [
+    "1b-audience",
+    "4g-spice"
+   ],
+   "ref": "L3253-3872",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-18",
+   "question": "Who does this audience trust — which creators, experts and peers do they name and believe — and what does that trusted person's delivery actually look like?",
+   "framework": "delivery.delivery_style",
+   "tags": [
+    "trust-language",
+    "community-voice",
+    "role-claimed"
+   ],
+   "stages": [
+    "1b-audience",
+    "4g-spice"
+   ],
+   "ref": "L3253-3872",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-19",
+   "question": "What does this audience watch, quote and wear — the shows and formats they sit through, the lines they repeat to each other, and the wardrobe, setting and sound of their actual world?",
+   "framework": "delivery.reference_world",
+   "tags": [
+    "subculture",
+    "in-word",
+    "taste"
+   ],
+   "stages": [
+    "4g-spice",
+    "4c-placement"
+   ],
+   "ref": "L5474-5574",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-20",
+   "question": "How does the room itself talk when nobody is selling — deadpan, hyped, plain — and at what pace does it say things?",
+   "framework": "delivery.register",
+   "tags": [
+    "subculture",
+    "in-word",
+    "community-voice"
+   ],
+   "stages": [
+    "4g-spice",
+    "4d-expansion"
+   ],
+   "ref": "L6260-6361",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-21",
+   "question": "What makes this audience cringe in an ad — the register they mock, the tells they call out, the thing that makes them say it is trying too hard?",
+   "framework": "delivery.avoid",
+   "tags": [
+    "cringe",
+    "competitor-annoyance",
+    "objection"
+   ],
+   "stages": [
+    "4g-spice",
+    "4f-audit"
+   ],
+   "ref": "L5436-5661",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-22",
+   "question": "How does this room actually phrase things OUT LOUD — its fillers, its openers, its sign-offs, the words it starts a thought with and the words it ends one on — as heard in its own posts, comments and videos, never as written copy?",
+   "framework": "spoken.levels",
+   "tags": [
+    "in-word",
+    "subculture",
+    "community-voice"
+   ],
+   "stages": [
+    "4g-spice",
+    "5-brief"
+   ],
+   "ref": "L5436-5661",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-23",
+   "question": "What does this room CALL things — the in-words for the problem, the product category, the result and the people involved — the shorthand it uses among itself rather than the category's own names?",
+   "framework": "spoken.levels",
+   "tags": [
+    "in-word",
+    "subculture",
+    "taste"
+   ],
+   "stages": [
+    "4g-spice",
+    "4d-expansion"
+   ],
+   "ref": "L5474-5574",
+   "status": "draft"
+  },
+  {
+   "id": "RQ-24",
+   "question": "How does this room REACT — the reaction lines it drops when something works, fails, surprises or disgusts it — quoted as said, so a beat can land in the room's own reflex rather than a writer's?",
+   "framework": "spoken.levels",
+   "tags": [
+    "community-voice",
+    "in-word",
+    "taste"
+   ],
+   "stages": [
+    "4g-spice",
+    "4e-close"
+   ],
+   "ref": "L6260-6361",
+   "status": "draft"
+  }
+ ],
+ "sections_rule": {
+  "rule": "A vocabulary, not a sequence. The sections in the list name what a part of an asset is DOING. Any ad carries any subset, in any order, with repeats; the framework the source follows is read off the asset and named, never imposed. The point is that every part is labelled for what it does, so a brief can be fleshed out and the writing can get creative systematically — knowing which job each beat is holding.",
+  "awareness_rule": "The awareness level decides which sections an asset needs at all. Most-aware skips straight to offer and call to action; product-aware works the gap between knowing and wanting; solution-aware needs the unique mechanism and proof; problem-aware needs the problem named and the root cause; unaware opens on identification before any problem is named. A section the level does not call for is dead time.",
+  "ref": [
+   "L667-972",
+   "L462-473"
+  ]
+ },
+ "frameworks_crosswalk": {
+  "rule": "Common copy frameworks read into the same vocabulary — so a swiped asset's own shape is named in one line and every part still carries a section label. Add a row only when a real asset follows a shape none of these covers; describe it plainly and flag it.",
+  "rows": [
+   {
+    "framework": "PAS (problem · agitate · solve)",
+    "sections": [
+     "hook",
+     "problem",
+     "agitation",
+     "solution",
+     "unique-mechanism",
+     "proof",
+     "product",
+     "offer",
+     "objections",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "AIDA (attention · interest · desire · action)",
+    "sections": [
+     "hook",
+     "identification",
+     "problem",
+     "transformation",
+     "proof",
+     "product",
+     "offer",
+     "urgency",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "BAB (before · after · bridge)",
+    "sections": [
+     "hook",
+     "problem",
+     "transformation",
+     "unique-mechanism",
+     "proof",
+     "product",
+     "offer",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "Story / testimonial (life · tried · found · now)",
+    "sections": [
+     "hook",
+     "identification",
+     "problem",
+     "failed-solutions",
+     "root-cause",
+     "product",
+     "unique-mechanism",
+     "proof",
+     "transformation",
+     "objections",
+     "offer",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "Mechanism-led (the new way)",
+    "sections": [
+     "hook",
+     "problem",
+     "root-cause",
+     "unique-mechanism",
+     "proof",
+     "solution",
+     "product",
+     "objections",
+     "offer",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "Us-vs-them / comparison",
+    "sections": [
+     "hook",
+     "problem",
+     "failed-solutions",
+     "root-cause",
+     "unique-mechanism",
+     "proof",
+     "product",
+     "objections",
+     "offer",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "Direct offer (most-aware)",
+    "sections": [
+     "hook",
+     "offer",
+     "proof",
+     "urgency",
+     "call-to-action"
+    ],
+    "status": "draft"
+   },
+   {
+    "framework": "Identification-only (unaware)",
+    "sections": [
+     "hook",
+     "identification",
+     "problem",
+     "transformation",
+     "solution",
+     "product",
+     "call-to-action"
+    ],
+    "status": "draft"
+   }
+  ]
+ }
+}

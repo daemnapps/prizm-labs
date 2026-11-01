@@ -1,0 +1,152 @@
+{
+  "_about": "The seven role templates of the Hand-off Standard (HANDOFF-STANDARD.md, decision 19). One entry per role; handoff.py renders handoff.md from these. Roles, never names. `needs` are the inputs a hand-off for this role cannot leave without; `publish` marks the roles whose work goes live and therefore stop at rule 6 (nothing goes live without the owner's go).",
+  "roles": {
+    "creator-manager": {
+      "title": "Creator manager",
+      "comes_from": "new creator briefs",
+      "job_types": ["match", "send", "chase"],
+      "inside": "every creator-handoff ready to send; the brief-to-creator match by talent card and avatar fit; due dates; a status sheet",
+      "told": "who gets what, what done looks like, what to chase",
+      "comes_back": "sent and delivered status for every creator-handoff",
+      "stops_at": "sending a brief to a creator",
+      "needs": ["brief_file", "product"],
+      "publish": false,
+      "tools": ["components/casting (talent cards, avatar fit)", "brands/<brand>/content-creators (the roster)"],
+      "steps": [
+        "Open briefs/ — one folder per brief, each with brief.md and brief.json.",
+        "For every brief pick the creator whose talent card fits the avatar named in brief.json (components/casting). Write the match to returned/matches.json: brief id, creator id (a role-side id, never a person's name), due date.",
+        "Build one creator-handoff folder per matched creator (this same skill: `handoff creator <brand> <brief ids>`), so every creator gets one folder of briefs.",
+        "Write returned/status.md: sent / delivered / chased per creator-handoff, one line each.",
+        "STOP before sending anything to a creator. Sending is the go."
+      ],
+      "returned": ["matches.json — brief id → creator id, due date", "status.md — sent / delivered / chased per creator-handoff"]
+    },
+    "creator": {
+      "title": "Creator (brief writer's package for one creator)",
+      "comes_from": "creator manager",
+      "job_types": ["video", "static", "sequence"],
+      "inside": "start-here; one brief per piece; inspiration and reference videos; the product's record in the catalog; the landing page by link id",
+      "told": "what to film or shoot; the rules (9:16, clean, no watermark); naming and how to return",
+      "comes_back": "raw footage and pictures named with brief and asset ids",
+      "stops_at": "nothing goes live; hands back only",
+      "needs": ["brief_file", "product"],
+      "publish": false,
+      "tools": [],
+      "steps": [
+        "Read handoff.md, then briefs/<brief id>/brief.md for each piece.",
+        "Film or shoot exactly what each brief asks. 9:16, clean background unless the brief says otherwise, no watermark, no filter that changes skin.",
+        "Name every file `<brief id>_<asset id>.<ext>` (asset-01, asset-02, …) and put it in returned/.",
+        "Write returned/notes.md — one line per file: brief id, asset id, what it is."
+      ],
+      "returned": ["<brief id>_asset-NN.<ext> — raw footage or pictures", "notes.md — one line per file"]
+    },
+    "clipper": {
+      "title": "Clipper",
+      "comes_from": "clipper briefs (a drop)",
+      "job_types": ["video", "slideshow"],
+      "inside": "open briefs with scenes and references; the product's record in the catalog; the page by link id; captions",
+      "told": "the open briefs, the posting rules, what a finished clip is",
+      "comes_back": "posted clips and their links",
+      "stops_at": "posting a clip",
+      "needs": ["brief_file", "product", "link"],
+      "publish": true,
+      "tools": ["lab/clipping (the clipper kit, `build.py`)"],
+      "steps": [
+        "Read handoff.md and each briefs/<brief id>/brief.md.",
+        "Cut the clip or build the slideshow the brief describes; captions from references/captions when present.",
+        "Name every finished file `<brief id>_<asset id>.<ext>` and put it in returned/.",
+        "Write returned/posted.json: brief id, asset id, where it is to be posted, the link once it is live — leave the link empty until the owner's go.",
+        "STOP before posting. Posting is the go."
+      ],
+      "returned": ["<brief id>_asset-NN.mp4 — finished clips or slideshows", "posted.json — asset → platform, link (empty until go)"]
+    },
+    "graphic-designer": {
+      "title": "Graphic designer",
+      "comes_from": "image, sequence, email and page briefs",
+      "job_types": ["static-ad", "sequence", "email", "landing-page"],
+      "inside": "static and sequence: the draft, the plate, product pictures, layout data, the exact words, the variations · email: the wireframe, the reference email, the copy, the picture jobs · page: the page copy, the picture map, the product's record in the catalog",
+      "told": "what to finish; what cannot change (product, words, offer, link); the sizes",
+      "comes_back": "finished files named to the standard",
+      "stops_at": "nothing goes live; hands back only",
+      "needs": ["brief_file", "product"],
+      "publish": false,
+      "tools": ["tools/image-edit (`edit.py <picture> --brand --change|--fix`, `vary.py`)", "tools/image-production (generation)"],
+      "steps": [
+        "Read handoff.md, then briefs/<brief id>/brief.md — the words, the layout and the variations are in the brief; assets/ lists what exists already.",
+        "Finish each piece with the tools named above. A change to a picture is one delta at a time (image-edit); never redraw the product, never retype the words.",
+        "Every finished file is named to the naming standard — the ad name from brief.json plus `_asset-NN`; a name that does not parse is not finished.",
+        "Put finished files in returned/ and write returned/index.json: file → brief id, asset id, what changed."
+      ],
+      "returned": ["<ad name>_asset-NN.png — finished statics or sequence frames", "index.json — file → brief id, asset id, what changed"]
+    },
+    "video-editor": {
+      "title": "Video editor",
+      "comes_from": "video production",
+      "job_types": ["edit", "recut"],
+      "inside": "clips per scene, the voice, music and sound, the cut sheet, the caption look, the hook versions",
+      "told": "the scene order and timing, the locked parts, one 9:16 master inside the 4:5 safe area",
+      "comes_back": "finished cuts",
+      "stops_at": "nothing goes live; hands back only",
+      "needs": ["brief_file", "kit"],
+      "publish": false,
+      "tools": ["tools/video-edit (`machine/run.py handoff <this folder>` — stops at the timeline and the captions; `--approve timeline|captions` on the owner's word)"],
+      "steps": [
+        "First time on this computer: read START-HERE.md in the role folder (Shared Assets/handoffs/video-editor/START-HERE.md). Every time: claim the ad on the shared work queue before cutting (`tools/video-production/machine/work_queue.py claim <brief>`) — if another computer holds it, leave it.",
+      "Read handoff.md; the edit kit is under assets/kit (cut sheet, clips per scene, voice, music, caption look, hook versions).",
+        "Run the edit line on the kit (`run.py handoff <this folder>`). Locked parts (the words, the product shots, the offer bar) do not move.",
+        "Stop at the timeline, then at the captions: each goes on only on the owner's approval (`--approve timeline`, then `--approve captions`).",
+        "The master (one 9:16 per brief, content inside the 4:5 safe area) is named `<ad name>_asset-NN.mp4`, put in returned/, and take-back writes returned/index.json: file → brief id, asset id, version."
+      ],
+      "returned": ["<ad name>_asset-NN.mp4 — one master per brief plus hook versions", "index.json — file → brief id, asset id, version"]
+    },
+    "ad-uploader": {
+      "title": "Ad uploader",
+      "comes_from": "finished ads",
+      "job_types": ["new ads", "swap"],
+      "inside": "the named ads, the copy, the landing page by link id, the ad set plan, the import sheet",
+      "told": "the exact ad name (nothing appended), the landing page in the URL field, the checks",
+      "comes_back": "the Meta ad id per ad",
+      "stops_at": "publishing to Meta",
+      "needs": ["ads", "copy", "link"],
+      "publish": true,
+      "tools": ["lab/meta-upload (`build.py --brand --lane --run --out` — builds the import sheet; every row PAUSED; talks to nothing)", "components/ad-handoff (`handoff.py --check` — the seven-check gate)"],
+      "steps": [
+        "Read handoff.md; the pictures are in assets/ads/<short name>/, and assets/index.json lists every ad by its short name with its old name beside it, its pictures and its copy row; references/links.json carries the landing page by link id.",
+        "Build the import sheet with meta-upload `build.py` into returned/import/. Every row lands PAUSED.",
+        "Check: each ad goes up under its short-form Meta ad name from section 3 of handoff.md, exactly (nothing appended); an ad already live on Meta keeps its old name there; the URL field is the working URL for the link id in references/links.json; every picture the sheet names exists.",
+        "Write returned/live-ids.json with one entry per ad — `{\"ad_name\": …, \"channel\": \"meta\", \"platform_id\": null}` — the platform id stays null until the ad exists in Meta.",
+        "STOP. The import sheet is parked. Uploading it to Meta is the go."
+      ],
+      "returned": ["import/ — the Meta bulk-import sheet plus the pictures it names, every row PAUSED", "live-ids.json — ad name → Meta ad id (null until it exists)"]
+    },
+    "klaviyo-uploader": {
+      "title": "Klaviyo uploader",
+      "comes_from": "finished emails",
+      "job_types": ["campaign", "flow"],
+      "inside": "the email and its pictures, the subject lines, the send date, the audience",
+      "told": "which send, which audience, which subject; the checks",
+      "comes_back": "the Klaviyo campaign id per send",
+      "stops_at": "scheduling or sending in Klaviyo",
+      "needs": ["email_run", "link"],
+      "publish": true,
+      "tools": ["tools/email-production (`push_klaviyo.py <run> --brand --pick N` — creates a DRAFT campaign; has no send call)"],
+      "steps": [
+        "Read handoff.md; assets/email lists the run's final HTML, the numbered subject set and the picked pair; references/links.json carries every link by id.",
+        "Check every link in the HTML is one of the link ids in references/links.json, and that the offer words in the email match references/offer-record.json.",
+        "Create the campaign as a DRAFT with push_klaviyo.py (`--pick` the numbered pair named in handoff.md).",
+        "Write returned/live-ids.json — `{\"send\": <label>, \"channel\": \"klaviyo\", \"platform_id\": <campaign id>, \"status\": \"DRAFT\"}`.",
+        "STOP. The campaign stays a DRAFT. Scheduling or sending is the go."
+      ],
+      "returned": ["live-ids.json — send → Klaviyo campaign id, status DRAFT"]
+    }
+  },
+  "needs_words": {
+    "brief_file": "the brief itself (brief.md) — from the brief's run folder or the brand's briefs folder",
+    "product": "the product's record in the catalog",
+    "link": "at least one landing page, by link id, in the catalog",
+    "ads": "the finished ads — a drop with one folder per ad",
+    "copy": "a copy row for every ad",
+    "kit": "an edit kit (--kit <folder>)",
+    "email_run": "a finished email run (--email-run <folder>)"
+  }
+}

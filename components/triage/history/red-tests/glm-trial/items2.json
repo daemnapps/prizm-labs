@@ -1,0 +1,79 @@
+[
+ {
+  "id": "R13",
+  "suite": "new-workflow-design/builds/mini-cockpit/test_cli25o_model_line.py",
+  "first_failing_line": "FAIL: test_the_job_is_set_only_while_its_handler_runs (__main__.ModelLine)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R14",
+  "suite": "new-workflow-design/builds/mini-cockpit/test_project_kinds.py",
+  "first_failing_line": "FAIL: test_every_kind_mints_with_its_own_glyph_model_prompt_and_mode (__main__.KindTableTestCase) (kind='lead')",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R15",
+  "suite": "new-workflow-design/builds/models-registry/test_model_budget.py",
+  "first_failing_line": "FAIL: test_glm_pins_nothing_it_cannot_evidence (__main__.TheRealReviewerEntries)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R16",
+  "suite": "new-workflow-design/builds/models-registry/test_models_registry.py",
+  "first_failing_line": "FAIL no subfolders \u2014 there is no engine and no emitted plane \u2014 ['CLAUDE.md', 'README.md', '__pycache__', 'models.json', 'trained-assets.json', 'validate.py']",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R17",
+  "suite": "new-workflow-design/builds/pm-tool/test_checklist.py",
+  "first_failing_line": "FAIL test_local_storage_holds_visibility_and_a_draft_and_nothing_else",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R18",
+  "suite": "new-workflow-design/builds/pm-tool/test_pm_view.py",
+  "first_failing_line": "FAIL test_the_per_person_writes_execute_and_revert",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R19",
+  "suite": "new-workflow-design/builds/records-plane/test_plane4c_envelopes.py",
+  "first_failing_line": "FAIL: test_the_fixture_still_matches_the_real_writers (__main__.TheBody) (item='filed-index', filer='lead')",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R20",
+  "suite": "new-workflow-design/builds/records-plane/test_plane7_inbox_index.py",
+  "first_failing_line": "FAIL: test_every_id_discoverable_today_has_an_add_record_behind_it (__main__.TheKillCondition)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R21",
+  "suite": "new-workflow-design/builds/review-component/test_rv1_manifest.py",
+  "first_failing_line": "FAIL: test_every_asset_ref_resolves (__main__.TestTheThreeSeeds)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R22",
+  "suite": "new-workflow-design/builds/review-component/test_rv2_request.py",
+  "first_failing_line": "FAIL: test_no_second_grouping_path_and_no_second_public_reader (__main__.TheBatchLane)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R23",
+  "suite": "new-workflow-design/builds/review-component/test_rv34_url_viewport.py",
+  "first_failing_line": "FAIL: test_the_installed_skill_is_the_draft_or_says_it_is_not (__main__.TheMirrorsAgreeWithTheManifest)",
+  "exit_code": 1,
+  "kind": "red"
+ }
+]

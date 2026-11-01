@@ -1,0 +1,6 @@
+# what the viewer check learns about YOUR brands: viewer cards, learnings,
+# objection answers, belief indexes. Yours, never the toolkit.
+records/
+# viewer-check trials: your feeds and your ads
+trials/*
+!trials/README.md

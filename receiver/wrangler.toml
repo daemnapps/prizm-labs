@@ -1,0 +1,10 @@
+name = "prizm-ask"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+REPO   = "daemnapps/prizm-labs"
+ORIGIN = "https://daemn.co"
+
+# routes are added after the zone exists:
+#   ask.daemn.co/*

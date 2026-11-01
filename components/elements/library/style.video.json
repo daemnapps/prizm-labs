@@ -1,0 +1,907 @@
+{
+ "element": "style",
+ "asset": "video",
+ "source": "tools/video-production/styles/bank.json",
+ "enforced_by": null,
+ "note": "The style bank (2026-09-20). Nothing refuses an unknown style yet — the variation chain should read this list next.",
+ "rows": [
+  {
+   "id": "claymation",
+   "name": "Claymation",
+   "what": "Everything is hand-sculpted modelling clay, shot frame by frame on a tabletop set.",
+   "why_it_works": null,
+   "status": "approved",
+   "state": null,
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "examples": "Nuora ad 110221229 'The truth about odor' — a claymation health explainer, 4 variants (components/swipe-paid/nuora/format-read.md); the owner's saves: davidaistar's claymation-ad carousels, 2026-09-22 (components/swipe-organic/records/damon-saves/catalog.json)",
+   "evidence": "Named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list); one paid swipe on file (Nuora 110221229), two saves on how the ads are made.",
+   "approved": true,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "stop-motion claymation: every surface hand-sculpted plasticine with visible thumbprints and tool marks, slightly lumpy proportions, matte clay skin, tiny handmade props, soft tabletop studio light, shallow depth of field of a miniature set",
+    "motion": "animated on twos, tiny jitter between frames, no motion blur",
+    "seen_as": "Claymation",
+    "ip_flag": null,
+    "fits_formats": [
+     "talking-object",
+     "song-ad",
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": "defined by the machine, review pending"
+  },
+  {
+   "id": "paper-cutout",
+   "name": "Paper cut-out",
+   "what": "Layered cut paper and card, flat shapes with real paper shadows between the layers.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/paper-cutout.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "layered paper-craft: every shape cut from coloured card and construction paper, visible fibre texture and cut edges, stacked layers casting small real drop shadows, flat colour, no gradients, lit like a shadow box",
+    "motion": "pieces slide, hinge and pop like puppets on pins; stepped timing",
+    "seen_as": "Paper animation / paper style",
+    "ip_flag": null,
+    "fits_formats": [
+     "song-ad",
+     "demonstration"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "crochet",
+   "name": "Crochet",
+   "what": "Everything is knitted or crocheted yarn — soft amigurumi people and props.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/crochet.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "crochet amigurumi: every person and object made of chunky yarn stitches, visible loops and fuzz, safety-eye faces, stuffed rounded forms, felt details, warm soft window light, macro lens look",
+    "motion": "gentle wobble, stop-motion on twos, yarn squashes softly",
+    "seen_as": "Crochet style",
+    "ip_flag": null,
+    "fits_formats": [
+     "talking-object",
+     "song-ad"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "needle-felt",
+   "name": "Needle felt",
+   "what": "Matted wool felt figures, fuzzier and more sculpted than crochet.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/needle-felt.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "needle-felted wool: figures and props sculpted from matted wool roving, fuzzy halo of stray fibres on every edge, bead eyes, muted natural dyes, miniature handmade set, soft daylight",
+    "motion": "stop-motion on twos, fibres shimmer slightly frame to frame",
+    "seen_as": "(extension of crochet)",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "felt-puppet",
+   "name": "Felt puppet",
+   "what": "Hand-and-rod foam puppets with felt skin, big mouths and ping-pong eyes on a TV-studio set.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/felt-puppet.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "children's television puppet show: soft fleece-and-foam puppet characters with wide hinged mouths and round plastic eyes, visible fleece texture and stitched seams, bright 1980s television studio lighting, colourful simple set",
+    "motion": "puppeteered bobbing, mouth flaps on syllables, arms move on rods",
+    "seen_as": "Muppet story",
+    "ip_flag": "Named after a trademarked puppet franchise — keep the look generic, never the characters.",
+    "fits_formats": [
+     "fake-podcast",
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "brick-figure",
+   "name": "Brick figure",
+   "what": "A world of snap-together plastic bricks with little cylinder-headed figures.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/brick-figure.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "plastic brick toy world: every object built from glossy interlocking studded bricks, people as small cylinder-headed toy figures with printed faces and claw hands, injection-moulded plastic sheen, macro photography of a toy set, shallow depth of field",
+    "motion": "stiff stop-motion, figures hop and swivel at the waist, on twos",
+    "seen_as": "Lego character",
+    "ip_flag": "Trademarked toy system — never show the logo or licensed figures.",
+    "fits_formats": [
+     "micro-drama",
+     "testimonial-montage"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "miniature-diorama",
+   "name": "Miniature diorama",
+   "what": "A real place shrunk to a model-railway set, shot tilt-shift.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/miniature-diorama.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "handmade miniature diorama: scale-model buildings, painted figurines, static grass and model trees, tilt-shift lens with a thin band of focus, bright hobby-lamp light, slight plastic sheen",
+    "motion": "slow overhead drift, figures move in tiny stop-motion steps",
+    "seen_as": "(adjacent to brick figure)",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "anime",
+   "name": "Anime",
+   "what": "Japanese TV animation — clean ink lines, flat cel shading, big expressive eyes, painted backgrounds.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/anime.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "Japanese anime: clean black line art, two-tone cel shading, large expressive eyes, glossy hair highlights, detailed hand-painted background, soft bloom on light sources",
+    "motion": "held poses with snappy moves, speed lines, hair and cloth sway, animated on threes",
+    "seen_as": "Anime style",
+    "ip_flag": null,
+    "fits_formats": [
+     "micro-drama",
+     "single-presenter"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "cel-1950s",
+   "name": "1950s hand-drawn cel",
+   "what": "Mid-century feature animation — inked outlines, gouache backgrounds, storybook warmth.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/cel-1950s.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "1950s hand-drawn cel animation: confident ink outlines, flat opaque paint fills, rounded appealing character design, soft gouache painted background, slight film grain and gate weave",
+    "motion": "on twos, squash and stretch, overlapping follow-through",
+    "seen_as": "Disney character (the classic 2D half)",
+    "ip_flag": "Keep it period-generic; never a studio's characters.",
+    "fits_formats": [
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "adult-cartoon",
+   "name": "Adult cartoon",
+   "what": "Flat wobbly-line TV cartoon with bug eyes and deadpan faces.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/adult-cartoon.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "adult animated sitcom: thin uniform outlines, flat colours with no shading, simple rubbery bodies, large white eyes with scribbled pupils, slack mouths, plain flat backgrounds",
+    "motion": "limited animation, mouth-flap dialogue, sudden jerky gestures",
+    "seen_as": "Rick and Morty",
+    "ip_flag": "Named after a trademarked show — generic look only.",
+    "fits_formats": [
+     "fake-podcast",
+     "meme"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "comic-panel",
+   "name": "Comic panel",
+   "what": "Printed comic book — heavy inks, halftone dots, panel borders and speech balloons.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/comic-panel.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "printed comic book panel: bold black inks, Ben-Day halftone dot shading, limited four-colour palette, slightly misregistered print, white panel gutter around the frame",
+    "motion": "parallax between cut-out layers, panel-to-panel snaps, impact bursts",
+    "seen_as": "Cartoon comic",
+    "ip_flag": null,
+    "fits_formats": [
+     "meme",
+     "testimonial-montage"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "whiteboard-sketch",
+   "name": "Whiteboard sketch",
+   "what": "Black marker line drawings on a white board, drawn in as you watch.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/whiteboard-sketch.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "whiteboard marker illustration: simple black dry-erase line drawings on a clean white board, one accent colour, hand-lettered labels, slight marker streaks, no shading",
+    "motion": "lines draw themselves on, a hand may enter to sketch; nothing else moves",
+    "seen_as": "Whiteboard explainer",
+    "ip_flag": null,
+    "fits_formats": [
+     "demonstration",
+     "expert-consult"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "storybook-watercolour",
+   "name": "Storybook watercolour",
+   "what": "Soft children's-book illustration — wet washes, pencil lines, paper grain.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/storybook-watercolour.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "children's storybook watercolour: loose wet-on-wet washes, visible pencil under-drawing, cold-press paper grain, soft edges, gentle limited palette",
+    "motion": "subtle boil on the line, slow page-turn moves, drifting washes",
+    "seen_as": "(extension)",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "family-3d",
+   "name": "Family 3D animation",
+   "what": "Big-studio 3D feature look — appealing stylised people, huge eyes, soft subsurface skin, cinematic light.",
+   "why_it_works": null,
+   "status": "approved",
+   "state": "reviewed",
+   "signed": "the owner, 2026-10-09: \"the creative format itself is supposed to look like Pixar\" (Resilia song-ad swipe)",
+   "examples": "swatches/family-3d.jpg",
+   "evidence": "resilia-song-02 (Resilia \"My whole crew knew\" song/story ad — the whole film is this style)",
+   "approved": true,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "3d",
+    "formula": "big-studio 3D animated feature: stylised appealing character with large expressive eyes and simplified features, soft subsurface-scattered skin, groomed hair, richly detailed set, warm cinematic key light with rim light",
+    "motion": "full fluid character animation, anticipation and follow-through, slow push-ins",
+    "seen_as": "Disney / Pixar character",
+    "ip_flag": "Studio names are trademarks — generic look only, never their characters.",
+    "fits_formats": [
+     "song-ad",
+     "micro-drama",
+     "talking-object"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "cutaway-3d",
+   "name": "3D cutaway explainer",
+   "what": "Glossy 3D simulation that flies inside a body or object to show what is happening.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/cutaway-3d.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "3d",
+    "formula": "3D science-explainer animation render: smooth simplified mannequin-like figure with matte neutral-grey surface, clean dark studio void background, soft even light, one glowing highlighted region with a floating magnified inset showing a simple stylised diagram of skin layers, saturated colour only on the part being explained",
+    "motion": "continuous camera fly-in from outside to inside, parts animate mechanically, labels pop on",
+    "seen_as": "Zack D Films",
+    "ip_flag": "Named after a creator — the look is generic 3D explainer.",
+    "fits_formats": [
+     "demonstration",
+     "expert-consult"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "skeleton-3d",
+   "name": "Skeleton character",
+   "what": "A friendly glossy 3D skeleton living a normal life — the narrator of body stories.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/skeleton-3d.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "3d",
+    "formula": "stylised 3D skeleton character: clean ivory bones with soft gloss, big round eye sockets with expressive pupils, wearing everyday clothes, everyday real-world setting, soft cinematic light, shallow depth of field",
+    "motion": "full character animation, exaggerated jaw on speech, bones clack subtly",
+    "seen_as": "Skeleton stories",
+    "ip_flag": null,
+    "fits_formats": [
+     "song-ad",
+     "micro-drama",
+     "demonstration"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "low-poly",
+   "name": "Low poly",
+   "what": "Faceted 3D made of flat triangles, like an early game console or a papercraft model.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/low-poly.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "3d",
+    "formula": "low-poly 3D: every form built from large flat-shaded triangles, no textures, simple gradient sky, pastel palette, hard facet edges, soft ambient occlusion",
+    "motion": "smooth floaty camera orbit, simple bobbing loops",
+    "seen_as": "Low poly story",
+    "ip_flag": null,
+    "fits_formats": [
+     "micro-drama",
+     "demonstration"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pixel-16bit",
+   "name": "16-bit pixel art",
+   "what": "Chunky retro-game pixels, side-on, limited palette.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/pixel-16bit.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "3d",
+    "formula": "16-bit pixel art: chunky visible pixels, limited 32-colour palette, dithered shading, side-on game-screen composition, crisp nearest-neighbour edges",
+    "motion": "few-frame sprite loops, screen scrolls sideways, text types on",
+    "seen_as": "(extension)",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "hypermotion-cinematic",
+   "name": "Hypermotion cinematic",
+   "what": "Car-commercial energy — impossible fast camera moves, macro details, speed ramps, hard light.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/hypermotion-cinematic.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "high-end commercial cinematography: anamorphic lens, hard rim light and deep contrast, macro detail, atmospheric haze, rich saturated grade, razor-sharp product surfaces",
+    "motion": "fast FPV-style fly-throughs, whip pans, speed ramps into slow motion, match cuts",
+    "seen_as": "Hypermotion cinematic",
+    "ip_flag": null,
+    "fits_formats": [
+     "demonstration"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "phone-ugc",
+   "name": "Phone-camera UGC",
+   "what": "Looks like a real person filmed it on their phone. The baseline everything else departs from.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/phone-ugc.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "native phone-camera footage: handheld front camera, available room light, true unretouched skin texture, slight noise and compression, nothing styled",
+    "motion": "handheld micro-shake, natural pauses, no cuts inside a line",
+    "seen_as": "(the default real look)",
+    "ip_flag": null,
+    "fits_formats": [
+     "single-presenter",
+     "testimonial-montage",
+     "demonstration"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "horror",
+   "name": "Horror",
+   "what": "Dread lighting — underlit faces, green-black shadows, grain, something wrong in the background.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/horror.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "horror film still: low-key underlighting, sickly green-teal shadows, crushed blacks, heavy film grain, fog, wide-angle lens slightly too close, unsettling stillness",
+    "motion": "slow creeping push-in, flicker, sudden jump cut",
+    "seen_as": "Horror style",
+    "ip_flag": null,
+    "fits_formats": [
+     "micro-drama",
+     "meme"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "vhs-camcorder",
+   "name": "VHS camcorder",
+   "what": "1990s home video — soft, smeary colour, tracking lines, date stamp.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/vhs-camcorder.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "1990s VHS camcorder footage: soft low-resolution image, colour bleed, tracking-line noise, blown highlights, orange date stamp in the corner, 4:3 feel inside the frame",
+    "motion": "handheld zooms, auto-focus hunting, tape glitches on cuts",
+    "seen_as": "(extension)",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "fight-night-broadcast",
+   "name": "Fight-night broadcast",
+   "what": "Pay-per-view sports graphics — tale of the tape, metallic lower-thirds, arena light.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/fight-night-broadcast.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "combat-sports broadcast: dark arena with hard spotlights and haze, metallic chrome-and-red broadcast graphics, versus split, stat bars, dramatic rim light on the subject",
+    "motion": "graphic slams and wipes, slow-motion walkouts, crowd flashes",
+    "seen_as": "UFC fight night",
+    "ip_flag": "League names and logos are trademarks — generic broadcast look only.",
+    "fits_formats": [
+     "meme",
+     "demonstration"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "glass-asmr",
+   "name": "Glass ASMR",
+   "what": "Everyday things made of clear coloured glass or jelly, sliced or squeezed in macro.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/glass-asmr.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "translucent glass-object macro: the subject made of clear coloured glass with internal refraction and caustics, on a clean cutting board, softbox highlights, extreme macro",
+    "motion": "one slow satisfying action — a slice, a crack, a squeeze — in a single take",
+    "seen_as": "(AI-native trend)",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "macro-commercial",
+   "name": "Macro beauty commercial",
+   "what": "Extreme close-ups on skin, liquid and glass — razor-sharp texture, everything else falling away.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/macro-commercial.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "high-end macro beauty commercial: extreme close-up detail, razor-sharp surface texture, very shallow depth of field, soft wrapped studio light with a specular kicker, clean luminous grade",
+    "motion": "slow macro slides and rack-focus pulls, liquid in slow motion",
+    "seen_as": "Macro product / beauty commercial",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "studio-hero",
+   "name": "Studio product hero",
+   "what": "Clean studio photography in motion: seamless backdrop, controlled light, the subject as the only thing in the world.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/studio-hero.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "studio product-hero photography: seamless single-colour cyclorama backdrop, controlled softbox key with gentle gradient falloff, crisp edges, no set, catalogue-clean grade",
+    "motion": "slow turntable rotation, gentle push-in, light sweeps across the surface",
+    "seen_as": "Studio product hero",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "dark-luxury",
+   "name": "Dark luxury",
+   "what": "Black marble, cool clinical light, deep blacks — the prestige skincare look.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/dark-luxury.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "dark luxury editorial commercial: black marble and slate surfaces, cool clinical top light, deep saturated blacks, fine metallic and glass highlights, restrained desaturated palette",
+    "motion": "slow deliberate dolly moves, light glints travelling across edges",
+    "seen_as": "Dark-marble luxury commercial",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "archival-16mm",
+   "name": "16mm archival film",
+   "what": "Looks like found documentary footage — grain, gate weave, light leaks, soft old lenses.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/archival-16mm.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "vintage 16mm archival documentary film: heavy organic grain, gate weave, light leaks at the frame edge, soft vintage lens, faded warm colour, slight vignette",
+    "motion": "handheld observational camera, film flicker, occasional splice jump",
+    "seen_as": "Vintage 16mm archival documentary",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "neon-noir",
+   "name": "Neon noir",
+   "what": "Wet night streets, warm bulbs against cold neon, glass and chrome.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/neon-noir.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "neon-noir night cinematography: wet reflective surfaces, cold cyan and magenta neon against warm practical bulbs, deep shadow, atmospheric haze, anamorphic flares",
+    "motion": "slow gliding camera, reflections rippling, signs flickering",
+    "seen_as": "Neon-noir cyberpunk",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "fashion-editorial",
+   "name": "Fashion editorial",
+   "what": "Magazine-campaign glamour — glossy skin, big light, oversized type energy.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/fashion-editorial.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "photoreal",
+    "formula": "luxury fashion magazine editorial campaign: glossy retouched skin, bold hard beauty light, saturated colour-blocked backdrop, confident high-fashion styling, Y2K gloss",
+    "motion": "snappy cuts, poses that hit on the beat, fast zoom punches",
+    "seen_as": "Luxury editorial / fashion campaign",
+    "ip_flag": "Magazine names are trademarks — generic look only.",
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "oil-painting",
+   "name": "Oil painting in motion",
+   "what": "Thick visible brushstrokes that swirl as the scene moves.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/oil-painting.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "post-impressionist oil painting: thick impasto brushstrokes, visible palette-knife texture, swirling directional strokes, saturated complementary colours, canvas weave showing through",
+    "motion": "brushstrokes flow and re-form every frame, slow drifting camera",
+    "seen_as": "Van Gogh oil-painting animation",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "ink-wash",
+   "name": "Ink wash",
+   "what": "Black ink and water on rice paper — soft bleeds, empty space, a few decisive strokes.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": "swatches/ink-wash.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "drawn",
+    "formula": "East Asian ink-wash painting: black sumi ink bleeding into wet rice paper, soft tonal washes, large areas of empty paper, a few decisive dry-brush strokes, one muted accent colour",
+    "motion": "ink blooms and spreads, forms dissolve into and out of washes",
+    "seen_as": "Ink-wash transformation",
+    "ip_flag": null,
+    "fits_formats": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "korean-doll",
+   "name": "Korean doll",
+   "what": "A Korean collectible doll shot as a stop-motion miniature — the deadpan doll look of the Cellimure skincare reels.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": "swatches/korean-doll.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "a Korean collectible doll in a stop-motion miniature: porcelain-smooth matte doll skin, a head slightly large for the body, small almond eyes with heavy relaxed lids and a calm deadpan expression, a small red rosebud mouth, round painted pink blush on the cheeks, hair as glossy sculpted strands, slightly stiff doll posture and jointed-looking hands, real miniature fabric on the clothes, a handmade dollhouse-scale set with real tiny materials, soft tabletop studio light with shallow focus",
+    "motion": "smooth but slightly weighted doll movement, small deliberate head turns, deadpan holds",
+    "seen_as": "Korean doll",
+    "ip_flag": null,
+    "fits_formats": [
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "thai-puppet",
+   "name": "Thai puppet",
+   "what": "Thailand's small-theatre puppets (hun lakhon lek): carved, hand-painted wooden figures with jointed bodies.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": "swatches/thai-puppet.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "a Thai hun lakhon lek small-theatre puppet: a carved and hand-painted wooden face with fine painted features and a serene expression, lacquered skin, jointed wooden arms and hands, clothes in rich miniature fabric with tiny gold thread edging, warm stage light, a miniature handmade set",
+    "motion": "rod-puppet movement: graceful, slightly floating gestures, jointed limbs that swing a touch loose, hand gestures held like a dance pose",
+    "seen_as": "Thai puppet",
+    "ip_flag": null,
+    "fits_formats": [
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "plush-mascot",
+   "name": "Plush mascot",
+   "what": "A soft plush mascot character living an ordinary day — the Thai viral-mascot way (Butterbear).",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": "swatches/plush-mascot.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "a soft plush mascot doll: a round huggable fleece-and-felt body with a big soft head, small dot eyes, rosy embroidered cheeks, stitched seams, fuzzy fabric texture everywhere, cheerful and a little clumsy, a soft felt-and-fabric miniature set, gentle daylight",
+    "motion": "bouncy, clumsy, squashy movement, small hops and wobbles, big readable gestures",
+    "seen_as": "Plush mascot",
+    "ip_flag": null,
+    "fits_formats": [
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "art-toy",
+   "name": "Art toy",
+   "what": "A collectible designer vinyl art toy — the blind-box figure look that Bangkok and the rest of Asia are mad for.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": "swatches/art-toy.jpg",
+   "evidence": null,
+   "approved": false,
+   "source": "tools/video-production/styles/bank.json",
+   "extra": {
+    "family": "handmade",
+    "formula": "a collectible designer vinyl art toy: chibi proportions with a big round head and small body, huge glossy eyes, tiny mouth, smooth glossy injection-moulded vinyl in soft pastel colours, seams and joints of a real toy figure, a miniature toy-scale set with glossy plastic props, bright studio product lighting",
+    "motion": "toy-figure movement: small hops, head tilts, stiff little arm swings, poses that snap and hold like a collectible being posed",
+    "seen_as": "Art toy",
+    "ip_flag": "the general art-toy look only — never Labubu, Molly, Crybaby or any Pop Mart character, ears, teeth or face",
+    "fits_formats": [
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "decisions": "components/elements/decisions.json",
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

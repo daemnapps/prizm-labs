@@ -1,0 +1,40 @@
+{
+  "_what": "The variation formulas — every way a winner becomes new ads, ordered from closest to the winner to furthest (the owner, 2026-10-08: 'you're supposed to just do it on the actual winner itself. It's literally just rearranging the existing content first, and then we can make other types of adjustments … create formulas for them'). Tier 1 needs nothing but the winner's own footage. Every formula names what Meta will see it as (Meta, Demystifying Creative Diversification: iteration = same visuals; diversification = different look, feel, storyline, message) and where it lives in Meta.",
+  "sources": {
+    "beats": "the winner's beats in the Creative Index ($CREATIVE_INDEX_DB: beat) — section, in/out, words, frame",
+    "frameworks": "components/marketing-doctrine/ad-frameworks.json — each framework's section order and awareness entry",
+    "swipes": "the swipe library (Creative Index swipe_card) — tier 4 only"
+  },
+  "tiers": [
+    {"tier": 1, "name": "Re-cut", "what": "Rearrange the winner's own footage. Nothing new is made.",
+     "meta": "iteration — same visuals; goes in the SAME ad as extra pieces, and Meta grades each one", "cost": "an edit, no generation",
+     "formulas": [
+       {"id": "hook-from-inside", "name": "Hook from inside", "how": "Open on a later beat that can stop a scroll on its own (proof · failed-solutions · transformation · product), then play the rest in the winner's order without it.", "makes": "one cut per candidate beat", "tests": "which existing moment is the strongest first 3 seconds"},
+       {"id": "framework-order", "name": "Framework order", "how": "Re-sequence the winner's beats into a doctrine framework's section order; a section the framework doesn't use is cut; each framework carries its own awareness entry.", "makes": "one cut per framework that shares 4+ sections with the winner", "tests": "which argument order (and so which awareness entry) sells"},
+       {"id": "cut-down", "name": "Cut-down", "how": "Keep the hook, the strongest proof, the offer and the call to action; drop the rest. ~15s and ~30s.", "makes": "a 15s and a 30s", "tests": "whether the short version holds the sale (Reels/Stories)"}
+     ]},
+    {"tier": 2, "name": "Layers", "what": "Same cut, new layer on top.",
+     "meta": "iteration — same visuals; pieces in the same ad", "cost": "words · voice · crop",
+     "formulas": [
+       {"id": "words", "name": "New words on screen", "how": "New headline / captions from the avatar's language bank, same footage.", "tests": "which words carry it"},
+       {"id": "sound", "name": "New sound", "how": "New voice read or music bed; Meta: music or voiceover on every Reel.", "tests": "voice and music"},
+       {"id": "shape", "name": "New shape", "how": "9:16 · 4:5 · 1:1 crops of the same cut; Meta: ≥20% of the ad set 9:16 with sound.", "tests": "placement fit"}
+     ]},
+    {"tier": 3, "name": "Re-shoot pieces", "what": "Same script and order; new footage for some beats.",
+     "meta": "diversification when face, setting or look changes — a NEW ad (3+ moves from what's running)", "cost": "generation per beat",
+     "formulas": [
+       {"id": "new-hook-footage", "name": "New hook footage", "how": "Generate a new opening shot for the same first line.", "tests": "the scroll-stop picture"},
+       {"id": "re-cast", "name": "Re-cast", "how": "The same script played by a different banked person.", "tests": "who she trusts"},
+       {"id": "re-set", "name": "Re-set", "how": "The same script in a different setting from the settings list.", "tests": "which world she sees herself in"},
+       {"id": "re-style", "name": "Re-style", "how": "The same script in a different look from the style list.", "tests": "the look"}
+     ]},
+    {"tier": 4, "name": "New structure", "what": "The winner's message poured into a real swipe from the library (proven-to-format).",
+     "meta": "diversification — a NEW ad", "cost": "a format run + production", "formulas": [
+       {"id": "format-swap", "name": "Format swap", "how": "Pick a real swipe by evidence (components/distinct-six/pick.py) and run the winner through it.", "tests": "a new storyline"}]},
+    {"tier": 5, "name": "New who", "what": "A different avatar or angle.", "meta": "a NEW ad set (ad set = avatar + angle)", "cost": "a new brief",
+     "formulas": [{"id": "new-ad-set", "name": "New ad set", "how": "Same product, new avatar + angle.", "tests": "a new audience"}]}
+  ],
+  "hook_sections": ["proof", "failed-solutions", "transformation", "product", "solution", "objections"],
+  "cutdown_keep": ["hook", "proof", "offer", "call-to-action"],
+  "framework_min_shared": 4
+}

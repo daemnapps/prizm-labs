@@ -1,0 +1,42 @@
+{
+ "atlas#6": {
+  "A": "opus",
+  "B": "glm"
+ },
+ "copywriter#6": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "copywriter#10": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "image-teardown#14": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "image-teardown#15": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "intake#4": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "media-render#3": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "media-render#4": {
+  "A": "opus",
+  "B": "glm"
+ },
+ "media-render#6": {
+  "A": "glm",
+  "B": "opus"
+ },
+ "meta-upload#11": {
+  "A": "opus",
+  "B": "glm"
+ }
+}

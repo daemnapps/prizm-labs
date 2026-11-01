@@ -1,0 +1,173 @@
+{
+ "_readme": "Where words and stickers may sit on the 9:16 frame. Every text layer (captions, hook, card, screen, end card, lower third, platform UI, icons, disclaimers) names a ZONE here — never a raw height. Every zone is a box in % of the frame, measured from the top-left (x, y = its top-left corner; w, h = its size). Each one sits inside the content 4:5 zone (the 22 Sep rule: 9:16 frame, the content in the centred 4:5 band = 14.8%–85.2% down) AND clear of every platform's own buttons in machine/defaults.json → safe_zones.surfaces (the right-hand icon rail, the bottom caption/CTA band, the top bar). Centred zones keep the same margin both sides as the right rail so centred words look centred. The gate refuses a zone id that is not here and a zone that crosses a surface's buttons. FACE-AWARE: when production marks where the person is (`subject_box` per scene in plan.json), a layer whose zone covers the face moves to the nearest free zone in its `moves_to` list and the cut sheet records why; with no subject box the gate WARNS that placement is face-blind for that scene. Two layers on screen at the same moment never hold zones that mostly overlap (more than `crowd_overlap` of the smaller one) — the later one moves, in order hook → captions → platform UI → lower thirds → icons. Only the owner signs a row approved.",
+ "asset": "video",
+ "bank": "placement",
+ "updated": "2026-09-23 (the owner: headline and captions sat too high; captions belong toward the bottom; organic surfaces)",
+ "face_overlap": 0.15,
+ "zones": [
+  {
+   "id": "top-headline",
+   "name": "Top headline",
+   "x": 15,
+   "y": 19,
+   "w": 70,
+   "h": 11,
+   "align": "center",
+   "what": "The first band under the app's top bar, inside the 4:5 content zone.",
+   "when_to_use": "The hook. It is the first thing read on frame one.",
+   "moves_to": [
+    "upper-third",
+    "center",
+    "caption-band"
+   ],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "upper-third",
+   "name": "Upper third",
+   "x": 15,
+   "y": 30,
+   "w": 70,
+   "h": 11,
+   "align": "center",
+   "what": "Just under the headline band.",
+   "when_to_use": "A comment-reply bubble, a search bar, a second headline line, a sticker that sits above the face.",
+   "moves_to": [
+    "top-headline",
+    "center",
+    "caption-band"
+   ],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "center",
+   "name": "Centre",
+   "x": 15,
+   "y": 42,
+   "w": 70,
+   "h": 11,
+   "align": "center",
+   "what": "Dead centre of the safe frame.",
+   "when_to_use": "One-word captions, a stat, a burst sticker — only when nobody's face is there.",
+   "moves_to": [
+    "upper-third",
+    "caption-band",
+    "top-headline"
+   ],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "center-block",
+   "name": "Centre block",
+   "x": 15,
+   "y": 26,
+   "w": 70,
+   "h": 40,
+   "align": "center",
+   "what": "The big middle box a plate's words sit in.",
+   "when_to_use": "A card's lines, a screen (review, comment, DM, site, order, search) and the end card's offer — scenes that are a plate, not a face.",
+   "moves_to": [],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "lower-third",
+   "name": "Lower third",
+   "x": 6,
+   "y": 52,
+   "w": 60,
+   "h": 8,
+   "align": "left",
+   "what": "A left-aligned strap above the caption band, clear of the right-hand icons.",
+   "when_to_use": "A name and title strap (an expert, a customer).",
+   "moves_to": [
+    "upper-third",
+    "left-rail"
+   ],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "caption-band",
+   "name": "Caption band",
+   "x": 15,
+   "y": 63,
+   "w": 70,
+   "h": 9,
+   "align": "center",
+   "what": "The lowest band words may use — the line just above the app's own caption, handle and CTA button.",
+   "when_to_use": "Spoken-word captions. Low enough to leave the face alone, high enough that no platform covers it.",
+   "moves_to": [
+    "upper-third",
+    "top-headline",
+    "center"
+   ],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "fine-print",
+   "name": "Fine print",
+   "x": 15,
+   "y": 72.5,
+   "w": 70,
+   "h": 2.5,
+   "align": "center",
+   "what": "A thin strip under the caption band.",
+   "when_to_use": "Disclaimers only — small, always legible, never covered.",
+   "moves_to": [],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "left-rail",
+   "name": "Left rail",
+   "x": 6,
+   "y": 40,
+   "w": 26,
+   "h": 14,
+   "align": "left",
+   "what": "A block on the left, between the upper third and the caption band — the mirror of the platform icon rail, which is always on the right.",
+   "when_to_use": "A like or view counter, a small icon or emoji, a price tag next to a face.",
+   "moves_to": [
+    "top-left",
+    "upper-third",
+    "lower-third"
+   ],
+   "status": "draft",
+   "signed": null
+  },
+  {
+   "id": "top-left",
+   "name": "Top left",
+   "x": 6,
+   "y": 19,
+   "w": 40,
+   "h": 8,
+   "align": "left",
+   "what": "The top-left corner under the top bar.",
+   "when_to_use": "A 'Stitched with' / 'Duet with' pill, a small badge.",
+   "moves_to": [
+    "left-rail",
+    "top-headline"
+   ],
+   "status": "draft",
+   "signed": null
+  }
+ ],
+ "defaults": {
+  "hook": "top-headline",
+  "captions": "caption-band",
+  "card": "center-block",
+  "screen": "center-block",
+  "endcard": "center-block",
+  "lower_thirds": "lower-third",
+  "disclaimers": "fine-print",
+  "icons": "left-rail",
+  "_platform_ui": "each platform-UI style names its own zone (looks/platform_ui.json)"
+ },
+ "crowd_overlap": 0.4
+}

@@ -1,0 +1,122 @@
+{
+ "element": "delivery",
+ "asset": "register",
+ "source": "components/marketing-doctrine/delivery.json › register",
+ "enforced_by": "the copywriter and the video teardown read it; nothing refuses an unknown value",
+ "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
+ "rows": [
+  {
+   "id": "staccato-urgent",
+   "name": "staccato-urgent",
+   "what": "Short lines, hard stops, stacking. The rhythm itself says hurry.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › register",
+   "extra": {
+    "when": "The opening seconds and the close; anywhere the cost of waiting is the argument."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "plain-flat",
+   "name": "plain-flat",
+   "what": "Ordinary sentence length, no lift, no adjective doing work the fact should do.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › register",
+   "extra": {
+    "when": "Where the claim has to carry itself — the mechanism, the proof, the product."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "warm-unhurried",
+   "name": "warm-unhurried",
+   "what": "Longer sentences, soft landings, room left standing after each thought.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › register",
+   "extra": {
+    "when": "Identification and transformation beats, where the viewer has to feel unhurried to feel seen."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "clinical",
+   "name": "clinical",
+   "what": "Precise, quantified, no colour. It sounds like a measurement, because it is one.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › register",
+   "extra": {
+    "when": "Proof and mechanism beats in a market that has stopped believing adjectives."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "playful",
+   "name": "playful",
+   "what": "Light, quick, the speaker plainly enjoying themselves.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › register",
+   "extra": {
+    "when": "Hooks and identification beats in rooms that enjoy their own subject."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "intimate-low",
+   "name": "intimate-low",
+   "what": "Quiet, close, said as though to one person who is already listening.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › register",
+   "extra": {
+    "when": "The admission, the objection answered honestly, the moment the piece stops addressing a market."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

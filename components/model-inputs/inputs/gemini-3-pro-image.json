@@ -1,0 +1,204 @@
+{
+ "_readme": [
+  "Nano Banana Pro = Gemini 3 Pro Image (House job pictures.object, an alternate, not routed). Filled 2026-10-26 from Google's Gemini API image-generation page and Google's Nano Banana Pro prompting tips; the API page was long and its Pro section could not be read in full, so the reference-image breakdown is flagged to verify. Every entry is draft.",
+  "No brand, product, person or format word appears in this file."
+ ],
+ "model": "gemini-3-pro-image",
+ "medium": "image",
+ "label": "Nano Banana Pro (Gemini 3 Pro Image)",
+ "registry_id": "gemini-3-pro-image",
+ "read": "2026-10-26",
+ "status": "draft",
+ "sources": [
+  "https://ai.google.dev/gemini-api/docs/image-generation",
+  "https://blog.google/products/gemini/prompting-tips-nano-banana-pro/",
+  "Higgsfield MCP models_explore get nano_banana_pro, 2026-10-26"
+ ],
+ "limits": {
+  "max_images": 14,
+  "max_images_note": "Google's tips: blend up to 6 to 14 unconnected images depending on the surface; the API page lists up to 6 object images, 5 character images and 3 style images in its comparison table (flattened in the fetch: verify)",
+  "image_sizes": "1K (default), 2K, 4K; the K must be uppercase, lowercase is rejected",
+  "aspect_ratios": "1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9 (the list Higgsfield shows for this model; Google's page list for Pro was not readable)",
+  "thinking": "on by default and cannot be switched off in the API; up to two interim images, the last is the final",
+  "watermark": "every generated image carries a SynthID watermark",
+  "grounding": "Google Search grounding is available",
+  "multi_turn": "multi-turn conversation is the recommended way to iterate"
+ },
+ "qualities": [],
+ "house": {
+  "job": "pictures.object",
+  "use": "alternate object-picture model, not routed; the third rung of the picture ladder"
+ },
+ "doors": {
+  "google": {
+   "vendor_id": "gemini-3-pro-image",
+   "note": "Google's own API: aspectRatio and imageSize in generationConfig.imageConfig"
+  },
+  "higgsfield": {
+   "vendor_id": "nano_banana_pro",
+   "read": "2026-10-26",
+   "status": "draft",
+   "source": "`higgsfield model get nano_banana_pro` (command line 1.2.2), 2026-10-26",
+   "resolutions": [
+    "1k",
+    "2k",
+    "4k"
+   ],
+   "resolution_default": "2k",
+   "aspect_ratios": [
+    "1:1",
+    "3:2",
+    "2:3",
+    "4:3",
+    "3:4",
+    "4:5",
+    "5:4",
+    "9:16",
+    "16:9",
+    "21:9"
+   ],
+   "references": "role image_references; at most 14 (Higgsfield's own rule); a non-empty prompt or at least one reference is required",
+   "differs": "Reachable through the Higgsfield command line only: the keyed API answers model_disabled.",
+   "cost_credits": "quoted free: 2 credits at 2k"
+  }
+ },
+ "inputs": [
+  {
+   "name": "contents (text + images)",
+   "what": "The prompt and the reference pictures, in one request.",
+   "allowed": "images up to 14 in total depending on the surface; give each a role in the text",
+   "we_send": "the same references as the other picture models",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "aspectRatio",
+   "what": "The frame.",
+   "allowed": "1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9; the output matches the first reference's ratio if none is set",
+   "we_send": "9:16",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "imageSize",
+   "what": "The resolution tier.",
+   "allowed": "1K, 2K, 4K (uppercase K)",
+   "we_send": "2K",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "thinking",
+   "what": "The model plans before drawing.",
+   "allowed": "always on, not settable",
+   "we_send": "nothing",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "grounding",
+   "what": "Search grounding for factual pictures.",
+   "allowed": "Google Search",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft"
+  }
+ ],
+ "structure": [
+  {
+   "id": "formula",
+   "rule": "Core elements: subject, composition, action, location, style, and the editing instruction; add aspect ratio, camera and lighting, text placement, factual constraints and reference roles for professional results.",
+   "status": "draft"
+  },
+  {
+   "id": "whole-sentences",
+   "rule": "Describe the scene in full sentences, not keywords.",
+   "status": "draft"
+  },
+  {
+   "id": "reference-roles",
+   "rule": "Define the role of each uploaded image: 'Use Image A for the pose, Image B for the art style, Image C for the background.' State how the references relate.",
+   "status": "draft"
+  },
+  {
+   "id": "say-what-stays",
+   "rule": "For an edit be direct and specific about the change and state what stays the same.",
+   "status": "draft"
+  },
+  {
+   "id": "canvas",
+   "rule": "Define the canvas with an aspect ratio in the prompt too ('a 9:16 vertical poster').",
+   "status": "draft"
+  },
+  {
+   "id": "direct-the-shot",
+   "rule": "Direct it like a cinematographer: angle, depth of field, lighting, colour grading.",
+   "status": "draft"
+  },
+  {
+   "id": "exact-text",
+   "rule": "State exactly what text appears and how: the words in quotes, the font style, the placement.",
+   "status": "draft"
+  },
+  {
+   "id": "factual-asks",
+   "rule": "For diagrams or factual pictures request accuracy explicitly and supply factual inputs.",
+   "status": "draft"
+  },
+  {
+   "id": "iterate-multi-turn",
+   "rule": "Iterate by conversation: one change at a time, restating what must hold.",
+   "status": "draft"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "perfect-small-text",
+   "text": "Expecting perfect small text, fine detail or spelling.",
+   "status": "draft"
+  },
+  {
+   "id": "unverified-data",
+   "text": "Trusting data-driven or factual visuals without checking them.",
+   "status": "draft"
+  },
+  {
+   "id": "multilingual-text",
+   "text": "Assuming text in other languages is free of grammar errors.",
+   "status": "draft"
+  },
+  {
+   "id": "complex-artifacts",
+   "text": "Expecting complex edits, blends or lighting changes to be free of artifacts.",
+   "status": "draft"
+  },
+  {
+   "id": "consistency",
+   "text": "Assuming character consistency stays perfect across edits.",
+   "status": "draft"
+  },
+  {
+   "id": "lowercase-k",
+   "text": "Lowercase image sizes: '2k' is rejected, send '2K'.",
+   "status": "draft"
+  },
+  {
+   "id": "studio-wording",
+   "text": "Studio, cinematic or staged wording when you want a real photo.",
+   "pattern": "studio polish|8k|masterpiece|ultra[- ]high realism|trending on",
+   "status": "draft"
+  },
+  {
+   "id": "author-quotes",
+   "text": "A person's name, a date or a quote from our own rulings inside the prompt: the model draws it as picture content.",
+   "pattern": "\\([A-Z][a-z]+,? 20\\d\\d|\\b[A-Z][a-z]+, 20\\d\\d-\\d\\d-\\d\\d",
+   "status": "draft"
+  }
+ ],
+ "history": [
+  {
+   "where": "house.use",
+   "was": "alternate object-picture model, not routed (one door, GPT Image, the owner 2026-09-22)"
+  }
+ ]
+}

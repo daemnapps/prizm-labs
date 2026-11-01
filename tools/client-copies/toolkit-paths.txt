@@ -1,0 +1,13 @@
+# What a client copy gets from Prizm Labs, and keeps getting every day.
+# One path per line. A folder is copied whole (files gone here are removed there).
+# Never listed, never touched in a client copy: the client's own brand folder,
+# .gitignore, .env, .github/, and anything else not named below.
+tools/
+components/
+brands/_TEMPLATE/
+.claude/CLAUDE.md
+.env.example
+START-HERE.md
+README.md
+WALKTHROUGH.md
+LICENSE

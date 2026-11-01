@@ -1,0 +1,33 @@
+{
+  "_what": "What the research gatherer's free daily sources pull for this brand (components/research-gatherer: surveys, reviews, interviews, feedback; daily.py runs every brand that has this file). Keys are read by NAME from the environment or the Keychain, never written here. Fill in or delete each block.",
+  "language_avatar": "<core avatar id the rows file into>",
+  "surveys": [
+    {
+      "survey": "<short id, e.g. customers>",
+      "name": "<the survey's name>",
+      "sheet": "<Google Sheet file id of the form's response sheet>",
+      "relationship": "ordered | refund | lead",
+      "since": "YYYY-MM-DD",
+      "note": ""
+    }
+  ],
+  "reviews": {
+    "platform": "junip | judgeme",
+    "key": "<NAME of the key in the environment / Keychain>",
+    "shop_domain": "<the domain Judge.me knows the shop by (judgeme only)>",
+    "since": "YYYY-MM-DD",
+    "note": ""
+  },
+  "feedback": {
+    "enabled": false,
+    "key": "<NAME of the Klaviyo private key>",
+    "metric": "Submitted Feedback",
+    "since": "YYYY-MM-DDTHH:MM:SSZ",
+    "note": ""
+  },
+  "interviews": {
+    "inbox": "core-avatars/<avatar>/language/evidence/inbox",
+    "company_speakers": ["<names of your own people in the transcripts>"],
+    "note": ""
+  }
+}

@@ -1,0 +1,4028 @@
+{
+ "schema": "creative-controls.v1",
+ "updated": "2026-10-29",
+ "added": "2026-10-23",
+ "what": "One set of creative controls for copy, video and pictures. The core dials apply to every medium; a few belong to one medium (film and picture grammar) and say so. Each dial is a 0 to 4 scale with a named anchor at every level; the same dial means the same thing in every medium and every chain. A reader measures the level an asset is at; a chain sets the level it should be at.",
+ "source": "the owner 2026-10-23: standardize the creative controls across copy, video and images; turn them up and down; absurd, maxed out, hyper-specific by default. Researched: psychology (valence, arousal, emotion, incongruity, benign violation, vividness, persuasion knowledge, authenticity, attention) and practitioner vocabulary (creativity templates, visual rhetoric, comedy and rhetoric craft).",
+ "rule": "A machine reads these dials from here and never restates them. The delivery dials (humor kind, delivery style, register, pacing) say how a piece sounds; these say how far it goes.",
+ "default_rule": "Unless a preset or the brief says otherwise: intensity, absurdity, specificity, dramatisation and stopping power at the top, swap depth at replacement, ad-likeness at native. Maxed and hyper-specific is the house stance; the guards keep it on the claim. The floor (never sterile) holds under every preset.",
+ "guards": [
+  {
+   "id": "relevance",
+   "name": "Relevance",
+   "what": "Every absurd or swapped element is about the problem, the result or the product. Unexpected and irrelevant is the one quadrant that hurts the message (Heckler & Childers)."
+  },
+  {
+   "id": "legibility",
+   "name": "Legibility",
+   "what": "The problem and what is ours read inside a second, however loud the rest is (Pieters, Warlop & Wedel)."
+  },
+  {
+   "id": "benign",
+   "name": "Benign",
+   "what": "Every violation carries its safety: distance, a character, obvious exaggeration (McGraw & Warren)."
+  },
+  {
+   "id": "claim-safe",
+   "name": "Claim-safe",
+   "what": "Exaggerate the premise and the emotion, never the medical or physical outcome."
+  },
+  {
+   "id": "receipt",
+   "name": "Receipt",
+   "what": "Every hyper-specific detail comes from the avatar's own words or the brand's own files; none is invented."
+  },
+  {
+   "id": "never-sterile",
+   "name": "Never sterile",
+   "what": "Every ad clears the floor on intensity, absurdity, humor, dramatisation and stopping power, at every awareness level. A proof or offer ad gets its proof inside an absurd, dramatised picture, never a plain product shot."
+  },
+  {
+   "id": "reads-cold",
+   "name": "Reads cold",
+   "what": "The words on the ad make sense to a stranger on one read, before any joke lands (the owner, 2026-10-23, on a picture otherwise called great: \"the text on that image doesn't make sense\"). A borrowed sentence shape is kept only when our words still say something literally true and clear inside it; never fill the swipe's sentence with our nouns like a word game. If the line needs the swipe to be understood, rewrite it."
+  },
+  {
+   "id": "one-idea",
+   "name": "One idea",
+   "what": "The words and the picture say the same thing. A stranger who reads the line and then looks at the picture understands why that picture is there (the owner, 2026-10-23: \"tie the image and copy together to make sure they actually make sense\"). A line about something the picture does not show fails, however good it is alone."
+  },
+  {
+   "id": "parody-not-copy",
+   "name": "Parody, not copy",
+   "what": "A real brand mark, outfit or famous face the swipe carries is turned into an absurd parody of itself, never kept as the real thing and never blanked. We are making people laugh, never passing anything off (the owner, 2026-10-23)."
+  }
+ ],
+ "dials": [
+  {
+   "id": "intensity",
+   "name": "Intensity",
+   "aka": [
+    "arousal",
+    "activation",
+    "energy"
+   ],
+   "what": "How hard the piece hits the body: heart rate, not mood. Separate from whether the feeling is good or bad.",
+   "framework": "The activation axis of Russell's circumplex of affect; Berger & Milkman found high-activation emotions get shared, whatever their valence.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "flat",
+     "what": "Calm, sleepy, nothing moves."
+    },
+    {
+     "level": 1,
+     "name": "low",
+     "what": "Mild, conversational, a shrug."
+    },
+    {
+     "level": 2,
+     "name": "engaged",
+     "what": "Alert; something is at stake."
+    },
+    {
+     "level": 3,
+     "name": "high",
+     "what": "Heart-rate up: anger, disgust, a burst of laughter, a wince."
+    },
+    {
+     "level": 4,
+     "name": "peak",
+     "what": "Shock, scream, can't-look-away; the strongest version of the feeling the ad carries."
+    }
+   ],
+   "copy": "Short sentences, hard verbs, stakes named, capitals and punctuation used sparingly but at the peak.",
+   "video": "Cut rate, camera motion, loudness, the performer's energy; the peak lands in the first three seconds.",
+   "image": "Contrast, saturation, how much of the frame the subject fills, how tight the crop, how much motion is implied.",
+   "default": {
+    "level": 4,
+    "why": "Activation is what makes people stop and share; a low-arousal ad is wallpaper."
+   },
+   "risk": "Peak arousal with no relief reads as distress; 3 against 4 is worth testing.",
+   "pairs_with": [
+    "emotion",
+    "stopping_power"
+   ],
+   "research": [
+    {
+     "cite": "Russell 1980, circumplex model of affect",
+     "url": "https://pdodds.w3.uvm.edu/research/papers/others/1980/russell1980a.pdf",
+     "checked": true
+    },
+    {
+     "cite": "Berger & Milkman 2012, What makes online content viral?",
+     "url": "https://cssh.northeastern.edu/pandemic-teaching-initiative/wp-content/uploads/sites/43/2020/09/What-Makes-Online-Content-Viral.pdf",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "valence",
+   "name": "Valence",
+   "aka": [
+    "pleasantness",
+    "emotional direction",
+    "tone"
+   ],
+   "what": "Whether the feeling is unpleasant or pleasant. Set per beat: a direct-response piece usually opens low and closes high.",
+   "framework": "The valence axis of Russell's circumplex.",
+   "scale": [
+    {
+     "level": -2,
+     "name": "aversive",
+     "what": "Repulsive or threatening: the problem at its worst."
+    },
+    {
+     "level": -1,
+     "name": "uneasy",
+     "what": "Tension, discomfort, a cringe."
+    },
+    {
+     "level": 0,
+     "name": "neutral",
+     "what": "Informational, no push."
+    },
+    {
+     "level": 1,
+     "name": "pleasant",
+     "what": "Warm, light, relieved."
+    },
+    {
+     "level": 2,
+     "name": "euphoric",
+     "what": "Triumph, delight, the payoff."
+    }
+   ],
+   "copy": "Loss against gain framing; the words of the problem against the words of the result.",
+   "video": "Faces, music key and tempo, colour grade, and the arc from the open to the close.",
+   "image": "The face, colour temperature and light, cramped and dark against open and bright.",
+   "default": {
+    "level": -2,
+    "why": "At the open: the problem at its worst stops the right person. The close moves up the scale."
+   },
+   "risk": "Disgust sticks to whatever it touches: keep the -2 on the problem, never on the product.",
+   "pairs_with": [
+    "emotion",
+    "humor"
+   ],
+   "research": [
+    {
+     "cite": "Russell 1980, circumplex model of affect",
+     "url": "https://pdodds.w3.uvm.edu/research/papers/others/1980/russell1980a.pdf",
+     "checked": true
+    },
+    {
+     "cite": "Morales & Fitzsimons 2007, product contagion",
+     "url": "https://people.duke.edu/~gavan/bio/GJF_articles/contagion_jmr_07.pdf",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "absurdity",
+   "name": "Absurdity",
+   "aka": [
+    "incongruity",
+    "surrealism",
+    "the twist",
+    "schema violation"
+   ],
+   "what": "How far the piece breaks what should happen. Always tied to the claim: absurd and relevant, never absurd and random.",
+   "framework": "Schema incongruity (Mandler; Meyers-Levy & Tybout), split by Heckler & Childers into unexpected and relevant: only unexpected-and-relevant helps the message.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "expected",
+     "what": "The category's usual picture."
+    },
+    {
+     "level": 1,
+     "name": "twist",
+     "what": "One unexpected detail inside a real scene."
+    },
+    {
+     "level": 2,
+     "name": "incongruous",
+     "what": "An odd premise, explained in the same beat."
+    },
+    {
+     "level": 3,
+     "name": "absurd",
+     "what": "Impossible but read in a second; the impossible thing IS the benefit or the problem."
+    },
+    {
+     "level": 4,
+     "name": "surreal",
+     "what": "Dream logic, rules broken on purpose, still pinned to the claim."
+    }
+   ],
+   "copy": "Impossible comparisons, absurd specifics, a non sequitur the payoff line resolves.",
+   "video": "A scene that breaks physical or social rules (giant objects, the wrong setting, deadpan wrongness) and a clean beat that resolves it.",
+   "image": "Scale distortion, one impossible object in an otherwise real photo, a swapped object that should not be there.",
+   "default": {
+    "level": 4,
+    "why": "Maxed and hyper-specific is the house stance; the relevance guard keeps it on the claim."
+   },
+   "risk": "Originality can pull attention to the ad and off the brand; the moderate-incongruity sweet spot failed a pre-registered replication, so test 3 against 4.",
+   "pairs_with": [
+    "metaphor",
+    "realism",
+    "humor"
+   ],
+   "research": [
+    {
+     "cite": "Heckler & Childers 1992, expectancy and relevancy",
+     "url": "https://ideas.repec.org/a/oup/jconrs/v18y1992i4p475-92.html",
+     "checked": true
+    },
+    {
+     "cite": "Meyers-Levy & Tybout 1989, schema congruity",
+     "url": "https://www.kellogg.northwestern.edu/academics-research/research/detail/1989/schema-congruity-as-a-basis-for-product-evaluation/",
+     "checked": true
+    },
+    {
+     "cite": "Pieters, Warlop & Wedel 2002, Breaking through the clutter",
+     "url": "https://research.tilburguniversity.edu/en/publications/breaking-through-the-clutter-benefits-of-advertisement-originalit/",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "humor",
+   "name": "Humor",
+   "aka": [
+    "comedy",
+    "funny"
+   ],
+   "what": "How much the piece is played for a laugh. The kind of humor is the delivery dial's humor value; this dial is how far it goes.",
+   "framework": "Benign violation (McGraw & Warren): something is wrong and safe at once. Speck's typology runs from comic wit to full comedy.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "none",
+     "what": "Played straight."
+    },
+    {
+     "level": 1,
+     "name": "wry",
+     "what": "A smile; light wit."
+    },
+    {
+     "level": 2,
+     "name": "playful",
+     "what": "Clearly a joke, warm."
+    },
+    {
+     "level": 3,
+     "name": "edged",
+     "what": "A sharp violation made safe by distance, a villain or a target."
+    },
+    {
+     "level": 4,
+     "name": "full comedy",
+     "what": "A sustained gag; violation and safety both at the top."
+    }
+   ],
+   "copy": "Set-up and punch, rule of three, deadpan specifics, self-deprecation.",
+   "video": "Timing, the performer, the reaction shot, escalation; the strongest medium for it.",
+   "image": "A visual pun or a one-frame gag; the caption carries the punch.",
+   "default": {
+    "level": 3,
+    "why": "The problem is already a violation; humor is what makes it safe to look at."
+   },
+   "risk": "A violation with nothing benign about it reads as gross or offensive.",
+   "humor_values": [
+    "none",
+    "dry",
+    "wry",
+    "self-deprecating",
+    "observational",
+    "absurd",
+    "broad"
+   ],
+   "pairs_with": [
+    "edge",
+    "absurdity"
+   ],
+   "research": [
+    {
+     "cite": "McGraw & Warren 2010, benign violations",
+     "url": "https://leeds-faculty.colorado.edu/mcgrawp/pdf/mcgraw.warren.2010.pdf",
+     "checked": true
+    },
+    {
+     "cite": "Speck 1991, humorous message taxonomy",
+     "url": "https://doi.org/10.1080/01633392.1991.10504957",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "specificity",
+   "name": "Specificity",
+   "aka": [
+    "vividness",
+    "concreteness",
+    "detail"
+   ],
+   "what": "How exact the piece is: a named time, place, number, object and body part against a general claim.",
+   "framework": "The vividness effect (Nisbett & Ross), dual coding (Paivio), imagery processing (MacInnis & Price).",
+   "scale": [
+    {
+     "level": 0,
+     "name": "abstract",
+     "what": "A general claim."
+    },
+    {
+     "level": 1,
+     "name": "category",
+     "what": "A category-level detail."
+    },
+    {
+     "level": 2,
+     "name": "concrete",
+     "what": "One sensory detail or one named situation."
+    },
+    {
+     "level": 3,
+     "name": "hyper-specific",
+     "what": "A named place, number, time, object or body part."
+    },
+    {
+     "level": 4,
+     "name": "a movie in one frame",
+     "what": "Two or more senses, an exact moment and an exact number or object."
+    }
+   ],
+   "copy": "Nouns over adjectives, numbers, sensory verbs.",
+   "video": "Macro on the exact detail, real texture, the proof moment on screen.",
+   "image": "Every swapped or exaggerated element at a stated size, texture and colour; real detail visible, never stock.",
+   "default": {
+    "level": 4,
+    "why": "Specific beats general, and it is what keeps absurd and dramatised pieces believable."
+   },
+   "risk": "A specific detail that is invented reads false; every one comes from the avatar's own words or the brand's files.",
+   "pairs_with": [
+    "dramatisation",
+    "realism"
+   ],
+   "research": [
+    {
+     "cite": "Nisbett & Ross 1980, the vividness effect (summary: Smith & Shaffer 2000)",
+     "url": "https://www.uky.edu/~ngrant/CJT780/readings/Day%207/SmithShaffer2000.pdf",
+     "checked": true
+    },
+    {
+     "cite": "MacInnis & Price 1987, imagery in information processing",
+     "url": "https://msbfile03.usc.edu/digitalmeasures/macinnis/intellcont/4656740-1.pdf",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "dramatisation",
+   "name": "Dramatisation",
+   "aka": [
+    "exaggeration",
+    "hyperbole",
+    "heightening"
+   ],
+   "what": "How far the problem, the reaction or the result is pushed past life size.",
+   "framework": "Hyperbole and figurative language (Kronrod & Danziger), puffery (Xu & Wyer), and the demonstration tradition: show the effect, bigger.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "literal",
+     "what": "States the fact."
+    },
+    {
+     "level": 1,
+     "name": "emphasis",
+     "what": "A strong word or framing, still plausible."
+    },
+    {
+     "level": 2,
+     "name": "dramatised",
+     "what": "Acted reaction, pushed before and after, still possible."
+    },
+    {
+     "level": 3,
+     "name": "hyperbole",
+     "what": "Physically impossible and obviously figurative."
+    },
+    {
+     "level": 4,
+     "name": "heightened reality",
+     "what": "The effect staged at its extreme and shown, not said."
+    }
+   ],
+   "copy": "Hyperbole, extreme comparison, the specific consequence.",
+   "video": "Staged reaction, speed ramp, dramatic reveal, the exaggerated demo.",
+   "image": "The problem or product oversized, the extreme before and after, the strongest expression.",
+   "default": {
+    "level": 4,
+    "why": "Obviously non-literal exaggeration is the drama; it reads as a picture, not a claim."
+   },
+   "risk": "Exaggerated outcomes are where ad policy and believability break: push the premise and the emotion, never the medical result.",
+   "pairs_with": [
+    "specificity",
+    "realism"
+   ],
+   "research": [
+    {
+     "cite": "Kronrod & Danziger 2013, figurative language and hedonic consumption",
+     "url": "https://en-coller.tau.ac.il/sites/coller-english.tau.ac.il/files/RP_243-Danziger.pdf",
+     "checked": true
+    },
+    {
+     "cite": "Xu & Wyer 2010, puffery in advertisements",
+     "url": "https://news.illinois.edu/head-scratching-ad-claims-can-alienate-consumers-study-finds/",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "metaphor",
+   "name": "Swap depth",
+   "aka": [
+    "the picture swap",
+    "replacement (pictorial analogy)",
+    "visual metaphor",
+    "contextual metaphor",
+    "visual rhetoric"
+   ],
+   "what": "How deeply our thing is merged into the source picture. Climbs from showing two things side by side to replacing one with the other.",
+   "framework": "Phillips & McQuarrie's visual rhetoric typology: juxtaposition, fusion and replacement, in rising complexity; Goldenberg's replacement template; Forceville's pictorial metaphor.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "literal",
+     "what": "Our thing shown as itself; nothing borrowed."
+    },
+    {
+     "level": 1,
+     "name": "juxtaposed",
+     "what": "Our thing placed beside the borrowed one, the viewer compares."
+    },
+    {
+     "level": 2,
+     "name": "fused",
+     "what": "Our thing and the borrowed one merged into one object."
+    },
+    {
+     "level": 3,
+     "name": "replaced",
+     "what": "The borrowed object is gone; ours stands in its place and the scene still reads."
+    },
+    {
+     "level": 4,
+     "name": "replaced world",
+     "what": "Several objects swapped by one rule, so the whole scene becomes ours."
+    }
+   ],
+   "copy": "Simile at 1, metaphor at 2 and 3, an extended metaphor carried through the whole piece at 4.",
+   "video": "Match cut at 1, morph at 2, the object swapped in the swipe's own footage at 3, the swipe's world rebuilt in our terms at 4.",
+   "image": "The picture swap: keep the swipe's pose, light, crowd and frame; swap the meaning-carrying objects by shape and role.",
+   "default": {
+    "level": 3,
+    "why": "Replacement keeps the swipe's proven picture and makes it ours in one look."
+   },
+   "risk": "Replacement is the hardest to read; if the swapped object does not rhyme in shape and role the picture goes random.",
+   "pairs_with": [
+    "absurdity",
+    "stopping_power"
+   ],
+   "research": [
+    {
+     "cite": "Phillips & McQuarrie 2004, beyond visual metaphor: a typology of visual rhetoric",
+     "url": "https://doi.org/10.1177/1470593104044089",
+     "checked": true
+    },
+    {
+     "cite": "Goldenberg, Mazursky & Solomon 1999, the fundamental templates of quality ads",
+     "url": "https://doi.org/10.1287/mksc.18.3.333",
+     "checked": true
+    },
+    {
+     "cite": "Forceville 1996, Pictorial Metaphor in Advertising",
+     "url": null,
+     "checked": false
+    },
+    {
+     "cite": "van Enschot et al. 2022, refining replacements",
+     "url": "https://research.tilburguniversity.edu/en/publications/refining-replacements-validating-a-revised-typology-of-visual-met/",
+     "checked": true
+    },
+    {
+     "cite": "Forceville 2008, pictorial and multimodal metaphor",
+     "url": "https://pure.uva.nl/ws/files/4111507/74907_Forceville_2008_in_PhillipsMcQuarrie_DARE_version_2_.pdf",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "edge",
+   "name": "Edge",
+   "aka": [
+    "transgression",
+    "taboo",
+    "shock",
+    "gross-out"
+   ],
+   "what": "How much the piece breaks a social rule: the thing people don't show or say. The violation half of benign violation.",
+   "framework": "Benign violation: the violation must be strong enough to register and distant enough to stay safe.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "polite",
+     "what": "Nothing anyone would hesitate to post."
+    },
+    {
+     "level": 1,
+     "name": "candid",
+     "what": "Says the thing people usually leave out."
+    },
+    {
+     "level": 2,
+     "name": "uncomfortable",
+     "what": "Shows what people hide: the close-up, the confession."
+    },
+    {
+     "level": 3,
+     "name": "gross or taboo",
+     "what": "Repulsive or forbidden, held at a distance."
+    },
+    {
+     "level": 4,
+     "name": "shocking",
+     "what": "The line most brands won't cross, made safe by absurdity or a character."
+    }
+   ],
+   "copy": "The unsaid thing said plainly; the confession; the name nobody uses in public.",
+   "video": "The close-up nobody films, the reaction held too long.",
+   "image": "The problem shown at full size, in full light.",
+   "default": {
+    "level": 3,
+    "why": "The problem is the edge; showing it is the whole point."
+   },
+   "risk": "Ad review rejects some edges outright; above 3 the benign half must be obvious.",
+   "pairs_with": [
+    "humor",
+    "absurdity"
+   ],
+   "research": [
+    {
+     "cite": "McGraw & Warren 2010, benign violations",
+     "url": "https://leeds-faculty.colorado.edu/mcgrawp/pdf/mcgraw.warren.2010.pdf",
+     "checked": true
+    },
+    {
+     "cite": "Morales & Fitzsimons 2007, product contagion",
+     "url": "https://people.duke.edu/~gavan/bio/GJF_articles/contagion_jmr_07.pdf",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "realism",
+   "name": "Realism",
+   "aka": [
+    "authenticity",
+    "lo-fi",
+    "the lived-in look"
+   ],
+   "what": "How real the world of the piece looks, independent of how absurd its event is. A real man in a real bathroom with an impossible thing in it is realism 3, absurdity 4.",
+   "framework": "Authenticity as cues the viewer reads (Beverland & Farrelly); the video chain's realism index rows.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "stylised",
+     "what": "Cartoon, CGI, obviously built."
+    },
+    {
+     "level": 1,
+     "name": "polished",
+     "what": "Studio, believable but idealised."
+    },
+    {
+     "level": 2,
+     "name": "casual pro",
+     "what": "Natural light, real location, light edit."
+    },
+    {
+     "level": 3,
+     "name": "lo-fi real",
+     "what": "Phone-shot, imperfect frame, real skin, unscripted feel."
+    },
+    {
+     "level": 4,
+     "name": "documentary",
+     "what": "Raw, unvarnished, a real person, place and moment."
+    }
+   ],
+   "copy": "Speech rhythm, hesitation, slang from the room; never marketing tone.",
+   "video": "Handheld, available light, a real room, imperfect delivery; the realism index's production rows.",
+   "image": "Real skin texture, unretouched, candid frame, phone grain. On a 3D set, realism is the print's job: the print turns the set's grey shapes into real materials, wear and grain.",
+   "default": {
+    "level": 3,
+    "why": "Lo-fi real makes the absurd land as something that happened, and keeps it off AI slop."
+   },
+   "risk": "The UGC-beats-polished evidence is thin; treat it as our own test, not a law.",
+   "pairs_with": [
+    "absurdity",
+    "ad_likeness"
+   ],
+   "research": [
+    {
+     "cite": "Beverland & Farrelly 2010, the quest for authenticity",
+     "url": "https://ideas.repec.org/a/oup/jconrs/v36y2010i5p838-856.html",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "ad_likeness",
+   "name": "Ad-likeness",
+   "aka": [
+    "native-ness (inverted)",
+    "polish",
+    "ad cues"
+   ],
+   "what": "How much the piece looks like an ad. 0 is a post a friend could have made; 4 is a commercial.",
+   "framework": "The persuasion knowledge model (Friestad & Wright): once people see it is an ad, they discount it. Native-ad studies find recognition lowers evaluation.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "native",
+     "what": "Indistinguishable from an organic post: no price, no offer, no call to action."
+    },
+    {
+     "level": 1,
+     "name": "native with product",
+     "what": "Organic form, the product present, not pitched."
+    },
+    {
+     "level": 2,
+     "name": "hybrid",
+     "what": "Creator-style form with an offer or call to action."
+    },
+    {
+     "level": 3,
+     "name": "ad-coded",
+     "what": "Product hero, claims, price, call to action."
+    },
+    {
+     "level": 4,
+     "name": "commercial",
+     "what": "Broadcast polish, logo first."
+    }
+   ],
+   "copy": "First person and story first at 0; headline claims and offer at 3.",
+   "video": "Selfie framing, platform captions, no title card at 0; logo, music bed and polish at 4.",
+   "image": "A screenshot, a note, a meme, a real post at 0; a button graphic, price badge and packshot at 3.",
+   "default": {
+    "level": 0,
+    "why": "Upper funnel is not supposed to feel like an ad at all. Bottom funnel sets its own level."
+   },
+   "risk": "Paid-partnership rules still apply; the dial is about form, never about hiding who pays.",
+   "pairs_with": [
+    "realism"
+   ],
+   "research": [
+    {
+     "cite": "Friestad & Wright 1994, persuasion knowledge model",
+     "url": "https://ideas.repec.org/a/oup/jconrs/v21y1994i1p1-31.html",
+     "checked": true
+    },
+    {
+     "cite": "Wojdynski & Evans 2016, Going native",
+     "url": "https://doi.org/10.1080/00913367.2015.1115380",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "stopping_power",
+   "name": "Stopping power",
+   "aka": [
+    "thumb-stop",
+    "scroll-stopper",
+    "pattern interrupt",
+    "attention"
+   ],
+   "what": "How hard the first second stops the scroll, and whether the thing that stops it is ours.",
+   "framework": "Attention research (Nelson-Field; Lumen) and distinctive brand assets (Romaniuk); originality grabs attention but can steal it from the brand (Pieters, Warlop & Wedel).",
+   "scale": [
+    {
+     "level": 0,
+     "name": "wallpaper",
+     "what": "Nothing catches the eye."
+    },
+    {
+     "level": 1,
+     "name": "noticeable",
+     "what": "One salient element: a colour, a face, motion."
+    },
+    {
+     "level": 2,
+     "name": "sometimes stops",
+     "what": "A clear hook inside the first second."
+    },
+    {
+     "level": 3,
+     "name": "interrupt",
+     "what": "An unexpected picture or sound in frame one, the problem or product readable early."
+    },
+    {
+     "level": 4,
+     "name": "hard stop",
+     "what": "An unmissable break in the first second, ours to own, and a reason to keep looking."
+    }
+   ],
+   "copy": "The first five words: a pattern break, specific, an open loop.",
+   "video": "Frame one and the first three seconds: motion, a face, an odd picture, a sound.",
+   "image": "One dominant focal point, high contrast against the feed, a face or an odd object; words readable in a glance.",
+   "default": {
+    "level": 4,
+    "why": "Everything else is wasted if the scroll does not stop."
+   },
+   "risk": "Score the hook and its link to us separately; a stop on something unrelated is a wasted click.",
+   "pairs_with": [
+    "intensity",
+    "metaphor"
+   ],
+   "research": [
+    {
+     "cite": "Nelson-Field 2020, The Attention Economy (coverage)",
+     "url": "https://www.marketingweek.com/attention-hacking-creative-media/",
+     "checked": false
+    },
+    {
+     "cite": "Pieters, Warlop & Wedel 2002, Breaking through the clutter",
+     "url": "https://research.tilburguniversity.edu/en/publications/breaking-through-the-clutter-benefits-of-advertisement-originalit/",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "relevance",
+   "name": "Relevance",
+   "aka": [
+    "the link",
+    "relevance link",
+    "appropriateness"
+   ],
+   "what": "How tightly the strange part connects back to the problem, the result or the product. The partner every loud dial needs.",
+   "framework": "Ad creativity is divergence AND relevance together (Smith et al.); only unexpected-and-relevant helps the message (Heckler & Childers).",
+   "scale": [
+    {
+     "level": 0,
+     "name": "unrelated",
+     "what": "Curiosity only; the weird part has nothing to do with us."
+    },
+    {
+     "level": 1,
+     "name": "loose",
+     "what": "A vague association."
+    },
+    {
+     "level": 2,
+     "name": "mapped",
+     "what": "The strange part stands for one clear feature or problem."
+    },
+    {
+     "level": 3,
+     "name": "mapped with proof",
+     "what": "It stands for the feature and shows it working."
+    },
+    {
+     "level": 4,
+     "name": "the weird IS the demo",
+     "what": "The strange part is itself the demonstration of the problem or the result."
+    }
+   ],
+   "copy": "The punchline lands on the product's point.",
+   "video": "The impossible event is the product doing its job.",
+   "image": "The swapped object is the problem or the product, not decoration.",
+   "default": {
+    "level": 4,
+    "why": "The safety rail that lets everything else run at the top."
+   },
+   "risk": "At 0 or 1 the ad buys clicks with no intent behind them.",
+   "pairs_with": [
+    "absurdity",
+    "metaphor"
+   ],
+   "research": [
+    {
+     "cite": "Smith, MacKenzie, Yang, Buchholz & Darley 2007, divergence and relevance in ad creativity",
+     "url": "https://doi.org/10.1287/mksc.1060.0256",
+     "checked": false
+    },
+    {
+     "cite": "Heckler & Childers 1992, expectancy and relevancy",
+     "url": "https://ideas.repec.org/a/oup/jconrs/v18y1992i4p475-92.html",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "rhyme",
+   "name": "Rhyme",
+   "aka": [
+    "visual rhyme",
+    "graphic match",
+    "rhyme fidelity"
+   ],
+   "what": "How closely our swapped object matches what it replaced in shape, pose, colour, size and light. The reason a swap reads in one look.",
+   "framework": "Visual rhyme, one of the four picture figures McQuarrie & Mick tested; its film cousin is the graphic match.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "no rhyme",
+     "what": "Our object looks nothing like what it replaced."
+    },
+    {
+     "level": 1,
+     "name": "loose",
+     "what": "Similar role, different shape."
+    },
+    {
+     "level": 2,
+     "name": "shape",
+     "what": "Same outline or silhouette."
+    },
+    {
+     "level": 3,
+     "name": "shape and place",
+     "what": "Same shape, same position and scale in the frame."
+    },
+    {
+     "level": 4,
+     "name": "perfect rhyme",
+     "what": "Same shape, place, scale, light and colour: the eye slides from theirs to ours."
+    }
+   ],
+   "copy": "Same rhythm and length as the line it replaces.",
+   "video": "A graphic match: the cut lands on the same shape.",
+   "image": "The ball becomes the product in the ball's place, angle and light; the product stays its true size and the rhyme in frame size comes from where it sits in the 3D set (nearer the camera reads bigger), never from scaling the product.",
+   "default": {
+    "level": 4,
+    "why": "A swap that rhymes reads as the swipe first and ours a second later."
+   },
+   "risk": "Forcing a rhyme can deform the product; the product stays true to itself and true to size. In the set, move the camera or the product's place to match the old object's frame size; never resize the product's own build.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "McQuarrie & Mick 1999, visual rhetoric in advertising (rhyme, antithesis, metaphor, pun)",
+     "url": "https://ideas.repec.org/a/oup/jconrs/v26y1999i1p37-54.html",
+     "checked": true
+    },
+    {
+     "cite": "Forceville 2008, pictorial and multimodal metaphor",
+     "url": "https://pure.uva.nl/ws/files/4111507/74907_Forceville_2008_in_PhillipsMcQuarrie_DARE_version_2_.pdf",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "coherence",
+   "name": "Coherence",
+   "aka": [
+    "one idea",
+    "copy-picture fit",
+    "image-text congruence"
+   ],
+   "what": "How tightly the words and the picture make one idea. Measured on the finished ad; a chain aims for the top.",
+   "framework": "Image-text congruence and anchorage (Barthes); in ad research, picture and headline that share one meaning are processed faster and remembered better than ones that pull apart.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "unrelated",
+     "what": "The words and the picture are about different things."
+    },
+    {
+     "level": 1,
+     "name": "loose",
+     "what": "The same topic, no shared point."
+    },
+    {
+     "level": 2,
+     "name": "captioned",
+     "what": "The words describe the picture, the joke lives in one of them only."
+    },
+    {
+     "level": 3,
+     "name": "linked",
+     "what": "The words name what the picture shows and add to it."
+    },
+    {
+     "level": 4,
+     "name": "one idea",
+     "what": "Neither works without the other: the line pays off exactly what the eye just saw."
+    }
+   ],
+   "copy": "The headline names the picture's swapped object or moment.",
+   "video": "The line on screen or spoken pays off the shot it sits on.",
+   "image": "The caption explains why that picture is there.",
+   "default": {
+    "level": 4,
+    "why": "A great picture under a line that makes no sense is a wasted picture."
+   },
+   "risk": "Spelling out the picture word for word kills the joke; anchorage stays low while coherence stays high.",
+   "pairs_with": [
+    "anchorage",
+    "relevance"
+   ],
+   "research": [
+    {
+     "cite": "Barthes 1964, Rhetoric of the Image (anchorage)",
+     "url": null,
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "anchorage",
+   "name": "Anchorage",
+   "aka": [
+    "caption steering",
+    "words explain the picture"
+   ],
+   "what": "How much the words tell the viewer what the picture means. Low makes the viewer solve it; high spells it out.",
+   "framework": "Barthes's anchorage: text fixes the meaning of an image. With the swap's structure it sets the inference load (Phillips & McQuarrie).",
+   "scale": [
+    {
+     "level": 0,
+     "name": "no words",
+     "what": "The picture alone carries it."
+    },
+    {
+     "level": 1,
+     "name": "a hint",
+     "what": "A few words point the way."
+    },
+    {
+     "level": 2,
+     "name": "a caption",
+     "what": "The words name the subject, not the link."
+    },
+    {
+     "level": 3,
+     "name": "the link named",
+     "what": "The words say what the swap means."
+    },
+    {
+     "level": 4,
+     "name": "explained",
+     "what": "The words explain the whole picture."
+    }
+   ],
+   "copy": "How much the headline gives away.",
+   "video": "Whether the voice or captions explain the picture.",
+   "image": "The caption's job: solve it or leave it.",
+   "default": {
+    "level": 1,
+    "why": "A picture the viewer solves is remembered; one hint keeps it readable."
+   },
+   "risk": "At 0 a hard swap can go unread; at 4 the picture stops working.",
+   "pairs_with": [
+    "metaphor"
+   ],
+   "research": [
+    {
+     "cite": "Barthes 1964, Rhetoric of the Image (anchorage)",
+     "url": null,
+     "checked": false
+    },
+    {
+     "cite": "Phillips & McQuarrie 2004, beyond visual metaphor: a typology of visual rhetoric",
+     "url": "https://doi.org/10.1177/1470593104044089",
+     "checked": true
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "borrowedness",
+   "name": "Borrowedness",
+   "aka": [
+    "recognisability",
+    "intertextuality",
+    "parody",
+    "pastiche",
+    "allusion"
+   ],
+   "what": "How much the piece is a known picture, format or moment the viewer already recognises.",
+   "framework": "Intertextuality (allusion, pastiche, parody, remix); figure effects fade when viewers lack the cultural knowledge (McQuarrie & Mick).",
+   "scale": [
+    {
+     "level": 0,
+     "name": "original",
+     "what": "Nothing borrowed."
+    },
+    {
+     "level": 1,
+     "name": "allusion",
+     "what": "A nod to something known."
+    },
+    {
+     "level": 2,
+     "name": "homage",
+     "what": "The look of a known thing."
+    },
+    {
+     "level": 3,
+     "name": "parody",
+     "what": "A known thing reworked for a laugh or a point."
+    },
+    {
+     "level": 4,
+     "name": "remix",
+     "what": "A known picture or format, kept, with our objects swapped in."
+    }
+   ],
+   "copy": "A known line or meme phrasing reused.",
+   "video": "A known format, scene or trend reused.",
+   "image": "A known photo or meme template kept, objects swapped.",
+   "default": {
+    "level": 4,
+    "why": "A picture they already know stops them; the swap makes it ours."
+   },
+   "risk": "If the viewer does not know the source the joke falls flat; pick sources from the avatar's own feed.",
+   "pairs_with": [
+    "metaphor",
+    "rhyme"
+   ],
+   "research": [
+    {
+     "cite": "McQuarrie & Mick 1999, visual rhetoric in advertising (rhyme, antithesis, metaphor, pun)",
+     "url": "https://ideas.repec.org/a/oup/jconrs/v26y1999i1p37-54.html",
+     "checked": true
+    },
+    {
+     "cite": "Culture jamming / détournement",
+     "url": "https://en.wikipedia.org/wiki/Culture_jamming",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "shot_scale",
+   "name": "Shot scale",
+   "aka": [
+    "social distance",
+    "framing",
+    "close-up to wide"
+   ],
+   "what": "How close the camera is to the subject.",
+   "framework": "Film shot scale; Kress & van Leeuwen read closeness as social distance.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "extreme wide",
+     "what": "The subject small in a big world."
+    },
+    {
+     "level": 1,
+     "name": "wide",
+     "what": "The whole body and place."
+    },
+    {
+     "level": 2,
+     "name": "medium",
+     "what": "Waist up."
+    },
+    {
+     "level": 3,
+     "name": "close-up",
+     "what": "A face or a hand fills the frame."
+    },
+    {
+     "level": 4,
+     "name": "extreme close-up",
+     "what": "Skin, pores, one bump."
+    }
+   ],
+   "copy": "Not used.",
+   "video": "The size of the subject in each shot.",
+   "image": "How much of the frame the subject fills.",
+   "default": {
+    "level": 3,
+    "why": "Close is intimate and shows the problem; wide is for scale gags."
+   },
+   "risk": "Too close loses the scene a swap depends on.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Film grammar: shot scale, average shot length, camera movement",
+     "url": "https://en.wikipedia.org/wiki/Shot_(filmmaking)",
+     "checked": false
+    },
+    {
+     "cite": "Kress & van Leeuwen, Reading Images (demand and offer, social distance)",
+     "url": null,
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "eye_contact",
+   "name": "Eye contact",
+   "aka": [
+    "demand vs offer",
+    "direct address"
+   ],
+   "what": "Whether the person looks at the viewer.",
+   "framework": "Kress & van Leeuwen: a look at the lens is a demand, no look is an offer to be watched.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "unaware",
+     "what": "No idea a camera is there."
+    },
+    {
+     "level": 1,
+     "name": "glance",
+     "what": "A passing look."
+    },
+    {
+     "level": 2,
+     "name": "candid",
+     "what": "Profile, caught in the moment."
+    },
+    {
+     "level": 3,
+     "name": "to lens",
+     "what": "Looks at the viewer."
+    },
+    {
+     "level": 4,
+     "name": "direct address",
+     "what": "Talks or gestures straight at the viewer."
+    }
+   ],
+   "copy": "Second person against third person.",
+   "video": "Talking to camera against being watched.",
+   "image": "The eyes on the lens or on the problem.",
+   "default": {
+    "level": 2,
+    "why": "Candid reads native; to-lens reads as a pitch."
+   },
+   "risk": "Direct address raises ad-likeness.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Kress & van Leeuwen, Reading Images (demand and offer, social distance)",
+     "url": null,
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "density",
+   "name": "Density",
+   "aka": [
+    "minimalism to maximalism",
+    "visual clutter"
+   ],
+   "what": "How much is in the frame.",
+   "framework": "Minimalism against maximalism in visual art and internet aesthetics.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "minimal",
+     "what": "One subject on nothing."
+    },
+    {
+     "level": 1,
+     "name": "sparse",
+     "what": "A subject and a hint of place."
+    },
+    {
+     "level": 2,
+     "name": "balanced",
+     "what": "A scene."
+    },
+    {
+     "level": 3,
+     "name": "dense",
+     "what": "Many things competing."
+    },
+    {
+     "level": 4,
+     "name": "maximal",
+     "what": "Packed edge to edge."
+    }
+   ],
+   "copy": "Word count on the ad.",
+   "video": "How busy each frame is.",
+   "image": "How many things the eye has to sort. In a 3D set every level has a real surface under the subject; density counts the props on it, from one (0) to edge to edge (4).",
+   "default": {
+    "level": 1,
+    "why": "One thing to look at makes the swap land."
+   },
+   "risk": "Dense frames hide the problem. Themed props add to density: dress surfaces before adding objects.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Internet aesthetics vocabulary (cursed, liminal, deep-fried, maximalism)",
+     "url": "https://aesthetics.fandom.com/wiki/Cursed_Images",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "scale_distortion",
+   "name": "Scale distortion",
+   "aka": [
+    "impossible scale",
+    "giant object"
+   ],
+   "what": "How far an object's size breaks reality.",
+   "framework": "Scale distortion (Magritte, Oldenburg); Goldenberg's dimensionality alteration.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "true size",
+     "what": "Everything life size."
+    },
+    {
+     "level": 1,
+     "name": "slightly off",
+     "what": "A little big or small."
+    },
+    {
+     "level": 2,
+     "name": "noticeable",
+     "what": "Clearly too big or small."
+    },
+    {
+     "level": 3,
+     "name": "monumental",
+     "what": "A building-sized object."
+    },
+    {
+     "level": 4,
+     "name": "impossible",
+     "what": "Planet-sized, or a city in a palm."
+    }
+   ],
+   "copy": "Size words that break reality.",
+   "video": "The giant object in the scene.",
+   "image": "The giant bump, the tiny man, the monumental prop. Built in the 3D set: the distorted thing is modelled at its distorted size and the print gives it real contact and shadow; never asked of the picture model in words, which cannot hold a size.",
+   "default": {
+    "level": 3,
+    "why": "Scale is the cheapest way to absurd that still reads."
+   },
+   "risk": "The product at the wrong size against itself breaks the one-product-one-size rule. Distort a prop, a problem or the world around the product; the product's own build stays at its true size unless the whole joke is one giant product, shown once.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Goldenberg, Mazursky & Solomon 1999, the fundamental templates of quality ads",
+     "url": "https://doi.org/10.1287/mksc.18.3.333",
+     "checked": true
+    },
+    {
+     "cite": "Internet aesthetics vocabulary (cursed, liminal, deep-fried, maximalism)",
+     "url": "https://aesthetics.fandom.com/wiki/Cursed_Images",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "uncanny",
+   "name": "Uncanny",
+   "aka": [
+    "cursed",
+    "liminal",
+    "off"
+   ],
+   "what": "How strange or wrong the picture feels, short of absurd: something is off.",
+   "framework": "Internet aesthetics: liminal, uncanny, cursed images.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "wholesome",
+     "what": "Nothing off."
+    },
+    {
+     "level": 1,
+     "name": "slightly off",
+     "what": "A small wrongness."
+    },
+    {
+     "level": 2,
+     "name": "liminal",
+     "what": "An empty, in-between feeling."
+    },
+    {
+     "level": 3,
+     "name": "uncanny",
+     "what": "Almost real, unsettling."
+    },
+    {
+     "level": 4,
+     "name": "cursed",
+     "what": "Disturbing and compelling."
+    }
+   ],
+   "copy": "Not used.",
+   "video": "The off feeling in the room or the face.",
+   "image": "The cursed-image look: flash, odd angle, wrong detail.",
+   "default": {
+    "level": 1,
+    "why": "A little off stops the scroll; cursed can read as AI slop."
+   },
+   "risk": "Above 2 it starts to look generated.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Internet aesthetics vocabulary (cursed, liminal, deep-fried, maximalism)",
+     "url": "https://aesthetics.fandom.com/wiki/Cursed_Images",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "degradation",
+   "name": "Degradation",
+   "aka": [
+    "deep-fried",
+    "compression",
+    "grain"
+   ],
+   "what": "How worn the image itself looks: grain, compression, filters.",
+   "framework": "Internet aesthetics: deep-fried and low-quality memes; the lo-fi look.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "clean",
+     "what": "Sharp, clean file."
+    },
+    {
+     "level": 1,
+     "name": "grain",
+     "what": "Light phone grain."
+    },
+    {
+     "level": 2,
+     "name": "compressed",
+     "what": "The reposted-screenshot look."
+    },
+    {
+     "level": 3,
+     "name": "filtered",
+     "what": "A heavy filter."
+    },
+    {
+     "level": 4,
+     "name": "deep-fried",
+     "what": "Blown colour, crushed and noisy."
+    }
+   ],
+   "copy": "Not used.",
+   "video": "Grain, compression, the reposted look.",
+   "image": "The screenshot-of-a-screenshot look.",
+   "default": {
+    "level": 1,
+    "why": "Light grain reads real; heavy reads meme."
+   },
+   "risk": "Degraded product pictures look cheap; keep the product clean.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Internet aesthetics vocabulary (cursed, liminal, deep-fried, maximalism)",
+     "url": "https://aesthetics.fandom.com/wiki/Cursed_Images",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "cutting_rate",
+   "name": "Cutting rate",
+   "aka": [
+    "pacing",
+    "average shot length"
+   ],
+   "what": "How often the shot changes.",
+   "framework": "Average shot length in film editing.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "one shot",
+     "what": "A single locked shot."
+    },
+    {
+     "level": 1,
+     "name": "long takes",
+     "what": "A few long shots."
+    },
+    {
+     "level": 2,
+     "name": "medium",
+     "what": "A cut about every five seconds."
+    },
+    {
+     "level": 3,
+     "name": "fast",
+     "what": "A cut every second or two."
+    },
+    {
+     "level": 4,
+     "name": "stream",
+     "what": "Jump-cut stream."
+    }
+   ],
+   "copy": "Not used.",
+   "video": "How often it cuts.",
+   "image": "Not used.",
+   "default": {
+    "level": 3,
+    "why": "Fast cutting holds the feed."
+   },
+   "risk": "Too fast loses the story.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Film grammar: shot scale, average shot length, camera movement",
+     "url": "https://en.wikipedia.org/wiki/Shot_(filmmaking)",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video"
+   ]
+  },
+  {
+   "id": "camera",
+   "name": "Camera movement",
+   "aka": [
+    "handheld",
+    "Dutch angle",
+    "camera shake"
+   ],
+   "what": "How still and level the camera is.",
+   "framework": "Camera movement and tilt in film grammar.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "locked",
+     "what": "Tripod, level."
+    },
+    {
+     "level": 1,
+     "name": "drift",
+     "what": "Gentle movement."
+    },
+    {
+     "level": 2,
+     "name": "handheld",
+     "what": "A hand holding it."
+    },
+    {
+     "level": 3,
+     "name": "tilted",
+     "what": "Dutch angle."
+    },
+    {
+     "level": 4,
+     "name": "wild",
+     "what": "Whip pans and tilt."
+    }
+   ],
+   "copy": "Not used.",
+   "video": "Tripod against hand against chaos.",
+   "image": "A level frame against a tilted one.",
+   "default": {
+    "level": 2,
+    "why": "Handheld reads real."
+   },
+   "risk": "Wild camera hides the problem.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Film grammar: shot scale, average shot length, camera movement",
+     "url": "https://en.wikipedia.org/wiki/Shot_(filmmaking)",
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "status",
+   "name": "Status",
+   "aka": [
+    "status play",
+    "who is higher"
+   ],
+   "what": "Who is higher in the scene: the speaker or the viewer.",
+   "framework": "Improv status play.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "authority",
+     "what": "High-status expert."
+    },
+    {
+     "level": 1,
+     "name": "expert peer",
+     "what": "Knows more, talks level."
+    },
+    {
+     "level": 2,
+     "name": "equal",
+     "what": "Level."
+    },
+    {
+     "level": 3,
+     "name": "self-deprecating",
+     "what": "Lowers themselves."
+    },
+    {
+     "level": 4,
+     "name": "hapless",
+     "what": "Lowest in the room."
+    }
+   ],
+   "copy": "How the speaker talks about themselves.",
+   "video": "The performer's status in the scene.",
+   "image": "Who looks in control.",
+   "default": {
+    "level": 3,
+    "why": "A low-status speaker makes the problem safe to laugh at."
+   },
+   "risk": "Low status on a proof beat weakens it.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Comedy craft (status play, irony, cringe)",
+     "url": null,
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video"
+   ]
+  },
+  {
+   "id": "irony",
+   "name": "Irony",
+   "aka": [
+    "wink",
+    "post-irony"
+   ],
+   "what": "How much the piece means something other than what it says.",
+   "framework": "Irony depth in internet humor.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "sincere",
+     "what": "Means it."
+    },
+    {
+     "level": 1,
+     "name": "wink",
+     "what": "A knowing nod."
+    },
+    {
+     "level": 2,
+     "name": "ironic",
+     "what": "Says the opposite."
+    },
+    {
+     "level": 3,
+     "name": "layered",
+     "what": "Irony on irony."
+    },
+    {
+     "level": 4,
+     "name": "post-ironic",
+     "what": "Meme layers; sincerity unknowable."
+    }
+   ],
+   "copy": "Says one thing, means another.",
+   "video": "The performer's knowing look.",
+   "image": "The meme caption against the picture.",
+   "default": {
+    "level": 1,
+    "why": "A wink keeps it native; deep irony loses the point."
+   },
+   "risk": "Above 2 the message gets lost.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Comedy craft (status play, irony, cringe)",
+     "url": null,
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "cringe",
+   "name": "Cringe",
+   "aka": [
+    "second-hand embarrassment",
+    "awkward"
+   ],
+   "what": "How much the viewer squirms for the person on screen.",
+   "framework": "Cringe comedy; vicarious embarrassment.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "smooth",
+     "what": "No awkwardness."
+    },
+    {
+     "level": 1,
+     "name": "slight",
+     "what": "A small awkward beat."
+    },
+    {
+     "level": 2,
+     "name": "noticeable",
+     "what": "Clearly awkward."
+    },
+    {
+     "level": 3,
+     "name": "squirming",
+     "what": "Hard to watch."
+    },
+    {
+     "level": 4,
+     "name": "peak",
+     "what": "Peak second-hand embarrassment."
+    }
+   ],
+   "copy": "The confession that goes too far.",
+   "video": "The moment held too long.",
+   "image": "The caught-in-the-act picture.",
+   "default": {
+    "level": 2,
+    "why": "A little cringe is native and relatable."
+   },
+   "risk": "Peak cringe makes the brand the joke.",
+   "pairs_with": [],
+   "research": [
+    {
+     "cite": "Comedy craft (status play, irony, cringe)",
+     "url": null,
+     "checked": false
+    }
+   ],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "parody_marks",
+   "name": "Parody marks",
+   "aka": [
+    "parody logo",
+    "lookalike",
+    "knock-off gag"
+   ],
+   "what": "What happens to the real logos, outfits and famous faces a swipe carries.",
+   "framework": "Parody and pastiche (intertextuality); the knock-off as a joke the viewer is in on.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "real",
+     "what": "The real mark or the real person, untouched. Never."
+    },
+    {
+     "level": 1,
+     "name": "blanked",
+     "what": "Removed: plain gear, no face. Safe and dead."
+    },
+    {
+     "level": 2,
+     "name": "slight twist",
+     "what": "One letter off, the swoosh bent: you look twice."
+    },
+    {
+     "level": 3,
+     "name": "absurd parody",
+     "what": "The mark renamed into a joke about the problem; the face a clear lookalike gag."
+    },
+    {
+     "level": 4,
+     "name": "rebuilt from the problem",
+     "what": "The logo, jersey or star made out of the problem itself."
+    }
+   ],
+   "copy": "A parody brand name in the words when the picture carries one.",
+   "video": "Parody marks on wardrobe and props; lookalikes, never the real person.",
+   "image": "Every logo, crest, outfit and famous face in the swipe becomes its parody.",
+   "default": {
+    "level": 3,
+    "why": "the owner, 2026-10-23: the parody is part of what makes it funny and culturally relevant."
+   },
+   "risk": "At 2 a mark can still read as the real one; at 3 and up it reads as the joke.",
+   "pairs_with": [
+    "absurdity",
+    "humor"
+   ],
+   "research": [],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "cultural_casting",
+   "name": "Culture casting",
+   "aka": [
+    "celebrity lookalike",
+    "influencer lookalike",
+    "cultural reference",
+    "pop-culture nod",
+    "known face"
+   ],
+   "what": "How much the piece casts the people and moments the avatar already knows: celebrities, known influencers, memes and moments from the avatar's own feed, as lookalikes and references.",
+   "framework": "Intertextuality and borrowed interest: a figure or moment the viewer recognises earns attention and shares; the joke lands when it comes from the viewer's own culture (McQuarrie & Mick; the parody lookalike matrix).",
+   "scale": [
+    {
+     "level": 0,
+     "name": "anonymous",
+     "what": "Generic people, no cultural reference."
+    },
+    {
+     "level": 1,
+     "name": "nod in the words",
+     "what": "A known line, meme or moment named in the words only."
+    },
+    {
+     "level": 2,
+     "name": "nod in the picture",
+     "what": "A known look, setting or moment in the background or styling."
+    },
+    {
+     "level": 3,
+     "name": "lookalike lead",
+     "what": "A celebrity or known-influencer lookalike from the avatar's world carries the piece: a recognisable nod with a slightly different face, never the real person."
+    },
+    {
+     "level": 4,
+     "name": "built on the moment",
+     "what": "The whole piece is built around a known figure or cultural moment the avatar's world is talking about right now."
+    }
+   ],
+   "copy": "The words reference a known person, meme or moment from the avatar's feed.",
+   "video": "A lookalike of a known figure from the avatar's world plays the lead; the scene borrows a moment the viewer knows.",
+   "image": "A lookalike of a known figure from the avatar's world in the picture; the swipe's own famous people kept as lookalikes.",
+   "default": {
+    "level": 3,
+    "why": "the owner, 2026-10-25: \"we should always try to use celebrity / known influencer lookalikes and other cultural references in what we make. it helps drive engagement while being funny and aware of the audience\"; \"should be in the chain\"."
+   },
+   "risk": "A lookalike too close to the real person reads as the real person (the owner, same day, on a famous bald lookalike: the face slightly different); one from outside the avatar's feed falls flat. Keep the face slightly different; pick figures from the avatar's researched worlds.",
+   "pairs_with": [
+    "parody_marks",
+    "borrowedness",
+    "humor"
+   ],
+   "research": [],
+   "status": "draft",
+   "media": [
+    "copy",
+    "video",
+    "image"
+   ]
+  },
+  {
+   "id": "dressing",
+   "name": "Dressing",
+   "aka": [
+    "set dressing",
+    "theming",
+    "production design",
+    "the moment's look",
+    "seasonal creative"
+   ],
+   "what": "How far one concept, taken from the avatar's culture map and crossed with the moment (a season or holiday), dresses the swipe's frame: its surfaces, props, palette and the words printed on props. The layout, camera and reading path never move; only what things are made of changes.",
+   "framework": "Set dressing and production design in film; moment (topical) marketing; the culture-concept method the promotion emails already prove.",
+   "scale": [
+    {
+     "level": 0,
+     "name": "as swiped",
+     "what": "The swipe's own surfaces, props and colours, untouched."
+    },
+    {
+     "level": 1,
+     "name": "moment prop",
+     "what": "One prop that marks the swipe's moment becomes the same prop for ours, same size and place."
+    },
+    {
+     "level": 2,
+     "name": "moment palette",
+     "what": "The moment's palette on the surfaces, plus the moment prop."
+    },
+    {
+     "level": 3,
+     "name": "concept world",
+     "what": "Every surface and prop is made from one concept's world, at true size, the moment's name on one real prop."
+    },
+    {
+     "level": 4,
+     "name": "the world built",
+     "what": "The whole frame is the concept's world, down to the textures, with the layout still the swipe's."
+    }
+   ],
+   "copy": "The headline is the concept talking, with one spice device; never the sale's dates as a calendar.",
+   "video": "The scene's set, props and wardrobe dressed for the concept; the format's shots unchanged.",
+   "image": "Built in the 3D set before the print: concept surfaces and props at true size, the moment's palette on them, the moment's name printed on a real prop (a flag, a sign, a tag).",
+   "default": {
+    "level": 3,
+    "why": "the owner, 2026-10-28: image ads, \"especially for promotion\", are \"supposed to actually stand out on feed and be themed\". A native post stays at 1: never restyled into a cleaner set."
+   },
+   "risk": "Dressing that moves the layout breaks the swipe; dressing on a native post makes it read as an ad. Clutter kills the one idea: dress surfaces before adding props.",
+   "pairs_with": [
+    "cultural_casting",
+    "borrowedness",
+    "density"
+   ],
+   "research": [],
+   "status": "draft",
+   "media": [
+    "video",
+    "image"
+   ]
+  }
+ ],
+ "emotion_rule": "One primary emotion per beat, at most one secondary, picked from this bank. Its strength is the intensity dial; its direction is the valence dial.",
+ "emotions": [
+  {
+   "id": "disgust",
+   "name": "Disgust",
+   "valence": -2,
+   "arousal": 3,
+   "what": "Repulsion at the problem.",
+   "copy": "Sensory words for texture and sight.",
+   "video": "The close-up, the wince.",
+   "image": "The problem full size in hard light.",
+   "source": "Ekman; Cowen & Keltner",
+   "status": "draft"
+  },
+  {
+   "id": "embarrassment",
+   "name": "Embarrassment",
+   "valence": -1,
+   "arousal": 2,
+   "what": "Being seen with the problem.",
+   "copy": "The moment someone notices.",
+   "video": "Eyes away, the hand covering.",
+   "image": "The hidden face, the turned head.",
+   "source": "Cowen & Keltner (awkwardness)",
+   "status": "draft"
+  },
+  {
+   "id": "frustration",
+   "name": "Frustration",
+   "valence": -1,
+   "arousal": 3,
+   "what": "Tried everything, nothing worked.",
+   "copy": "The list of failed fixes.",
+   "video": "The thrown razor, the sigh.",
+   "image": "The pile of products that failed.",
+   "source": "Plutchik (annoyance to rage)",
+   "status": "draft"
+  },
+  {
+   "id": "anxiety",
+   "name": "Anxiety",
+   "valence": -1,
+   "arousal": 3,
+   "what": "Dread of being judged.",
+   "copy": "The date, the meeting, the barber.",
+   "video": "The mirror check before leaving.",
+   "image": "The tight face, the checking glance.",
+   "source": "Cowen & Keltner",
+   "status": "draft"
+  },
+  {
+   "id": "empathic-pain",
+   "name": "Empathic pain",
+   "valence": -2,
+   "arousal": 4,
+   "what": "The viewer's own wince at someone else's hurt.",
+   "copy": "The sting named exactly.",
+   "video": "The blade on raw skin, the sharp inhale.",
+   "image": "The red, raised, sore close-up.",
+   "source": "Cowen & Keltner",
+   "status": "draft"
+  },
+  {
+   "id": "amusement",
+   "name": "Amusement",
+   "valence": 1,
+   "arousal": 3,
+   "what": "The laugh that makes the problem safe.",
+   "copy": "The punchline.",
+   "video": "The reaction shot.",
+   "image": "The visual gag.",
+   "source": "Cowen & Keltner",
+   "status": "draft"
+  },
+  {
+   "id": "surprise",
+   "name": "Surprise",
+   "valence": 0,
+   "arousal": 4,
+   "what": "The pattern break.",
+   "copy": "The first line that should not be there.",
+   "video": "The thing in frame one that should not be there.",
+   "image": "The impossible object.",
+   "source": "Ekman; Plutchik",
+   "status": "draft"
+  },
+  {
+   "id": "relief",
+   "name": "Relief",
+   "valence": 1,
+   "arousal": 1,
+   "what": "The problem is over.",
+   "copy": "The exhale line.",
+   "video": "Shoulders drop, the smile.",
+   "image": "The clean result, the easy face.",
+   "source": "Cowen & Keltner",
+   "status": "draft"
+  },
+  {
+   "id": "satisfaction",
+   "name": "Satisfaction",
+   "valence": 2,
+   "arousal": 2,
+   "what": "The satisfying result: smooth, clean, done.",
+   "copy": "The finished state, exactly.",
+   "video": "The slow reveal of the clean result.",
+   "image": "The flawless close-up.",
+   "source": "Cowen & Keltner",
+   "status": "draft"
+  },
+  {
+   "id": "pride",
+   "name": "Pride",
+   "valence": 2,
+   "arousal": 3,
+   "what": "Walking in differently; being looked at for the right reason.",
+   "copy": "The compliment, the second look.",
+   "video": "The walk-in, the head up.",
+   "image": "The chin up, the open stance.",
+   "source": "Tracy & Robins (not in Cowen's 27)",
+   "status": "draft"
+  },
+  {
+   "id": "awe",
+   "name": "Awe",
+   "valence": 2,
+   "arousal": 4,
+   "what": "Something vast or impossible that stops the breath.",
+   "copy": "The scale named.",
+   "video": "The reveal of the impossible thing.",
+   "image": "The scale-distorted picture.",
+   "source": "Cowen & Keltner; Berger & Milkman",
+   "status": "draft"
+  },
+  {
+   "id": "craving",
+   "name": "Craving",
+   "valence": 1,
+   "arousal": 3,
+   "what": "Wanting the result now.",
+   "copy": "The result in sensory words.",
+   "video": "The touch, the slow pan over the result.",
+   "image": "The result you want to touch.",
+   "source": "Cowen & Keltner",
+   "status": "draft"
+  }
+ ],
+ "technique_rule": "Techniques are switches: a piece uses one or it does not. They are how a dial gets turned up; name the one used.",
+ "techniques": [
+  {
+   "id": "juxtaposition",
+   "name": "Juxtaposition",
+   "family": "Picture swap (visual rhetoric)",
+   "aka": [],
+   "what": "Two things side by side so the viewer makes the link.",
+   "source": "Phillips & McQuarrie 2004",
+   "status": "draft"
+  },
+  {
+   "id": "fusion",
+   "name": "Fusion",
+   "family": "Picture swap (visual rhetoric)",
+   "aka": [
+    "hybrid metaphor"
+   ],
+   "what": "Two things merged into one object.",
+   "source": "Phillips & McQuarrie 2004",
+   "status": "draft"
+  },
+  {
+   "id": "replacement",
+   "name": "Replacement",
+   "family": "Picture swap (visual rhetoric)",
+   "aka": [
+    "pictorial analogy",
+    "contextual metaphor"
+   ],
+   "what": "One object stands in the place of another the scene expects; the context says what is missing.",
+   "source": "Phillips & McQuarrie 2004; Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "extreme-situation",
+   "name": "Extreme situation",
+   "family": "Creativity templates",
+   "aka": [
+    "absurd alternative",
+    "extreme attribute"
+   ],
+   "what": "The product or problem in an absurd, unrealistic situation that makes the attribute obvious.",
+   "source": "Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "extreme-consequence",
+   "name": "Extreme consequence",
+   "family": "Creativity templates",
+   "aka": [
+    "consequences"
+   ],
+   "what": "Show what happens after, pushed to the extreme: the consequence of having it or not having it.",
+   "source": "Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "competition",
+   "name": "Competition",
+   "family": "Creativity templates",
+   "aka": [],
+   "what": "The product pitted against something from another world to show its strength.",
+   "source": "Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "interactive-experiment",
+   "name": "Interactive experiment",
+   "family": "Creativity templates",
+   "aka": [],
+   "what": "The viewer is made to do or test something in the ad.",
+   "source": "Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "dimensionality-alteration",
+   "name": "Dimensionality alteration",
+   "family": "Creativity templates",
+   "aka": [],
+   "what": "Time, size or number changed: years later, a thousand of them, a giant one.",
+   "source": "Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "scale-distortion",
+   "name": "Scale distortion",
+   "family": "Visual",
+   "aka": [],
+   "what": "One object at an impossible size against real things.",
+   "source": "Magritte, Oldenburg; visual art",
+   "status": "draft"
+  },
+  {
+   "id": "visual-pun",
+   "name": "Visual pun",
+   "family": "Visual",
+   "aka": [],
+   "what": "A picture that reads two ways at once.",
+   "source": "Visual art and advertising craft",
+   "status": "draft"
+  },
+  {
+   "id": "heightening",
+   "name": "Heightening",
+   "family": "Comedy",
+   "aka": [
+    "escalation",
+    "game of the scene"
+   ],
+   "what": "Find the one unusual thing and make it bigger each beat.",
+   "source": "Improv craft (the game of the scene)",
+   "status": "draft"
+  },
+  {
+   "id": "rule-of-three",
+   "name": "Rule of three",
+   "family": "Comedy",
+   "aka": [],
+   "what": "Two set the pattern, the third breaks it.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "misdirection",
+   "name": "Misdirection",
+   "family": "Comedy",
+   "aka": [],
+   "what": "Lead to one reading, land on another.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "deadpan",
+   "name": "Deadpan",
+   "family": "Comedy",
+   "aka": [],
+   "what": "The absurd played completely straight.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "understatement",
+   "name": "Understatement",
+   "family": "Rhetoric",
+   "aka": [
+    "litotes",
+    "meiosis"
+   ],
+   "what": "The extreme described as minor.",
+   "source": "Rhetoric (litotes, meiosis)",
+   "status": "draft"
+  },
+  {
+   "id": "hyperbole",
+   "name": "Hyperbole",
+   "family": "Rhetoric",
+   "aka": [],
+   "what": "The minor described as extreme, obviously not literal.",
+   "source": "Rhetoric",
+   "status": "draft"
+  },
+  {
+   "id": "personification",
+   "name": "Personification",
+   "family": "Rhetoric",
+   "aka": [],
+   "what": "The problem or product given a person's face or will.",
+   "source": "Rhetoric",
+   "status": "draft"
+  },
+  {
+   "id": "native-format",
+   "name": "Native format",
+   "family": "Platform",
+   "aka": [
+    "lo-fi",
+    "ugly ad"
+   ],
+   "what": "Built in a form the feed already carries: a screenshot, a note, a meme, a post.",
+   "source": "Platform creative guidance",
+   "status": "draft"
+  },
+  {
+   "id": "extreme-analogy",
+   "name": "Extreme analogy",
+   "family": "Picture swap (visual rhetoric)",
+   "aka": [],
+   "what": "The swapped symbol pushed to an extreme instead of only transplanted.",
+   "source": "Goldenberg et al. 1999",
+   "status": "draft"
+  },
+  {
+   "id": "integrated",
+   "name": "Integrated metaphor",
+   "family": "Picture swap (visual rhetoric)",
+   "aka": [],
+   "what": "Our object posed so it looks like the thing it stands for, without being changed.",
+   "source": "Forceville 2008",
+   "status": "draft"
+  },
+  {
+   "id": "visual-rhyme",
+   "name": "Visual rhyme",
+   "family": "Rhetorical figures",
+   "aka": [],
+   "what": "Two different things pictured with the same form.",
+   "source": "McQuarrie & Mick 1999",
+   "status": "draft"
+  },
+  {
+   "id": "antithesis",
+   "name": "Antithesis",
+   "family": "Rhetorical figures",
+   "aka": [],
+   "what": "Two opposites side by side.",
+   "source": "McQuarrie & Mick 1999",
+   "status": "draft"
+  },
+  {
+   "id": "pun",
+   "name": "Pun",
+   "family": "Rhetorical figures",
+   "aka": [
+    "visual pun"
+   ],
+   "what": "One word or picture, two meanings.",
+   "source": "McQuarrie & Mick 1999",
+   "status": "draft"
+  },
+  {
+   "id": "detournement",
+   "name": "Détournement",
+   "family": "Picture swap (visual rhetoric)",
+   "aka": [
+    "subvertising",
+    "parody"
+   ],
+   "what": "A known image or ad reused with its meaning changed.",
+   "source": "Situationists; culture jamming",
+   "status": "draft"
+  },
+  {
+   "id": "defamiliarisation",
+   "name": "Defamiliarisation",
+   "family": "Visual",
+   "aka": [
+    "ostranenie"
+   ],
+   "what": "The familiar made strange so it is seen fresh.",
+   "source": "Shklovsky",
+   "status": "draft"
+  },
+  {
+   "id": "omission",
+   "name": "Omission and suggestion",
+   "family": "Visual",
+   "aka": [],
+   "what": "Leave the key thing out; the viewer fills it in.",
+   "source": "Pricken",
+   "status": "draft"
+  },
+  {
+   "id": "without-words",
+   "name": "Without words",
+   "family": "Visual",
+   "aka": [],
+   "what": "The picture carries everything; no copy.",
+   "source": "Pricken",
+   "status": "draft"
+  },
+  {
+   "id": "repetition",
+   "name": "Repetition and accumulation",
+   "family": "Visual",
+   "aka": [],
+   "what": "Many of the same thing; one is different.",
+   "source": "Pricken",
+   "status": "draft"
+  },
+  {
+   "id": "callback",
+   "name": "Callback",
+   "family": "Comedy",
+   "aka": [],
+   "what": "A later beat returns to an earlier one.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "non-sequitur",
+   "name": "Non sequitur",
+   "family": "Comedy",
+   "aka": [],
+   "what": "A beat that does not follow, resolved by the payoff.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "anti-joke",
+   "name": "Anti-joke",
+   "family": "Comedy",
+   "aka": [
+    "anti-humor"
+   ],
+   "what": "The set-up promises a punchline and delivers a plain fact.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "status-reversal",
+   "name": "Status reversal",
+   "family": "Comedy",
+   "aka": [],
+   "what": "The high-status one ends up lowest, or the other way round.",
+   "source": "Improv craft",
+   "status": "draft"
+  },
+  {
+   "id": "tag",
+   "name": "Tag / button",
+   "family": "Comedy",
+   "aka": [],
+   "what": "One more small laugh after the main one.",
+   "source": "Comedy writing craft",
+   "status": "draft"
+  },
+  {
+   "id": "match-cut",
+   "name": "Match cut",
+   "family": "Editing",
+   "aka": [
+    "graphic match"
+   ],
+   "what": "A cut that matches shape, colour or movement across shots.",
+   "source": "Film editing",
+   "status": "draft"
+  },
+  {
+   "id": "jump-cut",
+   "name": "Jump cut",
+   "family": "Editing",
+   "aka": [],
+   "what": "A cut inside one shot that skips time.",
+   "source": "Film editing",
+   "status": "draft"
+  },
+  {
+   "id": "smash-cut",
+   "name": "Smash cut",
+   "family": "Editing",
+   "aka": [],
+   "what": "An abrupt cut from one extreme to another.",
+   "source": "Film editing",
+   "status": "draft"
+  },
+  {
+   "id": "pov",
+   "name": "Point of view",
+   "family": "Editing",
+   "aka": [],
+   "what": "The camera is the viewer's own eyes.",
+   "source": "Film grammar",
+   "status": "draft"
+  },
+  {
+   "id": "found-footage",
+   "name": "Found footage",
+   "family": "Platform",
+   "aka": [],
+   "what": "Looks like footage nobody meant as an ad.",
+   "source": "Film and platform craft",
+   "status": "draft"
+  },
+  {
+   "id": "text-overlay",
+   "name": "Text overlay",
+   "family": "Platform",
+   "aka": [],
+   "what": "Words on the picture carry the hook.",
+   "source": "Platform creative guidance",
+   "status": "draft"
+  },
+  {
+   "id": "early-proposition",
+   "name": "Early proposition",
+   "family": "Platform",
+   "aka": [],
+   "what": "The point lands in the first three seconds.",
+   "source": "TikTok creative guidance",
+   "status": "draft"
+  },
+  {
+   "id": "seeds-of-curiosity",
+   "name": "Seeds of curiosity",
+   "family": "Copy",
+   "aka": [],
+   "what": "A line that opens a question the next line answers.",
+   "source": "Sugarman",
+   "status": "draft"
+  },
+  {
+   "id": "slippery-slide",
+   "name": "Slippery slide",
+   "family": "Copy",
+   "aka": [],
+   "what": "Each line exists to get the next one read.",
+   "source": "Sugarman",
+   "status": "draft"
+  },
+  {
+   "id": "reason-why",
+   "name": "Reason why",
+   "family": "Copy",
+   "aka": [],
+   "what": "Every claim given its reason.",
+   "source": "Hopkins",
+   "status": "draft"
+  },
+  {
+   "id": "in-world-signage",
+   "name": "In-world signage",
+   "family": "Visual",
+   "aka": [
+    "diegetic text",
+    "prop lettering",
+    "a sign in the scene"
+   ],
+   "what": "Words printed on a real prop in the scene (a flag, a shop sign, a tag, a receipt) carry the moment's name; built into the 3D set and printed with it, so the words sit on the prop's surface with its light. Only the moment's own name, big and plain; the headline is still set on top.",
+   "source": "Film and theatre: diegetic text; the 2026-10-28 Black Friday flag",
+   "status": "draft"
+  },
+  {
+   "id": "moment-dressing",
+   "name": "Moment dressing",
+   "family": "Visual",
+   "aka": [
+    "seasonal swap",
+    "holiday reskin"
+   ],
+   "what": "The props and colours that mark the swipe's own moment become the same props and colours for ours: same object, same size, same place (a national flag on a dowel becomes the sale's flag on the same dowel).",
+   "source": "Moment marketing; stage 3 injection v11",
+   "status": "draft"
+  },
+  {
+   "id": "true-scale-set",
+   "name": "True-scale set",
+   "family": "Visual",
+   "aka": [
+    "previs",
+    "blockout",
+    "3D set"
+   ],
+   "what": "The swipe's scene is built in 3D at real sizes with its camera and light, then printed into a photo: sizes, depth, contact and light come from the set, never from words. What makes scale distortion and rhyme possible without the product looking pasted on.",
+   "source": "Film previsualisation; image-production research/diffusion-fundamentals.md rule 1",
+   "status": "draft"
+  }
+ ],
+ "interactions": [
+  {
+   "id": "arousal-spreads",
+   "rule": "High arousal drives sharing whatever the valence; valence picks the emotion, intensity drives the spread.",
+   "source": "Berger & Milkman 2012"
+  },
+  {
+   "id": "absurd-needs-relevance",
+   "rule": "Absurdity at 3 or 4 only works with the relevance and legibility guards met.",
+   "source": "Heckler & Childers 1992; Pieters et al. 2002"
+  },
+  {
+   "id": "edge-needs-humor",
+   "rule": "Edge above 2 needs humor or absurdity to make it benign; without it the same picture reads as gross.",
+   "source": "McGraw & Warren 2010"
+  },
+  {
+   "id": "drama-needs-specifics",
+   "rule": "Dramatisation at 3 or 4 is paired with specificity and realism at 3 or more, or it reads as puffery.",
+   "source": "Xu & Wyer 2010 (unchecked); craft"
+  },
+  {
+   "id": "native-lowers-resistance",
+   "rule": "Low ad-likeness delays the 'this is an ad' discount; absurdity and humor may lower it further. A hypothesis for our own tests.",
+   "source": "Friestad & Wright 1994; Wojdynski & Evans 2016"
+  },
+  {
+   "id": "dressing-keeps-the-layout",
+   "rule": "Dressing changes what things are made of, never where they are: a dressed swipe that moved a zone, the camera or the product's place is a different ad. Native posts keep dressing at 1.",
+   "source": "Stage 3 injection v13, THE CONCEPT; the owner, 2026-10-25 and 2026-10-28"
+  }
+ ],
+ "presets": [
+  {
+   "id": "maxed",
+   "name": "Maxed",
+   "what": "The house default.",
+   "levels": {
+    "intensity": 4,
+    "valence": -2,
+    "absurdity": 4,
+    "humor": 3,
+    "specificity": 4,
+    "dramatisation": 4,
+    "metaphor": 3,
+    "edge": 3,
+    "realism": 3,
+    "ad_likeness": 0,
+    "stopping_power": 4,
+    "relevance": 4,
+    "rhyme": 4,
+    "anchorage": 1,
+    "borrowedness": 4,
+    "coherence": 4,
+    "parody_marks": 3,
+    "dressing": 4
+   },
+   "status": "draft"
+  },
+  {
+   "id": "native-unaware",
+   "name": "Native, unaware",
+   "what": "Upper funnel: a post, not an ad; no offer, no call to action.",
+   "levels": {
+    "intensity": 4,
+    "valence": -1,
+    "absurdity": 4,
+    "humor": 3,
+    "specificity": 4,
+    "dramatisation": 3,
+    "metaphor": 3,
+    "edge": 2,
+    "realism": 3,
+    "ad_likeness": 0,
+    "stopping_power": 4,
+    "relevance": 4,
+    "rhyme": 4,
+    "anchorage": 1,
+    "borrowedness": 4,
+    "coherence": 4,
+    "parody_marks": 3,
+    "dressing": 1
+   },
+   "status": "draft"
+  },
+  {
+   "id": "problem-aware",
+   "name": "Problem aware",
+   "what": "The problem shown and named, the cause revealed.",
+   "levels": {
+    "intensity": 4,
+    "valence": -2,
+    "absurdity": 3,
+    "humor": 3,
+    "specificity": 4,
+    "dramatisation": 4,
+    "metaphor": 3,
+    "edge": 3,
+    "realism": 3,
+    "ad_likeness": 1,
+    "stopping_power": 4,
+    "relevance": 4,
+    "rhyme": 4,
+    "anchorage": 2,
+    "borrowedness": 3,
+    "coherence": 4,
+    "parody_marks": 3
+   },
+   "status": "draft"
+  },
+  {
+   "id": "product-proof",
+   "name": "Product proof",
+   "what": "Bottom funnel: proof, the result, the price when called for, carried inside an absurd, dramatised picture. Never a plain packshot.",
+   "levels": {
+    "intensity": 4,
+    "valence": 1,
+    "absurdity": 3,
+    "humor": 3,
+    "specificity": 4,
+    "dramatisation": 3,
+    "metaphor": 3,
+    "edge": 2,
+    "realism": 4,
+    "ad_likeness": 3,
+    "stopping_power": 4,
+    "relevance": 4,
+    "rhyme": 4,
+    "anchorage": 3,
+    "borrowedness": 3,
+    "coherence": 4,
+    "parody_marks": 3,
+    "dressing": 3
+   },
+   "status": "draft"
+  }
+ ],
+ "floor": {
+  "what": "Never sterile (the owner, 2026-10-23: \"we don't want any sterile ads at all. This is Q4 money season\"). No preset, saved level or brief may set these dials below these levels, at any awareness level, bottom funnel and offers included. Parody marks never below 2: a real mark or face is never kept, and never just blanked.",
+  "levels": {
+   "intensity": 3,
+   "absurdity": 3,
+   "humor": 2,
+   "dramatisation": 3,
+   "stopping_power": 4,
+   "parody_marks": 2
+  },
+  "when_set": [
+   "parody_marks"
+  ]
+ },
+ "bar_rule": "The bar (the owner, 2026-10-23, on the first run made with these controls: \"this is what I'm talking about. These statics are brilliant ... this is actually my style of marketing\"). Five moves, written as moves, never as the ads themselves: a chain reads them as the level to reach, then finds its own swipe's version. Copying one is a failure of the same kind as a sterile ad.",
+ "bar": [
+  {
+   "id": "borrowed-world-rebuilt",
+   "name": "The borrowed world, rebuilt from the problem",
+   "awareness": "unaware",
+   "move": "A famous meme picture is kept whole (the person, the pose, the sky, the caption block) and its world is rebuilt out of the problem itself: the ground becomes the problem's own texture at monumental scale, and the one big object in the sky becomes a single giant instance of the problem. The words say exactly that, plainly.",
+   "dials": {
+    "absurdity": 4,
+    "metaphor": 4,
+    "borrowedness": 4,
+    "rhyme": 4,
+    "scale_distortion": 4,
+    "ad_likeness": 0,
+    "coherence": 4
+   },
+   "status": "draft"
+  },
+  {
+   "id": "their-simile-made-literal",
+   "name": "The avatar's own simile, made literal",
+   "awareness": "problem-aware",
+   "move": "The problem is drawn exactly the way the avatar describes it in their own words (if they say it feels like a pattern, the problem is laid out in that pattern), on a native phone selfie, captioned with the roast they actually hear. One element is blown up to impossible size so the cause is visible.",
+   "dials": {
+    "absurdity": 3,
+    "specificity": 4,
+    "realism": 3,
+    "edge": 3,
+    "humor": 2,
+    "coherence": 4
+   },
+   "status": "draft"
+  },
+  {
+   "id": "blamed-thing-warehouse",
+   "name": "The blamed thing, by the warehouse",
+   "awareness": "most-aware",
+   "move": "The thing the viewer blames for the problem is multiplied into a whole stocked warehouse, pallets and shelves of it; our product is held up in front of it by a real hand. The offer rides inside the joke, never on a plain sale graphic.",
+   "dials": {
+    "dramatisation": 4,
+    "scale_distortion": 3,
+    "humor": 3,
+    "ad_likeness": 3,
+    "coherence": 4
+   },
+   "status": "draft"
+  },
+  {
+   "id": "ranking-hijacked",
+   "name": "The ranking, hijacked",
+   "awareness": "solution-aware",
+   "move": "A familiar ranking format (a tier list) holds every fix the viewer has tried, standing on the problem itself as the background; our product sits alone in the top tier, and the line says the winner was not even one of the usual answers.",
+   "dials": {
+    "borrowedness": 4,
+    "humor": 3,
+    "relevance": 4,
+    "density": 3,
+    "coherence": 4
+   },
+   "status": "draft"
+  },
+  {
+   "id": "explainer-comes-off-the-board",
+   "name": "The explainer that comes off the board",
+   "awareness": "product-aware",
+   "move": "A hand-drawn explainer board compares the old way and ours; one drawn element turns real and loops out of the drawing into the room, so the cause is literally coming off the board. The real product sits beside it, true to how it rests.",
+   "dials": {
+    "absurdity": 3,
+    "metaphor": 3,
+    "specificity": 4,
+    "realism": 3,
+    "coherence": 4
+   },
+   "status": "draft"
+  },
+  {
+   "id": "moment-world-dressed",
+   "name": "The swipe, dressed as the moment's world",
+   "awareness": "most-aware",
+   "move": "A sale swipe is kept exactly (layout, camera, the hero product's place) and every surface and prop is rebuilt at true size from one concept the avatar already loves, crossed with the moment: the moment's palette on the surfaces, the moment's name on a real prop in the scene, the swipe's boxes as the brand's own closed boxes, the real product at its true size. The headline is the concept talking, the offer exactly as ordered.",
+   "dials": {
+    "dressing": 4,
+    "cultural_casting": 3,
+    "rhyme": 4,
+    "borrowedness": 4,
+    "realism": 3,
+    "ad_likeness": 3
+   },
+   "status": "draft"
+  }
+ ],
+ "arc_rule": "The awareness level picks the arc (best_for). Every beat of the arc holds one section from the marketing doctrine's list, so the arc IS the section plan. After the last beat, the close follows as the awareness level asks (offer, call-to-action, urgency where it is true). One arc per piece; a borrowed swipe keeps its arc unless the brief says why it changes.",
+ "arcs": [
+  {
+   "id": "person-in-a-hole",
+   "name": "Person in a hole",
+   "aka": [
+    "fall-rise",
+    "the comeback"
+   ],
+   "what": "Fall then rise.",
+   "how": "The most-shared emotional shape in a 1,700-story corpus; the fall makes the rise feel earned.",
+   "beats": [
+    {
+     "beat": "Fine, normal life",
+     "section": "identification"
+    },
+    {
+     "beat": "Falls in: the problem hits, it gets worse",
+     "section": "problem"
+    },
+    {
+     "beat": "Rock bottom",
+     "section": "agitation"
+    },
+    {
+     "beat": "The way out (the product as the rope)",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "Higher than where it started",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "problem-aware",
+    "solution-aware"
+   ],
+   "source": "Vonnegut, 'Shapes of Stories' lecture ('man in a hole'); Reagan et al. 2016, EPJ Data Science",
+   "status": "draft"
+  },
+  {
+   "id": "rags-to-riches",
+   "name": "Rags to riches",
+   "aka": [
+    "the steady rise",
+    "the glow-up"
+   ],
+   "what": "Rise.",
+   "how": "Pure aspiration with no dip; it carries on momentum and a strong before-and-after picture.",
+   "beats": [
+    {
+     "beat": "Low start, shown in a specific detail",
+     "section": "identification"
+    },
+    {
+     "beat": "Each step up, each one visible",
+     "section": "proof"
+    },
+    {
+     "beat": "The new life",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "product-aware",
+    "most-aware"
+   ],
+   "source": "Reagan et al. 2016 (the six core arcs)",
+   "status": "draft"
+  },
+  {
+   "id": "icarus",
+   "name": "Icarus",
+   "aka": [
+    "rise then fall",
+    "the cautionary tale"
+   ],
+   "what": "Rise then fall.",
+   "how": "Schadenfreude plus the fear of being that person: it sells prevention and is the arc of most public scandals.",
+   "beats": [
+    {
+     "beat": "The lead is winning",
+     "section": "identification"
+    },
+    {
+     "beat": "The lead ignores the warning sign",
+     "section": "problem"
+    },
+    {
+     "beat": "It catches up, publicly",
+     "section": "agitation"
+    }
+   ],
+   "best_for": [
+    "unaware",
+    "problem-aware"
+   ],
+   "source": "Reagan et al. 2016; Greek myth",
+   "status": "draft"
+  },
+  {
+   "id": "cinderella",
+   "name": "Cinderella",
+   "aka": [
+    "rise-fall-rise"
+   ],
+   "what": "Rise, fall, rise higher.",
+   "how": "The arc with the most reliably positive response in the corpus; the middle loss sets up the end.",
+   "beats": [
+    {
+     "beat": "Things start going right",
+     "section": "identification"
+    },
+    {
+     "beat": "Taken away: the setback",
+     "section": "agitation"
+    },
+    {
+     "beat": "Back, and better than before",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "problem-aware",
+    "solution-aware"
+   ],
+   "source": "Vonnegut; Reagan et al. 2016",
+   "status": "draft"
+  },
+  {
+   "id": "oedipus",
+   "name": "Oedipus",
+   "aka": [
+    "fall-rise-fall",
+    "the tragedy"
+   ],
+   "what": "Fall, rise, fall.",
+   "how": "Shows the failed solutions, so the real one lands as the only one left.",
+   "beats": [
+    {
+     "beat": "The problem",
+     "section": "problem"
+    },
+    {
+     "beat": "The false fix that seems to work",
+     "section": "failed-solutions"
+    },
+    {
+     "beat": "It comes back worse",
+     "section": "agitation"
+    }
+   ],
+   "best_for": [
+    "solution-aware"
+   ],
+   "source": "Reagan et al. 2016; Schwartz on failed solutions",
+   "status": "draft"
+  },
+  {
+   "id": "story-circle",
+   "name": "Story circle",
+   "aka": [
+    "the eight steps"
+   ],
+   "what": "A circle out and back, changed.",
+   "how": "Every satisfying story leaves and comes back changed; the circle makes a 30 s ad feel complete.",
+   "beats": [
+    {
+     "beat": "You: in a comfort zone",
+     "section": "identification"
+    },
+    {
+     "beat": "Need: wants something",
+     "section": "problem"
+    },
+    {
+     "beat": "Go: enters an unfamiliar situation",
+     "section": "failed-solutions"
+    },
+    {
+     "beat": "Search: adapts to it",
+     "section": "root-cause"
+    },
+    {
+     "beat": "Find: gets what was wanted",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "Take: pays a heavy price",
+     "section": "objections"
+    },
+    {
+     "beat": "Return: goes back to where it started",
+     "section": "proof"
+    },
+    {
+     "beat": "Change: having changed",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "unaware",
+    "problem-aware"
+   ],
+   "source": "Dan Harmon, the story circle (after Campbell)",
+   "status": "draft"
+  },
+  {
+   "id": "save-the-cat",
+   "name": "Save the cat beats",
+   "aka": [
+    "the fifteen beats",
+    "Snyder's beat sheet"
+   ],
+   "what": "Three acts with a midpoint and a dark night.",
+   "how": "The commercial-film standard; its last frame mirrors its first so the change can be seen.",
+   "beats": [
+    {
+     "beat": "Opening image",
+     "section": "hook"
+    },
+    {
+     "beat": "Theme stated",
+     "section": "identification"
+    },
+    {
+     "beat": "Catalyst",
+     "section": "problem"
+    },
+    {
+     "beat": "Debate",
+     "section": "objections"
+    },
+    {
+     "beat": "Break into two",
+     "section": "solution"
+    },
+    {
+     "beat": "Fun and games",
+     "section": "proof"
+    },
+    {
+     "beat": "Midpoint (false win or false loss)",
+     "section": "failed-solutions"
+    },
+    {
+     "beat": "Bad guys close in",
+     "section": "agitation"
+    },
+    {
+     "beat": "All is lost",
+     "section": "agitation"
+    },
+    {
+     "beat": "Dark night",
+     "section": "root-cause"
+    },
+    {
+     "beat": "Break into three",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "Finale",
+     "section": "product"
+    },
+    {
+     "beat": "Final image (the opening, reversed)",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "problem-aware",
+    "solution-aware"
+   ],
+   "source": "Blake Snyder, Save the Cat! (2005)",
+   "status": "draft"
+  },
+  {
+   "id": "heros-journey",
+   "name": "Hero's journey",
+   "aka": [
+    "the monomyth"
+   ],
+   "what": "Departure, ordeal, return with the gift.",
+   "how": "The viewer is the hero; the brand is the mentor, never the hero.",
+   "beats": [
+    {
+     "beat": "Ordinary world",
+     "section": "identification"
+    },
+    {
+     "beat": "Call (the problem)",
+     "section": "problem"
+    },
+    {
+     "beat": "Refusal",
+     "section": "objections"
+    },
+    {
+     "beat": "Meeting the mentor (the side character with the fix)",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "The ordeal",
+     "section": "agitation"
+    },
+    {
+     "beat": "The reward",
+     "section": "transformation"
+    },
+    {
+     "beat": "Return with the elixir",
+     "section": "call-to-action"
+    }
+   ],
+   "best_for": [
+    "problem-aware",
+    "solution-aware"
+   ],
+   "source": "Joseph Campbell (1949); Christopher Vogler, The Writer's Journey; Donald Miller, StoryBrand",
+   "status": "draft"
+  },
+  {
+   "id": "kishotenketsu",
+   "name": "Kishotenketsu",
+   "aka": [
+    "four acts with no conflict",
+    "the twist without a villain"
+   ],
+   "what": "Set-up, development, twist, reconciliation.",
+   "how": "Holds attention with surprise instead of conflict; built for the absurd and the surreal.",
+   "beats": [
+    {
+     "beat": "Ki: introduce",
+     "section": "hook"
+    },
+    {
+     "beat": "Sho: develop",
+     "section": "identification"
+    },
+    {
+     "beat": "Ten: the unrelated twist",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "Ketsu: the twist and the set-up click together",
+     "section": "product"
+    }
+   ],
+   "best_for": [
+    "unaware"
+   ],
+   "source": "Classical Chinese and Japanese four-part composition",
+   "status": "draft"
+  },
+  {
+   "id": "but-therefore",
+   "name": "But / therefore",
+   "aka": [
+    "the causal chain"
+   ],
+   "what": "Every beat caused by the last.",
+   "how": "Beats joined by 'and then' feel like a list; joined by 'but' and 'therefore' they feel like a story, and nobody scrolls in the middle of one.",
+   "beats": [
+    {
+     "beat": "This happens",
+     "section": "hook"
+    },
+    {
+     "beat": "BUT this goes wrong",
+     "section": "problem"
+    },
+    {
+     "beat": "THEREFORE the lead does this",
+     "section": "solution"
+    },
+    {
+     "beat": "BUT",
+     "section": "objections"
+    },
+    {
+     "beat": "THEREFORE",
+     "section": "proof"
+    },
+    {
+     "beat": "until the end",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "unaware",
+    "problem-aware",
+    "solution-aware",
+    "product-aware"
+   ],
+   "source": "Trey Parker & Matt Stone, NYU masterclass (2011)",
+   "status": "draft"
+  },
+  {
+   "id": "cold-open",
+   "name": "Cold open",
+   "aka": [
+    "in medias res",
+    "start at the crash"
+   ],
+   "what": "The climax first, then how we got here.",
+   "how": "The open question ('how did it get here?') holds the viewer through the set-up they would otherwise skip.",
+   "beats": [
+    {
+     "beat": "The most dramatic moment, unexplained",
+     "section": "hook"
+    },
+    {
+     "beat": "Rewind: 'three weeks earlier'",
+     "section": "identification"
+    },
+    {
+     "beat": "The story to that moment",
+     "section": "problem"
+    },
+    {
+     "beat": "Past it: the resolution",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "unaware"
+   ],
+   "source": "Horace, Ars Poetica (in medias res); TV cold-open practice",
+   "status": "draft"
+  },
+  {
+   "id": "mystery-box",
+   "name": "Mystery box",
+   "aka": [
+    "the withheld reveal"
+   ],
+   "what": "A question first, the answer last.",
+   "how": "An unanswered question is felt as a gap that has to be closed; the viewer watches to close it.",
+   "beats": [
+    {
+     "beat": "An image or line that cannot be explained yet",
+     "section": "hook"
+    },
+    {
+     "beat": "Clues, each one raising the question",
+     "section": "root-cause"
+    },
+    {
+     "beat": "The reveal, which recasts everything",
+     "section": "unique-mechanism"
+    }
+   ],
+   "best_for": [
+    "unaware"
+   ],
+   "source": "J. J. Abrams, 'The mystery box' (TED 2007); Loewenstein 1994",
+   "status": "draft"
+  },
+  {
+   "id": "epiphany-bridge",
+   "name": "Epiphany bridge",
+   "aka": [
+    "the backstory sell"
+   ],
+   "what": "The teller's story leads to the same realisation the viewer needs.",
+   "how": "A viewer accepts a belief discovered inside a story far more easily than one they are told.",
+   "beats": [
+    {
+     "beat": "Backstory: where I was",
+     "section": "identification"
+    },
+    {
+     "beat": "Desire: what I wanted",
+     "section": "problem"
+    },
+    {
+     "beat": "The wall: what stopped me",
+     "section": "failed-solutions"
+    },
+    {
+     "beat": "The epiphany: what I found out",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "The plan",
+     "section": "solution"
+    },
+    {
+     "beat": "The conflict while trying it",
+     "section": "objections"
+    },
+    {
+     "beat": "The result, and who I am now",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "problem-aware",
+    "solution-aware"
+   ],
+   "source": "Russell Brunson, Expert Secrets (2017)",
+   "status": "draft"
+  },
+  {
+   "id": "escalation-ladder",
+   "name": "Escalation ladder",
+   "aka": [
+    "the game of the scene",
+    "heightening"
+   ],
+   "what": "One absurd idea, pushed further every beat.",
+   "how": "Each step is surprising but follows the rule the viewer learned on step one, so it feels inevitable and funny.",
+   "beats": [
+    {
+     "beat": "Find the one unusual thing",
+     "section": "hook"
+    },
+    {
+     "beat": "Do it again, bigger",
+     "section": "agitation"
+    },
+    {
+     "beat": "Bigger",
+     "section": "agitation"
+    },
+    {
+     "beat": "Biggest, past the point of sense",
+     "section": "agitation"
+    },
+    {
+     "beat": "Snap back to the product",
+     "section": "product"
+    }
+   ],
+   "best_for": [
+    "unaware"
+   ],
+   "source": "Upright Citizens Brigade, 'the game' (Besser, Roberts & Walsh, UCB Comedy Improvisation Manual)",
+   "status": "draft"
+  },
+  {
+   "id": "micro-drama",
+   "name": "Micro-drama",
+   "aka": [
+    "vertical drama",
+    "the soap beat"
+   ],
+   "what": "Hook, conflict, reversal, cliffhanger, every minute.",
+   "how": "The vertical-drama apps hold viewers for hours with a reversal every 60-90 s; the satisfying comeuppance is the reward.",
+   "beats": [
+    {
+     "beat": "Hook: a betrayal or a shock in the first second",
+     "section": "hook"
+    },
+    {
+     "beat": "Conflict out loud",
+     "section": "problem"
+    },
+    {
+     "beat": "A reversal: the power flips",
+     "section": "solution"
+    },
+    {
+     "beat": "A cliffhanger or a satisfying humiliation of the villain",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "unaware",
+    "problem-aware"
+   ],
+   "source": "Vertical short-drama practice (2023-2026)",
+   "status": "draft"
+  },
+  {
+   "id": "two-sides",
+   "name": "Two sides",
+   "aka": [
+    "Rashomon",
+    "two sides of one story"
+   ],
+   "what": "The same event told twice, differently.",
+   "how": "The viewer becomes the judge; judging is engagement, and the gap between versions is the joke.",
+   "beats": [
+    {
+     "beat": "One version",
+     "section": "identification"
+    },
+    {
+     "beat": "The other version (or the camera's)",
+     "section": "problem"
+    },
+    {
+     "beat": "The truth, which neither said",
+     "section": "proof"
+    }
+   ],
+   "best_for": [
+    "unaware"
+   ],
+   "source": "Kurosawa, Rashomon (1950); reality-TV confessional practice",
+   "status": "draft"
+  },
+  {
+   "id": "unreliable-narrator",
+   "name": "Unreliable narrator",
+   "aka": [
+    "dramatic irony",
+    "the viewer knows first"
+   ],
+   "what": "The lead tells it one way, the picture shows another.",
+   "how": "The viewer is ahead of the character, which feels clever and holds the viewer to the moment the character catches up.",
+   "beats": [
+    {
+     "beat": "The lead brags or denies",
+     "section": "identification"
+    },
+    {
+     "beat": "The picture quietly contradicts it",
+     "section": "problem"
+    },
+    {
+     "beat": "Everyone but the lead can see it",
+     "section": "agitation"
+    },
+    {
+     "beat": "The lead finally sees it",
+     "section": "solution"
+    }
+   ],
+   "best_for": [
+    "unaware",
+    "problem-aware"
+   ],
+   "source": "Wayne Booth, The Rhetoric of Fiction (1961)",
+   "status": "draft"
+  },
+  {
+   "id": "transformation-reveal",
+   "name": "Transformation reveal",
+   "aka": [
+    "the before-after",
+    "the glow-up drop"
+   ],
+   "what": "Build-up, then the drop.",
+   "how": "The held before is the tension; the drop on the beat is the release, and it is the frame people screenshot.",
+   "beats": [
+    {
+     "beat": "The before, held long enough to feel",
+     "section": "problem"
+    },
+    {
+     "beat": "The process, sped up or hidden",
+     "section": "unique-mechanism"
+    },
+    {
+     "beat": "The drop: the after, on a beat",
+     "section": "transformation"
+    }
+   ],
+   "best_for": [
+    "product-aware",
+    "most-aware"
+   ],
+   "source": "Short-form transition practice; tension-release (music theory)",
+   "status": "draft"
+  }
+ ],
+ "device_rule": "Story devices are switches inside the arc: name each one used. A device that is set up must be paid off.",
+ "story_devices": [
+  {
+   "id": "open-loop",
+   "name": "Open loop",
+   "family": "Curiosity",
+   "aka": [
+    "Zeigarnik effect"
+   ],
+   "what": "Start a story or question and leave it unfinished; an interrupted task stays in the mind until it is closed.",
+   "source": "Zeigarnik 1927",
+   "status": "draft",
+   "how": "Open two loops in the first 5 s and close the second one last."
+  },
+  {
+   "id": "curiosity-gap",
+   "name": "Curiosity gap",
+   "family": "Curiosity",
+   "aka": [
+    "information gap"
+   ],
+   "what": "Show the viewer there is something they do not know yet, and that it is about them.",
+   "source": "Loewenstein 1994, Psychological Bulletin",
+   "status": "draft",
+   "how": "Name the gap precisely ('the one thing every pro in the trade knows that you don't') so it feels small enough to close by watching."
+  },
+  {
+   "id": "question-hook",
+   "name": "Question hook",
+   "family": "Curiosity",
+   "aka": [],
+   "what": "Open on a question the viewer answers in their head.",
+   "source": "Copywriting practice",
+   "status": "draft",
+   "how": "Ask the question the viewer is embarrassed to ask out loud."
+  },
+  {
+   "id": "pattern-interrupt",
+   "name": "Pattern interrupt",
+   "family": "Curiosity",
+   "aka": [
+    "the scroll stopper"
+   ],
+   "what": "Break what the feed has trained the eye to expect: wrong scale, wrong place, wrong sound.",
+   "source": "Neuro-linguistic practice; attention research on novelty",
+   "status": "draft",
+   "how": "Combine it with the curiosity gap so the interrupt asks a question."
+  },
+  {
+   "id": "ticking-clock",
+   "name": "Ticking clock",
+   "family": "Tension",
+   "aka": [
+    "the deadline"
+   ],
+   "what": "A visible time limit: the date, the meeting, the mirror before leaving the house.",
+   "source": "Screenwriting practice",
+   "status": "draft",
+   "how": "Put the clock on screen; cut faster as it runs down."
+  },
+  {
+   "id": "raise-the-stakes",
+   "name": "Raise the stakes",
+   "family": "Tension",
+   "aka": [],
+   "what": "Every beat costs the lead more: from comfort, to a date, to a job, to their name in public.",
+   "source": "McKee, Story (1997)",
+   "status": "draft",
+   "how": "Make the last stake social and public: who sees it."
+  },
+  {
+   "id": "reversal",
+   "name": "Reversal",
+   "family": "Tension",
+   "aka": [
+    "peripeteia",
+    "the flip"
+   ],
+   "what": "The situation turns into its opposite: the winner is losing, the bully is humiliated.",
+   "source": "Aristotle, Poetics",
+   "status": "draft",
+   "how": "Put the reversal on a cut and a sound hit."
+  },
+  {
+   "id": "recognition",
+   "name": "Recognition",
+   "family": "Tension",
+   "aka": [
+    "anagnorisis",
+    "the moment of seeing it"
+   ],
+   "what": "The character realises the truth, usually about themselves.",
+   "source": "Aristotle, Poetics",
+   "status": "draft",
+   "how": "Show it on the face, held; it is the frame the viewer identifies with."
+  },
+  {
+   "id": "setup-payoff",
+   "name": "Set-up and payoff",
+   "family": "Tension",
+   "aka": [
+    "Chekhov's gun",
+    "plant and pay"
+   ],
+   "what": "Something shown early that matters at the end.",
+   "source": "Chekhov (letters, 1889)",
+   "status": "draft",
+   "how": "Plant the product or the clue in the first 5 s so the ending feels earned, not sold."
+  },
+  {
+   "id": "false-victory",
+   "name": "False victory",
+   "family": "Tension",
+   "aka": [
+    "the midpoint"
+   ],
+   "what": "The lead thinks it is fixed; it is not.",
+   "source": "Snyder 2005",
+   "status": "draft",
+   "how": "Make the failed fix the competitor's category (the usual tool everyone already tried) and let it fail on screen."
+  },
+  {
+   "id": "all-is-lost",
+   "name": "All is lost",
+   "family": "Tension",
+   "aka": [
+    "the dark night"
+   ],
+   "what": "The lowest point just before the turn.",
+   "source": "Snyder 2005",
+   "status": "draft",
+   "how": "Strip the sound or the colour at the low point; the product arrives after it, never before."
+  },
+  {
+   "id": "twist",
+   "name": "Twist",
+   "family": "Tension",
+   "aka": [
+    "the reveal"
+   ],
+   "what": "A late fact that changes the meaning of everything before it.",
+   "source": "Narrative practice",
+   "status": "draft",
+   "how": "The twist must be fair: one clue earlier that the viewer only notices on a second watch (rewatches count)."
+  },
+  {
+   "id": "cliffhanger",
+   "name": "Cliffhanger",
+   "family": "Tension",
+   "aka": [],
+   "what": "End a section on an unresolved peak.",
+   "source": "Serial fiction practice",
+   "status": "draft",
+   "how": "In a series, end each part on one; in one ad, end each verse on one."
+  },
+  {
+   "id": "want-vs-need",
+   "name": "Want versus need",
+   "family": "Character",
+   "aka": [],
+   "what": "The lead wants one thing (respect, the date); the lead needs another (to stop hiding).",
+   "source": "McKee 1997; Snyder 2005",
+   "status": "draft",
+   "how": "The ad delivers the want by solving the need."
+  },
+  {
+   "id": "the-flaw",
+   "name": "The flaw",
+   "family": "Character",
+   "aka": [],
+   "what": "One specific, human flaw the viewer shares: vanity, denial, pride.",
+   "source": "Character-writing practice",
+   "status": "draft",
+   "how": "Make the flaw funny, never contemptible; the viewer must like the lead."
+  },
+  {
+   "id": "save-the-cat-moment",
+   "name": "Save the cat moment",
+   "family": "Character",
+   "aka": [
+    "the likeability beat"
+   ],
+   "what": "A small kind or relatable act early, so the viewer is on their side.",
+   "source": "Snyder 2005",
+   "status": "draft",
+   "how": "Even the villain-of-the-story gets one if it is the lead."
+  },
+  {
+   "id": "the-villain",
+   "name": "The villain",
+   "family": "Character",
+   "aka": [
+    "the enemy",
+    "the externalised problem"
+   ],
+   "what": "The problem as a character: the tool that fails, the bad advice, the doubter.",
+   "source": "StoryBrand (Miller 2017); us-vs-them framing",
+   "status": "draft",
+   "how": "Never a real person or a real competitor by name; a category or a personified thing."
+  },
+  {
+   "id": "the-mentor",
+   "name": "The mentor",
+   "family": "Character",
+   "aka": [
+    "the guide"
+   ],
+   "what": "The side character who hands over the fix: the pro, the elder, the friend.",
+   "source": "Campbell 1949; Miller 2017",
+   "status": "draft",
+   "how": "The mentor is who the brand plays; the viewer stays the hero."
+  },
+  {
+   "id": "the-witness",
+   "name": "The witness",
+   "family": "Character",
+   "aka": [
+    "the reaction shot"
+   ],
+   "what": "Someone else reacts to the problem or the change, so the viewer sees it through their eyes.",
+   "source": "Film grammar (the reaction shot)",
+   "status": "draft",
+   "how": "The witness shows what the hero cannot: the friend's wince, the date's double take."
+  },
+  {
+   "id": "the-confession",
+   "name": "The confession",
+   "family": "Character",
+   "aka": [
+    "the to-camera admission"
+   ],
+   "what": "The lead admits something to the camera that they hide from everyone else.",
+   "source": "Reality-TV confessional; testimonial practice",
+   "status": "draft",
+   "how": "Start on the confession; it is a pattern interrupt and an open loop at once."
+  },
+  {
+   "id": "emotional-whiplash",
+   "name": "Emotional whiplash",
+   "family": "Emotion",
+   "aka": [
+    "the valence swing"
+   ],
+   "what": "Swing from one emotion to its opposite in one cut: laughing to wincing, shame to pride.",
+   "source": "Berger & Milkman 2012",
+   "status": "draft",
+   "how": "One swing per 10 s keeps arousal up; arousal drives sharing."
+  },
+  {
+   "id": "peak-end",
+   "name": "Peak and end",
+   "family": "Emotion",
+   "aka": [
+    "the peak-end rule"
+   ],
+   "what": "People remember the most intense moment and the last moment, not the average.",
+   "source": "Kahneman, Fredrickson et al. 1993",
+   "status": "draft",
+   "how": "Design one peak and make the last 2 s the best feeling in the ad."
+  },
+  {
+   "id": "the-specific-detail",
+   "name": "The specific detail",
+   "family": "Emotion",
+   "aka": [
+    "concreteness"
+   ],
+   "what": "One detail so exact it can only be true: the receipt, the timestamp, the brand of the cheap thing that failed.",
+   "source": "Heath & Heath, Made to Stick (2007)",
+   "status": "draft",
+   "how": "One per beat; specific beats general every time."
+  },
+  {
+   "id": "identity-mirror",
+   "name": "Identity mirror",
+   "family": "Emotion",
+   "aka": [
+    "that's me"
+   ],
+   "what": "The viewer sees themselves in the character's exact situation.",
+   "source": "Self-referencing research (Burnkrant & Unnava 1995)",
+   "status": "draft",
+   "how": "Use the avatar's own words from research, word for word."
+  },
+  {
+   "id": "callback-ending",
+   "name": "Callback ending",
+   "family": "Payoff",
+   "aka": [
+    "the bookend"
+   ],
+   "what": "The last frame or line returns to the first, changed.",
+   "source": "Snyder 2005 (opening and final image)",
+   "status": "draft",
+   "how": "Same framing, same line, opposite meaning."
+  },
+  {
+   "id": "the-tag",
+   "name": "The tag",
+   "family": "Payoff",
+   "aka": [
+    "the button",
+    "the stinger"
+   ],
+   "what": "One more joke after the story is over.",
+   "source": "Comedy practice (sketch buttons)",
+   "status": "draft",
+   "how": "Put the product or the offer in the tag so the laugh carries it."
+  },
+  {
+   "id": "the-receipt",
+   "name": "The receipt",
+   "family": "Payoff",
+   "aka": [
+    "the proof shot"
+   ],
+   "what": "Hard proof on screen at the moment of doubt: the close-up, the real result, the real date.",
+   "source": "Schwartz on verification; DR proof practice",
+   "status": "draft",
+   "how": "Show it when the viewer's doubt peaks, not at the end."
+  }
+ ],
+ "trigger_rule": "Persuasion triggers are why a story turns into a click. Each row says how far to push and where the line is; the line is a guard, never a dial. A trigger used without its truth (a fake deadline, a fake crowd) is refused.",
+ "persuasion_triggers": [
+  {
+   "id": "narrative-transportation",
+   "name": "Narrative transportation",
+   "aka": [
+    "story lowers resistance"
+   ],
+   "what": "A viewer absorbed in a story argues back less and takes on its beliefs.",
+   "line": "The claim inside the story must still be true.",
+   "source": "Green & Brock 2000",
+   "status": "draft",
+   "how": "Deliver the claim inside the story, never as a break from it."
+  },
+  {
+   "id": "social-proof",
+   "name": "Social proof",
+   "aka": [],
+   "what": "People do what people like them are doing.",
+   "line": "Real numbers and real customers only.",
+   "source": "Cialdini, Influence (1984)",
+   "status": "draft",
+   "how": "Show a crowd of people like the viewer, in the viewer's world, doing it."
+  },
+  {
+   "id": "authority",
+   "name": "Authority",
+   "aka": [],
+   "what": "We follow people who look like they know.",
+   "line": "Never a fake credential; an actor is a character, never claimed as a real expert.",
+   "source": "Cialdini 1984",
+   "status": "draft",
+   "how": "The pro, the doctor, the elder who has seen it all: a role the viewer already trusts."
+  },
+  {
+   "id": "scarcity",
+   "name": "Scarcity",
+   "aka": [
+    "urgency"
+   ],
+   "what": "Things feel more valuable when they might run out.",
+   "line": "Never a fake countdown or fake stock.",
+   "source": "Cialdini 1984; Worchel et al. 1975",
+   "status": "draft",
+   "how": "Tie it to a real moment: the season, the event, the real stock."
+  },
+  {
+   "id": "loss-aversion",
+   "name": "Loss aversion",
+   "aka": [],
+   "what": "A loss hurts about twice as much as the same gain feels good.",
+   "line": "No fear about a health problem the viewer does not have.",
+   "source": "Kahneman & Tversky 1979",
+   "status": "draft",
+   "how": "Frame what the viewer keeps losing: the photos deleted, the plans skipped."
+  },
+  {
+   "id": "commitment",
+   "name": "Commitment and consistency",
+   "aka": [
+    "the micro-yes"
+   ],
+   "what": "After a small yes, a bigger yes is easier.",
+   "line": "Never trick anyone into a commitment.",
+   "source": "Cialdini 1984; Freedman & Fraser 1966",
+   "status": "draft",
+   "how": "Ask a question the viewer answers yes to in their head, then another, then the click."
+  },
+  {
+   "id": "unity",
+   "name": "Unity",
+   "aka": [
+    "identity",
+    "one of us"
+   ],
+   "what": "We say yes to people who are 'us'.",
+   "line": "Never fake membership in a real community or culture.",
+   "source": "Cialdini, Pre-Suasion (2016)",
+   "status": "draft",
+   "how": "Speak as one of their own: their slang, their world, their references."
+  },
+  {
+   "id": "reason-why",
+   "name": "The reason why",
+   "aka": [
+    "because"
+   ],
+   "what": "A request with a reason gets more yeses, even a thin reason.",
+   "line": "The reason must be true.",
+   "source": "Langer, Blank & Chanowitz 1978",
+   "status": "draft",
+   "how": "Always give the mechanism: why it works, in one line."
+  },
+  {
+   "id": "contrast",
+   "name": "Contrast and anchoring",
+   "aka": [],
+   "what": "A thing is judged against what is shown next to it.",
+   "line": "The anchor must be a real alternative at a real price.",
+   "source": "Tversky & Kahneman 1974",
+   "status": "draft",
+   "how": "Show the expensive, painful alternative first, then ours."
+  },
+  {
+   "id": "future-pacing",
+   "name": "Future pacing",
+   "aka": [
+    "the mental rehearsal"
+   ],
+   "what": "Let the viewer picture themselves after, in a specific moment.",
+   "line": "Never promise a result the product does not give.",
+   "source": "Persuasion practice; mental simulation research (Escalas 2004)",
+   "status": "draft",
+   "how": "One exact future scene: the photo posted, the compliment received."
+  },
+  {
+   "id": "identity-shift",
+   "name": "Identity shift",
+   "aka": [
+    "the kind of person who"
+   ],
+   "what": "People act to match who they think they are.",
+   "line": "Never shame who the viewer is now.",
+   "source": "Identity-based motivation (Oyserman 2009)",
+   "status": "draft",
+   "how": "Sell who the viewer becomes, not the tool: 'the one who never hides anymore'."
+  },
+  {
+   "id": "reciprocity",
+   "name": "Reciprocity",
+   "aka": [],
+   "what": "We return favours, even small ones.",
+   "line": "A gift with no strings, really.",
+   "source": "Cialdini 1984",
+   "status": "draft",
+   "how": "Give something real first: the tip, the free quiz result."
+  },
+  {
+   "id": "the-enemy",
+   "name": "The common enemy",
+   "aka": [],
+   "what": "A shared enemy bonds the viewer to whoever names it.",
+   "line": "Never a real competitor by name or a group of people.",
+   "source": "Persuasion practice; us-vs-them framing",
+   "status": "draft",
+   "how": "The enemy is the problem or the old way, never a person."
+  }
+ ],
+ "edge_line": {
+  "what": "How far to go: to the edge, never over. Push everything on the left; nothing on the right, ever.",
+  "push": [
+   "Exaggeration and absurdity everyone can see is a joke",
+   "Taboo-adjacent humour: near-curses, innuendo, 'pause'",
+   "Real public stories, told as what was publicly reported, allegations labelled",
+   "Real fears and real embarrassment, shown honestly",
+   "Lookalike archetypes and cultural nods, never the real person",
+   "Uncomfortable truths about the problem, the category and the old way"
+  ],
+  "never": [
+   "A claim the product cannot back",
+   "A fake testimonial, review, crowd, expert or result presented as real",
+   "A fake deadline, fake stock or fake price",
+   "A real person named, impersonated or defamed",
+   "Mocking a health condition, disability, race, religion or any protected trait",
+   "Minors in anything risky",
+   "A real tragedy used for laughs",
+   "Shame aimed at the viewer instead of at the problem"
+  ],
+  "source": "Workspace rulings (claim-safe, benign, parody-not-copy guards); FTC endorsement guides; Meta advertising standards"
+ },
+ "story_interactions": [
+  {
+   "id": "arc-follows-awareness",
+   "rule": "Unaware viewers get curiosity arcs (cold open, mystery box, kishotenketsu, escalation); problem-aware get the fall (man in a hole, Icarus); solution-aware get the failed fixes (Oedipus, epiphany bridge); product- and most-aware get the reveal (transformation, rags to riches).",
+   "source": "Schwartz, Breakthrough Advertising (1966), awareness levels"
+  },
+  {
+   "id": "story-beats-argument",
+   "rule": "The more the piece feels like a story, the less the viewer argues with the claim; break the story to sell and the resistance comes back.",
+   "source": "Green & Brock 2000"
+  },
+  {
+   "id": "absurd-needs-a-turn",
+   "rule": "An absurd piece still needs one turn; absurdity with no change is a meme, not an ad.",
+   "source": "Heckler & Childers 1992 (relevance); kishotenketsu"
+  },
+  {
+   "id": "one-arc-per-piece",
+   "rule": "Two arcs in 30 s read as noise; nest a device inside the arc instead.",
+   "source": "Screenwriting practice"
+  },
+  {
+   "id": "end-on-the-peak",
+   "rule": "The last 2 s decide how the whole ad is remembered; never end on the offer alone, end on the feeling with the offer on it.",
+   "source": "Kahneman et al. 1993 (peak-end)"
+  }
+ ]
+}

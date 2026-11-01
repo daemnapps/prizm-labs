@@ -1,0 +1,159 @@
+{
+ "theme": "red-tests",
+ "title": "Red tests on main",
+ "status": "draft pack, conformed from red-tests/DEFINITIONS-red-tests.md; not ruled",
+ "triage_owner": "the team",
+ "triage_owner_ruling": "the-org/decision-log.md 2026-10-02 TRIAGE, amended: the team triages red tests",
+ "theme_owner": "the team",
+ "theme_owner_ruling": "paused this round; the team as triage owner, theme owner not named",
+ "engine_owner": "the team",
+ "engine_owner_ruling": "the team 2026-10-02: \"I will remain component owner of the triage component for now\"",
+ "item": {
+  "noun": "red test",
+  "id_scheme": "R<n> for the run; the suite path is the stable id",
+  "record_slug": "red-<suite file stem>",
+  "count_2026_10_02": {
+   "open": 34,
+   "red": 33,
+   "timed_out": 1
+  }
+ },
+ "adapter": {
+  "read": "the newest record in platform/data/records/red-tests/ (the red-test reporter, TI-13 (six reds on main)); red and timeout rows are open",
+  "still_true": "run the suite once (python3 <suite>, timeout 300 s) in a read-only worktree; the reporter's next sweep is the authority",
+  "write_back": null,
+  "write_back_note": "none needed: a suite leaves the list when the reporter's next sweep finds it green",
+  "reopen": "automatic: a suite that goes red again comes back on the next sweep",
+  "code": "none separate yet; the 2026-10-02 trial read the record by hand"
+ },
+ "summary": {
+  "standard": "the triage engine's verdict plus three summary parts",
+  "required": [
+   "class",
+   "cause",
+   "causing_commit",
+   "fix",
+   "why",
+   "impacts",
+   "if_ignored"
+  ],
+  "labels": {
+   "class": "cause class",
+   "cause": "cause",
+   "causing_commit": "causing commit",
+   "fix": "the fix",
+   "why": "why it matters",
+   "impacts": "who and what it affects",
+   "if_ignored": "if it's ignored"
+  },
+  "where": [
+   "triage/red-tests/engine-verdicts-<date>.json",
+   "triage/red-tests/summaries-<date>.json (TI-24 (red-test summaries GLM), under evaluation)"
+  ]
+ },
+ "categories": null,
+ "categories_note": "34 items do not need categories; actions group them",
+ "cause_classes": [
+  "REAL",
+  "STALE",
+  "ENV"
+ ],
+ "cause_classes_note": "the three classes from DEFINITIONS-red-tests.md pass 2; a ruling is never a cause, it goes in blocked_by",
+ "priority": {
+  "tiers": {
+   "P0": "REAL on a live path, with the evidence named",
+   "P1": "REAL but not live, or a gate suite",
+   "P2": "STALE (a re-pin)",
+   "P3": "ENV (flaky)"
+  },
+  "live_use_for_p0": "a person's or the mini's run crashes or gives wrong output today",
+  "severity_source": "the engine's verdict",
+  "weights": {
+   "P0": 8,
+   "P1": 4,
+   "P2": 2,
+   "P3": 1
+  },
+  "age": {
+   "days": 7,
+   "cap": "P1",
+   "applies": true,
+   "from": "the first reporter record listing the suite (records start 2026-09-20)"
+  }
+ },
+ "owners": {
+  "source": "the code under test: components/CLAUDE.md Residents row, or the build folder's owner"
+ },
+ "deciders": {
+  "walls": "the team or the team",
+  "approvals": "the team (cards awaiting approval)",
+  "owner_calls": "the code's owner"
+ },
+ "walls": [
+  "a secret in git",
+  "a machine delete or external send",
+  "a key read by path",
+  "media over the size limit in git",
+  "brands/ read-only to machines this phase"
+ ],
+ "lane_conditions": {
+  "status": "the team is the triage owner and sits in the lead seat",
+  "now": [
+   "a re-pin or test fix the team cards and dispatches",
+   "an approval or ruling the team types"
+  ],
+  "guard": "never loosen or delete an assertion beyond the named pin; the lead reviews every assertion change (TI-23 (red-test fixes on GLM))"
+ },
+ "doer_tags": {
+  "now": "the triage owner can do it alone, today, within the lane conditions",
+  "after": "the triage owner can do it once a ruling lands (the action's own, or the pending 'apply a ruled default, owner told' ruling)",
+  "draft": "the triage owner prepares it; the owner lands it (owner's work in flight, a live path, or large)",
+  "owner": "only the owner can do it (a design call, knowledge or an act only they have)"
+ },
+ "people": [
+  "the team",
+  "the owner",
+  "the team",
+  "the team",
+  "the lead",
+  "maker"
+ ],
+ "context_hook": {
+  "status": "not proposed yet",
+  "file": null,
+  "note": "red tests live in build folders; whether a build folder's CLAUDE.md should import a context file is open"
+ },
+ "routes": {
+  "glm": "test-only re-pins and fixes (TI-23 (red-test fixes on GLM)): only test files change; 2–3 test files allowed",
+  "claude": "code on shared surfaces, the owner's code, engine and page code"
+ },
+ "sidecars": {
+  "engine_verdicts": "components/triage/history/red-tests/engine-verdicts-<date>.json",
+  "summaries": "components/triage/history/red-tests/summaries-<date>.json"
+ },
+ "outputs": {
+  "queue_model": "new-workflow-design/builds/atlas/triage/queue/model-red-tests-<date>.json",
+  "page": "(private page)",
+  "runs_home": "runs/triage/red-tests/<date>/ (ruled #5; not used yet)"
+ },
+ "cadence": "on each reporter change, or weekly (open)",
+ "open_gaps": [
+  "no adapter code yet",
+  "summaries under evaluation (TI-24 (red-test summaries GLM))",
+  "the reporter carries old statuses forward, so 'last red' can be stale",
+  "no context hook decided"
+ ],
+ "blocked_by": "a card awaiting approval, a pending decision, or nothing (the team 'ok' on #3, 4b36a7a90)",
+ "refs": {
+  "emits": [
+   "path",
+   "card",
+   "component"
+  ],
+  "related_sources": [
+   "cards",
+   "the red-test reporter"
+  ],
+  "examples": null
+ }
+}

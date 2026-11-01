@@ -1,0 +1,96 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUN-01 queue</title>
+<style>
+:root{--bg:#F2EDE2;--card:#FBF8F1;--ink:#171512;--soft:#3B352C;--muted:#7A7268;--rule:#DCD3C2;--gold:#9C7A12;--green:#3E6247;--red:#9E3B2C;--wash:#E9E2D2}
+@media(prefers-color-scheme:dark){:root{--bg:#171512;--card:#211E19;--ink:#F2EDE2;--soft:#D8D0C0;--muted:#9A9182;--rule:#3A352C;--gold:#D3B04A;--green:#7FB08A;--red:#E07A66;--wash:#2A2620}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,"Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 22px 80px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}.sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:14px}
+.stat{background:var(--card);padding:10px 12px}.stat b{display:block;font-size:26px;font-variant-numeric:tabular-nums;line-height:1.05}.stat span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;position:sticky;top:0;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--rule);z-index:5}
+button{font:13px inherit;padding:7px 12px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer;border-radius:0}
+button.q{background:transparent;color:var(--ink)}button:disabled{opacity:.4;cursor:default}
+.gate{font-size:12.5px;color:var(--muted);margin-left:auto;max-width:52ch}
+select{font:13px inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--card);color:var(--ink)}
+.job{font:12px ui-monospace,Menlo,monospace;background:var(--wash);padding:8px 12px;margin:10px 0;white-space:pre-wrap;max-height:120px;overflow:auto;display:none}
+table{width:100%;border-collapse:collapse;margin-top:10px}th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 8px;border-bottom:1px solid var(--rule);font-weight:500}
+td{padding:9px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr.u{cursor:pointer}tr.u:hover td{background:var(--card)}
+.pips i{display:inline-block;width:11px;height:11px;margin-right:3px;background:var(--green)}.pips i.o{background:transparent;border:1px dashed var(--muted)}.pips i.s{background:var(--red)}
+.chip{display:inline-block;font-size:11px;padding:1px 6px;border:1px solid var(--rule);margin:1px 2px 1px 0;color:var(--soft)}.chip.red{border-color:var(--red);color:var(--red)}.chip.gold{border-color:var(--gold);color:var(--gold)}.chip.green{border-color:var(--green);color:var(--green)}
+.pics{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;padding:6px 0 4px}
+.pic{background:var(--card);border:1px solid var(--rule);padding:8px}.pic img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#1A1A1A}
+.pic .n{font:10.5px ui-monospace,Menlo,monospace;color:var(--muted);margin:6px 0 4px;word-break:break-all}
+.pic .h{font-size:12px;font-weight:600;min-height:2.4em}.pic .f{font-size:11.5px;color:var(--red);margin:4px 0}
+.kk{display:flex;gap:6px;margin-top:6px}.kk button{padding:4px 9px;font-size:12px}.kk .k{background:var(--green);border-color:var(--green)}.kk .x{background:var(--red);border-color:var(--red)}
+.pic.kept{outline:2px solid var(--green)}.pic.killed{opacity:.45}
+.mono{font:11px ui-monospace,Menlo,monospace;color:var(--muted)}
+.notebox{margin-top:6px;padding:8px;background:var(--wash);border-left:3px solid var(--green)}.notebox.kill{border-left-color:var(--red)}
+.notebox .q{font-size:12px;margin-bottom:6px;color:var(--soft)}.notebox textarea{width:100%;font:13px inherit;padding:6px;border:1px solid var(--rule);background:var(--card);color:var(--ink);resize:vertical}
+.note{font-size:12px;margin-top:6px;padding:6px 8px;border-left:3px solid var(--green);background:var(--wash)}.note.kill{border-left-color:var(--red)}
+#notes td{font-size:12.5px}
+a{color:inherit}
+</style>
+<div class="wrap">
+<h1>RUN-01 — the queue</h1>
+<p class="sub">Every unit needs 3 clean pictures. Green = have, dashed = still to make, red = slop to fix. Click a row to see the pictures; keep or kill each one. <span id="drive"></span></p>
+<div class="strip" id="strip"></div>
+<div class="bar">
+  <button onclick="job('run')" id="b-run">Make missing + fix slop</button>
+  <button class="q" onclick="job('plan')">Re-plan</button>
+  <button class="q" onclick="job('sync')">Sync to GitHub</button>
+  <button class="q" onclick="job('kit')">Build Meta kit</button>
+  <a class="q" href="/proof" style="font:13px inherit;padding:7px 12px;border:1px solid var(--ink);text-decoration:none;color:var(--ink)">See the proof →</a>
+  <button class="q" disabled id="b-meta">Push to Meta</button>
+  <select id="f-run"><option value="">every batch</option></select>
+  <select id="f-show"><option value="">every unit</option><option value="short">short of 3</option><option value="slop">has slop</option><option value="done">done</option><option value="unreviewed">unreviewed</option></select>
+  <button class="q" id="stale" style="display:none" onclick="render()">↻ new pictures landed — refresh</button><span class="gate" id="gate"></span>
+</div>
+<pre class="job" id="job"></pre>
+<section id="notes-wrap" style="margin:18px 0 6px"><details><summary style="cursor:pointer;font-weight:600">Your notes — <span id="notes-n">0</span> kept · <span id="notes-k">0</span> killed</summary><table id="notes"><thead><tr><th>when</th><th>man</th><th>look</th><th>headline</th><th>pic</th><th>verdict</th><th>why</th></tr></thead><tbody></tbody></table></details></section>
+<table><thead><tr><th>man</th><th>look</th><th>headline</th><th>pictures</th><th>state</th><th>queue</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+<script>
+let S=null, open=new Set(), lastStamp="";
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function load(){ const r=await fetch("/state.json?t="+Date.now()); S=await r.json(); render(); }
+const stripHtml=c=>[[c.units,"units"],[c.done,"done"],[c.pictures,"pictures"],[c.to_make,"to make"],[c.slop,"slop to fix"],[c.unreviewed,"unreviewed"],[c.in_meta,"in meta"]].map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+function render(){
+  const c=S.counts; document.getElementById("stale").style.display="none";
+  document.getElementById("strip").innerHTML=stripHtml(c);
+  document.getElementById("gate").textContent=S.gate[0]||"";
+  const N=S.notes||[]; document.getElementById("notes-n").textContent=N.filter(n=>n.verdict==="keep").length; document.getElementById("notes-k").textContent=N.filter(n=>n.verdict==="kill").length;
+  document.querySelector("#notes tbody").innerHTML=N.map(n=>`<tr><td class="mono">${(n.at||"").slice(5,16).replace("T"," ")}</td><td>${esc(n.man)}</td><td>${esc(n.format)}</td><td>${esc(n.headline).slice(0,40)}</td><td class="mono">${n.asset.slice(-3)}</td><td><span class="chip ${n.verdict==="keep"?"green":"red"}">${n.verdict}</span></td><td>${esc(n.why)||"<i>no note</i>"}</td></tr>`).join("");
+  document.getElementById("b-meta").title=S.gate.join(" · ");
+  document.getElementById("drive").innerHTML=`Finished pictures: <a href="https://drive.google.com/drive/folders/${S.drive}" target="_blank">RUN-01 on Drive ↗</a>`;
+  const fr=document.getElementById("f-run"); if(fr.options.length===1) [...new Set(S.units.map(u=>u.run))].forEach(r=>{const o=document.createElement("option");o.value=r;o.textContent=r;fr.appendChild(o);});
+  const run=fr.value, show=document.getElementById("f-show").value;
+  document.getElementById("rows").innerHTML=S.units.filter(u=>(!run||u.run===run)&&(show===""||(show==="short"&&u.need)||(show==="slop"&&u.slop)||(show==="done"&&!u.need&&!u.slop)||(show==="unreviewed"&&u.assets.some(a=>!a.verdict&&!a.flags.length)))).map(u=>{
+    const key=u.run+"/"+u.slug;
+    const pips=u.assets.map(a=>`<i class="${a.verdict==="kill"?"o":(a.flags.length?"s":"")}" title="${esc(a.name.slice(-3))}"></i>`).join("")+"<i class='o'></i>".repeat(u.need);
+    const state=(!u.need&&!u.slop)?`<span class="chip green">done</span>`:[u.need?`<span class="chip gold">${u.need} to make</span>`:"",u.slop?`<span class="chip red">${u.slop} slop</span>`:""].join("");
+    const q=u.queue.filter(i=>i.status!=="done").map(i=>`<span class="chip">${i.kind} a${String(i.target).padStart(2,"0")} · ${i.status}</span>`).join("")||"";
+    const meta=u.meta?`<span class="chip green">in Meta · ${esc(u.meta.status||"paused")}</span>`:"";
+    let row=`<tr class="u" onclick="tog('${key}')"><td><b>${esc(u.man)}</b><div class="mono">${esc(u.run)}</div></td><td>${esc(u.format)}<div class="mono">${esc(u.angle)}</div></td><td>${esc(u.headline)||"<span class=mono>no headline read</span>"}</td><td class="pips">${pips}</td><td>${state}${meta}</td><td>${q}</td><td>${open.has(key)?"▾":"▸"}</td></tr>`;
+    if(open.has(key)) row+=`<tr><td colspan="7"><div class="pics">${u.assets.map(a=>`<div class="pic ${a.verdict==="keep"?"kept":a.verdict==="kill"?"killed":""}"><a href="/img/${esc(a.path)}" target="_blank" onclick="event.stopPropagation()"><img loading="lazy" src="/thumb/${esc(a.name)}"></a><div class="n">${esc(a.name.slice(-3))} · ${a.drive?`<a href="https://drive.google.com/file/d/${a.drive}/view" target="_blank">Drive ↗</a>`:"not on Drive"}</div><div class="h">${esc(a.headline)}</div>${a.flags.map(f=>`<div class="f">⚠ ${esc(f)}</div>`).join("")}${a.verdict?`<div class="note ${a.verdict}"><b>${a.verdict==="keep"?"kept":"killed"}</b> ${esc(a.why)||"<i>no note</i>"}</div>`:""}${pending[a.name]?`<div class="notebox ${pending[a.name]}" onclick="event.stopPropagation()"><div class="q">${pending[a.name]==="kill"?"Why kill it? Your words become the re-do instruction.":"Why keep it? One line for the index (optional)."}</div><textarea id="note-${a.name}" rows="3" placeholder="${pending[a.name]==="kill"?"e.g. device is backwards, bristles facing out":"e.g. neck damage reads clearly, bar is clean"}" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))send('${a.name}')"></textarea><div class="kk"><button id="send-${a.name}" class="${pending[a.name]==="kill"?"x":"k"}" onclick="send('${a.name}')">confirm ${pending[a.name]}</button><button class="q" onclick="cancel('${a.name}')">cancel</button></div></div>`
+:`<div class="kk"><button class="k" onclick="event.stopPropagation();verdict('${a.name}','keep')">keep</button><button class="x" onclick="event.stopPropagation();verdict('${a.name}','kill')">kill</button></div>`}</div>`).join("")}${u.rejected.length?`<div class="mono">rejected by the judge: ${u.rejected.length}</div>`:""}</div></td></tr>`;
+    return row;}).join("");
+}
+function tog(k){open.has(k)?open.delete(k):open.add(k);render();}
+let pending={};
+function verdict(asset,v){ pending[asset]=v; render(); setTimeout(()=>{const el=document.getElementById("note-"+CSS.escape(asset)); if(el) el.focus();},0); }
+async function send(asset){
+  const v=pending[asset]; const el=document.getElementById("note-"+CSS.escape(asset)); const why=(el?el.value:"").trim();
+  if(v==="kill"&&!why){ el.placeholder="Say what's wrong — that becomes the instruction for the re-do"; el.style.borderColor="var(--red)"; return; }
+  const btn=document.getElementById("send-"+CSS.escape(asset)); if(btn){btn.disabled=true;btn.textContent="saving…";}
+  try{ const r=await fetch("/api/review",{method:"POST",body:JSON.stringify({asset,verdict:v,why})}); if(!r.ok) throw new Error(await r.text()); }
+  catch(e){ alert("Could not save: "+e.message); }
+  delete pending[asset]; load(); }
+function cancel(asset){ delete pending[asset]; render(); }
+async function job(step){ const r=await fetch("/api/job",{method:"POST",body:JSON.stringify({step})}); if(r.status===409) alert("A job is already running."); pollJob(); }
+async function pollJob(){ const j=await (await fetch("/api/job?t="+Date.now())).json(); const el=document.getElementById("job"); el.style.display=(j.running||j.log_tail.length)?"block":"none"; el.textContent=(j.running?`▶ ${j.step} running…\n`:"")+j.log_tail.join("\n"); el.scrollTop=el.scrollHeight; document.getElementById("b-run").disabled=j.running; if(j.running) setTimeout(pollJob,2000); else load(); }
+["f-run","f-show"].forEach(id=>document.getElementById(id).addEventListener("change",render));
+load(); pollJob(); setInterval(async()=>{ try{ const r=await fetch("/state.json?t="+Date.now()); const s=await r.json(); const changed=JSON.stringify(s.counts)!==JSON.stringify(S&&S.counts); if(changed){ S=s; if(open.size===0&&Object.keys(pending).length===0) render(); else { document.getElementById("strip").innerHTML=stripHtml(s.counts); document.getElementById("stale").style.display="inline"; } } }catch(e){} },3000);
+</script>

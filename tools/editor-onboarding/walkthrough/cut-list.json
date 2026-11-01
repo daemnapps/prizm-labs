@@ -1,0 +1,147 @@
+{
+  "title": "Editor onboarding — the walkthrough",
+  "subtitle": "Recorded 21 Sep 2026 · cut to the steps that matter",
+  "source": "Call - 2026/09/21 - Recording (Google Drive, not in the repo)",
+  "output": "walkthrough-editors-v1.mp4",
+  "size": "1920x1080",
+  "fps": 24,
+  "card_seconds": 3,
+  "chapters": [
+    {
+      "card": "1 · Connect Google Drive and GitHub\ninside Higgsfield Supercomputer",
+      "keep": [
+        [
+          "05:24",
+          "08:20"
+        ]
+      ]
+    },
+    {
+      "card": "2 · Put the shared brand folders\nin your own Drive (Organize → Add shortcut)",
+      "keep": [
+        [
+          "10:50",
+          "14:05"
+        ]
+      ]
+    },
+    {
+      "card": "3 · Test it — new chat, + → Connectors,\nask for the brand folder",
+      "keep": [
+        [
+          "14:32",
+          "15:18"
+        ],
+        [
+          "17:37",
+          "17:57"
+        ]
+      ]
+    },
+    {
+      "card": "4 · Clone the tools repo\n(paste the link, say \"clone this\")",
+      "keep": [
+        [
+          "20:40",
+          "21:29"
+        ],
+        [
+          "22:54",
+          "23:52"
+        ]
+      ]
+    },
+    {
+      "card": "5 · Get updates —\n\"Pull my GitHub repository and look for updates\"",
+      "keep": [
+        [
+          "23:52",
+          "25:09"
+        ],
+        [
+          "27:04",
+          "27:44"
+        ],
+        [
+          "28:39",
+          "28:44"
+        ]
+      ]
+    },
+    {
+      "card": "6 · Where the briefs live —\nthe brand folder in Drive",
+      "keep": [
+        [
+          "29:15",
+          "29:42"
+        ],
+        [
+          "32:14",
+          "32:53"
+        ],
+        [
+          "33:49",
+          "34:30"
+        ],
+        [
+          "36:06",
+          "36:28"
+        ]
+      ]
+    },
+    {
+      "card": "7 · The workflow —\nreview, remove slop, reroll, sequence, edit",
+      "keep": [
+        [
+          "41:40",
+          "42:50"
+        ]
+      ]
+    },
+    {
+      "card": "8 · Turn the pull into a skill",
+      "keep": [
+        [
+          "49:45",
+          "50:27"
+        ]
+      ]
+    },
+    {
+      "card": "9 · Execute a brief —\npull up its clips",
+      "keep": [
+        [
+          "52:22",
+          "53:18"
+        ]
+      ]
+    },
+    {
+      "card": "10 · Pull in the video production workflows",
+      "keep": [
+        [
+          "62:33",
+          "63:28"
+        ],
+        [
+          "66:08",
+          "66:13"
+        ]
+      ]
+    }
+  ],
+  "quality": 18,
+  "screen": {
+    "x": 0,
+    "y": 135,
+    "w": 1440,
+    "h": 810,
+    "probe": [
+      1450,
+      0,
+      1920,
+      380
+    ]
+  },
+  "_screen": "The shared-screen region of the Meet layout, cropped and scaled up when a shared screen is on; the probe box is black only in that layout"
+}

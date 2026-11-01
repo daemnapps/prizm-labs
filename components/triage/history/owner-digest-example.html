@@ -1,0 +1,255 @@
+<title>Owner Weekly Digest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f3f4f2;--paper:#ffffff;--ink:#1c2420;--ink2:#4c5a53;--ink3:#6d7a74;--line:#dfe4e1;--soft:#eef2f0;--acc:#1f6b57;--accs:#e1efea;
+--ok:#1e7a48;--okb:#e3f2e8;--warn:#9a6205;--warnb:#f7eedb;--bad:#b0362c;--badb:#f8e6e3;--vio:#6a52a6;--viob:#efeaf8;--code:#f1f3f2;
+--sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;
+--line:#27322d;--soft:#1d2622;--acc:#5cc6a8;--accs:#163a31;--ok:#58c98d;--okb:#153020;--warn:#e2a64a;--warnb:#33270e;--bad:#e57a70;--badb:#3a1714;
+--vio:#ae98e2;--viob:#251f35;--code:#111715}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;--line:#27322d;--soft:#1d2622;
+--acc:#5cc6a8;--accs:#163a31;--ok:#58c98d;--okb:#153020;--warn:#e2a64a;--warnb:#33270e;--bad:#e57a70;--badb:#3a1714;--vio:#ae98e2;--viob:#251f35;--code:#111715}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-inline:16px;padding-block:24px 64px}
+.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.25}h1{font-size:26px;font-weight:700}h2{font-size:18px;font-weight:650}h3{font-size:15.5px;font-weight:600}
+p{margin:0}code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:0 4px;border-radius:3px;word-break:break-word}
+.mock{border:2px dashed var(--vio);background:var(--viob);color:var(--ink);border-radius:10px;padding:10px 14px;font-size:14px}
+.mock b{color:var(--vio)}
+.letter{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.meta{padding:16px 20px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 10px;font-size:13.5px}
+.meta dt{color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;font-size:11px;padding-top:2px}.meta dd{margin:0}
+.body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.lede{font-size:16px;max-width:66ch}
+.tally{display:flex;flex-wrap:wrap;gap:8px}
+.t{border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:120px;font-variant-numeric:tabular-nums}
+.t b{display:block;font-size:20px}.t span{font-size:12.5px;color:var(--ink2)}
+.t.ok b{color:var(--ok)}.t.warn b{color:var(--warn)}.t.vio b{color:var(--vio)}
+.todo{background:var(--accs);border-radius:8px;padding:10px 14px}
+.why{font-size:13.5px;color:var(--ink2);border-left:3px solid var(--line);padding-left:12px;display:flex;flex-direction:column;gap:6px}
+section{display:flex;flex-direction:column;gap:10px}
+.sh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.sh .n{font:600 12px var(--mono);color:var(--ink3)}
+.sub{font-size:13px;color:var(--ink3)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.card.move{border-left:4px solid var(--warn)}
+.ch{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
+.num{font:600 13px var(--mono);color:var(--acc);min-width:22px}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.p0{color:var(--bad);background:var(--badb)}.p1{color:var(--warn);background:var(--warnb)}.p2{color:var(--ink2);background:var(--soft)}
+.comp{font:500 12px var(--mono);color:var(--ink2);background:var(--soft);border-radius:4px;padding:1px 6px}
+.iid{font:500 12.5px var(--mono);color:var(--ink3)}
+.rows{display:grid;grid-template-columns:150px minmax(0,1fr);gap:6px 14px;font-size:14px}
+.rows dt{color:var(--ink3);font-size:12.5px;padding-top:1px}.rows dd{margin:0;min-width:0}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:13.5px}.checks li::before{content:"✓ ";color:var(--ok);font-weight:700}
+details.undo{border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:var(--soft)}
+details.undo>summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--acc)}
+.ways{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.way h4{margin:0 0 4px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.box{border:1px solid var(--line);border-radius:6px;background:var(--paper);overflow:hidden}
+.boxh{display:flex;justify-content:space-between;align-items:center;padding:4px 10px;border-bottom:1px solid var(--line);font-size:12px;color:var(--ink3)}
+.boxh button{font:600 12px var(--sans);background:var(--acc);color:var(--paper);border:0;border-radius:5px;padding:3px 10px;cursor:pointer}
+pre{margin:0;padding:10px;white-space:pre-wrap;word-break:break-word;font:12.5px/1.5 var(--mono);background:var(--code)}
+.note{background:var(--warnb);border-radius:6px;padding:8px 10px;font-size:13.5px}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.tw{overflow-x:auto}
+.reply{font:600 12.5px var(--mono);color:var(--acc);white-space:nowrap}
+.rules{display:flex;flex-direction:column;gap:6px;padding-left:20px;margin:0}
+footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:6px}
+@media (max-width:640px){.rows{grid-template-columns:1fr}.rows dt{margin-top:4px}.meta{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+
+<div class="mock"><b>Example only.</b> This is what the owner would receive on Friday 9 October if Option 3 ("a triage owner may make a change the issue's brief already spells out, telling the owner rather than asking") started on Monday 5 October. It is a proposal for the team to discuss, not a ruling. <b>None of these changes have been made.</b> The issues, files and fixes are real, taken from the component-issue triage of 2026-10-02. The commits, dates and test runs are illustrations.</div>
+
+<div class="letter">
+  <dl class="meta">
+    <dt>To</dt><dd>the owner</dd>
+    <dt>From</dt><dd>the team, triage owner for component issues</dd>
+    <dt>Week</dt><dd>Mon 5 – Fri 9 October 2026</dd>
+    <dt>Subject</dt><dd><b>What changed in your components this week: 5 fixes, 3 closed, 4 waiting on you</b></dd>
+  </dl>
+  <div class="body">
+    <h1>Your components this week</h1>
+    <p class="lede">Five small fixes went into components you own, each one an issue whose fix the system review had already spelled out, each proven by a test. Three issues were closed because they were already fixed. Nothing changed how a live run behaves. <b>You don't need to do anything unless you disagree with something.</b></p>
+    <div class="tally">
+      <div class="t ok"><b>5</b><span>fixes made, told not asked</span></div>
+      <div class="t"><b>3</b><span>closed as already fixed</span></div>
+      <div class="t warn"><b>2</b><span>drafted for you to land</span></div>
+      <div class="t vio"><b>2</b><span>need your signature</span></div>
+      <div class="t"><b>3</b><span>planned next week</span></div>
+    </div>
+    <div class="todo"><b>To object or undo:</b> reply to the team with a code, like <span class="reply">undo 2</span>, <span class="reply">sign 11</span> or <span class="reply">skip 13</span>. Objections are open until <b>Wednesday 14 October</b>; after that, any change can still be undone at any time (see "How to undo anything" at the end).</div>
+    <div class="why">
+      <p><b>Why you're getting this.</b> the team triages every component issue first. Under Option 3, a fix the brief already names can be made for you when all four hold: the brief names the change and a test proves it; no test is weakened; nothing changes how a live pipeline behaves; and you get this digest with a way to undo each change.</p>
+      <p><b>Why only these components.</b> The trial starts where you're not working: apify, intake and objects had 0–2 of your commits in the past week. Components you're actively changing (video-teardown, video-production, naming, copywriter and four more) get drafts for you to land instead, so nothing collides with your work.</p>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="sh"><h2>1. Changed in your components</h2><span class="sub">One commit per issue, each citing the issue id, so any one can be undone alone.</span></div>
+
+  <article class="card">
+    <div class="ch"><span class="num">1</span><span class="comp">apify</span><span class="iid">apify#5</span><span class="pill p2">P2</span><h3>--subreddits stripped letters, not a prefix</h3></div>
+    <dl class="rows">
+      <dt>What was wrong</dt><dd>The option meant to strip an <code>r/</code> prefix stripped any of those letters from the start of a name, so the subreddit <code>running</code> was searched as <code>unning</code>.</dd>
+      <dt>What changed</dt><dd>It now removes the prefix only when the name starts with it. One line in the option handling, plus a test.</dd>
+      <dt>How we know</dt><dd>New test: <code>running</code>, <code>r/running</code> and <code>rust</code> all come through correctly. The component's existing tests still pass.</dd>
+      <dt>Why not asked</dt><dd><ul class="checks"><li>the brief named the change (lstrip to a prefix strip)</li><li>a test proves it</li><li>no test weakened</li><li>not a live pipeline (apify has no run folder under runs/, checked 2026-10-02)</li></ul></dd>
+      <dt>Commit</dt><dd><code>apify#5: strip the r/ prefix, not its letters</code> <span class="sub">(example; none made)</span></dd>
+    </dl>
+    <details class="undo"><summary>Undo this change</summary>
+      <div class="ways">
+        <div class="way"><h4>Easiest: reply to the team</h4><p>Reply <span class="reply">undo 1</span> with one line on why. the team undoes it the same day and reopens apify#5 with your note.</p></div>
+        <div class="way"><h4>With your Claude</h4><div class="box"><div class="boxh">Paste into Claude Code<button type="button" data-copy="u1">Copy</button></div><pre id="u1">In ~/Projects/workspace, undo the triage fix for apify#5. Find its commit with: git log --grep='apify#5' --oneline. Undo it with git revert (a new commit; never reset or rebase), run components/apify's tests, and push. Then tell the team it was undone and why: [your reason], so apify#5 reopens with that note.</pre></div></div>
+        <div class="way"><h4>By hand</h4><div class="box"><div class="boxh">Terminal<button type="button" data-copy="g1">Copy</button></div><pre id="g1">git log --grep='apify#5' --oneline
+git revert &lt;commit from the line above&gt;
+git push</pre></div></div>
+      </div>
+    </details>
+  </article>
+
+  <article class="card">
+    <div class="ch"><span class="num">2</span><span class="comp">apify</span><span class="iid">apify#4</span><span class="pill p2">P2</span><h3>reddit.json could be left half-written</h3></div>
+    <dl class="rows">
+      <dt>What was wrong</dt><dd>The file was written in place, so a run stopped midway left invalid JSON that the next reader choked on.</dd>
+      <dt>What changed</dt><dd>It now writes to a temporary file and renames it into place, so the file is either the old one or the complete new one, never half.</dd>
+      <dt>How we know</dt><dd>New test interrupts a write and checks the file still parses.</dd>
+      <dt>Why not asked</dt><dd><ul class="checks"><li>the brief named the change</li><li>a test proves it</li><li>no test weakened</li><li>not a live pipeline</li></ul></dd>
+      <dt>Commit</dt><dd><code>apify#4: write reddit.json atomically</code> <span class="sub">(example)</span></dd>
+    </dl>
+    <details class="undo"><summary>Undo this change</summary>
+      <div class="ways"><p>Reply <span class="reply">undo 2</span>, or use the same steps as change 1 with <code>apify#4</code> in place of <code>apify#5</code>.</p></div>
+    </details>
+  </article>
+
+  <article class="card">
+    <div class="ch"><span class="num">3</span><span class="comp">intake</span><span class="iid">intake#6</span><span class="pill p0">P0</span><h3>Every paid copy swipe pointed at a file that doesn't exist</h3></div>
+    <dl class="rows">
+      <dt>What was wrong</dt><dd>Pointers were built as number + slug, but the slug already starts with the number, so every pointer read like <code>01_01_explore-….md</code> while the file on disk is <code>01_explore-….md</code>. All 614 blocks were affected.</dd>
+      <dt>What changed</dt><dd>One line: the slug is used as the file name (<code>pools.py:123</code>). Ids are unchanged, so nothing that joins on them breaks.</dd>
+      <dt>How we know</dt><dd>New test: in a fixture pool, every copy row's file exists.</dd>
+      <dt>Why not asked</dt><dd><ul class="checks"><li>the brief named the change and the line</li><li>a test proves it</li><li>no test weakened</li><li>readers now reach the right file; nothing that worked before behaves differently</li></ul></dd>
+      <dt>Commit</dt><dd><code>intake#6: copy pointers use the slug as the file name</code> <span class="sub">(example)</span></dd>
+    </dl>
+    <details class="undo"><summary>Undo this change</summary>
+      <div class="ways"><p>Reply <span class="reply">undo 3</span>, or follow change 1's steps with <code>intake#6</code>. Undoing brings back the broken pointers. That's harmless to data, but copy-teardown goes back to not finding the files.</p></div>
+    </details>
+  </article>
+
+  <article class="card">
+    <div class="ch"><span class="num">4</span><span class="comp">intake</span><span class="iid">intake#8</span><span class="pill p1">P1</span><h3>Swipes with no asset were kept but never counted</h3></div>
+    <dl class="rows">
+      <dt>What was wrong</dt><dd>intake's CLAUDE.md promises a swipe whose asset can't be found is "reported, never dropped". Such rows were kept, but no count of them appeared anywhere.</dd>
+      <dt>What changed</dt><dd>A new <code>asset_not_located</code> count, by source and kind, shows in the summary and in <code>run.json</code>. No row is added or removed.</dd>
+      <dt>How we know</dt><dd>New test: a fixture with two unlocatable swipes reports 2.</dd>
+      <dt>Why not asked</dt><dd><ul class="checks"><li>makes the code keep its own written promise</li><li>a test proves it</li><li>no test weakened</li><li>adds a line to the summary; nothing else changes</li></ul></dd>
+      <dt>Commit</dt><dd><code>intake#8: report swipes with no located asset</code> <span class="sub">(example)</span></dd>
+    </dl>
+    <details class="undo"><summary>Undo this change</summary>
+      <div class="ways"><p>Reply <span class="reply">undo 4</span>, or follow change 1's steps with <code>intake#8</code>.</p></div>
+    </details>
+  </article>
+
+  <article class="card move">
+    <div class="ch"><span class="num">5</span><span class="comp">objects</span><span class="iid">objects#2</span><span class="pill p2">P2</span><h3>Made objects now land under runs/, not the repo root</h3><span class="pill p1">a move</span></div>
+    <dl class="rows">
+      <dt>What was wrong</dt><dd>A make wrote its <code>.glb</code>, pictures and catalogue to <code>&lt;repo&gt;/&lt;project&gt;/3d/</code>, outside <code>runs/</code> and outside every media ignore, so a big file could slip into git.</dd>
+      <dt>What changed</dt><dd>Objects now go to <code>runs/ai-elements/&lt;brand&gt;/props/</code>, the home your 09-23 layout in <code>runs/README.md</code> gives props. In the same commit, the one reader (video-edit's <code>suggest.py</code>) looks there too.</dd>
+      <dt>How we know</dt><dd>New test: a make writes nothing outside <code>runs/</code>, and the moves suggester still finds the catalogue.</dd>
+      <dt>Why not asked</dt><dd><ul class="checks"><li>the home was already set by your own runs/ layout</li><li>a test proves it</li><li>no test weakened</li><li>the code and its one reader moved together</li></ul></dd>
+      <dt>Commit</dt><dd><code>objects#2: make lands under runs/ai-elements/&lt;brand&gt;/props/</code> <span class="sub">(example)</span></dd>
+    </dl>
+    <p class="note"><b>Undoing a move takes one extra step.</b> The code and its reader moved in one commit, so reverting that commit puts both back. But any object you made <i>after</i> this change was written to the new place. Undoing doesn't move those back. This week that's none. If there were any, they'd be listed here so you or your Claude could move them by hand.</p>
+    <details class="undo"><summary>Undo this change</summary>
+      <div class="ways">
+        <div class="way"><h4>Easiest: reply to the team</h4><p>Reply <span class="reply">undo 5</span>. the team reverts the commit and moves anything made since back to the old place.</p></div>
+        <div class="way"><h4>With your Claude</h4><div class="box"><div class="boxh">Paste into Claude Code<button type="button" data-copy="u5">Copy</button></div><pre id="u5">In ~/Projects/workspace, undo the triage fix for objects#2. Find its commit with git log --grep='objects#2' --oneline and revert it with git revert (never reset). Before pushing, list anything under runs/ai-elements/*/props/ created after that commit and move it back to where the old code expects it, in the same revert commit. Run components/objects' tests and video-edit's moves tests, then push and tell the team why: [your reason].</pre></div></div>
+      </div>
+    </details>
+  </article>
+</section>
+
+<section>
+  <div class="sh"><h2>2. Closed as already fixed</h2><span class="sub">Closed by the team, triage owner for component issues, each with its evidence. Reopen any by replying <span class="reply">reopen &lt;id&gt;</span>.</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>Issue</th><th>Evidence it's fixed</th></tr></thead>
+    <tbody>
+      <tr><td class="num">6</td><td><span class="iid">ad-handoff#11</span> No generated "How to use it" line</td><td><code>README.md:9</code> carries the dashboard link line, added by ATL-24 (README fill), commit <code>027fc32a5</code></td></tr>
+      <tr><td class="num">7</td><td><span class="iid">apify#14</span> No generated "How to use it" line</td><td><code>README.md:9</code>, the same ATL-24 (README fill) line</td></tr>
+      <tr><td class="num">8</td><td><span class="iid">marketing-calendar#14</span> No generated "How to use it" line</td><td><code>README.md:3</code>, the same ATL-24 (README fill) line</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sh"><h2>3. Drafted for you to land</h2><span class="sub">These are in components you're actively changing, or they touch a test, so the team drafted them rather than committing.</span></div>
+  <article class="card">
+    <div class="ch"><span class="num">9</span><span class="comp">copywriter</span><span class="iid">copywriter#20</span><span class="pill p1">P1</span><h3>gdoc_out.py --help crashes, so copy can't go to Drive as Google Docs</h3></div>
+    <dl class="rows">
+      <dt>Why it's yours</dt><dd>You made 10 commits in copywriter this week; a change from the team could collide with yours. It's also the crash you were asked about on 09-27 (I-132 (gdoc_out crash ask)), in case you already have a fix.</dd>
+      <dt>The draft</dt><dd>Load <code>paths.py</code> by file, the way <code>md.py</code> is already loaded. Saved as <code>triage/drafts/copywriter/20.diff</code> (example path). It turns one red test green.</dd>
+    </dl>
+    <div class="box"><div class="boxh">To land it, paste into Claude Code<button type="button" data-copy="d9">Copy</button></div><pre id="d9">In ~/Projects/workspace, apply the drafted fix new-workflow-design/builds/atlas/triage/drafts/copywriter/20.diff (git apply), run gdoc_out.py --help and new-workflow-design/builds/drive-pipe/test_gdrive_creator.py, and if both pass, commit it as "copywriter#20: load paths.py by file" and push. If I already fixed this another way, tell me and don't apply it.</pre></div>
+  </article>
+  <article class="card">
+    <div class="ch"><span class="num">10</span><span class="comp">naming</span><span class="iid">naming#2</span><span class="pill p2">P2</span><h3>never_used lists three brief numbers that are live</h3></div>
+    <dl class="rows">
+      <dt>Why it's yours</dt><dd>The fix changes two test assertions (<code>test_names.py:60</code>, <code>selfcheck.py:122-123</code>). Under Option 3, a triage owner never edits a test assertion, because that's how a check can be made to pass without fixing anything.</dd>
+      <dt>The draft</dt><dd>Clear <code>never_used</code> in <code>brief-aliases.json</code> (p128, p130 and p134 are live briefs in the brand register) and update the two assertions to match. Saved as <code>triage/drafts/naming/2.diff</code> (example path).</dd>
+    </dl>
+  </article>
+</section>
+
+<section>
+  <div class="sh"><h2>4. Needs your signature</h2><span class="sub">Text drafted from your code. It goes in only when you sign it: reply <span class="reply">sign &lt;n&gt;</span>, or <span class="reply">change &lt;n&gt;: …</span>.</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>Issue</th><th>What you'd be signing</th></tr></thead>
+    <tbody>
+      <tr><td class="num">11</td><td><span class="iid">ad-handoff#3</span> A lab caller depends on four functions the contract doesn't declare</td><td>One line in ad-handoff's CLAUDE.md naming <code>copy_rows</code>, <code>links</code>, <code>ad_folders</code> and <code>resolves</code> as functions others may use. Or say no, and the lab caller moves to the <code>--check</code> command instead.</td></tr>
+      <tr><td class="num">12</td><td><span class="iid">quality-checks#2</span> The copy-check prompt is read by no code</td><td>quality-checks' declared surface: one CLAUDE.md list of all 10 checks and which prompt each reads, drafted from the code. Docs only.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="sh"><h2>5. Planned for next week</h2><span class="sub">Reply <span class="reply">skip &lt;n&gt;</span> to hold any of these for you.</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>Issue</th><th>The change</th></tr></thead>
+    <tbody>
+      <tr><td class="num">13</td><td><span class="iid">ad-handoff#5</span> --check can create folders on Drive</td><td>Restore the "change nothing" promise for <code>--check</code>; a fixture test proves no folder is made.</td></tr>
+      <tr><td class="num">14</td><td><span class="iid">ad-handoff#10</span> repo() repeats run-kit</td><td>Replace the local copy with run-kit's <code>repo()</code>: one import.</td></tr>
+      <tr><td class="num">15</td><td><span class="iid">audio-teardown#13</span> The Gemini request sits in system temp</td><td>Write the request (which carries audio) under the run's <code>--out</code>; a test proves nothing lands in system temp.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="letter"><div class="body">
+  <h2>How to undo anything</h2>
+  <ol class="rules">
+    <li><b>Every change is one commit that names its issue,</b> so <code>git log --grep='&lt;issue id&gt;'</code> finds it, and undoing it touches nothing else.</li>
+    <li><b>Undo is always a new commit</b> (<code>git revert</code>), never a reset or a rebase, so your other work and everyone else's stays exactly as it is.</li>
+    <li><b>When you undo, the issue reopens with your reason on it.</b> the team won't make that change again without talking to you first.</li>
+    <li><b>A move undoes in one commit too,</b> because the code and its readers moved together. Anything written in the new place since is listed on that change's card.</li>
+    <li><b>There's no deadline to undo.</b> The Wednesday date is only for objecting before anything else builds on a change.</li>
+    <li><b>The trial stops itself.</b> If you undo two of the trial's changes, or a change breaks one of your live runs twice, changes in your components go back to needing your yes first.</li>
+  </ol>
+  <div class="box"><div class="boxh">Ask your Claude to explain this week's changes<button type="button" data-copy="x0">Copy</button></div><pre id="x0">In ~/Projects/workspace, show me every commit in the past week whose message cites an atlas issue id in one of my components (git log --since='1 week ago' --grep='#[0-9]'), and for each one explain in plain words what was wrong, what changed, which test proves it, and how I'd undo it. Explain only: change nothing.</pre></div>
+</div></div>
+
+<footer>
+  <p><b>How this digest would be made.</b> Every Friday, from two sources: the week's commits that cite an issue id in the owner's components, and the triage records the team files under the new <code>triage</code> record kind (close, answer, forward; ATL-28 (triage record kind)). One digest per owner: the team and the team would get their own for their components.</p>
+  <p><b>Where this stands.</b> Proposal "Option 3", for the team to discuss with the owner first. Source: <code>components/triage/proposals/triage-owner-scope.json</code>. Example page: <code>components/triage/history/owner-digest-example.html</code>.</p>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-copy]');if(!b)return;const pre=document.getElementById(b.dataset.copy);
+const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
+const pick=()=>{const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected: press copy'};
+try{navigator.clipboard.writeText(pre.textContent).then(done,pick)}catch(_){pick()}});
+</script>

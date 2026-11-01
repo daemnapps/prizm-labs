@@ -1,0 +1,43 @@
+{
+ "name": "ad916",
+ "voice": "9:16 direct-response ad captions: big, bright, two-thirds up the frame, one highlight colour.",
+ "when": "vertical paid social ads",
+ "register": "calm",
+ "fonts": {
+  "body": "Sora",
+  "hero": "Sora",
+  "tag": "Sora"
+ },
+ "palette": {
+  "body": "#FFFFFF",
+  "accent": "#FFD84A",
+  "em": "#FFD84A"
+ },
+ "body": {
+  "paradigm": "rail",
+  "layer": "fg",
+  "fontPx": 60,
+  "bottomPx": 440,
+  "letterSpacing": "0em",
+  "entrance": "fade",
+  "exit": "fade",
+  "minorScale": 1.12,
+  "yield": {
+   "dim": 0.55,
+   "pre": 0.2,
+   "post": 0.9
+  }
+ },
+ "hero": {
+  "setpiece": "settle",
+  "layer": "bg",
+  "fontPx": 104,
+  "params": {}
+ },
+ "plate": {
+  "dim": 0.16,
+  "pushIn": 0.012,
+  "grain": 5
+ },
+ "linkages": []
+}

@@ -1,0 +1,7 @@
+results/
+calendar/brands/*-derived.json
+email-system.html
+email-system.md
+learnings.html
+pull/.*-image-pool/
+.thumbs/

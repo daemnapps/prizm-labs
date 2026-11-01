@@ -1,0 +1,27 @@
+{
+ "_what": "The roles that finish ads outside the chain, what each delivers, and which card lane it takes: read by delivery.py (check for new deliveries). Finished work goes into returned/ inside the brief's own hand-off folder; the check reads those and brings each file to the same path in the repo.",
+ "_said": "the owner, 2026-10-27 (Tella): \"check for the team's recent delivery\"; \"we need to do that hand off and deliveries situation for ahmed as well on the video side, everything needs to run through the same process\"; then \"make this name agnostic. and the name of the folders need to be the same for both repo and drive ... briefs should come from final stages of the chains, not some random set up.\"",
+ "state": "awaiting-steph",
+ "note": "the team confirms the hand-off folders. Until she does they are placeholders: when she confirms, set `state` to confirmed and `confirmed_by` to her.",
+ "confirmed_by": null,
+ "folder": "handoffs/{role}/{brand}",
+ "drive_root": "Shared Assets",
+ "drive_folder": "runs/handoffs/{role}/{brand}",
+ "legacy_folders": ["handoffs/{role}/{brand}"],
+ "_drive_said": "2026-10-28: the Drive copy is the repo path itself (Shared Assets/runs/handoffs/...); legacy_folders (the old Shared Assets/handoffs/..., moved 2026-10-28) are read last so nothing in flight is lost.",
+ "repo_root": "runs",
+ "returned": "returned",
+ "where": "A brief's hand-off folder is runs/handoffs/<role>/<brand>/<brief key>/ (the Hand-off Standard's home), the same path in the repo and under Shared Assets/ on the Drive. The person saves the finished files into its returned/; the brief key in the folder name decides the brief. The packages are image-edit handoff.py (graphic-designer) and video-edit editor_handoff.py (video-editor).",
+ "roles": {
+  "graphic-designer": {
+   "filled_by": "the team",
+   "delivers": "pictures",
+   "lane": "image"
+  },
+  "video-editor": {
+   "filled_by": "the team",
+   "delivers": "videos",
+   "lane": "video"
+  }
+ }
+}

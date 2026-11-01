@@ -1,0 +1,104 @@
+{
+ "element": "delivery",
+ "asset": "pacing",
+ "source": "components/marketing-doctrine/delivery.json › pacing",
+ "enforced_by": "the copywriter and the video teardown read it; nothing refuses an unknown value",
+ "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
+ "rows": [
+  {
+   "id": "fast-open-slow-body",
+   "name": "fast-open-slow-body",
+   "what": "The first beats move hard, then the piece slows down where the thinking has to happen.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › pacing",
+   "extra": {
+    "when": "A mechanism or a proof that needs room, in a placement that gives nothing away for free."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "escalating",
+   "name": "escalating",
+   "what": "Each beat shorter and closer than the one before, all the way to the close.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › pacing",
+   "extra": {
+    "when": "Agitation into the offer, where the pressure is the argument."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "one-breath",
+   "name": "one-breath",
+   "what": "The whole piece delivered as a single unbroken run — no cut, no pause, nowhere to get off.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › pacing",
+   "extra": {
+    "when": "Short pieces whose whole appeal is that nothing was edited."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "beat-and-pause",
+   "name": "beat-and-pause",
+   "what": "A line, then a held silence long enough to be uncomfortable, then the next line.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › pacing",
+   "extra": {
+    "when": "Deadpan and deadly-sincere reads, where the silence is what makes the line land."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "list-stack",
+   "name": "list-stack",
+   "what": "Items delivered in a run, the same shape each time, the repetition doing the work.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › pacing",
+   "extra": {
+    "when": "Failed solutions, proof and the offer, where quantity is itself the argument."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

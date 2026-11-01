@@ -1,0 +1,5 @@
+{
+ "_readme": "The house finishes. finish.mjs reads the preset by name. 'satin' is the look of the owner's 3D head (2026-09-26): a clear lacquer coat over the object's own colours. 'keep' leaves the material as generated.",
+ "satin": {"roughness_max": 0.62, "metallic_max": 0.35, "clearcoat": 0.55, "clearcoat_roughness": 0.28},
+ "keep": {}
+}

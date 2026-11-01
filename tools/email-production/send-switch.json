@@ -1,0 +1,4 @@
+{
+ "_what": "the team's off-switch for every Approve → Schedule (EP-3 (email approval card)). on = scheduling allowed; off or a missing file = refused. the team changes it by her own commit.",
+ "email_schedule": "on"
+}

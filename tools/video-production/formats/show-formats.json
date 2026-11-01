@@ -1,0 +1,318 @@
+{
+ "_readme": "SHOW FORMATS — candidates, not the enforced bank. A show format borrows a whole kind of entertainment the viewer already watches: its roles, its big moment, its voice, its sound, its ending. It is a FORMAT by the house test (the script and who carries it both change); the visual STYLE is still picked separately from styles/bank.json. Brand injection is the ROLE MAP: the same six roles in every show, filled by the brand's avatar, problem, product, mechanism and offer. Nothing here is a format profile yet — a row the owner picks gets written from formats/TEMPLATE.md into formats/bank.json. `who_watches_hypothesis` is a guess to be checked against the sub-avatar's own feed, never a finding.",
+ "roles": [
+  {
+   "id": "hero",
+   "name": "The hero",
+   "what": "the customer — always her, never the brand"
+  },
+  {
+   "id": "villain",
+   "name": "The villain",
+   "what": "the problem, given a name, a face and a personality"
+  },
+  {
+   "id": "move",
+   "name": "The move",
+   "what": "the product, used the way this show uses its biggest moment"
+  },
+  {
+   "id": "voice",
+   "name": "The voice",
+   "what": "whoever this show lets explain things — they carry the mechanism so the hero never has to lecture"
+  },
+  {
+   "id": "replay",
+   "name": "The replay",
+   "what": "the place this show naturally zooms in or slows down — that is where the mechanism scene lives"
+  },
+  {
+   "id": "verdict",
+   "name": "The verdict",
+   "what": "how this show ends — that is the offer"
+  }
+ ],
+ "updated": "2026-09-20",
+ "shows": [
+  {
+   "id": "fight-night",
+   "name": "Fight night",
+   "what": "A championship bout, called live by two ringside commentators.",
+   "why_it_works": "The commentators can say anything about the product and it sounds like excitement, not a pitch. The fight gives the problem a body to lose.",
+   "roles": {
+    "hero": "the challenger, walking out to her own music",
+    "villain": "the undefeated opponent — the problem with a fighter's name",
+    "move": "the finishing move: she pulls out the product and locks the opponent up",
+    "voice": "two ringside commentators, one hype, one analyst — the analyst explains the mechanism mid-hold",
+    "replay": "the slow-motion replay: zoom into the opponent fading, down to what the active ingredient is doing underneath",
+    "verdict": "the belt, 'and NEW…', the offer on the broadcast lower-third"
+   },
+   "sound": "crowd roar, bell, walk-out music, commentators talking over each other",
+   "pairs_with_styles": [
+    "fight-night-broadcast",
+    "brick-figure",
+    "anime",
+    "adult-cartoon"
+   ],
+   "who_watches_hypothesis": "men 18–45; combat-sports and highlight-clip scrollers",
+   "frame": "show-frames/fight-night.jpg",
+   "frame_prompt": "a championship fight broadcast frame: she stands in a fight ring in fight gear, confident, facing a towering shadowy opponent made of dark blotchy pigment; arena spotlights, crowd, two commentators at a ringside desk in the foreground corner, broadcast score bug",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "cooking-show",
+   "name": "Cooking show",
+   "what": "A warm kitchen-counter show where the host makes the thing in front of you.",
+   "why_it_works": "Her trust in a recipe transfers to the product: ingredients you can see, steps you can follow, a result you can taste.",
+   "roles": {
+    "hero": "the host at her own counter",
+    "villain": "the recipe that always fails — the thing everyone gets wrong",
+    "move": "the secret ingredient, added with a flourish",
+    "voice": "the host to camera, plus a sidekick who asks the questions the viewer would",
+    "replay": "the overhead close-up: the mixture changing colour and texture in the bowl",
+    "verdict": "the reveal plate and the recipe card — the offer is the recipe card"
+   },
+   "sound": "sizzle, studio audience warmth, gentle theme sting",
+   "pairs_with_styles": [
+    "phone-ugc",
+    "claymation",
+    "macro-commercial",
+    "storybook-watercolour"
+   ],
+   "who_watches_hypothesis": "women 50+; daytime TV and recipe-reel watchers",
+   "frame": "show-frames/cooking-show.jpg",
+   "frame_prompt": "a daytime cooking show frame: she stands behind a bright studio kitchen counter in an apron, presenting a mixing bowl of golden paste to camera, ingredients in small glass bowls, overhead camera rig visible, warm studio audience lighting, show logo-free lower third",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "soap-opera",
+   "name": "Soap opera",
+   "what": "Daytime drama: long stares, a secret, someone who was supposed to be gone comes back.",
+   "why_it_works": "The problem that 'keeps coming back' is literally a soap plot. She already knows the grammar — the return, the reveal, the cliffhanger.",
+   "roles": {
+    "hero": "the woman who has been wronged",
+    "villain": "the one who keeps coming back — the ex, the twin, the rival; the problem returning in the same place",
+    "move": "the reveal: the truth she produces at the dramatic moment",
+    "voice": "inner monologue and the confidante in the next scene",
+    "replay": "the soft-focus flashback: how it came back last time, and why",
+    "verdict": "the cliffhanger — 'find out' is the call to act"
+   },
+   "sound": "swelling strings, a held pause, a door",
+   "pairs_with_styles": [
+    "dark-luxury",
+    "vhs-camcorder",
+    "cel-1950s",
+    "felt-puppet"
+   ],
+   "who_watches_hypothesis": "women 50+; (telenovela is a variant for Spanish-speaking households, not a second format)",
+   "frame": "show-frames/soap-opera.jpg",
+   "frame_prompt": "a daytime soap opera frame: she turns from a mantelpiece in an over-decorated living room with a dramatic shocked stare, soft glamour lighting, shallow focus, a shadowy figure standing in the doorway behind her, melodramatic mood",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "home-shopping",
+   "name": "Home shopping hour",
+   "what": "A live sell on a shopping channel: host, demo table, caller on the line, clock ticking.",
+   "why_it_works": "It is the one show that is ALREADY a direct-response ad, and her generation bought from it for thirty years.",
+   "roles": {
+    "hero": "the caller on the line who already owns it",
+    "villain": "the old product on the demo table that did not work",
+    "move": "the live demo on the back of a hand",
+    "voice": "the host, and the caller's own words",
+    "replay": "the split-screen close-up of the demo hand",
+    "verdict": "the countdown clock and 'quantity remaining' — the offer, natively"
+   },
+   "sound": "phone line beep, host patter, soft bed music",
+   "pairs_with_styles": [
+    "vhs-camcorder",
+    "studio-hero",
+    "felt-puppet"
+   ],
+   "who_watches_hypothesis": "women 55+",
+   "frame": "show-frames/home-shopping.jpg",
+   "frame_prompt": "a television home-shopping channel frame: she sits as host at a glossy demo table showing the back of her hand to camera, product jars arranged on risers, on-screen graphics with a countdown clock and a phone icon, bright flat studio light",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "courtroom",
+   "name": "Courtroom TV",
+   "what": "Small-claims television: a plaintiff, a defendant, a judge with no patience.",
+   "why_it_works": "A judge can say 'that product never worked and you knew it' — a verdict lands harder than a claim.",
+   "roles": {
+    "hero": "the plaintiff",
+    "villain": "the defendant: the thing she tried that failed her",
+    "move": "Exhibit A",
+    "voice": "the judge",
+    "replay": "the evidence photo, enlarged on the easel",
+    "verdict": "the gavel — judgment for the plaintiff, the offer as the ruling"
+   },
+   "sound": "gavel, gallery murmur, bailiff",
+   "pairs_with_styles": [
+    "phone-ugc",
+    "adult-cartoon",
+    "brick-figure"
+   ],
+   "who_watches_hypothesis": "daytime TV watchers, 45+",
+   "frame": "show-frames/courtroom.jpg",
+   "frame_prompt": "a daytime courtroom television frame: she stands at the plaintiff's podium holding up an evidence photograph, a stern judge at the bench behind, wood-panelled courtroom, flat bright TV lighting",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "true-crime",
+   "name": "True-crime documentary",
+   "what": "A hushed investigation: evidence board, archive footage, the culprit hiding in plain sight.",
+   "why_it_works": "'It was never what you thought it was' is the mechanism-led argument wearing a trench coat.",
+   "roles": {
+    "hero": "the one who would not let it go",
+    "villain": "the culprit everyone overlooked — the real cause",
+    "move": "the piece of evidence that cracks it",
+    "voice": "the hushed narrator and the expert interview",
+    "replay": "the forensic zoom: enhance, enhance",
+    "verdict": "case closed — the offer as 'what she uses now'"
+   },
+   "sound": "low drone, tape hiss, a single piano note",
+   "pairs_with_styles": [
+    "archival-16mm",
+    "horror",
+    "dark-luxury"
+   ],
+   "who_watches_hypothesis": "women 25–60; podcast and docuseries bingers",
+   "frame": "show-frames/true-crime.jpg",
+   "frame_prompt": "a true-crime documentary frame: she studies an evidence board covered in photographs and red string in a dim room lit by a desk lamp, film grain, serious investigative mood",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "game-show",
+   "name": "Game show",
+   "what": "A bright studio, a host, a big board, a contestant who has been wrong before.",
+   "why_it_works": "Every product she already tried becomes a wrong answer on the board — the objections get handled as a game.",
+   "roles": {
+    "hero": "the contestant",
+    "villain": "the wrong answers: everything she tried",
+    "move": "the final answer",
+    "voice": "the host",
+    "replay": "the board flipping to reveal the answer",
+    "verdict": "the prize — the offer"
+   },
+   "sound": "buzzer, ding, audience gasp",
+   "pairs_with_styles": [
+    "vhs-camcorder",
+    "felt-puppet",
+    "adult-cartoon",
+    "pixel-16bit"
+   ],
+   "who_watches_hypothesis": "broad; 45+ skews daytime",
+   "frame": "show-frames/game-show.jpg",
+   "frame_prompt": "a classic television game show frame: she stands at a contestant podium mid-cheer under colourful studio lights, a big answer board behind her with covered panels, a host in a suit gesturing, confetti",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "home-makeover",
+   "name": "Home makeover",
+   "what": "Before, demolition, rebuild, the walk-through reveal.",
+   "why_it_works": "Two steps — strip the old surface, rebuild what is underneath — is exactly how a renovation is told.",
+   "roles": {
+    "hero": "the homeowner",
+    "villain": "the 'before' — what was hiding under the surface",
+    "move": "demo day, then the rebuild",
+    "voice": "the contractor and the designer",
+    "replay": "the time-lapse",
+    "verdict": "the reveal walk-through — the offer at the front door"
+   },
+   "sound": "sledgehammer, upbeat montage music, the gasp",
+   "pairs_with_styles": [
+    "phone-ugc",
+    "miniature-diorama",
+    "brick-figure"
+   ],
+   "who_watches_hypothesis": "women 35–65; home and garden channel watchers",
+   "frame": "show-frames/home-makeover.jpg",
+   "frame_prompt": "a home renovation show frame: she stands in a half-renovated bathroom in work gloves beside a contractor, one wall stripped to studs and the other freshly tiled, bright natural light, before-and-after energy",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "nature-documentary",
+   "name": "Nature documentary",
+   "what": "A calm famous-sounding narrator observes a creature doing what it does.",
+   "why_it_works": "The narrator can describe skin, a cell or an ingredient as wildlife — the mechanism becomes a story with an animal in it.",
+   "roles": {
+    "hero": "the creature we are rooting for",
+    "villain": "the predator",
+    "move": "the adaptation that saves it",
+    "voice": "the narrator, never on screen",
+    "replay": "the extreme macro",
+    "verdict": "the season turns — the offer as the closing line"
+   },
+   "sound": "orchestral swell, wind, the narrator's hush",
+   "pairs_with_styles": [
+    "macro-commercial",
+    "cutaway-3d",
+    "claymation",
+    "storybook-watercolour"
+   ],
+   "who_watches_hypothesis": "broad; 35+",
+   "frame": "show-frames/nature-documentary.jpg",
+   "frame_prompt": "a nature documentary frame: extreme macro wildlife cinematography of her hand resting on moss as if it were a landscape, tiny glowing golden particles moving across the skin like creatures, shallow depth of field, soft forest light",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "analyst-desk",
+   "name": "Sports analyst desk",
+   "what": "Two analysts at a desk arguing over a replay, drawing on the screen.",
+   "why_it_works": "Us-versus-them staged as a debate, and the telestrator is a licence to draw the mechanism on a freeze-frame.",
+   "roles": {
+    "hero": "the player having the comeback season",
+    "villain": "the rival — or last season's version of him",
+    "move": "the play that changed the game",
+    "voice": "two analysts who disagree",
+    "replay": "the telestrator: circles and arrows drawn on the frozen replay",
+    "verdict": "the final score graphic — the offer"
+   },
+   "sound": "desk banter, whoosh graphics, highlight music",
+   "pairs_with_styles": [
+    "fight-night-broadcast",
+    "hypermotion-cinematic",
+    "adult-cartoon"
+   ],
+   "who_watches_hypothesis": "men 18–55",
+   "frame": "show-frames/analyst-desk.jpg",
+   "frame_prompt": "a sports television analyst desk frame: two animated analysts in suits argue at a glossy studio desk, a large screen behind them shows a frozen close-up of a hand with yellow telestrator circles and arrows drawn on it, broadcast graphics",
+   "status": "candidate",
+   "signed": null
+  },
+  {
+   "id": "boss-fight",
+   "name": "Boss fight",
+   "what": "A video-game level: health bars, a boss, a power-up, 'level cleared'.",
+   "why_it_works": "A health bar is the clearest progress picture ever invented — the problem visibly loses hit points.",
+   "roles": {
+    "hero": "the player character",
+    "villain": "the boss, with a name and a health bar",
+    "move": "the power-up item",
+    "voice": "the on-screen text and the announcer voice",
+    "replay": "the boss's health bar draining while the hit lands",
+    "verdict": "level cleared, loot drop — the offer is the loot"
+   },
+   "sound": "8-bit hits, power-up chime, victory fanfare",
+   "pairs_with_styles": [
+    "pixel-16bit",
+    "low-poly",
+    "anime"
+   ],
+   "who_watches_hypothesis": "men and teens 13–35",
+   "frame": "show-frames/boss-fight.jpg",
+   "frame_prompt": "a retro video game boss battle screen: she appears as the player character facing a huge blotchy shadow boss, health bars at the top of the screen, a glowing power-up item floating between them, game HUD",
+   "status": "candidate",
+   "signed": null
+  }
+ ]
+}

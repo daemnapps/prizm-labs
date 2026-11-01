@@ -1,0 +1,318 @@
+{
+ "model": "seedance-2.5",
+ "medium": "video",
+ "_readme": [
+  "Seedance 2.5 — the clip model (Higgsfield API; BytePlus ModelArk is the maker's own door). Filled 2026-10-26 from the maker's prompt guide, same shape as gpt-image-2.5.json so one library, one slice renderer and one checker serve both.",
+  "The field-level contract (which field a request carries) stays in tools/video-production/machine/model-inputs.json (stations motion, talking). What the clip prompt must look like is built by tools/video-production/machine/seedance_prompt.py and explained in tools/video-production/SEEDANCE-INPUTS.md.",
+  "The rulebook for the Seedance 2.5 clip: every input with its limit and our job, so the chain always gets the best image-to-video. Every row carries its source; every entry is status draft until it is approved. No brand, product, person or format word appears in this file."
+ ],
+ "label": "Seedance 2.5",
+ "registry_id": "seedance-2.5",
+ "read": "2026-10-26",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_reference": "bytedance/seedance-2.5/reference-to-video",
+  "higgsfield_image": "bytedance/seedance-2.5/image-to-video"
+ },
+ "sources": [
+  "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide",
+  "https://dreamina.capcut.com/seedance/seedance-2-5-prompt",
+  "https://clipdance.ai/blog/seedance-2-prompts-guide"
+ ],
+ "limits": {
+  "duration_seconds": [
+   4,
+   30
+  ],
+  "aspect_ratio_range": [
+   0.4,
+   2.5
+  ],
+  "max_references_total": 50,
+  "max_images": 30,
+  "image_max_resolution": "4K",
+  "max_videos": 10,
+  "max_video_seconds_total": 30,
+  "max_audio_clips": 10,
+  "max_audio_seconds_total": 30,
+  "stable_image_subjects": [
+   1,
+   8
+  ],
+  "stable_audio_video_subjects": [
+   1,
+   5
+  ],
+  "best_reference_video_seconds": [
+   5,
+   10
+  ],
+  "edit_source_max_seconds": 20,
+  "storyboard_panels_max": 15,
+  "house": {
+   "resolution": "480p, upscaled on this Mac",
+   "aspect": "9:16",
+   "takes": "up to the configured maximum number of attempts (default 3 on Seedance, then the Kling backup as the last rung); each scored; the best-scoring one kept, a tie to the later, flagged below_criteria if it did not pass (V34)",
+   "duration": "a talking take: its read × 1.15 + 0.6 s, rounded up (room for the model's own pauses); a silent one: its window; 4 to 30 s, the model's own range (the old 10 s cap was the retired Omni model's, removed 2026-10-28)"
+  },
+  "note": "A first-frame or last-frame ROLE locks the output to that picture's aspect and cannot sit beside audio on Higgsfield; a picture called 'the first frame' in the words is allowed and followed approximately.",
+  "audio_clip_seconds": [
+   2,
+   15
+  ],
+  "audio_clip_mb": 15,
+  "resolutions": [
+   "480p",
+   "720p",
+   "1080p"
+  ],
+  "image_formats": [
+   "png",
+   "jpg",
+   "jpeg",
+   "webp"
+  ]
+ },
+ "qualities": [],
+ "inputs": [
+  {
+   "name": "prompt",
+   "what": "The words: bound files, one sentence, timeline, constants.",
+   "allowed": "no stated limit; the shortest prompt that fully says the shot",
+   "we_send": "about 200 words, built by seedance_prompt.py",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "image (first frame)",
+   "what": "The approved start picture, named 'Image 1 is the first frame'.",
+   "allowed": "1 to 30 images; 1 to 8 subjects is the stable range",
+   "we_send": "one",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "image (other roles)",
+   "what": "A face, product, room or look reference, each bound by number and job.",
+   "allowed": "same pool as above; separate views, never a collage",
+   "we_send": "none in the chain; the bench can add them to test",
+   "use": "test",
+   "status": "draft"
+  },
+  {
+   "name": "image (last frame)",
+   "what": "Where a silent clip settles.",
+   "allowed": "role last_frame (locks aspect) or named in the words; not beside audio on Higgsfield",
+   "we_send": "silent clips only, only when different from the first",
+   "use": "sometimes",
+   "status": "draft"
+  },
+  {
+   "name": "video (reference)",
+   "what": "Motion, camera or style from a clip; says what it is for and what to ignore.",
+   "allowed": "up to 10, 30 s together, 5 to 10 s each works best; its subtitles and voices override the prompt",
+   "we_send": "the swipe's blurred clips, up to 3 of 2 to 8 s, 'motion and camera only'",
+   "use": "yes where the swipe's movement is the point",
+   "status": "draft"
+  },
+  {
+   "name": "audio (reference)",
+   "what": "A voice, music or rhythm; dialogue audio doubles as the speech.",
+   "allowed": "up to 10 clips, 30 s together",
+   "we_send": "the line's locked read, one clip, bound as the speaker's voice",
+   "use": "yes on talking clips",
+   "status": "draft"
+  },
+  {
+   "name": "duration",
+   "what": "Seconds of video.",
+   "allowed": "4 to 30 on 2.5 (4 to 15 on 2.0)",
+   "we_send": "the read's length + 0.6, 4 to 10",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "resolution",
+   "what": "Output size.",
+   "allowed": "480p, 720p, 1080p",
+   "we_send": "480p, upscaled locally",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "aspect_ratio",
+   "what": "Output shape.",
+   "allowed": "any from 0.4 to 2.5 on 2.5; fixed by a first/last-frame role or an edit source",
+   "we_send": "9:16",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "generate_audio",
+   "what": "Whether the clip carries sound.",
+   "allowed": "true or false",
+   "we_send": "true on talking clips, false on silent",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "output_format",
+   "what": "File type.",
+   "allowed": "mp4; mov keeps colour and sound consistency in edits and extensions",
+   "we_send": "mp4",
+   "use": "no",
+   "status": "draft"
+  }
+ ],
+ "structure": [
+  {
+   "id": "bind-every-file",
+   "rule": "Name every image, video and audio by its upload number and job: 'Image 1 is the first frame', 'Video 1 is for camera movement only', 'Audio 1 is the voice'. Upload in the order the subjects first appear.",
+   "ours": "seedance_prompt.build assets block",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "one-sentence",
+   "rule": "Then one summary sentence: subject, place, event, style, camera.",
+   "ours": "the summary block",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "timeline-windows",
+   "rule": "A timeline in whole-second windows that touch, or 'Shot N'. One primary change per window; too little and it improvises, too much and it adds cuts or skips the action. Do not time fast repeated actions.",
+   "ours": "windows of at least 2.5 s, two actions at most",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "constants-last",
+   "rule": "End with what stays constant (camera, place, light, sound), then the few negatives.",
+   "ours": "the 'Constant throughout' block",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "positive-wording",
+   "rule": "Say what you want. Negatives are supported for subtitles and audio ('no subtitles', 'no BGM').",
+   "ours": "two negatives only",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "one-camera-move",
+   "rule": "Name the shot size and ONE dominant move per shot ('slow push-in at eye level'); give an unusual term a plain explanation.",
+   "ours": "CAMERA phrases from the shot's camera_move",
+   "status": "draft",
+   "source": "https://dreamina.capcut.com/seedance/seedance-2-5-prompt"
+  },
+  {
+   "id": "point-dont-redescribe",
+   "rule": "When a reference is accurate, say to use it; do not describe it again.",
+   "ours": "'keep this exact person, face, clothing, props, room and light'",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "dialogue",
+   "rule": "Name who speaks; keep a line's delivery next to it as 'Character's line (emotion): words'. Do not repeat dialogue words or attach tone notes to single words: it triggers subtitles.",
+   "ours": "the words live in Audio 1 only",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "performance",
+   "rule": "Replace an emotion label with a trigger, a visible physical response and a delay. A strong emotion word can make the eyes glow.",
+   "ours": "the shot's face and gestures; the emotion label is not sent",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  },
+  {
+   "id": "seams",
+   "rule": "Name the visual bridge across a cut or join; describe the boundary state (pose, prop, light, camera, motion direction) on both sides of an extension.",
+   "ours": "hand-off and end sentences",
+   "status": "draft",
+   "source": "https://clipdance.ai/blog/seedance-2-prompts-guide"
+  },
+  {
+   "id": "reference-roles",
+   "rule": "Give each file one job and state what it must NOT pass on; bind each subject one by one, not 'images 1 to 4 respectively'.",
+   "ours": "VIDEO_LINE and the image role lines",
+   "status": "draft",
+   "source": "https://clipdance.ai/blog/seedance-2-prompts-guide"
+  },
+  {
+   "id": "split-hard-tasks",
+   "rule": "A task that mixes several references and edits is unstable: split it into simpler passes.",
+   "ours": "one picture, one voice, one clip",
+   "status": "draft",
+   "source": "https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "repeat-dialogue",
+   "text": "Typing the line beside its audio: it triggers burnt-in subtitles and says the words twice.",
+   "status": "draft"
+  },
+  {
+   "id": "emotion-words",
+   "text": "Strong emotion labels ('fanatical', 'extremely shocked'): they can light the eyes or overact.",
+   "status": "draft"
+  },
+  {
+   "id": "vague-style",
+   "text": "Vague words ('cinematic', 'epic reveal', 'dynamic camera', 'make it emotional and beautiful').",
+   "status": "draft"
+  },
+  {
+   "id": "long-blacklist",
+   "text": "Long generic blacklists: they compete with the scene.",
+   "status": "draft"
+  },
+  {
+   "id": "too-much-per-window",
+   "text": "Several events or exact timestamps in one short window: extra cuts, skipped actions.",
+   "status": "draft"
+  },
+  {
+   "id": "reference-with-words",
+   "text": "A reference video with subtitles, voices or music you do not want: they override the prompt unless rejected.",
+   "status": "draft"
+  },
+  {
+   "id": "unbound-references",
+   "text": "'Based on all references', an unused file, or a mapping that lives only inside a picture.",
+   "status": "draft"
+  },
+  {
+   "id": "conflicting-camera",
+   "text": "A locked tripod and aggressive handheld in the same beat; one continuous take with five cuts.",
+   "status": "draft"
+  },
+  {
+   "id": "text-in-frame",
+   "text": "Words the model must spell: it misspells; give them as a reference picture or lay them on later.",
+   "status": "draft"
+  },
+  {
+   "id": "mixed-roles",
+   "text": "A first/last-frame role beside audio references on Higgsfield (the 422).",
+   "status": "draft"
+  }
+ ],
+ "history": [
+  {
+   "who": "the owner",
+   "date": "2026-10-26",
+   "said": "we are also going to do this for seedance too so we always get the best quality image and image to video",
+   "about": "why this rulebook exists"
+  },
+  {
+   "who": "the owner",
+   "date": "2026-10-26",
+   "about": "every clip is made at 480p and upscaled on this Mac"
+  }
+ ]
+}

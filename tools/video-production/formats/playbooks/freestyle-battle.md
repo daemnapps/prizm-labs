@@ -1,0 +1,140 @@
+# Playbook · Freestyle / rap battle (song ad, rapper on screen) (`freestyle-battle`)
+
+**Status:** draft · **state:** BQE retired 2026-10-22 (opened on the problem); Barber rewritten story-first
+**Family:** freestyle-battle
+
+**Signed:** the owner 2026-10-22 — "it's a song ad, but the formats are different, so be cognizant of these little things. But yeah, bro, this is it. Let's run this shit up" — its own playbook, not a copy of the song ad.
+
+A New York freestyle or street rap battle made in Suno: our clean-shaven man roasts the bearded man's neck (bumps, the beard he hides behind, the breakup he's hiding from) with yo-mama bars, the other man fires back, our man flips it to the jawline and closes on one line of real talk: use the FLEX. The rappers are ON SCREEN and lip-sync every bar; the crowd or the booth reacts on every punchline; a funny pop-up pictures each joke. Entertainment first, the product is one line at the end.
+
+*Rendered from the .json beside this page by `machine/playbook.py` — edit the .json.*
+
+> Which model does what: `../../../generative-model-house/MODEL-HOUSE.md` (the only rule, 2026-10-20). The clip model below is today's default; per-format model choices are ruled there.
+
+## Structural signature
+
+| | |
+|---|---|
+| audio | song |
+| speakers | 2 |
+| address | to-each-other |
+| settings | 1 |
+| product_role | line |
+| pacing | fast |
+| capture | photoreal |
+| story | battle |
+
+## What is specialised, and why
+
+- **story order is fixed: the girl / the conflict / the tragedy and the weird detail FIRST, then the problem (the neck, the beard he hides behind), then every failed fix, then the comeback, then the flip to the solution. Never open on the problem or the product** — the owner 2026-10-22: "We don't go straight for the pitch, never. That's the whole point of this format" — same order as the animated song ads
+- **the track is made and picked before any picture; the cut follows its clock** — same as every song ad: the bars set the timing (SONG-WRITING.md)
+- **the first bar is the hardest bar and is rapped inside 2 s; that bar is also the caption, in quotes** — every top coldfreestylesonly post captions its hardest bar in quotes; the owner's verse-first rule (2026-10-21)
+- **crowd noise only in square-bracket tags ([Crowd erupts]); never a round-bracket stage note** — BQE take 2 rapped "(Crowd going crazy)" out loud (2026-10-22)
+- **scenes are set-ups, never bars or lines (VIDEO-RULINGS V35): one place and camera set-up per scene with a clear start and stop, the bars played inside; one start picture per scene, a returning set-up reuses its picture** — the owner 2026-10-23: "less frames and more just describing what's in the scene … we spent so much for no reason"
+- **a face-off, not a showcase: inches apart, nobody steps back; the crowd a tight circle pressed in; the opponent fights back with his face; handheld, low, hard club light** — the owner 2026-10-23: "head-to-head in a face-off and are intense … 8 Mile … we cannot fuck this up"
+- **the opponent and the crowd react on every punchline: a cut to the other man's face, the circle going OHHH** — the reaction sells the bar (every freestyle swipe cuts to the host or crew on the punchline)
+- **one pop-up per punchline, 0.6 to 1.0 s, picturing the joke literally, then straight back** — the owner 2026-10-22: "pop up little inserts … make it funny/weird"
+- **lookalike TYPES only: build, cut, fit and energy a viewer half-recognises; never a real person's face or name** — the sports_generated lookalike skits pull millions; a real likeness is never ours to use
+- **the product is advice between men, once, at the close; the real FLEX is in his hand in that shot; no price, no offer** — the owner: "we're not even selling anything anymore, we're just making content that people wanna watch"
+- **every bar is a lip-synced clip of the rapper saying it, cut at bar boundaries** — the swipes are all performance: the face saying the line is the content
+
+## Stage order
+
+teardown (framing read from the swipe: street battle or radio booth) → bars (write → Suno → pick the take that lands bar one inside 2 s and every bar clear) → ad-script (the bars, speaker per bar, punchline marks, pop-up per punchline) → elements (two lookalike types + the setting + the crowd; reuse banked first) → storyboard (from the track's clock: set-up scenes, each with start · what happens inside · stop, who raps, the reaction that lands each punchline — V35) → pictures (one start picture per set-up) → clips (one per scene, one try) → upscale → edit (control + hook versions) → copywriter (from the bars) → storyboard (from the track's clock: who raps each bar, reaction cuts, pop-ups) → pictures → clips (lip-synced bars, reaction clips, pop-up clips)
+
+## Stage settings
+
+**audio**
+- first: song
+- song_model: suno-v5
+- voice_model: the shared chain's own
+- nobody_talks: off
+- who_says_it: each bar is assigned to its rapper from the [Verse: name] tags; the lip-sync clip of that rapper gets that bar's slice of the track
+
+**song**
+- length_s: 80, 120
+- punch_first: the most shocking line OF THE GIRL STORY rapped inside the first 2 seconds (never the problem, never the product)
+- sections: [Verse 1: our man] the girl story + the weird detail, then the problem, then the failed fixes; [Verse 2: other man] comeback; [Verse 3: our man] flip + real-talk close with the solution; no chorus
+- voices: two clearly different male voices: ours younger and sharper, his deeper and raspy
+- crowd: in the track, square-bracket tags only
+- check: transcribe every take (whisper large-v3-turbo, -l en -mc 0 -et 2.8) and confirm every bar comes back word for word; pick the take that does and lands bar one fastest
+- brand_line: "Use the FLEX once a day" — the last bar, rapped, never a tag
+- master_true_peak_dbtp: -1.0
+- loudness_lufs: -14
+
+**pictures**
+- door: direct.openai
+- quality: high
+- size: 864x1536
+- aspect: 9:16
+- fix_calls: off
+- style_lock: photoreal, shot like a battle-league or radio-freestyle video: handheld inside the circle, natural street light, crowd with phones up; or the booth: headphones, station mic, logo wall
+- start_only: on
+- max_references: 3
+- cast: the two banked lookalike types, same faces in every picture
+- product: the real FLEX photo as a reference in the close shot, in our man's hand, shape, colour and label exact
+
+**clips**
+- bars: Seedance 2.5 with that bar's audio slice, lip-synced (MODEL-HOUSE: takes our voice and lip-syncs)
+- reactions: Seedance, silent, 2-3 s: the other man's face, the crowd going OHHH
+- popups: Seedance, silent, 2 s, trimmed to 0.6-1.0 s
+- resolution: the house default per door; upscale locally to 1080x1920
+- stills_allowed: off
+- camera: handheld, slight drift, punch-ins on the punchline like the swipes
+
+**hooks**
+- shape: the hardest bar with its reaction and pop-up, re-cut as a 3 s opener; four versions from four different punchlines
+- count: 4
+- generated: off
+
+**captions**
+- look: the bar on screen as it's rapped, bottom band, white bold with a black edge; the caption of the post is the first bar in quotes
+
+**gates**
+- apply: song bar check (every bar transcribed back), first bar inside 2 s, lip-sync per bar (the right rapper says the right bar), lookalike, not a real likeness, loudness/true peak, real FLEX in the close shot
+- skip: song flow gate (no melody, no gaps rule for a sung hook), product in the film's style (the format is photoreal), nobody-talks clip check
+
+**edit**
+- method: video-edit machine cut on the track's clock; bar clip → reaction on the punchline → pop-up → next bar
+- end: no end card; the last shot is the crowd erupting with the FLEX in his hand
+- loudness: -14 LUFS, true peak ≤ -1 dBTP
+- versions: control + 4 hook versions
+
+**copy**
+- source: the bars (freestyle.json); the post caption is the first bar in quotes
+- why: every top freestyle post captions its hardest bar
+
+## Known failures → fixes
+
+- **BQE opened on the neck bumps — the problem first, no story** → open on the girl / the conflict; the problem lands only after the story  _(from runs/video-production/<brand>/freestyle-1022 (BQE, retired); stage song)_
+- **a round-bracket stage note was rapped out loud ("Crowd going crazy")** → crowd noise in square-bracket tags only  _(from runs/video-production/<brand>/freestyle-1022 (BQE take 2); stage song)_
+- **11 s of ad-lib warm-up before the first bar** → pick the take that raps bar one inside 2 s; reroll otherwise  _(from runs/video-production/<brand>/freestyle-1022 (BQE take 2); stage song)_
+
+## Cost
+
+- target per ad: $—
+- target_per_ad_usd: 15
+- note: two takes of Suno (Premier plan) + pictures for 2 faces, 1 setting, 6-8 pop-ups + one clip per set-up scene (V35); first run sets the real number
+
+## Quality bar — not slop
+
+- every bar is understood on first listen
+- the right man's lips say the right bar
+- the crowd reacts on every punchline
+- each pop-up gets a laugh on its own
+- the two men look like people the viewer half-knows, never a real person
+- the FLEX line lands as advice, not an ad
+
+## Built from
+
+- coldfreestylesonly: Ddsh3CuuWu0 (1.44M), Dd0Jd5ROhKg (738K), DdEjGwmON2U (637K), DeMr_bCBE0M (465K)
+- sports_generated: DeDl057xUUk (7.26M) — the AI lookalike skit
+- lab/damon/song-ads/freestyle.json — the format draft and BQE
+
+## Rulings behind it
+
+- the owner 2026-10-22: "you need to flip it. We need to talk about the girl first … Just like we did with the Disney song ads … We keep the conflict, the weird thing, the tragedy … at the beginning, and then we put in anything that has to do with a problem and then we can talk about [failed] solutions … We don't go straight for the pitch, never. That's the whole point of this format"
+- the owner 2026-10-22: the freestyle format, Suno, lookalike rapper, pop-up inserts, yo-mama bars at the neck, use the FLEX, street framing, entertainment first
+- the owner 2026-10-22: its own format — "be cognizant of these little things … this is it. Let's run this shit up"
+- the owner 2026-10-21: every song starts on the verse; the story line is the hook
+- the owner 2026-10-05: FLEX once a day is the one ruled frequency

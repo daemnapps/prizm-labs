@@ -1,0 +1,36 @@
+{
+ "element": "delivery",
+ "asset": "humor",
+ "source": "fixture",
+ "enforced_by": null,
+ "note": "TEST-ONLY. Invented rows; the real lists are components/elements/library/.",
+ "rows": [
+  {
+   "id": "none",
+   "name": "none",
+   "what": "no joke",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "dry",
+   "name": "dry",
+   "what": "flat",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  }
+ ],
+ "duplicates": []
+}

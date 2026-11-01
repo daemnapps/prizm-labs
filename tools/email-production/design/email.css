@@ -1,0 +1,146 @@
+/* The designed email's sections. Every colour is a brand token (engine.py writes them from brands/<brand>/email-sms/design-system.json). Lifted from the BRAND-A week of 12 Oct 2026; one type scale: Display 34/26/21, body 16, label 10.5 caps. */
+/* the email itself */
+.em{background:var(--canvas);color:var(--ink);font-family:var(--sans)}
+.m{padding:20px 22px}
+/* embellishments: the brand's own set, gold deco and emeralds */
+.m-head{background-size:cover;background-position:center bottom;padding:54px 0 40px;position:relative}.m-head::after{content:"";position:absolute;inset:auto 0 0;height:60%;background:linear-gradient(transparent,var(--canvas))}
+.m-logo{position:relative;z-index:1;font:300 32px/1 var(--serif);text-align:center;letter-spacing:.05em;color:var(--ink);text-shadow:0 2px 22px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.6)}
+.m-orn{padding:4px 22px}.e-gems{height:34px;background:center/contain no-repeat}.e-fan{height:22px;background:center/contain no-repeat;margin:4px 0}
+.e-frame{position:relative}.e-frame::before,.e-frame::after{content:"";position:absolute;width:42px;height:42px;background-size:contain;background-repeat:no-repeat}
+.e-frame::before{left:7px;top:7px}.e-frame::after{right:7px;bottom:7px;transform:rotate(180deg)}
+.e-seal{width:118px;height:118px;margin:0 auto 14px;background:center/contain no-repeat;display:grid;place-content:center;text-align:center}
+.e-seal b{font:300 34px/1 var(--serif);background:linear-gradient(180deg,var(--orn-hi),var(--orn-lo));-webkit-background-clip:text;background-clip:text;color:transparent}.e-seal small{font:500 8px var(--sans);letter-spacing:.24em;color:var(--eyebrow)}
+.em .m-foot{background-size:100% auto;background-repeat:no-repeat;background-position:center bottom;padding-bottom:calc(28% + 18px);border-top:0}
+.m-specs b{background:linear-gradient(180deg,var(--orn-hi),var(--orn-lo));-webkit-background-clip:text;background-clip:text;color:transparent}
+.m-herotype{background:radial-gradient(90% 60% at 50% 0%,rgba(var(--glow-rgb),.07),transparent 70%)}
+.m-herotype .m-eye{color:var(--eyebrow)}.m-herotype .m-eye::before,.m-herotype .m-eye::after{content:"";display:inline-block;width:22px;height:1px;background:var(--eyebrow);vertical-align:middle;margin:0 10px;opacity:.7}
+.m-eye{font:500 10.5px var(--sans);letter-spacing:.18em;color:var(--button);text-align:center;margin-bottom:10px}
+.m-herotype h1,.m-herophoto h1{font:300 34px/1.04 var(--serif);text-align:center;margin:0 0 16px;text-wrap:balance}.m h1 i,.m-close i{color:var(--accent)}
+.m-herophoto{padding-top:8px}.m-herophoto h1{margin:20px 0 4px}.m-herophoto p{text-align:center;color:var(--muted);margin:0}
+.m-pic{margin:0;position:relative}.m-pic img{width:100%;display:block}.m-pic.r img{border-radius:16px}
+.pk{position:absolute;left:8px;top:8px;font:500 9.5px var(--sans);letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:99px;background:rgba(8,10,9,.8);color:var(--ink);border:1px solid var(--line);pointer-events:none}
+.pk-3d{color:var(--glow)}.pk-gen{color:var(--orn-hi)}.pk-emb{color:var(--orn-hi)}.pk-real{color:var(--muted)}.pk-make{color:var(--orn-hi)}
+body.clean .pk{display:none}
+.m-todo{margin:0;position:relative;border:1.5px dashed rgba(231,194,122,.55);border-radius:16px;display:grid;place-content:center;text-align:center;padding:30px 14px 14px;gap:4px;background:var(--surface)}
+.m-todo.k-real,.m-todo:has(.pk-real){border-color:rgba(143,183,224,.55)}
+.m-todo b{font:300 18px/1.1 var(--serif)}.m-todo p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.3}
+.m-tile .m-todo,.m-g6 .m-todo{padding:22px 5px 5px;border-radius:12px}.m-g6 .m-todo b{font-size:12px}.m-g6 .m-todo p{display:none}.m-tile .m-todo p{font-size:9.5px}.m-tile .m-todo b{font-size:13px}
+.m-tile .pk,.m-g6 .pk{font-size:7.5px;left:4px;top:4px;padding:2px 5px}
+.m-letter p{margin:0 0 14px;font-size:16px;line-height:1.55}.m-letter p:last-child{margin-bottom:0}.m-letter .m-hi{font:300 24px/1.2 var(--serif)}
+.m-quote{background:var(--deep);border-radius:16px;padding:26px 22px}.m-quote blockquote{margin:0;font:300 23px/1.2 var(--serif)}.m-quote cite{display:block;margin-top:12px;font:500 10.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--button);font-style:normal}
+.m-specs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:14px;overflow:hidden}
+.m-specs div{background:var(--surface);padding:14px 4px;text-align:center;display:grid;gap:4px}.m-specs b{font:300 21px/1 var(--serif)}.m-specs span{font-size:10.5px;color:var(--muted);line-height:1.2}
+.m-tiles h2,.m-arrows h2,.m-lights h2{font:300 24px/1.1 var(--serif);text-align:center;margin:0 0 14px;text-wrap:balance}
+.m-tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.m-tile{display:grid;gap:3px;align-content:start;min-width:0}.m-tile .m-pic img{border-radius:12px;aspect-ratio:1/1;object-fit:cover}.m-tile .m-todo{aspect-ratio:1/1}
+.m-tile b{font:500 12.5px var(--sans);margin-top:6px}.m-tile span{font-size:11.5px;color:var(--muted);line-height:1.3}
+.m-photocard{position:relative;margin:8px 0}
+.m-glass{position:relative;margin:-74px 22px 0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m-glass h3{margin:0 0 6px;font:500 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--button)}.m-glass p{margin:0;font:300 19px/1.25 var(--serif)}
+.m-arrows ul{list-style:none;margin:0;padding:0;display:grid;gap:1px;background:var(--line);border-radius:14px;overflow:hidden}
+.m-arrows li{background:var(--surface);display:flex;justify-content:space-between;gap:10px;padding:12px 16px;font-size:15px}.m-arrows li b{font-weight:500}.m-arrows li span{color:var(--muted);text-align:right}.m-arrows li span::before{content:"→ ";color:var(--button)}
+.m-close{text-align:center;font:300 24px/1.15 var(--serif);margin:16px 0 0}
+.m-lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.m-lgrid div{display:grid;gap:6px;text-align:center}.m-lgrid img{border-radius:12px}.m-lgrid span{font-size:12px;color:var(--muted)}.m-lgrid .pk{display:none}
+.m-g6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.m-g6 .m-todo{aspect-ratio:1/1}.m-grid p{text-align:center;color:var(--muted);margin:12px 0 0;font-size:13px}
+.m-card{display:grid;grid-template-columns:42% 1fr;gap:14px;background:var(--surface);border-radius:16px;padding:12px;align-items:center}
+.m-card h3{margin:0 0 4px;font:300 22px/1.05 var(--serif)}.m-card p{margin:0 0 8px;font-size:13px;color:var(--muted);line-height:1.35}.m-card .m-pic img{border-radius:10px}.m-card .pk{font-size:7.5px;left:4px;top:4px}
+.m-price{display:flex;gap:8px;align-items:baseline;margin-bottom:10px}.m-price b{font:400 22px var(--serif)}.m-price s{color:var(--dim);font-size:14px}
+.m-btn{display:block;background:var(--btn-bg,var(--button));color:var(--button-ink);text-align:center;font:500 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;padding:16px 10px;border-radius:var(--btn-radius,999px);text-decoration:none}
+.m-card .m-btn{padding:11px 6px;font-size:10.5px}
+.m-guar{text-align:center;background:radial-gradient(120% 90% at 50% 0%,rgba(var(--glow-rgb),.16),transparent 60%);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:12px 0;padding:30px 22px}
+.m-seal{width:76px;height:76px;border-radius:50%;border:1px solid var(--button);margin:0 auto 14px;display:grid;place-content:center;font:300 28px/1 var(--serif);color:var(--glow)}.m-seal small{font:500 8.5px var(--sans);letter-spacing:.2em;color:var(--button)}
+.m-guar h2{font:300 27px/1.08 var(--serif);margin:0 0 8px}.m-guar p{margin:0 0 18px;color:var(--muted)}
+.m-cta p{text-align:center;color:var(--muted);margin:0 0 12px}
+.m-sign{display:grid;gap:2px}.m-sign span{font:300 24px/1 var(--serif)}.m-sign small{color:var(--dim)}
+.m-foot{text-align:center;color:var(--dim);font-size:11px;padding:26px 16px 30px;border-top:1px solid var(--line);line-height:1.7;margin-top:10px}
+/* ---- the type system and the rhythm (the owner, 9 Oct: "structure within the fonts … like we are designing landing pages") ----
+   Display XL 34 · Display L 26 · Display M 21 · Body 16 · Small 13 · Label 10.5 caps. Serif = GT Super Display Light, always in a picture.
+   Sections breathe 26px top and bottom; content sits 22px in from each edge (33px in the 600px email). */
+.em .m{padding:26px 22px}
+.em .m-head{padding:16px 0 14px;background-position:center 30%}.em .m-head::after{height:70%}.em .m-head:not([style])::after{display:none}
+.em .m-logo-img{display:block;height:20px;width:auto;margin:0 auto;position:relative;z-index:1;filter:none}.em .m-head[style] .m-logo-img{filter:drop-shadow(0 2px 10px rgba(0,0,0,.8))}
+.em .m-mark{padding:24px 0 4px}.em .m-mark .m-logo-img{height:18px;filter:none}
+.em .m-herotype h1,.em .m-herophoto h1{font:300 34px/1.05 var(--serif)}
+.em .m-display h2,.em .m-turn h2,.em .m-tiles h2,.em .m-arrows h2,.em .m-lights h2,.em .m-guar h2,.em .m-steps h2{font:300 var(--h2,26px)/1.12 var(--serif);margin:0 0 14px;text-wrap:balance}
+.em .m-display{padding-bottom:6px}.em .m-display.m-left h2{text-align:left;margin:0}
+.em .m-quote blockquote,.em .m-glass p,.em .m-example blockquote,.em .m-close,.em .m-ex-ask{font:300 21px/1.28 var(--serif)}
+.em .m-turn p,.em .m-guar p,.em .m-herophoto p{font-size:15px;line-height:1.5}
+.em .m-eye,.em .m-quote cite,.em .m-glass h3,.em .m-example cite,.em .m-bigquote cite{font:500 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.em .m-letter p{font-size:16px;line-height:1.6}
+.em .m-pricebar{text-align:center;padding:18px 22px 0}.em .m-pricebar p{margin:0;font:300 30px/1 var(--serif);color:var(--ink)}.em .m-pricebar b{font-weight:300}.em .m-pricebar s{font:400 15px var(--sans);color:var(--dim);margin-left:8px}
+.em .m-cta{padding-top:12px}
+.em .m-signature{padding-top:6px}.em .m-signature span{display:block;font:300 24px/1 var(--serif)}.em .m-signature small{color:var(--dim);font-size:13px}
+.em .m-bigquote{text-align:center;padding:30px 26px 10px}.em .m-bigquote .m-eye{color:var(--eyebrow);margin-bottom:14px}.em .m-bigquote blockquote{margin:0 0 14px;font:300 27px/1.18 var(--serif);text-wrap:balance}.em .m-bigquote cite{color:var(--button);font-style:normal}
+.em .m-example cite{color:var(--button)}
+.em .m-wide{padding:18px 22px 0}.em .m-wide .m-pic img{border-radius:16px}
+.em .m-tophalf{padding-top:6px}.em .m-tophalf .m-pic img{border-radius:16px}.em .m-tophalf .m-cap{font-size:13px;line-height:1.45;margin-top:10px}
+.em .m-heroseal h1:empty{display:none}
+.em .m-pq{margin:16px 0 6px;font:300 21px/1.3 var(--serif);text-align:left}
+.em .m-deal{text-align:center;padding:34px 22px}.em .m-deal .m-eye{color:var(--eyebrow);margin-bottom:14px}.em .m-deal p{margin:0 0 6px;font:300 26px/1.18 var(--serif);text-wrap:balance}.em .m-deal p i{color:var(--accent)}
+.em .m-herophoto h1{margin:6px 0 16px}.em .m-herophoto p{margin:-8px 0 14px}.em .m-deal .e-seal{width:96px;height:96px;margin:0 auto 14px}
+
+.m-box h2,.m-selfies h2{font:300 26px/1.1 var(--serif);text-align:center;margin:0 0 14px;text-wrap:balance}.m-box h2 i,.m-selfies h2 i{color:var(--accent)}
+.m-bx{display:grid;gap:2px;min-width:0}.m-bx .m-pic img{border-radius:14px;aspect-ratio:1/1;object-fit:cover}
+.m-bx b{font:500 13px var(--sans);letter-spacing:.06em;margin-top:8px}.m-bx span{font-size:12.5px;color:var(--muted)}
+.m-bxg{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;margin-top:14px}
+.m-sfg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.m-sf{display:grid;gap:6px;align-content:start;min-width:0}
+.m-sf .m-pic img{border-radius:12px;aspect-ratio:3/4;object-fit:cover}.m-sf q{font:300 14.5px/1.2 var(--serif);color:var(--ink)}
+.m-selfies .m-cap{margin-top:12px}
+.m-creep{padding:4px 0 0;position:relative}.vh{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden}.e-creep{height:50px;background-position:center;background-size:100% auto;background-repeat:no-repeat}
+/* the board-level pieces any brand can use: header and footer on the brand's band, alt and panel grounds, hero over photo, photo row, callout, timeline (read off Brand-B's board, 17 Oct 2026) */
+.em .m-head:not([style]){background:var(--band);padding:16px 0 13px}
+.em .m-foot.on-band{background:var(--band);color:var(--band-ink);border-top:0;margin-top:0;padding:28px 16px 30px;opacity:1}
+.em .m-foot.on-band .m-footlogo{margin-bottom:12px}.em .m-foot .m-logo-img{filter:none}
+.em .g-alt{background:var(--alt)}
+.em .g-panel{background:var(--panel);color:var(--panel-ink)}.em .g-panel h1,.em .g-panel h2,.em .g-panel p,.em .g-panel span{color:var(--panel-ink)}
+.em .g-panel .m-btn{background:#fff;color:var(--band)}
+.em .m-overlay{position:relative;margin:0}.em .m-overlay .m-pic img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.em .m-ovw{position:absolute;left:0;right:0;padding:26px 26px 30px;text-align:center;color:#fff}
+.em .m-ov-bottom .m-ovw{bottom:0;background:linear-gradient(transparent,var(--fade) 38%)}.em .m-ov-top .m-ovw{top:0;background:linear-gradient(var(--fade) 62%,transparent)}
+.em .m-ovw h1{font:300 34px/1.06 var(--serif);margin:0 0 8px;color:#fff;text-wrap:balance}.em .m-ovw p{margin:0 0 16px;font-size:15px;line-height:1.45;color:#fff}
+.em .m-btn-light{display:inline-block;background:#fff;color:var(--band);padding:13px 22px;border-radius:4px}
+.em .m-prow{display:grid;gap:8px}.em .m-prow-2{grid-template-columns:1fr 1fr}.em .m-prow-3{grid-template-columns:1fr 1fr 1fr}
+.em .m-prow>div{display:grid;gap:6px;min-width:0}.em .m-prow .m-pic img{aspect-ratio:1/1;object-fit:cover;border-radius:4px}
+.em .m-prow span{font-size:12px;text-align:center;color:var(--muted)}.em .m-prow .m-cap{grid-column:1/-1;text-align:center;font-size:14px;color:var(--muted);margin:8px 0 0}
+.em .m-callout{border:1px solid var(--line);padding:16px 18px;text-align:center;font:300 18px/1.35 var(--serif)}
+.em .m-tlrow{display:grid;grid-template-columns:1fr 1fr 1fr;position:relative}.em .m-tlrow::before{content:"";position:absolute;left:8%;right:8%;top:30px;border-top:2px solid var(--ink)}
+.em .m-tlp{display:grid;gap:6px;justify-items:center;text-align:center;position:relative}.em .m-tlp b{font:600 14px var(--sans)}.em .m-tlp i{width:12px;height:12px;border-radius:50%;background:var(--ink);display:block}
+.em .m-tlp span{font-size:14px;line-height:1.3}.em .m-tlp.dim b{color:var(--muted)}.em .m-tlp.dim i{background:var(--canvas);border:2px solid var(--muted)}
+.em .m-link{text-align:center;padding-top:0}.em .m-link a{color:var(--ink);text-decoration:underline;font-size:14px}
+
+/* brand layout settings (look file "layout"): centred sections, compact buttons, the body weight */
+.em.a-center .m-turn,.em.a-center .m-display,.em.a-center .m-display.m-left h2,.em.a-center .m-letter p{text-align:center}
+.em.b-compact .m-cta,.em.b-compact .m-guar{text-align:center}.em.b-compact .m-cta .m-btn,.em.b-compact .m-guar .m-btn,.em.b-compact .m-card .m-btn{display:inline-block;padding:14px 22px;font-weight:600;letter-spacing:.04em}
+.em .m-btn{font-family:var(--btnfont,var(--sans))}
+.em .m-turn p,.em .m-letter p{font-weight:var(--body-weight,400)}
+.em .m-foot.on-band[style]{background-color:var(--band);background-size:100% auto;background-position:center bottom;background-repeat:no-repeat;padding-bottom:calc(18% + 20px)}
+
+/* blow-out pieces: full-bleed key visual and the moment's ticker band */
+.em .m-poster{position:relative;margin:0}.em .m-poster .m-pic img{display:block;width:100%;height:auto}
+.em .m-postw{padding:22px 24px 26px;text-align:center}.em .m-postw h1{font:300 40px/1.02 var(--serif);margin:0 0 10px;text-wrap:balance}.em .m-postw h1 i{color:var(--accent)}
+.em .m-postw p{margin:0 0 16px;font-size:16px;color:var(--muted)}
+.em .m-ticker{background:var(--accent);color:var(--canvas);overflow:hidden;white-space:nowrap;padding:9px 0}
+.em .m-ticker div{display:inline-block;font:700 13px/1 var(--sans);letter-spacing:.22em}.em .m-ticker span{margin:0 12px}.em .m-ticker i{font-style:normal;opacity:.7}
+.m-head.m-flat::after{display:none}
+.em .m-head.m-flat .m-logo-img{filter:none}
+
+.m-routine h2{font:300 26px/1.12 var(--serif);text-align:center;margin:0 0 16px;text-wrap:balance}
+.m-routine{display:grid;gap:12px}
+.m-rstep{display:grid;grid-template-columns:44% 1fr;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;min-width:0}
+.m-rstep .m-pic img{border-radius:12px;aspect-ratio:1/1;object-fit:cover}
+.m-rtext{min-width:0}
+.m-reye{font:500 9px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.m-rtext h3{font:300 18px/1.12 var(--serif);margin:0 0 6px}
+.m-rtext p{margin:0;font:400 12.5px/1.45 var(--sans);color:var(--muted)}
+.m-ingr h2{font:300 var(--h2,26px)/1.12 var(--serif);text-align:center;margin:0 0 16px;text-wrap:balance}
+.m-icard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0;overflow:hidden}
+.m-irow{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.m-irow:last-child{border-bottom:0}
+.m-irow .m-pic{flex:none;width:54px;margin:0}
+.m-irow .m-pic img{width:54px;height:54px;border-radius:12px;object-fit:cover;aspect-ratio:1/1}
+.m-itext{min-width:0}
+.m-itext h3{font:300 21px/1.1 var(--serif);margin:0 0 2px}
+.m-itext p{margin:0;font:400 14px/1.4 var(--sans);color:var(--muted)}
+.m-ingr .m-close{text-align:center;margin:16px 0 0}
+.em .gl>.m{background:transparent}
+
+.m-herotype .m-eye-plain::before,.m-herotype .m-eye-plain::after{display:none}

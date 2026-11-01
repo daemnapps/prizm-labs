@@ -1,0 +1,106 @@
+{
+  "_what": "How the letters in an ad are PHYSICALLY MADE — the material, surface and edge treatment of the letterforms. Not the typeface: a typeface is which shapes, a letterform is what they are built out of. The image teardown labels every text element with one of these ids and its own free phrase; stage 6 carries both into the type layer; stage 7 tells the generator how ours are made.",
+  "_why": "the owner, 2026-09-25: \"the nuance of the style of the creative is lost because a lot of these swipes have specific styles. Claymation-style text is going to look different than you just writing text on an image.\" Everything else about type was already recorded — class, width, weight, case, size, hex, tracking, leading. This was not, so every rebuild set flat digital type: right for a flat-digital swipe, wrong for every other kind.",
+  "_rule": "A row that does not fit is never bent to fit. The teardown answers `none-fits` and proposes a NAMED row in one line, and the work carries on — same rule the format, style, framework and awareness lists already run (stage 2b). the owner signs a proposed row before it becomes real; until then it is a draft nobody is blocked by.",
+  "_seeded": "2026-09-25, from the fourteen worked examples in stage1-image-teardown-v3-damon.md. Every row is `draft` — none has been signed.",
+  "letterforms": [
+    {
+      "id": "flat-digital",
+      "name": "Flat digital type",
+      "what": "Set type with no depth of any kind: solid fill, hard clean edge, no shadow, bevel, texture or outline. The most common answer and a real one — most direct-response statics are this.",
+      "how_to_see_it": "The letter edge is mathematically clean at full zoom and the fill is one unbroken colour. Nothing separates the letter from its ground except the colour change.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "extruded-3d",
+      "name": "Extruded 3D",
+      "what": "Letters pushed back into space with a visible side wall, usually bevelled at the front edge and casting a shadow onto what is behind them.",
+      "how_to_see_it": "A second colour runs down one side of every stroke — the extrusion — consistently to the same vanishing direction across all letters.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "moulded-clay",
+      "name": "Moulded clay",
+      "what": "Letters that read as modelled by hand out of a soft solid — claymation lettering. Rounded, slightly irregular, lit as a real object in the scene.",
+      "how_to_see_it": "Every stroke has its own soft highlight and contact shadow, thickness varies where a hand would have pressed, and no two identical letters are truly identical.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "hand-marker",
+      "name": "Hand-lettered marker",
+      "what": "Written by hand with a marker, brush or pen on a real surface. Stroke weight follows pressure and speed, and the ends of strokes show the tool.",
+      "how_to_see_it": "Line weight changes within a single stroke, ends taper or blot, and the baseline wanders.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "hand-drawn-textured",
+      "name": "Hand-drawn, textured fill",
+      "what": "Drawn letterforms whose fill carries a texture — hatching, stipple, grain, risograph — rather than a flat colour, often with a drawn shadow offset behind.",
+      "how_to_see_it": "The fill is not uniform at zoom: it is made of marks. A shadow, where present, is drawn rather than rendered.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "cut-paper",
+      "name": "Cut paper",
+      "what": "Letters that read as cut or torn from sheet material and laid on the ground, lifting slightly off it.",
+      "how_to_see_it": "A thin hard shadow hugs one side of each letter, edges show a cut or torn quality, and the paper's own surface catches light differently from the ground.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "embossed",
+      "name": "Embossed into the surface",
+      "what": "Letters pressed into or raised out of the material they sit on, carrying no colour of their own — they are the same material as the ground.",
+      "how_to_see_it": "The letters are legible only through highlight and shadow along their edges; sample the fill and it matches the background.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "letterpress",
+      "name": "Letterpress",
+      "what": "Printed with a physical impression: ink slightly heavier at the edge of each stroke, the paper visibly indented.",
+      "how_to_see_it": "Ink pools at stroke edges and thins in the middle, and the paper texture shows through the fill.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "chrome",
+      "name": "Chrome",
+      "what": "Metallic letters with a bevelled edge reflecting an environment — a horizon line across the face of the letter is the tell.",
+      "how_to_see_it": "The fill is a gradient that inverts partway down every stroke, and the same reflection pattern repeats across all letters.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "neon",
+      "name": "Neon tube",
+      "what": "Letters as glowing tube, with light spilling onto the surface behind them.",
+      "how_to_see_it": "Stroke width is constant, the core is brighter than the edge, and the ground immediately around the letters is lit by them.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "chalk",
+      "name": "Chalk or dust",
+      "what": "Letters drawn in a dry medium on a dark ground, edges dusty and broken rather than clean.",
+      "how_to_see_it": "Coverage is uneven within strokes, edges fade rather than stop, and the ground's texture breaks through.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "knockout-bar",
+      "name": "Knockout through a bar",
+      "what": "Letters cut out of a solid panel so the picture or ground shows through them, or the panel colour shows through the letters.",
+      "how_to_see_it": "A hard-edged rectangle of solid colour holds the line, and the letters are the absence of that colour rather than a colour of their own.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "caption-outline",
+      "name": "Outlined social caption",
+      "what": "White (or bright) letters with a hard contrasting outline or drop shadow so they stay legible over any footage — the native look of social captions and memes.",
+      "how_to_see_it": "A uniform stroke of a second colour follows every letter's contour at constant width, regardless of what is behind it.",
+      "status": "draft", "signed": null, "evidence": null
+    },
+    {
+      "id": "system-caption",
+      "name": "Native system caption",
+      "what": "Type rendered by a device or app rather than designed — a screenshot's own UI text, a native story caption, a search bar, a comment.",
+      "how_to_see_it": "It sits in a platform's own chrome at the platform's own size, and the typeface is a system face rather than a chosen one.",
+      "status": "draft", "signed": null, "evidence": null
+    }
+  ]
+}

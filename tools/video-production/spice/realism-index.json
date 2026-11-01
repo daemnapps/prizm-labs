@@ -1,0 +1,764 @@
+{
+ "_what": "Human-level realism: the small real behaviours of the hand holding the phone, the person in front of it, their skin and life, their senses and their place. A production brief picks from here (video spice, layer 2–4 and 7) by format; a clip or picture prompt carries the `prompt` words. Never coin an entry in a run: add it here.",
+ "_curator": "the owner",
+ "_source": "the owner 2026-10-20: 'it's little things like subtle selfie hand holding being slightly shaky … realistic movements, human level … it all depends on the format … build an index for this stuff in the repo'",
+ "formats": {
+  "selfie-talk": "one person, phone at arm's length",
+  "propped-phone-talk": "one person, phone propped on a stand or object",
+  "counter-demo": "a person making or showing something at a counter or table",
+  "walk-and-talk": "filming while walking",
+  "sit-down-interview": "seated, phone on a stand facing them",
+  "street-interview": "an interviewer's phone held out to a stranger",
+  "grwm-mirror": "getting ready, often in a mirror",
+  "pov-hands": "the phone looking down at the person's own hands"
+ },
+ "families": [
+  "camera-hand",
+  "body",
+  "face",
+  "skin",
+  "sense",
+  "place",
+  "finish",
+  "voice"
+ ],
+ "rows": [
+  {
+   "id": "selfie-micro-shake",
+   "family": "camera-hand",
+   "what_you_see": "The frame never sits dead still: tiny, irregular shakes from a hand at arm's length.",
+   "prompt": "Handheld selfie at arm's length: tiny irregular hand shake, never perfectly still.",
+   "formats": [
+    "selfie-talk",
+    "walk-and-talk",
+    "grwm-mirror"
+   ],
+   "level": 1,
+   "status": "draft",
+   "source": "the owner 2026-10-20: subtle selfie hand holding being slightly shaky",
+   "stage": "production",
+   "also": [
+    "editing"
+   ]
+  },
+  {
+   "id": "breathing-bob",
+   "family": "camera-hand",
+   "what_you_see": "A slow rise and fall in the frame in time with the holder's breathing.",
+   "prompt": "The handheld frame rises and falls very slightly with the holder's breathing.",
+   "formats": [
+    "selfie-talk",
+    "pov-hands",
+    "walk-and-talk"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "production",
+   "also": [
+    "editing"
+   ]
+  },
+  {
+   "id": "arm-tire-drift",
+   "family": "camera-hand",
+   "what_you_see": "Over a long take the phone sinks a little, then gets lifted back to framing.",
+   "prompt": "Over the take the phone slowly sinks a little and is nudged back up into framing.",
+   "formats": [
+    "selfie-talk"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "reframe-nudge",
+   "family": "camera-hand",
+   "what_you_see": "A small, quick correction when the subject drifts out of centre.",
+   "prompt": "A small, quick handheld reframe when they lean out of centre.",
+   "formats": [
+    "selfie-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "street-interview"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "editing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "walking-bob",
+   "family": "camera-hand",
+   "what_you_see": "A step rhythm in the frame: bob and slight roll with each footstep.",
+   "prompt": "Walking with the phone: a gentle bob and slight roll on each footstep.",
+   "formats": [
+    "walk-and-talk"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "propped-settle",
+   "family": "camera-hand",
+   "what_you_see": "A phone propped on a stand or against a jar: almost still, with a faint wobble when the counter is touched.",
+   "prompt": "Phone propped on the counter: almost still, a faint wobble when they touch the counter.",
+   "formats": [
+    "propped-phone-talk",
+    "counter-demo"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "follow-the-hands",
+   "family": "camera-hand",
+   "what_you_see": "The holder tilts down to follow what the hands are doing, a beat behind, then comes back up.",
+   "prompt": "The handheld phone tilts down to follow their hands a beat late, then comes back up to their face.",
+   "formats": [
+    "counter-demo",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "production",
+   "also": [
+    "writing"
+   ]
+  },
+  {
+   "id": "focus-hunt",
+   "family": "camera-hand",
+   "what_you_see": "When something comes close to the lens, the phone's focus breathes and catches it a moment late.",
+   "prompt": "The phone's autofocus hunts for a moment as the object comes close to the lens, then locks.",
+   "formats": [
+    "counter-demo",
+    "pov-hands",
+    "selfie-talk"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "exposure-shift",
+   "family": "camera-hand",
+   "what_you_see": "Brightness shifts a touch as the phone turns toward or away from the window.",
+   "prompt": "The phone's exposure shifts slightly as it turns toward the window light.",
+   "formats": [
+    "walk-and-talk",
+    "counter-demo",
+    "grwm-mirror"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "editing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "street-jostle",
+   "family": "camera-hand",
+   "what_you_see": "An interviewer's phone held out to a stranger: small jolts and a held-out arm's sway.",
+   "prompt": "Interviewer's phone held out at a stranger: small jolts and the sway of a held-out arm.",
+   "formats": [
+    "street-interview"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "listening-nod",
+   "family": "body",
+   "what_you_see": "Small, slow nods while they talk or while a point lands.",
+   "prompt": "Small, slow nods as the point lands.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "head-bobble",
+   "family": "body",
+   "what_you_see": "The side-to-side head bobble of agreement or listening.",
+   "prompt": "A gentle side-to-side head bobble of agreement.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "culture": "south-asian",
+   "source": "the owner 2026-10-20: the little head bobble an Indian avatar does when agreeing or listening",
+   "stage": "production",
+   "also": [
+    "writing"
+   ]
+  },
+  {
+   "id": "small-wai-nod",
+   "family": "body",
+   "what_you_see": "A small polite nod, hands sometimes brought together near the chest.",
+   "prompt": "A small polite nod, hands briefly brought together near the chest.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "culture": "thai",
+   "stage": "production",
+   "also": [
+    "writing"
+   ]
+  },
+  {
+   "id": "counter-tap",
+   "family": "body",
+   "what_you_see": "Two fingers tap the counter when a point is made.",
+   "prompt": "Two fingers tap the counter as they make the point.",
+   "formats": [
+    "counter-demo",
+    "propped-phone-talk"
+   ],
+   "level": 2,
+   "status": "draft",
+   "source": "Grandma Yai, 2026-10-20",
+   "stage": "production",
+   "also": [
+    "writing"
+   ]
+  },
+  {
+   "id": "hand-to-chest",
+   "family": "body",
+   "what_you_see": "A hand comes to the chest on something sincere or personal.",
+   "prompt": "A hand comes to their chest on the sincere line.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "lean-in-secret",
+   "family": "body",
+   "what_you_see": "They lean toward the lens and lower their voice for the secret.",
+   "prompt": "They lean toward the lens, voice lowered, as if telling a secret.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "glance-away-think",
+   "family": "body",
+   "what_you_see": "A glance to the side, remembering, before the next line.",
+   "prompt": "A brief glance to the side, remembering, then back to the lens.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "shoulder-shrug",
+   "family": "body",
+   "what_you_see": "A small shrug on 'that's just how it is'.",
+   "prompt": "A small shrug on the throwaway line.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "eyes-down-to-hands",
+   "family": "body",
+   "what_you_see": "Eyes drop to the hands while working, then come back up to the lens.",
+   "prompt": "Eyes drop to their hands while they work, then come back up to the lens.",
+   "formats": [
+    "counter-demo",
+    "pov-hands",
+    "grwm-mirror"
+   ],
+   "level": 1,
+   "status": "draft",
+   "source": "Grandma Yai, 2026-10-20",
+   "stage": "production",
+   "also": [
+    "writing"
+   ]
+  },
+  {
+   "id": "eyebrow-flash",
+   "family": "face",
+   "what_you_see": "A quick lift of the eyebrows on the surprising part.",
+   "prompt": "A quick eyebrow lift on the surprising part.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "half-smile",
+   "family": "face",
+   "what_you_see": "A knowing half-smile that starts before the line ends.",
+   "prompt": "A knowing half-smile that starts before the line ends.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "lip-press",
+   "family": "face",
+   "what_you_see": "Lips pressed together, a small disapproving pause before the problem.",
+   "prompt": "Lips pressed together in a small disapproving pause.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "disgust-wrinkle",
+   "family": "face",
+   "what_you_see": "The nose wrinkles at something gross.",
+   "prompt": "Their nose wrinkles slightly at the gross part.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "natural-blinks",
+   "family": "face",
+   "what_you_see": "Blinks at an irregular human rhythm, never a stare.",
+   "prompt": "They blink naturally at an irregular rhythm.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "squint-at-light",
+   "family": "face",
+   "what_you_see": "A slight squint toward bright window light.",
+   "prompt": "A slight squint toward the bright window.",
+   "formats": [
+    "walk-and-talk",
+    "street-interview"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "age-skin",
+   "family": "skin",
+   "what_you_see": "Real skin: pores, fine lines, age spots, uneven tone; no smoothing.",
+   "prompt": "Real skin with pores, fine lines, age spots and uneven tone; no beauty filter.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 1,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "work-stains",
+   "family": "skin",
+   "what_you_see": "Marks of a life's work on the hands: stained fingertips, small scars, calluses.",
+   "prompt": "Their hands carry the marks of their work (from the profile's life marks).",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "source": "the owner 2026-10-20: Grandma Yai's fingers slightly yellow from the turmeric",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "worn-objects",
+   "family": "skin",
+   "what_you_see": "The things they use are worn from years of use: a chipped bowl, a smooth wooden spoon, rubbed-down bangles.",
+   "prompt": "The things they use are worn from years of use.",
+   "formats": [
+    "counter-demo",
+    "pov-hands"
+   ],
+   "level": 2,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "smell-it",
+   "family": "sense",
+   "what_you_see": "They bring the ingredient to the nose and breathe it in.",
+   "prompt": "They bring it to their nose and breathe it in.",
+   "formats": [
+    "counter-demo",
+    "pov-hands"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "feel-it",
+   "family": "sense",
+   "what_you_see": "They rub the paste or the cloth between fingertip and thumb.",
+   "prompt": "They rub it between fingertip and thumb to feel the texture.",
+   "formats": [
+    "counter-demo",
+    "pov-hands",
+    "grwm-mirror"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "look-close",
+   "family": "sense",
+   "what_you_see": "They hold the result up and look at it closely before showing it.",
+   "prompt": "They hold it up and look at it closely before turning it to the lens.",
+   "formats": [
+    "counter-demo"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "writing",
+   "also": [
+    "production"
+   ]
+  },
+  {
+   "id": "steam-and-dust",
+   "family": "place",
+   "what_you_see": "A little steam from a warm bowl, dust in the window light.",
+   "prompt": "A little steam from the warm bowl; dust visible in the window light.",
+   "formats": [
+    "counter-demo"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "background-life",
+   "family": "place",
+   "what_you_see": "Something small moves in the background: a curtain, a leaf, light through a window.",
+   "prompt": "Small natural movement in the background: a curtain or leaves outside the window.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 3,
+   "status": "draft",
+   "stage": "production",
+   "also": []
+  },
+  {
+   "id": "phone-grain",
+   "family": "finish",
+   "what_you_see": "The faint grain and compression of a phone video, not a clean render.",
+   "prompt": "Edit: add the light grain and compression of a phone recording.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 1,
+   "stage": "editing",
+   "also": [],
+   "status": "draft"
+  },
+  {
+   "id": "crooked-hold",
+   "family": "finish",
+   "what_you_see": "The frame sits a degree or two off level, the way a hand holds a phone.",
+   "prompt": "Edit: rotate the frame a degree or two off level, varying slowly.",
+   "formats": [
+    "selfie-talk",
+    "walk-and-talk",
+    "street-interview",
+    "pov-hands"
+   ],
+   "level": 2,
+   "stage": "editing",
+   "also": [],
+   "status": "draft"
+  },
+  {
+   "id": "digital-micro-shake",
+   "family": "finish",
+   "what_you_see": "A clip that came out too still gets a hand's tiny shake added.",
+   "prompt": "Edit: a tiny irregular shake on a clip that came out too still.",
+   "formats": [
+    "selfie-talk",
+    "walk-and-talk",
+    "street-interview",
+    "pov-hands",
+    "counter-demo"
+   ],
+   "level": 1,
+   "stage": "editing",
+   "also": [
+    "production"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "app-native-captions",
+   "family": "finish",
+   "what_you_see": "Captions look exactly like the app's own caption style (font, motion, glow).",
+   "prompt": "Edit: the caption look of the app the piece pretends to be made in (looks/bank.json).",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 1,
+   "stage": "editing",
+   "also": [],
+   "status": "draft",
+   "source": "the owner 2026-10-20: it can never look like it's being edited off of the phone"
+  },
+  {
+   "id": "imperfect-zoom",
+   "family": "finish",
+   "what_you_see": "A pinch-zoom that overshoots slightly and settles, the way a thumb does it.",
+   "prompt": "Edit: a pinch-zoom that overshoots a touch and settles back.",
+   "formats": [
+    "selfie-talk",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 3,
+   "stage": "editing",
+   "also": [],
+   "status": "draft"
+  },
+  {
+   "id": "breath-before-line",
+   "family": "voice",
+   "what_you_see": "A small audible breath before a line starts.",
+   "prompt": "Voice: a small natural breath before the line.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "stage": "production",
+   "also": [
+    "writing"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "pace-shifts",
+   "family": "voice",
+   "what_you_see": "The voice speeds up on the exciting part and slows on the secret.",
+   "prompt": "Voice: speeds up a little on the exciting part, slows on the secret.",
+   "formats": [
+    "selfie-talk",
+    "propped-phone-talk",
+    "counter-demo",
+    "walk-and-talk",
+    "sit-down-interview",
+    "street-interview",
+    "grwm-mirror",
+    "pov-hands"
+   ],
+   "level": 2,
+   "stage": "writing",
+   "also": [
+    "production"
+   ],
+   "status": "draft"
+  }
+ ],
+ "stages": {
+  "writing": "the production brief decides it: which beat, which line, which shot",
+  "production": "the picture or the clip carries it (its prompt words)",
+  "editing": "the editor adds it (tools/video-edit)"
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "station 1 of the video line on the mini (2026-10-19): mini_step.py --brand --label (--url | --video) --route [--lane --product] --out [--dry-run] — the v2 teardown to the end of stage 2, handed on through Shared Assets runs/video-teardown/<brand>/<label>/ (run_kit.station)",
+  "script": "tools/video-teardown/machine/mini_step.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"url": "--url", "video": "--video", "route": "--route", "lane": "--lane", "product": "--product", "label": "--label"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": ["approve", "structure", "redo", "source", "queue"]
+}

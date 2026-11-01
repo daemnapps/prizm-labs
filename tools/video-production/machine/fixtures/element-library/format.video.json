@@ -1,0 +1,62 @@
+{
+ "element": "format",
+ "asset": "video",
+ "source": "fixture",
+ "enforced_by": null,
+ "note": "TEST-ONLY. Invented rows; the real lists are components/elements/library/.",
+ "rows": [
+  {
+   "id": "fixture-format",
+   "name": "fixture-format",
+   "what": "one still, one motion",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "fixture-second",
+   "name": "fixture-second",
+   "what": "a second defined format",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "fixture-named-only",
+   "name": "fixture-named-only",
+   "what": "[TO DEFINE \u2014 named, and nothing else written yet]",
+   "why_it_works": null,
+   "status": "draft",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  },
+  {
+   "id": "fixture-retired",
+   "name": "fixture-retired",
+   "what": "a format nobody may name any more",
+   "why_it_works": null,
+   "status": "deprecated",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "fixture",
+   "extra": {}
+  }
+ ],
+ "duplicates": []
+}

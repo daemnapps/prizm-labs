@@ -1,0 +1,129 @@
+{
+ "lane": "image",
+ "status": "draft",
+ "about": "A static ad from a swipe: image-teardown stages 1 to 6, the brief number, the pictures, the approval card, the Queue entry. Every step names the file that proves it happened, the checks it must pass, and the fix that acts on a miss.",
+ "steps": [
+  {
+   "id": "swipe",
+   "name": "the real post",
+   "proves": "assets/source.*",
+   "checks": [
+    "source_image",
+    "source_record"
+   ],
+   "fix": null,
+   "why_no_fix": "a run is opened on its swipe by a person or a batch (chain.py open --file): there is nothing to rebuild from"
+  },
+  {
+   "id": "teardown",
+   "name": "1 · teardown",
+   "proves": "out/01-teardown.md",
+   "checks": [
+    "stage_file:01-teardown.md"
+   ],
+   "fix": "run_stage:1"
+  },
+  {
+   "id": "format",
+   "name": "2 · the format",
+   "proves": "out/02-replication-spec.md",
+   "checks": [
+    "stage_file:02-replication-spec.md",
+    "has_words"
+   ],
+   "fix": "run_stage:2"
+  },
+  {
+   "id": "labels",
+   "name": "2b · element labels",
+   "proves": "out/02b-elements.md",
+   "checks": [
+    "stage_file:02b-elements.md",
+    "gate:elements"
+   ],
+   "fix": "run_stage:2b"
+  },
+  {
+   "id": "brand",
+   "name": "3 · brand step",
+   "proves": "out/03-injection.md",
+   "checks": [
+    "stage_file:03-injection.md",
+    "brand_lines",
+    "dials_floor"
+   ],
+   "judge": "brand_native",
+   "fix": "run_stage:3"
+  },
+  {
+   "id": "headlines",
+   "name": "4 · headlines",
+   "proves": "out/04-headlines.md",
+   "checks": [
+    "stage_file:04-headlines.md",
+    "headline_set"
+   ],
+   "fix": "run_stage:4"
+  },
+  {
+   "id": "variations",
+   "name": "5 · picture variations",
+   "proves": "out/05-image-variations.md",
+   "checks": [
+    "stage_file:05-image-variations.md",
+    "variation_set"
+   ],
+   "fix": "run_stage:5"
+  },
+  {
+   "id": "brief",
+   "name": "6 · the brief",
+   "proves": "out/06-brief.md",
+   "checks": [
+    "stage_file:06-brief.md",
+    "gate:copy"
+   ],
+   "fix": "run_stage:6"
+  },
+  {
+   "id": "filed",
+   "name": "the run's record",
+   "proves": "runs/image-teardown/<brand>/<run>/deliverable/06-brief.md",
+   "checks": [
+    "record_filed"
+   ],
+   "fix": "file_record"
+  },
+  {
+   "id": "number",
+   "name": "the brief number",
+   "proves": "tools/image-teardown/briefs.json",
+   "checks": [
+    "brief_number",
+    "brief_links"
+   ],
+   "fix": "open_brief"
+  },
+  {
+   "id": "pictures",
+   "name": "the pictures",
+   "proves": "runs/image-teardown/<brand>/<run>/pictures/*.png",
+   "checks": [
+    "batch_six"
+   ],
+   "fix": "make_pictures",
+   "note": "the approved first picture + its 5 variations (the owner, 2026-10-27); was 3 headlines x 2 casts remade from the swipe"
+  },
+  {
+   "id": "card",
+   "name": "the approval card",
+   "proves": "Shared Assets/meta/<brand>/<state>/image/<ad name>/card.json",
+   "checks": [
+    "card_filed",
+    "card_media",
+    "card_checks"
+   ],
+   "fix": "file_card"
+  }
+ ]
+}

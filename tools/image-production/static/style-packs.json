@@ -1,0 +1,116 @@
+{
+ "_what": "One pack per rendering register. A pack supplies the slots that describe HOW a frame is rendered, never WHAT is in it \u2014 so the same subject can be shot as candid UGC or drawn as flat vector by swapping one word. Read off the registers our own briefs actually used (2026-09-14): five, from six briefs — eight packs today. The element library reads this file as its style/image list.",
+ "_slots_a_pack_owns": [
+  "shot",
+  "light",
+  "grade",
+  "style",
+  "texture",
+  "negatives"
+ ],
+ "_slots_a_pack_never_owns": [
+  "references",
+  "subject",
+  "action",
+  "wardrobe",
+  "setting",
+  "composition",
+  "anchors"
+ ],
+ "packs": {
+  "candid-ugc": {
+   "name": "Candid UGC",
+   "what": "A photograph a real person would have taken of themselves or a friend. The register most swipes are in.",
+   "shot": "close, at the subject's own height, level, straight on, shallow depth so the background falls away",
+   "light": "soft frontal light with a slight top-down bias, raking enough to show surface texture rather than flatter it",
+   "grade": "natural grade, true colour, blacks lifted slightly",
+   "style": "candid, unstyled, native to a phone camera roll",
+   "texture": "unretouched and no better than the source \u2014 visible pores, follicles, marks and micro-shadows, slight softness, the compression and noise of a phone photo, nothing smoothed and nothing upgraded",
+   "negatives": "no studio lighting, no professional retouching, no camera, no phone, no tripod, no lighting equipment in frame, no watermark, no text unless the brief puts it on a surface in the world, not sharper or cleaner than the phone that took it"
+  },
+  "mirror-selfie": {
+   "name": "Mirror selfie",
+   "what": "Shot through a mirror, phone visible in the subject's hands. The only register where a phone belongs in frame, because the mirror explains it.",
+   "shot": "medium close, chest height, level, seen through a wall-mounted mirror, moderate depth with the subject sharp",
+   "light": "hard natural daylight from one side with deep shadow opposite, mixed with ambient room fill",
+   "grade": "natural grade, crushed blacks in the deep shadows",
+   "style": "native phone mirror selfie, unstyled domestic interior",
+   "texture": "unretouched \u2014 real skin with visible pores and natural imperfections",
+   "negatives": "no ring light, no professional lighting, no tripod, no jewellery, no watch, no logos, no watermark, no digital overlays"
+  },
+  "studio-object": {
+   "name": "Studio object",
+   "what": "The product alone on a controlled ground. Everything that reads as the ad is composited afterwards.",
+   "shot": "straight on, level, at the height of the object, centre-weighted, deep focus edge to edge",
+   "light": "soft overhead fill building a smooth gradient, one hard rim light entering from the side",
+   "grade": "high contrast, crushed blacks, clean",
+   "style": "clean digital studio render, no film grain, no texture on the ground beyond its own sheen",
+   "texture": "true material finish \u2014 matte where matte, reflective where reflective",
+   "negatives": "no text, no typography, no watermark, no figures, no hands, no shadows of objects that are not there, no colour outside the stated palette"
+  },
+  "flat-vector": {
+   "name": "Flat vector",
+   "what": "Drawn, not photographed. Meme and comic register \u2014 the swipe file uses it to make a problem safe to look at.",
+   "shot": "straight on, level, chest height, subject centred and cut at the upper thigh, everything equally crisp",
+   "light": "flat, soft and uniform, no modelling",
+   "grade": "solid colour fills on a flat ground",
+   "style": "flat vector illustration, thick black outlines, solid fills, no gradients, meme and comic aesthetic",
+   "texture": "none \u2014 clean digital, no shading, no realistic rendering",
+   "negatives": "no gradients, no shading, no photographic rendering, no watermark"
+  },
+  "diagnostic-scan": {
+   "name": "Diagnostic scan",
+   "what": "A glowing translucent body against a void. Reframes a cosmetic problem as a medical reading.",
+   "shot": "profile or three-quarter, at eye height, level, cropped at the chest, deep focus",
+   "light": "strong warm rim light from behind and to one side, soft fill from the front",
+   "grade": "high contrast, crushed blacks, gradient void from charcoal at centre to near-black at the edges",
+   "style": "clean digital 3D medical infographic, glowing and semi-translucent",
+   "texture": "pathology reads as denser, more opaque interruptions in the glow",
+   "negatives": "no full body, no nudity, no bare chest, no text, no UI, no labels, no callout boxes, no room, no floor, no furniture, no photograph, no face meeting camera"
+  },
+  "selfie": {
+   "name": "Selfie",
+   "what": "She is holding the camera. The phone IS the camera, so it is never in frame \u2014 a phone visible in a selfie means the picture is OF someone taking a selfie, which is a different photograph (the owner, 2026-09-14).",
+   "shot": "arm's length, at her own eye height or slightly above, one arm out of frame toward the lens, close, deep enough focus that the room behind reads",
+   "light": "whatever light the room has \u2014 a window, a lamp, mixed and uncorrected",
+   "grade": "natural, uncorrected, lifted blacks",
+   "style": "a photograph she took of herself on her own phone and posted the same day",
+   "texture": "unretouched and no better than the source \u2014 pores, flyaways, uneven skin, phone-camera softness and noise, nothing smoothed, nothing upgraded",
+   "negatives": "NO PHONE IN FRAME, no camera, no hand holding a device, no mirror unless the brief asks for one, no studio lighting, no ring light, no tripod, no retouching, no shallow cinematic depth of field, no professional portrait lighting, not sharper or cleaner than the phone that took it"
+  },
+  "studio-portrait-bw": {
+   "name": "Studio portrait, black and white",
+   "what": "A deliberate editorial portrait against a void. The one register here that is allowed to look made.",
+   "shot": "close, eye height, level, portrait-compressed, moderate depth",
+   "light": "soft directional loop light from one side, falling off into black",
+   "grade": "black and white, crushed blacks, high contrast on the eyes",
+   "style": "editorial portrait against a dark flat void, no environment",
+   "texture": "every pore, line and hair kept \u2014 the point of the register is age, undisguised",
+   "negatives": "no colour, no sepia, no retouching, no smoothing, no glamour filter, no environment, no furniture, no window, no props, no text, no product"
+  },
+  "vintage-print": {
+   "name": "Scanned vintage print",
+   "what": "Reads as a physical photograph that was kept, held and scanned \u2014 not a filter.",
+   "shot": "mid-shot, chest height, level, moderate depth",
+   "light": "frontal, soft, like a bounced on-camera flash",
+   "grade": "warm sepia or monochrome, lifted blacks",
+   "style": "a scanned physical film print \u2014 heavy grain throughout, creases across the image, yellowed borders, surface glare in one corner",
+   "texture": "the damage is real: grain, folds, the gloss of a print under light",
+   "negatives": "no digital cleanliness, no sharpness, no modern clothing or objects, no text, no watermark, no product"
+  }
+ },
+ "_result_budget": {
+  "_what": "How much better a result is ALLOWED to look. Orthogonal to the packs: a pack says how a frame is rendered, this says what a frame may claim. Set \"result\": true on any slot file whose frame shows an after state, a treated area or a before/after \u2014 the anchors and bans below are appended to that ad's own, and judge.py checks the same list off the picture that comes back.",
+  "_why": "Ruled 2026-09-14, from the AvatarHype extraction. Our texture slot already held skin truth; nothing held the CLAIM. A plate that cleared the skin completely passed every test we ran \u2014 which is a believable machine shipping an unbelievable ad. Their numbers, adopted as-is: a total fix reads as fake, so the fix is never total.",
+  "anchors": "the improvement is partial and incomplete, roughly 60-70% better and never fully cleared; three to five marks from the original condition survive and stay legible; freckles, moles, scars and skin texture are preserved exactly as they were; the same person under the same light as the before frame; healed skin still reads as skin, with pores and micro-shadow",
+  "negatives": "no fully cleared or flawless result, no glow, no halo, no bloom, no airbrushed or plastic skin, no softer lens or warmer grade than the before frame, no evenly spaced or symmetrical marks, no different face, no beauty retouching of any kind",
+  "budget": [
+   "The improvement is PARTIAL \u2014 roughly 60-70% better, never cleared.",
+   "Some of the original condition survives: 3-5 residual marks, still visible, not blurred out.",
+   "Freckles, moles, scars and skin texture are still there. Pores read.",
+   "It is the SAME person in the same light as the before \u2014 not a different face, not a different grade, not a softer lens.",
+   "No glow, no halo, no bloom, no plastic or airbrushed skin.",
+   "Nothing is symmetrical or evenly spaced that would not be in life."
+  ]
+ }
+}

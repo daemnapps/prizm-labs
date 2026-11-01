@@ -1,0 +1,306 @@
+{
+ "schema": 1,
+ "note": "The FULL format bank — every format on every channel, as data. This is the master; formats.json stays the copy machine's write-list (social only) and its rows mirror entries here. Each row's `provenance` says where the spec came from: 'proven' = running in a machine today, 'evidenced' = derived from corpus evidence, 'drafted' = first-principles draft awaiting refinement against the corpus. Refining a drafted spec is the standing work — edit the row, the map redraws.",
+ "formats": [
+  {
+   "key": "primary-text",
+   "channel": "paid-social",
+   "name": "Primary text / caption",
+   "what": "The words above the creative in the feed.",
+   "length": {
+    "min": 50,
+    "max": 120,
+    "unit": "words"
+   },
+   "form": "Real sentences. First line stands alone, then short paragraphs, one idea each, blank line between.",
+   "opens_with": "a line that works with the creative not yet seen",
+   "carries_offer": "optional",
+   "reads_as": "something a person typed, not something a brand approved",
+   "variations": 3,
+   "provenance": "proven — copy machine `caption` row; 216 swiped examples in corpus",
+   "status": "draft"
+  },
+  {
+   "key": "headline",
+   "channel": "paid-social",
+   "name": "Headline",
+   "what": "The bolded line under the creative — the ad's one claim.",
+   "length": {
+    "min": 4,
+    "max": 8,
+    "unit": "words"
+   },
+   "form": "One line. A claim, a contrast, or a named enemy. Title case or sentence case, never all caps.",
+   "opens_with": "the noun or the tension — never the brand name",
+   "carries_offer": "rarely",
+   "reads_as": "the thing you'd repeat to a friend verbatim",
+   "variations": 2,
+   "provenance": "evidenced — 15 real AdPlexity titles in corpus ('Collagen creams can't absorb. This serum can.')",
+   "status": "draft"
+  },
+  {
+   "key": "description",
+   "channel": "paid-social",
+   "name": "Description",
+   "what": "The small line under the headline. Most people never read it.",
+   "length": {
+    "min": 2,
+    "max": 5,
+    "unit": "words"
+   },
+   "form": "A fragment. Reassurance or mechanism, compressed.",
+   "opens_with": "whatever the headline left unsaid",
+   "carries_offer": "guarantee-shorthand only",
+   "reads_as": "a whispered aside",
+   "variations": 2,
+   "provenance": "proven — copy machine defaults (2 at 3 words)",
+   "status": "draft"
+  },
+  {
+   "key": "angle",
+   "channel": "paid-social",
+   "name": "Angle",
+   "what": "The copy block's framing — the bet a brand makes, carried by many creatives. Not an ad; the idea ads are cut from.",
+   "length": {
+    "min": 1,
+    "max": 2,
+    "unit": "sentences"
+   },
+   "form": "One framing statement a stranger could brief ten creatives from.",
+   "opens_with": "the belief being installed or reversed",
+   "carries_offer": "never",
+   "reads_as": "the strategy, said out loud",
+   "requires": "a heat signal before imitation — live creatives and variant count, per METHOD.md",
+   "variations": 1,
+   "provenance": "evidenced — 223 swiped angles across four brands, ranked by heat",
+   "misfiled": "not a copy format — an ANGLE is a CLAIM, the second axis of the model, and it lives in brands/<brand>/strategy/angles.json. Filed here it makes a claim look like a slot. the owner's ruling 2026-09-11; left in place rather than deleted so nothing reading this bank breaks, and marked so nothing reads it as a surface.",
+   "status": "draft"
+  },
+  {
+   "key": "overlay-text",
+   "channel": "paid-social",
+   "name": "Static / video overlay",
+   "what": "Words ON the creative — the message that survives sound-off.",
+   "length": {
+    "min": 3,
+    "max": 12,
+    "unit": "words per card"
+   },
+   "form": "Cards or captions burned into frame. Each card one beat. The set tells the whole story without audio.",
+   "opens_with": "the scroll-stopper — shown and said at once",
+   "carries_offer": "only on the final card",
+   "reads_as": "what the video is saying, not a summary of it",
+   "variations": 2,
+   "provenance": "evidenced — 46 overlay sets extracted from teardowns; music-only sources carry the whole script this way",
+   "status": "draft"
+  },
+  {
+   "key": "video-script",
+   "channel": "paid-social",
+   "name": "Video ad script",
+   "what": "The spoken words of the ad, beat by beat.",
+   "length": {
+    "min": 30,
+    "max": 90,
+    "unit": "seconds"
+   },
+   "form": "Beats against the source's structure — hook, problem, mechanism, proof, close. Written to be spoken, not read.",
+   "opens_with": "the source's own opening move, injected with our language",
+   "carries_offer": "in the close, exactly as the offer file words it",
+   "reads_as": "a person talking, whose sentences you could interrupt",
+   "requires": "a teardown record — scripts are rebuilt from structure, never freestyled",
+   "variations": 6,
+   "provenance": "proven — the video-teardown chain end to end (hooks v11, close v6)",
+   "status": "draft"
+  },
+  {
+   "key": "creator-caption",
+   "channel": "organic-social",
+   "name": "Creator caption",
+   "what": "The post's own words under an organic video or image.",
+   "length": {
+    "min": 5,
+    "max": 80,
+    "unit": "words"
+   },
+   "form": "The creator's register exactly — fragments allowed, emoji where they'd use them, hashtags only if they would.",
+   "opens_with": "the line that makes the video make sense",
+   "carries_offer": "never",
+   "reads_as": "the person who filmed it, typing on their phone",
+   "requires": "the creator's own voice evidence — captions are theirs, not the brand's",
+   "variations": 2,
+   "provenance": "evidenced — 360 real captions in corpus with views/likes signals",
+   "status": "draft"
+  },
+  {
+   "key": "hook-overlay",
+   "channel": "organic-social",
+   "name": "Hook line / overlay",
+   "what": "The first-frame words — the two-second stop decision.",
+   "length": {
+    "min": 3,
+    "max": 10,
+    "unit": "words"
+   },
+   "form": "One line on frame one. A moment shown, not a category claimed.",
+   "opens_with": "the formation the material calls for — free, but sourced from real language",
+   "carries_offer": "never",
+   "reads_as": "how a person starts a sentence, never how an ad does",
+   "requires": "a verbatim seam — every hook traces to a real row or it gets cut",
+   "variations": 6,
+   "provenance": "proven — video-teardown 4b (entry test, four-word test, photograph test)",
+   "status": "draft"
+  },
+  {
+   "key": "organic-post",
+   "channel": "organic-social",
+   "name": "Organic post (short / long)",
+   "what": "A story post with no offer — short-form and long-form per the machine's rows.",
+   "length": {
+    "min": 25,
+    "max": 350,
+    "unit": "words"
+   },
+   "form": "Short: a few hard sentences. Long: full prose that earns its middle.",
+   "opens_with": "short: the sharpest line. long: a promise the length will be worth it",
+   "carries_offer": "never on organic; late and soft when repurposed paid",
+   "reads_as": "a post someone wrote because they wanted to",
+   "variations": 3,
+   "provenance": "proven — copy machine short-form + long-form rows",
+   "status": "draft"
+  },
+  {
+   "key": "organic-script",
+   "channel": "organic-social",
+   "name": "Organic video script",
+   "what": "Spoken words for a native post — the ORGANIC lane's rebuild.",
+   "length": {
+    "min": 20,
+    "max": 90,
+    "unit": "seconds"
+   },
+   "form": "The source's own structure held until the product must enter; commercial structure built, never inherited.",
+   "opens_with": "whatever the source's first two seconds did to stop someone",
+   "carries_offer": "one aside at most — the lane dies if it sells",
+   "reads_as": "the creator's own post, with our subject swapped in",
+   "requires": "a teardown record with lane ORGANIC",
+   "variations": 6,
+   "provenance": "proven — video-teardown ORGANIC lane (expansion stage gated in)",
+   "status": "draft"
+  },
+  {
+   "key": "campaign-email",
+   "channel": "email",
+   "name": "Campaign email",
+   "what": "A one-off send to a segment.",
+   "length": {
+    "min": 40,
+    "max": 200,
+    "unit": "words visible"
+   },
+   "form": "One idea per send. Image-built or text-built per the brand's pattern; the copy carries even inside image alts.",
+   "opens_with": "a first line that pays off the subject within one scroll",
+   "carries_offer": "usually — but the treatment (story/proof/offer) is the concept brief's call",
+   "reads_as": "written to one person who already let us in",
+   "requires": "a concept brief and a segment — the email machine's contract",
+   "variations": 1,
+   "provenance": "proven — email machine; 309 shipped BRAND-A sends classified in corpus",
+   "status": "draft"
+  },
+  {
+   "key": "flow-email",
+   "channel": "email",
+   "name": "Flow email",
+   "what": "A triggered send — welcome, abandon, post-purchase, winback.",
+   "length": {
+    "min": 40,
+    "max": 180,
+    "unit": "words visible"
+   },
+   "form": "Same craft as campaign, but the trigger IS the context — never re-explain what the trigger already proves.",
+   "opens_with": "the moment that fired it, acknowledged in one line",
+   "carries_offer": "per flow position — never in the first welcome",
+   "reads_as": "a reply to something the reader just did",
+   "variations": 1,
+   "provenance": "drafted — flow sends sit inside the BRAND-A scrape, not yet split out",
+   "status": "draft"
+  },
+  {
+   "key": "subject-preview",
+   "channel": "email",
+   "name": "Subject + preview",
+   "what": "The open decision — two fragments doing one job.",
+   "length": {
+    "min": 3,
+    "max": 9,
+    "unit": "words each"
+   },
+   "form": "Subject stops the scan; preview completes or twists it. Never restate one in the other.",
+   "opens_with": "curiosity or named value — never the brand name",
+   "carries_offer": "only when the offer IS the news",
+   "reads_as": "a text from someone you know",
+   "variations": 2,
+   "provenance": "evidenced — 309 subject+preview pairs indexed in the send catalogue",
+   "status": "draft"
+  },
+  {
+   "key": "landing-page",
+   "channel": "owned-pages",
+   "name": "Landing page / advertorial",
+   "what": "The click's destination — attention is spent, conviction is the job.",
+   "length": {
+    "min": 800,
+    "max": 4000,
+    "unit": "words"
+   },
+   "form": "Sections in an argument order: promise → problem owned → mechanism → proof → offer → objections → close. Ad-to-page scent held from the first headline.",
+   "opens_with": "the ad's promise, restated bigger — never a cold brand header",
+   "carries_offer": "yes, staged — price appears after the mechanism, never before",
+   "reads_as": "an editorial that happens to end in a decision",
+   "requires": "the angle that sent the click — page and ad are one argument",
+   "variations": 1,
+   "provenance": "evidenced — 47 swiped pages captured (incl. a 21,490px advertorial), 4 of ours",
+   "status": "draft"
+  },
+  {
+   "key": "quiz",
+   "channel": "owned-pages",
+   "name": "Quiz",
+   "what": "Question-led conviction — the reader tells us the argument to make.",
+   "length": {
+    "min": 5,
+    "max": 12,
+    "unit": "questions"
+   },
+   "form": "Questions a person answers about themselves, each narrowing the recommendation; result page personalizes the pitch.",
+   "opens_with": "a question about THEM, not about the product",
+   "carries_offer": "on the result page only",
+   "reads_as": "a diagnosis, not a funnel",
+   "variations": 1,
+   "provenance": "proven — quiz-funnel skill + 1 shipped brand-b quiz; competitor-b runs quiz.competitor_blab.com as its whole front door",
+   "status": "draft"
+  },
+  {
+   "key": "pdp",
+   "channel": "owned-pages",
+   "name": "PDP",
+   "what": "The product's own page — where every funnel eventually lands.",
+   "length": {
+    "min": 150,
+    "max": 600,
+    "unit": "words above reviews"
+   },
+   "form": "Name, one-line promise, benefit bullets in the customer's words, mechanism, ritual, guarantee exactly as the offer file words it.",
+   "opens_with": "the dominant problem word the avatar actually uses",
+   "carries_offer": "yes — the canonical price, never a channel-specific one",
+   "reads_as": "the calm, complete answer after the ad's excitement",
+   "variations": 1,
+   "provenance": "drafted — brand product files exist; no PDP spec has been exercised by a machine yet",
+   "status": "draft"
+  }
+ ],
+ "asset": "copy",
+ "axis": "surface",
+ "scope": "Copy SURFACES only — WHERE the words go: the headline, the description, the hook line, the subject line. One asset uses several at once. This is NOT the style bank (HOW the copy is written — short-form, long-form story, social proof), which is formats.json in this folder and a different axis entirely. Every ad has a surface AND a style; they are not rivals. The model: components/naming/MODEL.md",
+ "updated": "2026-10-07"
+}

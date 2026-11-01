@@ -1,0 +1,693 @@
+{
+ "schema": 1,
+ "note": "SEED catalogue \u2014 the generic starting set a new brand copies into brands/<brand>/email-sms/email-types.json and then OWNS: usage counts, notes, and brand-born types (a named founder voice, a house subculture) belong to the brand's copy, never here. A TYPE is what the email IS; it belongs to exactly one CATEGORY by one test: whose material is it made of?",
+ "types": [
+  {
+   "key": "sale-window",
+   "status": "draft",
+   "well": "ask",
+   "name": "Sale window",
+   "what": "A discount, open for a stated period.",
+   "needs": [
+    "offer_file"
+   ],
+   "role": "asks",
+   "then": [
+    "last-chance"
+   ]
+  },
+  {
+   "key": "launch",
+   "status": "draft",
+   "well": "ask",
+   "name": "Launch",
+   "what": "A new product, or a new version of one.",
+   "needs": [
+    "product_file",
+    "offer_file"
+   ],
+   "role": "asks",
+   "then": [
+    "proof-drop",
+    "last-chance"
+   ]
+  },
+  {
+   "key": "anticipation",
+   "status": "draft",
+   "well": "ask",
+   "name": "Anticipation",
+   "what": "Before a launch, and selling nothing. Builds the wait so the launch does not have to arrive cold.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "sets-up",
+   "then": [
+    "launch"
+   ]
+  },
+  {
+   "key": "restock",
+   "status": "draft",
+   "well": "ask",
+   "name": "Restock",
+   "what": "A thing they wanted is available again.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "asks",
+   "then": []
+  },
+  {
+   "key": "bundle",
+   "status": "draft",
+   "well": "ask",
+   "name": "Bundle",
+   "what": "Two or more products argued as one purchase.",
+   "needs": [
+    "offer_file",
+    "product_file"
+   ],
+   "role": "asks",
+   "then": [
+    "stack"
+   ]
+  },
+  {
+   "key": "last-chance",
+   "status": "draft",
+   "well": "ask",
+   "name": "Last chance",
+   "what": "A deadline they are about to miss.",
+   "needs": [
+    "offer_file"
+   ],
+   "role": "recovers",
+   "then": []
+  },
+  {
+   "key": "subscription-invite",
+   "status": "draft",
+   "well": "ask",
+   "name": "Subscription invite",
+   "what": "Turn a repeat buyer into a standing order.",
+   "needs": [
+    "offer_file",
+    "product_file"
+   ],
+   "role": "asks",
+   "then": []
+  },
+  {
+   "key": "early-access",
+   "status": "draft",
+   "well": "ask",
+   "name": "Early access",
+   "what": "This list sees it first \u2014 a membership benefit as much as an ask.",
+   "needs": [
+    "offer_file"
+   ],
+   "role": "asks",
+   "then": [
+    "launch"
+   ]
+  },
+  {
+   "key": "gift-guide",
+   "status": "draft",
+   "well": "ask",
+   "name": "Gift guide",
+   "what": "Written for the buyer, not the user.",
+   "needs": [
+    "product_file",
+    "offer_file"
+   ],
+   "role": "asks",
+   "then": [
+    "last-chance"
+   ]
+  },
+  {
+   "key": "problem-explainer",
+   "status": "draft",
+   "well": "help",
+   "name": "Problem explainer",
+   "what": "One condition, taken seriously, in their words.",
+   "needs": [
+    "language_bank",
+    "objection_bank"
+   ],
+   "role": "earns",
+   "then": [
+    "objection-shot",
+    "mechanism"
+   ]
+  },
+  {
+   "key": "routine",
+   "status": "draft",
+   "well": "help",
+   "name": "Routine / how-to",
+   "what": "How to actually use it, in what order, how often.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "earns",
+   "then": [
+    "stack"
+   ]
+  },
+  {
+   "key": "mechanism",
+   "status": "draft",
+   "well": "help",
+   "name": "Why it works",
+   "what": "The mechanism, only as far as the doubt requires.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "myth-correction",
+   "status": "draft",
+   "well": "help",
+   "name": "Myth correction",
+   "what": "A thing this customer is told about the category that is wrong.",
+   "needs": [
+    "objection_bank",
+    "language_bank"
+   ],
+   "role": "earns",
+   "then": [
+    "objection-shot"
+   ]
+  },
+  {
+   "key": "mistake-audit",
+   "status": "draft",
+   "well": "help",
+   "name": "Mistake audit",
+   "what": "Three things you are doing that cause the thing you hate.",
+   "needs": [
+    "objection_bank",
+    "language_bank"
+   ],
+   "role": "earns",
+   "then": [
+    "routine"
+   ]
+  },
+  {
+   "key": "switch",
+   "status": "draft",
+   "well": "help",
+   "name": "The switch",
+   "what": "Against what they used before, honestly.",
+   "needs": [
+    "objection_bank"
+   ],
+   "role": "earns",
+   "then": [
+    "proof-drop"
+   ]
+  },
+  {
+   "key": "seasonal-skin",
+   "status": "draft",
+   "well": "help",
+   "name": "Seasonal shift",
+   "what": "What changes for this customer's problem in this season.",
+   "needs": [
+    "language_bank"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "objection-shot",
+   "status": "draft",
+   "well": "help",
+   "name": "Single objection",
+   "what": "One belief, taken on end to end, nothing else in the email.",
+   "needs": [
+    "objection_bank"
+   ],
+   "role": "recovers",
+   "then": []
+  },
+  {
+   "key": "stack",
+   "status": "draft",
+   "well": "help",
+   "name": "The stack",
+   "what": "How the products work together \u2014 cross-sell as education, not as a bundle pitch.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "earns",
+   "then": [
+    "bundle"
+   ]
+  },
+  {
+   "key": "moment",
+   "status": "draft",
+   "well": "belong",
+   "name": "Moment tie-in",
+   "what": "Something happening in the world this avatar is already inside.",
+   "needs": [
+    "cultural_moments"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "holiday",
+   "status": "draft",
+   "well": "belong",
+   "name": "Holiday, with an angle",
+   "what": "A holiday that means something to this avatar, not every holiday.",
+   "needs": [
+    "cultural_moments"
+   ],
+   "role": "earns",
+   "then": [
+    "gift-guide"
+   ]
+  },
+  {
+   "key": "ritual",
+   "status": "draft",
+   "well": "belong",
+   "name": "Seasonal ritual",
+   "what": "Back to school, prom, the summer cut, the new-year reset.",
+   "needs": [
+    "cultural_moments"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "subculture",
+   "status": "draft",
+   "well": "belong",
+   "name": "Subculture",
+   "what": "The room this avatar already sits in, regularly, talking about exactly this.",
+   "needs": [
+    "avatar"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "regional",
+   "status": "draft",
+   "well": "belong",
+   "name": "Regional",
+   "what": "Where they actually are.",
+   "needs": [
+    "cultural_moments"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "opinion",
+   "status": "draft",
+   "well": "brand",
+   "name": "Opinion",
+   "what": "A position on something in the category, taken out loud.",
+   "needs": [
+    "avatar"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "spotlight",
+   "status": "draft",
+   "well": "real",
+   "name": "Customer spotlight",
+   "what": "One named person and what happened to them.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": [
+    "proof-drop"
+   ]
+  },
+  {
+   "key": "someone-like-you",
+   "status": "draft",
+   "well": "real",
+   "name": "Someone like you",
+   "what": "A customer matched to the reader's own segment, pain point or state.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "proof-drop",
+   "status": "draft",
+   "well": "real",
+   "name": "Proof drop",
+   "what": "Several results at once, named, nothing else.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "milestone",
+   "status": "draft",
+   "well": "brand",
+   "name": "Milestone",
+   "what": "An anniversary, a count reached, a batch number. Our own history.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "reader-question",
+   "status": "draft",
+   "well": "real",
+   "name": "Reader question",
+   "what": "A real question someone asked, answered in public.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "closes",
+   "then": []
+  },
+  {
+   "key": "founder-note",
+   "status": "draft",
+   "well": "brand",
+   "name": "Founder note",
+   "what": "The founder, writing as themselves, about something that is actually true.",
+   "needs": [
+    "sender_identity"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "roll-call",
+   "status": "draft",
+   "well": "real",
+   "name": "Roll call",
+   "what": "Welcoming the people who just joined, to the people already here.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "mission",
+   "status": "draft",
+   "well": "brand",
+   "name": "Mission",
+   "what": "What this is for and who it is for, stated as a position.",
+   "needs": [
+    "avatar"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "behind-the-scenes",
+   "status": "draft",
+   "well": "brand",
+   "name": "Behind the scenes",
+   "what": "What we are building and how it is actually made.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "earns",
+   "then": [
+    "launch"
+   ]
+  },
+  {
+   "key": "what-went-wrong",
+   "status": "draft",
+   "well": "brand",
+   "name": "What went wrong",
+   "what": "A mistake, named, and what was done about it.",
+   "needs": [],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "trend",
+   "status": "draft",
+   "well": "belong",
+   "name": "Trend",
+   "what": "What is circulating in their world right now \u2014 not an event with a date, the ambient thing everyone is talking about.",
+   "needs": [
+    "cultural_moments"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "room-answered",
+   "status": "draft",
+   "well": "real",
+   "name": "The room answered",
+   "what": "We asked, and here is what four hundred of you said.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "closes",
+   "then": []
+  },
+  {
+   "key": "peer-advice",
+   "status": "draft",
+   "well": "real",
+   "name": "Peer advice",
+   "what": "What the guys who already solved this actually did.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "product-spotlight",
+   "status": "draft",
+   "well": "ask",
+   "name": "Product spotlight",
+   "what": "One product, what it does, why now. No discount, no deadline \u2014 the product is the whole email.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "asks",
+   "then": [
+    "proof-drop"
+   ]
+  },
+  {
+   "key": "guarantee",
+   "status": "draft",
+   "well": "ask",
+   "name": "Risk reversal",
+   "what": "The guarantee as the entire argument. Takes away the reason not to try it.",
+   "needs": [
+    "offer_file"
+   ],
+   "role": "recovers",
+   "then": []
+  },
+  {
+   "key": "availability",
+   "status": "draft",
+   "well": "ask",
+   "name": "Where to get it",
+   "what": "A new place to buy it \u2014 a marketplace, a retailer, a channel.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "asks",
+   "then": []
+  },
+  {
+   "key": "channel-invite",
+   "status": "draft",
+   "well": "ask",
+   "name": "Channel invite",
+   "what": "Join us somewhere else \u2014 text, app, a list within the list.",
+   "needs": [],
+   "role": "asks",
+   "then": []
+  },
+  {
+   "key": "product-finder",
+   "status": "draft",
+   "well": "help",
+   "name": "Product finder",
+   "what": "A few questions that end on the right product for them.",
+   "needs": [
+    "product_file"
+   ],
+   "role": "earns",
+   "then": [
+    "product-spotlight"
+   ]
+  },
+  {
+   "key": "content-request",
+   "status": "draft",
+   "well": "real",
+   "name": "Content request",
+   "what": "Asking customers for their photo, video or review.",
+   "needs": [
+    "customer_base"
+   ],
+   "role": "earns",
+   "then": [
+    "proof-drop",
+    "spotlight"
+   ]
+  },
+  {
+   "key": "sunset",
+   "status": "draft",
+   "well": "brand",
+   "name": "Are you still there",
+   "what": "A last email to someone who has stopped opening. Honest about being the last.",
+   "needs": [],
+   "role": "recovers",
+   "then": []
+  },
+  {
+   "key": "affiliate-feature",
+   "status": "draft",
+   "well": "affiliate",
+   "name": "Affiliate feature",
+   "what": "One partner product, recommended with our own commentary and a tracked link \u2014 their offer, not ours.",
+   "needs": [
+    "affiliate_file"
+   ],
+   "role": "earns",
+   "then": []
+  },
+  {
+   "key": "affiliate-roundup",
+   "status": "draft",
+   "well": "affiliate",
+   "name": "Affiliate roundup",
+   "what": "Several partner picks in one send, grouped around a theme (a season, a use case, a price point).",
+   "needs": [
+    "affiliate_file"
+   ],
+   "role": "earns",
+   "then": []
+  }
+ ],
+ "forms": [
+  {
+   "key": "designed",
+   "status": "draft",
+   "name": "Designed template",
+   "what": "Blocks, images, buttons. The default for anything from the Ask well.",
+   "sender": "brand"
+  },
+  {
+   "key": "rich-text",
+   "status": "draft",
+   "name": "Rich text with a name card",
+   "what": "Reads like a person wrote it, with a small identity card. The personal-voice forms.",
+   "sender": "person"
+  },
+  {
+   "key": "plain-text",
+   "status": "draft",
+   "name": "Plain text",
+   "what": "No design at all. Highest reply rate, lowest production cost.",
+   "sender": "person"
+  },
+  {
+   "key": "image-led",
+   "status": "draft",
+   "name": "Image led",
+   "what": "The picture carries it; copy is captioning. Needs the image lane.",
+   "sender": "brand"
+  },
+  {
+   "key": "text-led",
+   "status": "draft",
+   "name": "Text led",
+   "what": "Designed, but the argument is in the words.",
+   "sender": "brand"
+  }
+ ],
+ "modifiers": [
+  {
+   "key": "rebroadcast",
+   "status": "draft",
+   "name": "Rebroadcast to non-openers",
+   "what": "The same email, new subject, to the people who did not open. Already house practice \u2014 worth rules rather than habit."
+  },
+  {
+   "key": "awareness-variant",
+   "status": "draft",
+   "name": "Awareness variant",
+   "what": "The same type, rebuilt for a different awareness level. Unaware 249 and Product-Aware 26 are not the same email about the same thing."
+  },
+  {
+   "key": "segment-mirror",
+   "status": "draft",
+   "name": "Segment mirror",
+   "what": "The same occasion, resolved through a different lifecycle language bank."
+  }
+ ],
+ "treatments": [
+  {
+   "key": "humour",
+   "status": "draft",
+   "name": "Humour",
+   "what": "Entertainment is not a category \u2014 it has no material of its own. A funny sports email is Cultural; a funny founder story is Brand."
+  },
+  {
+   "key": "question",
+   "status": "draft",
+   "name": "A question",
+   "what": "A poll, a survey, a vote. Asking about a product is Promotional; asking about their skin is Educational."
+  },
+  {
+   "key": "no-ask",
+   "status": "draft",
+   "name": "No ask",
+   "what": "Deliberately nothing to click. What proves the other four are not a wind-up."
+  },
+  {
+   "key": "proof",
+   "status": "draft",
+   "name": "Proof",
+   "what": "Photos, numbers, results. Attaches to any category rather than being one."
+  }
+ ],
+ "rule": "A type earns its place by being genuinely distinct under the category test, never by filling out a column. A thin category is a finding to call out, not a hole to pad.",
+ "arc": {
+  "note": "A slot is a MOVE IN A SEQUENCE, never a standalone send.",
+  "roles": {
+   "earns": "Buys the right to ask later. Asks for nothing itself.",
+   "sets-up": "Points at a specific ask that has not happened yet.",
+   "asks": "The ask.",
+   "recovers": "Runs after an ask that did not land. Never the first ask.",
+   "closes": "The second half of something already sent."
+  },
+  "rule": "Cadence is not a rule: no target number of sends, no fixed share that may ask. The arc governs ORDER; the brand's own measured data governs FREQUENCY."
+ }
+}

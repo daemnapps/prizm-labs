@@ -1,0 +1,80 @@
+{
+ "schema": 1,
+ "note": "The sourcing layer — WHO each corpus source was written for, and which of our brand/avatar pairs may draw on it. Copy inherits its audience from where it was sourced: a swipe aimed at a 54-year-old woman never feeds copy aimed at a 15-year-old. `market` is evidenced from the source itself; `fits` is a RULING — only the owner fills it, and an empty fits list means the source is quarantined from injection until he does.",
+ "sources": {
+  "competitor-a": {
+   "kind": "adplexity-sweep",
+   "market": "women 45+, aging skin — foundation/serum angles ('at 52', collagen, jowls, wrinkles)",
+   "evidence": "components/swipe-paid/competitor-a/_BRAND.md + angle titles",
+   "fits": []
+  },
+  "competitor-c": {
+   "kind": "adplexity-sweep",
+   "market": "teens / young adults, acne — 'teen hormonal acne', 'understand your acne type'",
+   "evidence": "components/swipe-paid/competitor-c/_BRAND.md + angle titles",
+   "fits": []
+  },
+  "competitor_blab": {
+   "kind": "adplexity-sweep",
+   "market": "older men, aging face and neck — 'best-selling men's face treatment in Italy', 'old man', 'masculine neck definition'; Italian-origin brand, roughly half the angles in Italian",
+   "evidence": "components/swipe-paid/competitor_blab/angles/ primary texts, verbatim",
+   "fits": [],
+   "removed": {
+    "by": "the owner",
+    "on": "2026-10-02",
+    "why": "\"remove all of the competitor-b lab stuff and marks men stuff\" — the first swipes for ad copy are BRAND-A's own ads in its ad account",
+    "names": [
+     "competitor_blab",
+     "competitor-b"
+    ]
+   }
+  },
+  "damon-saves": {
+   "kind": "saved-posts-capture",
+   "market": "mixed — saved for market-opportunity / viral / novel-format signal, not one audience; per-row avatar_fit and bucket tags carry what is known",
+   "evidence": "components/swipe-organic/records/damon-saves/catalog.json",
+   "fits": []
+  },
+  "brand-a-email": {
+   "kind": "our-shipped-sends",
+   "market": "BRAND-A's own list — men, grooming/skincare",
+   "evidence": "lab/damon/brands/brand-a/email/",
+   "fits": [
+    {
+     "brand": "brand-a"
+    }
+   ]
+  },
+  "video-teardowns": {
+   "kind": "teardown-runs",
+   "market": "per-run — each run's audience stage names the avatar and funnel it was torn down for; rows carry that verdict",
+   "evidence": "runs/video-writing/*/*/stages/1b-audience.md",
+   "fits": "per-row"
+  },
+  "brand-b-pages": {
+   "kind": "our-pages",
+   "market": "Brand-B's own market — women 45+, body skin",
+   "evidence": "lab/damon/brands/brand-b/existing-content/",
+   "fits": [
+    {
+     "brand": "brand-b"
+    }
+   ]
+  },
+  "marsmen": {
+   "kind": "adplexity-sweep",
+   "market": "men, skin and grooming",
+   "evidence": "components/swipe-paid/marsmen/",
+   "fits": [],
+   "removed": {
+    "by": "the owner",
+    "on": "2026-10-02",
+    "why": "\"remove all of the competitor-b lab stuff and marks men stuff\" — the first swipes for ad copy are BRAND-A's own ads in its ad account",
+    "names": [
+     "marsmen",
+     "mars men"
+    ]
+   }
+  }
+ }
+}

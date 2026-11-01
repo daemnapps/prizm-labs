@@ -1,0 +1,7 @@
+{
+  "_fixture": "Shape of brands/<brand>/web/funnels/funnels.json: the brand domain every live ad uses, one funnel per product.",
+  "funnels": [
+    {"id": "glow-offer", "product": "glow-balm", "url": "https://shop.zzbrand.example/zz-glow/"},
+    {"id": "lip-offer", "product": "lip-balm", "url": "https://shop.zzbrand.example/zz-lip/"}
+  ]
+}

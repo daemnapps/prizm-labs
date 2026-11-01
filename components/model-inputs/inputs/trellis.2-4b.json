@@ -1,0 +1,225 @@
+{
+ "model": "trellis.2-4b",
+ "medium": "3d",
+ "_readme": [
+  "TRELLIS.2 makes the product turntable from one real photo, so a product is rendered and never drawn.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "TRELLIS.2 4B (image to 3D)",
+ "registry_id": "trellis.2-4b",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "door": "local",
+  "outputs": "sample.glb, sample.mp4"
+ },
+ "sources": [
+  "https://github.com/microsoft/TRELLIS.2",
+  "[ours] tools/video-production/PRODUCT-KITS.md"
+ ],
+ "limits": {
+  "input_images": 1,
+  "output": "PBR GLB plus a preview video",
+  "grid_resolutions": [
+   "512",
+   "1024",
+   "1536"
+  ],
+  "time_h100_seconds": {
+   "512": 3,
+   "1024": 17,
+   "1536": 60
+  },
+  "gpu": "NVIDIA, at least 24 GB; tested on A100 and H100",
+  "platform": "Linux only tested",
+  "decimation_target_faces_example": 1000000,
+  "texture_px_example": 4096,
+  "house": {
+   "use": "builds the product turntable from one real photo",
+   "product_rule": "the product is never drawn: a render of the 3D model is the picture (product-from-3D-model rule)"
+  }
+ },
+ "qualities": [
+  "512",
+  "1024",
+  "1536"
+ ],
+ "inputs": [
+  {
+   "name": "image",
+   "what": "The one picture the model is built from.",
+   "allowed": "a single image",
+   "we_send": "the cleanest whole-product photo, nothing cut off, plain background",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "resolution",
+   "what": "Grid size of the shape.",
+   "allowed": "512, 1024, 1536",
+   "we_send": "1024",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "seed",
+   "what": "Repeat a build.",
+   "allowed": "integer",
+   "we_send": "pinned and recorded",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "decimation target",
+   "what": "Simplify the mesh for export.",
+   "allowed": "faces; the example uses 1,000,000",
+   "we_send": "default",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "texture size",
+   "what": "Baked texture.",
+   "allowed": "pixels; the example uses 4096",
+   "we_send": "4096 for a label",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "alpha",
+   "what": "Transparency in the texture.",
+   "allowed": "stored but inactive until connected in the 3D tool",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "attention backend",
+   "what": "Which attention kernel.",
+   "allowed": "flash-attn, or xformers via ATTN_BACKEND",
+   "we_send": "default",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "memory setting",
+   "what": "Reduce GPU memory.",
+   "allowed": "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True",
+   "we_send": "set when memory fails",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  },
+  {
+   "name": "view/camera for preview",
+   "what": "Preview video.",
+   "allowed": "rendered with environment lighting",
+   "we_send": "turntable orbit",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://github.com/microsoft/TRELLIS.2"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "one-clean-photo",
+   "rule": "Give it one clean, whole picture of the product; the model builds everything else from it.",
+   "ours": "kit photo chosen by the product check",
+   "status": "draft",
+   "source": "https://github.com/microsoft/TRELLIS.2"
+  },
+  {
+   "id": "check-the-label",
+   "rule": "Read the label on the turntable: a build can warp text; compare against the real photo before the model is used.",
+   "ours": "product_check.py",
+   "status": "draft",
+   "source": "[ours] PRODUCT-KITS.md"
+  },
+  {
+   "id": "1024-default",
+   "rule": "1024 builds in about 17 s on an H100; use 1536 only when the label is unreadable at 1024.",
+   "ours": "1024",
+   "status": "draft",
+   "source": "https://github.com/microsoft/TRELLIS.2"
+  },
+  {
+   "id": "glb-opaque",
+   "rule": "The export is opaque; if the cut-out matters, connect the alpha in the 3D tool.",
+   "ours": "turntable renders on a plain set",
+   "status": "draft",
+   "source": "https://github.com/microsoft/TRELLIS.2"
+  },
+  {
+   "id": "render-not-draw",
+   "rule": "Pictures of the product come from renders of this model or the real photo, never drawn.",
+   "ours": "product-from-3D-model rule",
+   "status": "draft",
+   "source": "[ours] PRODUCT-KITS.md"
+  },
+  {
+   "id": "a-gpu-machine",
+   "rule": "It needs a 24 GB NVIDIA GPU on Linux; on the Mac it runs through the door that has one.",
+   "ours": "door local means the worker that has the GPU",
+   "status": "draft",
+   "source": "https://github.com/microsoft/TRELLIS.2"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "several-photos",
+   "text": "Expecting it to merge several photos: it takes one.",
+   "status": "draft",
+   "source": "https://github.com/microsoft/TRELLIS.2"
+  },
+  {
+   "id": "cut-off-product",
+   "text": "A photo with the product cut off: the missing part is invented.",
+   "status": "draft",
+   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+  },
+  {
+   "id": "smear-behind",
+   "text": "A photo with a smear or reflection on or behind the product.",
+   "status": "draft",
+   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+  },
+  {
+   "id": "unchecked-label",
+   "text": "Using the turntable without comparing the label to the real photo.",
+   "status": "draft",
+   "source": "[ours] PRODUCT-KITS.md"
+  },
+  {
+   "id": "run-on-mac",
+   "text": "Running it on a laptop without the GPU.",
+   "status": "draft",
+   "source": "https://github.com/microsoft/TRELLIS.2"
+  }
+ ]
+}

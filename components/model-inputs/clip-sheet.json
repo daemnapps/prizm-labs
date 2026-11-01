@@ -1,0 +1,484 @@
+{
+ "_readme": "THE CLIP VARIABLE SHEET: every input a clip chain takes. A recipe is this sheet filled in, under the same rules as the picture sheet (picture-sheet.json `rules`, PSH-1 to PSH-8) plus the clip rules below. The creative dials that apply to video and the 9 guards are added from components/creative-controls/controls.json when the sheet loads. Kinds as in picture-sheet.json.",
+ "status": "draft",
+ "version": 1,
+ "rules": [
+  {
+   "id": "CSH-1",
+   "tag": "voice is audio",
+   "rule": "The spoken line reaches the model only as the voice read (Audio 1); its words are never typed into the prompt."
+  },
+  {
+   "id": "CSH-2",
+   "tag": "maker's four blocks",
+   "rule": "The clip prompt keeps the maker's four blocks (the files, the look, second by second, always) from video-production/machine/seedance_prompt.py; scene fields reach the clip through those blocks."
+  },
+  {
+   "id": "CSH-3",
+   "tag": "changed dials said",
+   "rule": "A dial, feeling or technique a person changes on the Bench adds its level words as one 'Tone' sentence to the look block; levels set by the brief reach the clip through the brief's scene fields and are recorded on the sheet."
+  },
+  {
+   "id": "CSH-4",
+   "tag": "frames from one sheet",
+   "rule": "A start and an end picture come from one picture sheet (PSH-7 (one sheet per scene)); a mismatch is flagged and the best attempt used (PSH-8 (outputs never stop))."
+  },
+  {
+   "id": "CSH-5",
+   "tag": "no spend unpressed",
+   "rule": "The clip is made only on a person's press or a strategy's recorded cost approval; the preview quotes the cost for free."
+  },
+  {
+   "id": "CSH-6",
+   "tag": "emotion is visible",
+   "rule": "A shot with an emotion carries a face and gestures (visible actions, not emotion words); a shot with an emotion and no face or gestures is MISSING, not applicable only when the brief writes no emotion."
+  },
+  {
+   "id": "CSH-7",
+   "tag": "no silent gaps",
+   "rule": "A person's life marks and own gestures are filled from the character file, or not applicable with 'no character file', so a missing file shows instead of sending nothing."
+  }
+ ],
+ "groups": [
+  {
+   "id": "brief",
+   "name": "From the brief"
+  },
+  {
+   "id": "inputs",
+   "name": "What goes in"
+  },
+  {
+   "id": "clip",
+   "name": "What happens"
+  },
+  {
+   "id": "people",
+   "name": "The people"
+  },
+  {
+   "id": "settings",
+   "name": "The settings"
+  },
+  {
+   "id": "rules",
+   "name": "Do not do"
+  },
+  {
+   "id": "creative",
+   "name": "The creative dials"
+  },
+  {
+   "id": "guards",
+   "name": "Always protected"
+  },
+  {
+   "id": "run",
+   "name": "The run"
+  }
+ ],
+ "variables": [
+  {
+   "id": "brand",
+   "group": "brief",
+   "name": "Brand",
+   "means": "Whose ad this is.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "video",
+   "group": "brief",
+   "name": "The video",
+   "means": "The video run this clip belongs to.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "clip_id",
+   "group": "brief",
+   "name": "Which clip",
+   "means": "The clip of the video being made.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "scene",
+   "group": "brief",
+   "name": "The scene",
+   "means": "The scene of the brief this clip shows.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "start_picture",
+   "group": "inputs",
+   "name": "The start picture",
+   "means": "The first frame. The clip starts exactly on it.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "end_picture",
+   "group": "inputs",
+   "name": "The end picture",
+   "means": "The last frame, for a silent clip that ends somewhere new.",
+   "kind": "text",
+   "na": [
+    "a talking clip takes no end picture",
+    "the clip ends where it starts"
+   ]
+  },
+  {
+   "id": "voice",
+   "group": "inputs",
+   "name": "The voice read",
+   "means": "The locked read of the line, sent as audio.",
+   "kind": "text",
+   "na": [
+    "a silent clip"
+   ]
+  },
+  {
+   "id": "motion_refs",
+   "group": "inputs",
+   "name": "Motion from the ad",
+   "means": "Blurred pieces of the swipe's shot, for how the camera and hands move.",
+   "kind": "list",
+   "na": [
+    "this section does not copy the swipe's movement"
+   ]
+  },
+  {
+   "id": "frames_match",
+   "group": "inputs",
+   "name": "Start and end pictures match",
+   "means": "Both pictures come from one picture sheet.",
+   "kind": "text",
+   "na": [
+    "a talking clip takes no end picture",
+    "the clip ends where it starts",
+    "the video run chose both pictures"
+   ]
+  },
+  {
+   "id": "happens",
+   "group": "clip",
+   "name": "What happens",
+   "means": "The visible actions, one per few seconds.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "shot_emotion",
+   "group": "clip",
+   "name": "The feeling in the brief",
+   "means": "The emotion the brief writes for this shot. It is never sent as a word; it reaches the clip as the face and hands.",
+   "kind": "text",
+   "na": [
+    "the brief writes no emotion for this shot"
+   ]
+  },
+  {
+   "id": "face",
+   "group": "clip",
+   "name": "The face",
+   "means": "What the face does.",
+   "kind": "text",
+   "na": [
+    "no face in this clip",
+    "the brief writes no emotion for this shot"
+   ]
+  },
+  {
+   "id": "hands",
+   "group": "clip",
+   "name": "The hands",
+   "means": "What the hands do.",
+   "kind": "text",
+   "na": [
+    "no hands in this clip",
+    "the brief writes no emotion for this shot"
+   ]
+  },
+  {
+   "id": "acting",
+   "group": "clip",
+   "name": "Face and hands check",
+   "means": "The clip builder's own check that every shot's face and gestures are set (filled, or not applicable with its reason).",
+   "kind": "text",
+   "na": [
+    "no people in this clip"
+   ]
+  },
+  {
+   "id": "camera",
+   "group": "clip",
+   "name": "The camera",
+   "means": "One move from the list.",
+   "kind": "choice",
+   "allowed": [
+    "selfie",
+    "mirror",
+    "held",
+    "still",
+    "push-in",
+    "pan",
+    "tilt",
+    "arc",
+    "handheld",
+    "hold"
+   ],
+   "na": []
+  },
+  {
+   "id": "look",
+   "group": "clip",
+   "name": "The look",
+   "means": "The one look for the whole video.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "ends_on",
+   "group": "clip",
+   "name": "How it ends",
+   "means": "What the take ends on.",
+   "kind": "text",
+   "na": [
+    "the next clip carries straight on",
+    "the brief sets no end for this take"
+   ]
+  },
+  {
+   "id": "hand_off",
+   "group": "clip",
+   "name": "How it hands on",
+   "means": "How this take joins the next: a cut, continuous, on the action, matched or a whip.",
+   "kind": "choice",
+   "allowed": [
+    "cut",
+    "continuous",
+    "action",
+    "match",
+    "whip"
+   ],
+   "na": [
+    "the last clip of the video"
+   ]
+  },
+  {
+   "id": "who",
+   "group": "people",
+   "name": "Who is in it",
+   "means": "The cast member on screen.",
+   "kind": "text",
+   "na": [
+    "no people in this clip"
+   ]
+  },
+  {
+   "id": "marks",
+   "group": "people",
+   "name": "Their marks",
+   "means": "Scars, stains, jewellery kept exactly as in the picture.",
+   "kind": "text",
+   "na": [
+    "no people in this clip",
+    "no character file",
+    "spice level 1 leaves marks out"
+   ]
+  },
+  {
+   "id": "own_gestures",
+   "group": "people",
+   "name": "Their own gestures",
+   "means": "Two of the person's habits, used when the shot names no gestures.",
+   "kind": "text",
+   "na": [
+    "no people in this clip",
+    "no character file",
+    "the shot names its own gestures",
+    "spice level 1 or 2 leaves them out"
+   ]
+  },
+  {
+   "id": "duration",
+   "group": "settings",
+   "name": "Length",
+   "means": "Seconds: the read plus a little, 4 to 30.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "resolution",
+   "group": "settings",
+   "name": "Quality",
+   "means": "Made small, sharpened on this Mac.",
+   "kind": "choice",
+   "allowed": [
+    "480p",
+    "720p",
+    "1080p"
+   ],
+   "na": []
+  },
+  {
+   "id": "shape",
+   "group": "settings",
+   "name": "The shape",
+   "means": "Tall 9:16.",
+   "kind": "choice",
+   "allowed": [
+    "9:16"
+   ],
+   "na": []
+  },
+  {
+   "id": "spice",
+   "group": "settings",
+   "name": "How lived-in",
+   "means": "1 clean · 2 lived-in · 3 fully lived.",
+   "kind": "choice",
+   "allowed": [
+    "1",
+    "2",
+    "3"
+   ],
+   "na": []
+  },
+  {
+   "id": "realism",
+   "group": "settings",
+   "name": "Real-life details",
+   "means": "The small true details sent with the clip.",
+   "kind": "list",
+   "na": [
+    "the format has no realism rows"
+   ]
+  },
+  {
+   "id": "no_subtitles",
+   "group": "rules",
+   "name": "No subtitles",
+   "means": "No words burnt into the clip.",
+   "kind": "choice",
+   "allowed": [
+    "yes"
+   ],
+   "na": []
+  },
+  {
+   "id": "no_music",
+   "group": "rules",
+   "name": "No background music",
+   "means": "Music is added at the edit.",
+   "kind": "choice",
+   "allowed": [
+    "yes"
+   ],
+   "na": []
+  },
+  {
+   "id": "line_not_typed",
+   "group": "rules",
+   "name": "The line is never typed",
+   "means": "CSH-1 (voice is audio).",
+   "kind": "choice",
+   "allowed": [
+    "yes"
+   ],
+   "na": [
+    "a silent clip"
+   ]
+  },
+  {
+   "id": "preset",
+   "group": "creative",
+   "name": "The preset",
+   "means": "The set of dial levels the video aims for.",
+   "kind": "choice",
+   "allowed_from": "presets",
+   "na": [
+    "the video brief names no preset"
+   ]
+  },
+  {
+   "id": "emotion",
+   "group": "creative",
+   "name": "The feeling, from the bank",
+   "means": "The bank emotion the brief's feeling matches.",
+   "kind": "list",
+   "allowed_from": "emotions",
+   "na": [
+    "the brief's feeling has no match in the emotion bank",
+    "the brief writes no emotion for this shot"
+   ]
+  },
+  {
+   "id": "emotion_video",
+   "group": "creative",
+   "name": "How that feeling looks on camera",
+   "means": "The emotion bank's video line, for the face and hands.",
+   "kind": "text",
+   "na": [
+    "the brief's feeling has no match in the emotion bank",
+    "the brief writes no emotion for this shot"
+   ]
+  },
+  {
+   "id": "techniques",
+   "group": "creative",
+   "name": "The techniques",
+   "means": "The moves the clip uses.",
+   "kind": "list",
+   "allowed_from": "techniques",
+   "na": [
+    "the scene copies the swipe's own moves"
+   ]
+  },
+  {
+   "id": "backups",
+   "group": "run",
+   "name": "If it fails",
+   "means": "What takes over, in order.",
+   "kind": "list",
+   "na": []
+  },
+  {
+   "id": "run_label",
+   "group": "run",
+   "name": "The run name",
+   "means": "Where the clip is filed.",
+   "kind": "text",
+   "na": []
+  },
+  {
+   "id": "cost_approval",
+   "group": "run",
+   "name": "Cost approved by",
+   "means": "Who said yes to spending on this clip.",
+   "kind": "text",
+   "na": []
+  }
+ ],
+ "dial_media": "video",
+ "dial_na": [
+  "not used in a clip",
+  "the video brief sets no level for this dial"
+ ],
+ "required_dials": [
+  "intensity",
+  "absurdity",
+  "humor",
+  "dramatisation",
+  "stopping_power"
+ ],
+ "locked_in_a_set": [],
+ "free_in_a_set": [],
+ "output_checks": {
+  "max_attempts": 3
+ },
+ "history": "2026-10-26: created beside picture-sheet.json.",
+ "required_dials_why": "PSH-3 (guard dials set) applies to clips as to pictures."
+}

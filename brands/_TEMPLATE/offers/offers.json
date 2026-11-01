@@ -1,0 +1,21 @@
+{
+ "schema": 1,
+ "brand": "<brand>",
+ "lane": null,
+ "scope": "Offers ONLY — what an asset sells. Not angles (what we claim), not formats (how it is built), not prices on a PDP. One offer per thing the brand sells into. The model: components/naming/MODEL.md",
+ "source": "<where these came from — the store, a pricing sheet, the owner. Never blank, and never a live-site read without the date.>",
+ "updated": "<yyyy-mm-dd>",
+ "note": "Only the brand's owner signs an offer live. A price read from a storefront carries the date it was read, because a site can serve a placeholder — that has already happened once and put a price that never existed into two files.",
+ "offers": {
+  "<offer-id>": {
+   "name": "<what it is called>",
+   "what": "<one sentence: what the buyer gets>",
+   "status": "draft",
+   "signed": null,
+   "receipts": [
+    {"claim": "<the price, the terms, the stack>",
+     "source": "<a path or a dated read that RESOLVES>"}
+   ]
+  }
+ }
+}

@@ -1,0 +1,70 @@
+{
+  "kind": "fact-rulings",
+  "written_by": "marketing-chain-checks",
+  "written_by_evidence": "components/quality-checks/rule.py files one record per ruling, through platform/tools/dispatch_card.py write_record — HE-1 (fact rulings), 2026-10-01",
+  "title": "Fact rulings — a person's ruling on a held problem, by problem id",
+  "note": "One record per ruling on one delivery problem of one brand. The latest ruling per (brand, problem id) stands; a later wrong revokes an earlier true. true and not-ours clear that id for every email of the brand; true-once clears it for its own email only; fill clears nothing at the gate and carries its fact text into the verified facts; wrong clears nothing — the email stays held until its text changes. The brand's verified facts are a read over these records (standing true + fill), never a second store and never brands/. Prices are never ruled — offer bank only.",
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "open_items": true,
+  "serve_records": "history",
+  "verdict_fields": [
+    {
+      "key": "brand",
+      "required": true,
+      "note": "the brand the ruling belongs to, from the email's run.json — never read for another brand"
+    },
+    {
+      "key": "problem_id",
+      "required": true,
+      "note": "the problem's id: first 12 hex of sha256 over gate, kind, quote"
+    },
+    {
+      "key": "email",
+      "required": true,
+      "note": "the email's run folder name (its label) the ruling was made on"
+    },
+    {
+      "key": "kind",
+      "required": true,
+      "note": "the problem's kind: fact, chop, typo or unfilled"
+    },
+    {
+      "key": "quote",
+      "required": true,
+      "note": "the email's words the problem quoted"
+    },
+    {
+      "key": "files_say",
+      "required": false,
+      "note": "what the brand's files said, when the check named it"
+    },
+    {
+      "key": "ruling",
+      "required": true,
+      "values": ["wrong", "true", "true-once", "fill", "not-ours"],
+      "note": "the person's ruling"
+    },
+    {
+      "key": "fact",
+      "required": false,
+      "note": "the fact text, for true and fill — never a price"
+    },
+    {
+      "key": "reason",
+      "required": false,
+      "note": "why, for true-once"
+    },
+    {
+      "key": "by",
+      "required": true,
+      "note": "the person who ruled"
+    },
+    {
+      "key": "at",
+      "required": true,
+      "note": "when, UTC, for example 2026-10-01T10:30:00Z"
+    }
+  ]
+}

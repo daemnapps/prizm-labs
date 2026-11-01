@@ -1,0 +1,21 @@
+{
+ "_what": "The production contract v1, QB-5 (production contract): the shape of components/<component>/adapter.json (or components/<component>/<folder>/adapter.json, a component's own adapter folder). One manifest per production component; contract.py check enforces every rule written here. Definitions, the team's (curator, told after). Spec: team/handoffs/2026-10-22-production-contract.md.",
+ "status": "draft",
+ "schema": 1,
+ "fields": {
+  "schema": "the number 1",
+  "kind": "one components/naming/stages.json `types` id (email | video-ad | image-ad | carousel | landing-page) — the naming standard's list, never a second one",
+  "report": "argv: writes the component's observations through creative-queue's qcore.write_observation (runs/queue-shadow/ by default)",
+  "detail": "argv: `<id>` appended; prints the piece's parts [{n, kind, label, words, media: [{drive_id?, path_label}], position: {top, bottom} | null, ok}]",
+  "apply": "argv: `<id> <part|-> <word> [payload] --by <person>` appended; prints {ok, revision, message, paths?, ref?}; exit 0 done, 1 failed, 2 refused",
+  "words": "the change words this adapter takes: shared words, plus kind-specific words listed in kind_words",
+  "kind_words": "optional {word: what it does}: a word only this kind uses, listed here or refused",
+  "try": "optional argv, LD-83 (picture try first): same args as apply; makes preview results, commits nothing; prints {ok, message, tries}; exit 0 made, 1 failed, 2 refused. A verb, never a change word",
+  "try_words": "optional, with try: the change words try accepts — a non-empty list, each already in words, none refused"
+ },
+ "argv_rule": "a list of strings; argv[0] is a repo-relative path to a file under components/ that exists (builder card rule 12: no lab code); a .py file runs with the caller's sys.executable",
+ "shared_words": ["words", "picture", "redo", "move", "remove", "ok", "note"],
+ "refused_words": ["go", "schedule", "scheduled", "send", "approve", "publish", "launch"],
+ "refused_why": "A paid or outbound effect is never a change word: it stays an approval — a queue decision (cq.py approve) plus a person's press on the tool's machine, with an execution receipt.",
+ "kill_signal": "more than 3 kind_words on one adapter: the spec's kill (the shared level is wrong) — check warns, never fails"
+}

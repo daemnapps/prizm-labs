@@ -1,0 +1,638 @@
+{
+  "format_id": "multi-speaker-scene",
+  "name": "Multi-speaker scene (people talking around a patient or a product)",
+  "status": "draft",
+  "state": "seeded from 3 cut runs + 2 matched grandma-format runs, 2026-10-10",
+  "signed": null,
+  "family": "multi-speaker-scene",
+  "what": "Real-looking people in one or a few rooms talking — to the lens and to each other — around one person's problem and the product: the three-doctors consult, the live TV-shopping demo, the grandma test bench. Every speaker in their own cloned voice; on-camera lines spoken inside the clip; the edit cuts between whole takes and never repairs (VIDEO-RULINGS V15).",
+  "signature": {
+    "audio": "voice",
+    "speakers": 2,
+    "address": "mixed",
+    "settings": 1,
+    "product_role": "demo",
+    "pacing": "medium",
+    "capture": "studio",
+    "story": "pitch"
+  },
+  "specialised": [
+    {
+      "what": "voices first, every speaker their own cloned voice, kept once approved",
+      "why": "a run re-recorded approved voices and drifted them (kzn03-face-scrub vo-drifted-2026-10-01); every speaker reads in their own voice (CLAUDE.md 2026-09-23)"
+    },
+    {
+      "what": "on-camera lines are said inside the clip: each line's own locked ElevenLabs v3 read goes in as the clip's audio (nothing is fitted afterwards; speech-to-speech retired 2026-10-21, VIDEO-RULINGS V4)",
+      "why": "the owner 2026-10-03: \"version a actually sounds like the avatar looks\""
+    },
+    {
+      "what": "480p, one take of every clip (another only if it fails, three at most), the pick upscaled locally (VIDEO-RULINGS V5/V6, 2026-10-21; was 1080p for talking faces)",
+      "why": "lip-sync and identity are the whole read of a talking head; 480p is a song-ad saving, not this family's"
+    },
+    {
+      "what": "the edit cuts between whole takes; a faulty take is replaced by the best of its other takes, never covered with a punch-in, a zoom-in or b-roll (VIDEO-RULINGS V15, 2026-10-21; replaces 2026-10-09's cover-before-remake)",
+      "why": "the owner 2026-10-20: \"I don't want it to look mechanical at all\" — the swipe's own shot count, cuts between shots, no unneeded zoom-ins or punch-ins; the edit cuts, it does not repair"
+    },
+    {
+      "what": "never cut off a word; a dropped word is patched in the speaker's cloned voice",
+      "why": "the owner 2026-10-04: \"We should never be cutting off words\""
+    },
+    {
+      "what": "music only when the swipe or the brief calls for it, ducked under the voices (VIDEO-RULINGS V14, 2026-10-21; was a bed for the whole edit by default)",
+      "why": "the owner 2026-10-04: \"we need the music for the whole edit\""
+    },
+    {
+      "what": "pictures one quality step down (high), made at 9:16 with the subject zone in the first prompt; no zone-fix pass",
+      "why": "a subject-zone fix re-made 32 pictures on kzn03 and ran on every grandma run; cost target"
+    }
+  ],
+  "stage_order": [
+    "teardown",
+    "writing (the hook stays as the format has it)",
+    "elements (banked cast first)",
+    "voices (every line, every speaker)",
+    "storyboard",
+    "pictures",
+    "clips (Seedance 2.5, 480p, one take, three tries at most; the locked read goes in as the clip's audio)",
+    "the locked read goes into the clip as its audio (nothing is fitted afterwards)",
+    "words check",
+    "edit (cuts between whole takes; no repairs)",
+    "hook openings"
+  ],
+  "stages": {
+    "audio": {
+      "first": "voice",
+      "voice_model": "elevenlabs",
+      "on_camera": "said inside the clip: the speaker's own locked v3 read goes in as the clip's audio (nothing is fitted afterwards)",
+      "off_camera": "the speaker's cloned voice on its own track",
+      "voices_kept": true,
+      "turns": "each speaker waits their turn — no overlapping murmurs"
+    },
+    "song": {
+      "flow": null
+    },
+    "pictures": {
+      "door": "direct.openai",
+      "model_key": "model",
+      "quality": "high",
+      "size": "1152x2048",
+      "aspect": "9:16",
+      "fix_calls": false,
+      "subject_zone": "15–85% of the height, said in the first prompt",
+      "style_lock": "the swipe's style row (phone-grade realism on every run so far)",
+      "only_these_things": "list every prop; nothing from the swipe's own props leaks in"
+    },
+    "clips": {
+      "model": "seedance_2_5",
+      "endpoint": "image-to-video",
+      "resolution": "720p",
+      "seconds": [
+        4,
+        10
+      ],
+      "cut_at": "line or sentence boundaries, never padded",
+      "clips_per_picture": [
+        1,
+        2
+      ],
+      "takes": 1,
+      "upscale": "local Real-ESRGAN to 1080x1920 — the picked take only (VIDEO-RULINGS V6, 2026-10-21)",
+      "stills_allowed": false,
+      "person_from": "the section's approved picture, never a made frame",
+      "restart_on_same_picture": "a new shot — the storyboard's next angle or framing — cut at a line boundary; never a punch-in to hide the join (VIDEO-RULINGS V15)",
+      "max_tries": 3,
+      "_seedance": "2026-10-26: every clip is Seedance 2.5 at 480p, one take and three tries at most (VIDEO-RULINGS V34, MODEL-HOUSE.md); a clip is 4 s at the least"
+    },
+    "cast": {
+      "reuse": "banked cast first (the same presenter served four formats); new cast only for the roles a format adds (host, artist, doctors)",
+      "recurring": true,
+      "product": "real pixels — real archive clip, studio render or the turntable paste (live-action family)"
+    },
+    "hooks": {
+      "shape": "the hook stays as the format has it; 4–5 alternate openings swap the first scene or line (G01-H2…H6)",
+      "count": 5,
+      "generated": "only the opening scene"
+    },
+    "captions": {
+      "look": "ig-fb-native (Instagram/Facebook) unless the source has none"
+    },
+    "gates": {
+      "apply": [
+        "all 13 (run.py start)",
+        "line parity on every talking clip",
+        "voices kept, never re-recorded",
+        "mouths reviewed (a silent person's lips moving)",
+        "picture QC with a working reviewer"
+      ],
+      "skip": [
+        "song gates"
+      ]
+    },
+    "edit": {
+      "method": "video-edit machine cut on the voice track",
+      "cover_before_remake": false,
+      "broll": "real b-roll about 4 s each",
+      "lip_offset": "measure in each clip's own frames; one global picture offset when the whole cut is a frame off",
+      "loudness": "-14 LUFS",
+      "music": "only when the swipe or the brief calls for it (VIDEO-RULINGS V14); then ducked about -19 dB under voice",
+      "small_print": "none (ruled 2026-10-07)"
+    }
+  },
+  "failures": [
+    {
+      "failure": "a run re-recorded voices already approved; they drifted",
+      "fix": "approved takes restored; voices are kept, never re-recorded by a run",
+      "from_run": "runs/video-production/brand-b/kzn03-face-scrub (vo-drifted-2026-10-01)",
+      "stage": "voice"
+    },
+    {
+      "failure": "the picture reviewer crashed (JSONDecodeError); 21 pictures came back unreviewed",
+      "fix": "the owner reviewed; a crashed reviewer is a stop, never a pass",
+      "from_run": "runs/video-production/brand-b/kzn03-face-scrub-clean (qc-log/QC-LOG.md round 1)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "subjects outside the 15–85% height zone",
+      "fix": "subject zone said in the first prompt (the zone-fix re-made 32 pictures)",
+      "from_run": "runs/video-production/brand-b/kzn03-face-scrub-clean (ledger notes)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "product drawn at the wrong size",
+      "fix": "a product-scale rule in the picture prompt; product pixels from the real kit",
+      "from_run": "runs/video-production/brand-b/kzn03-face-scrub-clean (QC-LOG round 2)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "lips moving with no words on a silent person",
+      "fix": "the take prompt says \"listens in silence, lips closed\" (VIDEO-RULINGS V8); a take that still moves them is replaced by another take, never hidden in a close-up (VIDEO-RULINGS V15)",
+      "from_run": "runs/video-edit/brand-b/kzn03-face-scrub-clean (decisions.json closeups)",
+      "stage": "edit"
+    },
+    {
+      "failure": "clips ran out mid-word",
+      "fix": "trim the line; patch the missing words in the speaker's cloned voice (word_fix.py)",
+      "from_run": "runs/video-edit/brand-b/kzn03-face-scrub-clean (decisions trim_line, add_lines)",
+      "stage": "edit"
+    },
+    {
+      "failure": "the clip wrote words on a shirt / a third hand appeared",
+      "fix": "caught at the picture and clip checks; the take is replaced by another take, or the shot remade — never a crop punch-in or a b-roll cover (VIDEO-RULINGS V15)",
+      "from_run": "runs/video-edit/brand-b/kzn03-face-scrub-clean (decisions fixes, broll)",
+      "stage": "edit"
+    },
+    {
+      "failure": "lip sync about one frame off across the cut",
+      "fix": "one global picture_offset (0.042 s)",
+      "from_run": "runs/video-edit/brand-b/01-grandma-house-face-x-dd7gvdvprzl (decisions.json)",
+      "stage": "edit"
+    },
+    {
+      "failure": "the clip dropped \"look at my\"",
+      "fix": "a cloned-voice word patch",
+      "from_run": "runs/video-production/brand-b/01-grandma-house-face-x-dd7gvdvprzl (patches/S15-look-at-my-cheek.json)",
+      "stage": "edit"
+    },
+    {
+      "failure": "garbled small label text passed by the clip gate",
+      "fix": "blur at the edit, never a punch-in past it (VIDEO-RULINGS V15)",
+      "from_run": "runs/video-production/brand-b/01-grandma-house-face-x-dd7gvdvprzl (clips/GATE.md)",
+      "stage": "edit"
+    },
+    {
+      "failure": "the swipe's own props leaked into a picture; a person given glasses",
+      "fix": "\"ONLY these things…\" — the prompt lists every prop and look",
+      "from_run": "runs/video-production/brand-b/01-grandma-house-face-x-dd12vx6inuo (picture-fixes.json)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "the clip model kept erasing the skin spot",
+      "fix": "image-to-image still + push-in as b-roll",
+      "from_run": "runs/video-edit/brand-b/01-grandma-house-face-x-dd12vx6inuo (decisions.json broll)",
+      "stage": "edit"
+    },
+    {
+      "failure": "The clip cut to a new framing inside one call",
+      "fix": "flagged at QC; one continuous take is in every clip prompt",
+      "from_run": "runs/video-production/brand-b/01-grandma-house-face-x-davxlyhkzsb (qc-log/QC-LOG.md round 3)",
+      "stage": "clips"
+    },
+    {
+      "failure": "scrub rendered white / crystalline",
+      "fix": "\"soft tan, golden-beige cream\" — the product's real colour in words, from the kit",
+      "from_run": "runs/video-production/brand-b/01-grandma-house-face-x-dbmik5rnwqv (picture-fixes.json)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "the mouth tracker read a background screamer, not the lead",
+      "fix": "mouths reviewed by hand",
+      "from_run": "runs/video-edit/brand-b/01-grandma-house-face-x-dbmik5rnwqv (decisions.json mouths_reviewed)",
+      "stage": "edit"
+    },
+    {
+      "failure": "two shots planned on a clip door the provider does not offer",
+      "fix": "plan only the ruled door (Seedance 2.5 image-to-video / reference-to-video)",
+      "from_run": "runs/video-production/brand-b/01-grandma-house-face-x-dd7gvdvprzl (handoff)",
+      "stage": "storyboard"
+    }
+  ],
+  "cost": {
+    "target_usd_per_ad": 20,
+    "measured": "kzn03-face-scrub-clean ~$75 (79 i2v clips at 1080p, 108+39 picture calls); TV shopping $57.58; test bench $21.99; body scan $21.47; public reaction $13.90 (ledger.json each)",
+    "how": "pictures at high not xhigh, subject zone in the first prompt (no zone-fix pass), one take kept, another only if it fails (no cover-ups at the edit), 1–2 clips per picture where a speaker stays in one set-up, banked cast"
+  },
+  "quality_bar": [
+    "every word heard, none cut off (line parity on every talking clip)",
+    "lips on the words within a frame",
+    "a silent person's lips never move on screen",
+    "every speaker sounds like their face — their own cloned voice",
+    "no third hand, no words written on clothes or walls, no garbled labels left readable",
+    "the product is the real thing at its real size and colour",
+    "the room stays the same room across a scene (props, light, wardrobe)",
+    "music only when the swipe or the brief calls for it, never fighting the voice"
+  ],
+  "variants": [
+    {
+      "id": "expert-consult",
+      "name": "Expert consultation (the three doctors)",
+      "format_ids": [
+        "expert-consult"
+      ],
+      "status": "draft",
+      "state": "seeded",
+      "what": "one presenter takes the same problem to several experts in turn; the experts disagree; the last answer is the product",
+      "signature": {
+        "audio": "voice",
+        "speakers": 3,
+        "address": "mixed",
+        "settings": 4,
+        "product_role": "demo",
+        "pacing": "fast",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 3,
+        "settings": 4,
+        "pacing": "fast"
+      },
+      "overrides": {
+        "stages.edit.broll": "none before the last expert (the owner 2026-10-03: \"put broll on top early … do not do that at all\"); real b-roll ~4 s after",
+        "stages.edit.cards": "OPTION 1 / 2 / 3 in a native pop (white bold sans, dark rounded box); no receipt or price cutaways (the owner 2026-10-03)",
+        "stages.cast.roles": "the presenter + the experts, a wardrobe change marking each consultation; spots shown on bare skin",
+        "stages.hooks.count": 5
+      },
+      "from_runs": [
+        "runs/video-production/brand-b/kzn03-face-scrub-clean",
+        "runs/video-edit/brand-b/kzn03-face-scrub-clean",
+        "runs/video-teardown/brand-b/kzn03-face-scrub"
+      ]
+    },
+    {
+      "id": "tv-shopping",
+      "name": "Live TV-shopping demo",
+      "format_ids": [
+        "tv-shopping"
+      ],
+      "status": "draft",
+      "state": "seeded",
+      "what": "a host to the lens runs a live demo on a model while an artist applies the product — a demonstration, never a price ad",
+      "signature": {
+        "audio": "voice",
+        "speakers": 2,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "demo",
+        "pacing": "medium",
+        "capture": "broadcast",
+        "story": "pitch"
+      },
+      "differences": {
+        "address": "to-camera",
+        "capture": "broadcast"
+      },
+      "overrides": {
+        "stages.captions.look": "none (none in the source)",
+        "stages.edit.cards": "a live demonstration, not a value (price) ad (the owner 2026-10-09)",
+        "stages.cast.roles": "host to the lens + silent artist + the model; host and artist cast new, the model from the bank"
+      },
+      "from_runs": [
+        "runs/video-production/brand-b/01-grandma-house-face-x-dd7gvdvprzl",
+        "runs/video-edit/brand-b/01-grandma-house-face-x-dd7gvdvprzl",
+        "runs/video-teardown/brand-b/fmt-tv-shop-dd7gvdvprzl"
+      ]
+    },
+    {
+      "id": "grandma-explainer",
+      "name": "Grandma's test bench (product explainer)",
+      "format_ids": [
+        "grandma-explainer",
+        "grandma-test-bench"
+      ],
+      "status": "draft",
+      "state": "seeded",
+      "what": "an older woman to the lens tests the product beside a silent younger helper, one kitchen set; the nearest record to the grandma + doctor explainer (no grandma + doctor run is on file)",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "held",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "held"
+      },
+      "overrides": {
+        "stages.captions.look": "ig-fb-native",
+        "stages.edit.broll": "phone-photo inserts; where the clip erases the skin mark, an image-to-image still + push-in",
+        "stages.edit.cards": "offer cards kept (buy 2 get 1)"
+      },
+      "from_runs": [
+        "runs/video-production/brand-b/01-grandma-house-face-x-dd12vx6inuo",
+        "runs/video-edit/brand-b/01-grandma-house-face-x-dd12vx6inuo",
+        "runs/video-teardown/brand-b/fmt-hua-jin-dd12vx6inuo"
+      ]
+    },
+    {
+      "id": "body-scan-recipe",
+      "name": "body scan recipe",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 3,
+        "address": "to-camera",
+        "settings": 4,
+        "product_role": "held",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "settings": 4,
+        "product_role": "held"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/brand-b/fmt-body-scan-davxlyhkzsb"
+      ],
+      "match_score": 0.94,
+      "added": "2026-10-10",
+      "what": "*"
+    },
+    {
+      "id": "public-reaction",
+      "name": "public reaction",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 2,
+        "on_screen": 24,
+        "address": "to-each-other",
+        "settings": 1,
+        "product_role": "demo",
+        "pacing": "fast",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "address": "to-each-other",
+        "pacing": "fast"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/brand-b/fmt-public-reaction-dbmik5rnwqv"
+      ],
+      "match_score": 0.89,
+      "added": "2026-10-10",
+      "what": "demonstration · 0:11.6–0:37.5 · the product does the work on the Creator's armpit, hand, stomach and ankle. Each spray-and-wipe is one beat, showing before and after."
+    },
+    {
+      "id": "demonstration",
+      "name": "demonstration",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/fmt-askolivia-dceksuikmvp"
+      ],
+      "match_score": 0.9,
+      "added": "2026-10-17",
+      "what": null
+    },
+    {
+      "id": "single-presenter",
+      "name": "single presenter",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/fmt-rooted-health-dbjcmwipmrh"
+      ],
+      "match_score": 1.0,
+      "added": "2026-10-17",
+      "what": null
+    },
+    {
+      "id": "expert-stitch",
+      "name": "expert stitch",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/fmt-dannyguo-dscbuh9caej"
+      ],
+      "match_score": 1.0,
+      "added": "2026-10-17",
+      "what": null
+    },
+    {
+      "id": "expert-reaction",
+      "name": "expert reaction",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/fmt-dr-romero-dvvtqgcip0"
+      ],
+      "match_score": 1.0,
+      "added": "2026-10-17",
+      "what": null
+    },
+    {
+      "id": "split-screen-comparison",
+      "name": "split screen comparison",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/fmt-dr-vanita-du3x2indexf"
+      ],
+      "match_score": 1.0,
+      "added": "2026-10-17",
+      "what": null
+    },
+    {
+      "id": "remedy",
+      "name": "remedy",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/v2test-remedy-arden"
+      ],
+      "match_score": 1.0,
+      "added": "2026-10-18",
+      "what": null
+    },
+    {
+      "id": "makeover-reveal",
+      "name": "makeover reveal",
+      "status": "draft",
+      "state": "matched-by-builder",
+      "signature": {
+        "audio": "voice",
+        "speakers": 1,
+        "on_screen": 0,
+        "address": "to-camera",
+        "settings": 1,
+        "product_role": "none",
+        "pacing": "medium",
+        "capture": "studio",
+        "story": "pitch"
+      },
+      "differences": {
+        "speakers": 1,
+        "address": "to-camera",
+        "product_role": "none"
+      },
+      "overrides": {},
+      "from_runs": [
+        "runs/video-teardown/_work/batchtest-barber"
+      ],
+      "match_score": 1.0,
+      "added": "2026-10-18",
+      "what": null
+    }
+  ],
+  "built_from": [
+    "runs/video-production/brand-b/kzn03-face-scrub-clean",
+    "runs/video-production/brand-b/01-grandma-house-face-x-dd7gvdvprzl",
+    "runs/video-production/brand-b/01-grandma-house-face-x-dd12vx6inuo",
+    "runs/video-production/brand-b/01-grandma-house-face-x-davxlyhkzsb",
+    "runs/video-production/brand-b/01-grandma-house-face-x-dbmik5rnwqv",
+    "components/ad-variations/definitions/proven-to-format/brand-b-grandma-2026-10.json"
+  ],
+  "rulings": [
+    "the owner 2026-10-10: the three-doctors ad, the TV-shopping ad and the grandma explainer are ONE family that shares one workflow, refined per variant",
+    "the owner 2026-10-03: \"version a actually sounds like the avatar looks\" — on-camera lines in the clip, speech-to-speech (SUPERSEDED 2026-10-20/21, VIDEO-RULINGS V4: the locked read is fitted to the lips, no speech-to-speech)",
+    "the owner 2026-10-04: \"We should never be cutting off words\"; \"we need the music for the whole edit\"",
+    "the owner 2026-10-07 (RULINGS.md): the hook stays as the format has it; no small print; a dramatized demo is fine",
+    "the owner 2026-10-09: \"only regenerate what's absolutely necessary… cover issues up with zoom ins b-roll\" (SUPERSEDED 2026-10-20, VIDEO-RULINGS V15: no unneeded zoom-ins or punch-ins; the edit cuts, it does not repair)"
+  ]
+}

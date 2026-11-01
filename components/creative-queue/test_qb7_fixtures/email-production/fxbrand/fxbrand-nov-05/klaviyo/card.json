@@ -1,0 +1,9 @@
+{
+ "brand": "fxbrand",
+ "label": "fxbrand-nov-05",
+ "date": "2026-11-05",
+ "subjects": [{"subject": "A Klaviyo draft", "preview": "p"}],
+ "eve_done": {"by": "the team", "at": "2026-10-22T13:38:55+00:00"},
+ "klaviyo": {"campaign_id": "FX1", "message_id": "FX2"},
+ "status": "draft"
+}

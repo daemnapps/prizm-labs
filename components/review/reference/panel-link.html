@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="review-reference" content="1">
+<meta name="review-kind" content="review">
+<title>REFERENCE · review panel — link</title>
+<!--
+  A REFERENCE PAGE, NOT A PRODUCT — card RV-6 (reference panels).
+
+  The panel for `type: link` on the `review` kind — the asset lives somewhere
+  this platform does not serve, so the panel shows the pointer and gets out of
+  the way. It is also where an UNDECLARED type lands: the manifest's rule is
+  that an unknown value degrades to a link rather than to an empty box, so this
+  page takes it and NAMES the value, and the other three panels refuse it and
+  say it belongs here. NOT in team/promoted-surfaces.json; a promotion is a
+  human act.
+-->
+<link rel="stylesheet" href="_reference.css">
+</head>
+<body>
+<p class="ref"><b>REFERENCE, NOT A PRODUCT.</b>
+  <code>components/review/reference/panel-link.html</code> — a working panel for
+  <code>type: link</code>, kept plain on purpose and never promoted. Copy it,
+  rewrite the look, keep the grammar.</p>
+
+<h1>Review panel — link</h1>
+<p class="faint">Open it as <code>panel-link.html?item=RQ-…</code>. A blob pointer
+  is a link you can follow; a repo or drive pointer is shown as the pointer it is,
+  because turning one into a url is RV-5 (media renderer)'s job and not a second
+  copy of it here. Status is FOLDED from the records on every render, never
+  remembered between them.</p>
+
+<div id="app"></div>
+
+<!-- The viewers' ONE credential module (CP-8), loaded rather than copied. A
+     page moved into platform/views/viewers/ must INLINE it instead — that route
+     serves one html file per request and cannot fetch a sibling. -->
+<script src="../../../platform/views/viewers/_templates/_session-bootstrap.js"></script>
+<script src="_reference.js"></script>
+<script>
+// THE TYPE THIS PAGE IS THE REFERENCE FOR — and the one page that also takes a
+// type the manifest does NOT declare, because the manifest's rule is that an
+// unknown value degrades to a link. It is shown with the value it was given.
+const PANEL_TYPE = "link";
+mountReviewPanel(PANEL_TYPE, document.getElementById("app"));
+</script>
+</body>
+</html>

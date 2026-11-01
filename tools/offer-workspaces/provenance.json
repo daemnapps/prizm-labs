@@ -1,0 +1,44 @@
+[
+  {
+    "source": "reviewed local prototype/toolkit/brand-page-factory/scripts/page_build.py",
+    "path": "page/scripts/page_build.py",
+    "original_sha256": "f53c6ac4a1da23360e3ac80f6a66087af4ebefa3be4e26724645d92ca603a765",
+    "current_sha256": "5852c2280ff36f0a33808178180df5b879215c048a9d4a4e0aec8a9306b4e37f",
+    "adaptation": "Per-workspace section-library override"
+  },
+  {
+    "source": "reviewed local prototype/toolkit/brand-page-factory/assets/brand-config.template.json",
+    "path": "page/assets/brand-config.template.json",
+    "original_sha256": "2130409191e1f8e63604381dfa993f41e5a4b7b1c92c8a9d6e9a6e662ace2ee8",
+    "current_sha256": "2130409191e1f8e63604381dfa993f41e5a4b7b1c92c8a9d6e9a6e662ace2ee8",
+    "adaptation": "unchanged"
+  },
+  {
+    "source": "reviewed local prototype/toolkit/offer-agent/scripts/offer.py",
+    "path": "offer/scripts/offer.py",
+    "original_sha256": "e368beb952209b4b5e93e59f9b6503a952a878949f658c5ec2d2d87e8343e788",
+    "current_sha256": "e368beb952209b4b5e93e59f9b6503a952a878949f658c5ec2d2d87e8343e788",
+    "adaptation": "unchanged"
+  },
+  {
+    "source": "reviewed local prototype/toolkit/offer-agent/assets/Offer-MASTER.md",
+    "path": "offer/assets/Offer-MASTER.md",
+    "original_sha256": "bb7f6355bbc7e0a6a8d12d4960f6943695cd41a108187022f63ae8d2fb8612d0",
+    "current_sha256": "bb7f6355bbc7e0a6a8d12d4960f6943695cd41a108187022f63ae8d2fb8612d0",
+    "adaptation": "unchanged"
+  },
+  {
+    "source": "reviewed local prototype/toolkit/customer-avatar-framework/references/structure-map.md",
+    "path": "avatar/structure-map.md",
+    "original_sha256": "c63b8950568915e5e4e71911804175c67d5ab653de18b9099f10294c6fcac852",
+    "current_sha256": "1941e4b42912718947ee5e21738fbba90dda46f689d5e9677f9d4ed1ee9ba49e",
+    "adaptation": "Generic teaching examples; no original brand names"
+  },
+  {
+    "source": "reviewed local prototype/toolkit/customer-avatar-framework/references/cell-map.md",
+    "path": "avatar/cell-map.md",
+    "original_sha256": "c4f8cc881ae8f27476dbc0e428b3c3f195c2f6aa3e5f7c3e890f93d53888c2f6",
+    "current_sha256": "8736f69ba7a0c4615b8e3af9bc815c2e5d1acbd8e097af1705a28cf269223baa",
+    "adaptation": "Generic teaching examples; no original brand names"
+  }
+]

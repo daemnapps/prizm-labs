@@ -1,0 +1,9 @@
+{
+ "brand": "fxbrand",
+ "label": "fxbrand-oct-20",
+ "date": "2026-10-20",
+ "subjects": [{"subject": "Sat Oct 31 · Quick reminder!", "preview": "p"}],
+ "klaviyo": {"campaign_id": "FX5", "message_id": "FX6"},
+ "scheduled": {"by": "the owner", "at": "2026-10-18T13:20:00Z"},
+ "status": "scheduled"
+}

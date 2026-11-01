@@ -1,0 +1,121 @@
+{
+ "_what": "The steps of the video edit, in order. run.py and the page both read this list — nothing else decides what runs.",
+ "steps": [
+  {
+   "id": "gather",
+   "n": 1,
+   "who": "machine",
+   "what": "Collect what was approved upstream: A-roll clips, B-roll clips, the one voice track with its word timings, music, sound effects. Anything not approved is refused by name."
+  },
+  {
+   "id": "cut",
+   "n": 2,
+   "who": "model:opus",
+   "prompt": "prompts/stage-2-cut",
+   "what": "Write the cut sheet: which clip covers which words, where B-roll covers A-roll, trims, sound levels. Reads the brief, the teardown's roll labels and everything the owner has changed before.",
+   "fallback": "auto — clips in scene order laid on the voice timings"
+  },
+  {
+   "id": "gate",
+   "n": 3,
+   "who": "machine",
+   "what": "Check the cut sheet before anything renders: every file exists, no hole in the picture, trims inside the source, captions inside the frame and the runtime, every look and transition on its list. Red names the field."
+  },
+  {
+   "id": "timeline",
+   "n": 4,
+   "who": "damon",
+   "stop": true,
+   "what": "STOP 1 — the timeline page: every layer as bars on one clock, dead space already out. Approve, or say what to change in plain words."
+  },
+  {
+   "id": "captions",
+   "n": 5,
+   "who": "damon",
+   "stop": true,
+   "what": "STOP 2 — captions on, in the chosen look, shown as real frames from the edit. Approve, switch the look, or fix a word."
+  },
+  {
+   "id": "export",
+   "n": 6,
+   "who": "machine",
+   "what": "Write the HyperFrames page from the cut sheet, run its own checks, render the final file."
+  },
+  {
+   "id": "audit",
+   "n": 7,
+   "who": "machine",
+   "what": "audit.py on the finished file, every version: words chopped at a cut, lips against their own clip, words off every face and mouth read on the finished frames, the music and sound effects the swipe has. A finding holds the version (E12–E15, 2026-10-21)."
+  },
+  {
+   "id": "checks",
+   "n": 8,
+   "who": "machine",
+   "what": "The quality lane on the finished file: length matches the sheet, picture never black, voice level and music level in range, captions in time with the words."
+  },
+  {
+   "id": "file",
+   "n": 9,
+   "who": "machine",
+   "what": "File the record to runs/video-edit/<brand>/<label>/ and the video to the same path on the Drive, named by the naming convention."
+  },
+  {
+   "id": "learn",
+   "n": 10,
+   "who": "model:sonnet",
+   "prompt": "prompts/stage-9-learn",
+   "what": "Every change the owner made at a stop, with the why, becomes a rule the next cut reads."
+  }
+ ],
+ "line": {
+  "_what": "the edit-map line's steps (line.py reads this list — E16, 2026-10-21: one place says what runs)",
+  "steps": [
+   {
+    "id": "plan",
+    "what": "edit_map.py --hooks: one edit map per version (the control + every hook opening), takes laid whole and no repairs (V15); the music and SFX the swipe or brief calls for, from production's bank rows, else music_bed.py makes the bed (V14)"
+   },
+   {
+    "id": "mouths",
+    "what": "mouths.py, every version: the lead's mouth only moves when the lead is heard",
+    "stops": true
+   },
+   {
+    "id": "render",
+    "what": "render_map.py: picture and sound assembled, the lips held (syncheck), then compose.py draws every word (map_sheet.py)",
+    "stops": true
+   },
+   {
+    "id": "audit",
+    "what": "audit.py, every version: words cut, lips, sync, words on a face or mouth on the finished frames, the swipe's sound",
+    "stops": true
+   },
+   {
+    "id": "scan",
+    "what": "black frames, dead air, loudness, 9:16, every version",
+    "stops": true
+   },
+   {
+    "id": "watch",
+    "what": "watch.py, every version: the house judge (Gemini) watches the finished cut the way a viewer would — product real, one person, lips, words and their bands, no slop, the opening, the offer",
+    "stops": true
+   },
+   {
+    "id": "thumbs",
+    "what": "thumbs.py: a designed thumbnail per version"
+   },
+   {
+    "id": "copy",
+    "what": "the copywriter's words for the ad (brief_words.py)"
+   },
+   {
+    "id": "deliver",
+    "what": "deliver.py: names, the card, the manifest",
+    "stops": true
+   },
+   {
+    "id": "file",
+    "what": "meta-upload to_check: the card + videos + thumbnails into 1-check"
+   }
+  ]
+ }
+}

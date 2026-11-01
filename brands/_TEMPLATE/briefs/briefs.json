@@ -1,0 +1,7 @@
+{
+ "_what": "Every brief's header — what the brief is for (product, media, source, talent, avatar, angle, concept, format, ratio). creative-diversity/check.py --brief writes each brief's seven `moves` and its `diversity` score here.",
+ "_required_to_name": ["product"],
+ "_null": "null = not recorded yet. `none` only where the part does not apply.",
+ "_aliases": "How a delivery folder is matched to its brief: any alias, or the brief number in any spelling.",
+ "briefs": []
+}

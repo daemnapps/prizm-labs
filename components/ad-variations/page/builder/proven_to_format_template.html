@@ -1,0 +1,218 @@
+<title>Creative Run Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+/* Layout: the grid is the page. Rows = winners (their ad names), columns = formats (library names). Each square shows its chain stage. Select squares, pick the stage to run to, Activate. Output opens under the grid. */
+:root{
+  --bg:#fafafa; --panel:#ffffff; --fg:#18181b; --muted:#71717a; --line:#e4e4e7; --soft:#f4f4f5;
+  --accent:#0f766e; --accent-fg:#ffffff; --done:#15803d; --wait:#b45309;
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#09090b; --panel:#111113; --fg:#f4f4f5; --muted:#a1a1aa; --line:#27272a; --soft:#18181b;
+  --accent:#2dd4bf; --accent-fg:#042f2e; --done:#4ade80; --wait:#fbbf24; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#09090b; --panel:#111113; --fg:#f4f4f5; --muted:#a1a1aa; --line:#27272a; --soft:#18181b;
+  --accent:#2dd4bf; --accent-fg:#042f2e; --done:#4ade80; --wait:#fbbf24; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:16px;padding-block:20px 80px;display:flex;flex-direction:column;gap:14px}
+h1{font-size:22px;margin:0;font-weight:700;letter-spacing:-.01em}
+.small{font-size:12.5px;color:var(--muted)}
+.grid-wrap{overflow-x:auto;max-width:100%;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table.mx{border-collapse:separate;border-spacing:0;font-size:13px}
+table.mx th,table.mx td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle;text-align:center}
+table.mx thead th{background:var(--panel);min-width:132px;max-width:150px;font-weight:600;font-size:12.5px;line-height:1.25;vertical-align:bottom}
+table.mx thead th img{width:60px;aspect-ratio:9/16;object-fit:cover;border-radius:6px;display:block;margin:0 auto 6px}
+table.mx thead th .id{display:block;font:500 10.5px var(--mono);color:var(--muted);margin-top:3px;word-break:break-all}
+table.mx th.rowh{text-align:left;position:sticky;left:0;background:var(--panel);z-index:1;min-width:230px;max-width:260px;font-weight:600}
+table.mx th.rowh .in{display:flex;gap:8px;align-items:center}
+table.mx th.rowh img{width:40px;aspect-ratio:9/16;object-fit:cover;border-radius:5px;flex:0 0 auto}
+table.mx th.rowh .nm{font-size:12.5px;line-height:1.25;word-break:break-word}
+table.mx th.rowh .st{display:block;font:500 11px var(--mono);color:var(--muted);margin-top:2px}
+.cell{width:116px;min-height:58px;border-radius:10px;border:1px dashed var(--line);background:var(--bg);color:var(--muted);font:600 12.5px var(--sans);cursor:pointer;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cell .sn{font:500 10.5px var(--mono)}
+.cell.has{border:1px solid var(--done);color:var(--done);background:transparent}
+.cell.ready{border:2px solid var(--done);color:var(--accent-fg);background:var(--done);font-weight:700}
+.cell.ready .sn{color:var(--accent-fg)}
+.cell.q{border:1px solid var(--wait);color:var(--wait);background:transparent}
+.cell.sel{outline:2px solid var(--accent);outline-offset:1px;color:var(--accent)}
+.bar{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.bar label{font-weight:600;font-size:14px}
+select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.go{font:700 14px var(--sans);padding:10px 18px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-fg);cursor:pointer}
+.go:disabled{opacity:.4;cursor:not-allowed}
+.ghost{font:600 13px var(--sans);padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+button:focus-visible,select:focus{outline:2px solid var(--accent);outline-offset:2px}
+.status{font-size:13px;color:var(--muted)}
+.out{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.strip{display:flex;gap:4px;overflow-x:auto}
+.strip img{height:120px;border-radius:6px;flex:0 0 auto}
+.doc{min-width:0}
+.doc h1{font-size:19px} .doc h2{font-size:16px;margin:18px 0 8px;padding-top:10px;border-top:1px solid var(--line)}
+.doc table{border-collapse:collapse;font-size:13px;min-width:560px}
+.doc th,.doc td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+.doc th{background:var(--soft)}
+.doc code{font-family:var(--mono);font-size:12.5px;background:var(--soft);padding:1px 4px;border-radius:4px}
+.tw{overflow-x:auto;max-width:100%}
+pre.raw{white-space:pre-wrap;word-break:break-word;font:12.5px/1.55 var(--mono);background:var(--soft);border-radius:8px;padding:14px;margin:0;max-height:60vh;overflow:auto}
+details>summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:14px}
+.ro{font-size:13px;color:var(--wait)}
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:8px}
+.el{margin:0;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg)}
+.el.b{border-color:var(--done)} .el.m{border-color:var(--wait);border-style:dashed}
+.el img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.el .noimg{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+.el figcaption{padding:6px 8px;font-size:12.5px;line-height:1.3}
+.chain{display:flex;flex-direction:column;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.chain h2{font-size:18px;margin:0}
+.lanes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:700px){.lanes{grid-template-columns:minmax(0,1fr)}}
+.lane{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.lane .lt{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.st{border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--panel);font-size:13px;line-height:1.25}
+.st b{font-family:var(--mono);font-weight:600;margin-right:4px}
+.st.ok{border-color:var(--done);color:var(--done)}
+.st.pick{border-style:dashed}
+.st.gate{border:2px solid var(--wait);color:var(--wait);font-weight:600}
+.st.ai{border-color:var(--accent);color:var(--accent)}
+.ar{color:var(--muted);font-size:16px}
+.merge{text-align:center;color:var(--muted);font-size:20px;line-height:1}
+.main{display:flex;flex-direction:column;gap:6px;align-items:center}
+.main>.st{min-width:min(340px,100%);text-align:center}
+.main .loop{justify-content:center;max-width:560px}
+.loop{display:flex;flex-wrap:wrap;gap:4px;border:1px dashed var(--line);border-radius:10px;padding:6px}
+.loop .st{font-size:12px;padding:5px 7px}
+.back{font-size:13px;color:var(--wait);text-align:center}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend i{width:14px;height:10px;border-radius:3px;border:1px solid var(--line);display:inline-block}
+.fmtstat{font-size:12.5px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px}
+
+a.play{position:relative;display:inline-flex;gap:4px;text-decoration:none}
+a.play .pb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+a.play:hover .pb{background:var(--accent)}
+table.mx thead th a.play{display:block;width:60px;margin:0 auto 6px}
+table.mx thead th a.play img{margin:0}
+a.watch{font-weight:600;font-size:13.5px;color:var(--accent)}
+</style>
+
+<div class="wrap">
+  <div><h1>Creative Run Builder</h1><div class="small">{{TITLE}}</div><div id="readyline" style="margin-top:6px;font-weight:600"></div><div class="small" style="margin-top:4px">{{BANKED}}</div></div>
+  <div id="ro"></div>
+  <div class="grid-wrap"><table class="mx" id="mx"></table></div>
+  <div class="bar">
+    <span id="selcount" class="small">Tap squares to select.</span>
+    <label for="target">Run to</label>
+    <select id="target"></select>
+    <button class="go" id="activate" disabled>Activate</button>
+    <button class="ghost" id="clear">Clear selection</button>
+    <span class="status" id="status"></span>
+  </div>
+  <div id="out"></div>
+  <section class="chain" id="handoff" hidden><h2>Hand to Higgsfield</h2><div class="small">The ready briefs on the Drive, and the prompt that turns one into a video. Copy the grey block into a Higgsfield session, then paste a brief link.</div><div class="doc" id="handoff-doc"></div></section>
+  <section class="chain" id="chain">
+    <h2>The chain: proven ad → new format</h2>
+    <div class="lanes">
+      <div class="lane"><span class="lt">Winner · already a proven ad</span>
+        <div class="steps">{{WINNER_STEPS}}</div>
+        <div class="small">{{WINNER_NOTE}} This is the content we carry: script, mechanism, proof, offer logic.</div></div>
+      <div class="lane"><span class="lt">Format · the fresh swipe</span>
+        <div class="steps"><span class="st"><b>0</b>Triage</span><span class="ar">→</span><span class="st"><b>1</b>Teardown</span><span class="ar">→</span><span class="st"><b>2</b>Spec</span></div>
+        <div class="fmtstat small">{{FMTSTAT}}</div></div>
+    </div>
+    <div class="merge">↓ ↓</div>
+    <div class="main">
+      <span class="st"><b>3</b>Injection<br><span class="small">winner's content + {{INJECT}} → into the format's Spec</span></span>
+      <span class="ar">↓</span>
+      <div class="loop" title="Stage 4 loop — you pick which run"><span class="st pick"><b>4a</b>Reading</span><span class="st pick"><b>4b</b>Hooks</span><span class="st pick"><b>4c</b>Placement</span><span class="st pick"><b>4d</b>Expansion</span><span class="st pick"><b>4e</b>Close</span><span class="st pick"><b>4f</b>Audit</span><span class="st pick"><b>4g</b>Spice</span></div>
+      <span class="ar">↓</span>
+      <span class="st ai"><b>5</b>Brief · AI lane</span>
+      <span class="ar">↓</span>
+      <span class="st gate">Viewer Check</span>
+      <span class="ar">↓</span>
+      <span class="st"><b>6</b>Frames</span>
+      <span class="ar">↓</span>
+      <span class="st"><b>7</b>Final brief</span>
+    </div>
+    <div class="back">Viewer Check fails go back: opening → 4b Hooks · middle → 4c Placement · close → 4e Close · 2 fails → held for you</div>
+    <div class="legend"><span><i style="border-color:var(--done)"></i>done</span><span><i style="border-style:dashed"></i>stage 4 loop: you pick which parts run</span><span><i style="border:2px solid var(--wait)"></i>the script QC (Marketing Chain Checks)</span><span><i style="border-color:var(--accent)"></i>AI lane</span></div>
+    {{EARLIER_NOTE}}
+  </section>
+</div>
+
+<script>
+const D=/*DATA*/null;
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const md=s=>window.marked?marked.parse(s||""):"<pre class='raw'>"+esc(s)+"</pre>";
+const TH=k=>(D.thumbs[k]||{}).frames||[];
+const play=(k,inner)=>D.links[k]?`<a class="play" href="${D.links[k]}" target="_blank" rel="noopener" title="Play the video">${inner}<span class="pb">▶</span></a>`:inner;
+const cover=k=>{const f=TH(k);return f.length?play(k,`<img src="${f[Math.min(1,f.length-1)].src}" alt="">`):""};
+const strip=k=>`<div class="strip">${play(k,TH(k).map(f=>`<img src="${f.src}" alt="">`).join(""))}</div>${D.links[k]?`<a class="watch" href="${D.links[k]}" target="_blank" rel="noopener">▶ Watch the full video</a>`:""}`;
+// the video chain's own stages (tools/video-teardown/machine/chain.py), from where a format swap starts
+const STAGES=[["stage2","2 Spec"],["stage3","3 Injection"],["stage5","5 Brief"]];
+const stageName=k=>(STAGES.find(s=>s[0]===k)||[k,k])[1];
+
+let db=null, me=null, queue=[]; const sel=new Set();
+const key=(c,f)=>(c.split("/").pop()+"__"+f.split("/").pop()).replace(/[^A-Za-z0-9_.-]/g,"-");
+const swapAt=(c,f)=>D.swaps.find(s=>s.cpath===c&&s.fpath===f);
+const reqAt=(c,f)=>queue.find(r=>r.concept===c&&r.format===f);
+function cell(c,f){
+  const s=swapAt(c,f), r=reqAt(c,f), k=key(c,f), on=sel.has(k);
+  let cls="cell", body="—";
+  if(s&&s.state==="ready"){cls+=" ready";const tm=(s.elements||[]).filter(e=>!e.banked).length;body=`✓ READY<span class="sn">${s.elements&&s.elements.length?tm+" elements to make":"5 Brief · tap to read"}</span>`}
+  else if(s&&s.state==="brief"){cls+=" q";body=`5 Brief written<span class="sn">${esc(s.held)}</span>`}
+  else if(s&&(s.state==="inprogress"||s.state==="done")){cls+=" q";body=`${esc(s.stage)}<span class="sn">${s.held?"waiting at "+esc(s.held):"in progress"}</span>`}
+  else if(s){cls+=" q";body=`${esc(s.stage)}<span class="sn">being written</span>`}
+  else if(r){cls+=" q";body=`queued<span class="sn">→ ${esc(stageName(r.target))}</span>`}
+  if(on) cls+=" sel";
+  return `<button type="button" class="${cls}" data-c="${esc(c)}" data-f="${esc(f)}">${on?"✓ selected":body}</button>`;
+}
+function draw(){
+  {const r=D.swaps.filter(s=>s.state==="ready").length,bw=D.swaps.filter(s=>s.state==="brief").length,ip=D.swaps.length-r-bw;const el=document.getElementById("readyline");if(el)el.innerHTML=`<span style="color:var(--done)">✓ ${r} ready to make</span> · ${bw} brief written, needs production fields · ${ip} still in the chain`;}
+  const rowName=c=>{const st=D.stats[c.path];return st?st.ad:c.name};
+  document.getElementById("mx").innerHTML=`<thead><tr><th class="rowh">Winner (ad name) ↓<br>Format →<br><span class="small" style="font-weight:400">▶ tap a thumbnail to play</span></th>${D.formats.map(f=>`<th>${cover(f.path)}${esc(f.name)}<span class="id">${esc(f.format_id)}</span><span class="id">${esc(f.note)}</span></th>`).join("")}</tr></thead>
+  <tbody>${D.concepts.map(c=>{const st=D.stats[c.path];return `<tr><th class="rowh"><div class="in">${cover(c.path)}<div><span class="nm">${esc(rowName(c))}</span><span class="st">${st?`#${st.rank} · ${st.sales} sales · $${Math.round(st.cpa)}/sale`:""}</span></div></div></th>${D.formats.map(f=>`<td>${cell(c.path,f.path)}</td>`).join("")}</tr>`}).join("")}</tbody>`;
+  document.querySelectorAll("#mx .cell").forEach(b=>b.onclick=()=>{
+    const c=b.dataset.c,f=b.dataset.f,k=key(c,f);
+    sel.has(k)?sel.delete(k):sel.add(k);
+    if(swapAt(c,f)) show(c,f);
+    draw();
+  });
+  document.getElementById("selcount").textContent=sel.size?`${sel.size} selected.`:"Tap squares to select.";
+  document.getElementById("activate").disabled=!(db&&sel.size);
+}
+function show(c,f){
+  const s=swapAt(c,f); if(!s) return;
+  document.getElementById("out").innerHTML=`<div class="out"><div><b>${esc((D.stats[c]||{}).ad||s.concept)} × ${esc(D.formats.find(x=>x.path===f)?.name||s.fmt)}</b> <span class="small">— ${s.state==="ready"?"READY · 5 Brief":"reached "+esc(s.stage)+(s.held?" · waiting at "+esc(s.held):"")}</span></div>
+    <div class="small">Winner</div>${strip(c)}<div class="small">Format</div>${strip(f)}
+    ${s.elements&&s.elements.length?`<div><b>Station 3 · Elements</b> <span class="small">${s.elements.filter(e=>e.banked).length} banked · ${s.elements.filter(e=>!e.banked).length} to make — green = we have it, amber = will be made from the swipe frame shown</span>
+      <div class="egrid">${s.elements.map(e=>`<figure class="el ${e.banked?"b":"m"}">${e.pic?`<img src="${e.pic}" alt="">`:`<div class="noimg">no picture yet</div>`}<figcaption><span class="pill" style="color:${e.banked?"var(--done)":"var(--wait)"}">${e.banked?"banked":"to make"}</span> <b>${esc(e.id)}</b><br><span class="small">${esc(e.kind)} · ${esc(e.src||"")}</span></figcaption></figure>`).join("")}</div></div>`:""}
+    <details><summary>Read the brief</summary>
+    <div class="doc">${s.spec?md(s.spec):"<p class='small'>Being written now. The full prompt is below.</p>"}</div>
+    </details>
+    <details><summary>The new prompt slot: the winner's content (stage3-winner-slot-v1-damon.md), added to the chain's stage 3 Injection prompt</summary><pre class="raw">${esc(D.swap_prompt)}</pre></details>
+    <details data-sent="${esc(s.sent_file||"")}"><summary>Exactly what was sent (the full filled prompt)</summary><pre class="raw">Loading…</pre></details></div>`;
+  document.querySelectorAll("#out details[data-sent]").forEach(el=>el.addEventListener("toggle",async()=>{if(!el.open||el.dataset.loaded)return;el.dataset.loaded=1;const pre=el.querySelector("pre");try{const r=await fetch(el.dataset.sent);pre.textContent=r.ok?await r.text():"Couldn't load it."}catch(e){pre.textContent="Couldn't load it."}}));
+  document.querySelectorAll("#out .doc table").forEach(t=>{const w=document.createElement("div");w.className="tw";t.replaceWith(w);w.appendChild(t)});
+}
+document.getElementById("target").innerHTML=STAGES.map(([k,n])=>`<option value="${k}">${n}</option>`).join("");
+document.getElementById("clear").onclick=()=>{sel.clear();draw()};
+document.getElementById("activate").onclick=async()=>{
+  const st=document.getElementById("status"), target=document.getElementById("target").value; if(!db) return;
+  let n=0;
+  for(const c of D.concepts) for(const f of D.formats){const k=key(c.path,f.path); if(!sel.has(k)) continue;
+    try{await db.doc("requests/"+k).set({concept:c.path,concept_name:(D.stats[c.path]||{}).ad||c.name,format:f.path,format_name:f.name,format_id:f.format_id,target,product:D.batch.product,avatar:D.batch.avatar,offer:D.batch.offer,batch:D.batch.batch,state:"queued",at:new Date().toISOString(),by:me||""});n++}catch(e){}}
+  sel.clear(); st.textContent=`${n} queued to ${stageName(target)}. Say “run the queue” in any Claude session.`; draw();
+};
+{const h=document.getElementById("handoff-doc");if(h)h.innerHTML=D.handoff?md(D.handoff):"";h&&h.querySelectorAll("table").forEach(t=>{const w=document.createElement("div");w.className="tw";t.replaceWith(w);w.appendChild(t)});}
+draw();
+(async()=>{
+  try{db=window.claude?await claude.use("db"):null;const u=window.claude?await claude.use("user"):null;try{me=u?await u.id():null}catch(e){}}catch(e){db=null}
+  document.getElementById("ro").innerHTML=db?"":`<div class="ro">This view can't save. Open it signed in to Claude to activate.</div>`;
+  if(db) db.collection("requests").onSnapshot(s=>{queue=s.docs.map(d=>Object.assign({id:d.id},d.data()));draw()},()=>{});
+  draw();
+})();
+</script>

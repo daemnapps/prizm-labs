@@ -1,0 +1,849 @@
+{
+ "_what": "The Edit Line: the cut and dress stages, one row each, with the owner's open decisions. edit_line_page.py prints the page (context/edit-line.html → the artifact) and its Markdown mirror (EDIT-LINE.md) from this one file. Settle a decision by moving it from `open` to `settled` with his words and the date.",
+ "updated": "2026-09-23",
+ "phases": [
+  {
+   "id": "cut",
+   "name": "Cut",
+   "what": "Turns the clips into one clean run of picture and sound. Nothing gets added here, it only gets cut and ordered.",
+   "stages": [
+    {
+     "id": "cut-1",
+     "name": "Trim the dead air",
+     "status": "fix",
+     "status_note": "rules settled · remake wired",
+     "tracks": [
+      [
+       "V1",
+       "a"
+      ],
+      [
+       "A1",
+       "a"
+      ]
+     ],
+     "who": "machine",
+     "in": "Each clip's own sound track. The edit listens to the sound, not the video and not the written-out words.",
+     "out": "Each clip with its start and end silence gone and its breaths kept. Every longer pause is marked for your review, and every clip that stops mid-line is sent back to production.",
+     "rules": [
+      "Listen first. Silence is found in the sound itself (anything quieter than −35 dB for 0.15s or longer). The written-out words only say WHAT is said. The word tool stretches words across silences and even past the end of a clip, and that broke the an-earlier-run test.",
+      "Silence at the start and end of a clip is always cut.",
+      "Breaths (pauses under about 0.35s) are always kept. Cutting them makes the voice sound robotic.",
+      "Mid-clip pauses (0.35s or longer) are proposed by the machine and checked by you. Some are dead air, and some are a beat that makes the line land (the 2.2s before Nova's “No.” in an-earlier-run clip 6).",
+      "After a cut pause, the next piece zooms in 7% so the jump reads like a second camera in the room.",
+      "A clip that stops mid-line is an error, not something to edit around. It's marked clearly, goes back to production to be made again, and the production prompt that let it through gets fixed."
+     ],
+     "bug": "Cut from the sound, not the word timings, and the clips-running-past-their-end problem goes away. Before, the breath after the last word was measured from the word tool, which put clip 9's last word at 15.7s on a 14.1s clip.",
+     "open": [
+      {
+       "n": "T-3",
+       "q": "Your pause review is decided but not built: today the edit still cuts every pause longer than the pace setting on its own. Should marked pauses be their own quick stop (listen, keep or cut) before anything else is laid on?",
+       "now": "Not built yet."
+      }
+     ],
+     "listen": "an-earlier-run, 8 clips, 76.7s: about 50s talking · 6.8s start/end silence · 15.5s mid-clip pauses · 4.7s breaths. Two clips stop mid-line: clip 5 ends “…said taking the” (the script goes on “…top layer off is a cop out”), and clip 1 ends at “which is crazy” (the script goes on “because I'm going to ask them…”). Tested on 23 Sep: the edit's new check flagged clips 1 and 5 as cut off and passed clip 7 (whole line).",
+     "settled": [
+      {
+       "n": "T-2",
+       "q": "The punch-in (zoom 7% on the piece after a cut pause)?",
+       "answer": "Keep it. It gives real camera-movement vibes, like someone is actually in the room with her. (23 Sep)"
+      },
+      {
+       "n": "T-1",
+       "q": "Pace: one setting or per format?",
+       "answer": "Per format, from the brief. FIXED at the source on 23 Sep. The teardown heard the swipe's pace (e.g. “escalating”), but the spice sheet (stage 4g) dropped it, treating pace as something each section needed separately. Spice v5 sets pace ONCE for the whole piece, KEEPs the swipe's value, and never leaves it blank when the teardown named one. Every scene in the brief now carries it. The teardown now runs v5."
+      },
+      {
+       "n": "T-4",
+       "q": "Start and end silence?",
+       "answer": "Always cut. (23 Sep)"
+      },
+      {
+       "n": "T-5",
+       "q": "Breaths?",
+       "answer": "Always kept. (23 Sep)"
+      },
+      {
+       "n": "T-6",
+       "q": "Mid-clip pauses?",
+       "answer": "You review them a second time to check the pacing is right. (23 Sep)"
+      },
+      {
+       "n": "T-7",
+       "q": "A clip that stops mid-line?",
+       "answer": "Reproduce it, clearly marked as an error, and fix it upstream. BUILT 23 Sep. (1) Production's words check now asks whether the line FINISHED, not just whether the words were similar. A cut-off clip is CUT_OFF and never ships. (2) The edit listens to every talking clip before cutting, and a cut-off clip stops the edit and is sent back. (3) A remake order lands on the production run, and the remake-clip skill carries it out."
+      },
+      {
+       "n": "T-8",
+       "q": "How is a sent-back clip remade?",
+       "answer": "Surgically (your words, 23 Sep). Name the broken element and remake only that, then rebuild what depends on it from the same originals. Voice broken: remake that scene's voice slice, then re-clip from the SAME frames with the new voice. Frame broken: fix the frame with one change, then re-clip with the SAME voice. Only the clip broken: re-clip with the same frames and voice. For a cut-off clip the machine listens to the voice slice first to tell which one it is. Two tries at most, then a person."
+      },
+      {
+       "n": "T-9",
+       "q": "Where is a cut-off line caught?",
+       "answer": "At production, on the AUDIO, before any picture is paid for (your call, 23 Sep). BUILT: an audio check runs right after the voice is made. Each scene's slice is heard. It must say its line, finish it, and not be silent or clipping. A failing slice is remade once, voice only, then the run stops. The edit's own listen stays only as a backstop. First real test (pigment-memory): every line whole, but the read drifts in volume by 17 LU between scenes (warned, not stopped)."
+      }
+     ],
+     "prompts": [
+      {
+       "name": "The spice sheet, stage 4g · v5 (pace fix): the full prompt",
+       "file": "../../../tools/copywriter/prompts/video/stage-4-loop/4g-spice/stage4g-spice-v5-damon.md"
+      },
+      {
+       "name": "The remake-clip skill, word for word",
+       "file": "../../../.claude/skills/remake-clip/SKILL.md"
+      }
+     ]
+    },
+    {
+     "id": "cut-2",
+     "name": "Assemble",
+     "status": "built",
+     "status_note": "built",
+     "tracks": [
+      [
+       "V1",
+       "a"
+      ],
+      [
+       "A1",
+       "a"
+      ]
+     ],
+     "who": "machine",
+     "in": "The trimmed pieces and the handoff's scene order.",
+     "out": "One continuous run, scene after scene, with hard cuts.",
+     "rules": [
+      "Scenes go in the handoff's order.",
+      "Hard cuts only, no dissolves or wipes.",
+      "A clip that QC held back is left out and named on the review page."
+     ],
+     "open": [
+      {
+       "n": "A-1",
+       "q": "Should the edit ever drop or shorten a scene to hit a length, or always play the whole script? If there's a target length, what is it per format?",
+       "now": "Now: every approved scene plays, and the length is whatever's left after the dead air is out (an-earlier-run ≈ 76s before trimming)."
+      },
+      {
+       "n": "A-2",
+       "q": "The teardown writes a control hook plus 5 variations. Should the edit make one video per hook at this stage, or build one video now and swap hooks later in Variants?",
+       "now": "Now: one video, from the hook the handoff names."
+      }
+     ]
+    },
+    {
+     "id": "cut-3",
+     "name": "Lay the B-roll",
+     "status": "fix",
+     "status_note": "wired through brief + production · first real run next",
+     "tracks": [
+      [
+       "V2",
+       "b"
+      ]
+     ],
+     "who": "production makes it; the cut prompt places it",
+     "in": "The B-roll clips production made (scenes that aren't to camera), each with the words it covers.",
+     "out": "Each B-roll clip placed over the exact words it shows, with one sentence on why.",
+     "rules": [
+      "B-roll goes where the words name something the viewer should see: the problem, the product, the proof.",
+      "It's placed by the words it covers, not by seconds, so it stays right when the timing changes.",
+      "A scroll stopper opens the video and runs the length of the hook line.",
+      "Two B-roll clips never touch, the offer is never covered, and the first words after a B-roll run are never covered.",
+      "Your rules in learned.json outrank the prompt's own rules."
+     ],
+     "prompt": "prompts/stage-2-cut/stage2-cut-v2-damon.md",
+     "prompt_name": "The cut prompt (stage 2 · v2)",
+     "open": [
+      {
+       "n": "B-1",
+       "q": "Run the next brief end to end so we see real B-roll and card plates get made (nothing has been spent on it yet)?",
+       "now": "Proven on test briefs only."
+      },
+      {
+       "n": "B-5",
+       "q": "One rule clash in the brief prompt: it already says “a brand fact not in the files: cut the line”, but a card with a price nobody has approved is marked [UNFILLED] (so the run stops and asks you) instead of the line being cut. That exception applies only inside card words. Keep it?",
+       "now": "Built as the exception."
+      }
+     ],
+     "listen": "Checked 23 Sep. The idea for each B-roll shot comes from the swipe: the teardown labels every shot A-roll or B-roll and lists the B-roll as a make-list, and the brief must carry each one or say why it dropped it. The brief can also ADD B-roll (any line that shows proof, product or mechanism; at least a third of scenes). Production makes B-roll as its own scene with its own clip. What makes a scene B-roll in our data is one field: to_camera = false. A new camera angle inside a scene is NOT B-roll; it's a beat within one clip, because a scene is two frames and one continuous clip, and anything needing a hard cut must be its own scene. Nova (an-earlier-run): NO B-roll footage. Its brief predates the A/B labels. The swipe's non-talking shots were graphics and cards (the SPOTS map ×3, receipts ×3, the CTA grid), carried only as edit layers, and two real inserts (a tight shot of the leg, the scrub on skin) were written INSIDE talking scenes, where they can't cut. So no clip exists for them.",
+     "settled": [
+      {
+       "n": "B-0",
+       "q": "Where is B-roll decided and made?",
+       "answer": "Named in the teardown, carried in the brief, made at production. It has nothing to do with the edit. (the owner, 23 Sep.)"
+      },
+      {
+       "n": "B-2",
+       "q": "How much B-roll?",
+       "answer": "Set by the swipe: every swipe B-roll shot is carried, plus any line that shows proof, product or mechanism, and at least a third of the scenes."
+      },
+      {
+       "n": "B-6",
+       "q": "How it's carried (BUILT 23 Sep)",
+       "answer": "AI brief v13 writes the talking scenes first, then a B-ROLL table (which swipe shot each comes from, what it shows, the exact words it plays over), then a CARDS table, then a roll-sheet check: every swipe shot mapped to a scene of ours or dropped with a reason. Every scene must say to_camera true/false, and one that doesn't is refused. No B-roll inside a talking scene. Production refuses a brief whose roll sheet leaves a swipe shot unaccounted for, or maps it to the wrong kind of scene. Old briefs only get a warning."
+      }
+     ],
+     "prompts": [
+      {
+       "name": "The teardown, stage 1: labels every row with its roll, section, layers and sound",
+       "file": "../../../tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v13-damon.md"
+      },
+      {
+       "name": "The AI brief, stage 5 · v14: the full prompt",
+       "file": "../../../tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v14-damon.md"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dress",
+   "name": "Dress",
+   "what": "Everything laid on top of the cut: words, graphics and sound. Each layer is a setting, so changing one never re-cuts the footage.",
+   "stages": [
+    {
+     "id": "dress-1",
+     "name": "Text: hook, cards, captions",
+     "status": "fix",
+     "status_note": "built · face-blind",
+     "tracks": [
+      [
+       "T1",
+       "t"
+      ],
+      [
+       "T2",
+       "t"
+      ]
+     ],
+     "who": "machine",
+     "in": "The cut, the handoff's card words, and the caption look.",
+     "out": "The hook on screen from frame one, each card on its clip, and word-by-word captions.",
+     "rules": [
+      "The hook is on screen from the very first frame, with no fade, and lasts as long as the clip under it (your rule, 20 Sep).",
+      "Cards use the handoff's exact words and line breaks. Type is always a layer, never generated into the clip.",
+      "Captions show 2–4 words at a time, and the spoken word lights up.",
+      "Nothing sits where the app's buttons cover the frame: the top 12%, the bottom 25% or the sides."
+     ],
+     "open": [
+      {
+       "n": "X-1",
+       "q": "Text doesn't know where the face is yet (you flagged this on the first proof). Does it need to move off the face automatically before the next test, or is that fine for now?",
+       "now": "Now: the hook and cards sit at 16% from the top, wherever the face is."
+      },
+      {
+       "n": "X-2",
+       "q": "Should the hook and cards have one house style, or copy each swipe's own text style?",
+       "now": "Now: one style, black heavy type on a white plate."
+      },
+      {
+       "n": "X-3",
+       "q": "Captions on every ad? And which look is the default: bold highlight, clean lower, or one word?",
+       "now": "Now: on, with bold highlight (white caps, the spoken word turns yellow)."
+      }
+     ],
+     "settled": [
+      {
+       "n": "X-0",
+       "q": "When does the opening text start?",
+       "answer": "The opening caption always starts at the very beginning of the video, on frame one. (23 Sep, restating 20 Sep)"
+      }
+     ]
+    },
+    {
+     "id": "dress-2",
+     "name": "Inserts: receipts, graphics, end cards",
+     "status": "fix",
+     "status_note": "card pictures made at production",
+     "tracks": [
+      [
+       "V3",
+       "i"
+      ]
+     ],
+     "who": "production makes the picture; the edit sets the words",
+     "in": "The handoff's insert list (in an-earlier-run: three receipts, three “THE SPOTS” maps, a 4-panel end grid) and the offer bank for any price.",
+     "out": "Each insert built as a designed graphic and cut in where the handoff puts it.",
+     "rules": [
+      "Every card is its own scene in the brief: a picture with no words in it, plus the exact words, where they land, and their sound cue.",
+      "Production makes the picture (one still, the same image model as every first frame) and no clip.",
+      "The edit only sets the words on top, because type is a layer, never generated into a picture.",
+      "A price only comes from the offer bank. An unapproved figure is [UNFILLED], and the run stops and asks."
+     ],
+     "open": [
+      {
+       "n": "I-1",
+       "q": "The edit doesn't read the card data yet (the words, where they land, their sound). That's the next edit build. Which other inserts should get templates: name tags, arrows/circles, platform UI (see “Every element of a video”)?",
+       "now": "Card pictures come from production; the edit's side isn't built."
+      }
+     ]
+    },
+    {
+     "id": "dress-3",
+     "name": "Sound: music and effects",
+     "status": "none",
+     "status_note": "not built",
+     "tracks": [
+      [
+       "A2",
+       "s"
+      ],
+      [
+       "A3",
+       "s"
+      ]
+     ],
+     "who": "machine, from a sound bank",
+     "in": "The cut and the handoff's sound cues (an-earlier-run: one cash-register sound, identical each of the 3 times, plus an upbeat stinger at the end).",
+     "out": "A music bed under the voice and each effect on its moment.",
+     "rules": [
+      "The music sits 18 dB under the voice.",
+      "An effect lands 2 frames before its picture.",
+      "A fixed cue is the same file every time."
+     ],
+     "open": [
+      {
+       "n": "S-1",
+       "q": "Music on every ad, or only on some formats? For example, none under a talking vlog and music under a demo.",
+       "now": "Not decided. No music is laid today."
+      },
+      {
+       "n": "S-2",
+       "q": "Where should sounds come from: a licensed library we bank on the Drive once (a fixed set of whoosh, pop, ka-ching and stinger, reused forever), or generated per ad?",
+       "now": "Not decided. There are no sound files today."
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "elements": [
+  {
+   "group": "Picture",
+   "name": "A-roll",
+   "what": "The person talking to camera. The spine the whole ad hangs on.",
+   "teardown": "labels it",
+   "production": "makes it (talking clip on the voice)",
+   "edit": "trims, orders",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "B-roll: demonstration",
+   "what": "What the words describe: the product in use, the problem, the proof.",
+   "teardown": "labels it (B-roll + what it shows)",
+   "production": "makes it (its own scene)",
+   "edit": "lays it over its words",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Inserts / close-ups",
+   "what": "Tight detail shots: texture, the label, the tube in hand, skin up close.",
+   "teardown": "labels it as B-roll",
+   "production": "makes it (its own scene, never inside a talking one)",
+   "edit": "cuts it in",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Scroll-stopper opener",
+   "what": "A visual pattern-interrupt in the first 1–2 seconds, before or under the hook line.",
+   "teardown": "labels it",
+   "production": "makes it",
+   "edit": "opens on it",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Screens & receipts",
+   "what": "Screenshots: reviews, comments, a website, a text thread, an order confirmation.",
+   "teardown": "labels it (S / X / G / E)",
+   "production": "should make it as a plate",
+   "edit": "drifts it (never a frozen still)",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Before / after & split screen",
+   "what": "Two states side by side or wiped: before/after, us vs them, two options.",
+   "teardown": "labels it (S / X / G / E)",
+   "production": "makes both sides",
+   "edit": "builds the split as a layout",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Green-screen / picture-in-picture",
+   "what": "Creator over a background (an article, a post, a product page), or a small face over footage.",
+   "teardown": "labels it (S / X / G / E)",
+   "production": "makes the background and the talker",
+   "edit": "composites them",
+   "status": "partly",
+   "note": "picture-in-picture works; a true cut-out needs a keyed clip from production"
+  },
+  {
+   "group": "Picture",
+   "name": "Camera moves in post",
+   "what": "Punch-ins on cut pauses, slow push on stills, a shake on an impact.",
+   "teardown": "n/a",
+   "production": "n/a",
+   "edit": "applies them by rule",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Transitions",
+   "what": "How one shot hands to the next. Hard cut by default; whip, match cut or zoom only when the swipe does it.",
+   "teardown": "should label non-cuts",
+   "production": "n/a",
+   "edit": "applies them",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Picture",
+   "name": "Colour match",
+   "what": "Every AI clip looks like it came from the same camera on the same day.",
+   "teardown": "n/a",
+   "production": "matches every still AND every clip to the first frame",
+   "edit": "one grade over the whole piece",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "Hook headline",
+   "what": "The big line on screen from frame one.",
+   "teardown": "labels it (with the swipe's text look)",
+   "production": "n/a",
+   "edit": "composes it",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "Captions",
+   "what": "Word-by-word subtitles in a set look.",
+   "teardown": "reads the swipe's caption style",
+   "production": "n/a",
+   "edit": "composes them off the voice timing",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "Cards",
+   "what": "Receipts, price, stats, a claim, a list, a map with circles: the words on a designed picture.",
+   "teardown": "labels it (C row)",
+   "production": "makes the picture, text-free",
+   "edit": "lays the words on it",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "Lower-thirds / name tags",
+   "what": "“Dr. …, dermatologist”, “Nova, 64”: who is speaking.",
+   "teardown": "labels it",
+   "production": "n/a (template)",
+   "edit": "composes it",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "Annotation",
+   "what": "Arrows, circles, highlights, underlines pointing at the thing.",
+   "teardown": "labels it",
+   "production": "n/a (template)",
+   "edit": "draws it on its moment",
+   "status": "partly",
+   "note": "arrows and circles land on their words, but at a fixed spot; nothing tracks a moving thing yet"
+  },
+  {
+   "group": "Graphics",
+   "name": "Platform UI",
+   "what": "A comment-reply bubble, a stitch or duet frame, a search bar, a like count.",
+   "teardown": "labels it",
+   "production": "n/a (template)",
+   "edit": "composes it",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "End card & CTA",
+   "what": "Product, offer, guarantee, “shop now”, logo.",
+   "teardown": "labels it (S / X / G / E)",
+   "production": "makes the packshot plate",
+   "edit": "composes the offer words",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Graphics",
+   "name": "Disclaimers",
+   "what": "“Results may vary”, #ad / paid partnership, claim footnotes.",
+   "teardown": "n/a",
+   "production": "n/a",
+   "edit": "adds by brand and claim rule",
+   "status": "partly",
+   "note": "the edit adds them by rule, but each brand needs its compliance file (brands/<brand>/brand-identity/compliance.json), and none exist yet"
+  },
+  {
+   "group": "Sound",
+   "name": "Voice / dialogue",
+   "what": "The one continuous read. It drives everything.",
+   "teardown": "reads the swipe's delivery",
+   "production": "makes it, levels it, checks it",
+   "edit": "keeps each clip's own sound",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Sound",
+   "name": "Music bed",
+   "what": "A licensed track under the voice, ducked 18 dB, cut to its beat.",
+   "teardown": "labels it",
+   "production": "picks it from the bank (bank built; files not made yet)",
+   "edit": "lays it and ducks it",
+   "status": "building",
+   "note": "everything is built; the bank files aren't made yet (your go at the permission prompt)"
+  },
+  {
+   "group": "Sound",
+   "name": "Sound effects",
+   "what": "Whooshes on moves, pops on text, a riser into the reveal, a ka-ching on a price.",
+   "teardown": "labels it",
+   "production": "picks it from the bank (bank built; files not made yet)",
+   "edit": "lands it 2 frames early",
+   "status": "building",
+   "note": "built; bank files not made yet, plus a meme & viral sound bank to seed (see below)"
+  },
+  {
+   "group": "Sound",
+   "name": "Room tone",
+   "what": "Quiet background air under every cut so a trimmed pause never drops to dead digital silence.",
+   "teardown": "labels it",
+   "production": "picks it from the bank (bank built; files not made yet)",
+   "edit": "fills the gaps",
+   "status": "building",
+   "note": "built; bank files not made yet"
+  },
+  {
+   "group": "Sound",
+   "name": "Final mix",
+   "what": "Everything balanced and delivered at the platform level (about −14 LUFS).",
+   "teardown": "n/a",
+   "production": "n/a",
+   "edit": "masters it",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Versions",
+   "name": "Hook variants",
+   "what": "The control hook plus 5 variations on the same body.",
+   "teardown": "writes the 5 hooks",
+   "production": "makes each hook's opening",
+   "edit": "swaps the opening, keeps the body",
+   "status": "have",
+   "note": "one video per hook on the same body"
+  },
+  {
+   "group": "Versions",
+   "name": "Body / CTA modules",
+   "what": "The ad as blocks (hook, problem, proof, offer, CTA) that recombine.",
+   "teardown": "sections every swipe",
+   "production": "makes each block",
+   "edit": "assembles combinations",
+   "status": "missing",
+   "note": "this is the variation engine: sections by the doctrine (planned, below)"
+  },
+  {
+   "group": "Versions",
+   "name": "Length cutdowns",
+   "what": "15 / 30 / 60-second versions from one master.",
+   "teardown": "n/a",
+   "production": "n/a",
+   "edit": "cuts them by priority",
+   "status": "have",
+   "note": "15/30/60, whole low-priority scenes out first; a line is never cut mid-scene"
+  },
+  {
+   "group": "Versions",
+   "name": "Ratio",
+   "what": "9:16 only. No 4:5, no 1:1 (the owner, 23 Sep). Content kept in the centre 4:5 zone.",
+   "teardown": "n/a",
+   "production": "makes 9:16 with content in a 4:5 zone",
+   "edit": "one 9:16 render with its safe zones",
+   "status": "have",
+   "note": "built end to end 23 Sep: teardown names it, brief carries it, production makes it, edit assembles it; proven on a no-spend test render"
+  },
+  {
+   "group": "Versions",
+   "name": "Cover frame & name",
+   "what": "The thumbnail frame, plus the file name that ties it back to spend.",
+   "teardown": "n/a",
+   "production": "n/a",
+   "edit": "picks the cover, names it",
+   "status": "have",
+   "note": "a cover per hook plus naming; designed thumbnails come with the variation engine"
+  }
+ ],
+ "elements_intro": "Every element a finished ad can carry. The rule (your words, 23 Sep): the teardown names every element, the brief carries all of them, production makes all of them, and the edit only assembles. At extreme scale each element is a typed, reusable part with an id. The teardown marks it on the swipe's timeline, production makes it once as a file, banks (music, SFX, templates, disclaimers) are made once and reused forever, and the edit becomes a deterministic assembly of parts. A new version is just swapping parts: hook × body × CTA × music × caption look × ratio.",
+ "variation": {
+  "intro": "Your words, 23 Sep: “full control of our creative output and variation process down to the word spoken, all the way to pumping out 100 variations at a time with different formats and styles.” The trick at scale: every variation is a set of PARTS. Each part is made once, and the edit assembles combinations for free. Money is spent on parts, never on combinations.",
+  "axes": [
+   {
+    "axis": "Hook line",
+    "what": "The first spoken words.",
+    "level": "words",
+    "made": "voice + the opening clip"
+   },
+   {
+    "axis": "Headline",
+    "what": "The on-screen text from frame one.",
+    "level": "words",
+    "made": "nothing (text layer), free"
+   },
+   {
+    "axis": "Scroll-stopper",
+    "what": "The opening visual that stops the thumb.",
+    "level": "picture",
+    "made": "one clip"
+   },
+   {
+    "axis": "Sections (the doctrine's 15)",
+    "what": "Swap any section for another version of the same job: hook, identification, problem, agitation, failed solutions, root cause, unique mechanism, solution, product, proof, transformation, objections, offer, urgency, call to action. The vocabulary comes from your marketing doctrine, never a list we made up.",
+    "level": "section",
+    "made": "voice + its scenes, per version"
+   },
+   {
+    "axis": "Framework",
+    "what": "The same parts in a different order: PAS, AIDA, BAB, story/testimonial, mechanism-led, us-vs-them, direct offer, identification-only (the doctrine's ad frameworks).",
+    "level": "structure",
+    "made": "only the sections that framework adds"
+   },
+   {
+    "axis": "Style",
+    "what": "The same film in a different look (the format library's restyle chain: screenplay, blocking and words frozen; only the rendering swaps).",
+    "level": "style",
+    "made": "re-rendered frames and clips per style"
+   },
+   {
+    "axis": "Format",
+    "what": "A different show format for the same argument.",
+    "level": "format",
+    "made": "a new production (it changes what the film says)"
+   },
+   {
+    "axis": "Thumbnail / cover",
+    "what": "A custom designed cover, not just a frame grab.",
+    "level": "picture",
+    "made": "one designed still each"
+   },
+   {
+    "axis": "Sound",
+    "what": "Music bed, trend sound, SFX set.",
+    "level": "sound",
+    "made": "picked from banks, free"
+   }
+  ],
+  "math": "Example: 6 hooks × 3 scroll-stoppers × 3 problem sections × 3 unique-mechanism sections × 2 offers = 324 combinations, from 17 parts, and each can run as PAS, mechanism-led or us-vs-them. Add 3 headlines and 2 music beds (free) and it's thousands, still from the same paid parts. The doctrine check removes any combination the awareness level forbids.",
+  "rules": [
+   "The doctrine decides what's allowed. The awareness level decides which sections an ad may use and what the opening must not do (an unaware opening never names the product or price). The sophistication stage decides whether the mechanism leads. Every combination is checked against those rules before it renders, so a bad combo never gets made.",
+   "Sections must join cleanly in any order. Each section starts and ends on a shared anchor: the same presenter, wardrobe, setting and a neutral in/out frame. So any opening can sit before any body.",
+   "The voice stays one person, one read: each section version is voiced stitched to what plays before it, so the tone never jumps. Then it's heard by the audio gate.",
+   "Every part has an id, and every render's name carries its part ids. Spend and results join back to the PART, so you learn which hook, problem or style wins, not just which ad.",
+   "Structure is swapped at the section level, never mid-sentence. Words can change inside a section only by making a new version of that section.",
+   "No 4:5 and no 1:1. Every render is 9:16."
+  ],
+  "decisions": [
+   {
+    "n": "V-2",
+    "q": "Which combinations get rendered? All of them, a set number per batch (e.g. 100), or a designed test where each part appears equally often so the results say which PART wins?"
+   },
+   {
+    "n": "V-3",
+    "q": "Where do the alternative sections come from? The swipe gives one of each, so the extras would be written by the brief stage (new problem angles from the avatar research, new mechanisms from the product file), all from the same research, nothing invented. OK?"
+   },
+   {
+    "n": "V-4",
+    "q": "Thumbnails: designed covers made at production as their own element (a still with the headline composed on top, like a card), with several per ad?"
+   }
+  ],
+  "settled": [
+   {
+    "n": "V-1",
+    "q": "What are the sections?",
+    "answer": "The marketing doctrine's 15 sections and its 8 ad frameworks (your digest, 23 Sep). BUILT: the teardown (v13) labels every row with its section, the brief (v15) carries a section on every scene and names the framework, production refuses a section or framework that isn't in the doctrine (read live from the doctrine, never copied), and the edit labels every part of the cut with its section. The review page shows a Sections lane and a table (from, to, scenes, what's said). The edit refuses any part with no section."
+   }
+  ]
+ },
+ "inventory": {
+  "intro": "The whole machine on one page, swipe to finished ad. Each stage does its own job cleanly so the next one just runs: the teardown names every element, the brief carries it, production makes it and checks it, the edit only assembles. Everything here is judged by one thing: does it hold attention and win a customer?",
+  "stages": [
+   {
+    "stage": "1 · Teardown",
+    "does": "Watches the swipe and names every element on its timeline: talking, B-roll, cards, screens, splits, green-screen, end card, the scroll-stopper, transitions, text layers, sounds, music feel, and the doctrine section of every row.",
+    "state": "built",
+    "fixed_today": "It was being handed a blank prompt, so it never saw your 15 sections. Fixed, and any label that isn't one of the 15 now gets one re-read, then the run stops.",
+    "prompt": "teardown v13"
+   },
+   {
+    "stage": "2 · Spice",
+    "does": "Rewrites the script for the mouth so it sounds like a real person talking. Sets the pace once for the whole piece, kept from the swipe.",
+    "state": "built",
+    "fixed_today": "Pace was being dropped here. Fixed. (The language-line add-on was withdrawn: not what you meant.)",
+    "prompt": "spice v5"
+   },
+   {
+    "stage": "3 · Brief",
+    "does": "Carries every element to production in a fixed order: talking scenes, B-roll, cards, screens, splits, green-screen, end card, layers and sound, a song block when sung, then the check that every swipe shot is accounted for. Every scene has its section and says whether it's to camera. Right after it's written: every hole in a line is filled automatically, from the brand's folder first, then the web, then a sensible inference, with the source noted. The brand's own price, guarantee and claims only ever come from its files. Then every scene's section is checked and corrected.",
+    "state": "built",
+    "prompt": "AI brief v16",
+    "fixed_today": "Holes no longer reach you or the voice. On Nova's brief it researched the receipt ($__ for kojic acid soap, from the web) and inferred the dose line."
+   },
+   {
+    "stage": "4 · Production checks (before any money)",
+    "does": "Section fit (the words do the section's job) · the roll sheet (no swipe shot lost) · every label is a real doctrine section.",
+    "state": "built",
+    "fixed_today": "Section fit is new. It caught 4 wrong labels on Nova's brief."
+   },
+   {
+    "stage": "5 · Voice & song",
+    "does": "One continuous voice read, with numbers spoken by our rules and brand words by the pronunciation list, set to one volume. Then the audio gate: says its line, finishes it, brand words and numbers heard right, sound not broken. Sung pieces go through the song chain (ElevenLabs v2.5, lyrics only from the script).",
+    "state": "built",
+    "open": "5 words being re-picked by ear · June's saved voice settings aren't sent (your call) · Brand B has no cast voice yet"
+   },
+   {
+    "stage": "6 · Pictures",
+    "does": "First and last frames, then clips timed to the voice. Plates for cards, screens and split sides, green-screen backgrounds, the end card edited from the real packshot. Every frame checked for the centre 4:5 zone, with the face position recorded. Every clip colour-matched to the first frame.",
+    "state": "built"
+   },
+   {
+    "stage": "7 · Remake",
+    "does": "A broken scene is remade surgically: only the broken element (voice, frame or clip), then what's built on it, from the same originals. Two tries, then a person.",
+    "state": "built"
+   },
+   {
+    "stage": "8 · Edit: cut",
+    "does": "Listens first. Trims start and end silence, keeps breaths, a 7% punch-in after cut pauses, the scenes in order, B-roll placed by the words it covers. Every piece is labelled with its doctrine section.",
+    "state": "built",
+    "open": "your review stop for mid-clip pauses isn't built yet"
+   },
+   {
+    "stage": "9 · Edit: dress",
+    "does": "Hook on frame one, captions, cards, screens, splits, green-screen, end card, name tags, arrows and circles, platform bubbles, icons and emoji, disclaimers, transitions, one colour grade. Music ducked under the voice, sound effects, room tone, the mix. Text moves off the face.",
+    "state": "built",
+    "open": "captions should use the script's spelling, not the transcriber's · the green-screen cut-out is made but not placed yet"
+   },
+   {
+    "stage": "10 · Retention checks",
+    "does": "Flags where a video would lose attention: a shot held too long, not enough visual change, dead air, text pops with no sound, no zoom on key words, B-roll rhythm, loop ending. All warnings and scores with numbers you tune, nothing blocks. Shown on the live timeline.",
+    "state": "built"
+   },
+   {
+    "stage": "11 · Versions",
+    "does": "One video per hook on the same body, 15/30/60-second cutdowns, a cover per hook, every file named. 9:16 only.",
+    "state": "built"
+   },
+   {
+    "stage": "12 · Variation engine",
+    "does": "Swap any doctrine section, hook, headline, scroll-stopper, style, framework or sound as named parts. Pay for parts once and assemble combinations for free, with results joining back to the part that won.",
+    "state": "planned",
+    "open": "your V-2 to V-4 calls"
+   }
+  ],
+  "libraries": [
+   [
+    "Doctrine sections",
+    "15, from your marketing doctrine (every stage reads the same list)"
+   ],
+   [
+    "Ad frameworks",
+    "8: PAS, AIDA, BAB, story/testimonial, mechanism-led, us-vs-them, direct offer, identification-only"
+   ],
+   [
+    "Fonts",
+    "15 open-licence, all installed (TikTok Sans, Montserrat, Inter, Anton, Bebas Neue…)"
+   ],
+   [
+    "Text zones",
+    "9 named spots for TikTok and Reels (organic), headline a touch lower, captions toward the bottom, text moved off the face"
+   ],
+   [
+    "Platform bubbles",
+    "16 styles: TikTok reply, IG/YouTube comment, X post, iMessage, WhatsApp, DM, stitch, duet, search, likes, views, review"
+   ],
+   [
+    "Icons & elements",
+    "52: UI icons, emoji, stickers, arrows, circles, stars, badges, price tags, bursts, progress bars, sparkles"
+   ],
+   [
+    "Transitions",
+    "19 listed with what triggers each, plus 8 shader transitions (cube, warp, pixelize, swirl…)"
+   ],
+   [
+    "HyperFrames blocks",
+    "382 ready-made blocks indexed, installable by name"
+   ],
+   [
+    "Music",
+    "ElevenLabs won your blind test; bank rows ready to make; song chain on v2.5; 90s neo-soul style approved"
+   ],
+   [
+    "Sound effects",
+    "16 rows ready to make (whoosh, pop, riser, ka-ching, room tones…); trending sounds pool being built in your organic swipe tool"
+   ],
+   [
+    "Pronunciation",
+    "Brand A 80 words (all spoken ones confirmed by your ear), Brand B 48; numbers by our own rules"
+   ],
+   [
+    "Caption looks",
+    "3 (bold highlight, clean lower, one word)"
+   ]
+  ],
+  "pages": [
+   [
+    "Live Edit Timeline",
+    "(team page)",
+    "watch every element light up in sync"
+   ],
+   [
+    "Say It Right",
+    "(team page)",
+    "confirm pronunciations by ear"
+   ],
+   [
+    "Music Taste Test",
+    "(team page)",
+    "the blind test and Nova's song"
+   ]
+  ],
+  "yours": [
+   "Say \"go\" to make Nova's ad for real (a few dollars of pictures + Higgsfield credits for ~60s of clips)",
+   "June's saved voice settings: send them? (changes her sound going forward)",
+   "The music and sound-effect bank files: approve the spend at the permission prompt (about $__)",
+   "Variation engine: V-2 (which combinations), V-3 (where extra sections come from), V-4 (thumbnails)",
+   "Pause review: its own quick stop, or part of the timeline review?"
+  ],
+  "known": [
+   "Holes and wrong section labels are now fixed automatically at the brief. Production checks both again before it spends.",
+   "The Apify research account is out of credit (the spare took over). Research on the Nova run came back empty.",
+   "The teardown and brief prompts don't know the new bubble kinds, icons, zones and fonts yet. That's the repo-wide sync pass.",
+   "Nothing from today is committed yet."
+  ]
+ }
+}

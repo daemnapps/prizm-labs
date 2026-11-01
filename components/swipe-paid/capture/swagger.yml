@@ -1,0 +1,1686 @@
+swagger: '2.0'
+
+info:
+  title: AdPlexity API
+  description: 'AdPlexity API'
+  version: 2.0.0
+  contact:
+    email: support@adplexity.io
+
+host: app.adplexity.io
+basePath: /api/v2
+schemes:
+  - https
+
+produces:
+  - application/json
+
+tags:
+  - name: search
+    description: Search statistics
+  - name: lookup
+    description: Retrieve individual ads and landing pages by ID
+  - name: boards
+    description: Export ads from boards
+  - name: favourites
+    description: Favourite ads
+  - name: shared
+    description: Publicly shared boards and favourite folders
+  - name: dictionaries
+    description: Dictionaries
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+    description: Customer API key
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /search/ads:
+    get:
+      tags:
+        - search
+      summary: Search ADs by specific criteria.
+      operationId: searchAds
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/startDate'
+        - $ref: '#/parameters/endDate'
+        - $ref: '#/parameters/searchQuery'
+        - $ref: '#/parameters/searchMode'
+        - $ref: '#/parameters/affiliateNetwork'
+        - $ref: '#/parameters/affiliateOffer'
+        - $ref: '#/parameters/arbitrageNetwork'
+        - $ref: '#/parameters/technology'
+        - $ref: '#/parameters/trackingTools'
+        - $ref: '#/parameters/vertical'
+        - $ref: '#/parameters/language'
+        - $ref: '#/parameters/country'
+        - $ref: '#/parameters/daysRunningFrom'
+        - $ref: '#/parameters/daysRunningTo'
+        - $ref: '#/parameters/countriesCountFrom'
+        - $ref: '#/parameters/countriesCountTo'
+        - $ref: '#/parameters/adsCountFrom'
+        - $ref: '#/parameters/adsCountTo'
+        - $ref: '#/parameters/metaStatus'
+        - $ref: '#/parameters/metaLandingType'
+        - $ref: '#/parameters/metaAdType'
+        - $ref: '#/parameters/metaCtaType'
+        - $ref: '#/parameters/metaPlatform'
+        - $ref: '#/parameters/metaVideoLength'
+        - $ref: '#/parameters/metaGroupingId'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/count'
+        - $ref: '#/parameters/order'
+      responses:
+        '200':
+          description: ADs data
+          schema:
+            $ref: '#/definitions/SearchAdsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '422':
+          $ref: '#/responses/ValidationError'
+
+  /search/lps:
+    get:
+      tags:
+        - search
+      summary: Search LPs by specific criteria.
+      operationId: searchLps
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/startDate'
+        - $ref: '#/parameters/endDate'
+        - $ref: '#/parameters/searchQuery'
+        - $ref: '#/parameters/searchMode'
+        - $ref: '#/parameters/affiliateNetwork'
+        - $ref: '#/parameters/affiliateOffer'
+        - $ref: '#/parameters/arbitrageNetwork'
+        - $ref: '#/parameters/technology'
+        - $ref: '#/parameters/trackingTools'
+        - $ref: '#/parameters/vertical'
+        - $ref: '#/parameters/language'
+        - $ref: '#/parameters/country'
+        - $ref: '#/parameters/daysRunningFrom'
+        - $ref: '#/parameters/daysRunningTo'
+        - $ref: '#/parameters/countriesCountFrom'
+        - $ref: '#/parameters/countriesCountTo'
+        - $ref: '#/parameters/adsCountFrom'
+        - $ref: '#/parameters/adsCountTo'
+        - $ref: '#/parameters/metaStatus'
+        - $ref: '#/parameters/metaLandingType'
+        - $ref: '#/parameters/metaAdType'
+        - $ref: '#/parameters/metaCtaType'
+        - $ref: '#/parameters/metaPlatform'
+        - $ref: '#/parameters/metaVideoLength'
+        - $ref: '#/parameters/lpGroupingId'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/count'
+        - $ref: '#/parameters/order'
+      responses:
+        '200':
+          description: Landing pages data
+          schema:
+            $ref: '#/definitions/SearchLpsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '422':
+          $ref: '#/responses/ValidationError'
+
+  /ads/{id}:
+    get:
+      tags:
+        - lookup
+      summary: Get an ad by ID.
+      description: Returns a single ad with its associated landing pages.
+      operationId: getAdById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          description: Unique identifier of the ad
+      responses:
+        '200':
+          description: Ad data
+          schema:
+            $ref: '#/definitions/AdResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+
+  /lps/{id}:
+    get:
+      tags:
+        - lookup
+      summary: Get a landing page by ID.
+      description: Returns a single landing page.
+      operationId: getLpById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          description: Unique identifier of the landing page
+      responses:
+        '200':
+          description: Landing page data
+          schema:
+            $ref: '#/definitions/LandingPageResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+
+  /boards:
+    get:
+      tags:
+        - boards
+      summary: List user's boards.
+      description: Returns all boards belonging to the authenticated user.
+      operationId: listUserBoards
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successful response with list of boards
+          schema:
+            $ref: '#/definitions/UserBoardsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '403':
+          $ref: '#/responses/Forbidden'
+
+  /boards/ads:
+    get:
+      tags:
+        - boards
+      summary: Export ads from boards.
+      description: Retrieves all ads from specified boards for the authenticated user.
+      operationId: boardAds
+      produces:
+        - application/json
+      parameters:
+        - name: boards
+          in: query
+          required: true
+          type: array
+          items:
+            type: string
+          minItems: 1
+          collectionFormat: csv
+          description: Comma-separated board IDs to export ads from
+      responses:
+        '200':
+          description: Successful response with exported ads
+          schema:
+            $ref: '#/definitions/BoardsAdsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          $ref: '#/responses/ValidationError'
+
+  /favourites/ads:
+    get:
+      tags:
+        - favourites
+      summary: Export ads from favourite folders.
+      description: Retrieves all ads from specified favourite folders for the authenticated user.
+      operationId: favouriteAds
+      produces:
+        - application/json
+      parameters:
+        - name: folders
+          in: query
+          required: true
+          type: array
+          items:
+            type: string
+          minItems: 1
+          collectionFormat: csv
+          description: Comma-separated folder IDs to export ads from
+      responses:
+        '200':
+          description: Successful response with exported ads
+          schema:
+            $ref: '#/definitions/FavouritesAdsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          $ref: '#/responses/ValidationError'
+
+  /favourites/folders:
+    get:
+      tags:
+        - favourites
+      summary: List user's favourite folders.
+      description: Returns all favourite folders belonging to the authenticated user.
+      operationId: listFavouriteFolders
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successful response with list of favourite folders
+          schema:
+            $ref: '#/definitions/FavouriteFoldersResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '403':
+          $ref: '#/responses/Forbidden'
+
+  /shared/boards/{key}:
+    get:
+      tags:
+        - shared
+      summary: Export ads from a shared board.
+      description: Retrieves all ads from a board that has been shared via a public share key. No authentication required.
+      operationId: sharedBoardAds
+      security: []
+      produces:
+        - application/json
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+          description: Public share key of the board
+      responses:
+        '200':
+          description: Successful response with exported ads
+          schema:
+            $ref: '#/definitions/SharedBoardsAdsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          $ref: '#/responses/ValidationError'
+
+  /shared/favourites/folder/{key}:
+    get:
+      tags:
+        - shared
+      summary: Export ads from a shared favourite folder.
+      description: Retrieves all ads from a favourite folder that has been shared via a public share key. No authentication required.
+      operationId: sharedFavouriteAds
+      security: []
+      produces:
+        - application/json
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+          description: Public share key of the favourite folder
+      responses:
+        '200':
+          description: Successful response with exported ads
+          schema:
+            $ref: '#/definitions/SharedFavouritesFolderAdsResult'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          $ref: '#/responses/ValidationError'
+
+  /dictionary/countries:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list country codes.
+      operationId: countryCodes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/CountriesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/affiliate_networks:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list affiliate networks.
+      operationId: affiliateNetworks
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AffiliateNetworksResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/affiliate_offers:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of affiliate offers.
+      operationId: affiliateOffers
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/AffiliateOffersResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/arbitrage_networks:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list arbitrage networks.
+      operationId: arbitrageNetworks
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ArbitrageNetworksResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/languages:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list languages.
+      operationId: languages
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/LanguagesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/tracking_tools:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list tracking tools.
+      operationId: trackingTools
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/TrackingToolsResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/technologies:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list technologies.
+      operationId: technologies
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/TechnologiesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/verticals:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list verticals.
+      operationId: verticals
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/VerticalsResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/meta_statuses:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of Meta ad statuses.
+      operationId: metaStatuses
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MetaStatusesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/meta_landing_types:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of Meta landing types.
+      operationId: metaLandingTypes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MetaLandingTypesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/meta_ad_types:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of Meta ad types.
+      operationId: metaAdTypes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MetaAdTypesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/meta_cta_types:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of Meta CTA button types.
+      operationId: metaCtaTypes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MetaCtaTypesResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/meta_platforms:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of Meta publisher platforms.
+      operationId: metaPlatforms
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MetaPlatformsResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /dictionary/meta_video_lengths:
+    get:
+      tags:
+        - dictionaries
+      summary: Get list of Meta video length buckets.
+      operationId: metaVideoLengths
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/MetaVideoLengthsResult'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+responses:
+  BadRequest:
+    description: Bad request.
+    schema:
+      $ref: '#/definitions/ErrorModel'
+    examples:
+      application/json:
+        errorMessage: Invalid request
+        errorCode: 400
+        errorDescription: Date parameter must be in 'Y-m-d' format
+  Unauthorized:
+    description: Unauthorized.
+    schema:
+      $ref: '#/definitions/ErrorModel'
+    examples:
+      application/json:
+        errorMessage: Unauthorized
+        errorCode: 401
+        errorDescription: Missing or invalid X-API-Key header
+  Forbidden:
+    description: Access denied.
+    schema:
+      $ref: '#/definitions/ErrorModel'
+    examples:
+      application/json:
+        errorMessage: Access denied
+        errorCode: 403
+        errorDescription: Your subscription expired. Please prolong
+  NotFound:
+    description: Resource not found.
+    schema:
+      $ref: '#/definitions/ErrorModel'
+    examples:
+      application/json:
+        errorMessage: Not found
+        errorCode: 404
+        errorDescription: Item with the specified ID was not found
+  ValidationError:
+    description: Request validation errors.
+    schema:
+      $ref: '#/definitions/ErrorModel'
+    examples:
+      application/json:
+        errorMessage: Validation failed
+        errorCode: 422
+        errorDescription: Parameter must contain at least one item
+
+parameters:
+  startDate:
+    name: start_date
+    in: query
+    description: Start date for search date range (format 'Y-m-d').
+    required: true
+    type: string
+
+  endDate:
+    name: end_date
+    in: query
+    description: End date for search date range (format 'Y-m-d'). Maximum date range is 30 days.
+    required: true
+    type: string
+
+  offset:
+    name: offset
+    in: query
+    description: Offset of first item in result, can be used for pagination. Starting from zero.
+    required: false
+    type: integer
+
+  count:
+    name: count
+    in: query
+    description: Maximum number of items to be returned in result (1-100). Default is 100.
+    required: false
+    type: integer
+
+  searchQuery:
+    name: search_query
+    in: query
+    description: Search query string. Use with `search_mode` to specify which field to match against.
+    required: false
+    type: string
+
+  searchMode:
+    name: search_mode
+    in: query
+    description: |
+      Specifies which field the `search_query` matches against. Default is 'keyword.ad_or_lp'
+
+      Keyword subjects:
+      - keyword.lp - landing page text
+      - keyword.ad - ad title/description
+      - keyword.translated_lp - translated landing page text
+      - keyword.ad_or_lp - ad or landing page text
+      - keyword.arb_keyword - arbitrage keyword
+      - keyword.lp_summary - landing page summary
+
+      Advertiser subjects:
+      - advertiser.lp_url - landing page URL
+      - advertiser.lp_host - landing page host
+      - advertiser.lp_redirect - redirect URL
+      - advertiser.lp_outbound_url - outbound URL
+      - advertiser.lp_url_redirect_outbound - URL, redirect or outbound URL
+    required: false
+    type: string
+    enum:
+      - keyword.lp
+      - keyword.ad
+      - keyword.translated_lp
+      - keyword.ad_or_lp
+      - keyword.arb_keyword
+      - keyword.lp_summary
+      - advertiser.lp_url
+      - advertiser.lp_host
+      - advertiser.lp_redirect
+      - advertiser.lp_outbound_url
+      - advertiser.lp_url_redirect_outbound
+
+  country:
+    name: country
+    in: query
+    description: A list of country codes separated by commas, for example "GB,DE,FR". Available list of country codes may be obtained by using "/dictionary/countries" resource.
+    required: false
+    type: array
+    items:
+      type: string
+    collectionFormat: csv
+
+  affiliateNetwork:
+    name: affiliate_network
+    in: query
+    description: A list of affiliate network ID, separated by commas. Available list of affiliate networks can be obtained by "/dictionary/affiliate_networks" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  affiliateOffer:
+    name: affiliate_offer
+    in: query
+    description: A list of affiliate offer ID, separated by commas. Available list of affiliate offers can be obtained by "/dictionary/affiliate_offers" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  arbitrageNetwork:
+    name: arbitrage_network
+    in: query
+    description: A list of arbitrage network ID, separated by commas. Available list of arbitrage networks can be obtained by "/dictionary/arbitrage_networks" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  technology:
+    name: technology
+    in: query
+    description: A list of technology ID, separated by commas. Available list of technologies can be obtained by "/dictionary/technologies" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  trackingTools:
+    name: tracking_tools
+    in: query
+    description: A list of tracking tool ID, separated by commas. Available list of tracking tools can be obtained by "/dictionary/tracking_tools" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  vertical:
+    name: vertical
+    in: query
+    description: A list of vertical ID, separated by commas. Available list of verticals may be obtained by using "/dictionary/verticals".
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  language:
+    name: language
+    in: query
+    description: ISO 639-1 language code, f.e. `en`, `de`.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  order:
+    name: order
+    in: query
+    description: Sort order for search results.
+    required: false
+    type: string
+    enum:
+      - newest
+      - days_desc
+      - global_days_desc
+      - first_seen
+      - last_seen
+      - grouped_ads_desc
+      - grouped_pages_desc
+      - grouped_active_ads_desc
+      - grouped_new_ads_desc
+      - grouped_score_desc
+
+  daysRunningFrom:
+    name: days_running_from
+    in: query
+    description: Minimum number of days the ad has been running.
+    required: false
+    type: integer
+
+  daysRunningTo:
+    name: days_running_to
+    in: query
+    description: Maximum number of days the ad has been running.
+    required: false
+    type: integer
+
+  countriesCountFrom:
+    name: countries_count_from
+    in: query
+    description: Minimum number of countries the ad has been seen in.
+    required: false
+    type: integer
+
+  countriesCountTo:
+    name: countries_count_to
+    in: query
+    description: Maximum number of countries the ad has been seen in.
+    required: false
+    type: integer
+
+  adsCountFrom:
+    name: ads_count_from
+    in: query
+    description: Minimum number of ads grouped together under a result. Only effective when `meta_grouping_id` is set.
+    required: false
+    type: integer
+
+  adsCountTo:
+    name: ads_count_to
+    in: query
+    description: Maximum number of ads grouped together under a result. Only effective when `meta_grouping_id` is set.
+    required: false
+    type: integer
+
+  metaStatus:
+    name: meta_status
+    in: query
+    description: A list of Meta ad status IDs, separated by commas. Available list may be obtained by using "/dictionary/meta_statuses" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  metaLandingType:
+    name: meta_landing_type
+    in: query
+    description: A list of Meta landing type IDs, separated by commas. Available list may be obtained by using "/dictionary/meta_landing_types" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  metaAdType:
+    name: meta_ad_type
+    in: query
+    description: A list of Meta ad type IDs, separated by commas. Available list may be obtained by using "/dictionary/meta_ad_types" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  metaCtaType:
+    name: meta_cta_type
+    in: query
+    description: A list of Meta CTA button type IDs, separated by commas. Available list may be obtained by using "/dictionary/meta_cta_types" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  metaPlatform:
+    name: meta_platform
+    in: query
+    description: A list of Meta publisher platform IDs, separated by commas. Available list may be obtained by using "/dictionary/meta_platforms" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  metaVideoLength:
+    name: meta_video_length
+    in: query
+    description: A list of Meta video length bucket IDs, separated by commas. Available list may be obtained by using "/dictionary/meta_video_lengths" resource.
+    required: false
+    type: array
+    items:
+      type: integer
+    collectionFormat: csv
+
+  metaGroupingId:
+    name: meta_grouping_id
+    in: query
+    description: |
+      Meta ad grouping type ID. When set, search results are grouped by this grouping type.
+
+      Possible values:
+      - 1 - Group by creative and description
+      - 2 - Group by creative
+    required: false
+    type: integer
+    enum:
+      - 1
+      - 2
+    example: 1
+
+  lpGroupingId:
+    name: lp_grouping_id
+    in: query
+    description: |
+      Landing page grouping type ID. When set, search results are grouped by this grouping type.
+
+      Possible values:
+      - 1 - Group by URL and page content similarity
+      - 2 - Group by exact URL
+    required: false
+    type: integer
+    enum:
+      - 1
+      - 2
+    example: 1
+
+definitions:
+  SearchAdsResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Ad'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        - id: 1234567
+          type: 6
+          title: Best Crypto App of 2026
+          description: Earn rewards on every trade
+          image_url: https://adplexity.io/ads/1234567.jpg
+          video_url: https://adplexity.io/ads/1234567.mp4
+          meta_ad_type: 1
+          landing_pages:
+            - id: 9876543
+              ad_id: 1234567
+              url: https://example.com/lp/crypto
+              redirects:
+                - https://tracker.example.com/r/abc
+                - https://example.com/lp/crypto
+              outgoing_urls:
+                https://offer.example.com/signup:
+                  - https://t.example.com/click
+                  - https://offer.example.com/signup
+              screenshot_url: https://adplexity.io/lps/9876543.png
+              archive_url: https://adplexity.io/lps/9876543.html
+              technologies: [1, 14]
+              tracking_tools: [6]
+              affiliate_networks: [1]
+              affiliate_offers: [101]
+              arbitrage_networks: [12]
+      meta:
+        credits_cost: 1
+
+  SearchLpsResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LandingPage'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        - id: 9876543
+          ad_id: 1234567
+          url: https://example.com/lp/crypto
+          redirects:
+            - https://tracker.example.com/r/abc
+            - https://example.com/lp/crypto
+          outgoing_urls:
+            https://offer.example.com/signup:
+              - https://t.example.com/click
+              - https://offer.example.com/signup
+          screenshot_url: https://adplexity.io/lps/9876543.png
+          archive_url: https://adplexity.io/lps/9876543.html
+          technologies: [1, 14]
+          tracking_tools: [6]
+          affiliate_networks: [1]
+          affiliate_offers: [101]
+          arbitrage_networks: [12]
+      meta:
+        credits_cost: 1
+
+  AdResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/Ad'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        id: 1234567
+        type: 6
+        title: Best Crypto App of 2026
+        description: Earn rewards on every trade
+        image_url: https://adplexity.io/ads/1234567.jpg
+        video_url: https://adplexity.io/ads/1234567.mp4
+        countries: [US, GB]
+        verticals: [13]
+        technologies: [1]
+        affiliate_networks: [1]
+        affiliate_offers: [101]
+        arbitrage_networks: [12]
+        meta_page_id: '987654321'
+        landing_pages:
+          - id: 9876543
+            ad_id: 1234567
+            url: https://example.com/lp/crypto
+            redirects:
+              - https://example.com/lp/crypto
+            outgoing_urls: {}
+            screenshot_url: https://adplexity.io/lps/9876543.png
+            archive_url: https://adplexity.io/lps/9876543.html
+            technologies: [1]
+            tracking_tools: [6]
+            affiliate_networks: [1]
+            affiliate_offers: [101]
+            arbitrage_networks: [12]
+      meta:
+        credits_cost: 1
+
+  LandingPageResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/LandingPage'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        id: 9876543
+        ad_id: 1234567
+        url: https://example.com/lp/crypto
+        redirects:
+          - https://example.com/lp/crypto
+        outgoing_urls:
+          https://offer.example.com/signup:
+            - https://offer.example.com/signup
+        screenshot_url: https://adplexity.io/lps/9876543.png
+        archive_url: https://adplexity.io/lps/9876543.html
+        technologies: [1, 14]
+        tracking_tools: [6]
+        affiliate_networks: [1]
+        affiliate_offers: [101]
+        arbitrage_networks: [12]
+        days_total: 42
+        first_seen: '2026-08-01'
+        last_seen: '2026-08-30'
+        countries: [US, GB]
+        verticals: [13]
+      meta:
+        credits_cost: 1
+
+  BoardsAdsResult:
+    $ref: '#/definitions/AdsResult'
+
+  FavouritesAdsResult:
+    $ref: '#/definitions/AdsResult'
+
+  SharedBoardsAdsResult:
+    $ref: '#/definitions/AdsResult'
+
+  SharedFavouritesFolderAdsResult:
+    $ref: '#/definitions/AdsResult'
+
+  AdsResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: object
+        required:
+          - ads
+        properties:
+          ads:
+            type: array
+            description: List of ads
+            items:
+              $ref: '#/definitions/Ad'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        ads:
+          - id: 1234567
+            type: 6
+            title: Best Crypto App of 2026
+            description: Earn rewards on every trade
+            image_url: https://adplexity.io/ads/1234567.jpg
+            landing_pages:
+              - id: 9876543
+                ad_id: 1234567
+                url: https://example.com/lp/crypto
+                screenshot_url: https://adplexity.io/lps/9876543.png
+                technologies: [1]
+                tracking_tools: [6]
+                affiliate_networks: [1]
+                affiliate_offers: [101]
+                arbitrage_networks: [12]
+      meta:
+        credits_cost: 1
+
+  UserBoardsResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        description: List of boards
+        items:
+          $ref: '#/definitions/UserBoard'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        - id: 101
+          name: Crypto Campaigns
+          folder_name: Crypto
+        - id: 102
+          name: Holiday Shopping
+          folder_name: null
+
+  FavouriteFoldersResult:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        description: List of favourite folders
+        items:
+          $ref: '#/definitions/FavouriteFolder'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        - id: 201
+          name: Top performers
+        - id: 202
+          name: Inspiration
+
+  NamedEntityListResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/NamedEntity'
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+    example:
+      data:
+        - id: 1
+          name: Active
+        - id: 2
+          name: Inactive
+
+  LanguagesResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          required:
+            - code
+            - name
+          properties:
+            code:
+              type: string
+            name:
+              type: string
+          example:
+            code: en
+            name: English
+    example:
+      data:
+        - code: en
+          name: English
+        - code: de
+          name: German
+
+  CountriesResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CountryModel'
+    example:
+      data:
+        - name: France
+          code: FR
+        - name: Germany
+          code: DE
+
+  AffiliateNetworksResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/NamedEntity'
+          example:
+            id: 1
+            name: ZinQ Media
+    example:
+      data:
+        - id: 1
+          name: ZinQ Media
+        - id: 2
+          name: MaxBounty
+
+  AffiliateOffersResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/NamedEntity'
+            - type: object
+              properties:
+                affiliate_network_id:
+                  type: integer
+                  description: ID of the affiliate network the offer belongs to (see /dictionary/affiliate_networks).
+          example:
+            id: 101
+            name: Crypto Signup
+            affiliate_network_id: 1
+    example:
+      data:
+        - id: 101
+          name: Crypto Signup
+          affiliate_network_id: 1
+        - id: 102
+          name: Keto Trial
+          affiliate_network_id: 2
+
+  ArbitrageNetworksResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/NamedEntity'
+          example:
+            id: 3
+            name: Sedo
+    example:
+      data:
+        - id: 3
+          name: Sedo
+        - id: 4
+          name: Bodis
+
+  VerticalsResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/NamedEntity'
+          example:
+            id: 13
+            name: Cryptocurrencies
+    example:
+      data:
+        - id: 13
+          name: Cryptocurrencies
+        - id: 14
+          name: Finance
+
+  TrackingToolsResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/NamedEntity'
+          example:
+            id: 6
+            name: Voluum
+    example:
+      data:
+        - id: 6
+          name: Voluum
+        - id: 7
+          name: BeMob
+
+  TechnologiesResult:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          allOf:
+            - $ref: '#/definitions/NamedEntity'
+          example:
+            id: 1
+            name: Shopify
+    example:
+      data:
+        - id: 1
+          name: Shopify
+        - id: 2
+          name: WordPress
+
+  MetaStatusesResult:
+    $ref: '#/definitions/NamedEntityListResult'
+
+  MetaLandingTypesResult:
+    $ref: '#/definitions/NamedEntityListResult'
+
+  MetaAdTypesResult:
+    $ref: '#/definitions/NamedEntityListResult'
+
+  MetaCtaTypesResult:
+    $ref: '#/definitions/NamedEntityListResult'
+
+  MetaPlatformsResult:
+    $ref: '#/definitions/NamedEntityListResult'
+
+  MetaVideoLengthsResult:
+    $ref: '#/definitions/NamedEntityListResult'
+
+  UserBoard:
+    type: object
+    description: Represents a user's board
+    required:
+      - id
+      - name
+      - folder_name
+    properties:
+      id:
+        type: integer
+        description: Unique identifier of the board
+      name:
+        type: string
+        description: Name of the board
+      folder_name:
+        type: string
+        x-nullable: true
+        description: Name of the folder this board belongs to, or null if not in a folder
+
+  FavouriteFolder:
+    type: object
+    description: Represents a user's favourite folder
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        description: Unique identifier of the folder
+      name:
+        type: string
+        description: Name of the folder
+
+  NamedEntity:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+
+  ResponseMeta:
+    type: object
+    description: Response metadata included when the request has a credits cost
+    properties:
+      credits_cost:
+        type: integer
+        description: Number of API credits deducted for this request
+
+  ErrorModel:
+    type: object
+    description: Common error response model
+    required:
+      - errorMessage
+      - errorCode
+    properties:
+      errorMessage:
+        type: string
+        description: Human-readable error message
+      errorCode:
+        type: integer
+        description: Numeric error code for programmatic handling
+      errorDescription:
+        type: string
+        description: Additional details about the error
+    example:
+      errorMessage: Invalid request
+      errorCode: 400
+      errorDescription: Parameter 'start_date' must be in 'Y-m-d' format
+
+  CountryModel:
+    type: object
+    required:
+      - name
+      - code
+    properties:
+      name:
+        type: string
+      code:
+        type: string
+    example:
+      name: France
+      code: FR
+
+  Ad:
+    type: object
+    description: Represents an ad with its associated landing pages
+    required:
+      - id
+      - type
+    properties:
+      id:
+        type: integer
+        description: Unique identifier of the ad
+      type:
+        type: integer
+        description: Type of the ad from /dictionary/ad_types
+      title:
+        type: string
+        description: Title or headline of the ad
+      description:
+        type: string
+        description: Description text of the ad
+      image_url:
+        type: string
+        format: uri
+        description: URL to the ad's main image
+      video_url:
+        type: string
+        format: uri
+        description: URL to the ad's video if available
+      days_total:
+        type: integer
+        description: Total number of days the ad has been running. When `meta_grouping_id` is set, holds the group's value.
+      first_seen:
+        type: string
+        format: date
+        description: Date the ad was first seen (format 'Y-m-d').
+      last_seen:
+        type: string
+        format: date
+        description: Date the ad was last seen (format 'Y-m-d').
+      countries:
+        type: array
+        description: List of country codes the ad has been seen in. When `meta_grouping_id` is set, holds the group's value.
+        items:
+          type: string
+      tracking_tools:
+        type: array
+        description: List of tracking tool IDs detected across the ad's landing pages.
+        items:
+          type: integer
+      affiliate_networks:
+        type: array
+        description: List of affiliate network IDs associated with the ad.
+        items:
+          type: integer
+      affiliate_offers:
+        type: array
+        description: List of affiliate offer IDs detected across the ad's landing pages (see /dictionary/affiliate_offers).
+        items:
+          type: integer
+      arbitrage_networks:
+        type: array
+        description: List of arbitrage network IDs associated with the ad's landing pages.
+        items:
+          type: integer
+      technologies:
+        type: array
+        description: List of technology IDs detected across the ad's landing pages.
+        items:
+          type: integer
+      verticals:
+        type: array
+        description: List of vertical IDs of the ad (see /dictionary/verticals).
+        items:
+          type: integer
+      meta_ad_id:
+        type: string
+        description: Meta (Facebook) ad library ID. Only for Meta ads.
+      meta_page_id:
+        type: string
+        description: Meta (Facebook) page ID running the ad. Only for Meta ads.
+      meta_ad_type:
+        type: integer
+        description: Meta ad media type (see /dictionary/meta_ad_types). Only for Meta ads.
+      meta_cta_type:
+        type: integer
+        description: Meta CTA button type (see /dictionary/meta_cta_types). Only for Meta ads with a CTA button.
+      meta_page_name:
+        type: string
+        description: Name of the Meta page running the ad. Only for Meta ads.
+      meta_caption:
+        type: string
+        description: Caption (display link/domain) of the Meta ad. Only for Meta ads.
+      meta_platforms:
+        type: array
+        description: List of Meta publisher platform IDs the ad runs on (see /dictionary/meta_platforms). Only for Meta ads.
+        items:
+          type: integer
+      meta_status:
+        type: integer
+        enum:
+          - 1
+          - 0
+        description: Whether the Meta ad is currently active (1) or inactive (0). Only for Meta ads. When `meta_grouping_id` is set, reflects the group's status.
+      meta_grouping_id:
+        type: integer
+        description: Grouping type the results are grouped by. Only present when the `meta_grouping_id` request parameter is set.
+      meta_group_ads_count:
+        type: integer
+        description: Number of ads grouped together under this ad. Only present when `meta_grouping_id` is set.
+      meta_group_pages_count:
+        type: integer
+        description: Number of landing pages grouped together under this ad. Only present when `meta_grouping_id` is set.
+      meta_group_active_ads:
+        type: integer
+        description: Number of currently active ads in the group. Only present when `meta_grouping_id` is set.
+      meta_group_active_ads_change:
+        type: number
+        format: float
+        description: Percentage change of active ads in the group compared to the previous period (7 days), rounded to one decimal. 0 when there is no previous value. Only present when `meta_grouping_id` is set.
+      meta_group_new_ads:
+        type: integer
+        description: Number of ads in the group first seen within the last 7 days. Only present when `meta_grouping_id` is set.
+      meta_group_new_ads_change:
+        type: number
+        format: float
+        description: Percentage change of new ads in the group compared to the previous period (7 days), rounded to one decimal. 0 when there is no previous value. Only present when `meta_grouping_id` is set.
+      meta_group_score:
+        type: number
+        format: float
+        description: Group activity score combining active ads, new ads, ads count, days running and their growth. Higher is better. Only present when `meta_grouping_id` is set.
+      meta_group_score_change:
+        type: number
+        format: float
+        description: Percentage change of the group score compared to the previous period (7 days), rounded to one decimal. 0 when there is no previous value. Only present when `meta_grouping_id` is set.
+      landing_pages:
+        type: array
+        description: List of landing pages associated with this ad
+        items:
+          $ref: '#/definitions/LandingPage'
+
+  LandingPage:
+    type: object
+    description: Represents a landing page with its URLs and metadata
+    required:
+      - id
+      - ad_id
+      - url
+    properties:
+      id:
+        type: integer
+        description: Unique identifier of the landing page
+      ad_id:
+        type: integer
+        description: Unique identifier of the ad this landing page belongs to
+      url:
+        type: string
+        format: uri
+        description: Original URL of the landing page
+      redirects:
+        type: array
+        description: List of redirect URLs in the landing page redirect chain
+        items:
+          type: string
+          format: uri
+      outgoing_urls:
+        type: object
+        description: Map of outbound URLs where key is url and value is redirect chain
+        additionalProperties:
+          type: array
+          items:
+            type: string
+            format: uri
+      screenshot_url:
+        type: string
+        format: uri
+        description: URL to the screenshot of the landing page
+      archive_url:
+        type: string
+        format: uri
+        description: URL to the archived version of the landing page
+      technologies:
+        type: array
+        description: List of technology IDs detected on the landing page
+        items:
+          type: integer
+      tracking_tools:
+        type: array
+        description: List of tracking tool IDs detected on the landing page
+        items:
+          type: integer
+      affiliate_networks:
+        type: array
+        description: List of affiliate network IDs associated with the landing page
+        items:
+          type: integer
+      affiliate_offers:
+        type: array
+        description: List of affiliate offer IDs detected on the landing page (see /dictionary/affiliate_offers)
+        items:
+          type: integer
+      arbitrage_networks:
+        type: array
+        description: List of arbitrage network IDs associated with the landing page
+        items:
+          type: integer
+      days_total:
+        type: integer
+        description: Total number of days the landing page has been running.
+      first_seen:
+        type: string
+        format: date
+        description: Date the landing page was first seen (format 'Y-m-d').
+      last_seen:
+        type: string
+        format: date
+        description: Date the landing page was last seen (format 'Y-m-d').
+      countries:
+        type: array
+        description: List of country codes the landing page has been seen in.
+        items:
+          type: string
+      verticals:
+        type: array
+        description: List of vertical IDs of the landing page (see /dictionary/verticals).
+        items:
+          type: integer
+      lp_grouping_id:
+        type: integer
+        description: Grouping type the results are grouped by. Only present when the `lp_grouping_id` request parameter is set.
+      lp_group_lps_count:
+        type: integer
+        description: Number of landing pages grouped together under this landing page. Only present when `lp_grouping_id` is set.
+      lp_group_ads_count:
+        type: integer
+        description: Number of ads grouped together under this landing page. Only present when `lp_grouping_id` is set.

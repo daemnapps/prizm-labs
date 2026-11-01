@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "station 3 of the video line on the mini (2026-10-19): mini_v2.py --brand --label [--format] --out [--dry-run] — the writing station's brief by the same label (Shared Assets runs/video-writing/<brand>/<label>/), production v2 through clips, handed on through Shared Assets runs/video-production/<brand>/<label>/ (run_kit.station). Beside the v1 door (lab_door.json), not in it.",
+  "script": "tools/video-production/machine/mini_v2.py",
+  "subcommand": null,
+  "positionals": [],
+  "flags": {"label": "--label", "format": "--format"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": "--out", "runs_root_flag": null, "run_dir": null},
+  "refuse": ["yes", "provider", "runs_root", "bank", "banks", "cast_root", "record", "pack"]
+}

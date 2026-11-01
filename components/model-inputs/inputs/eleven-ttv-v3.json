@@ -1,0 +1,232 @@
+{
+ "model": "eleven-ttv-v3",
+ "medium": "voice",
+ "_readme": [
+  "Voice Design makes a cast member's own voice. It is a draft sheet read from the maker's API page.",
+  "No brand, product, person or format word appears in this file.",
+  "Draft: every entry is status draft until the owner approves it."
+ ],
+ "label": "ElevenLabs Voice Design (eleven_ttv_v3)",
+ "registry_id": "eleven-ttv-v3",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "model_id": "eleven_ttv_v3",
+  "endpoint": "POST /v1/text-to-voice/design"
+ },
+ "sources": [
+  "https://elevenlabs.io/docs/api-reference/text-to-voice/design",
+  "[ours] tools/video-production/machine/make_voice.py",
+  "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+ ],
+ "limits": {
+  "voice_description": "required; the maker states no maximum",
+  "text_chars": [
+   100,
+   1000
+  ],
+  "reference_audio": "base64, eleven_ttv_v3 only; size limit not stated",
+  "previews": "returned as a list; maximum not stated",
+  "house": {
+   "rule": "one custom voice per character, designed from the cast member's description and a real reference recording"
+  }
+ },
+ "qualities": [
+  "quality (higher = better, less variety)",
+  "guidance_scale 5 default",
+  "loudness 0.5 default"
+ ],
+ "inputs": [
+  {
+   "name": "voice_description",
+   "what": "The voice in words.",
+   "allowed": "text, required; longer and more detailed at a low guidance scale",
+   "we_send": "the cast member's age, tone, accent, pace, warmth",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "model_id",
+   "what": "Design model.",
+   "allowed": "eleven_multilingual_ttv_v2 (default) or eleven_ttv_v3",
+   "we_send": "eleven_ttv_v3: the only one that takes a reference recording",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "reference_audio_base64",
+   "what": "A real recording to steer the voice.",
+   "allowed": "base64 audio, v3 only",
+   "we_send": "the real reference recording",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "prompt_strength",
+   "what": "Balance between the description and the reference: 0 almost no prompt, 1 almost no reference.",
+   "allowed": "0 to 1, v3 only",
+   "we_send": "tuned per voice",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "text",
+   "what": "Sample text the preview speaks.",
+   "allowed": "100 to 1000 characters, or auto_generate_text true",
+   "we_send": "a line in her register",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "guidance_scale",
+   "what": "How closely to follow the description.",
+   "allowed": "default 5; high values sound artificial or robotic",
+   "we_send": "default",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "loudness",
+   "what": "Output level.",
+   "allowed": "-1 to 1, default 0.5, 0 is about -24 LUFS",
+   "we_send": "default",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "seed",
+   "what": "Repeat a voice.",
+   "allowed": "integer; same seed and inputs give the same voice",
+   "we_send": "pinned once a voice is chosen",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "quality",
+   "what": "Better output, less variety.",
+   "allowed": "number",
+   "we_send": "default",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "should_enhance",
+   "what": "AI expands the description.",
+   "allowed": "boolean, default false",
+   "we_send": "false: the words are ours",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  },
+  {
+   "name": "stream_previews",
+   "what": "Return ids to stream.",
+   "allowed": "boolean",
+   "we_send": "false",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "reference-recording",
+   "rule": "Design from a real reference recording on v3 so the voice has a human base.",
+   "ours": "make_voice.py",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "detail-over-guidance",
+   "rule": "Prefer a longer, more detailed description at a low guidance scale over a short one at a high scale.",
+   "ours": "description from the cast sheet",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "one-voice-per-character",
+   "rule": "Design the voice once and bank it; every later read uses that voice id.",
+   "ours": "voice bank",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+  },
+  {
+   "id": "fix-the-seed",
+   "rule": "Pin the seed once a preview is chosen so the voice can be rebuilt.",
+   "ours": "seed recorded on the cast member",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "sample-text-in-range",
+   "rule": "Keep the sample text between 100 and 1000 characters.",
+   "ours": "make_voice.py",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "listen-to-previews",
+   "rule": "Listen to every preview and pick by ear; a 409 means a preview is still generating, retry.",
+   "ours": "the owner or the voice check picks",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "high-guidance",
+   "text": "A high guidance scale: the voice turns artificial or robotic.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "reference-on-v2",
+   "text": "A reference recording on the v2 design model: only v3 takes it.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "text-out-of-range",
+   "text": "Sample text under 100 or over 1000 characters.",
+   "status": "draft",
+   "source": "https://elevenlabs.io/docs/api-reference/text-to-voice/design"
+  },
+  {
+   "id": "redesigning-every-run",
+   "text": "Designing a new voice each run: the character changes.",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+  }
+ ]
+}

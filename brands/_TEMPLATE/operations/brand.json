@@ -1,0 +1,11 @@
+{
+  "_what": "The brand's operating settings. Only the keys the research gatherer reads are shown (ownvoice: label, ad_accounts, accounts.helpdesk); other tools may add their own.",
+  "brand": "<brand folder name>",
+  "label": "<Brand name as shown on pages>",
+  "ad_accounts": [
+    {"network": "meta", "account": "<ad account id, e.g. act_...>", "note": ""}
+  ],
+  "accounts": {
+    "helpdesk": "gorgias | null"
+  }
+}

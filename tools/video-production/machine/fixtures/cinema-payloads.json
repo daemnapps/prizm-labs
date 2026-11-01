@@ -1,0 +1,34 @@
+[
+  {
+    "index": 1,
+    "id": "A1",
+    "params": {
+      "model": "cinematic_studio_3_0",
+      "prompt": "The room is <<<00000000-0000-4000-8000-0000000000e1>>>. The presenter <<<00000000-0000-4000-8000-0000000000c1>>> stands facing camera at chest height and speaks directly to the viewer.\n\nShe says, plainly:\n\n\"third line\"\n\nHer eyes stay on the lens. Locked frame, no camera movement. Single continuous take, no cuts or scene changes. No filming equipment in shot.",
+      "duration": 6,
+      "aspect_ratio": "9:16",
+      "resolution": "720p",
+      "generate_audio": true,
+      "genre": "drama"
+    },
+    "characters": ["lead"],
+    "products": [],
+    "lines": ["L3"]
+  },
+  {
+    "index": 2,
+    "id": "B1",
+    "params": {
+      "model": "cinematic_studio_3_0",
+      "prompt": "A plain wooden counter under soft window light. A hand sets a small tube <<<00000000-0000-4000-8000-0000000000d1>>> down and withdraws out of frame. The only writing anywhere in frame is the real label the product actually carries; no other text, no invented lettering, no price tags, no signage. Single continuous take, no cuts or scene changes.",
+      "duration": 4,
+      "aspect_ratio": "9:16",
+      "resolution": "720p",
+      "generate_audio": false,
+      "genre": "drama"
+    },
+    "characters": [],
+    "products": ["00000000-0000-4000-8000-0000000000d1"],
+    "lines": []
+  }
+]

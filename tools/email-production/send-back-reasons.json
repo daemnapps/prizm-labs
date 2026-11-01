@@ -1,0 +1,13 @@
+{
+ "_what": "The reasons the owner can pick when he sends an email back on the email approval page (EP-3 (email approval card)). A manifest: email_approve.py and klaviyo_upload.send_back read it entry by entry; every entry carries a status. the owner curates it.",
+ "reasons": [
+  {"id": "words", "label": "The words are wrong", "status": "draft"},
+  {"id": "subject", "label": "Subject or preview text", "status": "draft"},
+  {"id": "picture", "label": "Picture", "status": "draft"},
+  {"id": "offer-price", "label": "Offer or price", "status": "draft"},
+  {"id": "links", "label": "Links", "status": "draft"},
+  {"id": "audience", "label": "Audience", "status": "draft"},
+  {"id": "send-time", "label": "Send time", "status": "draft"},
+  {"id": "other", "label": "Other", "status": "draft"}
+ ]
+}

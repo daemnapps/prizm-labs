@@ -1,0 +1,11 @@
+{
+ "brand": "fxbrand",
+ "label": "fxbrand-oct-12",
+ "day": "Mon",
+ "date": "12 Oct",
+ "year": 2025,
+ "subjects": [{"subject": "An older card, its own year", "preview": "p"}],
+ "klaviyo": {"campaign_id": "FX7", "message_id": "FX8"},
+ "scheduled": {"by": "the owner", "at": "2025-10-10T13:20:00Z"},
+ "status": "scheduled"
+}

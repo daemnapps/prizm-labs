@@ -1,0 +1,13 @@
+{
+  "run": "unknown-format-run",
+  "items": [
+    {
+      "id": "S1",
+      "kind": "still",
+      "params": {"model": "nano_banana_2", "prompt": "The presenter <<<00000000-0000-4000-8000-0000000000c1>>> at a kitchen table in morning light."},
+      "medias": [],
+      "characters": ["lead"],
+      "products": []
+    }
+  ]
+}

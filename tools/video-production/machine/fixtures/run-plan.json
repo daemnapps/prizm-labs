@@ -1,0 +1,56 @@
+{
+  "brand": "_fixture",
+  "cast": {
+    "name": "Lead",
+    "resolution": "1080p",
+    "face": "00000000-0000-4000-8000-0000000000c1",
+    "hands": "",
+    "room": "00000000-0000-4000-8000-0000000000e1",
+    "presenter": "LEAD",
+    "who": "speaking to camera",
+    "says": "She says",
+    "voice": "00000000-0000-4000-8000-0000000000f1",
+    "also": [],
+    "alternates": {},
+    "elements": []
+  },
+  "scenes": [
+    {
+      "id": "A1",
+      "name": "opens on her hands",
+      "seconds": 6,
+      "line": "first line",
+      "delivery": "[confident, easy, like she's mid-conversation]",
+      "gesture": "She lifts one hand to chest height, then it comes down out of the bottom of frame and stays down.",
+      "generate": {},
+      "revoice": {}
+    },
+    {
+      "id": "A2",
+      "name": "closes to camera",
+      "seconds": 5,
+      "line": "second line",
+      "delivery": "[a flick of amusement]",
+      "gesture": "She tilts her head slightly, then settles, still.",
+      "generate": {},
+      "revoice": {}
+    }
+  ],
+  "cutaways": [
+    {
+      "id": "B1",
+      "over": "A1",
+      "at": 2.0,
+      "seconds": 4,
+      "why": "shows the product before the close",
+      "place": "A plain wooden counter under soft window light.",
+      "subject": "A small tube <<<00000000-0000-4000-8000-0000000000d1>>> sits alone on the counter.",
+      "action": "A hand sets the tube down and withdraws out of frame.",
+      "look": "Close, shallow focus, soft light.",
+      "resolution": "1080p",
+      "products": ["00000000-0000-4000-8000-0000000000d1"],
+      "generate": {}
+    }
+  ],
+  "overrides": {}
+}

@@ -1,0 +1,22 @@
+{
+ "part": "ATL-31 (remaining issue briefs) part F",
+ "request": "platform/data/records/workflow-requests/20261002T061737Z--dayu--impl-atl31f-issue-briefs.json",
+ "base": "0fabb40eb",
+ "opus_branch_tip": "b1be1d4d4",
+ "opus_test": "new-workflow-design/builds/atlas/test_atl31f_issue_briefs.py (274/274 on Opus)",
+ "seed": 20261002,
+ "rule": "one per component (6), one P3 if none picked, the rest random from the part's new briefs",
+ "scope_size": 58,
+ "sample": [
+  "atlas#6",
+  "copywriter#6",
+  "copywriter#10",
+  "image-teardown#14",
+  "image-teardown#15",
+  "intake#4",
+  "media-render#3",
+  "media-render#4",
+  "media-render#6",
+  "meta-upload#11"
+ ]
+}

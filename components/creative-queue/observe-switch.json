@@ -1,0 +1,5 @@
+{
+ "_what": "The observation switch for the machines that will write observations/<source>.json (none is wired yet: QB-1 (queue core) builds only the core). Off means no machine writes observations on a schedule; root is where they would write. Any value other than exactly \"on\" reads as off.",
+ "observe": "off",
+ "root": "runs/queue-shadow"
+}

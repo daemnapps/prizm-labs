@@ -1,0 +1,5 @@
+{
+  "_what": "The product names a brief may use for this brand, read by tools/email-production (render_email.py, sweep/rebuild.py) to find the product picture. handles maps a lower-cased, hyphenated word to the store handle when they differ.",
+  "words": ["<PRODUCT NAME>", "<Set Name>"],
+  "handles": {"<set-name>": "<the-store-handle>"}
+}

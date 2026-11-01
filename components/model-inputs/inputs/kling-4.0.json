@@ -1,0 +1,271 @@
+{
+ "_readme": [
+  "Kling 4.0 on Higgsfield — the wired BACKUP behind Seedance: a clip goes here when Seedance fails its three takes, is refused or is down. Same shape as seedance-2.5.json.",
+  "SOURCES ARE FLAGGED. The model list (Higgsfield connector) is the vendor's own and read live. The prompt rules come from fal's and Higgsfield's Kling 3.0 guides (third party / the door's own blog); Kling's own prompt guide was not found. Kling 4.0's own guide has not been read: its rows below that say 'from Kling 3.0' are assumed to carry.",
+  "THE ONE FACT THAT SHAPES THE FALLBACK: no Kling model on Higgsfield takes an audio reference. Kling makes its own sound (dialogue from the prompt, ambience) or none. It cannot lip-sync our locked ElevenLabs read. A talking clip that falls back to Kling is therefore SILENT (sound off) and its line is laid under it as an off-camera read, not lip-synced. Said plainly in the ledger.",
+  "No brand, product, person or format word appears in this file."
+ ],
+ "model": "kling-4.0",
+ "label": "Kling 4.0 (backup)",
+ "registry_id": "kling-4.0",
+ "read": "2026-10-26",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_model_id": "kling4_0",
+  "higgsfield_path": "kling-video/v4.0/image-to-video (the path pattern is from the Higgsfield video list; the exact request fields are read off the first live call)",
+  "also": "kling3_0 (3.0, std/pro/4k, 3 to 15 s), kling_o3_flf (first and last frame), kling_o3_image_reference (up to 7 reference pictures)"
+ },
+ "sources": [
+  "[vendor, live] Higgsfield connector model list (models_explore get), read 2026-10-26",
+  "https://open.higgsfield.ai/explore/video (the Higgsfield video list: paths and prices)",
+  "[guide, third party] https://blog.fal.ai/kling-3-0-prompting-guide/",
+  "[guide, Higgsfield blog] https://higgsfield.ai/blog/Kling-3.0-is-on-Higgsfield-User-Guide-AI-Video-Generation"
+ ],
+ "limits": {
+  "duration_seconds": [
+   3,
+   30
+  ],
+  "resolutions": [
+   "720p",
+   "1080p"
+  ],
+  "no_480p": "Kling 4.0 has no 480p: the backup is made at 720p and upscaled on this Mac like every clip",
+  "aspect_ratios": [
+   "21:9",
+   "16:9",
+   "9:16",
+   "1:1",
+   "auto"
+  ],
+  "max_element_ids": 7,
+  "audio_reference": "none: no Kling model on Higgsfield takes our audio",
+  "kling_3_0": {
+   "duration_seconds": [
+    3,
+    15
+   ],
+   "modes": [
+    "std",
+    "pro",
+    "4k"
+   ],
+   "sound": [
+    "on",
+    "off"
+   ],
+   "max_shots": 5,
+   "shots_total_seconds_max": 15
+  },
+  "price_per_second_usd": "from 0.11 (list 0.157) at 4.0; from 0.042 (list 0.084) at 3.0 — Higgsfield list, not measured",
+  "house": {
+   "role": "backup only, behind Seedance",
+   "mode": "image-to-video from the approved start picture",
+   "resolution": "720p, upscaled locally",
+   "aspect": "9:16",
+   "sound": "off (it cannot take our voice)",
+   "duration": "the clip's own length, 3 to 10 s",
+   "takes": "the backup is the last rung: one attempt, scored like the others; the best-scoring attempt overall is kept (V34)"
+  }
+ },
+ "qualities": [],
+ "inputs": [
+  {
+   "name": "prompt",
+   "what": "What happens and how the camera moves.",
+   "allowed": "no stated limit; subject, action, camera, style, one action and one camera move per shot",
+   "we_send": "about 90 words, built by kling_prompt.py",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "mode",
+   "what": "Which Kling mode.",
+   "allowed": "text-to-video, image-to-video, reference-to-video, video-edit",
+   "we_send": "image-to-video",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "start_image",
+   "what": "The approved first picture; the model keeps its identity, layout and text.",
+   "allowed": "1 image",
+   "we_send": "the approved 9:16 picture",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "end_image",
+   "what": "A last picture the clip settles on; the prompt must describe motion that can reach it.",
+   "allowed": "1 image",
+   "we_send": "only on a silent clip with a different last picture",
+   "use": "sometimes",
+   "status": "draft"
+  },
+  {
+   "name": "image_references",
+   "what": "Pictures that fix a subject across the clip.",
+   "allowed": "up to 7 on the 3.0 Omni model; element ids up to 7 on 4.0",
+   "we_send": "none",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "video_references",
+   "what": "A clip to take motion or edit from.",
+   "allowed": "video-edit mode, or reference mode",
+   "we_send": "none (Genjutsu does the swipe's motion)",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "resolution",
+   "what": "Output size.",
+   "allowed": "720p, 1080p (4.0)",
+   "we_send": "720p",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "duration",
+   "what": "Seconds.",
+   "allowed": "3 to 30 on 4.0; 3 to 15 on 3.0",
+   "we_send": "the clip's length",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "sound / audio",
+   "what": "Native generated sound.",
+   "allowed": "3.0: on or off. 4.0 and 2.6: native audio. No audio INPUT on any Kling model",
+   "we_send": "off",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "aspect_ratio",
+   "what": "Output shape.",
+   "allowed": "21:9, 16:9, 9:16, 1:1, auto",
+   "we_send": "9:16",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "multi_shots / multi_prompt",
+   "what": "A sequence of shots in one clip (3.0 Omni).",
+   "allowed": "up to 5 shots, total at most 15 s, each {prompt, duration}",
+   "we_send": "not used",
+   "use": "no",
+   "status": "draft"
+  }
+ ],
+ "structure": [
+  {
+   "id": "four-parts",
+   "rule": "Cover subject, action, camera behaviour and visual style.",
+   "ours": "kling_prompt.build: subject and style sentence, action windows, camera line, constants",
+   "status": "draft",
+   "source": "https://higgsfield.ai/blog/Kling-3.0-is-on-Higgsfield-User-Guide-AI-Video-Generation"
+  },
+  {
+   "id": "anchor-image",
+   "rule": "With a start picture, treat it as the anchor: describe only how the scene changes (movement, camera, environment), not what is already in it.",
+   "ours": "'Image 1 anchors the clip' and the action windows only",
+   "status": "draft",
+   "source": "https://blog.fal.ai/kling-3-0-prompting-guide/"
+  },
+  {
+   "id": "one-action-one-move",
+   "rule": "One action and one camera move per shot; split several events across shots; do not pack many shots into a short clip.",
+   "ours": "windows of at least 2.5 s, one camera line",
+   "status": "draft",
+   "source": "https://higgsfield.ai/blog/Kling-3.0-is-on-Higgsfield-User-Guide-AI-Video-Generation"
+  },
+  {
+   "id": "say-the-camera",
+   "rule": "State the camera move explicitly (tracking, panning, staying in a medium shot, resuming smoothly); the model follows a described move through the clip.",
+   "ours": "CAMERA phrases from the shot's camera_move",
+   "status": "draft",
+   "source": "https://blog.fal.ai/kling-3-0-prompting-guide/"
+  },
+  {
+   "id": "motion-physical",
+   "rule": "Motion follows gravity, inertia and the environment; explicit motion descriptions reduce artifacts.",
+   "ours": "the shot's visible actions only",
+   "status": "draft",
+   "source": "https://blog.fal.ai/kling-3-0-prompting-guide/"
+  },
+  {
+   "id": "end-frame-consistent",
+   "rule": "If an end frame is attached the prompt must describe motion that can plausibly reach it, else it drifts; simplify the prompt and let the frames carry direction.",
+   "ours": "an end picture only when different, motion kept simple",
+   "status": "draft",
+   "source": "https://higgsfield.ai/blog/Kling-3.0-is-on-Higgsfield-User-Guide-AI-Video-Generation"
+  },
+  {
+   "id": "locks-at-the-end",
+   "rule": "Close with locks and the few negatives ('no subtitles', 'no on-screen text').",
+   "ours": "the constants line",
+   "status": "draft",
+   "source": "https://higgsfield.ai/blog/Kling-3.0-is-on-Higgsfield-User-Guide-AI-Video-Generation"
+  },
+  {
+   "id": "dialogue-needs-labels",
+   "rule": "(If native speech were used) give every speaker a unique label, put the action before the line, and tone cues per speaker. Not used: our voice is ours.",
+   "ours": "not used — sound off",
+   "status": "draft",
+   "source": "https://blog.fal.ai/kling-3-0-prompting-guide/"
+  },
+  {
+   "id": "draft-low",
+   "rule": "Draft at 720p, lock the prompt and structure, then render the final at the size needed; do not iterate at 4K.",
+   "ours": "720p, upscaled locally",
+   "status": "draft",
+   "source": "https://higgsfield.ai/blog/Kling-3.0-is-on-Higgsfield-User-Guide-AI-Video-Generation"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "several-actions",
+   "text": "Several actions or camera moves in one shot.",
+   "status": "draft"
+  },
+  {
+   "id": "vague-motion",
+   "text": "Vague camera or motion language in fast or continuous shots.",
+   "status": "draft"
+  },
+  {
+   "id": "motion-against-end-frame",
+   "text": "Motion that conflicts with an attached end frame.",
+   "status": "draft"
+  },
+  {
+   "id": "too-many-shots",
+   "text": "Packing five shots into a short duration.",
+   "status": "draft"
+  },
+  {
+   "id": "pronoun-speakers",
+   "text": "Pronoun-only or unlabeled speakers (if speech is ever used).",
+   "status": "draft"
+  },
+  {
+   "id": "expecting-transfer",
+   "text": "Expecting reference-video motion transfer from the base model: that is Kling Motion Control, a separate model.",
+   "status": "draft"
+  },
+  {
+   "id": "native-speech-for-our-voice",
+   "text": "Using Kling's native speech for a line that must be OUR voice: it will not be our read.",
+   "status": "draft"
+  }
+ ],
+ "history": [
+  {
+   "who": "the owner",
+   "date": "2026-10-26",
+   "about": "Kling 4.0 is the wired backup behind Seedance"
+  }
+ ]
+}

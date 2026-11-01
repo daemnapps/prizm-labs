@@ -1,0 +1,35 @@
+{
+ "_readme": "The timing sheet from the scene run by hand on 2026-09-18 — one voice paragraph of 8.92 s and the four beat windows read off it — with the ids replaced by invented ones and the scene renamed to the fixture's own. Shape: what machine/voice.py writes to <run>/vo/timing.json.",
+ "track": "vo/track.mp3",
+ "voice_id": "00000000fixturevoice0000",
+ "model_id": "eleven_multilingual_v2",
+ "total": 14.92,
+ "scenes": {
+  "S1": {
+   "start": 0.0,
+   "end": 8.92,
+   "seconds": 8.92,
+   "file": "vo/S1.mp3",
+   "request_id": "00000000fixturereq00001",
+   "chars": 188,
+   "lines": [
+    {"text": "It comes back in the same place every time.", "start": 0.0, "end": 2.54},
+    {"text": "That is not the product failing.", "start": 3.18, "end": 4.55},
+    {"text": "That is the thing underneath it, doing what it does.", "start": 4.59, "end": 6.69},
+    {"text": "Once you know that, you stop buying the same answer.", "start": 7.06, "end": 8.92}
+   ]
+  },
+  "S2": {
+   "start": 8.92,
+   "end": 14.92,
+   "seconds": 6.0,
+   "file": "vo/S2.mp3",
+   "request_id": "00000000fixturereq00002",
+   "chars": 112,
+   "lines": [
+    {"text": "Reaching for the top shelf, and checking first who can see.", "start": 8.92, "end": 12.4},
+    {"text": "That is the part nobody says out loud.", "start": 12.4, "end": 14.92}
+   ]
+  }
+ }
+}

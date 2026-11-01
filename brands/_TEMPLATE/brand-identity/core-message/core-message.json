@@ -1,0 +1,7 @@
+{
+ "_what": "The one message every ad carries. `core` is read by the creative-diversity tagger, Distinct Six and the variation briefs.",
+ "core": "<the core message, one sentence, in the customer's words>",
+ "core_spend_share": null,
+ "second_message": {"text": "<the nearest other message, or None>", "spend_share": null, "ads": []},
+ "beliefs": []
+}

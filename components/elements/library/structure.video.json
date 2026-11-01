@@ -1,0 +1,1372 @@
+{
+ "element": "structure",
+ "asset": "video",
+ "source": "components/swipe-organic/formats.json",
+ "enforced_by": null,
+ "note": "Sorted automatically from organic swipes (swipe-organic formats.py). Most rows are unreviewed.",
+ "rows": [
+  {
+   "id": "sticky-line-maker-demo",
+   "name": "One caption over a hands-only demo",
+   "what": "One text line pinned for the ENTIRE runtime while one continuous handheld demonstration plays out. The line never changes, so nothing competes with the product; the viewer re-reads it while watching hands work. Face is cropped or incidental — the maker is a pair of hands, not a personality.",
+   "why_it_works": "No cut to a talking head means no permission needed to keep watching. The unchanging line acts as the promise; every second of footage is evidence against it.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DSEInFVD-iq\", \"author\": \"thermahugcompany\", \"views\": 146726835, \"line\": \"I made this for the cold-aholics\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "unbox or unwrap the product, hands only, real room — or open straight into use",
+     "unfold / assemble — the scale reveal",
+     "place it where it lives (bed, counter, floor)",
+     "use it as intended, one unbroken take",
+     "close on the mechanism (switch, controller, texture) — the proof detail"
+    ],
+    "text_behaviour": "one line, top third, same words start to finish, casual + an emoji or two; some instances land the line once on the opening beat and drop it, which does not break the format — what matters is that the text never changes and never argues",
+    "camera": "handheld phone, vertical, subject-height, natural window light, no cuts to face"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "objection-flip-collection",
+   "name": "Objection-flip collection",
+   "what": "A quoted objection or question sits on screen the whole time with a two-word answer under it. One beat of human reaction, then the rest of the runtime is the PRODUCT COLLECTION as the answer — many units, ordered, filling a shelf or surface. The answer is objects, never words.",
+   "why_it_works": "It borrows the energy of an argument and settles it with abundance. The collection reads as proof of a life, not a purchase.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DYwAweegzm8\", \"author\": \"memorieswithliz_\", \"views\": 79153424, \"line\": \"\\\"Are you rich?\\\" / Us: 🌍✈️\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "1s of people reacting to the quoted line (faces, no dialogue)",
+     "cut to the collection — wide, many units, ordered",
+     "travel across the collection so the count registers",
+     "pull one unit out of the set",
+     "open it — the inside is the payoff"
+    ],
+    "text_behaviour": "two lines pinned all runtime: the quoted objection in quotes, then 'Us:' + emoji answer",
+    "camera": "handheld, close orbit of the collection, natural interior light"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "forbidden-tease-dark-reveal",
+   "name": "Forbidden tease → dark reveal",
+   "what": "Two acts with an environment switch at the seam. Act one: bright room, product hidden then unveiled, text warns you not to look ('Don't show this to a ___'). Act two: hard cut to darkness, where the product's whole value becomes visible, and the text switches from tease to a share command.",
+   "why_it_works": "The withheld thing is the mechanism, not the product. The dark cut is a physical reveal — the benefit literally cannot be seen until the room changes, so the viewer has to stay for it.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DUwh0jWkfYu\", \"author\": \"thelumiloree\", \"views\": 63093106, \"line\": \"Don't show this to a reader → Share this with a nighttime book lover\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "bright room, product under a cloth, hands about to lift it",
+     "unveil — product visible but inert, benefit not yet legible",
+     "HARD CUT to darkness, product active, glow or effect carries the frame",
+     "close on the control that makes the effect",
+     "hold on the effect, warm and slow, text now a share command"
+    ],
+    "text_behaviour": "act one: 'Don't show this to a {identity}' + soft emoji · act two: 'Share this with a {identity}' — the switch lands on the cut",
+    "camera": "act one handheld daylight; act two locked or slow drift, exposure for the glow, everything else black"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "word-per-beat-procedure",
+   "name": "Word-per-beat procedure",
+   "what": "A camera that never moves, held on the thing being treated. ONE WORD per beat builds a sentence across the whole video, one step of the procedure per word. The operator is hands only — or a swapped-in element standing in for them; the problem is the subject and stays in frame the entire time.",
+   "why_it_works": "The sentence is unfinished until the last beat, so the read is the retention device — you cannot leave mid-sentence. The unmoving frame on the problem means the before-state never leaves the screen while the fix happens.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DUe1HtWjI3p\", \"author\": \"domepeace.co\", \"views\": 75994238, \"line\": \"BALD / SIMPLE / THIS / before / we / heal\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "word-per-beat",
+    "beats": [
+     "word 1 — the problem, raw and close (bumps, spots, texture visible)",
+     "word 2 — the product going on, colour change across the whole area",
+     "word 3 — the jar or tube held to camera, label readable",
+     "word 4 — the working step (scrub, sponge, massage)",
+     "word 5 — the wipe / removal, clean skin appearing",
+     "word 6 — hands finishing, the result held for a beat"
+    ],
+    "text_behaviour": "one word per beat, centre-low, all caps or lowercase consistently, one word in a colour for emphasis; the words read as a sentence in order and are still unfinished at the last sampled beat",
+    "camera": "zero camera movement — usually locked overhead on a reclined or seated subject, sometimes a locked frontal frame with the problem held at the edge of shot; even indoor light"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "filth-extraction-montage",
+   "name": "Gross gunk pulled out",
+   "what": "The transformation is the DEBRIS, not the surface. One tool pulled across a filthy thing extracts a visible mat of gunk; then the same tool proves itself on three or four unrelated surfaces in quick succession; then it rinses clean. Often opens with a witness in frame reacting to how bad it is.",
+   "why_it_works": "Extracted filth is unfakeable evidence and physically satisfying. The multi-surface run turns one product into a household verdict instead of a single use case.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DZMGaGUhibn\", \"author\": \"princess_one\", \"views\": 59523870, \"line\": \"no overlay — the debris carries it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "scene-setter with a witness or reaction — how bad it is",
+     "the hero pull: tool across the worst surface, mat of debris comes off",
+     "surface 2, different room, same tool",
+     "surface 3, tighter and faster",
+     "the tool rinsed under running water, clean again"
+    ],
+    "text_behaviour": "none, or a single small caption; a running spoken-caption track is tolerated, but nothing is ever pinned as a promise — the visual is the hook and text would steal from it",
+    "camera": "handheld, close on the contact point, daylight or plain interior light, cuts on each surface change"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "locked-frame-escalating-caption",
+   "name": "Locked-frame escalating caption",
+   "what": "The camera never moves — one wide interior frame, product centred. Small quoted captions escalate beat by beat ('hate these' → 'you mean THIS one?' → 'THIS?' → 'this...?') while the product physically transforms further and further in the identical frame.",
+   "why_it_works": "Stillness makes change legible: because nothing else moves, every transformation reads instantly. The changing caption plays as a deadpan argument the product keeps winning.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DT-wxYOk51n\", \"author\": \"marivellehome\", \"views\": 58793686, \"line\": \"\\\"hate extendable sofas\\\" → \\\"THIS?\\\" → \\\"this…?\\\"\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "wide locked frame, product in its normal state, first quoted objection",
+     "first transformation, caption answers back",
+     "person enters and uses it, caption changes",
+     "further transformation, caption changes again",
+     "final state, caption trails off or doubles down"
+    ],
+    "text_behaviour": "small quoted text, same position every beat, changing length each time — usually shrinking to a trail-off, sometimes lengthening into insistence; the change itself is the joke",
+    "camera": "tripod-locked wide, identical framing every beat, daylight through a window, never moves"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "character-sketch",
+   "name": "Character sketch",
+   "what": "One heightened costumed character carries the whole runtime. Wardrobe, hair and props do the satire before a word lands; dialogue finishes it. Zero on-screen text — the post caption carries the quoted punchline. A cast may react in cutaways and the character may stay in one confined location or roam between several; neither is load-bearing.",
+   "why_it_works": "People watch people, and a costume declares the whole premise in the first frame with no setup. Because it plays as a bit, the brand can be in the joke rather than interrupting it.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DWU3zlJATdg\", \"author\": \"druski\", \"views\": 74645008, \"line\": \"no overlay — the costume and the cast reactions carry it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "establish the lead in full character, first location",
+     "the bit lands — dialogue or a cast reaction registers it",
+     "the bit escalates, one line at a time",
+     "closer on the lead for the turn",
+     "the punchline, cast breaking or the character walking off"
+    ],
+    "text_behaviour": "none on screen at any beat — the platform caption carries the quoted line of dialogue as the punchline",
+    "camera": "handheld, tight on the character, shot-reverse to a reacting cast where there is one, travelling wides where the character moves between locations"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "running-caption-borrowed-cutaways",
+   "name": "Voiceover over borrowed clips",
+   "what": "One continuous narration is chopped into per-beat caption fragments that never complete a sentence, and that running caption is the only thing holding together footage the creator did not shoot — someone else's clip, a published diagram, a screen recording, stock process footage. A small talking-head panel or cut-out is pinned somewhere in frame so the narrator never fully leaves.",
+   "why_it_works": "The caption is always mid-sentence, so there is never a clean place to leave. The borrowed material supplies authority and production value the creator could never shoot, and the persistent narrator panel makes it read as one argument instead of a scrapbook.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DSSeEt3ETo3\", \"author\": \"drewcanole\", \"views\": 14320106, \"line\": \"The Secret Behind Why Everyone's Soaking Their Feet in These 3 Ingredients!\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "hook beat — a banner or first caption fragment fires over the presenter or the first source",
+     "cut to borrowed source 1, caption continues mid-sentence",
+     "cut to borrowed source 2 from a visibly unrelated place, caption continues",
+     "back to the presenter panel — the claim is named",
+     "borrowed source 3 as the proof, caption still unfinished",
+     "close on the presenter or a final borrowed frame"
+    ],
+    "text_behaviour": "one caption box in the same position all runtime, its words changing every beat as a continuous narration; each card cut off mid-sentence, often with one word highlighted; nothing is ever pinned unchanged",
+    "camera": "no camera of its own for most of the runtime — full-frame borrowed sources cut against a fixed studio or desk plate; the presenter panel never moves"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "split-screen-mechanism-verdict",
+   "name": "Split-screen mechanism verdict",
+   "what": "The frame is permanently divided for most of the runtime — the evidence in one band, the presenter in the other — so the viewer sees the claim and the person making it at the same second. The captions run the argument in order: correction, name, mechanism, verdict. The composite drops away only at the end, for the call.",
+   "why_it_works": "A split frame is an argument you cannot look away from: the ugly evidence never leaves the screen while the presenter reclassifies it. Because both halves are the same second, the mechanism is proved rather than asserted.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Dbbii2fPY2i\", \"author\": \"leilybeauty.clinic\", \"views\": 12556357, \"line\": \"WHICH DEVICE REALLY REMOVES BLACKHEADS? | SKIN SCRUBBER · SURFACE EXFOLIATION | VS | HYDRAFACIAL · DEEP PORE EXTRACTION\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "composite frame opens — evidence band plus presenter, first caption corrects the viewer",
+     "the thing is named in the caption while the evidence holds",
+     "the mechanism is stated — the evidence band changes state under it",
+     "the verdict lands over the product or the second state",
+     "the composite drops for a bare presenter close and the call"
+    ],
+    "text_behaviour": "one headline pinned across the seam for the whole runtime, or a caption per beat running correction → name → mechanism → verdict; the text is always about the evidence in the other band",
+    "camera": "locked — neither band moves. The evidence band is a held clinical close-up, an instrument view or a sourced clip; the presenter band is a fixed desk or cut-out over black"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "day-count-self-test",
+   "name": "Day-count self-test",
+   "what": "The runtime is organised by a rising day counter stamped in the identical position over the identical tight framing of the same body area. Nothing changes between beats except the number and the body. Wardrobe changes at each stamp are the proof the days are real and separate.",
+   "why_it_works": "A date ledger converts a demo into a trial the viewer is auditing. Because the frame is identical every time, the only variable left is the thing being sold, so the change reads as caused rather than claimed.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DU_S_B9ilq2\", \"author\": \"maksymbochan\", \"views\": 15059706, \"line\": \"Day 1: / POV: 2x Stamina in 3 Days❗\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "Day 1 — the untreated state in the framing that will be repeated, product applied on camera",
+     "next stamp — same frame, new wardrobe, product applied again",
+     "next stamp — the first readable change",
+     "next stamp — the change is now obvious in the same frame",
+     "final stamp, or the product held up to camera as the answer"
+    ],
+    "text_behaviour": "one day or interval stamp per beat in the identical position ('Day 1' → 'Day 14' → 'Day 30' → 'Day 90'); often a pinned POV promise on the opening beat; the stamp is an index, never an argument",
+    "camera": "one repeated framing — a selfie front camera or a fixed high angle — identical distance and angle at every stamp, same room, same light"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "reaction-panel-repost",
+   "name": "Reacting to someone else's clip",
+   "what": "Nothing in the post was shot for the post. Someone else's clip carries the whole runtime while a locked reaction panel of the poster sits in the frame the entire time and is never cut to. The reactor's presence, not their performance, is what licenses the borrowed clip.",
+   "why_it_works": "A real person visibly losing it is the fastest possible proof that the clip below is worth watching. The panel costs nothing to shoot and turns a repost into a post.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DVRfuQLkXZN\", \"author\": \"lpontheleft\", \"views\": 12018394, \"line\": \"9 MOLLETTE 😱👽⚡ 1 MANO 🤚\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "composite opens — borrowed clip plus the reactor panel, pinned punchline caption across the seam",
+     "the borrowed clip escalates, reactor visibly responds in the panel",
+     "the borrowed clip's own hook or timer registers",
+     "the reactor breaks — the panel is the payoff, not the clip",
+     "the clip resolves under the same unchanged composite"
+    ],
+    "text_behaviour": "one pinned punchline caption sitting across the seam for the whole runtime, or the borrowed clip's own burned-in caption; the reactor adds no text of their own",
+    "camera": "a locked vertical split or three-band composite that never changes — the reactor's webcam frame is static, the borrowed clip plays inside its band with whatever camera it came with"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pinned-line-acted-out",
+   "name": "One caption, acted out",
+   "what": "One caption sets a premise and then the footage does nothing but perform it — literally, and further each beat. The line is pinned unchanged for the whole runtime (or lands once at the head and never returns); it is never completed in words. No product, no dialogue, no talking head — the body is the entire payload.",
+   "why_it_works": "The text makes a promise the footage can only settle physically, so every beat is the viewer checking the claim against the picture. Escalation gives the edit its own clock: each beat has to go further than the last or the joke dies.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DVWRV_rj4CF\", \"author\": \"zople\", \"views\": 110021366, \"line\": \"pov: you won't let the Japanese out-bow you\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "the line lands, pinned — the premise is stated and never restated",
+     "first physical beat: the body starts doing what the line said",
+     "escalation — one notch further, same or new setup",
+     "escalation again, past the sane stopping point",
+     "the furthest beat, held; the line is still on screen or has already gone"
+    ],
+    "text_behaviour": "one line — usually a 'pov:' premise, often trailing off in an ellipsis — pinned unchanged in the same spot all runtime, or landed once on the opening beat and dropped; it never escalates and is never answered in words",
+    "camera": "no fixed rule and that is the point — a locked wide interior, a floor-level angle, or a freely roaming handheld covering a chain of gags; whatever holds the performance"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "deadpan-reaction-hold",
+   "name": "Deadpan reaction hold",
+   "what": "One frame is locked and simply held while a subject refuses to react. Everything else — a crowd, a second person, a label, the screen light — escalates around them, and the camera never cuts away or moves. The last third of the runtime is very often one unbroken close-up of a face doing nothing.",
+   "why_it_works": "A held non-reaction makes the viewer supply the missing emotion themselves, which is stickier than being handed it. Because the frame never moves, the length of the hold becomes the joke.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DbsNoqUN04F\", \"author\": \"olima_omega\", \"views\": 26336666, \"line\": \"no overlay — the face that refuses to react carries it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the locked frame is established — subject in a human situation, sometimes under a short pinned label",
+     "the first pressure: something escalates around or behind them",
+     "the pressure climbs; the subject still has not moved",
+     "hard cut (or no cut at all) into the tight close-up on the unreacting face",
+     "the close-up is simply held to the end"
+    ],
+    "text_behaviour": "zero on-screen text, or one short pinned line or two-word label that never changes and often drops before the hold begins",
+    "camera": "tripod-locked, square-on, zero camera movement and zero reframing; identical framing from first frame to last"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "wordless-pov-procedure",
+   "name": "Silent close-up how-to",
+   "what": "One service delivered on one subject, in step order, with ZERO on-screen text anywhere and no cutaway, location change or graphic. The camera is close and handheld at the work's own level and reframes with the hands rather than sitting on a tripod. The payoff is physical — extracted debris, a peeled sheet held up to the lens, or the subject's involuntary reaction.",
+   "why_it_works": "Silence is the credential: nothing is being sold to you in words, so the only thing left to judge is what is visibly coming off. Holding on one subject for the whole runtime means the before-state is always still on screen when the payoff lands.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DVReiWEjyjR\", \"author\": \"ronydas651\", \"views\": 127506318, \"line\": \"no overlay — the peeled sheet held to the lens carries it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "a wide or establishing frame — the untreated site and the operator's hands enter",
+     "the work begins in macro, camera closing with it",
+     "the first extraction or reaction registers",
+     "the payoff is lifted up into the lens (or the subject flinches) — repeated two or three times",
+     "the finished site, or a pull back to the room"
+    ],
+    "text_behaviour": "none at any beat — no hook line, no labels, no captions; the post caption carries anything that has to be said",
+    "camera": "close handheld at the reclined subject's own level or straight over the hands, reframing continuously with the work, no cuts away and no tripod"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "unfinished-line-real-payoff",
+   "name": "Unfinished line, real payoff",
+   "what": "A caption defers its own answer — it trails off in an ellipsis, ends on an open colon, or is cut off mid-word — and is then pinned unchanged while wordless footage delivers the answer instead. The footage is one continuous unstaged take; the payoff is something real that happened, not something performed.",
+   "why_it_works": "An unfinished sentence is an open loop the viewer cannot close by reading, only by watching. Because the payoff is unstaged, it cannot be argued with, and the gap between the flat line and the real event is the whole joke.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DavZz2ABQXa\", \"author\": \"good.ball21\", \"views\": 24407483, \"line\": \"Dear basketball....\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "the unfinished line lands, pinned — the answer is explicitly withheld",
+     "the footage starts, text-free from here on",
+     "the take runs unbroken, nothing yet explaining the line",
+     "the real moment lands — the collision, the contradiction, the absurd frame",
+     "held for a beat under the same unchanged line"
+    ],
+    "text_behaviour": "one line (often two, quoted) pinned unchanged in the same spot for the entire runtime, ending on an ellipsis, an open colon or a mid-word cut; it is never completed in words at any point",
+    "camera": "one unbroken take — locked, sideline or handheld close — that holds the answer; no cut to a talking head and no second source"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "labelled-cutaway-mechanism",
+   "name": "Labelled cross-section animation",
+   "what": "No person, no room, no product in hand — the whole runtime is one unmoving cutaway or cross-section with a fixed grid of labels that never change, and the only thing that animates is the named ingredient travelling below the surface while the named problem resolves. Where live footage is used, the labelled explainer graphic is pasted into the empty part of an otherwise unmoving frame.",
+   "why_it_works": "You watch the claim happen instead of hearing it. Because the labels never move, the eye has nothing to track except the mechanism, and a mechanism you can see reads as fact rather than marketing.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DUqpkKUDQSH\", \"author\": \"solliehealth\", \"views\": 151943666, \"line\": \"Niacinamide · Glycolic acid · Salicylic acid · Azelaic acid / Excess sebum · Comedone · Micro-cyst · Pustule\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the locked cutaway opens with the full label grid already in place",
+     "the named ingredient is released — liquid crosses the surface",
+     "it travels down into the structure, still in the same frame",
+     "the named problem visibly changes state under its own label",
+     "the resolved state is held in the identical frame"
+    ],
+    "text_behaviour": "a fixed headline plus a grid of labels — ingredients on one axis, problems on the other — set on frame one and never changed for the rest of the runtime",
+    "camera": "absolutely locked; a 3D cross-section or a single unmoving real setup, no push, no pan, no cut for the whole runtime"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stunt-funnel-reveal",
+   "name": "Weird stunt, then the pitch",
+   "what": "The first act is an attention toll that has nothing to do with the offer — an absurd prop, an out-of-place stunt, a staged confrontation — carrying all the on-screen text and all the ugliness. Then a hard turn funnels it into the thing actually being sold, shot completely differently, carrying no text at all.",
+   "why_it_works": "The stunt buys attention no product shot could earn, and the production-quality gap at the seam is itself the reveal — the viewer feels they have been let in on something rather than sold to.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DTQjYVVAZuk\", \"author\": \"rich_in_flow\", \"views\": 11690197, \"line\": \"POV: you DMed 1 million girls on Instagram💀🥀\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the stunt or gag opens, unexplained, carrying the on-screen text",
+     "it escalates or draws real bystanders in",
+     "the funnel — a transition object, a map pin, a face-to-camera turn",
+     "hard cut into the offer, shot clean, no text",
+     "the offer runs out properly and closes"
+    ],
+    "text_behaviour": "all the text lives in act one — a POV line, a data card, an argument; act two carries none at all, and the switch lands on the cut",
+    "camera": "act one is ugly and handheld — phone selfie, cut-out composite, real public location; act two is polished and stable — clean room, considered light, no visible phone look"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pinned-headline-monologue",
+   "name": "Talking head under a fixed headline",
+   "what": "One person, one seat, one room, one unbroken take to camera — and a single headline pinned in the top third that never changes for the entire runtime while rolling speech captions carry the argument underneath. No product, no cutaway, no demonstration, no second location.",
+   "why_it_works": "The pinned headline is a frame the viewer reads against every sentence spoken, so each line reassigns something under a claim they have already accepted. Nothing changes visually, so the only thing that can hold them is the argument — which is why the headline has to be the strongest line in the piece.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DZN5Njzo-Yh\", \"author\": \"thekumarmethod\", \"views\": 36021647, \"line\": \"This is a message to all finance bros\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the headline lands pinned, over the speaker already talking",
+     "the premise is named — often the audience is addressed directly",
+     "the argument turns: something familiar is reassigned under the headline",
+     "the framing tightens or holds; the headline is still there",
+     "the close — a call to follow, or the headline restated in speech"
+    ],
+    "text_behaviour": "one headline in an identical position (often a white box, top third) unchanged from first frame to last, plus burned-in rolling speech captions that change every beat below it",
+    "camera": "one locked or arm's-length frame on the speaker, same seat and same room throughout; no cuts, no cutaway, no second angle"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "opening-line-self-demo",
+   "name": "Selfie demo on myself",
+   "what": "The front camera is on the operator themselves, and their own face or body is both the demo surface and the payoff. One line opens the video — a craving line, a quoted comment, a claim — and either stays pinned or drops after the first beat; the rest is a wordless self-applied routine in one unchanging frame, ending on the surface visibly changed.",
+   "why_it_works": "Doing it to yourself on camera is the cheapest credible proof there is: nobody hired the face, and the before-state was volunteered. Because the frame never changes, the change in the skin is the only event, so it cannot be edited into existence.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DS_OFE1Ad57\", \"author\": \"lifeaszeph\", \"views\": 14070296, \"line\": \"Reply to James Carlo Duruin's comment — Just embrace it bro\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "the opening line lands over the untreated state — the worst-looking frame is offered first",
+     "the product goes on, self-applied, same frame",
+     "the working step, closer",
+     "the removal or second pass, the surface starting to change",
+     "the finished surface held in the identical frame the video opened on"
+    ],
+    "text_behaviour": "one line on the opening beat — pinned unchanged for the runtime, or dropped after the first beat and never replaced; no per-beat captions, no labels",
+    "camera": "one fixed front camera on the operator's own face or body, same distance and angle all runtime; no cutaway, no second location"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "era-stamped-upgrade-ladder",
+   "name": "Era-stamped upgrade ladder",
+   "what": "Every beat carries a year stamp in the same fixed position, and the objects change with it — the obsolete method first, then 'Vs...', then the current or future year held for the rest of the runtime with the product doing the same job. The footage is stitched from visibly different sources with no continuity between rungs.",
+   "why_it_works": "The viewer agrees the old way was bad before the product is ever shown, so the product arrives as an upgrade they have already voted for rather than a pitch. The date stamp does that work in two words and needs no argument.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DU4KVK9DHGN\", \"author\": \"luxsteam.co\", \"views\": 29960265, \"line\": \"Ironing in 1726 / Vs... → Ironing in 2026\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "year stamp 1 — the obsolete method, done the hard way",
+     "'Vs...' — the pivot card",
+     "year stamp 2 (and sometimes 3) — the product doing the same job",
+     "the product's mechanism in close, stamp still held",
+     "the finished result, stamp still held"
+    ],
+    "text_behaviour": "a year or era stamp in the identical top position at every beat, plus a 'Vs...' pivot card; the stamps are labels, never arguments, and the last one is held for the rest of the runtime",
+    "camera": "no continuity — each rung is separately sourced footage in its own room with its own camera; cuts land on the stamp change"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "concern-list-proof-photos",
+   "name": "Concern list with real photos",
+   "what": "The same composite unit repeats at every beat — a fixed frame plus one big label naming a single concern plus a real photo of that exact concern composited into it. The caption changes every cut, the frame does not, and each named thing is paid off by a picture of the actual thing rather than by a claim.",
+   "why_it_works": "A list makes the viewer wait for their own item to come up, which buys the whole runtime. Each item lands as recognition, not persuasion, because the proof photo is the ordinary unretouched version they already own or already have.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Da5j02xMfhN\", \"author\": \"kbeauty_code\", \"views\": 18159525, \"line\": \"Dark Armpits → Ingrown Hair\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "a quoted grievance or the first named concern opens over the fixed frame",
+     "concern 2 — new label, new proof photo, identical frame",
+     "concern 3 — same unit again",
+     "concern 4 — the list is now clearly longer than the video",
+     "the close — the answer, or the list simply stops"
+    ],
+    "text_behaviour": "one big label per beat naming a single item, in the identical position every time; the label changes on every cut and nothing is ever pinned across beats",
+    "camera": "one unchanging frame or repeated composite unit — the same corridor, the same shelf angle, the same two-shot — reused identically for every item on the list"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "wordless-pov-handoff-transformation",
+   "name": "Wordless POV handoff transformation",
+   "what": "A POV arm reaches out of the bottom of frame and hands the product to a stranger, and the next beat is that stranger using it on camera. Zero on-screen text and no creator face at any point; the run repeats with new strangers in new places, or the crowd around the one stranger reacts to the result.",
+   "why_it_works": "A stranger who did not know the camera was coming cannot be coached, so their reaction in the second the product works is unfakeable. Keeping the creator entirely out of frame removes the only person the viewer would otherwise distrust.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DcNDZ2vT-L1\", \"author\": \"partho.contes\", \"views\": 10607733, \"line\": \"no overlay — the sceptic's own before/after and the crew's reaction carry it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "POV arm enters frame, offering one unit from an open bagful",
+     "the stranger takes it — visibly sceptical or visibly in need of it",
+     "they apply or wear it on camera, no cut",
+     "the before/after lands in the same frame, and the people around them react",
+     "repeat with a new stranger in a new location"
+    ],
+    "text_behaviour": "none at any beat — no captions, no labels, no hook line",
+    "camera": "arm's-length POV from the camera-holder, no creator face; handheld, follows the stranger through the whole exchange with no cut away"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pinned-line-stranger-sighting",
+   "name": "Pinned line, stranger sighting",
+   "what": "One unchanging line sits on screen while a handheld phone catches the product out in a real public place — the same subject sighted again and again in different parts of one venue, or worn into real transactions where unpaid strangers react to it. The repetition or the stranger's laugh is the payoff; nothing is demonstrated.",
+   "why_it_works": "A product spotted in the wild reads as evidence of a world rather than a pitch, and a laugh from someone who is not being paid is the one endorsement that cannot be bought. The pinned line just supplies the joke the sightings answer.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DYRpfL8uSQT\", \"author\": \"athenaparissss\", \"views\": 17990103, \"line\": \"glitch in the matrix...\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "the pinned line lands over the first public sighting",
+     "second sighting, different part of the venue, same line",
+     "third sighting — the repetition registers as a bit",
+     "a real transaction or encounter: an unpaid stranger reacts",
+     "a second venue or a final sighting under the same unchanged line"
+    ],
+    "text_behaviour": "one lowercase or meme line, often unfinished, pinned top-centre and unchanged for the entire runtime; nothing else on screen",
+    "camera": "handheld phone, candid, at a distance that reads as caught rather than staged; cuts on each new sighting, no setup shots"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "locked-macro-debris-lift",
+   "name": "Locked-macro debris lift",
+   "what": "One extreme-macro framing on a single site, absolutely locked, held for the whole runtime with no cuts and no second surface. The only thing that changes is debris emerging — blooming into liquid, or breaking free of the surface in the final beat. No witness, no rinse, no multi-surface run.",
+   "why_it_works": "Because the frame never moves, the debris is the only event, and the eye is forced to measure how much of it there is. A locked macro also removes every editing suspicion — nothing was cut in, because nothing was cut.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DbQ0K0EyktH\", \"author\": \"drshubhamsmiles\", \"views\": 28295939, \"line\": \"no overlay — the fragment breaking free carries it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the locked macro is established on the untouched site",
+     "the tool enters and makes contact",
+     "the first debris becomes visible",
+     "the debris accumulates or spreads in the identical frame",
+     "the payoff — a fragment breaks free, or the field is fully clouded"
+    ],
+    "text_behaviour": "zero on-screen text, or a single line pinned unchanged for the entire runtime; nothing changes and nothing escalates",
+    "camera": "absolutely locked extreme macro on one site; no reframe, no cut, no pull-back for the whole runtime"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "found-clip-reaction-cut",
+   "name": "Found clip, reaction cut",
+   "what": "Someone else's footage runs full-frame with zero overlay for most of the runtime, then a hard cut puts the poster alone in a bare room for the rest of it. The reaction is withheld to the end rather than running alongside — the borrowed clip is never shared with a panel.",
+   "why_it_works": "Giving the found clip the whole frame lets it work at full strength, so the viewer is fully invested before the creator appears. Arriving only at the cut makes the take feel earned rather than parasitic.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DYU2tHsOcot\", \"author\": \"jalenhinton_\", \"views\": 7310353, \"line\": \"no overlay — the post caption credits the borrowed clip; the cut to the poster is the take\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the borrowed clip opens full-frame, no overlay, no panel",
+     "it escalates on its own terms",
+     "it peaks — chaos, a collision, an unstageable moment",
+     "hard cut: the poster alone in a different room, straight to camera",
+     "the take is delivered and held to the end"
+    ],
+    "text_behaviour": "zero on-screen text at any beat — the post caption credits the borrowed clip and carries anything else that needs saying",
+    "camera": "act one is whatever the borrowed footage was shot on, full-frame and uncut; act two is a handheld selfie in a bare room, no set, no props"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "captioned-steps-comment-gate",
+   "name": "Full recipe, step by step",
+   "what": "A complete recipe or routine is given away in full on camera — every ingredient named, every amount stated, nothing withheld — carried by per-beat spoken captions from a fixed frame, with occasional cutaways standing in for what the camera cannot show. Then the last two beats convert: a physical book or product is held to the lens behind a comment-to-get gate.",
+   "why_it_works": "Withholding nothing is the offer: a viewer who has just been handed the whole thing for free assumes the paid thing must be worth more. The gate arrives after the value, not before it, so it reads as a next step rather than a toll.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Db5lgk5BjRF\", \"author\": \"hua_jin123\", \"views\": 8782287, \"line\": \"…and it will not clear / 1 teaspoon of turmeric — running speech subtitles\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the frame opens mid-sentence, first caption clause already running",
+     "ingredient one named and dosed on camera",
+     "the remaining steps performed in order, one caption clause each",
+     "a cutaway carries the claim the camera cannot show",
+     "the physical book or product held to the lens — the comment gate lands in the caption"
+    ],
+    "text_behaviour": "running speech subtitles, one clause per beat in the same position, opening mid-sentence; the terminal beats carry the comment-to-get gate",
+    "camera": "one locked frame on the practitioner performing to camera for the body of the runtime, with brief hand-offs to a render or inset; back to the locked frame for the close"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "word-per-beat-internal-reveal",
+   "name": "Word-per-beat internal reveal",
+   "what": "One bold word per beat builds a single sentence across a run of fully rendered shots of a body, with the working part painted in or lit up inside it. The camera reframes freely between beats — nothing is locked — and the payoff is an interior view no real camera could ever get.",
+   "why_it_works": "The unfinished sentence holds the viewer while the render does something footage cannot: shows the inside. Seeing a mechanism from inside the body converts an assertion into something that looks observed.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DUtDFfGkwu9\", \"author\": \"mr.brainboost\", \"views\": 25202363, \"line\": \"making / lacrimal / a / drains / you\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "word-per-beat",
+    "beats": [
+     "word 1 — the exterior of the body part, rendered photoreal",
+     "word 2 — the camera moves in or through the surface",
+     "word 3 — the working part is picked out in colour inside",
+     "word 4 — the mechanism acts, still inside",
+     "word 5 — the interior payoff shot, glowing or resolved",
+     "word 6 — held, sentence still unfinished"
+    ],
+    "text_behaviour": "one bold word per beat, centre frame, building a single sentence in order; no other text at any point",
+    "camera": "fully rendered — the camera reframes between every beat, moving between angles and travelling into the body; never locked, no hands, no product, no room"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "silent-build-to-placed-reveal",
+   "name": "Silent build to withheld reveal",
+   "what": "Sequential build steps in one location with zero on-screen text and no address to camera. The camera tightens monotonically as the runtime goes on — wide on the maker, then medium at the work, then hands-only, then macro. The retention device is the unfinished object: you cannot tell what it is until the last beat opens or places it.",
+   "why_it_works": "An unfinished object is a question the viewer has to stay to have answered, and no caption can substitute for it. Silence keeps every second on the work, and the tightening camera signals the answer is getting closer without saying so.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Db4Fxb5JO2A\", \"author\": \"greennook_\", \"views\": 222805900, \"line\": \"no overlay — the unfinished object is the retention device\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "wide — the maker and the room, materials laid out",
+     "medium at the work — the first step, still unreadable",
+     "hands-only, closer — the object starts to take shape",
+     "closer again — one step from the answer",
+     "the reveal: cut open, demoulded, or placed where it lives"
+    ],
+    "text_behaviour": "none at any beat — no captions, no labels, no address to camera; the post caption carries everything",
+    "camera": "one location, tightening monotonically across the runtime from wide to macro; no cutaway, no second location, no talking head"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "one-product-three-worlds",
+   "name": "Same product, three places, no words",
+   "what": "The same product is demonstrated from scratch in three or four completely unrelated settings, on different bodies or in different homes, with no text doing any work at all. Each demo is self-contained; nothing carries over between them. The repetition itself is the argument.",
+   "why_it_works": "One demonstration proves a use case; four in unrelated worlds prove a verdict. Because none of the settings share anything, the only constant left on screen is the product, so the viewer generalises for you.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DbsTcDpC8bT\", \"author\": \"corywilkinsonis453\", \"views\": 32883069, \"line\": \"\\\"Results may differ from person to person\\\" — a fixed disclaimer; no persuasive text anywhere\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "demo 1 — the product used start to finish in world 1",
+     "hard cut to world 2 — visibly different place, different person",
+     "demo 2 run the same way, same shot grammar",
+     "hard cut to world 3, same again",
+     "a final world or a last close on the product; no summary, no CTA"
+    ],
+    "text_behaviour": "none that does any persuasive work — at most a fixed legal disclaimer sitting in the same place all runtime, which the viewer reads past",
+    "camera": "the same shot composed identically in each world, cut hard on every location change; no establishing shots and no transitions"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "public-reaction-repeat-demo",
+   "name": "Done in public, then repeated",
+   "what": "Two acts, no on-screen text anywhere. Act one is a witnessed act in a real public place — the old painful way endured, or the product used in front of strangers who visibly react. Act two hard-cuts into a wordless repeat run: the same product applied on three or four separate bodies or zones, tight and fast.",
+   "why_it_works": "The witnesses in act one do the persuading a caption would otherwise have to attempt, and they cost nothing. Act two then answers 'does it work on me' by simply running the coverage across enough different bodies that the viewer finds themselves in it.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Dbmik5RNWQV\", \"author\": \"leahandersenphdaa231\", \"views\": 52805988, \"line\": \"no persuasive overlay — only a fixed product disclaimer; the crowd and the repeat run carry it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "act one: the act performed in a real public place, bystanders in frame reacting",
+     "the reaction lands — a laugh, a wince, a stare",
+     "hard cut into act two: tight application on body 1, no text",
+     "body 2, different zone or different skin",
+     "body 3 and 4, faster, closing on the coverage"
+    ],
+    "text_behaviour": "none anywhere — at most a fixed product disclaimer; no hook line, no labels, no captions in either act",
+    "camera": "act one handheld and candid in the real venue with bystanders in shot; act two tight and wordless on the contact point, cutting on each new body or zone"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pinned-line-borrowed-intercut",
+   "name": "Pinned line, borrowed intercut",
+   "what": "One caption stays word-for-word identical across every beat while the picture alternates between the poster's own shot and footage from a visibly different second source. The maker's own frame is deliberately plain; the borrowed frames do all the punching, and the last third often lives entirely in the borrowed source.",
+   "why_it_works": "The unchanging line is the constant that makes two unrelated sources read as one argument. Because the poster's own shot is flat by design, every cut to the borrowed source lands as an escalation without the poster having to perform anything.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DbQxX32scg5\", \"author\": \"thabiso_wavyy\", \"views\": 10513050, \"line\": \"3 Hours Of Sleep / Doesn't Affect Me / Also me😭:\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "the identical line lands over the poster's own full-frame shot",
+     "cut to the second source — letterboxed or plainly different — same line",
+     "back to the poster's own shot, still flat, same line",
+     "cut back to the second source, which now carries the punch",
+     "the last stretch stays in the borrowed source under the unchanged line"
+    ],
+    "text_behaviour": "one caption, usually two lines ending on an open colon, word-for-word identical in the same position at every single beat; never completed, never escalated",
+    "camera": "two visibly different sources alternating — the poster's own plain full-frame shot against letterboxed or differently-graded borrowed footage; a cross-dissolve at the seam is common"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "deadpan-caption-evidence-montage",
+   "name": "Deadpan caption, evidence pile-up",
+   "what": "One claim is stated once — pinned unchanged on screen or left in the post caption — and then never argued again. Everything after it is a pile-up of visibly unconnected instances of the same thing, cut one to a beat: different rooms, different people, different sources, no continuity and no cast reverse.",
+   "why_it_works": "A claim proved by accumulation cannot be rebutted one instance at a time, and every new clip is fresh evidence for a case the viewer already agreed to in the first two seconds. The unconnectedness is the point — if the instances shared a location it would read as staged.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DZLqNIKiWTA\", \"author\": \"druski\", \"views\": 21865327, \"line\": \"no authored overlay — the pile-up of unconnected clips is the argument\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the claim lands once — pinned caption or post caption — over instance 1",
+     "instance 2, plainly unrelated to instance 1",
+     "instance 3, different room and different people again",
+     "instance 4 — the pile-up is now the argument",
+     "a final instance, no summary and no CTA"
+    ],
+    "text_behaviour": "one claim stated once and never changed — either a meme caption pinned all runtime or nothing on screen at all with the claim in the post caption; no per-beat captions",
+    "camera": "no continuity between beats: separately sourced or separately shot close shots, cut hard on each new instance, no shared location and no establishing shot"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "caption-only-single-take",
+   "name": "Caption-only single take",
+   "what": "One subject held in one framing for the whole runtime with zero on-screen text and effectively no cuts. Nothing is explained, nothing is demonstrated, nothing is sold on screen — the post caption carries the only words. What holds the viewer is real behaviour left running long enough to become the whole payload.",
+   "why_it_works": "A held take with no overlay reads as caught rather than made, and the absence of explanation is itself the hook — the viewer keeps watching to find out why they are being shown this. Because nothing is claimed, there is nothing to disbelieve.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DU3QWSpjuUk\", \"author\": \"dani.villar_\", \"views\": 83750908, \"line\": \"no overlay — the post caption carries the only words\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the framing is established — one subject, one vantage",
+     "the behaviour starts and is simply allowed to run",
+     "it continues past the point a normal edit would cut",
+     "the thing that makes it worth watching becomes legible",
+     "the take ends without resolution or explanation"
+    ],
+    "text_behaviour": "none on screen at any beat — the post caption is the only text anywhere in the piece",
+    "camera": "one distant or held vantage for the whole runtime, no cutaway, no reframe, no second angle; at most one scale change at the very open"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "flat-label-damage-reaction",
+   "name": "Label, then it goes wrong",
+   "what": "A flat label or graphic runs over the first half — a product name, a set of category labels — and then drops out exactly where the demonstration goes wrong. The payoff shot is the damage or the mess rather than the thing working, and the video ends on a hard cut to a locked deadpan face in another frame.",
+   "why_it_works": "A demo that turns on itself is the one outcome nobody can be accused of staging for a brand, so the failure buys more trust than a success would. Dropping the label at the exact moment it stops being true is what makes the turn readable without a word.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DSl0geBjjrg\", \"author\": \"landonmoss\", \"views\": 19222206, \"line\": \"FEET WARMERS FROM TEMU\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the flat label lands over the product or the categories, normal use",
+     "the demonstration proceeds, label still running",
+     "the turn: something goes wrong and the label drops out",
+     "the damage or the mess held up to the lens — this is the payoff shot",
+     "hard cut to a locked deadpan face in a different frame, no text"
+    ],
+    "text_behaviour": "a flat label or set of labels pinned over the first half only, dropping out at the turn and never replaced; zero text over the payoff and the closing reaction",
+    "camera": "handheld on the demonstration for act one; hard cut to a locked square-on selfie frame for the closing reaction, which does not move"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "subtitled-monologue-evidence-cutaways",
+   "name": "Talking head + proof cutaways",
+   "what": "The speaker's own unchanging frame carries most of the runtime while one continuous narration is burned in as per-beat captions that never close a sentence; every few beats the frame is handed to the thing the speech has just named — an object held up beside the face, a full-frame macro insert, a borrowed diagram or a stack of screenshots pasted into the same frame. The speaker's camera never changes; the evidence is the only thing that ever moves. Where the borrowed material instead holds the full frame for most of the runtime and the creator is reduced to a pinned panel, that is running-caption-borrowed-cutaways, not this.",
+   "why_it_works": "The caption is always mid-sentence, so there is no clean place to leave, and each insert arrives as a receipt for a claim the viewer has just heard rather than as a change of subject. Because the speaker's frame is identical every time it returns, a scrapbook of borrowed proof reads as one person's argument with exhibits.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DTktKp3DdM9\", \"author\": \"clairelyyouu\", \"views\": 2812071, \"line\": \"Goodbye unwanted hair🤯‼️ → everything you can think of to get rid of that unwanted → Now, → slows down the activity of your hair fall\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "subtitled-monologue",
+    "beats": [
+     "the speaker's frame opens already mid-sentence, first caption clause running",
+     "the claim is named — the object, the credential or the product held up beside the face",
+     "cut or paste to the evidence: a full-frame macro, a labelled diagram, someone else's before close-ups",
+     "back to the identical speaker frame, the sentence one clause further on",
+     "a second piece of evidence — the mechanism, the printed panel, the competing listings",
+     "close on the speaker frame, or on the product doing the thing that was claimed"
+    ],
+    "text_behaviour": "one continuous narration burned in as speech captions — one clause, or one spoken word, per beat in the identical position, cut off mid-sentence every time; sometimes a hook line over the opening beat that never returns, but nothing is ever pinned across the runtime",
+    "camera": "one fixed frame on the speaker — arm's-length selfie or a locked chest-up — identical every time it comes back, cut against full-frame evidence inserts or panels pasted into the top third or one side of that same frame; no second location and no second angle on the speaker"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "subtitled-monologue-angle-cuts",
+   "name": "Talking head, no cutaways",
+   "what": "One speaker in one place for the whole runtime with nothing pinned over them — a rolling speech caption is the only graphic and it is mid-sentence at every beat. The frame is either absolutely locked or cut between two or three fixed angles of the same setup; there is no product, no cutaway, no evidence and no second location. Locked, angle-cut and hook-then-dropped are one structure: what defines it is that nothing is held across the runtime and nothing is ever shown.",
+   "why_it_works": "With nothing to look at and nothing pinned, the never-finished sentence is the only retention device left, so the writing carries every second. The staged setting behind them — the room, the wardrobe, the lectern, the shelf of labelled jars — does the credentialing silently, which is why the speaker never has to prove anything on camera.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DZnx8mxzDkU\", \"author\": \"atlahworldwide\", \"views\": 2721550, \"line\": \"I'VE BEEN WORKING WITH THEM FOR 45 YEARS. → I SWEAR BEFORE GOD.\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "subtitled-monologue",
+    "beats": [
+     "the frame opens on the speaker already mid-sentence, or on one hook card that lands once and is gone",
+     "the premise is named in speech; the caption turns over",
+     "the argument escalates one clause at a time in the identical frame, or on a cut to a second fixed angle of the same setup",
+     "the strongest line lands with no visual support of any kind",
+     "the close — a gate clause, a question, or the sentence simply left open"
+    ],
+    "text_behaviour": "rolling burned-in speech captions, one clause per beat in the identical position, always cut off mid-sentence, often with the spoken word highlighted; nothing is pinned across the runtime — at most one hook card on the opening beat that is gone from every beat after it",
+    "camera": "one speaker in one place all runtime — either absolutely locked with a pixel-identical background every beat, or cut between two or three fixed angles of the same setup; no cutaway, no product, no second location, no camera move inside a beat"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "clause-chain-mechanism-demo",
+   "name": "One sentence, many proof shots",
+   "what": "One spoken sentence is broken into a short clause per beat, and each clause is answered by a different kind of shot of the same claim — the problem on a real body, the debris tapped out against a dark surface, a macro of the working part, a rendered cutaway of what happens underneath. Nothing is pinned and nothing is borrowed: the creator shoots or commissions all of it, and the shot type changes on every clause.",
+   "why_it_works": "The sentence is unfinished at every cut, so the read drags the viewer through a demonstration they would otherwise skip. Because each clause is paid off by a different class of proof — physical, then macro, then rendered — the same claim gets evidenced three ways inside fifteen seconds.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DUSce_UAa53\", \"author\": \"forbeaut_global\", \"views\": 3924335, \"line\": \"What is this? / Lifts flakes off / These flexible pins / removing built-up flakes / Even if you shampoo / No buildup\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "an opening question or first clause over the problem shown on a real body",
+     "the clause turns over: the physical proof — debris, residue or the result tapped out where it reads against a plain ground",
+     "macro on the working part of the product, the clause naming it",
+     "a rendered cutaway of the mechanism below the surface, still one clause",
+     "back to the real body, now clean or fixed",
+     "the product held up to the lens on the last clause"
+    ],
+    "text_behaviour": "one short clause per beat in the identical position, replaced on every cut and reading in order as a single sentence; no pinned line, no labels and no headline",
+    "camera": "no single camera behaviour — the format cuts between four shot types, one per beat: a real body at head height, a hands-only macro over a dark surface, a macro of the product itself, and a rendered cutaway; each shot locked or near-locked with no move inside it"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "spoken-caption-applied-demo",
+   "name": "Talk while I apply it",
+   "what": "The narrator is also the demo surface: the product goes onto their own face or body — by their own hand, or by someone else while the camera stays on them — in one continuous setup, and the text is their own transcribed speech. The captions bracket the runtime and drop out entirely through the application beats. Where the text is instead one line landed at the open and nothing after it, that is opening-line-self-demo.",
+   "why_it_works": "Speech captions read as a person talking rather than a claim being made, and the silence through the middle puts nothing at all between the viewer and the thing happening on the skin. Because the frame never leaves the narrator, the before-state is still on screen when the result lands.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DSAsIODDSf1\", \"author\": \"luminance_red\", \"views\": 12023605, \"line\": \"GIRL FROM TIKTOK → REALLY INTERESTED → [no caption at all through the application] → EVERYTHING LOOK SUPER\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the narrator opens talking to the lens, captions running, the untreated surface visible",
+     "the product goes on in the same frame — the captions drop out here",
+     "the working step, still silent on screen",
+     "the removal or second pass, the surface starting to change",
+     "the narrator talking again over the finished surface, captions back, often refusing to claim the result"
+    ],
+    "text_behaviour": "the narrator's own speech transcribed — two-to-four-word karaoke cards with the spoken word highlighted, or one plain annotation per beat — bracketing the runtime and absent entirely through the application; nothing is ever pinned",
+    "camera": "one fixed camera on the narrator's own face or body for the whole runtime, same distance and angle throughout, no cutaway and no second location; handheld drift is allowed, reframing is not"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "personified-mechanism-explainer",
+   "name": "Personified mechanism explainer",
+   "what": "Everything is rendered and everything is a character: the problem is given a face and a body, the active ingredient arrives as its own creature and acts on it, and the viewer watches something happen TO a character instead of hearing a claim. One word of the voiceover sits on screen per beat and the camera reframes freely between beats — wide, macro, a different world.",
+   "why_it_works": "A personified problem gives the viewer somebody to want defeated, which pulls harder than a mechanism they have to understand. Because the whole world is rendered, the format reaches a scale and a place no camera could, and never has to prove the footage is real.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Db8TkobqDiX\", \"author\": \"realhealthschool\", \"views\": 3450158, \"line\": \"TO / IT / BOTTOM / POROSITY / SEAL / STOPS\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the problem in character — distressed, infesting or smug — established in its own rendered world",
+     "a test the viewer could run themselves tonight, played out by the character",
+     "the active arrives as its own character and climbs onto the problem",
+     "the mechanism happens to the character in the same world",
+     "the two end states side by side — the treated character and the untreated one"
+    ],
+    "text_behaviour": "one word of the voiceover per beat, centred, heavy caps with a hard outline, swapping on every stressed word and never completing the sentence on screen; no labels and no pinned line",
+    "camera": "fully rendered with no real footage anywhere — the camera reframes between beats from wide to macro and moves between worlds; no hands, no room, no locked frame"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "transformation-hook-mechanism-explainer",
+   "name": "Before/after first, then why",
+   "what": "The outcome is settled in the opening beats — a two-panel before/after, a year-stamped then-and-now, a promise card, or the worst-looking frame offered first — and the whole rest of the runtime explains why it could be true, in rendered cutaways and labelled diagrams under a running claim caption. The hook furniture never returns after the opening block.",
+   "why_it_works": "Showing the result first buys the runtime, because everything after it is the viewer looking for the catch rather than waiting for a payoff. The mechanism half then supplies a reason, so a claim the viewer has already seen the end of arrives with an explanation attached.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DZzgwi7NHoc\", \"author\": \"alphainfuse\", \"views\": 4849237, \"line\": \"2025 / How sad it could be… → 2026 / Found {product} → It absorbed the serum 300% deeper in the scalp\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the outcome planted: a two-panel before/after, a year-stamp pair, or a promise card over the worst-looking frame",
+     "the same person or surface in the changed state, still inside the opening block",
+     "hard turn into the mechanism — a rendered cutaway or a labelled diagram, the running claim caption starting",
+     "the product in hand, or the routine performed, the caption continuing as one sentence",
+     "a second mechanism beat — the ingredient, the follicle, the muscle named",
+     "the last claim clause over the final rendered frame"
+    ],
+    "text_behaviour": "the opening carries a card, a year-stamp pair or a composited before/after panel that is gone after the first beats; everything after it is a running claim caption, one clause per beat in a fixed position, never pinned and never repeated",
+    "camera": "two visibly different halves — the transformation half is phone footage in real rooms with no continuity between the two states, and the mechanism half is rendered animation or a pasted labelled diagram with no camera of its own"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "word-per-beat-scene-chain",
+   "name": "Word-per-beat scene chain",
+   "what": "One narration is cut into a single word or a two-word fragment per beat, and every beat is a different world with nothing carried over — different room, different country, different cast, rendered or real. The only continuity is the sentence, which never finishes, and one recurring subject or product that survives from world to world.",
+   "why_it_works": "The unfinished sentence supplies the only thread, which frees the picture to jump anywhere and makes every jump read as an escalation rather than a break. Because the worlds share nothing, the recurring product or person becomes the only constant, and the viewer generalises it for you.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DVa-fWMkS0H\", \"author\": \"lucamaxiim\", \"views\": 569011, \"line\": \"because / profile picture / even / a volume / in Mumbai / something\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "word-per-beat",
+    "beats": [
+     "word 1 — world one, established in a single shot with no setup",
+     "word 2 — hard cut to an unrelated world, nothing carried over",
+     "word 3 — a third world, further from the first two",
+     "word 4 — the recurring subject or product turns up again, the only continuity",
+     "word 5 — the most absurd or most expensive world of the run",
+     "word 6 — held, the sentence still unfinished"
+    ],
+    "text_behaviour": "one word or a two-word fragment centred at mid-frame, replaced on every cut, building a single narration that is never on screen whole and never completes",
+    "camera": "no relationship between beats — each world is its own self-contained shot, rendered or filmed, with its own light and framing; no transitions, no establishing shots, no locked frame"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "dropped-hook-roaming-monologue",
+   "name": "Dropped hook, roaming monologue",
+   "what": "One hook line lands on the opening beat and is gone from every frame after it; the rest is a person arguing straight to camera with no text, no product and no cutaway, while the framing roams — close, wide, low, a different corner of the same place, or a location that travels behind them. The performance is the entire payload.",
+   "why_it_works": "The hook stakes the claim once so the viewer knows what they are staying for, and dropping it puts nothing between them and the face. The roaming framing is what stops two minutes of talking from reading as static — the cut has something to do even when the content does not.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DWhoYZrknKg\", \"author\": \"maxbennettkelly\", \"views\": 1352619, \"line\": \"PSA artists it can all fall apart at any moment\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the hook line lands over the first frame, stated once and never restated",
+     "the text is gone; the speaker argues the claim in a lean-in close",
+     "the framing jumps wide — the whole body, the room or the setting readable",
+     "back tighter as the argument turns",
+     "a final framing from a different vantage, or further along the location, still talking"
+    ],
+    "text_behaviour": "one hook line on the opening beat only — a PSA, a warning, a promise — dropped and never replaced or restated; most beats carry no text at all",
+    "camera": "handheld on the speaker throughout with the framing jumping freely between beats — close, wide, low, a different corner of the same room, or a setting that travels behind them; no cutaway, no product, no second source"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "instruction-card-routine",
+   "name": "Instruction-card routine",
+   "what": "Authored overlay furniture runs the video — a numbered list of moves that never depletes, a hold-time badge, a labelled anatomical diagram naming what is being worked — riding over a body performing one item per beat in one unchanging room. The overlay is the product; the body underneath is only proof the card is real.",
+   "why_it_works": "A card the viewer can follow turns a video into something they save rather than something they watch, and a list that stays fully visible tells them exactly how much is left. Naming the muscle or the technique makes free advice read as expertise rather than content.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DTmhb8vk2Uh\", \"author\": \"junya_fit_motivation\", \"views\": 12060950, \"line\": \"Move 1 / Move 2 / Move 3 / Move 4 / Move 5 / Move 6 · 20SEC · SEATED TOE TOUCH\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "an opening claim or before/after card over the demonstrator, stated once",
+     "the overlay card arrives: the full numbered list, the timer badge, the named move and its diagram",
+     "move one performed in full, its item struck through on the list",
+     "move two — same room, same overlay, the diagram and the banner change",
+     "move three, the camera repositioned between moves but never during one",
+     "the last move, the list now struck through to the end"
+    ],
+    "text_behaviour": "permanent overlay furniture in fixed slots — the full numbered list with only the current item struck, a hold-time badge, a labelled diagram and a move-name banner — with only the named item changing per beat",
+    "camera": "one room, a fixed low or wide angle held for the whole of each move, repositioned slightly between moves and never during one; the demonstrator in full frame with the top of the frame left empty for the overlay"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "captioned-screen-walkthrough",
+   "name": "Captioned screen walkthrough",
+   "what": "A hook card on one face beat, then the rest of the runtime is a phone held over a real monitor at an off-axis angle — glare, moiré, the room visible behind the lid — stepping through the tool one screen at a time under a clause of speech caption per beat, and closing on the machine's own output.",
+   "why_it_works": "Filming the screen rather than capturing it is the credential: the glare and the angle are what make it read as a machine actually doing the work rather than a claim about it. The closing readout is the payoff, so the viewer stays to see what the thing produced.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DUoTdgPEq9Z\", \"author\": \"noevarner.ai\", \"views\": 1114731, \"line\": \"Claude Code + Meta Ads = Unlimited Ads → over to apps and click → now you can optimize\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "one arm's-length face beat under a hook card stating the equation or the promise",
+     "phone over the laptop: the first screen, the caption naming the step",
+     "the next screen, tighter, one clause further into the sentence",
+     "a bare hand enters the frame on the keyboard — the machine is being driven live",
+     "the output: the result table or the finished thing, almost filling the frame"
+    ],
+    "text_behaviour": "a hook card in the top third on the opening beat only, dropped and never brought back; every beat after it carries one clause of speech caption in the same position, each cut off mid-sentence",
+    "camera": "one selfie beat at arm's length, then a phone handheld over a real monitor at an off-axis angle for the rest of the runtime, framed tighter beat by beat; no screen capture, no cutaway"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "logo-stamp-crowd-coverage",
+   "name": "Logo stamp, crowd coverage",
+   "what": "A small brand lockup stamps the opening beat and then drops for good; everything after it is handheld coverage of one real event from visibly different setups with no on-screen text, no demonstration and no address to camera. The product is worn, never held up or named, and the crowd around it does the vouching.",
+   "why_it_works": "A room of people already treating the thing as an arrival is a stronger claim than any line, and it cannot be written. Because nothing is ever demonstrated or explained, there is nothing to disbelieve — the viewer is only shown who is there.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DVX3nGPEccf\", \"author\": \"atychiphobia\", \"views\": 64993, \"line\": \"ATYCHIPHOBIA / FEAR OF FAILURE — the opening lockup, then no text at all\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the brand lockup over a near-black opening frame, then gone for good",
+     "the wearers move through the room or the street, caught from across it",
+     "a tight jostled frame — bodies crossing between the lens and the subject",
+     "the scrum: onlookers with phones and cameras raised around them",
+     "a wider frame with the rope, the stanchions or the venue in shot"
+    ],
+    "text_behaviour": "one small logo lockup on the opening beat only — the brand over a short tagline — and no on-screen text at any point after it",
+    "camera": "roaming handheld coverage of one real event from five or six visibly different setups at head height, pushed in among the bodies; no locked frame, no talking head, no establishing shot"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pinned-line-reaction-cut",
+   "name": "Pinned line, reaction cut",
+   "what": "One setup line, usually ending on an open colon, is pinned word-for-word identical over borrowed spectacle footage for most of the runtime, and the last beat hard-cuts to one person's face in a completely different room under that same unchanged line. The footage is the illustration; the face is the answer the colon promised.",
+   "why_it_works": "An open colon is a sentence the viewer cannot close by reading, so the cut to a face lands as the completion of a thought rather than as a reaction shot. Because the line never changes, two unrelated sources read as one joke.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DamBeiqJHdP\", \"author\": \"marquettdavon\", \"views\": 499742, \"line\": \"{audience} after seeing {the thing}: — pinned identical on all six beats, never completed\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "pinned-line",
+    "beats": [
+     "the pinned line lands over the borrowed footage, which plays in its own unchanging frame",
+     "the borrowed act escalates on its own terms, line unchanged",
+     "it keeps escalating — nothing is added and nothing is cut to",
+     "the spectacle peaks",
+     "hard cut: one person's face in an interior room, flat and unreacting, the same line still pinned"
+    ],
+    "text_behaviour": "one line pinned word-for-word in the identical position on every single beat including the final cut, ending on an open colon and never completed in words",
+    "camera": "whatever camera the borrowed footage came with, held full-frame and uncut for most of the runtime, then a hard cut to a fixed front-camera close in an ordinary room that does not move"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "locked-frame-screen-readout",
+   "name": "Locked frame, screen readout",
+   "what": "One absolutely locked frame with a person in it who never turns to camera or leaves their seat, a caption pinned unchanged for the entire runtime, and a screen inside the frame that is the only thing that changes — a document, a dashboard, a monitor rig — walked through section by section while the viewer reads it over their shoulder.",
+   "why_it_works": "It is the inverse of a demo: because the frame and the caption are both constants, the screen is the only moving part, so the deck becomes the argument. Reading something over someone's shoulder feels like access rather than a pitch.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"Db4M9M8iI_B\", \"author\": \"cortez_seay\", \"views\": 1894115, \"line\": \"It IS this serious 💔🥺\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the locked frame opens with the caption pinned and the screen on a title or a single word",
+     "the first section arrives on screen — a heading, a block of text, a small grid of evidence",
+     "section two, the person gesturing at the screen without ever turning to camera",
+     "section three, the stack now visibly longer than the runtime",
+     "back to a bare title screen or a final readout, the frame and the caption unchanged"
+    ],
+    "text_behaviour": "one short line pinned in the identical position from first frame to last, never changed and never argued; everything else that gets read belongs to the document inside the frame",
+    "camera": "absolutely locked for the whole runtime — same framing, same background, same light — with the subject filling one side of frame and the screen the other; no cut, no reframe, no cutaway"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "multicam-monologue-crowd-cutaway",
+   "name": "Live stage talk, many cameras",
+   "what": "One continuous live take of a performer talking to a real room, covered from four or more camera positions — tight close, full-stage wide, audience reverse, from behind the crowd — with word-synced speech captions running under every angle and a cutaway to the audience reacting placed exactly where the line lands.",
+   "why_it_works": "The reaction cutaway is proof the line worked on people who were actually there, which no caption can claim. Multi-angle coverage of one take is what makes the room read as real rather than staged, and the captions keep the speech legible with the sound off so the reaction means something.",
+   "status": "draft",
+   "state": "unreviewed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"code\": \"DalQ2U1Ba7f\", \"author\": \"jaylarsoncomedy\", \"views\": 4738228, \"line\": \"AND THEN THAT CASE F**KING HAVE AT IT → FEELS PRETTY GOOD FEELS PRETTY GOOD\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "family": "subtitled-monologue",
+    "beats": [
+     "tight close on the performer mid-word, captions running",
+     "the same close angle holds while the setup lands",
+     "cut to the full-stage wide — the venue and the room become visible",
+     "reverse onto the audience at the punchline: real people visibly reacting",
+     "back to a tighter or darker angle for the next run",
+     "from behind the crowd, the performer small and the room around them"
+    ],
+    "text_behaviour": "burned-in word-synced speech captions, centre-low, running continuously under every angle with the currently spoken words highlighted; nothing pinned and nothing authored",
+    "camera": "one continuous live take covered from four or more fixed positions — tight close, full-stage wide, audience reverse, from the back of the room — each near-locked; the edit changes angle rather than the camera moving"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "operator-service-montage",
+   "name": "Pro does it on a client",
+   "what": "A professional performs a multi-step service ON A CLIENT, shot third-person, with each product labelled on screen as it is used. The operator is an authority with hands on someone else's face; the viewer watches as the person in the chair, not as the person filming. Opens on the trade's own known ritual (the clippers, the wash) before any product appears, which buys the procedure its credibility.",
+   "why_it_works": "Every claim arrives as a caption on a procedure already underway, so nothing is being argued — it is being labelled. And because the subject is a paying client rather than the creator, the viewer has somebody to identify with who did not choose the product: the endorsement is the professional's, the experience is the stranger's, and the viewer is neither, which is a comfortable place to watch from.",
+   "status": "draft",
+   "state": "proposed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"clip\": \"Rico Faceail-.mp4\", \"creator\": \"barber\", \"note\": \"full service to gifting, every product captioned\"}, {\"clip\": \"IG_reel_fadedcutz__2023-10-09.mp4\", \"creator\": \"fadedcutz\", \"note\": \"kit pan, steamer, hot towel, eye pads\"}, {\"clip\": \"IG_reel_barbermentality_2025-04-11.mp4\", \"creator\": \"barbermentality\", \"note\": \"wordless variant — sequence alone carries it\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "the trade's own opening ritual — clippers, wash, cape — before any product is visible",
+     "the kit laid out or held to camera, each item named on screen",
+     "step one applied to the client, product named as it lands",
+     "the heat beat — steam, hot towel — the part that reads as 'treatment' not 'routine'",
+     "remaining steps in order, each labelled",
+     "close on the finished skin, client reacts in their own words",
+     "optional: the products handed over or gifted"
+    ],
+    "text_behaviour": "product names appear as plain labels the moment each is used and disappear when it is done — never a claim, never a sentence; the operator's handle and location pinned throughout; a discount code sometimes lands once in the middle, never at the open",
+    "camera": "handheld, vertical, third-person over the operator's shoulder or beside the chair; alternating close-up on hands and product with medium on the client; real shop light, no cuts to the operator talking to camera"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stranger-answer-montage",
+   "name": "Stranger answer montage",
+   "what": "The creator states the question to camera, then approaches strangers in public and lets their unscripted answers carry the whole argument. Every word is burned in as rolling captions because the audio is street audio. The creator never makes the claim — the strangers make it for him, and the more reluctant or unpolished they sound, the better it works.",
+   "why_it_works": "The persuasion belongs to people with nothing to gain. A creator saying women notice your skin is an ad; four strangers saying it unprompted is evidence. The awkwardness is load-bearing — a stranger hesitating, or giving a blunt answer the creator did not want, is the proof that nothing was scripted.",
+   "status": "draft",
+   "state": "proposed",
+   "signed": null,
+   "examples": null,
+   "evidence": "[{\"clip\": \"BRAND_A8.mp4\", \"creator\": \"street crew\", \"note\": \"five approaches cut tight, question repeated\"}, {\"clip\": \"BRAND_A1.mp4\", \"creator\": \"street crew\", \"note\": \"meme inserts, awkward silence played as the payoff\"}, {\"clip\": \"C2111.MP4\", \"creator\": \"street crew\", \"note\": \"before/after photo shown to a stranger, her reaction is the proof\"}]",
+   "approved": false,
+   "source": "components/swipe-organic/formats.json",
+   "extra": {
+    "beats": [
+     "creator to camera, states the question plainly — 'today we're asking strangers…'",
+     "first approach, caught mid-walk, question asked cold",
+     "two to four more answers cut tight, the captions carrying them",
+     "optional: a meme or reaction insert on the funniest answer",
+     "the answer that lands the point, given the most room",
+     "optional: the handoff — product given to the stranger, explained on the spot"
+    ],
+    "text_behaviour": "burned-in rolling captions on every line of speech, question and answer both, in the creator's own rough typing; no headline, no pinned claim — the captions are transcription, not copy",
+    "camera": "handheld, vertical, medium on the stranger with the creator's shoulder or mic in frame; wide when walking up so the approach reads as real; daylight public space, no lighting, ambient sound"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "storytelling",
+   "name": "Before → turn → after story",
+   "what": "One named person with one reason, told as a story: who he was before, the turn (he found out it was never his fault), who he is after — the beats are the story's, not a pitch's, and the product enters where the turn happens. Aimed at a buyer who already wants the outcome.",
+   "why_it_works": "Conscious Bar runs 100,000+ customers off 44 ads because every ad is one person's reason for switching, told in her own words; story and intent do the work volume does for everyone else.",
+   "status": "approved",
+   "state": null,
+   "signed": "damon 2026-09-25 (approved as recommended)",
+   "examples": "components/swipe-paid/consciousbar/teardown.md (the swipe); brands/brand-a/story.md (the story block: SPINE · BEFORE · TURN · AFTER, the tellers)",
+   "evidence": "the owner 2026-09-19: 'the storytelling ad' — 'storytelling and intent over volume'. Moved from format/video 2026-09-28: it is a video structure (what the beats are), not a format. The 16 Sep 'storytelling' format draft was ruled the same piece as expert-consult on 17 Sep and retired; this row is the structure, not that draft.",
+   "approved": true,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "defined by the machine, review pending"
+  },
+  {
+   "id": "timeline-turn",
+   "name": "Timeline turn",
+   "what": "Four beats. 1 PAST — open on a moment the viewer lived (a real customer line about then: 'sun worshiper when I was a teenager', 'clearer skin like I had when I was younger'), shot so it looks like then. 2 RELATE — the problem they have now started back there; they see their own history. 3 THE TURN — one moment where the timeline changes: the younger self gets told, the tape rewinds, the 'continue?' screen. 4 FORWARD — the product is the new timeline; the last ask is the click.",
+   "why_it_works": "Most people don't think about the future, they live in the past. Starting where they already are lets them relate before any claim; the turn hands them the moment to change it, and that is what moves them forward.",
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": "Brand-B spot-hider bank: 'I definitely was a sun worshiper when I was a teenager, so I have hyperpigmentation on my chest' · 'I wear sunscreen… now, but I did not as a kid'. BRAND-A fed-up-king: 'To get clearer skin like I had when I was younger' · 'they used to clown him for his skin, now they ask what changed' · 'why didn't anyone tell me about this sooner'.",
+   "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
+   "approved": false,
+   "source": "components/elements/additions.json",
+   "extra": {},
+   "aliases": [],
+   "note": "RESEARCH (2026-10-03): real past memories (hand-sorted) are 12 of 25,830 BRAND-A Fed-Up King bank lines and 8 of 4,688 Brand-B Spot-Hider lines — present but rare; BRAND-A's own 'Growing up without a dad' TikTok has 2.3M views. The one swiped structure on this idea with proof is era-stamped-upgrade-ladder (luxsteam.co, 29.96M views). named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+  }
+ ],
+ "dropped": {},
+ "decisions": "components/elements/decisions.json",
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

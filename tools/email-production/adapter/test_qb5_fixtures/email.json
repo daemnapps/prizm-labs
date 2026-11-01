@@ -1,0 +1,12 @@
+{
+ "subject": "The layout's own subject",
+ "preview": "A preview line",
+ "sections": [
+  {"s": "band"},
+  {"s": "hero_photo", "headline": "Hello there", "sub": "A line under it",
+   "picture": {"photo": "run:media/hero.png", "alt": "A hero picture", "source": "made", "drive_id": "fixture-drive-id"}},
+  {"s": "cta", "lead": "Last call", "label": "Shop now"},
+  {"s": "photo_card", "text": "A card",
+   "picture": {"todo": "a picture still to make", "alt": "still to make", "source": "make"}}
+ ]
+}

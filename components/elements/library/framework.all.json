@@ -1,0 +1,623 @@
+{
+ "element": "framework",
+ "asset": "all",
+ "source": "components/marketing-doctrine/ad-frameworks.json",
+ "enforced_by": "the second door (compose.py)",
+ "note": null,
+ "rows": [
+  {
+   "id": "pas",
+   "name": "PAS (problem · agitate · solve)",
+   "what": "Name the need, show what it costs to leave it alone, then the thing that ends it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "intensification",
+      "shape": "The problem as one concrete picture in the viewer's world, no product, no claim — the beat exists to make the next one unmissable."
+     },
+     {
+      "id": "problem",
+      "technique": "intensification",
+      "shape": "The need named in the viewer's own words, specific enough that they see their own situation before anything is offered."
+     },
+     {
+      "id": "agitation",
+      "technique": "intensification",
+      "shape": "The cost of leaving it alone — the black side pictured across time: what it takes, what it keeps taking, what it becomes if nothing changes."
+     },
+     {
+      "id": "solution",
+      "technique": "intensification",
+      "shape": "The turn: what changes and what it feels like when the want is met — the same desire, one fresh picture, brighter than the beat before."
+     },
+     {
+      "id": "unique-mechanism",
+      "technique": "mechanization",
+      "shape": "Why this works when the rest did not — named at the depth the market's stage demands: named only, described, or featured."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "Evidence at the beat where doubt peaks: a result, a number with its denominator, a real person, a before-and-after — placed here, not front-loaded."
+     },
+     {
+      "id": "product",
+      "technique": "redefinition",
+      "shape": "What it actually is — the physical facts that make the mechanism true, relabelled inside the beat, never a list."
+     },
+     {
+      "id": "offer",
+      "technique": "intensification",
+      "shape": "The terms set against a bigger anchor, and the guarantee restating every promise made so far."
+     },
+     {
+      "id": "objections",
+      "technique": "redefinition",
+      "shape": "The one flinch this viewer has at this point, named and resolved before the ask — the room's own objection words, answered."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "The single step left once every prior beat has been agreed to."
+     }
+    ],
+    "awareness": {
+     "entry": "problem-aware",
+     "exit": "product-aware"
+    },
+    "sophistication": [
+     "stage-1",
+     "stage-2"
+    ],
+    "formats_fit": [
+     "single-presenter",
+     "micro-drama",
+     "testimonial-montage"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "aida",
+   "name": "AIDA (attention · interest · desire · action)",
+   "what": "Stop the scroll, make the need felt, make the result wanted, ask for the step.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "intensification",
+      "shape": "Attention: one arresting image or line that stops the thumb — built from the viewer's world, never from the category's stock line."
+     },
+     {
+      "id": "identification",
+      "technique": "identification",
+      "shape": "Interest: the viewer named to themselves — the behaviour, the moment, the workaround only they would recognise."
+     },
+     {
+      "id": "problem",
+      "technique": "intensification",
+      "shape": "The need made explicit now that the viewer is inside the piece — in their words, one level deeper than the hook."
+     },
+     {
+      "id": "transformation",
+      "technique": "intensification",
+      "shape": "Desire: the after, pictured across time — the fulfilled want and the role the viewer gets to play in it."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "The claim confirmed exactly where wanting turns to doubting: a result, a witness, a demonstration."
+     },
+     {
+      "id": "product",
+      "technique": "identification",
+      "shape": "What it is, carried as a marker of the person the viewer wants to be seen as — physical facts only where they sharpen the picture."
+     },
+     {
+      "id": "offer",
+      "technique": "intensification",
+      "shape": "The terms against an anchor, the guarantee as the final restatement of every promise."
+     },
+     {
+      "id": "urgency",
+      "technique": "intensification",
+      "shape": "Action's reason to be now, real and receipted — a date, a run, a season — never invented scarcity."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "One step, one line, the conclusion of the chain."
+     }
+    ],
+    "awareness": {
+     "entry": "problem-aware",
+     "exit": "product-aware"
+    },
+    "sophistication": [
+     "stage-1",
+     "stage-2"
+    ],
+    "formats_fit": [
+     "any"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "bab",
+   "name": "BAB (before · after · bridge)",
+   "what": "The life before, the life after, and the mechanism that is the only way across.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "intensification",
+      "shape": "The before, as one picture the viewer already lives in — no product yet."
+     },
+     {
+      "id": "problem",
+      "technique": "intensification",
+      "shape": "The before in detail: what it costs day to day, in the viewer's own words, so the after has something to be measured against."
+     },
+     {
+      "id": "transformation",
+      "technique": "intensification",
+      "shape": "The after, pictured across time — the same life with the want met, escalating in vividness beat to beat."
+     },
+     {
+      "id": "unique-mechanism",
+      "technique": "mechanization",
+      "shape": "The bridge: how you get from before to after — the mechanism demonstrated, cause to effect, at the depth the market's stage needs."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "The bridge shown to hold: a real crossing — result, witness or demonstration — at the beat doubt would otherwise creep in."
+     },
+     {
+      "id": "product",
+      "technique": "redefinition",
+      "shape": "What the bridge is made of — the physical facts, relabelled inside the beat as the reason the after is real."
+     },
+     {
+      "id": "offer",
+      "technique": "intensification",
+      "shape": "Terms against an anchor; the guarantee restates the after as a promise."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "The one step that starts the crossing."
+     }
+    ],
+    "awareness": {
+     "entry": "problem-aware",
+     "exit": "solution-aware"
+    },
+    "sophistication": [
+     "stage-2",
+     "stage-3"
+    ],
+    "formats_fit": [
+     "demonstration",
+     "single-presenter"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "story-testimonial",
+   "name": "Story / testimonial (life · tried · found · now)",
+   "what": "One person's own account: what life was, what failed, what they found, what it is now.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "camouflage",
+      "shape": "A person talking, in the platform's own register — the first line of a story, not an ad's first line."
+     },
+     {
+      "id": "identification",
+      "technique": "identification",
+      "shape": "'I was you': the teller names the viewer through their own past self — the same behaviours, the same words."
+     },
+     {
+      "id": "problem",
+      "technique": "intensification",
+      "shape": "The problem as it was lived — specific moments, not a diagnosis."
+     },
+     {
+      "id": "failed-solutions",
+      "technique": "concentration",
+      "shape": "What was tried and how each failed at a recognisable moment — every weakness answered later by the matching strength, never a bare complaint."
+     },
+     {
+      "id": "root-cause",
+      "technique": "redefinition",
+      "shape": "What the teller finally understood — the real reason those failed, relabelling the problem in the same beat."
+     },
+     {
+      "id": "product",
+      "technique": "identification",
+      "shape": "The find — how it entered the story, carried as part of who the teller became, not as a pitch."
+     },
+     {
+      "id": "unique-mechanism",
+      "technique": "mechanization",
+      "shape": "Why it worked when the rest did not, in the teller's own explanation — named or described, never lectured."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "What happened: the result with its time frame, the visible change, the number with its denominator."
+     },
+     {
+      "id": "transformation",
+      "technique": "intensification",
+      "shape": "'Now': life with the want met, pictured across time — the role the teller plays now and the viewer could."
+     },
+     {
+      "id": "objections",
+      "technique": "redefinition",
+      "shape": "'What I'd tell you': the doubt the teller had, answered from experience."
+     },
+     {
+      "id": "offer",
+      "technique": "intensification",
+      "shape": "The terms as the teller would say them, with the guarantee as the promise they would make a friend."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "The one thing the teller says to do."
+     }
+    ],
+    "awareness": {
+     "entry": "solution-aware",
+     "exit": "product-aware"
+    },
+    "sophistication": [
+     "stage-2",
+     "stage-3",
+     "stage-4"
+    ],
+    "formats_fit": [
+     "testimonial-montage",
+     "single-presenter",
+     "micro-drama"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "mechanism-led",
+   "name": "Mechanism-led (the new way)",
+   "what": "Lead on HOW the result happens, not on the result — the answer to a market that has stopped believing claims.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "intensification",
+      "shape": "The new way named in the opening beat — one concrete picture of the mechanism, never the old claim restated."
+     },
+     {
+      "id": "problem",
+      "technique": "intensification",
+      "shape": "The problem the viewer already carries, named in their words, one beat — enough to make the cause worth hearing."
+     },
+     {
+      "id": "root-cause",
+      "technique": "redefinition",
+      "shape": "The feared frame appears and is relabelled inside the same beat — the problem turns out to be a different problem; the emotion is relief."
+     },
+     {
+      "id": "unique-mechanism",
+      "technique": "mechanization",
+      "shape": "The mechanism featured as the lead claim — a clear demonstration of it working, cause to effect, unexplained to understood."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "The mechanism shown to hold in a real case — result, witness or demonstration — placed exactly where the viewer asks 'does it, though?'"
+     },
+     {
+      "id": "solution",
+      "technique": "intensification",
+      "shape": "What the mechanism produces, stretched across time — the same desire at escalating vividness."
+     },
+     {
+      "id": "product",
+      "technique": "redefinition",
+      "shape": "The physical facts that make the mechanism true, relabelled inside the beat rather than listed."
+     },
+     {
+      "id": "objections",
+      "technique": "redefinition",
+      "shape": "The one reason not to believe the new way, in the room's own words, answered before the terms."
+     },
+     {
+      "id": "offer",
+      "technique": "intensification",
+      "shape": "Price set against a bigger anchor, the guarantee restating every promise already made."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "The one step left once the mechanism has been accepted."
+     }
+    ],
+    "awareness": {
+     "entry": "problem-aware",
+     "exit": "product-aware"
+    },
+    "sophistication": [
+     "stage-3",
+     "stage-4"
+    ],
+    "formats_fit": [
+     "demonstration",
+     "single-presenter",
+     "expert-consult"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "us-vs-them",
+   "name": "Us-vs-them / comparison",
+   "what": "The old way and this one, side by side, with the mechanism as the reason the comparison goes this way.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "intensification",
+      "shape": "The contrast in one picture: the old way and the new way side by side, no verdict yet."
+     },
+     {
+      "id": "problem",
+      "technique": "intensification",
+      "shape": "What the viewer lives with under the old way, in their own words."
+     },
+     {
+      "id": "failed-solutions",
+      "technique": "concentration",
+      "shape": "The old way failing at a relatable moment, each weakness sourced from real speech — and in the same beat, the new way at that exact moment."
+     },
+     {
+      "id": "root-cause",
+      "technique": "redefinition",
+      "shape": "Why the old way fails — the real reason, relabelled so the comparison is about cause, not preference."
+     },
+     {
+      "id": "unique-mechanism",
+      "technique": "mechanization",
+      "shape": "The new way's mechanism demonstrated — the how that the old way lacks."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "Side by side, receipted: the same task, opposite outcome, shown or measured."
+     },
+     {
+      "id": "product",
+      "technique": "redefinition",
+      "shape": "What the new way is made of — the facts that explain the difference, inside the beat."
+     },
+     {
+      "id": "objections",
+      "technique": "redefinition",
+      "shape": "'But the old way is cheaper / easier / what I know' — the switch cost named and reframed against the real anchor."
+     },
+     {
+      "id": "offer",
+      "technique": "intensification",
+      "shape": "Terms against the anchor the comparison already set; the guarantee closes the gap."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "The one step that switches."
+     }
+    ],
+    "awareness": {
+     "entry": "solution-aware",
+     "exit": "product-aware"
+    },
+    "sophistication": [
+     "stage-2",
+     "stage-3",
+     "stage-4"
+    ],
+    "formats_fit": [
+     "demonstration",
+     "single-presenter",
+     "expert-consult",
+     "meme"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "direct-offer",
+   "name": "Direct offer (most-aware)",
+   "what": "The product, the terms, the reason to act now, and stop. Nothing is explained and nothing is re-sold.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "intensification",
+      "shape": "The product and the deal in the first beat — the most-aware viewer wants nothing explained."
+     },
+     {
+      "id": "offer",
+      "technique": "redefinition",
+      "shape": "The terms, set against a bigger anchor — what it would cost otherwise, what is included, the guarantee in one line."
+     },
+     {
+      "id": "proof",
+      "technique": "intensification",
+      "shape": "One line of trust at the moment of the decision — a count with its denominator, a rating, a name."
+     },
+     {
+      "id": "urgency",
+      "technique": "intensification",
+      "shape": "Why now, real and receipted — the run, the date, the season — never invented scarcity."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "One step, one line."
+     }
+    ],
+    "awareness": {
+     "entry": "most-aware",
+     "exit": "most-aware"
+    },
+    "sophistication": [
+     "stage-1",
+     "stage-2"
+    ],
+    "formats_fit": [
+     "single-presenter",
+     "meme"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "identification-only",
+   "name": "Identification-only (unaware)",
+   "what": "A portrait before anything is named — the viewer described to themselves until they are recognised, and only then a need.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": "seed",
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/ad-frameworks.json",
+   "extra": {
+    "sections": [
+     {
+      "id": "hook",
+      "technique": "camouflage",
+      "shape": "A picture of the viewer's own moment, shot like the platform's organic content — no problem named, no claim, no product."
+     },
+     {
+      "id": "identification",
+      "technique": "identification",
+      "shape": "The viewer described to themselves — the behaviour, the workaround, the private moment they thought no one noticed — in the room's own words."
+     },
+     {
+      "id": "problem",
+      "technique": "gradualization",
+      "shape": "Only now the need is named, as the next accepted step from the recognition — never earlier, at this level a named problem too soon is the must-not."
+     },
+     {
+      "id": "transformation",
+      "technique": "intensification",
+      "shape": "The after pictured for this person specifically — the want met, the role they get to play."
+     },
+     {
+      "id": "solution",
+      "technique": "intensification",
+      "shape": "What to do instead, in plain terms, one fresh picture."
+     },
+     {
+      "id": "product",
+      "technique": "identification",
+      "shape": "What it is, carried as a marker of the person just described — no price, no terms at this level."
+     },
+     {
+      "id": "call-to-action",
+      "technique": "gradualization",
+      "shape": "A soft single step — the next thing to watch, read or try, not yet the buy."
+     }
+    ],
+    "awareness": {
+     "entry": "unaware",
+     "exit": "problem-aware"
+    },
+    "sophistication": [
+     "stage-5"
+    ],
+    "formats_fit": [
+     "micro-drama",
+     "single-presenter",
+     "testimonial-montage"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

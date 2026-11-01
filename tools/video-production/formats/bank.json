@@ -1,0 +1,104 @@
+{
+ "_readme": "The format bank for AI video production: every format the video machine runs, one row each. A run's `format` (run.json) must equal a row's `id` or the run is refused (RUN-PROTOCOL.md, Intake). A row is a PROFILE — how a piece of this shape is built: what a scene contains, the beat shape, the stations, the references. It is the TEMPLATE layer in components/naming/FORMATS.md, addressed `format:video:format-profile:<id>` (components/naming/names.py format_ref). Profiles say what a scene contains; they never carry gates — RUN-PROTOCOL.md does. A new format: copy TEMPLATE.md, fill it, add the row here as `draft`, run `python3 formats/render_bank.py`. Only the owner signs a row `approved`.",
+ "asset": "video",
+ "bank": "format-profile",
+ "scope": "AI-video PRODUCTION profiles only — how the machine builds a piece of a given shape. NOT the 50 organic-video structures (components/swipe-organic/formats.json — what a swiped post's structure is), not the copy styles, not the image build templates, not the email design formats. Map: components/naming/FORMATS.md",
+ "updated": "2026-09-17",
+ "status_values": {
+  "draft": "written, not signed — may run, and the run is the evidence for signing",
+  "approved": "the owner signed it; the profile is the standard for this shape",
+  "deprecated": "kept for the record; a run may not name it"
+ },
+ "formats": [
+  {
+   "id": "song-ad",
+   "name": "Song ad",
+   "what": "one lyric line, illustrated; shot length = line spacing; the product late and small",
+   "profile": "song-ad.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": "2026-09-03 (fal) and 2026-09-04 (Higgsfield) — the calls are the provider pages; 2026-09-16 again on Higgsfield, record not in the repo; filed: runs/video-production/brand-b/resilia-song-160986941 (2026-09-16, Higgsfield)",
+   "notes": "the first format run end to end; its two runs became archive/fal.md and archive/higgsfield.md"
+  },
+  {
+   "id": "single-presenter",
+   "name": "Single presenter",
+   "what": "one person to camera, one line, one of several locations",
+   "profile": "single-presenter.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": "2026-09-16 on Higgsfield with a demonstration beat inside it — runs/video-production/brand-b/smo-06-final-287-bottles",
+   "notes": "the UGC shape — the workhorse; profile written 2026-09-02, not yet run end to end on this machine"
+  },
+  {
+   "id": "meme",
+   "name": "Meme",
+   "what": "one swiped meme beat — the source's decisive action kept unchanged; the caption added at the edit",
+   "profile": "meme.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": "2026-09-16 on Higgsfield — record not in the repo (chat sandbox); profile drafted from the session's reports, for the owner to correct",
+   "notes": "the source's scroll-stopper is the whole format; a softened action is a failed piece — the 16 Sep pack holds no record of this piece; kzn03 and competitor-a-06 are not it"
+  },
+  {
+   "id": "expert-consult",
+   "name": "Expert consultation",
+   "what": "one presenter takes the same problem to several experts in turn; the price of each answer is the argument, the product is the last expert",
+   "profile": "expert-consult.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": "2026-09-16 on Higgsfield — runs/video-production/brand-b/kzn03",
+   "notes": "the owner 2026-09-17: the storytelling piece with Keri is this format, and expert-consult is its name. Was two draft rows; now one."
+  },
+  {
+   "id": "demonstration",
+   "name": "Demonstration",
+   "what": "the product doing the work — hands, surfaces, before and after; an action is one beat",
+   "profile": "demonstration.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": null,
+   "notes": "profile written 2026-09-02, not yet run end to end on this machine"
+  },
+  {
+   "id": "micro-drama",
+   "name": "Micro-drama",
+   "what": "several characters in one continuous set — a confrontation, a turn, an offer",
+   "profile": "micro-drama.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": null,
+   "notes": "the method was first proven on this shape (2026-09-01 production); no piece has run this machine's route end to end"
+  },
+  {
+   "id": "testimonial-montage",
+   "name": "Testimonial montage",
+   "what": "one person, one line, one room, many times over — the accumulation is the argument",
+   "profile": "testimonial-montage.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": null,
+   "notes": "profile written 2026-09-02, not yet run end to end on this machine"
+  },
+  {
+   "id": "remedy",
+   "name": "Remedy",
+   "what": "what people used to put on it at home — the kitchen, the jar, the older hands — then today's version: the product; one step said is one step shown",
+   "profile": "remedy.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": "2026-10-20 — Grandma Yai remedy reels (egg white pore peel, cold tea eye bundles, cracked heels) on the reel line; swipe @mayalin_wellness",
+   "notes": "first organic format run end to end; organic and paid are the same video, only the ask differs (RUN-PROTOCOL.md, one machine)"
+  },
+  {
+   "id": "comedy-skit",
+   "name": "Comedy skit",
+   "what": "a character played big in a real-looking world, every line answered by a reaction, ending on a flip",
+   "profile": "comedy-skit.md",
+   "status": "draft",
+   "signed": null,
+   "proven_on": null,
+   "notes": "the owner 2026-10-23: comedy skits operate similarly; first run the pastor barber body"
+  }
+ ]
+}

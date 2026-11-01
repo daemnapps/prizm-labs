@@ -1,0 +1,174 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Creative Controls</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fff;--ink:#1a1a1a;--mute:#6b6b66;--line:#e2ddd2;--acc:#908448;--accrgb:144,132,72;--chip:#eee7d7;--ok:#486c48;--low:#a3472f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111110;--card:#1b1b19;--ink:#f5f2ec;--mute:#a6a29a;--line:#2c2b27;--acc:#f0d860;--accrgb:240,216,96;--chip:#2a2924;--ok:#8fbf8f;--low:#e08a70}}
+:root[data-theme="dark"]{--bg:#111110;--card:#1b1b19;--ink:#f5f2ec;--mute:#a6a29a;--line:#2c2b27;--acc:#f0d860;--accrgb:240,216,96;--chip:#2a2924;--ok:#8fbf8f;--low:#e08a70}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:1200px;margin:0 auto}h1{margin:0 0 4px;font-size:30px}h2{margin:44px 0 6px;font-size:22px}h3{margin:0 0 6px;font-size:16px}
+.sub{color:var(--mute);margin:0 0 14px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 12px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}nav a{font-size:13px;font-weight:600;color:var(--acc);text-decoration:none;background:var(--chip);padding:4px 10px;border-radius:99px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 0}.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}.stat b{display:block;font-size:30px;color:var(--acc);line-height:1.1}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;position:relative}
+.step .n{display:inline-block;background:var(--ink);color:var(--bg);border-radius:99px;width:24px;height:24px;text-align:center;font-weight:700;font-size:13px;line-height:24px;margin-right:6px}
+.step img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px;margin:8px 0;display:block}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}.cmp td{padding:3px 4px;border-top:1px solid var(--line)}.cmp td.v{text-align:center;width:44px}
+.up{color:var(--ok);font-weight:700}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table.g{border-collapse:collapse;width:100%;font-size:13px}table.g th,table.g td{padding:7px 8px;border-top:1px solid var(--line);text-align:center;vertical-align:middle}
+table.g th{background:var(--chip);font-size:12px;font-weight:600}td.l,th.l{text-align:left;white-space:nowrap}
+.heat{font-weight:700;border-radius:6px;display:inline-block;min-width:34px;padding:3px 0}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:4px 11px;font-size:13px;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lohi{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.pair figure{margin:0}.pair img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px;display:block;background:var(--chip)}
+.pair figcaption{font-size:12px;margin-top:4px}.pair figcaption b{color:var(--acc)}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:6px 0}.ladder div{background:var(--chip);border-radius:6px;padding:4px;font-size:11px;text-align:center}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12.5px;margin:8px 0}.three div{border-left:3px solid var(--acc);padding:2px 8px}
+.dials{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px 18px}
+.dl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;gap:6px}.dl label span{color:var(--acc);text-align:right}
+.dl input{width:100%;accent-color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;align-items:start}
+article{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+article img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:var(--chip)}
+.meta{padding:9px 11px;font-size:12.5px}.tag{display:inline-block;font-size:11px;font-weight:600;background:var(--chip);color:var(--acc);border-radius:99px;padding:1px 8px;margin-bottom:6px}
+.bars{display:grid;grid-template-columns:repeat(var(--nb),1fr);gap:2px;margin:6px 0}.bars i{display:block;height:20px;border-radius:3px;position:relative}
+.bars i b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-style:normal}
+details summary{cursor:pointer;font-weight:600;color:var(--acc);font-size:12.5px;padding:4px 0}
+.why p{margin:3px 0}.dist{float:right;font-size:11px;color:var(--mute)}
+.btn{background:var(--ink);color:var(--bg);border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}.btn[disabled]{opacity:.5}
+.small{font-size:12.5px;color:var(--mute)}
+.say{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}.say .card{margin:0}.say q{display:block;font-size:17px;font-weight:700;quotes:"\201C" "\201D"}
+.gl td{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid var(--line);font-size:13px}
+input.search{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:14px;margin-bottom:10px}
+@media (max-width:760px){.flow,.stats{grid-template-columns:1fr 1fr}.three{grid-template-columns:1fr}.lohi{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>Creative controls</h1>
+<p class="sub">How far an ad goes, measured and set the same way in copy, video and pictures. Every swipe and every ad we make is read on the same dials; the chain turns ours up. Default: absurd, maxed out, hyper-specific.</p>
+<div class="stats" id="stats"></div>
+<nav><a href="#how">How it works</a><a href="#dials">Each dial, low vs high</a><a href="#gap">The gap</a><a href="#tune">Turn it up</a><a href="#start">How to start it</a><a href="#all">Every asset</a><a href="#banks">Emotions + techniques</a><a href="#names">The real names</a></nav>
+
+<h2 id="how">How it works</h2>
+<p class="sub">One real swipe, followed through the chain. Nothing here is a mock-up.</p>
+<div class="flow" id="flow"></div>
+<div class="card small" style="margin-top:10px" id="guardsTop"></div>
+
+<h2 id="dials">Each dial, low vs high</h2>
+<p class="sub">The lowest and highest real picture we hold on each dial, with the reader's reason. Same dial in copy and video: the line under each says how.</p>
+<div class="lohi" id="lohi"></div>
+
+<h2 id="gap">The gap</h2>
+<p class="sub">Average level by where the picture came from. Brighter is higher. Our pulled ads sit at the bottom; what pulls and what you picked sit higher.</p>
+<div class="scroll"><table class="g" id="gapT"></table></div>
+
+<h2 id="tune">Turn it up</h2>
+<p class="sub">Pick a starting point, move the dials; the closest real pictures line up underneath. Save sets what the chain aims for from the next run.</p>
+<div class="card"><div class="chips" id="presets"></div><div class="dials" id="sliders"></div>
+<p style="margin:12px 0 0"><button class="btn" id="save">Save these levels</button> <span class="small" id="saved"></span></p></div>
+<div class="grid" id="closest"></div>
+
+<h2 id="start">How to start it</h2>
+<p class="sub">You never run anything. Say it or click it; the session does the rest and the result lands on this page or the board.</p>
+<div class="say" id="say"></div>
+
+<h2 id="all">Every asset</h2>
+<div class="chips" id="groups"></div><div class="grid" id="every"></div>
+
+<h2 id="banks">Emotions + techniques</h2>
+<p class="sub">One emotion leads each beat. Techniques are the named moves that turn a dial up.</p>
+<div class="scroll"><table class="g" id="emoT"></table></div><div id="techs" style="margin-top:12px"></div>
+
+<h2 id="names">The real names</h2>
+<p class="sub">What practitioners and researchers actually call these moves. "New to us" marks the ones we hadn't been using.</p>
+<input class="search" id="q" placeholder="Search a term, e.g. replacement, heightening, deep-fried">
+<div class="chips" id="domains"></div><div id="gloss"></div>
+</div>
+<script>
+const D=/*DATA*/null;
+const G={'ours-approved':'Our ads you kept','ours-pulled':'Our ads you pulled','swipe-picked':'Swipes you picked','swipe-organic':'Popular organic posts','swipe-competitor':'Competitor statics'};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const byId=Object.fromEntries(D.dials.map(d=>[d.id,d]));
+const pic=D.dials.filter(d=>d.media.includes('image')).map(d=>d.id);
+const core=['intensity','valence','absurdity','humor','specificity','dramatisation','metaphor','edge','realism','ad_likeness','stopping_power','relevance','rhyme','anchorage','borrowedness'].filter(i=>byId[i]);
+const lo=id=>Math.min(...byId[id].scale.map(s=>s.level)), hi=id=>Math.max(...byId[id].scale.map(s=>s.level));
+const frac=(id,v)=>(v-lo(id))/(hi(id)-lo(id));
+const anchor=(id,v)=>{const s=byId[id].scale.find(s=>s.level===Math.round(v));return s?s.name:''};
+const heat=(id,v)=>`background:rgba(var(--accrgb),${(0.08+0.85*frac(id,v)).toFixed(2)})`;
+const has=(a,i)=>a.lv[i]!==undefined;
+
+document.getElementById('stats').innerHTML=[[D.dials.length,'dials'],[D.emotions.length,'named emotions'],[D.techniques.length,'techniques'],[D.gloss.length,'real names']].map(([n,l])=>`<div class="stat"><b>${n}</b>${l}</div>`).join('');
+
+// how it works
+const ex=D.example, tgt=D.target;
+const rows=core.filter(i=>ex&&has(ex,i)).map(i=>{const a=ex.lv[i],b=tgt[i];return `<tr><td>${esc(byId[i].name)}</td><td class="v">${a}</td><td class="v ${b>a?'up':''}">${b}</td></tr>`}).join('');
+document.getElementById('flow').innerHTML=ex?`
+<div class="step"><span class="n">1</span><b>The swipe comes in</b><img src="${ex.img}" alt=""><div class="small">You pick it in the Swipe Bank, or paste a link. ${esc(ex.note)}</div></div>
+<div class="step"><span class="n">2</span><b>The reader scores it</b><div class="small" style="margin:6px 0">Every dial, with the reason it sits there.</div>${bars(ex,core)}<div class="small"><b>Eye hits first:</b> ${esc(ex.standout)}</div><div class="small"><b>Feels:</b> ${esc(ex.emo.primary||'')}</div></div>
+<div class="step"><span class="n">3</span><b>The chain turns ours up</b><div class="small" style="margin:6px 0">Each dial lands at the preset (Maxed unless the order says Native or Proof), never below the swipe.</div><table class="cmp"><tr><td></td><td class="v small">swipe</td><td class="v small">ours</td></tr>${rows}</table></div>
+<div class="step"><span class="n">4</span><b>The brief says how, in the picture</b><div class="small" style="margin:6px 0">The brand step writes one line per dial: swipe level to ours, and the exact thing in the picture that puts it there. The brief's picture section turns each into a direction, and ends with a Dials line the picture check holds the draft to.</div>${ex.swapline?`<div class="small" style="border-left:3px solid var(--acc);padding-left:8px"><b>The swap this brief wrote:</b> ${esc(ex.swapline)}${ex.readsline?`<br><b>Why it still reads:</b> ${esc(ex.readsline)}`:''}</div>`:''}<div class="small" style="margin-top:6px">From now on the same step also writes, for example: <i>absurdity: swipe ${ex.lv.absurdity} → ours ${tgt.absurdity} (${esc(anchor('absurdity',tgt.absurdity))})</i>, and what in the picture puts it there.</div></div>`:'';
+document.getElementById('guardsTop').innerHTML='<b>Always on, whatever the dials say:</b> '+D.guards.map(g=>`<b>${esc(g.name)}</b> ${esc(g.what)}`).join(' · ');
+
+function bars(a,ids){ids=ids.filter(i=>has(a,i));return `<div class="bars" style="--nb:${ids.length}">`+ids.map(i=>`<i style="${heat(i,a.lv[i])}" title="${esc(byId[i].name)}: ${a.lv[i]} ${esc(anchor(i,a.lv[i]))}"><b>${a.lv[i]}</b></i>`).join('')+'</div>'}
+
+// low vs high
+document.getElementById('lohi').innerHTML=D.dials.map(d=>{const as=D.assets.filter(a=>has(a,d.id));if(as.length<2)return'';
+const s=[...as].sort((x,y)=>x.lv[d.id]-y.lv[d.id]),l=s[0],h=s[s.length-1];
+const fig=(a,w)=>`<figure><img loading="lazy" src="${a.img}" alt=""><figcaption><b>${w} · ${a.lv[d.id]} ${esc(anchor(d.id,a.lv[d.id]))}</b><br>${esc(a.why[d.id]||'')}</figcaption></figure>`;
+return `<div class="card"><h3>${esc(d.name)} <span class="small">· ${esc(d.aka.slice(0,3).join(', '))}</span></h3><div class="small">${esc(d.what)}</div>
+<div class="ladder">${d.scale.map(x=>`<div><b>${x.level}</b><br>${esc(x.name)}</div>`).join('')}</div>
+${h.lv[d.id]>l.lv[d.id]?`<div class="pair">${fig(l,'Low')}${fig(h,'High')}</div>`:`<p class="small">Everything we hold sits at ${l.lv[d.id]} on this dial.</p>`}
+<div class="three"><div><b>Copy</b><br>${esc(d.copy)}</div><div><b>Video</b><br>${esc(d.video)}</div><div><b>Picture</b><br>${esc(d.image)}</div></div>
+<div class="small"><b>Default ${d.default.level}:</b> ${esc(d.default.why)} <b>Watch:</b> ${esc(d.risk)}</div></div>`}).join('');
+
+// the gap
+const groups=Object.keys(G).filter(g=>D.assets.some(a=>a.group===g));
+let h='<tr><th class="l">Where it came from</th><th>n</th>'+pic.map(i=>`<th>${esc(byId[i].name)}</th>`).join('')+'</tr>';
+for(const g of groups){const as=D.assets.filter(a=>a.group===g);h+=`<tr><td class="l"><b>${G[g]}</b></td><td>${as.length}</td>`+pic.map(i=>{const xs=as.filter(a=>has(a,i));if(!xs.length)return'<td>–</td>';const m=xs.reduce((s,a)=>s+a.lv[i],0)/xs.length;return `<td title="${esc(anchor(i,m))}"><span class="heat" style="${heat(i,m)}">${m.toFixed(1)}</span></td>`}).join('')+'</tr>'}
+document.getElementById('gapT').innerHTML=h;
+
+function card(a,extra=''){return `<article><img loading="lazy" src="${a.img}" alt=""><div class="meta">${extra}<span class="tag">${G[a.group]||a.group}</span>${bars(a,core)}
+<div><b>Feels:</b> ${esc(a.emo.primary||'')}${a.emo.secondary?' + '+esc(a.emo.secondary):''}</div><div><b>Eye hits:</b> ${esc(a.standout)}</div>
+<details><summary>Why each level</summary><div class="why">${pic.filter(i=>has(a,i)).map(i=>`<p><b>${esc(byId[i].name)} ${a.lv[i]} (${esc(anchor(i,a.lv[i]))}):</b> ${esc(a.why[i])}</p>`).join('')}
+${a.tech.length?`<p><b>Techniques:</b> ${a.tech.map(esc).join(', ')}</p>`:''}${a.swap?`<p><b>Swap:</b> ${esc(a.swap)}</p>`:''}${a.notes?`<p><b>Not in the bank:</b> ${esc(a.notes)}</p>`:''}<p class="small">${esc(a.note)}</p></div></details></div></article>`}
+
+// tune
+let cur={},curP=D.presets[0].id,saved={};
+const defaults=Object.fromEntries(pic.map(i=>[i,byId[i].default.level]));
+function setPreset(p){curP=p;const pr=D.presets.find(x=>x.id===p);cur={...defaults,...pr.levels,...(saved[p]||{})};drawSliders();drawClosest();document.querySelectorAll('#presets .chip').forEach(c=>c.classList.toggle('on',c.dataset.p===p));document.getElementById('saved').textContent=pr.what}
+document.getElementById('presets').innerHTML=D.presets.map(p=>`<button class="chip" data-p="${p.id}">${esc(p.name)}</button>`).join('');
+document.querySelectorAll('#presets .chip').forEach(c=>c.onclick=()=>setPreset(c.dataset.p));
+function drawSliders(){document.getElementById('sliders').innerHTML=pic.map(i=>`<div class="dl"><label>${esc(byId[i].name)} <span id="v-${i}">${cur[i]} · ${esc(anchor(i,cur[i]))}</span></label><input type="range" min="${lo(i)}" max="${hi(i)}" step="1" value="${cur[i]}" data-i="${i}"></div>`).join('');
+document.querySelectorAll('#sliders input').forEach(s=>s.oninput=()=>{const i=s.dataset.i;cur[i]=+s.value;document.getElementById('v-'+i).textContent=cur[i]+' · '+anchor(i,cur[i]);drawClosest()})}
+function drawClosest(){const r=D.assets.map(a=>{const ids=pic.filter(i=>has(a,i));return{a,d:Math.sqrt(ids.reduce((s,i)=>s+Math.pow(frac(i,a.lv[i])-frac(i,cur[i]),2),0)/ids.length)}}).sort((x,y)=>x.d-y.d).slice(0,8);
+document.getElementById('closest').innerHTML=r.map(x=>card(x.a,`<span class="dist">${Math.round(100-100*x.d)}% match</span>`)).join('')}
+let db=null;
+document.getElementById('save').onclick=async()=>{if(!db){document.getElementById('saved').textContent='Saving works when the page is open in Claude.';return}
+try{await db.doc('levels/'+curP).set({levels:cur,at:new Date().toISOString()});saved[curP]={...cur};document.getElementById('saved').textContent='Saved. The chain uses these from the next run.'}catch(e){document.getElementById('saved').textContent='Could not save here.'}};
+setPreset(curP);
+(async()=>{try{if(!window.claude)return;db=await claude.use('db');if(!db){document.getElementById('save').disabled=true;return}
+const q=await db.collection('levels').get();q.docs.forEach(d=>{const v=d.data();if(v&&v.levels)saved[d.id]=v.levels});setPreset(curP)}catch(e){}})();
+
+// how to start it
+document.getElementById('say').innerHTML=D.say.map(s=>`<div class="card"><q>${esc(s.say)}</q><div style="margin-top:6px">${esc(s.does)}</div><div class="small" style="margin-top:6px"><b>Where it shows:</b> ${esc(s.shows)}</div></div>`).join('');
+
+// every asset
+let gOn=new Set(groups);
+document.getElementById('groups').innerHTML=groups.map(g=>`<button class="chip on" data-g="${g}">${G[g]}</button>`).join('');
+document.querySelectorAll('#groups .chip').forEach(c=>c.onclick=()=>{const g=c.dataset.g;gOn.has(g)?gOn.delete(g):gOn.add(g);c.classList.toggle('on');drawEvery()});
+function drawEvery(){document.getElementById('every').innerHTML=D.assets.filter(a=>gOn.has(a.group)).map(a=>card(a)).join('')}
+drawEvery();
+
+// banks
+document.getElementById('emoT').innerHTML='<tr><th class="l">Emotion</th><th>Direction</th><th>Intensity</th><th class="l">In copy</th><th class="l">In video</th><th class="l">In a picture</th></tr>'+D.emotions.map(e=>`<tr><td class="l"><b>${esc(e.name)}</b><br><span class="small">${esc(e.what)}</span></td><td>${e.valence>0?'+':''}${e.valence}</td><td>${e.arousal}</td><td class="l" style="white-space:normal">${esc(e.copy)}</td><td class="l" style="white-space:normal">${esc(e.video)}</td><td class="l" style="white-space:normal">${esc(e.image)}</td></tr>`).join('');
+const fams=[...new Set(D.techniques.map(t=>t.family))];
+document.getElementById('techs').innerHTML=fams.map(f=>`<div class="card"><h3>${esc(f)}</h3>${D.techniques.filter(t=>t.family===f).map(t=>`<div><b>${esc(t.name)}</b>${t.aka.length?` <span class="small">(${t.aka.map(esc).join(', ')})</span>`:''}: ${esc(t.what)} <span class="small">${esc(t.source)}</span></div>`).join('')}</div>`).join('');
+
+// glossary
+const doms=[...new Set(D.gloss.map(t=>t.domain))];let dOn=null;
+document.getElementById('domains').innerHTML=['All',...doms].map(d=>`<button class="chip ${d==='All'?'on':''}" data-d="${esc(d)}">${esc(d)}</button>`).join('');
+document.querySelectorAll('#domains .chip').forEach(c=>c.onclick=()=>{dOn=c.dataset.d==='All'?null:c.dataset.d;document.querySelectorAll('#domains .chip').forEach(x=>x.classList.toggle('on',x===c));drawGloss()});
+document.getElementById('q').oninput=drawGloss;
+function drawGloss(){const q=document.getElementById('q').value.toLowerCase();const ts=D.gloss.filter(t=>(!dOn||t.domain===dOn)&&(!q||(t.term+' '+t.what).toLowerCase().includes(q)));
+const by={};ts.forEach(t=>(by[t.domain]=by[t.domain]||[]).push(t));
+document.getElementById('gloss').innerHTML=Object.keys(by).map(k=>`<div class="card"><h3>${esc(k)}</h3><div class="scroll" style="border:0"><table style="width:100%;border-collapse:collapse">${by[k].map(t=>`<tr class="gl"><td style="width:24%"><b>${esc(t.term)}</b>${t.in_the_controls?'':' <span class="tag">new to us</span>'}</td><td>${esc(t.what)}</td><td style="width:14%" class="small">${esc(t.media)}</td></tr>`).join('')}</table></div></div>`).join('')||'<p class="small">Nothing matches.</p>'}
+drawGloss();
+</script></body></html>

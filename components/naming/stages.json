@@ -1,0 +1,186 @@
+{
+ "_what": "The one vocabulary for creative in motion (the owner, 17 Oct 2026: \"everything needs to operate on the same exact naming conventions\"). Every tool that shows a piece of creative — the Queue, Today, Approvals, the team pages — shows these words. Each tool keeps its own detailed steps underneath and maps them up here with `from`. Names of things (brand_product_brief-NNNN) stay in CONVENTION.md; this file names where a thing is.",
+ "status": "approved",
+ "types": [
+  {
+   "id": "video-ad",
+   "name": "Video ad",
+   "from": [
+    "video",
+    "AI video ad",
+    "Video",
+    "creator",
+    "ai video"
+   ]
+  },
+  {
+   "id": "image-ad",
+   "name": "Image ad",
+   "from": [
+    "image",
+    "static",
+    "Static",
+    "static ad",
+    "picture"
+   ]
+  },
+  {
+   "id": "carousel",
+   "name": "Carousel",
+   "from": [
+    "carousel"
+   ]
+  },
+  {
+   "id": "email",
+   "name": "Email",
+   "from": [
+    "email",
+    "written email"
+   ]
+  },
+  {
+   "id": "landing-page",
+   "name": "Landing page",
+   "from": [
+    "page",
+    "landing page",
+    "landing page and banners"
+   ]
+  }
+ ],
+ "stages": [
+  {
+   "id": "idea",
+   "name": "Teardown",
+   "who": "strategy",
+   "from": [
+    "Triage",
+    "Teardown",
+    "swipe",
+    "concept",
+    "Idea"
+   ]
+  },
+  {
+   "id": "brief",
+   "name": "Writing",
+   "who": "strategy",
+   "from": [
+    "Writing",
+    "Read",
+    "Spec",
+    "Injection",
+    "Brief",
+    "Layout"
+   ]
+  },
+  {
+   "id": "brief-needs-you",
+   "name": "Brief review",
+   "needs_damon": true,
+   "from": [
+    "Approve production",
+    "Briefs to produce",
+    "produce",
+    "Brief · needs you"
+   ]
+  },
+  {
+   "id": "making",
+   "name": "Production",
+   "who": "production",
+   "from": [
+    "Production",
+    "Making",
+    "pictures",
+    "build",
+    "To assign"
+   ]
+  },
+  {
+   "id": "editing",
+   "name": "Edit",
+   "who": "production",
+   "from": [
+    "Edit",
+    "Editing"
+   ]
+  },
+  {
+   "id": "final-needs-you",
+   "name": "Launch review",
+   "needs_damon": true,
+   "from": [
+    "Your OK",
+    "Finished ads",
+    "finished",
+    "With the owner",
+    "1-check",
+    "DRAFT IN KLAVIYO",
+    "Launch to Meta",
+    "ads",
+    "Final OK · needs you"
+   ]
+  },
+  {
+   "id": "launch",
+   "name": "Launch",
+   "who": "launch",
+   "from": [
+    "Versions",
+    "File to Meta check",
+    "2-approved",
+    "SCHEDULED IN KLAVIYO",
+    "Approved",
+    "Launch"
+   ]
+  },
+  {
+   "id": "live",
+   "name": "Live",
+   "from": [
+    "3-live",
+    "Live",
+    "Sent",
+    "live"
+   ]
+  }
+ ],
+ "flags": [
+  {
+   "id": "stuck",
+   "name": "Stuck",
+   "from": [
+    "Stopped",
+    "Stuck",
+    "Being fixed",
+    "upload_error"
+   ]
+  },
+  {
+   "id": "sent-back",
+   "name": "Sent back",
+   "from": [
+    "sent-back",
+    "Sent back",
+    "Needs work"
+   ]
+  },
+  {
+   "id": "cut",
+   "name": "Cut",
+   "from": [
+    "Cut",
+    "dropped"
+   ]
+  },
+  {
+   "id": "paused",
+   "name": "Paused",
+   "from": [
+    "Paused"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "_readme": "TEST-ONLY. Three wrong things: a look that is only a name, a humor value on nobody's list, a register that is really a pacing word.",
+ "piece": {
+  "style_id": "fixture-look-named-only"
+ },
+ "scenes": [
+  {
+   "id": "S1",
+   "delivery": {
+    "humor": "slapstick",
+    "style": "deadpan",
+    "register": "plain-flat",
+    "pacing": "one-breath"
+   }
+  },
+  {
+   "id": "S2",
+   "delivery": {
+    "humor": "none",
+    "style": "deadpan",
+    "register": "one-breath",
+    "pacing": "beat-and-pause"
+   }
+  }
+ ]
+}

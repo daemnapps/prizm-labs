@@ -1,0 +1,16 @@
+# Generated on demand — everything in pages/ is drawn from data by the
+# machine/ generators; regenerate, never hand-edit, never commit.
+pages/
+logs/
+__pycache__/
+
+# Media never enters the shared repo (workspace rule 3). The source video is
+# a symlink to the teardown's own mp4 and the poster is cut from it; both are
+# remade by every run.
+results/**/source.*
+results/**/poster.jpg
+
+# The prompt as sent carries the whole brand context inline — 11MB across
+# these runs, and rebuildable by replaying the same substitution. The run
+# record keeps what each stage RETURNED, which is the part worth diffing.
+results/**/*--sent.md

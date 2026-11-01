@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<defs><linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D3BF5"/><stop offset="0.2" stop-color="#2F5BFF"/><stop offset="0.38" stop-color="#00A8CC"/><stop offset="0.54" stop-color="#12A06F"/><stop offset="0.7" stop-color="#F09000"/><stop offset="0.85" stop-color="#F04A2E"/><stop offset="1" stop-color="#DB2A8C"/></linearGradient>
+<linearGradient id="hl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#171512" stop-opacity=".45"/><stop offset="1" stop-color="#171512" stop-opacity=".7"/></linearGradient>
+<clipPath id="tile"><rect width="64" height="64" rx="15"/></clipPath></defs>
+<rect width="64" height="64" rx="15" fill="#EFE9E1"/>
+
+<polygon points="25.00,11.00 45.00,51.00 55.00,45.00 35.00,5.00" fill="url(#s)"/>
+<polygon points="25.00,11.00 45.00,51.00 55.00,45.00 35.00,5.00" fill="url(#sh)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/>
+<polygon points="25.00,11.00 45.00,51.00 5.00,51.00" fill="url(#s)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/>
+<polygon points="25.00,11.00 15.00,31.00 25.00,31.00" fill="url(#hl)"/>
+</svg>

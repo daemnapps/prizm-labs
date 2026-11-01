@@ -1,0 +1,751 @@
+{
+ "_README": [
+  "MASTER TEMPLATE. Never edit this file. Copy per brand as <brand>-page-config.json.",
+  "",
+  "EVERY key is null. That is deliberate. A template pre-filled with one brand's",
+  "values is not a template, it is that brand's config wearing a template's name,",
+  "and any field left unfilled ships the wrong brand's data onto a live page.",
+  "The previous version of this file shipped a live review-widget API key and",
+  "another company's patent number to every brand that copied it.",
+  "",
+  "Validate before building:   python scripts/page_build.py check <your-config.json>",
+  "Build a section:            python scripts/page_build.py render <section> <config>",
+  "",
+  "173 keys used by the section library.",
+  "  brand_level (29): set once per brand.",
+  "  page_copy   (150): written per asset. A listicle and an offer",
+  "  page fill different subsets; `check` names exactly which ones your chosen",
+  "  sections require."
+ ],
+ "brand_level": {
+  "BENEFITS": null,
+  "BRAND": null,
+  "CHECKOUT_URL": null,
+  "COPYRIGHT": null,
+  "CTA_ANCHOR": null,
+  "CTA_TEXT": null,
+  "DISCLAIMER": null,
+  "DMCA_URL": null,
+  "GUARANTEE_HEADLINE": null,
+  "GUARANTEE_LABEL": null,
+  "HOME_URL": null,
+  "JUNIP_PRODUCT_ID": null,
+  "JUNIP_STORE_KEY": null,
+  "LOGO_COLOR_URL": null,
+  "LOGO_LIGHT_URL": null,
+  "NEXT_PACKAGE_ID": null,
+  "OFFER_TITLE": null,
+  "PATENT_LINE": null,
+  "PRESS_LOGOS": null,
+  "PRICE_NOW": null,
+  "PRICE_WAS": null,
+  "PRODUCT": null,
+  "PROOF_COUNT": null,
+  "RATING": null,
+  "REVIEWS_HEADING": null,
+  "SAVE_BADGE": null,
+  "VOICE_REGISTER": null,
+  "design_system": null,
+  "tokens_note": null
+ },
+ "page_copy": {
+  "ADD_TO_CART_ATTRS": null,
+  "ANNOUNCE_LINK_TEXT": null,
+  "ANNOUNCE_TEXT": null,
+  "ANNOUNCE_URL": null,
+  "AUDIENCE_LINE": null,
+  "AUTH_AVATAR": null,
+  "AUTH_NAME": null,
+  "AUTH_TITLE": null,
+  "A_HTML": null,
+  "BA_IMAGES": null,
+  "BA_IMG": null,
+  "BENEFIT": null,
+  "BRAND_PLAIN": null,
+  "CATEGORY_NAME": null,
+  "CAT_ID": null,
+  "CHECK_ICON": null,
+  "CLOSER_A": null,
+  "CLOSER_B": null,
+  "COMPARE_SUB": null,
+  "COMPARE_TITLE": null,
+  "CROSS_ICON_URL": null,
+  "DEMO_ASPECT": null,
+  "DEMO_BULLET": null,
+  "DEMO_H1": null,
+  "DEMO_MEDIA_ID": null,
+  "DIVIDER_ARROW_URL": null,
+  "DIVIDER_ARROW_WHITE_URL": null,
+  "DMCA_BADGE_URL": null,
+  "DOT_OFF": null,
+  "DOT_ON": null,
+  "EXPERT_CARD_TITLE": null,
+  "EXPERT_NAME": null,
+  "EXPERT_NAME_TITLE": null,
+  "EXPERT_PRODUCT_IMG": null,
+  "EXPERT_QUOTE": null,
+  "EXPERT_VIDEO_ID": null,
+  "FAMILY_BODY": null,
+  "FAMILY_HEADLINE": null,
+  "FEATURES_H1": null,
+  "FEATURE_COPY": null,
+  "FEATURE_ICON": null,
+  "FEATURE_LOGO": null,
+  "FEATURE_QUOTE": null,
+  "FEATURE_TITLE": null,
+  "FOUNDER_BODY_HTML": null,
+  "FOUNDER_HEADLINE": null,
+  "FOUNDER_NAME": null,
+  "FOUNDER_PHOTO": null,
+  "FOUNDER_SIGNATURE_IMG": null,
+  "GEM_BR": null,
+  "GEM_ICON_URL": null,
+  "GEM_TL": null,
+  "GUARANTEE_BODY": null,
+  "GUARANTEE_FEATURE": null,
+  "GUARANTEE_H2": null,
+  "GUARANTEE_ICON_URL": null,
+  "GUARANTEE_PROMISE": null,
+  "GUARANTEE_SUB": null,
+  "HERO_BOX_COPY": null,
+  "HERO_H1": null,
+  "HERO_H1_2": null,
+  "HERO_H1_3": null,
+  "HERO_H1_EM": null,
+  "HERO_IMG_URL": null,
+  "HERO_KICKER": null,
+  "HERO_SUB": null,
+  "HOWTO_ASPECT": null,
+  "HOWTO_H1": null,
+  "HOWTO_KICKER": null,
+  "HOWTO_MEDIA_ID": null,
+  "ITEM_ICON": null,
+  "JOIN_CTA_TEXT": null,
+  "MECH_IMG": null,
+  "MECH_TITLE": null,
+  "MOMENT_DESC": null,
+  "MOMENT_SUB": null,
+  "MOMENT_TITLE": null,
+  "MONEY_TITLE": null,
+  "NAV_CTA_ANCHOR": null,
+  "NAV_CTA_TEXT": null,
+  "NEEDED_IMG": null,
+  "NEEDED_TITLE": null,
+  "OBJECTION_QUOTES": null,
+  "OBJECTION_QUOTE_HTML": null,
+  "OFFER_RATING_LINE": null,
+  "ORDER_BY_DATE": null,
+  "ORDER_BY_NOTE": null,
+  "PATH1_DESC": null,
+  "PATH1_IMG": null,
+  "PATH1_ITEM": null,
+  "PATH1_LABEL": null,
+  "PATH1_TITLE": null,
+  "PATH2_DESC": null,
+  "PATH2_IMG": null,
+  "PATH2_ITEM": null,
+  "PATH2_LABEL": null,
+  "PATH2_TITLE": null,
+  "PAYMENT_ICONS": null,
+  "PHONE_FRAME_IMG": null,
+  "PI_BODY": null,
+  "PI_DEMO_MEDIA": null,
+  "PI_PRODUCT_IMG": null,
+  "PI_TITLE": null,
+  "PORTAL_VALUE": null,
+  "PRESS_HEADING": null,
+  "PROB_H1": null,
+  "PROB_IMG_BOT": null,
+  "PROB_IMG_TOP": null,
+  "PROB_LEAD": null,
+  "PRODUCT_ANIM": null,
+  "PRODUCT_CIRCLE_IMG": null,
+  "PRODUCT_COL": null,
+  "PRODUCT_IMG": null,
+  "PROD_HERO_IMG_URL": null,
+  "PROOF_NOUN": null,
+  "Q": null,
+  "Q_ID": null,
+  "REAL_PROBLEM_BODY": null,
+  "REAL_PROBLEM_LEAD": null,
+  "REAL_PROBLEM_ONELINE": null,
+  "RESULTS_H1": null,
+  "REVIEW_WIDGET_EMBED": null,
+  "SPENT_ITEM_IMG": null,
+  "SPENT_ITEM_LABEL": null,
+  "SPENT_ITEM_PRICE": null,
+  "SPENT_TITLE": null,
+  "STAR_ICON_URL": null,
+  "STAR_ROW_IMG": null,
+  "STAT_ICON": null,
+  "STAT_LABEL": null,
+  "STAT_VALUE": null,
+  "STEP_ICON": null,
+  "STEP_TEXT": null,
+  "SUCCESS_LINE": null,
+  "SUCCESS_RATE_IMG": null,
+  "TICKER_SEP_ICON": null,
+  "TOTAL_WASTED": null,
+  "T_BADGE": null,
+  "T_IMG": null,
+  "T_NAME": null,
+  "T_QUOTE": null,
+  "VALUE_LINES": null,
+  "VALUE_LINE_HTML": null,
+  "VERIFIED_ICON_URL": null,
+  "VOICE_FILTER": null,
+  "VSL_MEDIA_ID": null,
+  "VS_IMG": null,
+  "WWC_BODY": null,
+  "WWC_H1": null,
+  "WWC_IMG": null
+ },
+ "_usage_map": {
+  "ADD_TO_CART_ATTRS": [
+   "22-offer"
+  ],
+  "ANNOUNCE_LINK_TEXT": [
+   "01-announce-bar"
+  ],
+  "ANNOUNCE_TEXT": [
+   "01-announce-bar"
+  ],
+  "ANNOUNCE_URL": [
+   "01-announce-bar"
+  ],
+  "AUDIENCE_LINE": [
+   "13-features-around-product"
+  ],
+  "AUTH_AVATAR": [
+   "12-demo-video"
+  ],
+  "AUTH_NAME": [
+   "12-demo-video"
+  ],
+  "AUTH_TITLE": [
+   "12-demo-video"
+  ],
+  "A_HTML": [
+   "25-faq"
+  ],
+  "BA_IMAGES": [
+   "20-guarantee"
+  ],
+  "BA_IMG": [
+   "20-guarantee"
+  ],
+  "BENEFIT": [
+   "22-offer"
+  ],
+  "BRAND": [
+   "03-logo-bar"
+  ],
+  "BRAND_PLAIN": [
+   "22-offer"
+  ],
+  "CATEGORY_NAME": [
+   "25-faq"
+  ],
+  "CAT_ID": [
+   "25-faq"
+  ],
+  "CHECK_ICON": [
+   "12-demo-video"
+  ],
+  "CLOSER_A": [
+   "19-money-problem"
+  ],
+  "CLOSER_B": [
+   "19-money-problem"
+  ],
+  "COMPARE_SUB": [
+   "14-compare-device-table"
+  ],
+  "COMPARE_TITLE": [
+   "14-compare-device-table"
+  ],
+  "COPYRIGHT": [
+   "29-footer"
+  ],
+  "CROSS_ICON_URL": [
+   "09-problem",
+   "14-compare-device-table"
+  ],
+  "CTA_ANCHOR": [
+   "04-hero",
+   "22-offer"
+  ],
+  "CTA_TEXT": [
+   "04-hero",
+   "13-features-around-product",
+   "21-why-we-can",
+   "22-offer",
+   "30-sticky-cta"
+  ],
+  "DEMO_ASPECT": [
+   "12-demo-video"
+  ],
+  "DEMO_BULLET": [
+   "12-demo-video"
+  ],
+  "DEMO_H1": [
+   "12-demo-video"
+  ],
+  "DEMO_MEDIA_ID": [
+   "12-demo-video"
+  ],
+  "DISCLAIMER": [
+   "29-footer"
+  ],
+  "DIVIDER_ARROW_URL": [
+   "04-hero"
+  ],
+  "DIVIDER_ARROW_WHITE_URL": [
+   "19-money-problem"
+  ],
+  "DMCA_BADGE_URL": [
+   "29-footer"
+  ],
+  "DMCA_URL": [
+   "29-footer"
+  ],
+  "DOT_OFF": [
+   "15-expert-cards"
+  ],
+  "DOT_ON": [
+   "15-expert-cards"
+  ],
+  "EXPERT_CARD_TITLE": [
+   "15-expert-cards"
+  ],
+  "EXPERT_NAME": [
+   "17-skin-selector"
+  ],
+  "EXPERT_NAME_TITLE": [
+   "15-expert-cards"
+  ],
+  "EXPERT_PRODUCT_IMG": [
+   "15-expert-cards"
+  ],
+  "EXPERT_QUOTE": [
+   "15-expert-cards"
+  ],
+  "EXPERT_VIDEO_ID": [
+   "15-expert-cards"
+  ],
+  "FAMILY_BODY": [
+   "27-trust-family"
+  ],
+  "FAMILY_HEADLINE": [
+   "27-trust-family"
+  ],
+  "FEATURES_H1": [
+   "13-features-around-product"
+  ],
+  "FEATURE_COPY": [
+   "13-features-around-product"
+  ],
+  "FEATURE_ICON": [
+   "13-features-around-product"
+  ],
+  "FEATURE_LOGO": [
+   "15-expert-cards"
+  ],
+  "FEATURE_QUOTE": [
+   "15-expert-cards"
+  ],
+  "FEATURE_TITLE": [
+   "13-features-around-product"
+  ],
+  "FOUNDER_BODY_HTML": [
+   "26-founder"
+  ],
+  "FOUNDER_HEADLINE": [
+   "26-founder"
+  ],
+  "FOUNDER_NAME": [
+   "26-founder"
+  ],
+  "FOUNDER_PHOTO": [
+   "26-founder"
+  ],
+  "FOUNDER_SIGNATURE_IMG": [
+   "26-founder"
+  ],
+  "GEM_BR": [
+   "13-features-around-product"
+  ],
+  "GEM_ICON_URL": [
+   "14-compare-device-table"
+  ],
+  "GEM_TL": [
+   "13-features-around-product"
+  ],
+  "GUARANTEE_BODY": [
+   "22-offer"
+  ],
+  "GUARANTEE_FEATURE": [
+   "20-guarantee"
+  ],
+  "GUARANTEE_H2": [
+   "20-guarantee"
+  ],
+  "GUARANTEE_HEADLINE": [
+   "22-offer"
+  ],
+  "GUARANTEE_ICON_URL": [
+   "04-hero",
+   "28-final-cta"
+  ],
+  "GUARANTEE_LABEL": [
+   "04-hero",
+   "28-final-cta"
+  ],
+  "GUARANTEE_PROMISE": [
+   "20-guarantee"
+  ],
+  "GUARANTEE_SUB": [
+   "20-guarantee"
+  ],
+  "HERO_BOX_COPY": [
+   "04-hero"
+  ],
+  "HERO_H1": [
+   "04-hero"
+  ],
+  "HERO_H1_2": [
+   "04-hero"
+  ],
+  "HERO_H1_3": [
+   "04-hero"
+  ],
+  "HERO_H1_EM": [
+   "04-hero"
+  ],
+  "HERO_IMG_URL": [
+   "04-hero"
+  ],
+  "HERO_KICKER": [
+   "04-hero"
+  ],
+  "HERO_SUB": [
+   "04-hero"
+  ],
+  "HOME_URL": [
+   "03-logo-bar"
+  ],
+  "HOWTO_ASPECT": [
+   "16-how-to-steps"
+  ],
+  "HOWTO_H1": [
+   "16-how-to-steps"
+  ],
+  "HOWTO_KICKER": [
+   "16-how-to-steps"
+  ],
+  "HOWTO_MEDIA_ID": [
+   "16-how-to-steps"
+  ],
+  "ITEM_ICON": [
+   "23-two-path"
+  ],
+  "JOIN_CTA_TEXT": [
+   "28-final-cta"
+  ],
+  "JUNIP_PRODUCT_ID": [
+   "24-reviews-junip"
+  ],
+  "JUNIP_STORE_KEY": [
+   "24-reviews-junip"
+  ],
+  "LOGO_COLOR_URL": [
+   "02-mobile-nav",
+   "03-logo-bar"
+  ],
+  "LOGO_LIGHT_URL": [
+   "29-footer"
+  ],
+  "MECH_IMG": [
+   "11-solution-mechanism"
+  ],
+  "MECH_TITLE": [
+   "11-solution-mechanism"
+  ],
+  "MOMENT_DESC": [
+   "23-two-path"
+  ],
+  "MOMENT_SUB": [
+   "23-two-path"
+  ],
+  "MOMENT_TITLE": [
+   "23-two-path"
+  ],
+  "MONEY_TITLE": [
+   "19-money-problem"
+  ],
+  "NAV_CTA_ANCHOR": [
+   "02-mobile-nav"
+  ],
+  "NAV_CTA_TEXT": [
+   "02-mobile-nav"
+  ],
+  "NEEDED_IMG": [
+   "19-money-problem"
+  ],
+  "NEEDED_TITLE": [
+   "19-money-problem"
+  ],
+  "OBJECTION_QUOTES": [
+   "09-problem"
+  ],
+  "OBJECTION_QUOTE_HTML": [
+   "09-problem"
+  ],
+  "OFFER_RATING_LINE": [
+   "22-offer"
+  ],
+  "OFFER_TITLE": [
+   "22-offer"
+  ],
+  "ORDER_BY_DATE": [
+   "22-offer"
+  ],
+  "ORDER_BY_NOTE": [
+   "22-offer"
+  ],
+  "PATENT_LINE": [
+   "29-footer"
+  ],
+  "PATH1_DESC": [
+   "23-two-path"
+  ],
+  "PATH1_IMG": [
+   "23-two-path"
+  ],
+  "PATH1_ITEM": [
+   "23-two-path"
+  ],
+  "PATH1_LABEL": [
+   "23-two-path"
+  ],
+  "PATH1_TITLE": [
+   "23-two-path"
+  ],
+  "PATH2_DESC": [
+   "23-two-path"
+  ],
+  "PATH2_IMG": [
+   "23-two-path"
+  ],
+  "PATH2_ITEM": [
+   "23-two-path"
+  ],
+  "PATH2_LABEL": [
+   "23-two-path"
+  ],
+  "PATH2_TITLE": [
+   "23-two-path"
+  ],
+  "PAYMENT_ICONS": [
+   "29-footer"
+  ],
+  "PHONE_FRAME_IMG": [
+   "18-portal-preview"
+  ],
+  "PI_BODY": [
+   "10-product-intro"
+  ],
+  "PI_DEMO_MEDIA": [
+   "10-product-intro"
+  ],
+  "PI_PRODUCT_IMG": [
+   "10-product-intro"
+  ],
+  "PI_TITLE": [
+   "10-product-intro"
+  ],
+  "PORTAL_VALUE": [
+   "18-portal-preview"
+  ],
+  "PRESS_HEADING": [
+   "07-press-bar"
+  ],
+  "PRESS_LOGOS": [
+   "07-press-bar"
+  ],
+  "PRICE_NOW": [
+   "19-money-problem",
+   "22-offer",
+   "23-two-path"
+  ],
+  "PRICE_WAS": [
+   "22-offer"
+  ],
+  "PROB_H1": [
+   "09-problem"
+  ],
+  "PROB_IMG_BOT": [
+   "09-problem"
+  ],
+  "PROB_IMG_TOP": [
+   "09-problem"
+  ],
+  "PROB_LEAD": [
+   "09-problem"
+  ],
+  "PRODUCT": [
+   "04-hero",
+   "10-product-intro",
+   "11-solution-mechanism",
+   "12-demo-video",
+   "13-features-around-product",
+   "14-compare-device-table",
+   "16-how-to-steps",
+   "19-money-problem",
+   "20-guarantee",
+   "22-offer",
+   "26-founder"
+  ],
+  "PRODUCT_ANIM": [
+   "13-features-around-product"
+  ],
+  "PRODUCT_CIRCLE_IMG": [
+   "14-compare-device-table"
+  ],
+  "PRODUCT_COL": [
+   "14-compare-device-table"
+  ],
+  "PRODUCT_IMG": [
+   "13-features-around-product"
+  ],
+  "PROD_HERO_IMG_URL": [
+   "04-hero"
+  ],
+  "PROOF_COUNT": [
+   "08-testimonials",
+   "21-why-we-can",
+   "22-offer",
+   "23-two-path"
+  ],
+  "PROOF_NOUN": [
+   "08-testimonials",
+   "22-offer"
+  ],
+  "Q": [
+   "25-faq"
+  ],
+  "Q_ID": [
+   "25-faq"
+  ],
+  "RATING": [
+   "08-testimonials",
+   "22-offer"
+  ],
+  "REAL_PROBLEM_BODY": [
+   "09-problem"
+  ],
+  "REAL_PROBLEM_LEAD": [
+   "09-problem"
+  ],
+  "REAL_PROBLEM_ONELINE": [
+   "09-problem"
+  ],
+  "RESULTS_H1": [
+   "08-testimonials"
+  ],
+  "REVIEWS_HEADING": [
+   "24-reviews-junip"
+  ],
+  "REVIEW_WIDGET_EMBED": [
+   "24-reviews-junip"
+  ],
+  "SAVE_BADGE": [
+   "22-offer"
+  ],
+  "SPENT_ITEM_IMG": [
+   "19-money-problem"
+  ],
+  "SPENT_ITEM_LABEL": [
+   "19-money-problem"
+  ],
+  "SPENT_ITEM_PRICE": [
+   "19-money-problem"
+  ],
+  "SPENT_TITLE": [
+   "19-money-problem"
+  ],
+  "STAR_ICON_URL": [
+   "22-offer"
+  ],
+  "STAR_ROW_IMG": [
+   "08-testimonials"
+  ],
+  "STAT_ICON": [
+   "12-demo-video"
+  ],
+  "STAT_LABEL": [
+   "12-demo-video"
+  ],
+  "STAT_VALUE": [
+   "12-demo-video"
+  ],
+  "STEP_ICON": [
+   "16-how-to-steps"
+  ],
+  "STEP_TEXT": [
+   "16-how-to-steps"
+  ],
+  "SUCCESS_LINE": [
+   "21-why-we-can"
+  ],
+  "SUCCESS_RATE_IMG": [
+   "21-why-we-can"
+  ],
+  "TICKER_SEP_ICON": [
+   "06-ticker"
+  ],
+  "TOTAL_WASTED": [
+   "19-money-problem"
+  ],
+  "T_BADGE": [
+   "08-testimonials"
+  ],
+  "T_IMG": [
+   "08-testimonials"
+  ],
+  "T_NAME": [
+   "08-testimonials"
+  ],
+  "T_QUOTE": [
+   "08-testimonials"
+  ],
+  "VALUE_LINES": [
+   "19-money-problem"
+  ],
+  "VALUE_LINE_HTML": [
+   "19-money-problem"
+  ],
+  "VERIFIED_ICON_URL": [
+   "08-testimonials",
+   "20-guarantee"
+  ],
+  "VOICE_FILTER": [
+   "26-founder"
+  ],
+  "VSL_MEDIA_ID": [
+   "04-hero"
+  ],
+  "VS_IMG": [
+   "23-two-path"
+  ],
+  "WWC_BODY": [
+   "21-why-we-can"
+  ],
+  "WWC_H1": [
+   "21-why-we-can"
+  ],
+  "WWC_IMG": [
+   "21-why-we-can"
+  ]
+ }
+}

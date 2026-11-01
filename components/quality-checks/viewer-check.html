@@ -1,0 +1,772 @@
+<title>The Viewer Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; the test result sits in a phone-feed strip, the prompt in a mono card. */
+:root{
+  --bg:#F2F3F6; --panel:#FFFFFF; --fg:#16181D; --muted:#5D6270; --line:#DADDE4;
+  --accent:#2B54E8; --accent-soft:#E3E9FD;
+  --pass:#1E7A4A; --pass-soft:#DFF2E7; --fail:#B4322A; --fail-soft:#F8E1DF; --warn:#9A6400; --warn-soft:#F7EBD2;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --panel:#1A1D24; --fg:#E9EBF0; --muted:#9BA1AF; --line:#2C303A;
+  --accent:#7D9BFF; --accent-soft:#1F2945;
+  --pass:#5FCB90; --pass-soft:#16301F; --fail:#F08479; --fail-soft:#3A1A17; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --panel:#1A1D24; --fg:#E9EBF0; --muted:#9BA1AF; --line:#2C303A;
+  --accent:#7D9BFF; --accent-soft:#1F2945;
+  --pass:#5FCB90; --pass-soft:#16301F; --fail:#F08479; --fail-soft:#3A1A17; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-inline:20px;padding-block:40px 80px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.6rem;font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0;max-width:66ch}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:18px}
+.lede{font-size:1.15rem;color:var(--muted)}
+.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.stat b{font:800 2rem/1 var(--display);font-variant-numeric:tabular-nums}
+.stat span{font-size:.88rem;color:var(--muted)}
+.stat.good b{color:var(--pass)} .stat.bad b{color:var(--fail)} .stat.mid b{color:var(--warn)}
+ul.plain{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.plain li{padding-left:22px;position:relative;max-width:66ch}
+ul.plain li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.src{font:400 .78rem/1.4 var(--mono);color:var(--muted)}
+/* chain diagram */
+.chains{display:flex;flex-direction:column;gap:12px}
+.chain{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.chain .name{font:600 .82rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.step{font-size:.85rem;padding:5px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
+.arrow{color:var(--muted);font-size:.85rem}
+.step.viewer{background:var(--accent);border-color:var(--accent);color:var(--panel);font-weight:600}
+/* how it runs */
+ol.run{margin:0;padding:0;list-style:none;counter-reset:r;display:flex;flex-direction:column;gap:14px}
+ol.run li{counter-increment:r;display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+ol.run li::before{content:counter(r);font:700 1rem/36px var(--display);text-align:center;width:36px;height:36px;border-radius:50%;background:var(--accent-soft);color:var(--accent)}
+ol.run li div{min-width:0;display:flex;flex-direction:column;gap:4px}
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 .74rem/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-block;font:600 .74rem/1 var(--mono);padding:4px 8px;border-radius:999px;white-space:nowrap}
+.pill.pass{background:var(--pass-soft);color:var(--pass)} .pill.fail{background:var(--fail-soft);color:var(--fail)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
+/* feed strip */
+.feed{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.viewer{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.viewer header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.viewer header h3{font-size:1rem}
+.viewer .when{font-size:.8rem;color:var(--muted)}
+.scroll{display:flex;flex-direction:column;gap:4px}
+.row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;font-size:.8rem;padding:4px 6px;border-radius:6px}
+.row .n{font:500 .72rem/1 var(--mono);color:var(--muted)}
+.row.ours{background:var(--accent-soft);font-weight:600}
+.bar{height:6px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--muted);border-radius:3px}
+.row.ours .bar i{background:var(--accent)}
+.row .t{font:400 .72rem/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+blockquote{margin:0;padding:10px 12px;border-left:3px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0;font-size:.9rem}
+blockquote small{display:block;font:500 .7rem/1.3 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.callout{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+/* prompt */
+.prompt{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.prompt .bar2{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg);flex-wrap:wrap}
+.prompt .file{font:500 .78rem/1.3 var(--mono);color:var(--muted);word-break:break-all}
+.prompt pre{margin:0;padding:18px;font:400 .82rem/1.6 var(--mono);white-space:pre-wrap;word-wrap:break-word;overflow-x:auto}
+button.copy{font:600 .78rem/1 var(--body);padding:7px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+button.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.decide{background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.decide ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:480px){.wrap{padding-inline:16px}.stat b{font-size:1.7rem}}
+/* ── play it ── */
+.play{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:18px}
+.play-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:600 .82rem/1 var(--body);padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.chip small{font-weight:500;opacity:.75}
+.go{font:700 .95rem/1 var(--display);padding:11px 20px;border-radius:999px;border:0;background:var(--fg);color:var(--bg);cursor:pointer}
+.go:disabled{opacity:.45;cursor:default}
+.chip:focus-visible,.go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ticker{font:500 1rem/1.4 var(--body);min-height:2.8em;padding:10px 14px;border-radius:10px;background:var(--bg);border:1px dashed var(--line)}
+.trackwrap{overflow-x:auto;padding-bottom:6px}
+.track{position:relative;display:grid;grid-template-columns:repeat(8,minmax(92px,1fr));gap:8px;min-width:780px;padding-top:58px}
+.stn{position:relative;text-align:center;padding:10px 6px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:.78rem;line-height:1.3;transition:background .3s,border-color .3s}
+.stn b{display:block;font:700 .82rem/1.2 var(--display);margin-bottom:2px}
+.stn .cost{font:500 .68rem/1 var(--mono);color:var(--muted)}
+.stn.lit{border-color:var(--accent);background:var(--accent-soft)}
+.stn.good{border-color:var(--pass);background:var(--pass-soft)}
+.stn.bad{border-color:var(--fail);background:var(--fail-soft)}
+.stn.money b{color:var(--warn)}
+.token{position:absolute;top:0;left:0;width:52px;height:50px;transition:transform .7s cubic-bezier(.5,1.6,.4,1)}
+.token svg{width:52px;height:50px;display:block}
+.desk{position:absolute;top:6px;right:0;font:600 .72rem/1.2 var(--mono);color:var(--muted);text-align:right}
+.meter{display:flex;align-items:center;gap:12px;font-size:.85rem}
+.meter .bar{flex:1;height:10px;border-radius:5px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.meter .bar i{display:block;height:100%;width:0;background:var(--warn);transition:width .8s}
+.meter b{font:700 .9rem/1 var(--mono);min-width:92px;text-align:right}
+.phones{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.phone{border:2px solid var(--fg);border-radius:22px;padding:8px;background:var(--bg);display:flex;flex-direction:column;gap:6px;min-width:0}
+.phone .who{display:flex;align-items:center;gap:6px;font:600 .72rem/1.2 var(--mono);color:var(--muted)}
+.phone .who svg{width:22px;height:22px;flex:none}
+.screen{height:170px;overflow:hidden;border-radius:14px;background:var(--panel);position:relative}
+.reel{display:flex;flex-direction:column;gap:6px;padding:6px;transition:transform .5s ease}
+.post{height:52px;border-radius:9px;background:var(--line);font-size:.66rem;line-height:1.25;padding:6px 7px;color:var(--muted);overflow:hidden}
+.post.ours{height:150px;background:var(--accent-soft);border:2px solid var(--accent);color:var(--fg);display:flex;flex-direction:column;gap:6px}
+.post.ours .tag{font:600 .6rem/1 var(--mono);color:var(--accent)}
+.post.ours .wbar{height:6px;border-radius:3px;background:var(--panel);overflow:hidden;margin-top:auto}
+.post.ours .wbar i{display:block;height:100%;width:0;background:var(--accent);transition:width 1.4s linear}
+.post.ours .sec{font:500 .62rem/1 var(--mono);color:var(--muted)}
+.bubble{min-height:3.6em;font-size:.74rem;line-height:1.35;padding:7px 9px;border-radius:12px 12px 12px 3px;background:var(--panel);border:1px solid var(--line);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.bubble.show{opacity:1;transform:none}
+.bubble.no{border-color:var(--fail)} .bubble.yes{border-color:var(--pass)}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.lights{display:flex;flex-direction:column;gap:6px}
+.light{display:flex;align-items:center;gap:8px;font-size:.84rem}
+.light i{width:14px;height:14px;border-radius:50%;background:var(--line);flex:none;transition:background .3s}
+.light.on i{background:var(--pass)} .light.off i{background:var(--fail)}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.num{background:var(--bg);border-radius:10px;padding:10px}
+.num b{display:block;font:800 1.4rem/1 var(--display);font-variant-numeric:tabular-nums}
+.num span{font-size:.72rem;color:var(--muted)}
+.curve svg{width:100%;height:auto;display:block}
+.example{font:600 .7rem/1 var(--mono);color:var(--warn);text-transform:uppercase;letter-spacing:.06em}
+@media (prefers-reduced-motion:reduce){.token,.reel,.post.ours .wbar i,.bubble,.meter .bar i{transition:none}}
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:14px">
+  <div class="eyebrow">Marketing chain checks · live in the video and statics chains · 2 Oct 2026</div>
+  <h1>The Viewer Check</h1>
+  <p class="lede">After the writing is done, the ad gets dropped into its avatar's real feed and scrolled by 5 people who aren't marketers. Do they stop? When do they leave? Would they tap? If not, it goes back to the writing step that lost them. It now runs on every video and statics brief.</p>
+</header>
+
+<section>
+  <div class="eyebrow">Play it · how one ad gets through</div>
+  <h2>Press play and watch an ad try to make it</h2>
+  <p class="muted">The little brief walks the chain. Everything before the last step is text, so it costs cents. Real money only goes out at "Make it", and only if 5 people from the avatar stopped, stayed and wanted to tap.</p>
+  <div class="play" id="play">
+    <div class="play-top">
+      <div class="chips" role="group" aria-label="Pick a run">
+        <button class="chip" id="sc-real" type="button" aria-pressed="true">An ad that passes <small>· example</small></button>
+        <button class="chip" id="sc-weak" type="button" aria-pressed="false">A weak ad <small>· example</small></button>
+        <button class="chip" id="sc-twice" type="button" aria-pressed="false">Fails twice <small>· example</small></button>
+      </div>
+      <button class="go" id="go" type="button">▶ Play</button>
+    </div>
+    <div class="ticker" id="ticker" aria-live="polite">Pick a run, then press play.</div>
+    <div class="trackwrap"><div class="track" id="track">
+      <div class="token" id="token" aria-hidden="true"><svg viewBox="0 0 52 50"><rect x="8" y="4" width="36" height="42" rx="6" fill="var(--panel)" stroke="var(--fg)" stroke-width="2.5"/><path d="M14 13h18M14 18h24" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="29" r="3" fill="var(--fg)"/><circle cx="32" cy="29" r="3" fill="var(--fg)"/><path id="mouth" d="M20 37q6 5 12 0" stroke="var(--fg)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></div>
+      <div class="stn" data-i="0"><b>Swipe</b>a winning ad we found<div class="cost">¢</div></div>
+      <div class="stn" data-i="1"><b>Teardown</b>stripped to its structure<div class="cost">¢</div></div>
+      <div class="stn" data-i="2"><b>Writing</b>openings · middle · close<div class="cost">¢</div></div>
+      <div class="stn" data-i="3"><b>Brief</b>one fixed document<div class="cost">¢</div></div>
+      <div class="stn" data-i="4"><b>Checks</b>swipe match, cast, claims<div class="cost">¢</div></div>
+      <div class="stn" data-i="5"><b>5 viewers</b>scroll it in their feed<div class="cost">¢</div></div>
+      <div class="stn" data-i="6"><b>Worth making?</b>the last word<div class="cost">free</div></div>
+      <div class="stn money" data-i="7"><b>Make it</b>people, scenes, voice<div class="cost">$$$ credits</div></div>
+    </div></div>
+    <div class="meter"><span>Money spent on making</span><div class="bar"><i id="money"></i></div><b id="moneytxt">$0</b></div>
+    <div class="phones" id="phones"></div>
+    <div class="board">
+      <div class="lights" id="lights"></div>
+      <div class="nums" id="nums"></div>
+      <div class="curve"><div class="eyebrow" style="margin-bottom:6px">Still watching, second by second</div><svg id="curve" viewBox="0 0 300 130" role="img" aria-label="Retention curve"></svg></div>
+    </div>
+    <p class="muted" id="foot" style="font-size:.8rem"><span class="example">Example</span> · numbers made up to show the path. A real run shows your own 5 viewers in your avatar's feed. The predicted numbers are a guess from the viewers, not yet checked against Meta.</p>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Version 2 · 2 Oct · "we need belief"</div>
+  <h2>Now the viewers also judge belief</h2>
+  <div class="stats">
+    <div class="stat bad"><b>— / 5</b><span>believe the ad would work for them</span></div>
+    <div class="stat bad"><b>— / 5</b><span>said a line felt like a sales pitch</span></div>
+    <div class="stat good"><b>— / 5</b><span>said anything looked fake or staged</span></div>
+    <div class="stat good"><b>— / 2</b><span>with the sound off still got it</span></div>
+    <div class="stat good"><b>—%</b><span>would save it · —% would comment</span></div>
+  </div>
+  <blockquote><small>Viewer 2 · why not believe</small>[the viewer's own words]</blockquote>
+  <blockquote><small>Viewer 3 · why not believe</small>[the viewer's own words]</blockquote>
+  <blockquote><small>Viewer 5 · the pitch line</small>[the viewer's own words]</blockquote>
+  <div class="tbl"><table>
+    <thead><tr><th>New question to each viewer who stopped</th><th>What a fail does</th></tr></thead>
+    <tbody>
+      <tr><td>Do you believe it would work for you? What made you doubt it?</td><td>Most don't believe it → back to the step that writes the mechanism and proof</td></tr>
+      <tr><td>Did anything look fake, staged, AI-made or too perfect?</td><td>2+ say yes → back to where the shot is directed</td></tr>
+      <tr><td>Did it feel like someone selling at you? Which line?</td><td>2+ say yes → back to the spice step that writes the lines</td></tr>
+      <tr><td>Is this for someone like you?</td><td>Most say no → straight to the owner (wrong avatar)</td></tr>
+      <tr><td>Save, share, comment, or nothing? What would you comment?</td><td>Counted as numbers, not a pass or fail</td></tr>
+      <tr><td>2 of the 5 scroll with the sound off: did you get it?</td><td>Most muted viewers miss it → back to the on-screen words</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">What's still kept from version 1: did they stop, the second they left, what they felt, when it read as an ad and why, would they tap, what they'd remember. Never scored: "looks real". That's the score his fakes won with.</p>
+  <p class="muted">A refund or price line is the website's own wording, and website wording wins, so changing it is your call, not the machine's.</p>
+</section>
+
+
+<section>
+  <div class="eyebrow">First test · your ad · its avatar's feed</div>
+  <div class="stats">
+    <div class="stat good"><b>— / —</b><span>viewers stopped on our ad</span></div>
+    <div class="stat"><b>— / —</b><span>stops on the real posts around it</span></div>
+    <div class="stat mid"><b>0:—</b><span>when they knew it was an ad, and at what</span></div>
+    <div class="stat mid"><b>— / —</b><span>left before the end card</span></div>
+    <div class="stat good"><b>— / —</b><span>would tap</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Now live</div>
+  <h2>What runs today</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Chain</th><th>Where it runs</th><th>A fail goes back to</th></tr></thead>
+    <tbody>
+      <tr><td>Video briefs</td><td>Right after the brief's other checks (swipe match, cast, holes, claims), before the final brief. Also on briefs written in-session.</td><td>Openings → hooks · middle or giveaway → placement · close → close</td></tr>
+      <tr><td>Statics &amp; carousels</td><td>Right after the brief's copy check, before any picture is drawn</td><td>Openings → headlines · middle or giveaway → variations · close → brief</td></tr>
+      <tr><td>Landing pages</td><td><span class="pill warn">not yet</span> A page isn't seen in a feed. People land on it from an ad, so it needs its own version of the viewer.</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="plain">
+    <li><b>Blocks, not flags.</b> A fail goes back on its own with the viewers' words, and a fresh 5 read the rewrite. After 2 fails it holds for you. "Not for me" holds straight away, because who an ad is for is your call. You pass a held one with V.</li>
+    <li><b>5 viewers, not 3.</b> With 3, the same unchanged brief failed one round and passed the next. With 5, three rounds on the same brief all passed: watch-time — of 5, every viewer stopped, —% vs —% for the real posts.</li>
+    <li><b>Brand A works too.</b> Gemini refuses to read the Brand A profiles at all, so those checks fall back to GPT-5.5 automatically. Every verdict says which models answered.</li>
+    <li><b>Judged by who it was written for.</b> If the brief names a sub-avatar, the viewers are that sub-avatar. The feed falls back to the core avatar's feed when the sub has none.</li>
+    <li><b>Nothing gets made without a pass.</b> Video production and statics drawing both ask "worth making?" first, before any credits go out. A brief that was never checked gets checked right there, which costs cents. Each pass comes with predicted numbers: hook rate against the real feed, average watch, how many reach the price, how many would tap, and second-by-second retention.</li>
+    <li><b>Every round is filed in the run,</b> under viewer-check: what each viewer was sent, their answers, and a VERDICT page with their words.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Where this came from</div>
+  <h2>Toilet Mike, from Andrei Lunev's talk</h2>
+  <p>Lunev runs ads for 300+ brands with 2 people and 100+ agents. The talk was mostly about how he wires it. The part about checking work is one agent he calls Toilet Mike.</p>
+  <ul class="plain">
+    <li><b>Mike isn't a marketer.</b> He's a 42-year-old dad scrolling on the toilet at 10:47pm after a bad day. He thinks most ads are garbage. His only questions: does this stop your scroll, and what do you feel?</li>
+    <li><b>The agent that wrote it never grades it.</b> If you ask a writer to check its own work, it defends whatever it did. So the check is always a separate agent.</li>
+    <li><b>Mike reads the script first,</b> before any money goes on pictures or video.</li>
+    <li><b>A "no" goes back to the step that broke.</b> If the hook is weak, it goes back to hook writing. Then a fresh Mike reads it again. When things are tuned, that takes 2 rounds or fewer.</li>
+    <li><b>If Mike keeps saying the same thing, fix the writer's prompt.</b> Stop fixing ads one at a time.</li>
+    <li><b>His scorecard got gamed.</b> It gave points for "looks real", so two fake screenshot ads won #1 and #2. The fix was a new scorecard, not arguing with Mike.</li>
+    <li><b>You set the taste, not Mike.</b> You tune his prompt the same way you tune the copywriter's.</li>
+    <li><b>Live results check Mike every week.</b> The ad account shows what real people actually did.</li>
+  </ul>
+  <p class="src">Source: GreekOut II Mykonos 2026, Day 1, Andrei Lunev (64 min, transcript from the video's captions + 467-slide deck). Toilet Mike is at about 0:44 and in the Q&amp;A at about 0:52.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Ours vs his</div>
+  <h2>We already have the part he made up</h2>
+  <p>His Mike is one made-up dad reading an ad on its own. Ours is each avatar, scrolling the real feed we built for them, with our ad hidden somewhere in it. That gives us a bar he doesn't have: the ad has to beat the real posts sitting next to it.</p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Toilet Mike</th><th>The Viewer Check</th></tr></thead>
+    <tbody>
+      <tr><td>Who reads it</td><td>One made-up dad</td><td>The avatar the brief was written for, built from their profile</td></tr>
+      <tr><td>What they see</td><td>The ad alone</td><td>9 real posts from that avatar's feed, plus ours somewhere random</td></tr>
+      <tr><td>The bar</td><td>A checklist</td><td>Beat the real posts in the same scroll</td></tr>
+      <tr><td>How many</td><td>One</td><td>3 fresh viewers, different times of day, feed shuffled each time</td></tr>
+      <tr><td>Who scores</td><td>Mike</td><td>The viewer only reacts. Code does the scoring, so the viewer can't be gamed into passing an ad.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">Where it sits</div>
+  <h2>After the words are done, before anything is made</h2>
+  <div class="chains">
+    <div class="chain"><div class="name">Video briefs</div>
+      <div class="steps"><span class="step">teardown</span><span class="arrow">→</span><span class="step">audience pick</span><span class="arrow">→</span><span class="step">hooks · middle · close · spice</span><span class="arrow">→</span><span class="step">brief</span><span class="arrow">→</span><span class="step viewer">viewer check</span><span class="arrow">→</span><span class="step">final brief · elements</span></div></div>
+    <div class="chain"><div class="name">Statics &amp; carousels</div>
+      <div class="steps"><span class="step">teardown</span><span class="arrow">→</span><span class="step">hooks</span><span class="arrow">→</span><span class="step">variations</span><span class="arrow">→</span><span class="step">brief</span><span class="arrow">→</span><span class="step viewer">viewer check</span><span class="arrow">→</span><span class="step">draft picture</span></div></div>
+    <div class="chain"><div class="name">Landing pages</div>
+      <div class="steps"><span class="step">teardown</span><span class="arrow">→</span><span class="step">page words</span><span class="arrow">→</span><span class="step viewer">viewer check</span><span class="arrow">→</span><span class="step">layout</span><span class="arrow">→</span><span class="step">built page</span></div></div>
+  </div>
+  <p class="muted">Same slot in every chain: once the words are locked, before anything costs money.</p>
+</section>
+
+<section>
+  <div class="eyebrow">How one check runs</div>
+  <h2>Five steps, each done by a different worker</h2>
+  <ol class="run">
+    <li><div><b>Write the viewer card.</b><span class="muted">A plain, first-person description of the avatar from their profile: age, the problem they actually have, what they've already tried, what they're sick of, what makes them leave. No marketing words.</span></div></li>
+    <li><div><b>Pull the feed.</b><span class="muted">9 real posts from that avatar's feed, shuffled, with our ad dropped in at a random spot. Real ads look sponsored, so ours does too.</span></div></li>
+    <li><div><b>5 fresh viewers scroll it.</b><span class="muted">5 viewers, each at a different time of day with a different shuffle. Each one sees only the card and the feed. No brief, no swipe, no reasoning. For every post they say: stopped? second they left? what they felt? clocked it as an ad? would they tap?</span></div></li>
+    <li><div><b>Code scores it against the feed.</b><span class="muted">The viewer never sees a score and never knows which post is ours. That's what keeps it from being gamed.</span></div></li>
+    <li><div><b>Send it back or let it through.</b><span class="muted">Where they left decides which writing step it goes back to. A fresh 5 read the rewrite. After 2 fails it comes to you with their words.</span></div></li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">The scorecard (code, not the viewer)</div>
+  <h2>What passes</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Check</th><th>Pass when</th><th>Your first test</th></tr></thead>
+    <tbody>
+      <tr><td>Stop</td><td>Most viewers stop (3 of 5)</td><td class="num">—</td></tr>
+      <tr><td>Beats the feed</td><td>Our stop rate is higher than the real posts' stop rate in the same scroll</td><td class="num">—</td></tr>
+      <tr><td>Stays to the offer</td><td>Most are still watching when the offer shows (videos only)</td><td class="num">—</td></tr>
+      <tr><td>Not an ad before the stop</td><td>Nobody clocks it as an ad before they've stopped</td><td class="num">—</td></tr>
+      <tr><td>Would act</td><td>Most would tap or text a friend about it</td><td class="num">—</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Not on the scorecard on purpose: "looks real", "authentic", "relatable". Those are the scores that let Lunev's fakes win. Looking fake makes them leave, and leaving is already counted.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Where a "no" goes</div>
+  <h2>Where they left decides the writing step it goes back to</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>What the viewers did</th><th>Goes back to</th></tr></thead>
+    <tbody>
+      <tr><td>Didn't stop, or left in the first 2 seconds</td><td>Openings (hooks)</td></tr>
+      <tr><td>Stopped, then left before the offer</td><td>The middle (placement / expansion), at the second they left</td></tr>
+      <tr><td>Clocked it as an ad and left right after</td><td>The moment they named as the giveaway (placement, or spice if it was the words)</td></tr>
+      <tr><td>Stayed to the end but wouldn't tap</td><td>The close</td></tr>
+      <tr><td>"Not for me" / "didn't get it"</td><td>The audience pick, so a different avatar or sub-avatar</td></tr>
+      <tr><td>Same complaint on 3 briefs in a row</td><td>The writing prompt itself, shown to you on the prompt page</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Your ad, by these rules: — of — left at 0:—, right after the moment they called the giveaway. So it goes back to <b>—</b>, flagged at that second. Anything they said about the price is a close note.</p>
+</section>
+
+<section>
+  <div class="eyebrow">The test, scroll by scroll</div>
+  <h2>Three viewers, one feed</h2>
+  <p class="muted"><span class="example">Example</span> · the shape of a run. Yours fills in from your own run.</p>
+  <p class="muted">Bars show how far into each post they got. The blue row is ours. A short bar means they left almost right away.</p>
+  <div class="feed" id="feed"></div>
+</section>
+
+<section>
+  <div class="eyebrow">What they said about ours</div>
+  <h2>In their words</h2>
+  <blockquote><small>Viewer 1 · why they stopped</small>[the viewer's own words]</blockquote>
+  <blockquote><small>Viewer 2 · what gave it away</small>[the viewer's own words]</blockquote>
+  <blockquote><small>Viewer 3 · what stuck</small>[the viewer's own words]</blockquote>
+  <blockquote><small>Viewer 1 · text to a friend</small>[the viewer's own words]</blockquote>
+  <blockquote><small>Viewer 2 · why not buy</small>[the viewer's own words]</blockquote>
+</section>
+
+<section>
+  <div class="eyebrow">What the first test showed about our setup</div>
+  <h2>Three gaps</h2>
+  <div class="callout warn">
+    <p><b>1. The feed posts are thinner than our ad.</b> Real feed posts only have a caption and sometimes a one-line description. There's no transcript and no second-by-second, so our ad got described in more detail than everything around it. That tilts the test toward us. Fix: give feed posts the same second-by-second our teardown already writes for swipes.</p>
+    <p><b>2. The feeds hold organic posts only.</b> Paid swipes live in a separate place. A real scroll has other brands' ads in it too, and ours should have to beat those.</p>
+    <p><b>3. Briefs written in-session skipped the reviewer.</b> <span class="pill pass">fixed</span> The viewer check now runs on both paths.</p>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">The prompt, word for word · v1</div>
+  <h2>Every prompt in the chain</h2>
+  <div class="prompt">
+    <div class="bar2"><span class="file">components/quality-checks/prompts/viewer-check-v2-damon.md · v2, live</span><button class="copy" id="copy-prompt" type="button">Copy prompt</button></div>
+<pre id="prompt-text"># The Viewer — {brand} · {avatar} (v2)
+
+You are not a marketer. You have never worked in advertising and you don&#x27;t know
+its words. You are this person:
+
+{who}
+
+It is {when}. You are scrolling {platform}. {sound}
+
+Below is the next stretch of your feed, in order. Some posts are from people you
+follow or that the app picked for you; some may be ads. You only know which is
+which if the post makes it obvious — the same as in real life.
+
+For each post you get only what you would actually see and hear, second by
+second. Nothing else. React the way you really would: fast, honest, a bit tired.
+You distrust most ads. Most things you scroll past. That is normal.
+
+**For every post, answer:**
+- `stop` — yes / no. Did your thumb stop in the first two seconds?
+- `left_at` — the second you would have swiped away, or &quot;end&quot;.
+- `felt` — one line, in your own words, what went through your head.
+- `got_it` — yes / no. Did you get what it was about?
+- `ad_at` — did you clock it as an ad? At what second? (&quot;no&quot; if you didn&#x27;t.)
+- `ad_tell` — what gave it away, in your words. (&quot;&quot; if nothing.)
+- `tap` — yes / no. Would you tap the profile, the link, or the comments?
+- `tap_why` — why or why not, in your words.
+
+**Only for posts you stopped on:**
+- `believe` — yes / no / not sure. Do you believe it would actually work for you?
+- `doubt` — what made you doubt it, in your words (&quot;&quot; if nothing).
+- `fake` — yes / no. Did anything look fake, staged, AI-made or too perfect?
+- `fake_what` — what looked fake (&quot;&quot; if nothing).
+- `pitch` — yes / no. Did it feel like someone selling at you — a list of features, a big promise, a line you&#x27;ve heard a hundred times?
+- `pitch_line` — the line or moment that felt like a pitch (&quot;&quot; if none).
+- `for_me` — yes / no. Is this for someone like you?
+- `do` — what you&#x27;d actually do: save / share / comment / nothing (more than one is fine, comma-separated).
+- `comment` — if you&#x27;d comment, exactly what you&#x27;d write (&quot;&quot; if not).
+- `remember` — the line or picture you&#x27;d still have in your head tomorrow (&quot;nothing&quot; is fine).
+- `text_friend` — what you&#x27;d send a friend about it, word for word (&quot;nothing&quot; is fine).
+
+**Rules for you:**
+- Talk like you, not like a reviewer. If you catch yourself saying hook,
+  engaging, value, messaging, authentic, relatable, CTA, brand, content,
+  creative or audience — you are doing it wrong. Say what you would say.
+- Don&#x27;t be nice. You don&#x27;t owe anyone a stop or a &quot;yes&quot;.
+- Don&#x27;t be harsh to look smart either. If something got you, say so.
+- Don&#x27;t guess what whoever made it wanted. Only say what happened to you.
+- Looking real is not a reason to stop or believe. Looking fake is a reason to leave.
+- A clever line is not a reason to believe anything.
+- If you don&#x27;t get it, say &quot;didn&#x27;t get it&quot;. Don&#x27;t work it out.
+
+**Return JSON only:**
+{&quot;posts&quot;: [{&quot;n&quot;: 1, &quot;stop&quot;: &quot;yes|no&quot;, &quot;left_at&quot;: &quot;&lt;second&gt;|end&quot;, &quot;felt&quot;: &quot;...&quot;,
+ &quot;got_it&quot;: &quot;yes|no&quot;, &quot;ad_at&quot;: &quot;&lt;second&gt;|no&quot;, &quot;ad_tell&quot;: &quot;...&quot;, &quot;tap&quot;: &quot;yes|no&quot;,
+ &quot;tap_why&quot;: &quot;...&quot;, &quot;believe&quot;: &quot;yes|no|not sure&quot;, &quot;doubt&quot;: &quot;...&quot;, &quot;fake&quot;: &quot;yes|no&quot;,
+ &quot;fake_what&quot;: &quot;...&quot;, &quot;pitch&quot;: &quot;yes|no&quot;, &quot;pitch_line&quot;: &quot;...&quot;, &quot;for_me&quot;: &quot;yes|no&quot;,
+ &quot;do&quot;: &quot;save|share|comment|nothing&quot;, &quot;comment&quot;: &quot;...&quot;, &quot;remember&quot;: &quot;...&quot;,
+ &quot;text_friend&quot;: &quot;...&quot;}]}
+
+{feed}
+</pre>
+  </div>
+<div class="prompt">
+    <div class="bar2"><span class="file">components/quality-checks/prompts/viewer-card-v1-damon.md · turns the avatar profile into the viewer card</span></div>
+<pre># Viewer card — {brand} · {avatar} (v1)
+
+Below is a marketing profile of one kind of person. Turn it into a short card
+that a non-marketer could read and then *be* this person while scrolling.
+
+Write it in the first person, 4 to 7 plain sentences, under 120 words:
+- how old I am and where my life is right now
+- the problem I actually have, the way I&#x27;d describe it to a friend
+- what I&#x27;ve already tried and what happened
+- what I&#x27;m sick of seeing online, and what makes me scroll past instantly
+- what I think of ads
+- the one kind of thing that would actually make me look something up
+
+Rules:
+- Use only what the profile says. Invent nothing — no name, no job, no detail
+  the profile doesn&#x27;t give. If it gives an age range, pick one age inside it.
+- No marketing words at all: no desire, awareness, sophistication, avatar,
+  funnel, hook, angle, objection, pain point, audience, persona, brand.
+- Use the person&#x27;s own words where the profile quotes them.
+- No product names and nothing about what anyone is selling.
+
+Return the card as plain text only. No title, no notes.
+
+--- PROFILE ---
+{profile}
+</pre>
+  </div>
+  <div class="prompt">
+    <div class="bar2"><span class="file">components/quality-checks/prompts/viewer-cut-v1-damon.md · turns the brief into what a viewer actually sees</span></div>
+<pre># Viewer cut — what someone scrolling would actually see (v1)
+
+Below is a production brief for one {kind} ad. Turn it into exactly what a
+person scrolling past it would see and hear, and nothing else.
+
+Rules:
+- Only what reaches the viewer: what&#x27;s in the picture, what&#x27;s heard (voice
+  word for word, sounds, music), and on-screen text word for word.
+- Strip every instruction to the maker: camera, lens, lighting, wardrobe
+  notes, &quot;film this&quot;, &quot;if you don&#x27;t have this&quot;, reasons, sources, frame ids.
+- Write the picture the way a viewer would notice it, in a few plain words
+  (&quot;a woman holds a jar up to the bathroom mirror&quot;), never the way a director would.
+- Keep every detail the brief says will be visible: skin, marks, faces,
+  the product and what it looks like, a reaction. Those are what a viewer
+  stops for. Call the product what the brief calls it.
+- Ignore any &quot;Source:&quot; line or reference to the original video — that
+  describes the ad we copied, not this one.
+- If the brief offers several openings, use the FIRST one, then the body.
+- Keep the brief&#x27;s own timing. A video is one line per beat, `0:00–0:02`.
+  A still image or carousel slide is one line per image/slide, `[1]`, `[2]`.
+- Copy every spoken line and every on-screen line exactly. Don&#x27;t improve,
+  shorten or explain anything.
+- Add nothing the brief doesn&#x27;t have.
+
+Return JSON only:
+{&quot;length_s&quot;: &lt;total seconds, 0 for a still&gt;,
+ &quot;offer_at&quot;: &lt;second the price, offer or ask first appears; for a still, the image number; null if none&gt;,
+ &quot;caption&quot;: &quot;&lt;the post caption if the brief gives one, else \&quot;\&quot;&gt;&quot;,
+ &quot;lines&quot;: [&quot;0:00–0:02  ...&quot;, &quot;...&quot;]}
+
+--- BRIEF ---
+{brief}
+</pre>
+  </div>
+  <div class="prompt">
+    <div class="bar2"><span class="file">components/quality-checks/prompts/viewer-fix-v2-damon.md · the rewrite after a fail</span></div>
+<pre># Viewer fix — {brand} · {avatar} (v2)
+
+Five people from this avatar scrolled the ad below inside their real feed and
+passed on it. You rewrite ONLY what made them pass on it, so the next five
+believe it and move.
+
+**What failed:** {fix_at}
+
+**What the viewers said, and what the brand already has on file for it:**
+{notes}
+
+**What has worked on this avatar before:**
+{learnings}
+
+**How these people really talk** (their own words, from the brand&#x27;s language bank):
+{language}
+
+## Rules
+
+1. **Touch only what failed.** Leave every other line, frame and direction
+   exactly as it is, word for word.
+2. **The structure is locked.** Same scenes, same order, same people, same
+   places, same camera. Adapt words and how a moment is played, never rebuild.
+3. **Prices, guarantees and offer lines stay word for word.** They come from the
+   website. If a viewer doubted one, answer the doubt around it: before it,
+   after it, or in how it is shown. Never by rewording it.
+4. **Answer the doubt the way the bank says to.** Where the bank has an answer,
+   follow it. If it says &quot;answer skepticism with real customers, not claims&quot;,
+   do that, not a new claim.
+5. **Nothing invented.** Every new spoken or on-screen word comes from the
+   language bank, the objection bank&#x27;s answer, or the viewers&#x27; own words, and
+   you name which. No new facts, numbers, results, testimonials, people or
+   promises that aren&#x27;t in those sources.
+6. **No pitch.** No feature lists, no benefit stacks, no lines that sound like
+   an ad. Say it the way they would say it to a friend.
+7. **Cut before you add.** Fewer words on a card reads less like an ad. Never
+   stack more lines onto a card or frame that was already called a pitch. At most
+   one change per doubt.
+8. **Only point at what the ad shows.** Never write &quot;a real customer&quot;, &quot;day 90&quot;,
+   &quot;before and after&quot; or any proof the ad doesn&#x27;t actually show on screen. A
+   reply line from the bank that refers to another asset doesn&#x27;t belong here.
+9. **No lists.** Never put more than one claim or benefit in one line.
+10. If a doubt has no answer on file, or the only fix would break rule 3, leave it
+   and list it under &quot;open&quot;, saying what it would take.
+
+## Return
+
+First the whole brief, rewritten, in exactly the same format as below, between
+`=== BRIEF ===` and `=== END BRIEF ===`.
+
+Then JSON only, between `=== CHANGES ===` and `=== END CHANGES ===`:
+{&quot;changes&quot;: [{&quot;where&quot;: &quot;&lt;frame / opening / line&gt;&quot;, &quot;was&quot;: &quot;&lt;old words&gt;&quot;, &quot;now&quot;: &quot;&lt;new words&gt;&quot;,
+  &quot;why&quot;: &quot;&lt;the viewer doubt it answers&gt;&quot;, &quot;source&quot;: &quot;&lt;objection bank | language bank | viewer N&gt;: &lt;the exact words you used&gt;&quot;}],
+ &quot;open&quot;: [&quot;&lt;doubts with no answer on file&gt;&quot;]}
+
+--- THE BRIEF ---
+{brief}
+</pre>
+  </div>
+  <div class="prompt">
+    <div class="bar2"><span class="file">components/quality-checks/prompts/objection-match-v1-damon.md · their doubts matched to your objection bank</span></div>
+<pre># Objection match — {brand} · {avatar} (v1)
+
+Real people from this avatar just watched an ad and told us, in their own words,
+what they doubted, what felt like a sales pitch, and what they would comment.
+Below that is the brand&#x27;s objection bank: the objections real customers have
+raised before, with the answers the brand has on file.
+
+Your job: match each thing a viewer said to the objection in the bank it is the
+same worry as, and copy the bank&#x27;s own answer for it.
+
+Rules:
+- Quote the bank exactly. Copy the objection and the answer word for word,
+  with the heading or line they sit under. Never write a new answer.
+- If nothing in the bank is the same worry, say &quot;not in the bank&quot;. That is a
+  finding, not a failure, and it means a new objection we have no answer for.
+- If the bank holds an objection but no answer to it, say &quot;no answer on file&quot;.
+- One match per thing said. Don&#x27;t stretch: a worry about price is not a worry
+  about results.
+- Then predict the 3 comments most likely to show up under this ad, each tied
+  to a matched objection (or to &quot;not in the bank&quot;).
+
+Return JSON only:
+{&quot;matches&quot;: [{&quot;viewer&quot;: 1, &quot;said&quot;: &quot;&lt;their words&gt;&quot;, &quot;kind&quot;: &quot;doubt|pitch|comment&quot;,
+  &quot;objection&quot;: &quot;&lt;bank objection, verbatim, or &#x27;not in the bank&#x27;&gt;&quot;,
+  &quot;where&quot;: &quot;&lt;heading or line it sits under&gt;&quot;,
+  &quot;answer&quot;: &quot;&lt;bank answer, verbatim, or &#x27;no answer on file&#x27;&gt;&quot;}],
+ &quot;likely_comments&quot;: [{&quot;comment&quot;: &quot;&lt;as a viewer would type it&gt;&quot;, &quot;objection&quot;: &quot;&lt;bank objection or &#x27;not in the bank&#x27;&gt;&quot;}],
+ &quot;new_objections&quot;: [&quot;&lt;worries the bank doesn&#x27;t hold, in the viewers&#x27; words&gt;&quot;]}
+
+--- WHAT THE VIEWERS SAID ---
+{said}
+
+--- THE OBJECTION BANK ---
+{bank}
+</pre>
+  </div>
+  <div class="prompt">
+    <div class="bar2"><span class="file">components/quality-checks/prompts/hidden-boxes-v1-damon.md · where faces, product and words sit on a frame</span></div>
+<pre># Where things sit on the frame (v1)
+
+Look at this 9:16 ad frame. Find every face, the product, and every block of
+on-screen text. Give each a box in coordinates from 0 to 1000, where (0,0) is
+the top-left corner and (1000,1000) is the bottom-right of the whole frame.
+
+Only list what is actually there. Don&#x27;t guess at things you can&#x27;t see.
+
+Return JSON only:
+{&quot;items&quot;: [{&quot;what&quot;: &quot;face|product|text&quot;, &quot;label&quot;: &quot;&lt;a few words, e.g. &#x27;man&#x27;s face&#x27;, &#x27;the product&#x27;, &#x27;headline&#x27;&gt;&quot;,
+  &quot;box&quot;: [x_min, y_min, x_max, y_max]}]}
+</pre>
+  </div>
+  <div class="callout">
+    <h3>The viewer card used in the first test</h3>
+    <p>Taken from the avatar's profile. Written first person, with no marketing words.</p>
+    <blockquote>[the card, 4 to 7 first-person sentences from your avatar profile]</blockquote>
+  </div>
+</section>
+
+<section>
+  <div class="decide">
+    <div class="eyebrow" style="color:var(--accent)">Decided · 2 Oct</div>
+    <h2>A failed ad blocks</h2>
+    <p>It goes back to the writing step automatically and gets re-read. After 2 failed rounds it comes to you with the viewers' words. "Not for me" comes to you straight away.</p>
+  </div>
+</section>
+
+<footer>Built 2 Oct 2026 from Andrei Lunev's GreekOut II talk and one test run. A run's files are filed in its own run folder, under viewer-check/. Mirror: components/quality-checks/VIEWER-CHECK.md. Code: components/quality-checks/marketing_chain_checks/viewer.py.</footer>
+</div>
+
+<script>
+const runs=[
+ {name:"Viewer 1",when:"11:40pm, in bed",ours:5,posts:[
+  ["a real post A",1],["a real post B",6],["a real post C",1],["a real post D",1],["OURS",12],["a real post E",5],["a real post F",1],["a real post G",1],["a real post H",2],["a real post I",1]]},
+ {name:"Viewer 2",when:"4:15pm, on the bus",ours:7,posts:[
+  ["a real post B",1],["a real post C",1],["a real post G",1],["a real post D",2],["a real post A",1],["a real post H",1],["OURS",12],["a real post E",1],["a real post F",1],["a real post I",1]]},
+ {name:"Viewer 3",when:"1:10am, can't sleep",ours:3,posts:[
+  ["a real post G",1],["a real post C",1],["OURS",25],["a real post A",1],["a real post I",1],["a real post D",1],["a real post B",3],["a real post E",2],["a real post H",1],["a real post F",1]]}
+];
+const feed=document.getElementById("feed");
+runs.forEach(r=>{
+  const card=document.createElement("article");card.className="viewer";
+  const rows=r.posts.map((p,i)=>{
+    const ours=i+1===r.ours, s=p[1], pct=Math.min(100,Math.round(s/25*100));
+    const t=ours&&s>=25?"end":"0:"+String(s).padStart(2,"0");
+    return `<div class="row${ours?" ours":""}"><span class="n">${i+1}</span><span><span style="display:block;margin-bottom:3px">${p[0]}</span><span class="bar"><i style="width:${Math.max(pct,3)}%"></i></span></span><span class="t">${t}</span></div>`;
+  }).join("");
+  card.innerHTML=`<header><h3>${r.name}</h3><span class="when">${r.when}</span></header><div class="scroll">${rows}</div>`;
+  feed.appendChild(card);
+});
+document.getElementById("copy-prompt").addEventListener("click",e=>{
+  const txt=document.getElementById("prompt-text").innerText, b=e.currentTarget;
+  navigator.clipboard.writeText(txt).then(()=>{b.textContent="Copied"},()=>{
+    const r=document.createRange();r.selectNodeContents(document.getElementById("prompt-text"));
+    const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selected — press Copy"});
+  setTimeout(()=>{b.textContent="Copy prompt"},2500);
+});
+</script>
+<script>
+(()=>{
+const LEN=25, OFFER=21, reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait=ms=>new Promise(r=>setTimeout(r,reduce?Math.min(ms,120):ms));
+const $=id=>document.getElementById(id);
+const FACES=["#E8B48A","#8D5A3B","#C68B59","#5C3A21","#F1C9A0"];
+const REAL={name:"An ad that passes",example:true,viewers:[
+ {when:"11:40pm",feed:["a real post","a real post","a real post"],stop:true,left:21,tap:true,say:"[the viewer's own words]"},
+ {when:"4:15pm",feed:["a real post","a real post","a real post"],stop:true,left:25,tap:true,say:"[the viewer's own words]"},
+ {when:"1:10am",feed:["a real post","a real post","a real post"],stop:true,left:18,tap:false,say:"[the viewer's own words]"},
+ {when:"7:20am",feed:["a real post","a real post","a real post"],stop:true,left:25,tap:true,say:"[the viewer's own words]"},
+ {when:"12:30pm",feed:["a real post","a real post","a real post"],stop:true,left:18,tap:true,say:"[the viewer's own words]"}],
+ feedStop:.20};
+const WEAK={name:"A weak ad",example:true,viewers:[
+ {when:"11:40pm",feed:REAL.viewers[0].feed,stop:false,left:1,tap:false,say:"another 'secret routine' text on a white screen. scrolled."},
+ {when:"4:15pm",feed:REAL.viewers[1].feed,stop:false,left:1,tap:false,say:"looks like every other ad. gone."},
+ {when:"1:10am",feed:REAL.viewers[2].feed,stop:true,left:3,tap:false,say:"wait what is that... oh it's an ad. nah."},
+ {when:"7:20am",feed:REAL.viewers[3].feed,stop:false,left:1,tap:false,say:"didn't get it."},
+ {when:"12:30pm",feed:REAL.viewers[4].feed,stop:false,left:2,tap:false,say:"stock photo guy, skip."}],
+ feedStop:.20};
+let scenario="real", busy=false;
+const pos=i=>{const s=document.querySelector(`.stn[data-i="${i}"]`), t=$("track");return s.offsetLeft+s.offsetWidth/2-26;};
+function moveTo(i){$("token").style.transform=`translateX(${pos(i)}px)`;}
+function mood(happy){$("mouth").setAttribute("d",happy?"M20 37q6 5 12 0":"M20 40q6 -5 12 0");}
+function say(t){$("ticker").textContent=t;}
+function lit(i,cls){document.querySelectorAll(".stn").forEach(s=>{if(+s.dataset.i===i){s.classList.remove("lit","good","bad");s.classList.add(cls);}});}
+function resetStations(){document.querySelectorAll(".stn").forEach(s=>s.classList.remove("lit","good","bad"));}
+function face(c){return `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="${c}"/><circle cx="8" cy="10" r="1.3" fill="#1b1b1b"/><circle cx="14" cy="10" r="1.3" fill="#1b1b1b"/><path d="M7.5 14.5q3.5 2.5 7 0" stroke="#1b1b1b" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>`;}
+function buildPhones(sc){
+  $("phones").innerHTML=sc.viewers.map((v,i)=>`<div class="phone"><div class="who">${face(FACES[i])}Viewer ${i+1} · ${v.when}</div>
+   <div class="screen"><div class="reel" id="reel${i}">${v.feed.map(f=>`<div class="post">“${f}”</div>`).join("")}
+   <div class="post ours"><span class="tag">@yourbrand · Sponsored</span><span>${sc===REAL||scenario!=="real"&&sc!==WEAK?"[your ad, in a few words]":"Text on a white screen: “the secret routine”"}</span><span class="sec" id="sec${i}">0:00</span><div class="wbar"><i id="w${i}"></i></div></div>
+   <div class="post">…</div><div class="post">…</div></div></div>
+   <div class="bubble" id="b${i}"></div></div>`).join("");
+}
+function stats(sc){
+  const n=sc.viewers.length, stop=sc.viewers.filter(v=>v.stop).length, reach=sc.viewers.filter(v=>v.stop&&v.left>=OFFER).length,
+   act=sc.viewers.filter(v=>v.tap).length, avg=sc.viewers.reduce((a,v)=>a+Math.min(v.left,LEN),0)/n;
+  const curve=[...Array(LEN+1).keys()].map(t=>sc.viewers.filter(v=>Math.min(v.left,LEN)>=t).length/n);
+  const checks=[["Most stopped",stop>=3],["Beat the real posts",stop/n>sc.feedStop],["Most stayed to the price",reach>=3],["Nobody saw an ad before stopping",true],["Most would tap or tell a friend",act>=3]];
+  return {stop,reach,act,avg,curve,checks,pass:checks.every(c=>c[1]),n};
+}
+function board(sc,st,show){
+  $("lights").innerHTML=st.checks.map((c,i)=>`<div class="light ${show?(c[1]?"on":"off"):""}" id="l${i}"><i></i>${c[0]}</div>`).join("");
+  const nums=[[`${Math.round(st.stop/st.n*100)}%`,`hook rate · real posts ${Math.round(sc.feedStop*100)}%`],[`${st.avg.toFixed(1)}s`,`avg watch of ${LEN}s`],[`${Math.round(st.reach/st.n*100)}%`,`reach the price at 0:${OFFER}`],[`${Math.round(st.act/st.n*100)}%`,"would tap or tell a friend"]];
+  $("nums").innerHTML=nums.map(x=>`<div class="num"><b>${show?x[0]:"–"}</b><span>${x[1]}</span></div>`).join("");
+  const W=300,H=130,px=t=>14+t/LEN*(W-24),py=v=>H-18-v*(H-34);
+  let pts=st.curve.map((v,t)=>`${px(t).toFixed(1)},${py(v).toFixed(1)}`).join(" ");
+  $("curve").innerHTML=`<line x1="14" y1="${py(0)}" x2="${W-10}" y2="${py(0)}" stroke="var(--line)"/><line x1="14" y1="${py(1)}" x2="${W-10}" y2="${py(1)}" stroke="var(--line)" stroke-dasharray="3 3"/>
+   <line x1="${px(OFFER)}" y1="${py(1)-6}" x2="${px(OFFER)}" y2="${py(0)}" stroke="var(--warn)" stroke-dasharray="4 3"/><text x="${px(OFFER)-3}" y="${py(1)-8}" fill="var(--warn)" font-size="9" text-anchor="end" font-family="IBM Plex Mono, monospace">price at 0:21</text>
+   <text x="14" y="${H-4}" fill="var(--muted)" font-size="9" font-family="IBM Plex Mono, monospace">0:00</text><text x="${W-10}" y="${H-4}" fill="var(--muted)" font-size="9" text-anchor="end" font-family="IBM Plex Mono, monospace">0:25</text>
+   <text x="10" y="${py(1)+3}" fill="var(--muted)" font-size="9" text-anchor="end" font-family="IBM Plex Mono, monospace"></text>
+   ${show?`<polyline id="cline" points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>`:""}`;
+  const cl=$("cline"); if(cl&&!reduce){const L=cl.getTotalLength();cl.style.strokeDasharray=L;cl.style.strokeDashoffset=L;cl.getBoundingClientRect();cl.style.transition="stroke-dashoffset 1.6s ease";cl.style.strokeDashoffset=0;}
+}
+async function scroll(sc){
+  await Promise.all(sc.viewers.map(async(v,i)=>{
+    const reel=$(`reel${i}`); await wait(i*180);
+    for(let k=1;k<=v.feed.length;k++){reel.style.transform=`translateY(-${k*58}px)`;await wait(420);}
+    const w=$(`w${i}`), secEl=$(`sec${i}`), watch=Math.min(v.left,LEN);
+    if(!v.stop){w.style.width=`${watch/LEN*100}%`;secEl.textContent=`swiped at 0:0${watch}`;await wait(500);reel.style.transform=`translateY(-${v.feed.length*58+156}px)`;}
+    else{w.style.width=`${watch/LEN*100}%`;let s=0;const tick=setInterval(()=>{s=Math.min(s+1,watch);secEl.textContent=`0:${String(s).padStart(2,"0")}`;if(s>=watch)clearInterval(tick);},reduce?5:1400/Math.max(watch,1));await wait(1500);secEl.textContent=watch>=LEN?"watched to the end":`swiped at 0:${String(watch).padStart(2,"0")}`;}
+    const b=$(`b${i}`); b.textContent=`“${v.say}”`; b.className=`bubble show ${v.stop&&v.tap?"yes":"no"}`;
+  }));
+}
+async function money(on){$("money").style.width=on?"100%":"0";$("moneytxt").textContent=on?"spent now":"$0";}
+async function runOnce(sc,label){
+  buildPhones(sc); board(sc,stats(sc),false);
+  say(`${label}: the viewers get the brief dropped into their real feed…`);
+  moveTo(5); lit(5,"lit"); await wait(600);
+  await scroll(sc);
+  const st=stats(sc); board(sc,st,true); await wait(900);
+  return st;
+}
+async function play(){
+  if(busy)return; busy=true; $("go").disabled=true; resetStations(); money(false); mood(true);
+  const steps=["We swiped a winning ad.","Teardown strips it to its bones.","Writing fills in our words: openings, middle, close.","The brief is written down in the one fixed shape.","The checks look it over: same structure as the swipe, right people, claims we can make."];
+  for(let i=0;i<5;i++){moveTo(i);lit(i,"good");say(steps[i]);await wait(750);}
+  const ex=true;
+  let st=await runOnce(scenario==="real"?REAL:WEAK, ex?"Round 1 (example)":"Round 1");
+  let round=1;
+  while(!st.pass){
+    lit(5,"bad"); mood(false);
+    if(scenario==="twice"&&round===2){moveTo(6);lit(6,"bad");say("Failed twice. It stops here and goes to the owner's desk with the viewers' words. Nothing was made, $0 spent.");$("foot").innerHTML='<span class="example">Example</span> · this run is made up to show the path. The other two runs are examples too.';busy=false;$("go").disabled=false;return;}
+    say("They passed it by in the first seconds. Back to the writing step for the openings, carrying exactly what they said.");
+    await wait(900); moveTo(2); lit(2,"lit"); await wait(1100); mood(true);
+    say("Openings rewritten. A fresh set of 5 viewers scrolls it again…"); moveTo(3); await wait(600); moveTo(4); await wait(600);
+    round++;
+    st=await runOnce(scenario==="twice"?WEAK:REAL,`Round ${round}${ex?" (example)":""}`);
+  }
+  lit(5,"good"); moveTo(6); lit(6,"good"); say(`Worth making: ${Math.round(st.stop/st.n*100)}% stopped (real posts ${Math.round(REAL.feedStop*100)}%), ${st.avg.toFixed(1)}s average watch, ${Math.round(st.reach/st.n*100)}% reached the price.`);
+  await wait(1400); moveTo(7); lit(7,"good"); money(true); say("Only now does real money go out: people, scenes, voice. Everything before this cost cents.");
+  $("foot").innerHTML=ex?'<span class="example">Example</span> · the weak ad is made up to show the send-back. Round 2 reuses the passing example\'s viewers.':'<span class="example">Example</span> · numbers made up to show the path. A real run shows your own 5 viewers in your avatar\'s feed.';
+  busy=false; $("go").disabled=false;
+}
+function pick(id){scenario=id;["real","weak","twice"].forEach(k=>$(`sc-${k}`).setAttribute("aria-pressed",k===id));resetStations();moveTo(0);money(false);mood(true);
+  const sc=id==="real"?REAL:WEAK; buildPhones(sc); board(sc,stats(sc),false); say("Press play.");}
+["real","weak","twice"].forEach(k=>$(`sc-${k}`).addEventListener("click",()=>{if(!busy)pick(k);}));
+$("go").addEventListener("click",play);
+pick("real"); requestAnimationFrame(()=>moveTo(0));
+addEventListener("resize",()=>{});
+// first frame: show the real result at rest so the page is complete before anyone presses play
+board(REAL,stats(REAL),true);
+REAL.viewers.forEach((v,i)=>{const b=$(`b${i}`);b.textContent=`“${v.say}”`;b.className=`bubble show ${v.tap?"yes":"no"}`;const w=$(`w${i}`);w.style.transition="none";w.style.width=`${Math.min(v.left,LEN)/LEN*100}%`;$(`sec${i}`).textContent=v.left>=LEN?"watched to the end":`swiped at 0:${v.left}`;$(`reel${i}`).style.transform=`translateY(-${v.feed.length*58}px)`;requestAnimationFrame(()=>{w.style.transition="";});});
+})();
+</script>

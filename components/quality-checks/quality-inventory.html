@@ -1,0 +1,211 @@
+<title>Quality Check Inventory</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column. Four component cards up top, then name-clash tables, then per-tool lists. */
+:root{
+  --bg:#F2F3F6; --panel:#FFFFFF; --fg:#16181D; --muted:#5D6270; --line:#DADDE4;
+  --damon:#2B54E8; --damon-soft:#E3E9FD; --dev:#0F7B6C; --dev-soft:#DDF1ED; --warn:#9A6400; --warn-soft:#F7EBD2;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --panel:#1A1D24; --fg:#E9EBF0; --muted:#9BA1AF; --line:#2C303A;
+  --damon:#7D9BFF; --damon-soft:#1F2945; --dev:#4CC7B4; --dev-soft:#123029; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --panel:#1A1D24; --fg:#E9EBF0; --muted:#9BA1AF; --line:#2C303A;
+  --damon:#7D9BFF; --damon-soft:#1F2945; --dev:#4CC7B4; --dev-soft:#123029; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0}
+.wrap{max-width:900px;margin:0 auto;padding-inline:20px;padding-block:40px 80px;display:flex;flex-direction:column;gap:52px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.1rem,6vw,3.2rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.55rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0;max-width:68ch}
+section{display:flex;flex-direction:column;gap:16px}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.12rem;color:var(--muted)}
+.muted{color:var(--muted)}
+code,.path{font:400 .8rem/1.4 var(--mono);word-break:break-word}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.card h3{font-family:var(--mono);font-size:1rem;font-weight:500}
+.who{font:600 .72rem/1 var(--mono);padding:5px 8px;border-radius:999px;white-space:nowrap}
+.who.damon{background:var(--damon-soft);color:var(--damon)} .who.dev{background:var(--dev-soft);color:var(--dev)}
+.card.damon{border-top:4px solid var(--damon)} .card.dev{border-top:4px solid var(--dev)}
+.kv{display:grid;grid-template-columns:88px 1fr;gap:4px 10px;font-size:.88rem}
+.kv dt{color:var(--muted);font:500 .72rem/1.6 var(--mono);text-transform:uppercase;letter-spacing:.05em}
+.kv dd{margin:0;min-width:0}
+.big{font-size:1rem;font-weight:600}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 .72rem/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{white-space:nowrap}
+.pill{display:inline-block;font:600 .72rem/1 var(--mono);padding:4px 8px;border-radius:999px;white-space:nowrap}
+.pill.d{background:var(--damon-soft);color:var(--damon)} .pill.y{background:var(--dev-soft);color:var(--dev)} .pill.w{background:var(--warn-soft);color:var(--warn)}
+.clash{background:var(--warn-soft);border:1px solid var(--warn);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.clash h3{color:var(--warn)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem}
+.flow span.box{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-family:var(--mono);font-size:.78rem}
+.flow span.box.d{border-color:var(--damon);color:var(--damon)} .flow span.box.y{border-color:var(--dev);color:var(--dev)}
+.flow .arr{color:var(--muted)}
+footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:480px){.wrap{padding-inline:16px}.kv{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:14px">
+  <div class="eyebrow">Inventory · read from the workspace · 2 Oct 2026 · updated after the rename</div>
+  <h1>Quality Check Inventory</h1>
+  <p class="lede">Everything in the workspace whose name says quality, QC, check, review, judge, gate or audit. What each one actually does, who owns it, and where two names sound alike but mean different things.</p>
+  <div class="flow"><span class="pill d">blue = the owner</span><span class="pill y">green = the developer's (a curator keeps the definitions)</span></div>
+</header>
+
+<section>
+  <div class="eyebrow">The four components</div>
+  <h2>Four folders. Yours is now marketing-chain-checks</h2>
+  <div class="cards">
+    <article class="card damon">
+      <div class="top"><h3>marketing-chain-checks/</h3><span class="who damon">the owner</span></div>
+      <p class="big">Checks the ads and briefs our chains make, stops bad work moving on, and checks the chains themselves. Was called quality-checks until 2 Oct.</p>
+      <dl class="kv">
+        <dt>Has</dt><dd>The hold every chain uses (5 gates: inputs · elements · copy · media · delivery) · price, unfilled-slot and copy checks · the creative review after every stage · the QC log in every run · the viewer check (new today)</dd>
+        <dt>Called by</dt><dd>Every the owner chain: video teardown, copywriter, email, image, casting, calendar, intake, meta upload, video edit, and the lab teardowns</dd>
+        <dt>Judges</dt><dd>A machine (Gemini / GPT), plus code</dd>
+        <dt>Path</dt><dd><span class="path">components/quality-checks/</span> · a stub at the old path forwards old links</dd>
+      </dl>
+    </article>
+    <article class="card dev">
+      <div class="top"><h3>qc-checks/</h3><span class="who dev">the developer · the definitions curator</span></div>
+      <p class="big">Checks finished text and built pages for defects, and files what it finds for a person to rule on.</p>
+      <dl class="kv">
+        <dt>Has</dt><dd><b>text_check</b> (live): typos and banned words against a brand's QC dictionary · <b>voice_check</b> (pending): would she say it like this · <b>avatar_walk</b> (pending): clicks through a built funnel as the avatar</dd>
+        <dt>Called by</dt><dd>The /qc-check skill and the mini worker. Your chains don't call it.</dd>
+        <dt>Judges</dt><dd>Code and a dictionary. Output goes to <b>review</b> for a person.</dd>
+        <dt>Path</dt><dd><span class="path">components/qc-checks/</span></dd>
+      </dl>
+    </article>
+    <article class="card dev">
+      <div class="top"><h3>review/</h3><span class="who dev">the developer · the definitions curator</span></div>
+      <p class="big">Not a checker. It's the record of a person's verdict: ask, then verdict, then close.</p>
+      <dl class="kv">
+        <dt>Has</dt><dd>The review record ("RQ-…"), the module that files and reads them, panels on the platform. Its format is frozen.</dd>
+        <dt>Called by</dt><dd>/review-request, /review-status, qc-checks when it files findings</dd>
+        <dt>Judges</dt><dd>A person (the definitions curator, a lead, you)</dd>
+        <dt>Path</dt><dd><span class="path">components/review/</span></dd>
+      </dl>
+    </article>
+    <article class="card dev">
+      <div class="top"><h3>page-picture-review/</h3><span class="who dev">the developer</span></div>
+      <p class="big">Numbers every picture slot on a built landing page and records the decision on each one.</p>
+      <dl class="kv">
+        <dt>Has</dt><dd>Slot numbering, fit, the page's picture decisions (a product's Picture Index runs on it)</dd>
+        <dt>Called by</dt><dd>Landing-page work on Brand A</dd>
+        <dt>Judges</dt><dd>People, clicking on the page</dd>
+        <dt>Path</dt><dd><span class="path">components/page-picture-review/</span></dd>
+      </dl>
+    </article>
+  </div>
+  <div class="flow">
+    <span class="muted">How they connect:</span>
+    <span class="box y">qc-checks</span><span class="arr">→ files findings into →</span><span class="box y">review</span>
+    <span class="muted">· marketing-chain-checks runs on its own and calls neither.</span>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Two layers</div>
+  <h2>Checks inside the loop, and checks on the loop</h2>
+  <p class="muted">How marketing-chain-checks is organised from 2 Oct.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Layer</th><th>What it checks</th><th>Built</th><th>Not built yet</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Inside the loop</b></td><td>Each ad or brief as it moves through a chain. It stops it or sends it back.</td><td>The hold and its 5 gates · price, unfilled and copy checks · the creative review after every stage · the viewer check after the writing</td><td>—</td></tr>
+      <tr><td><b>2 · On the loop</b></td><td>The chain itself: is it working, and is it current?</td><td>The QC log: every round filed in the run, and a cause that would come back written up as a change to the chain</td><td>The same viewer complaint across briefs turning into a prompt change on its own · the viewer check's calls measured against live Meta results · a check that a chain's prompts and avatar files are the current ones</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Other checks on the system, owned by others: /system-review (does a folder follow the workspace rules) and the control room's machine check.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Where the names collide</div>
+  <h2>Same word, different thing</h2>
+
+  <div class="clash">
+    <h3>"quality-checks" and "qc-checks" <span class="pill d">renamed 2 Oct</span></h3>
+    <p>These were two different components with almost the same name. Yours is now <b>marketing-chain-checks</b>. <b>qc-checks</b> stays the developer's: it checks finished text and pages and files findings for a person. the developer ruled on 30 Sep that the two stay separate. Your component's notes used to say it calls qc-checks. No code ever did, and that line is now gone.</p>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Word</th><th>Where it appears</th><th>What it means there</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="5"><b>review</b></td><td><span class="path">marketing-chain-checks · review.py</span> <span class="pill d">the owner</span></td><td>A machine reads each stage's output against its sources (the "creative review")</td></tr>
+      <tr><td><span class="path">review/</span> <span class="pill y">the developer</span></td><td>A person's verdict on an asset, as a record</td></tr>
+      <tr><td><span class="path">page-picture-review/</span> <span class="pill y">the developer</span></td><td>People deciding each picture on a built page</td></tr>
+      <tr><td><span class="path">/system-review</span> skill <span class="pill y">the developer · the definitions curator</span></td><td>Does a folder follow the workspace's rules. About code and folders, not ads.</td></tr>
+      <tr><td><span class="path">review_page.py</span> in meta-upload, language-layer · <span class="path">build_review.py</span> in email</td><td>A page for a person to look things over before they go out</td></tr>
+      <tr><td rowspan="5"><b>QC</b></td><td><span class="path">qc-checks/</span> <span class="pill y">the developer</span></td><td>The defect checks above</td></tr>
+      <tr><td><span class="path">/qc-check</span> skill <span class="pill y">the developer</span></td><td>Runs qc-checks' text check on a file you name</td></tr>
+      <tr><td><span class="path">video-production · qc.py</span> <span class="pill d">the owner</span></td><td>Every machine check on one video ad in one pass, each finding naming the station to fix</td></tr>
+      <tr><td><span class="path">email-production · sweep/qc.py</span> <span class="pill d">the owner</span></td><td>Each rebuilt email checked against its source email</td></tr>
+      <tr><td><span class="path">qc_log</span> <span class="pill d">the owner</span></td><td>The QC log in every run. One log: video-production's copy is a pointer to the one in marketing-chain-checks.</td></tr>
+      <tr><td rowspan="2"><b>as the avatar</b></td><td><span class="path">marketing-chain-checks · viewer check</span> <span class="pill d">the owner · live</span></td><td>5 viewers scroll a <b>brief</b> inside the avatar's feed. Do they stop, stay, tap?</td></tr>
+      <tr><td><span class="path">qc-checks · avatar_walk</span> <span class="pill y">the developer · pending</span></td><td>Clicks through a <b>built funnel</b> as the avatar. Can she find the button, is the page in the order of her doubts?</td></tr>
+      <tr><td rowspan="2"><b>check</b> (skills)</td><td><span class="path">/component-check</span></td><td>Does a tool for this already exist, before building one. Not a quality check.</td></tr>
+      <tr><td><span class="path">/gut-check</span></td><td>Two blind agents try to break a decision document. Not for ads.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">Checks built inside each tool</div>
+  <h2>Not components, part of their own tool</h2>
+  <p class="muted">Every <code>gates.py</code> below holds work through marketing-chain-checks' shared hold. The files under each tool are its own checks.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Tool</th><th>Its own checks</th></tr></thead>
+    <tbody>
+      <tr><td>video-teardown <span class="pill d">D</span></td><td>swipe match · cast match · spoken check (every spoken word is a word) · elements check · hole fill and claims check on the brief · the 4f audit (holds on anything but SHIP) · viewer gate</td></tr>
+      <tr><td>copywriter <span class="pill d">D</span></td><td>4f audit prompt (video loop)</td></tr>
+      <tr><td>video-production <span class="pill d">D</span></td><td>qc.py (all checks, one pass) · voice QC · audio check · elements and library checks · stage-5 QC, motion QC and variation QC prompts · plate check</td></tr>
+      <tr><td>video-edit <span class="pill d">D</span></td><td>sync check · six frames of the finished cut against the cut sheet</td></tr>
+      <tr><td>image-production <span class="pill d">D</span></td><td>judge (picture judge prompt) · gates · headline audit</td></tr>
+      <tr><td>image-teardown (lab) <span class="pill d">D</span></td><td>judge · draft judge (stage 8) · gates (elements, copy, viewer) · check</td></tr>
+      <tr><td>image-edit <span class="pill d">D</span></td><td>compare judge (before vs after picture)</td></tr>
+      <tr><td>casting <span class="pill d">D</span></td><td>judge · gates</td></tr>
+      <tr><td>email-production <span class="pill d">D</span></td><td>sweep/qc.py · check_month · stage 8c check prompt · review page</td></tr>
+      <tr><td>marketing-calendar <span class="pill d">D</span></td><td>gates · review · brand check</td></tr>
+      <tr><td>ad-variations <span class="pill d">D</span></td><td>stage 6 gates prompt</td></tr>
+      <tr><td>audio-teardown <span class="pill d">D</span></td><td>effects check prompt</td></tr>
+      <tr><td>intake · research-gatherer <span class="pill d">D</span></td><td>gates</td></tr>
+      <tr><td>copy · email · page teardowns, outlier brief, pages (lab) <span class="pill d">D</span></td><td>gates (brief check prompt in outlier brief)</td></tr>
+      <tr><td>meta-upload · language-layer <span class="pill d">D</span></td><td>review page for a person</td></tr>
+      <tr><td>naming · metrics · brandpath</td><td>self-check · brand files check · alias check (data checks, not ads)</td></tr>
+      <tr><td>system-integration · control-room</td><td>queue check · machine check (the machine itself, not ads)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">In one line each</div>
+  <h2>Who checks what</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Question</th><th>Answered by</th></tr></thead>
+    <tbody>
+      <tr><td>Is this ad or brief right before we spend?</td><td>marketing-chain-checks <span class="pill d">the owner</span></td></tr>
+      <tr><td>Would the avatar stop and tap?</td><td>marketing-chain-checks · viewer check <span class="pill d">the owner</span></td></tr>
+      <tr><td>Does this finished copy have typos or banned words?</td><td>qc-checks · text check <span class="pill y">the developer</span></td></tr>
+      <tr><td>Can the avatar get through the built funnel?</td><td>qc-checks · avatar walk <span class="pill y">the developer · pending</span></td></tr>
+      <tr><td>What did a person rule?</td><td>review <span class="pill y">the developer</span></td></tr>
+      <tr><td>Which picture goes in which slot on the page?</td><td>page-picture-review <span class="pill y">the developer</span></td></tr>
+      <tr><td>Does this folder follow the workspace rules?</td><td>/system-review <span class="pill y">the developer · the definitions curator</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Read from the workspace on 2 Oct 2026: folder names, each component's own CLAUDE.md, skill descriptions, and which files import which. Media, icons and swipe files with "review" or "check" in their names left out. Mirror: components/quality-checks/QUALITY-INVENTORY.md.</footer>
+</div>

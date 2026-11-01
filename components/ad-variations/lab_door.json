@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "machine/run.py plan <teardown run> --brand [--n --k --label] [--dry-run]; run.py files its own plan under runs/ad-variations/<brand>/<label>/ in this checkout (LD-7 (four more doors))",
+  "script": "components/ad-variations/machine/run.py",
+  "subcommand": "plan",
+  "positionals": ["source"],
+  "flags": {"n": "--n", "k": "--k", "label": "--label"},
+  "bool_flags": {"dry_run": "--dry-run"},
+  "brand_flag": "--brand",
+  "out": {"flag": null, "runs_root_flag": null, "run_dir": null},
+  "refuse": ["model", "rerun_from", "plan"]
+}

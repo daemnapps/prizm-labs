@@ -1,0 +1,515 @@
+{
+ "_what": "The brand onboarding checklist, machine-readable. The 'activate Prizm Lab' flow (CLAUDE.md at the repo root) walks it one item at a time. The same list for people is ONBOARDING.md beside this file.",
+ "version": 1,
+ "progress_file": "brands/<brand>/onboarding-progress.json",
+ "progress_shape": {
+  "brand": "<brand>",
+  "done": [
+   "<item id>"
+  ],
+  "skipped": [
+   "<item id>"
+  ],
+  "updated": "<yyyy-mm-dd>"
+ },
+ "groups": [
+  "Brand basics",
+  "Products",
+  "Customers",
+  "Creative",
+  "Accounts & keys",
+  "First run"
+ ],
+ "items": [
+  {
+   "id": "brand-name",
+   "group": "Brand basics",
+   "name": "Your brand's name",
+   "why": "Every tool files its work under your brand's folder and writes your name in ads.",
+   "tools": [
+    "every tool"
+   ],
+   "how": [
+    "answer a question"
+   ],
+   "required": true,
+   "ask": "What's your brand called, written exactly the way it appears in your ads?",
+   "fills": [
+    "brands/<brand>/ (the folder name, lower-case-with-dashes)",
+    "operations/brand.json → brand, label",
+    "strategy/offer-page.json → brand_name"
+   ]
+  },
+  {
+   "id": "website",
+   "group": "Brand basics",
+   "name": "Your website",
+   "why": "Claude reads it to fill in most of the rest for you, so you type as little as possible.",
+   "tools": [
+    "onboarding (Claude reads it for the items below)"
+   ],
+   "how": [
+    "paste a link"
+   ],
+   "required": true,
+   "ask": "What's your website address?",
+   "fills": [
+    "README.md (one line: what this brand is, and the site)"
+   ]
+  },
+  {
+   "id": "story",
+   "group": "Brand basics",
+   "name": "Your brand story",
+   "why": "Video scripts, emails and stories are told through it.",
+   "tools": [
+    "video-teardown",
+    "story-machine",
+    "email-production",
+    "ad-variations",
+    "quality-checks"
+   ],
+   "how": [
+    "Claude drafts it from your website's About page",
+    "you confirm or correct it"
+   ],
+   "required": true,
+   "ask": "Here's the story I read off your site — what's wrong or missing?",
+   "fills": [
+    "brand-identity/story.md"
+   ],
+   "claude_can_fetch": "About / Our story page"
+  },
+  {
+   "id": "position",
+   "group": "Brand basics",
+   "name": "What you claim, and why it works",
+   "why": "Every ad, page and brief is checked against it; it's the base everything else reads.",
+   "tools": [
+    "video-teardown",
+    "video-production",
+    "copywriter",
+    "language-layer",
+    "creative-diversity",
+    "distinct-six"
+   ],
+   "how": [
+    "Claude drafts it from your site and reviews",
+    "answer a few questions"
+   ],
+   "required": true,
+   "ask": "In one sentence: who is this for, what does it do, and why does it work when other things didn't?",
+   "fills": [
+    "brand-identity/position.md"
+   ],
+   "claude_can_fetch": "product pages, homepage, reviews"
+  },
+  {
+   "id": "look",
+   "group": "Brand basics",
+   "name": "Your logo, colours and fonts",
+   "why": "Pictures and videos come out on-brand instead of generic.",
+   "tools": [
+    "image-production",
+    "image-teardown",
+    "image-edit",
+    "video-production",
+    "video-edit",
+    "email-production"
+   ],
+   "how": [
+    "drop files (logo — PNG or SVG)",
+    "Claude reads colours from your product photos",
+    "Claude reads fonts from your website"
+   ],
+   "required": true,
+   "ask": "Drop your logo here (a PNG with a clear background is best). Do you have brand fonts, or should I use what your site uses?",
+   "fills": [
+    "brand-identity/ (logo files)",
+    "brand-identity/palette.md",
+    "brand-identity/fonts.md"
+   ],
+   "claude_can_fetch": "fonts and colours from the website"
+  },
+  {
+   "id": "core-message",
+   "group": "Brand basics",
+   "name": "The one message every ad carries",
+   "why": "Lets the creative tools check every ad says the same core thing.",
+   "tools": [
+    "creative-diversity",
+    "distinct-six",
+    "meta-upload"
+   ],
+   "how": [
+    "Claude proposes it from your position and reviews",
+    "you pick or reword"
+   ],
+   "required": false,
+   "ask": "If a customer remembered one sentence from your ads, what should it be?",
+   "fills": [
+    "brand-identity/core-message/core-message.json"
+   ]
+  },
+  {
+   "id": "best-seller",
+   "group": "Products",
+   "name": "Your best-selling product",
+   "why": "Every brief, script and image is built around a real product with real facts.",
+   "tools": [
+    "video-teardown",
+    "video-production",
+    "image-production",
+    "image-teardown",
+    "copywriter",
+    "email-production",
+    "video-edit"
+   ],
+   "how": [
+    "paste the product page link — Claude fetches the facts",
+    "drop product photos (or Claude saves them from the page)"
+   ],
+   "required": true,
+   "ask": "What's your best seller? Paste the link to its product page.",
+   "fills": [
+    "products/<product>/product.md",
+    "products/<product>/images/"
+   ],
+   "claude_can_fetch": "name, price, ingredients/specs, claims, photos from the product page"
+  },
+  {
+   "id": "other-products",
+   "group": "Products",
+   "name": "Any other products you want ads for",
+   "why": "Lets you make ads for more than the best seller.",
+   "tools": [
+    "same as the best seller"
+   ],
+   "how": [
+    "paste product page links"
+   ],
+   "required": false,
+   "ask": "Any other products you want to make ads for? Paste their links, or say 'not now'.",
+   "fills": [
+    "products/<product>/ (one folder each)"
+   ],
+   "claude_can_fetch": "same as the best seller"
+  },
+  {
+   "id": "offer",
+   "group": "Products",
+   "name": "Your main offer",
+   "why": "Every ad sells into one offer; tools use it for the call to action and to check links.",
+   "tools": [
+    "creative-diversity",
+    "meta-upload",
+    "email-production",
+    "naming"
+   ],
+   "how": [
+    "paste the offer or landing page link",
+    "answer a question (price, deal, guarantee)"
+   ],
+   "required": true,
+   "ask": "What's the deal you lead with (price, bundle, discount, guarantee)? Paste the page where people buy it.",
+   "fills": [
+    "offers/offers.json",
+    "strategy/offer-page.json",
+    "meta/offer.json"
+   ],
+   "claude_can_fetch": "price and guarantee from the offer page (dated)"
+  },
+  {
+   "id": "funnels",
+   "group": "Products",
+   "name": "Your landing pages",
+   "why": "Briefs get matched to a page that actually sells that product.",
+   "tools": [
+    "naming (page picker)",
+    "meta-upload",
+    "handoff-standard"
+   ],
+   "how": [
+    "paste links"
+   ],
+   "required": false,
+   "ask": "Do you send ads to any landing pages other than the product page? Paste the links.",
+   "fills": [
+    "web/funnels/funnels.json"
+   ]
+  },
+  {
+   "id": "avatar",
+   "group": "Customers",
+   "name": "Who your customer is",
+   "why": "Every ad is written for one specific person, not 'everyone'.",
+   "tools": [
+    "video-teardown",
+    "image-teardown",
+    "language-layer",
+    "email-production",
+    "research-gatherer",
+    "swipe-organic",
+    "swipe-paid",
+    "naming"
+   ],
+   "how": [
+    "answer a few questions",
+    "Claude drafts the profile from your reviews"
+   ],
+   "required": true,
+   "ask": "Describe your typical customer — who buys, what problem they had, and what they tried before you.",
+   "fills": [
+    "core-avatars/avatars.json",
+    "core-avatars/<avatar>/profile.md"
+   ]
+  },
+  {
+   "id": "reviews",
+   "group": "Customers",
+   "name": "Your customer reviews",
+   "why": "The tools write in your customers' real words, with a receipt on every line.",
+   "tools": [
+    "language-layer",
+    "research-gatherer",
+    "copywriter",
+    "email-production"
+   ],
+   "how": [
+    "paste the reviews page link — Claude fetches them",
+    "or drop a reviews export (CSV)"
+   ],
+   "required": true,
+   "ask": "Where are your reviews? Paste the page (your site, Amazon, Trustpilot…) or drop an export file.",
+   "fills": [
+    "intake/reviews/",
+    "core-avatars/<avatar>/language/"
+   ],
+   "claude_can_fetch": "public review pages"
+  },
+  {
+   "id": "language",
+   "group": "Customers",
+   "name": "Your customers' words (built for you)",
+   "why": "The language bank every copy tool draws from.",
+   "tools": [
+    "language-layer",
+    "copywriter",
+    "email-production",
+    "video-teardown"
+   ],
+   "how": [
+    "nothing to do — Claude builds it from your reviews"
+   ],
+   "required": false,
+   "ask": "(No question — Claude builds this from the reviews and tells you when it's done.)",
+   "fills": [
+    "core-avatars/<avatar>/language/"
+   ]
+  },
+  {
+   "id": "surveys-support",
+   "group": "Customers",
+   "name": "Surveys and support tickets",
+   "why": "More real customer words, pulled daily.",
+   "tools": [
+    "research-gatherer",
+    "language-layer"
+   ],
+   "how": [
+    "answer a question (which survey sheet / which helpdesk)"
+   ],
+   "required": false,
+   "ask": "Do you run a customer survey or a support helpdesk you'd like the tools to learn from? Say which, or 'not now'.",
+   "fills": [
+    "operations/language-pulls.json",
+    "operations/brand.json → accounts.helpdesk"
+   ]
+  },
+  {
+   "id": "competitors",
+   "group": "Creative",
+   "name": "Your competitors",
+   "why": "The swipe tools pull what's already working for them.",
+   "tools": [
+    "swipe-organic",
+    "swipe-paid",
+    "my-feeds",
+    "copywriter",
+    "language-layer",
+    "video-production"
+   ],
+   "how": [
+    "answer a question (names or links/handles)",
+    "Claude finds their sites and social accounts"
+   ],
+   "required": true,
+   "ask": "Who are the 3–5 brands your customers compare you to?",
+   "fills": [
+    "competitors/"
+   ],
+   "claude_can_fetch": "their websites and social handles"
+  },
+  {
+   "id": "first-swipes",
+   "group": "Creative",
+   "name": "Ads or posts you'd like to copy the structure of",
+   "why": "This is what the teardown tools take apart and rebuild for your brand.",
+   "tools": [
+    "video-teardown",
+    "image-teardown"
+   ],
+   "how": [
+    "paste links (TikTok, Instagram, Meta Ad Library, YouTube)",
+    "or drop files"
+   ],
+   "required": true,
+   "ask": "Paste 1–3 videos or image ads you wish were yours — anyone's.",
+   "fills": [
+    "intake/swipes.md (the links)"
+   ]
+  },
+  {
+   "id": "past-ads",
+   "group": "Creative",
+   "name": "Your own past ads and content",
+   "why": "The tools learn what already works for you and avoid repeating what didn't.",
+   "tools": [
+    "copywriter",
+    "image-teardown",
+    "video-teardown",
+    "video-production"
+   ],
+   "how": [
+    "drop files",
+    "paste your Meta Ad Library page link",
+    "or a Drive folder link"
+   ],
+   "required": false,
+   "ask": "Got ads or posts that did well for you? Drop them, or paste your Ad Library page.",
+   "fills": [
+    "intake/",
+    "ads/top/"
+   ],
+   "claude_can_fetch": "your public Meta Ad Library page"
+  },
+  {
+   "id": "brand-assets",
+   "group": "Creative",
+   "name": "Photo shoots and brand videos",
+   "why": "Real footage and photos to cut into new ads.",
+   "tools": [
+    "video-edit",
+    "video-production",
+    "image-production"
+   ],
+   "how": [
+    "paste a Drive/Dropbox folder link",
+    "or drop files"
+   ],
+   "required": false,
+   "ask": "Do you have product photos or brand video beyond the product page? Paste a folder link or drop them.",
+   "fills": [
+    "brand-assets/"
+   ]
+  },
+  {
+   "id": "creators",
+   "group": "Creative",
+   "name": "Creators you work with",
+   "why": "Briefs can be written for a specific creator's style and footage.",
+   "tools": [
+    "editor-onboarding",
+    "video-teardown",
+    "image-production"
+   ],
+   "how": [
+    "paste their handles"
+   ],
+   "required": false,
+   "ask": "Do you work with any creators or UGC people? Paste their handles, or 'not now'.",
+   "fills": [
+    "content-creators/"
+   ]
+  },
+  {
+   "id": "keys",
+   "group": "Accounts & keys",
+   "name": "Keys for the tools you use",
+   "why": "Each tool uses your own accounts — nothing is shared. Asked only right before a tool first needs one.",
+   "tools": [
+    "each tool lists its keys in its README"
+   ],
+   "how": [
+    "Claude tells you which key, where to get it, and opens .env for you to paste it in"
+   ],
+   "required": true,
+   "ask": "(Asked just before the first tool that needs it.) This step needs a {KEY} — here's where to get it: {WHERE}. Paste it into the .env file I've opened.",
+   "fills": [
+    ".env (never committed)"
+   ],
+   "keys": "see .env.example",
+   "when": "just_in_time"
+  },
+  {
+   "id": "drive",
+   "group": "Accounts & keys",
+   "name": "Google Drive (optional)",
+   "why": "Lets tools save Docs and files into your Drive instead of only on your computer.",
+   "tools": [
+    "video-teardown",
+    "image-teardown",
+    "image-production",
+    "email-production"
+   ],
+   "how": [
+    "Claude walks you through it when you first want something saved to Drive"
+   ],
+   "required": false,
+   "ask": "Want results saved into a Google Drive folder? (You can skip this — everything is saved on your computer either way.)",
+   "fills": [
+    ".env → GDRIVE_SA_KEY"
+   ],
+   "keys": "GDRIVE_SA_KEY",
+   "when": "just_in_time"
+  },
+  {
+   "id": "meta-account",
+   "group": "Accounts & keys",
+   "name": "Your Meta ad account (optional)",
+   "why": "Only for uploading ads to Meta or reading how they performed.",
+   "tools": [
+    "meta-upload",
+    "meta-strategy"
+   ],
+   "how": [
+    "answer a question (ad account, page and pixel ids — Claude shows you where to find them)"
+   ],
+   "required": false,
+   "ask": "Do you want the tools to upload ads to Meta for you? If yes, I'll show you where to find your ad account id.",
+   "fills": [
+    "meta/account.json",
+    ".env → PRIZM_META_TOKEN"
+   ],
+   "keys": "PRIZM_META_TOKEN",
+   "when": "just_in_time"
+  },
+  {
+   "id": "first-teardown",
+   "group": "First run",
+   "name": "Your first teardown",
+   "why": "Proves everything is set up, and gets you your first brief.",
+   "tools": [
+    "video-teardown (or image-teardown for a picture ad)"
+   ],
+   "how": [
+    "nothing to do — Claude runs it on one of your swipes and shows you the result"
+   ],
+   "required": true,
+   "ask": "Ready? I'll take the first swipe you gave me apart and rebuild it for your brand.",
+   "fills": [
+    "runs/video-teardown/<brand>/ (the result)"
+   ]
+  }
+ ]
+}

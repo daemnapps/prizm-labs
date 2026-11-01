@@ -1,0 +1,17 @@
+{
+ "_note": "A sample swap list for brand-b-batch-grandma-church-after-fight, typed from its brand step for tests. The run's real list is written by the teardown to out/swaps.json.",
+ "product_in_frame": true,
+ "product_where": "tucked in the shawl fold at her chest",
+ "product_sides": ["front"],
+ "stays": ["the church pew and wall", "the held-book pose", "daylight from the window", "the sticker band"],
+ "swaps": [
+  {"from": "The church mother", "to": "Grandma Yai", "kind": "cast", "ref": "yai"},
+  {"from": "The open hymnal", "to": "an open handwritten recipe notebook", "kind": "drawn", "ref": null},
+  {"from": "The far side of her face", "to": "a spray of dark spots", "kind": "drawn", "ref": null},
+  {"from": "The shawl fringe", "to": "one Brilliance Face Scrub tube", "kind": "product", "ref": "brilliance-face-scrub"},
+  {"from": "The rival's product", "to": "a parody jar, \"SEOULFUL 14 STEP\"", "kind": "drawn", "ref": null},
+  {"from": "The sticker's words", "to": "our words", "kind": "words", "ref": null}
+ ],
+ "words": "drawn",
+ "source": "One Brilliance Face Scrub tube, real product photo, rests tucked in the shawl fold at her chest."
+}

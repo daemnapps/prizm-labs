@@ -1,0 +1,61 @@
+{
+  "_what": "One brief per FORMAT: the shots that make a variation — same man, same layout, same words, same bar; only the picture changes. Instantiated per unit into ads/<slug>/variations.json.",
+  "portraitvoid": [
+    "chin lifted, neck turned to camera, product held at the jaw",
+    "seated, three-quarter angle, product in the open palm",
+    "tight close-up on beard line and neck, product just entering frame"
+  ],
+  "productvoid": [
+    "product angled 30° in the raised hand, bristles toward camera",
+    "product held lower, palm open, dome facing up",
+    "the product set down on the basin edge, the man's neck behind it out of focus"
+  ],
+  "twopanel": [
+    "top panel: the neck from the other side; bottom: same fix, product held higher",
+    "top panel: the collar pulled down on the other side; bottom: the product flat against that same patch",
+    "top panel: chin lifted; bottom: bristles pressed flat against the skin, foam visible"
+  ],
+  "faceoff": [
+    "the man at the mirror with his chin lifted and his collar pulled down, product against the side of the neck",
+    "the man leaning over the sink, one hand on the rim, product held at the jawline",
+    "the man with a towel round his shoulders at the basin, product just off the skin below the ear"
+  ],
+  "mirrorselfie": [
+    "the man holding the phone lower so the mirror shows his jaw and neck, collar pulled aside",
+    "the man leaning toward the mirror, free hand stretching the skin under his chin to see it",
+    "the man half-turned in the mirror to catch the side of his neck over his shoulder"
+  ],
+  "distressedposter": [
+    "the poster taped to the bathroom mirror, the man in front of it with his collar open, looking at his own neck",
+    "the poster on the wall above the sink, the man leaning in close to the glass to see the bumps under his jaw",
+    "the man tugging his collar down in front of the poster, head turned to show the side of his neck"
+  ],
+  "checklist": [
+    "the list stuck to the bathroom mirror, the man behind it fastening his collar over the bumps",
+    "the man's hand entering frame beside the list, reaching for the device",
+    "the list taped inside a locker door, the man pulling his shirt on in front of it, neck visible"
+  ],
+  "apology": [
+    "the man at the bathroom mirror, collar open, looking at the bumps on his neck rather than the camera",
+    "the man sitting on the edge of the bath with his shirt in his hand, product resting on his knee",
+    "the man at the sink with the tap running, half-turned, product set on the basin edge"
+  ],
+  "captionbox": [
+    "same caption, man looking down at the sink",
+    "same caption, side-on at the mirror",
+    "same caption, seated on the tub edge"
+  ],
+  "commentreply": [
+    "same comment, different bathroom",
+    "same comment, man closer, phone in hand",
+    "same comment, the man tilting his chin up to show the skin he is talking about"
+  ],
+  "routinelabel": [
+    "the label on the shelf, the man's hand lifting the product past it, neck in frame above",
+    "the label beside the razors on the shelf, the man reaching in from the side of frame",
+    "the label at the mirror's edge, the man behind it fastening his collar"
+  ],
+  "_rule": "A VARIATION CHANGES THE MOMENT, INSIDE THE WORLD OF THE PROBLEM. Two ways to get this wrong and both have been made. (1) Change only the camera — 'harder light', 'tighter crop', 'slight angle', 'different card stock'. Those come back as the same picture: a hash over the first 110 found 16 renders indistinguishable from a sibling, every one from a camera-only brief. (2) Change the location out of the subject — the first rewrite sent Beto to a kitchen with a mug. the owner: 'this is slop'. He was right. The ad is about bumps on his neck; a man making coffee is a stock photo with a product dropped in. So: stay where the problem lives — the mirror, the sink, the collar, the lineup, the neck, the shirt going on — and move him within it. The briefs that always worked (captionbox, portraitvoid, twopanel) never left that world.",
+  "_test": "Read the three lines. (a) Could two be the same photograph a second apart? Not finished. (b) Could a line be an ad for anything else — coffee, a kitchen, a nice morning? Not finished. It has to be a man with this problem, at the moment he notices it.",
+  "_never": "Never describe anything that overlaps, peels, curls, tears or crops the layout itself. The poster IS the ad; a half-peeled corner ate the headline on 2026-09-11. Move the man, never the artwork."
+}

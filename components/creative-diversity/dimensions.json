@@ -1,0 +1,65 @@
+{
+  "_what": "Creative diversification, defined once in Meta's own terms. Every creative is read on these dimensions; every new brief is scored against the live library before anything is made. Each dimension names the list its values come from — no value is invented here. Every rule cites the Meta source it comes from (full quotes in META.md).",
+  "_why": "the owner, 2026-10-07: we are hyper-optimized for Meta — the system uses Meta's vocabulary and follows what Meta has published. Meta: 'When multiple ads look or feel alike, these are seen as variations of the same creative' (Demystifying Creative Diversification, 16 Dec 2025).",
+  "sources": "components/creative-diversity/META.md",
+  "vocabulary": {
+    "creative_diversification": "unique campaign assets tailored to different personas or use cases — 'truly different in look, feel, storyline, and message' (Meta)",
+    "creative_iteration": "same visuals, different text or CTA — allowed only inside a creative that already counts as new (Meta: 'should not replace true creative diversification')",
+    "variations_of_the_same_creative": "ads that 'look or feel alike' — Meta groups them and shares delivery",
+    "creative_similarity": "'when ad images are visually too alike, even if technically different assets' (Meta)",
+    "creative_fatigue": "overexposure of one image or video, counted across every campaign on the Page; 'creative limited' = cost per result above past ads under 2x, 'creative fatigue' = 2x or more (Meta help)",
+    "persona": "who the creative is for — our avatar / sub-avatar + desire (Meta: personas, use cases, motivations)",
+    "flexible_ad": "one ad holding up to 10 images and videos; Meta picks the mix per person"
+  },
+  "rule": {
+    "min_moves": 3,
+    "against": "the nearest creative in the live library of the same brand (account-wide; Meta counts fatigue across the whole Page)",
+    "variation_at_or_below": 1,
+    "risky": 2,
+    "text": "Creative diversification = at least 3 moves from the nearest live creative. 0–1 = a variation of the same creative (Meta groups it); 2 = risky; 3+ = a new creative.",
+    "threshold_is": "ours — Meta publishes no threshold. Calibrate against the tagged library."
+  },
+  "fixed": {
+    "_what": "Never varies. Every creative, every format: one product, one offer page, one core message.",
+    "offer": "brands/<brand>/strategy/offer-page.json — product · page · match (shape in brands/_TEMPLATE/strategy/offer-page.json)",
+    "core_message": "brands/<brand>/brand-identity/core-message/core-message.json#core"
+  },
+  "big": [
+    {"id": "who", "meta": "persona / use case / motivation", "name": "Persona (sub-avatar + desire)", "values": "brands/<brand>/core-avatars/avatars.json → sub_avatars (desire from each sub-avatar card)", "read_as": "sub_avatar"},
+    {"id": "awareness", "meta": "message", "name": "Awareness level", "values": "components/elements/library/doctrine.awareness.json", "read_as": "awareness"},
+    {"id": "argument", "meta": "message", "name": "Angle", "values": "brands/<brand>/strategy/angles.json (active rows)", "read_as": "angle"},
+    {"id": "format", "meta": "storyline", "name": "Format / structure", "values": "components/elements/library/format.video.json · structure.video.json · format.image.json · format.carousel.json", "read_as": "format"},
+    {"id": "face", "meta": "look and feel (visuals)", "name": "Face / talent", "values": "brands/<brand>/ai-elements/characters/casting/cards-v6.json (gender · age-band · ethnic-appearance · role)", "read_as": "face"},
+    {"id": "setting", "meta": "look and feel (visuals)", "name": "Setting", "values": "brands/<brand>/strategy/settings.json", "read_as": "setting"},
+    {"id": "look", "meta": "look and feel (visuals)", "name": "Visual style", "values": "components/elements/library/style.video.json · style.image.json", "read_as": "style"}
+  ],
+  "portfolio": {
+    "_what": "Meta's own rules for every ad set the creative goes into. Each line is Meta's, with its number.",
+    "rules": [
+      {"id": "format-mix", "rule": "each ad set holds an image, a video and a 9:16 video with audio", "meta": "9.1% lower CPA (1M+ ad sets); 7.3% lower CPA (Cyber 5 2025)"},
+      {"id": "vertical-audio-share", "rule": "at least 20% of an ad set's assets are 9:16 video with audio", "meta": "7% lower CPA (~530k ad sets)"},
+      {"id": "fewer-ads-more-assets", "rule": "fewer ads per ad set, each a flexible ad with up to 10 diverse assets; max 50 ads per ad set", "meta": "'Decrease ads per ad set, but maintain diverse creative assets per ad set'"},
+      {"id": "new-footage", "rule": "a new creative uses an image or video not already shown on the Page", "meta": "fatigue counts 'all recent exposures of the ad's image or video, including those from other campaigns from your Page'"},
+      {"id": "sound", "rule": "music or voiceover on every Reel", "meta": "up to 13% more incremental conversions"},
+      {"id": "safe-zone", "rule": "key messages inside the 9:16 safe zone", "meta": "34.5% lower cost per result vs image ads (with 9:16 + audio)"},
+      {"id": "creators", "rule": "creator content runs as partnership ads", "meta": "19% lower acquisition cost"}
+    ]
+  },
+  "carried": [
+    {"id": "sophistication", "name": "Market sophistication", "values": "components/elements/library/doctrine.sophistication.json; the brand's stage is the MARKET STAGE line in brands/<brand>/brand-identity/position.md", "note": "Read on every creative and must match the brand's stage. Not a diversification move: the market is at one stage."},
+    {"id": "language", "name": "Language layer", "values": "brands/<brand>/core-avatars/<avatar>/language/", "note": "The words come from the avatar's bank. Read on every creative as 'their words / our words'."}
+  ],
+  "iteration": {
+    "_what": "Meta's 'creative iteration' — worth testing, but only inside a creative that already counts as new. Meta groups these with the original.",
+    "moves": ["hook text / first line", "caption & headline", "CTA", "music swap", "overlay colour", "small trims or reorders"]
+  },
+  "spread": {
+    "_what": "What a healthy library looks like across awareness — the farm makes the top, the ads harvest the bottom.",
+    "target_share": {"unaware": 0.15, "problem-aware": 0.25, "solution-aware": 0.25, "product-aware": 0.25, "most-aware": 0.10},
+    "note": "Starting targets, ours, the owner to tune."
+  },
+  "not_meta": {
+    "_what": "Repeated everywhere, never said by Meta. Never build on these.",
+    "claims": ["'Entity ID' (agency term; Meta confirms grouping only)", "a '>60% similarity score' suppresses an ad", "'8–15+ ads per ad set' (Meta says the opposite)", "similar ads pay higher CPMs"]
+  }
+}

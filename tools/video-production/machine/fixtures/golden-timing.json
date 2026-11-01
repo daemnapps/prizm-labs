@@ -1,0 +1,18 @@
+{
+ "_readme": [
+  "THE GOLDEN TIMING SHEET — the one the scene run by hand on 2026-09-18 evening was cut against: one voice paragraph of 8.92 s and the four beat windows read off it. That call came back right (9 s, line check 100%), so these four spans are what the assembled timeline is held to.",
+  "The account ids it carried — the voice id and the request id — are replaced by invented ones, because a fixture never carries a real account's identifiers. Nothing else is changed.",
+  "Shape: the per-scene sheet a voice run writes. The same four windows appear in vo-timing.json, which is the whole-piece shape machine/voice.py writes to <run>/vo/timing.json; this file is what the golden test asserts the timeline against."
+ ],
+ "voice_id": "00000000fixturevoice0000",
+ "request_id": "00000000fixturereq00001",
+ "scene": "S1",
+ "start": 0.0,
+ "end": 8.92,
+ "beats": {
+  "frame1": [0.0, 2.54],
+  "frame2": [3.18, 4.55],
+  "frame3": [4.59, 6.69],
+  "last": [7.06, 8.92]
+ }
+}

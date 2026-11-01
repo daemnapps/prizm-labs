@@ -1,0 +1,1112 @@
+{
+ "element": "format",
+ "asset": "email",
+ "source": "components/marketing-calendar/definitions/send-types.seed.json",
+ "enforced_by": "email production; the marketing calendar",
+ "note": "The seed every brand copies; a brand's own email/email-types.json may add types.",
+ "rows": [
+  {
+   "id": "sale-window",
+   "name": "Sale window",
+   "what": "A discount, open for a stated period.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [
+     "last-chance"
+    ],
+    "needs": [
+     "offer_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "launch",
+   "name": "Launch",
+   "what": "A new product, or a new version of one.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [
+     "proof-drop",
+     "last-chance"
+    ],
+    "needs": [
+     "product_file",
+     "offer_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "anticipation",
+   "name": "Anticipation",
+   "what": "Before a launch, and selling nothing. Builds the wait so the launch does not have to arrive cold.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "sets-up",
+    "then": [
+     "launch"
+    ],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "restock",
+   "name": "Restock",
+   "what": "A thing they wanted is available again.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "bundle",
+   "name": "Bundle",
+   "what": "Two or more products argued as one purchase.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [
+     "stack"
+    ],
+    "needs": [
+     "offer_file",
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "last-chance",
+   "name": "Last chance",
+   "what": "A deadline they are about to miss.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "recovers",
+    "then": [],
+    "needs": [
+     "offer_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "subscription-invite",
+   "name": "Subscription invite",
+   "what": "Turn a repeat buyer into a standing order.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [],
+    "needs": [
+     "offer_file",
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "early-access",
+   "name": "Early access",
+   "what": "This list sees it first — a membership benefit as much as an ask.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [
+     "launch"
+    ],
+    "needs": [
+     "offer_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "gift-guide",
+   "name": "Gift guide",
+   "what": "Written for the buyer, not the user.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [
+     "last-chance"
+    ],
+    "needs": [
+     "product_file",
+     "offer_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "problem-explainer",
+   "name": "Problem explainer",
+   "what": "One condition, taken seriously, in their words.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "objection-shot",
+     "mechanism"
+    ],
+    "needs": [
+     "language_bank",
+     "objection_bank"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "routine",
+   "name": "Routine / how-to",
+   "what": "How to actually use it, in what order, how often.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "stack"
+    ],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "mechanism",
+   "name": "Why it works",
+   "what": "The mechanism, only as far as the doubt requires.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "myth-correction",
+   "name": "Myth correction",
+   "what": "A thing this customer is told about the category that is wrong.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "objection-shot"
+    ],
+    "needs": [
+     "objection_bank",
+     "language_bank"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "mistake-audit",
+   "name": "Mistake audit",
+   "what": "Three things you are doing that cause the thing you hate.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "routine"
+    ],
+    "needs": [
+     "objection_bank",
+     "language_bank"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "switch",
+   "name": "The switch",
+   "what": "Against what they used before, honestly.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "proof-drop"
+    ],
+    "needs": [
+     "objection_bank"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "seasonal-skin",
+   "name": "Seasonal shift",
+   "what": "What changes for this customer's problem in this season.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "language_bank"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "objection-shot",
+   "name": "Single objection",
+   "what": "One belief, taken on end to end, nothing else in the email.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "recovers",
+    "then": [],
+    "needs": [
+     "objection_bank"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stack",
+   "name": "The stack",
+   "what": "How the products work together — cross-sell as education, not as a bundle pitch.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "bundle"
+    ],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "moment",
+   "name": "Moment tie-in",
+   "what": "Something happening in the world this avatar is already inside.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "belong",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "cultural_moments"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "holiday",
+   "name": "Holiday, with an angle",
+   "what": "A holiday that means something to this avatar, not every holiday.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "belong",
+    "role": "earns",
+    "then": [
+     "gift-guide"
+    ],
+    "needs": [
+     "cultural_moments"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "ritual",
+   "name": "Seasonal ritual",
+   "what": "Back to school, prom, the summer cut, the new-year reset.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "belong",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "cultural_moments"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "subculture",
+   "name": "Subculture",
+   "what": "The room this avatar already sits in, regularly, talking about exactly this.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "belong",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "avatar"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "regional",
+   "name": "Regional",
+   "what": "Where they actually are.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "belong",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "cultural_moments"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "opinion",
+   "name": "Opinion",
+   "what": "A position on something in the category, taken out loud.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "avatar"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "spotlight",
+   "name": "Customer spotlight",
+   "what": "One named person and what happened to them.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "earns",
+    "then": [
+     "proof-drop"
+    ],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "someone-like-you",
+   "name": "Someone like you",
+   "what": "A customer matched to the reader's own segment, pain point or state.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "proof-drop",
+   "name": "Proof drop",
+   "what": "Several results at once, named, nothing else.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "milestone",
+   "name": "Milestone",
+   "what": "An anniversary, a count reached, a batch number. Our own history.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "reader-question",
+   "name": "Reader question",
+   "what": "A real question someone asked, answered in public.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "closes",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "founder-note",
+   "name": "Founder note",
+   "what": "The founder, writing as themselves, about something that is actually true.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "sender_identity"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "roll-call",
+   "name": "Roll call",
+   "what": "Welcoming the people who just joined, to the people already here.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "mission",
+   "name": "Mission",
+   "what": "What this is for and who it is for, stated as a position.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "avatar"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "behind-the-scenes",
+   "name": "Behind the scenes",
+   "what": "What we are building and how it is actually made.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "earns",
+    "then": [
+     "launch"
+    ],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "what-went-wrong",
+   "name": "What went wrong",
+   "what": "A mistake, named, and what was done about it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "earns",
+    "then": [],
+    "needs": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "trend",
+   "name": "Trend",
+   "what": "What is circulating in their world right now — not an event with a date, the ambient thing everyone is talking about.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "belong",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "cultural_moments"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "room-answered",
+   "name": "The room answered",
+   "what": "We asked, and here is what four hundred of you said.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "closes",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "peer-advice",
+   "name": "Peer advice",
+   "what": "What the guys who already solved this actually did.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "product-spotlight",
+   "name": "Product spotlight",
+   "what": "One product, what it does, why now. No discount, no deadline — the product is the whole email.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [
+     "proof-drop"
+    ],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "guarantee",
+   "name": "Risk reversal",
+   "what": "The guarantee as the entire argument. Takes away the reason not to try it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "recovers",
+    "then": [],
+    "needs": [
+     "offer_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "availability",
+   "name": "Where to get it",
+   "what": "A new place to buy it — a marketplace, a retailer, a channel.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "channel-invite",
+   "name": "Channel invite",
+   "what": "Join us somewhere else — text, app, a list within the list.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "ask",
+    "role": "asks",
+    "then": [],
+    "needs": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "product-finder",
+   "name": "Product finder",
+   "what": "A few questions that end on the right product for them.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "help",
+    "role": "earns",
+    "then": [
+     "product-spotlight"
+    ],
+    "needs": [
+     "product_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "content-request",
+   "name": "Content request",
+   "what": "Asking customers for their photo, video or review.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "real",
+    "role": "earns",
+    "then": [
+     "proof-drop",
+     "spotlight"
+    ],
+    "needs": [
+     "customer_base"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "sunset",
+   "name": "Are you still there",
+   "what": "A last email to someone who has stopped opening. Honest about being the last.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "brand",
+    "role": "recovers",
+    "then": [],
+    "needs": []
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "affiliate-feature",
+   "name": "Affiliate feature",
+   "what": "One partner product, recommended with our own commentary and a tracked link — their offer, not ours.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "affiliate",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "affiliate_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "affiliate-roundup",
+   "name": "Affiliate roundup",
+   "what": "Several partner picks in one send, grouped around a theme (a season, a use case, a price point).",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-calendar/definitions/send-types.seed.json",
+   "extra": {
+    "well": "affiliate",
+    "role": "earns",
+    "then": [],
+    "needs": [
+     "affiliate_file"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

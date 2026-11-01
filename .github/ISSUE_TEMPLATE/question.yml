@@ -1,0 +1,40 @@
+name: Ask a question
+description: Something broke, something's confusing, or you want to know if it can do X.
+title: "[question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask in plain English. You don't need to know the right words for anything.
+        Questions get answered here, in the open, so the next person finds the answer already written.
+  - type: textarea
+    id: question
+    attributes:
+      label: What are you trying to do?
+      description: One or two sentences. What you wanted to happen.
+      placeholder: I wanted it to pull a competitor's ads but nothing came back.
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What actually happened?
+      description: If there's red text in your Terminal, paste it here. All of it.
+      render: shell
+  - type: input
+    id: step
+    attributes:
+      label: Where were you?
+      description: Which walkthrough step, or which command you ran.
+      placeholder: Step 4 of the fast way
+  - type: dropdown
+    id: os
+    attributes:
+      label: Mac or Windows?
+      options: [Mac, Windows, Linux, Not sure]
+  - type: markdown
+    attributes:
+      value: |
+        **Don't paste API keys, passwords, or anything from a `.env` file.** If your error text
+        contains one, replace it with `XXXX` before you post.

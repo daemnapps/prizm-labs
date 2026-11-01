@@ -1,0 +1,78 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUN-01 — the proof</title>
+<style>
+:root{--bg:#F2EDE2;--card:#FBF8F1;--ink:#171512;--soft:#3B352C;--muted:#7A7268;--rule:#DCD3C2;--gold:#9C7A12;--green:#3E6247;--red:#9E3B2C;--wash:#E9E2D2}
+@media(prefers-color-scheme:dark){:root{--bg:#171512;--card:#211E19;--ink:#F2EDE2;--soft:#D8D0C0;--muted:#9A9182;--rule:#3A352C;--gold:#D3B04A;--green:#7FB08A;--red:#E07A66;--wash:#2A2620}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,"Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:22px 22px 80px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}.sub{color:var(--muted);margin:0 0 14px;max-width:80ch}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;position:sticky;top:0;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--rule);z-index:5;margin-bottom:8px}
+select,input{font:13px inherit;padding:6px 8px;border:1px solid var(--rule);background:var(--card);color:var(--ink)}
+a.q{font:13px inherit;padding:6px 10px;border:1px solid var(--ink);text-decoration:none;color:var(--ink)}
+.n{font:12px ui-monospace,Menlo,monospace;color:var(--muted);margin-left:auto}
+.row{background:var(--card);border:1px solid var(--rule);margin:14px 0;padding:14px}
+.rh{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.rh b{font-size:16px}.rh .mono{font:11px ui-monospace,Menlo,monospace;color:var(--muted)}
+.chip{font-size:11px;padding:1px 7px;border:1px solid var(--rule);color:var(--soft)}
+.chip.redo{border-color:var(--red);color:var(--red)}.chip.fix{border-color:var(--gold);color:var(--gold)}
+.chip.done{border-color:var(--green);color:var(--green)}.chip.failed{border-color:var(--red);color:var(--red)}
+.cols{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:16px;align-items:start}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.col h4{font:11px ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:400}
+.col img{width:100%;max-width:320px;display:block;border:1px solid var(--rule);background:#1A1A1A}
+.inj{font:12px ui-monospace,Menlo,monospace;line-height:1.5;background:var(--wash);padding:10px;white-space:pre-wrap;max-height:260px;overflow:auto;border-left:3px solid var(--gold)}
+.hl{margin-top:8px;font-size:13px}.hl b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:400}
+.hl .txt{font-weight:700;white-space:pre-line}
+.match{margin-top:8px;padding:6px 9px;font-size:12.5px;border-left:3px solid var(--green)}
+.match.bad{border-left-color:var(--red);color:var(--red)}
+.why{margin-top:8px;font-size:12.5px;color:var(--red);white-space:pre-wrap;max-height:140px;overflow:auto}
+.note{margin-top:8px;padding:6px 9px;background:var(--wash);border-left:3px solid var(--red);font-size:12.5px}
+.none{font:12px ui-monospace,Menlo,monospace;color:var(--muted);padding:20px 0}
+</style>
+<div class="wrap">
+<h1>RUN-01 — the proof</h1>
+<p class="sub">Every picture we made, shown three ways: the <strong>reference</strong> it was edited from, the <strong>exact instruction</strong> that went to the generator, and the <strong>result</strong> with the judge's verdict. Nothing is summarised — the instruction is printed as it was sent. <a href="/">← the queue</a></p>
+<div class="bar">
+  <select id="f-kind"><option value="">every kind</option><option value="redo">re-dos (your kills)</option><option value="fix">machine fixes</option><option value="fill">new variations</option></select>
+  <select id="f-status"><option value="">any outcome</option><option value="done">passed</option><option value="failed">judge sent back</option><option value="queued">not yet made</option></select>
+  <select id="f-man"><option value="">every man</option></select>
+  <input id="f-q" type="search" placeholder="search the instruction or the headline…">
+  <span class="n" id="count"></span>
+</div>
+<div id="rows"></div>
+</div>
+<script>
+let D=[];
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const img=(p,alt)=>p?`<a href="/img/${esc(p)}" target="_blank"><img loading="lazy" src="/tn/${esc(p)}" alt="${alt}"></a>`:`<div class="none">none</div>`;
+async function load(){ D=await (await fetch("/proof.json?t="+Date.now())).json();
+  const fm=document.getElementById("f-man"); if(fm.options.length===1)[...new Set(D.map(r=>r.man))].filter(Boolean).sort().forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;fm.appendChild(o);});
+  render(); }
+function render(){
+  const k=document.getElementById("f-kind").value,s=document.getElementById("f-status").value,m=document.getElementById("f-man").value,q=document.getElementById("f-q").value.toLowerCase();
+  const rows=D.filter(r=>(!k||r.kind===k)&&(!s||r.status===s)&&(!m||r.man===m)&&(!q||[r.injection,r.headline_spec,r.headline_read,r.kill_note].join(" ").toLowerCase().includes(q)));
+  document.getElementById("count").textContent=`${rows.length} of ${D.length}`;
+  document.getElementById("rows").innerHTML=rows.map(r=>{
+    const hs=(r.headline_spec||"").replace(/\n/g," ").trim(), hr=(r.headline_read||"").replace(/\n/g," ").trim();
+    const norm=x=>x.toLowerCase().replace(/[^a-z0-9]/g,"");
+    const match = hs&&hr ? (norm(hr).includes(norm(hs).slice(0,18))||norm(hs).includes(norm(hr).slice(0,18))) : null;
+    return `<div class="row">
+      <div class="rh"><b>${esc(r.man)} · ${esc(r.format)}</b><span class="mono">${esc(r.id)}</span>
+        <span class="chip ${r.kind}">${r.kind==="redo"?"your kill":r.kind}</span>
+        <span class="chip ${r.status}">${r.status==="done"?"passed the judge":r.status==="failed"?"judge sent it back":r.status}</span></div>
+      ${r.kill_note?`<div class="note"><b>Your words:</b> ${esc(r.kill_note)}</div>`:""}
+      <div class="cols">
+        <div class="col"><h4>1 · reference (what we edited from)</h4>${img(r.reference,"reference")}</div>
+        <div class="col"><h4>2 · the injection, verbatim</h4><div class="inj">${esc(r.injection)}</div>
+          ${hs?`<div class="hl"><b>headline the spec declares</b><span class="txt">${esc(hs)}</span></div>`:""}</div>
+        <div class="col"><h4>3 · result</h4>${img(r.result||r.rejected,"result")}
+          ${hr?`<div class="hl"><b>headline read off the pixels</b><span class="txt">${esc(hr)}</span></div>`:""}
+          ${match===null?"":`<div class="match ${match?"":"bad"}">${match?"✓ the printed headline matches the spec":"✗ the printed headline does NOT match the spec"}</div>`}
+          ${r.why?`<div class="why">${esc(r.why)}</div>`:""}</div>
+      </div></div>`;}).join("")||`<div class="none">nothing matches those filters</div>`;
+}
+["f-kind","f-status","f-man"].forEach(i=>document.getElementById(i).addEventListener("change",render));
+document.getElementById("f-q").addEventListener("input",render);
+load(); setInterval(load,15000);
+</script>

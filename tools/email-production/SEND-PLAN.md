@@ -1,0 +1,11 @@
+# The send plan — <brand>, rest of September 2026
+
+- **Tue 22 Sep · A note from you** (`founder-note`) → Core | VIP Customer, Core | Loyal Customer, Core | Subscriber, Core | Returning Customer, Core | One-Time Customer — eleven weeks with nothing from us, and the reason is not one he would have guessed — the whole operation moved to a warehouse in Ohio, which is why hi
+- **Wed 23 Sep · Asking them for their story** (`content-request`) → Core | VIP Customer — five orders in and he has never been asked what any of them did — the answer goes back out to the room, not into a folder
+- **Thu 24 Sep · Explaining the problem** (`problem-explainer`) → Core | Lead — the thing that leaves the mark is not the bump, it is the six weeks after it — what is actually happening under the skin between the flare and the sca
+- **Fri 25 Sep · The set, not the one bottle** (`bundle`) → Core | One-Time Customer — two products bought together cost less than the two bought a month apart, and the month apart is exactly what broke the result last time
+- **Sat 26 Sep · Correcting what they believe** (`myth-correction`) → Core | Lead — he is on his fourth razor and his third wash because he has been told, every time, that the next tool is the fix — the tool was never the thing, the f
+- **Sun 27 Sep · The guarantee** (`guarantee`) → Core | One-Time Customer — the reason he stopped is that nothing told him the second bottle was doing something different from the first — the guarantee means he can find out wi
+- **Mon 28 Sep · A partner's product, not ours** (`affiliate-feature`) → Core | Lead, Core | One-Time Customer, Core | Subscriber, Core | VIP Customer — the neck is handled and the beard is still the part he does not touch — we make nothing for hair or scalp, and the one thing that sits right next to w
+- **Tue 29 Sep · Put it on standing order** (`subscription-invite`) → Core | Subscriber — he is on a standing order for one thing and pays full freight every time he remembers the other two — the standing order was always meant to cover the
+- **Wed 30 Sep · What went wrong, and what changed** (`what-went-wrong`) → Core | Churned — he left after the stockouts and the shipments that never moved — here is what actually happened in the spring, what changed since (the whole operation

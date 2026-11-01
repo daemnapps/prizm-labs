@@ -1,0 +1,118 @@
+{
+ "what": "step 2 of run.json, brief brand_a_flex-face-brush_brief-0232 (runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/run.json), copied unchanged 2026-10-28: the sheet the dec7526e record is checked against",
+ "brief_key": "brand_a_flex_brief-0232",
+ "step": {
+  "n": 2,
+  "asset": "brand_a_flex_brief-0232_asset-02.png",
+  "what": "variation v1: Headline 1 · bumps back after one swipe",
+  "medium": "image",
+  "job": "pictures.generate",
+  "model_house": {
+   "registry": "gpt-image-2.5",
+   "door": "higgsfield"
+  },
+  "higgsfield_model": "gpt_image_2_5",
+  "model_name": "GPT Image 2.5",
+  "prompt": "INPUTS\nIMAGE 1 is the reference. Make ours from it: the same layout, look, light, photo style and text style and placement, changed only as THE PICTURE says.\nIMAGE 2 is the real FLEX: its product casting sheet: every side of it, labelled, at its true size; the exact shape, label and finish to copy from whichever side the picture shows. IMAGE 3 is the real FLEX: its FRONT, the bristle side: use it ONLY where FLEX is shown on its own, never on skin. IMAGE 4 is the real FLEX: its front at a three-quarter turn: use it ONLY where FLEX is shown on its own.\n\nTHE PICTURE\nTHE SWAPS: THE ONE CHANGE to IMAGE 1: The Braille-cell bumps are brand new: small, tight and bright red at the base, with a few fine cut beard hairs still stuck to the jawline. Everything else stays exactly as IMAGE 1 shows it.\n\nNO WORDS ADDED: IMAGE 1 carries no caption; add no caption, headline or overlay text (the words are set on afterwards). Every object in IMAGE 1 that carries lettering (a tag, a label, a pouch, a pendant) stays in the picture with its lettering, exactly as IMAGE 1 shows it.\n\nTHE LOOK OF THE PICTURE:\n- The strongest reaction the face can hold, caught at its peak.\n- The problem visible and uncomfortable, nothing softened.\n- Phone-camera photo: real skin texture with pores, slight noise, imperfect framing, nothing retouched.\n- Any logo or famous mark is renamed into an obvious joke about the problem.\nTHE FEELING: Disgust: The problem full size in hard light. Amusement: The visual gag.\n\nTHE PRODUCT\nThe product images are photographs of the real FLEX, each marked with the side it shows. Preserve its geometry, colour and label legibility exactly, whichever side faces the camera; do not restyle it, relabel it or invent any side that is not shown.\nFLEX shown on its own (on a counter, held up toward the camera, in a product tile, beside other products): its bristle face toward the camera as in its front photos (dense fine bristles in a teardrop pad, a control band with minus, power and plus, a thin white light line, a glossy dark dome base), or whichever angle looks best. Only when it is pressed on skin does the camera see its back. FLEX in use: its bristle face is pressed flat against his skin, so the camera sees ONLY its smooth matte black back with the sculpted wave and the debossed brand-a wordmark, never the bristles. At the BOTTOM of the device: a thin band, then a glossy polished silver-black dome base, with a thin bright white light line glowing in a curve between them, exactly as in its back photo. It is BIG in his hand: a handleless teardrop 11 cm tall and 7 cm wide, running from his jaw up to his cheekbone, covering most of his palm, his fingers spread on its back at its edges, the way the real hand in the hold photo holds it (copy only the hold and the size). The real FLEX is 11.15 cm tall and 6.98 cm wide: draw it at that true size against hands and faces, never smaller. How the real FLEX is held: held in a closed palm, fingers wrapped round the smooth matte back shell, thumb resting on the − ⏻ + band, bristle face turned outward. Never show FLEX: stood upright on a flat bottom; held by, or at, the base as if it were a handle; held backwards — smooth back or dome against the skin, bristles out; held bristles-inward, facing the palm; pinched between fingertips like a coin or a compact; held at arm's length, floating clear of the hand; held two-handed; blue, white, or grey; a round disc or flat pebble shape; fat, sparse bristle nubs; a logo or wordmark on the front bristle face; standing on its own on any surface; lying loose on a counter, sink, shelf, towel or bed; balanced on its round bottom.\n\nTHE PEOPLE\nEvery person is a LOOKALIKE of the person in that same spot in IMAGE 1: the same look, age, build, hair, style and energy. A celebrity or known influencer stays recognisable as a nod, with a slightly different face, never the real person. Any real brand name or logo becomes a parody of it, never the real one.\n\nTHE FRAME\nThis picture is 9:16, vertical, made at that size from the start. Its centre 4:5 (full width, from 15% to 85% of the height) is the SAFE ZONE: every face, hand, product, headline, word and badge sits inside it, clear of its edges. The top 15% and the bottom 15% are bleed: more of the same scene (wall, floor, ceiling, sky, counter), nothing that must be seen. The scene continues naturally to the top and bottom edge; never a band, never empty space.\n\nRULES\nApart from what THE PICTURE changes, do not change anything else in IMAGE 1. No writing in the picture except the exact words THE PICTURE gives.\nTHE PHOTO QUALITY is IMAGE 1's exactly: its grain, softness, filter, colour cast and compression. Never sharper, cleaner, glossier or more polished than IMAGE 1.",
+  "prompt_source": "model-inputs variation_brief + preview builder: ONE change off the approved picture",
+  "references": [
+   {
+    "n": 1,
+    "kind": "image",
+    "role": "the approved picture without its words (the plate): the variation is an edit of it",
+    "file": "runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/approved-plate.png",
+    "exists": true,
+    "element": null,
+    "source": "runs/image-production/brand-a/prompt-bench/brand-a-batch-pick-tt-7679242758120328462-20261027-104842.plate.png",
+    "local": "refs/approved-plate.png",
+    "drive": "Shared Assets/runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/approved-plate.png"
+   },
+   {
+    "n": 2,
+    "kind": "image",
+    "role": "the real FLEX: its product casting sheet: every side of it, labelled, at its true size; the exact shape, label and finish to copy from whichever side the picture shows",
+    "file": "runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/product-flex-face-brush-sheet.png",
+    "exists": true,
+    "element": {
+     "kind": "product",
+     "id": "flex-face-brush",
+     "name": "FLEX",
+     "brand": "brand-a",
+     "folder": "runs/ai-elements/brand-a/products/flex-face-brush",
+     "element": {
+      "id": "e19b60ec-577a-4096-94e6-ea133b393b0e",
+      "name": "brand-a-flex-casting-sheet"
+     }
+    },
+    "source": "runs/ai-elements/brand-a/products/flex-face-brush/model/product-sheet.png",
+    "local": "refs/product-flex-face-brush-sheet.png",
+    "drive": "Shared Assets/runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/product-flex-face-brush-sheet.png"
+   },
+   {
+    "n": 3,
+    "kind": "image",
+    "role": "the real FLEX: its FRONT, the bristle side: use it ONLY where FLEX is shown on its own, never on skin",
+    "file": "runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/product-flex-face-brush-turntable-000.png",
+    "exists": true,
+    "element": {
+     "kind": "product",
+     "id": "flex-face-brush",
+     "name": "FLEX",
+     "brand": "brand-a",
+     "folder": "runs/ai-elements/brand-a/products/flex-face-brush",
+     "element": {
+      "id": "e19b60ec-577a-4096-94e6-ea133b393b0e",
+      "name": "brand-a-flex-casting-sheet"
+     }
+    },
+    "source": "runs/ai-elements/brand-a/products/flex-face-brush/sources/turntable-000.png",
+    "local": "refs/product-flex-face-brush-turntable-000.png",
+    "drive": "Shared Assets/runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/product-flex-face-brush-turntable-000.png"
+   },
+   {
+    "n": 4,
+    "kind": "image",
+    "role": "the real FLEX: its front at a three-quarter turn: use it ONLY where FLEX is shown on its own",
+    "file": "runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/product-flex-face-brush-turntable-030.png",
+    "exists": true,
+    "element": {
+     "kind": "product",
+     "id": "flex-face-brush",
+     "name": "FLEX",
+     "brand": "brand-a",
+     "folder": "runs/ai-elements/brand-a/products/flex-face-brush",
+     "element": {
+      "id": "e19b60ec-577a-4096-94e6-ea133b393b0e",
+      "name": "brand-a-flex-casting-sheet"
+     }
+    },
+    "source": "runs/ai-elements/brand-a/products/flex-face-brush/sources/turntable-030.png",
+    "local": "refs/product-flex-face-brush-turntable-030.png",
+    "drive": "Shared Assets/runs/handoffs/graphic-designer/brand-a/brand_a_flex-face-brush_brief-0232/refs/product-flex-face-brush-turntable-030.png"
+   }
+  ],
+  "settings": {
+   "aspect_ratio": "9:16",
+   "variant": "sunburst",
+   "quality": "high",
+   "resolution": "2k",
+   "count": 1
+  },
+  "words_on_top": [
+   {
+    "zone": "Zone A — top timeline",
+    "words": "Shaved 1 swipe ago... / bumps already"
+   },
+   {
+    "zone": "Zone B — first quote",
+    "words": "Bro I can read my neck"
+   },
+   {
+    "zone": "Zone C — second quote",
+    "words": "It's giving braille"
+   }
+  ],
+  "bars": null,
+  "findings": []
+ }
+}

@@ -1,0 +1,425 @@
+{
+ "schema": 1,
+ "chain": "video-teardown",
+ "label": "Video teardown (the owner's chain, pinned)",
+ "note": "Snapshot of what the owner's own resolver picks at the pin for --route ai, taken with no model calls and no network (CR-2 ruling 2). Every prompt below is a byte-identical copy; nothing was rewritten, including its placeholder spelling — hence placeholder_style single-curly (ruling 3). At the pin his router had no triage output and therefore skipped and substituted nothing (lane unread — running everything), and his brand argument does not move the recipe. UNPINNED FOLLOW-ON SCOPE, deliberately not copied as live recipe (ruling 1): the other stage-5 lanes (ai-lane, creator-lane, creator-match, hook-asset), the lane-conditional skip/substitute overlay his run.py applies once stage 0 has read a video, and the hook-asset stage-5 override stage 4a can trigger.",
+ "prompts_dir": "prompts",
+ "placeholder_style": "single-curly",
+ "provenance": {
+  "source": "tools/video-teardown",
+  "sha": "1914eda643c764b36754ab4c0853680369b85cd0",
+  "pinned_on": "2026-08-31",
+  "route": "ai",
+  "resolver": "tools/video-teardown/machine/chain.py :: stages(brand=\"\", asset_type=\"\", route=\"ai\") — the same call his machine/run.py makes; prompt homes scanned: tools/video-teardown/prompts/stage-4-loop/4a-read; tools/video-teardown/prompts/stage-0-triage; tools/video-teardown/prompts/stage-1-teardown; tools/video-teardown/prompts/stage-1b-audience; tools/video-teardown/prompts/stage-2-replication; tools/video-teardown/prompts/stage-3-injection; tools/video-teardown/prompts/stage-4-loop/4c-placement; tools/video-teardown/prompts/stage-4-loop/4b-hook; tools/video-teardown/prompts/stage-4-loop/4d-expansion; tools/video-teardown/prompts/stage-4-loop/4e-close; tools/video-teardown/prompts/stage-5-brief/creator-lane; tools/video-teardown/prompts/stage-5-brief/ai-lane; tools/video-teardown/prompts/stage-5-brief/hook-asset; tools/video-teardown/prompts/stage-6-frames; tools/video-teardown/prompts/stage-4-loop/4f-audit; tools/video-teardown/prompts/stage-7-inject; tools/video-teardown/prompts/stage-8-profile; tools/video-teardown/prompts/parked; new-workflow-design/builds/video-teardown/prompts",
+  "note": "Snapshot of what the owner's own resolver picks at the pin for --route ai, taken with no model calls and no network (CR-2 ruling 2). Every prompt below is a byte-identical copy; nothing was rewritten, including its placeholder spelling — hence placeholder_style single-curly (ruling 3). At the pin his router had no triage output and therefore skipped and substituted nothing (lane unread — running everything), and his brand argument does not move the recipe. UNPINNED FOLLOW-ON SCOPE, deliberately not copied as live recipe (ruling 1): the other stage-5 lanes (ai-lane, creator-lane, creator-match, hook-asset), the lane-conditional skip/substitute overlay his run.py applies once stage 0 has read a video, and the hook-asset stage-5 override stage 4a can trigger.",
+  "picks": [
+   {
+    "stage": "stage0",
+    "engine": "gemini-video",
+    "version": 1,
+    "source": "tools/video-teardown/prompts/stage-0-triage/triage-v1-damon.md",
+    "source_filename": "triage-v1-damon.md",
+    "sha256": "653504e8e406422e0c05187f7a4cd147641e18d17e28fd59fb50173b70a36ec0",
+    "copied_to": "prompts/stage0/v1.md"
+   },
+   {
+    "stage": "stage1",
+    "engine": "gemini-video",
+    "version": 7,
+    "source": "tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v7-damon.md",
+    "source_filename": "stage1-teardown-v7-damon.md",
+    "sha256": "78d44e2fd1b6722e10bcd3994783012bea1a582327ba54a64ede3dd1ed880767",
+    "copied_to": "prompts/stage1/v7.md"
+   },
+   {
+    "stage": "stage1b",
+    "engine": "claude",
+    "version": 5,
+    "source": "tools/video-teardown/prompts/stage-1b-audience/stage1b-audience-v5-damon.md",
+    "source_filename": "stage1b-audience-v5-damon.md",
+    "sha256": "8b2eb016a6e2421c6fea4a2ac0c3b8ae66953115d523590d1ef615070889fcff",
+    "copied_to": "prompts/stage1b/v5.md"
+   },
+   {
+    "stage": "stage2",
+    "engine": "gemini-text",
+    "version": 2,
+    "source": "tools/video-teardown/prompts/stage-2-replication/stage2-replication-v2-damon.md",
+    "source_filename": "stage2-replication-v2-damon.md",
+    "sha256": "c1c861bd2df9aa4df12096b2c2235d4e267d0b061986862808c706a378c8a5ad",
+    "copied_to": "prompts/stage2/v2.md"
+   },
+   {
+    "stage": "stage3",
+    "engine": "claude",
+    "version": 8,
+    "source": "tools/video-teardown/prompts/stage-3-injection/stage3-injection-v8-damon.md",
+    "source_filename": "stage3-injection-v8-damon.md",
+    "sha256": "bee7ed907b16cdccadc6bb7e37d2e1de614c82850ce5d199519f145d7a2dff86",
+    "copied_to": "prompts/stage3/v8.md"
+   },
+   {
+    "stage": "stage4r",
+    "engine": "claude",
+    "version": 3,
+    "source": "tools/video-teardown/prompts/stage-4-loop/4a-read/stage4r-read-v3-damon.md",
+    "source_filename": "stage4r-read-v3-damon.md",
+    "sha256": "f18a3ef8a010b8eb6c64979dfc1de3c548f8a9028cbcf6a544032fef0bd09604",
+    "copied_to": "prompts/stage4r/v3.md"
+   },
+   {
+    "stage": "stage4b",
+    "engine": "claude",
+    "version": 11,
+    "source": "tools/video-teardown/prompts/stage-4-loop/4b-hook/stage4b-hook-v11-damon.md",
+    "source_filename": "stage4b-hook-v11-damon.md",
+    "sha256": "ce637a95eaa082829d89118ef487fb76697d8e1fdc313acb64ebecaf18bc396f",
+    "copied_to": "prompts/stage4b/v11.md"
+   },
+   {
+    "stage": "stage4a",
+    "engine": "claude",
+    "version": 10,
+    "source": "tools/video-teardown/prompts/stage-4-loop/4c-placement/stage4a-placement-v10-damon.md",
+    "source_filename": "stage4a-placement-v10-damon.md",
+    "sha256": "4ee5a132054b342d5a3d009ffe9f9d3bc76ae48197aa2e3327d381f02ff8d990",
+    "copied_to": "prompts/stage4a/v10.md"
+   },
+   {
+    "stage": "stage4c",
+    "engine": "claude",
+    "version": 11,
+    "source": "tools/video-teardown/prompts/stage-4-loop/4d-expansion/stage4c-expansion-v11-damon.md",
+    "source_filename": "stage4c-expansion-v11-damon.md",
+    "sha256": "543dad87b2e99a851dc8be35a74f459441d3338e070230f69a510bf7ef4355a9",
+    "copied_to": "prompts/stage4c/v11.md"
+   },
+   {
+    "stage": "stage4d",
+    "engine": "claude",
+    "version": 6,
+    "source": "tools/video-teardown/prompts/stage-4-loop/4e-close/stage4d-close-v6-damon.md",
+    "source_filename": "stage4d-close-v6-damon.md",
+    "sha256": "4e72661b04d2924c8332598d9d54910876e2c2c5f7b5aa33d8cb5bd01e29eb36",
+    "copied_to": "prompts/stage4d/v6.md"
+   },
+   {
+    "stage": "stage4e",
+    "engine": "claude",
+    "version": 3,
+    "source": "tools/video-teardown/prompts/stage-4-loop/4f-audit/stage4e-audit-v3-damon.md",
+    "source_filename": "stage4e-audit-v3-damon.md",
+    "sha256": "773f1b543a83a5a439f30782518b1f7f264db6fcf1fd83bb853c469230f4eb86",
+    "copied_to": "prompts/stage4e/v3.md"
+   },
+   {
+    "stage": "stage5",
+    "engine": "claude",
+    "version": 4,
+    "source": "tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v4-damon.md",
+    "source_filename": "stage5-ai-brief-v4-damon.md",
+    "sha256": "815db5be0c3c613ffdf2e51bdd176462622f69d2d47296fec27d5ff3fe67fc04",
+    "copied_to": "prompts/stage5/v4.md"
+   },
+   {
+    "stage": "stage6",
+    "engine": "frames",
+    "version": 2,
+    "source": "tools/video-teardown/prompts/stage-6-frames/stage6-frames-v2-damon.md",
+    "source_filename": "stage6-frames-v2-damon.md",
+    "sha256": "48632d6e72903cbbffd5e97d80050341fce86a700e7b9bacd9b35eb953dcc29f",
+    "copied_to": "prompts/stage6/v2.md"
+   },
+   {
+    "stage": "stage7",
+    "engine": "inject",
+    "version": 1,
+    "source": "tools/video-teardown/prompts/stage-7-inject/stage7-inject-v1-damon.md",
+    "source_filename": "stage7-inject-v1-damon.md",
+    "sha256": "d7605efeab03ef9511ab1fb5aed248bc956656393c52ce4e2649d69e8dc33ae3",
+    "copied_to": "prompts/stage7/v1.md"
+   },
+   {
+    "stage": "stage8",
+    "engine": "claude",
+    "version": 2,
+    "source": "tools/video-teardown/prompts/stage-8-profile/stage8-profile-v2-damon.md",
+    "source_filename": "stage8-profile-v2-damon.md",
+    "sha256": "217de05d3e409313288f18894c47f0f15474d46e7a5d2d8ad4a9141712f28340",
+    "copied_to": "prompts/stage8/v2.md"
+   }
+  ],
+  "gaps": []
+ },
+ "stages": [
+  {
+   "key": "stage0",
+   "label": "Triage",
+   "prompt": "stage0",
+   "model": "gemini-3-flash-preview",
+   "inputs": {},
+   "media": {
+    "video": {
+     "kind": "video",
+     "ref": "@config.video"
+    }
+   },
+   "output": "stages/stage0/output.md",
+   "note": "Cheap first look: which lane is this, and is a human really on camera. · his engine: gemini-video · his display id: 0",
+   "prompt_version": "v1"
+  },
+  {
+   "key": "stage1",
+   "label": "Teardown",
+   "prompt": "stage1",
+   "model": "gemini-3-flash-preview",
+   "inputs": {},
+   "media": {
+    "video": {
+     "kind": "video",
+     "ref": "@config.video"
+    }
+   },
+   "output": "stages/stage1/output.md",
+   "note": "One video in, one objective record out — scenes, mechanics, psychology. · his engine: gemini-video · his display id: 1",
+   "prompt_version": "v7"
+  },
+  {
+   "key": "stage1b",
+   "label": "Audience",
+   "prompt": "stage1b",
+   "model": "opus",
+   "inputs": {
+    "avatars": "@config.avatars",
+    "teardown_record": "@stage1",
+    "today": "@config.today"
+   },
+   "output": "stages/stage1b/output.md",
+   "note": "Which avatar, which funnel, which topics — decided after the breakdown, because a video has to be torn down before anyone can say who it speaks to. · his engine: claude · his display id: 1b",
+   "prompt_version": "v5"
+  },
+  {
+   "key": "stage2",
+   "label": "Spec",
+   "prompt": "stage2",
+   "model": "gemini-3-flash-preview",
+   "inputs": {
+    "teardown_record": "@stage1"
+   },
+   "output": "stages/stage2/output.md",
+   "note": "The record, abstracted into a brand-free construct everything else slots into. · his engine: gemini-text · his display id: 2",
+   "prompt_version": "v2"
+  },
+  {
+   "key": "stage3",
+   "label": "Injection",
+   "prompt": "stage3",
+   "model": "opus",
+   "inputs": {
+    "avatar": "@config.avatar",
+    "brand_name": "@config.brand_name",
+    "identity_anchors": "@config.identity_anchors",
+    "language": "@config.language",
+    "language_bank": "@config.language_bank",
+    "offer_file": "@config.offer_file",
+    "product_file": "@config.product_file",
+    "production_route": "@config.production_route",
+    "replication_spec": "@stage2",
+    "teardown_record": "@stage1",
+    "today": "@config.today"
+   },
+   "output": "stages/stage3/output.md",
+   "note": "Substitution, never rewrite — the source transcript is the template. · his engine: claude · his display id: 3",
+   "prompt_version": "v8"
+  },
+  {
+   "key": "stage4r",
+   "label": "Reading",
+   "prompt": "stage4r",
+   "model": "opus",
+   "inputs": {
+    "baseline_injection": "@stage3",
+    "objection_bank": "@config.objection_bank",
+    "product_file": "@config.product_file",
+    "replication_spec": "@stage2",
+    "teardown_record": "@stage1"
+   },
+   "output": "stages/stage4r/output.md",
+   "note": "What the source already is: its lane, its opening beat, the awareness it enters on. Decides nothing about our version. · his engine: claude · his display id: 4a",
+   "prompt_version": "v3"
+  },
+  {
+   "key": "stage4b",
+   "label": "Hooks",
+   "prompt": "stage4b",
+   "model": "opus",
+   "inputs": {
+    "avatar": "@config.avatar",
+    "baseline_injection": "@stage3",
+    "language": "@config.language",
+    "language_bank": "@config.language_bank",
+    "replication_spec": "@stage2",
+    "source_reading": "@stage4r",
+    "teardown_record": "@stage1",
+    "today": "@config.today"
+   },
+   "output": "stages/stage4b/output.md",
+   "note": "A control plus five variations. All ship to test — the machine never picks. · his engine: claude · his display id: 4b",
+   "prompt_version": "v11"
+  },
+  {
+   "key": "stage4a",
+   "label": "Placement",
+   "prompt": "stage4a",
+   "model": "opus",
+   "inputs": {
+    "baseline_injection": "@stage3",
+    "hook_set": "@stage4b",
+    "objection_bank": "@config.objection_bank",
+    "product_file": "@config.product_file",
+    "replication_spec": "@stage2",
+    "source_reading": "@stage4r",
+    "teardown_record": "@stage1",
+    "today": "@config.today"
+   },
+   "output": "stages/stage4a/output.md",
+   "note": "Where the product enters and the runtime budget — decided after the hooks exist, so it places against the real opening. · his engine: claude · his display id: 4c",
+   "prompt_version": "v10"
+  },
+  {
+   "key": "stage4c",
+   "label": "Expansion",
+   "prompt": "stage4c",
+   "model": "opus",
+   "inputs": {
+    "baseline_injection": "@stage3",
+    "chosen_hook": "@stage4b#pick",
+    "hook_set": "@stage4b",
+    "language": "@config.language",
+    "language_bank": "@config.language_bank",
+    "offer_file": "@config.offer_file",
+    "placement_plan": "@stage4a",
+    "product_file": "@config.product_file",
+    "replication_spec": "@stage2",
+    "teardown_record": "@stage1",
+    "today": "@config.today"
+   },
+   "output": "stages/stage4c/output.md",
+   "note": "Gated moves — each names the baseline line it serves or stays out. · his engine: claude · his display id: 4d",
+   "prompt_version": "v11"
+  },
+  {
+   "key": "stage4d",
+   "label": "Close",
+   "prompt": "stage4d",
+   "model": "opus",
+   "inputs": {
+    "baseline_injection": "@stage3",
+    "expanded_script": "@stage4c",
+    "objection_bank": "@config.objection_bank",
+    "offer_file": "@config.offer_file",
+    "placement_plan": "@stage4a",
+    "product_file": "@config.product_file",
+    "replication_spec": "@stage2",
+    "today": "@config.today"
+   },
+   "output": "stages/stage4d/output.md",
+   "note": "The objection at the flinch, then the guarantee-led close. · his engine: claude · his display id: 4e",
+   "prompt_version": "v6"
+  },
+  {
+   "key": "stage4e",
+   "label": "Audit",
+   "prompt": "stage4e",
+   "model": "opus",
+   "inputs": {
+    "full_script": "@stage4d",
+    "language_bank": "@config.language_bank",
+    "objection_bank": "@config.objection_bank",
+    "offer_file": "@config.offer_file",
+    "placement_plan": "@stage4a",
+    "product_file": "@config.product_file",
+    "replication_spec": "@stage2",
+    "teardown_record": "@stage1",
+    "today": "@config.today"
+   },
+   "output": "stages/stage4e/output.md",
+   "note": "Seven checks against the source. It reports; it gates nothing. · his engine: claude · his display id: 4f",
+   "prompt_version": "v3"
+  },
+  {
+   "key": "stage5",
+   "label": "Brief",
+   "prompt": "stage5",
+   "model": "opus",
+   "inputs": {
+    "baseline_injection": "@stage3",
+    "creator_profile": "@config.creator_profile",
+    "hook_set": "@stage4b",
+    "language_bank": "@config.language_bank",
+    "offer_file": "@config.offer_file",
+    "product_file": "@config.product_file",
+    "production_route": "@config.production_route",
+    "source_url": "@config.source_url",
+    "stage4_outputs": "@stage4d*",
+    "teardown_record": "@stage1",
+    "today": "@config.today",
+    "video_count": "@config.video_count"
+   },
+   "output": "stages/stage5/output.md",
+   "scope": "group",
+   "note": "The product — the one document the maker receives. · his engine: claude · his display id: 5",
+   "prompt_version": "v4"
+  },
+  {
+   "key": "stage6",
+   "label": "Frames",
+   "prompt": "stage6",
+   "model": "gemini-3-pro-image",
+   "inputs": {
+    "brief": "@stage5",
+    "product_look": "@config.product_look"
+   },
+   "media": {
+    "product_images": {
+     "kind": "image",
+     "ref": "@config.product_images"
+    }
+   },
+   "output": "stages/stage6/output.md",
+   "note": "A reference picture on every scene: her own video first, generated only for what her reel does not contain, and never a stand-in. · his engine: frames · his display id: 6",
+   "prompt_version": "v2"
+  },
+  {
+   "key": "stage7",
+   "label": "Final brief",
+   "prompt": "stage7",
+   "kind": "assemble",
+   "inputs": {
+    "brief": "@stage5",
+    "frames": "@stage6"
+   },
+   "output": "stages/stage7/output.md",
+   "note": "The pictures go into the shot list. This is the file that goes out. · his engine: inject · his display id: 7",
+   "prompt_version": "v1"
+  },
+  {
+   "key": "stage8",
+   "label": "Profile",
+   "prompt": "stage8",
+   "model": "opus",
+   "inputs": {
+    "brand_name": "@config.brand_name",
+    "creator_record": "@config.creator_record",
+    "existing_profile": "@config.existing_profile",
+    "handle": "@config.handle",
+    "profile_spec": "@config.profile_spec",
+    "teardown_material": "@config.teardown_material",
+    "today": "@config.today"
+   },
+   "output": "stages/stage8/output.md",
+   "note": "Her brand-side profile, refreshed from everything the machine now knows about her — the avatar workflow run on a real person. Creator runs only; where it lands is the brand's call. · his engine: claude · his display id: 8",
+   "prompt_version": "v2"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "draft",
+  "about": "run.py start <brief|plan> --brand --format --label [--dry-run], the run folder moved into $OUT/<label>/ (LD-1 (shared lab door))",
+  "script": "tools/video-production/machine/run.py",
+  "subcommand": "start",
+  "positionals": ["source"],
+  "flags": {"format": "--format", "label": "--label"},
+  "bool_flags": {"dry_run": "--dry-run", "generate_all_broll": "--generate-all-broll"},
+  "brand_flag": "--brand",
+  "out": {"flag": null, "runs_root_flag": "--runs-root", "run_dir": "runs/video-production/<brand>/<label>"},
+  "refuse": ["yes", "provider", "runs_root", "bank", "banks", "cast_root", "record", "pack"]
+}

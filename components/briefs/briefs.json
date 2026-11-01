@@ -1,0 +1,368 @@
+{
+ "_what": "Every brief style in the workspace, declared. Registered, not moved \u2014 each stays where its machine keeps it (see CLAUDE.md, the intake precedent).",
+ "_naming": "brief--<asset>--<actor>.md \u2014 the stage number leaves the filename.",
+ "_audit": "lab/damon/BRIEF-PATCHBAY.md (2026-09-25); usage counted off the shared runs/ plane.",
+ "updated": "2026-09-30",
+ "briefs": [
+  {
+   "id": "video--creator",
+   "record": "video teardown, stage 4 loop",
+   "asset": "video",
+   "actor": "creator",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-creator-brief-v28-damon.md",
+   "writes": "5-brief.md \u00b7 7-final-brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 132,
+    "last": "2026-09-23"
+   }
+  },
+  {
+   "id": "video--generator",
+   "record": "video teardown, stage 4 loop",
+   "asset": "video",
+   "actor": "generator",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v19-damon.md",
+   "writes": "5-brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 4,
+    "last": "2026-09-24"
+   }
+  },
+  {
+   "id": "video--creator-concept",
+   "record": "the stage-2 spec",
+   "asset": "video",
+   "actor": "creator",
+   "prompt": "tools/video-writing/prompts/stage-7b-page/stage7b-concept-v7-damon.md",
+   "writes": "7b-page.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 234,
+    "last": "2026-09-25"
+   },
+   "note": "the short brief a creator actually opens; carries the SOUND line since v6"
+  },
+  {
+   "id": "video--hook-asset",
+   "record": "a NONE verdict at stage 4a",
+   "asset": "video",
+   "actor": "either",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/hook-asset/stage5-hookasset-v2-damon.md",
+   "writes": "5-brief.md",
+   "status": "approved",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "tools/video-teardown/machine/chain.py:757-769 globs stage5-hookasset-*.md across PROMPT_HOMES when stage 4a returns NONE",
+    "counted": "no run on the runs plane at SI-184 (zero-run styles retired); kept approved because code still routes to it"
+   },
+   "note": "fires only when nothing on screen can carry the product"
+  },
+  {
+   "id": "static--designer",
+   "record": "image teardown, stages 1-2b; image writing, stages 3-5",
+   "asset": "static",
+   "actor": "designer",
+   "prompt": "tools/image-writing/prompts/stage6-image-brief-v6-damon.md",
+   "writes": "06-brief.md \u00b7 work-order.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 98,
+    "last": "2026-09-25"
+   }
+  },
+  {
+   "id": "static--creator",
+   "record": "image teardown, stages 1-2b; image writing, stages 3-5",
+   "asset": "static",
+   "actor": "creator",
+   "prompt": "tools/image-writing/prompts/stage6-creator-static-brief-v1-damon.md",
+   "writes": "06-brief.md",
+   "status": "approved",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "tools/image-writing/tools/writing.py BRANCH routes creator \u00b7 single to stage6-creator-static-brief* (highest on disk: v2)",
+    "counted": "no creator \u00b7 single run on the runs plane at SI-184 (zero-run styles retired); kept approved because code still routes to it"
+   }
+  },
+  {
+   "id": "carousel--generator",
+   "record": "image teardown, stages 1-2b; image writing, stages 3-5",
+   "asset": "carousel",
+   "actor": "generator",
+   "prompt": "tools/image-writing/prompts/stage6-ai-sequence-brief-v1-damon.md",
+   "writes": "06-brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 6,
+    "last": "2026-09-30",
+    "reader": "tools/image-writing/tools/writing.py BRANCH routes ai \u00b7 sequence and creator \u00b7 sequence to stage6-ai-sequence-brief* (highest on disk: v2)",
+    "counted": "runs not counted by the register: 6 run folders under runs/image-teardown/ name this prompt in 06-brief.md's first line; last = their latest run.json filed date; recounted by SI-184 (zero-run styles retired)"
+   }
+  },
+  {
+   "id": "carousel--creator",
+   "record": "image teardown, stages 1-2b; image writing, stages 3-5",
+   "asset": "carousel",
+   "actor": "creator",
+   "prompt": "tools/image-writing/prompts/archive/stage6-creator-sequence-brief-v1-damon.md",
+   "writes": "06-brief.md",
+   "status": "deprecated",
+   "state": "parked",
+   "evidence": {
+    "runs": 2,
+    "last": "2026-09-23",
+    "reader": "none \u2014 tools/image-writing/tools/writing.py BRANCH routes creator \u00b7 sequence to the AI sequence brief (the owner, 2026-10-01: carousels are AI only)",
+    "counted": "2 run folders under runs/image-teardown/ name this prompt in 06-brief.md's first line, both filed before the route was retired; recounted by SI-184 (zero-run styles retired)",
+    "ruled": "deprecated by SI-184 (zero-run styles retired): no code reader; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
+   }
+  },
+  {
+   "id": "copy--buyer",
+   "record": "copy chain, stage 8 render",
+   "asset": "copy",
+   "actor": "buyer",
+   "prompt": "tools/copywriter/prompts/stage9-brief-v1-damon.md",
+   "writes": "stage9--brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 109,
+    "last": "2026-09-29"
+   },
+   "note": "NAME COLLISION: email-production writes stage9--brief.md too"
+  },
+  {
+   "id": "email--builder",
+   "record": "email chain, stage 8 build",
+   "asset": "email",
+   "actor": "builder",
+   "prompt": "tools/email-production/prompts/stage9-brief-v2-damon.md",
+   "writes": "stage9--brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 25,
+    "last": "2026-09-30"
+   },
+   "note": "EMAIL-CHAIN.md proposes dropping this step \u2014 the owner rules"
+  },
+  {
+   "id": "email--production",
+   "record": "the marketing calendar",
+   "asset": "email",
+   "actor": "builder",
+   "prompt": "tools/email-production/brief.py",
+   "writes": "brief.md",
+   "status": "approved",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "code, not a prompt: imported by tools/email-production/run_month.py and copy_plan.py; run as python3 brief.py <compose dir>",
+    "counted": "runs not counted by the register"
+   },
+   "note": "deterministic, no model"
+  },
+  {
+   "id": "email--designer",
+   "record": "a finished email brief",
+   "asset": "email",
+   "actor": "designer",
+   "prompt": "tools/email-production/figma_brief.py",
+   "writes": "figma brief",
+   "status": "approved",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "code, not a prompt: imported by tools/email-production/pick_frame.py; run as python3 figma_brief.py results/<slot>",
+    "counted": "runs not counted by the register"
+   }
+  },
+  {
+   "id": "page--builder",
+   "record": "page chain, stage 4 close",
+   "asset": "page",
+   "actor": "builder",
+   "prompt": "lab/damon/pages/prompts/stage6-brief-v3-damon.md",
+   "writes": "stage6--brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 4,
+    "last": "2026-09-22"
+   }
+  },
+  {
+   "id": "any--approver",
+   "record": "an idea, no swipe",
+   "asset": "any",
+   "actor": "approver",
+   "prompt": "lab/damon/outlier-brief/prompts/idea3-concept-brief-v2-damon.md",
+   "writes": "idea3--concept-brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 4,
+    "last": "2026-09-27"
+   },
+   "note": "FORMAT-FREE \u2014 the format is picked at approval time. One of the two places teardown and brief are already decoupled; copy this shape."
+  },
+  {
+   "id": "video--clipper",
+   "record": "ANY published brief, any lane",
+   "asset": "video",
+   "actor": "creator",
+   "prompt": "lab/damon/clipping/prompts/brief-to-hero-v1-damon.md",
+   "writes": "brief.md",
+   "status": "approved",
+   "state": "live",
+   "evidence": {
+    "runs": 17,
+    "last": "2026-09-30"
+   },
+   "note": "takes a finished brief and re-points it at a brand's organic hero \u2014 no teardown involved. The second place it is already decoupled."
+  },
+  {
+   "id": "campaign--executor",
+   "record": "the Control Room registry",
+   "asset": "campaign",
+   "actor": "builder",
+   "prompt": "lab/damon/control-room/prompts/brief/campaign.md",
+   "writes": "\u2014",
+   "status": "deprecated",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "lab/damon/control-room/registry/agents.json:826 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
+    "ruled": "deprecated by SI-184 (zero-run styles retired): no run, no reader outside lab; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
+   }
+  },
+  {
+   "id": "calendar--executor",
+   "record": "the Control Room registry",
+   "asset": "calendar",
+   "actor": "builder",
+   "prompt": "lab/damon/control-room/prompts/brief/calendar.md",
+   "writes": "\u2014",
+   "status": "deprecated",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "lab/damon/control-room/registry/agents.json:857 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
+    "ruled": "deprecated by SI-184 (zero-run styles retired): no run, no reader outside lab; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
+   }
+  },
+  {
+   "id": "page--executor",
+   "record": "the Control Room registry",
+   "asset": "page",
+   "actor": "builder",
+   "prompt": "lab/damon/control-room/prompts/brief/landing-page.md",
+   "writes": "\u2014",
+   "status": "deprecated",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014",
+    "reader": "lab/damon/control-room/registry/agents.json:780 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
+    "ruled": "deprecated by SI-184 (zero-run styles retired): no run, no reader outside lab; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
+   }
+  },
+  {
+   "id": "video--named-creator",
+   "record": "video teardown, stage 4 loop",
+   "asset": "video",
+   "actor": "creator",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/named-creator/stage5-creator-brief-v1-damon.md",
+   "writes": "5-brief.md",
+   "status": "draft",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014"
+   },
+   "note": "addressed to one named creator; not in chain.py's prompt homes"
+  },
+  {
+   "id": "match--roster",
+   "record": "a finished brief",
+   "asset": "\u2014",
+   "actor": "\u2014",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-match/creator-match-v1-damon.md",
+   "writes": "\u2014",
+   "status": "draft",
+   "state": "parked",
+   "evidence": {
+    "runs": 0,
+    "last": "\u2014"
+   },
+   "note": "finds who on the roster can carry a brief; not wired"
+  }
+ ],
+ "retire_candidates": [
+  {
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v23-damon.md",
+   "last": "2026-08-28",
+   "runs": 88
+  },
+  {
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v21-damon.md",
+   "last": "2026-08-27",
+   "runs": 6
+  },
+  {
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v16-damon.md",
+   "last": "\u2014",
+   "runs": 0
+  },
+  {
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v22-damon.md",
+   "last": "\u2014",
+   "runs": 0
+  },
+  {
+   "prompt": "tools/video-writing/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v4-damon.md",
+   "last": "2026-08-31",
+   "runs": 2,
+   "careful": "byte-identical copy components/chain-runner/chains/video-teardown/prompts/stage5/v4.md is PINNED by components/chain-runner/chains/video-teardown/chain.json:119"
+  },
+  {
+   "prompt": "lab/damon/pages/prompts/stage6-brief-v1-damon.md",
+   "last": "\u2014",
+   "runs": 0
+  },
+  {
+   "prompt": "lab/damon/pages/prompts/stage6-brief-v2-damon.md",
+   "last": "\u2014",
+   "runs": 2
+  }
+ ],
+ "_retire_rule": "the owner rules the kill list. Archive into the folder's own archive/, never delete.",
+ "teardown_types": {
+  "_what": "Each brief TYPE image-teardown's register numbers (tools/image-teardown/tools/briefs.py TYPES) -> the brief style id(s) above it IS. Two registers, two jobs: that one numbers brief instances, this one declares styles. A list is a verified placement; {\"unmapped\": reason} is a type no style could be placed for without guessing. Read it through tools/briefs.py style_for(). SI-137 (brief vocabulary map), 2026-10-08.",
+  "image-ai": ["static--designer"],
+  "image-creator": ["static--creator"],
+  "sequence-ai": ["carousel--generator"],
+  "sequence-creator": ["carousel--creator"],
+  "video-ai": ["video--generator"],
+  "video-creator": ["video--creator"],
+  "email": {"unmapped": "the card named email--production, but every email row is filed by open_email() off a finished email-production run's stage9--brief.md, which email--builder writes; email--production is the calendar's deterministic brief.md. the owner places it."},
+  "page": ["page--builder"],
+  "copy": ["copy--buyer"],
+  "concept": {"unmapped": "no row in image-teardown's register carries it and no code files it; the card named video--creator-concept (7b-page.md), while any--approver writes the outlier lane's concept brief. the owner places it."}
+ }
+}

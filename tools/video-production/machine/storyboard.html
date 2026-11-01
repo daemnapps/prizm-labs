@@ -1,0 +1,171 @@
+<!doctype html><meta charset="utf-8">
+<title>Storyboard</title>
+<style>
+ :root{--bg:#100f0d;--card:#1a1815;--sunk:#0b0a09;--rule:#2e2a24;--ink:#f0ebe0;
+       --dim:#948d7e;--faint:#6b6459;--a:#e0a44a;--good:#6fc08d;--wait:#dfb63c}
+ *{box-sizing:border-box}
+ body{background:var(--bg);color:var(--ink);margin:0;
+      font:15px/1.5 -apple-system,system-ui,sans-serif}
+ .top{position:sticky;top:0;z-index:10;background:var(--bg);
+      border-bottom:1px solid var(--rule);padding:13px 20px;
+      display:flex;gap:14px;align-items:baseline}
+ h1{font-size:16px;margin:0;font-weight:800}
+ .mt{color:var(--dim);font:12px ui-monospace,Menlo,monospace;flex:1}
+ button{background:var(--card);color:var(--ink);border:1px solid var(--rule);
+        border-radius:7px;padding:7px 13px;font:inherit;font-size:12px;cursor:pointer}
+ button:hover{border-color:var(--a)}
+ button.go{background:var(--a);color:#1a1206;border-color:var(--a);font-weight:700}
+ .wrap{padding:18px 20px 90px;max-width:1180px;margin:0 auto}
+ .sc{background:var(--card);border:1px solid var(--rule);border-radius:12px;
+     margin-bottom:14px;overflow:hidden}
+ .hd{display:flex;gap:12px;align-items:center;padding:12px 16px;
+     border-bottom:1px solid var(--rule);background:var(--sunk)}
+ .n{width:28px;height:28px;border-radius:8px;background:var(--a);color:#1a1206;
+    display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+ .ty{font:10px ui-monospace,monospace;letter-spacing:.1em;padding:3px 8px;
+     border-radius:4px;border:1px solid currentColor}
+ .ty.A{color:#7fb3e8}.ty.B{color:#c99ae0}.ty.C{color:var(--good)}
+ .tc{font:11px ui-monospace,monospace;color:var(--faint);
+     font-variant-numeric:tabular-nums}
+ .st{margin-left:auto;font:10px ui-monospace,monospace;letter-spacing:.08em;
+     text-transform:uppercase;padding:3px 9px;border-radius:4px;
+     border:1px solid currentColor;color:var(--faint)}
+ .st.owned{color:var(--good)}.st.queued{color:var(--wait)}
+ .st.generated{color:var(--a)}.st.reused{color:#7fb3e8}
+ .bd{display:grid;grid-template-columns:1fr 300px;gap:18px;padding:15px 16px}
+ @media(max-width:820px){.bd{grid-template-columns:1fr}}
+ .say{font-size:16px;line-height:1.55;margin:0 0 8px}
+ .say b{color:var(--a);font-weight:600}
+ .dl{font:12px ui-monospace,monospace;color:#c99ae0;margin:0 0 10px}
+ .happens{color:var(--dim);margin:0 0 9px}
+ .meta{font-size:12px;color:var(--faint);line-height:1.7}
+ .meta b{color:var(--dim);font-weight:600}
+ .slot{background:var(--sunk);border:1px dashed var(--rule);border-radius:9px;
+       min-height:150px;display:flex;flex-direction:column;align-items:center;
+       justify-content:center;padding:14px;text-align:center;gap:9px}
+ .slot .need{color:var(--faint);font-size:12px;line-height:1.5}
+ .slot video,.slot img{width:100%;border-radius:7px;display:block}
+ .acts{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+ .picks{margin-top:10px;display:grid;gap:6px}
+ .pick{display:flex;gap:9px;align-items:center;background:var(--sunk);
+       border:1px solid var(--rule);border-radius:7px;padding:7px 9px;font-size:12px}
+ .pick .who{font-weight:600;white-space:nowrap}
+ .pick .vis{color:var(--faint);flex:1;overflow:hidden;text-overflow:ellipsis;
+            white-space:nowrap}
+ .pick button{padding:4px 9px;font-size:11px}
+ .empty{color:var(--faint);font-size:12px;padding:8px 0}
+ .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);
+      border-top:1px solid var(--rule);padding:11px 20px;display:flex;gap:12px;
+      align-items:center;font-size:13px}
+ .bar .sp{flex:1;color:var(--dim)}
+</style>
+
+<div class="top">
+  <h1 id="ttl">…</h1>
+  <span class="mt" id="mt"></span>
+  <button onclick="matchAll()">Find owned footage for every scene</button>
+</div>
+<div class="wrap" id="board"><div class="empty">loading…</div></div>
+<div class="bar">
+  <span class="sp" id="tally"></span>
+  <button onclick="load()">Refresh</button>
+  <button class="go" onclick="alert('Premiere export is next — the scenes have to hold first.')">Send to Premiere</button>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ts=v=>{v=+v||0;return `${Math.floor(v/60)}:${String(Math.round(v%60)).padStart(2,'0')}`};
+let B=null;
+
+async function load(){
+  B = await (await fetch('/api/board')).json();
+  $('#ttl').textContent = B.title;
+  $('#mt').textContent = `${B.scenes.length} scenes · ${B.runtime}s`;
+  $('#board').innerHTML = B.scenes.map(card).join('');
+  tally();
+}
+function tally(){
+  const c=k=>B.scenes.filter(s=>s.status===k).length;
+  $('#tally').textContent =
+    `${c('generated')} generated · ${c('reused')} reusing another scene's still · `+
+    `${c('owned')} from footage we own · ${c('queued')} queued · ${c('empty')} empty`;
+}
+function card(s){
+  const chosen = s.takes && s.takes.length ? s.takes[s.chosen ?? 0] : null;
+  return `<div class="sc" id="sc${s.n}">
+    <div class="hd">
+      <div class="n">${s.n}</div>
+      <span class="ty ${s.type}">TYPE ${s.type}</span>
+      <span class="tc">${ts(s.start)}–${ts(s.end)} · ${s.seconds}s</span>
+      <span class="st ${s.status}">${s.status==='owned'?'owned footage':s.status}</span>
+    </div>
+    <div class="bd">
+      <div>
+        ${s.say?`<p class="say"><b>“</b>${esc(s.say)}<b>”</b></p>`:''}
+        ${s.delivery?`<p class="dl">${esc(s.delivery)}</p>`:''}
+        ${s.happens?`<p class="happens">${esc(s.happens)}</p>`:''}
+        ${s.product?`<p class="happens"><b>Product:</b> ${esc(s.product)}</p>`:''}
+        <div class="meta">
+          ${s.who?`<div><b>Who</b> ${esc(s.who)}</div>`:''}
+          ${s.camera?`<div><b>Camera</b> ${esc(s.camera)}</div>`:''}
+          ${s.hear?`<div><b>Hear</b> ${esc(s.hear)}</div>`:''}
+          ${s.on_screen?`<div><b>On screen</b> ${esc(s.on_screen)}</div>`:''}
+          ${s.hold?`<div><b>Hold</b> ${esc(s.hold)}</div>`:''}
+        </div>
+        <div class="picks" id="p${s.n}"></div>
+      </div>
+      <div>
+        <div class="slot">
+          ${chosen ? renderTake(chosen) : `<div class="need">${esc(s.needs)}</div>`}
+          <div class="acts">
+            <button onclick="regen(${s.n})">Regen</button>
+            <button onclick="match(${s.n})">Find footage</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function renderTake(t){
+  if(t.kind==='owned')
+    return `<video src="http://127.0.0.1:8420/api/video?id=${t.clip_id}#t=${t.start},${t.end}"
+             muted playsinline controls preload="metadata"></video>
+            <div class="need">${esc(t.creator||'')} · ${ts(t.start)}–${ts(t.end)}<br>from the library</div>`;
+  if(t.file && /\.(mp4|mov)$/i.test(t.file))
+    return `<video src="/api/take?f=${encodeURIComponent(t.file)}" controls muted playsinline></video>`;
+  if(t.file) return `<img src="/api/take?f=${encodeURIComponent(t.file)}">` +
+    (t.reused_from ? `<div class="need">same still as scene ${t.reused_from} — no cut</div>` : '');
+  return `<div class="need">queued</div>`;
+}
+async function regen(n){
+  const note = prompt('Anything to change? (leave blank to just re-roll it)') ?? null;
+  if(note===null) return;
+  await fetch('/api/regen',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({n, note})});
+  await load();
+}
+async function match(n){
+  const el=$('#p'+n); el.innerHTML='<div class="empty">searching the library…</div>';
+  const d=await (await fetch('/api/match?n='+n)).json();
+  const picks=d.picks||[];
+  el.innerHTML = picks.length ? picks.map(p=>`
+    <div class="pick">
+      <span class="who">${esc(p.creator)}</span>
+      <span class="tc">${ts(p.start)}–${ts(p.end)}</span>
+      <span class="vis">${esc(p.spoken||p.visuals||'')}</span>
+      <button onclick='use(${n},${JSON.stringify(p).replace(/'/g,"&#39;")})'>Use</button>
+    </div>`).join('')
+    : '<div class="empty">nothing we own answers this — it gets generated</div>';
+}
+async function matchAll(){
+  for(const s of B.scenes) await match(s.n);
+}
+async function use(n,p){
+  await fetch('/api/use',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({n, clip_id:p.clip_id, creator:p.creator,
+                         start:p.start, end:p.end, label:p.visuals||''})});
+  await load();
+}
+load();
+</script>

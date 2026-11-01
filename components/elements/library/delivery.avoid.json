@@ -1,0 +1,50 @@
+{
+ "element": "delivery",
+ "asset": "avoid",
+ "source": "components/marketing-doctrine/delivery.json › avoid",
+ "enforced_by": "the copywriter and the video teardown read it; nothing refuses an unknown value",
+ "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial.",
+ "rows": [
+  {
+   "id": "cringe-register",
+   "name": "cringe-register",
+   "what": "The register this room mocks, named by the room, in the room's own words.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › avoid",
+   "extra": {
+    "when": "Every section, every level. It is checked against the chosen register and delivery style before anything is written."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "ad-voice-tells",
+   "name": "ad-voice-tells",
+   "what": "The tells that mark a piece as an ad before a claim is heard: the announcer lift at the end of a line, stacked superlatives, the too-clean read, the sell turn in the first seconds, the smile held past the end of the sentence, the grade that matches no room anyone lives in.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/delivery.json › avoid",
+   "extra": {
+    "when": "Every piece, and hardest wherever the room's scepticism toward advertising is the main barrier."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

@@ -1,0 +1,78 @@
+[
+ {
+  "id": "R24",
+  "suite": "new-workflow-design/builds/review-component/test_rv47_type_page.py",
+  "first_failing_line": "FAIL: test_every_witness_over_the_frozen_grammar_passes (__main__.TheWitnessesAreGreen) (witness='test_rv1_manifest.py')",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R25",
+  "suite": "new-workflow-design/builds/system-path/test_si1_component.py",
+  "first_failing_line": "AssertionError: system-runs manifest top-level keys differ: ['item_id', 'item_label', 'items', 'kind', 'note', 'open_items', 'title', 'verdict_fields', 'written_by', 'written_by_evidence']",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R26",
+  "suite": "new-workflow-design/builds/teardown-integration/test_drive_source.py",
+  "first_failing_line": "FAIL: test_refused_and_names_the_relative_form (__main__.AbsoluteMountRefusedByName)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R27",
+  "suite": "new-workflow-design/builds/teardown-integration/test_mini_run_request.py",
+  "first_failing_line": "ERROR: test_a_junk_venue_never_invents_one (__main__.DamonsPathUntouched)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R28",
+  "suite": "new-workflow-design/builds/teardown-integration/test_ti14_residue.py",
+  "first_failing_line": "FAIL wm49: exit 1, 4 failing line(s), 2 outside the residue",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R29",
+  "suite": "new-workflow-design/builds/teardown-integration/test_view_mirrors_board.py",
+  "first_failing_line": "FAIL bench-accept-4b-r7-chain-head-kerin-01-d--bench/prompts/0-triage.md \u2014 prompt resolves by the convention (or is listed as omitted) \u2014 missing platform/data/records/teardown-runs/bench-accept-4b-r7-c\u2026",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R30",
+  "suite": "new-workflow-design/builds/vt-multiuser/test_library_root.py",
+  "first_failing_line": "AttributeError: module 'library' has no attribute 'creators_root'",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R31",
+  "suite": "new-workflow-design/builds/vt-multiuser/test_mount_multiuser.py",
+  "first_failing_line": "AttributeError: module 'library' has no attribute 'creators_root'",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R32",
+  "suite": "new-workflow-design/builds/worker-multirepo/test_verdict_cap.py",
+  "first_failing_line": "FAIL: test_no_module_defines_the_cap_literal (__main__.NoLiterals)",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R33",
+  "suite": "new-workflow-design/builds/worker-multirepo/test_wm49_guarded_surfaces.py",
+  "first_failing_line": "FAIL: test_the_only_second_copies_are_the_owner_files_the_proposal_names (__main__.TheListItself) (copy='new-workflow-design/builds/system-path/task-cards.md')",
+  "exit_code": 1,
+  "kind": "red"
+ },
+ {
+  "id": "R34",
+  "suite": "new-workflow-design/builds/upright-qc/test_uq6_avatar_walk.py",
+  "first_failing_line": "HUNG \u2014 killed after 90s. NOT a pass: the suite never finished, so nothing about it is known.",
+  "kind": "timeout"
+ }
+]

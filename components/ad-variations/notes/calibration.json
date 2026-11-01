@@ -1,0 +1,77 @@
+{
+ "_what": "Post #1 (TikTok 7167399325910289706) planned automatically, compared with the hand-made Asset 01 spec, and the prompt changes that closed the gaps. Rendered on the Ad Variations page, 'Against the hand-made spec'.",
+ "golden": "the team notes (page (team page))",
+ "summary": "The first prompts found the elements and the corpus numbers, but locked too much, bundled several changes into one variation and read the sound wrong. Three passes later the automatic plan covers seven of the hand spec's ten levers (not the problem line, the demo bodies or the pitcher swap) with the same structure (a paid base plus one-lever variations, cast from the roster), finds the music bed and the reveal hit, and finds post #3 as the same template. What it still cannot do is see the frames: the picture for each beat comes from the teardown record, so it cannot spot reused footage the way the hand spec did.",
+ "rows": [
+  {
+   "what": "Cuts and beats",
+   "hand": "12 beats from ffmpeg scene detection — hard cuts at 2.13, 4.09, 6.34, 6.97, 9.93, 10.80, 11.64, 14.89, 16.02 s and a dissolve at 13.37 s; a thumbnail on every beat.",
+   "auto_v1": "10 hard cuts measured — every hand-spec hard cut except 4.09 (found as a soft change) and the 13.37 dissolve, plus one at 0.46 s. Pictures come from the record: 6.34–6.97 s was placed in the store aisle, where the hand spec shows the in-stitch payoff. No thumbnails.",
+   "change": "Stage 1 v2 is told it cannot see: never move a picture across a measured cut the record does not support; mark uncertain placement.",
+   "auto_v2": "Same cuts; the 6.34–6.97 s picture is still read from the record. Seeing frames needs a vision step — not built."
+  },
+  {
+   "what": "Sound",
+   "hand": "Music stem: a quiet bed 7.0–10.8 s, near silence 11–14 s, the loudest hit of the video at 14.5–15.5 s on the reveal.",
+   "auto_v1": "Mix loudness only — concluded there was no music bed.",
+   "change": "Stage 0 now separates the music stem on the local Demucs and measures it; stage 1 reads the stem before the record's Music line.",
+   "auto_v2": "Bed found at 7.0–10.5 s and the hit at 14.5–15.0 s; the record's own contradiction (header says phonk, rows say none) is reported."
+  },
+  {
+   "what": "The brand's own test",
+   "hand": "Post #3 (9.4M) is the same template with a different reactor — the brand already moved the reactor and went 9.4M → 16.4M. The hook's background is post #6's footage.",
+   "auto_v1": "Not found.",
+   "change": "A computed 'closest posts' table — same values on what a viewer sees and hears, the same first line or sticker wording counted four times — goes to stages 2 and 3.",
+   "auto_v2": "#3 is the closest post (73%), with #10 (the same 'heck is that' opener) also listed. Reuse of #6's footage is not visible without frames."
+  },
+  {
+   "what": "Locks and levers",
+   "hand": "10 ranked levers (reactor, sticker text, stitched clip, problem line, captions, end frame + paid ask, demo bodies, pitcher, SKU, benchmark line), 14 locks.",
+   "auto_v1": "7 levers. Locked the whole hook layout including who reacts, and locked captions, SKU, talent and end frame on corpus counts alone.",
+   "change": "v2: call the parts (who reacts, the sticker words, the clip behind the PIP), call organic and paid separately, and a value everyone shares is not proof it works. That swung to 33 ranked levers, so v3: ten ranked levers, the rest 'later', the nineteen fixed keys only.",
+   "auto_v2": "Ten ranked levers: the borrowed clip, the first line, who reacts, the PIP layout, the named public figure, product in frame one, the sticker wording, the dominant roll, captions, the product naming."
+  },
+  {
+   "what": "The variations",
+   "hand": "A paid base plus 10, each moving one lever; two reactor swaps cast from the roster (Marcus 29, Ray 61); captions; an offer end card; the King Set; faceless inserts; a motion-transfer pitch swap.",
+   "auto_v1": "A control plus 10, but 8 of 11 changed three variables and two were really new formats.",
+   "change": "v2/v3: at most two variables per variation, no format changes in the matrix, check the paid cut's needs (sound-off, 4:5, one offer), cast person-levers from the roster by name, and test a second hero SKU.",
+   "auto_v2": "A paid base (4:5, captions, one offer) plus 10: new borrowed clip, new first line, Marcus as reactor, Omar as reactor, the benchmark swapped for a customer's own aspiration, product out of frame one, new sticker wording, the dominant roll, captions, the Vitals Set named early. Not planned: the problem line (the v2 run had it), faceless demo inserts, the motion-transfer pitch swap. Added that the hand spec did not have: the dominant-roll test and the product held out of frame one."
+  },
+  {
+   "what": "Cost of the set",
+   "hand": "$__ machine cost; $__ if the cheaper motion route passes; ≈15 h.",
+   "auto_v1": "$__ ($__ with TEST routes), priced by the machine from routes.json.",
+   "change": "Rates written into routes.json once; the model gives units only.",
+   "auto_v2": "$__ on the locked routes — the two reactor swaps run on Genjutsu at ≈$__ each — or $__ when the TEST motion routes (Wan 2.2 Animate, Kling Motion Control) replace it; ≈18 h."
+  },
+  {
+   "what": "Gates",
+   "hand": "8 gates, each tied to a check that exists (safezone.py, claimfix.py, syncheck.py, voice_qc.py, gates 4/5).",
+   "auto_v1": "The same 8, with variation-specific pass lines; gates forced by the routes a recipe uses.",
+   "change": "the owner's seam rule added (27 Sep): chained clips are made in order from the real last frame, a seams gate at every join (≤ ~2× the median frame step), an optical-flow bridge only as the fallback.",
+   "auto_v2": "9 gates; the seams gate is forced wherever a recipe chains generated clips."
+  },
+  {
+   "what": "the owner decides",
+   "hand": "10 open calls (order, hero SKU, likeness, motion from a creator, voice cloning, the comment handle, 'Will Smith', the store shelf, the offer, organic vs paid).",
+   "auto_v1": "5 — the public figure, a real result vs the gag, the close's blame line, the close technique, the borrowed clip.",
+   "change": "No prompt change aimed here.",
+   "auto_v2": "6, overlapping the hand spec on the borrowed clip, the public figure and the offer; adds the read style, the market stage and the signature neck asset."
+  },
+  {
+   "what": "New formats",
+   "hand": "Not in Asset 01's scope.",
+   "auto_v1": "5 per ad, each part an index value with its evidence, marked NEW — untested.",
+   "change": "—",
+   "auto_v2": "5 per ad."
+  },
+  {
+   "what": "Time and spend to plan",
+   "hand": "A working session with frame pulls and hand analysis.",
+   "auto_v1": "≈20 minutes, ≈$__ of Claude per ad.",
+   "change": "—",
+   "auto_v2": "≈20–25 minutes, ≈$__ of Claude per ad at list price; the Variable Index was $__ once for the 60 posts."
+  }
+ ]
+}

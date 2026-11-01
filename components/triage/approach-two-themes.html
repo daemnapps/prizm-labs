@@ -1,0 +1,921 @@
+<title>Triage Approach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f4f5f3;--paper:#fff;--ink:#1b2420;--ink2:#4b5953;--ink3:#6c7973;--line:#d9e0dc;--soft:#edf1ef;
+--core:#2f5bd3;--cores:#e6edfd;--cmp:#1f6b57;--cmps:#e0efe9;--ops:#a3480f;--opss:#fbe9dc;--ref:#6a52a6;--refs:#efeaf8;
+--pos:#1e7a48;--posb:#e3f2e8;--neg:#b0362c;--negb:#f8e6e3;--prop:#9a6205;--props:#f8efdc;--code:#f1f3f2;
+--sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;
+--line:#2a3530;--soft:#1d2622;--core:#8aa9ff;--cores:#1b2645;--cmp:#5cc6a8;--cmps:#163a31;--ops:#f0a06b;--opss:#3a2414;--ref:#ae98e2;--refs:#251f35;
+--pos:#58c98d;--posb:#153020;--neg:#e57a70;--negb:#3a1714;--prop:#e2a64a;--props:#33270e;--code:#111715}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1412;--paper:#161d1a;--ink:#e3eae6;--ink2:#a7b4ae;--ink3:#86948e;--line:#2a3530;--soft:#1d2622;
+--core:#8aa9ff;--cores:#1b2645;--cmp:#5cc6a8;--cmps:#163a31;--ops:#f0a06b;--opss:#3a2414;--ref:#ae98e2;--refs:#251f35;--pos:#58c98d;--posb:#153020;
+--neg:#e57a70;--negb:#3a1714;--prop:#e2a64a;--props:#33270e;--code:#111715}
+.p1 *{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-inline:16px;padding-block:28px 64px}
+.p1 .wrap{max-width:1020px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+.p1 h1,.p1 h2,.p1 h3{margin:0;text-wrap:balance;line-height:1.2}.p1 h1{font-size:31px;font-weight:700}.p1 h2{font-size:21px;font-weight:650}.p1 h3{font-size:15.5px;font-weight:600}
+.p1 p{margin:0}.p1 code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:0 4px;border-radius:3px;word-break:break-word}
+.p1 a{color:var(--core)}
+.p1 .aey{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.p1 .alede{max-width:72ch;color:var(--ink2);font-size:16.5px}.p1 .head{display:flex;flex-direction:column;gap:10px}
+.p1 .apanel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.p1 .sec{display:flex;flex-direction:column;gap:12px}.p1 .sub{color:var(--ink2);max-width:74ch}
+.p1 .atw{overflow-x:auto}.p1 svg text{font-family:var(--sans)}
+.p1 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.p1 .theme{border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;border:2px solid}
+.p1 .theme.cmp{border-color:var(--cmp);background:var(--cmps)}.p1 .theme.ops{border-color:var(--ops);background:var(--opss)}
+.p1 .theme h2{font-size:19px}.p1 .theme .who{font-size:13.5px;color:var(--ink2)}
+.p1 .theme ul{margin:0;padding-left:18px}.p1 .theme li{margin:3px 0;font-size:14.5px}
+.p1 table{border-collapse:collapse;width:100%;font-size:14px}.p1 th,.p1 td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.p1 th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.p1 .tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.p1 .pos{color:var(--pos);background:var(--posb)}.p1 .neg{color:var(--neg);background:var(--negb)}.p1 .neu{color:var(--ink2);background:var(--soft)}
+.p1 .hl{color:var(--prop);background:var(--props)}
+.p1 .ex{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.p1 .ex .item{font-weight:600}.p1 .ex ul{margin:0;padding-left:18px;font-size:14px}.p1 .ex .noise{color:var(--ink3);font-size:13px}
+.p1 .cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.p1 .c{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.p1 .c p{font-size:14px;color:var(--ink2)}
+.p1 ol.q{display:flex;flex-direction:column;gap:8px;padding-left:22px;margin:0}.p1 ol.q li{padding-left:4px}
+.p1 .who-tag{font:600 12px var(--mono);color:var(--ref)}
+.p1 .star{background:var(--posb);border-radius:8px;padding:10px 14px}
+.p1 .dec{border-left:4px solid var(--prop);background:var(--props);border-radius:8px;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.p1 .dec ul{margin:0;padding-left:18px;font-size:14px}
+.p1 .tl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.p1 .tl .c b.d{font:600 12px var(--mono);color:var(--core)}
+.p1 .split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.p1 .split .c h3{display:flex;gap:8px;align-items:center}
+@media (max-width:760px){.p1 .tl,.p1 .split{grid-template-columns:1fr}}
+.p1 footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:4px}
+@media (max-width:760px){.p1 .two,.p1 .cards3{grid-template-columns:1fr}}
+
+.p1{display:flex;flex-direction:column;gap:32px}
+.partnav{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px}
+.parthead{border-top:3px solid var(--core);padding-top:18px;display:flex;flex-direction:column;gap:8px}
+.outer{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+.outer>*{min-width:0;max-width:100%}
+.ap .status .pill{white-space:normal;max-width:100%;height:auto}
+.ap{border-radius:14px;padding-block:8px;min-width:0;max-width:100%}
+
+/* Part 2: the atlas component page styles, scoped to .ap */
+.ap /* atlas-view: the dashboard's base (platform/views/viewers/_templates/atlas.html),.ap then only what the dashboard has no element for */
+
+  :root{
+    --ground:#F6F8F7; --panel:#FFFFFF; --panel-2:#EDF2F0;
+    --ink:#17211D; --ink-2:#4A5A54; --ink-3:#6B7A74;
+    --rule:#D9E1DD; --rule-2:#E8EEEB;
+    --accent:#0E6B5C; --accent-soft:#E2EFEB;
+    --ok:#1D7A4C; --ok-bg:#E3F1E8;
+    --warn:#A66B06; --warn-bg:#F6EEDC;
+    --crit:#B3372E; --crit-bg:#F7E6E4;
+    --idle:#6B7A7418; --idle-ink:#6B7A74;
+    --shadow:0 1px 2px #17211d10, 0 8px 24px #17211d08;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .ap{
+      --ground:#0F1513; --panel:#161D1A; --panel-2:#1C2521;
+      --ink:#E4EBE8; --ink-2:#A2B0AA; --ink-3:#85938D;
+      --rule:#26312D; --rule-2:#1E2724;
+      --accent:#4FC5AC; --accent-soft:#173A33;
+      --ok:#4CC98A; --ok-bg:#15301F;
+      --warn:#E0A33E; --warn-bg:#33270D;
+      --crit:#E4776C; --crit-bg:#3A1613;
+      --idle:#8FA09A22; --idle-ink:#8FA09A;
+      --shadow:0 1px 2px #0006, 0 10px 28px #0004;
+    }
+  }
+  :root[data-theme="dark"] .ap{
+    --ground:#0F1513; --panel:#161D1A; --panel-2:#1C2521;
+    --ink:#E4EBE8; --ink-2:#A2B0AA; --ink-3:#85938D;
+    --rule:#26312D; --rule-2:#1E2724;
+    --accent:#4FC5AC; --accent-soft:#173A33;
+    --ok:#4CC98A; --ok-bg:#15301F;
+    --warn:#E0A33E; --warn-bg:#33270D;
+    --crit:#E4776C; --crit-bg:#3A1613;
+    --idle:#8FA09A22; --idle-ink:#8FA09A;
+    --shadow:0 1px 2px #0006, 0 10px 28px #0004;
+  }
+
+  .ap *{box-sizing:border-box}
+  .ap{margin:0; background:var(--ground); color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased}
+  .ap .mn{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums}
+  .ap code{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.88em; background:var(--panel-2); padding:1px 5px; border-radius:3px}
+  .ap a{color:var(--accent)}
+  .ap :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+  .ap .pgnav{position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:12px;
+    padding:9px 16px; background:var(--panel); border-bottom:1px solid var(--rule)}
+  .ap .pgnav .sp{flex:1}
+  .ap .pgnav .here{font-size:10.5px; font-weight:700; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+  .ap .pgnav button.tgl{display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    font:inherit; font-size:12.5px; font-weight:600; color:var(--ink-2);
+    padding:6px 11px; border:1px solid var(--rule); border-radius:999px;
+    background:var(--ground); white-space:nowrap; line-height:1.2}
+  .ap .pgnav button.tgl:hover{color:var(--ink); border-color:var(--accent)}
+
+  .ap .stamp{font-size:11.5px; color:var(--ink-3);
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  .ap .snapline{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; font-size:12.5px}
+  .ap .snapline .chip{background:var(--panel-2); border:1px solid var(--rule);
+    border-radius:999px; padding:3px 11px; color:var(--ink-2)}
+  .ap .snapline .chip b{color:var(--ink); font-weight:650}
+
+  .ap h3{margin:22px 0 8px; font-size:14px; font-weight:650; color:var(--ink-2)}
+  .ap .note{color:var(--ink-3); font-size:12.5px; max-width:82ch; margin:8px 0 0}
+
+  .ap .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(136px,1fr)); gap:10px;
+    margin:14px 0}
+  .ap .tile{background:var(--panel); border:1px solid var(--rule); border-radius:9px;
+    padding:12px 14px; box-shadow:var(--shadow)}
+  .ap .tile .n{font-size:26px; font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:-.03em}
+  .ap .tile .l{font-size:11.5px; color:var(--ink-3); margin-top:2px}
+  .ap .tile.ok .n{color:var(--ok)} .ap .tile.warn .n{color:var(--warn)}
+  .ap .tile.crit .n{color:var(--crit)} .ap .tile.acc .n{color:var(--accent)}
+
+  .ap .panel{background:var(--panel); border:1px solid var(--rule); border-radius:9px;
+    padding:15px 17px; margin:12px 0; box-shadow:var(--shadow)}
+  .ap .grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:12px}
+
+  .ap .tw{overflow-x:auto; border:1px solid var(--rule); border-radius:9px;
+    background:var(--panel); margin:12px 0; box-shadow:var(--shadow)}
+  .ap table{border-collapse:collapse; width:100%; font-size:13.5px}
+  .ap th{font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+    text-align:left; padding:10px 13px; border-bottom:1px solid var(--rule);
+    white-space:nowrap; font-weight:700; background:var(--panel-2)}
+  .ap td{padding:9px 13px; border-bottom:1px solid var(--rule-2); vertical-align:top}
+  .ap tr:last-child td{border-bottom:none}
+  .ap td.num{text-align:right; font-variant-numeric:tabular-nums;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px}
+  .ap .dim{color:var(--ink-3)}
+
+  .ap .pill{display:inline-block; border-radius:999px; padding:1px 9px; font-size:11.5px;
+    font-weight:650; letter-spacing:.01em; white-space:nowrap}
+  .ap .p-ok{background:var(--ok-bg); color:var(--ok)}
+  .ap .p-warn{background:var(--warn-bg); color:var(--warn)}
+  .ap .p-crit{background:var(--crit-bg); color:var(--crit)}
+  .ap .p-idle{background:var(--idle); color:var(--idle-ink)}
+  .ap .p-acc{background:var(--accent-soft); color:var(--accent)}
+  .ap .owner{display:inline-block; font-size:11px; font-weight:650; color:var(--accent);
+    border:1px solid var(--accent); border-radius:4px; padding:0 5px}
+
+  .ap .strip{display:flex; gap:5px; flex-wrap:wrap; margin:9px 0}
+  .ap .stg{border:1px solid var(--rule); border-radius:7px; padding:5px 8px;
+    background:var(--panel-2); min-width:82px}
+  .ap .stg .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10.5px;
+    color:var(--ink-3)}
+  .ap .stg .nm{font-size:12px; font-weight:600}
+  .ap .stg .md{font-size:10.5px; color:var(--ink-3)}
+  .ap .stg.text{border-color:var(--accent); background:var(--accent-soft)}
+  .ap{display:flex; flex-direction:column}
+  .ap #boot-state{margin:12px 16px}
+  .ap .app{flex:1; min-height:0; display:flex; align-items:stretch}
+  .ap .pnl{display:flex; flex-direction:column; min-width:0; min-height:0}
+  .ap .pnl[hidden]{display:none}
+  .ap #p1{width:250px; flex:none; border-right:1px solid var(--rule); background:var(--panel)}
+  .ap #p3{width:330px; flex:none; border-left:1px solid var(--rule); background:var(--panel)}
+  .ap #p2{flex:1; min-width:0; min-height:0; overflow-y:auto}
+  .ap .phead{display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:8px 12px; border-bottom:1px solid var(--rule); flex:none}
+  .ap .ptitle{font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-3)}
+  .ap .pcollapse,.ap .prail{cursor:pointer; font:inherit; font-size:12px; color:var(--ink-3);
+    background:none; border:1px solid var(--rule); border-radius:5px; padding:1px 7px;
+    line-height:1.4}
+  .ap .pcollapse:hover,.ap .prail:hover{color:var(--accent); border-color:var(--accent)}
+  .ap .prail{flex:none; align-self:stretch; border-radius:0; border-width:0 1px 0 0;
+    background:var(--panel); width:22px; padding:0}
+  .ap #p3-rail{border-width:0 0 0 1px}
+  .ap .prail[hidden]{display:none}
+  .ap .pbody{flex:1; min-height:0; overflow-y:auto}
+  .ap #p1 .pbody{padding:2px 0 20px}
+  .ap #p3 .pbody{padding:12px 14px 24px}
+  .ap #p2top{padding:14px 16px 6px}
+  .ap #p2chain{padding:2px 16px 40px}
+  .ap .pempty{color:var(--ink-3); font-size:12.5px; margin:8px 2px; max-width:44ch}
+  .ap .ovh .tiles{margin-top:2px}
+
+  .ap .wfrow{display:block; width:100%; text-align:left; cursor:pointer; font:inherit;
+    background:none; border:0; border-bottom:1px solid var(--rule-2); color:var(--ink);
+    padding:8px 12px}
+  .ap .wfrow:hover{background:var(--panel-2)}
+  .ap .wfrow[aria-current="true"]{background:var(--accent-soft);
+    box-shadow:inset 2px 0 0 var(--accent)}
+  .ap .wfrow .wid{display:block; font-size:12.5px; font-weight:650}
+  .ap .wfrow .wlbl{display:block; font-size:11px; color:var(--ink-3); margin-top:1px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .ap .wfrow .wbadges{display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; font-size:10.5px;
+    align-items:center}
+
+  .ap .pgnav select{font:inherit; font-size:12.5px; font-weight:600; color:var(--ink);
+    background:var(--ground); border:1px solid var(--rule); border-radius:7px;
+    padding:4px 26px 4px 9px; cursor:pointer; appearance:none; -webkit-appearance:none;
+    background-image:linear-gradient(45deg,transparent 49%,var(--ink-3) 51%),
+      linear-gradient(135deg,var(--ink-3) 49%,transparent 51%);
+    background-position:right 13px top 55%,right 9px top 55%;
+    background-size:4px 4px,4px 4px; background-repeat:no-repeat}
+  .ap .pgnav select:hover{border-color:var(--accent)}
+  .ap .pgnav .stamp{white-space:nowrap}
+
+  .ap button.cchip{cursor:pointer; border:1px solid transparent;
+    font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+  .ap [data-cid][aria-pressed="true"]{outline:2px solid var(--accent); outline-offset:1px}
+  .ap #p2 [data-node].sel{outline:2px solid var(--accent); outline-offset:2px}
+  .ap .fstation:hover{border-color:var(--accent)}
+  .ap .fchip:hover{border-color:var(--accent); color:var(--ink)}
+
+  .ap .cdet .cdid{font-size:17px; font-weight:700; display:inline-block; margin-right:8px}
+  .ap .cdet h3{margin:10px 0 0}
+  .ap dl.kv{display:grid; grid-template-columns:max-content 1fr; gap:5px 12px;
+    font-size:12.5px; margin:12px 0 0}
+  .ap dl.kv dt{color:var(--ink-3)} .ap dl.kv dd{margin:0; min-width:0; overflow-wrap:anywhere}
+
+  @media (max-width:900px){
+    .ap .app{flex-direction:column; height:auto; overflow:visible}
+    .ap{display:block; height:auto}
+    .ap #p1,.ap #p3{width:auto; border:0; border-bottom:1px solid var(--rule); max-height:36vh}
+    .ap .prail{width:auto; align-self:auto; padding:4px; border-width:0 0 1px}
+  }
+
+  @media (max-width:640px){ .ap .pgnav .here{display:none} }
+
+  .ap /* ROUND 18: unmapped workflow rows render but don't click */
+  .wfunmapped{opacity:.75; cursor:default}
+
+  .ap /* ROUND 16: the pending-integration divider in the components list */
+  .wfdivider{margin:14px 10px 4px; padding-top:10px; border-top:1px solid var(--rule)}
+  .ap .wfdivider span:first-child{display:block; font-size:10.5px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+  .ap .wfdivider .dim{font-size:11px}
+
+  
+  .ap .cckill{border-left:3px solid var(--warn); background:var(--warn-bg); border-radius:0 6px 6px 0;
+    padding:10px 14px; margin:12px 0; font-size:12.5px}
+  .ap /* the artifact viewer's theme switch,.ap mapped onto the dashboard's tokens */
+  :root[data-theme="dark"]{--ground:#0F1513; --panel:#161D1A; --panel-2:#1C2521; --ink:#E4EBE8; --ink-2:#A2B0AA; --ink-3:#85938D;
+    --rule:#26312D; --rule-2:#1E2724; --accent:#4FC5AC; --accent-soft:#173A33; --ok:#4CC98A; --ok-bg:#15301F; --warn:#E0A33E; --warn-bg:#33270D;
+    --crit:#E4776C; --crit-bg:#3A1613; --idle:#8FA09A22; --idle-ink:#8FA09A; color-scheme:dark}
+  .ap{--violet:#6E55A8; --violet-bg:#EFEAF8}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="light"]) .ap{--violet:#A993DD; --violet-bg:#241E33}}
+  :root[data-theme="dark"] .ap,:root[data-theme="dark"] .ap{--violet:#A993DD; --violet-bg:#241E33}
+
+:root[data-theme="dark"] .ap{
+  --ground:#0F1513; --panel:#161D1A; --panel-2:#1C2521;
+  --ink:#E4EBE8; --ink-2:#A2B0AA; --ink-3:#85938D;
+  --rule:#26312D; --rule-2:#1E2724;
+  --accent:#4FC5AC; --accent-soft:#173A33;
+  --ok:#4CC98A; --ok-bg:#15301F; --warn:#E0A33E; --warn-bg:#33270D; --crit:#E4776C; --crit-bg:#3A1613;
+  --idle-ink:#8FA09A; --shadow:0 1px 2px #0006, 0 10px 28px #0004; color-scheme:dark;
+}
+.ap .wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+.ap h1,.ap h2,.ap h3{margin:0;line-height:1.2;text-wrap:balance}
+.ap h1{font-size:clamp(26px,4.5vw,34px);font-weight:750;letter-spacing:-.01em}
+.ap h2{font-size:20px;font-weight:700}
+.ap p{margin:0;max-width:72ch}
+.ap .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.ap section{display:flex;flex-direction:column;gap:14px}
+.ap .lede{display:flex;flex-direction:column;gap:12px}
+.ap .lede p{font-size:16px;color:var(--ink-2)}
+.ap .status{display:flex;flex-wrap:wrap;gap:8px;font-size:12px}
+.ap .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);align-items:center}
+.ap .legend span{display:inline-flex;gap:6px;align-items:center}
+.ap .sw{display:inline-block;width:14px;height:10px;border-radius:3px;border:1px solid var(--rule);background:var(--panel)}
+.ap .sw.hit{border-color:var(--accent);background:var(--accent-soft)}
+.ap .ci{font:700 10px ui-monospace,Menlo,monospace;color:var(--ink-3)}
+.ap .node{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:7px 8px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;box-shadow:var(--shadow)}
+.ap .node.hit{border-color:var(--accent);background:var(--accent-soft);border-width:1.5px}
+.ap .node.dead{border-color:var(--crit);border-style:dashed}
+.ap .node.miss{border-style:dashed}
+.ap .nh{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.ap .nm{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ap .own{font-size:11px;color:var(--ink-3)}
+.ap .nn,.ap .does{font-size:12px;color:var(--ink-2)}
+.ap .empty{font-size:11.5px;color:var(--ink-3);border:1px dashed var(--rule-2);border-radius:6px;padding:8px;text-align:center}
+.ap .t{display:inline-block;font:700 9.5px/1 ui-monospace,Menlo,monospace;padding:2px 4px;border-radius:3px;border:1px solid var(--rule);color:var(--ink-2)}
+.ap .tH{color:var(--warn);border-color:var(--warn)}
+.ap .tA{color:var(--accent);border-color:var(--accent)}
+.ap .tT{color:var(--ink-2)}
+.ap ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ap ol.steps li{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.ap ol.steps li>.note{grid-column:2}
+.ap .sn{font:700 12px ui-monospace,Menlo,monospace;color:var(--ink-3);padding-top:8px;text-align:right}
+.ap ol.stages{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.ap ol.stages li{display:flex;gap:8px;align-items:baseline;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:8px 10px;font-size:14px}
+.ap ol.stages li.unc{border-style:dashed;border-color:var(--warn)}
+.ap .u{display:inline-block;margin-left:6px;font:700 9.5px/1 ui-monospace,Menlo,monospace;color:var(--warn);border:1px dashed var(--warn);padding:2px 4px;border-radius:3px}
+.ap .sop{display:inline-block;margin-left:6px;font-size:11px;color:var(--ink-3)}
+.ap ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.ap .zone{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ap .zone:nth-child(2){border-color:var(--accent)}
+.ap .zh{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ap .zi{font-size:13px;display:flex;flex-direction:column;gap:2px}
+.ap .zi .k{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.ap .zone hr{border:0;border-top:1px solid var(--rule-2);margin:2px 0;width:100%}
+.ap td.src{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink-3);word-break:break-all}
+.ap .gap{color:var(--warn);font-size:12.5px}
+.ap .flowrow{display:grid;grid-template-columns:1fr 24px 1fr 24px 1.2fr 24px 1fr;gap:6px;align-items:stretch}
+.ap .arr{align-self:center;text-align:center;color:var(--accent);font-weight:700}
+@media (max-width:860px){.ap .flowrow{grid-template-columns:1fr}.ap .arr{transform:rotate(90deg)}}
+.ap .zone.main{border-color:var(--accent);background:var(--accent-soft)}
+.ap ul.gaps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.ap ul.gaps li{border-left:3px dashed var(--warn);background:var(--warn-bg);padding:8px 12px;border-radius:0 6px 6px 0;font-size:13.5px}
+.ap ol.stages.eng{counter-reset:stg;margin-bottom:12px}
+.ap ol.stages.eng li{counter-increment:stg;font-size:13.5px;padding:6px 10px}
+.ap ol.stages.eng li::before{content:counter(stg);font:700 11px ui-monospace,Menlo,monospace;color:var(--ink-3);min-width:1.6em;text-align:right}
+.ap .tvideo{color:var(--accent);border-color:var(--accent)}
+.ap .tstill{color:var(--warn);border-color:var(--warn)}
+.ap .signal{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ap .plainw{font-size:15px;max-width:75ch;color:var(--ink)}
+.ap .flowpic{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:12px;overflow-x:auto;color:var(--ink)}
+.ap .flowpic svg{min-width:720px}
+.ap details.checks{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.ap details.checks summary{cursor:pointer;font-weight:600;font-size:14px}
+.ap details.checks[open] summary{margin-bottom:10px}
+.ap .fflow{display:grid;grid-template-columns:repeat(calc(var(--n) * 2 - 1),auto);grid-template-columns:none;display:flex;gap:0;align-items:stretch;overflow-x:auto;padding-bottom:6px}
+.ap .fcol{flex:1 1 0;min-width:190px;display:flex;flex-direction:column;gap:10px}
+.ap .fch{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);border-bottom:2px solid var(--rule);padding-bottom:5px}
+.ap .farr{flex:0 0 28px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:18px}
+.ap .fgroup{display:flex;flex-direction:column;gap:6px}
+.ap .fgh{font-size:11.5px;font-weight:700;color:var(--ink-2)}
+.ap .fcap{font-weight:400;color:var(--ink-3)}
+.ap .fcard{background:var(--panel);border:1px solid var(--rule);border-radius:7px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.ap .fcard.eng{border:2px solid var(--accent);background:var(--accent-soft);gap:8px}
+.ap .fcard.prop{border:1.5px dashed var(--warn)}
+.ap .fcard.bad{border:2px solid var(--crit)}
+.ap .fcard.stale{border:2px dashed var(--warn)}
+.ap .fname{font-size:13.5px;font-weight:650;line-height:1.3;display:flex;gap:6px;flex-wrap:wrap;align-items:baseline}
+.ap .fhome{font:600 10px ui-monospace,Menlo,monospace;color:var(--ink-3);border:1px solid var(--rule);border-radius:3px;padding:1px 4px}
+.ap .fdet{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.ap .fsub{border-top:1px solid var(--rule);padding-top:6px;display:flex;flex-direction:column;gap:2px}
+.ap .fwb{font-size:12px;color:var(--accent)}
+.ap .ftags{display:flex;gap:6px;flex-wrap:wrap}
+.ap .ftag{font:700 10px ui-monospace,Menlo,monospace;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-2)}
+.ap .ftag.prop,.ap .ftag.stale{color:var(--warn);background:var(--warn-bg)}
+.ap .ftag.bad{color:var(--crit);background:var(--crit-bg)}
+.ap .fchips{display:flex;flex-wrap:wrap;gap:5px}
+.ap .fchip{max-width:100%;overflow-wrap:anywhere;font-size:12px;background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:3px 9px}
+.ap .fchip.prop{border-style:dashed;border-color:var(--warn)}
+.ap details.fmore summary{cursor:pointer;font-size:12px;color:var(--accent)}
+.ap details.fmore[open]{display:flex;flex-direction:column;gap:6px}
+.ap .fexits{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.ap .fexit.ok .fcard{border-left:4px solid var(--ok)}
+.ap .fexit.warn .fcard{border-left:4px solid var(--warn)}
+.ap .fexit.idle .fcard{border-left:4px solid var(--ink-3)}
+@media (max-width:1180px){.ap .fflow{flex-direction:column}.ap .fcol{min-width:0}.ap .farr{flex-basis:24px}.ap .farr span{transform:rotate(90deg)}}
+.ap .ch-wrap{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:12px;overflow-x:auto}
+.ap svg.ch{width:100%;min-width:900px;height:auto;display:block;font-family:inherit}
+.ap .ch-col{font-size:10.5px;font-weight:700;letter-spacing:.1em;fill:var(--ink-3)}
+.ap .ch-node rect{fill:var(--panel-2);stroke:var(--rule);stroke-width:1.2}
+.ap .ch-node.eng rect{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2}
+.ap .ch-node.prop rect{fill:none;stroke:var(--warn);stroke-width:1.5;stroke-dasharray:6 4}
+.ap .ch-node.flag rect{stroke:var(--warn);stroke-width:1.6}
+.ap .ch-node.bad rect{stroke:var(--crit);stroke-width:2.2}
+.ap .ch-node.stale rect{stroke:var(--warn);stroke-width:2.2;stroke-dasharray:3 3}
+.ap .ch-name{font-size:13.5px;font-weight:700;fill:var(--ink)}
+.ap .ch-sub{font-size:11.5px;fill:var(--ink-2)}
+.ap .ch-flag{font-size:11px;font-weight:600;fill:var(--warn)}
+.ap .ch-prop{font-size:10.5px;font-weight:700;fill:var(--warn)}
+.ap .ch-state{font-size:10px;font-weight:700}
+.ap .ch-state.bad{fill:var(--crit)}
+.ap .ch-state.stale{fill:var(--warn)}
+.ap .ch-edge{fill:none;stroke:var(--ink-3);stroke-width:1.4}
+.ap .ch-edge.proposed{stroke:var(--warn);stroke-dasharray:6 4}
+.ap .ch-edge.warn{stroke:var(--warn)}
+.ap .ch-arrhead{fill:var(--ink-3)}
+.ap .ch-arrhead.proposed,.ap .ch-arrhead.warn{fill:var(--warn)}
+.ap .ch-elabel{font-size:10.5px;fill:var(--ink-2);paint-order:stroke;stroke:var(--panel);stroke-width:4px}
+.ap .ch-elabel.proposed,.ap .ch-elabel.warn{fill:var(--warn)}
+.ap .ch-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);align-items:center}
+.ap .ch-legend span{display:inline-flex;gap:6px;align-items:center}
+.ap .lg{display:inline-block;width:18px;height:11px;border-radius:3px;border:1.5px solid var(--rule);background:var(--panel-2)}
+.ap .lg.eng{border-color:var(--accent);background:var(--accent-soft)}
+.ap .lg.prop{border:1.5px dashed var(--warn);background:none}
+.ap .lg.flag{border-color:var(--warn)}
+.ap .lg.bad{border-color:var(--crit)}
+.ap .refgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.ap .refcol{display:flex;flex-direction:column;gap:6px}
+.ap details.ref{background:var(--panel);border:1px solid var(--rule);border-radius:7px;padding:7px 10px}
+.ap details.ref summary{cursor:pointer;font-size:13.5px}
+.ap details.ref[open] summary{margin-bottom:8px}
+.ap details.ref table{min-width:0;font-size:12.5px}
+.ap .ch-cap{font-size:10.5px;fill:var(--ink-3);font-style:italic}
+.ap .refmore{display:flex;flex-direction:column;gap:6px}
+:root[data-theme="dark"] .ap{--violet:#A993DD;--violet-bg:#241E33}
+.ap figure.pf{margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:14px 12px 10px;display:flex;flex-direction:column;gap:10px}
+.ap figure.pf .scroll{overflow-x:auto}
+.ap svg.pic{display:block;width:100%;min-width:980px;height:auto;font-family:inherit}
+.ap .pch{font-size:10.5px;font-weight:700;letter-spacing:.1em;fill:var(--ink-3)}
+.ap .pg rect{fill:none;stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.ap .pg.h-supabase rect{stroke:var(--violet);stroke-width:1.4;stroke-dasharray:none;fill:var(--violet-bg)}
+.ap .pg.h-repo rect{stroke:var(--warn);stroke-width:1.3;stroke-dasharray:none}
+.ap .pg.flag rect{stroke:var(--warn);stroke-width:1.6;stroke-dasharray:6 3}
+.ap .pg.binding rect{stroke:var(--warn);stroke-width:1.3;stroke-dasharray:none;fill:var(--warn-bg)}
+.ap .pgh{font-size:10.5px;font-weight:700;fill:var(--ink-2)}
+.ap .pg.h-supabase .pgh{fill:var(--violet)}
+.ap .pg.h-repo .pgh,.ap .pg.binding .pgh,.ap .pg.flag .pgh{fill:var(--warn)}
+.ap .pgc{font-size:10px;fill:var(--ink-3);font-style:italic}
+.ap .pi rect{fill:var(--panel);stroke:var(--ink-2);stroke-width:1.2}
+.ap .pi.eng rect{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2}
+.ap .pi.proposed rect{fill:none;stroke:var(--warn);stroke-dasharray:6 4;stroke-width:1.4}
+.ap .pi.legacy rect{fill:none;stroke:var(--ink-3);stroke-dasharray:2 3}
+.ap .pi.legacy .pn,.ap .pi.legacy .ps{fill:var(--ink-3)}
+.ap .pi.flag rect{stroke:var(--warn);stroke-width:1.6}
+.ap .pi.bad rect{stroke:var(--crit);stroke-width:2.2}
+.ap .pi.stale rect{stroke:var(--warn);stroke-width:2;stroke-dasharray:3 2}
+.ap .pn{font-size:12.5px;font-weight:700;fill:var(--ink)}
+.ap .ps{font-size:11px;fill:var(--ink-2)}
+.ap .pl{font-size:10.5px;fill:var(--ink-3);font-style:italic}
+.ap .prun{font-size:10.5px;fill:var(--ink-2)}
+.ap .pref{font-size:10.5px;fill:var(--warn)}
+.ap .pcard{font-size:10.5px;font-weight:700;fill:var(--warn)}
+.ap .pstate{font-size:9.5px;font-weight:700}
+.ap .pstate.bad{fill:var(--crit)}
+.ap .pstate.stale{fill:var(--warn)}
+.ap .pa{fill:none;stroke:var(--ink-3);stroke-width:1.3;opacity:.8}
+.ap .pa.proposed{stroke:var(--warn);stroke-dasharray:5 4;opacity:1}
+.ap .pah{fill:var(--ink-3)}
+.ap .pah.proposed{fill:var(--warn)}
+.ap .plegend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);padding:0 4px}
+.ap .plegend span{display:inline-flex;gap:6px;align-items:center}
+.ap .lg.run{border:1.5px solid var(--ink-2);background:var(--panel)}
+.ap .lg.legacy{border:1.5px dotted var(--ink-3);background:none}
+.ap figcaption{font-size:12px;color:var(--ink-3);padding:0 4px;max-width:95ch}
+.ap .band{border-top:1px solid var(--rule);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.ap .bh{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ap .band.wait .bh{color:var(--warn)}
+.ap .bcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.ap .bc{border:1px solid var(--rule);border-radius:7px;padding:8px 10px;display:flex;flex-direction:column;gap:3px;font-size:12.5px;background:var(--panel)}
+.ap .bc b{font-size:13px}
+.ap .bc span{color:var(--ink-2)}
+.ap .bc i{font-style:normal;color:var(--accent);font-weight:600;font-size:12px}
+.ap .band.wait .bc{border:1.3px dashed var(--warn);background:var(--warn-bg)}
+.ap .band.wait .bc b{color:var(--warn)}
+.ap .band.wait .bc i{color:var(--warn)}
+.ap .bc.flag{border-color:var(--warn)}
+.ap .bc.x-ok{border-left:4px solid var(--ok)}
+.ap .bc.x-warn{border-left:4px solid var(--warn)}
+.ap .bc.x-idle{border-left:4px solid var(--ink-3)}
+.ap .bl{font-size:13px;color:var(--ink-2)}
+.ap ul.brules{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.ap ul.brules li.prop{color:var(--warn)}
+.ap p.kill{font-size:12.5px;color:var(--crit);font-weight:600}
+.ap .drift{border-left:3px solid var(--crit);background:var(--crit-bg);border-radius:0 8px 8px 0;padding:10px 14px;font-size:13px}
+.ap .drift ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.ap .refblock{display:flex;flex-direction:column;gap:0;border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:var(--panel)}
+.ap .refh{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding:8px 12px;background:var(--panel-2);border-bottom:1px solid var(--rule)}
+.ap section>.refh{border-radius:9px 9px 0 0;border:1px solid var(--rule);border-bottom:0;margin-top:8px}
+.ap details.refrow{border-bottom:1px solid var(--rule-2)}
+.ap details.refrow:last-child{border-bottom:0}
+.ap details.refrow summary{cursor:pointer;display:grid;grid-template-columns:minmax(160px,1.1fr) minmax(200px,2fr) auto auto minmax(90px,auto);gap:12px;align-items:baseline;padding:9px 12px;list-style:none}
+.ap details.refrow summary::-webkit-details-marker{display:none}
+.ap details.refrow summary::before{content:"▸";position:absolute;margin-left:-10px;color:var(--ink-3)}
+.ap details.refrow[open] summary{background:var(--accent-soft)}
+.ap details.refrow:hover summary{background:var(--panel-2)}
+.ap .rr-name{font-weight:700;font-size:14px}
+.ap .rr-sub{color:var(--ink-2);font-size:13px}
+.ap .rr-meta{font-size:12px;color:var(--ink-3);white-space:nowrap}
+.ap .rr-chips{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.ap .rr-body{padding:6px 12px 14px;display:flex;flex-direction:column;gap:12px}
+.ap .refitem{border-left:3px solid var(--rule);padding:4px 0 4px 12px;display:flex;flex-direction:column;gap:6px}
+.ap .ri-head{font-size:14px}
+.ap .ri-full{font-size:13.5px;color:var(--ink);max-width:90ch}
+.ap dl.ri-meta{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:0;font-size:12.5px}
+.ap dl.ri-meta dt{color:var(--ink-3)}
+.ap dl.ri-meta dd{margin:0;min-width:0;overflow-wrap:anywhere;color:var(--ink-2)}
+.ap .ri-dt{display:flex;flex-direction:column;gap:6px}
+.ap .ri-dth{font-size:13px;font-weight:700}
+.ap table.dt{font-size:12.5px;min-width:760px}
+.ap table.dt td{vertical-align:top}
+@media (max-width:760px){.ap details.refrow summary{grid-template-columns:1fr;gap:2px}.ap .rr-chips{justify-content:flex-start}}
+.ap .pman{font-size:10px;font-weight:600;fill:var(--ink-3)}
+.ap .lgman{font-size:12px;color:var(--ink-2)}
+.ap table.issues td:first-child{min-width:260px}
+.ap dl.howto dt{font-weight:600;color:var(--ink-2)}
+.ap td.inum{font:700 12px ui-monospace,Menlo,monospace;white-space:nowrap;color:var(--ink-2)}
+.ap /* page-specific,.ap no dashboard equivalent */
+.cstrip{display:grid;grid-template-columns:repeat(8,minmax(150px,1fr));gap:8px;overflow-x:auto;padding-bottom:6px}
+.ap .col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ap .ch{display:flex;gap:6px;align-items:center;font-size:12px;border-bottom:2px solid var(--rule);padding-bottom:4px}
+.ap .signal{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ap .signal a.pill{text-decoration:none}
+.ap details.checks summary{cursor:pointer;font-weight:650;font-size:13.5px}
+.ap details.refrow summary{border-bottom:0}
+.ap .refh{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding:8px 12px;border-bottom:1px solid var(--rule);background:var(--panel-2)}
+.ap .brief{margin-top:8px;padding:8px 10px;border-left:3px solid var(--accent);background:var(--panel-2);border-radius:0 6px 6px 0;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--ink-2)}.ap .brief .k{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}.ap .brief ul{margin:2px 0 0;padding-left:16px}.ap .brief code{font-size:11.5px;overflow-wrap:anywhere}.ap .brief .fchips{margin-top:2px}.ap .brief .fchip{font-size:11.5px;padding:1px 8px}.ap .brief .fchip i{font-style:normal;color:var(--ink-3)}
+.p1 .dflow{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.p1 .dstep{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.p1 .dstep.prop{border-style:dashed;border-color:var(--prop)}
+.p1 .lane{font:600 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:3px 6px;border-radius:6px;text-align:center}
+.p1 .lane.st{color:var(--cmp);background:var(--cmps)}.p1 .lane.lg{color:var(--core);background:var(--cores)}.p1 .lane.dm{color:var(--ops);background:var(--opss)}.p1 .lane.cl{color:var(--ref);background:var(--refs)}
+.p1 .dstep p{font-size:14px;color:var(--ink2);margin-top:2px}
+.p1 .dstep code{font-size:12.5px}
+.p1 .darr{text-align:center;color:var(--ink3);font-size:14px;line-height:1}
+.p1 .dbranch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.p1 .dbranch>div{display:flex;flex-direction:column;gap:6px}
+.p1 .dbranch h4{margin:0;font-size:13.5px}
+.p1 .say{display:block;margin-top:6px;font:13px/1.45 var(--mono);background:var(--code);border-radius:6px;padding:6px 8px;color:var(--ink)}
+@media (max-width:760px){.p1 .dbranch{grid-template-columns:1fr}.p1 .dstep{grid-template-columns:1fr}}
+</style>
+
+<div class="outer">
+<div class="p1">
+
+<header class="head">
+  <span class="aey">Triage · approach for the team meeting · 2026-10-02 · draft, not ruled</span>
+  <h1>One way to turn long lists into decisions, shown on two themes</h1>
+  <p class="alede">Every list we keep runs through one <b>triage engine</b>. The engine does the same steps for every list. What differs (what an item is, how it's prioritised, who decides, what it links to) comes from that list's <b>theme</b>, so a new list needs a new theme, not a new engine. This page shows how it generally works, using the two themes we run today as real examples: <b>components</b> (the atlas) and <b>operations</b> (the metrics dashboards, then the P&amp;L). More themes will follow later; they aren't designed yet. Today we review the approach and the two lists. Option 3 is ruled: the owner said yes. Then each theme owner spends two weeks running their own list and brings back what has to change.</p>
+  <nav class="partnav"><b>Part 1</b><a href="#owners">Who owns what</a><a href="#meeting">Today's meeting</a><a href="#how">How it works</a><a href="#priority">Grouping and prioritising</a><a href="#log">The decision log</a><a href="#themes">The two themes</a><a href="#two-weeks">The two weeks</a><b>Part 2</b><a href="#component">How the component works, to the atlas standard</a></nav>
+</header>
+
+<section class="apanel" id="owners">
+  <h2>Who owns what</h2>
+  <div class="atw"><table>
+    <thead><tr><th>What</th><th>Owner</th><th>Decides</th></tr></thead>
+    <tbody>
+      <tr><td><b>The triage engine</b> (the component every list runs through)</td><td>the team, for now</td><td>The nine passes, the shared page and log, the cross-reference mechanism. Anything that changes how <i>every</i> list is triaged.</td></tr>
+      <tr><td><b>Components / atlas</b>: the theme and its triage</td><td>the team</td><td>The theme's rules (what an issue is, how it's prioritised, what it cross-references), and works the list first.</td></tr>
+      <tr><td><b>Operations</b>: the theme and its triage</td><td>the team</td><td>The same for operations: which signals, which money thresholds, which P&amp;L pieces join. Works the list first.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="sub">A change to one theme's rules is its owner's to make. A change that every theme would feel goes to the team. "Theme owner" and "triage owner" are the same person in both themes today. They are kept as two roles so a list can later be owned by one person and worked by another.</p>
+</section>
+
+<section class="apanel" id="meeting">
+  <h2>Today's meeting</h2>
+  <ol class="q">
+    <li><b>The approach</b> (this page): is one engine with a pack per theme good enough to evaluate for two weeks?</li>
+    <li><b>The two lists</b>: <a href="(private page)">components</a> and <a href="(private page)">operations</a>.</li>
+    <li><b>Option 3</b>: <b>ruled yes</b>, after the owner said yes (below).</li>
+    <li><b>The two weeks</b>: start the team's and the team's evaluation (below).</li>
+  </ol>
+  <div class="dec">
+    <h3>Option 3: may a triage owner change code in someone else's component, with the owner told rather than asked first?</h3>
+    <p>This decides who does the 297 component issues tagged "after a ruling": about 197 in the owner's components, 70 in the team's, 18 in the team's, 29 with no owner on record (counts overlap).</p>
+    <p><b>The check, 2026-10-02:</b> each of the 297 was read against the four limits. 25 became the team's now; 77 are drafts for the owner, mostly because the fix touches something that runs; 174 still wait on a different ruling or answer; 21 are the owner's alone. So the "about 197 from the owner's list" was a ceiling: Option 3 moves 25 items outright and turns 77 more into drafts. The 110 items that were already "drafts, owner lands" were checked too: none becomes the team's (55 stay drafts, mostly live pipelines; 44 turn out to wait on a ruling, chiefly the shared records filer; 11 are the owner's alone). Each item on the components list now says what Option 3 changed for it and why, and each action says how many of its items moved. On the operations list it changes nothing: every signal is the team's own or a decision. The decision log's change and undo acts exist (ATL-32 (triage change trail), merged 170826a29). Per-item verdicts: <code>new-workflow-design/builds/atlas/triage/option3-check-2026-10-02.json</code>.</p>
+    <ul>
+      <li><b>1 · No</b> (today): all 297 wait on their owners.</li>
+      <li><b>2 · Narrow</b>: the team applies what a ruling already settles (output to runs/, keys by name, the README link). Bug fixes stay with owners.</li>
+      <li><b>3 · Broad</b> <span class="tag pos">ruled 2026-10-02</span>: option 2, plus bug fixes the issue's brief already spells out, each proven by a test.</li>
+    </ul>
+    <p><b>Limits on option 3:</b> a test proves each fix; no test check is weakened or removed; nothing that changes a live pipeline (those stay drafted for the owner to land); every change is written to the decision log with a one-line undo, and owners can see every change in their components there.</p>
+    <p><b>First step:</b> ask the owner: "Can the team, through Claude, fix things in your components when the brief spells out the fix and a test proves it, with every change in the decision log and a one-line undo?" Yes → option 3 and about 197 items leave the owner's list. No → option 2. <i>Confidence medium. Reverse if</i> a triage owner's change breaks an owner's live run twice, or the owner objects to more than a handful of changes in the first two weeks. <a href="#log">What the decision log records</a>.</p>
+    <h3 id="damon-flow">Option 3 is ruled: what it means for the owner</h3>
+    <p>the owner does nothing by default. Nothing waits on the owner's yes; the owner can look whenever, and undo anything. Solid boxes exist today; dashed ones are proposed. The grey lines are examples of what the owner might type to Claude.</p>
+    <div class="dflow">
+      <div class="dstep"><span class="lane st">the team</span><div><b>Fixes an issue in one of the owner's components</b><p>Only when the issue's summary already names the fix, a test proves it, no test check is weakened, and it doesn't change a live pipeline. Example: intake #6, copy pointers that named files that don't exist.</p></div></div>
+      <div class="darr">↓</div>
+      <div class="dstep prop"><span class="lane lg">Decision log</span><div><b>One <code>change</code> record, written the same minute</b><p>Which issue, the commit, the test that guards it, the files it touched, and one line on why. The issue is marked fixed with that commit as evidence.</p></div></div>
+      <div class="darr">↓</div>
+      <div class="dstep prop"><span class="lane cl">the owner's Claude</span><div><b>Already knows, the next time the owner works there</b><p>The component's context file gains one line from the log. When the owner's Claude opens a file in that component, it sees what changed and why, so it won't bring the bug back. (Works for sessions started at the workspace root; not yet for one started inside the component folder.)</p></div></div>
+      <div class="darr">↓</div>
+      <div class="dbranch">
+        <div>
+          <h4>To review, whenever the owner wants</h4>
+          <div class="dstep prop"><span class="lane dm">the owner</span><div><b>Asks the log</b><span class="say">What has triage changed in my components since Monday?</span><p>Each change comes back with its issue, why, the commit, the test, and how to undo it. Agreeing needs nothing; a <code>sign</code> is optional.</p></div></div>
+        </div>
+        <div>
+          <h4>If a component does something unexpected</h4>
+          <div class="dstep prop"><span class="lane dm">the owner</span><div><b>Asks why</b><span class="say">Why does intake's copy step now use the slug as the file name?</span><p>the owner's Claude finds the <code>change</code> record for that file: the issue it fixed, the summary that named the fix, the commit and the test.</p></div></div>
+          <div class="darr">↓</div>
+          <div class="dstep prop"><span class="lane dm">the owner</span><div><b>Undoes it, with one line on why</b><span class="say">Undo triage's change for intake #6 — the old names are read by the swipe step.</span><p>the owner's Claude reverts the commit and writes an <code>undo</code> record. The issue reopens and goes back to the owner as owner-only, and the team's Claude sees the undo, so it isn't tried again.</p></div></div>
+        </div>
+      </div>
+    </div>
+    <p><b>Ruled 2026-10-02, after the owner's yes, and ready to use.</b> The decision log can now record a <code>change</code> and an <code>undo</code> (ATL-32 (triage change trail), merged), and <code>components/triage/tools/file_record.py</code> files them. In Claude, <code>/triage</code> walks the team through a change and the owner through an undo, and answers "what has triage changed in my components?". One gap: the issue reopens on an undo by rule, but nothing reopens it automatically yet, so it is cleared by hand.</p>
+  </div>
+</section>
+
+<div class="apanel">
+  <h2>The shape</h2>
+  <div class="atw">
+  <svg viewBox="0 0 980 430" width="100%" style="min-width:880px" role="img" aria-label="Two themes feed one engine; reference sources feed cross-references; outputs go to people">
+    <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink3)"/></marker></defs>
+    <text x="20" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">THEMES (TRIAGED)</text>
+    <text x="345" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">ONE ENGINE · DAYU</text>
+    <text x="700" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">WHAT PEOPLE GET</text>
+    <rect x="20" y="40" width="270" height="120" rx="10" fill="var(--cmps)" stroke="var(--cmp)" stroke-width="2"/>
+    <text x="34" y="64" font-size="15" font-weight="700" fill="var(--cmp)">Components (the atlas)</text>
+    <text x="34" y="84" font-size="12.5" fill="var(--ink)">Theme and triage owner: the team</text>
+    <text x="34" y="103" font-size="12" fill="var(--ink2)">685 open issues on 48 components</text>
+    <text x="34" y="121" font-size="12" fill="var(--ink2)">refs: component · atlas · brand folder · card</text>
+    <text x="34" y="146" font-size="11.5" fill="var(--ink3)">found by the system reviews</text>
+    <rect x="20" y="180" width="270" height="120" rx="10" fill="var(--opss)" stroke="var(--ops)" stroke-width="2"/>
+    <text x="34" y="204" font-size="15" font-weight="700" fill="var(--ops)">Operations</text>
+    <text x="34" y="224" font-size="12.5" fill="var(--ink)">Theme and triage owner: the team</text>
+    <text x="34" y="243" font-size="12" fill="var(--ink2)">13 signals from the metrics data</text>
+    <text x="34" y="261" font-size="12" fill="var(--ink2)">refs: brand · product · metric · P&amp;L table</text>
+    <text x="34" y="286" font-size="11.5" fill="var(--ink3)">found by detectors; P&amp;L systems join next</text>
+    <rect x="20" y="320" width="270" height="92" rx="10" fill="var(--refs)" stroke="var(--ref)" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="34" y="344" font-size="14.5" font-weight="700" fill="var(--ref)">Reference sources (not triaged)</text>
+    <text x="34" y="364" font-size="12" fill="var(--ink2)">cards · inbox · PM tasks · brand folders</text>
+    <text x="34" y="382" font-size="12" fill="var(--ink2)">Slack channels: to be decided next</text>
+    <text x="34" y="400" font-size="11.5" fill="var(--ink3)">indexed for links only</text>
+    <rect x="345" y="40" width="300" height="372" rx="12" fill="var(--cores)" stroke="var(--core)" stroke-width="2"/>
+    <g font-size="13" fill="var(--ink)">
+      <text x="365" y="66" font-weight="600">1 · Read the list</text><text x="365" y="81" font-size="11.5" fill="var(--ink2)">the theme's reader, or its detectors</text>
+      <text x="365" y="106" font-weight="600">2 · Still true?</text><text x="365" y="121" font-size="11.5" fill="var(--ink2)">drop or close what's already fixed</text>
+      <text x="365" y="146" font-weight="600">3 · Summary</text><text x="365" y="161" font-size="11.5" fill="var(--ink2)">the eight parts on every item</text>
+      <text x="365" y="186" font-weight="600">4 · Cause, and what blocks it</text><text x="365" y="201" font-size="11.5" fill="var(--ink2)">two fields, never one</text>
+      <text x="365" y="226" font-weight="600">5 · Group</text><text x="365" y="241" font-size="11.5" fill="var(--ink2)">by the theme's own rules</text>
+      <text x="365" y="266" font-weight="600">6 · Prioritise</text><text x="365" y="281" font-size="11.5" fill="var(--ink2)">by the theme's own list</text>
+      <text x="365" y="306" font-weight="600">7 · The three whos</text><text x="365" y="321" font-size="11.5" fill="var(--ink2)">decides first · can do it · affected</text>
+      <text x="365" y="346" font-weight="600">8 · Link and show</text><text x="365" y="361" font-size="11.5" fill="var(--ink2)">related work · the queue page</text>
+      <text x="365" y="386" font-weight="600">9 · Log every act</text><text x="365" y="401" font-size="11.5" fill="var(--ink2)">to the decision log</text>
+    </g>
+    <g>
+      <rect x="700" y="40" width="260" height="70" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+      <text x="714" y="63" font-size="13.5" font-weight="600" fill="var(--ink)">A queue page per theme</text>
+      <text x="714" y="82" font-size="12" fill="var(--ink2)">actions, prompts to explain or do,</text>
+      <text x="714" y="98" font-size="12" fill="var(--ink2)">briefs, drafted fixes, option cards</text>
+      <rect x="700" y="126" width="260" height="56" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
+      <text x="714" y="149" font-size="13.5" font-weight="600" fill="var(--ink)">Decisions waiting, per person</text>
+      <text x="714" y="168" font-size="12" fill="var(--ink2)">with suggested answers and reply codes</text>
+      <rect x="700" y="198" width="260" height="56" rx="10" fill="var(--props)" stroke="var(--prop)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="714" y="221" font-size="13.5" font-weight="600" fill="var(--ink)">The decision log</text>
+      <text x="714" y="240" font-size="12" fill="var(--ink2)">every act, written once; everything reads it</text>
+      <rect x="700" y="270" width="260" height="56" rx="10" fill="var(--props)" stroke="var(--prop)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="714" y="293" font-size="13.5" font-weight="600" fill="var(--ink)">Context in Claude, per area</text>
+      <text x="714" y="312" font-size="12" fill="var(--ink2)">recent changes load where you work</text>
+      <rect x="700" y="342" width="260" height="56" rx="10" fill="var(--props)" stroke="var(--prop)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="714" y="365" font-size="13.5" font-weight="600" fill="var(--ink)">Atlas pages show what was done</text>
+      <text x="714" y="384" font-size="12" fill="var(--ink2)">closed by whom, and why</text>
+    </g>
+    <path d="M290,100 L343,140" stroke="var(--cmp)" stroke-width="1.8" fill="none" marker-end="url(#a)"/>
+    <path d="M290,240 L343,230" stroke="var(--ops)" stroke-width="1.8" fill="none" marker-end="url(#a)"/>
+    <path d="M290,366 L343,356" stroke="var(--ref)" stroke-width="1.8" stroke-dasharray="5 4" fill="none" marker-end="url(#a)"/>
+    <path d="M645,90 L698,75" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <path d="M645,170 L698,154" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <path d="M645,250 L698,226" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <path d="M645,320 L698,298" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <path d="M645,390 L698,370" stroke="var(--ink3)" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+    <text x="700" y="420" font-size="11.5" fill="var(--ink3)">Solid: built. Dashed: proposed.</text>
+  </svg>
+  </div>
+</div>
+
+<section class="apanel" id="how">
+  <h2>How it works, step by step</h2>
+  <p class="sub">The engine runs the same nine steps on every theme. The middle column is what the engine itself does; the two on the right are where each theme's own rules come in, from the two lists we run today.</p>
+  <div class="atw"><table>
+    <thead><tr><th>Step</th><th>The engine, for every theme</th><th>Components (the team)</th><th>Operations (the team)</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Read the list</b></td><td>Calls the theme's reader and turns each entry into one item shape</td><td>685 open issues from the atlas's component pages</td><td>13 signals the detectors build from the dashboards' data</td></tr>
+      <tr><td><b>2 · Still true?</b></td><td>Drops or marks what is already fixed, with the evidence</td><td>The component's next system run re-reads it; the team may close one with evidence</td><td>A signal clears itself when the next run no longer shows it; data health runs first and holds a stale brand's signals</td></tr>
+      <tr><td><b>3 · Summary</b></td><td>Everything triage creates is <b>born with</b> the eight-part summary (why, impact, evidence, response (a fix, or a follow-up on a positive signal), what the response changes, if ignored, lane, severity). Items read from elsewhere without one are listed as gaps</td><td>All 656 open issues (from system runs, written by ATL-31 (remaining issue briefs)); the 29 that look fixed close instead. All 83 actions: 23 with written briefs, 60 built from their issues' summaries</td><td>All 13 signals and all 5 actions, from the start</td></tr>
+      <tr><td><b>4 · Cause</b></td><td>Gives each item one cause from the theme's list, and what it waits on</td><td>26 causes, e.g. a moved path, output written into a brand folder</td><td>Data health, movement, sell-out before resupply, patterns over time</td></tr>
+      <tr><td><b>5 · Group</b></td><td>Groups items into actions by the <b>theme's own grouping rules</b> (next section), and counts what each action clears</td><td>685 issues into 83 actions, four rules</td><td>13 signals into 5 actions, one rule</td></tr>
+      <tr><td><b>6 · Prioritise</b></td><td>Ranks the actions by the <b>theme's own priority list</b> (next section)</td><td>by what the issue risks</td><td>by money at stake</td></tr>
+      <tr><td><b>7 · Three whos</b></td><td>Who decides first; who can do it, the triage owner considered first; who is affected</td><td>the team first, then the component's owner; the team for walls</td><td>the team first; each brand's ads owner for spend (not yet named)</td></tr>
+      <tr><td><b>8 · Link and show</b></td><td>Links each item to related work elsewhere, then writes the queue page with a summary and an explain prompt for every item and action</td><td>Links: component, folder, brand folder, cards</td><td>Links: brand, product, SKU, metric run, P&amp;L table, cards</td></tr>
+      <tr><td><b>9 · Log every act</b></td><td>Writes each close, answer, forward, change or ruling to the decision log</td><td>e.g. the team closes intake #6 with the commit that fixed it</td><td>e.g. the team forwards a spend signal to the ads owner</td></tr>
+    </tbody>
+  </table></div>
+  <p class="star"><b>Rule, from 2026-10-02:</b> anything this triage process creates (a signal, an action, an issue, a proposed card) comes with its eight-part summary from the start. Nothing is created now and summarised later.</p>
+  <p class="sub">The engine names no person, no folder and no rule: not who decides, not how items group, not how they rank. Everything in the two right-hand columns lives in that theme's own file, which its owner changes without asking anyone.</p>
+</section>
+
+<section class="apanel" id="priority">
+  <h2>Grouping and prioritising: each theme brings its own rules</h2>
+  <p class="sub">Neither how items are grouped nor how actions are ranked is built into the engine. Each theme's file holds both; the engine only applies them.</p>
+  <h3>Grouping: which items become one action</h3>
+  <div class="split">
+    <div class="c"><h3><span class="who-tag">Components</span> four rules, first match wins</h3><ol class="q">
+      <li><b>Close-out</b>: issues that look already fixed go into one action to confirm and close (1 action).</li>
+      <li><b>Shared fix</b>: the same fix across many components, e.g. repoint moved paths, the README how-to link line (24 actions).</li>
+      <li><b>Decision group</b>: issues waiting on one specific ruling, grouped by that ruling (11 actions).</li>
+      <li><b>Local batch</b>: everything else, per component, batched for its owner in one sitting (47 actions).</li>
+    </ol></div>
+    <div class="c"><h3><span class="who-tag">Operations</span> one rule</h3><ol class="q">
+      <li><b>Detector per brand</b>: one action for each kind of signal in each brand (data health first, then movement, sell-out, patterns), so each action reaches one decider (5 actions).</li>
+    </ol><p>Components group by fix because one change clears many issues. Operations group by brand and question because the person who answers differs by brand.</p></div>
+  </div>
+  <h3>Prioritising: how actions are ranked</h3>
+  <p class="sub">Nothing about priority is built into the engine. Each theme's file holds an ordered list: what makes an item P0, P1, P2 or P3, what counts as proof for a P0, how much each tier weighs, and whether age raises it. The engine only applies that list, and ranks each action by the weight of everything it clears.</p>
+  <div class="split">
+    <div class="c"><h3><span class="who-tag">Components</span> by what the issue risks</h3><ol class="q">
+      <li><b>P0</b>: touches a wall, or says one thing and does another on a component that runs. Needs proof of live use (a run in the last 30 days, a grant on the mini, or a person using it).</li>
+      <li><b>P1</b>: blocks or breaks something on a component in use (over 20 runs, 3 or more depending on it, or runs we can't see).</li>
+      <li><b>P2</b>: cleanup, batched by category.</li>
+      <li><b>P3</b>: parked: little use, few dependents.</li>
+    </ol><p>Weights 8 · 4 · 2 · 1. Age would raise an item after 7 days, never past P1, but issues carry no open-since date yet.</p></div>
+    <div class="c"><h3><span class="who-tag">Operations</span> by money at stake a month</h3><ol class="q">
+      <li><b>P0</b>: $10,000 or more. The dollar figure is its proof.</li>
+      <li><b>P1</b>: $2,000 or more, or a data-health problem that holds other signals.</li>
+      <li><b>P2</b>: $500 or more.</li>
+      <li><b>P3</b>: below $500.</li>
+    </ol><p>Weights 8 · 4 · 2 · 1. Age raises a signal after 7 days, never past P1, counted from the first run it fired (needs the decision log).</p></div>
+  </div>
+  <p class="sub">Same tiers, different reasons: components rank by risk to running work, operations by dollars. A future theme brings its own list the same way; the weights happen to match today but are the theme's to change.</p>
+</section>
+
+<section class="apanel" id="log">
+  <h2>The decision log: every act, written once</h2>
+  <p class="sub">We start here instead of a weekly digest. Each time someone acts on a triage item, it's written once, as one record, and never edited. The queue pages, the atlas, anyone's Claude and any later view all read from it. Asking "what changed in my components this week, and how do I undo it?" is a question to the log, not a separate message.</p>
+  <div class="atw"><table>
+    <thead><tr><th>Act</th><th>Who</th><th>What it records</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><code>close</code></td><td>triage owner</td><td>The item is already fixed. Evidence required, pinned to a commit</td><td><span class="tag pos">exists</span></td></tr>
+      <tr><td><code>answer</code></td><td>triage owner</td><td>The triage owner's own words on an item. Never stands in for the owner's yes</td><td><span class="tag pos">exists</span></td></tr>
+      <tr><td><code>forward</code></td><td>triage owner</td><td>The item handed to its owner or decider, undecided</td><td><span class="tag pos">exists</span></td></tr>
+      <tr><td><code>change</code></td><td>triage owner</td><td>A fix landed: the commit, the files, the test that guards it</td><td><span class="tag hl">proposed</span></td></tr>
+      <tr><td><code>draft</code></td><td>triage owner</td><td>A change prepared for the owner to land</td><td><span class="tag hl">proposed</span></td></tr>
+      <tr><td><code>sign</code></td><td>owner</td><td>The owner agreed to text about their own component</td><td><span class="tag hl">proposed</span></td></tr>
+      <tr><td><code>undo</code></td><td>owner</td><td>A change reverted, and why. Reopens the item</td><td><span class="tag hl">proposed</span></td></tr>
+      <tr><td><code>decide</code></td><td>decider</td><td>A ruling applied to items. Points at the line in the org's decision log, never copies it</td><td><span class="tag hl">proposed</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="split">
+    <div class="c"><h3>What every record holds</h3><ul>
+      <li><b>theme, item, act</b>: which list, which item, what happened</li>
+      <li><b>who, when</b>: the person who acted, and the time, from the clock</li>
+      <li><b>areas</b>: the components, folders, brands or products it touches. This decides where it shows up</li>
+      <li><b>evidence, commit, test</b>: where the proof is, and what guards it. A machine can check all three still hold</li>
+      <li><b>why</b>: one plain line. The only free text, kept short on purpose</li>
+      <li><b>ruling</b>: a pointer to the org's decision log, when a ruling allowed it</li>
+      <li><b>undoes</b>: on an undo, the record it reverses</li>
+    </ul><p>Today the record kind (ATL-28 (triage record kind)) has the first three acts and the fields <code>act · item · who · evidence · words · forwarded_to</code>. The rest is the proposed extension (open issue triage #14).</p></div>
+    <div class="c"><h3>Two examples, one per theme <span class="tag neu">illustrations, no records written yet</span></h3>
+<pre style="margin:0;font:12.5px/1.5 var(--mono);white-space:pre-wrap;background:var(--code);padding:10px;border-radius:8px">theme   components
+act     change
+item    intake #6
+who     steph
+areas   path:components/intake/tools/pools.py
+commit  (the fix's commit)
+test    copy rows' files exist
+why     copy pointers named files that don't exist
+ruling  none: the summary named the fix</pre>
+<pre style="margin:0;font:12.5px/1.5 var(--mono);white-space:pre-wrap;background:var(--code);padding:10px;border-radius:8px">theme         operations
+act           forward
+item          movement:<brand>
+who           the team
+areas         brand:<brand>
+forwarded_to  (the <brand> ads owner)
+why           revenue fell with spend; confirm the cut was meant</pre></div>
+  </div>
+  <div class="cards3">
+    <div class="c"><h3>Where it lives</h3><p>Records of kind <code>triage</code> on the shared records plane: append-only, every act kept (several acts on one item are all history). An item's open or closed state stays with the item itself; the log is the trail of how it got there.</p></div>
+    <div class="c"><h3>Who reads it</h3><p>The queue pages (an item's history, and anything already decided), the atlas ("closed by the team, and why"), and each area's context file, so anyone's Claude working in that component already knows what changed. That last one worked when tested from a workspace-root session, but not from one started inside the component folder.</p></div>
+    <div class="c"><h3>Two different decision logs</h3><p>The org's decision log (<code>the-org/decision-log.md</code>) holds rulings. This log holds acts on items. A <code>decide</code> record points at the ruling and never restates it, so the two can't drift apart.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="themes">
+  <h2>The two themes we use as real examples</h2>
+  <div class="two">
+    <div class="theme cmp">
+      <h2>Components (the atlas)</h2>
+      <p class="who">Theme owner and triage owner <b>the team</b> · <a href="(private page)">live queue</a> (shared on request)</p>
+      <ul>
+        <li><b>Items:</b> 685 open issues the system reviews found on 48 components, in 83 actions</li>
+        <li><b>What the team can do</b> (after the Option 3 check): 255 items now, 218 after another ruling, 132 drafted for an owner to land, 80 owner only</li>
+        <li><b>Already built:</b> 132 drafted changes ready (every one of the 255 items the team can do now has a drafted change or a recorded reason it was not drafted, ATL-29 (drafted changes) rounds 1 and 2), 48 option cards for decisions, eight-part summaries on all 656 open issues and all 83 actions</li>
+        <li><b>Priority:</b> by issue weight (P0 8 · P1 4 · P2 2 · P3 1), no P0 without live use</li>
+        <li><b>Open:</b> how far the team may change owners' code without asking (Option 3, ruled 2026-10-02 after the owner's yes)</li>
+      </ul>
+    </div>
+    <div class="theme ops">
+      <h2>Operations</h2>
+      <p class="who">Theme owner and triage owner <b>the team</b> · <a href="(private page)">live queue</a> (shared on request)</p>
+      <ul>
+        <li><b>Items:</b> signals the detectors build from the dashboards' data (refreshed daily on the mini): 13 today in 5 actions</li>
+        <li><b>Detectors:</b> data health first, then movement, sell-out before resupply, and <b>patterns over time</b></li>
+        <li><b>Priority:</b> by money at stake per month (P0 ≥ $10k · P1 ≥ $2k · P2 ≥ $500)</li>
+        <li><b>Next sources:</b> the P&amp;L systems the team is building, which may run from several pieces</li>
+        <li><b>Open:</b> each brand's ads owner; targets (none exist yet, so no threshold signals)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="sub"><b>More themes later.</b> The point of one engine is that the next list, whatever it is, joins with its own theme file, reader and owners, and no change to the engine. Which lists come next isn't designed yet; the two-week evaluation decides first whether the split between engine and theme holds.</p>
+</section>
+
+<section class="sec">
+  <h2>Cross-references: by design, specific to each theme</h2>
+  <p class="sub">An item rarely lives alone. The engine gives every item typed references, and each theme declares which kinds it carries. The resolvers are shared, so "brand: <brand>" means the same thing everywhere.</p>
+  <div class="atw"><table>
+    <thead><tr><th></th><th>Components</th><th>Operations</th><th>Both</th></tr></thead>
+    <tbody>
+      <tr><td><b>References it carries</b></td><td>component · folder · brand folder · atlas issue · card</td><td>brand · product · SKU · metric run · P&amp;L table or view · card</td><td>PM tasks · inbox items · Slack channels (to be decided)</td></tr>
+      <tr><td><b>Where they point</b></td><td><code>components/&lt;name&gt;/</code>, its atlas page, <code>brands/&lt;brand&gt;/</code>, the build decks</td><td>the dashboards' data, the warehouse's P&amp;L tables, the supply pipeline, the P&amp;L decks</td><td>the PM board, the inbox, Slack</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two">
+    <div class="ex">
+      <span class="item">Components: email-production#1, "14 scripts write into the brand folders"</span>
+      <p>Refs: <code>component:email-production</code>, <code>brand:<brand></code>, <code>brand:<brand></code>. Related, found today:</p>
+      <ul>
+        <li><b>HE-3 (shared brand facts)</b>, held-emails: the build that needs those brand facts right</li>
+        <li><b>EP-1 (email writer mini door)</b>, system-path: the email writer's route onto the mini</li>
+        <li><b>SI-3 (offer-bank move)</b>, system-path: a move that left 62 readers on an old path</li>
+      </ul>
+      <p class="noise">Matching by text also returned 5 cards that only mention the name. Hence the rule below: cards and tasks should declare their refs.</p>
+    </div>
+    <div class="ex">
+      <span class="item">Operations: "<brand>: shipping cost billed for only 9% of August orders"</span>
+      <p>Refs: <code>brand:<brand></code>, <code>metric:<brand>-performance</code>, <code>pnl:pnl_brand_a_orders</code>, <code>pnl:shiphero</code>. Related, found today:</p>
+      <ul>
+        <li><b>DOUX-C7</b>, <brand>-pnl: the orders view stack the P&amp;L reads</li>
+        <li><b>DOUX-C9</b>, <brand>-pnl: the <brand> performance run, which needs C7</li>
+        <li>dashboard deck cards on freight and cost of goods (MET-C11 family)</li>
+      </ul>
+      <p class="noise">So the signal lands with the people already building the fix, instead of a new ticket.</p>
+    </div>
+  </div>
+  <div class="cards3">
+    <div class="c"><h3>On the triage list</h3><p>Every item and action shows <b>Related elsewhere</b>: other themes' items on the same refs, open cards or tasks already handling it, later Slack threads. That stops re-filing, shows one fix that clears two themes, and tells the triage owner whom to ask.</p></div>
+    <div class="c"><h3>In the component design</h3><p>The engine gains one index of refs, built each run from every theme plus the reference sources, and one resolver per ref type. Packs only declare which refs they emit and which sources they look at. The decision log, context files and cross-theme links all use the index.</p></div>
+    <div class="c"><h3>Declared beats guessed</h3><p>Text matching found 8 "related" cards for email-production#1; 3 were real. Cards and PM tasks should carry a <code>refs:</code> line written when they're filed. Text matching stays as a labelled fallback.</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>A theme's own detectors: operations' patterns over time</h2>
+  <p class="sub">Beyond "what moved this month", the detectors check each brand's last 12 complete months for obvious patterns, positive or negative, that should shape decisions. These are readings to weigh, not faults to fix.</p>
+  <div class="atw"><table>
+    <thead><tr><th></th><th>Pattern</th><th>What the data shows</th><th>Decision it informs</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag neg">negative</span></td><td><brand>'s Meta dollars return less above about $17.6k a month</td><td>about $1.18 of revenue per Meta dollar below that, $0.87 above: under a dollar back, before product and shipping costs</td><td>a cap, or a test of a lower level (ads owner)</td></tr>
+      <tr><td><span class="tag neg">negative</span></td><td>Average order value falling, both brands</td><td><brand> down 22% over 12 months; <brand> down 20% over 8 months</td><td>offer, bundle and discount mix before more spend</td></tr>
+      <tr><td><span class="tag pos">positive</span></td><td>A floor without Meta spend</td><td><brand> about $40k a month; <brand> about $5.7k</td><td>how much any spend change really risks</td></tr>
+      <tr><td><span class="tag neu">rhythm</span></td><td>Strong and weak days</td><td><brand> sells 1.33x more on Sunday than Saturday; <brand> 1.26x more on Thursday than Monday (last 12 weeks)</td><td>when to schedule ads and email</td></tr>
+      <tr><td><span class="tag neu">movement</span></td><td><brand> revenue down 47% in 28 days</td><td>spend fell about the same, so it reads as a spend decision, not demand</td><td>confirm it was intended (ads owner)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="sub"><b>Caveats, shown on every signal:</b> spend counts Meta only, so the "floor" includes email and other channels. The returns are a straight-line reading of a dozen months, to confirm before acting. Only complete months count. Data health runs first: <brand>'s data stops a week early, so its movement signals are held rather than read as a drop.</p>
+</section>
+
+<section class="sec">
+  <h2>Lessons already built in</h2>
+  <p class="sub">A third list (red tests) ran through the same engine before this round and is set aside for now. It is not a theme here, but six of its lessons are built into both themes:</p>
+  <div class="cards3">
+    <div class="c"><h3>Cause ≠ what blocks it</h3><p>Two fields. A ruling is never a cause; it's what an item waits on.</p></div>
+    <div class="c"><h3>Items can close themselves</h3><p>When the source's own next run clears them. Operations signals now work this way.</p></div>
+    <div class="c"><h3>Age raises priority</h3><p>After 7 days open, never past P1: a P0 still needs evidence.</p></div>
+    <div class="c"><h3>Summaries stay on Claude</h3><p>In a blind test GLM wrote plausible summaries with 8 factual errors to Claude's 2. GLM stays for test-only fixes.</p></div>
+    <div class="c"><h3>Batches beat causes</h3><p>A back-test showed real fixes land in batches by person, not only by shared cause: "can do it, in one batch" is a column for that reason.</p></div>
+    <div class="c"><h3>Check the source's freshness</h3><p>A reporter that carries old statuses forward, or a dashboard a week behind, misleads the queue. Data health comes first.</p></div>
+  </div>
+</section>
+
+<section class="apanel" id="two-weeks">
+  <h2>The next two weeks: each owner evaluates their own list</h2>
+  <p class="sub">the team and the team each work their own list as the real job, not as a review, then bring back one consolidated set of changes. That feedback refines both their theme and the engine.</p>
+  <div class="tl">
+    <div class="c"><b class="d">Fri 10-02</b><p>Meeting. Option 3 decided. Both lists handed over.</p></div>
+    <div class="c"><b class="d">week 1</b><p>Work the list. Note every place it is wrong, missing or in the way, by item id.</p></div>
+    <div class="c"><b class="d">Fri 10-09</b><p>Both lists re-run on fresh data. A 15-minute check: what's surfacing?</p></div>
+    <div class="c"><b class="d">Fri 10-16</b><p>Each owner hands in one consolidated list of findings. the team rules the engine changes.</p></div>
+  </div>
+  <div class="split">
+    <div class="c"><h3><span class="who-tag">the team</span> components / atlas</h3><ol class="q">
+      <li>Does the queue match how you'd actually work it: actions in the right order, the "you first, the owner only when you can't" split right?</li>
+      <li>Is the "can do today" list believable? Mark any you couldn't actually do alone.</li>
+      <li>Are the issue and action summaries enough to act on without opening the component?</li>
+      <li>Which cross-references helped (brand folders, cards already in flight), and which were noise?</li>
+      <li>If Option 3 is ruled: which changes did you make, and did any owner object?</li>
+    </ol></div>
+    <div class="c"><h3><span class="who-tag">the team</span> operations</h3><ol class="q">
+      <li>Are these the right kinds of signals? What do you check by hand that's missing?</li>
+      <li>Are the money thresholds right (P0 ≥ $10k, P1 ≥ $2k, P2 ≥ $500 a month)?</li>
+      <li>Which patterns over time would have changed a decision, and which are noise?</li>
+      <li>Which P&amp;L pieces should join first, and what should they flag?</li>
+      <li>Who owns ads for each brand, and what targets do you want?</li>
+    </ol></div>
+  </div>
+  <p><b>Open it in Claude.</b> In Claude Code, after a pull: <code>/triage operations</code> or <code>/triage components</code> builds the list, opens it and explains any action; "note that: …" adds a finding. The shared pages stay as links: <a href="(private page)">operations</a>, <a href="(private page)">components</a>, and this page.</p>
+  <p><b>How to hand it in.</b> One file per theme, each finding on one line: the item it's about, what's wrong, the change you want, and whether it's <b>your theme</b> (you can just change it) or <b>the engine</b> (it would change every list, so it goes to the team). Your Claude can draft it from the queue page's prompts. Proposed homes: <code>components/triage/themes/atlas-FEEDBACK.md</code> and <code>operations-FEEDBACK.md</code>.</p>
+  <p><b>What the split tells us.</b> If most findings are theme changes, one engine with a pack per theme works. If most need engine changes, the split is in the wrong place and the contract is redrawn before a third theme joins.</p>
+  <p><b>Questions for everyone, any time in the two weeks:</b> should cards and PM tasks carry a declared <code>refs:</code> line when filed? Which Slack channels, if any, should feed references, given the <brand> workspace saw only 39 human messages in 30 days?</p>
+  <p class="star">★ Option 3 is ruled, its record exists and the 297 are checked: 25 are now the team's, 77 are drafts for owners. the team's first change is the test: one of the 25, filed with <code>/triage</code>, and the owner reads it back with "what has triage changed in my components?".</p>
+</section>
+
+</div>
+<section class="parthead" id="component">
+  <span class="aey">Part 2 · the triage component, to the atlas standard</span>
+  <h2>How the component is proposed to work</h2>
+  <p class="sub">Drawn the way every component page on the atlas is: open issues, how it works, how to use it, who owns it, the core, refusals, what the atlas flags, reference. The red "draft errors" are the atlas checking each claim against the code: <code>components/triage/</code> isn't built yet, so its location, its node and its refusals can't be found. They clear when it is built.</p>
+</section>
+<div class="ap"><div class="wrap">
+<header class="lede">
+  <span class="eyebrow">Upright Atlas · a component</span>
+  <h1>triage</h1>
+  <div class="status"><span class="pill p-idle">stage: not set</span><span class="pill p-idle">triage: status unstated</span><span class="pill p-idle">an engine · any list, read through its theme pack, in; a ranked queue of actions with summaries, three whos and cross-references out · decides nothing · PROPOSED, run by hand on two themes</span></div>
+  <div class="signal"><a class="pill p-crit" href="#checks-triage">7 draft errors</a><span class="pill p-idle">draft · not yet reviewed</span></div>
+  
+  <dl class="kv"><dt>Since</dt><dd>2026-10-02</dd><dt>Owner</dt><dd>Engine the team (&quot;for now&quot;); theme definitions the team (components / atlas) and the team (operations)</dd><dt>Run</dt><dd>/triage &lt;theme&gt; (proposed); today: tools/triage_page.py renders a theme&#x27;s queue model</dd><dt>Emits</dt><dd>a queue page per theme, summaries, drafts and option cards, cross-references; every act to the decision log (proposed)</dd><dt>Status</dt><dd>proposed design · run by hand on two themes (components / atlas, operations) · renderer, detectors and ref resolver live in the atlas build; components/triage/ not built</dd><dt>Contract</dt><dd>a theme pack and an adapter per theme (CONTRACT-themes.md); the eight-part summary (SCHEMA §5)</dd><dt>Workflows through it</dt><dd>0</dd></dl>
+  <p class="note">Rendered by <code>/atlas-view component:triage</code> from <code>platform/data/atlas/data.json</code>, compiled 2026-10-02T08:28:41Z. Every fact on this page is from that file; where the atlas does not know something, the page says so.</p>
+</header>
+<section><span class="eyebrow">1 · Open issues</span><h2>What is not right yet, and who owes the next move</h2><p class="note">6 open, 6 with no card yet; 9 resolved and hidden. A row closes when its card merges, its decision is ruled, or the team closes it with its evidence; a row with no card stays amber until someone cards it. Numbers are fixed per component and never reused.</p><div class="tw"><table class="issues"><thead><tr><th>#</th><th>Issue</th><th>Tied to</th><th>State</th><th>Owner</th></tr></thead><tbody><tr id="issue-6"><td class="inum">triage #6</td><td><b>Priority is guessed from keywords</b><div class="note">the P0 tier on the component-issue dry run: 101 items</div><div class="note">came about: ≈ STREAM · atlas [6941d8] · 2026-10-02 · c0ce1a03f · decides: the engine owner</div><div class="note"><b>Next:</b> Atlas actions are now weighted by issue tier (P0 8 · P1 4 · P2 2 · P3 1), but issue tiers still come from the dry run&#x27;s keyword rules; moves into atlas.json with the refactor (#11).</div><div class="brief"><div><span class="k">Why it matters</span>In a sample of 7 P0s, 2 were false. A wrong P0 spends the triage owner&#x27;s first hour on the wrong thing.</div><div><span class="k">Who and what it affects</span><div class="fchips"><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>component</i> triage</span></div></div><div><span class="k">What the run saw</span><ul><li><code>new-workflow-design/builds/atlas/triage/dryrun-2026-10-02.json@2d3842169</code></li><li><code>new-workflow-design/builds/atlas/triage/SPEC-briefs-targeted.md@e295ff859</code></li></ul></div><div><span class="k">Response</span>Read severity from the brief the run writes (SCHEMA §5 severity) and use keywords only when it is missing.</div><div><span class="k">What the response changes</span>P0 becomes a judgement made by whoever read the code.</div><div><span class="k">If it is ignored</span>The queue keeps opening with false alarms.</div></div></td><td>—</td><td><span class="pill p-warn">needs a card</span> <span class="pill p-acc">lane: owner</span> <span class="pill p-warn">P1</span></td><td>the engine owner</td></tr><tr id="issue-8"><td class="inum">triage #8</td><td><b>Customer service may not need an adapter at all</b><div class="note">tickets live in the helpdesk, outside the workspace</div><div class="note">came about: ≈ STREAM · atlas [6941d8] · 2026-10-02 · c0ce1a03f · decides: the team</div><div class="note"><b>Next:</b> Set aside this round: two themes only (components / atlas, operations).</div><div class="brief"><div><span class="k">Why it matters</span>Helpdesks like Zendesk, Gorgias and Intercom already triage with AI; pulling tickets in may duplicate that.</div><div><span class="k">Who and what it affects</span><div class="fchips"><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>person</i> the CS lead</span><span class="fchip"><i>component</i> triage</span><span class="fchip"><i>component</i> cs-metrics</span></div></div><div><span class="k">What the run saw</span><ul><li><code>new-workflow-design/builds/atlas/triage/PROPOSAL-issue-briefs.html@2d3842169</code></li></ul></div><div><span class="k">Response</span>Check the helpdesk&#x27;s own triage first; feed its themes into the weekly asks rather than copying tickets in.</div><div><span class="k">What the response changes</span>Either no adapter, or a thin one that reads themes.</div><div><span class="k">If it is ignored</span>An adapter built for a job the helpdesk already does.</div></div></td><td>—</td><td><span class="pill p-warn">needs a card</span> <span class="pill p-acc">lane: decision</span> <span class="pill p-idle">P3</span></td><td>the team</td></tr><tr id="issue-10"><td class="inum">triage #10</td><td><b>Queue pages are one-day snapshots</b><div class="note">both themes&#x27; two-week evaluation</div><div class="note">came about: ≈ STREAM · atlas [6941d8] · 2026-10-02 · 875026873 · decides: the team</div><div class="note"><b>Next:</b> Re-run both themes for 10-09 and 10-16 by hand; a tick on the mini is a deploy, to card after the evaluation.</div><div class="brief"><div><span class="k">Why it matters</span>An evaluation on a stale page measures the page, not the job.</div><div><span class="k">Who and what it affects</span><div class="fchips"><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>component</i> triage</span></div></div><div><span class="k">What the run saw</span><ul><li><code>new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c</code></li></ul></div><div><span class="k">Response</span>Re-render both queues on fresh data for 10-09 and 10-16.</div><div><span class="k">What the response changes</span>the team and the team judge the list as it is that week.</div><div><span class="k">If it is ignored</span>Feedback describes a list that moved on.</div></div></td><td>—</td><td><span class="pill p-warn">needs a card</span> <span class="pill p-acc">lane: triage owner</span> <span class="pill p-idle">P2</span></td><td>the atlas stream</td></tr><tr id="issue-11"><td class="inum">triage #11</td><td><b>Theme-specific code still lives in the engine&#x27;s tools</b><div class="note">every new theme</div><div class="note">came about: ≈ STREAM · atlas [6941d8] · 2026-10-02 · 875026873 · decides: the team</div><div class="note"><b>Next:</b> Refactor triage_page.py and triage_dryrun.py to read people, labels, weights and paths from the packs (about a day, inferred), after the 10-16 findings.</div><div class="brief"><div><span class="k">Why it matters</span>The contract says the engine names no person, path or rule; the renderer still does.</div><div><span class="k">Who and what it affects</span><div class="fchips"><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>component</i> triage</span></div></div><div><span class="k">What the run saw</span><ul><li><code>components/triage/CONTRACT-themes.md@fc6ea100c</code></li></ul></div><div><span class="k">Response</span>Move the list of people, brief labels, sidecar paths, weights and the item word into the packs.</div><div><span class="k">What the response changes</span>A third theme needs only a pack and an adapter.</div><div><span class="k">If it is ignored</span>Each new theme edits the engine.</div></div></td><td>—</td><td><span class="pill p-warn">needs a card</span> <span class="pill p-acc">lane: triage owner</span> <span class="pill p-idle">P2</span></td><td>the atlas stream</td></tr><tr id="issue-12"><td class="inum">triage #12</td><td><b>Cross-references are guessed from text</b><div class="note">both themes&#x27; &#x27;Related elsewhere&#x27;</div><div class="note">came about: ≈ STREAM · atlas [6941d8] · 2026-10-02 · 875026873 · decides: the team</div><div class="note"><b>Next:</b> Rule whether cards and PM tasks carry a declared refs: line when filed.</div><div class="brief"><div><span class="k">Why it matters</span>Text matching found 8 related cards for email-production#1, of which 3 were real.</div><div><span class="k">Who and what it affects</span><div class="fchips"><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>component</i> triage</span></div></div><div><span class="k">What the run saw</span><ul><li><code>new-workflow-design/builds/atlas/tools/triage_refs.py@fc6ea100c</code></li></ul></div><div><span class="k">Response</span>A refs: line on cards and tasks at filing; text matching stays as a labelled fallback.</div><div><span class="k">What the response changes</span>Related work shown is real, so re-filing stops.</div><div><span class="k">If it is ignored</span>Owners learn to ignore the column.</div></div></td><td>—</td><td><span class="pill p-warn">needs a card</span> <span class="pill p-acc">lane: decision</span> <span class="pill p-idle">P2</span></td><td>the team</td></tr><tr id="issue-13"><td class="inum">triage #13</td><td><b>Operations has no targets and no ads owner per brand</b><div class="note">the operations theme&#x27;s thresholds and its spend signals</div><div class="note">came about: ≈ STREAM · atlas [6941d8] · 2026-10-02 · 875026873 · decides: the team</div><div class="note"><b>Next:</b> Name each brand&#x27;s ads owner and any targets during the evaluation.</div><div class="brief"><div><span class="k">Why it matters</span>Without targets signals compare a brand only with its own history; without an ads owner two spend signals have no decider.</div><div><span class="k">Who and what it affects</span><div class="fchips"><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>person</i> the team</span><span class="fchip"><i>component</i> triage</span></div></div><div><span class="k">What the run saw</span><ul><li><code>components/triage/themes/operations-FINDINGS.md@fc6ea100c</code></li></ul></div><div><span class="k">Response</span>Name the ads owner per brand in operations.json; add targets as they are set.</div><div><span class="k">What the response changes</span>Spend signals reach someone who can act.</div><div><span class="k">If it is ignored</span>They sit in the queue with &#x27;decider: not named&#x27;.</div></div></td><td>—</td><td><span class="pill p-warn">needs a card</span> <span class="pill p-acc">lane: decision</span> <span class="pill p-idle">P2</span></td><td>the team</td></tr></tbody></table></div></section><section><span class="eyebrow">2 · How it works</span><h2>What goes in, what runs it, what comes out</h2><p class="plainw">A sorting desk for any long list. It reads a theme&#x27;s list through that theme&#x27;s adapter, drops what is already fixed, checks every item carries its summary, names each cause and what blocks it, then groups items into actions by the theme&#x27;s own grouping rules (components by fix, operations by detector and brand). It ranks actions by the theme&#x27;s own priority list (neither grouping nor priority is built into the engine), says who decides, who can do it (the triage owner first) and who is affected, links each item to related work elsewhere, and logs every act. The engine names no person, path or priority rule: all of that comes from the theme pack.</p><figure class="pf"><div class="scroll"><svg class="pic" viewBox="0 0 1168 569" role="img" aria-label="How triage works"><defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10z" class="pah"/></marker><marker id="pa-proposed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10z" class="pah proposed"/></marker></defs><text class="pch" x="112.0" y="18" text-anchor="middle">SOURCES</text><text class="pch" x="348.0" y="18" text-anchor="middle">INPUTS</text><text class="pch" x="584.0" y="18" text-anchor="middle">ENGINE</text><text class="pch" x="820.0" y="18" text-anchor="middle">OUTPUTS</text><text class="pch" x="1056.0" y="18" text-anchor="middle">USED BY</text><path class="pa" d="M210,100 C230.0,100 230.0,100 247,100" marker-end="url(#pa)"/><path class="pa" d="M210,218.5 C230.0,218.5 230.0,225.0 247,225.0" marker-end="url(#pa)"/><path class="pa" d="M210,330 C230.0,330 230.0,225.0 247,225.0" marker-end="url(#pa)"/><path class="pa" d="M210,507.0 C230.0,507.0 230.0,225.0 247,225.0" marker-end="url(#pa)"/><path class="pa" d="M446,100 C466.0,100 466.0,100 483,100" marker-end="url(#pa)"/><path class="pa" d="M446,225.0 C466.0,225.0 466.0,100 483,100" marker-end="url(#pa)"/><path class="pa" d="M682,100 C702.0,100 702.0,100 719,100" marker-end="url(#pa)"/><path class="pa" d="M682,100 C702.0,100 702.0,335.5 719,335.5" marker-end="url(#pa)"/><path class="pa" d="M918,100 C938.0,100 938.0,100 955,100" marker-end="url(#pa)"/><path class="pa" d="M918,335.5 C938.0,335.5 938.0,293 955,293" marker-end="url(#pa)"/><g class="pg"><rect x="958" y="233" width="196" height="127" rx="9"/><text class="pgh" x="967" y="247">🧩 Components</text></g><g class="pg"><rect x="958" y="40" width="196" height="179" rx="9"/><text class="pgh" x="967" y="54">👤 People</text></g><g class="pg h-repo proposed"><rect x="722" y="298" width="196" height="75" rx="9"/><text class="pgh" x="731" y="312">📁 the repo — on the plane</text></g><g class="pg h-repo"><rect x="722" y="40" width="196" height="244" rx="9"/><text class="pgh" x="731" y="54">📁 the repo — for the triage</text><text class="pgh" x="731" y="67">owner</text></g><g class="pg proposed"><rect x="486" y="40" width="196" height="246" rx="9"/><text class="pgh" x="495" y="54">nine passes</text></g><g class="pg h-repo binding"><rect x="250" y="181" width="196" height="88" rx="9"/><text class="pgh" x="259" y="195">📁 the repo — the summary</text><text class="pgh" x="259" y="208">standard</text></g><g class="pg h-repo"><rect x="250" y="40" width="196" height="127" rx="9"/><text class="pgh" x="259" y="54">📁 the repo — theme packs</text></g><g class="pg h-repo proposed"><rect x="14" y="463" width="196" height="88" rx="9"/><text class="pgh" x="23" y="477">📁 the repo — Reference</text><text class="pgh" x="23" y="490">sources</text></g><g class="pg"><rect x="14" y="270" width="196" height="179" rx="9"/><text class="pgh" x="23" y="284">🧩 Themes</text></g><g class="pg h-mini"><rect x="14" y="181" width="196" height="75" rx="9"/><text class="pgh" x="23" y="195">⚙ the mini — Automated</text></g><g class="pg"><rect x="14" y="40" width="196" height="127" rx="9"/><text class="pgh" x="23" y="54">👤 People</text></g><g class="pi proposed"><title>triage owner: /triage &lt;theme&gt;</title><rect x="22" y="61" width="180" height="46" rx="6"/><text class="pn" x="32" y="78">triage owner</text><text class="ps" x="32" y="93">/triage &lt;theme&gt;</text></g><g class="pi"><title>a lead or stream: a dry run</title><rect x="22" y="113" width="180" height="46" rx="6"/><text class="pn" x="32" y="130">a lead or stream</text><text class="ps" x="32" y="145">a dry run</text></g><g class="pi proposed"><title>tick per theme: weekly · daily</title><rect x="22" y="202" width="180" height="46" rx="6"/><text class="pn" x="32" y="219">tick per theme</text><text class="ps" x="32" y="234">weekly · daily</text></g><g class="pi"><title>components / atlas: 685 issues</title><rect x="22" y="291" width="180" height="46" rx="6"/><text class="pn" x="32" y="308">components / atlas</text><text class="ps" x="32" y="323">685 issues</text></g><g class="pi"><title>operations: 13 signals</title><rect x="22" y="343" width="180" height="46" rx="6"/><text class="pn" x="32" y="360">operations</text><text class="ps" x="32" y="375">13 signals</text></g><g class="pi proposed"><title>P&amp;L systems: next</title><rect x="22" y="395" width="180" height="46" rx="6"/><text class="pn" x="32" y="412">P&amp;L systems</text><text class="ps" x="32" y="427">next</text></g><g class="pi proposed"><title>cards · inbox · tasks: links only</title><rect x="22" y="497" width="180" height="46" rx="6"/><text class="pn" x="32" y="514">cards · inbox · tasks</text><text class="ps" x="32" y="529">links only</text></g><g class="pi"><title>atlas.json: the team</title><rect x="258" y="61" width="180" height="46" rx="6"/><text class="pn" x="268" y="78">atlas.json</text><text class="ps" x="268" y="93">the team</text></g><g class="pi"><title>operations.json: the team</title><rect x="258" y="113" width="180" height="46" rx="6"/><text class="pn" x="268" y="130">operations.json</text><text class="ps" x="268" y="145">the team</text></g><g class="pi binding"><title>SCHEMA §5: the eight parts</title><rect x="258" y="215" width="180" height="46" rx="6"/><text class="pn" x="268" y="232">SCHEMA §5</text><text class="ps" x="268" y="247">the eight parts</text></g><g class="pi eng proposed"><title>intake · still true?: the adapter</title><rect x="494" y="61" width="180" height="46" rx="6"/><text class="pn" x="504" y="78">intake · still true?</text><text class="ps" x="504" y="93">the adapter</text></g><g class="pi eng proposed"><title>summary · cause · group: theme&#x27;s grouping</title><rect x="494" y="113" width="180" height="61" rx="6"/><text class="pn" x="504" y="130">summary · cause ·</text><text class="pn" x="504" y="145">group</text><text class="ps" x="504" y="160">theme&#x27;s grouping</text></g><g class="pi eng proposed"><title>priority · three whos: triage owner first</title><rect x="494" y="180" width="180" height="46" rx="6"/><text class="pn" x="504" y="197">priority · three whos</text><text class="ps" x="504" y="212">triage owner first</text></g><g class="pi eng proposed"><title>refs · outputs · log: every act</title><rect x="494" y="232" width="180" height="46" rx="6"/><text class="pn" x="504" y="249">refs · outputs · log</text><text class="ps" x="504" y="264">every act</text></g><g class="pi"><title>queue page: one per theme</title><rect x="730" y="74" width="180" height="46" rx="6"/><text class="pn" x="740" y="91">queue page</text><text class="ps" x="740" y="106">one per theme</text></g><g class="pi"><title>summaries: items · actions</title><rect x="730" y="126" width="180" height="46" rx="6"/><text class="pn" x="740" y="143">summaries</text><text class="ps" x="740" y="158">items · actions</text></g><g class="pi"><title>drafts · options: components</title><rect x="730" y="178" width="180" height="46" rx="6"/><text class="pn" x="740" y="195">drafts · options</text><text class="ps" x="740" y="210">components</text></g><g class="pi"><title>cross-refs: text-matched</title><rect x="730" y="230" width="180" height="46" rx="6"/><text class="pn" x="740" y="247">cross-refs</text><text class="ps" x="740" y="262">text-matched</text></g><g class="pi proposed"><title>decision log: every act, once</title><rect x="730" y="319" width="180" height="46" rx="6"/><text class="pn" x="740" y="336">decision log</text><text class="ps" x="740" y="351">every act, once</text></g><g class="pi"><title>triage owner: the team · the team</title><rect x="966" y="61" width="180" height="46" rx="6"/><text class="pn" x="976" y="78">triage owner</text><text class="ps" x="976" y="93">the team · the team</text></g><g class="pi proposed"><title>owners and deciders: read the log · undo</title><rect x="966" y="113" width="180" height="46" rx="6"/><text class="pn" x="976" y="130">owners and deciders</text><text class="ps" x="976" y="145">read the log · undo</text></g><g class="pi"><title>the lead: one card per action</title><rect x="966" y="165" width="180" height="46" rx="6"/><text class="pn" x="976" y="182">the lead</text><text class="ps" x="976" y="197">one card per action</text></g><g class="pi proposed"><title>atlas: action · priority</title><rect x="966" y="254" width="180" height="46" rx="6"/><text class="pn" x="976" y="271">atlas</text><text class="ps" x="976" y="286">action · priority</text></g><g class="pi proposed"><title>anyone&#x27;s Claude: prompts · context</title><rect x="966" y="306" width="180" height="46" rx="6"/><text class="pn" x="976" y="323">anyone&#x27;s Claude</text><text class="ps" x="976" y="338">prompts · context</text></g></svg></div><div class="plegend"><span><i class="lg run"></i>runs at HEAD</span><span class="lgman">✍ by hand: a person writes or copies it, the machine does not make it</span><span><i class="lg prop"></i>planned, or approved and waiting on a fact</span><span><i class="lg legacy"></i>deferred, legacy, or beside</span><span><i class="lg flag"></i>runs today, worth a look</span><span><i class="lg bad"></i>conflict or stale against the code</span></div><figcaption>Solid runs at HEAD, drafted from the code at 875026873 and checked on every render; amber dashed is planned, or approved and still waiting on a fact; grey dotted is deferred, legacy, or beside; an amber outline runs today but is worth a look. Every box stands for items listed in full under Reference detail.</figcaption><div class="band"><div class="bh">Who writes back, and what</div><div class="bcards"><div class="bc"><b>the triage owner</b><span>confirm · clear · close · forward</span><i>from The triage owner (the team for components / atlas, the team for operations)</i></div><div class="bc"><b>the decider</b><span>sign · undo · decide</span><i>from owners and deciders</i></div></div></div><div class="band"><div class="bh">The outcome</div><p class="bl">every item ends in exactly one of these. The machine never closes an item by judgment: a close is the triage owner&#x27;s with evidence, or the source&#x27;s own next run.</p><div class="bcards"><div class="bc x-warn"><b>already fixed: a closure proposed back to the list</b><span></span></div><div class="bc x-warn"><b>cleared by the source&#x27;s next run (operations signals): it leaves the queue on its own</b><span></span></div><div class="bc x-ok"><b>the triage owner clears it, under the lane&#x27;s conditions</b><span></span></div><div class="bc x-ok"><b>an owner&#x27;s yes or no, in the weekly message</b><span></span></div><div class="bc x-ok"><b>a decision: options and a suggested answer go to the decider</b><span></span></div><div class="bc x-idle"><b>parked with a review date: little use on record</b><span></span></div></div></div><div class="band never"><div class="bh">What it never does</div><div class="bcards"><div class="bc"><b>close by judgment</b><span>a close is the triage owner&#x27;s, with evidence</span></div><div class="bc"><b>edit the list it reads</b><span>only through the list&#x27;s own writer</span></div><div class="bc"><b>go to an owner first</b><span>the triage owner sees it first</span></div><div class="bc"><b>leave an action with no decider</b><span>&#x27;none&#x27; is refused</span></div></div></div></figure></section><section><span class="eyebrow">3 · How to use it</span><h2>Asking for it, what you need, what you get</h2><dl class="kv howto"><dt>What it does</dt><dd>takes one theme&#x27;s list through its pack and adapter: drops what&#x27;s already fixed, checks summaries, names each cause, groups items by the one action that clears them, ranks the actions, names who decides, who can do it and who is affected, and links related work. Out comes one queue page for the triage owner (proposed as a component; run by hand today).</dd><dt>Before you start</dt><dd>a theme pack (themes/&lt;theme&gt;.json) with every key filled or set to null with a reason, and an adapter that can read the list and tell whether an item still holds. A named theme owner and triage owner.</dd><dt>The command</dt><dd>today, by hand: python3 tools/metrics_insights.py writes the operations model; /usr/bin/python3 tools/triage_page.py &lt;model&gt; renders any theme&#x27;s page. Proposed: /triage &lt;theme&gt;.</dd><dt>What you get</dt><dd>triage/queue/model-&lt;theme&gt;-&lt;date&gt;.json and its page: actions ranked, items clickable into summaries, prompts to paste into Claude.</dd><dt>When to stop and ask</dt><dd>an action that bundles unrelated causes, a P0 without live-use evidence, or a stale source (data health fails): the triage owner confirms before anything goes to an owner.</dd><dt>Confirm with</dt><dd>the team for the engine; the team for components / atlas; the team for operations.</dd></dl><p class="note">Generated ≈ STREAM · atlas [6941d8], 2026-10-02, proposed from the code, not yet in the component's README (components rule 10). Source <code>components/triage/CONTRACT-themes.md</code>.</p></section><section><span class="eyebrow">4 · Who owns it</span><h2>Who owns what, and the rules that do the work</h2><div class="band own"><div class="bh">Who owns what</div><div class="bcards"><div class="bc"><b>the engine</b><span>nine passes, page, log</span><i>the team, for now</i></div><div class="bc"><b>components / atlas</b><span>pack · triage</span><i>the team</i></div><div class="bc"><b>operations</b><span>pack · triage</span><i>the team</i></div><div class="bc"><b>the walls</b><span>bind every theme</span><i>the team · the team</i></div></div></div></section><section><span class="eyebrow">5 · The core</span><h2>Themes: what each list brings</h2><p class="note">The nine passes stay the same. Each theme brings a pack and an adapter, and its owner changes them without asking. Status 2026-10-02.</p><div class="tw"><table><thead><tr><th></th><th>Components / atlas</th><th>Operations</th></tr></thead><tbody><tr><td>Theme owner and triage owner</td><td>the team</td><td>the team</td></tr><tr><td>An item is</td><td>an issue, component#n</td><td>a signal, detector:brand[:product]</td></tr><tr><td>Read from</td><td>the compiled atlas: each component&#x27;s newest system run</td><td>the metrics dashboards&#x27; data, refreshed daily; P&amp;L systems next</td></tr><tr><td>Already fixed?</td><td>the next system run re-reads it; the team may close with evidence (SCHEMA §5a)</td><td>clears itself when the next run no longer shows it; data health runs first and holds stale brands</td></tr><tr><td>Summary</td><td>the eight parts on all 656 open issues (ATL-31 (remaining issue briefs)); the 29 that look fixed close instead</td><td>the eight parts on all 13 signals and all 5 actions</td></tr><tr><td>Summary at birth (rule)</td><td>met: 83 of 83 actions, 656 of 656 open issues</td><td>met: 13 signals, 5 actions</td></tr><tr><td>Cause classes</td><td>26 mechanisms: moved paths, output home, keys…</td><td>data health, movement, sell-out before resupply, patterns over time</td></tr><tr><td>Grouping</td><td>close-out → shared fix across components (24) → decision group (11) → local batch per component (47); first match wins</td><td>one action per detector per brand, data health first (5)</td></tr><tr><td>Priority</td><td>issue weight (P0 8 · P1 4 · P2 2 · P3 1); age raises it, never past P1; no P0 without live use</td><td>money at stake a month (P0 ≥ $10k · P1 ≥ $2k · P2 ≥ $500)</td></tr><tr><td>Who decides</td><td>owners from the Residents table (4 disputes open); the team for walls</td><td>each brand&#x27;s ads owner (not yet named); the team for the P&amp;L</td></tr><tr><td>What the triage owner may do alone</td><td>Option 3, ruled 2026-10-02 (the owner said yes): ruled defaults and fixes the summary spells out, a test proving each, every change in the decision log with an undo</td><td>read and flag; acting on spend is the ads owner&#x27;s</td></tr><tr><td>Cross-references</td><td>component · folder · brand folder · card</td><td>brand · product · SKU · metric run · P&amp;L table · card</td></tr><tr><td>Both</td><td>PM tasks · inbox items · Slack (to be decided)</td><td>PM tasks · inbox items · Slack (to be decided)</td></tr><tr><td>Evaluation</td><td>the team, 10-02 → 10-16, findings tagged theme or engine</td><td>the team, 10-02 → 10-16, findings tagged theme or engine</td></tr></tbody></table></div></section><section><span class="eyebrow">6 · Refusals</span><h2>What it refuses, by name</h2><div class="tw"><table><thead><tr><th>Refuses</th><th>Meaning</th><th>In the code</th></tr></thead><tbody><tr><td><code>no-pack</code></td><td>a list with no theme pack: no item word, causes, priority rule or owners to sort by</td><td><span class="pill p-crit">draft-error</span></td></tr><tr><td><code>no-summary-at-birth</code></td><td>creating an item, action group or issue without its eight-part summary (the team, 2026-10-02: a standing rule)</td><td><span class="pill p-crit">draft-error</span></td></tr><tr><td><code>no-decider</code></td><td>an action with no one named to decide: it never leaves the queue as &#x27;none&#x27;</td><td><span class="pill p-crit">draft-error</span></td></tr><tr><td><code>write-to-source</code></td><td>any change to the list it reads; closes go back through the list&#x27;s own writer</td><td><span class="pill p-crit">draft-error</span></td></tr><tr><td><code>unverified-close</code></td><td>closing an item whose evidence it could not check</td><td><span class="pill p-crit">draft-error</span></td></tr><tr><td><code>pack-relaxes-wall</code></td><td>a theme pack that loosens a wall; walls bind every theme</td><td><span class="pill p-crit">draft-error</span></td></tr><tr><td><code>guessed-as-declared</code></td><td>a text-matched cross-reference shown as if it were declared</td><td><span class="pill p-crit">draft-error</span></td></tr></tbody></table></div></section><section><span class="eyebrow">7 · The atlas</span><h2>What the atlas flags</h2><div class="tw"><table><thead><tr><th>Severity</th><th>Kind</th><th>Finding</th><th>Where</th></tr></thead><tbody><tr><td><span class="pill p-idle">note</span></td><td>Node no trace touches</td><td>components · triage component — no workflow trace routes through it</td><td class="src">components/CLAUDE.md</td></tr><tr><td><span class="pill p-warn">warn</span></td><td>Tool folder with no definition</td><td>no definition block — nothing here says what it takes, makes or never does, so the roster carries a folder, not a tool</td><td class="src">components/triage/CLAUDE.md</td></tr></tbody></table></div></section><section><span class="eyebrow">8 · Reference</span><h2>Reference detail</h2><p class="note">Every box in the picture, row by row. Open a row for each item it stands for: where it lives, what it restates, how it was checked, and its full list where it has one.</p><div class="refblock"><div class="refh">Sources</div><details class="refrow"><summary><span class="rr-name">triage owner</span><span class="rr-sub">/triage &lt;theme&gt;</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>The theme&#x27;s triage owner runs /triage …</b></div><p class="ri-full">The theme&#x27;s triage owner runs /triage &lt;theme&gt; from a session (proposed); today the atlas stream renders each queue by hand</p><dl class="ri-meta"><dt>Lives</dt><dd>a session</dd><dt>Restates</dt><dd><code>components/triage/CONTRACT-themes.md@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates components/triage/CONTRACT-themes.md@fc6ea100c: components/triage/CONTRACT-themes.md unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">a lead or stream</span><span class="rr-sub">a dry run</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>a lead or a stream asks …</b></div><p class="ri-full">a lead or a stream asks for a dry run over one theme (how both themes ran on 2026-10-02)</p><dl class="ri-meta"><dt>Lives</dt><dd>a session</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c: new-workflow-design/builds/atlas/tools/triage_page.py unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">tick per theme</span><span class="rr-sub">weekly · daily</span><span class="rr-meta">⚙ the mini</span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>a tick on the mini per theme</b></div><p class="ri-full">a tick on the mini per theme: weekly for components, daily for operations as the metrics data refreshes daily</p><dl class="ri-meta"><dt>Lives</dt><dd>the mini</dd><dt>Restates</dt><dd><code>components/triage/CONTRACT-themes.md@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates components/triage/CONTRACT-themes.md@fc6ea100c: components/triage/CONTRACT-themes.md unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">components / atlas</span><span class="rr-sub">685 issues</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>components / atlas</b></div><p class="ri-full">components / atlas: open issues on the component pages, from the compiled atlas (685 open on 48 components)</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> is the component atlas: exists<br><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c: new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">operations</span><span class="rr-sub">13 signals</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>operations</b></div><p class="ri-full">operations: signals the detectors build from the metrics dashboards&#x27; data (13 on 2026-10-02)</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/tools/metrics_insights.py@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> is the component metrics: exists<br><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/tools/metrics_insights.py@fc6ea100c: new-workflow-design/builds/atlas/tools/metrics_insights.py unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">P&amp;L systems</span><span class="rr-sub">next</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>operations, next</b></div><p class="ri-full">operations, next: the P&amp;L systems the team is building, joined as they land</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>components/triage/themes/operations.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates components/triage/themes/operations.json@fc6ea100c: components/triage/themes/operations.json unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">cards · inbox · tasks</span><span class="rr-sub">links only</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>cards</b></div><p class="ri-full">cards, inbox, PM tasks and brand folders, for cross-references; Slack channels to be decided (the <brand> workspace saw 39 human messages in 30 days)</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>components/triage/themes/slack-<brand>/channel-census-2026-10-02.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates components/triage/themes/slack-<brand>/channel-census-2026-10-02.json@fc6ea100c: components/triage/themes/slack-<brand>/channel-census-2026-10-02.json unchanged since fc6ea100c</dd></dl></div></div></details></div><div class="refblock"><div class="refh">Inputs</div><details class="refrow"><summary><span class="rr-name">atlas.json</span><span class="rr-sub">the team</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>themes/&lt;theme&gt;.json</b></div><p class="ri-full">themes/&lt;theme&gt;.json: the theme pack. Item word, adapter, summary fields, cause classes, priority rule, owners, lanes, refs it carries. One per theme, curated by the theme owner: atlas.json (the team), operations.json (the team)</p><dl class="ri-meta"><dt>Where</dt><dd><code>components/triage/themes/</code></dd><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>components/triage/themes/atlas.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at components/triage/themes/: components/triage/themes exists<br><span class="pill p-ok">agrees</span> restates components/triage/themes/atlas.json@fc6ea100c: components/triage/themes/atlas.json unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">operations.json</span><span class="rr-sub">the team</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>themes/&lt;theme&gt;.json</b></div><p class="ri-full">themes/&lt;theme&gt;.json: the theme pack. Item word, adapter, summary fields, cause classes, priority rule, owners, lanes, refs it carries. One per theme, curated by the theme owner: atlas.json (the team), operations.json (the team)</p><dl class="ri-meta"><dt>Where</dt><dd><code>components/triage/themes/</code></dd><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>components/triage/themes/atlas.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at components/triage/themes/: components/triage/themes exists<br><span class="pill p-ok">agrees</span> restates components/triage/themes/atlas.json@fc6ea100c: components/triage/themes/atlas.json unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">SCHEMA §5</span><span class="rr-sub">the eight parts</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">per brand</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>the eight-part summary (SCHEMA §5)</b></div><p class="ri-full">the eight-part summary (SCHEMA §5): why, impacts, evidence, response (a fix, or a follow-up on a positive signal), what the response changes, if ignored, lane, severity, on every item and every action</p><dl class="ri-meta"><dt>Where</dt><dd><code>new-workflow-design/builds/atlas/flows/SCHEMA.md</code></dd><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/flows/SCHEMA.md@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at new-workflow-design/builds/atlas/flows/SCHEMA.md: new-workflow-design/builds/atlas/flows/SCHEMA.md exists<br><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/flows/SCHEMA.md@fc6ea100c: new-workflow-design/builds/atlas/flows/SCHEMA.md unchanged since fc6ea100c</dd></dl></div></div></details></div><div class="refblock"><div class="refh">Engine</div><details class="refrow"><summary><span class="rr-name">intake · still true?</span><span class="rr-sub">the adapter</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>nine passes, in order</b></div><p class="ri-full">nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme&#x27;s own rules · priority, by the theme&#x27;s own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act</p><dl class="ri-meta"><dt>Where</dt><dd><code>components/triage/</code></dd><dt>Lives</dt><dd>repo</dd><dt>Runs</dt><dd>a session, or a tick per theme on the mini</dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at components/triage/: components/triage exists<br><span class="pill p-ok">agrees</span> is the atlas node component:triage: on the atlas</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">summary · cause · group</span><span class="rr-sub">theme&#x27;s grouping</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>nine passes, in order</b></div><p class="ri-full">nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme&#x27;s own rules · priority, by the theme&#x27;s own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act</p><dl class="ri-meta"><dt>Where</dt><dd><code>components/triage/</code></dd><dt>Lives</dt><dd>repo</dd><dt>Runs</dt><dd>a session, or a tick per theme on the mini</dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at components/triage/: components/triage exists<br><span class="pill p-ok">agrees</span> is the atlas node component:triage: on the atlas</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">priority · three whos</span><span class="rr-sub">triage owner first</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>nine passes, in order</b></div><p class="ri-full">nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme&#x27;s own rules · priority, by the theme&#x27;s own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act</p><dl class="ri-meta"><dt>Where</dt><dd><code>components/triage/</code></dd><dt>Lives</dt><dd>repo</dd><dt>Runs</dt><dd>a session, or a tick per theme on the mini</dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at components/triage/: components/triage exists<br><span class="pill p-ok">agrees</span> is the atlas node component:triage: on the atlas</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">refs · outputs · log</span><span class="rr-sub">every act</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>nine passes, in order</b></div><p class="ri-full">nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme&#x27;s own rules · priority, by the theme&#x27;s own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act</p><dl class="ri-meta"><dt>Where</dt><dd><code>components/triage/</code></dd><dt>Lives</dt><dd>repo</dd><dt>Runs</dt><dd>a session, or a tick per theme on the mini</dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> lives at components/triage/: components/triage exists<br><span class="pill p-ok">agrees</span> is the atlas node component:triage: on the atlas</dd></dl></div></div></details></div><div class="refblock"><div class="refh">Outputs</div><details class="refrow"><summary><span class="rr-name">queue page</span><span class="rr-sub">one per theme</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>one queue page per theme</b></div><p class="ri-full">one queue page per theme, the same format for every theme: actions ranked, each item clickable into its summary, the three whos, explain and do prompts for Claude</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c: new-workflow-design/builds/atlas/tools/triage_page.py unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">summaries</span><span class="rr-sub">items · actions</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>summaries on everything, from the start</b></div><p class="ri-full">summaries on everything, from the start: operations 13 signals and 5 actions; components all 656 open issues and all 83 actions (60 built from their issues&#x27; summaries by tools/triage_fill.py)</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/triage/queue/model-operations-2026-10-02.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/triage/queue/model-operations-2026-10-02.json@fc6ea100c: new-workflow-design/builds/atlas/triage/queue/model-operations-2026-10-02.json unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">drafts · options</span><span class="rr-sub">components</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>drafted fixes and option cards</b></div><p class="ri-full">drafted fixes and option cards: 113 ATL-29 (drafted changes), 48 ATL-30 (decision option cards), components only</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c: new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">cross-refs</span><span class="rr-sub">text-matched</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>cross-references on every item</b></div><p class="ri-full">cross-references on every item: typed refs, one shared resolver per type; text-matched today, declared refs proposed</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>new-workflow-design/builds/atlas/tools/triage_refs.py@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates new-workflow-design/builds/atlas/tools/triage_refs.py@fc6ea100c: new-workflow-design/builds/atlas/tools/triage_refs.py unchanged since fc6ea100c</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">decision log</span><span class="rr-sub">every act, once</span><span class="rr-meta">📁 the repo</span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>the decision log</b></div><p class="ri-full">the decision log: one `triage` record per act (close, answer, forward, change, draft, sign, undo, decide; ATL-28 (triage record kind), ATL-32 (triage change trail)), filed by components/triage/tools/file_record.py; append-only. Queue pages, the atlas and per-area context files for Claude read it (the readers are proposed)</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Restates</dt><dd><code>components/triage/tools/file_record.py@fc6ea100c</code></dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> restates components/triage/tools/file_record.py@fc6ea100c: components/triage/tools/file_record.py unchanged since fc6ea100c</dd></dl></div></div></details></div><div class="refblock"><div class="refh">Used by</div><details class="refrow"><summary><span class="rr-name">triage owner</span><span class="rr-sub">the team · the team</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>The triage owner</b></div><p class="ri-full">The triage owner (the team for components / atlas, the team for operations): works the list first, does what is marked theirs, closes with evidence, forwards the rest</p><dl class="ri-meta"><dt>Lives</dt><dd>a session</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">owners and deciders</span><span class="rr-sub">read the log · undo</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>owners and deciders</b></div><p class="ri-full">owners and deciders: see every change in their areas in the decision log, each with a one-line undo; answer, sign or undo</p><dl class="ri-meta"><dt>Lives</dt><dd>a session</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">the lead</span><span class="rr-sub">one card per action</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>the lead</b></div><p class="ri-full">the lead: an action with many items behind it becomes one card</p><dl class="ri-meta"><dt>Lives</dt><dd>a session</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">atlas</span><span class="rr-sub">action · priority</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>atlas</b></div><p class="ri-full">atlas: each issue shows its action, priority and clears-with count; closes read back from SCHEMA §5a</p><dl class="ri-meta"><dt>Lives</dt><dd>repo</dd><dt>Checked</dt><dd><span class="pill p-ok">agrees</span> is the component atlas: exists</dd></dl></div></div></details><details class="refrow"><summary><span class="rr-name">anyone&#x27;s Claude</span><span class="rr-sub">prompts · context</span><span class="rr-meta"></span><span class="rr-meta">1 item</span><span class="rr-chips"><span class="pill p-warn">planned</span></span></summary><div class="rr-body"><div class="refitem"><div class="ri-head"><b>anyone&#x27;s Claude</b></div><p class="ri-full">anyone&#x27;s Claude: the explain prompts on the queue, and the per-area context files once built</p><dl class="ri-meta"><dt>Lives</dt><dd>a session</dd></dl></div></div></details></div><div class="refmore"><details class="ref"><summary><b>What the atlas does not know yet</b></summary><ul class="gaps"><li><b>the team's review.</b> The flow is a machine draft, not yet reviewed. She approves it and checks with the owner where she needs to (ruled 2026-09-30).</li><li><b>What it takes, makes and refuses.</b> <code>components/triage</code> has no definition block, so the atlas cannot say. Proposal: write the block (the owner's act).</li><li><b>Where its inputs come from and who reads its output.</b> No workflow trace crosses it. Proposal: a trace drafted from the code that calls it (update mode), for the team to approve.</li><li><b>Its review and mini status.</b> No system-path run has filed a record for it yet; the next /system-fit, /system-ready or /system-review files one (SI-17 (system runs filed)).</li></ul></details></div><details class="checks panel" id="checks-triage"><summary>Checks against the code: 7 draft errors · 50 agree with the code</summary><p class="note">Drafted by ≈ STREAM · atlas [6941d8], for the team (engine owner). Redrawn 2026-10-02 for the two-theme round: components / atlas (the team) and operations (the team); red tests set aside at 2026-10-02T06:41Z from 875026873. A failing claim on an item nobody has edited is a draft error, fixed by redrafting. A failing claim on an item a person edited is a conflict, which becomes a decision on what the component is meant to do.</p><div class="tw"><table><thead><tr><th>State</th><th>Item</th><th>Claim</th><th>What the repo says</th></tr></thead><tbody><tr><td><span class="pill p-crit">draft-error</span></td><td>a list with no theme pack: no item word, causes, priority rule or owners to sort by</td><td>refuses as `no-pack`</td><td class="src">`no-pack` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-crit">draft-error</span></td><td>creating an item, action group or issue without its eight-part summary (the team, 2026-10-02: a standing rule)</td><td>refuses as `no-summary-at-birth`</td><td class="src">`no-summary-at-birth` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-crit">draft-error</span></td><td>an action with no one named to decide: it never leaves the queue as &#x27;none&#x27;</td><td>refuses as `no-decider`</td><td class="src">`no-decider` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-crit">draft-error</span></td><td>any change to the list it reads; closes go back through the list&#x27;s own writer</td><td>refuses as `write-to-source`</td><td class="src">`write-to-source` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-crit">draft-error</span></td><td>closing an item whose evidence it could not check</td><td>refuses as `unverified-close`</td><td class="src">`unverified-close` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-crit">draft-error</span></td><td>a theme pack that loosens a wall; walls bind every theme</td><td>refuses as `pack-relaxes-wall`</td><td class="src">`pack-relaxes-wall` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-crit">draft-error</span></td><td>a text-matched cross-reference shown as if it were declared</td><td>refuses as `guessed-as-declared`</td><td class="src">`guessed-as-declared` appears nowhere in components/triage&#x27;s non-test code</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>The theme&#x27;s triage owner runs /triage &lt;theme&gt; from a session (proposed); today the atlas stream renders each queue by hand</td><td>restates components/triage/CONTRACT-themes.md@fc6ea100c</td><td class="src">components/triage/CONTRACT-themes.md unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>a lead or a stream asks for a dry run over one theme (how both themes ran on 2026-10-02)</td><td>restates new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/tools/triage_page.py unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>a tick on the mini per theme: weekly for components, daily for operations as the metrics data refreshes daily</td><td>restates components/triage/CONTRACT-themes.md@fc6ea100c</td><td class="src">components/triage/CONTRACT-themes.md unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>components / atlas: open issues on the component pages, from the compiled atlas (685 open on 48 components)</td><td>is the component atlas</td><td class="src">exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>components / atlas: open issues on the component pages, from the compiled atlas (685 open on 48 components)</td><td>restates new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>operations: signals the detectors build from the metrics dashboards&#x27; data (13 on 2026-10-02)</td><td>is the component metrics</td><td class="src">exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>operations: signals the detectors build from the metrics dashboards&#x27; data (13 on 2026-10-02)</td><td>restates new-workflow-design/builds/atlas/tools/metrics_insights.py@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/tools/metrics_insights.py unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>operations, next: the P&amp;L systems the team is building, joined as they land</td><td>restates components/triage/themes/operations.json@fc6ea100c</td><td class="src">components/triage/themes/operations.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>cards, inbox, PM tasks and brand folders, for cross-references; Slack channels to be decided (the <brand> workspace saw 39 human messages in 30 days)</td><td>restates components/triage/themes/slack-<brand>/channel-census-2026-10-02.json@fc6ea100c</td><td class="src">components/triage/themes/slack-<brand>/channel-census-2026-10-02.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme&#x27;s own rules · priority, by the theme&#x27;s own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act</td><td>lives at components/triage/</td><td class="src">components/triage exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>nine passes, in order: intake · still true? · summary · cause and blocked_by · group, by the theme&#x27;s own rules · priority, by the theme&#x27;s own list · the three whos (decides first · can do it, the triage owner first · affected) · cross-references and outputs · log every act</td><td>is the atlas node component:triage</td><td class="src">on the atlas</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>themes/&lt;theme&gt;.json: the theme pack. Item word, adapter, summary fields, cause classes, priority rule, owners, lanes, refs it carries. One per theme, curated by the theme owner: atlas.json (the team), operations.json (the team)</td><td>lives at components/triage/themes/</td><td class="src">components/triage/themes exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>themes/&lt;theme&gt;.json: the theme pack. Item word, adapter, summary fields, cause classes, priority rule, owners, lanes, refs it carries. One per theme, curated by the theme owner: atlas.json (the team), operations.json (the team)</td><td>restates components/triage/themes/atlas.json@fc6ea100c</td><td class="src">components/triage/themes/atlas.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>the eight-part summary (SCHEMA §5): why, impacts, evidence, response (a fix, or a follow-up on a positive signal), what the response changes, if ignored, lane, severity, on every item and every action</td><td>lives at new-workflow-design/builds/atlas/flows/SCHEMA.md</td><td class="src">new-workflow-design/builds/atlas/flows/SCHEMA.md exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>the eight-part summary (SCHEMA §5): why, impacts, evidence, response (a fix, or a follow-up on a positive signal), what the response changes, if ignored, lane, severity, on every item and every action</td><td>restates new-workflow-design/builds/atlas/flows/SCHEMA.md@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/flows/SCHEMA.md unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>one queue page per theme, the same format for every theme: actions ranked, each item clickable into its summary, the three whos, explain and do prompts for Claude</td><td>restates new-workflow-design/builds/atlas/tools/triage_page.py@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/tools/triage_page.py unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>summaries on everything, from the start: operations 13 signals and 5 actions; components all 656 open issues and all 83 actions (60 built from their issues&#x27; summaries by tools/triage_fill.py)</td><td>restates new-workflow-design/builds/atlas/triage/queue/model-operations-2026-10-02.json@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/triage/queue/model-operations-2026-10-02.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>drafted fixes and option cards: 113 ATL-29 (drafted changes), 48 ATL-30 (decision option cards), components only</td><td>restates new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/triage/queue/model-components-2026-10-02.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>cross-references on every item: typed refs, one shared resolver per type; text-matched today, declared refs proposed</td><td>restates new-workflow-design/builds/atlas/tools/triage_refs.py@fc6ea100c</td><td class="src">new-workflow-design/builds/atlas/tools/triage_refs.py unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>the decision log: one `triage` record per act (close, answer, forward, change, draft, sign, undo, decide; ATL-28 (triage record kind), ATL-32 (triage change trail)), filed by components/triage/tools/file_record.py; append-only. Queue pages, the atlas and per-area context files for Claude read it (the readers are proposed)</td><td>restates components/triage/tools/file_record.py@fc6ea100c</td><td class="src">components/triage/tools/file_record.py unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>atlas: each issue shows its action, priority and clears-with count; closes read back from SCHEMA §5a</td><td>is the component atlas</td><td class="src">exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>The theme&#x27;s triage owner works the list before anything reaches an owner (the team, ruled 2026-10-02, 981094a4a; generalised the same day)</td><td>restates components/triage/CONTRACT-themes.md@fc6ea100c</td><td class="src">components/triage/CONTRACT-themes.md unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>what the triage owner may change alone in someone else&#x27;s component: Option 3, ruled 2026-10-02 (the owner said yes), under four limits</td><td>restates components/triage/proposals/triage-owner-scope.json@fc6ea100c</td><td class="src">components/triage/proposals/triage-owner-scope.json unchanged since fc6ea100c</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for towner</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for lead</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for tick</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for atlas</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for ops</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for pnl</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for refsrc</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for packs</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for packs</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for standard</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for passes</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for passes</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for passes</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for passes</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for queue</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for summ</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for drafts</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for refs</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for records</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for u-towner</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for u-owners</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for u-lead</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for u-atlas</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>covers</td><td>stands for u-claude</td><td class="src">every covered item is in the flow</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>issues</td><td>every issue has a fixed, unique number below issues_next</td><td class="src">numbers are unique</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>howto</td><td>restates components/triage/CONTRACT-themes.md</td><td class="src">a file the run wrote; exists</td></tr><tr><td><span class="pill p-ok">agrees</span></td><td>who</td><td>engine owner: the team, for now (the team, 2026-10-02)</td><td class="src">registry says: Engine the team (&quot;for now&quot;); theme definitions the team (components / atlas) and the team (operations) Engine Da</td></tr></tbody></table></div></details></section>
+</div></div>
+<footer>
+  <p>Design files: <code>components/triage/CONTRACT-themes.md</code> (the engine and theme contract), <code>themes/atlas.json</code>, <code>themes/operations.json</code>, <code>themes/operations-FINDINGS.md</code>, and <code>flow-triage.json</code> (Part 2's source, rendered by <code>/atlas-view</code> and checked against the code by <code>flowcheck.py</code>). Detectors: <code>tools/metrics_insights.py</code>; cross-references: <code>tools/triage_refs.py</code>.</p>
+  <p><b>Everything lives in <code>components/triage/</code>: start with its README.md and HANDOFF.md.</b> This page replaces the separate engine-and-themes view. Numbers are from 2026-10-02's data (cutoffs 09-23 to 09-30); readings are the detectors', to be confirmed by the owners. Draft by the atlas stream for the team, the engine owner; not ruled. Ownership as stated by the team on 2026-10-02.</p>
+</footer>
+</div>

@@ -1,0 +1,16 @@
+{
+ "_note": "A sample swap list for brand-b-batch-grandma-dark-spots-not-growing-old, typed from the table on 'What goes into a picture ad' (SWIPE-ELEMENTS-damon.md) for tests and the Bench screenshot. The run's real list is written by the teardown to out/swaps.json.",
+ "product_in_frame": false,
+ "product_where": "",
+ "product_sides": [],
+ "stays": ["9:16 crop", "high phone angle from her right", "head tilted back and turned away", "one hard top-left light", "the wavy grey wall", "black fur at the bottom", "caption band"],
+ "swaps": [
+  {"from": "The woman", "to": "Grandma Yai", "kind": "cast", "ref": "yai"},
+  {"from": "Swollen lips and cheek", "to": "three raised dark spots", "kind": "drawn", "ref": null},
+  {"from": "Silver pendant", "to": "\"K-GLOW 12 STEP\" foil pouch (parody)", "kind": "drawn", "ref": null},
+  {"from": "Skin shine, stray hairs", "to": "turmeric dust at the jaw", "kind": "drawn", "ref": null},
+  {"from": "The caption", "to": "our words", "kind": "words", "ref": null}
+ ],
+ "words": "set_on_top",
+ "source": "No product tube in frame. There is no place for one in this post."
+}

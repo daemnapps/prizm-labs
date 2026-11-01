@@ -1,0 +1,33 @@
+{
+  "run": "sample-run",
+  "items": [
+    {
+      "id": "S1",
+      "kind": "still",
+      "params": {"model": "fal-ai/gpt-image-2", "prompt": "This exact woman from the reference at a kitchen table in morning light, looking down at her hands. No text anywhere."},
+      "medias": [{"value": "00000000-0000-4000-8000-0000000000c1", "role": "image_references"}],
+      "characters": ["lead"],
+      "products": []
+    },
+    {
+      "id": "S2",
+      "kind": "restyle",
+      "params": {"model": "fal-ai/nano-banana-pro/edit", "prompt": "Using the first image as the scene, place the exact product from the second image on the table, small and late. Change nothing else."},
+      "medias": [
+        {"value": "00000000-0000-4000-8000-0000000000c1", "role": "image_references"},
+        {"value": "00000000-0000-4000-8000-0000000000d1", "role": "image_references"}
+      ],
+      "characters": ["lead"],
+      "products": ["00000000-0000-4000-8000-0000000000d1"]
+    },
+    {
+      "id": "S3",
+      "kind": "motion",
+      "params": {"model": "fal-ai/bytedance/seedance/v2.5/pro/image-to-video", "prompt": "She turns her hands over slowly, studying them. Natural subtle motion. Single continuous take, no cuts or scene changes.", "duration": 5, "resolution": "1080p"},
+      "medias": [{"value": "00000000-0000-4000-8000-0000000000a1", "role": "start_image"}],
+      "characters": ["lead"],
+      "products": [],
+      "lines": ["L1", "L2"]
+    }
+  ]
+}

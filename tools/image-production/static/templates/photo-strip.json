@@ -1,0 +1,178 @@
+{
+  "name": "photo-strip",
+  "use": "Headline on white at the top, the photograph as a strip across the middle, the offer in a colour bar at the foot. Best when the proof is a close-up of the product being used.",
+  "canvas": {
+    "w": 768,
+    "h": 1344
+  },
+  "layout": {
+    "ground": "#FFFFFF",
+    "picture": {
+      "treatment": "band",
+      "top_pct": 33,
+      "bottom_pct": 60
+    },
+    "band_feather_px": 0,
+    "blocks": [
+      {
+        "name": "offer",
+        "color": "#61514A",
+        "top_pct": 62,
+        "bottom_pct": 100,
+        "left_pct": 0,
+        "right_pct": 100
+      }
+    ],
+    "keep_clear": [
+      {
+        "name": "subject",
+        "top": 30,
+        "bottom": 62,
+        "left": 0,
+        "right": 100
+      }
+    ],
+    "product": {
+      "top": 50,
+      "bottom": 76,
+      "left": 58,
+      "right": 94
+    },
+    "safe": {
+      "top_pct": 14.29,
+      "bottom_pct": 85.71,
+      "why": "Meta crops a 9x16 asset to 4x5 in feed placements. Everything that carries meaning \u2014 every line of type, the product \u2014 must sit inside this window, so one asset covers every placement. The photograph may bleed past it; content may not."
+    },
+    "product_asset": "packshot-lockup.png"
+  },
+  "elements": [
+    {
+      "element": "eyebrow",
+      "slot": "eyebrow",
+      "top_pct": 16.0,
+      "left_pct": 12,
+      "right_pct": 88,
+      "align": "center",
+      "cap_pct": 1.55,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "wide",
+      "font": "serif",
+      "color": "#61514A",
+      "max_lines": 1,
+      "decorations": [
+        "thin horizontal rule #A99A92 left of text",
+        "thin horizontal rule #A99A92 right of text"
+      ]
+    },
+    {
+      "element": "subhead",
+      "slot": "subhead",
+      "top_pct": 20.2,
+      "left_pct": 10,
+      "right_pct": 90,
+      "align": "center",
+      "cap_pct": 1.65,
+      "case": "sentence",
+      "weight": "medium",
+      "tracking": "standard",
+      "font": "grotesque",
+      "color": "#4A4A4A",
+      "max_lines": 1
+    },
+    {
+      "element": "headline",
+      "slot": "headline",
+      "top_pct": 23.8,
+      "left_pct": 8,
+      "right_pct": 92,
+      "align": "center",
+      "cap_pct": 2.55,
+      "case": "sentence",
+      "weight": "bold",
+      "tracking": "tight",
+      "font": "grotesque",
+      "color": "#111111",
+      "max_lines": 2
+    },
+    {
+      "element": "offer_big",
+      "slot": "offer_big",
+      "top_pct": 62.5,
+      "left_pct": 8,
+      "right_pct": 50,
+      "align": "left",
+      "cap_pct": 3.9,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "tight",
+      "font": "grotesque",
+      "color": "#FFFFFF",
+      "max_lines": 1
+    },
+    {
+      "element": "offer_a",
+      "slot": "offer_a",
+      "top_pct": 69.0,
+      "left_pct": 8,
+      "right_pct": 50,
+      "align": "left",
+      "cap_pct": 1.5,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "standard",
+      "font": "grotesque",
+      "color": "#FFFFFF",
+      "max_lines": 1
+    },
+    {
+      "element": "offer_b",
+      "slot": "offer_b",
+      "top_pct": 72.6,
+      "left_pct": 8,
+      "right_pct": 50,
+      "align": "left",
+      "cap_pct": 1.5,
+      "case": "upper",
+      "weight": "bold",
+      "tracking": "standard",
+      "font": "grotesque",
+      "color": "#61514A",
+      "max_lines": 1,
+      "box": {
+        "fill": "#FFFFFF",
+        "pad_pct": 1.0
+      }
+    },
+    {
+      "element": "cta",
+      "slot": "cta",
+      "top_pct": 77.0,
+      "left_pct": 8,
+      "right_pct": 92,
+      "align": "center",
+      "cap_pct": 2.0,
+      "case": "sentence",
+      "weight": "bold",
+      "tracking": "standard",
+      "font": "grotesque",
+      "color": "#FFFFFF",
+      "max_lines": 1
+    },
+    {
+      "element": "fineprint",
+      "slot": "fineprint",
+      "top_pct": 81.6,
+      "left_pct": 10,
+      "right_pct": 90,
+      "align": "center",
+      "cap_pct": 0.95,
+      "case": "sentence",
+      "weight": "regular",
+      "tracking": "standard",
+      "font": "grotesque",
+      "color": "#E6DEDA",
+      "max_lines": 2
+    }
+  ]
+}

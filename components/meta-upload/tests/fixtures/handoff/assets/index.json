@@ -1,0 +1,41 @@
+{
+  "_what": "the actual files the receiver works from or uploads. Ads are named by the short form; old_name is the 13-part name a live ad keeps on Meta.",
+  "files": [
+    "assets/ads/zzbrand_glow-balm_brief-0901_batch-2026-10-01-a/zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_asset-01.png",
+    "assets/ads/zzbrand_glow-balm_brief-0902_batch-2026-10-01-a/zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_asset-01.png"
+  ],
+  "ads": [
+    {
+      "brief_id": "brief-0901",
+      "ad_name": "zzbrand_glow-balm_brief-0901_batch-2026-10-01-a",
+      "old_name": "zzbrand-glowbalm-static-ai-none-nightworker-dryskin-slowreset-kitchen-starburst-p901-9x16-261001a",
+      "batch_id": "batch-2026-10-01-a",
+      "meta_ad_names": [
+        {"link_id": "link_zzbrand_glow_landing", "meta_ad_name": "zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_glow-landing"},
+        {"link_id": "link_zzbrand_glow_lip-balm_landing", "meta_ad_name": "zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_glow-lip-balm-landing"}
+      ],
+      "files": [
+        {
+          "file": "assets/ads/zzbrand_glow-balm_brief-0901_batch-2026-10-01-a/zzbrand_glow-balm_brief-0901_batch-2026-10-01-a_asset-01.png",
+          "was": "zzbrand-glowbalm-static-ai-none-nightworker-dryskin-slowreset-kitchen-starburst-p901-9x16-261001a-a01.png"
+        }
+      ]
+    },
+    {
+      "brief_id": "brief-0902",
+      "ad_name": "zzbrand_glow-balm_brief-0902_batch-2026-10-01-a",
+      "old_name": "zzbrand-glowbalm-static-ai-none-nightworker-dryskin-slowreset-notebook-listicle-p902-9x16-261001a",
+      "batch_id": "batch-2026-10-01-a",
+      "meta_ad_names": [
+        {"link_id": "link_zzbrand_glow_landing", "meta_ad_name": "zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_glow-landing"},
+        {"link_id": "link_zzbrand_glow_lip-balm_landing", "meta_ad_name": "zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_glow-lip-balm-landing"}
+      ],
+      "files": [
+        {
+          "file": "assets/ads/zzbrand_glow-balm_brief-0902_batch-2026-10-01-a/zzbrand_glow-balm_brief-0902_batch-2026-10-01-a_asset-01.png",
+          "was": "zzbrand-glowbalm-static-ai-none-nightworker-dryskin-slowreset-notebook-listicle-p902-9x16-261001a-a01.png"
+        }
+      ]
+    }
+  ]
+}

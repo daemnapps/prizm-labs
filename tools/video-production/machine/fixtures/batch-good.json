@@ -1,0 +1,33 @@
+{
+  "run": "sample-run",
+  "items": [
+    {
+      "id": "S1",
+      "kind": "still",
+      "params": {"model": "nano_banana_2", "prompt": "The presenter <<<00000000-0000-4000-8000-0000000000c1>>> at a kitchen table in morning light, looking down at her hands. No subtitles. No captions."},
+      "medias": [],
+      "characters": ["lead"],
+      "products": []
+    },
+    {
+      "id": "S2",
+      "kind": "still",
+      "params": {"model": "nano_banana_pro", "prompt": "Using the first image as the scene, place the exact product from the second image on the table, small and late. Change nothing else."},
+      "medias": [
+        {"value": "00000000-0000-4000-8000-0000000000c1", "role": "image_references"},
+        {"value": "00000000-0000-4000-8000-0000000000d1", "role": "image_references"}
+      ],
+      "characters": ["lead"],
+      "products": ["00000000-0000-4000-8000-0000000000d1"]
+    },
+    {
+      "id": "S3",
+      "kind": "motion",
+      "params": {"model": "seedance_2_5", "prompt": "She turns her hands over slowly, studying them. Natural subtle motion. Single continuous take, no cuts or scene changes.", "duration": 5, "resolution": "1080p", "tier": "fast"},
+      "medias": [{"value": "00000000-0000-4000-8000-0000000000a1", "role": "start_image"}],
+      "characters": ["lead"],
+      "products": [],
+      "lines": ["L1", "L2"]
+    }
+  ]
+}

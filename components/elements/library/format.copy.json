@@ -1,0 +1,138 @@
+{
+ "element": "format",
+ "asset": "copy",
+ "source": "tools/copywriter/bank/formats.json",
+ "enforced_by": "copy production (the copywriter's stage 8)",
+ "note": null,
+ "rows": [
+  {
+   "id": "short-form",
+   "name": "Short-form",
+   "what": "The punchy one. Scroll-stopper, one idea, out.",
+   "why_it_works": null,
+   "status": "approved",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": true,
+   "source": "tools/copywriter/bank/formats.json",
+   "extra": {
+    "length": {
+     "min": 25,
+     "max": 60,
+     "unit": "words"
+    },
+    "form": "A few short sentences. Hard first line. No wind-up, no build.",
+    "opens_with": "the sharpest single line the argument contains",
+    "carries_offer": "rarely",
+    "reads_as": "someone saying one true thing and stopping",
+    "channels": [
+     "meta-feed",
+     "meta-reels",
+     "tiktok",
+     "shorts"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "caption",
+   "name": "Caption / Meta primary text",
+   "what": "The words above the creative in the feed.",
+   "why_it_works": null,
+   "status": "approved",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": true,
+   "source": "tools/copywriter/bank/formats.json",
+   "extra": {
+    "length": {
+     "min": 50,
+     "max": 120,
+     "unit": "words"
+    },
+    "form": "Real sentences. First line stands alone, then short paragraphs, one idea each, blank line between.",
+    "opens_with": "a line that works with the creative not yet seen",
+    "carries_offer": "optional",
+    "reads_as": "something a person typed, not something a brand approved",
+    "channels": [
+     "meta-feed",
+     "meta-reels",
+     "instagram"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "long-form",
+   "name": "Long-form story",
+   "what": "A story that earns its length — the middle included, not skipped.",
+   "why_it_works": null,
+   "status": "approved",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": true,
+   "source": "tools/copywriter/bank/formats.json",
+   "extra": {
+    "length": {
+     "min": 150,
+     "max": 350,
+     "unit": "words"
+    },
+    "form": "Paragraphs. Full prose. A reader who stops for it finishes it.",
+    "opens_with": "a promise the length will be worth it",
+    "carries_offer": "usually, late",
+    "reads_as": "a post someone wrote because they wanted to",
+    "channels": [
+     "meta-feed",
+     "instagram",
+     "email"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "social-proof",
+   "name": "Social proof",
+   "what": "Built on other people's words — what customers actually said.",
+   "why_it_works": null,
+   "status": "approved",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": true,
+   "source": "tools/copywriter/bank/formats.json",
+   "extra": {
+    "length": {
+     "min": 80,
+     "max": 200,
+     "unit": "words"
+    },
+    "form": "Quotes on their own lines, connective sentences between them.",
+    "opens_with": "the strongest quote, or the claim the quotes will settle",
+    "carries_offer": "optional",
+    "reads_as": "evidence stacked, not argued",
+    "channels": [
+     "meta-feed",
+     "instagram"
+    ]
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

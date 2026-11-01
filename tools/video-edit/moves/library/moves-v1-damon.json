@@ -1,0 +1,1692 @@
+{
+ "_what": "The moves index: every way we know to move, cut, pop or break the picture. suggest.py shortlists from it per scene; the creative-director prompt picks from the shortlist. 'reference' is a real, well-known example, or 'house move' when there isn't one we're sure of. 'kinds' = the scene kinds it suits (real, ai, 3d, mix); 'objects' = catalogue ids it uses ('*' = any satin object).",
+ "families": [
+  "transition",
+  "cut",
+  "object-move",
+  "pop-in",
+  "camera",
+  "time",
+  "frame-break",
+  "type",
+  "sound-sync"
+ ],
+ "triggers": [
+  "kick",
+  "snare",
+  "bass note",
+  "bass slide",
+  "drop",
+  "break",
+  "silence",
+  "vocal word",
+  "downbeat",
+  "double-time",
+  "space",
+  "reverse",
+  "loop seam"
+ ],
+ "moves": [
+  {
+   "id": "match-cut-shape",
+   "name": "Shape match cut",
+   "family": "transition",
+   "what_you_see": "One round thing becomes another round thing in the same spot on screen: the iris becomes the pond, the ball becomes the moon. You don't see a cut, only the jump in place.",
+   "reference": "2001: A Space Odyssey (Stanley Kubrick, 1968): the thrown bone becomes the satellite",
+   "music_trigger": "downbeat, kick",
+   "build": "ffmpeg hard cut; the two shapes lined up in size and position first (PIL overlay check of the last and first frame)",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "If the two shapes sit even slightly off in size or position, it reads as a mistake, not a match.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "match-cut-motion",
+   "name": "Motion match cut",
+   "family": "transition",
+   "what_you_see": "Something moving left to right keeps moving the same way at the same speed in the next shot, so the movement carries straight through the cut.",
+   "reference": "Edgar Wright's editing (Hot Fuzz, 2007; Baby Driver, 2017)",
+   "music_trigger": "kick, bass note",
+   "build": "ffmpeg: in/out points picked where direction and speed match; a 2-frame speed nudge (setpts) to lock them",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Direction flips across the cut (left becomes right) and the eye trips.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "match-cut-colour",
+   "name": "Colour match cut",
+   "family": "transition",
+   "what_you_see": "The last colour of one shot is the first colour of the next: Goja purple into purple dusk, neon pink into his pink wristband.",
+   "reference": "Lawrence of Arabia (David Lean, 1962): the blown-out match cuts to the desert sunrise",
+   "music_trigger": "downbeat, bass note",
+   "build": "ffmpeg cut plus a 4-frame grade ease (colorbalance/eq) so the two colours meet exactly",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Colours that are only close show as a flicker, not a match.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "whip-pan-handoff",
+   "name": "Whip-pan hand-off",
+   "family": "transition",
+   "what_you_see": "The camera whips sideways into a blur and whips out of the blur somewhere else. It feels like one fast turn of the head.",
+   "reference": "Edgar Wright (Hot Fuzz, 2007; Scott Pilgrim vs. the World, 2010)",
+   "music_trigger": "bass slide (the whip lasts exactly as long as the slide)",
+   "build": "ffmpeg: 6-8 frames of directional blur (tmix over a sliding crop) on the out and the in, the cut hidden in the blur, length set from bass.json",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Blur going different directions on each side, or a whip too slow, looks like a slideshow transition.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "racket-swing-whip",
+   "name": "Racket swing whip",
+   "family": "transition",
+   "what_you_see": "His left-handed swing sweeps across the lens and the swing is the whip: the racket passes, and we're in the next place.",
+   "reference": "house move",
+   "music_trigger": "kick (the hit)",
+   "build": "ffmpeg: cut on the frame the racket face fills the lens, 3 frames of directional blur; the swing is one of the padel Seedance shots",
+   "cost": "free if the padel shot exists; ~28 Higgsfield credits (one Seedance 2.5 shot, 4s 720p), finished on the Mac",
+   "wow": 3,
+   "risk": "Racket in the wrong hand, or its shape changing mid-swing.",
+   "kinds": [
+    "ai",
+    "mix"
+   ],
+   "objects": [
+    "padel-racket"
+   ]
+  },
+  {
+   "id": "object-handoff",
+   "name": "Object hand-off",
+   "family": "transition",
+   "what_you_see": "An object flies out of one shot through the edge of the frame and into the next shot from the opposite edge, same speed, same spin, as if it crossed from one place to the other.",
+   "reference": "OK Go 'This Too Shall Pass' (James Frost, OK Go & Syyn Labs, 2010) chains objects the same way inside one take",
+   "music_trigger": "kick, bass slide",
+   "build": "Blender: one flight of the satin object rendered on transparent with motion blur, split at the frame edge, overlaid on both clips with ffmpeg",
+   "cost": "free if the object is already in the catalogue; ~35 Higgsfield credits for a new 3D object",
+   "wow": 3,
+   "risk": "Object changes size, colour or spin between the two shots: the exact slop tell.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "toy-to-real",
+   "name": "Toy becomes real",
+   "family": "transition",
+   "what_you_see": "A small satin toy of a thing sits in shot; the camera pushes in and on the beat it's the real thing at full size.",
+   "reference": "A$AP Rocky 'HELICOPTER' (Dan Streit, 2026): the toy helicopter",
+   "music_trigger": "downbeat, kick",
+   "build": "Blender render of the object at the real clip's angle and size + ffmpeg push-in (zoompan), hard cut at matched size",
+   "cost": "free if the object is already in the catalogue; ~35 Higgsfield credits for a new 3D object",
+   "wow": 3,
+   "risk": "Angles or sizes don't match, so it reads as two different things.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "scale-pullback",
+   "name": "It was a model all along",
+   "family": "transition",
+   "what_you_see": "The camera pulls back and back until the whole world we were in is a tiny model on a desk.",
+   "reference": "Men in Black (Barry Sonnenfeld, 1997): the pull-back to the galaxy inside a marble",
+   "music_trigger": "loop seam, last bar",
+   "build": "Blender: the desk scene with the carousel; the last real frame mapped into the model as a texture; one continuous pull",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "The texture inside the model doesn't match the real frame and the swap shows.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "carousel",
+    "desk-phone"
+   ]
+  },
+  {
+   "id": "object-iris",
+   "name": "Object iris",
+   "family": "transition",
+   "what_you_see": "A round object (the ball, the vinyl, a curled koi) grows until it fills the frame, and inside its shape is the next scene.",
+   "reference": "The silent-film iris wipe, and Star Wars (George Lucas, 1977), which uses wipes as its grammar",
+   "music_trigger": "bass note, bass slide",
+   "build": "Blender render of the object growing on transparent; its silhouette becomes a PIL alpha mask that reveals the next clip; ffmpeg overlay",
+   "cost": "free if the object is already in the catalogue; ~35 Higgsfield credits for a new 3D object",
+   "wow": 2,
+   "risk": "A flat mask edge without the object's own shading looks like a 2005 slideshow.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "padel-ball",
+    "vinyl",
+    "koi",
+    "disco-ball"
+   ]
+  },
+  {
+   "id": "koi-swim-wipe",
+   "name": "Koi swim wipe",
+   "family": "transition",
+   "what_you_see": "The koi swims across the whole frame; everything behind its tail is already the next scene.",
+   "reference": "house move",
+   "music_trigger": "bass slide",
+   "build": "koi_swim.py path straight across the frame; the tail edge becomes a moving matte; ffmpeg overlay",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "The wipe line not following the tail exactly.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "koi"
+   ]
+  },
+  {
+   "id": "passer-by-wipe",
+   "name": "Passer-by wipe",
+   "family": "transition",
+   "what_you_see": "Someone or something passes close to the lens, the frame goes dark for a few frames, and when it clears we're somewhere else.",
+   "reference": "1917 (Sam Mendes, 2019) and Birdman (Alejandro G. Inarritu, 2014): cuts hidden inside dark passes",
+   "music_trigger": "kick",
+   "build": "ffmpeg: cut inside a frame where a foreground body fills the lens in our footage; or a Blender dark foreground object passing",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "The dark pass doesn't fully cover the frame and the cut peeks through.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "black-hole-cut",
+   "name": "Invisible cut through black",
+   "family": "transition",
+   "what_you_see": "The camera pushes into something dark (a doorway, a jacket, the pupil) and comes out of the dark in a new place.",
+   "reference": "Rope (Alfred Hitchcock, 1948): cuts hidden in a jacket's back",
+   "music_trigger": "bass slide, downbeat",
+   "build": "ffmpeg: push-in to black on shot A, push-out from black on shot B, matched speed",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Shots that don't reach true black.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "through-the-screen",
+   "name": "Through the screen",
+   "family": "transition",
+   "what_you_see": "We push into a phone screen until its picture is the whole frame.",
+   "reference": "house move",
+   "music_trigger": "downbeat",
+   "build": "Blender: clip mapped onto desk-phone's screen, camera push; ffmpeg cut to the full-frame clip at matched scale",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "The screen image goes soft as it fills the frame.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "desk-phone"
+   ]
+  },
+  {
+   "id": "into-the-eye",
+   "name": "Into the eye",
+   "family": "transition",
+   "what_you_see": "The camera goes into his eye and the iris opens into a world.",
+   "reference": "Blade Runner (Ridley Scott, 1982): the burning city reflected in an eye",
+   "music_trigger": "kick",
+   "build": "The existing Higgsfield Goja zoom cut in ffmpeg; or a macro still pushed in Blender",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Iris texture turning to mush at the deepest point.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d"
+   ],
+   "objects": []
+  },
+  {
+   "id": "drop-into-water",
+   "name": "Drop into water",
+   "family": "transition",
+   "what_you_see": "An object falls, hits water, the splash fills the frame, and the ripples settle into the next scene.",
+   "reference": "house move",
+   "music_trigger": "bass slide (down), kick",
+   "build": "Blender: object fall + ripple displacement on a plane carrying the next clip; ffmpeg",
+   "cost": "free if the object is already in the catalogue; ~35 Higgsfield credits for a new 3D object",
+   "wow": 2,
+   "risk": "A CG splash that looks like plastic.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "padel-ball",
+    "koi"
+   ]
+  },
+  {
+   "id": "morph",
+   "name": "Morph",
+   "family": "transition",
+   "what_you_see": "One face or shape melts cleanly into another at the same angle, with no cut at all.",
+   "reference": "Michael Jackson 'Black or White' (John Landis, 1991): the face morph",
+   "music_trigger": "bass slide",
+   "build": "Seedance 2.5 with the two frames as start and end frame",
+   "cost": "~28 Higgsfield credits (one Seedance 2.5 shot, 4s 720p), finished on the Mac",
+   "wow": 3,
+   "risk": "Features wander mid-morph: this is exactly where melting hands appear.",
+   "kinds": [
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "colour-flood",
+   "name": "Colour flood",
+   "family": "transition",
+   "what_you_see": "The picture is grey or stone, and colour spreads outward from one point (his eyes) until the whole frame is alive.",
+   "reference": "Pleasantville (Gary Ross, 1998)",
+   "music_trigger": "drop, bass note",
+   "build": "ffmpeg: grey copy over the colour copy, revealed by a growing radial mask centred on his eyes (PIL, one mask per frame)",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "A visible ring at the mask edge.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "double-exposure",
+   "name": "Double exposure",
+   "family": "transition",
+   "what_you_see": "Two shots at once, one inside the other: the falls flowing inside his silhouette.",
+   "reference": "True Detective opening titles (Patrick Clair, 2014)",
+   "music_trigger": "space, vocal word",
+   "build": "macOS Vision person matte + ffmpeg blend (screen) inside the matte",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Both images go muddy and neither reads.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "cut-on-kick",
+   "name": "Cut on every kick",
+   "family": "cut",
+   "what_you_see": "The picture changes exactly on each kick, so you feel the cuts in your chest.",
+   "reference": "A$AP Rocky 'HELICOPTER' (Dan Streit, 2026): the cold open cuts through rooms on the beat",
+   "music_trigger": "kick",
+   "build": "ffmpeg cut list straight from kicks.json, frame-exact",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "One cut a frame late breaks the whole feeling.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "in-and-out",
+   "name": "In and out at once",
+   "family": "cut",
+   "what_you_see": "Pieces of one push-in alternate forward and backwards on each kick, so the camera seems to go in and come out at the same time.",
+   "reference": "house move",
+   "music_trigger": "kick",
+   "build": "ffmpeg reverse + trim, each piece starting deeper than the last",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Pieces too alike and it just looks like a playback glitch.",
+   "kinds": [
+    "real",
+    "3d"
+   ],
+   "objects": []
+  },
+  {
+   "id": "hip-hop-montage",
+   "name": "Hip-hop montage",
+   "family": "cut",
+   "what_you_see": "A burst of tiny close-ups a few frames long, each on its own hit, like a drum fill for the eyes.",
+   "reference": "Requiem for a Dream (Darren Aronofsky, 2000)",
+   "music_trigger": "kick, double-time",
+   "build": "ffmpeg: 4-8 frame pieces from unused footage, one per hit",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Pulling a clip already used elsewhere in the loop breaks 'no clip twice'.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "smash-to-silence",
+   "name": "Smash cut to stillness",
+   "family": "cut",
+   "what_you_see": "Loud and busy, then instantly still: the picture drops on the same frame the drums do.",
+   "reference": "house move",
+   "music_trigger": "break, silence",
+   "build": "ffmpeg hard cut to a held frame, frame-exact to the drum drop",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Picture and sound out by even two frames.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "look-then-see",
+   "name": "Look, then see",
+   "family": "cut",
+   "what_you_see": "He looks at something, and the next shot is what he's looking at.",
+   "reference": "The Kuleshov effect (Lev Kuleshov, 1910s-20s)",
+   "music_trigger": "downbeat",
+   "build": "ffmpeg cut on the frame his eyes settle",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "His eyeline pointing the wrong way for the next shot.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "cut-on-action",
+   "name": "Cut on the action",
+   "family": "cut",
+   "what_you_see": "The cut lands in the middle of a movement (a swing, a step), so the movement hides the cut.",
+   "reference": "Walter Murch's 'In the Blink of an Eye' (1995) sets out the rule",
+   "music_trigger": "kick",
+   "build": "ffmpeg: out point mid-movement, in point at the matching phase of the next movement",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "The movement restarts or skips across the cut.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "double-time-cutting",
+   "name": "Cut rate doubles",
+   "family": "cut",
+   "what_you_see": "The cutting speed doubles when the music goes double-time, so the picture speeds up with the song.",
+   "reference": "house move",
+   "music_trigger": "double-time",
+   "build": "ffmpeg cut list on every half-beat for the double-time bars",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "Cutting faster than the eye can read what's in each clip.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "blink",
+   "name": "Blink",
+   "family": "cut",
+   "what_you_see": "One or two black frames between shots, like an eye blinking on the beat.",
+   "reference": "house move",
+   "music_trigger": "kick",
+   "build": "ffmpeg: 1-2 black frames inserted at the cut",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "On every cut it becomes a strobe and tires the eye.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "flash-insert",
+   "name": "Flash insert",
+   "family": "cut",
+   "what_you_see": "A single frame of an object or a place flashes on a hit and is gone before you're sure you saw it.",
+   "reference": "Fight Club (David Fincher, 1999): single-frame Tyler inserts",
+   "music_trigger": "kick",
+   "build": "ffmpeg: one frame from an unused clip or a Blender still, inserted on the kick",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Too many and it's noise; a frame from a clip used elsewhere breaks 'no clip twice'.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "bass-breathe",
+   "name": "Objects breathe with the bass",
+   "family": "object-move",
+   "what_you_see": "Every satin object swells a little on each bass note and settles back, like it's breathing to the bassline.",
+   "reference": "The Chemical Brothers 'Star Guitar' (Michel Gondry, 2002): every thing in frame timed to a sound",
+   "music_trigger": "bass note",
+   "build": "Blender keyframes read from bass.json (~6% pulse + quarter-turn nudge), as orbit_shot.py already does",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "Pulse too big and it turns into a cartoon bounce.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "slide-rise",
+   "name": "Rise and sink with the slide",
+   "family": "object-move",
+   "what_you_see": "Objects float up as the bass slides up and sink as it slides down, so you can see the glide.",
+   "reference": "house move",
+   "music_trigger": "bass slide",
+   "build": "Blender: object height keyed to the slide pitch in bass.json",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Objects moving late against the note.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "carousel-orbit",
+   "name": "The carousel",
+   "family": "object-move",
+   "what_you_see": "He stays locked in the centre while the objects (or the whole world) circle him.",
+   "reference": "A$AP Rocky 'HELICOPTER' (Dan Streit, 2026); The Matrix (the Wachowskis, 1999)",
+   "music_trigger": "downbeat (one turn per bar), bass level sets the speed",
+   "build": "orbit_shot.py: Blender objects in two passes (near/far) + macOS Vision matte so he cuts the far half",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Objects passing in front with no matte, or lit from a different sun than the plate.",
+   "kinds": [
+    "mix",
+    "3d"
+   ],
+   "objects": [
+    "carousel",
+    "koi",
+    "padel-racket",
+    "bag-cream-strap",
+    "goja-sign",
+    "turntable"
+   ]
+  },
+  {
+   "id": "frozen-hang",
+   "name": "Everything hangs in the air",
+   "family": "object-move",
+   "what_you_see": "The objects stop dead in mid-air around him, in the silence.",
+   "reference": "X-Men: Days of Future Past (Bryan Singer, 2014): the Quicksilver kitchen scene",
+   "music_trigger": "break, silence",
+   "build": "Blender still of the objects on transparent, lit to the plate, laid over the held frame",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "No shadows or wrong light and they look stickered on.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "fall-through-cuts",
+   "name": "Falling through the cuts",
+   "family": "object-move",
+   "what_you_see": "One object falls through three shots in a row, each cut catching it lower, until it lands.",
+   "reference": "house move",
+   "music_trigger": "kick (each cut), bass slide (down)",
+   "build": "Blender: one continuous fall on transparent, split across 3 clips by ffmpeg",
+   "cost": "free if the object is already in the catalogue; ~35 Higgsfield credits for a new 3D object",
+   "wow": 2,
+   "risk": "Fall speed changing between shots.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "thrown-and-caught",
+   "name": "Thrown and caught",
+   "family": "object-move",
+   "what_you_see": "He tosses something toward the lens; in the next shot, somewhere else, his left hand catches it.",
+   "reference": "house move (the throw-and-catch transition from social video)",
+   "music_trigger": "kick",
+   "build": "The catch is a real clip if one exists, else Seedance from his sheet; the object in flight is Blender on transparent",
+   "cost": "free with a real catch; ~28 Higgsfield credits (one Seedance 2.5 shot, 4s 720p), finished on the Mac",
+   "wow": 2,
+   "risk": "Catch in the wrong hand, or the object changing between throw and catch.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "one-becomes-another",
+   "name": "One thing becomes another",
+   "family": "object-move",
+   "what_you_see": "The koi curls up and becomes the vinyl; the ball flattens into the moon. Same place, same size, new object.",
+   "reference": "house move",
+   "music_trigger": "bass slide",
+   "build": "Blender: the two meshes scaled to the same size, a 6-frame scale/spin swap hidden in a spin blur",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A half-way mush between the two shapes.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "feather-follow",
+   "name": "Follow the object",
+   "family": "object-move",
+   "what_you_see": "The camera follows a flying object through the air and it leads us into the next scene.",
+   "reference": "Forrest Gump (Robert Zemeckis, 1994): the opening feather",
+   "music_trigger": "bass slide",
+   "build": "Blender: object flight with a camera chasing it, ending over a plane carrying the next clip",
+   "cost": "free if the object is already in the catalogue; ~35 Higgsfield credits for a new 3D object",
+   "wow": 3,
+   "risk": "The object doesn't hold up in close-up (low detail, soft texture).",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "spin-carries",
+   "name": "The spin carries over",
+   "family": "object-move",
+   "what_you_see": "The turntable's spin keeps going in the next round thing: the roundabout, the carousel, the orbit.",
+   "reference": "house move",
+   "music_trigger": "bass slide, downbeat",
+   "build": "ffmpeg rotate so the spin direction and speed match across the cut; Blender for the 3D side",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Spin speeds or directions that don't match.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "turntable",
+    "vinyl",
+    "carousel"
+   ]
+  },
+  {
+   "id": "object-in-his-hand",
+   "name": "Satin object in his real hand",
+   "family": "object-move",
+   "what_you_see": "A satin 3D object sits in his real left hand in real footage, lit as if it's really there.",
+   "reference": "house move",
+   "music_trigger": "bass note",
+   "build": "Blender render matched to the clip's camera and light + Vision hand matte so his fingers sit over it",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Hand and object not touching, or light from the wrong side.",
+   "kinds": [
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "object-per-instrument",
+   "name": "Every object plays a sound",
+   "family": "object-move",
+   "what_you_see": "Each object belongs to one sound: the koi moves on the bass, the ball on the kick, the record on the voice.",
+   "reference": "Daft Punk 'Around the World' (Michel Gondry, 1997): each group of dancers is one instrument",
+   "music_trigger": "kick, bass note, vocal word",
+   "build": "Blender keyframes read from kicks.json and bass.json, one object per stem",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Too many things moving at once: nothing reads.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "ball-at-the-lens",
+   "name": "Ball at the lens",
+   "family": "pop-in",
+   "what_you_see": "He slices the bandeja, the ball leaves his racket and rockets straight at the camera, filling the frame so you flinch like it's about to hit you.",
+   "reference": "The Great Train Robbery (Edwin S. Porter, 1903): the outlaw fires straight at the audience; the 3D-cinema 'coming at you' gag",
+   "music_trigger": "kick (the hit), next kick (the impact)",
+   "build": "Blender: the satin padel-ball's flight from the racket face toward the lens, growing, spinning, motion-blurred, rendered on transparent over the bandeja shot; the last 2 frames pass the lens, then a camera shake and a 1-frame white flash",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Ball not leaving from the racket face; wrong size against the racket; no motion blur so it looks pasted; ball colour changing.",
+   "kinds": [
+    "ai",
+    "mix"
+   ],
+   "objects": [
+    "padel-ball",
+    "padel-racket"
+   ]
+  },
+  {
+   "id": "out-of-the-phone",
+   "name": "Out of the phone",
+   "family": "pop-in",
+   "what_you_see": "Something on the phone screen (the koi, the neon) comes out of the screen into the room.",
+   "reference": "house move",
+   "music_trigger": "downbeat",
+   "build": "Blender: desk-phone with the clip on its screen; the 3D object rises out of the glass",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "The on-screen version and the 3D version not matching.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "desk-phone",
+    "koi",
+    "goja-sign"
+   ]
+  },
+  {
+   "id": "pop-on-kick",
+   "name": "Pop on the kick",
+   "family": "pop-in",
+   "what_you_see": "An object appears in frame on a kick with a tiny overshoot, as if it snapped into place.",
+   "reference": "house move",
+   "music_trigger": "kick",
+   "build": "Blender or PIL: scale keys 0 -> 110% -> 100% over 4 frames, laid over the clip",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "An unlit object popping in looks like a sticker app.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "cutout-sticker",
+   "name": "Cut-out sticker",
+   "family": "pop-in",
+   "what_you_see": "He, or an object, is cut out with a white border and stamped onto another place like a sticker.",
+   "reference": "Terry Gilliam's cut-out animation for Monty Python's Flying Circus (1969-74)",
+   "music_trigger": "kick",
+   "build": "macOS Vision matte + PIL border, stamped on with ffmpeg",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Ragged matte edges.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "steps-out-of-photo",
+   "name": "Steps out of the picture",
+   "family": "pop-in",
+   "what_you_see": "The shot shrinks into a framed photo, but his arm or the racket reaches out past the photo's border.",
+   "reference": "house move (the 'out of bounds' photo effect)",
+   "music_trigger": "bass note",
+   "build": "Vision matte of him over a PIL-drawn frame; the part of him outside the border stays on top",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "The matte wobbling where he crosses the border.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "rises-behind-him",
+   "name": "Rises behind him",
+   "family": "pop-in",
+   "what_you_see": "Something big (the temple) rises behind him while he stays still in front.",
+   "reference": "house move",
+   "music_trigger": "bass slide (up)",
+   "build": "Blender temple rendered on transparent rising, placed between the plate and his Vision matte",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Scale that doesn't make sense against the place.",
+   "kinds": [
+    "mix"
+   ],
+   "objects": [
+    "temple"
+   ]
+  },
+  {
+   "id": "word-becomes-thing",
+   "name": "The word becomes the thing",
+   "family": "pop-in",
+   "what_you_see": "The word on screen turns into the object it names and moves off: 'the one' becomes the koi and swims away.",
+   "reference": "house move",
+   "music_trigger": "vocal word",
+   "build": "Blender: text object and the satin object swapped in a spin; PIL type before and after",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Type and object in different light, so the swap shows.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "crash-zoom",
+   "name": "Crash zoom",
+   "family": "camera",
+   "what_you_see": "The frame snaps in on his face in a few frames.",
+   "reference": "Kill Bill (Quentin Tarantino, 2003), from the Shaw Brothers kung-fu films",
+   "music_trigger": "kick",
+   "build": "ffmpeg zoompan over 3-4 frames on a 4K source",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Pixelation if the source is small.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "punch-in-kick",
+   "name": "Punch-in on the kick",
+   "family": "camera",
+   "what_you_see": "Each kick the frame jumps a little closer, then eases back.",
+   "reference": "house move",
+   "music_trigger": "kick",
+   "build": "ffmpeg scale/crop keyed to kicks.json (8-12% punch)",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "Used everywhere it's seasick.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "impact-shake",
+   "name": "Impact shake",
+   "family": "camera",
+   "what_you_see": "The picture jolts on a hit, as if the camera took the hit.",
+   "reference": "house move",
+   "music_trigger": "kick (strongest)",
+   "build": "ffmpeg crop jitter, amplitude from the kick's strength in kicks.json, dying out over 6 frames",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "Shake with no hit on screen feels random.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "dolly-zoom",
+   "name": "Dolly zoom",
+   "family": "camera",
+   "what_you_see": "He stays the same size while the world behind him stretches away or rushes in.",
+   "reference": "Vertigo (Alfred Hitchcock, 1958); Jaws (Steven Spielberg, 1975)",
+   "music_trigger": "bass slide",
+   "build": "Blender with his matte on a card and the plate on a depth-displaced plane, camera moving back while the lens zooms in",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "The edges around him warp or tear.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "focus-pull",
+   "name": "Focus pull",
+   "family": "camera",
+   "what_you_see": "The focus shifts from the monk in the corner to him, or from an object to his face.",
+   "reference": "house move",
+   "music_trigger": "vocal word",
+   "build": "3D: Blender depth of field keyed; real: a blur ramp masked by depth/Vision matte",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "A fake blur with a halo round the edge.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "first-person-rush",
+   "name": "First-person rush",
+   "family": "camera",
+   "what_you_see": "We're him: the road rushing at us at speed.",
+   "reference": "The Prodigy 'Smack My Bitch Up' (Jonas Akerlund, 1997); Hardcore Henry (Ilya Naishuller, 2015)",
+   "music_trigger": "double-time, drop",
+   "build": "Real POV clip + ffmpeg speed ramp",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "So shaky it can't be watched.",
+   "kinds": [
+    "real"
+   ],
+   "objects": [
+    "helmet"
+   ]
+  },
+  {
+   "id": "face-lock",
+   "name": "Face locked in the centre",
+   "family": "camera",
+   "what_you_see": "His face stays perfectly still in the middle while the whole world swings around it.",
+   "reference": "Radiohead 'Jigsaw Falling into Place' (Garth Jennings, 2008): cameras rigged to the band",
+   "music_trigger": "kick",
+   "build": "macOS Vision face tracking + ffmpeg stabilise to the face point",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Micro-jitter on the face.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "frozen-orbit",
+   "name": "Frozen orbit",
+   "family": "camera",
+   "what_you_see": "Time stops and the camera circles him in the frozen moment.",
+   "reference": "The Matrix (the Wachowskis, 1999): bullet time",
+   "music_trigger": "break, silence",
+   "build": "Blender around the damon-full-body statue, or a depth-displaced still",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "The back of the frozen scene has holes.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "damon-full-body"
+   ]
+  },
+  {
+   "id": "deep-photo-push",
+   "name": "Deep photo push",
+   "family": "camera",
+   "what_you_see": "A still photo gets a slow 3D camera move: the foreground slides past the background.",
+   "reference": "The Kid Stays in the Picture (Brett Morgen & Nanette Burstein, 2002)",
+   "music_trigger": "bass slide",
+   "build": "Depth read from one photo, photo bent over it in Blender, camera moved through",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Stretched smears at the edges of him.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "world-rolls",
+   "name": "The world rolls",
+   "family": "camera",
+   "what_you_see": "The frame turns a full circle while he stays upright in the centre.",
+   "reference": "Lionel Richie 'Dancing on the Ceiling' (Stanley Donen, 1986); Inception (Christopher Nolan, 2010): the rotating corridor",
+   "music_trigger": "bass slide",
+   "build": "ffmpeg rotate on the plate + his Vision matte kept upright",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Black corners showing as it turns.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "out-of-the-tiny",
+   "name": "Out of the tiny",
+   "family": "camera",
+   "what_you_see": "We start inside something microscopic and pull back through it to the full scene.",
+   "reference": "Fight Club (David Fincher, 1999): the opening pull-out from inside the brain",
+   "music_trigger": "downbeat",
+   "build": "Blender push-out from desk-brain or the koi scales; or the Goja zoom reversed",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Detail falling apart at the tiny end.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "desk-brain",
+    "koi"
+   ]
+  },
+  {
+   "id": "through-the-gap",
+   "name": "Through the gap",
+   "family": "camera",
+   "what_you_see": "The camera flies through a gap in an object (the carousel, the racket's holes) into the next scene.",
+   "reference": "Panic Room (David Fincher, 2002): the camera through the coffee-pot handle",
+   "music_trigger": "bass slide",
+   "build": "Blender: fly through the satin object, the next clip on a plane beyond it",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Mesh too coarse when the camera is that close.",
+   "kinds": [
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "padel-racket",
+    "carousel"
+   ]
+  },
+  {
+   "id": "speed-ramp",
+   "name": "Speed ramp",
+   "family": "time",
+   "what_you_see": "Fast, then suddenly slow at the moment of impact, then fast again.",
+   "reference": "300 (Zack Snyder, 2006)",
+   "music_trigger": "kick (strongest)",
+   "build": "ffmpeg setpts curve; the slow part from 60/120fps clips (minterpolate only as a last resort)",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A choppy slow part from a 30fps clip.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "freeze-and-go",
+   "name": "Freeze, then go",
+   "family": "time",
+   "what_you_see": "The picture freezes on a hit, holds for a beat, then snaps back into motion.",
+   "reference": "Goodfellas (Martin Scorsese, 1990): the freeze frames",
+   "music_trigger": "kick (strongest), break",
+   "build": "ffmpeg: hold one frame (tpad/loop) for one beat, then resume",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Freezing on a blurred frame.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "stutter",
+   "name": "Stutter on the kick",
+   "family": "time",
+   "what_you_see": "The same 2-3 frames repeat rapidly on the kick, as if the picture stammers.",
+   "reference": "house move",
+   "music_trigger": "kick",
+   "build": "ffmpeg: frames repeated in place at the kick (inside the same moment, never reused later)",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Off the beat it just looks broken.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "echo-trail",
+   "name": "Echo trail",
+   "family": "time",
+   "what_you_see": "Movement leaves fading ghost copies of itself behind it.",
+   "reference": "house move",
+   "music_trigger": "bass note",
+   "build": "ffmpeg lagfun / tmix on the moving part (inside a Vision matte to keep the background clean)",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Muddy on busy backgrounds.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "reverse-snap",
+   "name": "Reverse snap",
+   "family": "time",
+   "what_you_see": "A moment plays backwards, then snaps forward again.",
+   "reference": "The Pharcyde 'Drop' (Spike Jonze, 1995); Coldplay 'The Scientist' (Jamie Thraves, 2002)",
+   "music_trigger": "reverse, bass slide",
+   "build": "ffmpeg reverse on the piece, cut back to forward on the kick",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Reversed walking reads as a mistake unless it's clearly on purpose.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "water-runs-uphill",
+   "name": "Water runs uphill",
+   "family": "time",
+   "what_you_see": "The waterfall climbs back up while he moves forward normally.",
+   "reference": "Tenet (Christopher Nolan, 2020)",
+   "music_trigger": "reverse",
+   "build": "Vision matte: him forward over the reversed plate",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Matte fringe against moving water.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "tape-stop",
+   "name": "Tape stop",
+   "family": "time",
+   "what_you_see": "The picture slows to a dead stop as the sound winds down.",
+   "reference": "house move",
+   "music_trigger": "break, silence",
+   "build": "ffmpeg setpts ramp to a held frame over the last beat",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "The slowdown curve not matching the sound.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "time-smear",
+   "name": "Time smear (slit-scan)",
+   "family": "time",
+   "what_you_see": "Each line of the picture is from a slightly different moment, so the moving world bends like liquid.",
+   "reference": "2001: A Space Odyssey (Stanley Kubrick, 1968): the Stargate, built by Douglas Trumbull with slit-scan",
+   "music_trigger": "bass slide, double-time",
+   "build": "ffmpeg frames out, PIL builds each frame from rows of successive frames; him matted back sharp on top",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Unreadable if he is the thing that smears.",
+   "kinds": [
+    "real"
+   ],
+   "objects": []
+  },
+  {
+   "id": "clone-each-pass",
+   "name": "Another of him each time round",
+   "family": "time",
+   "what_you_see": "Each pass of the loop adds another copy of him in the scene doing the same move.",
+   "reference": "Kylie Minogue 'Come Into My World' (Michel Gondry, 2002)",
+   "music_trigger": "downbeat, loop seam",
+   "build": "Vision matte + ffmpeg overlays offset by one loop each",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Copies overlapping in a heap.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "stepped-photos",
+   "name": "Stepped photos",
+   "family": "time",
+   "what_you_see": "Real photos flicked on the beat so he moves in jerks, like stop-motion.",
+   "reference": "Oren Lavie 'Her Morning Elegance' (Yuval & Merav Nathan, 2009); Peter Gabriel 'Sledgehammer' (Stephen R. Johnson, 1986)",
+   "music_trigger": "kick, bass note",
+   "build": "PIL: photos pinned to his body point, ffmpeg one photo per hit",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Photos not aligned, so the frame jumps as well as him.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "pushes-frame-open",
+   "name": "He pushes the frame open",
+   "family": "frame-break",
+   "what_you_see": "The picture starts as a narrow square and he pushes it open with his hands to full screen.",
+   "reference": "Mommy (Xavier Dolan, 2014)",
+   "music_trigger": "drop",
+   "build": "ffmpeg crop animation with black bars, timed to his hands",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "The widening not timed to his hands.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "breaks-the-edge",
+   "name": "Breaks the edge",
+   "family": "frame-break",
+   "what_you_see": "A thin border sits round the picture; an object flies out over the border into the black, as if it escaped the screen.",
+   "reference": "The 3D cat billboard at Cross Shinjuku Vision, Tokyo (2021): fake frame edges make things look like they leave the screen",
+   "music_trigger": "kick",
+   "build": "PIL border inset on the clip; Blender object on transparent drawn on top of the border",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "The border looks like a trick if it only appears for the gag.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "lens-crack",
+   "name": "Lens cracks",
+   "family": "frame-break",
+   "what_you_see": "Something hits the lens and a crack runs across the glass; the next cut clears it.",
+   "reference": "house move",
+   "music_trigger": "kick (strongest)",
+   "build": "PIL crack overlay + impact shake in ffmpeg",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A stock-footage crack look.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "split-screen",
+   "name": "Split screen",
+   "family": "frame-break",
+   "what_you_see": "The frame splits into two halves: two moments at once.",
+   "reference": "(500) Days of Summer (Marc Webb, 2009): expectations vs reality",
+   "music_trigger": "downbeat",
+   "build": "ffmpeg hstack/vstack",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Two busy halves and neither reads.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "can-you-tell",
+   "name": "Can you tell?",
+   "family": "frame-break",
+   "what_you_see": "Left half is the real footage, right half the AI version, lined up so the seam disappears.",
+   "reference": "house move (the loop's end question)",
+   "music_trigger": "vocal word",
+   "build": "ffmpeg hstack of the real clip and the Seedance version made from the same frame",
+   "cost": "~28 Higgsfield credits (one Seedance 2.5 shot, 4s 720p), finished on the Mac",
+   "wow": 3,
+   "risk": "Any slop tell on the AI half gives the game away.",
+   "kinds": [
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "multiply-on-beat",
+   "name": "Multiply on the beat",
+   "family": "frame-break",
+   "what_you_see": "On each kick the frame splits again: one, then two, then four, then sixteen copies.",
+   "reference": "The White Stripes 'The Hardest Button to Button' (Michel Gondry, 2003)",
+   "music_trigger": "kick",
+   "build": "ffmpeg xstack, one step per kick",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Tiles too small to read.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "tv-inset",
+   "name": "TV in the corner",
+   "family": "frame-break",
+   "what_you_see": "A small screen in the corner of the frame shows another moment: someone watching.",
+   "reference": "A$AP Rocky 'HELICOPTER' (Dan Streit, 2026): the news anchor on the TV",
+   "music_trigger": "space, vocal word",
+   "build": "ffmpeg overlay of the monk clip in a small inset",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "An inset so small nobody sees it.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": [
+    "monk"
+   ]
+  },
+  {
+   "id": "datamosh",
+   "name": "Pixel smear (datamosh)",
+   "family": "frame-break",
+   "what_you_see": "The new shot's movement drags the old shot's pixels with it, so one scene melts into the next.",
+   "reference": "Kanye West 'Welcome to Heartbreak' (Nabil Elderkin, 2009); Chairlift 'Evident Utensil' (Ray Tintori, 2009)",
+   "music_trigger": "bass slide",
+   "build": "ffmpeg encode both clips as one long-GOP stream, drop the keyframe at the cut with a small script, re-encode",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Hard to control: it can smear his face. Always checked frame by frame.",
+   "kinds": [
+    "real",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "colour-split",
+   "name": "Colour split on the hit",
+   "family": "frame-break",
+   "what_you_see": "Red, green and blue shift apart for a frame on the hit.",
+   "reference": "house move",
+   "music_trigger": "kick",
+   "build": "ffmpeg rgbashift for 2 frames",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "On every hit it looks like a cheap filter.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "drawn-outline",
+   "name": "Drawn outline",
+   "family": "frame-break",
+   "what_you_see": "A hand-drawn line traces around him, flickering on the beat.",
+   "reference": "a-ha 'Take On Me' (Steve Barron, 1985)",
+   "music_trigger": "bass note",
+   "build": "Vision matte -> PIL edge, redrawn with a little wobble every other frame",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "Jitter that doesn't feel hand-drawn.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "colour-flash",
+   "name": "Colour flash",
+   "family": "frame-break",
+   "what_you_see": "The whole frame flashes one colour (Goja purple, his pink) for a frame on the hit.",
+   "reference": "Enter the Void (Gaspar Noe, 2009): the strobing opening titles",
+   "music_trigger": "snare (not measured yet), kick",
+   "build": "ffmpeg: one solid-colour frame blended at 60% on the hit",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "Overused it tires the eye; keep it to the big hits.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "flare-hit",
+   "name": "Flare on the hit",
+   "family": "frame-break",
+   "what_you_see": "A streak of light cuts across the lens on the hit.",
+   "reference": "Star Trek (J.J. Abrams, 2009)",
+   "music_trigger": "kick (strongest)",
+   "build": "Blender or PIL anamorphic streak, screen-blended in ffmpeg",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "The stock plugin look.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "one-colour-only",
+   "name": "Only one colour",
+   "family": "frame-break",
+   "what_you_see": "Everything goes grey except one thing: the pink wristband, the koi.",
+   "reference": "Schindler's List (Steven Spielberg, 1993): the girl in the red coat",
+   "music_trigger": "vocal word",
+   "build": "ffmpeg hue mask (colorhold) or a Vision/object matte",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A halo of colour leaking round the edges.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "words-ride-the-bass",
+   "name": "Words that ride the bass",
+   "family": "type",
+   "what_you_see": "The lyric on screen swells and wobbles with each bass note and slides up and down with the bassline.",
+   "reference": "Prince 'Sign o' the Times' (Bill Konersman, 1987): the lyric is the video",
+   "music_trigger": "bass note, bass slide",
+   "build": "PIL type frames keyed to bass.json",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A cheap font sinks it.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "words-behind-him",
+   "name": "Words behind him",
+   "family": "type",
+   "what_you_see": "Big words sit in the scene behind him; he stays in front of them.",
+   "reference": "house move",
+   "music_trigger": "vocal word",
+   "build": "Vision matte + PIL type layered between plate and matte",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "The matte chewing the letters.",
+   "kinds": [
+    "real",
+    "ai",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "words-in-the-place",
+   "name": "Words in the place",
+   "family": "type",
+   "what_you_see": "The lyric is fixed in the real space (on the falls, on the court) and the camera moves past it.",
+   "reference": "Panic Room (David Fincher, 2002): the opening titles floating among the buildings",
+   "music_trigger": "vocal word",
+   "build": "Blender text in a camera-matched scene, or a planar track in ffmpeg",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Type slipping against the footage.",
+   "kinds": [
+    "real",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "word-per-kick",
+   "name": "One word per kick",
+   "family": "type",
+   "what_you_see": "The lyric lands one word at a time, each word on a kick.",
+   "reference": "house move",
+   "music_trigger": "kick, vocal word",
+   "build": "PIL type, one word per kick from kicks.json",
+   "cost": "free on the Mac",
+   "wow": 1,
+   "risk": "Too many words for the kicks available.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  },
+  {
+   "id": "ball-bounces-off-words",
+   "name": "Lands on the words",
+   "family": "type",
+   "what_you_see": "The padel ball drops, bounces off the lyric line on screen, and the words dip under the weight.",
+   "reference": "Zombieland (Ruben Fleischer, 2009): on-screen titles that the action touches",
+   "music_trigger": "kick, vocal word",
+   "build": "Blender ball on transparent + PIL type layer keyed to the bounce",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A floaty bounce, or type that dips like jelly.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "padel-ball"
+   ]
+  },
+  {
+   "id": "world-plays-the-beat",
+   "name": "The world plays the beat",
+   "family": "sound-sync",
+   "what_you_see": "Things passing in the real footage (poles, lights, pillars) line up exactly with the kicks.",
+   "reference": "The Chemical Brothers 'Star Guitar' (Michel Gondry, 2002)",
+   "music_trigger": "kick, double-time",
+   "build": "ffmpeg speed remap of the POV clip so each passing pole lands on a kick (poles found by frame differencing)",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "Needs a clip with regular passing things; drifting speed shows.",
+   "kinds": [
+    "real"
+   ],
+   "objects": []
+  },
+  {
+   "id": "the-release",
+   "name": "The release",
+   "family": "sound-sync",
+   "what_you_see": "Everything held still lets go on the first hit back: the water falls, the objects move, colour returns.",
+   "reference": "house move",
+   "music_trigger": "drop, kick",
+   "build": "ffmpeg hold -> resume on the first kick; Blender objects keyed to start on the same frame",
+   "cost": "free on the Mac",
+   "wow": 3,
+   "risk": "One thing starting a frame early and the release goes soft.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": [
+    "*"
+   ]
+  },
+  {
+   "id": "mouths-the-word",
+   "name": "He mouths the word",
+   "family": "sound-sync",
+   "what_you_see": "He mouths the one key lyric in time with the singer.",
+   "reference": "house move",
+   "music_trigger": "vocal word",
+   "build": "Real clip if he said it on camera; else Seedance from his sheet",
+   "cost": "~28 Higgsfield credits (one Seedance 2.5 shot, 4s 720p), finished on the Mac",
+   "wow": 2,
+   "risk": "AI mouth shapes that don't match the word.",
+   "kinds": [
+    "real",
+    "ai"
+   ],
+   "objects": []
+  },
+  {
+   "id": "invisible-seam",
+   "name": "The seam you can't see",
+   "family": "sound-sync",
+   "what_you_see": "The last frame hands straight back into the first, so the loop plays forever with no join.",
+   "reference": "house move",
+   "music_trigger": "loop seam",
+   "build": "ffmpeg: last frame and first frame matched in colour and position, checked by playing the join 10 times",
+   "cost": "free on the Mac",
+   "wow": 2,
+   "risk": "A one-frame jump at the join.",
+   "kinds": [
+    "real",
+    "ai",
+    "3d",
+    "mix"
+   ],
+   "objects": []
+  }
+ ]
+}

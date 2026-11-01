@@ -1,0 +1,461 @@
+{
+  "_what": "Every element list in the system, and where it lives. machine/elements.py build reads each one where it is and writes the library in one shape; it never edits a source. A list is changed at its source, then machine/elements.py build runs.",
+  "_rule": "the owner, 2026-09-20: every element defined once, every row the same fields, every one enforced — a value that is not on a list is refused, not guessed.",
+  "sources": [
+    {
+      "element": "format",
+      "asset": "video",
+      "path": "tools/video-production/formats/bank.json",
+      "rows": "formats",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "status": "status",
+        "signed": "signed",
+        "evidence": "proven_on"
+      },
+      "extra": [
+        "profile",
+        "notes"
+      ],
+      "enforced_by": "the AI video machine's preflight; the second door (compose.py)"
+    },
+    {
+      "element": "format",
+      "asset": "image",
+      "path": "tools/image-production/static/format-bank.json",
+      "rows": "formats",
+      "id": "key",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "why_it_works": "why_it_works",
+        "evidence": "evidence",
+        "examples": "drive"
+      },
+      "extra": [
+        "provenance",
+        "carries",
+        "native_crossover"
+      ],
+      "enforced_by": null
+    },
+    {
+      "element": "format",
+      "asset": "carousel",
+      "inline": [
+        {
+          "id": "tip-stack",
+          "name": "Tip stack",
+          "status": "draft",
+          "state": "proposed",
+          "what": "The cover names the count ('4 tips…'), then one tip per slide, numbered; the last slide is the ask or the product.",
+          "why_it_works": "A number on the cover is a promise of how long it takes; each swipe pays one tip, so the whole thing gets read.",
+          "examples": "davidaistar, '4 tips to master animated ads' (instagram.com/p/DdB4l9vEePW, the owner's saves 2026-09-22); 4bu_m TikTok photo posts #glowup #skincare #acnetips (runs/intake/brand-a/2026-09-20-first/swipes.jsonl, kind carousel)"
+        },
+        {
+          "id": "text-card-thread",
+          "name": "Text-card thread",
+          "status": "draft",
+          "state": "proposed",
+          "what": "Plain text cards, one thought per slide, no photography — the slides read as a thread; the account's name is the only picture.",
+          "why_it_works": "Reads as someone thinking out loud, not as an ad; the swipe is the page turn.",
+          "examples": "black_thoughtss_ (instagram.com/p/DdOa1tuGnI_, the owner's saves 2026-09-22 — motivation-mindset)"
+        },
+        {
+          "id": "step-tutorial",
+          "name": "Step tutorial",
+          "status": "draft",
+          "state": "proposed",
+          "what": "A how-to: the result on the cover, one step per slide with the screen or the hands shown, and a 'comment X for the file' close.",
+          "why_it_works": "Every slide is proof the result is reachable; the comment gate turns readers into a list.",
+          "examples": "davidaistar, 'Comment CLAYMATION for the skill' (instagram.com/p/Db1f1cikTOA, the owner's saves 2026-09-22)"
+        },
+        {
+          "id": "before-after-swipe",
+          "name": "Before/after swipe",
+          "status": "draft",
+          "state": "proposed",
+          "what": "Slide one is the before; the swipe reveals the after; the slides that follow are the routine that got there.",
+          "why_it_works": "The reader performs the reveal herself, which is the strongest way to show change without a claim in words.",
+          "examples": "4bu_m TikTok photo posts #jawline #debloat #glowup (runs/intake/brand-a/2026-09-20-first/swipes.jsonl — 4 carousels routed to image-teardown, sequence form)"
+        },
+        {
+          "id": "caption-joke-series",
+          "name": "Caption joke series",
+          "status": "draft",
+          "state": "proposed",
+          "what": "The same joke set-up carried across slides — one captioned photo per slide, the punchline on the last.",
+          "why_it_works": "Comedy relatability that gets shared; the last slide is where the account or the product sits.",
+          "examples": "danqiu2024, 'How to say … in Chinese?' (instagram.com/p/DdNnofxlFGz, the owner's saves 2026-09-22 — comedy-relatable)"
+        },
+        {
+          "id": "product-slide-set",
+          "name": "Product slide set",
+          "status": "draft",
+          "state": "proposed",
+          "what": "One product, ingredient or benefit per slide, each with one hard label; the cover is the claim, the last slide the offer. The paid-carousel default.",
+          "why_it_works": "Lets one ad carry six objections without a feature list; Meta shows the slide that earns the tap.",
+          "examples": "none on file yet — intake routes every paid `media: carousel` ad here (components/intake/tools/pools.py); the first one swiped fills this row"
+        }
+      ],
+      "enforced_by": "intake (kind carousel → format/carousel)",
+      "note": "First carousel list, 2026-09-28 (Master Plan v2, 3.1) — proposed from the carousel swipes on file: 4 organic TikTok photo posts (intake 2026-09-20) and 4 Instagram carousels in the owner's saves (2026-09-22). Held inline until a carousel tool owns it. image-teardown's sequence lane reads a carousel slide by slide."
+    },
+    {
+      "element": "format",
+      "asset": "email",
+      "path": "components/marketing-calendar/definitions/send-types.seed.json",
+      "rows": "types",
+      "id": "key",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "status": "status",
+        "signed": "signed"
+      },
+      "extra": [
+        "well",
+        "role",
+        "then",
+        "needs"
+      ],
+      "enforced_by": "email production; the marketing calendar",
+      "note": "The seed every brand copies; a brand's own email/email-types.json may add types."
+    },
+    {
+      "element": "format",
+      "asset": "page",
+      "enforced_by": "the pages machine (classify_pages.page_type)",
+      "note": "Held as code in components/naming/classify_pages.py; listed here as rows.",
+      "inline": [
+        {
+          "id": "salespage",
+          "name": "Sales page",
+          "what": "a long page that makes the whole case and asks for the order"
+        },
+        {
+          "id": "advertorial",
+          "name": "Advertorial",
+          "what": "an article with a byline or publication that sells through the story it reports"
+        },
+        {
+          "id": "prelander",
+          "name": "Pre-lander",
+          "what": "a short page between the ad and the offer that continues the ad's sentence"
+        },
+        {
+          "id": "listicle",
+          "name": "Listicle",
+          "what": "a numbered list of reasons or items, one of which is the product"
+        },
+        {
+          "id": "quiz",
+          "name": "Quiz",
+          "what": "questions that end on a recommendation"
+        },
+        {
+          "id": "comparison",
+          "name": "Comparison",
+          "what": "the product set against named alternatives"
+        },
+        {
+          "id": "review-page",
+          "name": "Review page",
+          "what": "reviews and results as the whole argument"
+        },
+        {
+          "id": "blog",
+          "name": "Blog",
+          "what": "an editorial post with no hard ask"
+        },
+        {
+          "id": "product-page",
+          "name": "Product page",
+          "what": "the store's page for one product"
+        },
+        {
+          "id": "utility",
+          "name": "Utility",
+          "what": "a page with a job but no argument — shipping, contact, policy"
+        }
+      ]
+    },
+    {
+      "element": "format",
+      "asset": "copy",
+      "path": "tools/copywriter/bank/formats.json",
+      "rows": "formats",
+      "id": "key",
+      "fields": {
+        "name": "name",
+        "what": "what"
+      },
+      "extra": [
+        "length",
+        "form",
+        "opens_with",
+        "carries_offer",
+        "reads_as",
+        "channels"
+      ],
+      "enforced_by": "copy production (the copywriter's stage 8)"
+    },
+    {
+      "element": "placement",
+      "asset": "all",
+      "path": "tools/copywriter/bank/format-bank.json",
+      "rows": "formats",
+      "id": "key",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "evidence": "provenance"
+      },
+      "extra": [
+        "channel",
+        "length",
+        "carries_offer"
+      ],
+      "enforced_by": null,
+      "note": "Where a piece runs — Meta primary text, a subject line, a landing page. Separate from format: the same format can run in several placements."
+    },
+    {
+      "element": "structure",
+      "asset": "video",
+      "path": "components/swipe-organic/formats.json",
+      "rows": "formats",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "mechanic",
+        "why_it_works": "why_it_works",
+        "status": "status",
+        "signed": "signed",
+        "evidence": "evidence"
+      },
+      "extra": [
+        "family",
+        "beats",
+        "text_behaviour",
+        "camera"
+      ],
+      "enforced_by": null,
+      "note": "Sorted automatically from organic swipes (swipe-organic formats.py). Most rows are unreviewed."
+    },
+    {
+      "element": "framework",
+      "asset": "all",
+      "path": "components/marketing-doctrine/ad-frameworks.json",
+      "rows": "frameworks",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "status": "status"
+      },
+      "extra": [
+        "sections",
+        "awareness",
+        "sophistication",
+        "formats_fit"
+      ],
+      "enforced_by": "the second door (compose.py)"
+    },
+    {
+      "element": "style",
+      "asset": "image",
+      "path": "tools/image-production/static/style-packs.json",
+      "rows": "packs",
+      "id": "@key",
+      "fields": {
+        "name": "name",
+        "what": "what"
+      },
+      "extra": [
+        "shot",
+        "light",
+        "grade",
+        "style",
+        "texture"
+      ],
+      "enforced_by": "image production; image teardown stage 6"
+    },
+    {
+      "element": "style",
+      "asset": "video",
+      "path": "tools/video-production/styles/bank.json",
+      "rows": "styles",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "status": "status",
+        "signed": "signed",
+        "evidence": "proven_on",
+        "examples": "swatch"
+      },
+      "extra": [
+        "family",
+        "formula",
+        "motion",
+        "seen_as",
+        "ip_flag",
+        "fits_formats"
+      ],
+      "enforced_by": null,
+      "note": "The style bank (2026-09-20). Nothing refuses an unknown style yet — the variation chain should read this list next."
+    },
+    {
+      "element": "style",
+      "asset": "caption",
+      "path": "tools/video-edit/looks/bank.json",
+      "rows": "looks",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "status": "status",
+        "signed": "signed"
+      },
+      "extra": [
+        "font",
+        "size_px",
+        "case",
+        "color",
+        "highlight",
+        "y_pct",
+        "max_words",
+        "entrance"
+      ],
+      "enforced_by": "the video edit's gate (cutsheet.py) refuses a caption look that is not a row",
+      "note": "Caption looks — how the words on screen look and move. A setting, never a re-edit."
+    },
+    {
+      "element": "delivery",
+      "asset": "@group",
+      "path": "components/marketing-doctrine/delivery.json",
+      "id": "id",
+      "fields": {
+        "name": "id",
+        "what": "what"
+      },
+      "extra": [
+        "when"
+      ],
+      "enforced_by": "the copywriter and the video teardown read it; nothing refuses an unknown value",
+      "groups": {
+        "path": "dials",
+        "id": "id",
+        "rows": "values"
+      },
+      "note": "One list per dial — humour, delivery style, register, pacing, reference world, avoid; the asset is the dial."
+    },
+    {
+      "element": "template",
+      "asset": "image",
+      "glob": "tools/image-production/static/templates/*.json",
+      "id": "@stem",
+      "fields": {
+        "name": "name",
+        "what": "use"
+      },
+      "extra": [
+        "canvas",
+        "layout"
+      ],
+      "enforced_by": "image production's renderer"
+    },
+    {
+      "element": "letterform",
+      "asset": "image",
+      "path": "tools/image-production/static/letterform-bank.json",
+      "rows": "letterforms",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what",
+        "status": "status",
+        "signed": "signed",
+        "evidence": "evidence"
+      },
+      "extra": [
+        "how_to_see_it"
+      ],
+      "enforced_by": "the image teardown (stage 1) — every text element carries a letterform id or none-fits with a proposed row"
+    },
+    {
+      "element": "template",
+      "asset": "email",
+      "enforced_by": "email production (simple_email.py)",
+      "inline": [
+        {
+          "id": "simple",
+          "name": "The simple email",
+          "what": "logo, headline, one hero picture, the copy, an optional offer picture, one button, sign-off, footer — every brand, its look from brands/<brand>/email-sms/simple.json",
+          "status": "approved",
+          "signed": "the owner 2026-09-19",
+          "evidence": "the owner, 2026-09-19: \"it literally can just be the logo at the top, headline, an image that describes the headline, the copy\""
+        }
+      ]
+    },
+    {
+      "element": "doctrine",
+      "asset": "awareness",
+      "path": "components/marketing-doctrine/frameworks.json",
+      "rows": "awareness.levels",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "knows"
+      },
+      "enforced_by": "every chain that binds the awareness slice",
+      "extra": [
+        "level",
+        "must",
+        "must_not"
+      ]
+    },
+    {
+      "element": "doctrine",
+      "asset": "sophistication",
+      "path": "components/marketing-doctrine/frameworks.json",
+      "rows": "sophistication.stages",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "market_has_heard"
+      },
+      "enforced_by": "the video teardown, the second door",
+      "extra": [
+        "stage",
+        "lead_with"
+      ]
+    },
+    {
+      "element": "doctrine",
+      "asset": "technique",
+      "path": "components/marketing-doctrine/frameworks.json",
+      "rows": "techniques",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "definition"
+      },
+      "enforced_by": "the copywriter, the video teardown, email production"
+    },
+    {
+      "element": "doctrine",
+      "asset": "section",
+      "path": "components/marketing-doctrine/frameworks.json",
+      "rows": "sections",
+      "id": "id",
+      "fields": {
+        "name": "name",
+        "what": "what"
+      },
+      "enforced_by": "the frameworks' sections; the copywriter's expansion"
+    }
+  ]
+}

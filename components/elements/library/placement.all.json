@@ -1,0 +1,398 @@
+{
+ "element": "placement",
+ "asset": "all",
+ "source": "tools/copywriter/bank/format-bank.json",
+ "enforced_by": null,
+ "note": "Where a piece runs — Meta primary text, a subject line, a landing page. Separate from format: the same format can run in several placements.",
+ "rows": [
+  {
+   "id": "primary-text",
+   "name": "Primary text / caption",
+   "what": "The words above the creative in the feed.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — copy machine `caption` row; 216 swiped examples in corpus",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "paid-social",
+    "length": {
+     "min": 50,
+     "max": 120,
+     "unit": "words"
+    },
+    "carries_offer": "optional"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "headline",
+   "name": "Headline",
+   "what": "The bolded line under the creative — the ad's one claim.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "evidenced — 15 real AdPlexity titles in corpus ('Collagen creams can't absorb. This serum can.')",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "paid-social",
+    "length": {
+     "min": 4,
+     "max": 8,
+     "unit": "words"
+    },
+    "carries_offer": "rarely"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "description",
+   "name": "Description",
+   "what": "The small line under the headline. Most people never read it.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — copy machine defaults (2 at 3 words)",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "paid-social",
+    "length": {
+     "min": 2,
+     "max": 5,
+     "unit": "words"
+    },
+    "carries_offer": "guarantee-shorthand only"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "angle",
+   "name": "Angle",
+   "what": "The copy block's framing — the bet a brand makes, carried by many creatives. Not an ad; the idea ads are cut from.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "evidenced — 223 swiped angles across four brands, ranked by heat",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "paid-social",
+    "length": {
+     "min": 1,
+     "max": 2,
+     "unit": "sentences"
+    },
+    "carries_offer": "never"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "overlay-text",
+   "name": "Static / video overlay",
+   "what": "Words ON the creative — the message that survives sound-off.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "evidenced — 46 overlay sets extracted from teardowns; music-only sources carry the whole script this way",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "paid-social",
+    "length": {
+     "min": 3,
+     "max": 12,
+     "unit": "words per card"
+    },
+    "carries_offer": "only on the final card"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "video-script",
+   "name": "Video ad script",
+   "what": "The spoken words of the ad, beat by beat.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — the video-teardown chain end to end (hooks v11, close v6)",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "paid-social",
+    "length": {
+     "min": 30,
+     "max": 90,
+     "unit": "seconds"
+    },
+    "carries_offer": "in the close, exactly as the offer file words it"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "creator-caption",
+   "name": "Creator caption",
+   "what": "The post's own words under an organic video or image.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "evidenced — 360 real captions in corpus with views/likes signals",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "organic-social",
+    "length": {
+     "min": 5,
+     "max": 80,
+     "unit": "words"
+    },
+    "carries_offer": "never"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "hook-overlay",
+   "name": "Hook line / overlay",
+   "what": "The first-frame words — the two-second stop decision.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — video-teardown 4b (entry test, four-word test, photograph test)",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "organic-social",
+    "length": {
+     "min": 3,
+     "max": 10,
+     "unit": "words"
+    },
+    "carries_offer": "never"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "organic-post",
+   "name": "Organic post (short / long)",
+   "what": "A story post with no offer — short-form and long-form per the machine's rows.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — copy machine short-form + long-form rows",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "organic-social",
+    "length": {
+     "min": 25,
+     "max": 350,
+     "unit": "words"
+    },
+    "carries_offer": "never on organic; late and soft when repurposed paid"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "organic-script",
+   "name": "Organic video script",
+   "what": "Spoken words for a native post — the ORGANIC lane's rebuild.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — video-teardown ORGANIC lane (expansion stage gated in)",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "organic-social",
+    "length": {
+     "min": 20,
+     "max": 90,
+     "unit": "seconds"
+    },
+    "carries_offer": "one aside at most — the lane dies if it sells"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "campaign-email",
+   "name": "Campaign email",
+   "what": "A one-off send to a segment.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — email machine; 309 shipped BRAND-A sends classified in corpus",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "email",
+    "length": {
+     "min": 40,
+     "max": 200,
+     "unit": "words visible"
+    },
+    "carries_offer": "usually — but the treatment (story/proof/offer) is the concept brief's call"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "flow-email",
+   "name": "Flow email",
+   "what": "A triggered send — welcome, abandon, post-purchase, winback.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "drafted — flow sends sit inside the BRAND-A scrape, not yet split out",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "email",
+    "length": {
+     "min": 40,
+     "max": 180,
+     "unit": "words visible"
+    },
+    "carries_offer": "per flow position — never in the first welcome"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "subject-preview",
+   "name": "Subject + preview",
+   "what": "The open decision — two fragments doing one job.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "evidenced — 309 subject+preview pairs indexed in the send catalogue",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "email",
+    "length": {
+     "min": 3,
+     "max": 9,
+     "unit": "words each"
+    },
+    "carries_offer": "only when the offer IS the news"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "landing-page",
+   "name": "Landing page / advertorial",
+   "what": "The click's destination — attention is spent, conviction is the job.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "evidenced — 47 swiped pages captured (incl. a 21,490px advertorial), 4 of ours",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "owned-pages",
+    "length": {
+     "min": 800,
+     "max": 4000,
+     "unit": "words"
+    },
+    "carries_offer": "yes, staged — price appears after the mechanism, never before"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "quiz",
+   "name": "Quiz",
+   "what": "Question-led conviction — the reader tells us the argument to make.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "proven — quiz-funnel skill + 1 shipped brand-b quiz; competitor-b runs quiz.competitor_blab.com as its whole front door",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "owned-pages",
+    "length": {
+     "min": 5,
+     "max": 12,
+     "unit": "questions"
+    },
+    "carries_offer": "on the result page only"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "pdp",
+   "name": "PDP",
+   "what": "The product's own page — where every funnel eventually lands.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": "drafted — brand product files exist; no PDP spec has been exercised by a machine yet",
+   "approved": false,
+   "source": "tools/copywriter/bank/format-bank.json",
+   "extra": {
+    "channel": "owned-pages",
+    "length": {
+     "min": 150,
+     "max": 600,
+     "unit": "words above reviews"
+    },
+    "carries_offer": "yes — the canonical price, never a channel-specific one"
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

@@ -1,0 +1,126 @@
+{
+ "_what": "The email formats as stacks of sections (EMAIL-FORMATS.md). Each section is one of the 17 names in SECTIONS.md; each picture slot is S scene (made from a real reference) · P product (real, placed) · D detail (made from a real macro reference) · R proof (real, as-is). section_email.py lays an email out from this file. Built 2026-10-08 on the owner's word: 'think about email design just like we think about landing page design'.",
+ "formats": {
+  "simple": {
+   "for": "letters, moments, quizzes, subscription",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "pictures": ["S"], "copy": "headline + the letter"},
+    {"name": "offer-section", "pictures": ["P"], "optional": true, "copy": "the offer line"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "hero-product": {
+   "for": "one product carries it",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "pictures": ["P"], "copy": "the product's name as a big title, the headline, the opening"},
+    {"name": "mechanism-section", "pictures": ["D", "D", "D"], "copy": "three chips: a short title and one line each, what it does"},
+    {"name": "cta-section"},
+    {"name": "cards-section", "pictures": ["S"], "copy": "the argument in a few short paragraphs, beside the man using it"},
+    {"name": "offer-section", "optional": true, "copy": "the offer line"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "proof-grid": {
+   "for": "results, customer stories",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "copy": "the claim headline and one line"},
+    {"name": "review-section", "pictures": ["R", "R", "R", "R", "R", "R"], "copy": "six results, a short caption each"},
+    {"name": "mechanism-section", "copy": "three short blocks: why it worked"},
+    {"name": "b4a-section", "pictures": ["R"], "copy": "one before-and-after, named"},
+    {"name": "stat-proof-section", "copy": "one number and what it counts"},
+    {"name": "cta-section"},
+    {"name": "cards-section", "pictures": ["S", "S"], "copy": "two short lines"},
+    {"name": "footer-section"}
+   ]
+  },
+  "system-education": {
+   "for": "sets, routines, stacks",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "pictures": ["S"], "copy": "headline and the opening"},
+    {"name": "symptoms-section", "copy": "the problem the set solves, in their words"},
+    {"name": "product-row-section", "pictures": ["P*"], "copy": "one product per tile: name and its one job"},
+    {"name": "routine-steps-section", "copy": "the order: step, what, how long"},
+    {"name": "offer-section", "optional": true, "copy": "the offer line"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "winback": {
+   "for": "coming back, last call",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "copy": "the reframe: you didn't stop caring"},
+    {"name": "mechanism-section", "copy": "what changed"},
+    {"name": "cards-section", "pictures": ["S"], "copy": "how easy it is now"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "objection-crusher": {
+   "for": "guarantee, objections, switching",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "copy": "the doubt, said out loud"},
+    {"name": "cards-section", "pictures": ["S"], "copy": "a real person and what happened"},
+    {"name": "mechanism-section", "copy": "why the doubt doesn't hold"},
+    {"name": "product-row-section", "pictures": ["P*"], "copy": "the products, name and one job each"},
+    {"name": "guarantee-section", "copy": "the guarantee, word for word from the offer bank"},
+    {"name": "offer-section", "optional": true, "copy": "the offer line"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "offer-urgency": {
+   "for": "sales, last chance",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "copy": "the desire line"},
+    {"name": "cards-section", "pictures": ["S", "P", "S"], "copy": "three short lines"},
+    {"name": "pricing-section", "copy": "the price, as the offer bank sells it"},
+    {"name": "social-section", "copy": "one trusted-by line"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "launch-window": {
+   "for": "drops with a deadline",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "pictures": ["P"], "copy": "the window and the drop"},
+    {"name": "offer-section", "copy": "the named offer and what's in it"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  },
+  "brand-manifesto": {
+   "for": "mission, opinion, founder",
+   "sections": [
+    {"name": "header-section"},
+    {"name": "hero-section", "copy": "the thesis line and the position"},
+    {"name": "cards-section", "pictures": ["S"], "copy": "the man it's for"},
+    {"name": "mechanism-section", "copy": "why it works, in three short blocks"},
+    {"name": "product-row-section", "pictures": ["P*"], "copy": "the products, name and one job each"},
+    {"name": "cta-section"},
+    {"name": "footer-section"}
+   ]
+  }
+ },
+ "type_to_format": {
+  "product-spotlight": "hero-product", "mechanism": "hero-product",
+  "proof-drop": "proof-grid", "spotlight": "proof-grid", "someone-like-you": "proof-grid", "room-answered": "proof-grid", "peer-advice": "proof-grid",
+  "bundle": "system-education", "stack": "system-education", "routine": "system-education", "mistake-audit": "system-education",
+  "sunset": "winback", "availability": "winback", "restock": "winback", "what-went-wrong": "winback",
+  "guarantee": "objection-crusher", "objection-shot": "objection-crusher", "switch": "objection-crusher", "myth-correction": "objection-crusher",
+  "sale-window": "offer-urgency", "last-chance": "offer-urgency", "early-access": "offer-urgency", "gift-guide": "offer-urgency",
+  "launch": "launch-window", "anticipation": "launch-window",
+  "mission": "brand-manifesto", "opinion": "brand-manifesto", "founder-note": "brand-manifesto", "milestone": "brand-manifesto"
+ },
+ "_default": "simple",
+ "_P*": "one product slot per product the email sells (a set expands to its products)"
+}

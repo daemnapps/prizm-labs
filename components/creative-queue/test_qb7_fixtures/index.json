@@ -1,0 +1,17 @@
+{
+ "built": "2026-10-22T02:00:00+00:00",
+ "people": ["the owner", "the team", "the team", "Christine", "Victoria"],
+ "batches": [],
+ "errors": [],
+ "entries": [
+  {"id": "fxbrand_fx_brief-0001", "brand": "fxbrand", "type": "video-ad", "title": "A video", "stage": "making", "flag": null, "since": "2026-10-01", "thumb": null, "links": [], "email_run": null},
+  {"id": "zz-no-such-brand_idea_zz-stub-run", "brand": "zz-no-such-brand", "type": "video-ad", "title": "zz-stub-run", "stage": "idea", "flag": null, "since": "2026-10-20", "thumb": null, "links": []},
+  {"id": "fxbrand_email_fxbrand-oct-20", "brand": "fxbrand", "type": "email", "title": "Sat Oct 31 · Quick reminder!", "stage": "final-needs-you", "flag": null, "since": "2026-10-20", "thumb": null, "links": [], "email_run": "fxbrand-oct-20"},
+  {"id": "fxbrand_fx_brief-0048", "brand": "fxbrand", "type": "image-ad", "title": "Brief 0048 · fx", "stage": "final-needs-you", "flag": "stuck", "since": "2026-10-16", "thumb": null, "links": []},
+  {"id": "fxbrand_idea_fxbrand_brilliance-face-scrub_none_batch-2026-10-01-a", "brand": "fxbrand", "type": "image-ad", "title": "fxbrand_brilliance-face-scrub_none_batch-2026-10-01-a", "stage": "making", "flag": null, "since": "2026-10-01", "thumb": null, "links": []},
+  {"id": "fxbrand_idea_fxbrand_glow-serum_static_batch-2026-10-14-b", "brand": "fxbrand", "type": "carousel", "title": "", "stage": "making", "flag": null, "since": "2026-10-14", "thumb": null, "links": []},
+  {"id": "fxbrand_glow-serum_idea_7", "brand": "fxbrand", "type": "image-ad", "title": null, "stage": "idea", "flag": null, "since": "2026-10-10", "thumb": null, "links": []},
+  {"id": "fxbrand_idea_fxbrand-creator-01--glow-serum", "brand": "fxbrand", "type": "image-ad", "title": "fxbrand-creator_01", "stage": "idea", "flag": null, "since": "2026-10-11", "thumb": null, "links": []},
+  {"id": "fxbrand_odd_shape", "brand": "fxbrand", "type": "landing-page", "title": "odd_shape", "stage": "brief", "flag": null, "since": "2026-10-12", "thumb": null, "links": []}
+ ]
+}

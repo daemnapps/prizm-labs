@@ -1,0 +1,334 @@
+{
+ "schema": 1,
+ "chain": "copy-general",
+ "label": "Copy, general lane (the owner's copy chain, resolved)",
+ "note": "RESOLVED from lab/damon/copy, not authored here (CM-1). Every prompt below is a byte-identical copy of the file HIS OWN resolver picks — machine/copy.py :: latest_prompt(), highest -vN- wins — and nothing was rewritten, including its placeholder spelling, hence placeholder_style single-curly. His lab is the authored upstream and stays canonical until the CM-2 goldens pass; when it moves, this chain is RE-RESOLVED by re-running resolve_copy_chain.py, never edited in place. ELEVEN stages, which is what his code actually runs: stage0, stage1, stage2, stage1b, stage3, stage4, stage5, stage6 (gated), stage7, stage8, stage9, in that array order. His own references disagree with each other and with the code (copy.py's docstring says five, his CLAUDE.md's table lists ten); the count here was taken from the STAGES list the runner iterates, and his files were not touched. ZERO brand-substituted text: every brand-shaped value is a placeholder or a named root, and the substitution happens at run time (rider (3), ruled). His bank/ files (formats.json, format-bank.json, channel-map.json) are deliberately NOT resolved into this chain — they carry brand names in their provenance strings and his machine reads them per brand-root at run time, so `formats` arrives as run-config like every other outside value.",
+ "prompts_dir": "prompts",
+ "placeholder_style": "single-curly",
+ "provenance": {
+  "source": "lab/damon/copy",
+  "pinned_on": "2026-09-02",
+  "route": "(none — his chain has no route flag; one shape, gated at stage6 on the triaged lane)",
+  "resolver": "new-workflow-design/builds/copy-machine/resolve_copy_chain.py, which calls lab/damon/copy/machine/copy.py :: latest_prompt(stage) for each key in that module's own STAGES list — his resolution logic, run read-only, no model calls, no network. Prompt home scanned: lab/damon/copy/prompts (non-recursive, so prompts/superseded/ is out by his own glob, not by ours).",
+  "note": "Resolution of the copy chain for the general lane (CM-1, batch 21). The name `copy-general` is a NEUTRAL WORKING NAME: the owner has not yet named this chain (I-82, copy-machine participation) and the build's ruling is that the name is his to pick and is not `copy` (stdlib shadow). Renaming is one `git mv` of this folder plus this file's `chain` field. `sha` and every pick's `sha256` are filled BY THE RESOLVER at resolve time; a pick digest that is absent has not been resolved yet, and the declared test fails by name until it is.",
+  "picks": [
+   {
+    "stage": "stage0",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage0-triage-v2-damon.md",
+    "source_filename": "stage0-triage-v2-damon.md",
+    "sha256": "039b1c0361589707b9be645ef2b46fd4e05477a0cf7dcbc4334511f8c91400cf",
+    "copied_to": "prompts/stage0/v2.md"
+   },
+   {
+    "stage": "stage1",
+    "engine": "claude",
+    "version": 1,
+    "source": "lab/damon/copy/prompts/stage1-read-v1-damon.md",
+    "source_filename": "stage1-read-v1-damon.md",
+    "sha256": "887a9cc0a4ac4107b825c281dd2237be9ac70dd5d06a67ceb890101973770655",
+    "copied_to": "prompts/stage1/v1.md"
+   },
+   {
+    "stage": "stage2",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage2-spec-v2-damon.md",
+    "source_filename": "stage2-spec-v2-damon.md",
+    "sha256": "1bebff1a95bb40705b1ed75494ee85ee6eec73a3ced58b94ad022a54207d79e8",
+    "copied_to": "prompts/stage2/v2.md"
+   },
+   {
+    "stage": "stage1b",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage1b-context-scout-v2-damon.md",
+    "source_filename": "stage1b-context-scout-v2-damon.md",
+    "sha256": "4264d50d0f25e2b8a754143c9ad149fc95aacf955d02da3220caaa557b5da1a7",
+    "copied_to": "prompts/stage1b/v2.md"
+   },
+   {
+    "stage": "stage3",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage3-injection-v2-damon.md",
+    "source_filename": "stage3-injection-v2-damon.md",
+    "sha256": "8dea8cce96997aa0d0cbda2871e0602fc5f2b6915c71caaba28c51beb75dad35",
+    "copied_to": "prompts/stage3/v2.md"
+   },
+   {
+    "stage": "stage4",
+    "engine": "claude",
+    "version": 1,
+    "source": "lab/damon/copy/prompts/stage4-placement-v1-damon.md",
+    "source_filename": "stage4-placement-v1-damon.md",
+    "sha256": "1a9cb74a5a32ff414e26905ed8898379d93bd94635acd6da38dae8bb062d5225",
+    "copied_to": "prompts/stage4/v1.md"
+   },
+   {
+    "stage": "stage5",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage5-hooks-v2-damon.md",
+    "source_filename": "stage5-hooks-v2-damon.md",
+    "sha256": "619d42e0b1562cba90d86b268e5bcd90976729a631310ef95b45fddd8e8c5b8a",
+    "copied_to": "prompts/stage5/v2.md"
+   },
+   {
+    "stage": "stage6",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage6-expansion-v2-damon.md",
+    "source_filename": "stage6-expansion-v2-damon.md",
+    "sha256": "fa306e850338ecbbd1830a388ff84a3b590be6a00cab622e6c2e3065c98d917d",
+    "copied_to": "prompts/stage6/v2.md"
+   },
+   {
+    "stage": "stage7",
+    "engine": "claude",
+    "version": 2,
+    "source": "lab/damon/copy/prompts/stage7-close-v2-damon.md",
+    "source_filename": "stage7-close-v2-damon.md",
+    "sha256": "aed855e28e6828361329b76848bfa3234444f62c344197f670b0e0586f01b3a9",
+    "copied_to": "prompts/stage7/v2.md"
+   },
+   {
+    "stage": "stage8",
+    "engine": "claude",
+    "version": 4,
+    "source": "lab/damon/copy/prompts/stage8-render-v4-damon.md",
+    "source_filename": "stage8-render-v4-damon.md",
+    "sha256": "e8249f01de20d18a2396ee778bbb241e28c9e3409c42cba42cb291c36941e739",
+    "copied_to": "prompts/stage8/v4.md"
+   },
+   {
+    "stage": "stage9",
+    "engine": "claude",
+    "version": 1,
+    "source": "lab/damon/copy/prompts/stage9-brief-v1-damon.md",
+    "source_filename": "stage9-brief-v1-damon.md",
+    "sha256": "11f7026cee1906881e38a88986d9ceeca95ad097adac9f29f07ae87df9695d87",
+    "copied_to": "prompts/stage9/v1.md"
+   }
+  ],
+  "gaps": [
+   "THE SUBSTITUTE HALF OF HIS LANE OVERLAY. His runner does two things on the triaged lane: it SKIPS stage6 when the lane is not ORGANIC, and it then feeds stage7's `body` the EXPANSION output when stage6 ran and the INJECTION output when it did not. CR-5's `when:` gave the skip a form; the substitute has none — a gate decides WHETHER a stage runs, never which input another stage reads, and there is no conditional-input form in schema 1. This chain therefore binds `body` to `@stage3`, the value his runner uses on every non-ORGANIC run and the one that always exists, and an ORGANIC run here hands stage7 the injection where his hands it the expansion. This is the same overlay the video-teardown pin recorded as unpinned follow-on scope; it is the first thing CM-2's goldens will show on an ORGANIC run, and the redesign signal it may raise is a chain-runner extension question, not a prompt-tuning one.",
+   "HIS stage1b READS TWO STAGE OUTPUTS CONCATENATED. copy.py passes `concept_brief=f\"{triage}\\n\\n{spec}\"` — one prompt token fed by two earlier stages joined by a blank line. `inputs` binds one reference per name and there is no concat form, so this chain takes `concept_brief` as `@config.concept_brief`, which a caller (and CM-2's harness) fills with exactly that join. It fails loudly and by name when nobody supplies it, which is the right failure: the alternative bindings either drop the spec silently or invent a twelfth stage this resolution did not find in his code.",
+   "THE PER-STAGE LANGUAGE QUERY IS NOT EXECUTED BY THIS ENGINE. Five stages take a `{language}` block that his runner produces by calling the language layer per stage (`L.for_stage(brand, <stage>, avatar, funnel, ...)`). This engine calls one thing, the model seam, and does not run queries, so each of those blocks arrives as its own run-config variable — `language_injection`, `language_hooks`, `language_expansion`, `language_close`, `language_render`. WHAT each stage asks the layer for is a chain definition and it lives beside this file, in `language-profile.json`, in the component's own chain-profile schema; the caller runs the query with that profile and passes the rendered blocks in. Nothing about the definition is lost — only the calling of it moves out.",
+   "AN UNREAD LANE FAILS HERE AND DEGRADES THERE. `lane` is a declared field, so a stage0 output with no LANE line fails stage0 by name. His runner records the lane as `unread` and carries on into a non-ORGANIC run. Failing is the ruled behaviour for an extracted field a later stage routes on; it is written down because it is a real difference in what a bad triage does."
+  ],
+  "sha": "947ac4bc88d6d928074e0d659829510aeb6e44e7"
+ },
+ "defaults": {
+  "model": "claude-opus-5"
+ },
+ "roots": {
+  "brand_home": "brands"
+ },
+ "stages": [
+  {
+   "key": "stage0",
+   "label": "Triage",
+   "prompt": "stage0",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "source": "@config.source",
+    "formats": "@config.formats",
+    "avatars": "@config.avatars"
+   },
+   "fields": {
+    "lane": {
+     "from": "regex",
+     "pattern": "^LANE:\\s*([A-Z ]+)"
+    }
+   },
+   "output": "stages/stage0/output.md",
+   "note": "Which lane, which format, whose voice. Everything downstream binds to this. · his group: READ THE SOURCE · his display id: 0. `lane` is extracted here (CR-6) because stage6's gate routes on it; his `lane_of()` regex is copied character for character, `.strip()` included, so this chain reads the lane his runner reads. FORMAT / AVATAR / FUNNEL are deliberately NOT declared: his runner tolerates their absence and a declared field that cannot be read fails the stage, so declaring them would fail runs his machine completes."
+  },
+  {
+   "key": "stage1",
+   "label": "Read",
+   "prompt": "stage1",
+   "prompt_version": "v1",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "source": "@config.source"
+   },
+   "output": "stages/stage1/output.md",
+   "note": "One source in, one objective record out — beats, turn, proof, voice markers. · his group: READ THE SOURCE · his display id: 1"
+  },
+  {
+   "key": "stage2",
+   "label": "Spec",
+   "prompt": "stage2",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "record": "@stage1"
+   },
+   "output": "stages/stage2/output.md",
+   "note": "The record abstracted into a brand-free construct everything else slots into. · his group: READ THE SOURCE · his display id: 2"
+  },
+  {
+   "key": "stage1b",
+   "label": "Context scout",
+   "prompt": "stage1b",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "concept_brief": "@config.concept_brief",
+    "context_index": "@config.context_index",
+    "always_loaded": "@config.always_loaded"
+   },
+   "output": "stages/stage1b/output.md",
+   "note": "Sifts everything the brand knows and picks what THIS source needs — and says what it left out. · his group: READ THE SOURCE · his display id: 2b. It runs AFTER stage2 in his code, which is why it sits fourth in this array; the array is the run order. `concept_brief` is his triage-plus-spec join and arrives as run-config — see provenance.gaps."
+  },
+  {
+   "key": "stage3",
+   "label": "Injection",
+   "prompt": "stage3",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "spec": "@stage2",
+    "record": "@stage1",
+    "avatar": "@config.avatar",
+    "language_bank": "@config.language_bank",
+    "language": "@config.language_injection",
+    "product_file": "@config.product_file",
+    "offer_file": "@config.offer_file",
+    "brand_context": "@config.brand_context",
+    "brand_name": "@config.brand_name"
+   },
+   "output": "stages/stage3/output.md",
+   "note": "Substitution, never rewrite — the construct is the template. · his group: MAKE IT OURS · his display id: 3"
+  },
+  {
+   "key": "stage4",
+   "label": "Placement",
+   "prompt": "stage4",
+   "prompt_version": "v1",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "injection": "@stage3",
+    "spec": "@stage2",
+    "product_file": "@config.product_file",
+    "offer_file": "@config.offer_file"
+   },
+   "output": "stages/stage4/output.md",
+   "note": "Where the product enters and how long the piece runs. Decides, writes nothing. · his group: MAKE IT OURS · his display id: 4"
+  },
+  {
+   "key": "stage5",
+   "label": "Hooks",
+   "prompt": "stage5",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "record": "@stage1",
+    "spec": "@stage2",
+    "injection": "@stage3",
+    "placement": "@stage4",
+    "language_bank": "@config.language_bank",
+    "language": "@config.language_hooks",
+    "brand_context": "@config.brand_context",
+    "hook_count": "@config.hook_count"
+   },
+   "output": "stages/stage5/output.md",
+   "note": "The control plus variations. All ship — the machine never picks, and nothing downstream reads `#pick` off this stage for exactly that reason. · his group: MAKE IT OURS · his display id: 5"
+  },
+  {
+   "key": "stage6",
+   "label": "Expansion",
+   "prompt": "stage6",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "spec": "@stage2",
+    "injection": "@stage3",
+    "placement": "@stage4",
+    "product_file": "@config.product_file",
+    "offer_file": "@config.offer_file",
+    "language_bank": "@config.language_bank",
+    "language": "@config.language_expansion",
+    "brand_context": "@config.brand_context"
+   },
+   "when": {
+    "field": "@stage0.lane",
+    "equals": "ORGANIC"
+   },
+   "output": "stages/stage6/output.md",
+   "note": "Gated moves that build commercial structure. THE GATE IS THE POINT (his words): an already-an-ad source carries its commercial structure already, so it is inherited at injection rather than rebuilt. Lifted unchanged from the video chain's ROUTES and given a declared form here (CR-5). · his group: MAKE IT OURS · his display id: 6"
+  },
+  {
+   "key": "stage7",
+   "label": "Close",
+   "prompt": "stage7",
+   "prompt_version": "v2",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "body": "@stage3",
+    "spec": "@stage2",
+    "placement": "@stage4",
+    "product_file": "@config.product_file",
+    "offer_file": "@config.offer_file",
+    "language_bank": "@config.language_bank",
+    "language": "@config.language_close",
+    "brand_context": "@config.brand_context"
+   },
+   "output": "stages/stage7/output.md",
+   "note": "The objection at the flinch, then the landing of the argument. · his group: MAKE IT OURS · his display id: 7. `body` is bound to the injection, never to the gated stage6 — the substitute half of his lane overlay has no form in schema 1 and is recorded in provenance.gaps rather than smoothed over."
+  },
+  {
+   "key": "stage8",
+   "label": "Render",
+   "prompt": "stage8",
+   "prompt_version": "v4",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "spec": "@stage2",
+    "injection": "@stage7",
+    "record": "@stage1",
+    "placement": "@stage4",
+    "hooks": "@stage5",
+    "product_file": "@config.product_file",
+    "offer_file": "@config.offer_file",
+    "language_bank": "@config.language_bank",
+    "language": "@config.language_render",
+    "brand_context": "@config.brand_context",
+    "formats": "@config.formats",
+    "output_formats": "@config.output_formats",
+    "channel": "@config.channel"
+   },
+   "output": "stages/stage8/output.md",
+   "note": "Turns the argument into the actual copy, in each requested format, ready to paste. · his group: WRITE THE COPY · his display id: 8. Its `{injection}` token is fed the CLOSE output, not stage3 — his runner passes `injection=close` here, and the token name is his prompt's, kept as it is because a copy whose tokens were renamed is not the copy that was pinned. `record` reaches this stage on purpose (his 2026-08-31 fix: the writing stage had the argument and not the person)."
+  },
+  {
+   "key": "stage9",
+   "label": "Brief",
+   "prompt": "stage9",
+   "prompt_version": "v1",
+   "inputs": {
+    "today": "@config.today",
+    "triage": "@stage0",
+    "full_piece": "@stage8",
+    "hooks": "@stage5",
+    "placement": "@stage4",
+    "source_reference": "@config.source_reference",
+    "offer_file": "@config.offer_file"
+   },
+   "output": "stages/stage9/output.md",
+   "note": "The one document a media buyer opens. · his group: WHAT SHIPS · his display id: 9"
+  }
+ ]
+}

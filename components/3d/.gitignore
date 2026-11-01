@@ -1,0 +1,4 @@
+trellis-mac/
+logs/
+__pycache__/
+setup.log

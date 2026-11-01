@@ -1,0 +1,288 @@
+{
+ "theme": "atlas",
+ "title": "Component issues (the atlas)",
+ "status": "draft pack, extracted from 2026-10-02's rulings and scripts; not ruled",
+ "triage_owner": "the team",
+ "triage_owner_ruling": "the team, typed to the dev-dayu lead 2026-10-12 ~02:30Z: \"Run triage skill and include all pending component triage list. Make me owner for now\" (temporary; supersedes the team as triage owner until he rules it back; the-org/decision-log.md 2026-10-12). Before: decision-log 2026-10-02 TRIAGE, amended: the team for component issues",
+ "theme_owner": "the team",
+ "theme_owner_ruling": "the team 2026-10-02: \"the team is owner of components / atlas (both triage owner and the theme itsemf)\"",
+ "evaluation": {
+  "window": "2026-10-02 to 2026-10-16",
+  "midpoint_rerun": "2026-10-09",
+  "feedback_due": "2026-10-16",
+  "feedback_file": "components/triage/themes/atlas-FEEDBACK.md (proposed)",
+  "finding_shape": "item id · what's wrong · change wanted · theme or engine"
+ },
+ "engine_owner": "the team",
+ "engine_owner_ruling": "the team 2026-10-02: \"I will remain component owner of the triage component for now\"",
+ "item": {
+  "noun": "issue",
+  "id_scheme": "<component>#<n>",
+  "record_slug": "<component>-<n>",
+  "count_2026_10_02": {
+   "open": 685,
+   "components": 48
+  }
+ },
+ "adapter": {
+  "read": "platform/data/atlas/data.json (compiled from each component's newest runs/system-integration/components-<c>/<run>/flow.json); an issue is open when it has no resolved and no merged_into",
+  "still_true": "a component's next system run re-reads every issue (SCHEMA §5a); between runs, triage marks 'looks fixed' with evidence and the triage owner closes it",
+  "write_back": "SCHEMA §5a: a close sets resolved (evidence) and resolved_by; every later run carries both; a run that contradicts it raises a conflict for the triage owner",
+  "reopen": null,
+  "reopen_gap": "missing: proposed that an undo record clears resolved and notes who reopened it and why (to the lead with the record-kind card)",
+  "code": "today inside tools/triage_dryrun.py; to be extracted as the atlas adapter"
+ },
+ "summary": {
+  "standard": "SCHEMA §5 (eight parts), new-workflow-design/builds/atlas/flows/SCHEMA.md",
+  "required": [
+   "why",
+   "impacts",
+   "evidence",
+   "fix",
+   "fix_impact",
+   "if_ignored",
+   "lane",
+   "severity"
+  ],
+  "labels": {
+   "why": "why it matters",
+   "impacts": "who and what it affects",
+   "evidence": "what the run saw",
+   "fix": "the response",
+   "fix_impact": "what the response changes",
+   "if_ignored": "if it's ignored",
+   "lane": "lane",
+   "severity": "priority"
+  },
+  "where": [
+   "the issue in its component's flow (runs from 6838d3556 on)",
+   "triage/issue-briefs/<component>.json (ATL-27 (P0 P1 issue briefs), until each component's next run)"
+  ],
+  "coverage_2026_10_02": "met: all 656 open issues (ATL-31 (remaining issue briefs)) and all 83 actions (60 built by tools/triage_fill.py); the 29 that look fixed close instead",
+  "fill_policy": "targeted: each component's issues gain the parts on its next system run (the team 01:08Z 'Targeted'); a bulk fill of the 302 that need someone else is held for the team",
+  "at_creation": {
+   "rule": "every item, action group or issue this theme's triage creates carries all eight parts when it is created; never backfilled",
+   "ruled": "the team, 2026-10-02, received 06:43Z by date -u: \"also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start\""
+  },
+  "fix_means": "the response: what to do, whether a fix, a follow-up on a positive signal, or another move. Key kept as `fix` for compatibility; shown as Response (the team, 2026-10-02)"
+ },
+ "categories": [
+  "README and how-to link",
+  "Docs say one thing, code another",
+  "Registry or Residents row",
+  "Keys and credentials",
+  "Old or moved paths",
+  "Runs, records and output homes",
+  "Tests missing or red",
+  "Writes into brands/",
+  "Duplicates and leftovers",
+  "Machine-bound literals",
+  "Other"
+ ],
+ "categories_note": "called 'theme' in tools/triage_dryrun.py; renamed 'category' so it does not clash with a triage theme",
+ "cause_classes": [
+  "DOC-DRIFT",
+  "REPOINT-MOVED",
+  "DEDUPE",
+  "OUTPUT-HOME",
+  "RUN-RECORD",
+  "REGISTRY-ROW",
+  "DRIVE-PIPE",
+  "KEYS-BY-NAME",
+  "TEST-DECLARE",
+  "HOWTO-LINK",
+  "INTERNALS-REACH",
+  "MODEL-REGISTRY",
+  "MACHINE-LITERAL",
+  "ID-TAG",
+  "LIBRARY-CLAUSE",
+  "CONTRACT-SEAM",
+  "MINI-KEY-GRANT",
+  "BRAND-LITERAL",
+  "ATLAS-HEADER",
+  "LIBRARY-CONTRACT",
+  "BUG",
+  "STATUS-SET",
+  "OWNER-RULING",
+  "BRAND-DATA-GAP",
+  "MINI-READY",
+  "UNIQUE"
+ ],
+ "cause_classes_note": "the most used of the 2026-10-02 dry run's patterns (clusters-2026-10-02.json); each names a mechanism, and items sharing one usually clear in one action",
+ "grouping": {
+  "rule_order": "first match wins",
+  "rules": [
+   {
+    "name": "close-out",
+    "when": "the issue looks already fixed (the cited file or README fill shows it)",
+    "group_by": "one action for all of them",
+    "count_2026_10_02": 1,
+    "model_kinds": [
+     "close"
+    ]
+   },
+   {
+    "name": "shared fix",
+    "when": "the same fix applies across components (one cause class with an action-shaped name, e.g. repoint moved paths, README how-to link line)",
+    "group_by": "cause class, across components",
+    "count_2026_10_02": 24,
+    "model_kinds": [
+     "shared"
+    ]
+   },
+   {
+    "name": "decision group",
+    "when": "the issue waits on one specific ruling",
+    "group_by": "that ruling",
+    "count_2026_10_02": 11,
+    "model_kinds": [
+     "other"
+    ]
+   },
+   {
+    "name": "local batch",
+    "when": "anything else",
+    "group_by": "component, batched for its owner",
+    "count_2026_10_02": 47,
+    "model_kinds": [
+     "local"
+    ]
+   }
+  ],
+  "why": "the red-test back-test showed real fixes land in batches by person, not only by shared cause; a local batch is one sitting for one owner"
+ },
+ "priority": {
+  "tiers": {
+   "P0": "touches a wall, or says one thing and does another on a component that runs",
+   "P1": "blocks or breaks something on a component in use (>20 runs, or ≥3 dependents, or runs we cannot see)",
+   "P2": "cleanup, batched by category",
+   "P3": "parked: ≤20 runs, fewer than 3 dependents, no runs we cannot see"
+  },
+  "live_use_for_p0": "ruled (#6, 4b36a7a90): a run on record within 30 days, a grant on the mini, or a person's live use; keywords may propose a P0, never assign one; the check is not built",
+  "severity_source": "the issue's summary severity where present (192), else the keyword tier",
+  "weights": {
+   "P0": 8,
+   "P1": 4,
+   "P2": 2,
+   "P3": 1
+  },
+  "age": {
+   "days": 7,
+   "cap": "P1",
+   "applies": false,
+   "why_not": "atlas issues carry no open-since date yet"
+  }
+ },
+ "owners": {
+  "source": "components/CLAUDE.md Residents table, then each component's CLAUDE.md",
+  "disputed_2026_10_02": [
+   "email-production#5: data says the team, the register row says the owner",
+   "qc-checks#9 and #12: data says the team; the team owns the qc-checks engine since 2026-10-01",
+   "local-studio and 3d: no owner on record",
+   "brandpath: the owner inferred from commit authorship"
+  ]
+ },
+ "deciders": {
+  "walls": "the team or the team",
+  "conventions": "the team, curator of components/system-integration/conventions.md",
+  "owner_calls": "the component's owner",
+  "registry": "the lead (Residents table)"
+ },
+ "walls": [
+  "a secret in git",
+  "a machine delete or external send",
+  "a key read by path",
+  "media over the size limit in git",
+  "brands/ read-only to machines this phase"
+ ],
+ "lane_conditions": {
+  "status": "drafted, not ruled",
+  "now": [
+   "changes no run-time behaviour",
+   "touches no wall",
+   "changes no owner, contract or curated content (content the triage owner curates is theirs)",
+   "fits in one commit"
+  ],
+  "option_3": {
+   "status": "proposed, for discussion: triage/proposals/triage-owner-scope.json",
+   "adds": "a ruled default, or a fix the brief already spells out, in an owner's component, with the owner told rather than asked",
+   "limits": [
+    "the brief names the change and a test proves it",
+    "no test assertion weakened or removed",
+    "nothing changes how a live pipeline behaves",
+    "every change is a decision-log record with a one-line undo; owners see their areas' changes there",
+    "logged first: the record and context line exist before the change lands"
+   ]
+  }
+ },
+ "doer_tags": {
+  "now": "the triage owner can do it alone, today, within the lane conditions",
+  "after": "the triage owner can do it once a ruling lands (the action's own, or the pending 'apply a ruled default, owner told' ruling)",
+  "draft": "the triage owner prepares it; the owner lands it (owner's work in flight, a live path, or large)",
+  "owner": "only the owner can do it (a design call, knowledge or an act only they have)"
+ },
+ "people": [
+  "the team",
+  "the owner",
+  "the team",
+  "the team",
+  "the lead",
+  "maker"
+ ],
+ "context_hook": {
+  "status": "tested 2026-10-02, proposed",
+  "file": "runs/triage/context/<component>.md",
+  "import_line": "@../../runs/triage/context/<component>.md in components/<component>/CLAUDE.md",
+  "limits": "last 30 days, at most ~15 one-line entries; structured fields only",
+  "works": "sessions started at the workspace root",
+  "misses": "sessions started inside the component folder"
+ },
+ "routes": {
+  "makers": "cards drafted by the triage owner, dispatched by the lead",
+  "glm": "tests-only and single-file doc cards (decision log 2026-09-17); issue summaries pending the TI-24 (red-test summaries GLM) evaluation",
+  "claude": "everything else; the owner's chains stay on Claude"
+ },
+ "sidecars": {
+  "issue_briefs": "new-workflow-design/builds/atlas/triage/issue-briefs/<component>.json",
+  "action_briefs": "new-workflow-design/builds/atlas/triage/briefs/<action>.md",
+  "drafts": "new-workflow-design/builds/atlas/triage/drafts/<component>/<n>.diff + INDEX.json (ATL-29 (drafted changes))",
+  "decisions": "new-workflow-design/builds/atlas/triage/decisions/<action>.json (ATL-30 (decision option cards))"
+ },
+ "outputs": {
+  "queue_model": "new-workflow-design/builds/atlas/triage/queue/model-components-<date>.json",
+  "page": "(private page)",
+  "runs_home": "runs/triage/atlas/<date>/ (ruled #5; not used yet)"
+ },
+ "cadence": "weekly (proposed); by hand today",
+ "open_gaps": [
+  "the adapter is still inside tools/triage_dryrun.py",
+  "the live-use check for P0",
+  "reopen in SCHEMA §5a",
+  "lane conditions and Option 3 not ruled",
+  "the context hook not ruled; 44 component instructions files to sign",
+  "owner disputes above"
+ ],
+ "blocked_by": "a card awaiting approval, a pending decision, or nothing (the team 'ok' on #3, 4b36a7a90); filled by the core's cause pass",
+ "refs": {
+  "emits": [
+   "component",
+   "path",
+   "brand",
+   "card",
+   "atlas-issue"
+  ],
+  "related_sources": [
+   "cards (all decks)",
+   "inbox",
+   "PM tasks",
+   "brand folders",
+   "Slack channels (to be determined)"
+  ],
+  "examples": "email-production#1 → component:email-production, brand:brand-b, brand:brand-a → HE-3 (shared brand facts), EP-1 (email writer mini door), SI-3 (offer-bank move)"
+ },
+ "pages": {
+  "queue": "(private page)",
+  "approach": "(private page)",
+  "home": "components/triage/"
+ }
+}

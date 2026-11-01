@@ -1,0 +1,109 @@
+{
+ "element": "doctrine",
+ "asset": "sophistication",
+ "source": "components/marketing-doctrine/frameworks.json",
+ "enforced_by": "the video teardown, the second door",
+ "note": null,
+ "rows": [
+  {
+   "id": "stage-1",
+   "name": "First in the market",
+   "what": "Nothing — no one has made this claim here before.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "stage": 1,
+    "lead_with": "The plain claim, stated simply and with no embellishment."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stage-2",
+   "name": "The claim is in the market",
+   "what": "The plain claim, now from competitors.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "stage": 2,
+    "lead_with": "The same claim, enlarged to the edge of what is still believable."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stage-3",
+   "name": "Claims exhausted",
+   "what": "Claims pushed to their limit, and it discounts about half of what it hears.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "stage": 3,
+    "lead_with": "A NEW MECHANISM — how the result happens, not what the result is. The mechanism leads the opening."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stage-4",
+   "name": "The mechanism is in the market",
+   "what": "A mechanism, from a competitor.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "stage": 4,
+    "lead_with": "The same mechanism, enlarged, made easier, faster or more complete."
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "stage-5",
+   "name": "Exhausted field",
+   "what": "Every claim and every mechanism, and believes none of them.",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/marketing-doctrine/frameworks.json",
+   "extra": {
+    "stage": 5,
+    "lead_with": "Drop claim and mechanism both and sell on identification alone — the same move as the Unaware level."
+   },
+   "aliases": [],
+   "note": null
+  }
+ ],
+ "dropped": {},
+ "duplicates": [],
+ "off_rule": [],
+ "off_status": [],
+ "unresolved": []
+}

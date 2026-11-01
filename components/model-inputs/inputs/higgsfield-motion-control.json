@@ -1,0 +1,406 @@
+{
+ "model": "higgsfield-motion-control",
+ "medium": "video",
+ "_readme": [
+  "Genjutsu motion control (Higgsfield `hf_mult_motion_control`) is the clip maker for a sale ad built on a swipe reel: the swipe video drives ONLY the movement; the person, the room and the product come from ONE scene still we make first. Deepened 2026-10-27 from the makers' own pages and our 18 Oct learnings; same shape as gpt-image-2.5.json.",
+  "Honest gap: Higgsfield publishes no page for `hf_mult_motion_control` by that name. Its Motion Control is Kling's (Kling 3.0 Motion Control), so the maker rules below are Kling's own guide and Higgsfield's help page for it. Where a limit differs by door it is said so; every row carries its source (a URL or one of our files).",
+  "Draft: nothing here is approved. No brand, product, person or format word appears in this file."
+ ],
+ "label": "Genjutsu motion control",
+ "registry_id": "higgsfield-motion-control",
+ "read": "2026-10-27",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_model_id": "hf_mult_motion_control",
+  "kling_motion_control": "kling3_0_motion_control (mode std or pro; background_source input_image or input_video; character_orientation image or video)"
+ },
+ "sources": [
+  "https://kling.ai/quickstart/motion-control-user-guide",
+  "https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling",
+  "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow",
+  "https://help.runwayml.com/hc/en-us/articles/50280558448147-Creating-with-Kling-3-0-Motion-Control",
+  "https://vercel.com/ai-gateway/models/kling-v3.0-motion-control/api",
+  "[ours] tools/video-production/VIDEO-RULINGS.md V38 to V41",
+  "[ours] tools/video-production/SHOT-ROUTES.md",
+  "[ours] components/model-inputs/VIDEO-PATH-damon.md (baseline rule, the owner 2026-10-27)"
+ ],
+ "limits": {
+  "duration_seconds": [
+   3,
+   30
+  ],
+  "max_images": 1,
+  "max_videos": 1,
+  "image_formats": [
+   "jpg",
+   "jpeg",
+   "png",
+   "webp"
+  ],
+  "max_image_mb": 10,
+  "min_image_edge_px": "340 (Kling guide, video: short edge at least 340, long edge up to 3850); 720 on the ComfyUI door; 300 short edge on Kling's own character-image rule",
+  "video_formats": [
+   "mp4",
+   "mov",
+   "webm",
+   "m4v"
+  ],
+  "max_video_mb": 100,
+  "reference_video_seconds": "3 to 30 (Kling); 30 only when the character follows the VIDEO, 10 when it follows the IMAGE (ComfyUI, Runway)",
+  "output_length": "equals the reference video's length; if the motion is fast or complex it can come back shorter, never under 3 s of continuous motion extracted, and the credits are not refunded (Kling)",
+  "resolutions": [
+   "480p",
+   "720p",
+   "1080p"
+  ],
+  "kling_motion_control": {
+   "mode": [
+    "std",
+    "pro"
+   ],
+   "background_source": [
+    "input_image",
+    "input_video"
+   ],
+   "character_orientation": [
+    "video",
+    "image"
+   ]
+  },
+  "output_shape": "comes back at the stills' own shape (834x1112, 3:4, from a 4:5 still): scale it back, never crop (a crop left the original caption peeking out) (ours, 18 Oct)",
+  "price_credits_per_second": "Kling 3.0 Standard 9, Professional 12; Kling 2.6 Standard 5, Professional 8 (Kling's own door; Higgsfield bills in its credits)",
+  "house": {
+   "resolution": "480p, upscaled locally",
+   "aspect": "9:16 from the jump (the scene still is made 9:16, the swipe is 9:16)",
+   "person": "the cast member's BASELINE built into a scene still (headshot, look, details, expressions); never the master (the owner, 2026-10-27)",
+   "orientation": "video (follow the swipe's movement and camera)"
+  },
+  "never_send_stems": [
+   "master"
+  ],
+  "video_seconds_range": [
+   3,
+   30
+  ]
+ },
+ "qualities": [
+  "std",
+  "pro",
+  "480p",
+  "720p",
+  "1080p"
+ ],
+ "inputs": [
+  {
+   "name": "image_references",
+   "what": "The ONE scene still: the person from her baseline, standing in her room, the real product in the frame. It is both the character and the world.",
+   "allowed": "one picture (jpg, png or webp, under 10 MB); whole body and head visible; arms and hands visible; room to move",
+   "we_send": "the approved scene still made 9:16 on GPT Image 2.5 from the BASELINE (headshot, look, details, expressions) + her room + the real product photo; never the master, never a studio sheet",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide",
+    "https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling",
+    "components/model-inputs/VIDEO-PATH-damon.md"
+   ]
+  },
+  {
+   "name": "video_references",
+   "what": "The swipe video whose movement is copied: timing, gesture, expression and (in video orientation) camera move.",
+   "allowed": "one video, 3 to 30 s, mp4/mov/webm/m4v under 100 MB, short edge at least 340 px, one continuous shot, one person",
+   "we_send": "the swipe's one clean shot cut on the frame map's boundaries, 9:16",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide",
+    "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow"
+   ]
+  },
+  {
+   "name": "character_orientation",
+   "what": "Whether the output follows the video's orientation and camera or the still's.",
+   "allowed": "video (up to 30 s; best for whole-body action) or image (up to 10 s; best for portraits with camera moves set in words)",
+   "we_send": "video: the swipe's movement and camera are the point",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow",
+    "https://kling.ai/quickstart/motion-control-user-guide"
+   ]
+  },
+  {
+   "name": "mode / tier",
+   "what": "Standard (about 720p) for tests, Professional (1080p) for fast hands and finer detail.",
+   "allowed": "std or pro",
+   "we_send": "std for the first take; pro only for a shot with fast hands that failed on std",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow",
+    "https://kling.ai/quickstart/motion-control-user-guide"
+   ]
+  },
+  {
+   "name": "resolution",
+   "what": "Output size tier on the Higgsfield door.",
+   "allowed": "480p, 720p, 1080p",
+   "we_send": "480p, upscaled locally",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling",
+    "[ours] components/generative-model-house/MODEL-HOUSE.md"
+   ]
+  },
+  {
+   "name": "background_source",
+   "what": "Which input gives the background: the still or the swipe video.",
+   "allowed": "input_image or input_video",
+   "we_send": "input_image: the room is already in our scene still, so the swipe's place never shows",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide",
+    "[ours] tools/video-production/SHOT-ROUTES.md"
+   ]
+  },
+  {
+   "name": "prompt",
+   "what": "Words for the background and details not covered by the motion or the still (an outfit, an added thing, the environment).",
+   "allowed": "free text; the maker gives no length limit",
+   "we_send": "short: keep the still's room and product, no new objects; or empty",
+   "use": "maybe",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide",
+    "https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling"
+   ]
+  },
+  {
+   "name": "keep_original_sound",
+   "what": "Keep the reference video's own sound in the output.",
+   "allowed": "boolean",
+   "we_send": "false: the swipe's sound is not ours; voice and music are laid in at the edit",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow"
+   ]
+  },
+  {
+   "name": "face reference / Element Library (Kling 3.0)",
+   "what": "A separate face binding from clear close-ups (front plus side views).",
+   "allowed": "facial information only; it does NOT carry clothing, hairstyle, makeup or props; binds only when the character's orientation matches the video's",
+   "we_send": "not used: the face comes from the scene still",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide"
+   ]
+  },
+  {
+   "name": "duration",
+   "what": "Length of the clip.",
+   "allowed": "not set by you: it follows the reference video, 3 to 30 s",
+   "we_send": "the swipe shot's own length (about 2 to 5 s per shot), cut to the frame map",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide"
+   ]
+  },
+  {
+   "name": "seed",
+   "what": "Repeat a result.",
+   "allowed": "not documented by the maker for this model",
+   "we_send": "not sent",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide"
+   ]
+  },
+  {
+   "name": "mask / region",
+   "what": "Mark an area to change.",
+   "allowed": "none on this model",
+   "we_send": "not available: a fix is a new still or a new run",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide"
+   ]
+  },
+  {
+   "name": "audio / voice reference",
+   "what": "A voice for lip-sync.",
+   "allowed": "none: motion control copies the swipe's mouth movement, it does not take our line",
+   "we_send": "not available: our line is laid under the clip at the edit",
+   "use": "no",
+   "status": "draft",
+   "source": [
+    "https://kling.ai/quickstart/motion-control-user-guide",
+    "[ours] tools/video-production/SHOT-ROUTES.md"
+   ]
+  },
+  {
+   "name": "aspect ratio",
+   "what": "The picture shape.",
+   "allowed": "not chosen: it follows the still; match the still's and the video's aspect (both 9:16)",
+   "we_send": "9:16 both",
+   "use": "yes",
+   "status": "draft",
+   "source": [
+    "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow"
+   ]
+  }
+ ],
+ "structure": [
+  {
+   "id": "scene-still-first",
+   "rule": "Make the whole scene as ONE still first: the person, her room and the product in the frame. The motion model only moves what the still shows.",
+   "ours": "scene still on GPT Image 2.5, approved by the owner, then motion control",
+   "status": "draft",
+   "source": "components/model-inputs/VIDEO-PATH-damon.md"
+  },
+  {
+   "id": "baseline-not-master",
+   "rule": "The person in the still is built from the cast BASELINE (headshot, look, details, expressions), never the master.",
+   "ours": "swipe_swap_job.py builds the still from c['baseline'] (headshot, look, details, expression)",
+   "status": "draft",
+   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md (the owner 2026-10-27); machine/swipe_swap_job.py"
+  },
+  {
+   "id": "swipe-drives-movement-only",
+   "rule": "The swipe video drives only the movement: timing, gesture, expression and camera. The person, the room and the product do not come from it.",
+   "ours": "video_references = the swipe shot; background_source input_image",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide"
+  },
+  {
+   "id": "still-in-the-shot",
+   "rule": "Build the person inside the shot's own look (same pose, light, contact shadows, depth of field, grain); a studio sheet laid in reads as pasted on. The photo look is the swipe's, never cleaner.",
+   "ours": "scene still prompt carries the swipe's look",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38, V52"
+  },
+  {
+   "id": "body-matches-framing",
+   "rule": "Match the still's framing to the video's: whole body with whole body, half body with half body, close-up with close-up. Same aspect on both.",
+   "ours": "still made 9:16 at the swipe's framing",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow"
+  },
+  {
+   "id": "show-the-limbs",
+   "rule": "The still must show every limb the motion needs, arms and hands included, with clear space around the body for large movement.",
+   "ours": "hands and arms in frame in the scene still",
+   "status": "draft",
+   "source": "https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling ; https://kling.ai/quickstart/motion-control-user-guide"
+  },
+  {
+   "id": "one-person-one-shot",
+   "rule": "One continuous shot, one person, no cuts, camera movement or obstructions in the reference; if two people are present the larger is used. Cut the swipe at its cuts and run one shot at a time.",
+   "ours": "per-shot runs on the frame map's boundaries (V39)",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/VIDEO-RULINGS.md V39"
+  },
+  {
+   "id": "moderate-speed",
+   "rule": "Steady, moderate movement works best. Fast gestures smear in the source and again in the model: blur the source first and check fast hands in QC; use pro for a fast-hands shot.",
+   "ours": "hand check in QC",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/VIDEO-RULINGS.md V38 to V41 (18 Oct)"
+  },
+  {
+   "id": "props-in-the-still-then-checked",
+   "rule": "A prop is carried only if it is in the scene still, and the maker says face binding drops props, so check the product in every clip: whole, same size, not melted. If it did not survive, the product is laid in from the real photo at the edit.",
+   "ours": "machine/product_check.py on the clip",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/SHOT-ROUTES.md"
+  },
+  {
+   "id": "scale-not-crop",
+   "rule": "The result comes back at the still's own shape; scale it back to 9:16, never crop it.",
+   "ours": "finish step",
+   "status": "draft",
+   "source": "[ours] tools/video-production/VIDEO-RULINGS.md (18 Oct)"
+  },
+  {
+   "id": "face-gate",
+   "rule": "Check the face against the baseline before a clip is kept; motion control exists because object swaps kept the original face (9 of 9 swaps kept it, 9 of 9 transfers carried ours).",
+   "ours": "face_gate.py",
+   "status": "draft",
+   "source": "tools/video-production/SHOT-ROUTES.md"
+  },
+  {
+   "id": "props-away-from-hands",
+   "rule": "Plan the blocking before the start frame: where the hands and the held props will move in the swipe. Product props sit on the side away from that path, and the motion words say for every prop the hands pass whether it stays in front of them or behind them, so nothing passes through a prop.",
+   "ours": "swap_bench.motion_transfer words; the start frame's product placement",
+   "status": "draft",
+   "source": "[ours] the owner, Tella review 27 Oct 2026 (AI Video Creative Feedback and Workflow Refinement)"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "master-as-person",
+   "text": "Building the still from the master instead of the baseline.",
+   "status": "draft",
+   "source": "components/model-inputs/VIDEO-PATH-damon.md"
+  },
+  {
+   "id": "studio-backdrop-reference",
+   "text": "A person built on a grey studio backdrop: it reads pasted on.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+  },
+  {
+   "id": "crop-the-output",
+   "text": "Cropping the stretched output: the original caption shows at the edge.",
+   "status": "draft",
+   "source": "tools/video-production/VIDEO-RULINGS.md (18 Oct)"
+  },
+  {
+   "id": "cuts-in-the-reference",
+   "text": "A reference video with cuts, shot changes or camera moves: it can be truncated.",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling"
+  },
+  {
+   "id": "fast-or-obscured-motion",
+   "text": "Overly fast motion or a subject whose body or head is blocked.",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide"
+  },
+  {
+   "id": "crowd-reference",
+   "text": "More than one person in the reference: the largest in frame is used, not the one you meant.",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide"
+  },
+  {
+   "id": "expect-our-line",
+   "text": "Expecting our spoken line from motion control: it copies the swipe's mouth and carries no audio of ours.",
+   "status": "draft",
+   "source": "tools/video-production/SHOT-ROUTES.md"
+  },
+  {
+   "id": "assume-props-survive",
+   "text": "Assuming a prop in the still survives the motion: the maker says face binding drops props; the product is checked in every clip and never drawn.",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/SHOT-ROUTES.md"
+  },
+  {
+   "id": "short-motion",
+   "text": "Under 3 s of continuous motion in the reference: the run fails and the credits are not refunded.",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide"
+  },
+  {
+   "id": "mismatched-framing",
+   "text": "A close-up still with a full-body video (or the reverse), or mismatched aspect ratios.",
+   "status": "draft",
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow"
+  }
+ ]
+}
