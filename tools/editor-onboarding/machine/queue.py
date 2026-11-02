@@ -90,11 +90,7 @@ STOP = {"the", "a", "an", "of", "and", "v1", "v2", "v3", "final"}
 
 # ---------------------------------------------------------------- the Drive --
 def drive_root() -> Path:
-    cs = Path.home() / "Library/CloudStorage"
-    acct = os.environ.get("DRIVE_ACCOUNT")
-    if acct:
-        return cs / f"GoogleDrive-{acct}"
-    return next(iter(sorted(cs.glob("GoogleDrive-*"))), cs / "GoogleDrive")
+    return Path.home() / "no-company-drive"   # Prizm Labs never reaches a company Drive
 
 
 def shared_assets() -> Path:

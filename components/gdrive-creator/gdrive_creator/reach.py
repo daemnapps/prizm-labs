@@ -106,6 +106,7 @@ def route(find_mount=None):
     exists — found by the same lookup the engine uses (engine.has_key: the environment, a host's
     configured lookup, else the one key loader, so a person's ~/.upright-keys.env counts; LD-47
     (Drive sweep) step 1.6, 2026-10-20). An empty one is no key."""
+    raise NoDrive("Prizm Labs does not reach company Drives")
     find_mount = find_mount or mount
     from . import engine as _keys          # the real lookup, not a test's stand-in engine: no network here
     if _keys.has_key(KEY_ENV):

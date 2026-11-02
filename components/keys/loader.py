@@ -57,7 +57,7 @@ MANAGED = "~/.workflow-worker.env"
 NO_FALLBACK_ENV = "KEYS_NO_FALLBACK"
 # TEMPORARY (Track A): the old locations, read in this order. "keychain" is
 # the ~/.daemn/daemn_keys.py helper, used only when that file exists.
-FALLBACK = ("keychain", "~/.daemn/keys.env", "~/.apify.env", "~/.gemini.env")
+FALLBACK = ("keychain",)
 KEYCHAIN_DIR = "~/.daemn"
 # Step 2: the repo's own .env (components/keys/loader.py -> repo root).
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -115,6 +115,11 @@ def _keychain(names):
         import daemn_keys
     except Exception:
         return None
+    # Personal keys only, never a company key: no fallback to a shared name.
+    own = ("TELLA_API_KEY", "ELEVENLABS_API_KEY", "ADPLEXITY_API_KEY")
+    names = ["PRIZM_META_TOKEN" if n == "META_ADS_TOKEN" else n for n in names]
+    names = [n + "_PERSONAL" for n in names if not n.endswith("_PERSONAL")] + [
+        n for n in names if n.endswith("_PERSONAL") or n.startswith("PRIZM_") or n in own]
     for n in names:
         try:
             v = daemn_keys.key(n)

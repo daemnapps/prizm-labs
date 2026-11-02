@@ -265,7 +265,7 @@ def _attempts(req, ctx, prompt, entry, model_id, t, raw_dir, name, transport, ju
 
 
 def make(req, library=None, purposes_map=None, table=None,
-         transport=None, judge_caller=None, mirror=True, mode="hold"):
+         transport=None, judge_caller=None, mirror=False, mode="hold"):
     """The request, made. Returns a result dict; writes only under `out` and
     the Drive mirror.
 

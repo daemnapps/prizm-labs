@@ -41,11 +41,7 @@ PAID = WS / "lab/damon/swipe-paid"
 
 
 def drive_root() -> Path:
-    cs = Path.home() / "Library/CloudStorage"
-    acct = os.environ.get("DRIVE_ACCOUNT")
-    if acct:
-        return cs / f"GoogleDrive-{acct}"
-    return next(iter(sorted(cs.glob("GoogleDrive-*"))), cs / "GoogleDrive")
+    return Path.home() / "no-company-drive"   # Prizm Labs never reaches a company Drive
 
 
 SA = drive_root() / "Shared drives/Shared Assets"

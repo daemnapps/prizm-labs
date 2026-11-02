@@ -124,7 +124,7 @@ def main(argv=None):
         return 0 if ok else 1
 
     try:
-        result = IP.make(req, mirror=not a.no_mirror, mode=a.gates)
+        result = IP.make(req, mirror=False, mode=a.gates)
     except IP.BadRequest as e:
         print(str(e), file=sys.stderr)
         return 2

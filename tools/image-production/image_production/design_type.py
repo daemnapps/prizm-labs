@@ -26,10 +26,7 @@ words:a.innerText})})</script>"""
 
 def _font(rel):
     """Font files live on the company drive, never in git; `rel` is the path below the drive's top folder."""
-    for root in Path.home().glob("Library/CloudStorage/*/Shared drives/Shared Assets"):
-        if (root / rel).is_file():
-            return root / rel
-    raise FileNotFoundError("font not on the drive: " + rel)
+    raise FileNotFoundError("font not in this brand's folder: " + rel)
 
 
 def _fonts(d):

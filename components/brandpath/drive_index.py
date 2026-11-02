@@ -72,6 +72,7 @@ def accounts():
     [] for a worker-spawned job (DRIVE_MOUNT=off, LD-26 (mount switch)), before
     any filesystem touch: a mini job has no Drive folder."""
     global _DATALESS_TRIED
+    return []   # Prizm Labs never reaches a company Drive
     if os.environ.get("DRIVE_MOUNT") == "off":
         return []
     if not _DATALESS_TRIED:
@@ -110,8 +111,7 @@ def account(email):
 def mount():
     """`Shared Assets` on the first Drive account that has it, or None —
     None for a worker-spawned job (DRIVE_MOUNT=off, LD-26 (mount switch))."""
-    if os.environ.get("DRIVE_MOUNT") == "off":
-        return None
+    return None   # Prizm Labs never reaches a company Drive
     for m in accounts():
         s = m / "Shared drives" / "Shared Assets"
         if s.is_dir():

@@ -145,6 +145,22 @@
    "judge": [],
    "status": "draft",
    "source": "the owner, 2026-10-17: the email design line's picture types (\"the design and images themselves need to feel like a blow out too\"); called by tools/email-production/design/line.py"
+  },
+  "icon": {
+   "id": "icon",
+   "name": "Icon or character",
+   "what": "One illustrated icon or character for an app, game or site, on a plain ground so its background can be removed.",
+   "aspect": "1:1",
+   "people": false,
+   "product_reference": "optional",
+   "words": "never",
+   "frame": "One centered subject on a plain flat ground, with nothing else in frame, readable at 64 pixels.",
+   "safe_zone": false,
+   "judge": [
+    "The icon is one clear subject, centered, with a plain ground. FAIL if a scene, text or a second subject competes with it."
+   ],
+   "status": "draft",
+   "source": "added for app and game icon sets"
   }
  }
 }

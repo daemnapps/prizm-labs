@@ -61,7 +61,7 @@ def _key():
     if k:
         return k
     import daemn_keys
-    return daemn_keys.key("GEMINI_API_KEY")
+    return daemn_keys.key("GEMINI_API_KEY_PERSONAL")
 
 
 def _json(t: str) -> dict:
@@ -166,7 +166,7 @@ def _openai(text: str, as_json: bool, model: str):
         body["response_format"] = {"type": "json_object"}
     req = urllib.request.Request("https://api.openai.com/v1/chat/completions", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json",
-                                          "Authorization": f"Bearer {daemn_keys.key('OPENAI_API_KEY')}"})
+                                          "Authorization": f"Bearer {daemn_keys.key('OPENAI_API_KEY_PERSONAL')}"})
     with urllib.request.urlopen(req, timeout=300) as r:
         t = json.loads(r.read())["choices"][0]["message"]["content"] or ""
     return _json(t) if as_json else t.strip()
