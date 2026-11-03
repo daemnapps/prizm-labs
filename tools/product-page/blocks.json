@@ -1,0 +1,343 @@
+{
+  "version": "2",
+  "about": "The standard blocks of a product page, for any brand, any product and any customer type. Every product page is built from these blocks only, in the order its recipe gives. Each block names its job, the inputs it reads, the customer evidence that decides its words, its rules, its artwork slots and its pass/fail checks. Brand, product and customer specifics are inputs, never part of a block.",
+  "inputs": {
+    "brand": "brands/<brand>/: identity and web tokens (colours, type, spacing, button), offers and guarantee, review app export, competitors.",
+    "product": "brands/<brand>/products/<product>/: facts, parts or ingredients, what is in the box, how it is used, how long it lasts, store title, variants and purchase options.",
+    "avatar": "brands/<brand>/core-avatars/<avatar>/: the customer type this page is written for, and that customer type's language rows. A page has one primary avatar."
+  },
+  "moves": ["keep", "amplify", "add", "refine", "rebuild", "merge", "cut"],
+  "zones": ["buy-area", "description", "below", "page"],
+  "blocks": [
+    {
+      "id": "gallery",
+      "zone": "buy-area",
+      "job": "Show the product, the product in use and a real result before the customer reads a word.",
+      "inputs": ["product facts", "product photos from the picture process", "review photos and videos"],
+      "evidence": "Share of reviews that carry customer photos or video.",
+      "rules": [
+        "The same slots on every product of the brand, in the same order: 1 the product alone, 2 in use, 3 a real customer result, 4 a close-up of the detail that matters, 5 what is in the box, 6 scale (in the hand, on the body, in the room).",
+        "Slot 1 is always the product. Slot 3 is always a real customer photo, never generated.",
+        "Thumbnails load with the page and a tap swaps at once."
+      ],
+      "artwork": ["six slots per product"],
+      "checks": ["slot 1 is the product", "slot 3 is a customer photo with its review id", "no thumbnail loads blank", "same slot order on every product"]
+    },
+    {
+      "id": "proof-line",
+      "zone": "buy-area",
+      "job": "Prove other customers bought it and it worked, before the name.",
+      "inputs": ["review app totals", "results-timeline output"],
+      "evidence": "How often reviews or other customers' results are given as the reason to buy.",
+      "rules": [
+        "One review total and one average for the whole store, the same number everywhere on the site.",
+        "Stars in the brand's accent colour, readable on the page background.",
+        "May add one timing fact from the results timeline."
+      ],
+      "artwork": ["a row of real customer faces or avatars"],
+      "checks": ["the total matches the review app's published count", "the same number on every page", "stars pass contrast on the background"]
+    },
+    {
+      "id": "title",
+      "zone": "buy-area",
+      "job": "Name the product exactly as the store names it.",
+      "inputs": ["store product title"],
+      "evidence": "-",
+      "rules": [
+        "The store's product title, word for word, everywhere (menu, cards, page).",
+        "One size on every product page; one or two lines at most.",
+        "A bundle gets a three-to-five-word line under its name saying what is in it."
+      ],
+      "artwork": [],
+      "checks": ["title equals the store title", "never three lines at phone width", "same size on every product"]
+    },
+    {
+      "id": "who-for",
+      "zone": "buy-area",
+      "job": "Tell the customer in one line that this is for their problem or goal.",
+      "inputs": ["avatar language rows: problem and goal language"],
+      "evidence": "The problems or goals customers say they bought it for, ranked by how often they say them.",
+      "rules": [
+        "One line under the proof line.",
+        "Names the top problems or goals for this product in the customers' own words, most-said first.",
+        "Describes the customer (type, age, situation) only when the avatar's data supports it."
+      ],
+      "artwork": [],
+      "checks": ["every problem or goal named appears in the language rows with its id", "one line at desktop width"]
+    },
+    {
+      "id": "hero-quote",
+      "zone": "buy-area",
+      "job": "Let one customer state the result in their own words.",
+      "inputs": ["reviews"],
+      "evidence": "Reviews that name a time and a result.",
+      "rules": [
+        "One verified review, quoted exactly.",
+        "Prefer a review that names both a time and a result.",
+        "No reviewer line under it."
+      ],
+      "artwork": [],
+      "checks": ["quote matches the review text exactly", "review id recorded"]
+    },
+    {
+      "id": "outcome-chips",
+      "zone": "buy-area",
+      "job": "Four results the customer gets, scannable in a second.",
+      "inputs": ["avatar language rows", "product facts"],
+      "evidence": "What customers were trying to achieve; what they say other products failed at.",
+      "rules": [
+        "Exactly four chips, two columns on every screen size.",
+        "Outcomes only. Specifications belong in the description.",
+        "One icon style for all four."
+      ],
+      "artwork": ["one icon per outcome, one drawn set"],
+      "checks": ["four chips", "no specification numbers in a chip", "each outcome traceable to a language row or product fact"]
+    },
+    {
+      "id": "offer-box",
+      "zone": "buy-area",
+      "job": "Let the customer choose, and know exactly what they get, when, and for how much.",
+      "inputs": ["store variants and purchase options", "brand offers"],
+      "evidence": "Refund, cancellation and objection reasons about price and terms.",
+      "rules": [
+        "Each option: price, the compare-at price crossed out, one savings figure in one style.",
+        "Each option names what ships, and for repeat deliveries what ships next, how often and at what price.",
+        "The best-value option is preselected and flagged.",
+        "Prices are read from the store, never typed."
+      ],
+      "artwork": [],
+      "checks": ["on-screen price equals checkout price for every option", "repeat contents and interval on screen where repeat delivery is offered", "one savings style"]
+    },
+    {
+      "id": "expectation-line",
+      "zone": "buy-area",
+      "job": "Set how soon it works for this product, so the customer does not give up early.",
+      "inputs": ["results-timeline output for this product"],
+      "evidence": "This product's own reviews that state when it worked.",
+      "rules": [
+        "Per product, never one shared sentence.",
+        "Names what customers notice first and when the main result arrives, with the timeline's numbers."
+      ],
+      "artwork": [],
+      "checks": ["different on every product", "every number traceable to the timeline output"]
+    },
+    {
+      "id": "buy-button",
+      "zone": "buy-area",
+      "job": "One action, and the terms around it in plain words.",
+      "inputs": ["store purchase options", "brand web tokens (button)"],
+      "evidence": "Same as offer-box.",
+      "rules": [
+        "One button look on the whole site, from the brand's tokens: one height, one type size, one hover, no movement.",
+        "Under it, for repeat delivery: what repeats, how often, at what price, and how to skip or cancel.",
+        "A one-time option shows its price next to it."
+      ],
+      "artwork": [],
+      "checks": ["adds the chosen option to the cart", "the terms line names contents, interval and price where repeat delivery is offered"]
+    },
+    {
+      "id": "arrival-timeline",
+      "zone": "buy-area",
+      "job": "Show what arrives and what changes on the same dates, up to the guarantee.",
+      "inputs": ["store purchase options", "results-timeline output", "brand guarantee"],
+      "evidence": "Results timeline counts.",
+      "rules": [
+        "Dates: today, each repeat delivery (when offered), the guarantee day.",
+        "On each date: what arrives, and what customers say had changed by then.",
+        "Choosing one delivery removes the repeat steps and keeps the rest."
+      ],
+      "artwork": [],
+      "checks": ["repeat steps disappear on one-time and return on repeat", "every 'changed by then' line traces to the timeline output"]
+    },
+    {
+      "id": "objections",
+      "zone": "buy-area",
+      "job": "Answer the two questions that stop the sale, right under the button.",
+      "inputs": ["avatar language rows: questions and objections", "results-timeline output", "brand guarantee"],
+      "evidence": "Questions customers say the site did not answer, ranked.",
+      "rules": [
+        "The two most-asked unanswered questions, open by default. Where the data agrees, these are 'Will it work for me?' and 'How long until I see it?'.",
+        "Answers use review counts and the guarantee. No claim the brand does not hold."
+      ],
+      "artwork": [],
+      "checks": ["two questions, open", "both are the top two in the ranked questions", "every number in an answer is sourced"]
+    },
+    {
+      "id": "description",
+      "zone": "description",
+      "job": "What it is, how it works, what the customer gets.",
+      "inputs": ["product facts", "avatar language rows: how it feels or performs, what they like"],
+      "evidence": "How customers describe it after use; what they like most.",
+      "rules": [
+        "Capitalised headline, one paragraph, the sub-head 'WHAT YOU GET', bullets, one closing line.",
+        "The paragraph: what it is, how it works, what the customer notices first, in customers' words.",
+        "One bullet style. Each specification says what it does for the customer.",
+        "Closing line: what is in the box and how long it lasts. One figure for each across the page."
+      ],
+      "artwork": [],
+      "checks": ["five parts in this order", "one bullet style", "figures match the FAQ and the chips"]
+    },
+    {
+      "id": "how-to-use",
+      "zone": "description",
+      "job": "How much, when, how long it takes.",
+      "inputs": ["product facts", "use-steps"],
+      "evidence": "How-to-use questions customers say the site did not answer.",
+      "rules": ["Three lines at most: amount or setting, when, time it takes.", "Names what to use it with when customers ask that."],
+      "artwork": [],
+      "checks": ["three lines or fewer", "matches use-steps"]
+    },
+    {
+      "id": "tabs",
+      "zone": "description",
+      "job": "The details the customer checks before paying.",
+      "inputs": ["product facts (materials, ingredients, specifications)", "shipping facts", "brand guarantee"],
+      "evidence": "What customers would change about the buying experience.",
+      "rules": ["The same tabs in the same order on every product: what it is made of (when relevant), shipping, the guarantee.", "Shipping states real ship and delivery times."],
+      "artwork": [],
+      "checks": ["same order on every product", "no tab about another product"]
+    },
+    {
+      "id": "problems-people",
+      "zone": "below",
+      "job": "The customer picks their problem or goal and sees real customers who had it, how long it took, and their photo.",
+      "inputs": ["reviews with photos", "results-timeline output"],
+      "evidence": "Reviews with photos and a stated time.",
+      "rules": ["One tab per top problem or goal from who-for.", "Each customer: first name, how long it took, their words, their own review photo."],
+      "artwork": ["three real customer photos per tab"],
+      "checks": ["every photo comes from its review", "every customer shows a time"]
+    },
+    {
+      "id": "results-timeline",
+      "zone": "below",
+      "job": "Show when it works, in stages, from the customers' own reviews.",
+      "inputs": ["reviews", "scripts/review_timeline.py output"],
+      "evidence": "Every review that states when a change happened.",
+      "rules": [
+        "Stages: day 1, week 1, weeks 2-3, weeks 4-6, weeks 7-12, 3+ months. Drop empty stages.",
+        "Each stage: how many reviews, what most of them said changed, two of their own lines, one customer photo when there is one.",
+        "Per product when the product has enough reviews; otherwise the brand's."
+      ],
+      "artwork": ["one real customer photo per stage"],
+      "checks": ["counts match the script output", "quotes match reviews exactly"]
+    },
+    {
+      "id": "mechanism",
+      "zone": "below",
+      "job": "How it works, against what the customer does now.",
+      "inputs": ["product facts", "avatar language rows: current solutions"],
+      "evidence": "'How does it work' questions; the alternatives customers name.",
+      "rules": ["One comparison: this product against what the customer uses now, yes or no per row.", "Only for products that work by a mechanism the customer cannot see."],
+      "artwork": ["one diagram or close-up"],
+      "checks": ["every row is a product fact"]
+    },
+    {
+      "id": "inside",
+      "zone": "below",
+      "job": "What it is made of and what each part does for the customer.",
+      "inputs": ["product facts: parts, materials or ingredients"],
+      "evidence": "Questions about what is in it.",
+      "rules": ["One section only, never a second one on the same parts.", "Three to six hero parts, each with what it does for the customer; the full list behind a link or tab."],
+      "artwork": ["one image per hero part; the product's 3D model when the brand has one"],
+      "checks": ["appears once on the page", "every claim is in the product facts"]
+    },
+    {
+      "id": "videos",
+      "zone": "below",
+      "job": "Let the customer watch it work and hear other customers.",
+      "inputs": ["creator and customer footage", "brand demo video"],
+      "evidence": "Other customers' results as a reason to buy.",
+      "rules": ["One video section: demo first, then customer and creator videos.", "Each tile: a poster frame, the person's name, what changed."],
+      "artwork": ["a poster frame for every tile"],
+      "checks": ["no tile without a poster", "one video section on the page"]
+    },
+    {
+      "id": "use-steps",
+      "zone": "below",
+      "job": "How it is used, in steps, with time per step.",
+      "inputs": ["product facts", "the products used together"],
+      "evidence": "Ease of use as a reason customers like it.",
+      "rules": ["One step per action (or per product when products are used together), each with its time.", "Real use photos."],
+      "artwork": ["one real use photo per step"],
+      "checks": ["steps match how-to-use"]
+    },
+    {
+      "id": "set-contents",
+      "zone": "below",
+      "job": "For a bundle: what each product in it does, with a link to it.",
+      "inputs": ["product facts of each product in the bundle"],
+      "evidence": "-",
+      "rules": ["One card per product: name, role, three to five hero parts, a button to its page."],
+      "artwork": ["one product image per card"],
+      "checks": ["every card links to its product page", "names equal store titles"]
+    },
+    {
+      "id": "pairing",
+      "zone": "below",
+      "job": "Add the one product that completes this one, in one tap.",
+      "inputs": ["store variants", "brand offers"],
+      "evidence": "Which products customers buy together.",
+      "rules": ["Heading and button say it is added to this product.", "The offer-box price look.", "The button adds this product (chosen option) and the pairing together."],
+      "artwork": ["one product image inside its frame"],
+      "checks": ["one tap adds both items", "same price look as the offer box"]
+    },
+    {
+      "id": "guarantee",
+      "zone": "below",
+      "job": "Remove the risk.",
+      "inputs": ["brand guarantee"],
+      "evidence": "-",
+      "rules": ["The brand's one guarantee wording everywhere.", "Lead with the length and what the customer gets.", "No other guarantee wording on the page."],
+      "artwork": [],
+      "checks": ["one guarantee wording on the whole page"]
+    },
+    {
+      "id": "faq",
+      "zone": "below",
+      "job": "Answer what is left.",
+      "inputs": ["avatar language rows: questions", "product facts"],
+      "evidence": "Questions customers say the site did not answer, ranked.",
+      "rules": ["One heading on every product.", "The same first questions in the same order on every product, taken from the ranked questions (typically: will it work for me, how long, how to use, what to use it with, is it right for my type or size, how long it lasts), then product-specific ones.", "No answer contradicts the page."],
+      "artwork": [],
+      "checks": ["same first questions on every product", "no contradiction with chips, description or tabs"]
+    },
+    {
+      "id": "reviews",
+      "zone": "below",
+      "job": "Every review, last.",
+      "inputs": ["review app"],
+      "evidence": "-",
+      "rules": ["The review app's block, showing the store total."],
+      "artwork": [],
+      "checks": ["total equals proof-line"]
+    },
+    {
+      "id": "page-look",
+      "zone": "page",
+      "job": "One look on every product page.",
+      "inputs": ["brand web tokens"],
+      "evidence": "Measured against the best competitor pages with scripts/measure_page.js.",
+      "rules": [
+        "One background, at most one contrasting band.",
+        "About twelve text styles; one title size; one button; one accent colour; all from the brand's tokens.",
+        "One section spacing (top/bottom and sides), desktop and phone, from the brand's tokens.",
+        "The whole offer box sits in the first screen on desktop.",
+        "One list-marker style for every list."
+      ],
+      "artwork": [],
+      "checks": ["text styles counted by scripts/measure_page.js at or under the target", "no sideways scroll at 390 wide", "offer box bottom above the fold at 1200 x 800", "every colour, size and spacing comes from the brand tokens"]
+    }
+  ],
+  "kinds": {
+    "single": "One product, used up or used once, that works without a hidden mechanism.",
+    "single-mechanism": "One product that works by a mechanism the customer cannot see (a tool, a device, a delivery system, an active process).",
+    "bundle-mechanism": "Several products sold together, one of which works by a hidden mechanism.",
+    "bundle": "Several products sold together, none with a hidden mechanism; a pairing completes it."
+  },
+  "recipes": {
+    "single": ["gallery", "proof-line", "title", "who-for", "hero-quote", "outcome-chips", "offer-box", "expectation-line", "buy-button", "arrival-timeline", "objections", "description", "how-to-use", "tabs", "problems-people", "results-timeline", "inside", "videos", "use-steps", "guarantee", "faq", "reviews"],
+    "single-mechanism": ["gallery", "proof-line", "title", "who-for", "hero-quote", "outcome-chips", "offer-box", "expectation-line", "buy-button", "arrival-timeline", "objections", "description", "how-to-use", "tabs", "problems-people", "results-timeline", "mechanism", "inside", "videos", "use-steps", "guarantee", "faq", "reviews"],
+    "bundle-mechanism": ["gallery", "proof-line", "title", "who-for", "hero-quote", "outcome-chips", "offer-box", "expectation-line", "buy-button", "arrival-timeline", "objections", "description", "how-to-use", "tabs", "problems-people", "results-timeline", "mechanism", "inside", "set-contents", "videos", "use-steps", "guarantee", "faq", "reviews"],
+    "bundle": ["gallery", "proof-line", "title", "who-for", "hero-quote", "outcome-chips", "offer-box", "expectation-line", "buy-button", "arrival-timeline", "objections", "description", "how-to-use", "tabs", "problems-people", "results-timeline", "set-contents", "pairing", "videos", "use-steps", "guarantee", "faq", "reviews"]
+  }
+}
