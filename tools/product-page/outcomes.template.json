@@ -1,0 +1,6 @@
+{
+  "it worked": "work(s|ed|ing)|result|differen|improv|better|gone|fixed|solved",
+  "first feel": "feel(s|ing)? (great|good|amazing|better|different)|love (it|how)",
+  "others noticed": "compliment|people (have )?(said|notic|ask)|asked me|noticed|told me",
+  "<the product's main result, in customers' words>": "<words from the avatar's language rows, joined with |>"
+}

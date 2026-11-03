@@ -28,6 +28,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Email | Marketing calendar | `components/marketing-calendar/` |
 | Email | Email production | `tools/email-production/` |
 | Pages | Page builder | `tools/offer-workspaces/page/` |
+| Pages | Product page standard | `tools/product-page/` |
 | Launch | Ad handoff | `components/ad-handoff/` |
 | Launch | Meta upload | `components/meta-upload/` |
 | Launch | Social distribution | `tools/social-distribution/` |
