@@ -1,7 +1,7 @@
 # Prompts
 
 Same convention as the teardown machine: one folder per stage, one file per
-version, `stageN-name-vN-damon.md`, superseded versions in `archive/`.
+version, `stageN-name-vN-owner.md`, superseded versions in `archive/`.
 
 Two chains have prompts in here. **The cinema chain is the live one.**
 
@@ -16,10 +16,10 @@ the brief's own counts.
 | stage | prompt | what it makes |
 |---|---|---|
 | 0 · Read the brief | `stage-0-read-brief/` *(mechanical, no model)* | the plan, covering every item the brief asks for |
-| 1 · Openings | `stage-1-openings/stage1-openings-v1-damon.md` | one hook per opening in the brief |
-| 2 · A-roll | `stage-2-aroll/stage2-aroll-v2-damon.md` | the talking spine |
-| 3 · B-roll | `stage-3-broll/stage3-broll-v1-damon.md` | the cutaways |
-| 4 · Offer cards | `stage-4-offer/stage4-offer-v2-damon.md` | price and guarantee on screen |
+| 1 · Openings | `stage-1-openings/stage1-openings-v1-owner.md` | one hook per opening in the brief |
+| 2 · A-roll | `stage-2-aroll/stage2-aroll-v2-owner.md` | the talking spine |
+| 3 · B-roll | `stage-3-broll/stage3-broll-v1-owner.md` | the cutaways |
+| 4 · Offer cards | `stage-4-offer/stage4-offer-v2-owner.md` | price and guarantee on screen |
 
 **These files are the product.** The shape a prompt takes is what makes the
 output consistent, so it lives here as a readable file rather than as a string
@@ -61,9 +61,9 @@ pasting the variables itself:
 
 | stage | prompt | used at |
 |---|---|---|
-| 1 · Cast | `stage-1-cast/stage1-character-sheet-v2-damon.md` | before any still — clone from the source frame where the person is on film |
-| 3 · Scene prompts | `stage-3-scenes/stage3-scene-prompts-v4-damon.md` | the stills; carries the product lock, the post list, the result budget, the section/emotion/outcome and the lines covered |
-| 5 · QC | `stage-5-qc/stage5-qc-v2-damon.md` | every still, mode `glance`; `deep` on product-hero frames; problems classed fixable / ceiling |
-| 6 · Handoff | `stage-6-handoff/stage6-handoff-v3-damon.md` | the editor pack, with line coverage, the post list, the loop, the scene arc, the receipt and the name |
+| 1 · Cast | `stage-1-cast/stage1-character-sheet-v2-owner.md` | before any still — clone from the source frame where the person is on film |
+| 3 · Scene prompts | `stage-3-scenes/stage3-scene-prompts-v4-owner.md` | the stills; carries the product lock, the post list, the result budget, the section/emotion/outcome and the lines covered |
+| 5 · QC | `stage-5-qc/stage5-qc-v2-owner.md` | every still, mode `glance`; `deep` on product-hero frames; problems classed fixable / ceiling |
+| 6 · Handoff | `stage-6-handoff/stage6-handoff-v3-owner.md` | the editor pack, with line coverage, the post list, the loop, the scene arc, the receipt and the name |
 
 The v1 files are in each stage's `archive/`.

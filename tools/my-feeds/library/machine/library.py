@@ -36,8 +36,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
 WS = Path(os.environ.get("AI_WORKSPACE", Path.home() / "Projects/workspace"))
-ORG = WS / "lab/damon/swipe-organic"
-PAID = WS / "lab/damon/swipe-paid"
+ORG = WS / "lab/owner/swipe-organic"
+PAID = WS / "lab/owner/swipe-paid"
 
 
 def drive_root() -> Path:
@@ -45,9 +45,9 @@ def drive_root() -> Path:
 
 
 SA = drive_root() / "Shared drives/Shared Assets"
-FEEDS_DRIVE = SA / "lab/damon/swipe-organic/records/avatar-feeds"
-VIDEOS_DRIVE = SA / "lab/damon/swipe-organic/records/swipe-videos"
-PAID_DRIVE = SA / "lab/damon/swipe-paid"
+FEEDS_DRIVE = SA / "lab/owner/swipe-organic/records/avatar-feeds"
+VIDEOS_DRIVE = SA / "lab/owner/swipe-organic/records/swipe-videos"
+PAID_DRIVE = SA / "lab/owner/swipe-paid"
 INDEX = SA / "SWIPE LIBRARY.md"
 
 
@@ -170,11 +170,11 @@ def index_md(F, V, FE, SW) -> str:
          f"| **Organic formats** — the structures under posts that worked | {len([k for k in by_fmt if not k.startswith('one-off')])} library formats in use of {len(F)} · {len([k for k in by_fmt if k.startswith('one-off')])} one-offs | "
          "public pack: github.com/daemnapps/prizm-labs → tools/my-feeds/organic |",
          f"| **Swipe videos** — every post torn down, filed under its format | {len(torn)} torn down · {len(V) - len(torn)} waiting | "
-         "`lab/damon/swipe-organic/records/swipe-videos/<code>/` — `video.mp4`, `handoff.md` (the rebuild sheet), `sheet.jpg` (the beats) |",
+         "`lab/owner/swipe-organic/records/swipe-videos/<code>/` — `video.mp4`, `handoff.md` (the rebuild sheet), `sheet.jpg` (the beats) |",
          f"| **My Feeds** — one feed per sub-avatar: what that person actually watches | {len(FE)} feeds · {sum(f['kept'] for f in FE):,} posts kept of {sum(f['total'] for f in FE):,} seen | "
-         "`lab/damon/swipe-organic/records/avatar-feeds/<feed>/FEED.md` |",
+         "`lab/owner/swipe-organic/records/avatar-feeds/<feed>/FEED.md` |",
          f"| **Paid sweeps** — every competitor's live ads, blocked by angle | {len(SW)} brands · {sum(s['ads'] for s in SW):,} ads · {sum(s['angles'] for s in SW)} angles | "
-         "`lab/damon/swipe-paid/<brand>/angles/NN_<angle>/` — video, photos, page captures · public pack: tools/my-feeds/paid |",
+         "`lab/owner/swipe-paid/<brand>/angles/NN_<angle>/` — video, photos, page captures · public pack: tools/my-feeds/paid |",
          "", "## My Feeds", "",
          "A feed is one person's scroll — entertainment first, the educational lane beside it, nothing that sells. "
          "The feed name is `<brand>--<sub-avatar>`. Open the FEED.md; every row links to the post.", "",

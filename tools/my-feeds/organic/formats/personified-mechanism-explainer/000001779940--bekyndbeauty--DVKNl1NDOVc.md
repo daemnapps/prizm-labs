@@ -51,6 +51,6 @@ rim light from behind the columns, cinematic render, no on-screen text.
 
 **Text overlay pattern:** one lowercase clause per beat, centre-low, white with a soft shadow, spoken by whoever is on screen and never completing a sentence —
 
-`"{consequence of the problem}"` → `"{the old product category}"` → `"I'm {ingredient name}"` → `"but I {differentiator}"` → `"I {benefit}"` → `"inside me"`
+`"{consequence of the problem}"` → `"{the old widget category}"` → `"I'm {ingredient name}"` → `"but I {differentiator}"` → `"I {benefit}"` → `"inside me"`
 
 **Reference:** https://www.instagram.com/p/DVKNl1NDOVc/

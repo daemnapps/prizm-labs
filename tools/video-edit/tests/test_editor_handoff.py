@@ -92,7 +92,6 @@ class Package(unittest.TestCase):
         sheet = (self.tmp / "out" / "handoff.md").read_text()
         self.assertIn(f"`{label}/returned/`", sheet)
         self.assertIn("`b_p_brief-0900-control.mp4`", sheet)
-        self.assertNotIn("ahmed", sheet.lower())
         self.assertTrue((self.tmp / "out" / "returned" / "README.md").is_file())
 
     def test_a_folder_another_tool_staged_is_not_written_over(self):

@@ -363,7 +363,7 @@ footer{color:var(--dim);font-size:13px;font-family:var(--mono);
       library — 308 emails, January 2025 to July 2026. <b style="color:var(--ink)">29
       of 32 citations land on the exact email they name.</b> Two of the misses are
       just shorthand ("King's Month" for "Happy King's Month: Let's Celebrate Your
-      FLEX Results"). One is genuinely wrong: <code>fathers-day</code> cites
+      WIDGET Results"). One is genuinely wrong: <code>fathers-day</code> cites
       21 June 2026, and that day's send was "<brand> is Pharmacist Formulated By My
       Dad" — a Father's Day email, but not the one named.</p>
 
@@ -396,7 +396,7 @@ footer{color:var(--dim);font-size:13px;font-family:var(--mono);
         tell me what's wrong with it. The <i style="font-style:normal;font-family:var(--mono);font-size:12px;background:var(--acc-bg);color:var(--acc);border-radius:4px;padding:1px 5px">{braces}</i>
         are where the brand's own record gets poured in before it's sent.</p>
     </div>
-    <details class="pr"><summary><span class="pn">Layer 3</span><span class="ph">Who is live<em>Decides which segments and avatars get spoken to this month, and which rest.</em></span><span class="pf">cal3-cells-v7-damon.md</span></summary><div class="inputs"><span class="il">Reads</span><i>{today}</i><i>{month}</i><i>{state}</i><i>{skeleton}</i></div><pre>Today is: {today}
+    <details class="pr"><summary><span class="pn">Layer 3</span><span class="ph">Who is live<em>Decides which segments and avatars get spoken to this month, and which rest.</em></span><span class="pf">cal3-cells-v7-owner.md</span></summary><div class="inputs"><span class="il">Reads</span><i>{today}</i><i>{month}</i><i>{state}</i><i>{skeleton}</i></div><pre>Today is: {today}
 The month being planned: {month}
 Here is the state of the brand, assembled from its own record: {state}
 Here is the month's dated skeleton — every public holiday and cultural moment that actually lands in it, with its real dates: {skeleton}
@@ -505,7 +505,7 @@ sends three weeks after Labor Day.
 Then **THE CALL, READ ALOUD** — four lines or fewer: which segments are live
 and which rest, what the split tests will teach, and what the record says
 about serving the live ones.
-</pre><div class="prnote">Its answer becomes <code>cells.json</code>, which layer 4 anchors against and layer 5 plans around. Every other layer inherits who is live from here — so this is the one place where getting the words wrong costs the whole month.</div></details><details class="pr"><summary><span class="pn">Layer 5</span><span class="ph">The concepts<em>Fills in everything the holidays and moments did not already claim.</em></span><span class="pf">cal5-concepts-v1-damon.md</span></summary><div class="inputs"><span class="il">Reads</span><i>{today}</i><i>{month}</i><i>{skeleton}</i><i>{anchored}</i><i>{cells}</i><i>{types}</i><i>{products}</i><i>{offers}</i><i>{coldness}</i><i>{findings}</i></div><pre>Today is: {today}
+</pre><div class="prnote">Its answer becomes <code>cells.json</code>, which layer 4 anchors against and layer 5 plans around. Every other layer inherits who is live from here — so this is the one place where getting the words wrong costs the whole month.</div></details><details class="pr"><summary><span class="pn">Layer 5</span><span class="ph">The concepts<em>Fills in everything the holidays and moments did not already claim.</em></span><span class="pf">cal5-concepts-v1-owner.md</span></summary><div class="inputs"><span class="il">Reads</span><i>{today}</i><i>{month}</i><i>{skeleton}</i><i>{anchored}</i><i>{cells}</i><i>{types}</i><i>{products}</i><i>{offers}</i><i>{coldness}</i><i>{findings}</i></div><pre>Today is: {today}
 The month being planned: {month}
 Here is the month's dated skeleton — the public holidays and cultural moments that actually land in it, with real dates: {skeleton}
 Here are the sends ALREADY ANCHORED to those dates by code — the holiday arcs, day by day, per live segment. They exist; do not propose them again: {anchored}
@@ -884,7 +884,7 @@ evidence, which never-sent types get their first outing, and anything left
     </div>
 
     <div class="tree">
-      <div class="tt">lab/damon/marketing-calendar/</div>
+      <div class="tt">lab/owner/marketing-calendar/</div>
       <div class="tr"><span class="f">machine/chain.py</span><span class="c">the nine layers, declared. <b>The one copy.</b></span></div>
       <div class="tr"><span class="f">machine/calendar.py</span><span class="c">runs them, in order</span></div>
       <div class="tr"><span class="f">machine/board.py · serve.py</span><span class="c">the review page and the server behind it</span></div>
@@ -991,7 +991,7 @@ evidence, which never-sent types get their first outing, and anything left
   </section>
 
   <footer>
-    lab/damon/marketing-calendar · 9 layers · 2 prompts · runs on any brand
+    lab/owner/marketing-calendar · 9 layers · 2 prompts · runs on any brand
   </footer>
 
 </div>

@@ -48,7 +48,7 @@ class DriveMount(unittest.TestCase):
         self.assertFalse(P.NO_MOUNT.exists())
 
     def test_every_drive_path_hangs_off_one_root(self):
-        self.assertEqual(P.DRIVE, P.SHARED_ASSETS / "lab" / "damon")
+        self.assertEqual(P.DRIVE, P.SHARED_ASSETS / "lab" / "owner")
         self.assertEqual(SI.DRIVE, swipe_home.root("paid"))
         self.assertEqual(G.ELEMENTS, P.SHARED_ASSETS / "brands")
         self.assertEqual(P.DRIVE_MOUNTED, P.SHARED_ASSETS != P.NO_MOUNT)
@@ -76,7 +76,7 @@ class DriveMount(unittest.TestCase):
 
     def test_old_lab_home_never_read(self):
         with tempfile.TemporaryDirectory() as t:
-            got = self._stills(Path(t), "lab/damon/swipe-paid/zz-swipe/blocks/01_x/photos",
+            got = self._stills(Path(t), "lab/owner/swipe-paid/zz-swipe/blocks/01_x/photos",
                                ("a.png", "b.jpg"))
             self.assertEqual(got, [])
 
@@ -92,7 +92,7 @@ class DriveMount(unittest.TestCase):
         self.assertEqual(err.getvalue().count(P.NO_MOUNT_NOTE), 1)
 
     def test_no_account_typed(self):
-        account = "GoogleDrive-" + "damon@"          # split, so this file is not a hit
+        account = "GoogleDrive-" + "owner@"          # split, so this file is not a hit
         typed = {str(f.relative_to(LANE)) for f in LANE.rglob("*.py")
                  if account in f.read_text(errors="replace")}
         # tools/variations.py is SI-34 (no Drive delete)'s; green either way.

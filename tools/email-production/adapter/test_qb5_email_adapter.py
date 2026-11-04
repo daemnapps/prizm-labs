@@ -91,7 +91,7 @@ class Report(Base):
         self.assertEqual(ents[self.eid("fx-held")]["held"], ["a price the offer bank does not sell"])
         self.assertEqual([k for k, e in ents.items() if e["held"]], [self.eid("fx-held")])
         self.assertEqual({k: e.get("approved_by") for k, e in ents.items() if e.get("approved_by")},
-                         {self.eid("fx-eve"): "eve"})
+                         {self.eid("fx-designer"): "designer"})
         # live is unreachable, and the report says so
         self.assertNotIn("live", {e["observed_stage"] for e in ents.values()})
         self.assertIn("unreachable", out["live"])
@@ -135,10 +135,10 @@ class Detail(Base):
             "sections": [{"i": 0, "top": 0.0, "bottom": 100.0}, {"i": 1, "top": 100.0, "bottom": 600.0},
                          {"i": 2, "top": 600.0, "bottom": 700.0}],
             "from": sha(run / "design" / "email.json"), "html": sha(run / "klaviyo" / "email.html")}))
-        eve = self.run_dir("fx-eve")
-        (eve / "klaviyo" / "layout.json").write_text(json.dumps({
+        designer = self.run_dir("fx-designer")
+        (designer / "klaviyo" / "layout.json").write_text(json.dumps({
             "schema": 1, "height": 1000.0, "sections": [{"i": 0, "top": 0.0, "bottom": 100.0}],
-            "from": "an-older-layout", "html": sha(eve / "klaviyo" / "email.html")}))
+            "from": "an-older-layout", "html": sha(designer / "klaviyo" / "email.html")}))
 
         def boom(*a, **k):
             raise AssertionError("detail called a process or Chrome: %r" % (a[:1],))
@@ -172,7 +172,7 @@ class Detail(Base):
         self.assertEqual(adapter.detail("%s__fx-ready" % BRAND)["id"], self.eid("fx-ready"))
 
     def test_missing_or_stale_layout_gives_null_positions(self):
-        for label in ("fx-checks", "fx-eve"):                      # none, and one from an older layout
+        for label in ("fx-checks", "fx-designer"):                      # none, and one from an older layout
             d = adapter.detail(self.eid(label))
             self.assertIs(d["layout_stale"], True, label)
             self.assertEqual({x["position"] for x in d["parts"]}, {None}, label)

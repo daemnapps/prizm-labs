@@ -22,7 +22,7 @@ Reused from image-production, never copied (components/CLAUDE.md):
   * the prompt file reader — `prompting.latest` / `prompting.body`;
   * the rule `judge.seen` is built on: a judge that did not run is not a pass.
 
-The prompt is `prompts/stage-5-qc/stage5-subject-zone-v1-damon.md` — sent as
+The prompt is `prompts/stage-5-qc/stage5-subject-zone-v1-owner.md` — sent as
 written. `caller(prompt, image_path, entry) -> str` is the seam; the tests
 pass a stub and nothing here opens a socket by itself.
 
@@ -120,7 +120,7 @@ def to_frame(box: dict, frame: dict) -> dict:
 
 
 # a hand box that runs to the picture's own edge is an arm coming into frame — the forearm crosses the
-# zone on that side by nature, and "fixing" it rebuilt a right one-handed FLEX shot as a two-handed one
+# zone on that side by nature, and "fixing" it rebuilt a right one-handed WIDGET shot as a two-handed one
 # (2026-10-09). The hand still has to sit inside on every side that does not reach the edge.
 EDGE = 3.0
 
@@ -138,7 +138,7 @@ def outside(box: dict, zone: dict, tol: float = TOLERANCE) -> bool:
 
 
 # A ZONE FIX MAY MOVE THE SHOT, NEVER REBUILD IT (2026-10-09). Three times in one night the one fix edit
-# rebuilt a right frame: a one-handed FLEX close-up came back two-handed with a face, a shower close-up came
+# rebuilt a right frame: a one-handed WIDGET close-up came back two-handed with a face, a shower close-up came
 # back a plain portrait with no device, three full-body "before" shots came back as face portraits. A fix
 # whose subjects are not the same kinds, or whose subject grew or shrank past this factor, is not a move.
 SHOT_SCALE = 1.8

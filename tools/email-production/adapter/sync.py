@@ -206,16 +206,16 @@ def rows(brand=None, steps=True):
                          "top": round(top / H, 4), "bottom": round(bot / H, 4),
                          "fields": [{"path": p, "value": v} for p, v in fields(s)], "pictures": pictures(s, run), "ok": i in oks})
         # only a picture problem stops the team; the words and the product are the team's, shown to her (the team, 2026-10-28)
-        held, for_steph = __import__("check").holds(c)
+        held, for_pm = __import__("check").holds(c)
         st = "scheduled" if c.get("scheduled") else "draft" if c.get("klaviyo") else "held" if held else "ready"
         s0 = (c.get("subjects") or [{}])[0]
         row = {"id": "%s__%s" % (run.parent.name, run.name), "brand": run.parent.name, "label": run.name,
                "title": s0.get("subject") or spec.get("subject") or run.name, "subject": s0.get("subject") or spec.get("subject") or "",
                "preview": s0.get("preview") or spec.get("preview") or "", "send_day": c.get("date") or "", "eve_due": c.get("eve_due") or "", "status": st,
-               "held": held, "for_steph": for_steph, "sections": secs, "ratio": round(H / 600, 4),
+               "held": held, "for_pm": for_pm, "sections": secs, "ratio": round(H / 600, 4),
                "layout_stale": LF.stale(run)}
         row["gaps"], words = split_gaps(_gaps(run))
-        row["for_steph"] = for_steph + [("Promise check: %s" if g.get("type") == "promise" else "Part %d · %s: %%s" % (
+        row["for_pm"] = for_pm + [("Promise check: %s" if g.get("type") == "promise" else "Part %d · %s: %%s" % (
             g["section"] + 1, KIND.get(g["type"], g["type"]))) % g["why"] for g in words]
         if steps:
             row["_steps"] = __import__("run_index").index(run)["steps"]

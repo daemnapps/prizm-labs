@@ -25,7 +25,7 @@ from pathlib import Path
 def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
-    The count here was right only while this file sat in lab/damon/. The move
+    The count here was right only while this file sat in lab/owner/. The move
     to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
     high — outside the repo entirely. A marker cannot go quietly wrong the next
     time something moves. AI_WORKSPACE still wins when it names a workspace.
@@ -150,7 +150,7 @@ WEEK = [  # BRAND-A, Sep 20–30 — from the rebuilt calendar; this pass writes
     ("Sun 20", "sep-05", "last-chance", "Lead", "Basics Set", "not this pass — gift-buyer email"),
     ("Mon 21", "sep-06", "content-request", "VIP Customer", "—", "to write"),
     ("Tue 22", "sep-07", "problem-explainer", "Lead", "—", "to write"),
-    ("Wed 23", "sep-08", "bundle", "One-Time Customer", "The Vitals Set", "written · HELD in Klaviyo — sold a size the store dropped"),
+    ("Wed 23", "sep-08", "bundle", "One-Time Customer", "The Starter Set", "written · HELD in Klaviyo — sold a size the store dropped"),
     ("Thu 24", "sep-09", "affiliate-feature", "Churned", "—", "can't write — no format on file"),
     ("Fri 25", "sep-10", "myth-correction", "Lead", "—", "not this pass — glow-up email"),
     ("Sat 26", "sep-11", "guarantee", "One-Time Customer", "none — the type needs one", "to write"),
@@ -166,7 +166,7 @@ KNOBS = [
     ("Put spice and awareness into step 3", "The tone dials from the marketing doctrine (humour, delivery, pacing, register) and the awareness guidance, bound into the main writing step, then 5 and 7.", "tune"),
     ("Require a preview line", "Step 5's main subject line can come back with no preview.", "tune"),
     ("Drop step 9", "A hand-build brief nothing reads any more. One fewer call per email.", "tune"),
-    ("Product files list sizes that aren't for sale", "The Sep 23 email sold '2 x The Vitals Set, $99.99' — a size the store removed. The product file lists every size ever made; the writer took it from there. The price check now stops it reaching Klaviyo; the product file should mark what's live.", "broken"),
+    ("Product files list sizes that aren't for sale", "The Sep 23 email sold '2 x The Starter Set, $99.99' — a size the store removed. The product file lists every size ever made; the writer took it from there. The price check now stops it reaching Klaviyo; the product file should mark what's live.", "broken"),
     ("Writing in the Control Room", "Add 'write emails' next to plan-month, so a week of emails is one trigger.", "none"),
     ("The old email's nav and footer words", "FIXED in the prompts, to be proven on the next real run: the writer had copied the old email's navigation and footer words into our body, and a typo from its preview line into ours. Step 1 (v2) now files furniture and broken lines under their own headings; step 2 (v2) builds from the message only; later steps never see the furniture.", "new"),
     ("The dry run is free", "FIXED: the dry run used to run step 0 before it stopped, so every check spent a call and left a folder behind. It now stops before any step, reports what only step 0 can know as 'decided at triage', and writes nothing.", "ok"),

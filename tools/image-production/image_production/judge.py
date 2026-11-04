@@ -140,7 +140,7 @@ def google_caller(prompt, img_path, entry, transport=None, key=None):
     if not k:
         raise SystemExit(f"no {entry.get('key')} on this machine — the judge cannot run, "
                          f"so nothing is delivered. Read from the environment, else the "
-                         f"macOS Keychain (service daemn-{entry.get('key')}, account damon).")
+                         f"macOS Keychain (service daemn-{entry.get('key')}, account owner).")
     p = Path(img_path)
     mime = mimetypes.guess_type(p.name)[0] or "image/png"
     payload = {"contents": [{"parts": [

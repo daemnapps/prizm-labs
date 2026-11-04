@@ -8,7 +8,7 @@
    "name": "Storytelling",
    "what": "One named person with one reason, told as a story: who he was before, the turn (he found out it was never his fault), who he is after — the beats are the story's, not a pitch's, and the product enters where the turn happens. Aimed at a buyer who already wants the outcome.",
    "status": "approved",
-   "signed": "damon 2026-09-25 (approved as recommended)",
+   "signed": "owner 2026-09-25 (approved as recommended)",
    "evidence": "the owner 2026-09-19: 'the storytelling ad' — 'storytelling and intent over volume'. Moved from format/video 2026-09-28: it is a video structure (what the beats are), not a format. The 16 Sep 'storytelling' format draft was ruled the same piece as expert-consult on 17 Sep and retired; this row is the structure, not that draft.",
    "why_it_works": "Conscious Bar runs 100,000+ customers off 44 ads because every ad is one person's reason for switching, told in her own words; story and intent do the work volume does for everyone else.",
    "examples": "components/swipe-paid/consciousbar/teardown.md (the swipe); brands/brand-a/story.md (the story block: SPINE · BEFORE · TURN · AFTER, the tellers)",
@@ -21,7 +21,7 @@
    "name": "Holistic healer authority",
    "what": "The claim is carried by an elder practitioner speaking from years of practice, not from a study — the kitchen, not the lab. Calm, unhurried, names ingredients she recognises (turmeric, ginger, chamomile), and the reader answers her rather than being sold to.",
    "status": "approved",
-   "signed": "damon 2026-09-25 (approved as recommended)",
+   "signed": "owner 2026-09-25 (approved as recommended)",
    "evidence": "the owner 2026-09-19: 'the holistic healer authority'. Moved from format/video 2026-09-28: it is how the ad sounds (a delivery style), not a format. Customer receipts: 'holistic doctor every 6 weeks, muscle tests me' (Lynn, 64); 'things a holistic doctor would approve' (language-bank.md).",
    "why_it_works": "Her trust bar is 'can I find this in my kitchen?' and 'would my holistic doctor approve?' — the voice that already has her trust is the one that can make the claim.",
    "examples": "brands/brand-b/story.md — teller 'the kitchen, not the lab — the elder practitioner, with the reader answering' (fits sub-02-clean-only-buyer); Competitor-C block 39, 'a grandma's holistic blog' (components/swipe-paid/competitor-c/…/tried-everything-root-cause-convert/profile.md); the Drive folder 'AI Black Holistic Healer' (43 files, archived — unproven)",
@@ -35,7 +35,7 @@
    "what": "A single photo dressed as someone's own Facebook post — phone-camera framing, the words as a post's caption line, nothing that announces an ad. A flat band top and bottom, a logo, a headline block or a plate kills it. Differs from bare-photo, which carries no words at all.",
    "why_it_works": "It borrows the shape of what she already scrolls; the ad is read as a person before the defence goes up.",
    "status": "approved",
-   "signed": "damon 2026-09-25 (approved as recommended)",
+   "signed": "owner 2026-09-25 (approved as recommended)",
    "examples": "tools/image-production/static/PIPELINE.md (the band ruling: 'a flat bar top and bottom announces a native-looking post as an advertisement'); the owner 2026-09-19: 'a native-looking image on Facebook'",
    "evidence": "Named by the owner 2026-09-19; defined 2026-09-28 from the pipeline's native-post rule and the bare-photo row.",
    "note": "defined by the machine, review pending"
@@ -47,7 +47,7 @@
    "name": "Dated native selfie",
    "what": "A single unretouched native-style selfie with a bare year or date overlaid, the date alone implying a before/after timeline.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
   },
   {
@@ -57,7 +57,7 @@
    "name": "Styled product still",
    "what": "A single photographic product shot in a fully art-directed setting, carrying only a headline overlay and no other graphic device.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
   },
   {
@@ -67,7 +67,7 @@
    "name": "Progression composite",
    "what": "Three or more identical faces or bodies in a row, each altered to show a different stage of change, with a timeline label under each stage.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
   },
   {
@@ -77,7 +77,7 @@
    "name": "Confession hook",
    "what": "A warning icon and a headline admitting a mistake lead into a reveal, with the product below alongside speech-bubble offer badges and a closing guarantee.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
   },
   {
@@ -87,7 +87,7 @@
    "name": "Quote over product",
    "what": "A large testimonial line and short attribution sit above a centered product shot, with no other graphic device.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
   },
   {
@@ -97,7 +97,7 @@
    "name": "Torn-paper clearance overlay",
    "what": "A staged product photograph topped by a scarcity headline, with a torn-paper graphic lower in frame framing a discount offer and close.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording."
   },
   {
@@ -107,7 +107,7 @@
    "name": "Before/after split with claim stack",
    "what": "Two side-by-side photos of the same subject in different states, a stacked multi-line text claim spanning the seam between them, and a product shot below.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" The seventh row of that batch — same ruling, same day. Name and definition are the labeller's own proposal, accepted unreviewed.",
    "aliases": [
     "before-after-splitclaim"
@@ -120,7 +120,7 @@
    "name": "Bare photograph",
    "what": "One full-bleed photograph carries the whole ad — no text, no overlay, no annotation, no product shot and no graphic device of any kind. The native-post formats live here.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" Stage 2b answered none-fits on eight more ads and proposed a row each; SEVEN of them described the same thing in different words (native-content-photo, bare-portrait, raw-native-photo, plain-photograph, bare-selfie, bare-photograph, plain-portrait), so they are ONE row — seven synonyms would make the format field useless for slicing a report, which is the only reason the field exists.",
    "aliases": [
     "barephoto"
@@ -133,7 +133,7 @@
    "name": "Benefit stack beside product",
    "what": "A vertical column of paired bold/regular benefit lines running down one side of the frame with the product beside it.",
    "status": "draft",
-   "signed": "damon 2026-09-23",
+   "signed": "owner 2026-09-23",
    "evidence": "the owner, 2026-09-23: \"just name them dude.\" The labeller's own proposal for p161, accepted unreviewed.",
    "aliases": [
     "benefitstack"
@@ -147,7 +147,7 @@
    "what": "Straight to camera, one plain line, the guarantee bar under it. The format is risk reversal — it looks like the brand talking, not selling.",
    "why_it_works": "The most-aware buyer knows the product; the only thing between him and the click is the fear of another purchase down the drain, so the guarantee leads.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.apology; BRAND-A batch 260905a.03-apology-omar",
    "evidence": "15 live BRAND-A ads (decision 8)",
    "aliases": [],
@@ -161,7 +161,7 @@
    "what": "A torn poster on a wall — the verdict across the top ('none of it worked'), the failed products listed on cards below, the product at the end.",
    "why_it_works": "The poster is already the list; the picture carries the whole history of failure so the copy can turn fast to the one reason.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.distressedposter; BRAND-A batch 260905a.02-poster-brett",
    "evidence": "18 live BRAND-A ads (decision 8)",
    "aliases": [
@@ -177,7 +177,7 @@
    "what": "One person on a matte black field, the headline in the empty space, the product held at the jaw. The format is a stare — nothing to look at but him and the problem.",
    "why_it_works": "The picture names the man and his problem; nothing competes with the line.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.portraitvoid; BRAND-A batch 260905a.01-void-beto",
    "evidence": "12 live BRAND-A ads (decision 8)",
    "aliases": [
@@ -193,7 +193,7 @@
    "what": "Two stacked frames — the damage in close-up on top, the fix pressed against the same skin below. The argument is entirely visual.",
    "why_it_works": "It is before-and-after without a claim in words, so it reads as a demonstration rather than a promise.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.twopanel",
    "evidence": "6 live BRAND-A ads (decision 8)",
    "aliases": [
@@ -209,7 +209,7 @@
    "what": "A card listing everything he has already tried — five blade, single blade, rotary, foil — and the product at the bottom. The list is the argument.",
    "why_it_works": "He has been changing the wrong variable for years; the list makes that point before a word of copy does.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.checklist",
    "evidence": "6 live BRAND-A ads (decision 8)",
    "aliases": [],
@@ -223,7 +223,7 @@
    "what": "Phone in hand at the bathroom mirror, the product at his jaw, the ad's line over the top. It reads like something he'd post himself.",
    "why_it_works": "The most personal shape in the set — first person, no brand voice, a caption not an ad.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.mirrorselfie",
    "evidence": "3 live BRAND-A ads (decision 8). Not the same as style/image `mirror-selfie` (a look); this is the shape of the ad.",
    "aliases": [
@@ -239,7 +239,7 @@
    "what": "The product alone on matte black with its spec set in type (12,000 RPM · IPX7 · 300 uses per charge). No person in frame.",
    "why_it_works": "The only shape with nobody in it, so the number in the picture opens the copy and the copy carries the story.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.productvoid",
    "evidence": "0 live BRAND-A ads (decision 8). `illustrated` maps here — an illustrated product-only ad is this shape in a drawn style; illustrated is a style, not a format.",
    "aliases": [
@@ -255,7 +255,7 @@
    "what": "A quiet frame with one caption over it — no product pitch in the picture, just the line and the person.",
    "why_it_works": "The least ad-shaped format in the set; if it reads like marketing it is dead.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.captionbox",
    "evidence": "2 live BRAND-A ads (decision 8)",
    "aliases": [
@@ -271,7 +271,7 @@
    "what": "A screenshot of a comment, answered. The ad is the reply.",
    "why_it_works": "The comment does the hooking, so the answer can be direct and one idea long without selling over the top of it.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.commentreply",
    "evidence": "2 live BRAND-A ads (decision 8)",
    "aliases": [
@@ -287,7 +287,7 @@
    "what": "A label-style card ('every morning') with the product beside it. Instructional, calm, no drama.",
    "why_it_works": "It sells the habit, not the problem — its job is to make one minute sound like nothing.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.routinelabel",
    "evidence": "1 live BRAND-A ad (decision 8)",
    "aliases": [
@@ -303,7 +303,7 @@
    "what": "An extreme close-up of skin or surface texture carries the ad — the bumps, pores or grain are the picture; a short line sits over or beside it.",
    "why_it_works": "Texture at that scale is a problem the reader recognises on sight, before any claim is made.",
    "status": "approved",
-   "signed": "damon 2026-09-25 · Cleanup Plan decision 8",
+   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
    "examples": "brief p004 ad names, e.g. brand-a-flex-static-ai-omar-fedupking-folliculitis-razornotproblem-behindyou-macrotexture-p004-9x16-260913a-a01 (tools/image-teardown/briefs.json)",
    "evidence": "0 live BRAND-A ads (decision 8). Meaning read off the p004 ad names — p004's brief was never written down, so the definition is the machine's; review pending.",
    "aliases": [
@@ -362,7 +362,7 @@
    "why_it_works": "Home-video texture reads as memory, not ad, so the viewer drops their guard.",
    "status": "draft",
    "signed": null,
-   "examples": "Brand-B visual lexicon already holds the 1980s baby-oil beach-towel picture (lab/damon/image-teardown/reference/visual-lexicon.md).",
+   "examples": "Brand-B visual lexicon already holds the 1980s baby-oil beach-towel picture (lab/owner/image-teardown/reference/visual-lexicon.md).",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "aliases": [],
    "note": "RESEARCH (2026-10-03): no swipe of this format in swipe-paid or swipe-organic, no ad results of ours. Unproven — it stays out of use until a swipe with proof or our own results back it; the data decides, not taste. named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."

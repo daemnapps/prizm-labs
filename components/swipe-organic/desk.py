@@ -489,7 +489,7 @@ class H(BaseHTTPRequestHandler):
                 return self.send(f.read_bytes(), "video/mp4")
         m = re.match(r"^/covers/([A-Za-z0-9_.-]+)$", self.path)
         if m:
-            f = D.HERE / "records/damon-saves/covers" / m.group(1)
+            f = D.HERE / "records/owner-saves/covers" / m.group(1)
             if f.exists():
                 return self.send(f.read_bytes(), "image/jpeg")
         self.send({"error": "not found"}, code=404)

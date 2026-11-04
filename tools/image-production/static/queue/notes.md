@@ -7,35 +7,35 @@ Every line is his note, verbatim, at the moment he clicked. A kill's note become
 | when | man | look | headline | picture | why |
 |---|---|---|---|---|---|
 | 2026-09-09T14:30 | Omar 45 | faceoff | EVERY OTHER FIX
-FLEX | a03 |  |
+WIDGET | a03 |  |
 | 2026-09-09T14:30 | Omar 45 | faceoff | EVERY OTHER FIX
-FLEX | a02 |  |
+WIDGET | a02 |  |
 | 2026-09-09T14:30 | Omar 45 | faceoff | EVERY OTHER FIX
-FLEX | a01 |  |
+WIDGET | a01 |  |
 | 2026-09-09T14:29 | Beto 38 | faceoff | EVERY
 OTHER FIX
-FLEX | a03 |  |
+WIDGET | a03 |  |
 | 2026-09-09T14:29 | Beto 38 | faceoff | EVERY
 OTHER FIX
-FLEX | a02 |  |
+WIDGET | a02 |  |
 | 2026-09-09T14:29 | Beto 38 | faceoff | EVERY
 OTHER FIX
-FLEX | a01 |  |
+WIDGET | a01 |  |
 | 2026-09-09T14:28 | Marcus 29 | checklist | FIVE BLADE
 SINGLE BLADE
 ROTARY
 FOIL
-FLEX | a03 |  |
+WIDGET | a03 |  |
 | 2026-09-09T14:28 | Marcus 29 | checklist | FIVE BLADE
 SINGLE BLADE
 ROTARY
 FOIL
-FLEX | a02 |  |
+WIDGET | a02 |  |
 | 2026-09-09T14:28 | Marcus 29 | checklist | FIVE BLADE
 SINGLE BLADE
 ROTARY
 FOIL
-FLEX | a01 |  |
+WIDGET | a01 |  |
 | 2026-09-09T14:28 | Hal 66 | commentreply |  | a03 |  |
 | 2026-09-09T14:28 | Hal 66 | commentreply |  | a01 |  |
 | 2026-09-09T14:28 | Hal 66 | commentreply |  | a02 |  |
@@ -65,13 +65,13 @@ EITHER WAY. | a01 |  |
 | 2026-09-09T14:24 | Ray 61 | captionbox |  | a01 |  |
 | 2026-09-09T14:24 | Dev 56 | faceoff | EVERY
 OTHER FIX
-FLEX | a03 |  |
+WIDGET | a03 |  |
 | 2026-09-09T14:23 | Dev 56 | faceoff | EVERY
 OTHER FIX
-FLEX | a01 |  |
+WIDGET | a01 |  |
 | 2026-09-09T14:23 | Dev 56 | faceoff | EVERY
 OTHER FIX
-FLEX | a02 |  |
+WIDGET | a02 |  |
 | 2026-09-09T14:22 | Brett 41 | twopanel |  | a03 |  |
 | 2026-09-09T14:21 | Ray 61 | portraitvoid | 40 YEARS
 OF SHAVING.
@@ -115,7 +115,7 @@ I STILL KNOW. | a02 | this headline is very odd |
 | 2026-09-09T14:30 | Brett 41 | mirrorselfie | THE BEARD HIDES IT.
 I STILL KNOW. | a01 | this headline is very odd |
 | 2026-09-09T14:29 | Brett 41 | faceoff | EVERY OTHER FIX
-FLEX | a03 | duplicate headline |
+WIDGET | a03 | duplicate headline |
 | 2026-09-09T14:27 | Hal 66 | mirrorselfie | NOBODY MAKES ADS
 FOR MY FACE. | a02 | doesn't make sense on how it's being held when he's looking in the mirror |
 | 2026-09-09T14:25 | Ray 61 | twopanel |  | a01 | device bottom should be facing the other side |
@@ -126,7 +126,7 @@ EITHER WAY. | a02 | device is too big, check proportion |
 SINGLE BLADE
 ROTARY
 FOIL
-FLEX | a02 | device is slop, it doesn't actually look like this |
+WIDGET | a02 | device is slop, it doesn't actually look like this |
 | 2026-09-09T14:23 | Dev 56 | routinelabel | EVERY MORNING | a03 | device is slop |
 | 2026-09-09T14:23 | Dev 56 | routinelabel | EVERY MORNING | a02 | each image needs to be unique in the set |
 | 2026-09-09T14:23 | Brett 41 | distressedposter | NONE OF IT WORKED | a03 | device is slop, not the acutal device |

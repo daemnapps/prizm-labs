@@ -23,7 +23,7 @@ from test_image_edit import (Base, RE, StubLibrary, judge_saying, setUpModule,  
                              stub_transport, tearDownModule)
 from image_edit import engine as E  # noqa: E402
 
-V3 = Path(__file__).resolve().parent.parent / "library" / "fixes-v3-damon.json"
+V3 = Path(__file__).resolve().parent.parent / "library" / "fixes-v3-owner.json"
 
 
 def judge_of_a_picture_with_no_hand(prompt, paths, entry):

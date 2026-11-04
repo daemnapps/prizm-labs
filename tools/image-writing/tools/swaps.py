@@ -54,7 +54,7 @@ KINDS = ("cast", "product", "library", "drawn", "words")
 WORDS = ("set_on_top", "drawn")
 SOURCES = ("stage3", "backfill")
 FILE = "swaps.json"
-READER_PROMPT = HERE.parent / "prompts" / "swaps-reader-v1-damon.md"
+READER_PROMPT = HERE.parent / "prompts" / "swaps-reader-v1-owner.md"
 
 
 # ───────────────────────── the record ─────────────────────────

@@ -32,7 +32,7 @@ def house_model(job):
 def _loader():
     """components/keys/loader.py, by path under its own module name (never on sys.path)."""
     import importlib.util
-    name = "upright_keys_loader"
+    name = "company_keys_loader"
     mod = sys.modules.get(name)
     if mod is None:
         here = Path(__file__).resolve()

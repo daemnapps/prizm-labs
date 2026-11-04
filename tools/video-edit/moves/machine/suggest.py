@@ -1,5 +1,5 @@
 """moves: the shortlist. For every scene in a project's loop, gather the scene facts, the music events in its
-bar, and the 8 best candidate moves from library/moves-v1-damon.json, scored by plain rules. No external API.
+bar, and the 8 best candidate moves from library/moves-v1-owner.json, scored by plain rules. No external API.
 
     python3 machine/suggest.py [<project>]      # default productions/music-video
 
@@ -32,7 +32,7 @@ FAMILY_LEAN = {
     "pop-in": {"ai", "mix", "3d"}, "camera": {"real", "3d"}, "time": {"real", "ai"},
     "frame-break": {"real", "ai", "mix"}, "type": {"real", "mix"}, "sound-sync": {"real", "3d", "mix"},
 }
-ALIASES = {"statue": "damon-full-body", "stone": "damon-full-body", "everything": "*orbit*",
+ALIASES = {"statue": "owner-full-body", "stone": "owner-full-body", "everything": "*orbit*",
            "bag": "bag-cream-strap", "record": "vinyl", "ball": "padel-ball", "racket": "padel-racket",
            "monk": "monk", "orbits": "*orbit*"}
 RARE = {"break", "silence", "drop", "reverse", "space", "double-time", "loop seam", "last bar", "vocal word", "strong kick"}
@@ -56,7 +56,7 @@ def scene_objects(shots, catalogue):
     words = set(re.findall(r"[a-z]+", " ".join((s.get("object") or "") + " " + (s.get("what") or "") for s in shots).lower()))
     srcs = {x for s in shots for x in (s.get("src") or [])}
     found = {cid for cid in catalogue if cid in srcs}
-    skip = {"desk", "damon", "full", "body", "strap", "black", "cream", "pouch", "sign"}
+    skip = {"desk", "owner", "full", "body", "strap", "black", "cream", "pouch", "sign"}
     for cid in catalogue:
         need = [w for w in cid.split("-") if w not in skip]
         if need and all(w in words for w in need) and (cid != "goja-sign" or "sign" in words or "neon" in words):
@@ -179,7 +179,7 @@ def main():
     bass = load(project / "song" / "crsl" / "bass.json")["notes"]
     kicks = load(project / "song" / "crsl" / "kicks.json")["kicks"]
     catalogue = load(project / "3d" / "catalogue.json")["objects"]
-    index = load(MOVES / "library" / "moves-v1-damon.json")["moves"]
+    index = load(MOVES / "library" / "moves-v1-owner.json")["moves"]
     bars = loop["bars"]
     beat = (bars[0]["end"] - bars[0]["start"]) / 4
 

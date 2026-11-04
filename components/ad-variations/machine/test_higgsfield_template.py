@@ -10,8 +10,8 @@ REPO = COMP.parent.parent
 BRANDS = [p.name for p in (REPO / "brands").iterdir() if p.is_dir()]
 
 HANDOFF = COMP / "prompts" / "higgsfield-handoff"
-V1_NAME = "higgsfield-p2f-v1-damon.md"
-V2 = HANDOFF / "higgsfield-p2f-v2-damon.md"
+V1_NAME = "higgsfield-p2f-v1-owner.md"
+V2 = HANDOFF / "higgsfield-p2f-v2-owner.md"
 SLOTS = ("brand", "brand_folder", "product", "avatar", "offer", "look_rule", "core_topic")
 SLOT_RE = re.compile(r"(\{(?:" + "|".join(sorted(SLOTS, key=len, reverse=True)) + r")\})")
 

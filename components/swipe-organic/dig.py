@@ -10,7 +10,7 @@
   4. FOLLOW  hops.py seats the creators behind the winners, on probation
   5. SAVE    thumbnails cached; the feed now rides the daily run forever
 
-The feed lands at records/avatar-feeds/damon--<name>/ — same four files as
+The feed lands at records/avatar-feeds/owner--<name>/ — same four files as
 every other feed, so nothing downstream needs to know it was asked for
 rather than built from an avatar's receipts.
 """
@@ -42,13 +42,13 @@ def main():
         reply = D.ask_model(text, "sonnet")
         plan = D.json_from(reply)
         name = re.sub(r"[^a-z0-9-]", "", (plan.get("NAME") or "feed").lower().replace(" ", "-"))[:40] or "feed"
-        feed = a.feed or f"damon--{name}"
+        feed = a.feed or f"owner--{name}"
         root = D.FEEDS / feed
         if root.exists():                       # same ask twice → grow that feed, never a twin
             S = json.loads((root / "sources.json").read_text())
         else:
             root.mkdir(parents=True)
-            S = {"brand": "damon", "avatar": name, "sources": [],
+            S = {"brand": "owner", "avatar": name, "sources": [],
                  "entry": {"max_age_days": 540, "hashtag_min_views": 50000, "hashtag_min_likes": 5000}}
         S.update(json.loads(a.meta))
         langs = [str(x).lower()[:2] for x in plan.get("LANGUAGES") or ["en"]]

@@ -1374,7 +1374,7 @@ def variant(a):
             print(f"  ! {run_name} produced no brief")
     if not new_ids:
         sys.exit("no briefs")
-    # The record goes where lab/damon/CLAUDE.md says output goes:
+    # The record goes where lab/owner/CLAUDE.md says output goes:
     # runs/<machine>/<brand>/<run-label>/ at the repo root, in git. The lane's
     # own runs/ is ignored by rule, so a run that only lives there is a run
     # that vanished in the next squash (2026-09-17, thirty-one of them).

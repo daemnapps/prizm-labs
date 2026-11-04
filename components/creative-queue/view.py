@@ -4,7 +4,7 @@ NOTHING.
   view.py [--index <repo>/runs/queue/index.json] [--root <repo>/runs/queue-shadow]
           [--emails <repo>/runs/email-production] [--now <UTC …Z>]
 
-the owner's index becomes ONE in-memory observation (source `damon-index`, `as_of` = the index's "built", each entry's
+the owner's index becomes ONE in-memory observation (source `owner-index`, `as_of` = the index's "built", each entry's
 `stage` as `observed_stage`); his own person fields (who, priority, title_set, note, removed) become in-memory legacy
 decisions, read exactly as `cq.py import-legacy` reads them, so any real decision beats them. The shadow root's
 decisions are read with `qcore.load`, the way `cq.py rebuild` reads them, and `qcore.reduce` does the rest. Nothing
@@ -16,7 +16,7 @@ scheduled, else draft when the card has a Klaviyo draft, else ready; `held` need
 worked out here), whose turn as the emails page says it, the send date and the team's deadline (<emails>/<brand>/
 deadlines.json, else 5 working days before the send, the emails page's EVE_WORKDAYS).
 
-Prints {"damon_built", "damon_age_h", "shadow_root", "people", "stages", "rows"}. Rows: every piece in the owner's index
+Prints {"owner_built", "owner_age_h", "shadow_root", "people", "stages", "rows"}. Rows: every piece in the owner's index
 that is not an email (video ads read only, `"read_only": "video"`), every shadow `add`, and every email card
 (`"read_only": "email"`), each with its decision fields and who decided them. Ids starting `zz-` (test pieces) are
 left out; so is Christine from `people`. A title that is empty or looks like an id is rebuilt from the id's parts. A
@@ -38,7 +38,7 @@ if str(HERE) not in sys.path:
 import cq  # noqa: E402  the same component: its legacy reading, reused
 import qcore  # noqa: E402
 
-SOURCE = "damon-index"
+SOURCE = "owner-index"
 VIDEO = "video-ad"
 EMAIL = "email"
 FIELDS = ("who", "priority", "due", "note", "requested_stage")      # the decisions a row carries
@@ -157,7 +157,7 @@ def row(e):
         "since": e.get("since"),
         "gone": e.get("gone"),
         "email_run": e.get("email_run"),
-        "in_damon": SOURCE in (e.get("observed_in") or []),
+        "in_owner": SOURCE in (e.get("observed_in") or []),
         "links": [y for y in (_link(x) for x in e.get("links") or []) if y],
         "removed": bool(e.get("removed")),
         "decided_by": {k: decided[k] for k in FIELDS + ("title_set", "removed") if k in decided},
@@ -166,7 +166,7 @@ def row(e):
         r["thumb"] = e["thumb"]
     for k in FIELDS:
         r[k] = e.get(k)
-    if not r["in_damon"] and "title" in decided:
+    if not r["in_owner"] and "title" in decided:
         r["added_by"] = decided["title"]
     return r
 
@@ -249,7 +249,7 @@ def email_rows(emails, today):
         r = {
             "id": eid, "type": EMAIL, "brand": brand, "email_run": label, "read_only": "email",
             "title": subject.strip() if isinstance(subject, str) and subject.strip() else label,
-            "stage": stage, "flag": None, "since": None, "gone": None, "in_damon": False, "links": [],
+            "stage": stage, "flag": None, "since": None, "gone": None, "in_owner": False, "links": [],
             "removed": False, "decided_by": {},
             "status": status, "turn": turn, "send_date": send, "send_date_ok": d is not None,
             "eve_due": eve_due, "eve_due_from": eve_from,
@@ -288,8 +288,8 @@ def build(index, root, now, emails=None):
     if emails is not None:
         rows += email_rows(emails, (at or datetime.now(timezone.utc)).date())
     return {
-        "damon_built": index.get("built"),
-        "damon_age_h": age,
+        "owner_built": index.get("built"),
+        "owner_age_h": age,
         "shadow_root": _rel(root),
         "people": [p for p in index.get("people") or [] if str(p).strip().lower() not in LEFT],
         "stages": _stages(),

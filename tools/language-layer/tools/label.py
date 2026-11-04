@@ -119,7 +119,7 @@ def product_names(brand):
 def _keys_loader():
     """components/keys/loader.py, loaded by path (never on sys.path), found from this file."""
     import importlib.util
-    mod = sys.modules.get("upright_keys_loader")
+    mod = sys.modules.get("company_keys_loader")
     if mod is None:
         d = os.path.dirname(os.path.abspath(__file__))
         while not os.path.isfile(os.path.join(d, "components", "keys", "loader.py")):
@@ -127,9 +127,9 @@ def _keys_loader():
                 raise RuntimeError("components/keys/loader.py not found above " + __file__)
             d = os.path.dirname(d)
         spec = importlib.util.spec_from_file_location(
-            "upright_keys_loader", os.path.join(d, "components", "keys", "loader.py"))
+            "company_keys_loader", os.path.join(d, "components", "keys", "loader.py"))
         mod = importlib.util.module_from_spec(spec)
-        sys.modules["upright_keys_loader"] = mod
+        sys.modules["company_keys_loader"] = mod
         spec.loader.exec_module(mod)
     return mod
 

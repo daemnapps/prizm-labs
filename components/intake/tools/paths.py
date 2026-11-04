@@ -56,7 +56,7 @@ def brands():
 
 
 def run_dir(brand, label, make=True):
-    """runs/intake/<brand>/<label>/ at the workspace root (lab/damon/CLAUDE.md §1).
+    """runs/intake/<brand>/<label>/ at the workspace root (lab/owner/CLAUDE.md §1).
     A brand or label that is not one plain folder name, or a label that resolves
     outside runs/intake/<brand>/, raises ValueError (intake#1, K2 (brands write wall))."""
     for what, value in (("brand", brand), ("label", label)):

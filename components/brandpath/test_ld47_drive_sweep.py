@@ -133,7 +133,7 @@ class Switch(unittest.TestCase):
         cls.sa = cls.acct / "Shared drives" / "Shared Assets"
         (cls.sa / "brands" / "b" / "products").mkdir(parents=True)
         (cls.sa / "handoffs" / "x").mkdir(parents=True)
-        (cls.sa / "lab" / "damon").mkdir(parents=True)
+        (cls.sa / "lab" / "owner").mkdir(parents=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -244,7 +244,7 @@ class Switch(unittest.TestCase):
             self.assertFalse(str(m.DRIVE).startswith(str(self.cloud)), m.DRIVE)
             self.assertFalse(m._drive_or_absent().is_dir())
         os.environ.pop("DRIVE_MOUNT")
-        self.assertEqual(m.drive(), self.sa / "lab" / "damon")
+        self.assertEqual(m.drive(), self.sa / "lab" / "owner")
 
     # naming/delivery_rule.py — resolve()
     def test_naming(self):

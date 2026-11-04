@@ -72,7 +72,7 @@
    "safe_zone": false,
    "judge": [],
    "status": "draft",
-   "source": "lab/damon/pages — the page machine is the caller this row is declared for; it has not run through here yet"
+   "source": "lab/owner/pages — the page machine is the caller this row is declared for; it has not run through here yet"
   },
   "video-still": {
    "id": "video-still",

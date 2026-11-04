@@ -156,7 +156,7 @@ class Schedule(Base):
         self.refused("nobody is not on the approver list", who=None)
         self.assertEqual(self.fake.calls, [])
 
-    def test_04_steph_schedules(self):
+    def test_04_pm_schedules(self):
         self.make_card()
         r = self.schedule(who="the team")
         self.assertEqual(r, {"ok": True, "scheduled": True})

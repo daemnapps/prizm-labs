@@ -35,7 +35,7 @@ MAPS = WORK / "_maps"
 REPO = COMPONENT.parent.parent
 RUNS = REPO / "runs" / "asset-index"
 # The old lab folder the records were first written to — read-only, last (root CLAUDE.md rule 9).
-LAB_WORK = REPO / "lab" / "damon" / "asset-index" / "work"
+LAB_WORK = REPO / "lab" / "owner" / "asset-index" / "work"
 
 sys.path.append(str(COMPONENT.parent / "brandpath"))
 import drive_index as DI  # noqa: E402

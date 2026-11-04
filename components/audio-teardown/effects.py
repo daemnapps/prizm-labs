@@ -4,7 +4,7 @@
               onsets sharper than 85% of the track's own, each tagged by Google's
               AudioSet sound list (PANNs) and marked on or off the beat
     NAMED     Gemini listens to that track with the list of moments
-              (prompts/effects-name-v<N>-damon.md): what each really is, whether
+              (prompts/effects-name-v<N>-owner.md): what each really is, whether
               it was added in the edit or made by the room or the product, its
               job in the edit, its UCS category — and adds any it missed
     FILED     every name under a UCS category (definitions/sound.json); the

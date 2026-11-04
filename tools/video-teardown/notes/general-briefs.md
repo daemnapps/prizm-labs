@@ -6,7 +6,7 @@ creator, doesn't need to be built by replicating their top videos."*
 
 ## The source set
 
-the owner's Instagram saves (`components/swipe-organic/records/damon-saves/`),
+the owner's Instagram saves (`components/swipe-organic/records/owner-saves/`),
 categories `skincare-product-promo` (28) and `body-scrub-exfoliation` (13)
 — the "link in bio / shop here" product videos. 35 had the video on disk in
 `records/swipe-videos/<code>/video.mp4`; 33 made it into the queue. Views

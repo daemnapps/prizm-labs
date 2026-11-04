@@ -65,7 +65,7 @@ def clean_ref(ref):
     ref = str(ref or "")
     if ref.startswith("/Users/"):
         m = re.search(r"/devel/daemn/(.*)$", ref)
-        return ("damon-sandbox:" + m.group(1)) if m else "local file (path withheld)"
+        return ("owner-sandbox:" + m.group(1)) if m else "local file (path withheld)"
     return ref
 
 

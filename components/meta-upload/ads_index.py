@@ -2,7 +2,7 @@
 """THE FINISHED ADS INDEX — one row per brief that reached an approval card: brief → card → live ad.
 
 The same front door as the product index (tools/video-production/machine/product_index.py), for finished ads.
-The audit that asked for it: components/naming/WHERE-EVERYTHING-GOES-damon.md ("Finished ad → ADS-INDEX.json (brief →
+The audit that asked for it: components/naming/WHERE-EVERYTHING-GOES-owner.md ("Finished ad → ADS-INDEX.json (brief →
 card → live ad)"; a brief with two names in meta/).
 
 Built from, READ ONLY (nothing on the Drive is written, moved or touched):

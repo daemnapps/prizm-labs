@@ -22,7 +22,7 @@ axes at once.
 It is not invented here. Two places in the repo had already worked it out, and
 this file only writes down what they agree on:
 
-> **`lab/damon/copy/bank/channel-map.json`** — *"Copywriting is one brain…
+> **`lab/owner/copy/bank/channel-map.json`** — *"Copywriting is one brain…
 > A channel decides the reading context; a format is a data row inside it;
 > **the words always come from the same place.**"*
 

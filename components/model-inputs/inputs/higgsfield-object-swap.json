@@ -23,7 +23,7 @@
   "[ours] tools/video-production/SHOT-ROUTES.md",
   "[ours] tools/video-production/CLAUDE.md 'A swap is the whole character'",
   "[ours] tools/video-production/VIDEO-RULINGS.md V38 to V41",
-  "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+  "[ours] components/model-inputs/VIDEO-PATH-owner.md"
  ],
  "limits": {
   "duration_seconds": [
@@ -84,7 +84,7 @@
    "use": "yes",
    "status": "draft",
    "source": [
-    "components/model-inputs/VIDEO-PATH-damon.md",
+    "components/model-inputs/VIDEO-PATH-owner.md",
     "[ours] tools/video-production/machine/cast_swap.py"
    ]
   },
@@ -192,7 +192,7 @@
    "rule": "The cast member goes in from the BASELINE pictures, never the master. A swap given the master alone is a face swap; the baseline gives the face, the look, the details and the expressions the shot needs.",
    "ours": "cast_swap.refs lists the baseline files",
    "status": "draft",
-   "source": "components/model-inputs/VIDEO-PATH-damon.md (the owner 2026-10-27)"
+   "source": "components/model-inputs/VIDEO-PATH-owner.md (the owner 2026-10-27)"
   },
   {
    "id": "one-shot-one-swap",
@@ -267,7 +267,7 @@
    "id": "master-only",
    "text": "Sending the master as the person: it is a face swap, and the baseline is the rule.",
    "status": "draft",
-   "source": "components/model-inputs/VIDEO-PATH-damon.md"
+   "source": "components/model-inputs/VIDEO-PATH-owner.md"
   },
   {
    "id": "shot-under-minimum",

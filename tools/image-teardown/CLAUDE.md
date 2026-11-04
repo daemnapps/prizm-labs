@@ -17,7 +17,7 @@ keeps the RECORDS (steps 1, 2, 2b and `out/controls-swipe.*`) and the one
 chain engine; `tools/run.py` hands each writing step to image-writing and the
 writing goes into this same run.
 
-**One home for a run (2026-10-28, components/naming/WHERE-EVERYTHING-GOES-damon.md
+**One home for a run (2026-10-28, components/naming/WHERE-EVERYTHING-GOES-owner.md
 item 4).** A run WORKS in `runs/image-teardown/<brand>/<label>/` — its `out/`,
 `vars/`, `assets/`, `finals/` beside its filed record — found by
 `tools/paths.py` `run_dir(label[, brand])` and listed by `all_runs()`. The
@@ -37,22 +37,22 @@ change to one of those is a change to image-writing.
 **Owner:** the owner. **Group:** teardowns. **Spoken name:** "image teardown".
 How to run it for a brand: `RUN.md`.
 
-**A component since 2026-10-01** — moved out of `lab/damon/image-teardown/`
+**A component since 2026-10-01** — moved out of `lab/owner/image-teardown/`
 on the owner's word ("move image teardown to components"). Everything moved with
 it: `chain.py`, `tools/`, the prompts, the brief register `briefs.json`, the
 tests and the pages. Runs still file at `runs/image-teardown/<brand>/<label>/`.
 The old lab folder is a one-release shim (README + forwarding `chain.py` /
 `serve.py`); readers look here first and fall back to it; working files a
 checkout still holds there are carried over by `tools/paths.py` `carry_over()`.
-The Drive copy is `Shared Assets/runs/image-teardown/<brand>/<run>/`, the same path as the repo (components/naming/WHERE-EVERYTHING-GOES-damon.md, fix 4);
+The Drive copy is `Shared Assets/runs/image-teardown/<brand>/<run>/`, the same path as the repo (components/naming/WHERE-EVERYTHING-GOES-owner.md, fix 4);
 drafts and worksheets at `Shared Assets/runs/image-teardown/<brand>/drafts|worksheets/`. The older copies under
-`Shared Assets/lab/damon/image-teardown/` and `Shared Assets/tools/image-teardown/` were moved there on
-2026-10-28 (`runs/system-integration/moves-2026-10-28/drive-moves.jsonl`); `lab/damon/mirror.py` writes the new place.
+`Shared Assets/lab/owner/image-teardown/` and `Shared Assets/tools/image-teardown/` were moved there on
+2026-10-28 (`runs/system-integration/moves-2026-10-28/drive-moves.jsonl`); `lab/owner/mirror.py` writes the new place.
 
 | New-resident question | Answer |
 |---|---|
 | Engine + owner | `chain.py` + `tools/` (`run.py` the steps and the engine image-writing runs on, `paths.py` every path, `briefs.py` the brief register, `elements_label.py` the labels, `gates.py` the gates and the filing) — the owner |
-| Definitions + curator | `prompts/` (steps 1, 2, 2b and the draft prompts; one file per step, `-vN-damon.md`, highest number wins), `templates/`, `reference/visual-lexicon.md` — the owner. Steps 3 to 6 and the standard brief: `tools/image-writing` |
+| Definitions + curator | `prompts/` (steps 1, 2, 2b and the draft prompts; one file per step, `-vN-owner.md`, highest number wins), `templates/`, `reference/visual-lexicon.md` — the owner. Steps 3 to 6 and the standard brief: `tools/image-writing` |
 | Plane | `runs/image-teardown/<brand>/<label>/` at the repo root (the run record: `01…06-*.md`, `elements.json`, `run.json`, `check.json`); variation drops at `runs/image-teardown/<brand>/<drop>/` (`working/`, `deliverable/`, `drop.json`, `run.json`), Drive mirror at the same path (SI-48 (teardown drops home), 2026-10-08); the brief register `briefs.json` here — one id per brief, read by the hand-off, naming, the asset ledger, clipping and production. Numbers count per brand and product (the owner, 1 Oct 2026: "brief numbers count per brand AND product — each product starts at 1 inside its brand."); new briefs are keyed `<brand>_<product>_brief-NNNN`, old ones keep `pNNN` |
 | Manifest | `run.json` per run (machine, brand, label, steps on file, `state` filed/held and why); `briefs.json` per brief (brand, type, product, avatar, run, links) |
 | Runs by | person |
@@ -111,7 +111,7 @@ docstring states the shape and the rules. It still lands in this run's `out/`; `
 Stage 3 (v6) writes it as its section 6 and image-writing (`writing.after`) reads it into `out/swaps.json` (a record that breaks the contract is
 sent back once); stage 6 (v10, v11) carries it unchanged in Document Two and image-writing says when it differs. A run made before it
 existed is backfilled by `swaps.py backfill`: the plain signals in the text first (a "no product" sentence, a product
-reference on the plate, the type layer), one fast reading call (image-writing `prompts/swaps-reader-v1-damon.md`) for the rest, cached in
+reference on the plate, the type layer), one fast reading call (image-writing `prompts/swaps-reader-v1-owner.md`) for the rest, cached in
 `out/.swaps-reader.json`, `source: "backfill"`.
 
 ## Steps
@@ -134,7 +134,7 @@ in chain order. `chain.py` is the entry; it opens runs and hands the stages to
 
 **The plain way is the default for pictures** (the owner, 2026-10-25: "there's a lot of control that I think is messing stuff up", then "literally 1000000x better than any flex implementation we had in the past"): `tools/pictures.py` and `tools/slides.py` (carousels, each slide from the swipe's own slide; a plan in `vars/slides.json`) make every picture in ONE call through `tools/image-production` `plain`: the swipe, the brand step's swap and words (or the slide's lines), each product's real in-use pictures and line from its kit. No house prompt, judge hold, paste or grain; `--controlled` keeps the old path.
 
-**The shared work list and the always-on worker** (the owner, 2026-10-23: "if they start something, I can pick it right up ... we can just leave it on all the time"): `tools/work_list.py` keeps `runs/image-teardown/<brand>/queue.json` (add · list · next · done · open; unaware and problem-aware first; a claim older than 3 hours is taken back); `tools/worker.py --brand <b> [--sync] [--once]` takes the next ad, runs stages 3 → 6 and the pictures on whatever login the machine holds, and puts a sterile or failed ad back on the list (held after 3 tries). `--sync` moves the list between machines through git. Start-here for a teammate: `context/HANDOFF-eve-<brand>-image-ads.md`.
+**The shared work list and the always-on worker** (the owner, 2026-10-23: "if they start something, I can pick it right up ... we can just leave it on all the time"): `tools/work_list.py` keeps `runs/image-teardown/<brand>/queue.json` (add · list · next · done · open; unaware and problem-aware first; a claim older than 3 hours is taken back); `tools/worker.py --brand <b> [--sync] [--once]` takes the next ad, runs stages 3 → 6 and the pictures on whatever login the machine holds, and puts a sterile or failed ad back on the list (held after 3 tries). `--sync` moves the list between machines through git. Start-here for a teammate: `context/HANDOFF-designer-<brand>-image-ads.md`.
 
 **The creative controls** (the owner, 2026-10-23): steps 3, 4 and 6 bind
 `components/creative-controls/slices/controls.md` as `{creative_controls}`.
@@ -173,7 +173,7 @@ before this step existed.
 - **Engine + owner:** `chain.py` + `tools/` (`run.py` the steps, `paths.py`
   every path, `elements_label.py` the labels, `gates.py` the gates and the
   filing), the owner.
-- **Definitions + curator:** `prompts/` — one file per step, `-vN-damon.md`,
+- **Definitions + curator:** `prompts/` — one file per step, `-vN-owner.md`,
   the highest NUMBER wins (`-v10-` beats `-v2-`); a changed prompt is a new
   file, never an edit. `superseded/` and `parked/` never run. the owner.
 - **The plane it emits:** `runs/image-teardown/<brand>/<label>/` at the repo

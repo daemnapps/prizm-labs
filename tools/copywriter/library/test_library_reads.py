@@ -39,11 +39,11 @@ class LibraryReads(unittest.TestCase):
         self.assertNotIn('"lab"', SRC.read_text(encoding="utf-8"))
 
     def test_captions_read_the_component(self):
-        cat = mod.WS / "components" / "swipe-organic" / "records" / "damon-saves" / "catalog.json"
+        cat = mod.WS / "components" / "swipe-organic" / "records" / "owner-saves" / "catalog.json"
         if not cat.is_file():
             self.skipTest(f"{cat.relative_to(mod.WS)} absent")
         quiet(mod.captions)
-        saves = [r for r in mod.rows if r.get("audience", {}).get("source") == "damon-saves"]
+        saves = [r for r in mod.rows if r.get("audience", {}).get("source") == "owner-saves"]
         self.assertGreaterEqual(len(saves), 1, mod.notes)
         for r in saves:
             self.assertFalse(r["path"].startswith("lab/"), r["path"])

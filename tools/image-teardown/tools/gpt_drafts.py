@@ -139,9 +139,9 @@ def _section(name, after=None, before=None):
 
 # The opening of every draft prompt whose swipe has an adult in it, with the
 # {offer} line; then OUR WOMAN, THE WORDS and the cropping clause follow.
-MATCH_FILE = "stage7-draft-match-swipe-v2-damon.md"
-LEAVE_FILE = "stage7-draft-leave-alone-v1-damon.md"
-WORDS_FILE = "stage7-draft-words-v5-damon.md"
+MATCH_FILE = "stage7-draft-match-swipe-v2-owner.md"
+LEAVE_FILE = "stage7-draft-leave-alone-v1-owner.md"
+WORDS_FILE = "stage7-draft-words-v5-owner.md"
 MATCH = _prompt(MATCH_FILE).strip() + "\n"          # v2: filled by .replace()
 # v4 — the model draws the words again, but told EXACTLY which words, where,
 # how big, what colour and — new — how the lettering is MADE, read off the
@@ -161,7 +161,7 @@ NO_PERSON = _section(LEAVE_FILE, before="<the frame")
 def _product_notes(brand, slug):
     """What a product file does not say in a parseable line, the machine
     keeps in its own file: drafts/<brand>/products.json — treats, texture,
-    a clean picture. brands/ is read-only to machines (lab/damon/CLAUDE.md §5)."""
+    a clean picture. brands/ is read-only to machines (lab/owner/CLAUDE.md §5)."""
     f = ROOT / "drafts" / brand / "products.json"
     return (json.loads(f.read_text()) if f.is_file() else {}).get(slug, {})
 

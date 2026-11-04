@@ -66,12 +66,12 @@ def plant(root, pid, ruling, fact="", kind="fact", brand=BRAND):
     d = root / R.RECORDS_REL
     d.mkdir(parents=True, exist_ok=True)
     at = "2026-10-02T10:%02d:00Z" % N[0]
-    rec = {"schema": 1, "kind": "fact-rulings", "reviewer": "steph", "item": pid,
+    rec = {"schema": 1, "kind": "fact-rulings", "reviewer": "pm", "item": pid,
            "verdict": {"brand": brand, "problem_id": pid, "email": "e1", "kind": kind,
                        "quote": "q", "files_say": None, "ruling": ruling, "fact": fact,
-                       "reason": "", "by": "steph", "at": at},
+                       "reason": "", "by": "pm", "at": at},
            "notes": "", "created": at, "via": "test"}
-    (d / ("%04d--steph--%s.json" % (N[0], pid))).write_text(json.dumps(rec))
+    (d / ("%04d--pm--%s.json" % (N[0], pid))).write_text(json.dumps(rec))
 
 
 class ProductFacts(unittest.TestCase):

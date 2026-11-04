@@ -6,11 +6,11 @@
     python3 components/briefs/backfill_brief_key.py [--apply] stamp `brief_key` into every run record the index can place
 
     import briefs_index as BI
-    BI.find("acme_flex_brief-0076")  -> the entry, or None (acme_flex-face-brush_brief-0076 finds the same one)
+    BI.find("acme_widget_brief-0076")  -> the entry, or None (acme_widget-face-brush_brief-0076 finds the same one)
     BI.build()                       -> the index dict (what BRIEFS-INDEX.json holds)
     BI.place_runs()                  -> [{station, brand, folder, key, how}] every run folder and the brief it is for
 
-the owner, 2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-damon.md, "What's confusing today" 2): one ad has a
+the owner, 2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md, "What's confusing today" 2): one ad has a
 different label at each station (`<swipe>-<brand>` at teardown, `<swipe>` at production) and only a
 handful of run folders carry the brief number. The folders are NOT renamed (links and other sessions lean on them);
 instead every run record carries `brief_key` and this one index joins them per brief.
@@ -418,7 +418,7 @@ def build(repo=None):
 def markdown(ix):
     L = ["# Briefs — every station's run, per brief", "",
          f"Built {ix['built']} by `{ix['via']}`. The machine copy is `runs/BRIEFS-INDEX.json` (`find <key>` reads it; "
-         "every spelling of a key, `brand_flex_brief-NNNN` or `brand_<catalog id>_brief-NNNN`, lands on one entry). "
+         "every spelling of a key, `brand_widget_brief-NNNN` or `brand_<catalog id>_brief-NNNN`, lands on one entry). "
          "Each folder is on the Drive at the same path under `Shared Assets/`.", "",
          f"{ix['counts']['briefs']} briefs · {ix['counts']['with_runs']} with run folders · "
          f"{ix['counts']['runs_placed']} run folders placed · {ix['counts']['runs_unplaced']} not placed "

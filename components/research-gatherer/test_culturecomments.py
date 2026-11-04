@@ -76,7 +76,7 @@ class FeedMapping(Tree):
         self.assertEqual(CC.map_feed("b--sub-b", self.root), ("b", "core-one", "sub-b"))
 
     def test_skipped(self):
-        self.assertIsNone(CC.map_feed("damon--sub-a", self.root))
+        self.assertIsNone(CC.map_feed("owner--sub-a", self.root))
         self.assertIsNone(CC.map_feed("b--a-shop-feed", self.root))
         self.assertIsNone(CC.map_feed("no-brand-separator", self.root))
 

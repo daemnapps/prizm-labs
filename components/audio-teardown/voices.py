@@ -9,7 +9,7 @@ exactly what to generate."
                  Mac in the venv named by AUDIO_PYTHON): pitch (Hz and how much it moves),
                  jitter, shimmer, harmonics-to-noise; plus pace, talk share and
                  line counts computed from the lines' own timings
-    3. HEARD     Gemini listens to the clip alone (prompts/voice-card-v<N>-damon.md):
+    3. HEARD     Gemini listens to the clip alone (prompts/voice-card-v<N>-owner.md):
                  accent, age by ear, texture, read style, delivery style, energy,
                  emotion, emphasis, tics, mic and space, a casting call, a voice prompt
     4. CHECKED   every label against definitions/voice.json and the doctrine's own

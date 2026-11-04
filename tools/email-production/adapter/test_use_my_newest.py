@@ -251,7 +251,7 @@ class TestTake(Base):
         rec = recs[0]
         self.assertEqual(r["outcome"], str(sorted((self.tmp / "plane").rglob("*.json"))[0]))
         self.assertEqual((rec["schema"], rec["kind"], rec["reviewer"], rec["via"]),
-                         (1, "model-outcome", "eve", "email-production/own_picture"))
+                         (1, "model-outcome", "designer", "email-production/own_picture"))
         self.assertRegex(rec["item"], r"^%s-P1-own-\d{8}T\d{6}Z$" % LABEL)
         self.assertEqual(rec["verdict"], {"model": "Higgsfield", "door": "own", "purpose": "email-story", "brand": BRAND,
                                           "judge": "not judged", "picked": True, "tries_before_pick": None,

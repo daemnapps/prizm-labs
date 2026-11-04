@@ -13,7 +13,7 @@ class Standard(unittest.TestCase):
         return P.BRIEF_STANDARD.read_text().split("\n=====\n")[1]
 
     def test_the_newest_template_is_the_one_held_to(self):
-        self.assertEqual(P.BRIEF_STANDARD.name, "brief-standard-static-v3-damon.md")
+        self.assertEqual(P.BRIEF_STANDARD.name, "brief-standard-static-v3-owner.md")
         self.assertEqual(P.BRIEF_STANDARD.parent, HERE / "templates")
 
     def test_template_passes(self):

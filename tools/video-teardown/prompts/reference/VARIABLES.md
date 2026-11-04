@@ -5,7 +5,7 @@ enters only through these variables. **Where each variable resolves for a
 given brand is stated in exactly one place — the brand's chain-variables
 map.** Production home: `brands/<brand>/chain-variables.md`. While a brand's
 chain work is pre-production it lives in the owner's lab folder instead —
-**`lab/damon/<brand>/chain-variables.md`** (with the hook
+**`lab/owner/<brand>/chain-variables.md`** (with the hook
 ledger beside it), per the owner's 2026-08-18 ruling that nothing from these
 runs enters the brand folder before graduation. A run pulling from a path not in that
 map is a defect. Zero variance: a variable name in a prompt must appear in

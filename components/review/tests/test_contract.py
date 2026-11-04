@@ -30,8 +30,8 @@ import review_request as rr        # noqa: E402 — after the path insert
 
 ASSET = {"warehouse": "repo", "ref": "components/review/review_request.py",
          "title": "The request module"}
-CALL = dict(asset=ASSET, type="md", reviewers=["steph"], lane="dev-qc",
-            requested_by="dayu")
+CALL = dict(asset=ASSET, type="md", reviewers=["pm"], lane="dev-qc",
+            requested_by="engineer")
 
 
 class Plane(unittest.TestCase):
@@ -110,7 +110,7 @@ class TheRefusals(Plane):
         self.refuses(reviewers=[])
 
     def test_a_reviewer_that_is_not_a_person_id(self):
-        self.refuses(reviewers=["the team Smith <steph@…>"])
+        self.refuses(reviewers=["the team Smith <pm@…>"])
 
     def test_a_lane_that_is_not_a_label(self):
         self.refuses(lane="Email Sends")
@@ -129,7 +129,7 @@ class TheRefusals(Plane):
 
     def test_an_event_outside_the_grammar(self):
         with self.assertRaises(rr.Refused):
-            rr.file_record("RQ-20260908010000-x", {"event": "comment"}, "dayu",
+            rr.file_record("RQ-20260908010000-x", {"event": "comment"}, "engineer",
                            root=str(self.root), env={}, commit=False)
         self.assertEqual(self.records(), [])
 
@@ -144,15 +144,15 @@ class TheWriterServesEveryEvent(Plane):
         item = out["item"]
         rr.file_record(item, {"event": "verdict", "verdict": "approve",
                               "reasons": ["accuracy"], "note": "ship it"},
-                       "steph", root=str(self.root), env={}, commit=False,
+                       "pm", root=str(self.root), env={}, commit=False,
                        now="2026-09-08T02:00:00Z")
         state = rr.fold(rr.read_records(root=str(self.root), item=item))
         self.assertEqual(state["status"], "open")
-        self.assertEqual(list(state["verdicts"]), ["steph"])
+        self.assertEqual(list(state["verdicts"]), ["pm"])
         self.assertFalse(state["accepted"])
 
         rr.file_record(item, {"event": "close", "decision": "accepted"},
-                       "dayu", root=str(self.root), env={}, commit=False,
+                       "engineer", root=str(self.root), env={}, commit=False,
                        now="2026-09-08T03:00:00Z")
         recs = rr.read_records(root=str(self.root), item=item)
         self.assertEqual(len(recs), 3)
@@ -165,10 +165,10 @@ class TheWriterServesEveryEvent(Plane):
         path = Path(out["path"])
         rec = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(rec["kind"], rr.KIND)
-        self.assertEqual(rec["reviewer"], "dayu")
+        self.assertEqual(rec["reviewer"], "engineer")
         self.assertEqual(rec["created"], "2026-09-08T01:00:00Z")
         self.assertEqual(path.name,
-                         "20260908T010000Z--dayu--%s.json" % out["item"])
+                         "20260908T010000Z--engineer--%s.json" % out["item"])
         self.assertEqual(path.parent, self.root / rr.RECORDS_REL,
                          "the plane it emits is the one its CLAUDE.md declares")
 
@@ -191,7 +191,7 @@ class TheCommandLine(unittest.TestCase):
             [sys.executable, str(HERE.parents[1] / "review_request.py"),
              "--dry-run", "--title", "The request module", "--type", "md",
              "--warehouse", "repo", "--ref", "components/review/review_request.py",
-             "--lane", "dev-qc", "--reviewer", "steph", "--by", "dayu"],
+             "--lane", "dev-qc", "--reviewer", "pm", "--by", "engineer"],
             capture_output=True, text=True, timeout=60)
         self.assertEqual(r.returncode, 0, r.stderr)
         name, body = r.stdout.split("\n", 1)
@@ -199,14 +199,14 @@ class TheCommandLine(unittest.TestCase):
         rec = json.loads(body)
         self.assertEqual(rec["verdict"]["event"], "request")
         self.assertEqual(rec["verdict"]["asset"]["warehouse"], "repo")
-        self.assertEqual(rec["reviewer"], "dayu")
+        self.assertEqual(rec["reviewer"], "engineer")
 
     def test_a_refusal_exits_two_and_says_which_field(self):
         r = subprocess.run(
             [sys.executable, str(HERE.parents[1] / "review_request.py"),
              "--dry-run", "--title", "x", "--type", "md", "--warehouse", "repo",
-             "--ref", "x", "--lane", "Email Sends", "--reviewer", "steph",
-             "--by", "dayu"],
+             "--ref", "x", "--lane", "Email Sends", "--reviewer", "pm",
+             "--by", "engineer"],
             capture_output=True, text=True, timeout=60)
         self.assertEqual(r.returncode, 2)
         self.assertIn("lane", r.stderr)

@@ -8,7 +8,7 @@ releases hook versions + thumbnails).
 AN OK IS A REVIEW VERDICT (AR-1b (approvals as verdicts), the dashboard route): the latest `approve` verdict on
 the review request, lane `ad-runs`, whose asset names the ad and the step (`asset_for` is that shape, written
 once, so the request the board opens and the verdict a person gives meet). Every door files on that request —
-the dashboard's Ad Runs page (`POST /api/review`), a person's own Claude (lab/damon/ad-runs/approve.py, git
+the dashboard's Ad Runs page (`POST /api/review`), a person's own Claude (lab/owner/ad-runs/approve.py, git
 route) and the owner's board button — and every reader reads it here. Records are read through
 components/review/review_request.py (`read_records`, `fold`, `list_open`); this file never folds a request.
 

@@ -112,7 +112,7 @@ QUESTIONS = {
 
 def build(kind):
     data = dict(kind=kind, swaps=swaps_data(), huajin=huajin(), library=library(),
-                swap_prompt=rd(T / "components/ad-variations/prompts/stage-format-swap/stage-format-swap-v1-damon.md"),
+                swap_prompt=rd(T / "components/ad-variations/prompts/stage-format-swap/stage-format-swap-v1-owner.md"),
                 read_prompt=rd(T / "components/swipe-organic/hua-jin/format-read-prompt.md"))
     if kind == "bank":
         data["swaps"] = [dict(s, sent="", spec=("written" if s["spec"] else "")) for s in data["swaps"]]
@@ -148,7 +148,7 @@ def builder():
     data = dict(kind="builder", swaps=sw, thumbs=thumbs, stats=stats, links=links, huajin=hj[:1], library=library(),
                 concepts=[dict(path=a, name=b, note=c) for a, b, c in CONCEPTS if c.startswith("video")], formats=fm,
                 products=["brilliance-face-scrub", "brilliance-body-scrub", "radiance-body-cream"], avatars=["spot-hider"],
-                swap_prompt=rd(T / "components/ad-variations/prompts/stage-format-swap/stage-format-swap-v1-damon.md"),
+                swap_prompt=rd(T / "components/ad-variations/prompts/stage-format-swap/stage-format-swap-v1-owner.md"),
                 read_prompt=rd(T / "components/swipe-organic/hua-jin/format-read-prompt.md"))
     (OUT / "variation-cycle.html").write_text(BTPL.read_text().replace("/*DATA*/null", j(data)))
 

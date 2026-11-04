@@ -43,7 +43,7 @@ READ = re.compile(r"^<!-- brief-read: [^\n]*-->\n", re.M)
 
 
 def prompt_file():
-    files = sorted(PROMPTS.glob("swipe-match-v*-damon.md"),
+    files = sorted(PROMPTS.glob("swipe-match-v*-owner.md"),
                    key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     if not files:
         raise RuntimeError(f"no swipe-match prompt in {PROMPTS}")
@@ -343,7 +343,7 @@ def check(run_dir, brief_name="5-brief.md"):
 
 
 def approve_read(brief_path, by="the owner"):
-    """DAMON READS THE BRIEF (2026-09-24: "i always need to see a written brief
+    """OWNER READS THE BRIEF (2026-09-24: "i always need to see a written brief
     before moving on to the production stage … so I can actually read the
     script before it goes out"). Written only when he says he has read it and
     it can go; tied to the brief's fingerprint, so an edit after his read
@@ -381,10 +381,10 @@ if __name__ == "__main__":
     ap.add_argument("run_dir")
     ap.add_argument("--brief", default="5-brief.md")
     ap.add_argument("--approve-structure", default="")
-    ap.add_argument("--damon-read", action="store_true",
+    ap.add_argument("--owner-read", action="store_true",
                     help="the owner has read this brief and says it can go to production — stamps his read, nothing else")
     a = ap.parse_args()
-    if a.damon_read:
+    if a.owner_read:
         approve_read(Path(a.run_dir) / "stages" / a.brief)
         print("BRIEF READ: approved by the owner"); sys.exit(0)
     if a.approve_structure:

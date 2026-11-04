@@ -172,7 +172,7 @@ His guess is half right, and it is the half that is already built.
 | | Piece | State |
 |---|---|---|
 | ✓ | **The brief writes the words down as data** — every headline, price and guarantee with its exact position, size, colour, alignment. Stage 6's type layer. | live on **44 of 66 briefs** |
-| ✓ | **The picture is generated with the words left out** — `stage7-draft-plate-only-v3-damon.md`: *"NO TEXT. NOT ANY… the words are set afterwards by a compositor, not by you"*, plus the measured rectangles that stay clean. Sent automatically whenever a brief carries a type layer (`gpt_drafts.py:509`). | live since 24 Sep |
+| ✓ | **The picture is generated with the words left out** — `stage7-draft-plate-only-v3-owner.md`: *"NO TEXT. NOT ANY… the words are set afterwards by a compositor, not by you"*, plus the measured rectangles that stay clean. Sent automatically whenever a brief carries a type layer (`gpt_drafts.py:509`). | live since 24 Sep |
 | ✗ | **The words get set on the picture** — `tools/image-production/static/tools/compose.py`. Built and tested. | **nothing in the draft run calls it** |
 
 So the model is told to leave the words out, half-obeys, and the words that

@@ -49,7 +49,7 @@ def _workspace_root(start=None):
 
 
 WS  = _repo(Path(__file__))
-LAB = WS / "lab" / "damon"      # a person's runs and swipes stay in lab
+LAB = WS / "lab" / "owner"      # a person's runs and swipes stay in lab
 # Every lane names assets the same way, so every run root is scanned when
 # picking the next free batch letter for a day. The real root is runs/ — every
 # lane files under runs/<lane>/<brand>/ (runs/README.md), so the whole folder
@@ -836,7 +836,7 @@ def brand_briefs(brand):
 def register_file():
     """The brief register every lane's `briefs.py open` writes to."""
     return next((f for f in (WS / "tools" / "image-teardown" / "briefs.json",
-                             WS / "lab" / "damon" / "image-teardown" / "briefs.json") if f.is_file()),
+                             WS / "lab" / "owner" / "image-teardown" / "briefs.json") if f.is_file()),
                 WS / "tools" / "image-teardown" / "briefs.json")
 
 

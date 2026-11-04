@@ -48,8 +48,8 @@ OFF_WORDS = ("not for me", "didn't get it", "didnt get it", "who is this for")
 
 
 def newest(stem: str) -> Path:
-    """The highest -vN-damon.md wins (the prompt-library convention)."""
-    got = sorted(PROMPTS.glob(f"{stem}-v*-damon.md"),
+    """The highest -vN-owner.md wins (the prompt-library convention)."""
+    got = sorted(PROMPTS.glob(f"{stem}-v*-owner.md"),
                  key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     if not got:
         raise FileNotFoundError(f"no {stem} prompt in {PROMPTS}")
@@ -948,7 +948,7 @@ def fix(brief_text: str, r: dict, brand: str, avatar: str, caller=None, refused:
         raise ValueError("the fixer returned no brief")
     # The offer is the website's wording: a rewrite that changes a price or
     # guarantee line is refused, whatever else it fixed (caught 2026-10-02:
-    # "FLEX™" quietly became "FLEX" on the price card).
+    # "WIDGET™" quietly became "WIDGET" on the price card).
     kept = [ln.strip() for ln in brief_text.splitlines() if re.search(r"\$\s?\d", ln)]
     for ln in kept:
         core = re.findall(r'"([^"]*\$\s?\d[^"]*)"', ln) or [ln]

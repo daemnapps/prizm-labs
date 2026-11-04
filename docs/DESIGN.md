@@ -9,8 +9,7 @@ Chosen 2026-09-22 after four directions were put side by side
 ## The idea
 
 **Light through a prism.** One white beam goes into the glass and a full
-spectrum comes out. The old LLC was Gradient Media; this one is Prizm, and the
-name is also the colour rule.
+spectrum comes out. The name Prizm is also the colour rule.
 
 So the page is **bone paper and warm ink**, the objects on it are **chrome**,
 and **colour carries meaning** — every stop of the spectrum owns a job. That is
@@ -123,7 +122,7 @@ the people who have been here before.
 
 ## Darker ink, real objects (2026-09-23)
 
-Damon: the grey copy read too light. `--ink-2` and `--ink-3` are darker, labels
+The owner: the grey copy read too light. `--ink-2` and `--ink-3` are darker, labels
 went from 10px to 11px, and sections have more air.
 
 The chrome and glass objects are no longer only stills. `/objects3d.js` renders

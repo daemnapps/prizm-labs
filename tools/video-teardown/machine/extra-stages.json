@@ -3,7 +3,7 @@
  "stages": [
   {
    "stage": "stage4r",
-   "prompt": "stage4r-read-v4-damon.md",
+   "prompt": "stage4r-read-v4-owner.md",
    "role": "stage",
    "vars": {
     "baseline_injection": "@stage3",
@@ -16,7 +16,7 @@
   },
   {
    "stage": "stage7",
-   "prompt": "stage7-inject-v1-damon.md",
+   "prompt": "stage7-inject-v1-owner.md",
    "role": "assemble",
    "vars": {
     "brief": "@stage5"
@@ -25,7 +25,7 @@
   },
   {
    "stage": "stage8",
-   "prompt": "stage8-profile-v2-damon.md",
+   "prompt": "stage8-profile-v2-owner.md",
    "role": "profile",
    "note": "the owner's ruling 2026-08-30: after a teardown run of a creator's own content, her brand-side profile refreshes itself — the avatar workflow run on a real person. Creator runs only; swipe runs record it skipped. The ~vars are gathered by creator_profile.py (her record, her runs, the brand's spec); WHERE the profile lands and WHICH spec shapes it come from brands/<brand>/content-creators/profile-home.json, never from this machine (rule 4). A failure here never stops the run — a brief is never lost to a profile.",
    "vars": {
@@ -40,7 +40,7 @@
   },
   {
    "stage": "stage7b",
-   "prompt": "stage7b-concept-v8-damon.md",
+   "prompt": "stage7b-concept-v8-owner.md",
    "role": "page",
    "note": "the owner, 2026-09-02, after Becky, Joanna and Pam read the spec itself: one run, two documents. Stage 5 stays the spec (pictures, audit, editor); this writes the one sheet she reads from the finished spec, and the Doc holds this instead of the spec. brief_count is gathered by run.py: how many briefs this creator has in her folder. | 2026-09-25: the brief carries a SOUND line again — removed when a model could only guess the music, back now that Demucs splits it and Shazam names it (music.py). Bound to @stage1 because stage 5 deliberately strips music from the spec (its Hear: rule is room-capture only).",
    "vars": {
@@ -58,7 +58,7 @@
   },
   {
    "stage": "stage1c",
-   "prompt": "stage1c-doctrine-v4-damon.md",
+   "prompt": "stage1c-doctrine-v4-owner.md",
    "role": "stage",
    "note": "The doctrine read of the SOURCE AS SWIPED (the owner's ruling 2026-09-18): 'every time we run a swipe, we'll run it through a marketing doctrine step too so we have full awareness of it and can clearly identify the unique framework of that video and bank it for later.' It reads the framework, the sections carried, the awareness the source enters and exits on, the stage-move it runs, the desire it rides, the techniques visible per section, the mood, and — from v2 — the DELIVERY READ (how the source is performed: humor level, delivery style, register, pacing, the reference world it visibly leans on and what it avoids) — all off the teardown record, cited, never improved. It decides nothing about our version: 1b answers for OUR reader and takes the source's reading from here rather than re-deriving it. Its fenced json block is filed as <run>/doctrine.json and compiled into the framework bank by framework_bank.py.",
    "vars": {
@@ -68,7 +68,7 @@
   },
   {
    "stage": "stage4g",
-   "prompt": "stage4g-spice-v10-damon.md",
+   "prompt": "stage4g-spice-v10-owner.md",
    "role": "stage",
    "note": "The creative pass, after the loop and before the brief (the owner's ruling 2026-09-18). Clean injection first, then the spice: why this format lands for THIS avatar, the cast voice it is spoken in, the styling, the mood register, and — from v2 — the delivery dials (humor level, delivery style, register, pacing, reference world, avoid), each one KEPT from the source's own delivery read or SWAPPED for this avatar's world with the receipt, plus the delivery script: every line as handed in with performance direction in brackets. Every research question is ANSWERED by the gatherer (~research), never guessed — an unanswered question is [UNFILLED] and its spice item is cut. It never changes a word of the script. v3 (2026-09-19, the owner: \"humans don't use em dashes when speaking\"): section 4 becomes THE SPOKEN SCRIPT — every paragraph rewritten for the mouth at the colloquialism level the sub-avatar's dials and research rows support, matched to the brand's measured creator voiceprints (~voiceprint), printed as the voice model reads it, with the level and the receipt on every change and a voice-settings block per scene; then the performance brackets as before. Binds {spoken} (components/marketing-doctrine/slices/spoken.md).",
    "vars": {
@@ -91,7 +91,7 @@
   },
   {
    "stage": "stage2f",
-   "prompt": "stage2f-compose-v4-damon.md",
+   "prompt": "stage2f-compose-v4-owner.md",
    "role": "stage",
    "note": "THE COMPOSE — the second door (the owner's ruling 2026-09-18): 'with all of the different sections we should begin to assemble actual frameworks to create ads strategically. We use swipes as the baseline, but since we have a fundamental system and understanding of who we are speaking to and how and what formats they're receptive to, we can pump out mounds of video and photo ads.' It runs in stage 2's slot on the FRAMEWORK lane ONLY (chain.py LANE_ONLY) and nowhere else: there is no swipe, so instead of abstracting a source into a construct it WRITES one from the chosen framework row, phase by phase, each phase naming its section id, its technique, its scene shape and the mandate. Its output is in the exact shape stage 2 prints, so stage 3 v9 consumes it unchanged and the whole chain after it is untouched. ad_framework and format_profile are supplied by compose.py as run values; market_state is 1b's own labelled-slot stand-in, written by compose.py from the flags.",
    "vars": {
@@ -112,14 +112,14 @@
   },
   {
    "stage": "stage3v",
-   "prompt": "stage3v-control-v1-damon.md",
+   "prompt": "stage3v-control-v1-owner.md",
    "role": "stage",
    "note": "THE CONTROL — Variation video chain only (the owner, 2026-09-28: \"we only run variation on proven assets\"). The proven ad's own script in stage 3's shape, filed by control.py with no model, so every @stage3 reader gets VERSION 0. The VARIATION route substitutes stage3 -> stage3v.",
    "vars": {}
   },
   {
    "stage": "stage4m",
-   "prompt": "stage4m-awareness-map-v1-damon.md",
+   "prompt": "stage4m-awareness-map-v1-owner.md",
    "role": "stage",
    "note": "THE AWARENESS MAP — Variation video chain only (the owner, 2026-09-28: \"The awareness map has only to do with the awareness levels. The format, product, cast, structure, all of that stays locked.\"). One branch per awareness level, each with the sections the doctrine says it needs; ends in a json block variation.py reads into tree.json.",
    "vars": {
@@ -135,14 +135,14 @@
   },
   {
    "stage": "stage5u",
-   "prompt": "stage5u-mark-used-v1-damon.md",
+   "prompt": "stage5u-mark-used-v1-owner.md",
    "role": "stage",
    "note": "MARK USED — every chain (the owner, 2026-09-28: \"anytime any of that language is used, we clearly mark it as used in X asset\"). mark_used.py, no model: the LANGUAGE USED blocks plus a verbatim match of the brief against the bank, written to the avatar's language/used/ lane.",
    "vars": {}
   },
   {
    "stage": "stage1k",
-   "prompt": "stage1k-culture-v3-damon.md",
+   "prompt": "stage1k-culture-v3-owner.md",
    "role": "stage",
    "search": true,
    "note": "THE CULTURE READ (the owner, 2026-10-05): \"The more we're aware of culture, what people watch, why they watch it, why they like it, and why they think it's funny or interesting or engaging, the easier all of this is. We can literally just leverage that authority.\" Two organic swipes went viral on a beloved film character dropped into a new situation, and the teardown called them 'AI player in a brown suit'. Teardown side and brand-free, so it runs with no route picked: it watches the video (the strongest Gemini, with Google Search grounding) beside the teardown record and the post's own caption and comments (culture.py, yt-dlp, never Apify), and names every reference with receipts and a confidence, who recognizes it, why it lands, what must be kept for it to land and the borrowed authority it trades on. Writing stages read it as culture_read (spec, injection, hooks, both briefs); a run without it reads 'NO CULTURE READ'.",
@@ -309,5 +309,5 @@
   "stage8"
  ],
  "_position_note": "2026-09-19: {position} = brands/<brand>/brand-identity/position.md — the brand's declared LINE, MECHANISM and MARKET STAGE as labelled slots. Bound to the audience, compose, injection, hook and placement stages. A brand without the file refuses loudly at 1b (brand file missing), which is the intended gate: no line, no run.",
- "_story_note": "2026-09-19: {story} = brands/<brand>/brand-identity/story.md — the brand's storytelling framework beside its position (SPINE, TELLERS, STORIES with beats and fits). Bound as the soft ~story fill to audience (picks STORY + TELLER), compose, injection (the main one), hooks, expansion and spice. A brand with no story.md runs as before with [UNFILLED]; lab/damon/story-builder drafts one. 1b's STORY/TELLER are recorded in run.json market_state and appended to {story} for every later stage."
+ "_story_note": "2026-09-19: {story} = brands/<brand>/brand-identity/story.md — the brand's storytelling framework beside its position (SPINE, TELLERS, STORIES with beats and fits). Bound as the soft ~story fill to audience (picks STORY + TELLER), compose, injection (the main one), hooks, expansion and spice. A brand with no story.md runs as before with [UNFILLED]; lab/owner/story-builder drafts one. 1b's STORY/TELLER are recorded in run.json market_state and appended to {story} for every later stage."
 }

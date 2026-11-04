@@ -11,12 +11,12 @@ import sync  # noqa: E402
 
 
 class GapSplit(unittest.TestCase):
-    def test_pictures_to_eve_the_rest_to_steph(self):
+    def test_pictures_to_eve_the_rest_to_pm(self):
         G = [{"kind": "picture", "why": "picture not made yet"}, {"kind": "product picture", "why": "cut out"},
              {"kind": "words", "type": "promise", "why": "a promise is missing"}, {"kind": "price", "why": "no price"}]
-        eve, steph = sync.split_gaps(G)
-        self.assertEqual([g["kind"] for g in eve], ["picture", "product picture"])
-        self.assertEqual([g["kind"] for g in steph], ["words", "price"])
+        designer, pm = sync.split_gaps(G)
+        self.assertEqual([g["kind"] for g in designer], ["picture", "product picture"])
+        self.assertEqual([g["kind"] for g in pm], ["words", "price"])
 
 
 if __name__ == "__main__":

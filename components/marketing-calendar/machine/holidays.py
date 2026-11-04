@@ -70,9 +70,9 @@ def table(year):
         ("cyber-monday",      "Cyber Monday",          tg + _dt.timedelta(days=4), "retail", 1),
         ("cyber-week",        "Cyber Week (Thanksgiving through Cyber Monday)",
                                                        tg,                    "retail", 5),
-        ("christmas-eve",     "Christmas the team",         _dt.date(year, 12, 24), "retail", 1),
+        ("christmas-designer",     "Christmas the team",         _dt.date(year, 12, 24), "retail", 1),
         ("christmas",         "Christmas",             _dt.date(year, 12, 25), "retail", 1),
-        ("new-years-eve",     "New Year's the team",        _dt.date(year, 12, 31), "observance", 1),
+        ("new-years-designer",     "New Year's the team",        _dt.date(year, 12, 31), "observance", 1),
     ]
     out = []
     for key, name, start, kind, span in rows:

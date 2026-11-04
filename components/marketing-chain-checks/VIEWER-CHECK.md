@@ -1,8 +1,8 @@
 # The Viewer Check
 
-Page: (private page) · source `viewer-check.html` · prompt `prompts/viewer-check-v1-damon.md`
+Page: (private page) · source `viewer-check.html` · prompt `prompts/viewer-check-v1-owner.md`
 
-**LIVE 2026-10-02 in the video and statics chains** (the owner: "slide this into the chains and lets ride it"). Code: `marketing_chain_checks/viewer.py`. Prompts: `viewer-check`, `viewer-card`, `viewer-cut` (all `-v1-damon.md`).
+**LIVE 2026-10-02 in the video and statics chains** (the owner: "slide this into the chains and lets ride it"). Code: `marketing_chain_checks/viewer.py`. Prompts: `viewer-check`, `viewer-card`, `viewer-cut` (all `-v1-owner.md`).
 
 ## What runs today
 | Chain | Where | A fail goes back to |

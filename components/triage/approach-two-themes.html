@@ -567,7 +567,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);p
     </ul>
     <p><b>Limits on option 3:</b> a test proves each fix; no test check is weakened or removed; nothing that changes a live pipeline (those stay drafted for the owner to land); every change is written to the decision log with a one-line undo, and owners can see every change in their components there.</p>
     <p><b>First step:</b> ask the owner: "Can the team, through Claude, fix things in your components when the brief spells out the fix and a test proves it, with every change in the decision log and a one-line undo?" Yes → option 3 and about 197 items leave the owner's list. No → option 2. <i>Confidence medium. Reverse if</i> a triage owner's change breaks an owner's live run twice, or the owner objects to more than a handful of changes in the first two weeks. <a href="#log">What the decision log records</a>.</p>
-    <h3 id="damon-flow">Option 3 is ruled: what it means for the owner</h3>
+    <h3 id="owner-flow">Option 3 is ruled: what it means for the owner</h3>
     <p>the owner does nothing by default. Nothing waits on the owner's yes; the owner can look whenever, and undo anything. Solid boxes exist today; dashed ones are proposed. The grey lines are examples of what the owner might type to Claude.</p>
     <div class="dflow">
       <div class="dstep"><span class="lane st">the team</span><div><b>Fixes an issue in one of the owner's components</b><p>Only when the issue's summary already names the fix, a test proves it, no test check is weakened, and it doesn't change a live pipeline. Example: intake #6, copy pointers that named files that don't exist.</p></div></div>
@@ -599,7 +599,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);p
   <svg viewBox="0 0 980 430" width="100%" style="min-width:880px" role="img" aria-label="Two themes feed one engine; reference sources feed cross-references; outputs go to people">
     <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink3)"/></marker></defs>
     <text x="20" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">THEMES (TRIAGED)</text>
-    <text x="345" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">ONE ENGINE · DAYU</text>
+    <text x="345" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">ONE ENGINE · ENGINEER</text>
     <text x="700" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">WHAT PEOPLE GET</text>
     <rect x="20" y="40" width="270" height="120" rx="10" fill="var(--cmps)" stroke="var(--cmp)" stroke-width="2"/>
     <text x="34" y="64" font-size="15" font-weight="700" fill="var(--cmp)">Components (the atlas)</text>
@@ -746,7 +746,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);p
 <pre style="margin:0;font:12.5px/1.5 var(--mono);white-space:pre-wrap;background:var(--code);padding:10px;border-radius:8px">theme   components
 act     change
 item    intake #6
-who     steph
+who     pm
 areas   path:components/intake/tools/pools.py
 commit  (the fix's commit)
 test    copy rows' files exist
@@ -904,7 +904,7 @@ why           revenue fell with spend; confirm the cut was meant</pre></div>
 </section>
 <div class="ap"><div class="wrap">
 <header class="lede">
-  <span class="eyebrow">Upright Atlas · a component</span>
+  <span class="eyebrow">Atlas · a component</span>
   <h1>triage</h1>
   <div class="status"><span class="pill p-idle">stage: not set</span><span class="pill p-idle">triage: status unstated</span><span class="pill p-idle">an engine · any list, read through its theme pack, in; a ranked queue of actions with summaries, three whos and cross-references out · decides nothing · PROPOSED, run by hand on two themes</span></div>
   <div class="signal"><a class="pill p-crit" href="#checks-triage">7 draft errors</a><span class="pill p-idle">draft · not yet reviewed</span></div>

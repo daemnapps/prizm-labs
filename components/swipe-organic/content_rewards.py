@@ -4,7 +4,7 @@
     python3 content_rewards.py <report share link> --brand <brand> --pool <name>
     python3 content_rewards.py <report share link> --brand <brand> --pool <name> --no-media   numbers only
 
-the owner, 2026-10-24, on the clipping campaign Tye runs for us: "digest all these assets ... download them ...
+the owner, 2026-10-24, on the clipping campaign the partner runs for us: "digest all these assets ... download them ...
 tracking their results internally". The report's share link is public; its own data feed (the one the report
 page reads) gives every clip: the post link, views, likes, comments, shares, spend and the slide images.
 

@@ -275,7 +275,7 @@ class BrandThreading(Sandbox):
 
     def test_no_brand_is_spelled_in_the_shipped_code(self):
         """Asked of the board's own reader, so this and the board cannot disagree."""
-        board = REPO / "lab/damon/system-blueprint/greenlight.py"
+        board = REPO / "lab/owner/system-blueprint/greenlight.py"
         if not board.is_file():
             self.skipTest("the green-light board is not in this checkout")
         import importlib.util

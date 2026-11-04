@@ -21,7 +21,7 @@ import desklib as D
 from run_kit.claude_flags import effort_args  # LD-73 (explicit effort); run-kit is on the path through desklib
 
 HERE = Path(__file__).resolve().parent
-SAVES = HERE / "records/damon-saves"
+SAVES = HERE / "records/owner-saves"
 VID = HERE / "records/swipe-videos"
 LIB = HERE / "formats.json"
 

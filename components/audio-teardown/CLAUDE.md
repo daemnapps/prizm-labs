@@ -25,11 +25,11 @@ and when we generate voice, we know exactly what to generate."
 | Step | File | What | Where it runs |
 |---|---|---|---|
 | split | `split.py` | voices lifted off the music (Demucs, MIT) | this Mac, `the venv named by DEMUCS_PYTHON` |
-| words | `words.py` + `prompts/words-v*-damon.md` | every word, in the language said (Gemini 3.1 Pro → 3.5 Flash) | GEMINI_API_KEY |
+| words | `words.py` + `prompts/words-v*-owner.md` | every word, in the language said (Gemini 3.1 Pro → 3.5 Flash) | GEMINI_API_KEY |
 | speakers | `speakers.py` | who speaks when (ElevenLabs Scribe v2) | ELEVENLABS_API_KEY |
 | lines | `lines.py` | merged by what was said into T1, T2…; every disagreement flagged | pure code |
-| voices | `voices.py` + `prompts/voice-card-v*-damon.md` | one clip per person; measured (Praat, GPLv3) + heard (Gemini); labels checked | this Mac, `the venv named by AUDIO_PYTHON`; GEMINI_API_KEY |
-| music | `music.py` + `prompts/music-read-v*-damon.md` | named (Shazam, then AudD — both asked); tempo, beat grid, key, energy curve, builds and drops, ending measured (librosa, ISC); heard from the music alone | this Mac (`the venv named by SHAZAM_PYTHON`, `the venv named by AUDIO_PYTHON`); AUDD_API_TOKEN; GEMINI_API_KEY |
+| voices | `voices.py` + `prompts/voice-card-v*-owner.md` | one clip per person; measured (Praat, GPLv3) + heard (Gemini); labels checked | this Mac, `the venv named by AUDIO_PYTHON`; GEMINI_API_KEY |
+| music | `music.py` + `prompts/music-read-v*-owner.md` | named (Shazam, then AudD — both asked); tempo, beat grid, key, energy curve, builds and drops, ending measured (librosa, ISC); heard from the music alone | this Mac (`the venv named by SHAZAM_PYTHON`, `the venv named by AUDIO_PYTHON`); AUDD_API_TOKEN; GEMINI_API_KEY |
 | effects | `effects.py` + `prompts/effects-check-v*`, `effects-name-v*` | every sharp sound timed (onsets) and tagged (PANNs AudioSet tagger, MIT code / CC-BY weights in `~/panns_data`); each moment confirmed on its own 1.2 s clip; named, given its job and UCS category | this Mac; GEMINI_API_KEY |
 | mix | `mix.py` | loudness (EBU R128, ffmpeg), voice over music, how far the music ducks under speech, every silence and the line after it, spoken / music form | this Mac |
 
@@ -59,7 +59,7 @@ the video-teardown run (`file_run.py`); a person running it standalone points
 
 ## Definitions (the owner's)
 
-`prompts/` — versioned `-vN-damon.md`, highest wins; a change is a new file on
+`prompts/` — versioned `-vN-owner.md`, highest wins; a change is a new file on
 his word, shown verbatim. `definitions/voice.json` — the voice-card label lists,
 `definitions/sound.json` — the music, effect-job and UCS category lists and the
 AudioSet → UCS filing rules. Both `status: draft` until he approves. `delivery_style` is NOT listed here: it is

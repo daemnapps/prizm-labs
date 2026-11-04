@@ -25,7 +25,7 @@ BANK = PK.BANK
 INDEX = BANK / "PRODUCT-INDEX.json"
 FRONT = BANK / "PRODUCTS.md"
 DRIVE_LABEL = "Shared Assets/brands"
-# ONE MASTER (2026-10-28, components/naming/WHERE-EVERYTHING-GOES-damon.md item 5): the kit at
+# ONE MASTER (2026-10-28, components/naming/WHERE-EVERYTHING-GOES-owner.md item 5): the kit at
 # runs/ai-elements/<brand>/products/<slug>/ is the product's one master. The Drive folder
 # brands/<brand>/products/<slug>/product-kit/ is where the label art and the source files live (and the team copy
 # `product_kit.py publish` puts there): a SOURCE, never a second master. Every entry and card says so.

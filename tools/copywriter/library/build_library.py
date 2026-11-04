@@ -30,7 +30,7 @@ HERE = Path(__file__).resolve().parent          # .../copywriter/library
 AD   = HERE.parent                               # .../copywriter
 
 # FOUND, never counted. This was AD.parent.parent.parent with a comment saying
-# "(lab/damon/copy)" — the depth from the machine's OLD home. After the move to
+# "(lab/owner/copy)" — the depth from the machine's OLD home. After the move to
 # components/ on 2026-09-19 it resolved one level above the workspace, so the
 # assert below fired and this script crashed on every run for three days.
 WS = next((d for d in HERE.parents
@@ -39,7 +39,7 @@ if WS is None:
     sys.exit(f"workspace not found from {HERE}")
 INDEX = WS / "runs/copywriter/_system/library/index.json"
 
-# swipe-paid and swipe-organic moved out of lab/damon/ into components/ on 2026-09-22.
+# swipe-paid and swipe-organic moved out of lab/owner/ into components/ on 2026-09-22.
 SWIPE_PAID = WS / "components" / "swipe-paid"
 SWIPE_ORGANIC = WS / "components" / "swipe-organic"
 
@@ -119,7 +119,7 @@ def note(msg):
 
 # --- 1 · <brand> emails — ours, shipped ----------------------------------
 def emails(brand):
-    # `lab/damon/brands/` was merged into `brands/` and deleted on 2026-09-02,
+    # `lab/owner/brands/` was merged into `brands/` and deleted on 2026-09-02,
     # so this read nothing and said "the email channel is empty this build"
     # every time — which reads like a fact about the brand, not a dead path.
     home = WS / "brands" / brand / "email-sms"

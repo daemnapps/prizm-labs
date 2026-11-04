@@ -78,7 +78,7 @@ Runs: `runs/playbook-learn/<format>/<run>/` (MATCH.md, PROPOSAL.md) + `decisions
 
 ## Hard rules (2026-09-17)
 
-- **A run is labelled by its brief number** (2026-10-15): `--label` is the brief's register id, `brand_product_brief-NNNN` (e.g. `brand_a_flex_brief-0070`, from `tools/image-teardown/briefs.json`) — so the production run, the edit run and the delivery all carry the brief number (the owner, 2026-10-15). A brief with no number yet gets one first (`tools/video-teardown/machine/file_run.py` `number_brief`).
+- **A run is labelled by its brief number** (2026-10-15): `--label` is the brief's register id, `brand_product_brief-NNNN` (e.g. `brand_a_widget_brief-0070`, from `tools/image-teardown/briefs.json`) — so the production run, the edit run and the delivery all carry the brief number (the owner, 2026-10-15). A brief with no number yet gets one first (`tools/video-teardown/machine/file_run.py` `number_brief`).
 
 - The platform is detected and the models shown before anything runs.
 - Nothing submits without a green preflight.
@@ -298,7 +298,7 @@ or ships past it.
 | **The production gate** (2026-09-23) | `model_inputs.production_gate`, run by `run.py start` right after the brief is read — before the voice, `--dry-run` included | a scene that does not say `to_camera` (refused by id — it used to default to talking whenever the scene had a voice, which is how a B-roll shot became a face); a card whose plate has words in it or that has no `lines`; a row of the swipe's make-list (`roll_sheet`, or the view's ROLL SHEET CHECK table) that maps to no scene and gives no drop reason, names a scene that does not exist, or lands on the wrong kind (a B row must be a `to_camera: false` scene, a C row a card). A brief with no roll sheet (written before v13) is WARNED, never refused; a card line carrying `[UNFILLED]` is warned. The same card and roll-sheet checks run again as preflight rule 12. **Every element (2026-09-23, `ELEMENTS.md`, brief v14):** a `kind` that disagrees with `to_camera`; a screen, split side, greenscreen background or endcard plate with quoted words or one of its own lines in it; a screen `surface`, split/greenscreen `layout`, annotation/platform_ui/transition kind or `music.energy` off its list (enums in `model-inputs.json` → `elements`); a scene `section` that is not a marketing-doctrine section id, or a piece `framework` that is not an ad-framework id nor `observed — …` (both READ from `components/marketing-doctrine/` at run time, never listed here; brief v15 — v14's `module` is a warned alias for a missing section only); `priority` outside 1–3; `opens` on no scene or on two; a greenscreen whose `talker_scene` is missing or not to camera; an endcard offer line or guarantee not found in `brands/<brand>/products/offer-bank.md` (an `[UNFILLED]` one is warned); an endcard with no product the brand holds a real packshot for; a layer, sfx cue or hook naming a scene that does not exist. Roll-sheet `S/X/G/E` rows must land on screen / split / greenscreen / endcard |
 | **The banks** (2026-09-23) | `machine/banks.py`, run by `run.py start` right after the production gate — `--dry-run` included | a brief whose `music` or an `sfx` cue has no MADE row in `banks/<bank>/index.json` — refused naming the row (or saying none exists) and the `make_bank.py` line that makes it; never a silent fallback. A fitting row writes `{bank_id, file}` into `plan.json`. `--banks <folder>` points at another bank |
 | **The elements lock** (2026-09-23; **no personal confirm since 2026-10-27**, : every element banked and every check green locks itself, `elements_check.py` `gate`; `VP_REUSED_AUTO=0` restores the manual lock) | `machine/elements_check.py`, run by `run.py start` right after the banks, before the voice — `--dry-run` reports, a real run refuses | every person, look, voice, setting, product and prop the brief (v17) names must be BANKED to `elements-standard.json` — documented (`character.md`/`set.md`/…, `provenance.json` checked field by field) and made FROM A REAL REFERENCE — and a scene with words must name its `speaker`, who must have their OWN voice. Anything short is refused by name and listed in `<run>/elements.json` as the make-list; all banked but not confirmed is refused until `elements_check.py confirm <run> --by the owner` writes `elements-lock.json` (a fingerprint of every file in every element folder — change one and confirm again). People are made with `machine/make_character.py`, which refuses a spec with no real reference or no adjustments, a product in a cast sheet, or a reference shared with a banked person. Generated elements live in `runs/ai-elements/<brand>/` (casting/, sets/, props/) — never `brands/` (`machine/element_paths.py`). The standard: `PRODUCTION-ELEMENTS.md` |
-| **Our own footage first** (2026-10-05) | `machine/footage.py` `gate()`, run by `run.py start` right after the banks — before the elements lock, the voice and any still or clip — `--dry-run` included; `--no-footage` skips it | every B-roll scene (`to_camera: false`, not the presenter, not a card / screen / split / greenscreen / endcard) is looked up in the brand's indexed footage on the company Shared Assets drive — locally, no service (`tools/asset-index/machine/search.py`, the Shared Assets map from `shared_paths.py`). A confident match (score ≥ 0.42, the ACTION itself matched, every named product — FLEX™, PRIME™ — in the clip) is CUT: `source_plan: cut`, `owned_file` + `owned_in`/`owned_out`, and no still or clip is made for it (the storyboard frames and the clip planners skip it). Every other B-roll scene is generated and carries its nearest real clip's frame in its first frame's `refs` (`footage_ref`). Prints cut / generate / presenter and the credits not spent. **The presenter is never the library's** (2026-09-11): a to-camera or type-A beat, or a scene that does not say, is never matched. the owner: "whatever needs to be generated, we can just generate." The same pass at the brief: `footage.py --brief <5-brief.md> --brand <b>` writes `footage.json` + `footage.md` beside it. Tests: `test_footage.py` |
+| **Our own footage first** (2026-10-05) | `machine/footage.py` `gate()`, run by `run.py start` right after the banks — before the elements lock, the voice and any still or clip — `--dry-run` included; `--no-footage` skips it | every B-roll scene (`to_camera: false`, not the presenter, not a card / screen / split / greenscreen / endcard) is looked up in the brand's indexed footage on the company Shared Assets drive — locally, no service (`tools/asset-index/machine/search.py`, the Shared Assets map from `shared_paths.py`). A confident match (score ≥ 0.42, the ACTION itself matched, every named product — WIDGET™, PRIME™ — in the clip) is CUT: `source_plan: cut`, `owned_file` + `owned_in`/`owned_out`, and no still or clip is made for it (the storyboard frames and the clip planners skip it). Every other B-roll scene is generated and carries its nearest real clip's frame in its first frame's `refs` (`footage_ref`). Prints cut / generate / presenter and the credits not spent. **The presenter is never the library's** (2026-09-11): a to-camera or type-A beat, or a scene that does not say, is never matched. the owner: "whatever needs to be generated, we can just generate." The same pass at the brief: `footage.py --brief <5-brief.md> --brand <b>` writes `footage.json` + `footage.md` beside it. Tests: `test_footage.py` |
 | **Preflight** | `machine/preflight.py check` — rules 1–12 | a batch before it is submitted: a person or product with no reference, post effects in a prompt, a start image that is not a verified frame, a model the provider does not offer, a batch over the cap, a line claimed twice, an unknown or deprecated format (rule 9, the local `formats/bank.json`), no no-cut line, and the model input contract (rule 12) |
 | **Still QC** (the inspector) | `prompts/stage-5-qc/` → `preflight.py verdict --layer inspector`, then `preflight.py verify` | a still that is not the scene specified; an unverified frame never goes to motion (rule 6) |
 | **Motion QC** | `prompts/stage-5b-motion-qc/` → `verdict --layer motion` | a clip that did not do what the beats said |
@@ -449,22 +449,22 @@ Each rule is a row in `components/model-inputs/lessons.json` (L-50 to L-62) nami
 
 **The whole process, stage by stage on the board, from the brief to the editor's hand-off: `VIDEO-PROCESS.md`.**
 
-- **The swipe, broken down** (`machine/scene_breakdown.py`, prompt `prompts/v2/scene-breakdown-v2-damon.md`): every
+- **The swipe, broken down** (`machine/scene_breakdown.py`, prompt `prompts/v2/scene-breakdown-v2-owner.md`): every
   swipe scene read to its smallest elements; the camera's hand drift is MEASURED on the frames, never read. The clip
   prompt carries the camera, the eyes, how things are handled and the atmosphere, never the swipe's own objects.
 - **Props make physical sense, the action lands on its object, the movement bar** (`machine/seedance_prompt.py`
   `PHYSICAL`, `MOTION`): stated in every clip.
 - **The same object all the way through, props in reach** (`machine/shot_swaps.py`): an object an earlier approved scene
   drew comes from that scene's picture; a prop the person picks up later is already in the start picture, within reach.
-- **The body check** (`machine/body_check.py`, prompt `prompts/v2/body-check-v1-damon.md`): every start picture and
+- **The body check** (`machine/body_check.py`, prompt `prompts/v2/body-check-v1-owner.md`): every start picture and
   every take, each hand traced to a shoulder, two reads that must agree; a wrong body fails a take and the board remakes
   a wrong picture by itself, up to twice, before a person sees it.
-- **The clip judge v4** (`prompts/v2/clip-judge-v4-damon.md`): props, the right object, the voice, the swipe's elements.
+- **The clip judge v4** (`prompts/v2/clip-judge-v4-owner.md`): props, the right object, the voice, the swipe's elements.
 - **One take per board press, the voice measured, no silent backup for a talking clip, no camera moves and no upscale
   on keep** (`machine/clips_run.py`, `providers.json` `max_tries` 1, `upscale_on_keep` false): the person decides on
   the board; camera moves and sharpening wait for the edit and the hand-off.
 - **Effects are drawn on our own scene's object, in the swipe's style, and upscaled** (`machine/effects.py`).
-- The writing chain carries the same rules from the brief on (`video-writing/prompts/v2/stage5-ai-brief-v9-damon.md`).
+- The writing chain carries the same rules from the brief on (`video-writing/prompts/v2/stage5-ai-brief-v9-owner.md`).
 
 ## What is in this folder
 
@@ -498,7 +498,7 @@ and what superseded each piece.
 - Output lands at `runs/video-production/<brand>/<label>/` per `runs/README.md`
   (2026-09-17).
 - `prompts/` — one folder per stage; the CURRENT prompt files live at the
-  top, versioned in the filename (`...-v2-damon.md`). **Never edit a prompt
+  top, versioned in the filename (`...-v2-owner.md`). **Never edit a prompt
   in place** — a change is a new file with a bumped version; retired
   versions move to `archive/` inside the stage folder. The board renders
   whatever is current.
@@ -553,7 +553,7 @@ and what superseded each piece.
 ## Where brand context lives (the owner's ruling, 2026-08-30)
 
 Brand data NEVER lives inside the machine. It lives in
-`brands/<brand>/` (the one brand home since 2026-09-02; `lab/damon/brands/`
+`brands/<brand>/` (the one brand home since 2026-09-02; `lab/owner/brands/`
 is gone) — products (one folder per product: product.md + images/ + Drive
 links), core-avatars, intake (was existing-content). The cast LIST is brand
 info under `ai-elements/characters/casting/`; each person's own files are
@@ -575,7 +575,7 @@ thing IS — offers live in the brand's offer-bank.
    record (`media/`, `direct.json`, `verdicts.json`) beside it. The artifact
    **The Road to $10** ((private page))
    is the shareable picture of the cost story; **The Video Machine** (see
-   `lab/damon/context/artifacts.md`) is how this system is set up and the
+   `lab/owner/context/artifacts.md`) is how this system is set up and the
    roadmap — that old link is dead, and this is the live one.
 3. Stage files may name candidate models under "candidates" — that's where
    model specifics belong, marked proven/testing/rejected.
@@ -583,7 +583,7 @@ thing IS — offers live in the brand's offer-bank.
 ## The four questions
 
 Answered 2026-09-23, when this folder owed them as a resident
-(`components/CLAUDE.md`). It moved out of `lab/damon/ai-video-production/`
+(`components/CLAUDE.md`). It moved out of `lab/owner/ai-video-production/`
 on the owner's word, 2026-09-22.
 
 - **Engine + owner:** `machine/run.py` is the one runner —
@@ -623,10 +623,10 @@ on the owner's word, 2026-09-22.
 Everything else in `machine/` is internal and may change without notice.
 
 **Keys:** `ELEVENLABS_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`,
-`BYTEPLUS_API_KEY` — by name through the shared key loader: the environment, then this repo's `.env` (add `NAME=value` there), then Damon's Mac Keychain when present.
+`BYTEPLUS_API_KEY` — by name through the shared key loader: the environment, then this repo's `.env` (add `NAME=value` there), then the owner's Mac Keychain when present.
 
 **One correction worth carrying**, found 2026-09-23: `machine/run.py` counted
-its way to the workspace root from the depth it had in `lab/damon/`, so after
+its way to the workspace root from the depth it had in `lab/owner/`, so after
 the move `DEFAULT_RUNS_ROOT` pointed at `~/Projects/runs` — outside the
 repo, outside git, outside Drive — and the mkdir would have created it. Every
 path here walks up now. **Paths are found, never counted.**

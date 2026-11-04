@@ -9,7 +9,7 @@
   "ruling": "\"it's a song ad, but the formats are different, so be cognizant of these little things. But yeah, bro, this is it. Let's run this shit up\" — its own playbook, not a copy of the song ad."
  },
  "family": "freestyle-battle",
- "what": "A New York freestyle or street rap battle made in Suno: our clean-shaven man roasts the bearded man's neck (bumps, the beard he hides behind, the breakup he's hiding from) with yo-mama bars, the other man fires back, our man flips it to the jawline and closes on one line of real talk: use the FLEX. The rappers are ON SCREEN and lip-sync every bar; the crowd or the booth reacts on every punchline; a funny pop-up pictures each joke. Entertainment first, the product is one line at the end.",
+ "what": "A New York freestyle or street rap battle made in Suno: our clean-shaven man roasts the bearded man's neck (bumps, the beard he hides behind, the breakup he's hiding from) with yo-mama bars, the other man fires back, our man flips it to the jawline and closes on one line of real talk: use the WIDGET. The rappers are ON SCREEN and lip-sync every bar; the crowd or the booth reacts on every punchline; a funny pop-up pictures each joke. Entertainment first, the product is one line at the end.",
  "signature": {
   "audio": "song",
   "speakers": 2,
@@ -43,7 +43,7 @@
    "song_ad": "lyric captions only"
   },
   {
-   "what": "the product is one spoken line at the close, and the real FLEX in our man's hand",
+   "what": "the product is one spoken line at the close, and the real WIDGET in our man's hand",
    "song_ad": "the product rendered in the film's style, held by the cast, plus an end card"
   },
   {
@@ -89,7 +89,7 @@
    "why": "the sports_generated lookalike skits pull millions; a real likeness is never ours to use"
   },
   {
-   "what": "the product is advice between men, once, at the close; the real FLEX is in his hand in that shot; no price, no offer",
+   "what": "the product is advice between men, once, at the close; the real WIDGET is in his hand in that shot; no price, no offer",
    "why": "the owner: \"we're not even selling anything anymore, we're just making content that people wanna watch\""
   },
   {
@@ -130,7 +130,7 @@
    "voices": "two clearly different male voices: ours younger and sharper, his deeper and raspy",
    "crowd": "in the track, square-bracket tags only",
    "check": "transcribe every take (whisper large-v3-turbo, -l en -mc 0 -et 2.8) and confirm every bar comes back word for word; pick the take that does and lands bar one fastest",
-   "brand_line": "\"Use the FLEX once a day\" — the last bar, rapped, never a tag",
+   "brand_line": "\"Use the WIDGET once a day\" — the last bar, rapped, never a tag",
    "master_true_peak_dbtp": -1.0,
    "loudness_lufs": -14
   },
@@ -144,7 +144,7 @@
    "start_only": true,
    "max_references": 3,
    "cast": "the two banked lookalike types, same faces in every picture",
-   "product": "the real FLEX photo as a reference in the close shot, in our man's hand, shape, colour and label exact"
+   "product": "the real WIDGET photo as a reference in the close shot, in our man's hand, shape, colour and label exact"
   },
   "clips": {
    "bars": "Seedance 2.5 with that bar's audio slice, lip-synced (MODEL-HOUSE: takes our voice and lip-syncs)",
@@ -169,7 +169,7 @@
     "lip-sync per bar (the right rapper says the right bar)",
     "lookalike, not a real likeness",
     "loudness/true peak",
-    "real FLEX in the close shot"
+    "real WIDGET in the close shot"
    ],
    "skip": [
     "song flow gate (no melody, no gaps rule for a sung hook)",
@@ -179,7 +179,7 @@
   },
   "edit": {
    "method": "video-edit machine cut on the track's clock; bar clip → reaction on the punchline → pop-up → next bar",
-   "end": "no end card; the last shot is the crowd erupting with the FLEX in his hand",
+   "end": "no end card; the last shot is the crowd erupting with the WIDGET in his hand",
    "loudness": "-14 LUFS, true peak ≤ -1 dBTP",
    "versions": "control + 4 hook versions"
   },
@@ -218,19 +218,19 @@
   "the crowd reacts on every punchline",
   "each pop-up gets a laugh on its own",
   "the two men look like people the viewer half-knows, never a real person",
-  "the FLEX line lands as advice, not an ad"
+  "the WIDGET line lands as advice, not an ad"
  ],
  "variants": [],
  "built_from": [
   "coldfreestylesonly: Ddsh3CuuWu0 (1.44M), Dd0Jd5ROhKg (738K), DdEjGwmON2U (637K), DeMr_bCBE0M (465K)",
   "sports_generated: DeDl057xUUk (7.26M) — the AI lookalike skit",
-  "lab/damon/song-ads/freestyle.json — the format draft and BQE"
+  "lab/owner/song-ads/freestyle.json — the format draft and BQE"
  ],
  "rulings": [
   "the owner 2026-10-22: \"you need to flip it. We need to talk about the girl first … Just like we did with the Disney song ads … We keep the conflict, the weird thing, the tragedy … at the beginning, and then we put in anything that has to do with a problem and then we can talk about [failed] solutions … We don't go straight for the pitch, never. That's the whole point of this format\"",
-  "the owner 2026-10-22: the freestyle format, Suno, lookalike rapper, pop-up inserts, yo-mama bars at the neck, use the FLEX, street framing, entertainment first",
+  "the owner 2026-10-22: the freestyle format, Suno, lookalike rapper, pop-up inserts, yo-mama bars at the neck, use the WIDGET, street framing, entertainment first",
   "the owner 2026-10-22: its own format — \"be cognizant of these little things … this is it. Let's run this shit up\"",
   "the owner 2026-10-21: every song starts on the verse; the story line is the hook",
-  "the owner 2026-10-05: FLEX once a day is the one ruled frequency"
+  "the owner 2026-10-05: WIDGET once a day is the one ruled frequency"
  ]
 }

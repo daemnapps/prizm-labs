@@ -10,12 +10,12 @@ refused ("say which"), never guessed.
 
 **The product token is the catalog id — one product, one name.** A product is named by its full catalog id everywhere — the name
 its kit folder (`runs/ai-elements/<brand>/products/<id>/`), its Drive folder and the hand-offs already
-use: `flex-face-brush`, `crush-bump-eliminator`, `core-supplement`, `war-face-wash`, `prime-face-quench`,
-`miro-face-towel`, `flex-charging-case`; a bundle is its Drive id (`vitals-set`, `king-set`). The short
-store handles (`flex`, `crush`, `core`, `war`, `prime`, `miro`, `the-vitals-set`, `the-king-skin-set`)
+use: `widget-face-brush`, `crush-bump-eliminator`, `core-supplement`, `war-face-wash`, `prime-face-quench`,
+`miro-face-towel`, `widget-charging-case`; a bundle is its Drive id (`vitals-set`, `king-set`). The short
+store handles (`widget`, `crush`, `core`, `war`, `prime`, `miro`, `the-starter-set`, `the-bundle-set`)
 are **aliases**: every lookup resolves through `names.product_id(brand, any_name)` (the reverse is
 `names.product_aliases`), built from each kit's `kit.json` `aliases`, the brand's Drive index and
-`product-aliases.json` here. So `<brand>_flex_brief-0076` and `<brand>_flex-face-brush_brief-0076` are
+`product-aliases.json` here. So `<brand>_widget_brief-0076` and `<brand>_widget-face-brush_brief-0076` are
 the same brief. New brief keys are minted with the catalog id; every register entry carries
 `product_id`. Nothing already made or live is renamed — old keys, Meta cards and live ad names keep the
 handle and still resolve.
@@ -72,12 +72,12 @@ feedback loop.
 ## Three levels in the account
 
 ```
-CAMPAIGN   US | FLEX™ | ICON
+CAMPAIGN   US | WIDGET™ | ICON
 AD SET       Fed-Up King | 260911 | 1 of 3
 AD             <the ad name, below>
 ```
 
-This follows what the ad account already runs (`US | FLEX™`, and message
+This follows what the ad account already runs (`US | WIDGET™`, and message
 themes like `Problem Solution` at the ad set) rather than a new scheme. The
 **campaign** says which market, which product, which funnel. It persists for
 months, so nothing dated and nothing about a batch goes in it — it has to stay
@@ -131,7 +131,7 @@ the whole mechanism — no lookup table, no id to keep in sync.
 | Field | What it is | Examples |
 |---|---|---|
 | `brand` | the brand | `<brand>`, `<brand>` |
-| `product` | the product it sells — its catalog id; a store handle is an alias (`names.product_id`) | `brilliance-body-scrub`, `flex-face-brush` |
+| `product` | the product it sells — its catalog id; a store handle is an alias (`names.product_id`) | `brilliance-body-scrub`, `widget-face-brush` |
 | `media` | **static, video or carousel** — the first thing anyone slices a report by, and recoverable from no other field | `static`, `video`, `carousel` |
 | `source` | who made the picture — `ai`, `ugc`, `studio` or `mixed` | `ai`, `ugc` |
 | `talent` | who is in it — a trained AI identity, a real creator, or `none` when no person appears | `susan`, `andrea`, `none` |

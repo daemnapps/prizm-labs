@@ -18,11 +18,11 @@ this chain points at a product sold to men, or to both.
 
 | Prompt | Hits | Who the "she" is | Severity |
 |---|---:|---|---|
-| `stage4b-hook-v4-damon.md` | **17** | the viewer | **Worst.** The whole hook philosophy is written about a female viewer |
-| `stage4c-expansion-v4-damon.md` | 5 | the viewer | Moderate |
-| `stage4e-audit-v1-damon.md` | 3 | the speaker | Low |
-| `stage4a-placement-v3-damon.md` | 2 | the viewer | Low |
-| `stage4d-close-v3-damon.md` | 2 | the speaker | Low |
+| `stage4b-hook-v4-owner.md` | **17** | the viewer | **Worst.** The whole hook philosophy is written about a female viewer |
+| `stage4c-expansion-v4-owner.md` | 5 | the viewer | Moderate |
+| `stage4e-audit-v1-owner.md` | 3 | the speaker | Low |
+| `stage4a-placement-v3-owner.md` | 2 | the viewer | Low |
+| `stage4d-close-v3-owner.md` | 2 | the speaker | Low |
 
 Clean already: stage 1, stage 2, stage 3, stage 5 v7.
 
@@ -40,7 +40,7 @@ method. They need rewriting, not find-and-replace.
 
 ## 2. Baked category — 1 prompt
 
-`stage3-injection-v3-damon.md`, lines 23–24. The worked example is skincare:
+`stage3-injection-v3-owner.md`, lines 23–24. The worked example is skincare:
 
 > "...because it's loaded with X to do Y to **skin that looks like this**" ...
 > "...to **skin** that..."
@@ -53,7 +53,7 @@ Everything else is clean. One example to re-cut generically.
 
 ### 3a. A category-specific fact is hardcoded in a generic stage
 
-`stage4c-expansion-v4-damon.md` still contains the literal string
+`stage4c-expansion-v4-owner.md` still contains the literal string
 `[SLOT: substantiated customer count]`.
 
 That is one product's missing fact written into a stage that is supposed to work
@@ -83,7 +83,7 @@ stage naming the canonical form, plus a pointer to the registry as the list.
 
 ### 3c. "Slot" means two different things
 
-`stage2-replication-v2-damon.md` defines **INJECTION SLOT** — which brand
+`stage2-replication-v2-owner.md` defines **INJECTION SLOT** — which brand
 material fills a structural element. That is not the same as `[SLOT: …]`, a fact
 nobody has. Two concepts, one word, in adjacent stages. Rename one.
 
@@ -102,7 +102,7 @@ deliberate ruling rather than leaving it as an accident.
 
 ### 3e. The audit stage contradicts the new rule
 
-`stage4e-audit-v1-damon.md` SHIP condition: *"all seven checks pass, slots are
+`stage4e-audit-v1-owner.md` SHIP condition: *"all seven checks pass, slots are
 flagged not filled"* — i.e. a script full of slots can SHIP.
 
 Under stage 5 v7 that is survivable, because stage 5 now rewrites rather than

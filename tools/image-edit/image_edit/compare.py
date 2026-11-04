@@ -31,7 +31,7 @@ STANDING = [
 def latest(folder=None):
     folder = Path(folder or P.home() / "prompts")
     best, best_v = None, -1
-    for f in folder.glob("compare-judge-v*-damon.md"):
+    for f in folder.glob("compare-judge-v*-owner.md"):
         try:
             v = int(f.name.split("-v")[1].split("-")[0])
         except ValueError:

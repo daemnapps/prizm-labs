@@ -144,7 +144,7 @@ class Brand:
         """The brand's own name templates, defaulting to naming.DEFAULT.
 
         Read off the live account, never imposed. Two real shapes so far:
-        `US | FLEX™ | ICON | Fed-Up King` and `cbo_us_purchase_body-scrub`.
+        `US | WIDGET™ | ICON | Fed-Up King` and `cbo_us_purchase_body-scrub`.
         """
         import naming as _n
         d = dict(_n.DEFAULT)

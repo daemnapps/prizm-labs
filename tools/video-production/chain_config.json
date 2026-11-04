@@ -6,7 +6,7 @@
    "stage": "stage0a",
    "name": "Format read",
    "runner": "claude-text",
-   "prompt": "stage0a-format-read-v1-damon.md",
+   "prompt": "stage0a-format-read-v1-owner.md",
    "why": "rule the shape, and name what the brief has not decided",
    "vars": {
     "brief": "~brief",
@@ -18,7 +18,7 @@
    "stage": "stage0b",
    "name": "Production document",
    "runner": "claude-text",
-   "prompt": "stage0b-production-document-v1-damon.md",
+   "prompt": "stage0b-production-document-v1-owner.md",
    "why": "every fact decided once, before generation costs anything",
    "vars": {
     "brief": "~brief",
@@ -37,14 +37,14 @@
    "name": "Cast",
    "runner": "image",
    "prompt_dir": "stage-1-cast",
-   "prompt": "stage1-character-sheet-v2-damon.md",
+   "prompt": "stage1-character-sheet-v2-owner.md",
    "why": "the character sheets and boards a new cast member needs before training"
   },
   {
    "stage": "stage1b",
    "name": "Identity plan",
    "runner": "claude-text",
-   "prompt": "stage1b-identity-plan-v1-damon.md",
+   "prompt": "stage1b-identity-plan-v1-owner.md",
    "why": "what must be trained before a frame is worth generating",
    "vars": {
     "production_document": "@stage2",
@@ -72,7 +72,7 @@
    "stage": "stage2b",
    "name": "Ledgers",
    "runner": "claude-text",
-   "prompt": "stage2b-ledgers-v1-damon.md",
+   "prompt": "stage2b-ledgers-v1-owner.md",
    "why": "consolidate the anti-drift tables and check them against each other",
    "vars": {
     "production_document": "@stage2",
@@ -84,7 +84,7 @@
    "stage": "stage3",
    "name": "Scene prompts",
    "runner": "claude-text",
-   "prompt": "stage3-scene-prompts-v6-damon.md",
+   "prompt": "stage3-scene-prompts-v6-owner.md",
    "why": "assemble one eleven-section prompt per scene; sections 1-8 verbatim; section 9 is the first frame, the timeline and the last frame, each in its own door's order",
    "vars": {
     "production_document": "@stage2",
@@ -116,7 +116,7 @@
    "name": "Sound plan",
    "runner": "claude-text",
    "prompt_dir": "stage-4b-sound",
-   "prompt": "stage4b-sound-plan-v1-damon.md",
+   "prompt": "stage4b-sound-plan-v1-owner.md",
    "why": "the bed, the effects and the room tone — everything heard that is not a spoken line",
    "vars": {
     "production_document": "@stage0b",
@@ -135,7 +135,7 @@
    "stage": "stage5",
    "name": "QC",
    "runner": "vision-judge",
-   "prompt": "stage5-qc-v2-damon.md",
+   "prompt": "stage5-qc-v2-owner.md",
    "scope": "scene",
    "why": "inspect every generated scene against what was specified",
    "vars": {
@@ -173,7 +173,7 @@
    "stage": "stage5b",
    "name": "Motion QC",
    "runner": "vision-judge",
-   "prompt": "stage5b-motion-qc-v2-damon.md",
+   "prompt": "stage5b-motion-qc-v2-owner.md",
    "prompt_dir": "stage-5b-motion-qc",
    "scope": "scene",
    "why": "identity hold, product constancy, anatomy, camera motivation, lip-sync class — every clip before it ships",
@@ -188,7 +188,7 @@
    "stage": "stage5c",
    "name": "Director pass",
    "runner": "vision-judge",
-   "prompt": "stage5c-director-v5-damon.md",
+   "prompt": "stage5c-director-v5-owner.md",
    "prompt_dir": "stage-5c-director",
    "scope": "scene",
    "why": "the creative QC the inspector is forbidden from offering — half-second, scroll stopper, dramatization, motion, format register, delivery landed",
@@ -205,7 +205,7 @@
    "stage": "stage6",
    "name": "Handoff",
    "runner": "claude-text",
-   "prompt": "stage6-handoff-v3-damon.md",
+   "prompt": "stage6-handoff-v3-owner.md",
    "why": "the pack the editor receives, and what it guarantees",
    "vars": {
     "production_document": "@stage2",
@@ -229,7 +229,7 @@
    "name": "Style formula",
    "runner": "claude-text",
    "prompt_dir": "stage-v1-style-formula",
-   "prompt": "stagev1-style-formula-v1-damon.md",
+   "prompt": "stagev1-style-formula-v1-owner.md",
    "why": "one canonical string, used byte-identical everywhere, plus the strip table",
    "vars": {
     "target_style": "~target_style",
@@ -241,7 +241,7 @@
    "name": "Convert assets",
    "runner": "claude-text",
    "prompt_dir": "stage-v2-convert-identities",
-   "prompt": "stagev2-convert-identities-v1-damon.md",
+   "prompt": "stagev2-convert-identities-v1-owner.md",
    "why": "characters, world and product converted FROM the refined sources — never re-described",
    "vars": {
     "style_formula": "@v1",
@@ -275,7 +275,7 @@
    "name": "Variation QC",
    "runner": "vision-judge",
    "prompt_dir": "stage-v5-variation-qc",
-   "prompt": "stagev5-variation-qc-v1-damon.md",
+   "prompt": "stagev5-variation-qc-v1-owner.md",
    "scope": "scene",
    "why": "style hold is the failure this gate exists for — plus identity, product, geometry, blocking, dialogue",
    "vars": {

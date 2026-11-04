@@ -72,7 +72,7 @@ def test_no_key_never_raises():
     section("1. no Apify key -> [UNFILLED], never raises")
 
     def _no_key(*a, **k):
-        raise SystemExit("no APIFY_TOKEN — set the env var or add one line to ~/.upright-keys.env")
+        raise SystemExit("no APIFY_TOKEN — set the env var or add one line to ~/.company-keys.env")
 
     with _Patch(R, "_run_reddit", _no_key):
         try:

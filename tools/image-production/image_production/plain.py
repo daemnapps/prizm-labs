@@ -1,7 +1,7 @@
 """The plain picture: one call, the way the owner makes them in Higgsfield.
 
     from image_production import plain
-    plain.make(brand, text, out, references=[<a swipe or a scene's plate>], products=["flex"], aspect="4:5")
+    plain.make(brand, text, out, references=[<a swipe or a scene's plate>], products=["widget"], aspect="4:5")
 
 the owner, 2026-10-25, on the carousels made this way: "there's a lot of control that I think is messing stuff up" and
 then "literally perfect. so much cleaner ... literally 1000000x better than any flex implementation we had in the
@@ -144,7 +144,7 @@ def _as_text(v):
 
 def prompt(text, names, lines, has_ref, people=None, inputs="", sheet=None, people_lines=(), rules_lines=(), sections=()):
     """THE INPUT STANDARD (the owner, 2026-10-26): every picture's prompt has the same labelled sections in the same order,
-    and a section with nothing in it is left out. prompts/input-standard-v1-damon.md is the page that shows it.
+    and a section with nothing in it is left out. prompts/input-standard-v1-owner.md is the page that shows it.
         INPUTS      which image is which
         THE PICTURE what the caller asked for (scene, subject, details, exact words)
         WHAT STAYS · THE FEELING · THE DIALS · TECHNIQUES · any other filled sheet variable, each its own section

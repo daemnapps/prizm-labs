@@ -87,7 +87,7 @@
      "prompts": [
       {
        "name": "The spice sheet, stage 4g · v5 (pace fix): the full prompt",
-       "file": "../../../tools/copywriter/prompts/video/stage-4-loop/4g-spice/stage4g-spice-v5-damon.md"
+       "file": "../../../tools/copywriter/prompts/video/stage-4-loop/4g-spice/stage4g-spice-v5-owner.md"
       },
       {
        "name": "The remake-clip skill, word for word",
@@ -152,7 +152,7 @@
       "Two B-roll clips never touch, the offer is never covered, and the first words after a B-roll run are never covered.",
       "Your rules in learned.json outrank the prompt's own rules."
      ],
-     "prompt": "prompts/stage-2-cut/stage2-cut-v2-damon.md",
+     "prompt": "prompts/stage-2-cut/stage2-cut-v2-owner.md",
      "prompt_name": "The cut prompt (stage 2 · v2)",
      "open": [
       {
@@ -187,11 +187,11 @@
      "prompts": [
       {
        "name": "The teardown, stage 1: labels every row with its roll, section, layers and sound",
-       "file": "../../../tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v13-damon.md"
+       "file": "../../../tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v13-owner.md"
       },
       {
        "name": "The AI brief, stage 5 · v14: the full prompt",
-       "file": "../../../tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v14-damon.md"
+       "file": "../../../tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v14-owner.md"
       }
      ]
     }

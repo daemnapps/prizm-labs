@@ -111,7 +111,7 @@ ul{{margin:0;padding-left:18px}} .ok{{color:var(--v)}} .held{{color:var(--s)}}
 <div class="top"><div>{vid}</div><div style="display:flex;flex-direction:column;gap:14px">
 <div class="say"><b>To change anything,</b> say it in plain words — "B-roll comes in a beat earlier", "lose the pause after 'sunscreen'", "captions in the clean look". It becomes a new version of the cut sheet; nothing is regenerated, and the reason is kept so the next cut starts closer.</div>
 <div><h2>The dials this edit ran under</h2><ul>{dials}</ul></div>
-{("<div><h2>The cutter’s notes for you</h2><ul>" + "".join(f"<li>{E(n)}</li>" for n in sheet.get("notes_for_damon") or []) + "".join(f"<li><b>Held out:</b> {E(str(h.get('clip')))} — {E(str(h.get('why')))}</li>" for h in sheet.get("held") or []) + "".join(f"<li><b>Missing:</b> {E(n)}</li>" for n in sheet.get("missing") or []) + "</ul></div>") if (sheet.get("notes_for_damon") or sheet.get("missing") or sheet.get("held")) else ""}
+{("<div><h2>The cutter’s notes for you</h2><ul>" + "".join(f"<li>{E(n)}</li>" for n in sheet.get("notes_for_owner") or []) + "".join(f"<li><b>Held out:</b> {E(str(h.get('clip')))} — {E(str(h.get('why')))}</li>" for h in sheet.get("held") or []) + "".join(f"<li><b>Missing:</b> {E(n)}</li>" for n in sheet.get("missing") or []) + "</ul></div>") if (sheet.get("notes_for_owner") or sheet.get("missing") or sheet.get("held")) else ""}
 {f'<div><h2>The machine’s checks</h2><ul>{chk}</ul></div>' if chk else ''}
 {f'<div><h2>What you have changed so far</h2><ul>{log}</ul></div>' if log else ''}</div></div>
 <div class="tl"><div class="inner"><div class="ruler">{ticks}</div>{''.join(rows)}</div></div>

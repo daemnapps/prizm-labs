@@ -127,7 +127,7 @@ class Geometry(unittest.TestCase):
 
 class ThePrompt(unittest.TestCase):
     def test_the_prompt_is_read_from_its_file_and_asks_where_not_whether(self):
-        self.assertEqual(sz.prompt_path().name, "stage5-subject-zone-v1-damon.md")
+        self.assertEqual(sz.prompt_path().name, "stage5-subject-zone-v1-owner.md")
         body = sz.prompt_text()
         self.assertIn('"subjects"', body)
         self.assertNotIn("```delta", body)           # the fix line is never sent to the judge

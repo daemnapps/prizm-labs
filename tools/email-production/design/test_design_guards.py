@@ -72,9 +72,9 @@ class APictureThatShowsWhatIsNotInTheBox(unittest.TestCase):
     def test_the_problem_names_the_picture_and_why(self):
         """the team, 2026-10-28: a wrong picture is the one check the team keeps, and it says which picture and why."""
         import build
-        spec = {"brand": "x", "sections": [{"s": "photo_card", "picture": {"photo": "drive:a.jpg", "alt": "FLEX in its case on the shelf"}}]}
+        spec = {"brand": "x", "sections": [{"s": "photo_card", "picture": {"photo": "drive:a.jpg", "alt": "WIDGET in its case on the shelf"}}]}
         lk = {"check": {"prices": {"$1": "x"}, "not_in_box": [{"word": "case", "why": "the charging case is sold separately"}]}}
-        out = build.product_check(spec, lk, "FLEX in its case on the shelf")
+        out = build.product_check(spec, lk, "WIDGET in its case on the shelf")
         bad = [x["detail"] for x in out if x["result"] == "PROBLEM"]
         self.assertEqual(len(bad), 1, out)
         self.assertIn("photo card picture shows the case", bad[0])

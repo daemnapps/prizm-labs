@@ -24,7 +24,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-LAB = REPO / "lab" / "damon" / "ad-runs"
+LAB = REPO / "lab" / "owner" / "ad-runs"
 sys.path.insert(0, str(HERE))
 import ad_approvals as A  # noqa: E402
 import line as L          # noqa: E402
@@ -94,7 +94,7 @@ def write(p, text):
 
 def open_request(root, ad, step, created, lane=A.LANE, commit=True):
     """The request the board opens for an ad waiting at a step (AR-2 (ad board snapshot)'s act, done by hand)."""
-    return RR.file_request(A.asset_for(ad, step), "link", ["damon"], lane, "damon", root=root, env={},
+    return RR.file_request(A.asset_for(ad, step), "link", ["owner"], lane, "owner", root=root, env={},
                            now=created, commit=commit)["item"]
 
 
@@ -209,21 +209,21 @@ class Reader(World):
     def test_the_ok_is_the_latest_approve_on_a_lane_ad_runs_request_naming_ad_and_step(self):
         r = self.a
         item = self.req[(WAIT_FINAL, "final")]
-        verdict(r, item, "steph", "reject", "2026-10-17T05:00:00Z")
+        verdict(r, item, "pm", "reject", "2026-10-17T05:00:00Z")
         self.assertNotIn(WAIT_FINAL, A.load(r, include_remote=False))              # a reject is not an OK
-        verdict(r, item, "steph", "approve", "2026-10-17T05:00:01Z", note="first")
+        verdict(r, item, "pm", "approve", "2026-10-17T05:00:01Z", note="first")
         verdict(r, item, "the team", "approve", "2026-10-17T05:00:02Z", note="second")
         got = A.load(r, include_remote=False)[WAIT_FINAL]["final"]
         self.assertEqual((got["approved_by"], got["note"], got["at"]), ("the team", "second", "2026-10-17T05:00:02Z"))
         verdict(r, item, "the team", "fix", "2026-10-17T05:00:03Z")               # her last word is no longer approve
-        self.assertEqual(A.load(r, include_remote=False)[WAIT_FINAL]["final"]["approved_by"], "steph")
-        RR.file_record(item, {"event": "close", "decision": "accepted"}, "damon", root=r, env={},
+        self.assertEqual(A.load(r, include_remote=False)[WAIT_FINAL]["final"]["approved_by"], "pm")
+        RR.file_record(item, {"event": "close", "decision": "accepted"}, "owner", root=r, env={},
                        now="2026-10-17T05:00:04Z", commit=False)
         self.assertIn("final", A.load(r, include_remote=False)[WAIT_FINAL])        # open or closed, the OK stands
         # an approve on another lane, or on a request naming another step, is no OK for this one
         other = open_request(r, WAIT_PROD, "production", "2026-10-17T05:01:00Z", lane="static-ads", commit=False)
-        verdict(r, other, "steph", "approve", "2026-10-17T05:01:01Z")
-        verdict(r, self.req[(WAIT_PROD, "production")], "steph", "approve", "2026-10-17T05:01:02Z")
+        verdict(r, other, "pm", "approve", "2026-10-17T05:01:01Z")
+        verdict(r, self.req[(WAIT_PROD, "production")], "pm", "approve", "2026-10-17T05:01:02Z")
         self.assertEqual(set(A.load(r, include_remote=False)[WAIT_PROD]), {"production"})
         self.assertEqual(A.load(r, include_remote=False)[WAIT_PROD]["production"]["item"],
                          self.req[(WAIT_PROD, "production")])
@@ -235,8 +235,8 @@ class Reader(World):
 
     def test_jsonl_seed_still_read_and_never_written(self):
         seed = write(self.a / A.LEGACY, "\n".join([
-            json.dumps({"id": "old-1", "step": "production", "approved_by": "damon", "at": "2026-10-15T10:00:00"}),
-            json.dumps({"id": "old-1", "approved_by": "damon"}),               # no step = final
+            json.dumps({"id": "old-1", "step": "production", "approved_by": "owner", "at": "2026-10-15T10:00:00"}),
+            json.dumps({"id": "old-1", "approved_by": "owner"}),               # no step = final
             "not json",
             json.dumps({"step": "final"}),                                      # no id: skipped
         ]) + "\n")
@@ -450,8 +450,8 @@ class Board(World):
 class Recheck(World):
     def test_a_stale_production_ok_is_refused_logged_and_never_acted_on(self):
         write(self.a / A.LEGACY, "\n".join(json.dumps(x) for x in (
-            {"id": WAIT_FINAL, "step": "production", "approved_by": "damon"},   # production already made
-            {"id": "ad-gone-7", "step": "production", "approved_by": "damon"},  # not on the board at all
+            {"id": WAIT_FINAL, "step": "production", "approved_by": "owner"},   # production already made
+            {"id": "ad-gone-7", "step": "production", "approved_by": "owner"},  # not on the board at all
         )) + "\n")
         verdict(self.a, self.req[(WAIT_PROD, "production")], "editor-a", "approve", "2026-10-17T05:00:00Z")
         started = self.runner_on(self.a)
@@ -462,7 +462,7 @@ class Recheck(World):
         self.assertEqual(sorted(json.loads(LR.JOBS.read_text())), ["production-" + WAIT_PROD])
 
     def test_a_retry_of_a_job_already_started_is_not_a_new_act(self):
-        write(self.a / A.LEGACY, json.dumps({"id": WAIT_FINAL, "step": "production", "approved_by": "damon"}) + "\n")
+        write(self.a / A.LEGACY, json.dumps({"id": WAIT_FINAL, "step": "production", "approved_by": "owner"}) + "\n")
         started = self.runner_on(self.a)
         write(LR.JOBS, json.dumps({"production-" + WAIT_FINAL: {"state": "waiting-usage", "retry_at": 0}}))
         _, text = quiet(LR.one_pass)
@@ -471,7 +471,7 @@ class Recheck(World):
 
     def test_versions_refuses_a_stale_final_ok_and_makes_the_live_one(self):
         write(self.a / "runs/video-production" / BRAND / "old-ad-5-prod" / "run.json", json.dumps({"label": "old-ad-5"}))
-        write(self.a / A.LEGACY, json.dumps({"id": "old-ad-5", "approved_by": "damon"}) + "\n")   # off the board
+        write(self.a / A.LEGACY, json.dumps({"id": "old-ad-5", "approved_by": "owner"}) + "\n")   # off the board
         verdict(self.a, self.req[(WAIT_FINAL, "final")], "editor-a", "approve", "2026-10-17T05:00:00Z")
         V.REPO, V.RUNS = self.a, self.a / "runs"
         V.DONE, V.LOG = self.a / "runs/ad-runs/versions-done.json", self.a / "runs/ad-runs/versions.log"
@@ -499,7 +499,7 @@ class HisRules(World):
             fh.write(json.dumps(rec) + "\n")
 
     def test_a_verdict_on_a_dropped_ad_is_refused_until_he_undoes_the_drop(self):
-        self.mark("dropped.jsonl", {"id": WAIT_PROD, "at": "2026-10-17T06:00:00", "by": "damon"})
+        self.mark("dropped.jsonl", {"id": WAIT_PROD, "at": "2026-10-17T06:00:00", "by": "owner"})
         verdict(self.a, self.req[(WAIT_PROD, "production")], "editor-a", "approve", "2026-10-17T06:00:01Z")
         started = self.runner_on(self.a)
         _, text = quiet(LR.one_pass)
@@ -508,7 +508,7 @@ class HisRules(World):
         got, said = self.approve(self.a, WAIT_PROD, "production", "--dry-run")
         self.assertEqual(got, 2, said)
         self.assertIn("not waiting for a production OK", said)
-        self.mark("dropped.jsonl", {"id": WAIT_PROD, "at": "2026-10-17T06:01:00", "by": "damon", "undo": True})
+        self.mark("dropped.jsonl", {"id": WAIT_PROD, "at": "2026-10-17T06:01:00", "by": "owner", "undo": True})
         quiet(LR.one_pass)
         self.assertEqual(started, ["production-" + WAIT_PROD])                  # the same verdict, live again
 
@@ -527,13 +527,13 @@ class HisRules(World):
         self.assertIn("stale OK refused, not acted on: production for %s" % old, text)
         self.assertIn("Old · restart to go ahead", text)
         # his Restart on an old ad: back into the approval queue (no job of its own), and the OK now stands
-        self.mark("restart.jsonl", {"id": old, "at": "2026-10-17T06:02:00", "by": "damon", "kind": "video",
+        self.mark("restart.jsonl", {"id": old, "at": "2026-10-17T06:02:00", "by": "owner", "kind": "video",
                                     "what": "back into the approval queue", "from_step": ""})
         quiet(LR.one_pass)
         self.assertEqual(started, ["production-" + old])
 
     def test_restart_asks_run_with_no_ok_anywhere(self):
-        self.mark("restart.jsonl", {"id": WAIT_PROD, "at": "2026-10-17T06:00:00", "by": "damon", "kind": "video",
+        self.mark("restart.jsonl", {"id": WAIT_PROD, "at": "2026-10-17T06:00:00", "by": "owner", "kind": "video",
                                     "from_step": "3"})
         started = self.runner_on(self.a)
         self.assertEqual(A.load(self.a), {})
@@ -577,15 +577,15 @@ def old_line_approved(f, rj, brief):
 
 
 SEED = [
-    {"id": "nobrief-1", "step": "production", "approved_by": "damon"},
-    {"id": "brand_prod_brief-0007", "step": "production", "approved_by": "damon"},
-    {"id": "brand_prod_brief-0007", "approved_by": "damon", "note": "no step = final"},
+    {"id": "nobrief-1", "step": "production", "approved_by": "owner"},
+    {"id": "brand_prod_brief-0007", "step": "production", "approved_by": "owner"},
+    {"id": "brand_prod_brief-0007", "approved_by": "owner", "note": "no step = final"},
     "not json",
-    {"step": "final", "approved_by": "damon"},
-    {"id": "brief-0009", "step": "final", "approved_by": "damon"},
-    {"id": "later-3", "step": "production", "approved_by": "damon"},
-    {"id": "brief-0009", "step": "final", "approved_by": "damon", "note": "the later line wins"},
-    {"id": "prod-only-4", "step": "production", "approved_by": "damon"},
+    {"step": "final", "approved_by": "owner"},
+    {"id": "brief-0009", "step": "final", "approved_by": "owner"},
+    {"id": "later-3", "step": "production", "approved_by": "owner"},
+    {"id": "brief-0009", "step": "final", "approved_by": "owner", "note": "the later line wins"},
+    {"id": "prod-only-4", "step": "production", "approved_by": "owner"},
 ]
 
 

@@ -1,6 +1,6 @@
 """Reusable 3D scene types for product stills: one fixed print prompt per scene type, only the words change.
 
-The sets themselves are built by flex_sets_blender.py inside the 3D Jutsu project. SCENES holds the values each ad
+The sets themselves are built by product_sets_blender.py inside the 3D Jutsu project. SCENES holds the values each ad
 passes to it; print_words() gives the print step's words. Add a new ad by adding a row, never a new set by hand.
 """
 import re
@@ -9,7 +9,7 @@ from pathlib import Path
 
 RUNS = Path(__file__).resolve().parents[2] / "runs" / "image-teardown"
 
-PRODUCT = ("The product is exactly as the reference shows it: the FLEX face brush, a matte black egg-shaped body with a soft "
+PRODUCT = ("The product is exactly as the reference shows it: the WIDGET face brush, a matte black egg-shaped body with a soft "
            "silicone bristle face, a thin white ring above its rounded glossy base, 11.15 cm long, 6.98 cm wide and only 3.35 cm "
            "thick. It is flat, thin and slim like the SIDE photo, never bulbous or puffed. "
            "In the blockout the product is a plain placeholder: its straight white stripe and big black base are not the real product. "
@@ -18,7 +18,7 @@ PRODUCT = ("The product is exactly as the reference shows it: the FLEX face brus
 FLAT = (" Seen straight-on and flat, exactly like the FRONT photo, no side wall or back showing, turned only slightly in its own plane.")
 HEAD = ("Two inputs: the first is a clean 3D blockout of {shot}; the second is the product's casting sheet of real studio photographs, which "
         "supplies its shape, materials and every detail. Keep the blockout's camera, layout, framing, sizes, depth and light exactly; nothing of "
-        "its grey materials carries over. Each grey egg in the blockout is one FLEX, its grey zone the bristle face.")
+        "its grey materials carries over. Each grey egg in the blockout is one WIDGET, its grey zone the bristle face.")
 TAIL = "A real, unretouched photograph, natural grain. No people, no hands. No writing anywhere except {allowed}."
 
 PROMPTS = {
@@ -48,9 +48,9 @@ SCENES = {
     "brand-a-batch-bf-flex-12": {
         "prompt": "tabletop-notes",
         "dress": "The surface is a coach's bone-white whiteboard draft desk with hand-drawn chalk-marker court lines, Xs, Os and play arrows "
-                 "running from each note to its FLEX, as if the desk is drafting a face brush with every pick. The grey discs are a steel "
+                 "running from each note to its WIDGET, as if the desk is drafting a face brush with every pick. The grey discs are a steel "
                  "stopwatch and a coach's whistle on a cord, the long dark bar a marker pen, the small discs round magnets. Soft window light from the upper left.",
-        "words": {"top": "Black Friday DRAFT PICKS", "middle": "FLEX starting at $46", "bottom": "90-day money-back guarantee"},
+        "words": {"top": "Black Friday DRAFT PICKS", "middle": "WIDGET starting at $46", "bottom": "90-day money-back guarantee"},
         "set": {"name": "bf_notes2", "kind": "tabletop", "frame_w_cm": 27, "ground": "#EEE7D7",
                 "notes": [{"x": .27, "y": .22, "w": .40, "h": .21, "spin": -2, "color": "#F0D860"},
                           {"x": .27, "y": .50, "w": .40, "h": .21, "spin": 1.5, "color": "#F0D860"},
@@ -72,7 +72,7 @@ SCENES = {
         "dress": "A miniature arena in a studio: the backdrop is bone-white pebbled basketball leather, flat and even, with two narrow spotlight beams "
                  "crossing on the product. The orange ring at upper right is a tiny regulation basketball hoop with a white net, the dark panel at "
                  "upper left a tiny blank arena scoreboard with lit dots and no numbers. The flecks are tiny ink and gold confetti.",
-        "words": {"front": "FLEX starting at $46", "back": "Black Friday"},
+        "words": {"front": "WIDGET starting at $46", "back": "Black Friday"},
         "set": {"name": "bf_float2", "kind": "float_hero", "frame_w_cm": 14, "backdrop": "#EEE7D7", "x": .5, "y": .37, "tilt": 7, "sun": [15, -10, 0],
                 "ribbon": {"radius_cm": 7.5, "width_cm": 1.9, "tilt": 14, "color": "#F0D860"},
                 "props": [{"shape": "ring", "x": .84, "y": .10, "w": .17, "color": "#C8622A"}, {"shape": "box", "x": .16, "y": .09, "w": .24, "h": .13, "color": "#1A1A1A"}],

@@ -195,7 +195,7 @@ class StartMachineHand(TempRuns):
 
     def make_plan(self) -> Path:
         # Reference images live in self.tmp, made on the fly — never as
-        # committed fixture binaries, since lab/damon/**/*.png is gitignored
+        # committed fixture binaries, since lab/owner/**/*.png is gitignored
         # (workspace rule 3) and a file only on this machine would silently
         # break the test on a fresh clone.
         ref1 = self.tmp / "cast-ref.png"
@@ -647,7 +647,7 @@ class StartRefusesAnUnreadyBrief(TempRuns):
         self.assertEqual(code, 2)
         self.assertIn("REFUSED swipe match: it was never checked against its swipe", out)
 
-    def test_a_brief_damon_has_not_read_is_refused(self):
+    def test_a_brief_owner_has_not_read_is_refused(self):
         import importlib.util as iu
         sp = iu.spec_from_file_location("swipe_match", HERE.parents[1] / "video-writing" / "machine" / "swipe_match.py")
         sm = iu.module_from_spec(sp); sp.loader.exec_module(sm)

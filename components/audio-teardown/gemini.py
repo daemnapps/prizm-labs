@@ -44,8 +44,8 @@ def ask(audio, text, models=MODELS):
 
 
 def prompt(stem, here):
-    """(path, text) of the newest prompts/<stem>-v<N>-damon.md, its version note stripped."""
-    files = sorted((Path(here) / "prompts").glob(f"{stem}-v*-damon.md"),
+    """(path, text) of the newest prompts/<stem>-v<N>-owner.md, its version note stripped."""
+    files = sorted((Path(here) / "prompts").glob(f"{stem}-v*-owner.md"),
                    key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     p = files[-1]
     return p, re.sub(r"^\*v\d+[^\n]*\*\n+", "", p.read_text())

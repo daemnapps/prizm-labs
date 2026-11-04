@@ -39,5 +39,5 @@ def flag(word):
 
 def all_words():
     """For a page: {"stages": [...], "types": [...], "flags": [...]} with ids and display names only."""
-    pick = lambda rows: [{"id": r["id"], "name": r["name"], **({"needs_damon": True} if r.get("needs_damon") else {})} for r in rows]
+    pick = lambda rows: [{"id": r["id"], "name": r["name"], **({"needs_owner": True} if r.get("needs_owner") else {})} for r in rows]
     return {"stages": pick(STAGES), "types": pick(TYPES), "flags": pick(FLAGS)}

@@ -18,10 +18,10 @@ pass; and the static and landing-page section each one feeds.
 It plans. It generates nothing. Production is NOT built yet: no component reads
 `variation-plan.json` today (2026-10-08) — no reader yet.
 
-`machine/format_swap.py` (the one-step concept+format → spec shortcut) is superseded by the proven ad → new format chain: `PROVEN-TO-FORMAT-damon.md`, `machine/proven_to_format.py`.
+`machine/format_swap.py` (the one-step concept+format → spec shortcut) is superseded by the proven ad → new format chain: `PROVEN-TO-FORMAT-owner.md`, `machine/proven_to_format.py`.
 
 Page: **Ad Variations** — (private page) (register: `context/artifacts.md`). Markdown
-mirror of the page: `AD-VARIATIONS-damon.md`.
+mirror of the page: `AD-VARIATIONS-owner.md`.
 
 ## Inputs
 
@@ -111,7 +111,7 @@ formats       [{id, name, what_the_viewer_sees, parts[{variable, value, evidence
                 closest_existing, why, seed_footage, to_make, audience, recipe, cost, gates}]
 shared        [{key, piece, route, units, usd, used_by[], why}]
 totals        variations, formats, usd, usd_with_tests, hours, not_included
-damon_decides [], problems []
+owner_decides [], problems []
 run           stages{prompt, sha, model, seconds, chars}, llm_cost, brand_files_read
 ```
 
@@ -164,7 +164,7 @@ everything after it; a changed prompt reruns itself and what depends on it.
 ## Calibration against the hand-made spec (27 Sep 2026)
 
 Post #1 (TikTok 7167399325910289706) was planned automatically and compared
-with the hand-made Asset 01 spec (`lab/damon/<brand>-relaunch/ASSET-01-VIDEO-VARIATIONS-damon.md`).
+with the hand-made Asset 01 spec (`lab/owner/<brand>-relaunch/ASSET-01-VIDEO-VARIATIONS-owner.md`).
 The full side-by-side is `notes/calibration.json`, rendered on the page.
 
 What was weaker, and what changed:
@@ -189,4 +189,4 @@ Prompt versions now live: stage 0c v1, stage 1 v3, stage 2 v3, stage 3 v3,
 stage 4 v2, stage 5 v3, stage 6 v3, stage 7 v2. Earlier versions are in each
 stage's `archive/`.
 
-`machine/format_swap.py` (the one-step concept+format → spec shortcut) is superseded by the proven ad → new format chain: `PROVEN-TO-FORMAT-damon.md`, `machine/proven_to_format.py`.
+`machine/format_swap.py` (the one-step concept+format → spec shortcut) is superseded by the proven ad → new format chain: `PROVEN-TO-FORMAT-owner.md`, `machine/proven_to_format.py`.

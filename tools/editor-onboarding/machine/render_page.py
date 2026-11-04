@@ -48,8 +48,8 @@ def mmss(t: float) -> str:
     return f"{int(t // 60):02d}:{int(t % 60):02d}"
 
 
-day_one = prompt_block(TOOL / "prompts" / "01-day-one-v3-damon.md")
-pull = prompt_block(TOOL / "prompts" / "02-pull-briefs-v3-damon.md")
+day_one = prompt_block(TOOL / "prompts" / "01-day-one-v3-owner.md")
+pull = prompt_block(TOOL / "prompts" / "02-pull-briefs-v3-owner.md")
 chaps = chapters()
 
 chapter_html = "\n".join(

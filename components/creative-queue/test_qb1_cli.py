@@ -37,7 +37,7 @@ def call(argv):
 class FakeGit:
     """A stand-in for subprocess.run: records every git call; `push_fails` pushes fail before one succeeds."""
 
-    def __init__(self, push_fails=0, fail=None, email="steph@company.com"):
+    def __init__(self, push_fails=0, fail=None, email="pm@company.com"):
         self.calls, self.push_fails, self.fail, self.email = [], push_fails, fail, email
 
     def __call__(self, args, **kw):
@@ -77,27 +77,27 @@ class Decisions(Temp):
                 ["add", "q2", "--title", "New idea", "--brand", "b", "--type", "video-ad"],
                 ["remove", "q1"], ["restore", "q1"], ["approve", "q2"]]
         for n, argv in enumerate(runs, 1):
-            code, out, err = call(argv + ["--by", "steph", "--root", str(self.root), "--no-commit"])
+            code, out, err = call(argv + ["--by", "pm", "--root", str(self.root), "--no-commit"])
             self.assertEqual(code, 0, err)
-            path = next((self.root / "decisions" / "steph").glob("*.jsonl"))
+            path = next((self.root / "decisions" / "pm").glob("*.jsonl"))
             self.assertEqual(out, "decision: %s\n" % path)
-            self.assertEqual(len(self.lines("steph")), n)
-        got = self.lines("steph")
+            self.assertEqual(len(self.lines("pm")), n)
+        got = self.lines("pm")
         self.assertEqual([x["op"] for x in got], ["set", "add", "remove", "restore", "approve"])
         self.assertEqual((got[0]["field"], got[0]["value"]), ("priority", "top"))
         self.assertEqual(got[1]["value"], {"title": "New idea", "brand": "b", "type": "video-ad"})
         for x in got:
-            self.assertEqual((x["schema"], x["by"]), (1, "steph"))
+            self.assertEqual((x["schema"], x["by"]), (1, "pm"))
             self.assertIsNotNone(qcore._utc(x["made"]))
             self.assertNotIn("legacy", x)
         self.assertEqual(path.name, got[0]["made"][:10] + ".jsonl")      # the UTC day names the file
 
     def test_by_defaults_to_git_email(self):
-        fake = FakeGit(email="dayu@company.com")
+        fake = FakeGit(email="engineer@company.com")
         with mock.patch.object(cq, "RUN", fake):
             code, out, err = call(["remove", "q1", "--root", str(self.root), "--no-commit"])
         self.assertEqual(code, 0, err)
-        self.assertEqual(self.lines("dayu")[0]["by"], "dayu")
+        self.assertEqual(self.lines("engineer")[0]["by"], "engineer")
         self.assertEqual(fake.subs(), ["config"])
         with mock.patch.object(cq, "RUN", FakeGit(email=None)):
             code, out, err = call(["remove", "q1", "--root", str(self.root), "--no-commit"])
@@ -105,28 +105,28 @@ class Decisions(Temp):
         self.assertIn("--by", err)
 
     def test_bad_decisions_refused_with_reason(self):
-        code, _, err = call(["set", "q1", "removed", "yes", "--by", "steph", "--root", str(self.root), "--no-commit"])
+        code, _, err = call(["set", "q1", "removed", "yes", "--by", "pm", "--root", str(self.root), "--no-commit"])
         self.assertEqual(code, 1)
-        code, _, err = call(["set", "q1", "requested_stage", "nowhere", "--by", "steph", "--root", str(self.root),
+        code, _, err = call(["set", "q1", "requested_stage", "nowhere", "--by", "pm", "--root", str(self.root),
                              "--no-commit"])
         self.assertEqual(code, 1)
         self.assertIn("requested_stage", err)
         for rec, word in (({"id": "q", "op": "delete"}, "op"), ({"id": "q", "op": "set", "field": "stage"}, "field"),
-                          ({"op": "remove"}, "id"), ({"id": "q", "op": "remove", "by": "damon"}, "own log"),
+                          ({"op": "remove"}, "id"), ({"id": "q", "op": "remove", "by": "owner"}, "own log"),
                           ({"id": "q", "op": "remove", "legacy": True}, "legacy")):
             with self.assertRaises(ValueError) as cm:
-                qcore.append_decision(self.root, "steph", rec)
+                qcore.append_decision(self.root, "pm", rec)
             self.assertIn(word, str(cm.exception))
         with self.assertRaises(ValueError):
             qcore.append_decision(self.root, "../escape", {"id": "q", "op": "remove"})
-        self.assertFalse((self.root / "decisions").exists() and self.lines("steph"))
+        self.assertFalse((self.root / "decisions").exists() and self.lines("pm"))
 
     def test_without_no_commit_commits_exactly_the_written_file(self):
         fake = FakeGit()
         with mock.patch.object(cq, "RUN", fake):
-            code, out, err = call(["approve", "q1", "--by", "steph", "--root", str(self.root)])
+            code, out, err = call(["approve", "q1", "--by", "pm", "--root", str(self.root)])
         self.assertEqual(code, 0, err)
-        path = str(next((self.root / "decisions" / "steph").glob("*.jsonl")))
+        path = str(next((self.root / "decisions" / "pm").glob("*.jsonl")))
         self.assertEqual(fake.subs(), ["add", "commit", "push", "rev-parse"])
         self.assertEqual(fake.calls[0], ["git", "add", "--", path])
         self.assertEqual(fake.calls[1][-2:], ["--", path])
@@ -138,7 +138,7 @@ class RebuildShow(Temp):
         qcore.write_observation(self.root, "mac", {"q1": {"title": "One", "observed_stage": "making"}},
                                 now="2026-10-22T02:00:00Z")
         for argv in (["set", "q1", "requested_stage", "launch"], ["add", "q2", "--title", "Two"]):
-            self.assertEqual(call(argv + ["--by", "steph", "--root", str(self.root), "--no-commit"])[0], 0)
+            self.assertEqual(call(argv + ["--by", "pm", "--root", str(self.root), "--no-commit"])[0], 0)
 
     def test_rebuild_writes_index_and_prints_summary(self):
         self.seed()
@@ -158,7 +158,7 @@ class RebuildShow(Temp):
         self.assertEqual(code, 0, err)
         e = json.loads(out)
         self.assertEqual((e["id"], e["observed_stage"], e["requested_stage"]), ("q1", "making", "launch"))
-        self.assertEqual(e["decided_by"]["requested_stage"]["by"], "steph")
+        self.assertEqual(e["decided_by"]["requested_stage"]["by"], "pm")
         self.assertEqual(call(["show", "nope", "--root", str(self.root)])[0], 1)
         self.assertFalse((self.root / "index.json").exists())      # show writes nothing
 
@@ -180,19 +180,19 @@ class ImportLegacy(Temp):
             self.assertNotIn(k, dd)
         self.assertEqual(rm["title"], LEGACY[REMOVED_ID]["title"])
         self.assertEqual(rm["history"], LEGACY[REMOVED_ID]["history"])      # every other field carried as observed
-        legacy = [json.loads(x) for x in (self.root / "decisions" / "damon" / "legacy.jsonl").read_text().splitlines()]
+        legacy = [json.loads(x) for x in (self.root / "decisions" / "owner" / "legacy.jsonl").read_text().splitlines()]
         self.assertEqual(legacy, [
             {"schema": 1, "id": DECIDED_ID, "op": "approve", "field": None,
              "value": {"action": "go", "stage": "final-needs-you", "at": "2026-10-18T14:31:16"},
-             "by": "damon", "made": "2026-10-18T14:31:16", "legacy": True},
+             "by": "owner", "made": "2026-10-18T14:31:16", "legacy": True},
             {"schema": 1, "id": REMOVED_ID, "op": "remove", "field": None, "value": None,
-             "by": "damon", "made": "2026-10-19T17:20:31", "legacy": True}])
+             "by": "owner", "made": "2026-10-19T17:20:31", "legacy": True}])
         # the imported queue reduces: the removal is a tombstone, the go an approval waiting to run
         code, out, err = call(["rebuild", "--root", str(self.root), "--no-commit"])
         self.assertEqual(code, 0, err)
         idx = {e["id"]: e for e in json.loads((self.root / "index.json").read_text())["entries"]}
         self.assertIs(idx[REMOVED_ID]["removed"], True)
-        self.assertEqual(idx[DECIDED_ID]["approved"], {"by": "damon", "made": "2026-10-18T14:31:16"})
+        self.assertEqual(idx[DECIDED_ID]["approved"], {"by": "owner", "made": "2026-10-18T14:31:16"})
         self.assertEqual(idx[DECIDED_ID]["execution"], "pending")
         # a second import changes nothing, so it writes and commits nothing
         fake = FakeGit()
@@ -215,11 +215,11 @@ class ImportLegacy(Temp):
         code, out, err = call(["import-legacy", "--from", str(src), "--root", str(self.root), "--no-commit"])
         self.assertEqual(code, 0, err)
         self.assertEqual(out, "legacy: 3 entries, 4 decisions\n")
-        mine = {(x["op"], x["field"]): x for x in self.lines("damon") if x["id"] == "b_x_brief-0001"}
+        mine = {(x["op"], x["field"]): x for x in self.lines("owner") if x["id"] == "b_x_brief-0001"}
         self.assertEqual(sorted(mine), [("set", "note"), ("set", "priority")])
         self.assertEqual(mine[("set", "priority")]["made"], "2026-10-18T09:00:00")
         self.assertEqual(mine[("set", "note")]["made"], "2026-10-22T02:20:07+00:00")
-        self.assertTrue(all(x["legacy"] for x in self.lines("damon")))
+        self.assertTrue(all(x["legacy"] for x in self.lines("owner")))
 
 
 class LiveGuard(Temp):
@@ -248,7 +248,7 @@ class LiveGuard(Temp):
         repo = self.make_repo(json.dumps({"live": "off"}))
         live = repo / "runs" / "queue"
         with mock.patch.dict(os.environ, {"AI_WORKSPACE": str(repo)}):
-            for argv in (["rebuild"], ["set", "q1", "note", "x", "--by", "steph"], ["show", "q1"],
+            for argv in (["rebuild"], ["set", "q1", "note", "x", "--by", "pm"], ["show", "q1"],
                          ["import-legacy", "--from", str(FIXTURES)]):
                 code, out, err = call(argv + ["--root", str(live), "--no-commit"])
                 self.assertEqual(code, 2)

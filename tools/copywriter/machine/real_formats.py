@@ -7,12 +7,12 @@
 
 the owner, 2026-10-27 (Tella, on the picture board): "right now we keep writing brand new ad copy over and over and
 over again per ad, and that's not necessary at all ... when I read some of this copy back, it's not in a proven
-format ... we're just freeballing it based off of the brief." And 2 Oct (docs/copy-format-bank-damon.md): "We're
+format ... we're just freeballing it based off of the brief." And 2 Oct (docs/copy-format-bank-owner.md): "We're
 first going to use the formats that directly came from the ad account, nothing that we generated or wrote."
 
 The raw material is the warehouse pull `library/meta_copy.py --from-db` already made (top 25 by spend + top 25 by
 lowest CPA, the words exactly as they ran, with their numbers): `runs/copywriter/<brand>/meta-copy/<date>/copy.json`.
-Nothing here reads the ad account. Each ad's words go through `prompts/copy-format-strip-vN-damon.md` and come back
+Nothing here reads the ad account. Each ad's words go through `prompts/copy-format-strip-vN-owner.md` and come back
 as the same words with named [BLANKS] — the way the video hook is a format (tools/video-teardown
 `hook_format`, its declared public helper, checks it here the same way: the format's fixed words must be the ad's
 own, in order). A format that is not the ad's own words is kept with `state: broken` and never handed to a writer.
@@ -45,9 +45,9 @@ HF = _hook_format()
 
 
 def latest_prompt(stage):
-    got = [(int(m.group(1)), f) for f in PROMPTS.glob(f"{stage}-v*-damon.md") for m in [re.search(r"-v(\d+)-", f.name)] if m]
+    got = [(int(m.group(1)), f) for f in PROMPTS.glob(f"{stage}-v*-owner.md") for m in [re.search(r"-v(\d+)-", f.name)] if m]
     if not got:
-        sys.exit(f"no prompt {stage}-vN-damon.md in {PROMPTS}")
+        sys.exit(f"no prompt {stage}-vN-owner.md in {PROMPTS}")
     return max(got)[1]
 
 

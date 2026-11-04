@@ -4,7 +4,7 @@
 chains and lets ride it"*). Code: `marketing_chain_checks/viewer.py`. Prompts:
 `viewer-check` (v2), `viewer-card`, `viewer-cut`, and for the chain
 `objection-match`, `answer-find`, `belief-drivers`, `viewer-fix`, `hidden-boxes`.
-The highest `-vN-damon.md` of each is the one that runs.
+The highest `-vN-owner.md` of each is the one that runs.
 
 The last check after the writing stages. The ad is dropped into its avatar's real
 feed and scrolled by fresh viewers who aren't marketers. They're asked: do you

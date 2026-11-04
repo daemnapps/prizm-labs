@@ -239,7 +239,7 @@ def settle(st, read, key):
     for el, v in hand_tags(key).items():
         if el in ELEMENTS:
             v = aliases(el).get(v, v)
-        lay[el], src[el] = v, "damon"
+        lay[el], src[el] = v, "owner"
     lay["_from"] = src
     st["layers"] = lay
     if lay.get("style"):

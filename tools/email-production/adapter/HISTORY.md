@@ -8,16 +8,16 @@ the page got here and the full detail behind each step.
 **Retired 2026-10-21 (the team, call GMT20261021-110119, 00:11-00:17 and 00:32-00:37):** the artifact page below and its
 5-minute `/loop` are replaced. the team works with her own Claude Code beside a page that shows her emails; every change
 is asked for in Claude, by code or in plain words. The new page is the team's live page
-`platform/views/viewers/steph/emails-demo.html`, opened through PF-4 (page starter kit) (see "Open the page for her").
+`platform/views/viewers/pm/emails-demo.html`, opened through PF-4 (page starter kit) (see "Open the page for her").
 What follows, down to "Requests from the email page", is kept as history.
 
-Published 2026-10-20 from the team's Upright account: (private page) (replaces the 2026-10-19 page D5AjDHL7TrWyLvB73x54xL, published from her personal account, whose data Upright accounts cannot reach from Claude Code)
+Published 2026-10-20 from the team's company account: (private page) (replaces the 2026-10-19 page D5AjDHL7TrWyLvB73x54xL, published from her personal account, whose data company accounts cannot reach from Claude Code)
 
 the owner's `tools/email-production/team-outlier/outlier-emails.html` with the team-facing wording: a "how this works"
 guide per person, a to-do list per email for the team, plain button names ("Change this picture", "This part looks right",
 "Make the missing parts for me", "Done: send to the team", "Redo the whole email"), statuses named for whoever is
 looking. The data contract is unchanged (collections `emails`, `steps`, `calls`; the same call actions), so
-`team-outlier/sync.py` list and apply work as written. Fill: `sync.py list --brand B > rows.json`, then `python3 lab/steph/eve-email-page/enrich.py rows.json` (each picture gets where it lives and a Drive link), then the rest as `team-outlier/README.md` says.
+`team-outlier/sync.py` list and apply work as written. Fill: `sync.py list --brand B > rows.json`, then `python3 lab/pm/designer-email-page/enrich.py rows.json` (each picture gets where it lives and a Drive link), then the rest as `team-outlier/README.md` says.
 
 Republish from this file over the link above, never a second copy. If the owner's template changes, carry the
 change here or fold these wording changes into his template (his call).
@@ -36,7 +36,7 @@ Use a **new** Claude Code conversation each working session, opened in the works
 
 **Open the page for her** (each working session, after `git pull`):
 
-    python3 components/page-features/kit/serve.py platform/views/viewers/steph/emails-demo.html --open
+    python3 components/page-features/kit/serve.py platform/views/viewers/pm/emails-demo.html --open
 
 It opens the emails page in her browser at http://127.0.0.1:8765/ with today's emails from her copy of the repo
 (PF-4 (page starter kit), minimal form). Leave it running in the background; after each change she reloads the page
@@ -48,12 +48,12 @@ and tell the team the last line it prints. the team's deadlines live in `runs/em
 the team asks in one of two ways:
 
 - **Pasted from the page.** Every button on the page copies one line that starts
-  `Email request (lab/steph/eve-email-page/README.md):`, then the code, then the address in brackets, then what to do.
+  `Email request (lab/pm/designer-email-page/README.md):`, then the code, then the address in brackets, then what to do.
   Example: `Email request (…): oct-20 · P1 [<brand>/<brand>-oct-20, section 1, picture 0] · change this picture: warmer light`.
   The bracket is exact: brand / run label, the section's index in `design/email.json`, the picture's index inside it.
 - **Said in her own words**, with or without a code: "oct-20 P2: warmer light", "the hero on the Halloween email looks
   too dark". A code is `<email> · P<n>` for a picture or `<email> · part <n>` for a part (part n = section index + 1).
-  Find P numbers with `python3 lab/steph/eve-email-page/own_picture.py list <email>`. If her words could mean two
+  Find P numbers with `python3 lab/pm/designer-email-page/own_picture.py list <email>`. If her words could mean two
   pictures, show her the two codes and ask which one.
 
 Then do what the request says:
@@ -73,7 +73,7 @@ push fails, stop and tell the team and the team; never force.
 
 ### Her own picture (Higgsfield, a photo, a designer's file)
 
-1. Find the picture: `python3 lab/steph/eve-email-page/own_picture.py list <email>` (e.g. `oct-20`). Use the code
+1. Find the picture: `python3 lab/pm/designer-email-page/own_picture.py list <email>` (e.g. `oct-20`). Use the code
    or the bracket address from her request.
 2. Get the file. She drags it into this window (you see its path on her Mac) or pastes a Google Drive link. Either
    works: a Drive link is read with her own `GDRIVE_SA_KEY`. HEIC, PNG, WEBP and JPG all work.
@@ -82,7 +82,7 @@ push fails, stop and tell the team and the team; never force.
    tubes in it."). Show it to her and use her correction if she gives one. Never reuse an old alt that no longer
    matches, and never a "To make…" prompt: the script refuses those.
 4. Run:
-   `python3 lab/steph/eve-email-page/own_picture.py place <email> <code, e.g. P1 or s1.0> "<file path or Drive link>" --alt "<the alt>" --made-with Higgsfield`
+   `python3 lab/pm/designer-email-page/own_picture.py place <email> <code, e.g. P1 or s1.0> "<file path or Drive link>" --alt "<the alt>" --made-with Higgsfield`
    (leave out `--made-with` for a real photo). It saves the picture as JPEG in the run's `media/` folder, puts it on
    the Drive at `Shared Assets/runs/email-production/<brand>/<label>/media/`, swaps it into `design/email.json`
    keeping the old picture in that picture's `history`, then rebuilds and checks the email. If the Drive step fails,

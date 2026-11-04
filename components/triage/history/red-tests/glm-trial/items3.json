@@ -23,7 +23,7 @@
  {
   "id": "R27",
   "suite": "new-workflow-design/builds/teardown-integration/test_mini_run_request.py",
-  "first_failing_line": "ERROR: test_a_junk_venue_never_invents_one (__main__.DamonsPathUntouched)",
+  "first_failing_line": "ERROR: test_a_junk_venue_never_invents_one (__main__.OwnersPathUntouched)",
   "exit_code": 1,
   "kind": "red"
  },

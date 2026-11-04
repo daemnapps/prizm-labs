@@ -8,7 +8,7 @@ Artifact: (private page)
 
 **Words here. Media on Drive** at `Shared Assets/swipe/paid/<brand>/`,
 mirroring this tree, reached through `swipe_home.py`. the team moved it there from
-`Shared Assets/lab/damon/swipe-paid/` on 2026-10-07; old stored lab paths still
+`Shared Assets/lab/owner/swipe-paid/` on 2026-10-07; old stored lab paths still
 resolve through `swipe_home.resolve()`. See `CLAUDE.md` for the rules.
 
 ## Block vs angle — the one thing to get right
@@ -83,7 +83,7 @@ Every key travels by NAME through the one key loader (`components/keys/loader.py
 | the frame scan | `GEMINI_API_KEY` | the Keychain |
 | the `paid` lane | `ADPLEXITY_API_KEY` | the Keychain |
 | the AdPlexity client | `capture/adplexity_client.py` | in this component, with its `market.db` and `raw/` ad cache |
-| media | the team Drive mounted | swipes at `Shared Assets/swipe/paid/` (through `swipe_home.py`); our own media at `Shared Assets/lab/damon/` |
+| media | the team Drive mounted | swipes at `Shared Assets/swipe/paid/` (through `swipe_home.py`); our own media at `Shared Assets/lab/owner/` |
 
 Derived files are gitignored and rebuilt, never migrated: `swipe.db`,
 `own/*/ads.json`, `own/*/pages.json`, `.build/`. Everything else is the record.

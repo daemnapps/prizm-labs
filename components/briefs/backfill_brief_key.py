@@ -4,7 +4,7 @@
     python3 components/briefs/backfill_brief_key.py            what it would stamp, per station (writes nothing)
     python3 components/briefs/backfill_brief_key.py --apply    stamp it, then rebuild runs/BRIEFS-INDEX.json + BRIEFS.md
 
-the owner, 2026-10-28 (WHERE-EVERYTHING-GOES-damon.md, item 2): run folders keep their labels (links and other sessions lean
+the owner, 2026-10-28 (WHERE-EVERYTHING-GOES-owner.md, item 2): run folders keep their labels (links and other sessions lean
 on them); each station's run.json carries the brief key instead. The key is the catalog form
 (`brand_<catalog product id>_brief-NNNN`, names.catalog_key). A run is placed by briefs_index.place_runs, which never
 guesses: a label the register gives to two briefs, or a number the register gives to another run, stays unstamped.

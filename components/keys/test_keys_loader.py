@@ -337,8 +337,8 @@ class FileFormat(LoaderCase):
 
 
 class UprightDisconnected(LoaderCase):
-    """2026-11-03: environment, then this repo's .env, then Damon's Keychain
-    helper. The Upright key files are never read."""
+    """2026-11-03: environment, then this repo's .env, then the owner's Keychain
+    helper. The company key files are never read."""
 
     def setUp(self):
         super().setUp()
@@ -350,8 +350,8 @@ class UprightDisconnected(LoaderCase):
     def test_only_the_keychain_after_dotenv(self):
         self.assertEqual(loader.FALLBACK, ("keychain",))
 
-    def test_upright_files_are_ignored(self):
-        for rel in (".upright-keys.env", ".daemn/keys.env", ".gemini.env", ".apify.env"):
+    def test_company_files_are_ignored(self):
+        for rel in (".company-keys.env", ".daemn/keys.env", ".gemini.env", ".apify.env"):
             self.write(rel, A + "=fake-upright\n")
         self.assertIsNone(loader.key(A, required=False))
 

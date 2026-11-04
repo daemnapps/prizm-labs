@@ -4,7 +4,7 @@ line), drawn for a person to read. Reads only controls.json; writes the page and
 
     python3 components/creative-controls/page/build_story_page.py
 
-Writes page/story-playbook.html (published as the Story Playbook artifact) and context/STORY-PLAYBOOK-damon.md.
+Writes page/story-playbook.html (published as the Story Playbook artifact) and context/STORY-PLAYBOOK-owner.md.
 """
 import html
 import json
@@ -13,7 +13,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 COMP = HERE.parent
 OUT = HERE / "story-playbook.html"
-MIRROR = COMP / "context" / "STORY-PLAYBOOK-damon.md"
+MIRROR = COMP / "context" / "STORY-PLAYBOOK-owner.md"
 
 # How each arc's line moves, left to right (0 = low, 1 = high): the picture of the shape, not data.
 SHAPES = {

@@ -49,7 +49,7 @@ Removed that day:
 | `casting/casting/generate.py` | the fal client subprocess → this component's `gpt-image-edit` row |
 | `email-production/fal_generate.py`, `gen_placeholders.py` | retired (their caller was already history; the live path makes pictures on GPT Image) |
 | `image-teardown/tools/fal_drafts.py` | renamed `gpt_drafts.py`, the `--door fal` escape hatch removed |
-| `lab/damon/avatar-builder/build.py` | retired — its job is `components/casting` now |
+| `lab/owner/avatar-builder/build.py` | retired — its job is `components/casting` now |
 | `video-teardown/machine/doctor.py`, Control Room registry | stopped asking for `FAL_KEY` |
 
 **Still on fal, and NOT touched** — each is somebody else's call:

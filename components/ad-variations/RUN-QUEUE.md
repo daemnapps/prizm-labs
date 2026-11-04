@@ -1,8 +1,8 @@
 # Run the queue — what a session does when the owner says "run the queue"
 
-**Efficient path first (2026-10-07):** run squares with `machine/proven_to_format.py run <batch> --square <name>` — each stage's prompt read once, each block once, Sonnet for 4a/4f, one square first then small batches. See PROVEN-TO-FORMAT-damon.md, "Running the squares efficiently".
+**Efficient path first (2026-10-07):** run squares with `machine/proven_to_format.py run <batch> --square <name>` — each stage's prompt read once, each block once, Sonnet for 4a/4f, one square first then small batches. See PROVEN-TO-FORMAT-owner.md, "Running the squares efficiently".
 
-The workflow is **proven ad → new format** (`PROVEN-TO-FORMAT-damon.md`). The old one-step swap (`machine/format_swap.py`) is superseded — do not use it for new squares.
+The workflow is **proven ad → new format** (`PROVEN-TO-FORMAT-owner.md`). The old one-step swap (`machine/format_swap.py`) is superseded — do not use it for new squares.
 
 **Rules (the owner, 2026-10-05):** video winner → video format only (no image → video for now). Face scrub runs ONE offer: buy 2, get 1 free. the owner picks the squares; nothing is queued for him. Questions go to him in chat, plainly — the page carries none. Claude stages are written by the session, always — never ask him to sign in.
 

@@ -6,7 +6,7 @@ the owner, 2026-10-06 (the bottom-up culture build): the culture map is built
 from the bank's own rows, so the rows people wrote in comment sections and
 communities are re-read for the seven culture tags (`annotate.CULTURE_TAGS`:
 taste, cringe, subculture, in-word, community-voice, role-claimed, and the
-new `laugh`). The read is `prompts/culture-tags-v1-damon.md`, shown word for
+new `laugh`). The read is `prompts/culture-tags-v1-owner.md`, shown word for
 word on every run's report.
 
 Which rows: every row in the avatar bank (sub-avatar folders included, never
@@ -33,7 +33,7 @@ from pathlib import Path
 from . import engine
 from . import annotate as A
 
-PROMPT = engine.ROOT / "prompts" / "culture-tags-v1-damon.md"
+PROMPT = engine.ROOT / "prompts" / "culture-tags-v1-owner.md"
 TYPES = ("comment", "community", "creator-comment")
 
 

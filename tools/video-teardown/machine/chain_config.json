@@ -5,13 +5,13 @@
       "stage": "stage1",
       "card": "3.1",
       "runner": "gemini-video",
-      "prompt": "stage1-teardown-v15-damon.md"
+      "prompt": "stage1-teardown-v15-owner.md"
     },
     {
       "stage": "stage1b",
       "card": "audience",
       "runner": "claude-text",
-      "prompt": "stage1b-audience-v12-damon.md",
+      "prompt": "stage1b-audience-v12-owner.md",
       "vars": {
         "today": "!today",
         "teardown_record": "@stage1",
@@ -23,7 +23,7 @@
       "stage": "stage2",
       "card": "3.1b",
       "runner": "gemini-text",
-      "prompt": "stage2-replication-v5-damon.md",
+      "prompt": "stage2-replication-v5-owner.md",
       "vars": {
         "teardown_record": "@stage1"
       }
@@ -32,7 +32,7 @@
       "stage": "stage3",
       "card": "4.2a",
       "runner": "claude-text",
-      "prompt": "stage3-injection-v22-damon.md",
+      "prompt": "stage3-injection-v22-owner.md",
       "vars": {
         "teardown_record": "@stage1",
         "replication_spec": "@stage2",
@@ -52,7 +52,7 @@
       "stage": "stage4a",
       "card": "4.2b",
       "runner": "claude-text",
-      "prompt": "stage4a-placement-v15-damon.md",
+      "prompt": "stage4a-placement-v15-owner.md",
       "vars": {
         "baseline_injection": "@stage3",
         "teardown_record": "@stage1",
@@ -66,7 +66,7 @@
       "stage": "stage4b",
       "card": "4.2c",
       "runner": "claude-text",
-      "prompt": "stage4b-hook-v23-damon.md",
+      "prompt": "stage4b-hook-v23-owner.md",
       "vars": {
         "baseline_injection": "@stage3",
         "teardown_record": "@stage1",
@@ -81,7 +81,7 @@
       "stage": "stage4c",
       "card": "4.2d",
       "runner": "claude-text",
-      "prompt": "stage4c-expansion-v19-damon.md",
+      "prompt": "stage4c-expansion-v19-owner.md",
       "vars": {
         "placement_plan": "@stage4a",
         "chosen_hook": "@stage4b#pick",
@@ -99,7 +99,7 @@
       "stage": "stage4d",
       "card": "4.2e",
       "runner": "claude-text",
-      "prompt": "stage4d-close-v13-damon.md",
+      "prompt": "stage4d-close-v13-owner.md",
       "vars": {
         "expanded_script": "@stage4c",
         "baseline_injection": "@stage3",
@@ -115,7 +115,7 @@
       "stage": "stage4e",
       "card": "4.3",
       "runner": "claude-text",
-      "prompt": "stage4e-audit-v10-damon.md",
+      "prompt": "stage4e-audit-v10-owner.md",
       "vars": {
         "full_script": "@stage4d",
         "teardown_record": "@stage1",
@@ -134,7 +134,7 @@
       "stage": "stage5",
       "card": "4.2f",
       "runner": "claude-text",
-      "prompt": "stage5-creator-brief-v32-damon.md",
+      "prompt": "stage5-creator-brief-v32-owner.md",
       "vars": {
         "stage4_outputs": "@stage4d*",
         "creator_profile": "=UNASSIGNED. The run supplies this when it is a creator's own post. Never name a creator here.",
@@ -154,13 +154,13 @@
   "videos": [
     {
       "label": "gold-jackie03",
-      "path": "Shared Assets/lab/dayu/prompt-optimizer/cal2-videos/jackie-03.mp4",
+      "path": "Shared Assets/lab/engineer/prompt-optimizer/cal2-videos/jackie-03.mp4",
       "why": "cal2-04 — both reviewers shipped its v5 teardown (golden)",
       "drive_id": "1eiwqFd5qRG34GRICQ8VPXhh60Qsf_7Ta"
     },
     {
       "label": "gold-jackie02",
-      "path": "Shared Assets/lab/dayu/prompt-optimizer/cal2-videos/jackie-02.mp4",
+      "path": "Shared Assets/lab/engineer/prompt-optimizer/cal2-videos/jackie-02.mp4",
       "why": "cal2-06 — both reviewers shipped its v5 teardown (golden)",
       "drive_id": "1_k5ZYwTE3n2BwMPEvClnYum4QsJwiGa-"
     }

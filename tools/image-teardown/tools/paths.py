@@ -10,7 +10,7 @@ release; working files a checkout still holds there are carried over on first
 use (`carry_over()` below).
 
 The one exception is Drive, and it is not an exception to the rule so much as
-the other half of it: `lab/damon/README.md` says code in the repo, content on
+the other half of it: `lab/owner/README.md` says code in the repo, content on
 Drive at the mirrored path. Pictures are content.
 
     from paths import LAB, LANE, SWIPE, DRIVE, brand
@@ -51,12 +51,12 @@ REPO = _repo(LANE)                                # the workspace root
 # the owner's lab — still home to mirror.py and the lab pages. Not the lane's
 # parent any more (the lane graduated to components/ on 2026-10-01), so it is
 # named from the repo root rather than walked to.
-LAB = REPO / "lab" / "damon"
+LAB = REPO / "lab" / "owner"
 OLD_LANE = LAB / "image-teardown"                 # the pre-2026-10-01 home; a shim now
 TOOL = "image-teardown"                           # its name under runs/
 RECORDS = REPO / "runs" / TOOL                    # runs/image-teardown/<brand>/<label>/
 ELEMENTS = REPO / "components/elements"           # the element library
-# image-production graduated out of lab/damon into components/ and three
+# image-production graduated out of lab/owner into components/ and three
 # readers were left pointing at the old path, so every draft job failed
 # with "can't open file" (2026-09-24). One constant now, not three paths.
 IMAGE_PROD = REPO / "tools/image-production/static"
@@ -65,7 +65,7 @@ RUN_KIT = REPO / "components/run-kit"             # tiers, numeric prompt versio
 
 # The library split into paid and organic; "swipe" has not existed since.
 # Three connection checks reported the whole swipe library missing.
-SWIPE = REPO / "components" / "swipe-paid"        # the swipe library — a component since 2026-09-22 (was lab/damon/swipe-paid)
+SWIPE = REPO / "components" / "swipe-paid"        # the swipe library — a component since 2026-09-22 (was lab/owner/swipe-paid)
 SWIPE_ORGANIC = REPO / "components" / "swipe-organic"   # likewise moved 2026-09-22
 # Brand truth left the lab on 2026-09-02: the two homes were
 # consolidated into the repo-root brands/. These paths pointed at the
@@ -95,9 +95,9 @@ WRITING_TOOLS = WRITING / "tools"
 def _newest(folder, stem):
     """The highest -vN- of a template (no number = 1), the same rule as the prompts."""
     import re
-    hits = list(folder.glob(stem + "*-damon.md"))
+    hits = list(folder.glob(stem + "*-owner.md"))
     num = lambda f: int((re.search(r"-v(\d+)-", f.name) or [0, 1])[1])
-    return max(hits, key=num) if hits else folder / (stem + "-damon.md")
+    return max(hits, key=num) if hits else folder / (stem + "-owner.md")
 
 
 # The standard brief every static brief is filled into (the owner, 2026-10-02);
@@ -111,7 +111,7 @@ BRIEF_STANDARD = _newest(WRITING / "templates", "brief-standard-static")
 # across, file by file, never over a file already here. The old lane still
 # being a live checkout (its own tools/paths.py present) means nothing moved
 # yet, so nothing is touched.
-# REMOVE WITH THE SHIM (SI-36 (teardown lab mirror), 2026-10-07): delete carry_over() and its import-time call below in the same commit that deletes lab/damon/image-teardown/ — lab/damon/image-teardown/README.md says when; that deletion is the owner's call. tests/test_drive_link.py fails until both go.
+# REMOVE WITH THE SHIM (SI-36 (teardown lab mirror), 2026-10-07): delete carry_over() and its import-time call below in the same commit that deletes lab/owner/image-teardown/ — lab/owner/image-teardown/README.md says when; that deletion is the owner's call. tests/test_drive_link.py fails until both go.
 _LEFTOVER_SKIP = {"README.md", "chain.py", "serve.py", "__pycache__", ".DS_Store"}
 
 
@@ -143,7 +143,7 @@ try:
 except Exception:                                 # never let tidying stop a run
     pass
 
-# ONE HOME FOR A RUN (2026-10-28, components/naming/WHERE-EVERYTHING-GOES-damon.md
+# ONE HOME FOR A RUN (2026-10-28, components/naming/WHERE-EVERYTHING-GOES-owner.md
 # item 4). A run's working files (out/, vars/, assets/, finals/, ...) used to sit
 # in this lane's own runs/<label>/ while its record was filed to
 # runs/image-teardown/<brand>/<label>/. They are one folder now: the run works
@@ -268,7 +268,7 @@ def _shared_assets():
 
 SHARED_ASSETS = _shared_assets()
 DRIVE_MOUNTED = SHARED_ASSETS != NO_MOUNT
-DRIVE = SHARED_ASSETS / "lab" / "damon"
+DRIVE = SHARED_ASSETS / "lab" / "owner"
 
 # runners
 GEMINI_TEXT = TOOLS / "gemini_text.py"      # reads pictures, writes records

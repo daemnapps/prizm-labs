@@ -3,4 +3,8 @@
 docs/privacy.html|ddixon@gradientmediallc.com
 docs/terms.html|ddixon@gradientmediallc.com
 docs/data-deletion.html|ddixon@gradientmediallc.com
-docs/briefs/douxds-clipper-kit|douxds
+docs/|damon
+docs/|dixon
+docs/|gradient media
+LICENSE|damon
+LICENSE|dixon

@@ -13,42 +13,42 @@ HERE = Path(__file__).resolve().parent
 P = HERE / "prompts"
 
 STAGES = [
-    ("1", "Teardown", "stage1-image-teardown-v1-damon.md", "a",
+    ("1", "Teardown", "stage1-image-teardown-v1-owner.md", "a",
      "One static in, one reproduction spec out. Frame spec, subject and "
      "setting, the zone table, the reading path, the psychology, the index. "
      "Observation only — abstraction happens at stage 2.",
      "one image", "the teardown record"),
-    ("1C", "Clone spec", "stage1c-image-clone-spec-v1-damon.md", "a",
+    ("1C", "Clone spec", "stage1c-image-clone-spec-v1-owner.md", "a",
      "The teardown turned into the two machine-readable blocks that rebuild "
      "the ad exactly: the plate prompt with its accept tests, and the type "
      "layer as JSON. Abstracts nothing.",
      "the teardown record", "plate prompt + type layer"),
-    ("2", "Replication spec", "stage2-image-replication-v1-damon.md", "b",
+    ("2", "Replication spec", "stage2-image-replication-v1-owner.md", "b",
      "The frame abstracted — brand stripped out, every element made "
      "injectable. Counts area and position, never seconds.",
      "the record", "a brand-free spec"),
-    ("3", "Injection", "stage3-image-injection-v1-damon.md", "b",
+    ("3", "Injection", "stage3-image-injection-v1-owner.md", "b",
      "Substitution, not rewriting. Our brand in the slots, zone for zone. "
      "Not yet an ad.",
      "record + spec + brand", "the baseline injection"),
-    ("4a", "Placement", "stage4a-image-placement-v1-damon.md", "c",
+    ("4a", "Placement", "stage4a-image-placement-v1-owner.md", "c",
      "Lane, headline zone, the ratios to build, awareness, the frame budget, "
      "the device check. No copy.",
      "baseline + record + spec", "the placement plan"),
-    ("4b", "Headlines", "stage4b-image-hook-v1-damon.md", "c",
+    ("4b", "Headlines", "stage4b-image-hook-v1-owner.md", "c",
      "One straight-swipe control plus five variations, each a line and an "
      "image concept, each cited to a verbatim. All ship to test.",
      "plan + banks + ledger", "6 headlines"),
-    ("4c", "Support copy", "stage4c-image-support-v1-damon.md", "c",
+    ("4c", "Support copy", "stage4c-image-support-v1-owner.md", "c",
      "Four moves, each behind the earns-its-way-in gate, priced in words "
      "against the frame budget rather than seconds against a runtime.",
      "plan + headlines + brand", "the frame through the product content"),
-    ("4d", "Offer block", "stage4d-image-offer-v1-damon.md", "c",
+    ("4d", "Offer block", "stage4d-image-offer-v1-owner.md", "c",
      "The two pieces of copy no earlier pass writes: the line that answers "
      "the flinch, and the offer block carrying the offer file's exact "
      "guarantee wording. Then the ratio check.",
      "frame so far + banks", "the finished frame"),
-    ("5", "Generation spec", "stage5-image-generation-v2-damon.md", "d",
+    ("5", "Generation spec", "stage5-image-generation-v2-owner.md", "d",
      "The maker is an image model, not a designer. Splits the ad into the "
      "plate the model paints and the type layer a compositor sets, decides "
      "per element which machine renders it, and emits a runnable job list.",

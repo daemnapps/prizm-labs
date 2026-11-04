@@ -57,7 +57,7 @@ for _r in Path(HERE).parents:          # the swipe home, one definition for both
 import swipe_home  # noqa: E402
 # The lab root on the Drive, for OUR OWN media only (not a swipe pool); the
 # pools' labels come from swipe_home.
-DRIVE = str(swipe_home.shared_assets() / "lab" / "damon")
+DRIVE = str(swipe_home.shared_assets() / "lab" / "owner")
 # Where our own delivered assets live, so an ad in the account can be shown as
 # the picture we actually made. The ad name is the prefix of the filename —
 # that is what the naming convention is for.

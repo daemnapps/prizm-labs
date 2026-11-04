@@ -143,9 +143,9 @@ function draw(){
   const sp=S.spend, newToday=S.cards.filter(c=>c.seen_days===0&&c.keep!==false).length;
   stats.textContent=`${S.feeds.length} feeds · ${S.cards.length.toLocaleString()} posts · ${newToday} new today`+(sp.used!=null?` · scraping $${sp.used} of $${sp.cap} this month`:"");
   // brand → avatar: two controls instead of a wall of tabs
-  const bl=[...new Set(S.feeds.map(f=>f.core&&f.brand!="damon"?f.brand:"general"))].sort((x,y)=>(x=="general")-(y=="general")||x.localeCompare(y));
+  const bl=[...new Set(S.feeds.map(f=>f.core&&f.brand!="owner"?f.brand:"general"))].sort((x,y)=>(x=="general")-(y=="general")||x.localeCompare(y));
   chips(brands,[["all","All brands"],...bl.map(b=>[b,b=="general"?"General":b.toUpperCase()])],brand,v=>{brand=v;feed="all";view="feed"});
-  const fb=f=>f.core&&f.brand!="damon"?f.brand:"general";
+  const fb=f=>f.core&&f.brand!="owner"?f.brand:"general";
   // A feed with no avatar of its own (his saves) is never filtered out by a
   // brand chip — each of its cards carries the brand it was saved for.
   const own=f=>!f.core, inBrand=S.feeds.filter(f=>brand=="all"||own(f)||fb(f)==brand);

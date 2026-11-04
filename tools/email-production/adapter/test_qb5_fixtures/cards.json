@@ -11,7 +11,7 @@
   "fx-ready": {"expect": ["final-needs-you", "ready"],
                "card": {"status": "draft", "subjects": [{"subject": "Ready one"}], "sections_ok": [1],
                         "final_check": [{"result": "ok", "detail": "all good"}]}},
-  "fx-eve": {"expect": ["final-needs-you", "eve-done"],
+  "fx-designer": {"expect": ["final-needs-you", "designer-done"],
              "card": {"status": "draft", "subjects": [{"subject": "the team finished"}],
                       "final_check": [{"result": "ok", "detail": "all good"}],
                       "eve_done": {"by": "the team", "at": "2026-10-21T10:00:00+00:00"}}},

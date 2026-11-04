@@ -67,7 +67,7 @@ def _forms(name):
 
 def brief_for(reg, brand, name):
     """(register key, record) for a hand-off folder: the exact key, else the brief NUMBER plus the brand, the product
-    word breaking a tie in either spelling (brand_a_flex-face-brush_brief-0076 and brand_a_flex_brief-0076 are one brief).
+    word breaking a tie in either spelling (brand_a_widget-face-brush_brief-0076 and brand_a_widget_brief-0076 are one brief).
     (None, {}) when nothing fits."""
     for f in [name] + _forms(name):              # every spelling of the key (names.brief_key_forms)
         if isinstance(reg.get(f), dict):

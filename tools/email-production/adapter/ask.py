@@ -40,12 +40,12 @@ from run_kit import paths  # noqa: E402
 
 REPO = paths.repo(HERE)
 SYNC = REPO / "tools" / "email-production" / "adapter" / "sync.py"
-WORDS_REVIEWER = "steph"     # the words are the team's (README, "Requests from the email page")
+WORDS_REVIEWER = "pm"     # the words are the team's (README, "Requests from the email page")
 LINE = re.compile(r"Email request \([^)]*\):\s*(?P<code>[^\[]*?)\s*\[(?P<brand>[\w-]+)/(?P<label>[\w-]+)"
                   r"(?:,\s*section\s+(?P<section>\d+))?(?:,\s*picture\s+(?P<picture>\d+))?\]\s*·\s*(?P<rest>.*)$")
 WHAT = [("change this picture", "picture"), ("use my own picture", "own"), ("this part looks right", "ok"),
         ("redesign this part", "look"), ("move this part", "move"), ("remove this part", "remove"),
-        ("change the words", "words"), ("make the missing parts", "fill"), ("done: send to steph", "done"),
+        ("change the words", "words"), ("make the missing parts", "fill"), ("done: send to pm", "done"),
         ("make the klaviyo draft", "go"),
         ("redo the whole email", "send_back"), ("i scheduled it in klaviyo", "scheduled"),
         ("add try", "add"), ("use try", "add"), ("use my newest", "newest")]
@@ -249,7 +249,7 @@ def mark_done(k, root=REPO):
     return True, out.get("path")
 
 
-def tell_steph(k, root=REPO):
+def tell_pm(k, root=REPO):
     """A review request to the team naming each changed line, before -> after. Returns the record's path."""
     sys.path.insert(0, str(REPO / "components" / "review"))
     from review_request import file_request
@@ -369,7 +369,7 @@ def main(argv=None):
         done.append(k)
         if k["action"] == "words" and k["by"] != "the team":
             try:
-                extra.append(tell_steph(k))
+                extra.append(tell_pm(k))
                 print("  the team has been sent a review request for these words")
             except Exception as e:  # noqa: BLE001 — the change stays; telling the team is said to have failed
                 failed.append("%s: the words changed but the team's review request failed (%s)" % (k["code"], str(e)[:120]))

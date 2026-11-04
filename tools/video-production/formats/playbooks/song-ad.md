@@ -126,7 +126,7 @@ idea (concept or swipe) → picks (awareness → arc → sections) → writing (
 
 ## Known failures → fixes
 
-- **songs 5½–6 min with 35–90 s dead air; first word 12 s in** → punch line first, sections fit from lines × beats_per_line, every take listened to by song.py flow()  _(from runs/video-production/<brand>/resilia-cheating-<brand> (song/LYRICS-damon.md); stage song)_
+- **songs 5½–6 min with 35–90 s dead air; first word 12 s in** → punch line first, sections fit from lines × beats_per_line, every take listened to by song.py flow()  _(from runs/video-production/<brand>/resilia-cheating-<brand> (song/LYRICS-owner.md); stage song)_
 - **brand line / last line dropped or blurred by the music model** → cut before it and crossfade an 8 s tag in the same style  _(from runs/video-production/<brand>/reddit-wrong-size-<brand>; stage song)_
 - **cast made photoreal for an animated swipe** → the teardown names the style row; every element and frame is made in it (family-3d)  _(from runs/video-production/<brand>/resilia-cheating-<brand>; stage elements)_
 - **The clip model 'could not generate' on a full-size PNG start picture** → send the start picture centre-cropped to 9:16 as a 432x768 JPEG q90  _(from runs/video-production/<brand>/reddit-the-fan-<brand>; stage clips)_
@@ -183,17 +183,17 @@ The song-ad line, station by station, on the components. Start it by name ('run 
 
 | # | Station | Component | Does | Signs off |
 |---|---|---|---|---|
-| 1 | The idea | research-gatherer (scratch) · video-teardown (swipe) | A concept from the research bank, or a swipe torn down | damon |
-| 2 | Awareness and arc | marketing-doctrine · creative-controls | The awareness level picks the arc; the arc's beats are the section plan (creative_controls.arcs_for / section_plan) (recorded in the run when scratch.py or the teardown opens it) | damon |
+| 1 | The idea | research-gatherer (scratch) · video-teardown (swipe) | A concept from the research bank, or a swipe torn down | owner |
+| 2 | Awareness and arc | marketing-doctrine · creative-controls | The awareness level picks the arc; the arc's beats are the section plan (creative_controls.arcs_for / section_plan) (recorded in the run when scratch.py or the teardown opens it) | owner |
 | 3 | Writing | video-writing | Injection, hooks, script, audit, spice and the brief; dials, spice, culture and the Story Playbook read in | — |
-| 4 | Brief review | the board | the owner reads the brief and OKs it; the production run opens only after his OK, so it is the mark that he did | damon |
-| 5 | Song first (Suno) | video-production song.py (Suno inputs) · suno.com by hand · the song gate | Production start writes song/suno-inputs.json from the brief's song block (model-inputs suno sheet) and waits; the song is made in Suno, then brought in and gated: every line heard in order, the flow listened to, the timing kept for the scenes | damon |
+| 4 | Brief review | the board | the owner reads the brief and OKs it; the production run opens only after his OK, so it is the mark that he did | owner |
+| 5 | Song first (Suno) | video-production song.py (Suno inputs) · suno.com by hand · the song gate | Production start writes song/suno-inputs.json from the brief's song block (model-inputs suno sheet) and waits; the song is made in Suno, then brought in and gated: every line heard in order, the flow listened to, the timing kept for the scenes | owner |
 | 6 | Cast and rooms | casting · objects / 3d | The cast in the film's style (banked first) and a 3D room for every set, so each scene has depth and a lens | — |
-| 7 | Scene pictures | the board (model-inputs · image-production) | One picture per scene from its room, cast and lens; the owner OKs every one | damon |
+| 7 | Scene pictures | the board (model-inputs · image-production) | One picture per scene from its room, cast and lens; the owner OKs every one | owner |
 | 8 | Hand-off | image-edit/handoff.py (front door) → video-edit | The brief, the song and every approved picture in one folder, here and on the Drive | — |
-| 9 | Clips and the cut | video-production clips · video-edit | the team: every shot of the singer is a lip-synced clip on the song (the singer sings his line, a musical), story shots silent over it; B-roll, effects, the cut under the song | ahmed |
+| 9 | Clips and the cut | video-production clips · video-edit | the team: every shot of the singer is a lip-synced clip on the song (the singer sings his line, a musical), story shots silent over it; B-roll, effects, the cut under the song | editor |
 | 10 | Upscale | local-studio (upscale) | Every finished cut to 1080x1920 in one batch before launch | — |
-| 11 | Launch | ad-review · naming · meta-upload | the owner's review, the names, the approval card; only the owner's click goes live | damon |
+| 11 | Launch | ad-review · naming · meta-upload | the owner's review, the names, the approval card; only the owner's click goes live | owner |
 
 ## Built from
 

@@ -19,7 +19,7 @@ The whole machine on one page, swipe to finished ad. Each stage does its own job
 | 8 · Edit: cut | Listens first. Each take laid whole — the cut falls between shots, never mid-breath; the pace is the format's; no punch-in unless the swipe pushes in (V15, 2026-10-21). The scenes in order, B-roll placed by the words it covers. Every piece is labelled with its doctrine section. Mid-clip pauses are marked on the timeline's Pauses lane | built |
 | 9 · Edit: dress | Hook on frame one, captions (the look picked by format and app, never on a face or mouth), cards, screens, splits, green-screen, end card, name tags, arrows and circles, platform bubbles, icons and emoji, disclaimers, the brief's whip/match hand-offs, one colour grade, the realism finish. Music, sound effects and room tone only when the swipe or brief calls for them (V14), the mix. Every word drawn by compose.py on both roads; audit.py checks every version (2026-10-21) | built |
 | 10 · Retention checks | Flags where a video would lose attention: a shot held too long, not enough visual change, dead air, text pops with no sound, no zoom on key words, B-roll rhythm, loop ending. All warnings and scores with numbers you tune, nothing blocks. Shown on the live timeline. | built |
-| 11 · Versions | One video per hook on the same body, 15/30/60-second cutdowns, a cover per hook, every file named. 9:16 only. **Only after the owner's OK on the control cut** (2026-10-15): `line.py` cuts the control alone until `runs/ad-runs/approvals.jsonl` holds his Approve from the Ad Runs board (or `--versions`); then `lab/damon/ad-runs/versions.py` runs the hooks + thumbnails on its own. | built |
+| 11 · Versions | One video per hook on the same body, 15/30/60-second cutdowns, a cover per hook, every file named. 9:16 only. **Only after the owner's OK on the control cut** (2026-10-15): `line.py` cuts the control alone until `runs/ad-runs/approvals.jsonl` holds his Approve from the Ad Runs board (or `--versions`); then `lab/owner/ad-runs/versions.py` runs the hooks + thumbnails on its own. | built |
 | 12 · Variation engine | Swap any doctrine section, hook, headline, scroll-stopper, style, framework or sound as named parts. Pay for parts once and assemble combinations for free, with results joining back to the part that won. Open: your V-2 to V-4 calls | planned |
 
 **Libraries:**
@@ -88,7 +88,7 @@ Open decisions:
 - **T-8** How is a sent-back clip remade? — settled: Surgically (your words, 23 Sep). Name the broken element and remake only that, then rebuild what depends on it from the same originals. Voice broken: remake that scene's voice slice, then re-clip from the SAME frames with the new voice. Frame broken: fix the frame with one change, then re-clip with the SAME voice. Only the clip broken: re-clip with the same frames and voice. For a cut-off clip the machine listens to the voice slice first to tell which one it is. Two tries at most, then a person.
 - **T-9** Where is a cut-off line caught? — settled: At production, on the AUDIO, before any picture is paid for (your call, 23 Sep). BUILT: an audio check runs right after the voice is made. Each scene's slice is heard. It must say its line, finish it, and not be silent or clipping. A failing slice is remade once, voice only, then the run stops. The edit's own listen stays only as a backstop. First real test (pigment-memory): every line whole, but the read drifts in volume by 17 LU between scenes (warned, not stopped).
 
-The spice sheet, stage 4g · v5 (pace fix): the full prompt: `../../tools/copywriter/prompts/video/stage-4-loop/4g-spice/stage4g-spice-v5-damon.md` (verbatim on the page)
+The spice sheet, stage 4g · v5 (pace fix): the full prompt: `../../tools/copywriter/prompts/video/stage-4-loop/4g-spice/stage4g-spice-v5-owner.md` (verbatim on the page)
 
 The remake-clip skill, word for word: `../../.claude/skills/remake-clip/SKILL.md` (verbatim on the page)
 
@@ -133,11 +133,11 @@ Open decisions:
 - **B-2** How much B-roll? — settled: Set by the swipe: every swipe B-roll shot is carried, plus any line that shows proof, product or mechanism, and at least a third of the scenes.
 - **B-6** How it's carried (BUILT 23 Sep) — settled: AI brief v13 writes the talking scenes first, then a B-ROLL table (which swipe shot each comes from, what it shows, the exact words it plays over), then a CARDS table, then a roll-sheet check: every swipe shot mapped to a scene of ours or dropped with a reason. Every scene must say to_camera true/false, and one that doesn't is refused. No B-roll inside a talking scene. Production refuses a brief whose roll sheet leaves a swipe shot unaccounted for, or maps it to the wrong kind of scene. Old briefs only get a warning.
 
-Prompt: `prompts/stage-2-cut/stage2-cut-v2-damon.md` (verbatim on the page)
+Prompt: `prompts/stage-2-cut/stage2-cut-v2-owner.md` (verbatim on the page)
 
-The teardown, stage 1: labels every row with its roll, section, layers and sound: `../../tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v13-damon.md` (verbatim on the page)
+The teardown, stage 1: labels every row with its roll, section, layers and sound: `../../tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v13-owner.md` (verbatim on the page)
 
-The AI brief, stage 5 · v14: the full prompt: `../../tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v14-damon.md` (verbatim on the page)
+The AI brief, stage 5 · v14: the full prompt: `../../tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v14-owner.md` (verbatim on the page)
 
 ## Dress
 
@@ -213,7 +213,7 @@ Rules today:
 Open decisions:
 
 
-Timeline feedback v1: the full prompt: `../../lab/damon/suite/prompts/timeline-feedback-v1-damon.md` (verbatim on the page)
+Timeline feedback v1: the full prompt: `../../lab/owner/suite/prompts/timeline-feedback-v1-owner.md` (verbatim on the page)
 
 ### DRESS-5 · The watch — one eye on every finished cut — built 23 Oct · Gemini 3.1 Pro, the house judge
 
@@ -231,11 +231,11 @@ Rules today:
 Open decisions:
 
 
-The watch v1: the full prompt: `prompts/stage-4-watch/cut-watch-v1-damon.md` (verbatim on the page)
+The watch v1: the full prompt: `prompts/stage-4-watch/cut-watch-v1-owner.md` (verbatim on the page)
 
 ## Before the cut — reading the handoff (built, parked)
 
-Prompt: `prompts/stage-1-read-pack/stage1-read-pack-v1-damon.md` (verbatim on the page).
+Prompt: `prompts/stage-1-read-pack/stage1-read-pack-v1-owner.md` (verbatim on the page).
 
 ## Every element of a video
 

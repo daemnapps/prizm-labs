@@ -1,6 +1,6 @@
 {
  "part": "ATL-31 (remaining issue briefs) part F",
- "request": "platform/data/records/workflow-requests/20261002T061737Z--dayu--impl-atl31f-issue-briefs.json",
+ "request": "platform/data/records/workflow-requests/20261002T061737Z--engineer--impl-atl31f-issue-briefs.json",
  "base": "0fabb40eb",
  "opus_branch_tip": "b1be1d4d4",
  "opus_test": "new-workflow-design/builds/atlas/test_atl31f_issue_briefs.py (274/274 on Opus)",

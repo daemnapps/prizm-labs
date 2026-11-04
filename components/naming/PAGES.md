@@ -28,7 +28,7 @@ listicle-fedupking-neckbumps
 | `concept` | the angle, not the headline — a claim family reused across pages | `neckbumps` · `baldnape` · `triedeverything` · `fortyyears` |
 | `variant` | only when two pages test the same three fields | `v2`, `b` |
 
-Funnel pages that are not pre-sells keep their plain names — `flex`,
+Funnel pages that are not pre-sells keep their plain names — `widget`,
 `checkout`, `receipt`, `oto-*`. There is one of each; a key buys nothing.
 
 ## The folder is the format
@@ -87,7 +87,7 @@ page_avatar: fed-up-king
 page_subs:   [barbershop-regular, bald-bumps-guy, ingrown-fighter]
 page_concept: neckbumps
 page_swipe:  swipe:competitor-c:pages-acne
-page_next:   flex          # where it hands off — never checkout
+page_next:   widget          # where it hands off — never checkout
 ```
 
 `page_swipe` uses the same `swipe:<brand>:<id>` reference the ad convention

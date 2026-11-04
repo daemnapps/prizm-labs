@@ -52,7 +52,7 @@ import brandpath as BP                                 # noqa: E402  — brand f
 
 BUILD = WS / "new-workflow-design/builds/video-teardown"
 # THE CHAIN'S OWN SHAPE, and it lives WITH the chain (2026-08-26).
-# It used to be read from lab/dayu/prompt-optimizer/regression/ — the shared
+# It used to be read from lab/engineer/prompt-optimizer/regression/ — the shared
 # chain plane — which was retired and DELETED on 2026-08-25 (3d78db6ea). That
 # deletion reasoned about the harness and the runner and never checked what the
 # graduated component read, so this file's disappearance made `stages()`
@@ -79,10 +79,10 @@ EXTRA = MACHINE / "extra-stages.json"
 # Whoever is signed in to Google Drive for Desktop on THIS machine is who the
 # run belongs to; a run that cannot find a mount says so out loud and never
 # quietly writes somewhere only its author can see.
-DRIVE_GLOB = "the company @company.com account"   # words for the messages only; the filter is drive_index.UPRIGHT_ACCOUNTS (LD-55 (Drive literal check))
+DRIVE_GLOB = "the company @company.com account"   # words for the messages only; the filter is drive_index.COMPANY_ACCOUNTS (LD-55 (Drive literal check))
 SHARED_DRIVE = "Shared drives/Shared Assets"
 # Renamed 2026-08-31 with the lab naming pass — the Drive folder is now
-# lab/damon/video-teardown, matching the component's name. Folder ids
+# lab/owner/video-teardown, matching the component's name. Folder ids
 # survive a Drive rename, so existing gdoc links keep working.
 RUNS_SUBPATH = ("tools", "video-teardown", "runs")   # out of lab 2026-10-18 (drive sweep); folder ids kept
 
@@ -119,17 +119,17 @@ def _drive_api():
 
 
 def drive_mounts():
-    """Every Upright Drive mount on this machine, in a stable order.
+    """Every company Drive mount on this machine, in a stable order.
 
     [] for a worker-spawned job (DRIVE_MOUNT=off, LD-26 (mount switch);
     LD-32 (teardown drive switch)), before any filesystem touch: a mini job
     has no Drive folder, so `drive_root()` raises MountError and every
     caller's own MountError handling applies. The account folders come from
-    brandpath's finder (LD-47 (Drive sweep)), filtered to the Upright ones."""
+    brandpath's finder (LD-47 (Drive sweep)), filtered to the company ones."""
     if os.environ.get("DRIVE_MOUNT") == "off":
         return []
     import drive_index                     # components/brandpath, on sys.path above
-    return drive_index.upright_accounts()  # the filter lives in drive_index only (LD-55 (Drive literal check))
+    return drive_index.company_accounts()  # the filter lives in drive_index only (LD-55 (Drive literal check))
 
 
 def drive_root():
@@ -152,7 +152,7 @@ def drive_root():
         raise MountError(
             f"several Google Drive mounts match {DRIVE_GLOB} ({names}) — "
             "this machine cannot tell which account a run belongs to; leave "
-            "one Upright account signed in")
+            "one company account signed in")
     root = found[0] / SHARED_DRIVE
     if not root.is_dir():
         raise MountError(
@@ -333,17 +333,22 @@ def record_mirror_error(run_dir, st, err):
 # record item id — and the second one silently folded over the first.
 #
 # `ran_by` is the machine account, mapped to the name the org already uses for
-# that person (records, Drive paths and the board all say `damon`, never his
+# that person (records, Drive paths and the board all say `owner`, never his
 # mac account). `venue` is where the run happened: `local` is a person's own
 # laptop, and that is the only venue that exists today — `mini`, the always-on
 # machine, is Batch 3's and is deliberately NOT written here yet.
-OWNER = "damon"
+OWNER = "owner"
 VENUE_LOCAL = "local"
-# Machine accounts that ARE a known person. the owner's mac account is
-# `damondixon` (machine/overnight.sh:11 has the path), and his runs must come
-# out byte-identical to the day before this card — bare slug, name `damon`.
-# Anyone not listed here passes through under their own account name.
-ACCOUNTS = {"damondixon": OWNER}
+# The machine account that is the owner: OWNER_ACCOUNT in the environment or
+# .env. Its runs use a bare slug, name `owner`. Anyone else passes through under
+# their own account name.
+def _accounts():
+    try:
+        from keys import key
+        name = key("OWNER_ACCOUNT", required=False)
+    except Exception:
+        name = os.environ.get("OWNER_ACCOUNT")
+    return {name: OWNER} if name else {}
 
 
 def person(name):
@@ -351,7 +356,7 @@ def person(name):
     record item id are both built from this, so it is gated the way every
     other id on this machine is: `[a-z0-9-]`, never empty."""
     n = re.sub(r"[^a-zA-Z0-9]+", "-", str(name or "")).strip("-").lower()
-    return ACCOUNTS.get(n, n) or "unknown"
+    return _accounts().get(n, n) or "unknown"
 
 
 def operator():
@@ -933,7 +938,7 @@ def stages(brand="", asset_type="", route="", lane=""):
         # are activating for both"). 7b writes "the page the maker reads" —
         # her folder, what she has to say, whether she is meant to film all of
         # it. On the AI route there is no maker and no her. The storyboard in
-        # lab/damon/video-production is what this route reads instead: the
+        # lab/owner/video-production is what this route reads instead: the
         # scenes, their takes, and what is still missing.
         # stage7 (the frames injected into the creator brief) goes with them:
         # on the AI route the ai-lane brief IS the deliverable and the video
@@ -1271,7 +1276,7 @@ def resolve_source(src, brand, outputs, var=None):
     if path.endswith("/CAST.md") and path.startswith("runs/casting/"):
         try:
             import subprocess as _sp
-            _sp.run([sys.executable, str(WS / "lab/damon/casting/build_cast.py"), "--brand", brand],
+            _sp.run([sys.executable, str(WS / "lab/owner/casting/build_cast.py"), "--brand", brand],
                     capture_output=True, text=True, timeout=120, cwd="/tmp")
         except Exception:
             pass
@@ -1297,7 +1302,7 @@ def resolve_source(src, brand, outputs, var=None):
 
         pick = str(outputs.get("product") or "").strip().lower()
         if pick and len(docs) > 1:
-            # Exact first. A brand with `flex.md` beside `flex-charging-case.md`
+            # Exact first. A brand with `flex.md` beside `product-charging-case.md`
             # and `flex-device-model.md` made `--product flex` match three
             # files, so neither branch fired and the run reported all
             # seventeen products as if nothing had been named at all.
@@ -1337,7 +1342,7 @@ def report():
     print(f"{'stage':<8}{'prompt':<44}{'ver':<5}engine")
     for s in stages():
         p = Path(s["prompt"]).name if s["prompt"] else "— MISSING —"
-        home = "damon" if s["prompt"] and "/daemn/" in s["prompt"] else "shared"
+        home = "owner" if s["prompt"] and "/daemn/" in s["prompt"] else "shared"
         print(f"{s['id']:<8}{p:<44}v{s['version']:<4}{s['engine']:<14}{home}")
 
 

@@ -298,7 +298,7 @@ def build(repo, brand, run, ix, out, texts, measurement, state):
         "totals": {"variations": len(variations), "formats": len(formats), "usd": round(var_usd + shared_usd, 2),
                    "usd_with_tests": round(with_tests + shared_usd, 2), "hours": round(hours, 1),
                    "not_included": "creator fees, editor hours beyond the estimate, media spend, re-rolls beyond the costed rolls"},
-        "damon_decides": s["stage2"].get("damon_decides") or [],
+        "owner_decides": s["stage2"].get("owner_decides") or [],
         "problems": problems,
         "run": {"stages": {k: {x: v.get(x) for x in ("prompt_name", "prompt_sha256_12", "model", "seconds", "chars_in", "chars_out")}
                            for k, v in (state.get("stages") or {}).items()},
@@ -384,6 +384,6 @@ def markdown(d):
     L += ["## 5. Made once, used across the set", "", "| Key | Piece | Route | Cost | Used by |", "|---|---|---|---|---|"]
     for x in d["shared"]:
         L.append(f"| {x.get('key')} | {x.get('piece')} | {x.get('route')} × {x.get('units')} | {_money(x.get('usd'))} | {', '.join(x.get('used_by') or [])} |")
-    L += ["", "## 6. the owner decides", "", *[f"- {x}" for x in d["damon_decides"]], "",
+    L += ["", "## 6. the owner decides", "", *[f"- {x}" for x in d["owner_decides"]], "",
           f"_Planning spend: {d['run']['llm_cost']['tokens_in']:,} tokens in, {d['run']['llm_cost']['tokens_out']:,} out ≈ {_money(d['run']['llm_cost']['usd'])} — {d['run']['llm_cost']['basis']}_"]
     return "\n".join(L) + "\n"

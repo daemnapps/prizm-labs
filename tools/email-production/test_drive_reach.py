@@ -269,7 +269,7 @@ class DriveReach(unittest.TestCase):
             src = (HERE / rel).read_text()
             for gone in ("def _drive_mount", "DRIVE_RUNS", "GoogleDrive-", "Library/CloudStorage"):
                 self.assertNotIn(gone, src, f"{rel}: {gone}")
-        self.assertNotIn("GoogleDrive-damon@", (HERE / "IMAGERY.md").read_text())
+        self.assertNotIn("GoogleDrive-owner@", (HERE / "IMAGERY.md").read_text())
         mod = load_folders()                     # DR.mount is patched to None here
         self.assertIsNone(mod.DRIVE)
         sys.argv = ["build_email_folders.py", "--brand", BRAND]

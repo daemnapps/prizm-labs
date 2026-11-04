@@ -56,7 +56,7 @@ def main():
                 f'feed winner: {w["views"]:,} views — {it["url"]}')
 
     # 3) the owner's saves, in this kit's categories; and their sounds
-    rows = json.loads((HERE / "records/damon-saves/catalog.json").read_text())["rows"]
+    rows = json.loads((HERE / "records/owner-saves/catalog.json").read_text())["rows"]
     cats = set(cfg["saves_categories"])
     sounds = Counter()
     for r in rows:

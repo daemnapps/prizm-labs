@@ -70,10 +70,10 @@ class Viewer(unittest.TestCase):
         brief = 'Brief\n```json\n{"scenes": [1]}\n```\n'
         (d / "viewer-check").mkdir()
         (d / "viewer-check" / "STAMP.json").write_text(json.dumps({"brief": V.brief_key(brief), "passed": True}))
-        self.assertTrue(V.stamp_of(d, brief + "DAMON READ: APPROVED\n"))          # a stamp line changes nothing
+        self.assertTrue(V.stamp_of(d, brief + "OWNER READ: APPROVED\n"))          # a stamp line changes nothing
         self.assertIsNone(V.stamp_of(d, brief.replace("[1]", "[2]")))              # the words changed: check again
 
-    def test_damons_v_passes_it(self):
+    def test_owners_v_passes_it(self):
         import tempfile
         d = Path(tempfile.mkdtemp())
         V.approve(d, "some brief")
@@ -94,7 +94,7 @@ class Viewer(unittest.TestCase):
         self.assertEqual(V.route(V.score(b, [1] * 5, 20, 15), 20)["fix_at"], "proof")
 
     def test_the_offer_is_allowed_to_sell(self):
-        cut = {"offer_at": 21, "lines": ["0:00–0:02  a barber", "0:18–0:21  text: nobody's neck clears", "0:21–0:25  Text: FLEX — $69.99 / 90 days. If your skin doesn't transform, full refund."]}
+        cut = {"offer_at": 21, "lines": ["0:00–0:02  a barber", "0:18–0:21  text: nobody's neck clears", "0:21–0:25  Text: WIDGET — $69.99 / 90 days. If your skin doesn't transform, full refund."]}
         ow = V.offer_words(cut)
         self.assertTrue(V.is_offer("If your skin doesn't transform, full refund.", ow))
         self.assertFalse(V.is_offer("nobody's neck clears in one cut", ow))
@@ -106,19 +106,19 @@ class Viewer(unittest.TestCase):
         self.assertFalse(V.score(b, [1] * 5, 25, 21, offer_set=ow)["checks"]["not_a_pitch"]["passed"])
 
     def test_the_rewrite_keeps_offer_lines_word_for_word(self):
-        brief = 'Frame 10\nOn screen: "FLEX™ — $69.99 / 90 days. full refund."\nFrame 9 text: old line\n'
-        good = ('=== BRIEF ===\nFrame 10\nOn screen: "FLEX™ — $69.99 / 90 days. full refund."\nFrame 9 text: new line\n=== END BRIEF ===\n'
+        brief = 'Frame 10\nOn screen: "WIDGET™ — $69.99 / 90 days. full refund."\nFrame 9 text: old line\n'
+        good = ('=== BRIEF ===\nFrame 10\nOn screen: "WIDGET™ — $69.99 / 90 days. full refund."\nFrame 9 text: new line\n=== END BRIEF ===\n'
                 '=== CHANGES ===\n{"changes":[{"where":"Frame 9","was":"old line","now":"new line"}],"open":[]}\n=== END CHANGES ===')
         t, ch = V.fix(brief, {"fix_at": "proof", "notes": "n"}, "b", "a", caller=lambda *x: good)
         self.assertIn("new line", t)
         self.assertEqual(ch["changes"][0]["now"], "new line")
         with self.assertRaises(ValueError):
-            V.fix(brief, {"fix_at": "proof", "notes": "n"}, "b", "a", caller=lambda *x: good.replace("FLEX™ — $69.99", "FLEX — $69.99"))
+            V.fix(brief, {"fix_at": "proof", "notes": "n"}, "b", "a", caller=lambda *x: good.replace("WIDGET™ — $69.99", "WIDGET — $69.99"))
 
     def test_the_rewrite_quotes_only_real_data(self):
-        brief = 'Frame 9 text: "old line here and more"\nOn screen: "FLEX™ — $69.99 / 90 days."\n'
+        brief = 'Frame 9 text: "old line here and more"\nOn screen: "WIDGET™ — $69.99 / 90 days."\n'
         def out(q):
-            return (f'=== BRIEF ===\nFrame 9 text: "{q}"\nOn screen: "FLEX™ — $69.99 / 90 days."\n=== END BRIEF ===\n'
+            return (f'=== BRIEF ===\nFrame 9 text: "{q}"\nOn screen: "WIDGET™ — $69.99 / 90 days."\n=== END BRIEF ===\n'
                     f'=== CHANGES ===\n{{"changes":[{{"where":"Frame 9","was":"old","now":"\\"{q}\\""}}]}}\n=== END CHANGES ===')
         V._real_text = lambda b, a: "very bad acne as a teen right now."
         for invented in ("the device looks simple, $70 is a lot", "worth the investment because they see real differences"):

@@ -89,11 +89,11 @@ def read(run: Path) -> list[dict]:
     dropped = [c for c in plan.get("cutaways", []) if c.get("dropped")]
 
     PROMPT = {
-        "readbrief": "stage-0-read-brief/stage0-read-brief-v1-damon.md",
-        "openings": "stage-1-openings/stage1-openings-v1-damon.md",
-        "aroll": "stage-2-aroll/stage2-aroll-v2-damon.md",
-        "broll": "stage-3-broll/stage3-broll-v2-damon.md",
-        "offer": "stage-4-offer/stage4-offer-v2-damon.md",
+        "readbrief": "stage-0-read-brief/stage0-read-brief-v1-owner.md",
+        "openings": "stage-1-openings/stage1-openings-v1-owner.md",
+        "aroll": "stage-2-aroll/stage2-aroll-v2-owner.md",
+        "broll": "stage-3-broll/stage3-broll-v2-owner.md",
+        "offer": "stage-4-offer/stage4-offer-v2-owner.md",
     }
 
     def stage(key, name, why, want, got, detail=""):

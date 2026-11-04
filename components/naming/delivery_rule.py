@@ -101,7 +101,7 @@ def resolve(folder):
 # Image teardown graduated to components/ on 2026-10-01; the lab path is the
 # fallback for a checkout that has not pulled the move.
 REGISTER = next((f for f in (WS / "tools" / "image-teardown" / "briefs.json",
-                             WS / "lab" / "damon" / "image-teardown" / "briefs.json") if f.is_file()),
+                             WS / "lab" / "owner" / "image-teardown" / "briefs.json") if f.is_file()),
                 WS / "tools" / "image-teardown" / "briefs.json")
 
 

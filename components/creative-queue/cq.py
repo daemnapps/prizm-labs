@@ -8,7 +8,7 @@
   cq.py rebuild [--now <UTC …Z>]                  observations + decisions -> index.json
   cq.py show <id>                                 the reduced entry, as JSON
   cq.py import-legacy --from <queue dir>          today's per-entry files -> observations/localhost.json
-                                                  + decisions/damon/legacy.jsonl
+                                                  + decisions/owner/legacy.jsonl
 
 Every subcommand takes --root (default <repo>/runs/queue-shadow) and --no-commit; the decision ones take
 --by (default: the name before "@" in `git config user.email`). Without --no-commit a writing subcommand
@@ -28,7 +28,7 @@ from qcore import paths  # noqa: E402
 
 RUN = subprocess.run          # the git seam: tests replace it, nothing else does
 LEGACY_SOURCE = "localhost"   # the one machine that writes today's store
-LEGACY_PERSON = "damon"
+LEGACY_PERSON = "owner"
 LEGACY_HUMAN = ("who", "priority", "title_set", "note", "removed", "removed_at", "decided")   # today's person fields
 APPROVE_ACTIONS = ("go", "approve")
 

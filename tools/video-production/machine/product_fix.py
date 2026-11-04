@@ -14,7 +14,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 WS = HERE.parents[2]
-FIXES = WS / "tools" / "image-edit" / "library" / "fixes-v4-damon.json"
+FIXES = WS / "tools" / "image-edit" / "library" / "fixes-v4-owner.json"
 
 
 def _load(name):

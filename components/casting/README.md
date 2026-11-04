@@ -103,14 +103,14 @@ prompts exactly as they would be sent. Drop `--dry-run` to run it.
 
 | Part | Lifted from |
 |---|---|
-| the nine steps, the three prompts, the fal door, "a DIFFERENT person" | `lab/damon/avatar-builder/` (`README.md`, `build.py`, `find.py`) |
-| the registry shape, and "never invent a person for a role the bank covers" | `lab/damon/casting/` (`README.md`, `build_cast.py`) |
+| the nine steps, the three prompts, the fal door, "a DIFFERENT person" | `lab/owner/avatar-builder/` (`README.md`, `build.py`, `find.py`) |
+| the registry shape, and "never invent a person for a role the bank covers" | `lab/owner/casting/` (`README.md`, `build_cast.py`) |
 | the footage search | `tools/image-production/image_production/assets.py` — **imported, not rewritten** |
 | the judge's eyes and its prompt | `tools/image-production/image_production/judge.py` — the questions here are this component's own |
 | the gates and the dry-run report | `tools/image-production/image_production/{gates,dryrun}.py`, `components/marketing-chain-checks` |
 | the path walking, the prompt versioning, the run path | `tools/image-production/image_production/paths.py`, `components/run-kit/run_kit/{prompts,filing}.py` |
 
-`lab/damon/avatar-builder` and `lab/damon/casting` are untouched and still
+`lab/owner/avatar-builder` and `lab/owner/casting` are untouched and still
 work exactly as before. They get retired later, side by side, once this is
 proven.
 

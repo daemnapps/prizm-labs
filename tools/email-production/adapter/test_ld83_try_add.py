@@ -227,7 +227,7 @@ class TestTry(Base):
         self.assertEqual(len(recs), 1)
         r = recs[0]
         self.assertEqual((r["schema"], r["kind"], r["reviewer"], r["item"], r["via"]),
-                         (1, "model-outcome", "eve", LABEL + "-P1-try-1", "email-production/try_picture"))
+                         (1, "model-outcome", "designer", LABEL + "-P1-try-1", "email-production/try_picture"))
         self.assertEqual(r["verdict"], {"model": "gpt-image-2.5", "door": "openai", "purpose": "email-story",
                                         "brand": BRAND, "judge": {"result": "pass", "failing": []}, "picked": False,
                                         "cost": "not on record"})

@@ -84,7 +84,7 @@ def _drive_mount():
 
 
 _MOUNT = _drive_mount()
-DRIVE_ROOT = (_MOUNT / "Shared drives" / "Shared Assets" / "lab" / "damon") if _MOUNT else None
+DRIVE_ROOT = (_MOUNT / "Shared drives" / "Shared Assets" / "lab" / "owner") if _MOUNT else None
 MIN_PAUSE = 0.3          # seconds — a silence between two words that counts as a pause
 MIN_WORDS = 8            # a post with fewer spoken words is music or a caption piece, not speech
 THIN_WORDS = 100         # a creator under this many measured words is reported but flagged thin

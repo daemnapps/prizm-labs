@@ -1,0 +1,5 @@
+{"by": "pm", "field": "who", "id": "fxbrand_fx_brief-0048", "made": "2026-10-23T13:40:00Z", "op": "set", "schema": 1, "value": "designer"}
+{"by": "pm", "field": "priority", "id": "fxbrand_fx_brief-0048", "made": "2026-10-23T13:40:05Z", "op": "set", "schema": 1, "value": "1"}
+{"by": "pm", "field": null, "id": "fxbrand_image-ad_baseline-03", "made": "2026-10-23T13:41:00Z", "op": "add", "schema": 1, "value": {"brand": "fxbrand", "title": "Baseline 03", "type": "image-ad"}}
+{"by": "pm", "field": "who", "id": "fxbrand_image-ad_baseline-03", "made": "2026-10-23T13:41:01Z", "op": "set", "schema": 1, "value": "designer"}
+{"by": "pm", "field": "who", "id": "fxbrand_fx_brief-0001", "made": "2026-10-23T13:42:00Z", "op": "set", "schema": 1, "value": "designer"}

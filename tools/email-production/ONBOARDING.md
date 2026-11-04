@@ -9,12 +9,12 @@ in this folder, that is a defect in the system, not a task for the brand.
 ## What the tool owns (this folder — brand-free, verified 2026-08-31)
 
 - The chain (`email.py`, 10 stage prompts), the composer (`compose.py`,
-  `prompts/composer-v3-damon.md`), the briefs (`brief.py`), the HTML
+  `prompts/composer-v3-owner.md`), the briefs (`brief.py`), the HTML
   reconstructor (`render_email.py`), the image filler (`fal_generate.py`),
   the sweep tools (`sweep/`), the pulls (`pull/`), the page
   (`build_dashboard.py`), and the rules (SLOT.md, CONTRACT.md, DOCTRINE).
 - the starter type catalogue a brand copies and then owns — now
-  `lab/damon/marketing-calendar/definitions/send-types.seed.json`, since
+  `lab/owner/marketing-calendar/definitions/send-types.seed.json`, since
   the calendar is what types a send against it (moved 2026-09-13).
 
 No prompt, check, or renderer names a brand, an avatar, a segment, a look,
@@ -48,7 +48,7 @@ Anything missing prints a NOTE or refuses honestly — nothing is invented.
 1. Create `brands/<brand>/` with avatars, products, offer bank, objections,
    moments, sender identity, and `variables/email.md` (copy <brand>'s map as
    the shape).
-2. Copy `lab/damon/marketing-calendar/definitions/send-types.seed.json` →
+2. Copy `lab/owner/marketing-calendar/definitions/send-types.seed.json` →
    `brands/<brand>/email/email-types.json`.
    Add the brand's own types and voices; the seed never carries them.
 3. Point the pulls at the brand's platform account (`pull/accounts.json`) and

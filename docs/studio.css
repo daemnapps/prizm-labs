@@ -579,7 +579,7 @@ h3 .ib,h4 .ib{width:32px;height:32px;padding:7px;margin-right:var(--s3);vertical
 }
 
 /* ═══ BRIEF CARD — every published brief, slideshow or video, drawn one way ═══
-   Built by lab/damon/clipping/build.py brief_card(). Same sections, same order:
+   Built by lab/owner/clipping/build.py brief_card(). Same sections, same order:
    head (kind, title, stats, actions) · the source · facts · idea + hooks ·
    the frames · must-have shots · the words · product points · the folds. */
 .eyebrow + h1{margin-top:var(--s3)}

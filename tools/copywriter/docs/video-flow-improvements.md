@@ -1,6 +1,6 @@
 # What the copy build learned that the video build should take
 
-Written 2026-08-26, after building `lab/damon/ad-copy` against the same
+Written 2026-08-26, after building `lab/owner/ad-copy` against the same
 problem the video chain already solved. the owner's ask: identify the creative
 and copy improvements the video flow can take from it, especially at
 **injection, hooks and expansion**.
@@ -39,7 +39,7 @@ avatar        : brands/<brand>/customer/avatar.md
 ```
 
 the owner rebuilt the language layer on 2026-08-25/26. It now holds **14,593
-sourced rows** at `lab/damon/brands/<brand>/core-avatars/<avatar>/
+sourced rows** at `lab/owner/brands/<brand>/core-avatars/<avatar>/
 language/*.json`, every row carrying `use`, `topics`, `speaker`, `funnel`,
 `source{name,type,date}`, `signal{likes,tier}` and an `attribution` flag.
 
@@ -218,5 +218,5 @@ be. **Keep the truth, drop the frame.**
 1, 3, 4 and 7 are cheap and independent. 2 and 5 are the ones that change
 what the chain can do.
 
-`lab/damon/ad-copy/language.py` is brand-agnostic and reusable as-is — it was
+`lab/owner/ad-copy/language.py` is brand-agnostic and reusable as-is — it was
 written against the schema, not against <brand>.

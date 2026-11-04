@@ -10,7 +10,7 @@ not **write our ads**. Triggered by
 One folder per brand, identical shape every time, so any two brands read alike
 and diff against each other.
 
-**This is a component, not lab.** It moved out of `lab/damon/swipe-paid/` on
+**This is a component, not lab.** It moved out of `lab/owner/swipe-paid/` on
 the owner's word, 2026-09-22. The header used to say "R&D under `lab/` — nothing
 here runs or gets consumed outside `lab/` until it graduates"; that was true
 until the move and is false now. `intake/` and both teardowns read this pool as
@@ -123,7 +123,7 @@ Answered 2026-09-23, when this folder owed them as a resident
   folder. Media and page captures mirror to
   `Shared Assets/swipe/paid/<brand>/`, named in a `**Drive:**`
   line on every `.md` so words always point at their media. Records written
-  before 2026-10-07 still name `Shared Assets/lab/damon/swipe-paid/…`;
+  before 2026-10-07 still name `Shared Assets/lab/owner/swipe-paid/…`;
   `swipe_home.resolve()` reads that form, so they keep working.
 - **Records (O12 (records adapter)):** none: no runs by design — a pool whose record is its folder (the team, 2026-10-07, triage page 7).
 - **Manifest per entry:** `<advertiser>/blocks.json` — every angle, the copy
@@ -151,7 +151,7 @@ nothing here reaches into another repo.
 ## Two things that are open, not settled
 
 - **The Drive carve-out (O9 (Drive by fileId)) — closed on Drive, 2026-10-07.** the team moved the
-  media by hand from `Shared Assets/lab/damon/swipe-paid/` to
+  media by hand from `Shared Assets/lab/owner/swipe-paid/` to
   `Shared Assets/swipe/paid/` (same file ids; the lab folder is gone). Every
   reader and writer reaches it through `swipe_home.py` (SI-47 (swipe switch)).
   Old stored lab paths still resolve through `swipe_home.resolve()`. Still

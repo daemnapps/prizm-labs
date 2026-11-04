@@ -1,6 +1,6 @@
 """The ONE prompting structure. Every picture, every caller, same skeleton.
 
-The skeleton is a prompt FILE (`prompts/picture-vN-damon.md`), so a change to
+The skeleton is a prompt FILE (`prompts/picture-vN-owner.md`), so a change to
 how pictures are asked for is a change the owner can read — it is never a string
 edited inside code. Highest `-vN-` wins, numerically, the same rule
 `components/run-kit/run_kit/prompts.py` enforces (an alphabetical sort lets v2

@@ -603,7 +603,7 @@ function reviewSignIn(el, after) {
     browser's localStorage and is never written into a record), or open this page from a
     <code>#k=…&amp;as=…</code> link.</p>
     <label>review key <input name="k" type="password" autocomplete="off"></label>
-    <label>your name <input name="as" placeholder="steph"></label>
+    <label>your name <input name="as" placeholder="pm"></label>
     <button>Use this key</button></form>`;
   el.querySelector("#rvkey").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -732,7 +732,7 @@ function mountReviewCreate(el) {
     <label>type <select name="type">${REVIEW_TYPES.map((t) => `<option>${t}</option>`).join("")}</select></label>
     <label>warehouse <select name="warehouse">${REVIEW_WAREHOUSES.map((w) => `<option>${w}</option>`).join("")}</select></label>
     <label>ref <input name="ref" size="60" placeholder="repo path · drive file id · blob url"></label>
-    <label>reviewers <input name="reviewers" placeholder="steph, damon"></label>
+    <label>reviewers <input name="reviewers" placeholder="pm, owner"></label>
     <label>lane <input name="lane" value="dev-qc" placeholder="email-sends · static-ads · dev-qc · …"></label>
     <label>due <span class="faint">(optional)</span> <input name="due" placeholder="YYYY-MM-DD"></label>
     <label>your words <span class="faint">(optional, rides in the envelope's notes)</span>

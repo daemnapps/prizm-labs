@@ -1,6 +1,6 @@
 # What we send Seedance, and why (2026-10-26)
 
-The standing contract for a Seedance 2.5 clip. Which model does the job is `components/generative-model-house/MODEL-HOUSE.md`; this page is how the inputs are shaped so that model gives its best result. Built by `machine/seedance_prompt.py`, sent by `machine/seedance.py`. The audit behind it, with the old and new prompts side by side and the clips: `SEEDANCE-INPUTS-damon.md` (the same text as the owner's page).
+The standing contract for a Seedance 2.5 clip. Which model does the job is `components/generative-model-house/MODEL-HOUSE.md`; this page is how the inputs are shaped so that model gives its best result. Built by `machine/seedance_prompt.py`, sent by `machine/seedance.py`. The audit behind it, with the old and new prompts side by side and the clips: `SEEDANCE-INPUTS-owner.md` (the same text as the owner's page).
 
 ## How one scene becomes one clip
 

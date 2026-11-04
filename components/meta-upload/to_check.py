@@ -15,7 +15,7 @@ first (tools/copywriter brief_words.py — the copywriter's own stages; the owne
 "whenever … an ad set of creatives is ready for distribution, we need to run the copywriter on
 those as well … so when I get to this Meta page to approve … we can just hit it") and the card
 takes what it wrote. Still nothing → empty lists, and the card's check fails where the owner sees it. Pages are catalog link ids
-(lab/damon/catalog/data/catalog.json); an id the catalog doesn't know is refused.
+(lab/owner/catalog/data/catalog.json); an id the catalog doesn't know is refused.
 No pages passed → the brief's own landing page (`landing_page`, chosen when the
 brief was written — components/naming/page_pick.py); pages passed always win.
 
@@ -42,7 +42,7 @@ SCHEMA = "meta-card/1"
 LANES = ("video", "image", "carousel", "creator")
 FORMATS = ("flexible", "carousel")
 STATES = ("1-check", "2-approved", "3-live", "sent-back")
-CATALOG = REPO / "lab/damon/catalog/data/catalog.json"
+CATALOG = REPO / "lab/owner/catalog/data/catalog.json"
 SHARED = SD.shared_assets()         # the mount's Shared Assets, else a named path that does not exist
 PICTURE = {".png", ".jpg", ".jpeg", ".webp"}
 VIDEO = {".mp4", ".mov", ".m4v"}

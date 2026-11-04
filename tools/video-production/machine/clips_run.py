@@ -1640,7 +1640,7 @@ def make_call(run: Path, c: dict, cfg: dict, led: Ledger, people: dict) -> dict:
     if not ruled:
         raise RuntimeError(f"{c['id']}: the Model House has no Seedance clip ruling (models.json clips.ruled_2026_10_23)")
     if not raw.is_file():
-        # DAMON'S RULING 2026-10-23 (components/generative-model-house MODEL-HOUSE.md, Clips): EVERY clip is Seedance 2.5
+        # OWNER'S RULING 2026-10-23 (components/generative-model-house MODEL-HOUSE.md, Clips): EVERY clip is Seedance 2.5
         # at 480p, upscaled locally; a talking clip goes with its locked read in the SAME call, so the mouth is built to the real words and
         # nothing is re-voiced after; cost never decides.
         SD = _load("seedance")

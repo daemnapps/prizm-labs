@@ -2,7 +2,7 @@
 
 The substance lives in `engine`; `query_language.py` at the component root is
 the CLI entry point. `tools/video-teardown/machine/language.py` and
-`lab/damon/copy/machine/language.py` are shims over this same module, so both
+`lab/owner/copy/machine/language.py` are shims over this same module, so both
 machines run this code unchanged.
 
 `language_layer`, not `language` — a top-level `language` module would be one

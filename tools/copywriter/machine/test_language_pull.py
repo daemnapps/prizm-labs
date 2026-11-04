@@ -134,7 +134,7 @@ class CopySet(unittest.TestCase):
         self.assertEqual(cmd[cmd.index("--stage") + 1], "spice")
         self.assertEqual(cmd[cmd.index("--awareness") + 1], "problem-aware")
         self.assertIn("{spice_bank}", CS.PROMPT.read_text().split("\n---\n", 1)[1])
-        self.assertTrue(re.search(r"copy-set-v\d+-damon\.md$", CS.PROMPT.name))
+        self.assertTrue(re.search(r"copy-set-v\d+-owner\.md$", CS.PROMPT.name))
 
 
 if __name__ == "__main__":

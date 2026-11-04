@@ -24,14 +24,14 @@
   {
    "id": "timeline",
    "n": 4,
-   "who": "damon",
+   "who": "owner",
    "stop": true,
    "what": "STOP 1 — the timeline page: every layer as bars on one clock, dead space already out. Approve, or say what to change in plain words."
   },
   {
    "id": "captions",
    "n": 5,
-   "who": "damon",
+   "who": "owner",
    "stop": true,
    "what": "STOP 2 — captions on, in the chosen look, shown as real frames from the edit. Approve, switch the look, or fix a word."
   },

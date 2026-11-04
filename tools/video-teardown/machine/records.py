@@ -33,7 +33,7 @@ REPO = HERE.parent / "records"
 # Each run's run.json is filed with the rest of the run at
 # runs/video-teardown/<brand>/<run>/ — the workspace's one home for run records
 # (runs/README.md). It sat under records/runs/ until 2026-09-30
-# (lab/damon/system-blueprint/RUNS-MOVE-2026-09-30.md).
+# (lab/owner/system-blueprint/RUNS-MOVE-2026-09-30.md).
 RUNS_HOME = C.WS / "runs" / "video-teardown"
 
 

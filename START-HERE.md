@@ -12,7 +12,7 @@ Four steps. No coding.
    Claude sets up your brand with you, one question at a time (about 20–30
    minutes; you can stop and say **continue onboarding** any time). The
    checklist it follows is in [`brands/_TEMPLATE/ONBOARDING.md`](brands/_TEMPLATE/ONBOARDING.md).
-4. **Questions?** Add **admin@gradientmediallc.com** to your repo
+4. **Questions?** Add **daemnapps** on GitHub to your repo
    (Settings → Collaborators) and we'll take a look.
 
 **Where your brand lives.** Your brand folder (`brands/<your-brand>/`) is kept

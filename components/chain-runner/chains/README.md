@@ -39,7 +39,7 @@ will say so. A change wanted here is a change to his prompts and a new pin, or
 a card of its own. `PARITY-HARNESS.md`, beside that tool, is how the copy is
 judged against his machine.
 
-**`copy-general/` is RESOLVED from the copy machine, `tools/copywriter` (`lab/damon/copy` until 2026-09-19), same discipline (CM-1 (copy resolution)).**
+**`copy-general/` is RESOLVED from the copy machine, `tools/copywriter` (`lab/owner/copy` until 2026-09-19), same discipline (CM-1 (copy resolution)).**
 Its prompts are copied by
 
     python3 new-workflow-design/builds/copy-machine/resolve_copy_chain.py --write

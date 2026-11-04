@@ -1,7 +1,7 @@
 """Steps 7 and 8 — the bible and the registry row, PROPOSED.
 
 **Registration is the brand's, not this component's.** A machine reads
-`brands/<brand>/` and never writes there (`lab/damon/CLAUDE.md` rule 5), and
+`brands/<brand>/` and never writes there (`lab/owner/CLAUDE.md` rule 5), and
 the cast records are curated by people on purpose — they are the brand's truth
 about who exists. So this writes, into the RUN folder:
 
@@ -81,7 +81,7 @@ def proposal(req, baseline=None, answer=None, start=None):
           "## 2 · then rebuild the readable sheet", "",
           "The sheet is rendered from the records and is NEVER edited by hand —",
           "correct the JSON and rebuild it, with whatever tool owns that job today",
-          "(`lab/damon/casting/build_cast.py --brand %s` as of 2026-09-22)."
+          "(`lab/owner/casting/build_cast.py --brand %s` as of 2026-09-22)."
           % req.get("brand", "<brand>"), "",
           "## 3 · close the gap this build was for", "",
           "The role asked for was **%s**." % (req.get("role") or "(none named)")]

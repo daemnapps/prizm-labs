@@ -1038,7 +1038,7 @@ def frames_for(maker, shots, sc, product_scenes=()):
         # picture, so a section whose brief changes set-up inside it (he walks in wide, then sits for a medium
         # shot) needs a picture for each — with one, every clip of a 62 s section started from him walking
         # in, and he stood through half the ad. A new set-up is a new shot size or a new posture.
-        # the product coming into the frame is a set-up too (2026-10-08, LeBron S7: he brings FLEX up but no
+        # the product coming into the frame is a set-up too (2026-10-08, LeBron S7: he brings WIDGET up but no
         # picture had it on the table, so Omni drew a hairbrush) — the element manifest says where it is
         key = lambda x: setup_key(x) + (x["id"] in product_scenes,)
         out, cur = [{"what": "start frame", "from": first["id"]}], key(first)

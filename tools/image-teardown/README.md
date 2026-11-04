@@ -4,7 +4,7 @@
 its structure — what it is, element by element — and a brief to remake it for
 one of our brands. It does not make the picture; the draft standard and
 image production do that from its brief. Owner: the owner. A component since
-2026-10-01 (moved out of `lab/damon/image-teardown/`). Spoken name: "image
+2026-10-01 (moved out of `lab/owner/image-teardown/`). Spoken name: "image
 teardown". The one-page definition is `CLAUDE.md`; how to run it is `RUN.md`.
 
     python3 tools/image-teardown/chain.py start --brand <brand> --product <product> --avatar <avatar> --swipe <swipe> --dry-run
@@ -15,7 +15,7 @@ Runs file at `runs/image-teardown/<brand>/<label>/`; every brief gets one id in
 ## How to use it → https://dashboard.the company.com/atlas#c-components-image-teardown
 
 
-Same chain, one frame. Built 2026-08-19 from `stage1-teardown-v6-damon.md`
+Same chain, one frame. Built 2026-08-19 from `stage1-teardown-v6-owner.md`
 after the owner's call to start the teardown process on image ads.
 
 **Current shape (2026-09-20):** `CLAUDE.md` is the one-page definition — steps,
@@ -33,7 +33,7 @@ slideshow (`CLAUDE.md`, "The branch"). The set-map prompt is still parked in
 | Path | What it is |
 |---|---|
 | **`DRAFT-STANDARD.md`** | **The ruling on how a swipe becomes our draft (the owner, 2026-09-17: "do not deviate"). One command: `tools/draft.py --brand <brand>`. Prompts: `prompts/stage7-*`, `prompts/stage8-*`** |
-| `prompts/stage1-image-teardown-v1-damon.md` | One static in, one reproduction spec out |
+| `prompts/stage1-image-teardown-v1-owner.md` | One static in, one reproduction spec out |
 | `prompts/video-doctrine-extract-v1.md` | A teaching video in, its operating doctrine out |
 | `tools/gemini_image.py` | Image-in / text-out runner — the twin of `tools/gemini_breakdown.py` |
 | `tools/compose.py` | Sets the type layer over a generated plate (ImageMagick) |
@@ -60,7 +60,7 @@ R=runs/2026-08-19-<brand>-thai-secret
 
 # one teardown per ad
 python3 tools/gemini_image.py \
-  --prompt-file prompts/stage1-image-teardown-v1-damon.md \
+  --prompt-file prompts/stage1-image-teardown-v1-owner.md \
   --image $R/assets/ad-01_thai-secret-editorial-1x1.png \
   --model gemini-3.1-pro-preview \
   --out $R/out/01-teardown-ad-01.md

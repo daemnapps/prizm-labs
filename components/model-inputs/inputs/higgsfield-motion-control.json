@@ -22,7 +22,7 @@
   "https://vercel.com/ai-gateway/models/kling-v3.0-motion-control/api",
   "[ours] tools/video-production/VIDEO-RULINGS.md V38 to V41",
   "[ours] tools/video-production/SHOT-ROUTES.md",
-  "[ours] components/model-inputs/VIDEO-PATH-damon.md (baseline rule, the owner 2026-10-27)"
+  "[ours] components/model-inputs/VIDEO-PATH-owner.md (baseline rule, the owner 2026-10-27)"
  ],
  "limits": {
   "duration_seconds": [
@@ -101,7 +101,7 @@
    "source": [
     "https://kling.ai/quickstart/motion-control-user-guide",
     "https://higgsfield.ai/creator-hub/help-center/ai-models/how-do-i-use-kling",
-    "components/model-inputs/VIDEO-PATH-damon.md"
+    "components/model-inputs/VIDEO-PATH-owner.md"
    ]
   },
   {
@@ -261,14 +261,14 @@
    "rule": "Make the whole scene as ONE still first: the person, her room and the product in the frame. The motion model only moves what the still shows.",
    "ours": "scene still on GPT Image 2.5, approved by the owner, then motion control",
    "status": "draft",
-   "source": "components/model-inputs/VIDEO-PATH-damon.md"
+   "source": "components/model-inputs/VIDEO-PATH-owner.md"
   },
   {
    "id": "baseline-not-master",
    "rule": "The person in the still is built from the cast BASELINE (headshot, look, details, expressions), never the master.",
    "ours": "swipe_swap_job.py builds the still from c['baseline'] (headshot, look, details, expression)",
    "status": "draft",
-   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md (the owner 2026-10-27); machine/swipe_swap_job.py"
+   "source": "[ours] components/model-inputs/VIDEO-PATH-owner.md (the owner 2026-10-27); machine/swipe_swap_job.py"
   },
   {
    "id": "swipe-drives-movement-only",
@@ -346,7 +346,7 @@
    "id": "master-as-person",
    "text": "Building the still from the master instead of the baseline.",
    "status": "draft",
-   "source": "components/model-inputs/VIDEO-PATH-damon.md"
+   "source": "components/model-inputs/VIDEO-PATH-owner.md"
   },
   {
    "id": "studio-backdrop-reference",

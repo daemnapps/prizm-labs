@@ -19,7 +19,7 @@ import argparse, json, re, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SAVES = HERE / "records/damon-saves"
+SAVES = HERE / "records/owner-saves"
 OUT = HERE / "records/swipe-videos"
 MARKS = [0.08, 0.24, 0.40, 0.56, 0.72, 0.88]
 

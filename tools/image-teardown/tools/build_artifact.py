@@ -332,15 +332,15 @@ def main():
       "<a href='(private page)'>"
       "prompt library</a>.</p>")
     for label, fn in [
-            ("Stage 1 · image teardown", "stage1-image-teardown-v1-damon.md"),
-            ("Stage 1C · clone spec", "stage1c-image-clone-spec-v1-damon.md"),
-            ("Stage 2 · replication spec", "stage2-image-replication-v1-damon.md"),
-            ("Stage 3 · injection", "stage3-image-injection-v1-damon.md"),
-            ("Stage 4a · placement", "stage4a-image-placement-v1-damon.md"),
-            ("Stage 4b · headlines", "stage4b-image-hook-v1-damon.md"),
-            ("Stage 4c · support copy", "stage4c-image-support-v1-damon.md"),
-            ("Stage 4d · offer block", "stage4d-image-offer-v1-damon.md"),
-            ("Stage 5 · generation spec", "stage5-image-generation-v2-damon.md"),
+            ("Stage 1 · image teardown", "stage1-image-teardown-v1-owner.md"),
+            ("Stage 1C · clone spec", "stage1c-image-clone-spec-v1-owner.md"),
+            ("Stage 2 · replication spec", "stage2-image-replication-v1-owner.md"),
+            ("Stage 3 · injection", "stage3-image-injection-v1-owner.md"),
+            ("Stage 4a · placement", "stage4a-image-placement-v1-owner.md"),
+            ("Stage 4b · headlines", "stage4b-image-hook-v1-owner.md"),
+            ("Stage 4c · support copy", "stage4c-image-support-v1-owner.md"),
+            ("Stage 4d · offer block", "stage4d-image-offer-v1-owner.md"),
+            ("Stage 5 · generation spec", "stage5-image-generation-v2-owner.md"),
             ("Video doctrine extract", "video-doctrine-extract-v1.md")]:
         f = prompts / fn
         if not f.exists():

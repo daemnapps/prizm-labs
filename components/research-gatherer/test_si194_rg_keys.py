@@ -12,7 +12,7 @@ network. The real ~/.daemn, ~/.workflow-worker.env, ~/.gemini.env,
 ~/.apify.env and the Keychain are never read.
 
   (a) loader    — rg_keys loads components/keys/loader.py by path as
-                  upright_keys_loader, reuses it; voiceprint run as a script
+                  company_keys_loader, reuses it; voiceprint run as a script
                   loads rg_keys by path and shares the same loader.
   (b) via key   — the three readers ask rg_keys.key(NAME); none imports the
                   helper or appends ~/.daemn to sys.path; feedback, reviews and
@@ -166,8 +166,8 @@ class Case(unittest.TestCase):
 class Loader(Case):
     def test_loaded_by_path_under_its_own_name(self):
         loader = rg_keys._load_loader()
-        self.assertEqual(loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], loader)
+        self.assertEqual(loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], loader)
         self.assertEqual(Path(loader.__file__).resolve(), REPO / "components" / "keys" / "loader.py")
         self.assertIs(rg_keys._load_loader(), loader, "loaded once, then reused")
 
@@ -299,7 +299,7 @@ class Mini(Case):
             self.assertIsNone(VP.key_of())
             msg = self.voiceprint_exit()
         self.assertIn(ELEVEN, msg)
-        self.assertIn("old locations skipped", msg)
+        self.assertIn("skipped (managed file", msg)
         self.assertNotIn("fake-", msg)
         self.assertEqual(self.key_files_opened(seen), [])
         self.assertNotIn(HELPER, sys.modules, "the Keychain helper was imported")

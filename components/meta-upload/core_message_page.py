@@ -1,17 +1,17 @@
 """Core Message — the one thing each brand's biggest-spending ads are saying, under every format and angle.
 
 Reads each brand's brands/<brand>/brand-identity/core-message/ (top-spenders.json, the 20 biggest spenders;
-core-message.json (Step 2 of lab/damon/media-buying/prompts/core-message-damon.md), and the prompt itself, shown verbatim.
-Writes lab/damon/media-buying/core-message.html and the Markdown copy CORE-MESSAGE-damon.md.
+core-message.json (Step 2 of lab/owner/media-buying/prompts/core-message-owner.md), and the prompt itself, shown verbatim.
+Writes lab/owner/media-buying/core-message.html and the Markdown copy CORE-MESSAGE-owner.md.
 """
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BRANDS = ROOT / "brands"   # each brand's core message lives at brands/<brand>/brand-identity/core-message/ (the owner, 5 Oct)
-PROMPT = ROOT / "lab/damon/media-buying/prompts/core-message-damon.md"
-OUT = ROOT / "lab/damon/media-buying/core-message.html"
-MD = ROOT / "lab/damon/media-buying/CORE-MESSAGE-damon.md"
+PROMPT = ROOT / "lab/owner/media-buying/prompts/core-message-owner.md"
+OUT = ROOT / "lab/owner/media-buying/core-message.html"
+MD = ROOT / "lab/owner/media-buying/CORE-MESSAGE-owner.md"
 NAMES = {"brand-a": "BRAND-A", "brand-b": "Brand-B"}
 
 
@@ -32,8 +32,8 @@ def build():
                  "message": (per.get(n) or {}).get("message", ""), "messenger": (per.get(n) or {}).get("messenger", ""),
                  "partial": (per.get(n) or {}).get("partial", False)} for n, a in sorted(ads.items())]
         brands[b] = {**c, "ads": rows, "total_spend": top[b]["total_spend"], "top20_share": top[b]["top20_spend_share"],
-                     "window": top[b]["window"], "left_out": top[b].get("left_out_by_damon") or []}
-    v = ROOT / "tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v15-damon.md"
+                     "window": top[b]["window"], "left_out": top[b].get("left_out_by_owner") or []}
+    v = ROOT / "tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v15-owner.md"
     wired = v.read_text().split("**6. THE CORE MESSAGE**", 1)[1].split("Give me a really clean output", 1)[0] if v.exists() else ""
     data = {"brands": brands, "prompt": PROMPT.read_text(),
             "wired": ("THE CORE MESSAGE" + wired).strip() if wired else ""}
@@ -44,7 +44,7 @@ def build():
 
 def write_md(brands):
     L = ["# Core Message — the owner", "", "The one thing each brand's 20 biggest-spending ads say, under every format and angle. "
-         "Prompt: `lab/damon/media-buying/prompts/core-message-damon.md`.", ""]
+         "Prompt: `lab/owner/media-buying/prompts/core-message-owner.md`.", ""]
     for b, B in brands.items():
         L += [f"# {NAMES[b]}", "", f"**The core message:** {B['core']}", "",
               f"Carried by {B['core_spend_share']}% of the top-20 spend (the top 20 = {B['top20_share']}% of all ${B['total_spend']:,}).", ""]

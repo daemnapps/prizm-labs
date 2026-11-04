@@ -6,7 +6,7 @@ response bodies that can just work with any type of hook."
 
 A **body** is everything after the hook: the part that sells. It is stitched behind a
 hook we test separately, so it has to stand on its own. First built with the pastor barber
-body (`runs/video-writing/<brand>/pastor-barber-body/BODY-damon.md`; page:
+body (`runs/video-writing/<brand>/pastor-barber-body/BODY-owner.md`; page:
 (private page)), and shaped by the owner's Tella review of
 the old cut ("Ad Editing Review and Feedback", 2026-10-23).
 
@@ -46,7 +46,7 @@ breathy, and the edit had dead pauses, late audio and a presenter outside the sa
 10. **Make, then edit clean.** Brief with A-roll and B-roll separated
    (`tools/video-production/BRIEF-SPEC.md`), elements through
    `tools/video-production/machine/elements_check.py`, then a hand-off folder to the
-   Hand-off Standard (`lab/damon/handoff-standard/HANDOFF-STANDARD.md`; worked example
+   Hand-off Standard (`lab/owner/handoff-standard/HANDOFF-STANDARD.md`; worked example
    `runs/video-production/<brand>/freestyle-1022/handoff/`). In the edit: the presenter stays
    in the safe zone, no frozen frames between lines, every line starts on time.
 
@@ -59,4 +59,4 @@ breathy, and the edit had dead pauses, late audio and a presenter outside the sa
 
 ## Next bodies on this process
 
-The guy barber, the baddie barber, and bodies for hook-only pieces (the goat headbutt → FLEX hook).
+The guy barber, the baddie barber, and bodies for hook-only pieces (the goat headbutt → WIDGET hook).

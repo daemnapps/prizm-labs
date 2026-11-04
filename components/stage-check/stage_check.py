@@ -34,7 +34,7 @@ ANGLE = None                                     # --angle, for a card whose bri
 
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
-    2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-damon.md item 4). The old lane folder
+    2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
     tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name
@@ -325,7 +325,7 @@ def judge(piece, key, model_call=None):
     from run_kit import model as MD
     crit = json.loads((HERE / "criteria.json").read_text())["criteria"][key]
     lines = "\n".join(f"{i}. {l}" for i, l in enumerate(crit["lines"], 1))
-    prompt = ((HERE / "prompts" / "judge-v1-damon.md").read_text()
+    prompt = ((HERE / "prompts" / "judge-v1-owner.md").read_text()
               .replace("{step}", crit["step"]).replace("{criteria}", lines)
               .replace("{evidence}", _evidence(piece, crit["evidence"])))
     call = model_call or MD.call
@@ -344,7 +344,7 @@ def fix_note(piece, key, why, model_call=None):
     """The 'checks' tier writes the note a re-make carries, from the failure."""
     from run_kit import model as MD
     crit = json.loads((HERE / "criteria.json").read_text())["criteria"][key]
-    prompt = ((HERE / "prompts" / "fix-note-v1-damon.md").read_text()
+    prompt = ((HERE / "prompts" / "fix-note-v1-owner.md").read_text()
               .replace("{step}", crit["step"]).replace("{failure}", why)
               .replace("{criteria}", "\n".join(f"- {l}" for l in crit["lines"]))
               .replace("{evidence}", _evidence(piece, crit["evidence"][-1:])))
@@ -453,7 +453,7 @@ def six_plan(piece, model_call=None):
     if f.is_file():
         return top_up(piece, json.loads(f.read_text()), f, model_call)
     rd = lambda n, k: (piece.out(n).read_text()[:k] if piece.out(n).is_file() else "")
-    prompt = ((HERE / "prompts" / "variants-v1-damon.md").read_text()
+    prompt = ((HERE / "prompts" / "variants-v1-owner.md").read_text()
               .replace("{injection}", rd("03-injection.md", 6000)).replace("{headlines}", rd("04-headlines.md", 6000))
               .replace("{variations}", rd("05-image-variations.md", 6000)))
     raw = (model_call or MD.call)(prompt, MD.TIERS["reads"], label="stage-check-six")
@@ -474,7 +474,7 @@ def top_up(piece, plan, f, model_call=None):
     hs = [h for h in plan.get("headlines") or [] if h]
     if 0 < len(hs) < 3:
         rd = piece.out("03-injection.md").read_text()[:5000] if piece.out("03-injection.md").is_file() else ""
-        prompt = ((HERE / "prompts" / "more-headlines-v1-damon.md").read_text()
+        prompt = ((HERE / "prompts" / "more-headlines-v1-owner.md").read_text()
                   .replace("{need}", str(3 - len(hs))).replace("{zone}", plan.get("zone") or "the main word zone")
                   .replace("{have}", "\n".join(f"- {h}" for h in hs)).replace("{injection}", rd))
         raw = (model_call or MD.call)(prompt, MD.TIERS["checks"], label="stage-check-headlines")
@@ -762,7 +762,7 @@ def write_record(piece, rows):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("ref", nargs="?", help="a brief id (brand_a_flex_brief-0243, or brief-0243 with --brand/--product) or a run name")
+    ap.add_argument("ref", nargs="?", help="a brief id (brand_a_widget_brief-0243, or brief-0243 with --brand/--product) or a run name")
     ap.add_argument("--batch", help="several refs: a file with one per line, or comma-separated")
     ap.add_argument("--brand"); ap.add_argument("--product")
     ap.add_argument("--review", action="store_true", help="write the batch review sheet even for one piece")

@@ -29,7 +29,7 @@ x
 | 2 | Three expert offices | Adapted | moved to a home setting |
 | 3 | The street opener | Dropped | cut |
 
-## STRUCTURE QUESTIONS FOR DAMON
+## STRUCTURE QUESTIONS FOR OWNER
 
 | # | The swipe has | The position suggests | Why it might matter |
 |---|---|---|---|

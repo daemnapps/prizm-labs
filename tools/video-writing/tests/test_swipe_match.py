@@ -23,7 +23,7 @@ class SwipeMatch(unittest.TestCase):
         (self.d / "stages" / "1-teardown.md").write_text("### 1. record")
         (self.d / "stages" / "5-brief.md").write_text(BRIEF)
         self.verdict = json.loads(json.dumps(SHOTS))
-        SM.ask_judge = lambda t, b, v=None: (json.loads(json.dumps(self.verdict)), "swipe-match-v1-damon.md")
+        SM.ask_judge = lambda t, b, v=None: (json.loads(json.dumps(self.verdict)), "swipe-match-v1-owner.md")
 
     def brief(self):
         return (self.d / "stages" / "5-brief.md").read_text()

@@ -20,8 +20,8 @@ component's two-picture judge (the reference beside the result — CHANGE
 PRESENT, NOTHING ELSE MOVED). A result that moved anything else is held under
 `rejected/`, never delivered.
 
-The two libraries designers run from — `library/fixes-vN-damon.json` (logo,
-product, layout, background, remove) and `library/variations-vN-damon.json`
+The two libraries designers run from — `library/fixes-vN-owner.json` (logo,
+product, layout, background, remove) and `library/variations-vN-owner.json`
 (headline, angle, person, product, colour, background, reframe) — are printed
 verbatim by `edit.py --fixes` and `vary.py --library`.
 

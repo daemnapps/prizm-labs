@@ -2,7 +2,7 @@
 """The layout offers only pictures someone has looked at, and a real picture's alt is what was seen in it
 (the team, 2026-10-28). Before: product photos reached the layout as file names alone, and it wrote what it guessed
 — "A Black man's jaw and neck in soft light, CRUSH™ in frame." for a white man's face with no product
-(brand-a-nov-02--fed-up-king), "the FLEX in its case on the shelf" for a man using the case as a hand mirror
+(brand-a-nov-02--fed-up-king), "the WIDGET in its case on the shelf" for a man using the case as a hand mirror
 (brand-a-nov-02--glow-up, a product the email does not sell). Those two cases are the fixtures here, with the
 tags asset-index tag.py wrote for them on 2026-10-28.
 
@@ -39,17 +39,17 @@ import line as LI                                  # noqa: E402
 
 BRAND = "zz-brand"
 FACE = "drive:brands/%s/products/crush-bump-eliminator/lifestyle/x_lifestyle_model-face.jpg" % BRAND
-MIRROR = "drive:brands/%s/products/flex-charging-case/lifestyle/x_lifestyle_mirror.jpg" % BRAND
-UNSEEN = "drive:brands/%s/products/flex-face-brush/lifestyle/x_lifestyle_in-hand-foam.jpg" % BRAND
+MIRROR = "drive:brands/%s/products/widget-charging-case/lifestyle/x_lifestyle_mirror.jpg" % BRAND
+UNSEEN = "drive:brands/%s/products/widget-face-brush/lifestyle/x_lifestyle_in-hand-foam.jpg" % BRAND
 TAGS = {
     "id-face": {"shot": "face-closeup", "people": "man 30-49", "skin_tone": "light", "products": [], "product_ok": None,
                 "quality": 5, "baked_text": "none", "one_line": "Close-up of a man's face looking to the right.", "ref": FACE},
     "id-mirror": {"shot": "person-using-product", "people": "man 30-49", "skin_tone": "light",
-                  "products": ["flex-charging-case"], "product_ok": True, "quality": 4, "baked_text": "none",
-                  "one_line": "Man looking at his reflection in the mirror of the FLEX Charging Case.", "ref": MIRROR},
+                  "products": ["widget-charging-case"], "product_ok": True, "quality": 4, "baked_text": "none",
+                  "one_line": "Man looking at his reflection in the mirror of the WIDGET Charging Case.", "ref": MIRROR},
 }
 GUESS_FACE = "A Black man's jaw and neck in soft light, CRUSH™ in frame."
-GUESS_MIRROR = "A bathroom mirror shot: the FLEX in its case on the shelf, a real customer at the sink."
+GUESS_MIRROR = "A bathroom mirror shot: the WIDGET in its case on the shelf, a real customer at the sink."
 
 
 def layout():
@@ -92,7 +92,7 @@ class Seen(unittest.TestCase):
         self.assertIn("no product", face_line)
         self.assertIn("Close-up of a man's face", face_line)
         mirror_line = next(l for l in txt.splitlines() if l.startswith(MIRROR))
-        self.assertIn("shows flex-charging-case", mirror_line)
+        self.assertIn("shows widget-charging-case", mirror_line)
 
     def test_a2_photos_described_under_another_collection(self):
         self.write("products", "tags.json", {"id-face": TAGS["id-face"]})
@@ -125,7 +125,7 @@ class Seen(unittest.TestCase):
         self.assertEqual(pics[0]["alt"], "Close-up of a man's face looking to the right.")
         self.assertNotIn("Black", pics[0]["alt"])
         self.assertNotIn("CRUSH", pics[0]["alt"])
-        self.assertEqual(pics[1]["alt"], "Man looking at his reflection in the mirror of the FLEX Charging Case.")
+        self.assertEqual(pics[1]["alt"], "Man looking at his reflection in the mirror of the WIDGET Charging Case.")
         self.assertEqual(pics[2]["alt"], "Woman holding the tube in a bathroom.")
         self.assertEqual(pics[3]["alt"], "A razor on a jaw.")      # a picture to make: its brief is its truth
         self.assertEqual(pics[4]["alt"], "The tube.")              # the real packshot cut-out

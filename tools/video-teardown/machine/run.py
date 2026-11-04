@@ -217,7 +217,7 @@ def cast_files(brand, avatar):
     Several cast members can serve one avatar (the swap frame: actors are a
     bank). The character who EMBODIES the avatar leads; `--cast <character>`
     swaps the actor for a run."""
-    # ONE brand home (the owner, 2026-09-02): lab/damon/brands merged into
+    # ONE brand home (the owner, 2026-09-02): lab/owner/brands merged into
     # brands/ and stopped existing, ahead of production.
     # runs/ai-elements/<brand>/casting/ is the one home of every person's files (2026-10-28, WHERE-EVERYTHING-GOES);
     # the brand's older ai-cast/ (ai-elements/characters/) is read after it, a name in both read from the first
@@ -289,7 +289,7 @@ def brand_parts(brand, key, *rest):
 
 
 def brand_root_rel(brand):
-    for rel in (("brands", brand), ("lab", "damon", "brands", brand)):
+    for rel in (("brands", brand), ("lab", "owner", "brands", brand)):
         if C.WS.joinpath(*rel).is_dir():
             return rel
     return ("brands", brand)
@@ -1065,7 +1065,7 @@ DISPLAY = getattr(C, "DISPLAY_ID", {})
 
 def structure_changes(body):
     """Every ELEMENT LEDGER row the rewrite marked Adapted or Dropped, and every
-    row of its STRUCTURE QUESTIONS FOR DAMON block — numbered as written."""
+    row of its STRUCTURE QUESTIONS FOR OWNER block — numbered as written."""
     out = []
     led = re.search(r"##\s*ELEMENT LEDGER(.*?)(?:\n##\s|\Z)", body, re.S | re.I)
     if led:
@@ -1073,7 +1073,7 @@ def structure_changes(body):
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
             if len(cells) >= 4 and re.match(r"^\d+$", cells[0]) and re.search(r"adapted|dropped", cells[2], re.I):
                 out.append({"n": cells[0], "element": cells[1], "status": cells[2].strip("* "), "why": cells[3]})
-    q = re.search(r"##\s*STRUCTURE QUESTIONS FOR DAMON(.*?)(?:\n##\s|\Z)", body, re.S | re.I)
+    q = re.search(r"##\s*STRUCTURE QUESTIONS FOR OWNER(.*?)(?:\n##\s|\Z)", body, re.S | re.I)
     if q:
         for line in q.group(1).splitlines():
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
@@ -1713,7 +1713,7 @@ def run_stage(d, st, stage, extras, redo=False):
                 pack["story"] = txt
             else:
                 pack["story"] = ("[UNFILLED: this brand has no story.md yet — "
-                                 "`python3 lab/damon/story-builder/build.py --brand <brand>` drafts one]")
+                                 "`python3 lab/owner/story-builder/build.py --brand <brand>` drafts one]")
         # WHERE THE AD STARTS (the owner, 2026-10-09: "we need to do the rewrite from that point forward" — the
         # LeBron cut opened on "You guys know who I am, right?", not the swipe's first line). Set once per run
         # with --open-at "<the line>"; the hooks pass rewrites THAT beat and everything before it is cut.
@@ -1785,7 +1785,7 @@ def run_stage(d, st, stage, extras, redo=False):
                 filled = head + text + rest.replace(tag, f"`{var}` (given in full above)")
             else:
                 filled = filled.replace(tag, text)
-        # DAMON'S RULINGS FOR THIS RUN (2026-09-25). His decisions for this ad
+        # OWNER'S RULINGS FOR THIS RUN (2026-09-25). His decisions for this ad
         # (the product, which roles stay, a line's shape, the offer) used to live
         # in chat or in a session's head; a stage run by the machine never saw
         # them and went back to the defaults. <run>/RULINGS.md is handed to every
@@ -2066,7 +2066,7 @@ def run_stage(d, st, stage, extras, redo=False):
                 for c in _fr.get("changes") or []:
                     say(f"      hole {c['scene']}: {c['how'][:120]}")
                 for f in _fr.get("flagged") or []:
-                    say(f"      NEEDS DAMON {f['scene']}: a card's own figure isn't in the brand's files — {f['line'][:80]}")
+                    say(f"      NEEDS OWNER {f['scene']}: a card's own figure isn't in the brand's files — {f['line'][:80]}")
             except Exception as e:
                 say(f"      hole fill could not run ({type(e).__name__}: {str(e)[:100]})")
                 _missed_checks.append(f"hole fill: {type(e).__name__}: {str(e)[:120]}")
@@ -2497,7 +2497,7 @@ def _v2_vars(key, d, st, template, filled, pack):
         lay = st.get("layers") or {}
         out["triage_layers"] = "\n".join(
             f"{el.upper()}: {lay.get(el) or '(not read)'}"
-            + (" — the owner's own tag, final" if (lay.get("_from") or {}).get(el) == "damon" else "")
+            + (" — the owner's own tag, final" if (lay.get("_from") or {}).get(el) == "owner" else "")
             for el in ("format", "style", "structure", "made"))
     if "teardown_brief" in want:
         out["teardown_brief"] = _ly.record_brief(pack.get("stage1") or filled.get("teardown_record") or "")
@@ -2520,7 +2520,7 @@ def _v2_after(key, d, st, out_name, t0):
             read = {"structure": read.get("structure")} if read.get("structure") else {}
         lay = _ly.settle(st, read, _ly.swipe_key(st.get("video")))
         say("      layers: " + "  ·  ".join(f"{el} {lay.get(el) or '—'}"
-                                            + (" (the owner)" if (lay.get("_from") or {}).get(el) == "damon" else "")
+                                            + (" (the owner)" if (lay.get("_from") or {}).get(el) == "owner" else "")
                                             for el in ("format", "style", "structure", "made")))
         if st.get("layers_pending"):
             say("      NEW, waiting for the owner's call on Outlier → Create → Swipes: " + ", ".join(st["layers_pending"]))

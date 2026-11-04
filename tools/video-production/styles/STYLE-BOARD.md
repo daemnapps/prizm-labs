@@ -194,7 +194,7 @@ Daytime drama: long stares, a secret, someone who was supposed to be gone comes 
 A live sell on a shopping channel: host, demo table, caller on the line, clock ticking. It is the one show that is ALREADY a direct-response ad, and her generation bought from it for thirty years.
 
 - **The hero:** the caller on the line who already owns it
-- **The villain:** the old product on the demo table that did not work
+- **The villain:** the old widget on the demo table that did not work
 - **The move:** the live demo on the back of a hand
 - **The voice:** the host, and the caller's own words
 - **The replay:** the split-screen close-up of the demo hand
@@ -375,8 +375,8 @@ Two triggers are yours: an outlier brief, or swipes sent to teardown. Everything
 
 **Prompts:**
 
-- Teardown — stage 1, v11 (adds Roll and Sound per row, and the make-list): `tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v11-damon.md`
-- AI brief — stage 5, v11 (uses the roll labels; adds the edit block): `tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v11-damon.md`
+- Teardown — stage 1, v11 (adds Roll and Sound per row, and the make-list): `tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v11-owner.md`
+- AI brief — stage 5, v11 (uses the roll labels; adds the edit block): `tools/copywriter/prompts/video/stage-5-brief/ai-lane/stage5-ai-brief-v11-owner.md`
 
 **Built next, in order:**
 
@@ -444,8 +444,8 @@ The video edit tool, in the lab, built to the same shape as every other tool in 
 
 ### Prompts
 
-- The cut prompt — stage 2 · v2: `tools/video-edit/prompts/stage-2-cut/stage2-cut-v2-damon.md`
-- The learning prompt — stage 9 · v1: `tools/video-edit/prompts/stage-9-learn/stage9-learn-v1-damon.md`
+- The cut prompt — stage 2 · v2: `tools/video-edit/prompts/stage-2-cut/stage2-cut-v2-owner.md`
+- The learning prompt — stage 9 · v1: `tools/video-edit/prompts/stage-9-learn/stage9-learn-v1-owner.md`
 
 ### Honest list: what is not joined up yet
 

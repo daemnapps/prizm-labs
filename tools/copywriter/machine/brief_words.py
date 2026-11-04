@@ -66,8 +66,8 @@ def product_path(brand, product):
 
 def _product_names(brand, product):
     """The product as asked, then its catalog id and every alias (names.product_id / product_aliases): the product
-    file can sit under the short name while the brief and the card carry the catalog id (2026-10-28: "flex" vs
-    "flex-face-brush" left a card with no words)."""
+    file can sit under the short name while the brief and the card carry the catalog id (2026-10-28: "widget" vs
+    "widget-face-brush" left a card with no words)."""
     out = [str(product)]
     try:
         cid = N.product_id(brand, product)
@@ -79,7 +79,7 @@ def _product_names(brand, product):
 
 def _ordered_as_promo(brand, reg):
     """The brief's own order (its teardown run's vars/ask.md → ask.json) names a seasonal moment: a sale ad, so its
-    words come from the promo formats (2026-10-28: a Black Friday clearance ad came back as "Meet the new FLEX lineup")."""
+    words come from the promo formats (2026-10-28: a Black Friday clearance ad came back as "Meet the new WIDGET lineup")."""
     run = (reg or {}).get("run")
     if not run:
         return False

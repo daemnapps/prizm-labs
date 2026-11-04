@@ -118,7 +118,7 @@ def build(a):
         (d / "stages" / f).write_text(text)
     now = _now()
     st = {"slug": a.label, "label": a.label, "opened": now, "brand": a.brand, "product": a.product,
-          "ran_by": "damon", "venue": "local", "lane": "scratch", "lane_declared": "paid", "chain": "v2",
+          "ran_by": "owner", "venue": "local", "lane": "scratch", "lane_declared": "paid", "chain": "v2",
           "production_route": "ai", "route_chosen_by_hand": True, "style_id": a.style, "format_id": a.format,
           "layers": {"format": a.format, "style": a.style, "structure": a.arc},
           "declared_audience": {"avatar": a.avatar, "sub": None},

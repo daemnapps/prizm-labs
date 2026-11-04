@@ -42,7 +42,7 @@ def fix_drive_lines(b):
     n = 0
     for p in glob.glob(f"{HERE}/{b}/**/*.md", recursive=True):
         s = open(p).read()
-        t = s.replace("Shared Assets/lab/damon/swipe/", "Shared Assets/lab/damon/swipe-paid/")
+        t = s.replace("Shared Assets/lab/owner/swipe/", "Shared Assets/lab/owner/swipe-paid/")
         t = re.sub(r"(swipe-paid/%s/)angles/" % b, r"\1blocks/", t)
         if t != s:
             open(p, "w").write(t); n += 1

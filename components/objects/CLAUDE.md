@@ -24,7 +24,7 @@ ref → mesh → finish → check → web → record
 
 | Step | Who | What |
 |---|---|---|
-| ref | Claude, **Higgsfield connector** | One clean reference image. The prompt is `prompts/object-reference-v1-damon.md`, word for word; the model is GPT Image 2.5 (`gpt_image_2_5`). A real photo of the thing is sent as a reference image whenever one exists. For a person, the reference is their **character sheet**, never prose. |
+| ref | Claude, **Higgsfield connector** | One clean reference image. The prompt is `prompts/object-reference-v1-owner.md`, word for word; the model is GPT Image 2.5 (`gpt_image_2_5`). A real photo of the thing is sent as a reference image whenever one exists. For a person, the reference is their **character sheet**, never prose. |
 | mesh | Claude, **Higgsfield connector** (default) | Image → 3D on Higgsfield (`image_to_3d`, or `multi_image_to_3d` for 2–4 views — use views for anything thin or symmetrical, e.g. the racket). the owner, 2026-09-26: "just use Higgsfield for all the stuff… so we're just clean and clear". `make` requires `--mesh <file.glb>` (the connector's result) or `--local`, which runs the free local generator (`components/3d/make3d`, TRELLIS.2, ~7 min) — background props only; faces and small detail are clearly worse (SI-136 (objects mesh default), 2026-10-08). |
 | finish | the machine | The house finish (`definitions/finish.json`): satin, a clear lacquer coat over the object's own colours, like the light on his 3D head. Centred, colours kept. |
 | check | the machine, then Claude **looks** | A Blender still. Claude opens it next to the reference: shape, colours, text, proportions. Nothing ships unseen. |

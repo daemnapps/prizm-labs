@@ -193,7 +193,7 @@ function show(c,f){
     <details><summary>Read the brief</summary>
     <div class="doc">${s.spec?md(s.spec):"<p class='small'>Being written now. The full prompt is below.</p>"}</div>
     </details>
-    <details><summary>The new prompt slot: the winner's content (stage3-winner-slot-v1-damon.md), added to the chain's stage 3 Injection prompt</summary><pre class="raw">${esc(D.swap_prompt)}</pre></details>
+    <details><summary>The new prompt slot: the winner's content (stage3-winner-slot-v1-owner.md), added to the chain's stage 3 Injection prompt</summary><pre class="raw">${esc(D.swap_prompt)}</pre></details>
     <details data-sent="${esc(s.sent_file||"")}"><summary>Exactly what was sent (the full filled prompt)</summary><pre class="raw">Loading…</pre></details></div>`;
   document.querySelectorAll("#out details[data-sent]").forEach(el=>el.addEventListener("toggle",async()=>{if(!el.open||el.dataset.loaded)return;el.dataset.loaded=1;const pre=el.querySelector("pre");try{const r=await fetch(el.dataset.sent);pre.textContent=r.ok?await r.text():"Couldn't load it."}catch(e){pre.textContent="Couldn't load it."}}));
   document.querySelectorAll("#out .doc table").forEach(t=>{const w=document.createElement("div");w.className="tw";t.replaceWith(w);w.appendChild(t)});

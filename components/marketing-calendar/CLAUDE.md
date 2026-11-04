@@ -9,7 +9,7 @@ Triggered by `python3 machine/marketing_calendar.py <month> --brand <brand>`.
 Runs by: person — the planner is run by hand, monthly; the mini reaches a month only through email-production's lab_entry.py, which reads the committed month (2026-10-08, B4a (decide-now cards) card 3, R-person-or-mini: the team, relayed verbatim by ◆ PLAN [1cc25f] before 04:49:43Z: "3 yes, 4 yes,5 yes, 6 yes"; the owner told after).
 
 > **Where this lives, and why.** Built as a component on 2026-09-13, moved back
-> to `lab/damon/` the same day to be perfected, and moved here for good on
+> to `lab/owner/` the same day to be perfected, and moved here for good on
 > 2026-09-19 on the owner's word: *"move these tools out of the lab… straight into
 > the real production repo, components… so we can actually run QC on it as
 > well… and everybody can have access to these things."* Settled by system review

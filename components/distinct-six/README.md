@@ -14,6 +14,6 @@ python3 components/distinct-six/run.py runs/video-teardown/<brand>/<run> --angle
 - **Writes:** `runs/distinct-six/<brand>/<run>/` → `sent.md` (the prompt as sent), `versions.json`, `page.html` (colour bars by section, plus a grid of moves between every pair).
 - **Sections:** the doctrine's own 15 (`components/elements/library/doctrine.section.json`). No second grouping.
 - **Rule:** every pair is 3+ moves apart and none copies what's running (`creative-diversity/check.py`). Failures go back once for a rewrite.
-- **Prompt:** `prompts/stage4v-distinct-v1-damon.md`. Claude runs on the owner's plan (`claude -p`). Meta is never called.
+- **Prompt:** `prompts/stage4v-distinct-v1-owner.md`. Claude runs on the owner's plan (`claude -p`). Meta is never called.
 
 Page: The Distinct Six, (team page)

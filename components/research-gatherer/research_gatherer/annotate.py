@@ -12,7 +12,7 @@ Two reads per row, two owners:
 
 What a filed row carries (brands/language-schema.md, plus):
   id              language_<brand>_<avatar>_<lane>_<NNNN> — the Naming Standard's
-                  two-mark rule (lab/damon/naming-standard, v5), numbered across
+                  two-mark rule (lab/owner/naming-standard, v5), numbered across
                   the whole avatar bank
   text            the exact words (names -> [name], signature cut; nothing else touched)
   source          name, type, date (the day it was PULLED), ref (permalink to the exact

@@ -42,8 +42,8 @@ class Attribution(unittest.TestCase):
             self.assertEqual(C.attribution(), {"ran_by": C.person("x"), "venue": "mini"})
 
     def test_the_name_passes_through_person(self):
-        with mock.patch.dict(os.environ, {"TEARDOWN_RAN_BY": "the owner the owner!"}):
-            self.assertEqual(C.operator(), C.person("the owner the owner!"))
+        with mock.patch.dict(os.environ, {"TEARDOWN_RAN_BY": "the owner!"}):
+            self.assertEqual(C.operator(), C.person("the owner!"))
 
     def test_unset_or_empty_is_local_and_the_account(self):
         with mock.patch.dict(os.environ, _without(*ENV), clear=True), \

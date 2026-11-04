@@ -2,7 +2,7 @@
 
 Reads runs/media-buying/top1/structure-calls.json (one entry per held teardown,
 parsed from each run's STRUCTURE-CHECK.md) and writes
-lab/damon/media-buying/rewrite-calls.html. His calls save to the page's db
+lab/owner/media-buying/rewrite-calls.html. His calls save to the page's db
 (collection `calls`, one doc per <run>__<item>), and are read back to run
 `--approve-structure` or re-run stage 3 with his note.
 """
@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CALLS = ROOT / "runs/media-buying/top1/structure-calls.json"
 RULINGS = ROOT / "runs/media-buying/top1/structure-rulings.json"
-OUT = ROOT / "lab/damon/media-buying/rewrite-calls.html"
+OUT = ROOT / "lab/owner/media-buying/rewrite-calls.html"
 
 THEMES = [
     ("lab", "A scientist or lab as the expert",

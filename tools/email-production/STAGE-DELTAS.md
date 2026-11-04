@@ -10,7 +10,7 @@ system and a fix in one is a fix worth porting to the others.
 
 ---
 
-## 0 · Triage — `stage0-triage-v1-damon.md`
+## 0 · Triage — `stage0-triage-v1-owner.md`
 
 **Same:** lane (`ALREADY AN AD` / `ORGANIC`), voice binding, whether the
 speaker is identifiable.
@@ -31,7 +31,7 @@ speaker is identifiable.
   same words from "<brand>" and from "Creator-A at <brand>" are two different
   emails. Everything downstream binds to it.
 
-## 1 · Read — `stage1-read-v1-damon.md`
+## 1 · Read — `stage1-read-v1-owner.md`
 
 **Same:** observation only, lines quoted never paraphrased, voice markers,
 what the source conspicuously never does.
@@ -50,7 +50,7 @@ what the source conspicuously never does.
 Same discipline as everywhere: this stage **observes**. It does not say what
 would work better.
 
-## 2 · Spec — `stage2-spec-v1-damon.md`
+## 2 · Spec — `stage2-spec-v1-owner.md`
 
 **Unchanged in intent, and this is deliberate.** The construct is brand-free
 *and medium-free* — that is why a video teardown can feed the email lane at
@@ -64,13 +64,13 @@ later stage can achieve them — but the devices themselves do not transfer to
 any other medium, and nothing downstream may treat "it had a hero image" as a
 structural requirement.
 
-## 2b · Context scout — `stage1b-context-scout-v1-damon.md`
+## 2b · Context scout — `stage1b-context-scout-v1-owner.md`
 
 **Unchanged.** Indexes the brand tree at run time, picks what *this* source
 needs, publishes what it deliberately left out. It must finish the sentence
 "the email will be different because this was read" for every file.
 
-## 3 · Injection — `stage3-injection-v1-damon.md`
+## 3 · Injection — `stage3-injection-v1-owner.md`
 
 **Same:** substitution, never rewrite. `[UNFILLED: …]` rather than a deleted
 move. Voice rules outrank house style, collisions logged.
@@ -80,7 +80,7 @@ accountable for. If triage named a person, every first-person line in the
 email is that person's, and a line the brand would say but the person would
 not is a defect at this stage, not a note for later.
 
-## 4 · Placement — `stage4-placement-v1-damon.md`
+## 4 · Placement — `stage4-placement-v1-owner.md`
 
 **Same:** decides, writes nothing. The source's own position is the default;
 moving the product earlier needs a stated reason. Room is never bought by
@@ -95,7 +95,7 @@ compressing a source beat — an overrun is escalated with a number.
 - **Image plan** — how many image blocks, what each is for. Every one becomes
   a job for the image lane, so an image with no stated job is not planned.
 
-## 5 · Subject lines — `stage5-subjects-v1-damon.md`
+## 5 · Subject lines — `stage5-subjects-v1-owner.md`
 
 The copy lane's hooks stage, renamed for what it actually writes here.
 
@@ -115,14 +115,14 @@ without its preview is incomplete.
 Plus, where triage allows it: a from-name variant, called out separately, so a
 test of the sender is never confounded with a test of the words.
 
-## 6 · Expansion — `stage6-expansion-v1-damon.md` · **gated**
+## 6 · Expansion — `stage6-expansion-v1-owner.md` · **gated**
 
 **Unchanged, including the gate.** Runs only when the lane is `ORGANIC`. Five
 candidate moves — problem, mechanism, proof, objection, ask — each gated, and
 NOT NEEDED is the honest answer most of the time. Never trims a source beat to
 pay for an addition; never changes voice.
 
-## 7 · Close — `stage7-close-v1-damon.md`
+## 7 · Close — `stage7-close-v1-owner.md`
 
 **Same:** the objection where the reader flinches, then the landing the
 construct calls for. Offer figures verbatim, conditions travelling with
@@ -133,7 +133,7 @@ optional and it is not a place to repeat the CTA. It exists when there is a
 second, weaker reason to act that would have cluttered the argument. When
 there isn't one, the honest answer is no PS.
 
-## 8 · Build — `stage8-build-v1-damon.md`
+## 8 · Build — `stage8-build-v1-owner.md`
 
 The copy lane's Render stage, doing the same job for a different object.
 
@@ -148,7 +148,7 @@ prose. The two must agree; the JSON is the one that renders.
 Block vocabulary is fixed and lives in `render.py`. A stage that needs a new
 block type says so; it does not mint one.
 
-## 9 · Brief — `stage9-brief-v1-damon.md`
+## 9 · Brief — `stage9-brief-v1-owner.md`
 
 **Same shape as the copy lane's**, pointed at whoever builds it: what it was
 built from and whether that was an ad or a post, the format, whose voice and

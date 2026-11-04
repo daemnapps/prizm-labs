@@ -4,8 +4,8 @@
 SI-193 (video-teardown keys reader): this file no longer reads key files
 itself. It delegates to components/keys/loader.py — key(NAME) — which looks
 in the environment, then this repo's .env (add NAME=value there), then
-Damon's Mac Keychain when its ~/.daemn helper exists (skipped on Windows).
-The Upright key files (~/.upright-keys.env, ~/.daemn/keys.env, ~/.gemini.env,
+the owner's Mac Keychain when its ~/.daemn helper exists (skipped on Windows).
+The company key files (~/.company-keys.env, ~/.daemn/keys.env, ~/.gemini.env,
 ~/.apify.env) are never read (disconnected 2026-11-03).
 
 The managed file is NEVER opened or parsed here — its existence only marks
@@ -22,7 +22,7 @@ import os, sys
 from pathlib import Path
 
 # Kept as public names so callers don't break. VAULT is this repo's .env; the
-# Upright key files are not read any more (2026-11-03).
+# company key files are not read any more (2026-11-03).
 VAULT = Path(__file__).resolve().parents[3] / ".env"
 LEGACY = []
 KEYCHAIN = Path.home() / ".daemn"
@@ -31,7 +31,7 @@ KEYCHAIN = Path.home() / ".daemn"
 # sys.path, so it cannot shadow or be shadowed by another `loader`.
 _REPO = Path(__file__).resolve().parents[3]
 _LOADER_PATH = _REPO / "components" / "keys" / "loader.py"
-_LOADER_NAME = "upright_keys_loader"
+_LOADER_NAME = "company_keys_loader"
 
 
 def _load_loader():
@@ -75,7 +75,7 @@ def _parse(p):
 
 
 def _keychain_names():
-    """The names Damon's Keychain helper knows. Silent if it is not set up (Windows)."""
+    """The names the owner's Keychain helper knows. Silent if it is not set up (Windows)."""
     folder = Path(os.path.expanduser(_loader.KEYCHAIN_DIR))
     if not (folder / "daemn_keys.py").is_file():
         return []
@@ -96,7 +96,7 @@ def _keychain_names():
 
 def all_keys():
     """{name: value} for the environment's key names, plus — off the mini —
-    every name this repo's .env holds, or, with no .env, the names Damon's
+    every name this repo's .env holds, or, with no .env, the names the owner's
     Keychain knows; each value from the loader."""
     names = {n for n in os.environ if _is_key_name(n)}
     if not _loader.fallback_skipped():

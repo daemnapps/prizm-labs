@@ -6,7 +6,7 @@ email (design/job.json + design/email.json + design/preview.html) per send out, 
 
 Each send's kind (design | letter) and format come from the calendar (marketing-calendar/machine/kinds.py).
 Its copy comes from its finished copy run (runs/email-production/<brand>/<label>/deliverable/email.json).
-Prompts: prompts/design1-jobcard-v1-damon.md, prompts/design2-layout-v1-damon.md, each written beside its
+Prompts: prompts/design1-jobcard-v1-owner.md, prompts/design2-layout-v1-owner.md, each written beside its
 output as sent. The layout is checked before it is kept: every section is one the engine has, every product
 picture is one the brand's look names, every proof id is in the brand's proof index, no picture repeats in
 the window. Nothing is generated: a picture still to make stays a `todo` slot until a person OKs it (step 3).
@@ -175,7 +175,7 @@ def products_of(lk):
 
 def product_key(brand, folder):
     """The product the brand declares for a picture's Drive folder name. The look names product pictures by their
-    Drive folder (flex-face-brush) and the brand may declare the product under a shorter key (flex): read
+    Drive folder (widget-face-brush) and the brand may declare the product under a shorter key (flex): read
     products/images.json's drive_folder, so the image engine is handed a product it knows (the team, 2026-10-22).
     A folder no product claims is returned as it is."""
     try:
@@ -697,7 +697,7 @@ def moment_world(brand, avatar, moment, bdir, profile, culture, dry=False):
     if not research.exists() or dry:
         return None
     truth, banned = product_truth(brand)
-    p0 = fill(_read(PROMPTS / "design0-moment-v1-damon.md"), learnings=LN.block(brand, ("design", "picture", "copy")), moment=moment, research=research.read_text(), product_truth=truth,
+    p0 = fill(_read(PROMPTS / "design0-moment-v1-owner.md"), learnings=LN.block(brand, ("design", "picture", "copy")), moment=moment, research=research.read_text(), product_truth=truth,
               avatar=profile, culture=culture, position=_read(bdir / "brand-identity" / "position.md", 12000))
     d.mkdir(parents=True, exist_ok=True)
     (d / (moment + ".prompt.md")).write_text(p0)
@@ -708,7 +708,7 @@ def moment_world(brand, avatar, moment, bdir, profile, culture, dry=False):
         if not probs:
             break
         out = M.call(p0 + "\n\nYOUR LAST ANSWER WAS HELD FOR: " + "; ".join(probs) + ". Rewrite it with every product exactly as PRODUCT TRUTH describes it.", model, label="design0-fix", runner=lean_call.design_runner(M))
-    world.write_text("# %s · %s · the moment world\n\nWritten by prompts/design0-moment-v1-damon.md from %s.\n\n%s\n" % (
+    world.write_text("# %s · %s · the moment world\n\nWritten by prompts/design0-moment-v1-owner.md from %s.\n\n%s\n" % (
         avatar, moment, research.name, out.strip()))
     return world.read_text()
 
@@ -739,7 +739,7 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
     truth, banned = product_truth(brand)
     themes = {k: v.get("_what", "") if isinstance(v, dict) else "" for k, v in (lk.get("themes") or {}).items() if not k.startswith("_")}
     used_concepts = [v for k, v in used.items() if k.startswith("concept:")]
-    p1 = fill(_read(PROMPTS / "design1-jobcard-v1-damon.md"), learnings=LN.block(brand, ("design", "copy")), send=send, kind=kind, copy=copy,
+    p1 = fill(_read(PROMPTS / "design1-jobcard-v1-owner.md"), learnings=LN.block(brand, ("design", "copy")), send=send, kind=kind, copy=copy,
               themes=json.dumps(list(themes)) if themes else "(none yet)", used_concepts=json.dumps(used_concepts) if used_concepts else "(none)",
               position=_read(bdir / "brand-identity" / "position.md", 12000), avatar=profile, culture=culture, moment_world=world_txt, design_rules=rules,
               product_truth=truth, visual_dna=dna_of(brand))
@@ -758,7 +758,7 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
     if is_house:                         # LD-101 (Brand-B house look): no proof picture is cleared for email
         cleared, people_txt = cleared_people(brand, send.get("product") or "")
         proof_ids, proof_txt = [], "CLEARED PEOPLE (creators cleared for email; show them only through on_camera, each at most once):\n" + people_txt
-    p2 = fill(_read(PROMPTS / "design2-layout-v1-damon.md"), learnings=LN.block(brand, ("design", "picture")), job=job, copy=copy, kind=kind, sections=secs,
+    p2 = fill(_read(PROMPTS / "design2-layout-v1-owner.md"), learnings=LN.block(brand, ("design", "picture")), job=job, copy=copy, kind=kind, sections=secs,
               products="\n".join(products_of(lk)), proof=proof_txt, photos=photos_txt, used=json.dumps(used), moment_world=world_txt, design_rules=rules,
               product_truth=truth, visual_dna=dna_of(brand))
     (d / "design2--prompt.md").write_text(p2)

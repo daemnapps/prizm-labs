@@ -237,7 +237,7 @@ def approve(brand, label, who):
         cal = S.the_slot(brand, label) or {}     # the calendar's send: an offer send names its product as the offer
         cal_product = next((v for v in (cal.get("product"), cal.get("offer"))
                             if str(v or "").lower() not in ("", "none", "null")), "")
-        slot = {"date": iso, "product": c.get("product") or cal_product or ("flex" if "flex" in " ".join(c.get("links", [])) else "war" if "/war" in " ".join(c.get("links", [])) else ""),
+        slot = {"date": iso, "product": c.get("product") or cal_product or ("product" if "widget" in " ".join(c.get("links", [])) else "war" if "/war" in " ".join(c.get("links", [])) else ""),
                 "segments": c["segments"]}
         segs, _ = audience(c)
         future = datetime.datetime.fromisoformat("%sT%s" % (iso, c.get("send_local", "13:00"))) > datetime.datetime.now()

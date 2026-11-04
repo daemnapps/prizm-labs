@@ -26,7 +26,7 @@ A short kebab slug naming the ACTION. Reuse it for every item that action clears
 
 ## Pass 5 — the three whos, in this order (the team, 2026-10-02: "Who can address directly (including in one batch); Who needs to make decision (if its different than #1); Who it impacts"; then "Put decides first before can do it")
 1. decides: whoever `blocked_by` names, whose yes is needed before work starts; null if nobody's.
-2. can_do: consider the list's TRIAGE OWNER first (the team: "even if the owners can do it, we should first consider if steph (the triage lead) can do it for them"; generalised the same day: "steph is replaced generally by the triage owner. Who might differ depending on who runs it generally"). For red tests the triage owner is DAYU, who sits in the lead seat and can card and dispatch. Tag each item with one of:
+2. can_do: consider the list's TRIAGE OWNER first (the team: "even if the owners can do it, we should first consider if pm (the triage lead) can do it for them"; generalised the same day: "pm is replaced generally by the triage owner. Who might differ depending on who runs it generally"). For red tests the triage owner is ENGINEER, who sits in the lead seat and can card and dispatch. Tag each item with one of:
    - now: the triage owner can do it alone, today: for a red test, a re-pin or test fix the team cards and dispatches, or an approval the team types.
    - after: the triage owner can do it once someone else's ruling lands, because the work just applies it.
    - draft: the triage owner cards or prepares it, and the code's owner lands it or must say yes (their live code, their work in flight).

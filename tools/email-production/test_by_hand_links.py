@@ -99,7 +99,7 @@ class ByHand(Base):
         self.assertIn("approver", r["error"])
         self.assertNotIn("links_confirmed", self.card())
 
-    def test_03_steph_confirms(self):
+    def test_03_pm_confirms(self):
         self.make_card()
         r = A.confirm_links(BRAND, LABEL, "the team")
         self.assertTrue(r["ok"], r)

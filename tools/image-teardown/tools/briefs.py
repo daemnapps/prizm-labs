@@ -75,7 +75,7 @@ OLD_RUNS = HERE / "runs"
 # (2026-10-08). A brief.md on the teardown shelf is frozen history, still read
 # last. Creator briefs went out from there before they had a number
 # (2026-09-29). They sat in tools/video-teardown/records/runs/ until
-# 2026-09-30 (lab/damon/system-blueprint/RUNS-MOVE-2026-09-30.md); that old
+# 2026-09-30 (lab/owner/system-blueprint/RUNS-MOVE-2026-09-30.md); that old
 # home is still looked in for one release.
 VIDEO_RUNS = REPO / "runs" / "video-teardown"
 VIDEO_WRITING = REPO / "runs" / "video-writing"

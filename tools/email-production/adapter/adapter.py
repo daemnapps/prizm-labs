@@ -19,7 +19,7 @@
         {ok, message, tries}; the paid line goes to stderr; exit 0 made · 1 failed · 2 refused (a word not in
         try_words, an approval, a model not in the choices, no door for it yet, a missing key)
 
-<id> is the queue id `<brand>_email_<label>` (the naming standard's shape — lab/damon/suite/queue_store.py `entry_id`,
+<id> is the queue id `<brand>_email_<label>` (the naming standard's shape — lab/owner/suite/queue_store.py `entry_id`,
 copied as a rule, never imported) or sync.py's row id `<brand>__<label>`. <part> is the section number in
 design/email.json (sync.py's `section`); `-` is the whole email.
 
@@ -167,8 +167,8 @@ def observe(run):
     elif not c.get("final_check"):
         state, stage = "checks-pending", "making"
     elif c.get("eve_done"):
-        state, stage = "eve-done", "final-needs-you"
-        e["approved_by"] = str((c["eve_done"] or {}).get("by") or "eve").lower() if isinstance(c["eve_done"], dict) else "eve"
+        state, stage = "designer-done", "final-needs-you"
+        e["approved_by"] = str((c["eve_done"] or {}).get("by") or "designer").lower() if isinstance(c["eve_done"], dict) else "designer"
     else:
         state, stage = "ready", "final-needs-you"
     s0 = (c.get("subjects") or [{}])[0]

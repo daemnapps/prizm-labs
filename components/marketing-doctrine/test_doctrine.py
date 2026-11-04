@@ -28,7 +28,7 @@ BOOK_LINES = 6407
 
 # the owner's own nine, in the order the owner lists them. This is the spine and it
 # never reorders.
-DAMON_SECTION_IDS = [
+OWNER_SECTION_IDS = [
     "hook", "problem", "failed-solutions", "root-cause", "unique-mechanism",
     "solution", "product", "offer", "call-to-action",
 ]
@@ -39,7 +39,7 @@ ADDED_SECTION_IDS = [
     "identification", "agitation", "proof", "transformation", "objections",
     "urgency",
 ]
-SECTION_IDS = DAMON_SECTION_IDS + ADDED_SECTION_IDS
+SECTION_IDS = OWNER_SECTION_IDS + ADDED_SECTION_IDS
 TECHNIQUE_IDS = [
     "intensification", "identification", "gradualization", "redefinition",
     "mechanization", "concentration", "camouflage",
@@ -134,7 +134,7 @@ def main():
     check("%d sections" % len(SECTION_IDS), len(secs) == len(SECTION_IDS),
           "got %d" % len(secs))
     check("the owner's nine are present, in that order",
-          [i for i in sec_ids if i in DAMON_SECTION_IDS] == DAMON_SECTION_IDS,
+          [i for i in sec_ids if i in OWNER_SECTION_IDS] == OWNER_SECTION_IDS,
           str(sec_ids))
     check("the six added on that ask are present",
           [i for i in sec_ids if i in ADDED_SECTION_IDS] == ADDED_SECTION_IDS,
@@ -145,7 +145,7 @@ def main():
     check("every added section says when and why it was added",
           all(s.get("added") for s in secs if s["id"] in ADDED_SECTION_IDS))
     check("none of the original nine carries an added line",
-          not any(s.get("added") for s in secs if s["id"] in DAMON_SECTION_IDS))
+          not any(s.get("added") for s in secs if s["id"] in OWNER_SECTION_IDS))
     check("every section names real techniques",
           all(t in TECHNIQUE_IDS for s in secs for t in s["techniques"]))
     check("every section names real awareness levels",

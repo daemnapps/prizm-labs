@@ -5,7 +5,7 @@ the owner, 2026-10-08: "add in to the viewer … identifying diversity against t
 scripts / briefs it reads. this would make the process more bullet proof."
 
 Reads written briefs (chain stage 5 outputs, Distinct Six versions, any .md),
-reads the seven moves off each (Gemini, prompts/read-brief-moves-v1-damon.md),
+reads the seven moves off each (Gemini, prompts/read-brief-moves-v1-owner.md),
 then says which pairs Meta would group as one creative and which copy what is
 already running. Off to the side of the Viewer Check; wired in after the developer's
 merge. Never calls Meta.
@@ -28,7 +28,7 @@ import check as K  # noqa: E402
 import matrix as M  # noqa: E402
 import tag as T  # noqa: E402
 
-PROMPT = HERE / "prompts" / "read-brief-moves-v1-damon.md"
+PROMPT = HERE / "prompts" / "read-brief-moves-v1-owner.md"
 MIN = json.loads((HERE / "dimensions.json").read_text())["rule"]["min_moves"]
 
 

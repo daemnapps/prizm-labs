@@ -75,7 +75,7 @@ answers only when that exact file is asked for.
    → `ads/hooks/`, story · position · compliance · `voice/` → `brand-identity/`,
    element facts → `ai-elements/`, `customer/` + customer-service docs →
    `customer-experience/`, and the rest — one line each in
-   `lab/damon/brand-folder-map/REPO-MOVE-2026-09-30.md`. Every old place is an
+   `lab/owner/brand-folder-map/REPO-MOVE-2026-09-30.md`. Every old place is an
    alias in `FOLDERS.json` (and `DEFAULTS`). Held in place because a reader
    outside this component names them literally: `qc-dictionary.json`,
    `channels/own-accounts.json`, `brand-identity/identity-anchors.md`.

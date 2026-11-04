@@ -5,7 +5,7 @@ the owner, 2026-10-23: "I'm ok with using gemini for the watch so we have a cons
 watched one by one in production (video-production's clip judge, the house judge); this watches the FINISHED cut the
 same way a viewer would — the product real, one person throughout, lips on the voice, the words right and in their
 bands, no slop, an opening that stops a thumb, an ending on the offer — with the prompt
-`prompts/stage-4-watch/cut-watch-v1-damon.md`.
+`prompts/stage-4-watch/cut-watch-v1-owner.md`.
 
     python3 watch.py <renders/control.mp4> [--lines <production run>/lines.json] [--version control]
 
@@ -29,7 +29,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-PROMPT = HERE.parent / "prompts" / "stage-4-watch" / "cut-watch-v1-damon.md"
+PROMPT = HERE.parent / "prompts" / "stage-4-watch" / "cut-watch-v1-owner.md"
 HOUSE = REPO / "components" / "generative-model-house" / "models.json"
 INLINE_MAX = 18 * 1024 * 1024      # Gemini's inline request limit is 20 MB; the proxy stays under it
 PASS_SCORE = 7

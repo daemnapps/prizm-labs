@@ -16,7 +16,7 @@ home; it had three, and this file's copy came from copy.py's. This file is the
 same file it always was: same names, same answers, same command. **The default
 below stays HERE**, because it is this machine's own policy. RULED 2026-09-09
 (the owner, "it lives in the repo and everything's reflective"): the repo root,
-the same as `lab/damon/copy/machine/paths.py` — the BH-1 divergence is closed. That divergence is written
+the same as `lab/owner/copy/machine/paths.py` — the BH-1 divergence is closed. That divergence is written
 down for the 09-03 the owner batch in
 `new-workflow-design/builds/brand-home/DIVERGENCE.md`; nothing here decided it.
 """
@@ -34,7 +34,7 @@ HERE = Path(__file__).resolve().parent
 # the runner reads (which is exactly what broke the first BRAND-A attempt).
 _DEFAULT_WS = _rk_paths.repo(Path(__file__))      # brands/ at the repo root (the owner, 2026-09-09)
 
-# FOUND, never counted: this folder moved lab/damon/email-production ->
+# FOUND, never counted: this folder moved lab/owner/email-production ->
 # tools/email-production on 2026-09-19, and parents[3] silently pointed one
 # level too high the moment it did.
 _REPO = next((d for d in Path(__file__).resolve().parents if (d / "components" / "brand-finder").is_dir()), None)
@@ -65,7 +65,7 @@ def calendar_tool(sub=""):
     here = Path(__file__).resolve()
     for d in [here.parent, *here.parents]:
         for cand in (d / "marketing-calendar",
-                     d / "lab" / "damon" / "marketing-calendar",
+                     d / "lab" / "owner" / "marketing-calendar",
                      d / "components" / "marketing-calendar"):
             if (cand / (sub or "machine")).exists():
                 return cand / sub if sub else cand
@@ -82,13 +82,13 @@ def component(*parts):
 
 
 def lab_tool(*parts):
-    """Another of the owner's machines, still in lab/damon/ — found by walking up,
+    """Another of the owner's machines, still in lab/owner/ — found by walking up,
     so this component can move again without every reach breaking."""
     for d in Path(__file__).resolve().parents:
-        cand = d.joinpath("lab", "damon", *parts)
+        cand = d.joinpath("lab", "owner", *parts)
         if cand.exists():
             return cand
-    return WORKSPACE.joinpath("lab", "damon", *parts)
+    return WORKSPACE.joinpath("lab", "owner", *parts)
 
 
 # K2 (brands write wall), SI-21 2026-10-07. No script in this component writes

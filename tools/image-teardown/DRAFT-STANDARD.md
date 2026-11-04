@@ -110,9 +110,9 @@ the brand's pack in place, and the Brief Board is republished.
 
 They live beside the other stage prompts and are the only copies:
 
-- `prompts/stage7-draft-match-swipe-v2-damon.md` (v1 kept for the record)
-- `prompts/stage7-draft-leave-alone-v1-damon.md`
-- `prompts/stage8-draft-judge-v2-damon.md` (v1 kept for the record)
+- `prompts/stage7-draft-match-swipe-v2-owner.md` (v1 kept for the record)
+- `prompts/stage7-draft-leave-alone-v1-owner.md`
+- `prompts/stage8-draft-judge-v2-owner.md` (v1 kept for the record)
 
 `gpt_drafts.py` and `draft_judge.py` read them from there. A change to a
 prompt is a new version file (`-v2-`), never an edit in place, and it renders

@@ -6,11 +6,9 @@
 # Those two may not carry our brand names or a home path. Everywhere: no keys, no
 # credential files, nothing over 2 MB.
 #   Install once:  git config core.hooksPath .githooks
-#   Skip once, only on Damon's say-so:  git commit --no-verify
+#   Skip once, only on the owner's say-so:  git commit --no-verify
 set -uo pipefail
 
-BRANDS='smooche|serlino|pasnida|douxds|norse[ -]?organics|ecommops|upright ?commerce|kerri[ -]?zane|volubalm'
-OURS='pasnida|douxds|ecommops|upright ?commerce|kerri[ -]?zane|volubalm'   # docs/swipes names competitors on purpose
 KEYS='(^|[^A-Za-z0-9])sk-(proj-|ant-api03-|ant-)?[A-Za-z0-9_]{20,}|AIza[0-9A-Za-z_-]{30,}|gh[pousr]_[A-Za-z0-9]{30,}|xox[baprs]-[A-Za-z0-9-]{10,}|apify_api_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|glpat-[A-Za-z0-9_-]{20,}|figd_[A-Za-z0-9_-]{20,}'
 HOME_PATH='/Users/[a-z0-9._-]+/'
 
@@ -46,10 +44,9 @@ while IFS= read -r f; do
   $f  → something shaped like a live key; if real, rotate it"; continue
   fi
   if outward "$f"; then
-    pat="$BRANDS"; case "$f" in docs/swipes/*) pat="$OURS";; esac
-    if grep -qEi "$pat" "$f"; then
+    if named=$(python3 tools/safety_check.py --file "$f"); then :; else
       hits="$hits
-  $f  → names our brand ($(grep -oEi "$pat" "$f" | sort -u | head -3 | tr '\n' ' ')) in a file that leaves the repo"; continue
+  $f  → names our brand ($named) in a file that leaves the repo"; continue
     fi
     if grep -qE "$HOME_PATH" "$f"; then
       hits="$hits

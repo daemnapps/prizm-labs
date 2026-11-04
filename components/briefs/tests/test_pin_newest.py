@@ -20,7 +20,7 @@ _spec = importlib.util.spec_from_file_location("briefs_register_newest", TOOL)
 B = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(B)
 
-PIN = "prompts/stage6-image-brief-v2-damon.md"
+PIN = "prompts/stage6-image-brief-v2-owner.md"
 
 
 def tree(tmp, names):
@@ -35,25 +35,25 @@ class PinNewest(unittest.TestCase):
 
     def test_v2_and_v6_resolves_to_v6(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = tree(tmp, ["stage6-image-brief-v2-damon.md",
-                              "stage6-image-brief-v6-damon.md"])
+            root = tree(tmp, ["stage6-image-brief-v2-owner.md",
+                              "stage6-image-brief-v6-owner.md"])
             self.assertEqual(B.newest(PIN, root),
-                             "prompts/stage6-image-brief-v6-damon.md")
+                             "prompts/stage6-image-brief-v6-owner.md")
 
     def test_version_is_a_number_not_text(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = tree(tmp, ["stage6-image-brief-v2-damon.md",
-                              "stage6-image-brief-v6-damon.md",
-                              "stage6-image-brief-v10-damon.md"])
+            root = tree(tmp, ["stage6-image-brief-v2-owner.md",
+                              "stage6-image-brief-v6-owner.md",
+                              "stage6-image-brief-v10-owner.md"])
             self.assertEqual(B.newest(PIN, root),
-                             "prompts/stage6-image-brief-v10-damon.md")
+                             "prompts/stage6-image-brief-v10-owner.md")
 
     def test_other_styles_and_subfolders_never_compete(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = tree(tmp, ["stage6-image-brief-v2-damon.md",
-                              "stage6-creator-static-brief-v9-damon.md"])
+            root = tree(tmp, ["stage6-image-brief-v2-owner.md",
+                              "stage6-creator-static-brief-v9-owner.md"])
             (root / "prompts" / "archive").mkdir()
-            (root / "prompts" / "archive" / "stage6-image-brief-v7-damon.md").write_text("x")
+            (root / "prompts" / "archive" / "stage6-image-brief-v7-owner.md").write_text("x")
             self.assertEqual(B.newest(PIN, root), PIN)
 
     def test_a_pin_with_no_version_is_returned_as_it_is(self):
@@ -63,8 +63,8 @@ class PinNewest(unittest.TestCase):
 
     def test_path_prints_the_pin_by_default_and_the_newest_on_ask(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = tree(tmp, ["stage6-image-brief-v2-damon.md",
-                              "stage6-image-brief-v6-damon.md"])
+            root = tree(tmp, ["stage6-image-brief-v2-owner.md",
+                              "stage6-image-brief-v6-owner.md"])
             reg = {"briefs": [{"id": "static--designer", "prompt": PIN}]}
             outs = []
             for flag in (False, True):
@@ -73,7 +73,7 @@ class PinNewest(unittest.TestCase):
                     code = B.cmd_path(Namespace(id="static--designer", newest=flag), reg)
                 self.assertEqual(code, 0)
                 outs.append(buf.getvalue().strip())
-        self.assertEqual(outs, [PIN, "prompts/stage6-image-brief-v6-damon.md"])
+        self.assertEqual(outs, [PIN, "prompts/stage6-image-brief-v6-owner.md"])
 
     def test_the_static_brief_pin_is_the_newest_on_disk(self):
         reg = B.load()
@@ -86,7 +86,7 @@ class PinNewest(unittest.TestCase):
         reg = B.load()
         copy = "components/chain-runner/chains/video-teardown/prompts/stage5/v4.md"
         notes = [r.get("careful", "") for r in reg["retire_candidates"]
-                 if r["prompt"].endswith("ai-lane/stage5-ai-brief-v4-damon.md")]
+                 if r["prompt"].endswith("ai-lane/stage5-ai-brief-v4-owner.md")]
         self.assertEqual(len(notes), 1)
         self.assertIn(copy, notes[0])
         self.assertTrue((B.WS / copy).is_file())

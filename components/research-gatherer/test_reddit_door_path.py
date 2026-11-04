@@ -5,7 +5,7 @@
     python3 components/research-gatherer/test_reddit_door_path.py
 
 No pytest, no network, no key — temp folders only. Proves the lab fallback
-(`lab/damon/control-room/tools/reddit.py`) is gone: a workspace holding only
+(`lab/owner/control-room/tools/reddit.py`) is gone: a workspace holding only
 that file gets a SystemExit naming the component path, which every caller
 of `_run_reddit` already turns into [UNFILLED: why]. Same shape as
 SI-59 (gatherer fallback cut)'s `test_apify_layer_path.py`.
@@ -24,7 +24,7 @@ sys.path.insert(0, str(HERE))
 import research_gatherer.engine as R  # noqa: E402
 
 DOOR = "components/apify/reddit.py"
-LAB_DOOR = "lab/damon/control-room/tools/reddit.py"
+LAB_DOOR = "lab/owner/control-room/tools/reddit.py"
 
 
 class RedditDoorPath(unittest.TestCase):
@@ -66,7 +66,7 @@ class RedditDoorPath(unittest.TestCase):
     def test_source_names_no_lab_door(self):
         text = (HERE / "research_gatherer" / "engine.py").read_text()
         self.assertNotIn(LAB_DOOR, text)
-        self.assertNotIn('"lab" / "damon"', text)
+        self.assertNotIn('"lab" / "owner"', text)
         self.assertNotIn('"lab"', inspect.getsource(R._reddit_tool))
         self.assertIn(DOOR, R._reddit_tool.__doc__)
 

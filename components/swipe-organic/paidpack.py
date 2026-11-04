@@ -24,7 +24,7 @@ def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
     This used to be `HERE.parents[2]`, which was the root only while this file
-    sat in lab/damon/. It moved to components/ on 2026-09-22 and every lookup
+    sat in lab/owner/. It moved to components/ on 2026-09-22 and every lookup
     silently pointed one level too high, at ~/Projects. A marker cannot go
     quietly wrong the next time something moves.
 

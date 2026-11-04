@@ -53,17 +53,17 @@ WS = C.WS
 
 # (pass key, display id, file id, name, prompt, [(marker, v1 key, v1 file id, v1 name)])
 PASSES = [
-    ("stage3", "3", "3", "Injection", "stage3-injection-v8-damon.md", None),
-    ("stage4v2a", "4ab", "4ab", "Reading Hooks", "stage4v2a-readhooks-v6-damon.md",
+    ("stage3", "3", "3", "Injection", "stage3-injection-v8-owner.md", None),
+    ("stage4v2a", "4ab", "4ab", "Reading Hooks", "stage4v2a-readhooks-v6-owner.md",
      [("READING", "stage4r", "4a", "Reading"), ("HOOKS", "stage4b", "4b", "Hooks")]),
-    ("stage4v2b", "4cde", "4cde", "Placement Expansion Close", "stage4v2b-build-v6-damon.md",
+    ("stage4v2b", "4cde", "4cde", "Placement Expansion Close", "stage4v2b-build-v6-owner.md",
      [("PLACEMENT", "stage4a", "4c", "Placement"), ("EXPANSION", "stage4c", "4d", "Expansion"),
       ("CLOSE", "stage4d", "4e", "Close")]),
-    ("stage4e", "4f", "4f", "Audit", "stage4e-audit-v8-damon.md", None),   # v5: verify row 11, no NO ENTRY in the rung map
-    ("stage4g", "4g", "4g", "Spice", "stage4g-spice-v8-damon.md", None),   # v4: V23, organic closes on the turn + the ask
+    ("stage4e", "4f", "4f", "Audit", "stage4e-audit-v8-owner.md", None),   # v5: verify row 11, no NO ENTRY in the rung map
+    ("stage4g", "4g", "4g", "Spice", "stage4g-spice-v8-owner.md", None),   # v4: V23, organic closes on the turn + the ask
     # the brief as a shooting script (2026-10-21, video-system sync W1-W25): shots, per-line reads, the lane
     # (v4, verify row 22: its history no longer says a scene carries voice_settings)
-    ("stage5", "5", "5", "Brief", "stage5-ai-brief-v10-damon.md", None),   # v9 (2026-10-28): brand-free, no rule changed · v8 (2026-10-28): the demo stays on its object; props make sense   # v5: V23, the organic end card is the ask only
+    ("stage5", "5", "5", "Brief", "stage5-ai-brief-v10-owner.md", None),   # v9 (2026-10-28): brand-free, no rule changed · v8 (2026-10-28): the demo stays on its object; props make sense   # v5: V23, the organic end card is the ask only
 ]
 # the run-time inputs every pass may ask for, filled by run_writing (never from the config)
 RUN_INPUTS = ("declared_layers", "ask_lane", "video_spice", "realism_index", "creative_controls", "emotion_video_lines",
@@ -784,7 +784,7 @@ def split(d, st, p):
 # the SAME full audit reads the script again. A patch that cannot be applied exactly (a FIND that is not in
 # the script once) is thrown away and the pass is rebuilt, as before. INJECTION and HOOKS re-runs still
 # rebuild: every pass after them reads what they write.
-PATCH_PROMPT = "stage4v2b-patch-v1-damon.md"
+PATCH_PROMPT = "stage4v2b-patch-v1-owner.md"
 PATCH_BLOCK = re.compile(r"=== FIX ([^=\n]+?) ===[ \t]*\nPART:[^\n]*\nFIND:[ \t]*\n(.*?)\nREPLACE:[ \t]*\n(.*?)\n=== END ===", re.S)
 
 

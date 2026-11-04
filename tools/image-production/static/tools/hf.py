@@ -68,9 +68,9 @@ def api(path, payload=None, method=None):
             "No Higgsfield API key on this machine.\n"
             "Create one at https://higgsfield.ai/settings/api then store it:\n"
             "  security add-generic-password -s higgsfield-key-id "
-            "-a damon -w '<key id>'\n"
+            "-a owner -w '<key id>'\n"
             "  security add-generic-password -s higgsfield-key-secret "
-            "-a damon -w '<key secret>'")
+            "-a owner -w '<key secret>'")
     url = path if path.startswith("http") else BASE + path
     data = json.dumps(payload).encode() if payload is not None else None
     req = urllib.request.Request(

@@ -103,7 +103,7 @@ being added; none of these are removed without a version bump here.
   "type": "spotlight",              // from the brand's type catalogue
   "role": "earns",                  // earns · sets-up · recovers · closes
   "occasion": "…",                  // what the send is about
-  "product": "the-king-skin-set",
+  "product": "the-bundle-set",
   "offer": "none",                  // a key in the brand's offer bank, or "none"
   "follows": null, "then": null,    // the arc, by slot id
   "source": "…",                    // the FORMAT this send is written off —

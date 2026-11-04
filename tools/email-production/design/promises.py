@@ -7,7 +7,7 @@ this must be clear and accomplished regardless of the brand / product / offer."
 A reader model reads the built layout once, the way the customer will, against the job card and the copy, and lists
 every promise the email sets up (a count or sequence, a thing named as part of the offer, a claim the job card says
 it proves, a reference, a question raised, what the button says it does) and whether the email keeps it. The prompt
-is prompts/design3-promises-v1-damon.md; it judges wholeness, never taste.
+is prompts/design3-promises-v1-owner.md; it judges wholeness, never taste.
 
     check(run_dir, spec=None, job=None, copy=None) -> {"promises": [...], "broken": [...]}   writes design/promises.json
     python3 tools/email-production/design/promises.py runs/email-production/<brand>/<label>
@@ -23,7 +23,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 EM = HERE.parent
 REPO = EM.parents[1]
-PROMPT = EM / "prompts" / "design3-promises-v1-damon.md"
+PROMPT = EM / "prompts" / "design3-promises-v1-owner.md"
 SKIP = {"s", "link", "gif", "photo", "proof", "source", "use", "ratio", "focus", "brief", "todo", "product", "theme",
         "record", "pins", "history", "stage", "fill", "cy"}
 

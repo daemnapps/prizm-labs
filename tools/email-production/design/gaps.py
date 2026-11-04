@@ -15,7 +15,7 @@ answer, in this order, and leaves the rest as a plain question for a person:
                 gap for the person who sets offers. Inventing one is the one thing this must never do.
     picture     an unmade or refused slot is sent through the picture step again (line.make_pictures)
     product picture on a product card: the brand's real product cut-out (its look file's products), never a scene
-    other words the smallest patch that closes the gap (prompts/design4-patch-v1-damon.md): only the gap changes,
+    other words the smallest patch that closes the gap (prompts/design4-patch-v1-owner.md): only the gap changes,
                 every section people already ruled on stays exactly as it is; then the promise check reads it again
 
 Every fill is written into the email's layout, recorded in <run>/gaps.json (what was missing, what filled it, from
@@ -186,7 +186,7 @@ def find(run):
 
 
 def patch(run, brand, lk, gaps):
-    """Close the given gaps with the fewest ops on the layout (prompts/design4-patch-v1-damon.md); writes the layout,
+    """Close the given gaps with the fewest ops on the layout (prompts/design4-patch-v1-owner.md); writes the layout,
     re-reads it with the promise check, returns {"ops", "closed", "cannot_fill"}."""
     run = Path(run)
     d = run / "design"
@@ -202,7 +202,7 @@ def patch(run, brand, lk, gaps):
     copy = json.loads(cf.read_text()) if cf.is_file() else {}
     secs = "\n".join("%s: %s" % (k, v) for k, v in line.GUIDE.items())
     gl = "\n".join("- section %d (%s): %s%s" % (g["section"] + 1, g["type"], g["why"], (". Suggested fix: " + g["fix"]) if g.get("fix") else "") for g in gaps)
-    p = (EM / "prompts" / "design4-patch-v1-damon.md").read_text()
+    p = (EM / "prompts" / "design4-patch-v1-owner.md").read_text()
     for k, v in (("rulings", PM.rulings(run, spec)), ("product_truth", truth), ("sections", secs),
                  ("job", json.dumps(job, indent=1, ensure_ascii=False)), ("copy", json.dumps(copy, indent=1, ensure_ascii=False)[:30000]),
                  ("gaps", gl), ("spec", json.dumps({k: v for k, v in spec.items() if k != "job"}, indent=1, ensure_ascii=False))):

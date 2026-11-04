@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build  # noqa: E402
 
-LOOK = "If your skin doesn't transform, full refund. You keep the FLEX™."
+LOOK = "If your skin doesn't transform, full refund. You keep the WIDGET™."
 FORMULAS = "Run it daily for 90 days. If you can't see the difference between day 1 and day 90, we refund you in full."
 
 

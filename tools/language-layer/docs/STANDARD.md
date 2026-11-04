@@ -113,7 +113,7 @@ The engine change is small: `query(awareness=…)` beside `used=`, and the hooks
 
 *"I have naming conventions set up for this system … see how we can apply that to this index and all our different sources since this is a richer database."*
 
-The Naming Standard (`lab/damon/naming-standard/NAMING-STANDARD.md`, v5 — lowercase; `-` joins the words inside a value, `_` joins the values; the type first; the brand spelled in full) already names the ROWS (`language_<brand>_<avatar>_<lane>_<NNNN>`, ruled 2026-09-28, <brand> renamed, <brand> in progress). The SOURCES are still free text: <brand>'s 14,243 rows come from **164 differently-written source names** ("Brand Improvement (Customers) survey — Q: What do you like most about the FLEX?", "TikTok comments, campaign post #1 @hyginmaxxing (1,800,000 views)", "29.9K podium slide", "reddit (r/wicked_edge, r/Blackskincare, …)"), and some point at a file path on one person's laptop.
+The Naming Standard (`lab/owner/naming-standard/NAMING-STANDARD.md`, v5 — lowercase; `-` joins the words inside a value, `_` joins the values; the type first; the brand spelled in full) already names the ROWS (`language_<brand>_<avatar>_<lane>_<NNNN>`, ruled 2026-09-28, <brand> renamed, <brand> in progress). The SOURCES are still free text: <brand>'s 14,243 rows come from **164 differently-written source names** ("Brand Improvement (Customers) survey — Q: What do you like most about the WIDGET?", "TikTok comments, campaign post #1 @hyginmaxxing (1,800,000 views)", "29.9K podium slide", "reddit (r/wicked_edge, r/Blackskincare, …)"), and some point at a file path on one person's laptop.
 
 **Each row's `source` gains four fields, and keeps its old `name` as a label:**
 
@@ -133,7 +133,7 @@ The Naming Standard (`lab/damon/naming-standard/NAMING-STANDARD.md`, v5 — lowe
 
 | Kind | Shape | Example from <brand>'s bank |
 |---|---|---|
-| Survey | `survey_<brand>_<survey>` + `question` = `q-<nn>_<question-slug>` | `survey_brand_a_brand-improvement-customers` · `q-02_what-do-you-like-most-about-the-flex` |
+| Survey | `survey_<brand>_<survey>` + `question` = `q-<nn>_<question-slug>` | `survey_brand_a_brand-improvement-customers` · `q-02_what-do-you-like-most-about-the-widget` |
 | Post (its comments) | `post_<platform>_<account>_<post id>` | `post_tiktok_brand_a_7167399325910289706` (#1's comments) · `post_tiktok_hyginmaxxing_<id>` (campaign post #1) |
 | Support | `ticket_<brand>_<system>` | `ticket_brand_a_gorgias` |
 | Review | `review_<site>_<whose product>` | `review_amazon_<competitor>` · `review_site_brand_a` |

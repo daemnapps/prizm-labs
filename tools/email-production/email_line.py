@@ -491,7 +491,7 @@ def main():
         BRAND_TREE = root
     else:
         BRAND_TREE = None
-        for cand in (WORKSPACE / "lab" / "damon", WORKSPACE):
+        for cand in (WORKSPACE / "lab" / "owner", WORKSPACE):
             if L and L.avatar_root(args.brand, cand).is_dir():
                 BRAND_TREE = cand
                 WORKSPACE = cand
@@ -517,7 +517,7 @@ def main():
 
     label = args.label or Path(args.source).stem
     # Output lives under runs/, keyed by the machine's spoken name, never
-    # beside the code (lab/damon/CLAUDE.md, ruled 2026-09-17). results/ is
+    # beside the code (lab/owner/CLAUDE.md, ruled 2026-09-17). results/ is
     # history: a run begun there before the move is picked up from there once,
     # so --rerun-from can reuse its stages, and continues in its new home.
     out_dir = WORKSPACE / "runs" / "email-production" / args.brand / label
@@ -666,7 +666,7 @@ def main():
             "to the source's week — strip it and let the argument stand on its own. Writing "
             "a price in anyway is the single worst thing this stage can do, because it puts "
             "one in front of a reader the plan deliberately did not price to.\n\n"
-            "**It still ends on a product.** RULED BY DAMON 2026-09-21: \"Every email should "
+            "**It still ends on a product.** RULED BY OWNER 2026-09-21: \"Every email should "
             "have some sort of refocus back into a product in some capacity… even if it's more "
             "like a value email, just make sure we have the ability to make money in each of "
             "these emails.\" No offer means no PRICE, never no destination. The button goes to "
@@ -740,7 +740,7 @@ def main():
         product_file = read(args.product, required=True) if args.product else ""
     # ONLY WHAT IS FOR SALE TODAY. A product file lists every size the store has
     # ever made; the offer bank lists what is live. Twice the writer sold
-    # "2 x The Vitals Set — $99.99" off the product file, a size the store had
+    # "2 x The Starter Set — $99.99" off the product file, a size the store had
     # removed, and twice the price check held the email. A check that keeps
     # catching the same mistake is not the fix: a line in the product file that
     # names a price the bank does not sell today is taken out before any stage
@@ -1074,7 +1074,7 @@ def main():
     else:
         parts.append("## THIS WEEK\n\n[UNFILLED: nobody has researched this week yet]")
     research = "\n\n".join(parts)
-    # The brand's real tellers and what happened to them (lab/damon/story-builder
+    # The brand's real tellers and what happened to them (lab/owner/story-builder
     # writes it; every quote checked against the brand's own files).
     story = read(brand_root / "brand-identity" / "story.md") or (
         "(this brand has no story file yet — tell no story you cannot source)")
@@ -1164,7 +1164,7 @@ def main():
     # and the unfilled check are exact and live in simple_email.py; these three
     # need reading: what the email says the product IS, whether a thought was
     # chopped, and typos. The first rewrite with customer language called the
-    # Vitals Set "wash, scrub, moisturizer" — it is a serum — and passed every
+    # Starter Set "wash, scrub, moisturizer" — it is a serum — and passed every
     # exact check.
     # v2 (2026-09-21) reads the catalogue too, so it can catch a DRAFT product —
     # and so it stops marking a PARTNER's own facts unsupported for being absent

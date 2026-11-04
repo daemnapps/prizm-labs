@@ -4,12 +4,12 @@ Everyone brings their own keys. A key is found in this order:
   1. an environment variable with that name;
   2. the `.env` file at the root of this repo (gitignored — copy
      `.env.example` to `.env` and fill in your own keys);
-  3. Damon's Mac Keychain, through the ~/.daemn/daemn_keys.py helper, only
+  3. the owner's Mac Keychain, through the ~/.daemn/daemn_keys.py helper, only
      when that helper exists (personal NAME_PERSONAL / PRIZM_* entries only).
      On Windows, or any machine without the helper, this step is skipped
      silently, so .env is the one place to set keys there.
-Nothing else is ever read. Prizm Labs is disconnected from the Upright key
-files (2026-11-03, authorised by Damon): no ~/.upright-keys.env,
+Nothing else is ever read. Prizm Labs is disconnected from the company key
+files (2026-11-03, authorised by the owner): no ~/.company-keys.env,
 ~/.daemn/keys.env, ~/.gemini.env or ~/.apify.env.
 A missing key raises KeyError whose message starts:
   "This tool needs NAME. Add it to .env (see .env.example)."
@@ -59,7 +59,7 @@ ALIASES = {
 # The mini marker only — checked for existence, never opened (SI-192b (loader skips key file)).
 MANAGED = "~/.workflow-worker.env"
 NO_FALLBACK_ENV = "KEYS_NO_FALLBACK"
-# After .env, only Damon's Keychain helper — never the Upright key files.
+# After .env, only the owner's Keychain helper — never the company key files.
 FALLBACK = ("keychain",)
 KEYCHAIN_DIR = "~/.daemn"
 # Step 2: the repo's own .env (components/keys/loader.py -> repo root).
@@ -107,7 +107,7 @@ def _parse(p):
 
 
 def _keychain(names):
-    """Damon's Keychain, through the ~/.daemn/daemn_keys.py helper.
+    """the owner's Keychain, through the ~/.daemn/daemn_keys.py helper.
     Silent when the helper is absent (Windows, anyone else's machine) or any call fails."""
     folder = _home(KEYCHAIN_DIR)
     if not (folder / "daemn_keys.py").is_file():

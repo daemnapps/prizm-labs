@@ -77,7 +77,7 @@ def _workspace() -> Path:
 
 def prompts() -> tuple[dict, str]:
     folder = COMPONENT / "prompts" / "stage-0f-cast"
-    files = sorted(folder.glob("cast-sheets-v*-damon.md"),
+    files = sorted(folder.glob("cast-sheets-v*-owner.md"),
                    key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     f = files[-1]
     secs, cur = {}, None

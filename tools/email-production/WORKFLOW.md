@@ -23,7 +23,7 @@ prove the flow before stage 2 opens it up.
 
 ### A · The calendar — **now its own component**
 
-`lab/damon/marketing-calendar/` (its own folder since 2026-09-13, the owner: the planner is
+`lab/owner/marketing-calendar/` (its own folder since 2026-09-13, the owner: the planner is
 "also going to be relevant for our ads as well"). Run it from there:
 
     python3 machine/calendar.py <month> --brand <brand>

@@ -323,7 +323,7 @@ def write_status(run: Path, h: dict, state: dict, sheet: dict | None, drive_dir:
           "drive_preview": drive_rel(drive_dir / preview) if drive_dir and preview and (drive_dir / preview).exists() else None,
           "drive_link": drive_link(drive_dir / preview) if drive_dir and preview else None,
           "resume": (f"python3 tools/video-edit/machine/run.py handoff {rel(h['folder'])} --approve {waiting}" if waiting else None),
-          "missing_from_kit": (sheet or {}).get("missing") or [], "notes_for_damon": (sheet or {}).get("notes_for_damon") or [],
+          "missing_from_kit": (sheet or {}).get("missing") or [], "notes_for_owner": (sheet or {}).get("notes_for_owner") or [],
           "open_decisions": open_decisions(), **(extra or {})}
     _write(run / "status.json", st)
     say = {"timeline": "STOP 1 — the timeline. The cut with the dead air out, no captions yet. Approve it, or say what to change.",
@@ -336,8 +336,8 @@ def write_status(run: Path, h: dict, state: dict, sheet: dict | None, drive_dir:
         md += [f"- Master: `{done.get('file')}`", f"- Drive: `{done.get('drive') or '—'}`", ""]
     if st["missing_from_kit"]:
         md += ["## Not in the kit (the edit leaves these out)", ""] + [f"- {m}" for m in st["missing_from_kit"]] + [""]
-    if st["notes_for_damon"]:
-        md += ["## Notes", ""] + [f"- {m}" for m in st["notes_for_damon"]] + [""]
+    if st["notes_for_owner"]:
+        md += ["## Notes", ""] + [f"- {m}" for m in st["notes_for_owner"]] + [""]
     md += ["## Open on the edit line (not decided here)", ""] + [f"- {m}" for m in st["open_decisions"]] + [""]
     (run / "STATUS.md").write_text("\n".join(md))
     return st

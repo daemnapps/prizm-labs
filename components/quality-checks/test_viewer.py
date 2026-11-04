@@ -72,10 +72,10 @@ class Viewer(unittest.TestCase):
         brief = 'Brief\n```json\n{"scenes": [1]}\n```\n'
         (d / "viewer-check").mkdir()
         (d / "viewer-check" / "STAMP.json").write_text(json.dumps({"brief": V.brief_key(brief), "passed": True}))
-        self.assertTrue(V.stamp_of(d, brief + "DAMON READ: APPROVED\n"))          # a stamp line changes nothing
+        self.assertTrue(V.stamp_of(d, brief + "OWNER READ: APPROVED\n"))          # a stamp line changes nothing
         self.assertIsNone(V.stamp_of(d, brief.replace("[1]", "[2]")))              # the words changed: check again
 
-    def test_damons_v_passes_it(self):
+    def test_owners_v_passes_it(self):
         import tempfile
         d = Path(tempfile.mkdtemp())
         V.approve(d, "some brief")

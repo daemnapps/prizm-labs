@@ -33,7 +33,7 @@ SUBFOLDER = "creator-teardowns"
 def drive_root():
     """The mounted 'Shared Assets' shared drive, or None if unavailable.
 
-    Prefers the Upright account when several Google accounts are mounted.
+    Prefers the company account when several Google accounts are mounted.
     The account folders come from brandpath's finder (LD-47 (Drive sweep)):
     none on a worker spawn (DRIVE_MOUNT=off, LD-26 (mount switch)).
     """
@@ -68,7 +68,7 @@ def resolve_out(explicit_out=None, brand=None):
             sys.exit(
                 "--brand given but the 'Shared Assets' shared drive isn't "
                 "mounted.\nInstall/sign in to Google Drive for Desktop with "
-                "the Upright account, or pass --out to write locally.")
+                "the company account, or pass --out to write locally.")
         target = root / brand / SUBFOLDER
         if not (root / brand).is_dir():
             existing = sorted(p.name for p in root.iterdir()

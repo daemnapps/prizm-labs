@@ -1,7 +1,7 @@
 # swipe-organic — what the avatars actually watch
 
 Auto-loads for work nested here. Written 2026-09-23, when the folder moved out
-of `lab/damon/` and owed the four new-resident questions
+of `lab/owner/` and owed the four new-resident questions
 (`components/CLAUDE.md`). **Nothing here is new doctrine** — every line is
 assembled from the five documents that were already in this folder, and where
 this file and one of them disagree, say so rather than guessing:
@@ -47,7 +47,7 @@ Runs by: person
   `observations.jsonl`, `sweeps.jsonl`; most also carry `plan.json` (the dig's
   plan), `discoveries.jsonl` (hops' adoptions), `feed.html` and
   `prompts-as-sent/`; `covers/` is gitignored and sits only on the Mac that
-  pulled), `damon-saves/`,
+  pulled), `owner-saves/`,
   `culture-digs/`, `personas/`, `persona-kits/`, `swipe-videos/`, `teardowns/`,
   `desk/`. Its scripts also write, and these are pool too: handle folders
   `<handle>/` (slideshows.py); pool folders `<pool>/posts.json` (add.py
@@ -62,7 +62,7 @@ Runs by: person
   `runs/swipe-organic/_packs/<date>/` with a `run.json`. Media mirrors to
   `Shared Assets/swipe/organic/`, reached through
   `components/swipe-paid/swipe_home.py` (SI-47 (swipe switch)), and creator
-  posts to `Shared Assets/lab/damon/creators/<handle>/posts/`.
+  posts to `Shared Assets/lab/owner/creators/<handle>/posts/`.
 - **Manifest per entry:** each feed's `items.json` carries its posts, one row
   per post with its source and a receipt; `sources.json` carries its sources,
   each with a receipt. The dig writes its ask into `sources.json` and its plan
@@ -72,7 +72,7 @@ Runs by: person
 **Read surface — who may read what** (the team, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line). Besides the `records/` shelves above, these are part of the pool's contract and other components may read them by path:
 1. **Handle folders** `<handle>/posts.json` and `<handle>/posts/*.md` — one pulled creator or brand (image-teardown, intake).
 2. **`formats.json`** (the definition above) and **`records/format-digest.json`** — read by elements and naming.
-3. **Per-shelf files:** `records/avatar-feeds/<feed>/items.json` (intake, video-production, research-gatherer, marketing-chain-checks), `records/swipe-videos/<code>/format.json` (intake), `records/damon-saves/catalog.json` (copywriter), `records/teardowns/<code>/` and `records/culture-digs/` (video-production, research-gatherer, ad-variations).
+3. **Per-shelf files:** `records/avatar-feeds/<feed>/items.json` (intake, video-production, research-gatherer, marketing-chain-checks), `records/swipe-videos/<code>/format.json` (intake), `records/owner-saves/catalog.json` (copywriter), `records/teardowns/<code>/` and `records/culture-digs/` (video-production, research-gatherer, ad-variations).
 Nothing imports this folder's Python; everything else here — the scripts, `.bundle/`, `desk/` state — is internal and may change without notice. A reshape of any file above is a contract change: say so here, and move the readers in the same commit.
 
 ## Rules this component holds itself to
@@ -126,11 +126,11 @@ Nothing imports this folder's Python; everything else here — the scripts, `.bu
 
 - **The Drive carve-out (O9 (Drive by fileId)) — closed for the pool,
   2026-10-07.** the team moved the media by hand from
-  `Shared Assets/lab/damon/swipe-organic/` to `Shared Assets/swipe/organic/`
+  `Shared Assets/lab/owner/swipe-organic/` to `Shared Assets/swipe/organic/`
   (same file ids; the lab folder is gone). Every reader and writer reaches it
   through `components/swipe-paid/swipe_home.py` (SI-47 (swipe switch)). Old
   stored lab paths still resolve through `swipe_home.resolve()`. Still open:
-  creator posts stay at `Shared Assets/lab/damon/creators/`, and the repo side
+  creator posts stay at `Shared Assets/lab/owner/creators/`, and the repo side
   moves with the 2 Nov move. Partial copies sit at
   `Shared Assets/swipe/_partial-copy-organic`, for a person to delete.
 - **Records (O12 (records adapter)): `runs/swipe-organic/` is filed by the shared
@@ -138,7 +138,7 @@ Nothing imports this folder's Python; everything else here — the scripts, `.bu
 
 ## What moved here, and what did not
 
-Moved out of `lab/damon/swipe-organic/` on the owner's word, 2026-09-22 (*"swipe
+Moved out of `lab/owner/swipe-organic/` on the owner's word, 2026-09-22 (*"swipe
 paid, swipe organic, intake all need to move to components now"*). Both launchd
 jobs were repointed and reloaded the same hour.
 

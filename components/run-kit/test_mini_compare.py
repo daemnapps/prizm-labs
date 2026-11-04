@@ -90,11 +90,11 @@ FILES = {
     "components/keys/loader.py":
         "import os\nimport nopkg_keys\n"
         "MANAGED = \"~/.workflow-worker.env\"\n"
-        "KEY_FILE = \"~/.upright-keys.env\"\n"
+        "KEY_FILE = \"~/.company-keys.env\"\n"
         "T = os.environ.get(\"SHOPIFY_TOKEN\")\n",
-    "components/keys/merge.py": "DEFAULT_OUT = \"~/upright-keys.master.env\"\n",
+    "components/keys/merge.py": "DEFAULT_OUT = \"~/company-keys.master.env\"\n",
     "components/keys/other.py": "OTHER = \"~/.other.env\"\n",
-    "components/notkeys/loader.py": "KEY_FILE = \"~/.upright-keys.env\"\n",
+    "components/notkeys/loader.py": "KEY_FILE = \"~/.company-keys.env\"\n",
     # fix 5: regex strings
     "components/regex/run.py":
         "import re\n"

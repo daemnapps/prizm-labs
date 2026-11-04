@@ -176,7 +176,7 @@ function show(c,f){
   document.getElementById("out").innerHTML=`<div class="out"><div><b>${esc((D.stats[c]||{}).ad||s.concept)} × ${esc(D.formats.find(x=>x.path===f)?.name||s.fmt)}</b> <span class="small">— stage 2 Spec, written ${esc((s.opened||"").slice(0,10))}</span></div>
     <div class="small">Winner</div>${strip(c)}<div class="small">Format</div>${strip(f)}
     <div class="doc">${md(s.spec)}</div>
-    <details><summary>The prompt (stage-format-swap-v1-damon.md)</summary><pre class="raw">${esc(D.swap_prompt)}</pre></details>
+    <details><summary>The prompt (stage-format-swap-v1-owner.md)</summary><pre class="raw">${esc(D.swap_prompt)}</pre></details>
     <details><summary>Exactly what was sent</summary><pre class="raw">${esc(s.sent)}</pre></details></div>`;
   document.querySelectorAll("#out .doc table").forEach(t=>{const w=document.createElement("div");w.className="tw";t.replaceWith(w);w.appendChild(t)});
 }

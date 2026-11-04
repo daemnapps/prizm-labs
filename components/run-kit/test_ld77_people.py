@@ -8,7 +8,7 @@ Covers the resolver (exact, case-insensitive, every address shape, unmapped /
 empty / ambiguous refused naming the fix, try_person_of, whoami, the CLI's
 exit 0 / exit 2), that mini_run's names ARE the resolver's, and the two shell
 sites that call the CLI: platform/tools/hats.sh hat_owner (THE acceptance
-check — stephanie@company.com mints dev-steph) and the post-compact hook's
+check — pm-primary@company.com mints dev-pm) and the post-compact hook's
 draft, which must never fail.
 
     /usr/bin/python3 components/run-kit/test_ld77_people.py
@@ -35,10 +35,10 @@ HOOK_DRAFT = REPO / "new-workflow-design/builds/system-path/ld77/drafts/dot-clau
 BASH = "/bin/bash"
 
 FIXTURE = {
-    "steph": {"person": "steph", "emails": [{"address": "the team@company.com"},
-                                            {"address": "stephanie@company.com"}]},
-    "damon": {"person": "damon", "emails": [{"address": "the owner@company.com"},
-                                            {"address": "ddixon@companyllc.com"}]},
+    "pm": {"person": "pm", "emails": [{"address": "the team@company.com"},
+                                            {"address": "pm-primary@company.com"}]},
+    "owner": {"person": "owner", "emails": [{"address": "the owner@company.com"},
+                                            {"address": "primary@companyllc.com"}]},
     "plain": {"person": "plain", "emails": ["plain@example.com"]},       # a bare-string entry
     "single": {"person": "single", "email": "Single@Example.com"},       # the singular key
     "broken": "{ not json",
@@ -86,10 +86,10 @@ class Base(unittest.TestCase):
 class TheResolver(Base):
     def test_exact_and_case_insensitive(self):
         r = self.tree()
-        self.assertEqual(P.person_of(r, "stephanie@company.com"), "steph")
-        self.assertEqual(P.person_of(r, "  STEPHANIE@Company.com \n"), "steph")
-        self.assertEqual(P.person_of(r, "ddixon@companyllc.com"), "damon")
-        self.assertEqual(P.person_of(r, "damon@COMPANY.com"), "damon")
+        self.assertEqual(P.person_of(r, "pm-primary@company.com"), "pm")
+        self.assertEqual(P.person_of(r, "  PM@Company.com \n"), "pm")
+        self.assertEqual(P.person_of(r, "primary@companyllc.com"), "owner")
+        self.assertEqual(P.person_of(r, "owner@COMPANY.com"), "owner")
 
     def test_every_address_shape_an_identity_file_has_used(self):
         r = self.tree()
@@ -98,7 +98,7 @@ class TheResolver(Base):
 
     def test_never_the_local_part(self):
         r = self.tree()
-        for email in ("steph@company.com", "stephanie@elsewhere.com", "damon@companyllc.com"):
+        for email in ("pm@company.com", "pm@elsewhere.com", "owner@companyllc.com"):
             with self.assertRaises(P.Refused) as cm:
                 P.person_of(r, email)
             self.assertIn("team/people/<you>/identity.json", str(cm.exception))
@@ -113,28 +113,28 @@ class TheResolver(Base):
             self.assertIsNone(P.try_person_of(r, email))
 
     def test_two_files_claiming_one_address_are_refused_naming_both(self):
-        r = self.tree({"eve": {"emails": [{"address": "shared@example.com"}]},
-                       "steph": {"emails": [{"address": "Shared@Example.com"}]}})
+        r = self.tree({"designer": {"emails": [{"address": "shared@example.com"}]},
+                       "pm": {"emails": [{"address": "Shared@Example.com"}]}})
         with self.assertRaises(P.Refused) as cm:
             P.person_of(r, "shared@example.com")
         msg = str(cm.exception)
-        self.assertIn("team/people/eve/identity.json", msg)
-        self.assertIn("team/people/steph/identity.json", msg)
+        self.assertIn("team/people/designer/identity.json", msg)
+        self.assertIn("team/people/pm/identity.json", msg)
         self.assertIsNone(P.try_person_of(r, "shared@example.com"))
 
     def test_an_unreadable_file_is_skipped_and_handed_to_skipped(self):
         r = self.tree()
         seen = []
-        self.assertEqual(P.claimants(r, "stephanie@company.com", skipped=lambda f, e: seen.append(f.parent.name)),
-                         ["steph"])
+        self.assertEqual(P.claimants(r, "pm-primary@company.com", skipped=lambda f, e: seen.append(f.parent.name)),
+                         ["pm"])
         self.assertEqual(seen, ["broken"])
 
     def test_whoami_through_a_git_seam_and_through_git(self):
         r = self.tree(email="the team@Company.com")
-        self.assertEqual(P.whoami(r, lambda args, repo: (0, "ddixon@companyllc.com\n", "")), "damon")
+        self.assertEqual(P.whoami(r, lambda args, repo: (0, "primary@companyllc.com\n", "")), "owner")
         with self.assertRaises(P.Refused):
             P.whoami(r, lambda args, repo: (1, "", ""))
-        self.assertEqual(P.whoami(r), "steph")
+        self.assertEqual(P.whoami(r), "pm")
 
 
 class TheCli(Base):
@@ -143,14 +143,14 @@ class TheCli(Base):
                               capture_output=True, text=True, env=ENV, timeout=60)
 
     def test_whoami_prints_the_id_exit_0(self):
-        r = self.tree(email="stephanie@company.com")
+        r = self.tree(email="pm-primary@company.com")
         p = self.cli("whoami", "--repo", str(r))
-        self.assertEqual((p.returncode, p.stdout), (0, "steph\n"), p.stderr)
-        p = self.cli("whoami", "--repo", str(r), "--email", "DDIXON@companyllc.com")
-        self.assertEqual((p.returncode, p.stdout), (0, "damon\n"), p.stderr)
+        self.assertEqual((p.returncode, p.stdout), (0, "pm\n"), p.stderr)
+        p = self.cli("whoami", "--repo", str(r), "--email", "PRIMARY@companyllc.com")
+        self.assertEqual((p.returncode, p.stdout), (0, "owner\n"), p.stderr)
 
     def test_unmapped_is_the_refusal_on_stderr_exit_2(self):
-        r = self.tree(email="steph@company.com")
+        r = self.tree(email="pm@company.com")
         p = self.cli("whoami", "--repo", str(r))
         self.assertEqual((p.returncode, p.stdout), (2, ""))
         self.assertIn("team/people/<you>/identity.json", p.stderr)
@@ -167,7 +167,7 @@ class MiniRunIsTheResolver(unittest.TestCase):
 
 
 class HatOwner(Base):
-    """THE acceptance check: a hat minted in the team's clone is dev-steph."""
+    """THE acceptance check: a hat minted in the team's clone is dev-pm."""
 
     def owner(self, root, path=None, *arg):
         env = dict(ENV, HATS_WORKSPACE=str(root))
@@ -178,23 +178,23 @@ class HatOwner(Base):
         return subprocess.run([BASH, "-c", script, "bash", str(HATS)] + list(arg),
                               capture_output=True, text=True, env=env, timeout=60)
 
-    def test_stephanie_at_company_is_steph(self):
-        p = self.owner(self.tree(email="stephanie@company.com"))
-        self.assertEqual(p.stdout, "steph rc=0\n", p.stderr)
+    def test_pm_at_company_is_pm(self):
+        p = self.owner(self.tree(email="pm-primary@company.com"))
+        self.assertEqual(p.stdout, "pm rc=0\n", p.stderr)
 
     def test_unmapped_returns_2_and_never_guesses(self):
-        p = self.owner(self.tree(email="steph@company.com"))
+        p = self.owner(self.tree(email="pm@company.com"))
         self.assertEqual(p.stdout, " rc=2\n", p.stderr)
 
     def test_no_python3_returns_2_never_aborts(self):
         empty = Path(tempfile.mkdtemp(prefix="ld77-nopath-"))
         self.roots.append(empty)
-        p = self.owner(self.tree(email="stephanie@company.com"), str(empty))
+        p = self.owner(self.tree(email="pm-primary@company.com"), str(empty))
         self.assertEqual(p.stdout, " rc=2\n", p.stderr)
 
     def test_an_explicit_owner_still_wins(self):
-        p = self.owner(self.tree(email="stephanie@company.com"), None, "dayu")
-        self.assertEqual(p.stdout, "dayu rc=0\n", p.stderr)
+        p = self.owner(self.tree(email="pm-primary@company.com"), None, "engineer")
+        self.assertEqual(p.stdout, "engineer rc=0\n", p.stderr)
 
 
 class PostCompactDraft(Base):
@@ -204,20 +204,20 @@ class PostCompactDraft(Base):
     def run_hook(self, root):
         plans = root / "team/plans"
         plans.mkdir(parents=True)
-        (plans / "dev-steph.md").write_text("# plan\n## BATCH 1\n")
-        (plans / "dev-stephanie.md").write_text("# plan\n## BATCH 9\n")
+        (plans / "dev-pm.md").write_text("# plan\n## BATCH 1\n")
+        (plans / "dev-pm.md").write_text("# plan\n## BATCH 9\n")
         return subprocess.run([BASH, str(HOOK_DRAFT)], cwd=str(root), env=ENV, timeout=60,
                               input='{"hook_event_name": "SessionStart", "source": "compact"}',
                               capture_output=True, text=True)
 
-    def test_steph_sees_her_plan_by_her_id(self):
-        p = self.run_hook(self.tree(email="stephanie@company.com"))
+    def test_pm_sees_her_plan_by_her_id(self):
+        p = self.run_hook(self.tree(email="pm-primary@company.com"))
         self.assertEqual(p.returncode, 0, p.stderr)
-        self.assertIn("dev-steph.md", p.stdout)
-        self.assertNotIn("dev-stephanie.md", p.stdout)
+        self.assertIn("dev-pm.md", p.stdout)
+        self.assertNotIn("dev-pm.md", p.stdout)
 
     def test_unmapped_shows_no_plan_and_exits_0(self):
-        p = self.run_hook(self.tree(email="stephanie@elsewhere.com"))
+        p = self.run_hook(self.tree(email="pm@elsewhere.com"))
         self.assertEqual(p.returncode, 0, p.stderr)
         self.assertNotIn("team/plans/", p.stdout)
         self.assertNotIn("identity.json", p.stdout + p.stderr)

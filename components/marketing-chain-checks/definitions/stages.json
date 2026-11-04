@@ -1,5 +1,5 @@
 {
- "_readme": "THE CREATIVE QC LOOP, every tool, every stage (the owner, 2026-10-02: 'i want this kind of creative QC process installed for each of my production tools … this should exist for all stages in the creation process'). Each entry says what the stage makes, what its output must agree with, its hard bars, and where a problem is fixed. quality_checks/review.py reads this; the reviewer prompt is prompts/creative-review-v1-damon.md. No brand is named here — every brand runs the same bars. A stage key may be a prefix (stage4 covers stage4b).",
+ "_readme": "THE CREATIVE QC LOOP, every tool, every stage (the owner, 2026-10-02: 'i want this kind of creative QC process installed for each of my production tools … this should exist for all stages in the creation process'). Each entry says what the stage makes, what its output must agree with, its hard bars, and where a problem is fixed. quality_checks/review.py reads this; the reviewer prompt is prompts/creative-review-v1-owner.md. No brand is named here — every brand runs the same bars. A stage key may be a prefix (stage4 covers stage4b).",
  "tools": {
   "video-teardown": {
    "default": {

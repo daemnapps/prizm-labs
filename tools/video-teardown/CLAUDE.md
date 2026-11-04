@@ -12,12 +12,12 @@ comes out.
 the writing code and stages, teardown hands off to it"): `writing_v2.py` and every writing
 prompt live in `tools/video-writing/`. This machine still holds the chain engine both
 use, runs v1 writing in its stage loop, and hands stages 3 → 5 to video-writing on
-`--writing v2`. **Graduated from `lab/damon/` 2026-08-25 (the team ruling); homed at `tools/video-teardown/` same day under the three-station design** — the first lab graduation after PM, run deliberately as the worked example of the
+`--writing v2`. **Graduated from `lab/owner/` 2026-08-25 (the team ruling); homed at `tools/video-teardown/` same day under the three-station design** — the first lab graduation after PM, run deliberately as the worked example of the
 process. `README.md` is the doctrine: it is the owner's, written in his voice,
 and his corrections outrank anything a session writes here.
 
 **A LIBRARY — the public surface** (the team, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line; this clause replaces TI-1 (adapter card) as the contract callers rely on). Callers put `machine/` on the path or load one file by path, and may use only these names:
-1. **Commands:** `machine/run.py <video> --brand <b> [--route --label --creator --product --for-avatar --from --to --only --stages]` (mini: `--source`) — a working run in `machine/runs/<slug>/`, filed to the two shelves below; `machine/swipe_match.py <run> [--approve-structure … | --damon-read]`; `machine/compose.py plan`.
+1. **Commands:** `machine/run.py <video> --brand <b> [--route --label --creator --product --for-avatar --from --to --only --stages]` (mini: `--source`) — a working run in `machine/runs/<slug>/`, filed to the two shelves below; `machine/swipe_match.py <run> [--approve-structure … | --owner-read]`; `machine/compose.py plan`.
 2. **Production's gates** (pure reads of a brief's text) — **the code moved to `tools/video-writing/machine/` on 2026-10-19; the files here forward to it, so every name below still works from this path, and new readers load the real file:** `swipe_match.stamp_of(text)` → `PASSED|HELD|STALE|None`; `swipe_match.read_of(text)` → `APPROVED|STALE|None`; `swipe_match.brief_hash(text)` → the 16-hex fingerprint; `manifest.status_of(text)` → `COMPLETE|MISSING|STALE|None`; `manifest.check(run_dir, brand, brief_name)` re-checks and rewrites the block; `spoken_check.check_lines([(id, text)])` → `[{id, text, found}]`; `cast_match.check(run_dir)` (findings at `[1]`), `cast_match.readable_mismatches(body, doc, brand)` and `cast_match.scene_mismatches(doc, brand)` → `[{n, element, why}]`; `cast_match.repair(run_dir)`.
 3. **Helpers:** `deepen.ask(media, prompt)` → the model's text; `transcript.scribe_only(media)` → `{words: […]}`; `culture.pull(dir, url, runner=)` → `(path|None, why)`; `md.render(markdown)` → HTML; `chain.drive_root()` → the Shared Assets `Path` (raises `MountError`); `chain.stages(brand, asset_type, route, lane)` → the stage list, with `chain.route_for`, `chain.PROMPT_HOMES`, `chain.GEMINI_MODEL`, `chain.CLAUDE_MODEL`; `tools/gemini_breakdown.key()`, `.req(url, …)` → parsed reply, `.BASE`; `tools/storage.drive_root()` → `Path|None`. `hook_format.labelled(body, label)`, `.fixed_parts(fmt)`, `.fits(fmt, line)` → the hook-is-a-format check, also run on the picture line's headlines (tools/image-writing `variation_rows.format_problems`, 2026-10-27, the owner: "look at the headline process for video … leverage the same process"); `layers.call_for(name)` → the owner's format call (`{decision, into, note}`) or None, for a name in any shape (`xyz`, `new:xyz`, `format:new:xyz`) — THE ONE READER of `runs/video-teardown/format-calls.json` (2026-10-19; writing v2 and Outlier's batch runner read through it).
 4. **Read by path:** `machine/runs/<slug>/` (`run.json`, `stages/1-teardown.md`), `records/creators/<handle>/`, `machine/chain_config.json`, and `prompts/` + `README.md` read or copied whole — a reader that pins one prompt version by file name carries its own risk.
@@ -51,7 +51,7 @@ Everything else in `machine/` and `tools/` is internal and may change without no
    not in this machine.
 5. Media and run outputs live on the team Drive, never in git (workspace
    rule 3). Keys live only in the environment or this repo's `.env`
-   (see `.env.example`); Prizm never reads the Upright key files (2026-11-03).
+   (see `.env.example`); Prizm never reads the company key files (2026-11-03).
 6. The retired shared chain (`new-workflow-design/builds/video-teardown/`)
    is history, not a reference — this machine replaced it entirely
    (decision log 2026-08-25).
@@ -84,7 +84,7 @@ One check reports without stopping a run (the elements validation); the rest STO
    SO. THE WHOLE POINT IS TO TAKE A SWIPE AND ADAPT, not ruin it." The
    rewrite (v12) keeps every place, role, speaker and beat of the swipe; a
    brand's position files shape the words only. Any ELEMENT LEDGER row it
-   marks Adapted or Dropped, and any STRUCTURE QUESTIONS FOR DAMON it raises,
+   marks Adapted or Dropped, and any STRUCTURE QUESTIONS FOR OWNER it raises,
    hold stage 3 (`status: held`, `STRUCTURE-CHECK.md` in the run) and nothing
    after it runs. Only the owner's numbers release it:
    `run.py <video> --approve-structure 2,Q1` (or `all`) re-checks the SAME
@@ -156,8 +156,8 @@ One check reports without stopping a run (the elements validation); the rest STO
    wrote for the wrong thing"). With no route, stages 0, 1, 1k, 1c and 2 run,
    every other stage waits, `run.json` carries `waiting_for: route`, and the
    run is filed like any teardown. A run already written on a route before
-   the lock keeps it. Map and hand-offs: `notes/four-stations-map-damon.md`,
-   `notes/four-stations-contracts-damon.md`. Test: `machine/test_route_lock.py`.
+   the lock keeps it. Map and hand-offs: `notes/four-stations-map-owner.md`,
+   `notes/four-stations-contracts-owner.md`. Test: `machine/test_route_lock.py`.
 
 9. **No more frames** (2026-09-30, the owner: "no more frames, only the brief and
    swipe file link"). Stage 6 never runs, on any route. Every brief opens with

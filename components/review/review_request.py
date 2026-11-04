@@ -2,7 +2,7 @@
 """File a review request in ONE call, and read a request's state by FOLDING it.
 
 Card RV-2 (review request module). The grammar is RV-1 (review kind
-manifest)'s, frozen verbatim in `team/plans/dev-dayu.md` batch 54; this file
+manifest)'s, frozen verbatim in `team/plans/dev-engineer.md` batch 54; this file
 mirrors the parts it must validate and NEVER edits the manifest.
 
 TWO DOORS, ONE RECORD — the card's claim, and the reason this module is
@@ -73,7 +73,7 @@ nothing):
     python3 components/review/review_request.py --dry-run \\
         --title "The RV-2 (review request module) module" --type md \\
         --warehouse repo --ref components/review/review_request.py \\
-        --lane dev-qc --reviewer dayu --by dayu
+        --lane dev-qc --reviewer engineer --by engineer
 """
 
 import json

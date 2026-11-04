@@ -9,7 +9,7 @@
 
 the owner, 2026-10-02: "a cleaner process … most stuff is always a swipe in some
 capacity, and we just recreate. All images AI, carousel AI." A carousel is an
-image ad with an order (WORK-QUEUE-damon.md, "Carousel, the clean way"). It
+image ad with an order (WORK-QUEUE-owner.md, "Carousel, the clean way"). It
 uses the same swipe, teardown, brief, hand-off and delivery as the image lane;
 only the brief and the slides differ. Every step is a tool that already
 existed — this file only runs them in order and files what they make:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Renders every copy run into one page: board.html.
 
-Same shape as the video-teardown machine's board (lab/damon/
+Same shape as the video-teardown machine's board (lab/owner/
 tools/video-teardown/machine/board.py) and deliberately so — left, the
 runs; click one and you get its five stages, and for each stage the prompt
 that ran and the output it produced, side by side. That pairing is the whole

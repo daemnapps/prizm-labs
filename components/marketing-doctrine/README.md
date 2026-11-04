@@ -113,7 +113,7 @@ Three rules travel with it and none of them is negotiable:
   proof always follows it.
 
 The humor rules, ruled by the owner 2026-10-06 ("All six", on the humor
-research in `lab/damon/context/humor-engine-damon.md`):
+research in `lab/owner/context/humor-engine-owner.md`):
 
 - **A planted joke comes from the room.** A straight source may take one only
 when the culture read or the avatar's culture map shows this audience already

@@ -99,7 +99,7 @@ def main() -> None:
     ticks = "".join(f'<i style="left:{t / 20 * 100:.2f}%">00:{t:02d}</i>' for t in range(0, 20, 2))
     page = (TOOL / "context/edit-line.tpl.html").read_text()
     page = page.replace("__PHASES__", elements + variation + phases).replace("<section style=\"display:flex;flex-direction:column;gap:12px\">\n  <h2>Which stage fills which track</h2>", inventory + "<section style=\"display:flex;flex-direction:column;gap:12px\">\n  <h2>Which stage fills which track</h2>", 1).replace("__TICKS__", ticks).replace(
-        "__PROMPT_READ__", E((TOOL / "prompts/stage-1-read-pack/stage1-read-pack-v1-damon.md").read_text())).replace("Updated 23 Sep 2026", f"Updated {d['updated']}")
+        "__PROMPT_READ__", E((TOOL / "prompts/stage-1-read-pack/stage1-read-pack-v1-owner.md").read_text())).replace("Updated 23 Sep 2026", f"Updated {d['updated']}")
     (TOOL / "context/edit-line.html").write_text(page)
 
     L = ["# The Edit Line — cut and dress", "", f"Updated {d['updated']}. Artifact: see `context/artifacts.md`. Printed by `machine/edit_line_page.py` from `context/edit-line.json` — edit the JSON, not this file.", "",
@@ -121,7 +121,7 @@ def main() -> None:
             for x in s.get("prompts") or []:
                 L += ["", f"{x['name']}: `{x['file'].replace('../../../', '')}` (verbatim on the page)"]
             L.append("")
-    L += ["## Before the cut — reading the handoff (built, parked)", "", "Prompt: `prompts/stage-1-read-pack/stage1-read-pack-v1-damon.md` (verbatim on the page).", ""]
+    L += ["## Before the cut — reading the handoff (built, parked)", "", "Prompt: `prompts/stage-1-read-pack/stage1-read-pack-v1-owner.md` (verbatim on the page).", ""]
     if d.get("elements"):
         L += ["## Every element of a video", "", d["elements_intro"], "", "| Group | Element | What it is | Teardown | Production | Edit | Today |", "|---|---|---|---|---|---|---|"]
         L += [f"| {e['group']} | {e['name']} | {e['what']} | {e['teardown']} | {e['production']} | {e['edit']} | {e['status']}{' — ' + e['note'] if e.get('note') else ''} |" for e in d["elements"]]

@@ -7,7 +7,7 @@
                               generator list to a session via manual.md)
     image_queue.py intake <id> <png>   a generated picture arrives: pad, judge, name, record, upload
     image_queue.py review <asset> keep|kill [why]
-    image_queue.py sync ["message"]  commit this lane's paths and push to damon/creative-record
+    image_queue.py sync ["message"]  commit this lane's paths and push to owner/creative-record
     image_queue.py kit              the Meta bulk-import sheet + pictures folder
 
 the owner never runs this. serve.py calls it from the page; a session calls it
@@ -37,7 +37,7 @@ def asset_tag(name):
         m = re.search(r"(?:-a|_asset-)(\d{2})$", stem)
         n = int(m.group(1)) if m else None
     return f"a{n:02d}" if n is not None else stem[-3:]
-sys.path.insert(0, str(WS / "lab/damon/creative-ledger"))
+sys.path.insert(0, str(WS / "lab/owner/creative-ledger"))
 sys.path.insert(0, str(WS / "tools/video-teardown/machine"))
 
 
@@ -195,7 +195,7 @@ DEVICE = (f". The face-brush device is {PRODUCT} — that exact product, matched
 SKIN = (". Any razor bumps, ingrown hairs or dark marks are ordinary shaving irritation on otherwise "
         "healthy skin — small raised bumps and faded post-inflammatory marks along the jaw and neck. "
         "Not a rash, not a wound, not blood, not inflamed or weeping skin")
-GUARANTEE = "90 DAYS. IF YOUR SKIN DOESN'T TRANSFORM, FULL REFUND. YOU KEEP THE FLEX™."
+GUARANTEE = "90 DAYS. IF YOUR SKIN DOESN'T TRANSFORM, FULL REFUND. YOU KEEP THE WIDGET™."
 
 
 def fix_text(why):
@@ -206,7 +206,7 @@ def fix_text(why):
                 f"\"{GUARANTEE}\" — correct the spelling, put every word inside the bar, print it once.")
     if "grow grow" in w: return "On the poster card, the words 'grow grow' become 'grow' — one word, nothing else changes."
     if "!" in w: return "Remove the stray exclamation mark glyph; nothing else changes."
-    if "wordmark" in w: return "Remove the BRAND-A FLEX wordmark; nothing else changes."
+    if "wordmark" in w: return "Remove the BRAND-A WIDGET wordmark; nothing else changes."
     out = "Fix only this, nothing else: " + why
     if re.search(r"bump|ingrown|mark|irritat|shav", why, re.I):
         out += SKIN
@@ -374,12 +374,12 @@ def review(asset, verdict, why=""):
         item = f"{u['run'].split('-')[1]}.{u['slug']}.{asset_tag(asset)}"
         a = next(a for a in u["assets"] if a["name"] == asset)
         if verdict == "kill":
-            R.human(item, "note", "damon", text=f"KILLED — {why or 'no reason given'}")
+            R.human(item, "note", "owner", text=f"KILLED — {why or 'no reason given'}")
             if a.get("drive"):
                 tr = load(RUNS_ROOT / "_drive-trash.json", []); tr.append({"id": a["drive"], "why": f"killed by the owner: {why}", "path": a["file"]}); save(RUNS_ROOT / "_drive-trash.json", tr)
         else:
-            R.human(item, "status", "damon", to="picked", evidence=f"kept on the RUN-01 queue page — {why or 'no note'}")
-            if why: R.human(item, "note", "damon", text=f"KEPT — {why}")
+            R.human(item, "status", "owner", to="picked", evidence=f"kept on the RUN-01 queue page — {why or 'no note'}")
+            if why: R.human(item, "note", "owner", text=f"KEPT — {why}")
     import threading
     threading.Thread(target=lambda: (notes_index(), plan(), sync(f"queue: {verdict} {asset[-30:]} — {why[:50]}")), daemon=True).start()
     return rv[asset]
@@ -406,8 +406,8 @@ def notes_index():
 
 # ------------------------------------------------------------------- sync ---
 PATHS = ["tools/image-production/static/runs/brand-a", "tools/image-production/static/queue",
-         "lab/damon/creative-ledger/records", "tools/image-production/static/tools", "components/naming"]
-BRANCH = "damon/creative-record"
+         "lab/owner/creative-ledger/records", "tools/image-production/static/tools", "components/naming"]
+BRANCH = "owner/creative-record"
 
 
 def sh(*cmd, check=False):
@@ -441,7 +441,7 @@ def kit():
     st = state(); out = HERE / "kit"; (out / "images").mkdir(parents=True, exist_ok=True)
     link = "https://brand-a.com/products/flex"
     # Posters were out on 2026-09-09 ("basically trash" — the device), and back in
-    # the same night once every one was re-made with the FLEX Element.
+    # the same night once every one was re-made with the WIDGET Element.
     OUT_OF_RUN = set()
     cols = ["Campaign Name", "Campaign Status", "Campaign Objective", "Buying Type",
             "Ad Set Name", "Ad Set Status", "Ad Set Daily Budget", "Optimization Goal", "Billing Event", "Bid Strategy",
@@ -455,7 +455,7 @@ def kit():
             shutil.copy2(WS / a["path"], out / "images" / a["file"])
             ws.append(["RUN-01 fed-up-king", "PAUSED", "Outcome Sales", "AUCTION",
                        "RUN-01 fed-up-king", "PAUSED", 50, "OFFSITE_CONVERSIONS", "IMPRESSIONS", "Lowest cost without cap",
-                       a["name"], "PAUSED", a["file"], u["headline"], "FLEX\u2122 by BRAND-A", link, "brand-a.com", "SHOP_NOW", "PAUSED"]); n += 1
+                       a["name"], "PAUSED", a["file"], u["headline"], "WIDGET\u2122 by BRAND-A", link, "brand-a.com", "SHOP_NOW", "PAUSED"]); n += 1
     wb.save(out / "run-01-bulk-import.xlsx")
     # the same thing as a page a person reads before uploading
     units = {}

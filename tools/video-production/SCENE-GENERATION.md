@@ -272,7 +272,7 @@ outside after one fix edit is held and no clip is made). The clip starts on
 the first frame and ends on the last, so the zone holds at both ends; what
 happens between them — a head rising into the top band on a push-in, a
 product sinking below — is checked by Motion QC, check 7 "Subject zone"
-(`prompts/stage-5b-motion-qc/stage5b-motion-qc-v2-damon.md`).
+(`prompts/stage-5b-motion-qc/stage5b-motion-qc-v2-owner.md`).
 
 ### Step 5 · The line check
 

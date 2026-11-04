@@ -131,7 +131,7 @@ def from_next(brand):
 
 def store_domain(brand):
     """The store's public domain, from the catalog tool's brand config."""
-    f = WORKSPACE / "lab" / "damon" / "catalog" / "tool" / "config" / f"{brand}.json"
+    f = WORKSPACE / "lab" / "owner" / "catalog" / "tool" / "config" / f"{brand}.json"
     try:
         stores = json.loads(f.read_text()).get("stores") or []
     except (OSError, ValueError):
@@ -170,7 +170,7 @@ def _norm(u):
 
 def catalog_ids(brand):
     """URL -> catalog id, from the catalog tool's brand config (`live_pages`)."""
-    f = WORKSPACE / "lab" / "damon" / "catalog" / "tool" / "config" / f"{brand}.json"
+    f = WORKSPACE / "lab" / "owner" / "catalog" / "tool" / "config" / f"{brand}.json"
     try:
         pages = json.loads(f.read_text()).get("live_pages") or {}
     except (OSError, ValueError):

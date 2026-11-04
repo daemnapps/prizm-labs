@@ -509,11 +509,11 @@ class Provider(unittest.TestCase):
     @contextlib.contextmanager
     def _vault_home(self, marker: bool):
         # Keys env standard: a temp HOME holding a FAKE value in the one key
-        # file ~/.upright-keys.env (the loader's path), plus the mini marker if asked.
+        # file ~/.company-keys.env (the loader's path), plus the mini marker if asked.
         home = Path(tempfile.mkdtemp(prefix="si194-preflight-home-"))
         folder = str(home / ".daemn")
         try:
-            (home / ".upright-keys.env").write_text(f"{KEY_ENV}=fake-si194-vault\n")
+            (home / ".company-keys.env").write_text(f"{KEY_ENV}=fake-si194-vault\n")
             if marker:
                 (home / ".workflow-worker.env").write_text("")
             with env(CLAUDECODE="1", HOME=str(home)):

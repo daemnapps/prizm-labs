@@ -11,7 +11,7 @@ for iid, url in res.items():
     it = plan[iid]; out = HERE / "inbox/gen" / f"{iid}.png"
     subprocess.run(["curl", "-sfL", "-o", str(out), url], check=True)
     ok, r = finish.add_asset(Q.RUNS_ROOT / it["run"], it["slug"], out, it["target"],
-                             "device replaced with the FLEX Element (8fad5612) — the owner 2026-09-09", it["source_name"])
+                             "device replaced with the WIDGET Element (8fad5612) — the owner 2026-09-09", it["source_name"])
     Q.log(f"poster: {iid} -> {'ok ' + r if ok else 'REJECT ' + '; '.join(r)[:100]}")
     if ok: Q.refresh_ocr(Q.RUNS_ROOT / it["run"] / "ads" / it["slug"], r + ".png")
     done[iid] = url; (HERE / "inbox/posters_done.json").write_text(json.dumps(done, indent=1))

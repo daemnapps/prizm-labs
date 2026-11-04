@@ -307,7 +307,7 @@ def module_rows(brand):
         out.append(("casting.paths.brand[registry]", old_regs[0] if old_regs else b / "core-avatars" / "casting", d["registry"]))
         for i, r in enumerate(d["registries"]):
             out.append((f"casting.paths.registries[{i}]", old_regs[i] if i < len(old_regs) else None, r))
-    it = try_import(next((p for p in ("tools/image-teardown/tools", "lab/damon/image-teardown/tools")
+    it = try_import(next((p for p in ("tools/image-teardown/tools", "lab/owner/image-teardown/tools")
                          if (WS / p / "paths.py").is_file()), "tools/image-teardown/tools"), "paths")
     if it and hasattr(it, "brand") and hasattr(it, "LANE"):
         d = it.brand(brand)

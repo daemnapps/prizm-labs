@@ -67,7 +67,7 @@ def _reuse_plate(dest) -> bool:
 
 def prompts() -> tuple[dict, str]:
     folder = COMPONENT / "prompts" / "stage-0g-sets"
-    f = sorted(folder.glob("set-plates-v*-damon.md"), key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))[-1]
+    f = sorted(folder.glob("set-plates-v*-owner.md"), key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))[-1]
     secs, cur = {}, None
     for line in f.read_text().splitlines():
         m = re.match(r"^## (\S+)\s*$", line)

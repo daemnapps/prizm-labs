@@ -28,7 +28,7 @@ import card_words as W  # noqa: E402
 import to_check as T  # noqa: E402
 
 # runs/handoffs first, the old print-run staging last (2026-10-28)
-HANDOFFS = [REPO / "runs/handoffs/video-editor", REPO / "lab/damon/print-run/handoffs/video-editor"]
+HANDOFFS = [REPO / "runs/handoffs/video-editor", REPO / "lab/owner/print-run/handoffs/video-editor"]
 
 
 def _read(p):

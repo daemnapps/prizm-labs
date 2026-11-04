@@ -8,7 +8,7 @@ Three file shapes under a ROOT (default <repo>/runs/queue-shadow until QB-4 (joi
   index.json                             {"schema": 1, "built", "sources": {src: {"as_of", "age_s"}}, "entries": [...]}
 
 `reduce` is a pure function of the first two; the index is a projection, rebuilt, never hand-edited.
-Stdlib only, Python 3.9.6. Nothing here imports lab code: the shapes were read from lab/damon/suite/queue_store.py.
+Stdlib only, Python 3.9.6. Nothing here imports lab code: the shapes were read from lab/owner/suite/queue_store.py.
 """
 import json
 import os

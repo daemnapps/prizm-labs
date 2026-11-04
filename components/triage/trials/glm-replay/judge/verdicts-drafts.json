@@ -182,8 +182,8 @@
    "test_ran": "n/a (not drafted); verified RULES.md:23 names components/run-kit/TEMPLATE/ and CLAUDE.md:27 says copy `TEMPLATE/`",
    "errors": [
     {
-     "what": "reason calls RULES.md:23 the 'one reader outside the folder'; lab/damon/control-room/registry/machines.json:680,685 also names components/run-kit/TEMPLATE",
-     "where": "reason text; lab/damon/control-room/registry/machines.json:680,685"
+     "what": "reason calls RULES.md:23 the 'one reader outside the folder'; lab/owner/control-room/registry/machines.json:680,685 also names components/run-kit/TEMPLATE",
+     "where": "reason text; lab/owner/control-room/registry/machines.json:680,685"
     }
    ]
   },
@@ -193,8 +193,8 @@
    "test_ran": "git apply --check FAILS in the worktree on this case-insensitive FS ('template/CLAUDE.md already exists'); --check --cached (index, case-sensitive) OK; no test exists or was added",
    "errors": [
     {
-     "what": "does not repoint lab/damon/system-blueprint/briefs/RULES.md:23 (brief: same commit), leaving it pointing at a folder that no longer exists (machines.json:680,685 too)",
-     "where": "lab/damon/system-blueprint/briefs/RULES.md:23 (untouched)"
+     "what": "does not repoint lab/owner/system-blueprint/briefs/RULES.md:23 (brief: same commit), leaving it pointing at a folder that no longer exists (machines.json:680,685 too)",
+     "where": "lab/owner/system-blueprint/briefs/RULES.md:23 (untouched)"
     },
     {
      "what": "no test proves the rename or the repoint",

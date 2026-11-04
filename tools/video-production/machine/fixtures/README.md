@@ -1,7 +1,7 @@
 # fixtures — what `test_preflight.py` runs against
 
 Invented UUIDs, no brand, no product, no person. Not a `runs/` folder on
-purpose: `lab/damon/**/runs/` is gitignored and these must be committed.
+purpose: `lab/owner/**/runs/` is gitignored and these must be committed.
 
 | file | what it is |
 |---|---|

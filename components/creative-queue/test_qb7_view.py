@@ -60,9 +60,9 @@ class View(unittest.TestCase):
         self.assertEqual(r["stage"], stage)
         self.assertEqual(r["email_link"], {"label": "open in the emails page",
                                            "url": "http://127.0.0.1:8765/#%s__%s" % (brand, label)})
-        for f in ("who", "priority", "due", "note", "requested_stage", "decided_by", "removed", "in_damon"):
+        for f in ("who", "priority", "due", "note", "requested_stage", "decided_by", "removed", "in_owner"):
             self.assertIn(f, r)
-        self.assertIs(r["in_damon"], False)
+        self.assertIs(r["in_owner"], False)
         self.assertIsNone(r["who"])                                  # a shadow decision on an email id is not read
         return r
 
@@ -74,10 +74,10 @@ class View(unittest.TestCase):
     def test_deadlines_json_overrides_the_default(self):
         self.check("fxbrand-nov-04", "ready", "the team: pictures", "2026-11-04", "2026-10-27", "deadlines.json")
 
-    def test_ready_with_eve_done_is_steph_words(self):
+    def test_ready_with_eve_done_is_pm_words(self):
         self.check("fxbrand-nov-03", "ready", "the team: words, then Go", "2026-11-03", "2026-10-27", DEFAULT)
 
-    def test_klaviyo_draft_is_steph_schedule(self):
+    def test_klaviyo_draft_is_pm_schedule(self):
         self.check("fxbrand-nov-05", "draft", "the team: schedule in Klaviyo", "2026-11-05", "2026-10-29", DEFAULT)
 
     def test_scheduled_ahead_and_scheduled_past(self):
@@ -110,11 +110,11 @@ class View(unittest.TestCase):
         self.assertFalse([i for i in self.rows if i.startswith("zz-")])
         r = self.rows["fxbrand_fx_brief-0048"]
         self.assertIsNone(r["read_only"])
-        self.assertEqual((r["who"], r["title"]), ("eve", "Brief 0048 · fx"))
+        self.assertEqual((r["who"], r["title"]), ("designer", "Brief 0048 · fx"))
 
     def test_people_without_christine(self):
         self.assertEqual(self.d["people"], ["the owner", "the team", "the team", "Victoria"])
-        self.assertEqual(sorted(self.d), ["damon_age_h", "damon_built", "people", "rows", "shadow_root", "stages"])
+        self.assertEqual(sorted(self.d), ["owner_age_h", "owner_built", "people", "rows", "shadow_root", "stages"])
 
     # ---------------------------------------------------------------- titles
     def test_title_fallback_for_the_three_id_shapes(self):

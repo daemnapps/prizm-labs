@@ -211,7 +211,7 @@ number, nothing else to change or point anywhere.
 > this note outranks it.
 
 Source of truth *(pre-graduation)*: `~/devel/daemn/video-teardown-machine/` (the owner's private
-repo). Mirrored into `workspace/lab/damon/video-teardown-machine/` so the
+repo). Mirrored into `workspace/lab/owner/video-teardown-machine/` so the
 team can see it — that copy is a bridge, not a fork. Changes get made in
 daemn first, then re-bridged the same way; the workspace copy is never
 edited directly.

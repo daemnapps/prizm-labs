@@ -47,7 +47,7 @@ class Workspace(unittest.TestCase):
         ]})
         feeds = self.ws / "components/swipe-organic/records/avatar-feeds"
         for fid, url, views in (("b--a1", "https://t.test/@a/video/1", 500), ("b--s1", "https://t.test/@c/video/2", 900),
-                                ("b--feed-x", "https://t.test/@d/video/3", 1), ("damon--saves", "https://t.test/@e/video/4", 1)):
+                                ("b--feed-x", "https://t.test/@d/video/3", 1), ("owner--saves", "https://t.test/@e/video/4", 1)):
             w(feeds / fid / "items.json", {"items": {f"tiktok:{views}": {
                 "url": url, "author": url.split("@")[1].split("/")[0], "caption": "cap #nba", "hashtags": ["nba", "fyp"],
                 "sift": {"keep": True, "kind": "skit"}}}})
@@ -77,7 +77,7 @@ class FeedMapping(Workspace):
         self.assertEqual(CM.map_feed("b--s1", ros), ("b", "a1", "s1"))
         self.assertEqual(CM.map_feed("b--s2", ros), ("b", "a1", "s2"))
         self.assertIsNone(CM.map_feed("b--feed-x", ros))
-        self.assertIsNone(CM.map_feed("damon--saves", ros))
+        self.assertIsNone(CM.map_feed("owner--saves", ros))
         self.assertIsNone(CM.map_feed("other--a1", ros))
 
     def test_feeds_for_avatar(self):

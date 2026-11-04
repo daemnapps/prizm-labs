@@ -13,7 +13,7 @@ are never read. viewer.ask() short-circuits under unittest, so _key, _openai
 and review._key are called directly.
 
   (a) loader    — mcc_keys loads components/keys/loader.py by path as
-                  upright_keys_loader; components/keys is never on sys.path.
+                  company_keys_loader; components/keys is never on sys.path.
   (b) via key   — no daemn_keys import left in marketing_chain_checks/; the
                   three reads ask mcc_keys.key(NAME).
   (c) order     — env beats the helper; the helper is found when the env is
@@ -175,8 +175,8 @@ class Case(unittest.TestCase):
 class Loader(Case):
     def test_loaded_by_path_under_its_own_name(self):
         loader = mcc_keys._load_loader()
-        self.assertEqual(loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], loader)
+        self.assertEqual(loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], loader)
         self.assertEqual(Path(loader.__file__).resolve(), REPO / "components" / "keys" / "loader.py")
         self.assertNotIn(str(REPO / "components" / "keys"), sys.path)
         self.assertIs(mcc_keys._load_loader(), loader, "loaded once, then reused")
@@ -284,7 +284,7 @@ class Mini(Case):
         self.assertIn(GEMINI, gem)
         self.assertIn(OPENAI, oai)
         for msg in (gem, oai):
-            self.assertIn("old locations skipped", msg)
+            self.assertIn("skipped (managed file", msg)
             self.assertNotIn("fake-", msg)
         self.assertEqual(self.key_files_opened(seen), [])
         self.assertNotIn(HELPER, sys.modules, "the Keychain helper was imported")

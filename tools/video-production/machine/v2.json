@@ -33,7 +33,7 @@
  },
  "review": {
   "_readme": "ONE fixed reviewer (no fallback chain). It sees the picture, the scene's words from the brief, and the banked cast LOOK (master + outfit references) — a banked look is correct by definition. It returns every problem in one list; a 'sent back' picture is remade once from itself (image-to-image) with the whole list. At most 2 rounds.",
-  "prompt": "tools/video-production/prompts/v2/picture-review-v8-damon.md",
+  "prompt": "tools/video-production/prompts/v2/picture-review-v8-owner.md",
   "_v8": "2026-10-21 (P72, VIDEO-RULINGS V32): hard fail G, decor or writing from another culture than the presenter's (read per run from their character file); every brand, product, person, ingredient and culture word taken out of the prompt.",
   "max_rounds": 2,
   "_v3": "2026-10-20: impossible objects, props held to their banked size, real foreign writing is fine (the remedy reels)",

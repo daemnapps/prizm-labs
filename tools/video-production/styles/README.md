@@ -14,7 +14,7 @@ The board publishes over ONE artifact — The Format Frontier,
 `../formats/show-formats.json`; the edit tab describes `tools/video-edit`.
 
 **`board-template.html` is source, not a generated page.** The repo ignores
-`lab/damon/**/board-*.html` to keep built boards out; this one is the template
+`lab/owner/**/board-*.html` to keep built boards out; this one is the template
 the generator fills, so it is force-added. `style-board.html` IS generated
 (5 MB of inlined pictures): `render_board.py` writes it to
 `runs/video-production/_system/style-board.html`, ignored there — rebuild it

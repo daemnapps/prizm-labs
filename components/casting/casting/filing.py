@@ -6,7 +6,7 @@ Three places, and none of them is a commit of pixels:
                                             judge's verdicts, check.json,
                                             run.json, the proposed row
     brands/<brand>/ai-cast/<id>/            the CHARACTER's pictures, exactly
-                                            where `lab/damon/avatar-builder/
+                                            where `lab/owner/avatar-builder/
                                             build.py` already files them
     Shared Assets/brands/<brand>/ai-cast/<id>/   the Drive mirror, step 9
 

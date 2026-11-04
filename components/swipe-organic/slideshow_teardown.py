@@ -26,7 +26,7 @@ LIB = HERE / "records" / "swipe-videos"
 
 
 def prompt():
-    return sorted((IT / "prompts").glob("stage1-sequence-teardown-v*-damon.md"),
+    return sorted((IT / "prompts").glob("stage1-sequence-teardown-v*-owner.md"),
                   key=lambda p: int(p.name.split("-v")[1].split("-")[0]))[-1]
 
 

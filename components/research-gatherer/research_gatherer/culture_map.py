@@ -23,7 +23,7 @@ Three steps, one model call:
    - structured culture reads (`stages/1k-culture.json`, written by the video
      teardown) whose avatar is this one: every ref. Id: `run:<slug>#R2`.
    The profile and rules.md are NOT evidence. They only seed "To test".
-2. WRITE — `prompts/culture-map-v1-damon.md`, one Claude call (the `claude`
+2. WRITE — `prompts/culture-map-v1-owner.md`, one Claude call (the `claude`
    command, the same way annotate.py reads rows), every line ending in its
    evidence ids in brackets.
 3. VERIFY — every line is parsed; a line that cites nothing, or cites an id
@@ -54,7 +54,7 @@ from pathlib import Path
 
 from . import engine
 
-PROMPT = engine.ROOT / "prompts" / "culture-map-v1-damon.md"
+PROMPT = engine.ROOT / "prompts" / "culture-map-v1-owner.md"
 CULTURE_TAGS = ("taste", "cringe", "subculture", "in-word", "community-voice", "role-claimed", "laugh",
                 "trust-language")
 HAND_NAME = "culture-map.hand-2026-10-06.md"
@@ -571,7 +571,7 @@ def header(pack, model, title=None):
     feeds = s["feeds"]
     lines = [MARK, f"# Culture map — {title or pack['avatar']}", "",
              f"**Built:** {pack['built_at']} by `components/research-gatherer/culture_map.py` "
-             f"(prompt `culture-map-v1-damon.md`, model `{model}`). Bottom-up: every line ends with the "
+             f"(prompt `culture-map-v1-owner.md`, model `{model}`). Bottom-up: every line ends with the "
              "evidence it rests on; a line the check could not trace to the evidence was dropped (count at the foot). "
              "**To test** holds claims the evidence does not back yet. Never use them as fact.",
              "", "**Sources and freshness:**",

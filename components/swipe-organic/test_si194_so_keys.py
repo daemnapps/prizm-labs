@@ -11,7 +11,7 @@ network. The real ~/.daemn, ~/.workflow-worker.env, ~/.apify.env and the
 Keychain are never read.
 
   (a) loader   — so_keys loads components/keys/loader.py by path as
-                 upright_keys_loader, never via sys.path; the reader shares it.
+                 company_keys_loader, never via sys.path; the reader shares it.
   (b) via key  — pull_creator_posts.key() asks so_keys; no `security`,
                  `find-generic-password` or subprocess call is left (AST).
   (c) order    — env beats the Keychain (the one intended change: the old
@@ -158,8 +158,8 @@ class Case(unittest.TestCase):
 class Loader(Case):
     def test_loaded_by_path_under_its_own_name(self):
         loader = so_keys._load_loader()
-        self.assertEqual(loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], loader)
+        self.assertEqual(loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], loader)
         self.assertEqual(Path(loader.__file__).resolve(), REPO / "components" / "keys" / "loader.py")
         self.assertNotIn(str(REPO / "components" / "keys"), sys.path)
         self.assertIs(so_keys._load_loader(), loader, "loaded once, then reused")
@@ -264,7 +264,7 @@ class Mini(Case):
             self.assertIsNone(so_keys.key(APIFY))
             msg = self.reader_exit()
         self.assertIn(APIFY, msg)
-        self.assertIn("old locations skipped", msg)
+        self.assertIn("skipped (managed file", msg)
         self.assertNotIn("fake-", msg)
         self.assertEqual(self.key_files_opened(seen), [])
         self.assertNotIn(HELPER, sys.modules, "the Keychain helper was imported")

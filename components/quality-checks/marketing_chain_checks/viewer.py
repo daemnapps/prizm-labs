@@ -55,8 +55,8 @@ OFF_WORDS = ("not for me", "didn't get it", "didnt get it", "who is this for")
 
 
 def newest(stem: str) -> Path:
-    """The highest -vN-damon.md wins (the prompt-library convention)."""
-    got = sorted(PROMPTS.glob(f"{stem}-v*-damon.md"),
+    """The highest -vN-owner.md wins (the prompt-library convention)."""
+    got = sorted(PROMPTS.glob(f"{stem}-v*-owner.md"),
                  key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     if not got:
         raise FileNotFoundError(f"no {stem} prompt in {PROMPTS}")

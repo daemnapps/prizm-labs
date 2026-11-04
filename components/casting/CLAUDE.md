@@ -16,17 +16,17 @@ component so other tools can leverage it correctly."*
 
 **This is an EXTRACTION, not an invention.** Every part already worked
 somewhere: the nine steps, the three generating prompts, the fal door and the
-"a DIFFERENT person" rule come from `lab/damon/avatar-builder`; the registry
+"a DIFFERENT person" rule come from `lab/owner/avatar-builder`; the registry
 reading and the "never invent a person for a role the bank covers" rule come
-from `lab/damon/casting`; the footage search is
+from `lab/owner/casting`; the footage search is
 `tools/image-production`'s asset reader, imported rather than rewritten;
 the gates, the dry-run report, the path walking and the filing come from
 `tools/image-production`, `components/marketing-chain-checks` and
 `components/run-kit`. Each module's docstring names what it was lifted from
 and what it changed.
 
-**Nothing has been switched over yet.** `lab/damon/avatar-builder` and
-`lab/damon/casting` are untouched and still work exactly as before. They get
+**Nothing has been switched over yet.** `lab/owner/avatar-builder` and
+`lab/owner/casting` are untouched and still work exactly as before. They get
 retired later, side by side, once this is proven — a working chain is never
 rewired on assumption.
 
@@ -148,7 +148,7 @@ the prompt sha, and `run_kit.filing`'s run path.
   image-production's judge · `gates` the three gates · `filing` where things
   go · `registration` the proposal · `engine` the request and the nine steps ·
   `dryrun` the free dry run), plus `cast.py`, the thin CLI. **the owner.**
-- **Definitions + curator:** `prompts/*-vN-damon.md` — the master, the anchor,
+- **Definitions + curator:** `prompts/*-vN-owner.md` — the master, the anchor,
   the detail board and the standing rules. **the owner** holds the approval gate.
   The element lists are NOT here — they are `components/elements`' and are
   asked, never copied. **The cast records are NOT here** — they are the
@@ -158,7 +158,7 @@ the prompt sha, and `run_kit.filing`'s run path.
   `elements.json`, `check.json`, `run.json`, `held/<step>-why.md`,
   `register/proposed-row.json`, `register/REGISTER.md`, `bible/character.md`.
   Pictures land in `brands/<brand>/ai-cast/<id>/` exactly as
-  `lab/damon/avatar-builder/build.py` already files them, and are mirrored to
+  `lab/owner/avatar-builder/build.py` already files them, and are mirrored to
   `Shared Assets/brands/<brand>/ai-cast/<id>/`. Media is never git (workspace
   rule 3; `.gitignore` already catches `brands/**/*.png`).
 - **Manifest per entry:** `run.json` — the request, the bank's answer before
@@ -217,7 +217,7 @@ would hold.
 1. **No brand, product, person or model name in code or in a prompt.** Two
    tests enforce it against the real `brands/` tree — one for brand folder
    names, one for every banked person's id.
-2. **`brands/` is read-only to this component** (`lab/damon/CLAUDE.md` rule
+2. **`brands/` is read-only to this component** (`lab/owner/CLAUDE.md` rule
    5), with the one exception the lab tool already had and which was not
    changed on assumption: the built PICTURES land in the brand's
    `ai-cast/<id>/`, as they do today. Every WORD — the row, the bible — is
@@ -231,7 +231,7 @@ would hold.
    SKIP and the reason; the sheets are already on this machine.
 6. **`sys.path.append`, never insert at 0** — a folder at position 0 shadows
    the stdlib. No file here is named after a stdlib module, and a test checks.
-7. **A changed prompt is a NEW file** `-v<N+1>-damon.md` beside the old one;
+7. **A changed prompt is a NEW file** `-v<N+1>-owner.md` beside the old one;
    highest number wins, numerically. Never edited in place.
 8. **This component never coins a name.** The `id`, the character's name, the
    role: all the caller's. A name not given is a field left out of the
@@ -247,7 +247,7 @@ finding BOTH is reported as a problem, because two registries for one brand
 splits a cast silently. Nothing here writes to either.
 
 **The two brands on disk keep their cast two different ways.**
-`lab/damon/casting/build_cast.py` renders from `roster.json` +
+`lab/owner/casting/build_cast.py` renders from `roster.json` +
 `authority.json` and REFUSES a brand that has neither. This component answers
 that brand anyway, from its `ai-cast/<id>/character.md` bibles — refusing
 would mean saying "no one plays that role" about a brand whose people are all

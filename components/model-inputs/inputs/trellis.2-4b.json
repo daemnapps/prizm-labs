@@ -201,13 +201,13 @@
    "id": "cut-off-product",
    "text": "A photo with the product cut off: the missing part is invented.",
    "status": "draft",
-   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+   "source": "[ours] components/model-inputs/VIDEO-PATH-owner.md"
   },
   {
    "id": "smear-behind",
    "text": "A photo with a smear or reflection on or behind the product.",
    "status": "draft",
-   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+   "source": "[ours] components/model-inputs/VIDEO-PATH-owner.md"
   },
   {
    "id": "unchecked-label",

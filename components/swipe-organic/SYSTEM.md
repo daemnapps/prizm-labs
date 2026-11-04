@@ -68,7 +68,7 @@ copying."
   same field.
 - **Download**: kept items get pulled down automatically (video +
   cover + caption) to Drive, mirroring the repo path —
-  `Shared Assets/lab/damon/swipe-organic/avatar-feeds/<avatar>/kept/<item-id>/`
+  `Shared Assets/lab/owner/swipe-organic/avatar-feeds/<avatar>/kept/<item-id>/`
   (media never in git; the item record gets a `**Drive:**` pointer).
 - **Organize**: nothing new to invent — the item already carries its
   avatar (folder), category, source, receipt, and signal history. Kept

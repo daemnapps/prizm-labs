@@ -60,7 +60,7 @@ adjust, since our teardown is ultra thorough now" — the Variable Index.
 
 the owner, 2026-10-07: "let's standardize this process of creating video ad variations since we will do it
 a lot moving forward." The team skill is `.claude/skills/ad-variations/`; the plain-words doc is
-`PROVEN-TO-FORMAT-damon.md`; the engine is `machine/proven_to_format.py`.
+`PROVEN-TO-FORMAT-owner.md`; the engine is `machine/proven_to_format.py`.
 
 - **Run:** `check → prep → inject → squares → step (loop) → page → elements → approve → produce → editor`, each `<batch>` a file in
   `definitions/proven-to-format/` (winners × formats + brand, product, avatar, offer, route).

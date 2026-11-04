@@ -46,7 +46,7 @@ DOCTRINE = C.WS / "components" / "marketing-doctrine"
 AD_FRAMEWORKS = DOCTRINE / "ad-frameworks.json"
 FRAMEWORKS = DOCTRINE / "frameworks.json"
 # The format bank is definitions, curated where the video machine keeps them.
-# The video machine left lab/damon/ai-video-production for
+# The video machine left lab/owner/ai-video-production for
 # tools/video-production (2026-09-22) and this path was not moved with it,
 # so every compose refused: "the format bank is not at … — nothing can be
 # composed without it".

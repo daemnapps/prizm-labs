@@ -2,13 +2,13 @@
 """the owner's saved posts — the human-taste intake stream.
 
 He curates by saving on Instagram, exactly as he always has. A sweep
-(via his own logged-in Chrome) drops the URLs into records/damon-saves/captured-urls.json;
+(via his own logged-in Chrome) drops the URLs into records/owner-saves/captured-urls.json;
 this scrapes each post publicly and writes one intake row per save with
 its receipts. Grading (bucket: viral | novel-format | market-opportunity,
 awareness grade, route) is a judgment layer on top — the session proposes,
 the owner overrides.
 
-    python3 saves.py [--inbox records/damon-saves/captured-urls.json] [--dry-run]
+    python3 saves.py [--inbox records/owner-saves/captured-urls.json] [--dry-run]
 """
 import argparse, json
 from datetime import datetime, timezone
@@ -19,7 +19,7 @@ HERE = Path(__file__).resolve().parent
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--inbox", default="records/damon-saves/captured-urls.json")
+    ap.add_argument("--inbox", default="records/owner-saves/captured-urls.json")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     urls = json.loads((HERE / args.inbox).read_text())
@@ -30,7 +30,7 @@ def main():
                                "addParentData": True})
     posts = [A.as_post(i, "instagram") for i in items if i.get("shortCode")]
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    out = HERE / "records/damon-saves/catalog.json"
+    out = HERE / "records/owner-saves/catalog.json"
     prior = json.loads(out.read_text()) if out.exists() else {"rows": []}
     seen = {r["url"] for r in prior["rows"]}
     added = 0

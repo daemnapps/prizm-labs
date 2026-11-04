@@ -1,6 +1,6 @@
 {
  "title": "For discussion: what may a triage owner change without asking first?",
- "status": "Ruled 2026-10-02: option 3. the owner said yes to the first-step question (relayed by the team: \"damon decided yes on option 3\"). Changes in owners' components wait for the decision log's change and undo acts (open issue triage #14).",
+ "status": "Ruled 2026-10-02: option 3. the owner said yes to the first-step question (relayed by the team: \"owner decided yes on option 3\"). Changes in owners' components wait for the decision log's change and undo acts (open issue triage #14).",
  "question": "When the fix is already clear, may the list's triage owner change code in someone else's component, with the owner told rather than asked first?",
  "stakes": "It decides who does the 297 component issues tagged \"after a ruling\": about 197 in the owner's components, 70 in the team's, 18 in the team's, and 29 with no owner on record. (The counts overlap where an issue names two owners.)",
  "options": [

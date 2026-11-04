@@ -62,12 +62,12 @@ def plant(root, pid, ruling, email="e1", brand=BRAND, kind="fact", fact="", crea
     d = root / R.RECORDS_REL
     d.mkdir(parents=True, exist_ok=True)
     at = created or "2026-10-01T10:%02d:00Z" % N[0]
-    rec = {"schema": 1, "kind": "fact-rulings", "reviewer": "steph", "item": pid,
+    rec = {"schema": 1, "kind": "fact-rulings", "reviewer": "pm", "item": pid,
            "verdict": {"brand": brand, "problem_id": pid, "email": email, "kind": kind,
                        "quote": "q", "files_say": None, "ruling": ruling, "fact": fact,
-                       "reason": "", "by": "steph", "at": at},
+                       "reason": "", "by": "pm", "at": at},
            "notes": "", "created": at, "via": "test"}
-    (d / ("%04d--steph--%s.json" % (N[0], pid))).write_text(json.dumps(rec))
+    (d / ("%04d--pm--%s.json" % (N[0], pid))).write_text(json.dumps(rec))
 
 
 def fresh_root():
@@ -106,7 +106,7 @@ class Ids(unittest.TestCase):
 
     def test_hold_with_items_writes_items_and_cleared(self):
         d = Path(tempfile.mkdtemp(dir=TMP))
-        it, row = ITEMS[0], {"id": "x", "kind": "fact", "ruling": "true", "by": "steph", "at": "t"}
+        it, row = ITEMS[0], {"id": "x", "kind": "fact", "ruling": "true", "by": "pm", "at": "t"}
         with self.assertRaises(Q.Held):
             Q.hold("delivery", [it["text"]], d, items=[it], cleared=[row])
         got = json.loads((d / "check.json").read_text())["delivery"]
@@ -130,7 +130,7 @@ class TheCommand(unittest.TestCase):
     def test_one_record_through_the_one_writer_and_nothing_in_the_repo(self):
         repo_dir = REPO / R.RECORDS_REL
         before = sorted(repo_dir.glob("*")) if repo_dir.is_dir() else []
-        r = rule(self.rd, ITEMS[0]["id"], "true", "It lasts all day — tested 2026-09.", "--by", "steph",
+        r = rule(self.rd, ITEMS[0]["id"], "true", "It lasts all day — tested 2026-09.", "--by", "pm",
                  root=self.root)
         self.assertEqual(r.returncode, 0, r.stderr)
         recs = self.records()
@@ -139,14 +139,14 @@ class TheCommand(unittest.TestCase):
         rec = json.loads(recs[0].read_text())
         self.assertEqual(set(rec), {"schema", "kind", "reviewer", "item", "verdict", "notes", "created", "via"})
         self.assertEqual((rec["kind"], rec["reviewer"], rec["item"], rec["via"]),
-                         ("fact-rulings", "steph", ITEMS[0]["id"], "marketing-chain-checks/rule.py"))
+                         ("fact-rulings", "pm", ITEMS[0]["id"], "marketing-chain-checks/rule.py"))
         v = rec["verdict"]
         self.assertEqual(list(v), ["brand", "problem_id", "email", "kind", "quote", "files_say",
                                    "ruling", "fact", "reason", "by", "at"])
         self.assertEqual((v["brand"], v["email"], v["kind"], v["ruling"], v["quote"]),
                          (BRAND, "e1", "fact", "true", "it lasts all day"))
         self.assertTrue(rec["created"].endswith("Z"))
-        self.assertTrue(recs[0].name.endswith("--steph--%s.json" % ITEMS[0]["id"]))
+        self.assertTrue(recs[0].name.endswith("--pm--%s.json" % ITEMS[0]["id"]))
         after = sorted(repo_dir.glob("*")) if repo_dir.is_dir() else []
         self.assertEqual(before, after, "nothing filed under the repo")
 
@@ -161,42 +161,42 @@ class TheCommand(unittest.TestCase):
         pid = ITEMS[2]["id"]
         for ruling, extra in (("true", ["the fact"]), ("true-once", ["--reason", "x"]),
                               ("fill", ["the fact"]), ("not-ours", [])):
-            self.refused(pid, ruling, *extra, "--by", "steph",
+            self.refused(pid, ruling, *extra, "--by", "pm",
                          says=f"brands/{BRAND}/products/offer-bank.md (the team's fold) — a ruling never clears a price")
-        self.refused(pid, "wrong", "--by", "steph", says="not rulable")
+        self.refused(pid, "wrong", "--by", "pm", says="not rulable")
 
     def test_fact_text_with_a_price_is_refused(self):
         for ruling in ("true", "fill"):
-            self.refused(ITEMS[0]["id"], ruling, "now just $39.99", "--by", "steph",
+            self.refused(ITEMS[0]["id"], ruling, "now just $39.99", "--by", "pm",
                          says="a ruling never clears a price")
 
     def test_an_unknown_id_lists_the_ids(self):
-        self.refused("000000000000", "true", "x", "--by", "steph", says=ITEMS[0]["id"])
+        self.refused("000000000000", "true", "x", "--by", "pm", says=ITEMS[0]["id"])
 
     def test_a_pre_he1_check_json_is_refused(self):
         make_run("old", items=None, root=self.root)
         r = rule(self.root / "runs/email-production" / BRAND / "old", ITEMS[0]["id"], "true", "x",
-                 "--by", "steph", root=self.root)
+                 "--by", "pm", root=self.root)
         self.assertNotEqual(r.returncode, 0)
         self.assertIn("re-check it first: simple_email.py", r.stderr)
         self.assertIn(f"--brand {BRAND} --no-images", r.stderr)
 
     def test_no_brand_in_run_json_is_refused(self):
         (self.rd / "run.json").write_text("{}")
-        self.refused(ITEMS[0]["id"], "true", "x", "--by", "steph", says="names no brand")
+        self.refused(ITEMS[0]["id"], "true", "x", "--by", "pm", says="names no brand")
 
     def test_true_needs_text_and_true_once_needs_a_reason(self):
-        self.refused(ITEMS[0]["id"], "true", "--by", "steph", says="needs the fact text")
-        self.refused(ITEMS[0]["id"], "fill", "--by", "steph", says="needs the fact text")
-        self.refused(ITEMS[0]["id"], "true-once", "--by", "steph", says="needs --reason")
+        self.refused(ITEMS[0]["id"], "true", "--by", "pm", says="needs the fact text")
+        self.refused(ITEMS[0]["id"], "fill", "--by", "pm", says="needs the fact text")
+        self.refused(ITEMS[0]["id"], "true-once", "--by", "pm", says="needs --reason")
 
     def test_an_unknown_ruling_is_refused(self):
-        self.refused(ITEMS[0]["id"], "maybe", "--by", "steph", says="is not a ruling")
+        self.refused(ITEMS[0]["id"], "maybe", "--by", "pm", says="is not a ruling")
 
     def test_unrulable_kinds_and_unfilled_limits(self):
-        self.refused(ITEMS[4]["id"], "true", "x", "--by", "steph", says="fix the email, not rulable")
-        self.refused(ITEMS[3]["id"], "true", "x", "--by", "steph", says="takes fill | not-ours | wrong")
-        r = rule(self.rd, ITEMS[3]["id"], "fill", "The handoff is the tin.", "--by", "steph", root=self.root)
+        self.refused(ITEMS[4]["id"], "true", "x", "--by", "pm", says="fix the email, not rulable")
+        self.refused(ITEMS[3]["id"], "true", "x", "--by", "pm", says="takes fill | not-ours | wrong")
+        r = rule(self.rd, ITEMS[3]["id"], "fill", "The handoff is the tin.", "--by", "pm", root=self.root)
         self.assertEqual(r.returncode, 0, r.stderr)
 
 

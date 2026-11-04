@@ -1,8 +1,8 @@
 """Winner Briefs — every top-1% winner remade as an AI brief, on one page, split by brand.
 
 Reads the finished teardown runs (runs/video-teardown/<brand>/top1-*/hand/5-brief.md), the winners' numbers and
-pictures (runs/media-buying/top1/board.json), and the open questions (runs/media-buying/top1/facts-for-damon.json).
-Writes lab/damon/media-buying/winner-briefs.html and the Markdown copy WINNER-BRIEFS-damon.md.
+pictures (runs/media-buying/top1/board.json), and the open questions (runs/media-buying/top1/facts-for-owner.json).
+Writes lab/owner/media-buying/winner-briefs.html and the Markdown copy WINNER-BRIEFS-owner.md.
 the owner's answers save to the page's db (collection `answers`, one doc per <run>__<n>).
 """
 import json
@@ -26,8 +26,8 @@ def _vt_workdir():
 
 ROOT = Path(__file__).resolve().parents[2]
 TOP1 = ROOT / "runs/media-buying/top1"
-OUT = ROOT / "lab/damon/media-buying/winner-briefs.html"
-MD = ROOT / "lab/damon/media-buying/WINNER-BRIEFS-damon.md"
+OUT = ROOT / "lab/owner/media-buying/winner-briefs.html"
+MD = ROOT / "lab/owner/media-buying/WINNER-BRIEFS-owner.md"
 MACHINE = _vt_workdir().root(ROOT)     # the teardown's live runs, runs/video-teardown/_work/ (SI-56)
 SKIP = {"top1-brand-b-01-grandma-house-h1"}          # superseded by the face-scrub run (the owner, 4 Oct)
 NAMES = {"brand-a": "BRAND-A", "brand-b": "Brand-B"}
@@ -86,7 +86,7 @@ def open_facts(f):
 
 def build():
     board = json.loads((TOP1 / "board.json").read_text())
-    facts = json.loads((TOP1 / "facts-for-damon.json").read_text()) if (TOP1 / "facts-for-damon.json").exists() else {}
+    facts = json.loads((TOP1 / "facts-for-owner.json").read_text()) if (TOP1 / "facts-for-owner.json").exists() else {}
     rulings = json.loads((TOP1 / "structure-rulings.json").read_text())["runs"] if (TOP1 / "structure-rulings.json").exists() else {}
     brands = {}
     for brand in NAMES:
@@ -133,7 +133,7 @@ def build():
 
 def write_md(brands):
     L = ["# Winner Briefs — the owner", "", "Every top-1% winner, remade as an AI brief that keeps the winner's own structure "
-         "(the owner's calls, 4 Oct). Live page: see `lab/damon/context/artifacts.md` → Winner Briefs.", ""]
+         "(the owner's calls, 4 Oct). Live page: see `lab/owner/context/artifacts.md` → Winner Briefs.", ""]
     for brand, B in brands.items():
         L += [f"# {NAMES[brand]}", "", f"**Core message:** {B['core']}", ""]
         for w in B["winners"]:

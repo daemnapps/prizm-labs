@@ -22,17 +22,17 @@ def fake_python(venv: Path) -> Path:
 class HelpersVenvLookup(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
-        self.saved_env = os.environ.get("UPRIGHT_VENVS")
-        os.environ["UPRIGHT_VENVS"] = str(self.tmp / "venvs")
+        self.saved_env = os.environ.get("COMPANY_VENVS")
+        os.environ["COMPANY_VENVS"] = str(self.tmp / "venvs")
         self.saved_local = helpers.LOCAL_VENV
         helpers.LOCAL_VENV = self.tmp / "beside" / ".venv"
 
     def tearDown(self):
         helpers.LOCAL_VENV = self.saved_local
         if self.saved_env is None:
-            os.environ.pop("UPRIGHT_VENVS", None)
+            os.environ.pop("COMPANY_VENVS", None)
         else:
-            os.environ["UPRIGHT_VENVS"] = self.saved_env
+            os.environ["COMPANY_VENVS"] = self.saved_env
         shutil.rmtree(self.tmp)
 
     def test_shared_venv_is_named_by_the_requirements_file(self):

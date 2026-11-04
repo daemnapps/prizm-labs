@@ -60,7 +60,7 @@
     ]
    ]
   },
-  "brand-a/flex-charging-case": {
+  "brand-a/widget-charging-case": {
    "tiles": {
     "front": "model/sheet/master-v4/front-closed-photoreal.png",
     "three-quarter": "model/sheet/master-v4/three-quarter-closed-photoreal.png",
@@ -83,7 +83,7 @@
      "model/sheet/master-v4/top-down-open-photoreal.png"
     ],
     [
-     "FLEX CLOSEUP",
+     "WIDGET CLOSEUP",
      "model/sheet/master-v4/flex-closeup-photoreal.png"
     ],
     [
@@ -100,7 +100,7 @@
     ]
    ]
   },
-  "brand-a/flex-face-brush": {
+  "brand-a/widget-face-brush": {
    "tiles": {
     "front": {
      "old_sheet_cell": [

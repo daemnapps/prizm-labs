@@ -3,7 +3,7 @@
 
 Written 2026-09-23 after a folder move broke sixteen path resolutions at once.
 Seven machines moved into components/ that week; each kept counting its way to
-the workspace from the depth it had in lab/damon/, so every one of them landed
+the workspace from the depth it had in lab/owner/, so every one of them landed
 on ~/Projects — a personal folder, not the repo. Most only read there and failed
 loudly. video-production/machine/run.py did not: its DEFAULT_RUNS_ROOT fed a
 mkdir(parents=True), so the next run with no explicit --runs-root would have

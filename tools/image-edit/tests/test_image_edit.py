@@ -543,8 +543,8 @@ class TestWalls(unittest.TestCase):
         names = {n for n in names if len(n) > 3}
         if not names:
             self.skipTest("no brands on this machine")
-        files = [root / "lab/damon/team-desk.html", root / "lab/damon/TEAM-DESK.md",
-                 root / "lab/damon/team-desk/page.py"]
+        files = [root / "lab/owner/team-desk.html", root / "lab/owner/TEAM-DESK.md",
+                 root / "lab/owner/team-desk/page.py"]
         files += [root / f".claude/skills/{n}/SKILL.md" for n in (
             "swipe-intake", "video-teardown", "image-teardown", "teardown-copy",
             "teardown-page", "teardown-email", "outlier-brief", "image-production",

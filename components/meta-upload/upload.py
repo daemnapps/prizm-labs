@@ -54,7 +54,7 @@ from brand import Brand
 from drop import read_handoff, kind_of, VIDEO
 
 APPROVALS = HERE / "approvals.json"
-STAGING = REPO / "lab/damon/print-run/handoffs"
+STAGING = REPO / "lab/owner/print-run/handoffs"
 # The ad URL standard (components/funnel-tracking/standard.json, ad_url): every ad this
 # uploader makes carries it, flexible, carousel and the bulk sheet alike. Meta fills each {{…}}
 # at click time; the funnel keeps utm_* and sub1 on the store's cart and order, so the store's
@@ -672,14 +672,14 @@ def switch_on(m, p, st, log=print):
 
 
 def _funnel_of(link_id):
-    sys.path.insert(0, str(REPO / "lab/damon/handoff-standard/skill"))
+    sys.path.insert(0, str(REPO / "lab/owner/handoff-standard/skill"))
     import handoff as H
     return H.funnel_of(link_id)
 
 
 def link_url(brand, link_id):
     """A catalog link id -> its URL (the catalog the hand-off reads)."""
-    sys.path.insert(0, str(REPO / "lab/damon/handoff-standard/skill"))
+    sys.path.insert(0, str(REPO / "lab/owner/handoff-standard/skill"))
     import handoff as H
     try:
         return H.Catalog(H.DEFAULT_CATALOG, brand).url(link_id)

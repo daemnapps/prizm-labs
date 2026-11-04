@@ -7,7 +7,7 @@ the owner, 2026-10-27: "we keep writing brand new ad copy over and over and over
 format ... we're just freeballing it based off of the brief." So the primary text, the headlines and the descriptions
 are each one of the brand's own formats (`real_formats.py`: real ads that sold, stripped to [BLANKS]) with the blanks
 filled for this ad from the product file, the market's words at the ad's awareness level and the spice
-(`prompts/copy-format-fill-vN-damon.md`). Nothing is written from scratch.
+(`prompts/copy-format-fill-vN-owner.md`). Nothing is written from scratch.
 
 Checked without a model, then sent back once with what broke: every line is a format it was handed, keeps that
 format's shape (its paragraphs one for one, most of its own words in order — elements may change), leaves no [BLANK], carries no price or deal off a promotion,

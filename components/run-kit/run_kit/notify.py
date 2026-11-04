@@ -4,7 +4,7 @@
     notify("timeline", "Rough cut ready: brand-a/promo-03", id_="brand-a/promo-03")
 
 Appends one line to runs/notify/events.jsonl — a single O_APPEND write, so many machines can write at once.
-It sends nothing anywhere. Outlier (lab/damon/suite) reads the file: its bell shows each event to the
+It sends nothing anywhere. Outlier (lab/owner/suite) reads the file: its bell shows each event to the
 person named in `who`, and for the owner alone it also messages his own phone. Never raises into the caller.
 
 Kinds and the links they make (open Outlier on that item, on the Mac or over Tailscale):
@@ -41,9 +41,9 @@ def link_for(kind, id_):
     return "%s/%s/%s" % (BASE.rstrip("/"), kind, quote(str(id_), safe=""))
 
 
-def notify(kind, title, link=None, who="damon", id_=None):
+def notify(kind, title, link=None, who="owner", id_=None):
     ev = {"id": uuid.uuid4().hex[:12], "ts": time.time(), "when": time.strftime("%Y-%m-%d %H:%M"),
-          "kind": kind, "title": str(title)[:300], "who": (who or "damon").lower(), "link": link or ""}
+          "kind": kind, "title": str(title)[:300], "who": (who or "owner").lower(), "link": link or ""}
     try:
         if not ev["link"] and id_ is not None:
             ev["link"] = link_for(kind, id_)
@@ -59,7 +59,7 @@ def notify(kind, title, link=None, who="damon", id_=None):
     return ev
 
 
-def safe_notify(kind, title, id_, who="damon", label=""):
+def safe_notify(kind, title, id_, who="owner", label=""):
     """For machines: skip test runs (v2test-*), never fail the run."""
     if str(label or id_).split("/")[-1].startswith("v2test-"):
         return None

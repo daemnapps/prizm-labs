@@ -22,7 +22,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
 _LOADER_PATH = HERE.parents[2] / "components" / "keys" / "loader.py"
-_LOADER_NAME = "upright_keys_loader"
+_LOADER_NAME = "company_keys_loader"
 
 
 _LOCK = threading.Lock()   # the hook versions run pooled (E35): a second thread must never see a half-loaded loader

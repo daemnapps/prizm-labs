@@ -16,8 +16,8 @@ the walkthrough video, the SOP and the prompts, in one place.
 |---|---|
 | `DESK.md` | the other side — what the person onboarding an editor does: folders by link once per brand, one message per editor, what to check. Team-only; it is not a page on the site. |
 | `SOP.md` | the way we work — once to set up, then the loop every session. What the page says, in Markdown. |
-| `prompts/01-day-one-v3-damon.md` | pasted once: connects, clones the tools, opens your hand-off folder, reads each `handoff.md` |
-| `prompts/02-pull-briefs-v3-damon.md` | pasted every session: sync → pick → read `handoff.md` → review → the asks → the edit (two review stops) → back into `returned/` |
+| `prompts/01-day-one-v3-owner.md` | pasted once: connects, clones the tools, opens your hand-off folder, reads each `handoff.md` |
+| `prompts/02-pull-briefs-v3-owner.md` | pasted every session: sync → pick → read `handoff.md` → review → the asks → the edit (two review stops) → back into `returned/` |
 | `machine/queue.py` | the work queue per brand — every role (video editor, graphic designer, creator, carousel), every state from Open to Live or Sent back — written to `briefs/QUEUE.md` on Drive from the folders and approval cards. Runs hourly. Tests: `machine/test_queue.py`. |
 | `walkthrough/cut-list.json` + `cut.py` | the edited walkthrough video — a cut list over the recorded call, rendered with ffmpeg. The recording is not in the repo. |
 | `context/artifacts.md` | the pages that show this work |

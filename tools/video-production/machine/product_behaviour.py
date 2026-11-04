@@ -6,7 +6,7 @@ we get this type of stuff. This is what's going to help reduce our time on each
 generation."
 
 A product kit measured the product's shape, size, colour and label, but not
-what it can physically do — so FLEX, which has a domed base and rolls over, was
+what it can physically do — so WIDGET, which has a domed base and rolls over, was
 drawn standing upright on a table in five frames. This step reads the brand's
 own files about the product and the list of its real pictures on the company
 drive, and writes `behaviour` into kit.json: what it cannot do, every way it
@@ -42,7 +42,7 @@ def _kit():
 
 def names_of(brand: str, slug: str) -> list[str]:
     """The names the brand's files use for this product: the slug, its first
-    word (flex-face-brush → flex) and the aliases in images.json."""
+    word (widget-face-brush → flex) and the aliases in images.json."""
     PK = _kit()
     out = [slug, slug.split("-")[0]] + PK.aliases(brand, slug)
     return [n for i, n in enumerate(out) if n and n not in out[:i]]
@@ -170,7 +170,7 @@ def words(beh: dict | None, name: str = "the product") -> str:
 
 def motion_words(beh: dict | None, name: str = "the product") -> str:
     """The behaviour as one sentence for a CLIP prompt: what may happen to the
-    product while the shot moves (the owner, 2026-10-09: FLEX is never left on its
+    product while the shot moves (the owner, 2026-10-09: WIDGET is never left on its
     own — in the hand, or in its holder or case)."""
     if not beh:
         return ""

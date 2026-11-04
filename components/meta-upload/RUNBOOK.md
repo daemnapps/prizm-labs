@@ -286,7 +286,7 @@ renderer:
 
 ```
 {market!u}{sep}{product}{sep}{funnel!u}{sep}{lane!t}   sep " | "
-    -> US | FLEX™ | ICON | Fed-Up King
+    -> US | WIDGET™ | ICON | Fed-Up King
 
 {budget!l}{sep}{market!l}{sep}{event!l}{sep}{product!l}{sep}{lane!l}   sep "_"
     -> cbo_us_purchase_body-scrub_creators

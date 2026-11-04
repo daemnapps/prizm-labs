@@ -78,7 +78,7 @@ from pathlib import Path
 def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
-    The count here was right only while this file sat in lab/damon/. The move
+    The count here was right only while this file sat in lab/owner/. The move
     to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
     high — outside the repo entirely. A marker cannot go quietly wrong the next
     time something moves. AI_WORKSPACE still wins when it names a workspace.
@@ -95,7 +95,7 @@ def _workspace(start=__file__):
 
 
 HERE = Path(__file__).resolve().parent
-# machine/voice.py -> ai-video-production -> damon -> lab -> the workspace
+# machine/voice.py -> ai-video-production -> owner -> lab -> the workspace
 # root — the same count run.py and prompt.py use for the same reason.
 WORKSPACE = _workspace()
 

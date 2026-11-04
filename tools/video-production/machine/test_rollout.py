@@ -33,7 +33,7 @@ from pathlib import Path
 def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
-    The count here was right only while this file sat in lab/damon/. The move
+    The count here was right only while this file sat in lab/owner/. The move
     to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
     high — outside the repo entirely. A marker cannot go quietly wrong the next
     time something moves. AI_WORKSPACE still wins when it names a workspace.
@@ -234,8 +234,8 @@ def _shape_of(path: Path) -> str:
 
 
 class LivePrompts(unittest.TestCase):
-    OFFER = PROMPTS / "stage-4-offer" / "stage4-offer-v2-damon.md"
-    AROLL = PROMPTS / "stage-2-aroll" / "stage2-aroll-v2-damon.md"
+    OFFER = PROMPTS / "stage-4-offer" / "stage4-offer-v2-owner.md"
+    AROLL = PROMPTS / "stage-2-aroll" / "stage2-aroll-v2-owner.md"
     GUARD = "**Everything named in this prompt as an example is an example of a SHAPE, not"
 
     def test_offer_v2_carries_no_price_and_no_link(self):
@@ -261,8 +261,8 @@ class LivePrompts(unittest.TestCase):
             self.assertIsNone(re.search(r"\d+\.\d\d", text), f"{f.name} carries a price")
 
     def test_the_machine_is_pinned_to_v2_and_the_files_exist(self):
-        self.assertTrue(prompt.STAGE_PROMPT["offer"].endswith("stage4-offer-v2-damon.md"))
-        self.assertTrue(prompt.STAGE_PROMPT["aroll"].endswith("stage2-aroll-v2-damon.md"))
+        self.assertTrue(prompt.STAGE_PROMPT["offer"].endswith("stage4-offer-v2-owner.md"))
+        self.assertTrue(prompt.STAGE_PROMPT["aroll"].endswith("stage2-aroll-v2-owner.md"))
         for stage in prompt.STAGE_PROMPT:
             self.assertTrue((PROMPTS / prompt.STAGE_PROMPT[stage]).is_file(), stage)
             prompt.shape(stage)

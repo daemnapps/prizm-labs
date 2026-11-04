@@ -140,7 +140,7 @@ def decisions(brief_md):
     nothing outstanding when between two and six things were, which is the
     worst way for this page to be wrong.
     """
-    OWNERS = ((r"\bdamon\b|founder|\bowner\b", "the owner"),
+    OWNERS = ((r"\bowner\b|founder|\bowner\b", "the owner"),
               (r"compositor|production decision", "compositor"),
               (r"casting|roster man", "casting"),
               (r"customer research|research pull", "research"))
@@ -246,7 +246,7 @@ def render(bid, rec, reg, extra=""):
     title = headline(brief) or str(sw.get("block") or rec["run"])
 
     dec = decisions(brief)
-    mine = [x for x in dec if "damon" in x["who"].lower() and not x["settled"]]
+    mine = [x for x in dec if "owner" in x["who"].lower() and not x["settled"]]
     chips = [f'<span class="chip">{H.escape(rec["brand"])}</span>']
     for k in ("problem", "concept"):
         if d.get(k):
@@ -369,7 +369,7 @@ def brands(reg):
             'family=Archivo:wght@400;600;800&family=Newsreader:opsz,wght@6..72,400&'
             'family=JetBrains+Mono:wght@400;600&display=swap">'
             f'<style>{CSS}</style><div class="wrap"><header>'
-            '<p class="id">lab/damon &middot; the static ad machine</p><h1>Briefs</h1>'
+            '<p class="id">lab/owner &middot; the static ad machine</p><h1>Briefs</h1>'
             '<p class="lede">One swipe in, one brief out. Every brand keeps its own '
             'briefs, its own runs, its own cast and its own folder on Drive &mdash; '
             'nothing is shared but the machine.</p></header>'
@@ -401,7 +401,7 @@ def index(reg, brand=None):
         src = run / "assets/source.jpg"
         b = (run / "out/06-brief.md")
         dec = decisions(b.read_text()) if b.is_file() else []
-        mine = [x for x in dec if "damon" in x["who"].lower() and not x["settled"]]
+        mine = [x for x in dec if "owner" in x["who"].lower() and not x["settled"]]
         dd = HERE / "drafts" / rec["brand"]
         cands = []
         for v in sorted((x for x in dd.glob("v*") if x.is_dir()),

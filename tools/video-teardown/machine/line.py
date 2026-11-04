@@ -129,7 +129,7 @@ def main() -> None:
         if label:
             run_dir = workdir.run_dir(label)
             # Found, not assumed. This was Path.home()/"Projects/workspace/…"
-            # pointing at lab/damon/video-production — a home that only exists on
+            # pointing at lab/owner/video-production — a home that only exists on
             # one Mac, naming a folder renamed to ai-video-production on
             # 2026-08-31, which then left lab entirely for
             # tools/video-production on 2026-09-22. Both old homes are gone,
@@ -138,7 +138,7 @@ def main() -> None:
             # kept behind it for a checkout that has not landed the move yet.
             vp = next((d / rel for d in Path(__file__).resolve().parents
                        for rel in (Path("components") / "video-production" / "machine",
-                                   Path("lab") / "damon" / "ai-video-production" / "machine")
+                                   Path("lab") / "owner" / "ai-video-production" / "machine")
                        if (d / rel).is_dir()), None)
             if vp is None:
                 print("\n▸ the AI video machine is not in this checkout — "

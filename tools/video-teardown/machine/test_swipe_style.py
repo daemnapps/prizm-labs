@@ -18,7 +18,7 @@ class SwipeStyle(unittest.TestCase):
         self.assertEqual(C.style_format_from_triage("LANE: ORGANIC\nONE LINE: y"), {"style_id": None, "format_id": None})
 
     def test_v3_prompt_asks_for_both(self):
-        p = sorted((Path(__file__).resolve().parents[1] / "prompts" / "stage-0-triage").glob("triage-v*-damon.md"),
+        p = sorted((Path(__file__).resolve().parents[1] / "prompts" / "stage-0-triage").glob("triage-v*-owner.md"),
                    key=lambda f: int(f.stem.split("-v")[1].split("-")[0]))[-1].read_text()
         for line in ("STYLE:", "FORMAT:", "{styles}", "{formats}"):
             self.assertIn(line, p)

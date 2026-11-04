@@ -7,7 +7,7 @@
                               generator list to a session via manual.md)
     queue.py intake <id> <png>   a generated picture arrives: pad, judge, name, record, upload
     queue.py review <asset> keep|kill [why]
-    queue.py sync ["message"]  commit this lane's paths and push to damon/creative-record
+    queue.py sync ["message"]  commit this lane's paths and push to owner/creative-record
     queue.py kit              the Meta bulk-import sheet + pictures folder
 
 the owner never runs this. serve.py calls it from the page; a session calls it
@@ -363,12 +363,12 @@ def review(asset, verdict, why=""):
         item = f"{u['run'].split('-')[1]}.{u['slug']}.{asset_tag(asset)}"
         a = next(a for a in u["assets"] if a["name"] == asset)
         if verdict == "kill":
-            R.human(item, "note", "damon", text=f"KILLED — {why or 'no reason given'}")
+            R.human(item, "note", "owner", text=f"KILLED — {why or 'no reason given'}")
             if a.get("drive"):
                 tr = load(RUNS_ROOT / "_drive-trash.json", []); tr.append({"id": a["drive"], "why": f"killed by the owner: {why}", "path": a["file"]}); save(RUNS_ROOT / "_drive-trash.json", tr)
         else:
-            R.human(item, "status", "damon", to="picked", evidence=f"kept on the RUN-01 queue page — {why or 'no note'}")
-            if why: R.human(item, "note", "damon", text=f"KEPT — {why}")
+            R.human(item, "status", "owner", to="picked", evidence=f"kept on the RUN-01 queue page — {why or 'no note'}")
+            if why: R.human(item, "note", "owner", text=f"KEPT — {why}")
     import threading
     threading.Thread(target=lambda: (notes_index(), plan(), sync(f"queue: {verdict} {asset[-30:]} — {why[:50]}")), daemon=True).start()
     return rv[asset]
@@ -396,7 +396,7 @@ def notes_index():
 # ------------------------------------------------------------------- sync ---
 PATHS = ["tools/image-production/static/runs/brand-b", "tools/image-production/static/queue",
          "the team notes/creative-ledger/records", "tools/image-production/static/tools", "components/naming"]
-BRANCH = "damon/creative-record"
+BRANCH = "owner/creative-record"
 
 
 def sh(*cmd, check=False):

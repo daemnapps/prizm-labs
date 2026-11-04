@@ -23,7 +23,7 @@ sys.path.insert(0, str(TOOL.parent / "my-feeds/library" / "machine"))
 import library as LIB  # noqa: E402
 
 ASKS = TOOL.parents[0] / "video-production" / "ASKS-SPEC.md"
-HANDOFF = TOOL.parents[0] / "video-production" / "prompts" / "stage-6-handoff" / "stage6-handoff-v5-damon.md"
+HANDOFF = TOOL.parents[0] / "video-production" / "prompts" / "stage-6-handoff" / "stage6-handoff-v5-owner.md"
 VIDEO = "https://drive.google.com/file/d/1H5WVVLt5nbgXGjXxwsfVk2k9fzw9eQQh/view"
 FOLDER = "https://drive.google.com/drive/folders/FOLDER_ID"
 PAGE = "https://daemn.co/onboarding.html"
@@ -53,14 +53,14 @@ def queues() -> dict[str, list[dict]]:
     return out
 
 
-day_one = block(TOOL / "prompts" / "01-day-one-v3-damon.md")
-swipe_prompt = block(TOOL / "prompts" / "03-library-v1-damon.md")
+day_one = block(TOOL / "prompts" / "01-day-one-v3-owner.md")
+swipe_prompt = block(TOOL / "prompts" / "03-library-v1-owner.md")
 LF, LV, LFE, LSW = LIB.formats(), LIB.videos(), LIB.feeds(), LIB.sweeps()
 ltorn = [v for v in LV if v["torn"]]
 feed_rows = "".join(f'<tr><td class="b">{E(f["feed"])}</td><td>{E(f["brand"])}</td><td>{f["kept"]}</td>'
                     f'<td>{f["lanes"].get("entertainment", 0)}</td><td>{f["lanes"].get("educational", 0)}</td><td>{E(f["updated"])}</td></tr>' for f in LFE)
 sweep_rows = "".join(f'<tr><td class="b">{i}</td><td>{s["angles"]}</td><td>{s["ads"]:,}</td><td>{s["concentration"]}%</td><td>{"yes" if s["on_drive"] else "not yet"}</td></tr>' for i, s in enumerate(LSW, 1))
-pull = block(TOOL / "prompts" / "02-pull-briefs-v3-damon.md")
+pull = block(TOOL / "prompts" / "02-pull-briefs-v3-owner.md")
 asks_v4 = asks_section()
 qs = queues()
 built = datetime.now().strftime("%-d %b %Y, %H:%M")
@@ -239,9 +239,9 @@ td.b{{color:var(--ink);font-weight:500}}
 <p class="eyebrow">05 · the prompts, verbatim</p>
 <h2>Two prompts, that's the job</h2>
 <p>These are the exact files the editor pastes. <span class="mono">{{BRAND}}</span> is the only thing they fill in. Change the file and the public page re-renders from it.</p>
-<div class="prompt-head"><h3 style="margin:0">Day one · v1</h3><span class="file">prompts/01-day-one-v3-damon.md · pasted once</span></div>
+<div class="prompt-head"><h3 style="margin:0">Day one · v1</h3><span class="file">prompts/01-day-one-v3-owner.md · pasted once</span></div>
 <pre>{E(day_one)}</pre>
-<div class="prompt-head"><h3 style="margin:0">Pull briefs · v1</h3><span class="file">prompts/02-pull-briefs-v3-damon.md · pasted every session</span></div>
+<div class="prompt-head"><h3 style="margin:0">Pull briefs · v1</h3><span class="file">prompts/02-pull-briefs-v3-owner.md · pasted every session</span></div>
 <pre>{E(pull)}</pre>
 </section>
 
@@ -257,7 +257,7 @@ td.b{{color:var(--ink);font-weight:500}}
   <div class="ask"><div class="k">Formats</div><span>9:16 only — nothing at 4:5 or 1:1. A 15 s cutdown map, and every face, product and word inside the centred 4:5 crop.</span><span class="d">default · one ratio</span></div>
   <div class="ask"><div class="k">Styles</div><span>A restyle of the same film — only when the brief names one.</span><span class="d">default · none</span></div>
 </div>
-<div class="prompt-head"><h3 style="margin:0">Stage 6 handoff · v4 — the new section</h3><span class="file">tools/video-production/prompts/stage-6-handoff/stage6-handoff-v5-damon.md · spec: ASKS-SPEC.md</span></div>
+<div class="prompt-head"><h3 style="margin:0">Stage 6 handoff · v4 — the new section</h3><span class="file">tools/video-production/prompts/stage-6-handoff/stage6-handoff-v5-owner.md · spec: ASKS-SPEC.md</span></div>
 <pre>{E(asks_v4)}</pre>
 </section>
 
@@ -287,7 +287,7 @@ td.b{{color:var(--ink);font-weight:500}}
 <div class="tw"><table><thead><tr><th>Feed</th><th>Brand</th><th>Kept</th><th>Entertainment</th><th>Educational</th><th>Newest</th></tr></thead><tbody>{feed_rows}</tbody></table></div>
 <h3>The paid sweeps</h3>
 <div class="tw"><table><thead><tr><th>#</th><th>Angles</th><th>Live ads</th><th>Top-3 share</th><th>Media on Drive</th></tr></thead><tbody>{sweep_rows}</tbody></table></div>
-<div class="prompt-head"><h3 style="margin:0">Library · v1</h3><span class="file">prompts/03-library-v1-damon.md · pasted when they want something to rebuild</span></div>
+<div class="prompt-head"><h3 style="margin:0">Library · v1</h3><span class="file">prompts/03-library-v1-owner.md · pasted when they want something to rebuild</span></div>
 <pre>{E(swipe_prompt)}</pre>
 </section>
 
@@ -332,7 +332,7 @@ if "--md" in sys.argv:
         lines += [f"### {b}", "", "| Brief | Type | Status | Who | Bounty | Due | Package |", "|---|---|---|---|---|---|---|"]
         lines += [f"| {r['brief']} | {r['type']} | {r['status']} | {r['who'] or '—'} | {r['bounty'] or '—'} | {r['due'] or '—'} | `{r['package']}` |" for r in rows] or ["| — | | | | | | |"]
         lines.append("")
-    lines += ["## The prompts", "", "Verbatim in `prompts/01-day-one-v3-damon.md` and `prompts/02-pull-briefs-v3-damon.md`.", "",
-              "## The asks", "", "`../video-production/ASKS-SPEC.md`; the handoff section in `stage-6-handoff/stage6-handoff-v5-damon.md`.", ""]
+    lines += ["## The prompts", "", "Verbatim in `prompts/01-day-one-v3-owner.md` and `prompts/02-pull-briefs-v3-owner.md`.", "",
+              "## The asks", "", "`../video-production/ASKS-SPEC.md`; the handoff section in `stage-6-handoff/stage6-handoff-v5-owner.md`.", ""]
     md.write_text("\n".join(lines))
     print(f"wrote {md}")

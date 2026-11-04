@@ -340,14 +340,14 @@ class Prompts(unittest.TestCase):
     def test_new_versions_win_and_open_with_the_guard(self):
         for stage, must in (("stage1-read", ["# PAGE FURNITURE", "# SOURCE DEFECTS", "# THE MESSAGE"]),
                             ("stage2-spec", ["Furniture never becomes a move", "A source defect is never carried"])):
-            files = sorted((HERE / "prompts").glob(f"{stage}-v*-damon.md"),
+            files = sorted((HERE / "prompts").glob(f"{stage}-v*-owner.md"),
                            key=lambda f: int(re.search(r"-v(\d+)-", f.name).group(1)))
             text = files[-1].read_text()
-            self.assertTrue(files[-1].name.endswith("-v2-damon.md"), files[-1].name)
+            self.assertTrue(files[-1].name.endswith("-v2-owner.md"), files[-1].name)
             self.assertTrue(text.startswith("**Everything named in this prompt as an example"))
             for m in must:
                 self.assertIn(m, text)
-            self.assertTrue((HERE / "prompts" / f"{stage}-v1-damon.md").is_file())
+            self.assertTrue((HERE / "prompts" / f"{stage}-v1-owner.md").is_file())
 
 
 class Partner(unittest.TestCase):

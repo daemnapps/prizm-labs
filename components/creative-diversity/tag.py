@@ -3,7 +3,7 @@
 
 Reads only the saved pull (runs/creative-diversity/<brand>/<date>/) — it never
 calls Meta. Each asset's video or image goes to Gemini with the prompt
-prompts/tag-ad-v1-damon.md, filled with the brand's real lists. Tags are
+prompts/tag-ad-v1-owner.md, filled with the brand's real lists. Tags are
 checked against those lists; anything off-list is kept as `new:` or flagged.
 
     python3 components/creative-diversity/tag.py brand-a [date]
@@ -46,7 +46,7 @@ def _shared_keys():
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE / "prompts" / "tag-ad-v1-damon.md"
+PROMPT = HERE / "prompts" / "tag-ad-v1-owner.md"
 MODEL = "gemini-3.8-flash"
 API = "https://generativelanguage.googleapis.com"
 LIB = ROOT / "components" / "elements" / "library"

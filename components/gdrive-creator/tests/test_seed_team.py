@@ -18,7 +18,7 @@ only, 3.9.
   f  "stations" absent = the person folder only
   g  the source matches none of test_reach.py's no-delete/move/rename patterns
   h  the REAL repo's identity files (read only): every station is an existing
-     components/<name>/ folder, and eve has exactly email-production and
+     components/<name>/ folder, and designer has exactly email-production and
      image-production
 """
 import contextlib
@@ -120,27 +120,27 @@ class Base(unittest.TestCase):
 
 class TestSeed(Base):
     def test_a_every_missing_folder_is_made_exactly_once(self):
-        self.person("eve", ["email-production", "image-production"])
-        self.person("ahmed", ["video-edit"])
+        self.person("designer", ["email-production", "image-production"])
+        self.person("editor", ["video-edit"])
         rows = self.seed()
         self.assertEqual(self.states(rows), [
-            ("team/ahmed", "made"), ("team/ahmed/video-edit", "made"),
-            ("team/eve", "made"), ("team/eve/email-production", "made"),
-            ("team/eve/image-production", "made")])
-        self.assertEqual(rows[1], {"person": "ahmed", "station": "video-edit",
-                                   "path": "team/ahmed/video-edit", "state": "made", "why": None})
+            ("team/designer", "made"), ("team/designer/email-production", "made"),
+            ("team/designer/image-production", "made"),
+            ("team/editor", "made"), ("team/editor/video-edit", "made")])
+        self.assertEqual(rows[4], {"person": "editor", "station": "video-edit",
+                                   "path": "team/editor/video-edit", "state": "made", "why": None})
         self.assertIsNone(rows[0]["station"])
         made = sorted((c[1], self.E.nodes[c[2]]["name"]) for c in self.E.creates())
         self.assertEqual(made, sorted([
-            ("team", "Shared Assets"), ("ahmed", "team"), ("video-edit", "ahmed"),
-            ("eve", "team"), ("email-production", "eve"), ("image-production", "eve")]))
-        for names in (("team",), ("team", "eve", "email-production"),
-                      ("team", "ahmed", "video-edit")):
+            ("team", "Shared Assets"), ("editor", "team"), ("video-edit", "editor"),
+            ("designer", "team"), ("email-production", "designer"), ("image-production", "designer")]))
+        for names in (("team",), ("team", "designer", "email-production"),
+                      ("team", "editor", "video-edit")):
             self.assertIsInstance(self.E.at(*names), str, names)        # exactly one, no duplicate
         self.assertEqual({c[3] for c in self.E.calls if c[0] == "find_file"}, {FOLDER})
 
     def test_b_a_second_run_makes_nothing(self):
-        self.person("eve", ["email-production", "image-production"])
+        self.person("designer", ["email-production", "image-production"])
         self.seed()
         before = (len(self.E.nodes), len(self.E.creates()))
         rows = self.seed()
@@ -149,51 +149,51 @@ class TestSeed(Base):
         self.assertEqual((len(self.E.nodes), len(self.E.creates())), before)
 
     def test_c_a_folder_already_there_is_untouched(self):
-        self.person("eve", ["email-production", "image-production"])
+        self.person("designer", ["email-production", "image-production"])
         team = self.E.add(ROOT, "team")
-        eve = self.E.add(team, "eve")
-        ep = self.E.add(eve, "email-production")
+        designer = self.E.add(team, "designer")
+        ep = self.E.add(designer, "email-production")
         self.E.add(ep, "keep.png")
         rows = self.seed()
         self.assertEqual(self.states(rows), [
-            ("team/eve", "already there"), ("team/eve/email-production", "already there"),
-            ("team/eve/image-production", "made")])
-        self.assertEqual([c[1:] for c in self.E.creates()], [("image-production", eve)])
-        self.assertEqual(self.E.at("team", "eve", "email-production"), ep)
-        self.assertIsNotNone(self.E.at("team", "eve", "email-production", "keep.png"))
+            ("team/designer", "already there"), ("team/designer/email-production", "already there"),
+            ("team/designer/image-production", "made")])
+        self.assertEqual([c[1:] for c in self.E.creates()], [("image-production", designer)])
+        self.assertEqual(self.E.at("team", "designer", "email-production"), ep)
+        self.assertIsNotNone(self.E.at("team", "designer", "email-production", "keep.png"))
 
     def test_d_an_unknown_station_is_refused_by_name_and_the_rest_is_made(self):
-        self.person("eve", ["email-production", "no-such-station", "image-production"])
+        self.person("designer", ["email-production", "no-such-station", "image-production"])
         rows = self.seed()
         self.assertEqual(self.states(rows), [
-            ("team/eve", "made"), ("team/eve/email-production", "made"),
-            ("team/eve/no-such-station", "refused"), ("team/eve/image-production", "made")])
+            ("team/designer", "made"), ("team/designer/email-production", "made"),
+            ("team/designer/no-such-station", "refused"), ("team/designer/image-production", "made")])
         self.assertEqual(rows[2]["why"],
                          "not a component: components/no-such-station/ does not exist")
         self.assertNotIn("no-such-station", [c[1] for c in self.E.calls if len(c) > 1])
-        self.assertIsNone(self.E.at("team", "eve", "no-such-station"))
+        self.assertIsNone(self.E.at("team", "designer", "no-such-station"))
 
     def test_d_a_path_shaped_station_is_refused(self):
-        self.person("eve", ["../team", "email-production/x"])
+        self.person("designer", ["../team", "email-production/x"])
         rows = self.seed()
         self.assertEqual([r["state"] for r in rows], ["made", "refused", "refused"])
         self.assertTrue(all(r["why"].startswith("not a component name:") for r in rows[1:]))
 
     def test_d_the_cli_exits_2_on_a_refusal_and_prints_every_row(self):
-        self.person("eve", ["email-production", "no-such-station"])
+        self.person("designer", ["email-production", "no-such-station"])
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = S.main([], repo=self.repo, find_engine=lambda: self.E, drive_root=ROOT, retired_ok=True)
         self.assertEqual(code, 2)
         self.assertEqual(out.getvalue().splitlines(), [
-            "made  team/eve",
-            "made  team/eve/email-production",
-            "refused  team/eve/no-such-station  — not a component: "
+            "made  team/designer",
+            "made  team/designer/email-production",
+            "refused  team/designer/no-such-station  — not a component: "
             "components/no-such-station/ does not exist",
             "made 2 · already there 0 · would make 0 · refused 1"])
 
     def test_the_cli_exits_0_when_nothing_is_refused(self):
-        self.person("eve", ["email-production"])
+        self.person("designer", ["email-production"])
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = S.main(["--dry-run"], repo=self.repo, find_engine=lambda: self.E,
@@ -203,16 +203,17 @@ class TestSeed(Base):
                          "made 0 · already there 0 · would make 2 · refused 0")
 
     def test_e_dry_run_creates_nothing(self):
-        self.person("eve", ["email-production", "image-production"])
-        self.person("dayu", [])
+        self.person("designer", ["email-production", "image-production"])
+        self.person("engineer", [])
         team = self.E.add(ROOT, "team")
-        self.E.add(team, "dayu")
+        self.E.add(team, "engineer")
         before = dict(self.E.nodes)
         rows = self.seed(dry_run=True)
         self.assertEqual(self.states(rows), [
-            ("team/dayu", "already there"), ("team/eve", "would make"),
-            ("team/eve/email-production", "would make"),
-            ("team/eve/image-production", "would make")])
+            ("team/designer", "would make"),
+            ("team/designer/email-production", "would make"),
+            ("team/designer/image-production", "would make"),
+            ("team/engineer", "already there")])
         self.assertEqual(self.E.creates(), [])
         self.assertEqual(self.E.nodes, before)
 
@@ -224,12 +225,12 @@ class TestSeed(Base):
     def test_svc_is_made_from_the_engine_only_when_needed(self):
         self.seed()                                                 # nobody: no Drive call
         self.assertEqual(self.E.calls, [])
-        self.person("eve", [])
+        self.person("designer", [])
         self.seed()
         self.assertEqual(self.E.calls[0], ("service",))
 
     def test_no_shared_assets_drive_is_a_named_nodrive(self):
-        self.person("eve", [])
+        self.person("designer", [])
 
         class NoDrives(object):
             def drives(self):
@@ -281,8 +282,8 @@ class TestRealTeam(unittest.TestCase):
         refused = [(r["path"], r["why"]) for r in rows if r["state"] == "refused"]
         self.assertEqual(refused, [])
         self.assertEqual(E.creates(), [])
-        eve = [r["station"] for r in rows if r["person"] == "eve" and r["station"]]
-        self.assertEqual(eve, ["email-production", "image-production"])
+        designer = [r["station"] for r in rows if r["person"] == "designer" and r["station"]]
+        self.assertEqual(designer, ["email-production", "image-production"])
         for r in rows:
             self.assertTrue(r["path"].startswith("team/"), r["path"])
             if r["station"]:

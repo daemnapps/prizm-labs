@@ -69,7 +69,7 @@ def kits(brand, lead):
         front = next((k / "model" / n for n in ("reference-front-transparent.png", "packshot-cutout.png", "front.png")
                       if (k / "model" / n).is_file()), None)
         name = PIC.product_name(brand, s)
-        if name not in {v[0] for v in out.values()}:          # one product per name: FLEX, not also its case
+        if name not in {v[0] for v in out.values()}:          # one product per name: WIDGET, not also its case
             out[s] = (name, k, front)
     return out
 

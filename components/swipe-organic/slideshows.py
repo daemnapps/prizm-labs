@@ -20,7 +20,7 @@ never land here. Ranked by views; `--top N` keeps the N hottest.
 (needs `shouldDownloadSlideshowImages`, or the actor answers with empty
 media) + one comments read. Roughly $0.50 an account at --top 8.
 
-`--group` records which set an account belongs to (Tye's example list, a
+`--group` records which set an account belongs to (the partner's example list, a
 competitor sweep) in posts.json; nothing else changes.
 """
 import argparse, json, os, re, sys
@@ -32,7 +32,7 @@ def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
     This used to be `HERE.parents[2]`, which was the root only while this file
-    sat in lab/damon/. It moved to components/ on 2026-09-22 and every lookup
+    sat in lab/owner/. It moved to components/ on 2026-09-22 and every lookup
     silently pointed one level too high, at ~/Projects. A marker cannot go
     quietly wrong the next time something moves.
 

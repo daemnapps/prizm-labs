@@ -850,7 +850,7 @@ class TestApprovedBasesAndPairs(Base):
         self.assertFalse(approval.write(p, gate_passed=True, judge="below_criteria")["approved"])
         bare = self.made("b.png", recipe=False)
         with self.assertRaises(approval.ApprovalRefused):
-            approval.approve(bare, by="damon")                        # not ours: no record to approve
+            approval.approve(bare, by="owner")                        # not ours: no record to approve
 
     def test_the_engine_writes_the_approval_when_the_judge_passes_a_picture_that_carried_its_sheet(self):
         from image_production import approval

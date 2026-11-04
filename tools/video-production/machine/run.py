@@ -54,7 +54,7 @@ from pathlib import Path
 def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
-    The count here was right only while this file sat in lab/damon/. The move
+    The count here was right only while this file sat in lab/owner/. The move
     to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
     high — outside the repo entirely. A marker cannot go quietly wrong the next
     time something moves. AI_WORKSPACE still wins when it names a workspace.
@@ -1014,7 +1014,7 @@ def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | N
             return f
         return None
     if ("at rest" in low or "in its cradle" in low) and brand:
-        # "<product> at rest" → the kit's real rest picture (FLEX in its cradle): words alone drew the cradle
+        # "<product> at rest" → the kit's real rest picture (WIDGET in its cradle): words alone drew the cradle
         # as a cup (2026-10-09)
         EP = _load("element_paths")
         named = value.split(":", 1)[-1].strip()
@@ -1036,7 +1036,7 @@ def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | N
         except (OSError, ValueError):
             pid = ""
         named = value.split(":", 1)[-1].strip()
-        # "the FLEX™ packshot (products/flex/images)": any single word of the name may be the product's alias
+        # "the WIDGET™ packshot (products/flex/images)": any single word of the name may be the product's alias
         words = [re.sub(r"[^a-z0-9-]", "", w.lower()) for w in re.split(r"[\s/()]+", named)]
         for cand in (pid, named, *[w for w in words if len(w) > 2]):
             if not cand:
@@ -1795,7 +1795,7 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
                       file=sys.stderr)
                 print("the brief is not ready for production — nothing was made", file=sys.stderr)
                 return 2
-            # DAMON READS THE BRIEF (2026-09-24: "i always need to see a written
+            # OWNER READS THE BRIEF (2026-09-24: "i always need to see a written
             # brief before moving on to the production stage … so I can
             # actually read the script before it goes out"). His read is
             # stamped only on his word, tied to this exact brief.
@@ -1833,7 +1833,7 @@ def cmd_start(a, transport=None, download=None, voice_transport=None,
                 print("      brief read: retired (the owner, 18 Oct) — the brief is on his page; production starts")
             elif _read != "APPROVED":
                 print("REFUSED the owner has not read this brief" + (" since it was edited" if _read == "STALE" else "")
-                      + " — show him the written brief; on his word: swipe_match.py <teardown run> --damon-read",
+                      + " — show him the written brief; on his word: swipe_match.py <teardown run> --owner-read",
                       file=sys.stderr)
                 print("the brief is not ready for production — nothing was made", file=sys.stderr)
                 return 2

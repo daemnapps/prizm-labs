@@ -4,17 +4,17 @@
 /* Layout: one column. Four component cards up top, then name-clash tables, then per-tool lists. */
 :root{
   --bg:#F2F3F6; --panel:#FFFFFF; --fg:#16181D; --muted:#5D6270; --line:#DADDE4;
-  --damon:#2B54E8; --damon-soft:#E3E9FD; --dayu:#0F7B6C; --dayu-soft:#DDF1ED; --warn:#9A6400; --warn-soft:#F7EBD2;
+  --owner:#2B54E8; --owner-soft:#E3E9FD; --engineer:#0F7B6C; --engineer-soft:#DDF1ED; --warn:#9A6400; --warn-soft:#F7EBD2;
   --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --body:"IBM Plex Sans", system-ui, -apple-system, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111318; --panel:#1A1D24; --fg:#E9EBF0; --muted:#9BA1AF; --line:#2C303A;
-  --damon:#7D9BFF; --damon-soft:#1F2945; --dayu:#4CC7B4; --dayu-soft:#123029; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}}
+  --owner:#7D9BFF; --owner-soft:#1F2945; --engineer:#4CC7B4; --engineer-soft:#123029; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111318; --panel:#1A1D24; --fg:#E9EBF0; --muted:#9BA1AF; --line:#2C303A;
-  --damon:#7D9BFF; --damon-soft:#1F2945; --dayu:#4CC7B4; --dayu-soft:#123029; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}
+  --owner:#7D9BFF; --owner-soft:#1F2945; --engineer:#4CC7B4; --engineer-soft:#123029; --warn:#E3B055; --warn-soft:#352813; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0}
 .wrap{max-width:900px;margin:0 auto;padding-inline:20px;padding-block:40px 80px;display:flex;flex-direction:column;gap:52px}
@@ -33,8 +33,8 @@ code,.path{font:400 .8rem/1.4 var(--mono);word-break:break-word}
 .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
 .card h3{font-family:var(--mono);font-size:1rem;font-weight:500}
 .who{font:600 .72rem/1 var(--mono);padding:5px 8px;border-radius:999px;white-space:nowrap}
-.who.damon{background:var(--damon-soft);color:var(--damon)} .who.dayu{background:var(--dayu-soft);color:var(--dayu)}
-.card.damon{border-top:4px solid var(--damon)} .card.dayu{border-top:4px solid var(--dayu)}
+.who.owner{background:var(--owner-soft);color:var(--owner)} .who.engineer{background:var(--engineer-soft);color:var(--engineer)}
+.card.owner{border-top:4px solid var(--owner)} .card.engineer{border-top:4px solid var(--engineer)}
 .kv{display:grid;grid-template-columns:88px 1fr;gap:4px 10px;font-size:.88rem}
 .kv dt{color:var(--muted);font:500 .72rem/1.6 var(--mono);text-transform:uppercase;letter-spacing:.05em}
 .kv dd{margin:0;min-width:0}
@@ -46,12 +46,12 @@ th{font:600 .72rem/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase
 tr:last-child td{border-bottom:0}
 td:first-child{white-space:nowrap}
 .pill{display:inline-block;font:600 .72rem/1 var(--mono);padding:4px 8px;border-radius:999px;white-space:nowrap}
-.pill.d{background:var(--damon-soft);color:var(--damon)} .pill.y{background:var(--dayu-soft);color:var(--dayu)} .pill.w{background:var(--warn-soft);color:var(--warn)}
+.pill.d{background:var(--owner-soft);color:var(--owner)} .pill.y{background:var(--engineer-soft);color:var(--engineer)} .pill.w{background:var(--warn-soft);color:var(--warn)}
 .clash{background:var(--warn-soft);border:1px solid var(--warn);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
 .clash h3{color:var(--warn)}
 .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem}
 .flow span.box{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-family:var(--mono);font-size:.78rem}
-.flow span.box.d{border-color:var(--damon);color:var(--damon)} .flow span.box.y{border-color:var(--dayu);color:var(--dayu)}
+.flow span.box.d{border-color:var(--owner);color:var(--owner)} .flow span.box.y{border-color:var(--engineer);color:var(--engineer)}
 .flow .arr{color:var(--muted)}
 footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
 @media (max-width:480px){.wrap{padding-inline:16px}.kv{grid-template-columns:1fr}}
@@ -70,8 +70,8 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
   <div class="eyebrow">The four components</div>
   <h2>Four folders. Yours is now marketing-chain-checks</h2>
   <div class="cards">
-    <article class="card damon">
-      <div class="top"><h3>marketing-chain-checks/</h3><span class="who damon">the owner</span></div>
+    <article class="card owner">
+      <div class="top"><h3>marketing-chain-checks/</h3><span class="who owner">the owner</span></div>
       <p class="big">Checks the ads and briefs our chains make, stops bad work moving on, and checks the chains themselves. Was called quality-checks until 2 Oct.</p>
       <dl class="kv">
         <dt>Has</dt><dd>The hold every chain uses (5 gates: inputs · elements · copy · media · delivery) · price, unfilled-slot and copy checks · the creative review after every stage · the QC log in every run · the viewer check (new today)</dd>
@@ -80,8 +80,8 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
         <dt>Path</dt><dd><span class="path">components/marketing-chain-checks/</span> · a stub at the old path forwards old links</dd>
       </dl>
     </article>
-    <article class="card dayu">
-      <div class="top"><h3>qc-checks/</h3><span class="who dayu">the team · the team</span></div>
+    <article class="card engineer">
+      <div class="top"><h3>qc-checks/</h3><span class="who engineer">the team · the team</span></div>
       <p class="big">Checks finished text and built pages for defects, and files what it finds for a person to rule on.</p>
       <dl class="kv">
         <dt>Has</dt><dd><b>text_check</b> (live): typos and banned words against a brand's QC dictionary · <b>voice_check</b> (pending): would she say it like this · <b>avatar_walk</b> (pending): clicks through a built funnel as the avatar</dd>
@@ -90,8 +90,8 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
         <dt>Path</dt><dd><span class="path">components/qc-checks/</span></dd>
       </dl>
     </article>
-    <article class="card dayu">
-      <div class="top"><h3>review/</h3><span class="who dayu">the team · the team</span></div>
+    <article class="card engineer">
+      <div class="top"><h3>review/</h3><span class="who engineer">the team · the team</span></div>
       <p class="big">Not a checker. It's the record of a person's verdict: ask, then verdict, then close.</p>
       <dl class="kv">
         <dt>Has</dt><dd>The review record ("RQ-…"), the module that files and reads them, panels on the platform. Its format is frozen.</dd>
@@ -100,8 +100,8 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
         <dt>Path</dt><dd><span class="path">components/review/</span></dd>
       </dl>
     </article>
-    <article class="card dayu">
-      <div class="top"><h3>page-picture-review/</h3><span class="who dayu">the team</span></div>
+    <article class="card engineer">
+      <div class="top"><h3>page-picture-review/</h3><span class="who engineer">the team</span></div>
       <p class="big">Numbers every picture slot on a built landing page and records the decision on each one.</p>
       <dl class="kv">
         <dt>Has</dt><dd>Slot numbering, fit, the page's picture decisions (the Face Scrub Picture Index runs on it)</dd>

@@ -10,11 +10,11 @@ that habit machine-readable without changing it.
 2. **Sweep** — on "sweep my saves", a session opens
    instagram.com/daemn.is/saved/all-posts/ in HIS logged-in Chrome
    (claude-in-chrome), scroll-collects the post links, and drops them in
-   `records/damon-saves/captured-urls.json`. His saves are private; his own browser is
+   `records/owner-saves/captured-urls.json`. His saves are private; his own browser is
    the only honest door, so the sweep needs Chrome open on his machine.
 3. **Scrape** — `python3 saves.py` reads the inbox, pulls each post's
    public data (author, reach, caption, hashtags, sound), and appends
-   receipted rows to `records/damon-saves/catalog.json` (+ `.md` mirror).
+   receipted rows to `records/owner-saves/catalog.json` (+ `.md` mirror).
    Already-seen URLs are skipped, so re-sweeps are cheap.
 4. **Grade & route** — a judgment pass fills bucket
    (viral | novel-format | market-opportunity), awareness grade

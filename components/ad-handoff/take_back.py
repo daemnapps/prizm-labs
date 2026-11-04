@@ -10,7 +10,7 @@ gave (`live_meta_<id>`, `live_klaviyo_<id>`, `live_sms_<id>`), and writes
 returned/index.json, the manifest's `returned` block and one `returned` row
 in the ledger. A missing hand-off raises `Refused` (`.reasons`).
 
-Moved here from lab/damon/handoff-standard/skill/handoff.py (SI-143
+Moved here from lab/owner/handoff-standard/skill/handoff.py (SI-143
 (take-back home)), verbatim but for the ledger row's `via`. Callers load this
 file by path: email-production klaviyo_upload.py, meta-upload upload.py,
 video-edit handoff_run.py, and the lab hand-off tool.

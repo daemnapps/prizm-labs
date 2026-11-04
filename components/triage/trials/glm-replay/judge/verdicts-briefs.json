@@ -2,7 +2,7 @@
  {"issue": "atlas#6",
   "A": {"errors": [], "unverified": 1, "completeness": 2, "usefulness": 2},
   "B": {"errors": [{"claim": "If ignored, CLI-13 (id-tag lint) keeps flagging this file; the fix makes it pass the lint the rest of the repo lives under", "why_wrong": "The id-tag lint only scans the-org/decision-log.md, PLATFORM-CONTEXT.md and team/plans/*.md; components/atlas/CLAUDE.md is never linted, so CLI-13 neither flags it now nor would after the fix", "cite": ".githooks/id-tag-lint.py:34-38@0fabb40eb"}], "unverified": 1, "completeness": 2, "usefulness": 1},
-  "pick": "A", "reason": "A's line and tag claims all check out and it names the exact tags to add, while B wrongly says CLI-13 lints this file and sends a contract edit to the steph lane."},
+  "pick": "A", "reason": "A's line and tag claims all check out and it names the exact tags to add, while B wrongly says CLI-13 lints this file and sends a contract edit to the pm lane."},
  {"issue": "copywriter#6",
   "A": {"errors": [{"claim": "On any clone without the working folder, both tools silently report nothing (and a fresh clone rebuilds a library that misses every teardown)", "why_wrong": "build_library.teardowns() calls runs.iterdir() with no is_dir guard, so a missing folder raises FileNotFoundError and the build crashes rather than silently reporting zero; only batch_status guards it", "cite": "tools/copywriter/library/build_library.py:226-228@0fabb40eb"}], "unverified": 1, "completeness": 2, "usefulness": 1},
   "B": {"errors": [], "unverified": 2, "completeness": 2, "usefulness": 2},

@@ -28,8 +28,8 @@ import image_edit as RE  # noqa: E402
 from image_edit import engine as E  # noqa: E402,F401
 
 LIB = HERE / "library"
-V2 = LIB / "fixes-v2-damon.json"
-V3 = LIB / "fixes-v3-damon.json"
+V2 = LIB / "fixes-v2-owner.json"
+V3 = LIB / "fixes-v3-owner.json"
 PRODUCT_FIX = HERE.parent / "video-production" / "machine" / "product_fix.py"
 RULE_6 = {"draft", "approved", "deprecated"}
 
@@ -98,7 +98,7 @@ def rows(path):
 class TestFixesV3(unittest.TestCase):
     def test_the_newest_library_is_the_one_the_engine_reads(self):
         table, path = RE.fixes()
-        self.assertEqual(path.name, "fixes-v4-damon.json")
+        self.assertEqual(path.name, "fixes-v4-owner.json")
 
     def test_every_row_status_is_a_rule_6_word(self):
         d = doc(V3)

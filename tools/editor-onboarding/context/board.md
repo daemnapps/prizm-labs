@@ -26,8 +26,8 @@ Built 22 Sep 2026, 17:03. The artifact is the page; this is its Markdown mirror.
 
 ## The prompts
 
-Verbatim in `prompts/01-day-one-v3-damon.md` and `prompts/02-pull-briefs-v3-damon.md`.
+Verbatim in `prompts/01-day-one-v3-owner.md` and `prompts/02-pull-briefs-v3-owner.md`.
 
 ## The asks
 
-`../video-production/ASKS-SPEC.md`; the handoff section in `stage-6-handoff/stage6-handoff-v5-damon.md`.
+`../video-production/ASKS-SPEC.md`; the handoff section in `stage-6-handoff/stage6-handoff-v5-owner.md`.

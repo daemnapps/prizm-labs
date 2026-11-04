@@ -66,7 +66,7 @@ modules — is read from `brands/<brand>/email/design-formats/components.json`;
 the first intake of a brand writes a starter from the layouts it finds and
 `identity/` (wordmark svg, `palette.md`), which the designer then tightens.
 
-## 3 · Build a month — **`lab/damon/marketing-calendar/`**
+## 3 · Build a month — **`lab/owner/marketing-calendar/`**
 
     python3 machine/marketing_calendar.py YYYY-MM --brand <brand> [--start-day N]
     python3 machine/serve.py                 # review it before any copy is written

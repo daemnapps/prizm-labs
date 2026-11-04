@@ -142,14 +142,14 @@ class DryRun(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             keep, R.PROMPTS = R.PROMPTS, Path(tmp)
             # numeric, not alphabetical: v10 beats v9
-            (Path(tmp) / "cal3-cells-v9-damon.md").write_text("old {month}")
-            (Path(tmp) / "cal3-cells-v10-damon.md").write_text("{month} {state} {nobody_fills_this}")
+            (Path(tmp) / "cal3-cells-v9-owner.md").write_text("old {month}")
+            (Path(tmp) / "cal3-cells-v10-owner.md").write_text("{month} {state} {nobody_fills_this}")
             try:
                 lines, problems = DRY.prompt_report("cells", {"month": "2026-11", "state": ""})
             finally:
                 R.PROMPTS = keep
         text = "\n".join(lines)
-        self.assertIn("cal3-cells-v10-damon.md", text)
+        self.assertIn("cal3-cells-v10-owner.md", text)
         self.assertIn("{nobody_fills_this}  MISSING", text)
         self.assertIn("{state}  EMPTY", text)
         self.assertEqual(len(problems), 1)

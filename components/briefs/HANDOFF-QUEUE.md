@@ -19,7 +19,7 @@ Shared Assets/runs/handoffs/<role>/<brand>/<same folder name>/    on the Drive (
 | `graphic-designer` | the team | pictures |
 | `video-editor` | the team | video |
 
-The folder name is the brief's register key with the catalog product name, e.g. `brand_a_flex-face-brush_brief-0296`.
+The folder name is the brief's register key with the catalog product name, e.g. `brand_a_widget-face-brush_brief-0296`.
 `handoff.py` (`tools/image-edit/`) writes it; nobody builds one by hand.
 
 ## What makes a hand-off ready

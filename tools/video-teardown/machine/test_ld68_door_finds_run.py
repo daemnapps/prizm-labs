@@ -30,7 +30,7 @@ mini_step = _load("mini_step_ld68", HERE / "mini_step.py")
 def _fake_chain(root, who):
     return types.SimpleNamespace(
         runs_root=lambda create=True: Path(root),
-        run_slug=lambda base, w=None: base if (w or who) == "damon" else "%s--%s" % (base, w or who))
+        run_slug=lambda base, w=None: base if (w or who) == "owner" else "%s--%s" % (base, w or who))
 
 
 def _run(root, name):
@@ -43,35 +43,35 @@ def _run(root, name):
 class DoorFindsRun(unittest.TestCase):
     def test_operator_suffixed_folder_is_found(self):
         with tempfile.TemporaryDirectory() as t:
-            C = _fake_chain(t, "dayu")
-            want = _run(t, "lab-x--dayu")
+            C = _fake_chain(t, "engineer")
+            want = _run(t, "lab-x--engineer")
             self.assertEqual(mini_step.work_dir("lab-x", C), want)
 
     def test_owner_bare_folder_is_found(self):
         with tempfile.TemporaryDirectory() as t:
-            C = _fake_chain(t, "damon")
+            C = _fake_chain(t, "owner")
             want = _run(t, "lab-x")
             self.assertEqual(mini_step.work_dir("lab-x", C), want)
 
     def test_only_bare_folder_falls_back_to_it(self):
         with tempfile.TemporaryDirectory() as t:
-            C = _fake_chain(t, "dayu")
+            C = _fake_chain(t, "engineer")
             want = _run(t, "lab-x")
             self.assertEqual(mini_step.work_dir("lab-x", C), want)
 
     def test_neither_exists_gives_bare_path_without_raising(self):
         with tempfile.TemporaryDirectory() as t:
-            C = _fake_chain(t, "dayu")
+            C = _fake_chain(t, "engineer")
             got = mini_step.work_dir("lab-x", C)
             self.assertEqual(got, Path(t) / "lab-x")
             self.assertFalse(got.exists())
 
     def test_fake_matches_the_real_rule(self):
         real = _load("chain_ld68", HERE / "chain.py")
-        with mock.patch.dict(os.environ, {"TEARDOWN_RAN_BY": "dayu"}):
-            self.assertEqual(real.run_slug("lab-x"), "lab-x--dayu")
+        with mock.patch.dict(os.environ, {"TEARDOWN_RAN_BY": "engineer"}):
+            self.assertEqual(real.run_slug("lab-x"), "lab-x--engineer")
             with tempfile.TemporaryDirectory() as t:
-                self.assertEqual(_fake_chain(t, "dayu").run_slug("lab-x"), real.run_slug("lab-x"))
+                self.assertEqual(_fake_chain(t, "engineer").run_slug("lab-x"), real.run_slug("lab-x"))
 
 
 if __name__ == "__main__":

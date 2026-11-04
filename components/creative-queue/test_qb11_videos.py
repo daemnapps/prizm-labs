@@ -20,7 +20,7 @@ import statics as S  # noqa: E402
 from test_qb9_statics import FakeDrive  # noqa: E402
 
 VIDEO_BRIEF = "<!-- prompt -->\n\n# Entanglement, 45 s with the pitch — song ad cut\n\n## Sources (all existing)\n"
-KEY = "brand_a_flex-face-brush_brief-0274"
+KEY = "brand_a_widget-face-brush_brief-0274"
 
 
 def video(back=None, complete=True):
@@ -47,18 +47,18 @@ class Base(unittest.TestCase):
 
 class Read(Base):
     def test_rows_titles_and_no_returned_folder_is_empty(self):
-        d = drive(**{KEY: video(), "brand_a_flex-face-brush_brief-0075": video(("cut.mp4", "notes.txt")),
-                     "brand_a_flex-face-brush_brief-0076": video(complete=False)})
+        d = drive(**{KEY: video(), "brand_a_widget-face-brush_brief-0075": video(("cut.mp4", "notes.txt")),
+                     "brand_a_widget-face-brush_brief-0076": video(complete=False)})
         before = copy.deepcopy(d.tree)
         got = S.listing(d, self.out, role="video-editor")
         rows = {r["key"]: r for r in got["rows"]}
-        self.assertEqual(sorted(rows), ["brand_a_flex-face-brush_brief-0075", KEY])
-        self.assertEqual([g["key"] for g in got["incomplete"]], ["brand_a_flex-face-brush_brief-0076"])
+        self.assertEqual(sorted(rows), ["brand_a_widget-face-brush_brief-0075", KEY])
+        self.assertEqual([g["key"] for g in got["incomplete"]], ["brand_a_widget-face-brush_brief-0076"])
         r = rows[KEY]
         self.assertEqual((r["title"], r["returned_files"], r["returned_work"], r["returned_id"], r["picture"]),
                          ("Entanglement, 45 s with the pitch — song ad cut", 0, 0, None, None))
-        self.assertEqual((rows["brand_a_flex-face-brush_brief-0075"]["returned_files"],
-                          rows["brand_a_flex-face-brush_brief-0075"]["returned_work"]), (2, 2), "any file counts for video")
+        self.assertEqual((rows["brand_a_widget-face-brush_brief-0075"]["returned_files"],
+                          rows["brand_a_widget-face-brush_brief-0075"]["returned_work"]), (2, 2), "any file counts for video")
         self.assertEqual(d.tree, before, "nothing is created on Drive: no returned/ folder appears")
         self.assertEqual(d.gets, ["runs/handoffs/video-editor/brand-a/%s/BRIEF.md" % k for k in sorted(rows)],
                          "only the briefs are fetched: no picture for video")
@@ -69,7 +69,7 @@ class Read(Base):
         self.assertIn("graphic-designer", got["error"])
 
     def test_titles(self):
-        self.assertEqual(S.title_of("# DOCUMENT ONE\n\n# BRIEF · BRAND-A · FLEX · The warehouse\n", "k"), "The warehouse")
+        self.assertEqual(S.title_of("# DOCUMENT ONE\n\n# BRIEF · BRAND-A · WIDGET · The warehouse\n", "k"), "The warehouse")
         self.assertEqual(S.title_of("# DOCUMENT ONE — THE BRIEF\n# The fight × pastor barber\n", "k"), "The fight × pastor barber")
         self.assertEqual(S.title_of("no heading here", "k"), "k")
 
@@ -81,7 +81,7 @@ class TheDone(Base):
         def file_request(**a):
             filed.append(a)
             return {"item": "rv-9", "route": "git", "path": str(self.out / "review.json")}
-        said = S.done(d, KEY, "ahmed", self.out, file_request=file_request, now="2026-10-29T22:00:00Z",
+        said = S.done(d, KEY, "editor", self.out, file_request=file_request, now="2026-10-29T22:00:00Z",
                       commit_paths=lambda paths, msg, repo: commits.append((paths, msg)), role="video-editor")
         return said, filed, commits
 
@@ -92,12 +92,12 @@ class TheDone(Base):
             self.assertEqual(str(e.exception), "Not sent: returned/ is empty. Put your finished cut there first.")
             self.assertFalse((self.out / "brand-a" / KEY / "done.json").exists())
 
-    def test_one_request_to_steph_on_the_video_lane(self):
+    def test_one_request_to_pm_on_the_video_lane(self):
         said, filed, commits = self.run_done(drive(**{KEY: video(("cut-45.mp4", "cut-45.srt"))}))
         self.assertEqual(said, "Sent to the team: Entanglement, 45 s with the pitch — song ad cut, 2 files back.")
         self.assertEqual(len(filed), 1)
         f = filed[0]
-        self.assertEqual((f["reviewers"], f["lane"], f["type"], f["requested_by"]), (["steph"], "video-done", "video", "ahmed"))
+        self.assertEqual((f["reviewers"], f["lane"], f["type"], f["requested_by"]), (["pm"], "video-done", "video", "editor"))
         self.assertIn("finished the video for brief", f["notes"])
         rec = json.loads((self.out / "brand-a" / KEY / "done.json").read_text())
         self.assertEqual((rec["role"], rec["by"], rec["returned_files"]), ("video-editor", "the team", 2))
@@ -106,7 +106,7 @@ class TheDone(Base):
 
     def test_cli_role_and_a_bad_role(self):
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            code = S.main(["done", KEY, "--role", "video-editor", "--by", "ahmed", "--out", str(self.out)],
+            code = S.main(["done", KEY, "--role", "video-editor", "--by", "editor", "--out", str(self.out)],
                           drive=drive(**{KEY: video()}))
         self.assertEqual((code, out.getvalue().strip()), (2, "Not sent: returned/ is empty. Put your finished cut there first."))
         with contextlib.redirect_stderr(io.StringIO()):
@@ -129,7 +129,7 @@ class TheDone(Base):
             self.assertEqual((got["rows"], got["error"]), ([], S.NO_DRIVE))
             self.assertIn("GDRIVE_SA_KEY", got["detail"])
             with contextlib.redirect_stdout(io.StringIO()) as out:
-                self.assertEqual(S.main(["done", KEY, "--role", "video-editor", "--by", "ahmed", "--out", str(self.out)]), 1)
+                self.assertEqual(S.main(["done", KEY, "--role", "video-editor", "--by", "editor", "--out", str(self.out)]), 1)
             self.assertEqual(out.getvalue().strip().splitlines()[-1], "Not sent: %s." % S.NO_DRIVE, "the kit shows the last line")
         finally:
             S.Drive = real

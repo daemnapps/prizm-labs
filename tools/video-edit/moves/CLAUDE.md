@@ -15,10 +15,10 @@ index → shortlist → prompt → options → the owner picks → the build
 
 | Step | Who | What |
 |---|---|---|
-| index | Claude keeps it | `library/moves-v1-damon.json`: 89 moves in 9 families, same versioned-library pattern as image-edit's fixes/variations. Each has what you see, a real reference (or "house move"), the music event that fires it, how our machine builds it, the cost, a wow score (1–3), and what makes it look cheap. A changed row is a new file (`-v2-damon.json`); new moves get added to the current one. |
+| index | Claude keeps it | `library/moves-v1-owner.json`: 89 moves in 9 families, same versioned-library pattern as image-edit's fixes/variations. Each has what you see, a real reference (or "house move"), the music event that fires it, how our machine builds it, the cost, a wow score (1–3), and what makes it look cheap. A changed row is a new file (`-v2-owner.json`); new moves get added to the current one. |
 | shortlist | the machine | `machine/suggest.py` reads the project's loop, the kick and bass files and the 3D catalogue, and writes the 8 best candidate moves per scene, scored by plain rules (the music in that bar, the scene's kind, the objects in it). No API, no cost. |
-| prompt | Claude | `prompts/creative-director-v1-damon.md`, word for word, once per scene, on the shortlist. |
-| options | Claude | `out/<project>-options-vN-damon.md`: 3 options per scene, each with the move ids, the exact second and beat it fires, what you see and feel, how it's built, the cost, what to watch for. |
+| prompt | Claude | `prompts/creative-director-v1-owner.md`, word for word, once per scene, on the shortlist. |
+| options | Claude | `out/<project>-options-vN-owner.md`: 3 options per scene, each with the move ids, the exact second and beat it fires, what you see and feel, how it's built, the cost, what to watch for. |
 | pick | **the owner** | He chooses. Nothing is built or generated before he does. |
 | build | the machine | The picked moves go to the edit (ffmpeg), Blender (objects, see `components/objects/`), or Higgsfield (paid, only with his OK). |
 
@@ -44,4 +44,4 @@ it and writes the options file.
   it says "house move".
 - **Times come from the song files** (`song/crsl/kicks.json`, `bass.json`).
   Snares aren't measured yet, so nothing is timed to one.
-- **The prompt is kept verbatim.** A change to it is a new version (`-v2-damon`).
+- **The prompt is kept verbatim.** A change to it is a new version (`-v2-owner`).

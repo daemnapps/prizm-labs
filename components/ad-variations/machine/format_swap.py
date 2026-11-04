@@ -29,7 +29,7 @@ CAP = 24000
 
 
 def newest_prompt():
-    ps = sorted(p for p in PROMPTS.glob("stage-format-swap-v*-damon.md"))
+    ps = sorted(p for p in PROMPTS.glob("stage-format-swap-v*-owner.md"))
     return max(ps, key=lambda p: int(p.stem.split("-v")[1].split("-")[0]))
 
 

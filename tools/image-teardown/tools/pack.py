@@ -44,7 +44,7 @@ WS = _P.REPO                      # the workspace, found by walking up — not c
 import briefs as B
 import deliver as D
 
-# Where a machine's output lands (lab/damon/CLAUDE.md, 2026-09-17): the
+# Where a machine's output lands (lab/owner/CLAUDE.md, 2026-09-17): the
 # record in git at runs/<machine>/<brand>/<run-label>/, media on Drive at the
 # mirrored path. The zip is media; the README is its record.
 MACHINE = "image-teardown"

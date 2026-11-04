@@ -647,7 +647,7 @@ def main():
             "to the source's week — strip it and let the argument stand on its own. Writing "
             "a price in anyway is the single worst thing this stage can do, because it puts "
             "one in front of a reader the plan deliberately did not price to.\n\n"
-            "**It still ends on a product.** RULED BY DAMON 2026-09-21: \"Every email should "
+            "**It still ends on a product.** RULED BY OWNER 2026-09-21: \"Every email should "
             "have some sort of refocus back into a product in some capacity… even if it's more "
             "like a value email, just make sure we have the ability to make money in each of "
             "these emails.\" No offer means no PRICE, never no destination. The button goes to "

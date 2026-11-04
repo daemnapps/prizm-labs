@@ -65,8 +65,8 @@ class Base(unittest.TestCase):
         write(seed / "team/dispatch-grants.json", json.dumps({"components": []}))
         write(seed / "team/people/alice/identity.json", json.dumps(
             {"person": "alice", "emails": [{"address": "alice@example.com"}]}))
-        write(seed / "team/people/dayu/identity.json", json.dumps(
-            {"person": "dayu", "emails": [{"address": "dayu@example.com"}]}))
+        write(seed / "team/people/engineer/identity.json", json.dumps(
+            {"person": "engineer", "emails": [{"address": "engineer@example.com"}]}))
         write(seed / "tracked.txt", "tracked\n")
         self.ident(seed, "seed")
         sh(seed, "add", "-A")
@@ -74,7 +74,7 @@ class Base(unittest.TestCase):
         sh(seed, "remote", "add", "origin", str(self.origin))
         sh(seed, "push", "-q", "origin", "main")
         self.clone = self.clone_as("alice", "clone")
-        self.other = self.clone_as("dayu", "other")
+        self.other = self.clone_as("engineer", "other")
         self.out = []
         self.dirs_before = publish_dirs()
 
@@ -188,7 +188,7 @@ class TestPublishOffClone(Base):
         code = D.main(["open", "--slug", "np", "--ask", "why?", "--no-push"], repo=self.clone,
                       git=M.git_run, now=NOW, say=out.append, env={}, host="alices-mbp")
         self.assertEqual(code, 0, "\n".join(out))
-        rel = "team/threads/dayu/20261023T1430Z-alice-np/001-alice.md"
+        rel = "team/threads/engineer/20261023T1430Z-alice-np/001-alice.md"
         self.assertTrue((self.clone / rel).is_file())
         self.assertEqual(sh(self.clone, "rev-parse", "HEAD~1").strip(), before)
         self.assertEqual(sh(self.clone, "show", "--name-only", "--format=", "HEAD").split(), [rel])

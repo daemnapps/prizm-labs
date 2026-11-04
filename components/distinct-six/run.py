@@ -35,7 +35,7 @@ SECTION_IDS = [x["id"] for x in SECTIONS]
 PALETTE = ["#e0663a", "#d1a12a", "#c2410c", "#8a5a2b", "#2f6fd6", "#3aa3b8", "#5b6ee1", "#2a9d6f",
            "#a35bd1", "#e05a9a", "#b8862a", "#16825d", "#4fb37a", "#7a7f99", "#c94f4f"]
 COLOR = {s: PALETTE[i % len(PALETTE)] for i, s in enumerate(SECTION_IDS)}
-PROMPT = sorted((HERE / "prompts").glob("stage4v-distinct-v*-damon.md"),
+PROMPT = sorted((HERE / "prompts").glob("stage4v-distinct-v*-owner.md"),
                 key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))[-1]
 MIN = json.loads((ROOT / "components" / "creative-diversity" / "dimensions.json").read_text())["rule"]["min_moves"]
 

@@ -29,16 +29,16 @@
     ]
    }
   },
-  "damon-saves": {
+  "owner-saves": {
    "kind": "saved-posts-capture",
    "market": "mixed — saved for market-opportunity / viral / novel-format signal, not one audience; per-row avatar_fit and bucket tags carry what is known",
-   "evidence": "components/swipe-organic/records/damon-saves/catalog.json",
+   "evidence": "components/swipe-organic/records/owner-saves/catalog.json",
    "fits": []
   },
   "brand-a-email": {
    "kind": "our-shipped-sends",
    "market": "BRAND-A's own list — men, grooming/skincare",
-   "evidence": "lab/damon/brands/brand-a/email/",
+   "evidence": "lab/owner/brands/brand-a/email/",
    "fits": [
     {
      "brand": "brand-a"
@@ -54,7 +54,7 @@
   "brand-b-pages": {
    "kind": "our-pages",
    "market": "Brand-B's own market — women 45+, body skin",
-   "evidence": "lab/damon/brands/brand-b/existing-content/",
+   "evidence": "lab/owner/brands/brand-b/existing-content/",
    "fits": [
     {
      "brand": "brand-b"

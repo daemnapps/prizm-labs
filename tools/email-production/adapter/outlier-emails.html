@@ -185,19 +185,19 @@ function how(h){
     ${h.prompt?`<details><summary>The prompt exactly as sent</summary><pre>${esc(h.prompt)}</pre></details>`:""}</details>`;
 }
 function sectionEditor(e,s){
-  const steph=who==="the team", eve=who==="the team";
+  const pm=who==="the team", designer=who==="the team";
   const pend=callsFor(e.id,s.i).filter(open);
   const words=(s.fields||[]).length?`<div class="part"><span class="eye">The words</span>
-     ${steph?"":`<p class="lock">the team does the final wording. Write a note in Send back if a line bothers you.</p>`}
-     ${s.fields.map((f,k)=>`<label>${esc(fieldName(f.path))}<textarea data-f="${k}" ${steph?"":"readonly"}>${esc(plain(f.value))}</textarea></label>`).join("")}
-     ${steph?`<div class="btns"><button type="button" class="btn go" id="saveWords" disabled>Save the new words</button><span class="note" id="wcount"></span></div>`:""}</div>`:"";
+     ${pm?"":`<p class="lock">the team does the final wording. Write a note in Send back if a line bothers you.</p>`}
+     ${s.fields.map((f,k)=>`<label>${esc(fieldName(f.path))}<textarea data-f="${k}" ${pm?"":"readonly"}>${esc(plain(f.value))}</textarea></label>`).join("")}
+     ${pm?`<div class="btns"><button type="button" class="btn go" id="saveWords" disabled>Save the new words</button><span class="note" id="wcount"></span></div>`:""}</div>`:"";
   const pics=(s.pictures||[]).length?`<div class="part"><span class="eye">${s.pictures.length>1?"The pictures":"The picture"}</span>
      ${s.pictures.map((p,k)=>`<div class="pic"><b style="font-weight:500">${s.pictures.length>1?`Picture ${k+1}: `:""}${esc(p.alt)}</b><small>${esc(p.source||"")}</small>
        ${how(p.how)}
-       ${eve?`<textarea data-pic="${k}" placeholder="ONE change, said plainly: make the pen ring red · move the mug out of frame · warmer light"></textarea>
+       ${designer?`<textarea data-pic="${k}" placeholder="ONE change, said plainly: make the pen ring red · move the mug out of frame · warmer light"></textarea>
        <div class="btns"><button type="button" class="btn" data-picgo="${k}">${p.how&&p.how.record?"Edit this picture":"Remake with this change"}</button>
        <span class="note">${p.how&&p.how.record?"Edited from its record: same references, everything else kept.":"No record yet: remade from its brief."}</span></div>`:""}</div>`).join("")}</div>`:"";
-  const look=eve?`<div class="part"><span class="eye">The look and the order</span>
+  const look=designer?`<div class="part"><span class="eye">The look and the order</span>
      <label>Change how this section looks<textarea id="lookNote" placeholder="e.g. more room around the price, swap the cream card for the gold rule"></textarea></label>
      <div class="btns"><button type="button" class="btn" id="lookGo">Redesign this section</button>
        <button type="button" class="btn" data-move="up" ${s===e.sections[0]?"disabled":""}>Move up</button>
@@ -211,7 +211,7 @@ function sectionEditor(e,s){
     ${(e.gaps||[]).filter(g=>(e.sections||[])[g.section]?.i===s.i).map(g=>`<p class="err">Gap · ${esc(g.field)}: ${esc(g.why)}${g.ask?` · ${esc(g.ask)}`:""}</p>`).join("")}
     ${pend.length?`<p class="note" style="color:var(--wait)">${pend.length} change${pend.length>1?"s":""} on this section waiting to apply.</p>`:""}
     ${words}${pics}${look}
-    ${!(s.fields||[]).length&&!(s.pictures||[]).length&&!eve?`<p class="note">Nothing to word here. Mark it right, or move on.</p>`:""}
+    ${!(s.fields||[]).length&&!(s.pictures||[]).length&&!designer?`<p class="note">Nothing to word here. Mark it right, or move on.</p>`:""}
     <div id="secSaid" aria-live="polite"></div></div>`;
 }
 

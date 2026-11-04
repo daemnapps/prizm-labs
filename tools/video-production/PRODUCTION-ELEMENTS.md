@@ -110,4 +110,4 @@ Checked field by field (`elements-standard.json → provenance_rules`):
   audio, real footage. Git holds the record and small copies; `full/`, audio and
   video are git-ignored.
 - **In code:** `machine/element_paths.py` is the only place these paths are written.
-- **Prompts:** `prompts/stage-0f-cast/cast-sheets-v*-damon.md`, newest wins.
+- **Prompts:** `prompts/stage-0f-cast/cast-sheets-v*-owner.md`, newest wins.

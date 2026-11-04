@@ -104,8 +104,8 @@ class KeysCase(unittest.TestCase):
 
 class Loader(KeysCase):
     def test_loaded_by_path_under_its_own_name(self):
-        self.assertEqual(keys._loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], keys._loader)
+        self.assertEqual(keys._loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], keys._loader)
         self.assertEqual(Path(keys._loader.__file__).resolve(),
                          HERE.parents[1] / "keys" / "loader.py")
         self.assertNotIn(str(HERE.parents[1] / "keys"), sys.path)
@@ -232,7 +232,7 @@ class Union(KeysCase):
     def test_key_file_present_is_the_only_file_listed(self):
         self.seed()
         self.helper({D: "fake-ddd"}, names=[D])
-        self.write(".upright-keys.env", E + "=fake-keyfile\n")
+        self.write(".company-keys.env", E + "=fake-keyfile\n")
         got = keys.all_keys()
         self.assertEqual(got, {E: "fake-keyfile"})
         self.assertEqual(keys.get(A, required=False), None)

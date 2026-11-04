@@ -210,7 +210,7 @@
   {
    "id": "duty",
    "label": "what the triage owner may change alone in someone else's component: Option 3, ruled 2026-10-02 (the owner said yes), under four limits",
-   "who": "dayu",
+   "who": "engineer",
    "cite": "components/triage/proposals/triage-owner-scope.json@fc6ea100c"
   }
  ],
@@ -809,7 +809,7 @@
    "if_ignored": "The triage owner keeps asking owners about issues they would agree with anyway.",
    "lane": "decision",
    "severity": "P1",
-   "resolved": "Ruled 2026-10-02: option 3. the owner said yes to the first-step question (relayed by the team: \"damon decided yes on option 3\"). Limits: the summary names the fix and a test proves it; no test check weakened; no live-pipeline change; every change in the decision log with a one-line undo."
+   "resolved": "Ruled 2026-10-02: option 3. the owner said yes to the first-step question (relayed by the team: \"owner decided yes on option 3\"). Limits: the summary names the fix and a test proves it; no test check weakened; no live-pipeline change; every change in the decision log with a one-line undo."
   },
   {
    "n": 3,

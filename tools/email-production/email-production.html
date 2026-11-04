@@ -342,7 +342,7 @@ built.</p>
 <section>
   <div class="sh"><div class="kick">Step 2, in full</div><h2>The prompts that run today</h2></div>
   <p class="sn">The files as they are on disk.</p>
-  <div class="pr"><div class="prh"><h4>0 · Triage</h4><span class="fn">stage0-triage-v2-damon.md</span></div><pre>Today is: {today}
+  <div class="pr"><div class="prh"><h4>0 · Triage</h4><span class="fn">stage0-triage-v2-owner.md</span></div><pre>Today is: {today}
 Here is the source: {source}
 Here is where it came from: {source_reference}
 Here are the formats this lane knows: {formats}
@@ -409,7 +409,7 @@ Then, briefly:
 - **IDENTIFIABLE** — is the speaker a real, named, traceable person: yes or no
 
 Give me the five labelled answers first, then the brief lines. Nothing else.
-</pre></div><div class="pr"><div class="prh"><h4>1 · Read</h4><span class="fn">stage1-read-v2-damon.md</span></div><pre>**Everything named in this prompt as an example is an example of a SHAPE, not
+</pre></div><div class="pr"><div class="prh"><h4>1 · Read</h4><span class="fn">stage1-read-v2-owner.md</span></div><pre>**Everything named in this prompt as an example is an example of a SHAPE, not
 of content.** No brand, product, person, price or phrase in this file belongs in
 your answer. Your answer&#x27;s content comes only from the inputs below.
 
@@ -568,7 +568,7 @@ it, so no reader of this record can take the broken form for the sender&#x27;s
 choice.
 
 If you find none, say `no source defects found`.
-</pre></div><div class="pr"><div class="prh"><h4>2 · Spec</h4><span class="fn">stage2-spec-v2-damon.md</span></div><pre>**Everything named in this prompt as an example is an example of a SHAPE, not
+</pre></div><div class="pr"><div class="prh"><h4>2 · Spec</h4><span class="fn">stage2-spec-v2-owner.md</span></div><pre>**Everything named in this prompt as an example is an example of a SHAPE, not
 of content.** No brand, product, person, price or phrase in this file belongs in
 your answer. Your answer&#x27;s content comes only from the inputs below.
 
@@ -716,7 +716,7 @@ device is one way of doing it.
    a social row or a footer — or repeats a mistake the source made — furniture
    or a defect is still in here, and the next stage will write it into our
    email. Go back and take it out.
-</pre></div><div class="pr"><div class="prh"><h4>2B · Context scout</h4><span class="fn">stage1b-context-scout-v1-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>2B · Context scout</h4><span class="fn">stage1b-context-scout-v1-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the brand-free construct built from the source: {spec}
 Here is everything this brand knows, file by file: {context_index}
@@ -814,7 +814,7 @@ holiday the offer would collide with, a timeline claim that reads differently
 in this month than another. If the date genuinely does not bear on this
 concept, say exactly that. Do not invent a seasonal angle to have something
 to write.
-</pre></div><div class="pr"><div class="prh"><h4>3 · Injection</h4><span class="fn">stage3-injection-v3-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>3 · Injection</h4><span class="fn">stage3-injection-v3-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the record of the source: {record}
 Here is the brand-free construct: {spec}
@@ -927,7 +927,7 @@ have not injected anything.
 
 ## THE CUSTOMER&#x27;S OWN WORDS — the copywriter&#x27;s rules, word for word
 
-Carried from `tools/copywriter/prompts/stage3-injection-v2-damon.md` on
+Carried from `tools/copywriter/prompts/stage3-injection-v2-owner.md` on
 2026-09-19 (the owner: &quot;hook up email to the actual customer&quot;). Email&#x27;s writer had
 the voice rules but never the queried rows, and never these rules for using them.
 
@@ -986,7 +986,7 @@ thought, not the sentence&quot;; 2026-09-20: &quot;all this choppiness… nobody
 going to read. It needs to actually feel real&quot;). An email is read, not heard —
 but it is read in the head, in a voice. So section 0 binds every line you
 write: **one thought is one sentence. Never chop a thought into a row of short
-statements.** &quot;Day 90. The Vitals Set.&quot; is a chop; say the thought whole. The
+statements.** &quot;Day 90. The Starter Set.&quot; is a chop; say the thought whole. The
 voice-model settings and the audio punctuation marks are for audio — ignore
 them here; the rhythm rules are not.
 
@@ -1052,7 +1052,7 @@ a filler you invented.
 
 **COLLISIONS** — every place a language-bank phrasing lost to a voice rule, or
 a brand claim lost to the sender&#x27;s ceiling. One line each, or &quot;none&quot;.
-</pre></div><div class="pr"><div class="prh"><h4>4 · Placement</h4><span class="fn">stage4-placement-v1-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>4 · Placement</h4><span class="fn">stage4-placement-v1-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the record of the source: {record}
 Here is the brand-free construct: {spec}
@@ -1130,7 +1130,7 @@ the scroll they hit it. Name the objection and the position. Stage 7 answers
 it; this stage only says where the flinch is.
 
 Give me the five decisions, labelled, each with its reason. Nothing else.
-</pre></div><div class="pr"><div class="prh"><h4>5 · Subject lines</h4><span class="fn">stage5-subjects-v2-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>5 · Subject lines</h4><span class="fn">stage5-subjects-v2-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the record of the source: {record}
 Here is the brand-free construct: {spec}
@@ -1254,7 +1254,7 @@ evidence for.
 Give me VERSION 0 first — subject, preview, its headline-rule result — then
 the variations, each with its one-line intent and headline-rule result, then
 the from-name note. Nothing else.
-</pre></div><div class="pr"><div class="prh"><h4>6 · Expansion</h4><span class="fn">stage6-expansion-v1-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>6 · Expansion</h4><span class="fn">stage6-expansion-v1-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the brand-free construct: {spec}
 Here is the injected piece: {injection}
@@ -1333,7 +1333,7 @@ the actual lines, written in the construct&#x27;s voice rules.
 
 Give me the gated list, then the expanded email in full with the needed moves
 in place — still as content, not as blocks. Stage 8 decides what is a block.
-</pre></div><div class="pr"><div class="prh"><h4>7 · Close</h4><span class="fn">stage7-close-v2-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>7 · Close</h4><span class="fn">stage7-close-v2-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the email so far: {body}
 Here is who this email comes from, and what they may claim: {sender_identity}
@@ -1357,7 +1357,7 @@ thought, not the sentence&quot;; 2026-09-20: &quot;all this choppiness… nobody
 going to read. It needs to actually feel real&quot;). An email is read, not heard —
 but it is read in the head, in a voice. So section 0 binds every line you
 write: **one thought is one sentence. Never chop a thought into a row of short
-statements.** &quot;Day 90. The Vitals Set.&quot; is a chop; say the thought whole. The
+statements.** &quot;Day 90. The Starter Set.&quot; is a chop; say the thought whole. The
 voice-model settings and the audio punctuation marks are for audio — ignore
 them here; the rhythm rules are not.
 
@@ -1460,7 +1460,7 @@ close, as continuous content, so the whole thing exists in one place and can
 be read for whether it holds together. Still as content, not as blocks.
 
 **ONE LINE ON WHAT THIS ENDING DOES** — for the brief.
-</pre></div><div class="pr"><div class="prh"><h4>8 · Build</h4><span class="fn">stage8-build-v3-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>8 · Build</h4><span class="fn">stage8-build-v3-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is the placement plan: {placement}
 Here is the email, end to end: {close}
@@ -1568,7 +1568,7 @@ Give me, in this order:
 
 `offer` is `null` when the send sells nothing; `offer.image` is `null` when no
 second picture is needed. The first `subjects` entry is the control.
-</pre></div><div class="pr"><div class="prh"><h4>9 · Brief</h4><span class="fn">stage9-brief-v2-damon.md</span></div><pre>Today is: {today}
+</pre></div><div class="pr"><div class="prh"><h4>9 · Brief</h4><span class="fn">stage9-brief-v2-owner.md</span></div><pre>Today is: {today}
 Here is what triage decided: {triage}
 Here is where the source came from: {source_reference}
 Here is the record of the source: {record}
@@ -1638,7 +1638,7 @@ sends. Stated plainly rather than smoothed over.
 
 If this section is empty, say &quot;nothing unresolved&quot; — never leave it out, or a
 reader cannot tell the difference between clean and unchecked.
-</pre></div><div class="pr"><div class="prh"><h4>D0 · Design · the moment, researched</h4><span class="fn">design0-moment-v1-damon.md</span></div><pre># Design step 0 · the moment world
+</pre></div><div class="pr"><div class="prh"><h4>D0 · Design · the moment, researched</h4><span class="fn">design0-moment-v1-owner.md</span></div><pre># Design step 0 · the moment world
 
 PRODUCT TRUTH IS LAW: every product appears exactly as its product file describes it (its container, colour,
 proportion and how it is held); never call it or draw it as anything else.
@@ -1733,7 +1733,7 @@ stamps, clip-art shopping bags, countdown clocks with no real deadline). None of
 
 Invented example of ONE seed line, for the SHAPE only:
 `the porch drop-off — a package left on the welcome mat in the cold — the tube is what&#x27;s inside the box she opens — profile §5`
-</pre></div><div class="pr"><div class="prh"><h4>D1 · Design · the job card</h4><span class="fn">design1-jobcard-v1-damon.md</span></div><pre># Design step 1 + 1b · the job card and the concept
+</pre></div><div class="pr"><div class="prh"><h4>D1 · Design · the job card</h4><span class="fn">design1-jobcard-v1-owner.md</span></div><pre># Design step 1 + 1b · the job card and the concept
 
 BRAND VISUAL DNA: the signature elements that make this brand look like itself; every email uses them.
 PRODUCT TRUTH IS LAW: every product appears exactly as its product file describes it (its container, colour,
@@ -1854,7 +1854,7 @@ Return ONLY a JSON object with the slots above as lower-case keys (`reader`, `jo
 
 Invented example of the SHAPE only:
 {&quot;reader&quot;: &quot;Bought once, months ago; thinks it was fine but forgot it.&quot;, &quot;job&quot;: &quot;...&quot;, &quot;belief&quot;: &quot;...&quot;, &quot;proof&quot;: &quot;...&quot;, &quot;action&quot;: &quot;...&quot;, &quot;measure&quot;: &quot;...&quot;, &quot;cut&quot;: &quot;...&quot;, &quot;product_facts&quot;: [&quot;...&quot;], &quot;concept&quot;: &quot;...&quot;, &quot;culture&quot;: &quot;...&quot;, &quot;theme&quot;: &quot;none&quot;, &quot;subject&quot;: &quot;...&quot;, &quot;preview&quot;: &quot;...&quot;, &quot;open_question&quot;: &quot;none&quot;}
-</pre></div><div class="pr"><div class="prh"><h4>D2 · Design · the layout</h4><span class="fn">design2-layout-v1-damon.md</span></div><pre># Design step 2 · the layout
+</pre></div><div class="pr"><div class="prh"><h4>D2 · Design · the layout</h4><span class="fn">design2-layout-v1-owner.md</span></div><pre># Design step 2 · the layout
 
 BRAND VISUAL DNA: the signature elements that make this brand look like itself; every email uses them.
 PRODUCT TRUTH IS LAW: every product appears exactly as its product file describes it (its container, colour,
@@ -1993,7 +1993,7 @@ Return ONLY one JSON object, the email&#x27;s spec:
 
 Invented example of the SHAPE only:
 {&quot;kind&quot;: &quot;design&quot;, &quot;theme&quot;: null, &quot;subject&quot;: &quot;...&quot;, &quot;preview&quot;: &quot;...&quot;, &quot;sections&quot;: [{&quot;s&quot;: &quot;band&quot;}, {&quot;s&quot;: &quot;hero_type&quot;, &quot;eyebrow&quot;: &quot;...&quot;, &quot;headline&quot;: &quot;... &lt;i&gt;...&lt;/i&gt;&quot;, &quot;picture&quot;: {&quot;stage&quot;: &quot;product:&lt;name&gt;&quot;, &quot;alt&quot;: &quot;...&quot;, &quot;source&quot;: &quot;cut&quot;}}, {&quot;s&quot;: &quot;offer&quot;, &quot;price&quot;: &quot;...&quot;, &quot;was&quot;: &quot;...&quot;, &quot;cta&quot;: &quot;...&quot;}, {&quot;s&quot;: &quot;foot&quot;}], &quot;notes&quot;: [&quot;...&quot;]}
-</pre></div><div class="pr"><div class="prh"><h4>D3 · Design · does it keep every promise</h4><span class="fn">design3-promises-v1-damon.md</span></div><pre># Design step 3 · does the email keep every promise it makes
+</pre></div><div class="pr"><div class="prh"><h4>D3 · Design · does it keep every promise</h4><span class="fn">design3-promises-v1-owner.md</span></div><pre># Design step 3 · does the email keep every promise it makes
 
 Every brand, product, offer and avatar name below comes from THIS email&#x27;s own inputs. Never bring in an example, a
 product or an offer from anywhere else, and never judge the email against a brand it is not for.

@@ -563,7 +563,7 @@
    "date": "2026-10-28",
    "source": "owner review, 2026-10-28",
    "rule": "Each action lands on the object the shot names, and that object stays the same object through the take; the clip judge checks it.",
-   "enforced_by": "tools/video-production/prompts/v2/clip-judge-v4-damon.md :: **The action lands on the right object.**",
+   "enforced_by": "tools/video-production/prompts/v2/clip-judge-v4-owner.md :: **The action lands on the right object.**",
    "status": "draft",
    "said": "Each action lands on the object the shot names, and that object stays the same object through the take; the clip judge checks it."
   },
@@ -653,7 +653,7 @@
    "date": "2026-10-28",
    "source": "owner review, 2026-10-28",
    "rule": "When the swipe is an offer ad (a sale, a clearance, a deal, a price, an event), the reason for the sale is the swipe's idea: keep it, put our product and our offer into it, and make the goods on sale our product. Never turn an offer ad into a problem ad.",
-   "enforced_by": "tools/image-writing/prompts/stage4b-image-hook-v6-damon.md :: WHEN THE SWIPE IS A SALE, THE SALE IS THE IDEA",
+   "enforced_by": "tools/image-writing/prompts/stage4b-image-hook-v6-owner.md :: WHEN THE SWIPE IS A SALE, THE SALE IS THE IDEA",
    "status": "draft",
    "said": "When the swipe is an offer ad (a sale, a clearance, a deal, a price, an event), the reason for the sale is the swipe's idea: keep it, put our product and our offer into it, and make the goods on sale our product. Never turn an offer ad into a problem ad."
   },
@@ -663,7 +663,7 @@
    "date": "2026-10-28",
    "source": "owner review, 2026-10-28",
    "rule": "When our product goes into the swipe's line, fix the words around it so the line reads right for our product: a brand name takes 'much', a product people count takes 'many'; count, gender, plural and verb follow our product, not the swipe's.",
-   "enforced_by": "tools/image-writing/prompts/stage4b-image-hook-v7-damon.md :: Then make it read right for OUR product",
+   "enforced_by": "tools/image-writing/prompts/stage4b-image-hook-v7-owner.md :: Then make it read right for OUR product",
    "status": "draft",
    "said": "When our product goes into the swipe's line, fix the words around it so the line reads right for our product: a brand name takes 'much', a product people count takes 'many'; count, gender, plural and verb follow our product, not the swipe's."
   },
@@ -703,7 +703,7 @@
    "date": "2026-10-28",
    "source": "owner review, 2026-10-28",
    "rule": "Boxes or packs in the swipe become our brand's real box (its banked library picture: wrap and finish), same shape, size, stacking and places as the swipe's, and CLOSED: never open boxes showing rows of our product, which would all be drawn. Our product appears only where the swipe's hero product is, and it is the real one.",
-   "enforced_by": "tools/image-writing/prompts/stage3-image-injection-v10-damon.md :: THE SWIPE'S BOXES BECOME OUR BRAND'S REAL BOXES, CLOSED",
+   "enforced_by": "tools/image-writing/prompts/stage3-image-injection-v10-owner.md :: THE SWIPE'S BOXES BECOME OUR BRAND'S REAL BOXES, CLOSED",
    "status": "draft",
    "said": "Boxes or packs in the swipe become our brand's real box (its banked library picture: wrap and finish), same shape, size, stacking and places as the swipe's, and CLOSED: never open boxes showing rows of our product, which would all be drawn. Our product appears only where the swipe's hero product is, and it is the real one."
   },
@@ -713,7 +713,7 @@
    "date": "2026-10-28",
    "source": "owner review, 2026-10-28",
    "rule": "The swipe's type is copied as it is drawn: outline or filled box, rounded corners, a shadow behind letters, true weight (black is black), the emoji, and any arrow or icon travelling with its line. The layout read records each one and the word-setter draws each one.",
-   "enforced_by": "tools/image-teardown/prompts/stage2-image-replication-v2-damon.md :: Draw what the type sits in, exactly",
+   "enforced_by": "tools/image-teardown/prompts/stage2-image-replication-v2-owner.md :: Draw what the type sits in, exactly",
    "status": "draft",
    "said": "The swipe's type is copied as it is drawn: outline or filled box, rounded corners, a shadow behind letters, true weight (black is black), the emoji, and any arrow or icon travelling with its line. The layout read records each one and the word-setter draws each one."
   },
@@ -853,7 +853,7 @@
    "date": "2026-10-28",
    "source": "owner review, 2026-10-28",
    "rule": "Every image ad, and always an offer or seasonal one, is built on one concept borrowed from the avatar's culture map and crossed with the moment: the concept dresses the swipe's set, props, palette and type while the swipe's layout stays, and the headline is the concept talking, with one spice device, never a plain statement of dates or terms.",
-   "enforced_by": "tools/image-writing/prompts/stage3-image-injection-v13-damon.md :: ## THE CONCEPT: NEVER GENERIC (the owner, 2026-10-28) — do this before the swap",
+   "enforced_by": "tools/image-writing/prompts/stage3-image-injection-v13-owner.md :: ## THE CONCEPT: NEVER GENERIC (the owner, 2026-10-28) — do this before the swap",
    "status": "draft",
    "said": "Every image ad, and always an offer or seasonal one, is built on one concept borrowed from the avatar's culture map and crossed with the moment: the concept dresses the swipe's set, props, palette and type while the swipe's layout stays, and the headline is the concept talking, with one spice device, never a plain statement of dates or terms."
   },
@@ -863,7 +863,7 @@
    "date": "2026-10-31",
    "source": "owner review, 2026-10-31",
    "rule": "A flat product is shot straight-on and turned only in its own plane; a side or over-the-top angle makes it read thicker than it is, and any other view has to be asked for by name.",
-   "enforced_by": "tools/image-production/flex_sets_blender.py :: def _flat_view(p, tilt, rolls):",
+   "enforced_by": "tools/image-production/product_sets_blender.py :: def _flat_view(p, tilt, rolls):",
    "status": "draft",
    "said": "Owner review: a product shot from above looked wrong and too thick; it should read flat, slightly rotated."
   },
@@ -883,7 +883,7 @@
    "date": "2026-10-31",
    "source": "owner review, 2026-10-31",
    "rule": "Scene dressing such as confetti never lands in the band kept clear for the words.",
-   "enforced_by": "tools/image-production/flex_sets_blender.py :: if any(t <= fy <= u for t, u in b.get(\"clear\") or []):",
+   "enforced_by": "tools/image-production/product_sets_blender.py :: if any(t <= fy <= u for t, u in b.get(\"clear\") or []):",
    "status": "draft",
    "said": "Owner review: a confetti speck sat inside a headline."
   },

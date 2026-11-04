@@ -63,8 +63,8 @@ run, and apply the calls ("apply the email calls"). the owner's demo copy: (priv
   get a Go until what holds it is fixed.
 - the team then does the final wording in the draft and schedules it in Klaviyo.
 
-Code: `lab/damon/suite/approvals.py` (`designed_emails`, `act_designed`), `lab/damon/suite/email_edit.py`
-(`learn_from_edit`), the preview and picture routes in `lab/damon/suite/suite_serve.py`.
+Code: `lab/owner/suite/approvals.py` (`designed_emails`, `act_designed`), `lab/owner/suite/email_edit.py`
+(`learn_from_edit`), the preview and picture routes in `lab/owner/suite/suite_serve.py`.
 
 ## Still open
 
@@ -76,8 +76,8 @@ Code: `lab/damon/suite/approvals.py` (`designed_emails`, `act_designed`), `lab/d
 
 - **Gaps** (`design/gaps.py`, runs before every build): unfilled prices are filled from the offer bank (never a sale
   price the bank doesn't have), unmade pictures are made, and anything else missing is closed by the smallest patch
-  (`prompts/design4-patch-v1-damon.md`): only the gap changes; everything people ruled on stays.
-- **Does it keep every promise** (`design/promises.py`, `prompts/design3-promises-v1-damon.md`, any brand/product/
+  (`prompts/design4-patch-v1-owner.md`): only the gap changes; everything people ruled on stays.
+- **Does it keep every promise** (`design/promises.py`, `prompts/design3-promises-v1-owner.md`, any brand/product/
   offer): reads the built email once, the way she will, and lists every promise it makes (a "two steps" with no step
   two, a price that contradicts the offer, a guarantee that's only a number). Rulings in the offer bank and past
   learnings outrank the job card. It can raise false alarms; check its reason before acting on it.

@@ -51,7 +51,7 @@ PICTURE = re.compile(r"\.(png|jpe?g|webp|gif|tiff?|psd|heic)$", re.I)
 TITLE = re.compile(r"^# BRIEF · (.+)$", re.M)
 HEADING = re.compile(r"^# (?!DOCUMENT\b)(.+)$", re.M)
 FRESH_S = 24 * 3600                                   # a cached brief or picture is fetched again after a day
-REVIEWER = "steph"                                    # only the team is told (the team, 2026-10-29)
+REVIEWER = "pm"                                    # only the team is told (the team, 2026-10-29)
 LANE = "static-done"
 DRIVE_FOLDER = "https://drive.google.com/drive/folders/%s"
 ROLES = {
@@ -147,7 +147,7 @@ def title_of(text, key):
 
 
 def brand_of(key):
-    """The key's brand, the part before its first "_" (brand_a_flex-face-brush_brief-0296 → brand-a)."""
+    """The key's brand, the part before its first "_" (brand_a_widget-face-brush_brief-0296 → brand-a)."""
     return key.split("_", 1)[0]
 
 

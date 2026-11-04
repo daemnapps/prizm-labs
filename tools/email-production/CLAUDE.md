@@ -14,12 +14,12 @@ the team, 2026-10-07, triage action 3 (definition lines and registry rows)) ·
 **`adapter/`:** built by the owner; engine the team after /system-review accepts it;
 words the team (decision log 2026-10-22). It holds the team page's `sync.py` (was
 `team-outlier/`) and the team's emails flow (`ask.py`, `prepare.py`, `own_picture.py`,
-`enrich.py`, was `lab/steph/eve-email-page/`), moved 2026-10-22 on the team's "go
+`enrich.py`, was `lab/pm/designer-email-page/`), moved 2026-10-22 on the team's "go
 lab-flow move"; both old folders are one-release forwarding stubs.
 
 Runs by: both
 
-> Moved from `lab/damon/email-production/` on the owner's word, 2026-09-19:
+> Moved from `lab/owner/email-production/` on the owner's word, 2026-09-19:
 > *"move these tools out of the lab… straight into the real production repo,
 > components… so we can actually run QC on it as well… and everybody can have
 > access to these things."* Settled by system review (the 2026-09-21 ruling: a
@@ -129,11 +129,11 @@ Cards are built per week by the week's own builder (first: `runs/email-productio
 
 Designed emails run through `design/` for every brand: the calendar marks each send design or letter
 (`components/marketing-calendar/machine/kinds.py`), `design/line.py` writes each send's job card and
-layout from its finished copy (prompts `design1-jobcard-v1-damon.md`, `design2-layout-v1-damon.md`),
+layout from its finished copy (prompts `design1-jobcard-v1-owner.md`, `design2-layout-v1-owner.md`),
 `design/engine.py` renders the layout in the brand's look (`brands/<brand>/email-sms/design-system.json`),
 `design/build.py` cuts it for Klaviyo and writes the approval card, `design/check.py` runs the final
 check across the batch. The whole process: `EMAIL-DESIGN.md`.
-`design/repick.py <brand> --run <run>` (step 2b, prompt `design2b-repick-v1-steph.md`) chooses a laid-out email's
+`design/repick.py <brand> --run <run>` (step 2b, prompt `design2b-repick-v1-pm.md`) chooses a laid-out email's
 brand photos and customer pictures again by what each one shows, keeping every section and word, then rebuilds and
 re-checks it (the team, 2026-10-28: layouts made before then picked photos by file name).
 **A brand's house look** (LD-101 (<brand> house look), built 2026-10-30, told to the owner after): a look file with a
@@ -188,7 +188,7 @@ The checks and the hold are the shared ones — `components/marketing-chain-chec
     offer bank sells today for that send's offer. Added after the first email
     sold a size the store no longer carries.
   - `Q.read_check_block` — the chain's own check step (8c,
-    `prompts/stage8c-check-v1-damon.md`): product facts, chopped thoughts, typos.
+    `prompts/stage8c-check-v1-owner.md`): product facts, chopped thoughts, typos.
     An email with no step 8c is held too.
   - `Q.unfilled_check` — no `[UNFILLED …]` note in the finished email.
   - `link-tags` — every link to the brand's own sites carries the tracking standard's email

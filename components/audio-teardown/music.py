@@ -10,7 +10,7 @@ everything a tool can measure is measured first.
               2026-09-25 test each named a song the other missed
     MEASURED  tempo, beat grid, key, energy across the video, where it builds or
               drops, how it ends (librosa, in the venv named by AUDIO_PYTHON — measure.py)
-    HEARD     Gemini on the music track (prompts/music-read-v<N>-damon.md):
+    HEARD     Gemini on the music track (prompts/music-read-v<N>-owner.md):
               genre, era, instruments, vocals, mood, shape, in the scene or laid
               over, how it sits under the voice, a composer brief
     CHECKED   every label against definitions/sound.json

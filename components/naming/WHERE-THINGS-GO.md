@@ -69,7 +69,7 @@ Already established in `CONVENTION.md`; repeated here so the two sit together.
 
 ```
 WORDS   the batch manifest beside the run
-MEDIA   Shared Assets/lab/damon/<lane>/<brand>/…
+MEDIA   Shared Assets/lab/owner/<lane>/<brand>/…
             image-production · video-production · image-teardown
 ```
 
@@ -79,8 +79,8 @@ that plus one field.
 ## Swipes
 
 ```
-WORDS   workspace/lab/damon/swipes/<pool>/registry.md
-MEDIA   Shared Assets/lab/damon/swipe-paid/<brand>/…
+WORDS   workspace/lab/owner/swipes/<pool>/registry.md
+MEDIA   Shared Assets/lab/owner/swipe-paid/<brand>/…
 CODE    workspace/components/swipe-paid/  (tool) and capture/ (pulling pages)
 ```
 

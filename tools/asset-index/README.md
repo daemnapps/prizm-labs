@@ -13,7 +13,7 @@ Two halves, deliberately split:
 | `extract.py` | frames + transcript + measurements, on this Mac | free |
 | the prompt | frames + transcript -> one JSON record | ~$0.002/clip |
 
-`tools/asset-index/prompts/index1-clip-v1-damon.md` is the prompt.
+`tools/asset-index/prompts/index1-clip-v1-owner.md` is the prompt.
 
 ## Running the free half
 

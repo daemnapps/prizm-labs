@@ -17,7 +17,7 @@ The loop, the same everywhere:
 
 What each stage is compared against and its hard bars live in
 `definitions/stages.json` — one entry per tool + stage. Nothing here names a
-brand. The reviewer prompt: `prompts/creative-review-v1-damon.md`.
+brand. The reviewer prompt: `prompts/creative-review-v1-owner.md`.
 
     from marketing_chain_checks import review
     review.after_stage("copywriter", "stage6-hooks", run_dir,
@@ -34,7 +34,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 COMP = HERE.parent
-PROMPT = COMP / "prompts" / "creative-review-v1-damon.md"
+PROMPT = COMP / "prompts" / "creative-review-v1-owner.md"
 STAGES = COMP / "definitions" / "stages.json"
 MODEL = os.environ.get("QC_REVIEW_MODEL", "gemini-3.1-pro-preview")
 BASE = "https://generativelanguage.googleapis.com/v1beta/models"

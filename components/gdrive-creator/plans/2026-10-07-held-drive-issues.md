@@ -1,6 +1,6 @@
 # Drive triage issues held for the keys / clean-up phase
 
-Read from origin/main at 075dd518c2, 7 Oct 2026. Ruling (the team, typed to ◆ PLAN · dev-dayu, relayed verbatim to the lead): "address all of the google drive component updates, future structure all together as part of the keys / clean up migration phase", and "ok page 8 go".
+Read from origin/main at 075dd518c2, 7 Oct 2026. Ruling (the team, typed to ◆ PLAN · dev-engineer, relayed verbatim to the lead): "address all of the google drive component updates, future structure all together as part of the keys / clean up migration phase", and "ok page 8 go".
 
 **This phase (decided 7 Oct, triage page #8):** people may use their Drive mount. Everything the mini runs reaches Drive through the API by file id (O9 reworded for this phase). One Drive client per side (D1-A). The shared helpers become "mount if there is one, gdrive-creator by id if not". Hard-coded the owner-account paths go. The image-teardown Drive delete and the dead mirror are fixed. The swipe libraries are copied to their ruled home, Shared Assets/swipe/, and the code switches at midnight BKK.
 

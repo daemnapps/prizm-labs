@@ -213,7 +213,7 @@ class QueueTest(unittest.TestCase):
 
     def test_ledger_writes_the_queue_when_it_is_here(self):
         # the private workspace carries the Asset Ledger: build hands QUEUE.md to it
-        led = self.ws / "lab/damon/asset-ledger/db"
+        led = self.ws / "lab/owner/asset-ledger/db"
         led.mkdir(parents=True)
         (led / "ledger.db").write_text("")
         (led / "load.py").write_text("import pathlib; pathlib.Path('rebuilt').write_text('y')\n")

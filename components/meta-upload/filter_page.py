@@ -2,7 +2,7 @@
 """filter_page — the Media Buying Desk page: every live ad's verdict, both brands, and the owner's calls on the ones that need him.
 
     filter_page.py      reads the latest runs/media-buying/<brand>/filter/<date>/verdicts.json per brand and writes
-                        lab/damon/media-buying/the-filter.html (+ THE-FILTER-damon.md), then it is republished to
+                        lab/owner/media-buying/the-filter.html (+ THE-FILTER-owner.md), then it is republished to
                         the same artifact
 
 The page keeps the owner's calls in its own database (capability `db`, collection `calls`, one doc per brand + ad:
@@ -15,7 +15,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
-OUT = WS / "lab/damon/media-buying/the-filter.html"
+OUT = WS / "lab/owner/media-buying/the-filter.html"
 BRANDS = (("brand-a", "BRAND-A"), ("brand-b", "Brand-B"))
 
 
@@ -82,7 +82,7 @@ def main():
                                                       "signs_of_life")} for a in d["ads"]]}
     page = TEMPLATE.replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
     OUT.write_text(page)
-    md = ["# The Filter", "", "Page: see lab/damon/context/artifacts.md (source `the-filter.html`, built by "
+    md = ["# The Filter", "", "Page: see lab/owner/context/artifacts.md (source `the-filter.html`, built by "
           "`components/meta-upload/filter_page.py`). Every live ad through the brand's standard; the owner's calls kept in the "
           "page's database (`calls`).", ""]
     for b, name in BRANDS:
@@ -95,7 +95,7 @@ def main():
             if a["verdict"] != "too early":
                 md.append(f"- **{a['verdict']}** — {a['ad_name']}: {a['why']} (spent ${a['spend']:,.0f})")
         md.append("")
-    (OUT.parent / "THE-FILTER-damon.md").write_text("\n".join(md) + "\n")
+    (OUT.parent / "THE-FILTER-owner.md").write_text("\n".join(md) + "\n")
     print(f"wrote {OUT.relative_to(WS)}")
 
 

@@ -63,7 +63,7 @@ FPS = "8"
 
 
 def prompt_file():
-    files = sorted(PROMPTS.glob("stage1f-frame-map-v*-damon.md"),
+    files = sorted(PROMPTS.glob("stage1f-frame-map-v*-owner.md"),
                    key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     return files[-1]
 

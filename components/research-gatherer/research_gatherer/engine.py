@@ -107,7 +107,7 @@ def _doctrine_questions_path():
 
 
 def _cache_root():
-    # Run records never live inside a component (lab/damon/CLAUDE.md §1,
+    # Run records never live inside a component (lab/owner/CLAUDE.md §1,
     # runs/README.md): the repo-root `runs/` tree, not this folder, even
     # though this engine is what writes into it.
     return WORKSPACE / "runs" / "research-cache" / "_system"
@@ -123,7 +123,7 @@ METHOD_HEADER = (
     "_Every claim below carries a receipt — a permalink, a date, a count with "
     "its denominator. Where nothing came back it says `[UNFILLED]` and why, "
     "rather than guessing (the standard: "
-    "lab/damon/control-room/prompts/research/_METHOD.md)._"
+    "lab/owner/control-room/prompts/research/_METHOD.md)._"
 )
 
 

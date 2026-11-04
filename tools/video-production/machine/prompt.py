@@ -36,7 +36,7 @@ from pathlib import Path
 def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
-    The count here was right only while this file sat in lab/damon/. The move
+    The count here was right only while this file sat in lab/owner/. The move
     to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
     high — outside the repo entirely. A marker cannot go quietly wrong the next
     time something moves. AI_WORKSPACE still wins when it names a workspace.
@@ -56,7 +56,7 @@ def _workspace(start=__file__):
 # --------------------------------------------------------- element facts
 #
 # Every slop round so far has been a fact the repo already held and the
-# prompt did not send: the FLEX standing on a base it does not have, bristles
+# prompt did not send: the WIDGET standing on a base it does not have, bristles
 # on a back that has none, invented bottles beside a real product element.
 #
 # So the facts live with the element, in element-facts.json, and ANY prompt
@@ -142,10 +142,10 @@ def with_facts(prompt: str) -> str:
 
 PROMPTS = Path(__file__).resolve().parent.parent / "prompts"
 STAGE_PROMPT = {
-    "openings": "stage-1-openings/stage1-openings-v1-damon.md",
-    "aroll":    "stage-2-aroll/stage2-aroll-v2-damon.md",
-    "broll":    "stage-3-broll/stage3-broll-v2-damon.md",
-    "offer":    "stage-4-offer/stage4-offer-v2-damon.md",
+    "openings": "stage-1-openings/stage1-openings-v1-owner.md",
+    "aroll":    "stage-2-aroll/stage2-aroll-v2-owner.md",
+    "broll":    "stage-3-broll/stage3-broll-v2-owner.md",
+    "offer":    "stage-4-offer/stage4-offer-v2-owner.md",
 }
 _SHAPE = re.compile(r"```shape\n(.*?)```", re.S)
 

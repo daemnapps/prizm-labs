@@ -136,7 +136,7 @@ class MapSources(unittest.TestCase):
 
     def test_a_laptop_path_never_survives(self):
         m = tool("map_sources")
-        self.assertEqual(m.clean_ref("~/devel/daemn/a/b.csv"), "damon-sandbox:a/b.csv")
+        self.assertEqual(m.clean_ref("~/devel/daemn/a/b.csv"), "owner-sandbox:a/b.csv")
         self.assertEqual(m.clean_ref("~/elsewhere.csv"), "local file (path withheld)")
 
 

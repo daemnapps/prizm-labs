@@ -85,7 +85,7 @@ OURS_PUBLIC = re.compile("|".join(a for a in packs.OURS.pattern.split("|")
                                   if a.lower() not in OUR_BRANDS), re.I)
 NEVER = re.compile(
     r"act_\d+|meta_page_id|adplexity|prompts-as-sent|customer-base|receipt|"
-    r"cloudfront\.net|damon--|desk/jobs|desk/briefs|apify|/Users/"
+    r"cloudfront\.net|owner--|desk/jobs|desk/briefs|apify|/Users/"
     + (r"|\b(?:" + "|".join(map(re.escape, OUR_BRANDS)) + r")--" if OUR_BRANDS else ""), re.I)
 
 
@@ -348,7 +348,7 @@ def build(records, ws, stage, old, repix=False):
         if core and brand == "general":
             core = pid_feed                    # an asked feed of his own: its own avatar
         sub = f.get("sub")
-        whose = f.get("whose") if f.get("whose") and f.get("whose") != "damon" else None
+        whose = f.get("whose") if f.get("whose") and f.get("whose") != "owner" else None
         feeds_out.append({
             "id": pid_feed, "title": clean(f["title"], ids), "brand": brand,
             "core": core, "sub": sub,

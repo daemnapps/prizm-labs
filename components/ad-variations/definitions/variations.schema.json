@@ -4,7 +4,7 @@
  "title": "variation-plan.json — the ad-variations contract",
  "description": "One proven ad's variation plan. Production components read this file. Every change names a Variable Index id; every cost is units × the rate in definitions/routes.json. Nothing in it has been generated.",
  "type": "object",
- "required": ["schema", "brand", "source", "index", "elements", "variations", "formats", "shared", "totals", "damon_decides", "problems", "run"],
+ "required": ["schema", "brand", "source", "index", "elements", "variations", "formats", "shared", "totals", "owner_decides", "problems", "run"],
  "properties": {
   "schema": {"const": "ad-variations/1"},
   "brand": {"type": "string"},
@@ -36,7 +36,7 @@
    "properties": {"status": {"const": "NEW — untested"}, "parts": {"type": "array", "items": {"type": "object", "required": ["variable", "value", "evidence"]}}}}},
   "shared": {"type": "array", "items": {"type": "object", "required": ["key", "piece", "route", "units", "used_by"]}},
   "totals": {"type": "object", "required": ["usd", "usd_with_tests", "hours"]},
-  "damon_decides": {"type": "array", "items": {"type": "string"}},
+  "owner_decides": {"type": "array", "items": {"type": "string"}},
   "problems": {"type": "array", "items": {"type": "string"}, "description": "what the machine's own checks found — an unknown variable id, a missing recipe"},
   "run": {"type": "object", "required": ["stages", "llm_cost"]}
  }

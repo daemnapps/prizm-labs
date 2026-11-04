@@ -12,7 +12,7 @@ Sources (all existing, none moved):
   creator records   tools/video-teardown/records/creators/<handle>/
   post media        Drive: Shared Assets/tools/video-teardown/creators/<handle>/posts/
   teardown runs     runs/video-teardown/ (filed, run-kit index) + _work/ (live)
-  the saves pool    records/damon-saves/catalog.json (333 authors, wider net)
+  the saves pool    records/owner-saves/catalog.json (333 authors, wider net)
 
 A post counts as torn down when its shortcode appears in a run's name —
 that is how runs are named (creator-a-06-dbtdq1qon4a). The page says so.
@@ -103,7 +103,7 @@ def creator(handle, runs):
 
 def saves_pool():
     try:
-        rows = json.loads((HERE / "records" / "damon-saves" / "catalog.json")
+        rows = json.loads((HERE / "records" / "owner-saves" / "catalog.json")
                           .read_text(encoding="utf-8"))["rows"]
     except Exception:
         return {}

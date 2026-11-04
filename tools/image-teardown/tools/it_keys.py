@@ -29,7 +29,7 @@ HERE = Path(__file__).resolve().parent
 _LOADER_PATH = next((r / "components" / "keys" / "loader.py" for r in HERE.parents
                      if (r / "components" / "keys" / "loader.py").is_file()),
                     HERE.parents[2] / "components" / "keys" / "loader.py")
-_LOADER_NAME = "upright_keys_loader"
+_LOADER_NAME = "company_keys_loader"
 
 
 def _load_loader():

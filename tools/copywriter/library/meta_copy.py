@@ -300,10 +300,10 @@ def db_query(sql):
             sys.modules[modname] = mod
             spec.loader.exec_module(mod)
         return mod
-    url = _load("loader.py", "upright_keys_loader").key("SUPABASE_DB_URL", required=False)
+    url = _load("loader.py", "company_keys_loader").key("SUPABASE_DB_URL", required=False)
     if not url:
         raise SystemExit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to this repo's .env")
-    safe, child = _load("pg_argv.py", "upright_pg_argv").for_psql(url)   # the password rides in the env, not argv
+    safe, child = _load("pg_argv.py", "company_pg_argv").for_psql(url)   # the password rides in the env, not argv
     r = subprocess.run(["psql", safe, "-At", "-v", "ON_ERROR_STOP=1",
                         "-c", "set default_transaction_read_only = on; " + sql],
                        capture_output=True, text=True, timeout=180, env=child)

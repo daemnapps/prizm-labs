@@ -23,7 +23,7 @@ class SwipeMatch(unittest.TestCase):
         (self.d / "stages" / "1-teardown.md").write_text("### 1. record")
         (self.d / "stages" / "5-brief.md").write_text(BRIEF)
         self.verdict = json.loads(json.dumps(SHOTS))
-        SM.ask_judge = lambda t, b, v=None: (json.loads(json.dumps(self.verdict)), "swipe-match-v1-damon.md")
+        SM.ask_judge = lambda t, b, v=None: (json.loads(json.dumps(self.verdict)), "swipe-match-v1-owner.md")
 
     def brief(self):
         return (self.d / "stages" / "5-brief.md").read_text()
@@ -53,7 +53,7 @@ class SwipeMatch(unittest.TestCase):
         edited = self.brief().replace("chest height", "waist height")
         self.assertEqual(SM.stamp_of(edited), "STALE")
 
-    def test_damon_must_read_the_brief_and_an_edit_needs_his_read_again(self):
+    def test_owner_must_read_the_brief_and_an_edit_needs_his_read_again(self):
         os.environ["DAEMN_STRUCTURE_APPROVALS"] = "all"
         SM.check(self.d)
         self.assertIsNone(SM.read_of(self.brief()))

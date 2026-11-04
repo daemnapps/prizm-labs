@@ -115,7 +115,7 @@ no house style here to conform to.
 > campaign level and message themes at the ad set, so the drop became:
 >
 > ```
-> CAMPAIGN   US | FLEX™ | ICON | Fed-Up King
+> CAMPAIGN   US | WIDGET™ | ICON | Fed-Up King
 > AD SET       Forty-Year Shaver | Ray | Razor Bumps | 260911
 > AD             <the 13-field ad name>
 > ```

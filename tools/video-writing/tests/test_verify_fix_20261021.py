@@ -89,7 +89,7 @@ class Row10EveryRouteGetsTheLane(unittest.TestCase):
             (d / "stages").mkdir(parents=True)
             (d / "prompts").mkdir()
             (d / "run.json").write_text(json.dumps(st))
-            tpl = Path(tmp) / "probe-v1-damon.md"
+            tpl = Path(tmp) / "probe-v1-owner.md"
             tpl.write_text("LANE {ask_lane}\nSPICE {video_spice}\nREALISM {realism_index}\n")
             stage = dict(key="stage4zz", id="4zz", file_id="4zz", name="Probe", prompt=str(tpl), version=1,
                          engine="claude", vars={g: "~" + g for g in C.RUN_INPUTS}, role="stage")

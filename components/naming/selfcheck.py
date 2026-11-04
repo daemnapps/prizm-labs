@@ -16,7 +16,7 @@ sys.path.append(str(N.WS / "components" / "brandpath"))   # appended, never ahea
 import brandpath as BP                                   # noqa: E402  brand folders by plan name
 
 WS  = N.WS                      # names.py's locator: run-kit paths.repo()
-LAB = WS / "lab" / "damon"      # a person's runs and swipes stay in lab
+LAB = WS / "lab" / "owner"      # a person's runs and swipes stay in lab
 ok = fail = 0
 
 
@@ -215,7 +215,7 @@ for m in mans:
 # library group on the same columns; if the two ever drift, a report that
 # looks joined is silently comparing two different questions.
 print("\nThe swipe join")
-SWIPE = WS / "components" / "swipe-paid"   # a component since 2026-09-22 (was lab/damon/swipe-paid)
+SWIPE = WS / "components" / "swipe-paid"   # a component since 2026-09-22 (was lab/owner/swipe-paid)
 check("the shared creative vocabulary is declared",
       N.CREATIVE_FIELDS == ["media", "source", "talent", "problem", "angle",
                             "concept", "format", "ratio"],

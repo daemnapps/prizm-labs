@@ -1,6 +1,6 @@
 """SCENE BREAKDOWN — each scene of the swipe read to its smallest elements (2026-10-28).
 
-One cheap read per scene of the swipe's own footage (prompts/v2/scene-breakdown-v1-damon.md): the camera's hand drift,
+One cheap read per scene of the swipe's own footage (prompts/v2/scene-breakdown-v1-owner.md): the camera's hand drift,
 where the person looks, every prop's state and lift, where each ingredient goes and its texture, what each action lands
 on, the sound effects, the atmosphere, the explainer graphic's style and the captions' look and place. Saved per scene in
 the run's `scene-breakdown.json`; the clip prompt states the elements (`prompt_lines`) and the clip judge checks them
@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE.parent / "prompts" / "v2" / "scene-breakdown-v2-damon.md"
+PROMPT = HERE.parent / "prompts" / "v2" / "scene-breakdown-v2-owner.md"
 FILE = "scene-breakdown.json"
 FIELDS = ("camera", "gaze", "props", "continuity", "actions", "sound", "atmosphere", "explainer", "captions", "pace", "manner")
 # what the clip itself carries, in words that fit OUR objects (the edit lays sound, captions and explainers; pace is the

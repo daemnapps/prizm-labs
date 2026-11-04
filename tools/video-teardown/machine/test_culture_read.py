@@ -59,7 +59,7 @@ class Ordering(unittest.TestCase):
         self.assertEqual(s["id"], "1k")
         self.assertEqual(s["engine"], "gemini-video")
         self.assertTrue(s["search"])
-        self.assertTrue(s["prompt"].endswith("stage1k-culture-v5-damon.md"))
+        self.assertTrue(s["prompt"].endswith("stage1k-culture-v5-owner.md"))
         self.assertIn("components/culture/prompts", s["prompt"])     # its own component since 2026-10-27
 
     def test_no_route_runs_it_and_holds_writing(self):

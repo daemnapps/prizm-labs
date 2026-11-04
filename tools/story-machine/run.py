@@ -6,7 +6,7 @@ Nothing is shortened unless a shorter cut is asked for by name:
     python3 run.py <stage-prompt.md> <slots.json> <out.md>
     python3 run.py --cut <narration.md> <out.md> 60 [45 ...] [--product NAME]
 
---cut uses prompts/05-cut-v2-damon.md: the model ranks sentences, code fills
+--cut uses prompts/05-cut-v2-owner.md: the model ranks sentences, code fills
 the requested time, so a cut is only ever made of lines from the full script.
 Key: OPENAI_API_KEY in the environment, or the local key store if present.
 """
@@ -18,7 +18,7 @@ import urllib.request
 
 MODEL = os.environ.get("STORY_MODEL", "gpt-5.1")
 TRIES = 3
-CUT_PROMPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompts", "05-cut-v2-damon.md")
+CUT_PROMPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompts", "05-cut-v2-owner.md")
 WPM = 290  # measured narration speed of the swiped format
 
 

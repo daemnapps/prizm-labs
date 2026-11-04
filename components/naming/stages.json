@@ -78,7 +78,7 @@
   {
    "id": "brief-needs-you",
    "name": "Brief review",
-   "needs_damon": true,
+   "needs_owner": true,
    "from": [
     "Approve production",
     "Briefs to produce",
@@ -110,7 +110,7 @@
   {
    "id": "final-needs-you",
    "name": "Launch review",
-   "needs_damon": true,
+   "needs_owner": true,
    "from": [
     "Your OK",
     "Finished ads",

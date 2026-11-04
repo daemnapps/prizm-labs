@@ -3,7 +3,7 @@
  "title": "Component issues (the atlas)",
  "status": "draft pack, extracted from 2026-10-02's rulings and scripts; not ruled",
  "triage_owner": "the team",
- "triage_owner_ruling": "the team, typed to the dev-dayu lead 2026-10-12 ~02:30Z: \"Run triage skill and include all pending component triage list. Make me owner for now\" (temporary; supersedes the team as triage owner until he rules it back; the-org/decision-log.md 2026-10-12). Before: decision-log 2026-10-02 TRIAGE, amended: the team for component issues",
+ "triage_owner_ruling": "the team, typed to the dev-engineer lead 2026-10-12 ~02:30Z: \"Run triage skill and include all pending component triage list. Make me owner for now\" (temporary; supersedes the team as triage owner until he rules it back; the-org/decision-log.md 2026-10-12). Before: decision-log 2026-10-02 TRIAGE, amended: the team for component issues",
  "theme_owner": "the team",
  "theme_owner_ruling": "the team 2026-10-02: \"the team is owner of components / atlas (both triage owner and the theme itsemf)\"",
  "evaluation": {

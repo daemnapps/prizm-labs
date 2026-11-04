@@ -224,7 +224,7 @@
    "id": "judge-approves",
    "text": "Letting the judge approve: the owner approves status, the judge only checks.",
    "status": "draft",
-   "source": "[ours] components/model-inputs/VIDEO-PATH-damon.md"
+   "source": "[ours] components/model-inputs/VIDEO-PATH-owner.md"
   },
   {
    "id": "agentic-with-custom-fps",

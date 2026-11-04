@@ -11,7 +11,7 @@ is ever started. The real ~/.daemn, ~/.workflow-worker.env, ~/.gemini.env,
 ~/.apify.env and the Keychain are never read.
 
   (a) loader    — cast_keys loads components/keys/loader.py by path as
-                  upright_keys_loader, at CALL time only, and reuses it.
+                  company_keys_loader, at CALL time only, and reuses it.
   (b) via key   — generate.key_value asks cast_keys.key(NAME); no `security`
                   subprocess, no helper import, no key file named in code.
   (c) order     — env beats the Keychain (the helper is never consulted);
@@ -163,15 +163,15 @@ class Case(unittest.TestCase):
 class Loader(Case):
     def test_loaded_by_path_under_its_own_name(self):
         loader = cast_keys._load_loader()
-        self.assertEqual(loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], loader)
+        self.assertEqual(loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], loader)
         self.assertEqual(Path(loader.__file__).resolve(), REPO / "components" / "keys" / "loader.py")
         self.assertNotIn(str(REPO / "components" / "keys"), sys.path)
         self.assertIs(cast_keys._load_loader(), loader, "loaded once, then reused")
 
     def test_importing_casting_loads_no_loader_and_reads_no_key(self):
         code = ("import sys; sys.path.append(%r); import casting; "
-                "assert 'upright_keys_loader' not in sys.modules, 'loader loaded at import'; "
+                "assert 'company_keys_loader' not in sys.modules, 'loader loaded at import'; "
                 "assert 'daemn_keys' not in sys.modules, 'helper imported at import'; "
                 "print('ok')" % str(CASTING))
         env = {k: v for k, v in os.environ.items() if k != KEY}
@@ -289,11 +289,11 @@ class NeverRaises(Case):
     def test_an_unloadable_loader_is_none_and_said_so(self):
         with mock.patch.dict(sys.modules), \
                 mock.patch.object(cast_keys, "_LOADER_PATH", self.home / "no-loader-here.py"):
-            sys.modules.pop("upright_keys_loader", None)
+            sys.modules.pop("company_keys_loader", None)
             self.assertIsNone(G.key_value())
             self.assertFalse(G.key_present())
             msg = cast_keys.missing(KEY)
-            self.assertNotIn("upright_keys_loader", sys.modules)
+            self.assertNotIn("company_keys_loader", sys.modules)
         self.assertIn(KEY, msg)
         self.assertIn("could not be asked", msg)
         with mock.patch.object(cast_keys, "_load_loader", side_effect=RuntimeError("boom")):

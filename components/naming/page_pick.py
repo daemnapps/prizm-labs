@@ -15,7 +15,7 @@ knows the product, the offer and the swipe's page type. Everything after it
 THE PICK, in order:
   1. sells the brief's product — the page's funnel is that product's
      (brands/<brand>/web/funnels/funnels.json), or its offers / its store
-     product page carry it (lab/damon/catalog/data/catalog.json). A page that
+     product page carry it (lab/owner/catalog/data/catalog.json). A page that
      only sells it inside a set is used only when nothing sells it alone, and
      the why says so.
   2. carries the brief's offer, when the brief names one.
@@ -56,7 +56,7 @@ if str(HERE) not in sys.path:
 import names as N  # noqa: E402
 
 WS = N.WS
-CATALOG = WS / "lab/damon/catalog/data/catalog.json"
+CATALOG = WS / "lab/owner/catalog/data/catalog.json"
 SWIPES = WS / "components/swipe-paid"
 TYPES = ("advertorial", "quiz", "offer", "store")
 WORD = {"advertorial": "advertorial", "quiz": "quiz", "offer": "offer page", "store": "store page"}

@@ -2,7 +2,7 @@
 
 Every shot is made as three takes (clips_run.make_picked); this scores each one so the best is kept. It asks the
 house judge (components/generative-model-house `behind.judge`, Gemini 3.1 Pro) to watch the take beside its
-approved start picture, with the prompt `prompts/v2/clip-judge-v4-damon.md` (v4, 2026-10-28 — v3 + props make sense, the right object, the voice, the swipe's elements):
+approved start picture, with the prompt `prompts/v2/clip-judge-v4-owner.md` (v4, 2026-10-28 — v3 + props make sense, the right object, the voice, the swipe's elements):
 
   dead pauses · lips closed while listening · kept its object · room unchanged · same person · the acting ·
   the camera move · no slop · absurd on purpose passes · stop-power (V24: how hard it stops a thumb)
@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE.parent / "prompts" / "v2" / "clip-judge-v4-damon.md"   # v4: props make sense, right object, voice, the swipe's elements (2026-10-28)
+PROMPT = HERE.parent / "prompts" / "v2" / "clip-judge-v4-owner.md"   # v4: props make sense, right object, voice, the swipe's elements (2026-10-28)
 
 
 def _load(name: str, as_name: str | None = None):

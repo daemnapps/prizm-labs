@@ -83,18 +83,18 @@ class Found(unittest.TestCase):
         R.REPO = self.tmp
         self.git("init", "-q")
         people = self.tmp / "team" / "people"
-        (people / "eve").mkdir(parents=True)
-        (people / "eve" / "identity.json").write_text(json.dumps({
-            "person": "eve", "key_audience": "designer", "stations": ["email-production", "image-production"],
+        (people / "designer").mkdir(parents=True)
+        (people / "designer" / "identity.json").write_text(json.dumps({
+            "person": "designer", "key_audience": "designer", "stations": ["email-production", "image-production"],
             "emails": [{"address": "the team@company.com"}]}))
-        (people / "steph").mkdir()
-        (people / "steph" / "identity.json").write_text(json.dumps({"person": "steph", "emails": []}))
+        (people / "pm").mkdir()
+        (people / "pm" / "identity.json").write_text(json.dumps({"person": "pm", "emails": []}))
         self.run_dir = self.tmp / "runs" / "email-production" / "fx" / "fx-nov-01"
         (self.run_dir / "design").mkdir(parents=True)
         (self.run_dir / "klaviyo").mkdir()
         self.card({})
 
-    def git(self, *a, who=("the team", "stephanie@company.com")):
+    def git(self, *a, who=("the team", "pm-primary@company.com")):
         env = dict(os.environ, GIT_AUTHOR_NAME=who[0], GIT_AUTHOR_EMAIL=who[1],
                    GIT_COMMITTER_NAME=who[0], GIT_COMMITTER_EMAIL=who[1])
         return subprocess.run(["git", *a], cwd=str(self.tmp), env=env, capture_output=True, text=True,
@@ -103,7 +103,7 @@ class Found(unittest.TestCase):
     def card(self, c):
         (self.run_dir / "klaviyo" / "card.json").write_text(json.dumps(c))
 
-    def commit(self, text, who=("the team", "stephanie@company.com")):
+    def commit(self, text, who=("the team", "pm-primary@company.com")):
         (self.run_dir / "design" / "email.json").write_text(json.dumps({"sections": [{"s": "letter", "text": text}]}))
         self.git("add", "-A", who=who)
         self.git("commit", "-q", "-m", text, who=who)
@@ -127,7 +127,7 @@ class Found(unittest.TestCase):
 
     def test_the_designer_is_found_by_her_email_too(self):
         got = self.commit("as sent")
-        self.commit("by her other git name", who=("eve-laptop", "eve@company.com"))
+        self.commit("by her other git name", who=("designer-laptop", "designer@company.com"))
         self.assertEqual(R.found(self.run_dir)["rev"], got)
 
     def test_a_done_finds_the_named_designer_as_before(self):

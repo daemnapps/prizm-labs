@@ -234,7 +234,7 @@ class MiniSkipsOldPlaces(Base):
             self.assertEqual(offer_bank_build.from_next(BRAND), [])
         self.assertEqual(rec.calls, [])
         self.assertEqual(self.helper_calls(), [])      # the helper was never called
-        self.assertIn("old locations skipped", ep_keys.missing(NAMES["loop"]))
+        self.assertIn("skipped (managed file", ep_keys.missing(NAMES["loop"]))
 
 
 class Imports(unittest.TestCase):
@@ -428,7 +428,7 @@ class EpKeys(Base):
 
     def test_loader_by_path_under_its_own_name(self):
         ep_keys.key(NAMES["loop"])
-        mod = sys.modules["upright_keys_loader"]
+        mod = sys.modules["company_keys_loader"]
         self.assertEqual(Path(mod.__file__).resolve(),
                          (HERE.parents[1] / "components" / "keys" / "loader.py").resolve())
         src = (HERE / "ep_keys.py").read_text()

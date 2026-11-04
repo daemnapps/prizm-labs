@@ -79,7 +79,7 @@ def render(template, fields, sep=" | ", spell=None):
     two that exist:
 
         {market!u}{sep}{product}{sep}{funnel!u}{sep}{lane!t}
-            -> US | FLEX™ | ICON | Fed-Up King
+            -> US | WIDGET™ | ICON | Fed-Up King
 
         {budget!l}_{market!l}_{event!l}_{product!l}_{lane!l}
             -> cbo_us_purchase_body-scrub_creators
@@ -234,7 +234,7 @@ if __name__ == "__main__":
              "campaign": "{budget!l}{sep}{market!l}{sep}{event!l}{sep}{product!l}{sep}{lane!l}",
              "ad_set": "{theme}"}
 
-    print(campaign({"market": "us", "product": "FLEX\u2122", "funnel": "icon",
+    print(campaign({"market": "us", "product": "WIDGET\u2122", "funnel": "icon",
                     "lane": "fedupking"}, pipes["campaign"], pipes["sep"],
                    spell=lambda s: {"fedupking": "Fed-Up King"}.get(s, s.title())))
     print(campaign({"budget": "cbo", "market": "us", "event": "purchase",

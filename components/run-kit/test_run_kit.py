@@ -134,8 +134,8 @@ class TestChainDelivers(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="runkit-chain-"))
         self.prompts = self.tmp / "prompts"; self.prompts.mkdir()
-        (self.prompts / "stage1-read-v1-damon.md").write_text("read {x}")
-        (self.prompts / "stage2-brief-v1-damon.md").write_text("brief {x}")
+        (self.prompts / "stage1-read-v1-owner.md").write_text("read {x}")
+        (self.prompts / "stage2-brief-v1-owner.md").write_text("brief {x}")
         self.steps = [{"key": "stage1", "name": "Read", "tier": "checks", "label": "read"},
                       {"key": "stage2", "name": "Brief", "tier": "designs", "label": "brief"}]
 
@@ -233,7 +233,7 @@ class TestVenvAndModelsOutsideRepo(unittest.TestCase):
         self.tmp = Path(tempfile.mkdtemp())
         self.req = self.tmp / "requirements.txt"
         self.req.write_text("pillow==11.0.0\n")
-        self.saved = {k: os.environ.pop(k, None) for k in ("UPRIGHT_VENVS", "UPRIGHT_MODELS")}
+        self.saved = {k: os.environ.pop(k, None) for k in ("COMPANY_VENVS", "COMPANY_MODELS")}
 
     def tearDown(self):
         for k, v in self.saved.items():
@@ -253,16 +253,16 @@ class TestVenvAndModelsOutsideRepo(unittest.TestCase):
         self.req.write_text("pillow==11.1.0\n")
         self.assertNotEqual(paths.venv("video-edit", self.req), before)
 
-    def test_default_root_is_home_upright_venvs(self):
+    def test_default_root_is_home_company_venvs(self):
         self.assertEqual(paths.venv("x", self.req).parent, Path.home() / ".upright" / "venvs")
 
-    def test_upright_venvs_is_honoured(self):
-        os.environ["UPRIGHT_VENVS"] = str(self.tmp / "v")
+    def test_company_venvs_is_honoured(self):
+        os.environ["COMPANY_VENVS"] = str(self.tmp / "v")
         self.assertEqual(paths.venv("x", self.req).parent, self.tmp / "v")
 
     def test_models_default_and_setting(self):
         self.assertEqual(paths.models("local-studio"), Path.home() / ".upright" / "models" / "local-studio")
-        os.environ["UPRIGHT_MODELS"] = str(self.tmp / "m")
+        os.environ["COMPANY_MODELS"] = str(self.tmp / "m")
         self.assertEqual(paths.models("local-studio"), self.tmp / "m" / "local-studio")
 
 

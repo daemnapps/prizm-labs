@@ -10,7 +10,7 @@ numerous brands coming.
 
     python3 app.py          # http://localhost:8765
 
-Data in:  records/damon-saves/catalog.json (+ covers/)
+Data in:  records/owner-saves/catalog.json (+ covers/)
 Records:  records/teardowns/<code>/           stage1 + stage2 (neutral)
           records/teardowns/<code>/injections/<brand>/  stage3 + brief
 Media:    records/teardowns/media/ — gitignored, words stay in git.
@@ -28,15 +28,15 @@ for _r in HERE.parents:                # the swipe home, one definition for both
         sys.path.append(str(_r / "components" / "swipe-paid"))
         break
 import swipe_home  # noqa: E402
-SAVES = HERE / "records/damon-saves"
+SAVES = HERE / "records/owner-saves"
 VID = HERE / "records/swipe-videos"
 TD = HERE / "records/teardowns"
 import desklib as D  # noqa: E402  WS: run-kit's repo() (triage page 12)
 from run_kit.claude_flags import effort_args, model_args  # noqa: E402  LD-73 (explicit effort), LD-100 (chain model explicit); run-kit is on the path through desklib
 WS = D.WS
 CHAIN = WS / "new-workflow-design" / "builds" / "video-teardown" / "prompts"
-S12 = ["stage1-teardown-v5-damon.md", "stage2-replication-v2-damon.md"]
-S35 = ["stage3-injection-v3-damon.md", "stage5-brief-v8-damon.md"]
+S12 = ["stage1-teardown-v5-owner.md", "stage2-replication-v2-owner.md"]
+S35 = ["stage3-injection-v3-owner.md", "stage5-brief-v8-owner.md"]
 PORT = 8765
 JOBS = {}  # "code" or "code:brand" -> {status, kind, brand?}
 LOCK = threading.Lock()
@@ -232,7 +232,7 @@ def board_html():
 <style>{CSS}</style></head><body>
 <header><h1>Swipe Studio</h1><span class="sub">{len(cards)} saves · click a card → Tear down → Inject into any brand</span>
 <span class="sub" style="margin-left:auto"><a href="/formats"><b>Format library</b></a> · Feeds:
-<a href="/feed/damon--saves">My saves feed</a> ·
+<a href="/feed/owner--saves">My saves feed</a> ·
 <a href="/feed/brand-a--glow-up">Glow-up feed</a></span></header>
 <div class="chips">
 <button class="chip on" data-b="all">All fits</button><button class="chip" data-b="brand-a">BRAND-A</button>
@@ -624,7 +624,7 @@ class H(BaseHTTPRequestHandler):
             f = HERE / "records/avatar-feeds" / m.group(1) / "feed.html"
             if f.is_file():
                 # the page is built for the repo; in the app, covers are served locally
-                body = f.read_text().replace("../../damon-saves/covers/", "/covers/")
+                body = f.read_text().replace("../../owner-saves/covers/", "/covers/")
                 return self._send(body)
             return self._send("no such feed", status=404)
         if self.path == "/formats":
@@ -694,7 +694,7 @@ if __name__ == "__main__":
     import sys
     sys.exit("Swipe Studio was retired on 2026-09-22 — open My Feeds instead:\n"
              "    http://localhost:8820\n"
-             "The saves are the 'damon · my saves' feed there; the format library\n"
+             "The saves are the 'owner · my saves' feed there; the format library\n"
              "is the link in its header, and every card has its rebuild sheet.")
 
 

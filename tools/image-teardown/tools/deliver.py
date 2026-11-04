@@ -38,7 +38,7 @@ sys.path.insert(0, str(WS / "tools/video-teardown/machine"))
 sys.path.insert(0, str(HERE / "tools"))
 import briefs as B
 
-ROOT = ["runs", "image-teardown"]   # moved from lab/damon/image-teardown, 2026-10-18 (drive sweep)
+ROOT = ["runs", "image-teardown"]   # moved from lab/owner/image-teardown, 2026-10-18 (drive sweep)
 
 
 def service():

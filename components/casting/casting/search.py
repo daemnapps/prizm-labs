@@ -5,7 +5,7 @@
 footage index (`tools/asset-index/work/<collection>/<id>/breakdown.json`)
 and the brand's Drive shelves, and it already matches on WHAT IS IN an asset
 rather than what it is called. That is exactly the search this step needs, so
-it is imported. `lab/damon/avatar-builder/find.py` reads the same records with
+it is imported. `lab/owner/avatar-builder/find.py` reads the same records with
 its own scan; this component calls the shared reader instead, and the one
 thing it adds is the part find.py has that assets.py does not — the FRAMES
 beside each record, which is what a baseline is.

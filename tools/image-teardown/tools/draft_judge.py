@@ -33,7 +33,7 @@ ROOT = HERE.parent
 BASE = "https://generativelanguage.googleapis.com"
 MODEL = "gemini-3.1-pro-preview"
 
-PROMPT_FILE = "stage8-draft-judge-v2-damon.md"
+PROMPT_FILE = "stage8-draft-judge-v2-owner.md"
 
 
 def _load():

@@ -1,4 +1,4 @@
-# Skills library — damon
+# Skills library — owner
 
 **Front door:** say the job; the `make` skill (in ~/.claude/skills/make) reads it,
 goes **Higgsfield first** (`HIGGSFIELD.md`), opens the recipe in `recipes/`, pulls

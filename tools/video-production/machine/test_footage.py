@@ -123,7 +123,7 @@ class Gate(Index):
             {"id": "S4", "kind": "card", "to_camera": False, "happens": "hand reaches upward to the shelf"},
             # a scene that does not say whether it is to camera is never handed to the library
             {"id": "S5", "happens": "runs fingertips along his jawline"},
-            broll("S6", "opens the FLEX box and lifts the lid", "the FLEX™ box in two hands",
+            broll("S6", "opens the WIDGET box and lifts the lid", "the WIDGET™ box in two hands",
                   "the hands open the box and lift the lid"),
         ]}
 

@@ -816,16 +816,16 @@ class AbsurdOnPurpose(unittest.TestCase):
         import clip_judge
         cfg = json.loads((HERE / "v2.json").read_text())
         # the review the run reads is v5 (P68), which keeps every v4 rule (absurd on purpose, slop still slop)
-        self.assertTrue(cfg["review"]["prompt"].endswith("picture-review-v8-damon.md"))   # P72: v8 = v7 + culture
-        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v7-damon.md").is_file(), "v7 kept")
-        v7 = (HERE.parent / "prompts" / "v2" / "picture-review-v7-damon.md").read_text()
+        self.assertTrue(cfg["review"]["prompt"].endswith("picture-review-v8-owner.md"))   # P72: v8 = v7 + culture
+        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v7-owner.md").is_file(), "v7 kept")
+        v7 = (HERE.parent / "prompts" / "v2" / "picture-review-v7-owner.md").read_text()
         self.assertIn("tone drifts", v7.lower())
-        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v6-damon.md").is_file(), "v6 kept")
-        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v6-damon.md").read_text()
+        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v6-owner.md").is_file(), "v6 kept")
+        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v6-owner.md").read_text()
         self.assertIn("Absurd on purpose is not slop", rv)
         self.assertIn("Slop is still slop", rv)
-        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v3-damon.md").is_file(), "v3 kept, never edited in place")
-        self.assertTrue(clip_judge.PROMPT.name == "clip-judge-v4-damon.md")
+        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v3-owner.md").is_file(), "v3 kept, never edited in place")
+        self.assertTrue(clip_judge.PROMPT.name == "clip-judge-v4-owner.md")
         self.assertIn("stop_power", clip_judge.PROMPT.read_text())
         r = clip_judge.judge(Path(tempfile.mkdtemp()), Path("x.mp4"), {"id": "c", "prompt": "p", "lines": []}, {},
                              ask=lambda *a, **k: ('{"score": 8, "pass": true, "stop_power": 9, "problems": []}', {}))
@@ -923,10 +923,10 @@ class FiveHardFails(unittest.TestCase):
     a face that is not the cast master and a set that is not ours; the swipe-edit prompt changes all five."""
 
     def test_the_review_names_all_five_and_never_shows_the_on_screen_words(self):
-        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v5-damon.md").read_text()
+        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v5-owner.md").read_text()
         for k in ("The swipe's things, not ours", "Any words", "A drawn product", "Not the cast member", "The set is ours"):
             self.assertIn(k, rv)
-        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v4-damon.md").is_file(), "v4 kept")
+        self.assertTrue((HERE.parent / "prompts" / "v2" / "picture-review-v4-owner.md").is_file(), "v4 kept")
         import importlib.util as u
         sp = u.spec_from_file_location("t_p68_run_v2", HERE / "run_v2.py")
         V2 = u.module_from_spec(sp); sp.loader.exec_module(V2)
@@ -1026,10 +1026,10 @@ class TheRealProductInHerHands(unittest.TestCase):
         self.assertFalse(it["product_paste"]["ok"], "recorded, so the reviewer holds the picture")
 
     def test_the_review_and_the_judge_name_the_real_product(self):
-        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v6-damon.md").read_text()
+        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v6-owner.md").read_text()
         self.assertIn("Not the real product", rv)
         self.assertIn("loofah", rv)
-        cj = (HERE.parent / "prompts" / "v2" / "clip-judge-v4-damon.md").read_text()
+        cj = (HERE.parent / "prompts" / "v2" / "clip-judge-v4-owner.md").read_text()
         self.assertIn("The real product stays real", cj)
 
 
@@ -1096,7 +1096,7 @@ class AgnosticPrompts(unittest.TestCase):
         sp = ER.spec_from_file_location("vm_t_er_p72", HERE / "element_refs.py")
         er = ER.module_from_spec(sp); sp.loader.exec_module(er)
         yield "review", (ws / cfg["review"]["prompt"]).read_text().split("\n", 3)[-1]      # past the title + history line
-        cj = (HERE.parent / "prompts" / "v2" / "clip-judge-v4-damon.md").read_text()
+        cj = (HERE.parent / "prompts" / "v2" / "clip-judge-v4-owner.md").read_text()
         yield "clip judge", cj.split("\n", 3)[-1]
         for k in ("SWIPE_EDIT", "PRODUCT_NONE", "PRODUCT_HELD", "NO_PRODUCT"):
             yield k, getattr(er, k)
@@ -1116,7 +1116,7 @@ class AgnosticPrompts(unittest.TestCase):
         src = (HERE / "run_v2.py").read_text()
         self.assertIn("def _presenter_culture(", src)
         self.assertIn("def _banked_set(", src)
-        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v8-damon.md").read_text()
+        rv = (HERE.parent / "prompts" / "v2" / "picture-review-v8-owner.md").read_text()
         self.assertIn("Another culture's room", rv)
         with tempfile.TemporaryDirectory() as t:
             run = Path(t)

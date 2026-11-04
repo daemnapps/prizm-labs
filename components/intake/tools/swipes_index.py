@@ -2,7 +2,7 @@
 """THE SWIPES INDEX — one living row per swipe, so a tool reads one file instead of digging through nine pools.
 
 The same front door as the product index (tools/video-production/machine/product_index.py), for swipes. The
-audit that asked for it: components/naming/WHERE-EVERYTHING-GOES-damon.md ("swipes in about 9 places ... the Drive
+audit that asked for it: components/naming/WHERE-EVERYTHING-GOES-owner.md ("swipes in about 9 places ... the Drive
 swipe front door is stale ... no index for swipes").
 
 Built from, read only:
@@ -142,7 +142,7 @@ def _run_path(slug, brand):
     return None
 
 
-# ── every other place a swipe is kept (2026-10-28, WHERE-EVERYTHING-GOES-damon.md item 6: "swipes in about 9") ──
+# ── every other place a swipe is kept (2026-10-28, WHERE-EVERYTHING-GOES-owner.md item 6: "swipes in about 9") ──
 # Each is read here as a SOURCE of the one index, read only, never moved. A swipe one of them shares with a pool (the
 # same post) is one row with `also_in`; one only it holds is a row of its own.
 PLACES = [
@@ -156,7 +156,7 @@ PLACES = [
     ("picks", "runs/creative-strategist/<brand>/<set>/picks.json", "the creative strategist's picked swipes"),
     ("research rounds", "runs/swipe-organic/<brand>/<round>/ranking.json, manifest.json", "ranked posts per avatar"),
     ("copy swipes", "runs/copywriter/<brand>/_swipe-sources*/<file>.md", "words the copywriter swiped"),
-    ("lab registries", "lab/damon/swipes/<pool>/registry.md", "the hand-kept shared registries (competitor ads, "
+    ("lab registries", "lab/owner/swipes/<pool>/registry.md", "the hand-kept shared registries (competitor ads, "
                                                                   "landing pages, organic posts)"),
 ]
 
@@ -199,7 +199,7 @@ def other_places(brand):
         out.append(_rec("copy", f.parent.name.lstrip("_"), f.stem, "own" if f.parent.name.endswith("-own") else "paid",
                         "copy", brand, f.parent.relative_to(ws).as_posix() + "/", file=f.relative_to(ws).as_posix()))
     pool_kind = {"competitor-ads": ("paid", None), "landing-pages": ("paid", "page"), "organic-posts": ("organic", None)}
-    for f in sorted(ws.glob("lab/damon/swipes/*/registry.md")):
+    for f in sorted(ws.glob("lab/owner/swipes/*/registry.md")):
         src, kind = pool_kind.get(f.parent.name, ("paid", None))
         for line in f.read_text().splitlines():
             cells = [c.strip() for c in line.strip().strip("|").split("|")]

@@ -76,7 +76,7 @@ class BadRequest(SystemExit):
 def _latest(prefix, folder=None):
     folder = Path(folder or P.home() / "library")
     best, best_v = None, -1
-    for f in folder.glob(f"{prefix}-v*-damon.json"):
+    for f in folder.glob(f"{prefix}-v*-owner.json"):
         try:
             v = int(f.name.split("-v")[1].split("-")[0])
         except ValueError:

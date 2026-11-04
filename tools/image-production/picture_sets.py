@@ -1,6 +1,6 @@
 """PICTURE SETS — a picture ad's scene built in 3D, at true sizes, before the picture is made (the owner, 2026-10-28).
 
-the owner, on a flat-lay whose FLEX looked stuck on: "you're missing depth ... in the video work ... we built like a depth
+the owner, on a flat-lay whose WIDGET looked stuck on: "you're missing depth ... in the video work ... we built like a depth
 map ... before we went into video production ... probably should do the same thing for just image ads ... the depth
 model is inside of Higgsfield ... we've already done the work and established the stuff back through chains. So when
 we run future workflows, stuff is faster."

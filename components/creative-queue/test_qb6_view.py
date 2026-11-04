@@ -58,18 +58,18 @@ class View(unittest.TestCase):
 
     def test_rows_without_video_with_shadow_decisions_and_adds(self):
         d, rows = self.view()
-        self.assertEqual(sorted(d), ["damon_age_h", "damon_built", "people", "rows", "shadow_root", "stages"])
+        self.assertEqual(sorted(d), ["owner_age_h", "owner_built", "people", "rows", "shadow_root", "stages"])
         # QB-7 (content queue Monday): the index's email rows are dropped, video is kept read only
         self.assertEqual(sorted(set(r["type"] for r in rows.values())), ["carousel", "image-ad", "landing-page", "video-ad"])
         self.assertEqual(rows["fxbrand_fx_brief-0001"]["read_only"], "video")   # a video ad shows, read only
         # the team's set on a piece in the owner's index shows, with who decided it
         r = rows["fxbrand_fx_brief-0048"]
-        self.assertEqual((r["who"], r["priority"], r["due"]), ("eve", "1", None))
-        self.assertEqual(r["decided_by"]["who"], {"by": "steph", "made": "2026-10-23T13:40:00Z"})
-        self.assertEqual(r["decided_by"]["priority"]["by"], "steph")
+        self.assertEqual((r["who"], r["priority"], r["due"]), ("designer", "1", None))
+        self.assertEqual(r["decided_by"]["who"], {"by": "pm", "made": "2026-10-23T13:40:00Z"})
+        self.assertEqual(r["decided_by"]["priority"]["by"], "pm")
         self.assertEqual((r["stage"], r["flag"], r["since"], r["title"], r["brand"]),
                          ("final-needs-you", "stuck", "2026-10-16", "Brief 0048 · fx", "fxbrand"))
-        self.assertIs(r["in_damon"], True)
+        self.assertIs(r["in_owner"], True)
         self.assertEqual(r["thumb"], "http://127.0.0.1:8795/thumb/fx.png")
         # links: 127.0.0.1 and localhost are the owner's Mac only; a real web link is not
         self.assertEqual(r["links"], [{"label": "Open in Launch to Meta", "url": "http://127.0.0.1:8795/", "local": True},
@@ -78,9 +78,9 @@ class View(unittest.TestCase):
         # a shadow add is a row of its own, not in the owner's list
         a = rows["fxbrand_image-ad_baseline-03"]
         self.assertEqual((a["title"], a["brand"], a["type"], a["who"], a["stage"]),
-                         ("Baseline 03", "fxbrand", "image-ad", "eve", None))
-        self.assertIs(a["in_damon"], False)
-        self.assertEqual(a["added_by"]["by"], "steph")
+                         ("Baseline 03", "fxbrand", "image-ad", "designer", None))
+        self.assertIs(a["in_owner"], False)
+        self.assertEqual(a["added_by"]["by"], "pm")
         # QB-7 (content queue Monday): an email in the owner's index is gone (emails come from the email line);
         # removed and gone rows are kept, marked
         self.assertNotIn("fxbrand_email_fxbrand-oct-20", rows)
@@ -88,15 +88,15 @@ class View(unittest.TestCase):
         self.assertEqual((gone["gone"], gone["removed"]), ("2026-10-18T14:26:54", False))
         rm = rows["fxbrand_idea_old-static"]
         self.assertIs(rm["removed"], True)
-        self.assertEqual(rm["decided_by"]["removed"]["by"], "damon")
+        self.assertEqual(rm["decided_by"]["removed"]["by"], "owner")
         for row in rows.values():
             for f in ("who", "priority", "due", "note", "requested_stage", "decided_by", "removed"):
                 self.assertIn(f, row)
 
-    def test_damon_built_and_age_come_from_the_index(self):
+    def test_owner_built_and_age_come_from_the_index(self):
         d, _ = self.view()
-        self.assertEqual(d["damon_built"], "2026-10-22T02:00:00+00:00")
-        self.assertEqual(d["damon_age_h"], 36.0)
+        self.assertEqual(d["owner_built"], "2026-10-22T02:00:00+00:00")
+        self.assertEqual(d["owner_age_h"], 36.0)
         self.assertEqual(d["people"], ["the owner", "the team", "the team"])     # QB-7 (content queue Monday): without Christine
         self.assertEqual(d["shadow_root"], str(self.root))
         self.assertEqual([s["id"] for s in d["stages"]][:2], ["idea", "brief"])
@@ -106,8 +106,8 @@ class View(unittest.TestCase):
         self.view()
         self.assertEqual(snapshot(self.tmp), before)
         self.assertEqual(sorted(str(p.relative_to(self.tmp)) for p in self.tmp.rglob("*")),
-                         sorted(["index.json", "shadow", "shadow/decisions", "shadow/decisions/steph",
-                                 "shadow/decisions/steph/2026-10-23.jsonl"]))
+                         sorted(["index.json", "shadow", "shadow/decisions", "shadow/decisions/pm",
+                                 "shadow/decisions/pm/2026-10-23.jsonl"]))
 
     def test_view_refuses_the_live_queue_as_root(self):
         code, out, err = run("view.py", "--index", str(self.index), "--root", str(REPO / "runs" / "queue"), "--now", NOW)
@@ -115,13 +115,13 @@ class View(unittest.TestCase):
         self.assertIn("REFUSED", err)
 
     def test_due_round_trips_and_a_bad_date_exits_2(self):
-        base = ["--by", "steph", "--root", str(self.root), "--no-commit"]
+        base = ["--by", "pm", "--root", str(self.root), "--no-commit"]
         code, out, err = run("cq.py", "set", "fxbrand_fx_brief-0048", "due", "2026-10-27", *base)
         self.assertEqual(code, 0, err)
         _, rows = self.view()
         r = rows["fxbrand_fx_brief-0048"]
         self.assertEqual(r["due"], "2026-10-27")
-        self.assertEqual(r["decided_by"]["due"]["by"], "steph")
+        self.assertEqual(r["decided_by"]["due"]["by"], "pm")
         before = snapshot(self.root)
         for bad in ("27/10", "2026-10-32", "2026-1-27", "tomorrow"):
             code, out, err = run("cq.py", "set", "fxbrand_fx_brief-0048", "due", bad, *base)

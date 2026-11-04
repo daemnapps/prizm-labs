@@ -19,8 +19,8 @@ TOOL = "casting"
 
 # Where a built character lives inside a brand, and where the brand's cast
 # RECORDS live. Both are the brand's, and both are read exactly as they are on
-# disk — `lab/damon/avatar-builder/build.py` files into the first and
-# `lab/damon/casting/build_cast.py` reads the second.
+# disk — `lab/owner/avatar-builder/build.py` files into the first and
+# `lab/owner/casting/build_cast.py` reads the second.
 CAST_FOLDER = ("ai-cast",)
 
 # THE REGISTRY IS BEING MOVED, AND THIS COMPONENT ONLY READS IT (2026-09-22).
@@ -158,7 +158,7 @@ def brand(name, start=None):
 
 def character(brand_name, cid, start=None):
     """One built character's folder inside the brand — the shape
-    `lab/damon/avatar-builder/build.py` already files into, unchanged."""
+    `lab/owner/avatar-builder/build.py` already files into, unchanged."""
     d = brand(brand_name, start)["cast"] / cid
     return {"root": d, "boards": d / "boards",
             "master": d / "master-sheet.png",
@@ -202,7 +202,7 @@ def drive_runs():
     (DRIVE_MOUNT=off, LD-26 (mount switch)), so that is the first failure."""
     brandpath()                                    # puts components/brandpath on sys.path
     import drive_index
-    mounts = drive_index.upright_accounts()        # named in drive_index only (LD-55 (Drive literal check))
+    mounts = drive_index.company_accounts()        # named in drive_index only (LD-55 (Drive literal check))
     if not mounts:
         raise MountError("no company Google Drive is mounted on this machine")
     if len(mounts) > 1:

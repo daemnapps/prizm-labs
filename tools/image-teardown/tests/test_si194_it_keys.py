@@ -11,7 +11,7 @@ network. The real ~/.daemn, ~/.workflow-worker.env, ~/.gemini.env, ~/.apify.env
 and the Keychain are never read.
 
   (a) loader    — it_keys loads components/keys/loader.py by path as
-                  upright_keys_loader, reuses it, never raises.
+                  company_keys_loader, reuses it, never raises.
   (b) import    — gpt_drafts, draft_judge and carousel import in a fresh process
                   whose HOME has NO ~/.daemn; no reader imports the helper, puts
                   ~/.daemn on sys.path or names a key file in code.
@@ -223,8 +223,8 @@ class Case(unittest.TestCase):
 class Loader(Case):
     def test_loaded_by_path_under_its_own_name(self):
         loader = it_keys._load_loader()
-        self.assertEqual(loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], loader)
+        self.assertEqual(loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], loader)
         self.assertEqual(Path(loader.__file__).resolve(), REPO / "components" / "keys" / "loader.py")
         self.assertNotIn(str(REPO / "components" / "keys"), sys.path)
         self.assertIs(it_keys._load_loader(), loader, "loaded once, then reused")
@@ -374,14 +374,14 @@ class Mini(Case):
                             getattr(self, site)()
                         msg = str(cm.exception.code)
                         self.assertIn(GEMINI, msg)
-                        self.assertIn("old locations skipped", msg)
+                        self.assertIn("skipped (managed file", msg)
                         self.assertNotIn("fake-", msg)
                     else:
                         self.assertIsNone(getattr(self, site)())
             with self.assertRaises(SystemExit) as cm:
                 self.via_pull_ig_image()
             self.assertIn(APIFY, str(cm.exception.code))
-            self.assertIn("old locations skipped", str(cm.exception.code))
+            self.assertIn("skipped (managed file", str(cm.exception.code))
             self.assertNotIn("fake-", str(cm.exception.code))
             self.assertEqual(check.api_key(), (False, "missing: " + GEMINI))
         self.assertEqual(self.key_files_opened(seen), [])

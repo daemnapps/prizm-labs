@@ -60,7 +60,7 @@ ELEMENT_KINDS = {"products": "product", "casting": "cast", "sets": "set", "props
 
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
-    2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-damon.md item 4). The old lane folder
+    2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
     tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name

@@ -46,7 +46,7 @@ def open_decisions(rec, dec):
     """The ones still waiting on the owner, after what he has already answered."""
     answered = rec.get("decisions", {})
     return [d for d in dec
-            if "damon" in d["who"].lower() and not d["settled"]
+            if "owner" in d["who"].lower() and not d["settled"]
             and not answered.get(slugify(d["what"]), {}).get("answer")]
 
 
@@ -62,7 +62,7 @@ def panel(bid, rec):
     for d in dec:
         key = slugify(d["what"])
         a = answered.get(key, {})
-        mine = "damon" in d["who"].lower() and not d["settled"]
+        mine = "owner" in d["who"].lower() and not d["settled"]
         state = ("settled in the brief" if d["settled"]
                  else f'answered {a["at"][:10]}' if a.get("answer")
                  else "open")

@@ -14,7 +14,7 @@ bottom, it can. Maybe there's an offer… and then you just put a button in."
 
 WHERE EACH PART COMES FROM
 - the words: stage 8 of the email chain writes them into this shape, as a
-  fenced `EMAIL` block (prompts/stage8-build-v2-damon.md)
+  fenced `EMAIL` block (prompts/stage8-build-v2-owner.md)
 - the look: `brands/<brand>/email-sms/simple.json`, read off the brand's own last
   sent email — this engine names no brand, colour or font
 - the pictures: the email picture chain (design/picture_chain.py), the way

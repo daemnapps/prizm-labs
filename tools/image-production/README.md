@@ -51,7 +51,7 @@ python3 tools/image-production/make.py \
 |---|---|
 | **One request shape** | `brand · purpose · direction · out` required, everything else optional. Declared in `CLAUDE.md`; a field nothing declares is refused |
 | **One context builder** | `context.py` — the product photo and the product's real facts, the logo, the palette, the fonts, the element rows. All read from `brands/<brand>/` at run time |
-| **One prompting structure** | `prompts/picture-vN-damon.md` — ten slots in a fixed order, the caller's direction in one of them, the standing rules on the end of every one |
+| **One prompting structure** | `prompts/picture-vN-owner.md` — ten slots in a fixed order, the caller's direction in one of them, the standing rules on the end of every one |
 | **One model route** | `models.json` — a forced model, else an edit, else a person, else an object. Read from the table, never decided in a caller's code |
 | **The judge** | `judge.py` — measured off the pixels first, then the brand's own product tests and a direction-match test put to a vision model. A judge that did not run holds the picture |
 | **Three gates** | inputs · elements · media, through `components/marketing-chain-checks`, into a gate-keyed `check.json` |
@@ -66,7 +66,7 @@ shape. So it no longer draws the product at all.
 When a request names a product whose kit has a 3D model, it happens by itself:
 
 1. **The scene is made empty.** The image model gets no product photo and is
-   told to leave a clear spot where the product goes (`prompts/product-space-v1-damon.md`).
+   told to leave a clear spot where the product goes (`prompts/product-space-v1-owner.md`).
 2. **The product is rendered** from the kit's 3D model in Blender, in a pose the
    kit allows (for a device that cannot stand: seated in its holder), from the
    camera angle and light the scene needs.
@@ -81,7 +81,7 @@ other product. `product_3d: false` (or `--no-product-3d`) turns it off;
 pose, camera and light.
 
 **Real size.** Unless the request names the spot, the empty scene is read
-(`prompts/product-locate-v1-damon.md`): where the empty spot is, and a common
+(`prompts/product-locate-v1-owner.md`): where the empty spot is, and a common
 object of known size near it (a hinge, an outlet plate, a tap). The product is
 then sized from its real measurements against that object, never by eye.
 A brief that already reserves a `product_zone` gets the product fitted there.

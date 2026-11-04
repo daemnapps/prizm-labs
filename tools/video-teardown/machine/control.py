@@ -42,7 +42,7 @@ def render(transcript, proof=None, label=""):
              "", "## ELEMENT LEDGER", "",
              "| # | Element | Status |", "|---|---|---|",
              "| 1 | Every element of the source | Kept |",
-             "", "## STRUCTURE QUESTIONS FOR DAMON", "", "None — the control changes nothing.", ""]
+             "", "## STRUCTURE QUESTIONS FOR OWNER", "", "None — the control changes nothing.", ""]
     return "\n".join(rows)
 
 

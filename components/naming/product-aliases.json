@@ -1,10 +1,10 @@
 {
  "_about": "Old product names -> the ONE product id (the catalog id). names.product_id() reads this, plus every kit's kit.json \"aliases\" (runs/ai-elements/<brand>/products/<id>/) and the brand's Drive index product ids. Only what those two do not already say goes here: today, the store handles of bundles whose Drive id differs.",
- "rule": "2026-10-28: the full catalog id wins (flex-face-brush, crush-bump-eliminator, bundles as their Drive ids). Store handles are aliases; nothing already made or live is renamed. An alias names exactly one product.",
+ "rule": "2026-10-28: the full catalog id wins (widget-face-brush, crush-bump-eliminator, bundles as their Drive ids). Store handles are aliases; nothing already made or live is renamed. An alias names exactly one product.",
  "brands": {
   "brand-a": {
-   "the-vitals-set": "vitals-set",
-   "the-king-skin-set": "king-set"
+   "the-starter-set": "vitals-set",
+   "the-bundle-set": "king-set"
   }
  }
 }

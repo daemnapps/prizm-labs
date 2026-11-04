@@ -11,7 +11,7 @@ with fake values only. No transport is ever reached: no network. The real
 are never read.
 
   (a) loader    — ip_keys loads components/keys/loader.py by path as
-                  upright_keys_loader, reuses it; gemini_image shares it.
+                  company_keys_loader, reuses it; gemini_image shares it.
   (b) via key   — route.key_value and gemini_image.key() ask ip_keys.key(NAME);
                   neither imports the helper or names a key file in code;
                   judge, providers and dryrun still ask route.key_value.
@@ -154,8 +154,8 @@ class Case(unittest.TestCase):
 class Loader(Case):
     def test_loaded_by_path_under_its_own_name(self):
         loader = ip_keys._load_loader()
-        self.assertEqual(loader.__name__, "upright_keys_loader")
-        self.assertIs(sys.modules["upright_keys_loader"], loader)
+        self.assertEqual(loader.__name__, "company_keys_loader")
+        self.assertIs(sys.modules["company_keys_loader"], loader)
         self.assertEqual(Path(loader.__file__).resolve(), REPO / "components" / "keys" / "loader.py")
         self.assertNotIn(str(REPO / "components" / "keys"), sys.path)
         self.assertIs(ip_keys._load_loader(), loader, "loaded once, then reused")

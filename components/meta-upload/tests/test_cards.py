@@ -159,7 +159,7 @@ class Moves(Base):
 
 
 class Upload(Base):
-    def test_refused_without_damons_approve(self):
+    def test_refused_without_owners_approve(self):
         f = C.move(self.card(), "2-approved")
         with self.assertRaises(SystemExit) as e:
             U.upload_card(f, m=FakeMeta("brand-b"), log=lambda *_: None)

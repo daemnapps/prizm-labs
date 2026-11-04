@@ -27,7 +27,7 @@ def test_scan_refuses_ours_and_never_public_things():
     sys.path.insert(0, str(HERE))
     import feedsexport as F
     for bad in ("brand-a--fed-up-king", "brand-b--spot-hider", "competitor-b", "/Users/someone", "act_123456", "meta_page_id",
-                "app.adplexity.io/storage/x.jpg", "prompts-as-sent", "damon--saves",
+                "app.adplexity.io/storage/x.jpg", "prompts-as-sent", "owner--saves",
                 "customer-base.md", "x.cloudfront.net/face.png", "APIFY_TOKEN"):
         assert F.dirty(bad), bad
     assert F.dirty("ad 916629913735911", {"916629913735911"})
@@ -44,8 +44,8 @@ def test_export_writes_no_brand_keyed_ids():
     sys.path.insert(0, str(HERE))
     import feedsexport as F
     assert F.public_id("brand-a--fed-up-king") == "fed-up-king"
-    assert F.public_id("damon--my-saves") == "my-saves"
-    assert not F.dirty(F.public_id("damon--saves"))
+    assert F.public_id("owner--my-saves") == "my-saves"
+    assert not F.dirty(F.public_id("owner--saves"))
 
 
 def test_guard_allows_public_competitors_only_when_asked(tmp_path):

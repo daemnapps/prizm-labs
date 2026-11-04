@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """His saves, as a feed on My Feeds.
 
-The saves catalog (records/damon-saves/) is his taste already applied — the
+The saves catalog (records/owner-saves/) is his taste already applied — the
 highest-signal intake the system has — and until now it was only readable on
 the old Swipe Studio board. My Feeds is THE board (his ruling, 2026-09-19),
 so the catalog is projected into the feed store like any other feed and shows
-up beside the avatar feeds as **damon · my saves**.
+up beside the avatar feeds as **owner · my saves**.
 
     python3 saves_feed.py [--dry-run]
 
 Free: no model, no network. Reads the catalog, writes the feed store.
 Idempotent — run it after every sweep, it rebuilds the feed in place.
 
-Note the other feed: `damon--saves` is NOT this. That one is *dug* from the
+Note the other feed: `owner--saves` is NOT this. That one is *dug* from the
 creators he saves two or more times — a room built out of his taste. This one
 is the saves themselves.
 """
@@ -21,9 +21,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SAVES = HERE / "records/damon-saves"
-FEED = HERE / "records/avatar-feeds/damon--my-saves"
-FEED_ID = "damon--my-saves"
+SAVES = HERE / "records/owner-saves"
+FEED = HERE / "records/avatar-feeds/owner--my-saves"
+FEED_ID = "owner--my-saves"
 
 
 def build(dry=False):
@@ -38,7 +38,7 @@ def build(dry=False):
             "author": r.get("author") or "", "posted": None,
             "caption": r.get("caption") or "", "hashtags": r.get("hashtags") or [],
             "cover": None, "kind": r.get("kind"),
-            "source": "damon's saved folder",
+            "source": "owner's saved folder",
             "receipt": f"saved on instagram.com/daemn.is/saved — {r.get('note') or 'first capture'}",
             "first_seen": seen,
             # his read, carried across so the page can search and filter on it
@@ -56,9 +56,9 @@ def build(dry=False):
         return
     FEED.mkdir(parents=True, exist_ok=True)
     (FEED / "sources.json").write_text(json.dumps({
-        "feed": FEED_ID, "title": "damon · my saves",
+        "feed": FEED_ID, "title": "owner · my saves",
         "ask": "Everything I saved on Instagram, newest sweep first.",
-        "whose": "damon", "brand": "damon",
+        "whose": "owner", "brand": "owner",
         "note": "Not dug — projected from the saves catalog by saves_feed.py. "
                 "A new sweep of the saved folder needs his own Chrome; this "
                 "rebuild only re-reads what the sweep already filed.",

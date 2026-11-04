@@ -442,7 +442,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         the lab folder (`video-production/...`). Try the swipe home first, then
         the lab root, then the paid root, and refuse anything that escapes them.
         """
-        lab = os.path.normpath(str(swipe_home.shared_assets() / "lab" / "damon"))
+        lab = os.path.normpath(str(swipe_home.shared_assets() / "lab" / "owner"))
         roots = [os.path.normpath(str(swipe_home.root(p))) for p in swipe_home.POOLS]
         hit = swipe_home.resolve(rel)
         cands = [os.path.normpath(str(hit))] if hit else []

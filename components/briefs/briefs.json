@@ -1,7 +1,7 @@
 {
  "_what": "Every brief style in the workspace, declared. Registered, not moved \u2014 each stays where its machine keeps it (see CLAUDE.md, the intake precedent).",
  "_naming": "brief--<asset>--<actor>.md \u2014 the stage number leaves the filename.",
- "_audit": "lab/damon/BRIEF-PATCHBAY.md (2026-09-25); usage counted off the shared runs/ plane.",
+ "_audit": "lab/owner/BRIEF-PATCHBAY.md (2026-09-25); usage counted off the shared runs/ plane.",
  "updated": "2026-09-30",
  "briefs": [
   {
@@ -9,7 +9,7 @@
    "record": "video teardown, stage 4 loop",
    "asset": "video",
    "actor": "creator",
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-creator-brief-v28-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-creator-brief-v28-owner.md",
    "writes": "5-brief.md \u00b7 7-final-brief.md",
    "status": "approved",
    "state": "live",
@@ -23,7 +23,7 @@
    "record": "video teardown, stage 4 loop",
    "asset": "video",
    "actor": "generator",
-   "prompt": "tools/video-writing/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v19-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v19-owner.md",
    "writes": "5-brief.md",
    "status": "approved",
    "state": "live",
@@ -37,7 +37,7 @@
    "record": "the stage-2 spec",
    "asset": "video",
    "actor": "creator",
-   "prompt": "tools/video-writing/prompts/stage-7b-page/stage7b-concept-v7-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-7b-page/stage7b-concept-v7-owner.md",
    "writes": "7b-page.md",
    "status": "approved",
    "state": "live",
@@ -52,7 +52,7 @@
    "record": "a NONE verdict at stage 4a",
    "asset": "video",
    "actor": "either",
-   "prompt": "tools/video-writing/prompts/stage-5-brief/hook-asset/stage5-hookasset-v2-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/hook-asset/stage5-hookasset-v2-owner.md",
    "writes": "5-brief.md",
    "status": "approved",
    "state": "parked",
@@ -69,7 +69,7 @@
    "record": "image teardown, stages 1-2b; image writing, stages 3-5",
    "asset": "static",
    "actor": "designer",
-   "prompt": "tools/image-writing/prompts/stage6-image-brief-v6-damon.md",
+   "prompt": "tools/image-writing/prompts/stage6-image-brief-v6-owner.md",
    "writes": "06-brief.md \u00b7 work-order.md",
    "status": "approved",
    "state": "live",
@@ -83,7 +83,7 @@
    "record": "image teardown, stages 1-2b; image writing, stages 3-5",
    "asset": "static",
    "actor": "creator",
-   "prompt": "tools/image-writing/prompts/stage6-creator-static-brief-v1-damon.md",
+   "prompt": "tools/image-writing/prompts/stage6-creator-static-brief-v1-owner.md",
    "writes": "06-brief.md",
    "status": "approved",
    "state": "parked",
@@ -99,7 +99,7 @@
    "record": "image teardown, stages 1-2b; image writing, stages 3-5",
    "asset": "carousel",
    "actor": "generator",
-   "prompt": "tools/image-writing/prompts/stage6-ai-sequence-brief-v1-damon.md",
+   "prompt": "tools/image-writing/prompts/stage6-ai-sequence-brief-v1-owner.md",
    "writes": "06-brief.md",
    "status": "approved",
    "state": "live",
@@ -115,7 +115,7 @@
    "record": "image teardown, stages 1-2b; image writing, stages 3-5",
    "asset": "carousel",
    "actor": "creator",
-   "prompt": "tools/image-writing/prompts/archive/stage6-creator-sequence-brief-v1-damon.md",
+   "prompt": "tools/image-writing/prompts/archive/stage6-creator-sequence-brief-v1-owner.md",
    "writes": "06-brief.md",
    "status": "deprecated",
    "state": "parked",
@@ -132,7 +132,7 @@
    "record": "copy chain, stage 8 render",
    "asset": "copy",
    "actor": "buyer",
-   "prompt": "tools/copywriter/prompts/stage9-brief-v1-damon.md",
+   "prompt": "tools/copywriter/prompts/stage9-brief-v1-owner.md",
    "writes": "stage9--brief.md",
    "status": "approved",
    "state": "live",
@@ -147,7 +147,7 @@
    "record": "email chain, stage 8 build",
    "asset": "email",
    "actor": "builder",
-   "prompt": "tools/email-production/prompts/stage9-brief-v2-damon.md",
+   "prompt": "tools/email-production/prompts/stage9-brief-v2-owner.md",
    "writes": "stage9--brief.md",
    "status": "approved",
    "state": "live",
@@ -195,7 +195,7 @@
    "record": "page chain, stage 4 close",
    "asset": "page",
    "actor": "builder",
-   "prompt": "lab/damon/pages/prompts/stage6-brief-v3-damon.md",
+   "prompt": "lab/owner/pages/prompts/stage6-brief-v3-owner.md",
    "writes": "stage6--brief.md",
    "status": "approved",
    "state": "live",
@@ -209,7 +209,7 @@
    "record": "an idea, no swipe",
    "asset": "any",
    "actor": "approver",
-   "prompt": "lab/damon/outlier-brief/prompts/idea3-concept-brief-v2-damon.md",
+   "prompt": "lab/owner/outlier-brief/prompts/idea3-concept-brief-v2-owner.md",
    "writes": "idea3--concept-brief.md",
    "status": "approved",
    "state": "live",
@@ -224,7 +224,7 @@
    "record": "ANY published brief, any lane",
    "asset": "video",
    "actor": "creator",
-   "prompt": "lab/damon/clipping/prompts/brief-to-hero-v1-damon.md",
+   "prompt": "lab/owner/clipping/prompts/brief-to-hero-v1-owner.md",
    "writes": "brief.md",
    "status": "approved",
    "state": "live",
@@ -239,14 +239,14 @@
    "record": "the Control Room registry",
    "asset": "campaign",
    "actor": "builder",
-   "prompt": "lab/damon/control-room/prompts/brief/campaign.md",
+   "prompt": "lab/owner/control-room/prompts/brief/campaign.md",
    "writes": "\u2014",
    "status": "deprecated",
    "state": "parked",
    "evidence": {
     "runs": 0,
     "last": "\u2014",
-    "reader": "lab/damon/control-room/registry/agents.json:826 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
+    "reader": "lab/owner/control-room/registry/agents.json:826 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
     "ruled": "deprecated by SI-184 (zero-run styles retired): no run, no reader outside lab; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
    }
   },
@@ -255,14 +255,14 @@
    "record": "the Control Room registry",
    "asset": "calendar",
    "actor": "builder",
-   "prompt": "lab/damon/control-room/prompts/brief/calendar.md",
+   "prompt": "lab/owner/control-room/prompts/brief/calendar.md",
    "writes": "\u2014",
    "status": "deprecated",
    "state": "parked",
    "evidence": {
     "runs": 0,
     "last": "\u2014",
-    "reader": "lab/damon/control-room/registry/agents.json:857 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
+    "reader": "lab/owner/control-room/registry/agents.json:857 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
     "ruled": "deprecated by SI-184 (zero-run styles retired): no run, no reader outside lab; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
    }
   },
@@ -271,14 +271,14 @@
    "record": "the Control Room registry",
    "asset": "page",
    "actor": "builder",
-   "prompt": "lab/damon/control-room/prompts/brief/landing-page.md",
+   "prompt": "lab/owner/control-room/prompts/brief/landing-page.md",
    "writes": "\u2014",
    "status": "deprecated",
    "state": "parked",
    "evidence": {
     "runs": 0,
     "last": "\u2014",
-    "reader": "lab/damon/control-room/registry/agents.json:780 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
+    "reader": "lab/owner/control-room/registry/agents.json:780 only (lab, not counted); the file stays where it is \u2014 lab is the owner's",
     "ruled": "deprecated by SI-184 (zero-run styles retired): no run, no reader outside lab; the owner named no style he still uses (I-196 (the owner notice and asks) Part D, 2026-10-08)"
    }
   },
@@ -287,7 +287,7 @@
    "record": "video teardown, stage 4 loop",
    "asset": "video",
    "actor": "creator",
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/named-creator/stage5-creator-brief-v1-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/named-creator/stage5-creator-brief-v1-owner.md",
    "writes": "5-brief.md",
    "status": "draft",
    "state": "parked",
@@ -302,7 +302,7 @@
    "record": "a finished brief",
    "asset": "\u2014",
    "actor": "\u2014",
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-match/creator-match-v1-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-match/creator-match-v1-owner.md",
    "writes": "\u2014",
    "status": "draft",
    "state": "parked",
@@ -315,38 +315,38 @@
  ],
  "retire_candidates": [
   {
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v23-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v23-owner.md",
    "last": "2026-08-28",
    "runs": 88
   },
   {
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v21-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v21-owner.md",
    "last": "2026-08-27",
    "runs": 6
   },
   {
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v16-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v16-owner.md",
    "last": "\u2014",
    "runs": 0
   },
   {
-   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v22-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/creator-lane/stage5-brief-v22-owner.md",
    "last": "\u2014",
    "runs": 0
   },
   {
-   "prompt": "tools/video-writing/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v4-damon.md",
+   "prompt": "tools/video-writing/prompts/stage-5-brief/ai-lane/stage5-ai-brief-v4-owner.md",
    "last": "2026-08-31",
    "runs": 2,
    "careful": "byte-identical copy components/chain-runner/chains/video-teardown/prompts/stage5/v4.md is PINNED by components/chain-runner/chains/video-teardown/chain.json:119"
   },
   {
-   "prompt": "lab/damon/pages/prompts/stage6-brief-v1-damon.md",
+   "prompt": "lab/owner/pages/prompts/stage6-brief-v1-owner.md",
    "last": "\u2014",
    "runs": 0
   },
   {
-   "prompt": "lab/damon/pages/prompts/stage6-brief-v2-damon.md",
+   "prompt": "lab/owner/pages/prompts/stage6-brief-v2-owner.md",
    "last": "\u2014",
    "runs": 2
   }

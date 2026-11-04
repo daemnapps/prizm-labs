@@ -44,7 +44,7 @@ def plans(site, handle):
 
     A subscription IS an offer — price, cadence and discount — and it was being
     carried in prose from memory: the bank said "$49.99 today + $50 every 60
-    days" when the shop says FLEX subscribes at $20 off every 75 days. Read it,
+    days" when the shop says WIDGET subscribes at $20 off every 75 days. Read it,
     do not remember it."""
     r = subprocess.run(["curl", "-fsSL", "--max-time", "20", f"{site}/products/{handle}.js"],
                        capture_output=True, text=True)

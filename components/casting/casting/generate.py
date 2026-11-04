@@ -1,6 +1,6 @@
 """The generator — a reference picture in, a new picture out.
 
-Lifted from `lab/damon/avatar-builder/build.py` (`uri`, `gen`): the same
+Lifted from `lab/owner/avatar-builder/build.py` (`uri`, `gen`): the same
 model, the same payload, the same data-uri reference, the same key lookup and
 the same "no file back is a FAILURE, said out loud" behaviour. Two things
 changed and both are said here rather than assumed:

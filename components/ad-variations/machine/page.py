@@ -5,7 +5,7 @@ tab. Rebuilt from files, never retyped:
     python3 machine/run.py page
 
 Writes page/ad-variations.html (the artifact source) and
-AD-VARIATIONS-damon.md (the Markdown mirror) inside the component.
+AD-VARIATIONS-owner.md (the Markdown mirror) inside the component.
 """
 import html
 import json
@@ -125,7 +125,7 @@ def run_html(d):
                     f'<td>{E(str(b.get("sound") or ""))}</td><td><span class="att">{E(str(b.get("attention") or ""))}</span> {E(str(b.get("why") or ""))}</td></tr>'
                     for b in d["beats"])
     rvf = "".join(f"<li>{E(str(x))}</li>" for x in d.get("record_vs_file") or [])
-    decides = "".join(f"<li>{E(str(x))}</li>" for x in d.get("damon_decides") or [])
+    decides = "".join(f"<li>{E(str(x))}</li>" for x in d.get("owner_decides") or [])
     return f'''<article class="run" id="run-{E(str(vid))}">{head}{probs}
 <h4>Elements — lock or lever</h4><p class="note">Rank is an ESTIMATE: nothing in the corpus isolates one variable at a time. Index values use the Variable Index ids.</p>{table}
 <h4>Variations</h4><div class="cards">{"".join(cards)}</div>
@@ -369,20 +369,20 @@ def build(repo, echo=print):
 <section class="panel" id="calibration" hidden><h2>Against the hand-made spec</h2>{calibration_html(cal)}</section>
 
 <section class="panel" id="run" hidden><h2>How to run it on any ad</h2>{HOWTO}</section>
-<p class="foot">Rebuilt from the component's files by <code>components/ad-variations/machine/page.py</code> · Markdown copy <code>components/ad-variations/AD-VARIATIONS-damon.md</code></p>
+<p class="foot">Rebuilt from the component's files by <code>components/ad-variations/machine/page.py</code> · Markdown copy <code>components/ad-variations/AD-VARIATIONS-owner.md</code></p>
 </div>
 <script type="application/json" id="ixdata">{ixjson}</script>
 <script>{JS}</script>'''
     out = COMP / "page" / "ad-variations.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(page)
-    (COMP / "AD-VARIATIONS-damon.md").write_text(mirror(prompts, runs, indexes, cal, avg))
-    echo(f"  page: {out.relative_to(repo)} ({len(page) / 1024:.0f} KB) · mirror AD-VARIATIONS-damon.md")
+    (COMP / "AD-VARIATIONS-owner.md").write_text(mirror(prompts, runs, indexes, cal, avg))
+    echo(f"  page: {out.relative_to(repo)} ({len(page) / 1024:.0f} KB) · mirror AD-VARIATIONS-owner.md")
     return out
 
 
 def mirror(prompts, runs, indexes, cal, avg):
-    L = ["# Ad Variations (damon)", "", "> **Internal only — not for sale.** Company tooling; access is granted person by person.", "",
+    L = ["# Ad Variations (owner)", "", "> **Internal only — not for sale.** Company tooling; access is granted person by person.", "",
          "Markdown mirror of the Ad Variations page. Rebuilt by `components/ad-variations/machine/page.py`.", "",
          "## How it works", ""]
     for key, name, what, how, _ in STRIP:

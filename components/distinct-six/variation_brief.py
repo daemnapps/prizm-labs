@@ -8,7 +8,7 @@ production briefs … pull from our asset index … be resourceful."
     python3 components/distinct-six/variation_brief.py brand-a brand-a-grandma-winner --product glow-face-scrub [--only order-pas]
 
 For each cut in runs/distinct-six/<brand>/<winner>/recipes.json: Claude (the owner's
-plan, `claude -p`) reads the cut like a viewer with prompts/variation-brief-v1-damon.md,
+plan, `claude -p`) reads the cut like a viewer with prompts/variation-brief-v1-owner.md,
 the winner's beats (Creative Index), the doctrine framework the cut follows, the
 clip library (runs/distinct-six/<brand>/clip-library/*.json), the brand's
 position (its NEVER list), the product's offer and the core message. Writes
@@ -28,7 +28,7 @@ sys.argv_saved, sys.argv = sys.argv, ["x"]
 sys.path.insert(0, str(HERE))
 import run as R  # claude(), the Creative Index path  # noqa: E402
 sys.argv = sys.argv_saved
-PROMPT = HERE / "prompts" / "variation-brief-v1-damon.md"
+PROMPT = HERE / "prompts" / "variation-brief-v1-owner.md"
 FORMULAS = json.loads((HERE / "formulas.json").read_text())
 FW = json.loads((ROOT / "components" / "marketing-doctrine" / "ad-frameworks.json").read_text())
 FW = {f["id"]: f for f in (FW.get("frameworks") or [v for v in FW.values() if isinstance(v, list)][0])}

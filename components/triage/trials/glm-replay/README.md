@@ -9,7 +9,7 @@ the team, 2026-10-02 at 10:05Z, "replay", answering ◆ PLAN [6beb2b]: "Say "rep
 | | Briefs | Drafts |
 |---|---|---|
 | Original | ATL-31 (remaining issue briefs) part F | ATL-29 (drafted changes) round 2 part A |
-| Request (instruction verbatim) | `platform/data/records/workflow-requests/20261002T061737Z--dayu--impl-atl31f-issue-briefs.json` | `platform/data/records/workflow-requests/20261002T091838Z--dayu--impl-atl29-r2a-remaining-now.json` |
+| Request (instruction verbatim) | `platform/data/records/workflow-requests/20261002T061737Z--engineer--impl-atl31f-issue-briefs.json` | `platform/data/records/workflow-requests/20261002T091838Z--engineer--impl-atl29-r2a-remaining-now.json` |
 | Base | 0fabb40eb | e6d8103826 |
 | Opus output | branch tip b1be1d4d4 (merged 2c8de3b27) | merged b49d2dfa7 |
 | Scope | 58 issue briefs, 6 components (copywriter, image-teardown, intake, meta-upload, media-render, atlas), 50 P2 and 8 P3 | 10 new rows: 6 diffs (apify#11, elements#1, image-production#22, image-teardown#2, marketing-doctrine#6, run-kit#15) and 4 not-drafted reasons |

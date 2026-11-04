@@ -83,7 +83,7 @@ FORMAT_NEEDS = [("0 Triage", "0", "stages/0-triage.md", None),
 RUN_ORDER = [("0", "0-triage.md"), ("1", "1-teardown.md"), ("1k", "1k-culture.md"), ("1b", "1c-doctrine.md"),
              ("2", "2-spec.md")]
 OPEN_ITEM = ("3 Injection: the chain's filled stage-3 prompt for the format + the winner slot "
-             "(prompts/stage-3-winner-slot/stage3-winner-slot-v1-damon.md: the winner's 1 Teardown transcript + "
+             "(prompts/stage-3-winner-slot/stage3-winner-slot-v1-owner.md: the winner's 1 Teardown transcript + "
              "1b Doctrine) — composed per square into runs/ad-variations/<brand>/p2f-<winner>__<code>/sent.md; "
              "the session writes 3-injection.md beside it. Approved by the owner 2026-10-05 (\"run them all\").")
 
@@ -464,7 +464,7 @@ def cmd_page(a):
     data = dict(kind="builder", batch={k: b[k] for k in ("batch", "brand", "product", "avatar", "offer", "route", "lane")},
                 swaps=squares(root, b), thumbs=m["thumbs"], stats=m["stats"], links=m["links"],
                 concepts=[dict(path=w["path"], name=w["ad"], note="") for w in b["winners"]], formats=fm,
-                swap_prompt=rd(HERE.parent / "prompts/stage-3-winner-slot/stage3-winner-slot-v1-damon.md"),
+                swap_prompt=rd(HERE.parent / "prompts/stage-3-winner-slot/stage3-winner-slot-v1-owner.md"),
                 handoff="")
     ws = [winner_state(root, w) for w in b["winners"]]
     allok = lambda n: all(dict(s).get(n, True) for s in ws)  # noqa: E731
@@ -749,13 +749,13 @@ def winner_slot(b, w):
         rv = concept_review(REPO, w)
         if rv.get("state") != "approved":
             raise SystemExit(f"{w['path']}: the concept brief is not approved — approve it through the outlier brief first")
-        slot = max(CONCEPT_SLOT.glob("stage3-concept-slot-v*-damon.md"),
+        slot = max(CONCEPT_SLOT.glob("stage3-concept-slot-v*-owner.md"),
                    key=lambda q: int(re.search(r"-v(\d+)-", q.name).group(1))).read_text()
         return slot.format(product=b["product"].replace("-", " ").title(), offer=b["offer"], avatar=b["avatar"],
                            concept_name=w.get("ad") or Path(w["path"]).name, approved_by=rv.get("by", "?"),
                            approved_at=rv.get("at", "?"),
                            concept_brief=rd(REPO / w["path"] / "deliverable/concept-brief.md"))
-    slot = max(WINNER_SLOT.glob("stage3-winner-slot-v*-damon.md"),
+    slot = max(WINNER_SLOT.glob("stage3-winner-slot-v*-owner.md"),
                key=lambda q: int(re.search(r"-v(\d+)-", q.name).group(1))).read_text()
     st = (stats(REPO, b) or {}).get(w["path"], {})
     wd = REPO / w["path"] / "stages"
@@ -900,7 +900,7 @@ def cmd_produce(a):
         print(f"{d.name}: " + ("started" if a.go else "dry run") + " — " + " ".join((r.stdout + r.stderr).strip().splitlines()[-2:])[-300:])
 
 
-HANDOFF = REPO / "lab" / "damon" / "handoff-standard" / "skill" / "handoff.py"   # the team's hand-off standard
+HANDOFF = REPO / "lab" / "owner" / "handoff-standard" / "skill" / "handoff.py"   # the team's hand-off standard
 VE = REPO / "tools" / "video-edit" / "machine"
 BRIEFS = REPO / "tools" / "image-teardown" / "tools" / "briefs.py"
 
@@ -976,7 +976,7 @@ def main():
         x = sp.add_parser(n); x.add_argument("batch")
     e_ = sp.add_parser("elements", help="Station 3.1 element lists for every green ad"); e_.add_argument("batch")
     ap_ = sp.add_parser("approve", help="\"elements ok\" for every green ad at once"); ap_.add_argument("batch")
-    ap_.add_argument("--by", default="damon")
+    ap_.add_argument("--by", default="owner")
     pr_ = sp.add_parser("produce", help="hand approved ads to production (dry run unless --go)"); pr_.add_argument("batch")
     pr_.add_argument("--format", default="demonstration", help="a row in video-production/formats/bank.json"); pr_.add_argument("--go", action="store_true")
     ed_ = sp.add_parser("editor", help="hand every ad with clips to the editor's queue (dry run unless --go)")

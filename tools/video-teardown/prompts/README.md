@@ -63,7 +63,7 @@ files, because the machine is brand-, product- and avatar-agnostic.
 ## Why the folder names and the shared config's names don't match
 
 The folders above are named for **when a stage runs** (4a is first, 4f is
-last). The team's shared chain config (`lab/dayu/prompt-optimizer/regression/
+last). The team's shared chain config (`lab/engineer/prompt-optimizer/regression/
 chain_config.json`) names stages for **what the team built them as** — and his
 file has `@stage4a`/`@stage4b`-style references baked into it that can't be
 renamed without breaking his config. So the machine keeps his internal names
@@ -96,27 +96,27 @@ and the sections are written down.
 
 | Shown as | File | Doctrine it binds |
 |---|---|---|
-| 0 | `triage-v2-damon.md` | — |
-| 1 | `stage1-teardown-v9-damon.md` | sections |
-| 1c | `stage1c-doctrine-v1-damon.md` | sections · awareness · sophistication · techniques · desire · mood |
-| 1b | `stage1b-audience-v6-damon.md` | desire · awareness · sophistication · 1c's read |
-| 2 | `stage2-replication-v3-damon.md` | sophistication · 1c's read |
-| 2f · FRAMEWORK lane only | `stage2f-compose-v1-damon.md` | sections · techniques · awareness · sophistication |
-| 3 | `stage3-injection-v9-damon.md` | techniques |
-| 4a | `stage4r-read-v4-damon.md` | awareness |
-| 4b | `stage4b-hook-v12-damon.md` | awareness |
-| 4c | `stage4a-placement-v10-damon.md` | — |
-| 4d | `stage4c-expansion-v12-damon.md` | techniques · sections · sophistication · research |
-| 4e | `stage4d-close-v7-damon.md` | offer-close · verification |
-| 4f | `stage4e-audit-v4-damon.md` | awareness · sophistication |
-| 4g | `stage4g-spice-v3-damon.md` | research-questions · techniques · mood · delivery · spoken · research · voiceprint |
-| 5 · creator | `stage5-creator-brief-v26-damon.md` | — |
-| 5 · ai | `stage5-ai-brief-v10-damon.md` | delivery · spoken (reads 4g's sheet; `voice` IS its spoken paragraph) |
-| 5 · hook asset | `stage5-hookasset-v2-damon.md` | — |
-| 6 | `stage6-frames-v2-damon.md` | — |
-| 7 | `stage7-inject-v1-damon.md` | — |
-| 7b | `stage7b-concept-v5-damon.md` | — |
-| 8 | `stage8-profile-v2-damon.md` | — |
+| 0 | `triage-v2-owner.md` | — |
+| 1 | `stage1-teardown-v9-owner.md` | sections |
+| 1c | `stage1c-doctrine-v1-owner.md` | sections · awareness · sophistication · techniques · desire · mood |
+| 1b | `stage1b-audience-v6-owner.md` | desire · awareness · sophistication · 1c's read |
+| 2 | `stage2-replication-v3-owner.md` | sophistication · 1c's read |
+| 2f · FRAMEWORK lane only | `stage2f-compose-v1-owner.md` | sections · techniques · awareness · sophistication |
+| 3 | `stage3-injection-v9-owner.md` | techniques |
+| 4a | `stage4r-read-v4-owner.md` | awareness |
+| 4b | `stage4b-hook-v12-owner.md` | awareness |
+| 4c | `stage4a-placement-v10-owner.md` | — |
+| 4d | `stage4c-expansion-v12-owner.md` | techniques · sections · sophistication · research |
+| 4e | `stage4d-close-v7-owner.md` | offer-close · verification |
+| 4f | `stage4e-audit-v4-owner.md` | awareness · sophistication |
+| 4g | `stage4g-spice-v3-owner.md` | research-questions · techniques · mood · delivery · spoken · research · voiceprint |
+| 5 · creator | `stage5-creator-brief-v26-owner.md` | — |
+| 5 · ai | `stage5-ai-brief-v10-owner.md` | delivery · spoken (reads 4g's sheet; `voice` IS its spoken paragraph) |
+| 5 · hook asset | `stage5-hookasset-v2-owner.md` | — |
+| 6 | `stage6-frames-v2-owner.md` | — |
+| 7 | `stage7-inject-v1-owner.md` | — |
+| 7b | `stage7b-concept-v5-owner.md` | — |
+| 8 | `stage8-profile-v2-owner.md` | — |
 
 **Stage 1c — the doctrine read (the owner's ruling, 2026-09-18).** "Every time
 we run a swipe, we'll run it through a marketing doctrine step too so we have

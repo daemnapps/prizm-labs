@@ -64,7 +64,7 @@ Format stacks and picture counts per send type: `EMAIL-FORMATS.md`, `formats.jso
 
 ## Pictures, in this order
 
-1. **Real product, cut out** — store 360° frames for FLEX, real packshots for bottles. Not the 3D models in emails yet.
+1. **Real product, cut out** — store 360° frames for WIDGET, real packshots for bottles. Not the 3D models in emails yet.
 2. **Brand photo we own** — studio lifestyle shots.
 3. **Real customer proof** — before/afters, photo reviews, UGC, own social posts; as they are, never made.
 4. **Made, from a real reference** — only what nothing we own shows; real product photo as the reference; every label read.
@@ -84,7 +84,7 @@ cut-outs · plinth under the footer. Gold and emerald for ornaments only; the bu
 - No customer face twice in a week (once a month at most); a customer's words only with his own face.
 - Every crop shows what its label names.
 - Borrow a format, never a person; a homage shows no face; the villain is the problem.
-- The product behaves like itself (FLEX in a hand, base or case; the case is sold separately, never shown as in the box).
+- The product behaves like itself (WIDGET in a hand, base or case; the case is sold separately, never shown as in the box).
 - The subject names the concept, not the product; body is two or three short lines.
 
 ## The weeks it ran on
@@ -94,15 +94,15 @@ cut-outs · plinth under the footer. Gold and emerald for ornaments only; the bu
 | Mon 12 Oct | Letter | VIP, 5+ orders | It was never about the bumps |
 | Tue 13 Oct | Design | Leads + subscribers | WAR: the sting was never proof |
 | Wed 14 Oct | Letter | Loyal, 4 orders | What we're against (restock WAR) |
-| Fri 16 Oct | Design | Subscribers | FLEX: reaches what your hands can't |
+| Fri 16 Oct | Design | Subscribers | WIDGET: reaches what your hands can't |
 | Sun 18 Oct | Design | Leads | "Five blade razors… makes no difference" |
-| Tue 20 Oct | Design | on its card | Retire the fitted (FLEX) |
+| Tue 20 Oct | Design | on its card | Retire the fitted (WIDGET) |
 | Thu 22 Oct | Design | on its card | Now playing: Smooth (CRUSH) |
 | Sat 24 Oct | Design | Subscribers | Keep it either way (the guarantee) |
 | Sun 26 Oct | Design | Returning · Engaged 180d | Night of the Bumps (WAR) |
-| Thu 29 Oct | Design | on its card | Barbershop at midnight (King Set as five pictures) |
+| Thu 29 Oct | Design | on its card | Barbershop at midnight (Bundle Set as five pictures) |
 | Fri 30 Oct | Letter | Customers | What are you going as? |
-| Sat 31 Oct | Design | on its card | Thriller-style street (King Set deal) |
+| Sat 31 Oct | Design | on its card | Thriller-style street (Bundle Set deal) |
 
 ## How it runs now, both brands (17 Oct 2026)
 
@@ -142,7 +142,7 @@ What was hand-built for the <brand> week is now one shared line; a brand changes
 |---|---|---|
 | A · Calendar | Every send gets `kind` (design / letter), `format` (section stack) and `kind_why`, at layer 9 and on a free two-week re-run. Letter types: content-request, mission, founder-note, what-went-wrong, sunset, reader-question, affiliate-feature; everything else is designed. A brand may add its own rule (`by_weekday`, `letter`, `design`). | `components/marketing-calendar/definitions/email-kinds.json`, `machine/kinds.py`, `brands/<brand>/email-sms/email-kinds.json` |
 | B · Copy | The copy chain, unchanged. Design starts only on finished copy. | `email.py` / `run_month.py` |
-| C · Job card + layout | Prompt 1 writes the job card and the concept from the reader's culture map; prompt 2 lays the email out as a spec (`design/email.json`). The layout is held unless every section exists, every product picture is in the brand's look, every proof id is in the proof index, and no proof repeats in the window. **the owner OKs the layouts.** | `tools/email-production/design/line.py`, `prompts/design1-jobcard-v1-damon.md`, `prompts/design2-layout-v1-damon.md` |
+| C · Job card + layout | Prompt 1 writes the job card and the concept from the reader's culture map; prompt 2 lays the email out as a spec (`design/email.json`). The layout is held unless every section exists, every product picture is in the brand's look, every proof id is in the proof index, and no proof repeats in the window. **the owner OKs the layouts.** | `tools/email-production/design/line.py`, `prompts/design1-jobcard-v1-owner.md`, `prompts/design2-layout-v1-owner.md` |
 | D · Build | The engine renders the spec in the brand's look; `build.py` cuts it for Klaviyo (team tracking tags via `machine/email_links.py`) and writes the approval card with the product check; `check.py` runs the final check across the batch. | `design/engine.py`, `build.py`, `check.py`, `approve_klaviyo.py` |
 
 Run it:

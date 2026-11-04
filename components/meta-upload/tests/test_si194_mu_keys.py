@@ -12,7 +12,7 @@ fail the test if anything starts a process; no network. The real ~/.daemn,
 read.
 
   (a) loader    — mu_keys loads components/keys/loader.py by path as
-                  upright_keys_loader, never on sys.path, only at call time.
+                  company_keys_loader, never on sys.path, only at call time.
   (b) surface   — token() keeps its name, signature and default; a brand's
                   token_key is the name asked; Meta(brand, tok=) never asks.
   (c) order     — env beats the Keychain helper; the helper is found, stripped,
@@ -52,7 +52,7 @@ DEFAULT = "PRIZM_META_TOKEN"
 BRAND_KEY = "FAKE_SI194_MU_BRAND_TOKEN"
 HELPER = "daemn_keys"
 MARKER = ".workflow-worker.env"
-LOADER = "upright_keys_loader"
+LOADER = "company_keys_loader"
 HINT = "system-user token from Business Settings"
 
 _CRED = ("_KEY", "_TOKEN", "_SECRET", "_KEY_ID", "_KEY_SECRET", "_DB_URL")

@@ -4,11 +4,11 @@ waits on it, and reads the answer; the lead answers in the same folder
 (LD-29 (mini-debug threads)).
 
     python3 components/run-kit/mini_debug.py open --slug S --ask "…" [--run LABEL]
-                [--seen "…"] [--tried "…"] [--machine M] [--to dayu] [--no-push]
+                [--seen "…"] [--tried "…"] [--machine M] [--to engineer] [--no-push]
     python3 components/run-kit/mini_debug.py reply <thread> --body "…"
-    python3 components/run-kit/mini_debug.py close <thread> (--fixed SHA | --needs-dayu "question" | --ruled POINTER)
+    python3 components/run-kit/mini_debug.py close <thread> (--fixed SHA | --needs-engineer "question" | --ruled POINTER)
     python3 components/run-kit/mini_debug.py watch <thread> [--interval 30]
-    python3 components/run-kit/mini_debug.py list [--to dayu] [--open]
+    python3 components/run-kit/mini_debug.py list [--to engineer] [--open]
     python3 components/run-kit/mini_debug.py brief
 
 Why it exists: a teammate's Claude cannot reach the team's sessions (another
@@ -31,7 +31,7 @@ open    prints team/threads/<to>/KNOWN-ISSUES.md and its `## Open` titles first
         `--no-push` writes + commits it by pathspec in your clone instead.
 reply   the next NNN-<from>.md (numbered from disk and origin/main, after a
         fetch); published as `open` is.
-close   NNN-close.md, one line — `fixed: SHA`, `needs-dayu: …` or `ruled: …`
+close   NNN-close.md, one line — `fixed: SHA`, `needs-engineer: …` or `ruled: …`
         and who closed it; published as `open` is.
 watch   every --interval seconds: git fetch, then one line per new message in
         the thread on origin/main written by someone else (its path and first
@@ -69,7 +69,7 @@ Refused = M.Refused
 THREADS = "team/threads"
 KNOWN = "KNOWN-ISSUES.md"
 LAB_RUNS = "platform/data/records/lab-runs"
-DEFAULT_TO = "dayu"
+DEFAULT_TO = "engineer"
 SUBJECT = "mini-debug:"
 STDERR_LINES = 8
 PREVIEW_LINES = 3
@@ -378,8 +378,8 @@ def close(repo, git, ns, now, say, env):
         if not SHA.match(ns.fixed.strip()):
             raise Refused("--fixed {0!r} is not a commit sha".format(ns.fixed))
         what = "fixed: " + ns.fixed.strip()
-    elif ns.needs_dayu is not None:
-        what = "needs-dayu: " + " ".join(ns.needs_dayu.split())
+    elif ns.needs_engineer is not None:
+        what = "needs-engineer: " + " ".join(ns.needs_engineer.split())
     else:
         what = "ruled: " + " ".join(ns.ruled.split())
     if what.endswith(": "):
@@ -520,7 +520,7 @@ def parser():
     c.add_argument("thread")
     how = c.add_mutually_exclusive_group(required=True)
     how.add_argument("--fixed", metavar="SHA")
-    how.add_argument("--needs-dayu", metavar="QUESTION")
+    how.add_argument("--needs-engineer", metavar="QUESTION")
     how.add_argument("--ruled", metavar="POINTER")
     w = sub.add_parser("watch", help="wait on a thread; one line per message from the other side")
     w.add_argument("thread")

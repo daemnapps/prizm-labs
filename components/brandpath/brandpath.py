@@ -29,7 +29,7 @@ import os
 import sys
 from pathlib import Path
 
-# The v6 folder plan (lab/damon/brand-folder-map). new name -> today's places,
+# The v6 folder plan (lab/owner/brand-folder-map). new name -> today's places,
 # first existing wins. An empty list means the folder is new: nothing maps to
 # it yet.
 DEFAULTS = {

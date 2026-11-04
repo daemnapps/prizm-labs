@@ -90,17 +90,17 @@ def accounts():
 
 # LD-55 (Drive literal check): the Drive app folder's names live HERE ONLY. A component that needs one
 # asks for it by these names instead of spelling "CloudStorage" or "GoogleDrive-" itself.
-UPRIGHT_ACCOUNTS = "GoogleDrive-*company.com"     # the company accounts among accounts()
+COMPANY_ACCOUNTS = "GoogleDrive-*company.com"     # the company accounts among accounts()
 NO_MOUNT = pathlib.Path.home() / "Library" / "CloudStorage" / "_no-drive-mounted" / "Shared Assets"
 # ^ a path that is never there: what a reader holds when this machine has no Drive folder, so its
 #   error names a Shared Assets path instead of None
 
 
-def upright_accounts():
+def company_accounts():
     """accounts() filtered to the company's @company.com accounts (the filter several readers
     carried as their own literal)."""
     import fnmatch
-    return [m for m in accounts() if fnmatch.fnmatchcase(m.name, UPRIGHT_ACCOUNTS)]
+    return [m for m in accounts() if fnmatch.fnmatchcase(m.name, COMPANY_ACCOUNTS)]
 
 
 def account(email):

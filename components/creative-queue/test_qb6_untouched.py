@@ -1,6 +1,6 @@
 """QB-6 (content queue page): the page's read door writes nothing, and the page asks for nothing else.
 
-Narrowed at merge by the dev-steph lead [2bdd01], 2026-10-23. The first form pinned runs/queue/, lab/, brands/,
+Narrowed at merge by the dev-pm lead [2bdd01], 2026-10-23. The first form pinned runs/queue/, lab/, brands/,
 emails.html, the team's page and both switch files by blob hash at the dispatch base, which proves the branch left them
 alone but turns red on main at the next ordinary commit under any of them (the maker said so). That half was
 checked once, on the branch diff, at merge. What stays true for good, and is checked here:

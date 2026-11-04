@@ -7,7 +7,7 @@ actual review. So in this case, we would not wanna make anything up."
     is_review(run)      the swipe is a real review (its source block is review-<id>, or the run is named -review-)
     fixed_words(run)    the review's words, zone by zone, as the teardown read them off the card (stage 1's
                         "Text (verbatim)" column)
-    block(run)          prompts/review-words-vN-damon.md with the words in, riding on the end of each writing step
+    block(run)          prompts/review-words-vN-owner.md with the words in, riding on the end of each writing step
     problems(run)       a fixed line the brief does not carry word for word (checked after step 6)
 """
 import json
@@ -47,7 +47,7 @@ def fixed_words(run):
 
 
 def _newest():
-    got = sorted(PROMPTS.glob("review-words-v*-damon.md"), key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
+    got = sorted(PROMPTS.glob("review-words-v*-owner.md"), key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     return got[-1]
 
 

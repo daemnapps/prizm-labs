@@ -86,7 +86,7 @@ class Build(unittest.TestCase):
             self.assertTrue(r["approved"], id_)
             self.assertTrue(r["what"] and not r["what"].startswith("[TO DEFINE"), id_)
 
-    def test_damons_four_rows(self):
+    def test_owners_four_rows(self):
         for el, asset, id_ in (("structure", "video", "storytelling"),
                                ("delivery", "delivery_style", "holistic-healer-authority"),
                                ("format", "image", "native-facebook-image"),

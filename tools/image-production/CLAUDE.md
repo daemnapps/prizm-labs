@@ -64,7 +64,7 @@ and over again. We never skip this process."* Sizes, depth, contact and light co
 
 the owner: *"image-production should move entirely to components now — make sure we
 have the full thing there because there's awkwardness with a half-built
-folder."* There were two: this engine, and the static-ad tool in `lab/damon/`.
+folder."* There were two: this engine, and the static-ad tool in `lab/owner/`.
 The tool is now `static/` inside this folder, so there is one home and no twin.
 
 | | |
@@ -142,7 +142,7 @@ object model.
   `filing` where pictures go · `dryrun` the free dry run · `engine` the request
   and `make`), plus `make.py`, the thin CLI. **the owner.**
 - **Definitions + curator:** `purposes.json` (what a picture is FOR),
-  `models.json` (the route table and the two doors), `prompts/*-vN-damon.md`
+  `models.json` (the route table and the two doors), `prompts/*-vN-owner.md`
   (the skeleton, the standing rules, the judge). **the owner** holds the approval
   gate; every row carries a `status`. The element library is NOT here — it is
   `components/elements`' and is asked, never copied; four of its source lists
@@ -215,7 +215,7 @@ required is missing.
    SKIP and the reason; the pictures are already in `out`.
 5. **`sys.path.append`, never insert at 0** — a folder at position 0 shadows
    the stdlib.
-6. **A changed prompt is a NEW file** `-v<N+1>-damon.md` beside the old one;
+6. **A changed prompt is a NEW file** `-v<N+1>-owner.md` beside the old one;
    highest number wins, numerically. Never edited in place.
 
 **Every photo and video asset (not email) is 9:16, made 9:16 from the start, safe zone assumed** (the owner, 2026-10-26: "when
@@ -264,7 +264,7 @@ only. No network, no model, no real key, nothing written outside `tempfile`.
 ## Two things that are open, not settled (stated 2026-09-23)
 
 - **The Drive carve-out (O9).** `static/tools/paths.py:74` discovers
-  `Shared Assets/lab/damon` on the mounted Drive — deliberately discovered and
+  `Shared Assets/lab/owner` on the mounted Drive — deliberately discovered and
   never typed, but still the lab path and still the mount. The standing ruling
   is fileId through the API. The static tool's media did not move when the code
   did; migrating it is a card. The main engine already mirrors to

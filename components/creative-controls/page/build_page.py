@@ -25,7 +25,7 @@ SC = json.loads((RUN / 'scores.json').read_text())
 
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
-    2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-damon.md item 4). The old lane folder
+    2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
     tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name
@@ -117,5 +117,5 @@ md += ['| %s | %s | %s | %s | %s |' % (d['name'], ', '.join(d['aka']), ' · '.jo
 md += ['', '## Guards (always on)', ''] + ['- **%s**: %s' % (g['name'], g['what']) for g in C['guards']]
 md += ['', '## Presets', ''] + ['- **%s** (%s): %s ' % (p['name'], p['id'], p['what']) + ', '.join('%s %s' % kv for kv in p['levels'].items()) for p in C['presets']]
 md += ['', 'The full glossary (%d real names) is `components/creative-controls/GLOSSARY.md`.' % len(GL)]
-(REPO / 'tools/image-teardown/context/CREATIVE-CONTROLS-damon.md').write_text('\n'.join(md) + '\n')
+(REPO / 'tools/image-teardown/context/CREATIVE-CONTROLS-owner.md').write_text('\n'.join(md) + '\n')
 print('mirror written')

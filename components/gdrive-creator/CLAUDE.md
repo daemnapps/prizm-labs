@@ -22,7 +22,7 @@ machine's own layout and stays there. Only the pipe moved.
 
 **Why it exists as one home.** It lived inside
 `tools/video-teardown/machine/` — component internals nothing else may
-depend on (components rule 2) — and `lab/damon/copy/machine/gdoc_out.py` (now
+depend on (components rule 2) — and `lab/owner/copy/machine/gdoc_out.py` (now
 `tools/copywriter/machine/gdoc_out.py`, moved 2026-09-19) reached in through a `sys.path.insert` into that machine's folder, plus an
 `import chain as C` behind it. Any refactor inside the video machine broke the
 copy lab silently, and the copy-machine rebuild was about to live exactly
@@ -367,7 +367,7 @@ plane — and this component folds back into its callers: pin the import with a
 one-line fragility comment and let it die with the habit. Callers: at 6edbff9c96 (gdrive-creator#8) eight components import it
 (video-teardown through its shim, copywriter `gdoc_out.py`, image-teardown deliver/pack,
 ad-handoff, image-production static finish/drive_reconcile, ad-variations, brandpath
-`drive_index`, email-production) plus `lab/damon/clipping`; count with
-`git grep -l -E "gdrive_creator|gdrive-creator" -- 'components/*.py' 'lab/damon/*.py'`, not this line
+`drive_index`, email-production) plus `lab/owner/clipping`; count with
+`git grep -l -E "gdrive_creator|gdrive-creator" -- 'components/*.py' 'lab/owner/*.py'`, not this line
 (N12 (docs point, not restate)). Byte uploads and mirrors run through it too, so the
 gdoc-only trigger is the owner's to re-confirm. **Fewer than 2 callers and it folds**, the same floor LL-1 (language layer) set.

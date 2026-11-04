@@ -121,7 +121,7 @@ def list_rows():
 
 check("list shows each picture's 1-based S address beside its P code", list_rows)
 check("template partCode reads S, picCode unchanged", page_codes("platform/views/viewers/_templates/emails.html"))
-check("the team's draft partCode reads S", page_codes("platform/views/viewers/steph/drafts/emails--final.html"))
+check("the team's draft partCode reads S", page_codes("platform/views/viewers/pm/drafts/emails--final.html"))
 check("help line names an S part and a P picture", help_line)
 check("ask()'s machine bracket keeps the raw indexes", machine_bracket_kept)
 def feature_51():

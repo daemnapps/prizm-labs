@@ -5,7 +5,7 @@
     python3 components/research-gatherer/test_apify_layer_path.py
 
 No pytest, no network, no key — temp folders only. Proves the dead lab
-fallback (`lab/damon/swipe-organic/apify.py`) is gone: a workspace holding
+fallback (`lab/owner/swipe-organic/apify.py`) is gone: a workspace holding
 only that file gets the component path back and a RuntimeError naming it,
 which every caller already turns into [UNFILLED: why].
 """
@@ -42,7 +42,7 @@ class ApifyLayerPath(unittest.TestCase):
         p.write_text(text)
 
     def test_no_lab_fallback(self):
-        self._write("lab/damon/swipe-organic/apify.py", "MARK = 'lab'\n")
+        self._write("lab/owner/swipe-organic/apify.py", "MARK = 'lab'\n")
         R.configure(self.tmp)
         self.assertEqual(R._swipe_apify(),
                          self.tmp / "components" / "apify" / "apify.py")
@@ -57,7 +57,7 @@ class ApifyLayerPath(unittest.TestCase):
 
     def test_source_names_only_the_component(self):
         text = (HERE / "research_gatherer" / "engine.py").read_text()
-        self.assertNotIn("lab/damon/swipe-organic", text)
+        self.assertNotIn("lab/owner/swipe-organic", text)
         self.assertNotIn("components/swipe-organic/apify.py", text)
         self.assertIn(LAYER, R.__doc__)
         self.assertIn(LAYER, R.apify_layer.__doc__)

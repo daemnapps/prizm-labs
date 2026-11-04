@@ -1,5 +1,5 @@
 {
- "_what": "The Disapprove reasons on the approval page. Each reason points at the upstream step(s) that caused it — as far upstream as it goes — and the tool that owns that step. A tool can differ by lane: {\"video\": ..., \"image\": ..., \"carousel\": ..., \"creator\": ..., \"*\": fallback}. Add a reason by adding a row; ids never change once used (learnings.jsonl keeps them). Steps are the twelve shared steps (lab/damon/work-queue/WORK-QUEUE-damon.md).",
+ "_what": "The Disapprove reasons on the approval page. Each reason points at the upstream step(s) that caused it — as far upstream as it goes — and the tool that owns that step. A tool can differ by lane: {\"video\": ..., \"image\": ..., \"carousel\": ..., \"creator\": ..., \"*\": fallback}. Add a reason by adding a row; ids never change once used (learnings.jsonl keeps them). Steps are the twelve shared steps (lab/owner/work-queue/WORK-QUEUE-owner.md).",
  "steps": {
   "1": "Swipe", "2": "Teardown", "3": "Route", "4": "Brief", "5": "Produce", "6": "Queue",
   "7": "Make", "8": "Deliver", "9": "Check", "10": "Approve", "11": "Live", "12": "Performance"

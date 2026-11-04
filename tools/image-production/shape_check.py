@@ -1,5 +1,5 @@
 """Measured reject check: how far a printed product strays from its true outline. The true outline is the product-only
-render from the set's own camera (flex_sets_blender.product_pass), so both are measured in the same frame.
+render from the set's own camera (product_sets_blender.product_pass), so both are measured in the same frame.
 
     python3 shape_check.py <print.png> <true-product.png>
 

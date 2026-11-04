@@ -2,7 +2,7 @@
 
 The standard for making one AI video, scene by scene, on the board (`http://127.0.0.1:8895/prompt`, **Video ad**).
 Written 2026-10-28 from the code as it stands and the owner's Tella reviews of that day (`components/model-inputs/lessons.json`
-L-50 to L-62). the owner's page for the same process: **The Video Process**, (private page) (source `context/video-process-damon.html`).
+L-50 to L-62). the owner's page for the same process: **The Video Process**, (private page) (source `context/video-process-owner.html`).
 
 Three things hold for every stage:
 
@@ -47,7 +47,7 @@ through the same front door: `tools/video-edit/handoff.py` routes it to `machine
 ## 0 · Swipe → brief (before the board)
 
 - **In:** the swipe video, the brand, the product.
-- **Out:** the AI brief, `5-brief.md`, written on `tools/video-writing/prompts/v2/stage5-ai-brief-v9-damon.md`, plus
+- **Out:** the AI brief, `5-brief.md`, written on `tools/video-writing/prompts/v2/stage5-ai-brief-v9-owner.md`, plus
   the teardown run the board reads (`framemap/shots/`, `source.mp4`).
 - **Runs:** `tools/video-teardown/machine/run.py <video> --brand <brand> --writing v2` → video-writing stages 3 → 5.
 - **Gate:** the swipe match (`video-teardown/machine/swipe_match.py`, the brief's first line `swipe-match: PASSED`) and the
@@ -73,7 +73,7 @@ through the same front door: `tools/video-edit/handoff.py` routes it to `machine
 - **Out:** `scene-breakdown.json`: the camera's hand drift, where the eyes go, each prop's state and lift, where each
   ingredient goes and its texture, what each action lands on, the sound effects, the atmosphere.
 - **Runs:** inside the **Get the swipe frame ready** job, for a scene not yet read (`prompt_bench._open_job`), or by hand
-  `tools/video-production/machine/scene_breakdown.py <run> [G01 …]`; prompt `prompts/v2/scene-breakdown-v2-damon.md`.
+  `tools/video-production/machine/scene_breakdown.py <run> [G01 …]`; prompt `prompts/v2/scene-breakdown-v2-owner.md`.
 - **Rule:** held or propped is MEASURED on the frames (`camera_drift`), never read by a model. The clip prompt carries the
   camera, the eyes, the handling and the atmosphere — never the swipe's own objects. The clip judge checks the same list
   (shown on the scene card).
@@ -98,7 +98,7 @@ through the same front door: `tools/video-edit/handoff.py` routes it to `machine
 - **In:** the swap list.
 - **Out:** the start picture (made → realism pass → lens), kept in the picture run.
 - **Board button:** **Make the start picture**.
-- **Gate — the body check** (`machine/body_check.py`, `prompts/v2/body-check-v1-damon.md`): each hand traced to a
+- **Gate — the body check** (`machine/body_check.py`, `prompts/v2/body-check-v1-owner.md`): each hand traced to a
   shoulder, at most two arms and two hands, no oversized or fused hand; two reads that must agree. A wrong body is
   remade automatically, up to twice (`prompt_bench.BODY_RETRIES`), before a person sees it.
 - **A person decides:** **Approve** (tied to the picture's exact bytes; a remade picture is not approved) or **Change it**
@@ -126,7 +126,7 @@ generated only when the library has nothing that fits. A clip counts only when i
   naturally); the breakdown's camera, eyes, handling and atmosphere; a real-person movement reference
   (`movement.py`, `movement-bank.json`).
 - **Gates before spend:** the face gate (`face_gate.py`) and the clip gate (`clip_gate.py`).
-- **Checks after:** the clip judge v4 (`prompts/v2/clip-judge-v4-damon.md`: props, the action on the right object, the
+- **Checks after:** the clip judge v4 (`prompts/v2/clip-judge-v4-owner.md`: props, the action on the right object, the
   voice, the swipe's elements); the body check on the take (a wrong body is a hard fail); the voice measured (a silent
   talking take fails; a talking clip never goes to the silent backup); the words checked word by word (`CUT_OFF`,
   `REPEAT`, and `MISSING` for a take that skips three or more words of its line, `lineparity.py`); a failed word check
@@ -230,17 +230,17 @@ New versions, live now; no rule, slot, placeholder or output format changed. Old
 
 | Stage | Old → new | Lines changed |
 |---|---|---|
-| The brief (AI video) | `stage5-ai-brief-v8` → `stage5-ai-brief-v9-damon.md` | 48 |
-| Our version of the swipe | `stage3-injection-v7` → `stage3-injection-v8-damon.md` | 24 |
-| Reading the hooks | `stage4v2a-readhooks-v4` → `stage4v2a-readhooks-v5-damon.md` | 20 |
-| Placement, expansion, close | `stage4v2b-build-v5` → `stage4v2b-build-v6-damon.md` | 19 |
-| The audit | `stage4e-audit-v7` → `stage4e-audit-v8-damon.md` | 12 |
-| Spice | `stage4g-spice-v6` → `stage4g-spice-v7-damon.md` | 24 |
-| Presenter body | `presenter-body-v5` → `presenter-body-v6-damon.md` | 14 |
-| Swipe match | `swipe-match-v1` → `swipe-match-v2-damon.md` | 4 |
-| Creator brief | `stage5-creator-brief-v34` → `stage5-creator-brief-v35-damon.md` | 67 |
-| Creator page concept | `stage7b-concept-v8` → `stage7b-concept-v9-damon.md` | 37 |
-| Who it speaks to | `stage1b-audience-v12` → `stage1b-audience-v13-damon.md` | 11 |
-| Hooks (creator) | `stage4b-hook-v25` → `stage4b-hook-v26-damon.md` | 32 |
-| Placement (creator) | `stage4a-placement-v17` → `stage4a-placement-v18-damon.md` | 16 |
-| Our version (creator) | `stage3-injection-v24` → `stage3-injection-v25-damon.md` | 29 |
+| The brief (AI video) | `stage5-ai-brief-v8` → `stage5-ai-brief-v9-owner.md` | 48 |
+| Our version of the swipe | `stage3-injection-v7` → `stage3-injection-v8-owner.md` | 24 |
+| Reading the hooks | `stage4v2a-readhooks-v4` → `stage4v2a-readhooks-v5-owner.md` | 20 |
+| Placement, expansion, close | `stage4v2b-build-v5` → `stage4v2b-build-v6-owner.md` | 19 |
+| The audit | `stage4e-audit-v7` → `stage4e-audit-v8-owner.md` | 12 |
+| Spice | `stage4g-spice-v6` → `stage4g-spice-v7-owner.md` | 24 |
+| Presenter body | `presenter-body-v5` → `presenter-body-v6-owner.md` | 14 |
+| Swipe match | `swipe-match-v1` → `swipe-match-v2-owner.md` | 4 |
+| Creator brief | `stage5-creator-brief-v34` → `stage5-creator-brief-v35-owner.md` | 67 |
+| Creator page concept | `stage7b-concept-v8` → `stage7b-concept-v9-owner.md` | 37 |
+| Who it speaks to | `stage1b-audience-v12` → `stage1b-audience-v13-owner.md` | 11 |
+| Hooks (creator) | `stage4b-hook-v25` → `stage4b-hook-v26-owner.md` | 32 |
+| Placement (creator) | `stage4a-placement-v17` → `stage4a-placement-v18-owner.md` | 16 |
+| Our version (creator) | `stage3-injection-v24` → `stage3-injection-v25-owner.md` | 29 |

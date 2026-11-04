@@ -1,4 +1,4 @@
-# FLEX charging case, modelled by hand from the studio material: Case.gif (closed lid frame 37, the base with its
+# WIDGET charging case, modelled by hand from the studio material: Case.gif (closed lid frame 37, the base with its
 # engraved charging panel frame 49) and BRAND_A_INSTRUCTIONAL_STILLS_05_CASE_CLOSE_MIRROR_2_V3.png (open, 2500px).
 # Exec'd inside parts.py. Axes: z = the case's long axis (stood upright like the renders), x = across,
 # y = depth; the lid is at -y (toward the camera at yaw 0), the base and its charging panel at +y.
@@ -177,14 +177,14 @@ if ang:
     hinge.rotation_euler = (0, 0, math.radians(-ang))   # negative open_deg swings the lid out toward the camera
     objs_c.append(hinge)
 
-# open, with FLEX lying in the tray (its back in the base, bristles toward the lid), from FLEX's own kit
+# open, with WIDGET lying in the tray (its back in the base, bristles toward the lid), from WIDGET's own kit
 if ang and C.get("flex_kit") and not os.environ.get("KIT_NO_FLEX"):
     fk = _json.load(open(str((d / C["flex_kit"]).resolve())))
     g2 = dict(globals()); g2.update(H=C.get("flex_height", fk["model_parts"]["height"]), D=fk["model_parts"]["diameter"], M=fk["model_parts"],
                                      d=(d / C["flex_kit"]).resolve().parent)
     before = set(bpy.data.objects.keys())
     exec(open(str(Path(__file__).resolve().parent / fk["model_parts"]["custom"])).read(), g2)
-    fl = bpy.data.objects.new("flex", None); sc.collection.objects.link(fl)
+    fl = bpy.data.objects.new("widget", None); sc.collection.objects.link(fl)
     for o in g2["custom_objs"]:
         if o.parent is None:
             o.parent = fl
@@ -192,8 +192,8 @@ if ang and C.get("flex_kit") and not os.environ.get("KIT_NO_FLEX"):
     fl.rotation_euler = (math.radians(C["flex_tilt"]), math.radians(C.get("flex_roll", 0)), math.radians(C.get("flex_yaw", 0)))
     objs_c.append(fl)
 
-# the lid mirror's picture: the studio still shows the FLEX's bristle field filling the mirror, bright and finely dotted,
-# while the FLEX itself faces the camera. A card carrying that field sits where the mirror's reflection looks — seen
+# the lid mirror's picture: the studio still shows the WIDGET's bristle field filling the mirror, bright and finely dotted,
+# while the WIDGET itself faces the camera. A card carrying that field sits where the mirror's reflection looks — seen
 # only in reflections (never by the camera, never lighting anything), so it shows in the mirror and nowhere else.
 MC = C.get("mirror_card")
 if ang and MC:

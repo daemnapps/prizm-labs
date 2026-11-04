@@ -202,7 +202,7 @@ def act(run, root, action):
         body = old.get('body') if old.get('sha256') == digest(pic) else None
         existing = read(run / 'body-checks.json').get(pic.name) or {}
         body = body or (existing if existing.get('sha') == digest(pic, 'sha1')[:16] else None)
-        if body and body.get('checker_sha256') != digest(root / 'tools/video-production/prompts/v2/body-check-v1-damon.md'):
+        if body and body.get('checker_sha256') != digest(root / 'tools/video-production/prompts/v2/body-check-v1-owner.md'):
             body = None
         body = body or load(root, 'tools/video-production/machine/body_check.py').check(run, pic, 'hook-frame-body')
         write(run / 'hook-frame-check.json', {'sha256': digest(pic), 'body': body, 'setup_signature': state['setup_signature']})
@@ -220,7 +220,7 @@ def act(run, root, action):
         old = read(run / 'hook-clip-review.json')
         body = old.get('body') if old.get('sha256') == digest(clip) else None
         checker = load(root, 'tools/video-production/machine/body_check.py')
-        if body and body.get('checker_sha256') != digest(root / 'tools/video-production/prompts/v2/body-check-v1-damon.md'):
+        if body and body.get('checker_sha256') != digest(root / 'tools/video-production/prompts/v2/body-check-v1-owner.md'):
             body = None
         body = body or checker.check(run, clip, 'hook-video-body')
         issues = list(body.get('problems') or [])

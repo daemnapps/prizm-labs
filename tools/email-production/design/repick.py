@@ -10,7 +10,7 @@ words around it, else pick one we own by what is IN it (asset-index tags), else 
 Made pictures (run:), product cut-outs and slots still to make are never touched; nor is a customer picture whose
 section carries that customer's own words. Every real picture's alt becomes what was seen in it (line.true_alts).
 
-Prompt: prompts/design2b-repick-v1-steph.md, written beside the output as sent (design/repick--prompt.md); what
+Prompt: prompts/design2b-repick-v1-pm.md, written beside the output as sent (design/repick--prompt.md); what
 changed and why is kept in email.json under `repick`. Then the email is rebuilt and re-checked as a picture change
 on the emails page is (design/build.py, design/check.py, the card's marks kept) unless --no-build.
 A picture another email of the brand already uses is not offered; the batch goes in the order given.
@@ -26,7 +26,7 @@ sys.path.insert(0, str(HERE))
 import line as LI  # noqa: E402
 
 L, EN, REPO = LI.L, LI.EN, LI.REPO
-PROMPT = LI.PROMPTS / "design2b-repick-v1-steph.md"
+PROMPT = LI.PROMPTS / "design2b-repick-v1-pm.md"
 PICTURE_KEYS = ("photo", "proof", "todo", "stage", "glow", "band")
 OWN_WORDS = ("example", "selfies")             # a customer's picture here sits with that customer's words
 

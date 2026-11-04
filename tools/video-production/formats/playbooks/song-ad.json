@@ -191,7 +191,7 @@
     {
       "failure": "songs 5½–6 min with 35–90 s dead air; first word 12 s in",
       "fix": "punch line first, sections fit from lines × beats_per_line, every take listened to by song.py flow()",
-      "from_run": "runs/video-production/brand-a/resilia-cheating-brand-a (song/LYRICS-damon.md)",
+      "from_run": "runs/video-production/brand-a/resilia-cheating-brand-a (song/LYRICS-owner.md)",
       "stage": "song"
     },
     {
@@ -364,7 +364,7 @@
         "does": "A concept from the research bank, or a swipe torn down",
         "run": "",
         "done_when": "{story}",
-        "gate": "damon"
+        "gate": "owner"
       },
       {
         "id": "picks",
@@ -373,7 +373,7 @@
         "does": "The awareness level picks the arc; the arc's beats are the section plan (creative_controls.arcs_for / section_plan) (recorded in the run when scratch.py or the teardown opens it)",
         "run": "",
         "done_when": "runs/video-teardown/_work/{label}/run.json",
-        "gate": "damon"
+        "gate": "owner"
       },
       {
         "id": "writing",
@@ -391,7 +391,7 @@
         "does": "the owner reads the brief and OKs it; the production run opens only after his OK, so it is the mark that he did",
         "run": "",
         "done_when": "runs/video-production/{brand}/{label}/run.json",
-        "gate": "damon"
+        "gate": "owner"
       },
       {
         "id": "production",
@@ -400,7 +400,7 @@
         "does": "Production start writes song/suno-inputs.json from the brief's song block (model-inputs suno sheet) and waits; the song is made in Suno, then brought in and gated: every line heard in order, the flow listened to, the timing kept for the scenes",
         "run": "python3 tools/video-production/machine/run.py start runs/video-teardown/_work/{label}/stages/5-brief.md --brand {brand} --format song-ad --label {label} --composed",
         "done_when": "runs/video-production/{brand}/{label}/song/song.json",
-        "gate": "damon"
+        "gate": "owner"
       },
       {
         "id": "elements",
@@ -418,7 +418,7 @@
         "does": "One picture per scene from its room, cast and lens; the owner OKs every one",
         "run": "",
         "done_when": "runs/video-production/{brand}/{label}/shot-approvals.json",
-        "gate": "damon"
+        "gate": "owner"
       },
       {
         "id": "handoff",
@@ -436,7 +436,7 @@
         "does": "the team: every shot of the singer is a lip-synced clip on the song (the singer sings his line, a musical), story shots silent over it; B-roll, effects, the cut under the song",
         "run": "",
         "done_when": "runs/handoffs/video-editor/{brand}/{brief_key}/returned/*control*.mp4",
-        "gate": "ahmed"
+        "gate": "editor"
       },
       {
         "id": "upscale",
@@ -454,7 +454,7 @@
         "does": "the owner's review, the names, the approval card; only the owner's click goes live",
         "run": "",
         "done_when": "",
-        "gate": "damon"
+        "gate": "owner"
       }
     ]
   }

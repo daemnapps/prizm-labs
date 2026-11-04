@@ -16,7 +16,7 @@ The ad name is the whole record: drop the last piece and you have the idea it be
 | man | look | what it says | pictures |
 |---|---|---|---|
 | Beto 38 | apology | KEEP IT EITHER WAY. | 2 |
-| Beto 38 | faceoff | EVERY OTHER FIX FLEX | 3 |
+| Beto 38 | faceoff | EVERY OTHER FIX WIDGET | 3 |
 | Beto 38 | portraitvoid | I SHAVE FOR WORK. IT COSTS ME. | 2 |
 | Beto 38 | productvoid | 12,000 RPM | 3 |
 | Beto 38 | twopanel |  | 3 |
@@ -26,13 +26,13 @@ The ad name is the whole record: drop the last piece and you have the idea it be
 | Brett 41 | portraitvoid | I GREW THE BEARD TO HIDE MY NECK. | 2 |
 | Brett 41 | twopanel |  | 3 |
 | Dev 56 | apology | KEEP IT EITHER WAY. | 2 |
-| Dev 56 | faceoff | EVERY OTHER FIX FLEX | 1 |
+| Dev 56 | faceoff | EVERY OTHER FIX WIDGET | 1 |
 | Dev 56 | portraitvoid | FIFTY-SIX. DULL, TIRED, AND SORE AFTER. | 1 |
 | Dev 56 | routinelabel | EVERY MORNING | 2 |
 | Hal 66 | apology | KEEP IT EITHER WAY. | 3 |
 | Hal 66 | commentreply |  | 2 |
 | Hal 66 | distressedposter | NONE OF IT WORKED | 3 |
-| Hal 66 | faceoff | EVERY OTHER FIX FLEX | 1 |
+| Hal 66 | faceoff | EVERY OTHER FIX WIDGET | 1 |
 | Hal 66 | mirrorselfie | NOBODY MAKES ADS FOR MY FACE. | 2 |
 | Hal 66 | portraitvoid | SIXTY-SIX. STILL SHAVING. STILL IRRITATED. | 2 |
 | Javi 26 | apology | KEEP IT EITHER WAY. | 3 |
@@ -41,14 +41,14 @@ The ad name is the whole record: drop the last piece and you have the idea it be
 | Javi 26 | portraitvoid | RED ALL DAY. CYSTS ON THE JAW. TWENTY-SIX. | 3 |
 | Javi 26 | twopanel |  | 3 |
 | Marcus 29 | apology | KEEP IT EITHER WAY. | 3 |
-| Marcus 29 | checklist | FIVE BLADE SINGLE BLADE ROTARY FOIL FLEX | 3 |
-| Marcus 29 | checklist | FIVE BLADE SINGLE BLADE ROTARY FOIL FLEX | 3 |
+| Marcus 29 | checklist | FIVE BLADE SINGLE BLADE ROTARY FOIL WIDGET | 3 |
+| Marcus 29 | checklist | FIVE BLADE SINGLE BLADE ROTARY FOIL WIDGET | 3 |
 | Marcus 29 | distressedposter | NONE OF IT WORKED | 3 |
-| Marcus 29 | faceoff | EVERY OTHER FIX FLEX | 1 |
+| Marcus 29 | faceoff | EVERY OTHER FIX WIDGET | 1 |
 | Marcus 29 | portraitvoid | SHARP LINEUP. WRECKED NECK. EVERY TIME. | 2 |
 | Omar 45 | apology | KEEP IT EITHER WAY. | 3 |
 | Omar 45 | distressedposter | NONE OF IT WORKED | 2 |
-| Omar 45 | faceoff | EVERY OTHER FIX FLEX | 2 |
+| Omar 45 | faceoff | EVERY OTHER FIX WIDGET | 2 |
 | Omar 45 | mirrorselfie | I CAN’T EVEN SEE THE BACK. | 2 |
 | Omar 45 | portraitvoid | BALD DOESN’T MEAN NOTHING GROWS. | 2 |
 | Omar 45 | twopanel |  | 3 |

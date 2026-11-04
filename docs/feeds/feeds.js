@@ -1,4 +1,4 @@
-/* My Feeds — Damon's board (the desk, port 8820) on the site, read-only.
+/* My Feeds — the owner's board (the desk, port 8820) on the site, read-only.
    Same controls, same cards, same behaviour; reads the static export in
    /feeds/data/ (written by the team repo's components/swipe-organic/
    feedsexport.py after each Pull). No server, no keys, nothing here spends.
@@ -54,14 +54,14 @@
 
   // ---- the avatar picker
   // It used to be one <select> holding everything, which buried the shape of
-  // the thing: a real avatar, Damon's own saved scrolls and a shop/clipper
-  // collection all looked alike in one flat list (Damon, 2 Oct: "our menu to
+  // the thing: a real avatar, the owner's own saved scrolls and a shop/clipper
+  // collection all looked alike in one flat list (the owner, 2 Oct: "our menu to
   // select through our different avatars is clunky"). Now it opens as a panel
   // that shows the actual tree — core avatar with its subs indented under it —
   // and keeps saves and collections in their own named columns, because they
   // are not avatars and never were.
   // Everything that belongs to a core avatar sits under that avatar — its subs
-  // and its collections alike (Damon, 2 Oct: "Base, Shop, and Clipper videos
+  // and its collections alike (the owner, 2 Oct: "Base, Shop, and Clipper videos
   // still go underneath the avatar. That's the whole thing."). Only his own
   // saved scrolls stand apart, because they are not an avatar at all.
   const isSave = f => own(f);
@@ -92,7 +92,7 @@
   }
 
   // The detail half of the mega menu: who this avatar actually is, what their
-  // scroll looks like, and where we go looking for it. Damon, 2 Oct: "so that
+  // scroll looks like, and where we go looking for it. the owner, 2 Oct: "so that
   // we can actually see what the avatar would look like and each of the
   // sub-avatars, so it's very clear who we are actually speaking to."
   function detailHTML(f, count) {
@@ -167,7 +167,7 @@
 
 
   // Every card reads the same way: two numbers big enough to actually see,
-  // then one signal, then the quiet dates. Damon, 2 Oct — the counts "need to
+  // then one signal, then the quiet dates. the owner, 2 Oct — the counts "need to
   // be way clearer… right now they're just light", and the cards were ragged
   // because the performance badges appeared on some and not others, floating
   // over the picture at whatever count happened to qualify. They sit in one

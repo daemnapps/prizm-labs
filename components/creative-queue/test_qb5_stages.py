@@ -39,7 +39,7 @@ class OneStageList(unittest.TestCase):
 
     def test_requested_stage_still_checked_against_the_list(self):
         with self.assertRaises(ValueError):
-            qcore.append_decision("/nonexistent-root-never-written", "steph",
+            qcore.append_decision("/nonexistent-root-never-written", "pm",
                                   {"id": "x", "op": "set", "field": "requested_stage", "value": "nowhere"})
 
 

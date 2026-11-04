@@ -241,7 +241,7 @@ def catalogue_block(brand, workspace=None):
 
 # THE FACTS OF EVERY LIVE PRODUCT, not just the one a send names (2026-09-21).
 # Once every email had to end on a product, emails began talking about products
-# their slot never named — FLEX, CRUSH — and the check, handed one product file,
+# their slot never named — WIDGET, CRUSH — and the check, handed one product file,
 # called every one of those statements unsupported. The catalogue decides what
 # is read, so a draft's file is never opened.
 #

@@ -177,7 +177,7 @@ def first_name(handle):
     except Exception:
         pass
     try:
-        prof = C.drive_root() / "lab" / "damon" / "creators" / handle / "profile.json"
+        prof = C.drive_root() / "lab" / "owner" / "creators" / handle / "profile.json"
         if prof.is_file():
             full = (json.loads(prof.read_text()).get("profile") or {}).get("fullName") or ""
             cands.append(first(full))

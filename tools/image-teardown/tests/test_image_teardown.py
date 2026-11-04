@@ -55,16 +55,16 @@ class PromptSort(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             d = Path(d)
             for n in (1, 2, 9, 10):
-                (d / f"stage1-image-teardown-v{n}-damon.md").write_text(str(n))
-            self.assertEqual(R.prompt_for("1", d).name, "stage1-image-teardown-v10-damon.md")
+                (d / f"stage1-image-teardown-v{n}-owner.md").write_text(str(n))
+            self.assertEqual(R.prompt_for("1", d).name, "stage1-image-teardown-v10-owner.md")
 
     def test_subfolders_never_compete(self):
         with tempfile.TemporaryDirectory() as d:
             d = Path(d)
             (d / "superseded").mkdir()
-            (d / "superseded/stage1-image-teardown-v99-damon.md").write_text("old")
-            (d / "stage1-image-teardown-v3-damon.md").write_text("live")
-            self.assertEqual(R.prompt_for("1", d).name, "stage1-image-teardown-v3-damon.md")
+            (d / "superseded/stage1-image-teardown-v99-owner.md").write_text("old")
+            (d / "stage1-image-teardown-v3-owner.md").write_text("live")
+            self.assertEqual(R.prompt_for("1", d).name, "stage1-image-teardown-v3-owner.md")
 
     def test_every_stage_has_a_live_prompt(self):
         for s in R.STAGES:
@@ -154,7 +154,7 @@ class Paths(unittest.TestCase):
     def test_found_by_walking_up(self):
         self.assertTrue((P.REPO / "components").is_dir() and (P.REPO / "brands").is_dir())
         self.assertEqual(P.LANE, LANE)
-        self.assertEqual(P.LAB, P.REPO / "lab" / "damon")
+        self.assertEqual(P.LAB, P.REPO / "lab" / "owner")
         self.assertEqual(LANE, P.REPO / "tools" / "image-teardown")
         self.assertEqual(P.BRANDS, P.REPO / "brands")
         self.assertEqual(P.RECORDS, P.REPO / "runs" / "image-teardown")
@@ -311,7 +311,7 @@ class Elements(unittest.TestCase):
             a = good_answer()
             a["framework/all"]["id"] = "not-a-framework"
             (run / "out" / EL.ANSWER).write_text(fenced(a))
-            rec, problems = EL.read(run, "stage2b-image-elements-v1-damon.md")
+            rec, problems = EL.read(run, "stage2b-image-elements-v1-owner.md")
             on_disk = json.loads((run / "out/elements.json").read_text())
             self.assertEqual(on_disk["refused"][0]["id"], "not-a-framework")
             with self.assertRaises(Held):

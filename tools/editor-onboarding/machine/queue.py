@@ -47,7 +47,7 @@ number (naming.json `brief`, the unit name, the brand's aliases) or, failing
 that, by its name (`AB-02 The Hen's Coat` is `ab-02-hens-coat`).
 
 ONE QUEUE (2 Oct 2026): when the private workspace carries the Asset Ledger
-(`lab/damon/asset-ledger/db/render_queue.py` beside its `ledger.db`), `build`
+(`lab/owner/asset-ledger/db/render_queue.py` beside its `ledger.db`), `build`
 hands the writing to it — QUEUE.md is then a picture of the ledger's `queue`
 view, which also sees the older delivery folders, the cards and the live ads.
 Same columns, same "How to take one" text, same queue.json fields. The folder
@@ -206,7 +206,7 @@ WORKSPACE = Path(os.environ.get("AI_WORKSPACE", Path.home() / "Projects/workspac
 
 
 def ledger_dir() -> Path:
-    return WORKSPACE / "lab/damon/asset-ledger/db"
+    return WORKSPACE / "lab/owner/asset-ledger/db"
 
 
 def ledger_render(brand: str, rebuild: bool = False) -> str | None:
@@ -743,7 +743,7 @@ def ship(run: Path, brand: str, dry: bool = False) -> Path | None:
 
 
 def register_file() -> Path | None:
-    for f in (WORKSPACE / "components/image-teardown/briefs.json", WORKSPACE / "lab/damon/image-teardown/briefs.json"):
+    for f in (WORKSPACE / "components/image-teardown/briefs.json", WORKSPACE / "lab/owner/image-teardown/briefs.json"):
         if f.is_file():
             return f
     return None

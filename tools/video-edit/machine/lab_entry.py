@@ -10,7 +10,7 @@
             → run.py handoff <folder> --runs-root $OUT/.runs-* --cut auto [--dry-run]
 
 ONE EDIT PATH (C13; verify 2026-10-21 row 16): this door used to run `run.py start` on its `--cut model` default — the
-retired 2026-09-20 pause-cutter prompt (prompts/stage-2-cut/stage2-cut-v2-damon.md: "cut at every pause"). A kit from
+retired 2026-09-20 pause-cutter prompt (prompts/stage-2-cut/stage2-cut-v2-owner.md: "cut at every pause"). A kit from
 a production run now goes through line.py, the road the runners use; any other kit takes run.py's own take-whole cut
 (`--cut auto`, a take laid whole, V15).
 

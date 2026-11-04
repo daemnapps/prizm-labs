@@ -26,7 +26,7 @@ media · delivery.
 
 **Checks today:** `price_check` · `unfilled_check` · `read_check_block` (the
 copy-check step: product facts, chopped thoughts, typos — prompt in
-`prompts/copy-check-v1-damon.md`) · `elements_check` (against `components/elements`) ·
+`prompts/copy-check-v1-owner.md`) · `elements_check` (against `components/elements`) ·
 `draft_product_check` · `money_path_check` · `subject_check` · `partner_check`.
 
 **The four questions:** engine + owner — `marketing_chain_checks/`, the owner · definitions —
@@ -69,7 +69,7 @@ The same five steps everywhere:
    against what it was given and the stage's hard bars, and returns findings per
    item (`ok`, `severity` BLOCKER/FIX/NOTE, `problems`, `fix_at`, `prompt_change`).
    What each stage is compared against and its bars: `definitions/stages.json`
-   (12 tools). The reviewer's words: `prompts/creative-review-v1-damon.md`.
+   (12 tools). The reviewer's words: `prompts/creative-review-v1-owner.md`.
 3. **The log** — `marketing_chain_checks/qc_log.py`: every round filed beside the run,
    `<run>/qc-log/QC-LOG.md` + raw findings. Nobody writes a row by hand.
 4. **The fix** — at the stage that caused it; a cause that would recur becomes a
@@ -92,11 +92,11 @@ filed UNCHECKED. A tool's own tests never spend on a review. Off: `QC_REVIEW=0`.
 
 the owner: *"slide this into the chains and lets ride it."* From Andrei Lunev's
 "Toilet Mike". `marketing_chain_checks/viewer.py`: the finished brief is translated into
-what a viewer sees (`prompts/viewer-cut-v1-damon.md`), dropped among 9 real posts
+what a viewer sees (`prompts/viewer-cut-v1-owner.md`), dropped among 9 real posts
 from its avatar's feed (`VIEWER_FEEDS`; default `components/swipe-organic/records/avatar-feeds/`), and
 scrolled by 5 fresh viewers built from the avatar profile
-(`prompts/viewer-card-v1-damon.md`, cached in `records/viewer-cards/`; reads
-`prompts/viewer-check-v1-damon.md`). **The viewers only react; code scores**
+(`prompts/viewer-card-v1-owner.md`, cached in `records/viewer-cards/`; reads
+`prompts/viewer-check-v1-owner.md`). **The viewers only react; code scores**
 against the real posts, so "looks real" is never a score. A fail returns a role
 (openings · middle · giveaway · close · audience) that each chain maps to its
 own step. Called from video-teardown `run.py` (`viewer_gate`, last stage-5 gate,

@@ -148,12 +148,12 @@ def _loader_key(name):
                  if (d / "keys" / "loader.py").is_file()), None)
     if home is None:
         return None
-    mod = sys.modules.get("upright_keys_loader")
+    mod = sys.modules.get("company_keys_loader")
     if mod is None:
-        spec = importlib.util.spec_from_file_location("upright_keys_loader", str(home))
+        spec = importlib.util.spec_from_file_location("company_keys_loader", str(home))
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        sys.modules["upright_keys_loader"] = mod
+        sys.modules["company_keys_loader"] = mod
     try:
         return mod.key(name, required=False) or None
     except Exception:

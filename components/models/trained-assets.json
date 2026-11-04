@@ -1,5 +1,5 @@
 {
- "_readme": "THE TRAINED-ASSETS INDEX (card MDL-1, 2026-09-01). The home the `lora.json` records emitted by components/identity-training/train_identity.py did not have. That component's own CLAUDE.md says so in as many words: 'until it lands, the lora.json records ARE the index' — this is the landing.\n\nAN INDEX REFERENCES; IT NEVER COPIES. Each entry points at a `lora.json` record by repo-relative path and stops there. Nothing moved, nothing was rewritten, and no weights url is duplicated here — the record is the asset and the only place its fields live, so the index cannot drift from it. `validate.py` refuses an entry that inlines a `lora_url`, and refuses one whose `record` path does not exist.\n\nWHERE THE RECORDS ACTUALLY ARE. A record sits where the engine or a later move put it, and its entry points at it by repo-relative path. train_identity.py resolves `brands/<brand>/` only (the one brand home since 2026-09-02; `lab/damon/brands/` is gone) and writes the record beside the brand source, or under `--out`. On file today: the product record under `brands/<brand>/products/…`, and the deprecated character record under `runs/ai-elements/<brand>/casting/…`, where its archive moved it.\n\nWEIGHTS ARE NOT IN GIT. They live on fal (workspace rule 3, media never committed). What is in git is words about them — which is the whole point of an index.\n\nSTATUS IS THE CURATOR'S GATE, same as models.json (components/CLAUDE.md rule 6). Seeded `draft`. the owner certifies the training set; the team holds the registry gate.",
+ "_readme": "THE TRAINED-ASSETS INDEX (card MDL-1, 2026-09-01). The home the `lora.json` records emitted by components/identity-training/train_identity.py did not have. That component's own CLAUDE.md says so in as many words: 'until it lands, the lora.json records ARE the index' — this is the landing.\n\nAN INDEX REFERENCES; IT NEVER COPIES. Each entry points at a `lora.json` record by repo-relative path and stops there. Nothing moved, nothing was rewritten, and no weights url is duplicated here — the record is the asset and the only place its fields live, so the index cannot drift from it. `validate.py` refuses an entry that inlines a `lora_url`, and refuses one whose `record` path does not exist.\n\nWHERE THE RECORDS ACTUALLY ARE. A record sits where the engine or a later move put it, and its entry points at it by repo-relative path. train_identity.py resolves `brands/<brand>/` only (the one brand home since 2026-09-02; `lab/owner/brands/` is gone) and writes the record beside the brand source, or under `--out`. On file today: the product record under `brands/<brand>/products/…`, and the deprecated character record under `runs/ai-elements/<brand>/casting/…`, where its archive moved it.\n\nWEIGHTS ARE NOT IN GIT. They live on fal (workspace rule 3, media never committed). What is in git is words about them — which is the whole point of an index.\n\nSTATUS IS THE CURATOR'S GATE, same as models.json (components/CLAUDE.md rule 6). Seeded `draft`. the owner certifies the training set; the team holds the registry gate.",
  "schema": 1,
  "_field_notes": {
   "id": "The registry's name for the trained identity. Unique across the file.",
@@ -20,7 +20,7 @@
    "record": "runs/ai-elements/brand-b/casting/_archive-2026-09-23/susan/lora.json",
    "trained": "2026-09-01",
    "status": "deprecated",
-   "certified_by": "damon",
+   "certified_by": "owner",
    "note": "Trained from her certified board set (master + sliced panels). Proven at four scenes, zero reference images, same woman every time."
   },
   {
@@ -31,7 +31,7 @@
    "record": "brands/brand-b/products/brilliance-body-scrub/lora.json",
    "trained": "2026-09-01",
    "status": "draft",
-   "certified_by": "damon",
+   "certified_by": "owner",
    "note": "Round 2, label-band close-up crops. STANDING CAVEAT carried from the record: micro-text wobbles at hero size, so label-forward frames composite the real packshot rather than generating the label. Read the record before using it."
   }
  ]

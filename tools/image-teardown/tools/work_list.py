@@ -56,7 +56,7 @@ def stale(item):
     return bool(t) and datetime.fromisoformat(t) < datetime.now(timezone.utc) - timedelta(hours=CLAIM_HOURS)
 
 
-def add(brand, run, preset, level, product="flex"):
+def add(brand, run, preset, level, product="widget"):
     q = load(brand)
     if find(q, run):
         return find(q, run)
@@ -99,7 +99,7 @@ def main():
     ap.add_argument("cmd", choices=["add", "list", "next", "done", "open"])
     ap.add_argument("run", nargs="?")
     ap.add_argument("--brand", required=True)
-    ap.add_argument("--preset"); ap.add_argument("--level"); ap.add_argument("--product", default="flex")
+    ap.add_argument("--preset"); ap.add_argument("--level"); ap.add_argument("--product", default="widget")
     ap.add_argument("--who"); ap.add_argument("--state"); ap.add_argument("--why", default="")
     a = ap.parse_args()
     if a.cmd == "add":

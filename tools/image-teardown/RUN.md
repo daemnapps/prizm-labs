@@ -119,7 +119,7 @@ renders as candid UGC or flat vector by changing one word.
 | angle bank | `brands/<brand>/strategy/angles.json` | stage 6 proposes angles instead of matching |
 | casting roster | `brands/<brand>/ai-cast/casting/` | nobody is cast; formats without a person still run |
 | swipe library | `components/swipe-paid/<swipe>/blocks/` | there is nothing to tear down |
-| the swipe on Drive | `Shared Assets/lab/damon/swipe-paid/<swipe>/` | no stills to open a run on. Drive names this folder `blocks` for some brands and `angles` for others; both are read |
+| the swipe on Drive | `Shared Assets/lab/owner/swipe-paid/<swipe>/` | no stills to open a run on. Drive names this folder `blocks` for some brands and `angles` for others; both are read |
 
 Brief ids count per brand and product (the owner, 1 Oct 2026: "brief numbers count per brand AND product — each product starts at 1 inside its brand."). Nothing to set up.
 

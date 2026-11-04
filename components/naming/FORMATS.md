@@ -25,8 +25,8 @@ contradict each other. One of them files `Angle` as a format.
 | Email | module | 4 | same file | **section** |
 | Email | layout, observed | 239 | `…/layouts.json` | **evidence** |
 | Email | Figma template | 87 | `…/figma-templates.json` | **evidence** |
-| Ad copy | copy surface | 16 | `lab/damon/copy/bank/format-bank.json` | **slot** |
-| Ad copy | copy style | 4 | `lab/damon/copy/bank/formats.json` | **style** |
+| Ad copy | copy surface | 16 | `lab/owner/copy/bank/format-bank.json` | **slot** |
+| Ad copy | copy style | 4 | `lab/owner/copy/bank/formats.json` | **style** |
 | Paid swipe page | block | 2,626 / 4 brands | `components/swipe-paid/<brand>/blocks.json` | **evidence** |
 | Email | email type | 47 <brand> · 46 <brand> | `brands/<brand>/email/email-types.json` | **kind** |
 | Offer | offer | 6 | `brands/<brand>/offers/offers.json` | **kind** |
@@ -44,7 +44,7 @@ contradict each other. One of them files `Angle` as a format.
 | Video production | format profile | 4 | `tools/video-production/formats/` | **template** |
 | Ad | media | 3 | `components/naming/names.py` MEDIA | **kind** |
 | Ad | source | 4 | same file, SOURCE | **kind** |
-| Ad copy | channel | 4 | `lab/damon/copy/bank/channel-map.json` | **kind** |
+| Ad copy | channel | 4 | `lab/owner/copy/bank/channel-map.json` | **kind** |
 | Image teardown | template | 1 | `tools/image-teardown/templates/` | **template** |
 
 **Found by the critics, 2026-09-11, after the first count said eleven.** Six of

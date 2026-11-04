@@ -40,7 +40,7 @@ def _read(p):
 
 
 def live_prompt():
-    files = sorted(PROMPTS.glob("presenter-body-v*-damon.md"),
+    files = sorted(PROMPTS.glob("presenter-body-v*-owner.md"),
                    key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
     if not files:
         raise SystemExit(f"no presenter-body prompt in {PROMPTS}")
@@ -187,7 +187,7 @@ def main(argv=None):
     cost = write(text, out / "presenter-body.md")
     print(f"wrote {out / 'presenter-body.md'} · ${cost}")
     # FILED ON THE WRITING SHELF (2026-10-20): the body is this piece's brief, so it can take its brief number and
-    # its card on the Queue (lab/damon/suite/creative_queue.py production_runs reads `writing_run`).
+    # its card on the Queue (lab/owner/suite/creative_queue.py production_runs reads `writing_run`).
     (out / "deliverable").mkdir(exist_ok=True)
     (out / "deliverable" / "5-brief.md").write_text((out / "presenter-body.md").read_text())
     (out / "run.json").write_text(json.dumps({"machine": "video-writing", "brand": a.brand, "product": a.product,

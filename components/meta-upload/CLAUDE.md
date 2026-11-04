@@ -1,7 +1,7 @@
 # meta-upload — the joiner
 
 **Owner: the owner (engine and definitions both). Component since 2026-09-29**, moved out of
-`lab/damon/meta-upload/` on the owner's word: *"this uploading thing … needs to just be in a component
+`lab/owner/meta-upload/` on the owner's word: *"this uploading thing … needs to just be in a component
 now, versus the lab."* Split out of `image-production` 2026-09-10 on his call: *"image production and
 uploading to meta are completely different."*
 

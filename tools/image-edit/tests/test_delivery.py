@@ -52,7 +52,7 @@ ROWS = {
     "testbrand_gadget_brief-0007": {"brief": "brief-0007", "brand": BRAND, "product": "gadget", "run": "run-g7"},
     "otherbrand_thing_brief-0400": {"brief": "brief-0400", "brand": "otherbrand", "product": "thing", "run": "run-o"},
 }
-CFG = {"state": "awaiting-steph", "note": "the team confirms the hand-off folders.", "folder": "handoffs/{role}/{brand}",
+CFG = {"state": "awaiting-pm", "note": "the team confirms the hand-off folders.", "folder": "handoffs/{role}/{brand}",
        "drive_root": "Shared Assets", "repo_root": "runs", "returned": "returned",
        "roles": {"graphic-designer": {"filled_by": "Pic", "delivers": "pictures", "lane": "image"},
                  "video-editor": {"filled_by": "Vid", "delivers": "videos", "lane": "video"}}}
@@ -216,12 +216,12 @@ class DeliveryTest(unittest.TestCase):
         self.assertIn("OLD place", DL.say({"roles": [res], "dry_run": False}))
 
     def test_folder_matches_its_brief_by_number_and_brand_in_either_product_spelling(self):
-        reg = register({"testbrand_flex_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "flex"},
+        reg = register({"testbrand_widget_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "widget"},
                         "testbrand_crush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "crush"}})
-        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_flex-face-brush_brief-0076")[:2], ("ok", "testbrand_flex_brief-0076"))
-        reg = register({"testbrand_flex-face-brush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "flex-face-brush"},
+        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_widget-face-brush_brief-0076")[:2], ("ok", "testbrand_widget_brief-0076"))
+        reg = register({"testbrand_widget-face-brush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "widget-face-brush"},
                         "testbrand_crush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "crush"}})
-        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_flex_brief-0076")[:2], ("ok", "testbrand_flex-face-brush_brief-0076"))
+        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_widget_brief-0076")[:2], ("ok", "testbrand_widget-face-brush_brief-0076"))
 
     def test_a_check_rebuilds_the_hand_off_index(self):
         self.run_check([(f"{KEY}/returned/a.png", "f1")])

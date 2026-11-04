@@ -3,11 +3,11 @@
 
     record.py made <manifest.json> [--batch-json batch.json] [--drive-ids ids.json] [--dry-run]
     record.py backfill <runs-root> [--dry-run]
-    record.py human <item> --event status|note|signed --by damon [--to validated] [--text ...] [--evidence ...] [--pointer ...]
+    record.py human <item> --event status|note|signed --by owner [--to validated] [--text ...] [--evidence ...] [--pointer ...]
 
 Shape: platform/data/kinds/creative-asset.json. Item id `<batch>.<slug>.a<nn>`
 — the folder slug of the unit, not the 130-char name, so it fits the plane's
-ITEM_ID_RE. Records land under HOME (lab/damon/creative-ledger/records/ until
+ITEM_ID_RE. Records land under HOME (lab/owner/creative-ledger/records/ until
 the team rules on lab writes to platform/data/records/); same envelope either way:
 {schema, kind, reviewer, item, verdict{event,...}, notes, created, via}.
 
@@ -23,9 +23,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import names as N
 
 WS  = N.WS                      # names.py's locator: run-kit paths.repo()
-LAB = WS / "lab" / "damon"      # a person's runs and swipes stay in lab
+LAB = WS / "lab" / "owner"      # a person's runs and swipes stay in lab
 KIND = "creative-asset"
-HOME = WS / "lab/damon/creative-ledger/records" / KIND
+HOME = WS / "lab/owner/creative-ledger/records" / KIND
 ITEM_ID_RE = re.compile(r"^[A-Za-z0-9._-]{1,80}$")
 UUID = re.compile(r"<<<([0-9a-f-]{36})>>>")
 

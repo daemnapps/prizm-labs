@@ -11,7 +11,7 @@ two names. The swipe library already records every angle a brand runs — the
 copy verbatim, the landing page, how many creatives it carries and how often
 one got cloned — so a run starts from a swipe id, not a path.
 
-**Code in the repo, pictures on Drive** (`lab/damon/README.md`). The angle
+**Code in the repo, pictures on Drive** (`lab/owner/README.md`). The angle
 records live here in git; the creatives live at the mirrored Drive path. This
 reads the record from git and copies the one picture it needs off Drive into
 the run, so the run holds the ad it was built from and nothing else.
@@ -22,10 +22,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paths as _P
-LAB = _P.LAB                                              # lab/damon — named from the repo root
+LAB = _P.LAB                                              # lab/owner — named from the repo root
 # The library split into swipe-paid / swipe-organic; plain "swipe" has not
 # existed since, so intake could not open a single run from a swipe id.
-SWIPE = _P.SWIPE                                          # components/swipe-paid (moved out of lab/damon 2026-09-22)
+SWIPE = _P.SWIPE                                          # components/swipe-paid (moved out of lab/owner 2026-09-22)
 for _r in Path(__file__).resolve().parents:               # the swipe home, one definition for both pools
     if (_r / "components" / "swipe-paid" / "swipe_home.py").is_file():
         sys.path.append(str(_r / "components" / "swipe-paid"))

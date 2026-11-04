@@ -35,7 +35,7 @@ from pathlib import Path
 def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
-    The count here was right only while this file sat in lab/damon/. The move
+    The count here was right only while this file sat in lab/owner/. The move
     to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
     high — outside the repo entirely. A marker cannot go quietly wrong the next
     time something moves. AI_WORKSPACE still wins when it names a workspace.
@@ -240,7 +240,7 @@ def build(sc: dict, elems: dict[str, str], place: str = "") -> str:
             parts.append(framing)
     blob = " ".join(str(sc.get(k) or "") for k in
                     ("happens", "product", "who", "camera", "hold"))
-    # "FLEX Pro Vibrating Face Brush" matched the person test on the word
+    # "WIDGET Pro Vibrating Face Brush" matched the person test on the word
     # "face" and a product shot was told to render visible pores.
     blob_np = re.sub(r"\bface (brush|wash)\b", "", blob, flags=re.I)
     has_person = sc["type"] == "A" or (sc["type"] != "C" and bool(PERSON.search(blob_np)))

@@ -1,13 +1,13 @@
 """Keep a person's own emails page and the shared one in step, both ways (the team, 2026-10-22).
 
-the team has her own live page (platform/views/viewers/eve/emails.html, cut by the team on 2026-10-22); the team keeps the shared
+the team has her own live page (platform/views/viewers/designer/emails.html, cut by the team on 2026-10-22); the team keeps the shared
 one (platform/views/viewers/_templates/emails.html and its preview page). Changes do not flow on their own, so each
 side records how far it has brought the other's in, in the person's sync record
 (platform/views/viewers/<person>/emails.sync.json), and this lists what is still to bring, from git:
 
-    page_sync.py status --person eve      what the shared page has that the team's page doesn't yet, and the reverse
-    page_sync.py mark --person eve --into own      after bringing the shared page's changes into the team's page
-    page_sync.py mark --person eve --into shared   after bringing the team's changes into the shared page
+    page_sync.py status --person designer      what the shared page has that the team's page doesn't yet, and the reverse
+    page_sync.py mark --person designer --into own      after bringing the shared page's changes into the team's page
+    page_sync.py mark --person designer --into shared   after bringing the team's changes into the shared page
 
 `mark` records the newest commit on the other side as brought in; run it only after every listed change is in (or
 left out on purpose and said so). Nothing here edits a page: the person's Claude makes the change (/page-change).

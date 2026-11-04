@@ -113,16 +113,16 @@ class Claims(unittest.TestCase):
         shutil.rmtree(self.tmp)
 
     def test_second_machine_is_refused_while_the_first_works(self):
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         with self.assertRaises(wq.Refused) as e:
             wq.claim(self.ws, self.store, "brief-0001", me="mac-b", person="editor")
         self.assertIn("mac-a", str(e.exception))
         self.assertEqual(len(self.store.records()), 1)          # the refusal wrote nothing
 
     def test_claiming_your_own_ad_again_writes_nothing(self):
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         with self.assertRaises(wq.Refused):
-            wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+            wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         self.assertEqual(len(self.store.records()), 1)
 
     def _age_all(self, hours):
@@ -132,7 +132,7 @@ class Claims(unittest.TestCase):
             f.write_text(json.dumps(r))
 
     def test_stale_claim_needs_take_over_and_names_what_it_replaced(self):
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         self._age_all(7)
         with self.assertRaises(wq.Refused) as e:
             wq.claim(self.ws, self.store, "brief-0001", me="mac-b", person="editor")
@@ -142,20 +142,20 @@ class Claims(unittest.TestCase):
         self.assertEqual(wq.fold(self.store.records())["brief-0001"]["owner"]["machine"], "mac-b")
 
     def test_progress_keeps_a_claim_fresh(self):
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         self._age_all(7)
-        wq.progress(self.ws, self.store, "brief-0001", stage="cut", me="mac-a", person="damon")
+        wq.progress(self.ws, self.store, "brief-0001", stage="cut", me="mac-a", person="owner")
         with self.assertRaises(wq.Refused) as e:
             wq.claim(self.ws, self.store, "brief-0001", take_over=True, me="mac-b", person="editor")
         self.assertNotIn("stale", str(e.exception))
 
     def test_only_the_owner_reports_progress_or_releases(self):
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         with self.assertRaises(wq.Refused):
             wq.progress(self.ws, self.store, "brief-0001", stage="cut", me="mac-b", person="editor")
         with self.assertRaises(wq.Refused):
             wq.release(self.ws, self.store, "brief-0001", me="mac-b", person="editor")
-        wq.release(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.release(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         wq.claim(self.ws, self.store, "brief-0001", me="mac-b", person="editor")   # free again
 
     def test_board_shows_the_other_machines_reported_stage(self):
@@ -166,9 +166,9 @@ class Claims(unittest.TestCase):
         self.assertEqual(rows["brief-0001"]["owner"], None)
 
     def test_records_are_on_the_planes_shape(self):
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         f = next((self.tmp / "records").glob("*.json"))
-        self.assertRegex(f.name, r"^\d{8}T\d{6}Z--damon--brief-0001--claim\.json$")
+        self.assertRegex(f.name, r"^\d{8}T\d{6}Z--owner--brief-0001--claim\.json$")
         r = json.loads(f.read_text())
         for k in ("schema", "kind", "reviewer", "item", "verdict", "notes", "created", "via"):
             self.assertIn(k, r)
@@ -177,7 +177,7 @@ class Claims(unittest.TestCase):
     def test_the_status_page_is_gone_but_the_board_still_names_every_stage_and_who_holds_it(self):
         # work_queue dropped its status page on purpose (038d183a64); the board it was drawn from stays
         self.assertFalse(hasattr(wq, "page_html"))
-        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.ws, self.store, "brief-0001", me="mac-a", person="owner")
         text = str(wq.board(self.ws, self.store))
         for word in ("mac-a", "brief-0001"):
             self.assertIn(word, text)
@@ -223,7 +223,7 @@ class TwoComputers(unittest.TestCase):
         return d
 
     def test_b_sees_a_claim_and_is_refused(self):
-        wq.claim(self.a, wq.GitStore(self.a), "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.a, wq.GitStore(self.a), "brief-0001", me="mac-a", person="owner")
         with self.assertRaises(wq.Refused) as e:
             wq.claim(self.b, wq.GitStore(self.b), "brief-0001", me="mac-b", person="editor")
         self.assertIn("mac-a", str(e.exception))
@@ -231,7 +231,7 @@ class TwoComputers(unittest.TestCase):
     def test_a_lost_race_is_rechecked_on_the_fresh_tip(self):
         sb = wq.GitStore(self.b)
         sb.fetch()                                          # b looked before a claimed…
-        wq.claim(self.a, wq.GitStore(self.a), "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.a, wq.GitStore(self.a), "brief-0001", me="mac-a", person="owner")
         rec = wq.make_record("claim", "brief-0001", "mac-b", "editor")
         with self.assertRaises(wq.Refused):                 # …but publish re-reads origin before pushing
             sb.publish(rec, wq._decide_claim("brief-0001", "mac-b", False, 6))
@@ -239,7 +239,7 @@ class TwoComputers(unittest.TestCase):
     def test_two_different_ads_both_land(self):
         sa, sb = wq.GitStore(self.a), wq.GitStore(self.b)
         sb.fetch()
-        wq.claim(self.a, sa, "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.a, sa, "brief-0001", me="mac-a", person="owner")
         # b's local tip is now behind; its push is refused once, it refetches and lands
         wq.claim(self.b, sb, "brief-0002", me="mac-b", person="editor")
         owners = {k: v["owner"]["machine"] for k, v in wq.fold(sa.records()).items()}
@@ -249,7 +249,7 @@ class TwoComputers(unittest.TestCase):
         write(self.a / "someone-elses.txt", "in flight\n")
         git(self.a, "add", "someone-elses.txt")             # another session's staged work
         head_before = git(self.a, "rev-parse", "HEAD")
-        wq.claim(self.a, wq.GitStore(self.a), "brief-0001", me="mac-a", person="damon")
+        wq.claim(self.a, wq.GitStore(self.a), "brief-0001", me="mac-a", person="owner")
         self.assertEqual(git(self.a, "rev-parse", "HEAD"), head_before)          # local branch not moved
         self.assertEqual(git(self.a, "diff", "--cached", "--name-only"), "someone-elses.txt")
         self.assertFalse((self.a / wq.RECORDS_REL).exists())                     # nothing dropped in the tree
@@ -260,7 +260,7 @@ class TwoComputers(unittest.TestCase):
     def test_offline_means_not_claimed(self):
         git(self.a, "remote", "set-url", "origin", str(self.tmp / "gone.git"))
         with self.assertRaises(wq.Refused) as e:
-            wq.GitStore(self.a).publish(wq.make_record("claim", "brief-0001", "mac-a", "damon"), lambda s: None)
+            wq.GitStore(self.a).publish(wq.make_record("claim", "brief-0001", "mac-a", "owner"), lambda s: None)
         self.assertIn("NOT claimed", str(e.exception))
 
 

@@ -4,7 +4,7 @@
     /usr/bin/python3 machine/culture_week.py --brand <brand> [--week YYYY-MM-DD]   # Monday; default next Monday
 
 Writes runs/culture-weekly/<brand>/<week>/prompt-as-sent.md — the prompt
-(prompts/culture-week-v1-damon.md) with its slots filled from the record:
+(prompts/culture-week-v1-owner.md) with its slots filled from the record:
 the brand's core avatars and culture maps, the moments that land that week,
 the seasons running, the emails already planned that week (held-open slots
 first), and the top posts in the brand's avatar feeds. A Claude session then
@@ -23,7 +23,7 @@ import marketing_calendar as CAL  # noqa: E402  (this folder's planner)
 import paths as P  # noqa: E402
 
 TOOL = HERE.parent
-PROMPT = TOOL / "prompts" / "culture-week-v1-damon.md"
+PROMPT = TOOL / "prompts" / "culture-week-v1-owner.md"
 
 
 def repo():

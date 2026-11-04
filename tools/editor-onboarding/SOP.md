@@ -34,14 +34,14 @@ from there; you never edit anything else.
    own Drive.
 4. **New chat in Supercomputer → the `+` button → Connectors** — check Google
    Drive and GitHub are both ticked for that chat.
-5. **Paste the Day-one prompt** (`prompts/01-day-one-v3-damon.md`) with the
+5. **Paste the Day-one prompt** (`prompts/01-day-one-v3-owner.md`) with the
    brand, your role and the folder link filled in. It clones the tools, opens
    your folder and tells you what is waiting. When it ends with *"Set up for
    <brand> — N hand-offs waiting"*, you are done.
 
 ## Every session — the loop
 
-1. **New chat → paste the Pull-briefs prompt** (`prompts/02-pull-briefs-v3-damon.md`)
+1. **New chat → paste the Pull-briefs prompt** (`prompts/02-pull-briefs-v3-owner.md`)
    with the brand and your role. Name a brief if you have one; otherwise it
    takes the newest hand-off with an empty `returned/`.
 2. **It syncs first** — pulls the tools for updates, reads your folder live.

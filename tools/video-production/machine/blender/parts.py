@@ -331,7 +331,7 @@ def lathe(part):
 
 
 objs = [lathe(p) for p in M.get("parts", [])]
-if M.get("custom"):                            # a product modelled by hand in its own script (FLEX, the case)
+if M.get("custom"):                            # a product modelled by hand in its own script (WIDGET, the case)
     _g = dict(globals()); exec(open(str((Path(__file__).resolve().parent / M["custom"]))).read(), _g)
     objs += _g["custom_objs"]
 objs += [bpy.data.objects[n] for o in objs for n in (o.get("extra") or [])]

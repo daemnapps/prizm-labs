@@ -2,14 +2,14 @@
  "_readme": "Every variable this chain needs from OUTSIDE itself, and the source the owner's machine resolves it from. A parity run fills the values by running HIS resolve_source() over these source strings for the brand under test, then passes the result as --config. It is a template, not a config: it names no brand and holds no value (workspace rule 7), and it is never read by the engine.",
  "vars": {
   "avatars": {
-   "damon_source": "?roster",
+   "owner_source": "?roster",
    "means": "a query against the brand's language bank",
    "used_by": [
     "stage1b"
    ]
   },
   "today": {
-   "damon_source": "!today",
+   "owner_source": "!today",
    "means": "computed by his machine at run time",
    "used_by": [
     "stage1b",
@@ -24,7 +24,7 @@
    ]
   },
   "avatar": {
-   "damon_source": "brands/<brand>/customer-experience/avatar.md",
+   "owner_source": "brands/<brand>/customer-experience/avatar.md",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage3",
@@ -32,7 +32,7 @@
    ]
   },
   "brand_name": {
-   "damon_source": "#brand_name",
+   "owner_source": "#brand_name",
    "means": "supplied when the run started",
    "used_by": [
     "stage3",
@@ -40,14 +40,14 @@
    ]
   },
   "identity_anchors": {
-   "damon_source": "brands/<brand>/brand-identity/identity-anchors.md",
+   "owner_source": "brands/<brand>/brand-identity/identity-anchors.md",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage3"
    ]
   },
   "language": {
-   "damon_source": "?injection",
+   "owner_source": "?injection",
    "means": "a query against the brand's language bank",
    "used_by": [
     "stage3",
@@ -56,7 +56,7 @@
    ]
   },
   "language_bank": {
-   "damon_source": "brands/<brand>/customer-experience/language-bank.md",
+   "owner_source": "brands/<brand>/customer-experience/language-bank.md",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage3",
@@ -67,7 +67,7 @@
    ]
   },
   "offer_file": {
-   "damon_source": "brands/<brand>/products/offer-bank.md",
+   "owner_source": "brands/<brand>/products/offer-bank.md",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage3",
@@ -78,7 +78,7 @@
    ]
   },
   "product_file": {
-   "damon_source": "brands/<brand>/products/",
+   "owner_source": "brands/<brand>/products/",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage3",
@@ -91,7 +91,7 @@
    ]
   },
   "production_route": {
-   "damon_source": "=AI",
+   "owner_source": "=AI",
    "means": "a fixed value in his chain config",
    "used_by": [
     "stage3",
@@ -99,7 +99,7 @@
    ]
   },
   "objection_bank": {
-   "damon_source": "brands/<brand>/customer-experience/objection-bank.md",
+   "owner_source": "brands/<brand>/customer-experience/objection-bank.md",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage4r",
@@ -109,28 +109,28 @@
    ]
   },
   "creator_profile": {
-   "damon_source": "=UNASSIGNED. The run supplies this when it is a creator's own post. Never name a creator here.",
+   "owner_source": "=UNASSIGNED. The run supplies this when it is a creator's own post. Never name a creator here.",
    "means": "a fixed value in his chain config",
    "used_by": [
     "stage5"
    ]
   },
   "source_url": {
-   "damon_source": "~source_url",
+   "owner_source": "~source_url",
    "means": "supplied by the run (gathered by his machine)",
    "used_by": [
     "stage5"
    ]
   },
   "video_count": {
-   "damon_source": "#video_count",
+   "owner_source": "#video_count",
    "means": "supplied when the run started",
    "used_by": [
     "stage5"
    ]
   },
   "video": {
-   "damon_source": "~video",
+   "owner_source": "~video",
    "means": "supplied by the run as a LOCATION (a path or a URI); his machine takes it as a call ARGUMENT, not a prompt token, and neither engine opens it to pipe it",
    "used_by": [
     "stage0",
@@ -139,49 +139,49 @@
    ]
   },
   "product_images": {
-   "damon_source": "~product_images",
+   "owner_source": "~product_images",
    "means": "supplied by the run as a LOCATION (a path or a URI); his machine takes it as a call ARGUMENT, not a prompt token, and neither engine opens it to pipe it",
    "used_by": [
     "stage6"
    ]
   },
   "product_look": {
-   "damon_source": "brands/<brand>/products/reference/look.md",
+   "owner_source": "brands/<brand>/products/reference/look.md",
    "means": "a workspace-relative file, read by his machine",
    "used_by": [
     "stage6"
    ]
   },
   "creator_record": {
-   "damon_source": "~creator_record",
+   "owner_source": "~creator_record",
    "means": "supplied by the run (gathered by his machine)",
    "used_by": [
     "stage8"
    ]
   },
   "existing_profile": {
-   "damon_source": "~existing_profile",
+   "owner_source": "~existing_profile",
    "means": "supplied by the run (gathered by his machine)",
    "used_by": [
     "stage8"
    ]
   },
   "handle": {
-   "damon_source": "~handle",
+   "owner_source": "~handle",
    "means": "supplied by the run (gathered by his machine)",
    "used_by": [
     "stage8"
    ]
   },
   "profile_spec": {
-   "damon_source": "~profile_spec",
+   "owner_source": "~profile_spec",
    "means": "supplied by the run (gathered by his machine)",
    "used_by": [
     "stage8"
    ]
   },
   "teardown_material": {
-   "damon_source": "~teardown_material",
+   "owner_source": "~teardown_material",
    "means": "supplied by the run (gathered by his machine)",
    "used_by": [
     "stage8"

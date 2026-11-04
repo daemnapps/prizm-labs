@@ -117,7 +117,7 @@ def controls(brand):
     try:
         _op = REPO / "runs" / "business-review" / "offer-products.json"
         if not _op.is_file():
-            _op = REPO / "lab" / "damon" / "business-review" / "definitions" / "offer-products.json"
+            _op = REPO / "lab" / "owner" / "business-review" / "definitions" / "offer-products.json"
         op = json.loads(_op.read_text())["offers"]
         for o in offers:
             for pr in (op.get(o["id"]) or {}).get("products", []):
@@ -288,7 +288,7 @@ def serve(path):
             "</head><body style='margin:0'>" + body + OUTLIER_SKIN + "</body></html>", "text/html; charset=utf-8")
 
 
-# Outlier's look (lab/damon/suite/outlier.html): black field, white condensed type, one red signal — laid over the
+# Outlier's look (lab/owner/suite/outlier.html): black field, white condensed type, one red signal — laid over the
 # matrix when it is served inside Outlier, so the Create tab reads as the same instrument. The artifact copy keeps its own.
 OUTLIER_SKIN = """<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@400;500;600&display=swap">
 <style>:root,:root[data-theme=dark]{--bg:#f5f1e8;--panel:#fffdf8;--ink:#1c1a16;--soft:#5f584c;--line:#e6dfd0;--shade:rgba(20,20,26,.35);

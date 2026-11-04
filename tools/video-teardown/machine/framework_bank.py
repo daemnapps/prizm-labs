@@ -542,7 +542,7 @@ def main(argv=None):
                     help="copy this run's OBSERVED framework into "
                          "components/marketing-doctrine/ad-frameworks.json "
                          "as a new row, status 'draft', state 'seed'. "
-                         "RUN ONLY ON DAMON'S OWN "
+                         "RUN ONLY ON OWNER'S OWN "
                          "WORD — ad-frameworks.json is curated doctrine, "
                          "not a compiled shelf, and a session promotes into "
                          "it only when he has said to.")

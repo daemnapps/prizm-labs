@@ -36,7 +36,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paths as P
 
-# The naming standard graduated to components/naming; lab/damon/naming/ has
+# The naming standard graduated to components/naming; lab/owner/naming/ has
 # not existed since, so this import died and took the whole finish step with
 # it — judge, name, file and deliver, all of stage two's tail (2026-09-14).
 sys.path.insert(0, str(P.NAMING))

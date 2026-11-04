@@ -15,7 +15,7 @@ moved to `components/brand-finder/` so rule-9's "where is brands/" has one
 home; it had three, converging by copy-paste. This file is the same file it
 always was: same names, same answers, same command. **The default below stays
 HERE**, because it is this machine's own policy: it differs from
-`lab/damon/email-production/paths.py`'s, and BH-1 forbids a shared locator
+`lab/owner/email-production/paths.py`'s, and BH-1 forbids a shared locator
 picking a winner between them. The component has no default of its own.
 """
 

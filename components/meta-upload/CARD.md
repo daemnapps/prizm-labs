@@ -58,7 +58,7 @@ The ad folder **moves** between states; nothing is copied or deleted. `<ad name>
   2026-10-09). The board labels a card "Copy checked · ready" or "Copy not checked yet · don't upload".
 - `words`: up to 5 of each; at least 1 primary text and 1 headline. Never invented downstream: a lane that
   has no headline leaves the list empty and the card fails its check.
-- `pages`: landing pages by catalog link id (`lab/damon/catalog/data/catalog.json`), each becomes its own
+- `pages`: landing pages by catalog link id (`lab/owner/catalog/data/catalog.json`), each becomes its own
   Meta ad named `<ad name>_<funnel id>-<page>` (`…_body-scrub-cpk-quiz`, `…_body-scrub-cpk-offer` — the way the
   live ads read; made in one place, `components/naming/page_pick.meta_page`, through handoff `funnel_of`).
   A lane that names no page gets the brief's own `landing_page`, chosen when the brief was written

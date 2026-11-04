@@ -71,7 +71,7 @@ class Home(unittest.TestCase):
                 g = W.glob_for(s, route, form)
                 self.assertTrue(list(W.PROMPTS.glob(g)), g)
                 self.assertFalse(list((TEARDOWN / "prompts").rglob(g)), f"{g} still in the teardown")
-        self.assertTrue((W.PROMPTS / "swaps-reader-v1-damon.md").is_file())
+        self.assertTrue((W.PROMPTS / "swaps-reader-v1-owner.md").is_file())
         self.assertFalse((TEARDOWN / "tools" / "swaps.py").exists())
 
     def test_the_teardown_runs_its_writing_steps_from_here(self):
@@ -92,7 +92,7 @@ class Home(unittest.TestCase):
 
     def test_the_live_stage5_writes_the_record_and_stage6_lists_it(self):
         s5 = R.prompt_for("5").read_text()
-        self.assertEqual(R.prompt_for("5").name, "stage4e-image-variations-v9-damon.md")
+        self.assertEqual(R.prompt_for("5").name, "stage4e-image-variations-v9-owner.md")
         self.assertIn("FORMAT HEADLINE", s5)                # v6: the headline is a format, the video hook step's rule
         self.assertIn("THE VARIATIONS RECORD", s5)
         self.assertIn("{approved_words}", s5)        # v4: the five vary the words on the approved picture
@@ -179,7 +179,7 @@ class StageFive(unittest.TestCase):
     def test_after_stage5_writes_variations_json_without_a_model(self):
         with tempfile.TemporaryDirectory() as d:
             run = make_run(d, answer(FIVE))
-            pf = W.PROMPTS / "stage4e-image-variations-v3-damon.md"
+            pf = W.PROMPTS / "stage4e-image-variations-v3-owner.md"
             cmd = [sys.executable, "-c", "raise SystemExit('a model was called')", "--prompt-file", str(pf)]
             quiet(W.after, R, run, "5", pf, cmd, "x", "y")
             self.assertEqual(VR.load(run)["variations"], FIVE)
@@ -187,7 +187,7 @@ class StageFive(unittest.TestCase):
     def test_a_broken_record_is_sent_back_once_and_never_written(self):
         with tempfile.TemporaryDirectory() as d:
             run = make_run(d, answer(FIVE[:3]))
-            pf = W.PROMPTS / "stage4e-image-variations-v3-damon.md"
+            pf = W.PROMPTS / "stage4e-image-variations-v3-owner.md"
             mark = Path(d) / "called"
             cmd = [sys.executable, "-c", f"open({str(mark)!r}, 'a').write('x')", "--prompt-file", str(pf)]
             _, out = quiet(W.after, R, run, "5", pf, cmd, "x", "y")
@@ -283,7 +283,7 @@ class HeadlineFormat(unittest.TestCase):
         rows[0] = dict(rows[0], words=["COVERED UP? WE'RE NOT / DOING JULY AGAIN"])
         with tempfile.TemporaryDirectory() as d:
             run = self.run_with(d, rows)
-            pf = W.PROMPTS / "stage4e-image-variations-v6-damon.md"
+            pf = W.PROMPTS / "stage4e-image-variations-v6-owner.md"
             mark = Path(d) / "called"
             cmd = [sys.executable, "-c", f"open({str(mark)!r}, 'a').write('x')", "--prompt-file", str(pf)]
             quiet(W.after, R, run, "5", pf, cmd, "x", "y")

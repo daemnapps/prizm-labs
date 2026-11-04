@@ -26,7 +26,7 @@ from pathlib import Path
 POOLS = ("paid", "organic")
 USE_LAB = False   # the revert: True puts every caller back on the lab folders
 HOME_REL = {"paid": "swipe/paid", "organic": "swipe/organic"}
-LAB_REL = {"paid": "lab/damon/swipe-paid", "organic": "lab/damon/swipe-organic"}
+LAB_REL = {"paid": "lab/owner/swipe-paid", "organic": "lab/owner/swipe-organic"}
 
 
 def _brandpath() -> Path | None:
@@ -48,9 +48,9 @@ MOUNT = drive_index.mount        # the seam: tests replace this attribute
 _FORMS = (
     ("swipe/paid", "paid"),
     ("swipe/organic", "organic"),
-    ("lab/damon/swipe-paid", "paid"),
-    ("lab/damon/swipe-organic", "organic"),
-    ("lab/damon/swipe", "paid"),          # the retired paid form
+    ("lab/owner/swipe-paid", "paid"),
+    ("lab/owner/swipe-organic", "organic"),
+    ("lab/owner/swipe", "paid"),          # the retired paid form
     ("swipe-paid", "paid"),
     ("swipe-organic", "organic"),
 )

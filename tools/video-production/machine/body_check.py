@@ -1,7 +1,7 @@
 """BODY CHECK — limbs counted, hands sized, on every picture and every take (2026-10-28).
 
 The clip judge scores a whole take and let a third arm and an oversized hand through. This check asks about ONLY the
-bodies (prompts/v2/body-check-v1-damon.md), on the picture itself or on frames across a take, and its failure is a hard
+bodies (prompts/v2/body-check-v1-owner.md), on the picture itself or on frames across a take, and its failure is a hard
 stop: a picture is not approved and a take does not pass.
 
     python3 body_check.py <run> <picture or video> [...]
@@ -17,7 +17,7 @@ import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE.parent / "prompts" / "v2" / "body-check-v1-damon.md"
+PROMPT = HERE.parent / "prompts" / "v2" / "body-check-v1-owner.md"
 FRAMES = 6
 
 

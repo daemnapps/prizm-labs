@@ -1,5 +1,5 @@
 # All run output — briefs, frames, run state — lives on the team Drive at
-# Shared Assets/lab/damon/video-teardown-machine/machine/runs/, mirroring
+# Shared Assets/lab/owner/video-teardown-machine/machine/runs/, mirroring
 # this tree. It travels as one bundle (words + images together) so anyone
 # can open a finished brief without git. Never committed here.
 machine/runs/

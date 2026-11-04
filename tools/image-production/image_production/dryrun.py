@@ -120,7 +120,7 @@ def run(req, library=None, purposes_map=None, table=None):
         r.ok("key", f"{kname} — on this machine (environment, else the Keychain)")
     else:
         r.bad("key", f"{kname} — not in the environment and not in the Keychain "
-                     f"(service daemn-{kname}, account damon)")
+                     f"(service daemn-{kname}, account owner)")
     jentry = R.judge_entry(t)
     if R.key_present(jentry):
         r.ok("judge key", f"{jentry['key']} — on this machine")

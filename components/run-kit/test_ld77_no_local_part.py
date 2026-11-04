@@ -15,7 +15,7 @@ QUOTE the rule — this card's deck, the workflow-request records that carry
 its text — derive nobody and are not read. lab/ and test files are REPORTED,
 never failed (lab is quarantined; a test's fixture may name an address).
 Known non-identity hits are listed by path in ALLOWED with the reason; the
-card's three (run-kit test fixtures, lab/damon/control-room/comms.py's phone
+card's three (run-kit test fixtures, lab/owner/control-room/comms.py's phone
 jid, atlas/tools/triage_dryrun.py's paths) fall outside the window or are
 tests/lab. A `.claude/` file with a draft under DRAFTS is read
 AS ITS DRAFT: the maker branch cannot write .claude/, the lead copies each

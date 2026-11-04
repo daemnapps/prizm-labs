@@ -2,7 +2,7 @@
 """tiers_page — the ranked assets of every brand on one page: top 1% in full, top 2–5% and 6–10%
 listed, under top 10% documented. Reads runs/media-buying/<brand>/tiers/<latest>/tiers.json.
 
-    tiers_page.py        writes runs/media-buying/tiers.html and its mirror TIERS-damon.md
+    tiers_page.py        writes runs/media-buying/tiers.html and its mirror TIERS-owner.md
 """
 import html, json
 from pathlib import Path
@@ -106,8 +106,8 @@ def main():
         md += ["", "Top 1%:", ""] + [f"{g['rank']}. {int(g['purchases']):,} purchases · {money(g['spend'])} · CPA {cpa(g['cpa'])} · "
                                      f"{len(g['ads'])} ads · {g['ads'][0]['ad_name']} — \"{((g['primary'] or ['(no words on file)'])[0].splitlines() or [''])[0][:100]}\""
                                      for g in d["rows"] if g["tier"] == "top-1"] + [""]
-    (BASE / "TIERS-damon.md").write_text("\n".join(md) + "\n")
-    print(f"wrote {out.relative_to(WS)} and TIERS-damon.md")
+    (BASE / "TIERS-owner.md").write_text("\n".join(md) + "\n")
+    print(f"wrote {out.relative_to(WS)} and TIERS-owner.md")
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 the owner, 2026-10-14: whenever an ad shows the brand as a mark it is the REAL
 logo. The model drew the name as bold sans capitals; the real wordmark is
 whatever the brand's kit holds. So the picture is made with the mark's place
-left empty (`prompts/brand-mark-space-v1-damon.md`), the eyes find that place
+left empty (`prompts/brand-mark-space-v1-owner.md`), the eyes find that place
 (or a mark drawn anyway), the place is cleared to its own background, and the
 brand's real wordmark is pasted: the light file on a dark ground, the dark file
 on a light one, sized to the place.

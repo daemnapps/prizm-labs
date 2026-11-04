@@ -330,7 +330,7 @@ retention and customer acquisition … we are literally programming ads for soci
 
 the owner: the human editor's job moves to visual concepts and briefing; the edit is
 automated. `run.py handoff <folder>` is that: one command from a video-editor hand-off
-(`lab/damon/handoff-standard`) to one 9:16 master in its `returned/`, stopping only at
+(`lab/owner/handoff-standard`) to one 9:16 master in its `returned/`, stopping only at
 the two review points in `steps.json`. It is a front door on `start`, not a second
 line — every rule above applies unchanged. A master a final check HELDs never goes to
 `returned/`. The talking-clip cut now stops at the clip's last frame when the word
@@ -361,16 +361,16 @@ read.)
 - `objects/`, `moves/`, `local-studio/`, `3d/` — brought over from the owner's
   private repo on his say-so, code and prompts only (clips, pictures and model
   weights stayed behind; media never goes in git). Siblings brought over the
-  same day: `lab/damon/higgsfield-catalogue/` and `lab/damon/model-map/` (the
+  same day: `lab/owner/higgsfield-catalogue/` and `lab/owner/model-map/` (the
   model list the skills' model check leans on).
 
 ## Sorted 2026-09-30 (the owner: "index both image edit and video edit, and see
 what actually makes sense")
 
 Of the four folders above, only two are actually editing tools — `moves/` (89
-named creative moves, now `moves/library/moves-v1-damon.json`, the same
+named creative moves, now `moves/library/moves-v1-owner.json`, the same
 versioned-file pattern image-edit's fixes/variations use) and the frame
-kit below (now `frame-control/library/moves-v1-damon.json` too, 11 named
+kit below (now `frame-control/library/moves-v1-owner.json` too, 11 named
 technical moves). `objects/`, `3d/` and `local-studio/` were production
 tools with no editing logic in them — moved out to their own components,
 `components/objects/`, `components/3d/`, `components/local-studio/`.
@@ -382,9 +382,9 @@ was fixed on the move (`components/3d/make3d`, a real sibling path now).
 
 the owner: "with any changes we make, they need to be banked and leveraged as knowledge for chain updates and
 optimizations in real time as soon as we hit render ... a fully closed loop." The Ad Editor
-(`lab/damon/suite/timeline.html`, http://127.0.0.1:8880/timeline) edits any run here on one standard set of tracks.
+(`lab/owner/suite/timeline.html`, http://127.0.0.1:8880/timeline) edits any run here on one standard set of tracks.
 Every save writes a new version with a line in `changes.jsonl` that names each bar, what it was and what it is now.
-Every 🎬 Make the video runs `prompts/stage-9-learn/stage9-learn-v2-damon.md` over the changes since the last lesson:
+Every 🎬 Make the video runs `prompts/stage-9-learn/stage9-learn-v2-owner.md` over the changes since the last lesson:
 every row is banked in `runs/video-edit/_lessons/lessons.jsonl` with the STAGE it teaches (edit, captions,
 production-picture, production-clip, voice, brief, teardown), and edit/caption rules he stated or that are now seen
 twice are promoted into `learned.json`, which the cut prompt obeys over its own rules. Lessons for upstream stages

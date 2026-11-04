@@ -50,7 +50,7 @@
    "fix": "Tag every mention from team/id-tags.json (coin-and-add any missing) in one sweep — the file that the org's map lives in should model the org's own grammar.",
    "fix_impact": "The atlas's contract file passes the lint the rest of the repo lives under; readers stop opening records to know what ATL-3(b) is.",
    "if_ignored": "CLI-13 keeps flagging the org's most-read component file, and every session reading it re-derives the ids cold.",
-   "lane": "steph",
+   "lane": "pm",
    "severity": "P2",
    "decider": "the team"
   }
@@ -171,7 +171,7 @@
   "issue_text": "Depends on a lab script and moves lab files at import",
   "tier": "P2",
   "A": {
-   "why": "drive_link.py:27-29 runs lab/damon/mirror.py at every invocation, and tools/paths.py:54-55 defines LAB and the OLD_LANE shim, with carry_over() (:98) called at import (:122) moving lab files as a side effect. A component's runtime depending on lab code is backwards under quarantine — infrastructure may use lab data, not depend on lab instruction content surviving.",
+   "why": "drive_link.py:27-29 runs lab/owner/mirror.py at every invocation, and tools/paths.py:54-55 defines LAB and the OLD_LANE shim, with carry_over() (:98) called at import (:122) moving lab files as a side effect. A component's runtime depending on lab code is backwards under quarantine — infrastructure may use lab data, not depend on lab instruction content surviving.",
    "impacts": {
     "people": [
      "the owner"
@@ -195,7 +195,7 @@
    "decider": "the owner"
   },
   "B": {
-   "why": "drive_link.py mirror() runs lab/damon/mirror.py as a subprocess and then reads the mount. paths.py carry_over() runs on every import and os.replace's untracked files from lab/damon/image-teardown into the component, with every error swallowed. The lab shim at BASE holds only README.md, chain.py and serve.py, with no tools/paths.py, so the guard lets carry_over walk the shim on every import. Workspace rule 9 says live infrastructure does not depend on lab once others depend on it.",
+   "why": "drive_link.py mirror() runs lab/owner/mirror.py as a subprocess and then reads the mount. paths.py carry_over() runs on every import and os.replace's untracked files from lab/owner/image-teardown into the component, with every error swallowed. The lab shim at BASE holds only README.md, chain.py and serve.py, with no tools/paths.py, so the guard lets carry_over walk the shim on every import. Workspace rule 9 says live infrastructure does not depend on lab once others depend on it.",
    "impacts": {
     "people": [
      "the owner"
@@ -217,7 +217,7 @@
    ],
    "fix": "(1) Replace drive_link.py mirror() and the mount read with gdrive-creator (engine.mirror_tree / find by id), the same shared action as image-teardown #3 (Drive through mount). (2) Give carry_over() a removal date tied to deleting the one-release lab shim, then delete it and its import-time call from paths.py.",
    "fix_impact": "Importing paths.py stops moving files as a side effect. Drive links work without the lab folder or the mount, on any machine.",
-   "if_ignored": "The component keeps breaking if lab/damon/mirror.py moves or is quarantined, and every import keeps silently moving files from lab.",
+   "if_ignored": "The component keeps breaking if lab/owner/mirror.py moves or is quarantined, and every import keeps silently moving files from lab.",
    "lane": "owner",
    "severity": "P2",
    "decider": "the owner (owner; the flow names no decider, inferred)"
@@ -228,7 +228,7 @@
   "issue_text": "The briefs register pins an old brief prompt",
   "tier": "P2",
   "A": {
-   "why": "components/briefs/briefs.json:66 declares the static brief's prompt as stage6-image-brief-v2-damon.md, but the folder runs to v6 and the chain resolves by glob — tests/test_image_teardown.py:100 asserts glob_for('6') == 'stage6-image-brief*' — so what runs is v6 while the register says v2 (the atlas flow's own label records the mismatch).",
+   "why": "components/briefs/briefs.json:66 declares the static brief's prompt as stage6-image-brief-v2-owner.md, but the folder runs to v6 and the chain resolves by glob — tests/test_image_teardown.py:100 asserts glob_for('6') == 'stage6-image-brief*' — so what runs is v6 while the register says v2 (the atlas flow's own label records the mismatch).",
    "impacts": {
     "people": [
      "the owner",
@@ -243,7 +243,7 @@
    "evidence": [
     "components/briefs/briefs.json:66@0fabb40eb",
     "tools/image-teardown/tests/test_image_teardown.py:100@0fabb40eb",
-    "tools/image-teardown/prompts/stage6-image-brief-v6-damon.md:1@0fabb40eb"
+    "tools/image-teardown/prompts/stage6-image-brief-v6-owner.md:1@0fabb40eb"
    ],
    "fix": "Re-pin briefs.json to the version the glob resolves (v6), or make the register store the glob and resolve exactly as the chain does so it cannot drift again.",
    "fix_impact": "The briefs register tells the truth about what produced each brief; prompt archaeology stops disagreeing with the register.",
@@ -253,7 +253,7 @@
    "decider": "the owner"
   },
   "B": {
-   "why": "components/briefs/briefs.json pins static--designer to stage6-image-brief-v2-damon.md (98 runs). The prompts folder holds v2 through v6, and run.py prompt_for() picks the highest -vN-, so the chain now runs v6. v6 was added in 858db0f33 on 2026-10-02, so the gap has grown since the fit, which said v5. Anyone reading the register sees a prompt four versions old.",
+   "why": "components/briefs/briefs.json pins static--designer to stage6-image-brief-v2-owner.md (98 runs). The prompts folder holds v2 through v6, and run.py prompt_for() picks the highest -vN-, so the chain now runs v6. v6 was added in 858db0f33 on 2026-10-02, so the gap has grown since the fit, which said v5. Anyone reading the register sees a prompt four versions old.",
    "impacts": {
     "people": [
      "the owner",
@@ -269,10 +269,10 @@
    "evidence": [
     "components/briefs/briefs.json:62-73@0fabb40eb",
     "tools/image-teardown/tools/run.py:161-162@0fabb40eb",
-    "tools/image-teardown/prompts/stage6-image-brief-v6-damon.md:1@0fabb40eb",
+    "tools/image-teardown/prompts/stage6-image-brief-v6-owner.md:1@0fabb40eb",
     "components/briefs/CLAUDE.md:70-71@0fabb40eb"
    ],
-   "fix": "Repin components/briefs/briefs.json:66 to stage6-image-brief-v6-damon.md. Better: have components/briefs/tools/briefs.py resolve the stage's highest version the way run.py prompt_for() does, so the pin cannot go stale again.",
+   "fix": "Repin components/briefs/briefs.json:66 to stage6-image-brief-v6-owner.md. Better: have components/briefs/tools/briefs.py resolve the stage's highest version the way run.py prompt_for() does, so the pin cannot go stale again.",
    "fix_impact": "The register and the atlas show the prompt the chain actually runs, and later prompt bumps stop creating drift.",
    "if_ignored": "The register stays wrong after every prompt bump, and anyone auditing a brief reads the wrong prompt.",
    "lane": "owner",
@@ -418,7 +418,7 @@
     "components/review/reference/_reference.js:398-405@0fabb40eb",
     "components/media-render/CLAUDE.md:116-120@0fabb40eb"
    ],
-   "fix": "In _pm-review-panel.js, keep the last rendered node per host (a WeakMap, as in _reference.js:398) and call pageMedia.release(old) before host.innerHTML = '' at :704 and :1182. Regenerate pm.html, pm-fb.html and steph/pm.html, which inline the panel, and add a seam test that a repaint releases the node it replaced.",
+   "fix": "In _pm-review-panel.js, keep the last rendered node per host (a WeakMap, as in _reference.js:398) and call pageMedia.release(old) before host.innerHTML = '' at :704 and :1182. Regenerate pm.html, pm-fb.html and pm/pm.html, which inline the panel, and add a seam test that a repaint releases the node it replaced.",
    "fix_impact": "A PM board session that flips through review popups stops piling up blob urls, so memory stays flat for the team, the team and anyone else working the board.",
    "if_ignored": "A long PM board session leaks one blob per repaint of a gated image or video. It is small per click but grows with use and is invisible until a tab slows down (inferred).",
    "lane": "owner",
@@ -530,10 +530,10 @@
     "components/meta-upload/upload.py:61-63@0fabb40eb",
     "components/meta-upload/upload.py:74-79@0fabb40eb"
    ],
-   "fix": "the team closes it: resolved = aed8f7989 (or brands/brand-a/web/funnels/funnels.json:3@0fabb40eb), resolved_by steph. No code or brand change is needed.",
+   "fix": "the team closes it: resolved = aed8f7989 (or brands/brand-a/web/funnels/funnels.json:3@0fabb40eb), resolved_by pm. No code or brand change is needed.",
    "fix_impact": "One fewer open issue on the meta-upload atlas page, and the brand-content shared action has one item left (#10, pages input).",
    "if_ignored": "The page keeps showing a fixed gap as open, and the next run spends time checking it again.",
-   "lane": "steph",
+   "lane": "pm",
    "severity": "P2",
    "decider": "the owner (the flow names no decider, inferred)"
   },

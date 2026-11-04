@@ -102,7 +102,7 @@ class Literals(unittest.TestCase):
     def test_no_account_and_no_home_checkout_typed(self):
         for p in sorted(HERE.rglob("*")):
             if p.suffix in (".py", ".md") and p.is_file():
-                self.assertNotIn("GoogleDrive-" + "damon@", p.read_text(errors="replace"), p)
+                self.assertNotIn("GoogleDrive-" + "owner@", p.read_text(errors="replace"), p)
         for name in ("drop.py", "to_check.py", "learnings.py"):
             self.assertNotIn("Projects/workspace", (HERE / name).read_text(), name)
 

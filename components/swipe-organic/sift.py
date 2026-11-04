@@ -7,7 +7,7 @@ unsifted post gets one read: keep or drop, what it is, which format from the
 bank (only when the caption makes it plain), and why. Dropped posts stay in
 the catalog — nothing is deleted, the page just hides them.
 
-    python3 sift.py --avatar damon--<name> [--batch 40] [--model haiku]
+    python3 sift.py --avatar owner--<name> [--batch 40] [--model haiku]
 """
 import argparse, json
 import desklib as D

@@ -64,7 +64,7 @@ Kept verbatim as the record of how the design got here. The current state is HAN
 3. The ads owner for each brand (decider of the <brand> spend signals).
 4. Targets for operations (none exist).
 5. Summaries on every item. the team, ~06:10Z: "these lists should also include the udpated issue summaries as well". Operations is done in this stream (eight parts on all 13 signals). For components the held C card now covers 464 items (493 without a summary, minus 29 that look fixed and only need closing), on Claude. Carded as ATL-31 (remaining issue briefs): 8 parts of 56 to 59 issues each, sidecars appended. DISPATCHED e8d0eac9f on the team's typed "Go"; the lead merges part by part. When parts land, re-render the components page and republish it (the renderer reads the sidecars as is).
-   **Relay rule (corrected by the lead, 10-02):** verbatim relays from this seat DO count for dispatch in dev-dayu, if they carry the line the team was answering. Always include that line.
+   **Relay rule (corrected by the lead, 10-02):** verbatim relays from this seat DO count for dispatch in dev-engineer, if they carry the line the team was answering. Always include that line.
 6. The `triage` record-kind extension (five acts, plus areas, commit and test) and a SCHEMA §5a reopen sentence. To card via the lead.
 7. Whether cards and PM tasks carry a declared `refs:` line.
 8. <brand> the team Slack token scope is broader than its job (channel and DM history). Re-issue narrower: his call.
@@ -86,7 +86,7 @@ Kept verbatim as the record of how the design got here. The current state is HAN
 
 ## UPDATE 2026-10-02 02:10Z: rulings landed; queue format test published
 - Ruled (decision log 981094a4a, 4b36a7a90): the team owns the engine; the team triages EVERYTHING first; the team may close an issue
-  with evidence (SCHEMA §5a: `resolved` + `resolved_by: "steph"`; render.py f25c4dac3, crosscheck.py 0a414be2d); cause and
+  with evidence (SCHEMA §5a: `resolved` + `resolved_by: "pm"`; render.py f25c4dac3, crosscheck.py 0a414be2d); cause and
   blocked_by are two fields; one `triage` record kind (ATL-28 (triage record kind) merged 9c1367b81); actions ranked
   P0 8 · P1 4 · P2 2 · P3 1, age escalates (never past P1), no P0 without a live path. TI-22 (first failing assertion)
   merged 80d5854a5. #7 ignored, #8 deferred. Still open on the team: the team's four conditions for clearing ALONE.
@@ -108,10 +108,10 @@ session on strategy").
 - README required and generated (08:22:42Z 10-01). Ready check is the owner's call; no batch /system-ready
   (08:31:56Z, decision log ed4966da9). Retire old views (10:08:05Z): done.
 - Issue brief standard: SCHEMA §5 has eight fields (why, impacts{people,components,machines}, evidence, fix,
-  fix_impact, if_ignored, lane steph|owner|decision, severity P0–P3), landed by the lead in 6838d3556. My half:
+  fix_impact, if_ignored, lane pm|owner|decision, severity P0–P3), landed by the lead in 6838d3556. My half:
   render.py shows them (217a962e2, skill:), and crosscheck.py enforces them only on issues added or reworded after
   6838d3556 (675b4a80c).
-- the team triages first (the team 10-02, a direction, not yet ruled). The "steph" lane means "the team triages and answers;
+- the team triages first (the team 10-02, a direction, not yet ruled). The "pm" lane means "the team triages and answers;
   the owner still says yes" until her four conditions are ruled.
 
 ## Artifacts (custody)

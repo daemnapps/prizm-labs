@@ -61,9 +61,9 @@
    "rulings": {
     "claymation": {
      "status": "approved",
-     "signed": "damon 2026-09-25 (approved as recommended)",
+     "signed": "owner 2026-09-25 (approved as recommended)",
      "note": "defined by the machine, review pending",
-     "examples": "Nuora ad 110221229 'The truth about odor' — a claymation health explainer, 4 variants (components/swipe-paid/nuora/format-read.md); the owner's saves: davidaistar's claymation-ad carousels, 2026-09-22 (components/swipe-organic/records/damon-saves/catalog.json)",
+     "examples": "Nuora ad 110221229 'The truth about odor' — a claymation health explainer, 4 variants (components/swipe-paid/nuora/format-read.md); the owner's saves: davidaistar's claymation-ad carousels, 2026-09-22 (components/swipe-organic/records/owner-saves/catalog.json)",
      "evidence": "Named by the owner 2026-09-20 (agency Notion page + Instagram '21 ad formats' list); one paid swipe on file (Nuora 110221229), two saves on how the ads are made."
     }
    }

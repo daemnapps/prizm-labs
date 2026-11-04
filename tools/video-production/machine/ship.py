@@ -22,9 +22,9 @@ with a random id in it.
 
 Ruled 2026-09-13: the home is the brand-a brand folder inside Shared Assets on
 the Company account. Corrected 2026-09-16: workspace work goes
-through damon@company.com only, never the personal
-ddixon@companyllc.com account (see lab/damon/ACCESS.md). The folder
-has to be shared with damon@company.com AND shortcut into its
+through owner@company.com only, never the personal
+owner@companyllc.com account (see lab/owner/ACCESS.md). The folder
+has to be shared with owner@company.com AND shortcut into its
 Drive — sharing alone does not sync it to disk, which is the step that gets
 missed.
 
@@ -125,7 +125,7 @@ def main():
         sys.exit(
             "\nNo home on Drive yet.\n\n"
             f"  No Shared Assets/brands/{brand}/ found. Share that folder with\n"
-            "  damon@company.com, then open it and choose\n"
+            "  owner@company.com, then open it and choose\n"
             "  'Add shortcut to Drive'. Sharing alone does not sync it to\n"
             "  this Mac — the shortcut is what puts it on disk.\n\n"
             f"  Or write {CONF.name} beside this script:\n"

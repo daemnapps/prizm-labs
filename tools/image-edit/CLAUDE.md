@@ -9,7 +9,7 @@ generate fresh, rewrite the words, or write over the original**. Triggered by
 (`--dry-run` on both spends nothing).
 
 **Owner:** the owner (engine and definitions both). Built 2026-09-22, build 5 on
-The Build List (`lab/damon/BUILD-LIST.md`).
+The Build List (`lab/owner/BUILD-LIST.md`).
 
 the owner, 2026-09-22: *"editors can create variations from baseline image drafts
 easily (draft follows variation instructions while maintaining reference and
@@ -52,7 +52,7 @@ picture outranks the kind's.
     brand     required   a folder under brands/
     picture   required   the reference — a file ON THIS MACHINE (`baseline` for vary)
     change    one of     the ONE thing to change, in words
-    fix       one of     a row in library/fixes-vN-damon.json; `args` fills its slots
+    fix       one of     a row in library/fixes-vN-owner.json; `args` fills its slots
     args      optional   the slots a fix or variation needs — a missing one is refused BY NAME
     kind      optional   picture (default) · slide · frame-A · frame-B · frame-C
     keep      optional   more things that must not move
@@ -152,7 +152,7 @@ matched to their brief.
 
 - **Named by role, one setting:** `delivery.json` `roles`: `graphic-designer` (pictures, card lane image) and
   `video-editor` (videos, lane video); `filled_by` is the one place a person is named. No person's name in a folder,
-  path, command, button or lane. `state` stays `awaiting-steph` until the team confirms the folders.
+  path, command, button or lane. `state` stays `awaiting-pm` until the team confirms the folders.
 - **Where:** a brief's hand-off folder is `runs/handoffs/<role>/<brand>/<brief key>/`, the same path in the repo and
   under `Shared Assets/` on the Drive. The check reads the repo's `returned/` first, then the Drive's, then the LEGACY
   places (`legacy_folders`, the old `Shared Assets/handoffs/…`) last, one Drive id once (2026-10-28). The packages put the brief there (`handoff.py` here,
@@ -256,7 +256,7 @@ the team's recent delivery"*; 16:10: *"right now image edit is where the final i
 makes outside the chain (Higgsfield) come back here, matched to their brief.
 
 - **The folder is one setting:** `delivery.json` `folder` (`Shared Assets/…/{brand}`). the team confirms it; until then
-  `state` is `awaiting-steph` and every check says so. Changing the folder is that one line.
+  `state` is `awaiting-pm` and every check says so. Changing the folder is that one line.
 - **Matching:** every picture under the folder (subfolders too) by the brief ID in its file name, else in the nearest
   folder name above it (`brief-0325`, `brief_0325`, `Brief 0325`), looked up for the brand in image-teardown's register
   (`tools/briefs.py`); a number two products share is decided by the product named in the path. No ID, an unknown ID,
@@ -299,11 +299,11 @@ in the brief's type layer and recomposed — exact, and free.
 
 | File | Rows | What a row is |
 |---|---|---|
-| `library/fixes-vN-damon.json` | logo · product · layout · background · remove (· text, deprecated in v3 — type belongs to the compositor) | a spot fix on a finished picture: one delta template with `{slots}`, the keeps it adds, what it needs, which brand file rides along (the logo, the product photo), the test the judge adds |
-| `library/variations-vN-damon.json` | headline · angle · person · product · colour · background · reframe | a variation off a baseline: the same shape. Stage 4e of image teardown writes its variation list against these ids |
+| `library/fixes-vN-owner.json` | logo · product · layout · background · remove (· text, deprecated in v3 — type belongs to the compositor) | a spot fix on a finished picture: one delta template with `{slots}`, the keeps it adds, what it needs, which brand file rides along (the logo, the product photo), the test the judge adds |
+| `library/variations-vN-owner.json` | headline · angle · person · product · colour · background · reframe | a variation off a baseline: the same shape. Stage 4e of image teardown writes its variation list against these ids |
 
 Every row carries `status` (draft / approved / deprecated). **A changed row
-is a NEW file `-v<N+1>-damon.json`** beside the old one; the highest number
+is a NEW file `-v<N+1>-owner.json`** beside the old one; the highest number
 wins. Never edited in place. `edit.py --fixes` and `vary.py --library` print
 them verbatim; the Skill Library page renders them.
 
@@ -314,7 +314,7 @@ them verbatim; the Skill Library page renders them.
 2. **`compare.py`, this component's** — two pictures, the reference beside the
    result, the change that was asked for, and two standing tests: **CHANGE
    PRESENT** and **NOTHING ELSE MOVED** — plus the fix's or variation's own
-   test. Prompt: `prompts/compare-judge-vN-damon.md`, highest wins. A result
+   test. Prompt: `prompts/compare-judge-vN-owner.md`, highest wins. A result
    that moved anything else is held under `rejected/` with its reason.
 
 The judge not running is a HOLD, never a pass.

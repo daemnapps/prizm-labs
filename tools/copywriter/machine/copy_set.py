@@ -13,7 +13,7 @@ formats … it'd be good to actually write fundamentally sound copy because righ
 this copy is awkward."
 
 A set is written once, from the product file, the angle, the offer bank, the guarantee
-and the market's own words (prompts/copy-set-v1-damon.md), checked (check()), and
+and the market's own words (prompts/copy-set-v1-owner.md), checked (check()), and
 approved once by the owner. Every card on that brand + product + angle then takes its words
 from the approved set (meta-upload/card_words.for_brief): `{offer}` becomes the set's
 offer line and `{click}` the line for the ad's page type, so the words always match the
@@ -38,7 +38,7 @@ PROMPTS = COPY / "prompts"
 
 def latest_set_prompt():
     """Highest copy-set-vN wins (same rule as copy.py's latest_prompt)."""
-    got = [(int(m.group(1)), f) for f in PROMPTS.glob("copy-set-v*-damon.md")
+    got = [(int(m.group(1)), f) for f in PROMPTS.glob("copy-set-v*-owner.md")
            for m in [re.search(r"-v(\d+)-", f.name)] if m]
     return max(got)[1]
 

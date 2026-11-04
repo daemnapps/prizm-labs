@@ -202,7 +202,7 @@ def runner_id(repo=None):
                       + NEVER_MERGES)
     # THE EMAIL'S LOCAL PART IS NOT THE PERSON ID, and assuming it was made one
     # teammate invisible to this tool for two weeks (fixed 2026-09-16, found by
-    # the ops lead's own session). `stephanie@…` resolved to `stephanie`; her id
+    # the ops lead's own session). `pm@…` resolved to `pm`; her id
     # everywhere else — the folder, 365 task records, her grant row — is
     # `brand-editor`. The grant the developer made on 2026-09-08 therefore never fired, and it
     # failed CLOSED AND SILENTLY: "Grants held: none", which reads as "you were
@@ -212,7 +212,7 @@ def runner_id(repo=None):
     # mapping is READ rather than guessed. The local part stays as the fallback
     # (it is right for everyone whose email agrees with their id) and the
     # registry wins whenever it has an answer. Fixing it HERE rather than
-    # writing `stephanie` into the grants file is deliberate: that would make
+    # writing `pm` into the grants file is deliberate: that would make
     # one file disagree with every other record about who she is.
     who = _id_for_email(email) or email.split("@")[0].strip()
     return who

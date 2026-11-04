@@ -132,7 +132,7 @@ product goes through the same pass before its kit is used in a picture.
 **Every angle, not three** (the owner, 2026-10-09: *"hyper analyze this so we get
 it 100% accurate … the depictions [must] be perfect so they pass as
 believable"*). Where the store has a 360° video, the model is checked against
-**every turntable angle it has** (FLEX: 24), outline by outline, aligned on the
+**every turntable angle it has** (WIDGET: 24), outline by outline, aligned on the
 body's centre — three views hid a front that was 7% too boxy at the
 three-quarter angles. When a model carved from all the frames exists, the
 shell takes its cross-sections and the hand-built detail sits on top. Fine
@@ -173,13 +173,13 @@ The rows are `product-standard.json` (eleven: exact 3D model at true size · eve
 colours · materials · states · the formula itself · how it is used · the never-show list · the current version, signed
 off · the lighting match · in Higgsfield). `product_kit.py score <brand> <slug>|--all` marks each complete, partial,
 missing or not applicable from what the kit holds and writes `model/standard.json`; the product sheets page
-(`components/model-inputs/context/product-sheets-damon.html`) shows them.
+(`components/model-inputs/context/product-sheets-owner.html`) shows them.
 
 **The casting sheet.** `product_kit.py sheet` lays every side on one labelled picture at true size,
 `model/product-sheet.png`. Every picture with the product in it carries it first (image-production `plain.product`).
 Angles the real photos lack are built the 3D-room way (`model/sheet/jutsu/angles.json`): the product built in
 Higgsfield 3D Jutsu at its true size first, a camera per angle, then the real look laid on with Jutsu's own angle step,
-the sheet as the reference. Never a tilt of the stand-in model, never a plain picture call (both failed on FLEX the
+the sheet as the reference. Never a tilt of the stand-in model, never a plain picture call (both failed on WIDGET the
 same day). Each product's sheet also lives in Higgsfield as one element, `kit.json` `higgsfield_element`.
 
 **Only the owner signs a version off** (`kit.json` `version.approved_by`). Label print files come from whoever designed the

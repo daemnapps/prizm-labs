@@ -1,12 +1,12 @@
 """The bank — who the brand has already banked, and who covers a role.
 
 **READ ONLY.** The registry is the brand's own content, curated by people
-(`lab/damon/CLAUDE.md` rule 5: a machine reads `brands/<brand>/` and never
+(`lab/owner/CLAUDE.md` rule 5: a machine reads `brands/<brand>/` and never
 writes there). This module opens it, normalises the rows into one shape, and
 answers one question: *who plays this role?* It proposes; it never writes.
 
 Two shapes are read, because the two brands on disk keep their cast two
-different ways and `lab/damon/casting/build_cast.py` refuses the second:
+different ways and `lab/owner/casting/build_cast.py` refuses the second:
 
     core-avatars/casting/roster.json     `people` — the people with the problem
     core-avatars/casting/authority.json  `people` — the credentialed voices,

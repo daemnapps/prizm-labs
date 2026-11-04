@@ -35,7 +35,7 @@ import chain as C
 # Creator work moved out of `swipe/` on 2026-08-27 (the owner) — it was buried
 # under four unrelated swipe projects. It stays inside the lab: everything of
 # his does, and a top-level folder was the wrong read. Creators now sit at
-# lab/damon/creators/<handle>, with the picking selections beside them. The
+# lab/owner/creators/<handle>, with the picking selections beside them. The
 # old swipe folder keeps its other projects and is no longer reached from here.
 ROOT_SUBPATH = ("tools", "video-teardown")   # out of lab 2026-10-18 (drive sweep)
 CREATORS_SUBPATH = ("tools", "video-teardown", "creators")

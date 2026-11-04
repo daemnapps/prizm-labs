@@ -271,9 +271,9 @@ def standard():
     cannot see is a prompt he cannot correct."""
     doc = (ROOT / "DRAFT-STANDARD.md").read_text()
     steps = re.search(r"## The six steps\n\n(\|.*?)\n\n", doc, re.S)
-    files = [("The draft — adult in the swipe", "stage7-draft-match-swipe-v2-damon.md"),
-             ("The draft — organic, no adult", "stage7-draft-leave-alone-v1-damon.md"),
-             ("The judge", "stage8-draft-judge-v2-damon.md")]
+    files = [("The draft — adult in the swipe", "stage7-draft-match-swipe-v2-owner.md"),
+             ("The draft — organic, no adult", "stage7-draft-leave-alone-v1-owner.md"),
+             ("The judge", "stage8-draft-judge-v2-owner.md")]
     tabs = "".join(
         f'<button class="tab{" on" if k == 0 else ""}" type="button" '
         f'data-pane="std-{k}">{html.escape(lbl)}</button>' for k, (lbl, _) in enumerate(files))

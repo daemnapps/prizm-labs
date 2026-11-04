@@ -2,8 +2,8 @@
 """top1_board — The Top 1% Board: each brand's winning ads on one page, and where each one is in the
 breakdown → learning → new copy road.
 
-    top1_board.py      reads runs/media-buying/top1/board.json, writes lab/damon/media-buying/top1-board.html
-                       (+ TOP1-BOARD-damon.md)
+    top1_board.py      reads runs/media-buying/top1/board.json, writes lab/owner/media-buying/top1-board.html
+                       (+ TOP1-BOARD-owner.md)
 
 the owner, 2 Oct 2026: "let's just do the top 1%. Let's build a board for them, and then we have to run the breakdown
 process on them, learn from them, and do some innovative copywriting with our different formats going forward" —
@@ -17,7 +17,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 SRC = WS / "runs/media-buying/top1/board.json"
-OUT = WS / "lab/damon/media-buying/top1-board.html"
+OUT = WS / "lab/owner/media-buying/top1-board.html"
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
             md.append(f"{w['rank']}. {w['ads'][0]['ad_name']} — {int(w['purchases'])} sales, ${w['spend']:,.0f}, CPA ${w['cpa']}, "
                       f"ROAS {w['roas']} · {len(w['ads'])} ads · {w['files_total']} files on Drive · {bd}")
         md.append("")
-    (OUT.parent / "TOP1-BOARD-damon.md").write_text("\n".join(md) + "\n")
+    (OUT.parent / "TOP1-BOARD-owner.md").write_text("\n".join(md) + "\n")
     print(f"wrote {OUT.relative_to(WS)}")
 
 

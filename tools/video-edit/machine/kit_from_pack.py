@@ -152,6 +152,6 @@ def build(pack: Path, kit_dir: Path, run_dir: Path, brand: str, label: str) -> t
            "brief": str(handoff_of(kit_dir).relative_to(kit_dir)), "fps": read.get("fps"),
            "voice": ({"src": full.get(Path(bed["file"]).name, bed["file"]), "words": None, "kind": bed.get("what"), "until_picture_ends": True} if bed else None),
            "music": None, "sfx": [], "clips": clips, "overlays": overlays,
-           "held": read.get("held") or [], "missing": read.get("missing") or [], "notes_for_damon": read.get("notes_for_damon") or [],
+           "held": read.get("held") or [], "missing": read.get("missing") or [], "notes_for_owner": read.get("notes_for_owner") or [],
            "read_by": f"{read['_model']} · prompt {read['_prompt']}"}
     return kit, notes

@@ -15,7 +15,7 @@ CONST = "COPY_CHECK" + "_PROMPT"
 SKIP = {".git", "runs", "platform/data", "new-workflow-design/builds/atlas"}
 # The one name-reader left: a lab display list (:26) that skips a missing file
 # (:54-56). Lab is not edited by this card.
-EXCEPTION = "lab/damon/system-blueprint/prompts_page.py"
+EXCEPTION = "lab/owner/system-blueprint/prompts_page.py"
 
 
 def readers():
@@ -40,7 +40,7 @@ def readers():
 class OneCheckPrompt(unittest.TestCase):
     def test_prompt_file_is_gone(self):
         self.assertTrue((WS / "components").is_dir())
-        self.assertFalse((COMP / "prompts" / f"{PROMPT_NAME}-damon.md").exists())
+        self.assertFalse((COMP / "prompts" / f"{PROMPT_NAME}-owner.md").exists())
         self.assertEqual(sorted((COMP / "prompts").glob(f"{PROMPT_NAME}*")), [])
 
     def test_package_imports_without_the_constant(self):

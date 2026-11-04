@@ -1,6 +1,6 @@
 # the team's emails: what her Claude does
 
-Moved here from lab/steph/eve-email-page/ on 2026-10-22 (the team: "go lab-flow move"), with team-outlier/ renamed to adapter/. Built in the team's lab 2026-10-21. Owner line: tools/email-production/CLAUDE.md. Kept short: the team's Claude reads it once per session. Background and history: HISTORY.md.
+Moved here from lab/pm/designer-email-page/ on 2026-10-22 (the team: "go lab-flow move"), with team-outlier/ renamed to adapter/. Built in the team's lab 2026-10-21. Owner line: tools/email-production/CLAUDE.md. Kept short: the team's Claude reads it once per session. Background and history: HISTORY.md.
 
 the team is a designer and does not use the terminal. Do every step yourself, say in one plain sentence what you did, and
 stop only for what only she can do (a file to drag in, what a picture shows, a yes). Never print a key value.
@@ -94,8 +94,8 @@ The picture is then made fresh from its brief with her change, not edited from t
 ## When she wants the page itself to look or work differently
 
 Bigger text, other colours, a different order: improvements are welcome and go to everyone.
-1. First time only: `/page-draft emails --name eve-ideas` (a copy of the shared page, in her folder).
-2. Make each change with `/page-change` on `platform/views/viewers/eve/drafts/emails--eve-ideas.html`, by number
+1. First time only: `/page-draft emails --name designer-ideas` (a copy of the shared page, in her folder).
+2. Make each change with `/page-change` on `platform/views/viewers/designer/drafts/emails--designer-ideas.html`, by number
    or in her words, and show it to her: `serve.py` on that draft with `--port 8766`.
 3. When she likes it, run `/review-request` asking the team to put it on the shared page, naming the draft and what
    changed. the team's Claude runs `/usr/bin/python3 components/page-features/features.py promote <her draft> --check`, then

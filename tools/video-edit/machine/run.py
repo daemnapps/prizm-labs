@@ -330,7 +330,7 @@ def auto_cut(kit: dict, kit_dir: Path, work: Path, controls: dict, brand: str, l
     if kit.get("fps"):
         cv = {**cv, "fps": int(round(float(kit["fps"])))}
     return {"meta": {"brand": brand, "label": label, "format": kit.get("format"), "style_id": kit.get("style_id"), **cv},
-            "held": kit.get("held") or [], "missing": kit.get("missing") or [], "notes_for_damon": (kit.get("notes_for_damon") or []) + past_end,
+            "held": kit.get("held") or [], "missing": kit.get("missing") or [], "notes_for_owner": (kit.get("notes_for_owner") or []) + past_end,
             "controls": controls, "cut_by": "auto", "voice": voice, "voice_cuts": voice_cuts,
             "music": ({"src": kit["music"]["src"], "start": 0, "volume_db": snd["music_db"]} if kit.get("music") else None),
             "sfx": [{**x, "volume_db": snd["sfx_db"]} for x in kit.get("sfx") or []],
@@ -392,7 +392,7 @@ def model_cut(kit: dict, kit_dir: Path, work: Path, run: Path, controls: dict, b
                 sheet["picture"].append({"id": c["id"], "roll": "b", "src": c["src"], "start": round(float(b["start"]), 3), "duration": round(float(b["duration"]), 3),
                                          "source_start": round(float(b.get("source_start", 0)), 3), "scene": c.get("scene"), "still": bool(c.get("still")), "volume_db": None, "why": b.get("why", "")})
             sheet["overlays"] = d.get("overlays") or []
-            sheet.update({"cut_by": f"model ({mdl}) on the machine's lip-safe draft · prompt {Path(path).name}", "missing": d.get("missing") or [], "notes_for_damon": d.get("notes_for_damon") or []})
+            sheet.update({"cut_by": f"model ({mdl}) on the machine's lip-safe draft · prompt {Path(path).name}", "missing": d.get("missing") or [], "notes_for_owner": d.get("notes_for_owner") or []})
             red = CS.check(sheet, kit_dir)
             if not red:
                 return sheet

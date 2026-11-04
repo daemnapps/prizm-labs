@@ -20,7 +20,7 @@ def _workspace(start=__file__):
     """The workspace root, FOUND by walking up — never counted with parents[N].
 
     This used to be `HERE.parents[2]`, which was the root only while this file
-    sat in lab/damon/. It moved to components/ on 2026-09-22 and every lookup
+    sat in lab/owner/. It moved to components/ on 2026-09-22 and every lookup
     silently pointed one level too high, at ~/Projects. A marker cannot go
     quietly wrong the next time something moves.
 
@@ -36,7 +36,7 @@ from run_kit.paths import repo  # noqa: E402  the one workspace locator (triage 
 # never ship is a secret or somebody's disk.
 LEAK = re.compile(r"/Users/|api[_-]?key|apify_token|sk-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{30,}", re.I)
 VID = HERE / "records/swipe-videos"
-SAVES = HERE / "records/damon-saves"
+SAVES = HERE / "records/owner-saves"
 REPO = _workspace()
 DEFAULT_OUT = REPO / "runs" / "swipe-organic" / "bundle"
 CHAIN = REPO / "tools/video-teardown"

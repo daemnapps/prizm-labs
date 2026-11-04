@@ -42,7 +42,7 @@ def _repo(start):
 # The tool's folder is the one holding machine.py and templates/ — found.
 PROD = _up(__file__, lambda d: (d / "machine.py").is_file() and (d / "templates").is_dir(),
            "image-production folder")             # tools/image-production/static
-LAB = PROD.parent                                  # lab/damon
+LAB = PROD.parent                                  # lab/owner
 REPO = _repo(PROD)                                 # the workspace root
 TOOL = "image-production"                          # its name under runs/
 RECORDS = REPO / "runs" / TOOL                     # runs/image-production/<brand>/<batch>/
@@ -50,7 +50,7 @@ RECORDS = REPO / "runs" / TOOL                     # runs/image-production/<bran
 # 2026-10-01; `LAB / "image-teardown"` had pointed inside this component since
 # image-production itself moved, so it named a folder that never existed.
 TEARDOWN = next((d for d in (REPO / "tools" / "image-teardown",
-                             REPO / "lab" / "damon" / "image-teardown")
+                             REPO / "lab" / "owner" / "image-teardown")
                  if (d / "chain.py").is_file() and (d / "prompts").is_dir()),
                 REPO / "tools" / "image-teardown")
 
@@ -59,7 +59,7 @@ TEARDOWN = next((d for d in (REPO / "tools" / "image-teardown",
 # lab copy, so the packshot stopped existing and the product silently
 # vanished from six finished ads.
 # The naming standard graduated out of the lab to components/naming on
-# 2026-09; lab/damon/naming/ has not existed since.
+# 2026-09; lab/owner/naming/ has not existed since.
 COMPONENTS = REPO / "components"
 NAMING = COMPONENTS / "naming"
 ELEMENTS = COMPONENTS / "elements"                 # the element library
@@ -113,14 +113,14 @@ class MountError(Exception):
 
 
 def drive():
-    """Shared Assets/lab/damon on the mounted Drive — DISCOVERED, never typed.
+    """Shared Assets/lab/owner on the mounted Drive — DISCOVERED, never typed.
 
     The account in the mount's name belongs to whoever is signed in, so it is
     not written here. Same discovery, and the same three loud failures, as
     components/run-kit/run_kit/filing.py `drive_runs()`. The account folders
     come from brandpath's finder (LD-47 (Drive sweep)): none on a worker
     spawn (DRIVE_MOUNT=off, LD-26 (mount switch))."""
-    mounts = DI.upright_accounts()             # the company accounts, named in drive_index only (LD-55 (Drive literal check))
+    mounts = DI.company_accounts()             # the company accounts, named in drive_index only (LD-55 (Drive literal check))
     if not mounts:
         raise MountError("no company Google Drive is mounted on this machine")
     if len(mounts) > 1:
@@ -129,7 +129,7 @@ def drive():
     shared = mounts[0] / "Shared drives" / "Shared Assets"
     if not shared.is_dir():
         raise MountError(f"the Shared Assets drive is not visible under {mounts[0].name}")
-    return shared / "lab" / "damon"
+    return shared / "lab" / "owner"
 
 
 def _drive_or_absent():
@@ -139,7 +139,7 @@ def _drive_or_absent():
     try:
         return drive()
     except MountError:
-        return Path.home() / "_no-drive-mounted" / "Shared Assets" / "lab" / "damon"   # never under the Drive app's folder
+        return Path.home() / "_no-drive-mounted" / "Shared Assets" / "lab" / "owner"   # never under the Drive app's folder
 
 
 DRIVE = _drive_or_absent()

@@ -257,7 +257,7 @@ class _HfShell:
     def fetch(self, url, dest):
         dest = Path(dest)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        req = urllib.request.Request(url, headers={"User-Agent": "upright-image-production/1"})
+        req = urllib.request.Request(url, headers={"User-Agent": "company-image-production/1"})
         with urllib.request.urlopen(req, timeout=300) as r:
             dest.write_bytes(r.read())
 
@@ -346,7 +346,7 @@ def generate(entry, prompt, references, out, aspect, transport=None, key=None):
     k = key if key is not None else R.key_value(name)
     if not k:
         raise SystemExit(f"no {name} on this machine — it is read from the environment, "
-                         f"else the macOS Keychain (service daemn-{name}, account damon). "
+                         f"else the macOS Keychain (service daemn-{name}, account owner). "
                          f"Nothing was sent and nothing was spent.")
     refs = [Path(r) for r in (references or [])]
     if entry["provider"] == "openai":

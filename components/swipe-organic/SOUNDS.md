@@ -20,7 +20,7 @@ a filter. The sounds make the content feel culturally current, not AI-made.
 - **The data:** `records/sounds/pool.json` (every sound),
   `records/sounds/index.json` (his kept sounds = the shortlist),
   `records/sounds/pulls.jsonl` (every pull), `records/sounds/raw/` (the chart as it came in).
-- **The audio:** on the Drive at `Shared Assets/lab/damon/swipe-organic/sounds/<id>.mp3`.
+- **The audio:** on the Drive at `Shared Assets/lab/owner/swipe-organic/sounds/<id>.mp3`.
   Never in git.
 
 ## How one pull runs
@@ -115,7 +115,7 @@ Kept sounds are written in the **same row shape as the music and SFX banks**
  "id": "snd-7550000000000000001",
  "tags": ["confident", "high", "pop", "song", "trending"],
  "energy": "high", "tempo_bpm": 120, "mood": "confident", "seconds": 30,
- "file": "Shared Assets/lab/damon/swipe-organic/sounds/snd-7550000000000000001.mp3",
+ "file": "Shared Assets/lab/owner/swipe-organic/sounds/snd-7550000000000000001.mp3",
  "source": "tiktok trending sound — <title> · <artist>",
  "licence": "organic posts only — added from TikTok's sound library at post time; not cleared for paid ads",
  "status": "made",

@@ -210,7 +210,7 @@ class Source(unittest.TestCase):
             src = inspect.getsource(fn)
             for bad in ("rmtree", "copytree", "CloudStorage", "GoogleDrive-"):
                 self.assertNotIn(bad, src, f"{fn.__name__} holds {bad!r}")
-        self.assertNotIn("damon@", Path(V.__file__).read_text())
+        self.assertNotIn("owner@", Path(V.__file__).read_text())
 
 
 class Service(unittest.TestCase):

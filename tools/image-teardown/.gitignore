@@ -1,5 +1,5 @@
 # Media lives on the team Drive, never in git (workspace rule 3), at the
-# mirrored path: Shared Assets/lab/damon/image-lane/runs/. That is the single
+# mirrored path: Shared Assets/lab/owner/image-lane/runs/. That is the single
 # home for every picture this lane makes — full-res output, sources, all of it.
 #
 # The web-copy exception was tried on 2026-08-26 and reversed the same day
@@ -45,7 +45,7 @@ __pycache__/
 image-board.html
 board.json
 
-# Carried over from the repo-root `lab/damon/**` rules when the lane moved to
+# Carried over from the repo-root `lab/owner/**` rules when the lane moved to
 # components/ (2026-10-01). Those rules stopped applying at the new path, so
 # without these the working runs, the per-brand boards and the superseded
 # snapshots would all have shown up as new files to commit.

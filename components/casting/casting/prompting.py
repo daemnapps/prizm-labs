@@ -1,6 +1,6 @@
 """The three generating steps' prompts. Slots, never prose.
 
-Each prompt is a FILE (`prompts/<step>-vN-damon.md`), so a change to how a
+Each prompt is a FILE (`prompts/<step>-vN-owner.md`), so a change to how a
 character is asked for is a change the owner can read — it is never a string
 edited inside code. Highest `-vN-` wins, NUMERICALLY (an alphabetical sort
 lets v2 beat v10), which is `components/run-kit/run_kit/prompts.py`'s rule and

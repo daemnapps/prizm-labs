@@ -247,7 +247,7 @@ def runs():
 
 
 def lab_only():
-    """Nothing in the lane may read outside lab/damon. Ruled 2026-08-28."""
+    """Nothing in the lane may read outside lab/owner. Ruled 2026-08-28."""
     hits = []
     # check.py states the rule and paths.py documents it — both name the old
     # root in prose. Everything else naming it is a real reach.
@@ -258,7 +258,7 @@ def lab_only():
             if "devel/daemn" in line and not line.lstrip().startswith("#"):
                 hits.append(f"{f.relative_to(LANE)}:{i}")
     return (not hits), ("reaches outside the lab: " + ", ".join(hits[:4])) if hits \
-        else "no tool reads outside lab/damon"
+        else "no tool reads outside lab/owner"
 
 
 for g, n, f in [

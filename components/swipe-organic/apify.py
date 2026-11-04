@@ -18,7 +18,7 @@ from run_kit.paths import repo as _repo  # noqa: E402  the one workspace locator
 
 def _ws():
     """Found by walking up. `parents[3]` was right only while this file sat in
-    lab/damon/; it moved to components/ on 2026-09-22 and pointed at ~/Projects.
+    lab/owner/; it moved to components/ on 2026-09-22 and pointed at ~/Projects.
     The walk is run-kit's paths.repo() (SI-111 (organic one locator))."""
     return _repo(__file__)
 

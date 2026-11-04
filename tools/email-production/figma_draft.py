@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """FIGMA DRAFT — the copy of one slot, laid into the brand's own Figma
 template (RULED 2026-09-09: drafts are built directly in Figma from the
-templates already in the file; Eve tweaks; Eve puts the finals into Klaviyo).
+templates already in the file; the designer tweaks; the designer puts the finals into Klaviyo).
 
     python3 figma_draft.py results/<slot> [--brand <brand>] [--template <nodeId>]
                            [--page "Drafts - September 2026 (machine)"] [--col N]

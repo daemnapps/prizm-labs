@@ -23,7 +23,7 @@ HERE = Path(__file__).resolve().parent
 LOCAL_ENV = HERE / ".env"
 
 _LOADER_PATH = HERE.parents[2] / "components" / "keys" / "loader.py"
-_LOADER_NAME = "upright_keys_loader"
+_LOADER_NAME = "company_keys_loader"
 
 
 def _load_loader():

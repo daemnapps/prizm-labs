@@ -30,13 +30,13 @@ os.environ["AI_WORKSPACE"] = str(TMP)            # before anything imports paths
 HERE = Path(__file__).resolve().parent
 REPO = next(d for d in HERE.parents if (d / "components" / "brand-finder").is_dir())
 BRAND, LABEL = "brand-a", "brand-a-oct-03--fed-up-king"
-SOURCE = (REPO / "platform/data/records/lab-runs/steph/steph-brand-a-oct-2026-mini-oct-05-07" / LABEL)
+SOURCE = (REPO / "platform/data/records/lab-runs/pm/pm-brand-a-oct-2026-mini-oct-05-07" / LABEL)
 COPY = TMP / "runs" / "email-production" / BRAND / LABEL
 RULE = REPO / "components" / "marketing-chain-checks" / "rule.py"
 FACTS = ["PRIME goes on right after cleansing, while the face is still damp.",
          "PRIME holds water in and regulates oil.",
          "Aloe vera in PRIME calms post-shave irritation.",
-         "A FLEX session runs about sixty seconds."]
+         "A WIDGET session runs about sixty seconds."]
 
 
 def brand_state():
@@ -85,7 +85,7 @@ class TheHeldEmailIsClearedByRulings(unittest.TestCase):
                 args = [it["id"], "true-once", "--reason", "the routine order is right for this send"]
             else:
                 args = [it["id"], "true", next(facts)]
-            r = run(RULE, COPY, *args, "--by", "steph")
+            r = run(RULE, COPY, *args, "--by", "pm")
             self.assertEqual(r.returncode, 0, r.stderr)
         self.assertEqual(len(list((TMP / "platform/data/records/fact-rulings").glob("*.json"))), 5)
 
@@ -96,7 +96,7 @@ class TheHeldEmailIsClearedByRulings(unittest.TestCase):
         self.assertEqual((d["result"], d["problems"], d["items"]), ("pass", [], []))
         self.assertEqual(len(d["cleared"]), 5)
         self.assertEqual(sorted(c["ruling"] for c in d["cleared"]), ["true"] * 4 + ["true-once"])
-        self.assertEqual(r.stdout.count("cleared by steph's"), 5)
+        self.assertEqual(r.stdout.count("cleared by pm's"), 5)
 
         # (d) the uploader's dry run accepts: no subprocess, no socket, nothing written
         media = COPY / "media"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read any ad — a picture, a video or a piece of copy — on the creative controls.
 
-Each asset goes to Gemini with prompts/read-controls-v1-damon.md, which binds
+Each asset goes to Gemini with prompts/read-controls-v1-owner.md, which binds
 slices/controls.md, and comes back with a level and a one-line reason per dial
 its medium uses, the emotion, the techniques, and the one thing the eye hits.
 Levels are checked against each dial's scale; anything off-scale is flagged.
@@ -28,7 +28,7 @@ from pathlib import Path
 import creative_controls as CC
 
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE / "prompts" / "read-controls-v1-damon.md"
+PROMPT = HERE / "prompts" / "read-controls-v1-owner.md"
 MODEL = "gemini-3.1-pro-preview"   # components/models/models.json
 API = "https://generativelanguage.googleapis.com"
 MIME = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
@@ -36,7 +36,7 @@ MEDIUM = {"image": "image", "video": "video", "text": "copy"}
 
 
 def key(name):
-    spec = importlib.util.spec_from_file_location("upright_keys_loader", str(CC.REPO / "components/keys/loader.py"))
+    spec = importlib.util.spec_from_file_location("company_keys_loader", str(CC.REPO / "components/keys/loader.py"))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     v = mod.key(name, required=False)

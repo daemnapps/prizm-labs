@@ -16,7 +16,7 @@ class VoiceQcVenv(unittest.TestCase):
                          Path("/ws/tools/video-edit/.venv/bin/python"))
 
     def test_old_lab_path_is_gone(self):
-        self.assertNotIn("lab/damon/video-edit", (HERE / "make_voice.py").read_text())
+        self.assertNotIn("lab/owner/video-edit", (HERE / "make_voice.py").read_text())
 
 
 if __name__ == "__main__":

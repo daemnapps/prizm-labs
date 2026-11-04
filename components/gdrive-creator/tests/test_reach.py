@@ -249,7 +249,7 @@ class TestRoute(Base):
     def key_file(self, line):
         home = self.tmp / "home"
         home.mkdir()
-        (home / ".upright-keys.env").write_text(line + "\n")
+        (home / ".company-keys.env").write_text(line + "\n")
         os.environ["HOME"] = str(home)
         os.environ.pop("KEYS_NO_FALLBACK", None)
         os.environ["GDRIVE_KEY_FILE_IN_TESTS"] = "1"     # opt in past the engine's test guard

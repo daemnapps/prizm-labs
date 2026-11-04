@@ -128,7 +128,7 @@ class TryVerb(unittest.TestCase):
         self.assertTrue(any(p.startswith("try_words:") and "without a `try` verb" in p for p in got), got)
 
     def test_try_argv_is_checked_like_the_others(self):
-        got = contract.check(dict(self.base(), **{"try": ["lab/dayu/x.py"], "try_words": ["picture"]}))
+        got = contract.check(dict(self.base(), **{"try": ["lab/engineer/x.py"], "try_words": ["picture"]}))
         self.assertTrue(any(p.startswith("try:") and "lab code" in p for p in got), got)
 
     def test_go_and_send_stay_refused_as_change_words_with_try(self):

@@ -14,32 +14,32 @@ P = HERE / "prompts"
 W = "../../image-writing/prompts/"      # steps 3 to 6: the writing station's prompts (2026-10-27)
 
 STAGES = [
-    ("1", "Teardown", "stage1-image-teardown-v1-damon.md", "a",
+    ("1", "Teardown", "stage1-image-teardown-v1-owner.md", "a",
      "One static in, one reproduction spec out. Frame spec, subject and "
      "setting, the zone table, the reading path, the psychology, the index. "
      "Observation only — abstraction happens at stage 2.",
      "one image", "the teardown record"),
-    ("1C", "Clone spec", "stage1c-image-clone-spec-v1-damon.md", "a",
+    ("1C", "Clone spec", "stage1c-image-clone-spec-v1-owner.md", "a",
      "The teardown turned into the two machine-readable blocks that rebuild "
      "the ad exactly: the plate prompt with its accept tests, and the type "
      "layer as JSON. Abstracts nothing.",
      "the teardown record", "plate prompt + type layer"),
-    ("1k", "Culture read", "../../culture/prompts/stage1k-culture-v4-damon.md", "a",
+    ("1k", "Culture read", "../../culture/prompts/stage1k-culture-v4-owner.md", "a",
      "What the people looking at the swipe recognize: references, formats, slang, the joke in its words, and since "
      "v5 (2026-10-29) the props that mark its moment and the words printed on things in the scene. The same read for "
      "video and pictures (components/culture).",
      "the teardown record + the post's talk", "out/01k-culture.md"),
-    ("2", "Replication spec", "stage2-image-replication-v1-damon.md", "b",
+    ("2", "Replication spec", "stage2-image-replication-v1-owner.md", "b",
      "The frame abstracted — brand stripped out, every element made "
      "injectable. Counts area and position, never seconds.",
      "the record", "a brand-free spec"),
-    ("3C", "Controls reader", "../../creative-controls/prompts/read-controls-v1-damon.md", "b",
+    ("3C", "Controls reader", "../../creative-controls/prompts/read-controls-v1-owner.md", "b",
      "Reads the swipe on the creative controls before stage 3: its level on "
      "every dial its medium uses, its emotion, its techniques and the one "
      "thing the eye hits first. The same reader scores our finished ads and "
      "every swipe (components/creative-controls).",
      "the swipe picture + the dials", "the swipe's levels"),
-    ("3", "Injection", "../../image-writing/prompts/stage3-image-injection-v6-damon.md", "b",
+    ("3", "Injection", "../../image-writing/prompts/stage3-image-injection-v6-owner.md", "b",
      "Substitution, not rewriting. Our brand in the slots, zone for zone. "
      "Not yet an ad. v4 added THE CREATIVE CONTROLS (every dial, swipe level to "
      "ours). v6 adds section 6, THE SWAPS RECORD: every swap as data with its kind "
@@ -48,30 +48,30 @@ STAGES = [
      "out/swaps.json, and every picture maker works out what goes into the picture "
      "from that file alone.",
      "record + spec + brand + the dials", "the baseline injection"),
-    ("3R", "Swaps reader", "../../image-writing/prompts/swaps-reader-v1-damon.md", "b",
+    ("3R", "Swaps reader", "../../image-writing/prompts/swaps-reader-v1-owner.md", "b",
      "Backfill only: reads a finished brand step and brief that pre-date the swaps "
      "record and writes the same record from what the text plainly says. A fast "
      "reading model, never a writer: a call the text does not settle comes back "
      "null and the run is listed, not guessed.",
      "the brand step + the brief's picture + the banks", "out/swaps.json"),
-    ("4a", "Placement", "../../image-writing/prompts/stage4a-image-placement-v1-damon.md", "c",
+    ("4a", "Placement", "../../image-writing/prompts/stage4a-image-placement-v1-owner.md", "c",
      "Lane, headline zone, the ratios to build, awareness, the frame budget, "
      "the device check. No copy.",
      "baseline + record + spec", "the placement plan"),
-    ("4b", "Headlines", "../../image-writing/prompts/stage4b-image-hook-v3-damon.md", "c",
+    ("4b", "Headlines", "../../image-writing/prompts/stage4b-image-hook-v3-owner.md", "c",
      "v3 (2026-10-23): every line written FOR the swapped picture, naming what it shows, reading cold; the control keeps the swipe\'s job, never a word-for-word swap that reads as nonsense. One control plus five variations, each a line and an "
      "image concept, each cited to a verbatim. All ship to test.",
      "plan + banks + ledger", "6 headlines"),
-    ("4c", "Support copy", "stage4c-image-support-v1-damon.md", "c",
+    ("4c", "Support copy", "stage4c-image-support-v1-owner.md", "c",
      "Four moves, each behind the earns-its-way-in gate, priced in words "
      "against the frame budget rather than seconds against a runtime.",
      "plan + headlines + brand", "the frame through the product content"),
-    ("4d", "Offer block", "stage4d-image-offer-v1-damon.md", "c",
+    ("4d", "Offer block", "stage4d-image-offer-v1-owner.md", "c",
      "The two pieces of copy no earlier pass writes: the line that answers "
      "the flinch, and the offer block carrying the offer file's exact "
      "guarantee wording. Then the ratio check.",
      "frame so far + banks", "the finished frame"),
-    ("5", "Variations", "../../image-writing/prompts/stage4e-image-variations-v3-damon.md", "c",
+    ("5", "Variations", "../../image-writing/prompts/stage4e-image-variations-v3-owner.md", "c",
      "The brief's five variations, as data. The batch is six pictures: the approved one "
      "plus exactly five, each ONE change off it (2026-10-27). v3 writes them as "
      "THE VARIATIONS RECORD, a json block code reads into out/variations.json: id, label, "
@@ -79,12 +79,12 @@ STAGES = [
      "who, age, look and wardrobe. tools/image-edit makes the five from that file "
      "(vary.py --from-brief).",
      "the brand step + its swap list + the headlines", "out/variations.json (5 rows)"),
-    ("5G", "Generation spec", "stage5-image-generation-v2-damon.md", "d",
+    ("5G", "Generation spec", "stage5-image-generation-v2-owner.md", "d",
      "The maker is an image model, not a designer. Splits the ad into the "
      "plate the model paints and the type layer a compositor sets, decides "
      "per element which machine renders it, and emits a runnable job list.",
      "stage 4 outputs + brand", "plate prompts + type layer as JSON"),
-    ("6", "The brief", "../../image-writing/prompts/stage6-image-brief-v10-damon.md", "d",
+    ("6", "The brief", "../../image-writing/prompts/stage6-image-brief-v10-owner.md", "d",
      "Everything before anyone builds: the ad in one line, the picture, the "
      "exact words, the offer and the variations. v11 (2026-10-27) lists the five rows "
      "of out/variations.json as one Variations section (the standard brief v2), in place "
@@ -98,12 +98,12 @@ STAGES = [
      "ad's own look, no long dashes on the ad, bodies that fit the line, "
      "native stays native.",
      "stages 1–5 + brand + palette", "the brief, three documents"),
-    ("6T", "The standard brief (template)", "../../image-writing/templates/brief-standard-static-v2-damon.md", "d",
+    ("6T", "The standard brief (template)", "../../image-writing/templates/brief-standard-static-v2-owner.md", "d",
      "The one page every static brief fills, bound into step 6 as {brief_standard}. v3 (2026-10-29): section 3 opens "
      "with the concept and the moment's palette, then what the 3D set holds, every prop at its real size, the camera "
      "and the light as facts, the product from its own true-size build.",
      "the brief's facts", "Document One of the brief"),
-    ("R", "Real review: words fixed", "../../image-writing/prompts/review-words-v1-damon.md", "e",
+    ("R", "Real review: words fixed", "../../image-writing/prompts/review-words-v1-owner.md", "e",
      "New 2026-10-27. When the swipe is a real customer review (the owner: \"this is the actual review ... we would not "
      "wanna make anything up\"), this rides on the end of steps 3 to 6 with the review's own words, zone by zone, as "
      "the teardown read them off the card. Step 6 is checked: a review line missing word for word is sent back once, "
@@ -112,19 +112,19 @@ STAGES = [
 ]
 
 # what changed since the version before, shown old next to new (a person reads every prompt change here)
-CHANGED_FROM = {W + "stage4e-image-variations-v8-damon.md": W + "stage4e-image-variations-v7-damon.md",   # 2026-10-28: sale ads stay the sale; written off the approved picture
-                W + "stage3-image-injection-v15-damon.md": W + "stage3-image-injection-v14-damon.md",
-                W + "stage4b-image-hook-v7-damon.md": W + "stage4b-image-hook-v6-damon.md",
-                "stage2-image-replication-v2-damon.md": "stage2-image-replication-v1-damon.md",
-                W + "stage6-image-brief-v11-damon.md": W + "stage6-image-brief-v10-damon.md",
-                W + "review-words-v1-damon.md": None,          # a new prompt: nothing before it
+CHANGED_FROM = {W + "stage4e-image-variations-v8-owner.md": W + "stage4e-image-variations-v7-owner.md",   # 2026-10-28: sale ads stay the sale; written off the approved picture
+                W + "stage3-image-injection-v15-owner.md": W + "stage3-image-injection-v14-owner.md",
+                W + "stage4b-image-hook-v7-owner.md": W + "stage4b-image-hook-v6-owner.md",
+                "stage2-image-replication-v2-owner.md": "stage2-image-replication-v1-owner.md",
+                W + "stage6-image-brief-v11-owner.md": W + "stage6-image-brief-v10-owner.md",
+                W + "review-words-v1-owner.md": None,          # a new prompt: nothing before it
                 # 2026-10-29: the creativity tools catch up with the 3D-set picture chain (3D set, print, words on top)
-                W + "stage4b-image-hook-v8-damon.md": W + "stage4b-image-hook-v7-damon.md",
-                W + "stage4e-image-variations-v9-damon.md": W + "stage4e-image-variations-v8-damon.md",
-                W + "stage6-image-brief-v12-damon.md": W + "stage6-image-brief-v11-damon.md",
-                "../../culture/prompts/stage1k-culture-v5-damon.md": "../../culture/prompts/stage1k-culture-v4-damon.md",
-                "../../image-writing/templates/brief-standard-static-v3-damon.md":
-                    "../../image-writing/templates/brief-standard-static-v2-damon.md"}
+                W + "stage4b-image-hook-v8-owner.md": W + "stage4b-image-hook-v7-owner.md",
+                W + "stage4e-image-variations-v9-owner.md": W + "stage4e-image-variations-v8-owner.md",
+                W + "stage6-image-brief-v12-owner.md": W + "stage6-image-brief-v11-owner.md",
+                "../../culture/prompts/stage1k-culture-v5-owner.md": "../../culture/prompts/stage1k-culture-v4-owner.md",
+                "../../image-writing/templates/brief-standard-static-v3-owner.md":
+                    "../../image-writing/templates/brief-standard-static-v2-owner.md"}
 
 # the definitions bound into the prompts, old next to new: (title, the copy taken before the change, the live file)
 DEFS_BEFORE = "runs/image-teardown/_system/before-2026-10-29"
@@ -134,7 +134,7 @@ DEFS = [("Creative controls, bound as {creative_controls}", "creative-controls-s
          "components/model-inputs/picture-dials.json"),
         ("The creative glossary", "creative-glossary.md", "components/creative-controls/GLOSSARY.md")]
 # the audit that went with that change, shown at the top of the page
-AUDIT = "tools/image-writing/context/creativity-tools-audit-2026-10-29-damon.md"
+AUDIT = "tools/image-writing/context/creativity-tools-audit-2026-10-29-owner.md"
 
 CSS = """
 :root{
@@ -324,9 +324,9 @@ def md_page(md):
 
 def latest(fn):
     """The highest -vN version of a prompt: the page shows what runs, so a stale version number in the list never hides it."""
-    stem = re.sub(r"-v\d+-damon\.md$", "", fn)
+    stem = re.sub(r"-v\d+-owner\.md$", "", fn)
     base = P / Path(fn).parent
-    hits = sorted(base.glob(Path(stem).name + "-v*-damon.md"), key=lambda f: int(re.search(r"-v(\d+)-", f.name).group(1)))
+    hits = sorted(base.glob(Path(stem).name + "-v*-owner.md"), key=lambda f: int(re.search(r"-v(\d+)-", f.name).group(1)))
     return str(Path(fn).parent / hits[-1].name) if hits else fn
 
 

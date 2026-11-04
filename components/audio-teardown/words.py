@@ -1,7 +1,7 @@
 """THE WORDS, IN EVERY LANGUAGE — Gemini listening to the voice track.
 
 The only model in the 2026-09-25 test that kept Korean and English exactly as
-said. The prompt is a file (prompts/words-v<N>-damon.md, highest wins) so it
+said. The prompt is a file (prompts/words-v<N>-owner.md, highest wins) so it
 is shown and changed like every other prompt, never edited in code.
 
 Order of trust (gemini.py): gemini-3.1-pro-preview, then gemini-3.5-flash

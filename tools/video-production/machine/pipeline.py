@@ -133,7 +133,7 @@ def pools():
 
     # organic — the avatar's feed
     n = 0
-    f = WS / "components/swipe-organic/records/avatar-feeds/damon--saves/items.json"
+    f = WS / "components/swipe-organic/records/avatar-feeds/owner--saves/items.json"
     if f.is_file():
         try:
             d = json.loads(f.read_text())

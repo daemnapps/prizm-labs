@@ -631,7 +631,7 @@ def _hold_flagged(run: Path, res: list | None = None) -> list:
     flagged = {str(r.get("id")) for r in res if r.get("verdict") not in ("PASS", None)}
     f = Path(run) / "clips" / "gate-approved.json"
     a = R.read_json(f, {}) or {}
-    held = sorted(k for k in a if k in flagged and not str((a[k] or {}).get("by", "")).lower().startswith("damon"))
+    held = sorted(k for k in a if k in flagged and not str((a[k] or {}).get("by", "")).lower().startswith("owner"))
     for k in held:
         a.pop(k, None)
     if held:

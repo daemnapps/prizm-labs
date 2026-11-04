@@ -75,7 +75,7 @@ _TITLE = "Customer language for this stage"
 # work for a brand nobody has told it about.
 _ROOTS = [
     lambda: Path(os.environ["LANGUAGE_ROOT"]).expanduser() if os.environ.get("LANGUAGE_ROOT") else None,
-    lambda: WORKSPACE / "lab" / "damon",
+    lambda: WORKSPACE / "lab" / "owner",
     lambda: WORKSPACE,
     lambda: WORKSPACE / "components",
 ]
