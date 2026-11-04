@@ -271,7 +271,7 @@ class Mini(Case):
             self.assertIsNone(R.key_value(GEMINI))
             msg = self.gemini_exit()
         self.assertIn(GEMINI, msg)
-        self.assertIn("old locations skipped", msg)
+        self.assertIn("skipped (managed file", msg)
         self.assertNotIn("fake-", msg)
         self.assertEqual(self.key_files_opened(seen), [])
         self.assertNotIn(HELPER, sys.modules, "the Keychain helper was imported")

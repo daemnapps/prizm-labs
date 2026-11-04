@@ -118,6 +118,8 @@ def _keychain(names):
         import daemn_keys
     except Exception:
         return None
+    # The helper reads shared key files first unless told Keychain only.
+    os.environ["DAEMN_KEYS_SOURCE"] = "keychain"
     # Personal keys only, never a company key: no fallback to a shared name.
     own = ("TELLA_API_KEY", "ELEVENLABS_API_KEY", "ADPLEXITY_API_KEY")
     names = ["PRIZM_META_TOKEN" if n == "META_ADS_TOKEN" else n for n in names]

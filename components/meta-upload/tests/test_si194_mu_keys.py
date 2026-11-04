@@ -252,7 +252,7 @@ class Mini(Case):
             msg = self.token_exit()
         self.assertNotIn(HELPER, sys.modules, "the Keychain helper was imported")
         self.assertIn(DEFAULT, msg)
-        self.assertIn("old locations skipped", msg)
+        self.assertIn("skipped (managed file", msg)
         self.assertIn(HINT, msg)
         self.assertNotIn("fake-", msg)
         self.assertNotIn("fake-", self.printed)
