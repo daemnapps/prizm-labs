@@ -19,7 +19,9 @@ the server is running. This is a local trial screen, not a replacement for an
 existing production approval page. The machine must stay awake.
 
 The connection form writes only `TYPESAFE_API_KEY` into this checkout's ignored
-`.env`, preserving other entries and setting file mode 0600. It makes no API
+`.env`, preserving other entries and setting file mode 0600. If this checkout’s `.env`
+is a symlink to a canonical local Prizm `.env`, the form updates its target
+and preserves the link. It makes no API
 call. Never put the key in a command argument, a tracked file or chat.
 
 ## Levels

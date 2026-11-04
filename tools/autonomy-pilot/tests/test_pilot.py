@@ -237,3 +237,24 @@ class RunKitIntegration(unittest.TestCase):
                 artifact=handler({})
             self.assertEqual(artifact.read_text().strip(),'Offline generated script')
             self.assertTrue((chain.out/'run.json').exists())
+
+
+class KeyFileTest(unittest.TestCase):
+    def test_shared_env_preserves_other_settings_and_symlink(self):
+        from pilot import save_key
+        with tempfile.TemporaryDirectory() as folder:
+            real=Path(folder)/'main.env';alias=Path(folder)/'pilot.env'
+            real.write_text('OTHER_SETTING=preserve\nTYPESAFE_API_KEY = old-placeholder\n')
+            alias.symlink_to(real)
+            save_key(alias,'synthetic-test-placeholder')
+            self.assertTrue(alias.is_symlink())
+            self.assertIn('OTHER_SETTING=preserve',real.read_text())
+            self.assertEqual(real.read_text().count('TYPESAFE_API_KEY'),1)
+            self.assertEqual(real.stat().st_mode & 0o777,0o600)
+
+    def test_invalid_key_does_not_modify_file(self):
+        from pilot import save_key
+        with tempfile.TemporaryDirectory() as folder:
+            p=Path(folder)/'keys.env';p.write_text('OTHER_SETTING=preserve\n')
+            with self.assertRaises(Refused):save_key(p,'bad\nkey')
+            self.assertEqual(p.read_text(),'OTHER_SETTING=preserve\n')

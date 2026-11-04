@@ -107,6 +107,24 @@ def evaluate(store, live=False, cap=.10):
     return result
 
 
+def save_key(env_path, value):
+    """Persist only the provided key; preserve a worktree's env symlink."""
+    if not isinstance(value, str) or not 16 <= len(value) <= 1024 or any(c.isspace() for c in value):
+        raise Refused('Enter the API key without spaces')
+    env = Path(env_path).resolve()
+    lines = env.read_text().splitlines() if env.exists() else []
+    lines = [line for line in lines if line.partition('=')[0].strip() != 'TYPESAFE_API_KEY']
+    lines.append('TYPESAFE_API_KEY=' + value)
+    fd, name = tempfile.mkstemp(prefix='.env-save-', dir=str(env.parent))
+    try:
+        with os.fdopen(fd, 'w') as output:
+            output.write('\n'.join(lines) + '\n')
+        os.chmod(name, 0o600)
+        os.replace(name, env)
+    finally:
+        if os.path.exists(name): os.unlink(name)
+
+
 def serve(store, port, synthetic=False):
     token = secrets.token_urlsafe(32)
     host = '127.0.0.1:' + str(port)
@@ -165,21 +183,7 @@ def serve(store, port, synthetic=False):
                 data = json.loads(self.rfile.read(size))
                 path = urlsplit(self.path).path
                 if path == '/api/key':
-                    value = data.get('key', '')
-                    if not isinstance(value, str) or not 16 <= len(value) <= 1024 or any(c.isspace() for c in value):
-                        raise Refused('Enter the API key without spaces')
-                    env = REPO / '.env'
-                    lines = env.read_text().splitlines() if env.exists() else []
-                    lines = [line for line in lines if not line.strip().startswith('TYPESAFE_API_KEY=')]
-                    lines.append('TYPESAFE_API_KEY=' + value)
-                    fd, name = tempfile.mkstemp(prefix='.env-save-', dir=str(REPO))
-                    try:
-                        with os.fdopen(fd, 'w') as output:
-                            output.write('\n'.join(lines) + '\n')
-                        os.chmod(name, 0o600)
-                        os.replace(name, env)
-                    finally:
-                        if os.path.exists(name): os.unlink(name)
+                    save_key(REPO / '.env', data.get('key', ''))
                     return self.reply({'ok': True})
                 elif path == '/api/demo' and synthetic:
                     for lane in LANES:
