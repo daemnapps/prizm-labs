@@ -27,7 +27,7 @@ format) and `tools/copywriter/prompts/copy-format-fill-v2-owner.md` (fills the f
 
 **BODY A**
 
-Struggling with razor bumps for years was a nightmare. Most products I tried severely burned or dried out my neck. After deep research and using WIDGET, a sonic brush that reaches deeper than your hands and frees the trapped hair, I healed my neck and confidence.
+Struggling with razor bumps for years was a nightmare. Most products I tried severely burned or dried out my neck. After deep research and using NOVA, a sonic brush that reaches deeper than your hands and frees the trapped hair, I healed my neck and confidence.
 
 Here are the only 3 steps for a neck nobody can read without buying another razor.
 

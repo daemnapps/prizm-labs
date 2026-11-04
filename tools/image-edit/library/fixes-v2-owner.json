@@ -60,7 +60,7 @@
    "checks": [
     "The product's OUTLINE and proportions now match the attached product photo (not only its label and colour) — same cap, same shape, label exact.",
     "The product is its real size against the hand holding it, never larger than the hand.",
-    "No trace of the old widget's outline remains."
+    "No trace of the old nova's outline remains."
    ],
    "region_hint": "the product's own box, widened to fit the real product's outline and size",
    "note": "2026-10-02, the owner: a swap with the designer 'technically did a label swap and a color-of-the-bottle swap, but it didn't actually do a proper, real bottle swap' — the old row kept the wrong product's size and box, so the model repainted inside the old outline. Now the whole object is replaced at the real product's own outline and size (same rule as video-production frame_rules.product_scale)."

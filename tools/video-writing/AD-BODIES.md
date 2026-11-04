@@ -59,4 +59,4 @@ breathy, and the edit had dead pauses, late audio and a presenter outside the sa
 
 ## Next bodies on this process
 
-The guy barber, the baddie barber, and bodies for hook-only pieces (the goat headbutt → WIDGET hook).
+The guy barber, the baddie barber, and bodies for hook-only pieces (the goat headbutt → NOVA hook).

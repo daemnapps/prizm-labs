@@ -497,7 +497,7 @@
    "licence": "Apache-2.0",
    "fallback_char": "❌",
    "what": "A red cross mark.",
-   "when_to_use": "The wrong way, the old widget.",
+   "when_to_use": "The wrong way, the old nova.",
    "anim_in": "pop",
    "anim_out": "shrink",
    "status": "draft",

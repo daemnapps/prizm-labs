@@ -19,7 +19,7 @@ sys.path.append(str(HERE))
 from image_edit import handoff as H  # noqa: E402
 from image_edit.engine import BadRequest  # noqa: E402
 
-RUN, BRAND, KEY = "testbrand-run-325", "testbrand", "testbrand_widget_brief-0325"
+RUN, BRAND, KEY = "testbrand-run-325", "testbrand", "testbrand_nova_brief-0325"
 PROMPT = "INPUTS\nIMAGE 1 is the reference.\nIMAGE 2 is our cast member.\n\nTHE PICTURE\nTHE ONE CHANGE to IMAGE 1: a spot.\n"
 LAYER = {"elements": [{"text": "x", "top_pct": 65, "left_pct": 10, "right_pct": 90, "align": "center", "height_pct": 7,
                        "weight": "bold", "color": "#FFFFFF", "font": "humanist-sans", "max_lines": 2,
@@ -199,7 +199,7 @@ class TestRunSheetInTheFolder(Base):
     def sheet(self):
         brief = self.repo / "runs" / "image-teardown" / BRAND / RUN / "deliverable" / "06-brief.md"
         brief.parent.mkdir(parents=True, exist_ok=True)
-        brief.write_text("# BRIEF · testbrand · widget · one spot\n")
+        brief.write_text("# BRIEF · testbrand · nova · one spot\n")
         swipe = f"tools/image-teardown/runs/{RUN}/assets/source.jpg"
         cast = str(self.cast.relative_to(self.repo))
         ret = {"role": H.ROLE, "name_pattern": f"{KEY}_asset-NN.<ext>",
@@ -364,11 +364,11 @@ class TestResolve(Base):
         (vm / "run.json").write_text("{}")
         (vm / "storyboard.json").write_text("{}")
         self.vm = vm
-        self.rows = {KEY: {"brief": "brief-0325", "type": "image-ai", "brand": BRAND, "product": "widget", "run": RUN},
-                     "testbrand_widget_brief-0326": {"brief": "brief-0326", "type": "video-ai", "brand": BRAND,
-                                                     "product": "widget", "run": "video-run-9"},
-                     "testbrand_widget_brief-0327": {"brief": "brief-0327", "type": "video-ai", "brand": BRAND,
-                                                     "product": "widget", "run": "not-made-yet"},
+        self.rows = {KEY: {"brief": "brief-0325", "type": "image-ai", "brand": BRAND, "product": "nova", "run": RUN},
+                     "testbrand_nova_brief-0326": {"brief": "brief-0326", "type": "video-ai", "brand": BRAND,
+                                                     "product": "nova", "run": "video-run-9"},
+                     "testbrand_nova_brief-0327": {"brief": "brief-0327", "type": "video-ai", "brand": BRAND,
+                                                     "product": "nova", "run": "not-made-yet"},
                      "testbrand_gadget_brief-0325": {"brief": "brief-0325", "type": "image-ai", "brand": BRAND,
                                                      "product": "gadget", "run": "other-run"}}
 
@@ -380,7 +380,7 @@ class TestResolve(Base):
         self.assertEqual(H.resolve(RUN, repo=self.repo, reg=self.reg(self.rows))["key"], KEY)
 
     def test_video_brief_finds_its_production_run(self):
-        it = H.resolve("testbrand_widget_brief-0326", repo=self.repo, reg=self.reg(self.rows))
+        it = H.resolve("testbrand_nova_brief-0326", repo=self.repo, reg=self.reg(self.rows))
         self.assertEqual((it["lane"], Path(it["run"])), ("video-editor", self.vm))
 
     def test_video_run_folder_finds_its_brief(self):
@@ -389,7 +389,7 @@ class TestResolve(Base):
 
     def test_video_with_no_production_run_is_refused(self):
         with self.assertRaises(BadRequest):
-            H.resolve("testbrand_widget_brief-0327", repo=self.repo, reg=self.reg(self.rows))
+            H.resolve("testbrand_nova_brief-0327", repo=self.repo, reg=self.reg(self.rows))
 
     def test_shared_number_is_refused_by_name_never_guessed(self):
         with self.assertRaises(BadRequest) as c:
@@ -398,7 +398,7 @@ class TestResolve(Base):
 
     def test_unknown_brief_is_refused(self):
         with self.assertRaises(BadRequest):
-            H.resolve("testbrand_widget_brief-0999", repo=self.repo, reg=self.reg(self.rows))
+            H.resolve("testbrand_nova_brief-0999", repo=self.repo, reg=self.reg(self.rows))
 
 
 class TestAgnostic(unittest.TestCase):

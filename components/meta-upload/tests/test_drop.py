@@ -13,7 +13,7 @@ import cards as C  # noqa: E402
 
 class Drop(unittest.TestCase):
     def test_drop_renames_into_dropped_and_leaves_the_lists(self):
-        name = "zzbrand_widget_brief-0001_batch-2026-10-30-a"
+        name = "zzbrand_nova_brief-0001_batch-2026-10-30-a"
         folder = C.root() / "zzbrand" / "1-check" / "image" / name
         folder.mkdir(parents=True)
         (folder / "card.json").write_text(json.dumps({"ad_name": name, "brand": "zzbrand"}))
@@ -25,7 +25,7 @@ class Drop(unittest.TestCase):
         self.assertEqual(json.loads((gone / "card.json").read_text())["approval"]["decision"], "drop")
 
     def test_a_live_card_cannot_be_dropped(self):
-        name = "zzbrand_widget_brief-0002_batch-2026-10-30-a"
+        name = "zzbrand_nova_brief-0002_batch-2026-10-30-a"
         folder = C.root() / "zzbrand" / "3-live" / "image" / name
         folder.mkdir(parents=True)
         (folder / "card.json").write_text(json.dumps({"ad_name": name, "brand": "zzbrand"}))

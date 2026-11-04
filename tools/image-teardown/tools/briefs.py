@@ -114,7 +114,7 @@ class Briefs(dict):
     def _find(self, k):
         """The key a record is filed under. A per-product key is also looked up
         under its product's other names (2026-10-28, one product id):
-        `acme_widget-face-brush_brief-0076` lands on the `acme_widget_brief-0076`
+        `acme_nova-face-brush_brief-0076` lands on the `acme_nova_brief-0076`
         row, which keeps its key."""
         k = self._k(k)
         if not isinstance(k, str) or dict.__contains__(self, k):
@@ -164,8 +164,8 @@ def save(reg):
 
 
 def catalog_product(brand, product):
-    """The product a NEW brief is written with: its catalog id when the brand has one for that name (`widget` ->
-    `widget-face-brush`, 2026-10-28), else the name as given. Old entries are never rewritten."""
+    """The product a NEW brief is written with: its catalog id when the brand has one for that name (`nova` ->
+    `nova-face-brush`, 2026-10-28), else the name as given. Old entries are never rewritten."""
     pid = N.product_id(brand, product)
     return pid if pid and pid in N.product_ids(brand) else product
 
@@ -300,7 +300,7 @@ def get(reg, any_id, brand=None, product=None):
     q = N.parse_brief_key(any_id)
     if q:
         k = str(any_id).strip().lower()
-        # the same brief under its product's other name (acme_widget-face-brush_… finds acme_widget_…)
+        # the same brief under its product's other name (acme_nova-face-brush_… finds acme_nova_…)
         k = next((f for f in [k] + N.brief_key_forms(k) if dict.__contains__(reg["briefs"], f)), k)
         return k, dict.get(reg["briefs"], k)
     k = key(any_id)

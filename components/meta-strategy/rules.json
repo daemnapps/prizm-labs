@@ -98,15 +98,15 @@
  },
  "offers": {
   "brand-a": {
-   "product": "widget",
+   "product": "nova",
    "page": "https://flex.brand-a.com/icon/flex/",
    "match": [
     "flex.brand-a.com/icon/flex",
     "method.brand-a.com/icon/portal-ingrown",
     "method.brand-a.com/icon/flex"
    ],
-   "campaign_product": "widget",
-   "_method_quiz": "9 Oct 2026, the owner: the LeBron ad goes to the new Bump Check portal on the BRAND-A CPK (method.brand-a.com/icon/portal-ingrown/), which ends on the CPK WIDGET offer page; both count as the WIDGET offer."
+   "campaign_product": "nova",
+   "_method_quiz": "9 Oct 2026, the owner: the LeBron ad goes to the new Bump Check portal on the BRAND-A CPK (method.brand-a.com/icon/portal-ingrown/), which ends on the CPK NOVA offer page; both count as the NOVA offer."
   },
   "brand-b": {
    "product": "brilliance-face-scrub",

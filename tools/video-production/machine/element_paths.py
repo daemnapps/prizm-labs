@@ -79,7 +79,7 @@ def product_kit(brand: str, product: str, ws: Path | None = None) -> Path | None
     """The product's truth kit (runs/ai-elements/<brand>/products/): the folder named
     by the product's ONE id — any name for it resolved through naming's
     `product_id` (2026-10-28: the store handle `flex` → the catalog id
-    `widget-face-brush`, from the kit's own aliases) — else, for a kit that declares
+    `nova-face-brush`, from the kit's own aliases) — else, for a kit that declares
     no alias, the one folder named `<id>-…`. None when there is no kit or the match
     is ambiguous — a product is never guessed."""
     home = elements_home(brand, "products", product, ws).parent
@@ -89,7 +89,7 @@ def product_kit(brand: str, product: str, ws: Path | None = None) -> Path | None
     pid = _product_id(brand, product, ws)
     if pid and (home / pid).is_dir():
         return home / pid
-    # a kit that is its OWN product in the brand's files (widget-charging-case.md) is not this one
+    # a kit that is its OWN product in the brand's files (nova-charging-case.md) is not this one
     others = {f.stem for f in (product_home(brand, "x", ws).parent).glob("*.md")} - {product}
     hits = [d for d in sorted(home.glob(product + "-*"))
             if d.is_dir() and (d / "kit.json").is_file() and d.name not in others]

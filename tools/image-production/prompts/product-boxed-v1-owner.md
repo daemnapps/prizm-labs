@@ -3,7 +3,7 @@
 For a frame whose product appears as its packaging (retail boxes, mailers,
 cartons) — outside the 3D path, because the 3D model is the product itself,
 not its box. Found 2026-10-14 on the first chain run with the 3D path: a brief
-asking for "WIDGET retail boxes mixed through" a pile of mailers came back as
+asking for "NOVA retail boxes mixed through" a pile of mailers came back as
 dozens of loose devices drawn by the image model — the exact thing the
 ruling (the owner, 2026-10-14) stopped. So here the image model is told the
 product itself never appears.

@@ -312,7 +312,7 @@ def refs_for_scene(scene: dict, doc: dict, brand: str, ws: Path | None = None,
     # of the references is a product drawn from words (the invented tube)
     locked = {str(l).split(" ")[0].strip("—-·:") for l in doc.get("product_lock") or []}
     # the element manifest knows every scene the product is in, not just the one
-    # the brief tagged (2026-10-07: LeBron's S8 drew "WIDGET" as an energy-drink can
+    # the brief tagged (2026-10-07: LeBron's S8 drew "NOVA" as an energy-drink can
     # because only the endcard carried `product`)
     # THE PRODUCT IS NEVER DRAWN (VIDEO-RULINGS V16, CHANGES.md C5 + P34, 2026-10-21): no packshot, turntable or
     # product-in-hand picture is attached to a GENERATION any more — the picture model drew the product from them.
@@ -323,7 +323,7 @@ def refs_for_scene(scene: dict, doc: dict, brand: str, ws: Path | None = None,
         pid_ = (doc.get("piece") or {}).get("product") or ""
         kit = EP.product_kit(brand, pid_, ws)
         # the product's real turntable (front, three-quarter, side, back — cut from the store's own 360°
-        # video, 2026-10-08) outranks a single packshot: one front photo let WIDGET be drawn as a can, a
+        # video, 2026-10-08) outranks a single packshot: one front photo let NOVA be drawn as a can, a
         # disc and 40% too small; four real angles leave the shape nothing to guess
         shot = _first(kit / "sources", ["turntable-sheet.png", "*packshot*"]) if kit and (kit / "sources").is_dir() else None
         shot = shot or _first(EP.product_home(brand, pid_, ws) / "images", packshot_names())
@@ -335,7 +335,7 @@ def refs_for_scene(scene: dict, doc: dict, brand: str, ws: Path | None = None,
         if shot:
             out.append(("real packshot", shot))
         # HOW IT BEHAVES (2026-10-07, restored 2026-10-09 after the 10-08 turntable change dropped it):
-        # how the product rests when nobody holds it goes in as a picture too (WIDGET in its cradle or case)
+        # how the product rests when nobody holds it goes in as a picture too (NOVA in its cradle or case)
         if kit and (kit / "kit.json").is_file():
             PB = _load("product_behaviour")
             beh = json.loads((kit / "kit.json").read_text()).get("behaviour")
@@ -481,7 +481,7 @@ def scene_holds_product(scene: dict) -> bool:
 def behaviour_words(doc: dict, brand: str, motion: bool = False) -> str:
     """How the product physically behaves, from its kit (product_behaviour.py): for a
     still, what it cannot do, how it rests and how it is held; for a clip, what may
-    happen to it while it moves (the owner, 2026-10-09: WIDGET is never left on its own)."""
+    happen to it while it moves (the owner, 2026-10-09: NOVA is never left on its own)."""
     EP = _load("element_paths")
     pid = (doc.get("piece") or {}).get("product") or ""
     kit = EP.product_kit(brand, pid, EP.WS) if pid else None
@@ -512,7 +512,7 @@ def bind(items: list[dict], brief_text: str, brand: str, run: Path | None = None
     last_sw = None
     for it in items:
         # THE CLIP KEEPS THE PHYSICS TOO (2026-10-09): a clip of a product scene says what may
-        # happen to the product while it moves — WIDGET is never set down loose, never stood up
+        # happen to the product while it moves — NOVA is never set down loose, never stood up
         if it.get("kind") == "motion" and isinstance(it.get("params"), dict):
             sc = scenes.get(it.get("for") or it.get("id"))
             if sc and product_scene(sc, doc):

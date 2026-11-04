@@ -39,7 +39,7 @@ def judge_of_a_picture_with_no_hand(prompt, paths, entry):
 
 class TestRestingProduct(Base):
     def edit(self):
-        return RE.edit(self.req(fix="product", product="widget"), transport=stub_transport(self.calls),
+        return RE.edit(self.req(fix="product", product="nova"), transport=stub_transport(self.calls),
                        judge_caller=judge_saying("PASS"), compare_caller=judge_of_a_picture_with_no_hand,
                        mirror=False, library=StubLibrary())
 
@@ -55,12 +55,12 @@ class TestRestingProduct(Base):
         self.assertIn("no hand in the image", r["rejected"][0]["fails"][0])
 
     def test_the_request_no_longer_says_it_is_in_a_hand(self):
-        asked = RE.resolve(self.req(fix="product", product="widget"))["asked"]
+        asked = RE.resolve(self.req(fix="product", product="nova"))["asked"]
         self.assertNotIn("in the hand,", asked)
         self.assertIn("where it already sits", asked)
 
     def test_a_held_product_still_gets_the_size_test(self):
-        checks = RE.resolve(self.req(fix="product", product="widget"))["checks"]
+        checks = RE.resolve(self.req(fix="product", product="nova"))["checks"]
         self.assertTrue(any("never larger than the hand" in c for c in checks))
 
 

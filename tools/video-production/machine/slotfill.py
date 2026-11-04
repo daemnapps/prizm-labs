@@ -129,7 +129,7 @@ def research_call(prompt: str, timeout: int = 900) -> str:
     `claude()`) — the research goes the same way: the prompt is left there as
     slots-<hash>.prompt.md and the run stops; the session researches it, writes
     slots-<hash>.md beside it, and the run is resumed. Without this the rewrite
-    held on the expired login while every other stage was writable (BRAND-A WIDGET
+    held on the expired login while every other stage was writable (BRAND-A NOVA
     rebuild, the owner's OK)."""
     import hashlib, os
     hand = os.environ.get("DAEMN_HAND_DIR")

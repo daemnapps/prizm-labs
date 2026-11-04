@@ -36,7 +36,7 @@ RULE = REPO / "components" / "marketing-chain-checks" / "rule.py"
 FACTS = ["PRIME goes on right after cleansing, while the face is still damp.",
          "PRIME holds water in and regulates oil.",
          "Aloe vera in PRIME calms post-shave irritation.",
-         "A WIDGET session runs about sixty seconds."]
+         "A NOVA session runs about sixty seconds."]
 
 
 def brand_state():

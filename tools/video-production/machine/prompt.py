@@ -56,7 +56,7 @@ def _workspace(start=__file__):
 # --------------------------------------------------------- element facts
 #
 # Every slop round so far has been a fact the repo already held and the
-# prompt did not send: the WIDGET standing on a base it does not have, bristles
+# prompt did not send: the NOVA standing on a base it does not have, bristles
 # on a back that has none, invented bottles beside a real product element.
 #
 # So the facts live with the element, in element-facts.json, and ANY prompt

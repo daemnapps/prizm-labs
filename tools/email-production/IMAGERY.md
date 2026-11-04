@@ -18,8 +18,8 @@ boards, email placeholders, anything.
 | **The product files on Drive** | Per-product source frames, models, clips | `Shared Assets/brands/<brand>/products/<product>/` on the Drive: your mount (components/brandpath drive_index.mount()), or by id from `brands/<brand>/products/DRIVE-INDEX.json` |
 | **The storefront photos** | The live product photography, straight from the store | `brands/<brand>/products/images.json` |
 
-<brand> reference elements on file (2026-09-09): `WIDGET-real-CGI` (the canonical
-WIDGET, off the brand's own CGI turntable — supersedes every earlier WIDGET),
+<brand> reference elements on file (2026-09-09): `NOVA-real-CGI` (the canonical
+NOVA, off the brand's own CGI turntable — supersedes every earlier NOVA),
 `flex-360-true`, `WAR-storefront-LIVE`, `PRIME-storefront-LIVE`,
 `CRUSH-storefront-LIVE`, `MIRO-storefront-LIVE`, `CORE-storefront-LIVE`,
 `FIELD-real-CGI`. The casting roster that used to sit beside them (Ray,
@@ -72,8 +72,8 @@ creator footage or the brief holds. Read the current roster from
 
 | Product | Reference id |
 |---|---|
-| WIDGET (canonical, off the brand's own turntable) | `0fa7420f-c30b-4197-aeb7-e35643bfcf8a` (`WIDGET-real-CGI`) |
-| WIDGET 360 (seven real frames, handleless pod, domed base) | `8fad5612-d46f-4c19-baec-c3a636f22a4e` (`flex-360-true`) |
+| NOVA (canonical, off the brand's own turntable) | `0fa7420f-c30b-4197-aeb7-e35643bfcf8a` (`NOVA-real-CGI`) |
+| NOVA 360 (seven real frames, handleless pod, domed base) | `8fad5612-d46f-4c19-baec-c3a636f22a4e` (`flex-360-true`) |
 | WAR | `797158d0-bb68-4b50-81ed-b345bb523d71` |
 | PRIME | `c9e9c9fa-8b4f-40c4-80f9-5103e78da92f` … see `show_reference_elements` |
 | CRUSH | `a66c1b39-5ca0-4c7c-94af-41bfa7f554f5`-era `CRUSH-storefront-LIVE` |

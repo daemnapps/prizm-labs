@@ -51,7 +51,7 @@ for _r in HERE.parents:
 import swaps as SW  # noqa: E402
 
 MAKE = P.REPO / "tools" / "image-production" / "make.py"
-FIT = 0.8   # real WIDGET finds fit 0.9+; a neck or a bump mistaken for it fit ~0.6 (2026-10-23)
+FIT = 0.8   # real NOVA finds fit 0.9+; a neck or a bump mistaken for it fit ~0.6 (2026-10-23)
 REFUSED = re.compile(r"rejected by the safety system|moderation_blocked")
 
 
@@ -152,7 +152,7 @@ def picture_inputs(run, swaps, words, with_ref, note=None):
 
 
 def product_in_frame(t, name):
-    """Whether the brand step puts the product in frame ("no WIDGET in this picture" names it too: only a mention that is
+    """Whether the brand step puts the product in frame ("no NOVA in this picture" names it too: only a mention that is
     not negated counts)."""
     frame = section(t, "1. THE INJECTED FRAME", "2. THE SUBJECT") + section(t, "3. THE ART DIRECTION", "4. SLOTS")
     neg_before = r"\b(no|not|never|without|leaves out|out of frame)\b[^.\n]{0,40}$"

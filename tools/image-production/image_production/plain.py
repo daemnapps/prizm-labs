@@ -1,7 +1,7 @@
 """The plain picture: one call, the way the owner makes them in Higgsfield.
 
     from image_production import plain
-    plain.make(brand, text, out, references=[<a swipe or a scene's plate>], products=["widget"], aspect="4:5")
+    plain.make(brand, text, out, references=[<a swipe or a scene's plate>], products=["nova"], aspect="4:5")
 
 the owner, 2026-10-25, on the carousels made this way: "there's a lot of control that I think is messing stuff up" and
 then "literally perfect. so much cleaner ... literally 1000000x better than any flex implementation we had in the

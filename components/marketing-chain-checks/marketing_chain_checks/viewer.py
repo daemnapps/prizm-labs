@@ -948,7 +948,7 @@ def fix(brief_text: str, r: dict, brand: str, avatar: str, caller=None, refused:
         raise ValueError("the fixer returned no brief")
     # The offer is the website's wording: a rewrite that changes a price or
     # guarantee line is refused, whatever else it fixed (caught 2026-10-02:
-    # "WIDGET™" quietly became "WIDGET" on the price card).
+    # "NOVA™" quietly became "NOVA" on the price card).
     kept = [ln.strip() for ln in brief_text.splitlines() if re.search(r"\$\s?\d", ln)]
     for ln in kept:
         core = re.findall(r'"([^"]*\$\s?\d[^"]*)"', ln) or [ln]

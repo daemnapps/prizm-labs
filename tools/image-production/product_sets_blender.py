@@ -1,4 +1,4 @@
-"""Reusable Blender sets for product stills in the 3D Jutsu WIDGET project (cb659331-a37b-4316-ae3f-b34139c20c3c).
+"""Reusable Blender sets for product stills in the 3D Jutsu NOVA project (cb659331-a37b-4316-ae3f-b34139c20c3c).
 
 Installed in that project as the text block `product_sets`, so a later session calls it in one line instead of building a set by hand:
 
@@ -48,9 +48,9 @@ def _box(coll, name, w, h, t, mat):
     v = [(-x, -y, 0), (x, -y, 0), (x, y, 0), (-x, y, 0), (-x, -y, t), (x, -y, t), (x, y, t), (-x, y, t)]
     return _mesh(coll, name, v, [(0, 1, 2, 3), (7, 6, 5, 4), (0, 4, 5, 1), (1, 5, 6, 2), (2, 6, 7, 3), (3, 7, 4, 0)], mat)
 
-def _widget(coll, name, matrix):
+def _nova(coll, name, matrix):
     # a linked copy of the true-size product; the copy must not carry the project's asset id
-    o = bpy.data.objects["HERO_widget"].copy()
+    o = bpy.data.objects["HERO_nova"].copy()
     if "hf_id" in o:
         del o["hf_id"]
     coll.objects.link(o)
@@ -138,8 +138,8 @@ def tabletop(p):
     for i, f in enumerate(p.get("products") or []):
         m = Matrix.Rotation(math.radians(f.get("spin", 0)), 4, "Z") @ Matrix.Rotation(math.radians(f.get("roll", 0)), 4, "Y") \
             @ Matrix.Rotation(math.radians(-90), 4, "X")
-        m.translation = (*xy(f), bpy.data.objects["HERO_widget"].dimensions.y / 2)
-        _widget(c, "widget%d" % i, m)
+        m.translation = (*xy(f), bpy.data.objects["HERO_nova"].dimensions.y / 2)
+        _nova(c, "nova%d" % i, m)
     def place(o, fx, fy, spin):
         o.location = ((fx - 0.5) * W, (0.5 - fy) * H, 0.0004)
         o.rotation_euler.z = math.radians(spin)
@@ -163,7 +163,7 @@ def float_hero(p):
     px, pz = (p["x"] - 0.5) * W, (0.5 - p["y"]) * H
     m = Matrix.Rotation(math.radians(p.get("tilt", 0)), 4, "Y")
     m.translation = (px, 0, pz)
-    _widget(c, "widget0", m)
+    _nova(c, "nova0", m)
     r = p.get("ribbon")
     if r:
         a, w, n = r["radius_cm"] * CM, r["width_cm"] * CM, 72
@@ -208,7 +208,7 @@ def render(artifacts, name, set_name, cam, product_only=False, px=(576, 1024), s
             flip(o, "hide_render", True)
     if product_only:
         for o in bpy.data.collections[set_name].objects:
-            if o.type == "MESH" and not o.name.startswith("widget"):
+            if o.type == "MESH" and not o.name.startswith("nova"):
                 flip(o, "is_holdout", True)
         flip(s.render, "film_transparent", True)
     flip(s, "camera", cam)

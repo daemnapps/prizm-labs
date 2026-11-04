@@ -117,7 +117,7 @@ def reconcile(brand):
     claims: its price, its link, and whether it points at anything real.
 
     RULED 2026-09-10 (the owner: "a price change on the Shopify store would not be
-    shown here in the repo… the WIDGET + Vitals system isn't even live anymore").
+    shown here in the repo… the NOVA + Vitals system isn't even live anymore").
     The bank is what a human ruled; the store is what a customer can buy. One
     does not overwrite the other — an offer pointing at a sold-out variant, or
     quoting a price the shop no longer charges, is reported and refused."""

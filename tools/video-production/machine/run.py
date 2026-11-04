@@ -1014,7 +1014,7 @@ def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | N
             return f
         return None
     if ("at rest" in low or "in its cradle" in low) and brand:
-        # "<product> at rest" → the kit's real rest picture (WIDGET in its cradle): words alone drew the cradle
+        # "<product> at rest" → the kit's real rest picture (NOVA in its cradle): words alone drew the cradle
         # as a cup (2026-10-09)
         EP = _load("element_paths")
         named = value.split(":", 1)[-1].strip()
@@ -1036,7 +1036,7 @@ def _named_ref(run: Path, value: str, item: dict, brand: str | None) -> Path | N
         except (OSError, ValueError):
             pid = ""
         named = value.split(":", 1)[-1].strip()
-        # "the WIDGET™ packshot (products/flex/images)": any single word of the name may be the product's alias
+        # "the NOVA™ packshot (products/flex/images)": any single word of the name may be the product's alias
         words = [re.sub(r"[^a-z0-9-]", "", w.lower()) for w in re.split(r"[\s/()]+", named)]
         for cand in (pid, named, *[w for w in words if len(w) > 2]):
             if not cand:

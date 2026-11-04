@@ -33,7 +33,7 @@ Every email goes through step 1b, and these are how the concept gets made, every
    toxic-green highlights) and its own header and divider. The brand palette is the default, never
    the only option.
 3. **Show, don't list.** Anything the email names gets a picture: every product in a box or set is
-   its own made picture in the moment's world (WIDGET in a coffin, MIRO as a ghost), never a list of names.
+   its own made picture in the moment's world (NOVA in a coffin, MIRO as a ghost), never a list of names.
 4. **Made from the real thing.** Every made picture starts from the product's casting sheet as its
    reference, and a product at rest is a 3D set printed with it, the words set on top after
    (`design/picture_chain.py`, 2026-10-29: the picture-ad way). After it comes back, **read every label on it**: the generator invents product names
@@ -54,7 +54,7 @@ Layout rule (9 Oct): **a headline is followed straight away by its image**; badg
 
 Rules carried from the brand: one price, one offer, one button per email (`brand-identity/story.md`,
 binding rules); lead with the mechanism, never a bare claim; the guarantee is a refund promise, never a
-results claim (`position.md`). Pictures obey the product's own behaviour (WIDGET is in a hand, its base or
+results claim (`position.md`). Pictures obey the product's own behaviour (NOVA is in a hand, its base or
 its case, never loose), and the case is sold separately, so it never appears as if it were in the box.
 
 First run: the week of 12 Oct 2026, `runs/email-production/<brand>/week-2026-10-12/layouts.py`

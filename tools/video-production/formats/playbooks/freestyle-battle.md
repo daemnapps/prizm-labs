@@ -5,7 +5,7 @@
 
 **Signed:** the owner 2026-10-22 — "it's a song ad, but the formats are different, so be cognizant of these little things. But yeah, bro, this is it. Let's run this shit up" — its own playbook, not a copy of the song ad.
 
-A New York freestyle or street rap battle made in Suno: our clean-shaven man roasts the bearded man's neck (bumps, the beard he hides behind, the breakup he's hiding from) with yo-mama bars, the other man fires back, our man flips it to the jawline and closes on one line of real talk: use the WIDGET. The rappers are ON SCREEN and lip-sync every bar; the crowd or the booth reacts on every punchline; a funny pop-up pictures each joke. Entertainment first, the product is one line at the end.
+A New York freestyle or street rap battle made in Suno: our clean-shaven man roasts the bearded man's neck (bumps, the beard he hides behind, the breakup he's hiding from) with yo-mama bars, the other man fires back, our man flips it to the jawline and closes on one line of real talk: use the NOVA. The rappers are ON SCREEN and lip-sync every bar; the crowd or the booth reacts on every punchline; a funny pop-up pictures each joke. Entertainment first, the product is one line at the end.
 
 *Rendered from the .json beside this page by `machine/playbook.py` — edit the .json.*
 
@@ -35,7 +35,7 @@ A New York freestyle or street rap battle made in Suno: our clean-shaven man roa
 - **the opponent and the crowd react on every punchline: a cut to the other man's face, the circle going OHHH** — the reaction sells the bar (every freestyle swipe cuts to the host or crew on the punchline)
 - **one pop-up per punchline, 0.6 to 1.0 s, picturing the joke literally, then straight back** — the owner 2026-10-22: "pop up little inserts … make it funny/weird"
 - **lookalike TYPES only: build, cut, fit and energy a viewer half-recognises; never a real person's face or name** — the sports_generated lookalike skits pull millions; a real likeness is never ours to use
-- **the product is advice between men, once, at the close; the real WIDGET is in his hand in that shot; no price, no offer** — the owner: "we're not even selling anything anymore, we're just making content that people wanna watch"
+- **the product is advice between men, once, at the close; the real NOVA is in his hand in that shot; no price, no offer** — the owner: "we're not even selling anything anymore, we're just making content that people wanna watch"
 - **every bar is a lip-synced clip of the rapper saying it, cut at bar boundaries** — the swipes are all performance: the face saying the line is the content
 
 ## Stage order
@@ -58,7 +58,7 @@ teardown (framing read from the swipe: street battle or radio booth) → bars (w
 - voices: two clearly different male voices: ours younger and sharper, his deeper and raspy
 - crowd: in the track, square-bracket tags only
 - check: transcribe every take (whisper large-v3-turbo, -l en -mc 0 -et 2.8) and confirm every bar comes back word for word; pick the take that does and lands bar one fastest
-- brand_line: "Use the WIDGET once a day" — the last bar, rapped, never a tag
+- brand_line: "Use the NOVA once a day" — the last bar, rapped, never a tag
 - master_true_peak_dbtp: -1.0
 - loudness_lufs: -14
 
@@ -72,7 +72,7 @@ teardown (framing read from the swipe: street battle or radio booth) → bars (w
 - start_only: on
 - max_references: 3
 - cast: the two banked lookalike types, same faces in every picture
-- product: the real WIDGET photo as a reference in the close shot, in our man's hand, shape, colour and label exact
+- product: the real NOVA photo as a reference in the close shot, in our man's hand, shape, colour and label exact
 
 **clips**
 - bars: Seedance 2.5 with that bar's audio slice, lip-synced (MODEL-HOUSE: takes our voice and lip-syncs)
@@ -91,12 +91,12 @@ teardown (framing read from the swipe: street battle or radio booth) → bars (w
 - look: the bar on screen as it's rapped, bottom band, white bold with a black edge; the caption of the post is the first bar in quotes
 
 **gates**
-- apply: song bar check (every bar transcribed back), first bar inside 2 s, lip-sync per bar (the right rapper says the right bar), lookalike, not a real likeness, loudness/true peak, real WIDGET in the close shot
+- apply: song bar check (every bar transcribed back), first bar inside 2 s, lip-sync per bar (the right rapper says the right bar), lookalike, not a real likeness, loudness/true peak, real NOVA in the close shot
 - skip: song flow gate (no melody, no gaps rule for a sung hook), product in the film's style (the format is photoreal), nobody-talks clip check
 
 **edit**
 - method: video-edit machine cut on the track's clock; bar clip → reaction on the punchline → pop-up → next bar
-- end: no end card; the last shot is the crowd erupting with the WIDGET in his hand
+- end: no end card; the last shot is the crowd erupting with the NOVA in his hand
 - loudness: -14 LUFS, true peak ≤ -1 dBTP
 - versions: control + 4 hook versions
 
@@ -123,7 +123,7 @@ teardown (framing read from the swipe: street battle or radio booth) → bars (w
 - the crowd reacts on every punchline
 - each pop-up gets a laugh on its own
 - the two men look like people the viewer half-knows, never a real person
-- the WIDGET line lands as advice, not an ad
+- the NOVA line lands as advice, not an ad
 
 ## Built from
 
@@ -134,7 +134,7 @@ teardown (framing read from the swipe: street battle or radio booth) → bars (w
 ## Rulings behind it
 
 - the owner 2026-10-22: "you need to flip it. We need to talk about the girl first … Just like we did with the Disney song ads … We keep the conflict, the weird thing, the tragedy … at the beginning, and then we put in anything that has to do with a problem and then we can talk about [failed] solutions … We don't go straight for the pitch, never. That's the whole point of this format"
-- the owner 2026-10-22: the freestyle format, Suno, lookalike rapper, pop-up inserts, yo-mama bars at the neck, use the WIDGET, street framing, entertainment first
+- the owner 2026-10-22: the freestyle format, Suno, lookalike rapper, pop-up inserts, yo-mama bars at the neck, use the NOVA, street framing, entertainment first
 - the owner 2026-10-22: its own format — "be cognizant of these little things … this is it. Let's run this shit up"
 - the owner 2026-10-21: every song starts on the verse; the story line is the hook
-- the owner 2026-10-05: WIDGET once a day is the one ruled frequency
+- the owner 2026-10-05: NOVA once a day is the one ruled frequency

@@ -21,7 +21,7 @@ Live page: The Diversity System — (private page)
 | Assets | Each ad is a flexible ad, up to 10 assets: 9:16 video with music/voiceover, 4:5, image, carousel if it fits; different faces and settings; ≥20% of the ad set's assets 9:16 with sound; key messages in the safe zone | Meta |
 | Creators | Partnership ads | Meta (19% lower acquisition cost) |
 
-**The one offer:** <brand> → WIDGET (`flex.<brand>.com/icon/flex/`) · <brand> → face scrub (`recipe.<brand>.com/<brand>-facescrub-cpk/landing/`).
+**The one offer:** <brand> → NOVA (`flex.<brand>.com/icon/flex/`) · <brand> → face scrub (`recipe.<brand>.com/<brand>-facescrub-cpk/landing/`).
 
 **Budget:** each ad set needs about 50 results a week to exit learning (Meta), so the campaign's daily budget is about **7 × cost per purchase × live ad sets** (ours). Face scrub break-even $38.81: ≈ $270/day per ad set, ≈ $550/day for its two. Add ad sets as budget allows.
 

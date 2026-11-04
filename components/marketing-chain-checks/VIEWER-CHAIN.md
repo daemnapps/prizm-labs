@@ -26,4 +26,4 @@ The video and statics chains run steps 1–7 at their own gate (`viewer.check`),
 
 ## First live runs (2 Oct)
 - **Silent Chair** (<brand> · glow-up, video): FAILED. Belief 0/5, and 5/5 felt the refund line was a pitch. The refund line is not in the objection bank, so it's a new worry. It goes back to the lines that sound like a sales pitch.
-- **p005 marker on belly** (<brand>, static; run as fed-up-king because the brief records no avatar): FAILED. Belief 0/5, 3 said it looked fake or staged, 5 said it was a pitch. "TRY <brand> WIDGET", the device and the face sit partly under Reels' bottom bar. It goes back to the shot that looks fake or staged.
+- **p005 marker on belly** (<brand>, static; run as fed-up-king because the brief records no avatar): FAILED. Belief 0/5, 3 said it looked fake or staged, 5 said it was a pitch. "TRY <brand> NOVA", the device and the face sit partly under Reels' bottom bar. It goes back to the shot that looks fake or staged.

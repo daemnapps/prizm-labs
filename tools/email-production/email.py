@@ -369,11 +369,11 @@ def main():
                          "as though there were one.")
     ap.add_argument("--product", default=None,
                     help="which product this is about — a key from "
-                         "brands/<brand>/products/ (e.g. widget, gadget, "
+                         "brands/<brand>/products/ (e.g. nova, gadget, "
                          "daily-set), or a path. What the thing IS.")
     ap.add_argument("--offer", default=None,
                     help="which offer this email carries — a key from the "
-                         "offer bank (e.g. widget-preorder). The commercial "
+                         "offer bank (e.g. nova-preorder). The commercial "
                          "construction around the product: price, bundle, "
                          "terms. A product and an offer are different things, "
                          "and one product carries many offers. Omit for an "

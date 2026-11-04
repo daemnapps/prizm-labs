@@ -24,10 +24,10 @@ try:
 except ImportError:                       # the look tests need real pictures; the rest do not
     Image = None
 
-KEY = "testbrand_widget_brief-0001"
+KEY = "testbrand_nova_brief-0001"
 EL = "aaaa1111-2222-3333-4444-555566667777"
 CAST = "cccc1111-2222-3333-4444-555566667777"
-PROMPT = "INPUTS\nIMAGE 1 is the reference.\n\nTHE PICTURE\nThe   tub becomes the widget.\nRULES\nChange nothing else."
+PROMPT = "INPUTS\nIMAGE 1 is the reference.\n\nTHE PICTURE\nThe   tub becomes the nova.\nRULES\nChange nothing else."
 
 
 def picture(path, colour):
@@ -40,17 +40,17 @@ def picture(path, colour):
 
 
 def sheet():
-    el = {"kind": "product", "id": "widget", "name": "WIDGET", "element": {"id": EL, "name": "widget-sheet"}}
+    el = {"kind": "product", "id": "nova", "name": "NOVA", "element": {"id": EL, "name": "nova-sheet"}}
     return {"brief_key": KEY, "brand": "testbrand", "steps": [
         {"n": 1, "asset": f"{KEY}_asset-01.png", "what": "the main picture", "medium": "image", "job": "pictures.generate",
          "higgsfield_model": "gpt_image_2_5", "model_name": "GPT Image 2.5", "prompt": PROMPT,
          "references": [
              {"n": 1, "kind": "image", "role": "the reference", "local": "refs/step-01-image-1-swipe.jpg",
               "file": "x/refs/step-01-image-1-swipe.jpg", "element": None},
-             {"n": 2, "kind": "image", "role": "the real WIDGET: its sheet", "local": "refs/product-widget-sheet.png",
-              "file": "x/refs/product-widget-sheet.png", "element": el},
-             {"n": 3, "kind": "image", "role": "the real WIDGET: its front", "local": "refs/product-widget-front.png",
-              "file": "x/refs/product-widget-front.png", "element": el}],
+             {"n": 2, "kind": "image", "role": "the real NOVA: its sheet", "local": "refs/product-nova-sheet.png",
+              "file": "x/refs/product-nova-sheet.png", "element": el},
+             {"n": 3, "kind": "image", "role": "the real NOVA: its front", "local": "refs/product-nova-front.png",
+              "file": "x/refs/product-nova-front.png", "element": el}],
          "cast": [{"who": "THE HOST", "element": {"id": CAST, "name": None},
                    "fallback": {"local": "refs/cast-host-master.png"}}],
          "settings": {"aspect_ratio": "9:16"}},
@@ -64,7 +64,7 @@ def good_receipt(**over):
     d = {"asset": f"{KEY}_asset-01.png", "step": 1, "higgsfield_generation_id": "gen-123", "model": "gpt_image_2_5",
          "prompt": PROMPT, "inputs": [
              {"n": 1, "kind": "image", "file": "step-01-image-1-swipe.jpg"},
-             {"n": 2, "kind": "element", "file": "widget-sheet", "media_id": EL},
+             {"n": 2, "kind": "element", "file": "nova-sheet", "media_id": EL},
              {"kind": "element", "file": "the host", "media_id": CAST}],
          "settings": {"aspect_ratio": "9:16"}, "made_by": "an agent", "made_at": "2026-10-28T10:00"}
     d.update(over)
@@ -77,8 +77,8 @@ def set_step():
             "set_request": {"change": "a bigger sign"}, "settings": {"aspect_ratio": "9:16"},
             "references": [{"n": 1, "kind": "image", "role": "the set's kept print", "local": "refs/approved-plate.png",
                             "file": "x/refs/approved-plate.png", "element": None, "look_only": True},
-                           {"n": 2, "kind": "image", "role": "the product's casting sheet", "local": "refs/product-widget-sheet.png",
-                            "file": "x/refs/product-widget-sheet.png", "element": None}]}
+                           {"n": 2, "kind": "image", "role": "the product's casting sheet", "local": "refs/product-nova-sheet.png",
+                            "file": "x/refs/product-nova-sheet.png", "element": None}]}
 
 
 class Base(unittest.TestCase):
@@ -89,8 +89,8 @@ class Base(unittest.TestCase):
         self.old = os.environ.get("AI_WORKSPACE")
         os.environ["AI_WORKSPACE"] = str(self.tmp)
         self.f = self.tmp / "runs/handoffs/graphic-designer/testbrand" / KEY
-        for name, c in (("step-01-image-1-swipe.jpg", "red"), ("product-widget-sheet.png", "black"),
-                        ("product-widget-front.png", "gray"), ("cast-host-master.png", "brown"),
+        for name, c in (("step-01-image-1-swipe.jpg", "red"), ("product-nova-sheet.png", "black"),
+                        ("product-nova-front.png", "gray"), ("cast-host-master.png", "brown"),
                         ("approved-plate.png", "blue")):
             picture(self.f / "refs" / name, c)
         self.sheet = sheet()
@@ -166,11 +166,11 @@ class ReceiptTest(Base):
 class PromptTest(Base):
     def test_word_for_word_with_whitespace_set_aside(self):
         self.receipt(good_receipt(prompt="  INPUTS IMAGE 1 is the reference.\r\n\tTHE PICTURE The tub becomes the "
-                                         "widget. RULES Change nothing else. "))
+                                         "nova. RULES Change nothing else. "))
         self.assertEqual(RC.check_prompt(self.rc(), self.sheet["steps"][0])["state"], RC.OK)
 
     def test_the_steps_own_element_placeholders_are_set_aside(self):
-        sent = PROMPT.replace("The   tub", f"<<<{EL}>>> The tub").replace("IMAGE 1 is", "@widget-sheet IMAGE 1 is")
+        sent = PROMPT.replace("The   tub", f"<<<{EL}>>> The tub").replace("IMAGE 1 is", "@nova-sheet IMAGE 1 is")
         self.receipt(good_receipt(prompt=sent))
         r = RC.check_prompt(self.rc(), self.sheet["steps"][0])
         self.assertEqual(r["state"], RC.OK)
@@ -181,10 +181,10 @@ class PromptTest(Base):
         self.assertEqual(RC.check_prompt(self.rc(), self.sheet["steps"][0])["state"], RC.BAD)
 
     def test_a_changed_word_is_wrong_and_the_diff_names_it(self):
-        self.receipt(good_receipt(prompt=PROMPT.replace("widget", "gizmo").replace("Change nothing else.", "")))
+        self.receipt(good_receipt(prompt=PROMPT.replace("nova", "gizmo").replace("Change nothing else.", "")))
         r = RC.check_prompt(self.rc(), self.sheet["steps"][0])
         self.assertEqual(r["state"], RC.BAD)
-        self.assertEqual((r["diff"][0]["sheet"], r["diff"][0]["sent"]), ("widget.", "gizmo."))
+        self.assertEqual((r["diff"][0]["sheet"], r["diff"][0]["sent"]), ("nova.", "gizmo."))
         self.assertIn("tub becomes the", r["diff"][0]["at"])
         self.assertEqual(r["diff"][1]["sheet"], "Change nothing else.")
 
@@ -205,14 +205,14 @@ class InputsTest(Base):
         self.assertEqual([m["by"] for m in r["matched"]], ["file name", "element id", "element id"])
 
     def test_files_instead_of_the_element_by_refs_name(self):
-        r = self.check([{"n": 1, "file": "refs/step-01-image-1-swipe.jpg"}, {"n": 2, "file": "product-widget-sheet.png"},
-                        {"n": 3, "file": "product-widget-front.png"}, {"file": "cast-host-master.png"}])
+        r = self.check([{"n": 1, "file": "refs/step-01-image-1-swipe.jpg"}, {"n": 2, "file": "product-nova-sheet.png"},
+                        {"n": 3, "file": "product-nova-front.png"}, {"file": "cast-host-master.png"}])
         self.assertEqual(r["state"], RC.OK, r)
 
     def test_a_missing_reference_is_named(self):
-        r = self.check([{"n": 1, "file": "step-01-image-1-swipe.jpg"}, {"n": 2, "file": "product-widget-sheet.png"}])
+        r = self.check([{"n": 1, "file": "step-01-image-1-swipe.jpg"}, {"n": 2, "file": "product-nova-sheet.png"}])
         self.assertEqual(r["state"], RC.BAD)
-        self.assertIn("IMAGE 3 (product-widget-front.png)", r["why"])
+        self.assertIn("IMAGE 3 (product-nova-front.png)", r["why"])
         self.assertIn("cast THE HOST", r["why"])
 
     def test_an_extra_input_is_named(self):
@@ -222,8 +222,8 @@ class InputsTest(Base):
         self.assertIn("random-mood-board.jpg", r["why"])
 
     def test_out_of_order_is_wrong(self):
-        r = self.check([{"file": "product-widget-sheet.png"}, {"file": "step-01-image-1-swipe.jpg"},
-                        {"file": "product-widget-front.png"}, {"media_id": CAST}])
+        r = self.check([{"file": "product-nova-sheet.png"}, {"file": "step-01-image-1-swipe.jpg"},
+                        {"file": "product-nova-front.png"}, {"media_id": CAST}])
         self.assertEqual(r["state"], RC.BAD)
         self.assertIn("out of order", r["why"])
         r = self.check([{"n": 2, "file": "step-01-image-1-swipe.jpg"}, {"media_id": EL}, {"media_id": CAST}])
@@ -294,11 +294,11 @@ class FolderTest(Base):
             self.assertFalse(f["file"].startswith("/"), "stored paths are folder-relative")
 
     def test_a_look_fail_is_wrong_and_too_small_to_tell_is_not_proven(self):
-        RC.check(self.f, judge=self.judge(lambda t: [("PASS", "ok"), ("FAIL", "the widget is white"), ("PASS", "ok")]
+        RC.check(self.f, judge=self.judge(lambda t: [("PASS", "ok"), ("FAIL", "the nova is white"), ("PASS", "ok")]
                                           [:len(t)] if len(t) == 3 else [("PASS", "ok")]))
         rep = json.loads((self.f / RC.OUT_JSON).read_text())
         self.assertEqual(rep["assets"][0]["looks"]["state"], RC.BAD)
-        self.assertIn("the widget is white", rep["assets"][0]["looks"]["why"])
+        self.assertIn("the nova is white", rep["assets"][0]["looks"]["why"])
         (self.f / RC.OUT_JSON).unlink()
         RC.check(self.f, judge=self.judge(lambda t: [("PASS", "ok"), ("FAIL", f"{RC.UNCLEAR}: a dark blur on the seat"),
                                                      ("PASS", "ok")][:len(t)] if len(t) == 3 else [("PASS", "ok")]))
@@ -354,8 +354,8 @@ class FolderTest(Base):
 
 
 FIX = Path(__file__).resolve().parent / "fixtures"
-SWAP_PROMPT = ("INPUTS\nIMAGE 1 is the reference.\nIMAGE 2 is the real WIDGET: its sheet. IMAGE 3 is the real WIDGET: its "
-               "front.\nIMAGE 4 is the logo.\n\nTHE PICTURE\nThe tub becomes the widget; the logo as IMAGE 4 shows.\n"
+SWAP_PROMPT = ("INPUTS\nIMAGE 1 is the reference.\nIMAGE 2 is the real NOVA: its sheet. IMAGE 3 is the real NOVA: its "
+               "front.\nIMAGE 4 is the logo.\n\nTHE PICTURE\nThe tub becomes the nova; the logo as IMAGE 4 shows.\n"
                "RULES\nChange nothing else.")
 
 
@@ -428,7 +428,7 @@ class RecordTest(Base):
         self.assertNotIn("words_diff", r)
 
     def test_inputs_from_the_record_medias_by_bytes_and_elements_by_id(self):
-        self.save(record(medias=[self.SWIPE], elements=[(EL, "widget-sheet"), (CAST, "the-host")]))
+        self.save(record(medias=[self.SWIPE], elements=[(EL, "nova-sheet"), (CAST, "the-host")]))
         r = RC.check_inputs(self.rc(), self.sheet["steps"][0], self.f,
                             fetch=lambda u: self.fail("the sha-only reader is not used for a record"),
                             fetch_media=self.media({self.SWIPE: self.swipe_bytes()}))
@@ -449,7 +449,7 @@ class RecordTest(Base):
         im.save(src)
         buf = io.BytesIO()
         im.resize((180, 320)).save(buf, "JPEG", quality=92)                 # the uploader resized and re-encoded it
-        self.save(record(medias=[self.SWIPE], elements=[(EL, "widget-sheet"), (CAST, "the-host")]))
+        self.save(record(medias=[self.SWIPE], elements=[(EL, "nova-sheet"), (CAST, "the-host")]))
         r = RC.check_inputs(self.rc(), self.sheet["steps"][0], self.f,
                             fetch_media=self.media({self.SWIPE: buf.getvalue()}))
         self.assertEqual(r["matched"][0]["by"], "the picture")
@@ -483,13 +483,13 @@ class RecordTest(Base):
         st["references"] = st["references"] + [{"n": 4, "kind": "image", "role": "the logo", "local": "refs/logo.png",
                                                 "element": None}]
         swapped = RC.swap_in_elements(SWAP_PROMPT, st)
-        line = ("IMAGE 2 is the real WIDGET, supplied as the element widget-sheet: every side of it, at its true size; "
+        line = ("IMAGE 2 is the real NOVA, supplied as the element nova-sheet: every side of it, at its true size; "
                 "copy the exact shape, label and finish.")
         self.assertIn(line, swapped)
         self.assertNotIn("its front", swapped)
         self.assertIn("IMAGE 3 is the logo.", swapped)                     # IMAGE 4 moved down by one
         self.assertIn("the logo as IMAGE 3 shows", swapped)
-        for sent in (swapped, swapped.replace("element widget-sheet", f"element <<<{EL}>>>")):
+        for sent in (swapped, swapped.replace("element nova-sheet", f"element <<<{EL}>>>")):
             self.save(record(prompt=sent))
             r = RC.check_prompt(self.rc(), st)
             self.assertEqual(r["state"], RC.OK, r.get("diff"))

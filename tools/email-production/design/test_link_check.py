@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check  # noqa: E402
 
-WIDGET = "https://brand-a.com/products/flex?utm_source=klaviyo&utm_content=%s"
+NOVA = "https://brand-a.com/products/flex?utm_source=klaviyo&utm_content=%s"
 
 
 class LinkCheck(unittest.TestCase):
@@ -32,29 +32,29 @@ class LinkCheck(unittest.TestCase):
     def test_tagged_links_to_one_page_are_asked_once(self):
         self.answers(("200", ""))
         for n in range(8):
-            self.assertEqual(check.code(WIDGET % n, wait=self.waited.append), "200")
+            self.assertEqual(check.code(NOVA % n, wait=self.waited.append), "200")
         self.assertEqual(self.asked, ["https://brand-a.com/products/flex"])
 
     def test_a_429_is_asked_again_after_the_named_wait(self):
         self.answers(("429", "60"), ("200", ""))
-        self.assertEqual(check.code(WIDGET % 1, wait=self.waited.append), "200")
+        self.assertEqual(check.code(NOVA % 1, wait=self.waited.append), "200")
         self.assertEqual(self.waited, [60])
         self.assertEqual(len(self.asked), 2)
 
     def test_the_wait_is_capped(self):
         self.answers(("429", "3600"), ("200", ""))
-        check.code(WIDGET % 1, wait=self.waited.append)
+        check.code(NOVA % 1, wait=self.waited.append)
         self.assertEqual(self.waited, [90])
 
     def test_a_429_that_never_clears_still_fails(self):
         self.answers(("429", ""), ("429", "30"), ("429", ""))
-        self.assertEqual(check.code(WIDGET % 1, wait=self.waited.append), "429")
+        self.assertEqual(check.code(NOVA % 1, wait=self.waited.append), "429")
         self.assertEqual(self.waited, [60, 30])
         self.assertEqual(len(self.asked), 3)
 
     def test_a_cloudflare_challenge_is_kept_out_and_not_retried(self):
         self.answers((check.CHALLENGE, ""))
-        self.assertEqual(check.code(WIDGET % 1, wait=self.waited.append), check.CHALLENGE)
+        self.assertEqual(check.code(NOVA % 1, wait=self.waited.append), check.CHALLENGE)
         self.assertIn(check.CHALLENGE, check.KEPT_OUT)
         self.assertEqual((self.waited, len(self.asked)), ([], 1))
 
@@ -84,7 +84,7 @@ class LinkCheck(unittest.TestCase):
     def test_different_pages_are_each_asked(self):
         self.answers(("200", ""), ("200", ""))
         check.code("https://brand-a.com/?utm_source=klaviyo", wait=self.waited.append)
-        check.code(WIDGET % 1, wait=self.waited.append)
+        check.code(NOVA % 1, wait=self.waited.append)
         self.assertEqual(self.asked, ["https://brand-a.com/", "https://brand-a.com/products/flex"])
         self.assertEqual(self.waited, [check.PACE])
 

@@ -30,13 +30,13 @@ class Source(unittest.TestCase):
         self.addCleanup(lambda: shutil.rmtree(self.td, ignore_errors=True))
 
     def test_a_delivered_transcript_comes_first_with_the_brief_on_top(self):
-        u = self.td / "acme/2026-10-02-delivered/acme_widget_brief-0004_batch-2026-10-01-a"
+        u = self.td / "acme/2026-10-02-delivered/acme_nova_brief-0004_batch-2026-10-01-a"
         u.mkdir(parents=True)
         (u / "transcript.md").write_text("| T1 | 0:01 | Speaker 1 | en | Hello there. |\n")
-        head = {"brief": "brief-0004", "product": "widget", "avatar": "fed-up-king", "angle": "x", "title": "The Pull"}
+        head = {"brief": "brief-0004", "product": "nova", "avatar": "fed-up-king", "angle": "x", "title": "The Pull"}
         with mock.patch.object(BW, "AUDIO_RUNS", self.td), \
                 mock.patch.object(BW, "brief_facts", lambda *a: (head, None)):
-            src, what = BW.source_for("acme", "brief-0004", "widget")
+            src, what = BW.source_for("acme", "brief-0004", "nova")
         self.assertEqual(src.name, "copy-source.md")
         text = src.read_text()
         self.assertTrue(text.startswith("# The Pull — ACME brief-0004"))
@@ -49,7 +49,7 @@ class Source(unittest.TestCase):
         (run / "deliverable").mkdir(parents=True)
         (run / "deliverable/5-brief.md").write_text("# brief")
         with mock.patch.object(BW, "WS", self.td), mock.patch.object(BW, "AUDIO_RUNS", self.td / "none"), \
-                mock.patch.object(BW, "brief_facts", lambda *a: (None, {"run": "some-run", "product": "widget"})):
+                mock.patch.object(BW, "brief_facts", lambda *a: (None, {"run": "some-run", "product": "nova"})):
             src, what = BW.source_for("acme", "brief-0004")
         self.assertEqual(src, run / "deliverable/5-brief.md")
 
@@ -63,7 +63,7 @@ class Source(unittest.TestCase):
 
     def test_no_source_runs_nothing(self):
         with mock.patch.object(BW, "AUDIO_RUNS", self.td / "none"), \
-                mock.patch.object(BW, "brief_facts", lambda *a: ({"product": "widget"}, None)), \
+                mock.patch.object(BW, "brief_facts", lambda *a: ({"product": "nova"}, None)), \
                 mock.patch.object(BW.subprocess, "run", side_effect=AssertionError("no copy run without a source")):
             res = BW.write("acme", "brief-0004")
         self.assertIsNone(res["rc"])

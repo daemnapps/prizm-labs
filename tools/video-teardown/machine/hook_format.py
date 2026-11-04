@@ -148,7 +148,7 @@ def source_opening(run_dir, fmt=None):
     ("Ladies and gentlemen, I need y'all to understand something." / "This man
     right here had a strong eye for talent."); checking the format against T1
     alone held a format that was word for word the source's own (2026-10-05,
-    BRAND-A WIDGET rebuild). Still the source's words, in order, from its first
+    BRAND-A NOVA rebuild). Still the source's words, in order, from its first
     line — never a line from later in the swipe."""
     tj = Path(run_dir) / "transcript.json"
     if not tj.exists():

@@ -89,9 +89,9 @@ class QueueTest(unittest.TestCase):
         (b / "claims").mkdir()
         (b / "claims" / "ab-03-last-look — Sam").write_text("")
         # a renamed delivery: its old name kept in naming.json
-        d1 = b / "delivered/acme_widget_brief-0001_batch-2026-09-30-a"
+        d1 = b / "delivered/acme_nova_brief-0001_batch-2026-09-30-a"
         d1.mkdir(parents=True)
-        (d1 / "acme_widget_brief-0001_batch-2026-09-30-a_asset-01.mp4").write_text("v")
+        (d1 / "acme_nova_brief-0001_batch-2026-09-30-a_asset-01.mp4").write_text("v")
         (d1 / "naming.json").write_text(json.dumps({"unit": d1.name, "brief": "brief-0001",
                                                      "folder_was": "AB-01-The-Quiet-Start"}))
         # a messy editor folder, not renamed yet
@@ -100,7 +100,7 @@ class QueueTest(unittest.TestCase):
         (d2 / "AB-02 The Cold Open v1.mp4").write_text("v")
         self.briefs = b
         # cards: brief 1 sent back with a note; a card with no package here is live
-        self.card("sent-back", "video", "acme_widget_brief-0001_batch-2026-09-30-a", "widget", "brief-0001",
+        self.card("sent-back", "video", "acme_nova_brief-0001_batch-2026-09-30-a", "nova", "brief-0001",
                   approval={"decision": "send-back", "note": "logo too small"}, run=str(d1))
         self.card("3-live", "video", "acme_gadget_brief-0140_batch-2026-09-29-a", "gadget", "brief-0140",
                   meta=[{"ad_id": "1"}, {"ad_id": "2"}])
@@ -115,9 +115,9 @@ class QueueTest(unittest.TestCase):
         (self.ws / "components/naming/names.py").write_text(STUB_NAMES)
         (self.ws / "brands/acme").mkdir(parents=True)
         (self.ws / "brands/acme/briefs.json").write_text(json.dumps({"briefs": [
-            {"brief": "brief-0001", "product": "widget", "count": "brand+product", "aliases": ["ab-01", "AB-01"]},
-            {"brief": "brief-0002", "product": "widget", "count": "brand+product", "aliases": ["ab-02", "AB-02"]},
-            {"brief": "brief-0003", "product": "widget", "count": "brand+product", "aliases": ["ab-03", "AB-03"]},
+            {"brief": "brief-0001", "product": "nova", "count": "brand+product", "aliases": ["ab-01", "AB-01"]},
+            {"brief": "brief-0002", "product": "nova", "count": "brand+product", "aliases": ["ab-02", "AB-02"]},
+            {"brief": "brief-0003", "product": "nova", "count": "brand+product", "aliases": ["ab-03", "AB-03"]},
             {"brief": None, "product": "gadget", "aliases": ["kq07"]}]}))
         (self.ws / "register.json").write_text(json.dumps({"briefs": {
             "p140": {"brand": "acme", "brief": "brief-0140", "product": "gadget", "run": "x"},
@@ -143,7 +143,7 @@ class QueueTest(unittest.TestCase):
     def test_states_and_numbers(self):
         r = self.rows()
         one = r["ab-01-the-quiet-start|Video editor"]
-        self.assertEqual(one["label"], "widget brief-0001")
+        self.assertEqual(one["label"], "nova brief-0001")
         self.assertEqual(one["old"], ["AB-01"])
         self.assertEqual(one["status_text"], "Sent back — logo too small")
         self.assertEqual(len(one["delivered"]), 1)          # the renamed folder found its package
@@ -195,7 +195,7 @@ class QueueTest(unittest.TestCase):
         (root / "briefs").mkdir()
         (root / "briefs/p170.html").write_text("<p>brief</p>")
         (root / "briefs.json").write_text(json.dumps({"briefs": {
-            "p170": {"brand": "acme", "brief": "brief-0170", "product": "widget", "status": "approved",
+            "p170": {"brand": "acme", "brief": "brief-0170", "product": "nova", "status": "approved",
                      "run": "acme-poster-01", "worksheet": "worksheets/acme/p170"},
             "p171": {"brand": "acme", "brief": "brief-0171", "status": "for-review", "run": "acme-poster-02"},
             "p172": {"brand": "acme", "brief": "brief-0172", "type": "video-creator", "lane": "video-teardown",

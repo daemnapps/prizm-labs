@@ -78,7 +78,7 @@ class Base(TR.Base):
         super().setUp()
         self.svc = MoveDrive()
         s = self.svc
-        self.inbox = s.add(s.add(s.add(s.add(s.add("d-sa", "handoffs"), "graphic-designer"), "zz-brand"), "zz_widget_brief-0001"), "returned")
+        self.inbox = s.add(s.add(s.add(s.add(s.add("d-sa", "handoffs"), "graphic-designer"), "zz-brand"), "zz_nova_brief-0001"), "returned")
         self.fid = s.add(self.inbox, "hero.png", b"bytes")
         self.root = self.tmp / "repo"
 
@@ -118,7 +118,7 @@ class TestMove(Base):
         self.assertEqual(self.svc.nodes[self.fid]["parent"], target)
         self.assertEqual(self.svc.nodes[self.fid]["data"], b"bytes")
         self.assertEqual(got["name"], "hero.png")
-        self.assertEqual(got["from"], "Shared Assets/handoffs/graphic-designer/zz-brand/zz_widget_brief-0001/returned")
+        self.assertEqual(got["from"], "Shared Assets/handoffs/graphic-designer/zz-brand/zz_nova_brief-0001/returned")
         self.assertEqual(got["to"], "Shared Assets/runs/image-production/used")
         self.assertEqual(set(got), {"drive_id", "name", "from", "to", "record"})
         self.no_harm()
@@ -136,7 +136,7 @@ class TestMove(Base):
         self.assertEqual(set(v), FIELDS)
         self.assertEqual({k: v[k] for k in ("drive_id", "name", "from", "to", "by", "why")},
                          {"drive_id": self.fid, "name": "hero.png",
-                          "from": "Shared Assets/handoffs/graphic-designer/zz-brand/zz_widget_brief-0001/returned",
+                          "from": "Shared Assets/handoffs/graphic-designer/zz-brand/zz_nova_brief-0001/returned",
                           "to": "Shared Assets/runs/image-production/used", "by": "graphic-designer",
                           "why": "used in p152"})
         self.assertRegex(v["at"], r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
@@ -192,7 +192,7 @@ class TestRefused(Base):
 
     def test_the_file_already_there_is_refused(self):
         with self.assertRaises(MoveRefused) as c:
-            move(self.fid, ["handoffs", "graphic-designer", "zz-brand", "zz_widget_brief-0001", "returned"], "graphic-designer", "why",
+            move(self.fid, ["handoffs", "graphic-designer", "zz-brand", "zz_nova_brief-0001", "returned"], "graphic-designer", "why",
                  svc=self.svc, record_root=self.root)
         self.assertIn("already in", str(c.exception))
         self.assertEqual(self.updates(), [])

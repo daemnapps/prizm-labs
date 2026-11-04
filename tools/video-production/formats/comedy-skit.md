@@ -53,4 +53,4 @@ format leans on hardest: the reactor appears in the most shots.
 Marcus's chair in four scenes). The fix: the reactor's full sheet goes in behind the swipe frame on every close-up,
 and no clip is made before the face gate passes.
 
-**The run it was proven on.** Not yet — first run: the pastor barber body (`brand_a_widget_brief-0075`).
+**The run it was proven on.** Not yet — first run: the pastor barber body (`brand_a_nova_brief-0075`).

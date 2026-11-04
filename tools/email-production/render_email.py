@@ -72,14 +72,14 @@ class Skin:
 
     def product_image(self, *names, kind="cutout"):
         """The real image for a product named in a block — matched on the
-        store handle or the product title (WIDGET, PRIME™ Face Quench…)."""
+        store handle or the product title (NOVA, PRIME™ Face Quench…)."""
         for n in names:
             n = str(n or "").strip().lower()
             if not n:
                 continue
             for handle, rec in self.products.items():
                 title = rec.get("title", "").lower()
-                head = re.sub(r"[™®].*$", "", title).strip()          # "widget" from "WIDGET™ Pro…"
+                head = re.sub(r"[™®].*$", "", title).strip()          # "nova" from "NOVA™ Pro…"
                 if n == handle or n == title or n == head or (len(n) >= 4 and (n in title or head in n)):
                     return rec.get(kind) or rec.get("hero")
         return None
@@ -167,7 +167,7 @@ def component(block, skin, ctx):
         if not img and "product" in brief.lower():
             # a product hero: the store's own listing photo, matched on any
             # product this run is about or the brief names
-            img = skin.product_image(ctx.get("product"), *re.findall(r"\b(WIDGET|PRIME|CRUSH|WAR|MIRO|CORE)\b", brief), kind="hero")
+            img = skin.product_image(ctx.get("product"), *re.findall(r"\b(NOVA|PRIME|CRUSH|WAR|MIRO|CORE)\b", brief), kind="hero")
         if img:
             inner = (f'<img src="{e(img)}" width="500" alt="{e(block.get("alt"))}" '
                      f'style="display:block;width:500px;max-width:100%;border-radius:{skin.l.get("image_radius", 20)}px;margin:0 auto">')

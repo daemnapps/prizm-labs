@@ -171,9 +171,9 @@ class Search(Base):
 
     def test_a_named_product_the_clip_lacks_is_listed_as_missing(self):
         hits = self.find("opens the box and lifts the lid", core="opens the box, lifts the lid",
-                         require=["WIDGET"])
+                         require=["NOVA"])
         self.assertEqual(hits[0]["clip_id"], "box")
-        self.assertEqual(hits[0]["missing"], ["widget"])
+        self.assertEqual(hits[0]["missing"], ["nova"])
         self.assertIsNotNone(hits[0]["action_match"])
 
     def test_invented_names_are_dropped_from_the_query(self):

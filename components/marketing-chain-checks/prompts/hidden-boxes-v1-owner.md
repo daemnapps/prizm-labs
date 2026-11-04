@@ -7,5 +7,5 @@ the top-left corner and (1000,1000) is the bottom-right of the whole frame.
 Only list what is actually there. Don't guess at things you can't see.
 
 Return JSON only:
-{"items": [{"what": "face|product|text", "label": "<a few words, e.g. 'man's face', 'WIDGET device', 'headline'>",
+{"items": [{"what": "face|product|text", "label": "<a few words, e.g. 'man's face', 'NOVA device', 'headline'>",
   "box": [x_min, y_min, x_max, y_max]}]}

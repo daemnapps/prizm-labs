@@ -195,7 +195,7 @@ DEVICE = (f". The face-brush device is {PRODUCT} — that exact product, matched
 SKIN = (". Any razor bumps, ingrown hairs or dark marks are ordinary shaving irritation on otherwise "
         "healthy skin — small raised bumps and faded post-inflammatory marks along the jaw and neck. "
         "Not a rash, not a wound, not blood, not inflamed or weeping skin")
-GUARANTEE = "90 DAYS. IF YOUR SKIN DOESN'T TRANSFORM, FULL REFUND. YOU KEEP THE WIDGET™."
+GUARANTEE = "90 DAYS. IF YOUR SKIN DOESN'T TRANSFORM, FULL REFUND. YOU KEEP THE NOVA™."
 
 
 def fix_text(why):
@@ -206,7 +206,7 @@ def fix_text(why):
                 f"\"{GUARANTEE}\" — correct the spelling, put every word inside the bar, print it once.")
     if "grow grow" in w: return "On the poster card, the words 'grow grow' become 'grow' — one word, nothing else changes."
     if "!" in w: return "Remove the stray exclamation mark glyph; nothing else changes."
-    if "wordmark" in w: return "Remove the BRAND-A WIDGET wordmark; nothing else changes."
+    if "wordmark" in w: return "Remove the BRAND-A NOVA wordmark; nothing else changes."
     out = "Fix only this, nothing else: " + why
     if re.search(r"bump|ingrown|mark|irritat|shav", why, re.I):
         out += SKIN
@@ -441,7 +441,7 @@ def kit():
     st = state(); out = HERE / "kit"; (out / "images").mkdir(parents=True, exist_ok=True)
     link = "https://brand-a.com/products/flex"
     # Posters were out on 2026-09-09 ("basically trash" — the device), and back in
-    # the same night once every one was re-made with the WIDGET Element.
+    # the same night once every one was re-made with the NOVA Element.
     OUT_OF_RUN = set()
     cols = ["Campaign Name", "Campaign Status", "Campaign Objective", "Buying Type",
             "Ad Set Name", "Ad Set Status", "Ad Set Daily Budget", "Optimization Goal", "Billing Event", "Bid Strategy",
@@ -455,7 +455,7 @@ def kit():
             shutil.copy2(WS / a["path"], out / "images" / a["file"])
             ws.append(["RUN-01 fed-up-king", "PAUSED", "Outcome Sales", "AUCTION",
                        "RUN-01 fed-up-king", "PAUSED", 50, "OFFSITE_CONVERSIONS", "IMPRESSIONS", "Lowest cost without cap",
-                       a["name"], "PAUSED", a["file"], u["headline"], "WIDGET\u2122 by BRAND-A", link, "brand-a.com", "SHOP_NOW", "PAUSED"]); n += 1
+                       a["name"], "PAUSED", a["file"], u["headline"], "NOVA\u2122 by BRAND-A", link, "brand-a.com", "SHOP_NOW", "PAUSED"]); n += 1
     wb.save(out / "run-01-bulk-import.xlsx")
     # the same thing as a page a person reads before uploading
     units = {}

@@ -1,4 +1,4 @@
-# WIDGET face brush, modelled by hand from the studio turntable (WIDGET_Rotate_1x1.mp4: front frame 1,
+# NOVA face brush, modelled by hand from the studio turntable (NOVA_Rotate_1x1.mp4: front frame 1,
 # side frame 39, back frame 61) and CGI_Device_Lit.jpg. Exec'd inside parts.py (custom builder), which
 # provides: bpy, bmesh, math, Vector, H, D, d (kit folder), M (model_parts), material(), hexrgb(), sc.
 # Every number below is read off those frames, in turntable pixels (front: centre x 570, top y 115,
@@ -103,7 +103,7 @@ def loft(name, rows, grow=0.0, ring_fn=None, close=True):
 
 # ── the shell ────────────────────────────────────────────────────────────────
 rows = [PX_TOP + d_ for d_ in (0.3, 0.8, 1.5, 2.5, 4, 6, 8.5, 11.5, 15)] + [y for y in range(int(PX_TOP) + 20, int(PX_BOT) - 20, C.get("row_px", 6))] + [PX_BOT - d_ for d_ in (15, 11.5, 8.5, 6, 4, 2.5, 1.5, 0.8, 0.3)]
-body = loft("widget-body", rows)
+body = loft("nova-body", rows)
 cs = body.modifiers.new("cs", "CORRECTIVE_SMOOTH"); cs.iterations = 6; cs.smooth_type = "SIMPLE"
 bpy.context.view_layer.objects.active = body; bpy.ops.object.modifier_apply(modifier="cs")
 sub = body.modifiers.new("sub", "SUBSURF"); sub.levels = sub.render_levels = 2
@@ -116,7 +116,7 @@ def saddle(edge, theta):
     yc, ys = edge[0], edge[1]
     if len(edge) > 3 and edge[3] == "x":
         # by the width across (the ring, 2026-10-09: seen from the front the store's ring is one clean arch — a parabola
-        # in x — which the angle around WIDGET's flattened front turned into a wave): u = how far out across the body
+        # in x — which the angle around NOVA's flattened front turned into a wave): u = how far out across the body
         x0 = section(yc, theta).x; a = abs(section(yc, 0.0 if x0 >= 0 else math.pi).x) or 1e-6
         u = min(1.0, abs(x0) / a)
         return yc + (ys - yc) * u ** (edge[2] if len(edge) > 2 else 2.0)

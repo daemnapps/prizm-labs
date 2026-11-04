@@ -170,7 +170,7 @@
   "REAL_PROBLEM_LEAD": null,
   "REAL_PROBLEM_ONELINE": null,
   "RESULTS_H1": null,
-  "REVIEW_WIDGET_EMBED": null,
+  "REVIEW_NOVA_EMBED": null,
   "SPENT_ITEM_IMG": null,
   "SPENT_ITEM_LABEL": null,
   "SPENT_ITEM_PRICE": null,
@@ -656,7 +656,7 @@
   "REVIEWS_HEADING": [
    "24-reviews-junip"
   ],
-  "REVIEW_WIDGET_EMBED": [
+  "REVIEW_NOVA_EMBED": [
    "24-reviews-junip"
   ],
   "SAVE_BADGE": [

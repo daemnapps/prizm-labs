@@ -428,7 +428,7 @@ def kit():
     → Import ads in bulk, in the owner's own Chrome; everything lands PAUSED."""
     import openpyxl
     st = state(); out = HERE / "kit"; (out / "images").mkdir(parents=True, exist_ok=True)
-    link = "https://brand-b.com/products/widget"
+    link = "https://brand-b.com/products/nova"
     # Posters were out on 2026-09-09 ("basically trash" — the device), and back in
     # the same night once every one was re-made with the the device Element.
     OUT_OF_RUN = set()

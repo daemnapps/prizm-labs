@@ -194,7 +194,7 @@ Daytime drama: long stares, a secret, someone who was supposed to be gone comes 
 A live sell on a shopping channel: host, demo table, caller on the line, clock ticking. It is the one show that is ALREADY a direct-response ad, and her generation bought from it for thirty years.
 
 - **The hero:** the caller on the line who already owns it
-- **The villain:** the old widget on the demo table that did not work
+- **The villain:** the old nova on the demo table that did not work
 - **The move:** the live demo on the back of a hand
 - **The voice:** the host, and the caller's own words
 - **The replay:** the split-screen close-up of the demo hand

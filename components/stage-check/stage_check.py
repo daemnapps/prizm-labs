@@ -762,7 +762,7 @@ def write_record(piece, rows):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("ref", nargs="?", help="a brief id (brand_a_widget_brief-0243, or brief-0243 with --brand/--product) or a run name")
+    ap.add_argument("ref", nargs="?", help="a brief id (brand_a_nova_brief-0243, or brief-0243 with --brand/--product) or a run name")
     ap.add_argument("--batch", help="several refs: a file with one per line, or comma-separated")
     ap.add_argument("--brand"); ap.add_argument("--product")
     ap.add_argument("--review", action="store_true", help="write the batch review sheet even for one piece")

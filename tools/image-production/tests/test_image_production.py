@@ -114,18 +114,18 @@ def fake_workspace(tmp):
     (root / "components").mkdir(parents=True, exist_ok=True)
     b = root / "brands" / "acme"
     (b / "identity").mkdir(parents=True, exist_ok=True)
-    (b / "products" / "widget" / "images").mkdir(parents=True, exist_ok=True)
+    (b / "products" / "nova" / "images").mkdir(parents=True, exist_ok=True)
     (b / "identity" / "palette.md").write_text("| Ink | `#112233` |\n| Gold | `#AABBCC` |\n")
     (b / "identity" / "fonts.md").write_text("A font.\n")
     (b / "identity" / "acme-logo.png").write_bytes(ONE_PIXEL_PNG)
     (b / "products" / "images.json").write_text(json.dumps({"products": {
-        "widget": {"title": "The Widget",
-                   "cutout": "products/widget/images/packshot.png"}}}))
-    (b / "products" / "widget" / "images" / "packshot.png").write_bytes(ONE_PIXEL_PNG)
+        "nova": {"title": "The Nova",
+                   "cutout": "products/nova/images/packshot.png"}}}))
+    (b / "products" / "nova" / "images" / "packshot.png").write_bytes(ONE_PIXEL_PNG)
     (b / "ai-elements").mkdir(parents=True, exist_ok=True)
     (b / "ai-elements" / "element-facts.json").write_text(json.dumps({"elements": {
         "11111111-1111-1111-1111-111111111111": {
-            "name": "acme-widget", "kind": "product", "canonical": True,
+            "name": "acme-nova", "kind": "product", "canonical": True,
             "facts": ["a squat blue tube"], "forbids": ["have a pump"]}}}))
     (root / "brands" / "other").mkdir(parents=True, exist_ok=True)
     return root
@@ -168,7 +168,7 @@ class Base(unittest.TestCase):
 
     def req(self, **kw):
         base = {"brand": "acme", "purpose": "email-hero",
-                "direction": "a man holding the widget in a kitchen",
+                "direction": "a man holding the nova in a kitchen",
                 "out": str(self.out), "people": False}
         base.update(kw)
         return base
@@ -209,8 +209,8 @@ class TestRequestShape(Base):
 
 class TestContext(Base):
     def test_brand_facts_come_from_the_brand(self):
-        _r, ctx, *_ = IP.resolve(self.req(product="widget"), library=self.lib)
-        self.assertEqual(ctx["product"]["title"], "The Widget")
+        _r, ctx, *_ = IP.resolve(self.req(product="nova"), library=self.lib)
+        self.assertEqual(ctx["product"]["title"], "The Nova")
         self.assertIn("squat blue tube", ctx["product"]["facts"])
         self.assertIn("#112233", ctx["palette"])
         self.assertTrue(ctx["logo"])
@@ -222,7 +222,7 @@ class TestContext(Base):
         self.assertIn("one coherent, recognisable product", ctx["product"]["judge_tests"][0])
 
     def test_the_real_product_photo_is_attached_as_a_reference(self):
-        _r, ctx, *_ = IP.resolve(self.req(purpose="email-offer", product="widget"),
+        _r, ctx, *_ = IP.resolve(self.req(purpose="email-offer", product="nova"),
                                  library=self.lib)
         self.assertEqual(len(ctx["references"]), 1)
         self.assertTrue(ctx["references"][0].endswith("packshot.png"))
@@ -232,8 +232,8 @@ class TestContext(Base):
         downloads. A purpose made FROM the real photograph refuses it."""
         b = self.root / "brands" / "acme"
         (b / "products" / "images.json").write_text(json.dumps({"products": {
-            "widget": {"title": "The Widget", "cutout": "https://cdn.example/widget.png"}}}))
-        _r, ctx, *_ = IP.resolve(self.req(purpose="email-offer", product="widget"),
+            "nova": {"title": "The Nova", "cutout": "https://cdn.example/nova.png"}}}))
+        _r, ctx, *_ = IP.resolve(self.req(purpose="email-offer", product="nova"),
                                  library=self.lib)
         self.assertEqual(ctx["references"], [])
         fatal = [m for m in ctx["missing"] if m["fatal"]]
@@ -243,8 +243,8 @@ class TestContext(Base):
     def test_the_same_url_is_only_a_note_when_the_photo_is_optional(self):
         b = self.root / "brands" / "acme"
         (b / "products" / "images.json").write_text(json.dumps({"products": {
-            "widget": {"title": "The Widget", "cutout": "https://cdn.example/widget.png"}}}))
-        _r, ctx, *_ = IP.resolve(self.req(product="widget"), library=self.lib)
+            "nova": {"title": "The Nova", "cutout": "https://cdn.example/nova.png"}}}))
+        _r, ctx, *_ = IP.resolve(self.req(product="nova"), library=self.lib)
         self.assertEqual([m for m in ctx["missing"] if m["fatal"]], [])
 
     def test_a_product_the_brand_does_not_declare_is_fatal(self):
@@ -260,7 +260,7 @@ class TestPrompt(Base):
         _r, _c, ad, path_b, *_ = IP.resolve(self.req(purpose="ad"), library=self.lib)
         self.assertEqual(path_a, path_b)
         for text in (hero, ad):
-            self.assertIn("a man holding the widget in a kitchen", text)
+            self.assertIn("a man holding the nova in a kitchen", text)
             self.assertIn("NO INVENTED TEXT", text)
             self.assertIn("THE PRODUCT IS OURS OR IT IS ABSENT", text)
             # the provenance table above the `---` is documentation and is
@@ -396,7 +396,7 @@ class TestGates(Base):
         self.assertEqual((problems, notes), ([], []))
 
     def test_a_purpose_that_has_decided_needs_no_declaration(self):
-        req = self.req(purpose="product-shot", product="widget")
+        req = self.req(purpose="product-shot", product="nova")
         req.pop("people")
         problems = IP.gates.input_problems(
             *IP.resolve(req, library=self.lib)[:2], IP.purposes(), IP.route.aspects())
@@ -486,8 +486,8 @@ class TestJudge(Base):
         self.assertEqual([a["outcome"] for a in row["attempts"]], ["below_criteria", "pass"])
 
     def test_the_product_test_is_the_brands_own_words(self):
-        _r, ctx, *_ = IP.resolve(self.req(product="widget"), library=self.lib)
-        req, ctx2, *_ = IP.resolve(self.req(product="widget"), library=self.lib)
+        _r, ctx, *_ = IP.resolve(self.req(product="nova"), library=self.lib)
+        req, ctx2, *_ = IP.resolve(self.req(product="nova"), library=self.lib)
         tests = IP.judge.tests_for(req, ctx2)
         self.assertTrue(any("squat blue tube" in t for t in tests))
         self.assertTrue(any("never: " in t or "never does" in t for t in tests))
@@ -495,7 +495,7 @@ class TestJudge(Base):
     def test_the_direction_match_test_quotes_the_direction(self):
         req, ctx, *_ = IP.resolve(self.req(), library=self.lib)
         tests = IP.judge.tests_for(req, ctx)
-        self.assertTrue(any("a man holding the widget in a kitchen" in t for t in tests))
+        self.assertTrue(any("a man holding the nova in a kitchen" in t for t in tests))
 
     def test_measured_catches_the_wrong_frame_without_a_model(self):
         try:
@@ -1093,7 +1093,7 @@ class TestRegionEdit(Base):
 
 class TestDryRun(Base):
     def test_it_spends_nothing_and_writes_nothing(self):
-        ok, resolved = IP.dry_run(self.req(product="widget"), library=self.lib)
+        ok, resolved = IP.dry_run(self.req(product="nova"), library=self.lib)
         self.assertIsNotNone(resolved)
         self.assertFalse(self.out.exists(), "the dry run must not create out/")
 
@@ -1104,7 +1104,7 @@ class TestDryRun(Base):
         with contextlib.redirect_stdout(buf):
             IP.dry_run(self.req(), library=self.lib)
         text = buf.getvalue()
-        self.assertIn("a man holding the widget in a kitchen", text)
+        self.assertIn("a man holding the nova in a kitchen", text)
         self.assertIn("routes to", text)
         self.assertIn("where it would land", text)
 

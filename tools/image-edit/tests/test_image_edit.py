@@ -103,13 +103,13 @@ def fake_workspace(tmp):
     (root / "components").mkdir(parents=True, exist_ok=True)
     b = root / "brands" / "acme"
     (b / "identity").mkdir(parents=True, exist_ok=True)
-    (b / "products" / "widget" / "images").mkdir(parents=True, exist_ok=True)
+    (b / "products" / "nova" / "images").mkdir(parents=True, exist_ok=True)
     (b / "identity" / "palette.md").write_text("| Ink | `#112233` |\n")
     (b / "identity" / "fonts.md").write_text("A font.\n")
     (b / "identity" / "acme-logo.png").write_bytes(png_bytes())
     (b / "products" / "images.json").write_text(json.dumps({"products": {
-        "widget": {"title": "The Widget", "cutout": "products/widget/images/packshot.png"}}}))
-    (b / "products" / "widget" / "images" / "packshot.png").write_bytes(png_bytes())
+        "nova": {"title": "The Nova", "cutout": "products/nova/images/packshot.png"}}}))
+    (b / "products" / "nova" / "images" / "packshot.png").write_bytes(png_bytes())
     (b / "ai-elements").mkdir(parents=True, exist_ok=True)
     (b / "ai-elements" / "element-facts.json").write_text(json.dumps({"elements": {}}))
     return root
@@ -383,7 +383,7 @@ class TestEdit(Base):
         self.assertIn("no logo file", r["refused"])
 
     def test_the_product_fix_attaches_the_declared_product_photo(self):
-        r = self.run_edit(fix="product", product="widget", dry_run=True)
+        r = self.run_edit(fix="product", product="nova", dry_run=True)
         self.assertTrue(any(x.endswith("packshot.png") for x in r["engine_request"]["references"]))
 
     def test_versions_count_up_and_never_overwrite(self):
@@ -421,12 +421,12 @@ class TestVary(Base):
 
     def test_a_product_swap_needs_the_product_named(self):
         with self.assertRaises(RE.BadRequest) as cm:
-            self.run_vary([{"id": "product", "args": {"product_name": "Widget"}}])
+            self.run_vary([{"id": "product", "args": {"product_name": "Nova"}}])
         self.assertIn("name `product`", str(cm.exception))
 
     def test_a_product_swap_attaches_the_product_photo(self):
-        s = self.run_vary([{"id": "product", "args": {"product_name": "Widget"}}],
-                          product="widget", dry_run=True)
+        s = self.run_vary([{"id": "product", "args": {"product_name": "Nova"}}],
+                          product="nova", dry_run=True)
         rec = json.loads((self.out / "product" / "edit.json").read_text())
         self.assertTrue(any(x.endswith("packshot.png") for x in rec["engine_request"]["references"]))
 

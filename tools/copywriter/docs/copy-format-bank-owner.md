@@ -24,7 +24,7 @@ Id `copyformat_<brand>_<avatar>_NN` · the source ad (id, Meta name, dates) · n
 
 ## The raw material, pulled 2 Oct from our database (no Meta calls)
 the owner: "if that data has already been pulled, then we can just use that. Same with <brand>." Read from the warehouse's nightly copy of Meta (`meta_ad_insights`, `meta_ads`) with `library/meta_copy.py --brand <b> --from-db`.
-- **<brand>** (1 Jan – 23 Sep 2026, 1,094 ads): 47 picked → 45 distinct primary texts, 40 headlines, 63 distinct videos/images. Biggest: the WIDGET "lowest price ever" founder letter ($58.7K, CPA $38.71, 9 ads) and "your last chance" ($53.2K, CPA $40.55, 11 ads).
+- **<brand>** (1 Jan – 23 Sep 2026, 1,094 ads): 47 picked → 45 distinct primary texts, 40 headlines, 63 distinct videos/images. Biggest: the NOVA "lowest price ever" founder letter ($58.7K, CPA $38.71, 9 ads) and "your last chance" ($53.2K, CPA $40.55, 11 ads).
 - **<brand>** (19 Nov 2024 – 1 Oct 2026, 1,198 ads): 46 picked → 7 distinct primary texts, 26 distinct videos/images. Biggest: "Women are OBSESSED with this viral dark spot hack" ($136.2K, CPA $64.62, 10 ads). 7 ads have no words on file.
 - Near-identical texts (97%+ the same, e.g. one link line changed) are one row; the edits are kept as versions. A flexible ad's numbers count toward every text in it.
 - Meta's stored pictures expire after a few days; each creative links to its Instagram post instead.

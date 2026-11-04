@@ -250,7 +250,7 @@ def lookup(reg, brand, bid, name):
 
 def _same_product(product, low, brand):
     """The folder's product word and the register's are one product when one starts the other (the catalog name and
-    the old handle: widget-face-brush / flex), so a folder matches its brief by brief NUMBER plus brand in either
+    the old handle: nova-face-brush / flex), so a folder matches its brief by brief NUMBER plus brand in either
     spelling (2026-10-28)."""
     m = re.match(re.escape(brand.lower()) + r"[_-](.+?)[_-]brief", low)
     word = m.group(1) if m else ""

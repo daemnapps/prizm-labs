@@ -101,7 +101,7 @@ class StageThree(unittest.TestCase):
         self.assertTrue(SW.validate({**GOOD, "swaps": [{"from": "a", "to": "b", "kind": "cast", "ref": None}]}))
 
     def test_the_kit_is_found_from_the_words_and_listed_unclear_when_none_leads(self):
-        self.assertEqual(SW.kit_from_text("brand-a", "the WIDGET brush head held against his neck"), "widget-face-brush")
+        self.assertEqual(SW.kit_from_text("brand-a", "the NOVA brush head held against his neck"), "nova-face-brush")
         self.assertIsNone(SW.kit_from_text("brand-a", "a bottle in his hand"))
 
     def test_no_record_is_a_plain_problem(self):
@@ -215,7 +215,7 @@ class WhatAMakerTakes(unittest.TestCase):
             pics = SW.pictures_for(run)
             self.assertEqual([p.name for p, _ in pics], ["master.jpg"])
             self.assertIn("Grandma Yai", pics[0][1])
-            self.assertFalse(PIC.product_in_frame_for(run, "text that names WIDGET", "WIDGET"))     # the record says no
+            self.assertFalse(PIC.product_in_frame_for(run, "text that names NOVA", "NOVA"))     # the record says no
 
     def test_without_a_record_the_old_reading_of_the_text_still_answers(self):
         with tempfile.TemporaryDirectory() as d:

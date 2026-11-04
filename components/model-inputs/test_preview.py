@@ -196,9 +196,9 @@ class Ready(unittest.TestCase):
 
     def test_the_product_kit_is_read_from_the_brief_title(self):
         import prompt_bench as PB
-        kits = ["widget-charging-case", "widget-face-brush", "war-face-wash"]
-        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · WIDGET™ Pro Vibrating Face Brush · Bathroom review", kits), "widget-face-brush")
-        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · WIDGET · Neck Detail", kits, {"widget-face-brush": ["widget"]}), "widget-face-brush")
+        kits = ["nova-charging-case", "nova-face-brush", "war-face-wash"]
+        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · NOVA™ Pro Vibrating Face Brush · Bathroom review", kits), "nova-face-brush")
+        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · NOVA · Neck Detail", kits, {"nova-face-brush": ["nova"]}), "nova-face-brush")
         # a short name only counts in the product slot, never in the title
         self.assertEqual(PB._product_of("# BRIEF · BRAND-A · CRUSH · The war on bumps", kits, {"war-face-wash": ["war"]}), "")
 

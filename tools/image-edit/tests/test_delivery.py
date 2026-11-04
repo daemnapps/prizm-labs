@@ -19,7 +19,7 @@ sys.path.append(str(HERE))
 import delivery as DL  # noqa: E402
 
 BRAND = "testbrand"
-KEY = "testbrand_widget_brief-0325"
+KEY = "testbrand_nova_brief-0325"
 
 
 class FakeDrive:
@@ -47,8 +47,8 @@ def register(rows):
 
 
 ROWS = {
-    KEY: {"brief": "brief-0325", "brand": BRAND, "product": "widget", "avatar": "spot-hider", "run": "testbrand-run-325"},
-    "testbrand_widget_brief-0007": {"brief": "brief-0007", "brand": BRAND, "product": "widget", "run": "run-w7"},
+    KEY: {"brief": "brief-0325", "brand": BRAND, "product": "nova", "avatar": "spot-hider", "run": "testbrand-run-325"},
+    "testbrand_nova_brief-0007": {"brief": "brief-0007", "brand": BRAND, "product": "nova", "run": "run-w7"},
     "testbrand_gadget_brief-0007": {"brief": "brief-0007", "brand": BRAND, "product": "gadget", "run": "run-g7"},
     "otherbrand_thing_brief-0400": {"brief": "brief-0400", "brand": "otherbrand", "product": "thing", "run": "run-o"},
 }
@@ -216,12 +216,12 @@ class DeliveryTest(unittest.TestCase):
         self.assertIn("OLD place", DL.say({"roles": [res], "dry_run": False}))
 
     def test_folder_matches_its_brief_by_number_and_brand_in_either_product_spelling(self):
-        reg = register({"testbrand_widget_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "widget"},
+        reg = register({"testbrand_nova_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "nova"},
                         "testbrand_crush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "crush"}})
-        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_widget-face-brush_brief-0076")[:2], ("ok", "testbrand_widget_brief-0076"))
-        reg = register({"testbrand_widget-face-brush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "widget-face-brush"},
+        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_nova-face-brush_brief-0076")[:2], ("ok", "testbrand_nova_brief-0076"))
+        reg = register({"testbrand_nova-face-brush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "nova-face-brush"},
                         "testbrand_crush_brief-0076": {"brief": "brief-0076", "brand": BRAND, "product": "crush"}})
-        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_widget_brief-0076")[:2], ("ok", "testbrand_widget-face-brush_brief-0076"))
+        self.assertEqual(DL.brief_of(reg, BRAND, "testbrand_nova_brief-0076")[:2], ("ok", "testbrand_nova-face-brush_brief-0076"))
 
     def test_a_check_rebuilds_the_hand_off_index(self):
         self.run_check([(f"{KEY}/returned/a.png", "f1")])

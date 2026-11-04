@@ -5,7 +5,7 @@
 > Which model does what: `components/generative-model-house/MODEL-HOUSE.md` (the only rule, 2026-10-20).
 
 Written 2026-09-11, from the first run that went end to end — Competitor-B Labs
-angle 01 → <brand> WIDGET. Every number here is measured on that run, not
+angle 01 → <brand> NOVA. Every number here is measured on that run, not
 estimated. Where something broke, it says so and says what it cost.
 
 This is the **AI route**. A creator brief is a different document for a
@@ -48,7 +48,7 @@ paying to keep alive.
 |---|---|---|
 | **0 Triage** | 33s | Calls the lane. `ALREADY AN AD` skips expansion — the source has hook, proof and offer, so structure is inherited, not rebuilt. |
 | **1 Teardown** | 35s | The source shot by shot: timestamp, visuals, on-screen text, transcript. |
-| **1b Audience** | 15s | Reads the avatar off the source. Came back `fed-up-king` — which is WIDGET's own lane, arrived at independently. |
+| **1b Audience** | 15s | Reads the avatar off the source. Came back `fed-up-king` — which is NOVA's own lane, arrived at independently. |
 | **2 Spec** | 15s | Brand and product stripped out. What remains is the reusable machine: phases, durations, what flexes and what is fixed. |
 
 ## 3 · Inject — stage 3

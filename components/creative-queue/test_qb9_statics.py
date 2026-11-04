@@ -17,7 +17,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.append(str(HERE))
 import statics as S  # noqa: E402
 
-BRIEF = "<!-- prompt -->\n\n# DOCUMENT ONE\n\n# BRIEF · BRAND-A · WIDGET™ Pro Vibrating Face Brush · The warehouse full of WIDGET\n"
+BRIEF = "<!-- prompt -->\n\n# DOCUMENT ONE\n\n# BRIEF · BRAND-A · NOVA™ Pro Vibrating Face Brush · The warehouse full of NOVA\n"
 
 
 class FakeDrive(object):
@@ -51,7 +51,7 @@ class FakeDrive(object):
         return str(dest)
 
 
-def handoff(files_back=(), approved="brand_a_widget-face-brush_brief-0296-approved.png", complete=True):
+def handoff(files_back=(), approved="brand_a_nova-face-brush_brief-0296-approved.png", complete=True):
     top = {"BRIEF.md": BRIEF.encode(), "RUN.md": b"r", "run.json": b"{}", "HANDOFF.md": b"h"}
     dirs = {"00-approved": {"files": {approved: b"PNG", approved.replace("-approved", "-approved-clean"): b"CLEAN",
                                       "swipe.jpg": b"S"}, "dirs": {}},
@@ -77,27 +77,27 @@ class Base(unittest.TestCase):
 
 class Listing(Base):
     def test_complete_rows_and_incomplete_left_out(self):
-        d = drive(brand_a={"brand_a_widget-face-brush_brief-0296": handoff(),
-                          "brand_a_widget-face-brush_brief-0232": handoff(("a.png", "b.jpg", "notes.txt"),
-                                                                       approved="brand_a_widget_brief-0232-approved.png")},
+        d = drive(brand_a={"brand_a_nova-face-brush_brief-0296": handoff(),
+                          "brand_a_nova-face-brush_brief-0232": handoff(("a.png", "b.jpg", "notes.txt"),
+                                                                       approved="brand_a_nova_brief-0232-approved.png")},
                   brand_b={"brand_b_brilliance-face-scrub_brief-0325": handoff(complete=False)})
         got = S.listing(d, self.out)
         self.assertIsNone(got["error"])
         rows = {r["key"]: r for r in got["rows"]}
-        self.assertEqual(sorted(rows), ["brand_a_widget-face-brush_brief-0232", "brand_a_widget-face-brush_brief-0296"])
+        self.assertEqual(sorted(rows), ["brand_a_nova-face-brush_brief-0232", "brand_a_nova-face-brush_brief-0296"])
         self.assertEqual(got["incomplete"], [{"key": "brand_b_brilliance-face-scrub_brief-0325", "brand": "brand-b",
                                               "missing": ["BRIEF.md", "RUN.md", "run.json", "refs/"]}])
-        r = rows["brand_a_widget-face-brush_brief-0296"]
+        r = rows["brand_a_nova-face-brush_brief-0296"]
         self.assertEqual((r["brand"], r["title"], r["returned_files"], r["returned_pictures"], r["done"]),
-                         ("brand-a", "The warehouse full of WIDGET", 0, 0, None))
+                         ("brand-a", "The warehouse full of NOVA", 0, 0, None))
         self.assertEqual(r["drive_url"], S.DRIVE_FOLDER % r["drive_id"])
-        back = rows["brand_a_widget-face-brush_brief-0232"]
+        back = rows["brand_a_nova-face-brush_brief-0232"]
         self.assertEqual((back["returned_files"], back["returned_pictures"]), (3, 2))
-        pic = self.out / "brand-a" / "brand_a_widget-face-brush_brief-0232" / "approved.png"
+        pic = self.out / "brand-a" / "brand_a_nova-face-brush_brief-0232" / "approved.png"
         self.assertEqual(pic.read_bytes(), b"PNG", "the -approved picture, never -approved-clean, by suffix")
 
     def test_the_brief_and_picture_are_fetched_once(self):
-        d = drive(brand_a={"brand_a_widget-face-brush_brief-0296": handoff()})
+        d = drive(brand_a={"brand_a_nova-face-brush_brief-0296": handoff()})
         S.listing(d, self.out)
         n = len(d.gets)
         self.assertEqual(n, 2)
@@ -132,7 +132,7 @@ class Listing(Base):
 
 
 class TheDone(Base):
-    KEY = "brand_a_widget-face-brush_brief-0296"
+    KEY = "brand_a_nova-face-brush_brief-0296"
 
     def run_done(self, d, **kw):
         filed, commits = [], []
@@ -167,7 +167,7 @@ class TheDone(Base):
     def test_one_request_to_pm_only_then_done_json_and_one_commit(self):
         d = drive(brand_a={self.KEY: handoff(("a.png", "b.png", "c.txt"))})
         said, filed, commits = self.run_done(d)
-        self.assertEqual(said, "Sent to the team: The warehouse full of WIDGET, 3 files back.")
+        self.assertEqual(said, "Sent to the team: The warehouse full of NOVA, 3 files back.")
         self.assertEqual(len(filed), 1)
         f = filed[0]
         self.assertEqual((f["reviewers"], f["lane"], f["requested_by"], f["commit"]), (["pm"], "static-done", "designer", False))

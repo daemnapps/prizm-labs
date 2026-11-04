@@ -20,7 +20,7 @@ import statics as S  # noqa: E402
 from test_qb9_statics import FakeDrive  # noqa: E402
 
 VIDEO_BRIEF = "<!-- prompt -->\n\n# Entanglement, 45 s with the pitch — song ad cut\n\n## Sources (all existing)\n"
-KEY = "brand_a_widget-face-brush_brief-0274"
+KEY = "brand_a_nova-face-brush_brief-0274"
 
 
 def video(back=None, complete=True):
@@ -47,18 +47,18 @@ class Base(unittest.TestCase):
 
 class Read(Base):
     def test_rows_titles_and_no_returned_folder_is_empty(self):
-        d = drive(**{KEY: video(), "brand_a_widget-face-brush_brief-0075": video(("cut.mp4", "notes.txt")),
-                     "brand_a_widget-face-brush_brief-0076": video(complete=False)})
+        d = drive(**{KEY: video(), "brand_a_nova-face-brush_brief-0075": video(("cut.mp4", "notes.txt")),
+                     "brand_a_nova-face-brush_brief-0076": video(complete=False)})
         before = copy.deepcopy(d.tree)
         got = S.listing(d, self.out, role="video-editor")
         rows = {r["key"]: r for r in got["rows"]}
-        self.assertEqual(sorted(rows), ["brand_a_widget-face-brush_brief-0075", KEY])
-        self.assertEqual([g["key"] for g in got["incomplete"]], ["brand_a_widget-face-brush_brief-0076"])
+        self.assertEqual(sorted(rows), ["brand_a_nova-face-brush_brief-0075", KEY])
+        self.assertEqual([g["key"] for g in got["incomplete"]], ["brand_a_nova-face-brush_brief-0076"])
         r = rows[KEY]
         self.assertEqual((r["title"], r["returned_files"], r["returned_work"], r["returned_id"], r["picture"]),
                          ("Entanglement, 45 s with the pitch — song ad cut", 0, 0, None, None))
-        self.assertEqual((rows["brand_a_widget-face-brush_brief-0075"]["returned_files"],
-                          rows["brand_a_widget-face-brush_brief-0075"]["returned_work"]), (2, 2), "any file counts for video")
+        self.assertEqual((rows["brand_a_nova-face-brush_brief-0075"]["returned_files"],
+                          rows["brand_a_nova-face-brush_brief-0075"]["returned_work"]), (2, 2), "any file counts for video")
         self.assertEqual(d.tree, before, "nothing is created on Drive: no returned/ folder appears")
         self.assertEqual(d.gets, ["runs/handoffs/video-editor/brand-a/%s/BRIEF.md" % k for k in sorted(rows)],
                          "only the briefs are fetched: no picture for video")
@@ -69,7 +69,7 @@ class Read(Base):
         self.assertIn("graphic-designer", got["error"])
 
     def test_titles(self):
-        self.assertEqual(S.title_of("# DOCUMENT ONE\n\n# BRIEF · BRAND-A · WIDGET · The warehouse\n", "k"), "The warehouse")
+        self.assertEqual(S.title_of("# DOCUMENT ONE\n\n# BRIEF · BRAND-A · NOVA · The warehouse\n", "k"), "The warehouse")
         self.assertEqual(S.title_of("# DOCUMENT ONE — THE BRIEF\n# The fight × pastor barber\n", "k"), "The fight × pastor barber")
         self.assertEqual(S.title_of("no heading here", "k"), "k")
 

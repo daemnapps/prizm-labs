@@ -100,7 +100,7 @@ def split_for(s: dict) -> dict:
 
 # Banked assets that must never be re-described, only referenced.
 ASSETS = {
-    "widget": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
+    "nova": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
     "brush": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
     "device": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
     # A cast member is read from the brand's casting registry, never pinned

@@ -65,7 +65,7 @@ Caption: I am ready sir...🏎️🥇🥽😃 @Cantina #madewithcantina #fyp #br
 0:12–0:15  Cape snapped off. The guy stands up and looks straight into the camera, chin up.
 0:15–0:18  Dap and half-hug. He walks out past the camera.
 0:18–0:21  Barber alone, holding the device. Text: "nobody's neck clears in one cut. / it's one thing. on the part that actually bumps."  @<brand> small in the corner.
-0:21–0:25  Barber holds the device, looking at it. Text: "WIDGET™ — $69.99 / 90 days. If your skin doesn't transform, full refund. You keep the WIDGET™."
+0:21–0:25  Barber holds the device, looking at it. Text: "NOVA™ — $69.99 / 90 days. If your skin doesn't transform, full refund. You keep the NOVA™."
 Caption: (none)
 
 --- POST 4 ---

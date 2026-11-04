@@ -33,11 +33,11 @@ fix the prompt, never the picture.**
 `runs/<brand>/<batch>/batch.json` — what is being made, and what it must pass.
 
 ```json
-{ "brand": "<brand>", "product": "widget", "batch": "260909a",
+{ "brand": "<brand>", "product": "nova", "batch": "260909a",
   "avatar": "fedupking", "lane": "fed-up-king", "problem": "razorbumps",
   "ratio": "9x16", "model": "nano_banana_pro",
   "drive_root": "<the run folder's Drive id — RUN-01 fed-up-king is 10m4iiEGrPQtivHBtINjf_NkUr-OajyWI>",
-  "offer": { "id": "flex-device", "bar_text": "90 days. If your skin doesn't transform, full refund. You keep the WIDGET™." },
+  "offer": { "id": "flex-device", "bar_text": "90 days. If your skin doesn't transform, full refund. You keep the NOVA™." },
   "ads": [ { "slug": "01-void-ray", "cast": "ray", "sub": "forty-year-shaver",
              "angle": "forty-year-shaver", "concept": "specvoid",
              "format": "productvoid", "template": "prompted",
@@ -170,7 +170,7 @@ device. You already have that identity tied in Higgsfield. All you need to do
 is swap the device."*
 
 Any prompt for a format that shows the product carries
-`<<<8fad5612-d46f-4c19-baec-c3a636f22a4e>>>` — the WIDGET Element built from
+`<<<8fad5612-d46f-4c19-baec-c3a636f22a4e>>>` — the NOVA Element built from
 seven real turntable angles. **A device described in a sentence is a device the
 model invents**, and it invented a spoon, a white brush head, a thing with a
 handle, a thing the size of a head. The formats that do not show it —

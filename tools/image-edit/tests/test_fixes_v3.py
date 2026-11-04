@@ -50,13 +50,13 @@ def fake_workspace(tmp):
     (root / "components").mkdir(parents=True, exist_ok=True)
     b = root / "brands" / "acme"
     (b / "identity").mkdir(parents=True, exist_ok=True)
-    (b / "products" / "widget" / "images").mkdir(parents=True, exist_ok=True)
+    (b / "products" / "nova" / "images").mkdir(parents=True, exist_ok=True)
     (b / "identity" / "palette.md").write_text("| Ink | `#112233` |\n")
     (b / "identity" / "fonts.md").write_text("A font.\n")
     (b / "identity" / "acme-logo.png").write_bytes(png_bytes())
     (b / "products" / "images.json").write_text(json.dumps({"products": {
-        "widget": {"title": "The Widget", "cutout": "products/widget/images/packshot.png"}}}))
-    (b / "products" / "widget" / "images" / "packshot.png").write_bytes(png_bytes())
+        "nova": {"title": "The Nova", "cutout": "products/nova/images/packshot.png"}}}))
+    (b / "products" / "nova" / "images" / "packshot.png").write_bytes(png_bytes())
     (b / "ai-elements").mkdir(parents=True, exist_ok=True)
     (b / "ai-elements" / "element-facts.json").write_text(json.dumps({"elements": {}}))
     return root

@@ -203,7 +203,7 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
   </div>
   <blockquote><small>Viewer 2 · why not believe</small>every skin tool says it works but doesn't.</blockquote>
   <blockquote><small>Viewer 3 · why not believe</small>it's an ad, so of course they say it works.</blockquote>
-  <blockquote><small>Viewer 5 · the pitch line</small>If your skin doesn't transform, full refund. You keep the WIDGET.</blockquote>
+  <blockquote><small>Viewer 5 · the pitch line</small>If your skin doesn't transform, full refund. You keep the NOVA.</blockquote>
   <div class="tbl"><table>
     <thead><tr><th>New question to each viewer who stopped</th><th>What a fail does</th></tr></thead>
     <tbody>
@@ -613,7 +613,7 @@ the top-left corner and (1000,1000) is the bottom-right of the whole frame.
 Only list what is actually there. Don&#x27;t guess at things you can&#x27;t see.
 
 Return JSON only:
-{&quot;items&quot;: [{&quot;what&quot;: &quot;face|product|text&quot;, &quot;label&quot;: &quot;&lt;a few words, e.g. &#x27;man&#x27;s face&#x27;, &#x27;WIDGET device&#x27;, &#x27;headline&#x27;&gt;&quot;,
+{&quot;items&quot;: [{&quot;what&quot;: &quot;face|product|text&quot;, &quot;label&quot;: &quot;&lt;a few words, e.g. &#x27;man&#x27;s face&#x27;, &#x27;NOVA device&#x27;, &#x27;headline&#x27;&gt;&quot;,
   &quot;box&quot;: [x_min, y_min, x_max, y_max]}]}
 </pre>
   </div>
@@ -694,7 +694,7 @@ function face(c){return `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="10"
 function buildPhones(sc){
   $("phones").innerHTML=sc.viewers.map((v,i)=>`<div class="phone"><div class="who">${face(FACES[i])}Viewer ${i+1} · ${v.when}</div>
    <div class="screen"><div class="reel" id="reel${i}">${v.feed.map(f=>`<div class="post">“${f}”</div>`).join("")}
-   <div class="post ours"><span class="tag">@<brand> · Sponsored</span><span>${sc===REAL||scenario!=="real"&&sc!==WEAK?"Barber, a neck with real bumps, the WIDGET™":"Text on a white screen: “the secret routine”"}</span><span class="sec" id="sec${i}">0:00</span><div class="wbar"><i id="w${i}"></i></div></div>
+   <div class="post ours"><span class="tag">@<brand> · Sponsored</span><span>${sc===REAL||scenario!=="real"&&sc!==WEAK?"Barber, a neck with real bumps, the NOVA™":"Text on a white screen: “the secret routine”"}</span><span class="sec" id="sec${i}">0:00</span><div class="wbar"><i id="w${i}"></i></div></div>
    <div class="post">…</div><div class="post">…</div></div></div>
    <div class="bubble" id="b${i}"></div></div>`).join("");
 }

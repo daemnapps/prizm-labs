@@ -240,7 +240,7 @@ def build(sc: dict, elems: dict[str, str], place: str = "") -> str:
             parts.append(framing)
     blob = " ".join(str(sc.get(k) or "") for k in
                     ("happens", "product", "who", "camera", "hold"))
-    # "WIDGET Pro Vibrating Face Brush" matched the person test on the word
+    # "NOVA Pro Vibrating Face Brush" matched the person test on the word
     # "face" and a product shot was told to render visible pores.
     blob_np = re.sub(r"\bface (brush|wash)\b", "", blob, flags=re.I)
     has_person = sc["type"] == "A" or (sc["type"] != "C" and bool(PERSON.search(blob_np)))

@@ -162,7 +162,7 @@ def query_for(s: dict) -> tuple[str, str]:
 
 
 def required_of(s: dict, cast_names=()) -> list[str]:
-    """Named things the shot shows — a product (WIDGET™, PRIME™), written in
+    """Named things the shot shows — a product (NOVA™, PRIME™), written in
     capitals or carrying ™/®. A clip without them cannot be cut in for the
     shot: a real hand holding some other bottle is not this product."""
     seen, _ = query_for(s)

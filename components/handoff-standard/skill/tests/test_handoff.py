@@ -289,28 +289,28 @@ class CatalogShapeTests(unittest.TestCase):
         try:
             f = tmp / "catalog.json"
             f.write_text(json.dumps({"meta": {}, "brands": {brand: {
-                "products": [{"id": f"product_{brand}_widget", "status": "on-sale"}],
-                "bundles": [{"id": f"bundle_{brand}_widget-3-pack", "status": "on-sale"}],
+                "products": [{"id": f"product_{brand}_nova", "status": "on-sale"}],
+                "bundles": [{"id": f"bundle_{brand}_nova-3-pack", "status": "on-sale"}],
                 "parts": [{"id": f"gift_{brand}_free-bag", "kind": "gift"}],
-                "offers": [{"ids": [f"offer_{brand}_widget-buy-2", f"offer_{brand}_widget-buy-2-refill"], "status": "live"}],
+                "offers": [{"ids": [f"offer_{brand}_nova-buy-2", f"offer_{brand}_nova-buy-2-refill"], "status": "live"}],
                 "placements": [{"id": f"link_{brand}_shop_landing", "url": "https://shop.example.test/"},
                                {"id": f"placement_{brand}_shop_landing_main-1"}],
-                "old_names": [{"old": "wdgt · Widget™ · the-widget", "layer": "product", "new": f"product_{brand}_widget"}],
+                "old_names": [{"old": "wdgt · Nova™ · the-nova", "layer": "product", "new": f"product_{brand}_nova"}],
             }, "otherbrand": {"products": [{"id": "product_otherbrand_x"}]}}}))
             c = H.Catalog(f, brand)
             self.assertEqual(c.shape, "A")
-            self.assertEqual(c.resolve("widget", "product"), f"product_{brand}_widget")
-            self.assertEqual(c.resolve("Widget™", "product"), f"product_{brand}_widget")
-            self.assertEqual(c.resolve("widget-3-pack", "product"), f"bundle_{brand}_widget-3-pack")
-            self.assertEqual(c.resolve(f"offer_{brand}_widget-buy-2-refill", "offer"), f"offer_{brand}_widget-buy-2-refill")
-            self.assertEqual(c.resolve("widget-buy-2", "offer"), f"offer_{brand}_widget-buy-2")
+            self.assertEqual(c.resolve("nova", "product"), f"product_{brand}_nova")
+            self.assertEqual(c.resolve("Nova™", "product"), f"product_{brand}_nova")
+            self.assertEqual(c.resolve("nova-3-pack", "product"), f"bundle_{brand}_nova-3-pack")
+            self.assertEqual(c.resolve(f"offer_{brand}_nova-buy-2-refill", "offer"), f"offer_{brand}_nova-buy-2-refill")
+            self.assertEqual(c.resolve("nova-buy-2", "offer"), f"offer_{brand}_nova-buy-2")
             self.assertEqual(c.resolve(f"link_{brand}_shop_landing", "link"), f"link_{brand}_shop_landing")
             self.assertEqual(c.url(f"link_{brand}_shop_landing"), "https://shop.example.test/")
             self.assertEqual(c.resolve("free-bag", "part"), f"gift_{brand}_free-bag")
             self.assertIsNone(c.resolve("product_otherbrand_x", "product"))
-            self.assertIsNone(c.resolve(f"product_{brand}_widget", "offer"), "a product id is not an offer id")
+            self.assertIsNone(c.resolve(f"product_{brand}_nova", "offer"), "a product id is not an offer id")
             self.assertIsNone(c.resolve("not-recorded", "offer"))
-            self.assertEqual(c.status(f"offer_{brand}_widget-buy-2"), "live")
+            self.assertEqual(c.status(f"offer_{brand}_nova-buy-2"), "live")
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 
@@ -325,7 +325,7 @@ class CatalogShapeTests(unittest.TestCase):
         old 13-part name beside it, and its pictures are copied under the short name."""
         tmp = Path(tempfile.mkdtemp(prefix="handoff-ads-"))
         try:
-            old = "acme-widget-static-ai-none-avatar-problem-angle-concept-format-p154-9x16-260923a"
+            old = "acme-nova-static-ai-none-avatar-problem-angle-concept-format-p154-9x16-260923a"
             folder = tmp / old
             folder.mkdir()
             (folder / f"{old}-a01.png").write_bytes(b"\x89PNG fake")
@@ -333,10 +333,10 @@ class CatalogShapeTests(unittest.TestCase):
             ad = {"ad_name": old, "batch_id": "batch-2026-09-23-a", "folder": str(folder),
                   "pictures": [f"{old}-a01.png", f"{old}-a02.png"]}
             g = {"brand": "acme", "extra": {}, "briefs": [{
-                "id": "brief-0154", "product_id": "product_acme_widget",
+                "id": "brief-0154", "product_id": "product_acme_nova",
                 "link_ids": ["link_acme_cpk_quiz", "link_acme_cpk_landing"], "ads": [ad]}]}
             plan = H.plan_assets(g)
-            unit = "acme_widget_brief-0154_batch-2026-09-23-a"
+            unit = "acme_nova_brief-0154_batch-2026-09-23-a"
             self.assertEqual(ad["short"], unit)
             self.assertEqual([m["meta_ad_name"] for m in ad["meta_names"]], [f"{unit}_cpk-quiz", f"{unit}_cpk-landing"])
             self.assertEqual([d for d, _ in plan], [f"ads/{unit}/{unit}_asset-01.png", f"ads/{unit}/{unit}_asset-02.png"])

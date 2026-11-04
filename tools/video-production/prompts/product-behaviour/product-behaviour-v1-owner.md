@@ -3,7 +3,7 @@
 the owner, 2026-10-07: "Every time that we pull in a product, we need to apply that
 product's physics as well. Just like we create its dimensions and its weight …
 we also need to do the same for the way that the product actually functions."
-A picture that shows the product doing something it physically cannot do (WIDGET
+A picture that shows the product doing something it physically cannot do (NOVA
 stood upright on a table — it has a domed base and rolls over) is a wasted
 generation. This record is read by every picture the product appears in.
 

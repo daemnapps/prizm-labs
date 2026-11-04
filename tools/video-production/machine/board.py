@@ -198,7 +198,7 @@ def change_box(row: dict, kind: str) -> str:
       <span class="slot">what needs changing &mdash; plain words</span>
       <textarea class="fx" data-id="{e(row['id'])}" data-kind="{kind}"
         data-k="change" rows="2"
-        placeholder="e.g. the WIDGET is standing up, it has a rounded bottom">{e(row.get('change'))}</textarea>
+        placeholder="e.g. the NOVA is standing up, it has a rounded bottom">{e(row.get('change'))}</textarea>
       <div class="acts">
         <button class="go regen" data-id="{e(row['id'])}" data-kind="{kind}">Regenerate with this note</button>
       </div>
@@ -502,7 +502,7 @@ def kit_html(d: dict) -> str:
     """The product kit: which elements exist, what is true of each, which
     shots use it, and which are blocked and why.
 
-    This panel exists because the WIDGET was wrong in three different ways
+    This panel exists because the NOVA was wrong in three different ways
     across three shots and there was nowhere on the board to SEE which
     element was attached. A control surface that hides the inputs is not one.
     """

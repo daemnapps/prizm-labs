@@ -175,7 +175,7 @@ def products_of(lk):
 
 def product_key(brand, folder):
     """The product the brand declares for a picture's Drive folder name. The look names product pictures by their
-    Drive folder (widget-face-brush) and the brand may declare the product under a shorter key (flex): read
+    Drive folder (nova-face-brush) and the brand may declare the product under a shorter key (flex): read
     products/images.json's drive_folder, so the image engine is handed a product it knows (the team, 2026-10-22).
     A folder no product claims is returned as it is."""
     try:

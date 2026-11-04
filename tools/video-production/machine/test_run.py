@@ -515,7 +515,7 @@ class Pack(TempRuns):
             }
         })
         run.write_json(r / "brief.json", {
-            "brand": "_fixture", "product": "widget", "problem": "dry-skin",
+            "brand": "_fixture", "product": "nova", "problem": "dry-skin",
             "angle": "testimonial", "concept": "beforeafter", "avatar": "lead",
             "format": "fixture-format", "talent": "lead", "source": "ai",
             "ratio": "9x16", "brief": "none"})

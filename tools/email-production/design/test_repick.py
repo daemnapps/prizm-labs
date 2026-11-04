@@ -34,8 +34,8 @@ except ImportError:
     sys.modules["PIL"] = PIL
 import repick as RP  # noqa: E402
 
-CASE = "drive:brands/b/products/widget-charging-case/lifestyle/x_mirror.jpg"
-FOAM = "drive:brands/b/products/widget-face-brush/lifestyle/x_in-hand-foam.jpg"
+CASE = "drive:brands/b/products/nova-charging-case/lifestyle/x_mirror.jpg"
+FOAM = "drive:brands/b/products/nova-face-brush/lifestyle/x_in-hand-foam.jpg"
 WASH = "drive:brands/b/products/war-face-wash/lifestyle/x_in-hand-with-flex.jpg"
 
 
@@ -45,11 +45,11 @@ def email():
         {"s": "hero_type", "eyebrow": "SAVE THIS", "headline": "That's not acne on your <i>jaw</i>",
          "picture": {"photo": "run:media/hero.png", "alt": "the chart", "source": "made"}},
         {"s": "photo_card", "title": "THE CHECK", "text": "You can check it on your own jaw tonight.",
-         "picture": {"photo": CASE, "ratio": 0.8, "focus": [0.5, 0.3], "alt": "WIDGET in its case on the shelf", "source": "photo"}},
+         "picture": {"photo": CASE, "ratio": 0.8, "focus": [0.5, 0.3], "alt": "NOVA in its case on the shelf", "source": "photo"}},
         {"s": "example", "picture": {"proof": "p-andrew", "alt": "Andrew"}, "quote": "My hair grows in curly", "who": "Andrew", "ask": "a"},
         {"s": "tiles", "title": "Two bumps. Two answers.", "tiles": [
             {"picture": {"stage": "product:crush", "alt": "tube", "source": "cut"}, "name": "CRUSH", "line": "The jaw"},
-            {"picture": {"photo": FOAM, "alt": "brush", "source": "photo"}, "name": "WIDGET", "line": "WAR goes on with this"}]},
+            {"picture": {"photo": FOAM, "alt": "brush", "source": "photo"}, "name": "NOVA", "line": "WAR goes on with this"}]},
         {"s": "picture", "picture": {"todo": "a razor", "alt": "a razor"}},
         {"s": "foot"}]}
 
@@ -80,11 +80,11 @@ class Repick(unittest.TestCase):
         before = copy.deepcopy(words(spec))
         sl = RP.slots(spec)
         changed = RP.apply(sl, {"slots": [{"n": 1, "photo": WASH, "why": "the case is sold separately"},
-                                          {"n": 2, "todo": "WIDGET in a hand, WAR on it", "brief": "real WIDGET", "why": "x"}]}, {})
+                                          {"n": 2, "todo": "NOVA in a hand, WAR on it", "brief": "real NOVA", "why": "x"}]}, {})
         self.assertEqual(words(spec), before)
         card = spec["sections"][2]["picture"]
         self.assertEqual(card, {"photo": WASH, "ratio": 0.8, "focus": [0.5, 0.3], "source": "photo"})
-        self.assertEqual(spec["sections"][4]["tiles"][1]["picture"]["todo"], "WIDGET in a hand, WAR on it")
+        self.assertEqual(spec["sections"][4]["tiles"][1]["picture"]["todo"], "NOVA in a hand, WAR on it")
         self.assertEqual([c["from"] for c in changed], [CASE, FOAM])
         self.assertEqual(spec["sections"][1]["picture"]["photo"], "run:media/hero.png")
         self.assertEqual(spec["sections"][3]["picture"]["proof"], "p-andrew")

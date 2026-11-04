@@ -98,45 +98,45 @@ class NextId(TempRegister):
         return self.put(reg)
 
     def test_each_product_counts_from_its_own_highest(self):
-        reg = self.put_products([("p001", "brand-a", "widget"), ("p002", "brand-a", "widget"),
+        reg = self.put_products([("p001", "brand-a", "nova"), ("p002", "brand-a", "nova"),
                                  ("p003", "brand-a", "brush"), ("p140", "brand-b", "scrub")])
         for kind in B.TYPES:
-            self.assertEqual(B.next_id(reg, "brand-a", kind, "widget"), "brief-0003", kind)
+            self.assertEqual(B.next_id(reg, "brand-a", kind, "nova"), "brief-0003", kind)
         self.assertEqual(B.next_id(reg, "brand-a", None, "brush"), "brief-0004")
         self.assertEqual(B.next_id(reg, "brand-b", "video-creator", "scrub"), "brief-0141")
         self.assertEqual(set(B.TYPES) >= {"image-ai", "video-ai", "email", "page", "copy",
                                           "concept", "sequence-ai"}, True)
 
     def test_a_new_product_or_brand_starts_at_one(self):
-        reg = self.put_products([("p001", "brand-a", "widget"), ("p140", "brand-b", "scrub")])
+        reg = self.put_products([("p001", "brand-a", "nova"), ("p140", "brand-b", "scrub")])
         self.assertEqual(B.next_id(reg, "brand-a", None, "crush"), "brief-0001")
-        self.assertEqual(B.next_id(reg, "brand-b", None, "widget"), "brief-0001")   # brands never share
+        self.assertEqual(B.next_id(reg, "brand-b", None, "nova"), "brief-0001")   # brands never share
         self.assertEqual(B.next_id(reg, "brand-c", None, "anything"), "brief-0001")
         self.assertNotIn("brand-c", reg["blocks"])                               # no more hundreds
 
     def test_old_briefs_with_no_product_do_not_block_a_product(self):
         reg = self.put_products([("p001", "brand-a", None), ("p002", "brand-a", None),
-                                 ("p005", "brand-a", "widget")])
-        self.assertEqual(B.next_id(reg, "brand-a", None, "widget"), "brief-0006")
+                                 ("p005", "brand-a", "nova")])
+        self.assertEqual(B.next_id(reg, "brand-a", None, "nova"), "brief-0006")
         self.assertEqual(B.next_id(reg, "brand-a", None, "crush"), "brief-0001")
         self.assertEqual(B.next_id(reg, "brand-a"), "brief-0003")      # the brand's product-less briefs
 
     def test_unknown_type_is_refused(self):
         reg = self.put(fresh(p001="brand-a"))
         with self.assertRaises(SystemExit):
-            B.next_id(reg, "brand-a", "poster", "widget")
+            B.next_id(reg, "brand-a", "poster", "nova")
 
     def test_retired_numbers_stay_taken_in_their_product(self):
-        reg = self.put_products([(f"p{n:03d}", "brand-a", "widget") for n in range(1, 11)],
-                                retired={"p011": {"brand": "brand-a", "product": "widget", "why": "test"}})
-        self.assertEqual(B.next_id(reg, "brand-a", None, "widget"), "brief-0012")    # p011 retired
+        reg = self.put_products([(f"p{n:03d}", "brand-a", "nova") for n in range(1, 11)],
+                                retired={"p011": {"brand": "brand-a", "product": "nova", "why": "test"}})
+        self.assertEqual(B.next_id(reg, "brand-a", None, "nova"), "brief-0012")    # p011 retired
 
     def test_a_new_per_product_brief_counts_and_never_reissues(self):
-        reg = self.put_products([("p001", "brand-a", "widget")])
+        reg = self.put_products([("p001", "brand-a", "nova")])
         dict.__setitem__(reg["briefs"], "brand-a_crush_brief-0001",
                          {"brand": "brand-a", "product": "crush", "brief": "brief-0001"})
         self.assertEqual(B.next_id(reg, "brand-a", None, "crush"), "brief-0002")
-        self.assertEqual(B.next_id(reg, "brand-a", None, "widget"), "brief-0002")
+        self.assertEqual(B.next_id(reg, "brand-a", None, "nova"), "brief-0002")
 
 
 
@@ -144,7 +144,7 @@ class PerProductKeys(TempRegister):
     def reg(self):
         reg = self.put({"briefs": {
             "p001": {"id": "p001", "brief": "brief-0001", "brand": "brand-a", "product": None},
-            "p005": {"id": "p005", "brief": "brief-0005", "brand": "brand-a", "product": "widget"},
+            "p005": {"id": "p005", "brief": "brief-0005", "brand": "brand-a", "product": "nova"},
             "p140": {"id": "p140", "brief": "brief-0140", "brand": "brand-b", "product": "scrub"},
             "brand-a_crush_brief-0001": {"id": "brand-a_crush_brief-0001", "brief": "brief-0001",
                                          "brand": "brand-a", "product": "crush"}}})
@@ -168,7 +168,7 @@ class PerProductKeys(TempRegister):
     def test_the_product_picks_between_briefs_sharing_a_number(self):
         reg = self.reg()
         self.assertEqual(B.get(reg, "brief-0001", "brand-a", "crush")[0], "brand-a_crush_brief-0001")
-        self.assertEqual(B.get(reg, "p001", "brand-a", "widget")[0], "p001")       # no flex 0001: the old one
+        self.assertEqual(B.get(reg, "p001", "brand-a", "nova")[0], "p001")       # no flex 0001: the old one
 
     def test_brand_and_number_alone_is_refused_when_shared(self):
         reg = self.reg()
@@ -214,12 +214,12 @@ class Stamp(TempRegister):
         (runs / "brand-a" / "r1" / "source.json").write_text("{}")
         real_runs, B.RUNS = B.RUNS, runs
         try:
-            bid, rec = B.open_brief("r1", "brand-a", reg, product="widget", kind="video-ai")
+            bid, rec = B.open_brief("r1", "brand-a", reg, product="nova", kind="video-ai")
         finally:
             B.RUNS = real_runs
         # numbers count per brand AND product (2026-10-01): the old p001 has no
-        # product, so WIDGET starts at 1 — keyed by all three, never p001
-        self.assertEqual(bid, "brand-a_widget_brief-0001")
+        # product, so NOVA starts at 1 — keyed by all three, never p001
+        self.assertEqual(bid, "brand-a_nova_brief-0001")
         self.assertEqual((rec["id"], rec["brief"], rec["type"]), (bid, "brief-0001", "video-ai"))
         self.assertIs(reg["briefs"][bid], rec)
         self.assertIsNot(reg["briefs"]["brief-0001"], rec)
@@ -242,16 +242,16 @@ class AngleAtNumbering(TempRegister):
         import angle_pick as AP
         with mock.patch.object(N, "register_file", return_value=B.REGISTER), \
                 mock.patch.object(AP, "auto", return_value=None) as auto:
-            bid, _ = B.open_brief("r1", "brand-a", reg, product="widget")
-            B.open_brief("r1", "brand-a", B.load(), product="widget")        # the same run: no second read
-        auto.assert_called_once_with("brand-a", bid, "widget")
+            bid, _ = B.open_brief("r1", "brand-a", reg, product="nova")
+            B.open_brief("r1", "brand-a", B.load(), product="nova")        # the same run: no second read
+        auto.assert_called_once_with("brand-a", bid, "nova")
 
     def test_a_scratch_register_never_calls_a_model(self):
         reg = self.put(fresh(p001="brand-a"))
         self.make_run()
         import angle_pick as AP
         with mock.patch.object(AP, "auto") as auto:
-            B.open_brief("r1", "brand-a", reg, product="widget")
+            B.open_brief("r1", "brand-a", reg, product="nova")
         auto.assert_not_called()
 
     def test_the_angle_lands_on_the_callers_copy(self):
@@ -265,7 +265,7 @@ class AngleAtNumbering(TempRegister):
             B.save(r)
             return {"angle": "never-the-tool"}
         with mock.patch.object(N, "register_file", return_value=B.REGISTER), mock.patch.object(AP, "auto", picked):
-            bid, rec = B.open_brief("r1", "brand-a", reg, product="widget")
+            bid, rec = B.open_brief("r1", "brand-a", reg, product="nova")
         self.assertIs(reg["briefs"][bid], rec)
         self.assertEqual((rec["angle"], rec["angle_state"]), ("never-the-tool", "picked"))
 
@@ -324,7 +324,7 @@ class RealRegister(unittest.TestCase):
             return f"brief-{max(n) + 1:04d}"
         self.assertEqual(B.next_id(reg, "brand-b", None, "brilliance-face-scrub"), next_of("brand-b", "brilliance-face-scrub"))
         self.assertEqual(B.next_id(reg, "brand-b", None, "a-product-not-made-yet"), "brief-0001")
-        self.assertEqual(B.next_id(reg, "brand-a", None, "widget"), next_of("brand-a", "widget"))
+        self.assertEqual(B.next_id(reg, "brand-a", None, "nova"), next_of("brand-a", "nova"))
 
     def test_cli_check_prints_the_count(self):
         out = io.StringIO()
@@ -339,7 +339,7 @@ class Landing(TempRegister):
     brief that already has links keeps them; a failed pick never stops a brief."""
     def test_a_brief_with_no_page_gets_one(self):
         reg = fresh(p003="brand-a")
-        reg["briefs"]["p003"]["product"] = "widget"
+        reg["briefs"]["p003"]["product"] = "nova"
         self.put(reg)
         import page_pick as PP
         lp = {"link_ids": ["link_brand-a_cpk_quiz"], "why": "the main live page"}

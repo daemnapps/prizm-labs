@@ -28,7 +28,7 @@ print(json.dumps([{"i": i, "keep": True, "exit": "none", "use": ["result"], "top
                    "ad_use": "proof", "names": [], "cut": ""} for i in rows]))
 """
 
-CSV = """Timestamp,Email Address,What do you like most about the WIDGET?,Leave any other comments.
+CSV = """Timestamp,Email Address,What do you like most about the NOVA?,Leave any other comments.
 4/9/2023 11:06:24,old@x.com,Old answer that is already in,none
 9/20/2026 10:00:00,a@x.com,It cleared my razor bumps in a week,N/A
 9/25/2026 10:25:58,b@x.com,Feels like a barber did it,Keep it up
@@ -74,8 +74,8 @@ class Surveys(unittest.TestCase):
         self.assertEqual(r["item"], S.rows_from_csv(CSV, self.SV, "b", "B", "x", since="2026-08-25")[0][0]["item"])
 
     def test_question_reuses_the_banks_number(self):
-        q = S.question_ids(["What do you like most about the WIDGET?"], {"what-do-you-like-most-about-the-widget": "q-07_what-do-you-like-most-about-the-widget"})
-        self.assertEqual(q[0], "q-07_what-do-you-like-most-about-the-widget")
+        q = S.question_ids(["What do you like most about the NOVA?"], {"what-do-you-like-most-about-the-nova": "q-07_what-do-you-like-most-about-the-nova"})
+        self.assertEqual(q[0], "q-07_what-do-you-like-most-about-the-nova")
         self.assertEqual(S.question_ids(["Brand new?"], {"x": "q-03_x"})[0], "q-04_brand-new")
 
     def test_cursor_is_a_timestamp(self):
@@ -108,7 +108,7 @@ class Surveys(unittest.TestCase):
 
 
 JUNIP = [{"id": 11, "rating": 5, "title": "Wow", "body": "My bumps are gone", "created_at": "2026-09-01T10:00:00Z",
-          "verified_buyer": True, "target_title": "WIDGET - Black"},
+          "verified_buyer": True, "target_title": "NOVA - Black"},
          {"id": 12, "rating": 2, "title": "Meh", "body": "", "created_at": "2026-09-02T10:00:00Z",
           "verified_buyer": False, "target_title": "WAR"},
          {"id": 10, "rating": 5, "title": "", "body": "Old one", "created_at": "2026-06-01T10:00:00Z", "verified_buyer": True}]

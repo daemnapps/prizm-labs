@@ -16,10 +16,10 @@ class SetPlan(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         M.REPO, self.was = self.tmp, M.REPO
-        self.folder = self.tmp / "runs/handoffs/graphic-designer/acme/acme_widget_brief-0001"
+        self.folder = self.tmp / "runs/handoffs/graphic-designer/acme/acme_nova_brief-0001"
         (self.folder / "refs").mkdir(parents=True)
         (self.folder / "refs/kept.png").write_text("x")
-        self.step = {"n": 2, "asset": "acme_widget_brief-0001_asset-02.png", "what": "variation v1", "job": "set-change",
+        self.step = {"n": 2, "asset": "acme_nova_brief-0001_asset-02.png", "what": "variation v1", "job": "set-change",
                      "medium": "image", "prompt": "Print this.", "higgsfield_model": None, "words_on_top": [],
                      "references": [{"n": 1, "kind": "image", "local": "refs/kept.png", "file": "x", "exists": True}],
                      "set_request": {"set": "one--v1", "change": "a bigger sign", "credits": 2.5, "steps": ["Copy it."], "flags": []}}

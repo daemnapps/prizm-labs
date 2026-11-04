@@ -147,7 +147,7 @@ def title_of(text, key):
 
 
 def brand_of(key):
-    """The key's brand, the part before its first "_" (brand_a_widget-face-brush_brief-0296 → brand-a)."""
+    """The key's brand, the part before its first "_" (brand_a_nova-face-brush_brief-0296 → brand-a)."""
     return key.split("_", 1)[0]
 
 

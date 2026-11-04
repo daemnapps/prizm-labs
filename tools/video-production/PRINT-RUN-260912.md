@@ -8,8 +8,8 @@ Delivered to Drive:
 
 | File | Length | What it is |
 |---|---|---|
-| `NINA-WIDGET-90s.mp4` | 91.2s | generated presenter, 7 A-roll takes, 9 owned cutaways over them |
-| `MIA-WIDGET-85s.mp4` | 84.5s | real contracted esthetician, 9 segments of delivered footage |
+| `NINA-NOVA-90s.mp4` | 91.2s | generated presenter, 7 A-roll takes, 9 owned cutaways over them |
+| `MIA-NOVA-85s.mp4` | 84.5s | real contracted esthetician, 9 segments of delivered footage |
 | `a-roll/A1–A7-vo.mp4` | — | the seven revoiced A-roll takes on their own |
 | `b-roll/C1–C9.mp4` + `manifest.json` | — | the nine cutaways as standalone clips |
 
@@ -41,9 +41,9 @@ Notated under the take each one covers, with the second it lands on.
 | A2 |  7.4s | 3.0s | 3D cross-section, the follicle — nothing gets down where the hair is | Content Starter Pack |
 | A3 |  4.4s | 3.0s | a real man works at his own neck and beard line | Transformation Ads |
 | A4 |  5.4s | 3.0s | harsh product pumped into a palm | Authority Figures |
-| A5 |  8.4s | 3.4s | **the real <brand> lineup and the WIDGET box** — real wordmarks | Authority Figures |
-| A6 |  2.4s | 3.0s | **hands holding the real WIDGET** | Authority Figures |
-| A6 |  8.2s | 3.2s | the WIDGET working on a real jawline in the chair | Authority Figures |
+| A5 |  8.4s | 3.4s | **the real <brand> lineup and the NOVA box** — real wordmarks | Authority Figures |
+| A6 |  2.4s | 3.0s | **hands holding the real NOVA** | Authority Figures |
+| A6 |  8.2s | 3.2s | the NOVA working on a real jawline in the chair | Authority Figures |
 | A6 | 13.0s | 2.6s | bristles macro and the follicle diagram | Authority Figures |
 | A6 | 15.6s | 2.6s | arrows driving down into the pore — "deeper" | Content Starter Pack |
 | A7 |  3.4s | 3.2s | the payoff — drying a clear face and neck | Main/Devonte |
@@ -67,7 +67,7 @@ order, and it cost nothing.
 | M3 |  6.5s | "my name is Mia Milano, a commercial print model turned licensed esthetician" |
 | M4 |  4.7s | "the root cause of acne and ingrown hairs is testosterone" |
 | M5 | 10.3s | the mechanism — excess oil plus dead skin clogs the pore |
-| M6 | 15.4s | the WIDGET — silicone bristles and sonic vibrations, what they do |
+| M6 | 15.4s | the NOVA — silicone bristles and sonic vibrations, what they do |
 | M7 |  7.5s | the price anchor — "a one hour session with me starts at 125 an hour" |
 | M8 |  6.5s | the guarantee — "get a full refund, no questions asked" |
 | M9 |  8.8s | the offer and the CTA |
@@ -86,7 +86,7 @@ looking at the actual frame.
 | Rejected | Why |
 |---|---|
 | "Close-up of a player's neck showing large dark bumps" | **NBA broadcast footage.** Not ours, not licensable. |
-| A real WIDGET box in real hands | a screen-recorded repost with someone else's caption and the platform UI burnt in |
+| A real NOVA box in real hands | a screen-recorded repost with someone else's caption and the platform UI burnt in |
 | A man holding the device, talking | mid-word. Under a voiceover a speaking mouth reads as a muted talking head. |
 | Every one of Mia's 28 clips | a `RECORDED ON BIGVU` teleprompter badge, bottom right — cropped out, not blurred |
 

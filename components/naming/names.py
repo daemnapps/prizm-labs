@@ -618,12 +618,12 @@ def parse_short(s):
 
 # ------------------------------------------------------- one product id ---
 # 2026-10-28: a product
-# has ONE name across the system — its full catalog id (`widget-face-brush`), the
+# has ONE name across the system — its full catalog id (`nova-face-brush`), the
 # name its kit folder (runs/ai-elements/<brand>/products/<id>/), its Drive
 # folder and the hand-offs already use; a bundle is its Drive id. The short
-# store handles (`widget`) are ALIASES: every lookup resolves through
-# product_id(), so a brief keyed `<brand>_widget_brief-0076` and one keyed
-# `<brand>_widget-face-brush_brief-0076` are the same brief. Nothing already made
+# store handles (`nova`) are ALIASES: every lookup resolves through
+# product_id(), so a brief keyed `<brand>_nova_brief-0076` and one keyed
+# `<brand>_nova-face-brush_brief-0076` are the same brief. Nothing already made
 # or live is renamed. Built from each kit's kit.json "aliases", the brand's
 # Drive index product ids (brands/ is READ here, never written) and the small
 # explicit table product-aliases.json beside this file. A name in none of them
@@ -675,8 +675,8 @@ def _product_table(brand, root=None):
 
 
 def _product_token(brand, name):
-    """Any spelling of a product -> its bare slug: `acme/widget`, `product_acme_widget-face-brush`,
-    `bundle_acme_starter-set`, a card path `brands/<b>/products/widget.md` or `…/<slug>/product.md`, `WIDGET`."""
+    """Any spelling of a product -> its bare slug: `acme/nova`, `product_acme_nova-face-brush`,
+    `bundle_acme_starter-set`, a card path `brands/<b>/products/nova.md` or `…/<slug>/product.md`, `NOVA`."""
     t = str(name).strip()
     if "/" in t:
         p = Path(t)
@@ -690,7 +690,7 @@ def _product_token(brand, name):
 def product_id(brand, any_name, root=None):
     """The ONE product id — the catalog id — from any name the system uses for it.
 
-    `widget` -> `widget-face-brush`; `widget-face-brush` -> `widget-face-brush`; `the-starter-set` -> `starter-set`.
+    `nova` -> `nova-face-brush`; `nova-face-brush` -> `nova-face-brush`; `the-starter-set` -> `starter-set`.
     None, "" and "none" -> None. A name no kit, Drive index or alias table knows passes through slugged and
     unchanged (a test brand, a product not catalogued yet) — never guessed. `root` is the workspace (tests)."""
     if name_is_empty(any_name):
@@ -724,7 +724,7 @@ def product_ids(brand, root=None):
 
 def brief_key_forms(k):
     """Every spelling of one per-product brief key, the canonical (catalog id) one first:
-    `acme_widget_brief-0076` -> [`acme_widget-face-brush_brief-0076`, `acme_widget_brief-0076`].
+    `acme_nova_brief-0076` -> [`acme_nova-face-brush_brief-0076`, `acme_nova_brief-0076`].
     [] for anything that is not a per-product key. A register is looked up under each in turn."""
     q = BRIEF_KEY.match(str(k or "").strip().lower())
     if not q:
@@ -736,7 +736,7 @@ def brief_key_forms(k):
 
 
 def catalog_key(k):
-    """The catalog form of a per-product brief key, `acme_widget_brief-0076` -> `acme_widget-face-brush_brief-0076`;
+    """The catalog form of a per-product brief key, `acme_nova_brief-0076` -> `acme_nova-face-brush_brief-0076`;
     anything else (an old `p076`, a brief-NNNN) comes back as given. A NEW run, hand-off or delivery folder is named
     with it (2026-10-28: the catalog id wins, store handles are aliases); readers take every form (brief_key_forms)."""
     f = brief_key_forms(k)
@@ -771,13 +771,13 @@ def brief_key(brand, product, brief):
     """`<brand>_<product>_brief-NNNN` — how the register keys a brief numbered
     per brand+product. No product is written `none`, never left blank. The
     product is written as its catalog id (product_id, 2026-10-28): a store
-    handle handed in (`widget`) keys the brief `widget-face-brush`."""
+    handle handed in (`nova`) keys the brief `nova-face-brush`."""
     return SEP.join([slug(brand), product_id(brand, product) or "none", brief_id(brief)])
 
 
 def parse_brief_key(k, raw=False):
     """(brand, product, brief-NNNN) or None. The product comes back as its
-    catalog id, so `acme_widget_brief-0076` and `acme_widget-face-brush_brief-0076`
+    catalog id, so `acme_nova_brief-0076` and `acme_nova-face-brush_brief-0076`
     parse alike; `raw=True` gives the token as written in the key."""
     q = BRIEF_KEY.match(str(k or "").strip().lower())
     if not q:

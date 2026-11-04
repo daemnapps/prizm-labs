@@ -140,11 +140,11 @@ def _product_of(brief_md, kits, aliases=None):
     """The product kit the brief names in its title line, if any."""
     head = next((l for l in brief_md.splitlines() if l.startswith("# BRIEF")), "").lower()
     words = set(re.findall(r"[a-z0-9]+", head))
-    whole = [k for k in kits if set(k.split("-")) <= words]  # "WIDGET™ Pro Vibrating Face Brush" names widget-face-brush
+    whole = [k for k in kits if set(k.split("-")) <= words]  # "NOVA™ Pro Vibrating Face Brush" names nova-face-brush
     if whole:
         return max(whole, key=lambda k: len(k.split("-")))
     parts = [x.strip() for x in head.split("·")]
-    named = set(re.findall(r"[a-z0-9]+", parts[2])) if len(parts) > 3 else set()   # "# BRIEF · BRAND-A · WIDGET · <title>"
+    named = set(re.findall(r"[a-z0-9]+", parts[2])) if len(parts) > 3 else set()   # "# BRIEF · BRAND-A · NOVA · <title>"
     by_alias = [k for k in kits if named & set(aliases.get(k) or [])]
     return by_alias[0] if len(by_alias) == 1 else ""
 

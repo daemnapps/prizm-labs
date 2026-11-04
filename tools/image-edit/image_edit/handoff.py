@@ -36,7 +36,7 @@ def folder_of(brand, key, role=ROLE, repo=None):
 
 def home_key(brand, key, role=ROLE, repo=None):
     """The folder name a brief's hand-off is written under: the folder already there in any spelling of the key (an
-    old `acme_widget_brief-0007` keeps its name, nothing is renamed), else the catalog form (names.catalog_key,
+    old `acme_nova_brief-0007` keeps its name, nothing is renamed), else the catalog form (names.catalog_key,
     2026-10-28: the catalog id wins, store handles are aliases)."""
     if not key:
         return key
