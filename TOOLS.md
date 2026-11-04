@@ -31,3 +31,5 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Launch | Ad handoff | `components/ad-handoff/` |
 | Launch | Meta upload | `components/meta-upload/` |
 | Launch | Social distribution | `tools/social-distribution/` |
+
+| Coordinate | Autonomy approval pilot (local experiment) | `tools/autonomy-pilot/` |
