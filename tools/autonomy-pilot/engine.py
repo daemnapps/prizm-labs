@@ -6,6 +6,7 @@ No publishing, arbitrary shell commands, shared Drive or external messaging.
 import hashlib
 import json
 import sqlite3
+import threading
 import uuid
 from pathlib import Path
 from contextlib import contextmanager
@@ -38,6 +39,7 @@ class Store:
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.db = self.root / 'pilot.db'
+        self.worker_lock = threading.RLock()
         with self.connect() as db:
             db.executescript('''CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY, data TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY, job TEXT, action TEXT, payload TEXT);
@@ -202,6 +204,10 @@ class Store:
             return job
 
     def tick(self, handlers):
+        with self.worker_lock:
+            return self._tick(handlers)
+
+    def _tick(self, handlers):
         """Call explicitly registered local adapters. One step per job, no shell.
 
         Run one worker per pilot store. Adapter should be idempotent by job/revision/stage.

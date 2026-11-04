@@ -7,7 +7,7 @@ import json
 import secrets
 import sys
 import uuid
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
 
@@ -200,7 +200,13 @@ def serve(store, port, synthetic=False):
                 return self.reply({'error': str(exc) if isinstance(exc, Refused) else 'Invalid request or unavailable file'}, 400)
 
     print('Pilot review screen: http://' + host, flush=True)
-    server = HTTPServer(('127.0.0.1', port), Handler)
+    class Server(ThreadingHTTPServer):
+        daemon_threads = True
+        def get_request(self):
+            sock, address = super().get_request()
+            sock.settimeout(5)
+            return sock, address
+    server = Server(('127.0.0.1', port), Handler)
     server.timeout = 2
     while True:
         server.handle_request()
