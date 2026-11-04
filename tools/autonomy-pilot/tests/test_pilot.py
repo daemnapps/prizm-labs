@@ -48,7 +48,7 @@ class Workflow(unittest.TestCase):
     def returned(self, job):
         folder = self.store.root / 'returns' / job['handoff']
         folder.mkdir(parents=True)
-        filename = {'email':'finished.html','image':'finished.png','video':'finished.mp4'}[job['lane']]
+        filename = {'email':'finished.html','image':'finished.png','video':'finished.mp4','creator':'finished.mp4'}[job['lane']]
         # Synthetic transport fixtures, not media-quality evidence.
         (folder / filename).write_bytes(b'Synthetic returned content')
         (folder/'return.json').write_text(json.dumps({'handoff':job['handoff'],'file':filename}))

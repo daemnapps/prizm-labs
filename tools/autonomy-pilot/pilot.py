@@ -3,6 +3,7 @@
 import argparse
 import os
 import tempfile
+import threading
 import json
 import secrets
 import sys
@@ -125,10 +126,26 @@ def save_key(env_path, value):
         if os.path.exists(name): os.unlink(name)
 
 
-def serve(store, port, synthetic=False):
+def registered_handlers(store, synthetic=False, creator=False, creator_provider="claude"):
+    demos = demo_handler(store) if synthetic else {}
+    from creator_chain import handler, INTEGRATION
+    real = handler(store, provider=creator_provider) if creator else None
+    registry = {}
+    for lane, stages in LANES.items():
+        for stage in stages[:-1]:
+            def dispatch(job, lane=lane, stage=stage):
+                if job.get('integration') == INTEGRATION:
+                    return real(job) if real and (lane, stage) == ('creator', 'script') else None
+                demo = demos.get((lane, stage))
+                return demo(job) if demo else None
+            registry[(lane, stage)] = dispatch
+    return registry
+
+
+def serve(store, port, synthetic=False, creator=False, creator_provider="claude"):
     token = secrets.token_urlsafe(32)
     host = '127.0.0.1:' + str(port)
-    handlers = demo_handler(store) if synthetic else {}
+    handlers = registered_handlers(store, synthetic, creator, creator_provider)
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *args):
@@ -157,9 +174,11 @@ def serve(store, port, synthetic=False):
                 return self.reply((Path(__file__).parent/path[1:]).read_bytes(),
                                   mime='text/javascript' if path.endswith('.js') else 'text/css')
             if path == '/api/state':
-                return self.reply({'jobs': store.jobs(), 'lanes': LANES, 'token': token, 'synthetic': synthetic})
-            if path == '/api/evaluation':
-                report = store.root / 'jev-results.json'
+                from creator_chain import status
+                jobs = [dict(j, integration_status=status(store, j)) for j in store.jobs()]
+                return self.reply({'jobs': jobs, 'lanes': LANES, 'token': token, 'synthetic': synthetic, 'creator': creator})
+            if path in ('/api/evaluation', '/api/comparison'):
+                report = store.root / ('workflow-results.json' if path == '/api/comparison' else 'jev-results.json')
                 if not report.exists():
                     return self.reply({'status': 'not_run'})
                 return self.reply(json.loads(report.read_text()))
@@ -201,8 +220,6 @@ def serve(store, port, synthetic=False):
                     pass
                 else:
                     raise Refused('Unknown endpoint')
-                store.tick(handlers)
-                ingest_returns(store)
                 return self.reply({'ok': True})
             except (ValueError, KeyError, TypeError, OSError) as exc:
                 # Local validation text only; never model/provider errors or credentials.
@@ -216,14 +233,21 @@ def serve(store, port, synthetic=False):
             sock.settimeout(5)
             return sock, address
     server = Server(('127.0.0.1', port), Handler)
-    server.timeout = 2
-    while True:
-        server.handle_request()
-        try:
-            store.tick(handlers)
-            ingest_returns(store)
-        except (ValueError, OSError):
-            pass  # A failed intake remains pending; inspect the manifest through the CLI.
+    stop = threading.Event()
+    def worker():
+        while not stop.is_set():
+            try:
+                store.tick(handlers)
+                ingest_returns(store)
+            except (ValueError, OSError):
+                pass
+            stop.wait(2)
+    threading.Thread(target=worker, daemon=True).start()
+    try:
+        server.serve_forever(poll_interval=.5)
+    finally:
+        stop.set()
+        server.server_close()
 
 
 def main():
@@ -233,6 +257,16 @@ def main():
     web = sub.add_parser('serve')
     web.add_argument('--port', type=int, default=8917)
     web.add_argument('--synthetic', action='store_true')
+    web.add_argument('--creator', action='store_true', help='Enable the existing creator-brief stage through the personal CLI')
+    web.add_argument('--creator-provider', choices=('claude','codex'), default='claude')
+    connected = sub.add_parser('connect-creator')
+    connected.add_argument('--provider', choices=('claude','codex'), default='claude')
+    connected.add_argument('--inputs', required=True)
+    connected.add_argument('--run', action='store_true', help='Generate once with the registered real stage')
+    comparison = sub.add_parser('compare')
+    comparison.add_argument('--cases', required=True)
+    comparison.add_argument('--live', action='store_true')
+    comparison.add_argument('--max-usd', type=float, default=1)
     sub.add_parser('status')
     sub.add_parser('tick')
     ev = sub.add_parser('evaluate')
@@ -244,7 +278,18 @@ def main():
     args = parser.parse_args()
     store = Store(args.root)
     if args.command == 'serve':
-        serve(store, args.port, args.synthetic)
+        serve(store, args.port, args.synthetic, args.creator, args.creator_provider)
+    elif args.command == 'connect-creator':
+        from creator_chain import prepare_inputs, INTEGRATION
+        fingerprint = prepare_inputs(store, args.inputs)
+        job = store.create('creator', 'handoff', INTEGRATION, fingerprint)
+        if args.run:
+            store.tick(registered_handlers(store, False, True, args.provider))
+        print(json.dumps(store.get(job['id']), indent=2))
+    elif args.command == 'compare':
+        from compare import compare
+        result = compare(store, args.cases, args.live, args.max_usd)
+        print(json.dumps({k:v for k,v in result.items() if k != 'results'}, indent=2))
     elif args.command == 'evaluate':
         evaluate(store, args.live, args.max_usd)
     elif args.command == 'create':

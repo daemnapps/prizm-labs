@@ -98,8 +98,8 @@ operator correction effort. The example 0.85 confidence cutoff is not calibrated
 `Store.tick(handlers)` takes a registry keyed by `(lane, stage)`. A handler receives
 the job and returns a file path; it cannot approve the result. Use `adapters.run_kit_handler(chain_factory, step_key, fields)` to wrap existing
 `run_kit.stage.Chain.run` stages, or supply a lane-specific callable. The integration
-test exercises the actual run-kit with its offline model seam. Real-generation handlers are deliberately not registered by this pilot.
-The synthetic server registers only local fixture writers.
+test exercises the actual run-kit with its offline model seam. The opt-in creator adapter below registers one existing writing stage. Other generation handlers remain disconnected.
+The synthetic flag registers local fixture writers only for demo jobs; connected creator jobs cannot fall through to them.
 
 Existing seams reviewed:
 
@@ -132,3 +132,75 @@ API/model documentation checked 4 November 2026:
 [typed API](https://docs.typesafe.ai/api/system-one),
 [model and pricing](https://docs.typesafe.ai/models),
 [confidence](https://docs.typesafe.ai/confidence).
+
+## Historical feedback comparison
+
+`compare --cases <local.json>` validates a frozen labeled dataset without calling a model.
+Add `--live --max-usd 1` to evaluate it on the unchanged decision policy and cutoff.
+Each case contains `id`, `feedback`, `context`, `expected`, `source` and `label_basis`.
+The dataset declares `label_status` and `limitations`. Only feedback and context go to
+Typesafe; labels and recorded fixes do not. The report preserves the dataset hash.
+Run data and source excerpts remain in the ignored output directory.
+
+The existing email `redo()` function stores every note as a standing rule. The baseline
+is a policy replay of that behavior, checked against its AST and source hash. It is
+not a current generative classifier, and applying it to creator feedback is a
+cross-workflow comparison. `send_back()` is a separate append-only note path.
+The pilot never invokes either production function or writes to their stores.
+A historical convenience sample and analyst labels cannot establish production accuracy.
+A completed or interrupted comparison is not overwritten or silently retried.
+
+## Connected creator-brief chain
+
+```
+python3 tools/autonomy-pilot/pilot.py --root runs/autonomy-pilot connect-creator --inputs <local-inputs.json> --run
+python3 tools/autonomy-pilot/pilot.py --root runs/autonomy-pilot serve --creator --creator-provider codex --synthetic
+```
+
+The input JSON has `fields` for the variables requested by the existing
+`tools/video-writing/prompts/stage-7b-page` prompt, `script` containing the already
+written spoken lines, and `provenance` explaining where they came from. It pins and
+hashes both the inputs and the resolved prompt. Missing inputs stop before spending.
+No new writing prompt is introduced. This connects stage7b, not the full upstream
+teardown, injection and script-writing pipeline.
+
+Creator lane: brief plus supplied script → human script review → local creator
+handoff package → returned video → final human review. It follows the creator
+brief's words-only format. The AI-video lane still requires storyboard and image reviews.
+The first live exercise uses a documented historical brief; it is not a new campaign.
+
+Send back regenerates the concept for that revision with the correction, without
+promoting it into a standing rule. The supplied script remains unchanged. To change
+spoken lines, supply revised script inputs as a new job. Jev stays advisory until
+representative evidence supports routing; it does not block a reviewer-requested edit.
+
+Generation uses the personal machine's Claude CLI in safe mode, with no model tools,
+MCP servers, session persistence, repository context, API-key loader or account
+fallback. A failed or interrupted attempt is held without an automatic retry.
+A durable claim and input hash prevent repeat refreshes from buying another draft.
+A prompt or input change requires a new job. Each attempt reserves $0.10 in the same
+cumulative $1 ledger as Jev, with the CLI's own $0.10 limit. Reported Claude usage cost
+may be covered by a subscription; it is not a verified cash charge. Budget exhaustion
+holds preparation while completed drafts remain reviewable.
+
+The adapter uses the existing run-kit prompt resolver, not the production runner
+that also touches shared systems. Automatic creative QC is not invoked through that
+runner. This is a local generation/review integration, not production readiness.
+Human review, lane media checks, authenticated operator delivery and distribution
+remain separate. Neither approval nor handoff sends a Google Doc or message.
+
+
+### Explicit Codex plan fallback
+
+Use `connect-creator --provider codex` or `serve --creator --creator-provider codex`
+after the owner chooses the existing Codex login. This selection is explicit;
+Claude failures never switch accounts on their own. The CLI forces ChatGPT login,
+removes API-key environment variables, ignores user configuration, uses a temporary
+read-only working directory, disables shell/apps/browser/multi-agent tools and hooks,
+and accepts only a completed text turn. No new account or API key is created.
+Five Codex plan attempts are allowed per pilot store, including interrupted calls;
+each revision still has one durable attempt. Plan usage is recorded separately
+from the cumulative $1 API reserve and is not reported as a zero cash bill.
+
+Reference: [Codex non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode)
+and [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).

@@ -11,7 +11,7 @@ import uuid
 from pathlib import Path
 from contextlib import contextmanager
 
-LANES = {'video': ['script', 'storyboard', 'image_draft', 'finished_asset'],
+LANES = {'creator': ['script', 'finished_asset'], 'video': ['script', 'storyboard', 'image_draft', 'finished_asset'],
          'image': ['image_draft', 'finished_asset'],
          'email': ['email_draft', 'image_draft', 'finished_asset']}
 MODES = ('observe', 'prepare', 'handoff')
@@ -64,10 +64,12 @@ class Store:
         finally:
             db.close()
 
-    def create(self, lane, mode='observe'):
+    def create(self, lane, mode='observe', integration=None, input_hash=None):
         if lane not in LANES or mode not in MODES:
             raise Refused('Unknown lane or autonomy level')
-        job = dict(id=uuid.uuid4().hex, lane=lane, mode=mode, index=0, revision=1,
+        if integration not in (None, 'creator-brief') or (integration and (lane != 'creator' or not isinstance(input_hash, str) or len(input_hash) != 64 or any(c not in '0123456789abcdef' for c in input_hash))):
+            raise Refused('Invalid integration or input fingerprint')
+        job = dict(integration=integration, input_hash=input_hash, id=uuid.uuid4().hex, lane=lane, mode=mode, index=0, revision=1,
                    state='awaiting_draft', stages={}, handoff=None, history=[])
         with self.transaction() as db:
             db.execute('INSERT INTO jobs VALUES (?,?)', (job['id'], json.dumps(job)))
@@ -128,6 +130,7 @@ class Store:
                     raise Refused('Stage is not accepting a draft')
                 if payload.get('revision') != job['revision'] or payload.get('stage') != stage:
                     raise Refused('Draft was generated for an older stage or revision')
+                job.pop('worker_error', None)
                 job['stages'][stage] = self.blob(job, payload['path'])
                 job['state'] = 'needs_review'
             elif action == 'approve':
@@ -180,7 +183,7 @@ class Store:
                     self.verify(a)
                 handoff_id = ident + '-r' + str(job['revision'])
                 package = dict(id=handoff_id, job=ident, revision=job['revision'], lane=job['lane'],
-                               role='video-editor' if job['lane'] == 'video' else 'production-operator',
+                               role='creator' if job['lane'] == 'creator' else ('video-editor' if job['lane'] == 'video' else 'production-operator'),
                                artifacts=job['stages'], expected='finished_asset', status='local_only')
                 db.execute('INSERT INTO outbox VALUES (?,?,?,?)', (handoff_id, ident, json.dumps(package), 'pending'))
                 job['handoff'], job['state'] = handoff_id, 'awaiting_return'
@@ -188,7 +191,7 @@ class Store:
                 if actor != 'operator' or job['state'] != 'awaiting_return' or payload.get('handoff') != job['handoff']:
                     raise Refused('Return does not match an active handoff')
                 artifact = self.blob(job, payload['path'])
-                allowed = {'video': {'.mp4', '.mov'}, 'image': {'.png', '.jpg', '.jpeg', '.webp'},
+                allowed = {'creator': {'.mp4', '.mov'}, 'video': {'.mp4', '.mov'}, 'image': {'.png', '.jpg', '.jpeg', '.webp'},
                            'email': {'.html', '.eml'}}[job['lane']]
                 if artifact['suffix'] not in allowed:
                     raise Refused('Wrong returned file type for this lane')
@@ -219,7 +222,16 @@ class Store:
             if job['mode'] in ('prepare', 'handoff') and job['state'] == 'awaiting_draft':
                 handler = handlers.get((job['lane'], stage))
                 if handler:
-                    path = handler(job)
+                    try:
+                        path = handler(job)
+                    except Refused as exc:
+                        with self.transaction() as db:
+                            held = self.get(job['id'], db)
+                            held['worker_error'] = str(exc)
+                            db.execute('UPDATE jobs SET data=? WHERE id=?', (json.dumps(held), job['id']))
+                        continue
+                    if path is None:
+                        continue
                     results.append(self.change(job['id'], 'submit', {'path': str(path), 'revision': job['revision'], 'stage': stage},
                         'submit-' + job['id'] + '-' + str(job['revision']) + '-' + stage))
             elif job['mode'] == 'handoff' and job['state'] == 'ready_for_handoff':
