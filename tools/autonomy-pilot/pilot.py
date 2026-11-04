@@ -158,6 +158,11 @@ def serve(store, port, synthetic=False):
                                   mime='text/javascript' if path.endswith('.js') else 'text/css')
             if path == '/api/state':
                 return self.reply({'jobs': store.jobs(), 'lanes': LANES, 'token': token, 'synthetic': synthetic})
+            if path == '/api/evaluation':
+                report = store.root / 'jev-results.json'
+                if not report.exists():
+                    return self.reply({'status': 'not_run'})
+                return self.reply(json.loads(report.read_text()))
             if path == '/api/artifact':
                 params = parse_qs(urlsplit(self.path).query)
                 try:
