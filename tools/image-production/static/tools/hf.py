@@ -49,7 +49,7 @@ def _ip_keys():
 def key():
     """The Authorization header value, or None. Never printed, never logged.
     HIGGSFIELD_KEY_ID / HIGGSFIELD_KEY_SECRET by name through the loader
-    (add them to ~/.upright-keys.env)."""
+    (add them to this repo's .env)."""
     try:
         ip = _ip_keys()
     except Exception:

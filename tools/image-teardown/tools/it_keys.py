@@ -5,7 +5,7 @@ SI-194 (readers use loader), dispatch 3: gpt_drafts.py, draft_judge.py,
 carousel.py, gemini_image.py, gemini_text.py, pull_ig_image.py and check.py no
 longer import ~/.daemn/daemn_keys or open ~/.gemini.env / ~/.apify.env
 themselves. They ask key(NAME), which asks components/keys/loader.py: the
-environment first, then the one key file ~/.upright-keys.env (add
+environment first, then this repo's .env (add
 NAME=value there; when it exists nothing else is read). Only on a machine with
 no key file yet does the loader fall back to the temporary old places. No
 local .env step: image-teardown has none. tools/deliver.py is not a reader here — it imports

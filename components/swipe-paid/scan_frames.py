@@ -64,7 +64,7 @@ def _keys_loader():
 
 def key():
     # By NAME through the one key loader (components/keys/loader.py): the
-    # variable first, then ~/.upright-keys.env. Never a path to a key file.
+    # variable first, then this repo's .env. Never a path to a key file.
     k = os.environ.get("GEMINI_API_KEY", "").strip()
     if k:
         return k
@@ -73,7 +73,7 @@ def key():
     except Exception as e:
         sys.exit(f"No GEMINI_API_KEY: {e}")
     if not k:
-        sys.exit("No GEMINI_API_KEY — add GEMINI_API_KEY=value to ~/.upright-keys.env")
+        sys.exit("No GEMINI_API_KEY — add GEMINI_API_KEY=value to this repo's .env")
     return k
 
 

@@ -43,7 +43,7 @@ sys.path.insert(0, str(WS / "tools/video-teardown/machine"))
 
 def _vault():
     """Every key is read through the one loader (video-teardown's keys.py wraps
-    components/keys/loader.py; keys live in ~/.upright-keys.env — add
+    components/keys/loader.py; keys live in this repo's .env — add
     NAME=value there). Load them into the environment once,
     so the Drive pipe and the judge find their credentials without anyone
     exporting anything. Silent if the vault is not there — the callers already

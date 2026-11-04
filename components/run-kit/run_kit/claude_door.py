@@ -8,7 +8,7 @@ A chain step is code calling a model. Which credential it runs on is decided
 here, once, the same way on every machine, in this order:
 
   1. a company API key — ANTHROPIC_API_KEY in the one key file
-     (~/.upright-keys.env, read through components/keys/loader.py). Billed to
+     (this repo's .env, read through components/keys/loader.py). Billed to
      the company, never expires, any person or machine runs on it.
   2. a long-life token — CLAUDE_CODE_OAUTH_TOKEN in the same file
      (`claude setup-token`, lasts a year).

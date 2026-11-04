@@ -70,7 +70,7 @@ def apify(actor, payload, token, timeout=900):
             raise SystemExit(
                 "Apify said 403 on every call, which means the account's monthly "
                 "allowance is spent (check /users/me/limits). Add a second key as "
-                "APIFY_TOKEN_PERSONAL to ~/.upright-keys.env and re-run.")
+                "APIFY_TOKEN_PERSONAL to this repo's .env and re-run.")
         say("  first Apify account is spent — switching to the spare")
         return _call(actor, payload, spare, timeout)
 

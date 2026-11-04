@@ -252,7 +252,7 @@ carries a `start_image (upload first)` line pointing at the still made for
 it — while `A1-still` and `SONG` never appear as their own editor blocks.
 A `--dry-run` on the same plan prints both direct requests and writes no
 `media/` and no `direct.json`; a run with neither `OPENAI_API_KEY` nor
-`~/.upright-keys.env` reachable is a hard stop naming the key.
+this repo's `.env` reachable is a hard stop naming the key.
 
 `machine/test_direct.py` covers `direct_openai.py` and `direct_google.py`
 against fake transports on their own: an OpenAI edit sends every reference

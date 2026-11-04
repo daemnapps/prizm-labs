@@ -4,9 +4,13 @@ Everyone brings their own keys. A key is found in this order:
   1. an environment variable with that name;
   2. the `.env` file at the root of this repo (gitignored — copy
      `.env.example` to `.env` and fill in your own keys);
-  3. only as a quiet last resort, the original owner's personal places
-     described below (a Mac Keychain helper and a few dotfiles). On anyone
-     else's machine those do not exist and are skipped silently.
+  3. Damon's Mac Keychain, through the ~/.daemn/daemn_keys.py helper, only
+     when that helper exists (personal NAME_PERSONAL / PRIZM_* entries only).
+     On Windows, or any machine without the helper, this step is skipped
+     silently, so .env is the one place to set keys there.
+Nothing else is ever read. Prizm Labs is disconnected from the Upright key
+files (2026-11-03, authorised by Damon): no ~/.upright-keys.env,
+~/.daemn/keys.env, ~/.gemini.env or ~/.apify.env.
 A missing key raises KeyError whose message starts:
   "This tool needs NAME. Add it to .env (see .env.example)."
 
@@ -55,8 +59,7 @@ ALIASES = {
 # The mini marker only — checked for existence, never opened (SI-192b (loader skips key file)).
 MANAGED = "~/.workflow-worker.env"
 NO_FALLBACK_ENV = "KEYS_NO_FALLBACK"
-# TEMPORARY (Track A): the old locations, read in this order. "keychain" is
-# the ~/.daemn/daemn_keys.py helper, used only when that file exists.
+# After .env, only Damon's Keychain helper — never the Upright key files.
 FALLBACK = ("keychain",)
 KEYCHAIN_DIR = "~/.daemn"
 # Step 2: the repo's own .env (components/keys/loader.py -> repo root).
@@ -104,8 +107,8 @@ def _parse(p):
 
 
 def _keychain(names):
-    """The ~/.daemn helper, imported the way video-teardown's keys.py does.
-    Silent when the helper is absent or any call fails."""
+    """Damon's Keychain, through the ~/.daemn/daemn_keys.py helper.
+    Silent when the helper is absent (Windows, anyone else's machine) or any call fails."""
     folder = _home(KEYCHAIN_DIR)
     if not (folder / "daemn_keys.py").is_file():
         return None
@@ -146,14 +149,11 @@ def fallback_skipped():
 
 def _places(skipped):
     places = ["environment"]
-    if not skipped:
-        places.append(".env")
     if skipped:
-        places.append("old locations skipped (managed file present or %s=1)"
+        places.append(".env and Keychain skipped (managed file present or %s=1)"
                       % NO_FALLBACK_ENV)
     else:
-        places += [KEYCHAIN_DIR + "/daemn_keys.py" if s == "keychain" else s
-                   for s in FALLBACK]
+        places += [".env", KEYCHAIN_DIR + "/daemn_keys.py (Keychain, Mac only)"]
     return places
 
 
@@ -169,24 +169,8 @@ def _lookup(name, skipped, cache):
     for n in names:
         if cache["dotenv"].get(n):
             return cache["dotenv"][n]
-    # KEYS_SOURCE=keychain in .env (or DAEMN_KEYS_SOURCE=keychain in the
-    # environment): the owner's Apple Keychain is the only place after .env —
-    # never the shared key files. Personal entries (NAME_PERSONAL) win.
-    if (cache["dotenv"].get("KEYS_SOURCE") == "keychain"
-            or os.environ.get("DAEMN_KEYS_SOURCE") == "keychain"):
-        os.environ["DAEMN_KEYS_SOURCE"] = "keychain"
+    if "keychain" in FALLBACK:
         return _keychain(names)
-    for src in FALLBACK:
-        if src == "keychain":
-            v = _keychain(names)
-            if v:
-                return v
-            continue
-        if src not in cache:
-            cache[src] = _parse(src)
-        for n in names:
-            if cache[src].get(n):
-                return cache[src][n]
     return None
 
 

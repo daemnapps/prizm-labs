@@ -131,7 +131,7 @@ def _in_a_test():
 
 def _loader_key(name):
     """The one key loader's answer for `name` (components/keys/loader.py, found upward, loaded by
-    path under its own module name): the environment, then a person's ~/.upright-keys.env; never
+    path under its own module name): the environment, then a person's this repo's .env; never
     read on the mini. None when there is no loader or no such key. The DEFAULT key lookup since
     LD-47 (Drive sweep) step 1.6 (2026-10-20), so a key in a person's key file counts as present
     with no export at each entry point. Never prints a value.

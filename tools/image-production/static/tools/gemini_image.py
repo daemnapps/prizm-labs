@@ -12,7 +12,7 @@ Usage:
 Multiple --image flags are sent in one call, in the order given, each labeled
 "IMAGE 1", "IMAGE 2", ... so the prompt can refer to them by number.
 Reads GEMINI_API_KEY by name through the key loader (add GEMINI_API_KEY=value
-to ~/.upright-keys.env).
+to this repo's .env).
 """
 
 import argparse, os, base64, json, mimetypes, sys, time, urllib.request
@@ -41,7 +41,7 @@ def _ip_keys():
 
 def key():
     # GEMINI_API_KEY by name through components/keys: the environment first
-    # (the vault is loaded into it), then ~/.upright-keys.env. Missing: exit naming the key
+    # (the vault is loaded into it), then this repo's .env. Missing: exit naming the key
     # and where the loader looked, never a value.
     try:
         ip = _ip_keys()

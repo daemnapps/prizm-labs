@@ -202,7 +202,7 @@ def main():
     fkey = keys.get("FAL_KEY")
     gkey = keys.get("ELEVENLABS_API_KEY" if BED.get("door") == "elevenlabs" else "GEMINI_API_KEY")   # the bed door's own key (P62)
     if not fkey:
-        sys.exit("no FAL_KEY — add FAL_KEY=value to ~/.upright-keys.env")
+        sys.exit("no FAL_KEY — add FAL_KEY=value to this repo's .env")
     out.mkdir(parents=True, exist_ok=True)
     made = 0
 

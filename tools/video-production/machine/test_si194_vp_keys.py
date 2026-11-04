@@ -316,7 +316,8 @@ class Missing(Case):
                     fn()
                 msg = str(cm.exception.code)
                 self.assertIn("FAL_KEY", msg)
-                self.assertIn("~/.upright-keys.env", msg)
+                self.assertIn(".env", msg)
+                self.assertNotIn("upright", msg)
                 self.assertNotIn("fake-", msg)
 
 

@@ -6,7 +6,7 @@
 The stored Admin token is short-lived (`{"t": …, "exp": …}`) and was six days
 dead when this was written, which is the sort of thing that gets reported as
 "the store is unavailable". It is not: the app's client id and secret are in the
-key file (~/.upright-keys.env) and a client-credentials call mints a fresh one in a second. So this
+key file (this repo's .env) and a client-credentials call mints a fresh one in a second. So this
 mints on demand, writes the new token back, and nothing upstream has to know.
 
 WHICH STORE, AND WHICH KEYS, ARE THE BRAND'S (2026-09-20). One store's domain
@@ -22,7 +22,7 @@ SHOPIFY_<BRAND>_APP and SHOPIFY_<BRAND>_TOKEN; the minted token is written back
 to the Keychain entry `shopify-ctrl-<brand>-token`, account `<brand>`.
 
 Auth comes through `ep_keys`, the one key loader (components/keys): the
-environment first, then ~/.upright-keys.env (add SHOPIFY_<BRAND>_CLIENT_ID,
+environment first, then this repo's .env (add SHOPIFY_<BRAND>_CLIENT_ID,
 _APP and _TOKEN there). The one Keychain WRITE left is the minted token's
 cache. No value is ever printed or put on a command line.
 """

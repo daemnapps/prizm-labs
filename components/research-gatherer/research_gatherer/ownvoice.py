@@ -64,7 +64,7 @@ def _cfg():
 
 def _vault(name):
     # SI-194 (readers use loader): by NAME through rg_keys and the one loader —
-    # the environment, then ~/.upright-keys.env. SUPABASE_DB_URL keeps
+    # the environment, then this repo's .env. SUPABASE_DB_URL keeps
     # its name (G-A1); the loader's alias also finds DATABASE_URL.
     try:
         from . import rg_keys

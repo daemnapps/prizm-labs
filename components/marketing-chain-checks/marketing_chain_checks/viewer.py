@@ -57,11 +57,8 @@ def newest(stem: str) -> Path:
 
 
 def _key():
-    k = os.environ.get("GEMINI_API_KEY", "").strip()
-    if k:
-        return k
-    import daemn_keys
-    return daemn_keys.key("GEMINI_API_KEY_PERSONAL")
+    from marketing_chain_checks import mcc_keys   # the one loader: environment, then this repo's .env
+    return mcc_keys.key("GEMINI_API_KEY")
 
 
 def _json(t: str) -> dict:
@@ -160,13 +157,16 @@ def _claude_cli(text: str, as_json: bool):
 
 
 def _openai(text: str, as_json: bool, model: str):
-    import daemn_keys
+    from marketing_chain_checks import mcc_keys   # the one loader: environment, then this repo's .env
+    openai_key = mcc_keys.key("OPENAI_API_KEY")
+    if not openai_key:
+        raise RuntimeError(mcc_keys.missing("OPENAI_API_KEY"))
     body = {"model": model, "messages": [{"role": "user", "content": text}]}
     if as_json:
         body["response_format"] = {"type": "json_object"}
     req = urllib.request.Request("https://api.openai.com/v1/chat/completions", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json",
-                                          "Authorization": f"Bearer {daemn_keys.key('OPENAI_API_KEY_PERSONAL')}"})
+                                          "Authorization": f"Bearer {openai_key}"})
     with urllib.request.urlopen(req, timeout=300) as r:
         t = json.loads(r.read())["choices"][0]["message"]["content"] or ""
     return _json(t) if as_json else t.strip()

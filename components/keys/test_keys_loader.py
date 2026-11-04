@@ -336,6 +336,40 @@ class FileFormat(LoaderCase):
         self.assertEqual(loader.key(A), "fake-apify")
 
 
+class UprightDisconnected(LoaderCase):
+    """2026-11-03: environment, then this repo's .env, then Damon's Keychain
+    helper. The Upright key files are never read."""
+
+    def setUp(self):
+        super().setUp()
+        self.dotenv = self.home / "repo.env"
+        p = mock.patch.object(loader, "DOTENV", self.dotenv)
+        p.start()
+        self.addCleanup(p.stop)
+
+    def test_only_the_keychain_after_dotenv(self):
+        self.assertEqual(loader.FALLBACK, ("keychain",))
+
+    def test_upright_files_are_ignored(self):
+        for rel in (".upright-keys.env", ".daemn/keys.env", ".gemini.env", ".apify.env"):
+            self.write(rel, A + "=fake-upright\n")
+        self.assertIsNone(loader.key(A, required=False))
+
+    def test_keychain_used_when_env_and_dotenv_empty(self):
+        self.helper({A + "_PERSONAL": "fake-keychain"})
+        self.assertEqual(loader.key(A), "fake-keychain")
+
+    def test_dotenv_beats_keychain(self):
+        self.helper({A + "_PERSONAL": "fake-keychain"})
+        self.dotenv.write_text(A + "=fake-dotenv\n")
+        self.assertEqual(loader.key(A), "fake-dotenv")
+
+    def test_no_helper_is_silent(self):
+        # Windows, or any machine without ~/.daemn/daemn_keys.py
+        self.assertIsNone(loader.key(A, required=False))
+        self.assertNotIn("daemn_keys", sys.modules)
+
+
 class NoLeaks(LoaderCase):
     def test_load_result_repr_and_str_show_names_only(self):
         os.environ[A] = "fake-leak-env"

@@ -72,12 +72,12 @@ already scanned is never paid for twice.
 Nothing is committed that a run needs, so a fresh clone works once these exist:
 
 Every key travels by NAME through the one key loader (`components/keys/loader.py`)
-— the environment first, then the one key file, `~/.upright-keys.env` (add
+— the environment first, then the one key file, this repo's `.env` (add
 `NAME=value` there). No machine here reads a key out of any other file.
 
 | for | what | where it comes from |
 |---|---|---|
-| the `own` lane | `SUPABASE_DB_URL` | `~/.upright-keys.env`; the data is still the ecom_data_sync Supabase tables |
+| the `own` lane | `SUPABASE_DB_URL` | this repo's `.env`; the data is still the ecom_data_sync Supabase tables |
 | page capture | `psycopg[binary]`, `playwright` | `python3 -m venv ~/.local/venvs/ecom && ~/.local/venvs/ecom/bin/pip install "psycopg[binary]" playwright` |
 | page screenshots | Google Chrome | already installed; playwright drives it with `channel="chrome"` |
 | the frame scan | `GEMINI_API_KEY` | the Keychain |

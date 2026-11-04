@@ -2,7 +2,7 @@
 
 SI-194 (readers use loader), meta-upload dispatch: `meta.token()` no longer
 runs `security find-generic-password` itself. It asks key(NAME), which asks
-components/keys/loader.py: the environment first, then ~/.upright-keys.env (the one key file — add NAME=value there; when it exists nothing else is read) — and only on a machine with no key file — the temporary old places.
+components/keys/loader.py: the environment first, then this repo's .env (add NAME=value there; nothing else is read).
 Every caller that builds `meta.Meta` (this folder's tools, copywriter's Door,
 media-buying, creative-diversity) reads through here unchanged.
 

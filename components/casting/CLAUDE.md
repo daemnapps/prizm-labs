@@ -191,7 +191,7 @@ verdict and carries on.
 
 Read **by name**, never by path, through the shared key loader
 (`components/keys/loader.py`, via `casting/cast_keys.py`): the process
-environment first, then the one key file `~/.upright-keys.env` (add
+environment first, then the one key file this repo's `.env` (add
 `NAME=value` there). Never out of a file in the repo, never printed,
 never logged, never written into a run record. Read at CALL time, never at
 import time — a declared test proves it in a fresh interpreter with no key and

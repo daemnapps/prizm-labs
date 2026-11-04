@@ -43,7 +43,7 @@ NO_IMAGES = False
 
 def have_picture_key():
     """The pictures need OPENAI_API_KEY, asked of the one key loader through
-    ep_keys: the environment first, then ~/.upright-keys.env (the one key
+    ep_keys: the environment first, then this repo's .env (the one key
     file); the
     picture door, direct_openai.key_of(), reads through the same loader.
     Without it the email is laid out with no pictures and the log SAYS so,

@@ -36,7 +36,7 @@ regenerate one still, one voice line, or one clip by id and reassemble.
 
 Runs live in machine/runs/<run>/ — timeline.json + notes.md are the record
 in git; stills/, vo/, clips/ and draft media are generated local state.
-Auth: FAL_KEY in the environment, or FAL_KEY=value in ~/.upright-keys.env.
+Auth: FAL_KEY in the environment, or FAL_KEY=value in this repo's .env.
 """
 
 import base64, importlib.util, json, os, subprocess, sys, time, urllib.request, urllib.error
@@ -70,7 +70,7 @@ MODEL_CLIP = "fal-ai/bytedance/seedance/v1/pro/image-to-video"
 def key():
     k = vp_keys.key("FAL_KEY", local_env=True)
     if not k:
-        sys.exit("No FAL_KEY. Export it or add FAL_KEY=value to ~/.upright-keys.env")
+        sys.exit("No FAL_KEY. Export it or add FAL_KEY=value to this repo's .env")
     return k
 
 

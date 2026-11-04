@@ -171,7 +171,7 @@ def _rg_keys():
 
 
 def key_of() -> str | None:
-    """ELEVENLABS_API_KEY by name: the environment, then ~/.upright-keys.env
+    """ELEVENLABS_API_KEY by name: the environment, then this repo's .env
     (the one key file) through the loader
     (rg_keys, SI-194 (readers use loader)). None when it is not there; never
     raises, never prints."""

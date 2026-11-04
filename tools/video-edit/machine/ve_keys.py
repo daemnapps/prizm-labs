@@ -4,7 +4,7 @@
 SI-194 (readers use loader), dispatch 2: listen.py, music_bed.py and
 word_fix.py no longer import ~/.daemn/daemn_keys themselves. They ask
 key(NAME), which asks components/keys/loader.py: the environment first, then
-the one key file ~/.upright-keys.env (add NAME=value there). Only on a machine
+this repo's .env (add NAME=value there). Only on a machine
 with no key file yet, and not on the mini, the loader still falls back to the
 old places. No local .env step: video-edit has none.
 

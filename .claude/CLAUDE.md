@@ -98,7 +98,9 @@ prompts, one brand folder) in the clients' team space named in
 - `START-HERE.md` — the four steps a person reads. (These instructions live in `.claude/CLAUDE.md`.)
 - `.env.example` — every key name the tools read, what it's for, where to get it.
 - `components/keys/loader.py` — how every tool finds a key: the environment,
-  then `.env`, then (only on the original owner's Mac) his personal key store.
+  then `.env`, then Damon's Mac Keychain (only where its `~/.daemn` helper
+  exists; skipped on Windows, so `.env` is the place there). Prizm never reads
+  the Upright key files such as `~/.upright-keys.env` (disconnected 2026-11-03).
 - `brands/_TEMPLATE/` — the brand folder every brand copies;
   `ONBOARDING.md` / `onboarding.json` are the checklist.
 - Each tool's `README.md` says what it does and which keys it needs.

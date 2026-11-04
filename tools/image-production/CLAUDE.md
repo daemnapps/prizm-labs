@@ -184,7 +184,7 @@ carries on.
 ## Keys
 
 Read **by name**, never by path: the process environment first, then the
-one key file `~/.upright-keys.env` (add `NAME=value` there), through
+one key file this repo's `.env` (add `NAME=value` there), through
 `components/keys/loader.py`. Never out of a file in the repo or the home folder, never printed,
 never logged, never written into a run record.
 

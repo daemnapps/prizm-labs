@@ -4,7 +4,7 @@
 Usage: python3 gemini_breakdown.py <video.mp4> [--model gemini-flash-latest]
                                    [--out breakdown.json] [--context "..."]
 
-Reads GEMINI_API_KEY through the shared key loader (environment, then ~/.upright-keys.env).
+Reads GEMINI_API_KEY through the shared key loader (environment, then this repo's .env).
 Uploaded copy is ephemeral on
 Google's side (auto-expires ~48h). Output: structured JSON breakdown
 next to the video (or --out), consumable by the brief step.
@@ -75,11 +75,11 @@ def _loader():
 
 def key():
     # Through the one shared loader (components/keys/loader.py): the environment
-    # first, then ~/.upright-keys.env.
+    # first, then this repo's .env.
     v = _loader().key("GEMINI_API_KEY", required=False)
     if v and v.strip():
         return v.strip()
-    sys.exit("GEMINI_API_KEY not found - add GEMINI_API_KEY=value to ~/.upright-keys.env")
+    sys.exit("GEMINI_API_KEY not found - add GEMINI_API_KEY=value to this repo's .env")
 
 
 

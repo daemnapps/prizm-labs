@@ -41,8 +41,8 @@ def main():
                       ("GDRIVE_SA_KEY", "making the Google Doc"),
                       ("ELEVENLABS_API_KEY", "casting a character's voice")):
         check(f"{name} ({why})",
-              lambda n=name: (OK, "") if keys.get(n, required=False) else (BAD, "not in ~/.upright-keys.env"),
-              "add NAME=value to ~/.upright-keys.env")
+              lambda n=name: (OK, "") if keys.get(n, required=False) else (BAD, "not in this repo's .env"),
+              "add NAME=value to this repo's .env")
 
     check("APIFY_TOKEN_PERSONAL (spare account)",
           lambda: (OK, "") if keys.get("APIFY_TOKEN_PERSONAL", required=False)

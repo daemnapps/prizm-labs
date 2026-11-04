@@ -623,7 +623,7 @@ on the owner's word, 2026-09-22.
 Everything else in `machine/` is internal and may change without notice.
 
 **Keys:** `ELEVENLABS_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`,
-`BYTEPLUS_API_KEY` — by name through the shared key loader: the environment, then `~/.upright-keys.env` (add `NAME=value` there).
+`BYTEPLUS_API_KEY` — by name through the shared key loader: the environment, then this repo's `.env` (add `NAME=value` there), then Damon's Mac Keychain when present.
 
 **One correction worth carrying**, found 2026-09-23: `machine/run.py` counted
 its way to the workspace root from the depth it had in `lab/damon/`, so after

@@ -45,7 +45,7 @@ def structure(brand, day):
         return mod
     url = _keys_mod("loader.py", "upright_keys_loader").key("SUPABASE_DB_URL", required=False)
     if not url:
-        sys.exit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to ~/.upright-keys.env")
+        sys.exit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to this repo's .env")
     safe, child = _keys_mod("pg_argv.py", "upright_pg_argv").for_psql(url)   # password in the env, not argv
     acct = json.loads((ROOT / "brands" / brand / "meta" / "account.json").read_text())["account_id"]
     q = ("select ad_id, ad_name, adset_id, adset_name, campaign_id, campaign_name, effective_status "

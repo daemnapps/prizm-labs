@@ -418,7 +418,7 @@ def right_account(key, lk):
     if want not in have:
         sys.exit(f"REFUSED — {lk.get('klaviyo_key')} opens the Klaviyo account of "
                  f"{c.get('organization_name') or 'an unnamed account'} ({', '.join(sorted(have)) or 'no website'}), "
-                 f"not this brand's ({want}). Nothing went to Klaviyo. Check that line in ~/.upright-keys.env")
+                 f"not this brand's ({want}). Nothing went to Klaviyo. Check that line in this repo's .env")
     _ACCOUNTS_OK.add(key)
 
 

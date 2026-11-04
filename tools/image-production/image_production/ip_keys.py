@@ -4,7 +4,7 @@ SI-194 (readers use loader), dispatch 4: `route.key_value` and
 `static/tools/gemini_image.py` no longer import ~/.daemn/daemn_keys or open
 ~/.gemini.env themselves. They ask key(NAME), which asks
 components/keys/loader.py: the environment first, then the one key file
-~/.upright-keys.env (add NAME=value there; when it exists nothing else is
+this repo's .env (add NAME=value there; when it exists nothing else is
 read). Only on a machine with no key file yet does the loader fall back to the
 temporary old places.
 `judge.py`, `providers.py` and `dryrun.py` already ask `route.key_value`, so

@@ -3,12 +3,12 @@
 
 Keys env standard: every reader in this folder asks key(NAME), which asks
 components/keys/loader.py: the environment first, then the one key file
-~/.upright-keys.env (add NAME=value there). Only on a machine with no key
+this repo's .env (add NAME=value there). Only on a machine with no key
 file yet does the loader fall back to the temporary old places.
 
 A caller that passes local_env=True (sequence.py) also gets
 machine/.env as the last resort — only on a machine with no key file yet; once
-~/.upright-keys.env exists, or on the mini, it is never read.
+this repo's .env exists, or on the mini, it is never read.
 
 Never raises; a missing key is None. Never prints or logs a value. The loader
 is loaded by path under its own module name, as video-teardown's keys.py does

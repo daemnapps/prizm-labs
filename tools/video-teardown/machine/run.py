@@ -651,7 +651,7 @@ def _clean_env():
     # THE CHAIN'S OWN LONG-LIFE LOGIN (2026-10-07). The CLI's saved sign-in only
     # stays alive while the CLI is used; idle a few days, it expires and every
     # Claude stage stops with "OAuth session expired". A token made once with
-    # `claude setup-token` lasts a year; it lives in ~/.upright-keys.env like every key
+    # `claude setup-token` lasts a year; it lives in this repo's .env like every key
     # (CLAUDE_CODE_OAUTH_TOKEN) and is handed to each call here.
     tok = os.environ.get("CLAUDE_CODE_OAUTH_TOKEN_CHAIN")
     if not tok:
@@ -666,7 +666,7 @@ def _clean_env():
     # A COMPANY API KEY WINS when there is one (the owner, 2026-10-07: "why a specific
     # account has to be the only one controlling this"). Billed to the company,
     # never expires, runnable by anyone or the mini, and it keeps chain runs off
-    # any one person's subscription limit. Key file: ANTHROPIC_API_KEY in ~/.upright-keys.env.
+    # any one person's subscription limit. Key file: ANTHROPIC_API_KEY in this repo's .env.
     key = os.environ.get("ANTHROPIC_API_KEY_CHAIN")
     if not key:
         try:

@@ -10,7 +10,7 @@ ear. the owner: "L would be cool if possible … let's find it."
     2. NAME    Shazam names the track and artist from the isolated music — free,
                no account (shazamio, in its own venv at ~/.daemn/venvs/shazam).
                AudD is a backup only if AUDD_API_TOKEN is ever added to
-               ~/.upright-keys.env; the owner chose Shazam over signing up.
+               this repo's .env; the owner chose Shazam over signing up.
     3. DESCRIBE When no song is named (an original or unreleased sound), the
                ISOLATED music is described by the model, which can actually hear
                it on its own.

@@ -11,7 +11,7 @@ and who cancelled. This is the retention half of the picture — the funnel half
 lives in Next Commerce.
 
 Auth: `LOOP_<BRAND>_KEY` through `ep_keys`, the one key loader (components/keys):
-the environment first, then ~/.upright-keys.env. The key is never
+the environment first, then this repo's .env. The key is never
 printed, never written to disk, never passed in a URL, never on a command line.
 """
 import argparse

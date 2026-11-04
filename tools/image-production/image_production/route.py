@@ -216,7 +216,7 @@ def key_value(name):
     """The key by NAME, through the one loader (`ip_keys`, components/keys —
     SI-194 (readers use loader)). The process environment first (that is how
     the vault is loaded into a process), then the one key file
-    ~/.upright-keys.env (add NAME=value there). On the mini the environment is
+    this repo's .env (add NAME=value there). On the mini the environment is
     the only place.
 
     Asked by name only: never read out of a file in the repo, and this module

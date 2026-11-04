@@ -48,11 +48,11 @@ def _loader():
 
 def key():
     # Through the one shared loader (components/keys/loader.py): the environment
-    # first, then ~/.upright-keys.env.
+    # first, then this repo's .env.
     v = _loader().key("GEMINI_API_KEY", required=False)
     if v and v.strip():
         return v.strip()
-    sys.exit("GEMINI_API_KEY not found - add GEMINI_API_KEY=value to ~/.upright-keys.env")
+    sys.exit("GEMINI_API_KEY not found - add GEMINI_API_KEY=value to this repo's .env")
 
 
 

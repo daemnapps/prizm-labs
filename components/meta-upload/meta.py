@@ -13,7 +13,7 @@ through asset_feed_spec. That is why this file exists.
 
 Credential: by name (`PRIZM_META_TOKEN`, or the brand's `token_key`) through
 the one key loader, components/keys/loader.py via mu_keys.py — the environment
-first, then ~/.upright-keys.env (add the NAME=value line there). Read at call time, never stored in the repo, never printed.
+first, then this repo's .env (add the NAME=value line there). Read at call time, never stored in the repo, never printed.
 """
 import json
 import sys

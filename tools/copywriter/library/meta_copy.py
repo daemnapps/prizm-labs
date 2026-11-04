@@ -302,7 +302,7 @@ def db_query(sql):
         return mod
     url = _load("loader.py", "upright_keys_loader").key("SUPABASE_DB_URL", required=False)
     if not url:
-        raise SystemExit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to ~/.upright-keys.env")
+        raise SystemExit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to this repo's .env")
     safe, child = _load("pg_argv.py", "upright_pg_argv").for_psql(url)   # the password rides in the env, not argv
     r = subprocess.run(["psql", safe, "-At", "-v", "ON_ERROR_STOP=1",
                         "-c", "set default_transaction_read_only = on; " + sql],

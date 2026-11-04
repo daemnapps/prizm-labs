@@ -6,7 +6,7 @@
 Deliberately narrow: the full creator-ingest component builds a dossier with
 transcripts and comments. This wants one still image and its permalink, and
 nothing else. Reads APIFY_TOKEN by name through components/keys
-(tools/it_keys.py) — the environment, then ~/.upright-keys.env (add
+(tools/it_keys.py) — the environment, then this repo's .env (add
 APIFY_TOKEN=value there).
 
 Media never enters a git repo — point --out at an ignored folder.

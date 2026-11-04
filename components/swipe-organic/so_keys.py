@@ -3,7 +3,7 @@
 SI-194 (readers use loader), dispatch for swipe-organic: pull_creator_posts.py
 no longer asks the Keychain itself (`security find-generic-password`). It asks
 key("APIFY_TOKEN"), which asks components/keys/loader.py: the environment
-first, then ~/.upright-keys.env (the one key file — add NAME=value there; when it exists nothing else is read) — and only on a machine with no key file — the temporary old places. pull_creator_posts.py is the
+first, then this repo's .env (add NAME=value there; nothing else is read). pull_creator_posts.py is the
 one reader here. Every other swipe-organic Apify reader (recomment, sounds,
 affinity, hops, saves, feed, desklib, slideshows, harvest) gets its token
 through components/apify, not through this helper.

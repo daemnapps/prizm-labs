@@ -137,7 +137,7 @@ def _keys_loader():
 def gemini_key():
     """GEMINI_API_KEY, by NAME, through the one key loader
     (components/keys/loader.py): the environment (the name the mini's
-    env.template and the dispatch grants know), then ~/.upright-keys.env on a
+    env.template and the dispatch grants know), then this repo's .env on a
     person's machine. Asked for by NAME, never read from a path."""
     k = os.environ.get("GEMINI_API_KEY")
     if k:
@@ -147,7 +147,7 @@ def gemini_key():
     except Exception:
         k = None
     if not k:
-        raise RuntimeError("GEMINI_API_KEY is not set in the environment or ~/.upright-keys.env")
+        raise RuntimeError("GEMINI_API_KEY is not set in the environment or this repo's .env")
     return k
 
 

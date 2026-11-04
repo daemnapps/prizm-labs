@@ -50,8 +50,8 @@ Everything else in `machine/` and `tools/` is internal and may change without no
    written without naming the brand, it belongs in that brand's folder,
    not in this machine.
 5. Media and run outputs live on the team Drive, never in git (workspace
-   rule 3). Keys live in `~/.upright-keys.env` on the owner's machine today;
-   company-account keys land in the ruled key home when that migration runs.
+   rule 3). Keys live only in the environment or this repo's `.env`
+   (see `.env.example`); Prizm never reads the Upright key files (2026-11-03).
 6. The retired shared chain (`new-workflow-design/builds/video-teardown/`)
    is history, not a reference — this machine replaced it entirely
    (decision log 2026-08-25).

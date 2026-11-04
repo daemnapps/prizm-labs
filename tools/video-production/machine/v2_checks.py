@@ -41,7 +41,7 @@ def _key():
     m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
     k = (m.key("GEMINI_API_KEY") or "").strip()
     if not k:
-        raise SystemExit("no GEMINI_API_KEY in ~/.upright-keys.env — v2's checks need it")
+        raise SystemExit("no GEMINI_API_KEY in this repo's .env — v2's checks need it")
     return k
 
 

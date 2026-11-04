@@ -34,7 +34,7 @@ signal; IG second — unlocks suggested-accounts; YT third). Each persona:
 - **Registry** (`records/personas/<avatar>/persona.json`) — handle,
   platform, status (warming | trained | flagged | retired), created
   date, device/IP note. **Never credentials** — logins live in the key
-  file (`~/.upright-keys.env`), not in git.
+  file (this repo's `.env`), not in git.
 - **Watch sessions**: scheduled browser sessions at human pace, 1–2/day.
   Watch-through = vote yes; fast skip = vote no; the kit's categories
   define which is which. Watch only — never post, comment, follow-spam.

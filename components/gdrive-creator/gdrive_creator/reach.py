@@ -104,7 +104,7 @@ def _finders(find_mount, find_engine):
 def route(find_mount=None):
     """"api" or "mount", else NoDrive(NO_DRIVE). A GDRIVE_SA_KEY means the API even where a mount
     exists — found by the same lookup the engine uses (engine.has_key: the environment, a host's
-    configured lookup, else the one key loader, so a person's ~/.upright-keys.env counts; LD-47
+    configured lookup, else the one key loader, so a person's this repo's .env counts; LD-47
     (Drive sweep) step 1.6, 2026-10-20). An empty one is no key."""
     raise NoDrive("Prizm Labs does not reach company Drives")
     find_mount = find_mount or mount

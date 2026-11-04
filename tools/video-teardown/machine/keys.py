@@ -3,11 +3,10 @@
 
 SI-193 (video-teardown keys reader): this file no longer reads key files
 itself. It delegates to components/keys/loader.py — key(NAME) — which looks
-in the environment, then the one key file ~/.upright-keys.env (the env
-standard, 2026-10-17: add NAME=value to ~/.upright-keys.env). When that file
-exists nothing else is read. Only on a machine with no key file yet, and not on
-the mini, the loader still falls back to the old places (the Keychain, then
-`~/.daemn/keys.env`, `~/.apify.env`, `~/.gemini.env`).
+in the environment, then this repo's .env (add NAME=value there), then
+Damon's Mac Keychain when its ~/.daemn helper exists (skipped on Windows).
+The Upright key files (~/.upright-keys.env, ~/.daemn/keys.env, ~/.gemini.env,
+~/.apify.env) are never read (disconnected 2026-11-03).
 
 The managed file is NEVER opened or parsed here — its existence only marks
 the mini. On the mini a job sees exactly its own environment's keys
@@ -22,8 +21,10 @@ import importlib.util
 import os, sys
 from pathlib import Path
 
-VAULT = Path.home() / ".daemn" / "keys.env"
-LEGACY = [Path.home() / ".gemini.env", Path.home() / ".apify.env"]
+# Kept as public names so callers don't break. VAULT is this repo's .env; the
+# Upright key files are not read any more (2026-11-03).
+VAULT = Path(__file__).resolve().parents[3] / ".env"
+LEGACY = []
 KEYCHAIN = Path.home() / ".daemn"
 
 # components/keys/loader.py, by path under its own module name — never on
@@ -58,8 +59,23 @@ def _is_key_name(n):
             or n in _loader.ALIASES or n in _loader.ALIASES.values())
 
 
+def _parse(p):
+    """The NAMES in a NAME=value file; values are read by the loader."""
+    out = set()
+    try:
+        text = Path(os.path.expanduser(str(p))).read_text()
+    except Exception:
+        return out
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        out.add(line.partition("=")[0].strip())
+    return out
+
+
 def _keychain_names():
-    """The names the Keychain helper knows. Silent if it is not set up."""
+    """The names Damon's Keychain helper knows. Silent if it is not set up (Windows)."""
     folder = Path(os.path.expanduser(_loader.KEYCHAIN_DIR))
     if not (folder / "daemn_keys.py").is_file():
         return []
@@ -78,33 +94,15 @@ def _keychain_names():
             return []
 
 
-def _parse(p):
-    """The NAMES in a NAME=value file; values are read by the loader."""
-    out = set()
-    try:
-        text = Path(os.path.expanduser(str(p))).read_text()
-    except Exception:
-        return out
-    for line in text.splitlines():
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        out.add(line.partition("=")[0].strip())
-    return out
-
-
 def all_keys():
     """{name: value} for the environment's key names, plus — off the mini —
-    every name ~/.upright-keys.env holds (or, on a machine with no key file,
-    the old files and the Keychain); each value from the loader."""
+    every name this repo's .env holds, or, with no .env, the names Damon's
+    Keychain knows; each value from the loader."""
     names = {n for n in os.environ if _is_key_name(n)}
     if not _loader.fallback_skipped():
         if _loader.has_key_file():
             names.update(_parse(_loader.KEY_FILE))
         else:
-            for src in _loader.FALLBACK:
-                if src != "keychain":
-                    names.update(_parse(src))
             names.update(_keychain_names())
     found = {}
     for n in sorted(names):
@@ -135,7 +133,7 @@ def export():
 def status():
     ks = all_keys()
     if not ks:
-        return "No keys found — add NAME=value to ~/.upright-keys.env"
+        return "No keys found — add NAME=value to this repo's .env"
     return "\n".join(f"  {k:<24} set ({len(v)} chars)" for k, v in sorted(ks.items()))
 
 

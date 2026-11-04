@@ -15,7 +15,7 @@ Every mode pulls its own rows, then hands them here:
 What a brand pulls is config in its own `operations/language-pulls.json`
 (`language_avatar`, `surveys`, `reviews`, `interviews`) — never here. A key is
 read by NAME through the one key loader, components/keys/loader.py (via
-rg_keys: the environment first, then ~/.upright-keys.env). Never
+rg_keys: the environment first, then this repo's .env). Never
 raises on a missing source: the mode says what is missing and moves on.
 """
 import datetime as dt
@@ -71,7 +71,7 @@ def avatar_for(brand, bj, named=None):
 
 
 def key(name):
-    """A key by NAME: the environment, then ~/.upright-keys.env (the one
+    """A key by NAME: the environment, then this repo's .env (the one
     key file) through the loader (rg_keys,
     SI-194 (readers use loader)). None when missing; never raises, never printed."""
     if not name:

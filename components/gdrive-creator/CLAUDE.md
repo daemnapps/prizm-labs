@@ -105,7 +105,7 @@ reader cannot list the mount; `readable()` is its one-call fallback to the API.
 from gdrive_creator import reach
 reach.route()                                  # -> "api" (GDRIVE_SA_KEY present, even with a mount) | "mount" | NoDrive
                                                #    present = engine.has_key(): the environment, a configured key_lookup, else the
-                                               #    one key loader (a person's ~/.upright-keys.env counts; LD-47 (Drive sweep) step 1.6, 2026-10-20).
+                                               #    one key loader (a person's this repo's .env counts; LD-47 (Drive sweep) step 1.6, 2026-10-20).
                                                #    Tests that mean "no key" set KEYS_NO_FALLBACK=1 as well as clearing the variable
 reach.get(parts, name, dest_dir, svc=None)     # -> Shared Assets/<parts>/<name> as a local file (the mount file itself, or read by id), or None
 reach.put(files, parts, svc=None)              # -> (how, placed, note). Folders made if missing, same name = updated in place; "none" + a SKIP note with no route
