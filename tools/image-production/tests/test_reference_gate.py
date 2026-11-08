@@ -43,13 +43,21 @@ class ReferenceGate(unittest.TestCase):
     def test_real_references_pass(self):
         self.assertEqual(refs_problems(req(), {"references": ["photo.jpg"]}), [])
 
-    def test_an_ai_made_reference_is_refused(self):
+    def test_ai_made_references_alone_are_refused(self):
         with tempfile.TemporaryDirectory() as d:
             made = Path(d) / "made-01.png"
             made.write_bytes(b"x")
             made.with_suffix(".recipe.json").write_text("{}")
-            got = refs_problems(req(from_image="frame.png", references=[str(made)]), {"references": [str(made)]})
+            got = refs_problems(req(from_image=str(made), references=[str(made)]), {"references": [str(made)]})
         self.assertTrue(any("AI-made" in p for p in got))
+
+    def test_an_ai_made_reference_rides_along_with_a_real_frame(self):
+        with tempfile.TemporaryDirectory() as d:
+            made = Path(d) / "shot-1.png"
+            made.write_bytes(b"x")
+            made.with_suffix(".recipe.json").write_text("{}")
+            got = refs_problems(req(from_image="swipe-frame.png", references=[str(made)]), {"references": [str(made)]})
+        self.assertFalse(any("AI-made" in p for p in got))
 
 
 if __name__ == "__main__":

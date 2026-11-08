@@ -92,6 +92,15 @@ def main(idea):
                           'note': 'AI voice read of %s line %d' % (ln.get('speaker') or 'the', k)})
         ff = sc.get('first_frame') or {}
         shots = sc.get('shots') or [{}]
+        if sc.get('take') == 'continuous':      # the swipe holds one take: ONE clip carries every line (BRIEF-SPEC 6-8; take.py)
+            steps.append({'id': 'take', 'tool': 'gen.take', 'model': None, 'prompt': frame_prompt(ff), 'seed': None,
+                          'inputs': {'refs': ff.get('refs') or []},
+                          'params': {'script': [{'speaker': ln.get('speaker'), 'say': ln.get('say')} for ln in script],
+                                     'staging': ov.get('happens') or sc.get('happens'), 'motion': sc.get('motion'),
+                                     'beats': [{'shot': sh.get('id'), 'face': sh.get('face'), 'do': sh.get('action') or (sh.get('gestures') or [None])[0]}
+                                               for sh in shots]},
+                          'note': 'one continuous take: start picture from the swipe frame, a voice sample per speaker, the swipe seconds as motion'})
+            shots = []
         for i, sh in enumerate(shots):
             start = frame_prompt(ff) if sh.get('start_picture', 'first_frame') == 'first_frame' else str(sh.get('start_picture'))
             params = {'copies': sh.get('copies'), 'lines': sh.get('lines') or [], 'speaker': sh.get('speaker')}

@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+"""One continuous take: a whole scene made as ONE clip (tools/video-production/BRIEF-SPEC.md, "Continuous takes
+and motion", ruled 2026-11-09).
+
+Where the swipe holds one take, the scene is one call carrying:
+  - the start picture (made by image production from the swipe's frame),
+  - one short voice sample per speaker (the model speaks every line itself, in that voice),
+  - the swipe's seconds as the motion reference (camera, staging, body language),
+  - the whole script in order, each line with its speaker, and the camera, staging and body language in words.
+
+    python3 take.py <take.json> [--dry-run]
+
+take.json:
+  {"out": "take.mp4", "model": "seedance-2.5" | "wan-3.0",  "seconds": 20,
+   "picture": "start.png",
+   "speakers": {"HOST": ["reads/1.mp3", "reads/3.mp3"], "RATER": ["reads/2.mp3"]},
+   "script": [{"speaker": "HOST", "say": "...", "do": "what the body does on this line"}, ...],
+   "staging": "who stands where and who moves where, in order",
+   "motion": {"source": "swipe.mp4", "from": 0, "to": 10, "blur": [[x, y, w, h], ...]},
+   "look": "place, light and sound in one line"}
+
+Doors: seedance-2.5 through the Higgsfield API (start picture + voices + motion video), wan-3.0 through fal
+(reference mode: the picture as a reference, voices, motion video; a start picture cannot ride with references there).
+Keys by name through the key loader. No brand, product or person is named here. Python 3.9.
+"""
+import json
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import settings as ST  # noqa: E402
+
+CAMERA = ("One continuous take shot on a phone held by a person on location: real handheld movement the whole time; the "
+          "camera drifts, bobs and re-frames as the operator follows the action. No cuts, no tripod, no smooth glide.")
+MOTION = ("Copy the camera movement, handheld shake, pacing and body language of the reference video; take nothing else "
+          "from it (not its people, clothes, place or words).")
+# What each door takes (tools/model-inputs/inputs/<model>.json): voice samples in total, the motion clip, and
+# whether the motion clip counts against the output length.
+DOORS = {
+    "seedance-2.5": {"voice_total": 30, "voice_each": (2, 15), "motion_max": 15, "shared_30": False},
+    "wan-3.0": {"voice_total": 15, "voice_each": (1, 15), "motion_max": 15, "shared_30": True},
+}
+
+
+def seconds_of(f) -> float:
+    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(f)],
+                       capture_output=True, text=True)
+    try:
+        return float(r.stdout.strip())
+    except ValueError:
+        return 0.0
+
+
+def samples(speakers, work, door):
+    """One voice sample per speaker, in speaker order: that speaker's reads joined, cut to fit the door's limits.
+    The sample only teaches the voice; the model speaks every line itself."""
+    lim = DOORS[door]
+    each_cap = min(lim["voice_each"][1], lim["voice_total"] / max(1, len(speakers)))
+    out = []
+    for name, reads in speakers.items():
+        f = Path(work) / f"voice-{name.lower().replace(' ', '-')}.mp3"
+        ins = sum((["-i", str(r)] for r in reads), [])
+        flt = "".join(f"[{i}]" for i in range(len(reads))) + f"concat=n={len(reads)}:v=0:a=1,atrim=0:{each_cap:.2f},apad=whole_dur={lim['voice_each'][0]}"
+        subprocess.run(["ffmpeg", "-v", "error", "-y"] + ins + ["-filter_complex", flt, "-b:a", "192k", str(f)], check=True)
+        out.append((name, f))
+    return out
+
+
+def motion_clip(motion, seconds, work, door):
+    """The swipe's seconds as the motion reference, its on-screen words and stickers blurred (`blur`: boxes as
+    fractions of the frame), cut to what the door takes."""
+    lim = DOORS[door]
+    span = float(motion["to"]) - float(motion.get("from", 0))
+    span = min(span, lim["motion_max"], (29 - seconds) if lim["shared_30"] else span)   # a second of margin: a clip measures a hair long
+    if span < 2:
+        return None
+    f = Path(work) / "motion.mp4"
+    boxes = motion.get("blur") or []
+    if boxes:
+        parts = [f"[0]split={len(boxes) + 1}[base]" + "".join(f"[b{i}]" for i in range(len(boxes)))]
+        last = "base"
+        for i, (x, y, w, h) in enumerate(boxes):
+            parts.append(f"[b{i}]crop=iw*{w}:ih*{h}:iw*{x}:ih*{y},boxblur=25[c{i}]")
+            parts.append(f"[{last}][c{i}]overlay=W*{x}:H*{y}[o{i}]")
+            last = f"o{i}"
+        vf = ["-filter_complex", ";".join(parts), "-map", f"[{last}]"]
+    else:
+        vf = []
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(motion.get("from", 0)), "-t", f"{span:.2f}",
+                    "-i", str(motion["source"])] + vf + ["-an", "-c:v", "libx264", "-crf", "22", str(f)], check=True)
+    return f
+
+
+def prompt(take, voices, with_motion):
+    audio = {name: i for i, (name, _) in enumerate(voices, 1)}
+    who = ", ".join(f"Audio {i} is the voice of {name}" for name, i in audio.items())
+    lines = []
+    for k, ln in enumerate(take["script"], 1):
+        do = f" {ln['do'].rstrip('.')}." if ln.get("do") else ""
+        lines.append(f"{k}.{do} {ln['speaker']}: \"{ln['say']}\"")
+    return "\n".join(x for x in [
+        CAMERA,
+        MOTION if with_motion else "",
+        "The people, clothes, place and light are exactly those of the reference picture.",
+        take.get("staging", ""),
+        f"{who}; each speaks only their own lines, lips matching every word. Real body language on every line.",
+        "In order:\n" + "\n".join(lines),
+        (take.get("look") or "") + " No music, no text on screen.",
+    ] if x)
+
+
+def _fal(endpoint, body):
+    sys.path.insert(0, str(ST.part("keys")))
+    import loader
+    h = {"Authorization": "Key " + loader.key("FAL_KEY"), "Content-Type": "application/json"}
+
+    def call(url, data=None):
+        r = urllib.request.Request(url, data=json.dumps(data).encode() if data is not None else None, headers=h,
+                                   method="POST" if data is not None else "GET")
+        try:
+            return json.load(urllib.request.urlopen(r, timeout=120))
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"fal {e.code}: {e.read().decode()[:400]}")
+
+    def up(path):
+        ctype = {".png": "image/png", ".jpg": "image/jpeg", ".mp3": "audio/mpeg", ".mp4": "video/mp4"}[Path(path).suffix]
+        i = call("https://rest.alpha.fal.ai/storage/upload/initiate?storage_type=fal-cdn-v3",
+                 {"content_type": ctype, "file_name": Path(path).name})
+        urllib.request.urlopen(urllib.request.Request(i["upload_url"], data=Path(path).read_bytes(),
+                                                      headers={"Content-Type": ctype}, method="PUT"), timeout=300)
+        return i["file_url"]
+
+    body = {k: ([up(x) for x in v] if k.endswith("_urls") else v) for k, v in body.items()}
+    job = call(f"https://queue.fal.run/{endpoint}", body)
+    while True:
+        st = call(job["status_url"])
+        if st.get("status") == "COMPLETED":
+            return job, call(job["response_url"])
+        if st.get("status") not in ("IN_QUEUE", "IN_PROGRESS"):
+            raise RuntimeError(f"fal ended {st}")
+        time.sleep(15)
+
+
+def make(take, dry_run=False):
+    door = take.get("model") or "seedance-2.5"
+    if door not in DOORS:
+        raise SystemExit(f"no take door for {door!r}: {', '.join(DOORS)}")
+    out = Path(take["out"])
+    work = out.with_suffix("")
+    work.mkdir(parents=True, exist_ok=True)
+    secs = int(take.get("seconds") or 20)
+    voices = samples(take["speakers"], work, door)
+    mclip = motion_clip(take["motion"], secs, work, door) if take.get("motion") else None
+    text = prompt(take, voices, mclip is not None)
+    sent = {"door": door, "seconds": secs, "picture": take["picture"], "voices": [str(v) for _, v in voices],
+            "motion": str(mclip) if mclip else None, "prompt": text}
+    (work / "sent.json").write_text(json.dumps(sent, indent=1))
+    if dry_run:
+        print(json.dumps(sent, indent=1))
+        return sent
+    if door == "wan-3.0":
+        body = {"prompt": text, "reference_image_urls": [take["picture"]], "reference_audio_urls": [str(v) for _, v in voices],
+                "resolution": "480p", "aspect_ratio": "9:16", "duration": secs, "enable_safety_checker": False,
+                "enable_thinking": True, "audio": True}
+        if mclip:
+            body["reference_video_urls"] = [str(mclip)]
+        job, res = _fal("alibaba/wan-3.0/reference-to-video", body)
+        url = (res.get("video") or {}).get("url")
+        rid = job.get("request_id")
+    else:
+        sd = ST.part("video-production") / "machine"
+        sys.path.insert(0, str(sd))
+        import higgsfield_api as hf
+        import seedance as SD
+        payload = {"prompt": text, "resolution": "480p", "aspect_ratio": "9:16", "duration": secs,
+                   "generate_audio": True, "output_format": "mp4", "image_urls": [hf.upload(take["picture"])],
+                   "audio_urls": [hf.upload(v) for _, v in voices]}
+        if mclip:
+            payload["video_urls"] = [hf.upload(mclip)]
+        res = SD._make(SD.paths()[0], payload, out, hf)
+        url, rid = res.get("url"), res.get("request_id")
+    if url and not out.is_file():
+        urllib.request.urlretrieve(url, out)
+    sent.update({"request_id": rid, "url": url, "file": str(out), "at": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    (work / "sent.json").write_text(json.dumps(sent, indent=1))
+    print(json.dumps({"take": str(out), "door": door, "request_id": rid}))
+    return sent
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        sys.exit(__doc__)
+    make(json.loads(Path(sys.argv[1]).read_text()), dry_run="--dry-run" in sys.argv)

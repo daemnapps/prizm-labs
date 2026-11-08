@@ -102,6 +102,10 @@ def fold_run(group):
     if last.get("last_frame") is not None:
         sc["last_frame"] = copy.deepcopy(last["last_frame"])
     sc["folded_from"] = [g.get("id") for g in group]
+    sources = {sh.get("copies") for sh in shots if sh.get("copies")}
+    if len(sources) == 1:                                 # the swipe holds one take here: made as ONE clip (BRIEF-SPEC 6-8)
+        sc["take"] = "continuous"
+        sc.setdefault("motion", {"copies": next(iter(sources))})
     for k in ("source_turn_id", "speaker_map", "native_voice_routing"):
         sc.pop(k, None)
     return sc

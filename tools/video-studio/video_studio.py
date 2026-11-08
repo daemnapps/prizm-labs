@@ -34,7 +34,7 @@ LOCK = threading.Lock()
 RUNNING = {}
 MAKING = {}   # AI shots with a take being made right now (Production view: pick a clip model, make a take)
 RUNNABLE = {"ffmpeg.trim", "voice.read", "layer.photo", "layer.offer", "hyperframes.card"}  # tools this canvas can run today; others show what they wait on
-WAITS = {"voice.ai": "AI voice", "gen.shot": "shot generation", "human.read": "voice read", "capture.page": "page capture", "layer.photo": "edit layer",
+WAITS = {"voice.ai": "AI voice", "gen.shot": "shot generation", "gen.take": "continuous take", "human.read": "voice read", "capture.page": "page capture", "layer.photo": "edit layer",
          "layer.offer": "edit layer"}
 
 

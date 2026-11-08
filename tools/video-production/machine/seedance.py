@@ -80,6 +80,21 @@ def check_inputs(secs, resolution, images, videos=(), audios=(), aspect=9 / 16, 
                                         aspect=aspect), "seedance")
 
 
+def fit_read(voice, model=None):
+    """A read shorter than the model's shortest audio reference ("Smash or pass?" is 1.4 s; Seedance 2.5 takes 2 s and
+    up) gets 0.15 s of quiet before the line and quiet after it up to the minimum plus 0.6 s, kept beside it as
+    `<read>.fit.mp3`. The line and its timing stay as read; nothing is stretched."""
+    voice = Path(voice)
+    lo = (_load("clip_limits").limits(model or DEFAULT_MODEL).get("audio_clip_seconds") or [0])[0]
+    if not voice.is_file() or seconds_of(voice) >= lo:
+        return voice
+    out = voice.with_name(voice.stem + ".fit.mp3")
+    if not out.is_file() or out.stat().st_mtime < voice.stat().st_mtime:
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(voice), "-af", f"adelay=150:all=1,apad=whole_dur={lo + 0.6}",
+                        "-b:a", "192k", str(out)], check=True)
+    return out
+
+
 def span(seconds) -> int:
     return int(min(HI, max(LO, math.ceil(float(seconds or LO)))))
 
@@ -137,6 +152,7 @@ def talk(line, still, voice, out, seconds=None, acting="", masters=None, no_peop
         raise SystemExit(f"{out.name}: no voice read at {voice} — the line is read first, then the clip is made to it")
     if not dry_run:
         _load("face_gate").require(still, masters, no_people=no_people, check=face_check)
+    voice = fit_read(voice, model)
     secs = span(seconds or (seconds_of(voice) + 0.6 if voice.is_file() else LO))
     check_inputs(secs, resolution, [still] + [Path(r) for r in refs], videos=videos, audios=[voice], model=model)
     payload = {"prompt": prompt or talk_prompt(line, acting), "resolution": resolution, "aspect_ratio": aspect,

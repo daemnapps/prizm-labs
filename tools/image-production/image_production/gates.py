@@ -122,10 +122,17 @@ def input_problems(req, ctx, purposes, aspects, notes=None):
             problems.append(why)
         else:
             notes.append(why)
-    made = [str(r) for r in req.get("references") or [] if Path(str(r)).with_suffix(".recipe.json").is_file()]
-    if made:
-        problems.append("AI-made reference: " + ", ".join(Path(m).name for m in made) + " — references are "
-                        "real frames and photos; an AI picture is never a reference for another")
+    # An AI picture may ride along as a reference (a scene's shot 1 keeps its people in shots 2..n; a cast sheet keeps
+    # a face) as long as the picture also starts from something real: a real `from_image` or one real reference
+    # (2026-11-09). A picture made only from AI pictures is refused.
+    def _made(p):
+        return bool(p) and Path(str(p)).with_suffix(".recipe.json").is_file()
+    refs = [str(r) for r in req.get("references") or []]
+    made = [r for r in refs if _made(r)]
+    real = [r for r in refs if not _made(r)] + ([req["from_image"]] if req.get("from_image") and not _made(req["from_image"]) else [])
+    if made and not real:
+        problems.append("only AI-made references: " + ", ".join(Path(m).name for m in made) + " — a picture also "
+                        "starts from a real frame or photo (`from_image` or one real reference); AI pictures ride along")
 
     for m in (ctx or {}).get("_missing_objects", []):
         if m.fatal:

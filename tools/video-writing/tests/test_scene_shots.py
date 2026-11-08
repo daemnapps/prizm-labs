@@ -46,6 +46,8 @@ class SceneShots(unittest.TestCase):
         self.assertEqual(s1["first_frame"]["subject"], "frame 1")
         self.assertEqual(s1["last_frame"]["change"], "end 3")
         self.assertEqual([sh.get("scene_master") for sh in s1["shots"]], [None, "S1.1", "S1.1"])
+        self.assertEqual(s1["take"], "continuous")               # every shot copies K01: the swipe holds one take
+        self.assertEqual(s1["motion"], {"copies": "K01"})
 
     def test_cards_and_separate_moments_stay_apart(self):
         other = turn(4, "HOST", "Elsewhere.", parent="S9")
