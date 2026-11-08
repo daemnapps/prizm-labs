@@ -1,9 +1,9 @@
-"""Where the scene canvas keeps its data and finds its neighbours — settings, never machine paths in the code.
+"""Where the Video Studio keeps its data and finds its neighbours — settings, never machine paths in the code.
 
-- SCENE_CANVAS_DATA   the folder holding `briefs/` and `sources/` (default: `runs/scene-canvas/` in this repo)
-- SCENE_CANVAS_DRIVE  a synced `Shared Assets` folder to read library clips from (default: none; clips are pulled by link)
-- SCENE_CANVAS_BOARD  the storyboard board's address (default http://127.0.0.1:8914)
-- SCENE_CANVAS_APPROVE the approval page's address (default http://127.0.0.1:8795)
+- VIDEO_STUDIO_DATA   the folder holding `briefs/` and `sources/` (default: `runs/video-studio/` in this repo)
+- VIDEO_STUDIO_DRIVE  a synced `Shared Assets` folder to read library clips from (default: none; clips are pulled by link)
+- VIDEO_STUDIO_BOARD  the storyboard board's address (default http://127.0.0.1:8914)
+- VIDEO_STUDIO_APPROVE the approval page's address (default http://127.0.0.1:8795)
 Keys are read through `components/keys/loader.py`, never from a file here.
 """
 import os
@@ -12,12 +12,12 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]                                   # the workspace this component sits in
-DATA = Path(os.environ.get("SCENE_CANVAS_DATA") or REPO / "runs" / "scene-canvas")
+DATA = Path(os.environ.get("VIDEO_STUDIO_DATA") or REPO / "runs" / "video-studio")
 BRIEFS = DATA / "briefs"
 SOURCES = DATA / "sources"
-DRIVE_ROOTS = [p for p in [os.environ.get("SCENE_CANVAS_DRIVE")] if p]
-BOARD = os.environ.get("SCENE_CANVAS_BOARD") or "http://127.0.0.1:8914"
-APPROVE = os.environ.get("SCENE_CANVAS_APPROVE") or "http://127.0.0.1:8795"
+DRIVE_ROOTS = [p for p in [os.environ.get("VIDEO_STUDIO_DRIVE")] if p]
+BOARD = os.environ.get("VIDEO_STUDIO_BOARD") or "http://127.0.0.1:8914"
+APPROVE = os.environ.get("VIDEO_STUDIO_APPROVE") or "http://127.0.0.1:8795"
 
 
 def part(name, root=None):

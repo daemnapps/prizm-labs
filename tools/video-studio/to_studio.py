@@ -1,4 +1,4 @@
-"""Open a brief's scene canvas in HyperFrames Studio, on the editing board's lanes.
+"""Open a brief's Video Studio in HyperFrames Studio, on the editing board's lanes.
 
   python3 to_studio.py <brief>          writes briefs/<brief>/studio/ (a HyperFrames project) and prints how to open it
 
@@ -14,13 +14,13 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-AIW = Path(os.environ.get("SCENE_CANVAS_AIW") or HERE.parents[1])     # the workspace this component sits in
+AIW = Path(os.environ.get("VIDEO_STUDIO_AIW") or HERE.parents[1])     # the workspace this component sits in
 sys.path.insert(0, str(HERE))
 import settings as ST  # noqa: E402
 MACHINE = ST.part("video-edit", AIW) / "machine"
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(MACHINE))
-import scene_canvas as SC  # noqa: E402
+import video_studio as SC  # noqa: E402
 import brief_layout as BL  # noqa: E402  the editing board's lanes, tracks, slot frames
 import compose as C  # noqa: E402
 import looks as LK  # noqa: E402
@@ -77,7 +77,7 @@ def build(n, hook=None):
         if sc["status"] == "made":
             src = os.path.join(root, "scenes", s, sc["run"]["files"]["video"])
             pic.append({"id": s, "roll": "a", "kind": None, "src": src, "start": math.floor(at * 1000) / 1000, "duration": round(d + 0.002, 3),   # start rounded down, 2 ms overlap: no sample ever falls between two clips
-                        "source_start": 0, "scene": s, "still": False, "volume_db": 0, "why": f"{s}: made on the scene canvas, {sc['pick']}",
+                        "source_start": 0, "scene": s, "still": False, "volume_db": 0, "why": f"{s}: made on the Video Studio, {sc['pick']}",
                         "drift": False, "track": track, "row": name, "label": label + f" · {sc['pick']}"})
             cp = os.path.join(root, "scenes", s, sc["run"]["files"]["captions"])
             lag = RENDER_LAG
@@ -136,7 +136,7 @@ def build(n, hook=None):
         marks.append({"id": "song-none", "track": BL.TRACK["song"], "row": "Song", "start": 0, "duration": end,
                       "label": "none in this brief (a cleared music bed after S1 if one is available)"})
     sheet = {"meta": {"brand": "brief", "label": st["brief"]["brief"], "format": "brief-layout", "style_id": None,
-                      "width": 1080, "height": 1920, "fps": 30, "made_by": "scene canvas", "brief": st["brief"]["brief"]},
+                      "width": 1080, "height": 1920, "fps": 30, "made_by": "Video Studio", "brief": st["brief"]["brief"]},
              "controls": {"transition": {"value": "cut"}, "captions": {"value": "off"}},
              "voice": None, "voice_cuts": [], "music": music, "sfx": [],
              "picture": pic, "captions": {"look": None, "words": []}, "overlays": ovs, "markers": marks}

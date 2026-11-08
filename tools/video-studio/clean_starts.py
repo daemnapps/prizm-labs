@@ -11,7 +11,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import scene_canvas as SC  # noqa: E402
+import video_studio as SC  # noqa: E402
 
 
 def cuts(src, a, d):

@@ -48,7 +48,7 @@ def stt(path):
 
 def main(n):
     sys.path.insert(0, HERE)
-    import scene_canvas as SC
+    import video_studio as SC
     B = SC.bdir(n)
     reads = json.load(open(os.path.join(B, "voice", "reads.json")))
     brief = json.load(open(os.path.join(B, "brief.json")))

@@ -13,7 +13,7 @@ GAP, LEAD, TAIL = 0.18, 0.06, 0.12
 
 def tighten(n):
     sys.path.insert(0, HERE)
-    import scene_canvas as SC
+    import video_studio as SC
     vdir = os.path.join(SC.bdir(n), "voice")
     reads = json.load(open(os.path.join(vdir, "reads.json")))["lines"]
     os.makedirs(os.path.join(vdir, "tight"), exist_ok=True)

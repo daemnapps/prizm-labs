@@ -1,4 +1,4 @@
-"""Storyboard idea -> scene canvas brief (the owner, 2026-11-08: one video workflow tool).
+"""Storyboard idea -> Video Studio brief (the owner, 2026-11-08: one video workflow tool).
 Reads the writing run's stage-5 production brief and the board's owner edits, writes one scene workflow per scene:
 the AI voice read of its line, then one generation step per shot (start picture, angle, move, action).
     python3 seed_from_brief.py <board idea key, e.g. brief7>
@@ -6,9 +6,9 @@ Never overwrites a take that exists; prints the canvas link."""
 import json, os, re, sys
 from pathlib import Path
 HERE = Path(__file__).resolve().parent
-ROOM = Path(os.environ.get('SCENE_CANVAS_BOARD_DATA') or HERE.parents[1] / 'runs' / 'storyboard')   # the storyboard board's data (matrix.json, owner-edits/)
+ROOM = Path(os.environ.get('VIDEO_STUDIO_BOARD_DATA') or HERE.parents[1] / 'runs' / 'storyboard')   # the storyboard board's data (matrix.json, owner-edits/)
 WORK = HERE.parents[1] / 'runs' / 'video-teardown' / '_work'
-STUDIO = os.environ.get('SCENE_CANVAS_STUDIO') or 'http://127.0.0.1:8922'
+STUDIO = os.environ.get('VIDEO_STUDIO_STUDIO') or 'http://127.0.0.1:8922'
 
 
 def brief_json(run):

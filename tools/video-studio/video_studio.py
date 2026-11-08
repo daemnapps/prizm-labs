@@ -1,8 +1,8 @@
-"""Scene canvas: every scene of a brief is a node with its own saved workflow.
+"""Video Studio: every scene of a brief is a node with its own saved workflow.
 
-  python3 scene_canvas.py serve [--port 8921]   the canvas page
-  python3 scene_canvas.py run <brief> S1           rerun one scene alone (what the scheduled agent calls)
-  python3 scene_canvas.py package <brief>          write the production package for HyperFrames
+  python3 video_studio.py serve [--port 8921]   the canvas page
+  python3 video_studio.py run <brief> S1           rerun one scene alone (what the scheduled agent calls)
+  python3 video_studio.py package <brief>          write the production package for HyperFrames
 
 A workflow (briefs/<n>/scenes/<S>/take-N.json) holds every step: tool, model,
 prompt, seed, inputs, params. A run writes the scene file, a thumbnail, its
@@ -92,7 +92,7 @@ def resolve(src):
     p = os.path.join(SOURCES, os.path.basename(loc))   # pulled from Drive by its link when no synced folder has it
     if os.path.exists(p):
         return p
-    raise FileNotFoundError("source not found (set SCENE_CANVAS_DRIVE or pull it by link): " + loc)
+    raise FileNotFoundError("source not found (set VIDEO_STUDIO_DRIVE or pull it by link): " + loc)
 
 
 def read_words(n, s, vfile):
@@ -540,7 +540,7 @@ def clip_reference(n, s):
         phone = _gen_file(os.path.join("phone", name + ".mp4"))
         if phone:
             steps.append({"what": "Phone pass", "model": "ffmpeg (no AI)", "input": name + ".mp4",
-                          "prompt": "Re-shot through a phone look: 432 px, grain, compression, handheld drift (scene_canvas.phone_copy)",
+                          "prompt": "Re-shot through a phone look: 432 px, grain, compression, handheld drift (video_studio.phone_copy)",
                           "prompt_note": "a fixed recipe, not a prompt", "out": phone})
         rejected = sorted(os.path.relpath(f, GEN) for f in glob.glob(os.path.join(GEN, "rejected", name + "*")))
         used = [{"step": st.get("id"), "in": (st.get("inputs") or {}).get("in"), "out": (st.get("inputs") or {}).get("out")}
@@ -759,7 +759,7 @@ def main(argv):
             threading.Thread(target=relay.serve_forever, daemon=True).start()
         except OSError:
             pass
-        print(f"scene canvas on http://127.0.0.1:{port} (board relay on {BOARD_RELAY})")
+        print(f"Video Studio on http://127.0.0.1:{port} (board relay on {BOARD_RELAY})")
         ThreadingHTTPServer(("127.0.0.1", port), H).serve_forever()
     elif argv[0] == "run":
         print(json.dumps(run_scene(argv[1], argv[2]), indent=1))

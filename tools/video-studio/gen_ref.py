@@ -11,7 +11,7 @@ THE PROCESS (models from the team's Generative Model House, components/generativ
   3. Clip        Seedance 2.5 through the Higgsfield API, 480p, silent, from the still or the frame (machine/seedance.py
                  motion). A person in the picture must pass the face gate against `master` (their real frame) first;
                  a picture with none of our people says `"no_people": true`.
-  4. Phone pass  scene_canvas.phone_copy re-shoots the clip at 432 px with grain and drift when a scene uses it, which is
+  4. Phone pass  video_studio.phone_copy re-shoots the clip at 432 px with grain and drift when a scene uses it, which is
                  also why the house's local upscale step is skipped here.
 A recipe: {"name", "ref", "refs": [...], "master": "...", "still": "...", "action": "...", "seconds": 5, "no_people": false}.
 Each run writes `made` on the recipe: every step's model, the prompt exactly as sent, the references, the request id,

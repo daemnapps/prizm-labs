@@ -10,7 +10,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import scene_canvas as SC  # noqa: E402
+import video_studio as SC  # noqa: E402
 import voice_continuous as VC  # noqa: E402
 
 URL = "https://api.elevenlabs.io/v1/music?output_format=mp3_44100_192"
