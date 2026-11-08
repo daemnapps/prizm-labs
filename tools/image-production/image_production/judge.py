@@ -213,14 +213,15 @@ def verdict(img_path, req, ctx, entry=None, caller=None, folder=None, aspects=No
     tests = tests_for(req, ctx)
     fails = measured(img_path, req.get("_gen_aspect") or req["_aspect"], aspects)
     raw = ""
-    if not fails:
+    on = entry.get("on", True) is not False         # models.json judge.on: false = no model call (2026-11-08)
+    if not fails and on:
         fails, raw = seen(img_path, tests, entry, caller, folder)
     return {"file": str(img_path),
             "verdict": "reject" if fails else "pass",
             "fails": fails,
-            "checks_run": tests,
-            "judge_model": entry.get("vendor_model", "unknown"),
-            "coverage": "measured + seen",
+            "checks_run": tests if on else [],
+            "judge_model": entry.get("vendor_model", "unknown") if on else "off",
+            "coverage": "measured + seen" if on else "measured only (model judge off; the picture is checked by eye)",
             "raw": raw}
 
 

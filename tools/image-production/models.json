@@ -112,6 +112,8 @@
   }
  },
  "judge": {
+  "on": false,
+  "on_note": "Off 2026-11-08 by the owner: a model judge on every picture spends a call per attempt and, when it errors, marks every picture below criteria so the engine makes every attempt (3 pictures for 1). The free measured checks (frame size and shape) still run; the session checks each picture by eye. Set true to turn the model judge back on.",
   "model": "gemini-judge",
   "provider": "google",
   "key": "GEMINI_API_KEY",

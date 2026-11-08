@@ -60,6 +60,29 @@ and over again. We never skip this process."* Sizes, depth, contact and light co
    gives a first print's words with them in, `put --run` records them in `set.json`, a variation's request carries them, and
    `signage <brand>` fills sets made before this. Nobody types them, and the print's no-writing line lets them through.
 
+## References: every picture starts from something real (2026-11-08)
+
+1. **IMAGE 1 is real:**
+   - a video thumbnail or start frame: a clean frame of its own clip, as `--from-image`;
+   - a scene or room: a real photo.
+
+   Never words alone. Never an AI-made picture as a reference: a picture this tool made carries a `.recipe.json` and is refused as one.
+2. **No reference given: the tool pulls the brand's real assets itself.**
+   - Where it reads from, in order: the Drive (mount for people, key for machines), else the brand's own folder in this repo (`brands/<brand>/`, the same shelf layout), plus the asset index's frames.
+   - It matches the picture's words, then word roots, then the nearest real kind: people for a picture of people; places and the product otherwise.
+   - Generated folders are never pulled: `ai-elements`, `set`, `core-avatars`, the archive, intake, finished ads.
+3. **The gate.**
+   - `ad`, `video-still` and `product-shot` with nothing real behind them are refused (`purposes.json` `reference_required`).
+   - Other purposes print a note.
+4. **Faces and products.**
+   - A face comes from its reference (`--ref`), including faces on screens and cards.
+   - The product comes from its kit and is never drawn.
+5. **Words on top.** Words go on top through `image_production.words`, never on a face or hands.
+6. **The dials.** Add `components/creative-controls` `target_md('maxed', <brand>, 'image')` to the direction.
+7. **Checked by eye.**
+   - The model judge is off (`models.json` `judge.on`); the free frame checks still run.
+   - A miss (wrong face, added words, a drawn product, a polished look) is remade through the tool.
+
 ## Two halves, one component (2026-09-22)
 
 the owner: *"image-production should move entirely to components now — make sure we

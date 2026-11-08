@@ -171,6 +171,12 @@ class Base(unittest.TestCase):
                 "direction": "a man holding the nova in a kitchen",
                 "out": str(self.out), "people": False}
         base.update(kw)
+        # a purpose that requires a reference (purposes.json `reference_required`) gets a real photo, as a caller must
+        if IP.purposes().get(base["purpose"], {}).get("reference_required") \
+                and not base.get("from_image") and not base.get("references"):
+            ref = Path(self.tmp) / "real-photo.png"
+            ref.write_bytes(png_bytes(9, 16))
+            base["references"] = [str(ref)]
         return base
 
 
@@ -393,6 +399,7 @@ class TestGates(Base):
         notes = []
         problems = IP.gates.input_problems(
             *IP.resolve(req, library=self.lib)[:2], IP.purposes(), IP.route.aspects(), notes)
+        notes = [n for n in notes if not n.startswith("no reference")]     # the reference note has its own test
         self.assertEqual((problems, notes), ([], []))
 
     def test_a_purpose_that_has_decided_needs_no_declaration(self):

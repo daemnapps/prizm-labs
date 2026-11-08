@@ -112,6 +112,21 @@ def input_problems(req, ctx, purposes, aspects, notes=None):
             f"is not attached as a reference — the picture is made from the direction "
             f"alone. It no longer changes the model: every picture goes to one door")
 
+    # The referencing process (2026-11-08): a picture starts from something real. A new picture with no
+    # `from_image` and no reference is a picture from words alone; a reference this tool made (it has a
+    # `.recipe.json` beside it) is AI referenced from AI. Editing a made picture stays allowed.
+    if ctx and not req.get("from_image") and not ctx.get("references"):
+        why = ("no reference — a picture starts from a real frame or photo (`from_image`) or real references "
+               "(`references`, the product kit, the brand's assets), never from words alone")
+        if (purposes.get(pid) or {}).get("reference_required"):     # purposes.json: on for ad, video-still, product-shot
+            problems.append(why)
+        else:
+            notes.append(why)
+    made = [str(r) for r in req.get("references") or [] if Path(str(r)).with_suffix(".recipe.json").is_file()]
+    if made:
+        problems.append("AI-made reference: " + ", ".join(Path(m).name for m in made) + " — references are "
+                        "real frames and photos; an AI picture is never a reference for another")
+
     for m in (ctx or {}).get("_missing_objects", []):
         if m.fatal:
             problems.append(f"{m.what}: {m.detail}")

@@ -46,6 +46,7 @@
   },
   "ad": {
    "id": "ad",
+   "reference_required": true,
    "name": "Static ad frame",
    "what": "A paid frame. It ships to a feed, so the frame shape and what survives the crop are part of the job.",
    "aspect": "9:16",
@@ -76,6 +77,7 @@
   },
   "video-still": {
    "id": "video-still",
+   "reference_required": true,
    "name": "Scene still",
    "what": "One generated frame standing for one scene of a video, so every scene has a picture.",
    "aspect": "9:16",
@@ -90,6 +92,7 @@
   },
   "product-shot": {
    "id": "product-shot",
+   "reference_required": true,
    "name": "Product alone",
    "what": "The product on a controlled ground, with nothing else in frame.",
    "aspect": "1:1",
