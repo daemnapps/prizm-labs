@@ -11,8 +11,9 @@ Where the swipe holds one take, the scene is one call carrying:
     python3 take.py <take.json> [--dry-run]
 
 take.json:
-  {"out": "take.mp4", "model": "seedance-2.5" | "wan-3.0",  "seconds": 20,
+  {"out": "take.mp4", "model": "seedance-2.5" | "wan-3.0" | "wan-vace-pose",  "seconds": 20,
    "picture": "start.png",
+   "cast": {"HOST": "sheets/host.png", "RATER": "sheets/rater.png"},     every person's character sheet (keeps them ours)
    "speakers": {"HOST": ["reads/1.mp3", "reads/3.mp3"], "RATER": ["reads/2.mp3"]},
    "script": [{"speaker": "HOST", "say": "...", "do": "what the body does on this line"}, ...],
    "staging": "who stands where and who moves where, in order",
@@ -42,6 +43,10 @@ MOTION = ("Copy the camera movement, handheld shake, pacing and body language of
 # What each door takes (tools/model-inputs/inputs/<model>.json): voice samples in total, the motion clip, and
 # whether the motion clip counts against the output length.
 DOORS = {
+    # wan-vace-pose: an open model on fal driven by the motion clip's tracked poses (bodies, hands, faces), from our first
+    # frame; it carries no voices (sound is laid after) and copies the clip's action exactly. fal's checker stays on unless
+    # the fal account is authorised to turn it off. 16 fps, 4n+1 frames, at most 241.
+    "wan-vace-pose": {"voice_total": 0, "voice_each": (0, 0), "motion_max": 15, "shared_30": False},
     "seedance-2.5": {"voice_total": 30, "voice_each": (2, 15), "motion_max": 15, "shared_30": False},
     "wan-3.0": {"voice_total": 15, "voice_each": (1, 15), "motion_max": 15, "shared_30": True},
 }
@@ -107,6 +112,7 @@ def prompt(take, voices, with_motion):
         CAMERA,
         MOTION if with_motion else "",
         "The people, clothes, place and light are exactly those of the reference picture.",
+        ("Each person looks exactly like their character sheet: " + ", ".join(f"{n} is the sheet named {n}" for n in take.get("cast") or {}) + ".") if take.get("cast") else "",
         take.get("staging", ""),
         f"{who}; each speaks only their own lines, lips matching every word. Real body language on every line.",
         "In order:\n" + "\n".join(lines),
@@ -136,6 +142,7 @@ def _fal(endpoint, body):
         return i["file_url"]
 
     body = {k: ([up(x) for x in v] if k.endswith("_urls") else v) for k, v in body.items()}
+    body = {k: (up(v[0]) if k.endswith("_url") and isinstance(v, list) else v) for k, v in body.items()}
     job = call(f"https://queue.fal.run/{endpoint}", body)
     while True:
         st = call(job["status_url"])
@@ -154,7 +161,7 @@ def make(take, dry_run=False):
     work = out.with_suffix("")
     work.mkdir(parents=True, exist_ok=True)
     secs = int(take.get("seconds") or 20)
-    voices = samples(take["speakers"], work, door)
+    voices = samples(take["speakers"], work, door) if DOORS[door]["voice_total"] else []
     mclip = motion_clip(take["motion"], secs, work, door) if take.get("motion") else None
     text = prompt(take, voices, mclip is not None)
     sent = {"door": door, "seconds": secs, "picture": take["picture"], "voices": [str(v) for _, v in voices],
@@ -163,8 +170,23 @@ def make(take, dry_run=False):
     if dry_run:
         print(json.dumps(sent, indent=1))
         return sent
-    if door == "wan-3.0":
-        body = {"prompt": text, "reference_image_urls": [take["picture"]], "reference_audio_urls": [str(v) for _, v in voices],
+    if door == "wan-vace-pose":
+        if not mclip:
+            raise SystemExit("wan-vace-pose needs `motion`: the clip whose poses drive the take")
+        pose = work / "pose-16fps.mp4"
+        n = int(min(241, seconds_of(mclip) * 16)) // 4 * 4 + 1
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mclip), "-vf", "fps=16", "-frames:v", str(n), "-an",
+                        "-c:v", "libx264", "-crf", "20", str(pose)], check=True)
+        body = {"prompt": text, "video_url": [str(pose)], "first_frame_url": [take["picture"]],
+                "ref_image_urls": [take["picture"]] + list((take.get("cast") or {}).values())[:9], "preprocess": True,
+                "match_input_num_frames": True, "match_input_frames_per_second": True, "resolution": "480p",
+                "aspect_ratio": "9:16", "enable_safety_checker": False, "enable_prompt_expansion": False,
+                "negative_prompt": "text, captions, logos, flash, still camera, extra people, changed clothes"}
+        job, res = _fal("fal-ai/wan-22-vace-fun-a14b/pose", body)
+        url = (res.get("video") or {}).get("url")
+        rid = job.get("request_id")
+    elif door == "wan-3.0":
+        body = {"prompt": text, "reference_image_urls": [take["picture"]] + list((take.get("cast") or {}).values())[:9], "reference_audio_urls": [str(v) for _, v in voices],
                 "resolution": "480p", "aspect_ratio": "9:16", "duration": secs, "enable_safety_checker": False,
                 "enable_thinking": True, "audio": True}
         if mclip:
@@ -178,7 +200,7 @@ def make(take, dry_run=False):
         import higgsfield_api as hf
         import seedance as SD
         payload = {"prompt": text, "resolution": "480p", "aspect_ratio": "9:16", "duration": secs,
-                   "generate_audio": True, "output_format": "mp4", "image_urls": [hf.upload(take["picture"])],
+                   "generate_audio": True, "output_format": "mp4", "image_urls": [hf.upload(take["picture"])] + [hf.upload(c) for c in (take.get("cast") or {}).values()],
                    "audio_urls": [hf.upload(v) for _, v in voices]}
         if mclip:
             payload["video_urls"] = [hf.upload(mclip)]
