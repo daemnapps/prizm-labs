@@ -1,0 +1,44 @@
+"""Where the scene canvas keeps its data and finds its neighbours — settings, never machine paths in the code.
+
+- SCENE_CANVAS_DATA   the folder holding `briefs/` and `sources/` (default: `runs/scene-canvas/` in this repo)
+- SCENE_CANVAS_DRIVE  a synced `Shared Assets` folder to read library clips from (default: none; clips are pulled by link)
+- SCENE_CANVAS_BOARD  the storyboard board's address (default http://127.0.0.1:8914)
+- SCENE_CANVAS_APPROVE the approval page's address (default http://127.0.0.1:8795)
+Keys are read through `components/keys/loader.py`, never from a file here.
+"""
+import os
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[1]                                   # the workspace this component sits in
+DATA = Path(os.environ.get("SCENE_CANVAS_DATA") or REPO / "runs" / "scene-canvas")
+BRIEFS = DATA / "briefs"
+SOURCES = DATA / "sources"
+DRIVE_ROOTS = [p for p in [os.environ.get("SCENE_CANVAS_DRIVE")] if p]
+BOARD = os.environ.get("SCENE_CANVAS_BOARD") or "http://127.0.0.1:8914"
+APPROVE = os.environ.get("SCENE_CANVAS_APPROVE") or "http://127.0.0.1:8795"
+
+
+def part(name, root=None):
+    """A neighbour by name, wherever this workspace keeps it: `components/<name>` or `tools/<name>`."""
+    root = Path(root or REPO)
+    for shelf in ("components", "tools"):
+        if (root / shelf / name).is_dir():
+            return root / shelf / name
+    return root / "components" / name
+
+
+def key(name):
+    """A key by name: the environment, then the workspace key loader."""
+    if os.environ.get(name):
+        return os.environ[name]
+    loader = part("keys")
+    if (loader / "loader.py").is_file():
+        sys.path.append(str(loader))
+        try:
+            import loader as L
+            return L.key(name) if hasattr(L, "key") else L.get(name)
+        except Exception:
+            return None
+    return None

@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scene Canvas</title>
+<style>
+/* Layout: scene nodes wired in order on a dotted canvas; the assembly strip pinned under it; one node's workflow opens in a side panel. */
+:root{--bg:#eceee9;--dot:#d6dcd6;--surface:#FFF;--ink:#16211c;--muted:#6b7871;--line:#d6dcd6;--soft:#f4f6f2;
+ --wire:#1d7a55;--wire-bg:#e3efe8;--yes:#1d7a55;--yes-bg:#e3efe8;--wait:#9A5B00;--wait-bg:#FCEFD8;--no:#B42318;--no-bg:#FDE6E3;
+ --display:system-ui,-apple-system,sans-serif;--body:system-ui,-apple-system,sans-serif;--mono:ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a18;--dot:#38413d;--surface:#222826;--ink:#eef2ee;--muted:#98a49d;--line:#38413d;--soft:#1c211f;--wire:#52c79a;--wire-bg:#1f3329;--yes:#52c79a;--yes-bg:#1f3329;--wait:#F2B45A;--wait-bg:#33270F;--no:#FF8A80;--no-bg:#3A1714;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161a18;--dot:#38413d;--surface:#222826;--ink:#eef2ee;--muted:#98a49d;--line:#38413d;--soft:#1c211f;--wire:#52c79a;--wire-bg:#1f3329;--yes:#52c79a;--yes-bg:#1f3329;--wait:#F2B45A;--wait-bg:#33270F;--no:#FF8A80;--no-bg:#3A1714;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 var(--body)}
+button,input,textarea,select{font:inherit;color:inherit}
+.ic{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top h1{font:800 19px/1.1 var(--display);margin:0}
+.made{display:flex;align-items:center;gap:8px;font:600 13px var(--body)}
+.mbar{width:120px;height:10px;border-radius:5px;background:var(--soft);overflow:hidden;border:1px solid var(--line)}
+.mbar i{display:block;height:100%;background:var(--yes);width:0;transition:width .6s}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--soft);border-radius:8px;height:34px;padding:0 12px;cursor:pointer;font:600 13px var(--body)}
+.btn.go{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.sp{margin-left:auto}
+.embed .top h1{display:none}.remote #pkg{display:none}.embed .top{position:sticky}
+.canvas{position:relative;margin:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:20px 20px;padding:24px;min-height:300px}
+.grid{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:34px 34px}
+svg.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+svg.wires path{fill:none;stroke:var(--wire);stroke-width:2.4}
+.node{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(20,24,33,.08);display:flex;flex-direction:column;cursor:pointer;text-align:left;padding:0;min-width:0}
+.node.sel{outline:2px solid var(--wire);outline-offset:2px}
+.node::before,.node::after{content:"";position:absolute;top:16px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--wire)}
+.node::before{left:-7px}.node::after{right:-7px}
+.nh{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--wire-bg);border-radius:12px 12px 0 0;font:800 13px/1.15 var(--display);color:var(--wire)}
+.nh b{font:500 11px var(--mono);color:var(--muted);margin-left:auto}
+.thumb{height:210px;background:var(--soft);display:grid;place-items:center;color:var(--muted);overflow:hidden;position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .dur{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.7);color:#fff;font:500 11px var(--mono);padding:2px 5px;border-radius:4px}
+.hatch{background:repeating-linear-gradient(135deg,var(--soft) 0 8px,var(--surface) 8px 14px)}
+.st{display:flex;align-items:center;gap:5px;font:600 12px var(--body);padding:7px 10px;border-top:1px solid var(--line)}
+.st.made{color:var(--yes)}.st.waiting{color:var(--wait)}.st.changed,.st.ready{color:var(--wire)}.st.running{color:var(--wire)}
+.steps{display:flex;flex-wrap:wrap;gap:4px;padding:0 10px 9px}
+.steps span{display:inline-flex;align-items:center;gap:3px;font:500 10.5px var(--mono);background:var(--soft);border-radius:4px;padding:2px 5px;color:var(--muted)}
+/* strip */
+.stripwrap{position:sticky;bottom:0;z-index:4;box-shadow:0 -8px 24px rgba(20,24,33,.10);margin:0 16px 12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sh h2{font:800 16px var(--display);margin:0}
+.strip{display:flex;gap:3px;height:92px;align-items:stretch}
+.slot{flex:var(--w) 1 0;min-width:22px;border-radius:7px;position:relative;overflow:hidden;border:1px solid var(--line);cursor:pointer;padding:0;background:var(--soft)}
+.slot.made{border:2px solid var(--yes);background:#000}
+.slot img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92}
+.slot .lb{position:absolute;left:4px;top:4px;font:600 11px var(--mono);background:var(--surface);color:var(--ink);border-radius:4px;padding:1px 4px}
+.slot .ic{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);color:var(--wait)}
+.slot.land{animation:land .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes land{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+.axis{display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--muted);margin-top:5px}
+/* panel */
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-12px 0 32px rgba(0,0,0,.14);transform:translateX(105%);transition:transform .22s;z-index:20;display:flex;flex-direction:column}
+.panel.open{transform:none}
+.ph{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.ph h3{margin:0;font:800 17px/1.2 var(--display);flex:1}
+.pb{padding:14px 16px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.pb video{width:100%;max-width:240px;aspect-ratio:9/16;background:#000;border-radius:10px;align-self:center}
+.words{background:var(--soft);border-radius:8px;padding:10px;font-size:14px}
+.step{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.step .t{display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--wire-bg);color:var(--wire);font:600 12.5px var(--mono)}
+.step .t.wait{background:var(--wait-bg);color:var(--wait)}
+.step .f{display:grid;grid-template-columns:70px minmax(0,1fr);gap:6px 8px;padding:9px 10px;align-items:center;font-size:13px}
+.step .f label{color:var(--muted);font-size:12px}
+.step input,.step textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 7px;font:500 13px var(--mono)}
+.step textarea{font-family:var(--body);min-height:44px;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.msg{font-size:13px;color:var(--muted)}.msg.err{color:var(--no)}
+.run{font:500 12px var(--mono);color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere}
+/* how each AI shot was made */
+.how{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.how>h4{margin:0;padding:9px 12px;background:var(--wire-bg);color:var(--wire);font:700 13px var(--body);display:flex;gap:8px;align-items:center}
+.how>h4 small{margin-left:auto;font:500 11px var(--mono);color:var(--muted)}
+.chain{display:flex;flex-direction:column;gap:0;padding:10px 12px}
+.hs{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px dashed var(--line)}
+.hs:first-child{border-top:0}
+.hs .m img,.hs .m video{width:96px;aspect-ratio:9/16;object-fit:cover;border-radius:7px;background:#000;display:block}
+.hs .m .none{width:96px;aspect-ratio:9/16;border-radius:7px;background:var(--soft);display:grid;place-items:center;font-size:11px;color:var(--muted);text-align:center;padding:6px}
+.hs b{display:block;font-size:13px}
+.hs .mod{font:500 11px var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.hs .pr{margin-top:6px;background:var(--soft);border-radius:7px;padding:8px;font-size:12.5px;line-height:1.45;white-space:pre-wrap}
+.hs .pn{font-size:11px;color:var(--muted);margin-top:3px}
+.rej{padding:8px 12px 12px;border-top:1px solid var(--line)}
+.rej b{font-size:12.5px}.rej ul{margin:4px 0 8px;padding-left:18px;font-size:12.5px}
+.rej .row{gap:6px}.rej video,.rej img{width:72px;aspect-ratio:9/16;object-fit:cover;border-radius:6px;background:#000;opacity:.85}
+.used{font:500 11.5px var(--mono);color:var(--muted);padding:0 12px 10px}
+.proc{margin:10px 12px 0;padding:8px 10px;border-radius:8px;font:600 12.5px var(--body)}
+.proc.ok{background:var(--yes-bg);color:var(--yes)}.proc.off{background:var(--wait-bg);color:var(--wait)}
+.proc span{font-weight:500;color:var(--ink)}
+.cm{margin:10px 12px 0;padding:10px;border:1px solid var(--line);border-radius:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cm b{font-size:12.5px;width:100%}
+.cm select{height:34px;border:1px solid var(--line);border-radius:8px;background:var(--soft);padding:0 8px;min-width:0;flex:1 1 220px;font:600 13px var(--body)}
+.cm .cmmsg{width:100%;font-size:12px;color:var(--muted)}
+/* scene panel: shots, change section, viewer */
+.pb>*{flex:none}
+.sec2{font:700 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.shots{display:flex;flex-direction:column;gap:8px}
+.shot{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:8px}
+.sthumb{border:0;padding:0;background:#000;border-radius:7px;overflow:hidden;cursor:zoom-in;width:64px;aspect-ratio:9/16}
+.sthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.shot b{font-size:13.5px}
+.chips2{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}
+.chips2 span{font:600 10.5px var(--body);background:var(--soft);color:var(--muted);border-radius:20px;padding:2px 7px}
+.chips2 .ai{background:var(--wait-bg);color:var(--wait)}.chips2 .own{background:var(--yes-bg);color:var(--yes)}
+details.chg{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+details.chg summary{cursor:pointer;font-weight:700}
+details.chg[open]{display:flex;flex-direction:column;gap:10px}
+.hint2{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+.lb{position:fixed;inset:0;background:rgba(10,12,16,.86);display:none;place-items:center;z-index:40}
+.lb.open{display:grid}
+.lbin{display:flex;flex-direction:column;align-items:center;gap:10px}
+.lbin img,.lbin video{max-height:84vh;max-width:92vw;border-radius:10px;background:#000}
+/* player */
+.player{position:fixed;inset:0;background:rgba(10,12,16,.86);display:none;place-items:center;z-index:30}
+.player.open{display:grid}
+.pwrap{position:relative;height:min(86vh,760px);aspect-ratio:9/16;max-width:92vw}
+.pwrap video{width:100%;height:100%;background:#000;border-radius:12px;display:block}
+.cap{position:absolute;left:8%;right:8%;bottom:16%;text-align:center;color:#fff;font:800 clamp(16px,3.4vh,28px)/1.15 var(--display);text-shadow:0 2px 0 #000,0 0 12px rgba(0,0,0,.8);pointer-events:none}
+.pclose{position:absolute;top:-44px;right:0}
+@media (max-width:760px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+ svg.wires{display:none}.node::before,.node::after{display:none}
+ .canvas{margin:12px 16px;padding:14px}
+ .stripwrap{margin:0 16px 12px}
+ .strip{flex-wrap:wrap;height:auto}.slot{flex:0 0 calc(16.66% - 3px);height:64px}
+ .panel{top:auto;left:0;width:100%;max-height:85%;border-radius:16px 16px 0 0;transform:translateY(105%)}.panel.open{transform:none}
+}
+@media (prefers-reduced-motion:reduce){.slot.land{animation:none}.panel{transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+ <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+ <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+ <symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 7.5L20 18M8.5 16.5L20 6"/></symbol>
+ <symbol id="i-browser" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></symbol>
+ <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+ <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+ <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></symbol>
+ <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h8M8 21v-7h8v7"/></symbol>
+</svg>
+
+<div class="top">
+ <h1 id="title">Scene Canvas</h1>
+ <div class="made"><span class="mbar"><i id="mfill"></i></span><span id="mtxt"></span></div>
+ <span class="sp"></span>
+ <button class="btn go" id="playall"><svg class="ic"><use href="#i-play"/></svg>Play the cut</button>
+ <button class="btn" id="pkg"><svg class="ic"><use href="#i-box"/></svg>Open the edit in HyperFrames</button>
+</div>
+
+<div class="canvas"><div class="grid" id="grid"><svg class="wires" id="wires" aria-hidden="true"></svg></div></div>
+
+<div class="stripwrap">
+ <div class="sh"><h2>Assembly</h2><span class="msg" id="smsg"></span></div>
+ <div class="strip" id="strip"></div>
+ <div class="axis"><span>0:00</span><span id="axend"></span></div>
+</div>
+
+<aside class="panel" id="panel" aria-hidden="true">
+ <div class="ph"><h3 id="pt"></h3><button class="btn" id="px" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button></div>
+ <div class="pb" id="pb"></div>
+</aside>
+
+<div class="lb" id="lb" onclick="if(event.target===this)closeLb()"></div>
+<div class="player" id="player"><div class="pwrap"><button class="btn pclose" id="plx"><svg class="ic"><use href="#i-x"/></svg>Close</button><video id="pv" playsinline></video><div class="cap" id="cap"></div></div></div>
+
+<script>
+const N = new URLSearchParams(location.search).get('brief') || '0322';
+if (new URLSearchParams(location.search).get('embed')) document.documentElement.classList.add('embed');
+if (!['127.0.0.1', 'localhost'].includes(location.hostname)) document.documentElement.classList.add('remote');   // on the phone: HyperFrames editing stays on the Mac
+let S = null, sel = null, prevMade = new Set();
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const icon = t => t.startsWith('ffmpeg') ? 'i-cut' : t === 'human.read' ? 'i-mic' : t.startsWith('capture') ? 'i-browser' : 'i-layers';
+const toolName = t => ({'ffmpeg.trim':'cut','human.read':'voice read','capture.page':'page capture','layer.photo':'photo layer','layer.offer':'offer layer'}[t] || t);
+const fmt = s => { s = Math.max(0, s); return Math.floor(s/60) + ':' + (s%60).toFixed(1).padStart(4,'0'); };
+const fileUrl = (sc, rel) => '/files/' + N + '/scenes/' + sc + '/' + rel;
+const estDur = sc => { if (sc.run && sc.status === 'made') return sc.run.duration; const w = (sc.workflow.words||'').split(/\s+/).filter(Boolean).length; return w ? w / 2.7 : 2.5; };
+
+async function load(){
+  S = await (await fetch('/api/brief/' + N)).json();
+  draw();
+}
+function draw(){
+  $('title').textContent = S.brief.title + ' · ' + S.brief.number;
+  const made = S.scenes.filter(s => s.status === 'made').length;
+  $('mfill').style.width = (made / S.scenes.length * 100) + '%';
+  $('mtxt').textContent = made + ' of ' + S.scenes.length + ' made';
+  const g = $('grid');
+  g.querySelectorAll('.node').forEach(n => n.remove());
+  S.scenes.forEach(sc => {
+    const wf = sc.workflow, b = document.createElement('button');
+    b.className = 'node' + (sel === sc.scene ? ' sel' : ''); b.id = 'n-' + sc.scene;
+    const th = sc.status === 'made'
+      ? '<img alt="" src="' + fileUrl(sc.scene, sc.run.files.thumb) + '?h=' + sc.run.workflow_hash + '"><span class="dur">' + sc.run.duration.toFixed(2) + 's</span>'
+      : '<svg class="ic" style="width:28px;height:28px"><use href="#' + (sc.waits.includes('voice read') ? 'i-mic' : sc.waits.length ? 'i-layers' : 'i-play') + '"/></svg>';
+    const st = {made:['i-check','Made'], waiting:['i-mic','Waits: ' + sc.waits.join(', ')], changed:['i-refresh','Changed, run again'], ready:['i-play','Ready to run'], running:['i-refresh','Making…']}[sc.status];
+    b.innerHTML = '<span class="nh">' + esc(sc.scene) + ' · ' + esc(wf.title) + '<b>' + esc(sc.pick) + '</b></span>'
+      + '<span class="thumb' + (sc.status === 'made' ? '' : ' hatch') + '">' + th + '</span>'
+      + '<span class="st ' + sc.status + '"><svg class="ic"><use href="#' + st[0] + '"/></svg>' + esc(st[1]) + '</span>'
+      + '<span class="steps">' + wf.steps.map(s => '<span><svg class="ic" style="width:11px;height:11px"><use href="#' + icon(s.tool) + '"/></svg>' + esc(toolName(s.tool)) + (s.inputs && s.inputs.in != null ? ' ' + s.inputs.in + '–' + s.inputs.out : '') + '</span>').join('') + '</span>';
+    b.onclick = () => openPanel(sc.scene);
+    g.appendChild(b);
+  });
+  requestAnimationFrame(wires);
+  drawStrip();
+}
+function wires(){
+  const w = $('wires'), g = $('grid'); if (matchMedia('(max-width:760px)').matches) { w.innerHTML=''; return; }
+  let h = '';
+  for (let i = 0; i < S.scenes.length - 1; i++) {
+    const A = $('n-' + S.scenes[i].scene), B = $('n-' + S.scenes[i+1].scene);
+    const x1 = A.offsetLeft + A.offsetWidth + 5, y1 = A.offsetTop + 21, x2 = B.offsetLeft - 5, y2 = B.offsetTop + 21;
+    if (y2 === y1) { const m = (x2 - x1)/2; h += `<path d="M${x1} ${y1} C${x1+m} ${y1} ${x2-m} ${y2} ${x2} ${y2}"/>`; }
+    else { const yb = A.offsetTop + A.offsetHeight + 17; h += `<path d="M${x1} ${y1} C${x1+40} ${y1} ${x1+40} ${yb} ${x1} ${yb} L${x2} ${yb} C${x2-40} ${yb} ${x2-40} ${y2} ${x2} ${y2}"/>`; }
+  }
+  w.innerHTML = h;
+}
+function drawStrip(){
+  const st = $('strip'); st.innerHTML = '';
+  let total = 0, madeT = 0;
+  S.scenes.forEach(sc => {
+    const d = estDur(sc); total += d; if (sc.status === 'made') madeT += d;
+    const b = document.createElement('button');
+    b.className = 'slot' + (sc.status === 'made' ? ' made' : ' hatch') + (sc.status === 'made' && !prevMade.has(sc.scene + sc.run.workflow_hash) && prevMade.size ? ' land' : '');
+    b.style.setProperty('--w', d.toFixed(2));
+    b.title = sc.scene + (sc.status === 'made' ? ' · ' + d.toFixed(2) + 's' : ' · about ' + d.toFixed(1) + 's, ' + sc.status);
+    b.innerHTML = (sc.status === 'made' ? '<img alt="" src="' + fileUrl(sc.scene, sc.run.files.thumb) + '?h=' + sc.run.workflow_hash + '">' : '<svg class="ic"><use href="#' + (sc.waits.includes('voice read') ? 'i-mic' : 'i-layers') + '"/></svg>') + '<span class="lb">' + sc.scene + '</span>';
+    b.onclick = () => sc.status === 'made' ? play([sc]) : openPanel(sc.scene);
+    st.appendChild(b);
+  });
+  prevMade = new Set(S.scenes.filter(s => s.status === 'made').map(s => s.scene + s.run.workflow_hash)); prevMade.add('_');
+  $('axend').textContent = '≈ ' + fmt(total);
+  $('smsg').textContent = fmt(madeT) + ' made · striped = still waiting';
+}
+function openPanel(id){
+  sel = id; const sc = S.scenes.find(s => s.scene === id), wf = sc.workflow;
+  document.querySelectorAll('.node').forEach(n => n.classList.toggle('sel', n.id === 'n-' + id));
+  $('pt').textContent = sc.scene + ' · ' + wf.title;
+  let h = '';
+  if (sc.status === 'made') h += '<video controls playsinline src="' + fileUrl(sc.scene, sc.run.files.video) + '?h=' + sc.run.workflow_hash + '"></video>';
+  if (wf.words) h += '<div class="words">' + esc(wf.words) + '</div>';
+  h += '<div class="sec2">Shots in this scene</div><div id="shotlist" class="shots"></div>';
+  h += '<div id="howbox"></div>';
+  h += '<details class="chg"><summary>Change this scene</summary><p class="hint2">Fix a cut point, a caption or a prompt below, then <b>Save</b> and <b>Re-make</b>. To try something without touching what is in the cut, make a <b>copy to try</b>: the cut keeps the current take until you pick the copy.</p>'
+    + '<div class="row"><button class="btn go" id="b-run"><svg class="ic"><use href="#i-play"/></svg>Re-make this scene</button><button class="btn" id="b-save"><svg class="ic"><use href="#i-save"/></svg>Save changes</button><button class="btn" id="b-take"><svg class="ic"><use href="#i-copy"/></svg>Make a copy to try</button>'
+    + (sc.takes.length > 1 ? '<label class="msg">In the cut <select class="btn" id="b-pick">' + sc.takes.map(t => '<option' + (t === sc.pick ? ' selected' : '') + '>' + t + '</option>').join('') + '</select></label>' : '') + '</div><div class="msg" id="pmsg"></div>';
+  wf.steps.forEach((s, i) => {
+    const wait = !['ffmpeg.trim'].includes(s.tool);
+    h += '<div class="step"><div class="t' + (wait ? ' wait' : '') + '"><svg class="ic"><use href="#' + icon(s.tool) + '"/></svg>' + esc(s.id) + ' · ' + esc(toolName(s.tool)) + (s.note ? ' · ' + esc(s.note) : '') + '</div><div class="f">';
+    if (s.inputs && s.inputs.source) h += '<label>Source</label><span>' + esc((wf.sources[s.inputs.source.slice(5)]||{}).file || s.inputs.source) + '</span>'
+      + '<label>In</label><input data-i="' + i + '" data-k="in" type="number" step="0.01" value="' + s.inputs.in + '">'
+      + '<label>Out</label><input data-i="' + i + '" data-k="out" type="number" step="0.01" value="' + s.inputs.out + '">';
+    if (s.params && s.params.crop) h += '<label>Crop x</label><input data-i="' + i + '" data-k="cropx" type="number" step="10" value="' + s.params.crop.x + '">';
+    if (s.params && s.params.sound) h += '<label>Sound</label><span>' + esc(s.params.sound === 'mute' ? 'off (narrator over it)' : 'original') + '</span>';
+    if (s.model || s.prompt || !s.inputs || !s.inputs.source) {
+      h += '<label>Model</label><input data-i="' + i + '" data-k="model" value="' + esc(s.model || '') + '">';
+      h += '<label>Seed</label><input data-i="' + i + '" data-k="seed" value="' + esc(s.seed ?? '') + '">';
+      h += '<label>Prompt</label><textarea data-i="' + i + '" data-k="prompt">' + esc(s.prompt || '') + '</textarea>';
+    }
+    if (s.caption != null) h += '<label>Caption</label><textarea data-i="' + i + '" data-k="caption">' + esc(s.caption) + '</textarea>';
+    h += '</div></div>';
+  });
+  h += '</details>';
+  if (sc.run) h += '<div class="run">Last run ' + esc(sc.run.ran_at) + ' · ' + sc.run.seconds_to_make + ' s to make · $' + sc.run.cost_usd.toFixed(2) + ' · recipe ' + esc(sc.run.workflow_hash) + (sc.run.clock_check ? ' · clock ' + sc.run.clock_check.got + ' / ' + sc.run.clock_check.want + ' s ' + (sc.run.clock_check.ok ? '✓' : '✕') : '') + '</div>';
+  $('pb').innerHTML = h;
+  $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false');
+  $('b-run').onclick = () => act(id, 'run');
+  $('b-save').onclick = () => saveWf(id);
+  $('b-take').onclick = () => act(id, 'take');
+  if ($('b-pick')) $('b-pick').onchange = e => act(id, 'pick', {take: e.target.value});
+  howMade(id); shotList(sc);
+}
+async function shotList(sc){
+  const box = $('shotlist'); if (!box) return;
+  const wf = sc.workflow, words = (wf.words || '').split(/\s+/);
+  const cuts = wf.steps.filter(s => s.tool === 'ffmpeg.trim' || s.tool === 'layer.photo');
+  if (!cuts.length) { box.innerHTML = '<div class="msg">No separate shots: this scene is one piece (' + esc(wf.steps.map(s => toolName(s.tool)).join(', ')) + ').</div>'; return; }
+  box.innerHTML = cuts.map((s, k) => {
+    const src = (wf.sources || {})[(s.inputs && s.inputs.source || '').slice(5)] || {};
+    const fw = s.params && s.params.from_word != null ? s.params.from_word : null;
+    const ai = src.generated;
+    const len = s.inputs && s.inputs.out != null ? (s.inputs.out - s.inputs.in) : null;
+    return '<div class="shot"><button class="sthumb" data-full="/api/shotframe/' + N + '/' + sc.scene + '/' + s.id + '"><img alt="" loading="lazy" src="/api/shotframe/' + N + '/' + sc.scene + '/' + s.id + '"></button><div>'
+      + '<b>' + (k + 1) + '. ' + esc(s.note || s.id) + '</b>'
+      + '<div class="chips2">' + (s.section ? '<span>' + esc(s.section) + '</span>' : '') + (ai ? '<span class="ai">AI shot</span>' : '<span class="own">our footage</span>') + (fw != null ? '<span>on “' + esc((words[fw] || '').replace(/[.,?!]/g, '')) + '”</span>' : '') + '</div>'
+      + '<div class="mod">' + esc(src.file || s.inputs && s.inputs.source || '') + (len != null ? ' · ' + s.inputs.in + '–' + s.inputs.out + ' s' : '') + '</div></div></div>';
+  }).join('');
+  box.querySelectorAll('.sthumb').forEach(b => b.onclick = () => lightbox(b.dataset.full));
+}
+function lightbox(src){
+  const v = /\.mp4($|[?#])/i.test(src);
+  $('lb').innerHTML = '<div class="lbin">' + (v ? '<video src="' + src + '" controls autoplay playsinline></video>' : '<img alt="" src="' + src + '">') + '<button class="btn" onclick="closeLb()"><svg class="ic"><use href="#i-x"/></svg>Close</button></div>';
+  $('lb').classList.add('open');
+}
+function closeLb(){ $('lb').classList.remove('open'); $('lb').innerHTML = ''; }
+const gen = p => '/gen/' + String(p).split('/').map(encodeURIComponent).join('/');
+const media = p => !p ? '<div class="none">none</div>' : /\.mp4$/i.test(p) ? '<video src="' + gen(p) + '#t=0.1" controls playsinline preload="metadata" muted></video>' : '<img alt="" src="' + gen(p) + '" style="cursor:zoom-in" onclick="lightbox(this.src)">';
+let CM = null;
+const cmOpt = m => esc(m.id) + (m.default ? ' · house default' : '') + ' · ' + esc(m.how || '') + (m.credits_5s != null ? ' · ' + m.credits_5s + ' credits / 5 s ' + esc(m.resolution) : '') + (m.wired ? '' : ' · not wired here');
+function cmBar(x){
+  if (!x.clip_model || !CM) return '';
+  const cur = CM.find(m => m.id === x.clip_model) || {};
+  return '<div class="cm" data-shot="' + esc(x.name) + '"><b>Clip model for the next take</b>'
+    + '<select aria-label="Clip model for ' + esc(x.name) + '">' + CM.map(m => '<option value="' + esc(m.id) + '"' + (m.id === x.clip_model ? ' selected' : '') + (m.wired ? '' : ' disabled') + '>' + cmOpt(m) + '</option>').join('') + '</select>'
+    + '<button class="btn go" data-take' + (x.making ? ' disabled' : '') + '>' + (x.making ? 'Making a take…' : 'Make a new take') + '</button>'
+    + '<div class="cmmsg">The current clip is kept under Takes thrown out; if the new take fails, the current clip stays.</div></div>';
+}
+function wireCm(id){
+  document.querySelectorAll('#howbox .cm').forEach(bar => {
+    const name = bar.dataset.shot, sel = bar.querySelector('select'), btn = bar.querySelector('[data-take]'), msg = bar.querySelector('.cmmsg');
+    let armed = false;
+    const price = () => { const m = CM.find(c => c.id === sel.value) || {}; return m.credits_5s != null ? m.credits_5s + ' credits' : 'price unknown'; };
+    sel.onchange = async () => {
+      armed = false; btn.textContent = 'Make a new take';
+      const r = await fetch('/api/shot/' + encodeURIComponent(name) + '/pick', {method: 'POST', body: JSON.stringify({model: sel.value})});
+      const j = await r.json().catch(() => ({}));
+      msg.textContent = r.ok ? 'Saved: the next take of this shot uses ' + j.clip_model + '.' : 'Could not save the pick: ' + (j.error || r.status);
+    };
+    btn.onclick = async () => {
+      if (!armed) { armed = true; btn.textContent = 'Confirm · spends ' + price(); msg.textContent = 'Click again to make one take on ' + sel.value + '.'; return; }
+      armed = false; btn.disabled = true; sel.disabled = true; btn.textContent = 'Making a take…';
+      msg.textContent = 'Making one take on ' + sel.value + ' (about 1 to 3 minutes). You can keep working.';
+      const r = await fetch('/api/shot/' + encodeURIComponent(name) + '/take', {method: 'POST', body: JSON.stringify({model: sel.value})});
+      const j = await r.json().catch(() => ({}));
+      if (r.ok) { await load(); howMade(id); }
+      else { btn.disabled = false; sel.disabled = false; btn.textContent = 'Make a new take'; msg.textContent = 'No new take: ' + (j.error || r.status) + '. The current clip is unchanged.'; }
+    };
+  });
+}
+async function howMade(id){
+  const box = $('howbox'); if (!box) return;
+  if (!CM) CM = ((await (await fetch('/api/clipmodels')).json().catch(() => null)) || {}).models || [];
+  const j = await (await fetch('/api/clip/' + N + '/' + id)).json().catch(() => null);
+  if (!j || !j.shots || !j.shots.length) return;
+  box.innerHTML = j.shots.map(x => '<div class="how"><h4>How this AI shot was made · ' + esc(x.name) + '<small>' + esc(x.kind) + '</small></h4>'
+    + cmBar(x)
+    + '<div class="proc ' + (x.on_house ? 'ok' : 'off') + '">' + (x.on_house ? '✓ ' : '✕ ') + esc(x.process || '') + (x.on_house ? '' : '<br><span>The process now: ' + esc(x.house) + '</span>') + '</div><div class="chain">'
+    + (x.ref ? '<div class="hs"><div class="m">' + media(x.ref) + '</div><div><b>The reference it starts from</b><div class="mod">' + esc(x.ref) + '</div></div></div>' : '')
+    + x.steps.map(t => '<div class="hs"><div class="m">' + media(t.out) + '</div><div><b>' + esc(t.what) + '</b><div class="mod">' + esc(t.model || '') + (t.settings ? ' · ' + esc(Object.entries(t.settings).filter(([,v]) => v != null).map(([k, v]) => k + ' ' + v).join(' · ')) : '') + (t.request_id ? ' · request ' + esc(t.request_id) : '') + (t.at ? ' · ' + esc(t.at) : '') + '</div>'
+      + (t.input ? '<div class="mod">from ' + esc(t.input) + '</div>' : '') + '<div class="pr">' + esc(t.prompt || '') + '</div><div class="pn">' + esc(t.prompt_note || '') + '</div></div></div>').join('')
+    + '</div>'
+    + (x.used.length ? '<div class="used">Used in this scene: ' + x.used.map(u => esc(u.step) + ' ' + u.in + '–' + u.out + ' s').join(' · ') + '</div>' : '')
+    + (x.rejected_notes.length || x.rejected_files.length ? '<div class="rej"><b>Takes thrown out</b>' + (x.rejected_notes.length ? '<ul>' + x.rejected_notes.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' : '') + '<div class="row">' + x.rejected_files.map(f => media(f)).join('') + '</div></div>' : '')
+    + (x.error ? '<div class="rej"><b>Refused</b><ul><li>' + esc(x.error) + '</li></ul></div>' : '')
+    + '<div class="used">Recipe: sources/generated/' + esc(x.recipe_file || '?') + '</div></div>').join('');
+  wireCm(id);
+}
+function collect(id){
+  const wf = JSON.parse(JSON.stringify(S.scenes.find(s => s.scene === id).workflow));
+  $('pb').querySelectorAll('[data-i]').forEach(el => {
+    const s = wf.steps[+el.dataset.i], k = el.dataset.k, v = el.value;
+    if (k === 'in' || k === 'out') s.inputs[k] = parseFloat(v);
+    else if (k === 'cropx') s.params.crop.x = parseInt(v, 10);
+    else if (k === 'seed') s.seed = v === '' ? null : (isNaN(+v) ? v : +v);
+    else s[k] = v === '' && k !== 'caption' ? null : v;
+  });
+  return wf;
+}
+async function saveWf(id){
+  const m = $('pmsg'); m.className = 'msg'; m.textContent = 'Saving…';
+  const r = await fetch('/api/scene/' + N + '/' + id + '/save', {method:'POST', body: JSON.stringify(collect(id))});
+  m.textContent = r.ok ? 'Saved' : 'Save failed'; if (!r.ok) m.className = 'msg err';
+  await load(); openPanel(id);
+}
+async function act(id, a, body){
+  const m = $('pmsg'); m.className = 'msg';
+  if (a === 'run') { await fetch('/api/scene/' + N + '/' + id + '/save', {method:'POST', body: JSON.stringify(collect(id))}); m.textContent = 'Making ' + id + '…'; $('b-run').disabled = true; }
+  const r = await fetch('/api/scene/' + N + '/' + id + '/' + a, {method:'POST', body: JSON.stringify(body || {})});
+  const j = await r.json();
+  if (!r.ok || j.error) { m.className = 'msg err'; m.textContent = j.error || 'Failed'; return; }
+  if (a === 'run' && !j.ok) { m.className = 'msg err'; m.textContent = 'Waits on: ' + j.waits.join(', '); }
+  await load(); openPanel(id);
+  if (a === 'run' && j.ok) $('pmsg').textContent = 'Made in ' + j.run.seconds_to_make + ' s';
+  if (a === 'take') { document.querySelector('details.chg').open = true; $('pmsg').textContent = j.take + ' is a copy to try. The cut still uses ' + S.scenes.find(x => x.scene === id).pick + ' until you pick ' + j.take + ' under "In the cut".'; }
+}
+function play(list){
+  if (!list.length) return;
+  let k = 0; const v = $('pv'); let caps = [];
+  const next = async () => {
+    if (k >= list.length) { closePlayer(); return; }
+    const sc = list[k++];
+    caps = (await (await fetch(fileUrl(sc.scene, sc.run.files.captions))).json()).lines || [];
+    v.src = fileUrl(sc.scene, sc.run.files.video) + '?h=' + sc.run.workflow_hash; v.play();
+  };
+  v.onended = next;
+  v.ontimeupdate = () => { const c = caps.find(c => v.currentTime >= c.start && v.currentTime < c.end); $('cap').textContent = c ? c.text : ''; };
+  $('player').classList.add('open'); next();
+}
+function closePlayer(){ const v = $('pv'); v.pause(); v.removeAttribute('src'); $('cap').textContent=''; $('player').classList.remove('open'); }
+$('plx').onclick = closePlayer;
+$('playall').onclick = () => play(S.scenes.filter(s => s.status === 'made'));
+$('pkg').onclick = async () => {
+  if (document.documentElement.classList.contains('embed') && window.parent !== window) { window.parent.postMessage({go: 'edit'}, '*'); return; }
+  $('smsg').textContent = 'Opening the edit in HyperFrames…'; const r = await fetch('/api/hyperframes/' + N, {method:'POST', body: '{}'}); const j = await r.json();
+  if (r.ok) location.href = j.url; else $('smsg').textContent = j.error || 'Could not open'; };
+$('px').onclick = () => { $('panel').classList.remove('open'); sel = null; document.querySelectorAll('.node').forEach(n => n.classList.remove('sel')); };
+addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('lb').classList.contains('open')) return closeLb(); closePlayer(); $('px').click(); } });
+addEventListener('resize', () => S && wires());
+load();
+</script>
+</body>
+</html>

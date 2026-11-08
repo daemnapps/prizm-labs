@@ -21,6 +21,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Make | Image production | `tools/image-production/` |
 | Make | Casting | `components/casting/` |
 | Make | 3D | `components/3d/` |
+| Edit | Video Studio (storyboard, production, edit, versions, approve in one place) | `tools/scene-canvas/` |
 | Edit | Video edit | `tools/video-edit/` |
 | Edit | Edit kit | `tools/video-edit-kit/` |
 | Edit | Image edit | `tools/image-edit/` |

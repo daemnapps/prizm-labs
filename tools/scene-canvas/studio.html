@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Studio</title>
+<style>
+/* One front door for video work (the owner, 8 Nov): one menu, one look, always clear which brand, ad and stage.
+   Look = the Storyboards board's own tokens, so every stage reads as one tool. */
+:root{--bg:#eceee9;--panel:#fff;--ink:#16211c;--dim:#6b7871;--line:#d6dcd6;--green:#153c2b;--accent:#1d7a55;--soft:#f4f6f2;--hl:#e3efe8;--warn:#9a5b00}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a18;--panel:#222826;--ink:#eef2ee;--dim:#98a49d;--line:#38413d;--green:#2f7d58;--accent:#52c79a;--soft:#1c211f;--hl:#1f3329;--warn:#f2b45a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161a18;--panel:#222826;--ink:#eef2ee;--dim:#98a49d;--line:#38413d;--green:#2f7d58;--accent:#52c79a;--soft:#1c211f;--hl:#1f3329;--warn:#f2b45a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,sans-serif;display:grid;grid-template-columns:248px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+.ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* left menu */
+#rail{grid-row:1/3;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.logo{display:flex;align-items:center;gap:8px;padding:14px 14px 10px;font-weight:800;font-size:15px;letter-spacing:.02em}
+.logo i{width:26px;height:26px;border-radius:7px;background:var(--green);display:grid;place-items:center;color:#fff}
+.brands{display:flex;gap:4px;margin:0 12px 10px;background:var(--bg);border-radius:9px;padding:3px}
+.brands button{flex:1;border:0;background:none;padding:6px 0;border-radius:7px;font-weight:600;font-size:13px;color:var(--dim)}
+.brands button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+#list{flex:1;overflow:auto;padding:0 8px 8px}
+.sec{font:700 11px system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:12px 8px 6px}
+.ad{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 9px;border-radius:8px;margin-bottom:2px}
+.ad:hover{background:var(--soft)}.ad.on{background:var(--hl)}
+.ad b{display:block;font-size:13px;line-height:1.25}
+.ad .k{font:600 11px ui-monospace,Menlo,monospace;color:var(--dim)}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.chip{font:600 10.5px system-ui;border-radius:20px;padding:2px 7px;background:var(--bg);color:var(--dim)}
+.chip.g{background:var(--hl);color:var(--accent)}
+.foot{border-top:1px solid var(--line);padding:8px}
+.foot button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:9px;border-radius:8px;text-align:left;font-weight:600;font-size:13px}
+.foot button:hover,.foot button.on{background:var(--soft)}
+.foot .n{margin-left:auto;background:var(--green);color:#fff;border-radius:20px;padding:1px 8px;font-size:12px}
+/* header */
+#head{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 18px 0;min-width:0}
+.crumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:28px}
+.bb{font:800 11px system-ui;letter-spacing:.08em;background:var(--green);color:#fff;border-radius:5px;padding:3px 7px}
+.crumb h1{font-size:18px;margin:0;font-weight:800;line-height:1.2}
+.crumb .key{font:600 12px ui-monospace,Menlo,monospace;color:var(--dim)}
+.crumb .sp{margin-left:auto}
+.crumb a{font-size:12px;color:var(--dim)}
+.tabs{display:flex;gap:2px;margin-top:8px;overflow-x:auto}
+.tab{display:flex;align-items:center;gap:7px;border:0;background:none;padding:9px 14px;border-bottom:3px solid transparent;font-weight:600;font-size:13.5px;color:var(--dim);white-space:nowrap}
+.tab .num{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:var(--bg);color:var(--dim)}
+.tab.on{color:var(--ink);border-bottom-color:var(--accent)}.tab.on .num{background:var(--accent);color:#fff}
+.tab.done .num{background:var(--hl);color:var(--accent)}
+.tab:disabled{opacity:.45;cursor:default}
+/* main */
+#main{position:relative;min-height:0;overflow:hidden}
+#main iframe{position:absolute;top:0;bottom:0;left:0;width:100%;height:100%;border:0;background:var(--bg)}
+#main iframe.crop{left:-208px;width:calc(100% + 208px);top:-58px;height:calc(100% + 58px)}
+#main iframe.under{top:44px;height:calc(100% - 44px)}
+.verbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;gap:6px;align-items:center;padding:0 12px;background:var(--panel);border-bottom:1px solid var(--line);overflow-x:auto}
+.vb{border:1px solid var(--line);background:var(--bg);border-radius:20px;padding:5px 12px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.vb.on{background:var(--green);color:#fff;border-color:var(--green)}
+.vedit{margin-top:8px;width:100%;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px;font-weight:600;font-size:12.5px}
+.empty{height:100%;display:grid;place-items:center;padding:24px;text-align:center;color:var(--dim)}
+.empty h2{color:var(--ink);margin:0 0 6px;font-size:20px}
+.go{display:inline-flex;align-items:center;gap:8px;border:0;background:var(--green);color:#fff;border-radius:9px;padding:11px 18px;font-weight:700;font-size:14px;margin-top:14px}
+.vers{height:100%;overflow:auto;padding:18px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.vcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
+.vcard video{width:100%;aspect-ratio:9/16;background:#000;border-radius:8px;display:block}
+.vcard b{display:block;margin-top:8px;font-size:13.5px}
+.vcard span{font-size:12px;color:var(--dim)}
+.vnote{color:var(--dim);margin:0 0 14px;font-size:13px}
+.menub{display:none}
+/* phone: the same studio reflowed — the menu becomes a drawer, the header stays, the stage fills the screen */
+@media (max-width:760px){
+ body{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:100dvh}
+ #rail{position:fixed;inset:0 auto 0 0;width:min(86vw,320px);z-index:30;transform:translateX(-102%);transition:transform .2s;box-shadow:12px 0 32px rgba(0,0,0,.2)}
+ body.drawer #rail{transform:none}
+ #scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:29}
+ body.drawer #scrim{display:block}
+ #head{grid-row:1;padding:8px 16px 0}
+ .menub{display:inline-grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);background:var(--bg);border-radius:9px;margin-right:2px}
+ .crumb h1{font-size:15px;flex:1 1 60%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .crumb .key,.crumb a{display:none}
+ .tab{padding:9px 10px;font-size:13px}.tab .num{display:none}
+ #main{grid-row:2}
+ #main iframe.crop{left:0;width:100%;top:0;height:100%}
+ .vers{padding:12px 16px}.vgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .ad{padding:10px 9px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+ <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+ <symbol id="i-feed" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+ <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+ <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+</svg>
+
+<aside id="rail" aria-label="Video ads">
+ <div class="logo"><i><svg class="ic"><use href="#i-film"/></svg></i>Video Studio</div>
+ <div class="brands" id="brands"></div>
+ <nav id="list"></nav>
+ <div class="foot">
+  <button id="f-approve"><svg class="ic"><use href="#i-check"/></svg>Approval queue<span class="n" id="f-n">0</span></button>
+  <button id="f-feed"><svg class="ic"><use href="#i-feed"/></svg>Swipe feed · new idea</button>
+ </div>
+</aside>
+
+<div id="scrim" onclick="document.body.classList.remove('drawer')"></div>
+<header id="head">
+ <div class="crumb"><button class="menub" aria-label="Menu" onclick="document.body.classList.toggle('drawer')"><svg class="ic"><use href="#i-feed"/></svg></button><span class="bb" id="h-brand"></span><h1 id="h-title"></h1><span class="key" id="h-key"></span><span class="sp"></span><a id="h-open" target="_blank" rel="noopener">open on its own ↗</a></div>
+ <div class="tabs" id="tabs"></div>
+</header>
+
+<main id="main"></main>
+
+<script>
+/* on the Mac the tools answer on 127.0.0.1; from the phone (over Tailscale) the same tools answer on this Mac's tailnet name */
+const LOCAL = ['127.0.0.1', 'localhost'].includes(location.hostname);
+const BOARD = 'http://' + (LOCAL ? '127.0.0.1' : location.hostname) + ':8914';   /* the phone reaches the board through its tailnet review route on 8914 */
+const APPROVE = 'http://' + (LOCAL ? '127.0.0.1' : location.hostname) + ':8795';
+const PHONE = () => matchMedia('(max-width:760px)').matches;
+const STAGES = [['storyboard','Storyboard'],['production','Production'],['edit','Edit'],['versions','Versions'],['approve','Approve']];
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const q = new URLSearchParams(location.search);
+let M = null, st = {brand: q.get('brand') || '', idea: q.get('idea'), n: q.get('n') || q.get('brief'), stage: q.get('stage'), view: q.get('view'), ver: q.get('ver')};
+const briefNo = k => (String(k || '').match(/brief-(\d+)/) || [])[1];
+
+async function loadMenu(){ M = await (await fetch('/api/menu')).json(); if (!st.brand && M.brands && M.brands.length) st.brand = M.brands[0].id; }
+function brandOf(b){ return M.brands.find(x => x.id === b) || M.brands[0]; }
+function current(){
+  for (const b of M.brands) {
+    for (const i of b.ideas) if ((st.idea && i.idea === st.idea) || (st.n && i.production === st.n)) return {b, item: i};
+    for (const p of b.productions) if (st.n && p.production === st.n) return {b, item: p};
+  }
+  return {b: brandOf(st.brand), item: null};
+}
+function save(){
+  const p = new URLSearchParams();
+  p.set('brand', st.brand); if (st.idea) p.set('idea', st.idea); if (st.n) p.set('n', st.n); if (st.stage) p.set('stage', st.stage); if (st.view) p.set('view', st.view); if (st.ver) p.set('ver', st.ver);
+  history.replaceState(null, '', '?' + p);
+}
+function drawRail(){
+  $('brands').innerHTML = M.brands.map(b => '<button class="' + (b.id === st.brand ? 'on' : '') + '" data-b="' + b.id + '">' + esc(b.label) + '</button>').join('');
+  $('brands').querySelectorAll('button').forEach(x => x.onclick = () => { st = {brand: x.dataset.b}; go(); });
+  const b = brandOf(st.brand);
+  let h = '<div class="sec">Ads</div>';
+  if (!b.ideas.length) h += '<div class="ad"><span class="k">No ideas yet</span></div>';
+  b.ideas.forEach(i => {
+    const on = (st.idea === i.idea && !st.view) ? ' on' : '';
+    const no = briefNo(i.key);
+    h += '<button class="ad' + on + '" data-idea="' + esc(i.idea) + '"><span class="k">' + (no ? 'Brief ' + no : 'Idea ' + esc(i.idea.replace('brief',''))) + '</span><b>' + esc(i.name) + '</b><span class="chips">'
+      + (i.production ? '<span class="chip g">In production</span>' : '<span class="chip">Storyboard</span>')
+      + (i.versions ? '<span class="chip g">' + i.versions + ' versions</span>' : '') + '</span></button>';
+  });
+  if (b.productions.length) {
+    h += '<div class="sec">Other productions</div>';
+    b.productions.forEach(p => { h += '<button class="ad' + (st.n === p.production && !st.idea ? ' on' : '') + '" data-n="' + esc(p.production) + '"><span class="k">' + esc(p.production) + '</span><b>' + esc(p.name) + '</b></button>'; });
+  }
+  $('list').innerHTML = h;
+  $('list').querySelectorAll('[data-idea]').forEach(x => x.onclick = () => { const i = b.ideas.find(y => y.idea === x.dataset.idea); st = {brand: b.id, idea: i.idea, n: i.production, stage: i.production ? 'production' : 'storyboard'}; go(); });
+  $('list').querySelectorAll('[data-n]').forEach(x => x.onclick = () => { st = {brand: b.id, n: x.dataset.n, stage: 'production'}; go(); });
+  $('f-n').textContent = b.waiting;
+  $('f-approve').classList.toggle('on', st.view === 'queue');
+  $('f-feed').classList.toggle('on', st.view === 'feed');
+}
+function drawHead(c){
+  const b = c.b, it = c.item;
+  $('h-brand').textContent = b.label;
+  if (st.view === 'queue') { $('h-title').textContent = 'Approval queue'; $('h-key').textContent = b.waiting + ' waiting'; $('tabs').innerHTML = ''; return; }
+  if (st.view === 'feed') { $('h-title').textContent = 'Swipe feed and ideas'; $('h-key').textContent = 'pick a swipe, start an idea'; $('tabs').innerHTML = ''; return; }
+  if (!it) { $('h-title').textContent = 'Pick an ad on the left'; $('h-key').textContent = ''; $('tabs').innerHTML = ''; return; }
+  $('h-title').textContent = it.name;
+  $('h-key').textContent = it.key || (it.idea ? 'idea ' + it.idea.replace('brief','') : '');
+  const has = {storyboard: !!it.idea, production: true, edit: !!it.production && LOCAL, versions: !!(it.production && it.versions !== 0), approve: true};
+  $('tabs').innerHTML = STAGES.map(([k, l], n) => '<button class="tab' + (st.stage === k ? ' on' : '') + '" data-s="' + k + '"' + (has[k] ? '' : ' disabled') + '><span class="num">' + (n + 1) + '</span>' + l + '</button>').join('');
+  $('tabs').querySelectorAll('.tab').forEach(x => x.onclick = () => { st.stage = x.dataset.s; if (st.stage !== 'edit') st.ver = null; go(); });
+}
+function frame(src, crop){ $('main').innerHTML = '<iframe' + (crop ? ' class="crop"' : '') + ' src="' + esc(src) + '" allow="autoplay; fullscreen"></iframe>'; $('h-open').href = src; $('h-open').style.display = ''; }
+async function drawMain(c){
+  const it = c.item; $('h-open').style.display = 'none';
+  if (st.view === 'queue') return frame(APPROVE + '/?embed=1&brand=' + st.brand);
+  if (st.view === 'feed') return frame(BOARD + '/?v=' + Date.now() + '#ideas', true);
+  if (!it) { $('main').innerHTML = '<div class="empty"><div><h2>Every video ad, one place</h2>Pick an ad on the left: its storyboard, production, versions and approval open here.</div></div>'; return; }
+  if (st.stage === 'storyboard' && it.idea) return frame(BOARD + '/?v=' + Date.now() + '#' + it.idea, true);
+  if (st.stage === 'production') {
+    if (it.production) return frame('/canvas?embed=1&brief=' + encodeURIComponent(it.production));
+    $('main').innerHTML = '<div class="empty"><div><h2>Not in production yet</h2>Production turns this storyboard into one workflow per scene: voice, shots and the timeline.<br><button class="go" id="produce"><svg class="ic"><use href="#i-play"/></svg>Produce</button><div id="pmsg" style="margin-top:10px"></div></div></div>';
+    $('produce').onclick = async () => { $('pmsg').textContent = 'Setting up production…'; const r = await fetch('/api/produce/' + it.idea, {method: 'POST'}); const j = await r.json(); if (!r.ok) { $('pmsg').textContent = j.error || 'Failed'; return; } await loadMenu(); st.n = j.brief; go(); };
+    return;
+  }
+  if (st.stage === 'edit') {
+    $('main').innerHTML = '<div class="empty"><div><h2>Opening the edit in HyperFrames…</h2>' + (st.ver ? 'Version ' + esc(st.ver.replace('H', 'V')) : 'The cut') + ', running on this Mac.</div></div>';
+    const r = await fetch('/api/hyperframes/' + encodeURIComponent(it.production), {method: 'POST', body: JSON.stringify({version: st.ver || null})});
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { $('main').innerHTML = '<div class="empty"><div><h2>Could not open the edit</h2>' + esc(j.error || '') + '</div></div>'; return; }
+    const vs = (await (await fetch('/api/versions/' + encodeURIComponent(it.production))).json()).versions;
+    $('main').innerHTML = '<div class="verbar">' + vs.map(v => '<button class="vb' + ((st.ver || 'control') === v.id ? ' on' : '') + '" data-v="' + esc(v.id) + '">' + esc(v.label) + '</button>').join('') + '</div><iframe class="under" src="' + esc(j.url) + '"></iframe>';
+    $('h-open').href = j.url; $('h-open').style.display = '';
+    $('main').querySelectorAll('.vb').forEach(b => b.onclick = () => { st.ver = b.dataset.v === 'control' ? null : b.dataset.v; go(); });
+    return;
+  }
+  if (st.stage === 'versions') {
+    const v = it.production ? (await (await fetch('/api/versions/' + encodeURIComponent(it.production))).json()).versions : [];
+    $('main').innerHTML = '<div class="vers"><p class="vnote">' + (v.length ? v.length + ' versions of this ad: the control and each opening. These are the files that go on its approval card, in this order.' : 'No rendered versions yet.') + '</p><div class="vgrid">'
+      + v.map((x, k) => '<div class="vcard"><video controls playsinline preload="metadata" src="/files/' + esc(x.file) + '#t=0.1"></video><b>' + esc(x.label) + '</b><span>on the card as video ' + (k + 1) + '</span><button class="vedit" data-v="' + esc(x.id) + '">Edit in HyperFrames</button></div>').join('') + '</div></div>';
+    $('main').querySelectorAll('.vedit').forEach(b => b.onclick = () => { st.stage = 'edit'; st.ver = b.dataset.v === 'control' ? null : b.dataset.v; go(); });
+    return;
+  }
+  if (st.stage === 'approve') { const no = briefNo(it.key); return frame(APPROVE + '/?embed=1&brand=' + st.brand + (no ? '&brief=brief-' + no : '')); }
+}
+async function go(){
+  document.body.classList.remove('drawer');
+  if (!M) await loadMenu();
+  const c = current();
+  if (c.item) { st.brand = c.b.id; if (!st.idea && c.item.idea) st.idea = c.item.idea; if (!st.n && c.item.production) st.n = c.item.production; if (!st.stage) st.stage = c.item.production ? 'production' : 'storyboard'; }
+  save(); drawRail(); drawHead(c); drawMain(c);
+}
+addEventListener('message', e => { if (e.data && e.data.go) { st.stage = e.data.go; st.ver = e.data.ver || null; go(); } });
+$('f-approve').onclick = () => { st = {brand: st.brand, view: 'queue'}; go(); };
+$('f-feed').onclick = () => { st = {brand: st.brand, view: 'feed'}; go(); };
+go();
+</script>
+</body>
+</html>
