@@ -20,6 +20,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import unquote, urlparse
 
@@ -425,6 +426,79 @@ def productions():
     return out
 
 
+def ledger_stages(prods):
+    """key -> {"id", "name", "flag"} for every production, read from the ledger (the Queue). A piece the ledger has
+    closed (sent to Meta and completed) is live. Names are the ledger's own stage names (components/naming/stages.json)."""
+    d = _get(ST.LEDGER + "/api/queue", timeout=20, ttl=60) or {}
+    names = {}
+    try:
+        names = {s["id"]: s["name"] for s in json.loads((ST.part("naming") / "stages.json").read_text())["stages"]}
+    except (OSError, ValueError, KeyError):
+        pass
+    by_id = {}
+    for e in d.get("items") or []:
+        by_id[e.get("id")] = e
+    for e in d.get("removed") or []:
+        if str(e.get("note") or "").startswith("Completed") or e.get("stage") == "live":
+            by_id.setdefault(e.get("id"), dict(e, stage="live"))
+    out = {}
+    for p in prods:
+        key = p.get("key") or ""
+        e = by_id.get(key)
+        if e is None and p.get("run"):                           # a piece named by its writing run
+            e = by_id.get(f"{key.split('_', 1)[0]}_idea_{p['run']}")
+        if e is None and "_brief-" in key:                       # the same brief under another product spelling
+            brand, num = key.split("_", 1)[0], key.rsplit("_brief-", 1)[1]
+            e = next((x for k, x in by_id.items() if str(k).startswith(brand + "_") and str(k).endswith("_brief-" + num)), None)
+        if e:
+            sid = e.get("stage")
+            out[key] = {"id": sid, "name": names.get(sid, sid), "flag": e.get("flag")}
+    return out
+
+
+def idea_runs():
+    """storyboard idea -> its writing run, from the board's matrix (the board's own data)."""
+    try:
+        board = Path(os.environ.get("VIDEO_STUDIO_BOARD_DATA") or ST.REPO / "runs" / "storyboard")
+        return {f"brief{a['n']}": a.get("line") for a in json.loads((board / "matrix.json").read_text()).get("ads", []) if a.get("line")}
+    except (OSError, ValueError):
+        return {}
+
+
+def link_productions(prods, ideas=None):
+    """A production made from an idea's writing run is that idea's production, even when its brief.json never said so:
+    its key ends with the run's name. Fills `idea` and `run` on each production."""
+    runs = idea_runs()
+    for p in prods:
+        key = str(p.get("key") or p.get("n") or "")
+        if not p.get("idea"):
+            p["idea"] = next((i for i, r in runs.items() if r and key.endswith(r)), None)
+        p["run"] = runs.get(p.get("idea")) if p.get("idea") else None
+    return prods
+
+
+def ledger_idea_stages(ideas):
+    """idea -> its ledger stage, for storyboard ideas not yet in production: the board's matrix names each idea's
+    writing run, and the ledger files a run as <brand>_idea_<run>."""
+    d = _get(ST.LEDGER + "/api/queue", timeout=20, ttl=60) or {}
+    try:
+        names = {s["id"]: s["name"] for s in json.loads((ST.part("naming") / "stages.json").read_text())["stages"]}
+    except (OSError, ValueError, KeyError):
+        names = {}
+    runs = idea_runs()
+    items = list(d.get("items") or [])
+    out = {}
+    for i in ideas:
+        run = runs.get(i.get("id"))
+        if not run:
+            continue
+        e = next((x for x in items if str(x.get("id")) == f"{i.get('brand')}_idea_{run}"
+                  or any(str(s).endswith(":" + run) for s in x.get("sources") or [])), None)
+        if e:
+            out[i["id"]] = {"id": e.get("stage"), "name": names.get(e.get("stage"), e.get("stage")), "flag": e.get("flag")}
+    return out
+
+
 def brands_here():
     """(brand, label) for every brand folder in this workspace; the label from the brand's own account file."""
     out = []
@@ -445,7 +519,7 @@ def brands_here():
 
 def menu():
     ideas = _get(BOARD + "/api/ideas") or []
-    prods = productions()
+    prods = link_productions(productions())
     by_idea = {p["idea"]: p for p in prods if p.get("idea")}
     for p in prods:
         if not p["brand"] and p.get("idea"):
@@ -454,6 +528,10 @@ def menu():
     waiting = {}
     for c in cards:
         waiting.setdefault(c.get("brand"), []).append(c.get("ad_name") or c.get("id"))
+    # every ad's stage comes from the ledger (the Queue), the same record the board and every tool read (the owner,
+    # 8 Nov: "studio needs to function on the same ledger as the board because it's all one integrated system")
+    stage_of = ledger_stages(prods)
+    idea_stage = ledger_idea_stages(ideas)
     brands = []
     for b, label in brands_here():
         items = []
@@ -461,11 +539,14 @@ def menu():
             if i.get("brand") != b:
                 continue
             p = by_idea.get(i["id"])
+            stage = stage_of.get(p["key"]) if p else idea_stage.get(i["id"])
+            stage = stage or ({"id": "making", "name": "Handed off · making"} if p else {"id": "idea", "name": "Storyboard"})
             items.append({"idea": i["id"], "name": i.get("name"), "swipe": i.get("swipe"), "production": p and p["n"],
-                          "key": p and p["key"], "versions": p and p["versions"]})
+                          "key": p and p["key"], "versions": p and p["versions"], "stage": stage})
         loose = [p for p in prods if p["brand"] == b and not p.get("idea")]
         brands.append({"id": b, "label": label, "ideas": items,
-                       "productions": [{"production": p["n"], "name": p["title"], "key": p["key"]} for p in loose],
+                       "productions": [{"production": p["n"], "name": p["title"], "key": p["key"],
+                                        "stage": stage_of.get(p["key"]) or {"id": "making", "name": "Handed off · making"}} for p in loose],
                        "waiting": len(waiting.get(b, []))})
     return {"brands": brands, "board": bool(ideas), "approve": cards is not None}
 
@@ -682,6 +763,8 @@ class H(BaseHTTPRequestHandler):
                 return self.file(shot_frame(parts[2], parts[3], parts[4]))
             except Exception as e:  # noqa: BLE001
                 return self.send(404, {"error": str(e)})
+        if parts[:2] == ["api", "productions"] and len(parts) == 2:
+            return self.send(200, {"productions": link_productions(productions())})
         if parts[:2] == ["api", "versions"] and len(parts) == 3:
             return self.send(200, {"versions": versions(parts[2])})
         if parts[0] == "gen" and len(parts) >= 2:

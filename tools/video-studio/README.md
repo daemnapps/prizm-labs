@@ -15,6 +15,10 @@ python3 tools/video-studio/seed_from_brief.py <idea>              # a storyboard
 
 The Studio is the only address: it serves the storyboard board under `/board/` and the approval page under `/approve/`, and sends their own requests back to them, so a computer and a phone open one link. The apps keep running where they are (`VIDEO_STUDIO_BOARD`, `VIDEO_STUDIO_APPROVE`); nothing in them changes. The HyperFrames editor in the Edit tab still opens on its own local port.
 
+## One ledger
+
+Where every ad stands comes from the ledger, the Queue (`VIDEO_STUDIO_LEDGER`), in its own stage names (`components/naming/stages.json`): the Studio never keeps a stage of its own. The Studio answers `/api/productions` for the ledger to read, so an ad being built shows there at Making (Editing once it has versions), and its approval card carries it on to Approve ad, Sending to Meta and On Meta. A production made from a storyboard idea's writing run is linked to that idea by the run's name, so the board, the Studio and the ledger show one piece once.
+
 ## Stages
 
 | Tab | What it shows |

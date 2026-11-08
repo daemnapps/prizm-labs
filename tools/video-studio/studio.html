@@ -31,6 +31,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
 .chip{font:600 10.5px system-ui;border-radius:20px;padding:2px 7px;background:var(--bg);color:var(--dim)}
 .chip.g{background:var(--hl);color:var(--accent)}
+.chip.live{background:var(--accent);color:#fff}
+.chip.w{background:#fff3d6;color:#8a5a00}
 .foot{border-top:1px solid var(--line);padding:8px}
 .foot button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:9px;border-radius:8px;text-align:left;font-weight:600;font-size:13px}
 .foot button:hover,.foot button.on{background:var(--soft)}
@@ -123,6 +125,12 @@ const BOARD = '/board';       /* one address: the Studio serves the storyboard b
 const APPROVE = '/approve';
 const PHONE = () => matchMedia('(max-width:760px)').matches;
 const STAGES = [['storyboard','Storyboard'],['production','Production'],['edit','Edit'],['versions','Versions'],['approve','Approve']];
+/* where the ad is, from its approval card first (live, approved, waiting, sent back), then its production */
+/* where the ad is, read from the ledger (the Queue) in its own stage names; the colour says who it waits on */
+const STAGE_LOOK = {idea: '', brief: '', 'brief-needs-you': 'w', making: 'g', editing: 'g', 'final-needs-you': 'w', launch: 'g', live: 'live'};
+function stageChip(i){ const s = i.stage || {id: i.production ? 'making' : 'idea', name: i.production ? 'Handed off · making' : 'Storyboard'};
+  const name = s.flag === 'sent-back' ? 'Sent back' : s.name;
+  return '<span class="chip ' + (s.flag === 'sent-back' ? 'w' : (STAGE_LOOK[s.id] || '')) + '">' + esc(name) + '</span>' + (i.versions ? '<span class="chip">' + i.versions + ' versions</span>' : ''); }
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const q = new URLSearchParams(location.search);
@@ -153,12 +161,11 @@ function drawRail(){
     const on = (st.idea === i.idea && !st.view) ? ' on' : '';
     const no = briefNo(i.key);
     h += '<button class="ad' + on + '" data-idea="' + esc(i.idea) + '"><span class="k">' + (no ? 'Brief ' + no : 'Idea ' + esc(i.idea.replace('brief',''))) + '</span><b>' + esc(i.name) + '</b><span class="chips">'
-      + (i.production ? '<span class="chip g">In production</span>' : '<span class="chip">Storyboard</span>')
-      + (i.versions ? '<span class="chip g">' + i.versions + ' versions</span>' : '') + '</span></button>';
+      + stageChip(i) + '</span></button>';
   });
   if (b.productions.length) {
     h += '<div class="sec">Other productions</div>';
-    b.productions.forEach(p => { h += '<button class="ad' + (st.n === p.production && !st.idea ? ' on' : '') + '" data-n="' + esc(p.production) + '"><span class="k">' + esc(p.production) + '</span><b>' + esc(p.name) + '</b></button>'; });
+    b.productions.forEach(p => { h += '<button class="ad' + (st.n === p.production && !st.idea ? ' on' : '') + '" data-n="' + esc(p.production) + '"><span class="k">' + esc(p.production) + '</span><b>' + esc(p.name) + '</b><span class="chips">' + stageChip(p) + '</span></button>'; });
   }
   $('list').innerHTML = h;
   $('list').querySelectorAll('[data-idea]').forEach(x => x.onclick = () => { const i = b.ideas.find(y => y.idea === x.dataset.idea); st = {brand: b.id, idea: i.idea, n: i.production, stage: i.production ? 'production' : 'storyboard'}; go(); });
@@ -210,7 +217,8 @@ async function drawMain(c){
     $('main').querySelectorAll('.vedit').forEach(b => b.onclick = () => { st.stage = 'edit'; st.ver = b.dataset.v === 'control' ? null : b.dataset.v; go(); });
     return;
   }
-  if (st.stage === 'approve') { const no = briefNo(it.key); return frame(APPROVE + '/?embed=1&brand=' + st.brand + (no ? '&brief=brief-' + no : '')); }
+  if (st.stage === 'approve') { const no = briefNo(it.key); const sid = (it.stage || {}).id, v = (it.stage || {}).flag === 'sent-back' ? 'sent-back' : {live: 'live', launch: 'approved'}[sid];
+    return frame(APPROVE + '/?embed=1&brand=' + st.brand + (no ? '&brief=brief-' + no : '') + (v ? '&view=' + v : '')); }
 }
 async function go(){
   document.body.classList.remove('drawer');
