@@ -579,6 +579,73 @@ def versions(n):
     return out
 
 
+# ONE ADDRESS (the owner, 8 Nov: "can we not just have this whole thing on one server?"). The Studio serves the storyboard
+# board under /board/ and the approval page under /approve/. A request those pages make for their own absolute paths
+# (/api/..., /files/...) carries the page as its Referer, so it goes back to the same app; the apps are untouched.
+APPS = {"board": ST.BOARD, "approve": ST.APPROVE}
+HOP = ("transfer-encoding", "connection", "content-length", "keep-alive", "x-frame-options")
+
+
+def app_for(handler):
+    """(app, path to send it) when this request belongs to the board or the approval page, else None."""
+    path = urlparse(handler.path).path
+    for name in APPS:
+        if path == "/" + name or path.startswith("/" + name + "/"):
+            rest = handler.path[len(name) + 1:]
+            return name, rest if rest.startswith("/") else "/" + rest
+    ref = urlparse(handler.headers.get("Referer") or "")
+    if ref.netloc and ref.netloc == (handler.headers.get("Host") or ""):
+        for name in APPS:
+            if ref.path == "/" + name or ref.path.startswith("/" + name + "/"):
+                SERVED[path] = name           # a script or style the app loaded: what it loads goes back to the app too
+                return name, handler.path
+        if ref.path in SERVED:
+            SERVED[path] = SERVED[ref.path]
+            return SERVED[ref.path], handler.path
+    return None
+
+
+SERVED = {}     # path -> app, for files an app's page loaded (their own requests name them as the Referer)
+
+
+def proxy(handler, name, path):
+    import http.client
+    u = urlparse(APPS[name])
+    body = handler.rfile.read(int(handler.headers.get("Content-Length") or 0) or 0) or None
+    hdr = {k: v for k, v in handler.headers.items() if k.lower() not in ("host", "connection", "referer", "origin")}
+    hdr["Host"] = u.netloc                      # the apps answer only their own address and origin
+    if handler.headers.get("Origin"):
+        hdr["Origin"] = f"{u.scheme}://{u.netloc}"
+    if handler.headers.get("Referer"):
+        hdr["Referer"] = f"{u.scheme}://{u.netloc}/"
+    try:
+        c = http.client.HTTPConnection(u.hostname, u.port or 80, timeout=300)
+        c.request(handler.command, path, body=body, headers=hdr)
+        r = c.getresponse()
+    except Exception as e:  # noqa: BLE001
+        handler.send_response(502); handler.end_headers(); handler.wfile.write(f"{name} is not running: {e}".encode()); return
+    handler.send_response(r.status)
+    for k, v in r.getheaders():
+        if k.lower() not in HOP:
+            if k.lower() == "location" and v.startswith("/"):
+                v = "/" + name + v                # a redirect stays inside the app
+            handler.send_header(k, v)
+    length = r.getheader("Content-Length")
+    if length is not None:
+        handler.send_header("Content-Length", length)
+        handler.end_headers()
+        while True:
+            chunk = r.read(65536)
+            if not chunk:
+                break
+            handler.wfile.write(chunk)
+    else:
+        data = r.read()
+        handler.send_header("Content-Length", str(len(data)))
+        handler.end_headers()
+        handler.wfile.write(data)
+
+
 class H(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -594,6 +661,9 @@ class H(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
+        got = app_for(self)
+        if got:
+            return proxy(self, *got)
         u = urlparse(self.path)
         parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
         if not parts or parts == ["studio"]:
@@ -628,6 +698,14 @@ class H(BaseHTTPRequestHandler):
             return self.file(p)
         self.send(404, {"error": "not found"})
 
+    def _other(self):
+        got = app_for(self)
+        if got:
+            return proxy(self, *got)
+        self.send(405, {"error": "method not allowed"})
+
+    do_PUT = do_DELETE = do_PATCH = _other
+
     def file(self, p):
         ctype = {"mp4": "video/mp4", "jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png",
                  "json": "application/json"}.get(p.rsplit(".", 1)[-1].lower(), "application/octet-stream")
@@ -657,6 +735,9 @@ class H(BaseHTTPRequestHandler):
                 left -= len(chunk)
 
     def do_POST(self):
+        got = app_for(self)
+        if got:
+            return proxy(self, *got)
         parts = [unquote(p) for p in urlparse(self.path).path.strip("/").split("/") if p]
         body = self.rfile.read(int(self.headers.get("Content-Length") or 0) or 0)
         try:
@@ -720,46 +801,10 @@ class H(BaseHTTPRequestHandler):
         self.send(404, {"error": "not found"})
 
 
-BOARD_RELAY = 8915      # the storyboard board, relayed so a phone on the tailnet can open it (the board only answers its own address)
-
-
-class Relay(BaseHTTPRequestHandler):
-    """Pass every request to the board on 127.0.0.1:8914 as if it came from this Mac (its Host check)."""
-    def log_message(self, *a):
-        pass
-
-    def _go(self):
-        import http.client
-        body = self.rfile.read(int(self.headers.get("Content-Length") or 0) or 0) or None
-        hdr = {k: v for k, v in self.headers.items() if k.lower() not in ("host", "connection", "accept-encoding")}
-        hdr["Host"] = "127.0.0.1:8914"
-        try:
-            c = http.client.HTTPConnection("127.0.0.1", 8914, timeout=120)
-            c.request(self.command, self.path, body=body, headers=hdr)
-            r = c.getresponse()
-            data = r.read()
-        except Exception as e:  # noqa: BLE001
-            self.send_response(502); self.end_headers(); self.wfile.write(str(e).encode()); return
-        self.send_response(r.status)
-        for k, v in r.getheaders():
-            if k.lower() not in ("transfer-encoding", "connection", "content-length"):
-                self.send_header(k, v)
-        self.send_header("Content-Length", str(len(data)))
-        self.end_headers()
-        self.wfile.write(data)
-
-    do_GET = do_POST = do_PUT = do_DELETE = _go
-
-
 def main(argv):
     if not argv or argv[0] == "serve":
         port = int(argv[argv.index("--port") + 1]) if "--port" in argv else 8921
-        try:
-            relay = ThreadingHTTPServer(("127.0.0.1", BOARD_RELAY), Relay)
-            threading.Thread(target=relay.serve_forever, daemon=True).start()
-        except OSError:
-            pass
-        print(f"Video Studio on http://127.0.0.1:{port} (board relay on {BOARD_RELAY})")
+        print(f"Video Studio on http://127.0.0.1:{port} — the board at /board/, the approval page at /approve/")
         ThreadingHTTPServer(("127.0.0.1", port), H).serve_forever()
     elif argv[0] == "run":
         print(json.dumps(run_scene(argv[1], argv[2]), indent=1))

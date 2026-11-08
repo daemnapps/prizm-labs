@@ -36,7 +36,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .foot button:hover,.foot button.on{background:var(--soft)}
 .foot .n{margin-left:auto;background:var(--green);color:#fff;border-radius:20px;padding:1px 8px;font-size:12px}
 /* header */
-#head{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 18px 0;min-width:0}
+#scrim{display:none}
+#head{grid-column:2;grid-row:1;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 18px 0;min-width:0}
 .crumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:28px}
 .bb{font:800 11px system-ui;letter-spacing:.08em;background:var(--green);color:#fff;border-radius:5px;padding:3px 7px}
 .crumb h1{font-size:18px;margin:0;font-weight:800;line-height:1.2}
@@ -50,7 +51,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tab.done .num{background:var(--hl);color:var(--accent)}
 .tab:disabled{opacity:.45;cursor:default}
 /* main */
-#main{position:relative;min-height:0;overflow:hidden}
+#main{grid-column:2;grid-row:2;position:relative;min-height:0;overflow:hidden}
 #main iframe{position:absolute;top:0;bottom:0;left:0;width:100%;height:100%;border:0;background:var(--bg)}
 #main iframe.crop{left:-208px;width:calc(100% + 208px);top:-58px;height:calc(100% + 58px)}
 #main iframe.under{top:44px;height:calc(100% - 44px)}
@@ -76,12 +77,12 @@ button{font:inherit;color:inherit;cursor:pointer}
  body.drawer #rail{transform:none}
  #scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:29}
  body.drawer #scrim{display:block}
- #head{grid-row:1;padding:8px 16px 0}
+ #head{grid-column:1;grid-row:1;padding:8px 16px 0}
  .menub{display:inline-grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);background:var(--bg);border-radius:9px;margin-right:2px}
  .crumb h1{font-size:15px;flex:1 1 60%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
  .crumb .key,.crumb a{display:none}
  .tab{padding:9px 10px;font-size:13px}.tab .num{display:none}
- #main{grid-row:2}
+ #main{grid-column:1;grid-row:2}
  #main iframe.crop{left:0;width:100%;top:0;height:100%}
  .vers{padding:12px 16px}.vgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
  .ad{padding:10px 9px}
@@ -118,8 +119,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 <script>
 /* on the Mac the tools answer on 127.0.0.1; from the phone (over Tailscale) the same tools answer on this Mac's tailnet name */
 const LOCAL = ['127.0.0.1', 'localhost'].includes(location.hostname);
-const BOARD = 'http://' + (LOCAL ? '127.0.0.1' : location.hostname) + ':8914';   /* the phone reaches the board through its tailnet review route on 8914 */
-const APPROVE = 'http://' + (LOCAL ? '127.0.0.1' : location.hostname) + ':8795';
+const BOARD = '/board';       /* one address: the Studio serves the storyboard board and the approval page itself */
+const APPROVE = '/approve';
 const PHONE = () => matchMedia('(max-width:760px)').matches;
 const STAGES = [['storyboard','Storyboard'],['production','Production'],['edit','Edit'],['versions','Versions'],['approve','Approve']];
 const $ = id => document.getElementById(id);

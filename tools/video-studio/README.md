@@ -11,6 +11,10 @@ python3 tools/video-studio/video_studio.py package <brief>        # the producti
 python3 tools/video-studio/seed_from_brief.py <idea>              # a storyboard idea -> a production (never a second one)
 ```
 
+## One address
+
+The Studio is the only address: it serves the storyboard board under `/board/` and the approval page under `/approve/`, and sends their own requests back to them, so a computer and a phone open one link. The apps keep running where they are (`VIDEO_STUDIO_BOARD`, `VIDEO_STUDIO_APPROVE`); nothing in them changes. The HyperFrames editor in the Edit tab still opens on its own local port.
+
 ## Stages
 
 | Tab | What it shows |
