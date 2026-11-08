@@ -13,7 +13,11 @@ THE PROCESS (models from the team's Generative Model House, components/generativ
                  a picture with none of our people says `"no_people": true`.
   4. Phone pass  video_studio.phone_copy re-shoots the clip at 432 px with grain and drift when a scene uses it, which is
                  also why the house's local upscale step is skipped here.
-A recipe: {"name", "ref", "refs": [...], "master": "...", "still": "...", "action": "...", "seconds": 5, "no_people": false}.
+A recipe: {"name", "ref", "refs": [...], "master": "...", "still": "...", "action": "...", "seconds": 5, "no_people": false,
+"scene_master": "<name of the scene's first shot>", "continue_from": "<name of the shot before, when there is no cut>"}.
+Shots in one scene are made in order as a sequence (BRIEF-SPEC "Scenes and shots"): `scene_master` puts the first
+shot's still in front of this shot's references, so the same people stand in the same place; `continue_from` starts
+this shot from the last frame of the shot before it.
 Each run writes `made` on the recipe: every step's model, the prompt exactly as sent, the references, the request id,
 seconds and time. The Video Studio shows it under "How this AI shot was made".
 """
@@ -191,12 +195,42 @@ def ref_path(rel):
     return p
 
 
+def _made_still(name):
+    """The still a made shot started from (its scene master), or None."""
+    p = os.path.join(G, "refs", name + "-still.png")
+    return p if os.path.exists(p) else None
+
+
+def last_frame(name):
+    """The last frame of a made shot, kept beside it as refs/<name>-last.png, or None when the shot is not made."""
+    clip = os.path.join(G, name + ".mp4")
+    if not os.path.exists(clip):
+        return None
+    out = os.path.join(G, "refs", name + "-last.png")
+    if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(clip):
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-sseof", "-0.05", "-i", clip, "-frames:v", "1", out], check=True)
+    return out
+
+
 def make(r, out, dry_run=False):
     """One shot through the house process; every step recorded on the recipe."""
     made = {"process": PROCESS, "ref": os.path.join("refs", r["ref"]), "steps": []}
     r["made"] = made                     # kept even when a later step fails, so the studio shows what did run
     frame = ref_path(r["ref"])
     extra = [ref_path(x) for x in r.get("refs") or []]
+    if r.get("continue_from"):           # no cut: this shot starts where the one before it ended
+        lf = last_frame(r["continue_from"])
+        if lf is None:
+            raise SystemExit(f"{r['name']}: continues from {r['continue_from']}, which is not made yet (make the scene in order)")
+        frame = lf
+        made["continues_from"] = r["continue_from"]
+    if r.get("scene_master"):            # the same people in the same place as the scene's first shot
+        sm = _made_still(r["scene_master"]) or last_frame(r["scene_master"])
+        if sm is None:
+            raise SystemExit(f"{r['name']}: its scene master {r['scene_master']} is not made yet (make the scene in order)")
+        extra = [sm] + [x for x in extra if x != sm]
+        made["scene_master"] = r["scene_master"]
     master = ref_path(r["master"]) if r.get("master") else None
     if r.get("still"):
         still = os.path.join(G, "refs", r["name"] + "-still.png")

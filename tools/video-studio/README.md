@@ -36,9 +36,10 @@ Phones get the same tabs behind a drawer; Edit opens on the computer only.
 | Setting | Default |
 |---|---|
 | `VIDEO_STUDIO_DATA` (holds `briefs/` and `sources/`) | `runs/video-studio/` |
-| `VIDEO_STUDIO_DRIVE` (a synced folder of your own library clips) | none; clips come from the brand's own folder |
+| `VIDEO_STUDIO_DRIVE` (a synced `Shared Assets` for library clips) | none; clips are pulled by link |
 | `VIDEO_STUDIO_BOARD`, `VIDEO_STUDIO_APPROVE`, `VIDEO_STUDIO_STUDIO` | `127.0.0.1` ports 8914, 8795, 8922 |
 | `VIDEO_STUDIO_BOARD_DATA` (the storyboard board's `matrix.json`, `owner-edits/`) | `runs/storyboard/` |
+| `VIDEO_STUDIO_WRITING` (the writing runs, each with its production brief) | `runs/video-teardown/_work/` |
 
 Keys come through `components/keys/loader.py`. Brands come from `brands/`: a brand with a `meta/account.json` shows in the menu, under its `label`.
 

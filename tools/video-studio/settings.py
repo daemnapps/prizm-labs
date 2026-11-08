@@ -4,6 +4,7 @@
 - VIDEO_STUDIO_DRIVE  a synced `Shared Assets` folder to read library clips from (default: none; clips are pulled by link)
 - VIDEO_STUDIO_BOARD  the storyboard board's address (default http://127.0.0.1:8914)
 - VIDEO_STUDIO_APPROVE the approval page's address (default http://127.0.0.1:8795)
+- VIDEO_STUDIO_WRITING the writing runs, each with its production brief (default runs/video-teardown/_work)
 - VIDEO_STUDIO_LEDGER  the Queue, the one ledger every tool reads stages from (default http://127.0.0.1:8880)
 Keys are read through `components/keys/loader.py`, never from a file here.
 """
@@ -19,6 +20,7 @@ SOURCES = DATA / "sources"
 DRIVE_ROOTS = [p for p in [os.environ.get("VIDEO_STUDIO_DRIVE")] if p]
 BOARD = os.environ.get("VIDEO_STUDIO_BOARD") or "http://127.0.0.1:8914"
 APPROVE = os.environ.get("VIDEO_STUDIO_APPROVE") or "http://127.0.0.1:8795"
+WRITING = Path(os.environ.get("VIDEO_STUDIO_WRITING") or REPO / "runs" / "video-teardown" / "_work")   # the writing runs (their production briefs)
 LEDGER = os.environ.get("VIDEO_STUDIO_LEDGER") or "http://127.0.0.1:8880"     # the Queue: the one ledger of where every piece is
 
 

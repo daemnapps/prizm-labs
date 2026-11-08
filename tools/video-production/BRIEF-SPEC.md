@@ -69,6 +69,21 @@ An ad with no TYPE A rows is a voice-over ad and says so in `overrides.aroll`.
 **Still:**    the generation prompt, verbatim, minus the refs.
 ```
 
+## Scenes and shots — a scene is a sequence (ruled 2026-11-08)
+
+A **scene** is one continuous moment: one place, one time, the same people, one sound bed. It holds the moment's whole script in order, every line with its `speaker`. A **shot** is one cut inside a scene: an angle or framing, the action it shows, and the lines it covers (`lines`, each with its `speaker`).
+
+1. **One moment is one scene, however many people speak in it.** A back-and-forth between a host and a guest is one scene whose shots cover the turns, never one scene per turn. A new scene starts only when the place, the time or the people change, or for a card or an insert from another world.
+2. **Speakers live on lines, not on scenes.** A scene may carry several speakers. The voice step reads each line in its speaker's voice and lays the reads down in order, so a scene is never split to give a speaker a voice.
+3. **A shot is at least 1.5 s** and names the source shot it copies (`copies`).
+4. **AI shots in one scene are made as a sequence, not one at a time.**
+   - Shot 1's still is the scene master: made from the real reference, it sets the place, the people, their clothes and the light.
+   - Every later shot's still is made with the scene master as a reference (`scene_master`), so the same people stand in the same place.
+   - A shot that continues without a cut (`hands_off: continuous`) starts from the last frame of the shot before it (`continue_from`).
+5. **The check.** `tools/video-writing/machine/scene_shots.py check <brief>` refuses consecutive scenes that are one moment split apart (the same parent scene, or the same section, setting, people and source shot). `fold` joins them into one scene with their shots in order.
+
+The example to copy is a street-interview hook: one scene of four shots of the same two-shot (the question, the card rising, the answer, the glance), cut on the words, with one continuous read.
+
 ## The anchor rule — the one that is not optional
 
 **Every identity visible in a frame carries its element on that frame — not only
