@@ -208,7 +208,7 @@ def prompt(take, voices, with_motion, view=None, own_voices=False):
         shots,
         MOTION if with_motion else "",
         "The people, clothes, place and light are exactly those of the reference picture.",
-        ("Each person looks exactly like their character sheet: " + ", ".join(f"{n} is the sheet named {n}" for n, c in cast.items() if c.get("sheet")) + ".") if any(c.get("sheet") for c in cast.values()) else "",
+        sheet_words(cast),
         " ".join(f"{n}: {c['look'].rstrip('.')}." for n, c in cast.items() if c.get("look")),
         take.get("staging", ""),
         (f"{who}; each speaks only their own lines, lips matching every word." if who else
@@ -216,6 +216,16 @@ def prompt(take, voices, with_motion, view=None, own_voices=False):
         "In order:\n" + "\n".join(lines),
         (take.get("look") or "") + " No music, no text on screen.",
     ] if x)
+
+
+def sheet_words(cast):
+    """Which reference picture is whose sheet: the pictures go in as the start picture, then each sheet in cast order."""
+    named = [n for n, c in cast.items() if c.get("sheet")]
+    if not named:
+        return ""
+    return ("After the first reference picture come the character sheets, one per person, in this order: "
+            + ", ".join(f"picture {k} is {n}" for k, n in enumerate(named, 2))
+            + ". Each person looks exactly like their own sheet in every frame: same face, hair, skin and build.")
 
 
 # --- voices: only the ones we own, picked by name (tools/video-production/machine/make_voice.py makes them) ---
