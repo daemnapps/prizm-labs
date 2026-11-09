@@ -596,7 +596,7 @@ def motion_in(take, dry_run=False):
         if not f.exists():
             raise SystemExit(f"no motion read for this scene yet ({f})")
         tm = json.loads(f.read_text())["take_motion"]
-        m.update({k: tm[k] for k in ("source", "from", "to", "approved")})
+        m.update({k: tm[k] for k in ("source", "from", "to", "approved", "pose") if k in tm})   # pose: the exact skeleton video of programmed motion
     if m.get("approved") is False and not dry_run:
         raise SystemExit("this scene's motion waits for approval: approve it on the scene page, then make the take")
     return dict(take, motion=m) if m else take

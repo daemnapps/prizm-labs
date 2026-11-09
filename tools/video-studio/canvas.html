@@ -372,15 +372,16 @@ async function motionBox(id){
   const j = await (await fetch('/api/motion/' + N + '/' + id)).json().catch(() => null);
   if (!j || sel !== id) return;
   MOT = j; const m = j.motion || {}, st = j.status;
-  const chip = st === 'approved' ? '<span class="chip ok"><svg class="ic" style="width:13px;height:13px"><use href="#i-check"/></svg>Approved</span>'
+  const chip = st === 'ready' ? '<span class="chip ok"><svg class="ic" style="width:13px;height:13px"><use href="#i-check"/></svg>Programmed · ready</span>'
+    : st === 'approved' ? '<span class="chip ok"><svg class="ic" style="width:13px;height:13px"><use href="#i-check"/></svg>Approved</span>'
     : st === 'tracked' ? '<span class="chip wait">Waits for your OK</span>'
     : st === 'reading' ? '<span class="chip wait"><svg class="ic" style="width:13px;height:13px"><use href="#i-refresh"/></svg>Reading…</span>'
     : j.error ? '<span class="chip no">Failed</span>' : '<span class="chip">No motion yet</span>';
   const vid = j.urls.overlay || j.urls.skeleton;
   const left = vid && st !== 'reading' ? '<video src="' + esc(vid) + '" autoplay muted loop playsinline controls></video>'
-    : '<div class="empty2">' + (st === 'reading' ? 'Reading the motion of ' + esc((j.reading || {}).file || 'the clip') + '…<br>about a minute' : 'Drop a phone video of the beat,<br>or use the swipe') + '</div>';
+    : '<div class="empty2">' + (st === 'reading' ? ((j.reading || {}).kind === 'programmed' ? 'Programming the motion from the take…<br>about four minutes' : 'Reading the motion of ' + esc((j.reading || {}).file || 'the clip') + '…<br>about a minute') : (j.has_take ? 'Program the motion<br>from the take' : 'Write the take first,<br>then program its motion')) + '</div>';
   const beats = (j.beats || []).map(b => '<div class="beat">' + (b.speaker ? '<i>' + esc(b.speaker) + '</i>' : '') + '<span>' + esc(b.say) + '</span></div>').join('') || '<div class="msg">No lines in this scene.</div>';
-  const kind = {phone: ['i-phone', 'phone act-out'], swipe: ['i-film', 'swipe'], '3d': ['i-box', '3D blocking']}[m.kind] || ['i-film', 'clip'];
+  const kind = {programmed: ['i-box', 'programmed from the take'], phone: ['i-phone', 'phone act-out'], swipe: ['i-film', 'swipe'], '3d': ['i-box', '3D blocking']}[m.kind] || ['i-film', 'clip'];
   const nums = j.motion ? '<div class="nums"><span><svg class="ic" style="width:14px;height:14px"><use href="#' + kind[0] + '"/></svg>' + esc(kind[1]) + ' · ' + (m.to - m.from).toFixed(1) + ' s</span>'
     + (m.people_max != null ? '<span><svg class="ic" style="width:14px;height:14px"><use href="#i-run"/></svg>' + m.people_max + ' people max · seen in ' + Math.round(100 * m.frames_with_people / Math.max(1, m.frames)) + '%</span>' : '')
     + (m.hands_seen != null ? '<span><svg class="ic" style="width:14px;height:14px"><use href="#i-hand"/></svg>' + m.hands_seen + '</span><span><svg class="ic" style="width:14px;height:14px"><use href="#i-face"/></svg>' + m.faces_seen + '</span>' : '')
@@ -391,11 +392,14 @@ async function motionBox(id){
     + (st === 'tracked' ? '<button class="btn go" id="mo-ok"><svg class="ic"><use href="#i-check"/></svg>Approve motion</button>' : '') + '</div>'
     + '<div class="mg"><div>' + left + '</div><div class="beats">' + beats + '</div></div>' + nums
     + (j.error ? '<div class="msg err">' + esc(j.error) + '</div>' : '')
-    + (st === 'reading' ? '' : '<div class="row2" style="margin-top:4px"><label class="drop" id="mo-drop" style="flex:1"><svg class="ic" style="vertical-align:-4px"><use href="#i-phone"/></svg> Drop a phone video (or a 3D render)<input type="file" id="mo-file" accept="video/*" hidden></label></div>'
-      + '<div class="row2"><select class="btn" id="mo-kind"><option value="phone">phone act-out</option><option value="3d">3D blocking</option></select>' + sw + '</div>')
+    + (st === 'reading' ? '' : '<div class="row2" style="margin-top:4px"><button class="btn go" id="mo-prog"' + (j.has_take ? '' : ' disabled') + '><svg class="ic"><use href="#i-box"/></svg>' + (m.kind === 'programmed' ? 'Program again from the take' : 'Program from the take') + '</button></div>'
+      + '<details style="margin-top:8px"><summary class="msg" style="cursor:pointer">Other sources: a phone act-out or the swipe</summary>'
+      + '<div class="row2" style="margin-top:4px"><label class="drop" id="mo-drop" style="flex:1"><svg class="ic" style="vertical-align:-4px"><use href="#i-phone"/></svg> Drop a phone video (or a 3D render)<input type="file" id="mo-file" accept="video/*" hidden></label></div>'
+      + '<div class="row2"><select class="btn" id="mo-kind"><option value="phone">phone act-out</option><option value="3d">3D blocking</option></select>' + sw + '</div></details>')
     + '<div class="msg" id="mo-msg"></div></div>';
   clearTimeout(motTimer); if (st === 'reading') motTimer = setTimeout(() => motionBox(id), 4000);
   if ($('mo-ok')) $('mo-ok').onclick = async () => { $('mo-ok').disabled = true; await fetch('/api/motion/' + N + '/' + id + '/approve', {method: 'POST', body: '{}'}); motionBox(id); };
+  if ($('mo-prog')) $('mo-prog').onclick = () => motionGo(id, '/program', '{}');
   if ($('mo-sw')) $('mo-sw').onclick = () => motionGo(id, '/swipe', JSON.stringify({from: +$('mo-from').value, to: +$('mo-to').value}));
   const drop = $('mo-drop'); if (!drop) return;
   const send = f => { if (!f) return; $('mo-msg').textContent = 'Sending ' + f.name + ' (' + (f.size / 1e6).toFixed(1) + ' MB)…';

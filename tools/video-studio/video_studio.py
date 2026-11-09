@@ -669,7 +669,8 @@ def motion_state(n, s):
             "error": (reading or {}).get("error"), "reading": reading, "motion": rec, "beats": _beats(wf),
             "swipe": {"file": os.path.basename(swipe), "seconds": round(probe_dur(swipe), 1)} if swipe else None,
             "urls": {k: base + v + ("?t=" + rec.get("tracked_at", "")) for k, v in (rec.get("files") or {}).items()} if rec else {},
-            "camera": (load(os.path.join(d, "camera.json")).get("summary") if os.path.exists(os.path.join(d, "camera.json")) else None)}
+            "camera": (load(os.path.join(d, "camera.json")).get("summary") if os.path.exists(os.path.join(d, "camera.json")) else None),
+            "has_take": os.path.exists(os.path.join(sdir(n, s), "take.json"))}
 
 
 def _read_motion(n, s, clip, start, end, kind, name=None):
@@ -684,6 +685,30 @@ def _read_motion(n, s, clip, start, end, kind, name=None):
         MOTION_READING.pop(key, None)
     except Exception as e:  # noqa: BLE001  shown on the page
         MOTION_READING[key] = {"error": str(e)}
+
+
+def _program_motion(n, s):
+    key = (n, s)
+    try:
+        r = subprocess.run([sys.executable, os.path.join(HERE, "motion_program.py"), "scene", sdir(n, s)],
+                           capture_output=True, text=True, timeout=1800)
+        if r.returncode:
+            MOTION_READING[key] = {"error": (r.stderr or r.stdout).strip()[-400:] or "the motion programmer failed"}
+            return
+        MOTION_READING.pop(key, None)
+    except Exception as e:  # noqa: BLE001  shown on the page
+        MOTION_READING[key] = {"error": str(e)}
+
+
+def motion_program(n, s):
+    """Our own motion, programmed from the scene's take: Claude writes the blocking, the figures act it out."""
+    if MOTION_READING.get((n, s)) and not MOTION_READING[(n, s)].get("error"):
+        raise RuntimeError("this scene's motion is already being made")
+    if not os.path.exists(os.path.join(sdir(n, s), "take.json")):
+        raise RuntimeError("this scene has no take written yet")
+    MOTION_READING[(n, s)] = {"kind": "programmed", "file": "the take", "since": datetime.datetime.now().strftime("%H:%M:%S")}
+    threading.Thread(target=_program_motion, args=(n, s), daemon=True).start()
+    return motion_state(n, s)
 
 
 def motion_start(n, s, clip, start=0.0, end=None, kind="phone", name=None):
@@ -918,6 +943,8 @@ class H(BaseHTTPRequestHandler):
                     return self.send(200, motion_start(n, s, swipe, float(q.get("from") or 0), q.get("to") and float(q["to"]), "swipe"))
                 if act == "approve":
                     return self.send(200, motion_approve(n, s, q.get("by")))
+                if act == "program":
+                    return self.send(200, motion_program(n, s))
             if len(parts) == 5 and parts[:2] == ["api", "scene"]:
                 n, s, act = parts[2], parts[3], parts[4]
                 if act == "run":

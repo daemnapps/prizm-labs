@@ -9,6 +9,8 @@ skeletons, approved, and then drive the take (take.py `motion`).
     python3 motion.py scene <scene dir> <clip> [--from S] [--to S] [--kind swipe|phone|3d] [--engine local|fal] [--name NAME]
     python3 motion.py approve <scene dir> [--by NAME]
     python3 motion.py blocking <spec.json> --out <clip.mp4> [--track]     a 3D blocking rendered to a clip (Blender)
+    python3 motion.py program <take.json> --out <dir> | <scene dir>       our own motion, programmed from the take
+                                                                           (motion_program.py): the default source
 
 `track` writes into <dir>:
   pose.json      every frame: each person (kept as the same person across frames) with body (OpenPose 18 points, plus the
@@ -363,13 +365,15 @@ def draw(track, cam, small, out_dir, fps):
     ph = int(round(H * pw / W / 2) * 2)
     sk = cv2.VideoWriter(str(out_dir / "skeleton.raw.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), fps, (W, H))
     ov = cv2.VideoWriter(str(out_dir / "overlay.raw.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), fps, (pw, ph))
-    cap = cv2.VideoCapture(str(small))
+    cap = cv2.VideoCapture(str(small)) if small and Path(small).exists() else None
     stick = max(2, int(W / 180))
     stills = []
     for i, fr in enumerate(track["frames"]):
-        ok, bgr = cap.read()
+        ok, bgr = cap.read() if cap is not None else (False, None)
         if not ok:
-            break
+            if cap is not None and not track.get("exact"):
+                break
+            bgr = np.full((H, W, 3), 38, np.uint8)        # skeletons only: no picture behind them
         canvas = np.zeros((H, W, 3), np.uint8)
         for p in fr["people"]:
             pts = [(int(x * W), int(y * H), c) for x, y, c in p["body"]]
@@ -393,8 +397,9 @@ def draw(track, cam, small, out_dir, fps):
                     cv2.circle(canvas, q, max(1, stick // 2), (255, 0, 0), -1)
             for x, y in p["face"]:
                 cv2.circle(canvas, (int(x * W), int(y * H)), max(1, stick // 3), (255, 255, 255), -1)
-            if pts[0][2] > 0.3:
-                cv2.putText(canvas, str(p["id"] + 1), (pts[0][0] + 8, pts[0][1] - 12), cv2.FONT_HERSHEY_SIMPLEX, W / 900, (255, 255, 255), 2)
+            if pts[0][2] > 0.3 or pts[1][2] > 0.3:
+                at = pts[0] if pts[0][2] > 0.3 else pts[1]
+                cv2.putText(canvas, str(p.get("name") or p["id"] + 1), (at[0] + 8, at[1] - 12), cv2.FONT_HERSHEY_SIMPLEX, W / 900, (255, 255, 255), 2)
         sk.write(canvas)
         small_bg = cv2.resize((bgr * 0.45).astype(np.uint8), (pw, ph))
         mixed = np.where(cv2.resize(canvas, (pw, ph)).sum(axis=2, keepdims=True) > 30, cv2.resize(canvas, (pw, ph)), small_bg)
@@ -473,6 +478,19 @@ def _read(small, out_dir, fps, people):
             "camera": cam["summary"]}
 
 
+def _draw(blk, clip, out_dir):
+    """Runs under the reader Python: the exact skeletons written by Blender, drawn into the previews."""
+    track = json.loads((blk / "pose.json").read_text())
+    cam = camera_path(json.loads((blk / "camera-steps.json").read_text())["steps"], track["fps"])
+    (out_dir / "pose.json").write_text(json.dumps(track, separators=(",", ":")))
+    (out_dir / "camera.json").write_text(json.dumps(cam, indent=0))
+    draw(track, cam, clip, out_dir, track["fps"])
+    seen = [len(f["people"]) for f in track["frames"]]
+    return {"frames": len(seen), "people_max": max(seen or [0]), "people_ids": len(track.get("names") or []),
+            "frames_with_people": sum(1 for x in seen if x), "hands_seen": sum(2 * x for x in seen), "faces_seen": 0,
+            "camera": cam["summary"], "exact": True}
+
+
 # ---------------------------------------------------------------- the commands
 
 def track(clip, out_dir, start=0.0, end=None, fps=16, people=6, engine="local", kind=None):
@@ -531,26 +549,43 @@ def blender():
     raise SystemExit("no Blender: set MOTION_BLENDER")
 
 
-def blocking(spec, out, then_track=False):
-    """A 3D blocking spec rendered headless into a clip at the spec's rate (16 fps by default)."""
+def blocking(spec, out, then_track=False, exact=True, motion_dir=None):
+    """A 3D blocking spec rendered headless into a clip at the spec's rate (16 fps by default), with the figures' exact
+    skeletons drawn into the previews (`exact`), or read back by the tracker (`then_track`)."""
     out = Path(out)
-    frames = out.with_suffix("")
-    frames = frames.parent / (frames.name + "-frames")
-    shutil.rmtree(frames, ignore_errors=True)
-    frames.mkdir(parents=True)
+    blk = out.parent / (out.stem + "-blender")
+    shutil.rmtree(blk, ignore_errors=True)
+    blk.mkdir(parents=True)
     t0 = time.time()
-    r = subprocess.run([blender(), "-b", "--factory-startup", "-P", str(HERE / "blocking_blender.py"), "--", str(spec), str(frames)],
+    r = subprocess.run([blender(), "-b", "--factory-startup", "-P", str(HERE / "blocking_blender.py"), "--", str(spec), str(blk)],
                        capture_output=True, text=True)
-    pngs = sorted(frames.glob("f-*.png"))
-    if r.returncode or not pngs:
-        raise SystemExit("Blender could not render the blocking: " + (r.stderr or r.stdout)[-800:])
+    if r.returncode or not (blk / "pose.json").exists():
+        raise SystemExit("Blender could not build the blocking: " + (r.stderr or r.stdout)[-800:])
     fps = int(json.loads(Path(spec).read_text()).get("fps") or 16)
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(fps), "-pattern_type", "glob", "-i", str(frames / "f-*.png"),
-                    "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
-    shutil.rmtree(frames, ignore_errors=True)
-    rec = {"clip": str(out), "frames": len(pngs), "seconds_to_render": round(time.time() - t0, 1)}
+    pngs = sorted(blk.glob("f-*.png"))
+    if pngs:
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(fps), "-pattern_type", "glob", "-i", str(blk / "f-*.png"),
+                        "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
+    rec = {"clip": str(out) if pngs else None, "frames": len(pngs), "seconds_to_render": round(time.time() - t0, 1)}
+    if exact:
+        md = Path(motion_dir) if motion_dir else out.parent / (out.stem + "-motion")
+        md.mkdir(parents=True, exist_ok=True)
+        r = subprocess.run([reader_python(), str(Path(__file__).resolve()), "_draw", str(blk), str(out) if pngs else "", str(md)],
+                           capture_output=True, text=True)
+        if r.returncode:
+            raise SystemExit("could not draw the skeletons: " + (r.stderr or r.stdout)[-600:])
+        m = {"source": str(out), "from": 0.0, "to": round(seconds_of(out), 3) if pngs else float(json.loads(Path(spec).read_text()).get("seconds") or 0),
+             "kind": "3d", "fps": fps, "engine": "blender", "status": "ready", "tracked_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+             "cost_usd": 0.0, "files": {"pose": "pose.json", "skeleton": "skeleton.mp4", "overlay": "overlay.mp4",
+                                         "camera": "camera.json", "sheet": "sheet.jpg"}}
+        m.update(json.loads(r.stdout.strip().splitlines()[-1]))
+        m["seconds_to_read"] = rec["seconds_to_render"]
+        m["take_motion"] = {"source": str(out), "from": 0.0, "to": m["to"], "approved": True, "pose": str(md / "skeleton.mp4")}
+        (md / "motion.json").write_text(json.dumps(m, indent=1))
+        rec["motion"] = m
     if then_track:
-        rec["motion"] = track(out, out.parent / (out.stem + "-motion"), fps=fps, kind="3d")
+        rec["tracked"] = track(out, out.parent / (out.stem + "-tracked"), fps=fps, kind="3d")
+    shutil.rmtree(blk, ignore_errors=True)
     return rec
 
 
@@ -570,8 +605,14 @@ if __name__ == "__main__":
     elif a[0] == "scene":
         print(json.dumps(scene(a[1], a[2], _arg(a, "--from", 0.0, float), _arg(a, "--to", None, float), _arg(a, "--kind", "phone"),
                                _arg(a, "--engine", "local"), name=_arg(a, "--name")), indent=1))
+    elif a[0] == "_draw":
+        print(json.dumps(_draw(Path(a[1]), a[2] or None, Path(a[3]))))
     elif a[0] == "blocking":
         print(json.dumps(blocking(a[1], _arg(a, "--out", "blocking.mp4"), "--track" in a), indent=1))
+    elif a[0] == "program":
+        import motion_program as MP
+        print(json.dumps(MP.program_scene(a[1]) if Path(a[1]).is_dir() else
+                         MP.program(json.loads(Path(a[1]).read_text()), _arg(a, "--out", "motion")), indent=1))
     elif a[0] == "approve":
         print(json.dumps(approve(a[1], _arg(a, "--by")), indent=1))
     else:

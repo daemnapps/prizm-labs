@@ -52,5 +52,29 @@ class Approval(unittest.TestCase):
         self.assertEqual(T.motion_in(take), take)
 
 
+class Programmed(unittest.TestCase):
+    def test_timeline_follows_the_lines(self):
+        import motion_program as MP
+        rows, total = MP.timeline({"script": [{"speaker": "A", "say": "one two three four five six"},
+                                              {"speaker": "B", "say": "seven"}]})
+        self.assertEqual([r["line"] for r in rows], [1, 2])
+        self.assertGreater(rows[1]["from"], rows[0]["to"])
+        self.assertGreater(total, rows[1]["to"])
+
+    def test_clean_keeps_only_what_the_figures_can_do(self):
+        import motion_program as MP
+        spec = {"people": [{"name": "A", "at": [0, 0]}, {"name": "B", "at": [1, 0]}],
+                "beats": [{"from": 1, "to": 2, "who": "A", "reach": "B.cheeks", "hands": "both"},
+                          {"from": 2, "to": 3, "who": "C", "walk": [0, 1]},              # nobody called C
+                          {"from": 3, "to": 4, "who": "B", "dance": True},               # no such action
+                          {"from": 9, "to": 12, "who": "B", "nod": 2}],                  # runs past the end
+                "camera": {"follow": [{"from": 0, "who": "A"}, {"from": 1, "who": "Z"}]}}
+        got = MP.clean(spec, 10.0)
+        self.assertEqual(len(got["beats"]), 2)
+        self.assertEqual(len(got["dropped"]), 2)
+        self.assertEqual(got["beats"][1]["to"], 10.0)
+        self.assertEqual([f["who"] for f in got["camera"]["follow"]], ["A"])
+
+
 if __name__ == "__main__":
     unittest.main()

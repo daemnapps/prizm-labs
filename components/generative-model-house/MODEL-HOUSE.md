@@ -80,6 +80,8 @@ A scene's motion is read and approved before a take is paid for (BRIEF-SPEC.md r
 | read a clip's motion (the default) | **MediaPipe on this machine** (`components/video-studio/motion.py`): a person finder, then pose, hands and face per person; the camera solved from the background | points for every person, hand and face; a skeleton video; the camera's path | free; 4 s of clip read in 18 s, 14 s of a crowded swipe in 57 s |
 | a swipe the local reader misses | **fal DWPose**, one call per frame (`motion.py --engine fal`) | a skeleton picture per frame, no points, no camera | 2 s of clip: 32 calls, about 0.02 USD, 4 minutes |
 | block a scene in 3D | **Blender**, headless (`motion.py blocking`) | a blocking clip from stand-in people, a `.glb` set, beats and a moving camera | free; 5 s rendered in about 25 s |
+| program a scene's motion (the default) | **Claude**, on the signed-in plan through the `claude` command line, no tools (`motion_program.py`, `prompts/motion-program.md`) | the blocking: people, beats, camera | no metered cost; about 1 minute for a 25 s, 10-line, 6-person scene |
+| rehearse it, hosted | **Higgsfield 3D Jutsu** (hosted Blender 5.2, `blocking_blender.py` run in a Jutsu project) | stand-in figures and OpenPose skeletons in the project; the skeleton video | 0 credits; built in 23 s, 25 s of skeleton video rendered in 99 s; shaded stand-ins take 16 s a frame, too slow for video there |
 
 ### Controls inside a take (2026-11-09)
 
