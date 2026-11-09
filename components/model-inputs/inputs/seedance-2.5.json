@@ -314,5 +314,11 @@
    "date": "2026-10-26",
    "about": "every clip is made at 480p and upscaled on this Mac"
   }
- ]
+ ],
+ "camera": {
+  "control": "take.py `camera` (move, angle, framing), a line's own `camera` per beat, `shots` (a shot list cut inside one call), `views` (the same moment once per view, cut line by line); camera control runs on Wan 3.0 and Seedance 2.5 only (ruled 2026-11-09)",
+  "multi_cam_views": "tested 2026-11-09 on Wan 3.0 reference mode (fal), 2 views x 20 s, 2 USD: the cut runs on unbroken words, but two separate calls rebuild the scene differently (the men swap places and one changes face between views), so the views do not match; a model's own shot list inside one call keeps the people and places",
+  "shot_list": "[own test 2026-11-09, Higgsfield CLI omni_reference with the exact start frame + one voice sample per speaker, 10 s, 30 credits, job d1446e4f-346a-447b-ba08-168ee6f5841a] a shot list (wide 0-3 s, over-the-shoulder close-up 3-7 s, low two-shot 7-10 s) is cut inside one call in order, same people and place across the cuts, lines in our voices",
+  "per_beat": "a camera line per beat is written into the beat (`camera`), the same words as the start-frame test on Wan"
+ }
 }

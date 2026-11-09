@@ -81,6 +81,20 @@ A scene's motion is read and approved before a take is paid for (BRIEF-SPEC.md r
 | a swipe the local reader misses | **fal DWPose**, one call per frame (`motion.py --engine fal`) | a skeleton picture per frame, no points, no camera | 2 s of clip: 32 calls, about 0.02 USD, 4 minutes |
 | block a scene in 3D | **Blender**, headless (`motion.py blocking`) | a blocking clip from stand-in people, a `.glb` set, beats and a moving camera | free; 5 s rendered in about 25 s |
 
+### Controls inside a take (2026-11-09)
+
+Every person and the camera are set in the take's own file (`take.json`, BRIEF-SPEC.md rules 7–8) and read back off the
+finished take. Camera control runs on Wan 3.0 and Seedance 2.5 only.
+
+| Control | Set by | Carried by | Read back by |
+|---|---|---|---|
+| a person's body, per beat | `moves` on each line; or the scene acted out on a phone (`motion`) | every route as words; the pose route copies an acted clip 1:1 | `take_layers.py`: hands up, moving, where they stand |
+| a person's face, per beat | `faces` on each line, one of ten (neutral, smile, grin, laugh, disgust, unsure, surprise, bite-lip, flirty, deadpan) | every route as words | `take_layers.py` face mesh (YuNet + SFace + MediaPipe blendshapes); `take.py check` marks each beat pass or miss |
+| a person's voice | `cast` NAME `voice`: a voice we own, by name (`take.py voices`, `take.py hear`) | every line read again in it (ElevenLabs v3); voice-sample routes speak in it, the others get it laid on | heard back (Scribe) where each line lands |
+| camera move, angle, framing | `camera`, and a line's own `camera` per beat | Wan 3.0 start-frame follows a camera line per beat in one take (10 s test: wide, push-in, pan, two-shot; 10 credits) | `take_layers.py` camera path: pan, tilt, push |
+| several angles of one moment | `camera` `shots` (a shot list cut inside one call) | Seedance 2.5 (10 s test, 30 credits) and Wan 3.0 reference mode (10 s, 0.50 USD) both cut wide → over-the-shoulder close → low two-shot, same people | the frames |
+| multi-cam | `camera` `views` + `cut`: the same moment once per view, cut line by line on the take's own speech | any route; each view is its own call | the cut; separate calls rebuild the scene differently (people swap places), so a shot list in one call is the default |
+
 ## Clips — Seedance 2.5, every clip (the owner, 2026-10-23)
 
 | Job | Model | How |
