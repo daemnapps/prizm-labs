@@ -365,9 +365,9 @@ def house_routes():
             r = ROUTE_OF.get((rid, row.get("door")))
             if r and r not in out:
                 out.append(r)
-        return out or ["wan-start@higgsfield", "seedance@higgsfield", "wan-ref@fal"]
+        return out or ["seedance@higgsfield", "wan-start@higgsfield", "wan-ref@fal"]
     except Exception:  # noqa: BLE001  a copy of the tools without the house still has the ruled order
-        return ["wan-start@higgsfield", "seedance@higgsfield", "wan-ref@fal"]
+        return ["seedance@higgsfield", "wan-start@higgsfield", "wan-ref@fal"]
 
 
 def _hf(job_type, args, out):
@@ -440,7 +440,10 @@ def _route(route, take, work, secs, text, voices, mclip, raw):
                 "--aspect_ratio", "9:16", "--generate_audio", "true", "--enable_thinking", "true"]
         return _hf("wan3_0", args, raw)
     if route == "seedance@higgsfield":
-        args = ["--prompt", text, "--mode", "omni_reference", "--start-image", str(pic), "--duration", str(secs),
+        # the default print (2026-11-09): the picture rides as an image reference, first, so Seedance rebuilds the first
+        # frame from it; `start_exact` asks for it as the exact start frame instead (Seedance refuses a swimwear start frame)
+        first = ["--start-image", str(pic)] if take.get("start_exact") else ["--image-references", str(pic)]
+        args = ["--prompt", text, "--mode", "omni_reference"] + first + ["--duration", str(secs),
                 "--resolution", "480p", "--aspect_ratio", "9:16", "--generate_audio", "true"]
         for c in cast:
             args += ["--image-references", str(c)]
