@@ -370,7 +370,7 @@ def plan_path(work, plan):
             for k, wk, c, tp, tl in zip(ks, w, C, T, tilt):
                 rows[k]["tip_w"] = round(float(wk), 3)
                 rows[k]["tilt"] = round(float(tl * (1 - wk)), 1)     # loose in the palm only; on the skin it lies flat to it
-                rows[k]["at"] = (c + (tp - c) * wk).round(2).tolist()
+                rows[k]["at"] = c.round(2).tolist()                      # held where the stand-in is held
         tops = [k for k, r in enumerate(rows) if r["on"] and r.get("top")]
         if len(tops) > 2:                                   # the roll is steadied the same way as the place
             T = _smooth(np.array([rows[k]["top"] for k in tops], dtype=float), 7)
@@ -419,7 +419,7 @@ def light_of(clip, frames, step=10):
     """Key direction (camera space: x right, y up, z toward the camera), key and fill colour, from the skin."""
     cap = cv2.VideoCapture(str(clip))
     N, L = [], []
-    tint = []
+    tint, rooms = [], []
     for k in range(0, len(frames), step):
         cap.set(cv2.CAP_PROP_POS_FRAMES, k)
         ok, bgr = cap.read()
@@ -438,6 +438,9 @@ def light_of(clip, frames, step=10):
         skin = bgr[mask > 0].astype(float)
         bright = skin[skin.sum(1) >= np.percentile(skin.sum(1), 90)]
         tint.append((bright.mean(0)[::-1] / 255.0, bgr.reshape(-1, 3).mean(0)[::-1] / 255.0))
+        top = bgr[: bgr.shape[0] // 4].reshape(-1, 3).astype(float)           # the room round the person: its
+        top = top[top.sum(1) >= np.percentile(top.sum(1), 50)]                # upper part, brighter half
+        rooms.append(top.mean(0)[::-1] / 255.0)
     N, L = np.array(N), np.array(L)
     A = np.c_[np.ones(len(N)), N]
     coef, *_ = np.linalg.lstsq(A, L, rcond=None)
@@ -449,7 +452,9 @@ def light_of(clip, frames, step=10):
     key = np.mean([a for a, _ in tint], 0)
     fill = np.mean([b for _, b in tint], 0)
     contrast = float(np.linalg.norm(coef[1:]) / max(coef[0], 1e-3))
+    room = np.mean(rooms, 0) if rooms else fill
     return {"dir": d.round(4).tolist(), "key_rgb": (key / key.max()).round(4).tolist(), "fill_rgb": fill.round(4).tolist(),
+            "room_rgb": room.round(4).tolist(),
             "contrast": round(contrast, 3), "skin_mean": round(float(L.mean()), 3)}
 
 
@@ -491,11 +496,11 @@ def poses(work, kit, tilt_deg=None):
         ex, ey, width = face_axes(P)
         cm = FACE_WIDTH_CM / width                                    # centimetres a pixel at the face
         at = np.array(r["at"])
-        n = _normal(P, at) if r.get("state") != "carried" else np.array([0.0, 0.0, 1.0])
+        n = _normal(P, at, 30) if r.get("state") != "carried" else np.array([0.0, 0.0, 1.0])
         R0 = np.array(frames[k]["pose"])[:3, :3] if frames[k].get("pose") else np.eye(3)
         fwd = R0[:, 2] / (np.linalg.norm(R0[:, 2]) + 1e-9)            # the way the face looks, from the head pose
         # held in the hand, bristles to the skin: the skin's own way of facing decides how much of its side shows
-        w_skin = 0.45                                                 # half the skin, half square to the face
+        w_skin = 0.85                     # flush on the skin, as a hand presses it (the real footage: seen near side-on)
         n = (w_skin * n + (1 - w_skin) * fwd) if r.get("state") != "carried" else n                                    # pressed on the skin, but a hand holds it square
         n = n / np.linalg.norm(n)                                     # to the face, not to the jaw's edge
         up2 = np.array(r["top"]) if r.get("top") else _tilted_up(ex, ey, r, pa["plan"])
@@ -519,7 +524,7 @@ def poses(work, kit, tilt_deg=None):
             # the device lies in the hand: on the skin its tip where the stand-in's tip is and its body back down in
             # the palm, so the hand covers most of it and the tip shows (owner, 9 Nov); loose in a palm, centred
             tw = r.get("tip_w", 0.0)
-            pad = np.array([0.0, 0.0, K["height_cm"] * (0.5 + 0.47 * tw)])
+            pad = np.array([0.0, -K["depth_cm"] * 0.5 * tw, K["height_cm"] * (0.5 + 0.1 * tw)])
         else:
             pad = np.array([0.0, -K["depth_cm"] / 2 + 0.05, K["height_cm"] * 0.55])
         loc = np.array([x, y, z]) - R @ pad
@@ -833,7 +838,12 @@ sun.rotation_mode = "QUATERNION"
 sun.rotation_quaternion = Vector(L["dir"]).to_track_quat("Z", "Y")      # a sun shines down its -Z
 sun.data.color = L["key_rgb"]; sun.data.energy = 3.0 * (0.6 + L["contrast"]); sun.data.angle = math.radians(12)
 w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
-bg = w.node_tree.nodes["Background"]; bg.inputs[0].default_value = list(L["fill_rgb"]) + [1]; bg.inputs[1].default_value = 0.55
+bg = w.node_tree.nodes["Background"]; bg.inputs[0].default_value = list(L.get("room_rgb", L["fill_rgb"])) + [1]; bg.inputs[1].default_value = 1.0
+rim = bpy.data.objects.new("room", bpy.data.lights.new("room", "AREA"))      # the bright room behind and round it:
+sc.collection.objects.link(rim)                                             # a large soft light from behind, so the
+rim.data.shape = "DISK"; rim.data.size = 400; rim.data.energy = 9.0e5        # silhouette catches a thin highlight
+rim.data.color = L.get("room_rgb", L["fill_rgb"]); rim.location = (0, 120, -260)
+rim.rotation_mode = "QUATERNION"; rim.rotation_quaternion = (Vector((0, 0, 0)) - Vector(rim.location)).to_track_quat("-Z", "Y")
 sc.render.engine = "BLENDER_EEVEE" if "BLENDER_EEVEE" in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties["engine"].enum_items] else "BLENDER_EEVEE_NEXT"
 sc.render.film_transparent = True
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = W, H, 100
@@ -923,6 +933,19 @@ def _clean_standin(out, V, a, width, key="green"):
     return o
 
 
+def _softness(clip):
+    """How soft the footage is (a Gaussian blur, in pixels, that a perfectly sharp render needs to match it), read from
+    how much fine detail the frames hold against a sharp reference."""
+    cap = cv2.VideoCapture(str(clip))
+    ok, bgr = cap.read()
+    if not ok:
+        return 0.6
+    g = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    lap = float(cv2.Laplacian(g, cv2.CV_32F).var())
+    # a sharp phone frame reads ~600+, soft AI video 40-150; map to 0.4-1.2 px
+    return float(np.clip(1.2 - (lap - 40) / 700, 0.4, 1.2))
+
+
 def _segmenter():
     try:
         import mediapipe as mp
@@ -964,6 +987,7 @@ def comp(work):
         d.mkdir()
     rng = np.random.default_rng(7)
     skin = _segmenter()
+    soft = _softness(tr["clip"])
     light = po["light"]
     sdir = np.array([-light["dir"][0], light["dir"][1]])            # the shadow falls away from the key (picture y down)
     for k, f in enumerate(frames):
@@ -983,6 +1007,7 @@ def comp(work):
             hm = hm * (1 - V)                       # where the stand-in shows, the hand is not in front
         if r.get("on") and png.exists():
             rgba = cv2.imread(str(png), cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
+            rgba = cv2.GaussianBlur(rgba, (0, 0), soft)                 # as soft as the footage round it
             rgb, a = rgba[:, :, 2::-1], rgba[:, :, 3]
             rgb = grade(rgb, a, bgr, light)
             # contact shadow: the product's shape, softened and pushed away from the light, darkening the skin

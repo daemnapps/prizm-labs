@@ -37,8 +37,14 @@ beat the picture is the take's own, except where a keyed stand-in still shows: i
   holds part ways (a generated hand is not a rigid body); never frame by frame.
 - **Re-grip.** Where the take moves the stand-in from one grip to another (open palm into the fingers), the device
   turns from the first grip to the second over a third of a second.
-- **Tip showing.** On the skin the device lies in the hand, its tip where the stand-in's tip is and its body down in
-  the palm under the fingers, so the tip shows above them. It is not laid flat with its back square to the camera.
+- **Flush on the skin, where the stand-in is held.** On the skin the device sits where the stand-in sits in the
+  fingers, its body a little toward the palm so its tip shows above them, its bristle face flat on the skin: it faces
+  the way the skin faces round the contact (the face mesh, over a wide patch), so on a jaw or a cheek turned from the
+  lens it is seen near side-on, as in the brand's own footage of it in use. It is not laid flat with its back square
+  to the camera.
+- **Lit by the room.** Besides the key read off the skin, the room round the person (the frame's upper part, its
+  brighter half) lights it from all round and from behind, so its satin shell catches a thin edge highlight the way
+  the real one does; its edges are softened to the footage's own focus (read from the frame's fine detail).
 - **Fingers on top.** The fingers in front of it are the take's own pixels, fingertips and nails included: the hand
   is cut out by a body-skin segmenter (MediaPipe's selfie multiclass model, which tells hand skin from face skin),
   kept to the area round the tracked hand. No shadow or grade lands on the fingers.
