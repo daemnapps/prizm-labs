@@ -53,3 +53,6 @@ Keys come through `components/keys/loader.py`. Brands come from `brands/`: a bra
 ## AI shots
 
 `gen_ref.py` makes every AI shot one way, from the Generative Model House: a real reference frame → still → clip → phone pass. Every run is recorded on the shot's recipe and shown under "How it was made". Pictures go through `tools/image-production` and its referencing rules.
+## Product on skin
+
+`product_layer.py` lays a product that is used on the face or body into a take's hand from its own 3D kit, so a video model never draws it: the take's hand holds a plain stand-in in one keyable colour; the face mesh and hands are tracked, the stand-in is keyed out, the product is rendered at its true size where the stand-in sits, the hand stays in front, the light is read off the clip. The method, the plan format and what holds and breaks: `PRODUCT-LAYER.md`.
