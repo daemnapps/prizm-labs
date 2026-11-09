@@ -23,16 +23,20 @@ beat the picture is the take's own, except where a keyed stand-in still shows: i
 
 ## How it is held (owner, 9 Nov)
 
-- The device lies in the hand the way it is really held: its tip shows above the fingers and its body sits down in
-  the palm, under the fingers. It is not laid flat with its back square to the camera. On the skin the tool puts the
-  device's tip where the stand-in's tip is and runs its body back down into the hand; how much of its side shows
-  follows the way the skin faces where it touches. Loose in an open palm (on the way to the face) it sits where the
-  stand-in sits, and it slides to tip-first over a few frames as the hand reaches the face.
-- The fingers in front of it are the take's own pixels and stay on top: the hand is cut out by a body-skin
-  segmenter (MediaPipe's selfie multiclass model, which tells hand skin from face skin), kept to the area round the
-  tracked hand, so the product never paints over a finger. No shadow or grade lands on the fingers.
-- The bar: executed with finesse. A finger dimmed, a product edge across a knuckle or the back laid flat to the lens
-  is a miss at the check.
+- The device takes the stand-in's own pose in every frame, never a fixed upright pose. The stand-in's narrow end is
+  the device's tip. Where the stand-in lies on its side in an open palm, the device lies on its side there too;
+  where its tip leans toward the lens (the stand-in looks shorter than it does side-on), the device leans the same
+  amount. Where the stand-in is seen end-on or cut by the frame's edge, the last direction read holds.
+- Which end is the tip is decided once for the clip: each frame that can tell the stand-in's narrow end votes, and
+  the direction is held from frame to frame, so the device never flips end over end.
+- On the skin the device lies in the hand: its tip where the stand-in's tip is, its body down in the palm under the
+  fingers, so the tip shows above them. It is not laid flat with its back square to the camera. Loose in an open
+  palm it sits where the stand-in sits, and it slides to tip-first over a few frames as the hand reaches the face.
+- The fingers in front of it are the take's own pixels and stay on top, fingertips and nails included: the hand is
+  cut out by a body-skin segmenter (MediaPipe's selfie multiclass model, which tells hand skin from face skin), kept
+  to the area round the tracked hand. No shadow or grade lands on the fingers.
+- The bar: executed with finesse. A finger dimmed or covered, the device standing when the stand-in lies, or its
+  back laid flat to the lens is a miss at the check.
 
 ## The method
 

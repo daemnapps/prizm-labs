@@ -29,8 +29,9 @@ What each stage does
           Every point of the path is a weighted mix of mesh points, so it rides the face as the head moves. The radius
           is a fraction of the face's width. One circle per beat unless "circles" says otherwise.
   render  The kit's own 3D model (model/render3d.json names the .blend and its root; kit.json size_cm the true size),
-          held as a hand holds it: on the skin its tip where the stand-in's tip is and its body down in the palm
-          (loose in an open palm, centred on the stand-in), bristles to the skin. The face's local surface normal
+          held as a hand holds it, in the stand-in's own pose every frame (its narrow end is the tip, its lean toward
+          the lens read from how short it looks): on the skin its tip where the stand-in's tip is and its body down
+          in the palm (loose in an open palm, centred on the stand-in), bristles to the skin. The face's local surface normal
           (a plane fitted to the mesh points round the contact) sets which way it faces, the stand-in's long axis
           (or the face's up) its roll, its true height against the face's width its size. Light is read off the
           clip: a key direction fitted from how bright the skin is against which way it faces, the light's colour
@@ -122,12 +123,25 @@ def standin_fit(bgr, key, min_area=400):
     X = pts - pts.mean(0)
     ev, evec = np.linalg.eigh(X.T @ X / len(X))
     ax = evec[:, 1]
-    if ax[1] > 0:                                   # narrow end up: the long axis points up the picture
-        ax = -ax
+    # the long axis points to the TIP, the narrow end: of the two ends, the one whose outer third is thinner across.
+    # When the two ends read alike (fingers over one, or seen end-on), it points up the picture.
+    side = X @ np.array([-ax[1], ax[0]])
+    pr = X @ ax
+    lo, hi = np.percentile(pr, [33, 67])
+    a_w, b_w = side[pr >= hi].std() if (pr >= hi).sum() > 20 else 0, side[pr <= lo].std() if (pr <= lo).sum() > 20 else 0
+    if a_w and b_w and min(a_w, b_w) < 0.9 * max(a_w, b_w):
+        if b_w < a_w:
+            ax = -ax
+        by = "narrow end"
+    else:
+        if ax[1] > 0:
+            ax = -ax
+        by = "up the picture"
     proj = X @ ax
     tip = pts.mean(0) + ax * proj.max()
-    return {"c": c.round(2).tolist(), "tip": tip.round(2).tolist(), "up": ax.round(4).tolist(), "long_px": round(float(proj.max() - proj.min()), 1),
-            "elong": round(float(math.sqrt(ev[1] / max(ev[0], 1e-6))), 3),
+    tail = pts.mean(0) + ax * proj.min()
+    return {"c": c.round(2).tolist(), "tip": tip.round(2).tolist(), "tail": tail.round(2).tolist(), "up": ax.round(4).tolist(), "long_px": round(float(proj.max() - proj.min()), 1),
+            "elong": round(float(math.sqrt(ev[1] / max(ev[0], 1e-6))), 3), "tip_by": by,
             "edge": bool(xs.min() <= 1 or ys.min() <= 1 or xs.max() >= m.shape[1] - 2 or ys.max() >= m.shape[0] - 2),
             "area": int(st[j, cv2.CC_STAT_AREA])}
 
@@ -286,9 +300,9 @@ def plan_path(work, plan):
         if si:
             hull = cv2.convexHull(P[OVAL, :2].astype(np.float32))
             d = cv2.pointPolygonTest(hull, (float(si["c"][0]), float(si["c"][1])), True)
-            # its long axis counts only when it is clearly egg-shaped from this side and whole in the picture; one
-            # seen round, cut wide by the fingers or cut by the frame's edge keeps the last roll read, or stands up
-            if si.get("elong", 2) >= 1.5 and not si.get("edge"):
+            # the device takes the stand-in's own direction every frame (owner, 9 Nov: "the tip" is its narrow end);
+            # only a stand-in seen end-on (round) or cut by the frame's edge keeps the last direction read
+            if si.get("elong", 2) >= 1.15 and not si.get("edge"):
                 last_top = si["up"]
             r.update({"on": True, "hand": True, "at": si["c"], "c": si["c"], "tip": si.get("tip") or si["c"],
                       "anchor": "stand-in", "top": last_top, "by": "stand-in",
@@ -317,11 +331,42 @@ def plan_path(work, plan):
         # palm); loose in an open palm it sits where the stand-in sits; it slides between the two over a few frames
         ks = [k for k, r in enumerate(rows) if r.get("anchor") == "stand-in"]
         if ks:
+            # how far its long axis leans toward the lens: a stand-in that looks shorter than it does side-on is
+            # turned toward the camera (its tip showing); side-on length-to-width is the clip's longest reading
+            el = np.array([frames[k]["stand_in"].get("elong", 1.0) for k in ks])
+            rt = max(float(np.percentile(el, 90)), 1.2)
+            cos2 = np.clip((el ** 2 - 1) / (rt ** 2 - 1), 0, 1)
+            tilt = _smooth(np.degrees(np.arccos(np.sqrt(cos2))), 7)
+            # its direction holds from frame to frame (a stand-in does not flip end over end between frames); which
+            # end is the tip is voted by every frame that could tell its narrow end, then held for the whole clip
+            prev, agree, against, U = None, 0, 0, []
+            for k in ks:
+                si = frames[k]["stand_in"]
+                u = np.array(si["up"], dtype=float)
+                if prev is not None and (si.get("elong", 2) < 1.15 or si.get("edge")):
+                    u = prev
+                flipped = prev is not None and float(np.dot(u, prev)) < 0
+                if flipped:
+                    u = -u
+                if si.get("tip_by") == "narrow end" and not si.get("edge"):
+                    against, agree = (against + 1, agree) if flipped else (against, agree + 1)
+                U.append(u)
+                prev = u
+            sign = -1.0 if against > agree else 1.0
+            for k, u in zip(ks, U):
+                u = u * sign
+                rows[k]["top"] = u.round(4).tolist()
+                si = frames[k]["stand_in"]                    # the tip is the end the held direction points to
+                if si.get("tail") and float(np.dot(u, np.array(si["up"]))) < 0:
+                    rows[k]["tip"] = si["tail"]
+                else:
+                    rows[k]["tip"] = si.get("tip") or si["c"]
             w = _smooth(np.array([1.0 if rows[k]["state"] == "on skin" else 0.0 for k in ks]), 9)
             C = _smooth(np.array([rows[k]["c"] for k in ks], dtype=float), 5)
             T = _smooth(np.array([rows[k]["tip"] for k in ks], dtype=float), 5)
-            for k, wk, c, tp in zip(ks, w, C, T):
+            for k, wk, c, tp, tl in zip(ks, w, C, T, tilt):
                 rows[k]["tip_w"] = round(float(wk), 3)
+                rows[k]["tilt"] = round(float(tl * (1 - wk)), 1)     # loose in the palm only; on the skin it lies flat to it
                 rows[k]["at"] = (c + (tp - c) * wk).round(2).tolist()
         tops = [k for k, r in enumerate(rows) if r["on"] and r.get("top")]
         if len(tops) > 2:                                   # the roll is steadied the same way as the place
@@ -452,8 +497,15 @@ def poses(work, kit, tilt_deg=None):
         n = n / np.linalg.norm(n)                                     # to the face, not to the jaw's edge
         up2 = np.array(r["top"]) if r.get("top") else _tilted_up(ex, ey, r, pa["plan"])
         up = np.array([up2[0], -up2[1], 0.0])                         # picture direction -> camera direction
-        up = up - n * np.dot(up, n)
-        up = up / (np.linalg.norm(up) + 1e-9)
+        if r.get("tilt"):                                             # its tip turned toward the lens: the long axis
+            tl = math.radians(r["tilt"])                              # leans out of the picture and the back turns
+            up = np.array([up[0] * math.cos(tl), up[1] * math.cos(tl), math.sin(tl)])   # with it
+            up = up / (np.linalg.norm(up) + 1e-9)
+            n = n - up * np.dot(n, up)
+            n = n / (np.linalg.norm(n) + 1e-9)
+        else:
+            up = up - n * np.dot(up, n)
+            up = up / (np.linalg.norm(up) + 1e-9)
         back = n                                                      # the product's back faces out of the skin
         right = np.cross(up, back)                                    # model axes: x right, y back, z top
         R = np.c_[right, back, up]
