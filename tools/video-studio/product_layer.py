@@ -29,13 +29,16 @@ What each stage does
           Every point of the path is a weighted mix of mesh points, so it rides the face as the head moves. The radius
           is a fraction of the face's width. One circle per beat unless "circles" says otherwise.
   render  The kit's own 3D model (model/render3d.json names the .blend and its root; kit.json size_cm the true size),
-          pressed flat on the skin at each path point: the face's local surface normal (a plane fitted to the mesh
-          points round the contact) sets which way it faces, the face's up direction sets its roll, its true height
-          against the face's width sets its size. Light is read off the clip: a key direction fitted from how bright
-          the skin is against which way it faces, the light's colour from the skin's brightest part, the fill from
-          the frame's average. Blender (EEVEE), transparent frames, motion blur.
-  comp    The hand from the clip stays in front of the product (a mask drawn from the hand's 21 points: palm and each
-          finger as a thick stroke, feathered), a soft contact shadow on the skin round it, the product's blacks and
+          held as a hand holds it: on the skin its tip where the stand-in's tip is and its body down in the palm
+          (loose in an open palm, centred on the stand-in), bristles to the skin. The face's local surface normal
+          (a plane fitted to the mesh points round the contact) sets which way it faces, the stand-in's long axis
+          (or the face's up) its roll, its true height against the face's width its size. Light is read off the
+          clip: a key direction fitted from how bright the skin is against which way it faces, the light's colour
+          from the skin's brightest part, the fill from the frame's average. Blender (EEVEE), transparent frames,
+          motion blur.
+  comp    The hand from the clip stays in front of the product: its own pixels, cut out by a body-skin segmenter
+          (hand skin, not face skin) round the tracked hand, never painted over or shadowed; a soft contact shadow
+          on the skin round the product, the product's blacks and
           white balance matched to the clip, the clip's grain on top. Writes layered.mp4, side.mp4 (clip | layered)
           and check.mp4 (mesh regions, the planned path, the hand and where the product sits).
 
@@ -59,6 +62,7 @@ import numpy as np
 MODELS = {
     "face": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
     "hand": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+    "seg": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite",
 }
 CACHE = Path.home() / ".cache" / "product-layer"
 FACE_WIDTH_CM = 14.5          # cheek to cheek (mesh points 234 to 454) on an adult face; sets the product's size
@@ -80,7 +84,7 @@ OVAL = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379
 
 def model(name):
     CACHE.mkdir(parents=True, exist_ok=True)
-    f = CACHE / f"{name}.task"
+    f = CACHE / (f"{name}.tflite" if MODELS[name].endswith(".tflite") else f"{name}.task")
     if not f.exists():
         urllib.request.urlretrieve(MODELS[name], f)
     return str(f)
@@ -121,7 +125,8 @@ def standin_fit(bgr, key, min_area=400):
     if ax[1] > 0:                                   # narrow end up: the long axis points up the picture
         ax = -ax
     proj = X @ ax
-    return {"c": c.round(2).tolist(), "up": ax.round(4).tolist(), "long_px": round(float(proj.max() - proj.min()), 1),
+    tip = pts.mean(0) + ax * proj.max()
+    return {"c": c.round(2).tolist(), "tip": tip.round(2).tolist(), "up": ax.round(4).tolist(), "long_px": round(float(proj.max() - proj.min()), 1),
             "elong": round(float(math.sqrt(ev[1] / max(ev[0], 1e-6))), 3),
             "edge": bool(xs.min() <= 1 or ys.min() <= 1 or xs.max() >= m.shape[1] - 2 or ys.max() >= m.shape[0] - 2),
             "area": int(st[j, cv2.CC_STAT_AREA])}
@@ -285,7 +290,8 @@ def plan_path(work, plan):
             # seen round, cut wide by the fingers or cut by the frame's edge keeps the last roll read, or stands up
             if si.get("elong", 2) >= 1.5 and not si.get("edge"):
                 last_top = si["up"]
-            r.update({"on": True, "hand": True, "at": si["c"], "top": last_top, "by": "stand-in",
+            r.update({"on": True, "hand": True, "at": si["c"], "c": si["c"], "tip": si.get("tip") or si["c"],
+                      "anchor": "stand-in", "top": last_top, "by": "stand-in",
                       "state": "on skin" if d > -0.3 * width else "carried"})
             r.setdefault("plan", None)
             continue
@@ -307,6 +313,16 @@ def plan_path(work, plan):
                 r["at"] = [round(float(sm[k, 0]), 2), round(float(sm[k, 1]), 2)]
                 if r.get("plan"):
                     r["drift"] = round(float(np.linalg.norm(sm[k] - np.array(r["plan"])) / face_axes(P_all[k])[2]), 3)
+        # on the skin the device lies in the hand tip first (its tip at the stand-in's tip, its body down in the
+        # palm); loose in an open palm it sits where the stand-in sits; it slides between the two over a few frames
+        ks = [k for k, r in enumerate(rows) if r.get("anchor") == "stand-in"]
+        if ks:
+            w = _smooth(np.array([1.0 if rows[k]["state"] == "on skin" else 0.0 for k in ks]), 9)
+            C = _smooth(np.array([rows[k]["c"] for k in ks], dtype=float), 5)
+            T = _smooth(np.array([rows[k]["tip"] for k in ks], dtype=float), 5)
+            for k, wk, c, tp in zip(ks, w, C, T):
+                rows[k]["tip_w"] = round(float(wk), 3)
+                rows[k]["at"] = (c + (tp - c) * wk).round(2).tolist()
         tops = [k for k, r in enumerate(rows) if r["on"] and r.get("top")]
         if len(tops) > 2:                                   # the roll is steadied the same way as the place
             T = _smooth(np.array([rows[k]["top"] for k in tops], dtype=float), 7)
@@ -430,7 +446,9 @@ def poses(work, kit, tilt_deg=None):
         n = _normal(P, at) if r.get("state") != "carried" else np.array([0.0, 0.0, 1.0])
         R0 = np.array(frames[k]["pose"])[:3, :3] if frames[k].get("pose") else np.eye(3)
         fwd = R0[:, 2] / (np.linalg.norm(R0[:, 2]) + 1e-9)            # the way the face looks, from the head pose
-        n = (0.45 * n + 0.55 * fwd) if r.get("state") != "carried" else n                                    # pressed on the skin, but a hand holds it square
+        # held in the hand, bristles to the skin: the skin's own way of facing decides how much of its side shows
+        w_skin = 0.45 + 0.35 * r.get("tip_w", 0.0)
+        n = (w_skin * n + (1 - w_skin) * fwd) if r.get("state") != "carried" else n                                    # pressed on the skin, but a hand holds it square
         n = n / np.linalg.norm(n)                                     # to the face, not to the jaw's edge
         up2 = np.array(r["top"]) if r.get("top") else _tilted_up(ex, ey, r, pa["plan"])
         up = np.array([up2[0], -up2[1], 0.0])                         # picture direction -> camera direction
@@ -442,7 +460,13 @@ def poses(work, kit, tilt_deg=None):
         # the contact: the middle of the bristle pad sits on the skin, pressed in a little
         x, y = (at[0] - W / 2) * cm, (H / 2 - at[1]) * cm
         z = float(-np.median(P[:468, 2])) * cm * 0 - 100.0
-        pad = np.array([0.0, -K["depth_cm"] / 2 + 0.05, K["height_cm"] * 0.55])
+        if r.get("anchor") == "stand-in":
+            # the device lies in the hand: on the skin its tip where the stand-in's tip is and its body back down in
+            # the palm, so the hand covers most of it and the tip shows (owner, 9 Nov); loose in a palm, centred
+            tw = r.get("tip_w", 0.0)
+            pad = np.array([0.0, 0.0, K["height_cm"] * (0.5 + 0.47 * tw)])
+        else:
+            pad = np.array([0.0, -K["depth_cm"] / 2 + 0.05, K["height_cm"] * 0.55])
         loc = np.array([x, y, z]) - R @ pad
         out.append({"i": k, "R": R.round(5).tolist(), "loc": loc.round(4).tolist()})
     data = {"size": [W, H], "width_cm": W * FACE_WIDTH_CM / float(np.median([face_axes(p)[2] for p in P_all])),
@@ -582,6 +606,32 @@ def _clean_standin(out, V, a, width, key="green"):
     return o
 
 
+def _segmenter():
+    try:
+        import mediapipe as mp
+        from mediapipe.tasks.python import BaseOptions, vision
+        seg = vision.ImageSegmenter.create_from_options(vision.ImageSegmenterOptions(
+            base_options=BaseOptions(model_asset_path=model("seg")), output_confidence_masks=True))
+        return lambda bgr: seg.segment(mp.Image(image_format=mp.ImageFormat.SRGB,
+                                                data=cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))).confidence_masks[2].numpy_view()
+    except Exception:
+        return None
+
+
+def hand_pixels(bgr, hands, width, skin):
+    """The hand's own pixels: body skin (not face skin) from the segmenter, kept inside the area round the hand's 21
+    points (so the neck is not taken), feathered by a pixel or two. Falls back to the drawn mask without a segmenter."""
+    H, W = bgr.shape[:2]
+    drawn = np.zeros((H, W), np.float32)
+    for h in hands:
+        drawn = np.maximum(drawn, hand_mask(np.array(h["points"], dtype=float), (H, W), width))
+    if skin is None or not hands:
+        return drawn
+    area = cv2.dilate((drawn > 0.05).astype(np.uint8), np.ones((int(width * 0.14) | 1,) * 2, np.uint8)).astype(np.float32)
+    body = np.clip((np.asarray(skin(bgr), dtype=np.float32) - 0.25) / 0.5, 0, 1)
+    return cv2.GaussianBlur(body * area, (0, 0), 0.8)
+
+
 def comp(work):
     tr = json.loads((work / "track.json").read_text())
     pa = json.loads((work / "path.json").read_text())
@@ -596,6 +646,7 @@ def comp(work):
             shutil.rmtree(d)
         d.mkdir()
     rng = np.random.default_rng(7)
+    skin = _segmenter()
     light = po["light"]
     sdir = np.array([-light["dir"][0], light["dir"][1]])            # the shadow falls away from the key (picture y down)
     for k, f in enumerate(frames):
@@ -608,9 +659,7 @@ def comp(work):
         out = img.copy()
         png = work / "render" / f"{k + 1:04d}.png"
         r = pa["rows"][k] if k < len(pa["rows"]) else {"on": False}
-        hm = np.zeros((H, W), np.float32)
-        for h in f.get("hands") or []:
-            hm = np.maximum(hm, hand_mask(np.array(h["points"], dtype=float), (H, W), width))
+        hm = hand_pixels(bgr, f.get("hands") or [], width, skin)
         key = tr.get("stand_in")
         V = cv2.dilate(standin_mask(bgr, key), np.ones((3, 3), np.uint8)).astype(np.float32) / 255.0 if key else None
         if V is not None:
@@ -623,7 +672,7 @@ def comp(work):
             sh = cv2.GaussianBlur(a, (0, 0), width * 0.03)
             M = np.float32([[1, 0, sdir[0] * width * 0.025], [0, 1, sdir[1] * width * 0.025]])
             sh = cv2.warpAffine(sh, M, (W, H))
-            out = out * (1 - 0.45 * sh[..., None])
+            out = out * (1 - 0.45 * (sh * (1 - hm))[..., None])        # no shadow on the fingers in front
             # the hand in the clip stays in front of the product; only where a hand is tracked
             a_vis = a * (1 - hm) if r.get("hand") else a
             out = out * (1 - a_vis[..., None]) + rgb * a_vis[..., None]

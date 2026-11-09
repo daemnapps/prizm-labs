@@ -21,6 +21,19 @@ frames carry the product; any beat frame without it (no stand-in, no hand) is a 
 beat the picture is the take's own, except where a keyed stand-in still shows: it is always covered. Without
 `--plan`, the path is circles along the jaw for three quarters of the beat, then up the cheek.
 
+## How it is held (owner, 9 Nov)
+
+- The device lies in the hand the way it is really held: its tip shows above the fingers and its body sits down in
+  the palm, under the fingers. It is not laid flat with its back square to the camera. On the skin the tool puts the
+  device's tip where the stand-in's tip is and runs its body back down into the hand; how much of its side shows
+  follows the way the skin faces where it touches. Loose in an open palm (on the way to the face) it sits where the
+  stand-in sits, and it slides to tip-first over a few frames as the hand reaches the face.
+- The fingers in front of it are the take's own pixels and stay on top: the hand is cut out by a body-skin
+  segmenter (MediaPipe's selfie multiclass model, which tells hand skin from face skin), kept to the area round the
+  tracked hand, so the product never paints over a finger. No shadow or grade lands on the fingers.
+- The bar: executed with finesse. A finger dimmed, a product edge across a knuckle or the back laid flat to the lens
+  is a miss at the check.
+
 ## The method
 
 1. **Make the take with a stand-in.** The take is written so the hand holds a plain stand-in of the product's shape
@@ -44,9 +57,9 @@ beat the picture is the take's own, except where a keyed stand-in still shows: i
    face looks), the fingers' direction setting its roll. The light is read off the clip: the side the key comes
    from (fitted from the skin's brightness against which way it faces), the key's colour from the skin's brightest
    part, the fill from the frame. Blender EEVEE, transparent frames, motion blur. About 0.3 s a frame on this Mac.
-5. **Composite.** `product_layer.py comp`: the hand stays in front (palm and the four fingers as one shape, the
-   thumb on its own so the product shows between thumb and fingers; wherever the stand-in shows, the hand is not in
-   front), any stand-in left uncovered filled from round it and its colour cast taken off the fingers, a soft
+5. **Composite.** `product_layer.py comp`: the hand stays in front (its own pixels, cut out by the body-skin
+   segmenter inside the area round the tracked hand; without the segmenter, a shape drawn from the hand's 21
+   points; wherever the stand-in shows, the hand is not in front), any stand-in left uncovered filled from round it and its colour cast taken off the fingers, a soft
    contact shadow, the product's body
    brought to the level of the clip's own blacks, the clip's white balance and grain. Writes `layered.mp4`,
    `side.mp4` (take | layered) and `check.mp4` (mesh regions, the planned path, the hand, where the product sits).
@@ -92,7 +105,6 @@ python3 product_layer.py run take.mp4 --kit runs/ai-elements/<brand>/products/<p
 
 - The camera is orthographic: the product keeps one size across the frame. Right for a selfie close-up; a product
   that travels toward or away from the lens needs a perspective camera.
-- The hand mask is drawn from 21 points, so finger edges are approximate (soft, a few pixels wide). A segmentation
-  model would cut them exactly.
+- The segmenter works at 256×256 and is scaled up, so a finger's edge can be a pixel or two soft at 720p.
 - The light is one key and one fill read off the skin; a hard coloured light or a strong reflection on the product
   is not matched.
