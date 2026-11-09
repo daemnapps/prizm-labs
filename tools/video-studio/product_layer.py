@@ -2,6 +2,9 @@
 """Lay a real product on skin in a video: track the face mesh, plan the product's path on it, render the product from
 its own 3D kit along that path, and put the holding hand back in front of it.
 
+    python3 product_layer.py step  <take.mp4> --kit <kit> --beat 1.8,5.0 [--stand-in green] [--side left] [--out out.mp4]
+                                   the chain step: the printed take (our voices on) in, the same take out with the
+                                   product on the skin through the beat, sound kept; the stages' files beside it
     python3 product_layer.py run   <clip.mp4> --kit <product kit folder> [--plan plan.json] [--out work/]
     python3 product_layer.py track <clip.mp4> [--out work/]                    face mesh + hands per frame -> track.json
     python3 product_layer.py plan  <work/> [--plan plan.json]                  the path on the mesh -> path.json
@@ -286,7 +289,8 @@ def plan_path(work, plan):
                       "state": "on skin" if d > -0.3 * width else "carried"})
             r.setdefault("plan", None)
             continue
-        got = _palm(frames[k], P, width, holder)
+        win = plan.get("window")
+        got = _palm(frames[k], P, width, holder) if not win or win[0] <= frames[k]["t"] <= win[1] else None
         if got is None:
             r.update({"on": False, "hand": False})
             continue
@@ -664,16 +668,56 @@ DEFAULT_PLAN = {"beat": {"seconds": [1.0, 5.0]}, "follow": "hand", "side": "righ
                           {"do": "sweep", "from": "jaw", "to": "cheek", "beats": 1}]}
 
 
+def step(take, kit, beat, out, plan=None, stand_in=None, side=None):
+    """Product on skin as one step of the finished chain: the printed take (with our voices laid on) and the beat where
+    the product is used in, the same take out with the real product on the skin, the take's own sound kept. Outside
+    the beat the picture is the take's own, except where a keyed stand-in still shows (it is always covered)."""
+    take, out = Path(take).resolve(), Path(out).resolve()
+    work = out.parent / (out.stem + "-product-layer")
+    plan = dict(plan or DEFAULT_PLAN)
+    plan["beat"] = {"seconds": list(beat)}
+    plan["window"] = list(beat)
+    if side:
+        plan["side"] = side
+    t = track(take, work, stand_in)
+    p = plan_path(work, plan)
+    render(work, kit)
+    comp(work)
+    has_audio = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of",
+                                "csv=p=0", str(take)], capture_output=True, text=True).stdout.strip() != ""
+    cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(work / "layered.mp4")]
+    cmd += (["-i", str(take), "-map", "0:v", "-map", "1:a", "-c:a", "copy"] if has_audio else [])
+    subprocess.run(cmd + ["-c:v", "copy", "-shortest", str(out)], check=True)
+    rows = p["rows"]
+    inside = [r for r in rows if beat[0] <= r["t"] <= beat[1]]
+    report = {"take": str(out), "work": str(work), "sound": has_audio,
+              "product_frames": sum(1 for r in rows if r.get("on")),
+              "beat_frames": len(inside), "beat_frames_without_product": sum(1 for r in inside if not r.get("on")),
+              "by_stand_in": sum(1 for r in rows if r.get("by") == "stand-in"),
+              "face_found": t["found"]["face"], "of": t["found"]["of"]}
+    (work / "step.json").write_text(json.dumps(report, indent=1))
+    return report
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("stage", choices=["run", "track", "plan", "render", "comp"])
+    ap.add_argument("stage", choices=["step", "run", "track", "plan", "render", "comp"])
     ap.add_argument("src")
     ap.add_argument("--kit")
     ap.add_argument("--plan")
     ap.add_argument("--out")
+    ap.add_argument("--beat", help="step: the seconds the product is used, start,end")
+    ap.add_argument("--side", choices=["right", "left"], help="step: the subject's own side the product works on")
     ap.add_argument("--stand-in", choices=sorted(KEYS), help="the take's hand holds a stand-in of this colour")
     a = ap.parse_args()
     plan = json.loads(Path(a.plan).read_text()) if a.plan else DEFAULT_PLAN
+    if a.stage == "step":
+        if not (a.kit and a.beat):
+            sys.exit("step needs --kit <product kit folder> and --beat start,end")
+        out = a.out or str(Path(a.src).with_name(Path(a.src).stem + "-product.mp4"))
+        beat = [float(x) for x in a.beat.split(",")]
+        print(json.dumps(step(a.src, a.kit, beat, out, plan if a.plan else None, a.stand_in, a.side)))
+        return
     if a.stage in ("run", "track"):
         work = Path(a.out or Path(a.src).with_suffix("")).resolve()
         t = track(Path(a.src).resolve(), work, a.stand_in)

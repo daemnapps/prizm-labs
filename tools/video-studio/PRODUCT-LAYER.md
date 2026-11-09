@@ -3,6 +3,24 @@
 A product that is applied to the face or body is never drawn by a video model. The take shows the person and the
 hand; the product comes from its own 3D kit and is laid into that hand by `product_layer.py`.
 
+## In the finished chain
+
+Step 8 of 9 (write the take → cast sheets → first frame → voices → motion → print → voices on → **product on skin** →
+check): whenever the product touches skin, it runs on the printed take, after our voices are laid on and before the
+check.
+
+```
+python3 product_layer.py step take.mp4 --kit runs/ai-elements/<brand>/products/<product> --beat 1.8,5.0 \
+    --stand-in green --side left --out take-product.mp4
+```
+
+In: the printed take with our voices on, and the beat (seconds) where the product is used. Out: the same take with
+the real product on the skin through the beat and the take's own sound kept; the stages' files (`track.json`,
+`path.json`, `check.mp4`, `step.json`) sit beside it in `<out>-product-layer/`. `step.json` says how many beat
+frames carry the product; any beat frame without it (no stand-in, no hand) is a miss for the check. Outside the
+beat the picture is the take's own, except where a keyed stand-in still shows: it is always covered. Without
+`--plan`, the path is circles along the jaw for three quarters of the beat, then up the cheek.
+
 ## The method
 
 1. **Make the take with a stand-in.** The take is written so the hand holds a plain stand-in of the product's shape
