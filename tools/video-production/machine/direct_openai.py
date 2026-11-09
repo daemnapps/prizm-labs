@@ -201,7 +201,20 @@ def generate(prompt: str, references: list[Path], out: Path, transport=None,
     """Edit (references given) or generate (none) — see module docstring. A picture GPT Image still refuses
     (moderation_blocked) is made on the house backup (`_backup`)."""
     if transport is None and _door() == "higgsfield":
-        return _via_image_engine(prompt, references, out, dry_run=dry_run, mask=mask)
+        # Carry the caller's frame size through the routed provider door.
+        size = (overrides or {}).get("size")
+        aspect = "9:16"
+        if size:
+            from math import gcd
+            match = re.fullmatch(r"(\d+)x(\d+)", str(size))
+            if not match:
+                raise ValueError(f"invalid image size: {size!r}")
+            width, height = map(int, match.groups())
+            if not width or not height:
+                raise ValueError("image dimensions must be positive")
+            divisor = gcd(width, height)
+            aspect = f"{width // divisor}:{height // divisor}"
+        return _via_image_engine(prompt, references, out, dry_run=dry_run, mask=mask, aspect=aspect)
     transport = transport or http_transport
     k = key if key is not None else key_of()
     if not dry_run and not k:

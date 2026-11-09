@@ -253,7 +253,7 @@ def _generate(d, prompt: str, refs: list[Path], out: Path, wide: bool):
     try:
         for _ in range(15):
             try:
-                return d.generate(prompt, refs, out)
+                return d.generate(prompt, refs, out, overrides={"size": "1536x1024"} if wide else None)
             except RuntimeError as e:
                 if "429" not in str(e):
                     raise
@@ -326,8 +326,14 @@ def jobs(spec: dict, P: dict, real: list[Path], prod: list[Path], out: Path, bas
                   out / "full" / "sheets" / "hands-closeup.png", False))
     for lk, v in spec["looks"].items():
         extra = [_abs(r, base) for r in v.get("refs", [])]
-        J.append((lk, fill(P["look"], outfit=v["outfit"]), [master] + extra + (body[:2] or real[:2]) + tex,
-                  out / "full" / "sheets" / f"{lk}.png", True))
+        if v.get("face_free"):
+            template = COMPONENT / "prompts" / "stage-0f-cast" / "wardrobe-face-free-v1.md"
+            prompt = template.read_text().format(outfit=v["outfit"])
+            J.append((lk, prompt, extra + (body[:2] or real[:2]),
+                      out / "full" / "sheets" / f"{lk}.png", True))
+        else:
+            J.append((lk, fill(P["look"], outfit=v["outfit"]), [master] + extra + (body[:2] or real[:2]) + tex,
+                      out / "full" / "sheets" / f"{lk}.png", True))
     return J
 
 
@@ -350,8 +356,10 @@ def build(spec_path: Path, out: Path | None = None, only: list[str] | None = Non
     for name, prompt, refs, dest, wide in jobs(spec, P, real, prod, out, base):
         if only and name not in only:
             continue
+        source_prompt = ("wardrobe-face-free-v1.md" if
+                         spec.get("looks", {}).get(name, {}).get("face_free") else pfile)
         (sent / f"{name}.prompt.md").write_text(
-            f"{prompt}\n\nReferences, in order: " + ", ".join(r.name for r in refs) + f"\nPrompt file: {pfile}\n")
+            f"{prompt}\n\nReferences, in order: " + ", ".join(r.name for r in refs) + f"\nPrompt file: {source_prompt}\n")
         if dry_run:
             print(f"[dry run] {name}: {len(refs)} refs → {dest.relative_to(out)}")
             continue

@@ -257,9 +257,22 @@ class _HfShell:
     def fetch(self, url, dest):
         dest = Path(dest)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        req = urllib.request.Request(url, headers={"User-Agent": "upright-image-production/1"})
-        with urllib.request.urlopen(req, timeout=300) as r:
-            dest.write_bytes(r.read())
+        # Download retries reuse the completed result; they never submit another job.
+        import subprocess
+        import tempfile
+        with tempfile.NamedTemporaryFile(dir=dest.parent, suffix=".download", delete=False) as f:
+            pending = Path(f.name)
+        try:
+            result = subprocess.run([
+                "curl", "--fail", "--location", "--silent", "--show-error",
+                "--connect-timeout", "15", "--max-time", "60", "--retry", "2",
+                "--output", str(pending), str(url),
+            ], capture_output=True, timeout=210)
+            if result.returncode or not pending.stat().st_size:
+                raise OSError("completed image download failed; recover the saved provider receipt")
+            pending.replace(dest)
+        finally:
+            pending.unlink(missing_ok=True)
 
 
 def higgsfield_ready(hf=None):
@@ -332,7 +345,14 @@ def _higgsfield(entry, prompt, references, out, aspect, hf=None):
     if str(job.get("status", "")).lower() != "completed" or not job.get("result_url"):
         raise ProviderError(f"Higgsfield picture {job.get('id')} ended {job.get('status')!r}: {json.dumps(job)[:300]}",
                             refused=str(job.get("status", "")).lower() == "nsfw" or bool(REFUSAL.search(json.dumps(job))))
-    hf.fetch(job["result_url"], out)
+    receipt = Path(str(out) + ".provider.json")
+    receipt.parent.mkdir(parents=True, exist_ok=True)
+    receipt.write_text(json.dumps(job, indent=2))
+    try:
+        hf.fetch(job["result_url"], out)
+    except Exception as exc:
+        # This job already succeeded. Do not turn a download error into a paid ladder retry.
+        raise OSError(f"image job {job.get('id')} completed; download pending; receipt: {receipt}") from exc
     return {"file": str(out), "model": entry.get("vendor_model"), "provider": "higgsfield",
             "request_id": job.get("id"), "usage": job.get("params")}
 
