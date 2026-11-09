@@ -190,18 +190,21 @@ def read(take, clip=None, fps=6.0, frames_out=None, base=None):
             break
         t = i / src_fps
         fs = eyes.faces(fr)
-        for name, c in cast.items():               # a `seen` point: the face nearest it, at that time
-            if c.get("seen") and name not in gallery and abs(t - c["seen"][0]) <= step / src_fps / 2 + 1e-6:
-                near = min(fs, key=lambda f: np.hypot(f["cx"] / W - c["seen"][1], f["cy"] / H - c["seen"][2]), default=None)
-                if near is not None:
-                    gallery[name] = [near]
+        due = [k for k, c in cast.items() if c.get("seen") and k not in gallery and abs(t - c["seen"][0]) <= step / src_fps / 2 + 1e-6]
+        pairs = sorted((np.hypot(f["cx"] / W - cast[k]["seen"][1], f["cy"] / H - cast[k]["seen"][2]), fi, k)
+                       for k in due for fi, f in enumerate(fs))
+        taken = set()
+        for d, fi, k in pairs:                     # a `seen` point: the nearest face at that time, one face per person
+            if d < 0.08 and fi not in taken and k not in gallery:
+                taken.add(fi)
+                gallery[k] = [fs[fi]]
         cam = camera(prev, fr) if prev is not None else (0.0, 0.0, 1.0)
         prev = fr
         samples.append({"t": round(t, 2), "faces": fs, "cam": cam, "frame": fr if frames_out else None})
     missing = [k for k in cast if k not in gallery]
-    if missing:
-        raise SystemExit(f"could not find these characters' faces (sheet or seen point): {missing}")
-    names = list(cast)
+    if len(missing) == len(cast):
+        raise SystemExit("no character's face was found where their sheet or `seen` point says")
+    names = [k for k in cast if k in gallery]      # a person not found where they were seen is reported, not guessed
     for _ in range(2):                             # two passes: the second uses every confident match as a reference too
         grown = {k: list(v[:1]) for k, v in gallery.items()}
         last = {}
@@ -249,7 +252,7 @@ def read(take, clip=None, fps=6.0, frames_out=None, base=None):
            for s in samples]
     out = {"clip": str(clip), "fps": fps, "size": [W, H], "seconds": round(n / src_fps, 2), "cast": names,
            "tracks": tracks, "camera": cam,
-           "found": {k: round(len(v) / max(1, len(samples)), 2) for k, v in tracks.items()},
+           "found": {k: round(len(v) / max(1, len(samples)), 2) for k, v in tracks.items()}, "not_found": missing,
            "note": "face values 0-1 from MediaPipe blendshapes; moving in shoulder widths per second; camera per sample"}
     if frames_out:
         draw_frames(samples, names, frames_out)

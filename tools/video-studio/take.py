@@ -645,6 +645,9 @@ def check(take, clip=None):
     for k, (ln, a, b) in enumerate(zip(take["script"], starts, ends), 1):
         for who, fc in (ln.get("faces") or {}).items():
             want = FACES.get(fc, ("", {}))[1]
+            if who not in L["tracks"]:
+                marks.append({"line": k, "who": who, "face": fc, "at": a, "seen": {}, "pass": None, "why": "not found in the take"})
+                continue
             rows = [r for r in L["tracks"].get(who, []) if a is not None and a - 0.3 <= r["t"] <= b + 0.3]
             peak = {m: round(max((r.get(m, 0) for r in rows), default=0), 2) for m in want}
             ok = None if not rows else all(peak[m] >= v for m, v in want.items())
