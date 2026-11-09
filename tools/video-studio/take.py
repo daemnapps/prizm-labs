@@ -465,14 +465,18 @@ def _route(route, take, work, secs, text, voices, mclip, raw):
         urllib.request.urlretrieve(url, raw)
         return job.get("request_id"), url
     if route == "vace-pose@fal":
-        if not mclip:
-            raise Refused("the pose route needs `motion`: the clip whose poses drive the take")
+        # programmed motion (motion_program.py) carries its exact skeleton video as `motion.pose`: it goes in as the
+        # poses themselves (OpenPose colours, preprocess off), so the model never re-detects people from stand-ins
+        skel = (take.get("motion") or {}).get("pose")
+        src = Path(skel) if skel and Path(skel).exists() else mclip
+        if not src:
+            raise Refused("the pose route needs `motion`: the clip (or the skeleton video) whose poses drive the take")
         pose = work / "pose-16fps.mp4"
-        n = int(min(241, seconds_of(mclip) * 16)) // 4 * 4 + 1
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mclip), "-vf", "fps=16", "-frames:v", str(n), "-an",
+        n = int(min(241, seconds_of(src) * 16, secs * 16)) // 4 * 4 + 1
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-vf", "fps=16", "-frames:v", str(n), "-an",
                         "-c:v", "libx264", "-crf", "20", str(pose)], check=True)
         body = {"prompt": text, "video_url": [str(pose)], "first_frame_url": [pic], "ref_image_urls": [pic] + cast[:9],
-                "preprocess": True, "match_input_num_frames": True, "match_input_frames_per_second": True,
+                "preprocess": not (skel and src == Path(skel)), "match_input_num_frames": True, "match_input_frames_per_second": True,
                 "resolution": "480p", "aspect_ratio": "9:16", "enable_safety_checker": False, "enable_prompt_expansion": False,
                 "negative_prompt": "text, captions, logos, flash, still camera, extra people, changed clothes"}
         try:
