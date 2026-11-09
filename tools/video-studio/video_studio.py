@@ -636,6 +636,83 @@ def clip_reference(n, s):
     return {"brief": n, "scene": s, "take": take, "shots": out}
 
 
+# ---------------------------------------------------------------- motion: author a scene's motion, watch it, approve it
+MOTION_READING = {}   # (brief, scene) -> what is being read right now
+
+
+def _beats(wf):
+    """The scene's lines in order, each with its speaker: what the motion has to carry."""
+    lines = [st for st in wf.get("steps") or [] if st.get("tool") in ("voice.ai", "human.read") and st.get("prompt")]
+    lines.sort(key=lambda st: (st.get("params") or {}).get("order") or 0)
+    if lines:
+        return [{"speaker": (st.get("params") or {}).get("speaker") or "", "say": st["prompt"]} for st in lines]
+    return [{"speaker": "", "say": w} for w in [wf.get("words")] if w]
+
+
+def _swipe_of(brief):
+    """The swipe this brief was written from, when its writing run holds it."""
+    run = os.path.join(str(ST.WRITING), str(brief.get("brief") or ""))
+    found = sorted(glob.glob(os.path.join(run, "*swipe*.mp4")))
+    return found[0] if found else None
+
+
+def motion_state(n, s):
+    brief = load(os.path.join(bdir(n), "brief.json"))
+    d = os.path.join(sdir(n, s), "motion")
+    f = os.path.join(d, "motion.json")
+    rec = load(f) if os.path.exists(f) else None
+    wf = load(os.path.join(sdir(n, s), brief["picks"][s] + ".json"))
+    swipe = _swipe_of(brief)
+    base = "/files/" + n + "/scenes/" + s + "/motion/"
+    reading = MOTION_READING.get((n, s))
+    return {"brief": n, "scene": s, "status": "reading" if reading and not reading.get("error") else (rec or {}).get("status") or "none",
+            "error": (reading or {}).get("error"), "reading": reading, "motion": rec, "beats": _beats(wf),
+            "swipe": {"file": os.path.basename(swipe), "seconds": round(probe_dur(swipe), 1)} if swipe else None,
+            "urls": {k: base + v + ("?t=" + rec.get("tracked_at", "")) for k, v in (rec.get("files") or {}).items()} if rec else {},
+            "camera": (load(os.path.join(d, "camera.json")).get("summary") if os.path.exists(os.path.join(d, "camera.json")) else None)}
+
+
+def _read_motion(n, s, clip, start, end, kind, name=None):
+    key = (n, s)
+    try:
+        r = subprocess.run([sys.executable, os.path.join(HERE, "motion.py"), "scene", sdir(n, s), clip, "--from", str(start)]
+                           + (["--to", str(end)] if end else []) + ["--kind", kind] + (["--name", name] if name else []),
+                           capture_output=True, text=True, timeout=1800)
+        if r.returncode:
+            MOTION_READING[key] = {"error": (r.stderr or r.stdout).strip()[-400:] or "the motion reader failed"}
+            return
+        MOTION_READING.pop(key, None)
+    except Exception as e:  # noqa: BLE001  shown on the page
+        MOTION_READING[key] = {"error": str(e)}
+
+
+def motion_start(n, s, clip, start=0.0, end=None, kind="phone", name=None):
+    if MOTION_READING.get((n, s)) and not MOTION_READING[(n, s)].get("error"):
+        raise RuntimeError("this scene's motion is already being read")
+    MOTION_READING[(n, s)] = {"kind": kind, "file": name or os.path.basename(clip), "since": datetime.datetime.now().strftime("%H:%M:%S")}
+    threading.Thread(target=_read_motion, args=(n, s, clip, start, end, kind, name), daemon=True).start()
+    return motion_state(n, s)
+
+
+def motion_upload(n, s, name, kind, data):
+    """A phone video (or a 3D render) dropped on the scene: kept in the scene's motion folder and read."""
+    d = os.path.join(sdir(n, s), "motion")
+    os.makedirs(d, exist_ok=True)
+    ext = os.path.splitext(name or "")[1].lower() or ".mp4"
+    if ext not in (".mp4", ".mov", ".m4v", ".webm"):
+        raise RuntimeError("a video please: .mp4, .mov, .m4v or .webm")
+    f = os.path.join(d, "source" + ext)                  # the scene's motion clip (the one before it is replaced)
+    with open(f, "wb") as out:
+        out.write(data)
+    return motion_start(n, s, f, 0.0, None, kind if kind in ("phone", "3d", "swipe") else "phone", os.path.basename(name or ""))
+
+
+def motion_approve(n, s, by=None):
+    import motion as MO
+    MO.approve(sdir(n, s), by)
+    return motion_state(n, s)
+
+
 def versions(n):
     """The finished cut and each opening's version, newest render of each."""
     b = bdir(n)
@@ -763,6 +840,8 @@ class H(BaseHTTPRequestHandler):
                 return self.file(shot_frame(parts[2], parts[3], parts[4]))
             except Exception as e:  # noqa: BLE001
                 return self.send(404, {"error": str(e)})
+        if parts[:2] == ["api", "motion"] and len(parts) == 4:
+            return self.send(200, motion_state(parts[2], parts[3]))
         if parts[:2] == ["api", "productions"] and len(parts) == 2:
             return self.send(200, {"productions": link_productions(productions())})
         if parts[:2] == ["api", "versions"] and len(parts) == 3:
@@ -821,9 +900,24 @@ class H(BaseHTTPRequestHandler):
         got = app_for(self)
         if got:
             return proxy(self, *got)
-        parts = [unquote(p) for p in urlparse(self.path).path.strip("/").split("/") if p]
+        u = urlparse(self.path)
+        parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
         body = self.rfile.read(int(self.headers.get("Content-Length") or 0) or 0)
         try:
+            if len(parts) == 5 and parts[:2] == ["api", "motion"]:
+                n, s, act = parts[2], parts[3], parts[4]
+                if act == "upload":
+                    from urllib.parse import parse_qs
+                    q = {k: v[0] for k, v in parse_qs(u.query).items()}
+                    return self.send(200, motion_upload(n, s, q.get("name") or "phone.mp4", q.get("kind") or "phone", body))
+                q = json.loads(body or b"{}")
+                if act == "swipe":
+                    swipe = _swipe_of(load(os.path.join(bdir(n), "brief.json")))
+                    if not swipe:
+                        return self.send(400, {"error": "this brief's swipe is not in its writing run"})
+                    return self.send(200, motion_start(n, s, swipe, float(q.get("from") or 0), q.get("to") and float(q["to"]), "swipe"))
+                if act == "approve":
+                    return self.send(200, motion_approve(n, s, q.get("by")))
             if len(parts) == 5 and parts[:2] == ["api", "scene"]:
                 n, s, act = parts[2], parts[3], parts[4]
                 if act == "run":

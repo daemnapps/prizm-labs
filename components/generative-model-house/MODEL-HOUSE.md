@@ -71,6 +71,16 @@ row AND an inputs file there; `input_rules.coverage()` lists the jobs that do no
 | every image edit (change one thing in an approved picture, region edits, the 9:16 finish) | **GPT Image 2.5**, edits | ruled again 2026-10-20. Nano Banana Pro is not used for edits or anything else |
 | backup when GPT refuses a picture we're allowed to make | **Seedream** (fal) | the owner 2026-10-21. Same prompt and references; Seedream's own rules still apply; the run record says which model made it |
 
+### Motion, read before any take (2026-11-09)
+
+A scene's motion is read and approved before a take is paid for (BRIEF-SPEC.md rule 7, "Motion sources").
+
+| Job | Tool | Gives | Cost and time, as measured 2026-11-09 |
+|---|---|---|---|
+| read a clip's motion (the default) | **MediaPipe on this machine** (`components/video-studio/motion.py`): a person finder, then pose, hands and face per person; the camera solved from the background | points for every person, hand and face; a skeleton video; the camera's path | free; 4 s of clip read in 18 s, 14 s of a crowded swipe in 57 s |
+| a swipe the local reader misses | **fal DWPose**, one call per frame (`motion.py --engine fal`) | a skeleton picture per frame, no points, no camera | 2 s of clip: 32 calls, about 0.02 USD, 4 minutes |
+| block a scene in 3D | **Blender**, headless (`motion.py blocking`) | a blocking clip from stand-in people, a `.glb` set, beats and a moving camera | free; 5 s rendered in about 25 s |
+
 ## Clips — Seedance 2.5, every clip (the owner, 2026-10-23)
 
 | Job | Model | How |

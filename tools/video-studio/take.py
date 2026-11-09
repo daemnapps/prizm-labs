@@ -18,6 +18,8 @@ take.json:
    "script": [{"speaker": "HOST", "say": "...", "do": "what the body does on this line", "read": "reads/1.mp3"}, ...],
    "staging": "who stands where and who moves where, in order",
    "motion": {"source": "swipe.mp4", "from": 0, "to": 10, "blur": [[x, y, w, h], ...]},
+             or {"scene": "<scene folder>", "blur": [...]}: the motion authored and approved on that scene (motion.py:
+             a swipe's seconds, a phone act-out or a 3D blocking); a motion marked "approved": false is never sent
    "look": "place, light and sound in one line"}
 
 Routes, in the house order (tools/generative-model-house, clips.take*): wan-start@higgsfield (the exact first frame;
@@ -301,7 +303,23 @@ def _route(route, take, work, secs, text, voices, mclip, raw):
     raise SystemExit(f"no take route {route!r}: {', '.join(sorted(set(ROUTE_OF.values())))}")
 
 
+def motion_in(take, dry_run=False):
+    """The take's motion: a scene's approved motion (motion.py) when `motion.scene` names one. Motion that is waiting
+    for approval stops the take before any paid call."""
+    m = dict(take.get("motion") or {})
+    if m.get("scene"):
+        f = Path(m["scene"]) / "motion" / "motion.json"
+        if not f.exists():
+            raise SystemExit(f"no motion read for this scene yet ({f})")
+        tm = json.loads(f.read_text())["take_motion"]
+        m.update({k: tm[k] for k in ("source", "from", "to", "approved")})
+    if m.get("approved") is False and not dry_run:
+        raise SystemExit("this scene's motion waits for approval: approve it on the scene page, then make the take")
+    return dict(take, motion=m) if m else take
+
+
 def make(take, dry_run=False):
+    take = motion_in(take, dry_run)
     first = ALIASES.get(take.get("model"), take.get("model"))
     routes = ([first] if first else []) + [r for r in (take.get("backups") or house_routes()) if r != first]
     out = Path(take["out"])

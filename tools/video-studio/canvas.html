@@ -133,6 +133,25 @@ details.chg[open]{display:flex;flex-direction:column;gap:10px}
  .panel{top:auto;left:0;width:100%;max-height:85%;border-radius:16px 16px 0 0;transform:translateY(105%)}.panel.open{transform:none}
 }
 @media (prefers-reduced-motion:reduce){.slot.land{animation:none}.panel{transition:none}}
+/* motion: the scene's motion as moving skeletons, beside its lines, approved before any paid take */
+.mo{border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0;background:var(--surface)}
+.mo .mh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.mo .mh b{font:800 15px var(--display)}
+.chip{display:inline-flex;align-items:center;gap:4px;font:700 12px var(--body);border-radius:999px;padding:3px 9px;background:var(--soft);color:var(--muted)}
+.chip.ok{background:var(--yes-bg);color:var(--yes)}.chip.wait{background:var(--wait-bg);color:var(--wait)}.chip.no{background:var(--no-bg);color:var(--no)}
+.mo .mg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.mo video{width:100%;border-radius:8px;background:#000;display:block;aspect-ratio:9/16;object-fit:contain}
+.mo .beats{display:flex;flex-direction:column;gap:5px;max-height:420px;overflow:auto}
+.mo .beat{display:flex;gap:6px;align-items:flex-start;font-size:13px;line-height:1.3;background:var(--soft);border-radius:7px;padding:6px 8px}
+.mo .beat i{font:700 10.5px var(--mono);font-style:normal;color:var(--wire);background:var(--wire-bg);border-radius:4px;padding:1px 5px;flex:none}
+.mo .nums{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.mo .nums span{display:inline-flex;align-items:center;gap:4px;font:600 12px var(--body);background:var(--soft);border-radius:6px;padding:4px 8px}
+.mo .drop{border:2px dashed var(--line);border-radius:10px;padding:14px;text-align:center;cursor:pointer;font:600 13px var(--body);color:var(--muted)}
+.mo .drop.on{border-color:var(--wire);color:var(--wire);background:var(--wire-bg)}
+.mo .row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.mo .row2 input[type=number]{width:64px;height:34px;border:1px solid var(--line);border-radius:8px;padding:0 6px;background:var(--surface)}
+.mo .empty2{display:grid;place-items:center;aspect-ratio:9/16;background:var(--soft);border-radius:8px;color:var(--muted);font:600 13px var(--body);text-align:center;padding:10px}
+@media (max-width:520px){.mo .mg{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -147,6 +166,12 @@ details.chg[open]{display:flex;flex-direction:column;gap:10px}
  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></symbol>
  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></symbol>
+ <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></symbol>
+ <symbol id="i-run" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M7 21l3-6 3 2v4M10 15l1-6 4 3 3 1M11 9l-4 2-1 3"/></symbol>
+ <symbol id="i-cam" viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/></symbol>
+ <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V5a1.5 1.5 0 0 1 3 0v8M17 9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-3l-3-5a1.5 1.5 0 0 1 2.5-1.7L8 13"/></symbol>
+ <symbol id="i-face" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 15a4.5 4.5 0 0 0 7 0"/></symbol>
+ <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></symbol>
  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h8M8 21v-7h8v7"/></symbol>
 </svg>
 
@@ -250,6 +275,7 @@ function openPanel(id){
   let h = '';
   if (sc.status === 'made') h += '<video controls playsinline src="' + fileUrl(sc.scene, sc.run.files.video) + '?h=' + sc.run.workflow_hash + '"></video>';
   if (wf.words) h += '<div class="words">' + esc(wf.words) + '</div>';
+  h += '<div id="motionbox"></div>';
   h += '<div class="sec2">Shots in this scene</div><div id="shotlist" class="shots"></div>';
   h += '<div id="howbox"></div>';
   h += '<details class="chg"><summary>Change this scene</summary><p class="hint2">Fix a cut point, a caption or a prompt below, then <b>Save</b> and <b>Re-make</b>. To try something without touching what is in the cut, make a <b>copy to try</b>: the cut keeps the current take until you pick the copy.</p>'
@@ -279,7 +305,7 @@ function openPanel(id){
   $('b-save').onclick = () => saveWf(id);
   $('b-take').onclick = () => act(id, 'take');
   if ($('b-pick')) $('b-pick').onchange = e => act(id, 'pick', {take: e.target.value});
-  howMade(id); shotList(sc);
+  howMade(id); shotList(sc); motionBox(id);
 }
 async function shotList(sc){
   const box = $('shotlist'); if (!box) return;
@@ -337,6 +363,53 @@ function wireCm(id){
       else { btn.disabled = false; sel.disabled = false; btn.textContent = 'Make a new take'; msg.textContent = 'No new take: ' + (j.error || r.status) + '. The current clip is unchanged.'; }
     };
   });
+}
+// Motion: the scene's motion read from a clip (the swipe, a phone act-out, a 3D blocking), watched as skeletons beside the
+// scene's lines, and approved before any paid take (motion.py; the take reads the approved motion).
+let MOT = {}, motTimer = null;
+async function motionBox(id){
+  const box = $('motionbox'); if (!box || sel !== id) return;
+  const j = await (await fetch('/api/motion/' + N + '/' + id)).json().catch(() => null);
+  if (!j || sel !== id) return;
+  MOT = j; const m = j.motion || {}, st = j.status;
+  const chip = st === 'approved' ? '<span class="chip ok"><svg class="ic" style="width:13px;height:13px"><use href="#i-check"/></svg>Approved</span>'
+    : st === 'tracked' ? '<span class="chip wait">Waits for your OK</span>'
+    : st === 'reading' ? '<span class="chip wait"><svg class="ic" style="width:13px;height:13px"><use href="#i-refresh"/></svg>Reading…</span>'
+    : j.error ? '<span class="chip no">Failed</span>' : '<span class="chip">No motion yet</span>';
+  const vid = j.urls.overlay || j.urls.skeleton;
+  const left = vid && st !== 'reading' ? '<video src="' + esc(vid) + '" autoplay muted loop playsinline controls></video>'
+    : '<div class="empty2">' + (st === 'reading' ? 'Reading the motion of ' + esc((j.reading || {}).file || 'the clip') + '…<br>about a minute' : 'Drop a phone video of the beat,<br>or use the swipe') + '</div>';
+  const beats = (j.beats || []).map(b => '<div class="beat">' + (b.speaker ? '<i>' + esc(b.speaker) + '</i>' : '') + '<span>' + esc(b.say) + '</span></div>').join('') || '<div class="msg">No lines in this scene.</div>';
+  const kind = {phone: ['i-phone', 'phone act-out'], swipe: ['i-film', 'swipe'], '3d': ['i-box', '3D blocking']}[m.kind] || ['i-film', 'clip'];
+  const nums = j.motion ? '<div class="nums"><span><svg class="ic" style="width:14px;height:14px"><use href="#' + kind[0] + '"/></svg>' + esc(kind[1]) + ' · ' + (m.to - m.from).toFixed(1) + ' s</span>'
+    + (m.people_max != null ? '<span><svg class="ic" style="width:14px;height:14px"><use href="#i-run"/></svg>' + m.people_max + ' people max · seen in ' + Math.round(100 * m.frames_with_people / Math.max(1, m.frames)) + '%</span>' : '')
+    + (m.hands_seen != null ? '<span><svg class="ic" style="width:14px;height:14px"><use href="#i-hand"/></svg>' + m.hands_seen + '</span><span><svg class="ic" style="width:14px;height:14px"><use href="#i-face"/></svg>' + m.faces_seen + '</span>' : '')
+    + '<span>$' + (m.cost_usd || 0).toFixed(2) + '</span></div>'
+    + (j.camera ? '<div class="nums"><span><svg class="ic" style="width:14px;height:14px"><use href="#i-cam"/></svg>' + esc(j.camera) + '</span></div>' : '') : '';
+  const sw = j.swipe ? '<button class="btn" id="mo-sw"><svg class="ic"><use href="#i-film"/></svg>Use the swipe</button><input type="number" id="mo-from" step="0.5" min="0" value="' + (m.kind === 'swipe' ? m.from : 0) + '" title="from (s)"><input type="number" id="mo-to" step="0.5" min="0" value="' + (m.kind === 'swipe' ? m.to : Math.min(14, j.swipe.seconds)) + '" title="to (s)"><span class="msg">s of ' + j.swipe.seconds + '</span>' : '';
+  box.innerHTML = '<div class="mo"><div class="mh"><svg class="ic"><use href="#i-run"/></svg><b>Motion</b>' + chip + '<span class="sp"></span>'
+    + (st === 'tracked' ? '<button class="btn go" id="mo-ok"><svg class="ic"><use href="#i-check"/></svg>Approve motion</button>' : '') + '</div>'
+    + '<div class="mg"><div>' + left + '</div><div class="beats">' + beats + '</div></div>' + nums
+    + (j.error ? '<div class="msg err">' + esc(j.error) + '</div>' : '')
+    + (st === 'reading' ? '' : '<div class="row2" style="margin-top:4px"><label class="drop" id="mo-drop" style="flex:1"><svg class="ic" style="vertical-align:-4px"><use href="#i-phone"/></svg> Drop a phone video (or a 3D render)<input type="file" id="mo-file" accept="video/*" hidden></label></div>'
+      + '<div class="row2"><select class="btn" id="mo-kind"><option value="phone">phone act-out</option><option value="3d">3D blocking</option></select>' + sw + '</div>')
+    + '<div class="msg" id="mo-msg"></div></div>';
+  clearTimeout(motTimer); if (st === 'reading') motTimer = setTimeout(() => motionBox(id), 4000);
+  if ($('mo-ok')) $('mo-ok').onclick = async () => { $('mo-ok').disabled = true; await fetch('/api/motion/' + N + '/' + id + '/approve', {method: 'POST', body: '{}'}); motionBox(id); };
+  if ($('mo-sw')) $('mo-sw').onclick = () => motionGo(id, '/swipe', JSON.stringify({from: +$('mo-from').value, to: +$('mo-to').value}));
+  const drop = $('mo-drop'); if (!drop) return;
+  const send = f => { if (!f) return; $('mo-msg').textContent = 'Sending ' + f.name + ' (' + (f.size / 1e6).toFixed(1) + ' MB)…';
+    motionGo(id, '/upload?name=' + encodeURIComponent(f.name) + '&kind=' + $('mo-kind').value, f); };
+  $('mo-file').onchange = e => send(e.target.files[0]);
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('on'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('on'); }));
+  drop.addEventListener('drop', e => send(e.dataTransfer.files[0]));
+}
+async function motionGo(id, path, body){
+  const r = await fetch('/api/motion/' + N + '/' + id + path, {method: 'POST', body});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { $('mo-msg').textContent = j.error || 'Could not start'; $('mo-msg').className = 'msg err'; return; }
+  motionBox(id);
 }
 async function howMade(id){
   const box = $('howbox'); if (!box) return;
