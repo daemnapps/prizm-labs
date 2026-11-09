@@ -37,6 +37,8 @@ What each stage does
           clip: a key direction fitted from how bright the skin is against which way it faces, the light's colour
           from the skin's brightest part, the fill from the frame's average. Blender (EEVEE), transparent frames,
           motion blur.
+          Once the hand grips it the product is locked to the hand (lock_to_hand): the grip pose is fixed once per
+          hold and carried on the tracked hand; jitter.json scores every held frame.
   comp    The hand from the clip stays in front of the product: its own pixels, cut out by a body-skin segmenter
           (hand skin, not face skin) round the tracked hand, never painted over or shadowed; a soft contact shadow
           on the skin round the product, the product's blacks and
@@ -66,6 +68,7 @@ MODELS = {
     "seg": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite",
 }
 CACHE = Path.home() / ".cache" / "product-layer"
+DEPTH = -100.0                # the plane the product sits on, in front of the orthographic camera (cm)
 FACE_WIDTH_CM = 14.5          # cheek to cheek (mesh points 234 to 454) on an adult face; sets the product's size
 
 # Mesh regions, by the subject's own side (MediaPipe's "right" points sit on the left of an unmirrored picture).
@@ -492,7 +495,7 @@ def poses(work, kit, tilt_deg=None):
         R0 = np.array(frames[k]["pose"])[:3, :3] if frames[k].get("pose") else np.eye(3)
         fwd = R0[:, 2] / (np.linalg.norm(R0[:, 2]) + 1e-9)            # the way the face looks, from the head pose
         # held in the hand, bristles to the skin: the skin's own way of facing decides how much of its side shows
-        w_skin = 0.45 + 0.35 * r.get("tip_w", 0.0)
+        w_skin = 0.45                                                 # half the skin, half square to the face
         n = (w_skin * n + (1 - w_skin) * fwd) if r.get("state") != "carried" else n                                    # pressed on the skin, but a hand holds it square
         n = n / np.linalg.norm(n)                                     # to the face, not to the jaw's edge
         up2 = np.array(r["top"]) if r.get("top") else _tilted_up(ex, ey, r, pa["plan"])
@@ -511,7 +514,7 @@ def poses(work, kit, tilt_deg=None):
         R = np.c_[right, back, up]
         # the contact: the middle of the bristle pad sits on the skin, pressed in a little
         x, y = (at[0] - W / 2) * cm, (H / 2 - at[1]) * cm
-        z = float(-np.median(P[:468, 2])) * cm * 0 - 100.0
+        z = DEPTH
         if r.get("anchor") == "stand-in":
             # the device lies in the hand: on the skin its tip where the stand-in's tip is and its body back down in
             # the palm, so the hand covers most of it and the tip shows (owner, 9 Nov); loose in a palm, centred
@@ -521,10 +524,272 @@ def poses(work, kit, tilt_deg=None):
             pad = np.array([0.0, -K["depth_cm"] / 2 + 0.05, K["height_cm"] * 0.55])
         loc = np.array([x, y, z]) - R @ pad
         out.append({"i": k, "R": R.round(5).tolist(), "loc": loc.round(4).tolist()})
+    hands = _hand_frames(frames, pa["rows"], P_all, W, H)
+    holds = []
+    if any(r.get("by") == "stand-in" for r in pa["rows"]):
+        out, holds = lock_to_hand(out, hands, pa["rows"], frames, K, W, H)
     data = {"size": [W, H], "width_cm": W * FACE_WIDTH_CM / float(np.median([face_axes(p)[2] for p in P_all])),
-            "fps": tr["fps"], "kit": K, "light": light, "frames": out}
+            "fps": tr["fps"], "kit": K, "light": light, "frames": out, "holds": holds}
     (work / "poses.json").write_text(json.dumps(data))
+    (work / "jitter.json").write_text(json.dumps(jitter(out, hands, pa["rows"], P_all, K, holds), indent=1))
     return data
+
+
+# ---------------------------------------------------------------------------------------------- locked to the hand
+def _orth(M):
+    u, _, vt = np.linalg.svd(M)
+    R = u @ vt
+    if np.linalg.det(R) < 0:
+        u[:, -1] *= -1
+        R = u @ vt
+    return R
+
+
+def _rot_deg(A, B):
+    return float(np.degrees(np.arccos(np.clip((np.trace(A.T @ B) - 1) / 2, -1, 1))))
+
+
+def _hand_frames(frames, rows, P_all, W, H):
+    """The holding hand as a rigid frame each frame, in camera centimetres: origin (the palm's centre), its turn in
+    the picture (wrist to middle knuckle) and size (wrist to middle knuckle plus across the knuckles). The hand nearest the product is taken; frames where the tracker lost it are filled between the frames
+    either side; then steadied over a few frames, so the hand's own movement stays and the tracker's shake goes."""
+    n = len(frames)
+    O, R, S, CM = [None] * n, [None] * n, [None] * n, [None] * n
+    for k, f in enumerate(frames):
+        cm = FACE_WIDTH_CM / face_axes(P_all[k])[2]
+        CM[k] = cm
+        r = rows[k] if k < len(rows) else {}
+        ref = np.array(r.get("at") or (f.get("stand_in") or {}).get("c") or [W / 2, H / 2], dtype=float)
+        best = None
+        for h in f.get("hands") or []:
+            Q = np.array(h["points"], dtype=float)
+            c = Q[[0, 5, 9, 13, 17], :2].mean(0)
+            d = float(np.linalg.norm(c - ref))
+            if best is None or d < best[0]:
+                best = (d, Q)
+        if best is None:
+            continue
+        Q = best[1]
+        # in the picture only: the tracker's depth for each knuckle is too unsteady to turn a product by, so the
+        # hand turns it in the picture's plane and its lean toward the lens stays as it was at the grip
+        X = np.c_[(Q[:, 0] - W / 2) * cm, (H / 2 - Q[:, 1]) * cm, np.zeros(len(Q))]
+        y = X[9] - X[0]
+        if np.linalg.norm(y) < 1e-6:
+            continue
+        y = y / np.linalg.norm(y)
+        z = np.array([0.0, 0.0, 1.0])
+        R[k] = np.c_[np.cross(y, z), y, z]
+        O[k] = X[[0, 5, 9, 13, 17]].mean(0) + np.array([0.0, 0.0, DEPTH])   # on the product's own depth plane
+        S[k] = float(np.linalg.norm(X[9] - X[0]) + np.linalg.norm(X[17] - X[5]))
+    have = [k for k in range(n) if R[k] is not None]
+    if not have:
+        return None
+    for k in range(n):                                   # fill the gaps between found frames
+        if R[k] is not None:
+            continue
+        lo = max((h for h in have if h < k), default=None)
+        hi = min((h for h in have if h > k), default=None)
+        if lo is None or hi is None:
+            j = lo if hi is None else hi
+            R[k], O[k], S[k] = R[j], O[j], S[j]
+        else:
+            t = (k - lo) / (hi - lo)
+            R[k] = _orth(R[lo] * (1 - t) + R[hi] * t)
+            O[k] = O[lo] * (1 - t) + O[hi] * t
+            S[k] = S[lo] * (1 - t) + S[hi] * t
+    Os = _smooth(np.array(O), 5)
+    Ss = _smooth(np.array(S), 9)
+    Rs = _smooth(np.array(R), 7)
+    return {"o": Os, "R": [_orth(m) for m in Rs], "s": Ss, "cm": CM, "found": [R_ is not None for R_ in R]}
+
+
+def _q(R):
+    """Rotation matrix to unit quaternion (w, x, y, z)."""
+    w = math.sqrt(max(0.0, 1 + R[0, 0] + R[1, 1] + R[2, 2])) / 2
+    x = math.copysign(math.sqrt(max(0.0, 1 + R[0, 0] - R[1, 1] - R[2, 2])) / 2, R[2, 1] - R[1, 2])
+    y = math.copysign(math.sqrt(max(0.0, 1 - R[0, 0] + R[1, 1] - R[2, 2])) / 2, R[0, 2] - R[2, 0])
+    z = math.copysign(math.sqrt(max(0.0, 1 - R[0, 0] - R[1, 1] + R[2, 2])) / 2, R[1, 0] - R[0, 1])
+    q = np.array([w, x, y, z])
+    return q / np.linalg.norm(q)
+
+
+def _R(q):
+    w, x, y, z = q
+    return np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+                     [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+                     [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)]])
+
+
+def _slerp(A, B, t):
+    qa, qb = _q(A), _q(B)
+    d = float(np.dot(qa, qb))
+    if d < 0:
+        qb, d = -qb, -d
+    if d > 0.9995:
+        q = qa + (qb - qa) * t
+    else:
+        th = math.acos(d)
+        q = (math.sin((1 - t) * th) * qa + math.sin(t * th) * qb) / math.sin(th)
+    return _R(q / np.linalg.norm(q))
+
+
+def _rz(a):
+    c, s_ = math.cos(a), math.sin(a)
+    return np.array([[c, -s_, 0], [s_, c, 0], [0, 0, 1]])
+
+
+def lock_to_hand(out, hands, rows, frames, K, W, H, regrip=10):
+    """Once the hand grips the product, it is one rigid object with the hand (owner, 9 Nov): it moves and turns only
+    with the hand, never re-fitted per frame.
+
+    A hold is a run of frames in one grip (loose in the open palm, or held to the skin). At the start of each hold
+    the grip pose is fixed once from the stand-in's own axis (its first clearly read frames): how the product sits,
+    its lean toward the lens and where it sits against the stand-in. Through the hold the product turns with the
+    hand's turn in the picture plus that fixed offset; the offset may only drift slowly (over about two seconds) to
+    follow the stand-in where the take's hand and the thing it holds part ways, never frame by frame. It moves with
+    the stand-in the hand holds, steadied. Between two holds (the take re-gripping it) it turns from one grip to
+    the next over a third of a second."""
+    if hands is None:
+        return out, []
+    n = len(out)
+    on = [o is not None for o in out]
+    state = [(rows[k].get("state") if on[k] else None) for k in range(n)]
+    runs, k = [], 0
+    while k < n:
+        if not on[k]:
+            k += 1
+            continue
+        j = k
+        while j < n and on[j] and state[j] == state[k]:
+            j += 1
+        runs.append([k, j, state[k]])
+        k = j
+    merged = []
+    for r_ in runs:                                       # a change lasting under 8 frames is not a new grip
+        if merged and merged[-1][1] == r_[0] and (r_[1] - r_[0] < 8 or merged[-1][1] - merged[-1][0] < 8):
+            if r_[1] - r_[0] > merged[-1][1] - merged[-1][0]:
+                merged[-1][2] = r_[2]
+            merged[-1][1] = r_[1]
+        else:
+            merged.append(list(r_))
+    centre = np.array([0.0, 0.0, K["height_cm"] / 2])
+    th_h = np.unwrap([math.atan2(hands["R"][k][1, 1], hands["R"][k][0, 1]) for k in range(n)])
+    th_s = np.unwrap([math.atan2(-(rows[k].get("top") or [0, -1])[1], (rows[k].get("top") or [0, -1])[0]) for k in range(n)])
+    cm = hands["cm"]
+    si_c = []
+    for k in range(n):
+        si = frames[k].get("stand_in")
+        if si:
+            c = si["c"]
+            si_c.append([c[0], c[1]])
+        else:
+            si_c.append(si_c[-1] if si_c and si_c[-1] is not None else None)
+    holds = []
+    for a, b, st in merged:
+        idx = list(range(a, b))
+        good = [k for k in idx if (frames[k].get("stand_in") or {}).get("elong", 0) >= 1.15
+                and not (frames[k].get("stand_in") or {}).get("edge") and not 0.05 < rows[k].get("tip_w", 0.0) < 0.95]
+        grip = (good or idx)[:12]
+        Rg = _orth(np.mean([np.array(out[k]["R"]) for k in grip], 0))
+        # the product turns with the hand; the grip's offset follows the stand-in only slowly
+        dlt = np.array([th_s[k] - th_h[k] for k in idx])
+        dlt = _smooth(dlt, 61) if len(dlt) > 4 else dlt
+        tg = float(np.mean([th_h[k] + dlt[k - a] for k in grip]))   # the turn at the moment of the grip
+        # where it sits against the stand-in the hand holds, fixed at the grip (in the product's own turned frame)
+        e = []
+        for k in grip:
+            if si_c[k] is None:
+                continue
+            c_p = (np.array(out[k]["loc"]) + np.array(out[k]["R"]) @ centre)[:2]
+            c_s = np.array([(si_c[k][0] - W / 2) * cm[k], (H / 2 - si_c[k][1]) * cm[k]])
+            e.append(_rz(-th_s[k])[:2, :2] @ (c_p - c_s))
+        e = np.median(e, 0) if e else np.zeros(2)
+        C = []
+        for k in idx:
+            sc = si_c[k]
+            C.append(np.array([(sc[0] - W / 2) * cm[k], (H / 2 - sc[1]) * cm[k]]) if sc is not None
+                     else (np.array(out[k]["loc"]) + np.array(out[k]["R"]) @ centre)[:2])
+        C = _smooth(np.array(C), 7)
+        poses_ = []
+        for j, k in enumerate(idx):
+            th = th_h[k] + dlt[j]
+            R = _rz(th - tg) @ Rg
+            c2 = C[j] + _rz(th)[:2, :2] @ e
+            c3 = np.array([c2[0], c2[1], DEPTH])
+            poses_.append((R, c3 - R @ centre))
+        holds.append({"from": a, "to": b, "state": st, "grip_frames": [grip[0], grip[-1]], "poses": poses_})
+    new = list(out)
+    for i, h in enumerate(holds):
+        for j, k in enumerate(range(h["from"], h["to"])):
+            R, loc = h["poses"][j]
+            new[k] = {"i": k, "R": R, "loc": loc, "hold": i}
+    for i in range(len(holds) - 1):                     # re-grip: from the end of one grip to the start of the next
+        A, B = holds[i], holds[i + 1]
+        if A["to"] != B["from"]:
+            continue
+        k0, k1 = max(A["from"], A["to"] - regrip // 2), min(B["to"], B["from"] + regrip // 2)
+        RA, LA = A["poses"][k0 - A["from"]]
+        RB, LB = B["poses"][k1 - 1 - B["from"]]
+        for k in range(k0, k1):
+            t = (k - k0 + 0.5) / (k1 - k0)
+            t = 0.5 - 0.5 * math.cos(math.pi * t)
+            new[k] = {"i": k, "R": _slerp(RA, RB, t), "loc": LA * (1 - t) + LB * t, "hold": i if k < A["to"] else i + 1}
+    for k, o in enumerate(new):
+        if o is not None and "hold" in o:
+            o["R"] = np.asarray(o["R"]).round(5).tolist()
+            o["loc"] = np.asarray(o["loc"]).round(4).tolist()
+    return new, [{k_: v for k_, v in h.items() if k_ != "poses"} for h in holds]
+
+
+def jitter(out, hands, rows, P_all, K, holds):
+    """Per frame while held: how much the product turned (degrees) and moved (pixels), how much the hand did, and how
+    much the product moved against the hand (the grip's own drift, close to zero when it is locked)."""
+    if hands is None:
+        return {"frames": []}
+    centre = np.array([0.0, 0.0, K["height_cm"] / 2])
+    rowsj, prev = [], None
+    for k, o in enumerate(out):
+        if o is None:
+            prev = None
+            continue
+        R = np.array(o["R"])
+        c = np.array(o["loc"]) + R @ centre
+        cm = hands["cm"][k]
+        rel_R = hands["R"][k].T @ R
+        rel_c = hands["R"][k].T @ (c - hands["o"][k]) / hands["s"][k]
+        cur = (R, c, hands["R"][k], hands["o"][k], rel_R, rel_c, hands["s"][k], cm)
+        if prev is not None:
+            pR, pc, pHR, pHo, prR, prc, ps, pcm = prev
+            rowsj.append({"i": k, "hold": o.get("hold"),
+                          "product_turn_deg": round(_rot_deg(pR, R), 2), "product_move_px": round(float(np.linalg.norm((c - pc)[:2])) / cm, 1),
+                          "hand_turn_deg": round(_rot_deg(pHR, hands["R"][k]), 2), "hand_move_px": round(float(np.linalg.norm((hands["o"][k] - pHo)[:2])) / cm, 1),
+                          "vs_hand_turn_deg": round(_rot_deg(prR, rel_R), 2),
+                          "vs_hand_move_px": round(float(np.linalg.norm((rel_c - prc)[:2])) * hands["s"][k] / cm, 1)})
+        prev = cur
+
+    # shake: the wobble left once the hand's own smooth movement is taken out (how far each frame sits off the line
+    # through the frames either side), in pixels and degrees; a steady hold reads close to zero
+    on_k = [k for k, o in enumerate(out) if o is not None]
+    pos = {k: (np.array(out[k]["loc"]) + np.array(out[k]["R"]) @ centre)[:2] / hands["cm"][k] for k in on_k}
+    for r in rowsj:
+        k = r["i"]
+        if k - 1 in pos and k + 1 in pos and k in pos:
+            r["shake_px"] = round(float(np.linalg.norm(pos[k] - (pos[k - 1] + pos[k + 1]) / 2)), 2)
+            Rm, R0, Rp = (np.array(out[j]["R"]) for j in (k - 1, k, k + 1))
+            r["shake_deg"] = round(abs(_rot_deg(Rm, R0) - _rot_deg(R0, Rp)) / 2 + 0.0, 2)
+        else:
+            r["shake_px"], r["shake_deg"] = 0.0, 0.0
+
+    def stats(key, rs):
+        v = np.array([r[key] for r in rs]) if rs else np.zeros(1)
+        return {"median": round(float(np.median(v)), 2), "p95": round(float(np.percentile(v, 95)), 2), "max": round(float(v.max()), 2)}
+    joins = [h["to"] for h, nx in zip(holds, holds[1:]) if nx["from"] == h["to"]]
+    regrip = {j + d for j in joins for d in range(-6, 7)}          # the re-grip frames and one either side
+    held = [r for r in rowsj if r["i"] not in regrip]
+    keys = ["shake_px", "shake_deg", "product_turn_deg", "product_move_px", "hand_turn_deg", "hand_move_px",
+            "vs_hand_turn_deg", "vs_hand_move_px"]
+    return {"held_frames": len(held), "regrip_frames": sorted(i for i in regrip if any(r["i"] == i for r in rowsj)),
+            "while_held": {k: stats(k, held) for k in keys}, "frames": rowsj}
 
 
 def _tilted_up(ex, ey, r, plan):

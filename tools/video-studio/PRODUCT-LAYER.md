@@ -23,20 +23,32 @@ beat the picture is the take's own, except where a keyed stand-in still shows: i
 
 ## How it is held (owner, 9 Nov)
 
-- The device takes the stand-in's own pose in every frame, never a fixed upright pose. The stand-in's narrow end is
-  the device's tip. Where the stand-in lies on its side in an open palm, the device lies on its side there too;
-  where its tip leans toward the lens (the stand-in looks shorter than it does side-on), the device leans the same
-  amount. Where the stand-in is seen end-on or cut by the frame's edge, the last direction read holds.
-- Which end is the tip is decided once for the clip: each frame that can tell the stand-in's narrow end votes, and
-  the direction is held from frame to frame, so the device never flips end over end.
-- On the skin the device lies in the hand: its tip where the stand-in's tip is, its body down in the palm under the
-  fingers, so the tip shows above them. It is not laid flat with its back square to the camera. Loose in an open
-  palm it sits where the stand-in sits, and it slides to tip-first over a few frames as the hand reaches the face.
-- The fingers in front of it are the take's own pixels and stay on top, fingertips and nails included: the hand is
-  cut out by a body-skin segmenter (MediaPipe's selfie multiclass model, which tells hand skin from face skin), kept
-  to the area round the tracked hand. No shadow or grade lands on the fingers.
-- The bar: executed with finesse. A finger dimmed or covered, the device standing when the stand-in lies, or its
-  back laid flat to the lens is a miss at the check.
+- **Locked to the hand.** Once the hand grips the device it is one rigid object with the hand: it moves and turns
+  only with the hand. No sliding, no re-orienting mid-hold, no shake from frame to frame. A hold is a run of frames
+  in one grip (loose in the open palm, or held to the skin).
+- **The grip pose is fixed once,** at the start of each hold, from the stand-in's own axis in its first clearly read
+  frames: how the device sits, its lean toward the lens, and where it sits against the stand-in. The stand-in's
+  narrow end is the tip, so where the stand-in lies on its side in an open palm the device lies on its side there
+  too. Which end is the tip is voted once for the clip.
+- **Carried on the hand.** Through the hold the device turns with the hand's turn in the picture (wrist to middle
+  knuckle) plus that fixed offset, and moves with the stand-in the hand holds, steadied over a few frames. The
+  tracker's depth for each knuckle is too unsteady to turn a device by, so its lean toward the lens stays as it was
+  at the grip. The offset may drift only slowly, over about two seconds, where the take's hand and the thing it
+  holds part ways (a generated hand is not a rigid body); never frame by frame.
+- **Re-grip.** Where the take moves the stand-in from one grip to another (open palm into the fingers), the device
+  turns from the first grip to the second over a third of a second.
+- **Tip showing.** On the skin the device lies in the hand, its tip where the stand-in's tip is and its body down in
+  the palm under the fingers, so the tip shows above them. It is not laid flat with its back square to the camera.
+- **Fingers on top.** The fingers in front of it are the take's own pixels, fingertips and nails included: the hand
+  is cut out by a body-skin segmenter (MediaPipe's selfie multiclass model, which tells hand skin from face skin),
+  kept to the area round the tracked hand. No shadow or grade lands on the fingers.
+- **Steadiness check.** `jitter.json` beside every run gives, for every held frame, how far the device turned and
+  moved since the last frame, how far the hand did, and its shake (how far it sits off the line through the frames
+  either side). While held, shake reads close to zero and the device turns about as much as the hand. On the 5 s
+  test (120 held frames): turn 0.3° a frame at the median against the hand's 0.13° (2.2° before the lock); shake
+  0.45 px and 0.05° at the median, worst 2.7 px (1.15 px, 0.65°, worst 16.4 px before).
+- **The bar:** executed with finesse. A device that slides, re-orients or shakes in a still hand, a finger dimmed or
+  covered, the device standing when the stand-in lies, or its back laid flat to the lens is a miss at the check.
 
 ## The method
 
