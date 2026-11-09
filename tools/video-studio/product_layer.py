@@ -69,7 +69,23 @@ MODELS = {
 }
 CACHE = Path.home() / ".cache" / "product-layer"
 DEPTH = -100.0                # the plane the product sits on, in front of the orthographic camera (cm)
-FACE_WIDTH_CM = 14.5          # cheek to cheek (mesh points 234 to 454) on an adult face; sets the product's size
+FACE_WIDTH_CM = 14.5          # cheek to cheek (mesh points 234 to 454): the fallback ruler when the irises are not tracked
+IPD_CM = 6.3                  # pupil to pupil (iris centres 468 and 473): the ruler for the product's size; it varies far
+                              # less between adults than a face's width does
+LENS_FOV_DEG = 64.0           # a phone's front camera across the frame, to tell how close the face is to the lens
+FRONT_CM = 2.0                # how far in front of the eyes' plane a product held to the cheek sits (it looks bigger)
+
+
+def cm_per_px(P, W):
+    """Centimetres a pixel for something held to the face: pupil distance as the ruler, then made a little smaller
+    (the product a little bigger) because it sits nearer the lens than the eyes do."""
+    if len(P) >= 474:
+        ipd = float(np.linalg.norm(P[468, :2] - P[473, :2]))
+        cm = IPD_CM / max(ipd, 1e-6)
+        f = (W / 2) / math.tan(math.radians(LENS_FOV_DEG) / 2)
+        dist = f * IPD_CM / max(ipd, 1e-6)
+        return cm * (dist - FRONT_CM) / dist
+    return FACE_WIDTH_CM / face_axes(P)[2]
 
 # Mesh regions, by the subject's own side (MediaPipe's "right" points sit on the left of an unmirrored picture).
 # Each is an ordered run of mesh points; a region point is a weighted mix of a run point and the face centre (1, nose
@@ -494,7 +510,7 @@ def poses(work, kit, tilt_deg=None):
             continue
         P = P_all[k]
         ex, ey, width = face_axes(P)
-        cm = FACE_WIDTH_CM / width                                    # centimetres a pixel at the face
+        cm = cm_per_px(P, W)                                          # centimetres a pixel at the face
         at = np.array(r["at"])
         n = _normal(P, at, 30) if r.get("state") != "carried" else np.array([0.0, 0.0, 1.0])
         R0 = np.array(frames[k]["pose"])[:3, :3] if frames[k].get("pose") else np.eye(3)
@@ -533,7 +549,7 @@ def poses(work, kit, tilt_deg=None):
     holds = []
     if any(r.get("by") == "stand-in" for r in pa["rows"]):
         out, holds = lock_to_hand(out, hands, pa["rows"], frames, K, W, H)
-    data = {"size": [W, H], "width_cm": W * FACE_WIDTH_CM / float(np.median([face_axes(p)[2] for p in P_all])),
+    data = {"size": [W, H], "width_cm": W * float(np.median([cm_per_px(p, W) for p in P_all])),
             "fps": tr["fps"], "kit": K, "light": light, "frames": out, "holds": holds}
     (work / "poses.json").write_text(json.dumps(data))
     (work / "jitter.json").write_text(json.dumps(jitter(out, hands, pa["rows"], P_all, K, holds), indent=1))
@@ -561,7 +577,7 @@ def _hand_frames(frames, rows, P_all, W, H):
     n = len(frames)
     O, R, S, CM = [None] * n, [None] * n, [None] * n, [None] * n
     for k, f in enumerate(frames):
-        cm = FACE_WIDTH_CM / face_axes(P_all[k])[2]
+        cm = cm_per_px(P_all[k], W)
         CM[k] = cm
         r = rows[k] if k < len(rows) else {}
         ref = np.array(r.get("at") or (f.get("stand_in") or {}).get("c") or [W / 2, H / 2], dtype=float)

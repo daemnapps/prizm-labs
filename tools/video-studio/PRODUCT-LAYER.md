@@ -21,6 +21,17 @@ frames carry the product; any beat frame without it (no stand-in, no hand) is a 
 beat the picture is the take's own, except where a keyed stand-in still shows: it is always covered. Without
 `--plan`, the path is circles along the jaw for three quarters of the beat, then up the cheek.
 
+## How big it is
+
+- True size, measured with the pupils as the ruler: the distance between the iris centres is about 6.3 cm on almost
+  every adult, so it holds on a broad face or a narrow one (a face's width does not: it read a broad face as bigger
+  than it is and drew the product too small). Without iris points, cheek to cheek at 14.5 cm is the fallback.
+- A product held to the cheek sits about 2 cm nearer the lens than the eyes, so it looks bigger than it would flat on
+  the face: the tool works out how close the face is from the pupils' width and a phone front camera's view (64°
+  across) and scales up by that (about 14% on a close-up selfie).
+- Check, 9 Nov: the brand's own footage of FLEX in use shows 1.4–1.6 pupil-widths of it above the fingers; ours is
+  now 1.98 pupil-widths long in all (11.15 cm), up from 1.72.
+
 ## How it is held (owner, 9 Nov)
 
 - **Locked to the hand.** Once the hand grips the device it is one rigid object with the hand: it moves and turns
