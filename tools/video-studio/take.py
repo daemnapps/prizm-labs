@@ -12,6 +12,8 @@ Where the swipe holds one take, the scene is one call carrying:
     python3 take.py voices [word]                     the voices we own (made from real speakers), by name
     python3 take.py hear "<voice name>" "a line" [out.mp3]   hear a voice say a line before it goes in a take
     python3 take.py check <take.json>                 read the finished take back (take_layers.py) and mark each beat
+    python3 take.py lipsync <clip> <voice.mp3> [--model latentsync|sync|musetalk] [--out f.mp4]
+                                                      the clip's face made to speak our read (a tracked take has no voices)
 
 take.json:
   {"out": "take.mp4", "model": "<route to try first; none = the house order>", "backups": ["<route>", ...],  "seconds": 20,
@@ -627,6 +629,30 @@ def make(take, dry_run=False):
     return rec
 
 
+# Lip sync for a take that carries no voices of its own (the pose route): one face, one read, on fal. Tested 2026-11-09
+# on a 2.5 s close-up (tools/model-inputs/inputs/wan-2.2-vace-fun-pose.json `lip_sync`): LatentSync followed the
+# voice best and costs least, so it is the default; Sync makes the sharpest mouth shapes; MuseTalk blurs the mouth.
+LIPSYNC = {"latentsync": ("fal-ai/latentsync", "video_url", 0.005), "sync": ("fal-ai/sync-lipsync/v2", "video_url", 0.05),
+           "musetalk": ("fal-ai/musetalk", "source_video_url", 0.0125)}
+
+
+def lipsync(clip, audio, out=None, model="latentsync"):
+    """`clip`'s most visible face made to speak `audio`; the audio is the clip's sound afterwards. Cost in USD."""
+    ep, vkey, per = LIPSYNC[model]
+    body = {vkey: [str(clip)], "audio_url": [str(audio)]}
+    if model != "musetalk":
+        body["enable_safety_checker"] = False
+    if model == "sync":
+        body["sync_mode"] = "cut_off"
+    job, res = _fal(ep, body)
+    out = Path(out or Path(clip).with_suffix(f".{model}.mp4"))
+    urllib.request.urlretrieve((res.get("video") or {})["url"], out)
+    rec = {"clip": str(clip), "audio": str(audio), "model": model, "file": str(out), "request_id": job.get("request_id"),
+           "cost": {"amount": round(per * seconds_of(clip), 3), "unit": "usd"}}
+    print(json.dumps(rec))
+    return rec
+
+
 def check(take, clip=None):
     """The finished take read back (take_layers.py, in a Python that has MediaPipe: TAKE_LAYERS_PYTHON) and every
     beat's faces marked: did the face the brief asked for show while that line was spoken."""
@@ -667,6 +693,10 @@ if __name__ == "__main__":
             print(f"{v['name']}  ({v['kind']})  {v['about'][:90]}")
     elif a[0] == "hear":
         print(say(voice_id(a[1]), a[2], a[3] if len(a) > 3 else "hear.mp3"))
+    elif a[0] == "lipsync":
+        def opt(k, d=None):
+            return a[a.index(k) + 1] if k in a else d
+        lipsync(a[1], a[2], opt("--out"), opt("--model", "latentsync"))
     elif a[0] == "check":
         check(json.loads(Path(a[1]).read_text()), a[2] if len(a) > 2 else None)
     else:

@@ -96,6 +96,8 @@ finished take. Camera control runs on Wan 3.0 and Seedance 2.5 only.
 | camera move, angle, framing | `camera`, and a line's own `camera` per beat | Wan 3.0 start-frame follows a camera line per beat in one take (10 s test: wide, push-in, pan, two-shot; 10 credits) | `take_layers.py` camera path: pan, tilt, push |
 | several angles of one moment | `camera` `shots` (a shot list cut inside one call) | Seedance 2.5 (10 s test, 30 credits) and Wan 3.0 reference mode (10 s, 0.50 USD) both cut wide → over-the-shoulder close → low two-shot, same people | the frames |
 | multi-cam | `camera` `views` + `cut`: the same moment once per view, cut line by line on the take's own speech | any route; each view is its own call | the cut; separate calls rebuild the scene differently (people swap places), so a shot list in one call is the default |
+| lip sync a take with no voices (the pose route) | `take.py lipsync <clip> <read>` | **LatentSync** on fal, the default (0.005 USD a second; followed the voice closest in the 9 Nov test); Sync lipsync-2 the sharper backup (3 USD a minute); MuseTalk blurs the mouth | the face mesh: mouth opening against the read |
+| one person's motion onto our picture | — (not a route) | **Wan 2.2 Animate** on fal (0.08 USD a second), tested 9 Nov: `move` carries the motion but warps the rest of the frame; `replace` keeps the source clip's people and words | the frames |
 
 ## Clips — Seedance 2.5, every clip (the owner, 2026-10-23)
 
