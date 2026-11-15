@@ -35,6 +35,11 @@
 .srcs .go{cursor:pointer;background:none;border-top:0;border-left:0;border-right:0;text-align:left}
 .more{justify-self:start;cursor:pointer}
 .empty{padding-block:var(--s6)}
+.connect{margin-top:var(--s5)}
+.connect summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:var(--s2);align-items:baseline}
+.connect-body{display:grid;gap:var(--s3);margin-top:var(--s3)}
+.connect-body pre{white-space:pre-wrap;word-break:break-all;margin:0}
+.addr{display:flex;gap:var(--s2);align-items:stretch}.addr pre{flex:1;min-width:0}.addr .btn{flex:none;cursor:pointer}
 @media (max-width:640px){.qbar{flex-wrap:wrap}.qbar input{flex:1 1 100%}.qbar .btn{flex:1 1 100%;text-align:center}#cats{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scrollbar-width:none}#cats .btn{flex:none}}
 </style>
 
@@ -61,6 +66,14 @@
     <div class="chips" id="kinds" role="group" aria-label="Show"></div>
     <div class="chips" id="cats" role="group" aria-label="Topic"></div>
   </div>
+
+  <details class="panel connect" id="connect">
+    <summary><b>Plug it into your AI</b> <span class="label">Claude · ChatGPT · Cursor · Claude Code</span></summary>
+    <div class="connect-body" id="connectBody">
+      <p>Your AI searches these rules and lessons by itself whenever you ask it about running a store. One address, works in any AI that takes an MCP server.</p>
+      <div class="btns"><button class="btn" id="getKey" type="button">Get my free key</button></div>
+    </div>
+  </details>
 
   <section class="out" id="answerWrap" hidden aria-live="polite"><div class="panel answer" id="answer"></div></section>
   <p class="meta" id="shown" style="margin-top:var(--s5)"></p>
@@ -228,11 +241,38 @@ function keyPanel(key, n) {
   return `<p class="eyebrow">Paid</p><h3>${n.toLocaleString()} answers added.</h3>
     <p>They're on this browser now; just ask. To use them from your own AI or tools, keep this key:</p>
     <pre><code>${esc(key)}</code></pre>
-    <details><summary>Use it from your own AI</summary>
+    <p>To plug it into Claude, ChatGPT or Cursor, open <b>Plug it into your AI</b> above.</p>
+    <details><summary>Call it from your own code</summary>
     <p>Get the best-matching rules and lessons for any question (one answer each), then hand them to whatever model you use:</p>
     <pre><code>curl ${esc(base)}/search -H "Authorization: Bearer ${esc(key)}" -H "Content-Type: application/json" -d '{"q":"how do I scale a winning ad"}'</code></pre>
     <p>Or get a written answer: the same call to <code>${esc(base)}/ask</code>.</p></details>`;
 }
+// ---------- Plug it into your AI: one MCP address with the visitor's key on it ----------
+const MCP = () => ASK_URL.replace(/\/ask$/, "") + "/mcp?key=" + pass;
+function connectSteps() {
+  const url = esc(MCP());
+  $("connectBody").innerHTML = `
+    <p class="label">Your address${credits != null ? ` · ${credits.toLocaleString()} uses on it` : ""}</p>
+    <div class="addr"><pre><code id="mcpUrl">${url}</code></pre><button class="btn" id="copyUrl" type="button">Copy</button></div>
+    <p class="label">Keep it private: uses come off this key.</p>
+    <details><summary><b>Claude</b> (claude.ai or the app)</summary><p>Settings → Connectors → Add custom connector. Name it Prizm Knowledge, paste the address, Add. Then ask Claude anything about running a store.</p></details>
+    <details><summary><b>ChatGPT</b></summary><p>Settings → Apps &amp; Connectors → Advanced → turn on Developer mode. Then Create, name it Prizm Knowledge, paste the address, choose No authentication, Create.</p></details>
+    <details><summary><b>Cursor</b></summary><p>Settings → MCP → Add new server, or put this in <code>.cursor/mcp.json</code>:</p><pre><code>{"mcpServers":{"prizm":{"url":"${url}"}}}</code></pre></details>
+    <details><summary><b>Claude Code</b></summary><pre><code>claude mcp add --transport http prizm "${url}"</code></pre></details>
+    <p>Two tools come with it: <b>search_knowledge</b> (the best-matching rules and lessons, for your AI to answer from) and <b>ask_knowledge</b> (a finished, cited answer). Each call is one use. Search on this page stays free.</p>`;
+  $("copyUrl").onclick = async () => { try { await navigator.clipboard.writeText(MCP()); $("copyUrl").textContent = "Copied"; } catch (e) { getSelection().selectAllChildren($("mcpUrl")); } };
+}
+async function getKey() {
+  const b = $("getKey"); b.disabled = true; b.textContent = "Making your key…";
+  try {
+    const r = await fetch(ASK_URL.replace(/\/ask$/, "") + "/key", {method: "POST", headers: {"Content-Type": "application/json"}, body: "{}"});
+    const d = await r.json();
+    if (!r.ok || !d.key) throw new Error(d.error || "failed");
+    pass = d.key; try { localStorage.setItem("prizm-pass", pass); } catch (e) {}
+    saveCredits(d.credits); freeLine(); connectSteps();
+  } catch (e) { b.disabled = false; b.textContent = "Get my free key"; $("connectBody").insertAdjacentHTML("beforeend", `<p>Couldn't make a key just now. Try again in a minute.</p>`); }
+}
+
 async function unlockFromPayment() {
   const sid = new URLSearchParams(location.search).get("paid");
   if (!sid || !ASK_URL) return;
@@ -244,7 +284,7 @@ async function unlockFromPayment() {
     const d = await r.json();
     if (!r.ok) throw new Error(d.error);
     pass = d.key; try { localStorage.setItem("prizm-pass", pass); } catch (e) {}
-    saveCredits(d.credits); freeLine();
+    saveCredits(d.credits); freeLine(); connectSteps();
     box.innerHTML = keyPanel(d.key, d.credits);
   } catch (e) { box.innerHTML = `<p>We couldn't add your answers automatically (${esc(e.message || "error")}). Reply to your receipt and we'll sort it.</p>`; }
 }
@@ -293,6 +333,7 @@ $("ask").addEventListener("click", ask);
   $("lede").textContent = `${r.toLocaleString()} decision rules and ${(items.length - r).toLocaleString()} lessons from running real brands: paid media, creative, creators, offers, retention. Search all of it free` + (ASK_URL ? `, or ask a question and get a straight answer from it.` : `.`);
   if (ASK_URL) { $("ask").hidden = false; $("q").setAttribute("enterkeyhint", "send"); }
   freeLine(); chips(); unlockFromPayment();
+  if (ASK_URL) { if (pass) connectSteps(); else $("getKey").onclick = getKey; } else $("connect").hidden = true;
   const q0 = new URLSearchParams(location.search).get("q");
   if (q0) { $("q").value = q0; state.q = q0; }
   render();
