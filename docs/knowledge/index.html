@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EFE9E1">
+<meta name="description" content="Ecommerce knowledge you can search and ask: 3,000 decision rules and lessons from running real brands — paid media, creative, creators, offers, retention.">
+<title>Knowledge — PRIZM LABS</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/studio.css?v=prizm16">
+<style>
+/* Layout only. */
+.qbar{display:flex;gap:var(--s2);margin-top:var(--s4)}
+.qbar input{flex:1;min-width:0;font:16px var(--body);padding:15px 20px;border:1px solid var(--line-2);border-radius:var(--r4);background:var(--card);color:var(--ink)}
+.qbar .btn{flex:none;cursor:pointer}
+.qbar .btn[hidden]{display:none}
+.free{margin-top:var(--s2)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4)}
+.chips .btn{cursor:pointer;padding:9px 14px}
+.out{margin-top:var(--s5);display:grid;gap:var(--s3)}
+.out[hidden]{display:none}
+.res{display:grid;gap:var(--s2)}
+.res h4{margin:0}
+.res .why{margin:0}
+.res mark{background:color-mix(in srgb,var(--amber) 28%,transparent);color:inherit;padding:0 2px;border-radius:var(--r1)}
+.answer{display:grid;gap:var(--s3)}
+.answer p,.answer li{max-width:var(--measure)}
+.answer ul{margin:0;padding-left:var(--s5);display:grid;gap:var(--s2)}
+.answer .cite{cursor:pointer;border:0;background:none;padding:0 2px}
+.srcs{display:grid;gap:var(--s2);border-top:1px solid var(--line);padding-top:var(--s3)}
+.srcs .go{cursor:pointer;background:none;border-top:0;border-left:0;border-right:0;text-align:left}
+.more{justify-self:start;cursor:pointer}
+.empty{padding-block:var(--s6)}
+@media (max-width:640px){.qbar{flex-wrap:wrap}.qbar input{flex:1 1 100%}.qbar .btn{flex:1 1 100%;text-align:center}#cats{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scrollbar-width:none}#cats .btn{flex:none}}
+</style>
+
+<nav class="bar">
+  <a class="mark" href="/">PRIZM LABS</a>
+  <span class="links">
+      <a href="/how-it-works.html">How it works</a>
+      <a href="/knowledge/">Knowledge</a>
+      <a href="/briefs/">Briefs</a>
+      <a href="/feeds/">Feeds</a>
+    </span>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Ecommerce knowledge</p>
+    <h1>Ask how it's done.</h1>
+    <p class="lede" id="lede">Decision rules and lessons from running real brands: paid media, creative, creators, offers, retention. Search all of it free, or ask a question and get a straight answer from it.</p>
+    <form class="qbar" id="form" role="search">
+      <input id="q" type="search" placeholder="How do I get started with ecommerce?" aria-label="Search or ask" autocomplete="off" enterkeyhint="search">
+      <button class="btn" id="ask" type="button" hidden>Ask</button>
+    </form>
+    <p class="label free" id="free"></p>
+    <div class="chips" id="kinds" role="group" aria-label="Show"></div>
+    <div class="chips" id="cats" role="group" aria-label="Topic"></div>
+  </div>
+
+  <section class="out" id="answerWrap" hidden aria-live="polite"><div class="panel answer" id="answer"></div></section>
+  <p class="meta" id="shown" style="margin-top:var(--s5)"></p>
+  <section class="out" id="list" aria-label="Rules and lessons"></section>
+</div>
+
+<footer class="bot">
+  <span>PRIZM LABS</span>
+  <span class="right"><a href="/light.html">Light</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a></span>
+</footer>
+<script src="/studio.js?v=9" defer></script>
+<script>
+// Where the Ask answers come from (receiver/knowledge-ask.js). Empty = Ask is not switched on yet.
+const ASK_URL = "";
+// Where a visitor goes after their free questions. Empty = "unlimited access is coming".
+const PAY_URL = "";
+const FREE = 5;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fill = s => esc(s).replace(/\{([^}]{1,30})\}/g, "your $1");
+let items = [], state = {q: "", kind: "", cat: "", n: 40};
+
+// ---------- search: by words AND meaning, forgiving of typos, knows ecom words ----------
+const STOP = new Set("a an the and or but if then so to of in on at by for with from into onto about as is are was were be been being do does did doing done have has had i me my we our you your he she it its they them their this that these those what which who whom how why when where can could should would will shall may might must just get got gets getting go going make made want need like really also very not no yes any some all more most much many one ever there here than too up out over under again only own same each few other such let lets im ive dont isnt".split(" "));
+function stem(w) {
+  if (w.length <= 3 || /^\d/.test(w)) return w;
+  if (/ies$/.test(w) && w.length > 4) return w.slice(0, -3) + "y";
+  if (/(sses|xes|ches|shes)$/.test(w)) return w.slice(0, -2);
+  if (/ss$/.test(w)) return w;
+  if (/s$/.test(w)) w = w.slice(0, -1);
+  if (/ing$/.test(w) && w.length > 5) return w.slice(0, -3);
+  if (/ed$/.test(w) && w.length > 4) return w.slice(0, -2);
+  return w;
+}
+const toks = s => (String(s).toLowerCase().replace(/e-?commerce|e-?com\b/g, "ecommerce").match(/[a-z0-9$%]+/g) || []).filter(w => !STOP.has(w) && w.length > 1).map(stem);
+const SYN = ["ecommerce ecom dtc shopify store brand business", "start begin beginner launch first new basics foundation",
+  "budget spend scale raise increase scaling", "cpa cac cpp cost acquisition", "creator ugc influencer ambassador affiliate talent",
+  "ad ads creative creatives advert video", "hook opener intro scroll stopper thumbstop", "email flow flows newsletter sms",
+  "offer bundle discount upsell pricing price promo", "retention ltv subscription repeat churn lifetime",
+  "landing lp page funnel advertorial presell", "research avatar customer persona audience", "profit margin contribution cash",
+  "roas return", "hire hiring team editor freelancer contractor", "product sku hero", "test testing experiment",
+  "organic tiktok instagram reels content", "meta facebook fb"].map(g => g.split(" ").map(stem));
+const SYNOF = new Map();
+SYN.forEach(g => g.forEach(w => SYNOF.set(w, [...(SYNOF.get(w) || []), ...g.filter(x => x !== w)])));
+let IX = null;
+function buildIndex(dim, vec) {
+  const post = new Map(), dl = new Float32Array(items.length);
+  items.forEach((it, d) => {
+    const tf = new Map(), add = (s, w) => { for (const t of toks(s)) tf.set(t, (tf.get(t) || 0) + w); };
+    add(it.title, 3); add(it.text, 2); add(it.why, 1); add(it.when, 1); add(it.cat, 1);
+    let len = 0; tf.forEach((v, t) => { len += v; (post.get(t) || post.set(t, []).get(t)).push(d, v); });
+    dl[d] = len;
+  });
+  const V = vec && vec.byteLength === items.length * dim ? new Int8Array(vec) : null;
+  IX = {post, dl, avg: dl.reduce((a, b) => a + b, 0) / items.length, V, dim, vocab: [...post.keys()]};
+}
+function edits(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  let prev = Array.from({length: b.length + 1}, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i]; let best = i;
+    for (let j = 1; j <= b.length; j++) { cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); best = Math.min(best, cur[j]); }
+    if (best > max) return max + 1; prev = cur;
+  }
+  return prev[b.length];
+}
+function fixWord(t) {
+  if (IX.post.has(t) || t.length < 4) return t;
+  const max = t.length >= 7 ? 2 : 1; let best = null, bd = max + 1, bn = 0;
+  for (const v of IX.vocab) {
+    if (Math.abs(v.length - t.length) > max) continue;
+    const d = edits(t, v, max), n = IX.post.get(v).length;
+    if (d < bd || (d === bd && n > bn)) { best = v; bd = d; bn = n; }
+  }
+  return best || t;
+}
+function rank(q) {
+  const raw = toks(q), terms = raw.map(fixWord);
+  const fixed = raw.map((t, n) => t !== terms[n] ? terms[n] : null).filter(Boolean);
+  const want = new Map();
+  terms.forEach(t => { want.set(t, 1); (SYNOF.get(t) || []).forEach(s => want.set(s, Math.max(want.get(s) || 0, 0.35))); });
+  const N = items.length, k1 = 1.2, b = 0.75, sc = new Float32Array(N), hits = new Uint8Array(N);
+  want.forEach((w, t) => {
+    const p = IX.post.get(t); if (!p) return;
+    const df = p.length / 2, idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
+    for (let i = 0; i < p.length; i += 2) { const d = p[i], f = p[i + 1]; sc[d] += w * idf * (f * (k1 + 1)) / (f + k1 * (1 - b + b * IX.dl[d] / IX.avg)); if (w === 1) hits[d]++; }
+  });
+  const nq = Math.max(1, terms.filter(t => IX.post.has(t)).length);
+  for (let d = 0; d < N; d++) if (sc[d]) sc[d] *= 0.5 + 0.5 * (hits[d] / nq);
+  const byWords = [...sc.keys()].filter(d => sc[d] > 0).sort((a, c) => sc[c] - sc[a]).slice(0, 300);
+  let byMeaning = [];
+  if (IX.V && byWords.length) {
+    const dim = IX.dim, cen = new Float32Array(dim), cs = new Float32Array(N);
+    byWords.slice(0, 8).forEach((d, n) => { const w = 1 / (n + 1); for (let j = 0; j < dim; j++) cen[j] += w * IX.V[d * dim + j]; });
+    for (let d = 0; d < N; d++) { let s = 0; const o = d * dim; for (let j = 0; j < dim; j++) s += cen[j] * IX.V[o + j]; cs[d] = s; }
+    byMeaning = [...cs.keys()].sort((a, c) => cs[c] - cs[a]).slice(0, 200);
+  }
+  const fused = new Map();
+  byWords.forEach((d, r) => fused.set(d, (fused.get(d) || 0) + 1 / (30 + r)));
+  byMeaning.forEach((d, r) => fused.set(d, (fused.get(d) || 0) + 0.6 / (30 + r)));
+  return {order: [...fused.keys()].sort((a, c) => fused.get(c) - fused.get(a)), terms: [...want.keys()], fixed};
+}
+function marked(s, terms) {
+  const set = new Set(terms);
+  return fill(s).split(/([A-Za-z0-9$%]+)/).map(w => set.has(stem(w.toLowerCase())) && !STOP.has(w.toLowerCase()) ? `<mark>${w}</mark>` : w).join("");
+}
+
+// ---------- the list ----------
+let last = null;
+function card(it, terms) {
+  const pill = it.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
+  const t = terms || [];
+  return `<article class="card res" id="k${it.id}"><div class="meta" style="border:0;padding:0">${pill}<span>${esc(it.cat)}</span>${it.when ? `<span>${esc(it.when)}</span>` : ""}</div>
+    <h4>${marked(it.kind === "Rule" ? it.text : it.title, t)}</h4>${it.kind === "Lesson" ? `<p>${marked(it.text, t)}</p>` : ""}
+    ${it.why && it.why !== it.text ? `<p class="why"><b>Why:</b> ${marked(it.why, t)}</p>` : ""}</article>`;
+}
+function render() {
+  const keep = it => (!state.kind || it.kind === state.kind) && (!state.cat || it.cat === state.cat);
+  const q = state.q.trim();
+  let list, terms = null, note = "";
+  if (q) {
+    if (!last || last.q !== q) last = {q, ...rank(q)};
+    list = last.order.map(d => items[d]).filter(keep); terms = last.terms;
+    if (last.fixed.length) note = `Searching for ${last.fixed.join(", ")}. `;
+    $("shown").textContent = note + (list.length ? `${list.length.toLocaleString()} matches, best first` : "");
+  } else {
+    list = items.filter(keep);
+    $("shown").textContent = `${list.length.toLocaleString()} ${state.cat || "rules and lessons"}`;
+  }
+  if (!list.length) { $("list").innerHTML = `<p class="lede empty">Nothing on that yet.${ASK_URL ? " Try Ask." : ""}</p>`; return; }
+  $("list").innerHTML = list.slice(0, state.n).map(it => card(it, terms)).join("") +
+    (list.length > state.n ? `<button class="btn ghost more" id="more">Show more</button>` : "");
+  const m = $("more"); if (m) m.onclick = () => { state.n += 40; render(); };
+}
+function chips() {
+  const cats = {}; items.forEach(i => cats[i.cat] = (cats[i.cat] || 0) + 1);
+  const chip = (attr, v, label, on) => `<button type="button" class="btn${on ? "" : " ghost"}" data-${attr}="${esc(v)}" aria-pressed="${on}">${esc(label)}</button>`;
+  $("kinds").innerHTML = [["", "Everything"], ["Rule", "Rules"], ["Lesson", "Lessons"]].map(([v, l]) => chip("kind", v, l, state.kind === v)).join("");
+  $("cats").innerHTML = Object.entries(cats).sort((a, b) => b[1] - a[1]).map(([c]) => chip("cat", c, c, state.cat === c)).join("");
+  document.querySelectorAll("[data-kind]").forEach(b => b.onclick = () => { state.kind = b.dataset.kind; state.n = 40; chips(); render(); });
+  document.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { state.cat = state.cat === b.dataset.cat ? "" : b.dataset.cat; state.n = 40; chips(); render(); });
+}
+
+// ---------- Ask: a straight answer from the best matches, with the sources ----------
+const used = () => { try { return +localStorage.getItem("prizm-asked") || 0; } catch (e) { return 0; } };
+const setUsed = n => { try { localStorage.setItem("prizm-asked", n); } catch (e) {} };
+let pass = ""; try { pass = localStorage.getItem("prizm-pass") || ""; } catch (e) {}
+function freeLine(left) {
+  if (!ASK_URL) { $("free").textContent = ""; return; }
+  if (pass) { $("free").textContent = "Unlimited questions"; return; }
+  const l = left ?? Math.max(0, FREE - used());
+  $("free").textContent = l > 0 ? `${l} of ${FREE} free questions left` : "Free questions used";
+}
+function paywall() {
+  return `<p class="eyebrow">Free questions used</p><h3>You've asked your ${FREE} free questions.</h3>
+    <p>Search stays free and unlimited. For unlimited answers:</p>` +
+    (PAY_URL ? `<div class="btns"><a class="btn" href="${esc(PAY_URL)}">Get unlimited answers</a></div>` : `<p class="label">Unlimited access opens soon.</p>`);
+}
+async function ask() {
+  const q = $("q").value.trim();
+  if (!q || !ASK_URL) return;
+  state.q = q; state.n = 40; render();
+  const box = $("answer"); $("answerWrap").hidden = false;
+  if (!pass && used() >= FREE) { box.innerHTML = paywall(); return; }
+  const top = last.order.map(d => items[d]);
+  const srcs = [...top.filter(i => i.kind === "Rule").slice(0, 5), ...top.filter(i => i.kind === "Lesson").slice(0, 10)];
+  if (!srcs.length) { box.innerHTML = `<p>Nothing in the knowledge base on that yet.</p>`; return; }
+  box.innerHTML = `<p class="eyebrow">${esc(q)}</p><p class="label">Reading ${srcs.length} rules and lessons…</p>`;
+  $("ask").disabled = true;
+  try {
+    const r = await fetch(ASK_URL, {method: "POST", headers: {"Content-Type": "application/json", ...(pass ? {"X-Pass": pass} : {})},
+                                     body: JSON.stringify({q, ids: srcs.map(s => s.id)})});
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 402) { setUsed(FREE); freeLine(0); box.innerHTML = paywall(); return; }
+    if (!r.ok) throw new Error(d.error || "failed");
+    if (!pass) setUsed(used() + 1);
+    freeLine(d.left);
+    const html = esc(d.answer).split(/\n{2,}/).map(p => /^\s*[-•*] /m.test(p)
+      ? `<ul>${p.split(/\n/).filter(Boolean).map(l => `<li>${l.replace(/^\s*[-•*]\s*/, "")}</li>`).join("")}</ul>` : `<p>${p.replace(/\n/g, "<br>")}</p>`).join("")
+      .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+      .replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (m, g) => g.split(/\s*,\s*/).map(n => srcs[+n - 1] ? `<a class="go cite" href="#s${n}">${n}</a>` : "").join(""));
+    box.innerHTML = `<p class="eyebrow">${esc(q)}</p>${html}<div class="srcs">` +
+      srcs.map((s, n) => `<details id="s${n + 1}"><summary>${n + 1} · ${esc(s.kind)} · ${esc(s.title)}</summary>${card(s)}</details>`).join("") + `</div>`;
+    box.querySelectorAll(".cite").forEach(a => a.onclick = e => { e.preventDefault(); const d = $(a.getAttribute("href").slice(1)); if (d) { d.open = true; d.scrollIntoView({behavior: "smooth", block: "center"}); } });
+  } catch (e) {
+    box.innerHTML = `<p class="eyebrow">${esc(q)}</p><p>Couldn't get an answer that time. Try again in a minute.</p>`;
+  } finally { $("ask").disabled = false; }
+}
+
+let tq = 0;
+$("q").addEventListener("input", e => { clearTimeout(tq); tq = setTimeout(() => { state.q = e.target.value; state.n = 40; render(); }, 160); });
+$("form").addEventListener("submit", e => { e.preventDefault(); clearTimeout(tq); if (ASK_URL) ask(); else { state.q = $("q").value; render(); } });
+$("ask").addEventListener("click", ask);
+(async () => {
+  $("shown").textContent = "Loading the knowledge base…";
+  const [d, v] = await Promise.all([fetch("/knowledge/knowledge.json").then(r => r.json()),
+                                    fetch("/knowledge/knowledge.vec").then(r => r.ok ? r.arrayBuffer() : null).catch(() => null)]);
+  items = d.items;
+  buildIndex(d.dim, v);
+  const r = items.filter(i => i.kind === "Rule").length;
+  $("lede").textContent = `${r.toLocaleString()} decision rules and ${(items.length - r).toLocaleString()} lessons from running real brands: paid media, creative, creators, offers, retention. Search all of it free` + (ASK_URL ? `, or ask a question and get a straight answer from it.` : `.`);
+  if (ASK_URL) { $("ask").hidden = false; $("q").setAttribute("enterkeyhint", "send"); }
+  freeLine(); chips();
+  const q0 = new URLSearchParams(location.search).get("q");
+  if (q0) { $("q").value = q0; state.q = q0; }
+  render();
+})();
+</script>
+</html>

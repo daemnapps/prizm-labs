@@ -1,0 +1,16 @@
+name = "prizm-knowledge-ask"
+main = "knowledge-ask.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+ORIGIN    = "https://daemn.co"
+KNOWLEDGE = "https://daemn.co/knowledge/knowledge.json"
+MODEL     = "gemini-3.6-flash"
+FREE      = "5"
+DAILY_CAP = "500"
+
+# secret: GEMINI_API_KEY
+# binding: a KV namespace named ASKS (free-question counts, the daily count, passes)
+# [[kv_namespaces]]
+# binding = "ASKS"
+# id = "<filled in when the namespace is made>"
