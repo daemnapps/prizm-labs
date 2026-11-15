@@ -73,11 +73,11 @@
 </footer>
 <script src="/studio.js?v=9" defer></script>
 <script>
-// Where the Ask answers come from (receiver/knowledge-ask.js). Empty = Ask is not switched on yet.
+// The knowledge server (receiver/knowledge-ask.js). Empty = Ask is not switched on yet.
 const ASK_URL = "";
-// Where a visitor goes after their free questions. Empty = "unlimited access is coming".
+// The Stripe payment link for answer credits. Empty = "more answers open soon".
 const PAY_URL = "";
-const FREE = 5;
+const FREE = 5, PACK = "200 answers for $10";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -209,16 +209,44 @@ function chips() {
 const used = () => { try { return +localStorage.getItem("prizm-asked") || 0; } catch (e) { return 0; } };
 const setUsed = n => { try { localStorage.setItem("prizm-asked", n); } catch (e) {} };
 let pass = ""; try { pass = localStorage.getItem("prizm-pass") || ""; } catch (e) {}
+let credits = null; try { credits = localStorage.getItem("prizm-credits"); credits = credits === null ? null : +credits; } catch (e) {}
+const saveCredits = n => { credits = n; try { localStorage.setItem("prizm-credits", n); } catch (e) {} };
 function freeLine(left) {
   if (!ASK_URL) { $("free").textContent = ""; return; }
-  if (pass) { $("free").textContent = "Unlimited questions"; return; }
+  if (pass) { $("free").textContent = credits != null ? `${credits.toLocaleString()} answers left` : "Answers on your key"; return; }
   const l = left ?? Math.max(0, FREE - used());
   $("free").textContent = l > 0 ? `${l} of ${FREE} free questions left` : "Free questions used";
 }
-function paywall() {
-  return `<p class="eyebrow">Free questions used</p><h3>You've asked your ${FREE} free questions.</h3>
-    <p>Search stays free and unlimited. For unlimited answers:</p>` +
-    (PAY_URL ? `<div class="btns"><a class="btn" href="${esc(PAY_URL)}">Get unlimited answers</a></div>` : `<p class="label">Unlimited access opens soon.</p>`);
+function paywall(out) {
+  const head = out ? `<p class="eyebrow">Answers used</p><h3>Your key is out of answers.</h3>`
+                   : `<p class="eyebrow">Free questions used</p><h3>You've asked your ${FREE} free questions.</h3>`;
+  return head + `<p>Search stays free. Answers are pay as you go: ${PACK}. You get a key that works here and from your own AI tools.</p>` +
+    (PAY_URL ? `<div class="btns"><a class="btn" href="${esc(PAY_URL)}">Get ${PACK}</a></div>` : `<p class="label">Paid answers open soon.</p>`);
+}
+function keyPanel(key, n) {
+  const base = ASK_URL.replace(/\/ask$/, "");
+  return `<p class="eyebrow">Paid</p><h3>${n.toLocaleString()} answers added.</h3>
+    <p>They're on this browser now; just ask. To use them from your own AI or tools, keep this key:</p>
+    <pre><code>${esc(key)}</code></pre>
+    <details><summary>Use it from your own AI</summary>
+    <p>Get the best-matching rules and lessons for any question (one answer each), then hand them to whatever model you use:</p>
+    <pre><code>curl ${esc(base)}/search -H "Authorization: Bearer ${esc(key)}" -H "Content-Type: application/json" -d '{"q":"how do I scale a winning ad"}'</code></pre>
+    <p>Or get a written answer: the same call to <code>${esc(base)}/ask</code>.</p></details>`;
+}
+async function unlockFromPayment() {
+  const sid = new URLSearchParams(location.search).get("paid");
+  if (!sid || !ASK_URL) return;
+  history.replaceState(null, "", location.pathname);
+  const box = $("answer"); $("answerWrap").hidden = false;
+  box.innerHTML = `<p class="label">Adding your answers…</p>`;
+  try {
+    const r = await fetch(ASK_URL.replace(/\/ask$/, "") + "/unlock", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({session: sid})});
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    pass = d.key; try { localStorage.setItem("prizm-pass", pass); } catch (e) {}
+    saveCredits(d.credits); freeLine();
+    box.innerHTML = keyPanel(d.key, d.credits);
+  } catch (e) { box.innerHTML = `<p>We couldn't add your answers automatically (${esc(e.message || "error")}). Reply to your receipt and we'll sort it.</p>`; }
 }
 async function ask() {
   const q = $("q").value.trim();
@@ -226,19 +254,19 @@ async function ask() {
   state.q = q; state.n = 40; render();
   const box = $("answer"); $("answerWrap").hidden = false;
   if (!pass && used() >= FREE) { box.innerHTML = paywall(); return; }
+  if (pass && credits === 0) { box.innerHTML = paywall(true); return; }
   const top = last.order.map(d => items[d]);
   const srcs = [...top.filter(i => i.kind === "Rule").slice(0, 5), ...top.filter(i => i.kind === "Lesson").slice(0, 10)];
   if (!srcs.length) { box.innerHTML = `<p>Nothing in the knowledge base on that yet.</p>`; return; }
   box.innerHTML = `<p class="eyebrow">${esc(q)}</p><p class="label">Reading ${srcs.length} rules and lessons…</p>`;
   $("ask").disabled = true;
   try {
-    const r = await fetch(ASK_URL, {method: "POST", headers: {"Content-Type": "application/json", ...(pass ? {"X-Pass": pass} : {})},
+    const r = await fetch(ASK_URL, {method: "POST", headers: {"Content-Type": "application/json", ...(pass ? {"Authorization": "Bearer " + pass} : {})},
                                      body: JSON.stringify({q, ids: srcs.map(s => s.id)})});
     const d = await r.json().catch(() => ({}));
-    if (r.status === 402) { setUsed(FREE); freeLine(0); box.innerHTML = paywall(); return; }
+    if (r.status === 402) { if (pass) { saveCredits(0); freeLine(); box.innerHTML = paywall(true); } else { setUsed(FREE); freeLine(0); box.innerHTML = paywall(); } return; }
     if (!r.ok) throw new Error(d.error || "failed");
-    if (!pass) setUsed(used() + 1);
-    freeLine(d.left);
+    if (!pass) { setUsed(used() + 1); freeLine(d.left); } else { if (d.credits != null) saveCredits(d.credits); freeLine(); }
     const html = esc(d.answer).split(/\n{2,}/).map(p => /^\s*[-•*] /m.test(p)
       ? `<ul>${p.split(/\n/).filter(Boolean).map(l => `<li>${l.replace(/^\s*[-•*]\s*/, "")}</li>`).join("")}</ul>` : `<p>${p.replace(/\n/g, "<br>")}</p>`).join("")
       .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
@@ -264,7 +292,7 @@ $("ask").addEventListener("click", ask);
   const r = items.filter(i => i.kind === "Rule").length;
   $("lede").textContent = `${r.toLocaleString()} decision rules and ${(items.length - r).toLocaleString()} lessons from running real brands: paid media, creative, creators, offers, retention. Search all of it free` + (ASK_URL ? `, or ask a question and get a straight answer from it.` : `.`);
   if (ASK_URL) { $("ask").hidden = false; $("q").setAttribute("enterkeyhint", "send"); }
-  freeLine(); chips();
+  freeLine(); chips(); unlockFromPayment();
   const q0 = new URLSearchParams(location.search).get("q");
   if (q0) { $("q").value = q0; state.q = q0; }
   render();
