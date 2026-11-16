@@ -75,12 +75,12 @@ dialog::backdrop{background:color-mix(in srgb,var(--ink) 40%,transparent)}
     <div class="obj" data-obj="prism" role="img" aria-label="A glass prism splitting one beam of light into a spectrum"></div>
     <div class="kc-top"><p class="eyebrow">Ecommerce knowledge</p><span class="pill ready">Free in beta through Dec 31</span></div>
     <h1>Ask how it's done.</h1>
-    <p class="lede">Chat with 3,074 decision rules and lessons from operators running real brands, backed by $20M in revenue. Every answer shows the rules it came from.</p>
+    <p class="lede">Chat with 3,536 decision rules, lessons and how-it-works guides from operators running real brands, backed by $20M in revenue. Ask how anything is done, or how our AI system makes ads. Every answer shows where it came from.</p>
     <div class="kc-try" id="try">
       <button class="btn ghost" type="button">How do I get started with ecommerce?</button>
       <button class="btn ghost" type="button">When should I raise budget on a winning ad?</button>
-      <button class="btn ghost" type="button">What makes a hook stop the scroll?</button>
-      <button class="btn ghost" type="button">How do I keep customers buying again?</button>
+      <button class="btn ghost" type="button">Which video model do you use?</button>
+      <button class="btn ghost" type="button">How does a swipe become a finished ad?</button>
     </div>
   </section>
 
@@ -88,7 +88,7 @@ dialog::backdrop{background:color-mix(in srgb,var(--ink) 40%,transparent)}
 
   <form class="kc-dock" id="form">
     <div class="kc-box">
-      <textarea id="q" rows="1" placeholder="Ask anything about running a store…" aria-label="Your question" enterkeyhint="send"></textarea>
+      <textarea id="q" rows="1" placeholder="Ask anything: running a store, or how our AI makes ads…" aria-label="Your question" enterkeyhint="send"></textarea>
       <button class="btn" id="send" type="submit">Ask</button>
     </div>
     <div class="kc-under">
@@ -140,9 +140,9 @@ function sourcesHTML(src, text) {
   const used = citedIn(text), order = src.map((s, i) => i + 1).filter(n => used.has(n));
   if (!order.length) return "";
   return `<details class="kc-srcd"><summary>${order.length} source${order.length > 1 ? "s" : ""}</summary><ol class="kc-src">` + order.map(n => {
-    const s = src[n - 1], pill = s.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
+    const s = src[n - 1], pill = s.kind === "Rule" ? `<span class="pill stop">Rule</span>` : s.kind === "Guide" ? `<span class="pill ready">How it works</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
     return `<li data-n="${n}"><span class="num">${n}</span><div><div class="meta" style="border:0;padding:0">${pill}<span>${esc(s.topic || "")}</span></div>
-      <p>${fill(s.kind === "Rule" ? s.text : s.title + " — " + s.text)}</p>${s.why && s.why !== s.text ? `<p><b>Why:</b> ${fill(s.why)}</p>` : ""}</div></li>`;
+      ${s.kind === "Guide" ? `<p><b>${fill(s.title)}</b></p><p style="white-space:pre-line">${fill(s.text)}</p>` : `<p>${fill(s.kind === "Rule" ? s.text : s.title + " — " + s.text)}</p>`}${s.why && s.why !== s.text ? `<p><b>Why:</b> ${fill(s.why)}</p>` : ""}</div></li>`;
   }).join("") + `</ol></details>`;
 }
 function turnHTML(t) {
@@ -169,7 +169,7 @@ async function ask(q) {
   busy = true; $("send").disabled = true; $("q").value = ""; grow();
   $("empty").hidden = true; $("reset").hidden = false;
   const history = chat.slice(-4).map(t => ({q: t.q, a: t.a}));
-  $("log").insertAdjacentHTML("beforeend", `<div class="kc-me">${esc(q)}</div><div class="kc-it going"><div class="kc-text"><p class="label">Searching 3,074 rules and lessons…</p></div></div>`);
+  $("log").insertAdjacentHTML("beforeend", `<div class="kc-me">${esc(q)}</div><div class="kc-it going"><div class="kc-text"><p class="label">Searching 3,536 rules, lessons and guides…</p></div></div>`);
   const it = $("log").lastElementChild, box = it.querySelector(".kc-text");
   toBottom();
   let text = "", src = [];

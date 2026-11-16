@@ -162,7 +162,8 @@ async function charge(env, request, explicitKey) {
   return { ok: true, commit: () => env.ASKS.put(k, String(used + 1), { expirationTtl: 2592000 }), left: FREE - used - 1, free: true };
 }
 
-const SYSTEM = `You answer questions about running and growing an ecommerce brand, from a knowledge base of decision rules and lessons written by operators who run real brands.
+const SYSTEM = `You answer questions about running and growing an ecommerce brand, and about how our AI marketing system works, from a knowledge base of decision rules, lessons and how-it-works guides written by operators who run real brands.
+HOW IT WORKS sources describe our own system: its parts, which model or tool does each job, what goes in and comes out, and what hands to what. For "what do you use", "which model", "how does X work" questions, answer from them, speak as "we", and name the models and tools exactly.
 Answer ONLY from the numbered SOURCES. Cite every point with its number in square brackets, like [3] or [2, 5]. Rules are how it is done now and win over lessons when they differ.
 If the sources do not cover the question, say so in one line and give what is closest.
 If there is a CONVERSATION SO FAR, the question may follow up on it ("what about email?", "say more about 2"): answer it in that context, still only from the SOURCES.
@@ -177,10 +178,13 @@ const pub = it => ({ id: it.id, kind: it.kind, title: it.title, text: it.text, w
 async function pickSources(env, K, q, ids) {
   ids = [...new Set((Array.isArray(ids) ? ids : []).map(Number).filter(Number.isInteger))].slice(0, 15);
   let src = ids.map(i => K.byId.get(i)).filter(Boolean);
-  if (!src.length) { const top = await rank(K, q, 40, env); src = [...top.filter(i => i.kind === "Rule").slice(0, 5), ...top.filter(i => i.kind !== "Rule").slice(0, 10)]; }
+  if (!src.length) {
+    const top = await rank(K, q, 45, env), of = k => top.filter(i => i.kind === k);
+    src = [...of("Guide").slice(0, 5), ...of("Rule").slice(0, 5), ...of("Lesson").slice(0, 6)].slice(0, 15);
+  }
   return src;
 }
-const sourceText = src => src.map((s, n) => `[${n + 1}] ${s.kind === "Rule" ? "RULE" : "LESSON"} · ${s.cat}\n${s.kind === "Rule" ? s.text : s.title + " — " + s.text}` +
+const sourceText = src => src.map((s, n) => `[${n + 1}] ${s.kind === "Rule" ? "RULE" : s.kind === "Guide" ? "HOW IT WORKS" : "LESSON"} · ${s.cat}\n${s.kind === "Rule" ? s.text : s.title + " — " + s.text}` +
   (s.why ? `\nWhy: ${s.why}` : "") + (s.when ? `\nWhen: ${s.when}` : "")).join("\n\n");
 // The conversation so far (a chat page sends it): the last 4 turns, each cut short.
 const turns = h => (Array.isArray(h) ? h : []).slice(-4).map(t => ({ q: String(t?.q || "").slice(0, 400), a: String(t?.a || "").slice(0, 1500) })).filter(t => t.q && t.a);
@@ -281,7 +285,7 @@ async function freeKey(env, request) {
 const TOOLS = [
   { name: "search_knowledge", title: "Search ecommerce knowledge",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
-    description: "Search 3,000 decision rules and lessons written by operators who run real ecommerce (DTC) brands: paid media and Meta ads, budgets and scaling, creative and hooks, UGC and creators, offers and pricing, landing pages, email and SMS, retention and LTV, research, hiring and operations. Returns the best-matching rules (how it is done now) and lessons (why), to answer from. Use it for any question about starting, running or growing an online store. One use per call.",
+    description: "Search 3,000+ decision rules, lessons and how-it-works guides written by operators who run real ecommerce (DTC) brands with an AI marketing system: paid media and Meta ads, budgets and scaling, creative and hooks, UGC and creators, offers and pricing, landing pages, email and SMS, retention and LTV, research, operations, and how the AI system makes ads (which image, video, voice and music models do which job, how to prompt them, how a swipe becomes a finished ad). Returns the best matches to answer from. Use it for any question about starting, running or growing an online store. One use per call.",
     inputSchema: { type: "object", properties: { query: { type: "string", description: "The question or topic, in plain words." },
                                                  limit: { type: "integer", description: "How many to return, 1 to 25 (default 10).", minimum: 1, maximum: 25 } },
                    required: ["query"] } },
