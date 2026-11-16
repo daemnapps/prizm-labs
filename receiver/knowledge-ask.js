@@ -55,8 +55,8 @@ const SYNOF = new Map();
 async function knowledge(env) {
   if (KB && Date.now() - KB_AT < 3600e3) return KB;
   const [d, vb] = await Promise.all([
-    fetch(env.KNOWLEDGE, { cf: { cacheTtl: 3600 } }).then(r => r.json()),
-    fetch(env.KNOWLEDGE.replace(/\.json$/, ".vec"), { cf: { cacheTtl: 3600 } }).then(r => r.ok ? r.arrayBuffer() : null).catch(() => null)]);
+    fetch(env.KNOWLEDGE + "?v=" + (env.KB_VERSION || "1"), { cf: { cacheTtl: 3600 } }).then(r => r.json()),
+    fetch(env.KNOWLEDGE.replace(/\.json$/, ".vec") + "?v=" + (env.KB_VERSION || "1"), { cf: { cacheTtl: 3600 } }).then(r => r.ok ? r.arrayBuffer() : null).catch(() => null)]);
   const post = new Map(), dl = [];
   d.items.forEach((it, i) => {
     const tf = new Map(), add = (s, w) => { for (const t of toks(s)) tf.set(t, (tf.get(t) || 0) + w); };
