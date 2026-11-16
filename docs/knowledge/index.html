@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#EFE9E1">
-<meta name="description" content="Ask how ecommerce is done: 3,000 decision rules and lessons from operators running real brands. Straight answers with their sources, free in beta. Plug it into Claude, ChatGPT, Codex or Cursor.">
+<meta name="description" content="Chat with 3,000 ecommerce rules and lessons from operators running real brands. Straight answers with their sources, free in beta. Plug it into Claude, ChatGPT, Codex or Cursor.">
 <title>Knowledge — PRIZM LABS</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -15,53 +15,49 @@
 <style>
 /* Layout only. */
 html{overflow-x:clip}
-.kx-hero{position:relative;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:center;gap:var(--s6);min-height:calc(100svh - 72px);padding-block:var(--s7)}
-.kx-hero .bloom{width:46%;aspect-ratio:1;right:2%;top:18%}
-.kx-copy{position:relative;z-index:1;display:grid;gap:var(--s4)}
-.kx-ask{display:flex;gap:var(--s2);padding:6px;border:1px solid var(--line-2);border-radius:var(--r4);background:var(--card);transition:border-color .2s}
-.kx-ask:focus-within{border-color:var(--indigo)}
-.kx-ask input{flex:1;min-width:0;font:17px var(--body);padding:12px 16px;border:0;background:none;color:var(--ink);outline:0}
-.kx-ask .btn,.kx-chips .btn,.kx-copybtn{cursor:pointer;transition:transform .15s}
-.kx-ask .btn:hover,.kx-chips .btn:hover{transform:translateY(-1px)}
-.kx-ask .btn:active,.kx-chips .btn:active{transform:translateY(1px)}
-.kx-chips{display:flex;flex-wrap:wrap;gap:var(--s2)}
-.kx-chips .btn{text-transform:none;letter-spacing:0;font-size:12.5px;padding:9px 14px}
-.kx-sec{padding-block:var(--s8);display:grid;gap:var(--s4)}
-.kx-frame{background:var(--card);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
-.kx-bar{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);align-items:baseline;justify-content:space-between;padding:var(--s4) var(--s5);border-bottom:1px solid var(--line);background:var(--paper)}
-.kx-bar h3{margin:0;font-size:clamp(17px,2vw,22px)}
-.kx-body{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
-.kx-ans{padding:var(--s5);display:grid;gap:var(--s3);align-content:start;font-size:16.5px;line-height:1.6}
-.kx-ans p,.kx-ans li{max-width:var(--measure);margin:0}
-.kx-ans ul{margin:0;padding-left:var(--s5);display:grid;gap:var(--s2)}
-.kx-ans > p:first-child:not(.label){font-size:clamp(18px,1.8vw,21px);line-height:1.45;color:var(--ink)}
-.kx-ans.going > :last-child::after{content:"";display:inline-block;width:8px;height:1.05em;margin-left:3px;vertical-align:-2px;background:var(--indigo);animation:kx-blink .9s steps(1) infinite}
-@keyframes kx-blink{50%{opacity:0}}
+.kc{max-width:780px;margin-inline:auto;padding-inline:var(--gutter);min-height:calc(100svh - 160px);display:flex;flex-direction:column}
+.kc-empty{flex:1;display:grid;place-content:center;justify-items:center;text-align:center;gap:var(--s4);padding-block:var(--s6)}
+.kc-empty[hidden]{display:none}
+.kc-empty .obj{width:clamp(120px,22vw,200px)}
+.kc-empty .lede{margin-inline:auto}
+.kc-top{display:flex;flex-wrap:wrap;gap:var(--s2);justify-content:center;align-items:center}
+.kc-try{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2);width:100%;max-width:620px;margin-top:var(--s2)}
+.kc-try .btn{text-transform:none;letter-spacing:0;font-size:13px;line-height:1.35;padding:12px 14px;text-align:left;white-space:normal;cursor:pointer;transition:transform .15s}
+.kc-try .btn:hover{transform:translateY(-2px)}
+.kc-log{display:grid;gap:var(--s5);padding-block:var(--s6) var(--s5)}
+.kc-me{justify-self:end;max-width:85%;background:var(--ink);color:var(--bone);padding:10px 16px;border-radius:var(--r3);font-size:16px;line-height:1.45;white-space:pre-wrap}
+.kc-it{display:grid;gap:var(--s3);font-size:16.5px;line-height:1.62}
+.kc-it p,.kc-it li{margin:0;max-width:var(--measure)}
+.kc-it ul{margin:0;padding-left:var(--s5);display:grid;gap:var(--s2)}
+.kc-it.going .kc-text > p:last-child::after,.kc-it.going .kc-text > ul:last-child > li:last-child::after{content:"";display:inline-block;width:8px;height:1.05em;margin-left:3px;vertical-align:-2px;background:var(--indigo);animation:kc-blink .9s steps(1) infinite}
+@keyframes kc-blink{50%{opacity:0}}
 .cite{font:500 10.5px/1 var(--mono);color:var(--indigo);background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r4);padding:3px 6px;margin-left:3px;vertical-align:2px;cursor:pointer;transition:background .15s,color .15s}
 .cite:hover{background:var(--indigo);color:var(--bone)}
-.kx-srcs{list-style:none;margin:0;padding:var(--s4);display:grid;gap:var(--s2);align-content:start;border-left:1px solid var(--line);background:var(--paper)}
-.kx-src{display:grid;grid-template-columns:auto 1fr;gap:var(--s1) var(--s3);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r2);background:var(--card);font-size:13.5px;line-height:1.45;transition:border-color .3s,opacity .3s,transform .3s}
-.kx-src .num{font:500 11px/1.6 var(--mono);color:var(--ink-3)}
-.kx-src p{margin:0;color:var(--ink-2)}
-.kx-src.lit{border-color:var(--indigo)}
-.kx-src.lit .num{color:var(--indigo)}
-.kx-src.dim{opacity:.6}
-.kx-src.flash{transform:translateX(-4px)}
-.kx-src.in{animation:kx-in .35s both}
-@keyframes kx-in{from{opacity:0;transform:translateY(6px)}}
-.kx-addr{display:flex;gap:var(--s2);align-items:stretch}
-.kx-addr pre{flex:1;min-width:0;margin:0;white-space:pre-wrap;word-break:break-all;font-size:14px}
-.kx-plug{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:var(--s3)}
-.kx-plug .card{display:grid;gap:var(--s2);align-content:start;transition:transform .2s}
-.kx-plug .card:hover{transform:translateY(-2px)}
-.kx-plug img{width:30px;height:30px}
-.kx-plug pre{margin:0;white-space:pre-wrap;word-break:break-all;font-size:12px}
-.res{display:grid;gap:var(--s2)} .res h4,.res .why{margin:0}
-.res mark{background:color-mix(in srgb,var(--amber) 28%,transparent);color:inherit;padding:0 2px;border-radius:var(--r1)}
-.kx-list{display:grid;gap:var(--s3)} .kx-list .more{justify-self:start;cursor:pointer}
-@media (max-width:860px){.kx-hero{grid-template-columns:1fr;min-height:0}.kx-hero .obj,.kx-hero .bloom{display:none}.kx-body{grid-template-columns:1fr}.kx-srcs{border-left:0;border-top:1px solid var(--line)}.kx-src.dim{display:none}}
-@media (max-width:640px){.kx-ask{flex-wrap:wrap;border-radius:var(--r3)}.kx-ask .btn{flex:1 1 100%;text-align:center}#cats{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scrollbar-width:none}#cats .btn{flex:none}.kx-addr{flex-wrap:wrap}.kx-addr .btn{flex:1 1 100%;text-align:center}}
-@media (prefers-reduced-motion:reduce){.kx-ans.going > :last-child::after,.kx-src.in{animation:none}}
+.kc-reading{display:flex;flex-wrap:wrap;gap:6px}
+.kc-reading .pill{animation:kc-in .3s both}
+@keyframes kc-in{from{opacity:0;transform:translateY(4px)}}
+.kc-src{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.kc-src li{display:grid;grid-template-columns:auto 1fr;gap:var(--s3);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r2);background:var(--card);font-size:13.5px;line-height:1.45;transition:border-color .3s}
+.kc-src li.lit{border-color:var(--indigo)}
+.kc-src .num{font:500 11px/1.6 var(--mono);color:var(--indigo)}
+.kc-src p{margin:2px 0 0;color:var(--ink-2)}
+.kc-dock{position:sticky;bottom:0;z-index:5;padding:var(--s3) 0 calc(var(--s3) + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bone) 70%,transparent)}
+.kc-box{display:flex;gap:var(--s2);align-items:flex-end;padding:6px 6px 6px 18px;border:1px solid var(--line-2);border-radius:var(--r3);background:var(--card);transition:border-color .2s}
+.kc-box:focus-within{border-color:var(--indigo)}
+.kc-box textarea{flex:1;min-width:0;resize:none;border:0;outline:0;background:none;font:16.5px/1.45 var(--body);color:var(--ink);padding:10px 0;max-height:180px}
+.kc-box .btn{cursor:pointer;flex:none}
+.kc-under{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);justify-content:space-between;align-items:center;margin-top:var(--s2)}
+.kc-under button{background:none;border:0;padding:4px 0;cursor:pointer}
+.kc-under button:hover{color:var(--indigo)}
+dialog.panel{margin:auto;max-width:min(720px,calc(100vw - 2 * var(--gutter)));width:100%;max-height:calc(100svh - 48px);overflow:auto;border-color:var(--line-2)}
+dialog::backdrop{background:color-mix(in srgb,var(--ink) 40%,transparent)}
+.kc-plug{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3);margin-top:var(--s4)}
+.kc-plug .card{display:grid;gap:var(--s2);align-content:start;padding:var(--s4)}
+.kc-plug img{width:26px;height:26px}
+.kc-plug pre,.kc-addr pre{margin:0;white-space:pre-wrap;word-break:break-all;font-size:12px}
+.kc-addr{display:flex;gap:var(--s2);margin-top:var(--s3)} .kc-addr pre{flex:1;min-width:0;font-size:13px}
+@media (max-width:640px){.kc-try,.kc-plug{grid-template-columns:1fr}.kc-try .btn:nth-child(n+3){display:none}.kc-addr{flex-wrap:wrap}.kc-addr .btn{flex:1 1 100%;text-align:center}}
+@media (prefers-reduced-motion:reduce){.kc-it.going .kc-text > p:last-child::after,.kc-it.going .kc-text > ul:last-child > li:last-child::after,.kc-reading .pill{animation:none}}
 </style>
 
 <nav class="bar">
@@ -74,124 +70,111 @@ html{overflow-x:clip}
     </span>
 </nav>
 
-<div class="wrap">
-  <header class="kx-hero">
-    <div class="bloom" aria-hidden="true"></div>
-    <div class="kx-copy">
-      <div class="kx-chips"><p class="eyebrow">Ecommerce knowledge</p><span class="pill ready">Free in beta through Dec 31</span></div>
-      <h1>Ask how it's done.</h1>
-      <p class="lede" id="lede">3,000 decision rules and lessons from operators running real brands. Ask anything about starting, running or scaling a store and get a straight answer, with the rules it came from.</p>
-      <form class="kx-ask" id="form" role="search">
-        <input id="q" type="search" placeholder="How do I get started with ecommerce?" aria-label="Your question" autocomplete="off" enterkeyhint="send">
-        <button class="btn" id="ask" type="submit">Ask</button>
-      </form>
-      <div class="kx-chips" id="try" aria-label="Try a question">
-        <button class="btn ghost" type="button">How do I get started with ecommerce?</button>
-        <button class="btn ghost" type="button">When should I raise budget on a winning ad?</button>
-        <button class="btn ghost" type="button">What makes a hook stop the scroll?</button>
-        <button class="btn ghost" type="button">How do I keep customers buying again?</button>
-      </div>
-    </div>
-    <div class="obj xl" data-obj="prism" role="img" aria-label="A glass prism splitting one beam of light into a spectrum"></div>
-  </header>
-
-  <section class="kx-sec" id="stage" aria-live="polite">
-    <p class="eyebrow">The answer</p>
-    <div class="kx-frame">
-      <div class="kx-bar"><h3 id="aq">How do I scale a winning ad?</h3><span class="label" id="ast">Example answer</span></div>
-      <div class="kx-body">
-        <div class="kx-ans" id="ans"></div>
-        <ol class="kx-srcs" id="srcs" aria-label="Sources"></ol>
-      </div>
+<main class="kc">
+  <section class="kc-empty" id="empty">
+    <div class="obj" data-obj="prism" role="img" aria-label="A glass prism splitting one beam of light into a spectrum"></div>
+    <div class="kc-top"><p class="eyebrow">Ecommerce knowledge</p><span class="pill ready">Free in beta through Dec 31</span></div>
+    <h1>Ask how it's done.</h1>
+    <p class="lede">Chat with 3,053 decision rules and lessons from operators running real brands. Every answer shows the rules it came from.</p>
+    <div class="kc-try" id="try">
+      <button class="btn ghost" type="button">How do I get started with ecommerce?</button>
+      <button class="btn ghost" type="button">When should I raise budget on a winning ad?</button>
+      <button class="btn ghost" type="button">What makes a hook stop the scroll?</button>
+      <button class="btn ghost" type="button">How do I keep customers buying again?</button>
     </div>
   </section>
 
-  <div class="beam"></div>
+  <div class="kc-log" id="log" aria-live="polite"></div>
 
-  <section class="kx-sec" id="plug" style="--hue:var(--indigo)">
-    <p class="eyebrow">Plug it into your AI</p>
-    <h2>Ask it from Claude, ChatGPT, Codex or Cursor.</h2>
-    <p class="lede">Paste one address into your AI. It pulls from these rules on its own whenever you ask about running a store. No sign-up, free through Dec 31.</p>
-    <div class="kx-addr"><pre><code id="mcp"></code></pre><button class="btn kx-copybtn" id="copy" type="button">Copy address</button></div>
-    <div class="kx-plug">
-      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/claude-color.svg" alt="" width="30" height="30"><h4>Claude</h4><p>Settings → Connectors → Add custom connector. Name it Prizm Knowledge, paste the address, Add.</p></div>
-      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/openai.svg" alt="" width="30" height="30"><h4>ChatGPT</h4><p>Settings → Apps &amp; Connectors → Advanced → turn on Developer mode. Create, paste the address, No authentication.</p></div>
-      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/openai.svg" alt="" width="30" height="30"><h4>Codex</h4><p>One line in your terminal:</p><pre><code class="mcpline" data-tpl="codex mcp add prizm --url {u}"></code></pre></div>
-      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/cursor.svg" alt="" width="30" height="30"><h4>Cursor &amp; Claude Code</h4><p>Cursor: Settings → MCP → Add server. Claude Code:</p><pre><code class="mcpline" data-tpl="claude mcp add --transport http prizm {u}"></code></pre></div>
+  <form class="kc-dock" id="form">
+    <div class="kc-box">
+      <textarea id="q" rows="1" placeholder="Ask anything about running a store…" aria-label="Your question" enterkeyhint="send"></textarea>
+      <button class="btn" id="send" type="submit">Ask</button>
     </div>
-  </section>
+    <div class="kc-under">
+      <span class="label">Answers only from the knowledge base · free through Dec 31</span>
+      <span><button class="label" id="plugOpen" type="button">Use it in your AI</button> <button class="label" id="reset" type="button" hidden>· New chat</button></span>
+    </div>
+  </form>
+</main>
 
-  <div class="beam"></div>
-
-  <section class="kx-sec" id="browse">
-    <p class="eyebrow">Browse</p>
-    <h2 id="bh">Every rule and lesson.</h2>
-    <form class="kx-ask" id="bform" role="search"><input id="bq" type="search" placeholder="Search: hooks, budget, email, offers…" aria-label="Search the rules and lessons" autocomplete="off"></form>
-    <div class="kx-chips" id="kinds" role="group" aria-label="Show"></div>
-    <div class="kx-chips" id="cats" role="group" aria-label="Topic"></div>
-    <p class="meta" id="shown"></p>
-    <div class="kx-list" id="list" aria-label="Rules and lessons"></div>
-  </section>
-</div>
+<dialog class="panel" id="plug" aria-labelledby="plugT">
+  <form method="dialog" style="float:right"><button class="btn ghost" type="submit">Close</button></form>
+  <p class="eyebrow">Plug it into your AI</p>
+  <h3 id="plugT">Ask it from Claude, ChatGPT, Codex or Cursor.</h3>
+  <p>Paste this address into your AI. It pulls from these rules on its own whenever you ask about running a store. No sign-up, free through Dec 31.</p>
+  <div class="kc-addr"><pre><code id="mcp"></code></pre><button class="btn" id="copy" type="button">Copy address</button></div>
+  <div class="kc-plug">
+    <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/claude-color.svg" alt="" width="26" height="26"><h4>Claude</h4><p>Settings → Connectors → Add custom connector. Name it Prizm Knowledge, paste the address, Add.</p></div>
+    <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/openai.svg" alt="" width="26" height="26"><h4>ChatGPT</h4><p>Settings → Apps &amp; Connectors → Advanced → Developer mode on. Create, paste the address, No authentication.</p></div>
+    <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/openai.svg" alt="" width="26" height="26"><h4>Codex</h4><pre><code class="mcpline" data-tpl="codex mcp add prizm --url {u}"></code></pre></div>
+    <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/cursor.svg" alt="" width="26" height="26"><h4>Cursor &amp; Claude Code</h4><p>Cursor: Settings → MCP → Add server.</p><pre><code class="mcpline" data-tpl="claude mcp add --transport http prizm {u}"></code></pre></div>
+  </div>
+</dialog>
 
 <footer class="bot">
   <span>PRIZM LABS</span>
   <span class="right"><a href="/light.html">Light</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a></span>
 </footer>
-<script type="application/json" id="example">{"q":"How do I scale a winning ad?","answer":"Scale a winning ad by preserving its proven core structure while iterating on hooks, avatars, awareness stages, and formats across multiple creators.\n\n- Mark every element of a winning ad as LOCK or LEVER, rank levers by estimated impact, and test the highest-impact variations first [1].\n- Double down on top-performing formats by creating a dedicated production chain and piping variations through similar swipes [2].\n- Keep the core message and format of the winning ad, but remake it for lower awareness stages like problem-aware and unaware audiences [3].\n- Keep the body of a proven creator ad and test new opener variations by altering or animating the hook [4].\n- Analyze winning ads with video-analysis tools to tie performance metrics to specific elements for future roadmaps and variations [7].\n- Rebuild the winner by keeping the exact same structure and dropping in new sub-avatar details [8].\n- Scale high-frequency core messages by having many creators and formats explain the same message [11].","sources":[{"id":14,"kind":"Rule","title":"Plan variations of a proven ad by marking every element LOCK (keep exactly) or LEVER (test), with evidence…","text":"Plan variations of a proven ad by marking every element LOCK (keep exactly) or LEVER (test), with evidence from the {brand}'s whole post corpus, then rank the levers by estimated impact and move the highest-impact ones first.","why":"Start adjusting the highest-impact opportunities on what already worked instead of guessing.","when":"Building variations from a winning video ad.","topic":"Creative"},{"id":1059,"kind":"Rule","title":"When one ad format beats everything, double down: build a dedicated chain for that format and pipe variations…","text":"When one ad format beats everything, double down: build a dedicated chain for that format and pipe variations through every similar swipe for new products.","why":"The top advertorial outsold everything else, so its format should be multiplied.","when":"Scaling a winning format","topic":"Strategy"},{"id":1429,"kind":"Lesson","title":"Scale a winner by moving it across awareness stages","text":"Scale a winner by keeping its core message and format and remaking it for the next awareness stage down: more problem-aware, then unaware versions. Once a format works, scaling is changing the traffic temperature, not inventing something new.","why":"Once a format works, scaling is changing the temperature of the traffic, not inventing something new.","when":"scaling a winning ad","topic":"Creative"},{"id":1690,"kind":"Lesson","title":"Make hook variations from a winning creator ad","text":"Make hook variations from a winning {creator} ad by screenshotting the creator, removing the text, and animating them with an AI video model or stitching them onto other clips. The body of the proven ad stays; only the opener changes.","why":"The body of a proven ad stays; only the opener changes.","when":"iterating on winning creator ads","topic":"Video"},{"id":1351,"kind":"Lesson","title":"Ship only one or two creatives a week until one hits","text":"Ship only a few creative batches a week until one hits, find the core message, then hand the winner to {creator}s to scale. Quality and learning beat volume before there is a winner.","why":"Quality and learning beat volume before there is a winner.","when":"early-stage brand without a winning ad","topic":"Creative"},{"id":2887,"kind":"Lesson","title":"Organic vibe plus direct-response fundamentals = the ads that scale","text":"The ads that scale sit where organic style and vibe overlap with direct-response fundamentals tested on large ad spend (clear problem, structure, social proof). Pure vibe gets views, not sales.","why":"Viral videos and videos that sell millions are different things.","when":"short-form video ads for paid social","topic":"Creative"},{"id":2748,"kind":"Lesson","title":"Feed winning videos to an analyzer and tie results to elements","text":"Run winning videos through a video-analysis tool to pull out why they worked, tie that to the ad's numbers, and use it for the next content roadmap, headlines and variations. It replaces a strategist's manual breakdown.","why":"It replaces a creative strategist's manual breakdown.","when":"creative analysis of winning video ads","topic":"AI systems"},{"id":1283,"kind":"Lesson","title":"Rebuild a winner from its parts","text":"Break a winning ad into characters, scenes, elements and transcript, drop new sub-{avatar} details into that same framework, and generate the new scenes. The winning structure is kept and only the person changes.","why":"The structure that won is kept, and only the person changes.","when":"making variations of a proven ad","topic":"Creative"},{"id":2049,"kind":"Lesson","title":"Revitalize a winning ad: update language only, keep the structure","text":"To revitalize a winning ad, give the AI the original script, the scene-by-scene and the creative learnings, and update only the language for the new campaign, not the format or copy structure; then write a detailed scene-by-scene for {editor}s.","why":"The ad worked for known reasons; change the words, not the winning structure.","when":"refreshing a past winner","topic":"Creative"},{"id":2303,"kind":"Lesson","title":"Grow value per customer because scaling ad spend raises costs","text":"Expect the cost of new customers to rise as {brand} scales paid spend; protect margin by raising AOV on the first order and LTV on every order after through offers, upsells and subscriptions.","why":"Higher value per customer is the way out of rising acquisition costs.","when":"paid media at scale / Meta and Google","topic":"Strategy"},{"id":2058,"kind":"Lesson","title":"Scale by multiplying formats and creators for a few core messages","text":"Scaling isn't writing more scripts; it's taking a few high-frequency core messages and having many {creator}s and formats explain the same message.","why":"A few proven messages repeated by many voices resonate.","when":"creative scaling strategy","topic":"Strategy"},{"id":1450,"kind":"Lesson","title":"Check the new ads column to see who is scaling","text":"In an ad-intelligence tool's domains view, use the new-ads count to see whether a competitor is scaling up or down. A rising count signals a winner; a falling one, a failing one.","why":"A rising count signals a winner; a falling one signals a failing one.","when":"competitor monitoring","topic":"Research"}]}</script>
 <script src="/studio.js?v=9" defer></script>
 <script>
 const SERVER = "https://prizm-knowledge.ddixon.workers.dev";
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fill = s => esc(s).replace(/\{([^}]{1,30})\}/g, "your $1");
+const KEEP = "prizm-chat";
 
-// ---------- the answer stage: sources first, then the words as they're written ----------
-let srcs = [], ctl = null;
-function srcItem(s, n) {
-  const pill = s.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
-  return `<li class="kx-src" id="s${n}"><span class="num">${String(n).padStart(2, "0")}</span>
-    <div><div class="meta" style="border:0;padding:0">${pill}<span>${esc(s.topic || s.cat || "")}</span></div>
-    <p>${fill(s.kind === "Rule" ? s.text : s.title)}</p></div></li>`;
-}
-function showSources(list, stagger) {
-  srcs = list;
-  $("srcs").innerHTML = list.map((s, i) => srcItem(s, i + 1)).join("");
-  if (stagger) [...$("srcs").children].forEach((li, i) => { li.classList.add("in"); li.style.animationDelay = (i * 45) + "ms";
-    li.addEventListener("animationend", () => { li.classList.remove("in"); li.style.animationDelay = ""; }, {once: true}); });
-}
-function format(text) {
+// The chat: [{q, a, sources}], kept in this browser so a reload doesn't lose it.
+let chat = [];
+try { chat = JSON.parse(localStorage.getItem(KEEP) || "[]"); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEEP, JSON.stringify(chat.slice(-20))); } catch (e) {} };
+
+const citedIn = text => new Set([...text.matchAll(/\[(\d+(?:\s*,\s*\d+)*)\]/g)].flatMap(m => m[1].split(/\s*,\s*/).map(Number)));
+function format(text, n) {
   return esc(text).split(/\n{2,}/).filter(p => p.trim()).map(p => /^\s*[-•*] /m.test(p)
       ? `<ul>${p.split(/\n/).filter(Boolean).map(l => `<li>${l.replace(/^\s*[-•*]\s*/, "")}</li>`).join("")}</ul>` : `<p>${p.replace(/\n/g, "<br>")}</p>`).join("")
     .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
-    .replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (m, g) => g.split(/\s*,\s*/).map(n => srcs[+n - 1] ? `<button class="cite" data-n="${n}" aria-label="Source ${n}">${n}</button>` : "").join(""));
+    .replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (m, g) => g.split(/\s*,\s*/).map(k => +k >= 1 && +k <= n ? `<button class="cite" type="button" data-n="${k}" aria-label="Source ${k}">${k}</button>` : "").join(""));
 }
-function light(text, done) {
-  const cited = new Set([...text.matchAll(/\[(\d+(?:\s*,\s*\d+)*)\]/g)].flatMap(m => m[1].split(/\s*,\s*/).map(Number)));
-  [...$("srcs").children].forEach((li, i) => { li.classList.toggle("lit", cited.has(i + 1)); li.classList.toggle("dim", done && !cited.has(i + 1)); });
-  return cited.size;
+function sourcesHTML(src, text) {
+  const used = citedIn(text), order = src.map((s, i) => i + 1).filter(n => used.has(n));
+  if (!order.length) return "";
+  return `<details class="kc-srcd"><summary>${order.length} source${order.length > 1 ? "s" : ""}</summary><ol class="kc-src">` + order.map(n => {
+    const s = src[n - 1], pill = s.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
+    return `<li data-n="${n}"><span class="num">${n}</span><div><div class="meta" style="border:0;padding:0">${pill}<span>${esc(s.topic || "")}</span></div>
+      <p>${fill(s.kind === "Rule" ? s.text : s.title + " — " + s.text)}</p>${s.why && s.why !== s.text ? `<p><b>Why:</b> ${fill(s.why)}</p>` : ""}</div></li>`;
+  }).join("") + `</ol></details>`;
 }
-function draw(text, going) {
-  $("ans").innerHTML = format(text) || `<p class="label">Reading ${srcs.length} rules and lessons…</p>`;
-  $("ans").classList.toggle("going", going);
-  return light(text, !going);
+function turnHTML(t) {
+  return `<div class="kc-me">${esc(t.q)}</div><div class="kc-it"><div class="kc-text">${format(t.a, t.sources.length)}</div>${sourcesHTML(t.sources, t.a)}</div>`;
 }
-$("ans").addEventListener("click", e => {
+function show() {
+  $("empty").hidden = chat.length > 0;
+  $("reset").hidden = !chat.length;
+  $("log").innerHTML = chat.map(turnHTML).join("");
+}
+$("log").addEventListener("click", e => {
   const b = e.target.closest(".cite"); if (!b) return;
-  const li = $("s" + b.dataset.n); if (!li) return;
-  li.scrollIntoView({behavior: "smooth", block: "nearest"});
-  li.classList.add("flash"); setTimeout(() => li.classList.remove("flash"), 400);
+  const it = b.closest(".kc-it"), d = it.querySelector("details"); if (!d) return;
+  d.open = true;
+  it.querySelectorAll(".kc-src li").forEach(li => li.classList.toggle("lit", li.dataset.n === b.dataset.n));
+  const li = it.querySelector(`.kc-src li[data-n="${b.dataset.n}"]`); if (li) li.scrollIntoView({behavior: "smooth", block: "nearest"});
 });
+const nearBottom = () => innerHeight + scrollY > document.documentElement.scrollHeight - 160;
+const toBottom = () => scrollTo({top: document.documentElement.scrollHeight, behavior: "smooth"});
 
+let busy = false;
 async function ask(q) {
-  q = (q || "").trim(); if (!q) return;
-  if (ctl) ctl.abort(); ctl = new AbortController();
-  $("aq").textContent = q; $("ast").textContent = "Finding the rules…";
-  $("ans").innerHTML = `<p class="label">Searching 3,000 rules and lessons…</p>`; $("srcs").innerHTML = ""; srcs = [];
-  $("stage").scrollIntoView({behavior: "smooth", block: "start"});
-  const t0 = performance.now(); let text = "";
+  q = (q || "").trim(); if (!q || busy) return;
+  busy = true; $("send").disabled = true; $("q").value = ""; grow();
+  $("empty").hidden = true; $("reset").hidden = false;
+  const history = chat.slice(-4).map(t => ({q: t.q, a: t.a}));
+  $("log").insertAdjacentHTML("beforeend", `<div class="kc-me">${esc(q)}</div><div class="kc-it going"><div class="kc-text"><p class="label">Searching 3,053 rules and lessons…</p></div></div>`);
+  const it = $("log").lastElementChild, box = it.querySelector(".kc-text");
+  toBottom();
+  let text = "", src = [];
   try {
-    const r = await fetch(SERVER + "/ask", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({q, stream: true}), signal: ctl.signal});
+    const r = await fetch(SERVER + "/ask", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({q, stream: true, history})});
     if (!r.ok || !r.body) { const d = await r.json().catch(() => ({})); throw new Error(d.error || "failed"); }
     const rd = r.body.getReader(), dec = new TextDecoder(); let buf = "";
     for (;;) {
@@ -201,167 +184,44 @@ async function ask(q) {
       while ((i = buf.indexOf("\n\n")) >= 0) {
         const block = buf.slice(0, i); buf = buf.slice(i + 2);
         const ev = (block.match(/^event: (.+)$/m) || [])[1], data = JSON.parse((block.match(/^data: (.*)$/m) || [, "{}"])[1]);
-        if (ev === "sources") { showSources(data, true); $("ast").textContent = `Reading ${data.length} sources`; draw("", true); }
-        if (ev === "text") { text += data.t; draw(text, true); $("ast").textContent = "Writing…"; }
+        const stick = nearBottom();
+        if (ev === "sources") {
+          src = data;
+          box.innerHTML = `<p class="label">Reading ${src.length} rules and lessons</p><div class="kc-reading">` +
+            src.slice(0, 8).map((s, k) => `<span class="pill" style="animation-delay:${k * 60}ms;--hue:var(--ink-2)">${esc(s.topic || s.kind)}</span>`).join("") + `</div>`;
+        }
+        if (ev === "text") { text += data.t; box.innerHTML = format(text, src.length); }
         if (ev === "error") throw new Error(data.error);
+        if (stick) scrollTo({top: document.documentElement.scrollHeight});
       }
     }
-    const n = draw(text, false);
-    $("ast").textContent = `Answered in ${((performance.now() - t0) / 1000).toFixed(1)} s · cites ${n} of ${srcs.length} sources`;
+    if (!text) throw new Error("no answer");
+    it.classList.remove("going");
+    it.insertAdjacentHTML("beforeend", sourcesHTML(src, text));
+    chat.push({q, a: text, sources: src}); save();
   } catch (e) {
-    if (e.name === "AbortError") return;
-    draw(text, false);
-    $("ans").insertAdjacentHTML("beforeend", `<p>Couldn't finish that answer (${esc(e.message || "error")}). Try again in a minute.</p>`);
-    $("ast").textContent = "Stopped";
-  }
+    it.classList.remove("going");
+    box.insertAdjacentHTML("beforeend", `<p>Couldn't finish that answer (${esc(e.message || "error")}). Try again in a minute.</p>`);
+  } finally { busy = false; $("send").disabled = false; $("q").focus(); }
 }
+function grow() { const t = $("q"); t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 180) + "px"; }
+$("q").addEventListener("input", grow);
+$("q").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); ask($("q").value); } });
 $("form").addEventListener("submit", e => { e.preventDefault(); ask($("q").value); });
-$("try").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { $("q").value = b.textContent; ask(b.textContent); } });
+$("try").addEventListener("click", e => { const b = e.target.closest("button"); if (b) ask(b.textContent); });
+$("reset").onclick = () => { chat = []; save(); show(); $("q").focus(); scrollTo({top: 0}); };
 
-// the example, shown as it was answered
-try { const ex = JSON.parse($("example").textContent); $("aq").textContent = ex.q; showSources(ex.sources); const n = draw(ex.answer, false); $("ast").textContent = `Example answer · cites ${n} of ${ex.sources.length} sources`; } catch (e) {}
-
-// ---------- plug it into your AI ----------
+// Use it in your AI
 const MCP = SERVER + "/mcp";
 $("mcp").textContent = MCP;
 document.querySelectorAll(".mcpline").forEach(c => c.textContent = c.dataset.tpl.replace("{u}", MCP));
+$("plugOpen").onclick = () => $("plug").showModal();
+$("plug").addEventListener("click", e => { if (e.target === $("plug")) $("plug").close(); });
 $("copy").onclick = async () => { try { await navigator.clipboard.writeText(MCP); $("copy").textContent = "Copied"; setTimeout(() => $("copy").textContent = "Copy address", 1800); } catch (e) { getSelection().selectAllChildren($("mcp")); } };
 
-// ---------- browse: by words AND meaning, forgiving of typos, knows ecom words ----------
-let items = [], state = {q: "", kind: "", cat: "", n: 30};
-const STOP = new Set("a an the and or but if then so to of in on at by for with from into onto about as is are was were be been being do does did doing done have has had i me my we our you your he she it its they them their this that these those what which who whom how why when where can could should would will shall may might must just get got gets getting go going make made want need like really also very not no yes any some all more most much many one ever there here than too up out over under again only own same each few other such let lets im ive dont isnt".split(" "));
-function stem(w) {
-  if (w.length <= 3 || /^\d/.test(w)) return w;
-  if (/ies$/.test(w) && w.length > 4) return w.slice(0, -3) + "y";
-  if (/(sses|xes|ches|shes)$/.test(w)) return w.slice(0, -2);
-  if (/ss$/.test(w)) return w;
-  if (/s$/.test(w)) w = w.slice(0, -1);
-  if (/ing$/.test(w) && w.length > 5) return w.slice(0, -3);
-  if (/ed$/.test(w) && w.length > 4) return w.slice(0, -2);
-  return w;
-}
-const toks = s => (String(s).toLowerCase().replace(/e-?commerce|e-?com\b/g, "ecommerce").match(/[a-z0-9$%]+/g) || []).filter(w => !STOP.has(w) && w.length > 1).map(stem);
-const SYNOF = new Map();
-["ecommerce ecom dtc shopify store brand business", "start begin beginner launch first new basics foundation",
- "budget spend scale raise increase scaling", "cpa cac cpp cost acquisition", "creator ugc influencer ambassador affiliate talent",
- "ad ads creative creatives advert video", "hook opener intro scroll stopper thumbstop", "email flow flows newsletter sms",
- "offer bundle discount upsell pricing price promo", "retention ltv subscription repeat churn lifetime",
- "landing lp page funnel advertorial presell", "research avatar customer persona audience", "profit margin contribution cash",
- "roas return", "hire hiring team editor freelancer contractor", "product sku hero", "test testing experiment",
- "organic tiktok instagram reels content", "meta facebook fb"].map(g => g.split(" ").map(stem))
-  .forEach(g => g.forEach(w => SYNOF.set(w, [...(SYNOF.get(w) || []), ...g.filter(x => x !== w)])));
-let IX = null;
-function buildIndex(dim, vec) {
-  const post = new Map(), dl = new Float32Array(items.length);
-  items.forEach((it, d) => {
-    const tf = new Map(), add = (s, w) => { for (const t of toks(s)) tf.set(t, (tf.get(t) || 0) + w); };
-    add(it.title, 3); add(it.text, 2); add(it.why, 1); add(it.when, 1); add(it.cat, 1);
-    let len = 0; tf.forEach((v, t) => { len += v; (post.get(t) || post.set(t, []).get(t)).push(d, v); });
-    dl[d] = len;
-  });
-  const V = vec && vec.byteLength === items.length * dim ? new Int8Array(vec) : null;
-  IX = {post, dl, avg: dl.reduce((a, b) => a + b, 0) / items.length, V, dim, vocab: [...post.keys()]};
-}
-function edits(a, b, max) {
-  if (Math.abs(a.length - b.length) > max) return max + 1;
-  let prev = Array.from({length: b.length + 1}, (_, j) => j), pp = prev;
-  for (let i = 1; i <= a.length; i++) {
-    const cur = [i]; let best = i;
-    for (let j = 1; j <= b.length; j++) {
-      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
-      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) cur[j] = Math.min(cur[j], pp[j - 2] + 1);
-      best = Math.min(best, cur[j]);
-    }
-    if (best > max) return max + 1; pp = prev; prev = cur;
-  }
-  return prev[b.length];
-}
-function fixWord(t) {
-  if (IX.post.has(t) || t.length < 4) return t;
-  const max = t.length >= 7 ? 2 : 1; let best = null, bd = max + 1, bn = 0;
-  for (const v of IX.vocab) {
-    if (Math.abs(v.length - t.length) > max) continue;
-    const d = edits(t, v, max), n = IX.post.get(v).length;
-    if (d < bd || (d === bd && n > bn)) { best = v; bd = d; bn = n; }
-  }
-  return best || t;
-}
-function rank(q) {
-  const raw = toks(q), terms = raw.map(fixWord);
-  const fixed = raw.map((t, n) => t !== terms[n] ? terms[n] : null).filter(Boolean);
-  const want = new Map();
-  terms.forEach(t => { want.set(t, 1); (SYNOF.get(t) || []).forEach(s => want.set(s, Math.max(want.get(s) || 0, 0.35))); });
-  const N = items.length, sc = new Float32Array(N), hits = new Uint8Array(N);
-  want.forEach((w, t) => {
-    const p = IX.post.get(t); if (!p) return;
-    const df = p.length / 2, idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
-    for (let i = 0; i < p.length; i += 2) { const d = p[i], f = p[i + 1]; sc[d] += w * idf * (f * 2.2) / (f + 1.2 * (0.25 + 0.75 * IX.dl[d] / IX.avg)); if (w === 1) hits[d]++; }
-  });
-  const nq = Math.max(1, terms.filter(t => IX.post.has(t)).length);
-  for (let d = 0; d < N; d++) if (sc[d]) sc[d] *= 0.5 + 0.5 * (hits[d] / nq);
-  const byWords = [...sc.keys()].filter(d => sc[d] > 0).sort((a, c) => sc[c] - sc[a]).slice(0, 300);
-  let byMeaning = [];
-  if (IX.V && byWords.length) {
-    const dim = IX.dim, cen = new Float32Array(dim), cs = new Float32Array(N);
-    byWords.slice(0, 8).forEach((d, n) => { const w = 1 / (n + 1); for (let j = 0; j < dim; j++) cen[j] += w * IX.V[d * dim + j]; });
-    for (let d = 0; d < N; d++) { let s = 0; const o = d * dim; for (let j = 0; j < dim; j++) s += cen[j] * IX.V[o + j]; cs[d] = s; }
-    byMeaning = [...cs.keys()].sort((a, c) => cs[c] - cs[a]).slice(0, 200);
-  }
-  const fused = new Map();
-  byWords.forEach((d, r) => fused.set(d, (fused.get(d) || 0) + 1 / (30 + r)));
-  byMeaning.forEach((d, r) => fused.set(d, (fused.get(d) || 0) + 0.6 / (30 + r)));
-  return {order: [...fused.keys()].sort((a, c) => fused.get(c) - fused.get(a)), terms: [...want.keys()], fixed};
-}
-function marked(s, terms) {
-  const set = new Set(terms);
-  return fill(s).split(/([A-Za-z0-9$%]+)/).map(w => set.has(stem(w.toLowerCase())) && !STOP.has(w.toLowerCase()) ? `<mark>${w}</mark>` : w).join("");
-}
-let last = null;
-function card(it, t = []) {
-  const pill = it.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
-  return `<article class="card res"><div class="meta" style="border:0;padding:0">${pill}<span>${esc(it.cat)}</span>${it.when ? `<span>${esc(it.when)}</span>` : ""}</div>
-    <h4>${marked(it.kind === "Rule" ? it.text : it.title, t)}</h4>${it.kind === "Lesson" ? `<p>${marked(it.text, t)}</p>` : ""}
-    ${it.why && it.why !== it.text ? `<p class="why"><b>Why:</b> ${marked(it.why, t)}</p>` : ""}</article>`;
-}
-function render() {
-  const keep = it => (!state.kind || it.kind === state.kind) && (!state.cat || it.cat === state.cat);
-  const q = state.q.trim();
-  let list, terms = [];
-  if (q) {
-    if (!last || last.q !== q) last = {q, ...rank(q)};
-    list = last.order.map(d => items[d]).filter(keep); terms = last.terms;
-    $("shown").textContent = (last.fixed.length ? `Searching for ${last.fixed.join(", ")}. ` : "") + (list.length ? `${list.length.toLocaleString()} matches, best first` : "");
-  } else {
-    list = items.filter(keep);
-    $("shown").textContent = `${list.length.toLocaleString()} ${state.cat || "rules and lessons"}`;
-  }
-  if (!list.length) { $("list").innerHTML = `<p class="lede">Nothing on that yet. Ask it at the top instead.</p>`; return; }
-  $("list").innerHTML = list.slice(0, state.n).map(it => card(it, terms)).join("") +
-    (list.length > state.n ? `<button class="btn ghost more" type="button">Show more</button>` : "");
-  const m = $("list").querySelector(".more"); if (m) m.onclick = () => { state.n += 30; render(); };
-}
-function chips() {
-  const cats = {}; items.forEach(i => cats[i.cat] = (cats[i.cat] || 0) + 1);
-  const b = (attr, v, label, on) => `<button class="btn ${on ? "" : "ghost"}" type="button" ${attr}="${esc(v)}">${esc(label)}</button>`;
-  $("kinds").innerHTML = b("data-kind", "", "Everything", !state.kind) + b("data-kind", "Rule", "Rules", state.kind === "Rule") + b("data-kind", "Lesson", "Lessons", state.kind === "Lesson");
-  $("cats").innerHTML = Object.entries(cats).sort((a, c) => c[1] - a[1]).map(([c]) => b("data-cat", c, c, state.cat === c)).join("");
-  document.querySelectorAll("[data-kind]").forEach(x => x.onclick = () => { state.kind = x.dataset.kind; state.n = 30; chips(); render(); });
-  document.querySelectorAll("[data-cat]").forEach(x => x.onclick = () => { state.cat = state.cat === x.dataset.cat ? "" : x.dataset.cat; state.n = 30; chips(); render(); });
-}
-let tq = 0;
-$("bq").addEventListener("input", e => { clearTimeout(tq); tq = setTimeout(() => { state.q = e.target.value; state.n = 30; render(); }, 160); });
-$("bform").addEventListener("submit", e => { e.preventDefault(); state.q = $("bq").value; render(); });
-(async () => {
-  $("shown").textContent = "Loading…";
-  const [d, v] = await Promise.all([fetch("/knowledge/knowledge.json").then(r => r.json()),
-                                    fetch("/knowledge/knowledge.vec").then(r => r.ok ? r.arrayBuffer() : null).catch(() => null)]);
-  items = d.items; buildIndex(d.dim, v);
-  const r = items.filter(i => i.kind === "Rule").length;
-  $("lede").textContent = `${r.toLocaleString()} decision rules and ${(items.length - r).toLocaleString()} lessons from operators running real brands. Ask anything about starting, running or scaling a store and get a straight answer, with the rules it came from.`;
-  $("bh").textContent = `Every rule and lesson: ${items.length.toLocaleString()}.`;
-  chips(); render();
-  const q0 = new URLSearchParams(location.search).get("q");
-  if (q0) { $("q").value = q0; ask(q0); }
-})();
+show();
+if (chat.length) scrollTo({top: document.documentElement.scrollHeight});
+const q0 = new URLSearchParams(location.search).get("q");
+if (q0) ask(q0); else if (matchMedia("(pointer:fine)").matches) $("q").focus();
 </script>
 </html>
