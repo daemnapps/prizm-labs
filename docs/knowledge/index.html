@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#EFE9E1">
-<meta name="description" content="Ecommerce knowledge you can search and ask: 3,000 decision rules and lessons from running real brands — paid media, creative, creators, offers, retention.">
+<meta name="description" content="Ask how ecommerce is done: 3,000 decision rules and lessons from operators running real brands. Straight answers with their sources, free in beta. Plug it into Claude, ChatGPT, Codex or Cursor.">
 <title>Knowledge — PRIZM LABS</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -14,33 +14,54 @@
 <link rel="stylesheet" href="/studio.css?v=prizm16">
 <style>
 /* Layout only. */
-.qbar{display:flex;gap:var(--s2);margin-top:var(--s4)}
-.qbar input{flex:1;min-width:0;font:16px var(--body);padding:15px 20px;border:1px solid var(--line-2);border-radius:var(--r4);background:var(--card);color:var(--ink)}
-.qbar .btn{flex:none;cursor:pointer}
-.qbar .btn[hidden]{display:none}
-.free{margin-top:var(--s2)}
-.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4)}
-.chips .btn{cursor:pointer;padding:9px 14px}
-.out{margin-top:var(--s5);display:grid;gap:var(--s3)}
-.out[hidden]{display:none}
-.res{display:grid;gap:var(--s2)}
-.res h4{margin:0}
-.res .why{margin:0}
+html{overflow-x:clip}
+.kx-hero{position:relative;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:center;gap:var(--s6);min-height:calc(100svh - 72px);padding-block:var(--s7)}
+.kx-hero .bloom{width:46%;aspect-ratio:1;right:2%;top:18%}
+.kx-copy{position:relative;z-index:1;display:grid;gap:var(--s4)}
+.kx-ask{display:flex;gap:var(--s2);padding:6px;border:1px solid var(--line-2);border-radius:var(--r4);background:var(--card);transition:border-color .2s}
+.kx-ask:focus-within{border-color:var(--indigo)}
+.kx-ask input{flex:1;min-width:0;font:17px var(--body);padding:12px 16px;border:0;background:none;color:var(--ink);outline:0}
+.kx-ask .btn,.kx-chips .btn,.kx-copybtn{cursor:pointer;transition:transform .15s}
+.kx-ask .btn:hover,.kx-chips .btn:hover{transform:translateY(-1px)}
+.kx-ask .btn:active,.kx-chips .btn:active{transform:translateY(1px)}
+.kx-chips{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.kx-chips .btn{text-transform:none;letter-spacing:0;font-size:12.5px;padding:9px 14px}
+.kx-sec{padding-block:var(--s8);display:grid;gap:var(--s4)}
+.kx-frame{background:var(--card);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
+.kx-bar{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);align-items:baseline;justify-content:space-between;padding:var(--s4) var(--s5);border-bottom:1px solid var(--line);background:var(--paper)}
+.kx-bar h3{margin:0;font-size:clamp(17px,2vw,22px)}
+.kx-body{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+.kx-ans{padding:var(--s5);display:grid;gap:var(--s3);align-content:start;font-size:16.5px;line-height:1.6}
+.kx-ans p,.kx-ans li{max-width:var(--measure);margin:0}
+.kx-ans ul{margin:0;padding-left:var(--s5);display:grid;gap:var(--s2)}
+.kx-ans > p:first-child:not(.label){font-size:clamp(18px,1.8vw,21px);line-height:1.45;color:var(--ink)}
+.kx-ans.going > :last-child::after{content:"";display:inline-block;width:8px;height:1.05em;margin-left:3px;vertical-align:-2px;background:var(--indigo);animation:kx-blink .9s steps(1) infinite}
+@keyframes kx-blink{50%{opacity:0}}
+.cite{font:500 10.5px/1 var(--mono);color:var(--indigo);background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r4);padding:3px 6px;margin-left:3px;vertical-align:2px;cursor:pointer;transition:background .15s,color .15s}
+.cite:hover{background:var(--indigo);color:var(--bone)}
+.kx-srcs{list-style:none;margin:0;padding:var(--s4);display:grid;gap:var(--s2);align-content:start;border-left:1px solid var(--line);background:var(--paper)}
+.kx-src{display:grid;grid-template-columns:auto 1fr;gap:var(--s1) var(--s3);padding:var(--s3);border:1px solid var(--line);border-radius:var(--r2);background:var(--card);font-size:13.5px;line-height:1.45;transition:border-color .3s,opacity .3s,transform .3s}
+.kx-src .num{font:500 11px/1.6 var(--mono);color:var(--ink-3)}
+.kx-src p{margin:0;color:var(--ink-2)}
+.kx-src.lit{border-color:var(--indigo)}
+.kx-src.lit .num{color:var(--indigo)}
+.kx-src.dim{opacity:.55}
+.kx-src.flash{transform:translateX(-4px)}
+.kx-src.in{animation:kx-in .35s both}
+@keyframes kx-in{from{opacity:0;transform:translateY(6px)}}
+.kx-addr{display:flex;gap:var(--s2);align-items:stretch}
+.kx-addr pre{flex:1;min-width:0;margin:0;white-space:pre-wrap;word-break:break-all;font-size:14px}
+.kx-plug{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:var(--s3)}
+.kx-plug .card{display:grid;gap:var(--s2);align-content:start;transition:transform .2s}
+.kx-plug .card:hover{transform:translateY(-2px)}
+.kx-plug img{width:30px;height:30px}
+.kx-plug pre{margin:0;white-space:pre-wrap;word-break:break-all;font-size:12px}
+.res{display:grid;gap:var(--s2)} .res h4,.res .why{margin:0}
 .res mark{background:color-mix(in srgb,var(--amber) 28%,transparent);color:inherit;padding:0 2px;border-radius:var(--r1)}
-.answer{display:grid;gap:var(--s3)}
-.answer p,.answer li{max-width:var(--measure)}
-.answer ul{margin:0;padding-left:var(--s5);display:grid;gap:var(--s2)}
-.answer .cite{cursor:pointer;border:0;background:none;padding:0 2px}
-.srcs{display:grid;gap:var(--s2);border-top:1px solid var(--line);padding-top:var(--s3)}
-.srcs .go{cursor:pointer;background:none;border-top:0;border-left:0;border-right:0;text-align:left}
-.more{justify-self:start;cursor:pointer}
-.empty{padding-block:var(--s6)}
-.connect{margin-top:var(--s5)}
-.connect summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:var(--s2);align-items:baseline}
-.connect-body{display:grid;gap:var(--s3);margin-top:var(--s3)}
-.connect-body pre{white-space:pre-wrap;word-break:break-all;margin:0}
-.addr{display:flex;gap:var(--s2);align-items:stretch}.addr pre{flex:1;min-width:0}.addr .btn{flex:none;cursor:pointer}
-@media (max-width:640px){.qbar{flex-wrap:wrap}.qbar input{flex:1 1 100%}.qbar .btn{flex:1 1 100%;text-align:center}#cats{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scrollbar-width:none}#cats .btn{flex:none}}
+.kx-list{display:grid;gap:var(--s3)} .kx-list .more{justify-self:start;cursor:pointer}
+@media (max-width:860px){.kx-hero{grid-template-columns:1fr;min-height:0}.kx-hero .obj,.kx-hero .bloom{display:none}.kx-body{grid-template-columns:1fr}.kx-srcs{border-left:0;border-top:1px solid var(--line)}.kx-src.dim{display:none}}
+@media (max-width:640px){.kx-ask{flex-wrap:wrap;border-radius:var(--r3)}.kx-ask .btn{flex:1 1 100%;text-align:center}#cats{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scrollbar-width:none}#cats .btn{flex:none}.kx-addr{flex-wrap:wrap}.kx-addr .btn{flex:1 1 100%;text-align:center}}
+@media (prefers-reduced-motion:reduce){.kx-ans.going > :last-child::after,.kx-src.in{animation:none}}
 </style>
 
 <nav class="bar">
@@ -54,50 +75,159 @@
 </nav>
 
 <div class="wrap">
-  <div class="hero">
-    <p class="eyebrow">Ecommerce knowledge</p>
-    <h1>Ask how it's done.</h1>
-    <p class="lede" id="lede">Decision rules and lessons from running real brands: paid media, creative, creators, offers, retention. Search all of it free, or ask a question and get a straight answer from it.</p>
-    <form class="qbar" id="form" role="search">
-      <input id="q" type="search" placeholder="How do I get started with ecommerce?" aria-label="Search or ask" autocomplete="off" enterkeyhint="search">
-      <button class="btn" id="ask" type="button" hidden>Ask</button>
-    </form>
-    <p class="label free" id="free"></p>
-    <div class="chips" id="kinds" role="group" aria-label="Show"></div>
-    <div class="chips" id="cats" role="group" aria-label="Topic"></div>
-  </div>
-
-  <details class="panel connect" id="connect">
-    <summary><b>Plug it into your AI</b> <span class="label">Claude · ChatGPT · Cursor · Claude Code</span></summary>
-    <div class="connect-body" id="connectBody">
-      <p>Your AI searches these rules and lessons by itself whenever you ask it about running a store. One address, works in any AI that takes an MCP server.</p>
-      <div class="btns"><button class="btn" id="getKey" type="button">Get my free key</button></div>
+  <header class="kx-hero">
+    <div class="bloom" aria-hidden="true"></div>
+    <div class="kx-copy">
+      <div class="kx-chips"><p class="eyebrow">Ecommerce knowledge</p><span class="pill ready">Free in beta through Dec 31</span></div>
+      <h1>Ask how it's done.</h1>
+      <p class="lede" id="lede">3,000 decision rules and lessons from operators running real brands. Ask anything about starting, running or scaling a store and get a straight answer, with the rules it came from.</p>
+      <form class="kx-ask" id="form" role="search">
+        <input id="q" type="search" placeholder="How do I get started with ecommerce?" aria-label="Your question" autocomplete="off" enterkeyhint="send">
+        <button class="btn" id="ask" type="submit">Ask</button>
+      </form>
+      <div class="kx-chips" id="try" aria-label="Try a question">
+        <button class="btn ghost" type="button">How do I get started with ecommerce?</button>
+        <button class="btn ghost" type="button">When should I raise budget on a winning ad?</button>
+        <button class="btn ghost" type="button">What makes a hook stop the scroll?</button>
+        <button class="btn ghost" type="button">How do I keep customers buying again?</button>
+      </div>
     </div>
-  </details>
+    <div class="obj xl" data-obj="prism" role="img" aria-label="A glass prism splitting one beam of light into a spectrum"></div>
+  </header>
 
-  <section class="out" id="answerWrap" hidden aria-live="polite"><div class="panel answer" id="answer"></div></section>
-  <p class="meta" id="shown" style="margin-top:var(--s5)"></p>
-  <section class="out" id="list" aria-label="Rules and lessons"></section>
+  <section class="kx-sec" id="stage" aria-live="polite">
+    <p class="eyebrow">The answer</p>
+    <div class="kx-frame">
+      <div class="kx-bar"><h3 id="aq">How do I scale a winning ad?</h3><span class="label" id="ast">Example answer</span></div>
+      <div class="kx-body">
+        <div class="kx-ans" id="ans"></div>
+        <ol class="kx-srcs" id="srcs" aria-label="Sources"></ol>
+      </div>
+    </div>
+  </section>
+
+  <div class="beam"></div>
+
+  <section class="kx-sec" id="plug" style="--hue:var(--indigo)">
+    <p class="eyebrow">Plug it into your AI</p>
+    <h2>Ask it from Claude, ChatGPT, Codex or Cursor.</h2>
+    <p class="lede">Paste one address into your AI. It pulls from these rules on its own whenever you ask about running a store. No sign-up, free through Dec 31.</p>
+    <div class="kx-addr"><pre><code id="mcp"></code></pre><button class="btn kx-copybtn" id="copy" type="button">Copy address</button></div>
+    <div class="kx-plug">
+      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/claude-color.svg" alt="" width="30" height="30"><h4>Claude</h4><p>Settings → Connectors → Add custom connector. Name it Prizm Knowledge, paste the address, Add.</p></div>
+      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/openai.svg" alt="" width="30" height="30"><h4>ChatGPT</h4><p>Settings → Apps &amp; Connectors → Advanced → turn on Developer mode. Create, paste the address, No authentication.</p></div>
+      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/openai.svg" alt="" width="30" height="30"><h4>Codex</h4><p>One line in your terminal:</p><pre><code class="mcpline" data-tpl="codex mcp add prizm --url {u}"></code></pre></div>
+      <div class="card"><img src="https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@1.80.0/icons/cursor.svg" alt="" width="30" height="30"><h4>Cursor &amp; Claude Code</h4><p>Cursor: Settings → MCP → Add server. Claude Code:</p><pre><code class="mcpline" data-tpl="claude mcp add --transport http prizm {u}"></code></pre></div>
+    </div>
+  </section>
+
+  <div class="beam"></div>
+
+  <section class="kx-sec" id="browse">
+    <p class="eyebrow">Browse</p>
+    <h2 id="bh">Every rule and lesson.</h2>
+    <form class="kx-ask" id="bform" role="search"><input id="bq" type="search" placeholder="Search: hooks, budget, email, offers…" aria-label="Search the rules and lessons" autocomplete="off"></form>
+    <div class="kx-chips" id="kinds" role="group" aria-label="Show"></div>
+    <div class="kx-chips" id="cats" role="group" aria-label="Topic"></div>
+    <p class="meta" id="shown"></p>
+    <div class="kx-list" id="list" aria-label="Rules and lessons"></div>
+  </section>
 </div>
 
 <footer class="bot">
   <span>PRIZM LABS</span>
   <span class="right"><a href="/light.html">Light</a> · <a href="https://higgsfield.ai?fpr=damon61" target="_blank" rel="noopener">Higgsfield</a></span>
 </footer>
+<script type="application/json" id="example">{"q":"How do I scale a winning ad?","answer":"Scale a winning ad by preserving its proven core structure while iterating on hooks, avatars, awareness stages, and formats across multiple creators.\n\n- Mark every element of a winning ad as LOCK or LEVER, rank levers by estimated impact, and test the highest-impact variations first [1].\n- Double down on top-performing formats by creating a dedicated production chain and piping variations through similar swipes [2].\n- Keep the core message and format of the winning ad, but remake it for lower awareness stages like problem-aware and unaware audiences [3].\n- Keep the body of a proven creator ad and test new opener variations by altering or animating the hook [4].\n- Analyze winning ads with video-analysis tools to tie performance metrics to specific elements for future roadmaps and variations [7].\n- Rebuild the winner by keeping the exact same structure and dropping in new sub-avatar details [8].\n- Scale high-frequency core messages by having many creators and formats explain the same message [11].","sources":[{"id":14,"kind":"Rule","title":"Plan variations of a proven ad by marking every element LOCK (keep exactly) or LEVER (test), with evidence…","text":"Plan variations of a proven ad by marking every element LOCK (keep exactly) or LEVER (test), with evidence from the {brand}'s whole post corpus, then rank the levers by estimated impact and move the highest-impact ones first.","why":"Start adjusting the highest-impact opportunities on what already worked instead of guessing.","when":"Building variations from a winning video ad.","topic":"Creative"},{"id":1059,"kind":"Rule","title":"When one ad format beats everything, double down: build a dedicated chain for that format and pipe variations…","text":"When one ad format beats everything, double down: build a dedicated chain for that format and pipe variations through every similar swipe for new products.","why":"The top advertorial outsold everything else, so its format should be multiplied.","when":"Scaling a winning format","topic":"Strategy"},{"id":1429,"kind":"Lesson","title":"Scale a winner by moving it across awareness stages","text":"Scale a winner by keeping its core message and format and remaking it for the next awareness stage down: more problem-aware, then unaware versions. Once a format works, scaling is changing the traffic temperature, not inventing something new.","why":"Once a format works, scaling is changing the temperature of the traffic, not inventing something new.","when":"scaling a winning ad","topic":"Creative"},{"id":1690,"kind":"Lesson","title":"Make hook variations from a winning creator ad","text":"Make hook variations from a winning {creator} ad by screenshotting the creator, removing the text, and animating them with an AI video model or stitching them onto other clips. The body of the proven ad stays; only the opener changes.","why":"The body of a proven ad stays; only the opener changes.","when":"iterating on winning creator ads","topic":"Video"},{"id":1351,"kind":"Lesson","title":"Ship only one or two creatives a week until one hits","text":"Ship only a few creative batches a week until one hits, find the core message, then hand the winner to {creator}s to scale. Quality and learning beat volume before there is a winner.","why":"Quality and learning beat volume before there is a winner.","when":"early-stage brand without a winning ad","topic":"Creative"},{"id":2887,"kind":"Lesson","title":"Organic vibe plus direct-response fundamentals = the ads that scale","text":"The ads that scale sit where organic style and vibe overlap with direct-response fundamentals tested on large ad spend (clear problem, structure, social proof). Pure vibe gets views, not sales.","why":"Viral videos and videos that sell millions are different things.","when":"short-form video ads for paid social","topic":"Creative"},{"id":2748,"kind":"Lesson","title":"Feed winning videos to an analyzer and tie results to elements","text":"Run winning videos through a video-analysis tool to pull out why they worked, tie that to the ad's numbers, and use it for the next content roadmap, headlines and variations. It replaces a strategist's manual breakdown.","why":"It replaces a creative strategist's manual breakdown.","when":"creative analysis of winning video ads","topic":"AI systems"},{"id":1283,"kind":"Lesson","title":"Rebuild a winner from its parts","text":"Break a winning ad into characters, scenes, elements and transcript, drop new sub-{avatar} details into that same framework, and generate the new scenes. The winning structure is kept and only the person changes.","why":"The structure that won is kept, and only the person changes.","when":"making variations of a proven ad","topic":"Creative"},{"id":2049,"kind":"Lesson","title":"Revitalize a winning ad: update language only, keep the structure","text":"To revitalize a winning ad, give the AI the original script, the scene-by-scene and the creative learnings, and update only the language for the new campaign, not the format or copy structure; then write a detailed scene-by-scene for {editor}s.","why":"The ad worked for known reasons; change the words, not the winning structure.","when":"refreshing a past winner","topic":"Creative"},{"id":2303,"kind":"Lesson","title":"Grow value per customer because scaling ad spend raises costs","text":"Expect the cost of new customers to rise as {brand} scales paid spend; protect margin by raising AOV on the first order and LTV on every order after through offers, upsells and subscriptions.","why":"Higher value per customer is the way out of rising acquisition costs.","when":"paid media at scale / Meta and Google","topic":"Strategy"},{"id":2058,"kind":"Lesson","title":"Scale by multiplying formats and creators for a few core messages","text":"Scaling isn't writing more scripts; it's taking a few high-frequency core messages and having many {creator}s and formats explain the same message.","why":"A few proven messages repeated by many voices resonate.","when":"creative scaling strategy","topic":"Strategy"},{"id":1450,"kind":"Lesson","title":"Check the new ads column to see who is scaling","text":"In an ad-intelligence tool's domains view, use the new-ads count to see whether a competitor is scaling up or down. A rising count signals a winner; a falling one, a failing one.","why":"A rising count signals a winner; a falling one signals a failing one.","when":"competitor monitoring","topic":"Research"}]}</script>
 <script src="/studio.js?v=9" defer></script>
 <script>
-// The knowledge server (receiver/knowledge-ask.js). Empty = Ask is not switched on yet.
-const ASK_URL = "https://prizm-knowledge.ddixon.workers.dev/ask";
-// The Stripe payment link for answer credits. Empty = "more answers open soon".
-const PAY_URL = "";
-const FREE = 5, PACK = "200 answers for $10";
-
+const SERVER = "https://prizm-knowledge.ddixon.workers.dev";
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fill = s => esc(s).replace(/\{([^}]{1,30})\}/g, "your $1");
-let items = [], state = {q: "", kind: "", cat: "", n: 40};
 
-// ---------- search: by words AND meaning, forgiving of typos, knows ecom words ----------
+// ---------- the answer stage: sources first, then the words as they're written ----------
+let srcs = [], ctl = null;
+function srcItem(s, n) {
+  const pill = s.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
+  return `<li class="kx-src" id="s${n}"><span class="num">${String(n).padStart(2, "0")}</span>
+    <div><div class="meta" style="border:0;padding:0">${pill}<span>${esc(s.topic || s.cat || "")}</span></div>
+    <p>${fill(s.kind === "Rule" ? s.text : s.title)}</p></div></li>`;
+}
+function showSources(list, stagger) {
+  srcs = list;
+  $("srcs").innerHTML = list.map((s, i) => srcItem(s, i + 1)).join("");
+  if (stagger) [...$("srcs").children].forEach((li, i) => { li.classList.add("in"); li.style.animationDelay = (i * 45) + "ms"; });
+}
+function format(text) {
+  return esc(text).split(/\n{2,}/).filter(p => p.trim()).map(p => /^\s*[-•*] /m.test(p)
+      ? `<ul>${p.split(/\n/).filter(Boolean).map(l => `<li>${l.replace(/^\s*[-•*]\s*/, "")}</li>`).join("")}</ul>` : `<p>${p.replace(/\n/g, "<br>")}</p>`).join("")
+    .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+    .replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (m, g) => g.split(/\s*,\s*/).map(n => srcs[+n - 1] ? `<button class="cite" data-n="${n}" aria-label="Source ${n}">${n}</button>` : "").join(""));
+}
+function light(text, done) {
+  const cited = new Set([...text.matchAll(/\[(\d+(?:\s*,\s*\d+)*)\]/g)].flatMap(m => m[1].split(/\s*,\s*/).map(Number)));
+  [...$("srcs").children].forEach((li, i) => { li.classList.toggle("lit", cited.has(i + 1)); li.classList.toggle("dim", done && !cited.has(i + 1)); });
+  return cited.size;
+}
+function draw(text, going) {
+  $("ans").innerHTML = format(text) || `<p class="label">Reading ${srcs.length} rules and lessons…</p>`;
+  $("ans").classList.toggle("going", going);
+  return light(text, !going);
+}
+$("ans").addEventListener("click", e => {
+  const b = e.target.closest(".cite"); if (!b) return;
+  const li = $("s" + b.dataset.n); if (!li) return;
+  li.scrollIntoView({behavior: "smooth", block: "nearest"});
+  li.classList.add("flash"); setTimeout(() => li.classList.remove("flash"), 400);
+});
+
+async function ask(q) {
+  q = (q || "").trim(); if (!q) return;
+  if (ctl) ctl.abort(); ctl = new AbortController();
+  $("aq").textContent = q; $("ast").textContent = "Finding the rules…";
+  $("ans").innerHTML = `<p class="label">Searching 3,000 rules and lessons…</p>`; $("srcs").innerHTML = ""; srcs = [];
+  $("stage").scrollIntoView({behavior: "smooth", block: "start"});
+  const t0 = performance.now(); let text = "";
+  try {
+    const r = await fetch(SERVER + "/ask", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({q, stream: true}), signal: ctl.signal});
+    if (!r.ok || !r.body) { const d = await r.json().catch(() => ({})); throw new Error(d.error || "failed"); }
+    const rd = r.body.getReader(), dec = new TextDecoder(); let buf = "";
+    for (;;) {
+      const {value, done} = await rd.read(); if (done) break;
+      buf += dec.decode(value, {stream: true});
+      let i;
+      while ((i = buf.indexOf("\n\n")) >= 0) {
+        const block = buf.slice(0, i); buf = buf.slice(i + 2);
+        const ev = (block.match(/^event: (.+)$/m) || [])[1], data = JSON.parse((block.match(/^data: (.*)$/m) || [, "{}"])[1]);
+        if (ev === "sources") { showSources(data, true); $("ast").textContent = `Reading ${data.length} sources`; draw("", true); }
+        if (ev === "text") { text += data.t; draw(text, true); $("ast").textContent = "Writing…"; }
+        if (ev === "error") throw new Error(data.error);
+      }
+    }
+    const n = draw(text, false);
+    $("ast").textContent = `Answered in ${((performance.now() - t0) / 1000).toFixed(1)} s · cites ${n} of ${srcs.length} sources`;
+  } catch (e) {
+    if (e.name === "AbortError") return;
+    draw(text, false);
+    $("ans").insertAdjacentHTML("beforeend", `<p>Couldn't finish that answer (${esc(e.message || "error")}). Try again in a minute.</p>`);
+    $("ast").textContent = "Stopped";
+  }
+}
+$("form").addEventListener("submit", e => { e.preventDefault(); ask($("q").value); });
+$("try").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { $("q").value = b.textContent; ask(b.textContent); } });
+
+// the example, shown as it was answered
+try { const ex = JSON.parse($("example").textContent); $("aq").textContent = ex.q; showSources(ex.sources); const n = draw(ex.answer, false); $("ast").textContent = `Example answer · cites ${n} of ${ex.sources.length} sources`; } catch (e) {}
+
+// ---------- plug it into your AI ----------
+const MCP = SERVER + "/mcp";
+$("mcp").textContent = MCP;
+document.querySelectorAll(".mcpline").forEach(c => c.textContent = c.dataset.tpl.replace("{u}", MCP));
+$("copy").onclick = async () => { try { await navigator.clipboard.writeText(MCP); $("copy").textContent = "Copied"; setTimeout(() => $("copy").textContent = "Copy address", 1800); } catch (e) { getSelection().selectAllChildren($("mcp")); } };
+
+// ---------- browse: by words AND meaning, forgiving of typos, knows ecom words ----------
+let items = [], state = {q: "", kind: "", cat: "", n: 30};
 const STOP = new Set("a an the and or but if then so to of in on at by for with from into onto about as is are was were be been being do does did doing done have has had i me my we our you your he she it its they them their this that these those what which who whom how why when where can could should would will shall may might must just get got gets getting go going make made want need like really also very not no yes any some all more most much many one ever there here than too up out over under again only own same each few other such let lets im ive dont isnt".split(" "));
 function stem(w) {
   if (w.length <= 3 || /^\d/.test(w)) return w;
@@ -110,15 +240,15 @@ function stem(w) {
   return w;
 }
 const toks = s => (String(s).toLowerCase().replace(/e-?commerce|e-?com\b/g, "ecommerce").match(/[a-z0-9$%]+/g) || []).filter(w => !STOP.has(w) && w.length > 1).map(stem);
-const SYN = ["ecommerce ecom dtc shopify store brand business", "start begin beginner launch first new basics foundation",
-  "budget spend scale raise increase scaling", "cpa cac cpp cost acquisition", "creator ugc influencer ambassador affiliate talent",
-  "ad ads creative creatives advert video", "hook opener intro scroll stopper thumbstop", "email flow flows newsletter sms",
-  "offer bundle discount upsell pricing price promo", "retention ltv subscription repeat churn lifetime",
-  "landing lp page funnel advertorial presell", "research avatar customer persona audience", "profit margin contribution cash",
-  "roas return", "hire hiring team editor freelancer contractor", "product sku hero", "test testing experiment",
-  "organic tiktok instagram reels content", "meta facebook fb"].map(g => g.split(" ").map(stem));
 const SYNOF = new Map();
-SYN.forEach(g => g.forEach(w => SYNOF.set(w, [...(SYNOF.get(w) || []), ...g.filter(x => x !== w)])));
+["ecommerce ecom dtc shopify store brand business", "start begin beginner launch first new basics foundation",
+ "budget spend scale raise increase scaling", "cpa cac cpp cost acquisition", "creator ugc influencer ambassador affiliate talent",
+ "ad ads creative creatives advert video", "hook opener intro scroll stopper thumbstop", "email flow flows newsletter sms",
+ "offer bundle discount upsell pricing price promo", "retention ltv subscription repeat churn lifetime",
+ "landing lp page funnel advertorial presell", "research avatar customer persona audience", "profit margin contribution cash",
+ "roas return", "hire hiring team editor freelancer contractor", "product sku hero", "test testing experiment",
+ "organic tiktok instagram reels content", "meta facebook fb"].map(g => g.split(" ").map(stem))
+  .forEach(g => g.forEach(w => SYNOF.set(w, [...(SYNOF.get(w) || []), ...g.filter(x => x !== w)])));
 let IX = null;
 function buildIndex(dim, vec) {
   const post = new Map(), dl = new Float32Array(items.length);
@@ -133,11 +263,15 @@ function buildIndex(dim, vec) {
 }
 function edits(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return max + 1;
-  let prev = Array.from({length: b.length + 1}, (_, j) => j);
+  let prev = Array.from({length: b.length + 1}, (_, j) => j), pp = prev;
   for (let i = 1; i <= a.length; i++) {
     const cur = [i]; let best = i;
-    for (let j = 1; j <= b.length; j++) { cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); best = Math.min(best, cur[j]); }
-    if (best > max) return max + 1; prev = cur;
+    for (let j = 1; j <= b.length; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) cur[j] = Math.min(cur[j], pp[j - 2] + 1);
+      best = Math.min(best, cur[j]);
+    }
+    if (best > max) return max + 1; pp = prev; prev = cur;
   }
   return prev[b.length];
 }
@@ -156,11 +290,11 @@ function rank(q) {
   const fixed = raw.map((t, n) => t !== terms[n] ? terms[n] : null).filter(Boolean);
   const want = new Map();
   terms.forEach(t => { want.set(t, 1); (SYNOF.get(t) || []).forEach(s => want.set(s, Math.max(want.get(s) || 0, 0.35))); });
-  const N = items.length, k1 = 1.2, b = 0.75, sc = new Float32Array(N), hits = new Uint8Array(N);
+  const N = items.length, sc = new Float32Array(N), hits = new Uint8Array(N);
   want.forEach((w, t) => {
     const p = IX.post.get(t); if (!p) return;
     const df = p.length / 2, idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
-    for (let i = 0; i < p.length; i += 2) { const d = p[i], f = p[i + 1]; sc[d] += w * idf * (f * (k1 + 1)) / (f + k1 * (1 - b + b * IX.dl[d] / IX.avg)); if (w === 1) hits[d]++; }
+    for (let i = 0; i < p.length; i += 2) { const d = p[i], f = p[i + 1]; sc[d] += w * idf * (f * 2.2) / (f + 1.2 * (0.25 + 0.75 * IX.dl[d] / IX.avg)); if (w === 1) hits[d]++; }
   });
   const nq = Math.max(1, terms.filter(t => IX.post.has(t)).length);
   for (let d = 0; d < N; d++) if (sc[d]) sc[d] *= 0.5 + 0.5 * (hits[d] / nq);
@@ -181,162 +315,52 @@ function marked(s, terms) {
   const set = new Set(terms);
   return fill(s).split(/([A-Za-z0-9$%]+)/).map(w => set.has(stem(w.toLowerCase())) && !STOP.has(w.toLowerCase()) ? `<mark>${w}</mark>` : w).join("");
 }
-
-// ---------- the list ----------
 let last = null;
-function card(it, terms) {
+function card(it, t = []) {
   const pill = it.kind === "Rule" ? `<span class="pill stop">Rule</span>` : `<span class="pill" style="--hue:var(--ink-2)">Lesson</span>`;
-  const t = terms || [];
-  return `<article class="card res" id="k${it.id}"><div class="meta" style="border:0;padding:0">${pill}<span>${esc(it.cat)}</span>${it.when ? `<span>${esc(it.when)}</span>` : ""}</div>
+  return `<article class="card res"><div class="meta" style="border:0;padding:0">${pill}<span>${esc(it.cat)}</span>${it.when ? `<span>${esc(it.when)}</span>` : ""}</div>
     <h4>${marked(it.kind === "Rule" ? it.text : it.title, t)}</h4>${it.kind === "Lesson" ? `<p>${marked(it.text, t)}</p>` : ""}
     ${it.why && it.why !== it.text ? `<p class="why"><b>Why:</b> ${marked(it.why, t)}</p>` : ""}</article>`;
 }
 function render() {
   const keep = it => (!state.kind || it.kind === state.kind) && (!state.cat || it.cat === state.cat);
   const q = state.q.trim();
-  let list, terms = null, note = "";
+  let list, terms = [];
   if (q) {
     if (!last || last.q !== q) last = {q, ...rank(q)};
     list = last.order.map(d => items[d]).filter(keep); terms = last.terms;
-    if (last.fixed.length) note = `Searching for ${last.fixed.join(", ")}. `;
-    $("shown").textContent = note + (list.length ? `${list.length.toLocaleString()} matches, best first` : "");
+    $("shown").textContent = (last.fixed.length ? `Searching for ${last.fixed.join(", ")}. ` : "") + (list.length ? `${list.length.toLocaleString()} matches, best first` : "");
   } else {
     list = items.filter(keep);
     $("shown").textContent = `${list.length.toLocaleString()} ${state.cat || "rules and lessons"}`;
   }
-  if (!list.length) { $("list").innerHTML = `<p class="lede empty">Nothing on that yet.${ASK_URL ? " Try Ask." : ""}</p>`; return; }
+  if (!list.length) { $("list").innerHTML = `<p class="lede">Nothing on that yet. Ask it at the top instead.</p>`; return; }
   $("list").innerHTML = list.slice(0, state.n).map(it => card(it, terms)).join("") +
-    (list.length > state.n ? `<button class="btn ghost more" id="more">Show more</button>` : "");
-  const m = $("more"); if (m) m.onclick = () => { state.n += 40; render(); };
+    (list.length > state.n ? `<button class="btn ghost more" type="button">Show more</button>` : "");
+  const m = $("list").querySelector(".more"); if (m) m.onclick = () => { state.n += 30; render(); };
 }
 function chips() {
   const cats = {}; items.forEach(i => cats[i.cat] = (cats[i.cat] || 0) + 1);
-  const chip = (attr, v, label, on) => `<button type="button" class="btn${on ? "" : " ghost"}" data-${attr}="${esc(v)}" aria-pressed="${on}">${esc(label)}</button>`;
-  $("kinds").innerHTML = [["", "Everything"], ["Rule", "Rules"], ["Lesson", "Lessons"]].map(([v, l]) => chip("kind", v, l, state.kind === v)).join("");
-  $("cats").innerHTML = Object.entries(cats).sort((a, b) => b[1] - a[1]).map(([c]) => chip("cat", c, c, state.cat === c)).join("");
-  document.querySelectorAll("[data-kind]").forEach(b => b.onclick = () => { state.kind = b.dataset.kind; state.n = 40; chips(); render(); });
-  document.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { state.cat = state.cat === b.dataset.cat ? "" : b.dataset.cat; state.n = 40; chips(); render(); });
+  const b = (attr, v, label, on) => `<button class="btn ${on ? "" : "ghost"}" type="button" ${attr}="${esc(v)}">${esc(label)}</button>`;
+  $("kinds").innerHTML = b("data-kind", "", "Everything", !state.kind) + b("data-kind", "Rule", "Rules", state.kind === "Rule") + b("data-kind", "Lesson", "Lessons", state.kind === "Lesson");
+  $("cats").innerHTML = Object.entries(cats).sort((a, c) => c[1] - a[1]).map(([c]) => b("data-cat", c, c, state.cat === c)).join("");
+  document.querySelectorAll("[data-kind]").forEach(x => x.onclick = () => { state.kind = x.dataset.kind; state.n = 30; chips(); render(); });
+  document.querySelectorAll("[data-cat]").forEach(x => x.onclick = () => { state.cat = state.cat === x.dataset.cat ? "" : x.dataset.cat; state.n = 30; chips(); render(); });
 }
-
-// ---------- Ask: a straight answer from the best matches, with the sources ----------
-const used = () => { try { return +localStorage.getItem("prizm-asked") || 0; } catch (e) { return 0; } };
-const setUsed = n => { try { localStorage.setItem("prizm-asked", n); } catch (e) {} };
-let pass = ""; try { pass = localStorage.getItem("prizm-pass") || ""; } catch (e) {}
-let credits = null; try { credits = localStorage.getItem("prizm-credits"); credits = credits === null ? null : +credits; } catch (e) {}
-const saveCredits = n => { credits = n; try { localStorage.setItem("prizm-credits", n); } catch (e) {} };
-function freeLine(left) {
-  if (!ASK_URL) { $("free").textContent = ""; return; }
-  if (pass) { $("free").textContent = credits != null ? `${credits.toLocaleString()} answers left` : "Answers on your key"; return; }
-  const l = left ?? Math.max(0, FREE - used());
-  $("free").textContent = l > 0 ? `${l} of ${FREE} free questions left` : "Free questions used";
-}
-function paywall(out) {
-  const head = out ? `<p class="eyebrow">Answers used</p><h3>Your key is out of answers.</h3>`
-                   : `<p class="eyebrow">Free questions used</p><h3>You've asked your ${FREE} free questions.</h3>`;
-  return head + `<p>Search stays free. Answers are pay as you go: ${PACK}. You get a key that works here and from your own AI tools.</p>` +
-    (PAY_URL ? `<div class="btns"><a class="btn" href="${esc(PAY_URL)}">Get ${PACK}</a></div>` : `<p class="label">Paid answers open soon.</p>`);
-}
-function keyPanel(key, n) {
-  const base = ASK_URL.replace(/\/ask$/, "");
-  return `<p class="eyebrow">Paid</p><h3>${n.toLocaleString()} answers added.</h3>
-    <p>They're on this browser now; just ask. To use them from your own AI or tools, keep this key:</p>
-    <pre><code>${esc(key)}</code></pre>
-    <p>To plug it into Claude, ChatGPT or Cursor, open <b>Plug it into your AI</b> above.</p>
-    <details><summary>Call it from your own code</summary>
-    <p>Get the best-matching rules and lessons for any question (one answer each), then hand them to whatever model you use:</p>
-    <pre><code>curl ${esc(base)}/search -H "Authorization: Bearer ${esc(key)}" -H "Content-Type: application/json" -d '{"q":"how do I scale a winning ad"}'</code></pre>
-    <p>Or get a written answer: the same call to <code>${esc(base)}/ask</code>.</p></details>`;
-}
-// ---------- Plug it into your AI: one MCP address with the visitor's key on it ----------
-const MCP = () => ASK_URL.replace(/\/ask$/, "") + "/mcp?key=" + pass;
-function connectSteps() {
-  const url = esc(MCP());
-  $("connectBody").innerHTML = `
-    <p class="label">Your address${credits != null ? ` · ${credits.toLocaleString()} uses on it` : ""}</p>
-    <div class="addr"><pre><code id="mcpUrl">${url}</code></pre><button class="btn" id="copyUrl" type="button">Copy</button></div>
-    <p class="label">Keep it private: uses come off this key.</p>
-    <details><summary><b>Claude</b> (claude.ai or the app)</summary><p>Settings → Connectors → Add custom connector. Name it Prizm Knowledge, paste the address, Add. Then ask Claude anything about running a store.</p></details>
-    <details><summary><b>ChatGPT</b></summary><p>Settings → Apps &amp; Connectors → Advanced → turn on Developer mode. Then Create, name it Prizm Knowledge, paste the address, choose No authentication, Create.</p></details>
-    <details><summary><b>Cursor</b></summary><p>Settings → MCP → Add new server, or put this in <code>.cursor/mcp.json</code>:</p><pre><code>{"mcpServers":{"prizm":{"url":"${url}"}}}</code></pre></details>
-    <details><summary><b>Claude Code</b></summary><pre><code>claude mcp add --transport http prizm "${url}"</code></pre></details>
-    <p>Two tools come with it: <b>search_knowledge</b> (the best-matching rules and lessons, for your AI to answer from) and <b>ask_knowledge</b> (a finished, cited answer). Each call is one use. Search on this page stays free.</p>`;
-  $("copyUrl").onclick = async () => { try { await navigator.clipboard.writeText(MCP()); $("copyUrl").textContent = "Copied"; } catch (e) { getSelection().selectAllChildren($("mcpUrl")); } };
-}
-async function getKey() {
-  const b = $("getKey"); b.disabled = true; b.textContent = "Making your key…";
-  try {
-    const r = await fetch(ASK_URL.replace(/\/ask$/, "") + "/key", {method: "POST", headers: {"Content-Type": "application/json"}, body: "{}"});
-    const d = await r.json();
-    if (!r.ok || !d.key) throw new Error(d.error || "failed");
-    pass = d.key; try { localStorage.setItem("prizm-pass", pass); } catch (e) {}
-    saveCredits(d.credits); freeLine(); connectSteps();
-  } catch (e) { b.disabled = false; b.textContent = "Get my free key"; $("connectBody").insertAdjacentHTML("beforeend", `<p>Couldn't make a key just now. Try again in a minute.</p>`); }
-}
-
-async function unlockFromPayment() {
-  const sid = new URLSearchParams(location.search).get("paid");
-  if (!sid || !ASK_URL) return;
-  history.replaceState(null, "", location.pathname);
-  const box = $("answer"); $("answerWrap").hidden = false;
-  box.innerHTML = `<p class="label">Adding your answers…</p>`;
-  try {
-    const r = await fetch(ASK_URL.replace(/\/ask$/, "") + "/unlock", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({session: sid})});
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error);
-    pass = d.key; try { localStorage.setItem("prizm-pass", pass); } catch (e) {}
-    saveCredits(d.credits); freeLine(); connectSteps();
-    box.innerHTML = keyPanel(d.key, d.credits);
-  } catch (e) { box.innerHTML = `<p>We couldn't add your answers automatically (${esc(e.message || "error")}). Reply to your receipt and we'll sort it.</p>`; }
-}
-async function ask() {
-  const q = $("q").value.trim();
-  if (!q || !ASK_URL) return;
-  state.q = q; state.n = 40; render();
-  const box = $("answer"); $("answerWrap").hidden = false;
-  if (!pass && used() >= FREE) { box.innerHTML = paywall(); return; }
-  if (pass && credits === 0) { box.innerHTML = paywall(true); return; }
-  const top = last.order.map(d => items[d]);
-  const srcs = [...top.filter(i => i.kind === "Rule").slice(0, 5), ...top.filter(i => i.kind === "Lesson").slice(0, 10)];
-  if (!srcs.length) { box.innerHTML = `<p>Nothing in the knowledge base on that yet.</p>`; return; }
-  box.innerHTML = `<p class="eyebrow">${esc(q)}</p><p class="label">Reading ${srcs.length} rules and lessons…</p>`;
-  $("ask").disabled = true;
-  try {
-    const r = await fetch(ASK_URL, {method: "POST", headers: {"Content-Type": "application/json", ...(pass ? {"Authorization": "Bearer " + pass} : {})},
-                                     body: JSON.stringify({q, ids: srcs.map(s => s.id)})});
-    const d = await r.json().catch(() => ({}));
-    if (r.status === 402) { if (pass) { saveCredits(0); freeLine(); box.innerHTML = paywall(true); } else { setUsed(FREE); freeLine(0); box.innerHTML = paywall(); } return; }
-    if (!r.ok) throw new Error(d.error || "failed");
-    if (!pass) { setUsed(used() + 1); freeLine(d.left); } else { if (d.credits != null) saveCredits(d.credits); freeLine(); }
-    const html = esc(d.answer).split(/\n{2,}/).map(p => /^\s*[-•*] /m.test(p)
-      ? `<ul>${p.split(/\n/).filter(Boolean).map(l => `<li>${l.replace(/^\s*[-•*]\s*/, "")}</li>`).join("")}</ul>` : `<p>${p.replace(/\n/g, "<br>")}</p>`).join("")
-      .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
-      .replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (m, g) => g.split(/\s*,\s*/).map(n => srcs[+n - 1] ? `<a class="go cite" href="#s${n}">${n}</a>` : "").join(""));
-    box.innerHTML = `<p class="eyebrow">${esc(q)}</p>${html}<div class="srcs">` +
-      srcs.map((s, n) => `<details id="s${n + 1}"><summary>${n + 1} · ${esc(s.kind)} · ${esc(s.title)}</summary>${card(s)}</details>`).join("") + `</div>`;
-    box.querySelectorAll(".cite").forEach(a => a.onclick = e => { e.preventDefault(); const d = $(a.getAttribute("href").slice(1)); if (d) { d.open = true; d.scrollIntoView({behavior: "smooth", block: "center"}); } });
-  } catch (e) {
-    box.innerHTML = `<p class="eyebrow">${esc(q)}</p><p>Couldn't get an answer that time. Try again in a minute.</p>`;
-  } finally { $("ask").disabled = false; }
-}
-
 let tq = 0;
-$("q").addEventListener("input", e => { clearTimeout(tq); tq = setTimeout(() => { state.q = e.target.value; state.n = 40; render(); }, 160); });
-$("form").addEventListener("submit", e => { e.preventDefault(); clearTimeout(tq); if (ASK_URL) ask(); else { state.q = $("q").value; render(); } });
-$("ask").addEventListener("click", ask);
+$("bq").addEventListener("input", e => { clearTimeout(tq); tq = setTimeout(() => { state.q = e.target.value; state.n = 30; render(); }, 160); });
+$("bform").addEventListener("submit", e => { e.preventDefault(); state.q = $("bq").value; render(); });
 (async () => {
-  $("shown").textContent = "Loading the knowledge base…";
+  $("shown").textContent = "Loading…";
   const [d, v] = await Promise.all([fetch("/knowledge/knowledge.json").then(r => r.json()),
                                     fetch("/knowledge/knowledge.vec").then(r => r.ok ? r.arrayBuffer() : null).catch(() => null)]);
-  items = d.items;
-  buildIndex(d.dim, v);
+  items = d.items; buildIndex(d.dim, v);
   const r = items.filter(i => i.kind === "Rule").length;
-  $("lede").textContent = `${r.toLocaleString()} decision rules and ${(items.length - r).toLocaleString()} lessons from running real brands: paid media, creative, creators, offers, retention. Search all of it free` + (ASK_URL ? `, or ask a question and get a straight answer from it.` : `.`);
-  if (ASK_URL) { $("ask").hidden = false; $("q").setAttribute("enterkeyhint", "send"); }
-  freeLine(); chips(); unlockFromPayment();
-  if (ASK_URL) { if (pass) connectSteps(); else $("getKey").onclick = getKey; } else $("connect").hidden = true;
+  $("lede").textContent = `${r.toLocaleString()} decision rules and ${(items.length - r).toLocaleString()} lessons from operators running real brands. Ask anything about starting, running or scaling a store and get a straight answer, with the rules it came from.`;
+  $("bh").textContent = `Every rule and lesson: ${items.length.toLocaleString()}.`;
+  chips(); render();
   const q0 = new URLSearchParams(location.search).get("q");
-  if (q0) { $("q").value = q0; state.q = q0; }
-  render();
+  if (q0) { $("q").value = q0; ask(q0); }
 })();
 </script>
 </html>

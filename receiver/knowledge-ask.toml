@@ -7,7 +7,8 @@ ORIGIN        = "https://daemn.co"
 KNOWLEDGE     = "https://daemn.co/knowledge/knowledge.json"
 MODEL         = "gemini-3.6-flash"
 FREE          = "5"        # free uses per visitor before paying
-DAILY_CAP     = "500"      # model answers a day across everyone (a hard stop on the model bill)
+DAILY_CAP     = "2000"     # model answers a day across everyone (a hard stop on the model bill, about $4 a day)
+BETA_UNTIL    = "2026-12-31"  # free for everyone, no key, through this date
 CENTS_PER_USE = "5"        # $10 buys 200 uses
 PAYMENT_LINK  = ""         # the Stripe payment link id (plink_...); only its payments make keys
 
