@@ -45,7 +45,7 @@ html{overflow-x:clip}
 .kx-src p{margin:0;color:var(--ink-2)}
 .kx-src.lit{border-color:var(--indigo)}
 .kx-src.lit .num{color:var(--indigo)}
-.kx-src.dim{opacity:.55}
+.kx-src.dim{opacity:.6}
 .kx-src.flash{transform:translateX(-4px)}
 .kx-src.in{animation:kx-in .35s both}
 @keyframes kx-in{from{opacity:0;transform:translateY(6px)}}
@@ -157,7 +157,8 @@ function srcItem(s, n) {
 function showSources(list, stagger) {
   srcs = list;
   $("srcs").innerHTML = list.map((s, i) => srcItem(s, i + 1)).join("");
-  if (stagger) [...$("srcs").children].forEach((li, i) => { li.classList.add("in"); li.style.animationDelay = (i * 45) + "ms"; });
+  if (stagger) [...$("srcs").children].forEach((li, i) => { li.classList.add("in"); li.style.animationDelay = (i * 45) + "ms";
+    li.addEventListener("animationend", () => { li.classList.remove("in"); li.style.animationDelay = ""; }, {once: true}); });
 }
 function format(text) {
   return esc(text).split(/\n{2,}/).filter(p => p.trim()).map(p => /^\s*[-•*] /m.test(p)
