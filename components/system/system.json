@@ -1,0 +1,633 @@
+{
+ "about": "The operating words of the system: one word, one meaning. This is how work is organised, for any brand. Where a meaning was already written down it is taken as written, not rewritten; 'source' says where. It does not define the creative words (angle, concept, framework, format, hook): those have their own home, named under 'elsewhere'. A use listed under 'retire' is renamed in the place that owns it, on the owner's yes, never here.",
+ "status": "draft",
+ "words": [
+  {
+   "word": "Brand",
+   "means": "A business the system works for.",
+   "list": "brands/<brand>/",
+   "retire": [],
+   "source": "in use everywhere with one meaning"
+  },
+  {
+   "word": "Owner",
+   "means": "The person who points the system and makes the four calls.",
+   "list": "one per brand",
+   "retire": [
+    "the person named on a component (that is its role)",
+    "engine owner and definitions curator (both are the component's role)",
+    "founder"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Role",
+   "means": "A job with one number, never a person.",
+   "list": "components/roles/roles.json",
+   "retire": [
+    "the seven hand-off templates (they are how work arrives at a role)",
+    "a character in a story format",
+    "a second role list kept by the promo calendar"
+   ],
+   "source": "already written in the stage hand-off rules"
+  },
+  {
+   "word": "Holder",
+   "means": "The person or agent a role is given to.",
+   "list": "brands/<brand>/roles.json",
+   "retire": [
+    "user",
+    "owner of a component",
+    "runner",
+    "filled by",
+    "station"
+   ],
+   "source": "already written in the stage hand-off rules"
+  },
+  {
+   "word": "Agent",
+   "means": "A specialist that is handed a role's whole job.",
+   "list": "roles.py agent <role>",
+   "retire": [
+    "worker",
+    "session"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Sub-agent",
+   "means": "Runs one step for an agent.",
+   "list": "inside a component",
+   "retire": [],
+   "source": "new here"
+  },
+  {
+   "word": "Workflow",
+   "means": "The components that make one type of output, in order, and the hand-offs between them.",
+   "list": "components/system/system.json → workflows",
+   "retire": [
+    "chain (as in the video chain)",
+    "pipeline",
+    "line",
+    "lane"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Stage",
+   "means": "A component's place in a workflow.",
+   "list": "components/naming/stages.json",
+   "retire": [
+    "a step inside a component (stage 0 to 5: those are steps)",
+    "the status of a piece (making, editing: that is where it is, not a stage)",
+    "job (the tool list's column)",
+    "phase",
+    "station"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Component",
+   "means": "A folder that does one job and writes its results to runs.",
+   "list": "components/system/components.json",
+   "retire": [
+    "machine",
+    "tool (for anything a person does not start)",
+    "line",
+    "part",
+    "piece",
+    "station"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Tool",
+   "means": "A component a person or agent starts directly.",
+   "list": "TOOLS.md",
+   "retire": [
+    "any component",
+    "an outside app"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Chain",
+   "means": "The steps inside one component, in order.",
+   "list": "the component's own folder",
+   "retire": [
+    "the components in order (that is a workflow)",
+    "the steps of a send"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Step",
+   "means": "One prompt or action in a chain.",
+   "list": "the component's own folder",
+   "retire": [
+    "stage",
+    "sub-process",
+    "piece"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Skill",
+   "means": "A sentence you say that starts a component.",
+   "list": ".claude/skills/",
+   "retire": [
+    "a saved prompt",
+    "an ability"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Door",
+   "means": "The one command a skill runs to start a component.",
+   "list": "the component's README",
+   "retire": [
+    "entry",
+    "front door",
+    "launcher",
+    "activates"
+   ],
+   "source": "already written in the stage hand-off rules"
+  },
+  {
+   "word": "Type",
+   "means": "What is being made: video ad, image ad, carousel, email, landing page.",
+   "list": "components/naming/stages.json → types",
+   "retire": [
+    "lane (the stage check's video, image, email)",
+    "kind",
+    "format",
+    "brief type (which also splits AI from creator)"
+   ],
+   "source": "already written in the naming component"
+  },
+  {
+   "word": "Route",
+   "means": "Who makes a piece: a creator, AI, or the founder.",
+   "list": "the component that offers the choice",
+   "retire": [
+    "where a send goes (that is a role)",
+    "which model answers",
+    "lane (creator or AI)",
+    "the one tool for a job"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Run",
+   "means": "One execution of a component.",
+   "list": "runs/",
+   "retire": [
+    "job",
+    "batch (a batch is several runs)"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Brief",
+   "means": "An approved script or layout with its brief number.",
+   "list": "the brief register",
+   "retire": [
+    "anything before approval (that is a script)",
+    "card",
+    "ticket"
+   ],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Hand-off",
+   "means": "One component's finished output, filed as a folder for the next role. The work comes back inside it.",
+   "list": "handoffs/<role>/<brand>/<brief key>/",
+   "retire": [
+    "a session card",
+    "a send",
+    "a memo to the team",
+    "drop",
+    "kit (the kit is what an edit hand-off carries)"
+   ],
+   "source": "already written in the stage hand-off rules"
+  },
+  {
+   "word": "Gate",
+   "means": "A rule a piece must pass. Three kinds: check, stop, call.",
+   "list": "",
+   "retire": [],
+   "source": "already written in the team glossary"
+  },
+  {
+   "word": "Check",
+   "means": "A gate the system decides: pass or fail.",
+   "list": "components/stage-check, components/quality-checks",
+   "retire": [
+    "gate (used alone)",
+    "QC",
+    "audit",
+    "criteria",
+    "checklist"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Stop",
+   "means": "A gate the role's holder decides: the run holds until they do.",
+   "list": "the component's own folder",
+   "retire": [
+    "approval",
+    "review point",
+    "needs you"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Call",
+   "means": "A gate only the owner decides: spend past a cap, go live, send, sign.",
+   "list": "components/roles/roles.json → calls",
+   "retire": [
+    "owner-stop",
+    "gate",
+    "approval",
+    "the go",
+    "needs you"
+   ],
+   "source": "a pick between uses that disagree"
+  },
+  {
+   "word": "Lane",
+   "means": "A category of working session: video, image, copy and so on.",
+   "list": "the sessions playbook",
+   "retire": [
+    "a type (video, image, email)",
+    "creator or AI (that is a route)",
+    "a row on the edit timeline (that is a track)",
+    "a brand's channel",
+    "a customer's stage",
+    "paid or organic",
+    "a worker process",
+    "nine more uses found"
+   ],
+   "source": "already written in the sessions playbook"
+  }
+ ],
+ "same_thing": [
+  {
+   "thing": "One folder that does a job",
+   "names": [
+    "component",
+    "tool",
+    "machine",
+    "line",
+    "part",
+    "piece",
+    "station"
+   ],
+   "keep": "component"
+  },
+  {
+   "thing": "Components in order",
+   "names": [
+    "workflow",
+    "chain",
+    "pipeline",
+    "line"
+   ],
+   "keep": "workflow"
+  },
+  {
+   "thing": "Who a role is given to",
+   "names": [
+    "holder",
+    "owner",
+    "user",
+    "runner",
+    "filled by"
+   ],
+   "keep": "holder"
+  },
+  {
+   "thing": "A component's place in a workflow",
+   "names": [
+    "stage",
+    "job",
+    "phase",
+    "station"
+   ],
+   "keep": "stage"
+  },
+  {
+   "thing": "What is being made",
+   "names": [
+    "type",
+    "lane",
+    "kind",
+    "format"
+   ],
+   "keep": "type"
+  },
+  {
+   "thing": "A pass or fail the system decides",
+   "names": [
+    "check",
+    "gate",
+    "QC",
+    "audit",
+    "criteria",
+    "checklist"
+   ],
+   "keep": "check"
+  },
+  {
+   "thing": "A decision only the owner makes",
+   "names": [
+    "call",
+    "owner-stop",
+    "gate",
+    "approval",
+    "the go",
+    "needs you"
+   ],
+   "keep": "call"
+  },
+  {
+   "thing": "What starts a component",
+   "names": [
+    "door",
+    "front door",
+    "entry",
+    "launcher",
+    "activates"
+   ],
+   "keep": "door"
+  }
+ ],
+ "kinds": [
+  {
+   "id": "tool",
+   "means": "A person or agent starts it"
+  },
+  {
+   "id": "engine",
+   "means": "Does work when another component calls it"
+  },
+  {
+   "id": "library",
+   "means": "Code other components import"
+  },
+  {
+   "id": "definitions",
+   "means": "Lists and rules other components read"
+  }
+ ],
+ "stages": {
+  "from": "components/naming/stages.json",
+  "order": [
+   "set-up",
+   "swipe",
+   "teardown",
+   "writing",
+   "production",
+   "edit",
+   "launch"
+  ],
+  "not_in_the_stage_list_yet": [
+   "set-up",
+   "swipe"
+  ]
+ },
+ "connect": {
+  "rule": "Nothing joins the system without one row in components.json. The row is the connection.",
+  "a_row_says": [
+   "path: the folder",
+   "kind: tool, engine, library or definitions",
+   "does: what it does, in a few words",
+   "role: the role that owns it",
+   "workflow: which workflow, every workflow, or the system itself",
+   "stage: where in the workflow",
+   "steps: the steps inside it, if it has named ones"
+  ],
+  "the_check_fails_when": [
+   "a folder has no row",
+   "a row has no folder",
+   "a row names a role, workflow, stage or kind that does not exist",
+   "two rows claim one folder",
+   "a listed tool is missing from the list",
+   "a word is given two meanings"
+  ]
+ },
+ "elsewhere": [
+  {
+   "words": "angle, concept, framework, format, hook, opening, scroll stopper",
+   "home": "components/elements and components/marketing-doctrine"
+  },
+  {
+   "words": "file, folder and ad names; the stage list; the type list",
+   "home": "components/naming"
+  },
+  {
+   "words": "card, main, sub, send",
+   "home": "the sessions playbook"
+  }
+ ],
+ "two_copies": {
+  "what": "The same components live in two places: a team workspace and this toolkit.",
+  "counted": "2026-11-17",
+  "team": 82,
+  "toolkit": 62,
+  "in_both": 52,
+  "identical": 0,
+  "note": "Not one shared component is the same file for file. Part of that is the toolkit's name-stripping; the two causes were not separated. No written rule was found for which copy leads. Even the approved stage list differs between the two copies. Decided 2026-11-17: the toolkit leads."
+ },
+ "nesting": [
+  "Workflow",
+  "Stage",
+  "Component",
+  "Chain",
+  "Step"
+ ],
+ "workflows": [
+  {
+   "id": "video",
+   "type": "video-ad",
+   "name": "Video"
+  },
+  {
+   "id": "image",
+   "type": "image-ad",
+   "name": "Image"
+  },
+  {
+   "id": "email",
+   "type": "email",
+   "name": "Email"
+  },
+  {
+   "id": "page",
+   "type": "landing-page",
+   "name": "Page"
+  },
+  {
+   "id": "all",
+   "type": "",
+   "name": "Every workflow"
+  },
+  {
+   "id": "system",
+   "type": "",
+   "name": "The system itself"
+  }
+ ],
+ "disagreements": [
+  {
+   "about": "Which copy of the system leads",
+   "sides": [
+    "The team workspace: 82 components, a written glossary, a joining process",
+    "The toolkit: 62 components, brand-agnostic, no glossary and no joining process until this file"
+   ],
+   "pick": "The toolkit leads",
+   "kind": "decision",
+   "decided": "The toolkit leads"
+  },
+  {
+   "about": "Components in order",
+   "sides": [
+    "workflow (the team's layers page)",
+    "chain (the stage hand-off rules: the video chain)"
+   ],
+   "pick": "workflow"
+  },
+  {
+   "about": "Stage",
+   "sides": [
+    "a step inside a component (the team glossary)",
+    "a component's place in the order (the stage hand-off rules)",
+    "where a piece is right now (the stage list)"
+   ],
+   "pick": "a component's place in the workflow"
+  },
+  {
+   "about": "The owner's decision",
+   "sides": [
+    "owner-stop",
+    "stop",
+    "gate",
+    "needs you"
+   ],
+   "pick": "call"
+  },
+  {
+   "about": "Lane",
+   "sides": [
+    "a category of session (the sessions playbook)",
+    "13 other uses across the three places"
+   ],
+   "pick": "a category of session"
+  },
+  {
+   "about": "The names of the stages",
+   "sides": [
+    "the team's stage list",
+    "the toolkit's copy of it (already different)",
+    "the video names page at home"
+   ],
+   "pick": "one stage list, in the naming component",
+   "kind": "decision"
+  }
+ ],
+ "found": {
+  "counted": "2026-11-17",
+  "glossary_exists_in": "the team workspace only",
+  "joining_process_exists_in": "the team workspace only",
+  "lane_meanings": 13,
+  "role_lists": 5,
+  "format_vocabularies": 25,
+  "tool_list_sizes": {
+   "the front page says": 12,
+   "the tool list has": 30,
+   "the tools folder holds": 70
+  },
+  "session_lanes_in_use_but_not_in_the_lane_table": [
+   "EMAIL",
+   "OP",
+   "RESEARCH",
+   "MEDIA",
+   "INVEST",
+   "CONTENT"
+  ]
+ },
+ "core": {
+  "decided": "2026-11-17",
+  "by": "the owner",
+  "rule": "The toolkit is the core. The words, the components, the roles and the knowledge are defined here, and work starts here.",
+  "follows": [
+   {
+    "what": "A brand's working copy (the team workspace)",
+    "how": "Through a bridge: it takes its definitions and components from here"
+   },
+   {
+    "what": "The session system (cards, lanes, sends)",
+    "how": "Used as it is; not redefined here"
+   }
+  ]
+ },
+ "bridge": {
+  "rule": "The working copy follows the toolkit. A component is built or changed here first, then taken across. Nothing here reads or writes the working copy.",
+  "counted": "2026-11-17",
+  "state": "not built",
+  "today": "Changes have been flowing the other way: made in the working copy, then mirrored here with names stripped. Turning that around is the bridge's job.",
+  "in_both": 52,
+  "only_here": [
+   "client-copies",
+   "editor-onboarding",
+   "handoff-standard",
+   "my-feeds",
+   "offer-workspaces",
+   "product-page",
+   "roles",
+   "social-distribution",
+   "story-machine",
+   "system",
+   "video-edit-kit"
+  ],
+  "only_in_the_working_copy": {
+   "about": "Not in the toolkit yet. Each one is either brought in (made brand-agnostic) or stays with the brand. The grouping is a first draft.",
+   "workflow components": [
+    "3d-recipes",
+    "ad-volume",
+    "creative-strategist",
+    "editor-skills",
+    "feedback-forms",
+    "media-buying",
+    "media-render",
+    "motion",
+    "page-features",
+    "page-picture-review",
+    "page-production",
+    "page-teardown",
+    "page-writing",
+    "promo-calendar",
+    "qc-checks",
+    "stage-handoff",
+    "storefront-promo-edit",
+    "subscription-compliance",
+    "video-doctrine",
+    "winners",
+    "world-skit"
+   ],
+   "system components": [
+    "atlas",
+    "component-candidates",
+    "session-teardown",
+    "system-integration"
+   ],
+   "numbers and tracking": [
+    "cs-metrics",
+    "funnel-tracking",
+    "metrics",
+    "trendtrack"
+   ]
+  }
+ }
+}

@@ -1,0 +1,199 @@
+{
+ "about": "Who holds each role for this brand, this brand's targets, and any call the owner has granted. The roles themselves are in components/roles/roles.json and never change per brand. A holder is a person's short id or agent:<name>; the first holder answers for the role's number. Leave a target empty until there is a real number for it. A grant is the owner's own act: only the owner turns one to true.",
+ "assign": {
+  "owner": {
+   "holders": [],
+   "targets": {
+    "net_profit_margin": null,
+    "owner_hours_cap": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "changed_this_month": ""
+  },
+  "growth-strategist": {
+   "holders": [],
+   "targets": {
+    "blended_return_floor": null,
+    "monthly_revenue": null,
+    "tests_per_week": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "spend": false
+   },
+   "changed_this_month": ""
+  },
+  "swiper": {
+   "holders": [],
+   "targets": {
+    "formats_banked_per_week": null,
+    "feeds_per_day": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "changed_this_month": ""
+  },
+  "creative-strategist": {
+   "holders": [],
+   "targets": {
+    "brief_to_winner_rate": null,
+    "concept_briefs_per_week": null,
+    "iteration_briefs_per_week": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "changed_this_month": ""
+  },
+  "video-producer": {
+   "holders": [],
+   "targets": {
+    "first_pass_rate": null,
+    "briefs_produced_per_week": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "spend": false
+   },
+   "changed_this_month": ""
+  },
+  "video-editor": {
+   "holders": [],
+   "targets": {
+    "finished_cuts_per_week": null,
+    "core_videos_per_day": null,
+    "variations_per_day": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "changed_this_month": ""
+  },
+  "graphic-designer": {
+   "holders": [],
+   "targets": {
+    "finished_pictures_per_week": null,
+    "pictures_per_day": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "changed_this_month": ""
+  },
+  "media-buyer": {
+   "holders": [],
+   "targets": {
+    "cost_per_purchase_target": null,
+    "ads_tested_per_week": null,
+    "wasted_spend_cap": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "live": false,
+    "spend": false
+   },
+   "changed_this_month": ""
+  },
+  "distributor": {
+   "holders": [],
+   "targets": {
+    "organic_views_per_week": null,
+    "posts_per_day": null,
+    "platforms_per_post": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "live": false
+   },
+   "changed_this_month": ""
+  },
+  "creator-manager": {
+   "holders": [],
+   "targets": {
+    "creator_revenue": null,
+    "creators_onboarded_per_month": null,
+    "submissions_per_week": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "send": false,
+    "spend": false,
+    "sign": false
+   },
+   "changed_this_month": ""
+  },
+  "retention-strategist": {
+   "holders": [],
+   "targets": {
+    "email_sms_revenue_share": null,
+    "email_sends_per_week": null,
+    "sms_sends_per_week": null,
+    "revenue_per_send_floor": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "send": false
+   },
+   "changed_this_month": ""
+  },
+  "page-builder": {
+   "holders": [],
+   "targets": {
+    "page_conversion_rate": null,
+    "page_tests_live": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "live": false
+   },
+   "changed_this_month": ""
+  },
+  "brand-operator": {
+   "holders": [],
+   "targets": {
+    "roles_on_target_share": null,
+    "cash_report_daily": null,
+    "stock_report_weekly": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "spend": false,
+    "sign": false
+   },
+   "changed_this_month": ""
+  },
+  "customer-experience": {
+   "holders": [],
+   "targets": {
+    "satisfaction_floor": null,
+    "response_time_cap": null,
+    "save_rate_floor": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "spend": false
+   },
+   "changed_this_month": ""
+  },
+  "system-builder": {
+   "holders": [],
+   "targets": {
+    "clean_run_rate": null,
+    "fixes_made_permanent": null
+   },
+   "spend_cap": null,
+   "token_budget": null,
+   "grants": {
+    "spend": false
+   },
+   "changed_this_month": ""
+  }
+ }
+}

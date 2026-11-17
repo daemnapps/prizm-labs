@@ -6,6 +6,8 @@ Start with **brand activation**. It shows what a brand already has and which of 
 |---|---|---|
 | Set up | Brand folder and onboarding | `brands/_TEMPLATE/` |
 | Set up | Brand activation | `.claude/skills/brand-activation/` |
+| Set up | The system: words, components, check | `components/system/` |
+| Set up | Roles and ownership | `components/roles/` |
 | Swipe | My Feeds | `tools/my-feeds/` |
 | Swipe | Paid and organic swipe | `components/swipe-paid/`, `components/swipe-organic/` |
 | Swipe | Intake | `components/intake/` |

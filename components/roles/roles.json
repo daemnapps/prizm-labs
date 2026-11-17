@@ -1,0 +1,1677 @@
+{
+ "about": "Who owns what. A role is the reason, the knowledge and what the work looks like in application. A user is assigned to a role. The user starts the role's agents; the agents and their sub-agents run the workflows to the end; the role's number says whether it worked. Brand-agnostic: no brand, person, price or target lives here. Targets and who fills each role live in each brand's roles.json.",
+ "status": "draft",
+ "model": {
+  "chain": [
+   {
+    "id": "owner",
+    "name": "Owner",
+    "does": "Points the system and reviews what goes out"
+   },
+   {
+    "id": "role",
+    "name": "Role",
+    "does": "Reason, knowledge, what good looks like, one number"
+   },
+   {
+    "id": "holder",
+    "name": "Holder",
+    "does": "The person or agent the role is given to"
+   },
+   {
+    "id": "agent",
+    "name": "Agent",
+    "does": "Runs the role's components start to finish"
+   },
+   {
+    "id": "sub_agent",
+    "name": "Sub-agents",
+    "does": "One per step inside a component"
+   },
+   {
+    "id": "workflow",
+    "name": "Workflow",
+    "does": "The components that make one type, in order"
+   },
+   {
+    "id": "number",
+    "name": "Number",
+    "does": "The one result the role owns"
+   },
+   {
+    "id": "loop",
+    "name": "Loop",
+    "does": "The number changes the next round"
+   }
+  ],
+  "split": {
+   "agents": 80,
+   "people": 20,
+   "rule": "Agents do the work. People hold the taste and the calls. A person is added only where a call cannot be written as a check."
+  },
+  "card": [
+   {
+    "field": "reason",
+    "asks": "Why does this role exist?"
+   },
+   {
+    "field": "knowledge",
+    "asks": "What does it know?"
+   },
+   {
+    "field": "application",
+    "asks": "What does the work look like when it is done?"
+   },
+   {
+    "field": "number",
+    "asks": "Which one number does it own?"
+   },
+   {
+    "field": "components",
+    "asks": "Which components does its agent run?"
+   },
+   {
+    "field": "taste",
+    "asks": "Which calls stay with a person?"
+   },
+   {
+    "field": "authority",
+    "asks": "What does it decide alone, and what goes to its lead?"
+   },
+   {
+    "field": "calls",
+    "asks": "Which of the owner's calls does it reach?"
+   },
+   {
+    "field": "tripwires",
+    "asks": "What pulls the owner in?"
+   },
+   {
+    "field": "loop",
+    "asks": "What does the number change next?"
+   }
+  ],
+  "rules": [
+   "Every number has one owner. Two owners is no owner.",
+   "A role owns an outcome, not a task list.",
+   "A role is named by what it does, never by who holds it.",
+   "A person or agent can hold several roles. A role can have several holders; the first one answers for its number.",
+   "After a hand-off the holder runs everything. The owner is asked only for his four calls.",
+   "The owner enters a workflow only when a trip-wire fires.",
+   "Authority grows when the number is hit and shrinks when it is missed."
+  ],
+  "authority": [
+   {
+    "level": 1,
+    "name": "Act now",
+    "scope": "Anything inside the written process and the daily budget"
+   },
+   {
+    "level": 2,
+    "name": "Decide and log",
+    "scope": "Direction inside the role's own function, written down the same day"
+   },
+   {
+    "level": 3,
+    "name": "Propose, then proceed",
+    "scope": "Past the role's budget or across roles. Goes ahead after one working day unless stopped"
+   },
+   {
+    "level": 4,
+    "name": "Owner decides",
+    "scope": "Cannot be undone, spends past the cap, goes live, signs, or changes positioning"
+   }
+  ],
+  "proposal": [
+   "Decision",
+   "Context",
+   "Data",
+   "Upside",
+   "Downside",
+   "Recommendation"
+  ],
+  "rhythm": [
+   {
+    "when": "Daily",
+    "what": "Count logged",
+    "by": "agent"
+   },
+   {
+    "when": "Weekly",
+    "what": "Number against target",
+    "by": "user"
+   },
+   {
+    "when": "Monthly",
+    "what": "New brief: targets reset from actuals",
+    "by": "owner"
+   },
+   {
+    "when": "Quarterly",
+    "what": "Role set and authority reviewed",
+    "by": "owner"
+   }
+  ],
+  "brief": [
+   "What changed this month",
+   "Your numbers",
+   "What you deliver",
+   "Standards",
+   "Syncs",
+   "Trip-wires"
+  ],
+  "naming": [
+   {
+    "rule": "A role id is lowercase with dashes and says the job.",
+    "example": "video-editor"
+   },
+   {
+    "rule": "One name everywhere: folder, path, command, button, lane and shared drive.",
+    "example": "handoffs/video-editor/"
+   },
+   {
+    "rule": "Who holds a role is one setting, never part of a name.",
+    "example": "holders: [\"<person>\", \"agent:<name>\"]"
+   },
+   {
+    "rule": "A stage is a component's place in a workflow. A stage is held by a role.",
+    "example": "video-edit → video-editor"
+   },
+   {
+    "rule": "A hand-off is one folder and the work comes back inside it.",
+    "example": "handoffs/<role>/<brand>/<brief key>/returned/"
+   },
+   {
+    "rule": "Stage words come from the one stage list.",
+    "example": "components/naming/stages.json"
+   },
+   {
+    "rule": "Reuse a name that exists before making a new one.",
+    "example": "roles.py resolve <name>"
+   }
+  ],
+  "stops_today": [
+   {
+    "stop": "Approve the brief",
+    "where": "the stage list",
+    "role": "creative-strategist",
+    "proposed": "holder",
+    "why": "Not one of the four calls"
+   },
+   {
+    "stop": "Approve the timeline",
+    "where": "the edit line",
+    "role": "video-editor",
+    "proposed": "holder",
+    "why": "Not one of the four calls"
+   },
+   {
+    "stop": "Approve the captions",
+    "where": "the edit line",
+    "role": "video-editor",
+    "proposed": "holder",
+    "why": "Not one of the four calls"
+   },
+   {
+    "stop": "Launch review",
+    "where": "the stage list",
+    "role": "media-buyer",
+    "proposed": "owner",
+    "why": "Going live",
+    "call": "live"
+   },
+   {
+    "stop": "Publish ads",
+    "where": "the ad upload",
+    "role": "media-buyer",
+    "proposed": "owner",
+    "why": "Going live. Can be granted",
+    "call": "live"
+   },
+   {
+    "stop": "Schedule or send",
+    "where": "the email upload",
+    "role": "retention-strategist",
+    "proposed": "owner",
+    "why": "Sending. Can be granted",
+    "call": "send"
+   },
+   {
+    "stop": "Send a brief to a creator",
+    "where": "the creator hand-off",
+    "role": "creator-manager",
+    "proposed": "owner",
+    "why": "Sending. Can be granted",
+    "call": "send"
+   },
+   {
+    "stop": "Post a clip",
+    "where": "the clipper hand-off",
+    "role": "distributor",
+    "proposed": "owner",
+    "why": "Going live. Can be granted",
+    "call": "live"
+   }
+  ],
+  "calls": {
+   "rule": "The only decisions that are the owner's. Everything else in a role runs without him.",
+   "list": [
+    {
+     "id": "spend",
+     "name": "Spending past a cap"
+    },
+    {
+     "id": "live",
+     "name": "Going live"
+    },
+    {
+     "id": "send",
+     "name": "Sending"
+    },
+    {
+     "id": "sign",
+     "name": "Signing"
+    }
+   ],
+   "grant": "A call can be handed to a role for one brand. A grant is the owner's own act, written in that brand's roles.json. Nothing in the toolkit sets one."
+  }
+ },
+ "layers": [
+  {
+   "id": "direction",
+   "name": "Direction",
+   "does": "Sets where the money goes"
+  },
+  {
+   "id": "growth",
+   "name": "Growth",
+   "does": "Brings money in"
+  },
+  {
+   "id": "operations",
+   "name": "Operations",
+   "does": "Keeps it running"
+  }
+ ],
+ "roles": [
+  {
+   "id": "owner",
+   "name": "Owner",
+   "layer": "direction",
+   "reports_to": "",
+   "reason": "Someone has to point the system at the money and judge what leaves it.",
+   "number": {
+    "name": "Net profit",
+    "reads_as": "Profit after every cost, as a share of revenue",
+    "target_key": "net_profit_margin",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Hours inside workflows",
+     "per": "week",
+     "target_key": "owner_hours_cap"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "decision-making",
+     "strategy",
+     "finance",
+     "team"
+    ],
+    "ask": [
+     "How to decide what to scale and what to cut",
+     "How authority is handed out and pulled back"
+    ],
+    "brand_files": [
+     "strategy",
+     "offers"
+    ]
+   },
+   "application": [
+    {
+     "output": "Direction for the month",
+     "cadence": "Monthly",
+     "standard": "One page: what we sell, to whom, and the target"
+    },
+    {
+     "output": "Role briefs reset",
+     "cadence": "Monthly",
+     "standard": "Targets moved from last month's actuals"
+    },
+    {
+     "output": "Review of what goes out",
+     "cadence": "As work lands",
+     "standard": "Approve or name the change"
+    }
+   ],
+   "taste": [
+    "Where to go next",
+    "Final look before anything goes out",
+    "Spending past a cap, going live, sending, signing"
+   ],
+   "authority": {
+    "level": 4,
+    "decides": [
+     "Anything that cannot be undone",
+     "Positioning, pricing and offers",
+     "Who holds each role"
+    ],
+    "sends_up": []
+   },
+   "tripwires": [
+    "Any role misses its number two weeks running",
+    "An output fails its check twice",
+    "A role acts outside its authority"
+   ],
+   "loop": {
+    "reads": "Every role's number, weekly",
+    "changes": "Next month's briefs and who holds which authority",
+    "feeds": [
+     "growth-strategist",
+     "brand-operator"
+    ]
+   },
+   "also_called": [
+    "founder",
+    "the owner"
+   ],
+   "handoffs": [],
+   "calls": []
+  },
+  {
+   "id": "growth-strategist",
+   "name": "Growth strategist",
+   "layer": "growth",
+   "reports_to": "owner",
+   "reason": "Acquisition, creative, retention and conversion only pay when one head runs them as one engine.",
+   "number": {
+    "name": "Blended return on ad spend",
+    "reads_as": "All revenue divided by all ad spend",
+    "target_key": "blended_return_floor",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Revenue",
+     "per": "month",
+     "target_key": "monthly_revenue"
+    },
+    {
+     "name": "Tests live",
+     "per": "week",
+     "target_key": "tests_per_week"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "strategy",
+     "offer",
+     "research"
+    ],
+    "ask": [
+     "How to set spend across channels and when to scale or pull back",
+     "How lifetime value sets what a customer can cost",
+     "What a campaign is and how to structure one"
+    ],
+    "brand_files": [
+     "strategy",
+     "offers",
+     "products",
+     "core-avatars",
+     "competitors",
+     "learnings"
+    ]
+   },
+   "application": [
+    {
+     "output": "Brand folder filled and current",
+     "cadence": "At set-up, then monthly",
+     "standard": "Every tool reads it without asking a person"
+    },
+    {
+     "output": "Test calendar",
+     "cadence": "Weekly",
+     "standard": "Each test names its angle, audience and number"
+    },
+    {
+     "output": "Growth report",
+     "cadence": "Weekly",
+     "standard": "Number against target, what scales, what dies"
+    }
+   ],
+   "taste": [
+    "Which market, angle and audience to press",
+    "When to scale and when to pull back"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "Budget split inside the month's total",
+     "What gets tested next"
+    ],
+    "sends_up": [
+     "A new channel or a new offer"
+    ]
+   },
+   "tripwires": [
+    "Blended return under the floor for a week",
+    "No test live"
+   ],
+   "loop": {
+    "reads": "Blended return, cost per purchase, repeat rate",
+    "changes": "Next week's test calendar and budget split",
+    "feeds": [
+     "swiper",
+     "creative-strategist",
+     "media-buyer",
+     "retention-strategist",
+     "page-builder"
+    ]
+   },
+   "also_called": [],
+   "handoffs": [],
+   "calls": [
+    {
+     "call": "spend",
+     "at": "Budget above the month's total"
+    }
+   ]
+  },
+  {
+   "id": "swiper",
+   "name": "Swiper",
+   "layer": "growth",
+   "reports_to": "creative-strategist",
+   "reason": "What already works is cheaper to find than to invent.",
+   "number": {
+    "name": "Proven formats banked",
+    "reads_as": "Swipes that pass triage and are filed, per week",
+    "target_key": "formats_banked_per_week",
+    "basis": "draft"
+   },
+   "counts": [
+    {
+     "name": "Feeds checked",
+     "per": "day",
+     "target_key": "feeds_per_day"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "research",
+     "organic"
+    ],
+    "ask": [
+     "What makes a swipe worth banking",
+     "Where proven formats are found"
+    ],
+    "brand_files": [
+     "competitors",
+     "intake",
+     "core-avatars"
+    ]
+   },
+   "application": [
+    {
+     "output": "Swipes filed with their source and numbers",
+     "cadence": "Daily",
+     "standard": "Each one carries proof it worked"
+    },
+    {
+     "output": "Research round on a named question",
+     "cadence": "On request",
+     "standard": "Real posts and comments only"
+    }
+   ],
+   "taste": [
+    "Is the proof real",
+    "Can the format be reused"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "What gets banked"
+    ],
+    "sends_up": [
+     "Which swipes run"
+    ]
+   },
+   "tripwires": [
+    "A day with nothing banked",
+    "A swipe filed with no proof"
+   ],
+   "loop": {
+    "reads": "Which banked formats became winners",
+    "changes": "Which feeds and formats get watched",
+    "feeds": [
+     "creative-strategist"
+    ]
+   },
+   "also_called": [],
+   "handoffs": [],
+   "calls": []
+  },
+  {
+   "id": "creative-strategist",
+   "name": "Creative strategist",
+   "layer": "growth",
+   "reports_to": "growth-strategist",
+   "reason": "The right ad has to be decided before it is made.",
+   "number": {
+    "name": "Brief-to-winner rate",
+    "reads_as": "Share of briefs that become top-spending ads",
+    "target_key": "brief_to_winner_rate",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "New concept briefs",
+     "per": "week",
+     "target_key": "concept_briefs_per_week"
+    },
+    {
+     "name": "Iteration briefs",
+     "per": "week",
+     "target_key": "iteration_briefs_per_week"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "creative",
+     "copy",
+     "research"
+    ],
+    "ask": [
+     "The flow every ad runs through",
+     "How to write hooks, angles and a call to action",
+     "How customer language becomes copy"
+    ],
+    "brand_files": [
+     "core-avatars",
+     "products",
+     "offers",
+     "briefs",
+     "learnings",
+     "variables"
+    ]
+   },
+   "application": [
+    {
+     "output": "Briefs filed by number",
+     "cadence": "Daily",
+     "standard": "Each names its hook, angle and call to action"
+    },
+    {
+     "output": "Iteration briefs",
+     "cadence": "Daily",
+     "standard": "Each names the source ad and the one thing being tested"
+    },
+    {
+     "output": "Brief summary with results",
+     "cadence": "Weekly",
+     "standard": "Built from the buyer's numbers"
+    }
+   ],
+   "taste": [
+    "The angle",
+    "Which hooks go on which proven bodies",
+    "Whether the script sounds like the person saying it"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "What gets briefed",
+     "Which concepts get iterated"
+    ],
+    "sends_up": [
+     "A new angle for the brand",
+     "Anything that changes the offer"
+    ]
+   },
+   "tripwires": [
+    "A week under the brief count",
+    "A brief with no hook, angle or call to action",
+    "A month with no winner"
+   ],
+   "loop": {
+    "reads": "The buyer's winners and losers, weekly",
+    "changes": "Next week's briefs",
+    "feeds": [
+     "video-producer",
+     "graphic-designer",
+     "retention-strategist",
+     "page-builder"
+    ]
+   },
+   "also_called": [
+    "strategist",
+    "strategy",
+    "copywriter",
+    "creative"
+   ],
+   "handoffs": [],
+   "calls": []
+  },
+  {
+   "id": "video-producer",
+   "name": "Video producer",
+   "layer": "growth",
+   "reports_to": "creative-strategist",
+   "reason": "A brief is worth nothing until its voice, pictures and clips exist.",
+   "number": {
+    "name": "First-pass rate",
+    "reads_as": "Share of made assets that pass their check the first time",
+    "target_key": "first_pass_rate",
+    "basis": "draft"
+   },
+   "counts": [
+    {
+     "name": "Briefs produced",
+     "per": "week",
+     "target_key": "briefs_produced_per_week"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "video",
+     "ai systems"
+    ],
+    "ask": [
+     "How cast, sets and scene pictures are made and approved",
+     "Which model to use for which shot"
+    ],
+    "brand_files": [
+     "ai-elements",
+     "brand-assets",
+     "products",
+     "briefs"
+    ]
+   },
+   "application": [
+    {
+     "output": "Cast, sets and props approved against the rules",
+     "cadence": "Per batch",
+     "standard": "Matches the brief and the brand folder"
+    },
+    {
+     "output": "Voice, pictures and clips for each brief",
+     "cadence": "Daily",
+     "standard": "Passes the stage check"
+    },
+    {
+     "output": "The edit kit handed to the video editor",
+     "cadence": "Per brief",
+     "standard": "Everything the cut needs, in one folder"
+    }
+   ],
+   "taste": [
+    "Does the cast look right",
+    "Do the pictures match the brief"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "Starting a batch",
+     "Clearing a stop inside the rules"
+    ],
+    "sends_up": [
+     "What the ad says",
+     "A new face for the brand"
+    ]
+   },
+   "tripwires": [
+    "The same stage fails twice",
+    "A batch stalled a full day"
+   ],
+   "loop": {
+    "reads": "Which stages fail and why",
+    "changes": "The rule or prompt for that stage, through its owner",
+    "feeds": [
+     "video-editor"
+    ]
+   },
+   "also_called": [
+    "producer",
+    "production",
+    "director"
+   ],
+   "handoffs": [],
+   "calls": [
+    {
+     "call": "spend",
+     "at": "Generation spend past the round's budget"
+    }
+   ]
+  },
+  {
+   "id": "video-editor",
+   "name": "Video editor",
+   "layer": "growth",
+   "reports_to": "creative-strategist",
+   "reason": "The first three seconds decide whether an ad gets watched, and that is made in the cut.",
+   "number": {
+    "name": "Finished cuts on time",
+    "reads_as": "Cuts delivered inside the turnaround, per week",
+    "target_key": "finished_cuts_per_week",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Core videos",
+     "per": "day",
+     "target_key": "core_videos_per_day"
+    },
+    {
+     "name": "Variations",
+     "per": "day",
+     "target_key": "variations_per_day"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "video"
+    ],
+    "ask": [
+     "The editing standard: pacing, captions, hooks",
+     "How variations test one thing at a time"
+    ],
+    "brand_files": [
+     "brand-identity",
+     "brand-assets",
+     "ads",
+     "briefs"
+    ]
+   },
+   "application": [
+    {
+     "output": "Finished cuts, ready for the account",
+     "cadence": "Daily",
+     "standard": "Matches the brief: hook, pacing, call to action"
+    },
+    {
+     "output": "Hook and call-to-action versions",
+     "cadence": "Same day",
+     "standard": "Each tests the one named thing"
+    },
+    {
+     "output": "Asset library filed",
+     "cadence": "Daily",
+     "standard": "Every final findable by brief number"
+    }
+   ],
+   "taste": [
+    "Does the cut feel right",
+    "Does the hook land in three seconds"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "Everything on the timeline"
+    ],
+    "sends_up": [
+     "A new script",
+     "New casting"
+    ]
+   },
+   "tripwires": [
+    "A day under the count",
+    "A brief waiting more than a day",
+    "A wrong word in a caption"
+   ],
+   "loop": {
+    "reads": "Hook rate and hold rate of delivered ads",
+    "changes": "The editing standard",
+    "feeds": [
+     "media-buyer",
+     "distributor"
+    ]
+   },
+   "also_called": [
+    "editor"
+   ],
+   "handoffs": [
+    "video-editor"
+   ],
+   "calls": []
+  },
+  {
+   "id": "graphic-designer",
+   "name": "Graphic designer",
+   "layer": "growth",
+   "reports_to": "creative-strategist",
+   "reason": "A picture ad, an email and a page all need finished pictures that keep the product and the words exact.",
+   "number": {
+    "name": "Finished pictures on time",
+    "reads_as": "Pictures delivered inside the turnaround, per week",
+    "target_key": "finished_pictures_per_week",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Pictures",
+     "per": "day",
+     "target_key": "pictures_per_day"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "image"
+    ],
+    "ask": [
+     "How a static ad is remade from a swipe",
+     "What cannot change in a picture: product, words, offer, link"
+    ],
+    "brand_files": [
+     "brand-identity",
+     "brand-assets",
+     "products",
+     "briefs",
+     "ads"
+    ]
+   },
+   "application": [
+    {
+     "output": "Finished statics and sequence frames",
+     "cadence": "Daily",
+     "standard": "Named to the naming standard. Product and words untouched"
+    },
+    {
+     "output": "Email and page pictures",
+     "cadence": "Per brief",
+     "standard": "Right sizes, matches the layout"
+    }
+   ],
+   "taste": [
+    "Does the picture look finished",
+    "Does it still read in one glance"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "How a picture is finished"
+    ],
+    "sends_up": [
+     "New words on the ad",
+     "A new look for the brand"
+    ]
+   },
+   "tripwires": [
+    "A day under the count",
+    "A product redrawn or words retyped",
+    "A file name that does not parse"
+   ],
+   "loop": {
+    "reads": "Which pictures became winning ads",
+    "changes": "The picture standard",
+    "feeds": [
+     "media-buyer",
+     "retention-strategist",
+     "page-builder"
+    ]
+   },
+   "also_called": [
+    "designer"
+   ],
+   "handoffs": [
+    "graphic-designer"
+   ],
+   "calls": []
+  },
+  {
+   "id": "media-buyer",
+   "name": "Media buyer",
+   "layer": "growth",
+   "reports_to": "growth-strategist",
+   "reason": "Every ad dollar needs one person answerable for what it bought.",
+   "number": {
+    "name": "Cost per purchase at spend",
+    "reads_as": "Lowest cost per purchase at the highest spend",
+    "target_key": "cost_per_purchase_target",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "New ads tested",
+     "per": "week",
+     "target_key": "ads_tested_per_week"
+    },
+    {
+     "name": "Spend wasted on losing ads",
+     "per": "week",
+     "target_key": "wasted_spend_cap"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "paid media"
+    ],
+    "ask": [
+     "How to structure campaigns and ad sets",
+     "When to kill an ad and when to scale it",
+     "How to name and hand off ads"
+    ],
+    "brand_files": [
+     "meta",
+     "ads",
+     "offers",
+     "learnings"
+    ]
+   },
+   "application": [
+    {
+     "output": "Account audit: losing ads off",
+     "cadence": "Daily",
+     "standard": "Nothing past the kill line still spending"
+    },
+    {
+     "output": "New ads uploaded and named",
+     "cadence": "As delivered",
+     "standard": "Named by the naming rule, linked to the right page"
+    },
+    {
+     "output": "Performance report",
+     "cadence": "Weekly",
+     "standard": "Winners, why they win, what to make next"
+    }
+   ],
+   "taste": [
+    "Why a winner wins",
+    "What to ask the creative side for next"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "Killing an ad past the kill line",
+     "Moving budget inside the daily total"
+    ],
+    "sends_up": [
+     "A new campaign structure"
+    ]
+   },
+   "tripwires": [
+    "An ad past the kill line still running",
+    "Wasted spend over the weekly cap",
+    "A week with no new ads tested"
+   ],
+   "loop": {
+    "reads": "Spend, cost per purchase and hook rate per ad",
+    "changes": "What the strategist briefs next",
+    "feeds": [
+     "creative-strategist",
+     "growth-strategist",
+     "page-builder"
+    ]
+   },
+   "also_called": [
+    "ad-uploader",
+    "meta-uploader",
+    "launch"
+   ],
+   "handoffs": [
+    "ad-uploader"
+   ],
+   "calls": [
+    {
+     "call": "live",
+     "at": "Publishing ads to the account"
+    },
+    {
+     "call": "spend",
+     "at": "Budget above the daily total"
+    }
+   ]
+  },
+  {
+   "id": "distributor",
+   "name": "Organic distributor",
+   "layer": "growth",
+   "reports_to": "creative-strategist",
+   "reason": "Free reach tests ideas before money does.",
+   "number": {
+    "name": "Organic views",
+    "reads_as": "Views across every platform, per week",
+    "target_key": "organic_views_per_week",
+    "basis": "draft"
+   },
+   "counts": [
+    {
+     "name": "Posts",
+     "per": "day",
+     "target_key": "posts_per_day"
+    },
+    {
+     "name": "Platforms per post",
+     "per": "post",
+     "target_key": "platforms_per_post"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "organic"
+    ],
+    "ask": [
+     "What mix of entertainment, education and product to post",
+     "How a winning ad hook becomes an organic post"
+    ],
+    "brand_files": [
+     "brand-identity",
+     "ads",
+     "content-creators"
+    ]
+   },
+   "application": [
+    {
+     "output": "Posts published on every platform",
+     "cadence": "Daily",
+     "standard": "Native to each platform"
+    },
+    {
+     "output": "Content calendar",
+     "cadence": "Weekly",
+     "standard": "Filed before the week starts"
+    },
+    {
+     "output": "What worked",
+     "cadence": "Monthly",
+     "standard": "Top posts and why"
+    }
+   ],
+   "taste": [
+    "Does it feel like a person posted it"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "What posts when"
+    ],
+    "sends_up": [
+     "A post that speaks for the brand on a sensitive subject"
+    ]
+   },
+   "tripwires": [
+    "A day with no post",
+    "A week with no calendar"
+   ],
+   "loop": {
+    "reads": "Views and saves per post",
+    "changes": "Which posts become paid tests",
+    "feeds": [
+     "media-buyer",
+     "swiper"
+    ]
+   },
+   "also_called": [
+    "clipper"
+   ],
+   "handoffs": [
+    "clipper"
+   ],
+   "calls": [
+    {
+     "call": "live",
+     "at": "Posting"
+    }
+   ]
+  },
+  {
+   "id": "creator-manager",
+   "name": "Creator manager",
+   "layer": "growth",
+   "reports_to": "creative-strategist",
+   "reason": "Real people on camera are a supply line, and a supply line needs a keeper.",
+   "number": {
+    "name": "Revenue from creator content",
+    "reads_as": "Sales traced to creator posts and creator ads",
+    "target_key": "creator_revenue",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Creators onboarded",
+     "per": "month",
+     "target_key": "creators_onboarded_per_month"
+    },
+    {
+     "name": "Submissions",
+     "per": "week",
+     "target_key": "submissions_per_week"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "creators"
+    ],
+    "ask": [
+     "How creators are found, onboarded and tiered",
+     "How a creator's best post becomes an ad brief"
+    ],
+    "brand_files": [
+     "content-creators",
+     "briefs"
+    ]
+   },
+   "application": [
+    {
+     "output": "Creator pipeline",
+     "cadence": "Daily",
+     "standard": "Every prospect has a next step"
+    },
+    {
+     "output": "Briefs sent to the right creators",
+     "cadence": "Weekly",
+     "standard": "Matched by style and past results"
+    },
+    {
+     "output": "Submissions reviewed",
+     "cadence": "Daily",
+     "standard": "Feedback inside a day"
+    }
+   ],
+   "taste": [
+    "Is this creator right for the brand",
+    "What feedback will make the next video better"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "Who joins and who moves tier"
+    ],
+    "sends_up": [
+     "Dropping a creator who has been paid"
+    ]
+   },
+   "tripwires": [
+    "A creator past due with no follow-up",
+    "Submissions under the weekly count"
+   ],
+   "loop": {
+    "reads": "Results per creator and per submission",
+    "changes": "Who gets the next brief",
+    "feeds": [
+     "video-editor",
+     "media-buyer"
+    ]
+   },
+   "also_called": [],
+   "handoffs": [
+    "creator-manager",
+    "creator"
+   ],
+   "calls": [
+    {
+     "call": "send",
+     "at": "Sending a brief to a creator"
+    },
+    {
+     "call": "spend",
+     "at": "Paying past the creator budget"
+    },
+    {
+     "call": "sign",
+     "at": "A creator contract"
+    }
+   ]
+  },
+  {
+   "id": "retention-strategist",
+   "name": "Retention strategist",
+   "layer": "growth",
+   "reports_to": "growth-strategist",
+   "reason": "A customer who buys once has cost money. One who buys again makes it.",
+   "number": {
+    "name": "Email and SMS share of revenue",
+    "reads_as": "Revenue from email and SMS divided by all revenue",
+    "target_key": "email_sms_revenue_share",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Email sends",
+     "per": "week",
+     "target_key": "email_sends_per_week"
+    },
+    {
+     "name": "SMS sends",
+     "per": "week",
+     "target_key": "sms_sends_per_week"
+    },
+    {
+     "name": "Revenue per send",
+     "per": "send",
+     "target_key": "revenue_per_send_floor"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "email/sms",
+     "retention"
+    ],
+    "ask": [
+     "How the calendar splits content, education and offer by segment",
+     "How flows and campaigns are built and checked",
+     "How subscriptions are saved"
+    ],
+    "brand_files": [
+     "email-sms",
+     "offers",
+     "products",
+     "customer-experience"
+    ]
+   },
+   "application": [
+    {
+     "output": "Month planned by segment",
+     "cadence": "Monthly",
+     "standard": "Each send names its segment and its job"
+    },
+    {
+     "output": "Sends built and checked",
+     "cadence": "Daily",
+     "standard": "No broken link, no wrong address"
+    },
+    {
+     "output": "Send report",
+     "cadence": "Weekly",
+     "standard": "Volume and revenue per send by segment"
+    }
+   ],
+   "taste": [
+    "Which offer goes to which segment",
+    "Does the email sound like the brand"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "What sends when, to whom"
+    ],
+    "sends_up": [
+     "A new discount or offer",
+     "Sending to the whole list"
+    ]
+   },
+   "tripwires": [
+    "A week under the send floor",
+    "Revenue per send under the floor two weeks running",
+    "Any send with a broken link"
+   ],
+   "loop": {
+    "reads": "Revenue per send by segment",
+    "changes": "Next month's calendar",
+    "feeds": [
+     "growth-strategist",
+     "customer-experience"
+    ]
+   },
+   "also_called": [
+    "klaviyo-uploader",
+    "email"
+   ],
+   "handoffs": [
+    "klaviyo-uploader"
+   ],
+   "calls": [
+    {
+     "call": "send",
+     "at": "Scheduling or sending an email or SMS"
+    }
+   ]
+  },
+  {
+   "id": "page-builder",
+   "name": "Page builder",
+   "layer": "growth",
+   "reports_to": "growth-strategist",
+   "reason": "The click is paid for. The page decides whether it comes back as money.",
+   "number": {
+    "name": "Page conversion rate",
+    "reads_as": "Purchases divided by visits, per page",
+    "target_key": "page_conversion_rate",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Page tests live",
+     "per": "week",
+     "target_key": "page_tests_live"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "landing page",
+     "offer"
+    ],
+    "ask": [
+     "The product page standard",
+     "How a page is matched to the ad that sends the click",
+     "How an offer is laid out"
+    ],
+    "brand_files": [
+     "web",
+     "offers",
+     "products",
+     "brand-identity"
+    ]
+   },
+   "application": [
+    {
+     "output": "Pages matched to live ad angles",
+     "cadence": "Per angle",
+     "standard": "Passes the page standard on a phone"
+    },
+    {
+     "output": "A test running",
+     "cadence": "Always",
+     "standard": "One thing changed, one number read"
+    }
+   ],
+   "taste": [
+    "Does the page keep the ad's promise"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "What gets tested on a page"
+    ],
+    "sends_up": [
+     "Changing price or offer"
+    ]
+   },
+   "tripwires": [
+    "No test running",
+    "A live page that fails the standard"
+   ],
+   "loop": {
+    "reads": "Conversion rate per page and per ad",
+    "changes": "The next page test",
+    "feeds": [
+     "media-buyer",
+     "growth-strategist"
+    ]
+   },
+   "also_called": [
+    "funnel"
+   ],
+   "handoffs": [],
+   "calls": [
+    {
+     "call": "live",
+     "at": "Putting a page live"
+    }
+   ]
+  },
+  {
+   "id": "brand-operator",
+   "name": "Brand operator",
+   "layer": "operations",
+   "reports_to": "owner",
+   "reason": "Someone has to check every number is being hit, with data and no opinion.",
+   "number": {
+    "name": "Roles on target",
+    "reads_as": "Share of roles hitting their number this week",
+    "target_key": "roles_on_target_share",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Cash report",
+     "per": "day",
+     "target_key": "cash_report_daily"
+    },
+    {
+     "name": "Stock report",
+     "per": "week",
+     "target_key": "stock_report_weekly"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "operations",
+     "finance"
+    ],
+    "ask": [
+     "How stock, cash and suppliers are watched",
+     "How each role's numbers add up to revenue"
+    ],
+    "brand_files": [
+     "operations",
+     "products",
+     "strategy"
+    ]
+   },
+   "application": [
+    {
+     "output": "Numbers check across every role",
+     "cadence": "Weekly",
+     "standard": "Each role: on target, yes or no"
+    },
+    {
+     "output": "Cash and stock reports",
+     "cadence": "Daily and weekly",
+     "standard": "No gaps. Anything odd flagged the same day"
+    },
+    {
+     "output": "One summary for the owner",
+     "cadence": "Weekly",
+     "standard": "What is off and what was done"
+    }
+   ],
+   "taste": [
+    "Is a number measuring activity when it should measure the result"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "Telling a role its number is off"
+    ],
+    "sends_up": [
+     "A role that keeps missing its number"
+    ]
+   },
+   "tripwires": [
+    "A role off target with no flag",
+    "A day with no cash report",
+    "Stock under the reorder line"
+   ],
+   "loop": {
+    "reads": "Every role's number",
+    "changes": "Which role gets attention this week",
+    "feeds": [
+     "owner"
+    ]
+   },
+   "also_called": [
+    "operator",
+    "ops"
+   ],
+   "handoffs": [],
+   "calls": [
+    {
+     "call": "spend",
+     "at": "Stock orders"
+    },
+    {
+     "call": "sign",
+     "at": "Supplier contracts"
+    }
+   ]
+  },
+  {
+   "id": "customer-experience",
+   "name": "Customer experience",
+   "layer": "operations",
+   "reports_to": "brand-operator",
+   "reason": "Every contact with a customer either adds to what they are worth or takes from it.",
+   "number": {
+    "name": "Customer satisfaction",
+    "reads_as": "Average score customers give after a contact",
+    "target_key": "satisfaction_floor",
+    "basis": "source"
+   },
+   "counts": [
+    {
+     "name": "Response time",
+     "per": "ticket",
+     "target_key": "response_time_cap"
+    },
+    {
+     "name": "Save rate",
+     "per": "month",
+     "target_key": "save_rate_floor"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "operations",
+     "retention"
+    ],
+    "ask": [
+     "Diagnose first, then recommend, then credit, then refund",
+     "How a cancellation is saved"
+    ],
+    "brand_files": [
+     "customer-experience",
+     "products",
+     "offers"
+    ]
+   },
+   "application": [
+    {
+     "output": "Tickets and comments answered",
+     "cadence": "Daily",
+     "standard": "Sounds like a person. Diagnosis before refund"
+    },
+    {
+     "output": "Recurring issues logged",
+     "cadence": "Daily",
+     "standard": "Same day"
+    },
+    {
+     "output": "What customers are saying",
+     "cadence": "Weekly",
+     "standard": "Patterns, with counts"
+    }
+   ],
+   "taste": [
+    "Tone on a hard conversation",
+    "When to save and when to let go"
+   ],
+   "authority": {
+    "level": 1,
+    "decides": [
+     "Refunds and credits inside the limit"
+    ],
+    "sends_up": [
+     "A pattern in complaints"
+    ]
+   },
+   "tripwires": [
+    "Satisfaction under the floor two weeks running",
+    "The same complaint three times in a week",
+    "A comment unanswered for two days"
+   ],
+   "loop": {
+    "reads": "Complaints, saves and scores",
+    "changes": "The answers page, the product page and the next brief",
+    "feeds": [
+     "creative-strategist",
+     "retention-strategist",
+     "brand-operator"
+    ]
+   },
+   "also_called": [],
+   "handoffs": [],
+   "calls": [
+    {
+     "call": "spend",
+     "at": "A refund past the limit"
+    }
+   ]
+  },
+  {
+   "id": "system-builder",
+   "name": "System builder",
+   "layer": "operations",
+   "reports_to": "owner",
+   "reason": "The tools are the staff. Someone keeps them working and makes each fix stick.",
+   "number": {
+    "name": "Clean-run rate",
+    "reads_as": "Share of runs that finish with no person fixing them",
+    "target_key": "clean_run_rate",
+    "basis": "draft"
+   },
+   "counts": [
+    {
+     "name": "Fixes that became a rule or check",
+     "per": "week",
+     "target_key": "fixes_made_permanent"
+    }
+   ],
+   "knowledge": {
+    "categories": [
+     "ai systems",
+     "operations"
+    ],
+    "ask": [
+     "How a stage is checked before the next one starts",
+     "How a fix is written into the tool and not into a chat"
+    ],
+    "brand_files": [
+     "variables"
+    ]
+   },
+   "application": [
+    {
+     "output": "Tools that run from the brand folder alone",
+     "cadence": "Always",
+     "standard": "No person needed to start or finish a run"
+    },
+    {
+     "output": "Every repeat fault turned into a check",
+     "cadence": "Weekly",
+     "standard": "It cannot happen the same way twice"
+    }
+   ],
+   "taste": [
+    "Is this worth building, or cheap to rent"
+   ],
+   "authority": {
+    "level": 2,
+    "decides": [
+     "How a tool is built"
+    ],
+    "sends_up": [
+     "Changing what a stage produces"
+    ]
+   },
+   "tripwires": [
+    "The same fault twice",
+    "A run that needs a person to finish"
+   ],
+   "loop": {
+    "reads": "Where runs stop and who fixed them",
+    "changes": "The tool, its check or its prompt",
+    "feeds": [
+     "video-producer",
+     "video-editor",
+     "graphic-designer",
+     "creative-strategist"
+    ]
+   },
+   "also_called": [
+    "toolkit",
+    "app",
+    "developer",
+    "the developer"
+   ],
+   "handoffs": [],
+   "calls": [
+    {
+     "call": "spend",
+     "at": "A new paid service"
+    }
+   ]
+  }
+ ]
+}

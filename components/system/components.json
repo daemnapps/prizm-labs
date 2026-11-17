@@ -1,0 +1,699 @@
+{
+ "about": "Every component of the system, once. A component is one folder that does one job. Each row says what kind it is, what it does, which role owns it, and where it sits: which workflow and which stage. A folder with no row here fails the check, and so does a row with no folder. Brand-agnostic.",
+ "status": "draft",
+ "components": [
+  {
+   "path": "brands/_TEMPLATE",
+   "kind": "definitions",
+   "does": "Fills and keeps the brand folder",
+   "role": "growth-strategist",
+   "workflow": "all",
+   "stage": "set-up",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": ".claude/skills/brand-activation",
+   "kind": "tool",
+   "does": "Finds what the brand needs turned on",
+   "role": "growth-strategist",
+   "workflow": "all",
+   "stage": "set-up",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/meta-strategy",
+   "kind": "engine",
+   "does": "Reads the account and lays out the plan",
+   "role": "growth-strategist",
+   "workflow": "all",
+   "stage": "launch",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/my-feeds",
+   "kind": "tool",
+   "does": "Watches the feeds",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/swipe-paid",
+   "kind": "engine",
+   "does": "Pulls paid swipes",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/swipe-organic",
+   "kind": "engine",
+   "does": "Pulls organic swipes",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/intake",
+   "kind": "engine",
+   "does": "Files what comes in",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [
+    "swipe"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/triage",
+   "kind": "engine",
+   "does": "Ranks and sorts the swipes",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/research-gatherer",
+   "kind": "engine",
+   "does": "Gathers customer language",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/video-teardown",
+   "kind": "tool",
+   "does": "Strips a video to its structure",
+   "role": "creative-strategist",
+   "workflow": "video",
+   "stage": "teardown",
+   "steps": [
+    "teardown"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/image-teardown",
+   "kind": "tool",
+   "does": "Strips an image to its structure",
+   "role": "creative-strategist",
+   "workflow": "image",
+   "stage": "teardown",
+   "steps": [
+    "teardown",
+    "format",
+    "labels"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/audio-teardown",
+   "kind": "engine",
+   "does": "Strips the audio",
+   "role": "creative-strategist",
+   "workflow": "video",
+   "stage": "teardown",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/video-writing",
+   "kind": "tool",
+   "does": "Writes the video script",
+   "role": "creative-strategist",
+   "workflow": "video",
+   "stage": "writing",
+   "steps": [
+    "writing",
+    "filed"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/image-writing",
+   "kind": "tool",
+   "does": "Writes the image ad",
+   "role": "creative-strategist",
+   "workflow": "image",
+   "stage": "writing",
+   "steps": [
+    "brand",
+    "headlines",
+    "variations",
+    "brief",
+    "filed"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/copywriter",
+   "kind": "tool",
+   "does": "Writes and sharpens copy",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/language-layer",
+   "kind": "tool",
+   "does": "Puts it in the customer's words",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/story-machine",
+   "kind": "tool",
+   "does": "Builds the story",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/briefs",
+   "kind": "engine",
+   "does": "Keeps the brief register",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/video-production",
+   "kind": "tool",
+   "does": "Makes the clips",
+   "role": "video-producer",
+   "workflow": "video",
+   "stage": "production",
+   "steps": [
+    "production"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/casting",
+   "kind": "engine",
+   "does": "Builds the cast",
+   "role": "video-producer",
+   "workflow": "video",
+   "stage": "production",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/3d",
+   "kind": "engine",
+   "does": "Builds sets and objects",
+   "role": "video-producer",
+   "workflow": "video",
+   "stage": "production",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/video-edit",
+   "kind": "tool",
+   "does": "Cuts the video",
+   "role": "video-editor",
+   "workflow": "video",
+   "stage": "edit",
+   "steps": [
+    "edit",
+    "card"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/video-edit-kit",
+   "kind": "tool",
+   "does": "Supplies captions, inserts and badges",
+   "role": "video-editor",
+   "workflow": "video",
+   "stage": "edit",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/asset-index",
+   "kind": "tool",
+   "does": "Files and finds every asset",
+   "role": "video-editor",
+   "workflow": "all",
+   "stage": "edit",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/image-production",
+   "kind": "tool",
+   "does": "Makes the pictures",
+   "role": "graphic-designer",
+   "workflow": "image",
+   "stage": "production",
+   "steps": [
+    "number",
+    "pictures"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/image-edit",
+   "kind": "tool",
+   "does": "Changes one thing at a time",
+   "role": "graphic-designer",
+   "workflow": "image",
+   "stage": "edit",
+   "steps": [
+    "card"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/ad-handoff",
+   "kind": "engine",
+   "does": "Packs finished ads for upload",
+   "role": "media-buyer",
+   "workflow": "all",
+   "stage": "launch",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/meta-upload",
+   "kind": "engine",
+   "does": "Uploads and names the ads",
+   "role": "media-buyer",
+   "workflow": "all",
+   "stage": "launch",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/social-distribution",
+   "kind": "tool",
+   "does": "Schedules and posts",
+   "role": "distributor",
+   "workflow": "all",
+   "stage": "launch",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/gdrive-creator",
+   "kind": "engine",
+   "does": "Collects and files creator footage",
+   "role": "creator-manager",
+   "workflow": "video",
+   "stage": "production",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/marketing-calendar",
+   "kind": "engine",
+   "does": "Plans the month",
+   "role": "retention-strategist",
+   "workflow": "email",
+   "stage": "writing",
+   "steps": [
+    "month"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/email-production",
+   "kind": "tool",
+   "does": "Writes, builds and checks each send",
+   "role": "retention-strategist",
+   "workflow": "email",
+   "stage": "production",
+   "steps": [
+    "copy",
+    "built",
+    "number"
+   ],
+   "basis": "source"
+  },
+  {
+   "path": "components/offer-workspaces/page",
+   "kind": "tool",
+   "does": "Builds the page",
+   "role": "page-builder",
+   "workflow": "page",
+   "stage": "production",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/product-page",
+   "kind": "tool",
+   "does": "Checks it against the standard",
+   "role": "page-builder",
+   "workflow": "page",
+   "stage": "production",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/chain-runner",
+   "kind": "engine",
+   "does": "Runs chains stage by stage",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/stage-check",
+   "kind": "engine",
+   "does": "Checks each hand-off",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/quality-checks",
+   "kind": "engine",
+   "does": "A retired name kept as a pointer to the workflow checks",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/run-kit",
+   "kind": "library",
+   "does": "Shared run parts",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/keys",
+   "kind": "library",
+   "does": "Finds every key",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/roles",
+   "kind": "definitions",
+   "does": "The roles: who owns which number",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "components/ad-variations",
+   "kind": "engine",
+   "does": "Plans and makes variations of an ad",
+   "role": "video-editor",
+   "workflow": "all",
+   "stage": "edit",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/local-studio",
+   "kind": "engine",
+   "does": "Runs editing jobs on the local machine",
+   "role": "video-editor",
+   "workflow": "all",
+   "stage": "edit",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/creative-controls",
+   "kind": "definitions",
+   "does": "The creative dials for copy, video and pictures",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/marketing-doctrine",
+   "kind": "definitions",
+   "does": "The doctrine every writing prompt cites",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/elements",
+   "kind": "definitions",
+   "does": "The library of formats, structures and styles",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/culture",
+   "kind": "engine",
+   "does": "Reads what a post's people recognise",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "teardown",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/distinct-six",
+   "kind": "engine",
+   "does": "Writes one concept as different ads",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/creative-queue",
+   "kind": "engine",
+   "does": "Holds briefs ready for the makers",
+   "role": "creative-strategist",
+   "workflow": "all",
+   "stage": "writing",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/creative-diversity",
+   "kind": "engine",
+   "does": "Scores an ad against the platform's diversity rule",
+   "role": "media-buyer",
+   "workflow": "all",
+   "stage": "launch",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/identity-training",
+   "kind": "engine",
+   "does": "Trains a look for a brand asset",
+   "role": "video-producer",
+   "workflow": "all",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/objects",
+   "kind": "engine",
+   "does": "Makes a 3D object from one picture",
+   "role": "video-producer",
+   "workflow": "all",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/generative-model-house",
+   "kind": "definitions",
+   "does": "Which model does which job",
+   "role": "video-producer",
+   "workflow": "all",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/model-inputs",
+   "kind": "definitions",
+   "does": "What each model takes and its limits",
+   "role": "video-producer",
+   "workflow": "all",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/models",
+   "kind": "definitions",
+   "does": "The list of approved models",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/reference-edit",
+   "kind": "engine",
+   "does": "Edits a picture from a reference",
+   "role": "graphic-designer",
+   "workflow": "image",
+   "stage": "edit",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/editor-onboarding",
+   "kind": "tool",
+   "does": "The front door for the people who make the ads",
+   "role": "creator-manager",
+   "workflow": "all",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/review",
+   "kind": "engine",
+   "does": "Keeps the review records",
+   "role": "brand-operator",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/handoff-standard",
+   "kind": "definitions",
+   "does": "The hand-off folder standard and its seven templates",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/naming",
+   "kind": "library",
+   "does": "Names every folder, file and ad",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/marketing-chain-checks",
+   "kind": "engine",
+   "does": "The checks a chain runs between stages",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/client-copies",
+   "kind": "tool",
+   "does": "Gives each client a private copy of the toolkit",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/brandpath",
+   "kind": "library",
+   "does": "Finds a brand's folder for every tool",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/brand-finder",
+   "kind": "library",
+   "does": "Finds a brand by name",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/apify",
+   "kind": "library",
+   "does": "The scraping connection",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/system",
+   "kind": "definitions",
+   "does": "The system's words, its parts and the check that keeps them connected",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "source"
+  },
+  {
+   "path": "tools/video-studio",
+   "kind": "tool",
+   "does": "Storyboard, production, edit, versions and approval in one place",
+   "role": "video-producer",
+   "workflow": "video",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  }
+ ]
+}
