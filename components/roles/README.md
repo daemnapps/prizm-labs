@@ -37,6 +37,19 @@ Nothing here names a brand, a person, a price or a target. Those live in each br
 | Trip-wires | What pulls the owner in? |
 | Loop | What does the number change next? |
 
+## The money
+
+Every role's number rolls up into one equation, and each term has one owning role:
+
+```
+Sales − cost of goods − shipping − marketing − overhead − fees = profit
+```
+
+Two lines every brand works out from its own numbers (`money` in the brand's `roles.json`):
+
+- Breakeven cost per purchase = order value × (1 − buffer) − cost per order
+- Target cost per purchase = breakeven − profit target × order value
+
 ## The rules
 
 1. Every number has one owner. Two owners is no owner.
@@ -78,6 +91,7 @@ Say what you want in plain words; Claude runs these.
 | Show me a role | `roles.py card <role>` |
 | Start a role's agent | `roles.py agent <role> --brand <brand>` |
 | This month's brief for a holder | `roles.py brief <role> --brand <brand>` |
+| The brand's cost-per-purchase lines | `roles.py money --brand <brand>` |
 | Set up roles for a new brand | copy `brands/_TEMPLATE/roles.json` into the brand folder and fill it |
 
 `check` fails when a number has two owners, a listed tool has no owner or two, a name means two roles, a hand-off role or a stage owner lands on no role, a workflow folder is missing, or a role card has an empty part.

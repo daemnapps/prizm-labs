@@ -7,6 +7,7 @@
     python3 components/roles/roles.py card <role> [--brand <brand>]    # one role, in full
     python3 components/roles/roles.py agent <role> [--brand <brand>]   # the brief the role's agent starts from
     python3 components/roles/roles.py brief <role> --brand <brand> [--month YYYY-MM]   # this month's brief for the holder
+    python3 components/roles/roles.py money --brand <brand>  # the brand's cost-per-purchase lines, from its own numbers
     python3 components/roles/roles.py template              # rewrite brands/_TEMPLATE/roles.json from the role file
     python3 components/roles/roles.py export                # roles + coverage as JSON (for a page)
 
@@ -123,6 +124,9 @@ def coverage(data):
     for n, who in names(data).items():
         if len(set(who)) > 1:
             problems.append(f"the name '{n}' means two roles: {', '.join(sorted(set(who)))}")
+    for x in data["model"].get("money", {}).get("equation", []) + data["model"].get("money", {}).get("levers", []):
+        if x["role"] not in ids:
+            problems.append(f"money: '{x.get('term') or x.get('name')}' names unknown role '{x['role']}'")
     for s in data["model"].get("stops_today", []):
         if s["role"] not in ids:
             problems.append(f"stop '{s['stop']}' names unknown role '{s['role']}'")
@@ -338,10 +342,33 @@ def cmd_brief(a):
     print("\n".join(L))
 
 
+def money_lines(inputs):
+    """Breakeven and target cost per purchase from a brand's own numbers; None when a number is missing."""
+    try:
+        ov, buf, cpo, pt = (float(inputs[k]) for k in ("order_value", "buffer", "cost_per_order", "profit_target"))
+    except (KeyError, TypeError, ValueError):
+        return None
+    breakeven = ov * (1 - buf) - cpo
+    return {"breakeven_cost_per_purchase": round(breakeven, 2), "target_cost_per_purchase": round(breakeven - pt * ov, 2)}
+
+
+def cmd_money(a):
+    data = load()
+    m = data["model"]["money"]
+    got = money_lines(brand_file(a.brand).get("money") or {})
+    names = {r["id"]: r["name"] for r in data["roles"]}
+    print(" ".join(f"{x['sign']} {x['term']} ({names[x['role']]})" for x in m["equation"]))
+    if not got:
+        sys.exit("Fill 'money' in the brand's roles.json first: " + ", ".join(i["key"] for i in m["inputs"]))
+    for f in m["formulas"]:
+        print(f"{f['name']}: {got[f['key']]}  ({f['is']})")
+
+
 def cmd_template(_a):
     data = load()
     out = {
         "about": "Who holds each role for this brand, this brand's targets, and any call the owner has granted. The roles themselves are in components/roles/roles.json and never change per brand. A holder is a person's short id or agent:<name>; the first holder answers for the role's number. Leave a target empty until there is a real number for it. A grant is the owner's own act: only the owner turns one to true.",
+        "money": {i["key"]: None for i in data["model"]["money"]["inputs"]},
         "assign": {},
     }
     for r in data["roles"]:
@@ -370,6 +397,7 @@ def main():
     p = sub.add_parser("card"); p.add_argument("role"); p.add_argument("--brand"); p.set_defaults(fn=cmd_card)
     p = sub.add_parser("agent"); p.add_argument("role"); p.add_argument("--brand"); p.set_defaults(fn=cmd_agent)
     p = sub.add_parser("brief"); p.add_argument("role"); p.add_argument("--brand", required=True); p.add_argument("--month"); p.set_defaults(fn=cmd_brief)
+    p = sub.add_parser("money"); p.add_argument("--brand", required=True); p.set_defaults(fn=cmd_money)
     sub.add_parser("template").set_defaults(fn=cmd_template)
     sub.add_parser("export").set_defaults(fn=cmd_export)
     a = ap.parse_args()

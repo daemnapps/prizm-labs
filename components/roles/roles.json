@@ -274,6 +274,90 @@
     }
    ],
    "grant": "A call can be handed to a role for one brand. A grant is the owner's own act, written in that brand's roles.json. Nothing in the toolkit sets one."
+  },
+  "money": {
+   "rule": "Every role's number rolls up into one equation. Each term has one owning role.",
+   "equation": [
+    {
+     "term": "Sales",
+     "sign": "+",
+     "role": "growth-strategist"
+    },
+    {
+     "term": "Cost of goods",
+     "sign": "-",
+     "role": "brand-operator"
+    },
+    {
+     "term": "Shipping",
+     "sign": "-",
+     "role": "brand-operator"
+    },
+    {
+     "term": "Marketing",
+     "sign": "-",
+     "role": "media-buyer"
+    },
+    {
+     "term": "Overhead",
+     "sign": "-",
+     "role": "owner"
+    },
+    {
+     "term": "Fees",
+     "sign": "-",
+     "role": "brand-operator"
+    },
+    {
+     "term": "Profit",
+     "sign": "=",
+     "role": "owner"
+    }
+   ],
+   "levers": [
+    {
+     "name": "Order value",
+     "role": "page-builder"
+    },
+    {
+     "name": "Repeat share of sales",
+     "role": "retention-strategist"
+    },
+    {
+     "name": "Cost per purchase",
+     "role": "media-buyer"
+    }
+   ],
+   "formulas": [
+    {
+     "name": "Breakeven cost per purchase",
+     "is": "order value × (1 − buffer) − cost per order",
+     "key": "breakeven_cost_per_purchase"
+    },
+    {
+     "name": "Target cost per purchase",
+     "is": "breakeven − profit target × order value",
+     "key": "target_cost_per_purchase"
+    }
+   ],
+   "inputs": [
+    {
+     "key": "order_value",
+     "name": "Average order value"
+    },
+    {
+     "key": "buffer",
+     "name": "Buffer, as a share (0.05 for 5%)"
+    },
+    {
+     "key": "cost_per_order",
+     "name": "Cost of goods and shipping per order"
+    },
+    {
+     "key": "profit_target",
+     "name": "Profit target, as a share (0.20 for 20%)"
+    }
+   ]
   }
  },
  "layers": [

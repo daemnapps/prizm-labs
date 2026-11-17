@@ -1,5 +1,11 @@
 {
  "about": "Who holds each role for this brand, this brand's targets, and any call the owner has granted. The roles themselves are in components/roles/roles.json and never change per brand. A holder is a person's short id or agent:<name>; the first holder answers for the role's number. Leave a target empty until there is a real number for it. A grant is the owner's own act: only the owner turns one to true.",
+ "money": {
+  "order_value": null,
+  "buffer": null,
+  "cost_per_order": null,
+  "profit_target": null
+ },
  "assign": {
   "owner": {
    "holders": [],
