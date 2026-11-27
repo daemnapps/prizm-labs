@@ -646,6 +646,16 @@
    "basis": "draft"
   },
   {
+   "path": "components/chain-mirror",
+   "kind": "tool",
+   "does": "Brings saved work in from a source repo, names stripped, and says how far behind",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/brandpath",
    "kind": "library",
    "does": "Finds a brand's folder for every tool",
@@ -692,6 +702,16 @@
    "role": "video-producer",
    "workflow": "video",
    "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
+   "path": "components/always-on",
+   "kind": "tool",
+   "does": "Moves jobs, boards, keys and rendering onto a server that never sleeps",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
    "steps": [],
    "basis": "draft"
   }
