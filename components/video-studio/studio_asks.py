@@ -237,7 +237,8 @@ def run_one(rec, runner=None):
         pid = rec["pid"]                               # started before a restart: wait for it
     else:
         (d / "exit.txt").unlink(missing_ok=True)
-        cmd = ["claude", "-p", prompt_for(rec), "--allowedTools", *TOOLS]
+        dirs = sorted({os.path.realpath(WS / x) for x in ("runs", "brands")})   # the data folders are often links
+        cmd = ["claude", "-p", prompt_for(rec), "--add-dir", *dirs, "--allowedTools", *TOOLS]
         wrapper = 'cd "$1" && shift && "$@" > "$OUT/run.log" 2>&1; echo $? > "$OUT/exit.txt"'
         try:
             pr = subprocess.Popen(["/bin/sh", "-c", wrapper, "ask", str(WS), *cmd], start_new_session=True,
