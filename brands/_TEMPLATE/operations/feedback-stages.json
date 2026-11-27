@@ -39,7 +39,8 @@
     "flow_name": "Feedback · list-no-order",
     "trigger": {
      "type": "metric",
-     "metric": "<joined_list_event>"
+     "metric": "<joined_list_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -66,7 +67,8 @@
     "flow_name": "Feedback · abandoned-checkout",
     "trigger": {
      "type": "metric",
-     "metric": "<checkout_started_event>"
+     "metric": "<checkout_started_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -94,17 +96,18 @@
     "flow_name": "Feedback · new-customer",
     "trigger": {
      "type": "metric",
-     "metric": "<delivered_event>"
+     "metric": "<order_placed_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
      "the order event — equals 1 over all time",
      "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "<time_to_first_result_days>",
-    "why_the_wait": "once the product has had time to do what it promises; asked earlier, the answer is a guess"
+    "wait": "<delivery_days + time_to_first_result_days>",
+    "why_the_wait": "from the order: the time it takes to arrive, then the time the product takes to do what it promises. Counted from the order because every order sends that event; a delivery signal often never arrives"
    },
-   "blocked_by": "needs delivered_event — the event name the email platform receives when an order is delivered (from the email platform's metrics list (Shopify + Klaviyo: 'Delivered Shipment', if delivery tracking is on)); order_placed_event — the event name(s) for a placed order, one per store or checkout (from the email platform's metrics list, the ones still firing); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); time_to_first_result_days — days after delivery before the product shows what it promises (from the product facts and claims (products/<product>/product.md), not a guess); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
+   "blocked_by": "needs order_placed_event — the event name(s) for a placed order, one per store or checkout (from the email platform's metrics list, the ones still firing); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); delivery_days — days from order to the customer holding it (most orders: the 90th percentile) (from measured: order to delivered events in the email platform, or the carrier's delivery times); time_to_first_result_days — days after delivery before the product shows what it promises (from the product facts and claims (products/<product>/product.md), not a guess); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
   },
   {
    "stage": "repeat-customer",
@@ -121,7 +124,8 @@
     "flow_name": "Feedback · repeat-customer",
     "trigger": {
      "type": "metric",
-     "metric": "<order_placed_event>"
+     "metric": "<order_placed_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -148,7 +152,8 @@
     "flow_name": "Feedback · subscriber",
     "trigger": {
      "type": "metric",
-     "metric": "<subscription_renewed_event>"
+     "metric": "<subscription_renewed_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -173,16 +178,17 @@
     "flow_name": "Feedback · churned-refund",
     "trigger": {
      "type": "metric",
-     "metric": "<refund_event>"
+     "metric": "<refund_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
      "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "<buffer_days>",
-    "why_the_wait": "soon, while it's fresh, but not inside the refund's own emails"
+    "wait": "<refund_flow_days + buffer_days>",
+    "why_the_wait": "after the brand's own refund emails have finished, so the form never lands inside them"
    },
-   "blocked_by": "needs refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order')); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
+   "blocked_by": "needs refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order')); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); refund_flow_days — days the brand's own refund emails run after a refund (from the email platform's refund flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "churned-cancelled",
@@ -199,7 +205,8 @@
     "flow_name": "Feedback · churned-cancelled",
     "trigger": {
      "type": "metric",
-     "metric": "<subscription_cancelled_event>"
+     "metric": "<subscription_cancelled_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -224,7 +231,8 @@
     "flow_name": "Feedback · post-support",
     "trigger": {
      "type": "metric",
-     "metric": "<ticket_resolved_event>"
+     "metric": "<ticket_resolved_event>",
+     "integration": ""
     },
     "trigger_filters": [],
     "flow_filters": [

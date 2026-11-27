@@ -57,7 +57,7 @@
    "lane": "customer",
    "relationship": "first-time-buyer",
    "why": "They have used the product for the first time: only they can say whether it did what the ads promised, and what they'd say to a friend.",
-   "event": "delivered_event",
+   "event": "order_placed_event",
    "exclude": [
     "refunded"
    ],
@@ -65,11 +65,11 @@
     "orders": 1
    },
    "wait": {
-    "after": "time_to_first_result_days",
-    "why": "once the product has had time to do what it promises; asked earlier, the answer is a guess"
+    "after": "delivery_days",
+    "plus": "time_to_first_result_days",
+    "why": "from the order: the time it takes to arrive, then the time the product takes to do what it promises. Counted from the order because every order sends that event; a delivery signal often never arrives"
    },
    "requires": [
-    "delivered_event",
     "order_placed_event"
    ],
    "known": {
@@ -135,8 +135,9 @@
    "why": "They asked for their money back: only they can say what broke between the promise and the product.",
    "event": "refund_event",
    "wait": {
-    "after": "buffer_days",
-    "why": "soon, while it's fresh, but not inside the refund's own emails"
+    "after": "refund_flow_days",
+    "plus": "buffer_days",
+    "why": "after the brand's own refund emails have finished, so the form never lands inside them"
    },
    "requires": [
     "refund_event"

@@ -33,14 +33,15 @@ class Stages(unittest.TestCase):
 
     def test_facts_drive_triggers_waits_and_which_forms_exist(self):
         f = self.facts(store_platform="shopify", email_platform="klaviyo", has_email_signup=True, welcome_series_days=5,
-                       checkout_recovery_days=2, time_to_first_result_days=21, buffer_days=1,
+                       checkout_recovery_days=2, time_to_first_result_days=21, buffer_days=1, delivery_days=7, refund_flow_days=3,
                        joined_list_event="Subscribed to List", checkout_started_event="Checkout Started",
                        order_placed_event=["Placed Order (store)", "Placed Order (checkout)"],
                        delivered_event="Delivered Shipment", refund_event="Refunded Order", sells_subscriptions=False)
         rows = {m["stage"]: s for m, s in S.derive(f)}
         self.assertIsNone(rows["subscriber"])
         self.assertIsNone(rows["churned-cancelled"])
-        self.assertEqual(rows["new-customer"]["klaviyo"]["wait"], "21 days")
+        self.assertEqual(rows["new-customer"]["klaviyo"]["wait"], "28 days")
+        self.assertEqual(rows["new-customer"]["klaviyo"]["trigger"]["metric"], "Placed Order")
         self.assertEqual(rows["list-no-order"]["klaviyo"]["wait"], "6 days")
         self.assertEqual(rows["abandoned-checkout"]["klaviyo"]["trigger"]["metric"], "Checkout Started")
         self.assertIn("Refunded Order — zero times since starting this flow", rows["new-customer"]["klaviyo"]["flow_filters"])
@@ -55,10 +56,24 @@ class Stages(unittest.TestCase):
         rows = {m["stage"]: s for m, s in S.derive(f)}
         self.assertIn("only klaviyo is built", rows["repeat-customer"]["blocked_by"])
 
+    def test_event_with_a_filter(self):
+        f = self.facts(email_platform="klaviyo", buffer_days=1, sells_subscriptions=True,
+                       subscription_renewed_event={"metric": "Placed Order (store)", "where": "tags contains 'renewal'"})
+        rows = {m["stage"]: s for m, s in S.derive(f)}
+        k = rows["subscriber"]["klaviyo"]
+        self.assertEqual((k["trigger"]["metric"], k["trigger_filters"]), ("Placed Order", ["tags contains 'renewal'"]))
+
+    def test_refund_form_waits_out_the_refund_emails(self):
+        f = self.facts(email_platform="klaviyo", buffer_days=1, refund_flow_days=3, refund_event="Refunded Order (store)")
+        rows = {m["stage"]: s for m, s in S.derive(f)}
+        self.assertEqual(rows["churned-refund"]["klaviyo"]["wait"], "4 days")
+
     def test_two_order_sources_show_as_either(self):
         f = self.facts(email_platform="klaviyo", buffer_days=1, order_placed_event=["Placed Order (store)", "Placed Order (checkout)"])
         rows = {m["stage"]: s for m, s in S.derive(f)}
-        self.assertEqual(rows["repeat-customer"]["klaviyo"]["trigger"]["metric"], "Placed Order (store) or Placed Order (checkout)")
+        t = rows["repeat-customer"]["klaviyo"]["trigger"]
+        self.assertEqual((t["metric"], t["integration"].split(" — ")[0]), ("Placed Order", "store"))
+        self.assertEqual([x["integration"] for x in t["one_flow_per_source"]], ["store", "checkout"])
 
     def test_proposal_drops_questions_for_dropped_forms_and_passes_check(self):
         self.facts(sells_subscriptions=False)

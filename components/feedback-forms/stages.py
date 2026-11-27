@@ -20,6 +20,7 @@ import argparse
 import copy
 import datetime as dt
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -43,10 +44,36 @@ def _val(f, name):
 
 
 def _names(v):
-    """An event value: one name, or a list of names (one per store or checkout) shown as 'A or B'."""
+    """An event value: one name, a {"metric", "where"} pair, or a list of either (one per store or checkout)."""
+    if isinstance(v, dict):
+        return f"{v.get('metric')} where {v.get('where')}" if v.get("where") else v.get("metric")
     if isinstance(v, list):
+        if any(isinstance(x, dict) for x in v):
+            return " or ".join(_names(x) for x in v if x)
         return " or ".join(str(x) for x in v if x) or None
     return v or None
+
+
+def _split(name):
+    """'Placed Order (Shopify)' -> ('Placed Order', 'Shopify')."""
+    m = re.match(r"^(.*?)\s*\(([^()]+)\)\s*$", str(name))
+    return (m.group(1), m.group(2)) if m else (str(name), "")
+
+
+def _trigger(value, ev):
+    """The flow trigger. More than one source (a list) means one flow per source, each with its own trigger."""
+    if not value:
+        return {"type": "metric", "metric": f"<{ev}>", "integration": ""}
+    names = value if isinstance(value, list) else [value]
+    first = names[0] if not isinstance(names[0], dict) else names[0].get("metric")
+    metric, integration = _split(first)
+    t = {"type": "metric", "metric": metric, "integration": integration}
+    if isinstance(names[0], dict) and names[0].get("where"):
+        t["filter"] = names[0]["where"]
+    if len(names) > 1:
+        t["one_flow_per_source"] = [dict(zip(("metric", "integration"), _split(n if not isinstance(n, dict) else n.get("metric")))) for n in names]
+        t["integration"] = integration + " — and one more flow per source: " + ", ".join(_names(n) for n in names[1:])
+    return t
 
 
 def _need(f, name):
@@ -101,8 +128,8 @@ def derive(f):
         stage = {"stage": m["stage"], "label": m["label"], "lane": m["lane"], "relationship": m["relationship"],
                  "known": m["known"], "why": m["why"], "status": "blocked" if needs else "ready",
                  "klaviyo": {"flow_name": f"Feedback · {m['stage']}",
-                             "trigger": {"type": "metric", "metric": metric or f"<{ev}>"},
-                             "trigger_filters": [], "flow_filters": filters,
+                             "trigger": _trigger(_val(f, ev), ev),
+                             "trigger_filters": [x for x in [_trigger(_val(f, ev), ev).get("filter")] if x], "flow_filters": filters,
                              "wait": f"{int(wait)} days" if not needs else f"<{' + '.join(k for k in (w['after'], w.get('plus')) if k)}>",
                              "why_the_wait": w["why"]}}
         if needs:

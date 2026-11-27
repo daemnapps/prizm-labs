@@ -25,6 +25,16 @@
   "means": "how many days the abandoned-checkout emails run",
   "from": "the email platform's checkout flow"
  },
+ "refund_flow_days": {
+  "value": null,
+  "means": "days the brand's own refund emails run after a refund",
+  "from": "the email platform's refund flow"
+ },
+ "delivery_days": {
+  "value": null,
+  "means": "days from order to the customer holding it (most orders: the 90th percentile)",
+  "from": "measured: order to delivered events in the email platform, or the carrier's delivery times"
+ },
  "time_to_first_result_days": {
   "value": null,
   "means": "days after delivery before the product shows what it promises",
