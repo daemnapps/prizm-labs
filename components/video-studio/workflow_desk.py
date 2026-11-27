@@ -746,7 +746,8 @@ def live_ads(brand):
         s3 = num(a.get("spend3"))
         rows.append({"id": a.get("ad_id"), "name": a.get("ad_name"), "brief": m.group(1) if m else None,
                      "campaign": a.get("campaign"), "spend3": s3, "active": s3 > 0, "spend7": s7, "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None,
-                     "spend30": s30, "buys30": b30, "value30": num(a.get("value30")),
+                     "spend30": s30, "buys30": b30, "value30": num(a.get("value30")), "value7": num(a.get("value7")),
+                     "roas7": round(num(a.get("value7")) / s7, 2) if s7 else None,
                      "cpa30": round(s30 / b30, 2) if b30 else None, "first_seen": a.get("first_seen"),
                      "call": c.get("action"), "why": c.get("why"), "break_even": c.get("break_even")})
     rows.sort(key=lambda x: -x["spend7"])
@@ -1050,6 +1051,23 @@ def join_update(data):
     return joining()
 
 
+def ad_off(data):
+    """The owner's Turn off on one ad: handed to Outlier's own pause (127.0.0.1:8880/api/ads/off), which checks the
+    Meta ad's name before pausing it and logs the press. One Meta call per press; the Studio never calls Meta itself."""
+    import urllib.request
+    body = {"brand": data.get("brand"), "ad": data.get("ad"), "ids": data.get("ids") or [], "spend": data.get("spend"),
+            "note": "Turn off in the Studio, confirmed"}
+    if not SAFE.match(str(body["brand"] or "")) or not body["ad"] or not body["ids"]:
+        raise ValueError("which ad?")
+    req = urllib.request.Request("http://127.0.0.1:8880/api/ads/off", data=json.dumps(body).encode(), method="POST",
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except Exception as e:  # noqa: BLE001 — said on the page
+        raise RuntimeError("Outlier did not turn it off: %s" % e)
+
+
 def vary_candidates(la, n=6):
     """New ads worth varying: groups that carry a brief number or a creator (trybe) tag, that sold in the last 30 days
     and are under the desk's break-even (or that the desk says to keep or scale). Ranked by purchases."""
@@ -1086,7 +1104,9 @@ def today(brand):
     la = live_ads(brand)
     return {"money": money(), "winners": winners(brand), "research": research(brand), "now": la["money"],
             "off": [a for a in la["ads"] if a["call"] == "off"], "calls": [a for a in la["ads"] if a["call"] not in (None, "too_early", "keep", "off")],
-            "calls_asof": la["calls_asof"], "vary": vary_candidates(la)}
+            "calls_asof": la["calls_asof"], "vary": vary_candidates(la),
+            "low_roas": sum(1 for a in la["ads"] if a["active"] and a["spend7"] >= 50 and (a["roas7"] or 0) < 0.5
+                            and not (a["buys7"] > 0 and not a["value7"]))}
 
 
 def preset(brand, avatar):
@@ -1381,6 +1401,8 @@ def handle(h, method, parts, query, body):
                 return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by")))
             if api == ["joining"]:
                 return h.send(200, join_update(data))
+            if api == ["ad-off"]:
+                return h.send(200, ad_off(data))
             if api == ["hide"]:
                 return h.send(200, hide(data.get("brand"), data.get("item"), data.get("on", True) is not False))
             if api == ["taste"]:                                # the owner's "Use this" / "Discard" on a taste draft

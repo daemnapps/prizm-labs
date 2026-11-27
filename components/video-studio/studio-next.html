@@ -332,7 +332,7 @@ tr.grp.lit td{background:color-mix(in srgb,var(--amber) 12%,var(--card))}
   <div class="grow"></div>
   <select class="brand" id="brand" aria-label="Brand"></select>
   <a class="icb" href="#knowledge" data-v="knowledge" title="Knowledge" aria-label="Knowledge"><i class="ic" data-i="book"></i></a>
-  <a class="icb wk" href="#asks" id="wk" data-v="asks" title="Working on it" aria-label="Working on it"><i class="ic" data-i="loop"></i><b class="nb" id="wkn"></b></a>
+  <a class="icb wk" href="#asks" id="wk" data-v="asks" title="Jobs: what Claude is doing for you" aria-label="Jobs"><i class="ic" data-i="loop"></i><b class="nb" id="wkn"></b></a>
   <a class="icb" href="#settings" data-v="settings" title="Settings" aria-label="Settings"><i class="ic" data-i="shield"></i></a>
   <a class="btn go" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a>
 </div></header>
@@ -426,7 +426,7 @@ function route(){
   const alias = {brands:'settings'};
   S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
-  if (S.view === 'ads' && !S.arg) S.view = 'live';
+  if (S.view === 'ads' && (!S.arg || S.arg === 'kill')) S.view = 'live';
   const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
@@ -464,6 +464,7 @@ async function today(){
       <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">${(d.off || []).length}</span></h3>
         ${(d.off || []).map(a => `<a class="row" href="${a.brief ? '#brief/' + encodeURIComponent(a.brief) : '#live/other/'}"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
         ${(d.calls || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${esc(a.name)}</b><span>${esc(a.why || '')}</span><span class="pill p-act">${esc(String(a.call).replace('_', ' '))}</span></a>`).join('')}
+        <a class="btn" href="#ads/kill" style="border-color:var(--coral);color:var(--coral);justify-self:start">Kill list · ${int(d.low_roas)} under 0.5 ROAS</a>
         ${d.calls_asof ? `<span class="lbl">media-buying desk · ${esc(dayLabel(d.calls_asof))}</span>` : ''}</div>
       <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${(d.vary || []).length}</span></h3>
         ${(d.vary || []).map(v => `<div class="row" data-go="${v.kind === 'brief' ? '#brief/' + encodeURIComponent(v.key) : '#live/' + v.kind + '/' + encodeURIComponent(v.key)}"><b title="${esc(v.example)}">${v.kind === 'brief' ? 'Brief ' + esc(v.key) : esc(v.key)}${v.label ? ' · ' + esc(v.label) : ''}</b><span>${int(v.buys30)} buys 30d · CPA ${usd(v.cpa30)}${v.break_even ? ' (line ' + usd(v.break_even) + ')' : ''}${v.kind === 'creator' ? ' · creator' : ''}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc((v.kind === 'brief' ? 'brief ' + v.key : 'creator ' + v.key) + ' · ' + v.example)}">Plan</button></div>`).join('') || '<div class="empty">No new ad under break-even with 2+ buys in 30 days</div>'}
@@ -499,7 +500,7 @@ function adList(){
   }
   return out;
 }
-const GROUPS = [['need', 'Needs you', 'amber'], ['making', 'Being made', 'cyan'], ['editor', 'With the editor', 'magenta'], ['live', 'Live', 'green'], ['nonum', 'No brief number yet', 'coral'], ['ideas', 'Ideas', 'violet']];
+const GROUPS = [['need', 'Needs you', 'amber'], ['making', 'Being made', 'cyan'], ['editor', 'With the editor', 'magenta'], ['live', 'Live', 'green'], ['nonum', 'No brief number yet', 'coral']];
 let openAd = null;
 function ads(){
   const list = adList();
@@ -689,22 +690,32 @@ document.addEventListener('submit', async e => {
 let swFilter = store.get('st.swf') || 'all';
 async function swipes(){
   const m = host();
-  m.innerHTML = `<form class="card arow" id="addsw" style="margin-bottom:16px"><i class="ib" style="--hue:var(--violet)">${icon('link')}</i><input name="u" type="url" required placeholder="Paste a post's link: it is saved and torn down" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Add swipe</button></form>
+  const sub = store.get('st.swsub') || 'feeds';
+  const tabsHtml = `<div class="filters" style="margin-bottom:14px"><button class="${sub === 'feeds' ? 'on' : ''}" data-swsub="feeds">My Feeds</button><button class="${sub === 'torn' ? 'on' : ''}" data-swsub="torn">Torn down</button></div>`;
+  if (sub === 'feeds') {
+    m.innerHTML = tabsHtml + `<div class="card" style="padding:0;overflow:hidden"><iframe src="http://127.0.0.1:8820/" title="My Feeds" style="width:100%;height:calc(100vh - 250px);border:0;display:block"></iframe></div>`;
+    m.querySelectorAll('[data-swsub]').forEach(b => b.onclick = () => { store.set('st.swsub', b.dataset.swsub); swipes(); });
+    return;
+  }
+  m.innerHTML = tabsHtml + `<form class="card arow" id="addsw" style="margin-bottom:16px"><i class="ib" style="--hue:var(--violet)">${icon('link')}</i><input name="u" type="url" required placeholder="Paste a post's link: it is saved and torn down" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Add swipe</button></form>
     <div class="ph" style="margin-bottom:14px"><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="#production/new"><i class="ic" data-i="plus"></i>Make an ad from a swipe</a></div></div><div class="skel">Loading the library…</div>`;
   $('#addsw').onsubmit = e => { e.preventDefault(); ask('swipe', e.target.u.value).then(r => { if (r) e.target.reset(); }); };
   paintIcons(m);
+  m.querySelectorAll('[data-swsub]').forEach(b => b.onclick = () => { store.set('st.swsub', b.dataset.swsub); swipes(); });
   let r; try { r = await J('/api/desk/swipes?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (!m.isConnected) return;
   const all = r.swipes || [];
   const F = [['all', 'All'], ['brief', 'Brief written'], ['organic', 'Organic'], ['own', 'Our own']];
-  const pick = () => all.filter(s => swFilter === 'all' || (swFilter === 'brief' && s.brief) || (swFilter === 'organic' && s.lane === 'ORGANIC') || (swFilter === 'own' && s.own));
+  let q = '';
+  const pick = () => all.filter(s => (swFilter === 'all' || (swFilter === 'brief' && s.brief) || (swFilter === 'organic' && s.lane === 'ORGANIC') || (swFilter === 'own' && s.own)) && (!q || [s.label, s.format, s.product, s.avatar, s.lane].join(' ').toLowerCase().includes(q)));
   const draw = () => {
     const rows = pick();
     $('#swc').textContent = rows.length + ' of ' + all.length + ' torn down';
     m.querySelectorAll('.skel, .lib').forEach(x => x.remove());
-    m.insertAdjacentHTML('beforeend', `<div class="lib"><div class="filters">${F.map(([k, n]) => `<button class="${k === swFilter ? 'on' : ''}" data-f="${k}">${n}</button>`).join('')}</div>
+    m.insertAdjacentHTML('beforeend', `<div class="lib"><div class="filters">${F.map(([k, n]) => `<button class="${k === swFilter ? 'on' : ''}" data-f="${k}">${n}</button>`).join('')}<input id="swq" placeholder="Search swipes" value="${esc(q)}" style="margin-left:auto;border:1px solid var(--line-2);border-radius:var(--r4);padding:5px 12px;font:12px var(--mono);min-width:200px"></div>
       ${rows.length ? `<div class="covers">${rows.map(s => `<a class="cover" href="#swipe/${encodeURIComponent(s.label)}"><div class="pic">${s.poster ? `<img loading="lazy" src="${media(s.poster)}" alt="">` : ''}</div><div class="cap"><b>${esc(nice(s.label))}</b><div class="meta">${s.brief ? '<span class="pill p-brief">brief</span>' : ''}${s.lane ? `<span class="pill p-swipe">${esc(s.lane.toLowerCase())}</span>` : ''}<span class="pill p-mute">${s.done}/${s.stages}</span></div></div></a>`).join('')}</div>` : '<div class="card note">No swipes here yet.</div>'}</div>`);
     m.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { swFilter = b.dataset.f; store.set('st.swf', swFilter); draw(); });
+    const qi = m.querySelector('#swq'); qi.oninput = () => { q = qi.value.toLowerCase(); const pos = qi.selectionStart; draw(); const n = m.querySelector('#swq'); n.focus(); n.setSelectionRange(pos, pos); };
   };
   draw();
 }
@@ -838,8 +849,9 @@ function production(lane){
   if (!m.querySelector('#sub') || m.dataset.lane !== lane) {
     m.dataset.lane = lane;
     m.innerHTML = `<div class="ph"><h1>Production</h1><span class="sub">every ad this brand is making, by lane</span></div>
-      <div class="lanes">${LANES.map(([id, name, ic, hue]) => `<a href="#production/${id}" class="${id === lane ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic" data-i="${ic}"></i>${name}</a>`).join('')}<a class="new ${lane === 'new' ? 'on' : ''}" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a></div><div id="sub"></div>`;
+      <div id="jobstrip"></div><div class="lanes">${LANES.map(([id, name, ic, hue]) => `<a href="#production/${id}" class="${id === lane ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic" data-i="${ic}"></i>${name}</a>`).join('')}<a class="new ${lane === 'new' ? 'on' : ''}" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a></div><div id="sub"></div>`;
     paintIcons(m);
+    J('/api/desk/asks?brand=' + encodeURIComponent(S.brand)).then(r => { const on = r.asks.filter(a => a.state === 'queued' || a.state === 'running'), ready = r.asks.filter(a => a.state === 'done' && (a.kind === 'variations' || a.kind === 'tune')).slice(0, 3); const el = $('#jobstrip'); if (!el || (!on.length && !ready.length)) return; el.innerHTML = `<div class="card" style="margin-bottom:14px;padding:12px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><b style="font-size:13px">Jobs</b>${on.map(a => `<a class="pill p-act" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}">Claude is on it · ${esc(a.name.slice(0, 48))}</a>`).join('')}${ready.map(a => `<a class="pill p-ready" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}">Ready for you · ${esc(a.name.slice(0, 48))}</a>`).join('')}</div>`; }).catch(() => {});
   }
   if (lane === 'video') { if (S.hiddenFor !== S.brand) { S.hiddenFor = S.brand; S.hidden = []; J('/api/desk/hidden?brand=' + encodeURIComponent(S.brand), {keep:true}).then(r => { S.hidden = r.hidden; if (S.view === 'production' || S.view === 'ads') { openAd = null; ads(); } }).catch(() => {}); } return ads(); }
   if (lane === 'swipes') return swipes();
@@ -939,17 +951,17 @@ async function asksBadge(){
   try { const r = await J('/api/desk/asks?brand=' + encodeURIComponent(S.brand), {keep:true}); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wkn'); if (el) { el.textContent = n || ''; $('#wk').classList.toggle('busy', !!n); } } catch {}
 }
 setInterval(asksBadge, 15000);
-const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['working', 'act'], done:['ready', 'ready'], failed:['stopped', 'stop']};
+const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['Claude is on it', 'act'], done:['ready for you', 'ready'], failed:['stopped', 'stop']};
 async function asksView(){
   const m = $('#main'), [brand, id] = (S.arg || '').split('/');
   if (brand && id) return askOne(brand, id);
-  m.innerHTML = `<div class="ph"><h1>Working on it</h1><span class="sub">jobs handed to Claude for this brand, newest first</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Jobs</h1></div><div class="card note" style="margin-bottom:16px">Each job is Claude doing one thing you pressed a button for (Plan, Go deeper, Tune, Add a swipe, Make these), in the background. Not a new session, nothing to manage. When one needs you it says <b>ready</b>: open it, read it, press the next button.</div><div class="skel">Loading…</div>`;
   let r; try { const [x, y] = await Promise.all([J('/api/desk/asks?brand=' + encodeURIComponent(S.brand)), J('/api/desk/asks?brand=_portfolio')]); r = {asks: [...x.asks, ...y.asks].sort((p, q) => String(q.asked).localeCompare(String(p.asked)))}; } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   m.querySelector('.skel').outerHTML = r.asks.length ? `<div class="card" style="padding:0">${r.asks.map(a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b><span class="j">${esc(a.brand === '_portfolio' ? 'All brands' : blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; }).join('')}</div>` : `<div class="card note">Nothing handed off yet. Tune, Go deeper, Plan variations, Add a swipe and Fill buttons land here.</div>`;
 }
 async function askOne(brand, id){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><a class="btn" href="#asks">← Working on it</a><h1 id="aname">…</h1><span id="astate"></span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><a class="btn" href="#asks">← Jobs</a><h1 id="aname">…</h1><span id="astate"></span></div><div class="skel">Loading…</div>`;
   let a; try { a = await J(`/api/desk/ask/${encodeURIComponent(brand)}/${encodeURIComponent(id)}`); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   const [w, c] = ASKSTATE[a.state] || [a.state, 'mute'];
   $('#aname').textContent = a.name; $('#astate').innerHTML = `<span class="pill p-${c}">${w}</span>`;
@@ -1097,9 +1109,31 @@ async function adsLive(){
   const stats = rs => ({n: rs.length, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30'),
     off: rs.filter(r => r.call === 'off').length, act: rs.filter(r => r.call && !['too_early', 'keep', 'off'].includes(r.call)).length});
   let curCat = store.get('st.adcat') || 'brief', open = new Set(), onlyCalls = false, focus = null, onlyActive = store.get('st.adact') !== false;
+  let kill = S.arg === 'kill', kMin = store.get('st.kmin') ?? 50, kRoas = store.get('st.kroas') ?? 0.5, offDone = new Set();
+  const killList = () => d.ads.filter(a => a.active && a.spend7 >= kMin && (a.roas7 ?? 0) < kRoas && !(a.buys7 > 0 && !a.value7)).sort((x, y) => y.spend7 - x.spend7);
+  const drawKill = () => {
+    m.querySelectorAll('.skel, #adtab').forEach(x => x.remove());
+    const rows = killList(), waste = rows.reduce((t, a) => t + a.spend7 - (a.value7 || 0), 0);
+    m.insertAdjacentHTML('beforeend', `<div id="adtab"><div class="filters"><button data-kback>← All ads</button><span class="lbl" style="align-self:center;margin-left:8px">Rule: spent at least</span><input id="kmin" type="number" min="0" value="${kMin}" style="width:80px;border:1px solid var(--line-2);border-radius:var(--r4);padding:4px 10px;font:12px var(--mono)"><span class="lbl" style="align-self:center">in 7 days and ROAS 7d under</span><input id="kroas" type="number" min="0" step="0.1" value="${kRoas}" style="width:70px;border:1px solid var(--line-2);border-radius:var(--r4);padding:4px 10px;font:12px var(--mono)"></div>
+      <div class="card" style="margin-bottom:14px"><div class="nums" style="grid-template-columns:repeat(3,1fr)"><div><span class="lbl">Ads on the kill list</span><b style="color:var(--coral)">${rows.length}</b></div><div><span class="lbl">Their spend, 7 days</span><b>${usd(rows.reduce((t, a) => t + a.spend7, 0))}</b></div><div><span class="lbl">Lost to them, 7 days</span><b style="color:var(--coral)">${usd(waste)}</b></div></div></div>
+      <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>Ad</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">ROAS 7d</th><th style="text-align:right">Spend 30d</th><th></th></tr>
+      ${rows.map(a => `<tr><td style="font:12px var(--mono)" title="${esc(a.name)}">${a.brief ? `<b class="bn">${esc(a.brief)}</b>` : ''}${esc((a.name || '').replace(/^.*?brief-\d{4}_?/, '') || a.name)}</td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n" style="color:var(--coral)">${a.roas7 ?? '0.00'}</td><td class="n">${usd(a.spend30)}</td><td style="text-align:right">${offDone.has(String(a.id)) ? '<span class="pill p-mute">off</span>' : `<button class="btn" data-off="${esc(a.id)}">Turn off</button>`}</td></tr>`).join('') || '<tr><td colspan="6" class="empty">Nothing under the line. Every active ad is pulling its weight at this rule.</td></tr>'}</table></div>
+      <div class="lbl" style="margin-top:10px">Turn off goes through Outlier: it checks the ad's name on Meta, pauses it, and logs your press. One Meta call per ad.</div></div>`);
+    m.querySelector('[data-kback]').onclick = () => { kill = false; history.replaceState(null, '', '#ads'); draw(); };
+    m.querySelector('#kmin').onchange = e => { kMin = +e.target.value || 0; store.set('st.kmin', kMin); drawKill(); };
+    m.querySelector('#kroas').onchange = e => { kRoas = +e.target.value || 0; store.set('st.kroas', kRoas); drawKill(); };
+    m.querySelectorAll('[data-off]').forEach(b => b.onclick = async () => {
+      const a = rows.find(x => String(x.id) === b.dataset.off); if (!a) return;
+      if (!b.dataset.sure) { b.dataset.sure = 1; b.textContent = 'Confirm: turn off'; b.classList.add('wait'); return; }
+      b.disabled = true; b.textContent = 'Turning off…';
+      try { await J('/api/desk/ad-off', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({brand: S.brand, ad: a.name, ids: [String(a.id)], spend: a.spend7})}); offDone.add(String(a.id)); toast('Off: ' + (a.brief ? 'brief ' + a.brief : a.name.slice(0, 30))); drawKill(); }
+      catch (e) { toast(e.message); b.disabled = false; b.textContent = 'Turn off'; }
+    });
+  };
   if (S.arg) { const [c, ...k] = S.arg.split('/'); if (['brief', 'creator', 'other'].includes(c)) { curCat = c; if (k.join('/')) { focus = k.join('/'); open.add(focus); } } }
   const cpa = (s, b) => b ? usd(s / b) : '—';
   const draw = () => {
+    if (kill) return drawKill();
     m.querySelectorAll('.skel, #adtab').forEach(x => x.remove());
     const pool = onlyActive ? d.ads.filter(a => a.active) : d.ads;
     const byCat = Object.fromEntries(CATS.map(([c]) => [c, pool.filter(a => cat(a) === c)]));
@@ -1113,7 +1147,7 @@ async function adsLive(){
       <div class="grid4" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">${CATS.map(([c, name, ic, hue]) => { const t = stats(byCat[c]); return `<button class="card catc ${c === curCat ? 'on' : ''}" data-cat="${c}" style="--hue:var(--${hue})"><h3>${ib(ic, hue)}${name}<span class="count">${t.n} ads</span></h3>
         <div class="stats"><div><span class="lbl">Spend 7d</span><b>${usd(t.s7)}</b></div><div><span class="lbl">Buys 7d</span><b>${int(t.b7)}</b></div><div><span class="lbl">CPA 7d</span><b>${cpa(t.s7, t.b7)}</b></div></div>
         <div class="arow">${t.off ? `<span class="pill p-stop">${t.off} to turn off</span>` : ''}${t.act ? `<span class="pill p-act">${t.act} other calls</span>` : ''}${!t.off && !t.act ? '<span class="lbl">no calls from the desk</span>' : ''}</div></button>`; }).join('')}</div>
-      <div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}<button class="${onlyActive ? 'on' : ''}" data-act style="margin-left:auto">Active only</button><button class="${onlyCalls ? 'on' : ''}" data-only>Only the desk's calls</button></div>
+      <div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}<button data-kill style="margin-left:auto;border-color:var(--coral);color:var(--coral)">Kill list · ${killList().length}</button><button class="${onlyActive ? 'on' : ''}" data-act>Active only</button><button class="${onlyCalls ? 'on' : ''}" data-only>Only the desk's calls</button></div>
       <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>${curCat === 'brief' ? 'Brief' : curCat === 'creator' ? 'Creator' : 'Campaign'}</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">ROAS 30d</th><th></th></tr>
       ${rows.map(r => { const isOpen = open.has(r.k); return `<tr class="grp" data-g="${esc(r.k)}"><td><span class="chev">${isOpen ? '▾' : '▸'}</span> <b>${title(r)}</b>${r.off ? ' <span class="pill p-stop">off</span>' : ''}</td><td class="n">${usd(r.s7)}</td><td class="n">${int(r.b7)}</td><td class="n">${cpa(r.s7, r.b7)}</td><td class="n">${usd(r.s30)}</td><td class="n">${r.s30 ? (r.v30 / r.s30).toFixed(2) : '—'}</td><td style="white-space:nowrap;text-align:right">${curCat === 'brief' ? `<a class="btn" href="#brief/${encodeURIComponent(r.k)}">Open</a> ` : ''}<button class="btn" data-ask="variations" data-input="${esc((curCat === 'brief' ? 'brief ' : curCat === 'creator' ? 'creator ' : 'campaign ') + r.k + ' · ' + r.rs[0].name)}">Make more</button></td></tr>` +
         (isOpen ? r.rs.map(a => { const [cw, cc] = CALL[a.call] || [a.call || '', 'mute']; return `<tr class="sub"><td title="${esc(a.name)}">${esc((a.name || '').replace(/^.*?brief-\d{4}_?/, '') || a.name)}${a.active ? '' : ' <span class="lbl">· no spend in 3 days</span>'}</td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n" style="color:var(--${a.break_even && a.cpa7 > a.break_even ? 'coral' : 'ink'})">${a.cpa7 != null ? usd(a.cpa7) : '—'}</td><td class="n">${usd(a.spend30)}</td><td class="n">${a.spend30 ? (a.value30 / a.spend30).toFixed(2) : '—'}</td><td style="text-align:right">${a.call ? `<span class="pill p-${cc}" title="${esc(a.why || '')}">${esc(cw)}</span>` : ''}</td></tr>`; }).join('') : ''); }).join('') || '<tr><td colspan="7" class="empty">Nothing here</td></tr>'}</table></div>
@@ -1122,6 +1156,7 @@ async function adsLive(){
     m.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { curCat = b.dataset.cat; store.set('st.adcat', curCat); open = new Set(); draw(); });
     m.querySelectorAll('[data-srt]').forEach(b => b.onclick = () => { adsSort = b.dataset.srt; store.set('st.adsort', adsSort); draw(); });
     m.querySelector('[data-only]').onclick = () => { onlyCalls = !onlyCalls; draw(); };
+    m.querySelector('[data-kill]').onclick = () => { kill = true; history.replaceState(null, '', '#ads/kill'); drawKill(); };
     m.querySelector('[data-act]').onclick = () => { onlyActive = !onlyActive; store.set('st.adact', onlyActive); draw(); };
     if (focus) { const tr = [...m.querySelectorAll('tr.grp')].find(x => x.dataset.g === focus); if (tr) { tr.classList.add('lit'); tr.scrollIntoView({block: 'center'}); } focus = null; }
     m.querySelectorAll('tr.grp').forEach(tr => tr.onclick = e => { if (e.target.closest('a,button')) return; const k = tr.dataset.g; open.has(k) ? open.delete(k) : open.add(k); draw(); });
