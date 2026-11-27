@@ -646,6 +646,16 @@
    "basis": "draft"
   },
   {
+   "path": "components/onboarding",
+   "kind": "tool",
+   "does": "One local page to set up a brand, its keys and its ad account",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/records",
    "kind": "definitions",
    "does": "Every record the system keeps, one name each, linked by id",

@@ -5,6 +5,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Job | Tool | Folder |
 |---|---|---|
 | Set up | Brand folder and onboarding | `brands/_TEMPLATE/` |
+| Set up | Setup page: brand, keys, ad account | `components/onboarding/` |
 | Set up | Brand activation | `.claude/skills/brand-activation/` |
 | Set up | The system: words, components, check | `components/system/` |
 | Set up | Records: every record, one name each, linked by id | `components/records/` |

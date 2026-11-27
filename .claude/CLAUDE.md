@@ -22,6 +22,9 @@ When the person says **activate Prizm Lab** (or **continue onboarding**):
    missing, tell them in one line what to install and stop there.
 2. **Keys file.** If `.env` doesn't exist, copy `.env.example` to `.env`.
    Confirm `git check-ignore .env` says it's ignored. Don't ask for any key yet.
+   Start the setup page (`python3 components/onboarding/serve.py`) and give the
+   person its link: they name the brand there (or link a brand folder that lives
+   in its own repo), and later type each key there, never into the chat.
 3. **Their brand folder.** Ask for the brand name (first checklist item), make
    a folder name from it (lower-case, dashes), and copy `brands/_TEMPLATE/` to
    `brands/<brand>/` if it doesn't exist yet.
