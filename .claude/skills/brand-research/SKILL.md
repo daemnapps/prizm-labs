@@ -71,7 +71,9 @@ refunded · cancelled · after support). The starter set is in `brands/_TEMPLATE
    forms; `install` writes the per-stage flow sheet.
 5. Answers come back with `connect.py feedback --brand <b> --key <KLAVIYO_PRIVATE_KEY_NAME>`.
 
-Putting the form on the store, building the flows in Klaviyo and designing each stage's email are separate steps,
+On a Shopify store, `python3 components/feedback-forms/shopify.py install --brand <b> --store <shop>.myshopify.com`
+shows what it would add (one theme template, one page at /pages/feedback); `--go` on the owner's word installs it,
+then set `form.url`/`form.link` to that page. Building the flows in Klaviyo and designing each stage's email are separate steps,
 each the owner's go: nothing goes live or sends from here.
 
 ## 3. Fill each avatar, in order

@@ -3596,6 +3596,9 @@
  "components/feedback-forms/prompts/questions-v1-write.md": {
   "commit": "225d0103d1a10211d7756098d7412e99008615fe"
  },
+ "components/feedback-forms/shopify.py": {
+  "commit": "e9cc5b1bc235cd19b273051659408ad79d1e4dfc"
+ },
  "components/feedback-forms/stages.py": {
   "commit": "2fbefd1779a95ac5c4a32b0ac3e1be56a186483c"
  },
@@ -3607,6 +3610,9 @@
  },
  "components/feedback-forms/tests/test_language_pass.py": {
   "commit": "a8afcfc18a47440b6fc4690be17001e0fda26693"
+ },
+ "components/feedback-forms/tests/test_shopify.py": {
+  "commit": "e9cc5b1bc235cd19b273051659408ad79d1e4dfc"
  },
  "components/feedback-forms/tests/test_stages.py": {
   "commit": "2fbefd1779a95ac5c4a32b0ac3e1be56a186483c"
