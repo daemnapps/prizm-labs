@@ -231,6 +231,10 @@
    {
     "from": "components/GLOSSARY.md",
     "to": "components/GLOSSARY.md"
+   },
+   {
+    "from": "components/WORKFLOWS.md",
+    "to": "components/WORKFLOWS.md"
    }
   ],
   "brand-template": [

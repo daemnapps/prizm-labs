@@ -599,6 +599,9 @@
  "components/GLOSSARY.md": {
   "commit": "58ae767a1e629fdabc4353108ec9393c7ed54135"
  },
+ "components/WORKFLOWS.md": {
+  "commit": "eef97110199f2ce95a885ea1fd803d7d4ad8a1a0"
+ },
  "components/ad-handoff/CLAUDE.md": {
   "commit": "4b6de574a9b8a7b2934d470160ab7e5f381925fe"
  },

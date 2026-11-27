@@ -8,7 +8,7 @@ Four steps. No coding.
 2. **Your keys.** Every tool uses your own accounts. The list of keys is in
    `.env.example`; Claude copies it to `.env` for you and fills it in with you
    when a tool first needs a key. `.env` never gets saved to GitHub.
-3. **Say: activate Prizm Lab** — open Claude Code in your copy and say it.
+3. **Say: activate Prizm Lab** — open Claude Code (or Codex, if you use ChatGPT) in your copy and say it.
    Claude sets up your brand with you, one question at a time (about 20–30
    minutes; you can stop and say **continue onboarding** any time). The
    checklist it follows is in [`brands/_TEMPLATE/ONBOARDING.md`](brands/_TEMPLATE/ONBOARDING.md).
