@@ -35,6 +35,8 @@ ENGINE_CSS = HERE / "engine" / "feedback.css"
 # The tracking standard's email tags (components/funnel-tracking, email_url), through its
 # public surface: every flow email's button link carries them (owner, 2026-10-12).
 sys.path.append(str(HERE.parent / "funnel-tracking" / "machine"))
+sys.path.insert(0, str(HERE))
+import design_system as DS  # noqa: E402
 import standard as TRACKING  # noqa: E402
 TYPES = ("choice", "multi", "scale", "text")
 AREAS = ("marketing", "product", "operations", "customer-service", "customer-experience", "website")
@@ -51,9 +53,12 @@ def ops(brand, root=None):
 
 
 def load(brand, root=None):
+    """The brand's stages and questions; the look is filled in from its design system (design_system.py)."""
     d = ops(brand, root)
-    return (json.loads((d / "feedback-stages.json").read_text()),
-            json.loads((d / "feedback-questions.json").read_text()))
+    stages = json.loads((d / "feedback-stages.json").read_text())
+    questions = json.loads((d / "feedback-questions.json").read_text())
+    questions["look"] = DS.resolve(questions, d.parent, root or WORKSPACE)
+    return stages, questions
 
 
 def brands(root=None):

@@ -17,10 +17,10 @@
   "repo": "<where the form page lives: the store's theme or a page repo>"
  },
  "email": {
-  "from_label": "<founder> from <brand>",
-  "from_email": "douxd@<brand>.com",
-  "style": "Plain founder note, no images, one link — the look of the three survey emails that collected 1,807 answers (T | Delivered › 'Brand Improvement Survey', template SMpqA6; T | Cancelled/Refund › 'Email #1 - Refund', template TXTuVD). Klaviyo footer as those emails have it: {% unsubscribe %} · {{ organization.name }} {{ organization.full_address }}.",
-  "reward": "The old emails promised a <reward> code shown after answering. The code itself is not on file (it lived on the Google Forms' confirmation screen). Put the code in feedback-questions.json › reward.code and the thank-you screen shows it; until then the emails below carry no reward line."
+  "from_label": "<the brand's sender name>",
+  "from_email": "<the brand's sending address>",
+  "style": "Made by the email production tool in the brand's design system and voice: one clear button to the form. Footer as the brand's other emails have it ({% unsubscribe %} · {{ organization.name }} {{ organization.full_address }}).",
+  "reward": "Optional: put a thank-you code in feedback-questions.json › reward.code and the last screen shows it."
  },
  "stages": [
   {
@@ -135,7 +135,7 @@
   },
   {
    "stage": "subscriber",
-   "label": "Active subscriber (<subscription app>), after 2nd renewal",
+   "label": "Active subscriber, after the 2nd renewal",
    "lane": "customer",
    "relationship": "ordered",
    "force_lane": null,
@@ -144,7 +144,7 @@
     "subscription": "active (<subscription app>)",
     "renewals": "2+"
    },
-   "status": "ready",
+   "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · subscriber",
     "trigger": {
@@ -160,7 +160,9 @@
      "Has not been in this flow in the last 180 days"
     ],
     "wait": "10 days"
-   }
+   },
+   "blocked_by": "only for brands that sell subscriptions: connect the subscription app so Klaviyo receives its renewal and cancel events, then set this stage ready",
+   "applies_if": "the brand sells subscriptions"
   },
   {
    "stage": "churned-refund",
@@ -198,7 +200,7 @@
     "subscription": "cancelled"
    },
    "status": "blocked",
-   "blocked_by": "<what is missing for this trigger in your stack>",
+   "blocked_by": "only for brands that sell subscriptions: connect the subscription app so Klaviyo receives its renewal and cancel events, then set this stage ready",
    "klaviyo": {
     "flow_name": "Feedback · churned-cancelled",
     "trigger": {
@@ -211,7 +213,8 @@
      "Has not been in this flow over all time"
     ],
     "wait": "1 day"
-   }
+   },
+   "applies_if": "the brand sells subscriptions"
   },
   {
    "stage": "post-support",
@@ -223,7 +226,7 @@
     "contacted_support": true
    },
    "status": "blocked",
-   "blocked_by": "<what is missing for this trigger in your stack>",
+   "blocked_by": "needs the brand helpdesk connected to Klaviyo so a resolved ticket reaches it as an event",
    "klaviyo": {
     "flow_name": "Feedback · post-support",
     "trigger": {
@@ -237,7 +240,8 @@
      "Has not been in this flow in the last 60 days"
     ],
     "wait": "1 day"
-   }
+   },
+   "applies_if": "the brand has a helpdesk connected to Klaviyo"
   }
  ]
 }

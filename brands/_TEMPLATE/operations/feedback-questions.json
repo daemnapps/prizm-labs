@@ -13,47 +13,26 @@
   "website"
  ],
  "look": {
+  "from": "design-system",
   "logo_alt": "<Brand>",
-  "font_body": "system-ui, sans-serif",
-  "font_head": "system-ui, sans-serif",
-  "head_transform": "none",
-  "tokens": {
-   "band": "#111111",
-   "band_ink": "#FFFFFF",
-   "ground": "#FFFFFF",
-   "card": "#FFFFFF",
-   "ink": "#111111",
-   "muted": "#6B6B6B",
-   "line": "#111111",
-   "accent": "#111111",
-   "accent_2": "#444444",
-   "cta": "#111111",
-   "cta_ink": "#FFFFFF",
-   "cta_line": "#111111",
-   "picked": "#111111",
-   "picked_ink": "#FFFFFF",
-   "radius": "8px",
-   "chip_radius": "999px"
-  },
-  "source": "neutral starter look: replace every token with the brand's design system (brands/<brand>/brand-identity/web-tokens.md)",
-  "logo": "assets/images/logo.svg"
+  "note": "Read at build time from the brand's design system (brand-identity/design-system/tokens.json, else brand-identity/web-tokens.md). Values set here override it."
  },
  "copy": {
-  "start": "Let's go",
+  "start": "Start",
   "next": "Next",
   "back": "Back",
   "skip": "Skip",
-  "submit": "Send it",
+  "submit": "Send",
   "sending": "Sending…",
-  "error": "That didn't send — check your connection and hit it again.",
-  "other_placeholder": "Tell me…",
-  "text_placeholder": "Type it how you'd say it…",
+  "error": "That didn't send. Check your connection and try again.",
+  "other_placeholder": "Something else…",
+  "text_placeholder": "Type your answer…",
   "step": "{n} of {total}"
  },
  "thanks": {
-  "title": "<thank-you line in the brand's voice>",
-  "body": "<thank-you line in the brand's voice>",
-  "sign": "<thank-you line in the brand's voice>"
+  "title": "Thank you",
+  "body": "We read every answer. Yours helps us make <Brand> better.",
+  "sign": "— The <Brand> team"
  },
  "reward": {
   "line": "",
@@ -62,14 +41,14 @@
  },
  "stages": {
   "list-no-order": {
-   "title": "Quick one",
-   "intro": "You've been following us for a minute but haven't bought our product yet. Six quick ones — straight answers help me the most.",
+   "title": "A few quick questions",
+   "intro": "You've been with us for a while but haven't ordered yet. Six quick questions, about two minutes.",
    "questions": [
     {
      "id": "why-interested",
      "n": 1,
      "type": "choice",
-     "text": "What made you want to try us — what were you hoping to fix?",
+     "text": "What made you interested in us?",
      "options": [
       "<most-said answer 1>",
       "<most-said answer 2>",
@@ -112,13 +91,12 @@
      "id": "holding-back",
      "n": 3,
      "type": "choice",
-     "text": "Why haven't you bought our product yet?",
+     "text": "What's kept you from ordering so far?",
      "options": [
       "Price",
       "I already bought it",
       "Still thinking about it",
-      "Not sure it works",
-      "The subscription"
+      "Not sure it works"
      ],
      "other": true,
      "areas": [
@@ -140,7 +118,7 @@
      "id": "what-would-help",
      "n": 4,
      "type": "choice",
-     "text": "Is there anything that would help you finally buy it?",
+     "text": "What would help you decide?",
      "options": [
       "A discount",
       "A lower price",
@@ -202,22 +180,22 @@
     }
    ],
    "email": {
-    "subject": "Real quick",
-    "preview": "Two minutes. Straight answers.",
+    "subject": "A few quick questions",
+    "preview": "Two minutes. It helps us a lot.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Tell me straight",
+    "button": "Answer now",
     "after": [
      "<sign-off in the brand's voice>"
     ]
    }
   },
   "abandoned-checkout": {
-   "title": "What happened?",
-   "intro": "You got to checkout and stopped. No pressure — I just want to know what got in the way so we can fix it.",
+   "title": "What got in the way?",
+   "intro": "You started an order and didn't finish. Five quick questions so we can fix what stopped you.",
    "questions": [
     {
      "id": "checkout-stop",
@@ -227,8 +205,7 @@
      "options": [
       "Price",
       "Shipping",
-      "Too many pop-ups and add-ons",
-      "The subscription",
+      "Too many pop-ups or add-ons",
       "Still thinking about it"
      ],
      "other": true,
@@ -254,7 +231,7 @@
      "id": "checkout-annoying",
      "n": 2,
      "type": "text",
-     "text": "Was anything confusing or pushy at checkout?",
+     "text": "Was anything at checkout confusing or frustrating?",
      "areas": [
       "website"
      ],
@@ -267,7 +244,7 @@
      "id": "what-would-help",
      "n": 3,
      "type": "choice",
-     "text": "Is there anything that would help you finish your order?",
+     "text": "What would help you decide?",
      "options": [
       "A discount",
       "A lower price",
@@ -302,7 +279,7 @@
      "id": "why-interested",
      "n": 5,
      "type": "choice",
-     "text": "What made you want to try us in the first place?",
+     "text": "What made you interested in us?",
      "options": [
       "<most-said answer 1>",
       "<most-said answer 2>",
@@ -321,14 +298,14 @@
     }
    ],
    "email": {
-    "subject": "How can I help you?",
-    "preview": "You got to checkout and stopped.",
+    "subject": "What got in the way?",
+    "preview": "You started an order and didn't finish.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Tell me what happened",
+    "button": "Tell us",
     "after": [
      "<sign-off in the brand's voice>"
     ]
@@ -336,7 +313,7 @@
   },
   "new-customer": {
    "title": "How's it going?",
-   "intro": "You've had your order for about ten days. Smooth? Clean? Nothing yet? I want your raw, honest take — the good and the bad. Seven quick ones.",
+   "intro": "You've had your order for about a week. Tell us how it's going, good or bad. About two minutes.",
    "questions": [
     {
      "id": "recommend",
@@ -388,7 +365,7 @@
      "id": "why-us",
      "n": 3,
      "type": "text",
-     "text": "What gut instinct made you buy from us over everything else out there?",
+     "text": "Why did you choose us over other options?",
      "areas": [
       "marketing"
      ],
@@ -509,22 +486,22 @@
     }
    ],
    "email": {
-    "subject": "Help us build the most authentic brand on the internet.",
-    "preview": "Smooth? Clean? Not yet? Your raw take — two minutes.",
+    "subject": "How's it going so far?",
+    "preview": "Tell us how your order is working for you.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Give me your take",
+    "button": "Share your thoughts",
     "after": [
      "<sign-off in the brand's voice>"
     ]
    }
   },
   "repeat-customer": {
-   "title": "You keep coming back",
-   "intro": "That means a lot. Tell me what's working — and what isn't. Seven quick ones.",
+   "title": "Thanks for coming back",
+   "intro": "Tell us what's working and what isn't. Seven quick questions.",
    "questions": [
     {
      "id": "recommend",
@@ -649,21 +626,21 @@
    ],
    "email": {
     "subject": "What's working for you?",
-    "preview": "Seven quick ones — I read every answer.",
+    "preview": "Seven quick questions. We read every answer.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Tell me what's working",
+    "button": "Share your thoughts",
     "after": [
      "<sign-off in the brand's voice>"
     ]
    }
   },
   "subscriber": {
-   "title": "How's the subscription treating you?",
-   "intro": "You've had a few deliveries now. Help me make the subscription work for you — six quick ones.",
+   "title": "How's your subscription?",
+   "intro": "You've had a few deliveries now. Help us make your subscription fit you.",
    "questions": [
     {
      "id": "recommend",
@@ -764,7 +741,7 @@
      "id": "cancel-what",
      "n": 6,
      "type": "text",
-     "text": "Tell me more — what happened?",
+     "text": "Can you tell us more?",
      "show_if": {
       "q": "close-to-cancel",
       "not_in": [
@@ -803,22 +780,22 @@
     }
    ],
    "email": {
-    "subject": "How's the subscription treating you?",
-    "preview": "Too much product? Running out? Six quick ones.",
+    "subject": "How's your subscription?",
+    "preview": "Too often? Not often enough? Tell us.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Make it work for me",
+    "button": "Tell us",
     "after": [
      "<sign-off in the brand's voice>"
     ]
    }
   },
   "churned-refund": {
-   "title": "Help me get this right",
-   "intro": "I saw you asked for a refund. I want to know why so it doesn't happen again. Six quick ones — no hard feelings.",
+   "title": "Help us get this right",
+   "intro": "You asked for a refund. Tell us why so it doesn't happen again.",
    "questions": [
     {
      "id": "refund-reason",
@@ -827,7 +804,7 @@
      "text": "Why did you request a refund?",
      "options": [
       "Too expensive",
-      "Shipping took too long / never came",
+      "Shipping took too long or it never came",
       "Got charged more than I expected",
       "Ordered by mistake",
       "It didn't work for me",
@@ -856,7 +833,7 @@
      "id": "what-happened",
      "n": 2,
      "type": "text",
-     "text": "Tell me what happened — straight up.",
+     "text": "What happened?",
      "areas": [
       "operations",
       "product",
@@ -889,7 +866,7 @@
       "Lower the price",
       "Better communication",
       "Faster delivery",
-      "Fix the website and checkout",
+      "A smoother website and checkout",
       "No, everything was good"
      ],
      "other": true,
@@ -948,7 +925,7 @@
      "id": "why-tried",
      "n": 7,
      "type": "choice",
-     "text": "Why were you interested in trying us in the first place?",
+     "text": "What made you interested in us in the first place?",
      "options": [
       "<most-said answer 1>",
       "<most-said answer 2>",
@@ -966,14 +943,14 @@
     }
    ],
    "email": {
-    "subject": "How can I help you?",
-    "preview": "I saw you requested a refund.",
+    "subject": "Help us get this right",
+    "preview": "We saw you asked for a refund.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Tell me what happened",
+    "button": "Tell us why",
     "after": [
      "<sign-off in the brand's voice>"
     ]
@@ -981,13 +958,13 @@
   },
   "churned-cancelled": {
    "title": "Before you go",
-   "intro": "I saw you cancelled your subscription. Help me understand why — five quick ones.",
+   "intro": "You cancelled your subscription. Five quick questions so we can do better.",
    "questions": [
     {
      "id": "cancel-reason",
      "n": 1,
      "type": "choice",
-     "text": "Why'd you cancel?",
+     "text": "Why did you cancel?",
      "options": [
       "Didn't know I signed up for a subscription",
       "Too much product piling up",
@@ -1018,7 +995,7 @@
      "id": "tell-more",
      "n": 2,
      "type": "text",
-     "text": "Tell me more — what happened?",
+     "text": "Can you tell us more?",
      "areas": [
       "operations",
       "product",
@@ -1086,22 +1063,22 @@
     }
    ],
    "email": {
-    "subject": "Before you go…",
-    "preview": "I saw you cancelled. Can I ask why?",
+    "subject": "Before you go",
+    "preview": "We saw you cancelled. Can we ask why?",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Tell me why",
+    "button": "Tell us why",
     "after": [
      "<sign-off in the brand's voice>"
     ]
    }
   },
   "post-support": {
-   "title": "How'd we do?",
-   "intro": "You reached out to the team recently. Five quick ones on how we handled it.",
+   "title": "How did we do?",
+   "intro": "You contacted us recently. Five quick questions on how we handled it.",
    "questions": [
     {
      "id": "support-score",
@@ -1109,8 +1086,8 @@
      "type": "scale",
      "min": 1,
      "max": 5,
-     "low": "Bad",
-     "high": "Great",
+     "low": "Poor",
+     "high": "Excellent",
      "text": "How did we do on your request?",
      "areas": [
       "customer-service"
@@ -1200,14 +1177,14 @@
     }
    ],
    "email": {
-    "subject": "How'd we do?",
-    "preview": "Five quick ones on your request.",
+    "subject": "How did we do?",
+    "preview": "Five quick questions on your request.",
     "body": [
      "Hi {{ first_name|default:'there' }},",
      "<one or two lines in the founder's voice, written by email production from the brand's own words>",
      "<what we're asking and how long it takes>"
     ],
-    "button": "Rate us",
+    "button": "Rate your experience",
     "after": [
      "<sign-off in the brand's voice>"
     ]
