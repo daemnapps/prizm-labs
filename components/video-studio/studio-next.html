@@ -972,9 +972,32 @@ async function askOne(brand, id){
 }
 
 /* ================= CREATORS (a Production lane) ================= */
-function creatorsView(){
-  $('#main').innerHTML = `<div class="ph"><h1>Creators</h1><span class="sub">who makes for this brand, what they sent, what it sold</span></div><div id="sub"></div>`;
-  return creatorsLane();
+async function creatorsView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Creators</h1><span class="sub" id="crsub">live numbers from the warehouse · tap a creator for their ads and videos</span></div><div class="skel">Loading…</div>`;
+  let d; try { d = await J('/api/desk/creators?live=1&brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'creators') return;
+  if (d.through) $('#crsub').textContent = `to ${dayLabel(d.through)} · from the warehouse, never Meta · tap a creator for their ads and videos`;
+  let onlyActive = store.get('st.cract') !== false, open = new Set(S.arg ? [S.arg] : []);
+  const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
+  const draw = () => {
+    const rows = d.creators.filter(c => !onlyActive || c.active);
+    const s7 = sum(rows, 'spend7'), b7 = sum(rows, 'buys7'), s30 = sum(rows, 'spend30'), v30 = sum(rows, 'value30');
+    m.querySelectorAll('.skel, #crtab').forEach(x => x.remove());
+    m.insertAdjacentHTML('beforeend', `<div id="crtab">
+      <div class="card" style="margin-bottom:16px"><div class="nums" style="grid-template-columns:repeat(5,1fr)"><div><span class="lbl">Creators</span><b>${rows.length}</b></div><div><span class="lbl">Spend 7d</span><b>${usd(s7)}</b></div><div><span class="lbl">Buys 7d</span><b>${int(b7)}</b></div><div><span class="lbl">Spend 30d</span><b>${usd(s30)}</b></div><div><span class="lbl">ROAS 30d</span><b>${s30 ? (v30 / s30).toFixed(2) : '—'}</b></div></div></div>
+      <div class="filters"><button class="${onlyActive ? 'on' : ''}" data-cra style="margin-left:auto">Active only</button></div>
+      <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>Creator</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">ROAS 30d</th><th></th></tr>
+      ${rows.map(c => { const isOpen = open.has(c.creator); return `<tr class="grp" data-cr="${esc(c.creator)}"><td><span class="chev">${isOpen ? '▾' : '▸'}</span> <b>${esc(c.creator)}</b> <span class="lbl">${c.n} ad${c.n > 1 ? 's' : ''}</span></td><td class="n">${usd(c.spend7)}</td><td class="n">${int(c.buys7)}</td><td class="n">${c.buys7 ? usd(c.spend7 / c.buys7) : '—'}</td><td class="n">${usd(c.spend30)}</td><td class="n" style="color:var(--${c.spend30 && c.value30 / c.spend30 >= 1 ? 'green' : 'ink'})">${c.spend30 ? (c.value30 / c.spend30).toFixed(2) : '—'}</td><td style="text-align:right"><button class="btn" data-ask="variations" data-input="${esc('creator ' + c.creator + ' · ' + c.ads[0].name)}">Make more</button></td></tr>` +
+        (isOpen ? c.ads.map(a => { const [cw, cc] = CALL[a.call] || [a.call || '', 'mute']; return `<tr class="sub"><td title="${esc(a.name)}">${esc(a.name)}${a.active ? '' : ' <span class="lbl">· no spend in 3 days</span>'}</td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n">${a.cpa7 != null ? usd(a.cpa7) : '—'}</td><td class="n">${usd(a.spend30)}</td><td class="n">${a.spend30 ? (a.value30 / a.spend30).toFixed(2) : '—'}</td><td style="text-align:right">${a.call ? `<span class="pill p-${cc}" title="${esc(a.why || '')}">${esc(cw)}</span>` : ''}</td></tr>`; }).join('') +
+          (c.submissions.length ? `<tr class="sub"><td colspan="7" style="font-family:var(--body)"><b style="font-size:12px">Videos sent in</b> ${c.submissions.map(x => `<span class="pill ${x.status === 'approved' ? 'p-ready' : 'p-wait'}" style="margin-left:6px">${esc((x.created || '').slice(0, 10))} · ${esc(x.status || '')}${x.ads ? ' · ' + x.ads + ' ads' : ''}</span>`).join('')}</td></tr>` : '') : ''); }).join('') || '<tr><td colspan="7" class="empty">No creator ads spent in this window</td></tr>'}</table></div>
+      ${d.program ? `<div class="lbl" style="margin-top:12px">Trybe program report: ${int(d.program.creators)} creators, ${int(d.program.submissions)} videos, ${esc(d.program.from || '')} → ${esc(d.program.to || '')}</div>` : ''}
+      ${(d.profiles || []).length ? `<div class="card" style="padding:0;margin-top:16px"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${ib('book', 'violet')}Creator profiles we keep</h3></div>${d.profiles.map(p => `<div class="sk"><b>${esc(p.handle)}</b><span class="j">${esc(p.title)}</span></div>`).join('')}</div>` : ''}</div>`);
+    paintIcons(m);
+    m.querySelector('[data-cra]').onclick = () => { onlyActive = !onlyActive; store.set('st.cract', onlyActive); draw(); };
+    m.querySelectorAll('tr.grp[data-cr]').forEach(tr => tr.onclick = e => { if (e.target.closest('a,button')) return; const k = tr.dataset.cr; open.has(k) ? open.delete(k) : open.add(k); draw(); });
+  };
+  draw();
 }
 async function creatorsLane(){
   const h = host(); h.innerHTML = '<div class="skel">Loading creators…</div>';

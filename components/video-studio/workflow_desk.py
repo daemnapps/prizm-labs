@@ -619,6 +619,40 @@ def email(brand, label):
             "stages": writing_stages(d, "components/email-production")}
 
 
+def creator_key(name):
+    """A creator ad's creator, from its name (the part before the first `_`, e.g. `Sofiaand Stefan_FLEX…_trybe=…`)."""
+    return re.sub(r"([a-z])([A-Z])", r"\1 \2", re.split(r"_|\s+-\s+", name or "")[0]).strip()
+
+
+def creators_live(brand):
+    """Every creator whose ads spent in 30 days (ads tagged trybe=), with live numbers from the warehouse copy, their
+    ads, their Trybe submissions and their profile when we keep one."""
+    la = live_ads(brand)
+    base = creators(brand)
+    subs = (base.get("read") or {}).get("rows") or []
+    prof = {p["handle"].lower(): p for p in base.get("profiles") or []}
+    out = {}
+    for a in la["ads"]:
+        if not re.search(r"trybe=", a["name"] or "", re.I):
+            continue
+        k = creator_key(a["name"])
+        g = out.setdefault(k, {"creator": k, "ads": [], "active": False})
+        g["ads"].append(a)
+        g["active"] = g["active"] or a["active"]
+    rows = []
+    for k, g in out.items():
+        sm = lambda f: round(sum(a[f] for a in g["ads"]), 2)
+        squash = re.sub(r"[^a-z]", "", k.lower())
+        rows.append({"creator": k, "active": g["active"], "ads": g["ads"], "n": len(g["ads"]),
+                     "spend7": sm("spend7"), "buys7": sm("buys7"), "spend30": sm("spend30"), "buys30": sm("buys30"),
+                     "value30": sm("value30"),
+                     "submissions": [x for x in subs if re.sub(r"[^a-z]", "", str(x.get("creator", "")).lower()) == squash],
+                     "profile": prof.get(squash)})
+    rows.sort(key=lambda r: -r["spend30"])
+    return {"creators": rows, "through": (la.get("money") or {}).get("through"), "program": base.get("read"),
+            "profiles": base.get("profiles")}
+
+
 def creators(brand):
     """The brand's creators: the newest creator-program read (runs/winners/<brand>/creators/<date>/trybe.json) and the
     creators we keep a profile on (brands/<brand>/content-creators/<handle>/profile.md)."""
@@ -1161,7 +1195,7 @@ def handle(h, method, parts, query, body):
             if api == ["pages"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, pages(q["brand"]))
             if api == ["creators"] and SAFE.match(q.get("brand", "")):
-                return h.send(200, creators(q["brand"]))
+                return h.send(200, creators_live(q["brand"]) if q.get("live") else creators(q["brand"]))
             if api == ["knowledge"]:
                 return h.send(200, knowledge(q.get("q", "")))
             if api == ["github"]:
