@@ -1,0 +1,237 @@
+{
+  "kind": "tasks",
+  "title": "Tasks",
+  "note": "The team's work board. A task IS an item plus its append-only event records (SCHEMA-draft.md, APPROVED 2026-08-24): current state is never stored, it is COMPUTED by folding the records in created order, latest-per-field wins, with `comment` and `link` accumulating. Ids are time-based \u2014 TSK-<yyyymmddHHMMSS>-<slug> \u2014 so no coordinator is needed and nothing is ever renumbered. Every verdict carries exactly one `event`: create | status | assign | edit | comment | link. Tasks created in the shell are record-borne: the `items` array below is a SEED only and is never edited by the tool. The item id `task-index` is RESERVED \u2014 each creator keeps one cumulative index record there so other browsers can discover record-borne tasks (the platform lists records only per known item id; same mechanism as the inbox's `filed-index`). Dev work ENTERS this board through `links`, never by copying a card. STATUS VOCABULARY (the email lead, 2026-08-25 \u2014 inputs/2026-08-25-the email lead-corrections.md): `proposed` = AI-derived or filed without authority to make it live; NOT actionable until a human with context confirms. `dropped` = WORK WE INTENTIONALLY DECIDED TO STOP (before 2026-08-25 this value had no definition anywhere and no task had ever used it). Work that is active but not moving is NEVER a status \u2014 it is a derived stale alert, because if a person has to set it, it is not accidental. Work intentionally paused is `snooze_until` a date, NOT a status. STANDING RULE: no status is added while the existing set plus a date can express the case.",
+  "open_items": true,
+  "serve_records": "history",
+  "_serve_records_note": "records-API fix, 2026-09-01 (BLOCKER-2026-08-31-records-api.md): this kind's records are an event history folded on read, so /api/reviews serves EVERY record for an item, ascending \u2014 not the latest per reviewer, which silently displaced a creator's `create` record on their own second write and made the item vanish from every view. Session-written records on suffixed filenames (`...--<item>--<note>.json`) are served under the item their body names. Kinds WITHOUT this field keep latest-per-reviewer exactly as before (qc-verdicts, visual-run, and every read-back panel depend on it).",
+  "item_id": "id",
+  "item_label": "title",
+  "management_grant": [
+    "the developer",
+    "the email lead",
+    "the designer"
+  ],
+  "_management_grant_note": "RULED by the developer (INB-41 (PM management view), INB-45 (default-open tools)): team tools are open by default; the management scope (see ALL tasks, triage, reassign) is the granted exception. THIS LIST IS ENFORCED by the API, and it is the only list the API reads. Since PM-3 (management scope gate) merged 2026-09-02: a signed-in person on this list gets every task; a signed-in person not on it gets only the tasks they are on (assignee, reviewer or creator), and a 403 for another person's task. ONE EXCEPTION, PM-37 (workflow exception), ruled by the developer 2026-09-15 and merged 2026-09-15 (ai-dev c29f413): the task list also gives every signed-in person every task tagged `workflow` and every step under one, whole. If this file cannot be read, signed-in callers get a 503. A holder of the shared team key still gets everything; this list is not read for them. Granted today: the developer, the email lead, the designer. || CHANGED 2026-08-26 (the developer): ['the developer','the email lead','the owner'] -> ['the developer','the email lead','the designer']: the owner removed, the designer added. Since PM-3 (management scope gate) this is enforced: the owner gets only the tasks he is on, plus the workflow runs.",
+  "no_progress_threshold": {
+    "default_days": 7,
+    "by_stream": {}
+  },
+  "_no_progress_threshold_note": "The `No progress` alert's policy home (PM-11, 2026-09-02; spec §7, inputs/2026-08-31-the email lead-pm-spec.md). `default_days` is 7 — the email lead's default; several days without movement is often normal here. `by_stream` maps a stream name to an integer number of days and OVERRIDES the default for tasks in that stream. IT IS DELIBERATELY EMPTY: which streams differ from 7 is the email lead's own open question (ARTIFACT-NOTES-2026-09-01.md) and a human ruling, never a value a session infers — an empty map means every stream takes the default, which is the honest state. NO PROGRESS IS A DERIVED ALERT AND NEVER A STATUS (the email lead's 2026-08-25 standing rule: if a person has to set it, it is not accidental) — days-since-last-movement is computed from the event history every task already carries, which is why this manifest holds the policy and nothing else. `in_review` is subject to it (D11), and a snooze silences it and NEVER a due date (D16).",
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "create",
+        "status",
+        "assign",
+        "edit",
+        "comment",
+        "link",
+        "index",
+        "track",
+        "untrack",
+        "today"
+      ],
+      "note": "exactly one per record. `index` appears only on the reserved item id `task-index`. PER-PERSON STATE lives in the last three (PM-11 — the developer's ruling via PLAN batch 22 addendum 160da5b37, 2026-09-02): `track` / `untrack` are one person's follow-up relationship to someone else's task, and `today` is one person's focus mark for a named day. THE RECORD'S AUTHOR IS THE PERSON — every record already carries `reviewer`, so per-person state comes free, stays append-only, and NEVER competes with a write to the task body. A view folds them per author, latest wins; a fold that ignores the author is wrong. the email lead stops tracking, the developer may continue (spec §4, inputs/2026-08-31-the email lead-pm-spec.md). REJECTED alternatives, both recorded so nobody re-proposes them: a per-person view file (`platform/views/<person>.json`) — exists, read by nothing, costs more to build; and device-local state (`localStorage`, what the prototype did) — dies at integration, because nothing ships that behaves differently on a second machine."
+    },
+    {
+      "key": "item",
+      "required_when": "event=create",
+      "note": "the full task body \u2014 record-borne tasks live here"
+    },
+    {
+      "key": "to",
+      "required_when": "event=status",
+      "values": [
+        "proposed",
+        "todo",
+        "in_progress",
+        "in_review",
+        "done",
+        "dropped"
+      ],
+      "note": "the status being moved to. Moving to `in_review` REQUIRES a `reviewer` (the email lead D11): In Review must never mean 'waiting for someone unspecified'. `done` is not reachable from `in_review` until the applicable review is recorded. || ENFORCED 2026-09-02 (PM-7), and WHAT 'RECORDED' MEANS, because SCHEMA-draft §15 named the rule and not the signal: the review is recorded when the person named in `reviewer` has left a `comment` on the task AFTER it entered in_review, or — when the reviewer is `auto-qc` — when a `link` of type `record` (the QC verdict) landed after that same moment. NO NEW EVENT AND NO NEW STATUS were added for it: the email lead ruled out a status while the existing set plus a date can express the case, so the signal is read out of the vocabulary that already exists. A comment left BEFORE this review does not count — the gate is about the review the task is in now. Both rules are checked in ORDER, over the folded record stream (validate_kinds.check_task_sequence), because neither is visible in a single record; and both bind from 2026-09-02 forward only, so the one 2026-08-31 record of this shape is read as it was written."
+    },
+    {
+      "key": "assignees",
+      "required_when": "event=assign",
+      "note": "array of identity.json person names; [] means unassigned. ALWAYS INTERNAL PEOPLE (the email lead D3): the owner is whoever follows up and moves the task forward. An external party is NEVER the owner \u2014 it goes in `waiting_on`."
+    },
+    {
+      "key": "field",
+      "required_when": "event=edit",
+      "values": [
+        "title",
+        "body",
+        "priority",
+        "due",
+        "tags",
+        "stream",
+        "waiting_on",
+        "waiting_on_ref",
+        "reviewer",
+        "snooze_until",
+        "estimate_days",
+        "step_order",
+        "starts_on",
+        "parent",
+        "alias"
+      ],
+      "note": "which item field the edit replaces. `alias` added 2026-10-08 (PM-67): a T-<n> minted for a task created with a TSK- id; set once, never changed; the TSK- id stays the item id. `parent` added 2026-10-06 (the email lead, manifest item 1 of ARTIFACT-NOTES-2026-09-01): moves an existing task under a workflow run or out of one (\"\" for none); the PM view already folded it, this aligns the vocabulary. `step_order` added 2026-09-15 (PM-29): an ORDERING KEY for a step of a workflow run, a positive whole number, or \"\" for none. IT IS A KEY AND NOT A POSITION, which is the whole design: values are MINTED SPARSELY (100, 200, 300 …) so MOVING A STEP IS ONE EDIT — one value written between the moved step's new neighbours — where the order living in the title text cost one title rewrite per step whose number changed. NOTHING IS CONTIGUOUS AND NOTHING REQUIRES IT: gaps are the point, a run may sit at 100, 250, 300, and RENORMALISING IS A SEPARATE EXPLICIT ACT a person asks for, never something a move does on its own. NO MIGRATION: a step with no `step_order` falls back to the number at the head of its title, so every run filed before this card reads exactly as it did. WHERE BOTH EXIST THE FIELD WINS, FULL STOP — the title's number is a fallback that loses, never a second source of order, and NO WRITER REWRITES A STORED TITLE TO RENUMBER. The number a person sees is computed from the sorted order on read and is never stored text. `estimate_days` added 2026-09-14 (PM-25): an INTEGER number of days the work is expected to take, or \"\" for none. IT IS THE ONLY FIELD THIS CARD ADDS, AND A DERIVED DUE DATE IS NEVER WRITTEN BACK — a view reads `due` when one was typed and otherwise derives it from the fold's first `in_progress` stamp plus this many CALENDAR days, on read, every time. Storing that derived date would create a second definition of \"due\" for the two to drift apart, which is the whole defect the one-helper rule exists to prevent; so no writer on any plane files a `due` edit computed from an estimate. `waiting_on` (free text, may name an external party), `reviewer` (person or `auto-qc`, required on the move into in_review) and `snooze_until` (date; the task keeps its status, leaves the active board, and returns on its own at the date) added 2026-08-25 per the email lead's corrections. `waiting_on_ref` added 2026-09-02 (PM-11): the STRUCTURED handoff that sits BESIDE the prose, never instead of it. Value is an ARRAY of {type, ref} — `type: \"person\"` with `ref` = a team/people/<name>/identity.json name, or `type: \"task\"` with `ref` = a task id; `[]` clears it. An array because real waits have more than one leg (T-3 waits on a build AND a key). NO MIGRATION: existing prose values are left exactly as written (T-3's sentence is untouched, byte for byte), a task may carry both, and this is what makes \"blocking work of mine\" computable while the prose keeps saying what a pointer cannot. A view renders the pointer as the handoff and the prose as the signal. `starts_on` added 2026-09-15 (PM-41): the date the work is PLANNED to begin — YYYY-MM-DD, or \"\" for none, and A DATE LATER THAN TODAY IS ORDINARY AND IS THE WHOLE POINT, because nothing on this kind could express a future plan before it. ONE FIELD FOR RUNS AND STEPS ALIKE (the developer, \"both\"): a run IS a task tagged `workflow`, so a second run-level start would be two things to keep in sync. THE PRECEDENCE RUNS THE OPPOSITE WAY TO `due`: a view reads the fold's first `in_progress` stamp FIRST and this typed date only when there is none — a due stays a COMMITMENT until it is met, while a start BECOMES A FACT the moment it happens, and a chart that reports Oct 1 for work begun Oct 3 is lying about history. The plan is not lost: a reader shows both when they disagree. A DERIVED START IS NEVER WRITTEN BACK, for the same reason `estimate_days` gives above, and a derived due date now counts from this date when no stamp exists — a person saying when work starts is not the page inventing a date. THIS IS NOT `snooze_until`: that means HIDE UNTIL, this means STARTS ON, the two are independent, and no writer ever fills one from the other."
+    },
+    {
+      "key": "value",
+      "required_when": "event=edit"
+    },
+    {
+      "key": "text",
+      "required_when": "event=comment"
+    },
+    {
+      "key": "add",
+      "required_when": "event=link",
+      "note": "{type: card|dispatch|branch|inbox|record|url, ref}"
+    },
+    {
+      "key": "note",
+      "note": "optional on status and assign \u2014 why it moved, who asked"
+    },
+    {
+      "key": "date",
+      "required_when": "event=today",
+      "note": "YYYY-MM-DD — the day this task is marked for. A today mark is DATED so yesterday's pins never leak into today's list; an undated mark would turn a focus view into a second backlog."
+    },
+    {
+      "key": "on",
+      "note": "optional boolean on `today`; absent means true. `false` UNMARKS that person's mark for that date. `track`/`untrack` are a pair of event values, but the today mark carries its own polarity instead — one event value covers mark and unmark, because a mark is always about a specific date and an `untoday` event would have to name the same date anyway."
+    },
+    {
+      "key": "tasks",
+      "required_when": "event=index",
+      "note": "id -> {created, by} for every task this person created; cumulative, latest per person wins"
+    }
+  ],
+  "items": [
+    {
+      "id": "TSK-20260824104300-pm-1-serve-platform-paths",
+      "title": "Serve platform/ paths, with the lab paths still working",
+      "body": "READ_PREFIXES gains `platform/data/` and `platform/views/`; the five hardcoded lab bases become ONE ordered base-path helper resolving platform/ first with the lab path as fallback. Expand-only \u2014 nothing moves.",
+      "status": "done",
+      "assignees": [],
+      "requested_by": "the developer",
+      "source": "dispatch",
+      "stream": "pm-tool",
+      "priority": 1,
+      "due": "",
+      "links": [
+        {
+          "type": "card",
+          "ref": "new-workflow-design/builds/pm-tool/task-cards.md#PM-1"
+        },
+        {
+          "type": "record",
+          "ref": "workflow-requests/20260824T104349Z--developer--impl-pm1-platform-paths.json"
+        }
+      ],
+      "parent": "",
+      "tags": [
+        "ai-dev",
+        "platform"
+      ],
+      "created": "2026-08-24T10:43:49Z",
+      "by": "the developer"
+    },
+    {
+      "id": "TSK-20260824112300-pm-2-pm-surface",
+      "title": "The PM surface: tasks kind, list and kanban, management view",
+      "body": "The `tasks` kind born at platform/data/, validator support, the shell at platform/views/pm/ over the existing inbox kind and the new tasks kind, and the management view for the developer, the email lead and the owner.",
+      "status": "in_review",
+      "assignees": [],
+      "requested_by": "the developer",
+      "source": "dispatch",
+      "stream": "pm-tool",
+      "priority": 1,
+      "due": "",
+      "links": [
+        {
+          "type": "card",
+          "ref": "new-workflow-design/builds/pm-tool/task-cards.md#PM-2"
+        },
+        {
+          "type": "record",
+          "ref": "workflow-requests/20260824T112245Z--developer--impl-pm2-surface.json"
+        }
+      ],
+      "parent": "",
+      "tags": [
+        "ai-workspace",
+        "platform"
+      ],
+      "created": "2026-08-24T11:22:45Z",
+      "by": "the developer"
+    },
+    {
+      "id": "TSK-20260824120000-pm-3-management-grant-server-side",
+      "title": "Enforce the PM management grant server-side (ai-dev)",
+      "body": "PM-2's done-when requires that a person without the management grant is REFUSED BY THE API, not merely shown a smaller page. Nothing in ai-workspace can do that: on this plane identity is declared (X-Reviewer), not authenticated, and the shared team key is the only gate. Needs an ai-dev card. Details and the proposed card text are in BLOCKERS.md.",
+      "status": "proposed",
+      "assignees": [],
+      "requested_by": "the developer",
+      "source": "ai-triage",
+      "stream": "pm-tool",
+      "priority": 1,
+      "due": "",
+      "links": [
+        {
+          "type": "card",
+          "ref": "new-workflow-design/builds/pm-tool/BLOCKERS.md"
+        },
+        {
+          "type": "inbox",
+          "ref": "INB-41"
+        },
+        {
+          "type": "inbox",
+          "ref": "INB-40"
+        }
+      ],
+      "parent": "",
+      "tags": [
+        "ai-dev",
+        "blocker"
+      ],
+      "created": "2026-08-24T12:00:00Z",
+      "by": "the developer"
+    },
+    {
+      "id": "TSK-20260824120100-legacy-homes-migration",
+      "title": "Migrate the 22 kinds, ~320 records and QC tooling out of lab/",
+      "body": "HOMES-draft's p3 expand-migrate-contract card: kinds to platform/data/kinds/, records to platform/data/records/<kind>/, QC tooling to platform/qc/, legacy viewers to platform/views/<product>/. Run on a quiet day with writers paused \u2014 never folded into another card.",
+      "status": "proposed",
+      "assignees": [],
+      "requested_by": "the developer",
+      "source": "human",
+      "stream": "platform",
+      "priority": 3,
+      "due": "",
+      "links": [
+        {
+          "type": "inbox",
+          "ref": "INB-39"
+        },
+        {
+          "type": "card",
+          "ref": "new-workflow-design/builds/pm-tool/HOMES-draft.md"
+        }
+      ],
+      "parent": "",
+      "tags": [
+        "migration"
+      ],
+      "created": "2026-08-24T12:01:00Z",
+      "by": "the developer"
+    }
+  ],
+  "_the email lead_rules_note": "Requirements that bind any view over this kind (the email lead, 2026-08-25). (1) Waiting work is visible AS A GROUP WITHOUT APPLYING A FILTER, and the who/what is on the item; the implementation is free, she ruled on the outcome not the mechanism. (2) Recurring work stays easy to see and does not disappear when this week's instance completes. (3) Snoozed work leaves the active board and is visible in its own list. (4) Snooze silences the no-update alert and NEVER a due date; snoozing past a due date deals with the due date at that moment, moved or removed. (5) Her seat ROUTES work to the right owner, it does not absorb ownership \u2014 any design that makes work stop with her by default is wrong."
+}

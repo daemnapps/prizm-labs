@@ -3,7 +3,7 @@
 **This is the column reference.** For the order you do things in, and the
 traps between the steps, read `RUNBOOK.md` beside it.
 
-Read off Meta's own template, downloaded from the **1. <brand>** account
+Read off Meta's own template, downloaded from the **1. Brand A** account
 2026-09-10: `AdsManagerTemplate_v2.3.xltx`, 143 columns, two sheets. Not from
 a blog post. Everything below is what the file itself enforces.
 

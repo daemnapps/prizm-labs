@@ -1,7 +1,7 @@
 # Model House and Inputs (updated 26 Oct 2026, evening)
 
 A chain asks the Model House for a job, gets one model through Higgsfield, and reads that model's rulebook for what can go
-in. Page (what is still open): (private page)
+in. Page (what is still open): https://claude.ai/artifact/4KiUGx2GA4CzaZSayWFuVY
 
 ## The setup
 
@@ -23,7 +23,7 @@ Gemini judge, and the local upscale (Real-ESRGAN) and 3D.
 
 Higgsfield's keyed API does not list GPT Image 2.5, Seedream 5 Pro or Nano Banana Pro (checked 26 Oct at
 open.higgsfield.ai), which is why the three picture models go through the command line. Cost check: GPT Image 2.5 about
-0.25 credits a low-quality picture, Seedream 2.5, Nano Banana Pro 2. Account: <brand> workspace, ultra plan.
+0.25 credits a low-quality picture, Seedream 2.5, Nano Banana Pro 2. Account: Brand A workspace, ultra plan.
 
 ## How a job is called, and what catches it when it fails
 

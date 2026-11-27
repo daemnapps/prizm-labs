@@ -1,0 +1,147 @@
+{
+  "kind": "output-review",
+  "title": "Output review — a round of outputs, judged",
+  "note": "ONE ROUND, TWO ITEM SHAPES ON ONE KIND (card OR-1). A ROUND is a set of outputs put in front of named reviewers — parity gate-5 reads, CM-2 goldens, an in-workflow taste check. It reviews OUTPUT and is NOT feature QC: merge acceptance and the gate-2 eyeball of tools are a different problem and stay where they are (the developer's scope wall, 2026-09-02). It is also a POST-RUN round, never an in-chain halt — the chain runner has no human in it by design. SHAPE 1, THE ROUND RECORD, on item `<round>`: `event: \"round\"`, filed by the minting worker (`mini-worker`, card OR-2), carrying the title, the source run(s), `mode` (`pair` or `single`), the reviewers asked, and the `items` array — one entry per output, each with its sides and their durable URLs. SHAPE 2, ONE RECORD PER OUTPUT, on item `<round>.i<k>` where k is the 1-based position in that array: `event: \"verdict\"`, filed BY THE REVIEWER through the dashboard. THE SPLIT IS DELIBERATE and is the visual-run `.r<n>` precedent for the same reason it exists there: /api/reviews is LATEST-PER-REVIEWER, so a whole round sharing one item id would keep only each reviewer's last verdict and silently discard the other K-1 outputs they judged — one item per output is what makes several reviewers' several judgements all survive on an append-only plane. VERDICT VOCABULARY, LIFTED FROM visual-run RATHER THAN INVENTED, and closed — there is no third shape. Pair: {verdict: \"same\"|\"better\"|\"worse\", reasons: [tags], note} — the verdict judges side B (the CANDIDATE, `role: \"candidate\"`) against side A (the BASELINE, `role: \"baseline\"`), never the other way round, so \"better\" always means the candidate beat the baseline. For CM-2 the baseline is the owner's own `results/` run and the candidate is the copy-general run on the SAME input. Single: {verdict: \"approve\"|\"reject\"|\"fix\", reasons: [tags], note}. THE ROUND'S OWN OWNER CLOSES IT with `event: \"close\"`, {decision: \"accepted\"|\"parked\"|\"rejected\"} filed back on the bare `<round>` item — a different reviewer from the minting worker, so latest-per-reviewer keeps the round record and the closure side by side rather than one overwriting the other. ATTRIBUTION: the reviewer on a verdict is whoever the platform stamped — the dashboard sends the signed-in person's own name and nothing else, and offers no field for typing somebody else's. On /api/review that name is client-declared and honest-by-convention by the developer's ruling of 2026-08-19; whether this kind should be an exception is OPEN (card OR-5, the developer's call) and no viewer or worker may pre-empt it. MEDIA NEVER LIVES ON THIS PLANE (workspace rule 3): an output's bytes are copied to the platform blob by the existing durable_url pattern (bench_upload) and the record carries the URL, never the bytes. WORDS may travel two ways — short ones inline in the record as `text`, longer ones mirrored under platform/data/records/output-review/<round>/ and named by a repo-relative `path` the viewer reads through the platform's own gated GET /api/file. AUTH: no reviewer keys and no tokens (the developer, 2026-09-02) — this is a dashboard tool at dashboard.the company.com/review?round=<id>, Upright sign-in is the identity (CP-2, session-derived) and grants are server-side. open_items is on because round ids and their per-output ids are minted by the worker, not by editing this manifest.",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "_reserved_ids": {
+    "rounds-index": "cumulative round id -> {title, mode, reviewers, opened, filed}. The platform lists records only per KNOWN item id, so a browser cannot enumerate rounds from the API — this is how the dashboard answers \"which rounds are open for ME\" when it is opened with no ?round=. Same mechanism as the teardown kind's `runs-index`, the inbox's `filed-index` and the tasks kind's `task-index`. The minter MERGES into the entries already there and removes nothing it does not recognise. A round missing from the index is still fully reviewable by its own link — the index is discovery, never the record of the round."
+  },
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "round",
+        "verdict",
+        "close",
+        "index"
+      ],
+      "note": "exactly one per record, and it names which of the two item shapes the record belongs to. `round` and `close` appear only on the bare `<round>` item; `verdict` only on `<round>.i<k>`; `index` only on the reserved id `rounds-index`."
+    },
+    {
+      "key": "round",
+      "required_when": "event=round|verdict|close",
+      "note": "the round id, repeated on every record so a record read on its own still names its round. [a-z0-9][a-z0-9-]{2,48}."
+    },
+    {
+      "key": "title",
+      "required_when": "event=round",
+      "note": "what a reviewer is being asked to judge, in their words — legible to someone who has never seen the round id."
+    },
+    {
+      "key": "mode",
+      "required_when": "event=round",
+      "values": [
+        "pair",
+        "single"
+      ],
+      "note": "`pair` renders two sides side by side and takes same/better/worse; `single` renders one output at a time and takes approve/reject/fix. The mode is a property of the ROUND, not of an item — one round never mixes both, because the two vocabularies are not comparable."
+    },
+    {
+      "key": "source",
+      "required_when": "event=round",
+      "note": "{runs: [{label, engine?, run_dir?, url?}]} — WHICH run(s) these outputs came out of. A pair round names both; run_dir is the machine path the minter read (unfetchable from a browser and shown as provenance only), url is clickable when there is one."
+    },
+    {
+      "key": "reviewers",
+      "required_when": "event=round",
+      "note": "the people ASKED, lowercase names as the platform stamps them. It is a request, not a gate — the server's grants decide who may open the page. This list is what the no-?round= listing filters on."
+    },
+    {
+      "key": "owner",
+      "required_when": "event=round",
+      "note": "whose round it is — the one person expected to file the `close`. Shown on the page so a reviewer knows who is waiting."
+    },
+    {
+      "key": "items",
+      "required_when": "event=round",
+      "note": "the outputs, in order; position k (1-based) IS the `<round>.i<k>` item id, so entries are APPEND-ONLY — reordering or removing one would re-point verdicts already filed. Each entry: {k, label, input?, sides: [...]}. `sides` has exactly TWO entries in pair mode (roles `baseline` then `candidate`) and exactly ONE in single mode (role `only`). Each side: {label, role, content_type: \"md\"|\"text\"|\"image\"|\"video\", durable_url?, path?, text?, bytes?, from?}. AT LEAST ONE of durable_url / path / text carries the output; a side with none renders as an absence and never as an empty box."
+    },
+    {
+      "key": "durable_url",
+      "note": "on a side: the PLATFORM BLOB copy of the bytes (the bench_upload pattern, visual-run's field of the same name). Public blob storage, so image and video render straight from it; the vendor's own url is ephemeral and is never the thing a record points at."
+    },
+    {
+      "key": "path",
+      "note": "on a side: repo-relative, under platform/data/records/output-review/, read through the platform's own gated GET /api/file. This is how md and text outputs too long to inline travel. A path outside that prefix is refused by the viewer rather than fetched."
+    },
+    {
+      "key": "text",
+      "note": "on a side: the output itself, inline, for short md/text outputs. Cheapest path and the one that keeps a round readable with no second fetch — bounded by the 16KB record cap the whole round shares."
+    },
+    {
+      "key": "reason_tags",
+      "note": "optional on the round: {pair: [...], single: [...]} overriding the kind's default tag list for this round, so a round about copy and a round about images can offer the words their reviewers actually use. Tags are a HELP, never a gate — the note is always available and a verdict with no tags is valid."
+    },
+    {
+      "key": "verdict",
+      "required_when": "event=verdict",
+      "values": [
+        "same",
+        "better",
+        "worse",
+        "approve",
+        "reject",
+        "fix"
+      ],
+      "note": "the first three are the PAIR vocabulary and the last three the SINGLE one; which set is legal is decided by the round's `mode` and never mixed. In pair mode the word describes the CANDIDATE relative to the BASELINE."
+    },
+    {
+      "key": "reasons",
+      "note": "on a verdict: an array of short tags, from the round's `reason_tags` or the kind's defaults. May be empty."
+    },
+    {
+      "key": "note",
+      "note": "on a verdict or a close: the reviewer's own words. Free text, always offered, never required — a one-tap verdict with no note is a complete verdict."
+    },
+    {
+      "key": "k",
+      "required_when": "event=verdict",
+      "note": "the 1-based position this verdict judges, repeated from the item id so a record read on its own is self-describing."
+    },
+    {
+      "key": "decision",
+      "required_when": "event=close",
+      "values": [
+        "accepted",
+        "parked",
+        "rejected"
+      ],
+      "note": "the OWNER's disposition of the whole round, filed on the bare `<round>` item. It closes the round; it does not judge an output, and it never overwrites or contradicts a reviewer's verdict — both records stand."
+    },
+    {
+      "key": "at",
+      "note": "iso8601 the client stamped. The platform's own `created` on the record is the authority; `at` is the client's account of itself and the two are shown together where they disagree."
+    },
+    {
+      "key": "rounds",
+      "required_when": "event=index",
+      "note": "round id -> {title, mode, reviewers, opened, filed}; cumulative, latest record wins, merged rather than replaced."
+    }
+  ],
+  "_defaults": {
+    "reason_tags": {
+      "pair": [
+        "hook",
+        "structure",
+        "voice",
+        "accuracy",
+        "specificity",
+        "length",
+        "format"
+      ],
+      "single": [
+        "hook",
+        "structure",
+        "voice",
+        "accuracy",
+        "specificity",
+        "length",
+        "format"
+      ]
+    },
+    "_note": "The default tag vocabulary the dashboard offers when a round declares no `reason_tags` of its own. Data, not a gate: an unlisted reason goes in the note."
+  }
+}

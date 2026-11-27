@@ -1,0 +1,608 @@
+{
+ "pulled": "2026-11-21",
+ "items": [
+  {
+   "section": "Edit any video",
+   "name": "Editing Room",
+   "line": "Upload up to 10 min \u00b7 swap person, angle, location, camera, light, brush",
+   "say": "edit this video in the Editing Room",
+   "img": "https://cdn.higgsfield.ai/2552d9f4-8122-4050-b067-6cafc70c4a20_thumb.webp",
+   "video": "https://cdn.higgsfield.ai/videoshop/take/2552d9f4-8122-4050-b067-6cafc70c4a20/preview/fe113d9a-0bbe-4962-9392-a216abedc6cd/compressed.mp4",
+   "link": "https://higgsfield.ai/editing-room"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Swap person",
+   "line": "Put someone else in the shot \u00b7 2\u201330s",
+   "say": "swap the person in this clip",
+   "img": "https://cdn.higgsfield.ai/2552d9f4-8122-4050-b067-6cafc70c4a20_thumb.webp",
+   "video": "https://cdn.higgsfield.ai/videoshop/take/2552d9f4-8122-4050-b067-6cafc70c4a20/preview/fe113d9a-0bbe-4962-9392-a216abedc6cd/compressed.mp4",
+   "link": "https://higgsfield.ai/editing-room"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Change angle",
+   "line": "Same moment from a second camera",
+   "say": "give me a new angle on this",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_main/29dc499c-84a0-43c3-8c6b-1e278a6cc474.mp4",
+   "link": "https://higgsfield.ai/editing-room"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Move camera",
+   "line": "Add dolly, pan or orbit to a still shot",
+   "say": "add a camera move to this",
+   "img": "https://cdn.higgsfield.ai/2552d9f4-8122-4050-b067-6cafc70c4a20_thumb.webp",
+   "video": "https://cdn.higgsfield.ai/videoshop/take/2552d9f4-8122-4050-b067-6cafc70c4a20/preview/fe113d9a-0bbe-4962-9392-a216abedc6cd/compressed.mp4",
+   "link": "https://higgsfield.ai/editing-room"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Relight",
+   "line": "Time of day, colour, light direction",
+   "say": "relight this shot",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_main/ff6c6ba0-3c47-416a-a473-e2b2bd425160.mp4",
+   "link": "https://higgsfield.ai/apps/relight"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Change location",
+   "line": "Move the shot to a new place",
+   "say": "put this shot somewhere else",
+   "img": "https://cdn.higgsfield.ai/2552d9f4-8122-4050-b067-6cafc70c4a20_thumb.webp",
+   "video": "https://cdn.higgsfield.ai/videoshop/take/2552d9f4-8122-4050-b067-6cafc70c4a20/preview/fe113d9a-0bbe-4962-9392-a216abedc6cd/compressed.mp4",
+   "link": "https://higgsfield.ai/editing-room"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Brush edit",
+   "line": "Paint one thing, say what it becomes",
+   "say": "change this one thing in the frame",
+   "img": "https://static.higgsfield.ai/nano-banana-2/review-1.webp",
+   "video": "https://static.higgsfield.ai/inpaint/hero-mini.mp4",
+   "link": "https://higgsfield.ai/editing-room"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Edit Video",
+   "line": "Edit, enhance, restyle footage",
+   "say": "edit this video",
+   "img": "https://static.higgsfield.ai/seo-landings/ave-motion-original-poster.webp",
+   "video": "https://static.higgsfield.ai/reality-manipulation/features/feature-1-3.mp4",
+   "link": "https://higgsfield.ai/ai/video/edit"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Reframe",
+   "line": "Any video to 9:16, 1:1, 16:9",
+   "say": "reframe this to vertical",
+   "img": "https://static.higgsfield.ai/seo-landings/ave-motion-original-poster.webp",
+   "video": "https://static.higgsfield.ai/reality-manipulation/features/feature-1-3.mp4",
+   "link": "https://higgsfield.ai/ai/video/reframe"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Enhance to 1080p",
+   "line": "Same footage, sharper, every cut kept",
+   "say": "enhance this to 1080p",
+   "img": "",
+   "video": "",
+   "link": "https://higgsfield.ai/upscale"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Lipsync Studio",
+   "line": "Make any face say new words",
+   "say": "lipsync this to the new line",
+   "img": "https://static.higgsfield.ai/public/thumbnail/lipsync-studio.jpg",
+   "video": "https://static.higgsfield.ai/lipsync-studio/tutorial_step_2.mp4",
+   "link": "https://higgsfield.ai/lipsync-studio"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Miracle",
+   "line": "Real-time AI video editing",
+   "say": "",
+   "img": "https://static.higgsfield.ai/higgsfield-miracle/og.webp",
+   "video": "",
+   "link": "https://higgsfield.ai/miracle"
+  },
+  {
+   "section": "Edit any video",
+   "name": "Mixed Media",
+   "line": "Viral edit effects, After Effects style",
+   "say": "",
+   "img": "https://static.higgsfield.ai/nano-banana-2/review-1.webp",
+   "video": "https://static.higgsfield.ai/mixed-media/hero.mp4",
+   "link": "https://higgsfield.ai/mixed-media-intro"
+  },
+  {
+   "section": "Edit any video",
+   "name": "AI Motion Designer",
+   "line": "Motion graphics inside After Effects",
+   "say": "",
+   "img": "https://static.higgsfield.ai/ai-motion-designer/og.webp",
+   "video": "https://static.higgsfield.ai/ai-motion-designer/launch-video.mp4",
+   "link": "https://higgsfield.ai/ai-motion-designer"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Ad Multiplier",
+   "line": "A winning 4\u201330s ad re-shot with our cast + product",
+   "say": "multiply this ad for <brand>",
+   "img": "https://static.higgsfield.ai/Og/Og-new.webp",
+   "video": "https://static.higgsfield.ai/ad-multiplier/hero-bg.mp4",
+   "link": "https://higgsfield.ai/ad-multiplier"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Katana",
+   "line": "Copy a reference edit onto our product",
+   "say": "katana this for <brand>",
+   "img": "https://static.higgsfield.ai/katana/og-20261013/katana.jpg",
+   "video": "",
+   "link": "https://higgsfield.ai/katana"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Genjutsu",
+   "line": "Copy a clip's motion \u00b7 swap objects \u00b7 trending moves",
+   "say": "genjutsu this clip",
+   "img": "https://static.higgsfield.ai/reality-manipulation/og.webp",
+   "video": "",
+   "link": "https://higgsfield.ai/genjutsu-create"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Recast",
+   "line": "Swap any character in a video",
+   "say": "recast this video",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_main/16af5e9e-270f-4b0f-b1c2-0c448c5d31ef.mp4",
+   "link": "https://higgsfield.ai/apps/recast"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Video Face Swap",
+   "line": "New face, same video",
+   "say": "",
+   "img": "https://static.higgsfield.ai/keyframes-faceswap-preview.jpg",
+   "video": "https://static.higgsfield.ai/videofaceswap/showcase-2-v2.mp4",
+   "link": "https://higgsfield.ai/apps/video-face-swap"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Character Swap",
+   "line": "Replace a character in a picture",
+   "say": "",
+   "img": "https://static.higgsfield.ai/keyframes-characterswap-preview.jpeg",
+   "video": "https://cdn.higgsfield.ai/application_main/5a17fdb6-88b3-4588-809c-0b7af087ca1c.mp4",
+   "link": "https://higgsfield.ai/apps/character-swap"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Click to Ad",
+   "line": "Product link \u2192 video ad",
+   "say": "make a video ad from this link",
+   "img": "",
+   "video": "https://static.higgsfield.ai/public/marketing-studio/hero-banners/marketing-studio-slider-poster-Ads.mp4",
+   "link": "https://higgsfield.ai/marketing-studio"
+  },
+  {
+   "section": "Turn a winner into ours",
+   "name": "Transitions",
+   "line": "Two clips merged with a transition",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_main/e4c366d4-f237-4f07-bd86-5b77808fafe6.mp4",
+   "link": "https://higgsfield.ai/apps/transitions"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama Ads",
+   "line": "A story film around the product \u00b7 47 cards",
+   "say": "drama ad \u00b7 <card> \u00b7 <brand>",
+   "img": "https://static.higgsfield.ai/micro-ads-intro/drama-ads-og.webp",
+   "video": "https://static.higgsfield.ai/micro-ads-intro/drama-ads-launch.mp4",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Micro drama",
+   "line": "Live-action mini drama, 2\u20134 min",
+   "say": "drama ad \u00b7 micro drama \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/7ad9cd5f-5228-472c-ab53-ad5d7e3692e8.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Cartoon story",
+   "line": "3D cartoon told by its hero",
+   "say": "drama ad \u00b7 cartoon story \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/27b229d1-293c-4287-8ace-824025747d0a.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Cinematic story",
+   "line": "Hero narrates over cinematic scenes",
+   "say": "drama ad \u00b7 cinematic story \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/8ef24139-050c-4001-bd0a-0c424cb1159e.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Claymation story",
+   "line": "Stop-motion tale",
+   "say": "drama ad \u00b7 claymation story \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/e4bac29b-1320-4266-9573-dd79306df378.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Talking object",
+   "line": "The product comes alive and talks",
+   "say": "drama ad \u00b7 talking object \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/80556510-c82c-4580-b6a3-1992a5a8f5bc.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Inside the body",
+   "line": "Cells and organs tell the story",
+   "say": "drama ad \u00b7 inside the body \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/49764e09-7ad3-4411-8a95-4900d5373687.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Doll story",
+   "line": "A doll-world tale",
+   "say": "drama ad \u00b7 doll story \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/dae7bacd-f2bf-43cf-ab7d-cd02132984e0.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Drama \u00b7 Crochet story",
+   "line": "A knitted-world tale",
+   "say": "drama ad \u00b7 crochet story \u00b7 <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-styles/c32c24ae-fe9b-4ec2-b5bd-3d1faff006d3.png",
+   "video": "",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Singing Ads",
+   "line": "Product song, characters sing it",
+   "say": "singing ad for <brand>",
+   "img": "https://static-public-media.higgsfield.ai/ads-story-presets/760cafb6-ca62-4f48-8b45-4882e8bf8cc3.webp",
+   "video": "https://static-public-media.higgsfield.ai/ads-story-presets/e0f51e78-6510-4ffa-8065-de85755b4a71.mp4",
+   "link": "https://higgsfield.ai/drama-ads-intro"
+  },
+  {
+   "section": "Story ads",
+   "name": "Short Drama",
+   "line": "A script \u2192 a multi-episode series",
+   "say": "",
+   "img": "https://static.higgsfield.ai/short-drama-studio/short-drama-og-thumbnail.jpg",
+   "video": "https://static.higgsfield.ai/short-drama-studio/landing/2026-11-16-mcp-v1/banner.mp4",
+   "link": "https://higgsfield.ai/short-drama"
+  },
+  {
+   "section": "Story ads",
+   "name": "Cinema Studio 4.0",
+   "line": "Direct every shot, camera and lens",
+   "say": "",
+   "img": "https://static.higgsfield.ai/cinema-studio-4-og.png",
+   "video": "https://cdn.higgsfield.ai/card/e037e439-307d-415c-8fc4-86082fbb1382.mp4",
+   "link": "https://higgsfield.ai/generate"
+  },
+  {
+   "section": "Creators + UGC",
+   "name": "UGC Builder",
+   "line": "Review \u00b7 voiceover \u00b7 unboxing \u00b7 try-on \u00b7 tutorial \u00b7 site tour",
+   "say": "UGC video for <product>",
+   "img": "https://cdn.higgsfield.ai/kling_motion/27d0a4d8-dfd5-4c18-a533-1897c5209dfe.webp",
+   "video": "https://cdn.higgsfield.ai/kling_motion/91c0e5ad-2729-481e-8935-a925df3729e0.mp4",
+   "link": "https://higgsfield.ai/ugc"
+  },
+  {
+   "section": "Creators + UGC",
+   "name": "AI Influencer",
+   "line": "A reusable creator \u00b7 remake any video with them",
+   "say": "",
+   "img": "https://static.higgsfield.ai/ai-influencer/og/2026-10-03/mini-og-4-v2.jpg",
+   "video": "",
+   "link": "https://higgsfield.ai/ai-influencer-studio"
+  },
+  {
+   "section": "Creators + UGC",
+   "name": "Marketing Studio",
+   "line": "Product shots, UGC, ads, posters",
+   "say": "",
+   "img": "https://static.higgsfield.ai/marketing-studio-thumbnail.jpg",
+   "video": "https://static.higgsfield.ai/ms-intro/hero-carousel/ugc.mp4",
+   "link": "https://higgsfield.ai/marketing-studio"
+  },
+  {
+   "section": "Creators + UGC",
+   "name": "Narration",
+   "line": "Put a person on screen over a clip",
+   "say": "put a narrator on this clip",
+   "img": "https://static.higgsfield.ai/public/thumbnail/lipsync-studio.jpg",
+   "video": "https://static.higgsfield.ai/lipsync-studio/tutorial_step_2.mp4",
+   "link": ""
+  },
+  {
+   "section": "Creators + UGC",
+   "name": "Creator Dub",
+   "line": "One video in 9 languages, lips synced",
+   "say": "dub this into Spanish",
+   "img": "https://static.higgsfield.ai/public/thumbnail/lipsync-studio.jpg",
+   "video": "https://static.higgsfield.ai/lipsync-studio/tutorial_step_2.mp4",
+   "link": "https://higgsfield.ai/audio"
+  },
+  {
+   "section": "Creators + UGC",
+   "name": "Audio",
+   "line": "Eleven v4, voice change, translate",
+   "say": "",
+   "img": "https://static.higgsfield.ai/thumbnail/SEEDAUDIO_OG_COVER_1.jpg",
+   "video": "",
+   "link": "https://higgsfield.ai/audio"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Shorts Studio",
+   "line": "Reels from a topic \u00b7 275 styles",
+   "say": "shorts about <topic>",
+   "img": "https://static.higgsfield.ai/shorts-studio/og.webp",
+   "video": "https://static-public-media.higgsfield.ai/ai-reels-presets/2dfd9fdb-4c03-4fba-8a77-0ea9e16cc2ce.mp4",
+   "link": "https://higgsfield.ai/shorts-studio"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Content Factory",
+   "line": "\"What if\u2026\" concept videos",
+   "say": "",
+   "img": "https://static.higgsfield.ai/thumbnail/content-factory.jpg",
+   "video": "",
+   "link": "https://higgsfield.ai/content-factory"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Motion Effects",
+   "line": "400+ effect templates on your clip",
+   "say": "",
+   "img": "https://static.higgsfield.ai/public/thumbnail/effects.jpg",
+   "video": "https://cdn.higgsfield.ai/kling_motion/8c4795a8-e7ef-4272-8fb3-9d349192a013.mp4",
+   "link": "https://higgsfield.ai/motion"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Faceless Studio",
+   "line": "Narrated explainer and story videos",
+   "say": "",
+   "img": "https://static.higgsfield.ai/public/faceless-studio/hero/mobile-card-left.webp",
+   "video": "https://cdn.higgsfield.ai/youtube_faceless_preset_cover/8b110d78-bf5f-4c19-b34a-5d813db45bb3.mp4",
+   "link": "https://higgsfield.ai/faceless-studio"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Mangaka",
+   "line": "Manga and comics, any style",
+   "say": "",
+   "img": "https://static.higgsfield.ai/manga-intro/hero/launch/item-poster.webp",
+   "video": "",
+   "link": "https://higgsfield.ai/mangaka"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Sticker Match Cut",
+   "line": "Easily create captivating sticker matchcut videos with our AI-powered ",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/136a3500-6a5c-4963-8830-1db416f29fe2.mp4",
+   "link": "https://higgsfield.ai/apps/sticker-matchcut"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Behind the Scenes",
+   "line": "Behind the Scenes AI effect \u2014 generate cinematic film set reveal clips",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/443e8e5a-47e0-41c0-955d-cc6e967dee8e.mp4",
+   "link": "https://higgsfield.ai/apps/behind-the-scenes"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "3D Figure",
+   "line": "3D Figure AI effect \u2014 transform your photo into a detailed 3D collecti",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/9d2c23d3-dc75-4c29-8ea6-f87d444f2dbc.mp4",
+   "link": "https://higgsfield.ai/apps/3d-figure"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Plushies",
+   "line": "Instantly turn your photo into a plushie or animated knitted doll with",
+   "say": "",
+   "img": "https://static.higgsfield.ai/app-plushies-og-preview.jpg",
+   "video": "https://cdn.higgsfield.ai/application_main/206ff054-fbe2-4edd-b5d2-60d60cfe4698.mp4",
+   "link": "https://higgsfield.ai/apps/plushies"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Mugshot",
+   "line": "Mugshot is an AI video effect that reimagines your photo as a realisti",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/1e915985-37d9-4dce-af76-9d717b7af7fc.mp4",
+   "link": "https://higgsfield.ai/apps/mugshot"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "3D Render",
+   "line": "3D Render AI effect \u2014 turn your photo into a high-quality 3D rendered ",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/19ebc3f6-c087-4390-9cc9-d33b1f1db997.mp4",
+   "link": "https://higgsfield.ai/apps/3d-render"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "3d Rotation",
+   "line": "3D Rotation is an AI effect that turns your photos into lifelike 3D ob",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/a92f364a-b012-4280-bdf2-1eee709613d7.mp4",
+   "link": "https://higgsfield.ai/apps/3d-rotation"
+  },
+  {
+   "section": "Viral formats + effects",
+   "name": "Outfit Swap",
+   "line": "AI outfit swap \u2014 try on any outfit from a single photo upload",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/25eab5d1-f93a-4688-9edf-91471c472a9f.mp4",
+   "link": "https://higgsfield.ai/apps/outfit-swap"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "Ads Studio",
+   "line": "Meta static ads with copy, from a product link",
+   "say": "static ads for <product link>",
+   "img": "https://static.higgsfield.ai/ads-studio-intro/hero/IMG_9556.webp",
+   "video": "",
+   "link": "https://higgsfield.ai/ads-studio"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "One-tap recipes \u00b7 80",
+   "line": "Before/after \u00b7 myth/fact \u00b7 3 reasons \u00b7 what's inside",
+   "say": "before/after for <product>",
+   "img": "https://static.higgsfield.ai/ads-studio-intro/carousel/item-2.webp",
+   "video": "",
+   "link": "https://higgsfield.ai/marketing-studio"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "Product shots",
+   "line": "Packshots, lifestyle, carousels",
+   "say": "product shots for <product>",
+   "img": "https://static.higgsfield.ai/public/marketing-studio/hero-banners/marketing-studio-slider-poster-Product.webp",
+   "video": "https://static.higgsfield.ai/public/marketing-studio/hero-banners/marketing-studio-slider-poster-Ads.mp4",
+   "link": "https://higgsfield.ai/marketing-studio"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "Soul 2.0 \u00b7 Soul Cinema",
+   "line": "High-aesthetic and cinematic photos",
+   "say": "",
+   "img": "https://static.higgsfield.ai/soul-cinema/hero/hf_20260304_130125_bd30ffb0-0be1-4aa8-a499-f1f0690d1df8.png",
+   "video": "",
+   "link": "https://higgsfield.ai/ai/image"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "Shots",
+   "line": "Turn a single reference photo into a sequence of storyboard shots",
+   "say": "",
+   "img": "https://static.higgsfield.ai/public/thumbnail/shots.jpg",
+   "video": "",
+   "link": "https://higgsfield.ai/apps/shots"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "Skin Enhancer",
+   "line": "Instantly smooth skin and remove blur from photos using advanced AI",
+   "say": "",
+   "img": "https://static.higgsfield.ai/public/thumbnail/skin-enhancer.jpg",
+   "video": "",
+   "link": "https://higgsfield.ai/apps/skin-enhancer"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "AI Stylist",
+   "line": "Your personal AI Stylist",
+   "say": "",
+   "img": "https://static.higgsfield.ai/AI_Stylist_2_og.jpg",
+   "video": "https://cdn.higgsfield.ai/application_main/bb9d59e1-0493-4031-a97d-27fc7f660c89.mp4",
+   "link": "https://higgsfield.ai/apps/ai-stylist"
+  },
+  {
+   "section": "Statics + pictures",
+   "name": "Expand image",
+   "line": "AI image expand tool \u2014 extend any photo beyond its edges with intellig",
+   "say": "",
+   "img": "",
+   "video": "https://cdn.higgsfield.ai/application_detail/af30a374-5805-45e1-ba1a-114e56bdf835.mp4",
+   "link": "https://higgsfield.ai/apps/expand-image"
+  },
+  {
+   "section": "Machines + plugins",
+   "name": "Supercomputer",
+   "line": "Agent that runs whole content jobs",
+   "say": "",
+   "img": "https://static.higgsfield.ai/computer/og.png",
+   "video": "",
+   "link": "https://higgsfield.ai/supercomputer"
+  },
+  {
+   "section": "Machines + plugins",
+   "name": "Agentic Canvas",
+   "line": "Node workflows for image + video",
+   "say": "",
+   "img": "https://static.higgsfield.ai/canvas/CANVAS-THUMBNAIL-1.png",
+   "video": "https://static.higgsfield.ai/canvas/Visual-effect/2-v2-mini.mp4",
+   "link": "https://higgsfield.ai/canvas"
+  },
+  {
+   "section": "Machines + plugins",
+   "name": "Premiere \u00b7 After Effects \u00b7 DaVinci",
+   "line": "Higgsfield inside the editor",
+   "say": "",
+   "img": "",
+   "video": "",
+   "link": "https://higgsfield.ai/plugins/premiere-pro"
+  },
+  {
+   "section": "Machines + plugins",
+   "name": "Games \u00b7 Playables",
+   "line": "Playable ads and games",
+   "say": "",
+   "img": "https://static.higgsfield.ai/games/og.png",
+   "video": "",
+   "link": "https://higgsfield.ai/playable"
+  },
+  {
+   "section": "Machines + plugins",
+   "name": "Property Studio",
+   "line": "New",
+   "say": "",
+   "img": "",
+   "video": "",
+   "link": "https://higgsfield.ai/property-studio"
+  },
+  {
+   "section": "Machines + plugins",
+   "name": "Collab",
+   "line": "Shared projects with the team",
+   "say": "",
+   "img": "https://static.higgsfield.ai/public/thumbnail/chat-intro.jpg",
+   "video": "https://static.higgsfield.ai/chat/movie-mini.mp4",
+   "link": "https://higgsfield.ai/chat-intro"
+  }
+ ]
+}

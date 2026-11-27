@@ -49,7 +49,7 @@ class FakeChain(RS.Chain):
         b = recipe.get("brief", recipe)
         base = b.get("base")
         kit = self.repo / "runs" / "ai-elements" / "acme" / "products" / "crush-serum"
-        first = base or str(self.repo / "tools" / "image-teardown" / "runs" / "acme-run-1" / "assets" / "source.jpg")
+        first = base or str(self.repo / "components" / "image-teardown" / "runs" / "acme-run-1" / "assets" / "source.jpg")
         inputs = [{"n": 1, "role": "the reference", "path": first}]
         if not base:
             inputs.append({"n": 2, "role": "the real CRUSH: its product casting sheet", "path": str(kit / "model" / "product-sheet.png")})
@@ -110,8 +110,8 @@ class RunSheetTest(unittest.TestCase):
         # the picture brief: filed run, approved picture with recipe and plate, two variations
         touch(r / "runs/image-teardown/acme/acme-run-1/deliverable/06-brief.md",
               "# DOCUMENT ONE\n\n# BRIEF · ACME · CRUSH · The tub swap\n\n| | |\n")
-        touch(r / "tools/image-teardown/runs/acme-run-1/assets/source.jpg")
-        touch(r / "tools/image-teardown/runs/acme-run-1/out/variations.json", json.dumps({
+        touch(r / "components/image-teardown/runs/acme-run-1/assets/source.jpg")
+        touch(r / "components/image-teardown/runs/acme-run-1/out/variations.json", json.dumps({
             "source": "stage5", "variations": [
                 {"id": "v1", "label": "words only", "words": ["NEW / WORDS"]},
                 {"id": "v2", "label": "one picture change", "words": ["OTHER"], "picture": "The tub is wet."}]}))
@@ -185,7 +185,7 @@ class RunSheetTest(unittest.TestCase):
         self.assertEqual(one["higgsfield_model"], "gpt_image_2_5")
         self.assertEqual(one["settings"], {"aspect_ratio": "9:16", "variant": "sunburst", "quality": "high",
                                            "resolution": "2k", "count": 1})
-        self.assertEqual(one["references"][0]["file"], "tools/image-teardown/runs/acme-run-1/assets/source.jpg")
+        self.assertEqual(one["references"][0]["file"], "components/image-teardown/runs/acme-run-1/assets/source.jpg")
         self.assertIsNone(one["references"][1]["element"]["element"])     # a product goes by its sheet file
         self.assertEqual(one["words_on_top"], [{"zone": "Headline", "words": "SHAVE / CLEAN"}])
         self.assertIn("approved picture's own recipe", one["prompt_source"])
@@ -208,7 +208,7 @@ class RunSheetTest(unittest.TestCase):
         self.assertNotIn(f"<<<{ELEMENT}>>>", md)
         self.assertIn('"model": "gpt_image_2_5"', md)                  # (b) the MCP call
         self.assertIn("higgsfield generate create gpt_image_2_5", md)  # (c) the command line
-        self.assertIn("--image-references tools/image-teardown/runs/acme-run-1/assets/source.jpg", md)
+        self.assertIn("--image-references components/image-teardown/runs/acme-run-1/assets/source.jpg", md)
 
     def test_return_asks_for_higgsfields_own_record_and_text_from_github(self):
         """2026-10-28: a retyped prompt came back corrupted and the Drive connector changed text; the proof is the
@@ -221,7 +221,7 @@ class RunSheetTest(unittest.TestCase):
         self.assertIn("acme_crush_brief-0001_asset-01.record.json", ret)
         self.assertIn("saved unchanged, never retyped", ret)
         for text in (ret, RS.LEAN):
-            self.assertIn("Read BRIEF.md, RUN.md and run.json from GitHub (company-team/workspace", text)
+            self.assertIn("Read BRIEF.md, RUN.md and run.json from GitHub (company-team/ai-workspace", text)
             self.assertIn("Take pictures, clips and voice files from the Drive.", text)
         self.assertIn("Read each step's prompt out of run.json with code and pass that string unchanged; "
                       "never retype a prompt.", RS.LEAN)
@@ -291,7 +291,7 @@ class RunSheetTest(unittest.TestCase):
                 self.assertEqual(r["drive"], f"Shared Assets/{home}/{r['local']}")
                 self.assertTrue((root / r["local"]).is_file(), r)        # every file RUN.md names is in the folder
         one = data["steps"][0]["references"]
-        self.assertEqual(one[0]["source"], "tools/image-teardown/runs/acme-run-1/assets/source.jpg")
+        self.assertEqual(one[0]["source"], "components/image-teardown/runs/acme-run-1/assets/source.jpg")
         self.assertEqual(data["return"]["drive"], f"Shared Assets/{home}/returned/")
         self.assertFalse(any(g.startswith("Reference files are named by their repo path") for g in data["gaps"]))
         md = (root / "RUN.md").read_text()
@@ -313,10 +313,42 @@ class RunSheetTest(unittest.TestCase):
         self.assertTrue((root / "returned" / "keep.png").is_file())
         self.assertEqual(sorted(p.name for p in (root / "refs").iterdir()), names)
 
+    def test_video_sheet_says_when_no_format_is_named(self):
+        s = self.sheet("acme_crush_brief-0002")
+        self.assertIsNone(s["format_home"]["home"])
+        self.assertIn("names no format", s["format_home"]["note"])
+        self.assertIn("## The format", RS.render_md(s))
+
+    def test_a_format_with_a_home_travels_with_the_handoff(self):
+        prod = self.tmp / "runs/video-production/acme/acme_crush_brief-0002"
+        touch(prod / "run.json", json.dumps({"format": "fixture-format"}))
+        home = self.tmp / "components/video-production/formats/fixture-format"
+        touch(home / "format.json", json.dumps({"id": "fixture-format", "name": "Fixture format", "status": "draft", "signed": None}))
+        touch(home / "FORMAT.md", "# Fixture format\n\nStep one is done right like this.\n")
+        touch(home / "LEARNINGS.md", "# Lessons\n\n| The lesson is about | Its home |\n")
+        touch(self.tmp / ".claude/skills/fixture-format/SKILL.md", "---\nname: fixture-format\n---\n")
+        s = self.sheet("acme_crush_brief-0002")
+        fh = s["format_home"]
+        self.assertEqual(fh["home"], "components/video-production/formats/fixture-format")
+        self.assertEqual(fh["skill"], ".claude/skills/fixture-format/SKILL.md")
+        self.assertIn("workflow.py run fixture-format --brand acme", fh["run"])
+        out = RS.pack(s, repo=self.tmp)
+        root = self.tmp / out["folder"]
+        self.assertIn("format/FORMAT.md", out["files"])
+        self.assertIn("Step one is done right like this.", (root / "format/FORMAT.md").read_text())
+        self.assertTrue((root / "format/LEARNINGS.md").is_file())
+        md = (root / "RUN.md").read_text()
+        self.assertIn("## The format", md)
+        self.assertIn("copy in this folder: `format/FORMAT.md`", md)
+        self.assertIn("returned/learned.md", md)
+        self.assertIsNone(MACHINE_PATH.search(md))
+
     def test_pack_video_carries_the_cast_picture(self):
         touch(self.tmp / "runs/ai-elements/acme/casting/barber-1/sheets/headshot.jpg")
         s = self.sheet("acme_crush_brief-0002")
         out = RS.pack(s, repo=self.tmp)
+        self.assertIn("VIDEO-DELIVERY.md", out["files"])
+        self.assertIn("one distinct thumbnail", (self.tmp / out["folder"] / "BRIEF.md").read_text())
         locals_ = [x["local"] for x in out["refs"]]
         self.assertIn("refs/cast-barber-1-headshot.jpg", locals_)
         self.assertIn("refs/start-picture.png", locals_)                # one file two steps use: named by its role

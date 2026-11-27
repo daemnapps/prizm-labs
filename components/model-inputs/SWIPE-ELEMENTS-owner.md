@@ -1,6 +1,6 @@
 # What goes into a picture ad (26 Oct 2026)
 
-Page: (private page)
+Page: https://claude.ai/artifact/NjZzF1Y1bBC2qcjmv7p38R
 
 For every swipe: what stays, what we swap, and which picture each swap needs. A picture goes in only when a swap
 needs a real thing of ours; everything else is drawn from words.
@@ -40,14 +40,14 @@ have their dials read, so the dial results rest on those 94; the 96 older teardo
 
 Product in the frame or not: 49 vs 51. Words drawn vs set on top: 54 vs 49. Neither moves the score much.
 
-## Example: "Grandma Yai, three spots" (<brand>-batch-grandma-dark-spots-not-growing-old)
+## Example: "Grandma Yai, three spots" (Brand B-batch-grandma-dark-spots-not-growing-old)
 
 Stays: 9:16 crop, high phone angle from her right, head tilted back and turned away, one hard top-left light, the wavy
 grey wall, black fur at the bottom, caption band.
 
 | In the swipe | Becomes | Picture needed |
 |---|---|---|
-| The woman | Grandma Yai (cast) | Yai's cast photo (`runs/ai-elements/<brand>/casting/yai/master.jpg`) |
+| The woman | Grandma Yai (cast) | Yai's cast photo (`runs/ai-elements/Brand B/casting/yai/master.jpg`) |
 | Swollen lips and cheek | three raised dark spots | none, drawn from words |
 | Silver pendant | "K-GLOW 12 STEP" foil pouch (parody) | none |
 | Skin shine, stray hairs | turmeric dust at the jaw | none |

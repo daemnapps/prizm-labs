@@ -5,7 +5,7 @@ eyewear, jewelry, hands, expression, place, prop) and, for each, the named
 OPTIONS a script may pick. `compose()` takes the picks a script names and
 returns the one prompt and the reference pictures to send to the edit door.
 
-THE BASELINE IS LAYERED, NOT THE MASTER (the owner, 2026-10-27): headshot, then look,
+THE BASELINE IS LAYERED, NOT THE MASTER (owner, 2026-10-27): headshot, then look,
 then details, then expression, with the picked place and props laid on top. The
 master is never a reference here. `layers` in the answer names which layer each
 reference is.
@@ -23,6 +23,8 @@ No brand, person or model is named here.
 import json
 from pathlib import Path
 
+from . import new_only
+
 HEADSHOT = "sheets/headshot.jpg"
 DETAILS = "sheets/details.jpg"
 EXPRESSIONS = "sheets/angles-expressions.jpg"
@@ -36,6 +38,7 @@ class PickError(ValueError):
 
 def load(folder):
     folder = Path(folder)
+    new_only.refuse_pictures([folder.resolve()])
     data = json.loads((folder / FILE).read_text())
     if "slots" not in data or "identity" not in data:
         raise PickError("%s needs `identity` and `slots`" % (folder / FILE))

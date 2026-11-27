@@ -2,7 +2,7 @@
 """Learnings — every Disapprove on the approval page, sent back up to the step that caused it.
 
     python3 learnings.py                 # rebuild the digests from learnings.jsonl, print a count per step
-    python3 learnings.py --show 4 brand-b [--tool copywriter]   # what that step would be told
+    python3 learnings.py --show 4 brand_b [--tool copywriter]   # what that step would be told
 
 Each Disapprove writes one line to `Shared Assets/meta/learnings.jsonl` (the
 cards root, or $META_CARDS_ROOT in trials) — who, which ad, the reasons picked
@@ -10,12 +10,12 @@ cards root, or $META_CARDS_ROOT in trials) — who, which ad, the reasons picked
 snapshot of the card's words and media names. This file turns those lines into
 one plain digest per step and brand:
 
-    Shared Assets/meta/learnings/<step>-<name>/<brand>.md    e.g. learnings/4-brief/brand-b.md
+    Shared Assets/meta/learnings/<step>-<name>/<brand>.md    e.g. learnings/4-brief/brand_b.md
 
 newest first, one line per rejection: when, which tool, the reason, the note,
 the unit. Upstream tools read their digest with `recent()`; the prompt hooks
 use `prompt_block()`, which gives back nothing unless that tool's switch in
-learnings-hooks.json is on (all OFF until the owner has seen the exact text).
+learnings-hooks.json is on (all OFF until owner has seen the exact text).
 
 Upstream tools load this file by path (this folder's module names — build,
 brand, meta, naming — would shadow theirs on sys.path):
@@ -24,8 +24,10 @@ brand, meta, naming — would shadow theirs on sys.path):
     _L = importlib.util.module_from_spec(_s); _s.loader.exec_module(_L)
 
 Hooks (each marked "APPROVAL-PAGE LEARNINGS HOOK" in its tool) — see learnings-hooks.json
-for which prompt each one feeds. Never writes into the repo. Never raises into
-an upstream tool: a read that fails returns nothing.
+for which prompt each one feeds. Never writes into the repo, with one exception: after a
+send-back is logged, sent_back.py rewrites the brand's counted summary
+(runs/meta-upload/<brand>/SENT-BACK.json: reasons and counts, never a note) for the results
+feed. Never raises into an upstream tool: a read that fails returns nothing.
 """
 import importlib.util, json, os, sys
 from collections import Counter, defaultdict
@@ -128,6 +130,14 @@ def record(card, where, by, reasons, note, at=None):
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
     SD.save(p)
     digest()
+    if not os.environ.get("META_CARDS_ROOT"):   # a trial root never writes the repo's summary
+        try:                                    # the counted summary the results feed reads (sent_back.py): no notes
+            _sb = importlib.util.spec_from_file_location("meta_sent_back", HERE / "sent_back.py")
+            _m = importlib.util.module_from_spec(_sb)
+            _sb.loader.exec_module(_m)
+            _m.rebuild_quietly(where["brand"])
+        except Exception:                       # noqa: BLE001 — the send-back is logged either way
+            pass
     return rec
 
 

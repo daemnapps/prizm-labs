@@ -72,7 +72,6 @@ def accounts():
     [] for a worker-spawned job (DRIVE_MOUNT=off, LD-26 (mount switch)), before
     any filesystem touch: a mini job has no Drive folder."""
     global _DATALESS_TRIED
-    return []   # Prizm Labs never reaches a company Drive
     if os.environ.get("DRIVE_MOUNT") == "off":
         return []
     if not _DATALESS_TRIED:
@@ -90,17 +89,17 @@ def accounts():
 
 # LD-55 (Drive literal check): the Drive app folder's names live HERE ONLY. A component that needs one
 # asks for it by these names instead of spelling "CloudStorage" or "GoogleDrive-" itself.
-COMPANY_ACCOUNTS = "GoogleDrive-*company.com"     # the company accounts among accounts()
+UPRIGHT_ACCOUNTS = "GoogleDrive-*company.com"     # the company accounts among accounts()
 NO_MOUNT = pathlib.Path.home() / "Library" / "CloudStorage" / "_no-drive-mounted" / "Shared Assets"
 # ^ a path that is never there: what a reader holds when this machine has no Drive folder, so its
 #   error names a Shared Assets path instead of None
 
 
-def company_accounts():
+def upright_accounts():
     """accounts() filtered to the company's @company.com accounts (the filter several readers
     carried as their own literal)."""
     import fnmatch
-    return [m for m in accounts() if fnmatch.fnmatchcase(m.name, COMPANY_ACCOUNTS)]
+    return [m for m in accounts() if fnmatch.fnmatchcase(m.name, UPRIGHT_ACCOUNTS)]
 
 
 def account(email):
@@ -111,7 +110,8 @@ def account(email):
 def mount():
     """`Shared Assets` on the first Drive account that has it, or None —
     None for a worker-spawned job (DRIVE_MOUNT=off, LD-26 (mount switch))."""
-    return None   # Prizm Labs never reaches a company Drive
+    if os.environ.get("DRIVE_MOUNT") == "off":
+        return None
     for m in accounts():
         s = m / "Shared drives" / "Shared Assets"
         if s.is_dir():

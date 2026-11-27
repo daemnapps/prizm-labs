@@ -1,0 +1,18 @@
+Photorealistic direct-response advertisement, vertical 4:5. Pure matte black background, no gradient, deep void.
+
+Centred: <<<8fad5612-d46f-4c19-baec-c3a636f22a4e>>> the black Brand A FLEX face brush, held in a raised hand rising from the bottom of the frame.
+
+THE SHAPE - most important thing in this image. The device is a smooth teardrop POD. Its BOTTOM IS A FULLY ROUNDED GLOSSY DOME - one continuous curve, like the bottom of an egg. There is NO flat base, NO cut-off edge, NO rim, NO grey foot, NO plate. The silhouette runs unbroken from the widest point down and round into that dome. A thin bright specular crescent sits where the matte body meets the glossy dome - that is a highlight on a curve, not a seam or a ring. Show the dome clearly, curving, below and clear of the fingers.
+
+The front carries a teardrop field of very fine dense black silicone bristles, and below it a raised band with small engraved minus, power and plus.
+
+THE GRIP: the pod is held in a CLOSED hand - fingers curled over and wrapped round the smooth back shell, thumb along the near side, the rounded dome of the base sitting proud below the little finger so its curve is visible. It fills the palm. Anatomically correct, five fingers.
+
+One hard key light from upper left, cool rim light down the right edge, a scatter of water droplets on the shell.
+
+TEXT - render EXACTLY these three and nothing else, no duplicates:
+1. Top, one centred line, enormous condensed white sans-serif capitals: "12,000 RPM"
+2. Beneath it, one small centred line, white letter-spaced capitals: "IPX7 WATERPROOF - 300 USES PER CHARGE"
+3. At the very bottom, a solid white full-width bar, two centred lines of black capitals: "LABOR DAY - FLEX $69.99  $99.99" then "ENDS TUESDAY". The "$99.99" has a black strikethrough.
+
+ABSOLUTELY NO OTHER TEXT - no logo, no wordmark, no watermark, no date stamp, no lettering on the device.

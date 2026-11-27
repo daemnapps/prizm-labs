@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """python3 test_ld73_effort_args.py — LD-73 (explicit effort): every chain's `claude -p` names
-its effort from one place, fixed at "medium" with no environment knob (the team, 2026-10-21).
+its effort from one place, fixed at "medium" with no environment knob (developer, 2026-10-21).
 Stdlib unittest, no network, no model call."""
 import os
 import sys

@@ -27,15 +27,15 @@ def frames(v, key, n=6):
     return out
 
 # winners (video)
-for d in sorted((SA / "lab/owner/swipes").glob("top1-brand-b-*")):
+for d in sorted((SA / "lab/owner/swipes").glob("top1-brand_b-*")):
     m = re.search(r"\*\*Source\*\* (.+?)\s*$", (d / "asset.md").read_text(), re.M)
     if m and Path(m.group(1)).is_file():
-        res["runs/video-teardown/brand-b/" + d.name] = {"kind": "video", "frames": frames(Path(m.group(1)), d.name)}
+        res["runs/video-teardown/brand_b/" + d.name] = {"kind": "video", "frames": frames(Path(m.group(1)), d.name)}
         print("ok", d.name)
 # statics
 st = {
- "runs/image-teardown/brand-b/brand-b-batch-top-static-mofu-showing-hands": SA / "brands/brand-b/intake/ads/paid-ads/ads-2026/body-scrub/middle-of-the-funnel/problem-why-dark-spots-come-back/MOFU-Ads-Mechanism-01.jpg",
- "runs/image-teardown/brand-b/brand-b-batch-top-static-hands-photostrip-p140": SA / "lab/owner/image-production/runs/260902b/ads/brand-b-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a01.png",
+ "runs/image-teardown/brand_b/brand_b-batch-top-static-mofu-showing-hands": SA / "brands/brand_b/intake/ads/paid-ads/ads-2026/body-scrub/middle-of-the-funnel/problem-why-dark-spots-come-back/MOFU-Ads-Mechanism-01.jpg",
+ "runs/image-teardown/brand_b/brand_b-batch-top-static-hands-photostrip-p140": SA / "lab/owner/image-production/runs/260902b/ads/brand_b-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a01.png",
 }
 for k, p in st.items():
     if p.is_file():

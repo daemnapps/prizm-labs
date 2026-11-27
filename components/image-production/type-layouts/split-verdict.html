@@ -1,0 +1,19 @@
+<!-- Split verdict: the two-sided comparison. Headline and subhead across the top, a line label on each side with its arrow, the cross and tick marks, a cream quote block with a button below. Sizes are at full scale; the fit step shrinks them together. -->
+<style>.mark{position:absolute;width:calc(var(--s)*84px);height:calc(var(--s)*84px);border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font:700 calc(var(--s)*52px)/1 Sans;box-shadow:0 2px 10px #0006}
+.lab{position:absolute;font:700 calc(var(--s)*46px)/1.05 Sans;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 1px 8px #0005}</style>
+<div class="area" data-fit style="justify-content:flex-start">
+ <div class="line" style="font:800 calc(var(--s)*92px)/1 Display;color:#fff;text-shadow:0 2px 16px #000b;letter-spacing:-.01em;text-transform:uppercase;margin-top:calc(var(--s)*6px)">{{head}}</div>
+ <div class="line" style="font:500 calc(var(--s)*46px)/1.1 Sans;color:#fff;text-shadow:0 2px 12px #000c;margin-top:calc(var(--s)*14px)">{{sub}}</div>
+ <div class="lab" style="left:3%;top:31%;color:#111;text-shadow:0 0 12px #fff">{{left}}</div>
+ <div class="lab" style="right:2%;top:30%;color:#fff;text-align:right;white-space:normal;width:32%">{{right}}</div>
+ <div class="lab" style="right:0;top:13%;width:18%;border:2px solid #fff;color:#fff;font-size:calc(var(--s)*22px);text-align:center;padding:calc(var(--s)*8px) 0;white-space:normal">{{badge}}</div>
+ <svg style="position:absolute;left:4%;top:40%;width:9%;height:9%" viewBox="0 0 80 80" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"><path d="M6 6C10 44 34 66 72 70M72 70l-20-14M72 70l-24 6"/></svg>
+ <svg style="position:absolute;right:12%;top:41%;width:9%;height:7%" viewBox="0 0 80 80" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M72 4C70 40 46 62 10 72M10 72l22-16M10 72l26 4"/></svg>
+ <div class="mark" style="background:#E53935;left:27%;top:55%">&#10005;</div>
+ <div class="mark" style="background:#43A047;left:calc(50% + 30px);top:55%">&#10003;</div>
+</div>
+<div style="position:absolute;left:0;right:0;top:74%;bottom:0;background:{{ground}}"></div>
+<div style="position:absolute;left:6%;right:6%;top:74.5%;height:10.7%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:{{ink}}">
+ <div style="font:600 36px/1.12 Display">{{quote}}</div>
+ <div style="background:{{ink}};color:{{ground}};font:700 30px/1 Sans;letter-spacing:.08em;padding:13px 40px;text-transform:uppercase">{{cta}}</div>
+</div>

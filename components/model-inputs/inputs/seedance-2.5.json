@@ -3,7 +3,7 @@
  "medium": "video",
  "_readme": [
   "Seedance 2.5 — the clip model (Higgsfield API; BytePlus ModelArk is the maker's own door). Filled 2026-10-26 from the maker's prompt guide, same shape as gpt-image-2.5.json so one library, one slice renderer and one checker serve both.",
-  "The field-level contract (which field a request carries) stays in tools/video-production/machine/model-inputs.json (stations motion, talking). What the clip prompt must look like is built by tools/video-production/machine/seedance_prompt.py and explained in tools/video-production/SEEDANCE-INPUTS.md.",
+  "The field-level contract (which field a request carries) stays in components/video-production/machine/model-inputs.json (stations motion, talking). What the clip prompt must look like is built by components/video-production/machine/seedance_prompt.py and explained in components/video-production/SEEDANCE-INPUTS.md.",
   "The rulebook for the Seedance 2.5 clip: every input with its limit and our job, so the chain always gets the best image-to-video. Every row carries its source; every entry is status draft until it is approved. No brand, product, person or format word appears in this file."
  ],
  "label": "Seedance 2.5",
@@ -71,7 +71,10 @@
    "jpg",
    "jpeg",
    "webp"
-  ]
+  ],
+  "audio_clip_min_note": "a reference audio clip under 2 s is refused (422, read 2026-11-09); take.py and seedance.py pad a short read with quiet",
+  "audio_is_voice_reference": "the reads are a voice reference: the model speaks the line itself in that voice, starting anywhere from 0.2 to 3.2 s into the clip (2026-11-09), so a cut trims by where the words land",
+  "higgsfield_cli": "higgsfield generate create seedance_2_5 --mode omni_reference --start-image … --audio-references … (plan credits; 60 for 20 s at 480p)"
  },
  "qualities": [],
  "inputs": [
@@ -95,7 +98,7 @@
    "name": "image (other roles)",
    "what": "A face, product, room or look reference, each bound by number and job.",
    "allowed": "same pool as above; separate views, never a collage",
-   "we_send": "none in the chain; the bench can add them to test",
+   "we_send": "on talking clips: the person's headshot and angles sheet, then the outfit, accessories and room the start picture was made from, each bound by number and job (clip_refs.py), up to 8",
    "use": "test",
    "status": "draft"
   },

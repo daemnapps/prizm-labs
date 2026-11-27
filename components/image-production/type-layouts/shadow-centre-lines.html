@@ -1,0 +1,5 @@
+<!-- Shadow centre lines: a phone post's plain caption. Centred lines of one size, white regular type with a hard black shadow, no box. Set keep_lines to ["head"] so the writer's lines hold. `mark` in the design's `fixed` puts a mark at the end of the first line, since the board strips emojis from its words. Sizes are at full scale; the fit step shrinks them. -->
+<div class="area" data-fit style="justify-content:flex-start">
+ <div class="line" id="lines" data-mark="{{mark}}" style="font:500 calc(var(--s)*48px)/1.22 'Helvetica Neue',-apple-system,Sans;color:#fff;text-shadow:calc(var(--s)*3px) calc(var(--s)*3px) 0 #000,0 0 calc(var(--s)*3px) #000">{{head}}</div>
+</div>
+<script>{const l=document.getElementById('lines');const m=l.dataset.mark;if(m)l.innerHTML=l.innerHTML.replace('<br>',' '+m+'<br>')}</script>

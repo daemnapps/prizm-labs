@@ -51,8 +51,8 @@ class Drop(Base):
         with mock.patch.object(drop, "DRIVE", sa):
             self.assertEqual(drop.where("x/y.txt"), sa / "x/y.txt")
         home = self.tmp / "home"
-        (home / "Projects/workspace/x").mkdir(parents=True)
-        (home / "Projects/workspace/x/z.txt").write_text("z")
+        (home / "Projects/ai-workspace/x").mkdir(parents=True)
+        (home / "Projects/ai-workspace/x/z.txt").write_text("z")
         with mock.patch.object(drop, "DRIVE", SD.NO_MOUNT), \
                 mock.patch.object(Path, "home", return_value=home):
             self.assertEqual(drop.where("x/z.txt"), drop.REPO / "x/z.txt")
@@ -104,7 +104,7 @@ class Literals(unittest.TestCase):
             if p.suffix in (".py", ".md") and p.is_file():
                 self.assertNotIn("GoogleDrive-" + "owner@", p.read_text(errors="replace"), p)
         for name in ("drop.py", "to_check.py", "learnings.py"):
-            self.assertNotIn("Projects/workspace", (HERE / name).read_text(), name)
+            self.assertNotIn("Projects/ai-workspace", (HERE / name).read_text(), name)
 
 
 if __name__ == "__main__":

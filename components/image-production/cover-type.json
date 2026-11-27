@@ -1,0 +1,60 @@
+{
+ "_what": "The type a cover's headline is set in when the cover job is given none. One record sets every version of one ad: one face, one weight, one size, one band. Read by image_production/covers.py; the words are set by image_production/words.py `set_headline`.",
+ "_why": "A cover's words are set by the tool, inside the cover job, never painted by the picture model and never added after the tool delivers. Covers of one ad came back with a different type weight on each when the picture model painted the words.",
+ "_curator": "The image tool's owner. A job passes its own `type` to follow the swipe's type; a key it leaves out comes from `default`.",
+ "_fields": {
+  "face": "an id in the type library (components/video-edit/looks/fonts/<id>/), or a font file on this machine (absolute, or below the workspace or the mounted Drive). A face that is not found is refused, never swapped",
+  "weight": "the weight on a variable face (300 to 900); a static face keeps its file's weight",
+  "size_px": "the largest size, in pixels on a 1080x1920 frame",
+  "min_size_px": "the smallest size the job may step down to so every version's headline fits at ONE size; below it the job refuses the headline",
+  "line_height": "line height as a multiple of the size",
+  "max_lines": "the most lines a headline may wrap to",
+  "zone": "the band the words sit in, percent of the frame: top, bottom, left, right. Inside the 4:5 safe zone (top 14.8, bottom 85.2, left 5, right 95). The picture is asked to keep every face out of it",
+  "align": "left | center | right",
+  "valign": "top | center | bottom, inside the band",
+  "case": "as-written | upper",
+  "fill": "the letters' colour, #RRGGBB",
+  "stroke": "{color, px}: an outline around the letters, or null",
+  "box": "{fill, pad_px, radius_px}: a filled box behind each line (the caption-on-a-box look), or null"
+ },
+ "default": {
+  "face": "tiktok-sans",
+  "weight": 700,
+  "size_px": 100,
+  "min_size_px": 70,
+  "line_height": 1.16,
+  "max_lines": 4,
+  "zone": {
+   "top": 58,
+   "bottom": 80,
+   "left": 6,
+   "right": 94
+  },
+  "align": "center",
+  "valign": "center",
+  "case": "as-written",
+  "fill": "#FFFFFF",
+  "stroke": {
+   "color": "#000000",
+   "px": 8
+  },
+  "box": null
+ },
+ "bands": [
+  {
+   "top": 58,
+   "bottom": 80,
+   "left": 6,
+   "right": 94
+  },
+  {
+   "top": 16,
+   "bottom": 38,
+   "left": 6,
+   "right": 94
+  }
+ ],
+ "_bands": "The bands tried, in order, when a job names no `zone`: the first one where no version's headline lands on that version's product. One band is chosen for the whole ad. Lower-middle first: a frame of a person talking has the face in the upper half. Then the top band.",
+ "_default_from": "components/video-edit/machine/cover_styles.json `instagram`: bold platform type at 100 px (about 5% of the height); 60 px was measured too small to read. Placement on the measured covers: top 24%, middle 21%, lower-middle 18%.",
+ "status": "draft"
+}

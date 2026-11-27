@@ -2,7 +2,7 @@
 
 `parents[N]` silently points one level too high or too low the day a folder
 moves, and nothing says so until a registry stops existing. Lifted from
-`tools/image-production/image_production/paths.py` (`_up`, `repo`,
+`components/image-production/image_production/paths.py` (`_up`, `repo`,
 `home`, `sibling`, `need_brand`, `drive_runs`, `rel` — unchanged but for the
 two constants and the brand map, which are this component's own).
 
@@ -202,7 +202,7 @@ def drive_runs():
     (DRIVE_MOUNT=off, LD-26 (mount switch)), so that is the first failure."""
     brandpath()                                    # puts components/brandpath on sys.path
     import drive_index
-    mounts = drive_index.company_accounts()        # named in drive_index only (LD-55 (Drive literal check))
+    mounts = drive_index.upright_accounts()        # named in drive_index only (LD-55 (Drive literal check))
     if not mounts:
         raise MountError("no company Google Drive is mounted on this machine")
     if len(mounts) > 1:

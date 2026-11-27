@@ -5,7 +5,7 @@
     angle_pick.py --brand <b> --brief brief-0036 --write                 ... and record it on the brief
     angle_pick.py --brand <b> --missing --write                          every brief with no angle yet
 
-the owner, 2026-10-12: "The angle should be derived from the brief itself through
+owner, 2026-10-12: "The angle should be derived from the brief itself through
 analyzing what the brief actually even is. That's it. The angle should be in
 the notes of the brief."
 
@@ -16,7 +16,7 @@ Every stage after reads it through `names.brief_record` / `names.brief_angle`
 — nothing downstream picks or re-derives one. ANGLE.md is the map.
 
 Where it is kept (brands/ is read-only to machines):
-  - the brief register entry (tools/image-teardown/briefs.json): `angle`,
+  - the brief register entry (components/image-teardown/briefs.json): `angle`,
     `angle_why`, `angle_state`, `angle_by`
   - a NOTES line in the brief file itself (runs/…)
   - the prompt and the answer: runs/naming/<brand>/angle-<brief>/
@@ -66,7 +66,7 @@ def model_id(alias=MODEL_ALIAS):
 
 def bank(brand, avatar=None):
     """(angles, scope) — the brand's active, non-misfiled angles, every one of them for every avatar: an angle is
-    the brand's, not an avatar's (the owner, 28 Oct 2026: "angles are just ways to start the conversation and each conversation varies by language of the avatar but the approach is the same"). The avatar's language and the swipe decide how
+    the brand's, not an avatar's (owner, 28 Oct 2026: "angles are just ways to start the conversation and each conversation varies by language of the avatar but the approach is the same"). The avatar's language and the swipe decide how
     it is said. `avatar` is kept for callers; it narrows nothing."""
     signed = N.signed_angles(brand) or {}
     seen, rows = set(), []
@@ -80,10 +80,10 @@ def bank(brand, avatar=None):
 
 
 def open_ad_sets(brand, avatar, rows):
-    """The rows whose ad set is already open in Meta (meta-upload `ad_sets`, files only) — the owner, 2026-10-27:
+    """The rows whose ad set is already open in Meta (meta-upload `ad_sets`, files only) — owner, 2026-10-27:
     "our campaign is established so most new ads will go into existing ad sets unless a new angle or avatar is
     clearly defined." An avatar with no open ad set at all keeps the whole bank: the brief still gets its angle,
-    and the card's ad set check says the ad set waits on the owner's signature."""
+    and the card's ad set check says the ad set waits on owner's signature."""
     if not avatar:
         return rows, ""
     try:
@@ -136,7 +136,7 @@ def brief_file(entry):
     # the run works in that same folder since 2026-10-28 (its out/); the old lane folder is read for one release
     rec_dir = WS / "runs" / "image-teardown" / N.slug(entry.get("brand") or "") / name
     for run in (WS / name, rec_dir, rec_dir / "out",
-                WS / "tools" / "image-teardown" / "runs" / name / "out"):
+                WS / "components" / "image-teardown" / "runs" / name / "out"):
         if not name or not run.is_dir():
             continue
         for bn in BRIEF_FILES:

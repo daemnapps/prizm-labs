@@ -1,0 +1,40 @@
+{
+  "ad_name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b",
+  "batch": "260905b",
+  "brand": "Brand A",
+  "product": "flex",
+  "media": "static",
+  "source": "ai",
+  "talent": "hal",
+  "avatar": "fedupking",
+  "problem": "razorbumps",
+  "angle": "unsigned",
+  "concept": "nobodymakesads",
+  "format": "mirrorselfie",
+  "brief": "p001",
+  "ratio": "9x16",
+  "_upload": "4 assets, 4 ads. One picture is one Meta ad \u2014 the bulk sheet carries one image per row. They share the concept 'Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b', which is the ad name minus its last field, and that is how they group in the report.",
+  "_join": "Meta's ad_name equals `ad_name`. Split on '-' for brand, product, media, source, talent, avatar, problem, angle, concept, format, brief, ratio, batch.",
+  "ads": [
+    {
+      "name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a01",
+      "ad_name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b",
+      "file": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a01.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a02",
+      "ad_name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b",
+      "file": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a02.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a03",
+      "ad_name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b",
+      "file": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a03.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a04",
+      "ad_name": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b",
+      "file": "Brand A-flex-static-ai-hal-fedupking-razorbumps-unsigned-nobodymakesads-mirrorselfie-p001-9x16-260905b-a04.png"
+    }
+  ]
+}

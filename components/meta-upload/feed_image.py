@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """feed_image — an image-edit drop into 1-check, one card per ad.
 
-    feed_image.py --brand brand-b --batch 260923a --links link_brand_b_cpk_quiz link_brand_b_cpk_landing
+    feed_image.py --brand brand_b --batch 260923a --links link_brand_b_cpk_quiz link_brand_b_cpk_landing
     feed_image.py … --dry-run          print every card it would write, write nothing
     feed_image.py … --root /tmp/meta   a fake meta/ folder (or $META_CARDS_ROOT)
 

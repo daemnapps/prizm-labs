@@ -17,7 +17,7 @@ Three ways to the right run, used by the lane feeders:
                                    by hand (`--words`)
 
 Nothing is invented: no run found means empty lists, and the card's own check
-fails where the owner can see why.
+fails where owner can see why.
 """
 import json, re, sys
 from pathlib import Path
@@ -27,7 +27,7 @@ REPO = HERE.parent.parent
 sys.path.insert(0, str(REPO / "components/naming"))
 import names as N  # noqa: E402
 
-# three of each: the construction (the owner, 2026-10-09: "if I only need the 3")
+# three of each: the construction (owner, 2026-10-09: "if I only need the 3")
 CAP = 3
 # the writer's word-count line ends a body: `*61 words.*`, `*53 words*`, `(48 words)`, `*(48 words)*`
 _END = re.compile(r"^\s*[*_]*\(?\s*\d+\s+words?\.?\s*\)?[*_]*\.?\s*$", re.M)
@@ -68,7 +68,7 @@ def checked(run_dir):
     """True when this copywriter run's copy passed the read-back copy check (stage 8c) and its final copy exists."""
     d = Path(run_dir)
     if d.is_file() and d.suffix == ".json":
-        # a level's words set, written once and reused on every ad at that level (the owner, 2026-10-23: "you don't
+        # a level's words set, written once and reused on every ad at that level (owner, 2026-10-23: "you don't
         # need to write ad copy for every single batch"), counts once it carries a passed read check
         try:
             return bool((json.loads(d.read_text()).get("read_check") or {}).get("passed"))
@@ -238,8 +238,8 @@ def brief_page(brand, brief, product=None):
 def from_copy_set(brand, brief, repo=REPO, product=None):
     """(words, where) from the APPROVED copy set for the brief's product + angle, or (None, None).
 
-    One set per brand + product + angle (tools/copywriter/machine/copy_set.py,
-    the owner 2 Oct 2026: "we don't actually need to change the copy for each ad unless it's
+    One set per brand + product + angle (components/copywriter/machine/copy_set.py,
+    owner 2 Oct 2026: "we don't actually need to change the copy for each ad unless it's
     a completely different angle"). Its {offer} and {click} are filled for the brief's
     own landing page type, so the words match the page the ad sends people to."""
     if not brief or brief == "none":
@@ -251,7 +251,7 @@ def from_copy_set(brand, brief, repo=REPO, product=None):
     prod, angle = head.get("product") or product, head.get("angle")
     if not (prod and angle):
         return None, None
-    sys.path.insert(0, str(Path(repo) / "tools/copywriter/machine"))
+    sys.path.insert(0, str(Path(repo) / "components/copywriter/machine"))
     import copy_set as CS
     s = CS.approved(brand, prod, angle, ws=repo)
     if not s:
@@ -271,6 +271,35 @@ def for_brief(brand, brief, repo=REPO, product=None):
     if not runs:
         return empty(), None
     return from_runs(runs), ", ".join(str(Path(d).relative_to(repo)) for d in runs)
+
+
+PRICE = re.compile(r"[$£€]\s?\d")
+
+
+def from_live(root, brand, product):
+    """(words, where, copy_checked) from the newest LIVE card for this product with a body and a headline.
+    New ads reuse live Meta text; no copy is written per ad (the owner's standing rule, 2026-11-02; made the
+    filing default 2026-11-16). A card whose words carry a price (a promo) is used only when no other is live.
+    (empty, None, False) when nothing for the product is live."""
+    best = {}
+    live = Path(root) / N.slug(brand) / "3-live"
+    for c in sorted(live.glob("*/*/card.json")) if live.is_dir() else []:
+        try:
+            card = json.loads(c.read_text())
+        except (OSError, ValueError):
+            continue
+        w = card.get("words") or {}
+        if card.get("product") != product or not w.get("primary") or not w.get("headlines"):
+            continue
+        promo = bool(PRICE.search(" ".join(x for k in ("primary", "headlines", "descriptions") for x in w.get(k) or [])))
+        when = max([m.get("at") or "" for m in card.get("meta") or []] + [card.get("made_at") or ""])
+        if promo not in best or when > best[promo][0]:
+            best[promo] = (when, card)
+    pick = best.get(False) or best.get(True)
+    if not pick:
+        return empty(), None, False
+    card = pick[1]
+    return card["words"], f"live card {card.get('ad_name')}", bool(card.get("copy_checked"))
 
 
 def missing(words):

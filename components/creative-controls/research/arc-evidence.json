@@ -1,0 +1,144 @@
+{
+ "schema": "arc-evidence/v1",
+ "status": "draft",
+ "state": "web-read 2026-11-26 by a session (free search only); sources named, not yet opened and checked by a person",
+ "what": "Outside evidence on which story arcs sell and which get consumed most, keyed to the arc ids in controls.json. Brand-free. Read by components/winners/shapes.py for every brand's shapes page.",
+ "checked": "2026-11-26",
+ "thin": "No peer-reviewed study ranks named arcs by ad CTR, CPA or ROAS on Meta or TikTok. Arc-level evidence is films and books; ad-level evidence is story vs no story, or formats. DTC numbers are vendor spend metrics.",
+ "selling": [
+  {
+   "arc": "person-in-a-hole",
+   "metric": "US box office",
+   "number": "$37.48M mean; +$6.56M in regression (p<0.001), holds for budget and genre; the only arc with significant revenue",
+   "sample": "6,174 film scripts, 9,015 box-office records",
+   "source": "Del Vecchio et al., JORS 2020/21",
+   "url": "https://arxiv.org/abs/1807.02221",
+   "strength": "peer-reviewed"
+  },
+  {
+   "arc": "cinderella",
+   "metric": "US box office",
+   "number": "$33.63M mean, not significant",
+   "source": "Del Vecchio et al.",
+   "url": "https://arxiv.org/abs/1807.02221",
+   "strength": "peer-reviewed"
+  },
+  {
+   "arc": "oedipus",
+   "metric": "US box office",
+   "number": "$31.44M mean, not significant (leans negative)",
+   "source": "Del Vecchio et al.",
+   "url": "https://arxiv.org/abs/1807.02221",
+   "strength": "peer-reviewed"
+  },
+  {
+   "arc": "rags-to-riches",
+   "metric": "US box office",
+   "number": "not significant",
+   "source": "Del Vecchio et al.",
+   "url": "https://arxiv.org/abs/1807.02221",
+   "strength": "peer-reviewed"
+  },
+  {
+   "arc": null,
+   "what": "complete five-act story",
+   "metric": "Super Bowl ad favourability",
+   "number": "+0.68 with all five acts vs -0.53 without; rises with each act present",
+   "sample": "108 ads, 2 years",
+   "source": "Quesenberry & Coolsen, J. Marketing Theory & Practice 2014",
+   "url": "https://mosaic.messiah.edu/bus_ed/31",
+   "strength": "peer-reviewed; liking, not sales"
+  },
+  {
+   "arc": null,
+   "what": "story vs feature-led",
+   "metric": "behaviour change",
+   "number": "about 2x; about half of video ads tell a story",
+   "sample": "about 15,000 ads",
+   "source": "Ipsos Creative|Spark 2026",
+   "url": "https://www.ipsos.com/en/misfits-stories",
+   "strength": "industry study"
+  },
+  {
+   "arc": null,
+   "what": "one visible face; 4 scenes in 6 s; brand inside the story",
+   "metric": "effectiveness (marketing mix model)",
+   "number": "+81%; +73%; +46% (only 36% of ads do the last)",
+   "sample": "about 55,000 creatives, 1,300 campaigns, 2024",
+   "source": "Kantar for Meta",
+   "url": "https://www.kantar.com/north-america/company-news/the-new-era-of-storytelling",
+   "strength": "industry study, platform-funded"
+  },
+  {
+   "arc": null,
+   "what": "emotional vs rational",
+   "metric": "top-box long-run profit growth",
+   "number": "about 2x",
+   "sample": "996 IPA campaigns 1980-2010",
+   "source": "Binet & Field",
+   "url": "https://ipa.co.uk/media/14463/long_and_short_of_it_presentation_final_030424.pdf",
+   "strength": "industry databank; ratio seen in secondary summaries"
+  },
+  {
+   "arc": null,
+   "what": "ad formats on Meta",
+   "metric": "hit rate (share of ads that become spend winners)",
+   "number": "founder story 8.57%, demonstration 8.11%, UGC 7.56%, testimonial 6.57%, storytelling hook 6.23%, before/after 6.07%, problem-solution 5.98%; founder flagged volatile",
+   "sample": "$1.29B spend, 578,750 creatives, 6,015 accounts, Sep 2025-Jan 2026",
+   "source": "Motion Creative Benchmarks 2026",
+   "url": "https://runneth.com/thumbstop-pulse/creative-benchmarks-2026",
+   "strength": "vendor; spend share, no CPA or ROAS"
+  },
+  {
+   "arc": "epiphany-bridge",
+   "metric": "conversion",
+   "number": "no published numbers found; one email test that cut a long personal story for detail raised sign-ups 1.4% to 2.1% (n=8,489)",
+   "source": "NextAfter",
+   "url": "https://www.nextafter.com/?p=15955",
+   "strength": "one published test"
+  }
+ ],
+ "consumption": [
+  {
+   "arc": "micro-drama",
+   "metric": "short-drama app revenue and downloads",
+   "number": "$2.98B in-app revenue 2025; about 2.3B downloads 2025 (over 2x 2024); 25 min a day, April 2026",
+   "source": "Sensor Tower 2026; Adjust",
+   "url": "https://sensortower.com/blog/state-of-short-drama-apps-2026-report",
+   "strength": "industry data; sells the app, not a product; no completion data"
+  },
+  {
+   "arc": "icarus",
+   "metric": "book downloads",
+   "number": "icarus, oedipus and person-in-a-hole told twice are the three most-downloaded arcs",
+   "sample": "1,327 Project Gutenberg books",
+   "source": "Reagan et al., EPJ Data Science 2016",
+   "url": "https://arxiv.org/abs/1606.07772",
+   "strength": "peer-reviewed; downloads a rough proxy"
+  },
+  {
+   "arc": "person-in-a-hole",
+   "metric": "box office as consumption",
+   "number": "highest mean gross (see selling)",
+   "source": "Del Vecchio et al.",
+   "url": "https://arxiv.org/abs/1807.02221",
+   "strength": "peer-reviewed"
+  },
+  {
+   "arc": "cold-open",
+   "metric": "first-minute retention",
+   "number": "a third of 60M viewers lost in minute one, counted as good; each later block has a set job",
+   "source": "leaked creator production guide, 2024",
+   "url": "https://simonwillison.net/2024/Sep/15/how-to-succeed-in-mrbeast-production/",
+   "strength": "anecdote"
+  },
+  {
+   "arc": "mystery-box",
+   "metric": "creator video views",
+   "number": "curiosity-gap openings in 28% of 1,238 videos; +3% over each creator's usual top video",
+   "source": "NetInfluencer",
+   "url": "https://www.netinfluencer.com/curiosity-gap-openings-dominate-top-creator-videos-but-visual-spectacle-runs-furthest-data-shows/",
+   "strength": "weak industry data"
+  }
+ ]
+}

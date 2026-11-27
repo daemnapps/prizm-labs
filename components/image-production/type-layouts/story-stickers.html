@@ -1,0 +1,6 @@
+<!-- Story stickers: the head line on a tilted white story sticker over the swipe's own, the offer on a smaller sticker in clear space. Words: head line, then the offer with its two parts split by a middle dot. Sizes are at full scale; the fit step shrinks the head sticker. -->
+<div class="area" data-fit style="justify-content:center;transform:rotate(10.6deg);overflow:visible">
+ <div class="line" style="font:700 calc(var(--s)*42px)/1 -apple-system,'Helvetica Neue',Sans;letter-spacing:-.01em;color:#000;background:#fff;border-radius:12px;padding:12px 22px">{{lead}}</div>
+</div>
+<div id="offer-sticker" style="position:fixed;left:60%;right:5%;top:62%;transform:rotate(10.6deg);text-align:center;font:700 27px/1.24 -apple-system,'Helvetica Neue',Sans;letter-spacing:-.01em;color:#000;background:#fff;border-radius:12px;padding:14px 8px">{{price}}</div>
+<script>var o=document.getElementById('offer-sticker');o.innerHTML=o.innerHTML.replace(/\s*·\s*/,'<br>')</script>

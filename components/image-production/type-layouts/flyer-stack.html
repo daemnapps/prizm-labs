@@ -1,0 +1,16 @@
+<!-- Flyer stack: a small line over one huge word, then a pill and label left of a thin rule, the offer and price right of it. Sizes are at full scale; the fit step shrinks them together. -->
+<div class="area" data-fit style="justify-content:flex-start;gap:calc(var(--s)*14px);color:{{ink}}">
+ <div class="line" style="font:400 calc(var(--s)*64px)/1.05 Sans">{{note}}</div>
+ <div class="line" style="font:400 calc(var(--s)*215px)/.95 Display;letter-spacing:-.02em">{{head}}</div>
+ <div style="display:flex;align-items:stretch;justify-content:center;gap:calc(var(--s)*26px);margin-top:calc(var(--s)*16px)">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:calc(var(--s)*10px);justify-content:center">
+   <div class="line" style="font:400 calc(var(--s)*40px)/1 Display;color:#fff;background:{{ground}};padding:calc(var(--s)*10px) calc(var(--s)*22px)">{{tag}}</div>
+   <div class="line" style="font:400 calc(var(--s)*32px)/1.1 Sans">{{label}}</div>
+  </div>
+  <div style="width:calc(var(--s)*3px);background:{{ink}}"></div>
+  <div style="display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--s)*8px);justify-content:center;text-align:left">
+   <div class="line" style="font:400 calc(var(--s)*54px)/1.02 Display">{{lead}}</div>
+   <div class="line" style="font:400 calc(var(--s)*32px)/1.1 Sans">{{price}}</div>
+  </div>
+ </div>
+</div>

@@ -1,0 +1,10 @@
+{
+ "_what": "Upload by link (link_host.py): a video goes into a private Google Cloud Storage bucket, Meta fetches it from a V4 signed URL that expires, and the object is deleted once Meta has processed it. One Meta call per video instead of ~17. No bucket set, the switch off, or any failure = the chunked upload as before.",
+ "on": false,
+ "bucket": "",
+ "prefix": "meta-upload/",
+ "expires_s": 3600,
+ "key": "META_UPLOAD_LINK_SA",
+ "_setup": "Each machine sets its own private bucket here (public access prevention on, objects deleted after 1 day) and puts a service-account key with Storage Object Admin on that bucket only in the key file under `key`; then \"on\": true.",
+ "_rollback": "\"on\": false, or META_UPLOAD_LINK_OFF=1 on one machine: every video goes chunked again."
+}

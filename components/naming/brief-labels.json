@@ -1,0 +1,27 @@
+{
+ "_about": "How a brief is shown to people: <Brand> · <Product> · NNNN (names.brief_label). Brief numbers count per brand and product, so the number alone names several briefs; every label people read carries all three, and every lookup matches the full key <brand>_<product>_brief-NNNN. A product with no short name here is shown from its catalog id (brilliance-body-scrub -> Brilliance body scrub).",
+ "on": true,
+ "_switch": "on: false (or BRIEF_IDS_OFF=1 in a machine's environment) puts labels back to 'Brief NNNN' and lets the Studio link and the Queue's done check match by brand + number again. Row in team/rollbacks.md.",
+ "brands": {"Brand A": "Brand A", "Brand B": "Brand B"},
+ "products": {
+  "Brand A": {
+   "flex-face-brush": "FLEX",
+   "flex-charging-case": "FLEX case",
+   "crush-bump-eliminator": "CRUSH",
+   "core-supplement": "CORE",
+   "prime-face-quench": "PRIME",
+   "war-face-wash": "WAR",
+   "miro-face-towel": "MIRO",
+   "vitals-set": "Vitals set",
+   "king-set": "King set"
+  },
+  "Brand B": {
+   "brilliance-body-scrub": "Body scrub",
+   "brilliance-face-scrub": "Face scrub",
+   "radiance-body-cream": "Body cream",
+   "face-serum": "Face serum",
+   "glow-duo-bundle": "Glow duo",
+   "travel-pouch": "Travel pouch"
+  }
+ }
+}

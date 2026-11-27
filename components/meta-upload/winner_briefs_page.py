@@ -3,7 +3,7 @@
 Reads the finished teardown runs (runs/video-teardown/<brand>/top1-*/hand/5-brief.md), the winners' numbers and
 pictures (runs/media-buying/top1/board.json), and the open questions (runs/media-buying/top1/facts-for-owner.json).
 Writes lab/owner/media-buying/winner-briefs.html and the Markdown copy WINNER-BRIEFS-owner.md.
-the owner's answers save to the page's db (collection `answers`, one doc per <run>__<n>).
+owner's answers save to the page's db (collection `answers`, one doc per <run>__<n>).
 """
 import json
 import re
@@ -17,7 +17,7 @@ def _vt_workdir():
     if m is None:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "vt_workdir", ROOT / "tools" / "video-teardown" / "machine" / "workdir.py")
+            "vt_workdir", ROOT / "components" / "video-teardown" / "machine" / "workdir.py")
         m = importlib.util.module_from_spec(spec)
         sys.modules["vt_workdir"] = m
         spec.loader.exec_module(m)
@@ -29,8 +29,8 @@ TOP1 = ROOT / "runs/media-buying/top1"
 OUT = ROOT / "lab/owner/media-buying/winner-briefs.html"
 MD = ROOT / "lab/owner/media-buying/WINNER-BRIEFS-owner.md"
 MACHINE = _vt_workdir().root(ROOT)     # the teardown's live runs, runs/video-teardown/_work/ (SI-56)
-SKIP = {"top1-brand-b-01-grandma-house-h1"}          # superseded by the face-scrub run (the owner, 4 Oct)
-NAMES = {"brand-a": "BRAND-A", "brand-b": "Brand-B"}
+SKIP = {"top1-brand_b-01-grandma-house-h1"}          # superseded by the face-scrub run (owner, 4 Oct)
+NAMES = {"brand_a": "brand_a", "brand_b": "brand_b"}
 
 
 def brief_json(text):
@@ -132,8 +132,8 @@ def build():
 
 
 def write_md(brands):
-    L = ["# Winner Briefs — the owner", "", "Every top-1% winner, remade as an AI brief that keeps the winner's own structure "
-         "(the owner's calls, 4 Oct). Live page: see `lab/owner/context/artifacts.md` → Winner Briefs.", ""]
+    L = ["# Winner Briefs — owner", "", "Every top-1% winner, remade as an AI brief that keeps the winner's own structure "
+         "(owner's calls, 4 Oct). Live page: see `lab/owner/context/artifacts.md` → Winner Briefs.", ""]
     for brand, B in brands.items():
         L += [f"# {NAMES[brand]}", "", f"**Core message:** {B['core']}", ""]
         for w in B["winners"]:
@@ -197,8 +197,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 </div>
 <script>
 (function(){
-const D=__DATA__;const NAMES={brand-a:"BRAND-A",brand-b:"Brand-B"};
-let brand="brand-a";try{brand=localStorage.getItem("wb-brand")||brand}catch(e){}
+const D=__DATA__;const NAMES={brand_a:"brand_a",brand_b:"brand_b"};
+let brand="brand_a";try{brand=localStorage.getItem("wb-brand")||brand}catch(e){}
 let answers={},db=null,uid="";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));

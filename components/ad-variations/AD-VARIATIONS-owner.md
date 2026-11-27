@@ -1,4 +1,4 @@
-# Ad Variations (owner)
+# Ad Variations (the owner)
 
 > **Internal only — not for sale.** the company tooling; access is granted person by person.
 
@@ -20,12 +20,12 @@ Planning cost: ≈$2.38 per ad.
 
 ## Test runs
 
-- #1 `7167399325910289706` — 11 variations, 5 new formats, $42.78 machine cost — full record: `runs/ad-variations/<brand>/<brand>-7167399325910289706/VARIATIONS.md`
-- #2 `7185208483388689706` — 11 variations, 5 new formats, $15.28 machine cost — full record: `runs/ad-variations/<brand>/<brand>-7185208483388689706/VARIATIONS.md`
+- #1 `7167399325910289706` — 11 variations, 5 new formats, $42.78 machine cost — full record: `runs/ad-variations/Brand A/Brand A-7167399325910289706/VARIATIONS.md`
+- #2 `7185208483388689706` — 11 variations, 5 new formats, $15.28 machine cost — full record: `runs/ad-variations/Brand A/Brand A-7185208483388689706/VARIATIONS.md`
 
 ## Variable Index
 
-- <brand>: `runs/ad-variations/<brand>/variable-index/VARIABLE-INDEX.md`
+- Brand A: `runs/ad-variations/Brand A/variable-index/VARIABLE-INDEX.md`
 
 ## Against the hand-made spec
 
@@ -37,7 +37,7 @@ The first prompts found the elements and the corpus numbers, but locked too much
 | Sound | Music stem: a quiet bed 7.0–10.8 s, near silence 11–14 s, the loudest hit of the video at 14.5–15.5 s on the reveal. | Mix loudness only — concluded there was no music bed. | Stage 0 now separates the music stem on the local Demucs and measures it; stage 1 reads the stem before the record's Music line. | Bed found at 7.0–10.5 s and the hit at 14.5–15.0 s; the record's own contradiction (header says phonk, rows say none) is reported. |
 | The brand's own test | Post #3 (9.4M) is the same template with a different reactor — the brand already moved the reactor and went 9.4M → 16.4M. The hook's background is post #6's footage. | Not found. | A computed 'closest posts' table — same values on what a viewer sees and hears, the same first line or sticker wording counted four times — goes to stages 2 and 3. | #3 is the closest post (73%), with #10 (the same 'heck is that' opener) also listed. Reuse of #6's footage is not visible without frames. |
 | Locks and levers | 10 ranked levers (reactor, sticker text, stitched clip, problem line, captions, end frame + paid ask, demo bodies, pitcher, SKU, benchmark line), 14 locks. | 7 levers. Locked the whole hook layout including who reacts, and locked captions, SKU, talent and end frame on corpus counts alone. | v2: call the parts (who reacts, the sticker words, the clip behind the PIP), call organic and paid separately, and a value everyone shares is not proof it works. That swung to 33 ranked levers, so v3: ten ranked levers, the rest 'later', the nineteen fixed keys only. | Ten ranked levers: the borrowed clip, the first line, who reacts, the PIP layout, the named public figure, product in frame one, the sticker wording, the dominant roll, captions, the product naming. |
-| The variations | A paid base plus 10, each moving one lever; two reactor swaps cast from the roster (Marcus 29, Ray 61); captions; an offer end card; the Bundle Set; faceless inserts; a motion-transfer pitch swap. | A control plus 10, but 8 of 11 changed three variables and two were really new formats. | v2/v3: at most two variables per variation, no format changes in the matrix, check the paid cut's needs (sound-off, 4:5, one offer), cast person-levers from the roster by name, and test a second hero SKU. | A paid base (4:5, captions, one offer) plus 10: new borrowed clip, new first line, Marcus as reactor, Omar as reactor, the benchmark swapped for a customer's own aspiration, product out of frame one, new sticker wording, the dominant roll, captions, the Starter Set named early. Not planned: the problem line (the v2 run had it), faceless demo inserts, the motion-transfer pitch swap. Added that the hand spec did not have: the dominant-roll test and the product held out of frame one. |
+| The variations | A paid base plus 10, each moving one lever; two reactor swaps cast from the roster (Marcus 29, Ray 61); captions; an offer end card; the King Set; faceless inserts; a motion-transfer pitch swap. | A control plus 10, but 8 of 11 changed three variables and two were really new formats. | v2/v3: at most two variables per variation, no format changes in the matrix, check the paid cut's needs (sound-off, 4:5, one offer), cast person-levers from the roster by name, and test a second hero SKU. | A paid base (4:5, captions, one offer) plus 10: new borrowed clip, new first line, Marcus as reactor, Omar as reactor, the benchmark swapped for a customer's own aspiration, product out of frame one, new sticker wording, the dominant roll, captions, the Vitals Set named early. Not planned: the problem line (the v2 run had it), faceless demo inserts, the motion-transfer pitch swap. Added that the hand spec did not have: the dominant-roll test and the product held out of frame one. |
 | Cost of the set | $27.07 machine cost; $19.79 if the cheaper motion route passes; ≈15 h. | $14.87 ($11.01 with TEST routes), priced by the machine from routes.json. | Rates written into routes.json once; the model gives units only. | $42.78 on the locked routes — the two reactor swaps run on Genjutsu at ≈$19 each — or $13.30 when the TEST motion routes (Wan 2.2 Animate, Kling Motion Control) replace it; ≈18 h. |
 | Gates | 8 gates, each tied to a check that exists (safezone.py, claimfix.py, syncheck.py, voice_qc.py, gates 4/5). | The same 8, with variation-specific pass lines; gates forced by the routes a recipe uses. | the owner's seam rule added (27 Sep): chained clips are made in order from the real last frame, a seams gate at every join (≤ ~2× the median frame step), an optical-flow bridge only as the fallback. | 9 gates; the seams gate is forced wherever a recipe chains generated clips. |
 | the owner decides | 10 open calls (order, hero SKU, likeness, motion from a creator, voice cloning, the comment handle, 'Will Smith', the store shelf, the offer, organic vs paid). | 5 — the public figure, a real result vs the gag, the close's blame line, the close technique, the borrowed clip. | No prompt change aimed here. | 6, overlapping the hand spec on the borrowed clip, the public figure and the offer; adds the read style, the market stage and the signature neck asset. |
@@ -270,7 +270,7 @@ Return one fenced json block and nothing else:
      "impact_basis": "ESTIMATE — …"}
   ],
   "lever_order": ["element keys, highest estimated impact first"],
-  "owner_decides": ["a question only the owner can answer, with the fact that raises it"]
+  "the owner_decides": ["a question only the owner can answer, with the fact that raises it"]
 }
 ```
 ````

@@ -1,0 +1,179 @@
+{
+ "audited": "2026-11-06",
+ "note": "Video editor queue audit. Open = Production or Edit stage, video type. verdict: ready | duplicate | leaked-image | broken | stale | done.",
+ "open_video": {
+  "Brand A_flex-face-brush_brief-0318": {
+   "verdict": "ready",
+   "lane": "all AI"
+  },
+  "Brand A_flex-face-brush_brief-0319": {
+   "verdict": "ready",
+   "lane": "all AI"
+  },
+  "Brand A_flex-face-brush_brief-0322": {
+   "verdict": "ready",
+   "lane": "AI plus real people"
+  },
+  "Brand A_flex-face-brush_brief-0274": {
+   "verdict": "ready",
+   "lane": "all code/animation"
+  },
+  "Brand A_flex-face-brush_brief-0275": {
+   "verdict": "ready",
+   "lane": "all code/animation"
+  },
+  "Brand B_brilliance-body-scrub_brief-0324": {
+   "verdict": "ready",
+   "lane": "all AI",
+   "ledger_rows": [
+    "Brand B_idea_Brand B_body-scrub_founder-kitchen-lab",
+    "Brand B_idea_workflow-Brand B_body-scrub_founder-kitchen-lab"
+   ]
+  },
+  "Brand B_brilliance-body-scrub_brief-0325": {
+   "verdict": "ready",
+   "lane": "all AI"
+  }
+ },
+ "not_for_editor": {
+  "Brand A_flex_brief-0318": {
+   "verdict": "duplicate",
+   "why": "second row for Barber Mission at Brief review; the real one is in Production",
+   "retired": "already off the queue"
+  },
+  "Brand A_flex_brief-0319": {
+   "verdict": "duplicate",
+   "why": "second row (flex-2k-skit) for The Razor Bump Feature, sitting at Writing in the Edit column",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand A_idea_Brand A_flex-face-brush_brief-0307": {
+   "verdict": "leaked-image",
+   "why": "brief 0307 is a Black Friday picture brief; no video hand-off exists",
+   "retired": "2026-11-06"
+  },
+  "Brand A_flex-face-brush_brief-0320": {
+   "verdict": "leaked-image",
+   "why": "text-thread piece made of four image edits; hand-off has no RUN.md or refs",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand A_idea_Brand A-brief1-street-interview-verbatim-20261105": {
+   "verdict": "broken",
+   "why": "in Production but still at Writing; no hand-off folder",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand A_idea_flex-here-we-go-again": {
+   "verdict": "broken",
+   "why": "in Edit but still at Writing (audit); no hand-off folder",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand B_idea_conscious-never-candy-ai": {
+   "verdict": "duplicate",
+   "why": "same title as 0325 Grandma's Root, still at Writing; no hand-off",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand B_idea_Brand B_body-scrub_founder-kitchen-lab": {
+   "verdict": "duplicate",
+   "why": "Kitchen To The Lab; the hand-off is brief 0324",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand B_idea_workflow-Brand B_body-scrub_founder-kitchen-lab": {
+   "verdict": "duplicate",
+   "why": "Kitchen To The Lab, second copy; the hand-off is brief 0324",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand B_idea_conscious-rebuilt-ai": {
+   "verdict": "broken",
+   "why": "The Buried Recipe in Production but still at Writing; no hand-off",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand B_idea_derm-shelf-body": {
+   "verdict": "stale",
+   "why": "stuck at Writing since 28 Oct; no hand-off",
+   "retire_blocked": "queue remove refused: no entry"
+  },
+  "Brand B_brilliance-face-scrub_brief-0339": {
+   "verdict": "stale",
+   "why": "in Edit but at Writing since 20 Oct; no hand-off",
+   "retired": "2026-11-06"
+  },
+  "Brand B_batch_0325_statics": {
+   "verdict": "leaked-image",
+   "why": "13 picture batches (g01-g19) carry the 0325 video brief id; they belong to the picture line"
+  }
+ },
+ "old_folders": {
+  "Brand A_flex-date-at-eight": {
+   "verdict": "broken",
+   "why": "only BRIEF.md and an empty refs folder; no brief id"
+  },
+  "Brand A_flex-face-brush_brief-0035": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0036": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0037": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0038": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0075": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0076": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0077": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0078": {
+   "verdict": "done"
+  },
+  "Brand A_flex-face-brush_brief-0321": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0292": {
+   "verdict": "stale",
+   "why": "nothing returned since 30 Oct; not on the queue"
+  },
+  "Brand B_brilliance-face-scrub_brief-0293": {
+   "verdict": "stale",
+   "why": "nothing returned since 30 Oct; not on the queue"
+  },
+  "Brand B_brilliance-face-scrub_brief-0294": {
+   "verdict": "stale",
+   "why": "nothing returned since 30 Oct; not on the queue"
+  },
+  "Brand B_brilliance-face-scrub_brief-0295": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0304": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0305": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0306": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0307": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0308": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0309": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0310": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0311": {
+   "verdict": "done"
+  },
+  "Brand B_brilliance-face-scrub_brief-0340": {
+   "verdict": "done"
+  }
+ }
+}

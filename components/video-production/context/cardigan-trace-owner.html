@@ -1,0 +1,130 @@
+<title>Cardigan Trace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700&family=Figtree:wght@400;600&display=swap">
+<style>
+/* Layout: an inspection report. Verdict first, the loop as a stepped path, then counts, locations and fixes. */
+:root{--bg:#f6f5f8;--fg:#211f2b;--mute:#5d5a6c;--line:#d9d6e2;--panel:#fff;--alert:#b3261e;--ok:#1f7a4d;--bar:#6a4fb3;--display:"Bitter",Georgia,serif;--body:"Figtree",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15141b;--fg:#ecebf2;--mute:#a5a2b5;--line:#322f40;--panel:#1e1c27;--alert:#f28b82;--ok:#6fd3a0;--bar:#a48ee8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15141b;--fg:#ecebf2;--mute:#a5a2b5;--line:#322f40;--panel:#1e1c27;--alert:#f28b82;--ok:#6fd3a0;--bar:#a48ee8;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+main{max-width:780px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:36px}
+h1{font-family:var(--display);font-size:clamp(30px,7vw,44px);line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-size:22px;margin:0 0 12px;text-wrap:balance}
+p{margin:0}.sub{color:var(--mute);margin-top:10px}
+.path{display:grid;gap:0}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;padding-block:12px;border-top:1px solid var(--line)}
+.step b.n{font-family:var(--display);font-size:22px;color:var(--bar)}
+.step.back b.n{color:var(--alert)}
+.step strong{display:block}.step span{color:var(--mute);font-size:15px}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:15px}
+.track{height:12px;background:var(--line)}.fill{height:100%;background:var(--bar)}
+.bar .v{font-variant-numeric:tabular-nums;text-align:right;color:var(--mute);font-size:14px}
+@media (max-width:520px){.bar{grid-template-columns:minmax(0,1fr) 84px}.track{grid-column:1/3;grid-row:2}}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px}td,th{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:13px;color:var(--mute);font-weight:600}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+code{font-size:13px;word-break:break-all}
+.zero{color:var(--alert);font-weight:600}
+ol.fix{margin:0;padding-left:22px;display:grid;gap:8px}
+.note{color:var(--mute);font-size:14px;margin-top:10px}
+</style>
+<main>
+<header>
+<h1>Why the cardigan keeps showing up</h1>
+<p class="sub">One unsourced line is pasted into every Brand B writing run before the swipe gets a say. Then the system counts its own output as proof.</p>
+</header>
+
+<section><h2>The loop</h2>
+<div class="path">
+<div class="step"><b class="n">1</b><div><strong>Born in the first avatar sheet</strong><span>“She wore a cardigan to her granddaughter’s birthday party. In July.” No customer record behind it.</span></div></div>
+<div class="step"><b class="n">2</b><div><strong>Copied into the language bank as her own words</strong><span>The bank gives it no name or source. It sits there twice, once under “The Real Proof”.</span></div></div>
+<div class="step"><b class="n">3</b><div><strong>Made the headline of the brand position</strong><span>It’s the pull quote under “The thing nobody in the category will say”.</span></div></div>
+<div class="step"><b class="n">4</b><div><strong>Pasted into every run</strong><span>The avatar, bank and position files go in whole, 18 to 24 mentions per run in the three clean runs I checked. That happens whatever the swipe is.</span></div></div>
+<div class="step"><b class="n">5</b><div><strong>A rule forces the writer to reach for it</strong><span>“Every hook traces to a verbatim”, and a hook that can’t cite one gets cut. So the writer grabs a vivid line that’s already in the bank.</span></div></div>
+<div class="step back"><b class="n">6</b><div><strong>The output comes back as evidence</strong><span>The strategy file says the summer cardigan “recurs across six creators”. Its source is our own hook cards. The position file then calls the angle “receipted six times”.</span></div></div>
+</div></section>
+
+<section><h2>How often it landed</h2>
+<div class="bars">
+<div class="bar"><span>Any writing step</span><div class="track"><div class="fill" style="width:81%"></div></div><span class="v">235 of 291</span></div>
+<div class="bar"><span>Hook step</span><div class="track"><div class="fill" style="width:71%"></div></div><span class="v">169 of 238</span></div>
+<div class="bar"><span>Swipe-to-brand step</span><div class="track"><div class="fill" style="width:56%"></div></div><span class="v">164 of 291</span></div>
+<div class="bar"><span>Working briefs</span><div class="track"><div class="fill" style="width:49%"></div></div><span class="v">94 of 190</span></div>
+<div class="bar"><span>Filed briefs</span><div class="track"><div class="fill" style="width:7%"></div></div><span class="v">6 of 92</span></div>
+</div>
+<p class="note">Brand B runs that contain the word anywhere in that step, including options nobody picked. The filed count is lower, so most of it dies before a brief, but it still takes up slots in every round.</p></section>
+
+<section><h2>Customer evidence on file</h2>
+<div class="scroll"><table><tr><th>Source</th><th>Mentions</th></tr>
+<tr><td>Focus group</td><td class="n zero">0</td></tr>
+<tr><td>Customer interviews</td><td class="n zero">0</td></tr>
+<tr><td>Support tickets, both pulls</td><td class="n zero">0</td></tr>
+<tr><td>Unbriefed creator posts</td><td class="n zero">0</td></tr>
+<tr><td>Unscripted creator DMs</td><td class="n zero">0</td></tr>
+<tr><td>Extract of the old language bank, marked weakest tier</td><td class="n">1</td></tr></table></div></section>
+
+<section><h2>Where it lives</h2>
+<div class="scroll"><table><tr><th>File</th><th>Mentions</th><th>What it does</th></tr>
+<tr><td><code>brands/Brand B/customer-experience/language-bank.md</code></td><td class="n">8</td><td>Pasted into the writing steps</td></tr>
+<tr><td><code>brands/Brand B/customer-experience/avatar.md</code></td><td class="n">3</td><td>Pasted into the writing steps</td></tr>
+<tr><td><code>brands/Brand B/brand-identity/position.md</code></td><td class="n">5</td><td>Tells the writer what to lead with</td></tr>
+<tr><td><code>brands/Brand B/brand-identity/story.md</code></td><td class="n">7</td><td>A full story named cardigan-in-july</td></tr>
+<tr><td><code>brands/Brand B/core-avatars/spot-hider/profile.md</code></td><td class="n">3</td><td>Where sessions like this one pick it up</td></tr>
+<tr><td><code>brands/Brand B/core-avatars/spot-hider/culture-map.md</code></td><td class="n">2</td><td>Lists it, already marked “evidence needed”</td></tr>
+<tr><td><code>brands/Brand B/strategy/angles.json</code></td><td class="n">3</td><td>Holds the “six creators” claim</td></tr>
+<tr><td><code>brands/Brand B/strategy/moments.json</code></td><td class="n">4</td><td>Email ideas on the calendar</td></tr>
+<tr><td><code>brands/Brand B/strategy/settings.json</code></td><td class="n">1</td><td>Strategy setting</td></tr>
+<tr><td><code>components/copywriter/prompts/stage8-render-v12-owner.md</code></td><td class="n">3</td><td>Written into the prompt itself as the example</td></tr>
+<tr><td><code>components/copywriter/prompts/stage3-injection-v8-owner.md</code></td><td class="n">1</td><td>Written into the prompt itself as the example</td></tr></table></div>
+<p class="note">It has also spread into funnel pages, advertorials and creator profiles. Older prompt versions carry it too, but those aren’t the latest.</p></section>
+
+<section><h2>Why the block never stopped it</h2>
+<p>A hook ledger was added in August after the line hooked four runs out of four. The current video writing prompts don’t read it, and its last row is from 18 August. It only ever covered hooks, so scripts, stories and concepts were never blocked.</p></section>
+
+<section><h2>Bigger than this one line</h2>
+<div class="bars">
+<div class="bar"><span>Cardigan</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v">169 runs</span></div>
+<div class="bar"><span>Leg makeup</span><div class="track"><div class="fill" style="width:93%"></div></div><span class="v">158 runs</span></div>
+<div class="bar"><span>Comes back</span><div class="track"><div class="fill" style="width:86%"></div></div><span class="v">145 runs</span></div>
+<div class="bar"><span>Tried everything</span><div class="track"><div class="fill" style="width:83%"></div></div><span class="v">141 runs</span></div>
+</div>
+<p class="note">Hook step, all brands’ working runs. Removing the cardigan alone means the next line takes its place. Leg makeup would be next, and I was about to lean on it for the new song.</p></section>
+
+<section><h2>What the language layer is doing</h2>
+<p>It’s plugged in, and it works. It rotates fresh lines each run and marks what’s been used. The cardigan isn’t in it at all. The trouble is what it holds and how little of the prompt it gets.</p>
+<div class="bars" style="margin-top:14px">
+<div class="bar"><span>Fixed files, same every run</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v">85K letters</span></div>
+<div class="bar"><span>Rotating language rows</span><div class="track"><div class="fill" style="width:7%"></div></div><span class="v">6K letters</span></div>
+</div>
+<div class="scroll" style="margin-top:18px"><table><tr><th>In the 1,442 Brand B rows</th><th>Rows</th></tr>
+<tr><td>Mention sleeves</td><td class="n zero">0</td></tr>
+<tr><td>Mention a granddaughter</td><td class="n zero">0</td></tr>
+<tr><td>Mention shorts or a swimsuit</td><td class="n zero">0</td></tr>
+<tr><td>Mention leg makeup</td><td class="n">1</td></tr>
+<tr><td>First person with a life word, like dress, photo or husband</td><td class="n">64</td></tr></table></div>
+<p class="note">The 64 is a rough word match, and many of those are off topic. Most of the bank is support tickets and fan comments on creators’ posts, such as “Beyond gorgeous my friend.” There’s no tag for a lived experience, so a writing step can’t ask for one.</p>
+<p style="margin-top:12px">So when the writer needs a real moment from her life, the rotating rows barely have any. It takes the one in the fixed files. Real ones do exist, like “I don’t wear dresses or skorts anymore” and “I don’t do photos”, but they’re buried.</p></section>
+
+<section><h2>What’s fixed now</h2>
+<div class="scroll"><table><tr><th>Piece</th><th>State</th></tr>
+<tr><td>Fixed files as the chains read them</td><td>Stock moments are out for both brands. Positioning, benefits and rules stay.</td></tr>
+<tr><td>Moments per avatar</td><td>Brand B: spot-hider 47, dry-skin 18. Brand A: glow-up 43, face-back 34, fed-up-king 33, gift-buyer 8.</td></tr>
+<tr><td>Video writing</td><td>A fresh set of 8 moments each run, across themes, swipe fit first. Live on real runs.</td></tr>
+<tr><td>Email, picture and copy chains</td><td>Moments arrive with their language query, and their fixed files read clean. Not yet proven on a live run.</td></tr>
+<tr><td>Rotation</td><td>A moment rests for 5 runs. In a test, run 1 and run 2 shared none.</td></tr>
+<tr><td>Repeat report</td><td>Each video writing run names any stock moment that got through.</td></tr>
+<tr><td>New brand or avatar</td><td>One build reads its profile, searches, indexes and finds its stock moments. Its new word list needs one read.</td></tr>
+<tr><td>Brand files on disk</td><td>Unchanged. The edit list is waiting for your OK.</td></tr></table></div>
+<h2 style="margin-top:22px">Moments now in the index</h2>
+<ul class="plain" style="margin:0;padding-left:18px;display:grid;gap:6px">
+<li>“I always keep my hands in my pocket at the beach.”</li>
+<li>“When I am a passinger in the car, I always put my hands under a hat on my lap for long rides.”</li>
+<li>“My grand-daughter asked me, ‘Nana, what are those spots on your skin?’”</li>
+<li>“I haven’t shown my arms since 1980.”</li>
+<li>“I started sleeping in gloves”</li>
+<li>“I hate summer because I have to wear makup on legs and it transfers on my bike, my car seats”</li>
+<li>“I wear shorts at home , NOT out”</li>
+</ul>
+<p class="note">Spot-hider’s 47 covers about six runs before lines start coming back. The smaller sets repeat sooner, and gift-buyer’s 8 repeats right away. Only spot-hider had a person read every line. The rest had a model read, so some noise remains. Reddit returned nothing, so all of this came from free sources.</p></section>
+</main>

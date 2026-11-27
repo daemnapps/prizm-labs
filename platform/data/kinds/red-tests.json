@@ -1,0 +1,87 @@
+{
+  "kind": "red-tests",
+  "title": "Red tests — which declared suites are red on main, reported by nobody",
+  "note": "Filed by the mini worker's red-test reporter (card TI-13 (six reds on main), done-when 4 — platform/workers/mini-worker/red_tests.py). THE DEFECT IT CLOSES, MEASURED: six declared suites were red on main on 2026-09-17 and nobody had noticed; on 2026-09-20 the same question asked of every `test_*.py` under `new-workflow-design/builds/` answered 45 RED OF 165 (27%), and the inventory had been wrong every single time it was taken — six, then a seventh when one more folder was swept, then five more when the sweep widened again. Every merge that day looked clean because the lead only ever swept the builds it touched. Nothing here fixes a red; this kind is the REPORT whose absence was the real defect. NO NEW SCHEDULER (one-scheduler rule, 2026-08-27): it rides the worker's existing 60s idle tick, beside cards_status_tick and its siblings, last before the WM-20 (plane snapshot) mirror. THE GATE IS THE SOURCE SHA WITH AN INTERVAL FLOOR UNDER IT — only a commit can change what a suite does, but this worker pushes its own records commits several times an hour, so a bare sha gate would sweep every tick; a moved HEAD sweeps at most every 15 minutes, and a 6-hour floor sweeps regardless, because an environmental red (a rotated credential, a filled disk) arrives with no commit at all. The cursor is MACHINE-LOCAL (platform/workers/mini-worker/.red-tests-state.json, gitignored) and advances on every pass, including the passes that file nothing. BOUNDED BY CONSTRUCTION: a per-suite timeout and a budget for the whole pass, with the next pass starting where the last one stopped, so the tail of the list is covered across passes rather than never. AN UNREACHED SUITE IS NOT A PASSING SUITE — `unreached` (budget ran out before it, or it has never been run on this machine) and `timeout` (it hung and was killed with its process group) are their own statuses, counted separately from green everywhere, and a suite this pass did not reach keeps its LAST KNOWN status carried from the previous record, never upgraded. THE INTERPRETER IS NAMED, top level and per row, because a suite can pass under one interpreter and die under another — a real bug hit 2026-09-20; the worker runs /usr/bin/python3 (3.9.6) by ruling. FILED ON CHANGE, NEVER ON TICK: the whole verdict except `pass` is compared against the filed record, so an unchanged red set writes nothing and pushes nothing; `pass` is written but never compared, because it differs every sweep by construction. THE SPAWN HOLDS NO VENDOR KEY (WM-14 (scoped job env), job name `local-tool` — job_env.py is maker-forbidden, so a `red-tests` row of its own is a one-line lead act). POINTERS AND LINES, NEVER OUTPUT: a row carries the suite path, its exit code and its FIRST FAILING LINE — never a suite's full output, which belongs in a re-run. THIS KIND GATES NOTHING: classifying a red as stale, environmental, flaky or real breakage stays a person's job, on the record this files (the 2026-09-20 sample of 12 — notes/red-sweep-sample-2026-09-20.md — read 8 stale · 1 environmental · 2 real · 1 flaky). THE WHOLE WORKSPACE, TOLD TRUE (TI-27 (sweep tells truth), 2026-10-11): the system sweep walks three roots — new-workflow-design/builds, components and platform (`suite_roots`; `suite_root` stays the first, for continuity) — skipping dot-folders, node_modules and __pycache__, with the same per-suite timeouts, budget and rotation. A GREEN IS NEVER REBORN `unreached` BECAUSE THE CAP SHED ITS NAME: every record carries `green_sha256` over the full sorted green list, the sweeping machine's state keeps that list, and the next pass carries it when the hashes match (a mismatch falls back to the record's own list and says so in `pass.notes`). LAB IS FILED APART: lab/<person>/ is swept at the tail of the same lap, within the same budget, as its OWN record per person — item `lab-<person>`, `bucket: \"lab\"`, `owner: <person>` — so its reds go to that owner; lab rows are NEVER in the `builds` record or its headline counts and are NEVER read as fix-job input (lab code written for a newer Python reds under 3.9.6 for that alone). ONE JOB PER CAUSE: every red, timeout and error row carries `cause` — its `at` (path:line) when present, else `text:` + the first 12 hex of sha256 of its failing line — and `counts.causes` counts the distinct causes among red rows. TIMING ROWS ARE NEVER FIX JOBS: a row whose failing line, or the assertion source at its `at`, compares an elapsed/duration/seconds/budget value against a bound carries `class: \"timing\"`, and `counts.timing` counts the distinct timing causes among red rows; such a row is never admissible as a fix job, because fixing one is loosening a budget, which is hiding a regression. Item id is `builds` for the system — one standing answer to one standing question, so several records exist for it and the LATEST BY `created` WINS — and `lab-<person>` for each lab owner, read the same way; the history is the append-only record, never an edit.",
+  "open_items": true,
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["sweep"],
+      "note": "exactly one per record; reserved so a later index or per-build event can join this kind without changing what a sweep record means"
+    },
+    {
+      "key": "suite_root",
+      "required": true,
+      "note": "the repo-relative root the suites were discovered under (new-workflow-design/builds; since TI-27 (sweep tells truth) the FIRST of `suite_roots`, kept for continuity; lab/<person> on a lab record). DISCOVERED, NEVER LISTED — a hand-maintained suite list is the same defect as TI-13 (six reds on main)'s hand-maintained STDLIB_OK, and it is why the inventory was wrong every time."
+    },
+    {
+      "key": "suite_roots",
+      "note": "every repo-relative root this record's suites were discovered under — new-workflow-design/builds, components, platform on the `builds` record; [lab/<person>] on a lab record (TI-27 (sweep tells truth)). A missing root is skipped and said in `pass.notes`; all of them missing files nothing."
+    },
+    {
+      "key": "bucket",
+      "values": ["lab"],
+      "note": "present only on a lab record (item `lab-<person>`). Absent = the system's `builds` record. A lab record is NEVER in the system's headline counts and NEVER fix-job input."
+    },
+    {
+      "key": "owner",
+      "note": "present only on a lab record: the lab/<person>/ folder's person, to whom its reds go."
+    },
+    {
+      "key": "interpreter",
+      "required": true,
+      "note": "the interpreter path every row was measured under unless the row says otherwise. /usr/bin/python3 on the mini, by ruling."
+    },
+    {
+      "key": "interpreter_version",
+      "required": true,
+      "note": "what that interpreter answered when asked (3.9.6 on the mini). An interpreter that cannot be run files NOTHING — a red set measured by an interpreter that will not start is not a measurement."
+    },
+    {
+      "key": "counts",
+      "required": true,
+      "note": "{suites, green, red, timeout, error, unreached, causes, timing}. They never shed under the 16KB cap: counts.red is the whole number even when rows were trimmed. counts.causes is the distinct `cause` keys among red rows (one fix job per cause, not per suite); counts.timing is how many of those causes are `class: timing` — so timing / causes is the timing share."
+    },
+    {
+      "key": "red",
+      "required": true,
+      "note": "[{suite, first_failing_line, exit_code, at?, interpreter?, cause, class?}] — the suites that exited non-zero. `cause` (TI-27 (sweep tells truth)) is the dedupe key: `at` when present, else `text:` + the first 12 hex of sha256(first_failing_line); timeout and error rows carry it too. `class: \"timing\"` marks a timing/budget assertion — NEVER admissible as a fix job (fixing one = loosening a budget = hiding a regression); a row carried from a previous record keeps the class it was measured with. `first_failing_line` is what the suite ACTUALLY printed (unittest's FAIL:/ERROR: header, the house-style FAIL line, pytest's `E   `, or a bare exception line), and a suite matching none of those yields its last line prefixed `(last line)` rather than a guess dressed as a diagnosis — TI-13 (six reds on main)'s own lesson that a red misnaming its cause is worse than a red. `at` is the source frame nearest above it as path:line."
+    },
+    {
+      "key": "timeout",
+      "required": true,
+      "note": "[{suite, first_failing_line, exit_code}] — suites killed at the per-suite timeout, with their process group. NEVER GREEN: the suite never finished, so nothing about it is known."
+    },
+    {
+      "key": "error",
+      "required": true,
+      "note": "[{suite, first_failing_line, exit_code}] — suites that could not be spawned or whose output could not be read. Distinct from `red` on purpose: 'it failed', 'it hung' and 'it could not be started' are three different things to triage."
+    },
+    {
+      "key": "unreached",
+      "required": true,
+      "note": "[{suite, first_failing_line, exit_code}] — the pass ran out of budget before them, or they have never been run on this machine. NEVER GREEN, and the honest word for a suite nobody has run."
+    },
+    {
+      "key": "green",
+      "required": true,
+      "note": "suite paths that exited 0 at their last measurement. First to shed under the cap (counts.green survives), because a green suite is the one row a reader need not act on."
+    },
+    {
+      "key": "green_sha256",
+      "note": "sha256 over the FULL sorted green list, one suite per line — written always, even when the cap shed the names (TI-27 (sweep tells truth)). The sweeping machine's state keeps that list; the next pass carries those greens when the state's hash equals this one, so a capped record never turns a green into `unreached`."
+    },
+    {
+      "key": "pass",
+      "required": true,
+      "note": "{measured, carried, seconds, budget_s, suite_timeout_s, started_at, window, complete, sha, reason, notes?} — what THIS pass did, for this record's suites (`seconds` is the whole pass, lab tail included); `notes` says a skipped missing root or a green carry that fell back. WRITTEN BUT NEVER COMPARED: it differs every sweep by construction, so including it in the change test would file a record every tick and destroy the silence the kind depends on. `window` is the first and last suite this pass reached; `complete` says whether the pass covered every suite; `carried` is how many rows came from the previous record."
+    },
+    {
+      "key": "truncated",
+      "note": "present only when the 16KB cap forced a shed, naming what was dropped and in which order — green names first, then unreached rows, then red rows from the tail. The counts above always cover the whole sweep."
+    }
+  ]
+}

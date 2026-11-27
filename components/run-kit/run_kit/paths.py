@@ -1,5 +1,5 @@
 """Paths are FOUND by walking up, never counted with parents[N].
-Lifted from tools/email-production/paths.py — written after a folder
+Lifted from components/email-production/paths.py — written after a folder
 move made parents[3] silently point one level too high."""
 import os
 from pathlib import Path
@@ -19,20 +19,20 @@ def repo(start=None):
 
 def venv(component, requirements):
     """Where a component's venv lives OUTSIDE the repo, so a fresh worktree (a mini run) finds it
-    (LD-52 (venvs outside repo)): $COMPANY_VENVS, default ~/.upright/venvs, then
+    (LD-52 (venvs outside repo)): $UPRIGHT_VENVS, default ~/.upright/venvs, then
     `<component>-<first 8 hex of sha256 of the requirements file>`. A changed requirements file
     names a different folder, so nothing runs on stale packages. The path may not exist yet."""
     import hashlib
-    root = Path(os.environ.get("COMPANY_VENVS") or Path.home() / ".upright" / "venvs").expanduser()
+    root = Path(os.environ.get("UPRIGHT_VENVS") or Path.home() / ".upright" / "venvs").expanduser()
     sha = hashlib.sha256(Path(requirements).read_bytes()).hexdigest()[:8]
     return root / f"{component}-{sha}"
 
 
 def models(component):
     """Where a component's model weights live OUTSIDE the repo (LD-52, extended to models):
-    $COMPANY_MODELS, default ~/.upright/models, then `<component>/` — the same layout as the
+    $UPRIGHT_MODELS, default ~/.upright/models, then `<component>/` — the same layout as the
     component's own models/ folder. The path may not exist yet."""
-    root = Path(os.environ.get("COMPANY_MODELS") or Path.home() / ".upright" / "models").expanduser()
+    root = Path(os.environ.get("UPRIGHT_MODELS") or Path.home() / ".upright" / "models").expanduser()
     return root / component
 
 

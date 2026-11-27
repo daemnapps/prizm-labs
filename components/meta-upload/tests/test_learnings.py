@@ -22,12 +22,12 @@ class Learnings(Base):
     def test_disapprove_writes_one_learning(self):
         import approve as A
         f = self.card()
-        code, out = A.disapprove(C.card_id(f), ["hook", "looks"], "faces melt in frame 2", "the owner")
+        code, out = A.disapprove(C.card_id(f), ["hook", "looks"], "faces melt in frame 2", "owner")
         self.assertEqual(code, 200, out)
         recs = [json.loads(x) for x in (self.root / "learnings.jsonl").read_text().splitlines()]
         self.assertEqual(len(recs), 1)
         r = recs[0]
-        self.assertEqual((r["by"], r["brand"], r["lane"], r["unit"]), ("the owner", "brand-b", "image", NAME))
+        self.assertEqual((r["by"], r["brand"], r["lane"], r["unit"]), ("owner", "brand_b", "image", NAME))
         self.assertEqual(r["brief_key"], "brand_b_brilliance-body-scrub_brief-0154")
         self.assertEqual([(x["id"], x["step"], x["tool"]) for x in r["reasons"]],
                          [("hook", 2, "image-teardown"), ("hook", 4, "copywriter"), ("looks", 5, "image-teardown")])
@@ -44,33 +44,33 @@ class Learnings(Base):
 
     def test_digest_and_recent(self):
         import approve as A
-        A.disapprove(C.card_id(self.card()), ["words"], "claims a cure", "the owner")
-        d = self.root / "learnings" / "4-brief" / "brand-b.md"
+        A.disapprove(C.card_id(self.card()), ["words"], "claims a cure", "owner")
+        d = self.root / "learnings" / "4-brief" / "brand_b.md"
         self.assertTrue(d.is_file())
-        lines = L.recent(4, "brand-b", "copywriter")
+        lines = L.recent(4, "brand_b", "copywriter")
         self.assertEqual(len(lines), 1)
         self.assertIn('[copywriter] Words wrong', lines[0])
         self.assertIn('"claims a cure"', lines[0])
         self.assertIn(NAME, lines[0])
-        self.assertEqual(L.recent(4, "brand-b", "catalog"), [])
-        self.assertEqual(L.recent(4, "brand-a"), [])
+        self.assertEqual(L.recent(4, "brand_b", "catalog"), [])
+        self.assertEqual(L.recent(4, "brand_a"), [])
 
     def test_prompt_hook_off_by_default(self):
         import approve as A
-        A.disapprove(C.card_id(self.card()), ["words"], "claims a cure", "the owner")
-        self.assertEqual(L.prompt_block("copywriter", 4, "brand-b"), "")
+        A.disapprove(C.card_id(self.card()), ["words"], "claims a cure", "owner")
+        self.assertEqual(L.prompt_block("copywriter", 4, "brand_b"), "")
         hooks = json.loads(L.HOOKS.read_text())
         self.assertTrue(hooks and not any(v.get("on") for k, v in hooks.items() if not k.startswith("_")))
         with mock.patch.dict(os.environ, {"META_LEARNINGS_HOOKS": "copywriter"}):
-            b = L.prompt_block("copywriter", 4, "brand-b")
+            b = L.prompt_block("copywriter", 4, "brand_b")
             self.assertTrue(b.strip().startswith(L.HEAD))
             self.assertIn("claims a cure", b)
-            self.assertEqual(L.prompt_block("copywriter", 4, "brand-a"), "")   # nothing to say -> nothing added
+            self.assertEqual(L.prompt_block("copywriter", 4, "brand_a"), "")   # nothing to say -> nothing added
 
     def test_summary_groups_by_step_and_tool(self):
         import approve as A
-        A.disapprove(C.card_id(self.card()), ["words", "page"], "wrong page and claim", "the owner")
-        A.disapprove(C.card_id(self.card(name=NAME[:-1] + "b")), ["words"], "off-brand", "the owner")
+        A.disapprove(C.card_id(self.card()), ["words", "page"], "wrong page and claim", "owner")
+        A.disapprove(C.card_id(self.card(name=NAME[:-1] + "b")), ["words"], "off-brand", "owner")
         s = L.summary()
         self.assertEqual(s["total"], 2)
         st = s["steps"][0]
@@ -78,20 +78,20 @@ class Learnings(Base):
         cw = next(t for t in st["tools"] if t["tool"] == "copywriter")
         self.assertEqual((cw["count"], cw["reasons"][0]["count"], cw["notes"][0]["note"]), (2, 2, "off-brand"))
         self.assertEqual(L.summary(lane="video")["total"], 0)
-        self.assertEqual(L.summary(brand="brand-b")["total"], 2)
+        self.assertEqual(L.summary(brand="brand_b")["total"], 2)
 
     def test_approver_written_and_checked(self):
         import approve as A
         f = self.card()
-        with mock.patch("upload.approvers", return_value=["the owner", "the team"]):
+        with mock.patch("upload.approvers", return_value=["owner", "developer"]):
             with self.assertRaises(SystemExit):
                 A.disapprove(C.card_id(f), ["words"], "x", "Nobody")
             with self.assertRaises(SystemExit):
                 A.disapprove(C.card_id(f), ["words"], "x", None)       # two approvers: must pick
             with mock.patch.object(A, "FAKE", FakeMeta):
-                code, out = A.approve(C.card_id(f), "PAUSED", "the team")
+                code, out = A.approve(C.card_id(f), "PAUSED", "developer")
         self.assertTrue(out["ok"], out)
-        self.assertEqual(C.load(C.folder_of(out["id"]))["approval"]["by"], "the team")
+        self.assertEqual(C.load(C.folder_of(out["id"]))["approval"]["by"], "developer")
         self.assertFalse((self.root / "learnings.jsonl").exists())     # an approve teaches nothing
 
     def test_uploader_refuses_a_name_not_on_the_list(self):
@@ -102,7 +102,7 @@ class Learnings(Base):
         C.save(f, c)
         f = C.move(f, "2-approved")
         with self.assertRaises(SystemExit):
-            U.upload_card(f, m=FakeMeta("brand-b"), log=lambda *_: None)
+            U.upload_card(f, m=FakeMeta("brand_b"), log=lambda *_: None)
 
 
 if __name__ == "__main__":

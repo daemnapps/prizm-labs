@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """gap_packet — the winners and the losers of one brand, side by side, for the gap read.
 
-    gap_packet.py --brand brand-a      writes runs/media-buying/<brand>/gap/<date>/packet.json + packet.md
+    gap_packet.py --brand brand_a      writes runs/media-buying/<brand>/gap/<date>/packet.json + packet.md
 
-the owner, 2 Oct 2026: compare the top 1% "against the top 25 biggest spenders" that did not make
+owner, 2 Oct 2026: compare the top 1% "against the top 25 biggest spenders" that did not make
 the top 10% — "clearly identify the gaps in the top 1% versus the bottom 90% … against our
 marketing doctrines, our avatar details, our research, brand context", so the system has
 pass/fail rules and stops repeating what the bottom 90% did.
@@ -20,7 +20,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(WS / "tools/copywriter/library"))
+sys.path.insert(0, str(WS / "components/copywriter/library"))
 
 WINNERS, LOSERS = "top-1", 25
 

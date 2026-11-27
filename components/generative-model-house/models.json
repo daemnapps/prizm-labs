@@ -83,7 +83,7 @@
     "talking": "bytedance/seedance-2.5/reference-to-video (the approved start picture + the line's own voice read, made together)",
     "motion": "bytedance/seedance-2.5/image-to-video (the approved start picture, end picture where there is one)"
    },
-   "door": "higgsfield API (tools/video-production/machine/higgsfield_api.py, HIGGSFIELD_KEY_ID/SECRET)",
+   "door": "higgsfield API (components/video-production/machine/higgsfield_api.py, HIGGSFIELD_KEY_ID/SECRET)",
    "why": "Every clip is Seedance 2.5, with the voice and the picture made together by the one model; cost does not decide the model. Resolution is 480p, upscaled on this Mac. Frontier models are used for generative work (provenance: history below).",
    "history": [
     {
@@ -99,6 +99,45 @@
    "capability": "video-from-image",
    "how": "every on-camera singing clip of a song ad (the singer's slice of the Suno song is the read); the song itself is laid in the edit, so the clip's own sound is not kept",
    "ruled": "the owner, 2026-10-29: Seedance 2.0 for song ads, officially. Every other clip stays Seedance 2.5."
+  },
+  "take": {
+   "registry": "seedance-2.5",
+   "door": "higgsfield",
+   "capability": "video-from-image",
+   "good_at": "the default print (ruled 2026-11-09): the cast picture and character sheets as image references, the 3D rehearsal as the motion video, one voice sample per speaker; held every reach on the beats, the handheld camera, the faces and the lines in our voices in the three-way and 2.0 tests; 45 credits for 15 s",
+   "bad_at": "refused the swipe's own footage as a motion reference (bikinis, faces close); voice samples under 2 s are refused (padded by take.py)"
+  },
+  "take_backup": {
+   "registry": "wan-3.0",
+   "door": "higgsfield",
+   "capability": "video-from-image",
+   "good_at": "the backup when Seedance refuses or fails: the exact first frame and the script, 1 credit a second; the model speaks the lines and our reads are laid after",
+   "bad_at": "cannot take references with a start picture, so it speaks in its own voices (our reads are laid after) and its motion comes from the written beats, not a tracked clip"
+  },
+  "take_backup_open": {
+   "registry": "wan-3.0",
+   "door": "fal",
+   "capability": "video-from-image",
+   "good_at": "reference mode with our voices and the swipe's motion video, when Higgsfield refuses or is down",
+   "bad_at": "the vendor still moderates it with fal's checker off ('model_moderated'); motion clip + output stay under 30 s; the picture is a reference, not the exact first frame"
+  },
+  "take_pose": {
+   "registry": "wan-2.2-vace-fun-pose",
+   "door": "fal",
+   "capability": "video-from-image",
+   "good_at": "tracked motion: a motion clip's poses drive our first frame frame for frame, nothing of its people, words or edits carried",
+   "bad_at": "no voices; the cast drifts without character sheets; fal's checker refuses bikinis on our account; copies the clip's action exactly"
+  },
+  "ruled_2026_11_09_takes": {
+   "order": [
+    "take",
+    "take_backup",
+    "take_backup_open"
+   ],
+   "pose_route": "take_pose, when a scene has a motion clip to follow",
+   "maker": "components/video-studio/take.py",
+   "why": "The owner, 2026-11-09: \"if the one provider won't take the work we should wire a back up in its place … between higgsfield cli and fal this should work\"; \"it's so cheap\" (20 credits a take).",
+   "default": "Seedance 2.5 omni-reference is the first route (the owner, 9 Nov: \"ok just use frontier model\"); Wan 3.0 start-frame and Wan 3.0 on fal are backups; Genjutsu motion control is a person's pick, not a route"
   }
  },
  "swipe_footage": {
@@ -127,7 +166,7 @@
    "registry": "eleven-ttv-v3",
    "door": "elevenlabs",
    "capability": "voice-design",
-   "how": "designs a cast member's own voice from their description and a real reference recording (tools/video-production/machine/make_voice.py); the only ElevenLabs design model that takes a reference recording",
+   "how": "designs a cast member's own voice from their description and a real reference recording (components/video-production/machine/make_voice.py); the only ElevenLabs design model that takes a reference recording",
    "ruled": "the voice rule (one custom voice per character, VIDEO-RULINGS V4); job added 2026-10-21 so make_voice reads its model here"
   },
   "music_bed": {

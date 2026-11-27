@@ -1,4 +1,4 @@
-"""The uploader moves like a person (pace.py, the owner 21 Oct 2026): busy waits and tries again, the hour has a budget."""
+"""The uploader moves like a person (pace.py, owner 21 Oct 2026): busy waits and tries again, the hour has a budget."""
 import io, json, os, sys, tempfile, time, unittest, urllib.error
 from pathlib import Path
 from unittest import mock

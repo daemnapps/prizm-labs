@@ -1,7 +1,7 @@
 """The judge — a generated sheet, checked before it is banked.
 
 **This writes no second judge.** The eyes, the judge prompt and the vision
-model are `tools/image-production/image_production/judge.py`'s, asked
+model are `components/image-production/image_production/judge.py`'s, asked
 through its `seen()` — one judge for the system, one place a judge prompt is
 versioned. What is this component's own is the QUESTIONS, because a character
 sheet fails differently from an ad frame: it fails by being the baseline's
@@ -22,7 +22,7 @@ from . import paths as P
 STANDING = [
     "No real third-party brand name, logo or wordmark appears unchanged: any brand mark in frame "
     "is a visible parody (renamed, misspelled or bent into a joke about the problem). No real famous "
-    "person appears as themselves: a famous face is changed enough to read as a lookalike gag."  # the owner, 2026-10-23: parody, never block,
+    "person appears as themselves: a famous face is changed enough to read as a lookalike gag."  # owner, 2026-10-23: parody, never block,
     "Nothing is grossly broken — a limb attached wrongly, a face melted, a "
     "body with the wrong number of arms. Judge this the way a viewer scrolling "
     "past would. A partly hidden hand, a foreshortened grip, an odd-looking "

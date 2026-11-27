@@ -1,0 +1,95 @@
+{
+  "kind": "atlas-refresh",
+  "written_by": "atlas",
+  "written_by_evidence": "platform/workers/mini-worker/atlas_adapter.py runs only components/atlas/compile.py; one record = one atlas compile (764 via atlas-refresh/1) — the lead, 2026-10-01, for ATL-20b (exact run counts); a kind with no written_by is not attributable to any component",
+  "title": "Atlas refresh — a record of every compile that mattered",
+  "note": "Filed by the mini worker's atlas compile-refresh tick (card ATL-2, platform/workers/mini-worker/atlas_adapter.py). The atlas is a PROMOTED surface (dashboard.the company.com/atlas) whose viewer fetches the COMMITTED platform/data/atlas/data.json through /api/file off the mini's clone — so before this tick, freshness was exactly 'what a human last committed', and every registry commit nobody followed with a hand-run of components/atlas/compile.py put stale org truth on the team domain silently. THE GATE IS THE SOURCE SHA, NOT A CLOCK, and that is the one thing that makes this kind different from its dashboard-refresh and cs-refresh siblings: the atlas compiles COMMITTED registries, so the only thing that can change its output is a commit. The tick records the main HEAD it last compiled at in a MACHINE-LOCAL cursor (platform/workers/mini-worker/.atlas-state.json, gitignored) and returns not-due when HEAD has not moved, so the common tick costs one `git rev-parse HEAD` and one file read. NO NEW SCHEDULER (one-scheduler rule, 2026-08-27): it rides the worker's existing 60s pull, in the idle branch beside cards_status_tick, dashboard_refresh_tick and cs_refresh_tick; its row in platform/workers/README.md's jobs table is its declaration. COMMIT ONLY ON A REAL DATA CHANGE, measured over platform/data/atlas/ MINUS last-refresh.json — the stamp carries the run's only wall clock, and a stamp-only churn commit every tick is the exact failure that exclusion exists to prevent. FAIL-STALE BEATS FAIL-WRONG: a compile that exits non-zero commits NOTHING, names the failing registry here and in worker.log, and leaves the last good data.json serving the page; the compiler builds its document in memory and writes once, so a failed run cannot leave a half-file behind. The cursor advances on failure too — one attempt per sha, never a FAILED record every minute. FILE ON CHANGE, NOT ON TICK: a record exists only when the atlas actually moved or the compile failed; a clean no-op compile is a log line, so the plane does not grow one record per registry commit. Item id is always `atlas` — one document, not a set of runs — so several records exist for it and the LATEST BY `created` WINS; the history is the append-only record, never an edit. NO CREDENTIAL: the compile is spawned under scoped_env('atlas-refresh'), whose JOB_ENV row grants no vendor key at all (WM-14), and it makes no network call. POINTERS, NEVER CONTENT: nothing here carries the atlas document — the viewer reads platform/data/atlas/data.json and never this record.",
+  "open_items": true,
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["compile"],
+      "note": "exactly one per record; reserved so a later index or status event can join this kind without changing what a compile record means"
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": ["ok", "failed"],
+      "note": "`failed` means compile.py exited non-zero — an unreadable or malformed registry, a timeout, or a compiler that could not be spawned. It never kills the worker's tick, and it never commits anything."
+    },
+    {
+      "key": "failure",
+      "required_when": "status=failed",
+      "values": ["compile-failed", "compile-timeout", "compile-unrunnable"],
+      "note": "which wall it hit, as a token a reader can count on. `compile-failed` is the compiler's own exit 2 — a registry it could not read or parse, named by file in `log`. `compile-timeout` (exit 124) and `compile-unrunnable` (exit 125) are the adapter's own codes for a spawn that never finished or never started."
+    },
+    {
+      "key": "reason",
+      "required_when": "status=failed",
+      "note": "the failure in words, including what did NOT happen: nothing was committed and the last good data.json is still what the promoted atlas serves"
+    },
+    {
+      "key": "exit_code",
+      "note": "compile.py's exit code. 0 clean, 2 a named registry failure, 124 timed out, 125 could not be run."
+    },
+    {
+      "key": "sha",
+      "required": true,
+      "note": "the main HEAD this compile ran at — the cursor key. null when git could not be read, which is treated as DUE rather than as 'nothing moved': a gate that cannot read the source must not be the thing that decides the page stays stale."
+    },
+    {
+      "key": "previous_sha",
+      "note": "the HEAD the last compile on this machine ran at; null on a machine's first run. The pair (previous_sha, sha) is the exact commit range this refresh answers for."
+    },
+    {
+      "key": "changed",
+      "required": true,
+      "note": "did data.json actually differ — `git status --porcelain` over platform/data/atlas/ MINUS last-refresh.json. This is the only thing that authorises a commit. Always false on a failed compile."
+    },
+    {
+      "key": "changed_paths",
+      "note": "up to 20 repo-relative paths that moved — pointers, never content. May be empty with changed=true in the one stated case where git status was unreadable and the decision was handed to git_push, which stages and then checks `diff --cached --quiet` and so cannot make an empty commit."
+    },
+    {
+      "key": "pushed",
+      "required": true,
+      "note": "was the change committed and pushed. false with changed=true means the atlas moved and the push failed or was not asked for (a CLI run pushes nothing by design) — the two are different facts and are never collapsed."
+    },
+    {
+      "key": "push_error",
+      "note": "present only when the record claimed a push that then failed. The record is filed BEFORE the push so it rides the same commit as the atlas; a push that fails is corrected on disk by the same run, seconds later and before any reader could have seen it, rather than leaving a claim nobody checked. Not an exception to the append-only rule — no LATER record ever edits an earlier one."
+    },
+    {
+      "key": "at",
+      "required": true,
+      "note": "UTC instant of the run"
+    },
+    {
+      "key": "seconds",
+      "note": "wall-clock of the compile subprocess"
+    },
+    {
+      "key": "command",
+      "note": "the compile invocation, as words — never a shell string to re-run blind. `--root` is passed explicitly so the adapter compiles the tree it was pointed at."
+    },
+    {
+      "key": "data_dir",
+      "note": "repo-relative directory the compile wrote (platform/data/atlas/) — a POINTER; the viewer reads data.json there and never from this record"
+    },
+    {
+      "key": "stamp",
+      "note": "the atlas's last-refresh.json in summary — refreshed_at, schema and the compiler's own summary counts (builds, cards, seats, drift findings, chain nodes and traces). Counts and a timestamp, never the document. null on a failed compile, and a stated absence when the file could not be read."
+    },
+    {
+      "key": "log",
+      "note": "the compile's own output, tail-trimmed. On a failure this is where the offending registry is named. A diagnostic — the full text is in worker.log. WM-6: the log rides with the verdict, so a reader never has to hold a record and a log file side by side to find out what happened."
+    },
+    {
+      "key": "truncated",
+      "note": "present only when the 16KB cap forced a shed, naming what was dropped. The log sheds first and nothing else sheds at all."
+    }
+  ]
+}

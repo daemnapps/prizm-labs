@@ -58,7 +58,7 @@ class HeldHome(unittest.TestCase):
         self.assertEqual(run["label"], "held")
 
     def test_triage_writes_the_brand_file(self):
-        path = build.REPO / "tools/image-production/static/queue/triage.py"
+        path = build.REPO / "components/image-production/static/queue/triage.py"
         spec = importlib.util.spec_from_file_location("triage_si54", path)
         triage = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(triage)

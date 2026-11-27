@@ -1,6 +1,6 @@
 # Creative Run Builder (the owner's copy)
 
-Page: (private page) · 5 Oct 2026. One page for the whole variation cycle: Build a run · Runs (your calls, spec, prompt, what was sent) · Formats (was the Format Bank) · Prompts. Page source `page/creative-run-builder.html`; how a session runs the queue: `RUN-QUEUE.md`.
+Page: https://claude.ai/artifact/UdUpx6pCCj2rgKFaosh7ju · 5 Oct 2026. One page for the whole variation cycle: Build a run · Runs (your calls, spec, prompt, what was sent) · Formats (was the Format Bank) · Prompts. Page source `page/creative-run-builder.html`; how a session runs the queue: `RUN-QUEUE.md`.
 
 **The workflow (5 Oct 2026): `PROVEN-TO-FORMAT-owner.md`** — proven ad → new format, batch by batch. The page now builds from a batch file (`definitions/proven-to-format/<batch>.json`) via `machine/proven_to_format.py page <batch>`.
 
@@ -10,13 +10,13 @@ Page: (private page) · 5 Oct 2026. One page for the whole variation cycle: Buil
 
 | Concept | Format | Spec |
 |---|---|---|
-| MOFU showing hands (static) | Public reaction, repeat demo · Dbmik5RNWQV | `runs/ad-variations/<brand>/swap-mofu-x-public-reaction/spec.md` |
-| Grandma House (top 1% video) | Body scan → kitchen fix · DavXLyHKZSB | `runs/ad-variations/<brand>/swap-grandma-house-x-kitchen-fix/spec.md` |
-| Melanin overproduction VSL (top 1%) | Body scan → kitchen fix · DavXLyHKZSB | `runs/ad-variations/<brand>/swap-melanin-vsl-x-kitchen-fix/spec.md` |
-| Grandma static | Public reaction, repeat demo · Dbmik5RNWQV | `runs/ad-variations/<brand>/swap-grandma-static-x-public-reaction/spec.md` |
-| Hands photostrip p140 (static) | Public reaction, repeat demo · Dbmik5RNWQV | `runs/ad-variations/<brand>/swap-hands-photostrip-x-public-reaction/spec.md` |
-| Grandma House | Hua Jin signs → remedy → book · Ddh2x27iLY0 | `runs/ad-variations/<brand>/swap-grandma-house-x-huajin-signs-remedy/spec.md` |
-| Grandma House | Hua Jin real-vs-fake tests → book · Dd12vX6inUo | `runs/ad-variations/<brand>/swap-grandma-house-x-huajin-purity-tests/spec.md` |
+| MOFU showing hands (static) | Public reaction, repeat demo · Dbmik5RNWQV | `runs/ad-variations/Brand B/swap-mofu-x-public-reaction/spec.md` |
+| Grandma House (top 1% video) | Body scan → kitchen fix · DavXLyHKZSB | `runs/ad-variations/Brand B/swap-grandma-house-x-kitchen-fix/spec.md` |
+| Melanin overproduction VSL (top 1%) | Body scan → kitchen fix · DavXLyHKZSB | `runs/ad-variations/Brand B/swap-melanin-vsl-x-kitchen-fix/spec.md` |
+| Grandma static | Public reaction, repeat demo · Dbmik5RNWQV | `runs/ad-variations/Brand B/swap-grandma-static-x-public-reaction/spec.md` |
+| Hands photostrip p140 (static) | Public reaction, repeat demo · Dbmik5RNWQV | `runs/ad-variations/Brand B/swap-hands-photostrip-x-public-reaction/spec.md` |
+| Grandma House | Hua Jin signs → remedy → book · Ddh2x27iLY0 | `runs/ad-variations/Brand B/swap-grandma-house-x-huajin-signs-remedy/spec.md` |
+| Grandma House | Hua Jin real-vs-fake tests → book · Dd12vX6inUo | `runs/ad-variations/Brand B/swap-grandma-house-x-huajin-purity-tests/spec.md` |
 
 Each folder also holds `sent.md` (the prompt exactly as filled) and `run.json`.
 

@@ -61,12 +61,12 @@ ELEMENT_KINDS = {"products": "product", "casting": "cast", "sets": "set", "props
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
     2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
-    tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
+    components/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name
     hits = ([root / str(brand).lower() / run] if brand else []) + sorted(root.glob(f"*/{run}"))
     work = [d for d in hits if (d / "out").is_dir() or (d / "vars").is_dir()]
-    old = Path(repo) / "tools" / "image-teardown" / "runs" / run
+    old = Path(repo) / "components" / "image-teardown" / "runs" / run
     if work:
         return work[0]
     if old.is_dir():
@@ -96,7 +96,7 @@ class Chain:
 
     def register(self):
         if self._reg is None:
-            self._reg = _load(self.repo / "tools" / "image-teardown" / "tools" / "briefs.py", "runsheet_register")
+            self._reg = _load(self.repo / "components" / "image-teardown" / "tools" / "briefs.py", "runsheet_register")
         return self._reg
 
     def lookup(self, what, brand=None):
@@ -104,7 +104,7 @@ class Chain:
         R = self.register()
         k, r = R.get(R.load(), str(what), brand=brand)
         if not r:
-            raise SystemExit(f"{what} is not in the brief register (tools/image-teardown/briefs.json)")
+            raise SystemExit(f"{what} is not in the brief register (components/image-teardown/briefs.json)")
         return k, r
 
     def house(self, job):
@@ -130,7 +130,7 @@ class Chain:
     def set_change(self, brand, run, variation, change, brief):
         """A picture change on a run with a kept 3D set, as a set request (image-production picture_sets, the same call
         image-edit's vary_recipe makes), or None when the run has no kept set. Nothing is spent."""
-        f = self.repo / "tools" / "image-production" / "picture_sets.py"
+        f = self.repo / "components" / "image-production" / "picture_sets.py"
         if self._sets is None:
             self._sets = _load(f, "runsheet_picture_sets") if f.is_file() else False
         S = self._sets
@@ -142,8 +142,25 @@ class Chain:
             ask["credits"] = 0                                 # the print is already made
         return ask
 
+    def first_set(self, brand, run):
+        """The run's main picture under GATE-4 (2026-11-10): {"kept": {set, print}} when a kept 3D set print exists (the
+        print IS the picture), else {"ask": the first print's request (picture_sets.first_print)}. Nothing is spent."""
+        f = self.repo / "components" / "image-production" / "picture_sets.py"
+        if self._sets is None:
+            self._sets = _load(f, "runsheet_picture_sets") if f.is_file() else False
+        S = self._sets
+        if not S:
+            return None
+        found = S.kept(brand, run)
+        if found:
+            return {"kept": found}
+        try:
+            return {"ask": S.first_print(brand, run)}
+        except Exception as ex:                               # noqa: BLE001  a run with no brief yet still gets the step
+            return {"ask": {"print_words": None, "why": str(ex)[:200]}}
+
     def _image_edit(self):
-        folder = str(self.repo / "tools" / "image-edit")
+        folder = str(self.repo / "components" / "image-edit")
         if folder not in sys.path:
             sys.path.append(folder)
         import image_edit
@@ -252,7 +269,7 @@ def return_place(key, brand, role):
     tail = f"{handoff_folder(key, brand, role)}/{RETURN_DIR}/"
     return {"role": role, "name_pattern": f"{key}_asset-NN.<ext>", "repo": tail, "drive": f"Shared Assets/{tail}",
             "receipt": {"name_pattern": f"{key}_asset-NN.receipt.json", "fields": RECEIPT_FIELDS,
-                        "or_link": f"{key}_asset-NN.link.txt", "checked_by": "tools/image-edit/reference_check.py",
+                        "or_link": f"{key}_asset-NN.link.txt", "checked_by": "components/image-edit/reference_check.py",
                         "record": {"name_pattern": f"{key}_asset-NN.record.json", "what": RECORD_WHAT,
                                    "who": "an agent with the Higgsfield tools; it outranks the receipt"}},
             "text_from": TEXT_FROM_GITHUB}
@@ -419,6 +436,58 @@ def _set_step(n, key, what, ask, change, zones, brand, products, elements, repo)
             "bars": None, "findings": [], "set_request": json.loads(scrub(json.dumps(ask, ensure_ascii=False), repo))}
 
 
+SONG_FIRST = ("SONG FIRST, the editor's own step: make the song in Suno from the brief's song block, pick the master "
+              "(every line heard, in order), align its lyrics and slice each sung scene to <scene>.wav; those slices are "
+              "the audio inputs of the singing clips. Lyrics are sung, never spoken voice reads.")
+
+PRINT_STEPS = [
+    "In 3D Jutsu on your own Higgsfield account: `scene_builder_3d_list_projects`; use the project named `{project}`, or "
+    "create it with that name (a project id from someone else's account does not open on yours).",
+    "Build the blockout at true size from the prompt: a plain figure per person at their true build, where the scene "
+    "puts them, products at their real size, the room's surfaces and light. Camera 9:16. Look-only references show "
+    "pose, build and place; they are never sent to the print.",
+    "Render it fresh in a `scene_builder_3d_query_python` call (608 x 1080, EEVEE, 8 samples, the size every 3D recipe sets; publish it with "
+    "`artifacts.file`). Every print needs its own fresh render: an old render or another project's render fails "
+    "with INVALID_GENERATION_REFERENCE.",
+    "Upload the print reference today (`media_upload`, PUT the bytes, `media_confirm`); an upload older than a day fails.",
+    "Print it: `scene_builder_3d_generate_angles` with the render's operationId and artifactId, the prompt word for "
+    "word, referenceMediaId = the upload, 9:16, 2k, a new requestId. Then `scene_builder_3d_get_generation` until it "
+    "has succeeded, and look at it against the references: people as their sheets show them, never slimmer or younger.",
+    "Wrong: fix the blockout or the prompt and print again (never patch the print). Right: save the get_generation "
+    "reply unchanged to a file and run the step's `then` command.",
+]
+
+
+def as_print(st):
+    """A picture the editor makes as a 3D print (image-production RULE GATE-4), on their own Higgsfield account: same
+    asset, prompt and references; the door is 3D Jutsu's print, never a flat picture call. The look-only references
+    (the swipe's frames) shape the blockout; the rest are the print's reference, one picture (a board when several)."""
+    st = dict(st)
+    sent = [r for r in st.get("references") or [] if not r.get("look_only")]
+    st.update({"job": "3d-print", "model_house": None, "higgsfield_model": None, "model_name": "Higgsfield 3D Jutsu",
+               "settings": {"aspect_ratio": "9:16", "resolution": "2k", "count": 1},
+               "print": {"credits": 2.5, "reference": [r["file"] for r in sent],
+                         "prompt_tail": "Keep the blockout's camera, framing, sizes, depth and light exactly. Nothing of "
+                                        "the blockout's flat colours carries over. No writing, no captions, no logos."}})
+    return st
+
+
+def print_how(s, key=""):
+    """A 3D print step in the words every rendering uses."""
+    out = [f"**A 3D print in Higgsfield 3D Jutsu, on your own account, never a flat picture** ({s['print']['credits']} "
+           "credits; the blockout and renders are free).", ""]
+    how = s["print"].get("how")                 # a hand-off that carries its own 3D builds (3d/JUTSU.md) says it its way
+    if not how:
+        out += [RECIPES, ""]
+    out += [f"{i}. {x.format(project=s['print'].get('project') or key + ' sets')}"
+            for i, x in enumerate(how or PRINT_STEPS, 1)]
+    ref = s["print"]["reference"]
+    out += ["", "Print reference: " + (f"`{ref[0]}`" if len(ref) == 1 else
+                                       "one board of " + ", ".join(f"`{r}`" for r in ref) if ref else "none (the blockout and the words carry it)") + ".",
+            f"Print with the Step {s['n']} prompt from the core, word for word. Name the result `{s['asset']}`.", ""]
+    return out
+
+
 def picture_steps(key, rec, chain, products, elements, repo):
     brand, run = rec["brand"], rec["run"]
     house = chain.house("pictures.generate")
@@ -433,8 +502,28 @@ def picture_steps(key, rec, chain, products, elements, repo):
         approved = {"brief": {"brand": brand, "run": run, "product": rec.get("product") or ""}}
         recipe = approved["brief"]
         source = "model-inputs preview builder, from the brief's run (no approved picture yet)"
-    steps = [_picture_step(1, key, "the main picture" + (" (the approved one: remake only if it is lost)" if ap else ""),
-                           chain.picture(recipe), house, brand, products, elements, repo, source)]
+    # GATE-4 (2026-11-10): the main picture is the run's kept 3D set print, never a flat picture made by hand
+    fs = getattr(chain, "first_set", lambda *_: None)(brand, run)
+    if fs and fs.get("kept"):
+        kp = fs["kept"]
+        steps = [_set_step(1, key, f"the main picture: set {kp['set']}'s kept print (nothing to make)",
+                           {"kept_print": rel(Path(kp["print"]), repo), "print_words": None}, {}, [], brand, products,
+                           elements, repo)]
+        steps[0]["job"] = "set-print"
+    elif fs is not None:
+        steps = [_set_step(1, key, "the main picture: build the 3D set in Jutsu at true size, render, print it "
+                           "(cast board for people: image-production cast_board.py), file it with picture_sets.py put",
+                           fs["ask"], {}, [], brand, products, elements, repo)]
+        steps[0]["job"] = "set-build"
+    else:
+        steps = [_picture_step(1, key, "the main picture" + (" (the approved one: remake only if it is lost)" if ap else ""),
+                               chain.picture(recipe), house, brand, products, elements, repo, source)]
+    if fs is not None:                       # the words still go on top in the swipe's zones (nothing is spent here)
+        try:
+            steps[0]["words_on_top"] = _picture_step(1, key, "", chain.picture(recipe), house, brand, products, elements,
+                                                     repo, source)["words_on_top"]
+        except Exception:                    # noqa: BLE001  a brief with no picture yet keeps the set step alone
+            pass
     vf = _teardown_run(repo, run, brand) / "out" / "variations.json"
     vs = json.loads(vf.read_text()) if vf.is_file() else {}
     for v in (vs.get("variations") or []) if vs.get("source") == "stage5" else []:
@@ -595,11 +684,37 @@ def _brief_json(md):
     return d if isinstance(d, dict) else {}          # a carousel's first block can be its slide-deltas list
 
 
-def _cast_master(folder, repo):
-    for f in ("full/master.png", "master.png", "master.jpg", "sheets/master-reference.jpg", "sheets/headshot.jpg"):
-        if (Path(repo) / folder / f).is_file():
-            return f"{folder}/{f}"
+def _run_style(rec, repo):
+    """The ad's style and the runs it came from, from its writing run (style_id, forked_from, source_run)."""
+    try:
+        rj = json.loads((Path(repo) / "runs" / "video-teardown" / "_work" / str(rec.get("run") or "") / "run.json").read_text())
+    except (OSError, ValueError):
+        return None, []
+    srcs = [rec.get("run"), rj.get("forked_from"), Path(str(rj.get("source_run") or "")).name]
+    return rj.get("style_id"), [s for s in srcs if s]
+
+
+def _cast_master(folder, repo, style=None):
+    """The person's master picture IN THE AD'S STYLE first (casting/<person>/styles/<style>/, 18 Nov: a family-3d ad
+    handed the maker the person's photoreal master as IMAGE 1), else the person's own master."""
+    roots = ([f"{folder}/styles/{style}"] if style and style not in ("photoreal", "phone-ugc") else []) + [folder]
+    for root in roots:
+        for f in ("full/master.png", "master.png", "master.jpg", "sheets/master-reference.jpg", "sheets/headshot.jpg"):
+            if (Path(repo) / root / f).is_file():
+                return f"{root}/{f}"
     return None
+
+
+def _banked_since(name, brand, repo, sources):
+    """A person the brief marks NEW who was banked afterwards from this ad's own swipe (the style chain makes new people
+    in the ad's style): casting/<name>/ whose provenance names one of the ad's runs. None when there is none."""
+    slug = re.sub(r"[^a-z0-9]+", "-", str(name or "").lower()).strip("-")
+    d = Path(repo) / "runs" / "ai-elements" / brand / "casting" / slug
+    try:
+        prov = (d / "provenance.json").read_text()
+    except OSError:
+        return None
+    return f"runs/ai-elements/{brand}/casting/{slug}" if slug and any(s in prov for s in sources) else None
 
 
 def draft_steps(key, rec, md, chain, products, elements, repo):
@@ -612,15 +727,47 @@ def draft_steps(key, rec, md, chain, products, elements, repo):
     song_ad = piece.get("format") == "song-ad"
     res = str(piece.get("resolution") or "480p")
     cast = {}
+    style, sources = _run_style(rec, repo)
     for c in d.get("cast") or []:
         bank = c.get("bank_id")
         folder = f"runs/ai-elements/{brand}/casting/{bank}" if bank and bank != "NEW" and (Path(repo) / "runs" / "ai-elements" / brand / "casting" / bank).is_dir() else None
+        if not folder and sources:
+            folder = _banked_since(c.get("name") or c.get("id"), brand, repo, sources)
         el = _el_for_folder(folder, brand, products, elements, repo) if folder else None
         cast[c.get("id") or c.get("name")] = {"who": c.get("name") or c.get("id"), "folder": folder,
-                                              "master": _cast_master(folder, repo) if folder else None,
+                                              "identity": c.get("identity_block") or "", "adjust": c.get("adjustments"),
+                                              "master": _cast_master(folder, repo, style) if folder else None,
                                               "element": (el or {}).get("element")}
     slug = product_slug(brand, piece.get("product") or rec.get("product"), products, repo)
     steps = []
+    # THE EDITOR BUILDS THE CAST FIRST (owner, 2026-11-17): every person the brief marks NEW gets one cast sheet, the
+    # swipe's own frames giving build and pose only, before any start picture uses them
+    for cid, c in cast.items():
+        if c["folder"]:
+            continue
+        # the swipe frames the brief's ELEMENTS row names for this person (| KORY | person | NEW | … | swipe K02 and K14 |)
+        row = re.search(r"^\|\s*" + re.escape(str(c["who"])) + r"\s*\|\s*person\s*\|(.*)$", md or "", re.M)
+        ks = sorted(set(re.findall(r"K(\d{2,3})", row.group(1)))) if row else []
+        wr = Path(repo) / "runs" / "video-teardown" / "_work" / str(rec.get("run") or "") / "framemap" / "shots"
+        frames = [wr / f"K{k}-mid.jpg" for k in ks if (wr / f"K{k}-mid.jpg").is_file()]
+        sheet_refs = [{"n": i + 1, "kind": "image", "role": f"the swipe's person {c['who']} stands in for (pose, build, look only; never the face)",
+                       "file": rel(f, repo), "exists": True, "element": None, "look_only": True} for i, f in enumerate(frames)]
+        n = len(steps) + 1
+        steps.append({"n": n, "asset": asset_name(key, n, "png"), "what": f"cast sheet for {c['who']}: build once, every picture after uses this",
+                      "medium": "image", "job": ph["job"], "model_house": {"registry": ph["registry"], "door": ph["door"]},
+                      "higgsfield_model": ph["higgsfield_model"], "model_name": PLAIN_MODEL.get(ph["higgsfield_model"]),
+                      "prompt": (f"Casting sheet of {c['who']}, an original person resembling no real one: front, three-quarter and profile "
+                                 "head shots, and one full body, on a plain light background, "
+                                 + ("phone-grade light, real skin with visible pores. " if not style or style in ("photoreal", "phone-ugc")
+                                    else f"made in the ad's style ({style}), never photoreal. ")
+                                 + (f"Who this is: {c['identity']} " if c.get("identity") else "")
+                                 + (f"Changes from the swipe's person: {', '.join(c['adjust']) if isinstance(c['adjust'], list) else c['adjust']}. " if c.get("adjust") else "")
+                                 + "The reference pictures give build, presence and posture only, never the face."),
+                      "prompt_source": "the brief's NEW cast row; the editor builds the cast first (2026-11-17)",
+                      "references": sheet_refs, "settings": {"aspect_ratio": "9:16", "variant": "sunburst", "quality": "high",
+                                                              "resolution": "2k", "count": 1},
+                      "words_on_top": [], "bars": None, "findings": [], "draft": True, "cast_sheet": True})
+        c["master"] = c["master"] or f"{asset_name(key, n, 'png')} (step {n} makes it)"
     for sc in d.get("scenes") or []:
         ff = sc.get("first_frame") or {}
         who = [w for w in cast if w and w in str(sc.get("who") or "")]
@@ -634,8 +781,35 @@ def draft_steps(key, rec, md, chain, products, elements, repo):
         prompt = "\n".join(x for x in (
             ff.get("subject"), ff.get("composition"), ff.get("action"), ff.get("location"),
             ff.get("lighting"), ff.get("camera"), ff.get("style")) if x)
-        if not prompt:
-            continue
+        kind = str(sc.get("kind") or "")
+        plate = str((((sc.get(kind) or {}) if kind in ("screen", "card", "endcard") else {}).get("plate")
+                     or (sc.get("plate") if kind in ("screen", "card", "endcard") else "")) or "")
+        if kind in ("screen", "card", "endcard") and plate:
+            # THE PLATE IS A PICTURE (2026-11-19): a screen, card or end card the brief describes as a plate is made
+            # (the picture, no words in it; the words are set at the edit) — 3 of 13 scenes of an animated brief had no
+            # step. An animated piece's product on the plate comes from its 3D build (VIDEO-RULINGS V58).
+            prompt = "\n".join(x for x in (plate, "No words, letters or numbers anywhere in the picture: the words are "
+                                            "set on it at the edit.", piece.get("style")) if x)
+            try:
+                import importlib.util as _iu
+                _sp = _iu.spec_from_file_location("rs_product_route", Path(repo) / "components/video-production/machine/product_route.py")
+                _pr = _iu.module_from_spec(_sp); _sp.loader.exec_module(_pr)
+                if _pr.in_look(piece) and piece.get("product") and re.search(r"\b(FLEX|brush|bottle|product|jar|tube|box)\b", plate, re.I):
+                    got, _why = _pr.endcard_ref(brand, piece.get("product"))
+                    if got:
+                        refs.append({"n": len(refs) + 1, "kind": "image", "role": "the product's 3D build: make it in the "
+                                     "picture's own look, same shape, colour and label layout", "file": rel(got, repo),
+                                     "exists": exists(got, repo), "element": None})
+                        prompt += "\n" + _pr.IN_LOOK_LINE
+            except Exception:  # noqa: BLE001 — a plate without its product reference is still a plate
+                pass
+        if not prompt:                   # every scene gets its picture (2026-11-17 walkthrough: 13 of 20 were in the sheet)
+            if kind in ("screen", "card", "endcard"):
+                continue                 # no plate described: made in the edit (a screen recording or a card)
+            prompt = "\n".join(x for x in (sc.get("happens"), sc.get("setting_id") and f"Place: {sc.get('setting_id')}",
+                                            piece.get("style")) if x)
+            if not prompt:
+                continue
         n = len(steps) + 1
         steps.append({"n": n, "asset": asset_name(key, n, "png"), "what": f"start picture for {sc.get('id')}",
                       "medium": "image", "job": ph["job"], "model_house": {"registry": ph["registry"], "door": ph["door"]},
@@ -713,6 +887,139 @@ def _kind(rec):
     raise SystemExit(f"{rec.get('id')} is a {t} brief: run sheets cover picture, carousel and video briefs")
 
 
+def production_route(rec, repo=None):
+    """Resolve the maker route from the writing run and registry, never a generation fallback.
+
+    Missing route on legacy video records remains AI. Explicit conflicting routes refuse.
+    A shot's REAL/SWAP/AI route and free-text production notes are not maker routes.
+    """
+    repo = Path(repo or REPO)
+    known = ("ai", "creator", "founder")
+    claims = []
+    route = rec.get("production_route")
+    if route in known:
+        claims.append(("register.production_route", route))
+    typ = str(rec.get("type") or "").split("-", 1)
+    if len(typ) == 2 and typ[0] == "video" and typ[1] in known:
+        claims.append(("register.type", typ[1]))
+    run = str(rec.get("run") or "")
+    candidates = [repo / run / "run.json",
+                  repo / "runs/video-writing" / str(rec.get("brand") or "") / Path(run).name / "run.json"] if run else []
+    for f in dict.fromkeys(candidates):
+        if f.is_file():
+            doc = json.loads(f.read_text())
+            if doc.get("production_route") in known:
+                claims.append((rel(f, repo), doc["production_route"]))
+    if len({v for _, v in claims}) > 1:
+        raise ValueError("Conflicting production routes: " + ", ".join(k + "=" + v for k, v in claims))
+    return claims[0][1] if claims else "ai"
+
+
+def filming_assignment(key, rec, bf, md, route, repo):
+    """A creator/founder assignment. Keep source instructions verbatim; invent no shots."""
+    doc = _brief_json(md)
+    shots = doc.get("filming") or doc.get("scenes") or []
+    if not isinstance(shots, list):
+        shots = []
+    takes = []
+    for i, shot in enumerate(shots, 1):
+        if not isinstance(shot, dict):
+            continue
+        instruction = shot.get("film") or shot.get("action") or shot.get("visual") or shot.get("description")
+        if not instruction:
+            continue
+        takes.append({"asset_id": f"{key}_asset-{i:02d}", "scene": str(shot.get("id") or f"S{i}"),
+                      "instructions": instruction, "words": shot.get("voice") or shot.get("words") or "",
+                      "expected_takes": shot.get("expected_takes", 1)})
+    # v1 creator/founder briefs use labelled Film blocks rather than an AI scenes object.
+    if not takes:
+        blocks = list(re.finditer(r"(?m)^\*\*Film:\*\*\s*(.+?)(?=^\*\*Film:\*\*|\Z)", md, re.S))
+        for i, block in enumerate(blocks, 1):
+            takes.append({"asset_id": f"{key}_asset-{i:02d}", "scene": f"S{i}",
+                          "instructions": block.group(1).strip(), "words": "", "expected_takes": 1})
+    gaps = []
+    if not bf or bf.name != "7-final-brief.md":
+        gaps.append("A final 7-final-brief.md is required before filming.")
+    if not takes:
+        gaps.append("No explicit filming instructions found; finish the filming assignment upstream.")
+    for take in takes:
+        n = take["expected_takes"]
+        if type(n) is not int or not 1 <= n <= 100:
+            gaps.append(take["asset_id"] + ": expected_takes must be an integer from 1 to 100.")
+    ret = return_place(key, rec["brand"], LANES["video"])
+    ret.pop("receipt", None)  # Real footage does not require an AI generation receipt.
+    ret["manifest"] = "returned/return-manifest.json"
+    ret["next"] = "components/image-edit/delivery.py --brand <brand> --ingest-filming <this-folder>"
+    template = {"schema": "filming-return/v1", "brief_key": key, "production_route": route, "takes": []}
+    for take in takes:
+        for n in range(1, take["expected_takes"] + 1 if type(take["expected_takes"]) is int and 1 <= take["expected_takes"] <= 100 else 1):
+            template["takes"].append({"asset_id": take["asset_id"], "take": n,
+                                      "file": f"{take['asset_id']}_take-{n:02d}.mp4", "sha256": None,
+                                      "accepted": False, "reviewer": None, "roll": None, "talks": None, "words": []})
+    return {"runsheet": 1, "built": datetime.now().isoformat(timespec="seconds"), "core": "filming",
+            "brief_key": key, "brief": rec.get("brief") or key, "brand": rec["brand"], "product": rec.get("product"),
+            "kind": "video", "production_route": route, "packet_kind": "filming-assignment",
+            "state": "draft" if gaps else "ready", "execution_ready": not gaps,
+            "readiness": {"ready": not gaps, "blockers": gaps}, "title": _title(md, rec.get("title") or key),
+            "brief_file": rel(bf, repo) if bf else None, "run": rec.get("run"), "production_run": None,
+            "deliverable": rel(bf.parent, repo) if bf else None, "return": ret, "return_manifest": template,
+            "takes": takes, "steps": [], "elements": [], "gaps": gaps}
+
+
+FORMATS_DIR = "components/video-production/formats"
+
+
+def format_home(fid, brand, repo=REPO):
+    """Where this brief's format is defined and how it is run (components/video-production/formats/README.md, "One home
+    per format"). A format with a home folder gets its FORMAT.md, LEARNINGS.md, skill and workflow command; a format without
+    one says so, so the maker runs the shared chain and the run's lessons start that format's home."""
+    repo = Path(repo)
+    if not fid:
+        return {"id": None, "home": None, "note": "The brief names no format. Name it before production: a run is refused without one."}
+    folder = repo / FORMATS_DIR / fid
+    if not (folder / "format.json").is_file():
+        return {"id": fid, "home": None,
+                "note": "This format has no home folder yet. Make it with the shared chain; what the run teaches is written "
+                        "for the format's first home (" + FORMATS_DIR + "/README.md, One home per format)."}
+    doc = json.loads((folder / "format.json").read_text())
+    skill = repo / ".claude" / "skills" / fid / "SKILL.md"
+    return {"id": fid, "name": doc.get("name") or fid, "status": doc.get("status"), "signed": doc.get("signed"),
+            "home": f"{FORMATS_DIR}/{fid}", "format_md": f"{FORMATS_DIR}/{fid}/FORMAT.md",
+            "learnings": f"{FORMATS_DIR}/{fid}/LEARNINGS.md",
+            "skill": f".claude/skills/{fid}/SKILL.md" if skill.is_file() else None,
+            "run": f"python3 components/video-production/machine/workflow.py run {fid} --brand {brand} --label <label>"}
+
+
+def _run_format(prun, repo):
+    """The format a video production run names in its run.json (it wins over the brief's own field)."""
+    try:
+        return json.loads((Path(repo) / "runs" / "video-production" / prun / "run.json").read_text()).get("format")
+    except (OSError, ValueError, TypeError):
+        return None
+
+
+def format_lines(sheet):
+    """The run sheet's format section: which format this is, where its instructions live, how to run it, where lessons go."""
+    fh = sheet.get("format_home")
+    if not fh:
+        return []
+    lines = ["## The format", ""]
+    if not fh.get("home"):
+        return lines + [f"Format: `{fh.get('id') or 'none'}`. {fh['note']}", ""]
+    local = ((sheet.get("handoff") or {}).get("format") or {})
+    lines += [f"Format: **{fh['name']}** (`{fh['id']}`) · {fh['status']}" + (" · signed" if fh.get("signed") else " · unsigned") + ".", "",
+              "Every rule of this format lives in its home folder. Read it before making anything.", "",
+              "| | |", "|---|---|",
+              f"| **Instructions** | `{fh['format_md']}`" + (f" · copy in this folder: `{local['format_md']}`" if local.get("format_md") else "") + " |",
+              f"| **Lessons** | `{fh['learnings']}`" + (f" · copy in this folder: `{local['learnings']}`" if local.get("learnings") else "") + " |"]
+    if fh.get("skill"):
+        lines.append(f"| **Skill** | `{fh['skill']}` (Claude Code: say \"produce this {fh['name'].lower()}\") |")
+    lines += [f"| **Run it** | `{fh['run']}` (in the team workspace; it hands out one step at a time and stops at every review) |", "",
+              "What the run teaches goes into `returned/learned.md`, one line per lesson, each with its home from the routing "
+              "table in the lessons file. A home is changed only after the owner says yes.", ""]
+    return lines
+
+
 def build(brief_key, brand=None, repo=None, chain=None):
     """The run sheet for one brief, as a dict (what run.json holds)."""
     repo = Path(repo or REPO)
@@ -722,6 +1029,9 @@ def build(brief_key, brand=None, repo=None, chain=None):
     kind = _kind(rec)
     bf = _brief_file(rec, kind, repo)
     md = bf.read_text() if bf else ""
+    route = production_route(rec, repo) if kind == "video" else None
+    if route in ("creator", "founder"):
+        return filming_assignment(key, rec, bf, md, route, repo)
     products, elements = chain.products(), chain.elements()
     brand = rec["brand"]
     gaps = []
@@ -816,7 +1126,40 @@ def build(brief_key, brand=None, repo=None, chain=None):
            "production_run": f"runs/video-production/{prun}" if prun else None,
            "return": return_place(key, brand, role), "elements": els, "steps": steps,
            "gaps": list(dict.fromkeys(gaps))}
+    blockers = []
+    if not steps:
+        blockers.append("No production steps.")
+    # an approved, numbered video brief with no production run is the EDITOR's to build, picture to clip (owner,
+    # 2026-11-17): a drafted prompt and an input an earlier step makes are the work itself, never a blocker. Every
+    # picture in it is a 3D print the editor makes on their own Higgsfield account (image-production RULE GATE-4)
+    editor_builds = kind == "video" and not prun and bool(re.search(r"brief-\d+", key))
+    made_here = lambda f: bool(re.search(r"\(step \d+ makes it\)|\(not made yet: step \d+ makes it\)|not read yet|not banked yet|not sliced yet", str(f)))  # noqa: E731
+    if editor_builds:
+        steps[:] = [as_print(st) if st["medium"] == "image" and st.get("job") not in ("words-only", "set-change") else st
+                    for st in steps]
+    for st in steps:
+        if st.get("draft") and not editor_builds:
+            blockers.append(f"step {st['n']}: draft prompt; finish production upstream.")
+        for ref in st.get("references") or []:
+            if not ref.get("exists") and not (editor_builds and made_here(ref.get("file"))):
+                blockers.append(f"step {st['n']}: unresolved input {ref.get('file')}")
+        if editor_builds:                # the maker's own work, in order, never a stop that waits on the owner
+            st["findings"] = [SONG_FIRST if str(x).startswith("BLOCKED: approve the Suno master") else x
+                              for x in st.get("findings") or []]
+        blockers.extend(f"step {st['n']}: {x}" for x in st.get("findings") or [] if str(x).startswith("BLOCKED"))
+    if editor_builds and any(SONG_FIRST in (st.get("findings") or []) for st in steps):
+        out["gaps"] = out["gaps"] + [SONG_FIRST]
+    if editor_builds:
+        out["editor_builds"] = True
+        out["gaps"] = out["gaps"] + ["The editor builds this brief end to end: the cast sheet first, then every start picture "
+                                     "from it (each one a 3D print in Higgsfield 3D Jutsu, on the editor's own account), then "
+                                     "every clip, then the cut. Drafted prompts are the brief's own words; tighten them "
+                                     "against BRIEF.md as you go."]
+    out.update({"production_route": route, "packet_kind": "generation", "state": "draft" if blockers else "ready",
+                "execution_ready": not blockers, "readiness": {"ready": not blockers, "blockers": blockers}})
     out["deliverable"] = rel(bf.parent, repo) if bf and bf.parent.name == "deliverable" else None
+    if kind == "video":
+        out["format_home"] = format_home((_run_format(prun, repo) if prun else None) or out["format"], brand, repo)
     if any(st["medium"] == "video" for st in steps):
         out["cut"] = cut_plan(out)
     return out
@@ -836,7 +1179,7 @@ CUT_RULES = [
 
 def cut_plan(sheet):
     key = sheet["brief_key"]
-    return {"asset": f"{key}-control.mp4", "order": [st["asset"] for st in sheet["steps"]], "rules": (["Use the approved Suno master as the continuous soundtrack. Mute all generated clip audio; never replace lyrics with spoken voice reads.", "Align every scene and lip-sync slice to the actual song timing before cutting. Durations are pending until the master is approved.", "Use only video clips in the cut; start pictures are references. Captions follow the sung words and stay clear of faces.", "9:16, 1080x1920. Master to -14 LUFS."] if sheet.get("format") == "song-ad" else CUT_RULES),
+    return {"asset": f"{key}-control.mp4", "order": [st["asset"] for st in sheet["steps"] if st.get("medium") != "image"], "rules": (["Use the approved Suno master as the continuous soundtrack. Mute all generated clip audio; never replace lyrics with spoken voice reads.", "Align every scene and lip-sync slice to the actual song timing before cutting. Durations are pending until the master is approved.", "Use only video clips in the cut; start pictures are references. Captions follow the sung words and stay clear of faces.", "9:16, 1080x1920. Master to -14 LUFS."] if sheet.get("format") == "song-ad" else CUT_RULES),
             "brief": "BRIEF.md (what the ad says, any headline, music or sound effect it calls for)"}
 
 
@@ -868,7 +1211,7 @@ def _setting_line(s):
 
 def receipt_example(sheet):
     """One filled-in receipt for the first step that calls a model: the shape every receipt takes."""
-    s = next((x for x in sheet["steps"] if x.get("job") not in ("words-only", "set-change")), None)
+    s = next((x for x in sheet["steps"] if x.get("job") not in ("words-only", "set-change", "3d-print")), None)
     if not s:
         return None
     ins, seen = [], set()
@@ -939,11 +1282,17 @@ def _refs_for(s):
     return by_el, files
 
 
+RECIPES = ("**Not in your Higgsfield account?** Rebuild it, free, from `components/3d-recipes/` on GitHub: its README lists "
+           "every product and world and how to run one in any account. A set that has no recipe is built fresh from this "
+           "brief, on the product's recipe.")
+
+
 def set_how(s):
     """A set change in the words every rendering uses: the request's own steps, then the words and the name."""
     ask = s["set_request"]
     out = [f"**A change to the 3D set, in Higgsfield 3D Jutsu, never a flat picture.** "
            f"The change: {ask.get('change')}. Set request: `{ask.get('set')}` ({ask.get('credits')} credits to print).", ""]
+    out += [RECIPES, ""]
     out += [f"{i}. {x}" for i, x in enumerate(ask.get("steps") or [], 1)]
     out += ["", f"Print with the Step {s['n']} prompt from the core, word for word. Name the result `{s['asset']}`."]
     if s["words_on_top"]:
@@ -959,7 +1308,7 @@ def render_core(sheet):
         L += ["### Elements", "", "| Kind | What | Higgsfield element | Its files | Used in |", "|---|---|---|---|---|"]
         for e in sheet["elements"]:
             hf = e.get("element")
-            L.append(f"| {e['kind']} | {e['name']} | " + (f"`{hf['name']}` · `<<<{hf['id']}>>>`" if hf else "none yet") +
+            L.append(f"| {e['kind']} | {e['name']} | " + (f"`{hf.get('name') or e['name']}` · `<<<{hf['id']}>>>`" if hf else "none yet") +
                      f" | `{e.get('folder') or '-'}`" + (f" · Drive `{e['drive']}`" if e.get("drive") else "") +
                      ("".join(f" · here `{x}`" for x in e.get("refs") or [])) +
                      f" | {', '.join(e['covers'][:6])}{' …' if len(e['covers']) > 6 else ''} |")
@@ -970,6 +1319,8 @@ def render_core(sheet):
             L += ["No Higgsfield call: the approved plate gets these words set on top.", ""]
         elif s["job"] == "set-change":
             L += ["A change to the kept 3D set: built and printed in Higgsfield 3D Jutsu, not as a flat picture.", ""]
+        elif s["job"] == "3d-print":
+            L += ["A 3D print in Higgsfield 3D Jutsu, made on the editor's own account, not a flat picture.", ""]
         else:
             L += ["| Job | Model | Higgsfield model id | Settings |", "|---|---|---|---|",
                   f"| {s['job']} ({s['model_house']['registry']}, {s['model_house']['door']}) | {s['model_name']} | "
@@ -985,7 +1336,7 @@ def render_core(sheet):
                 hf = e.get("element")
                 tag = "IMAGE" if r["kind"] == "image" else r["kind"].upper()
                 where = (f"`{r['local']}` · `{r['file']}` · `{r['drive']}`" if r.get("local") else f"`{r['file']}`")
-                L.append(f"| {tag} {r['n']} | {r['role']} | " + (f"`{hf['name']}`" if hf else "-") +
+                L.append(f"| {tag} {r['n']} | {r['role']} | " + (f"`{hf.get('name') or e.get('name') or hf.get('id')}`" if hf else "-") +
                          f" | {where}" + ("" if r["exists"] or "(not " in r["file"] else " (missing)") + " |")
             L.append("")
         for c in s.get("cast") or []:
@@ -1018,7 +1369,7 @@ TYPE_STYLE = ("in the swipe's type style: copy the words on the swipe picture (s
 # Text from GitHub, media from the Drive (2026-10-28, the Supercomputer agent): the Drive connector changes text when
 # it reads or writes it (an element id came back with an extra 0, a LEARNINGS line was reworded), and a retyped prompt
 # came back corrupted ("Shaved" -> "Shared", symbols lost, never-rules dropped).
-TEXT_FROM_GITHUB = ("Read BRIEF.md, RUN.md and run.json from GitHub (company-team/workspace, the same path as on the "
+TEXT_FROM_GITHUB = ("Read BRIEF.md, RUN.md and run.json from GitHub (company-team/ai-workspace, the same path as on the "
                     "Drive); the Drive connector can change text. Take pictures, clips and voice files from the Drive.")
 LEAN = ("**Work one step at a time.** Fetch only that step's files from refs/, make it, save the result straight to "
         "returned/ on the Drive, then go on to the next step. Never copy the whole folder into your own workspace: "
@@ -1059,6 +1410,9 @@ def render_web(sheet):
         if s["job"] == "set-change":
             L += set_how(s)
             continue
+        if s["job"] == "3d-print":
+            L += print_how(s, sheet.get("brief_key") or "")
+            continue
         by_el, files = _refs_for(s)
         page = "Image → Create Image" if s["medium"] == "image" else "Video → Create Video"
         n = 1
@@ -1066,6 +1420,10 @@ def render_web(sheet):
         for eid, x in by_el.items():
             n += 1
             fall = [r for r in s["references"] if r["n"] in x["images"] and r["kind"] == "image"]
+            if not x["el"]["element"].get("name"):  # an element with no name cannot be @-mentioned: its files go in
+                L.append(f"{n}. The {x['el']['name']} element has no name to @-mention in the web app: upload these files, "
+                         "in this order: " + ", ".join(f"`{_f(r)}`" for r in fall) + ".")
+                continue
             L.append(f"{n}. First choice: in the prompt box type **@{x['el']['element']['name']}** (the {x['el']['name']} "
                      f"element). It carries IMAGE {', '.join(map(str, x['images']))}. If the model will not take the "
                      "@-mention, upload these files instead, in this order: "
@@ -1079,10 +1437,14 @@ def render_web(sheet):
             L.append(f"{n}. Upload, in this order: {what}.")
         for c in s.get("cast") or []:
             fb = (c.get("fallback") or {}).get("local")
-            if c.get("element"):
+            if c.get("element") and c["element"].get("name"):
                 n += 1
-                L.append(f"{n}. First choice: @-mention **{c['element'].get('name') or c['element']['id']}** for {c['who']}."
+                L.append(f"{n}. First choice: @-mention **{c['element']['name']}** for {c['who']}."
                          + (f" If the model will not take it, upload `{fb}` instead." if fb else ""))
+            elif c.get("element") and fb:       # an element with no name cannot be @-mentioned in the web app
+                n += 1
+                L.append(f"{n}. {c['who']}'s Higgsfield element has no name to @-mention here: upload `{fb}` as the "
+                         "picture of them.")
             elif fb:
                 n += 1
                 L.append(f"{n}. {c['who']} has no Higgsfield element yet: upload `{fb}` as the picture of them.")
@@ -1154,6 +1516,9 @@ def render_claude(sheet):
         if s["job"] == "set-change":
             L += set_how(s)
             continue
+        if s["job"] == "3d-print":
+            L += print_how(s, sheet.get("brief_key") or "")
+            continue
         by_el, files = _refs_for(s)
         k = [0]
 
@@ -1161,7 +1526,7 @@ def render_claude(sheet):
             k[0] += 1
             L.append(f"{k[0]}. {x}")
         if by_el:
-            ids = ", ".join(f"`<<<{x['el']['element']['id']}>>>` ({x['el']['element']['name']}, IMAGE "
+            ids = ", ".join(f"`<<<{x['el']['element']['id']}>>>` ({x['el']['element'].get('name') or x['el'].get('name')}, IMAGE "
                             f"{', '.join(map(str, x['images']))})" for x in by_el.values())
             fall = [r for r in s["references"] if any(r["n"] in x["images"] for x in by_el.values()) and r["kind"] == "image"]
             say(f"Elements first: {ids}. Put the placeholder in the prompt and leave those files out of `medias`; never "
@@ -1206,6 +1571,9 @@ def render_other(sheet):
         if s["job"] == "set-change":
             L += set_how(s)
             continue
+        if s["job"] == "3d-print":
+            L += print_how(s, sheet.get("brief_key") or "")
+            continue
         st = s["settings"]
         if s["medium"] == "image":
             cmd = (f"higgsfield generate create {s['higgsfield_model']} \\\n  --prompt \"$(python3 components/briefs/runsheet.py {key} "
@@ -1240,12 +1608,28 @@ def render_other(sheet):
 
 
 def render_md(sheet):
+    if sheet.get("packet_kind") == "filming-assignment":
+        lines = [f"# FILMING ASSIGNMENT · {sheet['brief_key']}", "",
+                 f"Route: {sheet['production_route']} · {sheet['state']}. Read BRIEF.md in full before filming.", "",
+                 "Keep each raw take separate; do not generate AI substitutes. Asset IDs stay with the takes.", ""]
+        for gap in sheet["gaps"]:
+            lines.append("BLOCKED: " + gap)
+        for take in sheet["takes"]:
+            lines += [f"## {take['asset_id']} · {take['scene']} · {take['expected_takes']} take(s)", "",
+                      str(take["instructions"]), "", str(take["words"]), ""]
+        lines += ["## Return", "", "Copy RETURN-MANIFEST.template.json to returned/return-manifest.json. Put raw files in returned/.",
+                  "Fill each take's file, SHA-256, roll (a/b), talks, timed words for speech, and acceptance/reviewer after review.",
+                  "Unaccepted or incomplete returns stay blocked. The intake produces edit-kit.json for video-edit's existing start door.",
+                  "Raw takes are never a finished ad or a Meta delivery.", "",
+                  "`python3 components/image-edit/delivery.py --brand " + sheet["brand"] + " --ingest-filming <this-folder>`", ""]
+        return "\n".join(lines)
     r = sheet["return"]
     head = [f"# RUN SHEET · {sheet['brand'].upper()} · {sheet['title']} · {sheet['brief_key']}", "",
             "How to make this brief, from any tool. The brief says what to make; this says how. The core is Higgsfield: "
             "every tool below runs the same calls.", "",
             "| | |", "|---|---|",
             f"| **Brief** | `{sheet['brief_key']}` · `{sheet['brief_file'] or 'no brief file found'}` |",
+            f"| **Readiness** | {sheet.get('state', 'legacy')} · execution ready: {sheet.get('execution_ready', 'not recorded')} |",
             f"| **Makes** | {len(sheet['steps'])} asset(s): `{sheet['steps'][0]['asset'] if sheet['steps'] else '-'}`"
             + (f" to `{sheet['steps'][-1]['asset']}`" if len(sheet["steps"]) > 1 else "") + " |",
             f"| **Product** | {sheet['product'] or 'none'} |",
@@ -1255,10 +1639,12 @@ def render_md(sheet):
     h = sheet.get("handoff")
     if h:
         head[-1:] = [f"| **This folder** | `{h['folder']}/` · Drive `{h['drive']}/` |",
-                     f"| **In it** | `BRIEF.md` (the brief), this `RUN.md`, `run.json`, and `refs/`: all {len(h['refs'])} "
-                     "reference file(s) this sheet names, so nothing outside this folder is needed |", "",
+                     f"| **In it** | `BRIEF.md` (the brief), this `RUN.md`, `run.json`, and `refs/`: the {len(h['refs'])} "
+                     "file(s) the steps below send" + (", plus each clip's own folder `refs/<clip>/`" if h.get("per_clip") else "")
+                     + ", so nothing outside this folder is needed |", "",
                      "Open this folder on Google Drive. A person follows **section A**; an agent follows **section B** "
                      "(or C). Put the finished files in `returned/`.", ""]
+    head += format_lines(sheet)
     if sheet["gaps"]:
         head += ["**Open before a perfect run:**", ""] + [f"- {g}" for g in sheet["gaps"]] + [""]
     return "\n".join(head + render_core(sheet) + render_web(sheet) + render_claude(sheet) + render_other(sheet)).rstrip() + "\n"
@@ -1312,6 +1698,50 @@ def _ref_name(r, step_n, shared):
     return f"step-{step_n:02d}-{tag}-{r['n']}-{role}{ext}"
 
 
+def swipe_into(folder, run, repo=None):
+    """THE SWIPE TRAVELS WITH THE BRIEF (2026-11-19: a hand-off reached the editor without the video it remakes).
+    Copies the writing run's swipe video into <folder>/swipe/swipe.mp4 and writes swipe/SOURCE.md (where it came
+    from). Looks in the working run, then the filed teardown. Returns the copied path, or None when the run has none."""
+    import shutil
+    repo = Path(repo or REPO)
+    run = str(run or "").strip()
+    if not run:
+        return None
+    cands = [repo / "runs" / "video-teardown" / "_work" / run / "source.mp4"]
+    cands += sorted((repo / "runs" / "video-teardown").glob(f"*/{run}/source.mp4"))
+    src = next((c for c in cands if c.is_file() and c.stat().st_size > 50000), None)
+    if not src:
+        return None
+    out = Path(folder) / "swipe"
+    out.mkdir(parents=True, exist_ok=True)
+    dst = out / "swipe.mp4"
+    if not dst.is_file() or dst.stat().st_size != src.stat().st_size:
+        shutil.copy2(src, dst)
+    try:
+        rj = json.loads((src.parent / "run.json").read_text())
+    except (OSError, ValueError):
+        rj = {}
+    link = rj.get("post_url") or rj.get("source_url") or rj.get("swipe") or ""
+    (out / "SOURCE.md").write_text("# The swipe\n\n`swipe.mp4` is the video this ad remakes: watch it before the "
+                                   "first clip.\n\n- Writing run: `%s`\n- Original: %s\n" % (run, link or "not recorded"))
+    return dst
+
+
+def profile_into(root, s, repo):
+    """The full profile the piece was written from (creative-strategist who.attach), as PROFILE.md and profile.json beside
+    BRIEF.md. A brief written before profiles has none, and nothing is made up for it."""
+    import shutil
+    run, bf = str(s.get("run") or ""), s.get("brief_file")
+    places = [repo / run, repo / "runs" / "video-teardown" / "_work" / run.rstrip("/").split("/")[-1]] + ([(repo / bf).parent, (repo / bf).parent.parent] if bf else [])
+    for d in places:
+        if (d / "profile.json").is_file():
+            shutil.copy2(d / "profile.json", root / "profile.json")
+            if (d / "profile.md").is_file():
+                shutil.copy2(d / "profile.md", root / "PROFILE.md")
+            return True
+    return False
+
+
 def pack(sheet, folder=None, role=None, repo=None):
     """The run sheet made SELF-CONTAINED in a hand-off folder (2026-10-28: a Higgsfield Supercomputer user with
     Google Drive and GitHub opens ONE folder and makes the brief with nothing from this Mac). Writes into
@@ -1327,7 +1757,10 @@ def pack(sheet, folder=None, role=None, repo=None):
     s = copy.deepcopy(sheet)
     key, brand = s["brief_key"], s["brand"]
     role = role or s["return"]["role"]
-    s["return"] = return_place(key, brand, role)
+    if s.get("packet_kind") != "filming-assignment":
+        s["return"] = return_place(key, brand, role)
+    elif role != LANES["video"]:
+        raise ValueError("Filming assignments use the existing video-editor handoff lane.")
     home = handoff_folder(key, brand, role)
     root = Path(folder) if folder else repo / home
     try:
@@ -1341,6 +1774,8 @@ def pack(sheet, folder=None, role=None, repo=None):
                          "nothing to hand off")
     (root / REFS).mkdir(parents=True, exist_ok=True)
     (root / RETURN_DIR).mkdir(exist_ok=True)
+    swipe_into(root, s.get("run"), repo)        # the swipe video travels with the brief (2026-11-19)
+    profile_into(root, s, repo)                 # and the full profile of who it is for (2026-11-25)
     uses = {}
     for st in s["steps"]:
         for r in st["references"]:
@@ -1362,6 +1797,7 @@ def pack(sheet, folder=None, role=None, repo=None):
         n = named[src]
         return {"source": src, "local": f"{REFS}/{n}", "file": f"{home}/{REFS}/{n}", "drive": f"{drive}/{REFS}/{n}"}
 
+    style = _run_style({"run": s.get("run")}, repo)[0]          # the ad's style: its people's masters in that style
     for st in s["steps"]:
         for r in st["references"]:
             if not r.get("exists"):
@@ -1370,14 +1806,14 @@ def pack(sheet, folder=None, role=None, repo=None):
                 continue
             r.update(place(r["file"], _ref_name(r, st["n"], len(uses[r["file"]]) > 1)))
         for c in st.get("cast") or []:
-            m = _cast_master(c["folder"], repo) if c.get("folder") else None
+            m = _cast_master(c["folder"], repo, style) if c.get("folder") else None
             if m:
                 c["fallback"] = place(m, f"cast-{Path(c['folder']).name}-{STEM_WORD.get(Path(m).stem) or _slug(Path(m).stem, 3)}"
                                          f"{Path(m).suffix.lower()}")
     for e in s["elements"]:
         mine = [x["local"] for x in refs if x["source"].startswith(str(e.get("folder") or "\0") + "/")]
         if not mine and e.get("folder"):
-            f = (f"{e['folder']}/model/product-sheet.png" if e["kind"] == "product" else _cast_master(e["folder"], repo))
+            f = (f"{e['folder']}/model/product-sheet.png" if e["kind"] == "product" else _cast_master(e["folder"], repo, style))
             if f and (repo / f).is_file():
                 mine = [place(f, f"{e['kind']}-{e['id']}-{STEM_WORD.get(Path(f).stem) or _slug(Path(f).stem, 3)}"
                                  f"{Path(f).suffix.lower()}")["local"]]
@@ -1387,9 +1823,35 @@ def pack(sheet, folder=None, role=None, repo=None):
     s["handoff"] = {"folder": home, "drive": drive, "role": role,
                     "brief": {"local": "BRIEF.md", "file": f"{home}/BRIEF.md", "drive": f"{drive}/BRIEF.md", "source": s["brief_file"]},
                     "refs": refs, "missing": missing}
+    extra = []
+    if s.get("kind") == "video":
+        delivery = _load(HERE / "video_delivery.py", "briefs_video_delivery")
+        extra += delivery.pack(root)
+    fh = s.get("format_home") or {}
+    if fh.get("home"):
+        # the format's instructions and lesson routing travel with the folder, so a maker without the repo has them;
+        # the home folder stays the live copy
+        (root / "format").mkdir(exist_ok=True)
+        local = {}
+        for k, name in (("format_md", "FORMAT.md"), ("learnings", "LEARNINGS.md")):
+            src = repo / fh[k]
+            if src.is_file():
+                (root / "format" / name).write_text(f"<!-- Copy of {fh[k]} as packed {s['built'][:10]}. The live copy is that file. -->\n"
+                                                    + src.read_text())
+                local[k] = f"format/{name}"
+                extra.append(f"format/{name}")
+        s["handoff"]["format"] = local
+    if s.get("packet_kind") == "filming-assignment":
+        template = "RETURN-MANIFEST.template.json"
+        (root / template).write_text(json.dumps(s["return_manifest"], indent=2) + "\n")
+        extra.append(template)
     (root / "RUN.md").write_text(render_md(s))
     (root / "run.json").write_text(json.dumps(s, indent=1, ensure_ascii=False) + "\n")
-    return {"folder": home, "drive": drive, "files": ["BRIEF.md", "RUN.md", "run.json"] + [x["local"] for x in refs],
+    contract = _load(HERE / "delivery_contract.py", "briefs_delivery_contract")
+    if contract.pack(root, record=s):
+        extra += ["DELIVERY-REQUIREMENTS.json", "DELIVERY-CHECKLIST.md", "delivery-state.json"]
+        extra += [str(p.relative_to(root)) for p in (root / "revisions").rglob("*.json")]
+    return {"folder": home, "drive": drive, "files": ["BRIEF.md", "RUN.md", "run.json"] + extra + [x["local"] for x in refs],
             "refs": refs, "missing": missing, "sheet": s}
 
 

@@ -1,0 +1,43 @@
+<title>Your Calls</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=Source+Serif+4:wght@400;600&display=swap"><style>
+/* layout: one column of call cards, then one short list of what is running */
+:root{--bg:#f3f4f2;--fg:#17201d;--muted:#59645f;--line:#d3d8d4;--accent:#0b6b57;--on:#fff;--disp:"Archivo",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121816;--fg:#e9eeeb;--muted:#a1ada7;--line:#2c3733;--accent:#5fd0b4;--on:#0d1412;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121816;--fg:#e9eeeb;--muted:#a1ada7;--line:#2c3733;--accent:#5fd0b4;--on:#0d1412;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:18px/1.4 var(--body);padding-block:32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:640px;margin:auto;display:grid;gap:28px}
+h1{font:800 clamp(32px,6vw,44px)/1.05 var(--disp);margin:0}
+h2{font:800 20px var(--disp);margin:0}
+section{display:grid;gap:12px}
+.call{border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:10px}
+.call b{font:800 18px/1.25 var(--disp)}
+.call p{margin:0;color:var(--muted)}
+a.btn,button{display:inline-block;justify-self:start;background:var(--accent);color:var(--on);font:800 15px var(--disp);padding:10px 14px;border:0;border-radius:6px;text-decoration:none;cursor:pointer}
+a.btn:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0;display:grid}
+li{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--line)}
+li span:last-child{color:var(--muted);text-align:right;min-width:0}
+a{color:var(--accent)}
+</style><main><h1>Your Calls</h1>
+<section><h2>Do these 6</h2>
+<div class="call"><b>1. Tell a creator scripts 1 and 2 are ready</b><p>Kitchen To The Lab, brief 0324. The Bleach Shelf Exposé, brief 0325.</p><button id="copy" type="button">Copy the message</button></div>
+<div class="call"><b>2. Load Fed-Up King picks for a creator?</b><p>$20 cap per format. Say yes in the format hunt session.</p><a class="btn" href="https://claude.ai/artifact/AYQfcNj9VRQVYtEZGvN7L1" target="_blank" rel="noopener">Open the Format Board</a></div>
+<div class="call"><b>3. Rewrite the Christmas song on her real experiences?</b><p>Say yes or no in the song cartoon session.</p><a class="btn" href="https://claude.ai/artifact/W9G6k5Ypf8zvt9dGddPfNf" target="_blank" rel="noopener">Read the current song</a></div>
+<div class="call"><b>4. Open up the 5 blockers?</b><p>The checks that keep holding the chains. Hard walls stay. Say yes here.</p></div>
+<div class="call"><b>5. Approve the four Christmas ads</b><p>Open the approval page on this Mac. Check the ad set and page on the two dry skin cards first. Nothing is live until you click.</p><p>localhost:8795</p></div>
+<div class="call"><b>6. Run the full 2K skit redo?</b><p>About $12, stopping at $15. Say yes in the 2K skit session.</p></div>
+</section>
+<section><h2>Watch</h2>
+<p>Nothing new yet. Your notes went to the sessions below.</p>
+</section>
+<section><h2>Running, nothing from you</h2>
+<ul><li><span>Script 1</span><span>With a creator's folder</span></li>
+<li><span>Script 2</span><span>In a creator's folder</span></li>
+<li><span>Spot ads in Meta</span><span>Both sets live</span></li>
+<li><span>Text Thread</span><span>Phone sound and sound waves</span></li>
+<li><span>Barber Mission, Dragon Ball Z</span><span>Going ahead</span></li></ul>
+</section></main>
+<script>
+var msg="Two ads are ready for you. Kitchen To The Lab, brief 0324: https://drive.google.com/drive/folders/1l4YvtlxCormzW5lu8uRb7F_cqJJSc0La\nThe Bleach Shelf Exposé, brief 0325: https://drive.google.com/drive/folders/12MAzJ8wXci-8DuXTRD1zFohrQjD0xP-a";
+document.getElementById("copy").addEventListener("click",function(){var b=this;function ok(){b.textContent="Copied"}
+navigator.clipboard.writeText(msg).then(ok,function(){b.textContent=msg})});
+</script>

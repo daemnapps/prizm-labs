@@ -30,7 +30,7 @@ from . import cast_keys
 
 # THE EDIT DOOR, THROUGH THE ONE IMAGE ENGINE. Every step here is a reference
 # edit — a picture in, a picture out — so this asks
-# `tools/image-production` for its edit row rather than naming a vendor.
+# `components/image-production` for its edit row rather than naming a vendor.
 # It used to run `openai/gpt-image-2/edit` over fal's client; fal was ruled out
 # for the third time on 2026-09-22 ("remove anything with fal or flux lora"),
 # and the engine's own table is where a model is chosen now.
@@ -68,7 +68,7 @@ def payload(prompt, reference):
 
 def plan(step, reference, model=MODEL):
     """What the call WOULD be, for the dry run. Reads no key and no file."""
-    return {"step": step, "model": model, "door": "tools/image-production",
+    return {"step": step, "model": model, "door": "components/image-production",
             "client_on_this_machine": (
                 Path(__file__).resolve().parents[2] / "image-production").is_dir(),
             "reference": str(reference),
@@ -84,10 +84,13 @@ def _engine_runner(argv, env, cwd):
     out = Path(argv[-1]).with_suffix(".png")
     providers, route = engine()
     try:
+        from image_production import set_gate     # a cast sheet comes from a filed 3D set print too (GATE-4, "cast" lane)
+        set_gate.door_gate([job["reference"]], door="casting", lane="cast")
         _, entry, _ = route.pick({"model": MODEL, "from_image": job["reference"]},
                                  {"purpose": {"people": True}})
-        providers.generate(entry, job["prompt"], [job["reference"]], out, "1:1",
-                           key=env.get(KEY))
+        with set_gate.cleared():
+            providers.generate(entry, job["prompt"], [job["reference"]], out, "1:1",
+                               key=env.get(KEY))
     except Exception as e:                                  # noqa: BLE001
         return "", "%s: %s" % (type(e).__name__, e)
     return ("wrote %s\n" % out) if out.is_file() else ("", "the door wrote no file")

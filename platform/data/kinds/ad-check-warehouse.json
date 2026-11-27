@@ -1,0 +1,98 @@
+{
+  "kind": "ad-check-warehouse",
+  "title": "Ad Check warehouse reads — a record of every run, per brand",
+  "note": "One record per BRAND per run of the Ad Check warehouse job, filed by the mini worker's daily tick (card MET-C54 (ad check warehouse job), platform/workers/mini-worker/ad_check_adapter.py). Ad Check's ad numbers come from the always-on mini rather than one person's Mac, and this kind is the record that says so: what ran, when, whether it succeeded, whether a file moved, and whether that move was pushed. A read that DID NOT HAPPEN is readable here as a `failed` record; silence is never the answer. THE RUN is two read-only warehouse reads per brand, in order: components/funnel-tracking/machine/history.py --brand <b> --days 60 --root runs/ad-check/warehouse and contribution.py --brand <b> --days 90 --root runs/ad-check/warehouse, writing runs/ad-check/warehouse/<b>/{history.json, contribution.json}. It writes NOTHING else — never runs/funnel-tracking/<brand>/, the person's own job's files. Both are spawned under scoped_env('ad-check-warehouse') (WM-14), whose JOB_ENV row grants SUPABASE_DB_URL and NO other key; PATH gets /opt/homebrew/bin because psql lives there on the mini. NO NEW SCHEDULER (the one-scheduler rule, 2026-08-27): the job rides the worker's existing 60s tick, gated by a DAY cursor at 06:35 America/New_York, after the dashboard's 06:15 and CS's 06:25; a second tick on the same NY day is a no-op, and the row in platform/workers/README.md's jobs table is its declaration. The cursor advances on failure too. PUSH ONLY ON CHANGE under runs/ad-check/warehouse/; on an unchanged day the records ride the next push. NO CREDENTIAL EVER APPEARS: the connection string's exact value is scrubbed out of every captured line before it is logged or filed. Item id = the brand. The brands are the keys of components/funnel-tracking/economics.json `brands` — read, never named in the worker (workspace rule 7). Several records exist per brand and the LATEST BY `created` WINS; the history is the append-only record, never an edit.",
+  "open_items": true,
+  "item_id": "brand",
+  "item_label": "brand",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["refresh"],
+      "note": "exactly one per record; reserved so a later event can join this kind without changing what a refresh record means"
+    },
+    {
+      "key": "brand",
+      "required": true,
+      "note": "the brand; equals the record's item id"
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": ["ok", "failed"],
+      "note": "`failed` covers two named failure modes, told apart by `failure`. One brand failing never stops the next, and neither ever kills the worker's tick."
+    },
+    {
+      "key": "failure",
+      "required_when": "status=failed",
+      "values": ["missing-credential", "read-failed"],
+      "note": "`missing-credential`: SUPABASE_DB_URL absent from the scoped environment, so nothing was spawned. `read-failed`: history.py or contribution.py exited non-zero (both are run either way; `steps` says which)."
+    },
+    {
+      "key": "reason",
+      "required_when": "status=failed",
+      "note": "the failure in words, including what to do about it"
+    },
+    {
+      "key": "exit_code",
+      "note": "0 on ok; the first failing script's exit code on read-failed; null when nothing was spawned. 124 = timed out (600 s per command), 125 = could not be run."
+    },
+    {
+      "key": "steps",
+      "note": "one {script, exit_code} per command, in the order run (history.py, then contribution.py)"
+    },
+    {
+      "key": "seconds",
+      "note": "wall-clock of the brand's two reads together"
+    },
+    {
+      "key": "at",
+      "required": true,
+      "note": "UTC instant of the run"
+    },
+    {
+      "key": "day",
+      "required": true,
+      "note": "the America/New_York calendar day this tick was cursored to (YYYY-MM-DD). The cursor key: one attempt per day."
+    },
+    {
+      "key": "changed",
+      "required": true,
+      "note": "did a file under runs/ad-check/warehouse/<brand>/ move (a read-only git status over runs/ad-check/warehouse/). Only a change authorises a push."
+    },
+    {
+      "key": "changed_paths",
+      "note": "up to 20 repo-relative paths that moved — pointers, never content"
+    },
+    {
+      "key": "pushed",
+      "required": true,
+      "note": "was the change committed and pushed. false with changed=true means the push failed or was not asked for (a CLI run pushes nothing by design)."
+    },
+    {
+      "key": "push_error",
+      "note": "present only when the record claimed a push that then failed; the same run corrects its own file seconds later, before any reader could have seen it"
+    },
+    {
+      "key": "command",
+      "note": "the two invocations, as words — never a shell string to re-run blind"
+    },
+    {
+      "key": "root",
+      "note": "the folder the reads write: runs/ad-check/warehouse — a POINTER; Ad Check reads the files there and never this record"
+    },
+    {
+      "key": "env_granted",
+      "note": "which credential names the scoped environment actually carried — NAMES ONLY, never values"
+    },
+    {
+      "key": "log",
+      "note": "the two reads' own output, tail-trimmed, with the credential's value scrubbed out. A diagnostic — the full text is in worker.log."
+    },
+    {
+      "key": "truncated",
+      "note": "present only when the 16KB cap forced a shed. The log sheds first and nothing else sheds at all."
+    }
+  ]
+}

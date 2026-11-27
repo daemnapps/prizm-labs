@@ -1,0 +1,81 @@
+{
+  "kind": "triage",
+  "title": "Triage — the triage owner's acts on triage items (close, answer, forward; change, draft, sign, undo, decide)",
+  "written_by": "triage",
+  "written_by_evidence": "the triage component (engine the developer, decision log 2026-10-02 TRIAGE: \"I own engine\"; flow components/triage/flow-triage.json, `component: \"triage\"`) is PROPOSED and partly built — `components/triage/tools/file_record.py` (4012bdd88) files these. Named so the atlas attributes the records to the component that will file them (components/atlas/compile.py record_kinds). Card ATL-28 (triage record kind); the change trail, card ATL-32 (triage change trail).",
+  "note": "ONE RECORD PER ACT ON ONE TRIAGE ITEM (the developer, decision log 2026-10-02 TRIAGE DESIGN #5: \"ONE kind `triage`: run outputs under `runs/triage/<list>/<date>/`; each the email lead act (close, answer, forward) a `triage` record — who, item id, evidence, her words — a trail, never a second vote\"; card ATL-28 (triage record kind)). THE TRIAGE OWNER: each list names its own (decision log 2026-10-02 TRIAGE ROLES), so this kind says \"the triage owner\", never a person. THE CHANGE TRAIL (decision log 2026-10-02 OPTION 3 RULED, its fourth limit: every change is logged with a one-line undo; card ATL-32 (triage change trail)): a triage owner who applies a ruled default, or a fix the issue's brief spells out, inside an owner's component files a `change` record naming the `commit` that made it and the `test` that proves it — the owner is told by this record, not asked. A change to a live pipeline is never a `change`: it is a `draft` for the owner to land. An `undo` names what it reverses in `undoes` and reopens the issue that change resolved (SCHEMA §5a). A TRAIL ONLY: a triage record says what was done and on what evidence; it NEVER stands in for the owner's yes — an `answer` is the triage owner's words, not the decider's ruling; a `forward` hands the item on without deciding it; a `sign` is the owner's or decider's acknowledgement of a change or draft; a `decide` records that a ruling was made and points at it (`ruling`) — the decision log stays where the ruling lives. A close on a component-page issue is the act decision log 2026-10-02 TRIAGE (#4) licenses — it sets `resolved` (the evidence) and `resolved_by` on the issue (SCHEMA §5a) and the next run carries it; this record is the trail of that act, the flow's issue stays the place its state lives. STATUS IS NEVER STORED here — nothing reads open/closed off this kind. RUN OUTPUTS HAVE NO KIND: the queue JSON and the page a triage run writes live under `runs/triage/<list>/<date>/`, never on this plane. WHY NOT THE `review` KIND: review.json is FROZEN and its record grammar cannot hold per-item evidence without a ruling — its events are request|verdict|close|seen over ONE asset per request, it declares no `evidence` key, and writing an undeclared key is exactly the drift its freeze exists to stop. So `triage` stays separate. ITEM ID: the envelope `item` is a SLUG — `<component>-<n>` for a component-page issue (`qc-checks-3`), or the action slug for an action group (`readme-how-to-link-line`) — because the platform's ITEM_ID_RE ([A-Za-z0-9._-]{1,80}) refuses the `#` and the space in the human form; the human form (`qc-checks #3`) rides in the verdict's `item`. NOT ENFORCED BY THE API: the review-app stores any verdict object (kinds/README.md) — the fields below are enforced by whoever writes or reads them against this manifest, never by a copied list.",
+  "open_items": true,
+  "serve_records": "history",
+  "_serve_records_note": "\"history\": several acts may land on one item from one person (an answer, then a close), and every one is part of the trail — latest-per-(reviewer, item) would silently keep only the last. Same reason review, tasks and inbox set it.",
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "_items_note": "Deliberately empty, with open_items: true — items are the triage queue's own ids, minted by a run under runs/triage/<list>/<date>/, never listed here.",
+  "verdict_fields": [
+    {
+      "key": "act",
+      "required": true,
+      "values": ["close", "answer", "forward", "change", "draft", "sign", "undo", "decide"],
+      "note": "exactly one per record. `close`: the triage owner marks the item done, with its evidence. `answer`: the triage owner answers the item in their words — never the owner's yes. `forward`: the triage owner hands the item to someone else (`forwarded_to`) without deciding it. `change`: the triage owner applied a ruled default or a fix the brief spells out in an owner's component (decision log 2026-10-02 OPTION 3) — `commit` and `test` required; the owner is told, not asked. `draft`: a fix drafted for the owner to land (a live pipeline, or anything outside Option 3's limits) — nothing applied. `sign`: the owner or decider acknowledges a change or draft. `undo`: reverses a change — `undoes` required; it reopens the issue that change resolved (SCHEMA §5a). `decide`: a ruling was made on the item — `ruling` required. A ninth act is a ruling."
+    },
+    {
+      "key": "item",
+      "required": true,
+      "note": "the item in human words: `<component> #<n>` for a component-page issue (e.g. `qc-checks #3`), or the action slug for an action group (e.g. `readme-how-to-link-line`). The envelope `item` carries the slug form of the same id."
+    },
+    {
+      "key": "who",
+      "required": true,
+      "note": "the person who acted, lowercase as in team/people/<name>/identity.json — the triage owner (each list names its own, decision log 2026-10-02), or on a `sign`, `undo` or `decide` the owner or decider who acted. The platform stamps `reviewer` on every record with whoever FILED it; `who` names whoever ACTED, which differs when a seat files their relayed word."
+    },
+    {
+      "key": "evidence",
+      "required_when": "act=close",
+      "pattern": "^[^\\s:@]+:[0-9]+(-[0-9]+)?@[0-9a-f]{7,40}$",
+      "note": "[\"path:line@sha\", …] — where the proof is, pinned to the commit it was read at (a range `path:12-20@sha` is fine). REQUIRED ON A CLOSE: a close without evidence is refused, because evidence is what makes a close checkable (decision log 2026-10-02 TRIAGE: \"the email lead may mark an issue closed with its evidence\" — the triage owner, each list naming its own). Optional on every other act. Every entry matches `pattern`; the sha is a commit, never a branch."
+    },
+    {
+      "key": "words",
+      "required_when": "act=answer",
+      "note": "the actor's own words, verbatim. Required on an answer (an answer IS words); offered, never required, on any other act."
+    },
+    {
+      "key": "forwarded_to",
+      "required_when": "act=forward",
+      "note": "the person the item goes to, lowercase as in team/people/<name>/identity.json. Only on a forward."
+    },
+    {
+      "key": "theme",
+      "note": "the triage theme the item belongs to, as its theme pack names it (`atlas`, `operations`; components/triage/CONTRACT-themes.md, \"One log\"). Offered, never required; one decision log across themes reads it to say which list an act came from."
+    },
+    {
+      "key": "areas",
+      "note": "[\"path:<folder or file>\" | \"brand:<b>\" | \"product:<p>\" | \"sku:<s>\", …] — the typed area keys the item touches (CONTRACT-themes.md, the item shape). Offered, never required; it is how an owner asks the log \"what changed in my areas\"."
+    },
+    {
+      "key": "commit",
+      "required_when": "act=change",
+      "pattern": "^[0-9a-f]{7,40}$",
+      "note": "the commit that made the change — a sha, never a branch. REQUIRED ON A CHANGE: its one-line undo is `git revert <commit>` (decision log 2026-10-02 OPTION 3, fourth limit). Optional elsewhere (a draft may name its base)."
+    },
+    {
+      "key": "test",
+      "required_when": "act=change",
+      "note": "the test that proves the change, as a path (optionally `path::case`). REQUIRED ON A CHANGE: Option 3's first limit, a test proves each fix — and no test check is weakened or removed by it (the second)."
+    },
+    {
+      "key": "why",
+      "note": "one line: why this act — the ruled default or the brief line a change applies, or the reason for an undo. Offered, never required."
+    },
+    {
+      "key": "ruling",
+      "required_when": "act=decide",
+      "note": "a pointer to the ruling — the decision log entry (`the-org/decision-log.md`, its date and heading) or the card that carries it. REQUIRED ON A DECIDE; the ruling lives there, this record only points at it. Optional on a change (the ruled default it applies)."
+    },
+    {
+      "key": "undoes",
+      "required_when": "act=undo",
+      "note": "the triage record (its file name under platform/data/records/triage/) or the commit (a sha) this undo reverses. REQUIRED ON AN UNDO; the undo reopens the issue that change resolved (SCHEMA §5a)."
+    }
+  ]
+}

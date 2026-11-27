@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """tiers — every real asset a brand ran, ranked: top 1% · top 5% · top 10% · under top 10%.
 
-    tiers.py --brand brand-a                  rank from the warehouse, write runs/media-buying/<brand>/tiers/<date>/
-    tiers.py --brand brand-a --by spend       rank by spend instead of purchases
+    tiers.py --brand brand_a                  rank from the warehouse, write runs/media-buying/<brand>/tiers/<date>/
+    tiers.py --brand brand_a --by spend       rank by spend instead of purchases
 
-the owner, 2 Oct 2026: "rank the top 10% of whatever it is that we have, and clearly filter for
+owner, 2 Oct 2026: "rank the top 10% of whatever it is that we have, and clearly filter for
 that … the top 5% and the top 1%, we can just see those … Everything that is not top 10%
 should still be documented as just being under top 10%." The goal: "create 1% top ads all
 the time."
@@ -23,7 +23,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(WS / "tools/copywriter/library"))
+sys.path.insert(0, str(WS / "components/copywriter/library"))
 
 TIERS = (("top-1", 0.01), ("top-5", 0.05), ("top-10", 0.10))
 LABEL = {"top-1": "Top 1%", "top-5": "Top 2–5%", "top-10": "Top 6–10%", "under-10": "Under top 10%"}

@@ -1,0 +1,13 @@
+{
+  "kind": "task-cards",
+  "title": "Task-card review",
+  "note": "Review each card definition against reality: does the story hold, is done_when checkable, is done_by the right owner, does coverage match the board? Source of truth: pipeline-map/cards.json (regen-driven — review the definition, not the rendering).",
+  "items_file": "lab/the developer/prompt-optimizer/pipeline-map/cards.json",
+  "items_key": "cards",
+  "item_id": "id",
+  "item_label": "title",
+  "verdict_fields": [
+    { "key": "ok", "type": "boolean", "label": "Card holds (story / done_when / done_by are right)" },
+    { "key": "notes", "type": "text", "label": "What needs to change (required if not ok)" }
+  ]
+}

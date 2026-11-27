@@ -1,0 +1,12 @@
+<!-- Letter: a printed note from the brand on a white page. A huge all-caps headline in the accent colour across the top, two left-aligned paragraphs with the offer words in bold accent colour (slots p2b and p2d), then a signature (the name in the display face) and a small grey sign-off line. A small solid tag (`tag`) sits over one product in the row below; `tag_x` and `tag_y` (percent of the frame, its centre and its bottom) come from `fixed`. Sizes are at full scale; the fit step shrinks them together. -->
+<style>.ac{color:{{ground}};font-weight:600}.tag:empty{display:none}</style>
+<div class="area" data-fit style="justify-content:flex-start;align-items:flex-start;text-align:left;gap:calc(var(--s)*34px);color:{{ink}}">
+ <div class="line" style="font:600 calc(var(--s)*84px)/1 Sans;letter-spacing:-.01em;text-transform:uppercase;color:{{ground}}">{{head}}</div>
+ <div style="font:600 calc(var(--s)*47px)/1.24 Sans;letter-spacing:-.005em;white-space:normal">{{p1}}</div>
+ <div style="font:600 calc(var(--s)*47px)/1.24 Sans;letter-spacing:-.005em;white-space:normal">{{p2a}} <span class="ac">{{p2b}}</span> {{p2c}} <span class="ac">{{p2d}}</span> {{p2e}}</div>
+ <div style="display:flex;flex-direction:column;gap:calc(var(--s)*6px);margin-top:calc(var(--s)*6px)">
+  <div class="line" style="font:500 calc(var(--s)*88px)/1 Display;letter-spacing:.01em">{{sig}}</div>
+  <div class="line" style="font:600 calc(var(--s)*36px)/1.2 Sans;color:#8A8A8A">{{signoff}}</div>
+ </div>
+</div>
+<div class="tag" style="position:fixed;left:{{tag_x}}%;top:{{tag_y}}%;transform:translate(-50%,-100%);background:{{ground}};color:#fff;font:600 30px/1 Sans;letter-spacing:.08em;padding:12px 22px;border-radius:6px">{{tag}}</div>

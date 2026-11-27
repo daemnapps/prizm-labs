@@ -1,0 +1,20 @@
+{
+ "kind": "wf-atlas-cards",
+ "title": "atlas — the org's living system map",
+ "note": "Carded by the lead 2026-08-31 on the developer's ruling relayed via PLAN batch 8. ATL-1 (first slice) dispatched at carding. Seed spec in the build folder.",
+ "open_items": true,
+ "items_file": "new-workflow-design/builds/atlas/task-cards.md",
+ "format": "md-sections",
+ "verdict_fields": [
+  {
+   "key": "approve",
+   "type": "boolean",
+   "label": "Approve card as-is"
+  },
+  {
+   "key": "feedback",
+   "type": "text",
+   "label": "What to change (required unless approved)"
+  }
+ ]
+}

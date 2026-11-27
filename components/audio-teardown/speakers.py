@@ -8,16 +8,19 @@ saying so. Its speaker labels and timings are what the merge uses.
 import json
 import subprocess
 
+import house_models
 from keys import key
 
 STT = "https://api.elevenlabs.io/v1/speech-to-text"
-MODEL = "scribe_v2"
+MODEL = house_models.model_id("sound.speakers")      # the Model House names it (V2; verify row 17)
 
 
 def listen(audio, timeout=300):
-    r = subprocess.run(["curl", "-sS", "--max-time", str(timeout), "-H", f"xi-api-key: {key('ELEVENLABS_API_KEY')}",
+    # the key header goes to curl on stdin — never on its command line
+    r = subprocess.run(["curl", "-sS", "--max-time", str(timeout), "-H", "@-",
                         "-F", f"model_id={MODEL}", "-F", "diarize=true", "-F", "timestamps_granularity=word",
-                        "-F", f"file=@{audio}", STT], capture_output=True, text=True)
+                        "-F", f"file=@{audio}", STT],
+                       input=f"xi-api-key: {key('ELEVENLABS_API_KEY')}\n", capture_output=True, text=True)
     try:
         d = json.loads(r.stdout)
     except ValueError:

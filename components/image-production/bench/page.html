@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Picture Bench</title>
+<style>
+:root{--bg:#f6f6f5;--card:#fff;--fg:#18181b;--mut:#6b6b73;--line:#e2e2e0;--acc:#0f6b5c;--sunk:#f0f0ee;--warn:#9a5b00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:18px 20px 6px;max-width:1180px;margin:0 auto}
+h1{font-size:24px;margin:0}
+.sub{color:var(--mut);margin:2px 0 0}
+main{max-width:1180px;margin:0 auto;padding:12px 20px 60px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;align-items:start}
+@media(max-width:860px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:0 0 8px}
+label{display:block;font-size:13px;color:var(--mut);margin:8px 0 3px}
+select,textarea,input[type=text]{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--fg)}
+textarea{min-height:130px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.strip{display:flex;gap:10px;flex-wrap:wrap}
+.slot{width:112px;text-align:center}
+.slot .im{width:112px;height:140px;border:1px solid var(--line);border-radius:7px;background:var(--sunk) center/contain no-repeat}
+.slot b{display:inline-block;background:var(--acc);color:#fff;border-radius:999px;font-size:12px;padding:0 8px;margin-bottom:3px}
+.slot span{display:block;font-size:12px;color:var(--mut);line-height:1.3}
+.empty{color:var(--mut);font-size:13px}
+.sec{margin:0 0 10px}.sec h3{margin:0 0 2px;font-size:12px;letter-spacing:.08em;color:var(--acc)}
+.sec p{margin:0;white-space:pre-wrap;font-size:13px;background:var(--sunk);border-radius:7px;padding:8px 10px}
+button{font:inherit;border:0;border-radius:8px;padding:11px 18px;background:var(--acc);color:#fff;cursor:pointer;font-weight:600}
+button.ghost{background:var(--sunk);color:var(--fg);font-weight:500;padding:7px 12px}
+button:disabled{opacity:.5;cursor:default}
+.cost{font-size:13px;color:var(--warn);margin-left:10px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+.thumbs img{height:90px;border:2px solid transparent;border-radius:6px;cursor:pointer}
+.thumbs img.on{border-color:var(--acc)}
+.results{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px}
+.res img{width:100%;border-radius:6px;display:block}
+.res small{color:var(--mut);display:block;margin-top:4px;word-break:break-all}
+.err{color:#a13b2b}
+</style></head><body>
+<header><h1>Picture Bench</h1><p class="sub">Set up one picture the way the model receives it, read it, make it. One picture per press. Every picture is 9:16 with the safe zone set, made that way from the start. <span style="opacity:.6">Page updated __STAMP__.</span></p></header>
+<div style="max-width:1180px;margin:0 auto;padding:4px 20px 0"><div class="card" id="model" style="margin:0;display:flex;gap:18px;flex-wrap:wrap;align-items:center"><span class="empty">Reading the model…</span></div></div>
+<main>
+ <div>
+  <div class="card"><h2>1 · Product</h2>
+   <div class="row"><div><label for="brand">Brand</label><select id="brand"></select></div>
+   <div><label for="product">Product in the picture</label><select id="product"></select></div></div>
+   <p class="empty">Its front, three-quarter and back photos go in automatically.</p></div>
+  <div class="card"><h2>2 · Reference (optional)</h2>
+   <p class="empty" style="margin-top:0">The picture to remake. It becomes IMAGE 1. Leave empty to make a fresh picture.</p>
+   <div class="thumbs" id="swipes"></div>
+   <label for="up">or upload one</label><input type="file" id="up" accept="image/*">
+   <p><button class="ghost" id="clear">No reference</button></p></div>
+  <div class="card"><h2>3 · More pictures to put in (optional)</h2>
+   <p class="empty" style="margin-top:0">Your own real pieces, a cast photo, a before and after. Each comes in as the next IMAGE number, and you say what it is. They need a reference above.</p>
+   <input type="file" id="more" accept="image/*" multiple><div id="extras"></div></div>
+  <div class="card"><h2>4 · The picture</h2>
+   <label for="text">What it shows, in your words. Put any exact words in quotes.</label>
+   <textarea id="text" placeholder="A woman in her 40s at a kitchen counter holds the tube up to the camera, phone-photo look, window light."></textarea></div>
+  <div class="card"><h2>5 · Quality</h2>
+   <div class="row"><div><label for="quality">Detail level</label><select id="quality"><option value="">high (what chains use today)</option><option value="low">low (fast draft)</option><option value="medium">medium</option><option value="xhigh">xhigh (more detail, slower, costs more)</option><option value="max">max (most detail, slowest)</option></select></div>
+   <div id="resbox" hidden><label for="resolution">Resolution (always 9:16)</label><select id="resolution"><option value="">2k (what chains use today)</option><option value="1k">1k (fast draft)</option><option value="4k">4k (largest)</option></select></div>
+   <div id="sizebox"><label for="size">Size (always 9:16)</label><select id="size"><option value="">1152x2048 (2.4 MP, what chains use today)</option><option value="1440x2560">1440x2560 (3.7 MP, the largest OpenAI treats as stable)</option><option value="1008x1792">1008x1792 (1.8 MP)</option></select></div></div></div>
+  <p><button class="ghost" id="quote">What will this cost?</button> <button id="go">Make the picture</button><span class="cost">The cost is the credit quote from Higgsfield: press "What will this cost?" (it is free). Pictures are made from the Prompt Bench.</span></p>
+  <p id="msg" class="empty"></p>
+ </div>
+ <div>
+  <div class="card"><h2>What the model receives · images <span id="count" style="text-transform:none;letter-spacing:0"></span></h2><div class="strip" id="images"><span class="empty">Pick a brand.</span></div></div>
+  <div class="card"><h2>Checked against the model's rules</h2><div id="checks"></div><p class="empty" style="margin-bottom:0">Rules live in components/model-inputs (read from OpenAI's docs, 26 Oct). An error stops the picture; a warning is sent anyway.</p></div>
+  <div class="card"><h2>What the model receives · the prompt</h2><div id="prompt"></div></div>
+ </div>
+</main>
+<main style="grid-template-columns:1fr;padding-top:0"><div><h2 style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)">Pictures made here</h2><div class="results" id="results"></div></div></main>
+<script>
+const $=id=>document.getElementById(id);
+let opts={brands:{},swipes:[],history:[]}, ref=null, timer=null, extras=[];
+const img=p=>'/file?path='+encodeURIComponent(p);
+async function post(u,b){const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return r.json()}
+function body(){return {brand:$('brand').value,product:$('product').value,text:$('text').value,quality:$('quality').value,size:$('size').value,resolution:$('resolution').value,references:ref?[ref,...extras.map(x=>({upload:x.upload,name:x.name,role:x.role}))]:[]}}
+function fillProducts(){const ps=opts.brands[$('brand').value]||[];$('product').innerHTML='<option value="">no product</option>'+ps.map(p=>`<option>${p}</option>`).join('');if(ps.length)$('product').value=ps[0]}
+function drawSwipes(){$('swipes').innerHTML=opts.swipes.map(s=>`<img src="${img(s.path)}" title="${s.name}" data-p="${s.path}" class="${ref&&ref.path===s.path?'on':''}">`).join('')||'<span class="empty">No recent swipes found.</span>';
+ [...$('swipes').querySelectorAll('img')].forEach(i=>i.onclick=()=>{ref={path:i.dataset.p};drawSwipes();preview()})}
+async function preview(){
+  const b=body(); if(!b.brand)return;
+  const r=await post('/api/preview',b);
+  if(r.error){$('prompt').innerHTML='<p class="err">'+r.error+'</p>';return}
+  $('checks').innerHTML=(r.checks||[]).length?r.checks.map(c=>`<p style="margin:4px 0;color:${c.level==='error'?'#a13b2b':'#9a5b00'}"><b>${c.level==='error'?'Stops it':'Heads up'}</b> · ${c.say}</p>`).join(''):'<p style="margin:4px 0;color:#0f6b5c"><b>All clear</b> · every image is numbered, the sections are all there, the size and quality are allowed.</p>';
+  drawModel(r.model);$('count').textContent='('+r.images.length+' of '+((r.model||{}).max_images||16)+' the model takes)';
+  $('images').innerHTML=r.images.length?r.images.map(i=>`<div class="slot"><div class="im" style="background-image:url('${img(i.path)}')"></div><b>IMAGE ${i.n}</b><span>${i.role}</span></div>`).join(''):'<span class="empty">No images: a fresh picture from words only.</span>';
+  const parts=r.prompt.split(/\n\n(?=[A-Z ]+\n)/);
+  $('prompt').innerHTML=parts.map(p=>{const k=p.indexOf('\n');return `<div class="sec"><h3>${p.slice(0,k)}</h3><p>${p.slice(k+1).replace(/</g,'&lt;')}</p></div>`}).join('');
+}
+function drawModel(m){if(!m)return;const hf=m.door==='higgsfield';$('resbox').hidden=!hf;$('sizebox').hidden=hf;$('model').innerHTML=`<span><b>Model</b> ${m.name} <span class="empty">(${m.model})</span></span><span><b>Door</b> ${m.door==='openai'?'OpenAI, direct':(m.door==='higgsfield'?'Higgsfield (command line)':m.door)}</span><span><b>Quality</b> ${$('quality').value||m.quality}</span><span><b>Frame</b> 9:16, ${hf?($('resolution').value||m.resolution)+' tier':($('size').value||m.size)}</span>${hf?'<span><b>Variant</b> '+m.variant+'</span>':''}<span><b>Images allowed</b> up to ${m.max_images} per picture</span>`}
+function drawExtras(){$('extras').innerHTML=extras.map((x,i)=>`<div class="row" style="align-items:center;margin-top:8px"><img src="${x.upload}" style="height:56px;flex:0 0 auto;min-width:0;border-radius:5px"><input type="text" data-i="${i}" placeholder="What is this picture? e.g. our real before and after" value="${(x.role||'').replace(/"/g,'&quot;')}"><button class="ghost" data-x="${i}" style="flex:0 0 auto;min-width:0">Remove</button></div>`).join('');
+ [...$('extras').querySelectorAll('input')].forEach(i=>i.oninput=()=>{extras[i.dataset.i].role=i.value;later()});
+ [...$('extras').querySelectorAll('button')].forEach(b=>b.onclick=()=>{extras.splice(+b.dataset.x,1);drawExtras();preview()})}
+$('more').onchange=async e=>{for(const f of e.target.files){await new Promise(ok=>{const fr=new FileReader();fr.onload=()=>{extras.push({upload:fr.result,name:f.name,role:''});ok()};fr.readAsDataURL(f)})}e.target.value='';drawExtras();preview()};
+function later(){clearTimeout(timer);timer=setTimeout(preview,350)}
+function drawHistory(){$('results').innerHTML=opts.history.map(h=>`<div class="res"><a href="${img(h.path)}" target="_blank"><img src="${img(h.path)}"></a><small>${h.brand} · ${h.name}</small></div>`).join('')||'<span class="empty">Nothing yet.</span>'}
+async function go(){
+  const b=body(); $('go').disabled=true; $('msg').className='empty'; $('msg').textContent='Making it… about a minute.';
+  const r=await post('/api/generate',b); if(r.error){$('msg').className='err';$('msg').textContent=r.error;$('go').disabled=false;return}
+  const poll=async()=>{const j=await (await fetch('/api/job?id='+r.id)).json();
+    if(j.state==='running'){setTimeout(poll,3000);return}
+    $('go').disabled=false;
+    if(j.state==='done'){$('msg').textContent='Done'+(j.drive?' and copied to the Shared Assets drive.':' (drive copy did not land).');opts.history.unshift({path:j.file,name:j.file.split('/').pop(),brand:b.brand});drawHistory()}
+    else{$('msg').className='err';$('msg').textContent=j.error||'It failed.'}};
+  poll()}
+$('brand').onchange=()=>{fillProducts();preview()};$('product').onchange=preview;$('text').oninput=later;
+$('quality').onchange=preview;$('size').onchange=preview;$('resolution').onchange=preview;$('go').onclick=go;$('quote').onclick=async()=>{const r=await post('/api/cost',body());$('msg').className=r.error?'err':'empty';$('msg').textContent=r.error||r.say};
+$('clear').onclick=()=>{ref=null;drawSwipes();preview()};
+$('up').onchange=e=>{const f=e.target.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{ref={upload:fr.result,name:f.name};preview()};fr.readAsDataURL(f)};
+(async()=>{opts=await (await fetch('/api/options')).json();$('brand').innerHTML=Object.keys(opts.brands).map(b=>`<option>${b}</option>`).join('');fillProducts();drawSwipes();drawHistory();preview()})();
+</script></body></html>

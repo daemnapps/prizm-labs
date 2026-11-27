@@ -4,5 +4,5 @@
 
 a definitions registry, no engine · 17 models (12 approved) and 2 trained identities · read in place by the worker
 
-Owner: the team
+Owner: the developer
 

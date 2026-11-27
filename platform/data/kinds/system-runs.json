@@ -1,0 +1,49 @@
+{
+  "kind": "system-runs",
+  "written_by": "system-integration",
+  "written_by_evidence": "components/system-integration/system_runs.py files ONE record per /system-fit|ready|review (55 of 56 via system-lane/SI-17, 1 via system-skill/SI-17, 06:41Z) — the lead, 2026-10-01, for ATL-20b (exact run counts); a kind with no written_by is not attributable to any component",
+  "title": "System integration judgements — fit, ready, and review by folder",
+  "note": "A system-runs record is a JUDGEMENT about a folder; fit-runs records a MEASURED START of a command; never conflate them.",
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "open_items": true,
+  "verdict_fields": [
+    {
+      "key": "target",
+      "required": true,
+      "note": "the repo-relative folder judged, for example components/copywriter"
+    },
+    {
+      "key": "skill",
+      "required": true,
+      "values": ["fit", "ready", "review"],
+      "note": "which system-integration skill made the judgement: fit, ready, or review"
+    },
+    {
+      "key": "verdict",
+      "required": true,
+      "note": "free text: the run's headline verdict"
+    },
+    {
+      "key": "label",
+      "required": true,
+      "note": "the run's UTC stamp, for example 20260922-0939Z"
+    },
+    {
+      "key": "base_sha",
+      "required": true,
+      "note": "the repository commit judged by the run"
+    },
+    {
+      "key": "issue_ids",
+      "required": true,
+      "note": "list of issue identifiers raised or carried by the run"
+    },
+    {
+      "key": "memo_path",
+      "required": true,
+      "note": "repo-relative path to the run's FIT.md, ready.md, or REVIEW.md"
+    }
+  ]
+}

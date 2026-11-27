@@ -1,0 +1,320 @@
+<title>Writing Prompts Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* layout: one column, status strip on top, one tap-open card per prompt */
+:root{--bg:#f6f7f9;--card:#fff;--fg:#17191d;--mut:#606773;--line:#dfe3e8;--acc:#2f5bd3;--add:#e8f6ec;--addfg:#145a2c;--off:#8a6d12;--offbg:#fbf3dc;
+--disp:"Space Grotesk",system-ui,sans-serif;--body:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--card:#1a1d22;--fg:#e8eaee;--mut:#9aa1ad;--line:#2c3139;--acc:#7c9cff;--add:#16301f;--addfg:#9be0b2;--off:#e6c56a;--offbg:#2c2614;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--card:#1a1d22;--fg:#e8eaee;--mut:#9aa1ad;--line:#2c3139;--acc:#7c9cff;--add:#16301f;--addfg:#9be0b2;--off:#e6c56a;--offbg:#2c2614;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body)}
+.wrap{max-width:880px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
+h1{font-family:var(--disp);font-size:28px;margin:0;text-wrap:balance}
+.top{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:4px}
+.tile b{font-family:var(--disp);font-size:22px} .tile span{color:var(--mut);font-size:13px}
+.tile.off b{color:var(--off)}
+h2{font-family:var(--disp);font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);margin:8px 0 0}
+.list{display:grid;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px}
+summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:10px minmax(120px,170px) 1fr auto;gap:12px;align-items:center;padding:12px 14px}
+summary::-webkit-details-marker{display:none} summary:focus-visible{outline:2px solid var(--acc);border-radius:10px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--off)}
+.t{font-weight:600} .l{color:var(--mut);font-size:14px;min-width:0}
+.state{font-size:12px;color:var(--off);background:var(--offbg);padding:3px 8px;border-radius:99px;white-space:nowrap}
+.body{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:14px;min-width:0}
+.meta{color:var(--mut);font-size:13px} code{font-family:var(--mono);font-size:12px}
+.step{font-weight:600;font-size:13px;margin-bottom:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px} .cols>div{min-width:0}
+.lab{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:4px} .lab.new{color:var(--addfg)}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:12px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:320px;overflow:auto}
+pre.add{background:var(--add);color:var(--addfg)}
+@media (max-width:600px){summary{grid-template-columns:10px 1fr auto} .l{grid-column:2/4} .cols{grid-template-columns:1fr}}
+</style>
+<div class="wrap">
+<h1>Writing Prompts Review</h1>
+<div class="top">
+<div class="tile"><b>11</b><span>improved prompts to read · none live</span></div>
+<div class="tile off"><b>Off</b><span>Softer unaware ads (preset by awareness)</span></div>
+<div class="tile off"><b>Off</b><span>Pick mix: 4 in 5 market, 1 in 5 competitors</span></div>
+</div>
+<h2>Tap one to read before and after</h2>
+<div class="list"><details class="card"><summary><span class="dot"></span><span class="t">The idea</span><span class="l">Picks the angle first, then names the concept</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: Which angle · Which concept under the angle · File: <code>stage4i-idea-v3-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- writing v2 (2026-11-02, V56): a new pass between the injection and the hooks. One controlling idea, chosen before a line of the middle is written. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- writing v2 (2026-11-18, held for review, not live): stage4i-idea-v3 = v2 + THE ANGLE and THE CONCEPT (fills decisions 2.2 and 2.3 of the video decision logic). The pass is handed the brand&#x27;s angle list in one new slot, `angles`, chooses the angle before the idea and names the concept under it. Five labelled lines are added at the end of the answer: ANGLE, ANGLE BELIEF, ANGLE GAP, CONCEPT, CONCEPT WHY. Every line of v2 stands, word for word: the candidates, the scores and the tie rule are unchanged. --&gt;</pre></div></div></div><div class="pair"><div class="step">the angle list is handed in</div><div class="cols"><div><div class="lab">Before</div><pre>Real moves from real high-performing scripts, by section: {creative_moves}</pre></div><div><div class="lab new">Added</div><pre class="add">The brand&#x27;s angle list, each angle with its id, its name, the one sentence it argues and the avatar it is aimed at: {angles}</pre></div></div></div><div class="pair"><div class="step">the angle and the concept, before the idea</div><div class="cols"><div><div class="lab">Before</div><pre>## What a controlling idea is</pre></div><div><div class="lab new">Added</div><pre class="add">## The angle, chosen before the idea (v3)
+
+Choose the angle before you look for the idea. An angle here is one row of the brand&#x27;s angle list above: what the brand argues. Wherever else this prompt uses the word angle for a lens or a door into the ad, that is a different thing and it stays as written.
+
+How to choose it:
+
+1. Start from what customers say: the real customer language above.
+2. Find the belief they already hold.
+3. An angle agrees with that belief, shows where it falls short, and puts the new information in that gap. Look for the angles on the list that do this.
+4. Order them by how broad the entry belief is.
+5. A reworded winner is not a new angle.
+
+Choose one angle from the list, by its id. Never write an angle that is not on the list. If the list holds no angle, print `ANGLE: none on file` and `none` on the two lines under it, and carry on.
+
+## The concept, named under the angle (v3)
+
+The order is: angle, then concepts, then videos, then scroll stoppers, then hooks. So the concept is named next, under the angle.
+
+A concept is the voice and the situation that carries the angle. It comes from one real experience, or from the culture the audience follows. A winner becomes a new concept under the same angle.
+
+Name the concept this script runs under the angle you chose. Give it a short name, and say in one line the voice, the situation and where it comes from. If no angle was chosen, print `CONCEPT: none` and `CONCEPT WHY: none`.
+
+Then find the controlling idea as the sections below say. Nothing in them changes: the five candidates, the scores and the tie rule stand as written.</pre></div></div></div><div class="pair"><div class="step">five labelled lines at the end of the answer</div><div class="cols"><div><div class="lab">Before</div><pre>Then the five candidates with their scores, so the owner can see what lost.</pre></div><div><div class="lab new">Added</div><pre class="add">Last, five labelled lines (v3). One per line, spelled exactly this way, nothing else on the line. Later steps read them by these labels:
+
+```
+ANGLE: &lt;id from the list&gt; — &lt;its name&gt;
+ANGLE BELIEF: &lt;the belief the customer already holds&gt;
+ANGLE GAP: &lt;where it falls short; the new information&gt;
+CONCEPT: &lt;a short name&gt;
+CONCEPT WHY: &lt;one line: the voice, the situation, and the real experience or the culture it comes from&gt;
+```</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">The six openings</span><span class="l">Each one a different customer angle</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: How the openings differ from each other · File: <code>stage4v2a-readhooks-v11-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- writing v2 (2026-11-07): stage4v2a-readhooks-v9 = v8 + THE MENU: three ways in judged by the first frame, six opening types with the dead openings banned, and a ten-line battery (two per trigger) the five variations are taken from. New output: section 2b, the ENTRY/TYPE/TRIGGER tags on each TAKE line and in the hook-matrix, and three checks. Everything else is v8, word for word. Sources (MIT): short-drama-factory references/golden-3s-hook-library.md; coleschaffer/copywritingskills-rmbc skills/hook-battery/SKILL.md; zenstory-ai/drama-skills skills/short-drama-develop/references/episode-design.md §4.4 and skills/short-drama-write/references/script-craft.md. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- writing v2 (2026-11-18, held for review, not live): stage4v2a-readhooks-v11 = v9 + EACH OPENING TAKES A DIFFERENT CUSTOMER-LANGUAGE ANGLE (fills decision 4.4 of the video decision logic): the line the six openings differ along, why the entry level sets how wide an opening reaches, and one new labelled line per opening, CUSTOMER ANGLE V0 to V5. No test is added or changed; the five slots and the hook-matrix block are untouched. Everything else is v9, word for word. --&gt;</pre></div></div></div><div class="pair"><div class="step">the line the openings differ along</div><div class="cols"><div><div class="lab">Before</div><pre>that a viewer would read as the same opening are one variation. What every
+take keeps from the format is its WORLD — the speaker, the register, the
+reference the culture read names, the place the body continues in — so the
+body that follows can carry any of the six.</pre></div><div><div class="lab new">Added</div><pre class="add">**EACH OPENING TAKES A DIFFERENT CUSTOMER-LANGUAGE ANGLE (v11).** This
+is the line the six openings differ along. A customer-language angle is one
+thing customers say, in their own words, from the language above. The take is
+the moment an opening enters through; its customer-language angle is what
+customers say that it comes in on. Each opening takes a different one, so the
+set shows which one opens the conversation. The control is not rewritten for
+this: name the angle its line already takes.
+
+How wide an opening reaches follows the entry level the reading names. That
+level is already decided; this is the reason it holds:
+
+- For the widest market, open on something unexpected without naming the
+  problem. That is the unaware entry, and THE UNAWARE ENTRY above says what
+  may be in it.
+- To reach only people with the problem, name it. That is the problem-aware
+  entry.
+
+Print the angle as one more labelled line under each opening&#x27;s `THUMB` line,
+V0 to V5, one per line and nothing else on the line:
+
+`CUSTOMER ANGLE Vn: &lt;the angle, in a few of the customer&#x27;s own words&gt; · &lt;the row it comes from; on V0, control&gt;`
+
+This adds no test and changes none. `TAKE`, `LINE`, `CARD`, `SCROLL`, `THUMB`
+and the `hook-matrix` block stay exactly as they are.</pre></div></div></div><div class="pair"><div class="step">the labelled line, beside the five slots</div><div class="cols"><div><div class="lab">Before</div><pre>the one still, what is in it and where, and its words. Then: every specific
+in the take and the verbatim it came from **quoted inside its original full
+sentence**, with its source · what it assumes about the speaker · how the
+take hands over to the body&#x27;s next beat.</pre></div><div><div class="lab new">Added</div><pre class="add">Then one more labelled line for each opening, V0 included, under its `THUMB`
+line: `CUSTOMER ANGLE Vn:`, as EACH OPENING TAKES A DIFFERENT
+CUSTOMER-LANGUAGE ANGLE above says (v11).</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">The script</span><span class="l">Says what the lead and body are for</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: The lead and the body · File: <code>stage4v2b-build-v11-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- writing v2 (2026-11-03): stage4v2b-build-v9 = v8 + THE SKIT RULES, from the first full world skit. Everything else stands, word for word. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- writing v2 (2026-11-18, held for review, not live): stage4v2b-build-v11 = v9 + WHAT THE LEAD AND THE BODY ARE FOR (fills decision 4.5 of the video decision logic): one short block of reasoning where the placement is first planned. It adds no beat, section, slot, check or output line. Everything else stands, word for word. --&gt;</pre></div></div></div><div class="pair"><div class="step">what the lead and the body are for</div><div class="cols"><div><div class="lab">Before</div><pre>Plan the direct-response transformation. The lane, the opening beat and the
+awareness entry are already decided and handed to you above — do not re-derive
+them, do not overrule them. Your job starts after the opening.</pre></div><div><div class="lab new">Added</div><pre class="add">**WHAT THE LEAD AND THE BODY ARE FOR (v11).** Plan with these two jobs
+in mind. They are why the beats after the opening exist:
+
+- **The lead** comes once the opening lands. It carries the conversation on,
+  and it sets the tone.
+- **The body** is everything after the hook. It earns trust through story
+  before the product appears: I see you, I went through it, here is what I
+  learned. Skip that and you get buyers who refund.
+
+This is reasoning for the plan. It adds no beat, no section and no check, and
+it changes no rule below.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">The check</span><span class="l">Notes where the sale starts; no new fail</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: How native and how sales it reads · File: <code>stage4e-audit-v13-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- writing v2 (2026-11-03): stage4e-audit-v11 = v10 + check 13, the skit test. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- writing v2 (2026-11-18, held for review, not live): stage4e-audit-v13 = v11 + HOW NATIVE IT READS, AND WHERE THE SALE SITS, with THE NATIVE NOTE (fills decision 4.8 of the video decision logic): the same block of reasoning the held spice pass carries, and a note of two labelled lines printed after WHAT I WOULD WATCH (where the sale starts as a share of the runtime; any line that reads stiff aloud). It adds no check, no CHECK TABLE row and no FAIL, and changes no verdict word. Everything else stands, word for word. --&gt;</pre></div></div></div><div class="pair"><div class="step">the reasoning, and the note printed last</div><div class="cols"><div><div class="lab">Before</div><pre>**WHAT I WOULD WATCH** — the one thing most likely to be wrong that these
+checks cannot catch. Say it plainly rather than padding the verdict.</pre></div><div><div class="lab new">Added</div><pre class="add">**HOW NATIVE IT READS, AND WHERE THE SALE SITS (v13).** The reasoning,
+in three lines:
+
+- The organic feel carries the piece, and the sale sits in the back half.
+- It should read like a favour from a friend.
+- Reading it aloud is what catches the stiff lines and the machine-written
+  ones.
+
+This is reasoning only. It adds no check, no gate and no hold, and it changes
+no rule in this prompt.
+
+**THE NATIVE NOTE (v13)** — the last thing this audit prints, after WHAT
+I WOULD WATCH. One heading line, then two labelled lines, one per line:
+
+`THE NATIVE NOTE (a note, not a fix):`
+`SALE STARTS: &lt;time&gt; of &lt;runtime&gt; · &lt;n&gt;% in · &lt;first half or back half&gt;`
+`STIFF ALOUD: &quot;&lt;the line&gt;&quot; (&lt;time&gt;) ; … — or none`
+
+- `SALE STARTS` is where the sale starts, as a share of the runtime: the time
+  of the first beat that sells (the beat where the product enters), over the
+  script&#x27;s own runtime.
+- `STIFF ALOUD` is every line that reads stiff or machine-written when it is
+  read aloud, quoted.
+
+This is a note and only a note. It adds no new check. It adds no row to the
+CHECK TABLE and no FAIL. It changes no verdict word: SHIP, RE-RUN and STOP are
+decided exactly as before, and nothing in this note sends a script back.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">The polish</span><span class="l">Organic feel, sale in the back half</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: How native and how sales it reads · File: <code>stage4g-spice-v11-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- writing v2 (2026-11-02, V56): stage4g-spice-v9 = v8 + THE CREATIVE REWRITE: ideas may change, facts stay locked. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- writing v2 (2026-11-18, held for review, not live): stage4g-spice-v11 = v9 + HOW NATIVE IT READS, AND WHERE THE SALE SITS (fills decision 4.8 of the video decision logic): one short block of reasoning, the same block the held audit carries. It adds no slot, gate or output line and moves no beat. Everything else stands, word for word. --&gt;</pre></div></div></div><div class="pair"><div class="step">the reasoning</div><div class="cols"><div><div class="lab">Before</div><pre>The clean injection is done — the sense is locked. This pass adds the
+flare: why this format works for *this* avatar, and what makes it stand
+out. **The facts are locked: every claim, number, price, guarantee, product fact,
+customer quote, the order of the argument and the offer stay as handed in.**</pre></div><div><div class="lab new">Added</div><pre class="add">**HOW NATIVE IT READS, AND WHERE THE SALE SITS (v11).** The reasoning,
+in three lines:
+
+- The organic feel carries the piece, and the sale sits in the back half.
+- It should read like a favour from a friend.
+- Reading it aloud is what catches the stiff lines and the machine-written
+  ones.
+
+This is reasoning only. It adds no check, no gate and no hold, and it changes
+no rule in this prompt.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">The brief</span><span class="l">Carries the idea and concept by name</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: The one idea · What goes to production · File: <code>stage5-ai-brief-v16-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- stage5-ai-brief-v13-the owner = v12 + A SCENE IS ONE MOMENT (owner, 2026-11-09: AI video kept coming out as single clips with no sequence inside the scene; a back-and-forth was written as one scene per line). Speakers live on lines. Everything else stands, word for word. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- stage5-ai-brief-v16 (2026-11-18, held for review, not live) = v13 + THE ONE IDEA, CARRIED BY NAME (fills decisions 4.2 and 4.11 of the video decision logic): the brief is handed the idea pass&#x27;s answer in one new slot, `controlling_idea`, and carries it by name: one Idea line under the concept&#x27;s paragraph, and `piece.idea` and `piece.concept` in the block. `piece.angle` keeps its rule. No scene, line, shot or check changes. Everything else stands, word for word. --&gt;</pre></div></div></div><div class="pair"><div class="step">the one idea is handed in</div><div class="cols"><div><div class="lab">Before</div><pre>Here are the transformed scripts, one per source format: {stage4_outputs}
+Here is the hook set, with every variation and its scroll stopper: {hook_set}
+Here is where the ad starts — the line the owner chose, word for word, or `none`: {opening_at}
+When it names a line, the piece STARTS there: every scene of the injection before that line is left out of the brief — no scene, no voice line, no picture for it — and the openings are the hook set&#x27;s, built on that line. When it says `none`, nothing is cut.</pre></div><div><div class="lab new">Added</div><pre class="add">Here is the one idea this piece runs on, as the idea pass handed it on: {controlling_idea}</pre></div></div></div><div class="pair"><div class="step">the rule: carry it by name</div><div class="cols"><div><div class="lab">Before</div><pre>## THE BRIEF IS THE PROMPT — YOUR OUTPUT HAS TWO PARTS</pre></div><div><div class="lab new">Added</div><pre class="add">## THE ONE IDEA — carried by name (v16)
+
+The one idea this piece runs on is among the inputs above, as the idea pass
+handed it on. The script was already written inside it. The brief is the one
+file that goes to production, so the idea travels in it, by name. Nothing else
+about the brief changes: no scene, no line and no shot is written, moved or
+cut because of this section.
+
+Carry it in three places:
+
+- **The readable view** — one line under the concept&#x27;s paragraph, naming the
+  idea and the concept (the shape below shows it).
+- **`piece.idea`** — the controlling idea in one line: the line the idea pass
+  printed under THE CONTROLLING IDEA, copied, never reworded.
+- **`piece.concept`** — the name on the idea pass&#x27;s `CONCEPT:` line; an empty
+  string when the idea pass named none. It is never the `# ` heading: the
+  heading names this piece and is `piece.title`.
+
+`piece.angle` keeps its rule: one id from the angles list. Where the idea pass
+printed an `ANGLE:` line and its id is on that list, that is the id.
+
+When that input is empty or reads `[UNFILLED]`, `piece.idea` and
+`piece.concept` are empty strings and the view&#x27;s line says `none`.</pre></div></div></div><div class="pair"><div class="step">one line in the header prose</div><div class="cols"><div><div class="lab">Before</div><pre>⟨One to three sentences: the core idea this concept runs on, pulled from its
+own material.⟩</pre></div><div><div class="lab new">Added</div><pre class="add">**Idea:** ⟨the controlling idea in one line, as the idea pass printed it — or `none`⟩ · **Concept:** ⟨the concept&#x27;s name from the idea pass&#x27;s `CONCEPT:` line — or `none` when it named none⟩</pre></div></div></div><div class="pair"><div class="step">piece.idea and piece.concept in the block</div><div class="cols"><div><div class="lab">Before</div><pre>  &quot;awareness&quot;: &quot;⟨the awareness level this piece enters on⟩&quot;,
+  &quot;sophistication&quot;: &quot;⟨the sophistication stage⟩&quot;,
+  &quot;product&quot;: &quot;⟨the product&#x27;s folder name under the brand&#x27;s products — the one whose real photo the edit lays on⟩&quot;,
+  &quot;angle&quot;: &quot;⟨the angle this piece argues: one id from the angles list, spelled as that list spells it⟩&quot;,</pre></div><div><div class="lab new">Added</div><pre class="add">  &quot;idea&quot;: &quot;⟨the controlling idea in one line — the line the idea pass printed under THE CONTROLLING IDEA, copied; an empty string when the idea is empty⟩&quot;,
+  &quot;concept&quot;: &quot;⟨the concept&#x27;s name from the idea pass&#x27;s `CONCEPT:` line; an empty string when the idea pass named none⟩&quot;,</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">Who it&#x27;s for</span><span class="l">Awareness read off the post itself</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: Its awareness level · File: <code>stage1b-audience-v15-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>*v12 (2026-10-06, the owner: &quot;i mean not every add is funny....&quot; · &quot;it&#x27;s more about the foundational way to identify these cultural nuances&quot;): STRAIGHT is the default. The HUMOR RUNG ladder now starts at 0 · straight, and 0 is what a piece gets unless the swipe itself is funny or the culture read names a meme or format this audience already laughs at and the problem fits in it; a testimonial, a before/after, a founder story stays straight. The rung is the one the swipe and its culture read actually support, never the funniest one available. Each avatar&#x27;s humor map is now a CULTURE MAP — humor is one section of it — and the culture map is the RQ-17 receipt where v11 named the humor map. Everything in v11 stands.*</pre></div><div><div class="lab new">Added</div><pre class="add">*v15 (2026-11-18, held for review, not live: it sits in `proposed/`, which the picker does not read; fills decision 1.6 of the video decision logic): the awareness level is read off the post itself on every swipe, and `AWARENESS WHY` always says what the post shows. A declared level holds exactly as before; where the post reads at another level, `AWARENESS WHY` says so in that same line, as a finding. No label, slot or rule changes. Everything in v13 stands.*</pre></div></div></div><div class="pair"><div class="step">read it off the post, and say what the post shows</div><div class="cols"><div><div class="lab">Before</div><pre>the source explains and what it assumes — but answer it for OUR reader, for
+this exact desire, not for the source&#x27;s. Then quote that level&#x27;s `must_not`
+verbatim from the slice, because every hook written downstream is checked
+against it.</pre></div><div><div class="lab new">Added</div><pre class="add">**Read the level off the post itself, on every swipe (v15).** How
+deeply the post describes the problem tells you the level. Ask it of every
+swipe, whether or not a level was declared. Take the answer from the doctrine
+read above and the teardown beat that shows it; never re-derive it.
+
+`AWARENESS WHY` always says what the post itself shows: how deeply it
+describes the problem, and the level that reads as. It says this as well as
+what the rules above ask of it, and it stays one line.
+
+A declared level still holds exactly as section 0 says: `AWARENESS:` and
+`AWARENESS MUST NOT:` do not move. When the post reads at another level than
+the declared one, `AWARENESS WHY` says so in the same line, as a finding:
+`FINDING: the post reads &lt;level&gt;, declared &lt;level&gt;`. A finding is printed and
+nothing more: it changes no label and stops nothing.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">Creator brief</span><span class="l">What&#x27;s fixed, what&#x27;s theirs, the format</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: A creator&#x27;s or founder&#x27;s brief · File: <code>stage5-creator-brief-v37-owner.md</code></div><div class="pair"><div class="step">version note</div><div class="cols"><div><div class="lab">Before</div><pre>&lt;!-- v36 (2026-11-16, V57 — the swipe is the backbone; everything on it is ours): every frame does the job of the source shot it stands on, in the source&#x27;s order; the place, the action, how many frames, the outfits and the words on screen are ours, built from our script and pushed further. Where ours differs from the swipe, it is noted, never held. The scroll stoppers still come word for word from our hook set; the real product, claims and every labelled line are as v35. --&gt;</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- v37 (2026-11-18, held for review, not live: it sits in proposed/, which the picker does not read; fills decision 4.10 of the video decision logic): the brief is handed the format by name, with the reason it was called that, in one new slot, `declared_layers`, and names it in its header; and it says which parts are fixed (the angle, the key points, the product facts, the ask) and which are the creator&#x27;s own (the words, the slang, the delivery). The script stays whole and every labelled line is as v36. --&gt;</pre></div></div></div><div class="pair"><div class="step">the format this is made in</div><div class="cols"><div><div class="lab">Before</div><pre>## THE LANE — paid or organic, and it changes only the ask (2026-10-21)</pre></div><div><div class="lab new">Added</div><pre class="add">## THE FORMAT THIS IS MADE IN (v37)
+
+The teardown already decided what this video is: its format, its style, its
+structure and how it is made, each with the reason it was called that.
+
+{declared_layers}
+
+Name the format in the brief&#x27;s header, the way it is named above (the shape
+below shows the line).</pre></div></div></div><div class="pair"><div class="step">the format, named in the header</div><div class="cols"><div><div class="lab">Before</div><pre>⟨One to three sentences: the core idea this concept runs on, from its own
+material.⟩</pre></div><div><div class="lab new">Added</div><pre class="add">Format: ⟨the format this is made in — its id and its name, as THE FORMAT THIS IS MADE IN gives them⟩</pre></div></div></div><div class="pair"><div class="step">what is fixed, and what is the creator&#x27;s</div><div class="cols"><div><div class="lab">Before</div><pre># WHAT DOES NOT GO IN</pre></div><div><div class="lab new">Added</div><pre class="add"># WHAT IS FIXED, AND WHAT IS THE CREATOR&#x27;S (v37)
+
+A brief that is too exact reads as an ad. So the brief fixes the angle and the
+key points, and leaves the words, the slang and the delivery to the person
+filming.
+
+Last in each concept, after HOW IT LIVES ON CAMERA where it is printed, print
+`## WHAT IS FIXED, WHAT IS YOURS` and five short lines, written to the
+creator, plainly:
+
+- **Fixed — the angle:** what this video argues, in one plain line.
+- **Fixed — the key points:** what has to come across, in the script&#x27;s order,
+  a few words each.
+- **Fixed — the product facts:** said as the script has them.
+- **Fixed — the ask:** the last line, word for word.
+- **Yours — the words, the slang and the delivery:** the `Say:` lines show one
+  way to say it.
+
+The script stays in the brief, whole: every `Say:` line is still written word
+for word as the rules above say, and no frame, line or labelled line changes.
+This section only tells the creator which parts hold and which are theirs.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">Creator page</span><span class="l">What&#x27;s fixed, what&#x27;s theirs, the format</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: A creator&#x27;s or founder&#x27;s brief · File: <code>stage7b-concept-v11-owner.md</code></div><div class="pair"><div class="step">the change</div><div class="cols"><div><div class="lab">Before</div><pre>**The creator is a professional.** ... They take
+it from there, in their own words and their own style. The spec&#x27;s detail is for
+our editor and our pictures, not for them.</pre></div><div><div class="lab new">Added</div><pre class="add">**What is fixed and what is theirs (v11).** Fix the angle and the key points: the direction the hooks take, the beats that must happen, the product points and the product&#x27;s real facts. Leave the words, the slang and the delivery to the creator. A brief that is too exact reads as an ad.
+
++ slot line: Here is the format this video is made in, each layer with why it was called that: {declared_layers}
+
++ rule: ## The format line names the format (v11): the Format line uses that format&#x27;s plain name in its three to six words; only the name goes on the page, never the playbook, beats or reasons; no format named = written from the spec as before.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">A new format</span><span class="l">How to decide: same, own, or not one</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: A format the lists do not know · File: <code>format-call-guidance-v1-owner.md</code></div><div class="pair"><div class="step">the whole file (new)</div><div class="cols"><div><div class="lab">Before</div><pre>nothing is shown</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- format-call-guidance-v1 (2026-11-18, held for review, not live: shown nowhere yet; fills decision 3.3 of the video decision logic). The short guidance for the person deciding on a format the lists do not know. --&gt;
+# A format the lists do not know — how to decide
+
+The run stops on a new format name until you decide. Decide by the structure:
+
+- The same structure with our language swapped in is the same format, whatever it sells.
+- Name a format by its structure.
+- One that keeps winning is a format. One that won once is a one-off.
+
+## The three choices
+
+- **Same as X** — choose it when this has the structure of a format already on the list, with other language in it or another thing being sold.
+- **Its own format** — choose it when the structure is on no list and it keeps winning. Name it by its structure.
+- **Not a format** — choose it when it won once. It is a one-off.</pre></div></div></div></div></details><details class="card"><summary><span class="dot"></span><span class="t">No swipe</span><span class="l">Avatar side first, then the format</span><span class="state">Not live</span></summary>
+<div class="body"><div class="meta">Fills: An idea with no swipe: format, style, arc · File: <code>stage2s-scratch-picks-v1-owner.md</code></div><div class="pair"><div class="step">the whole file (new)</div><div class="cols"><div><div class="lab">Before</div><pre>the session picks by hand; nothing states the order or asks for a reason</pre></div><div><div class="lab new">Added</div><pre class="add">&lt;!-- stage2s-scratch-picks-v1 (2026-11-18, held for review, not live: a new prompt, wired to no run; fills decision 2.4 of the video decision logic). For an idea with no swipe: the order the picks are made in, with one reason line for each. It makes picks only; it writes no script. --&gt;
+# An idea with no swipe — the picks, in order
+
+There is no swipe for this run. Nothing was torn down, so nothing hands you a
+format, a style or an arc. You make the picks a from-scratch run starts from,
+in the order below, with one reason line for each. You write no script and no
+brief.
+
+## What you are given
+
+The avatar: {avatar}
+
+The brand&#x27;s angle list, each angle with its id, its name and the one sentence
+it argues: {angles}
+
+Real language selected for this avatar, each row with its source: {language}
+
+The five awareness levels, each with where the ad may begin: {awareness_levels}
+
+The format list, each format with its id and what it is: {formats}
+
+## The order
+
+**Work the avatar side first: the angle, the language, the tone.** Then pick
+the format.
+
+1. **The angle.** One id from the angle list.
+2. **The language.** The customer&#x27;s own words the ad is written in, quoted
+   from the rows above.
+3. **The tone.** How it has to sound to this avatar, in a few words.
+4. **The awareness level the ad enters at.** One of the five levels, by its
+   id.
+5. **The format.** Pick the format this avatar already watches, by the
+   awareness level the ad enters at. One id from the format list. The format
+   supplies the hook, the scroll stopper and the lead, so this step picks
+   none of those three.
+6. **The style and the arc.** They come last, after the format. This step is
+   handed no list for either, so name each in plain words, or write `not on
+   file`. Never coin an id.
+
+Every pick comes from what you were given. Where the inputs do not show what
+this avatar watches, say so in `FORMAT WHY`, and never present a guess as
+what they watch. A pick made here is a proposal: a proposed default is not
+proof.
+
+## What you hand on, exactly in this shape
+
+Eight labelled lines, in this order, one per line, spelled exactly this way:
+
+```
+AVATAR ANGLE: &lt;angle id&gt; — &lt;one line: why this angle for this avatar&gt;
+LANGUAGE: &quot;&lt;the customer&#x27;s words&gt;&quot; (&lt;source&gt;) ; … — &lt;one line: why these&gt;
+TONE: &lt;a few words&gt; — &lt;one line: what in the avatar&#x27;s language shows it&gt;
+AWARENESS: &lt;level id&gt; — &lt;one line: why the ad enters there&gt;
+FORMAT: &lt;format id&gt;
+FORMAT WHY: &lt;one line: what shows this avatar already watches it, and why it fits the level the ad enters at&gt;
+STYLE: &lt;the look, in plain words — or not on file&gt; — &lt;one line: what it follows from&gt;
+ARC: &lt;the order it is told in, in plain words — or not on file&gt; — &lt;one line: what it follows from&gt;
+```
+
+Nothing else. No script, no hook, no scroll stopper and no lead.</pre></div></div></div></div></details></div>
+</div>

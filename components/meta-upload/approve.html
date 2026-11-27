@@ -178,7 +178,15 @@ a{color:var(--accent)}
 .bbar input{flex:1 1 220px;min-width:0;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:10px;font:15px var(--body)}
 @media (max-width:720px){.lrow{grid-template-columns:auto minmax(0,1fr)}.lthumbs{grid-column:1/-1;order:3;overflow-x:auto}.lacts{grid-column:1/-1;justify-content:stretch;order:4}.lacts .b{flex:1 1 0}.lthumbs img{width:60px;height:107px}}
 </style>
-<script>document.documentElement.dataset.skin="approve";document.head.appendChild(Object.assign(document.createElement("link"),{rel:"stylesheet",href:location.protocol+"//"+location.hostname+":8880/skin.css"}));document.head.appendChild(Object.assign(document.createElement("script"),{src:location.protocol+"//"+location.hostname+":8880/skin.js"}))</script></head>
+<script>/* inside the Video Studio (?embed=1): its header and look, filtered to one brand or ad (the owner, 8 Nov: one tool) */
+if(new URLSearchParams(location.search).get("embed"))document.documentElement.classList.add("embed");</script>
+<style>
+.embed header{display:none}
+.embed:root{--bg:#eceee9;--panel:#fff;--ink:#16211c;--soft:#6b7871;--line:#d6dcd6;--accent:#1d7a55;--accent-soft:#e3efe8}
+.embed body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg)}
+.embed .wrap{padding-top:12px}
+</style>
+<script>if(!document.documentElement.classList.contains("embed")){document.documentElement.dataset.skin="approve";document.head.appendChild(Object.assign(document.createElement("link"),{rel:"stylesheet",href:location.protocol+"//"+location.hostname+":8880/skin.css"}));document.head.appendChild(Object.assign(document.createElement("script"),{src:location.protocol+"//"+location.hostname+":8880/skin.js"}))}</script></head>
 <body>
 <div class="wrap">
   <header>
@@ -199,7 +207,9 @@ const VIEWS=[["check","To check"],["approved","Approved"],["live","Live"],["sent
 const LANE={video:"Video",image:"Image",carousel:"Carousel",creator:"Creator"};
 const PILL={"1-check":["wait","Waiting for you"],"2-approved":["ok","Approved — going in"],"3-live":["live","Live in Meta"],"sent-back":["stop","Sent back"]};
 const S={view:"check",brand:"",lane:"",start:{},by:"",layout:"list",sel:new Set(),open:new Set()};
+const QP=new URLSearchParams(location.search);S.brief=QP.get("brief")||"";if(VIEWS.some(v=>v[0]===QP.get("view")))S.view=QP.get("view");
 try{const t=localStorage.getItem("approve-theme");if(t)document.documentElement.dataset.theme=t;const v=localStorage.getItem("approve-view");if(v)S.view=v;S.layout=localStorage.getItem("approve-layout")||"list";S.by=localStorage.getItem("approve-by")||""}catch(e){}
+if(QP.get("brand"))S.brand=QP.get("brand");if(QP.get("view"))S.view=QP.get("view");
 document.getElementById("theme").onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark";try{localStorage.setItem("approve-theme",r.dataset.theme)}catch(e){}};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const host=u=>{try{const x=new URL(u);return x.host+x.pathname}catch(e){return u||""}};
@@ -207,8 +217,10 @@ const host=u=>{try{const x=new URL(u);return x.host+x.pathname}catch(e){return u
 async function load(){
   const q=new URLSearchParams({view:S.view,brand:S.brand,lane:S.lane});
   let d;
-  try{d=await (await fetch((S.view==="learnings"?"/api/learnings?":"/api/cards?")+q)).json()}catch(e){document.getElementById("grid").innerHTML='<div class="empty">The page lost its connection — reload.</div>';return}
+  try{d=await (await fetch((S.view==="learnings"?"/api/learnings?":"/api/cards?")+q)).json()}catch(e){if(S.view!=="check"){S.view="check";try{localStorage.setItem("approve-view","check")}catch(_){};return load()}document.getElementById("grid").innerHTML='<div class="empty">The page lost its connection — reload.</div>';return}
   if(d.counts)S.counts=d.counts;if(d.reasons)S.reasons=d.reasons;
+  // a full key (the Studio's link) matches that one brief; an old brief-0324 still narrows by the words in the name
+  if(S.brief&&Array.isArray(d.cards))d.cards=d.cards.filter(c=>/_brief-\d{4}$/.test(S.brief)?(c.brief_key===S.brief.toLowerCase()||String(c.ad_name||"").toLowerCase().startsWith(S.brief.toLowerCase()+"_")):String(c.ad_name||c.id||"").includes(S.brief));
   S.d=d;render();
 }
 /* who is deciding: picked once per browser, written on every approve / disapprove */
@@ -231,13 +243,33 @@ function render(){
   const g=document.getElementById("grid");
   const pick=!S.by?`<div class="pick" style="grid-column:1/-1"><b>Who is deciding?</b><div class="bar">${(d.approvers||[]).map(n=>`<button class="chip" onclick="setBy('${esc(n)}')">${esc(n)}</button>`).join("")}</div><span class="hint">Asked once on this browser. Your name goes on every approve and disapprove.</span></div>`:"";
   const list=S.view==="check"&&S.layout==="list";
-  g.innerHTML=pick+jobsStrip(d)+(d.cards.length?(list?listView(d.cards):d.cards.map(card).join("")):`<div class="empty">${S.view==="check"?"Nothing waiting for you.":"Nothing here."}</div>`);
+  const y=window.scrollY;
+  g.innerHTML=pick+`<div id="jobstrip" style="display:contents">${jobsStrip(d)}</div>`+(d.cards.length?(list?listView(d.cards):d.cards.map(card).join("")):`<div class="empty">${S.view==="check"?"Nothing waiting for you.":"Nothing here."}</div>`);
+  window.scrollTo(0,y);
   batchBar();
-  clearTimeout(S.poll);
-  if((d.jobs||[]).some(j=>j.state==="queued"||j.state==="uploading"))S.poll=setTimeout(load,4000);
+  watchJobs();
 }
+/* while ads go into Meta only the status strip and tab counts update: never the cards you are working on */
+function watchJobs(){clearTimeout(S.poll);if((S.d.jobs||[]).some(j=>j.state==="queued"||j.state==="uploading"))S.poll=setTimeout(soft,4000)}
+async function soft(){
+  const q=new URLSearchParams({brand:S.brand,lane:S.lane});
+  let d;try{d=await (await fetch("/api/jobs?"+q)).json()}catch(e){return watchJobs()}
+  S.counts=d.counts;S.d.counts=d.counts;S.d.jobs=d.jobs;S.d.queue=d.queue;
+  bar(S.d);
+  const s=document.getElementById("jobstrip");if(s&&S.view!=="learnings")s.innerHTML=jobsStrip(S.d);
+  (S.d.cards||[]).filter(c=>d.jobs.some(j=>j.name===c.ad_name&&j.cid!==c.id)).forEach(c=>gone(c.id));
+  watchJobs();
+}
+function gone(id){if(!id||!S.d.cards)return;S.d.cards=S.d.cards.filter(c=>c.id!==id);S.sel.delete(id);S.open.delete(id);[cardEl(id),document.getElementById("row-"+id)].forEach(e=>e&&e.remove());batchBar()}
+function busy(){const a=document.activeElement;
+  return (a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&a.type!=="checkbox")||S.sel.size>0||S.open.size>0||!!S.backing
+    ||!!document.querySelector(".note.open")||[...document.querySelectorAll("textarea,input[type=text]")].some(x=>x.value.trim())}
+/* after an action: drop the finished card, and rebuild the list only when nothing is in progress */
+function quiet(id){gone(id);return busy()?soft():load()}
 function setLayout(v){S.layout=v;try{localStorage.setItem("approve-layout",v)}catch(e){};render()}
-const brief=n=>((String(n||"").match(/brief-(\d+)/)||[])[1]||"");
+/* the readable brief ID ("Acme · Body scrub · 0324") comes from the page's server (names.brief_label); a number
+   alone names a brief per brand AND product, so it is never shown on its own (11 Nov) */
+const briefTag=x=>x&&x.brief_label?esc(x.brief_label)+" · ":"";
 const JOB={waiting:["wait","Waiting, tries again by itself"],queued:["wait","Queued"],uploading:["up","Sending to Meta"],live:["ok","Live in Meta"],failed:["stop","Didn't go in"],gone:["stop","Left Approved"]};
 function jobsStrip(d){
   const all=(d.jobs||[]);if(!all.length||S.view!=="check")return "";
@@ -245,7 +277,7 @@ function jobsStrip(d){
   if(!js.length)return "";
   const n=s=>all.filter(j=>j.state===s).length;
   return `<section class="jobs"><h3>Going into Meta <span class="foot">· ${n("queued")+n("uploading")+n("waiting")} going in · ${n("failed")+n("gone")} didn't go in</span></h3>${js.map(j=>{const [c,l]=JOB[j.state]||["wait",j.state];
-    return `<div class="job">${j.thumb?`<img src="${esc(j.thumb)}" alt="" loading="lazy">`:"<span></span>"}<div><div><b>${brief(j.ad_name)?"Brief "+esc(brief(j.ad_name))+" · ":""}${esc(j.headline||j.ad_name)}</b> <span class="foot">${esc(j.start==="ACTIVE"?"On":"Paused")} · ${esc((j.at||"").replace("T"," ").slice(11,16))}</span></div>${j.error?`<div class="err">${esc(j.error)}</div>`:""}</div><div style="display:flex;gap:6px;align-items:center"><span class="pill ${c}">${l}${j.state==="live"&&j.ads?` · ${j.ads} ad${j.ads>1?"s":""}`:""}</span>${j.state==="failed"&&j.cid&&j.cid.includes("/2-approved/")?`<button class="b sm" onclick="retryJob('${esc(j.cid)}',this)">Try again</button>`:""}</div></div>`}).join("")}</section>`;
+    return `<div class="job">${j.thumb?`<img src="${esc(j.thumb)}" alt="" loading="lazy">`:"<span></span>"}<div><div><b>${briefTag(j)}${esc(j.headline||j.ad_name)}</b> <span class="foot">${esc(j.start==="ACTIVE"?"On":"Paused")} · ${esc((j.at||"").replace("T"," ").slice(11,16))}</span></div>${j.error?`<div class="err">${esc(j.error)}</div>`:""}</div><div style="display:flex;gap:6px;align-items:center"><span class="pill ${c}">${l}${j.state==="live"&&j.ads?` · ${j.ads} ad${j.ads>1?"s":""}`:""}</span>${j.state==="failed"&&j.cid&&j.cid.includes("/2-approved/")?`<button class="b sm" onclick="retryJob('${esc(j.cid)}',this)">Try again</button>`:""}</div></div>`}).join("")}</section>`;
 }
 function listView(cards){
   const ids=cards.map(c=>c.id);
@@ -253,13 +285,13 @@ function listView(cards){
   return `<div class="lv"><div class="lvhead"><label><input type="checkbox" id="selall" ${all?"checked":""} onchange="selAll(this.checked)"> Select all</label><span>${cards.length} waiting · click a row for the words, pages and checks</span></div>${cards.map(row).join("")}</div>`;
 }
 function row(c){
-  const thumbs=c.media.slice(0,6).map(m=>m.kind==="video"?`<img src="${esc(m.cover||"")}" alt="">`:`<img src="${esc(m.thumb)}" alt="" loading="lazy">`).join("");
+  const thumbs=c.media.slice(0,6).map(m=>m.kind==="video"?`<img src="${esc(m.cover||m.thumb)}" alt="" loading="lazy">`:`<img src="${esc(m.thumb)}" alt="" loading="lazy">`).join("");
   const fail=c.checks.filter(x=>!x.ok);
   const st=fail.length?`<span class="pill stop">Check failing: ${esc(fail[0].label)}</span>`:(c.copy_checked?'<span class="pill ok">Ready</span>':'<span class="pill wait">Copy not checked</span>');
   const open=S.open.has(c.id);
   return `<div class="lrow${S.sel.has(c.id)?" sel":""}" id="row-${esc(c.id)}"><input type="checkbox" class="sel" aria-label="select" ${S.sel.has(c.id)?"checked":""} onchange="selOne('${esc(c.id)}',this.checked)">
     <div class="lthumbs" onclick="toggleRow('${esc(c.id)}')">${thumbs}</div>
-    <div class="lmain" onclick="toggleRow('${esc(c.id)}')"><b>${brief(c.ad_name)?"Brief "+esc(brief(c.ad_name))+" · ":""}${esc(c.headline||c.ad_name)}</b><small>${esc(c.brand_label)} · ${esc(LANE[c.lane]||c.lane)} · ${c.media.length} picture${c.media.length===1?"":"s"} · ${esc(c.ad_name)}</small><div>${st}</div></div>
+    <div class="lmain" onclick="toggleRow('${esc(c.id)}')"><b>${briefTag(c)}${esc(c.headline||c.ad_name)}</b> ${(c.revision_request||c.delivery)?`<span class="pill wait">${esc(String((c.revision_request||c.delivery).revision_id).split("-").pop())}${c.state==="sent-back"?" · Back for revision":""}</span>`:""}<small>${esc(c.brand_label)} · ${esc(LANE[c.lane]||c.lane)} · ${c.media.length} picture${c.media.length===1?"":"s"} · ${esc(c.ad_name)}</small><div>${st}</div></div>
     <div class="lacts"><button class="b go sm" ${c.passed?"":"disabled"} onclick="doBatch('live',['${esc(c.id)}'])">Approve → On</button><button class="b sm" ${c.passed?"":"disabled"} onclick="doBatch('paused',['${esc(c.id)}'])">Approve → Paused</button><button class="b sm backb" onclick="openBack('${esc(c.id)}')">Send back</button><button class="b sm" onclick="doDrop(['${esc(c.id)}'])">Drop</button></div>
     ${S.backing===c.id?`<div class="backbox"><textarea id="fb-${esc(c.id)}" placeholder="What should change? (this goes to the remake)"></textarea><div class="lacts"><button class="b sm warn" onclick="sendBack(['${esc(c.id)}'],'fb-${esc(c.id)}')">Send back with this</button><button class="b sm" onclick="openBack('')">Cancel</button></div></div>`:""}
     ${open?`<div class="ldetail">${card(c)}</div>`:""}</div>`;
@@ -333,7 +365,7 @@ function more(id,btn){const e=document.getElementById(id);e.classList.toggle("cl
 function card(c){
   const [pc,pt]=PILL[c.state]||["wait",c.state];
   const media=c.media.map((m,i)=>m.kind==="video"
-    ?`<div><video src="${esc(m.src)}${m.cover?"":"#t=0.1"}"${m.cover?` poster="${esc(m.cover)}"`:""} controls preload="metadata" playsinline webkit-playsinline></video><div class="n">${i+1}${m.cover?" · thumbnail":""}</div></div>`
+    ?`<div><video src="${esc(m.src)}" poster="${esc(m.cover||m.thumb)}" controls preload="metadata" playsinline webkit-playsinline></video><div class="n">${i+1}${m.cover?" · thumbnail":""}</div></div>`
     :`<div><a href="${esc(m.src)}" target="_blank" rel="noopener"><img src="${esc(m.thumb)}" loading="lazy" alt="${c.format==="carousel"?"slide":"picture"} ${i+1}"></a><div class="n">${c.format==="carousel"?"slide ":""}${i+1}</div></div>`).join("");
   const w=c.words||{};
   const pages=(c.goes.length?c.goes:c.pages).map(g=>g.error?`<span class="pill stop">${esc(g.error)}</span>`:`<div><a class="mono" href="${esc(g.url)}" target="_blank" rel="noopener">${esc(host(g.url))}</a></div>`).join("")||'<span class="pill stop">None</span>';
@@ -345,7 +377,7 @@ function card(c){
   const all=c.checks.length?`<details class="all"><summary>Every check</summary><ul class="checks">${c.checks.map(x=>`<li class="${x.ok?"":"bad"}">${x.ok?"✓":"✕"} ${esc(x.label)} — ${esc(x.why)}</li>`).join("")}</ul></details>`:"";
   const start=S.start[c.id]||"PAUSED";
   let rows=`
-    <div class="row"><span>Ad name</span><div class="mono">${esc(c.ad_name)}</div></div>
+    <div class="row"><span>Ad name${(c.revision_request||c.delivery)?`<br>${esc((c.revision_request||c.delivery).revision_id)}`:""}</span><div class="mono">${esc(c.ad_name)}</div></div>
     <div class="row"><span>Primary text</span><div>${texts(w.primary)}</div></div>
     <div class="row"><span>Headlines</span><div>${(w.headlines||[]).length?esc(w.headlines.join(" · ")):'<span class="pill stop">None</span>'}</div></div>
     <div class="row"><span>Descriptions</span><div>${(w.descriptions||[]).length?esc(w.descriptions.join(" · ")):'<span style="color:var(--soft)">none</span>'}</div></div>
@@ -358,7 +390,12 @@ function card(c){
     rows+=`<div class="row"><span>${a.decision==="disapprove"?"Disapproved":no?"Sent back":"Approved"}</span><div>${esc(a.by)} · ${esc((a.at||"").replace("T"," "))}${a.start?" · starts "+(a.start==="ACTIVE"?"On":"Paused"):""}${(a.reasons||[]).length?`<div style="margin-top:4px">${a.reasons.map(r=>`<div><span class="pill stop">${esc(r.label)}</span> <span style="color:var(--soft);font-size:.8rem">→ step ${esc(r.step)} · ${esc(r.tool)}</span></div>`).join("")}</div>`:""}${a.note?`<div class="text" style="margin-top:4px"><b>Note:</b> ${esc(a.note)}</div>`:""}</div></div>`}
   if(c.meta&&c.meta.length)rows+=`<div class="row"><span>In Meta</span><div class="goes">${c.meta.map(m=>`<div class="g"><div class="mono">${esc(m.meta_ad_name)}</div><div>ad set <span class="mono">${esc(m.ad_set||"not recorded")}</span></div><div>ad id <a class="mono" target="_blank" rel="noopener" href="https://adsmanager.facebook.com/adsmanager/manage/ads?act=${esc(c.account_id)}&selected_ad_ids=${esc(m.ad_id)}">${esc(m.ad_id)}</a> · ${m.status==="ACTIVE"?"On":'<span class="pill stop">Paused — not spending</span>'}${m.delivery?` · Meta says: ${esc(m.delivery.toLowerCase().replace(/_/g," "))}`:""}</div></div>`).join("")}${(c.start_warnings||[]).map(x=>`<div class="pill stop" style="margin-top:6px">${esc(x)}</div>`).join("")}</div></div>`;
   const camps=((S.d&&S.d.campaigns)||{})[c.brand]||[];
+  const fbp=((S.d&&S.d.fb_pages)||{})[c.brand]||[];
+  if(c.state==="1-check"&&fbp.length>1){const on=c.fb_pages_pick&&c.fb_pages_pick.length?c.fb_pages_pick:fbp.filter(p=>p.default).map(p=>p.id);
+    rows+=`<div class="row"><span>Runs from</span><div>${fbp.map(p=>`<label style="margin-right:12px"><input type="checkbox" data-fbp="${esc(c.id)}" value="${esc(p.id)}"${on.includes(p.id)?" checked":""} onchange="pickPages('${esc(c.id)}')"> ${esc(p.name)}</label>`).join("")}<div style="color:var(--soft);font-size:.75rem">One ad per ticked Page</div></div></div>`}
   if(c.state==="1-check")rows+=`<div class="row"><span>Campaign</span><div><select onchange="pickCampaign('${esc(c.id)}',this.value)"><option value="">By its landing page</option>${camps.map(o=>`<option value="${esc(o.name)}"${o.name===c.campaign_pick?" selected":""}>${esc(cname(o.name))}</option>`).join("")}</select></div></div>`;
+  const sets=((S.d&&S.d.ad_sets)||{})[c.brand]||[];
+  if(c.state==="1-check")rows+=`<div class="row"><span>Ad set</span><div><select onchange="pickAdSet('${esc(c.id)}',this.value)"><option value="">By its avatar and angle</option>${sets.map(n=>`<option value="${esc(n)}"${n===c.ad_set_pick?" selected":""}>${esc(sname(n))}</option>`).join("")}</select></div></div>`;
   if(c.state==="3-live"&&c.meta&&c.meta.length){const inn=[...new Set(c.meta.map(m=>m.campaign).filter(Boolean))];const to=camps.filter(o=>!inn.includes(o.name));
     rows+=`<div class="row"><span>Campaigns</span><div class="goes">${inn.map(n=>`<div class="g"><span class="mono">${esc(cname(n))}</span> <button class="b" style="padding:2px 8px;font-size:.75rem" onclick="campStatus('${esc(c.id)}','${esc(c.brand)}','${esc(n)}','PAUSED',this)">Pause campaign</button></div>`).join("")}${to.length?`<div style="margin-top:6px"><select id="mv-${esc(c.id)}">${to.map(o=>`<option value="${esc(o.name)}">${esc(cname(o.name))}</option>`).join("")}</select> <button class="b" style="padding:2px 8px;font-size:.75rem" onclick="moveTo('${esc(c.id)}',this)">Copy into campaign</button></div>`:""}</div></div>`}
   if(c.made_by&&c.made_by.tool)rows+=`<div class="row"><span>Made by</span><div style="color:var(--soft)">${esc(c.made_by.tool)}${c.made_by.creator?" · "+esc(c.made_by.creator):""}</div></div>`;
@@ -369,7 +406,7 @@ function card(c){
   const note=(c.state==="1-check"||c.state==="2-approved")?`<div class="note" id="note-${esc(c.id)}"><b>What's wrong? Pick one or more.</b><div class="why">${why}</div><textarea placeholder="Say what needs to change (required)"></textarea><div class="bar"><button class="b warn" onclick="disapprove('${esc(c.id)}',this)">Disapprove</button><button class="b" onclick="openNote('${esc(c.id)}')">Cancel</button></div></div>`:"";
   const err=c.upload_error?`<div class="result err">Meta said no (${esc(c.upload_error.at.replace("T"," "))}):\n${esc(c.upload_error.error)}</div>`:"";
   return `<article class="modal" id="card-${esc(c.id)}">
-    <div class="top"><b>${esc(c.brand_label)} · ${esc(LANE[c.lane]||c.lane)}<small>${c.format==="carousel"?"carousel ad":"flexible ad"}</small></b><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${c.state==="1-check"?(c.copy_checked?'<span class="pill ok">Copy checked · ready</span>':'<span class="pill stop">Copy not checked yet · don\'t upload</span>'):""}<span class="pill ${pc}">${pt}</span></span></div>
+    <div class="top"><b>${c.brief_label?esc(c.brief_label):esc(c.brand_label)} · ${esc(LANE[c.lane]||c.lane)}<small>${c.format==="carousel"?"carousel ad":"flexible ad"}</small></b><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${c.state==="1-check"?(c.copy_checked?'<span class="pill ok">Copy checked · ready</span>':'<span class="pill stop">Copy not checked yet · don\'t upload</span>'):""}<span class="pill ${pc}">${pt}</span></span></div>
     <div class="media">${media||'<span class="pill stop">No media</span>'}</div>
     <div class="rows">${rows}</div>${err}<div class="slot"></div>${btns}${note}</article>`;
 }
@@ -379,25 +416,48 @@ async function openEdit(id){
   if(box.innerHTML){box.innerHTML="";return}
   const c=S.d.cards.find(x=>x.id===id);const w=c.words||{};
   const L=(await (await fetch("/api/links?brand="+encodeURIComponent(c.brand))).json()).links||[];
+  const LIB=(await (await fetch("/api/copy?brand="+encodeURIComponent(c.brand))).json()).library||{};
+  S.copy=S.copy||{};S.copy[id]=LIB;S.picked=S.picked||{};S.picked[id]=new Set();
   const on=new Set((c.pages||[]).map(p=>p.link_id));
   const ta=(k,label,val,h)=>`<div style="margin-top:10px"><b>${label}</b><textarea data-k="${k}" style="width:100%;min-height:${h}px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)">${esc(val)}</textarea></div>`;
   const prim=(w.primary&&w.primary.length?w.primary:[""]);
-  box.innerHTML=`<div style="margin-top:8px"><div class="hint">Each primary text and each headline is its own box. Descriptions: one per line.</div>
+  const tag=o=>o.from==="winner"?`<span class="pill ok" style="font-size:.7rem">${esc(o.note)}</span>`:o.from==="edit"?`<span class="pill" style="font-size:.7rem">${esc(o.note)}</span>`:`<span style="color:var(--soft);font-size:.72rem">${esc(o.note)}</span>`;
+  const shelf=(k,title,wide)=>(LIB[k]||[]).length?`<div style="margin-top:10px"><b>${title}</b> <span class="hint" style="display:inline">tap to add or remove</span><div style="display:flex;gap:6px;overflow-x:auto;padding:4px 0">${LIB[k].map(o=>`<button class="b cpick" data-kind="${k}" data-oid="${esc(o.id)}" style="flex:0 0 auto;text-align:left;padding:6px 10px;font-size:.8rem;max-width:${wide?260:200}px;white-space:normal" onclick="pickCopy('${esc(id)}','${k}','${esc(o.id)}')"><span class="ck" style="font-weight:800"></span> ${esc(wide?o.text.slice(0,140)+(o.text.length>140?"…":""):o.text)}<br>${tag(o)}</button>`).join("")}</div></div>`:"";
+  const picks=`<div style="margin-top:8px;padding:8px;border:1px solid var(--line);border-radius:10px"><b>Copy library</b><div class="hint">Winners with their sales, your past edits, and words on live ads. Pick any mix; edit below; every change is logged for the next batch.</div>${shelf("primary","Primary text",true)}${shelf("headlines","Headlines")}${shelf("descriptions","Descriptions")}</div>`;
+  box.innerHTML=`<div style="margin-top:8px">${picks}<div class="hint">Each primary text, headline and description is its own box (up to five of each).</div>
     <div data-prims>${prim.map((t,i)=>ta("primary","Primary text "+(i+1),t,170)).join("")}</div>
     <button class="b" style="margin-top:8px;padding:6px 12px;font-size:.85rem" onclick="addBox(this,'primary','Primary text',170)">+ Add another primary text</button>
     <div data-heads>${(w.headlines&&w.headlines.length?w.headlines:[""]).map((t,i)=>ta("headlines","Headline "+(i+1),t,50)).join("")}</div>
-    <button class="b" style="margin-top:8px;padding:6px 12px;font-size:.85rem" onclick="addBox(this,'headlines','Headline',50)">+ Add another headline</button>${ta("descriptions","Descriptions",(w.descriptions||[]).join("\n"),50)}
+    <button class="b" style="margin-top:8px;padding:6px 12px;font-size:.85rem" onclick="addBox(this,'headlines','Headline',50)">+ Add another headline</button>
+    <div data-descs>${(w.descriptions&&w.descriptions.length?w.descriptions:[""]).map((t,i)=>ta("descriptions","Description "+(i+1),t,40)).join("")}</div>
+    <button class="b" style="margin-top:8px;padding:6px 12px;font-size:.85rem" onclick="addBox(this,'descriptions','Description',40)">+ Add another description</button>
     <div style="margin-top:10px"><b>Landing page</b>${L.filter(o=>o.allowed).map(o=>`<label style="display:block;margin-top:4px"><input type="checkbox" data-link="${esc(o.link_id)}" ${on.has(o.link_id)?"checked":""}> ${esc(o.label)} <span class="mono" style="color:var(--soft)">${esc(host(o.url))}</span></label>`).join("")}</div>
     <div class="btns" style="margin-top:10px"><button class="b go" onclick="saveEdit('${esc(id)}',this)">Save</button><button class="b" onclick="openEdit('${esc(id)}')">Cancel</button></div></div>`;
+  box.addEventListener("input",()=>marks(id));marks(id);
 }
-function addBox(btn,k,label,h){const d=btn.previousElementSibling.matches("[data-prims],[data-heads]")?btn.previousElementSibling:btn.parentElement.querySelector(k==="primary"?"[data-prims]":"[data-heads]");const n=d.querySelectorAll("textarea").length+1;if(n>5)return;const w=document.createElement("div");w.innerHTML=`<div style="margin-top:10px"><b>${label} ${n}</b><textarea data-k="${k}" style="width:100%;min-height:${h}px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)"></textarea></div>`;d.appendChild(w.firstChild)}
+function edBoxes(box,k){return [...box.querySelectorAll(`[data-k="${k}"]`)]}
+function edHas(box,k,t){const n=x=>x.replace(/\s+/g," ").trim();return edBoxes(box,k).some(x=>n(x.value)===n(t))}
+function pickCopy(id,k,oid){
+  const box=document.getElementById("ed-"+id);const o=((S.copy[id]||{})[k]||[]).find(x=>x.id===oid);if(!box||!o)return;
+  const n=x=>x.replace(/\s+/g," ").trim();const key=k+":"+o.text;
+  {const bx=edBoxes(box,k);const hit=bx.find(x=>n(x.value)===n(o.text));
+    if(hit){hit.value="";if(bx.length>1)hit.parentElement.remove();S.picked[id].delete(key);
+      const nm={primary:"Primary text",headlines:"Headline",descriptions:"Description"}[k];edBoxes(box,k).forEach((x,i)=>{const b=x.previousElementSibling;if(b&&b.tagName==="B")b.textContent=nm+" "+(i+1)})}
+    else{let empty=bx.find(x=>!x.value.trim());if(!empty&&bx.length<5){box.querySelector(`[data-k="${k}"]`).closest("[data-prims],[data-heads],[data-descs]").nextElementSibling.click();empty=edBoxes(box,k).find(x=>!x.value.trim())}
+      if(empty){empty.value=o.text;S.picked[id].add(key)}}}
+  marks(id);
+}
+function marks(id){const box=document.getElementById("ed-"+id);if(!box)return;
+  box.querySelectorAll(".cpick").forEach(b=>{const o=((S.copy[id]||{})[b.dataset.kind]||[]).find(x=>x.id===b.dataset.oid);const on=o&&edHas(box,b.dataset.kind,o.text);
+    b.style.outline=on?"2px solid var(--yes,#2e7d4f)":"";b.querySelector(".ck").textContent=on?"✓":""})}
+function addBox(btn,k,label,h){const d=btn.previousElementSibling.matches("[data-prims],[data-heads],[data-descs]")?btn.previousElementSibling:btn.parentElement.querySelector(k==="primary"?"[data-prims]":k==="headlines"?"[data-heads]":"[data-descs]");const n=d.querySelectorAll("textarea").length+1;if(n>5)return;const w=document.createElement("div");w.innerHTML=`<div style="margin-top:10px"><b>${label} ${n}</b><textarea data-k="${k}" style="width:100%;min-height:${h}px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)"></textarea></div>`;d.appendChild(w.firstChild)}
 async function saveEdit(id,btn){
   const box=document.getElementById("ed-"+id);const g=k=>box.querySelector(`[data-k=${k}]`).value;
   const lines=v=>v.split("\n").map(x=>x.trim()).filter(Boolean);
-  const words={primary:[...box.querySelectorAll('[data-k="primary"]')].map(x=>x.value.trim()).filter(Boolean),headlines:[...box.querySelectorAll('[data-k="headlines"]')].map(x=>x.value.trim()).filter(Boolean),descriptions:lines(g("descriptions"))};
+  const words={primary:[...box.querySelectorAll('[data-k="primary"]')].map(x=>x.value.trim()).filter(Boolean),headlines:[...box.querySelectorAll('[data-k="headlines"]')].map(x=>x.value.trim()).filter(Boolean),descriptions:[...box.querySelectorAll('[data-k="descriptions"]')].map(x=>x.value.trim()).filter(Boolean)};
   const ids=[...box.querySelectorAll("[data-link]:checked")].map(x=>x.dataset.link);
   btn.disabled=true;
-  const r=await post("/api/words",{id,words,by:S.by}).catch(e=>({ok:false,error:String(e)}));
+  const r=await post("/api/words",{id,words,by:S.by,picked:[...((S.picked||{})[id]||[])]}).catch(e=>({ok:false,error:String(e)}));
   if(!r.ok){btn.disabled=false;show(id,false,esc(r.error));return}
   if(ids.length){const q=await post("/api/pages",{id,pages:ids}).catch(e=>({ok:false,error:String(e)}));if(!q.ok){btn.disabled=false;show(id,false,esc(q.error));return}}
   load();
@@ -405,6 +465,9 @@ async function saveEdit(id,btn){
 function setStart(id,v){S.start[id]=v;render()}
 /* campaigns (17 Oct 2026): pick one for a new ad, copy a live ad into another, pause a whole campaign */
 const cname=n=>String(n||"").replace(/^campaign_[^_]+_/,"");
+const sname=n=>String(n||"").replace(/^adset_[^_]+_/,"");
+async function pickAdSet(id,v){const r=await post("/api/ad-set",{id,ad_set:v}).catch(e=>({ok:false,error:String(e)}));if(!r.ok){show(id,false,esc(r.error));return}load()}
+async function pickPages(id){const v=[...document.querySelectorAll(`input[data-fbp="${CSS.escape(id)}"]:checked`)].map(x=>x.value);const r=await post("/api/fb-pages",{id,pages:v}).catch(e=>({ok:false,error:String(e)}));if(!r.ok){show(id,false,esc(r.error));return}load()}
 async function pickCampaign(id,v){const r=await post("/api/campaign",{id,campaign:v}).catch(e=>({ok:false,error:String(e)}));if(!r.ok){show(id,false,esc(r.error));return}load()}
 async function moveTo(id,btn){
   if(!S.by){show(id,false,"Pick who is deciding first (top of the page).");return}
@@ -413,7 +476,7 @@ async function moveTo(id,btn){
   btn.disabled=true;btn.textContent="Copying…";
   const r=await post("/api/move",{id,campaign:v,by:S.by}).catch(e=>({ok:false,error:String(e)}));
   if(!r.ok){btn.disabled=false;btn.textContent="Copy into campaign";show(id,false,esc(r.error));return}
-  show(id,true,`Copied into ${esc(cname(v))}: ${r.copied.map(x=>esc(x.ad_id)).join(", ")}`);setTimeout(load,1500)}
+  show(id,true,`Copied into ${esc(cname(v))}: ${r.copied.map(x=>esc(x.ad_id)).join(", ")}`);setTimeout(()=>quiet(),1500)}
 async function campStatus(id,brand,camp,status,btn){
   if(!S.by){show(id,false,"Pick who is deciding first (top of the page).");return}
   if(!confirm(`${status==="PAUSED"?"Pause":"Switch on"} the whole campaign ${cname(camp)}? Every ad in it ${status==="PAUSED"?"stops spending":"starts spending"}.`))return;
@@ -431,14 +494,14 @@ async function approve(id,btn,start){
   const el=cardEl(id);el.classList.add("busy");btn.textContent="Sending to Meta…";
   const r=await post("/api/approve",{id,start,by:S.by}).catch(e=>({ok:false,error:String(e)}));
   el.classList.remove("busy");
-  if(r.ok){show(id,true,`Approved ${start==="ACTIVE"?"(On)":"(Paused)"} — it's on its way into Meta; its result shows under "Sent to Meta" at the top.`);setTimeout(load,1200)}
-  else{show(id,false,`${r.state==="2-approved"?"Approved, but Meta said no — it's waiting under Approved to try again.\n":""}${esc(r.error)}`);btn.textContent=label;if(r.state==="2-approved")setTimeout(load,4000)}
+  if(r.ok){show(id,true,`Approved ${start==="ACTIVE"?"(On)":"(Paused)"} — it's on its way into Meta; its result shows under "Sent to Meta" at the top.`);setTimeout(()=>quiet(id),1200)}
+  else{show(id,false,`${r.state==="2-approved"?"Approved, but Meta said no — it's waiting under Approved to try again.\n":""}${esc(r.error)}`);btn.textContent=label;if(r.state==="2-approved")setTimeout(()=>quiet(id),4000)}
 }
 async function retry(id,btn){
   const el=cardEl(id);el.classList.add("busy");btn.textContent="Sending to Meta…";
   const r=await post("/api/retry",{id}).catch(e=>({ok:false,error:String(e)}));
   el.classList.remove("busy");
-  if(r.ok){show(id,true,"Queued again — its result shows under \"Sent to Meta\" on To check.");setTimeout(load,1200)}
+  if(r.ok){show(id,true,"Queued again — its result shows under \"Sent to Meta\" on To check.");setTimeout(()=>quiet(id),1200)}
   else{show(id,false,esc(r.error));btn.textContent="Try again → Meta"}
 }
 async function disapprove(id,btn){
@@ -450,7 +513,7 @@ async function disapprove(id,btn){
   if(!note){show(id,false,"Say what needs to change first.");return}
   btn.disabled=true;
   const r=await post("/api/disapprove",{id,reasons,note,by:S.by}).catch(e=>({ok:false,error:String(e)}));
-  if(r.ok){show(id,true,"Disapproved. Sent back to: "+r.to.map(esc).join(", "));setTimeout(load,1800)}else{show(id,false,esc(r.error));btn.disabled=false}
+  if(r.ok){show(id,true,"Disapproved. Sent back to: "+r.to.map(esc).join(", "));setTimeout(()=>quiet(id),1800)}else{show(id,false,esc(r.error));btn.disabled=false}
 }
 
 /* the Learnings tab: what keeps going wrong, by the step and tool that caused it */

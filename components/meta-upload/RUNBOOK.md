@@ -280,13 +280,15 @@ permission"* — that is a Business Settings grant, not a code problem.
 | `adsets` | no | per-sub-avatar notes and age bands |
 | `offers` | no | the expired-offer gate; without it nothing is checked for a dead offer bar |
 
+A promo brief needs no row there (2026-11-03): its ads stop at the end of its moment's window. The brief's register record names its run, the run's `vars/ask.md` names the ask, and the ask's `moment` is read through the marketing calendar's `moment_window` from `strategy/moments.json` — the first window ending on or after the day the brief was opened. Past that end the build holds the brief's pictures and lists why; `--allow-expired` overrides both gates.
+
 **Read the naming convention off the account before the first drop**, and put
 it in the brand file as a template. Two live accounts, two shapes, one
 renderer:
 
 ```
 {market!u}{sep}{product}{sep}{funnel!u}{sep}{lane!t}   sep " | "
-    -> US | NOVA™ | ICON | Fed-Up King
+    -> US | FLEX™ | ICON | Fed-Up King
 
 {budget!l}{sep}{market!l}{sep}{event!l}{sep}{product!l}{sep}{lane!l}   sep "_"
     -> cbo_us_purchase_body-scrub_creators

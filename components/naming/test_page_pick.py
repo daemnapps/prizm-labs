@@ -59,7 +59,7 @@ def pick(**kw):
 class Types(unittest.TestCase):
     def test_swipe_urls(self):
         self.assertEqual(PP.type_of_url("https://mengotomars.com/pages/quiz-v6?x=1"), "quiz")
-        self.assertEqual(PP.type_of_url("https://competitor-a.com/products/ccf2"), "store")
+        self.assertEqual(PP.type_of_url("https://brand_c.com/products/ccf2"), "store")
         self.assertEqual(PP.type_of_url("https://x.com/pages/10-reasons", "listicle"), "advertorial")
         self.assertEqual(PP.type_of_url("https://try.x.com/scrub/en/us/v2c/adv"), "advertorial")
         self.assertEqual(PP.type_of_url("https://x.com/landing.html"), "offer")

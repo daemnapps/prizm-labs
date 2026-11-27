@@ -28,7 +28,7 @@
    "path": "<funnel-repo>/src/icon/_includes/landing/",
    "brand": null,
    "what": "The blocks a page is assembled from. Brand-agnostic by the rule — hero-1 would build any brand's page unchanged — but it physically lives inside one brand's funnel repo, which is the one place the rule and the location disagree.",
-   "location_conflict": "Lives at brand-a-icon/src/icon/_includes/landing/ while being true of any brand. The second brand's funnel will either copy these 82 files or reach across to another brand's repo; both are wrong. Ruling needed before a Brand-B funnel is built, not after."
+   "location_conflict": "Lives at Brand A-icon/src/icon/_includes/landing/ while being true of any brand. The second brand's funnel will either copy these 82 files or reach across to another brand's repo; both are wrong. Ruling needed before a Brand B funnel is built, not after."
   },
   {
    "asset": "organic-video",
@@ -44,7 +44,7 @@
    "id": "template",
    "layer": "template",
    "entries": 5,
-   "path": "tools/image-production/static/templates/",
+   "path": "components/image-production/static/templates/",
    "brand": null,
    "what": "The build template an image ad is rendered in."
   },
@@ -116,7 +116,7 @@
    "id": "surface",
    "layer": "section",
    "entries": 16,
-   "path": "tools/copywriter/bank/format-bank.json",
+   "path": "components/copywriter/bank/format-bank.json",
    "brand": null,
    "what": "WHERE the words go — headline, description, hook line. One ad uses several at once."
   },
@@ -125,7 +125,7 @@
    "id": "style",
    "layer": "style",
    "entries": 4,
-   "path": "tools/copywriter/bank/formats.json",
+   "path": "components/copywriter/bank/formats.json",
    "brand": null,
    "what": "HOW the copy is written — short-form, long-form story, social proof. A different axis from surface, not a rival to it."
   },
@@ -134,7 +134,7 @@
    "id": "channel",
    "layer": "kind",
    "entries": 4,
-   "path": "tools/copywriter/bank/channel-map.json",
+   "path": "components/copywriter/bank/channel-map.json",
    "brand": null,
    "what": "Where the copy runs."
   },
@@ -143,7 +143,7 @@
    "id": "format-profile",
    "layer": "template",
    "entries": 7,
-   "path": "tools/video-production/formats/bank.json",
+   "path": "components/video-production/formats/bank.json",
    "brand": null,
    "what": "The production profiles a video is made against — one row per format, each with a profile file beside it; a run must name one. Status draft/approved/deprecated, only the owner signs.",
    "updated": "2026-09-17"

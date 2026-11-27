@@ -7,6 +7,7 @@ Nothing here names a brand. The avatar comes from the teardown's own audience
 read (stage 1b), never a default.
 """
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -18,8 +19,21 @@ LEVELS = ("most-aware", "product-aware", "solution-aware", "problem-aware", "una
 # spice for the room's own register.
 LANGUAGE_STAGES = (("hooks", 25), ("injection", 20), ("spice", 15))
 # the copywriter's language door, in the checkout this file sits in — found, never by counting folders
-_SHIM = next((d / "tools" / "copywriter" / "machine" for d in Path(__file__).resolve().parents
-              if (d / "tools" / "copywriter" / "machine" / "language.py").is_file()), None)
+_SHIM = next((d / "components" / "copywriter" / "machine" for d in Path(__file__).resolve().parents
+              if (d / "components" / "copywriter" / "machine" / "language.py").is_file()), None)
+
+
+def _folder(brand, avatar):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name (naming/PEOPLE.md)."""
+    try:
+        import importlib.util
+        f = next(d / "naming" / "people.py" for d in Path(__file__).resolve().parents if d.name == "components")
+        spec = importlib.util.spec_from_file_location("naming_people", f)
+        people = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(people)
+        return people.folders(brand, avatar)[0] or avatar
+    except Exception:                                  # noqa: BLE001  without the door the name stands as given
+        return avatar
 
 
 def level_of(text):
@@ -27,6 +41,56 @@ def level_of(text):
     t = str(text or "").strip().strip("`").lower()
     t = t.split()[0].strip("`.,;:") if t else ""
     return t if t in LEVELS else None
+
+
+def who():
+    """creative-strategist `machine/who.py` (its public surface): the one read of who an ad is for, loaded once by path."""
+    import importlib.util
+    name = "creative_strategist_who"
+    if name not in sys.modules:
+        was = list(sys.path)
+        f = next(d / "components/creative-strategist/machine/who.py" for d in Path(__file__).resolve().parents if (d / "components" / "creative-strategist").is_dir())
+        spec = importlib.util.spec_from_file_location(name, str(f))
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        sys.path[:] = was + [x for x in sys.path if x not in was]     # appended: this machine's own modules keep every name
+        sys.modules[name] = m
+    return sys.modules[name]
+
+
+def who_args(brand, avatar, sub=None, demographic=None, what=None):
+    """(brand, avatar, sub, demographic, what) ready for who.block / who.stamp, or None when the avatar is not on file.
+    A sub-avatar that is not on file is said, and the step is written to the whole avatar."""
+    H = who()
+    if not (brand and avatar) or not (H.avatar_dir(brand, avatar) / "profile.md").is_file():
+        return None
+    s = re.split(r"[\s,(]", str(sub or "").strip().strip("`"))[0]
+    if s.lower() in ("none", "core", "null", "-"):
+        s = ""
+    try:
+        H.resolve(brand, avatar, s)
+    except SystemExit as e:
+        print(f"  ! {e}: written to the whole avatar", file=sys.stderr)
+        s = ""
+    return brand, avatar, s, demographic or None, {k: v for k, v in (what or {}).items() if v}
+
+
+def who_text(args):
+    """who.block with no prompt slot in it, or ""."""
+    return re.sub(r"\{([a-z_]+)\}", r"(\1)", who().block(*args)) if args else ""
+
+
+def aim_of(rec):
+    """(sub, demographic, what) a parent run or an ask carries: its `aim`, else its own keys (an ask's `strategy`, its
+    `sub_avatar`; a teardown run's 1b read). Nothing is filled in."""
+    rec = rec if isinstance(rec, dict) else {}
+    a, s = rec.get("aim") or {}, rec.get("strategy") or {}
+    aud = rec.get("audience") if isinstance(rec.get("audience"), dict) else {}
+    what = {k: a.get(k) or s.get(k) for k in ("desire", "awareness", "stage", "leads_with", "doubt", "claim")}
+    lv = re.search(r"\b(%s)\b" % "|".join(LEVELS), str(what["awareness"] or "").lower())
+    what["awareness"] = lv.group(1) if lv else None
+    return (a.get("sub") or rec.get("sub_avatar") or aud.get("_sub_avatar"), a.get("demographic") or rec.get("demographic"),
+            {k: v for k, v in what.items() if v})
 
 
 def _read(p, limit=None):
@@ -48,6 +112,7 @@ class BrandContext:
     def __init__(self, repo, brand, avatar=None, awareness=None):
         self.repo, self.brand, self.avatar = Path(repo), brand, avatar
         self.awareness = level_of(awareness)
+        self.sub, self.demographic, self.what = None, None, {}     # set by speak_to()
         sys.path.append(str(self.repo / "components" / "brandpath"))
         import brandpath as BP  # noqa: E402
         self.bp, self.brands = BP, self.repo / "brands"
@@ -68,6 +133,24 @@ class BrandContext:
         if t is not None:
             self.read_files.append(self.rel(p))
         return t
+
+    def product_rel(self, name, default):
+        """`products/<catalog id>.md` (or `<id>/product.md`) for any name of a product, relative to the
+        brand folder; `default` when the brand has no file for it. One product name (2026-11-19)."""
+        naming = str(Path(__file__).resolve().parents[2] / "naming")   # the sibling component, beside this code
+        if naming not in sys.path:
+            sys.path.append(naming)
+        import names  # noqa: E402
+        f = names.product_file(self.brand, name, root=self.repo)
+        return str(f.relative_to(self.home)) if f and f.is_relative_to(self.home) else default
+
+    def speak_to(self, sub=None, demographic=None, what=None):
+        """Who the variations speak to (the parent run's own), for `avatars()`. -> who.stamp's answer, or {}."""
+        self.sub, self.demographic, self.what = sub, demographic, dict({"awareness": self.awareness}, **(what or {}))
+        args = who_args(self.brand, self.avatar, sub, demographic, self.what)
+        st = who().stamp(*args) if args else {}
+        self.awareness = level_of(st.get("awareness")) or self.awareness      # the language rows follow the same level
+        return st
 
     # ------------------------------------------------------------------
     def rules(self):
@@ -95,39 +178,47 @@ class BrandContext:
         if sell:
             out.append("Sellable: " + "; ".join(f"{s.get('title')} ({s.get('handle')})" for s in sell))
         for handle in h.get("heroes") or []:
-            t = self.file(f"products/{handle}.md", 2500)
+            rel = self.product_rel(handle, f"products/{handle}.md")   # one product name (2026-11-19)
+            t = self.file(rel, 2500)
             if t:
-                out.append(f"--- products/{handle}.md ---\n{t}")
+                out.append(f"--- {rel} ---\n{t}")
         return "\n".join(out)
 
     def avatars(self):
         if not self.avatar:
             return MISSING
-        base = self.bp.brand_path(self.brand, "core-avatars", self.avatar, root=self.brands)
+        folder = _folder(self.brand, self.avatar)
+        base = self.bp.brand_path(self.brand, "core-avatars", folder, root=self.brands)
         out = []
-        prof = self.file(f"core-avatars/{self.avatar}/profile.md", 5000)
+        prof = self.file(f"core-avatars/{folder}/profile.md", 5000)
         out.append(f"=== core avatar: {self.avatar} (profile.md) ===\n{prof or MISSING}")
+        args = who_args(self.brand, self.avatar, self.sub, self.demographic, self.what or {"awareness": self.awareness})
+        if args:
+            out.append(who_text(args))              # who.py: the named sub-avatar's card, words, doubts and claim
         subs = sorted((base / "sub-avatars").glob("*.md")) if (base / "sub-avatars").is_dir() else []
+        if args and args[2]:                        # a sub-avatar is named: that one, and no other person's situation
+            key = re.sub(r"^sub-\d+-", "", args[2])
+            subs = [s for s in subs if re.sub(r"^sub-\d+-", "", s.stem) == key]
         for s in subs:
-            t = _read(s, 900)
             self.read_files.append(self.rel(s))
-            out.append(f"--- sub-avatar {s.stem} ---\n{t}")
+            out.append(f"--- sub-avatar {s.stem} ---\n{_read(s)}")      # whole: a card cut mid-line is half a person
         return "\n\n".join(out)
 
     def language(self):
         """Verbatim customer lines for the run's avatar — the only words a new line may use.
 
-        Queried through the language layer, the call the picture chain and the video hook step make (the owner,
+        Queried through the language layer, the call the picture chain and the video hook step make (owner,
         2026-10-27: "awareness levels and verbatims and spice are the foundation of what we're doing here"): the
         avatar's rows, never-used first plus a proven slice, spoken at the ad's awareness level first — hooks,
         injection and spice. It used to read the raw bank files ranked by likes. A failed or empty query is said,
         on stderr and in the slot; it never widens to every avatar's rows."""
         if not self.avatar:
             return MISSING
-        lang = self.bp.brand_path(self.brand, "core-avatars", self.avatar, "language", root=self.brands)
+        folder = _folder(self.brand, self.avatar)
+        lang = self.bp.brand_path(self.brand, "core-avatars", folder, "language", root=self.brands)
         if lang.is_dir():
             self.read_files += [self.rel(f) for f in sorted(lang.rglob("*.json")) if "used" not in f.relative_to(lang).parts]
-        shim = next((d for d in (self.repo / "tools" / "copywriter" / "machine", _SHIM)
+        shim = next((d for d in (self.repo / "components" / "copywriter" / "machine", _SHIM)
                      if d is not None and (d / "language.py").is_file()), None)
         level = self.awareness or "any level"
         if shim is None:
@@ -158,7 +249,7 @@ class BrandContext:
                 out.append(txt.strip())
         if empty:
             print(f"  ! language: no rows for {self.avatar} · {level} · {', '.join(empty)}", file=sys.stderr)
-        rules = self.file(f"core-avatars/{self.avatar}/language/rules.md", 4000)
+        rules = self.file(f"core-avatars/{folder}/language/rules.md", 4000)
         head = f"=== language rules ===\n{rules}\n\n" if rules else ""
         return head + "\n\n".join(out)
 

@@ -1,0 +1,386 @@
+{
+ "format_id": "single-presenter",
+ "name": "Talking ad",
+ "status": "draft",
+ "state": "parked 2026-11-27: one person to camera; not proven end to end, so out of the owner's view (the live lines are micro-drama and song-ad). Was: new; no ad has run on it yet",
+ "signed": null,
+ "family": "single-presenter",
+ "what": "One person to camera in long takes, built from the talking recipe.",
+ "signature": {
+  "audio": "voice",
+  "speakers": "one",
+  "address": "camera",
+  "settings": null,
+  "product_role": null,
+  "pacing": null,
+  "capture": null,
+  "story": null
+ },
+ "specialised": [
+  {"what": "workflow", "why": "The talking recipe and its role stations."}
+ ],
+ "stage_order": [
+  "teardown",
+  "writing",
+  "elements",
+  "gates",
+  "voice",
+  "storyboard",
+  "pictures",
+  "clips",
+  "edit"
+ ],
+ "stages": {},
+ "failures": [],
+ "cost": {
+  "target_usd_per_ad": null
+ },
+ "quality_bar": [
+  "the shared QC gate: inspector + director verdicts on every clip"
+ ],
+ "variants": [],
+ "built_from": [
+  "runs/video-production/Brand A/Brand A_flex-face-brush_brief-0299",
+  "runs/video-production/Brand B/yai-cheek-45-70"
+ ],
+ "rulings": [],
+ "workflow": {
+  "what": "The talking ad line, with the three roles at their stations. The one person stop is the quote, before any money moves; every review is decided by the decision layer and filed for the owner to overrule. Going live stays his click on the approval page.",
+  "ruled": "Owner, 2026-11-02: build the system for talking ads through the three roles.",
+  "steps": [
+   {
+    "id": "ad-plan",
+    "name": "Ad Plan",
+    "component": "video-teardown · video-writing · marketing-doctrine",
+    "does": "The strategist writes one Ad Plan page from the swipe or idea, in the workflow folder as ad-plan.md Also write runs/video-production/{brand}/workflow-{label}/ad-plan-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+    "executor": "agent",
+    "role": "strategist",
+    "prompts": [
+     "components/video-production/prompts/roles/strategist-v2-owner.md"
+    ],
+    "evidence": [
+     "runs/video-production/{brand}/workflow-{label}/ad-plan.md",
+     "runs/video-production/{brand}/workflow-{label}/ad-plan-review.json"
+    ],
+    "gate": null
+   },
+   {
+    "id": "ad-plan-review",
+    "name": "Ad Plan review",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "runs/video-production/{brand}/workflow-{label}/ad-plan-review.json",
+    "input_files": [
+     "runs/video-production/{brand}/workflow-{label}/ad-plan-review.json"
+    ],
+    "review_files": [
+     "runs/video-production/{brand}/workflow-{label}/ad-plan.md"
+    ],
+    "overrule": "the owner"
+   },
+   {
+    "id": "brief",
+    "name": "Accepted writing brief",
+    "component": "video-writing",
+    "does": "The writing chain runs with the decision layer on: python3 components/video-writing/machine/run.py {teardown} --autonomous (the teardown or scratch run's label). Every structure, hook, audit, swipe-match and manifest hold is decided from the owner's past calls and filed for him to overrule; the run continues. A run that still stops is diagnosed and fixed in the session, never sent to the owner. Retain the actual writing run and maker brief; a held or stale brief is not complete and goes back to writing, never around it. Writing costs are never quoted.",
+    "executor": "agent",
+    "evidence": [
+     "{brief}"
+    ],
+    "gate": null,
+    "inputs": [
+     "brief",
+     "writing_run",
+     "route"
+    ],
+    "brief_check": {
+     "run": "{writing_run}/run.json",
+     "brief": "{brief}"
+    }
+   },
+   {
+    "id": "brief-review",
+    "name": "Brief review",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "{brief}",
+    "input_files": [
+     "{brief}"
+    ],
+    "overrule": "the owner"
+   },
+   {
+    "id": "shot-plan",
+    "name": "Shot plan",
+    "component": "director layer · model-inputs",
+    "does": "The director writes the shot plan, look, locks and takes into shot-plan.md in the workflow folder, following the talking recipe, before any money moves",
+    "executor": "agent",
+    "role": "director",
+    "prompts": [
+     "components/video-production/prompts/roles/director-v1-owner.md",
+     "components/video-production/formats/recipes/talking-long-take-v1.md"
+    ],
+    "evidence": [
+     "runs/video-production/{brand}/workflow-{label}/shot-plan.md"
+    ],
+    "gate": null
+   },
+   {
+    "id": "price",
+    "name": "The quote, then the owner's go",
+    "component": "video-production · generative-model-house",
+    "executor": "agent",
+    "quote": true,
+    "stops_for": "the owner: the quote (his only stop)",
+    "does": "THE ONE STOP. Before any money moves, price every paid step from here to the cut on the house models (components/generative-model-house/MODEL-HOUSE.md): voice, every start picture and B-roll picture, the two proof clips and every remaining clip with its retake allowance, each as count x unit price, with the total and the stop point. Write runs/video-production/{brand}/workflow-{label}/quote.json as {\"total_usd\": <number>, \"lines\": [{\"what\", \"count\", \"unit_usd\", \"usd\"}], \"stop_point\": \"...\"} and show the owner the total and what it buys. Only his own go in chat opens the spend: record it with workflow.py go <format> --brand {brand} --label {label} --approved-by <name> --said \"<his words>\" --cap <dollars>, then complete this station. Writing costs are never quoted (owner, 2026-11-25). Never record a go he did not give. Spend past the cap is a new quote, never a quiet overrun.",
+    "evidence": [
+     "runs/video-production/{brand}/workflow-{label}/quote.json",
+     "runs/video-production/{brand}/workflow-{label}/go.json"
+    ],
+    "go": {
+     "quote": "runs/video-production/{brand}/workflow-{label}/quote.json",
+     "record": "runs/video-production/{brand}/workflow-{label}/go.json"
+    },
+    "gate": null
+   },
+   {
+    "id": "production",
+    "name": "Voice and storyboard",
+    "component": "video-production",
+    "does": "Use the approved brief and authored shot plan. Inside the owner's go (go.json and its cap), run run_v2.py start {brief} --brand {brand} --label {production_label} --voice-only --go runs/video-production/{brand}/workflow-{label}/go.json, then run_v2.py storyboard runs/video-production/{brand}/{production_label} --brief {brief} --go runs/video-production/{brand}/workflow-{label}/go.json. Both commands are under components/video-production/machine/. Reuse verified outputs. Stop before pictures: start without flags and start --storyboard create pictures and do not belong here. Never bypass writing acceptance or picture approvals.",
+    "executor": "agent",
+    "paid": true,
+    "run": "",
+    "done_when": "runs/video-production/{brand}/{production_label}/storyboard.json",
+    "gate": null,
+    "evidence": [
+     "runs/video-production/{brand}/{production_label}/storyboard.json"
+    ],
+    "inputs": [
+     "production_label",
+     "brief",
+     "writing_run"
+    ],
+    "input_files": [
+     "{brief}",
+     "runs/video-production/{brand}/workflow-{label}/shot-plan.md"
+    ]
+   },
+   {
+    "id": "breakdown",
+    "name": "Element breakdown",
+    "component": "video-production scene_breakdown.py · shot_swaps.py",
+    "does": "Every swipe scene read to its elements, and each element marked keep or swap for ours",
+    "executor": "agent",
+    "evidence": [
+     "runs/video-production/{brand}/{production_label}/scene-breakdown.json"
+    ],
+    "gate": null
+   },
+   {
+    "id": "shot-set",
+    "name": "3D shot set",
+    "component": "video-production shot_sets.py · Higgsfield 3D Jutsu",
+    "does": "One 3D set per place and camera, with the stand-in and light locked, printed and linked to every shot",
+    "executor": "agent",
+    "evidence": [
+     "runs/video-production/{brand}/{production_label}/shot-sets.json"
+    ],
+    "gate": null
+   },
+   {
+    "id": "pictures",
+    "name": "Start picture",
+    "component": "the board",
+    "does": "One start picture, signed off by the system's reviewer under the go (run_v2.py --go; a flagged picture is held and remade, never shipped), for the talking takes, then only the B-roll and demos the script needs, all from the shot set through image production on the board Also write runs/video-production/{brand}/workflow-{label}/pictures-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+    "executor": "agent",
+    "evidence": [
+     "runs/video-production/{brand}/{production_label}/shot-approvals.json",
+     "{picture_files}",
+     "runs/video-production/{brand}/workflow-{label}/pictures-review.json"
+    ],
+    "gate": null,
+    "inputs": [
+     "picture_files"
+    ]
+   },
+   {
+    "id": "pictures-review",
+    "name": "Start picture review",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "runs/video-production/{brand}/workflow-{label}/pictures-review.json",
+    "input_files": [
+     "runs/video-production/{brand}/workflow-{label}/pictures-review.json"
+    ],
+    "review_files": [
+     "runs/video-production/{brand}/{production_label}/shot-approvals.json",
+     "{picture_files}"
+    ],
+    "overrule": "the owner"
+   },
+   {
+    "id": "proof-clips",
+    "name": "Two proof clips",
+    "component": "the board",
+    "does": "The hook and the hardest shot, one take each, with the total and stop point stated first; nothing else runs until the decision layer passes the look Also write runs/video-production/{brand}/workflow-{label}/proof-clips-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+    "executor": "agent",
+    "role": "producer",
+    "prompts": [
+     "components/video-production/prompts/roles/producer-v1-owner.md",
+     "components/video-production/formats/recipes/talking-long-take-v1.md"
+    ],
+    "evidence": [
+     "runs/video-production/{brand}/{production_label}/clips/ledger.json",
+     "{proof_clip_one}",
+     "{proof_clip_two}",
+     "runs/video-production/{brand}/workflow-{label}/proof-clips-review.json"
+    ],
+    "gate": null,
+    "inputs": [
+     "proof_clip_one",
+     "proof_clip_two"
+    ]
+   },
+   {
+    "id": "proof-clips-review",
+    "name": "Two proof clips review",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "runs/video-production/{brand}/workflow-{label}/proof-clips-review.json",
+    "input_files": [
+     "runs/video-production/{brand}/workflow-{label}/proof-clips-review.json"
+    ],
+    "review_files": [
+     "runs/video-production/{brand}/{production_label}/clips/ledger.json",
+     "{proof_clip_one}",
+     "{proof_clip_two}"
+    ],
+    "overrule": "the owner"
+   },
+   {
+    "id": "clips",
+    "name": "All clips",
+    "component": "the board",
+    "does": "The remaining clips through the board, three takes at most per shot; each failure gets one named reason and one change. The producer records the go-ahead total in clips-done.md in the workflow folder",
+    "executor": "agent",
+    "role": "producer",
+    "prompts": [
+     "components/video-production/prompts/roles/producer-v1-owner.md",
+     "components/video-production/formats/recipes/talking-long-take-v1.md"
+    ],
+    "evidence": [
+     "runs/video-production/{brand}/workflow-{label}/clips-done.md"
+    ],
+    "gate": null
+   },
+   {
+    "id": "score",
+    "name": "First-take score",
+    "component": "video-production first_take.py",
+    "does": "Counts shots right on take one and why the rest failed; the board shows this file",
+    "executor": "command",
+    "run": "python3 components/video-production/machine/first_take.py runs/video-production/{brand}/{production_label} --out runs/video-production/{brand}/{production_label}/first-take.json",
+    "done_when": "runs/video-production/{brand}/{production_label}/first-take.json",
+    "gate": null,
+    "evidence": [],
+    "inputs": [
+     "production_label"
+    ]
+   },
+   {
+    "id": "learn",
+    "name": "Teach the recipe",
+    "component": "video-production formats/recipes",
+    "does": "Any failure reason seen twice is proposed as one recipe rule in learned.md in the workflow folder and filed through the decision layer; no recipe changes in the run: a new recipe version is written only after the owner agrees with the filed call Also write runs/video-production/{brand}/workflow-{label}/learn-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+    "executor": "agent",
+    "role": "producer",
+    "prompts": [
+     "components/video-production/prompts/roles/producer-v1-owner.md"
+    ],
+    "evidence": [
+     "runs/video-production/{brand}/workflow-{label}/learned.md",
+     "runs/video-production/{brand}/workflow-{label}/learn-review.json"
+    ],
+    "gate": null
+   },
+   {
+    "id": "learn-review",
+    "name": "Teach the recipe review",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "runs/video-production/{brand}/workflow-{label}/learn-review.json",
+    "input_files": [
+     "runs/video-production/{brand}/workflow-{label}/learn-review.json"
+    ],
+    "review_files": [
+     "runs/video-production/{brand}/workflow-{label}/learned.md"
+    ],
+    "overrule": "the owner"
+   },
+   {
+    "id": "edit-handoff",
+    "name": "Edit and hand-off",
+    "component": "video-edit · image-edit/handoff.py",
+    "does": "Prepare the local cut and handoff instructions; sending or publishing is a separate authorized action. Also write runs/video-production/{brand}/workflow-{label}/edit-handoff-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+    "executor": "agent",
+    "evidence": [
+     "runs/video-edit/{brand}/{production_label}/renders/control.mp4",
+     "runs/video-production/{brand}/workflow-{label}/edit-handoff-review.json"
+    ],
+    "gate": null,
+    "done_when": "runs/video-edit/{brand}/{production_label}/renders/control.mp4"
+   },
+   {
+    "id": "edit-handoff-review",
+    "name": "Edit and hand-off review",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "runs/video-production/{brand}/workflow-{label}/edit-handoff-review.json",
+    "input_files": [
+     "runs/video-production/{brand}/workflow-{label}/edit-handoff-review.json"
+    ],
+    "review_files": [
+     "runs/video-edit/{brand}/{production_label}/renders/control.mp4"
+    ],
+    "overrule": "the owner"
+   },
+   {
+    "id": "launch",
+    "name": "Launch package",
+    "component": "ad-review · naming · meta-upload",
+    "does": "Prepare the named final cut, captions and destination, then file them on the Meta approval page (meta-upload skill: Shared Assets/meta/{brand}/1-check/). Going live is the owner's click on that page, outside this run; nothing is published here. Also write runs/video-production/{brand}/workflow-{label}/launch-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+    "executor": "agent",
+    "evidence": [
+     "runs/video-production/{brand}/workflow-{label}/launch-package.md",
+     "runs/video-production/{brand}/workflow-{label}/launch-review.json"
+    ],
+    "gate": null,
+    "done_when": ""
+   },
+   {
+    "id": "launch-review",
+    "name": "Launch package check",
+    "component": "decision layer · video-teardown decide.py",
+    "executor": "decided",
+    "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+    "review_asset": "runs/video-production/{brand}/workflow-{label}/launch-review.json",
+    "input_files": [
+     "runs/video-production/{brand}/workflow-{label}/launch-review.json"
+    ],
+    "review_files": [
+     "runs/video-production/{brand}/workflow-{label}/launch-package.md"
+    ],
+    "overrule": "the owner"
+   }
+  ],
+  "route_locked": true,
+  "completion": "reviewed-launch-package"
+ }
+}

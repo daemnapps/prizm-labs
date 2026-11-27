@@ -1,0 +1,47 @@
+{
+  "_about": "THE ONE MODEL TABLE (Creative Workflow Standard part 1, 'model by job'; the developer, 2026-11-26, 'Yes, build it'). Read through run_kit/tiers.py. 'shared' is what a chain gets for each kind of job: reads (the answer is in the input), checks (applies rules written down), designs (makes the calls nobody wrote down). Each chain entry starts PINNED to the models that chain asked for on 2026-11-26, so moving a chain onto this table changes nothing; an entry's 'tiers' override only the jobs that differ from shared. 'default' means the chains' one model for a call that names none, run_kit/claude_flags.py MODEL (LD-100 (chain model explicit)). When the owner answers the build-week worksheet (A1-A3), set 'shared' once and remove each chain's pins as that chain is ready. 'lean' records LD-62 (lean model calls), ruled for email only on 2026-10-21; nothing reads it yet except email's own lean_call.py, which predates it.",
+  "shared": {
+    "reads": "claude-haiku-4-5-20251001",
+    "checks": "claude-sonnet-5",
+    "designs": "claude-opus-5"
+  },
+  "chains": {
+    "marketing-calendar": {
+      "status": "draft",
+      "tiers": {},
+      "lean": false,
+      "state": "on the table: both layers are designs steps"
+    },
+    "copywriter": {
+      "status": "draft",
+      "tiers": {},
+      "lean": false,
+      "state": "on the table: copy_writer.py stages; --tier still edits one run"
+    },
+    "copywriter-formats": {
+      "status": "draft",
+      "tiers": {
+        "checks": "claude-sonnet-5-5",
+        "designs": "claude-opus-5-5"
+      },
+      "lean": false,
+      "state": "on the table, pinned: google_copy.py, format_copy.py, copy_set.py, real_formats.py run on 5.5"
+    },
+    "session-teardown": {
+      "status": "draft",
+      "tiers": {
+        "reads": "claude-haiku-5-5",
+        "checks": "claude-sonnet-5-5",
+        "designs": "default"
+      },
+      "lean": false,
+      "state": "on the table, pinned: 5.5 throughout, designs follows the chains' one model"
+    },
+    "email-production": {
+      "status": "draft",
+      "tiers": {},
+      "lean": true,
+      "state": "not yet on the table: email keeps its own copy in email_line.py until after the Black Friday sends (29 Nov); same values as shared today"
+    }
+  }
+}

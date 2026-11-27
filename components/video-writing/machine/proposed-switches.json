@@ -1,0 +1,15 @@
+{
+  "_how": "One switch per stage for the proposed prompts in components/video-teardown/prompts/proposed/ (chain.py PROPOSED_FILES). A false switch means that stage runs its live prompt, unchanged; a true switch means it reads its proposed file. Switched on 2026-11-07 by the owner's pick: stage3 (injection), stage4i (idea), stage4v2a (hooks). Research stays off because only the mechanism stage, also off, reads it. Test runs can use VW_PROPOSED=stage4g,stage5 instead of editing this file.",
+  "stage1b": false,
+  "stage1r": false,
+  "stage1m": false,
+  "stage3": true,
+  "stage4i": true,
+  "stage4v2a": true,
+  "stage4v2b": false,
+  "stage4v2b-patch": false,
+  "stage4e": false,
+  "stage4g": false,
+  "stage4h": false,
+  "stage5": false
+}

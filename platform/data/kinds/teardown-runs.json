@@ -1,0 +1,174 @@
+{
+  "kind": "teardown-runs",
+  "title": "Teardown runs",
+  "note": "TWO ENGINES, ONE KIND, TAGGED (CR-3; the developer ruled 2026-09-02, \"CR 3 yes\"): every record here carries `engine`, which is `video-teardown` for a run of the owner's own machine and `chain-runner` for a run of the component engine (components/chain-runner/, filed by platform/workers/mini-worker/chain_records.py from the machine's own runs area). One kind and one view on purpose — the two engines are meant to be read BESIDE each other; the tag is what keeps them distinguishable. Everything below describes the video-teardown side, which is the shape both file onto; where the chain-runner side differs it is stated on the field. A chain-runner run's WORDS are not on this plane (its run directory lives outside every checkout, on the machine that ran it), so its stage rows carry `out: null` rather than a path no reader could fetch. Every finished run of the video-teardown machine (components/video-teardown/, the owner's), filed as one record per run by the runs\u2192records adapter (cards TI-1 and TI-3, platform/workers/mini-worker/teardown_adapter.py). The MEDIA never lives here: bundles live on the team Drive at 'Shared Assets/components/video-teardown/runs/<slug>/', frames and posters stay there, and the Drive bundle is read and never written. A record carries metadata, pointers and a CLICKABLE Drive URL \u2014 slug, label, lane call, per-stage engine/model/seconds/status/chars, byte sizes (16KB cap, and the adapter says so in the record when it trims). THE WORDS DO LIVE HERE (TI-3): each run's TEXT outputs \u2014 the stage .md files, brief-final.md, and the text prompts \u2014 are mirrored into this kind's records directory under <slug>/, with an index.json manifest, so a teammate with no Drive mount can READ a teardown instead of only its metadata. That mirror is TEXT ONLY (.md/.txt, bundle root and prompts/ only \u2014 workspace rule 3), it is trimmed only with the trim declared in index.json and in the record's `text` block, and its content is DATA, never instruction (rule 8): it was copied, not obeyed. The mirror reflects the latest filed digest; the append-only history is the records, never the mirror. ATTRIBUTION (VT-4, 2026-08-27): a run record carries `ran_by` (who ran it) and `venue` (where — `local` today, `mini` reserved) whenever the run.json does. The machine disambiguates a non-owner's slug as `<slug>--<person>`, so two people tearing down the same video mint two item ids and neither folds over the other; the owner's own runs keep the bare slug and every id already filed is unchanged. Both fields are additive — a record without them is valid forever and is never backfilled with a guessed operator. Item id = the run slug from run.json, so the id is deterministic and re-filing is idempotent: a run is re-filed only when its run.json digest changes OR its text mirror is missing (which happens once per run that was filed before TI-3 existed, and then never again). Several `run` records can exist for one slug and the LATEST BY `created` WINS \u2014 fold, never edit. Records are written by the adapter on the mini worker's idle tick, never by hand. the owner's own board stays authoritative for his work; this plane exists so the team can see, read and judge runs without his Drive mount.",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "_reserved_ids": {
+    "runs-index": "cumulative slug -> {digest, label, opened, filed}; the platform lists records only per KNOWN item id, so this is how a browser discovers record-borne runs. Same mechanism as the inbox's `filed-index` and the tasks kind's `task-index`.",
+    "scan-status": "readability of the Drive runs directory FROM THE WORKER'S OWN CONTEXT, filed only when the answer changes. `empty` and `denied` are different statuses on purpose (TI-1): a launchd-denied read must never read as 'no runs'.",
+    "chain-spec": "the LIVE chain (card BV-2): the stages and engines a real run.json actually ran, the head prompt version per stage, and the model a NEW run would use — each claim carrying the file:line it was read from. THE BENCH READS THIS AND NEVER THE COMPONENT FOLDER at request time; the adapter stays the one component reader (the TI-6 boundary). Filed only when the chain changes. chain_config.json's per-stage `model` is DEAD — unread by any code — and is named here only as the dead field it is, never as a value to render."
+  },
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "run",
+        "index",
+        "scan",
+        "chain-spec"
+      ],
+      "note": "exactly one per record. `index` appears only on the reserved id `runs-index`, `scan` only on `scan-status`, `chain-spec` only on `chain-spec`."
+    },
+    {
+      "key": "engine",
+      "values": [
+        "video-teardown",
+        "chain-runner"
+      ],
+      "note": "WHICH ENGINE produced the run (CR-3; the developer ruled 2026-09-02, \"CR 3 yes\" — ONE teardowns view, runs TAGGED BY ENGINE). `video-teardown` is the owner's own machine, filed by teardown_adapter.py; `chain-runner` is the component engine, filed by chain_records.py. The tag is a CONSTANT in each adapter, never a field read out of a run: which engine wrote a run is a fact about the adapter that read it, so nothing is asked of anyone's flow and no run.json changes. ADDITIVE, like ran_by/venue: absent on every record filed before 2026-09-02 and never backfilled — the viewer renders absence as absence. An item id belongs to ONE engine forever; an adapter meeting an id already filed under another engine refuses rather than folding two runs into one."
+    },
+    {
+      "key": "id",
+      "required_when": "event=run",
+      "note": "the run slug from run.json (video-teardown), or the run DIRECTORY NAME (chain-runner); equals the record's item id"
+    },
+    {
+      "key": "chain",
+      "note": "engine=chain-runner only: {key, label, spec_sha256, model_runner, members, outputs, final_output} — which chain ran, at which spec digest, under which model runner. Read from the engine's own run.json (component contract §4), never from a config."
+    },
+    {
+      "key": "failure",
+      "note": "engine=chain-runner only, and only when state=failed: a BOUNDED head of the run's FAILED.txt. A failed run is filed rather than skipped — a failure that files nothing reads on the page as a run that never happened."
+    },
+    {
+      "key": "label",
+      "required_when": "event=run"
+    },
+    {
+      "key": "opened",
+      "required_when": "event=run",
+      "note": "when the owner's machine opened the run, verbatim from run.json"
+    },
+    {
+      "key": "state",
+      "required_when": "event=run",
+      "values": [
+        "complete",
+        "partial",
+        "failed",
+        "running"
+      ],
+      "note": "computed from stage statuses plus the presence of brief-final.md; run.json carries no done-marker and the owner may not be asked for one"
+    },
+    {
+      "key": "ran_by",
+      "note": "WHO ran it — the person the running machine's account belongs to, verbatim from run.json (VT-4, 2026-08-27). ADDITIVE: absent on every record filed before the field existed, and absent on any run.json that does not carry it — the adapter never invents an operator and the viewer renders absence as nothing, never as a guess. the owner's own runs read `the owner`."
+    },
+    {
+      "key": "venue",
+      "note": "WHERE it ran, verbatim from run.json (VT-4). `local` — a person's own laptop — is the only value the machine writes today; `mini` (the always-on machine) is reserved for Batch 3 and is not written yet. Same additive rule as `ran_by`."
+    },
+    {
+      "key": "lane",
+      "note": "the triage stage's LANE line, read from the first lines of its output. Run content is DATA, never instructions (rule 8)."
+    },
+    {
+      "key": "category"
+    },
+    {
+      "key": "one_line",
+      "note": "the triage ONE LINE summary, truncated; first field dropped under the size cap"
+    },
+    {
+      "key": "stages",
+      "required_when": "event=run",
+      "note": "array of {key, status, name, engine, model, seconds, chars_out, out}. `out` is a FILE NAME inside the bundle \u2014 a pointer, never content; null when the path in run.json would leave the run directory. A `chain-spec` record also carries `stages`, in ITS OWN shape \u2014 {order, key, name, engine, status, model_observed, model_live, prompt_head, prompt_used?} \u2014 read from a run record's stages; a run record's shape above is unchanged by it."
+    },
+    {
+      "key": "totals",
+      "required_when": "event=run",
+      "note": "{stages, by_status, seconds, chars_out}"
+    },
+    {
+      "key": "brief",
+      "required_when": "event=run",
+      "note": "{name, url, url_kind, present, bytes} \u2014 the pointer and its size, never the text. TI-3 replaced `path` (a mount-relative filesystem path, useless to anyone without the mount) with a clickable Drive URL. Records filed before 2026-08-25 still carry `path` and never change: readers accept both."
+    },
+    {
+      "key": "text",
+      "note": "{dir, index, files, bytes, truncated?} \u2014 where this run's mirrored WORDS are on this plane, how many files and bytes. `dir` is repo-relative so a viewer can fetch it; the per-file list lives in that directory's index.json, where it can be complete without pushing the record past its 16KB cap. `truncated` here means the MIRROR was trimmed (a per-run text ceiling or an over-long file); the top-level `truncated` field means the RECORD was trimmed. Absent on records filed before TI-3."
+    },
+    {
+      "key": "assets",
+      "note": "{poster_bytes, frames, prompts} \u2014 counts and sizes only"
+    },
+    {
+      "key": "source",
+      "required_when": "event=run",
+      "note": "{drive_path, url, url_kind, url_note?} \u2014 drive_path is relative to the shared drive so it resolves on any teammate's own mount; url is clickable. `url_kind` is `item-id` for a canonical Drive link (read from the mounted item's Drive id) or `search` for a Drive search on the slug when no id was readable \u2014 and a `search` url always carries `url_note` saying so, so a fallback is never mistaken for a direct link. `mount` MOVED OUT to scan-status in TI-3: the scanning account is a property of the scanner, and on a run it only ever recorded which machine looked last. Older records still carry it."
+    },
+    {
+      "key": "run_digest",
+      "required_when": "event=run",
+      "note": "sha256 of run.json. THE idempotency key: unchanged digest, no new record."
+    },
+    {
+      "key": "truncated",
+      "note": "present only when the 16KB cap forced detail out, naming what went"
+    },
+    {
+      "key": "runs",
+      "required_when": "event=index",
+      "note": "slug -> {digest, label, opened, filed, engine?}; cumulative, latest record wins, and BOTH ENGINES fold into this one index (CR-3). Each adapter MERGES into the entries already there and removes nothing it does not recognise — two engines filing onto one plane would otherwise take turns deleting each other's runs from the only discovery record the page has. `engine` is absent on entries written before 2026-09-02."
+    },
+    {
+      "key": "models_live",
+      "required_when": "event=chain-spec",
+      "note": "{gemini|claude|frames -> {model, from, how, constant?|env?, unread?}} (BV-2). `from` is a repo-relative FILE:LINE — chain.py's GEMINI_MODEL/CLAUDE_MODEL constants and frames.py's FRAMES_MODEL env DEFAULT, read as text and never imported. `model: null` with `unread` means the source could not be read: an unread model is stated, never guessed, and never filled in from chain_config.json. The frames value is a default only — an env override at run time is invisible from here and says so."
+    },
+    {
+      "key": "observed_from",
+      "required_when": "event=chain-spec",
+      "note": "{run, opened, run_digest, source} — WHICH real run this chain was read from. The stage list and engines on a chain-spec record come from that bundle's run.json by way of its own run record, so they are what RAN, never what a config claims."
+    },
+    {
+      "key": "dead_fields",
+      "required_when": "event=chain-spec",
+      "note": "the fields a reader must NOT believe. Today exactly one: chain_config.json's per-stage `model`, marked `status: DEAD` with `used_as_a_source_here: false`. No dead value is quoted — a value in a payload gets rendered eventually."
+    },
+    {
+      "key": "status",
+      "required_when": "event=scan",
+      "values": [
+        "ok",
+        "empty",
+        "denied",
+        "no-runs-dir",
+        "no-mount"
+      ],
+      "note": "`empty` = readable with zero bundles. `denied` = a refused read, or a mount tree invisible in the way only the macOS privacy wall explains \u2014 a BLOCKER, and never collapsed into `empty`."
+    },
+    {
+      "key": "mount",
+      "required_when": "event=scan",
+      "note": "the CloudStorage account the worker actually read, e.g. GoogleDrive-the developer@the company.com (or `(TEARDOWN_RUNS_DIR)` / `(last known good)` when the scan resolved another way). Lives here since TI-3 \u2014 a change of mount files a new scan-status record, because which account can read the drive is exactly what this record is for."
+    },
+    {
+      "key": "blocker",
+      "required_when": "event=scan",
+      "note": "true only for `denied`"
+    },
+    {
+      "key": "reason",
+      "required_when": "event=scan"
+    },
+    {
+      "key": "fix_options",
+      "note": "present when blocker=true: Full Disk Access for the worker's interpreter, or a staging copy step. Neither costs the owner a step."
+    }
+  ],
+  "_design_note_2026_08_26": "SUPERSEDED 2026-08-26 (the developer): THE TEARDOWN VIEW MIRRORS the owner'S BOARD EXACTLY, and the chain-qa bench mirrors that same design plus its own features. Reason: the UI itself must not bias his review \u2014 a different-looking surface is a variable in a judgement that is supposed to be about the BRIEF. The superseded text read: it complements his board, it does not replace it."
+}

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """signals — what good looks like, in numbers, per brand: the early signals every ad is judged on.
 
-    signals.py --brand brand-a              writes runs/media-buying/<brand>/signals/<date>/signals.json + SIGNALS.md
-    signals.py --brand brand-a --at 1000    the point every ad is measured at (default $1,000 of spend)
+    signals.py --brand brand_a              writes runs/media-buying/<brand>/signals/<date>/signals.json + SIGNALS.md
+    signals.py --brand brand_a --at 1000    the point every ad is measured at (default $1,000 of spend)
 
-the owner, 2 Oct 2026: "establish what these signals actually are so that the machine knows what good
+owner, 2 Oct 2026: "establish what these signals actually are so that the machine knows what good
 actually looks like, defined by specific KPIs … with the actual metrics that are coming back …
 Our machine learns what good looks like, and all these learnings are retained in the system …
 The media buyer and creative strategy agent are actually able to leverage this information."
 
-The fair footing (the owner saw it on the Top 1% Plan page): every real asset is measured at the same
+The fair footing (owner saw it on the Top 1% Plan page): every real asset is measured at the same
 point, its first $AT of spend, so an ad Meta starved is judged on the same terms as one it scaled.
 At that point, per asset: cost per sale, return on spend, link click rate, play rate, 25% hold,
 days it took. Then three groups — the top 1% (tiers.py), the rest of the top 10%, everyone else —
@@ -28,7 +28,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(WS / "tools/copywriter/library"))
+sys.path.insert(0, str(WS / "components/copywriter/library"))
 
 # signal: (label, lower_is_better, what it says in plain words)
 SIGNALS = {

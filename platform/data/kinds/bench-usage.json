@@ -1,0 +1,33 @@
+{
+  "kind": "bench-usage",
+  "title": "Bench usage",
+  "note": "INSTRUMENTATION FOR A PRE-DECIDED KILL-CONDITION (card CQ-4, 2026-08-25). The bench's kill-condition is written down and dated: if after a month the bench's only user is the developer, the UI did not earn its build — keep Door A and retire the bench to the promptfoo CLI. A condition that is checked from memory is not a condition, so the page files one record per person per chain per day, and `bench_usage.py` answers the question from the records instead of from anyone's recollection. Item id = the person (declared identity, same as everywhere on this plane); one record per open, append-only. THIS KIND GATES NOTHING and is nobody's performance record — it counts opens of a page, and its only consumer is the retire-or-keep decision on 2026-09-25.",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["open", "request"],
+      "note": "`open` = somebody loaded the bench for a chain. `request` = somebody actually asked for a matrix — the stronger signal of the two, and the one the kill-condition turns on."
+    },
+    {
+      "key": "by",
+      "required_when": "always",
+      "note": "declared identity — the record's item id is the same name"
+    },
+    {
+      "key": "chain",
+      "note": "which chain's bench was opened; absent when the picker itself was the whole visit (which is still a use, and still counted)"
+    },
+    {
+      "key": "at",
+      "required_when": "always"
+    },
+    {
+      "key": "client",
+      "note": "which viewer wrote it (X-Client), so a record can be traced to a surface"
+    }
+  ]
+}

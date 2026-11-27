@@ -1,0 +1,732 @@
+{
+  "format_id": "song-ad",
+  "name": "Song ad (sung story, animated)",
+  "status": "approved",
+  "state": "workflow rebuilt 2026-11-27 on the Higgsfield Singing Ads path of brief 0376",
+  "signed": {
+    "by": "the owner",
+    "date": "2026-10-10",
+    "ruling": "his rulings of 2026-10-09/10 cover every line (cited per line under rulings): punch first + shorter + flow (SONG-WRITING.md); match the swipe's style; nobody talks, all clips, no stills, Seedance 480p one take + local upscale; product never drawn; cost down \"even more\"."
+  },
+  "family": "sung-story",
+  "what": "A dramatic first-person story told as a real song (2:30–3:15). The song is made first and the whole cut follows it: every sung line is a silent clip in the swipe's animated style, nobody talks on screen, the product arrives late, rendered in the film's style from the real product photo, and only the end card is the real packshot.",
+  "signature": {
+    "audio": "song",
+    "speakers": 0,
+    "address": "none",
+    "settings": 6,
+    "product_role": "insert",
+    "pacing": "fast",
+    "capture": "animated",
+    "story": "narrative"
+  },
+  "specialised": [
+    {
+      "what": "the song is made and passed before any picture",
+      "why": "the cut is derived from the song's timing; SONG-WRITING.md (the owner 2026-10-10)"
+    },
+    {
+      "what": "song flow: gaps up to 3.5 s, dead air up to 10%, 6 beats a rapped line / 8 a ballad line",
+      "why": "the owner 2026-10-10: the first tight pass sounded rushed — \"it needs to actually sound like a song, just efficient\""
+    },
+    {
+      "what": "the product is rendered in the film's style from the real product photo, held by the cast; only the end card is the real packshot",
+      "why": "the owner 2026-10-10: \"you shouldn't be using real b-roll for this\" — in an animated ad real footage breaks the film. This OVERRIDES the general 'product is never drawn → real footage' route for stylised formats; that route still holds for real-footage / UGC formats"
+    },
+    {
+      "what": "nobody talks; every scene is a silent clip — no stills ever",
+      "why": "attention-first song ads; a held still reads as slop (the owner 2026-10-10)"
+    },
+    {
+      "what": "Seedance 2.5 at 480p, one take, then local Real-ESRGAN upscale",
+      "why": "~$0.13/s at 480p vs about $0.57/s at 1080p; sloppy B-roll is fine under a song (the owner 2026-10-10)"
+    },
+    {
+      "what": "pictures at high quality on the house picture model (2026-10-21, VIDEO-RULINGS V17 — was medium on the fast tier), made at 9:16, no framing-fix calls",
+      "why": "pictures were $3.5–7/ad of the spend on xhigh 2:3 + zone-fix remakes; the clips are 480p so xhigh detail is thrown away (cost ruling 2026-10-10)"
+    },
+    {
+      "what": "scenes are set-ups, never lyric lines (VIDEO-RULINGS V35): one place and camera set-up per scene, a clear start and stop, the lyric beats played inside it; one start picture per scene, a returning set-up reuses its picture",
+      "why": "one picture per line made 40–57 pictures an ad (and 33 frames on 21 Oct); the owner 2026-10-23: \"less frames and more just describing what's in the scene\""
+    },
+    {
+      "what": "recurring cast and sets across stories",
+      "why": "the 10-09/10 runs already re-used banked family-3d people; a new cast per story is wasted spend"
+    },
+    {
+      "what": "hooks are cut from existing clips, never generated",
+      "why": "h-a..h-d were 3 s scroll stoppers from the story's shocking beats, $0 extra"
+    }
+  ],
+  "stage_order": [
+    "idea (concept or swipe)",
+    "picks (awareness → arc → sections)",
+    "writing (video-writing → the brief)",
+    "brief review (the owner)",
+    "song first (production start → song.py)",
+    "cast and 3D rooms",
+    "scene pictures (board, the owner OKs each)",
+    "hand-off (video editor)",
+    "clips and the cut (a creator)",
+    "upscale (bulk)",
+    "launch (the owner's click)"
+  ],
+  "stages": {
+    "audio": {
+      "first": "song",
+      "song_model": "suno",
+      "voice_model": null,
+      "nobody_talks": false,
+      "song_how": "made by hand in Suno from song.py --suno (model-inputs suno sheet + the style row's suno line); brought back with song.py --from-file through the song gate (the owner, 2026-10-28)",
+      "sung_on_camera": "the singer sings his lines on camera like a musical: each sung scene's slice of the song (song.py sung_reads → vo/<scene>.mp3) is that scene's read, and its clip is a lip-synced talking clip; story shots stay silent over the song (the owner, 2026-10-28)"
+    },
+    "song": {
+      "length_s": [
+        150,
+        195
+      ],
+      "punch_first": "the story's most shocking line sung in the first second — no intro, no humming, no beat-only bar",
+      "sections": "fit (lines × beats_per_line + tail beats at the row's tempo) — never a hand-written number",
+      "flow": {
+        "first_word_s": 1.0,
+        "max_gap_s": 3.5,
+        "dead_air_ratio": 0.1,
+        "ignore_tail_s": 4.0,
+        "beats_per_line": 6,
+        "tail_beats": 1,
+        "shrink": 0.85
+      },
+      "brand_line": "said plainly once in the bridge and in the outro tag; a dropped tag is fixed by crossfading an 8 s tag in the same style",
+      "master_true_peak_dbtp": -1.0,
+      "loudness_lufs": -14,
+      "beats_per_line_by_style": {
+        "story-rap-soul": 6,
+        "dramatic-pop-ballad": 8,
+        "cinematic-orchestral-ballad": 8
+      },
+      "sound": "it needs to actually sound like a song, just efficient: a melody, a sung hook, fewer syllables per line; short musical breaks are fine (under the 3.5 s gap)",
+      "flow_why": "the owner 2026-10-10 (second pass): max gap 3.5 s, dead air ≤10%, first word ≤1 s; rap 6 beats a line, ballads 8 — \"it needs to actually sound like a song, just efficient\""
+    },
+    "pictures": {
+      "door": "direct.openai",
+      "model_key": null,
+      "quality": "high",
+      "size": "864x1536",
+      "aspect": "9:16",
+      "made_at": "9:16 directly at 864x1536 — exact 9:16, both sides divide by 16 (the API takes any such size: components/image-production/models.json note, 2026-09-22); the clip is 480p so a bigger picture is thrown away",
+      "fix_calls": false,
+      "style_lock": "the swipe's style row, formula first (family-3d on every run so far)",
+      "send_size": null,
+      "start_only": true,
+      "max_references": 3,
+      "product": "image-to-image from the real product photo, restyled into the swipe's style; shape, colour and label exact"
+    },
+    "clips": {
+      "model": "seedance-2.0",
+      "endpoint": "image-to-video",
+      "resolution": "720p",
+      "seconds": [
+        4,
+        4
+      ],
+      "clips_per_picture": [
+        2,
+        3
+      ],
+      "takes": 1,
+      "audio": "silent",
+      "upscale": "local Real-ESRGAN realesr-animevideov3 x3 to 1080x1920, crf 15",
+      "stills_allowed": false,
+      "short_clip": "slow to no less than 0.75x, then play the rest in reverse (ping-pong) — never hold a frame",
+      "send_size": "432x768",
+      "send_format": "jpeg q90, centre-cropped to 9:16",
+      "prompt_order": "action line + style lock FIRST, then motion; nothing else",
+      "refused_every_try": "the same prompt and references to the backup door (VIDEO-RULINGS V21); never the neighbour clip punched in (VIDEO-RULINGS V15)",
+      "max_tries": 3,
+      "_seedance": "2026-10-26: every clip is Seedance 2.5 at 480p, one take and three tries at most (VIDEO-RULINGS V34, MODEL-HOUSE.md); a clip is 4 s at the least",
+      "_model_why": "the owner, 2026-10-29: Seedance 2.0 for song ads (generative-model-house clips.song_ad); every other format stays Seedance 2.5"
+    },
+    "cast": {
+      "reuse": "banked people and sets in the swipe's style first, across stories",
+      "recurring": true,
+      "product": "ANIMATED STYLE RULE: the product is rendered IN THE FILM'S STYLE, image-to-image from the real product photo (shape, colour and label kept exact), held by the banked cast and animated like every other scene; only the end card is the real packshot. Real archive footage and studio renders in the body are refused for an animated style."
+    },
+    "hooks": {
+      "shape": "~3 s scroll stopper cut from the story's most shocking clip, punched in 1.10→1.30x, a lyric line as text + one bank SFX, then into the first sung line",
+      "count": 4,
+      "generated": false
+    },
+    "captions": {
+      "look": "lyric lines in the swipe's caption look; the control opens on the first sung line with a headline at 16% from the top"
+    },
+    "gates": {
+      "apply": [
+        "song line gate",
+        "song flow gate",
+        "style lock",
+        "clip words check (no words on the picture)",
+        "loudness/true peak",
+        "product in the film's style from the real photo (no real footage in the body)"
+      ],
+      "skip": [
+        "voice per speaker",
+        "lip-sync / line parity on clips (nobody talks)",
+        "talking-scene audio slice"
+      ]
+    },
+    "edit": {
+      "method": "video-edit machine cut on the song's clock (renders on python3.14)",
+      "reuse": "second chorus and outro reuse earlier clips whole — never punched in (VIDEO-RULINGS V15)",
+      "end_card": "camera move on the real packshot / studio render — the ONLY real product pixels in an animated song ad",
+      "garbled_background_text": "blur at the edit (gblur sigma 22), never a punch-in past it (VIDEO-RULINGS V15)",
+      "loudness": "-14 LUFS, true peak ≤ -1 dBTP (limit the song first)",
+      "versions": "control + 4 hook versions"
+    },
+    "copy": {
+      "source": "AD-SCRIPT.md — the sung lyrics",
+      "why": "the copywriter drifts to the story plot from the brand files otherwise"
+    }
+  },
+  "failures": [
+    {
+      "failure": "songs 5½–6 min with 35–90 s dead air; first word 12 s in",
+      "fix": "punch line first, sections fit from lines × beats_per_line, every take listened to by song.py flow()",
+      "from_run": "runs/video-production/Brand A/resilia-cheating-Brand A (song/LYRICS-owner.md)",
+      "stage": "song"
+    },
+    {
+      "failure": "brand line / last line dropped or blurred by the music model",
+      "fix": "cut before it and crossfade an 8 s tag in the same style",
+      "from_run": "runs/video-production/Brand A/reddit-wrong-size-Brand A",
+      "stage": "song"
+    },
+    {
+      "failure": "cast made photoreal for an animated swipe",
+      "fix": "the teardown names the style row; every element and frame is made in it (family-3d)",
+      "from_run": "runs/video-production/Brand A/resilia-cheating-Brand A",
+      "stage": "elements"
+    },
+    {
+      "failure": "The clip model 'could not generate' on a full-size PNG start picture",
+      "fix": "send the start picture centre-cropped to 9:16 as a 432x768 JPEG q90",
+      "from_run": "runs/video-production/Brand B/reddit-the-fan-Brand B",
+      "stage": "clips"
+    },
+    {
+      "failure": "The clip model re-framed a 2:3 picture / refused it",
+      "fix": "the picture goes in at 9:16; a 9:16 crop passed where the 2:3 was refused",
+      "from_run": "runs/video-production/Brand B/resilia-cheating-Brand B (ledger probe-G01-crop)",
+      "stage": "clips"
+    },
+    {
+      "failure": "clip refusals (prohibited / third-party / safety)",
+      "fix": "action line + style lock first; reword the action, never resend the same request; shorten to action + style + motion",
+      "from_run": "runs/video-production/Brand A/resilia-cheating-Brand A (clips/gate-refusals.json)",
+      "stage": "clips"
+    },
+    {
+      "failure": "a clip refused on every try",
+      "fix": "the same prompt and references to the backup door (VIDEO-RULINGS V21); never the neighbour clip punched in (VIDEO-RULINGS V15)",
+      "from_run": "runs/video-production/Brand A/reddit-wrong-size-Brand A (S28→S25)",
+      "stage": "edit"
+    },
+    {
+      "failure": "clip shorter than its lyric window filled with a still push-in",
+      "fix": "slow to ≥0.75x then reverse (ping-pong); never a still",
+      "from_run": "runs/video-production/Brand A/reddit-it-was-me-Brand A",
+      "stage": "edit"
+    },
+    {
+      "failure": "garbled background signs and labels",
+      "fix": "blur on the start picture, or at the edit (gblur 22) — never a punch-in past it (VIDEO-RULINGS V15)",
+      "from_run": "runs/video-production/Brand A/reddit-it-was-me-Brand A (covered_at_edit)",
+      "stage": "edit"
+    },
+    {
+      "failure": "real brands drawn in pictures (snacks, batteries)",
+      "fix": "remade unbranded",
+      "from_run": "runs/video-production/Brand A/reddit-it-was-me-Brand A",
+      "stage": "pictures"
+    },
+    {
+      "failure": "shower scenes refused by the picture filter",
+      "fix": "reword to the sink",
+      "from_run": "runs/video-production/Brand A/reddit-you-imagined-it-Brand A (S37)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "product label misspelt / a stranger drawn into the packshot",
+      "fix": "the product is restyled image-to-image from the real product photo with its label kept exact (never drawn from words); end card = camera push on the real packshot",
+      "from_run": "runs/video-production/Brand A/reddit-wrong-size-Brand A",
+      "stage": "edit"
+    },
+    {
+      "failure": "copywriter cards drifted to the story plot",
+      "fix": "name AD-SCRIPT.md (the sung lyrics) as the copy source",
+      "from_run": "runs/video-production/Brand A/reddit-you-imagined-it-Brand A (ad_words)",
+      "stage": "copy"
+    },
+    {
+      "failure": "control and a hook version held at -0.7/-0.8 dBTP",
+      "fix": "limit the song first (alimiter 0.6) and master to ≤ -1 dBTP",
+      "from_run": "runs/video-edit/Brand A/reddit-it-was-me-Brand A (deliverable/checks.json)",
+      "stage": "edit"
+    },
+    {
+      "failure": "zone-fix picture remakes unbilled on the ledger and doubling picture calls",
+      "fix": "make at 9:16 directly; framing-fix calls off",
+      "from_run": "runs/video-production/Brand A/reddit-it-was-me-Brand A (41 zone-fix rows)",
+      "stage": "pictures"
+    },
+    {
+      "failure": "real archive B-roll / studio renders cut into an animated film",
+      "fix": "refused for animated styles — the product is rendered in the film's style from the real photo, held by the banked cast",
+      "from_run": "runs/video-production/Brand A/reddit-it-was-me-Brand A (inserts.json product_rule) — ruled out by the owner 2026-10-10",
+      "stage": "edit"
+    },
+    {
+      "failure": "no lane, no quote and no priced go before paid clips (a blanket 'go execute')",
+      "fix": "the quote station is the one stop; the lane opens only on the owner's go on that price, and the clip guard passes only an open lane's model",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "clips"
+    },
+    {
+      "failure": "held concept-only sets used as clip references",
+      "fix": "the pack is not ready on any held asset, and the lane does not open on it",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "elements"
+    },
+    {
+      "failure": "a delivered clip shows two men hugging, on a lyric that asked for it",
+      "fix": "the setups check refuses a hug or kiss in a prompt unless contact_ok names who it is, never two men; the takes look at house rules",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "clips"
+    },
+    {
+      "failure": "captions showed the transcript's mishearing instead of the approved lyric",
+      "fix": "the edit's captions are the approved lyric word for word",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "edit"
+    },
+    {
+      "failure": "two brief versions; the pack used one and the production run named the other",
+      "fix": "the workflow names one brief, the writing run's accepted stage, and re-files the shelf copy from it",
+      "from_run": "runs/video-teardown/_work/Brand A-this-christmas-photo",
+      "stage": "writing"
+    },
+    {
+      "failure": "the approve action pressed on the owner's behalf",
+      "fix": "the run ends at 1-check and never calls approve",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "meta"
+    },
+    {
+      "failure": "a static opening",
+      "fix": "the motion law in every prompt: timed 1.5-2 s shots, each an action with a visible result, the camera moving",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "clips"
+    },
+    {
+      "failure": "the product turned the wrong way in progression clips",
+      "fix": "the mechanism in one clip; later clips drop the product reference",
+      "from_run": "runs/higgsfield/Brand A/singing-ads-Brand A_flex-face-brush_brief-0376",
+      "stage": "clips"
+    }
+  ],
+  "cost": {
+    "target_usd_per_ad": 10,
+    "cap_usd_per_ad": null,
+    "_cap": "2026-10-21 (P40, VIDEO-RULINGS V17: cost is never a reason): no dollar cap stops an ad; three of every element, the best kept.",
+    "measured": "ledger $9.67–16.31 an ad on 8 runs (pictures $3.49–7.02, clips $6.18–10.38) — pictures understated (zone-fix rows unbilled), element sheets ~$2.40–4.70 more, song not on the ledger; ~$18–27 all in",
+    "how": "pictures high on the house picture model at 9:16 (V17, 2026-10-21 — was medium on the fast tier), no fix calls, 2–3 clips per picture (~20 pictures not ~50); clips 3–4 s at 480p (~45 × 3.5 s × $0.13 ≈ $20 for a 2:45 song); cast and sets reused (element sheets ≈ $0); hooks cut from clips ($0)"
+  },
+  "quality_bar": [
+    "the first sung word lands inside 1 s and it is the story's punch line",
+    "no gap over 2 s between sung words; dead air under 5% (song.py flow)",
+    "every picture in the swipe's style row — no photoreal person in an animated ad",
+    "every shot moves: no still, no frozen frame, no held last frame",
+    "no readable garbage text anywhere on screen (blurred, never punched past)",
+    "no stranger, no merged faces, no real third-party brand in frame",
+    "every clip sits under the lyric it illustrates",
+    "master ≤ -1 dBTP at -14 LUFS",
+    "the brand line is heard plainly once in the bridge and in the outro",
+    "the product matches the real photo exactly (shape, colour, label) AND is in the film's style — no real footage in the body; the end card is the real packshot",
+    "it sounds like a song: a melody and a sung hook, not a rushed list of lines",
+    "the story is real: real cheating, real scandal, real stakes; never a softened version (the owner, 2026-10-28: \"I want the cheating to be real\")",
+    "innuendo and sus pushed right up to the edge line (Story Playbook): double meanings, 'pause', near-curses; never over it",
+    "every scene has one shocking thing a viewer would screenshot",
+    "it watches like a music video and a movie at once: the singer's performance shots intercut with the story, shot sizes varied (wide, medium, close), every shot staged and lit like film",
+    "depth in every scene: built from its 3D room with a real lens and light, never a flat backdrop",
+    "the clip model is used to its limit: camera moves, physical acting, emotion travelling through the shot; never a held pose",
+    "upscaled to 1080x1920 before launch; nothing ships at the clip model's working resolution"
+  ],
+  "variants": [],
+  "built_from": [
+    "runs/video-production/Brand A/resilia-cheating-Brand A",
+    "runs/video-production/Brand A/reddit-wrong-size-Brand A",
+    "runs/video-production/Brand A/reddit-it-was-me-Brand A",
+    "runs/video-production/Brand A/reddit-you-imagined-it-Brand A",
+    "runs/video-production/Brand A/reddit-on-principle-Brand A",
+    "runs/video-production/Brand B/resilia-cheating-Brand B",
+    "runs/video-production/Brand B/reddit-the-fan-Brand B",
+    "runs/video-production/Brand B/reddit-two-more-years-Brand B",
+    "runs/video-edit/Brand A/* and runs/video-edit/Brand B/* (the matching edits + -h-* hook versions)"
+  ],
+  "rulings": [
+    "the owner 2026-10-10 (SONG-WRITING.md): \"the opening line needs to start with the punch … these songs need to be shorter … the songs need to flow\"",
+    "the owner 2026-10-09 (THE-CHAIN.md): \"the creative format itself is supposed to look like Pixar\" — the swipe's style is the lock",
+    "the owner 2026-10-10 (memory: song ads all clips, cheap): no stills ever; Seedance 480p + local upscale; sloppy B-roll is fine",
+    "the owner 2026-10-10 (attention-first song ads): no voiceover, silent scenes follow the sung story",
+    "the owner 2026-10-09/10 (CLAUDE.md, product never drawn): \"all this slop stuff is gone … so we can print ads\"",
+    "the owner 2026-10-10: \"how can we get our cost down even more\" — the cost defaults above",
+    "the owner 2026-10-10: \"we cannot have AI slop\" — the quality bar",
+    "the owner 2026-10-10: \"you shouldn't be using real b-roll for this\" — animated formats render the product in the film's style from the real photo; only the end card is real",
+    "the owner 2026-10-10: \"it needs to actually sound like a song, just efficient\" — max gap 3.5 s, dead air ≤10%, rap 6 / ballad 8 beats a line",
+    {
+      "ruled": "2026-11-27",
+      "rule": "song ads run one locked workflow, the path brief 0376 took with its fixes; autonomous, the quote the only stop"
+    }
+  ],
+  "workflow": {
+    "what": "The song-ad line, for any song ad, run autonomously: start (a swipe, or our own), writing chain (holds decided by the decision layer), the song, the elements, the Studio pack, the story map, the quote, Higgsfield Singing Ads with a check after every paid step, upscale on this Mac, the edit, the approval page. The only stop is the quote: the owner's go on the price opens the lane.",
+    "ruled": "2026-11-27: one named workflow, the path brief 0376 took with its fixes; autonomous, the quote the only stop; the clip model one setting",
+    "route_locked": true,
+    "completion": "filed-to-approval-page",
+    "settings": {
+      "clip_model": {
+        "default": "seedance-2.5",
+        "set_by": "the owner's go on the quote (drama_lane.py open --format song-ad --model)",
+        "options": [
+          "seedance-2.5",
+          "wan-3.0"
+        ]
+      },
+      "stops": [
+        "the quote, before any paid generation"
+      ]
+    },
+    "steps": [
+      {
+        "id": "start",
+        "name": "Start: a swipe, or our own",
+        "component": "swipe-intake · video-teardown · video-writing scratch.py",
+        "executor": "agent",
+        "skill": ".claude/skills/swipe-intake/SKILL.md",
+        "does": "Two starts, one workflow. WITH A SWIPE (source=swipe): save and index it (swipe-intake) and tear it down through stage 2 (video-teardown run.py); its structure and beats are the swipe's. source_record = runs/intake/{brand}/<intake>/run.json. WITHOUT A SWIPE (source=own): the concept brief (research-round or the owner's idea), then python3 components/video-writing/machine/scratch.py <label> --brand {brand} --product <p> --avatar <a> --format song-ad --arc <arc> --style <style id> --story <concept.md> (no --write); the arc's beats are the song's sections. source_record = the concept file. Return source, teardown and source_record.",
+        "inputs": [
+          "source",
+          "teardown",
+          "source_record"
+        ],
+        "evidence": [
+          "{source_record}"
+        ],
+        "done_when": "runs/video-teardown/_work/{teardown}/run.json",
+        "run_check": {
+          "file": "runs/video-teardown/_work/{teardown}/run.json",
+          "stages": [
+            "stage0",
+            "stage1",
+            "stage2"
+          ]
+        },
+        "gate": null
+      },
+      {
+        "id": "brief",
+        "name": "Writing chain brief",
+        "component": "video-writing",
+        "executor": "command",
+        "skill": ".claude/skills/video-writing/SKILL.md",
+        "run": "python3 components/video-writing/machine/run.py {teardown} --autonomous",
+        "does": "The writing chain writes the song brief with the decision layer on: every hold is decided and filed in runs/decisions/calls.jsonl, and the run continues. Nothing is hand-patched, and no brief is accepted outside the chain. The brief this workflow uses is the writing run's own accepted stage brief ({brief}), one version only.",
+        "inputs": [
+          "brief",
+          "writing_run"
+        ],
+        "done_when": "{brief}",
+        "evidence": [
+          "{brief}"
+        ],
+        "brief_check": {
+          "run": "{writing_run}/run.json",
+          "brief": "{brief}"
+        },
+        "gate": null
+      },
+      {
+        "id": "song",
+        "name": "The song",
+        "component": "video-production song.py · Suno",
+        "executor": "agent",
+        "does": "Make the song from the brief's lyrics through the song chain (SONG-CHAIN.md): song.py writes the Suno inputs, the takes are made in Suno, and the chosen take goes back through the song gate (song.py --from-file): every line heard, in order, and the last line finished. Keep the song unchanged from here on. The take is chosen by the run (the one whose lines all pass, the cleaner ending on a tie) and filed through the decision layer; the owner hears it on the quote page.",
+        "evidence": [
+          "runs/video-production/{brand}/{production_label}/song/song.json",
+          "runs/video-production/{brand}/{production_label}/song/timing.json"
+        ],
+        "inputs": [
+          "production_label"
+        ],
+        "gate": null
+      },
+      {
+        "id": "elements",
+        "name": "Cast, looks, places and product",
+        "component": "casting · 3d-print · image production · elements_check",
+        "executor": "agent",
+        "does": "Every person, look, place and the product in the brief's style, each from a filed 3D print through image production (one image process, no side paths; never a session's own image tool). The product is its approved casting sheet in the style (style_chain). A held or concept-only asset is never used as a reference. The elements lock writes itself when every element is banked and checked.",
+        "evidence": [
+          "runs/video-production/{brand}/{production_label}/elements-lock.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "pack",
+        "name": "Studio pack",
+        "component": "video-studio higgsfield/hf_pack.py",
+        "executor": "command",
+        "run": "python3 components/video-studio/higgsfield/hf_pack.py pack singing-ads {production_label} --writing {writing_run}",
+        "input_files": [
+          "{brief}"
+        ],
+        "done_when": "runs/higgsfield/{brand}/singing-ads-{production_label}/pack.json",
+        "does": "Gathers the song, its lines on the song's clock (lines.tsv), the accepted scene plan, the banked cast, places and product into the film folder (pack.json, REQUEST.md). A held asset, a missing line clock or no accepted scenes marks it not ready, and the lane will not open on it.",
+        "gate": null
+      },
+      {
+        "id": "plan",
+        "name": "Story map, windows and clip prompts",
+        "component": "Higgsfield Singing Ads recipe",
+        "executor": "agent",
+        "skill": "components/workflow-teardown/recipes/singing-ads.md",
+        "prompts": [
+          "components/video-production/formats/recipes/drama-camera-v1.md"
+        ],
+        "does": "Cut the song into windows on its own sung lines (lines.tsv), end to end with no gap, each window inside the clip model's length, one clip a window, following the accepted scene plan in order. Write film/script.json {clips: [{id, make: fresh, images: [refs], videos: [], voices: []}]}, film/plan.json {song_seconds, windows: [{clip, start, end}]} and film/prompts/clip-<id>.txt. Every prompt carries the motion law: a timed shot list of about 1.5-2 s shots, each a physical action with a visible result, the camera moving (drama camera recipe). The product's mechanism is shown in one clip; later clips drop the product reference. A skin or look change keeps the same room, angle and light across its states. No on-screen text. Men never hug or kiss men.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/script.json",
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/plan.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "price",
+        "name": "Quote, then the owner's go",
+        "component": "Higgsfield ads_studio_story_recipe · get_drama_ads_config · video-studio higgsfield/drama_lane.py",
+        "executor": "agent",
+        "skill": "components/workflow-teardown/recipes/singing-ads.md",
+        "quote": true,
+        "stops_for": "the owner: the quote (his only stop)",
+        "does": "THE ONE STOP. Start the ad's record with ads_studio_story_recipe (preset /singing-ads) for its story id, the drama_ads_id. Price every window on both clip models (drama_lane.py models --format song-ad), Seedance 2.5 480p draft and Wan 3.0 480p, with get_drama_ads_config purpose stage under that id, called right before the numbers are shown; never a remembered rate or a hand sum. Show the owner both totals beside the chosen song (to hear) and the story map. His go names the model (Seedance when he does not say). Write quote.json {drama_ads_id, clip_model, resolution, total_credits, quote_refs, other_quote}; only his go opens the lane: drama_lane.py open <film> --format song-ad --quote quote.json --model <his pick> --approved-by <name> --said \"<his words>\" --cap <credits>. Read the account's credit balance (balance) right before the quote and show it beside both totals, with what is left after the chosen one; a balance below the total is said first.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/quote.json",
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/lane.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "go-check",
+        "name": "Lane check",
+        "component": "video-studio higgsfield/drama_lane.py",
+        "executor": "command",
+        "run": "python3 components/video-studio/higgsfield/drama_lane.py check runs/higgsfield/{brand}/singing-ads-{production_label} go",
+        "input_files": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/lane.json"
+        ],
+        "done_when": "runs/higgsfield/{brand}/singing-ads-{production_label}/checks/go.json",
+        "does": "Holds every paid step until the lane is open on the owner's go, on one clip model, the quote on that same model, under the cap.",
+        "gate": null
+      },
+      {
+        "id": "sheets",
+        "name": "Reference sheets",
+        "component": "Higgsfield Singing Ads recipe",
+        "executor": "agent",
+        "skill": "components/workflow-teardown/recipes/singing-ads.md",
+        "paid": true,
+        "does": "Upload our banked cast, looks, places and the product's approved casting sheet as the film's references; make a sheet only for a role the pack names as new, once, with the lane's drama_ads_id. Write film/sheets.json {sheets: [{kind, name, job_id | source}]}; the product row's source is the pack's product sheet.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/sheets.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "sheets-check",
+        "name": "Sheets check",
+        "component": "video-studio higgsfield/drama_lane.py",
+        "executor": "command",
+        "run": "python3 components/video-studio/higgsfield/drama_lane.py check runs/higgsfield/{brand}/singing-ads-{production_label} sheets",
+        "input_files": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/sheets.json"
+        ],
+        "done_when": "runs/higgsfield/{brand}/singing-ads-{production_label}/checks/sheets.json",
+        "does": "Holds the clips until every sheet is made once and the product is the pack's approved sheet, never generated.",
+        "gate": null
+      },
+      {
+        "id": "setups",
+        "name": "Every clip's setup on the page",
+        "component": "media-production scene input review",
+        "executor": "agent",
+        "does": "Before any clip is sent, publish every clip's exact setup on the film's page: ordered references with role and preview, the full prompt, model, resolution, aspect, duration and its quote. Write film/setups.json {page, setups: [{clip, model (the lane's vendor id), resolution, aspect_ratio, duration, refs: [{role, value, file}], prompt_file, prompt_sha256, camera, quote_credits}]}. Showing the setup adds no stop.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/setups.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "setups-check",
+        "name": "Plan and setup check",
+        "component": "video-studio higgsfield/drama_lane.py",
+        "executor": "command",
+        "run": "python3 components/video-studio/higgsfield/drama_lane.py check runs/higgsfield/{brand}/singing-ads-{production_label} setups",
+        "input_files": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/setups.json",
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/plan.json"
+        ],
+        "done_when": "runs/higgsfield/{brand}/singing-ads-{production_label}/checks/setups.json",
+        "does": "Holds the clips until the windows run end to end over the song on its sung lines within the model's length, every setup is published on the lane's model and settings within its reference limits, every shot moves, and no prompt has a hug or kiss between men.",
+        "gate": null
+      },
+      {
+        "id": "clips",
+        "name": "Clips through the batch tools",
+        "component": "Higgsfield Singing Ads recipe",
+        "executor": "agent",
+        "skill": "components/workflow-teardown/recipes/singing-ads.md",
+        "paid": true,
+        "does": "Send each clip exactly as its published setup through generate_video_batch with the lane's drama_ads_id, sound off (the song is laid in the edit), Seedance as a 480p draft so the 1080p finish stays open. Run drama_lane.py request <film> <request.json> before every send. The first clip goes alone and is looked at; the rest follow in batches. Freeze each take in jobs.json {clips: [{clip, take, request: {params}, job_id, result_url}]}. Stop at the lane's cap.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/jobs.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "takes",
+        "name": "Each take looked at",
+        "component": "Higgsfield Singing Ads recipe · video-production",
+        "executor": "agent",
+        "prompts": [
+          "components/video-production/formats/recipes/drama-camera-v1.md"
+        ],
+        "does": "Download every take and look at it at 2 frames a second against its window: motion (the timed shots happen, the camera moves), identity, the lyric beat it illustrates, continuity (skin state, wardrobe, room), product use (right way round, in the right clip only), house rules (no men hugging or kissing, no stray text). A wrong take is fixed with clip_tools.py (only the broken seconds) or remade inside the cap, never sent to the owner; a kept finding is filed with drama_lane.py decide. Write film/takes.json {takes: [{clip, job_id, accepted, looked: {motion, identity, lyric_beat, continuity, product, house_rules}}]}.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/takes.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "takes-check",
+        "name": "Takes check",
+        "component": "video-studio higgsfield/drama_lane.py",
+        "executor": "command",
+        "run": "python3 components/video-studio/higgsfield/drama_lane.py check runs/higgsfield/{brand}/singing-ads-{production_label} takes",
+        "input_files": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/film/takes.json",
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/jobs.json"
+        ],
+        "done_when": "runs/higgsfield/{brand}/singing-ads-{production_label}/checks/takes.json",
+        "does": "Holds the edit until every frozen request matches its published setup and the lane, and every window has an accepted take looked at on all six looks.",
+        "gate": null
+      },
+      {
+        "id": "upscale",
+        "name": "Upscale on this Mac",
+        "component": "local-studio local.py",
+        "executor": "agent",
+        "does": "Upscale every accepted take on this Mac (python3 components/local-studio/local.py upscale, Real-ESRGAN animevideov3, x3); never a Higgsfield upscale. Check each output's frame count, duration and source sha against its take, and write clips/upscale-status.json naming each take and its upscaled file.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/clips/upscale-status.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "edit",
+        "name": "The edit",
+        "component": "video-edit from_higgsfield.py · v2.py · HyperFrames",
+        "executor": "agent",
+        "skill": ".claude/skills/video-edit/SKILL.md",
+        "does": "Build the cut from the accepted, upscaled takes (video-edit from_higgsfield.py; never a hand-written cut), lay the song unchanged, and deliver a captioned and a clean version (run.py deliver). The captions are the approved lyric word for word, kept off faces. Make the opening variations on the first window and splice them with v2.py ad --control --hook, the body proven identical. Covers from the film's frames. Write deliverable/edit.json naming each version, its takes, its checks, and that the song is unchanged.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/deliverable/edit.json"
+        ],
+        "gate": null
+      },
+      {
+        "id": "meta",
+        "name": "Filed to the approval page",
+        "component": "meta-upload",
+        "executor": "agent",
+        "skill": ".claude/skills/meta-upload/SKILL.md",
+        "does": "File the control and every opening as one flexible ad into the approval folder (meta-upload, 1-check), with the brand's proven words. Write deliverable/meta-filed.json. The run ends here and nothing is published here. Never call the approval page's approve action: going live is the owner's click on the approval page, outside the run.",
+        "evidence": [
+          "runs/higgsfield/{brand}/singing-ads-{production_label}/deliverable/meta-filed.json"
+        ],
+        "gate": null
+      }
+    ]
+  },
+  "clip_models": {
+    "default": "seedance-2.5",
+    "models": {
+      "seedance-2.5": {
+        "lane": "house",
+        "resolution": "480p",
+        "aspect_ratio": "9:16",
+        "duration": [
+          4,
+          30
+        ],
+        "refs": {
+          "image": 30,
+          "video": 10,
+          "audio": 10
+        },
+        "extension": true,
+        "params": {
+          "generate_audio": false,
+          "draft": true
+        },
+        "refuse_params": [],
+        "read": "brief 0376: seedance_2_5 omni_reference 480p, sound off; remakes as draft so the 1080p finish stays open"
+      },
+      "wan-3.0": {
+        "lane": "option",
+        "resolution": "480p",
+        "aspect_ratio": "9:16",
+        "duration": [
+          2,
+          30
+        ],
+        "refs": {
+          "image": 10,
+          "video": 5,
+          "audio": 5
+        },
+        "extension": false,
+        "params": {
+          "generate_audio": false
+        },
+        "refuse_params": [
+          "mode",
+          "extension_mode",
+          "draft"
+        ],
+        "read": "models_explore wan3_0, 2026-11-27; reference mode rules in components/model-inputs/inputs/wan-3.0.json"
+      }
+    }
+  },
+  "lane": {
+    "preset": "/singing-ads",
+    "looks": [
+      "motion",
+      "identity",
+      "lyric_beat",
+      "continuity",
+      "product",
+      "house_rules"
+    ],
+    "sandbox_checks": [],
+    "song": true
+  }
+}

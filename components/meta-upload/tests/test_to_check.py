@@ -14,7 +14,7 @@ import to_check as T
 import feed_image, feed_video, feed_carousel, feed_creator
 import delivery_rule as DR
 
-CARD_KEYS = ["schema", "brand", "lane", "format", "ad_name", "old_name", "brief_id", "product", "avatar",
+CARD_KEYS = ["schema", "brand", "lane", "format", "ad_name", "old_name", "brief_id", "product", "avatar", "sub_avatar", "face",
              "angle", "media", "words", "copy_checked", "pages", "made_by", "made_at", "checks", "approval", "meta"]
 
 RENDER = """**`FORMAT: caption`**
@@ -71,7 +71,8 @@ class Base(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         self.root = self.tmp / "meta"
-        self.env = mock.patch.dict(os.environ, {"META_CARDS_ROOT": str(self.root)})
+        # these tests file stand-in pictures; the made-by-the-tool gate has its own tests (test_made_by_tool.py)
+        self.env = mock.patch.dict(os.environ, {"META_CARDS_ROOT": str(self.root), "MADE_BY_TOOL_GATE_OFF": "all"})
         self.env.start()
 
     def tearDown(self):
@@ -100,35 +101,35 @@ class Words(unittest.TestCase):
 
     def test_run_found_by_its_body(self):
         with tempfile.TemporaryDirectory() as t:
-            run = Path(t) / "runs/copywriter/brand-b/fn-x"
+            run = Path(t) / "runs/copywriter/brand_b/fn-x"
             run.mkdir(parents=True)
             (run / "stage8--render.md").write_text(RENDER)
             body = "First body, long enough to be found again by its own words.\n\nSee how it works 👉\n\n*61 words.*"
-            self.assertEqual(W.run_for_body("brand-b", body, Path(t)), run)
-            self.assertIsNone(W.run_for_body("brand-b", "A body nobody ever wrote, anywhere at all.", Path(t)))
+            self.assertEqual(W.run_for_body("brand_b", body, Path(t)), run)
+            self.assertIsNone(W.run_for_body("brand_b", "A body nobody ever wrote, anywhere at all.", Path(t)))
 
     def test_runs_for_brief_by_number_token(self):
         with tempfile.TemporaryDirectory() as t:
             for label in ("p130-h1-v1-apology", "p1300-other", "x-p13-y"):
-                d = Path(t) / "runs/copywriter/brand-b" / label
+                d = Path(t) / "runs/copywriter/brand_b" / label
                 d.mkdir(parents=True)
                 (d / "stage8--render.md").write_text(RENDER)
-            got = [d.name for d in W.runs_for_brief("brand-b", "brief-0130", Path(t))]
+            got = [d.name for d in W.runs_for_brief("brand_b", "brief-0130", Path(t))]
             self.assertEqual(got, ["p130-h1-v1-apology"])
 
     def test_runs_for_brief_by_the_folder_its_source_sits_in(self):
         """chain.py copy labels a run by its swipe, not its brief: the run still
         belongs to the brief when its source file sits in the brief's own run."""
         with tempfile.TemporaryDirectory() as t:
-            for label, src in (("brand-b-01-swipe", "runs/image-teardown/brand-b/brand-b-01-swipe/out/01-teardown.md"),
-                               ("brand-b-02-other", "runs/image-teardown/brand-b/brand-b-02-other/out/01-teardown.md")):
-                d = Path(t) / "runs/copywriter/brand-b" / label
+            for label, src in (("brand_b-01-swipe", "runs/image-teardown/brand_b/brand_b-01-swipe/out/01-teardown.md"),
+                               ("brand_b-02-other", "runs/image-teardown/brand_b/brand_b-02-other/out/01-teardown.md")):
+                d = Path(t) / "runs/copywriter/brand_b" / label
                 d.mkdir(parents=True)
                 (d / "stage8--render.md").write_text(RENDER)
                 (d / "run.json").write_text(json.dumps({"source_path": src}))
-            with mock.patch.object(W, "brief_run_names", lambda *a, **k: {"brand-b-01-swipe"}):
-                got = [d.name for d in W.runs_for_brief("brand-b", "brief-0998", Path(t))]
-            self.assertEqual(got, ["brand-b-01-swipe"])
+            with mock.patch.object(W, "brief_run_names", lambda *a, **k: {"brand_b-01-swipe"}):
+                got = [d.name for d in W.runs_for_brief("brand_b", "brief-0998", Path(t))]
+            self.assertEqual(got, ["brand_b-01-swipe"])
 
 
 class BriefPage(Base):
@@ -137,18 +138,18 @@ class BriefPage(Base):
     def test_card_inherits_the_briefs_page(self):
         m = [png(self.tmp / "src" / "a.png")]
         with mock.patch.object(T.PP, "landing_ids", lambda *a, **k: ["link_brand_b_cpk_landing"]):
-            p = T.to_check("brand-b", "image", "flexible", m, W.empty(), [], None,
+            p = T.to_check("brand_b", "image", "flexible", m, W.empty(), [], None,
                            product="brilliance-body-scrub", brief="brief-0154", batch="260923a", dry_run=True)
             self.assertEqual([x["link_id"] for x in p["card"]["pages"]], ["link_brand_b_cpk_landing"])
-            p = T.to_check("brand-b", "image", "flexible", m, W.empty(), ["link_brand_b_cpk_quiz"], None,
+            p = T.to_check("brand_b", "image", "flexible", m, W.empty(), ["link_brand_b_cpk_quiz"], None,
                            product="brilliance-body-scrub", brief="brief-0154", batch="260923a", dry_run=True)
-            # a quiz page passed wins, and the product's offer page rides beside it (the owner, 2026-10-23)
+            # a quiz page passed wins, and the product's offer page rides beside it (owner, 2026-10-23)
             self.assertEqual([x["link_id"] for x in p["card"]["pages"]], ["link_brand_b_cpk_quiz", "link_brand_b_cpk_landing"])
 
     def test_no_brief_page_means_no_page(self):
         m = [png(self.tmp / "src" / "a.png")]
         with mock.patch.object(T.PP, "landing_ids", lambda *a, **k: []):
-            p = T.to_check("brand-b", "image", "flexible", m, W.empty(), [], None,
+            p = T.to_check("brand_b", "image", "flexible", m, W.empty(), [], None,
                            product="brilliance-body-scrub", brief="brief-0154", batch="260923a", dry_run=True)
         self.assertEqual(p["card"]["pages"], [])
 
@@ -156,12 +157,12 @@ class BriefPage(Base):
 class Card(Base):
     def test_writes_folder_media_and_exact_card(self):
         m = [png(self.tmp / "src" / "b.png"), png(self.tmp / "src" / "a.png")]
-        p = T.to_check("brand-b", "image", "flexible", m,
+        p = T.to_check("brand_b", "image", "flexible", m,
                        {"primary": ["Body"], "headlines": ["H"], "descriptions": []}, ["link_brand_b_cpk_quiz"],
                        {"tool": "image-edit", "run": "runs/x"}, product="brilliance-body-scrub", brief="p154",
                        batch="260923a", old_name="old")
         ad = "brand_b_brilliance-body-scrub_brief-0154_batch-2026-09-23-a"
-        target = self.root / "brand-b/1-check/image" / ad
+        target = self.root / "brand_b/1-check/image" / ad
         self.assertEqual(p["state"], "filed")
         self.assertEqual(p["target"], target)
         self.assertEqual(sorted(x.name for x in target.iterdir()),
@@ -171,9 +172,9 @@ class Card(Base):
         self.assertEqual(c["schema"], "meta-card/1")
         self.assertEqual(c["media"], [f"{ad}_asset-01.png", f"{ad}_asset-02.png"])
         self.assertEqual(c["pages"], [{"link_id": "link_brand_b_cpk_quiz",
-                                       "url": "https://recipe.brand-b.com/brand-b-scrub-cpk/quiz/"},
+                                       "url": "https://recipe.brand_b.com/brand_b-scrub-cpk/quiz/"},
                                       {"link_id": "link_brand_b_cpk_landing",     # the offer page beside the quiz
-                                       "url": "https://recipe.brand-b.com/brand-b-scrub-cpk/landing.html"}])
+                                       "url": "https://recipe.brand_b.com/brand_b-scrub-cpk/landing.html"}])
         self.assertEqual((c["avatar"], c["angle"]), ("spot-hider", "pigment-memory"))   # from the brief header
         self.assertEqual(c["made_by"], {"tool": "image-edit", "run": "runs/x", "creator": None})
         self.assertIsNone(c["approval"])
@@ -182,21 +183,21 @@ class Card(Base):
 
     def test_unknown_link_refused(self):
         with self.assertRaises(T.Refused):
-            T.to_check("brand-b", "image", "flexible", [png(self.tmp / "a.png")], None, ["link_brand_b_nope"],
+            T.to_check("brand_b", "image", "flexible", [png(self.tmp / "a.png")], None, ["link_brand_b_nope"],
                        product="x", brief="none", batch="batch-2026-10-01-a")
 
     def test_dry_run_writes_nothing(self):
-        p = T.to_check("brand-b", "video", "flexible", [self.tmp / "not-made-yet.mp4"], None, [],
+        p = T.to_check("brand_b", "video", "flexible", [self.tmp / "not-made-yet.mp4"], None, [],
                        product="brilliance-body-scrub", brief="brief-0191", batch="batch-2026-10-01-a", dry_run=True)
         self.assertEqual(p["state"], "would file")
         self.assertEqual(p["missing_words"], ["no primary text", "no headline"])
         self.assertFalse(self.root.exists())
 
     def test_a_thumbnail_rides_with_its_video(self):
-        """4 Oct 2026 (the owner: "unique thumbnails per creative"): thumbs[i] goes with media[i], named after it."""
+        """4 Oct 2026 (owner: "unique thumbnails per creative"): thumbs[i] goes with media[i], named after it."""
         kw = dict(product="brilliance-body-scrub", brief="brief-0154", batch="batch-2026-10-01-a")
         vids = [png(self.tmp / "v1.png"), png(self.tmp / "v2.png")]
-        p = T.to_check("brand-b", "image", "flexible", vids, None, [], thumbs=[png(self.tmp / "t1.png", (1080, 1920))], **kw)
+        p = T.to_check("brand_b", "image", "flexible", vids, None, [], thumbs=[png(self.tmp / "t1.png", (1080, 1920))], **kw)
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual(len(c["media"]), 2)
         self.assertEqual(list(c["thumbs"]), [c["media"][0]])
@@ -206,11 +207,11 @@ class Card(Base):
     def test_a_refile_keeps_the_same_folder(self):
         """4 Oct 2026: a refile swapped the whole folder, so its Drive link changed and the shared one was trashed.
         The folder stays; its files are swapped inside it, and a file the new card no longer lists STAYS, named on
-        the new card as superseded (2026-10-18, the team's ruling, LD-17 (Drive deletes out): no machine delete on Drive)."""
+        the new card as superseded (2026-10-18, developer's ruling, LD-17 (Drive deletes out): no machine delete on Drive)."""
         kw = dict(product="brilliance-body-scrub", brief="brief-0154", batch="batch-2026-10-01-a")
-        p = T.to_check("brand-b", "image", "flexible", [png(self.tmp / "a.png"), png(self.tmp / "b.png")], None, [], **kw)
+        p = T.to_check("brand_b", "image", "flexible", [png(self.tmp / "a.png"), png(self.tmp / "b.png")], None, [], **kw)
         folder = p["target"]; ino = folder.stat().st_ino
-        q = T.to_check("brand-b", "image", "flexible", [png(self.tmp / "c.png")], None, [], replace=True, **kw)
+        q = T.to_check("brand_b", "image", "flexible", [png(self.tmp / "c.png")], None, [], replace=True, **kw)
         self.assertEqual(q["state"], "replaced")
         self.assertEqual(folder.stat().st_ino, ino)                  # the same folder, not a new one
         old = sorted(n for _, n in p["files"] if n != q["files"][0][1])
@@ -223,12 +224,12 @@ class Card(Base):
         """LD-17 (Drive deletes out): each refile adds what it dropped to the prior card's superseded list."""
         kw = dict(product="brilliance-body-scrub", brief="brief-0154", batch="batch-2026-10-01-a")
         src = [png(self.tmp / f"{n}.png") for n in "abc"]
-        p = T.to_check("brand-b", "image", "flexible", src, None, [], **kw)
+        p = T.to_check("brand_b", "image", "flexible", src, None, [], **kw)
         names = [n for _, n in p["files"]]                           # asset-01, -02, -03
-        T.to_check("brand-b", "image", "flexible", src[:2], None, [], replace=True, **kw)
+        T.to_check("brand_b", "image", "flexible", src[:2], None, [], replace=True, **kw)
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual(c["superseded"], [names[2]])
-        T.to_check("brand-b", "image", "flexible", src[:1], None, [], replace=True, **kw)
+        T.to_check("brand_b", "image", "flexible", src[:1], None, [], replace=True, **kw)
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual(c["superseded"], sorted(names[1:]))
         self.assertTrue(all((p["target"] / n).is_file() for n in names))
@@ -237,11 +238,11 @@ class Card(Base):
         """LD-17 (Drive deletes out): a file the new card lists again is current, not superseded."""
         kw = dict(product="brilliance-body-scrub", brief="brief-0154", batch="batch-2026-10-01-a")
         src = [png(self.tmp / f"{n}.png") for n in "abc"]
-        p = T.to_check("brand-b", "image", "flexible", src, None, [], **kw)
+        p = T.to_check("brand_b", "image", "flexible", src, None, [], **kw)
         names = [n for _, n in p["files"]]
-        T.to_check("brand-b", "image", "flexible", src[:1], None, [], replace=True, **kw)
+        T.to_check("brand_b", "image", "flexible", src[:1], None, [], replace=True, **kw)
         self.assertEqual(json.loads((p["target"] / "card.json").read_text())["superseded"], sorted(names[1:]))
-        T.to_check("brand-b", "image", "flexible", src[:2], None, [], replace=True, **kw)
+        T.to_check("brand_b", "image", "flexible", src[:2], None, [], replace=True, **kw)
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual(c["superseded"], [names[2]])
         self.assertEqual(c["media"], names[:2])
@@ -249,37 +250,37 @@ class Card(Base):
     def test_never_refiled_once_decided(self):
         kw = dict(product="brilliance-body-scrub", brief="brief-0154", batch="batch-2026-10-01-a")
         src = [png(self.tmp / "a.png")]
-        p = T.to_check("brand-b", "image", "flexible", src, None, [], **kw)
-        self.assertEqual(T.to_check("brand-b", "image", "flexible", src, None, [], **kw)["state"],
+        p = T.to_check("brand_b", "image", "flexible", src, None, [], **kw)
+        self.assertEqual(T.to_check("brand_b", "image", "flexible", src, None, [], **kw)["state"],
                          "skipped: already in 1-check")
-        self.assertEqual(T.to_check("brand-b", "image", "flexible", src, None, [], replace=True, **kw)["state"],
+        self.assertEqual(T.to_check("brand_b", "image", "flexible", src, None, [], replace=True, **kw)["state"],
                          "replaced")
         c = json.loads((p["target"] / "card.json").read_text())
-        c["approval"] = {"by": "the owner", "decision": "approve"}
+        c["approval"] = {"by": "owner", "decision": "approve"}
         (p["target"] / "card.json").write_text(json.dumps(c))
-        self.assertEqual(T.to_check("brand-b", "image", "flexible", src, None, [], replace=True, **kw)["state"],
+        self.assertEqual(T.to_check("brand_b", "image", "flexible", src, None, [], replace=True, **kw)["state"],
                          "skipped: already decided on in 1-check")
-        shutil.move(str(p["target"]), str(self.root / "brand-b/3-live/image" / p["target"].name))
-        self.assertEqual(T.to_check("brand-b", "image", "flexible", src, None, [], **kw)["state"],
+        shutil.move(str(p["target"]), str(self.root / "brand_b/3-live/image" / p["target"].name))
+        self.assertEqual(T.to_check("brand_b", "image", "flexible", src, None, [], **kw)["state"],
                          "skipped: already in 3-live")
 
     def test_lane_and_format_must_agree(self):
         with self.assertRaises(T.Refused):
-            T.to_check("brand-b", "image", "carousel", [png(self.tmp / "a.png")], None, [],
+            T.to_check("brand_b", "image", "carousel", [png(self.tmp / "a.png")], None, [],
                        product="x", brief="none", batch="batch-2026-10-01-a")
 
 
 class ImageLane(Base):
     def make_drop(self):
         repo = self.tmp / "repo"
-        old = "brand-b-brilliancebodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-apothecary-specstarburst-p154-9x16-260923a"
-        d = repo / "runs/image-edit/brand-b/260923a/deliverable" / old
+        old = "brand_b-brilliancebodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-apothecary-specstarburst-p154-9x16-260923a"
+        d = repo / "runs/image-edit/brand_b/260923a/deliverable" / old
         d.mkdir(parents=True)
         (d / "manifest.json").write_text(json.dumps({"ad_name": old, "batch": "260923a", "product": "brilliance-body-scrub",
                                                      "brief": "p154", "ads": []}))
         for n in (2, 1):
             png(d / f"{old}-a{n:02d}.png")
-        run = repo / "runs/copywriter/brand-b/fn-x"
+        run = repo / "runs/copywriter/brand_b/fn-x"
         run.mkdir(parents=True)
         (run / "stage8--render.md").write_text(RENDER)
         with (d.parent / "copy.csv").open("w", newline="") as f:
@@ -290,7 +291,7 @@ class ImageLane(Base):
 
     def test_headlines_come_back_from_the_writer(self):
         repo, old = self.make_drop()
-        [(p, why, src)] = feed_image.feed("brand-b", "260923a", ["link_brand_b_cpk_landing"], repo=repo)
+        [(p, why, src)] = feed_image.feed("brand_b", "260923a", ["link_brand_b_cpk_landing"], repo=repo)
         self.assertIsNone(why)
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual(c["old_name"], old)
@@ -305,33 +306,55 @@ class VideoLane(Base):
     def test_master_goes_to_check_with_handoff_pages(self):
         h = self.tmp / "handoff"
         h.mkdir()
-        (h / "manifest.json").write_text(json.dumps({"role": "video-editor", "brand": "brand-b", "batch": None,
+        (h / "manifest.json").write_text(json.dumps({"role": "video-editor", "brand": "brand_b", "batch": None,
             "briefs": [{"id": "brief-0191", "product_id": "product_brand_b_brilliance-body-scrub",
                         "link_ids": ["link_brand_b_cpk_quiz"]}]}))
         master = self.tmp / "final.mp4"
         master.write_bytes(b"\0" * 64)
-        p, src = feed_video.file_master("brand-b", "brief-0191", "brilliance-body-scrub", "batch-2026-10-01-a",
+        p, src = feed_video.file_master("brand_b", "brief-0191", "brilliance-body-scrub", "batch-2026-10-01-a",
                                         master, handoff=h)
         ad = "brand_b_brilliance-body-scrub_brief-0191_batch-2026-10-01-a"
-        self.assertEqual(p["target"], self.root / "brand-b/1-check/video" / ad)
+        self.assertEqual(p["target"], self.root / "brand_b/1-check/video" / ad)
         self.assertTrue((p["target"] / f"{ad}_asset-01.mp4").is_file())
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual([x["link_id"] for x in c["pages"]], ["link_brand_b_cpk_quiz", "link_brand_b_cpk_landing"])
         self.assertEqual(c["words"], {"primary": [], "headlines": [], "descriptions": []})   # none written for 0191
 
+    def test_every_version_of_a_brief_rides_in_one_card(self):
+        h = self.tmp / "handoff"
+        h.mkdir()
+        (h / "manifest.json").write_text(json.dumps({"role": "video-editor", "brand": "brand_b", "batch": None,
+            "briefs": [{"id": "brief-0191", "product_id": "product_brand_b_brilliance-body-scrub",
+                        "link_ids": ["link_brand_b_cpk_quiz"]}]}))
+        vs = []
+        for n in ("control", "h1", "h2"):
+            v = self.tmp / f"{n}.mp4"
+            v.write_bytes(b"\0" * 64)
+            vs.append(v)
+        p, _ = feed_video.file_master("brand_b", "brief-0191", "brilliance-body-scrub", "batch-2026-10-01-a",
+                                      vs, handoff=h)
+        ad = "brand_b_brilliance-body-scrub_brief-0191_batch-2026-10-01-a"
+        c = json.loads((p["target"] / "card.json").read_text())
+        self.assertEqual(c["media"], [f"{ad}_asset-0{i}.mp4" for i in (1, 2, 3)])
+        with self.assertRaises(T.Refused):          # a second waiting card for the same brief is the old mistake
+            feed_video.file_master("brand_b", "brief-0191", "brilliance-body-scrub", "batch-2026-10-01-b",
+                                   vs[1], handoff=h)
+        p2 = T.to_check("brand_b", "video", "flexible", [vs[1]], {}, ["link_brand_b_cpk_quiz"], product="brilliance-body-scrub",
+                        brief="brief-0191", batch="batch-2026-10-01-b", root=self.root, second_card=True)
+        self.assertEqual(p2["state"], "filed")      # only on purpose
 
     def test_video_editor_finish_files_the_card(self):
         import importlib.util
-        spec = importlib.util.spec_from_file_location("handoff_run", REPO / "tools/video-edit/machine/handoff_run.py")
+        spec = importlib.util.spec_from_file_location("handoff_run", REPO / "components/video-edit/machine/handoff_run.py")
         HR = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(HR)
         h = self.tmp / "handoff"
         h.mkdir()
-        (h / "manifest.json").write_text(json.dumps({"role": "video-editor", "brand": "brand-b",
+        (h / "manifest.json").write_text(json.dumps({"role": "video-editor", "brand": "brand_b",
             "briefs": [{"id": "brief-0191", "product_id": "product_brand_b_brilliance-body-scrub"}]}))
         master = self.tmp / "m.mp4"
         master.write_bytes(b"\0")
-        got = HR.to_check(self.tmp / "run", {"brand": "brand-b", "brief": "brief-0191", "product": "brilliance-body-scrub",
+        got = HR.to_check(self.tmp / "run", {"brand": "brand_b", "brief": "brief-0191", "product": "brilliance-body-scrub",
                                              "folder": h}, master, "batch-2026-10-01-a", REPO)
         self.assertEqual(got["state"], "filed")
         self.assertTrue(got["folder"].startswith(str(self.root)))
@@ -346,13 +369,13 @@ class CarouselLane(Base):
         from PIL import Image
         Image.new("RGB", (90, 160)).save(run / "slide-03.jpg")
         png(run / "slide-01-reject-copied-face.png")
-        p, _ = feed_carousel.feed(run, "brand-a", "crush-bump-eliminator", links=["link_brand_a_store_method-quiz"])
+        p, _ = feed_carousel.feed(run, "brand_a", "crush-bump-eliminator", links=["link_brand_a_store_method-quiz"])
         ad = p["card"]["ad_name"]
         self.assertEqual(p["card"]["format"], "carousel")
         self.assertEqual(p["card"]["media"], [f"{ad}_slide-{n:02d}.png" for n in (1, 2, 3)])
         with Image.open(p["target"] / f"{ad}_slide-03.png") as im:
             self.assertEqual(im.format, "PNG")
-        again, _ = feed_carousel.feed(run, "brand-a", "crush-bump-eliminator")
+        again, _ = feed_carousel.feed(run, "brand_a", "crush-bump-eliminator")
         self.assertEqual(again["card"]["ad_name"], ad)       # the same run finds its own card
         self.assertTrue(again["state"].startswith("skipped"))
 
@@ -380,44 +403,44 @@ class CarouselLane(Base):
         (run / "sequence.json").write_text(json.dumps({"slide_one": str(one), "slides": [
             {"slide": 2, "delivered": [str(s2)]}, {"slide": 3, "delivered": []}]}))
         with self.assertRaises(T.Refused) as e:
-            feed_carousel.feed(run, "brand-a", "crush-bump-eliminator")
+            feed_carousel.feed(run, "brand_a", "crush-bump-eliminator")
         self.assertIn("3", str(e.exception))
-        p, _ = feed_carousel.feed(run, "brand-a", "crush-bump-eliminator", picks={3: str(s2)}, dry_run=True)
+        p, _ = feed_carousel.feed(run, "brand_a", "crush-bump-eliminator", picks={3: str(s2)}, dry_run=True)
         self.assertEqual([Path(s).name for s, _ in p["files"]], ["plate.png", "out.png", "out.png"])
 
 
 class CreatorLane(Base):
     def test_named_delivery_goes_to_check_and_launch_sheet_still_works(self):
-        watched = self.tmp / "creators/brand-b/creator-a/DELIVERABLES"
+        watched = self.tmp / "creators/brand_b/creator-zane/DELIVERABLES"
         ad = "brand_b_brilliance-body-scrub_brief-0191_batch-2026-10-01-a"
         f = watched / ad
         f.mkdir(parents=True)
         (f / f"{ad}_asset-02.mp4").write_bytes(b"\0" * 8)
         (f / f"{ad}_asset-01.mp4").write_bytes(b"\0" * 8)
         (f / "control-swipe.mp4").write_bytes(b"\0" * 8)          # rides along, not the work
-        res = DR.to_check("brand-b", watched, ["link_brand_b_cpk_quiz"])
+        res = DR.to_check("brand_b", watched, ["link_brand_b_cpk_quiz"])
         [(p, why, _)] = res
         self.assertIsNone(why)
         c = json.loads((p["target"] / "card.json").read_text())
         self.assertEqual(c["lane"], "creator")
         self.assertEqual(c["media"], [f"{ad}_asset-01.mp4", f"{ad}_asset-02.mp4"])
-        self.assertEqual(c["made_by"]["creator"], "creator-a")
+        self.assertEqual(c["made_by"]["creator"], "creator-zane")
         self.assertEqual(c["made_by"]["tool"], "delivery-rule")
         self.assertTrue((f / f"{ad}_asset-01.mp4").is_file(), "the delivery folder is never touched")
-        DR.launch_sheet("brand-b", watched)
+        DR.launch_sheet("brand_b", watched)
         self.assertIn(ad, (watched / "READY-TO-LAUNCH.md").read_text())
 
     def test_dry_run_plans_only(self):
         watched = self.tmp / "w"
         ad = "brand_b_brilliance-face-scrub_brief-0167_batch-2026-09-29-a"
         png(watched / ad / f"{ad}_asset-01.png")
-        [(p, _, _)] = DR.to_check("brand-b", watched, dry_run=True)
+        [(p, _, _)] = DR.to_check("brand_b", watched, dry_run=True)
         self.assertEqual(p["state"], "would file")
         self.assertFalse(self.root.exists())
 
 
 class QuizAndOffer(unittest.TestCase):
-    """the owner, 2026-10-23: anything tested on a quiz is also tested on the offer page."""
+    """owner, 2026-10-23: anything tested on a quiz is also tested on the offer page."""
 
     def test_quiz_only_gets_the_offer_page(self):
         with mock.patch.object(T.PP, "offer_pages", lambda b, p: ["link_x_offer"]), \
@@ -450,7 +473,7 @@ class Plain(unittest.TestCase):
 
 
 class CopyMachineStep(unittest.TestCase):
-    """2026-10-09 (the owner): every card with no words runs the copywriter on its brief before it files —
+    """2026-10-09 (owner): every card with no words runs the copywriter on its brief before it files —
     and only a real filing does: a test or proof root never starts it."""
 
     def test_runs_the_copywriter_when_the_card_has_no_words(self):
@@ -458,7 +481,7 @@ class CopyMachineStep(unittest.TestCase):
         got = {"primary": ["Body."], "headlines": ["Head"], "descriptions": ["Desc"]}
         seq = iter([(W.empty(), None), (got, "run")])
         with mock.patch.object(W, "for_brief", side_effect=lambda *a, **k: next(seq)):
-            w = T.copy_machine("brand-b", "brief-0001", "x", run=lambda cmd, check=False: calls.append(cmd))
+            w = T.copy_machine("brand_b", "brief-0001", "x", run=lambda cmd, check=False: calls.append(cmd))
         self.assertEqual(w, got)
         self.assertTrue(calls and calls[0][1].endswith("brief_words.py") and "brief-0001" in calls[0])
 
@@ -466,14 +489,14 @@ class CopyMachineStep(unittest.TestCase):
         calls = []
         got = {"primary": ["Body."], "headlines": ["Head"], "descriptions": ["Desc"]}
         with mock.patch.object(W, "for_brief", return_value=(got, "run")):
-            self.assertEqual(T.copy_machine("brand-b", "brief-0001", run=lambda c, check=False: calls.append(c)), got)
+            self.assertEqual(T.copy_machine("brand_b", "brief-0001", run=lambda c, check=False: calls.append(c)), got)
         self.assertEqual(calls, [])
 
     def test_a_test_root_never_starts_it(self):
         with mock.patch.object(T, "copy_machine", side_effect=AssertionError("must not run")), \
                 mock.patch.object(T, "plan", side_effect=T.Refused("stop here")):
             with self.assertRaises(T.Refused):
-                T.to_check("brand-b", "video", "flexible", [], W.empty(), brief="brief-0001", root="/tmp/x")
+                T.to_check("brand_b", "video", "flexible", [], W.empty(), brief="brief-0001", root="/tmp/x")
 
 
 class CardReadsTheCheckedCopy(unittest.TestCase):

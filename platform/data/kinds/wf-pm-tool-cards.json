@@ -1,0 +1,20 @@
+{
+  "kind": "wf-pm-tool-cards",
+  "title": "pm-tool \u2014 inventory review",
+  "note": "Cards drafted by the lead 2026-08-24 (not a studio run). Two cards, two repos, strictly sequenced.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/pm-tool/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    {
+      "key": "approve",
+      "type": "boolean",
+      "label": "Approve card as-is"
+    },
+    {
+      "key": "feedback",
+      "type": "text",
+      "label": "What to change (required unless approved)"
+    }
+  ]
+}

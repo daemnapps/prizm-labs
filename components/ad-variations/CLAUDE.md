@@ -6,8 +6,13 @@ marked lock or lever with evidence from the brand's whole corpus, N one-lever
 variations, new formats recombined from what the corpus proves, a merge recipe
 per variation (seconds reused, what AI makes, route, cost), QC gates and
 congruence links. Does not **generate anything** — production is NOT built
-yet: no component reads `variation-plan.json` today (2026-10-08) — no reader
-yet. Triggered by
+yet. One reader since 2026-11-18: `machine/next_ask.py <plan folder>` files the
+plan's next variation as an ask the writing tools read (`asks/<ask>/ask.json`,
+and `next-ask.json`: what is next, asked, held by the plan and left, and the winner
+it is for), so a plan reaches the queue as the next ask; the winners queue source
+reads `next-ask.json`. The ask's `variation` block is read by no writing tool yet.
+`proposed/` holds what is written and not live (a locks prompt with the order
+of the layers, the across-forms rule); nothing reads it. Triggered by
 `python3 machine/run.py plan <post id | teardown run> --brand <brand>` (add
 `--dry-run` to fill every prompt and spend nothing).
 
@@ -68,7 +73,7 @@ a lot moving forward." The team skill is `.claude/skills/ad-variations/`; the pl
 - **Plane it emits:** `runs/ad-variations/<brand>/p2f-<winner>__<format>/` (`sent.md`, `3-injection.md`),
   each square's chain run filed at `runs/video-teardown/<brand>/sq-*` and each format's at `fmt-*`, and the
   grid page `page/creative-run-builder.html` (the Creative Run Builder artifact).
-- **Exception to rule 1, on purpose:** this capability DRIVES the video chain (`tools/video-teardown/
+- **Exception to rule 1, on purpose:** this capability DRIVES the video chain (`components/video-teardown/
   machine/run.py`, by its command line) and works in its run folders (`machine/runs/sq-*`, `fmt-*`), because
   every square is a real chain run through 5 Brief and the Viewer Check. It changes no chain code. If the
   chain's run-folder shape or its 40-character run-name limit changes, `check`, `inject`, `squares`, `step`
@@ -76,3 +81,55 @@ a lot moving forward." The team skill is `.claude/skills/ad-variations/`; the pl
 - **Holds:** the swipe's own format holds pass (the owner, 2026-10-06); audit fails on claims, the offer or brand
   rules are fixed, never passed.
 - **Runs by:** person (a session runs it; Claude stages written in-session).
+
+## Third capability: winning statics, one change at a time (added 2026-11-23)
+
+Ruled 2026-11-23: the winner variation workflow existed for video only, so a winning image ad went down the new-ad
+path (teardown → new concept → new copy) and came back reinvented. This is the image side of the same process: go
+deeper into what already won, the elements in the picture and the copy on it. Never a new concept, setting or format.
+
+1. **Pick:** `components/winners/winners.py statics --brand <b> [--days 30] [--min-spend 100] [--min-roas <x>]` lists
+   the image ads proven on their own numbers and ties each to its brief, its chain run, its approved picture and its
+   3D set (`runs/winners/<brand>/statics/<date>/statics.json`).
+2. **Read the winner as it ran:** a records-only run on its live picture (`components/image-teardown/chain.py open
+   --file <live picture>` then `tools/run.py <run> 1,1k,2,2b`). Its own original run is never rewritten.
+3. **Plan:** `machine/static_plan.py --brand <b> --winner-run <run> --label <name> [--ad <Meta ad name> --statics
+   <statics.json>] [--set <3D set>] [--ask <ask.json>] [--rows 6] [--dry-run]` → locks, levers and N rows
+   (`prompts/stage-static-plan/`). A copy row changes ONE word zone in the winner's own format and leaves the picture;
+   a picture row changes ONE element in the same setting and leaves every word. Checked with no model (one change,
+   the winner's words kept on picture rows, every zone present, banned lines from the ask, offer-bank prices only),
+   sent back once, a row still broken dropped and named. Writes `runs/ad-variations/<brand>/<label>/`
+   (`winner.json`, `variation-plan.json`, `variations.json` in image-writing's row shape, `VARIATIONS.md`, the prompt
+   as sent, the answers).
+4. **Owner sign-off** on the rows (the copy sign-off gate: no picture from unapproved words).
+5. **Make:** copy rows set the words on the winner's picture; picture rows become a change to the winner's own 3D set
+   and go through the 3D print runner (casting sheet only, one print first, the real product pasted).
+6. **Check and file:** product against its casting sheet, words exact, offer against the bank, then naming and the
+   versions inside the winner's own approval card.
+
+**Plan v2 (2026-11-24):** rows that moved the light, steam or camera a step came back looking like the same picture. The
+plan now dresses the winner for the order's moment first (the `control`, written as its own row), every row builds on it
+and passes the feed test (2 cm wide, a different ad; a lever that small is refused in code), copy rows read the run's
+customer-language pull when it is the order's avatar's, and the product's rules come off its kit.
+
+**Sprint (2026-11-24):** `machine/static_sprint.py prep|hand <sprint.json>` packs a round of these plans as the graphic
+designer's hand-offs: one image-edit design assignment per winner (through `assignment.build`), one required delivery slot per version.
+`prep` sends nothing; `hand --by --only` runs after the owner's sign-off on the rows.
+
+**Natural statics (2026-11-24):** `machine/natural_statics.py start|comments|copy|check|draft|page|number|file|status` runs a
+whole round of natural static ads from one `sprint.json`: pictures we own with the words set in code (layouts story, tag,
+letter, note, comments, plate, all 1080 x 1920), one changed line per version, copy that already ran, one page, then one
+card per ad on the approval page. No model call, nothing generated, no gate turned off, nothing approved or uploaded.
+Front door: the `statics-sprint` skill. Tests: `machine/test_natural_statics.py`.
+
+Tests: `machine/test_static_plan.py` (no model, no network). Steps 5–6 use the existing image-edit and image-production
+doors; making a winner's row needs the winner's recipe or set on record (open where a winner was made outside the chain).
+
+## Our own ad multiplier and swipe edit (2026-11-25)
+
+`machine/multiply.py plan|make`: one finished ad in, versions out, each with one shot changed to footage we own, the sound, the
+length and every other shot untouched, free. A person, product or place change is priced for that shot only and never sent from
+here. `components/video-edit/machine/swipe_edit.py read|plan|cut` puts our footage on a swipe's cutting and refuses while any
+shot is missing. Both cut through `components/video-edit/machine/shot_engine.py` (whole frames on one clock; footage is searched
+in the asset index, and any piece with words burned in is refused by reading its frames on this machine). Both write a
+`look-first.png`: nothing is used before it has been looked at. Tests: `components/video-edit/tests/test_shot_engine.py`.

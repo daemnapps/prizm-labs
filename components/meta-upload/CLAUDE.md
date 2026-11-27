@@ -1,7 +1,7 @@
 # meta-upload — the joiner
 
 **Owner: the owner (engine and definitions both). Component since 2026-09-29**, moved out of
-`lab/owner/meta-upload/` on the owner's word: *"this uploading thing … needs to just be in a component
+`lab/the owner/meta-upload/` on the owner's word: *"this uploading thing … needs to just be in a component
 now, versus the lab."* Split out of `image-production` 2026-09-10 on his call: *"image production and
 uploading to meta are completely different."*
 
@@ -14,6 +14,8 @@ uploading to meta are completely different."*
 | Runs by | person |
 
 **Front door — the finished ads index (2026-10-28):** one row per brief that reached a card (brief → card → files → Meta ad ids, a brief under two names shown once) at `runs/meta-upload/<brand>/ADS-INDEX.json` (machines) and `runs/meta-upload/<brand>/ADS.md` (people), read-only from the Drive cards and `meta/live.jsonl`. Built by `ads_index.py`, rebuilt by every card move (`cards.move`) and every new card (`to_check`). **Tools read it first** (`ads_index.find_ad(brand, brief)`) instead of walking `meta/`. Tests: `tests/test_ads_index.py`.
+
+**Where an ad goes — the Ad Directory (2026-11-10):** one table per brand at `runs/meta-upload/<brand>/DIRECTORY.md` (people) and `directory.json` (machines): every live campaign and ad set (spend 7/30 days, active ads, the pages its ads land on), each funnel → the one campaign it routes to, each catalog page → funnel → campaign, each brief → avatar × angle → ad set. Read from the data warehouse (`meta_ads`, `meta_ad_insights`) and the repo; no Meta call, no AI. Built by `directory.py --brand <brand>`; `directory.load()` rebuilds it when older than 12 hours. `upload.campaign_for` reads it first, so a card's campaign is the warehouse's live campaign for its funnel, never a guess from a renamed or stale campaign; a funnel with no live campaign says so instead of picking a twin. No account ids are written into it.
 
 **Names** come from `components/naming/` (the short form, 2026-09-29): each batch goes in as one Meta ad
 named `brand_product_brief_batch_funnel`, into the `adset_brand_avatar_angle` ad set its brief sets; the
@@ -62,7 +64,7 @@ unit it belongs to.
 
 That join is the only contract for the DATA between these folders. Code crosses only through the LIBRARY clause below (the names other components import) and the commands in the lane-feeder table; anything else that crosses is a reach, not a contract.
 
-**A LIBRARY — the public surface** (SI-120 (library clauses drafted), 2026-10-08, triage action 6 (declare public surfaces), PROVISIONAL — the team signs on the owner's behalf; he may strike any line). Callers put this folder on `sys.path` (today they insert it at 0) or load one file by path, and may use only these names:
+**A LIBRARY — the public surface** (SI-120 (library clauses drafted), 2026-10-08, triage action 6 (declare public surfaces), PROVISIONAL — the developer signs on the owner's behalf; he may strike any line). Callers put this folder on `sys.path` (today they insert it at 0) or load one file by path, and may use only these names:
 1. **`to_check` — the one card writer:** `plan(brand, lane, fmt, media, words=, links=, made_by=, *, ad_name=, …)` → the card plan; `show(p)` → its printout; `cards_root(root=None)` → the `meta/` folder (`--root`, else `$META_CARDS_ROOT`, else the Drive); `Refused` (the exception every refusal raises); `SHARED` (the mount's Shared Assets). Command: `to_check.py --brand --lane …` (video-edit `line.py:121` runs it).
 2. **`card_words` — the words on a card:** `empty()` → the empty shape; `from_runs(runs)` → words from copywriter stage-8 runs; `from_file(path)` → words from a `words.json` / copy file; `for_brief(brand, brief, repo=, product=)` → `(words, where)`, the approved copy set first, then the brief's copywriter runs.
 3. **The feeders — one per lane:** `feed_image.feed(brand, batch, links, *, root=, dry_run=, …)`; `feed_video.file_master(brand, brief, product, batch, master, *, handoff=, run=, links=, …)` → `(plan, words_from)`; `feed_carousel.feed(folder, brand, product=, *, brief=, batch=, links=, words=, …)`, `feed_carousel.slides(folder)` → `(order, gaps)`, `feed_carousel.batch_for(root, brand, product, brief, run)`; `feed_creator.feed_root(brand, watched, since=, …)`. Each is also a command (the lane-feeder table above).
@@ -81,7 +83,7 @@ Everything else — `cards`, `upload`, `build`, `prepare`, `naming`, `drop`, the
 | `prepare.py` | images into the library, ad sets into the account — steps 2 and 3, resumable |
 | `naming.py` | **what things are called.** Campaign, ad set, and how a drop over 50 ads is cut into ad sets. Nothing types these names by hand |
 | `STRUCTURE.md` | the account's limits, where we sit against them, and why one drop = one ad set |
-| `AdsManagerTemplate_v2.3.xltx` | Meta's own template, downloaded from the 1. <brand> account 2026-09-10. Kept so nobody re-downloads it |
+| `AdsManagerTemplate_v2.3.xltx` | Meta's own template, downloaded from the 1. Brand A account 2026-09-10. Kept so nobody re-downloads it |
 | `template-headers.json` | its 143 column names, in order, machine-readable |
 | `RUNBOOK.md` | **the procedure** — the order a drop goes in, and every trap between the steps |
 | `BULK-IMPORT.md` | the column reference: the three import situations, the CBO shape, every allowed value, and what the template will not carry |
@@ -100,13 +102,65 @@ the card and writes nothing. An ad already in 2-approved / 3-live / sent-back is
 | carousel | `feed_carousel.py <sequence run or slide-NN.png folder> --brand --product` | `sequence.py --to-check` |
 | creator | `feed_creator.py --brand` | `delivery_rule.py --apply --to-check` |
 
+**A filed ad is finished, and finished work lives on the Drive** (the owner, 2026-11-17: production comes off his plate,
+and what he does make goes into the Drive just like his editors'). After a card is filed or replaced, `to_check`
+hands each source picture or video that sits under `runs/` to the same path on the Drive (run-kit `drive_hand`): a
+pointer stays at the old place so every page and step still finds it, and the Mac's copy drops once Drive has it.
+Records (`.json`, `.md`) never move; a no-op off the mount; a failure never stops a filing.
+
 **Words** (`card_words.py`) come only from the copywriter's stage 8 render — bodies, HEADLINES, DESCRIPTIONS. The
 image feeder finds the run by the drop's own copy.csv body text (that is how the lost headlines come back); the
 others by the brief's number/alias in a copywriter run label, a copywriter run whose source sits in the brief's own
 run folder, or a `words.json` beside the media. None found → empty lists, and the card fails its check. A brief
-with no words yet gets them from `tools/copywriter/machine/brief_words.py` (the copywriter's chain, unchanged).
+with no words yet gets them from `components/copywriter/machine/brief_words.py` (the copywriter's chain, unchanged).
 **Pages** (2 Oct 2026): `--links` when given, else the brief's own `landing_page` (`components/naming/page_pick.py`,
 picked when the brief is written). Tests: `tests/test_to_check.py`.
+
+### Pictures come only from image production (RULE GATE-5, 2026-11-11)
+
+`to_check.py` refuses any thumbnail and any image/carousel picture whose sha256 is in no image-production run record
+(`made_by_tool.py`, reading `image-production/image_production/provenance.py`); the card carries `made_by_tool`
+{file: {sha256, record}} and the page's check `made_by_tool` re-reads the files in the card folder. A frame grab, words
+typed on afterwards, a hand composite or split, or any edit after delivery is refused: make the picture with
+image-production `make.py` and file the file it delivered. Video files are out of scope. Cards filed before the switch's
+`since` are left as filed. The gate runs only where image-production `models.json` carries `gate.made_by_tool` (the
+entry lands with the tool's own fingerprinting); with no entry nothing is refused and no check is added. Switch: that
+entry (`on`, `lanes`, `since`), or `MADE_BY_TOOL_GATE_OFF=all` / a lane list on one machine; row GATE-5 in
+`team/rollbacks.md`. Tests: `tests/test_made_by_tool.py`.
+
+### The cover rule (2026-11-12)
+
+A waiting video card (1-check or sent-back) carries four more checks from `cover_rule.py`; each one failing holds
+Approve with a plain line. A card already approved or live is never checked.
+
+| Check | Passes when |
+|---|---|
+| `cover_each` | every video on the card has its own cover in `thumbs` |
+| `cover_swipe` | every cover's record names the swipe it follows, and that id is a row of the cover index (`runs/asset-index/swipes/covers/covers.json`); a placeholder fails |
+| `cover_frame` | every cover's record names a source frame from that cover's own video: the video's `video_sha256`, or a path with its folder to that file on this machine; a bare file name or a version id alone fails |
+| `cover_differs` | no two covers of the card are the same picture (64-bit picture hash, the same at 8 bits or fewer) |
+
+- The record is `cover_records[<cover file>]` on the card. `to_check.py` writes it from the first of: `cover_records`
+  passed to it (`--cover-records`, one JSON per thumbnail), `<cover>.cover.json` beside the cover, the
+  image-production `run.json` beside the cover or one folder up (its `cover` block, or the `pictures` row for the
+  file), the cover's line in image production's ledger. Shape and accepted names: the docstring of `cover_rule.py`.
+- The filer refuses nothing for this rule: the card files, `to_check.py` prints `NOT READY` with each failing line,
+  and the plan carries them as `cover_checks`.
+- One card: `python3 cover_rule.py <card folder>`. One cover's record: `python3 cover_rule.py --record <cover file>`.
+- `feed_video.file_master` (the approval-page route) takes `thumbs` and `cover_records`; given neither, it reads the
+  Video Studio's cover hand-off for those masters (`briefs/<production>/covers/to-file.json`, or `production=`) when
+  it says `ready` and is fresh, and the plan's `covers_from` says where the covers came from or why none did. A
+  hand-off with a held version files no covers at all. Switch: cover-rule.json `to_file`,
+  `META_FILE_MASTER_COVERS_OFF=1`, row FILE-MASTER-COVERS; `to_file_ready`, `META_FILE_MASTER_COVERS_OFF=ready`, row
+  FILE-MASTER-COVERS-READY. Tests: `tests/test_file_master_covers.py`.
+- Covers of the card against covers already in its ad set are compared by pre-flight where it is installed, and
+  that finding stays a note that holds nothing.
+- Switch: `cover-rule.json` (`on`, `checks.<name>`, `lanes.<lane>`, `since`), or `META_COVER_RULE_OFF=all` / a comma
+  list of check names on one machine; row COVER-RULE in `team/rollbacks.md`. `frame_check: "name"` and
+  `swipe_check: "named"` put the two proofs back to names only (row COVER-RULE-PROOF); `swipe_index` or
+  `META_COVER_INDEX` names another index. A record naming its video by a bare file name (no folder, no
+  `video_sha256`) proves no video; `bare_name: true` reads it as before (row COVER-RULE-BARE-NAME). Tests:
+  `tests/test_cover_rule.py`.
 
 ## The uploader (1 Oct 2026)
 

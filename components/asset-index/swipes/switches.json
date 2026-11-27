@@ -1,0 +1,35 @@
+{
+ "about": "Switches for covers.py. Off puts that part back to how the tool behaved before it. One machine only: COVER_SWIPES_OFF=all or a comma list of names in its environment. Row COVER-SWIPES in team/rollbacks.md.",
+ "avatar": {
+  "on": true,
+  "off_means": "pull --avatar and import refuse; find ignores --avatar and lists the discovery surfaces' covers only. Avatar rows already in covers.json stay on disk."
+ },
+ "move": {
+  "on": true,
+  "off_means": "moves refuses; index writes no move; find ignores --move and prints no move column."
+ },
+ "merge-keeps": {
+  "on": true,
+  "off_means": "index and import replace the whole group of the rows they bring (the avatar, or the discovery surfaces): an avatar's covers a new pull does not carry are dropped, an eye read is lost when its row is brought again, and a cover an avatar also sees goes when the next discovery pull drops it."
+ },
+ "avatar-slug": {
+  "on": true,
+  "off_means": "an avatar name must already be lower-case letters, digits and dashes, and a bad name or a missing avatar file stops the caller (SystemExit) instead of raising ValueError."
+ },
+ "avatar-scope": {
+  "on": true,
+  "off_means": "find --avatar falls back to the discovery surfaces' covers also when the avatar has covers but none pass the other filters."
+ },
+ "move-rules": {
+  "on": true,
+  "off_means": "derive_move reads no impossible-object, counts any open mouth or shocked face as face-at-limit, and any thing held or pointed to the camera as thing-to-lens."
+ },
+ "merge-by-pull": {
+  "on": true,
+  "off_means": "a discovery pull replaces every discovery row (unless an avatar also sees it), so a narrower pull, for example one source, drops the other sources' covers and their eye reads."
+ },
+ "move-picture": {
+  "on": true,
+  "off_means": "face-at-limit and thing-to-lens also match words that are only the cover's own text, and line-shown-literally is read from any word the cover's text shares with the picture, also a caption naming what a real frame holds up."
+ }
+}

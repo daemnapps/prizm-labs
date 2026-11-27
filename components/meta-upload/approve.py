@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The approval page — every finished ad on one standard card; the owner's click sends it into Meta.
+"""The approval page — every finished ad on one standard card; owner's click sends it into Meta.
 
     python3 approve.py                 # http://localhost:8795  (launch config "meta-approve")
     python3 approve.py --port 8795 --root <scratch meta tree> --fake-meta   # trials: nothing reaches Meta
@@ -29,7 +29,7 @@ whenever Tailscale comes on. Never 0.0.0.0, never a public tunnel.
 Phone: the page installs to a home screen as "Approve" (/manifest.webmanifest,
 /icon-180.png, /icon-512.png — drawn here, no files).
 """
-import argparse, io, ipaddress, json, mimetypes, os, queue, re, subprocess, sys, threading, time
+import argparse, errno, http.client, io, ipaddress, json, mimetypes, os, queue, re, socket, ssl, subprocess, sys, threading, time, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -41,15 +41,17 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import cards as C
 import learnings as L
+import copy_library as CL
 import upload as U
 from brand import Brand
+import meta  # noqa: F401 — loaded first so every connection the page makes (Meta, Gemini) prefers IPv4 (see meta.py)
 
 PAGE = HERE / "approve.html"
 VIEWS = {"check": "1-check", "approved": "2-approved", "live": "3-live", "sent-back": "sent-back"}
 LOCK = threading.Lock()          # one approve / upload / send-back at a time
 FAKE = None                      # --fake-meta: a stand-in Meta for trials
 _thumbs = {}
-# The upload queue (the owner, 24 Oct 2026: "I'm clicking upload, but some things don't get uploaded. I don't want to
+# The upload queue (owner, 24 Oct 2026: "I'm clicking upload, but some things don't get uploaded. I don't want to
 # keep pulling and reading from Meta"). An approve is written and the card moved at once; the upload goes on this
 # queue and one worker sends them into Meta one at a time. Each ad's result (queued, uploading, live, failed and
 # why) is kept here by ad name and shown on the page, so nothing is dropped and nobody has to look in Meta.
@@ -69,6 +71,17 @@ def brand_label(name):
         return b.d.get("label") or b.pretty(name) or name
     except SystemExit:
         return name
+
+
+def brief_ids(name):
+    """{brief_key, brief_label} for an ad name: the catalog full key and the readable ID people see
+    ("Acme · Body scrub · 0324", components/naming names.brief_label). A number names a brief per brand AND product,
+    so the page never shows or filters by the number alone (2026-11-11)."""
+    try:
+        N = __import__("to_check").N
+        return {"brief_key": N.full_brief_key(name) or "", "brief_label": N.brief_label(name)}
+    except Exception:  # noqa: BLE001
+        return {"brief_key": "", "brief_label": ""}
 
 
 def view_of(folder, card, run_checks):
@@ -104,11 +117,19 @@ def view_of(folder, card, run_checks):
             "pages": card.get("pages") or [],
             "account": account, "account_id": b.account_id if b else "",
             "goes": goes, "media": media, "checks": checks, "passed": C.passed(card) if checks else False,
+            "delivery": card.get("delivery"), "revision_request": card.get("revision_request"),
             "approval": card.get("approval"), "meta": card.get("meta") or [], "upload_error": card.get("upload_error"),
-            "campaign_pick": card.get("campaign"),
+            "campaign_pick": card.get("campaign"), "ad_set_pick": card.get("ad_set"), "fb_pages_pick": card.get("fb_pages") or [],
             "made_by": card.get("made_by"), "made_at": card.get("made_at"), "checked_at": card.get("checked_at"),
             "copy_checked": bool(card.get("copy_checked")),
-            "headline": ((card.get("words") or {}).get("headlines") or [""])[0], "job": JOBS.get(Path(folder).name)}
+            "headline": ((card.get("words") or {}).get("headlines") or [""])[0], "job": JOBS.get(Path(folder).name),
+            **brief_ids(card.get("ad_name"))}
+
+
+def jobs_json(brand=None, lane=None):
+    """What the page needs while ads go into Meta: no card is re-checked or re-drawn for this."""
+    return {"jobs": sorted(({"name": k, **v, **brief_ids(v.get("ad_name") or k)} for k, v in JOBS.items()), key=lambda j: j.get("at") or "", reverse=True)[:80],
+            "queue": UPQ.qsize(), "counts": counts(brand, lane)}
 
 
 def cards_json(view, brand=None, lane=None):
@@ -118,14 +139,21 @@ def cards_json(view, brand=None, lane=None):
     # a card whose brief was replaced (stage-check marks it superseded_by the new brief) leaves the list;
     # its folder stays where it is
     folders = [f for f in folders if not (C.load(f) or {}).get("superseded_by")]
+    set_up = set(C.brands())                     # a test card under a brand with no Meta account must not take the page down
+    folders = [f for f in folders if (C.load(f) or {}).get("brand") in set_up]
     with ThreadPoolExecutor(6) as ex:
         out = list(ex.map(lambda f: view_of(f, C.load(f), run), folders))
     camps = {b: U.campaign_options(b) for b in {c["brand"] for c in out}}
-    return {"view": view, "cards": out, "counts": counts(brand, lane), "campaigns": camps, "brands": [{"id": b, "label": brand_label(b)} for b in C.brands()],
+    def _pages(b):
+        try:
+            return [{"id": x["id"], "name": x.get("name"), "default": bool(x.get("default"))} for x in Brand(b).fb_pages]
+        except Exception:  # noqa: BLE001 — a brand with no account file picks no Page
+            return []
+    return {"view": view, "cards": out, "campaigns": camps, "fb_pages": {b: _pages(b) for b in camps},
+            "ad_sets": {b: ad_set_options(b) for b in camps}, "brands": [{"id": b, "label": brand_label(b)} for b in C.brands()],
             "lanes": list(C.LANES), "root": str(C.root()), "fake": bool(FAKE),
             "approvers": approvers(), "reasons": reasons_for_page(),
-            "jobs": sorted(({"name": k, **v} for k, v in JOBS.items()), key=lambda j: j.get("at") or "", reverse=True)[:80],
-            "queue": UPQ.qsize()}
+            **jobs_json(brand, lane)}
 
 
 def counts(brand=None, lane=None):
@@ -171,7 +199,7 @@ def score_diversity(folder):
     """Meta strategy (7 Oct 2026): before an approve, read the ad itself and score it
     against the running library (creative-diversity/check.py — never calls Meta).
     Cached on the card by media, so it runs once per ad. A scorer failure never
-    blocks the upload (the owner, 12 Oct 2026: "I just need ads uploaded"): the reason
+    blocks the upload (owner, 12 Oct 2026: "I just need ads uploaded"): the reason
     goes on the card as an `unscored` verdict and the approve carries on."""
     if FAKE:
         return ""
@@ -192,7 +220,7 @@ def score_diversity(folder):
 
 
 def approve(cid, start, by=None):
-    # the owner, 7 Oct 2026: no silent default. The Creator-A face scrub ad sat paused
+    # owner, 7 Oct 2026: no silent default. The creator face scrub ad sat paused
     # for three days because the page started every approve as Paused.
     if start not in ("ACTIVE", "PAUSED"):
         return 400, {"ok": False, "error": "pick On or Paused — the approve needs one"}
@@ -263,13 +291,49 @@ def _approved_folder(name):
     return None
 
 
-# Two failures that are only timing never count as "didn't go in" (the owner, 2026-10-27, on four approved ads that
+# Two failures that are only timing never count as "didn't go in" (owner, 2026-10-27, on four approved ads that
 # stopped: "we need to fix what was failing seriously"): a card's pictures not there yet because the Drive is still
 # moving the folder into Approved (three ads, 25 Oct), and Meta's request limit for the ad account (one ad). Each waits
 # and goes back on the queue by itself; only after its last try is it "didn't go in".
+#
+# A lost internet connection is the third (2026-11-25, two approved ads stopped overnight by it): while there is no
+# connection the card waits ("offline", up to a day); a connection that drops mid-send gets a few resends ("network").
+# The resend never makes a second ad: upload.go picks up its own saved ids and looks the ad up by name in Meta first.
 RETRY = {"media": (90, 6, "The Drive was still moving this card's pictures into Approved"),
-         "limit": (900, 8, "Meta's request limit for the ad account was reached")}
+         "limit": (900, 8, "Meta's request limit for the ad account was reached"),
+         "offline": (300, 288, "This Mac has no internet"),
+         "network": (300, 12, "The internet dropped while this ad was going in; nothing goes in twice")}
 META_LIMIT = re.compile(r"request limit|too many (?:api )?calls|\"code\"\s*:\s*(?:4|17|32|613|80004)\b|\"is_transient\"\s*:\s*true", re.I)
+
+
+NETWORK_ERRNO = {errno.ENETDOWN, errno.ENETUNREACH, errno.EHOSTDOWN, errno.EHOSTUNREACH, errno.ETIMEDOUT,
+                 errno.ECONNABORTED, errno.ECONNRESET, errno.ECONNREFUSED, errno.EPIPE}
+
+
+def lost_connection(e):
+    """This error is the connection, not Meta's answer: an HTTP answer, a missing file or a refusal is never one."""
+    if isinstance(e, urllib.error.HTTPError):
+        return False
+    if isinstance(e, urllib.error.URLError):
+        e = e.reason if isinstance(e.reason, BaseException) else e
+        if isinstance(e, ssl.SSLCertVerificationError):
+            return False
+        return isinstance(e, (urllib.error.URLError, socket.gaierror, ssl.SSLError)) or lost_connection(e)
+    return (isinstance(e, (TimeoutError, ConnectionError, socket.gaierror, http.client.RemoteDisconnected,
+                           http.client.IncompleteRead))
+            or (isinstance(e, ssl.SSLError) and not isinstance(e, ssl.SSLCertVerificationError))
+            or (isinstance(e, OSError) and e.errno in NETWORK_ERRNO))
+
+
+def online():
+    """Meta can be reached from this Mac right now (a connection only: no request is made)."""
+    if FAKE:
+        return True
+    try:
+        socket.create_connection(("graph.facebook.com", 443), timeout=8).close()
+        return True
+    except OSError:
+        return False
 
 
 def retry_later(name, kind):
@@ -298,16 +362,20 @@ def upload_one(name):
         folder = _approved_folder(name)
         if folder is None:
             j = JOBS.get(name) or {}
-            if j.get("state") in ("queued", "uploading"):
+            if j.get("state") in ("queued", "uploading", "waiting"):
                 _job(name, state="gone", error="the card left Approved before it was sent (sent back or moved)")
             return
         UPLOADING.add(name)
         _remember(folder, C.load(folder), "uploading", error="")
     try:
+        if not online() and retry_later(name, "offline"):    # before the checks: with no internet they fail too
+            return
         score_diversity(folder)
         card = C.check_and_save(folder, online=True, meta=meta_for(C.where(folder)["brand"]))
         if not C.passed(card):
             if only_missing_media(card) and retry_later(name, "media"):
+                return
+            if not online() and retry_later(name, "offline"):
                 return
             bad = [f"{C.LABELS.get(k, k)}: {v['why']}" for k, v in card["checks"].items() if not v["ok"]]
             _job(name, state="failed", error="a machine check is failing — " + "; ".join(bad))
@@ -322,6 +390,8 @@ def upload_one(name):
         else:
             _job(name, state="failed", error=r.get("error") or "Meta said no")
     except Exception as e:  # noqa: BLE001 — the queue never dies on one ad
+        if lost_connection(e) and retry_later(name, "network"):
+            return
         _job(name, state="failed", error=f"{type(e).__name__}: {e}"[:400])
     finally:
         UPLOADING.discard(name)
@@ -343,7 +413,7 @@ def resume_queue():
 
 
 def batch(ids, action, by=None, note=None):
-    """Many cards in one go (the owner, 24 Oct 2026: "some sort of batch approval"): approve On, approve Paused, or send
+    """Many cards in one go (owner, 24 Oct 2026: "some sort of batch approval"): approve On, approve Paused, or send
     back. A send-back from the list carries the reason 'Something else' and the note given, or a plain one."""
     if action not in ("live", "paused", "back", "drop"):
         return 400, {"ok": False, "error": "pick approve on, approve paused or send back"}
@@ -374,7 +444,7 @@ def link_options(brand):
                         "type": PP.link_type(v), "group": v.get("group") or "", "live_ads": PP.live_ads(v),
                         "allowed": ok, "why": "" if ok else f"not the {offer['product']} offer page — your one-offer rule"})
     have = {o["url"].rstrip("/") for o in out}
-    try:                                         # portal pages sit in the funnel map, not the catalog (the owner, 30 Oct 2026)
+    try:                                         # portal pages sit in the funnel map, not the catalog (owner, 30 Oct 2026)
         tr = json.loads((Path(__file__).resolve().parents[2] / "brands" / brand / "web/funnels/tracking.json").read_text())
     except (OSError, ValueError):
         tr = {}
@@ -387,7 +457,7 @@ def link_options(brand):
                 continue
             ok = (not offer) or any(m in url for m in offer["match"])
             slug = pg["path"].strip("/").split("/")[-1]
-            out.append({"link_id": f"link_{brand}_{pg['path'].strip('/').split('/')[0].replace('brand-b-', '').replace('-cpk', '')}_{slug}",
+            out.append({"link_id": f"link_{brand}_{pg['path'].strip('/').split('/')[0].replace('brand_b-', '').replace('-cpk', '')}_{slug}",
                         "url": url, "label": f"{fn.get('name', '')} portal · {slug.replace('portal-', '')}", "type": "quiz",
                         "group": fn.get("name") or "", "live_ads": 0, "allowed": ok,
                         "why": "" if ok else f"not the {offer['product']} offer page — your one-offer rule"})
@@ -395,7 +465,7 @@ def link_options(brand):
 
 
 def set_pages(cid, link_ids):
-    """the owner picks where the ad sends traffic before he launches it (15 Oct 2026: "on launch to meta I want to
+    """owner picks where the ad sends traffic before he launches it (15 Oct 2026: "on launch to meta I want to
     add the ability to select the links to send traffic to"). Each picked page becomes its own Meta ad at upload,
     named for that page, exactly as a card's `pages` always has. Only catalog links of the card's brand."""
     folder = C.folder_of(cid)
@@ -416,8 +486,29 @@ def set_pages(cid, link_ids):
     return 200, {"ok": True, "pages": card["pages"]}
 
 
+def set_fb_pages(cid, pages):
+    """owner picks the Facebook Page(s) a new ad runs from (owner 2026-11-21: a duplicate test on a second Page);
+    none ticked = the brand's own Page. One ad per picked Page."""
+    folder = C.folder_of(cid)
+    if C.where(folder)["state"] != "1-check":
+        return 409, {"ok": False, "error": "this card is not waiting in 1-check any more — reload"}
+    card = C.load(folder)
+    known = {x["id"] for x in Brand(C.where(folder)["brand"]).fb_pages}
+    pages = [str(x) for x in pages or []]
+    bad = [x for x in pages if x not in known]
+    if bad:
+        return 400, {"ok": False, "error": "not one of this brand's Pages: " + ", ".join(bad)}
+    if pages:
+        card["fb_pages"] = pages
+    else:
+        card.pop("fb_pages", None)
+    card.setdefault("history", []).append({"at": now(), "what": "Facebook Pages picked", "fb_pages": pages or "the brand's own"})
+    C.save(folder, card)
+    return 200, {"ok": True}
+
+
 def set_campaign(cid, campaign):
-    """the owner picks the campaign a new ad goes into (17 Oct 2026); empty = the one its landing page gives."""
+    """owner picks the campaign a new ad goes into (17 Oct 2026); empty = the one its landing page gives."""
     folder = C.folder_of(cid)
     if C.where(folder)["state"] != "1-check":
         return 409, {"ok": False, "error": "this card is not waiting in 1-check any more — reload"}
@@ -430,6 +521,29 @@ def set_campaign(cid, campaign):
     else:
         card.pop("campaign", None)
     card.setdefault("history", []).append({"at": now(), "what": "campaign picked", "campaign": campaign or "by page"})
+    C.save(folder, card)
+    return 200, {"ok": True}
+
+
+def ad_set_options(brand):
+    """Every ad set a new ad of this brand may go into: open ones only (ad_sets.py). Files only, never the ad account."""
+    import ad_sets as AS
+    return sorted(AS.live(brand) | AS.signed(brand))
+
+
+def set_ad_set(cid, ad_set):
+    """owner picks the ad set a new ad goes into (31 Oct 2026); empty = the one its avatar and angle give."""
+    folder = C.folder_of(cid)
+    if C.where(folder)["state"] != "1-check":
+        return 409, {"ok": False, "error": "this card is not waiting in 1-check any more — reload"}
+    card = C.load(folder)
+    if ad_set and ad_set not in ad_set_options(C.where(folder)["brand"]):
+        return 400, {"ok": False, "error": f"{ad_set} is not one of this brand's open ad sets"}
+    if ad_set:
+        card["ad_set"] = ad_set
+    else:
+        card.pop("ad_set", None)
+    card.setdefault("history", []).append({"at": now(), "what": "ad set picked", "ad_set": ad_set or "by angle"})
     C.save(folder, card)
     return 200, {"ok": True}
 
@@ -457,20 +571,57 @@ WORD_KEYS = ("primary", "headlines", "descriptions")
 PIC_EXT = {".jpg": "JPEG", ".jpeg": "JPEG", ".png": "PNG", ".webp": "WEBP"}
 
 
-def edit_words(cid, words, by=None):
-    """Rewrite a waiting card's words in place (the owner, 15 Oct: rewrite lines before approving). Up to five of each;
-    the copy check runs again on the next look."""
+OFFER_BITS = re.compile(r"\$\s?\d[\d,]*(\.\d+)?|\d+\s?%|\b\d+(st|nd|rd|th)?\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b|"
+                        r"black friday|cyber monday|labor day|memorial day|end of (an )?era|new year|christmas|holiday|valentine'?s?( day)?|"
+                        r"mother'?s day|father'?s day|today only|free [a-z™ ]{0,30}(towel|pouch|wash|gift|bag)|buy \d+,? get \d+( free)?", re.I)
+
+
+def _offer_masked(text):
+    return re.sub(r"\s+", " ", OFFER_BITS.sub("#", CL.norm(text))).strip()
+
+
+def has_run(text, ran):
+    """A line has run when it ran word for word, or when it is a run line with only its offer matched to today's
+    (price, discount, gift, date, event name: owner, 16 Nov 2026, "update the copy a bit to match if necessary")."""
+    import difflib
+    n = CL.norm(text)
+    if n in ran:
+        return True
+    m = _offer_masked(text)
+    for r in ran:
+        rm = _offer_masked(r)
+        if m == rm or (len(rm) > 40 and difflib.SequenceMatcher(None, m, rm).ratio() >= 0.8):
+            return True
+    return False
+
+
+def edit_words(cid, words, by=None, picked=None):
+    """Rewrite a waiting card's words in place (owner, 15 Oct: rewrite lines before approving). Up to five of each;
+    the copy check runs again on the next look. Every change is logged for the next batch (copy_library.log_edit,
+    the owner, 8 Nov: "whatever I make updates on you log that for the next batch so our copy process and learnings
+    evolve")."""
     f = C.folder_of(cid)
     if C.where(f)["state"] != "1-check":
         return 409, {"ok": False, "error": "only an ad still waiting for approval can be edited"}
     card = C.load(f)
+    before = json.loads(json.dumps(card.get("words") or {}))
     w = card.setdefault("words", {})
     for k in WORD_KEYS:
         if isinstance((words or {}).get(k), list):
             w[k] = [str(x).strip() for x in words[k] if str(x).strip()][:5]
-    card.pop("copy_checked", None)
-    card.setdefault("edits", []).append({"by": by or "the owner", "at": datetime.now().isoformat(timespec="seconds"), "what": "words"})
+    lib = CL.library(C.where(f)["brand"], n=200)
+    ran = {k: {CL.norm(o["text"]) for o in lib[k] if o["from"] in ("winner", "live")} for k in CL.KINDS}
+    if w.get("primary") and w.get("headlines") and all(has_run(t, ran["primary"]) for t in w["primary"]) and all(
+            has_run(t, ran["headlines"]) for t in w["headlines"]):
+        card["copy_checked"] = True              # every line has already run (a banked winner or a live ad's words)
+    else:
+        card.pop("copy_checked", None)
+    card.setdefault("edits", []).append({"by": by or "owner", "at": datetime.now().isoformat(timespec="seconds"), "what": "words"})
     C.save(f, card)
+    try:
+        CL.log_edit(dict(card, brand=C.where(f)["brand"]), before, card["words"], picked, by)
+    except Exception as e:                       # noqa: BLE001 — the save stands; the log is best effort
+        print(f"copy log: {e}", file=sys.stderr, flush=True)
     return 200, {"ok": True}
 
 
@@ -500,7 +651,7 @@ def replace_picture(cid, key, new_file, by=None):
     tmp = target.with_name("." + target.name + ".tmp")
     (im.convert("RGB") if fmt == "JPEG" else im).save(tmp, fmt, **({"quality": 95} if fmt == "JPEG" else {}))
     os.replace(tmp, target)
-    card.setdefault("edits", []).append({"by": by or "the owner", "at": datetime.now().isoformat(timespec="seconds"), "what": f"picture {key}"})
+    card.setdefault("edits", []).append({"by": by or "owner", "at": datetime.now().isoformat(timespec="seconds"), "what": f"picture {key}"})
     C.save(f, card)
     _thumbs.clear()
     return 200, {"ok": True}
@@ -526,6 +677,13 @@ def disapprove(cid, reasons, note, by=None):
     except ValueError as e:
         return 400, {"ok": False, "error": str(e)}
     card = C.load(folder)
+    import delivery_gate as DG
+    try:
+        revision = DG.revise(card, note, by, cid)
+    except Exception as e:
+        return 409, {"ok": False, "error": "Revision was not sent: " + str(e)}
+    if revision:
+        card["revision_request"] = revision
     at = now()
     card["approval"] = {"by": by, "at": at, "decision": "disapprove", "note": note,
                         "reasons": [{k: r[k] for k in ("id", "label", "step", "tool")} for r in rs]}
@@ -537,7 +695,7 @@ def disapprove(cid, reasons, note, by=None):
 
 
 def drop(cid, note, by=None):
-    """Drop a card that is not worth running (the owner, 30 Oct 2026: "allow me to delete certain briefs as well beyond
+    """Drop a card that is not worth running (owner, 30 Oct 2026: "allow me to delete certain briefs as well beyond
     send back"). It leaves every list and nothing goes upstream — no remake, no learning. The folder is renamed into
     meta/<brand>/dropped/, never deleted, so it can be restored."""
     by = who(by)
@@ -555,9 +713,17 @@ def drop(cid, note, by=None):
 
 
 def thumb(path):
-    """A 270-px-wide JPEG of a picture, kept in memory."""
+    """A 270-px-wide JPEG of a picture, or of a frame of a video, kept in memory."""
     key = (str(path), path.stat().st_mtime)
     if key not in _thumbs:
+        if path.suffix.lower() in C.VIDEO:
+            r = subprocess.run(["ffmpeg", "-v", "error", "-ss", "1", "-i", str(path), "-frames:v", "1",
+                                "-vf", "scale=270:-2", "-f", "image2", "-c:v", "mjpeg", "pipe:1"],
+                               capture_output=True, timeout=60)
+            if r.returncode or not r.stdout:
+                raise ValueError(f"no frame from {path.name}")
+            _thumbs[key] = r.stdout
+            return _thumbs[key]
         from PIL import Image
         with Image.open(path) as im:
             im = im.convert("RGB")
@@ -684,17 +850,19 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, icon(512 if "512" in u.path else 180), "image/png")
             if u.path == "/api/links":
                 return self.send(200, {"links": link_options((parse_qs(u.query).get("brand") or [""])[0])})
+            if u.path == "/api/copy":
+                return self.send(200, {"library": CL.library((parse_qs(u.query).get("brand") or [""])[0])})
             if u.path == "/api/learnings":
                 return self.send(200, dict(L.summary(q.get("brand"), q.get("lane")),
                                            brands=[{"id": b, "label": brand_label(b)} for b in C.brands()],
                                            lanes=list(C.LANES), approvers=approvers(), fake=bool(FAKE),
                                            root=str(C.root()), counts=counts(q.get("brand"), q.get("lane"))))
+            if u.path == "/api/jobs":
+                return self.send(200, jobs_json(q.get("brand"), q.get("lane")))
             if u.path == "/api/cards":
                 return self.send(200, cards_json(q.get("view", "check"), q.get("brand"), q.get("lane")))
             if u.path.startswith("/thumb/"):
                 p = self.file_in_card(u.path[len("/thumb"):])
-                if p.suffix.lower() in C.VIDEO:
-                    return self.send(404, {"error": "video"})
                 return self.send(200, thumb(p), "image/jpeg")
             if u.path.startswith("/media/"):
                 return self.serve_file(self.file_in_card(u.path[len("/media"):]))
@@ -754,8 +922,12 @@ class Handler(BaseHTTPRequestHandler):
                     code, out = set_pages(body.get("id"), body.get("pages"))
                 elif u.path == "/api/retry":
                     code, out = queue_retry(body.get("id"))
+                elif u.path == "/api/fb-pages":
+                    code, out = set_fb_pages(body.get("id"), body.get("pages"))
                 elif u.path == "/api/campaign":
                     code, out = set_campaign(body.get("id"), body.get("campaign"))
+                elif u.path == "/api/ad-set":
+                    code, out = set_ad_set(body.get("id"), body.get("ad_set"))
                 elif u.path == "/api/move":
                     code, out = move(body.get("id"), body.get("campaign"), body.get("by"))
                 elif u.path == "/api/campaign-status":
@@ -765,7 +937,7 @@ class Handler(BaseHTTPRequestHandler):
                 elif u.path == "/api/disapprove":
                     code, out = disapprove(body.get("id"), body.get("reasons"), body.get("note"), body.get("by"))
                 elif u.path == "/api/words":
-                    code, out = edit_words(body.get("id"), body.get("words"), body.get("by"))
+                    code, out = edit_words(body.get("id"), body.get("words"), body.get("by"), body.get("picked"))
                 elif u.path == "/api/replace-picture":
                     code, out = replace_picture(body.get("id"), body.get("key"), body.get("file"), body.get("by"))
                 elif u.path == "/api/check":

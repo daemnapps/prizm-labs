@@ -13,7 +13,7 @@ not in the run folder, not under `brands/`, not on Drive. Exit 1 when
 anything REQUIRED is missing or a gate would hold; exit 0 otherwise.
 
 Lifted in shape from
-`tools/image-production/image_production/dryrun.py`, including its
+`components/image-production/image_production/dryrun.py`, including its
 OK / -- / MISSING report and its reason for existing: a dry run that costs
 money is a dry run nobody runs.
 """

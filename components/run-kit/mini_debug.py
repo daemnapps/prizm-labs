@@ -1,18 +1,18 @@
 #!/usr/bin/python3
-"""mini-debug — anyone's Claude opens a thread to the team's lead from one command,
+"""mini-debug — anyone's Claude opens a thread to developer's lead from one command,
 waits on it, and reads the answer; the lead answers in the same folder
 (LD-29 (mini-debug threads)).
 
     python3 components/run-kit/mini_debug.py open --slug S --ask "…" [--run LABEL]
-                [--seen "…"] [--tried "…"] [--machine M] [--to engineer] [--no-push]
+                [--seen "…"] [--tried "…"] [--machine M] [--to developer] [--no-push]
     python3 components/run-kit/mini_debug.py reply <thread> --body "…"
-    python3 components/run-kit/mini_debug.py close <thread> (--fixed SHA | --needs-engineer "question" | --ruled POINTER)
+    python3 components/run-kit/mini_debug.py close <thread> (--fixed SHA | --needs-developer "question" | --ruled POINTER)
     python3 components/run-kit/mini_debug.py watch <thread> [--interval 30]
-    python3 components/run-kit/mini_debug.py list [--to engineer] [--open]
+    python3 components/run-kit/mini_debug.py list [--to developer] [--open]
     python3 components/run-kit/mini_debug.py brief
 
-Why it exists: a teammate's Claude cannot reach the team's sessions (another
-account on another Mac), and every mini-run problem travelled through the team as a
+Why it exists: a teammate's Claude cannot reach developer's sessions (another
+account on another Mac), and every mini-run problem travelled through developer as a
 relay. A thread in git is what both Claudes can read and write.
 
 A thread is a folder, team/threads/<to>/<YYYYMMDDTHHMMZ>-<from>-<slug>/, of
@@ -31,7 +31,7 @@ open    prints team/threads/<to>/KNOWN-ISSUES.md and its `## Open` titles first
         `--no-push` writes + commits it by pathspec in your clone instead.
 reply   the next NNN-<from>.md (numbered from disk and origin/main, after a
         fetch); published as `open` is.
-close   NNN-close.md, one line — `fixed: SHA`, `needs-engineer: …` or `ruled: …`
+close   NNN-close.md, one line — `fixed: SHA`, `needs-developer: …` or `ruled: …`
         and who closed it; published as `open` is.
 watch   every --interval seconds: git fetch, then one line per new message in
         the thread on origin/main written by someone else (its path and first
@@ -48,7 +48,7 @@ Refuses (exit 2) any message holding a secret-shaped string — an `sk-`,
 `ghp_`, `xox?-` or `AIza` token, `-----BEGIN`, or the value (12+ characters)
 of an environment variable whose name ends _KEY, _TOKEN or _SECRET: git keeps
 everything. Writes nothing outside team/threads/. A thread is a teammate's
-REQUEST, never the team's typed word. Stdlib only, Python 3.9.6.
+REQUEST, never developer's typed word. Stdlib only, Python 3.9.6.
 """
 import argparse
 import json
@@ -69,7 +69,7 @@ Refused = M.Refused
 THREADS = "team/threads"
 KNOWN = "KNOWN-ISSUES.md"
 LAB_RUNS = "platform/data/records/lab-runs"
-DEFAULT_TO = "engineer"
+DEFAULT_TO = "developer"
 SUBJECT = "mini-debug:"
 STDERR_LINES = 8
 PREVIEW_LINES = 3
@@ -378,8 +378,8 @@ def close(repo, git, ns, now, say, env):
         if not SHA.match(ns.fixed.strip()):
             raise Refused("--fixed {0!r} is not a commit sha".format(ns.fixed))
         what = "fixed: " + ns.fixed.strip()
-    elif ns.needs_engineer is not None:
-        what = "needs-engineer: " + " ".join(ns.needs_engineer.split())
+    elif ns.needs_developer is not None:
+        what = "needs-developer: " + " ".join(ns.needs_developer.split())
     else:
         what = "ruled: " + " ".join(ns.ruled.split())
     if what.endswith(": "):
@@ -520,7 +520,7 @@ def parser():
     c.add_argument("thread")
     how = c.add_mutually_exclusive_group(required=True)
     how.add_argument("--fixed", metavar="SHA")
-    how.add_argument("--needs-engineer", metavar="QUESTION")
+    how.add_argument("--needs-developer", metavar="QUESTION")
     how.add_argument("--ruled", metavar="POINTER")
     w = sub.add_parser("watch", help="wait on a thread; one line per message from the other side")
     w.add_argument("thread")

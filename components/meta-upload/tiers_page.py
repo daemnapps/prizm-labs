@@ -86,18 +86,18 @@ section{{background:var(--p);border:1px solid var(--line);border-radius:10px;pad
 table{{border-collapse:collapse;width:100%;font-size:.84rem}}td,th{{text-align:left;padding:5px 7px;border-bottom:1px solid var(--line);vertical-align:top}}th{{color:var(--soft);font-weight:600}}.scroll{{overflow-x:auto}}
 details summary{{cursor:pointer;font-weight:600;margin-top:8px}}a{{color:var(--acc)}}</style>
 <div class="w"><header><h1>Top 1% Ads</h1><p class="sm">Every real asset each brand ran, ranked by purchases. Only the top 10% gets worked on; everything under it is documented. From our database's copy of Meta — no Meta calls.</p></header>
-<section class="call"><h2>The goal</h2><p style="margin:0">"That's the goal: to create 1% top ads all the time." the owner, 2 Oct. Rank everything, work only on the top 10%, and find out why the bottom 90% isn't the top 1% — against our marketing doctrine, the avatars, the research and the brand — so the system has pass/fail rules and stops repeating what the bottom 90% did.</p></section>
+<section class="call"><h2>The goal</h2><p style="margin:0">"That's the goal: to create 1% top ads all the time." owner, 2 Oct. Rank everything, work only on the top 10%, and find out why the bottom 90% isn't the top 1% — against our marketing doctrine, the avatars, the research and the brand — so the system has pass/fail rules and stops repeating what the bottom 90% did.</p></section>
 {secs}
 <section><h2>The words on this page</h2><p class="sm" style="margin:0"><b>Real asset</b>: one video or image (or one flexible ad's set of them), shown once with every ad that ran it folded in. <b>Ranked by</b>: purchases driven. <b>Tiers</b> are by count of assets: top 1% = the first 1% of assets, and so on. <b>CPA</b> = spend ÷ purchases. A flexible ad's set is one asset because Meta doesn't split its sales by video.</p></section></div>'''
 
 
 def main():
-    brands = [(n, latest(b)) for b, n in (("brand-a", "BRAND-A"), ("brand-b", "Brand-B"))]
+    brands = [(n, latest(b)) for b, n in (("brand_a", "brand_a"), ("brand_b", "brand_b"))]
     brands = [(n, d) for n, d in brands if d]
     out = BASE / "tiers.html"
     out.write_text(page(brands))
     md = ["# Top 1% Ads", "", "Every real asset each brand ran, ranked by purchases (from the warehouse copy of Meta). "
-          "the owner, 2 Oct 2026: \"That's the goal: to create 1% top ads all the time.\"", ""]
+          "owner, 2 Oct 2026: \"That's the goal: to create 1% top ads all the time.\"", ""]
     for n, d in brands:
         md += [f"## {n}", f"{d['ads']:,} ads, {d['window']['from']} to {d['window']['to']} → {d['assets']:,} real assets.", "",
                "| Tier | Assets | Share of purchases | Share of spend | CPA |", "|---|---|---|---|---|"]

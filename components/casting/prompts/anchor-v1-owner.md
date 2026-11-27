@@ -5,7 +5,7 @@ substitution is what stops drift compounding, because nothing is ever derived
 from a derivative.
 
 Run **verbatim** — it is the course's own prompt library entry (*Avatar
-angles*), carried here unchanged from `lab/owner/avatar-builder/build.py`
+angles*), carried here unchanged from `lab/the owner/avatar-builder/build.py`
 (`ANCHOR`). It takes no slots on purpose: the master sheet is the only source
 of identity, and a sentence added to this prompt is a sentence competing with
 it.

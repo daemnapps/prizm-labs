@@ -1,0 +1,29 @@
+{
+ "schema": "asset-library-story-beats/v1",
+ "what": "Shared story beats (a brand adds or overrides beats under story_beats in brands/<brand>/footage-library.json). Story beats a Real-lane ad casts and cuts from owned footage, each as a rule over the cast pass's fields (room, action_tags, couple, product_in_use, face_visible). cast.py coverage counts the owned scenes that carry each beat; a beat under min_scenes clean scenes, or with fewer than min_people distinct people, is a gap that generation fills. No brand appears here.",
+ "min_scenes": 5,
+ "min_people": 2,
+ "beats": {
+  "bathroom-routine": {"rooms": ["bathroom"], "actions": ["using-product", "applying-product", "mirror-check"]},
+  "product-in-use": {"product_in_use": true},
+  "gym": {"rooms": ["gym"], "actions": ["working-out"]},
+  "sport": {"actions": ["playing-sport"]},
+  "couple": {"couple": true},
+  "couple-intimate": {"couple": true, "actions": ["hugging-kissing"]},
+  "party-night-out": {"rooms": ["party-club", "restaurant-bar"], "actions": ["partying", "dancing"]},
+  "wedding": {"rooms": ["wedding-venue"]},
+  "barber": {"rooms": ["barbershop"]},
+  "office-work": {"rooms": ["office"], "actions": ["working-at-desk"]},
+  "car": {"rooms": ["car"], "actions": ["driving"]},
+  "bedroom-waking": {"rooms": ["bedroom"], "actions": ["waking-up"]},
+  "kitchen-food": {"rooms": ["kitchen"], "actions": ["cooking", "eating-drinking"]},
+  "getting-dressed": {"actions": ["getting-dressed"]},
+  "outdoor-walk": {"rooms": ["street", "nature", "beach-pool"], "actions": ["walking"]},
+  "unboxing": {"actions": ["unboxing"]},
+  "showing-product": {"actions": ["showing-product"]},
+  "talking-to-camera": {"actions": ["talking-to-camera"]},
+  "reaction": {"actions": ["reacting", "laughing"]},
+  "phone-scroll": {"actions": ["phone-use"]},
+  "face-close-up": {"framing": ["extreme-close-up", "close-up"], "face_visible": true}
+ }
+}

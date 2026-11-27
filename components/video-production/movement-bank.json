@@ -1,0 +1,579 @@
+{
+ "_about": "Real footage sent with clips as a motion-only reference, chosen by what the shot shows (machine/movement.py): a talking person, a product in use, an action. Filled from the footage index by machine/movement_fill.py. Never AI footage. Each entry: what the person does, so the chain can pick by what a scene does. Media under runs/ai-elements/movement/, cut from the source named in `source`.",
+ "entries": [
+  {
+   "id": "talks-points-at-face-calm",
+   "file": "runs/ai-elements/movement/talks-points-at-face-calm.mp4",
+   "seconds": 14,
+   "from": 0,
+   "talks": true,
+   "framing": "close selfie, head and shoulders",
+   "does": [
+    "talks to camera",
+    "calm matter-of-fact",
+    "points",
+    "touches cheek",
+    "head turns",
+    "head tilts",
+    "nods",
+    "shows spots",
+    "teacher explains"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/55-64/barbara-2/raw/brilliance-face-scrub_Brand B pointing out dark spots on face.MOV",
+    "cut": "first 14 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "talks-gestures-lively",
+   "file": "runs/ai-elements/movement/talks-gestures-lively.mp4",
+   "seconds": 14,
+   "from": 0,
+   "talks": true,
+   "framing": "medium selfie, chest up",
+   "does": [
+    "talks to camera",
+    "lively excited",
+    "hand gestures",
+    "holds product",
+    "shows tube",
+    "head moves",
+    "smiles",
+    "testimonial"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/55-64/tricia/raw/brilliance-body-scrub_a-roll_Testimonial 2 Website. Tricia .mov",
+    "cut": "first 14 s, no sound"
+   },
+   "status": "deprecated",
+   "state": "refused: the clip model refused 3 of 3 takes on content safety with this reference (2026-10-28, scene 2 of a run); a low neckline in the reference is the likely cause"
+  },
+  {
+   "id": "talk-calm-1",
+   "file": "runs/ai-elements/movement/talk-calm-1.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "talking",
+   "talks": true,
+   "framing": "Woman talks to camera, holding a black silicone face brush.",
+   "does": [
+    "talks to camera",
+    "calm",
+    "explains",
+    "matter-of-fact",
+    "teacher"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/female/white/25-34/jennifer/raw/concept-2_Video Aug 11 2025, 4 26 19 PM.mov",
+    "drive_id": "1LZuHWGqFenTLND8OVbkQ6HYq-qE1AWgW",
+    "cut": "10.0 s from 1.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "talk-calm-2",
+   "file": "runs/ai-elements/movement/talk-calm-2.mp4",
+   "seconds": 7.9,
+   "from": 0,
+   "kind": "talking",
+   "talks": true,
+   "framing": "Woman talking in kitchen.",
+   "does": [
+    "talks to camera",
+    "calm",
+    "explains",
+    "matter-of-fact",
+    "teacher"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/female/latino/18-24/elky/raw/72C8AD20-43F6-4084-9C57-A59D08DF2C2B.MOV",
+    "drive_id": "1VNw2rgUtUNUuGmXiTEcKOodd1c3Kq6pJ",
+    "cut": "7.9 s from 2.1 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "talk-calm-3",
+   "file": "runs/ai-elements/movement/talk-calm-3.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "talking",
+   "talks": true,
+   "framing": "The woman holds up a brown tube of face scrub and talks directly to the camera.",
+   "does": [
+    "talks to camera",
+    "calm",
+    "explains",
+    "matter-of-fact",
+    "teacher"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/latino/45-54/victoria/raw/brilliance-body-scrub_a-roll_IMG_6433.MOV",
+    "drive_id": "1qZORUye52oDGPusT3Hlx6gj1nSe7subO",
+    "cut": "10.0 s from 0.8 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "talk-lively-3",
+   "file": "runs/ai-elements/movement/talk-lively-3.mp4",
+   "seconds": 9.0,
+   "from": 0,
+   "kind": "talking",
+   "talks": true,
+   "framing": "The woman holds up the brown and blue tubes, smiling and talking.",
+   "does": [
+    "talks to camera",
+    "lively",
+    "excited",
+    "testimonial",
+    "hand gestures",
+    "smiles"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/east-asian/25-34/jennie/raw/brilliance-body-scrub_a-roll_LINE #1.mov",
+    "drive_id": "1ONsRdDXT6eDlVGmTAOLlf3-ZsYC6lQII",
+    "cut": "9.0 s from 23.5 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "talk-man-2",
+   "file": "runs/ai-elements/movement/talk-man-2.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "talking",
+   "talks": true,
+   "framing": "Selfie medium shot of a young man in a bathroom talking about skin care.",
+   "does": [
+    "talks to camera",
+    "man",
+    "explains",
+    "hand gestures"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/male/east-asian/18-24/devin/raw/DSC_0926[1].MOV",
+    "drive_id": "1MzEsvJwv-IEJbJx84SAKvqiK7XqB29dx",
+    "cut": "10.0 s from 0.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "apply-face-2",
+   "file": "runs/ai-elements/movement/apply-face-2.mp4",
+   "seconds": 8.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "She applies the scrub to her cheek and rubs it in with two fingers.",
+   "does": [
+    "applies",
+    "rubs",
+    "massages",
+    "spreads",
+    "scrubs",
+    "works",
+    "circles"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/unknown-ethnicity/unknown-age/jill/raw/brilliance-face-scrub_IMG_5443.MOV",
+    "drive_id": "1C9cf_sgx64B7jyhgeCMj-q1RNILVzCtW",
+    "cut": "8.0 s from 16.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "apply-face-3",
+   "file": "runs/ai-elements/movement/apply-face-3.mp4",
+   "seconds": 6.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "She applies the scrub to her right cheek, rubbing it in with her fingers.",
+   "does": [
+    "applies",
+    "rubs",
+    "massages",
+    "spreads",
+    "scrubs",
+    "works",
+    "circles"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/55-64/lillian/raw/brilliance-face-scrub_IMG_7895.mov",
+    "drive_id": "1vsCfD_iCq_IpjfjNWjRtm1GHwo7mMCmJ",
+    "cut": "6.0 s from 12.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "apply-cheek-3",
+   "file": "runs/ai-elements/movement/apply-cheek-3.mp4",
+   "seconds": 4.5,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "Man rubs hands together and applies white cream to his face, massaging his forehead and cheeks.",
+   "does": [
+    "applies",
+    "rubs",
+    "massages",
+    "spreads",
+    "scrubs",
+    "works",
+    "circles"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/male/black/25-34/demitry/raw/IMG_2068.mov",
+    "drive_id": "1WzZ-BmdMwh-64AVkvp0r_tmFX_prkPZJ",
+    "cut": "4.5 s from 0.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "rinse-1",
+   "file": "runs/ai-elements/movement/rinse-1.mp4",
+   "seconds": 8.5,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "She rinses her face with water from the sink.",
+   "does": [
+    "rinses",
+    "splashes",
+    "washes"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/unknown-ethnicity/unknown-age/sondra/raw/brilliance-face-scrub_IMG_7350.MOV",
+    "drive_id": "1ZTsk2EyPUmJAD4sl94OvH3ANZ5QNzhUG",
+    "cut": "8.5 s from 81.5 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "rinse-2",
+   "file": "runs/ai-elements/movement/rinse-2.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "Rinses face with water at sink.",
+   "does": [
+    "rinses",
+    "splashes",
+    "washes"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/male/east-asian/18-24/jamie/raw/IMG_5358.MOV",
+    "drive_id": "1Qwgeqit1dutR6MWOFSjeveZRCyFEUL1Y",
+    "cut": "10.0 s from 51.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "squeeze-1",
+   "file": "runs/ai-elements/movement/squeeze-1.mp4",
+   "seconds": 4.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "She squeezes more cream from the yellow tube onto her fingers.",
+   "does": [
+    "squeezes",
+    "dispenses"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/45-54/vicki/raw/brilliance-face-scrub_A-2.mov",
+    "drive_id": "1AhXFNu1OqF1i8ej7Oww-UtM_8dCFDUcf",
+    "cut": "4.0 s from 14.5 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "squeeze-3",
+   "file": "runs/ai-elements/movement/squeeze-3.mp4",
+   "seconds": 8.670000000000002,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "woman squeezes a line of tan scrub onto her fingers",
+   "does": [
+    "squeezes",
+    "dispenses"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/latino/25-34/gabriela/raw/brilliance-face-scrub_Brand B 2-003.MP4",
+    "drive_id": "1RHJR88NcDn4ybLacpwIYq8Z2D1Mopp7f",
+    "cut": "8.670000000000002 s from 63.33 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "hold-product-2",
+   "file": "runs/ai-elements/movement/hold-product-2.mp4",
+   "seconds": 7.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "Hands holding and rotating a black and gold product box.",
+   "does": [
+    "holds",
+    "lifts",
+    "raises"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/archive/creators-curated/High Quality UGC/IG_reel_rubyecom_2025-01-06.mp4",
+    "drive_id": "1cgAYrVAE8N6uvpjAMV5Cju5sEJlwRfV0",
+    "cut": "7.0 s from 5.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "arms-2",
+   "file": "runs/ai-elements/movement/arms-2.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "She rubs her hands together and then rubs the product into her left arm, from shoulder to wrist.",
+   "does": [
+    "rubs",
+    "lotion",
+    "smooths"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/east-asian/25-34/jennie/raw/brilliance-body-scrub_Application Body Scrub (1).mov",
+    "drive_id": "12B6IBEpnsWh3Iekpw-vMYBJQVneZi3J0",
+    "cut": "10.0 s from 15.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "arms-3",
+   "file": "runs/ai-elements/movement/arms-3.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "Man rubs white cleanser into his face with both hands in a bathroom.",
+   "does": [
+    "rubs",
+    "lotion",
+    "smooths"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/male/black/25-34/kevin/raw/Video_5.MOV",
+    "drive_id": "12SSvoJfdtnVi9QmqrKmzv7OOwmCFtoHr",
+    "cut": "10.0 s from 0.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "shave-2",
+   "file": "runs/ai-elements/movement/shave-2.mp4",
+   "seconds": 9.0,
+   "from": 0,
+   "kind": "usage",
+   "talks": false,
+   "framing": "Man shaves neck with manual razor.",
+   "does": [
+    "shaves",
+    "razor"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/male/latino/25-34/david/raw/IMG_6766.mov",
+    "drive_id": "1BinBSY9uTguFOn2da2ipxKGgm2_IK-8i",
+    "cut": "9.0 s from 4.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "point-skin-1",
+   "file": "runs/ai-elements/movement/point-skin-1.mp4",
+   "seconds": 7.0,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "Close-up of her left cheek as she points to spots and skin texture.",
+   "does": [
+    "points",
+    "pointing",
+    "fingertip",
+    "taps"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/25-34/kendall/raw/brilliance-face-scrub_D, Take 2.MOV",
+    "drive_id": "1chrYZAqmvKV20-L7ZWYKrUn07IV8OZyM",
+    "cut": "7.0 s from 7.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "point-skin-2",
+   "file": "runs/ai-elements/movement/point-skin-2.mp4",
+   "seconds": 5.0,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "The woman points to spots on the back of her hand.",
+   "does": [
+    "points",
+    "pointing",
+    "fingertip",
+    "taps"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/55-64/Becky/raw/ig_2026-09-30_becky.mp4",
+    "drive_id": "1rurD3zpM_sin8NWK1YmE5RVLeGJdxSxj",
+    "cut": "5.0 s from 6.5 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "mirror-3",
+   "file": "runs/ai-elements/movement/mirror-3.mp4",
+   "seconds": 8.0,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "A young woman with dark hair in a white tank top touches her face and looks into the camera lens as if it were a mirror.",
+   "does": [
+    "mirror"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/25-34/kendall/raw/brilliance-face-scrub_A, Take 1.MOV",
+    "drive_id": "1XeKmVoC1lJrz8XAkZShqQglI_7BeHwgv",
+    "cut": "8.0 s from 0.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "walk-1",
+   "file": "runs/ai-elements/movement/walk-1.mp4",
+   "seconds": 7.5,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "The woman walks back towards the camera, smiling and looking directly into the lens.",
+   "does": [
+    "walks",
+    "walking"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/45-54/mia/raw/brilliance-face-scrub_Brand B B-Roll(49).mov",
+    "drive_id": "1LaDWTPquDhoqmzMEwTGMLgpJ5qXpBnYf",
+    "cut": "7.5 s from 7.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "walk-2",
+   "file": "runs/ai-elements/movement/walk-2.mp4",
+   "seconds": 5.0,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "She walks back towards the camera, touching her hair and smiling.",
+   "does": [
+    "walks",
+    "walking"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/white/55-64/barbara-2/raw/brilliance-face-scrub_Brand B K outdoor shot.mov",
+    "drive_id": "1xeGz-V8joGNO7TEJopagXA8acTh3DCPS",
+    "cut": "5.0 s from 11.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "walk-3",
+   "file": "runs/ai-elements/movement/walk-3.mp4",
+   "seconds": 5.0,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "The woman turns around and walks back towards the camera, smiling as she approaches.",
+   "does": [
+    "walks",
+    "walking"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand B/content-creators/female/unknown-ethnicity/unknown-age/sondra/raw/brilliance-face-scrub_IMG_7453.MOV",
+    "drive_id": "1XuKSWZEgnO9n87CUjWbQiy7f19Gyrzjt",
+    "cut": "5.0 s from 3.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "kitchen-2",
+   "file": "runs/ai-elements/movement/kitchen-2.mp4",
+   "seconds": 10.0,
+   "from": 0,
+   "kind": "action",
+   "talks": false,
+   "framing": "Man cooks pasta sauce and eats at small table.",
+   "does": [
+    "pours",
+    "stirs",
+    "cooks",
+    "chops",
+    "blends"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/brands/Brand A/content-creators/male/white/25-34/matt/raw/Snaptik.app_7273241340073332011.mp4",
+    "drive_id": "1LWez5jJUWQBL1jzsec21QS_RSgYuGXCy",
+    "cut": "10.0 s from 30.0 s, no sound"
+   },
+   "status": "draft"
+  },
+  {
+   "id": "tiktok-talk-review",
+   "file": "runs/ai-elements/movement/tiktok-talk-review.mp4",
+   "seconds": 10,
+   "from": 0,
+   "kind": "talking",
+   "talks": true,
+   "framing": "medium shot, holds product to camera",
+   "does": [
+    "talks to camera",
+    "review",
+    "holds product",
+    "shows bottle",
+    "hand gestures",
+    "testimonial"
+   ],
+   "real": true,
+   "source": {
+    "label": "Shared Assets/swipe/organic/records/swipe-videos/7644337653432716558/video.mp4",
+    "cut": "10 s from 5 s, no sound"
+   },
+   "status": "draft"
+  }
+ ]
+}

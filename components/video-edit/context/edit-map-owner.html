@@ -1,0 +1,325 @@
+<title>Video Edit Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: three cards on top, then the six doors as flows, the doubled jobs side by side, then every piece of both as tiles */
+:root{
+  --bg:#f5f6f4;--panel:#fff;--ink:#171b19;--dim:#6a736e;--line:#dfe3df;
+  --accent:#1d7a55;--accent-soft:#e3f1ea;
+  --warn:#a35d00;--warn-soft:#fbefdc;--bad:#b2362b;--bad-soft:#f9e3e0;--mute-soft:#eef0ee;
+  --f-display:"Space Grotesk",system-ui,sans-serif;--f-body:Inter,system-ui,-apple-system,sans-serif;--f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121514;--panel:#1b201e;--ink:#eaeeeb;--dim:#97a29c;--line:#2e3532;
+  --accent:#4cc08f;--accent-soft:#183026;--warn:#f0b357;--warn-soft:#33270f;--bad:#f08a7f;--bad-soft:#3a1c19;--mute-soft:#232a27;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121514;--panel:#1b201e;--ink:#eaeeeb;--dim:#97a29c;--line:#2e3532;
+  --accent:#4cc08f;--accent-soft:#183026;--warn:#f0b357;--warn-soft:#33270f;--bad:#f08a7f;--bad-soft:#3a1c19;--mute-soft:#232a27;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1{font:700 26px/1.15 var(--f-display);margin:0;text-wrap:balance}
+h2{font:700 17px/1.2 var(--f-display);margin:0 0 10px;text-wrap:balance}
+.sub{color:var(--dim);font-size:13px;margin-top:4px}
+.eyebrow{font:600 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.card.hot{border-color:var(--bad)}
+.card .big{font:700 30px/1 var(--f-display);margin:6px 0 4px}
+.card .big.bad{color:var(--bad)}.card .big.warn{color:var(--warn)}.card .big.ok{color:var(--accent)}
+.card p{margin:0;font-size:13px}
+/* flows */
+.doors{display:flex;flex-direction:column;gap:10px}
+.door{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.door-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font:600 11px var(--f-body);border-radius:20px;padding:2px 8px;white-space:nowrap}
+.t-studio{background:var(--warn-soft);color:var(--warn)}
+.t-edit{background:var(--accent-soft);color:var(--accent)}
+.t-auto{background:var(--mute-soft);color:var(--dim)}
+.t-bad{background:var(--bad-soft);color:var(--bad)}
+.door-h b{font-size:14px}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.step{font-size:12.5px;padding:5px 9px;border-radius:7px;border:1px solid var(--line);background:var(--bg)}
+.step.s{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));background:var(--warn-soft)}
+.step.e{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--accent-soft)}
+.step.o{font-weight:600}
+.arr{color:var(--dim);font-size:12px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin-bottom:10px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+/* doubled table */
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+tr:last-child td{border-bottom:0}
+td.job{font-weight:600;white-space:nowrap}
+.x{color:var(--bad);font-weight:700}
+@media (max-width:600px){
+  table,thead,tbody,tr,td{display:block}thead{display:none}
+  tr{border-bottom:1px solid var(--line);padding:8px 0}td{border:0;padding:3px 12px}
+  td[data-l]::before{content:attr(data-l);display:block;font:600 10.5px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+}
+/* inventory */
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.col{min-width:0}
+.col-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.col-h span{font:500 12px var(--f-mono);color:var(--dim)}
+.grp{margin-bottom:12px}
+.grp .eyebrow{margin-bottom:6px;display:block}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 9px;min-width:0}
+.tile b{display:block;font-size:12.5px;line-height:1.25}
+.tile i{display:block;font-style:normal;font-size:11.5px;color:var(--dim);margin-top:2px}
+.tile code{font:500 10.5px var(--f-mono);color:var(--dim);word-break:break-all}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.d-live{background:var(--accent)}.d-dup{background:var(--bad)}.d-exp{background:var(--warn)}.d-off{background:var(--dim)}
+/* target */
+.target{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch}
+.box{border-radius:10px;padding:14px;border:1px solid var(--line);background:var(--panel)}
+.box.front{border-color:var(--warn)}.box.engine{border-color:var(--accent)}
+.box ul{margin:8px 0 0;padding-left:18px;font-size:13px}
+.mid{display:flex;align-items:center;justify-content:center;color:var(--dim);font:600 20px var(--f-display)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+details ul{margin:8px 0 0;padding-left:18px;font-size:13px}
+@media (max-width:760px){.top,.two{grid-template-columns:1fr}.target{grid-template-columns:1fr}.mid{transform:rotate(90deg)}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Video edit · how it runs today · 21 Nov</div>
+    <h1>Video Edit Map</h1>
+    <div class="sub">Two parts both edit your videos. Studio should only be the screen; Video Edit should do the work.</div>
+  </header>
+
+  <section class="top">
+    <div class="card">
+      <div class="eyebrow">Done today</div>
+      <div class="big ok">All editing</div>
+      <p>now lives in Video Edit. Studio only shows it. Same output, proven on 3 real ads.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow">One command</div>
+      <div class="big ok">deliver</div>
+      <p>Hand it any ad → every version, levelled, checked, on one approval card.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Your Studio (8922)</div>
+      <div class="big ok">Team copy</div>
+      <p>Restarted on the team's code, restarter pointed there too. Same screen.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Now: hand it over, get it back</h2>
+    <div class="door">
+      <div class="flow">
+        <span class="step o">Any finished ad</span><span class="arr">→</span>
+        <span class="step e">deliver</span><span class="arr">→</span>
+        <span class="step e">Cut</span><span class="arr">→</span><span class="step e">Check</span><span class="arr">→</span>
+        <span class="step e">Render + −14 LUFS</span><span class="arr">→</span><span class="step e">Edit moves</span><span class="arr">→</span>
+        <span class="step e">Covers</span><span class="arr">→</span><span class="step e">Used-everything check</span><span class="arr">→</span>
+        <span class="step o">Approval card</span>
+      </div>
+    </div>
+    <div class="tbl" style="margin-top:10px"><table>
+      <thead><tr><th>Proof</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td class="job" data-l="Proof">Edit project, 3 ads</td><td data-l="Result">✓ byte-identical before / after</td></tr>
+        <tr><td class="job" data-l="Proof">Scene cuts, 3 ads</td><td data-l="Result">✓ video, captions, still identical</td></tr>
+        <tr><td class="job" data-l="Proof">Full render, idea-36</td><td data-l="Result">✓ control + 5 hooks at −14.0 LUFS</td></tr>
+        <tr><td class="job" data-l="Proof">Used-everything check</td><td data-l="Result">✓ passes idea-14, idea-15 · ✗ catches a swapped clip, a dropped caption word</td></tr>
+        <tr><td class="job" data-l="Proof">Not finished in production</td><td data-l="Result">✓ held with the reason (idea-45: AI shots)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Before today: 6 doors</h2>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--warn-soft);border:1px solid var(--warn)"></i>Studio does it</span>
+      <span><i class="sw" style="background:var(--accent-soft);border:1px solid var(--accent)"></i>Video Edit does it</span>
+    </div>
+    <div class="doors">
+      <div class="door">
+        <div class="door-h"><span class="tag t-studio">A · main</span><b>You press "Next step" in Studio</b><span class="tag t-bad">Studio edits itself</span></div>
+        <div class="flow">
+          <span class="step s">Shots</span><span class="arr">→</span><span class="step s">Voice</span><span class="arr">→</span>
+          <span class="step s">Cut (its own cutter)</span><span class="arr">→</span><span class="step s">Check</span><span class="arr">→</span>
+          <span class="step e">Render (borrows Video Edit's composer)</span><span class="arr">→</span>
+          <span class="step s">Edit: music + SFX (its own)</span><span class="arr">→</span><span class="step s">Re-render</span><span class="arr">→</span>
+          <span class="step s">Covers</span><span class="arr">→</span><span class="step o">Video in Studio's folder</span>
+        </div>
+      </div>
+      <div class="door">
+        <div class="door-h"><span class="tag t-studio">B</span><b>"Produce" / "Prepare hand-off" in Studio</b></div>
+        <div class="flow"><span class="step s">Sets up scenes from the brief</span><span class="arr">→</span><span class="step">goes into door A</span></div>
+      </div>
+      <div class="door">
+        <div class="door-h"><span class="tag t-studio">C</span><b>Studio hands AI shots to the editor</b></div>
+        <div class="flow">
+          <span class="step s">Studio "maker" step</span><span class="arr">→</span><span class="step e">Video Edit packs the hand-off</span><span class="arr">→</span>
+          <span class="step">Editor opens in HyperFrames / Premiere</span><span class="arr">→</span><span class="step">Delivery comes back</span><span class="arr">→</span><span class="step">door E</span>
+        </div>
+      </div>
+      <div class="door">
+        <div class="door-h"><span class="tag t-edit">D</span><b>A session runs Video Edit's "line"</b></div>
+        <div class="flow">
+          <span class="step e">Plan the edit</span><span class="arr">→</span><span class="step e">Mouths</span><span class="arr">→</span><span class="step e">Render</span><span class="arr">→</span>
+          <span class="step e">Audit</span><span class="arr">→</span><span class="step e">Watch (Gemini)</span><span class="arr">→</span><span class="step e">Covers</span><span class="arr">→</span>
+          <span class="step e">Deliver</span><span class="arr">→</span><span class="step o">Approval folder</span>
+        </div>
+      </div>
+      <div class="door">
+        <div class="door-h"><span class="tag t-edit">E</span><b>A session runs Video Edit from a kit</b></div>
+        <div class="flow">
+          <span class="step e">Gather</span><span class="arr">→</span><span class="step e">Cut (Opus + cut prompt)</span><span class="arr">→</span><span class="step e">Gate</span><span class="arr">→</span>
+          <span class="step e">Timeline</span><span class="arr">→</span><span class="step e">Captions</span><span class="arr">→</span><span class="step e">Export</span><span class="arr">→</span>
+          <span class="step e">Audit + checks</span><span class="arr">→</span><span class="step e">File</span><span class="arr">→</span><span class="step e">Learn</span>
+        </div>
+      </div>
+      <div class="door">
+        <div class="door-h"><span class="tag t-auto">F · automatic</span><b>Watchdog, every 5 min</b></div>
+        <div class="flow"><span class="step">Finds a stuck job</span><span class="arr">→</span><span class="step s">Presses "Next step" in Studio</span><span class="arr">→</span><span class="step">door A</span></div>
+      </div>
+      <div class="door">
+        <div class="door-h"><span class="tag t-bad">Gap</span><b>The ad workflow's edit steps</b></div>
+        <div class="flow"><span class="step">Hand-off · clips-edit · upscale</span><span class="arr">→</span><span class="step o">No code. Done by hand.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Done twice (before today)</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Job</th><th>In Studio</th><th>In Video Edit</th></tr></thead>
+      <tbody>
+        <tr><td class="job" data-l="Job">Cut to the swipe</td><td data-l="In Studio">swipe cutter + scene renderer</td><td data-l="In Video Edit">beat cut · edit map · auto cut (retired Studio's way as "a third path")</td></tr>
+        <tr><td class="job" data-l="Job">Captions</td><td data-l="In Studio">own caption chunks + song captions</td><td data-l="In Video Edit">transcribe + model cut</td></tr>
+        <tr><td class="job" data-l="Job">Music bed</td><td data-l="In Studio"><span class="x">2 copies</span>: music bed + edit stage</td><td data-l="In Video Edit">music bed</td></tr>
+        <tr><td class="job" data-l="Job">Sound effects</td><td data-l="In Studio">edit stage</td><td data-l="In Video Edit">SFX maker</td></tr>
+        <tr><td class="job" data-l="Job">Final render + loudness</td><td data-l="In Studio">render step, −14 LUFS</td><td data-l="In Video Edit">export + master, −14 LUFS</td></tr>
+        <tr><td class="job" data-l="Job">Hook versions</td><td data-l="In Studio">re-renders each hook</td><td data-l="In Video Edit">render versions / hooks</td></tr>
+        <tr><td class="job" data-l="Job">Covers</td><td data-l="In Studio">covers stage (points at a retired Video Edit file)</td><td data-l="In Video Edit">line covers step</td></tr>
+        <tr><td class="job" data-l="Job">Edit screen</td><td data-l="In Studio">Edit tab (8922)</td><td data-l="In Video Edit">Brief Editing Board (8916)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Every piece</h2>
+    <div class="legend">
+      <span><i class="dot d-live"></i>live</span><span><i class="dot d-dup"></i>doubles the other</span>
+      <span><i class="dot d-exp"></i>experiment</span><span><i class="dot d-off"></i>dormant / pass-through</span>
+    </div>
+    <div class="two">
+      <div class="col">
+        <div class="col-h"><h2 style="margin:0">Video Edit</h2><span>~356 files</span></div>
+        <div class="grp"><span class="eyebrow">The engine</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-live"></i>Kit run</b><i>gather → cut → file → learn</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Line</b><i>edit map → render → deliver</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Composer</b><i>the only HyperFrames writer</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Watch</b><i>Gemini judges the cut</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Audit + checks</b><i>black frames, sync, loudness</i></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Music bed · SFX</b><i>doubled in Studio</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Learn</b><i>lessons from your changes</i></div>
+          <div class="tile"><b><i class="dot d-exp"></i>v2 / mini doors</b><i>runs on the mini</i></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Prompts</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-off"></i>1 · Read pack</b><i>built, parked</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>2 · Cut</b><i>Opus</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>4 · Watch</b><i>Gemini · v3</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>9 · Learn</b><i>Sonnet</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Creative director</b><i>picks moves</i></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Libraries</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-live"></i>Looks</b><i>fonts, grades, stickers, transitions</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Moves</b><i>89 edit moves</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Cut rules</b><i>learned rules</i></div>
+          <div class="tile"><b><i class="dot d-off"></i>Frame control</b><i>dormant since Sept</i></div>
+          <div class="tile"><b><i class="dot d-off"></i>Higgsfield skills</b><i>reference notes</i></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Hand-off to people</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-live"></i>Maker pack</b><i>timeline + HyperFrames + Premiere</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Open brief</b><i>editor opens a brief</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Stage hand-off</b><i>packs + checks deliveries</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Premiere captions</b><i>bridge</i></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Screens</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-dup"></i>Brief Editing Board</b><i>port 8916</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Timeline pages</b><i>per run</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Live timeline</b><i>per run</i></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Drawn-in-code formats</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-exp"></i>Low-poly 3D</b></div>
+          <div class="tile"><b><i class="dot d-exp"></i>Cartoon</b></div>
+          <div class="tile"><b><i class="dot d-exp"></i>Anime</b></div>
+          <div class="tile"><b><i class="dot d-exp"></i>Stick</b></div>
+          <div class="tile"><b><i class="dot d-exp"></i>Thread</b></div>
+        </div></div>
+      </div>
+
+      <div class="col">
+        <div class="col-h"><h2 style="margin:0">Video Studio</h2><span>~94 files</span></div>
+        <div class="grp"><span class="eyebrow">Screen (what it should be)</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-live"></i>Studio shell</b><i>6 tabs, brand + ad menu</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Scene canvas</b><i>scenes, takes, buttons</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Edit tab</b><i>opens HyperFrames preview</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Chain view · checks</b><i>read-only panels</i></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Editing it does itself</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-dup"></i>Next-step engine</b><i>picks + runs every stage</i></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Scene renderer</b><i>its own ffmpeg cutting</i></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Swipe cut + check</b></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Edit stage</b><i>music, SFX, camera moves</i></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Music bed</b><i>its own copy, unused</i></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Song captions</b><i>unused</i></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Render + hooks</b></div>
+          <div class="tile"><b><i class="dot d-dup"></i>Covers</b></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Production (not editing)</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-live"></i>Seed from brief</b></div>
+          <div class="tile"><b><i class="dot d-live"></i>Shot lists + fill</b><i>owned footage first</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>AI shots</b><i>stills → clips</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Takes + lips</b></div>
+          <div class="tile"><b><i class="dot d-live"></i>Voices</b><i>ElevenLabs reads</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Sound board</b></div>
+          <div class="tile"><b><i class="dot d-live"></i>Product layer</b><i>3D product in hand</i></div>
+          <div class="tile"><b><i class="dot d-live"></i>Quick variation</b></div>
+          <div class="tile"><b><i class="dot d-live"></i>Creator lane</b></div>
+        </div></div>
+        <div class="grp"><span class="eyebrow">Already passes through</span><div class="tiles">
+          <div class="tile"><b><i class="dot d-off"></i>Maker files ×4</b><i>→ Video Edit</i></div>
+          <div class="tile"><b><i class="dot d-off"></i>Edit notes</b><i>→ Video Edit</i></div>
+          <div class="tile"><b><i class="dot d-off"></i>Motion ×3</b><i>→ Motion</i></div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where it ends up · <span style="color:var(--accent)">editing moved ✓</span> · <span style="color:var(--warn)">one engine inside Video Edit: next</span></h2>
+    <div class="target">
+      <div class="box front">
+        <div class="eyebrow">Video Studio</div><b>The screen</b>
+        <ul><li>HyperFrames view of the cut</li><li>Pick brand, ad, version</li><li>Buttons send the ask</li><li>Shows what came back</li></ul>
+      </div>
+      <div class="mid">→</div>
+      <div class="box engine">
+        <div class="eyebrow">Video Edit</div><b>The one engine</b>
+        <ul><li>Cut, captions, music, SFX</li><li>Render, hooks, loudness</li><li>Covers, checks, file</li><li>Learns from every change</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <details>
+    <summary>Other things found</summary>
+    <ul>
+      <li>The Studio on 8922 runs from a copy in this Mac's app folder; a second Studio from the team copy runs on 8932.</li>
+      <li>Studio's finished videos land in the old board folder, not the team's runs folder.</li>
+      <li>Video Edit's moves director reaches back into Studio: the two lean on each other both ways.</li>
+      <li>Studio has no rules file of its own and is not listed with the other components.</li>
+    </ul>
+  </details>
+</div>

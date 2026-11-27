@@ -81,6 +81,13 @@ class Brand:
     @property
     def pixel_id(self): return str(self.d.get("pixel_id") or "")
     @property
+    def fb_pages(self):
+        """The Facebook Pages this brand may run ads from (account.json `fb_pages`, owner 2026-11-21); the one Page in
+        `page_id` when the file names no list. Each: {id, name, tag, default?}."""
+        rows = self.d.get("fb_pages") or [{"id": self.page_id, "name": self.d.get("page_name") or "page", "tag": "", "default": True}]
+        return [dict(r, id=str(r["id"])) for r in rows]
+
+    @property
     def instagram_id(self):
         v = self.d.get("instagram_id")
         return str(v) if v else None
@@ -144,7 +151,7 @@ class Brand:
         """The brand's own name templates, defaulting to naming.DEFAULT.
 
         Read off the live account, never imposed. Two real shapes so far:
-        `US | NOVA™ | ICON | Fed-Up King` and `cbo_us_purchase_body-scrub`.
+        `US | FLEX™ | ICON | Fed-Up King` and `cbo_us_purchase_body-scrub`.
         """
         import naming as _n
         d = dict(_n.DEFAULT)
@@ -156,7 +163,7 @@ class Brand:
         """Title Case for Ads Manager, using the brand's own spellings.
 
         Slugs are kebab-case everywhere they are stored and Title Case
-        everywhere the owner reads them. A brand overrides only the ones a naive
+        everywhere owner reads them. A brand overrides only the ones a naive
         capitalise gets wrong — `el-jefe` -> `El Jefe`, `fedupking` ->
         `Fed-Up King`.
         """

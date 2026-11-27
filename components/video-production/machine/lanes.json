@@ -1,0 +1,28 @@
+{
+ "_what": "How a whole ad is made, as settings: the lanes a production can run in, the styles that are filmed pictures, and any format whose way of being made is fixed whatever footage we own. machine/lane.py is the only reader; the Video Studio shows its call and never decides one. Brand-agnostic.",
+ "status": "draft",
+ "lanes": {
+  "ai": "AI (every shot made)",
+  "mix": "AI + Real (our footage where the footage decision passed the shot, AI for the rest)",
+  "real": "Real (our own footage on every shot)",
+  "creator": "A creator films it (the creator brief goes to the creator hub)"
+ },
+ "filmed_styles": {
+  "_what": "Style ids whose pictures are filmed footage, so a clip of ours can be cut into them. Any other style is drawn or rendered in a look our filmed footage does not have, and every shot of it is made. No style on a run means photoreal.",
+  "ids": ["photoreal", "phone-ugc"]
+ },
+ "by_format": {
+  "_what": "A format made one way whatever the route and the footage say. Each row: the lane, the reason in plain words, where the reason comes from, and a status. Only a format whose own definition settles it belongs here; every other format is decided by the route and the footage decision (lane.py default).",
+  "text-thread": {
+   "lane": "ai",
+   "why": "drawn in code: no people and no camera, so there is no shot footage of ours could stand in for",
+   "from": "components/video-production/formats/bank.json (format_type production)",
+   "status": "draft"
+  }
+ },
+ "older_production": {
+  "_what": "A production saved before the lane was recorded on it (before 2026-11-16). Those were all made the same way, so every reader gets the same answer.",
+  "lane": "real",
+  "why": "made before the way of making was recorded on a production: those ran our own footage on every shot, with AI only on a yes"
+ }
+}

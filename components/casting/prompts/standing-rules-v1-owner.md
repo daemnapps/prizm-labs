@@ -8,7 +8,7 @@ the model; everything below the rule is.
 
 | Rule | Came from | The failure it was written after |
 |---|---|---|
-| Unretouched skin | `lab/owner/avatar-builder/build.py` `CLEAN`, verbatim | A generated character that cannot cut against filmed footage, because filmed skin has pores and generated skin did not. |
+| Unretouched skin | `lab/the owner/avatar-builder/build.py` `CLEAN`, verbatim | A generated character that cannot cut against filmed footage, because filmed skin has pores and generated skin did not. |
 | No text in frame | `build.py` `CLEAN`, verbatim | Lettering and watermarks invented into a reference sheet, which then trained into everything derived from it. |
 | Single image | `build.py` `CLEAN`, verbatim | A contact sheet returned where one frame was asked for, so the anchor had no single identity to reference. |
 | A DIFFERENT person | `brands/<brand>/ai-elements/characters/README.md`, the 2026-09-14 ruling | The one result this process must not produce: a generated twin of a contracted creator, whose consent covered their own footage and nothing else. |

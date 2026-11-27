@@ -1,0 +1,192 @@
+# Guy Humor Swipes — Brand A
+
+Every Brand A swipe whose culture read says funny or mixed: 52 pictures of 187 read, 21 videos of 55 read.
+Built by `runs/image-teardown/Brand A/guy-humor-swipes/build_page.py`. Artifact: see `context/artifacts.md`.
+
+## Pictures
+
+- **Brand A-batch-bald-problem-24840205** (funny)
+  - Joke: "been growing / On his head since he was in his moms womb" — literally, the hair has been trapped under the skin for 27 years; the way the room reads it, it is a hyperbolic roast exaggerating a partner's grooming neglect to signal affectionate exasperation. The room laughs at the ridiculous, biologically impossible…
+  - Same kind: "paying rent in his scalp since 2012" (reasoning: internet exaggeration for something being there a long time); "bro has been brewing this since the Bush administration" (reasoning: using political eras as a measure of time for a minor physical anomaly is a…
+- **Brand A-batch-bald-problem-61756959** (funny)
+  - Joke: "watch me pull this frontal out" — literally, pulling out a hair from the front of the neck; in slang, calling a single coarse chin hair a "frontal" (an entire ear-to-ear lace wig) to exaggerate how thick, long, or stubborn it feels, making the room laugh at the relatable hyperbole
+  - Same kind: - "pulling out this whole 30-inch bundle" (reasoning: uses weave length terminology to exaggerate a single hair)
+- **Brand A-batch-bald-problem-80131615** (funny)
+  - Joke: "Shaving my head because I'm balding" -> Literally, "I am losing my hair so I am cutting it all off." The room reads it as a sarcastic, deadpan humblebrag meaning, "Look at my perfectly thick hair (and my abs); I'm saying the exact opposite so you realize how good I look." They laugh at the sheer audacity of the lie.
+  - Same kind: (Reasoning: applying the same false-flaw paradox to other idealized traits)
+- **Brand A-batch-bald-problem-90628638** (funny)
+  - Joke: "Head-acial" — literally a premium facial treatment for a bald head; the way the room reads it, a portmanteau of "head" (oral sex) and "facial" (ejaculation on the face), making the innocent spa service sound like an extreme sexual act, which forces a laugh.
+  - Same kind: "Dome polishing" (literally shining a bald head; slang for oral sex) — reasoning: uses the same head/oral double meaning. "Deep tissue release" (literally a massage technique; slang for sexual climax) — reasoning: a standard spa term that sounds like a sexual…
+- **Brand A-batch-bald-top-55102209** (funny)
+  - Joke: "taking their hat off / after a long day out". Literal: removing headwear after a day outdoors. Room read: the "hatfishing" reveal—the private moment of dropping the physical and psychological disguise of a hat to reveal the hidden baldness underneath. The room laughs because it calls out a widespread, unspoken male…
+  - Same kind: - "Guys who wear hoodies at the beach / pretending they aren't sweating" (reasoning: hiding a body insecurity with inappropriate clothing)
+- **Brand A-batch-bald-top-55185950** (funny)
+  - Joke: "super powers" — literally, superhuman abilities like flight or super strength; the way the room reads it, a hyperbolic, sarcastic term for a mildly amusing or completely useless advantage of a normal physical trait. The room laughs at the extreme contrast between a superhero concept and an unglamorous guy crouching…
+  - Same kind: - "The ultimate bald man life hack" (reasoning: uses internet slang for a minor advantage)
+- **Brand A-batch-bald-top-57021709** (funny)
+  - Joke: the absurdity of the niche community (similar to the famous "Josh Fight"). Presenting an absurd but verifiably real event creates a massive curiosity gap. The viewer stops to laugh at the spectacle and verify if it is real.
+- **Brand A-batch-bald-top-64896286** (funny)
+  - Joke: "what yall call this haircut" — literally, what is the name of this style; to the room, it is an invitation for creative roasting and insults (e.g., naming it "the lawnmower special").
+  - Same kind: - "chat, is this real?" (reasoning: the most common streamer slang for disbelief)
+- **Brand A-batch-bald-top-65111054** (funny)
+  - Joke: insider recognition x curiosity gap — the ad borrows the title of a known funny video but intentionally withholds the punchline the original videos provide, forcing the viewer to pause.
+  - Same kind: - "What tall people do when it snows...." (reasoning: same structure targeting a specific physical trait and weather event with an ellipsis)
+- **Brand A-batch-bald-top-66406926** (funny)
+  - Joke: insider recognition x incongruity. The viewer either immediately recognizes the famous wholesome viral moment, or, if they haven't seen it, laughs at the sheer absurdity of hyper-feminine Y2K craft supplies meticulously applied to the historically stoic canvas of a senior dad's bald head
+- **Brand A-batch-bald-top-87312910** (funny)
+  - Joke: insider recognition. It skips any formal introduction and demands the viewer immediately step into the described shoes. The brain knows exactly how to read a "POV:" prompt, instantly looking for the punchline in the visual.
+  - Same kind: "downloaded a new chore patch" (reasoning: gaming/tech slang for a new burden) · "leveled up to head-polisher" (reasoning: applying gaming progression phrasing to the literal task) · "new daily quest acquired" (reasoning: gaming RPG slang applied to a…
+- **Brand A-batch-bf-marsmen-139975781** (funny)
+  - Joke: incongruity x insider recognition — the viewer stops scrolling expecting internet drama or gossip (insider recognition of the format), but is hit with an incongruous pivot to an aggressive sales pitch.
+- **Brand A-batch-cm-marsmen-139975781** (funny)
+  - Joke: incongruity x pattern interrupt. The viewer expects high-stakes gossip or a serious confession based on the aesthetics, but is instead hit with a massive discount ("50% off for life"). It works by wearing the camouflage of a serious, organic post.
+- **Brand A-batch-middle-hims-173186821** (funny)
+  - Joke: incongruity x nostalgia. It takes a serious, insecurity-driven topic (male pattern baldness) and drops it perfectly onto a nostalgic novelty product, creating a visual gag that the viewer's standard ad defense mechanisms don't block.
+- **Brand A-batch-middle-marsmen-109675063** (funny)
+  - Joke: "YOUR MOOBS ARE TALKING. THEY'RE SAYING 'LOW T'." Literally, a physical symptom indicating a hormonal deficiency. The way the room reads it, it's a personification where the viewer's embarrassing man-boobs are actively insulting their masculinity (calling them "Low T", a known internet insult for weak/beta men). The…
+  - Same kind: - "YOUR DAD BOD IS TALKING. IT'S SAYING 'NO ENERGY'." (reasoning: uses a highly recognized cultural label for a soft physique and personifies it as a messenger)
+- **Brand A-batch-parody-barbershop-roast-2** (funny)
+  - Joke: "kill your barber gng" literally means to commit murder against a hair professional with your gang; the way the room reads it, it is hyperbolic internet slang for "your haircut is completely ruined, friend," making an extreme joke out of a mundane grooming situation.
+  - Same kind: (reasoning: internet slang roasting a friend's bad style with hyperbole) "fire your barber immediately gng", "bro needs to sue the shop 😭", "barber did you so dirty gng 💀", "whoever lined you up is an opp", "don't ever go back there gng 💔".
+- **Brand A-batch-parody-diss-cover** (funny)
+  - Joke: "got beef". Literally: possessing cow meat. The room reading (slang): having a serious grudge, rivalry, or conflict. The room laughs because the aggressive street slang (normally used for rival gangs or rappers) is incongruously applied to everyday necessities like water and soap, rendering the "tough guy" persona…
+  - Same kind: - "when it's raining / I don't use an umbrella, I just get wet" (Reasoning: refusing a basic protective item to look tough)
+- **Brand A-batch-parody-goat-debate** (funny)
+  - Joke: "CATCHING LOBS" — literally catching a high-arc basketball pass near the rim; the way the room reads it, being handed an incredibly easy opportunity or setup in life, dating, or business. The joke is the visual incongruity of treating this casual slang with the utmost philosophical seriousness.
+  - Same kind: "CATCHING STRAYS" (reasoning: similar slang for taking collateral damage or insults in an argument you weren't even part of); "FUMBLING THE BAG" (reasoning: slang for ruining a guaranteed opportunity or paycheck, treated with the same mock-seriousness);…
+- **Brand A-batch-parody-headband-king-2** (funny)
+  - Joke: "get clowned" means being mocked by peers; "so you hit one of these" means physically striking the defensive pose shown in the image (LeBron's shrug), adopting his dismissive "it's just basketball" attitude to dodge taking accountability for being wrong.
+  - Same kind: - reasoning: casual internet phrasing about defending bad sports takes or deflecting blame to friends.
+- **Brand A-batch-parody-nfl-challenge** (funny)
+  - Joke: competence reveal x incongruity. Lawrence is usually known as a quiet, polite "golden boy." Hearing him calmly tell a defender "I play better when you hit me" is incongruous and reveals a competitive, psychotic edge that fans loved. This specific frame drops the viewer right into the start of that famous exchange,…
+- **Brand A-batch-parody-ref-call** (funny)
+  - Joke: insider recognition x incongruity — the viewer immediately understands the "rules" of this video (it's a skit, the guy is playing a role), bypassing the need for exposition so the joke can land faster.
+- **Brand A-batch-pick-igp-dedad32iz9a** (funny)
+  - Joke: "Oh yea I'm locking this down / He ain't scoring" — literally means physically securing something or preventing points, but in basketball slang it is the ultimate boast of defensive dominance. The room laughs because of the dramatic irony: an average bare hand is claiming dominance over an NBA champion moments before…
+  - Same kind: "I'm putting him in a blender" (reasoning: basketball slang for crossing someone over); "He don't want these problems" (reasoning: common pickup basketball trash talk); "I'm clamping him up" (reasoning: synonymous slang for elite defense).
+- **Brand A-batch-pick-igp-demnrjpo0kf** (funny)
+  - Joke: looks like a █ Quagmire — the original viral tweet reads "black Quagmire"; the room laughs because it's a blunt, slightly edgy racial descriptor making the cartoon comparison exact, and censoring it plays into internet algorithmic survival while forcing the viewer to fill in the blank. ya momma hoe ‼️ — a literal…
+  - Same kind: (reasoning: observational roasts pointing out unfortunate resemblances using absurd cartoon/pop culture figures, in the casual voice of a Twitter user)
+- **Brand A-batch-pick-igp-dex0outthzr** (funny)
+  - Joke: "GOAT in CBA" — literally, he is the greatest player of all time in the Chinese Basketball Association; the way the room reads it, it's a massive insult about his career falling off so hard he can only dominate against lower-tier competition.
+  - Same kind: reasoning: other ways to sarcastically praise someone for dominating a lower-tier environment — "franchise player for the Shanghai Sharks", "putting up video game numbers at the YMCA", "finally found his level".
+- **Brand A-batch-pick-tt-7629746340792110357** (funny)
+  - Joke: insider recognition x incongruity. The viewer recognizes the famous sports meme, and the surreal visual of an NBA player on the moon provides the absurd setup for the topical punchline.
+- **Brand A-batch-pick-tt-7684071813227285774** (funny)
+  - Joke: "how to get the best / NECK" — literally, a fitness tip on how to build neck muscles; the way the room reads it, a crude slang instruction on how to receive the best oral sex, rendered completely absurd by the deeply unsexy image.
+  - Same kind: (reasoning: crude internet double entendres masked as earnest self-improvement or innocent tutorials) "how to increase your GIRTH", "the secret to lasting LONGER", "why your WOOD is soft", "stretching your HOLE".
+- **Brand A-batch-pn-organic-84717334** (funny)
+  - Joke: - "asking for a friend": LITERALLY inquiring on behalf of an acquaintance. THE ROOM'S READ: I am deeply embarrassed that I am struggling with this, so I am pretending it is not my problem. The room laughs at the transparent, relatable deflection.
+  - Same kind: - "has anyone ever cured razor bumps... asking for science." (reasoning: swaps the deflection target to something equally absurd while keeping the trope)
+- **Brand A-batch-top-nuora-111263412** (funny)
+  - Joke: "how it felt down there" means the physical ground below the text bubble in the desert (literal) and the feeling in the female genital region (the way the room reads it). The room laughs because the unspoken word "dry" is made hilariously, absurdly literal by the cracked earth.
+  - Same kind: - "what the sahara felt like a few months ago:" (reasoning: relies on the same extreme geographical metaphor for dryness)
+- **Brand A-batch-top-organic-15018518** (funny)
+  - Joke: incongruity x insider recognition. The innocent setup quote is juxtaposed with a mildly violent visual. The text format provides the connective tissue so the brain instantly solves the puzzle: potato = head, knife = barber's scissors.
+- **Brand A-batch-top-organic-18700318** (funny)
+  - Joke: "messed up your shi" / "get no play" — read literally as "messed up your [cut-off word]" and "not participating in recreation", but read by the room as slang for "ruined your haircut" and "getting no romantic/sexual action". The room laughs because it connects vanity over a haircut directly to a brutal self-own about…
+  - Same kind: (reasoning: escalating the self-own using similar slang for a lack of romantic success or looks)
+- **Brand A-batch-top-organic-20610318** (funny)
+  - Joke: "photo dump" / "drake song". Literally: a carousel of pictures and a music track by Drake. The way the room reads it: a "photo dump" is supposed to project an effortless, "I don't care" vibe, while adding a "Drake song" projects a try-hard, emotionally dramatic "subtle flex." The room laughs because pairing them…
+  - Same kind: - "when it's a 'casual' photo dump but the first pic is a thirst trap" (reasoning: points out another way people fail at the effortless vibe)
+- **Brand A-batch-top-organic-47838998** (funny)
+  - Joke: "ven in self defense?" — literally, a question about whether a legal penalty applies if the act was committed to protect oneself. The way the room reads it: the original tweet called for the execution of child rapists; asking if *that* specific crime could ever be committed "in self-defense" is a logical impossibility…
+- **Brand A-batch-top-organic-52273665** (funny)
+  - Joke: "magine if men had" — literally an incomplete thought about what men might have; to the room, it's the trigger phrase for the grotesque punchline "to breastfeed babies using their cocks," generating an involuntary laugh through cursed memory recall.
+- **Brand A-batch-top-organic-54962720** (funny)
+  - Joke: relatable frustration x comedic juxtaposition. It pairs a mundane, urgent need (needing a haircut) with an extreme, exaggerated visual of the professional being completely disconnected and unavailable in a vacation setting.
+  - Same kind: - [Reasoning: applying the same "unavailable professional living their best life when you desperately need them" meme phrasing to other frustratingly essential services]
+- **Brand A-batch-top-organic-61212685** (funny)
+  - Joke: incongruity — dropping an infamous, unstoppable slasher into the role of a daytime school bus driver is completely absurd.
+- **Brand A-batch-top-organic-75823647** (funny)
+  - Joke: "corn" literally means the yellow vegetable, but the room reads it as "porn" (adult content), bypassing platform censors; the humor comes from contrasting this slightly taboo assumption with the innocent, mundane reality of laughing at dumb memes.
+  - Same kind: reasoning: other algospeak terms or internet assumptions subverted by innocent mundane realities.
+- **Brand A-batch-top-organic-89710358** (funny)
+  - Joke: Incongruity and shock value. It takes a mundane, shower-thought question about human biology and answers it not with words, but with a deeply unsettling, hyper-realistic visual anomaly.
+- **Brand A-batch-top-organic-91183903** (funny)
+  - Joke: "Giving Daddy energy" — literally, he looks like a father; the way the room reads it (slang/innuendo), he exudes the aura of a confident, sexually attractive older man. The room laughs at the blunt, slightly thirsty accuracy of the label applied to a stranger in the wild.
+  - Same kind: - "It's giving main character." (reasoning: uses the same slang structure to assign a different recognizable internet trope)
+- **Brand A-batch-top-organic-96593941** (funny)
+  - Joke: "got traded mid picture" — literal: the player changed teams while the camera shutter was open; the room: laughing at the absurdity of sports graphics making terrible copy-paste edits to update a player's uniform.
+  - Same kind: - "bro didn't even have time to blink" (reasoning: uses internet "bro" syntax to point out the frozen identical expression)
+- **Brand A-batch-glowup-split-48k** (mixed)
+  - Joke: insider recognition. The carousel speaks directly to this demographic's specific insecurities and desires using their exact jargon. The viewer instantly recognizes the creator as an authority who understands the "meta" of physical attractiveness.
+- **Brand A-batch-middle-marsmen-122129820** (mixed)
+  - Joke: insider recognition — using a taboo or slightly embarrassing colloquial slang word in clean, professional typography signals that the brand understands the specific lived experience of the viewer, bypassing clinical distance.
+- **Brand A-batch-pick-marsmen-122203312** (mixed)
+  - Joke: - "We Made Too Much" (Literal: We manufactured an excess of inventory. Double meaning: This is a massive clearance sale, but we're using premium DTC code words so it doesn't sound cheap.)
+  - Same kind: - "our logistics guy is in tears 💀" (reasoning: uses the skull emoji for "dead" from stress/laughing)
+- **Brand A-batch-pick-penrose-156514678** (mixed)
+  - Joke: "smoke breaks". Literally: stepping out for a cigarette. The way the room reads it (double meaning): stepping out to get high (smoke weed) or feed a heavily stigmatized nicotine habit, requiring intense odor-hiding (mints for breath, scented butter for hands/face) so coworkers don't catch on. The room smiles at the…
+  - Same kind: "post-lunch safety check" (reasoning: established cannabis slang), "for when your 'walk' was a little too relaxing" (reasoning: office euphemism), "HR-approved scent blocker" (reasoning: corporate paranoia), "for after your 'allergies' act up" (reasoning: red…
+- **Brand A-batch-pick-tt-7679242758120328462** (mixed)
+  - Joke: "Your neck is so bumpy" / "Your neck is so gross 🤢" — literally refers to the razor bumps on his throat; in slang, "getting neck" means getting oral sex, so the quotes sound like a partner complaining about a sexual act, which makes the room laugh at the unintentional/intentional innuendo.
+  - Same kind: - "Nobody wants your neck looking like that" (reasoning: plays on the skin condition and the sexual act)
+- **Brand A-batch-pn-organic-72019982** (mixed)
+  - Joke: insider recognition. The format asks the viewer to put themselves in a highly specific situation, making the image feel like an inside joke or a shared complaint between peers rather than a brand message.
+- **Brand A-batch-review-11325990** (mixed)
+  - Joke: "The ooohs and ahhhhs" followed by "compliments... from the ladies". First reading: the literal vocal sounds of women being impressed by how smooth his skin is. Second reading: the vocal sounds of romantic or sexual intimacy. The room laughs because it hooks them with a mildly suggestive, plausible deniability…
+  - Same kind: - "They can't keep their hands off it" (reasoning: sounds like a boast about his body or overall appeal, but pivots to just his soft face)
+- **Brand A-batch-top-marsmen-109775958** (mixed)
+  - Joke: "t up or shut up" literally means to tee up (prepare) or be quiet, but to the room it is a play on "put up or shut up" where "put" is replaced by "t" (testosterone), creating an insider mandate to fix their hormones; "isn't a personality" is funny because it uses internet hyperbole to aggressively reframe a legitimate…
+  - Same kind: reasoning: internet meme formats used to attack male complacency or low energy — "being exhausted is not a hobby"; "drinking 4 energy drinks a day is not a substitute for a personality"; "your low T is showing"; "bro is running on 1% battery and calling it a…
+- **Brand A-batch-top-organic-14946062** (mixed)
+  - Joke: "there’s nothing worse than / being a trans model and / getting razor bumps 🥲" — Literally: This specific skin condition is bad for my specific career/life. The room's read: A hyperbolic, ironic complaint where a mundane physical annoyance is treated as the ultimate tragedy, punctuated by the "smiling through the…
+  - Same kind: reasoning
+- **Brand A-batch-top-organic-84717334** (mixed)
+  - Joke: "just asking for a friend..." — literally, inquiring on behalf of someone else; the room reads it as a sarcastic, self-deprecating admission that the speaker is actually asking for themselves because they are embarrassed. The room laughs at the relatable vulnerability. "down there" — literally, a location below the…
+  - Same kind: reasoning: other deflective internet phrases used to admit to something embarrassing or niche without fully owning it — "I'm just a girl...", "asking for science...", "this is a safe space right?", "please don't perceive me but...", "is it just me or...".
+- **Brand A-Brand D-04-low-stock-warning** (mixed)
+  - Joke: "ACNE DOESN'T GET A FREE PERIOD" (Slide 22) — literally means the acne never stops or takes a break; to the room, a "free period" is a coveted gap in a high school schedule. It's a clever pun that marries the continuous nature of the skin problem with the school setting, and why the room smiles at it.
+  - Same kind: - "Breakouts don't take snow days." (reasoning: uses a beloved school disruption to mean acne doesn't rest)
+- **Brand A-sprtn-02-your-hair-s-not-done-yet** (mixed)
+  - Joke: "stealing your wife's hairdryer" — literally, taking a styling tool; the way the room reads it, a hyperbolic boast about having an absurd, unmanageable amount of thick hair where there used to be a bald spot. The room laughs at the vivid domestic image of a previously balding man suddenly needing a hairdryer.
+  - Same kind: reasoning: hyperbole about mundane problems caused by having too much hair.
+- **Brand A-sprtn-03-18000-men-made-the-switc** (mixed)
+  - Joke: "go bald than soft" / eggplant emoji (Slide 59, 91). Literally: a vegetable or the physical texture of an object. The room: erectile dysfunction, using a crass visual pun to acknowledge the primary fear men have about finasteride without sounding like a medical brochure. The room laughs in relief that a brand finally…
+  - Same kind: (reasoning: men's health slang for virility/potency vs hair loss) "Keep your hair and your hardware," "Don't trade your flagpole for some follicles," "Pitching a tent vs pitching your hair," "Grow hair without killing the mood."
+
+## Videos
+
+- **Dcq-DOkpnos-Brand A** (funny) — https://www.instagram.com/reel/Dcq-DOkpnos/
+  - Joke: The Anticipation Gap x The Tension Release. The viewer waits for the sleeping man to wake up, and the tension breaks when he does.
+- **DdMF24UzKwP-Brand A** (funny) — https://www.instagram.com/reel/DdMF24UzKwP/
+  - Joke: Incongruity x contagious emotion. The contrast between his tough exterior (face tattoos, "GENERAL" shirt) and his helpless, breathless giggling makes the viewer drop their guard and laugh with him.
+- **deaamykc-sj-Brand A** (funny) — https://www.instagram.com/reel/DeAamYKC_sJ/
+  - Joke: camouflage. The viewer thinks they are watching a relatable, organic joke about catfishing or being single. This buys 11 seconds of watch time and sets up the shock of the pivot.
+- **pastor-barber-body-Brand A** (funny) — https://www.tiktok.com/@druski/video/7594632859407715639
+  - Joke: insider recognition x a quotable line the room repeats — viewers know Druski's style of pushing boundaries and calling out cultural absurdities, and they tune in to see how far he will take the satire
+- **156782916** (funny)
+  - Joke: a quotable line the room repeats. It perfectly captures the unearned arrogance the ad wants to project onto expensive colognes, making the competitor look foolish right before getting knocked out.
+- **batchtest-meme** (funny)
+  - Joke: a bait-and-switch joke. The setup ("If you're having a bad day at work, just remember...") sounds like it will offer comfort or perspective. The punchline abruptly shifts the blame onto the viewer for actively seeking out and accepting the job they now hate. The mocking laughter at the end twists the knife.
+- **create-a-player-2026** (funny)
+  - Joke: The Expectation Gap. The viewer knows the game's ratings are notoriously harsh and heavily debated. Watching a highly confident, multi-millionaire pro athlete get genuinely annoyed by a video game creates immediate comedic tension and relatability.
+- **dcq-dokpnos-Brand A** (funny)
+  - Joke: The Anticipation Gap x The Tension Release. The viewer waits for the sleeping man to wake up, and the tension breaks when he does.
+- **ddmf24uzkwp-Brand A** (funny)
+  - Joke: Incongruity x contagious emotion. The contrast between his tough exterior (face tattoos, "GENERAL" shirt) and his helpless, breathless giggling makes the viewer drop their guard and laugh with him.
+- **deaamykc-sj-Brand A** (funny)
+  - Joke: camouflage. The viewer thinks they are watching a relatable, organic joke about catfishing or being single. This buys 11 seconds of watch time and sets up the shock of the pivot.
+- **goat-headbutt-dezojp9p7pf** (funny)
+  - Joke: Incongruity. The caption sets up an expectation of a high-stakes sports debate or highlight reel, but the video delivers a man struggling against a literal farm animal.
+- **og-chatgpt-ddculjkn4cw** (funny)
+  - Joke: Relatable absurdity. Exaggerating a common behavior (asking AI for life advice) to ridiculous extremes, and using the AI's logical, dry responses as a comedic straight man to the creator's emotional reactions.
+- **pastor-barber-body-Brand A** (funny)
+  - Joke: insider recognition x a quotable line the room repeats — viewers know Druski's style of pushing boundaries and calling out cultural absurdities, and they tune in to see how far he will take the satire
+- **sq-05-damonvsl-damontorash-x-nvl15** (funny)
+  - Joke: incongruity. The hyper-realistic rendering of the giant comb and fruit contrasts absurdly with the formal suits and the serious, high-effort martial arts choreography.
+- **sq-09-nobody-tells-you-x-nvl16** (funny)
+  - Joke: native platform camouflage. It looks exactly like the organic content the viewer is already scrolling through, lowering their guard against a sales pitch.
+- **sq-10-ditl-china-first-tim-x-nvl18** (funny)
+  - Joke: Incongruity x competence reveal. The viewer expects a standard skate trick based on the setting and camera work, but is presented with an impossible physics scenario. The joke works because the VFX is executed cleanly enough to look real at first glance, and the physical backflip is genuinely impressive, making the…
+- **v2test-meme-dalk** (funny)
+  - Joke: a bait-and-switch joke. The setup ("If you're having a bad day at work, just remember...") sounds like it will offer comfort or perspective. The punchline abruptly shifts the blame onto the viewer for actively seeking out and accepting the job they now hate. The mocking laughter at the end twists the knife.
+- **DepK6PgBrR1-Brand A** (mixed) — https://www.instagram.com/reel/DepK6PgBrR1/
+  - Joke: insider recognition x a quotable line the room repeats. The audio instantly signals to the viewer that this is a video about relationship standards and effort. It sets a high bar for the boyfriend's redemption and makes the viewer judge his actions through that specific lens.
+- **155495826** (mixed)
+  - Joke: relatable insecurity x a magic bullet. It speaks directly to the target audience's fear of being average, then immediately provides a solution that requires no physical effort.
+- **158667419** (mixed)
+  - Joke: incongruity (the character dropped somewhere they never were) / a familiar aesthetic applied to a new situation. By using a cartoon style known for cynical, anti-establishment humor, the ad bypasses the viewer's natural defense against corporate marketing. It feels like a sketch, not a pitch.
+- **depk6pgbrr1-Brand A** (mixed)
+  - Joke: insider recognition x a quotable line the room repeats. The audio instantly signals to the viewer that this is a video about relationship standards and effort. It sets a high bar for the boyfriend's redemption and makes the viewer judge his actions through that specific lens.

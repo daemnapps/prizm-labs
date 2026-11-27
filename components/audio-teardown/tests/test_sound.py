@@ -49,3 +49,23 @@ class Render(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MusicReadShape(unittest.TestCase):
+    """2026-11-15: the music read came back as [ {...} ] and was silently dropped, leaving the sheet's music blank."""
+    def test_one_item_list_is_unwrapped_and_empty_is_an_error(self):
+        import music as M
+        calls = iter([([{"genre": "Electronic", "felt_bpm": 80}], "m", []), ({}, "m", [])])
+        real_ask, real_measure, real_sz, real_ad = M.G.ask, M.measure, M.shazam, M.audd
+        M.G.ask = lambda *a, **k: next(calls)
+        M.measure = lambda t: {"present": True}
+        M.shazam = M.audd = lambda t: (None, "not a known recording")
+        try:
+            import tempfile
+            with tempfile.NamedTemporaryFile(suffix=".mp3") as f:
+                self.assertEqual(M.read(f.name)["heard"]["felt_bpm"], 80)
+                r = M.read(f.name)
+                self.assertNotIn("heard", r)
+                self.assertIn("not the music read", r["heard_error"])
+        finally:
+            M.G.ask, M.measure, M.shazam, M.audd = real_ask, real_measure, real_sz, real_ad

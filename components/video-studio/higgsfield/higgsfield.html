@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Higgsfield · Video Studio</title>
+<style>
+/* Everything Higgsfield offers, one shelf per kind of video. Same tokens as the Studio. */
+:root{--bg:#eceee9;--panel:#fff;--ink:#16211c;--dim:#6b7871;--line:#d6dcd6;--green:#153c2b;--accent:#1d7a55;--soft:#f4f6f2;--hl:#e3efe8;--new:#b4561a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a18;--panel:#222826;--ink:#eef2ee;--dim:#98a49d;--line:#38413d;--green:#2f7d58;--accent:#52c79a;--soft:#1c211f;--hl:#1f3329;--new:#f0a066;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161a18;--panel:#222826;--ink:#eef2ee;--dim:#98a49d;--line:#38413d;--green:#2f7d58;--accent:#52c79a;--soft:#1c211f;--hl:#1f3329;--new:#f0a066;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,sans-serif}
+.wrap{max-width:1320px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:26px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--dim);margin-top:2px}
+.back{color:var(--accent);text-decoration:none;font-weight:600}
+nav.jump{display:flex;gap:6px;flex-wrap:wrap}
+nav.jump a{font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:4px 11px}
+nav.jump a:hover{background:var(--hl)}
+.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;align-items:center}
+.hero video{width:100%;border-radius:8px;background:#000;aspect-ratio:16/9;object-fit:cover}
+.hero .tag{color:var(--new);font:700 11px system-ui;letter-spacing:.09em;text-transform:uppercase}
+.hero h2{margin:4px 0 8px;font-size:24px}
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.modes span{background:var(--hl);border-radius:6px;padding:3px 9px;font-size:12.5px;font-weight:600}
+.free{font-weight:700;color:var(--new)}
+h3{font:700 12px system-ui;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin:0 0 10px;display:flex;gap:8px;align-items:baseline}
+h3 small{font-weight:600;letter-spacing:0;text-transform:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:transform .15s}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.media{position:relative;aspect-ratio:4/5;background:var(--soft);overflow:hidden}
+.media img,.media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.media video{opacity:0;transition:opacity .2s}
+.card:hover .media video.ready{opacity:1}
+.media .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:38px;font-weight:800;color:var(--dim)}
+.media .play{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700;border-radius:5px;padding:2px 6px}
+.body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px}
+.body b{font-size:14.5px}
+.body .l{font-size:12.5px;color:var(--dim)}
+.say{font:12px ui-monospace,Menlo,monospace;background:var(--soft);border-radius:5px;padding:3px 6px;margin-top:4px;color:var(--ink)}
+/* Recipes shelf: Higgsfield's workflows taken apart, beside our cheap rebuild (21 Nov) */
+.rx-intro{color:var(--dim);margin:-4px 0 12px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.rcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 13px;cursor:pointer;display:flex;flex-direction:column;gap:6px;text-align:left;font:inherit;color:inherit}
+.rcard:hover,.rcard.on{border-color:var(--accent)}
+.rcard.on{box-shadow:0 0 0 2px var(--accent) inset}
+.rcard b{font-size:15px}
+.rcard .l{font-size:12.5px;color:var(--dim);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cost{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;flex-wrap:wrap}
+.cost .hf{background:var(--soft);border-radius:5px;padding:2px 7px}
+.cost .us{background:var(--hl);color:var(--accent);border-radius:5px;padding:2px 7px}
+.tag2{font:700 10.5px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.rdetail{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}
+.rdetail h4{margin:0 0 2px;font-size:19px}
+.rdetail .l{color:var(--dim)}
+.inputs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.inputs span{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:12px}
+.step{border-top:1px solid var(--line);padding:10px 0;display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px}
+.step .n{width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:12.5px}
+.step .what{font-size:12.5px;color:var(--dim);margin:2px 0 6px}
+.swap{display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr);gap:6px;align-items:stretch}
+.swap .side{border-radius:7px;padding:6px 9px;font-size:12.5px}
+.swap .side.a{background:var(--soft)}
+.swap .side.b{background:var(--hl)}
+.swap .side i{display:block;font-style:normal;font:700 10px system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.swap .ar{display:grid;place-items:center;color:var(--accent);font-weight:800}
+.swap .cr{font-weight:800}
+.note{font-size:12px;color:var(--dim);margin-top:4px}
+.pbtn{margin-top:6px;font:600 12px system-ui;color:var(--accent);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 9px;cursor:pointer}
+.prompts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:8px}
+.prompts pre{margin:0;white-space:pre-wrap;word-break:break-word;font:11.5px/1.45 ui-monospace,Menlo,monospace;background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:8px 10px;max-height:420px;overflow:auto}
+.prompts .h{font:700 10.5px system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.check{font-size:12px;margin-top:4px}
+.check:before{content:"✓ ";color:var(--accent);font-weight:800}
+@media(max-width:760px){.swap{grid-template-columns:1fr}.swap .ar{transform:rotate(90deg)}.prompts{grid-template-columns:1fr}.rgrid{grid-template-columns:1fr}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.card{transition:none}}
+</style></head><body>
+<div class="wrap">
+  <header>
+    <div><a class="back" href="/">← Video Studio</a>
+      <h1>Higgsfield</h1>
+      <div class="sub" id="count">Everything it can make · hover a card to play it · tell me a card and a brand, I run it</div></div>
+    <nav class="jump" id="jump"></nav>
+  </header>
+
+  <section class="hero">
+    <video id="erv" muted loop playsinline autoplay poster="https://cdn.higgsfield.ai/2552d9f4-8122-4050-b067-6cafc70c4a20_thumb.webp" src="https://cdn.higgsfield.ai/videoshop/take/2552d9f4-8122-4050-b067-6cafc70c4a20/preview/fe113d9a-0bbe-4962-9392-a216abedc6cd/compressed.mp4"></video>
+    <div>
+      <span class="tag">New · Editing Room</span>
+      <h2>Upload a video, change anything in it</h2>
+      <div class="modes"><span>Swap person</span><span>Change angle</span><span>Change location</span><span>Move camera</span><span>Relight</span><span>Brush edit</span></div>
+      <div>Up to 10 min · <span class="free">free edits until Dec 1</span></div>
+      <div class="say" style="display:inline-block;margin-top:10px">say: edit this video in the Editing Room</div>
+    </div>
+  </section>
+
+  <section id="recipes"><h3>Recipes <small id="rxn"></small></h3>
+    <div class="rx-intro">Higgsfield word for word → ours → cheapest model · tap one</div>
+    <div class="hero" style="grid-template-columns:1fr;padding:10px 14px;margin-bottom:12px"><div><span class="tag">Next · your go</span>
+      <div style="font-weight:700;margin:2px 0">Test 3 Singing Ad clips on the two cheapest models · 43.5 credits</div>
+      <div class="cost"><span class="hf">Seedance 30 / 10 s</span><span>→</span><span class="us">Wan 3.0 7.5</span><span class="us">Gemini Flash 7.5</span></div>
+      <div class="say" style="display:inline-block;margin-top:8px">say: run the cheap bench</div></div></div>
+    <div class="rgrid" id="rgrid"></div><div id="rdet"></div>
+    <h3 style="margin-top:22px">Every workflow, taken apart <small id="bxn"></small></h3>
+    <div class="rgrid" id="bgrid"></div><div id="bdet"></div>
+  </section>
+
+  <div id="shelves"></div>
+</div>
+<script>
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+fetch('/higgsfield/catalog.json').then(r=>r.json()).then(d=>{
+  const secs=[...new Set(d.items.map(x=>x.section))];
+  document.getElementById('jump').innerHTML=secs.map(s=>`<a href="#${slug(s)}">${esc(s)}</a>`).join('');
+  document.getElementById('count').textContent=`${d.items.length} tools · hover a card to play it · tell me a card and a brand, I run it`;
+  document.getElementById('shelves').innerHTML=secs.map(s=>{
+    const items=d.items.filter(x=>x.section===s);
+    return `<section id="${slug(s)}" style="margin-bottom:26px"><h3>${esc(s)} <small>${items.length}</small></h3><div class="grid">${items.map(x=>`
+      <a class="card" ${x.link?`href="${esc(x.link)}" target="_blank" rel="noopener"`:''}>
+        <div class="media">${x.img?`<img loading="lazy" src="${esc(x.img)}" alt="" onerror="this.remove()">`:`<div class="ph">${esc(x.name[0])}</div>`}
+          ${x.video?`<video muted loop playsinline preload="none" data-src="${esc(x.video)}"></video><span class="play">▶</span>`:''}</div>
+        <div class="body"><b>${esc(x.name)}</b><span class="l">${esc(x.line)}</span>${x.say?`<span class="say">say: ${esc(x.say)}</span>`:''}</div>
+      </a>`).join('')}</div></section>`;}).join('');
+  document.querySelectorAll('.card').forEach(c=>{
+    const v=c.querySelector('video'); if(!v) return;
+    c.addEventListener('mouseenter',()=>{ if(!v.src){v.src=v.dataset.src;} v.play().then(()=>v.classList.add('ready')).catch(()=>{}); });
+    c.addEventListener('mouseleave',()=>{ v.pause(); });
+  });
+  // a card with no picture shows its video's first frame
+  document.querySelectorAll('.media').forEach(m=>{ if(!m.querySelector('img')){const v=m.querySelector('video'); if(v){v.src=v.dataset.src;v.preload='metadata';v.classList.add('ready');v.style.opacity=1;}}});
+});
+</script>
+<script>
+// Recipes shelf: reads the workflow-teardown index (recipes + breakdowns)
+(function(){
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cr=v=>v==null||v===''?'':(typeof v==='number'?v+' cr':E(v));
+function side(cls,label,o){ if(!o) return `<div class="side ${cls}"><i>${label}</i>same</div>`;
+  return `<div class="side ${cls}"><i>${label}</i>${E(o.model||o)}${o.credits!=null&&o.credits!==''?` · <span class="cr">${cr(o.credits)}</span>`:''}</div>`;}
+function prompts(a,b,la,lb){ if(!a&&!b) return '';
+  const id='p'+Math.random().toString(36).slice(2);
+  return `<button class="pbtn" onclick="var e=document.getElementById('${id}');e.hidden=!e.hidden">Prompt</button>
+   <div class="prompts" id="${id}" hidden>${a?`<div><div class="h">${la}</div><pre>${E(a)}</pre></div>`:''}${b?`<div><div class="h">${lb}</div><pre>${E(b)}</pre></div>`:''}</div>`;}
+function recipe(r){
+  const p=r.price||{};
+  return `<div class="rdetail"><h4>${E(r.name)}</h4><div class="l">${E(r.makes)}</div>
+   <div class="cost" style="margin-top:8px"><span class="hf">Higgsfield ${E(p.higgsfield)}</span><span>→</span><span class="us">Cheapest ${E(p.cheap)}</span></div>
+   ${p.basis?`<div class="note">${E(p.basis)}</div>`:''}
+   <div class="inputs">${(r.inputs||[]).map(i=>`<span title="${E(i.from)}">${E(i.name)}${i.required?'':' · optional'}</span>`).join('')}</div>
+   ${(r.steps||[]).map(s=>`<div class="step"><div class="n">${E(s.n)}</div><div><b>${E(s.name)}</b><div class="what">${E(s.what)}</div>
+     <div class="swap">${side('a','Higgsfield',s.hf)}<div class="ar">→</div>${side('b','Cheapest',s.cheap||s.house)}</div>
+     ${s.cheap&&s.cheap.note?`<div class="note">${E(s.cheap.note)}</div>`:''}
+     ${prompts(s.prompt_hf,s.prompt_ours,'Higgsfield · word for word','Ours')}
+     ${s.check?`<div class="check">${E(s.check)}</div>`:''}</div></div>`).join('')}</div>`;}
+function breakdown(b){
+  return `<div class="rdetail"><h4>${E(b.name)}</h4><div class="l">${E(b.makes)}</div>
+   <div class="cost" style="margin-top:8px">${b.price?`<span class="hf">${E(b.price)}</span>`:''}${b.cheap_price?`<span>→</span><span class="us">${E(b.cheap_price)}</span>`:''}</div>
+   ${(b.steps||[]).map(s=>`<div class="step"><div class="n">${E(s.n)}</div><div><b>${E(s.name)}</b>
+     <div class="swap">${side('a','Higgsfield',s.model&&s.model!=='none'?{model:s.model}:null)}<div class="ar">→</div>${side('b','Cheapest',s.cheap?{model:s.cheap}:null)}</div></div></div>`).join('')}
+   ${(b.prompts||[]).length?`<div class="step"><div class="n">P</div><div><b>Prompts, word for word</b>${b.prompts.map(p=>`<div style="margin-top:8px"><div class="tag2">${E(p.label)}</div><div class="prompts" style="grid-template-columns:1fr"><pre>${E(p.text)}</pre></div></div>`).join('')}</div></div>`:''}</div>`;}
+function shelf(list,grid,det,render,line){
+  const g=document.getElementById(grid),d=document.getElementById(det);
+  g.innerHTML=list.map((x,i)=>`<button class="rcard" data-i="${i}"><span class="tag2">${E(x.kind||'video recipe')}</span><b>${E(x.name)}</b><span class="l">${E(x.makes)}</span>${line(x)}</button>`).join('');
+  g.querySelectorAll('.rcard').forEach(c=>c.onclick=()=>{const on=c.classList.contains('on');
+    g.querySelectorAll('.rcard').forEach(x=>x.classList.remove('on'));
+    if(on){d.innerHTML='';return;} c.classList.add('on'); d.innerHTML=render(list[+c.dataset.i]); d.scrollIntoView({behavior:'smooth',block:'nearest'});});}
+fetch('/higgsfield/recipes.json').then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
+  const R=d.recipes||[],B=d.breakdowns||[];
+  document.getElementById('rxn').textContent=R.length; document.getElementById('bxn').textContent=B.length;
+  shelf(R,'rgrid','rdet',recipe,r=>{const c=(r.price||{}).card||{};return `<div class="cost"><span class="hf">Higgsfield ${E(c.higgsfield)}</span><span>→</span><span class="us">${E(c.cheap)}</span></div><span class="l">per ${E(c.per)} · ${(r.steps||[]).length} steps</span>`;});
+  shelf(B,'bgrid','bdet',breakdown,b=>`<span class="l">${(b.steps||[]).length} steps · ${(b.prompts||[]).length} prompts</span>`);
+  const j=document.getElementById('jump');
+  const link=()=>{ if(j&&!j.querySelector('a[href="#recipes"]')) j.insertAdjacentHTML('afterbegin','<a href="#recipes">Recipes</a>'); };
+  link(); if(j) new MutationObserver(link).observe(j,{childList:true});
+}).catch(()=>{document.getElementById('recipes').hidden=true;});
+})();
+</script>
+</body></html>

@@ -1,6 +1,6 @@
 """The one door every chain's `claude -p` goes through — no account is ever wired in.
 
-the owner, 2026-10-23: "It should just be able to run regardless of who is working
+owner, 2026-10-23: "It should just be able to run regardless of who is working
 on the code base or what account is working on the code base. It's just code.
 We are the orchestrator and the chains run regardless."
 
@@ -8,16 +8,16 @@ A chain step is code calling a model. Which credential it runs on is decided
 here, once, the same way on every machine, in this order:
 
   1. a company API key — ANTHROPIC_API_KEY in the one key file
-     (this repo's .env, read through components/keys/loader.py). Billed to
+     (~/.upright-keys.env, read through components/keys/loader.py). Billed to
      the company, never expires, any person or machine runs on it.
   2. a long-life token — CLAUDE_CODE_OAUTH_TOKEN in the same file
      (`claude setup-token`, lasts a year).
   3. whatever login the `claude` CLI holds on this machine — any account —
      and then every other Claude login saved on it: each folder under
      ~/.claude-accounts/ is one account (`CLAUDE_CONFIG_DIR`), logged in once.
-  4. Codex — the OpenAI login this machine holds (the owner, 2026-10-23: "doesn't
-     matter if I'm using Codex, my Claude one, Claude two, or the team having a
-     Claude or the team having a Claude ... it should just work with whoever's
+  4. Codex — the OpenAI login this machine holds (owner, 2026-10-23: "doesn't
+     matter if I'm using Codex, my Claude one, Claude two, or editor having a
+     Claude or creator having a Claude ... it should just work with whoever's
      account is in use"). Text steps only.
   5. the Claude session running the chain (the session hand), last.
 
@@ -157,7 +157,69 @@ def _model_args():
     return _flags().model_args()
 
 
-def run(args, prompt, timeout=1800, cwd=None, extra_env=None):
+def _ran():
+    """run_kit/ran.py, the what-ran record: ONE instance shared with run_kit.model (sys.modules["run_kit.ran"]),
+    loaded by path because this module is also loaded by path. None if it cannot load: the door then runs as before."""
+    import sys
+    m = sys.modules.get("run_kit.ran")
+    if m is None:
+        try:
+            spec = importlib.util.spec_from_file_location("run_kit.ran", Path(__file__).with_name("ran.py"))
+            m = importlib.util.module_from_spec(spec)
+            sys.modules["run_kit.ran"] = m
+            spec.loader.exec_module(m)
+        except Exception:
+            sys.modules.pop("run_kit.ran", None)
+            return None
+    return m
+
+
+def _asked(args, flag, default):
+    a = list(args)
+    return a[a.index(flag) + 1] if flag in a and a.index(flag) + 1 < len(a) else default
+
+
+def run(args, prompt, timeout=1800, cwd=None, extra_env=None, connectors=False):
+    """The door (below, `_run`), plus one what-ran line per call while run_kit/ran.py's switch is on
+    (Creative Workflow Standard part 5, 2026-11-26). With the switch off this is exactly `_run`."""
+    R = _ran()
+    if R is None or not R.on():
+        return _run(args, prompt, timeout, cwd, extra_env, connectors)
+    import time
+    t0 = time.time()
+    try:
+        model = _asked(args, "--model", None) or _flags().model()
+        effort = _asked(args, "--effort", None) or _flags().effort()
+        row = {"model_asked": model, "effort": effort, "prompt_sha256_12": R.fingerprint(prompt),
+               "prompt_chars": len(prompt or ""), "caller": R.caller(), "route": "door"}
+    except Exception:
+        row = {"route": "door"}
+    try:
+        r = _run(args, prompt, timeout, cwd, extra_env, connectors)
+    except subprocess.TimeoutExpired:
+        R.note(**row, outcome="timeout", seconds=round(time.time() - t0, 1))
+        raise
+    except Exception:
+        R.note(**row, outcome="error", seconds=round(time.time() - t0, 1))
+        raise
+    try:
+        said = (r.stdout or "") + (r.stderr or "")
+        if r.returncode == 0:
+            outcome = "done"
+        elif "waiting for the session hand" in said:
+            outcome = "waiting_for_hand"
+        elif len(said) < 300 and OUT_OF_ROOM.search(said):
+            outcome = "out_of_room"
+        else:
+            outcome = "failed"
+        R.note(**row, outcome=outcome, answered_by=getattr(r, "credential", None),
+               chars_out=len(r.stdout or "") if r.returncode == 0 else None, seconds=round(time.time() - t0, 1))
+    except Exception:
+        pass
+    return r
+
+
+def _run(args, prompt, timeout=1800, cwd=None, extra_env=None, connectors=False):
     """`claude -p <args>` with the prompt on stdin, trying each credential in
     turn. Returns the CompletedProcess of the first that answers, or of the
     last one tried. `extra_env` (non-credential settings) rides every try.
@@ -188,6 +250,11 @@ def run(args, prompt, timeout=1800, cwd=None, extra_env=None):
         creds, use_codex = [], False
     else:
         creds, use_codex = credentials(), True
+    if connectors:
+        # A step that works through the account's connected tools (the claude.ai connectors: a 3D builder, a drive)
+        # runs on a Claude login, never on the company key or a bare token, which carry no connectors; no Codex
+        creds = [c for c in creds if c[0] not in ("company key", "long-life token")]
+        use_codex = False
     for label, cred in creds:
         env = {**base_env(), **(extra_env or {}), **cred}
         last = subprocess.run([binary(), "-p", *args], input=prompt, capture_output=True,
@@ -205,7 +272,7 @@ def run(args, prompt, timeout=1800, cwd=None, extra_env=None):
         if cx.returncode == 0:
             return cx
         last = cx if OUT_OF_ROOM.search(said) or not last else last
-    # LAST DOOR — THE SESSION RUNNING THE CHAIN (the owner, 2026-10-23: "all I know is I
+    # LAST DOOR — THE SESSION RUNNING THE CHAIN (owner, 2026-10-23: "all I know is I
     # have usage on this account here … I switch between my different accounts").
     # Every credential on this machine is out, so the step goes to the Claude
     # session that started the run, on whatever account that session is signed in

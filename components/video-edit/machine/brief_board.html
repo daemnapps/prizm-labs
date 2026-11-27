@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Brief Editing Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* One brief, its scenes in order. Each B-roll scene: the clip in the cut now (plays its in→out), its trim, then its choices
+   from the ledger and the library in a row. Same tokens as the Footage Library board. */
+:root{
+  /*LIGHT*/
+  --m-clean:#1f7a45; --m-cap:#9a6a00; --m-cleared:#2a5fb0; --m-warn:#b4471f; --m-red:#b3261e;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  /*DARK*/
+  --m-clean:#57c07f; --m-cap:#e0b23e; --m-cleared:#7aa6ec; --m-warn:#ec8a5f; --m-red:#ef6b62; color-scheme:dark}}
+:root[data-theme="dark"]{
+  /*DARK*/
+  --m-clean:#57c07f; --m-cap:#e0b23e; --m-cleared:#7aa6ec; --m-warn:#ec8a5f; --m-red:#ef6b62; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 var(--body)}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:18px 8px}
+h1{font:700 30px/1.05 var(--display);letter-spacing:.01em;margin:0;overflow-wrap:anywhere}
+.sub{color:var(--mute);margin:4px 0 0;font-size:14px}
+.bar{background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.bar .wrap{padding-block:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:10px 15px;cursor:pointer}
+.btn.go{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.why{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--mute)}
+.opt{border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:8px;padding:6px 9px;font:500 13px var(--body);cursor:pointer}
+.whytext{font:500 13px var(--body);padding:6px 9px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);min-width:0;width:220px;max-width:100%}
+.opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.note{font-size:13px;color:var(--mute)}
+.panelbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:12px}
+.panelbox h2{font:700 18px/1.1 var(--display);letter-spacing:.03em;text-transform:uppercase;margin:0 0 6px}
+.panelbox ul{margin:6px 0 0;padding-left:18px;font-size:13.5px}
+.panelbox details summary{cursor:pointer;font-weight:600}
+.pv{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.pv video{width:min(100%,280px);aspect-ratio:9/16;background:#000;border-radius:10px}
+main{padding-block:6px 80px}
+.scene{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-top:14px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:16px}
+.scene.made{grid-template-columns:1fr;opacity:.92}
+.scene>div{min-width:0}
+@media (max-width:760px){.scene{grid-template-columns:minmax(0,1fr)}.now video{max-height:60vh}}
+.sid{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.sid b{font:700 22px/1 var(--display);letter-spacing:.02em}
+.tag{font:700 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:5px;background:var(--chip);color:var(--fg);border:1px solid var(--line)}
+.tag.broll{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.shows{font-size:13.5px;margin:6px 0 0;overflow-wrap:anywhere}
+.said{font-size:13.5px;color:var(--mute);margin:4px 0 0;font-style:italic;overflow-wrap:anywhere}
+.now video{width:100%;aspect-ratio:9/16;max-height:440px;background:#000;border-radius:10px;display:block;object-fit:contain}
+.now .look{font-size:12.5px;color:var(--m-warn);margin-top:6px;min-height:1em}
+.trim{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px;align-items:center;margin-top:8px;font-size:13px}
+.trim [data-trim]{grid-column:1/-1;justify-self:start}
+.trim input{width:100%;min-width:0;font:600 14px var(--body);padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-variant-numeric:tabular-nums}
+.trim .nud{border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:6px;padding:5px 7px;font:600 12px var(--body);cursor:pointer}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tab{font:600 12.5px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:8px 11px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity}
+.alt{flex:0 0 150px;scroll-snap-align:start;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.alt.on{outline:2px solid var(--gold);outline-offset:-2px}
+.thumb{aspect-ratio:3/4;width:100%;background:#2a2d28;position:relative;overflow:hidden;cursor:pointer;border:0;padding:0}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tier{position:absolute;top:6px;left:6px;font:700 13px/1 var(--display);padding:4px 6px;border-radius:5px;background:#000000b3;color:#fff}
+.tier.A{background:var(--accent)}
+.len{position:absolute;bottom:6px;right:6px;font:600 12px/1 var(--body);padding:3px 6px;border-radius:5px;background:#000000b3;color:#fff;font-variant-numeric:tabular-nums}
+.away{position:absolute;bottom:6px;left:6px;font:600 11px/1 var(--body);padding:3px 6px;border-radius:5px;background:var(--m-warn);color:#fff}
+.meta{padding:7px 8px 8px;display:flex;flex-direction:column;gap:5px;flex:1}
+.line{font-size:12px;color:var(--mute);overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.marks{display:flex;flex-wrap:wrap;gap:4px}
+.mk{font-size:11px;font-weight:600;padding:2px 5px;border-radius:5px;border:1px solid currentColor;line-height:1.2}
+.mk.clean{color:var(--m-clean)} .mk.caption{color:var(--m-cap)} .mk.partner-handle,.mk.brand-handle{color:var(--m-cleared)}
+.mk.platform-mark,.mk.editor-logo,.mk.handle{color:var(--m-warn)} .mk.offer-text,.mk.app-screen{color:var(--m-red)}
+.use{margin-top:auto;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:8px;font:600 13px var(--body);cursor:pointer}
+.use:disabled{background:var(--chip);color:var(--mute);cursor:default}
+.regen{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px}
+.regen .btn{padding:8px 12px;font-size:13px}
+.wait{color:var(--m-warn);font-weight:600}
+.empty{color:var(--mute);font-size:13px;padding:10px 0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
+.toast[hidden]{display:none}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--fg);max-width:420px;width:calc(100% - 32px)}
+dialog::backdrop{background:#0008}
+dialog h3{font:700 22px/1.1 var(--display);margin:0 0 8px}
+dialog .price{font:700 34px/1 var(--display);margin:8px 0}
+dialog .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.log li{margin:4px 0}
+</style></head>
+<body>
+<header class="top wrap"><h1 id="title">Brief Editing Board</h1><p class="sub" id="sub"></p></header>
+<div class="bar"><div class="wrap">
+  <button class="btn go" id="pv">Preview the cut</button>
+  <span class="note" id="pvnote"></span>
+  <span class="why" id="why">Why:</span>
+</div></div>
+<div class="wrap">
+  <div class="panelbox" id="pvbox" hidden><h2>Preview</h2><div class="pv"><video id="pvvid" controls playsinline></video><p class="note" id="pvinfo"></p></div></div>
+  <div class="panelbox" id="gatebox"><details><summary id="gatesum"></summary><ul id="gate"></ul></details></div>
+  <div class="panelbox" id="regenbox" hidden><h2>Regens waiting for the owner</h2><ul id="regens"></ul></div>
+</div>
+<main class="wrap" id="scenes"></main>
+<div class="wrap"><div class="panelbox"><h2>Changes</h2><ul class="log" id="log"></ul></div></div>
+<dialog id="dlg"><h3 id="dt"></h3><p id="dw" class="note"></p><div class="price" id="dp"></div><p class="note" id="dh"></p>
+  <p class="note">Paid. This sends the request to the owner. Nothing is made until he says yes for this run.</p>
+  <div class="acts"><button class="btn" id="dno">Not now</button><button class="btn go" id="dyes">Ask the owner</button></div></dialog>
+<div class="toast" id="toast" hidden></div>
+<script>
+const BASE = location.pathname.replace(/\/$/, "");
+const REASONS = ["Better match", "Cleaner picture", "Right product", "Tighter", "Truer to the line", "Other"];
+let S = null, why = REASONS[0], tabs = {}, looking = {};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sec = x => (x == null ? "—" : Number(x).toFixed(2));
+function toast(t){ const e=$("#toast"); e.textContent=t; e.hidden=false; clearTimeout(e._t); e._t=setTimeout(()=>e.hidden=true,2600); }
+
+function whyBar(){
+  const other = !REASONS.slice(0, -1).includes(why);
+  $("#why").innerHTML = "Why:" + REASONS.map(r => `<button class="opt" aria-pressed="${r === "Other" ? other : r === why}">${r}</button>`).join("") +
+    (other ? `<input class="whytext" aria-label="Why this change" value="${esc(why === "Other" ? "" : why)}">` : "");
+  $("#why").querySelectorAll(".opt").forEach(b => b.onclick = () => { why = b.textContent; whyBar(); if (why === "Other") $(".whytext").focus(); });
+  const t = $(".whytext"); if (t) t.oninput = () => { why = t.value.trim() || "Other"; };
+}
+
+async function post(act, body){
+  const r = await fetch(`${BASE}/${act}`, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  const j = await r.json();
+  if (!r.ok || j.error) { toast(j.error || "That did not save"); throw new Error(j.error); }
+  return j;
+}
+
+function marks(o){ return `<div class="marks">${(o.marks||["clean"]).map(m=>`<span class="mk ${esc(m)}">${esc(m)}</span>`).join("")}</div>`; }
+function len(o){ return (o.out!=null && o.in!=null) ? `${(o.out-o.in).toFixed(1)}s` : ""; }
+
+function altCard(sc, o, cur){
+  const on = cur && cur.id === o.id;
+  return `<div class="alt ${on?"on":""}">
+    <button class="thumb" data-look="${esc(o.id)}" title="Play it here"><img loading="lazy" src="${esc(o.frame)}" alt="">
+      <span class="tier ${esc(o.tier)}">${esc(o.tier||"?")}</span><span class="len">${len(o)}</span>${o.band==="pool"?'<span class="away" style="background:var(--gold);top:6px;right:6px;bottom:auto;left:auto">Pool</span>':""}
+      ${o.local==="not on this machine"?'<span class="away">Drive only</span>':""}</button>
+    <div class="meta">${marks(o)}<div class="line">${esc(o.shows)}</div>
+      <button class="use" data-use="${esc(o.id)}" ${on?"disabled":""}>${on?"In the cut":"Use"}</button></div></div>`;
+}
+
+function sceneHTML(sc){
+  const said = sc.said ? `<p class="said">“${esc(sc.said)}”</p>` : "";
+  const price = S.prices[sc.id] || {};
+  const asked = S.regen.filter(r => r.scene === sc.id).slice(-1)[0];
+  const regen = `<div class="regen"><button class="btn" data-regen="${esc(sc.id)}">Regen · ~$${(price.ai_usd||0).toFixed(2)}</button>
+    ${asked ? `<span class="wait">Asked ${esc(asked.at.slice(0,16).replace("T"," "))} · ${esc(asked.status)}</span>` : ""}</div>`;
+  const head = `<div class="sid"><b>${esc(sc.id)}</b><span class="tag ${sc.role==="broll"?"broll":""}">${esc(sc.role==="broll"?"B-roll":(sc.kind||sc.role))}</span>
+    ${sc.section?`<span class="tag">${esc(sc.section)}</span>`:""}<span class="note">${sc.seconds}s</span></div>
+    <p class="shows">${esc(sc.shows)}</p>${said}`;
+  if (sc.role !== "broll")
+    return `<section class="scene made" id="sc-${esc(sc.id)}"><div>${head}<p class="note">Made by production — not cut from footage.</p>${regen}</div></section>`;
+  const cur = S.current[sc.id], opts = S.options[sc.id] || {}, slot = S.slot[sc.id];
+  const lk = looking[sc.id];
+  const show = lk || cur;
+  const src = show && show.clip_url ? `${show.clip_url}#t=${show.in||0},${show.out||""}` : "";
+  const t = tabs[sc.id] || ["picked","ledger","ranked"].find(k => (opts[k]||[]).length) || "ranked";
+  const bands = [["picked","Picked"],["ledger","From the ledger"],["ranked","Same blank"],["different","Different"]];
+  const list = (opts[t]||[]);
+  return `<section class="scene" id="sc-${esc(sc.id)}">
+    <div class="now">${head}
+      <video data-v="${esc(sc.id)}" controls playsinline muted preload="metadata" ${show?`poster="${esc(show.frame||"")}"`:""} src="${esc(src)}"></video>
+      <div class="look">${lk ? `Looking at ${esc(lk.id)} — not in the cut yet` : (cur ? "" : "No footage in the cut yet")}</div>
+      ${cur ? `${marks(cur)}<p class="note">${esc(cur.file||cur.path||"")} · tier ${esc(cur.tier||"?")} · ${esc(cur.local||"")}
+        ${cur.drive?` · <a href="${esc(cur.drive)}" target="_blank" rel="noopener">Drive</a>`:""}</p>
+      <div class="trim"><span>In</span><button class="nud" data-n="in:-0.1">−</button><input data-in type="number" step="0.05" value="${sec(cur.in)}"><button class="nud" data-n="in:0.1">+</button>
+        <span>Out</span><button class="nud" data-n="out:-0.1">−</button><input data-out type="number" step="0.05" value="${sec(cur.out)}" ${slot&&slot.fixed?"disabled":""}><button class="nud" data-n="out:0.1" ${slot&&slot.fixed?"disabled":""}>+</button>
+        <button class="btn" data-trim>Save trim</button></div>
+      ${slot&&slot.fixed?`<p class="note">The edit line holds this slot at ${slot.duration.toFixed(2)}s on the clock: moving the in moves the out with it.</p>`:""}` : ""}
+      ${regen}
+    </div>
+    <div>
+      <div class="tabs">${bands.map(([k,n])=>`<button class="tab" data-tab="${k}" aria-selected="${k===t}">${n} · ${(opts[k]||[]).length}</button>`).join("")}</div>
+      <div class="row">${list.length ? list.map(o => altCard(sc,o,cur)).join("") : '<div class="empty">Nothing here for this scene.</div>'}</div>
+      ${opts.blank ? `<p class="note">Library blank: ${esc(Object.entries(opts.blank).filter(([k])=>k!=="action_words").map(([k,v])=>`${k} ${v}`).join(" · ") || "any beat")}</p>` : ""}
+    </div></section>`;
+}
+
+function wire(sc){
+  const el = document.getElementById(`sc-${sc.id}`); if (!el) return;
+  el.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { tabs[sc.id] = b.dataset.tab; rerender(sc); });
+  const all = () => Object.values(S.options[sc.id]||{}).filter(Array.isArray).flat();
+  el.querySelectorAll("[data-look]").forEach(b => b.onclick = () => {
+    const o = all().find(x => x.id === b.dataset.look); looking[sc.id] = (S.current[sc.id]||{}).id === o.id ? null : o; rerender(sc);
+    const v = el.querySelector("video"); if (v && v.src) v.play().catch(()=>{});
+  });
+  el.querySelectorAll("[data-use]").forEach(b => b.onclick = async () => {
+    b.disabled = true; b.textContent = "Saving…";
+    try { const j = await post("swap", {scene: sc.id, id: b.dataset.use, why}); looking[sc.id] = null; toast(`${sc.id} swapped · ${j.saved}`); await load(); }
+    catch(e){ b.disabled = false; b.textContent = "Use"; }
+  });
+  el.querySelectorAll("[data-n]").forEach(b => b.onclick = () => {
+    const [k, d] = b.dataset.n.split(":"); const i = el.querySelector(`[data-${k}]`); i.value = (Number(i.value) + Number(d)).toFixed(2);
+    const v = el.querySelector("video"); if (v) { v.currentTime = Number(el.querySelector("[data-in]").value); }
+  });
+  const tb = el.querySelector("[data-trim]");
+  if (tb) tb.onclick = async () => {
+    const tin = Number(el.querySelector("[data-in]").value), tout = Number(el.querySelector("[data-out]").value);
+    try { const j = await post("trim", {scene: sc.id, in: tin, out: tout, why}); toast(`${sc.id} trimmed · ${j.saved}`); await load(); } catch(e){}
+  };
+  const v = el.querySelector("video[data-v]");
+  if (v) { const show = looking[sc.id] || S.current[sc.id];
+    v.addEventListener("timeupdate", () => { if (show && show.out != null && v.currentTime >= show.out) { v.pause(); v.currentTime = show.in || 0; } }); }
+  el.querySelectorAll("[data-regen]").forEach(b => b.onclick = () => askRegen(sc));
+}
+
+function rerender(sc){ const el = document.getElementById(`sc-${sc.id}`); el.outerHTML = sceneHTML(sc); wire(sc); }
+
+function askRegen(sc){
+  const p = S.prices[sc.id] || {};
+  $("#dt").textContent = `Regen ${sc.id}`; $("#dw").textContent = sc.shows;
+  $("#dp").textContent = `~$${(p.ai_usd||0).toFixed(2)}`; $("#dh").textContent = p.how || "";
+  const d = $("#dlg"); d.showModal();
+  $("#dno").onclick = () => d.close();
+  $("#dyes").onclick = async () => { d.close(); try { await post("regen", {scene: sc.id, why}); toast(`${sc.id}: asked the owner — nothing runs until he says yes`); await load(); } catch(e){} };
+}
+
+function chrome(){
+  $("#title").textContent = `${S.brief} · editing board`;
+  const bro = S.scenes.filter(s => s.role === "broll").length;
+  $("#sub").textContent = `${S.brand} · ${S.scenes.length} scenes, ${bro} cut from our footage · ` +
+    (S.sheet ? `cut sheet ${S.sheet.replace("cutsheet-","").replace(".json","")} (${S.kind}) · ${S.versions} version${S.versions===1?"":"s"}` : "no cut sheet yet — the first change lays the rough cut");
+  $("#gatesum").textContent = S.gate.length ? `Before a master: ${S.gate.length} to fix (the edit line's gate)` : "The gate is green — the edit line can render the master";
+  $("#gate").innerHTML = S.gate.slice(0, 40).map(r => `<li>${esc(r)}</li>`).join("");
+  const waiting = S.regen.filter(r => r.status && r.status.startsWith("waiting"));
+  $("#regenbox").hidden = !waiting.length;
+  $("#regens").innerHTML = waiting.map(r => `<li><b>${esc(r.scene)}</b> · ~$${Number(r.usd).toFixed(2)} · ${esc(r.path)} · ${esc(r.why)}</li>`).join("");
+  $("#log").innerHTML = S.changes.length ? S.changes.map(c => `<li><b>${esc((c.to||"").replace("cutsheet-","").replace(".json",""))}</b> · ${esc(c.asked)} · ${esc(c.why)}${c.was?` · was ${esc(c.was)}`:""}</li>`).join("") : '<li class="note">No changes yet.</li>';
+  const p = S.preview;
+  $("#pv").disabled = p && p.state === "rendering";
+  $("#pvnote").textContent = !p ? "" : p.state === "rendering" ? `Rendering v${p.version}…` : p.state === "failed" ? `Preview failed: ${p.error}` :
+    (S.sheet && S.sheet !== `cutsheet-v${p.version}.json`) ? `Preview is of v${p.version}; the cut is now ${S.sheet.replace("cutsheet-","").replace(".json","")} — preview again` : `Preview of v${p.version} ready`;
+  if (p && p.state === "ready") { $("#pvbox").hidden = false; const v = $("#pvvid"); if (!v.src.endsWith(p.file)) v.src = p.file;
+    $("#pvinfo").textContent = `Draft render of cut sheet v${p.version} through HyperFrames. A draft: the master comes from the edit line.`; }
+}
+
+async function load(){
+  const r = await fetch(`${BASE}/state.json`); S = await r.json();
+  if (S.error) { $("#scenes").innerHTML = `<p class="empty">${esc(S.error)}</p>`; return; }
+  chrome();
+  $("#scenes").innerHTML = S.scenes.map(sceneHTML).join("");
+  S.scenes.forEach(wire);
+  if (S.preview && S.preview.state === "rendering") setTimeout(poll, 3000);
+}
+async function poll(){
+  const r = await fetch(`${BASE}/state.json`); const j = await r.json(); S.preview = j.preview; chrome();
+  if (j.preview && j.preview.state === "rendering") setTimeout(poll, 3000);
+}
+$("#pv").onclick = async () => { try { const j = await post("preview", {}); S.preview = j; chrome(); setTimeout(poll, 3000); } catch(e){} };
+whyBar(); load();
+</script>
+</body></html>

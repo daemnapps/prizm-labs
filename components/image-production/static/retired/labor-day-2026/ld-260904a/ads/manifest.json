@@ -1,0 +1,45 @@
+{
+  "ad_name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a",
+  "batch": "260904a",
+  "brand": "Brand A",
+  "product": "flex",
+  "media": "static",
+  "source": "ai",
+  "talent": "none",
+  "avatar": "fedupking",
+  "problem": "razorbumps",
+  "angle": "transformnewman",
+  "concept": "labordaycountdown",
+  "format": "mixed",
+  "brief": "p001",
+  "ratio": "9x16",
+  "_upload": "5 assets, 5 ads. One picture is one Meta ad \u2014 the bulk sheet carries one image per row. They share the concept 'Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a', which is the ad name minus its last field, and that is how they group in the report.",
+  "_join": "Meta's ad_name equals `ad_name`. Split on '-' for brand, product, media, source, talent, avatar, problem, angle, concept, format, brief, ratio, batch.",
+  "ads": [
+    {
+      "name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a01",
+      "ad_name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a",
+      "file": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a01.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a02",
+      "ad_name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a",
+      "file": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a02.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a03",
+      "ad_name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a",
+      "file": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a03.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a04",
+      "ad_name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a",
+      "file": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a04.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a05",
+      "ad_name": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a",
+      "file": "Brand A-flex-static-ai-none-fedupking-razorbumps-transformnewman-labordaycountdown-mixed-p001-9x16-260904a-a05.png"
+    }
+  ]
+}

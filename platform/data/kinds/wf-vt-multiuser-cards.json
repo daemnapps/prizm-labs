@@ -1,0 +1,12 @@
+{
+  "kind": "wf-vt-multiuser-cards",
+  "title": "vt-multiuser — teardown machine for more than one person",
+  "note": "Carded by the lead 2026-08-27 from the the developer-approved multi-user plan (owner-of-record escalation, decision log 2026-08-27). VT-1/VT-2 dispatch in parallel; VT-4 after VT-1 merges; VT-3 is lead-executed (.claude/ is maker-forbidden).",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/vt-multiuser/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

@@ -20,15 +20,15 @@ contradict each other. One of them files `Angle` as a format.
 | Page | page format | 10 | `components/naming/classify_pages.py` | **kind** |
 | Page | section block | 82 | the funnel's repo, `_includes/landing/` | **section** |
 | Organic video | organic format | 50 | `components/swipe-organic/formats.json` | **structure** |
-| Image ad | build template | 5 | `tools/image-production/static/templates/` | **template** |
+| Image ad | build template | 5 | `components/image-production/static/templates/` | **template** |
 | Email | design format (FMT-01..) | 9 | `brands/<brand>/email/design-formats/components.json` | **template** |
 | Email | module | 4 | same file | **section** |
 | Email | layout, observed | 239 | `…/layouts.json` | **evidence** |
 | Email | Figma template | 87 | `…/figma-templates.json` | **evidence** |
-| Ad copy | copy surface | 16 | `lab/owner/copy/bank/format-bank.json` | **slot** |
-| Ad copy | copy style | 4 | `lab/owner/copy/bank/formats.json` | **style** |
+| Ad copy | copy surface | 16 | `lab/the owner/copy/bank/format-bank.json` | **slot** |
+| Ad copy | copy style | 4 | `lab/the owner/copy/bank/formats.json` | **style** |
 | Paid swipe page | block | 2,626 / 4 brands | `components/swipe-paid/<brand>/blocks.json` | **evidence** |
-| Email | email type | 47 <brand> · 46 <brand> | `brands/<brand>/email/email-types.json` | **kind** |
+| Email | email type | 47 Brand A · 46 Brand B | `brands/<brand>/email/email-types.json` | **kind** |
 | Offer | offer | 6 | `brands/<brand>/offers/offers.json` | **kind** |
 | Offer | guarantee | 2 | `brands/<brand>/offers/guarantees.json` | **kind** |
 | Swipe capture | channel tag | 6 | `components/naming/classify_pages.py` | **kind** |
@@ -41,11 +41,11 @@ contradict each other. One of them files `Angle` as a format.
 | Email | modifier | 3 | same file | **style** |
 | Email | arc | 3 | same file | **structure** |
 | Email | family, observed | per send | `…/design-formats/census.json` | **evidence** |
-| Video production | format profile | 4 | `tools/video-production/formats/` | **template** |
+| Video production | format profile | 4 | `components/video-production/formats/` | **template** |
 | Ad | media | 3 | `components/naming/names.py` MEDIA | **kind** |
 | Ad | source | 4 | same file, SOURCE | **kind** |
-| Ad copy | channel | 4 | `lab/owner/copy/bank/channel-map.json` | **kind** |
-| Image teardown | template | 1 | `tools/image-teardown/templates/` | **template** |
+| Ad copy | channel | 4 | `lab/the owner/copy/bank/channel-map.json` | **kind** |
+| Image teardown | template | 1 | `components/image-teardown/templates/` | **template** |
 
 **Found by the critics, 2026-09-11, after the first count said eleven.** Six of
 these seven were missed because they do not have the word "format" anywhere
@@ -116,7 +116,7 @@ them are a shared *text mechanic* — a way to browse, never a merge list.
    same word, same folder. Neither says which one a tool should read.
 2. **`Angle` is filed as a copy format** in `format-bank.json`. An angle is a
    claim (see CLAUDE.md, "Four things"); it is not a format, and having it in
-   there is the same category error the <brand> angle bank made in reverse.
+   there is the same category error the Brand A angle bank made in reverse.
 3. **Brand scoping is inconsistent.** Email formats are per brand; organic
    formats and image templates are brand-agnostic; page formats are in a
    component. Nothing states which of these *should* be per brand.
@@ -137,7 +137,7 @@ format:<brand>:<asset>:<id>          a per-brand bank
 ```
 
 **The brand segment is not optional decoration.** Without it `format:email:FMT-04`
-does not say whose FMT-04, and <brand> and <brand> both have one. A bank is
+does not say whose FMT-04, and Brand A and Brand B both have one. A bank is
 per-brand exactly when its header carries `brand`; its address carries the same
 segment, in the same position the swipe grammar puts it.
 

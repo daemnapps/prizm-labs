@@ -48,5 +48,40 @@ class Merge(unittest.TestCase):
         self.assertEqual(L.norm("你看看"), ["你", "看", "看"])
 
 
+
+# The swipe-hook case (2026-11-15): a woman's sniffs, "Ew." and "Mm." over loud music before the narrator.
+# The words model heard only the narrator; Scribe heard her. Her words must reach the transcript and her
+# sounds the vocal-sounds list.
+HOOK_SCRIBE = [w("[sniffs]", 0.0, 2.9, "s1", "audio_event"), w("Ew.", 3.06, 3.3, "s1"),
+               w("[sniffs]", 3.3, 8.9, "s1", "audio_event"), w("Mm.", 9.12, 9.36, "s1"),
+               w("[sighs]", 14.02, 15.0, "s1", "audio_event"),
+               w("It's", 15.14, 15.3, "s0"), w("the", 15.3, 15.4, "s0"), w("same", 15.4, 15.7, "s0"), w("scent", 15.7, 16.1, "s0")]
+HOOK_GEM = [{"speaker": "Speaker 1", "start": 15.0, "end": 16.5, "text": "It's the same scent", "language": "en"}]
+
+
+class HookUnderMusic(unittest.TestCase):
+    def setUp(self):
+        self.out = L.merge(HOOK_GEM, HOOK_SCRIBE, "eng", 17.0)
+
+    def test_words_only_scribe_heard_are_kept_and_flagged(self):
+        texts = [l["text"] for l in self.out]
+        self.assertEqual(texts, ["Ew.", "Mm.", "It's the same scent"])
+        self.assertIn("scribe-only", self.out[0]["flags"])
+        self.assertNotIn("scribe-only", self.out[2]["flags"])
+
+    def test_numbered_in_time_order(self):
+        self.assertEqual([l["id"] for l in self.out], ["T1", "T2", "T3"])
+        self.assertAlmostEqual(self.out[0]["start"], 3.06)
+
+    def test_her_voice_is_not_the_narrator(self):
+        self.assertNotEqual(self.out[0]["speaker"], self.out[2]["speaker"])
+
+    def test_every_vocal_sound_timed(self):
+        v = L.vocal_sounds(HOOK_SCRIBE)
+        self.assertEqual([(x["at"], x["sound"]) for x in v], [(0.0, "sniffs"), (3.3, "sniffs"), (14.02, "sighs")])
+
+    def test_nothing_added_when_the_words_model_heard_it(self):
+        self.assertEqual(len(L.merge(GEM, SCRIBE, "eng", 11.0)), 3)
+
 if __name__ == "__main__":
     unittest.main()

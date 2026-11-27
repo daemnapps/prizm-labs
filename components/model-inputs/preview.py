@@ -3,12 +3,12 @@
 cost quoted for free. It generates nothing, spends nothing, and sends nothing.
 
     import preview
-    r = preview.preview("pictures.generate", {"brand": "brand-b", "run": "brand-b-batch-grandma-church-after-fight",
+    r = preview.preview("pictures.generate", {"brand": "brand_b", "run": "brand_b-batch-grandma-church-after-fight",
                                               "product": "brilliance-face-scrub"})
     r["prompt"]; r["inputs"]; r["settings"]; r["findings"]; r["cost"]; r["ladder"]; r["ok"]
 
     python3 preview.py pictures.generate brief.json          # brief.json, or a JSON string; --json prints the whole answer
-    python3 preview.py clips.seedance '{"run": "brand-b/yai-sun-spots-back", "call": "G01-C1-1"}'
+    python3 preview.py clips.seedance '{"run": "brand_b/yai-sun-spots-back", "call": "G01-C1-1"}'
     python3 preview.py --fields pictures.generate            # which fields a brief for this job takes
 
 THE GATE: the command exits 1 when the rulebook finds an error (and 2 when the builder cannot assemble the job), so a
@@ -57,12 +57,12 @@ LADDER = {
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
     2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
-    tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
+    components/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name
     hits = ([root / str(brand).lower() / run] if brand else []) + sorted(root.glob(f"*/{run}"))
     work = [d for d in hits if (d / "out").is_dir() or (d / "vars").is_dir()]
-    old = Path(repo) / "tools" / "image-teardown" / "runs" / run
+    old = Path(repo) / "components" / "image-teardown" / "runs" / run
     if work:
         return work[0]
     if old.is_dir():
@@ -129,20 +129,39 @@ PICTURE_FIELDS = {
 }
 
 
-COPY_ROW = re.compile(r"^(\|\s*(?:Zone\b|[A-Z]\b)[^|]*\|[^|]*\|[^|]*\|)([^|]*)(\|\s*)$", re.M)  # "Zone A" or "A — top offer note"
+COPY_ROW = re.compile(r"^(\|\s*\**(?:Zone\b|[A-Z]\b)[^|]*\|[^|]*\|[^|]*\|)([^|]*)(\|\s*)$", re.M)  # "Zone A" or "A — top offer note"
+
+
+def _is_note(v):
+    """A cell that is a note to the maker, not words for the picture: "unchanged (red circle)" or a "[SLOT: ...]" placeholder."""
+    s = (v or "").strip().strip('"').lower()
+    return s.startswith("unchanged") or s.startswith("[slot") or s.startswith("slot:") or "— unchanged" in s or "- unchanged" in s
 
 
 def _our_copy(words):
-    """The 'Our copy' cell of each zone row in the brand step's words table: [(zone, text)]."""
-    return [(m.group(1).split("|")[1].strip(), m.group(2).strip()) for m in COPY_ROW.finditer(words or "")
-            if not m.group(1).split("|")[1].strip().lower() == "zone"]
+    """The 'Our copy' cell of each zone row in the brand step's words table: [(zone, text)]. Notes to the maker are not words,
+    except "unchanged": the picture is made with no words in it (a 3D print, or a plate made word-free), so a zone that
+    keeps the swipe's words takes them from its 'Source copy' cell (2026-11-10: the 1-4 panel numbers went missing)."""
+    out = []
+    for m in COPY_ROW.finditer(words or ""):
+        cells = m.group(1).split("|")
+        zone, ours = cells[1].strip(), m.group(2).strip()
+        if zone.lower() == "zone":
+            continue
+        if not _is_note(ours):
+            out.append((zone, ours))
+            continue
+        src = cells[3].strip().strip('"') if len(cells) > 3 else ""
+        if ours.strip('"').lower().startswith("unchanged") and src and src.lower() not in ("—", "-", "none", "n/a", "(none)"):
+            out.append((zone, src))
+    return out
 
 
 def _set_copy(words, new):
     it = iter(new)
 
     def sub(m):
-        if m.group(1).split("|")[1].strip().lower() == "zone":
+        if m.group(1).split("|")[1].strip().lower() == "zone" or _is_note(m.group(2)):
             return m.group(0)
         v = next(it, None)
         return m.group(0) if v is None else f"{m.group(1)} {v} {m.group(3)}"
@@ -341,7 +360,9 @@ def matrix_text(sw, kept_back=()):
         to = x["to"].rstrip(".")
         if to.split(" ", 1)[0] in LOWER_FIRST:                 # "becomes three raised spots", but "becomes Grandma Yai"
             to = to[:1].lower() + to[1:]
-        if x["kind"] == "library" and x.get("own_light"):       # the room printed from 3D brings its own light (2026-10-28)
+        if (sw or {}).get("style_lock"):                        # an animated film: redrawn in its style, no photo lines
+            pass
+        elif x["kind"] == "library" and x.get("own_light"):       # the room printed from 3D brings its own light (2026-10-28)
             to = to + ", in IMAGE 1's grain and phone-photo quality"
         elif x["kind"] == "library" and any(y.get("own_light") for y in (sw or {}).get("swaps") or []):
             to = to + ", lit by the room picture's own light, in IMAGE 1's grain and phone-photo quality"
@@ -597,20 +618,32 @@ def type_layer(run, brief, words):
         # field, would otherwise push every later line one place down (2026-10-28: the price landed in no zone)
         by = {}
         for z, c in rows:
-            m = re.match(r"(?i)(?:zone\s+)?([a-z])\b", z)
+            m = re.match(r"(?i)\**\s*(?:zone\s+)?([a-z])\b", z)     # a bold zone cell is the same zone (2026-11-02: it left the swipe's words on)
             if m:
                 by[m.group(1).lower()] = c
         els = layer.get("elements") or []
-        keyed = [re.match(r"(?i)zone_([a-z])$", str(el.get("element") or "")) for el in els]
+        # a zone split in two (zone_b_left, zone_b_right) takes its own letter; with no row of ours it keeps the swipe's words,
+        # or every later line slides one place up and the swipe's prices stay in (2026-11-02, Before/After unchanged)
+        keyed = [re.match(r"(?i)zone_([a-z])(_\w+)?$", str(el.get("element") or "")) for el in els]
         # a zone a person emptied has no row left: it stays empty in its own place, never pulling the next words up into
         # it (2026-10-28: emptying the top line put SALE at the very top, outside the safe zone)
-        pairs = ([(el, by.get(k.group(1).lower(), "")) for el, k in zip(els, keyed)]
+        pairs = ([(el, by.get(k.group(1).lower(), el.get("text") if k.group(2) else "")) for el, k in zip(els, keyed)]
                  if by and all(keyed)
                  else list(zip(els, [c for _, c in rows])))
         bullets = _bulleted_zones(run)
         extra = []
         for el, txt in pairs:
+            old = len(str(el.get("text") or ""))
+            quoted = str(el.get("text") or "").lstrip()[:1] in ('"', "\u201c")
             el["text"] = set_words(txt)
+            if quoted and el["text"]:                        # the swipe's quote marks stay when ours are its quote (2026-11-02)
+                el["text"] = "\u201c" + el["text"] + "\u201d"
+            # our one-line label is longer than the swipe's: its zone grows with it, so the words keep the swipe's size
+            # instead of shrinking to a speck (2026-11-02: BEFORE became SPECIMEN A in a span measured for six letters)
+            if old and len(el["text"]) > old and el.get("align") == "left" and el.get("max_lines") == 1 and el.get("measure"):
+                left = float(el.get("left_pct") or 0)
+                el["right_pct"] = round(min(100 - left, left + (float(el.get("right_pct") or 100) - left) * len(el["text"]) / old), 2)
+                el["measure"] = max(int(el["measure"]), len(el["text"]))
             # the swipe's coloured pieces of a line ("$118 ", "-> ", "$39") are ITS words: ours replace them, or the
             # compositor sets the swipe's old price (2026-10-28, a Black Friday ad came out "$118 -> $39")
             el.pop("segments", None)
@@ -686,7 +719,8 @@ def type_layer(run, brief, words):
     for c in layer.get("composited") or []:
         # the swipe's torn white paper behind a line of words (2026-10-28: dropped, the words floated on the picture):
         # it follows the words it carries, so it stays with them when they move into the safe zone
-        if re.search(r"(?i)\bpaper\b", str(c.get("note") or "")):
+        # a torn strip that divides the picture carries no words: it is built into the set, never stamped (2026-11-02)
+        if re.search(r"(?i)\bpaper\b", str(c.get("note") or "")) and "divider" not in str(c.get("kind") or "").lower():
             # the words it carries: the block nearest below its top (the safe zone may have moved them up a little)
             under = [e for e in layer.get("elements") or [] if isinstance(e.get("top_pct"), (int, float))
                      and float(e["top_pct"]) >= float(c.get("top_pct") or 0) - 12]
@@ -741,7 +775,7 @@ def lessons(medium=None):
 
 
 def swipe_bars(src):
-    """(top %, bottom %) of the solid black bars the swipe was posted with, (0, 0) when it has none. the owner, 2026-10-27,
+    """(top %, bottom %) of the solid black bars the swipe was posted with, (0, 0) when it has none. owner, 2026-10-27,
     on a remake without them: "First and foremost, you're missing the black box at the top and bottom." """
     try:
         from PIL import Image, ImageStat
@@ -987,12 +1021,20 @@ def build_picture(brief, job="pictures.generate"):
                            f"and each other, {ps} shadow falling where the light sends it. Real depth: the camera focused on {ob}, the "
                            f"room behind {ob} softly out of focus the way a phone lens blurs it, light falling off toward the back. "
                            f"Never a cut-out, never pasted in, never sharper or brighter than the photograph {sj} {stands} in.")
-    if locals().get("real_people"):
+    style_lock = str((locals().get("sw0") or {}).get("style_lock") or "")
+    if style_lock:
+        # AN ANIMATED FILM (2026-10-31): the film's style replaces every realism and photo-quality line
+        rules_lines.append("THE FRAME: the picture fills the whole tall 9:16 frame edge to edge. No black bars, borders or letterbox, whatever IMAGE 1 shows.")
+        rules_lines.append("THE STYLE OF THE WHOLE PICTURE, people, room and props alike: " + style_lock + ". IMAGE 1 is a soft grey pose guide: it gives camera, framing and pose ONLY, and nothing in it is clothing, skin or an object to copy. "
+                           "Every photo sent is for layout ONLY: the room, walls, floor, shelves, towels, fixtures, clothes, skin and hands are "
+                           "all redrawn as one animated film frame, simplified forms, stylised materials, clean render. No photographic texture "
+                           "anywhere. If any part could pass for a photograph, it is wrong.")
+    if locals().get("real_people") and not style_lock:
         # REAL HUMANS (2026-10-28)
         rules_lines.append("THE PEOPLE ARE REAL PEOPLE, photographed: unretouched human skin with pores, peach fuzz, fine lines, "
                            "creases with shadow in them and a natural sheen; real eyes with feeling in them, wet lid lines, individual "
                            "lashes and catchlights; stray hairs. Never smoothed, waxy, airbrushed, plastic or AI-glossy.")
-    if with_ref:
+    if with_ref and not style_lock:
         # the swipe's photo quality, never a cleaner one (2026-10-27)
         rules_lines.append("THE PHOTO QUALITY is IMAGE 1's exactly: its grain, softness, filter, colour cast and compression. "
                            "Never sharper, cleaner, glossier or more polished than IMAGE 1.")
@@ -1015,6 +1057,8 @@ def build_picture(brief, job="pictures.generate"):
         if not in_frame:
             slug = None
     people = brief.get("people") or ("cast" if people_lines else None)
+    if people in ("none", "no", False):                      # no person in the picture (GATE-4: anything else needs a print)
+        people = False
     product_refs, views, got = None, [], None
     if slug:
         got = plain.product(brand, slug)
@@ -1023,7 +1067,7 @@ def build_picture(brief, job="pictures.generate"):
             views = [(i, p, w) for i, (p, w) in enumerate(prefs)]
             if sw is not None and brief.get("show_product") is None:
                 # IN USE (in a hand, on skin): the kit's in-use pictures, its back and a real hand holding it, the
-                # recipe of the carousels the owner approved on 2026-10-25 ("1000000x better than any ... implementation we
+                # recipe of the carousels owner approved on 2026-10-25 ("1000000x better than any ... implementation we
                 # had in the past"); the front photos say "never on skin" and go in only when it is shown on its own.
                 # The side filter below dropped the back and the hold photo from every in-use board picture
                 # (2026-10-27)
@@ -1157,7 +1201,8 @@ def build_clip(brief, job="clips.seedance"):
     scenes = [{**sc, "hands_off": ho[sc.get("id")]} if sc.get("id") in ho and not sc.get("hands_off") else sc for sc in scenes]
     # the person's edits, applied to the scene before the chain's own planner reads it
     sid = brief.get("scene_id")
-    first = next((c for c in cr.plan(run, sb, scenes, style=cr.style_line(run, doc))["calls"]
+    cfg = cr.route_cfg(None, cr.format_of(run, doc))
+    first = next((c for c in cr.plan(run, sb, scenes, cfg=cfg, style=cr.style_line(run, doc))["calls"]
                   if brief.get("call") in (None, c["id"])), None)
     if first is None:
         raise ValueError(f"no call {brief.get('call')!r} in {run.name}")
@@ -1168,11 +1213,15 @@ def build_clip(brief, job="clips.seedance"):
         if brief.get("scene") is not None:
             sc["happens"] = brief["scene"]
             sc["beats"] = []
+            if sc.get("clip_direction"):                       # a clip's own direction follows the person's edit
+                sc["clip_direction"] = brief["scene"]
         shots = sc.get("shots") or []
-        if shots and any(brief.get(k) is not None for k in ("face", "gestures", "camera_move")):
+        if any(brief.get(k) is not None for k in ("face", "gestures", "camera_move")):
+            shots = shots or [{}]                          # an older plan has no shots: a person's words start the first one
             shots[0] = {**shots[0], **{k: brief[k] for k in ("face", "gestures", "camera_move") if brief.get(k) is not None}}
+            sc["shots"] = shots
     style = brief["style"] if brief.get("style") is not None else cr.style_line(run, doc)
-    res = cr.plan(run, sb, scenes, style=style)
+    res = cr.plan(run, sb, scenes, cfg=cfg, style=style)
     call = dict(next(c for c in res["calls"] if c["id"] == first["id"]))
     if brief.get("movement_id") is not None:
         movement = cr._load("movement")
@@ -1195,7 +1244,6 @@ def build_clip(brief, job="clips.seedance"):
                 pass
     call["refs"] = [r for i, r in enumerate(call.get("refs") or []) if f"motion:{i}" not in skip]
     people, _ = cr.people_of(run)
-    cfg = cr.route_cfg(None, cr.format_of(run, doc))
     lead = ((sb.get("people_map") or {}).get("lead") or [None])[0]
     by_id = {x["id"]: x for x in scenes}
     sb_ = cr._load("scene_breakdown")
@@ -1204,9 +1252,9 @@ def build_clip(brief, job="clips.seedance"):
     call["camera_held"] = bool((br_.get("drift") or {}).get("held"))
     sp = cr._load("seedance_prompt")
     built_sp = sp.build(call, by_id, people, cfg["words"], style, lead)
-    prompt = built_sp["prompt"]
+    prompt = call.get("direction_prompt") or built_sp["prompt"]
     tone = clip_tone(brief)
-    if tone:                                                  # CSH-3 (changed dials said): one sentence in the look block
+    if tone and not call.get("direction_prompt"):             # CSH-3 (changed dials said): one sentence in the look block
         blocks = prompt.split("\n\n")
         blocks[1] = blocks[1].rstrip() + " " + tone
         prompt = "\n\n".join(blocks)
@@ -1246,10 +1294,12 @@ def build_clip(brief, job="clips.seedance"):
     level = call.get("spice_level") or 2
     real = cr.realism_rows(call.get("realism_format") or cr.REALISM_FORMAT.get(call.get("camera")), cr.CLIP_FAMILIES, call.get("realism"),
                            level=int(level))[:4]
-    return {"prompt": prompt, "inputs": inputs + voice + vids, "medium": "video", "choices": choices,
+    pics = [{"role": "reference: " + r["job"], "path": r["file"], "kind": "image", "on": True} for r in call.get("image_refs") or []]
+    return {"prompt": prompt, "inputs": inputs + pics + voice + vids, "medium": "video", "choices": choices,
             "settings": {"duration": call["duration"], "aspect": "9:16", "resolution": call["resolution"], "endpoint": call["endpoint"],
                          "audio": bool(call.get("talking")), "takes": call.get("takes")},
-            "fields": {"scene": sc0.get("happens") or "", "scene_id": sid, "face": cr._as_text(sh0.get("face")), "gestures": cr._as_text(sh0.get("gestures")),
+            "registry": cr.clip_model(cfg),
+            "fields": {"scene": sc0.get("happens") or call.get("direction") or "", "scene_id": sid, "face": cr._as_text(sh0.get("face")), "gestures": cr._as_text(sh0.get("gestures")),
                        "camera_move": sh0.get("camera_move") or "", "camera": cr.camera_move_of(sc0) or call.get("camera") or "still",
                        "style": style, "call": call["id"], "spice": level, "who": cr.desc(who, people) if who in people else "",
                        "who_id": who, "marks": str(pinfo.get("marks") or "").strip(), "own_gestures": str(pinfo.get("gestures") or "").strip(),
@@ -1708,6 +1758,9 @@ def fill_defaults(recipe, built=None):
         tt += "".join(f"\n- {k}: {v}" for k, v in (house.get("levels") or {}).items())
     emo_line = pic_label(t, "THE EMOTION")
     emos = list(b.get("emotions") or []) or [e["id"] for e in c["emotions"] if re.search(r"\b" + re.escape(e["name"]) + r"\b", emo_line, re.I)]
+    if not emos and (run / "out" / "swaps.json").is_file():     # a brand step with no EMOTION line: the swaps' feeling
+        fe = str((json.loads((run / "out" / "swaps.json").read_text()).get("feeling") or {}).get("emotion") or "")
+        emos = [e["id"] for e in c["emotions"] if e["id"] in fe.lower() or e["name"].lower() in fe.lower()]
     # a brand step written before it named THE EMOTION takes the swipe's own read of it (out/controls-swipe.json), the
     # way the dials do (2026-10-27)
     sread = {}
@@ -1879,6 +1932,34 @@ REALISM = ("Change ONE thing in IMAGE 1: the skin of the person, on the face, ne
            "product and its label, the hands' position, the room, the light direction and shadows, the framing, colours and focus.")
 
 
+REALISM_SKIN = ("Change ONE thing in IMAGE 1: the skin, wherever skin shows. Make it real human skin: individual pores, fine hairs "
+                "catching the light, uneven tone, every mark, bump and spot exactly where IMAGE 1 has it, a natural matte finish "
+                "with only a faint sheen where skin really shines. Remove every trace of gloss, plastic, wax, airbrush or smoothing. "
+                "Keep EVERYTHING else exactly as IMAGE 1: the face, the expression, the framing, the product, the light, colours and focus.")
+
+SKIN_SHOWN = re.compile(r"(?i)\b(?:skin|face|faces|cheek|cheeks|neck|jaw|jawline|forehead|chin|scalp|pores?|acne|pimples?|"
+                        r"bumps?|spots?|marks?|breakouts?|stubble|beard|man|men|guy|person|people|customer)\b")
+
+
+def skin_refs(text):
+    """The skin bank's real texture for this picture (image-production skin_bank: a customer crop + a macro shot)."""
+    import sys as _s
+    ip = str(REPO / "components" / "image-production")
+    if ip not in _s.path:
+        _s.path.append(ip)
+    from image_production import skin_bank
+    cond = " ".join(w for w in ("acne", "razor bumps", "ingrown", "dark marks", "spots", "pores", "oily")
+                    if re.search(r"(?i)\b" + w.split()[0], text))
+    rows = skin_bank.pick(cond or "clear")
+    files = [str(p) for p in skin_bank.files(rows)]
+
+    def words(first):
+        n = list(range(first, first + len(files)))
+        return (" " + " and ".join(f"IMAGE {i}" for i in n) + " are real skin photographed up close: take the skin's texture "
+                "from them, never their face or the photo itself.") if files else ""
+    return {"files": files, "rows": [r["file"] for r in rows], "words": words}
+
+
 def lens_pass(img, lens):
     from PIL import Image, ImageFilter, ImageChops
     import io
@@ -1898,17 +1979,25 @@ def finish_people(out, brand, brief, recipe):
         except (OSError, ValueError, KeyError):
             sw = {}
     cast = [x for x in sw.get("swaps") or [] if x.get("kind") == "cast" and x.get("ref")]
-    if not cast or brief.get("finish") is False or sw.get("words") == "set_on_top":
+    # every picture that shows skin gets the pass, cast or not, with the skin bank's real texture (owner, 2026-11-26:
+    # "these people and skin textures look very plasticky"; the acne and dark-spot close-ups had no cast row and got none)
+    text = json.dumps(sw, ensure_ascii=False)
+    skin = bool(cast) or bool(SKIN_SHOWN.search(text))
+    if not skin or brief.get("finish") is False or sw.get("words") == "set_on_top" or sw.get("style_lock"):
         return {}
+    bank = skin_refs(text)
     from PIL import Image
     out = Path(out)
     made = out.with_name(out.stem + "-made.png"); made.write_bytes(out.read_bytes())
     real = out.with_name(out.stem + "-real.png")
     done = {"made": str(made)}
     try:
-        _load("video-production/machine/direct_openai.py").generate(REALISM, [made, cast_photo(brand, cast[0]["ref"])], real)
-        done["real"] = str(real)
-    except Exception as e:                                   # noqa: BLE001  the made picture stands; the miss is recorded
+        # L-40's realism pass runs on the picture made from the run's kept 3D set print, named so GATE-4 can check it
+        refs = [made] + ([cast_photo(brand, cast[0]["ref"])] if cast else []) + [p for p in bank["files"]]
+        words = (REALISM if cast else REALISM_SKIN) + bank["words"](2 + (1 if cast else 0))
+        _load("video-production/machine/direct_openai.py").generate(words, refs, real, from_print=set_print(brand, brief.get("run")))
+        done["real"] = str(real); done["skin_refs"] = bank["rows"]
+    except (Exception, SystemExit) as e:                                   # noqa: BLE001  the made picture stands; the miss is recorded
         done["realism_failed"] = str(e)[:300]
         real = made
     lenses = json.loads((HERE / "lenses.json").read_text())
@@ -1972,6 +2061,14 @@ def _image_words():
     return words
 
 
+def _drive_twin(path):
+    """The same repo-relative path on the mounted Shared Assets drive, or None."""
+    for root in Path.home().glob("Library/CloudStorage/*/Shared drives/Shared Assets"):
+        if (root / Path(path).relative_to(REPO)).exists():
+            return root / Path(path).relative_to(REPO)
+    return None
+
+
 def set_print(brand, run):
     """The newest kept print of the run's picture set (runs/image-production/<brand>/sets/*/set.json naming the run), or
     None. image-production `picture_sets.py` records them."""
@@ -1984,9 +2081,12 @@ def set_print(brand, run):
         except ValueError:
             continue
         if run in (d.get("runs") or []):
-            kept = [p for p in d.get("prints") or [] if str(p.get("note", "")).startswith("kept") and (sj.parent / p["file"]).is_file()]
-            if kept:
-                return sj.parent / kept[-1]["file"]
+            # git carries set.json, never the picture: a print made on another machine is read from the same path on the Drive
+            twin = _drive_twin(sj.parent)
+            for home in [sj.parent] + ([twin] if twin else []):
+                kept = [p for p in d.get("prints") or [] if str(p.get("note", "")).startswith("kept") and (home / p["file"]).is_file()]
+                if kept:
+                    return home / kept[-1]["file"]
     return None
 
 
@@ -2023,8 +2123,18 @@ def make_picture(recipe, approved_by, out_dir=None):
         from PIL import Image
         Image.open(printed).convert("RGB").save(plate_f)
         shutil.copy(plate_f, raw)
+        try:   # the plate is the kept print re-saved: it carries the print's record (GATE-5, 2026-11-24)
+            sys.path.append(str(REPO / "components" / "image-production"))
+            from image_production import provenance as _PV
+            _ps = _PV.sha256(printed)
+            if not _PV.known(printed, _ps):
+                _PV.set_print(printed, brand=s["brand"], set_name=Path(printed).parent.name)
+            for _f in (plate_f, raw):
+                _PV.derive(_f, _ps, "set-print-plate")
+        except Exception:  # noqa: BLE001 — the record never stops a picture
+            pass
         got = {"file": str(raw), "rung": "picture-set", "attempts": 0, "words_on_top": {"plate": str(plate_f)},
-               "below_criteria": [], "set_print": str(Path(printed).relative_to(REPO))}
+               "below_criteria": [], "set_print": Path(printed).parent.name + "/" + Path(printed).name}
     else:
         got = plain.generate(s, raw, recipe={k: v for k, v in r.items() if k != "needs"})
         # GEOMETRY FROM PIXELS, NEVER FROM WORDS (research/diffusion-fundamentals.md rule 1; 2026-10-28): a picture with the product in it and no printed 3D set took its sizes, depth and light
@@ -2041,7 +2151,9 @@ def make_picture(recipe, approved_by, out_dir=None):
         real = real_product(Path(plate), s["brand"], b)
         try:
             wd = _image_words()
-            wd.set_on_top(Path(plate), s["type_layer"], out=Path(got["file"]), plate=Path(plate))
+            done = wd.set_on_top(Path(plate), s["type_layer"], out=Path(got["file"]), plate=Path(plate))
+            if not done.get("ok"):                           # a returned failure, not a raised one (2026-11-02: a wordless ad looked fine)
+                raise ValueError("; ".join(done.get("notes") or ["the setter failed"]))
         except Exception as e:                               # noqa: BLE001  the made picture stands; the miss is a flag
             real["held"] = f"the words could not be set again over the real product: {str(e)[:160]}"
         plain.to_frame(got["file"], out)
@@ -2285,6 +2397,8 @@ def preview(job, brief, quote=True):
         recipe = {**recipe_of(brief), "kind": "clip"}
         brief = brief_of(recipe)
     built = builder_for(job)(brief)
+    own = built.pop("registry", None)
+    rid, vendor = (own, own) if own else (rid, vendor)
     if job == "clips.seedance":
         filled = fill_defaults_clip(recipe, dict(built))
     plain = built.pop("plain", None) or _image_chain()
@@ -2385,7 +2499,11 @@ def main(argv=None):
         if probs or not appr:
             print("REFUSED: " + (" ".join(p["say"] for p in probs) or "no cost approval in the recipe"), file=sys.stderr)
             return 1
-        print(json.dumps(make_picture(rec, appr), indent=1))
+        try:
+            print(json.dumps(make_picture(rec, appr), indent=1))
+        except ValueError as e:                            # a GATE-4 refusal (or any refusal) is a message, not a crash
+            print("REFUSED: " + str(e), file=sys.stderr)
+            return 1
         return 0
     if len(a) < 2:
         print(__doc__)

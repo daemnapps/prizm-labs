@@ -1,0 +1,60 @@
+{
+  "kind": "chat-usage",
+  "title": "Chat usage (per model call)",
+  "note": "ONE RECORD PER MODEL CALL made by /api/chat — the durable, per-person answer to \"what did this week cost, and who spent it\" (card FT-7, 2026-09-02, superseding the developer's earlier \"check the cost after she's done\" the same hour). Today the console shows one number for the WHOLE KEY and /api/health counts calls per instance for one hour; neither can be split by person, by view, or by model, and neither survives a restart. THE ITEM IS THE PERSON (declared identity — the same item-id-is-the-person convention bench-usage uses, this kind being the SECOND USE of usage-as-records). TOKENS ARE READ FROM THE PROVIDER RESPONSE'S `usage` FIELD AND NOWHERE ELSE — never estimated from the prompt, never reported by the client: a client-reported number is a number the client chose, and an estimate is a guess wearing a decimal point. FILING IS SERVER-SIDE, through the same `writeRecord` path FT-2 already injects, attributed to the caller — the browser never files its own bill. A FAILED FILING NEVER FAILS THE CHAT TURN: it is logged and the turn still answers, because a cost ledger that can break a conversation would be turned off within a week. NO MONEY IS STORED HERE. Records carry tokens; COST IS COMPUTED AT READ (tokens x price) by new-workflow-design/builds/feedback-twins/chat_cost.py against the pinned table platform/data/model-prices.json, so a price correction reprices history instead of leaving a frozen wrong dollar figure in every record. A model with no row in that table prints `unpriced` and never a number. ONE CALL, ONE RECORD — a tool-use loop answering a single user turn makes several billed calls and files several records; `turn` is what groups them back together. Append-only, never amended: a correction is a later record. THIS KIND GATES NOTHING and is nobody's performance record — it counts what was spent, and its consumers are the per-person cost question and, when spend warrants it, the CP-12 quota pattern. The item id `usage-index` is RESERVED and is never a person: it carries the cumulative roster of people who have filed usage, because the platform lists records only per known item id (same mechanism as the inbox's `filed-index`, the tasks kind's `task-index` and view-feedback's `view-index`).",
+  "open_items": true,
+  "serve_records": "history",
+  "_serve_records_note": "LATEST-PER-REVIEWER IS WRONG HERE, and wrong in the way that looks right: every one of a person's calls files under that same person's item id, so the default fold would serve their single most recent call and silently discard the week. These records are an append-only event history summed on read — the same reason tasks, inbox and view-feedback set it (records-API fix, 2026-09-01, BLOCKER-2026-08-31-records-api.md).",
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "_items_note": "Deliberately empty and open_items: true. The addressable items are PEOPLE, and the people registry is team/people/<name>/identity.json — a second committed list here would go stale the first time someone joins or leaves. Discovery of who has actually spent anything is the `usage-index` record's job.",
+  "verdict_fields": [
+    {
+      "key": "view",
+      "required_when": "always",
+      "note": "WHICH SURFACE spent the money — the view tool id the turn came from (`performance`, `inventory`), the PARENT view's id and not its `<view>-fb` twin, exactly as view-feedback files, so one view's cost and one view's feedback answer to the same name. This is the axis that says whether a twin is earning its build, which is the family's own kill-condition; without it the spend is one undifferentiated number again."
+    },
+    {
+      "key": "model",
+      "required_when": "always",
+      "note": "The model id the PROVIDER RESPONSE names, not the one the request asked for — an alias can resolve to a different snapshot, and the bill follows what actually ran. This string is the join key into platform/data/model-prices.json; a value with no row there is reported `unpriced` rather than priced at zero or guessed from a sibling model."
+    },
+    {
+      "key": "input_tokens",
+      "required_when": "always",
+      "note": "Verbatim from the response's `usage.input_tokens`. Plain (uncached) input only — the cached halves are their own fields below and must NOT be folded in here, because they bill at different rates."
+    },
+    {
+      "key": "output_tokens",
+      "required_when": "always",
+      "note": "Verbatim from the response's `usage.output_tokens`. The most expensive tokens per unit on every row of the price table, which is why output is never merged with input into one 'tokens' count."
+    },
+    {
+      "key": "cache_read_input_tokens",
+      "required_when": "always",
+      "note": "Verbatim from the response's `usage.cache_read_input_tokens`; 0 when nothing was read from cache. SEPARATE FIELD ON PURPOSE: cache reads are the cheap tokens, and a chat that re-sends a whole view's data slice every turn is mostly this. Summing them into `input_tokens` would overstate the bill, and overstating it invisibly is worse than not measuring."
+    },
+    {
+      "key": "cache_creation_input_tokens",
+      "required_when": "always",
+      "note": "Verbatim from the response's `usage.cache_creation_input_tokens`; 0 when nothing was written to cache. The other side of the cache trade — written once at a premium, read back cheaply — and the only way to tell a cache that is paying for itself from one that is being rebuilt every turn."
+    },
+    {
+      "key": "at",
+      "required_when": "always",
+      "note": "ISO-8601 Z, when the model call COMPLETED. Distinct from the record's own `created` stamp: the filing can lag, retry, or land in a later batch, and the window a cost question asks about (\"this week\") is a window of calls, not of writes. Every window filter reads this field."
+    },
+    {
+      "key": "turn",
+      "required_when": "always",
+      "note": "An opaque id, stable across every model call that answers ONE user turn. A tool-use loop bills three or four times for what the person experienced as one question, so per-call records without this cannot answer \"what does a turn cost\" — which is the number any quota would actually be set in. Never a running counter shared across people; unique per turn is the whole contract."
+    },
+    {
+      "key": "people",
+      "required_when": "item = usage-index",
+      "note": "person -> {first, last} for everyone who has filed usage; cumulative, folded as a union across the reserved item's history. Appears ONLY on the reserved `usage-index` item and never on a usage record. Same contract as the other index kinds: without it a reader coming through /api/reviews cannot enumerate the people who have records, because the platform lists records only per item id it already knows."
+    }
+  ],
+  "_no_money_note": "THERE IS NO COST FIELD, AND THAT IS THE DESIGN. Prices change and get corrected; a USD figure written into an append-only record is a wrong number that can never be fixed, only superseded by a second wrong number. Records carry the counts the provider billed; the price table carries the rates with their source and pull date; the reader multiplies. That also means a model the table does not know is honestly `unpriced` instead of quietly $0.00."
+}

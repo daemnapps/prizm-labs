@@ -41,6 +41,14 @@ items already on record, and what to do next.
 
 Add `--json` for the same answer as data.
 
+### In the ad's style
+
+    python3 components/casting/cast.py who --brand <brand> --role "barber" --style <style-id>
+    python3 components/casting/cast.py variant --brand <brand> --person <id> --style <style-id> [--dry-run]
+
+The ad's style is one setting (video-production `styles/style_chain.py`). A banked person in another style is a
+variant to make from their master, filed under their `styles/<style-id>/`, never a gap and never a new face.
+
 ### What could be the baseline?
 
     python3 components/casting/cast.py find --brand <brand> --like "barber, apron"
@@ -102,14 +110,14 @@ prompts exactly as they would be sent. Drop `--dry-run` to run it.
 
 | Part | Lifted from |
 |---|---|
-| the nine steps, the three prompts, the fal door, "a DIFFERENT person" | `lab/owner/avatar-builder/` (`README.md`, `build.py`, `find.py`) |
-| the registry shape, and "never invent a person for a role the bank covers" | `lab/owner/casting/` (`README.md`, `build_cast.py`) |
-| the footage search | `tools/image-production/image_production/assets.py` — **imported, not rewritten** |
-| the judge's eyes and its prompt | `tools/image-production/image_production/judge.py` — the questions here are this component's own |
-| the gates and the dry-run report | `tools/image-production/image_production/{gates,dryrun}.py`, `components/marketing-chain-checks` |
-| the path walking, the prompt versioning, the run path | `tools/image-production/image_production/paths.py`, `components/run-kit/run_kit/{prompts,filing}.py` |
+| the nine steps, the three prompts, the fal door, "a DIFFERENT person" | `lab/the owner/avatar-builder/` (`README.md`, `build.py`, `find.py`) |
+| the registry shape, and "never invent a person for a role the bank covers" | `lab/the owner/casting/` (`README.md`, `build_cast.py`) |
+| the footage search | `components/image-production/image_production/assets.py` — **imported, not rewritten** |
+| the judge's eyes and its prompt | `components/image-production/image_production/judge.py` — the questions here are this component's own |
+| the gates and the dry-run report | `components/image-production/image_production/{gates,dryrun}.py`, `components/marketing-chain-checks` |
+| the path walking, the prompt versioning, the run path | `components/image-production/image_production/paths.py`, `components/run-kit/run_kit/{prompts,filing}.py` |
 
-`lab/owner/avatar-builder` and `lab/owner/casting` are untouched and still
+`lab/the owner/avatar-builder` and `lab/the owner/casting` are untouched and still
 work exactly as before. They get retired later, side by side, once this is
 proven.
 

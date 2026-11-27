@@ -45,7 +45,7 @@ def _workspace_root(start=None):
     for d in p.parents:
         if (d / "brands").is_dir() and (d / "CLAUDE.md").is_file():
             return d
-    raise RuntimeError("not inside the workspace")
+    raise RuntimeError("not inside the ai-workspace")
 
 
 WS  = _repo(Path(__file__))
@@ -95,7 +95,7 @@ OLD_SLUG = re.compile(r"^[a-z0-9]+$")
 # The two brief spellings. p140 -> brief-0140, same number.
 BRIEF_OLD = re.compile(r"^p(\d{3})$")
 BRIEF_NEW = re.compile(r"^brief-(\d{4})$")
-# A brief numbered per brand AND product (the owner, 2026-10-01) is identified by
+# A brief numbered per brand AND product (owner, 2026-10-01) is identified by
 # all three: `acme_crush_brief-0004`. The register keys new briefs this way.
 BRIEF_KEY = re.compile(r"^([a-z0-9]+(?:-[a-z0-9]+)*)_([a-z0-9]+(?:-[a-z0-9]+)*)_(brief-(\d{4}))$")
 # The two batch spellings. 260902a -> batch-2026-09-02-a.
@@ -273,7 +273,7 @@ def signed_angles(brand):
     """The angles the brand has actually signed.
 
     `strategy/angles.json` is the one angle source, and its own rule is "no
-    receipt, no entry; only the owner signs an angle active". A naming scheme
+    receipt, no entry; only owner signs an angle active". A naming scheme
     that let anyone type a new angle into a filename would quietly create a
     second, unsigned vocabulary — and the reports would then be grouped on
     words nobody ruled."""
@@ -300,7 +300,7 @@ def check_angle(brand, angle):
         return f"no angle source for {brand} — angle '{angle}' is unverified"
     if not known:
         return (f"{brand} has no signed angles yet (strategy/angles.json is "
-                f"empty by design — only the owner signs one active), so "
+                f"empty by design — only owner signs one active), so "
                 f"'{angle}' is unverified")
     if slug(angle) not in known and slug(angle) != "unsigned":
         return (f"'{angle}' is not a signed angle for {brand}. Signed: "
@@ -557,7 +557,7 @@ def parse_any(s):
 
 
 # ---------------------------------------------------------------- short ---
-# The short form (the owner, 2026-09-29). The name says only what it takes to
+# The short form (owner, 2026-09-29). The name says only what it takes to
 # find the ad and read Ads Manager at a glance; everything else — media,
 # source, talent, avatar, problem, angle, concept, format, ratio — is in the
 # brief, looked up by its number (`brief_header`).
@@ -618,17 +618,19 @@ def parse_short(s):
 
 # ------------------------------------------------------- one product id ---
 # 2026-10-28: a product
-# has ONE name across the system — its full catalog id (`nova-face-brush`), the
+# has ONE name across the system — its full catalog id (`widget-face-brush`), the
 # name its kit folder (runs/ai-elements/<brand>/products/<id>/), its Drive
 # folder and the hand-offs already use; a bundle is its Drive id. The short
-# store handles (`nova`) are ALIASES: every lookup resolves through
-# product_id(), so a brief keyed `<brand>_nova_brief-0076` and one keyed
-# `<brand>_nova-face-brush_brief-0076` are the same brief. Nothing already made
+# store handles (`widget`) are ALIASES: every lookup resolves through
+# product_id(), so a brief keyed `<brand>_widget_brief-0076` and one keyed
+# `<brand>_widget-face-brush_brief-0076` are the same brief. Nothing already made
 # or live is renamed. Built from each kit's kit.json "aliases", the brand's
 # Drive index product ids (brands/ is READ here, never written) and the small
 # explicit table product-aliases.json beside this file. A name in none of them
 # passes through slugged and unchanged — never guessed.
 _PRODUCTS = None                  # SEAM: {(root, brand): {"ids": set, "alias": {name: id}}}; None = re-read
+
+
 
 
 def _product_table(brand, root=None):
@@ -640,7 +642,7 @@ def _product_table(brand, root=None):
     key = (str(root), b)
     if key in _PRODUCTS:
         return _PRODUCTS[key]
-    ids, seen = set(), {}
+    ids, seen, conflicts, cat_alias = set(), {}, [], {}
     kits = root / "runs" / "ai-elements" / b / "products"
     for kj in sorted(kits.glob("*/kit.json")) if b and kits.is_dir() else []:
         pid = slug(kj.parent.name)
@@ -669,14 +671,20 @@ def _product_table(brand, root=None):
         ids.add(slug(pid))
         seen.setdefault(slug(a), set()).add(slug(pid))
     # an alias two products claim names neither; a catalog id is never an alias of another
-    alias = {a: next(iter(p)) for a, p in seen.items() if len(p) == 1 and a not in ids}
-    _PRODUCTS[key] = {"ids": ids, "alias": alias}
+    alias = {a: next(iter(p)) for a, p in cat_alias.items() if len(p) == 1 and a not in ids}
+    for a, p in seen.items():
+        if a in cat_alias:                      # the catalog already names it: the catalog wins
+            if p != cat_alias[a]:
+                conflicts.append((a, sorted(p), sorted(cat_alias[a])))
+        elif len(p) == 1 and a not in ids:
+            alias[a] = next(iter(p))
+    _PRODUCTS[key] = {"ids": ids, "alias": alias, "conflicts": conflicts}
     return _PRODUCTS[key]
 
 
 def _product_token(brand, name):
-    """Any spelling of a product -> its bare slug: `acme/nova`, `product_acme_nova-face-brush`,
-    `bundle_acme_starter-set`, a card path `brands/<b>/products/nova.md` or `…/<slug>/product.md`, `NOVA`."""
+    """Any spelling of a product -> its bare slug: `acme/widget`, `product_acme_widget-face-brush`,
+    `bundle_acme_starter-set`, a card path `brands/<b>/products/widget.md` or `…/<slug>/product.md`, `WIDGET`."""
     t = str(name).strip()
     if "/" in t:
         p = Path(t)
@@ -690,7 +698,7 @@ def _product_token(brand, name):
 def product_id(brand, any_name, root=None):
     """The ONE product id — the catalog id — from any name the system uses for it.
 
-    `nova` -> `nova-face-brush`; `nova-face-brush` -> `nova-face-brush`; `the-starter-set` -> `starter-set`.
+    `widget` -> `widget-face-brush`; `widget-face-brush` -> `widget-face-brush`; `the-starter-set` -> `starter-set`.
     None, "" and "none" -> None. A name no kit, Drive index or alias table knows passes through slugged and
     unchanged (a test brand, a product not catalogued yet) — never guessed. `root` is the workspace (tests)."""
     if name_is_empty(any_name):
@@ -722,9 +730,26 @@ def product_ids(brand, root=None):
     return sorted(_product_table(brand, root)["ids"])
 
 
+def product_file(brand, any_name, root=None):
+    """The product's info file, from any of its names: `brands/<b>/products/<id>.md`, else
+    `brands/<b>/products/<id>/product.md`, where <id> is `product_id()`. None when neither exists.
+    One product name (2026-11-19): every reader builds this path here, never from a store handle."""
+    n = str(any_name or "").strip()
+    pid = product_id(brand, n[:-3] if n.endswith(".md") and "/" not in n else n, root)   # `flex.md` = `flex`
+    b = slug(brand or "")
+    if not pid or not b:
+        return None
+    base = (Path(root) if root else WS) / "brands"
+    for rest in ((f"{pid}.md",), (pid, "product.md")):
+        p = BP.brand_path(b, "products", *rest, root=base)
+        if p.is_file():
+            return p
+    return None
+
+
 def brief_key_forms(k):
     """Every spelling of one per-product brief key, the canonical (catalog id) one first:
-    `acme_nova_brief-0076` -> [`acme_nova-face-brush_brief-0076`, `acme_nova_brief-0076`].
+    `acme_widget_brief-0076` -> [`acme_widget-face-brush_brief-0076`, `acme_widget_brief-0076`].
     [] for anything that is not a per-product key. A register is looked up under each in turn."""
     q = BRIEF_KEY.match(str(k or "").strip().lower())
     if not q:
@@ -736,7 +761,7 @@ def brief_key_forms(k):
 
 
 def catalog_key(k):
-    """The catalog form of a per-product brief key, `acme_nova_brief-0076` -> `acme_nova-face-brush_brief-0076`;
+    """The catalog form of a per-product brief key, `acme_widget_brief-0076` -> `acme_widget-face-brush_brief-0076`;
     anything else (an old `p076`, a brief-NNNN) comes back as given. A NEW run, hand-off or delivery folder is named
     with it (2026-10-28: the catalog id wins, store handles are aliases); readers take every form (brief_key_forms)."""
     f = brief_key_forms(k)
@@ -744,7 +769,7 @@ def catalog_key(k):
 
 
 # ------------------------------------------------- per brand + product ---
-# the owner, 2026-10-01: "brief numbers count per brand AND product — each product
+# owner, 2026-10-01: "brief numbers count per brand AND product — each product
 # starts at 1 inside its brand." Older briefs keep the numbers they have (one
 # shared count until that day), so one brand can hold an old brief-0001 and a
 # CRUSH brief-0001. A brief is brand + product + number; the short name
@@ -771,13 +796,13 @@ def brief_key(brand, product, brief):
     """`<brand>_<product>_brief-NNNN` — how the register keys a brief numbered
     per brand+product. No product is written `none`, never left blank. The
     product is written as its catalog id (product_id, 2026-10-28): a store
-    handle handed in (`nova`) keys the brief `nova-face-brush`."""
+    handle handed in (`widget`) keys the brief `widget-face-brush`."""
     return SEP.join([slug(brand), product_id(brand, product) or "none", brief_id(brief)])
 
 
 def parse_brief_key(k, raw=False):
     """(brand, product, brief-NNNN) or None. The product comes back as its
-    catalog id, so `acme_nova_brief-0076` and `acme_nova-face-brush_brief-0076`
+    catalog id, so `acme_widget_brief-0076` and `acme_widget-face-brush_brief-0076`
     parse alike; `raw=True` gives the token as written in the key."""
     q = BRIEF_KEY.match(str(k or "").strip().lower())
     if not q:
@@ -815,6 +840,84 @@ def next_brief_number(rows, brand, product):
     return top + 1
 
 
+# ------------------------------------------------- the readable brief ID ---
+# 2026-11-11: one number named three briefs (two products of one brand, one of another) and the Studio, the Queue
+# and the approval page mixed them up. Every lookup matches the full key; every label people read is ONE format,
+# made here: "<Brand> · <Product> · NNNN" (e.g. "Acme · Body scrub · 0324"). Names and labels live in
+# brief-labels.json beside this file; its "on" (or BRIEF_IDS_OFF=1) is the rollback switch.
+# BRIEF_KEY at the start of a longer name at the start of a longer name (an ad name, a card folder, a URL value)
+BRIEF_KEY_IN = re.compile(r"^([a-z0-9]+(?:-[a-z0-9]+)*)_([a-z0-9]+(?:-[a-z0-9]+)*?)_(brief-(\d{4}))(?![0-9])")
+_LABELS = None
+
+
+def _brief_labels():
+    global _LABELS
+    if _LABELS is None:
+        try:
+            _LABELS = json.loads((Path(__file__).resolve().parent / "brief-labels.json").read_text())
+        except (OSError, ValueError):
+            _LABELS = {}
+    return _LABELS
+
+
+def brief_ids_on():
+    """True unless the rollback switch is thrown (brief-labels.json "on": false, or BRIEF_IDS_OFF=1)."""
+    import os
+    if str(os.environ.get("BRIEF_IDS_OFF") or "").strip().lower() in ("1", "true", "yes", "on"):
+        return False
+    return _brief_labels().get("on", True) is not False
+
+
+def brand_label(brand):
+    b = slug(brand or "")
+    return (_brief_labels().get("brands") or {}).get(b) or b.capitalize()
+
+
+def product_label(brand, product):
+    """A product's short name for people: brief-labels.json, else its catalog id in words."""
+    pid = product_id(brand, product) if not name_is_empty(product) else None
+    if not pid:
+        return ""
+    got = ((_brief_labels().get("products") or {}).get(slug(brand)) or {}).get(pid)
+    return got or pid.replace("-", " ").capitalize()
+
+
+def brief_label(k, brand=None, product=None):
+    """The one readable ID for a brief: `acme_body-scrub_brief-0324` -> "Acme · Body scrub · 0324".
+    Takes a full key, any name that starts with one (an ad name, a card folder), or brand + product + a number in any
+    spelling. A brief with no product reads "Acme · 0324". Switch off: "Brief 0324". "" when there is no number."""
+    t = str(k or "").strip().lower()
+    m = BRIEF_KEY_IN.search(t)
+    if m:
+        brand, product, num = m.group(1), m.group(2), int(m.group(4))
+    else:
+        num = brief_number(t)
+    if not num:
+        return ""
+    if not brief_ids_on():
+        return f"Brief {num:04d}"
+    parts = [brand_label(brand)] if brand else []
+    pl = product_label(brand, product) if brand and not name_is_empty(product) else ""
+    if pl:
+        parts.append(pl)
+    if not parts:
+        return f"Brief {num:04d}"     # no brand known: a number alone is never passed off as one brief
+    return " · ".join(parts + [f"{num:04d}"])
+
+
+def full_brief_key(name):
+    """The catalog full key a name starts with (`acme_body-scrub_brief-0324_batch-…` -> `acme_body-scrub_brief-0324`),
+    or None. Product spellings resolve to the catalog id."""
+    m = BRIEF_KEY_IN.search(str(name or "").strip().lower())
+    return catalog_key(m.group(0)) if m else None
+
+
+def same_brief(a, b):
+    """True when two names carry the same full brief key (brand + product + number). A number alone never matches."""
+    ka, kb = full_brief_key(a), full_brief_key(b)
+    return bool(ka) and ka == kb
+
+
 def brand_alias(brand, alias):
     """A brand's own code for a brief (`dxs01`) -> (product, brief-NNNN), or
     None. These live per brand in brief-aliases.json `brand_aliases`, not in
@@ -835,9 +938,9 @@ def brand_briefs(brand):
 
 def register_file():
     """The brief register every lane's `briefs.py open` writes to."""
-    return next((f for f in (WS / "tools" / "image-teardown" / "briefs.json",
+    return next((f for f in (WS / "components" / "image-teardown" / "briefs.json",
                              WS / "lab" / "owner" / "image-teardown" / "briefs.json") if f.is_file()),
-                WS / "tools" / "image-teardown" / "briefs.json")
+                WS / "components" / "image-teardown" / "briefs.json")
 
 
 def register_rows(brand=None, reg=None):
@@ -919,7 +1022,7 @@ def find_brief(brand, brief_or_alias, product=None, reg=None):
 def brief_header(brand, brief_or_alias, product=None):
     """A brief's naming header from brands/<brand>/briefs/briefs.json.
 
-    `product` picks between briefs that share a number (the owner, 2026-10-01:
+    `product` picks between briefs that share a number (owner, 2026-10-01:
     numbers count per brand and product). Callers that read the product off
     a short name pass it. Without one, a number two products share raises
     AmbiguousBrief instead of handing back the wrong brief's header."""
@@ -931,7 +1034,7 @@ def brief_header(brand, brief_or_alias, product=None):
     h = hit["header"]
     if not h.get("angle"):
         # brands/ is read-only to machines: an angle read off the brief by
-        # angle_pick.py is kept on the register entry (the owner, 2026-10-12)
+        # angle_pick.py is kept on the register entry (owner, 2026-10-12)
         got = _register_angle(hit.get("register"))
         if got:
             h = {**h, **got}
@@ -947,7 +1050,7 @@ def _register_angle(reg_rec):
 
 def brief_record(brand, brief_or_alias, product=None):
     """The ONE brief record every stage reads, or None: the register entry
-    (tools/image-teardown/briefs.json — machine-written facts, incl. the
+    (components/image-teardown/briefs.json — machine-written facts, incl. the
     angle angle_pick.py read off the brief) overlaid by the brands/<brand>/briefs
     header (a person's word wins). Adds `angle_from` = header | register.
     Raises AmbiguousBrief like find_brief. See ANGLE.md."""
@@ -968,7 +1071,7 @@ def brief_record(brand, brief_or_alias, product=None):
 def brief_angle(brand, brief_or_alias, product=None):
     """The brief's angle — {angle, angle_why, angle_from} — or None.
 
-    the owner, 2026-10-12: "The angle should be derived from the brief itself …
+    owner, 2026-10-12: "The angle should be derived from the brief itself …
     The angle should be in the notes of the brief." Set once, by angle_pick.py
     when the brief is registered; every stage reads it here (ANGLE.md)."""
     rec = brief_record(brand, brief_or_alias, product)

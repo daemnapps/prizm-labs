@@ -5,7 +5,7 @@ from pathlib import Path
 
 S = Path(__file__).parent
 T = S / "tree"
-RUNS = T / "runs/ad-variations/brand-b"
+RUNS = T / "runs/ad-variations/brand_b"
 OUT = S / "pages"; OUT.mkdir(exist_ok=True)
 
 SWAPS = [
@@ -80,18 +80,18 @@ def j(x):
 TPL = (S / "page_template.html").read_text()
 BTPL = S / "builder_template.html"
 
-V = "runs/video-teardown/brand-b/"; I = "runs/image-teardown/brand-b/"
+V = "runs/video-teardown/brand_b/"; I = "runs/image-teardown/brand_b/"
 CONCEPTS = [
- (V+"top1-brand-b-01-grandma-house-face","Grandma House","video · 1:05"),
- (V+"top1-brand-b-02-vsl-melanin-overproducti","Melanin VSL","video · 6:48"),
- (V+"top1-brand-b-05-short-video-today-years","Today-years","video · 0:49"),
- (V+"top1-brand-b-06-scrub-task-43-hook-3","Scrub task 43 · hook 3","video · 0:59"),
- (V+"top1-brand-b-10-scrub-task-5-hook-2","Scrub task 5 · hook 2","video · 1:12"),
- (V+"top1-brand-b-03-scrub-task-86-hook-5-wt","Scrub task 86 · hook 5","video · 2:34"),
- (V+"top1-brand-b-07-scrub-task-4-hook-1","Scrub task 4 · hook 1","video · 4:08"),
- (I+"brand-b-batch-top-static-mofu-showing-hands","MOFU showing hands","static"),
- (I+"brand-b-batch-top-static-grandma-static","Grandma static","static"),
- (I+"brand-b-batch-top-static-hands-photostrip-p140","Hands photostrip (p140)","static"),
+ (V+"top1-brand_b-01-grandma-house-face","Grandma House","video · 1:05"),
+ (V+"top1-brand_b-02-vsl-melanin-overproducti","Melanin VSL","video · 6:48"),
+ (V+"top1-brand_b-05-short-video-today-years","Today-years","video · 0:49"),
+ (V+"top1-brand_b-06-scrub-task-43-hook-3","Scrub task 43 · hook 3","video · 0:59"),
+ (V+"top1-brand_b-10-scrub-task-5-hook-2","Scrub task 5 · hook 2","video · 1:12"),
+ (V+"top1-brand_b-03-scrub-task-86-hook-5-wt","Scrub task 86 · hook 5","video · 2:34"),
+ (V+"top1-brand_b-07-scrub-task-4-hook-1","Scrub task 4 · hook 1","video · 4:08"),
+ (I+"brand_b-batch-top-static-mofu-showing-hands","MOFU showing hands","static"),
+ (I+"brand_b-batch-top-static-grandma-static","Grandma static","static"),
+ (I+"brand_b-batch-top-static-hands-photostrip-p140","Hands photostrip (p140)","static"),
 ]
 F = "components/swipe-organic/records/"
 FORMATS = [

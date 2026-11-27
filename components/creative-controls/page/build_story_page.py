@@ -50,16 +50,16 @@ PLAYBOOKS = COMP.parent / "video-production" / "formats" / "playbooks"
 # The one flow every ad runs, in order, on the tools that exist: (step, what it decides, the tool, who decides).
 FLOW = [
     ("Avatar + product", "Who it is for and what the product honestly does", "brand files · research round · culture map", ""),
-    ("The idea", "Door A: a swipe that already works. Door B: our own story, no swipe", "swipe pools + teardown · research bank (concept)", "the owner picks"),
-    ("Awareness", "Where the ad is allowed to begin", "marketing rulebook", "the owner picks"),
-    ("Arc", "The story's shape; each beat is a section", "Story Playbook", "the owner picks"),
+    ("The idea", "Door A: a swipe that already works. Door B: our own story, no swipe", "swipe pools + teardown · research bank (concept)", "owner picks"),
+    ("Awareness", "Where the ad is allowed to begin", "marketing rulebook", "owner picks"),
+    ("Arc", "The story's shape; each beat is a section", "Story Playbook", "owner picks"),
     ("Format + style", "What kind of ad and what it looks like", "format and style banks · format playbook", ""),
     ("Writing", "Hooks, script, audit, spice, the brief; dials, spice and culture read in", "video writing (door B: from scratch)", ""),
-    ("Brief review", "Is this the ad", "the board", "the owner OKs"),
-    ("Audio first", "The song or the voice, made from the brief", "video production", "the owner OKs"),
-    ("Cast, rooms, scene pictures", "Who is in it, the 3D sets, one picture per scene", "casting · the board", "the owner OKs each"),
-    ("Hand-off", "Clips, B-roll, effects, the cut", "hand-off folder", "the team"),
-    ("Launch", "Review, names, the approval card", "ad review · naming · Meta card", "the owner's click"),
+    ("Brief review", "Is this the ad", "the board", "owner OKs"),
+    ("Audio first", "The song or the voice, made from the brief", "video production", "owner OKs"),
+    ("Cast, rooms, scene pictures", "Who is in it, the 3D sets, one picture per scene", "casting · the board", "owner OKs each"),
+    ("Hand-off", "Clips, B-roll, effects, the cut", "hand-off folder", "creator"),
+    ("Launch", "Review, names, the approval card", "ad review · naming · Meta card", "owner's click"),
 ]
 
 
@@ -126,7 +126,7 @@ def mirror(c):
     secs = {x["id"]: x["name"] for x in doc["sections"]}
     out = ["# Story Playbook", "", "The flow every ad runs, and the story layer of the creative controls",
            "(`components/creative-controls/controls.json`); awareness and sections are the marketing rulebook's",
-           "(`components/marketing-doctrine/frameworks.json`). Page: see `tools/image-teardown/context/artifacts.md`.", "",
+           "(`components/marketing-doctrine/frameworks.json`). Page: see `components/image-teardown/context/artifacts.md`.", "",
            "## The flow", ""] + ["%d. **%s**: %s (%s)%s" % (i + 1, a, b, w, " — " + o if o else "") for i, (a, b, w, o) in enumerate(FLOW)]
     out += ["", "## Awareness → arcs", ""]
     for l in doc["awareness"]["levels"][::-1]:

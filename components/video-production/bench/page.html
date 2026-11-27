@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Bench</title>
+<style>
+:root{--bg:#f4f5f6;--card:#fff;--fg:#14191f;--mut:#5f6b76;--line:#d9dee3;--acc:#1f4fa8;--sunk:#eceff2;--old:#a8421f;--new:#13745b;--warn:#8a6a00;--warnbg:#f6ebc6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1419;--card:#171e26;--fg:#e7ecf0;--mut:#93a0ab;--line:#2a3440;--acc:#8db2f5;--sunk:#1d262f;--old:#f0976f;--new:#5fd0a8;--warn:#e8c55a;--warnbg:#352c0e;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header,main{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding-top:18px}h1{font-size:24px;margin:0}.sub{color:var(--mut);margin:2px 0 0}
+main{padding-block:12px 60px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;align-items:start}
+@media(max-width:860px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:0 0 8px}
+label{display:block;font-size:13px;color:var(--mut);margin:8px 0 3px}
+select,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--fg)}
+textarea{min-height:260px;resize:vertical;font:12.5px/1.5 ui-monospace,Menlo,monospace}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.strip{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.slot{width:120px}.slot .im{width:120px;height:210px;border:1px solid var(--line);border-radius:7px;background:var(--sunk) center/cover no-repeat}
+.slot b{display:inline-block;background:var(--acc);color:var(--bg);border-radius:999px;font-size:12px;padding:0 8px;margin-bottom:3px}
+.slot span{display:block;font-size:12px;color:var(--mut);line-height:1.3}
+.seg button{background:var(--sunk);color:var(--fg);font-weight:500;padding:7px 14px;border-radius:0}.seg button.on{background:var(--acc);color:var(--bg)}
+button{font:inherit;border:0;border-radius:8px;padding:11px 18px;background:var(--acc);color:var(--bg);cursor:pointer;font-weight:600}
+button:disabled{opacity:.5;cursor:default}
+.cost{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:14px}
+.cost label{display:flex;gap:8px;align-items:center;margin:6px 0 0;color:inherit;font-size:14px}
+.results{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;min-width:0}
+.res video{width:100%;aspect-ratio:9/16;background:#000;border-radius:6px;display:block}
+.res small{color:var(--mut);display:block;margin-top:4px;word-break:break-all}.res .old{color:var(--old)}.res .new{color:var(--new)}
+.err{color:#c0452f}.empty{color:var(--mut);font-size:13px}
+.pending{aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;background:var(--sunk);color:var(--mut);font-size:13px;text-align:center;border-radius:6px}
+</style></head><body>
+<header><h1>Video Bench</h1><p class="sub">Set up one clip the way Seedance receives it, read it, make it. The same picture and the same voice every time, so a test changes one thing.</p></header>
+<main>
+ <div>
+  <div class="card"><h2>1 · Case</h2>
+   <label for="case">A frozen clip: its picture and its voice read</label><select id="case"></select>
+   <p class="empty" id="line"></p>
+   <p class="empty" id="std"></p></div>
+  <div class="card"><h2>2 · What goes in</h2>
+   <div class="strip" id="inputs"></div>
+   <label><input type="checkbox" id="master"> Add the person&rsquo;s face picture as an extra image (a test: it may fight the first frame)</label>
+   <label for="addfile">Add an input: a picture or a video</label>
+   <div class="row"><input type="file" id="addfile" accept="image/*,video/mp4,video/quicktime"><select id="addrole"><option value="motion">Video: motion and camera only</option><option value="face">Picture: the face</option><option value="product">Picture: the real product</option><option value="set">Picture: the room</option><option value="style">Picture: the look</option></select><button id="addbtn" type="button">Add</button></div>
+   <div id="extras" class="empty"></div>
+   <p class="empty" id="limits"></p></div>
+  <div class="card"><h2>3 · The prompt</h2>
+   <div class="seg" style="display:flex;margin-bottom:8px"><button data-w="old">Old</button><button data-w="new" class="on">New</button><button data-w="custom">My edit</button></div>
+   <textarea id="prompt" spellcheck="false"></textarea></div>
+ </div>
+ <div>
+  <div class="card"><h2>4 · Size and cost</h2>
+   <div class="row"><div><label for="res">Size</label><select id="res"><option value="480p">480p (the ruled size, upscaled later)</option><option value="720p">720p (comparison only)</option></select></div>
+   <div><label>Length</label><div id="len" style="padding:8px 0">–</div></div></div>
+   <div class="cost" id="cost">–<label><input type="checkbox" id="ok"> I OK this cost</label></div>
+   <div class="row"><button id="make">Make this one clip</button><button id="board" title="Every standard case, old and new prompt">Make the standard board</button></div>
+   <p class="empty" id="msg"></p></div>
+  <div class="card"><h2>Clips made here</h2><div class="results" id="results"></div></div>
+ </div>
+</main>
+<script>
+let OPT=null,cur=null,which="new",edited="",EX=[];
+const $=id=>document.getElementById(id);
+const f=p=>"/file?path="+encodeURIComponent(p);
+async function post(u,b){const r=await fetch(u,{method:"POST",body:JSON.stringify(b)});return {ok:r.ok,j:await r.json()}}
+async function load(){OPT=await (await fetch("/api/options")).json();
+ $("case").innerHTML=OPT.cases.map((c,i)=>`<option value="${i}">${c.id} · ${c.seconds}s · ${c.case}${c.standard?" · standard":""}</option>`).join("");
+ pick();renderResults()}
+function pick(){cur=OPT.cases[+$("case").value];$("line").textContent="Line: “"+cur.line+"”";
+ const n=OPT.cases.filter(c=>c.standard).length;$("std").textContent=n+" standard cases; the board makes each with the old and the new prompt.";
+ setPrompt();preview()}
+function setPrompt(){$("prompt").value=which==="custom"?edited:cur.prompts[which];document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.w===which))}
+async function preview(){const r=await post("/api/preview",{id:cur.id,case:cur.case,prompt:$("prompt").value,resolution:$("res").value,master:$("master").checked,extras:EX});
+ if(!r.ok){$("msg").textContent=r.j.error;return}
+ const p=r.j;$("inputs").innerHTML=p.images.map(i=>`<div class="slot"><b>IMAGE ${i.n}</b><div class="im" style="background-image:url('${f(i.path)}')"></div><span>${i.role}</span></div>`).join("")+
+ `<div class="slot"><b>AUDIO ${p.audio.n}</b><audio controls src="${f(p.audio.path)}" style="width:150px"></audio><span>${p.audio.role}</span></div>`;
+ $("inputs").innerHTML+=(p.videos||[]).map(v=>`<div class="slot"><b>VIDEO ${v.n}</b><video src="${f(v.path)}" style="width:120px;height:210px;object-fit:cover;border-radius:7px" muted controls></video><span>${v.role}</span></div>`).join("");
+ $("limits").textContent="Limits: pictures "+p.limits.images+"; video "+p.limits.video+"; audio "+p.limits.audio+". A last frame cannot ride with a voice (the model refuses it).";
+ $("len").textContent=p.seconds+" s · 9:16";
+ $("cost").firstChild.textContent="This clip: about $"+p.usd.toFixed(2)+(p.estimate?" (estimate, "+p.resolution+" has not been priced yet)":" (measured)")+". The standard board: about $"+boardCost(p.resolution).toFixed(2)+". ";
+ $("msg").textContent=""}
+function boardCost(res){const r=OPT.resolutions[res];return OPT.cases.filter(c=>c.standard).reduce((a,c)=>a+2*c.seconds*r,0)}
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{if(which==="custom")edited=$("prompt").value;which=b.dataset.w;setPrompt();preview()});
+$("prompt").oninput=()=>{which="custom";edited=$("prompt").value;document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.w==="custom"))};
+$("case").onchange=pick;$("res").onchange=preview;$("master").onchange=preview;
+async function go(url,body){const r=await post(url,body);if(!r.ok){$("msg").textContent=r.j.error;return}
+ $("msg").textContent="Started. Clips appear below as they finish (about 4 minutes each, one at a time).";watch()}
+$("make").onclick=()=>go("/api/generate",{id:cur.id,case:cur.case,prompt:$("prompt").value,label:which,resolution:$("res").value,master:$("master").checked,ok:$("ok").checked});
+$("board").onclick=()=>go("/api/board",{resolution:$("res").value,ok:$("ok").checked});
+$("addbtn").onclick=()=>{const fl=$("addfile").files[0];if(!fl)return;const rd=new FileReader();rd.onload=()=>{
+ const isv=fl.type.startsWith("video");let role=$("addrole").value;if(isv)role="motion";else if(role==="motion")role="face";
+ EX.push({upload:rd.result,name:fl.name,role});$("addfile").value="";drawEx();preview()};rd.readAsDataURL(fl)};
+function drawEx(){$("extras").innerHTML=EX.map((x,i)=>`${x.name} · ${x.role} <a href="#" data-i="${i}">remove</a>`).join("<br>");
+ document.querySelectorAll("#extras a").forEach(a=>a.onclick=e=>{e.preventDefault();EX.splice(+a.dataset.i,1);drawEx();preview()})}
+let timer=null;
+async function watch(){clearInterval(timer);timer=setInterval(async()=>{const j=await (await fetch("/api/jobs")).json();
+ const live=Object.values(j).filter(x=>x.state==="waiting"||x.state==="running");const bad=Object.values(j).filter(x=>x.state==="failed").slice(-1)[0];
+ OPT.results=(await (await fetch("/api/options")).json()).results;renderResults(live);
+ if(bad)$("msg").innerHTML='<span class="err">'+bad.error+'</span>';if(!live.length)clearInterval(timer)},5000);renderResults()}
+function renderResults(live=[]){$("results").innerHTML=live.map(x=>`<div class="res"><div class="pending">${x.state==="running"?"Making…":"Waiting"}</div><small>${x.case} · ${x.label} · ${x.res}</small></div>`).join("")+
+ OPT.results.map(r=>`<div class="res"><video controls playsinline preload="metadata" src="${f(r.path)}"></video><small>${r.id} · <span class="${r.label}">${r.label}</span> · ${r.resolution}${(r.extras||[]).length?" · +"+(r.extras||[]).map(x=>x.role).join(",") :""}${r.usd?" · $"+r.usd.toFixed(2):""}</small></div>`).join("")||'<p class="empty">Nothing made yet.</p>'}
+load();
+</script></body></html>

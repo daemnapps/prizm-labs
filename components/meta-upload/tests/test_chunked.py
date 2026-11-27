@@ -6,6 +6,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import meta  # noqa: E402
 
 
+class UploadCopy(unittest.TestCase):
+    def test_light_file_goes_as_it_is(self):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "small.mp4"
+            f.write_bytes(b"x" * 100)
+            self.assertEqual(meta.upload_copy(f), f)
+
+    def test_unreadable_heavy_file_still_goes(self):
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "bad.mp4"
+            f.write_bytes(b"x" * 100)
+            self.assertEqual(meta.upload_copy(f, over=10), f)
+
+
 class Chunked(unittest.TestCase):
     def test_sends_every_piece_then_finishes(self):
         m = meta.Meta.__new__(meta.Meta)

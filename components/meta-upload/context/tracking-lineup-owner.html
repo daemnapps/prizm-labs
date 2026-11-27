@@ -1,0 +1,118 @@
+<title>Tracking Lineup</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a numbered run of six cards (who does it, how long, one reply button), then three view cards for what comes next. Zinc neutrals, one blue accent, owner colours. */
+:root{--bg:#f6f6f8;--panel:#fff;--fg:#18181b;--muted:#71717a;--line:#e4e4e7;--soft:#f1f1f4;--accent:#2563eb;--accentbg:#e8efff;--me:#15803d;--mebg:#dcfce7;--you:#b45309;--youbg:#fef3c7;--both:#7c3aed;--bothbg:#ede9fe;--sans:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0b0e;--panel:#141418;--fg:#f4f4f5;--muted:#a1a1aa;--line:#26262c;--soft:#1b1b21;--accent:#6ea0ff;--accentbg:#16213a;--me:#4ade80;--mebg:#0b2a17;--you:#fbbf24;--youbg:#33260a;--both:#c4b5fd;--bothbg:#241a3d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0b0e;--panel:#141418;--fg:#f4f4f5;--muted:#a1a1aa;--line:#26262c;--soft:#1b1b21;--accent:#6ea0ff;--accentbg:#16213a;--me:#4ade80;--mebg:#0b2a17;--you:#fbbf24;--youbg:#33260a;--both:#c4b5fd;--bothbg:#241a3d;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:24px 72px;display:flex;flex-direction:column;gap:26px}
+h1{font-size:clamp(26px,5vw,34px);letter-spacing:-.025em;margin:0;line-height:1.05}
+h2{font-size:19px;margin:0;letter-spacing:-.01em;display:flex;gap:8px;align-items:center}
+h3{font-size:16px;margin:0}
+p{margin:0}
+.sub{color:var(--muted);max-width:64ch}
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.who{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;width:max-content}
+.who .ico{width:13px;height:13px}
+.me{background:var(--mebg);color:var(--me)}.you{background:var(--youbg);color:var(--you)}.both{background:var(--bothbg);color:var(--both)}
+.run{display:flex;flex-direction:column;gap:10px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:40px minmax(0,1fr);gap:4px 14px}
+.step .n{width:40px;height:40px;border-radius:12px;background:var(--accentbg);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:16px;grid-row:span 3}
+.step.done .n{background:var(--mebg);color:var(--me)}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.time{font-size:12.5px;color:var(--muted);display:inline-flex;gap:4px;align-items:center}
+.time .ico{width:14px;height:14px}
+.step p{font-size:14px;color:var(--muted)}
+.step ul{margin:2px 0 0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn .ico{width:15px;height:15px}
+.check{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--soft);color:var(--muted);border-radius:10px;padding:8px 10px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.step.done .check{background:var(--mebg);color:var(--me);border-color:transparent}
+.st{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;width:max-content}
+.st .ico{width:13px;height:13px}
+.st-done{background:var(--mebg);color:var(--me)}.st-doing{background:var(--accentbg);color:var(--accent)}.st-open{background:var(--youbg);color:var(--you)}.st-dropped{background:var(--soft);color:var(--muted)}
+.tally{display:flex;gap:8px;flex-wrap:wrap}
+.step.done .n{background:var(--mebg);color:var(--me)}
+.step.dropped{opacity:.6}.step.dropped h3{text-decoration:line-through}
+.views{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.view{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.view .vi{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.view ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:12px;padding:12px 14px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-bot" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4M8 14h.01M16 14h.01"/></symbol>
+ <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+ <symbol id="i-link" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+ <symbol id="i-ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+ <symbol id="i-dollar" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></symbol>
+ <symbol id="i-flow" viewBox="0 0 24 24"><path d="M22 3H2l8 9.5V19l4 2v-8.5z"/></symbol>
+ <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+ <symbol id="i-map" viewBox="0 0 24 24"><path d="m1 6 7-4 8 4 7-4v16l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></symbol>
+</svg>
+
+<div class="wrap">
+ <header style="display:flex;flex-direction:column;gap:8px">
+  <span style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Brand A + Brand B · tracking · 12 Oct 2026</span>
+  <h1>Tracking Lineup</h1>
+  <p class="sub">What to do, in order, to get ad → funnel → purchase → email fully tracked on both brands. Then the views you'll run the money from. Tap a reply button to copy it, then paste it in the chat.</p>
+  <div class="legend"><span class="who me"><svg class="ico"><use href="#i-bot"/></svg>I do it</span><span class="who you"><svg class="ico"><use href="#i-user"/></svg>You do it</span><span class="who both"><svg class="ico"><use href="#i-user"/></svg>You or the email lead</span></div>
+ </header>
+
+ <section style="display:flex;flex-direction:column;gap:12px">
+  <h2>Do these first</h2>
+  <div class="tally" id="tally"></div>
+  <div class="run" id="run"></div>
+ </section>
+
+ <section style="display:flex;flex-direction:column;gap:12px">
+  <h2>Your views <span class="st st-done" style="margin-left:6px"><svg class="ico"><use href="#i-ok"/></svg>Built 12 Oct</span></h2>
+  <p class="sub">Acquisition Command: one page, three views, from the real orders, the journey, Clarity and ad spend from the warehouse. Rebuilt in the 6am refresh.</p>
+  <div class="views">
+   <div class="view"><div class="vi me"><svg class="ico"><use href="#i-dollar"/></svg></div><h3>Money</h3><ul><li>Each ad's real funnel revenue</li><li>Upsell revenue</li><li>30-day value per customer</li><li>Spend from your Drive ad exports or the warehouse, never the ad account</li></ul></div>
+   <div class="view"><div class="vi you"><svg class="ico"><use href="#i-flow"/></svg></div><h3>Flow</h3><ul><li>Ad → funnel → order → upsell → email → repeat</li><li>The drop at every step</li><li>Per-page drop-off once Clarity's token is in</li></ul></div>
+   <div class="view"><div class="vi both"><svg class="ico"><use href="#i-target"/></svg></div><h3>Priorities</h3><ul><li>Which ad to scale</li><li>Which ad to kill</li><li>Which funnel step or email flow is leaking the most money</li></ul></div>
+  </div>
+  <div class="btnrow"><a class="btn" href="https://claude.ai/artifact/LiLwWupPNYH3oYto1MjxYd" target="_blank" rel="noopener"><svg class="ico"><use href="#i-target"/></svg>Open Acquisition Command</a><a class="btn ghost" href="https://claude.ai/artifact/G8sfWLXyygzkg4oPWrNM7s" target="_blank" rel="noopener"><svg class="ico"><use href="#i-map"/></svg>Open the Funnel Map</a></div>
+  <p class="note">Updated 12 Oct. Each step's status is set here when it's actually done. Reply in the chat to move the open ones.</p>
+ </section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const STEPS=[
+ {st:"done",who:"me",t:"Done 12 Oct",h:"Lock in what's built",p:"Committed and pushed: the tracking standard, checker, real sales per ad, journey and email link tags."},
+ {st:"done",who:"you",t:"Done 12 Oct",h:"Put the tracking live on both funnels",list:["Brand A: live, every page scores 82 / 82","Brand B: merged, pixel 1294318978367829 now on all 22 pages (allow list was already set)"]},
+ {st:"dropped",who:"both",t:"Not needed",h:"Fix old broken ad link tags",p:"Dropped on your call. Every ad uploaded from now on gets the standard link tags automatically, so old ads age out."},
+ {st:"done",who:"me",t:"Done 12 Oct",h:"Link tags on every ad and every email",list:["Ads: the uploader stamps the standard tags on every new ad","Emails: every link in every email the email line builds is tagged, and an email with an untagged link is held back"]},
+ {st:"done",who:"me",t:"Done 12 Oct",h:"Rebuild the numbers every morning",p:"Scheduled on your Mac at 6am: real sales per ad, the full journey and Clarity per-page drop-off, for both brands. Brand B's funnel now scores 134 / 134 live."},
+ {st:"doing",who:"you",t:"1 of 3 to go",h:"Keys only you can make",list:["✓ Brand A Clarity token: in and working","✓ Brand B Clarity token: in and working","Brand B Klaviyo key (read only): when Klaviyo is working, reply “pop up Brand B klaviyo”"],say:"pop up Brand B klaviyo"},
+ {st:"dropped",who:"you",t:"Your call 12 Oct",h:"Separate funnel purchases in Meta",p:"Not doing it. All purchases keep flowing through the pixel as they do now, so nothing in Meta changes. Ads lift total sales, store included."},
+ {st:"open",who:"me",t:"In your views",h:"Funnel / store / blended filter",p:"Your Money view gets one switch: funnel only (real funnel sales per ad), store (Brand A.com), or blended (everything, the “ads drive total purchases” number). Built with the views."},
+ {st:"open",who:"you",t:"5 minutes, when Klaviyo works",h:"Klaviyo UTM setting, in each account",list:["Profile menu (bottom left) → Settings → UTM Tracking","Turn on for campaigns and flows","utm_source = klaviyo, utm_medium = email (static)","utm_campaign = Campaign name (flows: Flow name), utm_content = Message name"],p:"This covers flows and emails made by hand in Klaviyo, so their clicks land in the same journey as the ads."}
+];
+const I=n=>`<svg class="ico"><use href="#i-${n}"/></svg>`;
+const WHO={me:["me","bot","I do it"],you:["you","user","You do it"],both:["both","user","You or the email lead"]};
+const ST={done:["Done","st-done"],doing:["In progress","st-doing"],open:["To do","st-open"],dropped:["Dropped","st-dropped"]};
+function draw(){
+ const c={done:0,doing:0,open:0,dropped:0};STEPS.forEach(s=>c[s.st]++);
+ document.getElementById("tally").innerHTML=`<span class="st st-done">${I("ok")}${c.done} done</span><span class="st st-doing">${I("clock")}${c.doing} in progress</span><span class="st st-open">${c.open} to do</span>`;
+ document.getElementById("run").innerHTML=STEPS.map((s,i)=>{const w=WHO[s.who],st=ST[s.st];return `<div class="step ${s.st}"><div class="n">${s.st==="done"?I("ok"):i+1}</div><div class="meta"><span class="st ${st[1]}">${st[0]}</span><span class="who ${w[0]}">${I(w[1])}${w[2]}</span><span class="time">${I("clock")}${s.t}</span></div><h3>${s.h}</h3><div>${s.p?`<p>${s.p}</p>`:""}${s.list?`<ul>${s.list.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}${s.say||s.link?`<div class="btnrow">${s.say?`<button type="button" class="btn" data-say="${s.say}">${I("copy")}Reply “${s.say}”</button>`:""}${s.link?`<a class="btn ghost" href="${s.link[0]}" target="_blank" rel="noopener">${I("link")}${s.link[1]}</a>`:""}</div>`:""}</div></div>`}).join("")}
+draw();
+const toast=document.getElementById("toast");
+function say(t){toast.textContent=t;toast.classList.add("on");clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove("on"),1800)}
+document.addEventListener("click",e=>{
+ const c=e.target.closest("[data-say]");if(c){const t=c.dataset.say;(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject()).then(()=>say(`Copied “${t}”. Paste it in the chat.`),()=>say(`Type “${t}” in the chat.`));return}
+});
+</script>

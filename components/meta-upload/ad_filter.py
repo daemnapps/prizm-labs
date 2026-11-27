@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """ad_filter — every live ad through the brand's standard: scale · good · watch · too early · pulled up · cut · kill.
 
-    ad_filter.py --brand brand-a               writes runs/media-buying/<brand>/filter/<date>/verdicts.json + FILTER.md
-    ad_filter.py --brand brand-a --live-days 3 an ad is live when it spent in the last N days of the data (default 3)
+    ad_filter.py --brand brand_a               writes runs/media-buying/<brand>/filter/<date>/verdicts.json + FILTER.md
+    ad_filter.py --brand brand_a --live-days 3 an ad is live when it spent in the last N days of the data (default 3)
 
-the owner, 2 Oct 2026: "build the filter" — so that "every time we do a pull on our ad metrics, we can run through
+owner, 2 Oct 2026: "build the filter" — so that "every time we do a pull on our ad metrics, we can run through
 this filter and be very clear about what is going on", and "if there's any question or confusion, then it
 should just be pulled up".
 
@@ -16,7 +16,7 @@ GOOD CPA:
 
   under 2×        TOO EARLY      not enough spend to judge
   kill rule fires KILL           no sale by 2×, or CPA over the brand's kill line at 5× — and no sign of life
-                  PULLED UP      the same, but with a sign of life (share, carts/checkouts, click rate) — the owner's call
+                  PULLED UP      the same, but with a sign of life (share, carts/checkouts, click rate) — owner's call
   3× to 5×        GOOD / WATCH   first read on CPA and return
   5× and over     GOOD / CUT     the decision: past the cut line on CPA or return → CUT, or PULLED UP if it shows life
   10× and over    SCALE          good on CPA and return AND Meta gives it a good share of spend
@@ -28,7 +28,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(WS / "tools/copywriter/library"))
+sys.path.insert(0, str(WS / "components/copywriter/library"))
 
 ORDER = ["pull up", "kill", "cut", "scale", "good", "watch", "too early"]
 LABEL = {"pull up": "Pulled up for you", "kill": "Kill", "cut": "Cut", "scale": "Scale", "good": "Good",
@@ -161,7 +161,7 @@ def run(brand, live_days=3):
              "share": round(100 * t["s"] / c, 1) if c else None, "atc": t["atc"], "ic": t["ic"],
              "ctr": round(100 * t["lc"] / t["i"], 2) if t["i"] else None,
              "last_3_days_spend": round(sum(float(r["s"] or 0) for r in rs if r["date"] >= since), 2)}
-        # THIS WEEK (the owner, 2 Oct: "ads that have gotten significant spend through a new test that likely need to get
+        # THIS WEEK (owner, 2 Oct: "ads that have gotten significant spend through a new test that likely need to get
         # killed" — and efficiency "way down" in the last 7 days). Judged on the last 7 days of the data alone, from
         # 2× good CPA spent this week; it can only make a verdict harsher, never kinder, and signs of life still pull up.
         wk = (date.fromisoformat(last) - timedelta(days=6)).isoformat()
@@ -182,7 +182,7 @@ def run(brand, live_days=3):
     doc = {"brand": brand, "data_through": last, "last_spend_day": last_spend, "live": f"spent in the last {live_days} days of the data (since {since})",
            "standard": str((WS / "runs/media-buying" / brand / "standard.json").relative_to(WS)),
            "counts": counts, "ads": ads, "made": date.today().isoformat(),
-           "note": "Nothing here changes Meta. Kill and cut are a list for the owner; pulled-up ads need his call."}
+           "note": "Nothing here changes Meta. Kill and cut are a list for owner; pulled-up ads need his call."}
     out = WS / "runs/media-buying" / brand / "filter" / date.today().isoformat()
     out.mkdir(parents=True, exist_ok=True)
     (out / "verdicts.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
@@ -201,6 +201,9 @@ def main():
     ap.add_argument("--brand", required=True)
     ap.add_argument("--live-days", type=int, default=3)
     a = ap.parse_args()
+    desk = Path(__file__).resolve().parents[2] / "runs" / "media-buying" / a.brand / "desk.json"
+    if desk.exists() and json.loads(desk.read_text()).get("rule"):
+        raise SystemExit("%s's keep / kill calls come from the Ad Desk rule (runs/media-buying/%s/desk.json, \"analyze ads\"); this filter's kill lines are retired there" % (a.brand, a.brand))
     run(a.brand, a.live_days)
 
 

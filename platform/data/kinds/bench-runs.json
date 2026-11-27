@@ -1,0 +1,118 @@
+{
+  "kind": "bench-runs",
+  "title": "Bench runs",
+  "note": "Door B of chain-qa (card CQ-1 registers the kind; the bench itself is a later card): one record per interactive bench run — a teammate picks a STAGE, picks prompt versions x models, runs the matrix on the same golden fixtures, and compares arms side by side with per-run cost. It answers 'which version/model should we use', where the regression-runs kind answers 'did this change break anything'. Same substrate and the SAME WALL: a bench run executes inside the pinned regression clone, its media lands under the regression Drive root, and this record carries pointers and metadata only (workspace rule 3). A bench run GATES NOTHING and grants no green — green stays human-calibrated. Item id = the bench run-id; latest record by `created` wins. EMPTY IS NOT A PASS here either: an arm that could not run is a FAIL with its reason, never an absent row that reads as agreement.",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "_reserved_ids": {
+    "bench-index": "cumulative bench run-id -> {chain, stage, arms, opened}; the platform lists records only per KNOWN item id, so this is how a browser discovers record-borne bench runs."
+  },
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["bench", "index", "split-test", "control", "split-test-case"],
+      "note": "exactly one per record. `index` appears only on the reserved id `bench-index`. `split-test-case`: one per case of a translation split test; never indexed."
+    },
+    {
+      "key": "id",
+      "required_when": "event=bench",
+      "note": "the bench run-id; equals the record's item id"
+    },
+    {
+      "key": "label",
+      "required_when": "event=bench"
+    },
+    {
+      "key": "chain",
+      "required_when": "event=bench"
+    },
+    {
+      "key": "stage",
+      "required_when": "event=bench",
+      "note": "the single stage under test — the bench is per-stage by design"
+    },
+    {
+      "key": "pin",
+      "required_when": "event=bench",
+      "note": "{ref, sha} of the clone the arms ran in"
+    },
+    {
+      "key": "fixtures",
+      "required_when": "event=bench",
+      "note": "[{id, blessed}] — every arm runs the same fixtures or the comparison means nothing"
+    },
+    {
+      "key": "arms",
+      "required_when": "event=bench",
+      "note": "array of {arm, prompt, prompt_sha256, model, status, seconds, chars_out, out (a POINTER, never content), cost_usd, reason}. `reason` is required whenever status is not `done`."
+    },
+    {
+      "key": "opened",
+      "required_when": "event=bench"
+    },
+    {
+      "key": "by",
+      "required_when": "event=bench",
+      "note": "who ran it — declared identity, same as everywhere else on this plane"
+    },
+    {
+      "key": "cost",
+      "note": "{usd, basis, coverage} — from prices.json where the vendor is priced there; a lower bound with its coverage stated, never an authoritative total"
+    },
+    {
+      "key": "artifacts",
+      "note": "[{arm, drive_path, bytes}] — Drive-relative pointers for media arms; resolves on any teammate's own mount"
+    },
+    {
+      "key": "verdict",
+      "note": "the human's pick, when one has been made: {arm, by, at, note}. A bench run with no pick is a finished run, not a failed one — but it grants no green and binds nothing."
+    },
+    {
+      "key": "runs",
+      "required_when": "event=index",
+      "note": "bench run-id -> {chain, stage, arms, opened}; cumulative, latest record wins"
+    },
+    {
+      "key": "test",
+      "required_when": "event=split-test|control",
+      "note": "the split-test card it ran or marks: {id, card, version} on a run (CQ-8 (minimum bench test 1)); the test id alone on a control mark"
+    },
+    {
+      "key": "cases",
+      "required_when": "event=split-test",
+      "note": "[{case_id, pinned, key, files}] — the pre-registered cases as built, each pinned to one commit; refused cases carry their leak or build reason"
+    },
+    {
+      "key": "contenders",
+      "required_when": "event=split-test",
+      "note": "per contender per case {status, reason, seconds, parsed answer (capped), score, judge scores, disagree}; a contender that could not run is failed WITH ITS REASON, never absent"
+    },
+    {
+      "key": "controls",
+      "required_when": "event=split-test",
+      "note": "the saved-control model's two runs, same shape as contenders — the noise band every finding is read against"
+    },
+    {
+      "key": "findings",
+      "required_when": "event=split-test",
+      "note": "one mechanical finding per contender (CQ-8 part 6; no model call): model, effort, route, task kind, n cases, outcome vs control, cost and speed ratios, date, run id, test card"
+    },
+    {
+      "key": "setup",
+      "required_when": "event=split-test",
+      "note": "{prompt_sha256, rubric_sha256, card_sha256, judges, control} — what an identical rerun would need"
+    },
+    {
+      "key": "run",
+      "required_when": "event=control",
+      "note": "the split-test run id whose contender is marked as the saved control; item id is control-<test>, latest record wins"
+    },
+    {
+      "key": "contender",
+      "required_when": "event=control",
+      "note": "the menu key marked as the saved control for the test; the mark also carries `by`, who marked it"
+    }
+  ]
+}

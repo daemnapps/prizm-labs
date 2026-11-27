@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""filter_page — the Media Buying Desk page: every live ad's verdict, both brands, and the owner's calls on the ones that need him.
+"""filter_page — the Media Buying Desk page: every live ad's verdict, both brands, and owner's calls on the ones that need him.
 
     filter_page.py      reads the latest runs/media-buying/<brand>/filter/<date>/verdicts.json per brand and writes
                         lab/owner/media-buying/the-filter.html (+ THE-FILTER-owner.md), then it is republished to
                         the same artifact
 
-The page keeps the owner's calls in its own database (capability `db`, collection `calls`, one doc per brand + ad:
+The page keeps owner's calls in its own database (capability `db`, collection `calls`, one doc per brand + ad:
 `<brand>_<ad_id>` → {brand, ad_id, ad_name, verdict, why, call: kill|keep|more, reason, by, at, data_through}).
 The machine reads them back (ArtifactData list `calls`) to retune the kill lines and signs of life
-(standard.py) — every change shown to the owner first. Nothing on the page touches Meta.
+(standard.py) — every change shown to owner first. Nothing on the page touches Meta.
 """
 import html, json
 from pathlib import Path
@@ -16,7 +16,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 OUT = WS / "lab/owner/media-buying/the-filter.html"
-BRANDS = (("brand-a", "BRAND-A"), ("brand-b", "Brand-B"))
+BRANDS = (("brand_a", "brand_a"), ("brand_b", "brand_b"))
 
 
 def latest(brand):
@@ -28,7 +28,7 @@ def media(ad_ids):
     """Each ad's picture (small JPEG as a data URI — the page can't load Meta's servers), its Instagram post and
     Meta preview link, from the warehouse's nightly meta_ads copy (fresh links)."""
     import base64, io, subprocess, sys, urllib.request
-    sys.path.insert(0, str(WS / "tools/copywriter/library"))
+    sys.path.insert(0, str(WS / "components/copywriter/library"))
     import meta_copy as MC
     if not ad_ids:
         return {}
@@ -83,7 +83,7 @@ def main():
     page = TEMPLATE.replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
     OUT.write_text(page)
     md = ["# The Filter", "", "Page: see lab/owner/context/artifacts.md (source `the-filter.html`, built by "
-          "`components/meta-upload/filter_page.py`). Every live ad through the brand's standard; the owner's calls kept in the "
+          "`components/meta-upload/filter_page.py`). Every live ad through the brand's standard; owner's calls kept in the "
           "page's database (`calls`).", ""]
     for b, name in BRANDS:
         d = data.get(b)
@@ -179,7 +179,7 @@ table.t td{padding:7px 8px;border-bottom:1px solid var(--line)}table.t td.n,tabl
 <div class="w">
 <div class="top">
   <div style="display:grid;gap:4px"><h1>Media Buying Desk</h1><span class="soft" id="asof"></span></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap"><div class="seg" id="btabs"><button type="button" data-b="brand-b" aria-pressed="true">Brand-B</button><button type="button" data-b="brand-a" aria-pressed="false">BRAND-A</button></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><div class="seg" id="btabs"><button type="button" data-b="brand_b" aria-pressed="true">brand_b</button><button type="button" data-b="brand_a" aria-pressed="false">brand_a</button></div>
   <div class="seg" id="ttabs"><button type="button" data-t="trouble" aria-pressed="true">Troubleshoot</button><button type="button" data-t="ads" aria-pressed="false">Ads</button><button type="button" data-t="business" aria-pressed="false">Business</button></div></div>
 </div>
 <div id="adsTop" style="display:grid;gap:8px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><div class="legend" id="legend"></div><div class="seg" id="vtabs"><button type="button" data-v="camp" aria-pressed="true">By campaign</button><button type="button" data-v="verdict" aria-pressed="false">By verdict</button></div></div><div class="vbar" id="vbar"></div></div>
@@ -190,11 +190,11 @@ table.t td{padding:7px 8px;border-bottom:1px solid var(--line)}table.t td.n,tabl
 <tr><td><b>Meta CPA</b></td><td>ad spend ÷ the sales Meta reports</td></tr>
 <tr><td><b>Meta ROAS</b></td><td>the sales value Meta reports ÷ ad spend</td></tr>
 <tr><td><b>Share of spend</b></td><td>of everything an ad's campaign spent while it ran, how much went to that ad</td></tr>
-<tr><td><b>Store revenue</b></td><td>what the store took in, after tax and refunds (BRAND-A: brand-a.com; Brand-B: its funnels)</td></tr>
+<tr><td><b>Store revenue</b></td><td>what the store took in, after tax and refunds (brand_a: brand_a.com; brand_b: its funnels)</td></tr>
 <tr><td><b>Store orders</b></td><td>every store order, from an ad or not</td></tr>
 <tr><td><b>MER</b></td><td>store revenue ÷ ad spend — what each ad dollar returned across the whole business</td></tr>
 <tr><td><b>Blended CPA</b></td><td>ad spend ÷ store orders — what each order cost across the whole business</td></tr>
-<tr><td><b>Tracked orders</b></td><td>store orders that record the ad that sold them (Brand-B only; BRAND-A orders don't)</td></tr>
+<tr><td><b>Tracked orders</b></td><td>store orders that record the ad that sold them (brand_b only; brand_a orders don't)</td></tr>
 <tr><td><b>Tracked CPA · tracked ROAS</b></td><td>an ad's or brief's spend against only its tracked orders</td></tr>
 <tr><td><b>Verdicts</b></td><td>the brand's standard on The Top 1% Plan: judged from 2× good CPA, decision at 5×, scale check at 10×</td></tr>
 </table></details>
@@ -207,7 +207,7 @@ const ORDER=["pull up","kill","cut","scale","good","watch","too early"];
 const LABEL={"pull up":"Your call","kill":"Kill","cut":"Cut","scale":"Scale","good":"Good","watch":"Watch","too early":"Too early"};
 const COL={"pull up":"var(--ask)","kill":"var(--cut)","cut":"var(--cut)","scale":"var(--top)","good":"var(--top)","watch":"var(--watch)","too early":"var(--grey)"};
 const CALLS=[["kill","Kill"],["keep","Keep"],["more","Give it more"]];
-let brand="brand-b", view="camp", tab="trouble", part="angle", win="30", openId=null, db=null, uid=null, calls={};
+let brand="brand_b", view="camp", tab="trouble", part="angle", win="30", openId=null, db=null, uid=null, calls={};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const money=v=>v==null?"—":"$"+Math.round(v).toLocaleString();
@@ -306,7 +306,7 @@ function business(d){
   const daily=bz.daily.filter(x=>x.date>=new Date(Date.now()-win*864e5).toISOString().slice(0,10));
   return `${winBtns()}${kpis(kp)}
   <div class="card2"><h2>Store revenue against ad spend, by day</h2><div class="chart">${chart(daily.map(x=>Object.assign({},x)),"sales",x=>x.spend,"Store revenue","Ad spend",money)}</div></div>
-  ${bz.store_per_ad?"":'<p class="note">BRAND-A store orders don’t record the ad that sold them, so its store numbers are for the whole business, not per ad or brief.</p>'}`;
+  ${bz.store_per_ad?"":'<p class="note">brand_a store orders don’t record the ad that sold them, so its store numbers are for the whole business, not per ad or brief.</p>'}`;
 }
 function render(){
   const d=D[brand];
@@ -320,7 +320,7 @@ function render(){
   const n=d.ads.length||1;
   $("vbar").innerHTML=ORDER.map(v=>d.counts[v]?`<i style="width:${100*d.counts[v]/n}%;background:${COL[v]}" title="${LABEL[v]} ${d.counts[v]}"></i>`:"").join("");
   $("legend").innerHTML=ORDER.map(v=>`<span><i class="dot" style="background:${COL[v]}"></i>${LABEL[v]} <b>${d.counts[v]||0}</b></span>`).join("");
-  if(!d.ads.length){$("view").innerHTML=`<div class="empty">No ${brand==="brand-a"?"BRAND-A":"Brand-B"} ad has spent since ${d.last_spend_day}. Nothing live to judge.</div>`;return}
+  if(!d.ads.length){$("view").innerHTML=`<div class="empty">No ${brand==="brand_a"?"brand_a":"brand_b"} ad has spent since ${d.last_spend_day}. Nothing live to judge.</div>`;return}
   const keep=[...document.querySelectorAll("#view details")].map(x=>x.open);
   $("view").innerHTML=view==="camp"?byCampaign(d):byVerdict(d);
   if(!db) document.querySelectorAll(".calls").forEach(el=>{el.querySelectorAll("button,input").forEach(x=>x.disabled=true);el.insertAdjacentHTML("beforeend",'<span class="err">Open this page signed in to save calls.</span>')});

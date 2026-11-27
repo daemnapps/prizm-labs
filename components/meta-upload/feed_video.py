@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""feed_video — a finished video master into 1-check, as one card.
+"""feed_video — a brief's finished video masters into 1-check, as one flexible card (every version in it).
 
     feed_video.py <video-edit run folder | video-editor hand-off folder> [--links …] [--dry-run] [--root …]
 
-The video editor (tools/video-edit/machine/handoff_run.py) calls `file_master()`
+The video editor (components/video-edit/machine/handoff_run.py) calls `file_master()`
 right after give_back() puts the master into the hand-off's returned/. Run by hand
 it reads the run's status.json for its hand-off, and finds the master in the run
 (`work/final.mp4`, else returned/); `--dry-run` plans a card for a run that has not
@@ -13,10 +13,18 @@ Writes `meta/<brand>/1-check/video/<ad name>/<ad name>_asset-01.mp4` + card.json
 
 Words: a `words.json` in the hand-off, else the brief's own copywriter runs
 (card_words.for_brief — runs labelled with the brief's number or alias), else
-empty lists (the card's check fails; the owner sees "no primary text · no headline").
+empty lists (the card's check fails, and the card shows "no primary text · no headline").
 Pages: the hand-off's link ids (briefs[].link_ids), plus any --links.
+Covers: `thumbs` (one per master, in order) and `cover_records` when the caller passes them; when it passes neither,
+the Video Studio's hand-off for these masters (`<VIDEO_STUDIO_DATA>/briefs/<production>/covers/to-file.json`, written
+by its cover stage) when it is there, ready and fresh: it says `ready` (every version has its cover; a hand-off with
+a held version or a run still going files none, so the card never carries some versions' covers and reads as covered),
+it was made after every master was last written, and every master is the same file the cover stage made its cover
+from (`stage.json` video_stamp). A stale, unready or missing hand-off files no covers, and the card's cover check holds
+it. Switch: cover-rule.json `to_file`, META_FILE_MASTER_COVERS_OFF=1 (row FILE-MASTER-COVERS); `to_file_ready`,
+META_FILE_MASTER_COVERS_OFF=ready (row FILE-MASTER-COVERS-READY).
 """
-import argparse, json, sys
+import argparse, json, os, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -51,17 +59,130 @@ def words_for(brand, brief, handoff=None, repo=REPO):
     return w, src or "nothing found"
 
 
+TO_FILE_PARTS = ("ready",)            # META_FILE_MASTER_COVERS_OFF names these to turn one part off; any other value, all
+
+
+def _covers_off():
+    return {x.strip() for x in os.environ.get("META_FILE_MASTER_COVERS_OFF", "").split(",") if x.strip()}
+
+
+def _rule():
+    try:
+        return json.loads((HERE / "cover-rule.json").read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def to_file_on():
+    """Does file_master read the Video Studio's cover hand-off? cover-rule.json `to_file` (default on), and not
+    META_FILE_MASTER_COVERS_OFF (1, or anything but a part name) on this machine."""
+    if _covers_off() - set(TO_FILE_PARTS):
+        return False
+    return _rule().get("to_file") is not False
+
+
+def needs_ready():
+    """Does file_master file a hand-off's covers only when it says ready? cover-rule.json `to_file_ready` (default
+    on), and not META_FILE_MASTER_COVERS_OFF=ready on this machine."""
+    return "ready" not in _covers_off() and _rule().get("to_file_ready") is not False
+
+
+def studio_data():
+    return Path(os.environ.get("VIDEO_STUDIO_DATA") or REPO / "runs" / "video-studio")
+
+
+def _same(a, b):
+    try:
+        return Path(a).resolve() == Path(b).resolve()
+    except OSError:
+        return False
+
+
+def _stamp(f):
+    try:
+        st = Path(f).stat()
+        return st.st_mtime, st.st_size
+    except OSError:
+        return None
+
+
+def studio_covers(masters, production=None, data=None):
+    """(thumbs, cover_records, where, note) for these masters from the Video Studio's cover hand-off. `thumbs` and
+    `cover_records` line up with `masters` (None where a master has no ready cover); both are None when no fresh
+    hand-off covers these masters. `production` names the studio production; without it the hand-off whose videos
+    are exactly these files is used."""
+    data = Path(data or studio_data()) / "briefs"
+    files = [data / production / "covers" / "to-file.json"] if production else sorted(data.glob("*/covers/to-file.json"))
+    for f in files:
+        hand = _read(f) if f.is_file() else None
+        if not isinstance(hand, dict):
+            continue
+        media = [str(m) for m in hand.get("media") or []]
+        at = []
+        for m in masters:
+            i = next((k for k, x in enumerate(media) if _same(x, m)), None)
+            if i is None and production:                  # named by the caller: the studio's own name for it counts
+                i = next((k for k, x in enumerate(media) if Path(x).name == Path(m).name), None)
+            at.append(i)
+        if None in at:
+            if production:
+                return None, None, str(f), f"{f}: covers no file named {Path(masters[at.index(None)]).name}"
+            continue
+        if needs_ready() and hand.get("ready") is not True:
+            held = "; ".join("%s: %s" % (h.get("version"), h.get("why") or "held") for h in hand.get("held") or []
+                             if isinstance(h, dict))
+            return None, None, str(f), (f"{f}: the hand-off is not ready, so no cover is filed until every version "
+                                        f"has one" + (f" (held: {held})" if held else
+                                                      " (its cover run is still going)" if hand.get("running") else ""))
+        made = f.stat().st_mtime
+        stage = _read(f.parent / "stage.json") or {}
+        stamps = {Path(str(r.get("video"))).name: r.get("video_stamp") for r in stage.get("versions") or []
+                  if isinstance(r, dict) and r.get("video")}
+        for m in masters:
+            now = _stamp(m)
+            was = stamps.get(Path(m).name)
+            if now is None:
+                return None, None, str(f), f"{f}: {Path(m).name} is not on this machine"
+            if now[0] > made + 1:
+                return None, None, str(f), f"{f}: {Path(m).name} was written after the covers were handed off"
+            if isinstance(was, dict) and (abs(float(was.get("mtime") or 0) - now[0]) > 1 or was.get("size") != now[1]):
+                return None, None, str(f), f"{f}: {Path(m).name} is not the video its cover was made from"
+        thumbs = [str((hand.get("thumbs") or [])[i]) if i < len(hand.get("thumbs") or []) else "" for i in at]
+        recs = [str((hand.get("cover_records") or [])[i]) if i < len(hand.get("cover_records") or []) else "" for i in at]
+        gone = [t for t in thumbs if t and not Path(t).is_file()]
+        if gone:
+            return None, None, str(f), f"{f}: cover not on this machine: {Path(gone[0]).name}"
+        return [t or None for t in thumbs], [r or None for r in recs], str(f), ""
+    return None, None, None, "no Video Studio cover hand-off covers these files"
+
+
 def file_master(brand, brief, product, batch, master, *, handoff=None, run=None, links=(),
-                root=None, dry_run=False, replace=False, repo=REPO):
-    """One finished master → one card. Returns (plan, words source)."""
+                root=None, dry_run=False, replace=False, repo=REPO, thumbs=None, cover_records=None,
+                production=None, openings=None):
+    """A brief's finished masters → its one card (flexible: every version rides in it, in order).
+    `master` is one file or a list (the control first, then each hook). `thumbs` (a cover per master, in order) and
+    `cover_records` go to the filer as given; with neither, the Video Studio's fresh cover hand-off for these masters
+    is read (`studio_covers`; `production` names it). `openings` names the opening each master carries, in order;
+    with none, the filer reads it from the edit's own record beside each render (openings.py). The card carries the
+    brief's `concept` and one `openings` row per asset. Returns (plan, words source); the plan's `covers_from` says
+    where the covers came from, or why none did."""
     man = _read(Path(handoff) / "manifest.json") if handoff else None
     words, src = words_for(brand, brief, handoff, repo)
     pages = list(dict.fromkeys(list(links) + (handoff_links(man) if man else [])))
     run_rel = str(Path(run).resolve().relative_to(repo)) if run and Path(run).resolve().is_relative_to(repo) else (str(run) if run else None)
-    p = T.to_check(brand, "video", "flexible", [master], words, pages,
+    masters = [master] if isinstance(master, (str, Path)) else list(master)
+    covers_from = "passed by the caller" if thumbs is not None or cover_records is not None else None
+    if covers_from is None and to_file_on():
+        thumbs, cover_records, where, note = studio_covers(masters, production)
+        covers_from = where if thumbs is not None else note
+    elif covers_from is None:
+        covers_from = "not read (cover-rule.json to_file, META_FILE_MASTER_COVERS_OFF)"
+    p = T.to_check(brand, "video", "flexible", masters, words, pages,
                    {"tool": "video-edit", "run": run_rel, "creator": None},
                    product=product, brief=brief, batch=N.norm_batch(batch), root=root,
-                   dry_run=dry_run, replace=replace)
+                   dry_run=dry_run, replace=replace, thumbs=thumbs, cover_records=cover_records,
+                   openings=openings)
+    p["covers_from"] = covers_from
     return p, src
 
 
@@ -111,17 +232,22 @@ def main():
     ap.add_argument("--root", help="the meta/ folder (default $META_CARDS_ROOT or the Drive)")
     ap.add_argument("--replace", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--production", help="the Video Studio production whose cover hand-off (covers/to-file.json) to read")
     a = ap.parse_args()
     f = Path(a.folder)
     try:
         brand, brief, product, batch, master, handoff, run = (
             from_handoff(f) if (f / "manifest.json").is_file() else from_run(f))
         p, src = file_master(brand, brief, product, a.batch or batch, master, handoff=handoff, run=run,
-                             links=a.links, root=a.root, dry_run=a.dry_run, replace=a.replace)
+                             links=a.links, root=a.root, dry_run=a.dry_run, replace=a.replace,
+                             production=a.production)
     except (T.Refused, ValueError) as e:
         sys.exit(f"REFUSED  {e}")
     print(T.show(p, verbose=True))
     print(f"           words from: {src}")
+    print(f"           covers from: {p.get('covers_from')}")
+    print(f"           concept: {p['card'].get('concept') or 'none on the brief'} · openings: "
+          + (", ".join(f"{o['asset']} {o.get('opening') or 'not known'}" for o in p["card"].get("openings") or []) or "none"))
     if a.dry_run:
         print(json.dumps(p["card"], indent=1, ensure_ascii=False))
 

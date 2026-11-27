@@ -1,0 +1,107 @@
+{
+  "kind": "creative-asset",
+  "title": "Creative asset — what we made, what it said, what it earned",
+  "note": "ONE ITEM PER ASSET (the reviewable unit); the ad unit — the 13-field ad_name — stays the spend join and is a body field, because the 130-char asset name does not fit ITEM_ID_RE. Item id `<batch>.<slug>.a<nn>` for a delivered asset, `<batch>.<slug>.r<n>` for a reject. Append-only event history folded on read (serve_records history, same as tasks). Events: `made` — MACHINE ONLY (reviewer image-production or a lane's record-keeper): identity (the 13 fields + lane + sub), template, copy.slots + copy.provenance declared|ocr|unknown, hook, offer{id, bar_text}, prompt, model{requested, reported}, references, location{drive_id, drive_path, durable_url}, qc{status, checks_run, fails, judge_model, coverage}. `signed` — HUMAN ONLY: a pointer to the output-review verdict that approved the sub-avatar mapping. `status` — HUMAN ONLY: offered | control-ran | picked | testing | validated | retired (the hook-ledger vocabulary, verbatim) plus `evidence`. `note` — HUMAN ONLY: the why, the LEARN half of the loop. RULES: a `made` record NEVER reads as approval (qc-verdicts precedent); no record stores money — spend joins at read via ad_name against platform/data/metrics/<run>/data.json, and until the ad-level Meta pull exists (AW-10, warehouse owner) every view says MADE, NOT WORKED; `unknown` is written, never blank; `sub` is null when undeclared, never guessed. Owner the owner (lab/the owner/creative-ledger); written by components/naming/record.py. Records live under lab/the owner/creative-ledger/records/ until the developer rules on a lab tool writing platform/data/records/ (precedent: teardown_adapter.py standalone) — same shape either way.",
+  "open_items": true,
+  "serve_records": "history",
+  "item_id": "id",
+  "item_label": "name",
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "made",
+        "signed",
+        "status",
+        "note"
+      ],
+      "note": "exactly one per record. `made` is machine-only; the other three are human-only and carry the person in `reviewer`."
+    },
+    {
+      "key": "name",
+      "required_when": "event=made",
+      "note": "the 14-field asset name; drop the last field for the ad unit"
+    },
+    {
+      "key": "ad_name",
+      "required_when": "event=made",
+      "note": "the 13-field ad unit — Meta's Ad name; the spend join"
+    },
+    {
+      "key": "fields",
+      "required_when": "event=made",
+      "note": "the 13 fields parsed, plus lane and sub (null when undeclared)"
+    },
+    {
+      "key": "template",
+      "required_when": "event=made",
+      "note": "layout template path, or `prompted` when the layout lived only in the prompt. `format` in the name IS the layout template; the copy bank's notion is `copy_kind`."
+    },
+    {
+      "key": "copy",
+      "required_when": "event=made",
+      "note": "{slots{headline, subhead, offer_bar, ...}, provenance: declared|ocr|unknown}"
+    },
+    {
+      "key": "hook",
+      "note": "{text, source_row} — the language-bank row the headline came from, when known"
+    },
+    {
+      "key": "offer",
+      "required_when": "event=made",
+      "note": "{id, bar_text} — copied from the offer bank, never typed from memory; no price stored unless it was on the pixels"
+    },
+    {
+      "key": "prompt",
+      "note": "{text, path} — verbatim when kept; `unknown` when it was not"
+    },
+    {
+      "key": "model",
+      "note": "{requested, reported} — e.g. nano_banana_pro requested, nano_banana_2 reported"
+    },
+    {
+      "key": "references",
+      "note": "[{role, ref}] — cast Element, product Element, image_references for an edit"
+    },
+    {
+      "key": "location",
+      "required_when": "event=made",
+      "note": "{drive_id, drive_path, durable_url|null}"
+    },
+    {
+      "key": "qc",
+      "required_when": "event=made",
+      "note": "{status: pass|reject, checks_run[], fails[], judge_model, coverage} — coverage says which checks actually ran"
+    },
+    {
+      "key": "pointer",
+      "required_when": "event=signed",
+      "note": "the output-review record that carries the human verdict"
+    },
+    {
+      "key": "to",
+      "required_when": "event=status",
+      "values": [
+        "offered",
+        "control-ran",
+        "picked",
+        "testing",
+        "validated",
+        "retired"
+      ],
+      "note": "the hook-ledger vocabulary; `evidence` says on what"
+    },
+    {
+      "key": "evidence",
+      "required_when": "event=status",
+      "note": "what the status rests on — a Meta report, a date, a decision; never a number of dollars"
+    },
+    {
+      "key": "text",
+      "required_when": "event=note",
+      "note": "the why"
+    }
+  ],
+  "items": [],
+  "_items_note": "SEED ONLY, deliberately empty — every asset is record-borne (open_items). Views discover items from the records, never from this list."
+}

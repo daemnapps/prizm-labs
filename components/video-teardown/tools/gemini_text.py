@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+"""Text-in / text-out Gemini run, for the stages after the video teardown.
+
+The replication spec takes a teardown record and returns a spec — no video
+involved, so `gemini_breakdown.py` (which requires a file upload) can't run
+it. Same key loader, same model default, same output convention.
+
+Usage:
+  python3 gemini_text.py --prompt-file prompts/replication-v1.txt \
+      --var teardown_record=results/ulta--teardown-v2--gemini-3-flash-preview.txt \
+      --out results/ulta--replication-v1--gemini-3-flash-preview.txt
+
+Every {placeholder} in the prompt must be supplied via --var name=path, or
+the run stops before spending anything.
+"""
+
+import argparse, json, os, re, sys, time, urllib.request
+from pathlib import Path
+
+BASE = "https://generativelanguage.googleapis.com"
+
+
+def house_model(job):
+    """A model id from the Generative Model House (VIDEO-RULINGS V2; verify row 17, 2026-10-21), through the
+    teardown's one reader, machine/house.py, loaded by path."""
+    import importlib.util
+    sp = importlib.util.spec_from_file_location("vt_house", Path(__file__).resolve().parents[1] / "machine" / "house.py")
+    m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+    return m.model_id(job)
+
+
+def _loader():
+    """components/keys/loader.py, by path under its own module name (never on sys.path)."""
+    import importlib.util
+    name = "upright_keys_loader"
+    mod = sys.modules.get(name)
+    if mod is None:
+        here = Path(__file__).resolve()
+        path = next((r / "components" / "keys" / "loader.py" for r in here.parents
+                     if (r / "components" / "keys" / "loader.py").is_file()),
+                    here.parents[2] / "components" / "keys" / "loader.py")
+        spec = importlib.util.spec_from_file_location(name, str(path))
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules[name] = mod
+        spec.loader.exec_module(mod)
+    return mod
+
+
+def key():
+    # Through the one shared loader (components/keys/loader.py): the environment
+    # first, then ~/.upright-keys.env.
+    v = _loader().key("GEMINI_API_KEY", required=False)
+    if v and v.strip():
+        return v.strip()
+    sys.exit("GEMINI_API_KEY not found - add GEMINI_API_KEY=value to ~/.upright-keys.env")
+
+
+
+def _usage(url, reply):
+    """Teardown v2's cost log: only when VT_USAGE_LOG names a file (v1 never sets it)."""
+    if not os.environ.get("VT_USAGE_LOG") or ":generateContent" not in (url or ""):
+        return reply
+    try:
+        import importlib.util as _iu
+        _sp = _iu.spec_from_file_location("vt_layers", Path(__file__).resolve().parents[1] / "machine" / "layers.py")
+        _m = _iu.module_from_spec(_sp); _sp.loader.exec_module(_m)
+        _m.log_gemini(url, reply)
+    except Exception:
+        pass
+    return reply
+
+def req(url, data=None, headers=None, tries=4):
+    for attempt in range(1, tries + 1):
+        try:
+            r = urllib.request.Request(url, data=data, headers=headers or {})
+            with urllib.request.urlopen(r, timeout=600) as resp:
+                return _usage(url, json.loads(resp.read() or b"{}"))
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 500, 502, 503, 504) and attempt < tries:
+                wait = 10 * attempt
+                print(f"  HTTP {e.code}, retry {attempt}/{tries - 1} in {wait}s",
+                      file=sys.stderr)
+                time.sleep(wait)
+                continue
+            sys.exit(f"HTTP {e.code}: {e.read()[:500].decode('utf8', 'replace')}")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--prompt-file", required=True)
+    ap.add_argument("--var", action="append", default=[],
+                    metavar="NAME=PATH",
+                    help="fill {NAME} in the prompt with the contents of PATH")
+    ap.add_argument("--model", default=None, help="default: the house's behind.fast_read")
+    ap.add_argument("--out")
+    a = ap.parse_args()
+    a.model = a.model or house_model("behind.fast_read")
+
+    pf = Path(a.prompt_file)
+    prompt = pf.read_text()
+
+    supplied = {}
+    for pair in a.var:
+        if "=" not in pair:
+            sys.exit(f"--var needs NAME=PATH, got: {pair}")
+        name, path = pair.split("=", 1)
+        supplied[name] = Path(path).read_text()
+
+    # Check the PROMPT's own placeholders, before substituting. Checking after
+    # substitution false-alarms whenever a supplied file happens to mention
+    # brace syntax — e.g. a brand file that documents its own variable name.
+    # A name inside backticks is documentation, not a slot: every doctrine
+    # slice opens with "Bound as `{its_name}`", and stage 2 stopped on it
+    # (2026-09-18) because the filled prompt carried that line verbatim.
+    wanted = set(re.findall(r"\{([a-z_]+)\}", re.sub(r"`[^`\n]*`", "", prompt)))
+    missing = sorted(wanted - set(supplied))
+    if missing:
+        sys.exit(f"unfilled placeholders: {', '.join(missing)}\n"
+                 f"supply each with --var NAME=PATH")
+
+    for name, body in supplied.items():
+        prompt = prompt.replace("{" + name + "}", body)
+
+    k = key()
+    print(f"[1/2] sending {len(prompt)} chars to {a.model}")
+    url = f"{BASE}/v1beta/models/{a.model}:generateContent?key={k}"
+    body = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode()
+    r = req(url, data=body, headers={"Content-Type": "application/json"})
+    try:
+        txt = "".join(p.get("text", "")
+                      for p in r["candidates"][0]["content"]["parts"])
+    except (KeyError, IndexError):
+        sys.exit(f"unexpected response: {json.dumps(r)[:800]}")
+
+    header = (f"<!-- prompt: {pf.name} | model: {a.model} | "
+              f"vars: {','.join(supplied) or 'none'} | run: "
+              f"{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} -->\n\n")
+    out = Path(a.out) if a.out else (
+        Path(__file__).parent / "results" /
+        f"{pf.stem}--{a.model}.txt")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(header + txt)
+    print(txt[:2000])
+    print(f"[2/2] full output → {out}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,160 @@
+{
+ "_what": "Which way an ad is made, decided by the brief. One row per route: the formats that take it, what it needs before anything is paid, and what it costs. hf_route.py reads this file; nothing else decides a route. The structure-only facts (how many people speak on camera, whether it is sung) decide a format this file does not list.",
+ "status": "draft",
+ "credits": {
+  "seedance_s": 3,
+  "wan_s": 0.75,
+  "sheet": 2.5,
+  "words_a_second": 2.7,
+  "from": "Higgsfield's own quotes, 2026-11-25, 480p; a sheet is one Seedream 5 Pro picture"
+ },
+ "routes": [
+  {
+   "id": "creators",
+   "name": "Creators film it",
+   "engine": "no AI",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "creator"
+   ],
+   "needs": [
+    "script"
+   ],
+   "cost": "none"
+  },
+  {
+   "id": "own-footage",
+   "name": "Our own footage",
+   "engine": "no AI, the edit line",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "testimonial-montage",
+    "narrator-montage",
+    "vo-montage",
+    "voiceover-pitch",
+    "found-clip-reaction-cut",
+    "meme"
+   ],
+   "needs": [
+    "script"
+   ],
+   "cost": "none"
+  },
+  {
+   "id": "code",
+   "name": "Drawn in code",
+   "engine": "no AI",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "text-thread"
+   ],
+   "needs": [
+    "script"
+   ],
+   "cost": "none"
+  },
+  {
+   "id": "singing-ads",
+   "name": "Singing Ads",
+   "engine": "Higgsfield /singing-ads",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "song-ad",
+    "music-video-narrative"
+   ],
+   "needs": [
+    "script",
+    "song",
+    "product",
+    "people"
+   ],
+   "cost": "seconds"
+  },
+  {
+   "id": "drama-ads",
+   "name": "Drama Ads",
+   "engine": "Higgsfield /drama-ads",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "micro-drama",
+    "dramatic-continuation",
+    "comedy-skit",
+    "multi-speaker-scene",
+    "short-movie",
+    "street-interview",
+    "era-roll-call",
+    "talking-object",
+    "animated-explainer"
+   ],
+   "needs": [
+    "script",
+    "product",
+    "people"
+   ],
+   "cost": "seconds"
+  },
+  {
+   "id": "ugc-video",
+   "name": "UGC Builder",
+   "engine": "Higgsfield /ugc-video",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "single-presenter",
+    "expert-consult",
+    "remedy",
+    "founder-origin-story",
+    "selfie-talk",
+    "demonstration",
+    "live-studio-demo",
+    "unboxing-deal"
+   ],
+   "formats_inside": {
+    "demonstration": "tutorial",
+    "live-studio-demo": "tutorial",
+    "unboxing-deal": "unboxing"
+   },
+   "needs": [
+    "script",
+    "product",
+    "people"
+   ],
+   "cost": "seconds"
+  },
+  {
+   "id": "ad-multiplier",
+   "name": "Our Ad Multiplier",
+   "engine": "ours: ad-variations/machine/multiply.py",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "winner-variation"
+   ],
+   "needs": [
+    "source ad",
+    "product"
+   ],
+   "cost": "free for every shot we own; a person, product or place change is priced for that shot only"
+  },
+  {
+   "id": "swipe-edit",
+   "name": "Our swipe edit",
+   "engine": "ours: video-edit/machine/swipe_edit.py",
+   "status": "draft",
+   "state": "built",
+   "formats": [
+    "swipe-edit"
+   ],
+   "needs": [
+    "source ad",
+    "product"
+   ],
+   "cost": "free for every shot we own; only the gaps are priced"
+  }
+ ]
+}

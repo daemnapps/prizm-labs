@@ -1,0 +1,90 @@
+{
+ "about": "Which of our folders feeds each Higgsfield preset. Our research and assets go in; Higgsfield does the production. hf_pack.py reads this file. state: built = hf_pack.py packs it today; mapped = the sources are named, the pack is not written yet; ours = our own tool does it, nothing is sent.",
+ "doors": [
+  {
+   "id": "singing-ads",
+   "name": "Singing Ads",
+   "preset": "/singing-ads",
+   "status": "draft",
+   "state": "built",
+   "from": "a video-editor hand-off that carries a song",
+   "inputs": {
+    "song": "assets/kit/song/*.mp3 (or song/*.mp3) in the hand-off",
+    "timed lyrics": "assets/kit/song/lyrics-timed.json, used instead of Higgsfield's own transcription",
+    "cast": "assets/kit/cast/<use>/master.jpg for every shot-list cast role banked in the kit, used as the character sheets",
+    "places": "assets/kit/sets/<set>/ first picture, used as the location sheets",
+    "product": "assets/kit/product/reference-front.png and reference-34.png, the only product pictures allowed"
+   }
+  },
+  {
+   "id": "drama-ads",
+   "name": "Drama Ads",
+   "preset": "/drama-ads",
+   "status": "draft",
+   "state": "mapped",
+   "from": "a brand, a product and an avatar",
+   "inputs": {
+    "product": "brands/<brand>/products/<product>/images/",
+    "hero and conflict": "brands/<brand>/core-avatars/<avatar>/profile.md and culture-map.md",
+    "her words": "brands/<brand>/core-avatars/<avatar>/language/",
+    "objections": "brands/<brand>/core-avatars/objection-bank.md",
+    "offer": "brands/<brand>/products/offer-bank.md"
+   }
+  },
+  {
+   "id": "ad-multiplier",
+   "name": "Ad Multiplier",
+   "preset": "ad-multiplier",
+   "status": "draft",
+   "state": "ours",
+   "from": "a proven ad in the winners bank, or a swipe",
+   "inputs": {
+    "the ad": "runs/winners/<brand>/bank.json, or a swipe from runs/intake/<brand>/",
+    "cast": "brands/<brand>/ai-cast/ masters",
+    "product": "brands/<brand>/products/<product>/images/",
+    "market words": "brands/<brand>/core-avatars/<avatar>/language/"
+   },
+   "replaced_by": "components/ad-variations/machine/multiply.py"
+  },
+  {
+   "id": "katana",
+   "name": "Katana",
+   "preset": "/katana",
+   "status": "draft",
+   "state": "ours",
+   "from": "a swipe whose edit we want",
+   "inputs": {
+    "reference edit": "runs/intake/<brand>/ swipe video",
+    "product": "brands/<brand>/products/<product>/images/",
+    "angle": "brands/<brand>/strategy/angles.json"
+   },
+   "replaced_by": "components/video-edit/machine/swipe_edit.py"
+  },
+  {
+   "id": "ugc-video",
+   "name": "UGC Builder",
+   "preset": "ugc-video",
+   "status": "draft",
+   "state": "mapped",
+   "from": "a product and an avatar",
+   "inputs": {
+    "product": "brands/<brand>/products/<product>/images/",
+    "script words": "brands/<brand>/core-avatars/<avatar>/language/",
+    "creator": "brands/<brand>/ai-cast/ masters"
+   }
+  },
+  {
+   "id": "ads-studio",
+   "name": "Ads Studio",
+   "preset": "ads-studio",
+   "status": "draft",
+   "state": "mapped",
+   "from": "a product page and the offer",
+   "inputs": {
+    "product page": "brands/<brand>/products/README.md links",
+    "offer": "brands/<brand>/products/offer-bank.md",
+    "angle": "brands/<brand>/strategy/angles.json"
+   }
+  }
+ ]
+}

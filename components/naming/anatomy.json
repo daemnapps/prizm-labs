@@ -1,0 +1,625 @@
+{
+ "_about": "The human body, one list for every brand. A product, a person's one thing (`where-<part>`), a customer line and a picture all name a part from here. `hair`: grows coarse hair; `sees`: the person can see it without a mirror or help; `shaved`: no, some, often; `covered`: by clothes no, some, yes; `words`: how customers say it.",
+ "groups": [
+  {
+   "id": "head",
+   "name": "Head",
+   "parts": [
+    {
+     "id": "crown",
+     "name": "Crown",
+     "words": "top of head|top of (my|the|his|her) head|crown|bald head|shaved head|scalp",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "hairline",
+     "name": "Hairline",
+     "words": "hairline|(my|your|her) edges|line ?up",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "temples",
+     "name": "Temples",
+     "words": "temples?",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "back-of-head",
+     "name": "Back of head",
+     "words": "back of (my|the|his|her) head|occiput",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "behind-ears",
+     "name": "Behind the ears",
+     "words": "behind (my|the|his|her) ears?",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "ears",
+     "name": "Ears",
+     "words": "\\bears?\\b|ear lobes?",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    }
+   ]
+  },
+  {
+   "id": "face",
+   "name": "Face",
+   "parts": [
+    {
+     "id": "forehead",
+     "name": "Forehead",
+     "words": "forehead|\\bt.?zone",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "between-brows",
+     "name": "Between the brows",
+     "words": "between (my|the) (eye)?brows|unibrow|glabella",
+     "hair": true,
+     "sees": false,
+     "shaved": "some",
+     "covered": "no"
+    },
+    {
+     "id": "eyelids",
+     "name": "Eyelids",
+     "words": "eyelids?",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "under-eyes",
+     "name": "Under the eyes",
+     "words": "under (my|the) eyes?|eye bags|dark circles",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "nose",
+     "name": "Nose",
+     "words": "\\bnose\\b|blackheads on",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "cheeks",
+     "name": "Cheeks",
+     "words": "cheeks?",
+     "hair": true,
+     "sees": false,
+     "shaved": "some",
+     "covered": "no"
+    },
+    {
+     "id": "upper-lip",
+     "name": "Upper lip",
+     "words": "upper lip|mustache|moustache",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "lips",
+     "name": "Lips",
+     "words": "\\blips\\b|chapped",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "chin",
+     "name": "Chin",
+     "words": "\\bchin\\b",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "jaw",
+     "name": "Jaw",
+     "words": "jaw(line)?",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    },
+    {
+     "id": "beard-area",
+     "name": "Beard area",
+     "words": "beard|facial hair|sideburns?",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "no"
+    }
+   ]
+  },
+  {
+   "id": "neck",
+   "name": "Neck",
+   "parts": [
+    {
+     "id": "front-of-neck",
+     "name": "Front of the neck",
+     "words": "front of (my|the) neck|throat|adam.?s apple",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "some"
+    },
+    {
+     "id": "sides-of-neck",
+     "name": "Sides of the neck",
+     "words": "sides? of (my|the) neck",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "some"
+    },
+    {
+     "id": "nape",
+     "name": "Nape",
+     "words": "nape|back of (my|the|his|her) neck|neckline",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "some"
+    }
+   ]
+  },
+  {
+   "id": "torso",
+   "name": "Chest and stomach",
+   "parts": [
+    {
+     "id": "collarbone",
+     "name": "Collarbone",
+     "words": "collar ?bone",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "chest",
+     "name": "Chest",
+     "words": "\\bchest\\b|d[eé]collet",
+     "hair": true,
+     "sees": true,
+     "shaved": "some",
+     "covered": "yes"
+    },
+    {
+     "id": "under-breast",
+     "name": "Under the breast",
+     "words": "under (my|the) (breast|boob)s?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "yes"
+    },
+    {
+     "id": "stomach",
+     "name": "Stomach",
+     "words": "stomach|abdomen|belly|tummy",
+     "hair": true,
+     "sees": true,
+     "shaved": "some",
+     "covered": "yes"
+    },
+    {
+     "id": "sides",
+     "name": "Sides",
+     "words": "love handles|flanks",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "yes"
+    }
+   ]
+  },
+  {
+   "id": "back",
+   "name": "Back",
+   "parts": [
+    {
+     "id": "shoulders",
+     "name": "Shoulders",
+     "words": "shoulders?",
+     "hair": true,
+     "sees": true,
+     "shaved": "some",
+     "covered": "yes"
+    },
+    {
+     "id": "upper-back",
+     "name": "Upper back",
+     "words": "upper back|bacne|back acne|\\bmy back\\b",
+     "hair": true,
+     "sees": false,
+     "shaved": "some",
+     "covered": "yes"
+    },
+    {
+     "id": "lower-back",
+     "name": "Lower back",
+     "words": "lower back",
+     "hair": true,
+     "sees": false,
+     "shaved": "some",
+     "covered": "yes"
+    }
+   ]
+  },
+  {
+   "id": "arms",
+   "name": "Arms",
+   "parts": [
+    {
+     "id": "upper-arms",
+     "name": "Upper arms",
+     "words": "upper arms?|back of (my|the) arms?|\\barms?\\b",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "armpits",
+     "name": "Armpits",
+     "words": "armpits?|underarms?",
+     "hair": true,
+     "sees": true,
+     "shaved": "often",
+     "covered": "yes"
+    },
+    {
+     "id": "elbows",
+     "name": "Elbows",
+     "words": "elbows?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "forearms",
+     "name": "Forearms",
+     "words": "forearms?",
+     "hair": true,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "wrists",
+     "name": "Wrists",
+     "words": "wrists?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "no"
+    }
+   ]
+  },
+  {
+   "id": "hands",
+   "name": "Hands",
+   "parts": [
+    {
+     "id": "backs-of-hands",
+     "name": "Backs of the hands",
+     "words": "back of (my|the) hands?|\\bhands?\\b",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "palms",
+     "name": "Palms",
+     "words": "palms?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "fingers",
+     "name": "Fingers",
+     "words": "fingers?|knuckles?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "no"
+    },
+    {
+     "id": "nails",
+     "name": "Nails",
+     "words": "finger ?nails?|cuticles?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "no"
+    }
+   ]
+  },
+  {
+   "id": "groin",
+   "name": "Groin and buttocks",
+   "parts": [
+    {
+     "id": "bikini-line",
+     "name": "Bikini line",
+     "words": "bikini",
+     "hair": true,
+     "sees": true,
+     "shaved": "often",
+     "covered": "yes"
+    },
+    {
+     "id": "pubic-area",
+     "name": "Pubic area",
+     "words": "pubic|groin|\\bballs\\b",
+     "hair": true,
+     "sees": true,
+     "shaved": "often",
+     "covered": "yes"
+    },
+    {
+     "id": "inner-thighs",
+     "name": "Inner thighs",
+     "words": "inner thighs?",
+     "hair": true,
+     "sees": true,
+     "shaved": "some",
+     "covered": "yes"
+    },
+    {
+     "id": "buttocks",
+     "name": "Buttocks",
+     "words": "butt(ocks)?|booty",
+     "hair": true,
+     "sees": false,
+     "shaved": "some",
+     "covered": "yes"
+    }
+   ]
+  },
+  {
+   "id": "legs",
+   "name": "Legs",
+   "parts": [
+    {
+     "id": "thighs",
+     "name": "Thighs",
+     "words": "thighs?",
+     "hair": true,
+     "sees": true,
+     "shaved": "often",
+     "covered": "some"
+    },
+    {
+     "id": "knees",
+     "name": "Knees",
+     "words": "knees?",
+     "hair": false,
+     "sees": true,
+     "shaved": "some",
+     "covered": "some"
+    },
+    {
+     "id": "backs-of-knees",
+     "name": "Backs of the knees",
+     "words": "back of (my|the) knees?",
+     "hair": false,
+     "sees": false,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "shins",
+     "name": "Shins",
+     "words": "shins?|\\blegs?\\b",
+     "hair": true,
+     "sees": true,
+     "shaved": "often",
+     "covered": "some"
+    },
+    {
+     "id": "calves",
+     "name": "Calves",
+     "words": "calf|calves",
+     "hair": true,
+     "sees": false,
+     "shaved": "often",
+     "covered": "some"
+    },
+    {
+     "id": "ankles",
+     "name": "Ankles",
+     "words": "ankles?",
+     "hair": false,
+     "sees": true,
+     "shaved": "some",
+     "covered": "some"
+    }
+   ]
+  },
+  {
+   "id": "feet",
+   "name": "Feet",
+   "parts": [
+    {
+     "id": "tops-of-feet",
+     "name": "Tops of the feet",
+     "words": "top of (my|the) f(oo|ee)t|\\bfeet\\b|\\bfoot\\b",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "heels",
+     "name": "Heels",
+     "words": "heels?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "soles",
+     "name": "Soles",
+     "words": "soles?|bottom of (my|the) f(oo|ee)t",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    },
+    {
+     "id": "toes",
+     "name": "Toes",
+     "words": "toes?|toe ?nails?",
+     "hair": false,
+     "sees": true,
+     "shaved": "no",
+     "covered": "some"
+    }
+   ]
+  }
+ ],
+ "_regions": "Parts close enough to be mentioned together in one piece. A part may sit in more than one.",
+ "regions": {
+  "scalp and back of head": [
+   "crown",
+   "hairline",
+   "temples",
+   "back-of-head",
+   "behind-ears",
+   "ears",
+   "nape"
+  ],
+  "upper face": [
+   "hairline",
+   "temples",
+   "forehead",
+   "between-brows",
+   "eyelids",
+   "under-eyes",
+   "nose",
+   "cheeks"
+  ],
+  "shave area": [
+   "cheeks",
+   "upper-lip",
+   "lips",
+   "chin",
+   "jaw",
+   "beard-area",
+   "front-of-neck",
+   "sides-of-neck"
+  ],
+  "neck": [
+   "nape",
+   "front-of-neck",
+   "sides-of-neck",
+   "behind-ears"
+  ],
+  "neck and chest": [
+   "front-of-neck",
+   "sides-of-neck",
+   "collarbone",
+   "chest"
+  ],
+  "front of the body": [
+   "collarbone",
+   "chest",
+   "under-breast",
+   "stomach",
+   "sides"
+  ],
+  "back": [
+   "shoulders",
+   "upper-back",
+   "lower-back",
+   "nape"
+  ],
+  "arms": [
+   "shoulders",
+   "upper-arms",
+   "armpits",
+   "elbows",
+   "forearms",
+   "wrists"
+  ],
+  "hands": [
+   "forearms",
+   "wrists",
+   "backs-of-hands",
+   "palms",
+   "fingers",
+   "nails"
+  ],
+  "groin": [
+   "bikini-line",
+   "pubic-area",
+   "inner-thighs",
+   "buttocks"
+  ],
+  "upper legs": [
+   "buttocks",
+   "inner-thighs",
+   "thighs",
+   "knees",
+   "backs-of-knees"
+  ],
+  "legs": [
+   "thighs",
+   "knees",
+   "backs-of-knees",
+   "shins",
+   "calves",
+   "ankles"
+  ],
+  "feet": [
+   "ankles",
+   "tops-of-feet",
+   "heels",
+   "soles",
+   "toes"
+  ]
+ }
+}

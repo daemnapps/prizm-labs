@@ -6,7 +6,7 @@
    "id": "identity",
    "name": "Identity / face drift",
    "passes": "The generated person matches the cast sheet in every sampled frame; no face melt through the move.",
-   "check": "tools/video-production gate 5 (still vs cast sheet) on the still; one frame every 0.5 s of the clip through the same check. A per-frame video checker is not built yet.",
+   "check": "components/video-production gate 5 (still vs cast sheet) on the still; one frame every 0.5 s of the clip through the same check. A per-frame video checker is not built yet.",
    "forced_by": [
     "gpt-image:person",
     "seedance-hf:person",
@@ -54,7 +54,7 @@
    "id": "safe-zones",
    "name": "Caption and face safe zones",
    "passes": "Faces, the product and the hands doing the beat sit inside the centred 4:5 zone of the 9:16 frame; text off faces and clear of the platform's right rail and bottom caption band.",
-   "check": "tools/video-production/machine/safezone.py (subject 4:5 zone) + tools/video-edit/machine/faces.py (text off the face track).",
+   "check": "components/video-production/machine/safezone.py (subject 4:5 zone) + components/video-edit/machine/faces.py (text off the face track).",
    "forced_by": [
     "*"
    ],
@@ -64,7 +64,7 @@
    "id": "brand-rules",
    "name": "Brand rules",
    "passes": "Only bank words on screen and in new lines; the brand's NEVER lists (position.md, story.md, identity-anchors.md) hold; compliance.json small print where a claim is made.",
-   "check": "tools/video-production/machine/claimfix.py (lines against the product's claim rules) + the NEVER lists checked by text.",
+   "check": "components/video-production/machine/claimfix.py (lines against the product's claim rules) + the NEVER lists checked by text.",
    "forced_by": [
     "*"
    ],
@@ -82,7 +82,7 @@
    "id": "lip-sync",
    "name": "Lip sync",
    "passes": "Replaced or re-voiced lines land on the lips within ±0.3 s.",
-   "check": "tools/video-edit/machine/syncheck.py.",
+   "check": "components/video-edit/machine/syncheck.py.",
    "forced_by": [
     "lipsync-sync",
     "elevenlabs-sts",
@@ -94,7 +94,7 @@
    "id": "voice",
    "name": "Voice",
    "passes": "A new voice matches the person's age and gender by ear and is unmuffled.",
-   "check": "tools/video-production/machine/voice_qc.py (pitch, highs, gender against the spec).",
+   "check": "components/video-production/machine/voice_qc.py (pitch, highs, gender against the spec).",
    "forced_by": [
     "elevenlabs-tts",
     "elevenlabs-sts"

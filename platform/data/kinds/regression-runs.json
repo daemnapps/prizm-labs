@@ -1,0 +1,107 @@
+{
+  "kind": "regression-runs",
+  "title": "Regression runs",
+  "note": "Door A of chain-qa (card CQ-1): one record per regression run of a registered chain — the chain executed at its PINNED ref, on GOLDEN fixtures, diffed against BLESSED. A record carries METADATA AND POINTERS ONLY: chain, pin (the sha actually checked out), run-id, fixture ids, per-stage status, and per-output diff verdicts with the layer that produced each. Never media, never an output's text (workspace rule 3, the durable_url pattern) — media bytes live under the regression Drive root at 'Shared Assets/regression/<chain>/<run-id>/', which is resolved at run time through storage.py: drive_root() and never carries an account name. The RUN itself lives in the regression clone (~/.chain-qa/clones/<chain>/<ref>/.chain-qa-runs/<run-id>/), outside every work checkout: a chain author's board, worktree and Drive paths are never touched, which is the isolation this kind exists to make visible. Item id = the run-id, so re-filing is idempotent and the latest record by `created` wins — fold, never edit. EMPTY IS NOT A PASS, carried through into the record: an UNBLESSED fixture never passes, and an unrunnable stage is a FAIL carrying its reason, never a skip and never a silent zero.",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "_reserved_ids": {
+    "runs-index": "cumulative run-id -> {chain, pin, opened, verdict}; the platform lists records only per KNOWN item id, so this is how a browser discovers record-borne runs. Same mechanism as teardown-runs' runs-index and the inbox's filed-index.",
+    "wall-status": "the isolation ledger of the last dry structural run, filed only when the answer changes. `clean`, `unresolved` and `breached` are different statuses on purpose: a zone that could not be resolved must never read as a proven wall, and a breach STOPS ALL RUNS."
+  },
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["run", "index", "wall"],
+      "note": "exactly one per record. `index` appears only on the reserved id `runs-index`, `wall` only on `wall-status`."
+    },
+    {
+      "key": "chain",
+      "required_when": "event=run",
+      "note": "the registered chain name from platform/data/chains.json"
+    },
+    {
+      "key": "pin",
+      "required_when": "event=run",
+      "note": "{ref, sha} — the declared ref AND the sha actually checked out. A run that cannot state its pin is not a regression result."
+    },
+    {
+      "key": "id",
+      "required_when": "event=run",
+      "note": "the run-id; equals the record's item id"
+    },
+    {
+      "key": "label",
+      "required_when": "event=run"
+    },
+    {
+      "key": "opened",
+      "required_when": "event=run"
+    },
+    {
+      "key": "state",
+      "required_when": "event=run",
+      "values": ["pass", "fail", "unrunnable", "running"],
+      "note": "`unrunnable` is a FAIL with its reason, never a skip — a stage that could not run is exactly the case a silent zero would hide."
+    },
+    {
+      "key": "fixtures",
+      "required_when": "event=run",
+      "note": "[{id, blessed}] — an UNBLESSED fixture never passes; the flag is on the record so nobody has to go and check."
+    },
+    {
+      "key": "stages",
+      "required_when": "event=run",
+      "note": "array of {key, class, status, seconds, reason}. `reason` is required whenever status is not `done`."
+    },
+    {
+      "key": "diffs",
+      "required_when": "event=run",
+      "note": "array of {stage, output, diff (exact|judged|perceptual), verdict (same|changed|fail|unrunnable), layer, detail, blessed_ref}. The diff policy is DECLARED PER OUTPUT in chains.json; this field records which one actually ran and what it said."
+    },
+    {
+      "key": "judge",
+      "note": "{modality, vendor, model, score, threshold} on judged/perceptual verdicts. Routing is measurement-backed: Claude for stills, Gemini for video."
+    },
+    {
+      "key": "cost",
+      "note": "{usd, basis} — priced from platform/workers/mini-worker/prices.json where the vendor is priced there; a lower bound with its coverage, never an authoritative total."
+    },
+    {
+      "key": "artifacts",
+      "required_when": "event=run",
+      "note": "[{stage, output, drive_path, bytes}] — drive_path is RELATIVE to the shared drive so it resolves on any teammate's own mount. Pointers only."
+    },
+    {
+      "key": "zones",
+      "required_when": "event=run",
+      "note": "{clone, drive, records} — the three permitted zones this run resolved, so the wall is on the record and not only in a log."
+    },
+    {
+      "key": "runs",
+      "required_when": "event=index",
+      "note": "run-id -> {chain, pin, opened, verdict}; cumulative, latest record wins"
+    },
+    {
+      "key": "status",
+      "required_when": "event=wall",
+      "values": ["clean", "unresolved", "breached", "empty"],
+      "note": "`empty` = a plan that would write nowhere, which is a FAIL and not a clean sheet. `unresolved` = a zone that could not be resolved (Drive unmounted, or a refused read) — never collapsed into `clean`."
+    },
+    {
+      "key": "blocker",
+      "required_when": "event=wall",
+      "note": "true for `breached` and `unresolved`. A breach stops ALL runs (kill-condition, card CQ-1)."
+    },
+    {
+      "key": "paths",
+      "required_when": "event=wall",
+      "note": "every path the dry structural run planned, with its zone and verdict. The wall is PROVEN by this list, never asserted."
+    },
+    {
+      "key": "reason",
+      "required_when": "event=wall"
+    }
+  ]
+}

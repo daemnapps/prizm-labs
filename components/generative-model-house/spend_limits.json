@@ -1,0 +1,38 @@
+{
+ "status": "draft",
+ "what": "The most one Higgsfield call may ask for, checked before it is sent (spend.py). The house still names the model; this only stops a call bigger than the ruled size.",
+ "credit_usd": {
+  "value": 0.05,
+  "why": "the auto-refill rate, 150 USD for 3,000 credits; the dearest way credits are bought"
+ },
+ "jobs": {
+  "seedance_2_5": {
+   "max_resolution": "480p",
+   "why": "every clip is made at 480p and upscaled on this Mac (VIDEO-RULINGS V44); 720p is 2.3 times the credits, 1080p is 5.3 times"
+  },
+  "seedance_2_0": {
+   "max_resolution": "480p",
+   "why": "as Seedance 2.5"
+  },
+  "wan3_0": {
+   "max_resolution": "480p",
+   "why": "480p takes, upscaled on this Mac"
+  },
+  "hf_mult_replace_object": {
+   "max_resolution": "480p",
+   "why": "the swap sheet's own size (swap_bench.py); two swaps made outside it cost 480 credits each on 31 October"
+  },
+  "hf_mult_motion_control": {
+   "max_resolution": "480p",
+   "why": "the swap sheet's own size (swap_bench.py); two swaps made outside it cost 480 credits each on 31 October"
+  }
+ },
+ "flag_one_charge_over": 100,
+ "words_that_leave_the_product_out": [
+  "(?:product|brush|tube|jar|bottle|box|pack)[^.;]{0,40} laid on (?:in|at) the edit",
+  "grip (?:is )?(?:left )?open (?:on [\\w' ]{2,30}? )?for ",
+  "reserved for (?:the )?real",
+  "clear for the (?:real|later) product",
+  "\\[UNFILLED"
+ ]
+}

@@ -1,0 +1,11 @@
+<!-- Gift from: the "as seen in" layout without the press claim. A small spaced line and a big brand name centred at the top (`kicker`, `mark`, both in `fixed` or on the board); a left-aligned block under them (`lead` in accent italics, then `head` in caps, one line per written line, and `tail`, its last line, in bold accent caps); a round accent badge (`badge`, one line per written line) and a dark footer bar across the bottom (`foot`). The product stands to the right of the block. Badge place (`badge_x`, `badge_y`, its centre, percent of the frame) and the bar's top (`foot_y`) come from `fixed`. Sizes are at full scale; the fit step shrinks the top block together. -->
+<style>.badge:empty,.bar:empty,.tail:empty{display:none}</style>
+<div class="area" data-fit style="justify-content:flex-start;align-items:stretch;gap:calc(var(--s)*14px);color:{{ink}}">
+ <div class="line" style="align-self:center;font:600 calc(var(--s)*36px)/1 Sans;letter-spacing:.14em;text-transform:uppercase">{{kicker}}</div>
+ <div class="line" style="align-self:center;font:500 calc(var(--s)*150px)/1 Display;letter-spacing:.04em;text-transform:uppercase;margin-bottom:calc(var(--s)*40px)">{{mark}}</div>
+ <div class="line" style="align-self:flex-start;text-align:left;font:italic 600 calc(var(--s)*54px)/1.1 Sans;color:{{ground}}">{{lead}}</div>
+ <div class="line" style="align-self:flex-start;text-align:left;font:500 calc(var(--s)*64px)/1.08 Display;text-transform:uppercase">{{head}}</div>
+ <div class="line tail" style="align-self:flex-start;text-align:left;font:600 calc(var(--s)*52px)/1.1 Sans;text-transform:uppercase;color:{{ground}}">{{tail}}</div>
+</div>
+<div class="badge" style="position:fixed;left:{{badge_x}}%;top:{{badge_y}}%;transform:translate(-50%,-50%) rotate(-8deg);width:300px;height:300px;border-radius:50%;background:{{ground}};border:6px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font:600 40px/1.08 Sans;text-transform:uppercase;padding:24px">{{badge}}</div>
+<div class="bar" style="position:fixed;left:0;right:0;top:{{foot_y}}%;background:#111;color:#fff;text-align:center;font:600 32px/1 Sans;letter-spacing:.08em;text-transform:uppercase;padding:30px 4%">{{foot}}</div>

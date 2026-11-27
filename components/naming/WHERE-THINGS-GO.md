@@ -9,7 +9,7 @@ usable at volume.
 ## The rule
 
 ```
-words  ->  workspace/brands/<brand>/…     (git: diffable, reviewable, small)
+words  ->  ai-workspace/brands/<brand>/…     (git: diffable, reviewable, small)
 media  ->  Shared Assets/brands/<brand>/…    (Drive: the files themselves)
 ```
 
@@ -25,12 +25,12 @@ words are is knowing where its media is. Work still being figured out lives in
 ## Pages
 
 ```
-WORDS   workspace/brands/<brand>/funnels/<funnel>/
+WORDS   ai-workspace/brands/<brand>/funnels/<funnel>/
             icon-build.md              the running record
             pages.md                   the registry, generated
             <name>-construct.md        what the copy was injected against
 
-SOURCE  the funnel's own repo — for ICON: daemnapps/<brand>-icon
+SOURCE  the funnel's own repo — for ICON: the owner/Brand A-icon
             src/icon/<page-name>.html  front matter carries the key
             src/icon/assets/           the media the build actually uses
 
@@ -57,7 +57,7 @@ folder on Drive, a row in the registry, a URL and a source file all carry the
 same string. No lookup table.
 
 Live example:
-`brands/<brand>/funnels/icon/salespage/salespage-fedupking-razornotproblem/`
+`brands/Brand A/funnels/icon/salespage/salespage-fedupking-razornotproblem/`
 
 Pages group by format on the drive — salespages together, advertorials
 together — and the money pages sit under `offers/` with their plain names.
@@ -69,7 +69,7 @@ Already established in `CONVENTION.md`; repeated here so the two sit together.
 
 ```
 WORDS   the batch manifest beside the run
-MEDIA   Shared Assets/lab/owner/<lane>/<brand>/…
+MEDIA   Shared Assets/lab/the owner/<lane>/<brand>/…
             image-production · video-production · image-teardown
 ```
 
@@ -79,9 +79,9 @@ that plus one field.
 ## Swipes
 
 ```
-WORDS   workspace/lab/owner/swipes/<pool>/registry.md
-MEDIA   Shared Assets/lab/owner/swipe-paid/<brand>/…
-CODE    workspace/components/swipe-paid/  (tool) and capture/ (pulling pages)
+WORDS   ai-workspace/lab/the owner/swipes/<pool>/registry.md
+MEDIA   Shared Assets/lab/the owner/swipe-paid/<brand>/…
+CODE    ai-workspace/components/swipe-paid/  (tool) and capture/ (pulling pages)
 ```
 
 The captures themselves — ~9.3GB of DOM dumps and screenshots — live on the

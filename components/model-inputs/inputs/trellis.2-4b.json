@@ -16,7 +16,7 @@
  },
  "sources": [
   "https://github.com/microsoft/TRELLIS.2",
-  "[ours] tools/video-production/PRODUCT-KITS.md"
+  "[ours] components/video-production/PRODUCT-KITS.md"
  ],
  "limits": {
   "input_images": 1,

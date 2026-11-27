@@ -1,11 +1,11 @@
 """Tell people the moment work is done (19 Oct 2026).
 
     from run_kit.notify import link_for, notify
-    notify("timeline", "Rough cut ready: brand-a/promo-03", id_="brand-a/promo-03")
+    notify("timeline", "Rough cut ready: brand_a/promo-03", id_="brand_a/promo-03")
 
 Appends one line to runs/notify/events.jsonl — a single O_APPEND write, so many machines can write at once.
 It sends nothing anywhere. Outlier (lab/owner/suite) reads the file: its bell shows each event to the
-person named in `who`, and for the owner alone it also messages his own phone. Never raises into the caller.
+person named in `who`, and for owner alone it also messages his own phone. Never raises into the caller.
 
 Kinds and the links they make (open Outlier on that item, on the Mac or over Tailscale):
     timeline <brand/label> · brief <queue id> · batch <batch id> · swipe <swipe key> · calls <call id>
@@ -19,7 +19,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 KINDS = ("timeline", "brief", "batch", "swipe", "calls")
-BASE = os.environ.get("OUTLIER_BASE", "http://localhost:8880")
+BASE = os.environ.get("OUTLIER_BASE", "http://owner-mac.tailefdb34.ts.net:8880")
 
 
 def _repo():

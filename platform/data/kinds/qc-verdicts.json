@@ -1,0 +1,54 @@
+{
+  "kind": "qc-verdicts",
+  "title": "QC gate verdicts — verifier v1",
+  "note": "ONE ITEM PER RUN. check_live.sh (lab/the developer/prompt-optimizer/review/) runs the assertable parts of UI-QC.md against a DEPLOYED viewer and files one record here as reviewer 'verifier-v1'. Item id is `<person>.<tool>.<UTC timestamp>` — its own item per run, deliberately: /api/reviews is latest-per-reviewer, so a shared item id would let each run erase the last and the seat would accumulate no history at all (the trap visual-run.json documents). Verdict: {schema, runner, tool, url, trigger: post-push|daily|on-demand, status: pass|fail|warn|error, gates: {gate1, gate2_assertable, gate2_eyeball, invariants} each {status, assertions:[{id, status, detail}]}, failed_assertions:[id], screenshot, screenshot_note, coverage, at}. HALF-COVERAGE IS STATED, NEVER IMPLIED (the developer, 2026-08-20): Gate 2's eyeball pass — truncation, legibility, primary action above the fold — is judgment and is OUT of v1, so `gate2_eyeball.status` is always `not_run` and a record NEVER says Gate 2 passed. It says which half ran and points at the screenshot still awaiting a human look. A `pass` here means: every deterministic assertion held, and a human has not yet looked. Records are created by a machine and are not a human's review — nothing here approves anything. UI-QC.md remains the gate authority; this kind carries results, never rules. A `warn` (QG-3 (shared-cause verdicts), 2026-09-15) is an assertion the org's own later ruling overtook — today exactly g2.conv-home-control, which CP-9 (view menu) replaced fleet-wide, and g1.4-self-contained, which PM-18 (hierarchy pass) made expected. A warn NEVER masks a fail: `fail` still wins the record's status, the assertion still runs and still says what it found, and the record names the ruling that overtook it in `warned_assertions`. A warning is a drift left visible, never a silenced check.",
+  "open_items": true,
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "tool",
+      "type": "text",
+      "label": "Tool (person/tool as served by the viewer host)"
+    },
+    {
+      "key": "url",
+      "type": "text",
+      "label": "Deployed URL checked"
+    },
+    {
+      "key": "trigger",
+      "type": "text",
+      "label": "post-push | daily | on-demand"
+    },
+    {
+      "key": "status",
+      "type": "text",
+      "label": "pass | fail | warn | error"
+    },
+    {
+      "key": "gates",
+      "type": "object",
+      "label": "Per-gate results, each with its assertions"
+    },
+    {
+      "key": "failed_assertions",
+      "type": "list",
+      "label": "Assertion ids that failed"
+    },
+    {
+      "key": "warned_assertions",
+      "type": "list",
+      "label": "Assertion ids demoted to warnings by a later ruling"
+    },
+    {
+      "key": "screenshot",
+      "type": "text",
+      "label": "Screenshot pointer — the Gate 2 eyeball artifact, awaiting a human"
+    },
+    {
+      "key": "coverage",
+      "type": "text",
+      "label": "What ran and what did not"
+    }
+  ]
+}

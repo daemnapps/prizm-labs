@@ -9,13 +9,12 @@
     FORM       spoken / music share of the runtime, from the lines and the music read
 """
 import json
-import os
 import re
 import subprocess
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PY = Path(os.environ.get("AUDIO_PYTHON") or "/nonexistent/audio-python")
+PY = Path.home() / ".daemn" / "venvs" / "audio" / "bin" / "python"
 
 
 def loudness(path):

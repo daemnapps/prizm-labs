@@ -1,0 +1,12 @@
+{
+  "kind": "wf-data-plane-cards",
+  "title": "data-plane — inventory review",
+  "note": "Cards drafted by the lead 2026-08-25 from INB-39. DP-1 untracks committed node_modules; DP-2 moves the review plane to platform/. Expand was already complete (PM-1); contract comes later.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/data-plane/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

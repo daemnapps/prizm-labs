@@ -1,0 +1,16 @@
+{
+  "kind": "smoke",
+  "title": "API smoke tests",
+  "note": "Disposable test kind — records under reviews/smoke/ are test writes with no meaning.",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve (smoke)" },
+    { "key": "feedback", "type": "text", "label": "Feedback (smoke)" }
+  ],
+  "items": [
+    {
+      "id": "smoke-01",
+      "label": "inline smoke item",
+      "content": "If you can read this through /api/items, the read plane works."
+    }
+  ]
+}

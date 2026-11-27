@@ -45,34 +45,34 @@ class Guarded(unittest.TestCase):
                          "something new was created in components/meta-upload/")
 
     def home(self):
-        return self.R / "meta-upload" / "brand-b" / "h1" / "upload"
+        return self.R / "meta-upload" / "brand_b" / "h1" / "upload"
 
 
 class RunsHome(Guarded):
     def test_upload_home_shape(self):
-        got = upload.upload_home("brand-b", "h1", runs_root=self.R)
+        got = upload.upload_home("brand_b", "h1", runs_root=self.R)
         self.assertEqual(got, self.home())
         self.assertFalse(self.R.exists())
-        for brand, name in (("../x", "h1"), ("a/b", "h1"), ("", "h1"), ("brand-b", ".."),
-                            ("brand-b", ".hidden"), ("brand-b", "a\\b"), ("brand-b", None)):
+        for brand, name in (("../x", "h1"), ("a/b", "h1"), ("", "h1"), ("brand_b", ".."),
+                            ("brand_b", ".hidden"), ("brand_b", "a\\b"), ("brand_b", None)):
             with self.assertRaises(SystemExit, msg=(brand, name)):
                 upload.upload_home(brand, name, runs_root=self.R)
-        default = upload.upload_home("brand-b", "h1")
-        self.assertEqual(default.relative_to(REPO / "runs").parts, ("meta-upload", "brand-b", "h1", "upload"))
+        default = upload.upload_home("brand_b", "h1")
+        self.assertEqual(default.relative_to(REPO / "runs").parts, ("meta-upload", "brand_b", "h1", "upload"))
         self.assertNotIn("brands", default.relative_to(REPO).parts)
         self.assertFalse(default.exists())
 
     def test_plan_lands_under_runs(self):
-        (self.folder / "manifest.json").write_text(json.dumps({"name": "h1", "brand": "brand-b"}))
-        p = {"handoff": "h1", "brand": "brand-b", "campaigns": {}, "ads": [], "held": []}
+        (self.folder / "manifest.json").write_text(json.dumps({"name": "h1", "brand": "brand_b"}))
+        p = {"handoff": "h1", "brand": "brand_b", "campaigns": {}, "ads": [], "held": []}
         with mock.patch.object(upload, "plan", return_value=p), mock.patch("builtins.print"):
             upload.run(self.folder, None, False, runs_root=self.R)
         self.assertEqual(json.loads((self.home() / "plan.json").read_text())["handoff"], "h1")
         self.assertFalse((self.folder / "returned").exists())
 
     def test_go_state_default_is_runs(self):
-        p = {"brand": "brand-b", "handoff": "h1", "campaigns": {"C1": {"ad_sets": {}}}, "ads": []}
-        upload.go(self.folder, p, {"start": "PAUSED"}, m=FakeMeta("brand-b"), runs_root=self.R, log=lambda *a: None)
+        p = {"brand": "brand_b", "handoff": "h1", "campaigns": {"C1": {"ad_sets": {}}}, "ads": []}
+        upload.go(self.folder, p, {"start": "PAUSED"}, m=FakeMeta("brand_b"), runs_root=self.R, log=lambda *a: None)
         st = json.loads((self.home() / "state.json").read_text())
         self.assertIn("C1", st["campaigns"])
         self.assertFalse((self.folder / "returned" / "upload" / "state.json").exists())
@@ -82,8 +82,8 @@ class RunsHome(Guarded):
         legacy.parent.mkdir(parents=True)
         legacy.write_text(json.dumps({"campaigns": {"C1": "123"}, "ad_sets": {}, "media": {}, "ads": {}}, indent=1))
         before = legacy.read_bytes()
-        p = {"brand": "brand-b", "handoff": "h1", "campaigns": {"C1": {"ad_sets": {}}}, "ads": []}
-        m, said = FakeMeta("brand-b"), []
+        p = {"brand": "brand_b", "handoff": "h1", "campaigns": {"C1": {"ad_sets": {}}}, "ads": []}
+        m, said = FakeMeta("brand_b"), []
         upload.go(self.folder, p, {"start": "PAUSED"}, m=m, runs_root=self.R, log=said.append)
         self.assertNotIn("campaigns", [edge for edge, _ in m.posts])
         self.assertEqual(json.loads((self.home() / "state.json").read_text())["campaigns"]["C1"], "123")
@@ -91,11 +91,11 @@ class RunsHome(Guarded):
         self.assertTrue(any("legacy" in s for s in said))
 
     def test_write_back_keeps_handoff_pointer(self):
-        (self.folder / "manifest.json").write_text(json.dumps({"role": "ad-uploader", "brand": "brand-b", "name": "h1"}))
+        (self.folder / "manifest.json").write_text(json.dumps({"role": "ad-uploader", "brand": "brand_b", "name": "h1"}))
         (self.folder / "returned").mkdir()
         stub = types.ModuleType("ad_handoff_take_back")
         stub.take_back = lambda *a, **k: None
-        p = {"brand": "brand-b", "handoff": "h1", "ads": [{"meta_ad_name": "A", "unit": "u", "old_name": "o"}]}
+        p = {"brand": "brand_b", "handoff": "h1", "ads": [{"meta_ad_name": "A", "unit": "u", "old_name": "o"}]}
         with mock.patch.object(upload, "_take_back_module", return_value=stub):
             rows = upload.write_back(self.folder, p, {"ads": {"A": "9"}}, runs_root=self.R)
         pointer = json.loads((self.folder / "returned" / "live-ids.json").read_text())

@@ -125,7 +125,7 @@
    "use": "yes",
    "status": "draft",
    "source": [
-    "[ours] tools/video-production/VIDEO-RULINGS.md V40"
+    "[ours] components/video-production/VIDEO-RULINGS.md V40"
    ]
   },
   {
@@ -174,7 +174,7 @@
    "rule": "Check the upscaled clip for smoothing of grain and text; the swipe's grain is part of the look.",
    "ours": "judge reads the upscaled clip",
    "status": "draft",
-   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V38"
+   "source": "[ours] components/video-production/VIDEO-RULINGS.md V38"
   }
  ],
  "avoid": [
@@ -200,7 +200,7 @@
    "id": "grain-added-after",
    "text": "Adding grain or a filter after upscaling to fix a smooth look.",
    "status": "draft",
-   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+   "source": "components/video-production/VIDEO-RULINGS.md V38"
   }
  ]
 }

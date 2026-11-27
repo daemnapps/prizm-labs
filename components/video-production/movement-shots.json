@@ -1,0 +1,211 @@
+{
+ "_about": "The shots the real-video reference bank must hold (machine/movement_fill.py finds them in the footage index). kind: talking = a person to camera; usage = a product being used; action = a person doing something else; broll = no one performing. `find` is what the shot shows, `core` the action itself, `does` the words a scene is matched on.",
+ "entries": [
+  {
+   "id": "talk-calm",
+   "kind": "talking",
+   "find": "woman talking to camera selfie calm explaining",
+   "core": "talking",
+   "does": [
+    "talks to camera",
+    "calm",
+    "explains",
+    "matter-of-fact",
+    "teacher"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "talk-lively",
+   "kind": "talking",
+   "find": "woman excitedly talking to camera selfie testimonial",
+   "core": "talking",
+   "does": [
+    "talks to camera",
+    "lively",
+    "excited",
+    "testimonial",
+    "hand gestures",
+    "smiles"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "talk-man",
+   "kind": "talking",
+   "find": "man talking to camera selfie",
+   "core": "talking",
+   "does": [
+    "talks to camera",
+    "man",
+    "explains",
+    "hand gestures"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "apply-face",
+   "kind": "usage",
+   "find": "woman rubbing scrub on her face with fingers",
+   "core": "rubbing",
+   "does": [
+    "applies",
+    "rubs",
+    "massages",
+    "spreads",
+    "scrubs",
+    "works",
+    "circles"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "apply-cheek",
+   "kind": "usage",
+   "find": "applying cream to cheek massaging skin",
+   "core": "applying",
+   "does": [
+    "applies",
+    "rubs",
+    "massages",
+    "spreads",
+    "scrubs",
+    "works",
+    "circles"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "rinse",
+   "kind": "usage",
+   "find": "rinsing face with water at sink",
+   "core": "rinsing",
+   "does": [
+    "rinses",
+    "splashes",
+    "washes"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "squeeze",
+   "kind": "usage",
+   "find": "squeezing tube onto fingers",
+   "core": "squeezing",
+   "does": [
+    "squeezes",
+    "dispenses"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "hold-product",
+   "kind": "usage",
+   "find": "holding product up to camera showing label",
+   "core": "holding",
+   "does": [
+    "holds",
+    "lifts",
+    "raises"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "arms",
+   "kind": "usage",
+   "find": "rubbing lotion on arms hands",
+   "core": "rubbing",
+   "does": [
+    "rubs",
+    "lotion",
+    "smooths"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "shower",
+   "kind": "usage",
+   "find": "scrubbing body in shower",
+   "core": "scrubbing",
+   "does": [
+    "scrubs",
+    "shower",
+    "body",
+    "water"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "shave",
+   "kind": "usage",
+   "find": "man shaving neck razor",
+   "core": "shaving",
+   "does": [
+    "shaves",
+    "razor"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "point-skin",
+   "kind": "action",
+   "find": "pointing at dark spots on her skin",
+   "core": "pointing",
+   "does": [
+    "points",
+    "pointing",
+    "fingertip",
+    "taps"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "mirror",
+   "kind": "action",
+   "find": "looking in the mirror touching face",
+   "core": "mirror",
+   "does": [
+    "mirror"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "walk",
+   "kind": "action",
+   "find": "walking outdoors",
+   "core": "walking",
+   "does": [
+    "walks",
+    "walking"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "kitchen",
+   "kind": "action",
+   "find": "cooking in kitchen",
+   "core": "cooking",
+   "does": [
+    "pours",
+    "stirs",
+    "cooks",
+    "chops",
+    "blends"
+   ],
+   "status": "draft"
+  },
+  {
+   "id": "sit",
+   "kind": "action",
+   "find": "sitting on couch",
+   "core": "sitting",
+   "does": [
+    "sits",
+    "couch",
+    "thinks",
+    "relaxes"
+   ],
+   "status": "draft"
+  }
+ ]
+}

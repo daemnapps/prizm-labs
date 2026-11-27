@@ -12,10 +12,10 @@ import preview as PV  # noqa: E402
 # the runs' own swap lists (out/swaps.json) come from the teardown; these sample lists stand in for them in tests
 CHURCH = str(HERE / "fixtures" / "church-after-fight-swaps.json")
 SPOTS = str(HERE / "fixtures" / "three-spots-swaps.json")
-PIC = {"brand": "brand-b", "run": "brand-b-batch-grandma-church-after-fight", "product": "brilliance-face-scrub", "swap_file": CHURCH}
-THREE = {"brand": "brand-b", "run": "brand-b-batch-grandma-dark-spots-not-growing-old", "product": "", "product_slug": "brilliance-face-scrub",
+PIC = {"brand": "brand_b", "run": "brand_b-batch-grandma-church-after-fight", "product": "brilliance-face-scrub", "swap_file": CHURCH}
+THREE = {"brand": "brand_b", "run": "brand_b-batch-grandma-dark-spots-not-growing-old", "product": "", "product_slug": "brilliance-face-scrub",
          "swap_file": SPOTS}
-CLIP = {"run": "brand-b/yai-sun-spots-back", "call": "G01-C1"}
+CLIP = {"run": "brand_b/yai-sun-spots-back", "call": "G01-C1"}
 
 
 class Preview(unittest.TestCase):
@@ -149,7 +149,7 @@ class Swaps(unittest.TestCase):
         self.assertTrue([x for x in r["findings"] if x.get("var") == "swaps" and "not on file" in x["say"]])
 
     def test_a_library_swap_adds_its_photo(self):
-        lib = str(PV.cast_photo("brand-b", "yai"))             # any real photo on file stands in for a library prop
+        lib = str(PV.cast_photo("brand_b", "yai"))             # any real photo on file stands in for a library prop
         f = self.tmp_list(swaps=[{"from": "The wall", "to": "our kitchen set", "kind": "library", "ref": lib}])
         r = self.spots(swap_file=f)
         self.assertIn(lib, [i["path"] for i in r["inputs"]])
@@ -157,7 +157,7 @@ class Swaps(unittest.TestCase):
 
     def test_the_real_three_spots_list(self):
         run = {k: v for k, v in THREE.items() if k != "swap_file"}
-        if not (PV._lane_run("brand-b", run["run"]) / "out" / "swaps.json").is_file():
+        if not (PV._lane_run("brand_b", run["run"]) / "out" / "swaps.json").is_file():
             self.skipTest("the teardown has not written this run's swap list yet")
         r = PV.preview("pictures.generate", run, quote=False)
         self.assertNotIn("THE PRODUCT", r["prompt"])
@@ -178,7 +178,7 @@ class Swaps(unittest.TestCase):
         self.assertIsNone(PV.build_picture({**b, "words_mode": "drawn"})["send"]["type_layer"])
 
     def test_a_drawn_swap_needs_no_picture(self):
-        rows = PV.swap_rows("brand-b", json.loads(Path(SPOTS).read_text()))
+        rows = PV.swap_rows("brand_b", json.loads(Path(SPOTS).read_text()))
         self.assertEqual([r["needs"] for r in rows if r["kind"] == "drawn"], ["none: drawn from words"] * 3)
 
 
@@ -187,20 +187,20 @@ class Ready(unittest.TestCase):
 
     def test_a_complete_brief_is_ready_and_an_incomplete_one_names_its_first_gap(self):
         import prompt_bench as PB
-        r = PB.readiness("brand-b", "brand-b-batch-grandma-dark-spots-not-growing-old", "brilliance-face-scrub")
+        r = PB.readiness("brand_b", "brand_b-batch-grandma-dark-spots-not-growing-old", "brilliance-face-scrub")
         self.assertEqual(r, {"ready": True, "missing": 0, "first": ""})
-        bad = PB.readiness("brand-a", "brand-a-batch-bald-problem-54865677", "")
+        bad = PB.readiness("brand_a", "brand_a-batch-bald-problem-54865677", "")
         self.assertFalse(bad["ready"])
         self.assertTrue(bad["first"])
-        self.assertIs(PB.readiness("brand-a", "brand-a-batch-bald-problem-54865677", ""), bad)   # cached
+        self.assertIs(PB.readiness("brand_a", "brand_a-batch-bald-problem-54865677", ""), bad)   # cached
 
     def test_the_product_kit_is_read_from_the_brief_title(self):
         import prompt_bench as PB
-        kits = ["nova-charging-case", "nova-face-brush", "war-face-wash"]
-        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · NOVA™ Pro Vibrating Face Brush · Bathroom review", kits), "nova-face-brush")
-        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · NOVA · Neck Detail", kits, {"nova-face-brush": ["nova"]}), "nova-face-brush")
+        kits = ["flex-charging-case", "flex-face-brush", "war-face-wash"]
+        self.assertEqual(PB._product_of("# BRIEF · brand_a · FLEX™ Pro Vibrating Face Brush · Bathroom review", kits), "flex-face-brush")
+        self.assertEqual(PB._product_of("# BRIEF · brand_a · FLEX · Neck Detail", kits, {"flex-face-brush": ["flex"]}), "flex-face-brush")
         # a short name only counts in the product slot, never in the title
-        self.assertEqual(PB._product_of("# BRIEF · BRAND-A · CRUSH · The war on bumps", kits, {"war-face-wash": ["war"]}), "")
+        self.assertEqual(PB._product_of("# BRIEF · brand_a · CRUSH · The war on bumps", kits, {"war-face-wash": ["war"]}), "")
 
     def test_the_words_row_reads_as_the_words(self):
         r = PV.preview("pictures.generate", {k: v for k, v in THREE.items() if k != "swap_file"}, quote=False)
@@ -322,8 +322,8 @@ class Sheet(unittest.TestCase):
         self.assertIn(f'"{first}"', r["prompt"])
 
     def test_swaps_stop_at_the_next_label_and_source_of_is_kept(self):
-        t = "- **SWAPS:** (1) the young woman becomes Creator-A.\n- **THE DIALS:**\n- intensity: swipe 3 → ours 4 (peak): x\n**1. THE INJECTED FRAME**\n| Zone |"
-        self.assertEqual(PV.swaps_block(t), "(1) the young woman becomes Creator-A.")
+        t = "- **SWAPS:** (1) the young woman becomes creator.\n- **THE DIALS:**\n- intensity: swipe 3 → ours 4 (peak): x\n**1. THE INJECTED FRAME**\n| Zone |"
+        self.assertEqual(PV.swaps_block(t), "(1) the young woman becomes creator.")
         self.assertIn("the source of the remedy", PV.clean_md("the source of the remedy keeps its place"))
         self.assertEqual(PV.clean_md("The source woman becomes Yai"), "the woman in IMAGE 1 becomes Yai")
 

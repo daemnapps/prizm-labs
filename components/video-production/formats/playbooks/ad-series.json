@@ -1,0 +1,106 @@
+{
+  "format_id": "ad-series",
+  "name": "Ad series",
+  "status": "draft",
+  "state": "parked 2026-11-27: three or more ads told as one story; not proven end to end, so out of the owner's view (the live lines are micro-drama and song-ad). Was: new; dry runs only (no production run)",
+  "signed": null,
+  "home": "components/video-production/formats/ad-series/format.json",
+  "family": "ad-series",
+  "signature": {
+    "audio": null,
+    "speakers": null,
+    "address": null,
+    "settings": null,
+    "product_role": "hero",
+    "pacing": null,
+    "capture": null,
+    "story": "series"
+  },
+  "specialised": [
+    {
+      "what": "workflow",
+      "why": "a series layer: arc card and ledger before any ad is written; each ad then runs its own format's workflow"
+    }
+  ],
+  "stage_order": [
+    "teardown",
+    "writing",
+    "series",
+    "elements",
+    "gates",
+    "voice",
+    "storyboard",
+    "pictures",
+    "clips",
+    "edit"
+  ],
+  "stages": {},
+  "failures": [],
+  "cost": {
+    "target_usd_per_ad": null
+  },
+  "quality_bar": [
+    "the ledger passes series_check.py with no L-check failing",
+    "each ad stands alone: hook, proof, ask",
+    "the recurring object is the same real item in every ad"
+  ],
+  "variants": [],
+  "built_from": [],
+  "rulings": [],
+  "workflow": {
+    "what": "The ad-series line. No person stop: the arc card and ledger are decided by the decision layer and filed for the owner to overrule; then each ad runs its own format's workflow, whose one stop is its quote.",
+    "ruled": null,
+    "route_locked": false,
+    "completion": "reviewed-arc-and-ledger",
+    "steps": [
+      {
+        "id": "arc",
+        "name": "Arc card and ledger",
+        "component": "video-production formats/ad-series",
+        "executor": "agent",
+        "gate": null,
+        "does": "Follow components/video-production/formats/ad-series/FORMAT.md, steps Arc and Ledger. Write arc.md and ledger.json in the workflow folder, then run python3 components/video-production/formats/ad-series/series_check.py on ledger.json. Also write runs/video-production/{brand}/workflow-{label}/arc-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.",
+        "prompts": [
+          "components/video-production/formats/ad-series/FORMAT.md"
+        ],
+        "evidence": [
+          "runs/video-production/{brand}/workflow-{label}/arc.md",
+          "runs/video-production/{brand}/workflow-{label}/ledger.json",
+          "runs/video-production/{brand}/workflow-{label}/arc-review.json"
+        ]
+      },
+      {
+        "id": "arc-review",
+        "name": "Arc card and ledger review",
+        "component": "decision layer · video-teardown decide.py",
+        "executor": "decided",
+        "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+        "review_asset": "runs/video-production/{brand}/workflow-{label}/arc-review.json",
+        "input_files": [
+          "runs/video-production/{brand}/workflow-{label}/arc-review.json"
+        ],
+        "review_files": [
+          "runs/video-production/{brand}/workflow-{label}/arc.md",
+          "runs/video-production/{brand}/workflow-{label}/ledger.json"
+        ],
+        "overrule": "the owner"
+      },
+      {
+        "id": "learn",
+        "name": "File what the series taught",
+        "component": "video-production formats/ad-series",
+        "executor": "agent",
+        "gate": null,
+        "does": "Follow FORMAT.md, step Learn: each lesson into learned.md in the workflow folder with its one home from the routing table in LEARNINGS.md; filed through the decision layer; nothing changes in a home in the run, only after the owner agrees with the filed call.",
+        "prompts": [
+          "components/video-production/formats/ad-series/FORMAT.md",
+          "components/video-production/formats/ad-series/LEARNINGS.md"
+        ],
+        "evidence": [
+          "runs/video-production/{brand}/workflow-{label}/learned.md"
+        ]
+      }
+    ]
+  },
+  "what": "three or more ads that run as one story: each ad is a full ad in its own format, and a ledger carries the card, the product, the cast and the open promises from one ad to the next"
+}

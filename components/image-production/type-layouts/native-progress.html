@@ -1,0 +1,10 @@
+<!-- Native progress: a big left-aligned white headline over a thin progress bar with a short tag beside it, then two small italic lines. The bar's fill is set in the layout. Sizes are at full scale; the fit step shrinks them together. -->
+<div class="area" data-fit style="align-items:flex-start;text-align:left;justify-content:flex-start;gap:calc(var(--s)*20px);color:#fff">
+ <div class="line" style="font:400 calc(var(--s)*92px)/1.08 Display;white-space:normal;width:86%">{{head}}</div>
+ <div style="display:flex;align-items:center;gap:calc(var(--s)*20px);width:100%">
+  <div style="flex:0 0 58%;height:calc(var(--s)*24px);background:#fff"><div style="width:66.7%;height:100%;background:{{ground}}"></div></div>
+  <div class="line" style="font:400 calc(var(--s)*38px)/1 Sans">{{note}}</div>
+ </div>
+ <div class="line" style="font:italic 400 calc(var(--s)*36px)/1.2 Sans">{{lead}}</div>
+ <div class="line" style="font:italic 400 calc(var(--s)*30px)/1.2 Sans">{{price}}</div>
+</div>

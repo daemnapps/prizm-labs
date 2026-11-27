@@ -16,7 +16,7 @@ Three of the five (`components/marketing-chain-checks`):
 WHY: printed when it happens, in `check.json`, and in the record.
 
 Lifted in shape from
-`tools/image-production/image_production/gates.py`.
+`components/image-production/image_production/gates.py`.
 """
 import json
 import sys
@@ -161,10 +161,17 @@ def resolve_elements(req, lib=None):
         if not value:
             continue
         picked[field] = value
-        try:
-            row = lib.get(field, asset, value)
-        except Exception as e:                   # noqa: BLE001 — Unknown is the library's own
-            problems.append("%s: %s" % (field, e))
+        # a style may be a picture style (style/image) or the ad's video style (style/video): the swipe's style is the
+        # one setting the whole ad is made in (owner ruling, 12 Nov 2026), so casting takes either
+        row, err = None, None
+        for a in ((asset, "video") if field == "style" else (asset,)):
+            try:
+                row = lib.get(field, a, value)
+                break
+            except Exception as e:               # noqa: BLE001 — Unknown is the library's own
+                err = err or e
+        if row is None:
+            problems.append("%s: %s" % (field, err))
             continue
         if str(row.get("what") or "").strip().upper().startswith("[TO DEFINE"):
             problems.append("%s `%s` is named in the library but not defined yet — "

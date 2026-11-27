@@ -1,0 +1,43 @@
+{
+ "kind": "fit-runs",
+ "title": "Fit runs — measured starts on a clean clone",
+ "note": "Filed once per fit-run request by the mini worker (card WM-79 (fit measurement)). Each verdict names the folder, its documented command, exit code, first failing line, elapsed seconds, vendor keys actually present, origin/main sha, and every path left changed in the disposable worktree. The command runs only when it is named in that folder's CLAUDE.md or README.md; roots are components/, the invoking person's own lab/<person>/, plus that person's optional runs.roots grant. The job holds no vendor key, denies network access, and fences writes to the throwaway worktree. Records are append-only; for one folder, newest created wins.",
+ "item_id": "item",
+ "item_label": "folder",
+ "items": [],
+ "open_items": true,
+ "verdict_fields": [
+  {
+   "key": "folder",
+   "note": "repo-relative path of the folder measured"
+  },
+  {
+   "key": "command",
+   "note": "the command AS THE FOLDER'S OWN DOCS NAME IT — never invented"
+  },
+  {
+   "key": "exit_code",
+   "note": "the documented command's exit status"
+  },
+  {
+   "key": "first_failing_line",
+   "note": "red_tests.first_failing_line over the output; null when exit_code is 0"
+  },
+  {
+   "key": "seconds",
+   "note": "wall time of the run"
+  },
+  {
+   "key": "keys",
+   "note": "vendor keys actually present in the scrubbed env — EMPTY by ruling; a non-empty list here is a finding"
+  },
+  {
+   "key": "sha",
+   "note": "the origin/main commit the throwaway worktree was cut from"
+  },
+  {
+   "key": "output_paths",
+   "note": "every path the command wrote, so 'files the same wherever it ran' is measured and not asserted"
+  }
+ ]
+}

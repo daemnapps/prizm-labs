@@ -7,7 +7,7 @@ one scoreboard a picture-ad tool can read next to each control.
 Read only. It re-runs nothing, calls no model and spends nothing.
 
     python3 components/model-inputs/ad_anatomy.py            # every brand
-    python3 components/model-inputs/ad_anatomy.py brand-a     # one brand
+    python3 components/model-inputs/ad_anatomy.py brand_a     # one brand
 
 Writes runs/ad-anatomy/scoreboard.json (only when run as a script).
 """
@@ -24,7 +24,7 @@ import sys
 from typing import Dict, List, Optional, Tuple
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TEARDOWN_RUNS = os.path.join(ROOT, "tools", "image-teardown", "runs")   # the old working home, read for one release
+TEARDOWN_RUNS = os.path.join(ROOT, "components", "image-teardown", "runs")   # the old working home, read for one release
 LANE_RUNS = os.path.join(ROOT, "runs", "image-teardown")
 ORGANIC_ROOT = os.path.join(ROOT, "runs", "swipe-organic")
 PAID_ROOT = os.path.join(ROOT, "components", "swipe-paid")

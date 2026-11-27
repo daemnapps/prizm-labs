@@ -1,0 +1,74 @@
+{
+ "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+ "batch": "260902c",
+ "brand": "Brand B",
+ "product": "bodyscrub",
+ "media": "static",
+ "source": "ai",
+ "talent": "none",
+ "avatar": "spothider",
+ "problem": "darkspots",
+ "angle": "pigmentmemory",
+ "concept": "handsapplication",
+ "format": "photostrip",
+ "brief": "p141",
+ "ratio": "9x16",
+ "_upload": "All 6 assets go into ONE ad unit named 'Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c'. Meta reports one row for the unit.",
+ "_join": "Meta's ad_name equals `ad_name`. Split on '-' for brand, product, media, source, talent, avatar, problem, angle, concept, format, brief, ratio, batch.",
+ "ads": [
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a01",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a01.png",
+   "headline": "The turmeric scrub that becomes your even skin",
+   "template": "photo-strip",
+   "picture_model": "fal-ai/bytedance/seedream/v4/text-to-image",
+   "picture_size": "1536x2688"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a02",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a02.png",
+   "headline": "The body scrub that takes spots off your legs",
+   "template": "photo-strip",
+   "picture_model": "fal-ai/bytedance/seedream/v4/text-to-image",
+   "picture_size": "1536x2688"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a03",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a03.png",
+   "headline": "The Thai scrub that ends 'just the way it is'",
+   "template": "photo-strip",
+   "picture_model": "fal-ai/bytedance/seedream/v4/text-to-image",
+   "picture_size": "1536x2688"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a04",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a04.png",
+   "headline": "A turmeric scrub that fades your oldest spots",
+   "template": "photo-strip",
+   "picture_model": "fal-ai/bytedance/seedream/v4/text-to-image",
+   "picture_size": "1536x2688"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a05",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a05.png",
+   "headline": "The dark-spot scrub that works from the neck down",
+   "template": "photo-strip",
+   "picture_model": "fal-ai/bytedance/seedream/v4/text-to-image",
+   "picture_size": "1536x2688"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a06",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p141-9x16-260902c-a06.png",
+   "headline": "The Thai body scrub that fades every visible spot",
+   "template": "photo-strip",
+   "picture_model": "fal-ai/bytedance/seedream/v4/text-to-image",
+   "picture_size": "1536x2688"
+  }
+ ]
+}

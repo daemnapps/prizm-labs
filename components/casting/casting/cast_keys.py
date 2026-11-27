@@ -3,7 +3,7 @@
 SI-194 (readers use loader), casting dispatch: `generate.key_value` no longer
 starts `security find-generic-password` itself. It asks key(NAME), which asks
 components/keys/loader.py: the environment first, then the one key file
-this repo's .env (add NAME=value there). Only on a machine with no key file
+~/.upright-keys.env (add NAME=value there). Only on a machine with no key file
 yet — and not the mini, nor with KEYS_NO_FALLBACK=1 — does the loader fall
 back to the temporary old places. `dryrun.py` asks `generate.key_present`, so it reads through
 here unchanged. The judge's key is image-production's `route.key_value`,
@@ -26,7 +26,7 @@ HERE = Path(__file__).resolve().parent
 _LOADER_PATH = next((r / "components" / "keys" / "loader.py" for r in HERE.parents
                      if (r / "components" / "keys" / "loader.py").is_file()),
                     HERE.parents[2] / "components" / "keys" / "loader.py")
-_LOADER_NAME = "company_keys_loader"
+_LOADER_NAME = "upright_keys_loader"
 
 
 def _load_loader():

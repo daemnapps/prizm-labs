@@ -1,0 +1,23 @@
+{
+  "_what": "How the creative strategist's swipe step searches the paid library. Brand-agnostic: nothing here names a brand. A brand overrides a field by declaring it in its own folder (brands/<brand>/strategy/markets.json for markets); keywords and categories are never set here, they come from the avatar.",
+  "ruled": "the owner, 2026-10-01",
+  "source": "AdPlexity Social API /search/ads (components/swipe-paid/capture/adplexity_client.py)",
+  "signal": {
+    "group_by": "creative (meta_grouping_id=2)",
+    "sort": "grouped_new_ads_desc — new copies in the last 7 days (velocity)",
+    "read": ["meta_group_new_ads", "meta_group_new_ads_change", "meta_group_active_ads", "meta_group_ads_count", "meta_group_score_change", "days_total"],
+    "copies_floor": 5,
+    "days_running_from": 14,
+    "status": "active"
+  },
+  "ad_type": ["image", "video"],
+  "markets": {
+    "default": ["US", "GB", "CA", "AU", "NZ", "IE"],
+    "language": "en",
+    "override": "brands/<brand>/strategy/markets.json"
+  },
+  "no_filter": ["cta", "affiliate_network", "tracking_tools", "platform"],
+  "keywords": "from the avatar's own words: machine/keywords.py --brand <b> --avatar <a> [--sub <s>]",
+  "categories": "the product's own category + the avatar's affinity groups (profile)",
+  "credits": "1 per ad returned + 1 per call; count is the price. Plan + cost shown and approved before any pull. Review already-paid results first."
+}

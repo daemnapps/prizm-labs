@@ -1,0 +1,12 @@
+{
+  "kind": "wf-output-review-cards",
+  "title": "output-review — reviewing the output of a run",
+  "note": "Cards carded by the lead 2026-09-02 from the developer's rulings in PLAN batch 26 (team/plans/dev-developer.md at 261068d10). Scope is REVIEWING OUTPUT — parity gate-5 reads, CM-2 goldens, in-workflow taste checks — never feature QC. Auth is Upright sign-in, no reviewer keys: the tool is a dashboard tool, session is the identity (CP-2), grants server-side. OR-1 kind + view, OR-2 the mint-round worker action, OR-3 CM-2 as the first round (and the feature's acceptance), OR-4 single-output taste mode, OR-5 the open attribution question that is the developer's call and not dispatchable.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/output-review/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

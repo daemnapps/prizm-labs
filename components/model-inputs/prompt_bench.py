@@ -26,11 +26,11 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 
 # THE BOARD NEVER RUNS STALE CODE (2026-10-27): the server is started once and runs for days, so a fix to the picture
-# builder, the picture engine or the writing tools reached it only on a restart. A BRAND-A picture came out with no words
+# builder, the picture engine or the writing tools reached it only on a restart. A brand_a picture came out with no words
 # because the running board still looked for a file the image-writing split had moved. Every route asks fresh() first:
 # when any of those files changed since they were loaded, they are loaded again.
-WATCH = [HERE, REPO / "tools/image-production/image_production", REPO / "tools/image-teardown/tools",
-         REPO / "tools/image-writing/tools", REPO / "components/generative-model-house"]
+WATCH = [HERE, REPO / "components/image-production/image_production", REPO / "components/image-teardown/tools",
+         REPO / "components/image-writing/tools", REPO / "components/generative-model-house"]
 _LOADED = [0.0]
 
 
@@ -140,11 +140,11 @@ def _product_of(brief_md, kits, aliases=None):
     """The product kit the brief names in its title line, if any."""
     head = next((l for l in brief_md.splitlines() if l.startswith("# BRIEF")), "").lower()
     words = set(re.findall(r"[a-z0-9]+", head))
-    whole = [k for k in kits if set(k.split("-")) <= words]  # "NOVA™ Pro Vibrating Face Brush" names nova-face-brush
+    whole = [k for k in kits if set(k.split("-")) <= words]  # "FLEX™ Pro Vibrating Face Brush" names flex-face-brush
     if whole:
         return max(whole, key=lambda k: len(k.split("-")))
     parts = [x.strip() for x in head.split("·")]
-    named = set(re.findall(r"[a-z0-9]+", parts[2])) if len(parts) > 3 else set()   # "# BRIEF · BRAND-A · NOVA · <title>"
+    named = set(re.findall(r"[a-z0-9]+", parts[2])) if len(parts) > 3 else set()   # "# BRIEF · brand_a · FLEX · <title>"
     by_alias = [k for k in kits if named & set(aliases.get(k) or [])]
     return by_alias[0] if len(by_alias) == 1 else ""
 
@@ -229,7 +229,7 @@ def cast_list():
             idm = re.search(r"## Identity block[^\n]*\n>\s*([^\n]+)", ch)          # the paste-ready line: who she is, in one line
             age, sex, eth = _read_person(idm.group(1) if idm else str(r.get("reads") or ""))
             sheets = (d / "sheets").is_dir() and any((d / "sheets").glob("headshot.*")) or any((d / "sheets").glob("turnaround.*"))
-            # a person with casting sheets can be cast (2026-10-27, on BRAND-A's cast all marked "not on the brand's
+            # a person with casting sheets can be cast (2026-10-27, on brand_a's cast all marked "not on the brand's
             # cast list": that list was emptied on 2026-09-29 and everyone since was built with sheets, never added back)
             working = bool(sheets)
             why = "" if working else "sheets not made"
@@ -505,9 +505,17 @@ def _make_swap(jid, brief):
             "try:\n sj.approve_still(sys.argv[2],sys.argv[3],sys.argv[4]);r=sj.make_clip(sys.argv[2],sys.argv[3],sys.argv[4]);"
             "open(st,'w').write(json.dumps({'state':'done','file':r['file']}))\n"
             "except BaseException as e:\n open(st,'w').write(json.dumps({'state':'failed','error':str(e)[:400]}))\n")
-    subprocess.Popen([sys.executable, "-c", code, str(REPO / "tools/video-production/machine/swipe_swap_job.py"), brand, label, who, str(st)],
+    subprocess.Popen([sys.executable, "-c", code, str(REPO / "components/video-production/machine/swipe_swap_job.py"), brand, label, who, str(st)],
                      start_new_session=True, stdout=subprocess.DEVNULL, stderr=open(d / "clip-run.log", "a"))
     JOBS[jid].update(status_file=str(st))
+
+
+def _has_bars(pic):
+    """Solid black rows at the top or bottom of a picture: bars baked in, which a moving clip camera then moves."""
+    from PIL import Image
+    g = Image.open(pic).convert("L")
+    n = g.height // 50
+    return any(g.crop((0, y, g.width, y + n)).getextrema()[1] < 28 for y in (0, g.height - n))
 
 
 def _make(jid, brief):
@@ -546,6 +554,19 @@ def _make(jid, brief):
             dst.write_bytes(Path(got["file"]).read_bytes())
             bc = body_check(REPO / "runs" / "video-production" / shot["run"], dst)
             n = int(brief.get("body_retry") or 0)
+            # THE SAFE ZONE IS MEASURED, NEVER ASKED FOR (2026-10-31): faces, product and hands inside the centred 4:5 of the 9:16
+            # frame, on the same machine check the production line uses; a miss is remade like a wrong body
+            if not is_opening and bc.get("ok") is not False:
+                zc = PV._load("video-production/machine/safezone.py").check(dst)
+                zf = REPO / "runs" / "video-production" / shot["run"] / "zone-checks.json"
+                zd = _read_json(zf)
+                zd[dst.name] = {"verdict": zc.get("verdict"), "outside": zc.get("outside"), "sha": _sha(dst)}
+                zf.write_text(json.dumps(zd, indent=1))
+                if zc.get("verdict") == "FAIL" and not _no_person(shot):     # a close-up with no person fills the frame on purpose
+                    bc = {"ok": False, "problems": ["outside the safe zone: " + ", ".join(zc.get("outside") or []) +
+                                                    "; pull the camera back so the face, hands and product sit inside the centred 4:5 of the frame"]}
+            if not is_opening and bc.get("ok") is not False and _has_bars(dst):
+                bc = {"ok": False, "problems": ["black bars in the frame; the picture fills the whole 9:16 frame edge to edge, no bars or borders"]}
             if not is_opening and bc.get("ok") is False and n < BODY_RETRIES:
                 # A WRONG BODY IS REMADE BEFORE A PERSON SEES IT (2026-10-28): the check's own words become the scene's
                 # note, the swaps are rewritten with it, and the picture is made again, up to BODY_RETRIES times
@@ -606,10 +627,15 @@ def shots(run):
         made = cp.picture_file(d, pid) if pid else None
         ks = (g.get("swipe") or {}).get("shots") or []
         sw = td / "framemap" / "shots" / ks[0]["first"] if ks and ks[0].get("first") else None
+        if sw is None:                                      # no swipe (a scratch ad): the scene's own reference frame stands in
+            sc = next((s for s in plan.get("scenes") or [] if s.get("id") in (g.get("scenes") or [])), {})
+            ref = (sc.get("reference") or {}).get("file")
+            sw = d / ref if ref else None
         slug, _ = _shot_slug(run, g["id"])
         it = PV._teardown_run(REPO, slug)
         state = ("ready" if (it / "out" / "swaps.json").is_file() else
-                 (SHOT_JOBS.get(slug) or {}).get("state") or ("none" if sw else "no swipe frame"))
+                 next((x for x in [(SHOT_JOBS.get(slug) or {}).get("state")] if x and x != "ready"), None)
+                 or ("none" if sw else "no swipe frame"))    # "ready" comes only from the scene's own files, never a remembered job
         out.append({"n": n, "id": g["id"], "maker": g.get("maker"), "seconds": g.get("seconds"),
                     "swipe_shot": ks[0]["id"] if ks else None,
                     "swipe_frame": workflow.get("base") or (str(sw) if sw and sw.is_file() else ""),
@@ -639,7 +665,7 @@ def shots(run):
         for scene in out:
             for candidate in scene["clips"]:
                 candidate["kept"] = False
-    rj = json.loads((td / "run.json").read_text()) if (td / "run.json").is_file() else {}
+    rj = json.loads((td / "run.json").read_text()) if (td / "run.json").is_file() else _read_json(d / "run.json")
     brand, _, label = run.partition("/")
     cut = REPO / "runs" / "video-edit" / brand / label / "renders" / "control.mp4"
     ej = SHOT_JOBS.get("edit:" + run) or {}
@@ -661,6 +687,8 @@ def shots(run):
                                        "cut": status.get('cut') or ''})
     hj = SHOT_JOBS.get("hook:" + run) or {}
     return {"run": run, "brand": brand, "product": rj.get("product") or "", "shots": out,
+            "style": str((plan.get("piece") or {}).get("style") or ""),
+            "no_swipe": not any(((g.get("swipe") or {}).get("shots")) for g in sb.get("sections") or []),
             "workflow": workflow, "openings": child_openings,
             "workflow_job": {k: hj.get(k) for k in ("state", "error", "action")},
             "editing": ej.get("state") == "running", "edit_error": ej.get("error") if ej.get("state") == "failed" else "",
@@ -770,6 +798,16 @@ def _sha(p):
 BODY_RETRIES = 2
 
 
+def _no_person(shot):
+    """The shot lists no person in its elements: pulling the camera back would turn it into a different shot."""
+    s = next((x for x in shots(shot["run"])["shots"] if x.get("picture") == shot.get("picture")), None)
+    sb = _read_json(_video_run(shot["run"]) / "storyboard.json")
+    g = next((x for x in sb.get("sections") or [] if s and x.get("id") == s["id"]), None)
+    if s and PV._load("video-production/machine/shot_swaps.py").hands_only(s.get("swipe_frame")):
+        return True                                          # the swipe's shot is hands with no face: it stays that close
+    return bool(g) and not any(str(e).startswith("person") for e in g.get("elements") or [])
+
+
 def _body_retry(jid, brief, shot, bc, n):
     run = shot["run"]
     got = shots(run)
@@ -781,7 +819,7 @@ def _body_retry(jid, brief, shot, bc, n):
     notes.setdefault(s["id"], []).append("Body check (automatic): " + "; ".join(bc.get("problems") or [])[:400]
                                          + ". Exactly two arms and two hands, each plainly from the person's own shoulder, normal size.")
     (d / "shot-notes.json").write_text(json.dumps(notes, indent=1, ensure_ascii=False))
-    _sh(["tools/video-production/machine/shot_swaps.py", str(d), s["id"], "--frame", s["swipe_frame"],
+    _sh(["components/video-production/machine/shot_swaps.py", str(d), s["id"], "--frame", s["swipe_frame"],
          "--write", s["picture_run"]], timeout=600)
     return _make(jid, {**brief, "body_retry": n + 1})
 
@@ -859,7 +897,7 @@ def edit_make(body):
 
 def _edit_job(jid, run):
     """Runs in its own process: each scene effect's current clip becomes the edit's B-roll of the same name, then the
-    video-edit line cuts the draft (tools/video-edit/machine/line.py --draft --no-file)."""
+    video-edit line cuts the draft (components/video-edit/machine/line.py --draft --no-file)."""
     import shutil
     d = _video_run(run)
     if (d / "opening.json").is_file():
@@ -870,7 +908,7 @@ def _edit_job(jid, run):
     for fx in sorted((d / "effects").glob("*/clip.mp4")):
         shutil.copyfile(fx, e / "broll" / f"{fx.parent.name}.mp4")
     # the scenes are approved: the edit only cuts them together, its checks are listed, nothing is regenerated
-    _sh(["tools/video-edit/machine/line.py", str(d), "--draft", "--approved", "--no-file"], timeout=5400)
+    _sh(["components/video-edit/machine/line.py", str(d), "--draft", "--approved", "--no-file"], timeout=5400)
     cut = e / "renders" / "control.mp4"
     if not cut.is_file():
         raise ValueError("the edit line made no cut")
@@ -926,7 +964,7 @@ def shot_change(body):
 def _change_job(jid, video_dir, gid, frame, picture_run, brief):
     """Runs in its own process (2026-10-28: every board job is its own process): the swaps are rewritten with the
     person's note, then the start picture is made again the same way as the first time."""
-    _sh(["tools/video-production/machine/shot_swaps.py", video_dir, gid, "--frame", frame, "--write", picture_run],
+    _sh(["components/video-production/machine/shot_swaps.py", video_dir, gid, "--frame", frame, "--write", picture_run],
         timeout=600)
     return _make(jid, brief)
 
@@ -946,22 +984,65 @@ def shot_open(body):
     return 200, {"state": "opening"}
 
 
+def _avatar_of(video_dir):
+    """The avatar the video's brief was written for, from the brief register: a brand with several needs it named."""
+    key = str(_read_json(Path(video_dir) / "run.json").get("brief_key") or "")
+    briefs = _read_json(REPO / "components/image-teardown/briefs.json")
+    rows = briefs.get("briefs") or briefs
+    number = key.rsplit("_", 1)[-1]
+    same = [v for k, v in rows.items() if isinstance(v, dict) and k.split("_")[0] == key.split("_")[0] and k.endswith("_" + number)]
+    return next((v.get("avatar") for v in same if v.get("avatar")), None)
+
+
+def _pose_guide(frame, video_dir, gid):
+    """AN ANIMATED FILM TAKES ONLY THE POSE FROM A PHOTO (2026-10-31): a real photo as IMAGE 1 brings its clothes, jewellery, skin and
+    look into the picture however the words are put, so the frame goes in as a soft grey guide: camera, framing and pose, nothing else."""
+    from PIL import Image, ImageFilter, ImageOps
+    out = Path(video_dir) / "pose-guides" / f"{gid}.jpg"
+    out.parent.mkdir(exist_ok=True)
+    # EVERY PICTURE IS FULL 9:16 (2026-10-31): a wide frame's own black bars get copied into the picture, and a clip that moves
+    # the camera then moves the bars. The bars are cut off and the guide is a full tall frame with no hard edge.
+    g = Image.open(frame).convert("L")
+    box = g.point(lambda v: 255 if v > 28 else 0).getbbox()
+    g = ImageOps.autocontrast(g.crop((0, box[1], g.width, box[3])) if box else g)
+    w, h = 1080, 1920
+    fill = ImageOps.fit(g, (w, h)).filter(ImageFilter.GaussianBlur(60))
+    if g.width / g.height > w / h:
+        fw = int(w * 1.25)
+        fg = g.resize((fw, int(g.height * fw / g.width)))
+        fg = fg.crop(((fw - w) // 2, 0, (fw - w) // 2 + w, fg.height))
+        fill.paste(fg, (0, (h - fg.height) // 2))
+    else:
+        fill = ImageOps.fit(g, (w, h))
+    fill.filter(ImageFilter.GaussianBlur(20)).convert("RGB").save(out, quality=92)
+    return str(out)
+
+
 def _open_job(jid, brand, product, frame, name, slug, video_dir, gid):
+    sid = str((_read_json(Path(video_dir) / "plan.json").get("piece") or {}).get("style_id") or "")
+    rows = _read_json(REPO / "components/video-production/styles/bank.json")
+    rows = rows if isinstance(rows, list) else rows.get("styles") or []
+    # only a drawn or animated style redraws the frame: a photoreal style (phone footage included) keeps the real swipe frame
+    if any(x.get("id") == sid and x.get("family") not in (None, "real", "photo", "photoreal") for x in rows if isinstance(x, dict)):
+        frame = _pose_guide(frame, video_dir, gid)
     """Runs in its own process: the shot's swipe frame opened as a picture run, its chain run, its swaps written."""
-    _sh(["tools/image-teardown/chain.py", "open", "--brand", brand, "--file", frame,
+    _sh(["components/image-teardown/chain.py", "open", "--brand", brand, "--file", frame,
          "--name", name, "--source", "organic", "--route", "ai", "--form", "single"], timeout=300)
     # the records only: a video scene's swaps come from its brief, so the picture chain's writing stages are never used here
-    cmd = ["tools/image-teardown/tools/run.py", slug, "1,1k,2,2b", "--brand", brand, "--gates", "warn"]
+    cmd = ["components/image-teardown/tools/run.py", slug, "1,1k,2,2b", "--brand", brand, "--gates", "warn"]
     if product:
         cmd += ["--product", product]
+    avatar = _avatar_of(Path(video_dir))
+    if avatar:
+        cmd += ["--avatar", avatar]
     _sh(cmd, timeout=3600)
     # the shot's swaps come from the VIDEO BRIEF, never the picture chain's own new concept (2026-10-27)
-    _sh(["tools/video-production/machine/shot_swaps.py", video_dir, gid, "--frame", frame, "--write", slug], timeout=600)
+    _sh(["components/video-production/machine/shot_swaps.py", video_dir, gid, "--frame", frame, "--write", slug], timeout=600)
     # THE SWIPE SCENE BROKEN DOWN (L-50, L-51) with the frame, so no clip is ever made without it; a failed read never
     # stops the frame — the scene card then shows no breakdown and a new Get the swipe frame ready reads it
     if gid not in _read_json(Path(video_dir) / "scene-breakdown.json"):
         try:
-            _sh(["tools/video-production/machine/scene_breakdown.py", video_dir, gid], timeout=900)
+            _sh(["components/video-production/machine/scene_breakdown.py", video_dir, gid], timeout=900)
         except Exception:                                   # noqa: BLE001
             pass
 
@@ -980,7 +1061,8 @@ def make(body):
         return 200, {"id": jid}
     shot = brief.get("video_shot") or {}
     run = brief["run"] if job_ == "clips.seedance" else shot.get("run")
-    key = ("clip:" if job_ == "clips.seedance" else "picture:") + run if run else None
+    # one generation per element at a time; a video's other scenes may run beside it
+    key = ("clip:" + run if job_ == "clips.seedance" else f"picture:{run}:{shot.get('picture') or ''}") if run else None
     if key and (SHOT_JOBS.get(key) or {}).get("state") == "running":
         return 400, {"error": "This element already has a generation running."}
     return 200, {"id": _spawn("_make_clip" if job_ == "clips.seedance" else "_make", [brief], shot_key=key)}
@@ -1008,14 +1090,14 @@ def made(brand=None):
 
 
 # ------------------------------------------------ the batch: the approved picture + 5, then the Meta card (2026-10-27)
-# the owner: "we're gonna run batches of ads through this tool right here … we need to see all the 6 variations of the
+# owner: "we're gonna run batches of ads through this tool right here … we need to see all the 6 variations of the
 # headlines at this stage … let's make the one and then we make the variations." The board drives the same components
 # the chain does, nothing of its own: image-writing writes the five (stage 5) and keeps the copy sign-off, image-edit
 # makes them on the picture path, meta-upload files the card. Every step is a job the page polls.
 
 def _brief_row(run):
     """The register's row for a run (image-teardown briefs.json): its brief number, product and avatar."""
-    f = REPO / "tools/image-teardown/briefs.json"
+    f = REPO / "components/image-teardown/briefs.json"
     try:
         d = json.loads(f.read_text())
     except (OSError, ValueError):
@@ -1107,7 +1189,7 @@ def batch_write(body):
     avatar = row.get("avatar") or ask.get("avatar")
     if not (run and brand and product):
         return 400, {"error": "this brief has no brand or product in the register or its order"}
-    cmd = (["tools/image-writing/run.py", run, "5,6", "--brand", brand, "--product", product]
+    cmd = (["components/image-writing/run.py", run, "5,6", "--brand", brand, "--product", product]
            + (["--avatar", avatar] if avatar else []) + (["--ask", ask_path] if ask_path else []))
     return _bg(f"w{int(time.time() * 1000)}", lambda: {"log": _sh(cmd)[-1500:], "batch": batch(run, brand)})
 
@@ -1133,11 +1215,11 @@ def batch_make(body):
                 v["words"] = new
     vf.write_text(json.dumps(d, indent=1, ensure_ascii=False))
     brand = body.get("brand") or st["brief"].get("brand")
-    by = (body.get("by") or "the owner") + ", on the board"
+    by = (body.get("by") or "owner") + ", on the board"
 
     def go():
-        _sh(["tools/image-writing/tools/copy_ok.py", "approve", run, "--by", by], 120)
-        log = _sh(["tools/image-edit/vary.py", st["approved_picture"], "--brand", brand, "--from-brief", str(vf),
+        _sh(["components/image-writing/tools/copy_ok.py", "approve", run, "--by", by], 120)
+        log = _sh(["components/image-edit/vary.py", st["approved_picture"], "--brand", brand, "--from-brief", str(vf),
                    "--label", f"{run}--batch"])
         return {"log": log[-1500:], "batch": batch(run, brand)}
     return _bg(f"v{int(time.time() * 1000)}", go)
@@ -1162,7 +1244,7 @@ def batch_card(body):
         prod = body.get("product") or row.get("product")
         if not prod:
             return 400, {"error": "this ad has no brief number yet, and no product to number it under"}
-        _sh(["tools/image-teardown/tools/briefs.py", "open", run, "--brand", row.get("brand") or body.get("brand"),
+        _sh(["components/image-teardown/tools/briefs.py", "open", run, "--brand", row.get("brand") or body.get("brand"),
              "--type", "image-ai", "--product", prod] + (["--avatar", m.group(1)] if m else []), 300)
         row = _brief_row(run)
         if not row.get("brief"):
@@ -1196,16 +1278,16 @@ def batch_card(body):
 
 
 # ------------------------------------------------ new deliveries: the graphic designer's pictures, the video editor's videos
-# the owner, 2026-10-27: "check for [the graphic designer's] recent delivery", "for [the video editor] as well on the video
+# owner, 2026-10-27: "check for [the graphic designer's] recent delivery", "for [the video editor] as well on the video
 # side, everything needs to run through the same process", "make this name agnostic". The check, the matching to briefs
-# and bringing it in are image-edit's (tools/image-edit/delivery.py); the card is meta-upload's to_check. The board
+# and bringing it in are image-edit's (components/image-edit/delivery.py); the card is meta-upload's to_check. The board
 # only asks and shows.
 
 def _deliverers():
     """The roles the board's delivery button checks, named by role (2026-10-27):
     `name` is the role in words, `filled_by` who fills it today, both from image-edit's delivery.json."""
     try:
-        roles = json.loads((REPO / "tools/image-edit/delivery.json").read_text()).get("roles") or {}
+        roles = json.loads((REPO / "components/image-edit/delivery.json").read_text()).get("roles") or {}
     except (OSError, ValueError):
         return []
     return [{"id": k, "name": "the " + k.replace("-", " "), "filled_by": v.get("filled_by"), "delivers": v.get("delivers")}
@@ -1214,7 +1296,7 @@ def _deliverers():
 
 def _delivery():
     import importlib.util
-    spec = importlib.util.spec_from_file_location("image_edit_delivery", REPO / "tools/image-edit/delivery.py")
+    spec = importlib.util.spec_from_file_location("image_edit_delivery", REPO / "components/image-edit/delivery.py")
     m = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(m)
     return m
@@ -1246,9 +1328,9 @@ def delivery_card(body):
 
 
 # ------------------------------------------------ the Higgsfield handoff (2026-10-27)
-# the owner: "once I feel confident, I'll have something called a Higgsfield handoff, so that way you can just work directly
+# owner: "once I feel confident, I'll have something called a Higgsfield handoff, so that way you can just work directly
 # in Supercomputer." The package (prompts, numbered pictures, words, rules, HANDOFF.md) and its copy on the Drive are
-# image-edit's (tools/image-edit/handoff.py); the board only presses it and shows the link.
+# image-edit's (components/image-edit/handoff.py); the board only presses it and shows the link.
 
 def _handoff_target(body):
     """What the handoff front door is asked for: a video run ("brand/run" on the board) by its folder, a picture by its
@@ -1275,7 +1357,7 @@ def handoff_state(run, kind=None):
 
 def _register_rows():
     try:
-        d = json.loads((REPO / "tools/image-teardown/briefs.json").read_text())
+        d = json.loads((REPO / "components/image-teardown/briefs.json").read_text())
     except (OSError, ValueError):
         return []
     return [r for r in (d.get("briefs") or {}).values() if isinstance(r, dict)]
@@ -1305,16 +1387,16 @@ def handoff(body):
             except (OSError, ValueError):
                 ask = {}
             b = brand or ask.get("brand") or ""
-            _sh(["tools/image-teardown/tools/briefs.py", "open", what, "--brand", b, "--type", "image-ai"]
+            _sh(["components/image-teardown/tools/briefs.py", "open", what, "--brand", b, "--type", "image-ai"]
                 + (["--product", ask["product"]] if ask.get("product") else [])
                 + (["--avatar", ask["avatar"]] if ask.get("avatar") else [])
                 + sum((["--link", l] for l in ask.get("links") or []), []), 300)
         if kind == "pic":
             # the run's record is filed again first, so it lists the brief the board just wrote (2026-10-28: a written
             # brief was refused as "never reached the final stage" because the record was filed before it was written)
-            _sh(["-c", "import sys; sys.path.insert(0, 'tools/image-teardown/tools'); import gates, paths; "
+            _sh(["-c", "import sys; sys.path.insert(0, 'components/image-teardown/tools'); import gates, paths; "
                        f"gates.file_record({(brand or paths_brand(what))!r}, {what!r})"], 300)
-        log = _sh(["tools/image-edit/handoff.py", what] + (["--brand", brand] if brand else []), 1800)
+        log = _sh(["components/image-edit/handoff.py", what] + (["--brand", brand] if brand else []), 1800)
         link = next((l.split("link: ", 1)[1].strip() for l in log.splitlines() if l.startswith("link: ")), None)
         if not link:
             raise SystemExit("the handoff said no Drive link: " + log[-300:])

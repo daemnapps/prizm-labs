@@ -1,0 +1,60 @@
+{
+ "_readme": [
+  "Wan 2.2 VACE Fun (pose) on fal: tracked motion drives a first frame. Same shape as wan-3.0.json.",
+  "No brand, product, person or format word appears in this file."
+ ],
+ "model": "wan-2.2-vace-fun-pose",
+ "label": "Wan 2.2 VACE Fun (pose)",
+ "registry_id": "wan-2.2-vace-fun-pose",
+ "read": "2026-11-09",
+ "status": "draft",
+ "vendor_ids": {
+  "fal": "fal-ai/wan-22-vace-fun-a14b/pose"
+ },
+ "sources": [
+  "https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=fal-ai/wan-22-vace-fun-a14b/pose (read 2026-11-09)",
+  "fal pricing API: 0.15 USD a second (2026-11-09)"
+ ],
+ "limits": {
+  "num_frames": [
+   81,
+   241
+  ],
+  "frames": "4n+1 (224 refused, 221 accepted)",
+  "fps": [
+   5,
+   30
+  ],
+  "resolutions": [
+   "240p",
+   "360p",
+   "480p",
+   "580p",
+   "720p"
+  ],
+  "inputs": "video_url (the motion clip; preprocess=true tracks its poses), first_frame_url, ref_image_urls, prompt, negative_prompt",
+  "safety": "enable_safety_checker false needs an authorised fal account; ours is checked: a bikini first frame is refused, and a prompt can be refused"
+ },
+ "tests": [
+  {
+   "at": "2026-11-09",
+   "what": "14 s at 480p, the swipe's poses driving our first frame",
+   "result": "motion copied frame for frame; the cast drifted without character sheets (blindfolds and clothes moved between people)"
+  }
+ ],
+ "lip_sync": {
+  "why": "the pose route carries no voices, so a take made on it is silent; our read is laid on and the speaker's face is made to speak it",
+  "tested": "[own test 2026-11-09] a 2.5 s close-up of one face, our read of one line; match = how closely the mouth's opening follows the voice's loudness, frame by frame (MediaPipe jawOpen against the read, 0 none to 1 exact); the clip as made scored 0.13",
+  "latentsync": "fal-ai/latentsync, 0.005 USD a second, 86 s for 2.5 s: match 0.39, the closest; mouth a little soft. The house default (`take.py lipsync`)",
+  "sync": "fal-ai/sync-lipsync/v2 (lipsync-2), 3 USD a minute, 71 s: match 0.31; the sharpest mouth shapes (a round 'oo', teeth); it re-mouths every face in frame",
+  "musetalk": "fal-ai/musetalk, about 0.0125 USD a second of clip, 24 s: match 0.20; the mouth area goes blurry",
+  "limits": "one face at a time: a take with several people is synced line by line on a window where the speaker's face is the largest in frame; a face turned away or under a blindfold gives nothing to sync (the first test on a wide tracked take moved no visible mouth)"
+ },
+ "animate": {
+  "model": "Wan 2.2 Animate on fal (fal-ai/wan/v2.2-14b/animate/move and /replace), 0.08 USD a second at 480p",
+  "tested": "[own test 2026-11-09] 4 s of a swipe with one woman walking and leaning in, our rater's picture as the person; move 260 s, replace 371 s",
+  "move": "our person does the clip's motion in our picture's place: the motion carries; the rest of the frame warps and smears where the clip's other people move",
+  "replace": "our person is put into the clip itself: the clip's other people, its on-screen words (garbled) and its props stay, so a swipe leaks through; usable only on a clip that is ours",
+  "house": "not a take route; for one person's motion onto our picture, the pose route with a tracked clip keeps the frame cleaner"
+ }
+}

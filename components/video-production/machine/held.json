@@ -1,0 +1,35 @@
+{
+ "_what": "Changes that are written and NOT live: each waits for the owner's review, shown before and after on one page. `on: false` means the code is in the chain and nothing acts on it. Turning one on is a ruling: set `on` true and write the date and the words of the ruling in `ruled`. machine/held.py is the only reader. Brand-agnostic.",
+ "status": "draft",
+ "items": {
+  "hooks-from-the-body": {
+   "on": false,
+   "ruled": null,
+   "decision": "More openings from what exists",
+   "code": "machine/hook_variations.py body_openings() · `hook_variations.py from-body <run>` prints them; `--apply` is refused while this is off",
+   "before": "Nothing looks inside the body for a line that could open the ad. Every opening is written new at the hook pass; a line already filmed is never moved to the front.",
+   "after": "After the control is cut, the body's own on-camera lines are read for ones that can open the ad by themselves: short, standing on their own without the line before them, and carrying a hook signal (a question, a turn, a figure, a word to the viewer, an admission). Up to three are proposed as openings in the same shape every opening has, each naming the scene whose own clip moves to the front. No clip is made: the edit re-orders footage that already exists.",
+   "source": "the decision logic file, stage 6 'More openings from what exists'"
+  },
+  "cast-by-audience": {
+   "on": false,
+   "ruled": null,
+   "decision": "Who is on screen",
+   "code": "machine/auto_elements.py audience_cast() and lead_of(); read in run() only while this is on",
+   "before": "A new person is asked for at the casting door in the brief's own words for that person (the row's role, else its name and what it says the person is). The lead of the ad is asked for the same way as everyone else.",
+   "after": "The lead of the ad is cast as someone who looks like the audience: the people the cast bank holds for the avatar the piece is written for. When the brief has an expert or other figure of authority, that role is cast from the bank's authority people for the same avatar, so the audience's own likeness is paired with the figure they trust. When the words name a kind of person, that kind is shown: every other role is still asked for in the brief's own words.",
+   "wording": "Cast someone who looks like the audience, paired with a figure of authority. When the words name a kind of person, show that kind.",
+   "source": "the decision logic file, stage 5 'Who is on screen'"
+  },
+  "lessons-into-prompts": {
+   "on": false,
+   "ruled": null,
+   "decision": "What the edit learned",
+   "code": "components/video-edit/machine/learn.py block(stage) is the reader (live, tested, called by nothing upstream yet). The slot is added by each prompt's own owner.",
+   "before": "A lesson the edit learns about a picture, a clip, a voice read, a line of the brief or the teardown is banked and read by no prompt. Only edit and caption rules reach the cut.",
+   "after": "Each stage's prompt gets one labelled slot, EDIT LESSONS FOR THIS STAGE, filled from the lessons file by stage (`learn.block('brief')`, `'teardown'`, `'production-picture'`, `'production-clip'`, `'voice'`): the rules stated as rules or seen twice, each with its scope and how often it was seen; NONE when the edit has taught that stage nothing. Observations seen once are not sent.",
+   "slot": "EDIT LESSONS FOR THIS STAGE (rules learned from changes made at the edit; each binds within its scope; NONE = nothing learned yet):\n{edit_lessons}",
+   "source": "the decision logic file, stage 6 'What the edit learned'"
+  }
+ }
+}

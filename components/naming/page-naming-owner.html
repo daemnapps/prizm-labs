@@ -1,0 +1,259 @@
+<title>Page Naming</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* layout: one column; three things on top, then the three lengths (ads beside pages), links, tests, what changes */
+:root{
+  --bg:#fafafa;--panel:#ffffff;--fg:#18181b;--muted:#71717a;--line:#e4e4e7;--accent:#2563eb;--ok:#15803d;--warn:#b45309;--soft:#f4f4f5;
+  --sans:Inter,system-ui,-apple-system,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#09090b;--panel:#18181b;--fg:#f4f4f5;--muted:#a1a1aa;--line:#27272a;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--soft:#1f1f23;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#09090b;--panel:#18181b;--fg:#f4f4f5;--muted:#a1a1aa;--line:#27272a;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--soft:#1f1f23;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5;margin:0}
+.wrap{max-width:960px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1{font-size:26px;margin:0;font-weight:600;text-wrap:balance}
+h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:4px;align-content:start}
+.tile b{font-size:15px}.tile span{color:var(--muted);font-size:13px}
+.tile.now{border-color:var(--accent);border-width:2px}
+.tag{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.big{font-size:28px;font-weight:600;line-height:1.1}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--soft)}
+tr:last-child td{border-bottom:0}
+code{font-family:var(--mono);font-size:12px;background:var(--soft);padding:1px 5px;border-radius:4px;word-break:break-all}
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px}
+.chain div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.chain i{color:var(--muted);font-style:normal}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px}
+summary{cursor:pointer;font-weight:500}
+ul{margin:8px 0 0;padding-left:18px}
+@media (max-width:600px){
+  h1{font-size:22px}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:auto}
+  table.cards tr:first-child{display:none}
+  table.cards tr{border-bottom:1px solid var(--line);padding:6px 0}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td::before{content:attr(data-l);display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+}
+</style>
+<div class="wrap">
+  <header style="display:grid;gap:6px">
+    <h1>Page Naming</h1>
+    <span style="color:var(--muted);font-size:14px">Every page, store and funnel. Long where we work, short in Meta, one rule for links.</span>
+  </header>
+
+  <section class="grid">
+    <div class="tile now"><span class="tag">Done ✓</span><b>20 old pages archived</b><span>Still up on the web, untouched. New ads can't pick them.</span></div>
+    <div class="tile"><span class="tag">Done ✓</span><b>Every page has an ID</b><span>229 pages new ads can use, checked daily</span></div>
+  </section>
+  <section>
+    <h2>The naming rule</h2>
+    <div class="chain"><div><b>brand</b></div><i>_</i><div><b>place</b> = funnel or store</div><i>_</i><div><b>page</b> = read off its address</div></div>
+    <div class="tbl" style="margin-top:12px"><table class="cards">
+      <tr><th>Where</th><th>Looks like</th></tr>
+      <tr><td data-l="Where">Page ID (our records)</td><td data-l="Looks like"><code>Brand B_body-scrub-cpk_quiz</code></td></tr>
+      <tr><td data-l="Where">Meta ad name (end)</td><td data-l="Looks like"><code>…_body-scrub-cpk-quiz</code></td></tr>
+      <tr><td data-l="Where">A new version</td><td data-l="Looks like"><code>Brand B_body-scrub-cpk_quiz_v2</code></td></tr>
+      <tr><td data-l="Where">A funnel</td><td data-l="Looks like"><code>Brand B_body-scrub-cpk</code> = product + funnel</td></tr>
+    </table></div>
+  </section>
+  <section>
+    <h2>Brand B — every page new ads can use</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Place</th><th>Landing</th><th>Cart · Checkout</th><th>Post-purchase</th></tr>
+      <tr><td data-l="Place"><b>body-scrub-cpk</b></td><td data-l="Landing"><code>glow-book</code> · <code>landing</code> · <code>landing-clean-dry</code> · <code>landing-dry</code> · <code>portal-dry</code> · <code>portal-yai</code> · <code>presell-five-ingredients</code> · <code>quiz</code> · <code>quiz-dry</code></td><td data-l="Cart · Checkout"><code>checkout</code> · <code>checkout-dry</code></td><td data-l="Post-purchase"><code>oto-up-bodycream</code> · <code>oto-up-bodycream-dry</code> · <code>oto-up-facescrub</code> · <code>oto-up-facescrub-dry</code> · <code>receipt</code></td></tr>
+      <tr><td data-l="Place"><b>body-scrub-cpk-subscribe</b></td><td data-l="Landing"><code>landing</code> · <code>portal-yai</code> · <code>presell-five-ingredients</code> · <code>quiz</code></td><td data-l="Cart · Checkout"><code>checkout</code></td><td data-l="Post-purchase"><code>oto-up-bodycream</code> · <code>oto-up-facescrub</code> · <code>receipt</code></td></tr>
+      <tr><td data-l="Place"><b>body-scrub-v2c</b></td><td data-l="Landing"><code>adv</code> · <code>select</code></td><td data-l="Cart · Checkout"><code>checkout</code></td><td data-l="Post-purchase"><code>oto-dw-bodycream</code> · <code>oto-up-bodycream</code> · <code>thank-you</code></td></tr>
+      <tr><td data-l="Place"><b>face-scrub-cpk</b></td><td data-l="Landing"><code>landing</code> · <code>portal-face</code> · <code>portal-yai</code> · <code>quiz</code></td><td data-l="Cart · Checkout"><code>checkout</code></td><td data-l="Post-purchase"><code>oto-up-bodycream</code> · <code>oto-up-bodyscrub</code> · <code>receipt</code></td></tr>
+      <tr><td data-l="Place"><b>face-scrub-cpk-subscribe</b></td><td data-l="Landing"><code>landing</code> · <code>portal-yai</code> · <code>quiz</code></td><td data-l="Cart · Checkout"><code>checkout</code></td><td data-l="Post-purchase"><code>oto-up-bodycream</code> · <code>oto-up-bodyscrub</code> · <code>receipt</code></td></tr>
+      <tr><td data-l="Place"><b>store</b></td><td data-l="Landing"><code>collection-skincare</code> · <code>home</code> · <code>page-about-us</code> · <code>page-contact</code> · <code>page-eu-withdrawal</code> · <code>page-help</code> · <code>page-how-to-use</code> · <code>page-ingredients</code> · <code>page-message-received</code> · <code>page-modern-italy</code> · <code>page-non-toxic</code> · <code>page-offer</code> · <code>page-pigmentreset</code> · <code>page-pre-bfcm</code> · <code>page-pre-bfcm-thank-you</code> · <code>page-privacy</code> · <code>page-return-policy</code> · <code>page-shipping-policy</code> · <code>page-terms</code> · <code>page-thai-traditions</code> · <code>product-at-home-thai-spa-glow-bundle</code> · <code>product-brilliance-body-scrub</code> · <code>product-brilliance-face-scrub</code> · <code>product-glow-duo-bundle</code> · <code>product-Brand B-travel-pouch</code> · <code>product-radiance-body-cream</code></td><td data-l="Cart · Checkout"><code>cart</code> · <code>checkout</code></td><td data-l="Post-purchase">—</td></tr>
+    </table></div>
+  </section>
+  <section>
+    <h2>Brand A — every page new ads can use</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Place</th><th>Landing</th><th>Cart · Checkout</th><th>Post-purchase</th></tr>
+      <tr><td data-l="Place"><b>flex-cpk</b></td><td data-l="Landing"><code>flex</code> · <code>quiz</code> · <code>quiz-results</code> · <code>salespage-fedupking-razornotproblem</code></td><td data-l="Cart · Checkout"><code>checkout</code></td><td data-l="Post-purchase"><code>oto-charging-case</code> · <code>oto-core</code> · <code>oto-crush-bump-serum</code> · <code>oto-prime-face-quench</code> · <code>oto-vitals-set</code> · <code>oto-war-facewash</code> · <code>receipt</code></td></tr>
+      <tr><td data-l="Place"><b>store</b></td><td data-l="Landing"><code>collection-all</code> · <code>collection-formulas</code> · <code>collection-hair</code> · <code>collection-skin</code> · <code>collection-the-essentials</code> · <code>collection-the-lift</code> · <code>home</code> · <code>page-about-us</code> · <code>page-collaborate</code> · <code>page-connect</code> · <code>page-core</code> · <code>page-eu-withdrawal</code> · <code>page-f-a-q</code> · <code>page-formulations</code> · <code>page-guide</code> · <code>page-gut-skin-axis</code> · <code>page-level-up</code> · <code>page-level-up-guarantee</code> · <code>page-log-in</code> · <code>page-patents</code> · <code>page-results</code> · <code>page-shipping-information</code> · <code>page-situation-m</code> · <code>page-tracking</code> · <code>page-your-level-up</code> · <code>product-basics-set</code> · <code>product-clear-skin-set</code> · <code>product-core</code> · <code>product-crush</code> · <code>product-flex</code> · <code>product-flex-charging-case</code> · <code>product-gift-card</code> · <code>product-miro</code> · <code>product-prime</code> · <code>product-the-king-skin-set</code> · <code>product-the-vitals-set</code> · <code>product-war</code> · +105 blog posts</td><td data-l="Cart · Checkout"><code>cart</code> · <code>checkout</code></td><td data-l="Post-purchase">—</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Where the money goes</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Page</th><th>Ads</th><th>Briefs</th></tr>
+      <tr><td data-l="Page">FLEX offer page</td><td data-l="Ads">75</td><td data-l="Briefs">62</td></tr>
+      <tr><td data-l="Page">Scrub spot quiz</td><td data-l="Ads">21</td><td data-l="Briefs">20</td></tr>
+      <tr><td data-l="Page">Scrub advertorial (original funnel)</td><td data-l="Ads">18</td><td data-l="Briefs">1</td></tr>
+      <tr><td data-l="Page">Scrub offer page</td><td data-l="Ads">6</td><td data-l="Briefs">2</td></tr>
+      <tr><td data-l="Page">Scrub five-ingredient presell</td><td data-l="Ads">5</td><td data-l="Briefs">0</td></tr>
+      <tr><td data-l="Page">Razor-bump sales page</td><td data-l="Ads">2</td><td data-l="Briefs">1</td></tr>
+      <tr><td data-l="Page">Face scrub offer page</td><td data-l="Ads">0</td><td data-l="Briefs">40</td></tr>
+    </table></div>
+    <span style="color:var(--muted);font-size:12px">Ads per the catalog (early Oct) · briefs per the register today</span>
+  </section>
+
+  <section>
+    <h2>The 20 archived pages — what points at each</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>#</th><th>Fix</th><th>What points here</th><th>Forwards to</th></tr>
+      <tr><td data-l="#">1</td><td data-l="Fix"><b>Dry-skin sequence → its own funnel</b><br>7 pages, addresses unchanged</td><td data-l="What points here">1 order (checkout-dry, Nov 9)</td><td data-l="Forwards to">no forward — nothing taken down</td></tr>
+      <tr><td data-l="#">2</td><td data-l="Fix"><b>One method quiz, not three</b><br><code>flex-cpk · home</code></td><td data-l="What points here">3 briefs · 4 cards (sent-back)</td><td data-l="Forwards to"><code>method.Brand A.com/icon/quiz</code></td></tr>
+      <tr><td data-l="#">2</td><td data-l="Fix"><b>One method quiz, not three</b><br><code>store · page-method-quiz</code></td><td data-l="What points here">2 briefs · 2 cards (sent-back) · <b>1 order</b>, last 2026-11-11</td><td data-l="Forwards to"><code>method.Brand A.com/icon/quiz</code></td></tr>
+      <tr><td data-l="#">2</td><td data-l="Fix"><b>One method quiz, not three</b><br><code>store · page-method-result</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>method.Brand A.com/icon/quiz/results</code></td></tr>
+      <tr><td data-l="#">3</td><td data-l="Fix"><b>Thai Remedy advertorial: store copies go</b><br><code>store · page-adv1</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-scrub-cpk/presell-five-ingredients</code></td></tr>
+      <tr><td data-l="#">3</td><td data-l="Fix"><b>Thai Remedy advertorial: store copies go</b><br><code>store · page-adv2</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-scrub-cpk/presell-five-ingredients</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-flex-lp</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>Brand A.com/products/flex</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-checkoutdemo</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-offer-multigeo-test</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com/en/offer</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-offer-old</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com/en/offer</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-offer-test</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com/en/offer</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-offer1</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com/en/offer</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-salespage</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-test</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com</code></td></tr>
+      <tr><td data-l="#">4</td><td data-l="Fix"><b>Store junk</b><br><code>store · page-vsldemo</code></td><td data-l="What points here">orders: store doesn't record the page</td><td data-l="Forwards to"><code>Brand B.com</code></td></tr>
+      <tr><td data-l="#">5</td><td data-l="Fix"><b>Retire face scrub V1</b><br><code>face-scrub-v1 · checkout</code></td><td data-l="What points here"><b>2 orders</b>, last 2026-09-03</td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-facescrub-cpk/landing</code></td></tr>
+      <tr><td data-l="#">5</td><td data-l="Fix"><b>Retire face scrub V1</b><br><code>face-scrub-v1 · landing</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-facescrub-cpk/landing</code></td></tr>
+      <tr><td data-l="#">5</td><td data-l="Fix"><b>Retire face scrub V1</b><br><code>face-scrub-v1 · oto-dw-scrub</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-facescrub-cpk/landing</code></td></tr>
+      <tr><td data-l="#">5</td><td data-l="Fix"><b>Retire face scrub V1</b><br><code>face-scrub-v1 · oto-scrub</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-facescrub-cpk/landing</code></td></tr>
+      <tr><td data-l="#">5</td><td data-l="Fix"><b>Retire face scrub V1</b><br><code>face-scrub-v1 · presell-remedy</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-facescrub-cpk/landing</code></td></tr>
+      <tr><td data-l="#">5</td><td data-l="Fix"><b>Retire face scrub V1</b><br><code>face-scrub-v1 · thank-you</code></td><td data-l="What points here"><span class="ok">nothing</span></td><td data-l="Forwards to"><code>recipe.Brand B.com/Brand B-facescrub-cpk/landing</code></td></tr>
+    </table></div>
+    <span style="color:var(--muted);font-size:12px">From our own records: brief register · approval cards (1-check, sent-back, 3-live; 2-approved is empty) · funnel tracking · warehouse orders, last 90 days. Nothing read from the ad account. Every page forwards; none is just deleted.</span>
+  </section>
+  <details><summary>Everything else (no call needed)</summary>
+
+
+  <section>
+    <h2>Already fixed</h2>
+    <div class="grid">
+      <div class="tile"><span class="tag">✓</span><b>One address per page</b><span>Offer page and presell were reached two ways</span></div>
+      <div class="tile"><span class="tag">✓</span><b>Live addresses stay</b><span>The ID is the standard; renames would only add hops</span></div>
+      <div class="tile"><span class="tag">Waiting</span><b>PostHog tag</b><span>Built, not live yet</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>A funnel is the sequence, a page is one step</h2>
+    <div class="chain"><div><b>Landing</b></div><i>→</i><div><b>Cart</b></div><i>→</i><div><b>Checkout</b></div><i>→</i><div><b>Post-purchase</b></div></div>
+    <div class="tbl" style="margin-top:12px"><table class="cards">
+      <tr><th>Step</th><th>Its job</th><th>Pages</th></tr>
+      <tr><td data-l="Step">Landing</td><td data-l="Its job">Where the ad sends people; sells the idea and the offer</td><td data-l="Pages">advertorial · quiz · portal · offer page · product page</td></tr>
+      <tr><td data-l="Step">Cart</td><td data-l="Its job">Holds what they picked</td><td data-l="Pages">store cart · cart drawer</td></tr>
+      <tr><td data-l="Step">Checkout</td><td data-l="Its job">Takes the payment</td><td data-l="Pages">checkout</td></tr>
+      <tr><td data-l="Step">Post-purchase</td><td data-l="Its job">Adds to the order, confirms it</td><td data-l="Pages">upsell · downsell · receipt</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Three lengths, same as ads</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Length</th><th>Ads today</th><th>Pages</th></tr>
+      <tr><td data-l="Length">Long · files, runs</td><td data-l="Ads today"><code>Brand B_brilliance-body-scrub_brief-0136_batch-2026-09-27-a_asset-01</code></td><td data-l="Pages"><code>Brand B_body-scrub-cpk_quiz_v7</code></td></tr>
+      <tr><td data-l="Length">ID · the key</td><td data-l="Ads today"><code>Brand B_brilliance-body-scrub_brief-0136</code></td><td data-l="Pages"><code>Brand B_body-scrub-cpk_quiz</code></td></tr>
+      <tr><td data-l="Length">In Meta · last piece</td><td data-l="Ads today"><code>…_body-scrub-cpk</code></td><td data-l="Pages"><code>…_body-scrub-cpk-quiz</code> <span class="ok">no version</span></td></tr>
+      <tr><td data-l="Length">Everything else</td><td data-l="Ads today">in the brief</td><td data-l="Pages">in the page list</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>The page ID: brand _ place _ page</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Place</th><th>Page part</th><th>Example</th></tr>
+      <tr><td data-l="Place">A funnel</td><td data-l="Page part">its address piece</td><td data-l="Example"><code>Brand B_body-scrub-cpk_quiz</code></td></tr>
+      <tr><td data-l="Place">The store</td><td data-l="Page part">kind + store handle</td><td data-l="Example"><code>Brand A_store_product-war</code></td></tr>
+      <tr><td data-l="Place">Store page / quiz</td><td data-l="Page part">kind + handle</td><td data-l="Example"><code>Brand A_store_page-method-quiz</code></td></tr>
+      <tr><td data-l="Place">Collection · blog · home</td><td data-l="Page part">kind + handle</td><td data-l="Example"><code>…_store_collection-&lt;handle&gt;</code></td></tr>
+      <tr><td data-l="Place">Any other site</td><td data-l="Page part">a place name you OK once</td><td data-l="Example">method.Brand A.com quiz</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Versions</h2>
+    <div class="grid">
+      <div class="tile"><span class="tag">Numbered</span><b>v1, v2, v3 …</b><span>Every build. Never reused.</span></div>
+      <div class="tile"><span class="tag">One control</span><b>✓ marks it</b><span>Variant wins → it takes the ✓. Number stays.</span></div>
+      <div class="tile"><span class="tag">A test</span><b>control vs variant (v7)</b><span>One page, one test at a time</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Page</th><th>Address rule</th><th>Example</th></tr>
+      <tr><td data-l="Page">New pre-sell (funnel)</td><td data-l="Address rule">format-angle, + sub-avatar if written for one</td><td data-l="Example"><code>/advertorial-pigmentmemory-textureseeker/</code></td></tr>
+      <tr><td data-l="Page">Money pages</td><td data-l="Address rule">plain, one of each</td><td data-l="Example"><code>/landing/</code> · <code>/checkout/</code> · <code>/oto-up-bodycream/</code></td></tr>
+      <tr><td data-l="Page">New store page</td><td data-l="Address rule">same rule, as the handle</td><td data-l="Example"><code>/pages/quiz-razornotproblem</code></td></tr>
+      <tr><td data-l="Page">Product page</td><td data-l="Address rule">the store handle, never renamed</td><td data-l="Example"><code>/products/war</code></td></tr>
+      <tr><td data-l="Page">Variant build</td><td data-l="Address rule">under the page; ads never point here</td><td data-l="Example"><code>/quiz/v7/</code></td></tr>
+      <tr><td data-l="Page">Live pages today</td><td data-l="Address rule"><span class="ok">untouched</span></td><td data-l="Example">ads keep landing</td></tr>
+      <tr><td data-l="Page">Ad link</td><td data-l="Address rule">page address + today's tracking tags</td><td data-l="Example"><code>?utm_content=&lt;ad name&gt;</code></td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>A split test</h2>
+    <div class="chain"><div>Hypothesis written</div><i>→</i><div>Page brief: variant</div><i>→</i><div>page chain builds <code>v7</code></div><i>→</i><div>PostHog splits the address: control · variant</div><i>→</i><div>Reached checkout, then purchase</div><i>→</i><div>Variant wins · control holds · no difference</div></div>
+  </section>
+
+  <section>
+    <h2>Trace any ad to its page</h2>
+    <div class="chain"><div>Meta ad</div><i>→</i><div>ad brief</div><i>→</i><div>page ID</div><i>→</i><div>control version</div><i>→</i><div>page brief + run</div><i>→</i><div>live address</div></div>
+  </section>
+
+  <section>
+    <h2>Added so nothing slips</h2>
+    <div class="grid">
+      <div class="tile"><span class="tag">Offer</span><b>Offer recorded per version</b><span>A price or bundle test is its own test, never mixed with a design test</span></div>
+      <div class="tile"><span class="tag">Funnel tests</span><b>Funnels get versions too</b><span>Upsell order, quiz first vs offer first</span></div>
+      <div class="tile"><span class="tag">Numbers</span><b>Every version carries its numbers</b><span>Conversion · order value · upsell take · subscribe rate</span></div>
+      <div class="tile"><span class="tag">Result rule</span><b>Hypothesis + stop point before it starts</b><span>Days + orders; the numbers call it</span></div>
+      <div class="tile"><span class="tag">Every link</span><b>Ads, email, creators, bio</b><span>Same address; creator links carry their tracking tag</span></div>
+      <div class="tile"><span class="tag">Gates</span><b>Compliance check, then your click</b><span>No version goes live without both</span></div>
+      <div class="tile"><span class="tag">Markets</span><b>Country added when a second exists</b><span>Not in names until then</span></div>
+      <div class="tile"><span class="tag">Retired pages</span><b>Keep their ID</b><span>Where it forwards is recorded</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What changes on your yes</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>Thing</th><th>Today</th><th>After</th></tr>
+      <tr><td data-l="Thing">Page list</td><td data-l="Today" class="warn">5 places, funnels only</td><td data-l="After" class="ok">One list, every page</td></tr>
+      <tr><td data-l="Thing">Store pages</td><td data-l="Today" class="warn">2 known</td><td data-l="After" class="ok">All, read from the store</td></tr>
+      <tr><td data-l="Thing">Duplicates</td><td data-l="Today" class="warn">2 ids, same Yai portal</td><td data-l="After" class="ok">1 page</td></tr>
+      <tr><td data-l="Thing">Ad briefs</td><td data-l="Today" class="warn">Store a link id</td><td data-l="After" class="ok">Store the page ID</td></tr>
+      <tr><td data-l="Thing">Page chain</td><td data-l="Today" class="warn">No brief, free label</td><td data-l="After" class="ok">Brief at start, filed as a version</td></tr>
+      <tr><td data-l="Thing">brief-0285 (face scrub)</td><td data-l="Today" class="warn">Filed like an ad</td><td data-l="After" class="ok">Page brief, new page</td></tr>
+      <tr><td data-l="Thing">Daily check</td><td data-l="Today" class="warn">None</td><td data-l="After" class="ok">Flags any live page with no ID</td></tr>
+      <tr><td data-l="Thing">Meta ad names</td><td data-l="Today">Clean</td><td data-l="After" class="ok">Untouched</td></tr>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Brand files your yes covers (3)</h2>
+    <div class="tbl"><table class="cards">
+      <tr><th>File</th><th>Edit</th></tr>
+      <tr><td data-l="File">Funnel lists (both brands)</td><td data-l="Edit">Each funnel lists its page IDs</td></tr>
+      <tr><td data-l="File">3 old page registers</td><td data-l="Edit">Point to the one page list</td></tr>
+      <tr><td data-l="File">Brand A FLEX drafts (4)</td><td data-l="Edit"><code>-sub02baldbumpsguy</code> → <code>-baldbumpsguy</code>; "construct" notes filed under their page</td></tr>
+    </table></div>
+  </section>
+
+  <details><summary>Rules carried over from the ads</summary>
+    <ul>
+      <li>Lowercase. <code>-</code> inside a value, <code>_</code> between values.</li>
+      <li>An ID or version number is never reused or re-pointed.</li>
+      <li>Avatar and angle only from the signed lists. Nothing coined.</li>
+      <li>Avatar, headline, offer, swipe: in the page list, not the link.</li>
+      <li>A page brief names its page; it never picks a landing page.</li>
+      <li>Emails stay out (date-driven).</li>
+    </ul>
+  </details>
+  </details>
+</div>

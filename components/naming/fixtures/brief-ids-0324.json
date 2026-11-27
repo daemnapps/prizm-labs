@@ -1,0 +1,11 @@
+{
+ "_about": "The three real briefs numbered 0324 on 2026-11-11: two products of one brand and one of another. Brief-ID tests (naming/test_brief_ids.py, video-studio/test_brief_ids.py, the Queue's) read them here so the code carries no brand.",
+ "briefs": [
+  {"key": "Brand B_brilliance-body-scrub_brief-0324", "label": "Brand B · Body scrub · 0324", "ad_name": "Brand B_brilliance-body-scrub_brief-0324_batch-2026-11-11-a"},
+  {"key": "Brand B_brilliance-face-scrub_brief-0324", "label": "Brand B · Face scrub · 0324", "ad_name": "Brand B_brilliance-face-scrub_brief-0324_batch-2026-10-27-a"},
+  {"key": "Brand A_flex-face-brush_brief-0324", "label": "Brand A · FLEX · 0324", "ad_name": "Brand A_flex-face-brush_brief-0324_batch-2026-11-11-a_icon-flex"}
+ ],
+ "store_handle": {"key": "Brand A_flex_brief-0232", "catalog": "Brand A_flex-face-brush_brief-0232", "label": "Brand A · FLEX · 0232"},
+ "no_product": {"key": "Brand B_none_brief-0012", "label": "Brand B · 0012"},
+ "idea": "Brand B_idea_conscious-rebuilt-ai"
+}

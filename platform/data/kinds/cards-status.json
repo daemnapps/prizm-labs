@@ -1,0 +1,79 @@
+{
+  "kind": "cards-status",
+  "title": "Cards status — every dev card, one view",
+  "note": "One record per FAMILY (card CARDS-1, new-workflow-design/builds/cards-portfolio/task-cards.md): where every dev card stands — carded, dispatched, running, built-awaiting-merge, done-unverified, failed, merged — joined by platform/workers/mini-worker/cards_status.py from four sources that already hold the facts. (a) CARDED: every registry deck's `### ` headings, parsed with the PLATFORM'S OWN md-sections parser, vendored verbatim from validate_kinds.py so the adapter and the platform never disagree about what a card is. (b) LIFECYCLE: workflow-request records matched on `impl-<cardid>`, latest status wins. (c) MERGED: git log's merge-commit convention. (d) DONE-REPORT: a DONE-REPORT-<id>.md beside the deck. POINTERS ONLY — card ids, deck paths, record filenames, commit shas; a card's story and done-when are served by /api/items and are never duplicated here (workspace rule 3, and the 16KB verdict cap). FAMILY COMES FROM THE CARD ID, never the registry prefix alone — chain-qa's one deck carries CQ and BV while the registry declares only CQ; `family_source` states which of the two was used, and `registry-prefix-fallback` marks the decks whose ids predate the prefix grammar. `done-unverified` is NEVER folded into `done`: a test that did not pass and a test that passed are different answers. A heading the platform would not serve is a LOUD adapter-log skip listed in `skipped_headings`, never a silent absence. FILED ON CHANGE: an unchanged portfolio files nothing, tick after tick. This kind GATES NOTHING — it is a view of state, not a verdict on it. Item id = the family letter prefix; latest record by `created` wins. || PROVENANCE NOTE, 2026-09-08: the 31 records stamped 20260908T133612Z carry reviewer `mini-worker` and THE WORKER DID NOT WRITE THEM. A ◆ PLAN seat ran cards_status.py in the live clone to READ the queue and the script wrote as a side effect; the lead then swept them into 5aaecd368 unaware. The CONTENT is a real computation from the same script the worker runs, so it is not wrong — only the author label is, and the worker's next run supersedes it on read. THEY ARE KEPT DELIBERATELY: this plane is append-only, and a record removed to tidy an embarrassment is a worse artifact than a record with a wrong author. Two fixes point at it — WM-30 (write-root guard), whose temp-root default would have refused the write outright, and the narrower one that cards_status.py should have a read-only mode so reading state never writes it.",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "_reserved_ids": {
+    "families-index": "family -> {builds, decks, cards, states}; the platform lists records only per KNOWN item id, so this is how a browser discovers the record-borne families."
+  },
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "portfolio",
+        "index"
+      ],
+      "note": "exactly one per record. `index` appears only on the reserved id `families-index`."
+    },
+    {
+      "key": "family",
+      "required_when": "event=portfolio",
+      "note": "the card-id letter prefix (CQ, BV, WM, …); equals the record's item id"
+    },
+    {
+      "key": "label",
+      "required_when": "event=portfolio"
+    },
+    {
+      "key": "builds",
+      "required_when": "event=portfolio",
+      "note": "the registered build name(s) whose decks carry this family — usually one, and deliberately a list because one deck can carry two families"
+    },
+    {
+      "key": "decks",
+      "required_when": "event=portfolio",
+      "note": "[{deck, build, items_kind, registry_prefix, stage, cards_state, by}] — repo-relative POINTERS. `items_kind` is the review kind that serves this deck's cards via /api/items; a viewer reads the card's text there and never from here."
+    },
+    {
+      "key": "family_sources",
+      "required_when": "event=portfolio",
+      "note": "`card-id` and/or `registry-prefix-fallback` — how this family's membership was derived, stated rather than assumed"
+    },
+    {
+      "key": "counts",
+      "required_when": "event=portfolio",
+      "note": "state -> count, plus `total`. States: carded | dispatched | running | built-awaiting-merge | done-unverified | failed | merged."
+    },
+    {
+      "key": "cards",
+      "required_when": "event=portfolio",
+      "note": "array of {id, state, family_source, build, deck, items_kind, done_report, lifecycle, merged}. `lifecycle` is {status, item, record, at, by, repo, branch} from the latest workflow-request record — `record` is a FILENAME, never the record's body; `repo` carries the ai-dev flag. `merged` is {sha, subject} or null. POINTERS ONLY: no card story, done-when or other deck prose appears anywhere in this array."
+    },
+    {
+      "key": "skipped_headings",
+      "required_when": "event=portfolio",
+      "note": "[{deck, heading, why}] — every `### ` heading the platform's own parser drops. LOUD, never silent: a malformed heading that simply vanished would read as a card that was never written."
+    },
+    {
+      "key": "merge_scan",
+      "note": "{source, commits, merged_ids, limit} — how far the git-log scan reached. An unreadable log files NOTHING rather than a portfolio whose merged set is silently empty."
+    },
+    {
+      "key": "truncated",
+      "note": "present only when the 16KB cap forced a shed, naming what was dropped. Skipped headings shed first (the full list is in the adapter log), card rows last and from the tail — the counts still cover the whole family."
+    },
+    {
+      "key": "families",
+      "required_when": "event=index",
+      "note": "family -> {builds, decks, cards, states}; cumulative, latest record wins"
+    },
+    {
+      "key": "decks_without_cards_file",
+      "required_when": "event=index",
+      "note": "[{build, why}] — registered builds that declare no deck (video-teardown's cards live on the pipeline board). Named rather than omitted, so a missing family reads as a known absence."
+    }
+  ]
+}

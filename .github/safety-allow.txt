@@ -8,3 +8,6 @@ docs/|dixon
 docs/|gradient media
 LICENSE|damon
 LICENSE|dixon
+components/briefs/tests/|@example.test
+components/video-production/machine/|test@example.invalid
+components/video-edit/microdrama/template/gsap.min.js|jack@greensock.com

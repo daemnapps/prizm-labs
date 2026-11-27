@@ -8,7 +8,7 @@
 components/brandpath drive_index.mount() looks for it (any GoogleDrive-*
 account), so no file here types one person's account. With no mount the answer
 is NO_MOUNT, a named path that does not exist (the precedent:
-tools/image-production/static/tools/paths.py, _drive_or_absent): a reader's
+components/image-production/static/tools/paths.py, _drive_or_absent): a reader's
 `.is_dir()` says no, and a writer refuses with NOTE. `META_CARDS_ROOT` and
 `--root` stay the overrides; they are read where they always were. Mount only:
 meta-upload runs on a person's own Mac. Never writes anything.
@@ -40,10 +40,10 @@ def mounted(path):
     return Path(path) != NO_MOUNT
 
 
-# ---- API first (the owner, 20 Oct 2026: the Drive is reached "directly via API, which our tools need to default to") ---
+# ---- API first (owner, 20 Oct 2026: the Drive is reached "directly via API, which our tools need to default to") ---
 # With GDRIVE_SA_KEY in the environment, Shared Assets/meta is a local copy kept in step through the API
 # (components/gdrive-creator shared.py); a changed card goes back with save(). CARDS_ROUTE=mount pins the Drive folder
-# itself: the Meta approve page (approve.py, the owner's Mac only) moves card folders between states, which only the
+# itself: the Meta approve page (approve.py, owner's Mac only) moves card folders between states, which only the
 # folder can do. META_CARDS_ROOT stays the override for tests and trials.
 def _sh():
     p = str(REPO / "components/gdrive-creator")

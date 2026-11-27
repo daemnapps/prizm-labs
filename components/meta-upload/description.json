@@ -1,0 +1,7 @@
+{
+ "_what": "Every card carries a description. `check`: the card's words check fails with no description (cards.py). `fill`: the filer fills an empty description with the line most of the brand's live cards carry, the same product's first, never a price, an offer or a dated line (to_check.py live_description).",
+ "on": true,
+ "check": true,
+ "fill": true,
+ "_rollback": "\"on\": false turns both off (a card files and passes with no description, as before); \"check\": false or \"fill\": false turns one off. One machine only: META_DESCRIPTION_OFF=all, or check, or fill. Row DESCRIPTION in team/rollbacks.md."
+}

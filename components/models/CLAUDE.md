@@ -1,6 +1,6 @@
 # components/models — the model registry, as data
 
-**Curators: the team and the owner, either one's approval counts (the team, relayed verbatim by ◆ PLAN [60643d], ≤04:34:30Z 2026-10-22: "We can both curate all models"; the team alone since 2026-09-01).** One place answers *which models are
+**Curators: the developer and the owner, either one's approval counts (the developer, relayed verbatim by ◆ PLAN [60643d], ≤04:34:30Z 2026-10-22: "We can both curate all models"; the developer alone since 2026-09-01).** One place answers *which models are
 approved, what each costs, and which key each spends*. Consumers read the
 manifest directly; there is nothing to run and nothing to call.
 
@@ -19,15 +19,15 @@ rewire.** Nothing was repointed by MDL-1 (models registry); every fragment still
 always read.
 
 > DUTY-6 FLAG (carried from the build's task-cards.md): this component was
-> created directly on the team's ruled word, skipping the lab station — the
+> created directly on the developer's ruled word, skipping the lab station — the
 > atlas/chain-runner precedent. A ruled exception, not a precedent-widening.
 
 ## New-resident checklist (components/CLAUDE.md, ruled 2026-09-01)
 
 | question | answer |
 |---|---|
-| **engine + owner** | **validator only — the team.** `validate.py` is the whole of the code and it produces nothing; there is no engine to own. A component with no engine is deliberate here, not an omission |
-| **definitions + curator** | the two manifests — `models.json` (what we may call) and `trained-assets.json` (what we have trained). **Curators: the team and the owner** (2026-10-22), either one holding the approval gate (rule 6), insights per purpose included. the owner certifies the training SETS behind the trained assets, as ruled with IDT-1 (identity extraction) — that is a different act from blessing the registry entry |
+| **engine + owner** | **validator only — the developer.** `validate.py` is the whole of the code and it produces nothing; there is no engine to own. A component with no engine is deliberate here, not an omission |
+| **definitions + curator** | the two manifests — `models.json` (what we may call) and `trained-assets.json` (what we have trained). **Curators: the developer and the owner** (2026-10-22), either one holding the approval gate (rule 6), insights per purpose included. the owner certifies the training SETS behind the trained assets, as ruled with IDT-1 (identity extraction) — that is a different act from blessing the registry entry |
 | **the plane it emits** | **none — the manifest is the product.** No run, no `--out`, no `platform/data/…` folder. Reading the registry needs no credential and no permission, which is rule 7 working as intended |
 | **what the manifest declares per entry** | **`id` · `modality` · `cost` · `status` · `key_env` (the env var NAME).** Plus, as provenance rather than contract: `label`, `vendor`, `aliases`, `transport`, `cost_reason`, `sources`, `note` |
 
@@ -110,7 +110,7 @@ reads no real manifest and writes nothing, ever.
   carry a `cost_reason`. This is the bench's own doctrine held as a schema
   rule: a zero and an unknown are different answers.
 - **Everything seeds `draft`.** The definition owner holds the gate (rule 6).
-  A consumer that filters to `approved` finds this registry empty until the team
+  A consumer that filters to `approved` finds this registry empty until the developer
   blesses entries — deliberately, not as a bug.
 - **The registry never guesses.** There are no defaults and no fallbacks. A
   model whose cost or key was guessed is worse than a model that is absent.
@@ -124,11 +124,11 @@ reads no real manifest and writes nothing, ever.
 
 ## OpenRouter — the standing inference vendor (MDL-4 (openrouter vendor), 2026-09-09)
 
-the team's word: "a parallel to fal.ai but for inference models … include it in
+the developer's word: "a parallel to fal.ai but for inference models … include it in
 the models component to be used more generally." OpenRouter is a **vendor**
 here, the way fal is for images: many models, one key, one bill. Every entry
 below spends `OPENROUTER_API_KEY` (the name; the value lives in the worker's
-env file by the team's own act), rides `transport: api`, and is **reached only
+env file by the developer's own act), rides `transport: api`, and is **reached only
 through the worker's `infer` action** (WM-34 (infer action)) — no second
 OpenRouter client anywhere in the org, and no id resolved from anything but
 this file.
@@ -146,13 +146,13 @@ the list price is recorded and the disagreement is in the entry's
 `cost_reason`.
 
 **Data policy.** DeepSeek's first-party endpoint trains on prompts. The
-account's Data Policies exclude training providers (the team's click, 2026-09-09).
+account's Data Policies exclude training providers (the developer's click, 2026-09-09).
 Whether a non-training provider serves `deepseek-v4-flash-0731` under that
 policy is **unchecked until the first `infer` call**; a `no provider` answer
 means the entry comes out (MDL-4 (openrouter vendor)'s kill), never that the policy loosens.
 
 **Seeding rule.** A new entry is seeded `draft`; that is the gate, not a
-placeholder. the team blesses each by name (`approved_by` on the entry), and a
+placeholder. the developer blesses each by name (`approved_by` on the entry), and a
 consumer filtering to `approved` does not see it until he does. Each entry's
 current status is in `models.json`.
 
@@ -271,13 +271,13 @@ distribution instead.
 
 ## Kill-condition
 
-**KEPT 2026-10-08** (the team, relayed verbatim by ◆ PLAN [1cc25f] before 04:32:36Z: "go on B1, 2, 3"; decision log 2026-10-08 B2 (triage design calls)). The 2026-10-01 clause ("if nothing beyond the
+**KEPT 2026-10-08** (the developer, relayed verbatim by ◆ PLAN [1cc25f] before 04:32:36Z: "go on B1, 2, 3"; decision log 2026-10-08 B2 (triage design calls)). The 2026-10-01 clause ("if nothing beyond the
 bench reads this registry by then, fold it back") is spent: the worker's
 `infer_run.py` and `shadow_judge.py`, language-layer's test and qc-checks'
 `text_check.py` read `models.json`. **Kill (restated for those readers): the
 registry falls back to a single reader → fold it into that reader's file and
 retire the component.** A registry with one reader is a file with extra steps.
-The five draft rows (#4) and `trained-assets.json` (#9) come back to the team as a
+The five draft rows (#4) and `trained-assets.json` (#9) come back to the developer as a
 short list.
 
 Second, inherited from the contract addendum: if the curator's approval queue

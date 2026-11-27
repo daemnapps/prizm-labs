@@ -1,6 +1,6 @@
 """One index over every run, built by reading `runs/` — nothing declares itself.
 
-the owner, 2026-09-23, after the Clipper Kit turned out to read its briefs straight
+owner, 2026-09-23, after the Clipper Kit turned out to read its briefs straight
 out of a cloned lane's own `runs/` folder, which was then deleted: *"the
 clipping teardown should've been a teardown, then the runs to create the briefs
 should've been placed like we have creator briefs. We need to seriously ensure

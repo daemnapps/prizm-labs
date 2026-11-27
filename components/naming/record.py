@@ -8,7 +8,7 @@
 Shape: platform/data/kinds/creative-asset.json. Item id `<batch>.<slug>.a<nn>`
 — the folder slug of the unit, not the 130-char name, so it fits the plane's
 ITEM_ID_RE. Records land under HOME (lab/owner/creative-ledger/records/ until
-the team rules on lab writes to platform/data/records/); same envelope either way:
+developer rules on lab writes to platform/data/records/); same envelope either way:
 {schema, kind, reviewer, item, verdict{event,...}, notes, created, via}.
 
 Rules carried: a `made` record is written by the machine and never reads as

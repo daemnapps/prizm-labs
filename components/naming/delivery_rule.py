@@ -9,7 +9,7 @@ from that brief's header in `brands/<brand>/briefs/briefs.json`:
     folder   brand_product_brief_batch               one per delivery
     file     brand_product_brief_batch_asset-NN.ext  one per cut / picture
 
-The short form (the owner, 2026-09-29): everything else about the ads is in the
+The short form (owner, 2026-09-29): everything else about the ads is in the
 brief, looked up by its number. The file carries no funnel; the Meta ad is
 the folder name + the funnel (`names.short_meta`), one ad per batch.
 A folder already named in the older 13-part form is converted to the short
@@ -29,7 +29,7 @@ Without --apply it only reports. With --apply it renames, writes
 `READY-TO-LAUNCH.md` at the top of the watched folder: every named delivery
 grouped by the ad set it goes in (avatar + angle).
 
-With --to-check, every named delivery ALSO goes to the owner's approval: copied into
+With --to-check, every named delivery ALSO goes to owner's approval: copied into
 Shared Assets/meta/<brand>/1-check/creator/<folder name>/ with its card
 (components/meta-upload/feed_creator.py; the delivery folder stays as it is). Without
 --apply that is a dry run that prints the cards it would write.
@@ -78,7 +78,7 @@ PART_ORDER = ["product", "media", "source", "talent", "avatar", "problem",
 def resolve(folder):
     """A watched folder on THIS computer. delivery.json names folders the way
     Drive shows them ("Shared Assets/…", "<Brand>/Ads/…"), not by one person's
-    mount path, so the rule runs on whoever's Mac the team or anyone else uses.
+    mount path, so the rule runs on whoever's Mac email_lead or anyone else uses.
     Looked for in every Google Drive account mounted here: the shared drives,
     My Drive, and folders shared in by shortcut. A full path is used as is.
     The accounts come from brandpath's finder (LD-47 (Drive sweep)): none on a
@@ -100,9 +100,9 @@ def resolve(folder):
 # as "no brief matches" for want of a hand-kept row.
 # Image teardown graduated to components/ on 2026-10-01; the lab path is the
 # fallback for a checkout that has not pulled the move.
-REGISTER = next((f for f in (WS / "tools" / "image-teardown" / "briefs.json",
+REGISTER = next((f for f in (WS / "components" / "image-teardown" / "briefs.json",
                              WS / "lab" / "owner" / "image-teardown" / "briefs.json") if f.is_file()),
-                WS / "tools" / "image-teardown" / "briefs.json")
+                WS / "components" / "image-teardown" / "briefs.json")
 
 
 def load(brand):
@@ -110,7 +110,7 @@ def load(brand):
     f = base / "briefs.json"
     reg = json.loads(f.read_text()) if f.is_file() else {"briefs": []}
     cfg = json.loads((base / "delivery.json").read_text()) if (base / "delivery.json").is_file() else {}
-    # One brief per brand + product + number (the owner, 2026-10-01: numbers count
+    # One brief per brand + product + number (owner, 2026-10-01: numbers count
     # per brand AND product). A register row is the same brief as a brand row
     # only when both are on the same count — old shared number, or the same
     # product's per-product number — never because the digits match.
@@ -429,7 +429,7 @@ def launch_sheet(brand, root):
         lines += [f"## `{adset}`{flag}", ""]
         lines += [f"- `{name}` — {n} file(s)" for name, n in groups[adset]] + [""]
     # written beside, then swapped in (16 Oct 2026): opening the old sheet in place makes Google Drive fetch it
-    # first, and a sheet Drive has not got locally hung the run (brand-a, from 5 Oct) or failed it under launchd
+    # first, and a sheet Drive has not got locally hung the run (brand_a, from 5 Oct) or failed it under launchd
     # ("Resource deadlock avoided"). A rename never needs the old copy.
     tmp = root / ".READY-TO-LAUNCH.md.partial"
     tmp.write_text("\n".join(lines))

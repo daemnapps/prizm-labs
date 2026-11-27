@@ -1,10 +1,10 @@
 # The Picture Path
 
-Mirror of the artifact (private page) (27 Oct 2026).
+Mirror of the artifact https://claude.ai/artifact/DvYskcPoNUBAD8mUtAjBVs (27 Oct 2026).
 
 This page traces every station the grandma picture went through, where each station lives, and what it did. The same path is the one the owner and Amit will run by hand, one picture at a time.
 
-The picture: `runs/image-production/<brand>/prompt-bench/<brand>-batch-grandma-dark-spots-not-growing-old-20261027-001821.png`. It was made with GPT Image 2.5 on the first try, for 2.75 credits.
+The picture: `runs/image-production/Brand B/prompt-bench/Brand B-batch-grandma-dark-spots-not-growing-old-20261027-001821.png`. It was made with GPT Image 2.5 on the first try, for 2.75 credits.
 
 ## What went in
 
@@ -15,7 +15,7 @@ The picture: `runs/image-production/<brand>/prompt-bench/<brand>-batch-grandma-d
 
 | # | Station | Where it lives | This picture |
 |---|---|---|---|
-| 1 | The swipe is broken down | image teardown chain: `tools/image-teardown/runs/<swipe>/out/` `swaps.json`, `controls-swipe.json`, `elements.json`, `06-brief.md` | 4 swaps: the woman becomes our grandma, the lips become 3 dark spots, the pendant becomes a K-GLOW parody pouch, and the caption becomes our words. 12 things stay. |
+| 1 | The swipe is broken down | image teardown chain: `components/image-teardown/runs/<swipe>/out/` `swaps.json`, `controls-swipe.json`, `elements.json`, `06-brief.md` | 4 swaps: the woman becomes our grandma, the lips become 3 dark spots, the pendant becomes a K-GLOW parody pouch, and the caption becomes our words. 12 things stay. |
 | 2 | You make the choices (by hand for now) | the board, `components/creative-controls/controls.json`, `components/model-inputs/picture-dials.json` | Cast: Two More Years Mama. Product out. Words set on top. Stray hairs and fur edges kept. Preset: maxed. Feeling: disgust. Dials: intensity 4, absurdity 3, humor 3, dramatisation 3, realism 3, stopping power 4, parody marks 3, valence 1. |
 | 3 | The builder writes the prompt | `components/model-inputs/preview.py` `build_picture` | A 30-line prompt and 2 pictures. |
 | 4 | The check, before any spend | `picture-sheet.json`, `inputs/gpt-image-2.5.json`, `input_rules.py` | 76 of 76 inputs settled: 59 filled, 17 not needed. |
@@ -29,7 +29,7 @@ The prompt carries "Warm light, an easy, relieved face." That line comes from th
 ## The line, start to finish (27 Oct 2026)
 
 1. **image teardown — the records.** What's in the swipe, its format with the brand stripped, its labels, its level on every dial. It writes nothing of ours.
-2. **image writing — our version.** The swaps, the words, the brief, and the 5 variations as data (`out/variations.json`), one change each. It became its own component on 27 Oct (`tools/image-writing`).
+2. **image writing — our version.** The swaps, the words, the brief, and the 5 variations as data (`out/variations.json`), one change each. It became its own component on 27 Oct (`components/image-writing`).
 3. **image-production — the first picture.** The concept picture, made from the brief with the words set on top. the owner approves it.
 4. **image-edit — the 5 variations.** Each is the approved picture plus one change, made as an EDIT (the approved picture is IMAGE 1, and the prompt carries only the change). Each is checked against the approved picture, with up to 2 tries and the best kept (`vary.py --from-brief`).
 5. **Meta card — approval.** All 6 go on one card in `meta/<brand>/1-check/image/`. Nothing goes live until the owner presses Approve.
@@ -68,7 +68,7 @@ The brief decides the variations and image-edit makes them.
 - Step 5 writes the picture options (`out/05-image-variations.md`).
 - Step 6 puts both in the brief: section 6 "Headline options" (5) and section 7 "Picture options" (4), with the order to run them.
 
-**image-edit** makes the pictures. It's called by the brief's variation step, `tools/image-teardown/tools/variations.py`, which does this:
+**image-edit** makes the pictures. It's called by the brief's variation step, `components/image-teardown/tools/variations.py`, which does this:
 
 1. Finds the brief's judged draft and uses it as the starting picture.
 2. Makes one call per option:
@@ -77,7 +77,7 @@ The brief decides the variations and image-edit makes them.
 3. A two-picture judge checks each result: the change is there and nothing else moved, or the result is held back.
 4. Every result is named, listed in `drop.csv` and copied to Drive. On request, it's filed as a Meta approval card in `meta/<brand>/1-check/image/`.
 
-**The hand-off between them** is the brief's number in the brief list (`tools/image-teardown/briefs.json`) plus its judged draft.
+**The hand-off between them** is the brief's number in the brief list (`components/image-teardown/briefs.json`) plus its judged draft.
 
 **Where it breaks from the picture path:**
 
@@ -100,8 +100,8 @@ Nowhere yet. It is on this Mac only:
 | Door | Status |
 |---|---|
 | Pressing Make by hand | Full path. Every station uses the person's choices. |
-| Image teardown chain (`tools/image-teardown/tools/pictures.py`) | Same builder (stations 3 to 6), but station 2's choices aren't saved with the swipe, so the chain gets the teardown's defaults only. |
-| Video chain | Its own builders: start pictures in `tools/video-production/machine/run_v2.py`, clips in `clips_run.py` and `seedance_prompt.py`. It takes only each model's limits from model-inputs (`clip_limits.py`). This is the next job. |
+| Image teardown chain (`components/image-teardown/tools/pictures.py`) | Same builder (stations 3 to 6), but station 2's choices aren't saved with the swipe, so the chain gets the teardown's defaults only. |
+| Video chain | Its own builders: start pictures in `components/video-production/machine/run_v2.py`, clips in `clips_run.py` and `seedance_prompt.py`. It takes only each model's limits from model-inputs (`clip_limits.py`). This is the next job. |
 
 ## The loop (by hand, one picture, no batches)
 
@@ -114,7 +114,7 @@ Nowhere yet. It is on this Mac only:
 
 ## Then video, on the same principles
 
-The six video rules are V48–V53 in `tools/video-production/VIDEO-RULINGS.md`:
+The six video rules are V48–V53 in `components/video-production/VIDEO-RULINGS.md`:
 
 - **V48:** scenes, each with one picture and one short prompt that names its references.
 - **V49:** one face, headless bodies.

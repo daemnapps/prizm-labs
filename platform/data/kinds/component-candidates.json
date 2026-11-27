@@ -1,0 +1,25 @@
+{
+  "kind": "component-candidates",
+  "title": "Component candidates — the register",
+  "note": "THE DETECTOR the component bar was missing (the developer, 2026-09-02, PLAN batch 27 'go with recommendation'; filed by the lead as CC-1). components/CLAUDE.md sets the bar for a component — proven, owned, contracted — but nothing DETECTED a shared part before the third copy; brand-home x3 was caught by a manual survey. ONE ROW PER SHARED PART, on item `<slug>` ([a-z0-9-]): what it does · where it exists today (paths, and how many copies) · would-be consumers · the SIGNAL that raised it (carding = the lead filling a card's 'Shared parts:' line; design = a PLAN fold's 'Reuses / could be reused by' line; scanner = the CC-2 worker tick, reviewer mini-worker) · owner-if-extracted · DISPOSITION watch|extract|never. DISPOSITIONS ARE the developer'S — graduation stays his (INB-4); any seat may RAISE a row (open_items), a disposition record from anyone else is advisory and says so. THE RULE OF THREE (ruled with the kind): 1st use = a note on the card that builds it, never a row; 2nd use = a row here, disposition watch; 3rd use = an extraction card that BLOCKS the third copy. THE EXTRACTION BAR IS UNCHANGED: two real consumers + an owner + a contract; one consumer = a note, never a component — premature extraction freezes an untested contract. Records are an event history folded on read (serve_records history, the inbox pattern): a row is raised, then watched, then extracted or ruled never; the latest record's disposition is the current one. The reserved id `candidates-index` is the cumulative list of row ids and is how a browser enumerates rows (the platform lists records only per KNOWN item id — the inbox `filed-index` / tasks `task-index` / teardown `runs-index` mechanism); a seat that raises a row appends to it in the same act. KILL (on the whole system): three weeks on, if the register holds only scanner rows and none from carding, the human signal is dead — keep the scanner, drop the template line.",
+  "open_items": true,
+  "serve_records": "history",
+  "item_id": "id",
+  "item_label": "what",
+  "items": [],
+  "_reserved_ids": {
+    "candidates-index": "cumulative {ids: [...]} of every row raised, latest record wins; appended to by whoever raises a row, in the same act."
+  },
+  "verdict_fields": [
+    { "key": "event", "values": ["raise", "disposition", "index"], "note": "exactly one per record. `index` appears only on `candidates-index`." },
+    { "key": "what", "note": "one line: what the shared part does (raise records)" },
+    { "key": "where", "note": "list of repo paths where it exists today — the copies, each named (raise records)" },
+    { "key": "copies", "note": "integer, how many copies `where` lists (raise records)" },
+    { "key": "consumers", "note": "list: builds or tools that use or would use it (raise records)" },
+    { "key": "signal", "values": ["carding", "design", "scanner"], "note": "what raised the row (raise records)" },
+    { "key": "owner_if_extracted", "note": "who would own the component; a name or 'unassigned' (raise records)" },
+    { "key": "disposition", "values": ["watch", "extract", "never"], "note": "the developer's; on a raise record it is the proposal (always watch); on a disposition record it is the ruling when reviewer is the developer, advisory otherwise" },
+    { "key": "note" },
+    { "key": "ids", "note": "index records only" }
+  ]
+}

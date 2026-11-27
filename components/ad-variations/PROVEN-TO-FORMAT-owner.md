@@ -2,7 +2,7 @@
 
 Take ads that already sold, tell them again in a fresh format someone else proved, and run each one through the chain to a brief. One batch at a time, as many times as you like.
 
-Page: **Creative Run Builder** — (private page)
+Page: **Creative Run Builder** — https://claude.ai/artifact/UdUpx6pCCj2rgKFaosh7ju
 
 ## The 5 steps
 
@@ -62,11 +62,11 @@ Claude stages are written from this session (the owner, 2026-10-07: the sign-in 
 
 Run it:
 ```
-python3 machine/proven_to_format.py run <brand>-face-scrub-2026-10 --square <one square run name>   # one square first
-python3 machine/proven_to_format.py run <brand>-face-scrub-2026-10 --limit 5                        # then a few at a time
-python3 machine/proven_to_format.py page <brand>-face-scrub-2026-10                                 # refresh the grid
+python3 machine/proven_to_format.py run Brand B-face-scrub-2026-10 --square <one square run name>   # one square first
+python3 machine/proven_to_format.py run Brand B-face-scrub-2026-10 --limit 5                        # then a few at a time
+python3 machine/proven_to_format.py page Brand B-face-scrub-2026-10                                 # refresh the grid
 ```
-Squares resume from the repo (`runs/video-teardown/<brand>/sq-*`) on any machine and file back there when done. Status of every square: `runs/ad-variations/<brand>/P2F-STATUS.md`.
+Squares resume from the repo (`runs/video-teardown/Brand B/sq-*`) on any machine and file back there when done. Status of every square: `runs/ad-variations/Brand B/P2F-STATUS.md`.
 
 ## Into production (2026-10-08)
 
@@ -74,13 +74,13 @@ Once a brief is green: **elements** (what each ad needs — banked or to make, e
 
 ## To the editor (2026-10-09)
 
-Once an ad's clips are made it goes into **the editor's queue**: one folder per ad on the Drive under Shared Assets → handoffs → video-editor → <brand>, named by its brief number (`brand_b_brilliance-face-scrub_brief-0292`). Inside: the clips in scene order, the voice, music and sounds, the timing, and an editor brief (what the ad is, every scene's words, what can't change, known clip faults, where to drop the finished cut). You assign a brief number; the editor opens that folder.
+Once an ad's clips are made it goes into **the editor's queue**: one folder per ad on the Drive under Shared Assets → handoffs → video-editor → <brand>, named by its brief number (`Brand B_brilliance-face-scrub_brief-0292`). Inside: the clips in scene order, the voice, music and sounds, the timing, and an editor brief (what the ad is, every scene's words, what can't change, known clip faults, where to drop the finished cut). You assign a brief number; the editor opens that folder.
 
 ---
 
 ## For sessions (technical)
 
-Batch files: `definitions/proven-to-format/<batch>.json` (today: `<brand>-face-scrub-2026-10.json`, schema in its `_schema` line). Engine: `machine/proven_to_format.py`, standard library only.
+Batch files: `definitions/proven-to-format/<batch>.json` (today: `Brand B-face-scrub-2026-10.json`, schema in its `_schema` line). Engine: `machine/proven_to_format.py`, standard library only.
 
 ```
 python3 machine/proven_to_format.py check <batch>             # readiness, both sides, plain words
@@ -90,11 +90,11 @@ python3 machine/proven_to_format.py queue [<artifact url | requests.json>]  # ho
 ```
 
 - `--root <dir>` on check/prep/page reads an alternate tree when this checkout is behind the shared one.
-- `prep` builds `tools/video-teardown/machine/run.py` commands: formats to `--to 2` with `--route ai`, label `fmt-<name>-<code>` (the chain lowercases it into the run folder); winners resumed `--from 1|1b --to 1b`. It never queues a square.
+- `prep` builds `components/video-teardown/machine/run.py` commands: formats to `--to 2` with `--route ai`, label `fmt-<name>-<code>` (the chain lowercases it into the run folder); winners resumed `--from 1|1b --to 1b`. It never queues a square.
 - **Claude stages are written by the session, always** (the owner, 5 Oct 2026). Every `prep` command sets `DAEMN_HAND_DIR` to a `hand/` folder inside its run. At a Claude stage the run stops and leaves `<stage>.prompt.md` there; the session writes `<stage>.md` beside it, then runs the same command again with `--from <that stage>`. Every check still applies. This is the normal path — never ask the owner to sign in. (Today's two format runs, `fmt-tv-shop-dd7gvdvprzl` and `fmt-hua-jin-dd12vx6inuo`, had 1b Doctrine written this way.)
-- `page` caches thumbnails, Drive play links and sales stats in `page/builder/cache/<batch>/` (`--refresh` rebuilds from the Drive mount and the winner record `lab/owner/media-buying/winner-briefs.html`). Template: `page/builder/proven_to_format_template.html`. It writes the file; publishing over the same link is a separate step.
+- `page` caches thumbnails, Drive play links and sales stats in `page/builder/cache/<batch>/` (`--refresh` rebuilds from the Drive mount and the winner record `lab/the owner/media-buying/winner-briefs.html`). Template: `page/builder/proven_to_format_template.html`. It writes the file; publishing over the same link is a separate step.
 - Doctrine file name: 1b Doctrine writes `stages/1c-doctrine.md` (chain.py `FILE_ID`/`DISPLAY_ID`).
 - The old one-step shortcut `machine/format_swap.py` + `prompts/stage-format-swap/` is superseded by this chain; kept for the 3 earlier specs.
-- Pending (the owner's sign-off): a winner-content input slot in `tools/copywriter/prompts/video/stage-3-injection/stage3-injection-v*-owner.md` (winner's 1 Teardown transcript + 1b Doctrine). Do not edit that prompt without it.
+- Pending (the owner's sign-off): a winner-content input slot in `components/copywriter/prompts/video/stage-3-injection/stage3-injection-v*-owner.md` (winner's 1 Teardown transcript + 1b Doctrine). Do not edit that prompt without it.
 
-**Known gap (2026-10-06):** stage 5 Brief fills its top "Core message:" line from the SWIPE's teardown (THE CORE MESSAGE), so a proven-ad → new-format brief opened with the swipe's message (food tests, mascara). Fixed by hand on the written briefs with <brand>'s core message from `lab/owner/media-buying/CORE-MESSAGE-owner.md`. In this chain the line must come from the winner/brand, not the swipe — check it on every brief until stage 5 reads it from the winner.
+**Known gap (2026-10-06):** stage 5 Brief fills its top "Core message:" line from the SWIPE's teardown (THE CORE MESSAGE), so a proven-ad → new-format brief opened with the swipe's message (food tests, mascara). Fixed by hand on the written briefs with Brand B's core message from `lab/the owner/media-buying/CORE-MESSAGE-owner.md`. In this chain the line must come from the winner/brand, not the swipe — check it on every brief until stage 5 reads it from the winner.

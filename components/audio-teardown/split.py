@@ -1,7 +1,7 @@
 """SPLIT — the voices lifted off the music, so every later read hears speech alone.
 
 Demucs (Meta's open separation model, MIT licence) runs on this Mac in its own
-venv, the venv named by DEMUCS_PYTHON — the same one the video chain's music naming uses.
+venv, ~/.daemn/venvs/demucs — the same one the video chain's music naming uses.
 Two tracks out: voices.mp3 and music.mp3 (everything that is not voice).
 
 A swipe with no usable separation (Demucs missing, or it fails) falls back to
@@ -12,12 +12,11 @@ A stamp beside the tracks (split-source.json: the video's path, size and mtime)
 says which video they came from; tracks from any other video are made again.
 """
 import json
-import os
 import shutil
 import subprocess
 from pathlib import Path
 
-DEMUCS = Path(os.environ.get("DEMUCS_PYTHON") or "/nonexistent/demucs-python")
+DEMUCS = Path.home() / ".daemn" / "venvs" / "demucs" / "bin" / "python"
 STAMP = "split-source.json"
 
 

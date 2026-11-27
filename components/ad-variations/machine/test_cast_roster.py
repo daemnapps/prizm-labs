@@ -21,7 +21,7 @@ def _root():
 class CastRoster(unittest.TestCase):
     def test_roster_is_read_through_brandpath(self):
         root = _root()
-        for brand in ("brand-b", "brand-a"):
+        for brand in ("brand_b", "brand_a"):
             with self.subTest(brand=brand):
                 c = brandctx.BrandContext(root, brand)
                 self.assertNotEqual(c.cast(), brandctx.MISSING)

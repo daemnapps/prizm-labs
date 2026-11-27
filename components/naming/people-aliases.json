@@ -1,0 +1,33 @@
+{
+ "_about": "Old avatar and sub-avatar names -> the name that follows PEOPLE.md. people.canon reads either name; a folder keeps its old name and nothing live is renamed.",
+ "state": "in use since 2026-11-25",
+ "brands": {
+  "Brand A": {
+   "avatars": {"fed-up-king": "razor-bumps", "still-breaking-out": "acne", "spots-wont-fade": "dark-spots", "face-back": "wrinkles", "glow-up": "whole-look", "gift-buyer": "buying-for-him"},
+   "subs": {
+    "razor-bumps": {"barbershop-regular": "when-fresh-cut", "bald-bumps-guy": "where-back-of-head", "ingrown-fighter": "tried-everything", "forty-year-shaver": "since-decades"},
+    "acne": {"tried-every-wash-kid": "tried-every-wash", "clogged-pores-kid": "has-oily-skin", "date-night-brother": "when-dating"},
+    "dark-spots": {"marks-that-stay-kid": "since-breakouts"},
+    "buying-for-him": {"before-accutane-mom": "tried-the-derm"}
+   },
+   "demographics": {
+    "el-rey-cansado": {"sub": "when-fresh-cut", "demographic": "male-25-34-latino"},
+    "el-jefe": {"sub": "when-shaving-for-work", "demographic": "male-35-44-latino-spanish"},
+    "get-his-face-right-mom": {"sub": "has-dark-marks", "demographic": "female-45-54-black"},
+    "mijo-mom": {"sub": "feels-he-hides-his-face", "demographic": "female-45-54-latino"}
+   },
+   "merges": {
+    "razor-bumps_since-decades": {"into": "razor-bumps_tried-everything", "lens": "since decades", "why": "61% of Tried everything's lines also sit under it", "decided": "2026-11-27"},
+    "buying-for-him_tried-the-derm": {"into": "buying-for-him_feels-he-hides-his-face_female-45-54-latino", "lens": "tried the derm", "demographic": "female-45-54-white", "why": "55% of its lines also sit under Feels he hides his face", "decided": "2026-11-27"}
+   }
+  },
+  "Brand B": {
+   "avatars": {"spot-hider": "dark-spots", "dry-skin": "dry-skin"},
+   "subs": {
+    "dark-spots": {"sun-damage-reckoner": "since-sun-damage", "clean-only-buyer": "feels-wary-of-chemicals", "texture-seeker": "has-rough-texture", "face-dark-marks": "where-face"},
+    "dry-skin": {"dry-flaky-shins": "where-shins", "dry-crepey-arms": "where-arms", "lotion-stopped-working": "tried-lotion", "dry-since-menopause": "since-menopause", "scared-of-scrubbing": "feels-scared-to-scrub"}
+   },
+   "demographics": {}
+  }
+ }
+}

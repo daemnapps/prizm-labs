@@ -7,8 +7,8 @@ effortLevel. Every call site now passes its effort explicitly, from here:
     from run_kit.claude_flags import effort_args
     argv = ["claude", "-p", "--model", m, *effort_args(), ...]
 
-The level is fixed at "medium" — the owner's own default, the effort the chains
-were tuned at (the team, 2026-10-21: "set to medium for mini for now. Don't add
+The level is fixed at "medium" — owner's own default, the effort the chains
+were tuned at (developer, 2026-10-21: "set to medium for mini for now. Don't add
 more variables"). No environment knob: change EFFORT here. email-production
 keeps its own effort (LD-62 (lean model calls), lean_call.py). Stdlib only.
 

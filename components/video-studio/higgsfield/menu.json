@@ -1,0 +1,835 @@
+{
+ "about": "The Higgsfield menu in plain words, one row per tool on the Studio's Higgsfield page (catalog.json): what you give it, whether our script drives it (ours = our script/song/words drive it; own = it writes its own but takes ours; none = no script), what it is for in an ad, its teardown breakdown and the component of ours that feeds it. fits = the script formats (names.json) it makes; * = any. Read by the Creative Options page. Curated by hand, every row draft.",
+ "status_values": [
+  "draft",
+  "approved",
+  "deprecated"
+ ],
+ "rows": [
+  {
+   "id": "editing-room",
+   "name": "Editing Room",
+   "status": "draft",
+   "give": "a video up to 10 min",
+   "script": "none",
+   "use": "fix or remake a shot inside a finished ad",
+   "breakdown": null,
+   "ours": "video-edit",
+   "fits": []
+  },
+  {
+   "id": "swap-person",
+   "name": "Swap person",
+   "status": "draft",
+   "give": "a 2–30 s clip + a face",
+   "script": "none",
+   "use": "put our cast into a swipe's shot",
+   "breakdown": null,
+   "ours": "casting",
+   "fits": []
+  },
+  {
+   "id": "change-angle",
+   "name": "Change angle",
+   "status": "draft",
+   "give": "a clip",
+   "script": "none",
+   "use": "a second camera on the same moment",
+   "breakdown": "angles-hf",
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "move-camera",
+   "name": "Move camera",
+   "status": "draft",
+   "give": "a still shot",
+   "script": "none",
+   "use": "add a push-in or orbit to a flat shot",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "relight",
+   "name": "Relight",
+   "status": "draft",
+   "give": "a clip",
+   "script": "none",
+   "use": "match light across shots, day to night",
+   "breakdown": "lighting-hf",
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "change-location",
+   "name": "Change location",
+   "status": "draft",
+   "give": "a clip",
+   "script": "none",
+   "use": "same action, our place",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "brush-edit",
+   "name": "Brush edit",
+   "status": "draft",
+   "give": "a clip + a painted area",
+   "script": "none",
+   "use": "change one thing in frame",
+   "breakdown": null,
+   "ours": "image-edit",
+   "fits": []
+  },
+  {
+   "id": "edit-video",
+   "name": "Edit Video",
+   "status": "draft",
+   "give": "footage",
+   "script": "none",
+   "use": "restyle or enhance footage",
+   "breakdown": "video-editing",
+   "ours": "video-edit",
+   "fits": []
+  },
+  {
+   "id": "reframe",
+   "name": "Reframe",
+   "status": "draft",
+   "give": "any video",
+   "script": "none",
+   "use": "a 16:9 swipe to 9:16",
+   "breakdown": null,
+   "ours": "video-edit",
+   "fits": []
+  },
+  {
+   "id": "enhance-to-1080p",
+   "name": "Enhance to 1080p",
+   "status": "draft",
+   "give": "a video",
+   "script": "none",
+   "use": "sharpen a 480p/720p take",
+   "breakdown": "higgsfield-enhance-video",
+   "ours": "local-studio",
+   "fits": []
+  },
+  {
+   "id": "lipsync-studio",
+   "name": "Lipsync Studio",
+   "status": "draft",
+   "give": "a face video + new words",
+   "script": "ours",
+   "use": "make a creator say our line",
+   "breakdown": null,
+   "ours": null,
+   "fits": [
+    "*"
+   ]
+  },
+  {
+   "id": "miracle",
+   "name": "Miracle",
+   "status": "draft",
+   "give": "a video",
+   "script": "none",
+   "use": "live AI edits",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "mixed-media",
+   "name": "Mixed Media",
+   "status": "draft",
+   "give": "a clip",
+   "script": "none",
+   "use": "viral After-Effects-style edit looks",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "ai-motion-designer",
+   "name": "AI Motion Designer",
+   "status": "draft",
+   "give": "After Effects project",
+   "script": "none",
+   "use": "motion graphics for end cards",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "ad-multiplier",
+   "name": "Ad Multiplier",
+   "status": "draft",
+   "give": "a winning 4–30 s ad + our cast/product",
+   "script": "none",
+   "use": "re-shoot a proven ad as ours, many versions",
+   "breakdown": "ad-multiplier",
+   "ours": "ad-variations",
+   "fits": []
+  },
+  {
+   "id": "katana",
+   "name": "Katana",
+   "status": "draft",
+   "give": "a reference edit + our product",
+   "script": "own",
+   "use": "copy an edit's style onto our product",
+   "breakdown": "katana",
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "genjutsu",
+   "name": "Genjutsu",
+   "status": "draft",
+   "give": "a driving clip + our subject",
+   "script": "none",
+   "use": "copy a viral move or swap an object",
+   "breakdown": "genjutsu",
+   "ours": "motion",
+   "fits": []
+  },
+  {
+   "id": "recast",
+   "name": "Recast",
+   "status": "draft",
+   "give": "a video",
+   "script": "none",
+   "use": "swap any character",
+   "breakdown": null,
+   "ours": "casting",
+   "fits": []
+  },
+  {
+   "id": "video-face-swap",
+   "name": "Video Face Swap",
+   "status": "draft",
+   "give": "a video + a face",
+   "script": "none",
+   "use": "new face, same video",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "character-swap",
+   "name": "Character Swap",
+   "status": "draft",
+   "give": "a picture + a character",
+   "script": "none",
+   "use": "replace a person in a still",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "click-to-ad",
+   "name": "Click to Ad",
+   "status": "draft",
+   "give": "a product link",
+   "script": "own",
+   "use": "a fast first ad from a product page",
+   "breakdown": null,
+   "ours": null,
+   "fits": [
+    "demonstration"
+   ]
+  },
+  {
+   "id": "transitions",
+   "name": "Transitions",
+   "status": "draft",
+   "give": "two clips",
+   "script": "none",
+   "use": "a branded transition between scenes",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "drama-ads",
+   "name": "Drama Ads",
+   "status": "draft",
+   "give": "a card + our story/script + product",
+   "script": "own",
+   "use": "story ads: problem as drama, product turns it",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-micro-drama",
+   "name": "Drama · Micro drama",
+   "status": "draft",
+   "give": "our script + cast + product",
+   "script": "own",
+   "use": "rival, shame, comeback: 2–4 min drama",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-cartoon-story",
+   "name": "Drama · Cartoon story",
+   "status": "draft",
+   "give": "our story + product",
+   "script": "own",
+   "use": "3D cartoon, hero narrates",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-cinematic-story",
+   "name": "Drama · Cinematic story",
+   "status": "draft",
+   "give": "our story + product",
+   "script": "own",
+   "use": "hero narrates over film shots",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-claymation-story",
+   "name": "Drama · Claymation story",
+   "status": "draft",
+   "give": "our story + product",
+   "script": "own",
+   "use": "stop-motion problem-creature stories",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-talking-object",
+   "name": "Drama · Talking object",
+   "status": "draft",
+   "give": "our script + product",
+   "script": "own",
+   "use": "the product talks and fixes it",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-inside-the-body",
+   "name": "Drama · Inside the body",
+   "status": "draft",
+   "give": "our story + product",
+   "script": "own",
+   "use": "cells and organs tell the problem",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-doll-story",
+   "name": "Drama · Doll story",
+   "status": "draft",
+   "give": "our story + product",
+   "script": "own",
+   "use": "doll-world comedy",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "drama-crochet-story",
+   "name": "Drama · Crochet story",
+   "status": "draft",
+   "give": "our story + product",
+   "script": "own",
+   "use": "knitted-world tale",
+   "breakdown": "drama-ads",
+   "ours": "story presets",
+   "fits": [
+    "micro-drama",
+    "personal-story",
+    "comedy-skit",
+    "glow-up"
+   ]
+  },
+  {
+   "id": "singing-ads",
+   "name": "Singing Ads",
+   "status": "draft",
+   "give": "OUR song or narration (audio) + cast",
+   "script": "ours",
+   "use": "song ads: the song tells the story",
+   "breakdown": "singing-ads",
+   "ours": "song line (built)",
+   "fits": [
+    "*song"
+   ]
+  },
+  {
+   "id": "short-drama",
+   "name": "Short Drama",
+   "status": "draft",
+   "give": "our script or an idea",
+   "script": "own",
+   "use": "multi-episode drama series",
+   "breakdown": "short-drama",
+   "ours": null,
+   "fits": [
+    "micro-drama",
+    "comedy-skit"
+   ]
+  },
+  {
+   "id": "cinema-studio-4-0",
+   "name": "Cinema Studio 4.0",
+   "status": "draft",
+   "give": "our shot list: shot by shot, lens, camera",
+   "script": "ours",
+   "use": "direct every shot of a film-look ad",
+   "breakdown": null,
+   "ours": "video-production",
+   "fits": [
+    "*"
+   ]
+  },
+  {
+   "id": "ugc-builder",
+   "name": "UGC Builder",
+   "status": "draft",
+   "give": "product + creator + our exact script",
+   "script": "own",
+   "use": "review, voiceover, unboxing, try-on, tutorial",
+   "breakdown": "ugc-video",
+   "ours": "video-production",
+   "fits": [
+    "demonstration",
+    "personal-story",
+    "testimonial-montage",
+    "glow-up",
+    "tips-then-pitch",
+    "street-interview",
+    "deal-walkthrough"
+   ]
+  },
+  {
+   "id": "ai-influencer",
+   "name": "AI Influencer",
+   "status": "draft",
+   "give": "a face + style once",
+   "script": "ours",
+   "use": "one reusable AI creator for every ad",
+   "breakdown": null,
+   "ours": "casting",
+   "fits": [
+    "personal-story",
+    "tips-then-pitch",
+    "demonstration",
+    "glow-up",
+    "deal-walkthrough"
+   ]
+  },
+  {
+   "id": "marketing-studio",
+   "name": "Marketing Studio",
+   "status": "draft",
+   "give": "product + a template (649)",
+   "script": "none",
+   "use": "product shots, UGC, posters from templates",
+   "breakdown": null,
+   "ours": "image-production",
+   "fits": []
+  },
+  {
+   "id": "narration",
+   "name": "Narration",
+   "status": "draft",
+   "give": "a clip + a photo + our words",
+   "script": "ours",
+   "use": "a person on screen narrating our line",
+   "breakdown": "narration",
+   "ours": null,
+   "fits": [
+    "remedy",
+    "expert-consult",
+    "tips-then-pitch"
+   ]
+  },
+  {
+   "id": "creator-dub",
+   "name": "Creator Dub",
+   "status": "draft",
+   "give": "a creator video",
+   "script": "none",
+   "use": "one ad in 9 languages, lips synced",
+   "breakdown": "creator-dub",
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "audio",
+   "name": "Audio",
+   "status": "draft",
+   "give": "our words",
+   "script": "ours",
+   "use": "voices, voice change, translation",
+   "breakdown": null,
+   "ours": "audio-teardown",
+   "fits": []
+  },
+  {
+   "id": "shorts-studio",
+   "name": "Shorts Studio",
+   "status": "draft",
+   "give": "a topic or our literal script + presenter",
+   "script": "own",
+   "use": "presenter reels, 275 styles",
+   "breakdown": "shorts-studio",
+   "ours": null,
+   "fits": [
+    "tips-then-pitch",
+    "personal-story",
+    "deal-walkthrough",
+    "expert-consult"
+   ]
+  },
+  {
+   "id": "content-factory",
+   "name": "Content Factory",
+   "status": "draft",
+   "give": "a 'what if' topic",
+   "script": "own",
+   "use": "'what if' scenario shorts drawn in code",
+   "breakdown": "content-factory",
+   "ours": null,
+   "fits": [
+    "meme"
+   ]
+  },
+  {
+   "id": "motion-effects",
+   "name": "Motion Effects",
+   "status": "draft",
+   "give": "a clip",
+   "script": "none",
+   "use": "400+ effect templates as hooks",
+   "breakdown": "presets",
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "faceless-studio",
+   "name": "Faceless Studio",
+   "status": "draft",
+   "give": "a topic or our script",
+   "script": "own",
+   "use": "narrated explainers, no face",
+   "breakdown": "faceless-video",
+   "ours": "video-production",
+   "fits": [
+    "tips-then-pitch",
+    "remedy",
+    "era-roll-call"
+   ]
+  },
+  {
+   "id": "mangaka",
+   "name": "Mangaka",
+   "status": "draft",
+   "give": "an idea, our script or photos",
+   "script": "own",
+   "use": "manga and comic pages",
+   "breakdown": "manga-engine",
+   "ours": null,
+   "fits": [
+    "comedy-skit",
+    "micro-drama"
+   ]
+  },
+  {
+   "id": "sticker-match-cut",
+   "name": "Sticker Match Cut",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "sticker match-cut hook",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "behind-the-scenes",
+   "name": "Behind the Scenes",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "film-set reveal hook",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "3d-figure",
+   "name": "3D Figure",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "collectible-figure hook",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "plushies",
+   "name": "Plushies",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "plush / knitted-doll hook",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "mugshot",
+   "name": "Mugshot",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "mugshot gag hook",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "3d-render",
+   "name": "3D Render",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "3D-render look",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "3d-rotation",
+   "name": "3d Rotation",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "turn a photo into a rotating object",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "outfit-swap",
+   "name": "Outfit Swap",
+   "status": "draft",
+   "give": "a photo + an outfit",
+   "script": "none",
+   "use": "try-on statics",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "ads-studio",
+   "name": "Ads Studio",
+   "status": "draft",
+   "give": "a product link",
+   "script": "own",
+   "use": "Meta static ads with copy",
+   "breakdown": "ads-studio",
+   "ours": "image-writing",
+   "fits": []
+  },
+  {
+   "id": "one-tap-recipes-80",
+   "name": "One-tap recipes · 80",
+   "status": "draft",
+   "give": "one product photo",
+   "script": "none",
+   "use": "before/after, myth/fact, 3 reasons, packshots",
+   "breakdown": "presets",
+   "ours": "image-production",
+   "fits": []
+  },
+  {
+   "id": "product-shots",
+   "name": "Product shots",
+   "status": "draft",
+   "give": "product photos",
+   "script": "none",
+   "use": "packshots, lifestyle, carousels",
+   "breakdown": "product-photoshoot",
+   "ours": "image-production",
+   "fits": []
+  },
+  {
+   "id": "soul-2-0-soul-cinema",
+   "name": "Soul 2.0 · Soul Cinema",
+   "status": "draft",
+   "give": "a prompt",
+   "script": "none",
+   "use": "high-aesthetic stills",
+   "breakdown": null,
+   "ours": "image-production",
+   "fits": []
+  },
+  {
+   "id": "shots",
+   "name": "Shots",
+   "status": "draft",
+   "give": "one reference photo",
+   "script": "none",
+   "use": "a storyboard of shots from one picture",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "skin-enhancer",
+   "name": "Skin Enhancer",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "clean up skin and blur",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "ai-stylist",
+   "name": "AI Stylist",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "styling ideas",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "expand-image",
+   "name": "Expand image",
+   "status": "draft",
+   "give": "a photo",
+   "script": "none",
+   "use": "extend a picture to 9:16",
+   "breakdown": null,
+   "ours": "image-edit",
+   "fits": []
+  },
+  {
+   "id": "supercomputer",
+   "name": "Supercomputer",
+   "status": "draft",
+   "give": "a job in words",
+   "script": "own",
+   "use": "an agent that runs a whole content job",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "agentic-canvas",
+   "name": "Agentic Canvas",
+   "status": "draft",
+   "give": "nodes",
+   "script": "none",
+   "use": "build our own image/video node chains",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "premiere-after-effects-davinci",
+   "name": "Premiere · After Effects · DaVinci",
+   "status": "draft",
+   "give": "your edit",
+   "script": "none",
+   "use": "Higgsfield inside the editor",
+   "breakdown": "use-blender-and-after-effects",
+   "ours": "video-edit",
+   "fits": []
+  },
+  {
+   "id": "games-playables",
+   "name": "Games · Playables",
+   "status": "draft",
+   "give": "an idea",
+   "script": "own",
+   "use": "playable ads",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "property-studio",
+   "name": "Property Studio",
+   "status": "draft",
+   "give": "listing photos",
+   "script": "none",
+   "use": "real-estate (not for us)",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  },
+  {
+   "id": "collab",
+   "name": "Collab",
+   "status": "draft",
+   "give": "a project",
+   "script": "none",
+   "use": "shared projects with the team",
+   "breakdown": null,
+   "ours": null,
+   "fits": []
+  }
+ ]
+}

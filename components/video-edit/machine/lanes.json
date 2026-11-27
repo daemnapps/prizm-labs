@@ -1,0 +1,251 @@
+{
+ "about": "The lane contract for a brief laid onto HyperFrames Studio: what each lane (Studio row) may hold. lane_check.py reads a Studio project's index.html against it and lists every element on a lane it does not belong to.",
+ "read_from": [
+  "brief_layout.py LANES and TRACK: A-roll 1, B-roll 2, Greenscreen 3, Cards 4, End card 5, Captions 6, Song 7, Voice 8",
+  "compose.py sound section: the first audio row is 10 (music when there is no voice read), the next row is held for voice cuts, then room tone, then one row per sound effect (13 and up in a brief layout)",
+  "compose.py writes each element's lane as data-track-index; a picture's lane comes from the cut sheet's track (display only, layering stays the roll)",
+  "brief_layout.py words(): a scene's on-screen words AND a card's lines go on the Captions lane as text, in the piece's one caption style"
+ ],
+ "lanes": [
+  {
+   "lane": "A-roll",
+   "code": "A",
+   "tracks": [
+    1
+   ],
+   "icon": "🎤",
+   "holds": [
+    "aroll_clip",
+    "picture",
+    "empty_marker"
+   ],
+   "allowed": "S1 'Original interview' video (Brief 0322) on A-roll",
+   "not_allowed": "a caption line dragged onto A-roll"
+  },
+  {
+   "lane": "B-roll",
+   "code": "B",
+   "tracks": [
+    2
+   ],
+   "icon": "🎞",
+   "holds": [
+    "broll_clip",
+    "picture",
+    "empty_marker"
+   ],
+   "allowed": "S2 'stands alone with his head down' slot (sprtn-18000-men) on B-roll",
+   "not_allowed": "the S4 card (a card scene) dropped onto B-roll"
+  },
+  {
+   "lane": "Greenscreen",
+   "code": "G",
+   "tracks": [
+    3
+   ],
+   "icon": "🟩",
+   "holds": [
+    "greenscreen_clip",
+    "picture",
+    "empty_marker"
+   ],
+   "allowed": "S8 greenscreen shot (sprtn-18000-men) on Greenscreen",
+   "not_allowed": "the S17 end card dragged onto Greenscreen"
+  },
+  {
+   "lane": "Cards",
+   "code": "C",
+   "tracks": [
+    4
+   ],
+   "icon": "🪧",
+   "holds": [
+    "card_picture",
+    "card_text",
+    "overlay_graphic",
+    "picture",
+    "empty_marker"
+   ],
+   "allowed": "S4 'GQ quote' card video (Brief 0322) on Cards",
+   "not_allowed": "B-roll footage of the shower scene put on Cards"
+  },
+  {
+   "lane": "End card",
+   "code": "E",
+   "tracks": [
+    5
+   ],
+   "icon": "🏁",
+   "holds": [
+    "endcard_picture",
+    "endcard_text",
+    "picture",
+    "empty_marker"
+   ],
+   "allowed": "S11 'Get your FLEX' end card (Brief 0322) on End card",
+   "not_allowed": "a card scene, or a split's divider line, on End card"
+  },
+  {
+   "lane": "Captions",
+   "code": "captions",
+   "tracks": [
+    6
+   ],
+   "icon": "💬",
+   "holds": [
+    "caption",
+    "empty_marker"
+   ],
+   "allowed": "S1 'The after.' caption line on Captions (a card's lines in caption style count as caption words too)",
+   "not_allowed": "a song section, a picture or a sound placed on Captions"
+  },
+  {
+   "lane": "Song",
+   "code": "song",
+   "tracks": [
+    7
+   ],
+   "icon": "🎵",
+   "holds": [
+    "song_section",
+    "empty_marker"
+   ],
+   "allowed": "the 'chorus · Lift your head high…' section on Song",
+   "not_allowed": "a caption line dragged onto Song"
+  },
+  {
+   "lane": "Voice",
+   "code": "voice",
+   "tracks": [
+    8
+   ],
+   "icon": "🗣",
+   "holds": [
+    "voice_line",
+    "voice_audio",
+    "empty_marker"
+   ],
+   "allowed": "S2 'That reaction? It's real…' voice line on Voice",
+   "not_allowed": "the music bed or a whoosh on Voice"
+  },
+  {
+   "lane": "Music",
+   "code": "music",
+   "tracks": [
+    10,
+    11
+   ],
+   "icon": "🎼",
+   "holds": [
+    "music_audio",
+    "empty_marker"
+   ],
+   "allowed": "'Music · beat stand-in' on Music",
+   "not_allowed": "a recorded voice read on Music"
+  },
+  {
+   "lane": "Sound effects",
+   "code": "sfx",
+   "tracks_from": 12,
+   "icon": "💥",
+   "holds": [
+    "sfx_audio",
+    "room_tone",
+    "empty_marker"
+   ],
+   "allowed": "'Whoosh · S4, the cut on the drop' on Sound effects",
+   "not_allowed": "the music bed moved down onto a sound effect row"
+  }
+ ],
+ "kinds": {
+  "aroll_clip": {
+   "say": "A-roll clip",
+   "home": "A-roll",
+   "seen_as": "a <video> or <img> picture whose scene the cut sheet puts on A-roll"
+  },
+  "broll_clip": {
+   "say": "B-roll clip",
+   "home": "B-roll",
+   "seen_as": "a picture whose scene the cut sheet puts on B-roll"
+  },
+  "greenscreen_clip": {
+   "say": "greenscreen shot",
+   "home": "Greenscreen",
+   "seen_as": "a picture with class gs, or whose scene the cut sheet puts on Greenscreen"
+  },
+  "card_picture": {
+   "say": "card",
+   "home": "Cards",
+   "seen_as": "a picture whose scene the cut sheet puts on Cards"
+  },
+  "endcard_picture": {
+   "say": "end card",
+   "home": "End card",
+   "seen_as": "a picture whose scene the cut sheet puts on End card"
+  },
+  "picture": {
+   "say": "picture",
+   "home": null,
+   "seen_as": "a picture with no cut sheet to say its scene's lane: any picture lane passes"
+  },
+  "card_text": {
+   "say": "card words box",
+   "home": "Cards",
+   "seen_as": "a div with class card or screen; or an offer card layer from scene canvas to_studio (id S9-layer-1, label 'S9 offer · …'); or a card scene's own text on that card's lane"
+  },
+  "endcard_text": {
+   "say": "end card words box",
+   "home": "End card",
+   "seen_as": "a div with class endcard; or an end-card scene's own text on the End card lane"
+  },
+  "overlay_graphic": {
+   "say": "overlay graphic",
+   "home": "Cards",
+   "seen_as": "a div with class lt, ann, ui, disc, icn or lab (lower third, annotation, platform UI, disclaimer, icon, split label)"
+  },
+  "caption": {
+   "say": "caption",
+   "home": "Captions",
+   "seen_as": "a timed text div with no picture class (brief_layout overlays), or class cap"
+  },
+  "song_section": {
+   "say": "song section",
+   "home": "Song",
+   "seen_as": "a marker whose id starts song- or whose label names a section (intro, verse, chorus, bridge, hook, drop, outro)"
+  },
+  "voice_line": {
+   "say": "voice line",
+   "home": "Voice",
+   "seen_as": "a marker whose id starts voice- or whose label starts with a scene and its words"
+  },
+  "voice_audio": {
+   "say": "voice recording",
+   "home": "Voice",
+   "seen_as": "an <audio> with id voice, or labelled or named voice"
+  },
+  "music_audio": {
+   "say": "music",
+   "home": "Music",
+   "seen_as": "an <audio> with id music, labelled Music, or a song/music file"
+  },
+  "sfx_audio": {
+   "say": "sound effect",
+   "home": "Sound effects",
+   "seen_as": "an <audio> in the sfx audio group"
+  },
+  "room_tone": {
+   "say": "room tone",
+   "home": "Sound effects",
+   "seen_as": "an <audio> with room in its id or label"
+  },
+  "empty_marker": {
+   "say": "'none in this brief' marker",
+   "home": null,
+   "seen_as": "a marker labelled 'none in this brief': allowed on every lane"
+  }
+ },
+ "off_the_lanes": "Any track that is no lane above (9, or the rows compose uses only in finished edits: 20 spoken captions, 25 card and end card words, 30 overlays, 32–36 graphics) is reported as off the lanes.",
+ "gaps_in_compose": [
+  "2026-11-07: three rows were found where compose writes an element onto another lane's row (voice audio on 10/11; split divider and labels on 5/6; finished-edit words on 20/25 and graphics on 32–36). The timeline session has fixed all three in its copy: voice on 8, music 10, room tone 12, effects 13+, card words and split parts on 4, end card words on 5, spoken captions and overlays on 6, graphics on 4. The fix waits on its send to origin."
+ ]
+}

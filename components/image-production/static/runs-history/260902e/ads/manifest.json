@@ -1,0 +1,45 @@
+{
+ "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e",
+ "batch": "260902e",
+ "brand": "Brand B",
+ "product": "bodyscrub",
+ "media": "static",
+ "source": "ai",
+ "talent": "none",
+ "avatar": "spothider",
+ "problem": "darkspots",
+ "angle": "pigmentmemory",
+ "concept": "spotsuptheclose",
+ "format": "fullphoto",
+ "brief": "p141",
+ "ratio": "9x16",
+ "_upload": "All 5 assets go into ONE ad unit named 'Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e'. Meta reports one row for the unit.",
+ "_join": "Meta's ad_name equals `ad_name`. Split on '-' for brand, product, media, source, talent, avatar, problem, angle, concept, format, brief, ratio, batch.",
+ "ads": [
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a01",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a01.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a02",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a02.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a03",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a03.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a04",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a04.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a05",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-spotsuptheclose-fullphoto-p141-9x16-260902e-a05.png"
+  }
+ ]
+}

@@ -1,0 +1,223 @@
+<title>__BRAND__ Top Creatives</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* A study wall: the proven creatives as cards, filters on top, the message mix above the wall */
+:root{
+  --bg:#eef1ee; --paper:#ffffff; --ink:#0f1a14; --muted:#5b6b62; --line:#d6ddd8;
+  --brand:#062b14; --brand-ink:#ffffff; --gold:#a8873a; --good:#1f7a45; --bad:#b4372f; --bar:#062b14;
+  --display:"Archivo",ui-sans-serif,system-ui,sans-serif; --body:"Source Sans 3",ui-sans-serif,system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d130f;--paper:#151d18;--ink:#e8eee9;--muted:#9aaba1;--line:#26332b;--brand:#2f8a55;--brand-ink:#ffffff;--gold:#d2b46a;--good:#5cc488;--bad:#f07a70;--bar:#5cc488;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d130f;--paper:#151d18;--ink:#e8eee9;--muted:#9aaba1;--line:#26332b;--brand:#2f8a55;--brand-ink:#ffffff;--gold:#d2b46a;--good:#5cc488;--bad:#f07a70;--bar:#5cc488;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+.wrap{max-width:1400px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,4.5vw,44px);margin:0;letter-spacing:-.01em}
+h2{font-family:var(--display);font-weight:700;font-size:18px;margin:0}
+.lede{margin:6px 0 0;color:var(--muted);max-width:75ch}
+.lede b{color:var(--ink)}
+.mix{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,30rem),1fr));gap:16px}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px;min-width:0}
+.rowb{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 4.2rem 3.6rem;gap:10px;align-items:center;font-size:13px;cursor:pointer;border-radius:6px;padding:3px 4px;border:0;background:none;color:inherit;font:inherit;text-align:left}
+.rowb:hover,.rowb[aria-pressed=true]{background:var(--bg)}
+.rowb .n{min-width:0}
+.rowb i{display:block;height:9px;border-radius:2px;background:var(--bar)}
+.rowb .v{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+.rowb .c{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted)}
+.hdr{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 4.2rem 3.6rem;gap:10px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+.hdr span:nth-child(n+3){text-align:right}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;border-bottom:1px solid var(--line)}
+.bar label{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.bar select,.bar input{font:inherit;font-size:13px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink);max-width:16rem;min-width:0}
+.bar .count{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.types{display:flex;flex-wrap:wrap;gap:6px;flex-basis:100%}
+.tiers button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:#111}
+.types button{font:inherit;font-size:14px;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.types button[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.types button small{font-weight:400;opacity:.75;margin-left:6px;font-family:var(--mono);font-size:11px}
+.types button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.chip{font:inherit;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--brand);background:var(--brand);color:var(--brand-ink);cursor:pointer}
+.chip[hidden]{display:none}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,15.5rem),1fr));gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;min-width:0}
+.pic{position:relative;display:block;aspect-ratio:9/16;max-width:100%;background:var(--line);overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.rk{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:12px;background:var(--brand);color:var(--brand-ink);padding:2px 7px;border-radius:5px}
+.td{position:absolute;top:8px;right:8px;font-size:11px;font-weight:600;background:var(--gold);color:#111;padding:2px 8px;border-radius:5px}
+.watch{position:absolute;bottom:8px;right:8px;font-size:12px;font-weight:600;background:rgba(0,0,0,.72);color:#fff;padding:4px 10px;border-radius:999px;text-decoration:none}
+.watch:focus-visible,.chip:focus-visible,.rowb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.meta{padding:10px 12px 12px;display:grid;gap:6px;align-content:start;min-width:0}
+.msg{font-family:var(--display);font-weight:700;font-size:14px;line-height:1.2}
+.scr{font-size:12px;color:var(--muted)}
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.nums div{display:grid}
+.nums small{font-family:var(--body);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.nums b{font-weight:500;font-size:14px}
+.nums b.good{color:var(--good)}.nums b.bad{color:var(--bad)}
+.hl{font-weight:600;font-size:13px}
+.op{font-size:12.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.nm{font-family:var(--mono);font-size:10.5px;color:var(--muted);word-break:break-word}
+.plan{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px}
+.plan ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.plan li{color:var(--muted)}
+.plan li b{color:var(--ink)}
+.plan li span{font-size:12px;font-family:var(--mono);margin-left:6px}
+.plan li.done span{color:var(--good)}
+.plan li.now span{color:var(--gold)}
+.plan li.done::marker{color:var(--good)}
+.plan li.now::marker{color:var(--gold)}
+.grp{display:grid;gap:12px}
+.grp+.grp{margin-top:18px}
+.ghead{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;border-bottom:2px solid var(--brand);padding-bottom:6px}
+.ghead h2{font-size:22px}
+.ghead span{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.ghead p{margin:0;flex-basis:100%;font-size:13px;color:var(--muted)}
+.fix{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.fix select{font:inherit;font-size:12px;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-width:0;flex:1}
+.fix .ed{font-family:var(--mono);font-size:10.5px;color:var(--gold)}
+.dbnote{font-size:12px;color:var(--muted)}
+.foot{color:var(--muted);font-size:12px;max-width:90ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>__BRAND__ Top Creatives</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+  <div class="bar" role="toolbar" aria-label="Sort and filter the ads">
+    <div class="types tiers" role="group" aria-label="How deep">
+      <button type="button" data-t="__CORE_N__" aria-pressed="true">Core __CORE_N__</button><button type="button" data-t="__TOP50_N__" aria-pressed="false">Top __TOP50_N__</button><button type="button" data-t="__ALL_N__" aria-pressed="false">All __ALL_N__</button>
+    </div>
+    <div class="types" role="group" aria-label="Type">
+      <button type="button" data-g="" aria-pressed="true">All</button><button type="button" data-g="Founder" aria-pressed="false">Founder</button><button type="button" data-g="Creator" aria-pressed="false">Creator</button><button type="button" data-g="B-roll and cuts" aria-pressed="false">B-roll and cuts</button><button type="button" data-g="Statics" aria-pressed="false">Statics</button>
+    </div>
+    <label for="f-sort">Sort <select id="f-sort"><option value="purchases">Most purchases</option><option value="cpa">Cheapest per purchase</option><option value="roas">Highest ROAS</option><option value="spend">Most spend</option><option value="last">Most recent</option></select></label>
+    <label for="f-year">Ran in <select id="f-year"><option value="">Either year</option><option value="2025">2025</option><option value="2026">2026</option></select></label>
+    <label for="f-format">Format <select id="f-format"><option value="">Video and image</option><option value="Video">Video</option><option value="Image">Image</option></select></label>
+    <label for="f-q">Search <input id="f-q" type="search" aria-label="Search by name, headline or opening line"></label>
+    <button type="button" class="chip" id="chip-msg" hidden></button>
+    <button type="button" class="chip" id="chip-scr" hidden></button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="mix">
+    <div class="box"><h2>Messages in the top 10%</h2><div class="hdr"><span>Message</span><span>Share of purchases</span><span>Ads</span><span>Cost</span></div><div id="mx-msg"></div></div>
+    <div class="box"><h2>What's on screen in the top 10%</h2><div class="hdr"><span>On screen</span><span>Share of purchases</span><span>Ads</span><span>Cost</span></div><div id="mx-scr"></div></div>
+  </div>
+  <p class="dbnote" id="dbnote" hidden></p>
+  <div id="wall"></div>
+  <p class="foot">__FOOT__</p>
+</div>
+
+<script>
+const ROWS = __ROWS__;
+const TOTAL = __TOTAL__;
+(function(){
+  const $ = (s) => document.querySelector(s);
+  const fmt$ = (v) => '$' + Math.round(v).toLocaleString('en-US');
+  const pct = (v) => (v * 100).toFixed(1) + '%';
+  const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const ym = (s) => MON[+s.slice(5) - 1] + ' ' + s.slice(0, 4);
+  const avgCpa = ROWS.reduce((t, r) => t + r.spend, 0) / ROWS.reduce((t, r) => t + r.purchases, 0);
+  const st = {msg: null, scr: null, grp: null, tier: __CORE_N__};
+  ROWS.forEach((r) => { r.g0 = r.group; r.s0 = r.screen; });
+  let DB = null, OV = {};
+  const GROUPS = ['Founder', 'Creator', 'B-roll and cuts', 'Statics'];
+  const applyOv = () => ROWS.forEach((r) => { const o = OV['r' + r.rank]; r.group = o ? o.group : r.g0; r.screen = o && o.screen ? o.screen : r.s0; r.edited = !!o; });
+  async function setType(r, g){
+    if (!DB) return;
+    const ref = DB.collection('recat').doc('r' + r.rank);
+    try {
+      if (g === r.g0) { await ref.delete(); }
+      else { const screen = g === 'Founder' ? 'Founder to camera' : (r.s0 === 'Founder to camera' && g === 'Creator' ? 'Creator talking to camera' : r.s0);
+        await ref.set({group: g, screen, name: r.name, was: r.g0, at: new Date().toISOString()}); }
+    } catch (e) { const n = document.getElementById('dbnote'); n.hidden = false; n.textContent = 'That change was not saved. Only the owner or an editor of this page can recategorize.'; }
+  }
+  const topP = ROWS.reduce((t, r) => t + r.purchases, 0);
+  $('#lede').innerHTML = '';
+  const l = $('#lede');
+  l.append('The ', Object.assign(document.createElement('b'), {textContent: ROWS.length + ' creatives'}), ' that made ',
+    Object.assign(document.createElement('b'), {textContent: pct(topP / TOTAL)}), ' of all __BRAND__ purchases in __WINDOW__, at ',
+    Object.assign(document.createElement('b'), {textContent: fmt$(avgCpa)}), ' a purchase. __CORE_LINE__ Pick a type, message or on-screen row to narrow the list.');
+
+  function group(key, el){
+    const g = new Map();
+    ROWS.filter((r) => r.rank <= st.tier && (!st.grp || r.group === st.grp)).forEach((r) => { const o = g.get(r[key]) || {k: r[key], n: 0, p: 0, s: 0}; o.n++; o.p += r.purchases; o.s += r.spend; g.set(r[key], o); });
+    const list = [...g.values()].sort((a, b) => b.p - a.p), max = list[0].p;
+    el.replaceChildren();
+    list.forEach((o) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'rowb'; const sk = key === 'message' ? 'msg' : key === 'group' ? 'grp' : 'scr'; b.setAttribute('aria-pressed', String(st[sk] === o.k));
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = o.k;
+      const w = document.createElement('span'); const i = document.createElement('i'); i.style.width = Math.max(2, o.p / max * 100) + '%'; w.appendChild(i);
+      w.title = pct(o.p / TOTAL) + ' of all purchases';
+      const v = document.createElement('span'); v.className = 'v'; v.textContent = o.n;
+      const c = document.createElement('span'); c.className = 'c'; c.textContent = fmt$(o.s / o.p);
+      const sh = document.createElement('span'); sh.className = 'v'; sh.textContent = pct(o.p / TOTAL);
+      w.style.display = 'grid'; w.style.gridTemplateColumns = 'minmax(0,1fr) 3.4rem'; w.style.gap = '6px'; w.style.alignItems = 'center'; w.append(sh);
+      b.append(n, w, v, c);
+      b.addEventListener('click', () => { st[sk] = st[sk] === o.k ? null : o.k; render(); });
+      el.appendChild(b);
+    });
+  }
+  function card(r){
+    const c = document.createElement('article'); c.className = 'card';
+    const p = document.createElement('div'); p.className = 'pic';
+    if (r.img) { const im = document.createElement('img'); im.src = r.img; im.alt = r.screen + ': ' + (r.headline || r.name); im.loading = 'lazy'; p.appendChild(im); }
+    else { const no = document.createElement('p'); no.textContent = 'No picture on the machine that built this board'; no.style.cssText = 'padding:12px;margin:0;font-size:13px'; p.appendChild(no); }
+    const rk = document.createElement('span'); rk.className = 'rk'; rk.textContent = '#' + r.rank; p.appendChild(rk);
+    if (r.teardown) { const td = document.createElement('span'); td.className = 'td'; td.textContent = 'Torn down'; p.appendChild(td); }
+    if (r.link) { const a = document.createElement('a'); a.className = 'watch'; a.href = r.link; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r.format === 'Image' ? 'Open ▸' : 'Watch ▸'; p.appendChild(a); }
+    const m = document.createElement('div'); m.className = 'meta';
+    const msg = document.createElement('div'); msg.className = 'msg'; msg.textContent = r.message;
+    const scr = document.createElement('div'); scr.className = 'scr'; scr.textContent = r.group + ' · ' + r.screen + ' · ' + r.format + ' · ' + ym(r.first) + (r.last !== r.first ? ' to ' + ym(r.last) : '');
+    const nums = document.createElement('div'); nums.className = 'nums';
+    [['Purchases', r.purchases.toLocaleString('en-US'), ''], ['Cost', fmt$(r.cpa), r.cpa <= avgCpa ? 'good' : 'bad'], ['ROAS', r.roas.toFixed(2) + 'x', r.roas >= 1 ? 'good' : 'bad']].forEach(([k, v, cl]) => {
+      const d = document.createElement('div'); const s = document.createElement('small'); s.textContent = k; const b = document.createElement('b'); b.textContent = v; if (cl) b.className = cl; d.append(s, b); nums.appendChild(d); });
+    const sp = document.createElement('div'); sp.className = 'scr'; sp.textContent = fmt$(r.spend) + ' spent · ' + pct(r.share) + ' of all purchases';
+    m.append(msg, scr, nums, sp);
+    if (r.cuts > 1) { const cu = document.createElement('div'); cu.className = 'scr'; cu.textContent = r.cuts + ' cuts of this one ad merged'; cu.title = (r.variants || []).join('\n'); m.appendChild(cu); }
+    if (r.headline) { const h = document.createElement('div'); h.className = 'hl'; h.textContent = r.headline; m.appendChild(h); }
+    if (r.opening) { const o = document.createElement('div'); o.className = 'op'; o.textContent = r.opening; m.appendChild(o); }
+    if (DB) { const fx = document.createElement('label'); fx.className = 'fix'; fx.append('Type');
+      const sel = document.createElement('select'); sel.setAttribute('aria-label', 'Type for #' + r.rank);
+      GROUPS.forEach((g) => { const o = document.createElement('option'); o.value = g; o.textContent = g; if (g === r.group) o.selected = true; sel.appendChild(o); });
+      sel.addEventListener('change', () => setType(r, sel.value)); fx.appendChild(sel);
+      if (r.edited) { const ed = document.createElement('span'); ed.className = 'ed'; ed.textContent = 'changed'; fx.appendChild(ed); }
+      m.appendChild(fx); }
+    const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = r.name; m.appendChild(nm);
+    c.append(p, m); return c;
+  }
+  function render(){
+    group('message', $('#mx-msg')); group('screen', $('#mx-scr'));
+    const y = $('#f-year').value, f = $('#f-format').value, q = $('#f-q').value.trim().toLowerCase(), s = $('#f-sort').value;
+    let list = ROWS.filter((r) => r.rank <= st.tier && (!st.msg || r.message === st.msg) && (!st.scr || r.screen === st.scr) && (!st.grp || r.group === st.grp) && (!y || r.years.includes(+y)) && (!f || r.format === f)
+      && (!q || (r.name + ' ' + r.headline + ' ' + r.opening).toLowerCase().includes(q)));
+    const dir = {purchases: -1, cpa: 1, roas: -1, spend: -1, last: -1}[s];
+    list.sort((a, b) => (a[s] < b[s] ? -1 : a[s] > b[s] ? 1 : 0) * dir || a.rank - b.rank);
+    const wall = $('#wall'); wall.className = 'wall'; wall.replaceChildren(...list.map(card));
+    const cm = $('#chip-msg'), cs = $('#chip-scr');
+    document.querySelectorAll('.types:not(.tiers) button').forEach((b) => { b.setAttribute('aria-pressed', String((b.dataset.g || null) === st.grp)); const g = b.dataset.g, n = ROWS.filter((r) => r.rank <= st.tier && (!g || r.group === g)); const p = n.reduce((t, r) => t + r.purchases, 0); let sm = b.querySelector('small'); if (!sm) { sm = document.createElement('small'); b.appendChild(sm); } sm.textContent = n.length + ' · ' + pct(p / TOTAL); });
+    cm.hidden = !st.msg; cm.textContent = (st.msg || '') + '  ×'; cs.hidden = !st.scr; cs.textContent = (st.scr || '') + '  ×';
+    document.querySelectorAll('.tiers button').forEach((b) => { const n = ROWS.filter((r) => r.rank <= +b.dataset.t); const p2 = n.reduce((t, r) => t + r.purchases, 0); let sm = b.querySelector('small'); if (!sm) { sm = document.createElement('small'); b.appendChild(sm); } sm.textContent = pct(p2 / TOTAL) + ' of purchases'; });
+    const p = list.reduce((t, r) => t + r.purchases, 0);
+    $('#count').textContent = list.length + ' creatives · ' + pct(p / TOTAL) + ' of all purchases';
+  }
+  $('#chip-msg').addEventListener('click', () => { st.msg = null; render(); });
+  document.querySelectorAll('.types:not(.tiers) button').forEach((b) => b.addEventListener('click', () => { st.grp = b.dataset.g || null; render(); }));
+  document.querySelectorAll('.tiers button').forEach((b) => b.addEventListener('click', () => { st.tier = +b.dataset.t; document.querySelectorAll('.tiers button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); render(); }));
+  $('#chip-scr').addEventListener('click', () => { st.scr = null; render(); });
+  ['#f-sort', '#f-year', '#f-format'].forEach((s) => $(s).addEventListener('change', render));
+  $('#f-q').addEventListener('input', render);
+  render();
+  (async () => {
+    const db = await claude.use('db'); if (!db) return;
+    DB = db; render();
+    const note = document.getElementById('dbnote');
+    const t = setTimeout(() => { note.hidden = false; note.textContent = 'Saved type changes cannot be reached yet; the list shows the original types.'; }, 10000);
+    db.collection('recat').onSnapshot((snap) => {
+      if (!snap.metadata.fromCache) { clearTimeout(t); note.hidden = true; }
+      OV = {}; snap.docs.forEach((d) => { const v = d.data(); if (v && v.group) OV[d.id] = {group: v.group, screen: v.screen || null}; });
+      applyOv(); render();
+    }, () => { clearTimeout(t); note.hidden = false; note.textContent = 'Saved type changes could not be loaded; the list shows the original types.'; });
+  })();
+})();
+</script>

@@ -19,7 +19,7 @@ It plans. It generates nothing. Production is NOT built yet: no component reads
 
 `machine/format_swap.py` (the one-step concept+format → spec shortcut) is superseded by the proven ad → new format chain: `PROVEN-TO-FORMAT-owner.md`, `machine/proven_to_format.py`.
 
-Page: **Ad Variations** — (private page) (register: `context/artifacts.md`). Markdown
+Page: **Ad Variations** — https://claude.ai/artifact/LNuJEqMXjGysPX97k25LaP (register: `context/artifacts.md`). Markdown
 mirror of the page: `AD-VARIATIONS-owner.md`.
 
 ## Inputs
@@ -110,7 +110,7 @@ formats       [{id, name, what_the_viewer_sees, parts[{variable, value, evidence
                 closest_existing, why, seed_footage, to_make, audience, recipe, cost, gates}]
 shared        [{key, piece, route, units, usd, used_by[], why}]
 totals        variations, formats, usd, usd_with_tests, hours, not_included
-owner_decides [], problems []
+the owner_decides [], problems []
 run           stages{prompt, sha, model, seconds, chars}, llm_cost, brand_files_read
 ```
 
@@ -134,7 +134,7 @@ route, via run-kit). Measured on the two test runs: ≈150k tokens in and ≈60k
 out — **≈ $2.3–2.5 per ad** at list price (#1 $2.46, #2 $2.29), plus an
 occasional Sonnet call when a stage's JSON needs its punctuation repaired.
 About 20–25 minutes per ad. The Variable Index cost **$1.98 once** for the 60
-<brand> posts on Sonnet; after that only new posts are coded. Stage 0 is free
+Brand A posts on Sonnet; after that only new posts are coded. Stage 0 is free
 (ffmpeg and the local Demucs). No production money is spent here.
 
 The machine cost of the plans themselves (what production would spend):
@@ -163,7 +163,7 @@ everything after it; a changed prompt reruns itself and what depends on it.
 ## Calibration against the hand-made spec (27 Sep 2026)
 
 Post #1 (TikTok 7167399325910289706) was planned automatically and compared
-with the hand-made Asset 01 spec (`lab/owner/<brand>-relaunch/ASSET-01-VIDEO-VARIATIONS-owner.md`).
+with the hand-made Asset 01 spec (`lab/the owner/Brand A-relaunch/ASSET-01-VIDEO-VARIATIONS-owner.md`).
 The full side-by-side is `notes/calibration.json`, rendered on the page.
 
 What was weaker, and what changed:

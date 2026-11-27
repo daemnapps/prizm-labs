@@ -26,11 +26,11 @@ of the picture; this is one new app owned by Prizm Labs.*
 | Needs | the app published | business verification + 500 API calls in 15 days at < 15% errors, then App Review (no screen recording since 4 May 2026; decision ~1 week) |
 
 **Not settled by Meta's docs:** whether a Limited app may write to ad accounts owned by *another*
-business (<brand> LLC's, <brand>'s) once they are shared in. One page says "your ad account → standard
+business (Brand A LLC's, Brand B's) once they are shared in. One page says "your ad account → standard
 access is enough", another says "other people's ad accounts → advanced access". One test write settles it.
 
 **Known from our own runs:** the 11 Sep Outlier writes failed with error #3 while the app was unpublished;
-<brand>'s account returned "(#200) Ad account owner has NOT grant ads_management" — it was never shared.
+Brand B's account returned "(#200) Ad account owner has NOT grant ads_management" — it was never shared.
 
 **Verification needs a registered legal entity** with matching documents (articles, registration,
 government tax document or business bank statement) and an HTTPS website; up to 14 working days. The
@@ -63,28 +63,28 @@ the company LLC portfolio is already verified.
 the owner: "we'd just start with the company having the ownership since I already have an established
 business manager, I just need to build a proper app and get approvals going."
 
-- Site pages for the app form: daemn.co/privacy.html, daemn.co/terms.html, daemn.co/data-deletion.html (daemnapps/prizm-labs PR 12, the owner merges); icon `docs/media/prizm-labs-app-icon-1024.png` in that repo.
+- Site pages for the app form: daemn.co/privacy.html, daemn.co/terms.html, daemn.co/data-deletion.html (the owner/prizm-labs PR 12, the owner merges); icon `docs/media/prizm-labs-app-icon-1024.png` in that repo.
 - App: "Prizm Labs", use case Create & manage ads with Marketing API, portfolio the company, category Business and pages.
-- Key: the existing Conversions API System User in the company gets the Prizm Labs app (full control) + <brand> ad account + <brand> Page; token saved as `daemn-PRIZM_META_TOKEN`.
-- Order: test on <brand> (own-business account) → record the review video on paused ads → App Review for ads_management + ads_read (answers on the page) → <brand> and others shared in as partners.
+- Key: the existing Conversions API System User in the company gets the Prizm Labs app (full control) + Brand A ad account + Brand A Page; token saved as `daemn-PRIZM_META_TOKEN`.
+- Order: test on Brand A (own-business account) → record the review video on paused ads → App Review for ads_management + ads_read (answers on the page) → Brand B and others shared in as partners.
 
 ## 1 Oct 2026, 3:30pm — the key works
 
 App published. Key saved as `daemn-PRIZM_META_TOKEN` (Conversions API System User, all seven permissions
-granted). Reaches 1. <brand> (2824261077700798) and the <brand> Page. **Write test passed:** one image into the
-<brand> library (hash 2cb8ff66…) — the #3 block is gone. A validate-only paused campaign was accepted (nothing
-created). <brand> still returns "(#200) Ad account owner has NOT grant ads_management" — not shared yet.
+granted). Reaches 1. Brand A (2824261077700798) and the Brand A Page. **Write test passed:** one image into the
+Brand A library (hash 2cb8ff66…) — the #3 block is gone. A validate-only paused campaign was accepted (nothing
+created). Brand B still returns "(#200) Ad account owner has NOT grant ads_management" — not shared yet.
 
 ## 1 Oct 2026, evening — both brands connected
 
-New system user "Prizm Labs" holds the key (`daemn-PRIZM_META_TOKEN`, 7 permissions). Reaches 1. <brand> and
-Brand_BSkin, Pages <brand> / <brand> Skincare / <brand> T. Write test + validate-only campaign passed on both —
-no App Review needed. Page caps: <brand> 0/1,000; <brand> Skincare 80/1,000; <brand> T 5/250. Left for the owner:
+New system user "Prizm Labs" holds the key (`daemn-PRIZM_META_TOKEN`, 7 permissions). Reaches 1. Brand A and
+PasnidaSkin, Pages Brand A / Brand B Skincare / Brand B T. Write test + validate-only campaign passed on both —
+no App Review needed. Page caps: Brand A 0/1,000; Brand B Skincare 80/1,000; Brand B T 5/250. Left for the owner:
 remove the Prizm Labs app from the Conversions API System User (never revoke its tokens); the first go.
 
 ## 1 Oct 2026 — what a drop needs to upload
 1 drop folder (pictures or videos; the ad-handoff gate now counts .mp4/.mov) · 2 copy.csv with primary/alt text + 2 headlines + 2 descriptions (`headlines` / `descriptions` columns, or the copywriter's HEADLINES/DESCRIPTIONS blocks) · 3 landing page by catalog link id · 4 hand-off folder · 5 the owner's go in approvals.json · 6 `upload.py --go`.
-<brand> now uses <brand>'s naming (campaign_brand_a_us_<product>_<funnel>_purchase_cbo; adset by avatar+angle) and has `brands/<brand>/web/funnels/funnels.json` (icon, store). Campaign product = the funnel's product, else the ad's own.
+Brand A now uses Brand B's naming (campaign_Brand A_us_<product>_<funnel>_purchase_cbo; adset by avatar+angle) and has `brands/Brand A/web/funnels/funnels.json` (icon, store). Campaign product = the funnel's product, else the ad's own.
 
 ## The approval card (1 Oct 2026)
 Every finished ad — video, image, carousel, creator — lands in `Shared Assets/meta/<brand>/1-check/<lane>/<ad name>/`
@@ -93,4 +93,4 @@ standard card: media, words, page, where it goes in Meta, machine checks. **Appr
 check is red) sends it in. **Two buttons, no default (7 Oct 2026): Approve → On or Approve → Paused.** On also switches on the campaign and ad set the upload made; a paused one that already existed is flagged on the card. The Meta ids and Meta's own delivery status land on the card and the folder moves to
 3-live. **Send back** takes your note. Your click is the go — no approvals list for this road.
 Proved 1 Oct: Meta's dry run (validate only, nothing made) accepted a flexible ad and a carousel ad on both
-1. <brand> and Brand_BSkin.
+1. Brand A and PasnidaSkin.

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """standard — what good looks like, per brand: the one standard every new ad is judged by.
 
-    standard.py --brand brand-a        writes runs/media-buying/<brand>/standard.json (the latest standard)
+    standard.py --brand brand_a        writes runs/media-buying/<brand>/standard.json (the latest standard)
 
-the owner, 2 Oct 2026: "we need to standardize … build a standard view of what good looks like … as a
+owner, 2 Oct 2026: "we need to standardize … build a standard view of what good looks like … as a
 criterion for all of these new ads that we put through our machine. And obviously, this is going
 to differ per brand because each brand's metrics and avatars and assets are all different."
 
-the owner, same day: days-to-spend and the $1,000 checkpoint are out — "how much it actually spent depends
+owner, same day: days-to-spend and the $1,000 checkpoint are out — "how much it actually spent depends
 on the budget itself … It's more about: Is this ad even scalable at this X budget?" So three signals,
 each over the ad's life (ads with $100+ spent), from the warehouse (no Meta calls): cost per sale,
 return on ad spend, and SHARE OF SPEND — the asset's spend over its campaign's whole spend on the
@@ -17,7 +17,7 @@ days it ran. For each:
   CUT          the typical ad outside the top 10% — at or past this, it's performing like the bottom
 Signals that don't pick winners (clicks, hook, hold) are listed as WATCHED, NOT JUDGED.
 The ad-parts rules (from the gap reads) sit beside the numbers with their status: approved,
-waiting on the owner, or none yet.
+waiting on owner, or none yet.
 """
 import argparse, json, statistics as st
 from pathlib import Path
@@ -30,7 +30,7 @@ JUDGED = [("cpa", "Cost per acquisition (CPA)", True, "spend ÷ purchases"),
           ("roas", "Return on ad spend", False, "sales value ÷ spend"),
           ("share", "Share of spend", False, "of everything its campaign spent while the ad ran, how much Meta gave this ad — "
                                              "is it scalable at that budget")]
-# WHEN to judge (the owner, 2 Oct: "At what point do we need to assess …?"). Measured in spend, as a
+# WHEN to judge (owner, 2 Oct: "At what point do we need to assess …?"). Measured in spend, as a
 # multiple of the brand's GOOD CPA, so it holds at any budget. From replaying every ad launched in the
 # data window: how often a read at that point matched where the ad ended (top 10% or not).
 CHECKPOINTS = [
@@ -42,53 +42,53 @@ CHECKPOINTS = [
      "what": "Is Meta giving it a real share of the campaign's spend? Share of spend is judged here, not earlier."},
 ]
 READ_ACCURACY = {   # % of ads passing the checkpoint's judged signal that ended top 10% (CPA at 3× and 5×, share of spend at 10×); base = share that ended top 10%
-    "brand-a": {"base": 35, 3: 61, 5: 87, 10: 96, "winner_days": {3: 3, 5: 4, 10: 6}},
-    "brand-b": {"base": 18, 3: 53, 5: 56, 10: 49, "winner_days": {3: 3, 5: 4, 10: 7}},
+    "brand_a": {"base": 35, 3: 61, 5: 87, 10: 96, "winner_days": {3: 3, 5: 4, 10: 6}},
+    "brand_b": {"base": 18, 3: 53, 5: 56, 10: 49, "winner_days": {3: 3, 5: 4, 10: 7}},
 }
-# WHAT BAD LOOKS LIKE — the kill lines (the owner, 2 Oct: "clear criteria for what bad looks like … so we
+# WHAT BAD LOOKS LIKE — the kill lines (owner, 2 Oct: "clear criteria for what bad looks like … so we
 # can kill it so we don't waste any money"). Same two rules for every brand, the line set per brand from
 # replaying every ad launched in the window: the most money saved while killing at most ~3% of ads that
-# went on to the top 10%, and no top-1% ad. BRAND-A winners often look bad early and recover, so its
+# went on to the top 10%, and no top-1% ad. brand_a winners often look bad early and recover, so its
 # decision line is looser.
 KILL = {
-    "brand-a": {"decision_cpa_x": 4, "stats": {"ads_killed": 31, "winners_killed": 3, "winners_total": 85,
+    "brand_a": {"decision_cpa_x": 4, "stats": {"ads_killed": 31, "winners_killed": 3, "winners_total": 85,
                "top1_killed": 0, "saved": 3380, "saved_pct_of_waste": 6}},
-    "brand-b": {"decision_cpa_x": 1.5, "stats": {"ads_killed": 134, "winners_killed": 3, "winners_total": 98,
+    "brand_b": {"decision_cpa_x": 1.5, "stats": {"ads_killed": 134, "winners_killed": 3, "winners_total": 98,
                 "top1_killed": 0, "saved": 32345, "saved_pct_of_waste": 16}},
 }
-# NO GOOD AD GETS KILLED (the owner, 2 Oct: "make sure that no good ones would actually be killed? If there's
+# NO GOOD AD GETS KILLED (owner, 2 Oct: "make sure that no good ones would actually be killed? If there's
 # any question or confusion, then it should just be pulled up, and then we can train over time"). When a
-# kill rule fires, the ad is killed only with NO sign of life; any sign of life pulls it up for the owner,
+# kill rule fires, the ad is killed only with NO sign of life; any sign of life pulls it up for owner,
 # with the reason, and his call is recorded so the lines can be retuned from it. Signs of life set from
 # the past winners a kill rule would have hit — every one of them had at least one.
 SIGNS_OF_LIFE = {
-    "brand-a": {"rules": [("share", 4, "still getting {v}% of its campaign's spend"), ("atc", 8, "{v} add to carts")],
+    "brand_a": {"rules": [("share", 4, "still getting {v}% of its campaign's spend"), ("atc", 8, "{v} add to carts")],
                "history": {"kill_triggers": 32, "pulled_up": 24, "auto_killed": 8, "winners_auto_killed": 0,
                            "months": 9}},
-    "brand-b": {"rules": [("share", 15, "still getting {v}% of its campaign's spend"), ("ic", 5, "{v} checkouts started"),
+    "brand_b": {"rules": [("share", 15, "still getting {v}% of its campaign's spend"), ("ic", 5, "{v} checkouts started"),
                           ("ctr", 4.4, "{v}% link click rate")],
                 "history": {"kill_triggers": 163, "pulled_up": 104, "auto_killed": 59, "winners_auto_killed": 0,
                             "months": 23}},
 }
 WATCHED = ["Link click rate", "Hook rate (3-second views)", "25% hold"]
 
-AVATARS = {"brand-a": ["fed-up-king", "glow-up", "face-back", "gift-buyer"], "brand-b": ["spot-hider"]}
+AVATARS = {"brand_a": ["fed-up-king", "glow-up", "face-back", "gift-buyer"], "brand_b": ["spot-hider"]}
 PARTS = {
-    "brand-a": [{"rule": "The ad names a real deal (a price cut, $ or % off, a free item, a declared sale) and backs it "
+    "brand_a": [{"rule": "The ad names a real deal (a price cut, $ or % off, a free item, a declared sale) and backs it "
                         "with a guarantee, a real limit, or a reason for the price.",
                 "evidence": "winners 8 of 10, losers 6 of 25 (shared copy counted once: ~71% vs ~35%)",
                 "status": "seen in winners, not required",
-                "note": "the owner, 2 Oct: not everything needs to lead with the deal."}],
-    "brand-b": [],
+                "note": "owner, 2 Oct: not everything needs to lead with the deal."}],
+    "brand_b": [],
 }
-PARTS_NOTE = {"brand-a": "", "brand-b": "No copy rule picks Brand-B winners: most ads ran the same two texts. "
+PARTS_NOTE = {"brand_a": "", "brand_b": "No copy rule picks brand_b winners: most ads ran the same two texts. "
                                        "The rules will come from the videos, read next."}
 
 
 def daily(brand):
     """Every ad's daily spend, sales and value, with its campaign — one warehouse query, no Meta calls."""
     import sys
-    sys.path.insert(0, str(WS / "tools/copywriter/library"))
+    sys.path.insert(0, str(WS / "components/copywriter/library"))
     sys.path.insert(0, str(HERE))
     import meta_copy as MC
     from brand import Brand
@@ -143,7 +143,7 @@ def build(brand):
     others = [r for r in rows if r["tier"] != "top-1"]
     out = {"brand": brand, "measured": "over each ad's life, ads with at least $%d spent" % MIN_SPEND,
            "from": {"window": tiers["window"], "assets": len(rows), "winners": len(win), "rest": len(rest)},
-           "approved": {"by": "the owner", "on": "2026-10-02", "said": "We have this, and this is good."},
+           "approved": {"by": "owner", "on": "2026-10-02", "said": "We have this, and this is good."},
            "avatars": AVATARS.get(brand, []), "judged": [], "watched": [],
            "parts": PARTS.get(brand, []), "parts_note": PARTS_NOTE.get(brand, "")}
     for k, label, low, means in JUDGED:

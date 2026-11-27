@@ -1,0 +1,10 @@
+{
+ "_what": "take.py's face doors (take_faces.py): the start picture against the sheets of the people in it before anything is bought; every beat of the made take against the people it names, a drifted take never used.",
+ "on": false,
+ "picture": true,
+ "_picture": "false: the start picture is sent unchecked, as before 2026-11-13.",
+ "take": true,
+ "_take": "false: the made take is placed without its beats being face-checked.",
+ "_rollback": "\"on\": false turns both off; TAKE_FACES_OFF=1 or =picture / =take on one machine. Row TAKE-FACES in team/rollbacks.md.",
+ "_off": "Owner ruling 2026-11-20: pictures and clips are made from the banked references, so the face doors no longer hold pictures or clips back. Set \"on\" to true to bring them back."
+}

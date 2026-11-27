@@ -35,8 +35,35 @@ MIME = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp
 MEDIUM = {"image": "image", "video": "video", "text": "copy"}
 
 
+BACKUP_KEYS = ("GEMINI_API_KEY_PERSONAL",)   # the standing backup (decision 2026-11-12: every tool is account agnostic)
+
+
+def keys():
+    """The key values in order: the company key, then the standing backup (owner rule 2026-11-16: fall back on its own)."""
+    spec = importlib.util.spec_from_file_location("upright_keys_loader", str(CC.REPO / "components/keys/loader.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    got = [v.strip() for v in (mod.key(n, required=False) for n in ("GEMINI_API_KEY",) + BACKUP_KEYS) if v]
+    if not got:
+        sys.exit("missing key GEMINI_API_KEY — add the line GEMINI_API_KEY=... to the one key file")
+    return got
+
+
+def read_any(asset):
+    """read_one on the first key that is not out of credit or over its spend cap (402 / 429 RESOURCE_EXHAUSTED)."""
+    last = None
+    for k in keys():
+        try:
+            return read_one(k, asset)
+        except RuntimeError as e:
+            last = e
+            if not any(w in str(e) for w in ("402", "429", "RESOURCE_EXHAUSTED", "spending cap")):
+                raise
+    raise last
+
+
 def key(name):
-    spec = importlib.util.spec_from_file_location("company_keys_loader", str(CC.REPO / "components/keys/loader.py"))
+    spec = importlib.util.spec_from_file_location("upright_keys_loader", str(CC.REPO / "components/keys/loader.py"))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     v = mod.key(name, required=False)
@@ -52,10 +79,12 @@ def call(url, body=None, headers=None, raw=False, tries=5):
                 b = r.read()
                 return (b, dict(r.headers)) if raw else json.loads(b or b"{}")
         except urllib.error.HTTPError as e:
-            if e.code in (429, 500, 502, 503, 504) and n < tries:
+            body = e.read()[:300]
+            capped = e.code in (402, 429) and any(w in body.lower() for w in (b"spending cap", b"resource_exhausted", b"billing"))
+            if e.code in (429, 500, 502, 503, 504) and n < tries and not capped:   # a spend cap is not a wait
                 time.sleep(8 * n)
                 continue
-            raise RuntimeError("Gemini %s: %r" % (e.code, e.read()[:300]))
+            raise RuntimeError("Gemini %s: %r" % (e.code, body))
         except urllib.error.URLError:
             if n < tries:
                 time.sleep(8 * n)
@@ -121,7 +150,6 @@ def check(got, kind):
 
 
 def main(brand, label, manifest):
-    k = key("GEMINI_API_KEY")
     out = CC.REPO / "runs" / "creative-controls" / brand / label
     out.mkdir(parents=True, exist_ok=True)
     f = out / "scores.json"
@@ -131,7 +159,7 @@ def main(brand, label, manifest):
 
     def work(a):
         try:
-            got = read_one(k, a)
+            got = read_any(a)
             return a, got, check(got, a["kind"])
         except Exception as e:  # one bad asset never stops the batch
             return a, None, ["read failed: %s" % e]
@@ -145,10 +173,9 @@ def main(brand, label, manifest):
 
 
 def one(path, out):
-    k = key("GEMINI_API_KEY")
     asset = {"id": Path(path).stem, "kind": "image", "path": path, "note": "a swipe"}
     for _ in range(3):  # the reader names a technique off the bank now and then; a fresh read usually lands
-        got = read_one(k, asset)
+        got = read_any(asset)
         problems = check(got, "image")
         if not problems:
             break

@@ -1,0 +1,20 @@
+{
+  "kind": "wf-feedback-twins-cards",
+  "title": "feedback-twins \u2014 feedback on a view, without touching the view",
+  "note": "Cards carded by the lead 2026-09-02 from the developer's batch 24 design and its self-serve addendum. FT-1 the view-feedback kind, FT-2 the gated /api/chat mouth (ai-dev), FT-3 the button and the fb-view, FT-4 the Victoria pilot, FT-5 the feedback queue that turns overlay records into proposals. Main views stay chat-free; each reviewer's twin folds only their own records; outsiders wait on the recipient-boundary ruling and on B-1 enforcement.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/feedback-twins/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    {
+      "key": "approve",
+      "type": "boolean",
+      "label": "Approve card as-is"
+    },
+    {
+      "key": "feedback",
+      "type": "text",
+      "label": "What to change (required unless approved)"
+    }
+  ]
+}

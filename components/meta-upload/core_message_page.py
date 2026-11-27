@@ -8,11 +8,11 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-BRANDS = ROOT / "brands"   # each brand's core message lives at brands/<brand>/brand-identity/core-message/ (the owner, 5 Oct)
+BRANDS = ROOT / "brands"   # each brand's core message lives at brands/<brand>/brand-identity/core-message/ (owner, 5 Oct)
 PROMPT = ROOT / "lab/owner/media-buying/prompts/core-message-owner.md"
 OUT = ROOT / "lab/owner/media-buying/core-message.html"
 MD = ROOT / "lab/owner/media-buying/CORE-MESSAGE-owner.md"
-NAMES = {"brand-a": "BRAND-A", "brand-b": "Brand-B"}
+NAMES = {"brand_a": "brand_a", "brand_b": "brand_b"}
 
 
 def build():
@@ -33,7 +33,7 @@ def build():
                  "partial": (per.get(n) or {}).get("partial", False)} for n, a in sorted(ads.items())]
         brands[b] = {**c, "ads": rows, "total_spend": top[b]["total_spend"], "top20_share": top[b]["top20_spend_share"],
                      "window": top[b]["window"], "left_out": top[b].get("left_out_by_owner") or []}
-    v = ROOT / "tools/video-teardown/prompts/stage-1-teardown/stage1-teardown-v15-owner.md"
+    v = ROOT / "components/video-teardown/prompts/stage-1-teardown/stage1-teardown-v15-owner.md"
     wired = v.read_text().split("**6. THE CORE MESSAGE**", 1)[1].split("Give me a really clean output", 1)[0] if v.exists() else ""
     data = {"brands": brands, "prompt": PROMPT.read_text(),
             "wired": ("THE CORE MESSAGE" + wired).strip() if wired else ""}
@@ -43,7 +43,7 @@ def build():
 
 
 def write_md(brands):
-    L = ["# Core Message — the owner", "", "The one thing each brand's 20 biggest-spending ads say, under every format and angle. "
+    L = ["# Core Message — owner", "", "The one thing each brand's 20 biggest-spending ads say, under every format and angle. "
          "Prompt: `lab/owner/media-buying/prompts/core-message-owner.md`.", ""]
     for b, B in brands.items():
         L += [f"# {NAMES[b]}", "", f"**The core message:** {B['core']}", "",
@@ -103,7 +103,7 @@ button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outli
 </div>
 <script>
 (function(){
-const D=__DATA__;const NAMES={brand-a:"BRAND-A",brand-b:"Brand-B"};
+const D=__DATA__;const NAMES={brand_a:"brand_a",brand_b:"brand_b"};
 const keys=Object.keys(D.brands);let brand=keys[0];try{const s=localStorage.getItem("cm-brand");if(s&&D.brands[s])brand=s}catch(e){}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));

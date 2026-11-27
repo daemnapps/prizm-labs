@@ -53,7 +53,7 @@ def page_type(row):
     # An advertorial is an ARTICLE — it carries a byline, a publication or a
     # read time, and it reads as editorial. Length alone never made one, and
     # using length as the test silently labelled every long page an
-    # advertorial (the owner, 2026-09-11: "it's clearly not an advertorial").
+    # advertorial (owner, 2026-09-11: "it's clearly not an advertorial").
     # Test the markers an advertorial actually carries, not a stray "by X" —
     # "Trusted By Leading Doctors" matched that and made Norse's sales page an
     # advertorial. These four are the real tells.

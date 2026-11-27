@@ -1,0 +1,12 @@
+{
+  "kind": "wf-dashboard-cards",
+  "title": "dashboard — the owner's performance dashboard moved live, refreshed from the mini",
+  "note": "Kind manifest filed by the dev-the developer lead 2026-08-28: the build was registered in workflows.json (dev-the designer scope, I-65 verdict) with this kind declared, but the manifest was never created, so /api/items served nothing and the cards viewer showed no story/done-when for pending DASH cards — found via the developer's report on DASH-C4. Deck and cards are dev-the designer's; this file only makes them servable.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/dashboard/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

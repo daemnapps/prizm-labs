@@ -1,0 +1,12 @@
+{
+  "kind": "wf-mini-cockpit-cards",
+  "title": "mini-cockpit — drive the mini's dev sessions from the MBP",
+  "note": "Carded by the lead 2026-08-28 from the the developer-approved MBP-cockpit plan (zesty-tinkering-kettle.md; relayed via the parked 08-27 lead, verified at head). CLI-1 dispatchable; CLI-2 is LEAD-EXECUTED (.claude/ is maker-forbidden, the VT-3 precedent). the developer runs Step 0 (ssh config + tmux) himself.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/mini-cockpit/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

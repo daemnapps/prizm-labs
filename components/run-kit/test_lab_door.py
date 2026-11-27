@@ -26,10 +26,10 @@ from run_kit import lab_door as D    # noqa: E402
 
 REAL = D.find_repo(__file__)         # this checkout, found by walking up
 MANIFESTS = {
-    "video-production": REAL / "tools/video-production/machine/lab_door.json",
-    "image-teardown": REAL / "tools/image-teardown/lab_door.json",
-    "image-production": REAL / "tools/image-production/lab_door.json",
-    "image-edit": REAL / "tools/image-edit/lab_door.json",
+    "video-production": REAL / "components/video-production/machine/lab_door.json",
+    "image-teardown": REAL / "components/image-teardown/lab_door.json",
+    "image-production": REAL / "components/image-production/lab_door.json",
+    "image-edit": REAL / "components/image-edit/lab_door.json",
     "meta-upload": REAL / "components/meta-upload/lab_door.json",
 }
 LD7_MANIFESTS = {                    # LD-7 (four more doors): manifests at the component root

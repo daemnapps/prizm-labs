@@ -6,10 +6,3 @@ an engine · eight steps, one video in, the Sound Sheet out · run by a person o
 
 Owner: the owner
 
-## How to use it → (team dashboard)
-
-## Local venvs (public copy)
-
-Demucs, Shazam and the audio measures (librosa, Praat) each run in their own
-venv, named by `DEMUCS_PYTHON`, `SHAZAM_PYTHON` and `AUDIO_PYTHON`. See
-`tools/video-teardown/README.md` for the three install lines.

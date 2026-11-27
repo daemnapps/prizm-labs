@@ -1,0 +1,113 @@
+{
+  "kind": "review",
+  "title": "Review — a request, its verdicts, its close",
+  "_frozen": "APPROVED 2026-09-08 by the lead (★ LEAD · mn · dev-the developer), which is the mark batch 54 requires before any panel card dispatches. Verified against batch 54's FROZEN MANIFEST block field by field, plus test_rv1_manifest.py 26/26 and validate_kinds.py clean. FROM THIS MARK ON, A CHANGE HERE IS A RULING, NOT A MAKER'S JUDGMENT — the email lead builds her panels against this file and has no ai-dev access, so the freeze is the whole of her protection. The one shape choice RV-1 (review kind manifest) had to make is the `media_inventory` KEY NAME, accepted as filed: batch 54 froze that a declaration exists and what it is for, never what it is called. RV-4 (media route per-kind) was already with a maker when this merged, from a worktree cut before this file existed, so if it reads a different key the reconciliation is one line on whichever side and belongs to the lead at RV-4's merge — not to a change here.",
+  "note": "THE FROZEN CONTRACT (card RV-1, written VERBATIM from team/plans/dev-developer.md batch 54's FROZEN MANIFEST block; design of record = the artifact \"Review Component Design\" + batches 51–54; the rulings are in the-org/decision-log.md, 2026-09-08). This manifest IS the split between the email lead's front end and the engine: she owns the panels and has no ai-dev access, so a change here after the freeze is a RULING, never a maker's judgment, and no panel card dispatches before the lead marks it `approved`. ONE ASSET, ONE REQUEST, THREE EVENTS. An item is a REQUEST: `RQ-<id>` (one per request; a second request record on the same id is an edit; round two = NEW id, same asset pointer). Every record carries exactly one `event` — request | verdict | close — and NO SUB-ITEMS: there is no `.v` and no `.close`, because those are EVENT LABELS now, not item ids. `serve_records` is `history` for that reason: the records of one request are an append-only event stream folded on read, and latest-per-reviewer would silently drop every verdict but the last. CLOSE RULE, in batch 54's words: \"auto on one reviewer + no on_accept; else explicit by requester/owner; the panel labels which\" — i.e. a request with exactly one reviewer and no `on_accept` closes on that reviewer's verdict, and anything else waits for an explicit `close` record from the requester or the owner; the surface always LABELS which of the two a given request is, so nobody has to guess whether someone is still expected to act. The REQUESTER is the author of the `request` record — the platform stamps `reviewer` on every record, so no field is spent naming them. DISCOVERY: NO MERGED INDEX RECORD, ever — the `filed-index` shape is struck by the 2026-09-08 ids-only ruling and by WM-24 (index truncation). Discovery is a KIND-WIDE READ plus a declared index view (the PLANE-4b (index views read) declaration), which RV-8 (review queue index view) adds to this file after RV-1 merges. MEDIA NEVER LIVES ON THIS PLANE (workspace rule 3): the record carries a POINTER — `asset` — and, for anything the platform must serve byte-by-byte, one row per file in the `media` inventory this manifest declares in `media_inventory`. Drive is the media warehouse for human-authored creative and video and blob is for small machine outputs (the developer, ruled 2026-09-08); Supabase Storage is declared as a warehouse word but is not in use. ATTRIBUTION: the reviewer on a verdict is whoever the platform stamped, and on /api/review that name is CLIENT-DECLARED and honest-by-convention — OR-5 (verdict attribution) is unchanged by this kind and no viewer or worker may pre-empt it. STATUS IS NEVER STORED: open/closed is FOLDED from the records (no close = open, latest close wins, latest verdict per reviewer), and RV-2 (review request module) owns the one implementation of that fold — a second copy of it is a defect. `open_items` is on because request ids are minted by the requester, not by editing this manifest.",
+  "open_items": true,
+  "serve_records": "history",
+  "_serve_records_note": "\"history\" per batch 54's frozen block. These records ARE an append-only event history folded on read, so /api/reviews must serve EVERY record for an item, ascending — not the latest per (reviewer, item), which would keep one verdict per reviewer and silently discard the request record the moment its author filed anything else. Set for the same reason tasks, inbox and view-feedback set it (records-API fix, 2026-09-01, BLOCKER-2026-08-31-records-api.md).",
+  "item_id": "id",
+  "item_label": "title",
+  "items": [],
+  "_items_note": "Deliberately empty, with open_items: true. A request id is minted by whoever files the request (RV-2 (review request module)), never by editing this file, so a committed item list here would be a second copy of the plane that goes stale on the first request. The words a surface SHOWS for a request are `asset.title` on its `request` record — `item_label` names the field a seeded item would carry and is not a second source of truth.",
+  "media": {
+    "field": "verdict.media"
+  },
+  "_media_note": "RECONCILED 2026-09-08 by the lead at RV-4 (media route per-kind)'s merge (ai-dev ee3e8cc), which is the one reconciliation RV-1 (review kind manifest)'s `_frozen` mark reserved. RV-1 declared `media_inventory: \"media\"`; the route reads `manifest.media = {field: …}`, so this manifest now speaks the route's shape. THE MANIFEST MOVED, NOT THE ROUTE, for two reasons: `mediaInventoryOf` is the PLATFORM-WIDE per-kind convention every kind reads through — teardown-runs included, once its transitional table row is deleted — and one kind's invented key should not define the platform's shape (PLANE-4c (index view envelopes) settled the same species: the consumer's contract is fixed, the producer satisfies it); and what the freeze protects is the email lead's RECORD GRAMMAR — event, type, asset, reviewers, verdict, decision — which is untouched, while this key is engine-to-engine plumbing no panel reads. THE PATH ALSO CHANGED, and the key-name argument would have hidden it: `mediaRows(record, field)` walks from the WHOLE RECORD, so a review's rows are at `verdict.media`. The bare name would have resolved to nothing and served nothing SILENTLY, because a field naming nothing is a legitimate empty answer in that design.",
+  "_media_inventory_note": "THE MEDIA-INVENTORY DECLARATION batch 54 requires — the manifest names the RECORD FIELD that lists media rows, and the generalized /api/media (RV-4 (media route per-kind)) reads that name instead of being hard-wired to one kind. The per-kind declaration is the PLANE-4b (index views read) pattern, reused rather than reinvented. The inventory record REMAINS THE ALLOWLIST: a file no row names is never served, which is the whole security model. Row shape mirrors the precedent this generalizes — `teardown-runs`, whose rows are {name, bytes, type, role, id} — with `id` widened to `ref` + `warehouse` because a review's media may sit in any warehouse `asset` allows, and Drive is only one of them. NAMING THIS KEY IS THE ONE SHAPE CHOICE RV-1 HAD TO MAKE: batch 54 froze that a declaration exists and what it is for, not what it is called, and the card gives RV-1 the field \"RV-4 reads\". RV-4 reads `media_inventory`.",
+  "index": {
+    "item": "review-queue",
+    "view": "plane.idx_review_queue_records"
+  },
+  "_index_note": "THE DECLARED INDEX VIEW (card RV-8 (review queue index view)), in the PLANE-4b-i (index view api) grammar — `{item, view}`, read in ONE place beside `serveModeOf` in `review-app/lib/record-select.mjs`, never a new route. THIS IS THE ONLY EDIT THE FREEZE LICENSES, and RV-1 (review kind manifest)'s `note` reserved it in advance: \"Discovery is a KIND-WIDE READ plus a declared index view (the PLANE-4b (index views read) declaration), which RV-8 adds to this file after RV-1 merges.\" No record grammar moved: not one `verdict_fields` entry, not `media`, not `serve_records`. A PANEL READS NOTHING NEW HERE. THE VIEW IS NEVER THE SOURCE OF TRUTH — the records are, and this declaration only says where a fast answer to \"my open reviews\" comes from when the source is postgres. NO MERGED INDEX RECORD, EVER: `review-queue` is a VIEW's item name and no file of that name exists or may ever be written (the 2026-09-08 ids-only ruling; WM-24 (index truncation) is what the struck shape cost). The view answers \"open requests where this person is requester or reviewer\", ONE ROW PER PERSON, ids only, folded exactly the way RV-2 (review request module) folds — `plane.idx_review_queue` carries the fold in SQL, `review_request.fold()` carries it in Python, and `test_rv8_index_view.py` proves the two agree against a kind-wide read rather than trusting them to. A THIRD COPY OF THE FOLD IS A DEFECT.",
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "request",
+        "verdict",
+        "close",
+        "seen"
+      ],
+      "note": "exactly one per record. `request` opens the item and carries the asset pointer and the ask; `verdict` is one reviewer's judgement; `close` is the disposition of the whole request. There are NO SUB-ITEMS — `.v` and `.close` item ids do not exist on this kind, because these words are event labels now. `seen` IS THE FOURTH VALUE, RULED BY the developer 2026-09-09 (card RV-16a) — the one change this freeze has taken to the record grammar, and a RULING, never a maker's judgment. It says A REVIEWER OPENED THE REQUEST, and nothing else: it CARRIES NO JUDGMENT, it NEVER CLOSES anything, and it NEVER SATISFIES the close rule's \"one reviewer\" — a request whose only records are `request` and `seen` is OPEN and still waiting on that named reviewer, which is the whole point of the event (the email lead can tell \"he has seen it and not decided\" from \"he has not looked\", without asking him). AT MOST ONE PER REVIEWER PER REQUEST: the plane is append-only so a second `seen` from the same person is never refused, it FOLDS AWAY — the fold exposes `seen_by[]` with ONE entry per reviewer however many times they looked, exactly as it keeps one verdict per reviewer. THE VERDICT VOCABULARY IS UNCHANGED BY IT: `seen` is an EVENT, not a verdict, and a fourth verdict word would be RV-15 (choice verdict), which is not ruled. COST, stated because it is why batch 71 wanted to wait: one record per open, on an append-only plane that now grows by READS as well as by writes. KILL: the plane grows fast enough to matter, or a `seen` is ever observed satisfying a close → the event is WITHDRAWN from this manifest by a ruling, never patched around in the fold."
+    },
+    {
+      "key": "type",
+      "values": [
+        "text",
+        "md",
+        "image",
+        "video",
+        "doc",
+        "link",
+        "page"
+      ],
+      "required_when": "event=request",
+      "note": "what is being reviewed, TAKEN FROM THE RECORD AND NEVER SNIFFED — it is what a panel keys on to decide how to render, and an unknown value degrades to a link rather than to an empty box. `page` IS the developer'S RULING OF 2026-09-10 (card RV-47 (type page)), the FIFTH change this freeze has taken to the record grammar — `url` (card RV-34 (url and viewport)) was the fourth — and a RULING, never a maker's judgment. THE AMENDMENT IS ONE VALUE AND IT ADDS NO WAREHOUSE WORD. The two species are declared beside each other because the difference between them is the whole reason the word exists: `page` is A DEPLOYED WEB PAGE, FRAMED AT A DECLARED WIDTH; `link` is A THING WE DELIBERATELY DO NOT EMBED — a Figma frame, whose comments belong in Figma. THE DISTINCTION IS NOT WHERE THE THING LIVES: both are warehouse `url`, which RV-34 (url and viewport) already carries for both, and `viewport` is where the declared width is said. IT IS WHETHER THE PANEL EMBEDS IT — which is what makes the species a `type` value, the word a panel keys on, rather than a second warehouse. THE SPECIES IS DECLARED BY THE FILER AND NEVER INFERRED, at any layer: nothing reads a species off a hostname, because a figma.com url is usually a frame and sometimes a prototype somebody wants judged as a page, and a guess that is right nine times teaches the tenth person that the tool knows something it does not. THERE IS NO THIRD SPECIES WORD — a third is a RULING. `page` GOES LAST, in the order the mirrors are compared against this list element for element (`components/review/review_request.py`, `components/review/reference/_reference.js`, the lifted `REVIEW_TYPES` in `platform/views/viewers/_templates/_pm-review-create.js`). UNTIL RV-40 (link page panel) BUILDS THE FRAME, a `page` renders as the link it points at — the honest rendering of a thing not yet embedded, and never an empty frame; a type that declares no media says so rather than mounting a host it cannot paint."
+    },
+    {
+      "key": "asset",
+      "required_when": "event=request",
+      "note": "{warehouse: repo|drive|blob|supabase|url, ref, title, at?, viewport?} — the POINTER, never the bytes (workspace rule 3). `warehouse` says where it lives: `repo` (`ref` is a repo-relative path), `drive` (`ref` is a Drive file id), `blob` (`ref` is the platform blob url), `supabase` (declared for completeness; Supabase Storage was NOT added on 2026-09-08 and nothing points there yet), `url` (lives somewhere the platform does not own — a Figma file, a Netlify preview, any link; `ref` is the url itself, tracking params stripped). `url` IS the developer'S RULING OF 2026-09-10 (card RV-34), the FOURTH change this freeze has taken to the record grammar and a RULING, never a maker's judgment. WHAT IT IS FOR, said plainly because the alternative is what people already do: `blob` MEANS A CAPTURE WE MADE AND HOLD, and it keeps that honest meaning — a Figma link filed as `blob` is a lie about provenance that nothing catches, and until this word existed it was the ONLY way to file a link. `blob` keeps the captures; `url` takes the links. `title` is the human words for the thing — what a reviewer reads before they open anything. `at` IS THE REF PAIR, OPTIONAL AND NEVER REQUIRED — the developer'S RULING B OF 2026-09-09 (card RV-23), the second amendment this freeze has taken and a RULING, never a maker's judgment. A document request MAY name a ref pair: a path AND the commit it was read at. THE REASON IS THE SAME ONE THAT MAKES AN ANCHOR A QUOTE — a repo path carries NO VERSION, so `ref` alone names whatever that path holds today and a reviewer's words can end up attached to a file nobody can reconstruct. `at` is a COMMIT (hex, 7-40), never a branch and never a tag: a branch name MOVES, and a pointer that moves is exactly the rot the pair exists to stop. IT IS OPTIONAL AND STAYS OPTIONAL — every request filed before this ruling carries none, none of them changes, and a request that omits it is byte-identical to what the writers filed before the field existed. ONLY A `repo` POINTER HAS ONE: a Drive file id, a blob url, a supabase pointer and a `url` carry their own version or none, so `at` beside them names nothing and is refused BY NAME rather than stored. THE REPO-ONLY RULE IS UNCHANGED BY RV-34 AND THAT IS DELIBERATE — version binding for a `url` is the CAPTURE (RV-35 (page capture)), never a commit: a deploy preview redeploys on every push and a Figma file changes under you, so anyone reaching for `at` on a `url` has mistaken a link for a version. `viewport` IS THE OTHER HALF OF the developer'S RULING OF 2026-09-10 (card RV-34): `viewport: \"mobile\" | \"desktop\"`, OPTIONAL on the pointer, saying at what width the thing under review was meant to be read. ABSENT MEANS UNSTATED — NOT DEFAULTED. A request that omits it is byte-identical to what the writers filed before the key existed, exactly as `at` is, and nothing anywhere reads an absent `viewport` as `desktop`. It is declared on the POINTER and adds NO KEY to this list: like `at`, it rides inside `asset`, so the twelve keys the witnesses guard are the same twelve. A value outside the two words is refused BY NAME rather than stored — a third viewport is a RULING. Written by both write routes and checked by both (`components/review/review_request.py`, `components/review/reference/_reference.js`)."
+    },
+    {
+      "key": "reviewers",
+      "required_when": "event=request",
+      "note": "[person…] — the people ASKED, lowercase names as the platform stamps them, each carrying a team/people/<name>/identity.json. Identity is CLIENT-DECLARED and OR-5 (verdict attribution) is unchanged by this kind. It is a request, not a gate: who may open a record is decided by the server's grants, and a verdict from someone not on this list is a real verdict."
+    },
+    {
+      "key": "lane",
+      "required_when": "event=request",
+      "values": [
+        "email-sends",
+        "static-ads",
+        "dev-qc"
+      ],
+      "note": "A LABEL, NOT A GATE (batch 54's words). The three values above are the pilot lanes named in the frozen block; the vocabulary is OPEN — batch 54 writes it as `email-sends | static-ads | dev-qc | …` — so a lane outside this list is legal and groups a queue, it never refuses a request."
+    },
+    {
+      "key": "due",
+      "note": "YYYY-MM-DD, OPTIONAL. When a request is wanted by. A date, never a status."
+    },
+    {
+      "key": "on_accept",
+      "note": "{action, …}, OPTIONAL. What should happen when this request closes `accepted` — the declared handoff RV-3 (on_accept adapter) files (e.g. a workflow-request). Its presence is also half the close rule: a request carrying an `on_accept` never auto-closes, because something is meant to happen and somebody has to mean it."
+    },
+    {
+      "key": "verdict",
+      "required_when": "event=verdict",
+      "values": [
+        "approve",
+        "reject",
+        "fix"
+      ],
+      "note": "one reviewer's judgement of the asset. Lifted from the output-review single-mode vocabulary rather than invented, and closed — there is no fourth word."
+    },
+    {
+      "key": "reasons",
+      "note": "on a verdict: an array of short tags. May be empty — a one-tap verdict with no tags is a complete verdict."
+    },
+    {
+      "key": "note",
+      "note": "on a verdict or a close: the reviewer's own words. Free text, always offered, never required."
+    },
+    {
+      "key": "anchors",
+      "note": "ANCHORED COMMENTS ON THE WORDS — `anchors: [{quote, prefix, suffix, comment, row?}]`, OPTIONAL on the verdict block, `row` the only optional key inside an anchor. DECLARED BY the developer'S RULING A OF 2026-09-09 (card RV-23), and DECLARED rather than merely tolerated for the reason the ruling states: an undeclared key PASSES the validator, so writing one anyway is exactly the drift this freeze exists to stop. The precedent is RV-16a (seen event engine), which stretched this same manifest by ruling on 2026-09-09. THE PROBLEM IT ANSWERS: a verdict on an 11,800-character brief that says \"thin in places\" helps nobody — the writer guesses which places. The reviewer selects the words and comments ON them, and the comment travels with the words that provoked it. AN ANCHOR IS A TEXT-QUOTE SELECTOR, NEVER A LINE NUMBER: a repo path carries no version and a line number rots the moment somebody edits above it, while a quote with its neighbourhood re-finds itself — and when it genuinely cannot it says \"not found in this version\" rather than silently pointing at the wrong line. RESOLUTION ORDER is the exact neighbourhood first, then the quote alone. `quote` is the selected words; `prefix` and `suffix` are the NEIGHBOURHOOD that disambiguates a quote appearing more than once — both are always PRESENT, and either may be the empty string where the quote sits at the very start or the very end of a text, because refusing that would refuse the first sentence of every document; `comment` is the reviewer's words about those words. `row` NAMES WHICH TEXT the anchor lives in and is what lets ONE request carry anchors across MANY texts — a teardown's fourteen stage outputs are fourteen documents under one request; it is OMITTED when the request has a single text, because then there is nothing to disambiguate. Anchors are APPENDED WITH THE VERDICT AND NEVER EDITED AFTERWARDS — the plane appends, it does not rewrite — and there are NO REPLIES AND NO THREADS: a second reviewer files their own anchors rather than threading onto yours. THE VERDICT STAYS ONE PER REQUEST: this declares a FIELD, not a per-row verdict, and per-row disposition remains an unruled question that RV-27 (per-asset feedback) deliberately routes around. OPTIONAL AND STAYS OPTIONAL — a verdict without anchors is byte-identical to what the writers filed before this field existed. THE SHAPE IS CHECKED, NOT MERELY STORED: both write routes refuse a malformed anchor BY NAME rather than filing it (`components/review/review_request.py`, `components/review/reference/_reference.js`), and a key this shape does not name is refused too — a sixth key on an anchor is a RULING, and that refusal is where it surfaces."
+    },
+    {
+      "key": "decision",
+      "required_when": "event=close",
+      "values": [
+        "accepted",
+        "rejected",
+        "parked"
+      ],
+      "note": "CLOSE ONLY — the disposition of the whole request, filed by the requester or the owner (or written by the surface on the auto-close path). It closes the request; it never overwrites or contradicts a reviewer's verdict, and both records stand."
+    },
+    {
+      "key": "media",
+      "note": "THE MEDIA INVENTORY — the field `media_inventory` declares, listing one row per file the platform must serve for this request, for the generalized /api/media (RV-4 (media route per-kind)). Rows are {name, type, ref, warehouse, bytes?, role?}: `name` is the EXACT name the route matches on, `type` is the content type taken from the record and never sniffed, `warehouse` + `ref` are the same two words `asset` uses. Optional — a request whose asset needs no byte-serving (a repo path, a public blob url, a link) carries no `media` and is not checked for one. THE INVENTORY IS THE ALLOWLIST: a file no row names is refused, never fetched."
+    }
+  ]
+}

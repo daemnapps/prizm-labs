@@ -17,7 +17,7 @@ DRY = "[dry run — not written]"
 
 
 def creative_qc(tool, stage, run_dir, output, given, echo=print):
-    """THE CREATIVE QC LOOP for every chain built on run-kit (the owner, 2026-10-02:
+    """THE CREATIVE QC LOOP for every chain built on run-kit (owner, 2026-10-02:
     "installed for each of my production tools … for all stages in the creation
     process"): the stage's output against what it was given and its bars
     (components/marketing-chain-checks/definitions/stages.json), filed in qc-log/.
@@ -100,7 +100,8 @@ class Chain:
 
         self.echo(f"  -> {key}  {step.get('name', '')} ({pf.name}) on {chosen}" + ("" if why == step.get("tier") else f" — {why}"))
         t0 = time.time()
-        text = M.call(filled, chosen, label=key, runner=self.runner)
+        text = M.call(filled, chosen, label=key, runner=self.runner,
+                      run_dir=self.out, tier=step.get("tier", "designs"), why=why, prompt_file=pf.name)
         self.calls += 1
         out = self.out / f"{key}--{step['label']}.md"
         out.write_text(text + "\n")

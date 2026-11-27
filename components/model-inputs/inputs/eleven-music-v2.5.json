@@ -17,7 +17,7 @@
  "sources": [
   "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
   "https://elevenlabs.io/docs/api-reference/music/create-composition-plan/llms.txt",
-  "[ours] tools/video-production/SONG-CHAIN.md"
+  "[ours] components/video-production/SONG-CHAIN.md"
  ],
  "limits": {
   "duration_seconds": [
@@ -62,7 +62,7 @@
    "status": "draft",
    "source": [
     "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   },
   {
@@ -107,7 +107,7 @@
    "status": "draft",
    "source": [
     "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   },
   {
@@ -119,7 +119,7 @@
    "status": "draft",
    "source": [
     "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   },
   {
@@ -131,7 +131,7 @@
    "status": "draft",
    "source": [
     "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   },
   {
@@ -165,7 +165,7 @@
    "status": "draft",
    "source": [
     "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans",
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   },
   {
@@ -176,7 +176,7 @@
    "use": "yes",
    "status": "draft",
    "source": [
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   },
   {
@@ -187,7 +187,7 @@
    "use": "yes",
    "status": "draft",
    "source": [
-    "[ours] tools/video-production/SONG-CHAIN.md"
+    "[ours] components/video-production/SONG-CHAIN.md"
    ]
   }
  ],
@@ -232,21 +232,21 @@
    "rule": "Every section 3 to 120 s, at most 30 sections, 10 minutes total; the house caps lines at 200 characters and 30 lines.",
    "ours": "refused by name in song.py",
    "status": "draft",
-   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans ; [ours] tools/video-production/SONG-CHAIN.md"
+   "source": "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans ; [ours] components/video-production/SONG-CHAIN.md"
   },
   {
    "id": "words-checked-both-ways",
    "rule": "Every sung line must be a script line and every script line sung; the song is transcribed and each line must be heard at 0.75 or better.",
    "ours": "song gate",
    "status": "draft",
-   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+   "source": "[ours] components/video-production/SONG-CHAIN.md"
   },
   {
    "id": "remake-once",
    "rule": "A failed gate remakes ONCE with seed + 1, then stops naming the missing line.",
    "ours": "song.py",
    "status": "draft",
-   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+   "source": "[ours] components/video-production/SONG-CHAIN.md"
   }
  ],
  "avoid": [
@@ -278,7 +278,7 @@
    "id": "free-text-style",
    "text": "A free-text style instead of the ruled row.",
    "status": "draft",
-   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+   "source": "[ours] components/video-production/SONG-CHAIN.md"
   },
   {
    "id": "non-english-styles",

@@ -1,0 +1,30 @@
+{
+ "_what": "The cover rule (cover_rule.py): four card checks on a waiting video card. cover_each: every video has its own cover. cover_swipe: every cover's record names the swipe it follows. cover_frame: every cover's record names a source frame from its own video. cover_differs: no two covers of the card are the same picture. A failing check holds Approve. Cards already approved or live are never checked.",
+ "on": true,
+ "_rollback": "\"on\": false turns all four off; \"checks\": {\"<name>\": false} turns one off; \"lanes\": {\"<lane>\": false} one lane. One machine only: META_COVER_RULE_OFF=all or a comma list of check names. Row COVER-RULE in team/rollbacks.md.",
+ "checks": {
+  "cover_each": true,
+  "cover_swipe": true,
+  "cover_frame": true,
+  "cover_differs": true
+ },
+ "lanes": {
+  "video": true,
+  "creator": false
+ },
+ "_since": "Cards filed before this moment (YYYY-MM-DDTHH:MM:SS, the card's made_at) are left as filed. Empty: every waiting card is checked.",
+ "since": "",
+ "_same_at_bits": "Two covers whose 64-bit picture hashes differ by this many bits or fewer are the same picture. Where pre-flight is installed (preflight.json), its covers.same_at_bits is used instead, so there is one number.",
+ "same_at_bits": 8,
+ "_frame_check": "cover_frame's proof that a cover's frame is from its own video. \"own-video\": the record's video_sha256 is the filed video's (or its .clean twin's); else a video named with a folder is that file on this machine; a bare file name (no folder, no video_sha256) or a record naming no video fails (see _bare_name). \"name\": the file name, stem or version id is enough, as before.",
+ "frame_check": "own-video",
+ "_bare_name": "With frame_check \"own-video\": false (shipped), a record naming its video by a bare file name (no folder, no video_sha256) proves no video and cover_frame holds the card. true: a bare file name that equals the filed video's name passes, as before. Row COVER-RULE-BARE-NAME.",
+ "bare_name": false,
+ "_swipe_check": "cover_swipe's proof. \"index\": the swipe id is a row of the cover index (swipe_index, from the repo root; META_COVER_INDEX on one machine) and a placeholder is refused. \"named\": any name but the empty ones passes, as before.",
+ "swipe_check": "index",
+ "swipe_index": "runs/asset-index/swipes/covers",
+ "_to_file": "feed_video.file_master (the approval-page filing route) reads the Video Studio's cover hand-off (briefs/<production>/covers/to-file.json) when the caller passes no thumbs or cover_records, and only when it is fresh for those masters. false: it files no covers unless passed, as before. One machine: META_FILE_MASTER_COVERS_OFF=1. Row FILE-MASTER-COVERS.",
+ "to_file": true,
+ "_to_file_ready": "With to_file on: true (shipped), the hand-off's covers are filed only when to-file.json says \"ready\" (every version has its cover); a hand-off with a held version, or a cover run still going, files none, so the card is not left carrying some versions' covers. false: the ready versions' covers are filed, as before. One machine: META_FILE_MASTER_COVERS_OFF=ready. Row FILE-MASTER-COVERS-READY.",
+ "to_file_ready": true
+}

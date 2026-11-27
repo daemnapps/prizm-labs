@@ -16,8 +16,8 @@
  },
  "sources": [
   "https://elevenlabs.io/docs/api-reference/text-to-voice/design",
-  "[ours] tools/video-production/machine/make_voice.py",
-  "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+  "[ours] components/video-production/machine/make_voice.py",
+  "[ours] components/video-production/VIDEO-RULINGS.md V4"
  ],
  "limits": {
   "voice_description": "required; the maker states no maximum",
@@ -179,7 +179,7 @@
    "rule": "Design the voice once and bank it; every later read uses that voice id.",
    "ours": "voice bank",
    "status": "draft",
-   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+   "source": "[ours] components/video-production/VIDEO-RULINGS.md V4"
   },
   {
    "id": "fix-the-seed",
@@ -226,7 +226,7 @@
    "id": "redesigning-every-run",
    "text": "Designing a new voice each run: the character changes.",
    "status": "draft",
-   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+   "source": "[ours] components/video-production/VIDEO-RULINGS.md V4"
   }
  ]
 }

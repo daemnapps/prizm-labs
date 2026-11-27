@@ -90,11 +90,11 @@ FILES = {
     "components/keys/loader.py":
         "import os\nimport nopkg_keys\n"
         "MANAGED = \"~/.workflow-worker.env\"\n"
-        "KEY_FILE = \"~/.company-keys.env\"\n"
+        "KEY_FILE = \"~/.upright-keys.env\"\n"
         "T = os.environ.get(\"SHOPIFY_TOKEN\")\n",
-    "components/keys/merge.py": "DEFAULT_OUT = \"~/company-keys.master.env\"\n",
+    "components/keys/merge.py": "DEFAULT_OUT = \"~/upright-keys.master.env\"\n",
     "components/keys/other.py": "OTHER = \"~/.other.env\"\n",
-    "components/notkeys/loader.py": "KEY_FILE = \"~/.company-keys.env\"\n",
+    "components/notkeys/loader.py": "KEY_FILE = \"~/.upright-keys.env\"\n",
     # fix 5: regex strings
     "components/regex/run.py":
         "import re\n"
@@ -616,7 +616,7 @@ TRACE_FILES = {
         "flags": {"mode": "--mode", "label": "--label"}, "bool_flags": {"dry_run": "--dry-run"},
         "brand_flag": "--brand", "out": {"flag": "--out", "runs_root_flag": None, "run_dir": None},
         "refuse": []}),
-    # the tools/video-teardown/machine/keys.py shape: the environment first; the
+    # the components/video-teardown/machine/keys.py shape: the environment first; the
     # Path.home() fallback (line 9) is a static RED a run that has the variable never reaches
     "components/tracer/cli.py":
         "import argparse, os, subprocess, sys, time\n"                       # 1
@@ -666,7 +666,7 @@ TRACE_FILES = {
     "components/nodry/cli.py":
         "import os\nopen(os.path.join(os.environ[\"HOME\"], \"nodry-ran.txt\"), \"w\").write(\"ran\")\n",
 }
-# the stub a grant row names, the shape of tools/video-teardown/machine/lab_entry.py
+# the stub a grant row names, the shape of components/video-teardown/machine/lab_entry.py
 STUB = ("#!/usr/bin/python3\n"
         "import os, sys, pathlib\n"
         "sys.path.append(next(str(d / \"components\" / \"run-kit\") for d in pathlib.Path(__file__).resolve()"

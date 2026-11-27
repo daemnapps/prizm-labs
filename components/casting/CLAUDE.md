@@ -16,17 +16,17 @@ component so other tools can leverage it correctly."*
 
 **This is an EXTRACTION, not an invention.** Every part already worked
 somewhere: the nine steps, the three generating prompts, the fal door and the
-"a DIFFERENT person" rule come from `lab/owner/avatar-builder`; the registry
+"a DIFFERENT person" rule come from `lab/the owner/avatar-builder`; the registry
 reading and the "never invent a person for a role the bank covers" rule come
-from `lab/owner/casting`; the footage search is
-`tools/image-production`'s asset reader, imported rather than rewritten;
+from `lab/the owner/casting`; the footage search is
+`components/image-production`'s asset reader, imported rather than rewritten;
 the gates, the dry-run report, the path walking and the filing come from
-`tools/image-production`, `components/marketing-chain-checks` and
+`components/image-production`, `components/marketing-chain-checks` and
 `components/run-kit`. Each module's docstring names what it was lifted from
 and what it changed.
 
-**Nothing has been switched over yet.** `lab/owner/avatar-builder` and
-`lab/owner/casting` are untouched and still work exactly as before. They get
+**Nothing has been switched over yet.** `lab/the owner/avatar-builder` and
+`lab/the owner/casting` are untouched and still work exactly as before. They get
 retired later, side by side, once this is proven — a working chain is never
 rewired on assumption.
 
@@ -51,7 +51,7 @@ again, and the judge is asked it as a test.
 **AI characters are made only from existing assets and customer information,
 always with reference files; a character without a casting sheet is not
 current and is not used in new work until it gets one.** A casting sheet is
-the Person element in `tools/video-production/PRODUCTION-ELEMENTS.md` —
+the Person element in `components/video-production/PRODUCTION-ELEMENTS.md` —
 `runs/ai-elements/<brand>/casting/<id>/` with `character.md`, the master, the
 sheets, `reference/` holding the REAL files the master was edited from, and
 `provenance.json`. The brand's `casting/cards-v6.json` records
@@ -158,7 +158,7 @@ the prompt sha, and `run_kit.filing`'s run path.
   `elements.json`, `check.json`, `run.json`, `held/<step>-why.md`,
   `register/proposed-row.json`, `register/REGISTER.md`, `bible/character.md`.
   Pictures land in `brands/<brand>/ai-cast/<id>/` exactly as
-  `lab/owner/avatar-builder/build.py` already files them, and are mirrored to
+  `lab/the owner/avatar-builder/build.py` already files them, and are mirrored to
   `Shared Assets/brands/<brand>/ai-cast/<id>/`. Media is never git (workspace
   rule 3; `.gitignore` already catches `brands/**/*.png`).
 - **Manifest per entry:** `run.json` — the request, the bank's answer before
@@ -191,15 +191,15 @@ verdict and carries on.
 
 Read **by name**, never by path, through the shared key loader
 (`components/keys/loader.py`, via `casting/cast_keys.py`): the process
-environment first, then the one key file this repo's `.env` (add
+environment first, then the one key file `~/.upright-keys.env` (add
 `NAME=value` there). Never out of a file in the repo, never printed,
 never logged, never written into a run record. Read at CALL time, never at
 import time — a declared test proves it in a fresh interpreter with no key and
 an empty `HOME`.
 
 The key the generating steps spend is the one `casting/generate.py` names
-(`KEY`), through `tools/image-production`'s edit row; the judge's key is
-`tools/image-production`'s judge's, which owns that route.
+(`KEY`), through `components/image-production`'s edit row; the judge's key is
+`components/image-production`'s judge's, which owns that route.
 
 ## The free dry run
 
@@ -217,7 +217,7 @@ would hold.
 1. **No brand, product, person or model name in code or in a prompt.** Two
    tests enforce it against the real `brands/` tree — one for brand folder
    names, one for every banked person's id.
-2. **`brands/` is read-only to this component** (`lab/owner/CLAUDE.md` rule
+2. **`brands/` is read-only to this component** (`lab/the owner/CLAUDE.md` rule
    5), with the one exception the lab tool already had and which was not
    changed on assumption: the built PICTURES land in the brand's
    `ai-cast/<id>/`, as they do today. Every WORD — the row, the bible — is
@@ -247,7 +247,7 @@ finding BOTH is reported as a problem, because two registries for one brand
 splits a cast silently. Nothing here writes to either.
 
 **The two brands on disk keep their cast two different ways.**
-`lab/owner/casting/build_cast.py` renders from `roster.json` +
+`lab/the owner/casting/build_cast.py` renders from `roster.json` +
 `authority.json` and REFUSES a brand that has neither. This component answers
 that brand anyway, from its `ai-cast/<id>/character.md` bibles — refusing
 would mean saying "no one plays that role" about a brand whose people are all
@@ -303,5 +303,16 @@ exactly these final inputs, and nothing else in their folder:
 5. Old versions, retired looks and test files are deleted once the new set is in (decision log 2026-10-28). One
    picture of the whole set: `sheets/master-reference.jpg`.
 
-Made by video-production `make_character.py` with prompt stage-0f-cast `cast-sheets-v3` (headshot first, then every
-sheet with the headshot as its skin reference). `compose.py` layers headshot, look, details, expression.
+Made by video-production `make_character.py` with prompt stage-0f-cast `cast-sheets-v4`: master (kept as
+`full/master-raw.png`) → **de-slop** (step 2, 2026-11-10: re-textured from the spec's `texture` skin and hair photos out of
+`runs/ai-elements/_texture-refs/`; takes in `deslop/`, the pick is `full/master.png`; a spec with no `texture` is refused)
+→ headshot (face from the de-slopped master only, the skin photo as texture) → every sheet with the headshot as its
+skin reference. `--only deslop` then `--pick-deslop a|b` checks the take before any sheet is made. `compose.py` layers headshot, look, details, expression.
+
+## Avatar sheets: a test set for one customer group each (2026-10-31)
+
+`avatar_sheets.py <avatars.json> [--only id ...] [--dry-run]` builds invented people for customer groups: one list in, each person's master, headshot and expressions out through video-production `make_character.py`, plus `core.json`, `provenance.json` and a proposed talent card in the list's folder for a person to move. A group is read as words. A customer's picture is refused as a reference, because a real customer's likeness may not seed a face (brand rights position). The world reference must be a frame with no person in it: the headshot step sends it again, and a frame with a person put that person back on the first test. Open every headshot before going on. Three pictures a person, 8.25 credits. Tests: `tests/test_avatar_sheets.py`.
+
+## New only: old items are refused by name (2026-11-02)
+
+`casting/new_only.py` reads `runs/ai-elements/<brand>/new-only.json`: people, sets and old product pictures that no new run may use. An `approved` row refuses; a run in `in_flight` finishes as it started; new names pass. Video stills, picture making, the clip door, swaps, the elements gate, `who_plays`, `compose` and `make_character` all ask it, and every product lookup goes to the current casting sheet first (`fresh_product`, `sheet_views`; `product_sheet.py views` writes `model/sheet/current/`). Email pictures are exempt. Removed items were moved, not deleted, to `runs/_removed-2026-11-02/`. Tests: `tests/test_new_only.py`.

@@ -1,0 +1,20 @@
+{
+  "kind": "wf-upright-qc-cards",
+  "title": "Upright QC — checks invokable from Claude, answers without a dashboard",
+  "note": "Kind file added by the lead 2026-09-27 under CARDS-10 (missing kind files): the registry row existed with no kind file, so the cards page's /api/items call for this family returned 502 (the live UI-QC check, red since 2026-09-25). Registered by the developer.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/upright-qc/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    {
+      "key": "approve",
+      "type": "boolean",
+      "label": "Approve card as-is"
+    },
+    {
+      "key": "feedback",
+      "type": "text",
+      "label": "What to change (required unless approved)"
+    }
+  ]
+}

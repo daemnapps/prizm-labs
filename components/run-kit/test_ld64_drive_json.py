@@ -16,8 +16,8 @@ from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run_kit import station  # noqa: E402
 
-LABEL = "creator-a-kzn03-counter-kitchen"
-OUT = "ve-creator-a-kzn03-counter-kitchen-2-20261020"
+LABEL = "creator-kzn03-counter-kitchen"
+OUT = "ve-creator-kzn03-counter-kitchen-2-20261020"
 
 
 class IdReach:
@@ -82,7 +82,7 @@ class TestLabelTrap(Base):
         self.assertEqual((self.run_dir / "drive.json").read_bytes(), (copy_to / "drive.json").read_bytes())
         rec = self.rec()
         self.assertEqual(rec["folder"], "Shared Assets/runs/video-edit/brand-a/" + LABEL)
-        self.assertNotIn("ve-creator-a", rec["folder"])
+        self.assertNotIn("ve-creator", rec["folder"])
         self.assertEqual(rec["schema"], 1)
         self.assertEqual(rec["route"], "api")
         self.assertEqual(rec["folder_id"], "fid-.")

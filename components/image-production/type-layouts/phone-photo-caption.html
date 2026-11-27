@@ -1,0 +1,11 @@
+<!-- Phone photo caption: a screenshot of a photo in the phone's album. White top bar with the time, back arrow, date pill and dots, then a white centred caption with a soft shadow. Sizes are at full scale; the fit step shrinks the caption. -->
+<div style="position:absolute;top:0;left:0;right:0;height:12.5%;background:#fff;color:#111;font-family:Sans">
+ <div style="position:absolute;top:26px;left:96px;font-size:34px">{{clock}}</div>
+ <div style="position:absolute;top:100px;left:48px;width:92px;height:92px;border-radius:50%;background:#f3f3f3;text-align:center;font:44px/88px Sans">‹</div>
+ <div style="position:absolute;top:96px;left:50%;transform:translateX(-50%);padding:14px 56px;border-radius:50px;background:#f3f3f3;text-align:center;font-size:30px;line-height:1.2;white-space:nowrap" id="d">{{date}}</div>
+ <div style="position:absolute;top:100px;right:48px;width:92px;height:92px;border-radius:50%;background:#f3f3f3;text-align:center;font:40px/76px Sans">…</div>
+</div>
+<div class="area" data-fit style="justify-content:center;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8)">
+ <div class="line" style="font:400 calc(var(--s)*64px)/1.2 Sans;white-space:normal;max-width:100%">{{head}} {{emoji}}</div>
+</div>
+<script>const d=document.getElementById('d');d.innerHTML=d.textContent.split(' / ').join('<br>')</script>

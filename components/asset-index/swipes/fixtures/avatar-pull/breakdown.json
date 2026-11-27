@@ -1,0 +1,8 @@
+{
+ "FxBread00001": {
+  "frame": "face+product", "people": "one", "expression": "smile", "shot": "medium", "zoom": "native",
+  "text_style": "native-box", "text_words": 6, "text_case": "sentence", "text_place": "top", "grade": "warm",
+  "marks": ["none"], "look": "lightly-edited",
+  "shows": "baker beside a giant loaf filling the kitchen table, white box black caption", "absurd": 2
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "avatar": "example-home-baker",
+ "who": "Home bakers 30 to 55 who bake bread at weekends and follow sourdough and kitchen accounts",
+ "platforms": ["instagram"],
+ "hashtags": ["sourdough", "homebaking", "breadmaking"],
+ "accounts": [],
+ "topics": ["sourdough starter", "bread scoring"],
+ "on_topic": ["bread", "sourdough", "bake", "dough", "loaf"],
+ "floor": {"instagram": {"likes": 5000}},
+ "per_source": 40
+}

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """feed_carousel — a finished carousel into 1-check, as one card (format "carousel").
 
-    feed_carousel.py <slides folder> --brand brand-a --product crush-bump-eliminator \\
+    feed_carousel.py <slides folder> --brand brand_a --product crush-bump-eliminator \\
         [--brief brief-0201] [--batch …] [--links …] [--pick 3=<file>] [--words …] [--dry-run] [--root …]
 
 The slides folder is either
-  - a sequence run (tools/image-edit/sequence.py → runs/image-edit/<brand>/<label>/,
+  - a sequence run (components/image-edit/sequence.py → runs/image-edit/<brand>/<label>/,
     with sequence.json): slide 1 is the plate it started from, slide N the delivered
     picture in slide-NN/ (the first one, unless --pick N=<file> names another), or
   - a folder of finished slides named slide-01.png, slide-02.png … (the clipper
-    carousels, runs/image-edit/brand-a/clipper-carousels/<run>/), or a delivery folder:
+    carousels, runs/image-edit/brand_a/clipper-carousels/<run>/), or a delivery folder:
     `<brief>--slide-NN--vN.png` (a designer's, deliver-brief naming) or
     `<unit>_asset-NN.png` (named by the hourly delivery rule; asset NN is slide NN).
 

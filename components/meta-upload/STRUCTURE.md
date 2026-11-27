@@ -14,7 +14,7 @@ So: the numbers first, then the shape they force, then the names.
 ## The limits
 
 Every number verified against Meta's own Help Center on 2026-09-11, and every
-count read off `1. <brand>` (act 2824261077700798) the same day.
+count read off `1. Brand A` (act 2824261077700798) the same day.
 
 | limit | number | where we are |
 |---|---:|---|
@@ -55,8 +55,8 @@ The ceiling is not close. Build for the read, not for the cap.
 
 ## One drop, one ad set
 
-> **<brand>, ruled 2026-09-28 (the owner):** an ad set is one avatar + one angle
-> and holds many batches — `adset_brand_b_spot-hider_pigment-memory`, no date,
+> **Brand B, ruled 2026-09-28 (the owner):** an ad set is one avatar + one angle
+> and holds many batches — `adset_Brand B_spot-hider_pigment-memory`, no date,
 > no part number. Its account file sets `naming.ad_set_by` to avatar + angle,
 > and `build.py` groups that way for any brand that does. What a full (50-ad)
 > ad set does is not ruled yet; the builder stops rather than guess. The rule
@@ -115,7 +115,7 @@ no house style here to conform to.
 > campaign level and message themes at the ad set, so the drop became:
 >
 > ```
-> CAMPAIGN   US | NOVA™ | ICON | Fed-Up King
+> CAMPAIGN   US | FLEX™ | ICON | Fed-Up King
 > AD SET       Forty-Year Shaver | Ray | Razor Bumps | 260911
 > AD             <the 13-field ad name>
 > ```

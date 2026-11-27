@@ -32,12 +32,13 @@ REPO = HERE.parent.parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(REPO / "components/naming"))
 import names as N            # parse_any: an ad name in either form -> its fields
+import people                # the one door to a person (naming/PEOPLE.md)
 
 # ---- the four inputs -------------------------------------------------------
 # None of them are named here. Every one is a path the BRAND declares in
 # `brands/<brand>/meta/account.json`, resolved by brand.py, because this
 # folder must work for any brand without being edited (workspace rule 7).
-QUEUE    = REPO / "tools/image-production/static/queue"   # review + audit, brand-agnostic
+QUEUE    = REPO / "components/image-production/static/queue"   # review + audit, brand-agnostic
 HEADERS  = HERE / "template-headers.json"              # Meta's own 143 columns
 
 # ---- what the campaign is --------------------------------------------------
@@ -49,7 +50,7 @@ HEADERS  = HERE / "template-headers.json"              # Meta's own 143 columns
 # Market, product and funnel come from the brand; the lane comes from the drop
 # (`--lane`), because one brand runs several and they never blend.
 def creative_qc(tool, stage, run_dir, output, given=None, items=None):
-    """THE CREATIVE QC LOOP (the owner, 2026-10-02: "installed for each of my
+    """THE CREATIVE QC LOOP (owner, 2026-10-02: "installed for each of my
     production tools … for all stages in the creation process"): the output is
     reviewed against what it was given and the stage's bars
     (components/marketing-chain-checks/definitions/stages.json); the round is filed in
@@ -109,7 +110,7 @@ UTM = ("utm_source=facebook&utm_medium=paid&utm_campaign={campaign}"
        "&utm_content={ad_name}&utm_term={sub}")
 
 # The ad set is one sub-avatar's drop, so it carries that sub-avatar's own age
-# band off its card in adsets.json. the owner's call, 2026-09-11: the avatar is a
+# band off its card in adsets.json. owner's call, 2026-09-11: the avatar is a
 # level he steers and reads at, not only a label on the ad.
 
 
@@ -132,6 +133,69 @@ def expired(offers, when=None):
     return out
 
 
+# A promotion's dates live once, on its moment in brands/<brand>/strategy/moments.json, and the marketing
+# calendar reads them through the moment's anchor (2026-11-03). A brief's moment is the one its order named: the
+# brief's register record names the run that wrote it, and that run's vars/ask.md names the creative
+# strategist's ask.json, whose `moment` is the promotion (the road copywriter brief_words.py reads). So a promo
+# ad stops at the end of its moment's window with no date typed here, and a new promotion needs no second list.
+TEARDOWN_RUNS = ("runs/image-teardown/{brand}/{run}", "runs/video-teardown/_work/{run}")
+
+
+def _calendar():
+    cal = HERE.parent / "marketing-calendar" / "machine"     # a sibling component, by its declared surface
+    if str(cal) not in sys.path:
+        sys.path.append(str(cal))           # appended, never ahead of this folder
+    import marketing_calendar
+    return marketing_calendar
+
+
+def brief_moment(brand, brief, product=None):
+    """(moment key, the day the brief was opened, the ask's name) for a brief whose order named a moment,
+    else None. A brief with no ask, or an ask with no moment, is not a promotion."""
+    try:
+        hit = N.find_brief(brand, brief, product)
+    except N.AmbiguousBrief:
+        return None
+    reg = (hit or {}).get("register") or {}
+    run = reg.get("run")
+    if not run:
+        return None
+    for home in TEARDOWN_RUNS:
+        f = REPO / home.format(brand=N.slug(brand), run=run) / "vars" / "ask.md"
+        if not f.is_file() or not f.read_text().strip():
+            continue
+        try:
+            ask = json.loads((REPO / f.read_text().strip()).read_text())
+        except (OSError, ValueError):
+            return None
+        m = ask.get("moment")
+        key = (m.get("key") if isinstance(m, dict) else m) or None
+        if not key:
+            return None
+        opened = reg.get("opened") or ask.get("asked")
+        try:
+            opened = date.fromisoformat(str(opened)[:10])
+        except ValueError:
+            opened = None
+        return key, opened, ask.get("ask") or f.parent.parent.name
+    return None
+
+
+def moment_ended(brand, brief, product=None, when=None):
+    """Why a promo brief's ads must not ship — its moment's window has ended — or None.
+    The window is the one the brief was made for (the first ending on or after the day it was opened)."""
+    when = when or date.today()
+    got = brief_moment(brand, brief, product)
+    if not got:
+        return None
+    key, opened, ask = got
+    win = _calendar().moment_window(brand, key, opened or when)
+    if win and date.fromisoformat(win[1]) < when:
+        return (f"{key} ended {win[1]} — the window of the brief's moment "
+                f"(strategy/moments.json, ordered by the ask {ask})")
+    return None
+
+
 def held_file(brand):
     """The brand's cleared calls: runs/meta-upload/<brand>/held/held.json — written by
     image-production's static/queue/triage.py --apply (meta-upload#14)."""
@@ -142,7 +206,7 @@ def blocked(brand):
     """Pictures that must never reach the account, with the reason.
 
     Two gates, both from the review that already happened:
-      - the owner killed it
+      - owner killed it
       - the headline audit says the picture does not show what the headline claims,
         unless the brand's held_file(brand) lists it as read and cleared
     """
@@ -204,7 +268,7 @@ def near_duplicates(paths, within=15):
     distressedposter, faceoff, apology, checklist — were producing renders a
     perceptual hash cannot tell apart: Beto's faceoff a01 and a03 came back
     one bit apart out of 256. Three ad slots, one picture, the budget split
-    three ways for a single read. the owner, looking at them: "Same here we're
+    three ways for a single read. owner, looking at them: "Same here we're
     doing the same images bro".
 
     dHash on the picture only — the ink bands top and bottom are identical on
@@ -264,7 +328,7 @@ def copy_for(book, fmt, sub, turn):
     carries the same words; that is what makes it a variation rather than a
     second ad. Rotating per picture (which this did for a few hours on
     2026-09-11) hands each of a concept's three pictures a different headline
-    and quietly turns one test into three untested ones. the owner, seeing it:
+    and quietly turns one test into three untested ones. owner, seeing it:
     "these are literally the same concept not 3 unique concepts".
     """
     blk = book.get(fmt)
@@ -288,9 +352,14 @@ def ad_set_value(b, field, value):
     base = REPO / "brands" / b.name
     if field == "avatar":
         ids = [d.name for d in (base / "core-avatars").iterdir() if d.is_dir()]
+        if value and key(value) not in {key(i) for i in ids}:       # a profile id or a new name lands on the folder the brand keeps
+            try:
+                value = people.folders(b.name, value)[0] or value
+            except Exception:                                       # noqa: BLE001  the name stands, and is refused below
+                pass
     elif field == "angle":
         if key(value) == "promo":
-            # a promo ad (a sale, a seasonal offer) gets its own `..._promo` ad set (the owner, 24 Oct 2026; ad_sets.PROMO):
+            # a promo ad (a sale, a seasonal offer) gets its own `..._promo` ad set (owner, 24 Oct 2026; ad_sets.PROMO):
             # it is not a claim, so it is never in the angle bank (2026-10-28: a Black Friday card could not be placed)
             return "promo"
         angles = json.loads((base / "strategy/angles.json").read_text())["angles"]
@@ -451,7 +520,10 @@ def main():
     talent  = roster_map(b.roster)
 
     stop = blocked(b.name)
+    # the older per-brief list (brands/<brand>/offers/offers-meta.json) still holds the briefs it already names;
+    # a promo brief's end comes from its moment (moment_ended) and gets no entry there
     dead = {} if args.allow_expired else expired(b.offers)
+    ended = {}
     hashes = json.loads(Path(args.hashes).read_text()) if args.hashes else {}
     adset_ids = json.loads(Path(args.adset_ids).read_text()) if args.adset_ids else {}
     short = {}
@@ -482,6 +554,10 @@ def main():
         problem, who = f.get("problem") or d.get("problem"), d["talent"]
         brief = f.get("brief") or d.get("brief")
         dead_hit = next((dead[x] for x in N.brief_forms(brief) if x in dead), None)
+        if not dead_hit and not args.allow_expired and brief not in (None, "none"):
+            if brief not in ended:
+                ended[brief] = moment_ended(b.name, brief, f.get("product") or d.get("product"))
+            dead_hit = ended[brief]
         if dead_hit:
             held.append((a["name"], dead_hit))
             continue
@@ -570,7 +646,7 @@ def main():
     for key in sorted(by_key, key=lambda k: (-by_key[k], k)):
         mine = [kr for kr in rows if kr[0] == key]
         if by:
-            # One ad set per value of `ad_set_by` (Brand-B: avatar + angle),
+            # One ad set per value of `ad_set_by` (brand_b: avatar + angle),
             # holding every batch — no date, no part number. Past Meta's
             # 50-ad cap the brand has not ruled what happens, so stop.
             name = naming.render(nm["ad_set"], {"brand": b.name, **dict(zip(by, key))},

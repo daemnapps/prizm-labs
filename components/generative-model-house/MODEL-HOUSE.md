@@ -8,13 +8,13 @@ And: *"for image editing, we're still gonna use GPT."*
 **This component is the only place that says which model does which job.** Every tool that makes a
 picture, a clip, a voice or a sound reads it: people read this page, code reads `models.json` through
 `model_house.py`. No tool writes a model choice of its own. To add or change a model, change it here and
-every tool follows. `tools/video-production/SHOT-ROUTES.md` decides HOW a shot is made (REAL footage
+every tool follows. `components/video-production/SHOT-ROUTES.md` decides HOW a shot is made (REAL footage
 we own, a SWAP of the swipe's own shot, or AI); when it is AI, the model comes from here. Which model each
 ad FORMAT uses is ruled per format and recorded here too.
 
 ## The house default, and a person's pick (MDL-8 (registry-linked house), 2026-10-22)
 
-the team, 2026-10-22: *"link the model house to the registry, although the model house should also be able to pull
+the developer, 2026-10-22: *"link the model house to the registry, although the model house should also be able to pull
 from the model component as well. the owner's point with model house was not to limit to just limited models."*
 
 **The rule: a TOOL calls `model(job)` and gets the house default, only. A tool never picks a non-default model on
@@ -71,6 +71,23 @@ row AND an inputs file there; `input_rules.coverage()` lists the jobs that do no
 | every image edit (change one thing in an approved picture, region edits, the 9:16 finish) | **GPT Image 2.5**, edits | ruled again 2026-10-20. Nano Banana Pro is not used for edits or anything else |
 | backup when GPT refuses a picture we're allowed to make | **Seedream** (fal) | the owner 2026-10-21. Same prompt and references; Seedream's own rules still apply; the run record says which model made it |
 
+## Takes — a continuous scene in one clip, with backups (ruled 2026-11-09)
+
+A scene the swipe holds as one take is made as ONE clip (components/video-production/BRIEF-SPEC.md, rules 6–8) by
+`components/video-studio/take.py`. The first route makes it; a refusal (content filter, moderation) or a failure moves
+the take to the next route on its own, and `sent.json` records every route tried and the one that made it.
+
+| Order | Job in `models.json` | Route | Takes | Cost (20 s, 480p) |
+|---|---|---|---|---|
+| 1 | `clips.take` | **Seedance 2.5**, Higgsfield CLI, omni-reference (the default, ruled 2026-11-09) | the cast picture and character sheets as image references + the 3D rehearsal as the motion video + one voice sample per speaker (2–15 s each); speaks the lines in our voices | 45 credits for 15 s |
+| 2 | `clips.take_backup` | **Wan 3.0**, Higgsfield CLI, start-frame mode | the exact first frame and the whole script; speaks in its own voices, our reads are laid after (`take.lay`) | 20 credits |
+| 3 | `clips.take_backup_open` | **Wan 3.0**, fal, reference mode | the picture as a reference, voices (15 s total), motion video (clip + output under 30 s) | 0.05 USD a second |
+| — | `clips.take_pose` | **Wan 2.2 VACE Fun (pose)**, fal | a motion clip's tracked poses drive our first frame frame for frame; no voices | 0.15 USD a second |
+
+What the filters do, as found 2026-11-09: Higgsfield takes a first frame in bikinis; Seedance and Higgsfield's Wan
+refuse the swipe's own footage as a motion reference; fal's own checker refuses a bikini first frame on our account
+and Alibaba moderates Wan 3.0 even with fal's checker off. Only open weights on our own GPU run without a filter.
+
 ### Motion, read before any take (2026-11-09)
 
 A scene's motion is read and approved before a take is paid for (BRIEF-SPEC.md rule 7, "Motion sources").
@@ -103,8 +120,9 @@ finished take. Camera control runs on Wan 3.0 and Seedance 2.5 only.
 
 | Job | Model | How |
 |---|---|---|
-| every clip | **Seedance 2.5**, made at **480p and upscaled on this Mac** (the owner, 2026-10-26; was 720p), Higgsfield API (`tools/video-production/machine/seedance.py`) | a talking clip sends the start picture AND the line's voice read in one call (`reference-to-video`); a silent clip goes from the picture (`image-to-video`). Nothing is re-voiced after. Cost never decides. |
+| every clip | **Seedance 2.5**, made at **480p and upscaled on this Mac** (the owner, 2026-10-26; was 720p), Higgsfield API (`components/video-production/machine/seedance.py`) | a talking clip sends the start picture AND the line's voice read in one call (`reference-to-video`); a silent clip goes from the picture (`image-to-video`). Nothing is re-voiced after. Cost never decides. |
 | backup clip | **Kling 4.0**, 720p (no 480p), Higgsfield API (`machine/kling.py`, `clips.backup`) | only when Seedance fails its three takes, is refused or is down. It takes the start picture and NO audio, so its clip is silent: a talking clip is laid over its own locked read, not lip-synced. The run ledger says which model made each clip. Rulebook: `components/model-inputs/inputs/kling-4.0.json` |
+| a person's pick for a single clip (ruled 2026-11-08; the house model for continuous takes from 2026-11-09, see Takes) | **Wan 3.0**, 480p, Higgsfield plan credits through the CLI (`machine/wan.py`, registry `wan-3.0`) | never chosen by a tool: a person picks it for a shot, usually one Seedance refuses or where the cost per take matters (5 credits for 5 s at 480p against Seedance's 15). Image-to-video from the approved picture only, sound off, no voice read; the prompt holds the framing (the first take pushed in unasked). Rulebook: `components/model-inputs/inputs/wan-3.0.json` |
 
 ## Using the swipe's own footage
 

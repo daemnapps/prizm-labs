@@ -1,0 +1,105 @@
+{
+  "kind": "component-runs",
+  "written_by": "runs-filer",
+  "written_by_evidence": "platform/workers/mini-worker/runs_filer.py files these records from run_kit.index.scan() over runs/ — PLANE-19 (runs filer), carded 2026-10-07; the worker tick ships switched off (worker.py RUNS_FILER_ON = False)",
+  "title": "Component runs — what ran, when, held or not",
+  "note": "Metadata only. The first time a machine is filed, every run then present folds into ONE snapshot record (item <machine>--history), filed once and never re-filed; afterwards each run not in that folded set gets one record of its own. No date or mtime decides the split (PLANE-19 (runs filer) round 2). state is 'unverified' until RKIT-1 (run-kit honest) lands.",
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "open_items": true,
+  "verdict_fields": [
+    {
+      "key": "machine",
+      "required": true,
+      "note": "the component that ran, its runs/ segment mapped to its folder name (runs/research is research-gatherer)"
+    },
+    {
+      "key": "brand",
+      "required": false,
+      "note": "per-run record only: the brand slot under runs/<machine>/"
+    },
+    {
+      "key": "label",
+      "required": false,
+      "note": "per-run record only: the run folder's name"
+    },
+    {
+      "key": "path",
+      "required": false,
+      "note": "per-run record only: the run folder, repo-relative, for example runs/copywriter/Brand B/<label>"
+    },
+    {
+      "key": "state",
+      "required": false,
+      "values": ["unverified"],
+      "note": "per-run record only: 'unverified' when the run's run.json carries a state, null when it carries none; never a verified word until RKIT-1 (run-kit honest) lands"
+    },
+    {
+      "key": "run_state",
+      "required": false,
+      "note": "per-run record only: the state word as run.json states it, unverified"
+    },
+    {
+      "key": "held",
+      "required": false,
+      "note": "per-run record: true when any check.json in the run has a truthy held or a non-empty problems. History snapshot: the count of such runs among those folded"
+    },
+    {
+      "key": "deliverable",
+      "required": false,
+      "note": "per-run record only: the first 20 file NAMES under the run's deliverable/, never their contents"
+    },
+    {
+      "key": "changed",
+      "required": false,
+      "note": "per-run record only: the run folder's last-changed day, UTC, YYYY-MM-DD — information only; a folder mtime moves on a checkout, so nothing is decided by it and a per-run record is not re-filed when only this moves"
+    },
+    {
+      "key": "count",
+      "required": false,
+      "note": "history snapshot only: how many runs were folded at the machine's first filing"
+    },
+    {
+      "key": "runs",
+      "required": false,
+      "note": "history snapshot only: the folded set — every run present at the machine's first filing, as sorted '<brand>/<label>' keys. Absent when the list would break the 16KB cap; runs_sha256 and runs_file stand in for it"
+    },
+    {
+      "key": "runs_sha256",
+      "required": false,
+      "note": "history snapshot only, when runs is absent: sha256 of the sorted keys as compact JSON"
+    },
+    {
+      "key": "runs_file",
+      "required": false,
+      "note": "history snapshot only, when runs is absent: the sidecar holding the full folded set, relative to this kind's records directory (_history/<machine>.json) — not a record; the plane reads only the *.json directly in the kind's directory"
+    },
+    {
+      "key": "brands",
+      "required": false,
+      "note": "history snapshot only: folded runs per brand slot"
+    },
+    {
+      "key": "first",
+      "required": false,
+      "note": "history snapshot only: the earliest changed day among the folded runs, information only"
+    },
+    {
+      "key": "last",
+      "required": false,
+      "note": "history snapshot only: the latest changed day among the folded runs, information only"
+    },
+    {
+      "key": "snapshot",
+      "required": false,
+      "values": [true],
+      "note": "history snapshot only: always true, marks the record as a fold of many runs"
+    },
+    {
+      "key": "truncated",
+      "required": false,
+      "note": "present only when detail was dropped to fit the 16KB verdict cap, naming what"
+    }
+  ]
+}

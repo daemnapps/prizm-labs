@@ -1,0 +1,6 @@
+{
+ "_what": "Owner ruling 2026-11-20: once the script is written the swipe's job is done; every picture and clip of an AI-lane ad is generated from our creative, never copied from the swipe. This switch decides whether production may still use the swipe (machine/swipe_use.py reads it). Rollback row: team/rollbacks.md.",
+ "ai_lane_uses_swipe": true,
+ "_ai_lane_uses_swipe": "false (the ruling): for a brief whose lane is ai, production uses no swipe frame as a picture reference (the storyboard's swipe_camera shot, the swipe composition frame, a swipe-edit frame), no swipe footage as a motion reference (motion transfer, the swipe's own clip), no SWAP route, and no swipe cut timing (the storyboard's sections and lengths come from our brief and our voice). true restores the earlier behaviour.",
+ "_restored": "Owner, 2026-11-20 (same day): the swipe image IS used to generate our version, and the swipe's motion patterns ARE extracted to generate our own. The earlier 'false' was a misreading; true restores swipe frames as picture references, swipe motion as motion references, the swap route and the swipe's cut timing."
+}

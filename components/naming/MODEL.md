@@ -22,7 +22,7 @@ axes at once.
 It is not invented here. Two places in the repo had already worked it out, and
 this file only writes down what they agree on:
 
-> **`lab/owner/copy/bank/channel-map.json`** — *"Copywriting is one brain…
+> **`lab/the owner/copy/bank/channel-map.json`** — *"Copywriting is one brain…
 > A channel decides the reading context; a format is a data row inside it;
 > **the words always come from the same place.**"*
 
@@ -61,7 +61,7 @@ Both say: separate axes, each a closed set, multiplied. Not one list.
 
 ## Still wrong, and known
 
-**Eleven entries in the <brand> angle bank are formats** — `three-line-hook` is
+**Eleven entries in the Brand A angle bank are formats** — `three-line-hook` is
 a text template, `arrow-methods-grid` a slide layout, `product-as-method` a
 placement rule. Seven of them are signed. Every one is a glow-up entry, which
 is why the bank looks channel-coupled: those rows only work in one container,

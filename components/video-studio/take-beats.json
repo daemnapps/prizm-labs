@@ -1,0 +1,9 @@
+{
+ "_what": "take.py's beat door (take_beats.py): beats carried as fields (who, action, prop, target, where) before anything is bought; the made take read against every beat, its cast and its line-up, a take that misses one never used.",
+ "on": true,
+ "fields": true,
+ "_fields": "false: a beat with no who or no action no longer stops a paid take (the gaps are still listed in sent.json).",
+ "take": true,
+ "_take": "false: the made take is placed without being read against its beats.",
+ "_rollback": "\"on\": false turns both off; TAKE_BEATS_OFF=1 or =fields / =take on one machine. Row TAKE-BEATS in team/rollbacks.md."
+}

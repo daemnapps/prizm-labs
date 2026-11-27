@@ -1,5 +1,5 @@
 """The card road's promises: checks catch a bad card; a card moves, never
-copies; nothing uploads without the owner's approve on it; one card -> one ad per
+copies; nothing uploads without owner's approve on it; one card -> one ad per
 page in Meta (flexible or carousel, slides in order), ids on the card, folder
 in 3-live, one line per ad in live.jsonl; a Meta error leaves it in
 2-approved; a re-run makes nothing twice. All against a fake Meta."""
@@ -16,7 +16,7 @@ import ad_sets as AS
 import fake_meta
 from fake_meta import FakeMeta
 
-PAGE = {"link_id": "link_brand_b_cpk_quiz", "url": "https://recipe.brand-b.com/brand-b-scrub-cpk/quiz/"}
+PAGE = {"link_id": "link_brand_b_cpk_quiz", "url": "https://recipe.brand_b.com/brand_b-scrub-cpk/quiz/"}
 NAME = "brand_b_brilliance-body-scrub_brief-0154_batch-2026-10-02-a"
 
 
@@ -29,7 +29,7 @@ class Base(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name) / "meta"
         os.environ["META_CARDS_ROOT"] = str(self.root)
-        C.ensure_tree(self.root, ["brand-b"])
+        C.ensure_tree(self.root, ["brand_b"])
         C._cache.clear()
         fake_meta.WORLD.clear()
         self.live = Path(self.tmp.name) / "live.jsonl"
@@ -37,7 +37,7 @@ class Base(unittest.TestCase):
                   mock.patch.object(C, "page_status", return_value=200),
                   # the test pages sell body scrub, so the test brand's one offer is body scrub
                   mock.patch.object(C, "strategy_offer", return_value={"product": "brilliance-body-scrub",
-                                                                      "match": ["brand-b-scrub-cpk"]}),
+                                                                      "match": ["brand_b-scrub-cpk"]}),
                   # the test card's ad set is one already running in Meta (ad_sets.py, 2026-10-27)
                   mock.patch.object(AS, "live", return_value={"adset_brand_b_spot-hider_pigment-memory"})]
         for x in self.p:
@@ -50,14 +50,14 @@ class Base(unittest.TestCase):
         self.tmp.cleanup()
 
     def card(self, lane="image", fmt="flexible", n=2, name=NAME, size=(540, 960), **over):
-        f = self.root / "brand-b" / "1-check" / lane / name
+        f = self.root / "brand_b" / "1-check" / lane / name
         f.mkdir(parents=True)
         media = []
         for i in range(1, n + 1):
             m = f"{name}_{'slide' if fmt == 'carousel' else 'asset'}-{i:02d}.png"
             pic(f / m, size)
             media.append(m)
-        c = {"schema": C.SCHEMA, "brand": "brand-b", "lane": lane, "format": fmt, "ad_name": name,
+        c = {"schema": C.SCHEMA, "brand": "brand_b", "lane": lane, "format": fmt, "ad_name": name,
              "product": "brilliance-body-scrub", "avatar": "spot-hider", "angle": "pigment-memory", "media": media,
              "words": {"primary": ["Body one."], "headlines": ["H1", "H2", "H3"][:n] if fmt == "carousel" else ["H1"],
                        "descriptions": ["D1"]},
@@ -69,33 +69,40 @@ class Base(unittest.TestCase):
 
     def approve(self, f, start="PAUSED"):
         c = C.load(f)
-        c["approval"] = {"by": "the owner", "at": "2026-10-01T12:00:00", "decision": "approve", "start": start}
+        c["approval"] = {"by": "owner", "at": "2026-10-01T12:00:00", "decision": "approve", "start": start}
         C.save(f, c)
         return C.move(f, "2-approved")
 
 
 class Checks(Base):
     def test_meta_strategy_checks(self):
-        # 7 Oct 2026: a variation of a running creative, a page off the one offer, re-used footage
+        # 7 Oct 2026: a page off the one offer is refused, and so is a variation of a running creative.
+        # 1 Nov 2026 (cards.py, "reusing live creative no longer blocks an ad"): footage already live informs and
+        # never blocks, so a card re-using live footage is not refused for it, nor scored as a variation.
+        offer = {"product": "brilliance-face-scrub", "match": ["brand_b-facescrub-cpk"]}
         f = self.card(diversity={"verdict": "variation", "moves_apart": 1, "same_on": ["who", "format"]})
-        live = self.root / "brand-b" / "3-live" / "image" / "old"
+        with mock.patch.object(C, "strategy_offer", return_value=offer):
+            c = C.check_and_save(f, meta=FakeMeta("brand_b"))
+        bad = {k for k, v in c["checks"].items() if not v["ok"]}
+        self.assertEqual(bad, {"diversity", "offer"})
+        self.assertIn("variation", c["checks"]["diversity"]["why"])
+        live = self.root / "brand_b" / "3-live" / "image" / "old"
         live.mkdir(parents=True)
         pic(live / "old_asset-01.png")
-        with mock.patch.object(C, "strategy_offer", return_value={"product": "brilliance-face-scrub",
-                                                                 "match": ["brand-b-facescrub-cpk"]}):
-            c = C.check_and_save(f, meta=FakeMeta("brand-b"))
+        with mock.patch.object(C, "strategy_offer", return_value=offer):
+            c = C.check_and_save(f, meta=FakeMeta("brand_b"))
         bad = {k for k, v in c["checks"].items() if not v["ok"]}
-        self.assertEqual(bad, {"diversity", "offer", "new_footage"})
-        self.assertIn("variation", c["checks"]["diversity"]["why"])
+        self.assertEqual(bad, {"offer"})
+        self.assertIn("already live", c["checks"]["new_footage"]["why"])
 
     def test_unscored_card_waits_for_approve(self):
         f = self.card(diversity=None)
-        c = C.check_and_save(f, meta=FakeMeta("brand-b"))
+        c = C.check_and_save(f, meta=FakeMeta("brand_b"))
         self.assertIn("scored when you approve", c["checks"]["diversity"]["why"])
 
     def test_good_card_passes(self):
         f = self.card()
-        c = C.check_and_save(f, meta=FakeMeta("brand-b"))
+        c = C.check_and_save(f, meta=FakeMeta("brand_b"))
         self.assertTrue(C.passed(c), {k: v for k, v in c["checks"].items() if not v["ok"]})
         self.assertEqual(c["checks"]["ad_set"]["why"], "adset_brand_b_spot-hider_pigment-memory")
         self.assertIn("body-scrub-cpk", c["checks"]["campaign"]["why"])
@@ -107,40 +114,40 @@ class Checks(Base):
         pic(f / "t1.png", (1080, 1920))
         c["thumbs"] = {c["media"][0]: "t1.png"}
         C.save(f, c)
-        out = C.checks(f, C.load(f), meta=FakeMeta("brand-b"))
+        out = C.checks(f, C.load(f), meta=FakeMeta("brand_b"))
         self.assertTrue(out["thumbs"]["ok"], out["thumbs"])
         self.assertTrue(out["name"]["ok"], out["name"])
         pic(f / "t1.png", (1080, 1080))
-        self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand-b"))["thumbs"]["ok"])
+        self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand_b"))["thumbs"]["ok"])
 
     def test_wrong_ratio_and_no_headline(self):
         f = self.card(size=(1080, 1080), words={"primary": ["x"], "headlines": [], "descriptions": []})
-        c = C.checks(f, C.load(f), meta=FakeMeta("brand-b"))
+        c = C.checks(f, C.load(f), meta=FakeMeta("brand_b"))
         self.assertFalse(c["ratio"]["ok"])
         self.assertFalse(c["words"]["ok"])
 
     def test_carousel_needs_two_slides(self):
         f = self.card(lane="carousel", fmt="carousel", n=1)
-        self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand-b"))["media"]["ok"])
+        self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand_b"))["media"]["ok"])
 
     def test_wrong_product_page(self):
         f = self.card(pages=[{"link_id": "link_brand_b_cpk_brilliance-face-scrub_landing"}])
-        c = C.checks(f, C.load(f), meta=FakeMeta("brand-b"))
+        c = C.checks(f, C.load(f), meta=FakeMeta("brand_b"))
         self.assertFalse(c["product"]["ok"])
 
     def test_page_not_live(self):
         f = self.card()
         with mock.patch.object(C, "page_status", return_value=404):
-            self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand-b"))["pages"]["ok"])
+            self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand_b"))["pages"]["ok"])
 
     def test_bad_name(self):
         f = self.card(name="brand_b_not-a-name")
-        self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand-b"))["name"]["ok"])
+        self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand_b"))["name"]["ok"])
 
     def test_page_cap_full(self):
         f = self.card()
         with mock.patch.object(C, "PAGE_AD_LIMIT", 3):
-            self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand-b"))["page_cap"]["ok"])
+            self.assertFalse(C.checks(f, C.load(f), meta=FakeMeta("brand_b"))["page_cap"]["ok"])
 
 
 class Moves(Base):
@@ -153,28 +160,28 @@ class Moves(Base):
         self.assertEqual(C.where(new)["lane"], "image")
 
     def test_folder_of_refuses_escape(self):
-        for bad in ("../x", "brand-b/1-check/image/..", "brand-b/9-x/image/a", "a/b"):
+        for bad in ("../x", "brand_b/1-check/image/..", "brand_b/9-x/image/a", "a/b"):
             with self.assertRaises(ValueError):
                 C.folder_of(bad)
 
 
 class Upload(Base):
-    def test_refused_without_owners_approve(self):
+    def test_refused_without_damons_approve(self):
         f = C.move(self.card(), "2-approved")
         with self.assertRaises(SystemExit) as e:
-            U.upload_card(f, m=FakeMeta("brand-b"), log=lambda *_: None)
+            U.upload_card(f, m=FakeMeta("brand_b"), log=lambda *_: None)
         self.assertIn("REFUSED", str(e.exception))
 
     def test_refused_outside_2_approved(self):
         f = self.card()
         c = C.load(f)
-        c["approval"] = {"by": "the owner", "decision": "approve", "start": "PAUSED"}
+        c["approval"] = {"by": "owner", "decision": "approve", "start": "PAUSED"}
         C.save(f, c)
         with self.assertRaises(SystemExit):
-            U.upload_card(f, m=FakeMeta("brand-b"), log=lambda *_: None)
+            U.upload_card(f, m=FakeMeta("brand_b"), log=lambda *_: None)
 
     def test_flexible_goes_live(self):
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         new, card = U.upload_card(self.approve(self.card()), m=m, log=lambda *_: None)
         self.assertEqual(C.where(new)["state"], "3-live")
         self.assertEqual(card["meta"][0]["meta_ad_name"], NAME + "_body-scrub-cpk-quiz")   # <funnel id>-<page>, as the live ads read
@@ -186,11 +193,11 @@ class Upload(Base):
         camp = [p for e, p in m.posts if e == "campaigns"][0]
         self.assertEqual(camp["status"], "PAUSED")
         line = json.loads(self.live.read_text().splitlines()[0])
-        self.assertEqual((line["ad_name"], line["lane"], line["brand"]), (NAME, "image", "brand-b"))
+        self.assertEqual((line["ad_name"], line["lane"], line["brand"]), (NAME, "image", "brand_b"))
         self.assertEqual(C.load(new)["meta"][0]["ad_id"], line["ad_id"])
 
     def test_start_on(self):
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         U.upload_card(self.approve(self.card(), "ACTIVE"), m=m, log=lambda *_: None)
         self.assertEqual([p for e, p in m.posts if e == "ads"][0]["status"], "ACTIVE")
         # 7 Oct 2026: "On" switches on the campaign and ad set this upload made
@@ -199,17 +206,17 @@ class Upload(Base):
         self.assertTrue(made and made <= made_here)
 
     def test_start_paused_switches_nothing_on(self):
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         U.upload_card(self.approve(self.card(), "PAUSED"), m=m, log=lambda *_: None)
         self.assertFalse([p for e, p in m.posts if e == "update"])
 
     def test_approve_needs_on_or_paused(self):
         import approve as A
-        code, out = A.approve("anything", None, "the owner")
+        code, out = A.approve("anything", None, "owner")
         self.assertEqual(code, 400)
 
     def test_carousel_keeps_slide_order(self):
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         f = self.card(lane="carousel", fmt="carousel", n=3)
         U.upload_card(self.approve(f), m=m, log=lambda *_: None)
         ad = [p for e, p in m.posts if e == "ads"][0]
@@ -228,22 +235,40 @@ class Upload(Base):
     def test_meta_error_stays_in_2_approved_then_retry_is_safe(self):
         f = self.approve(self.card())
         with self.assertRaises(SystemExit):
-            U.upload_card(f, m=FakeMeta("brand-b", fail_on="ads"), log=lambda *_: None)
+            U.upload_card(f, m=FakeMeta("brand_b", fail_on="ads"), log=lambda *_: None)
         self.assertTrue(f.exists())
         self.assertIn("Invalid parameter", C.load(f)["upload_error"]["error"])
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         new, card = U.upload_card(f, m=m, log=lambda *_: None)
         self.assertEqual(C.where(new)["state"], "3-live")
         self.assertNotIn("upload_error", card)
         # the campaign and ad set made on the failed run were found by name, not made again
         self.assertEqual([e for e, _ in m.posts if e in ("campaigns", "adsets")], [])
 
+    def test_a_connection_lost_as_the_ad_is_made_never_makes_a_second(self):
+        """Meta made the ad, the answer never came back (a read timeout): the resend finds it by name."""
+        class Drops(FakeMeta):
+            def post(self, path, **params):
+                r = super().post(path, **params)
+                if path.endswith("/ads"):
+                    raise TimeoutError("The read operation timed out")
+                return r
+        f = self.approve(self.card())
+        with self.assertRaises(TimeoutError):
+            U.upload_card(f, m=Drops("brand_b"), log=lambda *_: None)
+        m = FakeMeta("brand_b")
+        made = [x["id"] for x in m.w["ads"]]
+        new, card = U.upload_card(f, m=m, log=lambda *_: None)
+        self.assertEqual(C.where(new)["state"], "3-live")
+        self.assertEqual([e for e, _ in m.posts if e in ("ads", "adimages")], [])
+        self.assertEqual([r["ad_id"] for r in card["meta"]], made[-len(card["meta"]):])
+
 
 class Server(Base):
     def setUp(self):
         super().setUp()
         # one approver, as these tests assume; the real approvers.json is the team's list and may hold several
-        p = mock.patch("upload.approvers", return_value=["the owner"])
+        p = mock.patch("upload.approvers", return_value=["owner"])
         p.start()
         self.addCleanup(p.stop)
 
@@ -263,7 +288,7 @@ class Server(Base):
             code, out = A.approve(C.card_id(f), "PAUSED")
         self.assertTrue(out["ok"], out)
         new = C.folder_of(out["id"])
-        self.assertEqual(C.load(new)["approval"]["by"], "the owner")
+        self.assertEqual(C.load(new)["approval"]["by"], "owner")
 
     def test_disapprove_needs_a_reason_and_a_note(self):
         import approve as A
@@ -275,7 +300,7 @@ class Server(Base):
         code, out = A.disapprove(C.card_id(f), ["words"], "headline too long")
         self.assertEqual(C.where(C.folder_of(out["id"]))["state"], "sent-back")
         a = C.load(C.folder_of(out["id"]))["approval"]
-        self.assertEqual((a["decision"], a["note"], a["by"]), ("disapprove", "headline too long", "the owner"))
+        self.assertEqual((a["decision"], a["note"], a["by"]), ("disapprove", "headline too long", "owner"))
         self.assertEqual(a["reasons"][0]["tool"], "copywriter")
 
 
@@ -296,12 +321,12 @@ class FewerMetaCalls(Base):
         self.assertIn("when you approve", chk["page_cap"]["why"])
 
     def test_page_count_asked_once_for_a_batch(self):
-        m1, m2 = FakeMeta("brand-b"), FakeMeta("brand-b")
-        self.assertEqual(C.page_ads("brand-b", m1)["count"], 3)
-        self.assertEqual(C.page_ads("brand-b", m2)["count"], 3)       # another approve, the file answers
+        m1, m2 = FakeMeta("brand_b"), FakeMeta("brand_b")
+        self.assertEqual(C.page_ads("brand_b", m1)["count"], 3)
+        self.assertEqual(C.page_ads("brand_b", m2)["count"], 3)       # another approve, the file answers
         asked = [g for m in (m1, m2) for g in m.gets if g[0].endswith("/ads_volume")]
         self.assertEqual(len(asked), 1)
-        self.assertTrue(C.page_ads_file("brand-b").is_file())
+        self.assertTrue(C.page_ads_file("brand_b").is_file())
 
     def test_request_limit_passes_with_a_note(self):
         class Limited(FakeMeta):
@@ -309,7 +334,7 @@ class FewerMetaCalls(Base):
                 raise SystemExit('Meta 400: {"error":{"message":"(#17) User request limit reached","code":17,'
                                  '"error_subcode":2446079}}')
         f = self.card()
-        c = C.checks(f, C.load(f), meta=Limited("brand-b"))["page_cap"]
+        c = C.checks(f, C.load(f), meta=Limited("brand_b"))["page_cap"]
         self.assertTrue(c["ok"])
         self.assertIn("request limit", c["why"])
 
@@ -320,7 +345,7 @@ class FewerMetaCalls(Base):
         f = self.card(diversity=None)
         with mock.patch.dict(sys.modules, {"check": broken}), mock.patch.object(A, "FAKE", None), \
                 mock.patch.object(A, "meta_for", lambda b: FakeMeta(b)):
-            code, out = A.approve(C.card_id(f), "PAUSED", "the owner")
+            code, out = A.approve(C.card_id(f), "PAUSED", "owner")
         self.assertEqual(code, 200, out)
         self.assertTrue(out["ok"], out)
         dv = C.load(C.folder_of(out["id"]))["diversity"]
@@ -328,28 +353,28 @@ class FewerMetaCalls(Base):
         self.assertIn("no module named tag", dv["why"])
 
     def test_ids_remembered_per_brand(self):
-        m1 = FakeMeta("brand-b")
+        m1 = FakeMeta("brand_b")
         U.upload_card(self.approve(self.card()), m=m1, log=lambda *_: None)
         self.assertFalse([x for x in m1.lists if x.endswith("/ads")])  # a fresh upload never lists ads
-        m2 = FakeMeta("brand-b")
+        m2 = FakeMeta("brand_b")
         U.upload_card(self.approve(self.card(name=NAME.replace("brief-0154", "brief-0155"))), m=m2, log=lambda *_: None)
         self.assertEqual(m2.lists, [])                                   # campaign + ad set from ids.json
         self.assertEqual([e for e, _ in m2.posts if e in ("campaigns", "adsets")], [])
-        ids = json.loads((U.brand_runs("brand-b") / "ids.json").read_text())
+        ids = json.loads((U.brand_runs("brand_b") / "ids.json").read_text())
         self.assertEqual(len(ids["campaigns"]), 1)
         self.assertEqual(len(ids["ad_sets"]), 1)
-        self.assertTrue(str(U.brand_runs("brand-b")).startswith(str(self.root)))   # a trial never writes runs/
+        self.assertTrue(str(U.brand_runs("brand_b")).startswith(str(self.root)))   # a trial never writes runs/
 
     def test_every_video_waited_on_in_one_read(self):
-        f = self.root / "brand-b" / "1-check" / "video" / NAME
+        f = self.root / "brand_b" / "1-check" / "video" / NAME
         f.mkdir(parents=True)
         for i in (1, 2):
             (f / f"v{i}.mp4").write_bytes(b"x")
-        C.save(f, {"schema": C.SCHEMA, "brand": "brand-b", "lane": "video", "format": "flexible", "ad_name": NAME,
+        C.save(f, {"schema": C.SCHEMA, "brand": "brand_b", "lane": "video", "format": "flexible", "ad_name": NAME,
                    "product": "brilliance-body-scrub", "avatar": "spot-hider", "angle": "pigment-memory",
                    "media": ["v1.mp4", "v2.mp4"], "words": {"primary": ["B"], "headlines": ["H"], "descriptions": []},
                    "pages": [PAGE], "checks": {}, "approval": None, "meta": []})
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         U.upload_card(self.approve(f), m=m, log=lambda *_: None)
         reads = [g for g in m.gets if g[0] == "" and "ids" in g[1]]
         self.assertEqual(len(reads), 1)

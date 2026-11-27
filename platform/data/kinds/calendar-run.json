@@ -1,0 +1,90 @@
+{
+  "kind": "calendar-run",
+  "written_by": "marketing-calendar",
+  "written_by_evidence": "components/marketing-calendar/machine/records.py (KIND = \"calendar-run\"); all 8 records reviewer marketing-calendar — the lead, 2026-10-01, for ATL-20b (exact run counts); a kind with no written_by is not attributable to any component",
+  "title": "Marketing calendar \u2014 a record of every month that was planned",
+  "note": "Filed by `lab/the owner/marketing-calendar/machine/records.py` after a run of the nine-layer calendar flow. One record per planned month per brand; the item id is the run label (`calendar-2026-09`, `calendar-2026-09-Brand B`), so several records exist for one month and the LATEST BY `at` WINS \u2014 a re-plan is a new record, never an edit of the old one. POINTERS, NEVER CONTENT: nothing here carries a slot, an angle or a line of copy. The month itself lives in the run folder the record names, and the reviewer's own judgements live in `review.json` beside it; this plane carries counts and state so the dashboard can show which months exist, which are clean, and which a human has finished with. The `review` block is the whole point of the kind \u2014 a month that planned cleanly and that nobody has read is not a month that is ready to send, and those are two different facts that the counts keep apart.",
+  "open_items": true,
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": [
+        "plan",
+        "review"
+      ],
+      "note": "`plan` is a run of the calendar flow. `review` is a snapshot of where a human got to on a month already planned \u2014 filed when the reviewer's decisions change, never on a tick."
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": [
+        "ok",
+        "breaks",
+        "failed"
+      ],
+      "note": "`breaks` means the month was produced but its own checker found rules it violates \u2014 the month exists and is readable, and is not ready to send. `failed` means the flow did not finish; no slots.json was written."
+    },
+    {
+      "key": "brand",
+      "required": true,
+      "note": "the brand folder the run read \u2014 brand CONTENT only, per rule-9 (brand home)"
+    },
+    {
+      "key": "month",
+      "required": true,
+      "note": "YYYY-MM the month planned"
+    },
+    {
+      "key": "slots",
+      "required": true,
+      "note": "how many sends the month holds after layer 9 dropped duplicates"
+    },
+    {
+      "key": "breaks",
+      "required": true,
+      "note": "rules the month violates, per its own checks.md \u2014 the count, never the text"
+    },
+    {
+      "key": "warnings",
+      "required": true,
+      "note": "things a human should read but that do not break the month"
+    },
+    {
+      "key": "review",
+      "note": "where the human got to: {pending, approved, needs_work, cut, edited, noted}. `edited` counts slots a reviewer rewrote a field on, `noted` counts slots carrying a note for the writer. Absent on a run nobody has opened."
+    },
+    {
+      "key": "copy",
+      "note": "how many slots have been handed to a writer, by state: {queued, running, done, failed}. The hand-off command itself is named in the component's handoff.json, never here."
+    },
+    {
+      "key": "at",
+      "required": true,
+      "note": "UTC instant of the run"
+    },
+    {
+      "key": "seconds",
+      "note": "wall-clock of the whole flow, when the run recorded one"
+    },
+    {
+      "key": "stages",
+      "note": "All NINE layers, in chain order, keyed by the chain's own keys (declared in lab/the owner/marketing-calendar/machine/chain.py). Per layer: n, by (code|ai), status, produced, seconds \u2014 and for the two thinking layers the prompt file name and its sha. the owner's standing rule is that the prompt is the product, so the version that decided a month is part of that month's record. `status` is `done` (ran), `carried` (a replay reused this layer's output from disk and carried its record forward), or `unrecorded` (reused from disk with no prior record, so the prompt behind it cannot be named). The list is always complete: a layer missing from the record and a layer that did not run must never look the same."
+    },
+    {
+      "key": "unrecorded_stages",
+      "note": "The layers whose output governs this month but whose run was never recorded \u2014 a NAMED hole. Absent (null) on a month planned end to end. Non-empty means the month is not fully reproducible: re-plan it if that matters, or accept it knowingly."
+    },
+    {
+      "key": "run_dir",
+      "required": true,
+      "note": "where the month lives \u2014 a POINTER. The engine writes everywhere under its `--out`, so this is wherever the caller sent it; a reader opens board.html there and never reconstructs a month from this record."
+    },
+    {
+      "key": "board",
+      "note": "the review page inside the run folder, relative to it"
+    }
+  ]
+}

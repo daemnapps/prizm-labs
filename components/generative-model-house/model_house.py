@@ -1,4 +1,4 @@
-"""The Generative Model House reader — every generative tool asks here which model does a job (the owner, 2026-10-20).
+"""The Generative Model House reader — every generative tool asks here which model does a job (owner, 2026-10-20).
 
     import model_house as MH
     MH.model("pictures.edit")          -> {"model": "gpt-image-2.5-sunburst", "door": "openai", "registry_id": ...}

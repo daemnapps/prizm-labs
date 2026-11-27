@@ -110,7 +110,7 @@ class Paths(unittest.TestCase):
         self.assertEqual(bad, [], "components reaching outside the workspace:\n  "
                                  + "\n  ".join(bad)
                                  + "\n\nThe code, the cache and the key all live in here "
-                                   "(the owner 2026-09-23).")
+                                   "(owner 2026-09-23).")
 
 
 if __name__ == "__main__":

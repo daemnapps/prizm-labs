@@ -202,7 +202,7 @@ def main():
         # by side. Grouping by brief id (which is what this did until
         # 2026-09-11) splits one idea across two blocks whenever it was built
         # in two production runs, and the variations then read as duplicates.
-        # the owner, looking at exactly that: "these are still the same....".
+        # owner, looking at exactly that: "these are still the same....".
         by_idea = OrderedDict()
         for r in rs:
             by_idea.setdefault((fields(r["Ad Name"])[0], r["Title"]), []).append(r)

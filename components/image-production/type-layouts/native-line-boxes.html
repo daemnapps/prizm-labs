@@ -1,0 +1,5 @@
+<!-- Native line boxes: the phone app's text tool. Each line of the headline sits on its own white rounded box hugging that line, regular weight black type, the box stepping in with a shorter line; an optional outlined white caption keeps its size at the foot of the safe zone. Set keep_lines to ["head", "note"] so the writer's line breaks hold. Sizes are at full scale; the fit step shrinks the headline. -->
+<div class="area" data-fit style="justify-content:flex-start">
+ <div class="line" style="font:500 calc(var(--s)*90px)/1.2 'Helvetica Neue',-apple-system,Sans;color:#000"><span style="background:#fff;border-radius:calc(var(--s)*18px);padding:calc(var(--s)*6px) calc(var(--s)*20px);-webkit-box-decoration-break:clone;box-decoration-break:clone">{{head}}</span></div>
+</div>
+<div style="position:fixed;left:5%;right:5%;bottom:14.8%;text-align:center;font:500 92px/1.08 'Helvetica Neue',-apple-system,Sans;color:#fff;-webkit-text-stroke:7px #000;paint-order:stroke fill">{{note}}</div>

@@ -1,14 +1,14 @@
 """The three generating steps' prompts. Slots, never prose.
 
 Each prompt is a FILE (`prompts/<step>-vN-owner.md`), so a change to how a
-character is asked for is a change the owner can read — it is never a string
+character is asked for is a change owner can read — it is never a string
 edited inside code. Highest `-vN-` wins, NUMERICALLY (an alphabetical sort
 lets v2 beat v10), which is `components/run-kit/run_kit/prompts.py`'s rule and
 is asked of it rather than re-implemented.
 
 A prompt file is documentation above the `---` rule and the prompt below it,
 so the reasoning travels with the prompt without being sent
-(`tools/image-production/image_production/prompting.py`, same split).
+(`components/image-production/image_production/prompting.py`, same split).
 
 The ORDER of the slots is the contract. A slot with nothing in it is dropped
 entirely — never sent empty, never filled with a guess.

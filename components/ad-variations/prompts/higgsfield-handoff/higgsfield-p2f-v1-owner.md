@@ -9,7 +9,7 @@ THE BRIEF: {brief_link}
 Open it from Google Drive and read every section before generating anything.
 
 WHAT THIS AD IS
-A proven <brand> winner re-told in a new format. Product: Brilliance Face Scrub. Avatar: spot-hider (women 45+ with dark spots). Lane: AI. The ONLY offer is "buy 2, get 1 free" — never write, say or show any other price, discount or bundle.
+A proven Brand B winner re-told in a new format. Product: Brilliance Face Scrub. Avatar: spot-hider (women 45+ with dark spots). Lane: AI. The ONLY offer is "buy 2, get 1 free" — never write, say or show any other price, discount or bundle.
 
 HOW TO BUILD IT — in this order, and stop for my OK at each ★
 1. Read THE PIECE (aspect, resolution, style), THE CAST, THE WORLD, THE PRODUCT, PRODUCT LOCK and COMPOSITION. Every person, room and product shot must match these descriptions.
@@ -24,7 +24,7 @@ RULES THAT NEVER BEND
 - Never invent a claim, number, testimonial, price or person. If the brief leaves a slot empty or says TO MAKE, stop and tell me — don't fill it.
 - If the brief's top "Core message" line talks about anything other than dark spots and the face scrub, ignore that line and tell me.
 - Edits are image-to-image: change one thing on the approved frame, never re-roll from scratch.
-- Save everything to Google Drive: Shared Assets/runs/ad-variations/<brand>/higgsfield/<the brief's square name>/ (audio/, stills/, clips/), and send me the folder link.
+- Save everything to Google Drive: Shared Assets/runs/ad-variations/Brand B/higgsfield/<the brief's square name>/ (audio/, stills/, clips/), and send me the folder link.
 
 When every ★ is approved, give me one list: each clip in order with its link, ready for the editor.
 ```
@@ -34,11 +34,11 @@ When every ★ is approved, give me one list: each clip in order with its link, 
 | Square | Status | Brief |
 |---|---|---|
 | Scrub Task 5 (Hook 2) × TV-shopping live demo | **Ready** — passed every check | https://drive.google.com/file/d/1QdRxtQ_HiugXkPIXf7B_ABtx_Cwgkdzj/view |
-| <brand>'s Grandma × Captioned steps (Hua Jin) | Brief written · 5 production fields to fill | https://drive.google.com/file/d/11xASIPn6OmkCshYOl4Rrkc1Lnb1LeDE6/view |
+| Brand B's Grandma × Captioned steps (Hua Jin) | Brief written · 5 production fields to fill | https://drive.google.com/file/d/11xASIPn6OmkCshYOl4Rrkc1Lnb1LeDE6/view |
 | Scrub Task 4 (Hook 1) × TV-shopping live demo | Brief written · 2 production fields to fill | https://drive.google.com/file/d/1X6qK9uWuf9dnYF6mCPwqroH_xlI1xmtU/view |
 | Scrub Task 5 (Hook 2) × Captioned steps (Hua Jin) | Brief written · 1 production field to fill | https://drive.google.com/file/d/1QAs2ZY4OGynCCMXNM3Rs7IkSF0ivieUt/view |
 | Scrub Task 43 (Hook 3) × TV-shopping live demo | Brief written · waiting at the Viewer Check | https://drive.google.com/file/d/1v5kJUXFxpKSxPdKTeaOxLx-u1FYrJZj5/view |
 
-All briefs folder: https://drive.google.com/drive/folders/FOLDER_ID
+All briefs folder: https://drive.google.com/drive/folders/1bsmzuqhQ2riPXRkpSeUQ2ui-m3TpfpZW
 
 "Production fields to fill" are items the chain's production check found empty in the brief (marked TO MAKE or blank). The prompt above stops and asks when it meets one.

@@ -1,0 +1,166 @@
+{
+  "format_id": "default",
+  "name": "General chain (no playbook)",
+  "status": "approved",
+  "state": "the shared chain as it runs today",
+  "signed": {"by": "the owner", "date": "2026-10-10", "ruling": "the general chain stays the fallback for any format without its own playbook: \"as opposed to just having a general workflow for all ads\""},
+  "family": "default",
+  "what": "Every setting here is the shared chain's own (THE-CHAIN.md, providers.json, RUN-PROTOCOL.md). null = the shared chain decides; a family playbook overrides only what it names.",
+  "signature": {"audio": null, "speakers": null, "address": null, "settings": null, "product_role": null, "pacing": null, "capture": null, "story": null},
+  "specialised": [],
+  "stage_order": ["teardown", "writing", "elements", "gates", "voice", "storyboard", "pictures", "clips", "edit"],
+  "stages": {
+    "audio": {"first": "voice", "song_model": null, "voice_model": null},
+    "song": {"flow": null, "length_s": null},
+    "pictures": {"door": "direct.openai", "model_key": null, "quality": null, "size": null, "aspect": "9:16", "fix_calls": true, "style_lock": "the swipe's style row", "send_size": null},
+    "clips": {"model": "seedance_2_5", "resolution": "720p", "seconds": [4, 10], "clips_per_picture": 1, "takes": 1, "max_tries": 3, "upscale": "local, the picked take only", "stills_allowed": false, "short_clip": null},
+    "cast": {"reuse": "per-brand cast bank first", "recurring": false},
+    "hooks": {"shape": "hooks as format fills (writing station 2.2)"},
+    "captions": {"look": "the swipe's own caption look (style.caption)"},
+    "gates": {"apply": "all 13 (run.py start)", "skip": []},
+    "edit": {"method": "video-edit machine cut, or the editor hand-off", "loudness": "-14 LUFS"}
+  },
+  "failures": [],
+  "cost": {"target_usd_per_ad": null},
+  "quality_bar": ["the shared QC gate: inspector + director verdicts on every clip"],
+  "variants": [],
+  "built_from": [],
+  "rulings": [],
+  "workflow": {
+    "what": "Draft reviewed production intake; generation is outside this fallback recipe.",
+    "state": "draft",
+    "completion": "reviewed-production-plan",
+    "steps": [
+      {
+        "id": "brief",
+        "name": "Accepted writing brief",
+        "component": "video-writing",
+        "does": "The writing chain runs with the decision layer on: python3 components/video-writing/machine/run.py {teardown} --autonomous (the teardown or scratch run's label). Every structure, hook, audit, swipe-match and manifest hold is decided from the owner's past calls and filed for him to overrule; the run continues. A run that still stops is diagnosed and fixed in the session, never sent to the owner. Retain the actual writing run and maker brief; a held or stale brief is not complete and goes back to writing, never around it. Writing costs are never quoted.",
+        "executor": "agent",
+        "evidence": [
+          "{brief}"
+        ],
+        "gate": null,
+        "inputs": [
+          "brief",
+          "writing_run",
+          "route"
+        ],
+        "brief_check": {
+          "run": "{writing_run}/run.json",
+          "brief": "{brief}"
+        }
+      },
+      {
+        "id": "brief-review",
+        "name": "Brief review",
+        "component": "decision layer · video-teardown decide.py",
+        "executor": "decided",
+        "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+        "review_asset": "{brief}",
+        "input_files": [
+          "{brief}"
+        ],
+        "overrule": "the owner"
+      },
+      {
+        "id": "production-plan",
+        "name": "Prepare production plan",
+        "component": "video-production · model-inputs",
+        "does": "Read the resolved existing family and style, then author the scene/asset/cast plan, exact component steps, missing inputs, estimate and stopping point. This draft fallback is reviewed planning coverage, not a proven end-to-end production recipe. Do not generate.",
+        "executor": "agent",
+        "evidence": [
+          "runs/video-production/{brand}/workflow-{label}/production-plan.md"
+        ],
+        "gate": null,
+        "inputs": [
+          "production_route",
+          "format"
+        ],
+        "input_files": [
+          "{brief}"
+        ]
+      },
+      {
+        "id": "production-plan-review",
+        "name": "Production plan review",
+        "component": "decision layer · video-teardown decide.py",
+        "executor": "decided",
+        "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+        "review_asset": "runs/video-production/{brand}/workflow-{label}/production-plan.md",
+        "input_files": [
+          "runs/video-production/{brand}/workflow-{label}/production-plan.md"
+        ],
+        "overrule": "the owner"
+      }
+    ]
+  },
+  "creator_workflow": {
+    "what": "Reviewed maker package; no dispatch.",
+    "state": "draft",
+    "completion": "reviewed-maker-package",
+    "steps": [
+      {
+        "id": "brief",
+        "name": "Accepted writing brief",
+        "component": "video-writing",
+        "does": "The writing chain runs with the decision layer on: python3 components/video-writing/machine/run.py {teardown} --autonomous (the teardown or scratch run's label). Every structure, hook, audit, swipe-match and manifest hold is decided from the owner's past calls and filed for him to overrule; the run continues. A run that still stops is diagnosed and fixed in the session, never sent to the owner. Retain the actual writing run and maker brief; a held or stale brief is not complete and goes back to writing, never around it. Writing costs are never quoted.",
+        "executor": "agent",
+        "evidence": [
+          "{brief}"
+        ],
+        "gate": null,
+        "inputs": [
+          "brief",
+          "writing_run",
+          "route"
+        ],
+        "brief_check": {
+          "run": "{writing_run}/run.json",
+          "brief": "{brief}"
+        }
+      },
+      {
+        "id": "brief-review",
+        "name": "Brief review",
+        "component": "decision layer · video-teardown decide.py",
+        "executor": "decided",
+        "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+        "review_asset": "{brief}",
+        "input_files": [
+          "{brief}"
+        ],
+        "overrule": "the owner"
+      },
+      {
+        "id": "maker-package",
+        "name": "Prepare maker package",
+        "component": "video-writing · handoff",
+        "does": "Prepare the creator/founder instructions and references locally, using the actual production route. Do not run AI generation or send the package.",
+        "executor": "agent",
+        "evidence": [
+          "runs/video-production/{brand}/workflow-{label}/maker-package.md"
+        ],
+        "gate": null,
+        "inputs": [
+          "production_route"
+        ],
+        "input_files": [
+          "{brief}"
+        ]
+      },
+      {
+        "id": "maker-package-review",
+        "name": "Maker package review",
+        "component": "decision layer · video-teardown decide.py",
+        "executor": "decided",
+        "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.",
+        "review_asset": "runs/video-production/{brand}/workflow-{label}/maker-package.md",
+        "input_files": [
+          "runs/video-production/{brand}/workflow-{label}/maker-package.md"
+        ],
+        "overrule": "the owner"
+      }
+    ]
+  }
+}

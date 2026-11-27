@@ -1,0 +1,1324 @@
+{
+"formats": [
+{
+"id": "text-thread",
+"name": "Text thread or screenshot story",
+"tier": "code",
+"top": "112.4M",
+"proof": "10 posts in his feeds",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+],
+"tool": "Needs a tool, small",
+"thumb": "t/text-thread-or-screenshot-story.jpg",
+"link": "https://www.tiktok.com/@amosthakid/video/7519547488353750294"
+},
+{
+"id": "diagram",
+"name": "Diagram explainer",
+"tier": "code",
+"top": "63.4M",
+"proof": "Format proof, skin pairing untested",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+],
+"tool": "Needs a tool",
+"thumb": "v/P11ykXwx4-k.jpg",
+"link": "https://www.youtube.com/watch?v=P11ykXwx4-k"
+},
+{
+"id": "brain-test",
+"name": "Brain and eye test",
+"tier": "code",
+"top": "49.1M",
+"proof": "15% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin",
+"Face Back"
+],
+"tool": "Needs a tool, small",
+"thumb": "v/iVbopWyBR5Y.jpg",
+"link": "https://www.youtube.com/watch?v=iVbopWyBR5Y"
+},
+{
+"id": "prayer",
+"name": "Prayer over calm pictures",
+"tier": "code",
+"top": "31.2M",
+"proof": "7% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin",
+"Gift Buyer"
+],
+"tool": "Needs a tool, small",
+"thumb": "v/gLIjml_Kfmw.jpg",
+"link": "https://www.youtube.com/watch?v=gLIjml_Kfmw"
+},
+{
+"id": "lyric-card",
+"name": "Lyric and music card",
+"tier": "code",
+"top": "7M",
+"proof": "16 posts in his feeds",
+"av": [
+"Fed-Up King"
+],
+"tool": "Needs a tool, small",
+"thumb": "t/lyric-and-music-card.jpg",
+"link": "https://www.instagram.com/p/DVghBOaD_XP/"
+},
+{
+"id": "stick",
+"name": "Flat 2D or stick family comedy",
+"tier": "draw",
+"top": "39M",
+"proof": "22 posts across all feeds",
+"av": [
+"Fed-Up King",
+"Glow-Up",
+"Gift Buyer",
+"Spot Hider",
+"Face Back"
+],
+"tool": "Stick tool built",
+"thumb": "t/flat-2d-or-stick-cartoon.jpg",
+"link": "https://www.youtube.com/shorts/sBZfqOcOULI"
+},
+{
+"id": "remember-when",
+"name": "Remember-when cartoon",
+"tier": "draw",
+"top": "4.0M",
+"proof": "23% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin",
+"Face Back",
+"Fed-Up King"
+],
+"tool": "Cartoon tool built",
+"thumb": "v/qoRpMwyErk8.jpg",
+"link": "https://www.youtube.com/watch?v=qoRpMwyErk8"
+},
+{
+"id": "slideshow",
+"name": "Meme or tips slideshow",
+"tier": "pictures",
+"top": "3.5M",
+"proof": "6 posts in feeds",
+"av": [
+"Fed-Up King",
+"Gift Buyer",
+"Glow-Up",
+"Spot Hider"
+],
+"tool": "Needs a tool, small",
+"thumb": "t/meme-or-tips-slideshow.jpg",
+"link": "https://www.tiktok.com/@caldruki/video/7664379927889710358"
+},
+{
+"id": "remedies",
+"name": "Forgotten remedies",
+"tier": "pictures",
+"top": "2.5M",
+"proof": "16% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Stills plus edit",
+"thumb": "v/P6ghgJztC64.jpg",
+"link": "https://www.youtube.com/watch?v=P6ghgJztC64"
+},
+{
+"id": "wisdom",
+"name": "Narrated life wisdom",
+"tier": "pictures",
+"top": "2.2M",
+"proof": "26% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin",
+"Face Back"
+],
+"tool": "Stills plus edit",
+"thumb": "v/_NOdyBi9UHo.jpg",
+"link": "https://www.youtube.com/watch?v=_NOdyBi9UHo"
+},
+{
+"id": "game-skit",
+"name": "NBA and game skits",
+"tier": "game",
+"top": "5M",
+"proof": "23 posts in feeds",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+],
+"tool": "Check footage use",
+"thumb": "t/nba-and-game-skits.jpg",
+"link": "https://www.tiktok.com/@loosewitit34/video/7607606880113823007"
+},
+{
+"id": "inside-skin",
+"name": "Inside-the-skin 3D",
+"tier": "image",
+"top": "105.4M",
+"proof": "One channel, skin topics",
+"av": [
+"Glow-Up",
+"Fed-Up King",
+"Spot Hider"
+],
+"tool": "Needs 3D",
+"thumb": "v/yy5xxh0wt2U.jpg",
+"link": "https://www.youtube.com/watch?v=yy5xxh0wt2U"
+},
+{
+"id": "3d-cartoon",
+"name": "3D CGI cartoon",
+"tier": "image",
+"top": "74M",
+"proof": "36 posts across all feeds",
+"av": [
+"Glow-Up",
+"Fed-Up King",
+"Spot Hider",
+"Face Back",
+"Gift Buyer"
+],
+"tool": "Generator",
+"thumb": "t/3d-cgi-cartoon.jpg",
+"link": "https://www.youtube.com/shorts/Dgc8mT6nutI"
+},
+{
+"id": "body-part",
+"name": "Talking body-part character",
+"tier": "image",
+"top": "70.2M",
+"proof": "Looks generated, not confirmed",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+],
+"tool": "Generator",
+"thumb": "v/V0ALvVPHz-8.jpg",
+"link": "https://www.youtube.com/watch?v=V0ALvVPHz-8"
+},
+{
+"id": "ai-story",
+"name": "AI realistic story",
+"tier": "image",
+"top": "34M",
+"proof": "20 posts across all feeds",
+"av": [
+"Spot Hider",
+"Glow-Up",
+"Fed-Up King",
+"Gift Buyer"
+],
+"tool": "Generator",
+"thumb": "t/ai-realistic.jpg",
+"link": "https://www.tiktok.com/@everydaygoldenstories/video/7579626745867832596"
+},
+{
+"id": "dream-50s",
+"name": "1950s dream music video",
+"tier": "image",
+"top": "10.5M",
+"proof": "6% older comments, all 2026",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Generator",
+"thumb": "v/reU99t1QS7E.jpg",
+"link": "https://www.youtube.com/watch?v=reU99t1QS7E"
+},
+{
+"id": "painted",
+"name": "Painted or illustrated meme",
+"tier": "image",
+"top": "1M",
+"proof": "10 posts in feeds",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+],
+"tool": "Image process",
+"thumb": "t/painted-or-illustrated-meme.jpg",
+"link": "https://www.instagram.com/p/DTX7vltD2ei/"
+},
+{
+"id": "oldies-playlist-card",
+"name": "Oldies playlist card",
+"tier": "deep",
+"top": "21.2M",
+"proof": "12% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Build tool",
+"link": "https://www.youtube.com/watch?v=cUims9drQXA",
+"deep": true
+},
+{
+"id": "piano-hymns-over-scenery",
+"name": "Piano hymns over scenery",
+"tier": "deep",
+"top": "10.5M",
+"proof": "9% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Build tool",
+"link": "https://www.youtube.com/watch?v=nnk1HTsmJk0",
+"deep": true
+},
+{
+"id": "country-gospel-hymns-card",
+"name": "Country gospel hymns card",
+"tier": "deep",
+"top": "6.8M",
+"proof": "8.5% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Build tool",
+"link": "https://www.youtube.com/watch?v=e_GRfzKPie8",
+"deep": true
+},
+{
+"id": "sleep-scripture-reading",
+"name": "Sleep scripture reading",
+"tier": "deep",
+"top": "8.2M",
+"proof": "6% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Build tool",
+"link": "https://www.youtube.com/watch?v=3L2A19r9q-U",
+"deep": true
+},
+{
+"id": "love-songs-playlist-card",
+"name": "Love songs playlist card",
+"tier": "deep",
+"top": "5.6M",
+"proof": "6% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Build tool",
+"link": "https://www.youtube.com/watch?v=wHTMyrvD3YQ",
+"deep": true
+},
+{
+"id": "depression-era-meals-story",
+"name": "Depression-era meals story",
+"tier": "deep",
+"top": "4.1M",
+"proof": "14% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Stills",
+"link": "https://www.youtube.com/watch?v=5svGOPptoGA",
+"deep": true
+},
+{
+"id": "classic-tv-stories",
+"name": "Classic TV stories",
+"tier": "deep",
+"top": "1.3M",
+"proof": "9.5% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Stills",
+"link": "https://www.youtube.com/watch?v=xg4Y747OzEw",
+"deep": true
+},
+{
+"id": "family-betrayal-story",
+"name": "Family betrayal story",
+"tier": "deep",
+"top": "2.3M",
+"proof": "7% older comments",
+"av": [
+"Spot Hider",
+"Dry Skin"
+],
+"tool": "Stills, 2026",
+"link": "https://www.youtube.com/watch?v=Tn2NJE-DAJw",
+"deep": true
+}
+],
+"shows": [
+{
+"s": "Little House on the Prairie",
+"g": "Her shows",
+"top": 11171580,
+"pct": 37.5,
+"id": "MawR-tA61dM",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "The Waltons",
+"g": "Her shows",
+"top": 2837210,
+"pct": 36.0,
+"id": "qpmRcP8S7Bo",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Mister Rogers",
+"g": "Her shows",
+"top": 3382595,
+"pct": 32.0,
+"id": "FhAJnx5uwUU",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Schoolhouse Rock",
+"g": "Her shows",
+"top": 7880201,
+"pct": 30.5,
+"id": "4AyjKgz9tKg",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "And1 Mixtape",
+"g": "Sports",
+"top": 4408483,
+"pct": 28.5,
+"id": "v_UluQ005Mg",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Mike Tyson's Punch-Out",
+"g": "Sports",
+"top": 10089474,
+"pct": 27.0,
+"id": "X0pJSTy4tJI",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "All That",
+"g": "Black culture",
+"top": 2592098,
+"pct": 25.0,
+"id": "CuY_R1_HNzA",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Arthur",
+"g": "Cartoon Network and Nick",
+"top": 11776804,
+"pct": 21.0,
+"id": "b53WaK71sMM",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Fat Albert",
+"g": "Black culture",
+"top": 7933500,
+"pct": 19.0,
+"id": "r87cIxZXEME",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Soul Train",
+"g": "Black culture",
+"top": 28506792,
+"pct": 17.5,
+"id": "ZTt649Hvtxs",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "NBA 2K",
+"g": "Games",
+"top": 6241881,
+"pct": 17.5,
+"id": "Ey8TeAsn_OU",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Doug",
+"g": "Cartoon Network and Nick",
+"top": 3731397,
+"pct": 17.0,
+"id": "Hygi3PlZI0Y",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "SportsCenter theme",
+"g": "Sports",
+"top": 8600112,
+"pct": 17.0,
+"id": "yKlGTQasEBo",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Sanford and Son",
+"g": "Black women nostalgia",
+"top": 11399321,
+"pct": 17.0,
+"id": "ePp1jHqbEnE",
+"av": [
+"Spot Hider",
+"Gift Buyer"
+]
+},
+{
+"s": "Smart Guy",
+"g": "Black culture",
+"top": 1528932,
+"pct": 16.5,
+"id": "sf0goBbPQoo",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Peanuts",
+"g": "Her shows",
+"top": 7856399,
+"pct": 15.5,
+"id": "00gXEn1ehDg",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Rick and Morty",
+"g": "Adult cartoons",
+"top": 24231365,
+"pct": 15.0,
+"id": "CdGKfBir7bI",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Street Fighter",
+"g": "Games",
+"top": 12184286,
+"pct": 15.0,
+"id": "7Lf25jxvLjw",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Johnny Bravo",
+"g": "Cartoon Network and Nick",
+"top": 9317520,
+"pct": 14.5,
+"id": "Exe0IEB3hKs",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "The Golden Girls",
+"g": "Her shows",
+"top": 9998569,
+"pct": 14.0,
+"id": "GWbz_mIAShM",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Diff'rent Strokes",
+"g": "Black women nostalgia",
+"top": 4288452,
+"pct": 14.0,
+"id": "vV27CUj51vU",
+"av": [
+"Spot Hider",
+"Gift Buyer"
+]
+},
+{
+"s": "In Living Color",
+"g": "Black culture",
+"top": 14057876,
+"pct": 12.5,
+"id": "fdtKBe7sM48",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Aqua Teen Hunger Force",
+"g": "Adult cartoons",
+"top": 2392122,
+"pct": 12.5,
+"id": "dcd6wU86OgI",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "The Carol Burnett Show",
+"g": "Her shows",
+"top": 48973333,
+"pct": 12.0,
+"id": "5zw_B0mqdp4",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "The Jeffersons",
+"g": "Black culture",
+"top": 5388010,
+"pct": 11.5,
+"id": "MYcqToQzzGY",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Mortal Kombat",
+"g": "Games",
+"top": 176892439,
+"pct": 11.5,
+"id": "0dz0YU0jJr4",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "The Brady Bunch",
+"g": "Her shows",
+"top": 3908605,
+"pct": 11.0,
+"id": "d2JooUMsDdA",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "The Andy Griffith Show",
+"g": "Her shows",
+"top": 3668609,
+"pct": 11.0,
+"id": "lu3r3qesCrs",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Living Single",
+"g": "Black culture",
+"top": 1421132,
+"pct": 10.5,
+"id": "sMrmctL_FgY",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Tony Hawk Pro Skater",
+"g": "Games",
+"top": 10571341,
+"pct": 10.5,
+"id": "PLC1V22Y7iY",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Static Shock",
+"g": "Black culture",
+"top": 1125825,
+"pct": 10.0,
+"id": "c9s2v7CdCUE",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Dragon Ball Z",
+"g": "Anime",
+"top": 35781459,
+"pct": 9.5,
+"id": "avYmgg8UxwU",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Tekken",
+"g": "Games",
+"top": 3664757,
+"pct": 9.5,
+"id": "TuPZBD_78EI",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "The Proud Family",
+"g": "Black culture",
+"top": 6429138,
+"pct": 9.0,
+"id": "1k1IfrKO4Nk",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "King of the Hill",
+"g": "Adult cartoons",
+"top": 8165017,
+"pct": 8.5,
+"id": "-iQLNR9btr4",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "CatDog",
+"g": "Cartoon Network and Nick",
+"top": 16229257,
+"pct": 8.0,
+"id": "zyPLFKiZL-o",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Madden",
+"g": "Games",
+"top": 6205600,
+"pct": 8.0,
+"id": "ibDc0nX5uqw",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "GTA San Andreas",
+"g": "Games",
+"top": 103565625,
+"pct": 8.0,
+"id": "W4VTq0sa9yg",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "I Love Lucy",
+"g": "Her shows",
+"top": 4267102,
+"pct": 8.0,
+"id": "K3axU2b0dDk",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Transformers",
+"g": "1980s toys",
+"top": 4961574,
+"pct": 8.0,
+"id": "Ae-Pl-Q34ng",
+"av": [
+"Face Back",
+"Fed-Up King"
+]
+},
+{
+"s": "Family Matters",
+"g": "Black culture",
+"top": 18769804,
+"pct": 7.5,
+"id": "sud1fak_65Q",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Bewitched",
+"g": "Her shows",
+"top": 2156264,
+"pct": 7.0,
+"id": "_9-Pk-EcqOI",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "G.I. Joe",
+"g": "1980s toys",
+"top": 4245797,
+"pct": 7.0,
+"id": "4Ah2I166f_U",
+"av": [
+"Face Back",
+"Fed-Up King"
+]
+},
+{
+"s": "Bleach",
+"g": "Anime",
+"top": 16364687,
+"pct": 6.5,
+"id": "92TEcszkRBw",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "The Sound of Music",
+"g": "Her shows",
+"top": 69889374,
+"pct": 6.5,
+"id": "UmmOJx_Hxto",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "Daria",
+"g": "Adult cartoons",
+"top": 2054214,
+"pct": 6.0,
+"id": "c1Mn3PC-IPY",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Monday Night Football theme",
+"g": "Sports",
+"top": 3001563,
+"pct": 6.0,
+"id": "37-AlmNdESg",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "227",
+"g": "Black women nostalgia",
+"top": 2435673,
+"pct": 6.0,
+"id": "NqX7z-kLZuw",
+"av": [
+"Spot Hider",
+"Gift Buyer"
+]
+},
+{
+"s": "Space Jam",
+"g": "Sports",
+"top": 59202401,
+"pct": 5.5,
+"id": "J9FImc2LOr8",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "A Different World",
+"g": "Black women nostalgia",
+"top": 3043495,
+"pct": 5.0,
+"id": "FIhAZgXGlxg",
+"av": [
+"Spot Hider",
+"Gift Buyer"
+]
+},
+{
+"s": "Moesha",
+"g": "Black culture",
+"top": 1821248,
+"pct": 4.5,
+"id": "5jUaNSkmdSI",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Def Comedy Jam",
+"g": "Black culture",
+"top": 8467719,
+"pct": 4.5,
+"id": "DR-hxO5CtTk",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+]
+},
+{
+"s": "Samurai Jack",
+"g": "Cartoon Network and Nick",
+"top": 4388073,
+"pct": 4.5,
+"id": "px19BWFk8kw",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "One Piece",
+"g": "Anime",
+"top": 46805209,
+"pct": 4.5,
+"id": "IHhNTt3oxtY",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "South Park",
+"g": "Adult cartoons",
+"top": 13735026,
+"pct": 4.0,
+"id": "4AaYwJPGZPM",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Futurama",
+"g": "Adult cartoons",
+"top": 5415139,
+"pct": 4.0,
+"id": "QRk1s5Kf3aQ",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Def Jam Fight for NY",
+"g": "Games",
+"top": 4349595,
+"pct": 4.0,
+"id": "JaTfo5TeX-E",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Beavis and Butt-Head",
+"g": "Adult cartoons",
+"top": 31800762,
+"pct": 3.5,
+"id": "tVzbWb3hgMU",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Death Note",
+"g": "Anime",
+"top": 23284446,
+"pct": 3.5,
+"id": "RvIx-SJvlNY",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Crash Bandicoot",
+"g": "Games",
+"top": 15008381,
+"pct": 3.5,
+"id": "7flYUW9-A_M",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "The Simpsons",
+"g": "Adult cartoons",
+"top": 33489022,
+"pct": 2.5,
+"id": "5JVQA2aWgpE",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Bob's Burgers",
+"g": "Adult cartoons",
+"top": 5381545,
+"pct": 2.5,
+"id": "DGqRffMMaLM",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Demon Slayer",
+"g": "Anime",
+"top": 170481364,
+"pct": 2.5,
+"id": "pmanD_s7G3U",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "The Magic School Bus",
+"g": "Cartoon Network and Nick",
+"top": 18648024,
+"pct": 2.0,
+"id": "ngJPCcO8SK8",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "The Boondocks",
+"g": "Black culture",
+"top": 12323000,
+"pct": 1.5,
+"id": "Q3a8flR8QEw",
+"av": [
+"Fed-Up King",
+"Gift Buyer"
+],
+"note": "People quote it, so low nostalgia talk"
+},
+{
+"s": "American Dad",
+"g": "Adult cartoons",
+"top": 6414038,
+"pct": 1.5,
+"id": "lFV1uT-ihDo",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Robot Chicken",
+"g": "Adult cartoons",
+"top": 16621765,
+"pct": 1.5,
+"id": "1jwkYv-n494",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Jujutsu Kaisen",
+"g": "Anime",
+"top": 24644483,
+"pct": 1.5,
+"id": "2c_lHmkOq0E",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Attack on Titan",
+"g": "Anime",
+"top": 212078244,
+"pct": 1.5,
+"id": "CID-sYQNCew",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Family Guy",
+"g": "Adult cartoons",
+"top": 17438359,
+"pct": 0.5,
+"id": "ClC4s6EXyn4",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Dexter's Laboratory",
+"g": "Cartoon Network and Nick",
+"top": 3231391,
+"pct": null,
+"id": "Ya3Q9OLk25g",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Powerpuff Girls",
+"g": "Cartoon Network and Nick",
+"top": 29719438,
+"pct": null,
+"id": "BuwG63Y6Glk",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Ed Edd n Eddy",
+"g": "Cartoon Network and Nick",
+"top": 3804028,
+"pct": null,
+"id": "1BPLXepRC8E",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Courage the Cowardly Dog",
+"g": "Cartoon Network and Nick",
+"top": 12362284,
+"pct": null,
+"id": "pyEKOY1TIbU",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Rocket Power",
+"g": "Cartoon Network and Nick",
+"top": 4913328,
+"pct": null,
+"id": "QT_eQEuPscE",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Ren and Stimpy",
+"g": "Cartoon Network and Nick",
+"top": 1281781,
+"pct": null,
+"id": "2W8gADOplmY",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Avatar The Last Airbender",
+"g": "Cartoon Network and Nick",
+"top": 9742763,
+"pct": null,
+"id": "Avw0_VjiQkY",
+"av": [
+"Fed-Up King",
+"Glow-Up"
+]
+},
+{
+"s": "Yu-Gi-Oh",
+"g": "Anime",
+"top": 11696821,
+"pct": null,
+"id": "MjdNz071O4E",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Gundam Wing",
+"g": "Anime",
+"top": 9830803,
+"pct": null,
+"id": "oNJ4aBoRipg",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Cowboy Bebop",
+"g": "Anime",
+"top": 28483303,
+"pct": null,
+"id": "n2rVnRwW0h8",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "Hunter x Hunter",
+"g": "Anime",
+"top": 20052129,
+"pct": null,
+"id": "q43wzP6A1CM",
+"av": [
+"Glow-Up",
+"Fed-Up King"
+]
+},
+{
+"s": "El Chapulin Colorado",
+"g": "Latino",
+"top": 3713686,
+"pct": null,
+"id": "XKzrrdcA-ik",
+"av": [
+"Fed-Up King"
+]
+},
+{
+"s": "Sesame Street 1970s",
+"g": "Her shows",
+"top": 23465732,
+"pct": null,
+"id": "6TjX5r37V0Q",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+},
+{
+"s": "The Wizard of Oz",
+"g": "Her shows",
+"top": 62334616,
+"pct": null,
+"id": "PSZxmZmBfnU",
+"av": [
+"Spot Hider",
+"Dry Skin"
+]
+}
+],
+"avatars": [
+"Fed-Up King",
+"Glow-Up",
+"Face Back",
+"Gift Buyer",
+"Spot Hider",
+"Dry Skin"
+],
+"topics": [
+{
+"name": "Menopause",
+"top": "2.6M",
+"pct": 42,
+"link": "https://www.youtube.com/watch?v=ReFZ__ZeSEQ"
+},
+{
+"name": "Adding years",
+"top": "1.6M",
+"pct": 14,
+"link": "https://www.youtube.com/watch?v=SQ54wma-JQA"
+},
+{
+"name": "Crepey skin",
+"top": "1.4M",
+"pct": 13,
+"link": "https://www.youtube.com/watch?v=D0na7epFxQ4"
+},
+{
+"name": "Reversing aging",
+"top": "7.0M",
+"pct": 12.5,
+"link": "https://www.youtube.com/watch?v=DnvWAP99r3Y"
+},
+{
+"name": "Vaseline hacks",
+"top": "4.6M",
+"pct": 12,
+"link": "https://www.youtube.com/watch?v=KYctq8FliK4"
+},
+{
+"name": "Dry wrinkled hands",
+"top": "9.1M",
+"pct": 3,
+"link": "https://www.youtube.com/watch?v=pIB3neebwSk"
+}
+]
+}

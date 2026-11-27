@@ -1,0 +1,472 @@
+{
+ "_readme": [
+  "Wan 3.0 on Higgsfield and fal. Since 2026-11-27 an option priced beside Seedance 2.5 on every micro-drama quote (owner: 'this is how we're going to scale ai video'). The house mode for dialogue clips is REFERENCE mode: character, place and product sheets as image references, one voice sample per speaker, an optional silent camera rehearsal; native audio on; 480p 9:16. The start-frame route below stays for single silent shots.",
+  "SOURCES ARE FLAGGED [official] / [vendor] / [anecdotal] / [own test]. Alibaba publishes an official Wan 3.0 prompt guide (sources); limits read live from fal's schema and `higgsfield model get wan3_0` on 2026-11-27. Every rule is draft until a paid take proves it (tests: the open list).",
+  "THE FACTS THAT SHAPE THE DOOR: a start or end picture never travels with references, so reference mode rebuilds the first frame from the sheets; references are named Image N / Video N / Audio N by upload order within each type; there is no negative-prompt field; the prompt may be rewritten by the vendor.",
+  "No brand, product, person or format word appears in this file."
+ ],
+ "model": "wan-3.0",
+ "label": "Wan 3.0 (a person's pick)",
+ "registry_id": "wan-3.0",
+ "read": "2026-11-27",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_model_id": "wan3_0",
+  "higgsfield_cli": "higgsfield generate create wan3_0 --prompt … --start-image <file> --resolution 480p --duration N --aspect_ratio 9:16 --generate_audio false (the plan's credits, signed-in account)",
+  "higgsfield_api_path": "alibaba/wan-3.0/image-to-video (keyed API, same model)",
+  "also": "wan3_0_prime (higher tier, 7.5 credits for 5 s at 480p), wan2_7, wan2_6"
+ },
+ "sources": [
+  "[vendor, live] Higgsfield CLI `higgsfield model get wan3_0` and `generate cost wan3_0`, read 2026-11-08",
+  "https://open.higgsfield.ai/models/alibaba/wan-3.0/image-to-video",
+  "https://fal.ai/models/alibaba/wan-3.0/image-to-video (schema: enable_prompt_expansion, enable_safety_checker)",
+  "https://www.alibabacloud.com/help/en/model-studio/wan3-0-video",
+  "[own test] first take 2026-11-08, job dbefb6cc-30ca-4a43-acc8-52bf548df8a3",
+  "[official] https://help.aliyun.com/en/model-studio/wan3-video-generation-prompt-guide",
+  "[official] https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference",
+  "[official] https://help.aliyun.com/en/model-studio/wan3-video-generation-guide",
+  "[vendor, live] fal openapi schema alibaba/wan-3.0/reference-to-video, read 2026-11-27",
+  "[vendor, live] higgsfield model get wan3_0, read 2026-11-27",
+  "[vendor] https://docs.comfy.org/tutorials/partner-nodes/wan/wan3-0",
+  "[vendor] https://runware.ai/docs/models/alibaba-wan3-0/guides/prompting.md",
+  "[anecdotal] https://help.scenario.com/articles/4856166365-wan-3-0-the-essentials , https://www.eachlabs.ai/blog/wan-3-0-prompting-guide"
+ ],
+ "limits": {
+  "duration_seconds": [
+   2,
+   30
+  ],
+  "smart_duration": "-1 lets the model choose the length; the door always sends a number",
+  "resolutions": [
+   "480p",
+   "720p",
+   "1080p"
+  ],
+  "aspect_ratios": [
+   "auto",
+   "16:9",
+   "9:16",
+   "1:1",
+   "4:3",
+   "3:4"
+  ],
+  "image_formats": [
+   "png",
+   "jpg",
+   "jpeg",
+   "webp"
+  ],
+  "max_images": 2,
+  "start_and_references": "start_image / end_image cannot be combined with image, video or audio references on this door",
+  "max_image_references": 10,
+  "max_video_references": 5,
+  "max_video_seconds_total": 15,
+  "max_audio_clips": 5,
+  "max_audio_seconds_total": 15,
+  "credits_per_second": {
+   "480p": 1,
+   "720p": 1.75,
+   "1080p": 3.5
+  },
+  "price_per_second_usd": "0.05 / 0.10 / 0.20 (480p / 720p / 1080p) on the keyed API, fal and Alibaba",
+  "house": {
+   "role": "an option on every micro-drama quote, picked at the owner's go (2026-11-27); Seedance 2.5 stays the default when he names none",
+   "mode": "reference mode: each speaker's sheet, the place sheet, the product sheet as image references; one voice sample per speaker; optional silent camera rehearsal as Video 1",
+   "resolution": "480p, then the house's own upscale or phone pass",
+   "aspect": "9:16",
+   "sound": "on",
+   "duration": "the shot list's length, 4-15 s typical",
+   "voice_budget": "15 s across all samples: two speakers about 5-7 s each, three about 4-5 s each",
+   "takes": "one take, another only on failure",
+   "start_frame_route": "image-to-video from one approved start picture, sound off: single silent shots only"
+  },
+  "reference_mode": "Reference mode (reference pictures + voices + motion video, no start picture) is the mode a continuous take uses: the picture rides as a reference, so the first frame is rebuilt from it, not copied.",
+  "fal_route": {
+   "endpoint": "alibaba/wan-3.0/reference-to-video",
+   "key": "FAL_KEY",
+   "reference_video_plus_output_max_seconds": 30,
+   "enable_safety_checker": "false turns off fal's own checker only; the vendor still moderates the model ('model_moderated', read 2026-11-09)",
+   "read": "2026-11-09, fal openapi schema and two live calls"
+  },
+  "start_frame_mode": "A start picture with no references: the exact first frame and the script; the model speaks every line in its own voices (our reads are laid after). Takes a first frame in bikinis on Higgsfield (2026-11-09).",
+  "higgsfield_cli_media_flags": "--start-image, --image-references, --audio-references, --video-references; repeat a flag for several files; local paths are uploaded",
+  "output": "MP4, 30 fps [official]",
+  "image_rule": "jpg/jpeg/png (no transparency)/bmp/webp, 240-8000 px a side, aspect within 8:1, 20 MB each [official]",
+  "video_rule": "mp4/mov, 1-15 s each, 15 s total, at least 16 fps, input + output at most 30 s, input seconds billed [official][vendor fal]",
+  "audio_rule": "wav/mp3, 1-15 s each, 15 s total, 15 MB each [official]",
+  "max_references_total": 20,
+  "prompt_max_chars": 20000,
+  "prompt_over_limit": "truncated, not refused [official]",
+  "seed": "not reproducible even when fixed [official]"
+ },
+ "qualities": [],
+ "inputs": [
+  {
+   "name": "prompt",
+   "what": "Overall line, reference block, timed shot list, dialogue, sound, style, negatives, in that order (structure: formula-order).",
+   "allowed": "up to 20,000 characters; attention narrows past a few hundred words [vendor runware]",
+   "we_send": "about 150-300 words in reference mode",
+   "use": "yes",
+   "status": "draft",
+   "source": "[official] prompt guide"
+  },
+  {
+   "name": "start_image",
+   "what": "The approved first picture; the clip starts on it.",
+   "allowed": "1 image",
+   "we_send": "none in reference mode; the approved picture on the start-frame route",
+   "use": "start-frame route only",
+   "status": "draft"
+  },
+  {
+   "name": "end_image",
+   "what": "A last picture the clip settles on.",
+   "allowed": "1 image; needs start_image",
+   "we_send": "only when the shot has its own last picture",
+   "use": "no",
+   "status": "draft"
+  },
+  {
+   "name": "image_references / video_references / audio_references",
+   "what": "Image N = sheets (face, build, clothing; the place; the product), Audio N = one voice sample per speaker, Video N = a silent camera rehearsal; numbered by upload order within each type.",
+   "allowed": "images up to 10, videos up to 5 (15 s, billed), audio up to 5 (15 s); 20 in all",
+   "we_send": "each speaker's sheet, then the place, then the product (3-6); one voice sample per speaker in speaker order; the camera rehearsal when the shot needs it",
+   "use": "yes (reference mode)",
+   "status": "draft",
+   "source": "[official] API reference"
+  },
+  {
+   "name": "resolution",
+   "what": "Output size.",
+   "allowed": "480p, 720p, 1080p (default 720p)",
+   "we_send": "480p",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "duration",
+   "what": "Seconds.",
+   "allowed": "2 to 30, or -1 for smart length (default 5)",
+   "we_send": "the shot's length",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "aspect_ratio",
+   "what": "Output shape.",
+   "allowed": "auto, 16:9, 9:16, 1:1, 4:3, 3:4 (default auto)",
+   "we_send": "9:16",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "generate_audio",
+   "what": "Native generated sound.",
+   "allowed": "true or false (default true)",
+   "we_send": "true in reference mode (native speech, effects, room sound); false on the silent start-frame route",
+   "use": "yes",
+   "status": "draft"
+  },
+  {
+   "name": "enable_thinking",
+   "what": "Extra planning before generation.",
+   "allowed": "true or false (default false)",
+   "we_send": "test on and off (the Studio's fal call sends true today); the effect is unmeasured",
+   "use": "test",
+   "status": "draft",
+   "source": "[vendor fal/higgsfield]; [anecdotal scenario]"
+  },
+  {
+   "name": "enable_prompt_expansion (fal) / prompt_extend (Alibaba)",
+   "what": "An LLM rewrites the prompt before generation.",
+   "allowed": "default true; not exposed on Higgsfield",
+   "we_send": "test false on fal to keep exact lines and timestamps; read actual_prompt when true",
+   "use": "test",
+   "status": "draft",
+   "source": "[vendor fal] off may lower quality; [vendor comfy] off for exact wording; [anecdotal eachlabs] can blur timestamps"
+  }
+ ],
+ "structure": [
+  {
+   "id": "anchor-image",
+   "rule": "With a start picture, say it is the first frame and describe only what changes: the action and the camera.",
+   "ours": "the house clip prompt opens 'Image 1 is the first frame'",
+   "status": "draft",
+   "source": "[own test] 2026-11-08",
+   "applies": "start-frame route"
+  },
+  {
+   "id": "hold-the-framing",
+   "rule": "Say the camera keeps the first frame's framing; left unsaid, the first take pushed in from full body to waist-up within a second.",
+   "ours": "the door adds a framing line to every prompt",
+   "status": "draft",
+   "source": "[own test] 2026-11-08",
+   "applies": "start-frame route"
+  },
+  {
+   "id": "one-action",
+   "rule": "One action per shot, written as visible movement.",
+   "ours": "the recipe's action line",
+   "status": "draft",
+   "source": "[own test] 2026-11-08",
+   "applies": "start-frame route"
+  },
+  {
+   "id": "formula-order",
+   "applies": "reference mode",
+   "rule": "Overall description, reference citations, shots with timestamps (subject, place, move, camera), dialogue, sound, style and mood, negative list. Leave out a section the clip does not need.",
+   "status": "draft",
+   "source": "[official] prompt guide"
+  },
+  {
+   "id": "number-per-type",
+   "applies": "reference mode",
+   "rule": "Name references 'Image N', 'Video N', 'Audio N', counted by upload order within each type; with two or more of a type always use the number.",
+   "status": "draft",
+   "source": "[official] API reference and guide; '@Image1' is one vendor's form, untested here"
+  },
+  {
+   "id": "purpose-per-reference",
+   "applies": "reference mode",
+   "rule": "Say what each reference gives and nothing more: 'Image 1 is <name>, one <man|woman>, a character sheet: face, hair, skin, build and clothing only'; 'Image 3 is the room: layout and light only; nobody from it appears'; 'Video 1 is used only for camera movement; take no people, look or sound from it'.",
+   "status": "draft",
+   "source": "[official] guide: say what each material is for, or features bleed between subjects"
+  },
+  {
+   "id": "subject-lock",
+   "applies": "reference mode",
+   "rule": "One 'Subject locking: <name> Image N, ...' line; restate each person's key traits in the shots; 'consistent throughout' and 'they do not look alike'.",
+   "status": "draft",
+   "source": "[official] guide, multi-character and short-drama examples"
+  },
+  {
+   "id": "voice-timbre-binding",
+   "applies": "reference mode",
+   "rule": "Once per speaker: '<Name>'s voice timbre references Audio N, <register>'; take only the voice characteristics and have the person say the lines below.",
+   "status": "draft",
+   "source": "[official] guide; register in the binding carried over from the Drama Ads Seedance findings [own]"
+  },
+  {
+   "id": "dialogue-format",
+   "applies": "reference mode",
+   "rule": "Each line inside its shot: '<Name> says (<delivery in face and voice words>): \"<exact words>\"' then 'Lip sync.' Name the speaker on every line; never two speakers' lines in one sentence.",
+   "status": "draft",
+   "source": "[official] guide"
+  },
+  {
+   "id": "verbatim-and-language",
+   "applies": "reference mode",
+   "rule": "After the shots: 'Only the quoted lines are spoken, word for word, in <language>, each once, by the named speaker; no other speech.' A shot with no lines says 'No one speaks in this shot.'",
+   "status": "draft",
+   "source": "[official] say 'no dialogue' or it may add some; the language line is an untested Seedance lesson [own]"
+  },
+  {
+   "id": "timed-shots",
+   "applies": "reference mode",
+   "rule": "'Shot N [a-bs]:' windows that touch, 2-5 s each, one bracket style throughout, each ending 'Hard cut.'; 'One continuous shot.' on the first line for a single take. No fast repeated actions.",
+   "status": "draft",
+   "source": "[official] guide; [own test] 2026-11-09: a 3-shot list cut in one call, shot 3 framed the wrong two people"
+  },
+  {
+   "id": "spatial-block",
+   "applies": "reference mode",
+   "rule": "A 'Fixed spatial relationships:' line: who stands left or right, by what landmark, and that nobody crosses.",
+   "status": "draft",
+   "source": "[official] short-drama example"
+  },
+  {
+   "id": "camera-per-shot",
+   "applies": "reference mode",
+   "rule": "Shot size, angle and ONE named move per shot in plain words (handheld follow, push in, pull out, whip pan, snap zoom, orbit, tracking, tilt); no stacked moves. Fits the drama camera recipe: a move in every shot, a cut every 2-3 s.",
+   "status": "draft",
+   "source": "[official] guide; video-production formats/recipes/drama-camera-v1.md"
+  },
+  {
+   "id": "sound-line",
+   "applies": "reference mode",
+   "rule": "Name the room sound and the action sounds in their own sentence and write 'no background music'.",
+   "status": "draft",
+   "source": "[official] guide, background music control"
+  },
+  {
+   "id": "negatives-inline",
+   "applies": "reference mode",
+   "rule": "No negative field exists: end the prompt with 'Negative prompt list:' and only the real risks (subtitles, on-screen text, watermark, a third person, twins or duplicate faces, costume change, face drift, background music).",
+   "status": "draft",
+   "source": "[official] guide; fal and Higgsfield schemas carry no negative_prompt"
+  },
+  {
+   "id": "length",
+   "applies": "reference mode",
+   "rule": "150-300 words; few beats for the seconds, or the end compresses or drops.",
+   "status": "draft",
+   "source": "[vendor runware]; [anecdotal]"
+  }
+ ],
+ "avoid": [
+  {
+   "id": "references-with-start",
+   "text": "Sending reference pictures, clips or sound together with a start picture: the door refuses the mix.",
+   "status": "draft"
+  },
+  {
+   "id": "sound-left-on",
+   "text": "Leaving generated sound on: it is on by default.",
+   "status": "draft",
+   "applies": "start-frame route"
+  },
+  {
+   "id": "names-in-prompt",
+   "text": "Naming a real person, brand or franchise in the prompt: the vendor's moderation checks prompts, pictures and the finished clip.",
+   "status": "draft"
+  },
+  {
+   "id": "expecting-our-voice",
+   "text": "Expecting it to speak our locked voice read from a start picture: on this door a start picture cannot carry audio.",
+   "status": "draft",
+   "applies": "start-frame route"
+  },
+  {
+   "id": "frame-words-with-refs",
+   "applies": "reference mode",
+   "text": "Prompt words that call Image 1 the first frame in reference mode: no frame travels with references, so the model may paste a sheet in as the opening.",
+   "status": "draft",
+   "source": "[official]"
+  },
+  {
+   "id": "multi-person-ref",
+   "applies": "reference mode",
+   "text": "A reference picture with more than one person or a busy background, or one reference doing two jobs.",
+   "status": "draft",
+   "source": "[official] one purpose per material; [anecdotal]"
+  },
+  {
+   "id": "grid-as-frame",
+   "applies": "reference mode",
+   "text": "A storyboard or multi-panel picture with no line saying it is shot guidance only: it is read as one frame.",
+   "status": "draft",
+   "source": "[official]"
+  },
+  {
+   "id": "genre-labels",
+   "applies": "reference mode",
+   "text": "Style labels like a genre name that can turn into on-screen text: describe the look instead.",
+   "status": "draft",
+   "source": "[anecdotal] one clip"
+  },
+  {
+   "id": "similar-voices",
+   "applies": "reference mode",
+   "text": "Two voice samples close in pitch and pace: they blur into one voice.",
+   "status": "draft",
+   "source": "[anecdotal] Wan 2.7, unchecked on 3.0"
+  },
+  {
+   "id": "separate-calls-for-views",
+   "applies": "reference mode",
+   "text": "Two angles of one moment made as two calls: the scene is rebuilt differently; cut them inside one call.",
+   "status": "draft",
+   "source": "[own test] 2026-11-09"
+  }
+ ],
+ "history": [
+  {
+   "who": "owner",
+   "date": "2026-11-08",
+   "about": "Wan 3.0 added to the house as a person's pick for clips, run on the Higgsfield plan's credits"
+  },
+  {
+   "who": "owner",
+   "date": "2026-11-27",
+   "about": "Wan 3.0 is an option on every micro-drama quote, the way to scale AI video; reference-mode prompt rules added from Alibaba's official guide, start-frame rules kept for single silent shots"
+  }
+ ],
+ "tests": [
+  {
+   "at": "2026-11-09",
+   "what": "a 20 s continuous take of a three-person scene, reference mode, two voice samples (4.8 s and 6.1 s), 20 credits on Higgsfield",
+   "result": "the subject walks the line and the handheld camera follows; 9 of 10 lines spoken, one word dropped; a motion video reference was refused by the plan's content filter"
+  },
+  {
+   "at": "2026-11-09",
+   "what": "start-frame mode, 20 s, a written one-take scene (two women walk a line of three men feeling each man's cheeks)",
+   "result": "both takes walked the line and spoke all 10 lines in order, 20 credits each; our reads laid after matched the speaking moments"
+  }
+ ],
+ "camera": {
+  "control": "take.py `camera` (move, angle, framing), a line's own `camera` per beat, `shots` (a shot list cut inside one call), `views` (the same moment once per view, cut line by line); camera control runs on Wan 3.0 and Seedance 2.5 only (ruled 2026-11-09)",
+  "multi_cam_views": "tested 2026-11-09 on Wan 3.0 reference mode (fal), 2 views x 20 s, 2 USD: the cut runs on unbroken words, but two separate calls rebuild the scene differently (the men swap places and one changes face between views), so the views do not match; a model's own shot list inside one call keeps the people and places",
+  "start_frame_per_beat": "[own test 2026-11-09, Higgsfield CLI start-frame mode, 10 s, 10 credits, job a82258b5-35c5-4b8c-b348-39732b2ed6f6] a camera line per beat is followed in order inside one continuous take: starts wide on the line-up, pushes in fast to a close-up on the hands on the first man's jaw, pans right to the second man, holds a two-shot; the exact first frame is kept",
+  "reference_shot_list": "[own test 2026-11-09, fal reference mode, 10 s, 0.50 USD, request 01a1bf20-0ad0-7201-8152-e6877bf7f032] a shot list (Shot 1 0-3 s wide, Shot 2 3-7 s over-the-shoulder close-up, Shot 3 7-10 s low two-shot) is cut inside one call: wide, then over-the-shoulder close on the speaker, then a low two-shot; the third shot framed two different people than asked",
+  "angle": "in start-frame mode the first frame fixes the opening angle; a new angle comes from a move (push, pan, swing) or a cut in the shot list"
+ },
+ "open_tests": [
+  {
+   "n": 1,
+   "test": "4 s, 1 sheet, 1 voice sample whose words differ from the quoted line",
+   "look_for": "the new line in the sample's voice, none of the sample's own words",
+   "credits": 4
+  },
+  {
+   "n": 2,
+   "test": "4 s, Audio 1 is the exact line's recording, prompt says lip-sync to Audio 1",
+   "look_for": "our recording played (an exact locked voice) or a new read",
+   "credits": 4
+  },
+  {
+   "n": 3,
+   "test": "the worked two-speaker clip at 6 s, then the voice uploads swapped with the prompt unchanged",
+   "look_for": "each line stays in the voice its binding names, from the right mouth",
+   "credits": 12
+  },
+  {
+   "n": 4,
+   "test": "'Image 1' against '@Image1', same 5 s two-person prompt",
+   "look_for": "the right face on the right name and line",
+   "credits": 10
+  },
+  {
+   "n": 5,
+   "test": "fal: prompt expansion on and off; Higgsfield once",
+   "look_for": "lines word for word, cuts near their timestamps; Higgsfield's behaviour",
+   "credits": "about 8 + 0.80 USD"
+  },
+  {
+   "n": 6,
+   "test": "thinking on and off, everything else the same",
+   "look_for": "who is in frame in the last shot, dropped words, cut timing",
+   "credits": 16
+  },
+  {
+   "n": 7,
+   "test": "with and without the negative and sound lines",
+   "look_for": "music on a spectrogram, subtitles in frames",
+   "credits": 16
+  },
+  {
+   "n": 8,
+   "test": "3-view sheets against single headshots",
+   "look_for": "twins, face drift, a third person",
+   "credits": 12
+  },
+  {
+   "n": 9,
+   "test": "a silent 4 s 3D rehearsal as Video 1, camera only, on Higgsfield",
+   "look_for": "the camera follows it, nothing of the stand-ins carried, no refusal",
+   "credits": 12
+  },
+  {
+   "n": 10,
+   "test": "15 s, 5 shots, 4 lines",
+   "look_for": "how far cuts and lines land from their seconds, a dropped ending, a repeated last line",
+   "credits": 15
+  },
+  {
+   "n": 11,
+   "test": "the same 8 s prompt with 3 images, then 10",
+   "look_for": "face, outfit and product drift",
+   "credits": 16
+  }
+ ],
+ "example_reference_mode": "Overall: one 8-second vertical live-action micro-drama scene in three shots with hard cuts, handheld phone-camera realism, tension that turns. Two people in frame in every shot.\n\nReferences: Image 1 is <A>, one man, a character sheet: use it only for his face, hair, skin, build and clothing. Image 2 is <B>, one woman, a character sheet: use it only for her face, hair, skin, build and clothing. Image 3 is the kitchen: use it only for the room, its layout and its light; nobody from Image 3 appears.\n<A>'s voice timbre references Audio 1, a low, calm male voice. <B>'s voice timbre references Audio 2, a bright, quick female voice. Take only the voice characteristics from each audio and have each person say the lines below.\nSubject locking: <A> Image 1, <B> Image 2, kitchen Image 3. Each keeps their own face, hair, build and clothing, consistent throughout; they do not look alike.\nFixed spatial relationships: <A> stands at the counter on the left, <B> stands in the doorway on the right; nobody crosses.\n\nShot 1 [0-3s]: medium two-shot at eye level, handheld push in from the doorway toward the counter. <A> turns from the counter to <B>, brows pulled together, mouth tight. <A> says (low, flat): \"You told her before you told me?\" Lip sync. Hard cut.\nShot 2 [3-5.5s]: close-up on <B> over <A>'s shoulder; handheld whip pan onto her. Her eyes drop to the floor, then lift to him; she exhales. <B> says (quiet and quick): \"I didn't know how to tell you.\" Lip sync. Hard cut.\nShot 3 [5.5-8s]: low two-shot from the counter, handheld orbit a quarter turn to the right. <A> sets his mug down; <B> takes one step toward him and stops. No one speaks in this shot.\n\nDialogue: only the two quoted lines are spoken, word for word, in American English, each once, by the named speaker; no other speech.\nSound: kitchen room tone and the mug on the counter; no background music.\nStyle: natural phone-video realism, warm practical kitchen light.\nNegative prompt list: subtitles, on-screen text, watermark, a third person, twins or duplicate faces, costume change, face drift, background music."
+}

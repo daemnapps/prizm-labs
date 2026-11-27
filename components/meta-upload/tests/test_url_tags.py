@@ -17,7 +17,7 @@ from test_cards import Base, NAME
 
 class UrlTags(Base):
     def posted_ad(self, **card):
-        m = FakeMeta("brand-b")
+        m = FakeMeta("brand_b")
         U.upload_card(self.approve(self.card(**card)), m=m, log=lambda *_: None)
         ads = [p for e, p in m.posts if e == "ads"]
         self.assertEqual(len(ads), 1)

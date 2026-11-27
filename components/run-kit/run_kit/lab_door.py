@@ -7,7 +7,7 @@ own command line, read off a small manifest the component keeps.
 
 Why it exists (LD-1 (shared lab door), from the 2026-10-17 ad-line mini setup
 list §5): VE-1 (video-edit mini door) wrote one door by hand
-(tools/video-edit/machine/lab_entry.py); five more would have been copies
+(components/video-edit/machine/lab_entry.py); five more would have been copies
 four to eight (O1). This is that door once, the definitions in each component
 (components rule 5): a `lab_door.json` beside the component's CLI and a stub
 `lab_entry.py` that calls `run()` with it — the stub is what a grant row names.
@@ -299,7 +299,7 @@ def command(m, args, repo, brand, dest, runs_root):
 
 def child_env(env, repo):
     env = dict(env)
-    env["AI_WORKSPACE"] = str(repo)      # runs resolve against this checkout, not ~/Projects/workspace
+    env["AI_WORKSPACE"] = str(repo)      # runs resolve against this checkout, not ~/Projects/ai-workspace
     return env
 
 

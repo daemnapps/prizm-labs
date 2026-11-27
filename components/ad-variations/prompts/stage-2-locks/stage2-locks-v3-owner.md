@@ -80,6 +80,6 @@ Return one fenced json block and nothing else:
      "impact_basis": "ESTIMATE — …"}
   ],
   "lever_order": ["element keys, highest estimated impact first"],
-  "owner_decides": ["a question only the owner can answer, with the fact that raises it"]
+  "the owner_decides": ["a question only the owner can answer, with the fact that raises it"]
 }
 ```

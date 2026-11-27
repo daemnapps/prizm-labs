@@ -1,0 +1,7 @@
+{
+ "_what": "The Studio's Make the AI shots stage (ai_shots.py): starts the production chain's own command for the brief (components/video-production/machine/ai_lane.py: elements, voice, storyboard, pictures from 3D set prints, camera and motion plan per scene, clip plan, clips) and shows the chain's run. No production logic lives in the Studio.",
+ "dry_run": true,
+ "_dry_run": "true (the default): the chain's dry run only; nothing is spent. false: the live run, on the owner's go (it refuses without a passing dry run of the same brief). VIDEO_STUDIO_AI_SHOTS_DRY_RUN=1 forces a dry run on one machine.",
+ "cap_credits": 450,
+ "_cap_credits": "Passed to the chain's live run: it refuses when its dry run's high quote is over this many Higgsfield credits."
+}

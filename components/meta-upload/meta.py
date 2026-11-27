@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The Meta Marketing API, as this lab uses it.
 
-The bulk sheet could never make the ad the owner actually wants — one ad unit per
+The bulk sheet could never make the ad owner actually wants — one ad unit per
 concept with its variations inside, same copy, Meta rotating the picture. The
 sheet has one Image File Name column and one Title, and Meta's own exporter
 says ads with multiple images "can't be imported or exported". The API can,
@@ -13,9 +13,19 @@ through asset_feed_spec. That is why this file exists.
 
 Credential: by name (`PRIZM_META_TOKEN`, or the brand's `token_key`) through
 the one key loader, components/keys/loader.py via mu_keys.py — the environment
-first, then this repo's .env (add the NAME=value line there). Read at call time, never stored in the repo, never printed.
+first, then ~/.upright-keys.env (add the NAME=value line there). Read at call time, never stored in the repo, never printed.
 """
-import json
+import json, shutil, socket, subprocess, tempfile
+
+# IPv4 first: on this network IPv6 to graph-video.facebook.com connects to nothing and hangs, so every upload
+# piece waited out the IPv6 attempt (11 Nov 2026: ~18-35 min a video; the same file over IPv4 goes up in seconds).
+# IPv6 stays as the fallback when a host has no IPv4 address.
+_getaddrinfo = socket.getaddrinfo
+def _v4_first(host, port, family=0, *a, **k):
+    r = _getaddrinfo(host, port, family, *a, **k)
+    return sorted(r, key=lambda x: x[0] != socket.AF_INET)
+if getattr(socket.getaddrinfo, "__name__", "") != "_v4_first":
+    socket.getaddrinfo = _v4_first
 import sys
 import urllib.parse
 import urllib.request
@@ -46,6 +56,32 @@ def token(name="PRIZM_META_TOKEN"):
     return tok
 
 
+COPY_OVER_BYTES = 30_000_000     # a master above this, at a higher bit rate than COPY_KBPS, gets a lighter upload copy (11 Nov 2026: 110 MB 20 Mbps masters took ~35 min each at full size)
+COPY_KBPS = 8000                 # = delivery.SPEC video_kbps; Meta re-encodes every video anyway (1 Nov 2026)
+
+
+def upload_copy(path, over=COPY_OVER_BYTES, kbps=COPY_KBPS):
+    """The file to send Meta: a delivery-size copy (delivery.SPEC) of a heavier master in its own temp folder, else
+    the master itself. Cards filed since 11 Nov 2026 are already at SPEC; this catches older ones.
+    Any failure sends the master, so a copy problem never stops an upload."""
+    p = Path(path)
+    if p.stat().st_size <= over:
+        return p
+    try:
+        import delivery
+        if delivery.meets(p):
+            return p
+        out = Path(tempfile.mkdtemp(prefix="meta-upload-")) / p.name
+        delivery.make(p, out)
+        if 0 < out.stat().st_size < p.stat().st_size:
+            _log(f"  upload copy: {p.stat().st_size // 1000000} MB master, {out.stat().st_size // 1000000} MB sent")
+            return out
+        shutil.rmtree(out.parent, ignore_errors=True)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        pass
+    return p
+
+
 class Meta:
     def __init__(self, brand, tok=None):
         """`brand` is a name ('<brand>') or an already-loaded Brand."""
@@ -56,8 +92,13 @@ class Meta:
         self.PIXEL = self.brand.pixel_id
         self.INSTAGRAM = self.brand.instagram_id
         self._t = tok or token(self.brand.token_key)
+        self.calls = 0              # Meta API calls this object made (a batch counts each request inside it)
+        self._links = {}            # video id -> link_host object name, deleted once Meta has processed it
 
-    def _call(self, path, params=None, post=False, files=None):
+    def _count(self, n=1):
+        self.calls = getattr(self, "calls", 0) + n
+
+    def _call(self, path, params=None, post=False, files=None, count=1):
         params = dict(params or {})
         params["access_token"] = self._t
         url = f"{BASE}/{path.lstrip('/')}"
@@ -69,10 +110,13 @@ class Meta:
         else:
             req = urllib.request.Request(url + "?" + urllib.parse.urlencode(params))
         def send():
+            pace.before_call(log=_log)           # slow down before Meta's limit (usage headers, pace.py)
+            self._count(count)
             with urllib.request.urlopen(req, timeout=120) as r:
+                pace.note_usage(r.headers)
                 return json.loads(r.read() or b"{}")
         # Meta's errors are the useful part — surfaced whole (never the token, which urllib would echo in the
-        # URL); a "busy / slow down" answer waits and tries again first (pace.py, the owner 2026-10-21)
+        # URL); a "busy / slow down" answer waits and tries again first (pace.py, owner 2026-10-21)
         import pace
         return pace.with_retry(send, path.split("?")[0] or "a call", log=_log)
 
@@ -89,7 +133,11 @@ class Meta:
         out += res.get("data", [])
         while res.get("paging", {}).get("next"):
             nxt = res["paging"]["next"]
+            import pace
+            pace.before_call(log=_log)
+            self._count()
             with urllib.request.urlopen(nxt, timeout=120) as r:
+                pace.note_usage(r.headers)
                 res = json.loads(r.read() or b"{}")
             out += res.get("data", [])
         return out
@@ -128,25 +176,68 @@ class Meta:
         """Send a video into the account library -> its id, without waiting for
         Meta to process it (wait_videos does that, for every video of an ad at once).
 
-        Small files go in one multipart post. Anything over CHUNKED_OVER uses
-        Meta's resumable upload (start -> transfer the pieces Meta asks for ->
-        finish) on graph-video, because a one-shot post of a 150 MB master is
-        cut off mid-send (4 Oct 2026: broken pipe on every 2:22 master)."""
+        Small files go in one multipart post. Anything over CHUNKED_OVER goes BY LINK
+        when link_host is set up (one call: Meta fetches the file from a short-lived private
+        link, 11 Nov 2026), else — or when the link route fails — by Meta's resumable upload
+        (start -> transfer the pieces Meta asks for -> finish) on graph-video, because a
+        one-shot post of a 150 MB master is cut off mid-send (4 Oct 2026). `self.last_via`
+        says which way the last video went."""
         import pace
-        p = Path(path)
+        master = Path(path)
         brand = getattr(getattr(self, "brand", None), "name", None) or "unknown"
-        size = p.stat().st_size
-        pace.before_video(brand, size, log=_log)      # never more than the hour's budget (pace.json per_hour)
-        if size > self.CHUNKED_OVER:
-            vid = self._upload_chunked(p, name or p.name)
-        else:
-            vid = self._multipart(f"{BASE}/act_{self.ACCOUNT}/advideos",
-                                  {"name": name or p.name}, ("source", p.name, p.read_bytes()), timeout=900)["id"]
-        pace.sent(brand, size, p.name)
+        p = upload_copy(master)                       # the master stays as it is; Meta gets the lighter copy
+        try:
+            size = p.stat().st_size
+            import link_host
+            via = "link" if size > self.CHUNKED_OVER and link_host.available() else (
+                "chunked" if size > self.CHUNKED_OVER else "multipart")
+            pace.before_video(brand, 0 if via == "link" else size, log=_log)  # the hour's budget (pace.json per_hour)
+            vid = None
+            if via == "link":
+                vid = self._upload_link(p, name or master.name)
+                if not vid:
+                    via = "chunked"
+            if via == "chunked":
+                vid = self._upload_chunked(p, name or master.name)
+            elif via == "multipart":
+                vid = self._multipart(f"{BASE}/act_{self.ACCOUNT}/advideos",
+                                      {"name": name or master.name}, ("source", p.name, p.read_bytes()), timeout=900)["id"]
+            self.last_via = via
+            pace.sent(brand, size, master.name, via=via)
+        finally:
+            if p != master:
+                shutil.rmtree(p.parent, ignore_errors=True)
         return vid
+
+    def _upload_link(self, p, name):
+        """Meta fetches the file from a short-lived private link -> the video id, in ONE call; None on any
+        failure (the caller then sends it chunked). The object is deleted once Meta has processed the video."""
+        import link_host
+        obj = None
+        try:
+            url, obj = link_host.put(p)
+            vid = self._call(f"act_{self.ACCOUNT}/advideos", {"file_url": url, "name": name}, post=True)["id"]
+        except (SystemExit, Exception) as e:  # noqa: BLE001 — any failure falls back to the chunked upload
+            _log(f"  {p.name}: the link upload did not go ({str(e)[:200]}), sending it in pieces instead")
+            if obj:
+                link_host.remove(obj)
+            return None
+        if not hasattr(self, "_links"):
+            self._links = {}
+        self._links[vid] = obj
+        _log(f"  {p.name}: {p.stat().st_size // 1000000} MB sent by link (1 call)")
+        return vid
+
+    def _drop_links(self, ids):
+        import link_host
+        for v in ids:
+            obj = getattr(self, "_links", {}).pop(v, None)
+            if obj:
+                link_host.remove(obj)
 
     def statuses(self, ids):
         """{video id: {"status": …}} for many videos in ONE HTTP request (POST / batch=…)."""
+        self._count(max(0, len(ids) - 1))     # Meta counts every request inside a batch; post() counts one
         res = self.post("", batch=[{"method": "GET", "relative_url": f"{v}?fields=status"} for v in ids],
                         include_headers="false")
         out = {}
@@ -177,7 +268,9 @@ class Meta:
                 st = ((res.get(vid) or {}).get("status") or {}).get("video_status")
                 if st == "ready":
                     left.remove(vid)
+                    self._drop_links([vid])          # Meta has the file: the private link copy goes
                 elif st == "error":
+                    self._drop_links([vid])
                     raise SystemExit(f"Meta could not process video {names.get(vid, vid)}")
             if not left:
                 return
@@ -200,10 +293,14 @@ class Meta:
         req = urllib.request.Request(url, data=b"".join(parts),
                                      headers={"Content-Type": f"multipart/form-data; boundary={boundary}"})
 
-        def send():
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return json.loads(r.read() or b"{}")
         import pace
+
+        def send():
+            pace.before_call(log=_log)
+            self._count()
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                pace.note_usage(r.headers)
+                return json.loads(r.read() or b"{}")
         return pace.with_retry(send, f"the {fields.get('upload_phase') or 'upload'} step", log=_log)
 
     def _upload_chunked(self, p, name, tries=4):
@@ -214,10 +311,13 @@ class Meta:
         s = self._multipart(url, {"upload_phase": "start", "file_size": size})
         sid, vid = s["upload_session_id"], s["video_id"]
         a, b = int(s["start_offset"]), int(s["end_offset"])
+        t0, sent_s, pieces, biggest = time.time(), 0.0, 0, 0
         with open(p, "rb") as f:
             while a < b:
                 f.seek(a)
                 piece = f.read(b - a)
+                pieces, biggest = pieces + 1, max(biggest, len(piece))
+                t1 = time.time()
                 for n in range(tries):
                     try:
                         r = self._multipart(url, {"upload_phase": "transfer", "upload_session_id": sid, "start_offset": a},
@@ -227,10 +327,13 @@ class Meta:
                         if n == tries - 1:
                             raise SystemExit(f"video {p.name}: a piece kept failing at byte {a} — run again, it resumes")
                         time.sleep(5 * (n + 1))
+                sent_s += time.time() - t1
                 a, b = int(r["start_offset"]), int(r["end_offset"])
                 if a < b:
                     import pace
                     pace.between_chunks()
+        _log(f"  {p.name}: {size // 1000000} MB in {pieces} pieces (largest {biggest // 1000} KB), "
+             f"{sent_s / 60:.1f} min sending, {(time.time() - t0) / 60:.1f} min in all")
         done = self._multipart(url, {"upload_phase": "finish", "upload_session_id": sid, "title": name})
         if not done.get("success", True):
             raise SystemExit(f"Meta did not accept video {p.name}: {json.dumps(done)[:300]}")

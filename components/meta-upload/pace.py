@@ -1,4 +1,4 @@
-"""pace — the uploader moves like a person, not a script (the owner, 21 Oct 2026).
+"""pace — the uploader moves like a person, not a script (owner, 21 Oct 2026).
 
 Three things, all set in pace.json:
 
@@ -10,6 +10,11 @@ Three things, all set in pace.json:
 * **Busy means wait, not quit.** A 5xx from Meta, or one of Meta's own "slow down / try again" error codes, waits
   (45 s, 2 min, 5 min, 10 min, each with a little jitter) and tries the same call again. Only after the last wait
   does it stop, and the upload resumes from upload-state.json on retry.
+
+* **Meta's own meters.** Every reply's usage headers (x-business-use-case-usage, x-ad-account-usage, x-app-usage)
+  are read (note_usage); before the next call the uploader slows as the top meter climbs past usage.slow_at %, and
+  past usage.pause_at % (or when Meta names a time to regain access) waits that out (before_call). So a batch slows
+  down before Meta's limit instead of failing on it (11 Nov 2026: code 17 / 2446079 on development access).
 
 `META_PACE=off` turns every wait off (tests only)."""
 import json, os, random, time
@@ -77,6 +82,9 @@ def budget_wait(brand, size, log=None, now=None):
     rows = _recent(brand, now)
     cap = CFG["per_hour"]
     rows = [r for r in rows if not r.get("card_done")]
+    for r in rows:                         # a video Meta fetched by link sent no bytes from here (pace.json _per_hour_link)
+        if r.get("via") == "link":
+            r["bytes"] = 0
     sent, n = sum(r.get("bytes", 0) for r in rows), len(rows)
     if sent + size <= cap["bytes"] and n + 1 <= cap["videos"]:
         return 0
@@ -121,11 +129,84 @@ def card_done(brand, name):
         fh.write(json.dumps({"t": time.time(), "bytes": 0, "card_done": name}) + "\n")
 
 
-def sent(brand, size, name):
+def sent(brand, size, name, via=None):
     f = _log_file(brand)
     f.parent.mkdir(parents=True, exist_ok=True)
+    row = {"t": time.time(), "bytes": size, "file": name}
+    if via:
+        row["via"] = via
     with f.open("a") as fh:
-        fh.write(json.dumps({"t": time.time(), "bytes": size, "file": name}) + "\n")
+        fh.write(json.dumps(row) + "\n")
+
+
+# ---- Meta's usage meters ----------------------------------------------------------------------------------------
+METERS = ("call_count", "total_cputime", "total_time", "acc_id_util_pct")
+USAGE = {"top": 0.0, "regain_s": 0, "t": 0.0, "tier": None}     # the latest reading, this process
+
+
+def read_usage(headers):
+    """(top %, seconds until Meta gives access back, access tier) from one reply's headers. Missing = (0, 0, None)."""
+    top, regain, tier = 0.0, 0, None
+    for h in ("x-business-use-case-usage", "x-ad-account-usage", "x-app-usage"):
+        try:
+            stack = [json.loads((headers.get(h) if headers else None) or "null")]
+        except (ValueError, TypeError):
+            continue
+        while stack:
+            x = stack.pop()
+            if isinstance(x, dict):
+                for k, v in x.items():
+                    if k in METERS and isinstance(v, (int, float)):
+                        top = max(top, float(v))
+                    elif k == "estimated_time_to_regain_access" and isinstance(v, (int, float)):
+                        regain = max(regain, int(v) * 60)           # minutes
+                    elif k == "reset_time_duration" and isinstance(v, (int, float)) and top >= 100:
+                        regain = max(regain, int(v))                # seconds
+                    elif k == "ads_api_access_tier" and isinstance(v, str):
+                        tier = v
+                    elif isinstance(v, (dict, list)):
+                        stack.append(v)
+            elif isinstance(x, list):
+                stack += x
+    return top, regain, tier
+
+
+def note_usage(headers):
+    """Keep the latest meter reading (every Meta reply, errors included)."""
+    top, regain, tier = read_usage(headers)
+    if top or regain or tier:
+        USAGE.update(top=top, regain_s=regain, t=time.time(), tier=tier or USAGE["tier"])
+    return top
+
+
+def usage_wait(now=None):
+    """Seconds to wait before the next call, from the latest meter reading (0 = go)."""
+    if off() or not USAGE["t"]:
+        return 0
+    u = CFG.get("usage") or {}
+    now = now or time.time()
+    left_regain = max(0, USAGE["t"] + USAGE["regain_s"] - now)
+    if left_regain:
+        return left_regain + 5
+    top = USAGE["top"]
+    if top >= u.get("pause_at", 80):
+        return max(0, USAGE["t"] + u.get("pause_min_s", 300) - now)
+    lo = u.get("slow_at", 50)
+    if top >= lo:
+        a, b = u.get("slow_s", [4, 20])
+        span = max(1.0, u.get("pause_at", 80) - lo)
+        return a + (b - a) * min(1.0, (top - lo) / span)
+    return 0
+
+
+def before_call(log=None):
+    """Slow down before Meta's limit, never run into it."""
+    w = usage_wait()
+    if w:
+        if log and w >= 30:
+            log(f"  pace: Meta's usage meter is at {USAGE['top']:.0f}%, waiting {w / 60:.1f} min before the next call")
+        time.sleep(w)
+    return w
 
 
 def is_busy(code, body=""):
@@ -154,10 +235,12 @@ def with_retry(send, describe, log=None):
             return send()
         except urllib.error.HTTPError as e:
             body = e.read().decode("utf8", "replace")
+            note_usage(getattr(e, "headers", None))
             if i < len(waits) and is_busy(e.code, body):
+                w = max(waits[i], usage_wait())          # Meta's own "regain access in N min" wins over our guess
                 if log:
-                    log(f"  Meta is busy ({e.code}) on {describe}, waiting {waits[i] / 60:.1f} min then trying again")
-                time.sleep(waits[i])
+                    log(f"  Meta is busy ({e.code}) on {describe}, waiting {w / 60:.1f} min then trying again")
+                time.sleep(w)
                 continue
             raise SystemExit(f"Meta {e.code}: {body[:900]}"
                              + (" — Meta stayed busy through every wait; retry later, it resumes" if is_busy(e.code, body) else ""))

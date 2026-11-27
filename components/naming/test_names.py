@@ -64,7 +64,7 @@ class BriefSpellings(unittest.TestCase):
 
 class PerProductFixture(unittest.TestCase):
     """A temp workspace: brand `acme` with an old shared-count register
-    (p001 no product, p005 nova, p006 face-scrub) and three CRUSH briefs
+    (p001 no product, p005 flex, p006 face-scrub) and three CRUSH briefs
     numbered per product in its own briefs.json, one of them with a code."""
 
     def setUp(self):
@@ -72,17 +72,17 @@ class PerProductFixture(unittest.TestCase):
         self.D = D
         self.td = Path(tempfile.mkdtemp())
         (self.td / "brands" / "acme" / "briefs").mkdir(parents=True)
-        (self.td / "tools" / "image-teardown").mkdir(parents=True)
+        (self.td / "components" / "image-teardown").mkdir(parents=True)
         crush = [{"brief": f"brief-000{n}", "product": "crush", "count": N.PER_PRODUCT,
                   "title": f"crush {n}", "aliases": ["ac-01"] if n == 1 else []} for n in (1, 2, 3)]
-        old = [{"brief": "brief-0005", "product": "nova", "title": "old nova"}]
+        old = [{"brief": "brief-0005", "product": "flex", "title": "old flex"}]
         (self.td / "brands/acme/briefs/briefs.json").write_text(json.dumps({"briefs": crush + old}))
         reg = {"briefs": {
             "p001": {"id": "p001", "brief": "brief-0001", "brand": "acme", "product": None},
-            "p005": {"id": "p005", "brief": "brief-0005", "brand": "acme", "product": "nova"},
+            "p005": {"id": "p005", "brief": "brief-0005", "brand": "acme", "product": "flex"},
             "p006": {"id": "p006", "brief": "brief-0006", "brand": "acme", "product": "face-scrub"}},
             "retired": {"p007": {"brand": "acme", "product": "face-scrub"}}}
-        self.reg_file = self.td / "tools/image-teardown/briefs.json"
+        self.reg_file = self.td / "components/image-teardown/briefs.json"
         self.reg_file.write_text(json.dumps(reg))
         saved = (N.WS, N._ALIASES, D.WS, D.REGISTER)
         N.WS, D.WS, D.REGISTER = self.td, self.td, self.reg_file
@@ -99,21 +99,21 @@ class PerProductFixture(unittest.TestCase):
 
 
 class PerProduct(PerProductFixture):
-    """the owner, 2026-10-01: "brief numbers count per brand AND product — each
+    """owner, 2026-10-01: "brief numbers count per brand AND product — each
     product starts at 1 inside its brand." Older briefs keep their numbers."""
 
     def test_next_number_per_brand_and_product(self):
         rows = self.rows()
         self.assertEqual(N.next_brief_number(rows, "acme", "crush"), 4)
-        self.assertEqual(N.next_brief_number(rows, "acme", "nova"), 6)
+        self.assertEqual(N.next_brief_number(rows, "acme", "flex"), 6)
         self.assertEqual(N.next_brief_number(rows, "acme", "face-scrub"), 8)     # retired p007 stays taken
         self.assertEqual(N.next_brief_number(rows, "acme", "a-product-not-made-yet"), 1)
         self.assertEqual(N.next_brief_number(rows, "other", "crush"), 1)         # brands never share
 
     def test_old_briefs_with_no_product_do_not_block_a_product(self):
         rows = [{"brand": "x", "product": None, "brief": "brief-0007"},
-                {"brand": "x", "product": "nova", "brief": "brief-0002"}]
-        self.assertEqual(N.next_brief_number(rows, "x", "nova"), 3)
+                {"brand": "x", "product": "flex", "brief": "brief-0002"}]
+        self.assertEqual(N.next_brief_number(rows, "x", "flex"), 3)
         self.assertEqual(N.next_brief_number(rows, "x", "crush"), 1)
         self.assertEqual(N.next_brief_number(rows, "x", None), 8)
 
@@ -128,14 +128,14 @@ class PerProduct(PerProductFixture):
     def test_old_ids_unchanged(self):
         self.assertEqual(N.brief_id("p001"), "brief-0001")
         self.assertEqual(N.brief_code("brief-0001"), "p001")
-        self.assertEqual(N.brief_header("acme", "brief-0005")["title"], "old nova")
-        self.assertEqual(N.brief_header("acme", "p005")["title"], "old nova")
-        self.assertEqual(N.brief_header("acme", "brief-0005", "bodyscrub")["title"], "old nova")  # old word, old brief
+        self.assertEqual(N.brief_header("acme", "brief-0005")["title"], "old flex")
+        self.assertEqual(N.brief_header("acme", "p005")["title"], "old flex")
+        self.assertEqual(N.brief_header("acme", "brief-0005", "bodyscrub")["title"], "old flex")  # old word, old brief
 
     def test_the_product_picks_between_briefs_sharing_a_number(self):
         self.assertEqual(N.brief_header("acme", "brief-0001", "crush")["title"], "crush 1")
         self.assertEqual(N.brief_header("acme", "acme_crush_brief-0002")["title"], "crush 2")
-        self.assertIsNone(N.brief_header("acme", "brief-0001", "nova"))        # the old p001: no header
+        self.assertIsNone(N.brief_header("acme", "brief-0001", "flex"))        # the old p001: no header
 
     def test_brand_and_number_alone_is_refused_when_shared(self):
         with self.assertRaises(N.AmbiguousBrief) as cm:
@@ -165,7 +165,7 @@ class DeliveryPerProduct(PerProductFixture):
         self.assertEqual((self.m("AC-01 delivery")["brief"], self.m("AC-01 delivery")["product"]), ("brief-0001", "crush"))
         self.assertEqual(self.m("brief-0002 crush")["product"], "crush")
         self.assertIsNone(self.m("p001")["product"])                   # pNNN is the old count's spelling
-        self.assertEqual(self.m("p005")["product"], "nova")
+        self.assertEqual(self.m("p005")["product"], "flex")
         self.assertIsNone(self.m("brief-0004 crush"))                  # not issued yet: never the old p004
 
 

@@ -311,7 +311,7 @@ def stdlib_shadows(root, c):
     """A .py file in the component named like one of Python's own modules (platform, copy,
     email, calendar, profile …). When a script in that folder runs, Python puts the folder
     first on the import path, so ANY library in that run that imports the real module gets
-    this file instead — the owner's three-doctors-2 died exactly so (video-production's
+    this file instead — owner's three-doctors-2 died exactly so (video-production's
     platform.py, 2026-10-19; LD-19 (calendar shadow fix) and LD-27 (platform shadow fix)).
     [(file, line)]."""
     if not os.access(MINI_PY, os.X_OK):

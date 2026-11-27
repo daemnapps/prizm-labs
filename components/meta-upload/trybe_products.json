@@ -1,0 +1,9 @@
+{
+ "_what": "Trybe's product names -> our ONE product id (components/naming names.product_ids), per brand. Read by feed_creator.py --trybe before naming's own aliases. A Trybe name not here and not known to naming is refused, never guessed. Main session ruling 2026-11-15 (creator system, station 5).",
+ "status": "draft",
+ "brands": {
+  "Brand A": {
+   "FLEX™ Pro Vibrating Face Brush": "flex-face-brush"
+  }
+ }
+}

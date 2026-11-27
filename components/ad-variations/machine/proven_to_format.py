@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""proven_to_format.py — proven ad → new format, one batch at a time (the owner, 5 Oct 2026).
+"""proven_to_format.py — proven ad → new format, one batch at a time (owner, 5 Oct 2026).
 
     python3 proven_to_format.py check <batch>            what is broken down, what is missing
     python3 proven_to_format.py prep  <batch> [--go]     the run.py commands that fill the gaps (--go runs them)
@@ -8,7 +8,7 @@
     python3 proven_to_format.py inject  <batch>   3 Injection prompts per square (chain's stage-3 prompt + winner slot)
     python3 proven_to_format.py squares <batch>   each written Injection becomes its own chain run
     python3 proven_to_format.py elements <batch>  Station 3.1 element lists (banked / to make) for every green ad
-    python3 proven_to_format.py approve  <batch>  the owner's "elements ok" for every green ad at once (skips any with gaps)
+    python3 proven_to_format.py approve  <batch>  owner's "elements ok" for every green ad at once (skips any with gaps)
     python3 proven_to_format.py produce  <batch> [--go]  hand approved ads to production (Station 4)
     python3 proven_to_format.py editor   <batch> [--go]  every ad with clips → the editor's queue folder, named by its brief
     python3 proven_to_format.py step  <batch> <square run name>   one step for a session writing Claude stages itself
@@ -21,9 +21,9 @@ read an alternate tree (a fuller extract of the shared repo) when this checkout 
 
 The batch is a grid: proven winners (rows, already torn down by the video chain) × fresh format swipes (columns).
 Winner side needs 1 Teardown + 1b Doctrine (file 1c-doctrine.md) + the transcript. Format side needs
-0 Triage → 1 Teardown → 2 Spec. Per square the chain then runs 3 Injection → the stage 4 loop (the owner's pick) →
+0 Triage → 1 Teardown → 2 Spec. Per square the chain then runs 3 Injection → the stage 4 loop (owner's pick) →
 5 Brief (AI lane) → Viewer Check → 6 Frames → 7 Final brief. Stage names are the chain's own
-(tools/video-teardown/machine/chain.py). Nothing here queues a square; the owner picks them on the page.
+(components/video-teardown/machine/chain.py). Nothing here queues a square; owner picks them on the page.
 Standard library only; ffmpeg/magick only for thumbnails.
 """
 import argparse, base64, json, os, re, shlex, subprocess, sys
@@ -50,7 +50,7 @@ def _no_mount():
 
 
 SA = DI.mount() or _no_mount()
-TEARDOWN = "tools/video-teardown/machine"
+TEARDOWN = "components/video-teardown/machine"
 # A format's swipe video is read through the swipe home: the definition records
 # keep the path they were written with, and swipe_home.resolve() maps it to today's.
 for _r in HERE.parents:
@@ -66,7 +66,7 @@ def _vt_workdir():
     if m is None:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "vt_workdir", REPO / "tools" / "video-teardown" / "machine" / "workdir.py")
+            "vt_workdir", REPO / "components" / "video-teardown" / "machine" / "workdir.py")
         m = importlib.util.module_from_spec(spec)
         sys.modules["vt_workdir"] = m
         spec.loader.exec_module(m)
@@ -85,7 +85,7 @@ RUN_ORDER = [("0", "0-triage.md"), ("1", "1-teardown.md"), ("1k", "1k-culture.md
 OPEN_ITEM = ("3 Injection: the chain's filled stage-3 prompt for the format + the winner slot "
              "(prompts/stage-3-winner-slot/stage3-winner-slot-v1-owner.md: the winner's 1 Teardown transcript + "
              "1b Doctrine) — composed per square into runs/ad-variations/<brand>/p2f-<winner>__<code>/sent.md; "
-             "the session writes 3-injection.md beside it. Approved by the owner 2026-10-05 (\"run them all\").")
+             "the session writes 3-injection.md beside it. Approved by owner 2026-10-05 (\"run them all\").")
 
 
 # ---------- batch + files ----------
@@ -122,7 +122,7 @@ CONCEPT_SLOT = COMP / "prompts" / "stage-3-concept-slot"
 
 
 def is_concept(w):
-    """A row that is an approved outlier-brief concept, not a torn-down winner (the owner, 12 Oct 2026)."""
+    """A row that is an approved outlier-brief concept, not a torn-down winner (owner, 12 Oct 2026)."""
     return w.get("kind") == "concept"
 
 
@@ -207,8 +207,8 @@ def cmd_check(a):
 # ---------- prep ----------
 
 def winner_video(w):
-    m = re.search(r"\*\*Source\*\* (.+?)\s*$", rd(SA / "tools/video-teardown/swipes" / short(w) / "asset.md"), re.M)
-    return m.group(1) if m else f"<the winner's video — Source line of Shared Assets/tools/video-teardown/swipes/{short(w)}/asset.md>"
+    m = re.search(r"\*\*Source\*\* (.+?)\s*$", rd(SA / "components/video-teardown/swipes" / short(w) / "asset.md"), re.M)
+    return m.group(1) if m else f"<the winner's video — Source line of Shared Assets/components/video-teardown/swipes/{short(w)}/asset.md>"
 
 
 def run_cmd(video, b, label, start=None, stop="2", post_url=None):
@@ -266,11 +266,11 @@ def cmd_prep(a):
             waiting = sorted(p.name for p in hand.glob("*.prompt.md") if not (hand / p.name.replace(".prompt", "")).is_file())
             print(f"  → exit {r.returncode}" + (f"; waiting for the session: {', '.join(waiting)} in {hand}" if waiting else ""))
     if todo:
-        print("\nClaude stages are written by the session, always (the owner, 5 Oct 2026). Each command carries "
+        print("\nClaude stages are written by the session, always (owner, 5 Oct 2026). Each command carries "
               "DAEMN_HAND_DIR (a hand/ folder inside its run): at a Claude stage the run stops and leaves "
               "<stage>.prompt.md there; the session writes <stage>.md beside it (same name, no .prompt) and runs "
               "the same command again with --from <that stage>. Every check still applies to what the session wrote.")
-    print("\nNo square is queued by this. the owner picks squares on the page.\n" + OPEN_ITEM)
+    print("\nNo square is queued by this. owner picks squares on the page.\n" + OPEN_ITEM)
 
 
 # ---------- page ----------
@@ -500,21 +500,21 @@ def cmd_page(a):
 
 # ---------- queue ----------
 
-QUEUE_DOC = """How a session works the queue (the owner says "run the queue"):
+QUEUE_DOC = """How a session works the queue (owner says "run the queue"):
 
 1. Read the requests the page saved: ArtifactData, action "list", collection "requests", url = the page's artifact
    url. Each doc is requests/<winner run>__<format code>:
      concept (winner run path) · concept_name (ad name) · format (swipe record path) · format_name · format_id
      target · product · avatar · offer · batch · state ("queued") · at · by
-2. What each target means (stage names from tools/video-teardown/machine/chain.py):
+2. What each target means (stage names from components/video-teardown/machine/chain.py):
      stage2  2 Spec — the format is broken down: 0 Triage → 1 Teardown → 2 Spec. `prep <batch>` prints the command.
      stage3  3 Injection — the winner's content (script, mechanism, proof, offer logic) + product + offer go INTO
              the format's 2 Spec. One chain run per square, label sq-<winner run>-x-<format code>: copy the
              format run's stages/ into that run folder, then run.py ... --from 3 --to 3. BLOCKED on the open item.
      stage5  through the stage 4 loop (4a Reading · 4b Hooks · 4c Placement · 4d Expansion · 4e Close · 4f Audit ·
-             4g Spice — only the parts the owner picked, asked in chat) to 5 Brief, AI lane (--route ai). The Viewer
+             4g Spice — only the parts owner picked, asked in chat) to 5 Brief, AI lane (--route ai). The Viewer
              Check (Marketing Chain Checks) runs by itself after every stage-5 brief. Then 6 Frames → 7 Final brief.
-3. Questions go to the owner in chat, plainly. The page carries none.
+3. Questions go to owner in chat, plainly. The page carries none.
 4. When a square is done: set its doc's state to "done" (pin if_version), rebuild the page (`page <batch>`) and
    republish over the same url.
 """
@@ -593,7 +593,7 @@ def next_stage(st):
 
 
 def holds(d):
-    """Ids in the run's hold notes: (pass — the swipe's own shape, per the owner 2026-10-06; fix — claims, offer, rules)."""
+    """Ids in the run's hold notes: (pass — the swipe's own shape, per owner 2026-10-06; fix — claims, offer, rules)."""
     ok, fix = set(), set()
     for f in d.glob("*.md"):
         if not re.fullmatch(r"[A-Z0-9-]+\.md", f.name):
@@ -614,7 +614,7 @@ def fix_audit(d, ids, offer):
               "Change nothing else: the structure, timings and every other line stay as they are. Return ONLY the full "
               "corrected script, nothing before or after it.\n\n=== THE FAILED CHECKS ===\n" + rd(d / "AUDIT-HOLD.md") +
               "\n\n=== THE SCRIPT ===\n" + rd(script))
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): started through run_kit's claude_door
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): started through run_kit's claude_door
     # by the teardown chain's own _claude_run (its clean environment, its credential order).
     r = _chain_run()(["--model", "opus", "--allowed-tools", ""], prompt, timeout=900, env=_chain_env())
     if r.returncode or len(r.stdout.strip()) < 0.6 * len(rd(script)):
@@ -843,7 +843,7 @@ def cmd_squares(a):
 
 # ---------- production hand-off: element lists → one approval → production ----------
 
-VP = REPO / "tools" / "video-production" / "machine"
+VP = REPO / "components" / "video-production" / "machine"
 
 
 def prod_dir(b, d):
@@ -877,7 +877,7 @@ def cmd_elements(a):
 
 
 def cmd_approve(a):
-    """the owner's "elements ok" for every green ad at once (Station 3.3). An ad with anything still to make is
+    """owner's "elements ok" for every green ad at once (Station 3.3). An ad with anything still to make is
     skipped and named — never approved past a gap."""
     b = load(a.batch)
     for d, f in green_squares(b):
@@ -901,19 +901,19 @@ def cmd_produce(a):
 
 
 HANDOFF = REPO / "lab" / "owner" / "handoff-standard" / "skill" / "handoff.py"   # the team's hand-off standard
-VE = REPO / "tools" / "video-edit" / "machine"
-BRIEFS = REPO / "tools" / "image-teardown" / "tools" / "briefs.py"
+VE = REPO / "components" / "video-edit" / "machine"
+BRIEFS = REPO / "components" / "image-teardown" / "tools" / "briefs.py"
 
 
 def _register_row(b, d):
-    """The ad's row in the brief register (tools/image-teardown/briefs.json), found by its chain run."""
-    reg = json.loads(rd(REPO / "tools" / "image-teardown" / "briefs.json") or "{}").get("briefs") or {}
+    """The ad's row in the brief register (components/image-teardown/briefs.json), found by its chain run."""
+    reg = json.loads(rd(REPO / "components" / "image-teardown" / "briefs.json") or "{}").get("briefs") or {}
     rows = reg.values() if isinstance(reg, dict) else reg
     return next((x for x in rows if x.get("run") == d.name and x.get("brand") == b["brand"]), None)
 
 
 def cmd_editor(a):
-    """Station 4 → the editor (the owner, 2026-10-09: "I will just assign briefs to my editor to execute directly from
+    """Station 4 → the editor (owner, 2026-10-09: "I will just assign briefs to my editor to execute directly from
     the google drive"). Every ad whose clips are made gets ONE video-editor hand-off: its brief number in the
     register, its edit kit (video-edit `from-run`: clips in scene order, voice, music, sound, timing), and a folder
     named by the brief's short form, brand_product_brief, in Shared Assets/runs/handoffs/video-editor/<brand>/ — the
@@ -935,7 +935,7 @@ def cmd_editor(a):
             if not row:
                 print(f"{d.name}: the brief register refused — {(r.stderr or r.stdout).strip()[-300:]}"); continue
             # the register points at the brief production made the clips from
-            p = REPO / "tools" / "image-teardown" / "briefs.json"
+            p = REPO / "components" / "image-teardown" / "briefs.json"
             reg = json.loads(p.read_text())
             for x in (reg["briefs"].values() if isinstance(reg["briefs"], dict) else reg["briefs"]):
                 if x.get("run") == d.name and x.get("brand") == b["brand"]:

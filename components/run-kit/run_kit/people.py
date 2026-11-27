@@ -3,9 +3,9 @@
 
 A person is the team/people/<id>/ whose identity.json lists the git email —
 the exact address, case-insensitive — and NEVER the email's local part. The
-local part is right only when it happens to equal the folder name: the team's
-clone signs as pm-primary@company.com (team/people/pm/), the owner's as
-owner@companyllc.com (team/people/owner/). Eight places guessed by the
+local part is right only when it happens to equal the folder name: email_lead's
+clone signs as email_lead@company.com (team/people/email_lead/), owner's as
+owner@example_com (team/people/owner/). Eight places guessed by the
 local part; they all ask here now. Unmapped or ambiguous is REFUSED with the
 fix named (put the address in your team/people/<you>/identity.json), never
 guessed onto a record.

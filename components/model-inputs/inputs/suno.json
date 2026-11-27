@@ -2,7 +2,7 @@
  "model": "suno",
  "medium": "music",
  "_readme": [
-  "Suno makes the song in every song ad (the owner, 2026-10-28: \"for all song ads, we're just using Suno. It's the best.\"). It has no API: the song-ad chain writes the boxes from this sheet (tools/video-production/machine/song.py --suno) and a person or a browser session types them into suno.com; the take comes back through the song gate (song.py --from-file).",
+  "Suno makes the song in every song ad (the owner, 2026-10-28: \"for all song ads, we're just using Suno. It's the best.\"). It has no API: the song-ad chain writes the boxes from this sheet (components/video-production/machine/song.py --suno) and a person or a browser session types them into suno.com; the take comes back through the song gate (song.py --from-file).",
   "Registry id `suno` (components/models, transport manual); the Generative Model House's sound.song names it.",
   "No brand, product, person or format word appears in this file.",
   "Draft: every entry is status draft until the owner approves it."
@@ -21,12 +21,12 @@
   "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026",
   "https://roo.beehiiv.com/p/suno-prompting",
   "https://jackrighteous.com/en-us/blogs/guides-using-suno-ai-music-creation/advanced-suno-prompt-engineering-guide",
-  "[ours] tools/video-production/SONG-CHAIN.md",
-  "[ours] tools/video-production/formats/song-ad.md"
+  "[ours] components/video-production/SONG-CHAIN.md",
+  "[ours] components/video-production/formats/song-ad.md"
  ],
  "limits": {
   "style_box_chars": "about 1,000 on v5 / v5.5 (community-tested; Suno publishes no limits table); older v4 about 200; text past the limit is cut silently",
-  "lyrics_box_chars": "sources conflict: about 3,000 or up to 5,000; stay near 2,500",
+  "lyrics_box_chars": "sources conflict: about 3,000 or up to 5,000; aim near 2,500. Seen 2026-11-20: a take was made from about 3,700 characters pasted in one box, sung through to the end. The door refuses past 5,000.",
   "title_chars": "about 100 (one third-party source)",
   "style_descriptors": "3 to 5 simple, 8 to 15 detailed, about 20 maximum; sweet spot 4 to 7",
   "genres_max": 3,
@@ -81,7 +81,7 @@
    "source": [
     "https://github.com/mttkllr/suno-field-guide",
     "https://roo.beehiiv.com/p/suno-ai-prompts-that-actually-work-in-v5-5-2026",
-    "[ours] tools/video-production/formats/song-ad.md"
+    "[ours] components/video-production/formats/song-ad.md"
    ]
   },
   {
@@ -316,7 +316,7 @@
    "rule": "Whatever Suno makes goes through the same song gate as any song ad: every script line heard in order, last line finished. Suno may sing words the lyrics do not hold.",
    "ours": "song gate on the downloaded file",
    "status": "draft",
-   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+   "source": "[ours] components/video-production/SONG-CHAIN.md"
   }
  ],
  "avoid": [
@@ -384,7 +384,7 @@
    "id": "artist-names",
    "text": "Naming a living artist as the style: the song-ad style is a ruled row, no free text.",
    "status": "draft",
-   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+   "source": "[ours] components/video-production/SONG-CHAIN.md"
   }
  ]
 }

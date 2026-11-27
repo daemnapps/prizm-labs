@@ -1,0 +1,17 @@
+{
+ "kind": "model-outcome",
+ "title": "Model outcomes",
+ "note": "One record per picture try and per add, written by components/email-production/adapter/try_picture.py, LD-83 (picture try first): which model made it (the registry id, components/models/models.json, and the door), for what purpose and brand, what the judges said, whether the person picked it and after how many tries, and the registry's stated price or \"not on record\". Item = <run>-<P code>-try-<n>; reviewer = the person. One record per event, never an edit of an earlier one; an add writes its own record with picked true. Read later to rank models per purpose and in general (the model house's choices() purpose seam); never written into components/models/ or the model house.",
+ "open_items": true,
+ "items": [],
+ "verdict_fields": [
+  { "key": "model", "type": "text", "label": "Model (registry id)" },
+  { "key": "door", "type": "text", "label": "Door" },
+  { "key": "purpose", "type": "text", "label": "Purpose" },
+  { "key": "brand", "type": "text", "label": "Brand" },
+  { "key": "judge", "type": "json", "label": "Judge (result + failing checks, or \"not judged\")" },
+  { "key": "picked", "type": "boolean", "label": "Picked" },
+  { "key": "tries_before_pick", "type": "number", "label": "Tries before the pick" },
+  { "key": "cost", "type": "text", "label": "Cost (as the registry states it)" }
+ ]
+}

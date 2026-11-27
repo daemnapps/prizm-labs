@@ -1,0 +1,28 @@
+{
+ "_what": "Every finishing tool a clip can go through, ours first. clip_tools.py reads this file. A row with engine 'ours' spends nothing; a row with engine 'higgsfield' is sent only after a live quote, through the spend guard. credits_s is Higgsfield's own quote at 480p, 2026-11-25.",
+ "status": "draft",
+ "tools": [
+  {"id": "fix", "name": "Fix part of a clip", "engine": "higgsfield", "state": "built", "house": "clips.seedance", "mode": "video_edit", "credits_s": 3.5, "min_s": 4, "max_s": 30, "window": true, "instead_of": "making the whole clip again"},
+  {"id": "extend", "name": "Carry a clip on", "engine": "higgsfield", "state": "built", "house": "clips.seedance", "mode": "video_extension", "credits_s": 3, "min_s": 4, "max_s": 15, "instead_of": "making a second clip that has to match"},
+  {"id": "relight", "name": "Change the light", "engine": "higgsfield", "state": "built", "house": "clips.seedance", "mode": "video_edit", "credits_s": 3.5, "min_s": 4, "max_s": 30, "window": true, "looks": {
+   "soft": "A very large diffused soft light from the front and one side, like a big overcast window out of frame. Shadows roll off slowly with no hard edges. Low contrast, neutral-warm colour, natural skin.",
+   "window": "Daylight from one window at the side: bright on the near side of the face, gentle falloff to the far side, soft shadow on the wall.",
+   "morning": "Early morning sun, low and warm, coming from one side, with long soft shadows and a clean pale fill.",
+   "golden": "Low golden-hour sun from behind and one side: a warm rim on hair and shoulders, soft warm fill on the face.",
+   "barbershop": "Overhead shop fluorescents with warm bulbs around the mirror: clean even light on the face, warm spill behind.",
+   "night": "Night indoors: one warm lamp as the key from the side, the rest of the room dim, a faint cool spill from outside.",
+   "flat": "Even overcast daylight from every side, no visible shadows, true skin colour: plain phone-footage light."}},
+  {"id": "angle", "name": "New camera on the same moment", "engine": "higgsfield", "state": "built", "house": "clips.seedance", "mode": "omni_reference", "credits_s": 3, "min_s": 4, "max_s": 15, "window": true, "moves": {
+   "push-in": "a slow push in toward the face", "pull-out": "a slow pull back that shows more of the place", "orbit-left": "the camera arcs round to the left", "orbit-right": "the camera arcs round to the right",
+   "low": "from low, looking up", "high": "from high, looking down", "close": "a tight close shot of the face", "hands": "a tight close shot of the hands and what they hold", "wide": "a wide shot that shows the whole place", "side": "from the side, in profile", "handheld": "handheld, a little drift and shake"}},
+  {"id": "upscale", "name": "Sharpen to full size", "engine": "ours", "state": "built", "by": "components/local-studio/local.py upscale", "credits_s": 0, "backup": "ByteDance upscale, 1 credit a clip"},
+  {"id": "grade", "name": "Match the colour", "engine": "ours", "state": "built", "by": "components/video-production/machine/colour_match.py", "credits_s": 0, "instead_of": "a paid grade at 3.5 credits a second"},
+  {"id": "sound", "name": "Sound effects on the cuts", "engine": "ours", "state": "built", "by": "components/video-edit/machine/sfx_make.py and the sound bank", "credits_s": 0, "instead_of": "a bought sound pass; a sound already in the bank is never made twice"},
+  {"id": "cutout", "name": "Take the background off", "engine": "ours", "state": "built", "by": "components/local-studio/local.py matte", "credits_s": 0, "instead_of": "a paid background remover"},
+  {"id": "versions", "name": "New versions of a winner", "engine": "ours", "state": "built", "by": "components/ad-variations/machine/multiply.py", "credits_s": 0, "instead_of": "Ad Multiplier, 45 credits a version"},
+  {"id": "swipe-edit", "name": "Copy a swipe's edit", "engine": "ours", "state": "built", "by": "components/video-edit/machine/swipe_edit.py", "credits_s": 0, "instead_of": "Katana, about 180 credits"},
+  {"id": "swap", "name": "Swap the person or product", "engine": "higgsfield", "state": "built", "by": "components/video-studio/swipe_swap_job.py", "credits_s": 3},
+  {"id": "dub", "name": "Another language", "engine": "higgsfield", "state": "built", "workflow": "dubbing", "credits_s": 3, "min_s": 2, "max_s": 180, "languages": ["spa", "por", "fra", "deu", "ita"]},
+  {"id": "reframe", "name": "Vertical to wide or square", "engine": "ours", "state": "built", "by": "the edit line crops and resets the words", "credits_s": 0, "instead_of": "a paid reframe at 2.25 credits a second"}
+ ]
+}

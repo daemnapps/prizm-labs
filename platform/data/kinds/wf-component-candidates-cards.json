@@ -1,0 +1,12 @@
+{
+  "kind": "wf-component-candidates-cards",
+  "title": "component-candidates — the detector for shared parts",
+  "note": "Cards carded by the lead 2026-09-02 from the developer's ruling in PLAN batch 27 (team/plans/dev-developer.md at dca2dc417). CC-1 the register kind + carding line + seed rows (lead-executed, done same day); CC-2 the daily scanner tick, sequenced after the 09-03 the owner window. The register itself is the component-candidates kind; this family is the work that built and extends it.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/component-candidates/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

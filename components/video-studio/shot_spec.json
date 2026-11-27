@@ -1,0 +1,7 @@
+{
+ "_what": "Switches for shot_spec.py. direction_first: the owner's direction for a shot (briefs/<idea>/directions.json) sets its action instead of the swipe's (2026-11-11). Rollback row: team/rollbacks.md.",
+ "direction_first": {
+  "on": true,
+  "lanes": {}
+ }
+}

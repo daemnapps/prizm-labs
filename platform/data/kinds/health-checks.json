@@ -1,0 +1,42 @@
+{
+  "kind": "health-checks",
+  "title": "Health checks — one record per production check run",
+  "note": "One record per RUN of the health watch (card CP-25 (health watch)), filed by the APP (review-app, through its records door) — the ONE named exception to the 2026-09-23 one-writer rule (decision log 2026-09-27). Append-only: a new file per run, never an edit. Runs 20 minutes after each ai-dev production deploy, daily at 23:00Z, and on demand. Each record carries every signal's value, pass/fail, the window and the deploy sha; a failing signal ALSO files one `tasks` record per signature (dedupe and auto-close on the task, never here). Item id = the run's trigger + timestamp. The health view (card 2, design mock first) reads this kind.",
+  "open_items": true,
+  "item_id": "run",
+  "item_label": "run",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "trigger",
+      "required": true,
+      "values": [
+        "post-deploy",
+        "daily",
+        "on-demand"
+      ]
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": [
+        "ok",
+        "failed"
+      ],
+      "note": "failed when ANY signal failed"
+    },
+    {
+      "key": "signals",
+      "required": true,
+      "note": "list of {name, value, threshold, pass, window, sample} — thresholds are data in the watch's own config file"
+    },
+    {
+      "key": "deploy_sha",
+      "note": "the ai-dev production commit the run judged; required for post-deploy"
+    },
+    {
+      "key": "tasks",
+      "note": "the task ids this run filed or commented on"
+    }
+  ]
+}

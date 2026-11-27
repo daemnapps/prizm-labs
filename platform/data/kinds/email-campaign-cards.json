@@ -1,0 +1,12 @@
+{
+  "kind": "email-campaign-cards",
+  "title": "Email-campaign cards — inventory review",
+  "note": "REFRAMED (the developer, 2026-08-19): this deck is a comprehensive task INVENTORY from various inputs — not yet the workflow to design around. Per card: is it right at all (approve / revise with element feedback / ARCHIVE if irrelevant — archived cards are kept, never deleted)? Reviewers may ADD cards they find missing (DN-* ids, saved as records — the source md is never edited). Workflow membership and development scope live in the companion kind email-campaign-workflow (the assembly). SE-N1…N6 are open observations — judge whether they become cards.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/email-workflow/email-workflow-draft/campaign-e2e-the email lead-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change / what's missing (required unless approved)" }
+  ]
+}

@@ -3,7 +3,7 @@
 
     python3 run.py <video> --out <dir>
 
-Steps built so far (2026-09-25):
+Steps:
     split      voices lifted off the music (Demucs, on this Mac)
     words      Gemini writes every word, in the language it was said
     speakers   Scribe v2 says who spoke and when
@@ -23,9 +23,9 @@ Writes into --out (the caller's folder — nothing is written anywhere else):
     voices/voice-<n>.mp3, voices/voice-cards.json   one clip and one card per person
     sound-sheet.json what is filled of the Sound Sheet so far (languages, voices, models, flags)
     sound-sheet.md   the transcript and the voice cards, for a person
+    effects-machine.json  every timed moment and its one-clip check
 
-Brand-agnostic: it reads only the video. Voices, music, effects and the mix come
-in later steps; their fields stay absent until then, never guessed.
+Brand-agnostic: it reads only the video.
 """
 import argparse
 import json
@@ -64,6 +64,17 @@ def render(lines, langs):
     return "\n".join(md) + "\n"
 
 
+def render_vocal(sounds):
+    md = ["### VOCAL SOUNDS", "",
+          "Every non-word sound a person makes (sniffs, sighs, moans, laughs), timed. Short words under the music "
+          "are in the transcript, flagged scribe-only.", ""]
+    if not sounds:
+        return "\n".join(md + ["None heard.", ""])
+    md += ["| Time | Sound | Speaker |", "|---|---|---|"]
+    md += [f"| {stamp(v['at'])} | {v['sound']} | {v.get('speaker') or '—'} |" for v in sounds]
+    return "\n".join(md) + "\n"
+
+
 def teardown(video, out, reuse=False):
     """reuse: keep the words, speakers and voice cards already in --out and add
     only what is missing (music, effects, mix) — for runs made before those existed."""
@@ -89,6 +100,7 @@ def teardown(video, out, reuse=False):
     else:
         lines = L.from_scribe_only(scribe["words"], scribe.get("language"))
     langs = L.languages(lines)
+    vocal = L.vocal_sounds(scribe["words"])
     (out / "transcript.json").write_text(json.dumps(lines, indent=1, ensure_ascii=False) + "\n")
     (out / "transcript.md").write_text(render(lines, langs))
     sheet = {
@@ -102,6 +114,7 @@ def teardown(video, out, reuse=False):
         "switches_language": len([k for k in langs if k != "?"]) > 1,
         "voices": len({l["speaker"] for l in lines}),
         "lines": len(lines),
+        "vocal_sounds": vocal,
         "flags": {f: sum(f in l["flags"] for l in lines) for f in
                   ("scribe-dropped", "scribe-translated", "heard-differently", "speaker-from-words-model", "scribe-only")},
         "took_seconds": round(time.time() - t0, 1),
@@ -136,7 +149,10 @@ def add_sound(video, out, tracks, t0):
     (out / "effects-machine.json").write_text(json.dumps(ef.get("machine", {}), indent=1) + "\n")
     (out / "sound-sheet.json").write_text(json.dumps(sheet, indent=1, ensure_ascii=False) + "\n")
     langs = sheet.get("languages") or L.languages(lines)
-    (out / "sound-sheet.md").write_text("\n".join([render(lines, langs), V.render(cards), MU.render(mu),
+    if "vocal_sounds" not in sheet and (out / "speakers.json").exists():   # a run made before they were kept
+        sheet["vocal_sounds"] = L.vocal_sounds(json.loads((out / "speakers.json").read_text()).get("words") or [])
+        (out / "sound-sheet.json").write_text(json.dumps(sheet, indent=1, ensure_ascii=False) + "\n")
+    (out / "sound-sheet.md").write_text("\n".join([render(lines, langs), render_vocal(sheet.get("vocal_sounds") or []), V.render(cards), MU.render(mu),
                                                    EF.render(ef), MX.render(mx)]))
     return sheet
 

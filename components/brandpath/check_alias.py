@@ -238,7 +238,7 @@ def rows_for(brand):
     for rel in DATA_RELS:
         out.append((f"data path {rel}", b / rel, BP.resolve_rel(brand, rel, root=BRANDS)))
     # the video-teardown chain config, brand filled in
-    cfg = WS / "tools/video-teardown/machine/chain_config.json"
+    cfg = WS / "components/video-teardown/machine/chain_config.json"
     if cfg.is_file():
         def walk(x):
             if isinstance(x, dict):
@@ -283,14 +283,14 @@ def module_rows(brand):
         finally:
             sys.path.remove(str(WS / folder))
 
-    ip = try_import("tools/image-production", "image_production.paths")
+    ip = try_import("components/image-production", "image_production.paths")
     if ip:
         d = ip.brand(brand)
         for k, old in (("identity", b / "identity"), ("products", b / "products"),
                        ("product_images", b / "products" / "images.json"),
                        ("elements", b / "elements"), ("offers", b / "offers")):
             out.append((f"image_production.paths.brand[{k}]", old, d[k]))
-    st = try_import("tools/image-production/static/tools", "paths")
+    st = try_import("components/image-production/static/tools", "paths")
     if st and hasattr(st, "brand") and hasattr(st, "BRANDS"):
         d = st.brand(brand)
         for k, old in (("identity", b / "identity"), ("logo_white", b / "identity/logo-white.png"),
@@ -307,8 +307,8 @@ def module_rows(brand):
         out.append(("casting.paths.brand[registry]", old_regs[0] if old_regs else b / "core-avatars" / "casting", d["registry"]))
         for i, r in enumerate(d["registries"]):
             out.append((f"casting.paths.registries[{i}]", old_regs[i] if i < len(old_regs) else None, r))
-    it = try_import(next((p for p in ("tools/image-teardown/tools", "lab/owner/image-teardown/tools")
-                         if (WS / p / "paths.py").is_file()), "tools/image-teardown/tools"), "paths")
+    it = try_import(next((p for p in ("components/image-teardown/tools", "lab/owner/image-teardown/tools")
+                         if (WS / p / "paths.py").is_file()), "components/image-teardown/tools"), "paths")
     if it and hasattr(it, "brand") and hasattr(it, "LANE"):
         d = it.brand(brand)
         old_id = next((f for f in (b / "identity-anchors.md", b / "identity/anchors.md", b / "identity/palette.md")
@@ -318,7 +318,7 @@ def module_rows(brand):
                        ("palette", b / "identity/palette.md"), ("cast", b / "ai-cast/casting")):
             out.append((f"image-teardown paths.brand[{k}]", old, d[k]))
     sys.modules.pop("paths", None)
-    ep = try_import("tools/video-production/machine", "element_paths")
+    ep = try_import("components/video-production/machine", "element_paths")
     if ep:
         out.append(("element_paths.cast_list", b / "ai-cast" / "casting", ep.cast_list(brand, WS)))
         for p in names_in(b / "products"):

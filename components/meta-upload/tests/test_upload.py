@@ -86,10 +86,10 @@ class CardNames(unittest.TestCase):
         names each ad `<unit>_<funnel id>-<page>`, as the live ads read."""
         with tempfile.TemporaryDirectory() as t:
             unit = "brand_b_brilliance-body-scrub_brief-0137_batch-2026-09-30-a"
-            card = {"brand": "brand-b", "ad_name": unit, "product": "brilliance-body-scrub", "brief_id": "brief-0137",
+            card = {"brand": "brand_b", "ad_name": unit, "product": "brilliance-body-scrub", "brief_id": "brief-0137",
                     "avatar": "spot-hider", "angle": "honest-timeline", "media": [], "words": {},
-                    "pages": [{"link_id": "link_brand_b_cpk_quiz", "url": "https://recipe.brand-b.com/brand-b-scrub-cpk/quiz/"},
-                              {"link_id": "link_brand_b_cpk_landing", "url": "https://recipe.brand-b.com/brand-b-scrub-cpk/landing.html"}]}
+                    "pages": [{"link_id": "link_brand_b_cpk_quiz", "url": "https://recipe.brand_b.com/brand_b-scrub-cpk/quiz/"},
+                              {"link_id": "link_brand_b_cpk_landing", "url": "https://recipe.brand_b.com/brand_b-scrub-cpk/landing.html"}]}
             p = upload.card_plan(Path(t), card)
             names = sorted(r["meta_ad_name"] for r in p["ads"] + p["held"])
             self.assertEqual(names, [f"{unit}_body-scrub-cpk-offer", f"{unit}_body-scrub-cpk-quiz"])
@@ -147,7 +147,7 @@ class Thumbnails(unittest.TestCase):
         from fake_meta import FakeMeta
         with tempfile.TemporaryDirectory() as d:
             t = Path(d) / "a_thumb.jpg"; t.write_bytes(b"x")
-            m = FakeMeta("brand-b") if "brand" in FakeMeta.__init__.__code__.co_varnames else FakeMeta()
+            m = FakeMeta("brand_b") if "brand" in FakeMeta.__init__.__code__.co_varnames else FakeMeta()
             self.assertEqual(U.thumb_for(m, {"thumbs": {"v.mp4": str(t)}}, "v.mp4", "vid-1"), "hash-a_thumb.jpg")
             self.assertEqual(U.thumb_for(m, {"thumbs": {}}, "w.mp4", "vid-2"), "thumb-vid-2")
 

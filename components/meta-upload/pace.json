@@ -1,15 +1,59 @@
 {
  "_what": "How the uploader paces itself so it moves like a person in Ads Manager, not a script (the owner, 21 Oct 2026: \"think through actual human-like movement for this uploading process … it's not human the way we're uploading these massive files\"). Read by pace.py. Seconds unless named. Set META_PACE=off only in tests.",
  "_why": "21 Oct 2026: three 6-minute song ads (five ~350 MB versions each) went up back to back, ~3 GB in under an hour; Meta's video server answered 503 and the uploader quit on the first one.",
- "between_chunks_s": [1.5, 4.0],
- "between_videos_s": [25, 75],
- "between_ads_s": [180, 420],
- "per_hour": {"bytes": 1200000000, "videos": 8},
+ "between_chunks_s": [
+  1.5,
+  4.0
+ ],
+ "between_videos_s": [
+  25,
+  75
+ ],
+ "between_ads_s": [
+  180,
+  420
+ ],
+ "per_hour": {
+  "bytes": 1200000000,
+  "videos": 16
+ },
  "busy_retry": {
-  "http_codes": [500, 502, 503, 504],
-  "meta_codes": [1, 2, 4, 17, 32, 341, 613, 80004, 1487390],
-  "waits_s": [45, 120, 300, 600],
+  "http_codes": [
+   500,
+   502,
+   503,
+   504
+  ],
+  "meta_codes": [
+   1,
+   2,
+   4,
+   17,
+   32,
+   341,
+   613,
+   80004,
+   1487390
+  ],
+  "waits_s": [
+   45,
+   120,
+   300,
+   600
+  ],
   "jitter": 0.25
  },
- "log": "runs/meta-upload/<brand>/pace.jsonl"
+ "log": "runs/meta-upload/<brand>/pace.jsonl",
+ "_per_hour_why": "11 Nov 2026: videos per hour 8 -> 16 (owner: more video ads per hour); files are now filed at 4 Mbps (delivery.py), so the 1.2 GB/hour byte cap that stopped Meta's 503s (21 Oct) stays as it was. Rollback: videos 8.",
+ "usage": {
+  "slow_at": 50,
+  "pause_at": 80,
+  "slow_s": [
+   4,
+   20
+  ],
+  "pause_min_s": 300,
+  "_what": "Meta's own usage meters, read from every reply's headers (x-business-use-case-usage, x-ad-account-usage, x-app-usage). At slow_at % on any meter the uploader adds a pause before each call, longer as it climbs; at pause_at % (or when Meta names a time to regain access) it waits that time, at least pause_min_s, before the next call. 11 Nov 2026: both ad accounts report ads_api_access_tier development_access; a ten-video card hit code 17 / 2446079."
+ },
+ "_per_hour_link": "A video Meta fetches by link (upload-link.json) counts toward per_hour.videos but not per_hour.bytes: the bytes cap guards Meta's video server against our pushes (21 Oct), and a link sends no bytes from here."
 }

@@ -5,7 +5,7 @@ breakdown → learning → new copy road.
     top1_board.py      reads runs/media-buying/top1/board.json, writes lab/owner/media-buying/top1-board.html
                        (+ TOP1-BOARD-owner.md)
 
-the owner, 2 Oct 2026: "let's just do the top 1%. Let's build a board for them, and then we have to run the breakdown
+owner, 2 Oct 2026: "let's just do the top 1%. Let's build a board for them, and then we have to run the breakdown
 process on them, learn from them, and do some innovative copywriting with our different formats going forward" —
 "When you have stuff that works, you just double down on it … The underlying message is basically the same."
 board.json is built from tiers.py's top-1% rows (warehouse, no Meta calls); each winner's `breakdown` fills in as
@@ -88,7 +88,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 </style>
 <div class="w">
 <div class="top"><div style="display:grid;gap:6px"><span class="lab">Double down on what works</span><h1>The Top 1% Board</h1></div>
-<div class="seg" id="btabs"><button type="button" data-b="brand-b" aria-pressed="true">Brand-B</button><button type="button" data-b="brand-a" aria-pressed="false">BRAND-A</button></div></div>
+<div class="seg" id="btabs"><button type="button" data-b="brand_b" aria-pressed="true">brand_b</button><button type="button" data-b="brand_a" aria-pressed="false">brand_a</button></div></div>
 <p class="lead" id="lead"></p>
 <div class="road"><span class="on">1 · The board</span><i>›</i><span>2 · Break each one down</span><i>›</i><span>3 · Why it works</span><i>›</i><span>4 · New copy in our formats</span><i>›</i><span>5 · Variations: same message, new format or angle</span></div>
 <div id="core"></div>
@@ -98,7 +98,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 <script>
 (function(){
 const D=__DATA__;
-let brand="brand-b";
+let brand="brand_b";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const money=v=>v==null?"—":"$"+Math.round(v).toLocaleString();
@@ -128,14 +128,14 @@ function card(w,i){
 function render(){
   const d=D[brand];
   document.querySelectorAll("#btabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.b===brand));
-  $("lead").innerHTML=`The top 1% brought in <b>${d.share}%</b> of all ${brand==="brand-a"?"BRAND-A":"Brand-B"} sales, out of ${d.assets.toLocaleString()} real assets. <b>${d.winners.length}</b> on the board${(d.removed||[]).length?` <span class="soft" style="font-weight:400">(taken off: ${d.removed.map(r=>esc(r.name)).join(", ")})</span>`:""}.`;
+  $("lead").innerHTML=`The top 1% brought in <b>${d.share}%</b> of all ${brand==="brand_a"?"brand_a":"brand_b"} sales, out of ${d.assets.toLocaleString()} real assets. <b>${d.winners.length}</b> on the board${(d.removed||[]).length?` <span class="soft" style="font-weight:400">(taken off: ${d.removed.map(r=>esc(r.name)).join(", ")})</span>`:""}.`;
   const c=d.core_message;
   $("core").innerHTML=c?`<section style="background:var(--gold-soft);border-radius:14px;padding:18px 20px;display:grid;gap:10px"><span class="lab" style="color:var(--gold)">The message that works · in ${esc(c.seen_in)}</span>
     <p style="font:600 1.25rem/1.35 var(--display)">${esc(c.message)}</p>
     <div style="display:grid;gap:4px;font-size:.88rem"><b>The same message, told as:</b>${c.formats.map(f=>`<span>· ${esc(f)}</span>`).join("")}</div>
     <p style="font-size:.86rem">${esc(c.hook_note)}</p><p style="font-size:.86rem;color:var(--gold)">${esc(c.rules_note)}</p></section>`:"";
   $("list").innerHTML=d.winners.map(card).join("");
-  $("foot").textContent=`Ranked by sales from our own copy of the ad account, ${d.window.from} to ${d.window.to}; each video, image or flexible-ad set counted once, every ad that ran it folded in.${brand==="brand-a"?" BRAND-A numbers start 1 Jan 2026 — older winners, like the years-long VSL before 2026, are only in Meta.":""}`;
+  $("foot").textContent=`Ranked by sales from our own copy of the ad account, ${d.window.from} to ${d.window.to}; each video, image or flexible-ad set counted once, every ad that ran it folded in.${brand==="brand_a"?" brand_a numbers start 1 Jan 2026 — older winners, like the years-long VSL before 2026, are only in Meta.":""}`;
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("#btabs button"); if(b){brand=b.dataset.b;render();return}

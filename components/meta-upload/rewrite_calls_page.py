@@ -1,4 +1,4 @@
-"""Winner Rewrite Calls — the page where the owner rules on the structure holds.
+"""Winner Rewrite Calls — the page where owner rules on the structure holds.
 
 Reads runs/media-buying/top1/structure-calls.json (one entry per held teardown,
 parsed from each run's STRUCTURE-CHECK.md) and writes
@@ -16,8 +16,8 @@ OUT = ROOT / "lab/owner/media-buying/rewrite-calls.html"
 
 THEMES = [
     ("lab", "A scientist or lab as the expert",
-     {"brand-a": "Today's rule: the barber is the expert, not a lab.",
-      "brand-b": "Today's rule: the kitchen is the expert, not a lab."}),
+     {"brand_a": "Today's rule: the barber is the expert, not a lab.",
+      "brand_b": "Today's rule: the kitchen is the expert, not a lab."}),
     ("origin", "Factory, warehouse or store shots",
      "Today's rule: no shots that claim where or how it's made."),
     ("offer", "Stacked deals and extra offers",
@@ -34,19 +34,19 @@ THEMES = [
 
 # item -> theme, set by reading each item (keyword guessing put half of them wrong)
 THEME_OF = {
-    "brand-a-02": {"1": "age", "Q1": "lab", "Q2": "age", "Q3": "other", "Q4": "teller"},
-    "brand-a-05": {"Q1": "lab", "Q2": "offer", "Q3": "click", "Q4": "teller", "Q5": "origin", "Q6": "other"},
-    "brand-a-07": {"Q1": "lab", "Q2": "offer"},
-    "brand-a-08": {"Q1": "offer"},
-    "brand-a-09": {"Q1": "offer", "Q2": "offer", "Q3": "click"},
-    "brand-a-10": {"Q1": "teller"},
-    "brand-b-01": {"8": "other", "Q1": "age", "Q2": "offer"},
-    "brand-b-02": {"3": "lab", "Q1": "lab", "Q2": "lab", "Q3": "lab"},
-    "brand-b-03": {"2": "other", "8": "offer", "Q1": "lab"},
-    "brand-b-04": {"Q1": "lab", "Q2": "origin"},
-    "brand-b-07": {"4": "teller", "7": "other", "Q1": "lab", "Q2": "teller"},
-    "brand-b-09": {"Q1": "lab", "Q2": "origin"},
-    "brand-b-10": {"7": "offer"},
+    "brand_a-02": {"1": "age", "Q1": "lab", "Q2": "age", "Q3": "other", "Q4": "teller"},
+    "brand_a-05": {"Q1": "lab", "Q2": "offer", "Q3": "click", "Q4": "teller", "Q5": "origin", "Q6": "other"},
+    "brand_a-07": {"Q1": "lab", "Q2": "offer"},
+    "brand_a-08": {"Q1": "offer"},
+    "brand_a-09": {"Q1": "offer", "Q2": "offer", "Q3": "click"},
+    "brand_a-10": {"Q1": "teller"},
+    "brand_b-01": {"8": "other", "Q1": "age", "Q2": "offer"},
+    "brand_b-02": {"3": "lab", "Q1": "lab", "Q2": "lab", "Q3": "lab"},
+    "brand_b-03": {"2": "other", "8": "offer", "Q1": "lab"},
+    "brand_b-04": {"Q1": "lab", "Q2": "origin"},
+    "brand_b-07": {"4": "teller", "7": "other", "Q1": "lab", "Q2": "teller"},
+    "brand_b-09": {"Q1": "lab", "Q2": "origin"},
+    "brand_b-10": {"7": "offer"},
 }
 
 TEMPLATE = r"""<title>Winner Rewrite Calls</title>
@@ -95,7 +95,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const key=(it,r)=>it.run+"__"+r.n;
 const ALL=[];D.items.forEach(it=>it.rows.forEach(r=>ALL.push([it,r])));
-const NAMES={brand-a:"BRAND-A",brand-b:"Brand-B"};let brand="brand-a";try{brand=localStorage.getItem("rc-brand")||brand}catch(e){}
+const NAMES={brand_a:"brand_a",brand_b:"brand_b"};let brand="brand_a";try{brand=localStorage.getItem("rc-brand")||brand}catch(e){}
 let all=[];
 function choice(k,cur){return `<div class="choice" data-k="${esc(k)}"><button type="button" data-v="keep" aria-pressed="${cur==="keep"}">Keep it like the winner</button><button type="button" data-v="rule" aria-pressed="${cur==="rule"}">Follow today's rule</button></div>`}
 function render(){
@@ -107,7 +107,7 @@ function render(){
     const vals=new Set(xs.map(([it,r])=>(calls[key(it,r)]||{}).call||""));const cur=vals.size===1?[...vals][0]:"";
     return `<div class="theme"><div><b>${esc(t.title)}</b> <span class="soft" style="font-size:.82rem">· ${xs.length} item${xs.length>1?"s":""} in ${(n=>n+(n>1?" ads":" ad"))(new Set(xs.map(([it])=>it.run)).size)}</span><div class="why">${esc(typeof t.rule==="object"?t.rule[brand]:t.rule)}</div></div>${choice("theme:"+t.key,cur)}</div>`}).join("");
   $("ads").innerHTML=D.items.filter(it=>it.brand===brand).map(it=>`<section class="sec"><div class="ad">${it.pic?`<img src="${it.pic}" alt="">`:'<div class="ph"></div>'}<div style="min-width:0;display:grid;gap:4px">
-    <span class="lab">${it.brand==="brand-a"?"BRAND-A":"Brand-B"} · #${it.rank} · ${it.sales.toLocaleString()} sales · $${it.spend.toLocaleString()}</span><h2>${esc(it.name)}</h2>
+    <span class="lab">${it.brand==="brand_a"?"brand_a":"brand_b"} · #${it.rank} · ${it.sales.toLocaleString()} sales · $${it.spend.toLocaleString()}</span><h2>${esc(it.name)}</h2>
     <div>${it.rows.map(r=>{const c=calls[key(it,r)]||{};return `<div class="row"><div><span class="tag">${esc((D.themes.find(t=>t.key===r.theme)||{}).title||"")}</span></div>
       <div>${esc(r.element)}</div><div class="why">Right now the rewrite ${r.change==="Adapted"?"<b>followed today's rule</b>":"<b>kept it like the winner</b>"} and is waiting on you.</div><details><summary>Why it was flagged</summary><div class="why">${esc(r.why)}</div></details>
       ${choice(key(it,r),c.call||"")}${c.call?`<input class="note" data-k="${esc(key(it,r))}" placeholder="Note (optional) — e.g. use the barber, keep the deal but one click" value="${esc(c.note||"")}">`:""}

@@ -1,0 +1,216 @@
+{
+ "_readme": "What the copier brings in, by group, in the order the plan moves them. 'from' is a path in the source repo, 'to' the path here. A folder copies every saved file under it; 'exclude' holds patterns to leave out. Run records, brand folders and keys are never listed. Brand output (briefs, drafts, worksheets, records, notes, statics) stays out: it belongs in each brand's own folder.",
+ "groups": {
+  "micro-drama": [
+   {
+    "from": "components/video-production/formats/playbooks/micro-drama.json",
+    "to": "components/video-production/formats/playbooks/micro-drama.json"
+   },
+   {
+    "from": "components/video-production/formats/playbooks/micro-drama.md",
+    "to": "components/video-production/formats/playbooks/micro-drama.md"
+   },
+   {
+    "from": "components/video-production/formats/micro-drama.md",
+    "to": "components/video-production/formats/micro-drama.md"
+   },
+   {
+    "from": "components/video-production/formats/recipes",
+    "to": "components/video-production/formats/recipes"
+   },
+   {
+    "from": "components/video-production/machine/drama_start.py",
+    "to": "components/video-production/machine/drama_start.py"
+   },
+   {
+    "from": "components/video-production/machine/drama_series.py",
+    "to": "components/video-production/machine/drama_series.py"
+   },
+   {
+    "from": "components/video-production/machine/workflow.py",
+    "to": "components/video-production/machine/workflow.py"
+   },
+   {
+    "from": "components/video-production/machine/test_micro_drama_workflow.py",
+    "to": "components/video-production/machine/test_micro_drama_workflow.py"
+   },
+   {
+    "from": "components/video-studio/CLAUDE.md",
+    "to": "components/video-studio/CLAUDE.md"
+   },
+   {
+    "from": "components/video-studio/higgsfield",
+    "to": "components/video-studio/higgsfield",
+    "exclude": [
+     "__pycache__"
+    ]
+   },
+   {
+    "from": "components/video-writing/machine/run.py",
+    "to": "components/video-writing/machine/run.py"
+   },
+   {
+    "from": "components/video-teardown/machine/decide.py",
+    "to": "components/video-teardown/machine/decide.py"
+   },
+   {
+    "from": "components/model-inputs/inputs/wan-3.0.json",
+    "to": "components/model-inputs/inputs/wan-3.0.json"
+   },
+   {
+    "from": "components/model-inputs/slices/wan-3.0.md",
+    "to": "components/model-inputs/slices/wan-3.0.md"
+   },
+   {
+    "from": ".claude/skills/ad-workflow",
+    "to": ".claude/skills/ad-workflow"
+   }
+  ],
+  "video": [
+   {
+    "from": "components/video-production",
+    "to": "components/video-production",
+    "replace": true
+   },
+   {
+    "from": "components/video-writing",
+    "to": "components/video-writing",
+    "replace": true
+   },
+   {
+    "from": "components/video-teardown",
+    "to": "components/video-teardown",
+    "replace": true,
+    "exclude": [
+     "(^|/)(records|notes)/"
+    ]
+   },
+   {
+    "from": "components/video-edit",
+    "to": "components/video-edit",
+    "replace": true
+   },
+   {
+    "from": "components/model-inputs",
+    "to": "components/model-inputs",
+    "replace": true
+   },
+   {
+    "from": "components/generative-model-house",
+    "to": "components/generative-model-house",
+    "replace": true
+   },
+   {
+    "from": "components/casting",
+    "to": "components/casting",
+    "replace": true
+   },
+   {
+    "from": "components/audio-teardown",
+    "to": "components/audio-teardown",
+    "replace": true
+   },
+   {
+    "from": "components/motion",
+    "to": "components/motion",
+    "replace": true
+   },
+   {
+    "from": "components/video-studio",
+    "to": "components/video-studio",
+    "replace": true
+   }
+  ],
+  "static": [
+   {
+    "from": "components/image-teardown",
+    "to": "components/image-teardown",
+    "replace": true,
+    "exclude": [
+     "(^|/)(briefs|drafts|worksheets|evidence)/"
+    ]
+   },
+   {
+    "from": "components/image-writing",
+    "to": "components/image-writing",
+    "replace": true
+   },
+   {
+    "from": "components/image-production",
+    "to": "components/image-production",
+    "replace": true
+   },
+   {
+    "from": "components/image-edit",
+    "to": "components/image-edit",
+    "replace": true
+   },
+   {
+    "from": "components/briefs",
+    "to": "components/briefs",
+    "replace": true
+   },
+   {
+    "from": "components/naming",
+    "to": "components/naming",
+    "replace": true
+   },
+   {
+    "from": "components/asset-index",
+    "to": "components/asset-index",
+    "replace": true
+   },
+   {
+    "from": "components/copywriter",
+    "to": "components/copywriter",
+    "replace": true
+   }
+  ],
+  "strategy": [
+   {
+    "from": "components/creative-strategist",
+    "to": "components/creative-strategist",
+    "replace": true
+   },
+   {
+    "from": "components/winners",
+    "to": "components/winners",
+    "replace": true
+   },
+   {
+    "from": "components/models",
+    "to": "components/models",
+    "replace": true
+   },
+   {
+    "from": "components/run-kit",
+    "to": "components/run-kit",
+    "replace": true
+   },
+   {
+    "from": "components/creative-controls",
+    "to": "components/creative-controls",
+    "replace": true
+   },
+   {
+    "from": "components/ad-variations",
+    "to": "components/ad-variations",
+    "replace": true
+   },
+   {
+    "from": "components/meta-upload",
+    "to": "components/meta-upload",
+    "replace": true
+   },
+   {
+    "from": "platform/data/kinds",
+    "to": "platform/data/kinds"
+   },
+   {
+    "from": "components/brandpath",
+    "to": "components/brandpath",
+    "replace": true
+   }
+  ]
+ }
+}

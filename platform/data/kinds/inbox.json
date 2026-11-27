@@ -1,0 +1,78 @@
+{
+ "kind": "inbox",
+ "title": "Decision inbox",
+ "note": "Decisions and asks addressed to a person. Each item carries a recommendation and a default-if-silent. Rulings are review records (verdict.ruling: accept | otherwise | defer | delegate). Items filed from the viewer are open_items records: an add record on a new INB-* id plus the filer's cumulative 'filed-index' record (verdict.items) \u2014 the items_file is never edited by the viewer. The item id 'filed-index' is reserved and never a decision. Items carry `stream` (2026-08-21): which workstream the decision belongs to \u2014 a registered build name from new-workflow-design/workflows.json, or a plane: platform | org | people. Closed vocabulary, enforced by validate_kinds.py; filed items must set it. FILING CONVENTION for NEW items (2026-08-25, PM-4): write `title` as the human ask \u2014 plain language, what is being asked of the addressee, legible to a reader who has never seen the id, the priority or the stream. Technical detail, codes and reasoning go in `context`; the concrete proposal goes in `recommendation`. This governs NEW items only: existing and archived items are never retro-rewritten, and no viewer ever rewrites a title it displays. ROUTING (2026-08-28, the developer ruling the peer-operator batch): an ask belonging to the dev-the designer scope addresses the designer (`to: the designer`) \u2014 she is that scope's human owner and rules it; only cross-scope and org-level asks address the developer. Existing items stay addressed as filed. PARITY NOTE (2026-09-02, batch 29, the developer): a card act by dev-the designer on a dev-the developer family \u2014 carding, annotating, dispatching, merging \u2014 files ONE item to the developer titled as the plain FYI (\"the designer <did X> on <family>\"), non-blocking, default_if_silent = proceed. The note is the record of the act, never a gate on it; a \"fix\" that changes a done-when without the developer's word is the one case that files as BLOCKING instead.",
+ "open_items": true,
+ "serve_records": "history",
+ "_serve_records_note": "records-API fix, 2026-09-01 (BLOCKER-2026-08-31-records-api.md): this kind's records are an event history folded on read, so /api/reviews serves EVERY record for an item, ascending \u2014 not the latest per reviewer, which silently displaced a creator's `create` record on their own second write and made the item vanish from every view. Session-written records on suffixed filenames (`...--<item>--<note>.json`) are served under the item their body names. Kinds WITHOUT this field keep latest-per-reviewer exactly as before (qc-verdicts, visual-run, and every read-back panel depend on it).",
+ "_replies_note": "REPLY WORDS (2026-09-05, card CLI-15 (ruling replies), halves (a)+(b)). An item MAY carry an OPTIONAL `replies` array — the enumerated words a phone surface may offer as one-tap answers for THAT item, each drawn from `reply_words` below. The field is optional and stays optional: every item filed before this date carries none, and an item without `replies` is a normal item that simply offers no tap. A tap files a REPLY RECORD: a record of this kind whose top-level `reviewer` and `item` say who answered what, and whose `verdict` carries `{word, ts, source}` — the card's shape `{reviewer, item, word, ts, source}` laid on the envelope every record here already uses. `word` MUST be one of that item's own `replies`; a word outside the list is refused by the writer and flagged by validate_kinds.py. The RECORD IS THE TRUTH: `cockpit_actions.sh reply` files it before it nudges any seat, so a keystroke that gets eaten (the 2026-09-04 modal) costs nothing. Only the cockpit acting as the developer writes one — hence `reply_reviewer` and `reply_sources`, both checked.",
+ "reply_words": [
+  "rule it",
+  "go",
+  "merge",
+  "hold",
+  "constant",
+  "run",
+  "dismiss"
+ ],
+ "reply_sources": [
+  "dashboard"
+ ],
+ "reply_reviewer": "the developer",
+ "items_file": "new-workflow-design/inbox/items.json",
+ "items_key": "items",
+ "item_id": "id",
+ "item_label": "title",
+ "index": {
+  "item": "filed-index",
+  "view": "plane.idx_filed_index_records"
+ },
+ "_index_note": "THE DECLARED INDEX VIEW (card PLANE-7 (inbox index species), 2026-09-10, on the developer's \"Go\"), in the PLANE-4b-i (index view api) grammar — `{item, view}`, read in ONE place beside `serveModeOf` in `review-app/lib/record-select.mjs`, never a new route. The shape is RV-8 (review queue index view)'s, already merged and already proven on `review.json`; it was copied, not invented. WHAT IT FIXES, MEASURED RATHER THAN ARGUED: the `filed-index` record above is DISCOVERY MAINTAINED BY HAND. On 2026-09-09 the lead and the PLAN seat both filed under `reviewer: the developer`, shared one cumulative record and each overwrote the other's — the fold showed one or four of six items for twelve hours — and the repair then went 21,281 BYTES against the plane's 16 KB cap, because the shape carried each item's whole BODY at ~2 KB apiece. \"Cumulative\" was arithmetically impossible past about eight items and had been for weeks; three older `filed-index` records on the plane are truncated mid-string and unreadable for exactly that reason. THE VIEW CANNOT BE CLOBBERED, because nobody writes it. WHAT THE VIEW RETURNS: one row PER FILER, exactly as the writer files one cumulative record each and readers fold the union, and a body of `{id: {created, filed_by}}` over EVERY `add` record under that filer. THE VIEW IS NEVER THE SOURCE OF TRUTH — the `add` records are, and this declaration only says where discovery is READ FROM. A POINTER IS NOT A BODY: an entry carries no `item`, because `loadInbox`'s own comment always said so (\"the index is for DISCOVERY, never for carrying bodies\"; \"a dict entry with no body is a discovery too, not a blank item\") and the body comes from the item's own record, which PM-16 (one-read poll)'s kind-wide call has already fetched. NO RECORD GRAMMAR MOVED: not one `verdict_fields` entry, not `serve_records`, not `items_file`, and no viewer reads anything new here. NO WRITER STOPS EMITTING ON THIS DECLARATION — that is PLANE-9 (writers off merged), it comes third, and it waits on PLANE-8 (live envelope check)'s byte-equality record; until then both the written records and the view exist and readers fold the union of both, which is what the inbox has always done. KILL (the developer's, with the card): an id discoverable today that the view does not return strikes the species, and the inbox keeps its written index exactly as `families-index` was struck at PLANE-4c (index view envelopes)'s merge — a view that loses an item is worse than a hand-maintained record that loses one, because nobody can see it happen. Checked at declaration against the plane, not assumed: every id in every readable `filed-index` record has an `add` record behind it, and `test_plane7_inbox_index.py` re-checks it against the records on every run.",
+ "verdict_fields": [
+  {
+   "key": "ruling",
+   "values": [
+    "accept",
+    "otherwise",
+    "defer",
+    "delegate"
+   ]
+  },
+  {
+   "key": "note",
+   "required_when": "ruling=otherwise"
+  },
+  {
+   "key": "defer_until",
+   "required_when": "ruling=defer"
+  },
+  {
+   "key": "delegate_to",
+   "required_when": "ruling=delegate"
+  },
+  {
+   "key": "item",
+   "note": "echo of the item body when the item is record-borne (filed), so latest-wins readback never loses it. Optional item field `card`: the card id this item is about (e.g. \"SD-3\"); an I- or T- item MAY carry it (decision log 2026-09-30)."
+  },
+  {
+   "key": "closes",
+   "note": "OPTIONAL boolean (2026-09-08, card CLI-15d (closes flag)): does THIS record end the item? Where it is present it DECIDES, whatever the ruling word says; where it is absent the reader falls back to the ruling vocabulary in platform/tools/inbox_closure.py (NOT_WAITING), so every record filed before this date keeps exactly the meaning it had. Write it when the ruling word alone would not say — `accept` is a filing word, not a closure, and sixteen items the developer had ruled kept asking for nine days because two readers had to guess. Only a JSON true/false is a flag: a string or a number falls through to the word list rather than being coerced. No existing record is rewritten to add it. A FILING RECORD WRITES `closes: false` (2026-09-08, card PM-21 (filing is not a decision), the developer \"do fix\"): the record that FILES an item carries `ruling: accept` with `disposition: add`, and the board read that as a decision — so twelve items left the developer's active list the moment they arrived, one of them on the day it was due. A filing decides nothing and now says so. THREE readers honour the flag: the cockpit's `asks`, the Slack digest, and pm.html, which cannot import Python and so inlines the ported flag half from platform/tools/inbox_closure.js, byte-checked against platform/tools/inbox_closure.py. The board keeps its OWN vocabulary for flagless records (it asks whether a human decided, not whether the item still waits) — where the two would disagree, write the flag."
+  },
+  {
+   "key": "word",
+   "note": "reply records only (CLI-15 (ruling replies)): the enumerated word the developer answered with. Must be one of that item's `replies`; the presence of this key is what makes a record a reply record"
+  },
+  {
+   "key": "ts",
+   "required_when": "word",
+   "note": "ISO-8601 Z, when the word was tapped"
+  },
+  {
+   "key": "source",
+   "required_when": "word",
+   "values": [
+    "dashboard"
+   ]
+  }
+ ]
+}

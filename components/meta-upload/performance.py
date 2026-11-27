@@ -30,9 +30,13 @@ FIELDS = "ad_id,ad_name,date_start,spend,impressions,clicks,actions,action_value
 
 
 def ours(name):
-    """An ad the system named: <unit>_<page>."""
-    d = N.parse_short(name or "")
-    return d if d and d.get("funnel") and not d.get("asset") else None
+    """An ad the system named: <unit>_<page>, or <unit>_<page>_trybe-<trybe_id> for a Trybe creator's video."""
+    import trybe_tag as TT
+    base, tid = TT.split(name or "")
+    d = N.parse_short(base or "")
+    if not (d and d.get("funnel") and not d.get("asset")):
+        return None
+    return {**d, "trybe_id": tid} if tid else d
 
 
 def action(rows, kind="purchase"):

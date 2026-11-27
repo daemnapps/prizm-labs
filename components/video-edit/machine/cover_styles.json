@@ -1,0 +1,247 @@
+{
+ "about": "The cover step's styles (thumbs_up.py). Each native style is set from a breakdown of real covers on that platform's discovery surface, pulled and indexed as swipes (components/asset-index/swipes/covers.py; rows in runs/asset-index/swipes/covers/covers.json, sums in patterns.json). 'evidence' quotes those sums. Change a style through a new pull and its numbers, not by taste.",
+ "source": {
+  "pulled": "2026-11-11",
+  "patterns": "runs/asset-index/swipes/covers/patterns.json"
+ },
+ "styles": {
+  "instagram": {
+   "label": "Instagram native (caption on a box)",
+   "size": [
+    1080,
+    1920
+   ],
+   "grade": "none",
+   "vignette": false,
+   "words": {
+    "look": "caption-box",
+    "font": "tiktok-sans",
+    "weight": 700,
+    "size": 100,
+    "line_height": 1.16,
+    "side": 60,
+    "box": "#ffffff",
+    "box_text": "#000000",
+    "key_box": "#000000",
+    "y": 0.27,
+    "gap": 0.22,
+    "bands": [
+     [
+      0.12,
+      0.32
+     ],
+     [
+      0.42,
+      0.58
+     ],
+     [
+      0.6,
+      0.76
+     ]
+    ]
+   },
+   "marks": [],
+   "safe": [
+    250,
+    1600
+   ],
+   "evidence": [
+    "67 Instagram Explore covers (US, Canada, UK locales), median 163k likes, median 2.8 days old.",
+    "Look: native 51%, lightly edited 21%, raw 18%; designed 6%, studio 4%.",
+    "Words on 72% (text read); median 7 words read by eye. Caption line height on the 40 native-caption covers: smallest quarter 3.0%, median 3.6%, top tenth 4.9%, largest 10.5% of the cover height.",
+    "Text treatment: plain native caption 28%, caption on a box 19%, outlined caption 13%, designed type 6%, none 31%.",
+    "Case: sentence 36%, lower 13%, upper 10%. Placement: top 24%, middle 21%, lower-middle 18%.",
+    "Marks: emoji 13%, logo 10%, sticker 4%, circle 1%, arrow 1%, price 1%, stamp 0%. Grade: as shot 67%.",
+    "Colour: median saturation 0.30 and colourfulness 38 (YouTube 0.44 and 65).",
+    "Size set to the top of that range (100 px type, about 5% of the height, bold) after the owner, 11 Nov, on the first set at 60 px (3%): 'we can barely see the text'."
+   ]
+  },
+  "instagram-plain": {
+   "label": "Instagram native (plain caption)",
+   "size": [
+    1080,
+    1920
+   ],
+   "grade": "none",
+   "vignette": false,
+   "words": {
+    "look": "caption",
+    "font": "tiktok-sans",
+    "weight": 700,
+    "size": 96,
+    "line_height": 1.2,
+    "side": 70,
+    "y": 0.27,
+    "bands": [
+     [
+      0.12,
+      0.32
+     ],
+     [
+      0.42,
+      0.58
+     ],
+     [
+      0.6,
+      0.76
+     ]
+    ]
+   },
+   "marks": [],
+   "safe": [
+    250,
+    1600
+   ],
+   "evidence": [
+    "Same 67 covers: the plain white native caption (no box) is the most used text treatment, 28%. Reads only over a darker part of the frame."
+   ]
+  },
+  "tiktok": {
+   "label": "TikTok native",
+   "size": [
+    1080,
+    1920
+   ],
+   "grade": "none",
+   "vignette": false,
+   "words": {
+    "look": "caption",
+    "font": "tiktok-sans",
+    "weight": 600,
+    "size": 62,
+    "line_height": 1.18,
+    "side": 140,
+    "y": 0.5,
+    "bands": [
+     [
+      0.4,
+      0.62
+     ],
+     [
+      0.62,
+      0.74
+     ]
+    ]
+   },
+   "marks": [],
+   "safe": [
+    200,
+    1500
+   ],
+   "evidence": [
+    "47 TikTok Explore and For You covers (US), each 500k+ views in its first 14 days, median 1.49M views, median 3.3 days old.",
+    "No words on 57%. Where there are words: plain native caption 19%, outlined 11%, box 2%.",
+    "Placement: middle 21%, spread 9%, lower-middle 6%, top 6%. Text line 5.5% of the height.",
+    "Look: native 40%, raw 30%, studio 21%. Marks: logo 13%, emoji 9%, no circles, arrows or stamps.",
+    "Frame: scene 30%, face 21%, body 15%; 38% show no person."
+   ]
+  },
+  "youtube-shorts": {
+   "label": "YouTube Shorts native",
+   "size": [
+    1080,
+    1920
+   ],
+   "grade": "none",
+   "vignette": false,
+   "words": {
+    "look": "outline",
+    "font": "tiktok-sans",
+    "weight": 800,
+    "size": 70,
+    "side": 110,
+    "stroke": 7,
+    "y": 0.2,
+    "bands": [
+     [
+      0.12,
+      0.3
+     ],
+     [
+      0.45,
+      0.6
+     ]
+    ]
+   },
+   "marks": [],
+   "safe": [
+    200,
+    1500
+   ],
+   "evidence": [
+    "11 YouTube Shorts (most viewed in the last 14 days, 250k+ views; YouTube has no public Shorts explore feed). Small sample.",
+    "Text: outlined 27%, designed 18%, box 18%, none 36%. Placement: top 27%, middle 27%. Look: native 45%, raw 36%."
+   ]
+  },
+  "youtube": {
+   "label": "YouTube long-form",
+   "size": [
+    1280,
+    720
+   ],
+   "grade": "contrast(1.12) saturate(1.35) brightness(1.03)",
+   "vignette": false,
+   "words": {
+    "look": "outline",
+    "font": "anton",
+    "weight": 400,
+    "size": 96,
+    "side": 60,
+    "stroke": 12,
+    "y": 0.2,
+    "transform": "uppercase",
+    "bands": [
+     [
+      0.06,
+      0.3
+     ],
+     [
+      0.7,
+      0.9
+     ]
+    ]
+   },
+   "marks": [
+    "circle",
+    "arrow"
+   ],
+   "safe": [
+    30,
+    690
+   ],
+   "evidence": [
+    "42 YouTube Trending covers (US), 100k+ views, median 307k views, median 1.3 days old.",
+    "Look: studio 55%, designed 43%. Grade saturated 57%; median saturation 0.44, colourfulness 65.",
+    "Text: designed type 40%, title card 24%, none 33%; upper case 48%; median 2 words; text line 11.7% of the height.",
+    "Placement: top 26%, bottom 19%, middle 17%. Faces: shock 24% of covers. Split or collage 31%.",
+    "Marks: logo 45%, border 14%, number 12%, arrow 5%, circle 2%."
+   ]
+  },
+  "turned-up": {
+   "label": "Turned up (the original look)",
+   "size": [
+    1080,
+    1920
+   ],
+   "grade": "contrast(1.18) saturate(1.3) brightness(1.04)",
+   "vignette": true,
+   "words": {
+    "look": "boxes"
+   },
+   "marks": [
+    "circle",
+    "arrow",
+    "bubble",
+    "sticker",
+    "stamp"
+   ],
+   "safe": [
+    285,
+    1635
+   ],
+   "evidence": [
+    "Owner, 10 Nov: clickbait/watchbait, every element turned up. Not built from a pull; closest to YouTube long-form (designed 43%, saturated 57%)."
+   ]
+  }
+ }
+}

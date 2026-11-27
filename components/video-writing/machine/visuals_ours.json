@@ -1,0 +1,6 @@
+{
+ "_what": "How the writing line uses the swipe for the pictures (owner rulings 2026-11-20; last word: we use the swipe image to generate our version and extract its motion patterns to generate our own). lanes.brief: true = stage 5 v18 (staged fresh), false = v17 (swipe as backbone). lanes.director: false = 5d v1 (no camera); true = camera written, director_base swipe (v3: the swipe's shot and motion pattern as base, ours layered on) or ours (v2: staged fresh). One machine: VISUALS_OURS_OFF=all|<lanes>, VISUALS_DIRECTOR_BASE=swipe|ours.",
+ "on": true,
+ "lanes": {"brief": false, "director": true},
+ "director_base": "swipe"
+}

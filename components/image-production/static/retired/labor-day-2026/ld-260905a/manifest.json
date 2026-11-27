@@ -1,0 +1,55 @@
+{
+  "run": "ld-260905a",
+  "brand": "Brand A",
+  "product": "flex",
+  "date": "2026-09-05",
+  "lane": "fed-up-king",
+  "offer": {
+    "id": "flex-labor-day",
+    "price": 69.99,
+    "compare_at": 99.99,
+    "runs_until": "2026-09-08",
+    "beat": "final-countdown",
+    "verified_against": "live Shopify variant 2026-09-05"
+  },
+  "product_element": "8fad5612-d46f-4c19-baec-c3a636f22a4e",
+  "model_requested": "nano_banana_pro",
+  "model_reported": "nano_banana_2",
+  "canvas": "generated 4:5, padded to 9:16 (1856x3300)",
+  "ads": [
+    {
+      "slug": "01-void-beto",
+      "cast": "beto",
+      "age": 38,
+      "concept": "specvoid",
+      "format": "productvoid",
+      "prompt": "prompts/01-void-beto.txt"
+    },
+    {
+      "slug": "02-poster-brett",
+      "cast": "brett",
+      "age": 41,
+      "concept": "bladesdontmatter",
+      "format": "distressedposter",
+      "prompt": "prompts/02-poster-brett.txt"
+    },
+    {
+      "slug": "03-apology-omar",
+      "cast": "omar",
+      "age": 45,
+      "concept": "weforgot",
+      "format": "apology",
+      "prompt": "prompts/03-apology-omar.txt"
+    },
+    {
+      "slug": "04-faceoff-dev",
+      "cast": "dev",
+      "age": 56,
+      "concept": "everyotherfix",
+      "format": "faceoff",
+      "prompt": "prompts/04-faceoff-dev.txt"
+    }
+  ],
+  "passes_to_land": 11,
+  "note": "Every correction was re-run as text-to-image, so each fix re-rolled the whole frame. Corrections are image-to-image from now on."
+}

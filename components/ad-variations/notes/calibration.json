@@ -1,6 +1,6 @@
 {
  "_what": "Post #1 (TikTok 7167399325910289706) planned automatically, compared with the hand-made Asset 01 spec, and the prompt changes that closed the gaps. Rendered on the Ad Variations page, 'Against the hand-made spec'.",
- "golden": "the team notes (page (team page))",
+ "golden": "lab/the owner/Brand A-relaunch/ASSET-01-VIDEO-VARIATIONS-owner.md (page https://claude.ai/artifact/4zTKx41FGpxsBMo8AATBiu)",
  "summary": "The first prompts found the elements and the corpus numbers, but locked too much, bundled several changes into one variation and read the sound wrong. Three passes later the automatic plan covers seven of the hand spec's ten levers (not the problem line, the demo bodies or the pitcher swap) with the same structure (a paid base plus one-lever variations, cast from the roster), finds the music bed and the reveal hit, and finds post #3 as the same template. What it still cannot do is see the frames: the picture for each beat comes from the teardown record, so it cannot spot reused footage the way the hand spec did.",
  "rows": [
   {
@@ -33,17 +33,17 @@
   },
   {
    "what": "The variations",
-   "hand": "A paid base plus 10, each moving one lever; two reactor swaps cast from the roster (Marcus 29, Ray 61); captions; an offer end card; the Bundle Set; faceless inserts; a motion-transfer pitch swap.",
+   "hand": "A paid base plus 10, each moving one lever; two reactor swaps cast from the roster (Marcus 29, Ray 61); captions; an offer end card; the King Set; faceless inserts; a motion-transfer pitch swap.",
    "auto_v1": "A control plus 10, but 8 of 11 changed three variables and two were really new formats.",
    "change": "v2/v3: at most two variables per variation, no format changes in the matrix, check the paid cut's needs (sound-off, 4:5, one offer), cast person-levers from the roster by name, and test a second hero SKU.",
-   "auto_v2": "A paid base (4:5, captions, one offer) plus 10: new borrowed clip, new first line, Marcus as reactor, Omar as reactor, the benchmark swapped for a customer's own aspiration, product out of frame one, new sticker wording, the dominant roll, captions, the Starter Set named early. Not planned: the problem line (the v2 run had it), faceless demo inserts, the motion-transfer pitch swap. Added that the hand spec did not have: the dominant-roll test and the product held out of frame one."
+   "auto_v2": "A paid base (4:5, captions, one offer) plus 10: new borrowed clip, new first line, Marcus as reactor, Omar as reactor, the benchmark swapped for a customer's own aspiration, product out of frame one, new sticker wording, the dominant roll, captions, the Vitals Set named early. Not planned: the problem line (the v2 run had it), faceless demo inserts, the motion-transfer pitch swap. Added that the hand spec did not have: the dominant-roll test and the product held out of frame one."
   },
   {
    "what": "Cost of the set",
-   "hand": "$__ machine cost; $__ if the cheaper motion route passes; ≈15 h.",
-   "auto_v1": "$__ ($__ with TEST routes), priced by the machine from routes.json.",
+   "hand": "$27.07 machine cost; $19.79 if the cheaper motion route passes; ≈15 h.",
+   "auto_v1": "$14.87 ($11.01 with TEST routes), priced by the machine from routes.json.",
    "change": "Rates written into routes.json once; the model gives units only.",
-   "auto_v2": "$__ on the locked routes — the two reactor swaps run on Genjutsu at ≈$__ each — or $__ when the TEST motion routes (Wan 2.2 Animate, Kling Motion Control) replace it; ≈18 h."
+   "auto_v2": "$42.78 on the locked routes — the two reactor swaps run on Genjutsu at ≈$19 each — or $13.30 when the TEST motion routes (Wan 2.2 Animate, Kling Motion Control) replace it; ≈18 h."
   },
   {
    "what": "Gates",
@@ -69,9 +69,9 @@
   {
    "what": "Time and spend to plan",
    "hand": "A working session with frame pulls and hand analysis.",
-   "auto_v1": "≈20 minutes, ≈$__ of Claude per ad.",
+   "auto_v1": "≈20 minutes, ≈$2.3 of Claude per ad.",
    "change": "—",
-   "auto_v2": "≈20–25 minutes, ≈$__ of Claude per ad at list price; the Variable Index was $__ once for the 60 posts."
+   "auto_v2": "≈20–25 minutes, ≈$2.3–2.5 of Claude per ad at list price; the Variable Index was $1.98 once for the 60 posts."
   }
  ]
 }

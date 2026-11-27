@@ -118,20 +118,50 @@ def merge(gem, scribe_words, scribe_lang=None, total=0.0):
         out.append({"id": f"T{i + 1}", "speaker": names[who], "start": round(a, 2), "end": round(b, 2),
                     "text": g["text"], "language": lang, "also": [two(x) for x in (g.get("also") or [])],
                     "flags": flags, "scribe_heard": scribe_heard[:400]})
+    # SCRIBE HEARD IT, THE WORDS MODEL DID NOT (2026-11-15): a short "Ew." or "Mm." from a second voice
+    # under loud music never reached the transcript, because only the words model's lines were kept.
+    # Every Scribe word that no line matched and no line's time covers becomes its own line, flagged.
+    used = {j for i in got for j in got[i]}
+    spans = [(l["start"] - 0.2, l["end"] + 0.2) for l in out]
+    left = [w for j, w in enumerate(speech) if j not in used
+            and not any(a <= (w["start"] + w["end"]) / 2 <= b for a, b in spans)]
+    for c in _runs(left):
+        names.setdefault(c["sp"], f"Speaker {len(names) + 1}")
+        out.append({"id": "", "speaker": names[c["sp"]], "start": round(c["start"], 2), "end": round(c["end"], 2),
+                    "text": c["text"], "language": sl, "also": [], "flags": ["scribe-only"], "scribe_heard": c["text"]})
+    out.sort(key=lambda l: l["start"])
+    for k, l in enumerate(out, 1):
+        l["id"] = f"T{k}"
     return out
 
 
-def from_scribe_only(scribe_words, scribe_lang, gap=1.2):
-    """No Gemini answered: Scribe's own words, one line per turn, flagged —
-    other languages may be missing or translated."""
+def _runs(words, gap=1.2):
+    """Words in time order → one run per speaker turn (a new run on a speaker change or a pause over `gap`)."""
     out, cur = [], None
-    for w in scribe_words:
+    for w in words:
         if not cur or w["speaker"] != cur["sp"] or w["start"] - cur["end"] > gap:
             cur = {"sp": w["speaker"], "start": w["start"], "end": w["end"], "text": w["text"]}
             out.append(cur)
         else:
             cur["text"] += " " + w["text"]
             cur["end"] = w["end"]
+    for c in out:
+        c["text"] = re.sub(r"\s+", " ", c["text"]).strip()
+    return out
+
+
+def vocal_sounds(scribe_words):
+    """Every non-word sound a person makes (sniffs, sighs, moans, laughs, gasps), timed: Scribe's audio events.
+    They carry a hook as much as the words do (2026-11-15: a swipe's opening was sniffs, "Ew" and "Mm" over
+    music, and the sheet showed none of it)."""
+    return [{"at": round(w["start"], 2), "end": round(w["end"], 2), "sound": w["text"].strip("[] ").lower(),
+             "speaker": w.get("speaker")} for w in scribe_words if w.get("type") == "audio_event"]
+
+
+def from_scribe_only(scribe_words, scribe_lang, gap=1.2):
+    """No Gemini answered: Scribe's own words, one line per turn, flagged —
+    other languages may be missing or translated."""
+    out = _runs(scribe_words, gap)
     names = {}
     res = []
     for i, c in enumerate(out, 1):

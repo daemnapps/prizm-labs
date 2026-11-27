@@ -1,0 +1,50 @@
+{
+ "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+ "batch": "260902b",
+ "brand": "Brand B",
+ "product": "bodyscrub",
+ "media": "static",
+ "source": "ai",
+ "talent": "none",
+ "avatar": "spothider",
+ "problem": "darkspots",
+ "angle": "pigmentmemory",
+ "concept": "handsapplication",
+ "format": "photostrip",
+ "brief": "p140",
+ "ratio": "9x16",
+ "_upload": "All 6 assets go into ONE ad unit named 'Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b'. Meta reports one row for the unit.",
+ "_join": "Meta's ad_name equals `ad_name`. Split on '-' for brand, product, media, source, talent, avatar, problem, angle, concept, format, brief, ratio, batch.",
+ "ads": [
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a01",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a01.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a02",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a02.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a03",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a03.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a04",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a04.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a05",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a05.png"
+  },
+  {
+   "name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a06",
+   "ad_name": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b",
+   "file": "Brand B-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-handsapplication-photostrip-p140-9x16-260902b-a06.png"
+  }
+ ]
+}

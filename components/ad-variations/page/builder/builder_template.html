@@ -92,7 +92,7 @@ a.watch{font-weight:600;font-size:13.5px;color:var(--accent)}
 </style>
 
 <div class="wrap">
-  <div><h1>Creative Run Builder</h1><div class="small"><brand> · Brilliance Face Scrub · spot-hider · buy 2, get 1 free · video → video</div></div>
+  <div><h1>Creative Run Builder</h1><div class="small">Brand B · Brilliance Face Scrub · spot-hider · buy 2, get 1 free · video → video</div></div>
   <div id="ro"></div>
   <div class="grid-wrap"><table class="mx" id="mx"></table></div>
   <div class="bar">
@@ -142,7 +142,7 @@ const TH=k=>(D.thumbs[k]||{}).frames||[];
 const play=(k,inner)=>D.links[k]?`<a class="play" href="${D.links[k]}" target="_blank" rel="noopener" title="Play the video">${inner}<span class="pb">▶</span></a>`:inner;
 const cover=k=>{const f=TH(k);return f.length?play(k,`<img src="${f[Math.min(1,f.length-1)].src}" alt="">`):""};
 const strip=k=>`<div class="strip">${play(k,TH(k).map(f=>`<img src="${f.src}" alt="">`).join(""))}</div>${D.links[k]?`<a class="watch" href="${D.links[k]}" target="_blank" rel="noopener">▶ Watch the full video</a>`:""}`;
-// the video chain's own stages (tools/video-teardown/machine/chain.py), from where a format swap starts
+// the video chain's own stages (components/video-teardown/machine/chain.py), from where a format swap starts
 const STAGES=[["stage2","2 Spec"],["stage3","3 Injection"],["stage5","5 Brief"]];
 const stageName=k=>(STAGES.find(s=>s[0]===k)||[k,k])[1];
 

@@ -1,0 +1,65 @@
+{
+  "kind": "view-feedback",
+  "title": "View feedback (twins)",
+  "note": "What a reviewer marks on their feedback twin: append-only, person-attributed OVERLAY RECORDS in four species — annotation, flag, view_pref, change_proposal (card FT-1; the design is ruled in new-workflow-design/builds/feedback-twins/CLAUDE.md). AN ITEM IS A VIEW: the item id is the PARENT view's tool id (`performance`, `inventory` — the same [a-z0-9-] tool id the CP-9 views menu declares), NEVER the `<view>-fb` twin's id, because one view's feedback must not split across two ids the day a twin is renamed. THE RECORD'S AUTHOR IS THE PERSON — every record already carries `reviewer`, so attribution comes free and stays append-only (the PM-11 pattern, tasks kind, second use). A twin FOLDS ONLY ITS OWN VIEWER'S RECORDS (the developer verbatim, 2026-09-02: each reviewer's twin folds only their own): a fold that ignores the author is wrong, and shared review is at most a later option, never a default. THE MAIN VIEW READS NONE OF THIS KIND — the hard constraint of the whole family; the parent view's only addition is one 'Give feedback' button (FT-3), and the absence is asserted as a grep in new-workflow-design/builds/feedback-twins/test_view_feedback.py so the day someone wires the kind into a parent template, the test says so. NOTHING HERE PATCHES A MAIN VIEW: records roll up as PROPOSALS on an inbox item, the developer decides, and the change rides the normal card path (FT-5). No status, no resolution field, no edits — a record is never amended, and a superseding record is just a later record. The item id `view-index` is RESERVED: each person keeps one cumulative index record there naming the views they have written feedback on, so a roll-up can DISCOVER them — the platform lists records only per known item id (same mechanism as the inbox's `filed-index` and the tasks kind's `task-index`). Identity is today's upright sign-in, internal users only at current trust; B-1 enforcement precedes any true-outsider twin.",
+  "open_items": true,
+  "serve_records": "history",
+  "_serve_records_note": "These records ARE an append-only history folded on read, so /api/reviews must serve EVERY record for an item, ascending — not the latest per reviewer, which would leave each person holding exactly one overlay mark per view. Set for the same reason tasks and inbox set it (records-API fix, 2026-09-01, BLOCKER-2026-08-31-records-api.md).",
+  "item_id": "id",
+  "item_label": "title",
+  "items": [],
+  "_items_note": "Deliberately empty and open_items: true. The addressable items are the declared views, which the server computes per person (the CP-9 `consumer-views` meta tag, `toolsIn()`); a second committed list of view ids here would be a copy to keep in sync and would go stale the first time a view is promoted. Discovery of which views actually carry feedback is the `view-index` record's job.",
+  "verdict_fields": [
+    {
+      "key": "overlay",
+      "values": [
+        "annotation",
+        "flag",
+        "view_pref",
+        "change_proposal",
+        "index"
+      ],
+      "note": "exactly one per record — the overlay species. `index` appears only on the reserved item id `view-index`. The four species are the whole vocabulary: `annotation` = a note on the view, `flag` = something wanting attention and why, `view_pref` = one person's rendering preference for their own twin, `change_proposal` = a structured ask that this view change. Adding a fifth species is a human ruling, not a session's inference."
+    },
+    {
+      "key": "text",
+      "required_when": "overlay = annotation | flag | change_proposal",
+      "note": "the prose, in the author's own words. On a flag it is WHY it is flagged; on a change_proposal it is the ask — write it the way an inbox item's title would read (the PM-4 filing convention), because FT-5 rolls these up into exactly that. Never present on `view_pref` or `index`."
+    },
+    {
+      "key": "anchor",
+      "required_when": "overlay = change_proposal",
+      "note": "{type, ref} — WHAT ON THE VIEW this record is about. `type` is one of view | section | metric | column | row | element; `ref` names it in the view's own terms (a metric name, a column header) and is required for every type except `view`, which means the whole page. Optional on annotation and flag (absent = the whole view); REQUIRED on change_proposal, because a proposal that does not say what it changes cannot be grouped, decided, or carded."
+    },
+    {
+      "key": "level",
+      "values": [
+        "question",
+        "concern",
+        "blocker"
+      ],
+      "note": "optional on `flag`; absent means `concern`. A flag with no level is still a flag — this only sorts the queue, and a flag that carried no urgency at all would just be an annotation."
+    },
+    {
+      "key": "pref",
+      "required_when": "overlay = view_pref",
+      "note": "the preference key, a non-empty string. THE VOCABULARY IS THE VIEW'S, NOT THIS KIND'S — each view knows its own knobs (a hidden section, a sort, a date range) and an unknown key is ignored by the fold rather than rejected here, so a view may gain a knob without a manifest change. Prefs fold latest-wins PER AUTHOR PER KEY and affect only that person's twin."
+    },
+    {
+      "key": "value",
+      "required_when": "overlay = view_pref",
+      "note": "any JSON the view understands. `null` clears that person's preference for the key and returns the twin to the view's default — append-only, so a preference is never deleted, only superseded."
+    },
+    {
+      "key": "change",
+      "required_when": "overlay = change_proposal",
+      "note": "{type} — the VERB that makes a proposal structured: add | remove | modify | reorder, applied to whatever `anchor` names. The pair (anchor, change.type) is what lets FT-5 group a view's proposals mechanically; the prose in `text` says the rest."
+    },
+    {
+      "key": "views",
+      "required_when": "overlay = index",
+      "note": "view id -> {first, by} for every view this person has filed feedback on; cumulative, latest per person wins. Same contract as the tasks kind's index: without it a roll-up cannot enumerate the views that carry records."
+    }
+  ],
+  "_absence_note": "GREP-PROVABLE ABSENCE (FT-1's done-when): no template under platform/views/viewers/_templates/ names `view-feedback`. That is the design — the main views stay chat-free and overlay-free, and all folding code lives in the `<view>-fb` twin (FT-3). test_view_feedback.py asserts the zero hits, so the absence fails loudly instead of eroding quietly."
+}

@@ -1,12 +1,12 @@
 """VOICE CARDS — one per person: their own clip, what a tool measures, what an ear hears.
 
-the owner, 2026-09-25: "we can make really really really powerful avatar, sub avatar,
+owner, 2026-09-25: "we can make really really really powerful avatar, sub avatar,
 casting calls that are direct and detailed and when we generate voice, we know
 exactly what to generate."
 
     1. CLIP      each speaker's lines cut out of the voice track and joined (≤ 90 s)
     2. MEASURED  Praat, the voice scientists' standard tool (GPLv3, runs on this
-                 Mac in the venv named by AUDIO_PYTHON): pitch (Hz and how much it moves),
+                 Mac in ~/.daemn/venvs/audio): pitch (Hz and how much it moves),
                  jitter, shimmer, harmonics-to-noise; plus pace, talk share and
                  line counts computed from the lines' own timings
     3. HEARD     Gemini listens to the clip alone (prompts/voice-card-v<N>-owner.md):
@@ -19,7 +19,6 @@ The look (face, hair, wardrobe) is joined in the video chain, where the cast
 sheet lives; this card carries the times each person speaks so the join can be made.
 """
 import json
-import os
 import subprocess
 import sys
 import tempfile
@@ -32,7 +31,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.append(str(HERE.parent / "run-kit"))     # appended, never ahead of this component
 from run_kit.paths import repo  # noqa: E402
 
-PY = Path(os.environ.get("AUDIO_PYTHON") or "/nonexistent/audio-python")
+PY = Path.home() / ".daemn" / "venvs" / "audio" / "bin" / "python"
 VOCAB = json.loads((HERE / "definitions" / "voice.json").read_text())["lists"]
 MAX_CLIP = 90.0
 
@@ -93,7 +92,7 @@ def cut(voices, segments, out):
 
 def measure(clip):
     if not PY.exists():
-        return {"error": "voice measures not installed (the venv named by AUDIO_PYTHON)"}
+        return {"error": "voice measures not installed (~/.daemn/venvs/audio)"}
     r = subprocess.run([str(PY), "-c", PRAAT, str(clip)], capture_output=True, text=True, timeout=120)
     try:
         return json.loads(r.stdout.strip().splitlines()[-1])
@@ -143,7 +142,7 @@ def cards(lines, voices_track, out_dir, total_seconds):
                     .replace("{delivery_styles}", ", ".join(styles)))
             try:
                 heard, model, tried = G.ask(clip, text)
-                card.update(heard if isinstance(heard, dict) else {})
+                card.update(G.one(heard))
                 card["heard_by"] = model
             except Exception as e:
                 card["heard_error"] = str(e)[:200]

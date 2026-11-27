@@ -1,0 +1,20 @@
+{
+  "kind": "wf-cards-portfolio-cards",
+  "title": "cards-portfolio — every dev card, one view",
+  "note": "Carded by the lead 2026-08-28 from the the developer-approved plan (relayed via PLAN, read at head). CARDS-1 dispatched; CARDS-2 after its merge; promote `cards` only after the developer eyeballs.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/cards-portfolio/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    {
+      "key": "approve",
+      "type": "boolean",
+      "label": "Approve card as-is"
+    },
+    {
+      "key": "feedback",
+      "type": "text",
+      "label": "What to change (required unless approved)"
+    }
+  ]
+}

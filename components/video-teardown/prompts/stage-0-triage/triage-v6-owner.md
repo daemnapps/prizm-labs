@@ -1,0 +1,22 @@
+<!-- v6 (2026-11-19, owner: the scroll stoppers are their own list — "Yes, add those 4"): a HOOK FORMAT line from the locked hook formats ({video_names}), or none, or DEFINE. Dramatic continuation is a hook format now, not a script format. Everything in v5 stands. -->
+<!-- v5 (2026-11-19, owner: "categorize the swipe / winner in this framework and when we create new briefs it needs to fall in this framework, and if it does not seem to be in this framework, then we need to clearly define it"): three name lines, SCRIPT FORMAT, PRODUCTION FORMAT and STYLE, each ONE id from the locked video names ({video_names}, components/video-production/formats/names.json) or DEFINE: <its own name> — <its own words>. A DEFINE goes to the owner as one card; writing waits for his call (run.py, video_names.settle). STYLE now picks from the locked styles. FORMAT stays as it was (the element library id, read by the format bank and the playbooks). Everything else in v3 stands. -->
+Classify this video for a swipe-file triage. Answer in exactly this format, nothing else:
+
+LANE: one of ALREADY AN AD | ORGANIC | STATIC | SEQUENTIAL — is this a paid ad (product pitch, offer, CTA to buy) or organic content?
+CATEGORY: what product/service category and who the speaker appears to be (age range, gender).
+RUNTIME: the video's length.
+SOUND FORM: one of SPOKEN | SUNG | RAPPED | MUSIC ONLY | SILENT — how the words reach the ear. LISTEN before answering; this is not visible on screen and cannot be judged from the pictures. SUNG means a voice carries the words on a melody for most of the runtime. RAPPED means rhythmic delivery over a beat without sung pitch. MUSIC ONLY means a bed with no words. A spoken voice over music is SPOKEN, not SUNG. If the piece switches — a sung chorus between spoken verses — answer with the dominant form and add "· mixed: <what the other part is>".
+SCRIPT FORMAT: what the ad SAYS — the shape of its argument. Exactly ONE `id` from the SCRIPT FORMAT list in THE NAMES below, then " — " and why. If none of them is what this ad says, write `DEFINE: <a short name for it> — <what it is, in plain words>`. Never stretch a name to fit.
+PRODUCTION FORMAT: how the ad is MADE — who or what is on screen and what carries the sound. Exactly ONE `id` from the PRODUCTION FORMAT list in THE NAMES below, then " — " and why (read it off the sound form and who talks: sung or rapped is a song ad; music only is a short movie; one voice over shots with nobody talking on screen is a narrator montage; two or more people talking is a multi-speaker scene; one person to camera is a single presenter; a phone screen of messages is a text thread). If none fits, write `DEFINE: <a short name> — <what it is>`.
+HOOK FORMAT: the scroll stopper — only when the first seconds are made differently from the body (a faked stunt, a fake billboard, watch-bait drama, a weird stunt) and end where the pitch starts. Exactly ONE `id` from the HOOK FORMAT list in THE NAMES below, then " — " and why; `none` when the opening is simply the body starting (most ads); `DEFINE: <a short name> — <what it is>` when it is a scroll stopper unlike any on the list.
+STYLE: what every picture LOOKS like, read off the frames, not the topic. Exactly ONE `id` from the STYLE list in THE NAMES below, then " — " and what you see that makes it that style (eyes, proportions, skin, surfaces, light, capture). The test: swap the style and the script, cast and beats would stay the same. Real people filmed on a phone is phone-ugc; never call a stylised or animated piece real footage. If none of the styles is what this looks like (claymation, a doll world, a horror look…), write `DEFINE: <a short name> — <what you see>`.
+FORMAT: the video format — the shape the piece carries its message in. Exactly ONE `id` from the format list below, then " — " and why. If no row fits, write `new:<short-name>` and describe it.
+AI ASSESSMENT: is any part of this video AI-generated (synthetic voice, generated avatar/likeness, AI b-roll, generated images)? Name the specific tells you observe — lip-sync drift, unnatural blinks, texture shimmer, impossible physics, TTS cadence, watermarks of gen tools — or state "no AI tells observed". Give a confidence: LIKELY AI | POSSIBLY AI | LIKELY HUMAN.
+ONE LINE: what happens in the video.
+
+
+THE FORMAT LIST (pick an `id`):
+{formats}
+
+THE NAMES (locked; use these ids and no others, or DEFINE):
+{video_names}

@@ -23,14 +23,14 @@ home (beside `state.json`, the ids made so far) and to the hand-off's own
 `returned/live-ids.json` (the hand-off standard's declared return), and
 `handoff take-back` records it in the ledger as `live_meta_<id>`.
 
-**Nothing goes live without the owner.** `--go` refuses unless `approvals.json`
+**Nothing goes live without owner.** `--go` refuses unless `approvals.json`
 in this folder carries his go for that hand-off (and, before the very first
 real upload, the `first_go` line). An approval says which landing pages and
 whether the ads start PAUSED or ACTIVE. After the first go, every approved
 hand-off runs with no one at the keyboard — `--all-approved` walks them.
 
 **The card road (1 Oct 2026)** — `upload_card(<card folder>)` takes one
-finished ad from the Drive (CARD.md) into Meta after the owner's click on the
+finished ad from the Drive (CARD.md) into Meta after owner's click on the
 approval page (`approve.py`); flexible or carousel. approvals.json above is
 the legacy hand-off road only.
 
@@ -50,6 +50,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(REPO / "components/naming"))
 import names as N
 import pace
+import trybe_tag as TT
 from brand import Brand
 from drop import read_handoff, kind_of, VIDEO
 
@@ -130,8 +131,8 @@ def page_for(link, brand):
     url = (link or {}).get("url") or ""
     path, host = urlparse(url).path or "/", urlparse(url).netloc
     best = None
-    # a funnel on the page's own host wins over one that only shares the path ("/" on method.brand-a.com is the
-    # quiz, not the brand-a.com store: 9 Oct 2026); the longest path breaks a tie
+    # a funnel on the page's own host wins over one that only shares the path ("/" on method.brand_a.com is the
+    # quiz, not the brand_a.com store: 9 Oct 2026); the longest path breaks a tie
     rank = lambda f: (urlparse(f["url"]).netloc == host, len(urlparse(f["url"]).path))
     for f in funnels(brand):
         fu = urlparse(f.get("url") or "")
@@ -139,7 +140,7 @@ def page_for(link, brand):
             best = f
     if not best:
         return url, None, "no funnel in the brand's registry matches this page"
-    # the owner, 17 Oct 2026: BRAND-A's "icon" and "flex-cpk" funnels both sat at method.brand-a.com/icon/, so the
+    # owner, 17 Oct 2026: brand_a's "icon" and "flex-cpk" funnels both sat at method.brand_a.com/icon/, so the
     # first one listed won silently and ads split across two campaigns. Two funnels on one page is now a stop.
     tied = [f["id"] for f in funnels(brand) if urlparse(f.get("url") or "").path
             and path.startswith(urlparse(f["url"]).path) and rank(f) == rank(best)]
@@ -198,16 +199,46 @@ def campaign_for(b, funnel, fields):
     """The campaign sells one product to one funnel: the funnel's product,
     else the ad's own, else the brand's fallback -> (name, why)."""
     product = funnel_product(b.name, funnel) or (N.slug(fields["product"]) if fields.get("product") else None)
+    # the directory first (owner, 10 Nov 2026): the warehouse's live campaign for this funnel, read and assigned,
+    # never guessed — directory.py, rebuilt from the warehouse when older than 12 h
+    try:
+        import directory as DIR
+        live, dwhy = DIR.campaign_for_funnel(b.name, funnel)
+    except Exception:  # noqa: BLE001 — no directory: the older rules below
+        live, dwhy = None, None
+    if live:
+        return live, None
     try:
         name = campaign_name(b, funnel, product)
     except SystemExit as e:
         return None, f"no campaign: {e}"
-    return name, new_campaign(b.name, name)
+    why = new_campaign(b.name, name)
+    if dwhy:                           # the directory knows this funnel has no live campaign: say so, never a twin
+        return name, why or dwhy
+    if why:
+        twin = live_twin(b.name, name, funnel)
+        if twin:
+            return twin, None
+    return name, why
+
+
+def live_twin(brand, name, funnel):
+    """The one live campaign that is this campaign renamed: same product and funnel, a suffix on the funnel part
+    (a brand's campaign renamed with a `-subscribe` suffix, Nov 2026). Cards then go into the campaign that
+    is spending instead of failing their check as a NEW campaign. None when there is no such campaign or more
+    than one (the approval page's campaign picker decides then)."""
+    if not funnel or f"_{funnel}_" not in name:
+        return None
+    head, tail = name.split(f"_{funnel}_", 1)
+    _, ids = known_ids(brand)
+    have = set(ids["campaigns"]) | spending_campaigns(brand)
+    hits = [c for c in have if c.startswith(f"{head}_{funnel}-") and c.endswith(f"_{tail}")]
+    return hits[0] if len(hits) == 1 else None
 
 
 def spending_campaigns(brand):
     """Campaign names the warehouse has seen spend for this brand (funnel-tracking's views data, never a Meta
-    read). A campaign made by hand is in use even though no upload remembered it — Brand-B's body scrub CPK
+    read). A campaign made by hand is in use even though no upload remembered it — brand_b's body scrub CPK
     campaign, 17 Oct 2026. In the uploader's naming, so another brand's campaign never counts."""
     f = REPO / "runs" / "funnel-tracking" / "views-data.json"
     try:
@@ -263,7 +294,7 @@ def copy_ad(m, ad_id, adset_id, name, status):
 
 
 def move_card(folder, campaign, by, m=None, log=print):
-    """A live card's ads, copied into `campaign` (the owner, 17 Oct 2026: "duplicate the ad … into the main
+    """A live card's ads, copied into `campaign` (owner, 17 Oct 2026: "duplicate the ad … into the main
     campaign"). Each copy goes into the ad set of the same name inside that campaign and starts the way the
     original runs. The originals are left alone — pausing the old campaign is its own press. Returns the card."""
     import cards as C
@@ -339,8 +370,8 @@ def set_campaign_status(brand, campaign, status, by, m=None):
 
 
 def new_campaign(brand, name):
-    """Why an ad may not go: it would open a campaign the brand has never used. the owner, 17 Oct 2026: a funnel
-    change sent BRAND-A ads into a second campaign nobody asked for. Once a brand has campaigns, a new one is
+    """Why an ad may not go: it would open a campaign the brand has never used. owner, 17 Oct 2026: a funnel
+    change sent brand_a ads into a second campaign nobody asked for. Once a brand has campaigns, a new one is
     only made when $META_NEW_CAMPAIGN names it; otherwise the card fails its campaign check and says so."""
     _, ids = known_ids(brand)
     have = set(ids["campaigns"]) | spending_campaigns(brand)
@@ -421,7 +452,7 @@ def approvals():
 def approval_for(name):
     a = approvals()
     if not a.get("first_go"):
-        raise SystemExit("REFUSED: no first go from the owner recorded in approvals.json — nothing has ever been "
+        raise SystemExit("REFUSED: no first go from owner recorded in approvals.json — nothing has ever been "
                          "uploaded by this tool, and the first real upload is his call.")
     hit = next((x for x in a["approved"] if x["handoff"] == name), None)
     if not hit:
@@ -458,7 +489,7 @@ def flexible_ad(ad, b, st, m):
     No dynamic-creative ad set is needed, so many ads share one ad set."""
     media = [st["media"][f] for f in ad["media"]]
     cta = {"type": ad["cta"], "value": {"link": ad["url"]}}
-    story = {"page_id": b.page_id, **({"instagram_user_id": b.instagram_id} if b.instagram_id else {})}
+    story = _story(ad, b)
     texts = ([{"text": t, "text_type": "primary_text"} for t in ad["bodies"]]
              + [{"text": t, "text_type": "headline"} for t in ad["titles"]]
              + [{"text": t, "text_type": "description"} for t in ad.get("descriptions") or []])   # 4 Oct: video ads dropped them
@@ -475,6 +506,13 @@ def flexible_ad(ad, b, st, m):
     return {"creative": {"name": ad["meta_ad_name"], "object_story_spec": story, "url_tags": URL_TAGS,
                          **_advantage_off()},
             "creative_asset_groups_spec": {"groups": [{**group, "texts": texts, "call_to_action": cta}]}}
+
+
+def _story(ad, b):
+    """The Page an ad runs from: the card's picked Page (`fb_page`, owner 2026-11-21: one ad per picked Page), else
+    the brand's. The brand's Instagram account rides only with the brand's own Page."""
+    pid = str(ad.get("fb_page") or b.page_id)
+    return {"page_id": pid, **({"instagram_user_id": b.instagram_id} if b.instagram_id and pid == str(b.page_id) else {})}
 
 
 def _advantage_off():
@@ -502,7 +540,7 @@ def carousel_ad(ad, b, st, m=None):
         if ad["descriptions"]:
             kid["description"] = ad["descriptions"][0]
         kids.append(kid)
-    story = {"page_id": b.page_id, **({"instagram_user_id": b.instagram_id} if b.instagram_id else {}),
+    story = {**_story(ad, b),
              "link_data": {"link": ad["url"], "message": ad["bodies"][0], "child_attachments": kids,
                            "multi_share_optimized": False, "multi_share_end_card": False,
                            "call_to_action": cta}}
@@ -547,13 +585,21 @@ def go(folder, p, approval, m=None, state_f=None, log=print, runs_root=None):
                 return x["id"]
 
     def alive(oid):
-        """A remembered id still takes ads. the owner, 2026-10-12: a card kept posting into an ad set that had been
+        """A remembered id still takes ads. owner, 2026-10-12: a card kept posting into an ad set that had been
         archived since its first try ("Archived ad sets may only contain archived or deleted ads") while a live
         ad set of the same name sat beside it. A lookup that fails is taken as alive — Meta answers the post."""
         try:
             return m.get(oid, fields="effective_status").get("effective_status") not in DEAD
         except (SystemExit, Exception):  # noqa: BLE001
             return True
+
+    def sibling_goal(cid):
+        """Meta requires every ad set in a lowest-cost campaign to share one delivery goal (error 1885760),
+        so a new ad set takes the goal of the ad sets already in the campaign; an empty campaign takes the brand's."""
+        for x in m.paged(f"{cid}/adsets", fields="optimization_goal", limit=50):
+            if x.get("optimization_goal"):
+                return x["optimization_goal"]
+        return b.optimization_goal
 
     acct = f"act_{m.ACCOUNT}"
     ids_f, ids = known_ids(b.name, runs_root)   # name -> id per brand: Meta is asked by name only on a miss
@@ -584,13 +630,13 @@ def go(folder, p, approval, m=None, state_f=None, log=print, runs_root=None):
                 sid = None                      # archived since we remembered it: find the live one by name
             sid = sid or find("adsets", ad_set, st["campaigns"][camp])
             if not sid:
-                # an ad set is made only when the owner signed it new, or it is a promo one (ad_sets.py, 2026-10-27)
+                # an ad set is made only when owner signed it new, or it is a promo one (ad_sets.py, 2026-10-27)
                 import ad_sets as AS
                 closed = AS.why_closed(b.name, ad_set, runs_root)
                 if closed:
                     raise SystemExit(closed)
                 sid = m.post(f"{acct}/adsets", name=ad_set, campaign_id=st["campaigns"][camp], status="PAUSED",
-                             billing_event="IMPRESSIONS", optimization_goal=b.optimization_goal,
+                             billing_event="IMPRESSIONS", optimization_goal=sibling_goal(st["campaigns"][camp]),
                              targeting=targeting(b),
                              promoted_object={"pixel_id": b.pixel_id, "custom_event_type": b.conversion_event},
                              **attribution(b))["id"]
@@ -640,7 +686,7 @@ def go(folder, p, approval, m=None, state_f=None, log=print, runs_root=None):
 
 
 def attribution(b):
-    """The ad set's attribution window, from the brand's account file (the owner,
+    """The ad set's attribution window, from the brand's account file (owner,
     2026-10-08): 7-day click · 1-day view · 1-day engaged view while learning,
     1-day click once scaling. Nothing set -> Meta's own default."""
     a = (getattr(b, "d", None) or {}).get("attribution") or {}
@@ -649,7 +695,7 @@ def attribution(b):
 
 
 def switch_on(m, p, st, log=print):
-    """'On' means the ad runs. the owner, 7 Oct 2026: the Creator-A face scrub ad was
+    """'On' means the ad runs. owner, 7 Oct 2026: the creator face scrub ad was
     approved Paused by default and its new ad set was made paused, so nothing ran.
     A campaign or ad set this upload made is switched on with the ad. One that
     already existed and is paused is left alone (it may hold other ads) and
@@ -666,7 +712,7 @@ def switch_on(m, p, st, log=print):
         if sid in made:
             m.post(sid, status="ACTIVE")
             log(f"  ad set on: {k.split('|')[1]}")
-    # No read-back from Meta (the owner, 2026-10-08: no direct Meta reads). The card
+    # No read-back from Meta (owner, 2026-10-08: no direct Meta reads). The card
     # shows what was set; delivery comes from the warehouse.
     st["delivery"] = {}
 
@@ -702,8 +748,9 @@ def thumb_for(m, ad, f, vid):
 
 def card_plan(folder, card):
     """A card -> the same plan shape as plan(): one ad per landing page, named
-    <ad name>_<funnel_of(link id)>, into the campaign / ad set the brand's
-    naming gives. Every reason an ad cannot go is in `held`."""
+    <ad name>_<funnel_of(link id)> (plus _trybe-<trybe_id> for a Trybe creator's video, whose link then
+    carries trybe=<trybe_id>), into the campaign / ad set the brand's naming gives. Every reason an ad
+    cannot go is in `held`."""
     folder = Path(folder)
     b = Brand(card["brand"])
     fields = card_fields(card)
@@ -712,7 +759,7 @@ def card_plan(folder, card):
     out = {"card": card.get("ad_name"), "brand": b.name, "account": b.account_id,
            "made": datetime.now().isoformat(timespec="seconds"), "campaigns": {}, "ads": [], "held": []}
     ad_set, why = ad_set_for(b, fields)
-    if card.get("ad_set"):                  # an ad set picked for this card (the owner, 24 Oct 2026: promo ads get their own)
+    if card.get("ad_set"):                  # an ad set picked for this card (owner, 24 Oct 2026: promo ads get their own)
         ad_set, why = card["ad_set"], None
     why = [why] if why else []
     missing = [p.name for p in media if not p.is_file()]
@@ -730,6 +777,13 @@ def card_plan(folder, card):
             meta_name = N.short_meta(card["ad_name"], _funnel_of(link_id))
         except (ValueError, KeyError) as e:
             meta_name, ad_why = f"{card.get('ad_name')}_?", ad_why + [f"no Meta ad name: {e}"]
+        # THE TRYBE RULE (2026-11-15, trybe_tag.py): an ad from a creator's Trybe video ends its name with the
+        # trybe_id and carries trybe=<trybe_id> on its link, or the creator is unpaid and the sale unattributed
+        if card.get("trybe_id"):
+            try:
+                meta_name, url = TT.meta_name(meta_name, card["trybe_id"]), TT.link(url, card["trybe_id"])
+            except ValueError as e:
+                ad_why.append(str(e))
         camp = None
         if not funnel:
             ad_why.append(note)
@@ -737,7 +791,7 @@ def card_plan(folder, card):
             if product_clash(b, funnel, fields):
                 ad_why.append(product_clash(b, funnel, fields))
             camp, cw = campaign_for(b, funnel, fields)
-            if card.get("campaign"):            # picked on the approval page (the owner, 17 Oct 2026)
+            if card.get("campaign"):            # picked on the approval page (owner, 17 Oct 2026)
                 camp, cw = card["campaign"], new_campaign(b.name, card["campaign"])
             ad_why += [cw] if cw else []
         row = {"meta_ad_name": meta_name, "unit": card.get("ad_name"), "old_name": card.get("old_name"),
@@ -749,7 +803,18 @@ def card_plan(folder, card):
                "bodies": [_plain(x) for x in (w.get("primary") or [])][:MAX_TEXTS],
                "titles": [_plain(x) for x in (w.get("headlines") or [])][:MAX_TEXTS],
                "descriptions": [_plain(x) for x in (w.get("descriptions") or [])][:MAX_TEXTS], "cta": b.cta}
-        _add(out, row, ad_why)
+        # THE PAGE PICK (owner 2026-11-21): the card runs once per picked Facebook Page (`fb_pages`, ids from the
+        # account file's `fb_pages`); a Page other than the brand's own adds `_p-<tag>` to the ad name so results read apart
+        known = {str(x["id"]): x for x in b.fb_pages}
+        for fp in [str(x) for x in (card.get("fb_pages") or [])] or [str(b.page_id)]:
+            r2, why2 = dict(row), list(ad_why)
+            if fp not in known:
+                why2.append(f"Facebook Page {fp} is not on the brand's account file (fb_pages)")
+            elif fp != str(b.page_id):
+                r2["meta_ad_name"] = f"{meta_name}_p-{known[fp].get('tag') or fp[-4:]}"
+            r2["fb_page"] = fp
+            r2["fb_page_name"] = (known.get(fp) or {}).get("name")
+            _add(out, r2, why2)
     if not card.get("pages"):
         out["held"].append({"meta_ad_name": card.get("ad_name"), "why": ["no landing page on the card"]})
     return out
@@ -764,7 +829,7 @@ LIVE = None   # default: the Drive tree, meta/live.jsonl — never the shared ch
 
 
 def approvers():
-    """The names whose approve sends a card in (approvers.json — the owner adds people)."""
+    """The names whose approve sends a card in (approvers.json — owner adds people)."""
     return json.loads((Path(__file__).resolve().parent / "approvers.json").read_text())["approvers"]
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The cards — every finished ad waiting for, or past, the owner's approve (CARD.md).
+"""The cards — every finished ad waiting for, or past, owner's approve (CARD.md).
 
     meta/<brand>/<state>/<lane>/<ad name>/card.json + the media
 
@@ -13,7 +13,7 @@ deleted. The root is the Drive's `Shared Assets/meta`, or `META_CARDS_ROOT`
     python3 cards.py --tree              # make the empty state/lane folders for every brand
 
 This file never approves anything. The approval is written only by the
-approval page (approve.py) on the owner's click.
+approval page (approve.py) on owner's click.
 """
 import json, os, re, subprocess, sys, time, urllib.request
 from datetime import datetime
@@ -32,7 +32,7 @@ LANES = ("video", "image", "carousel", "creator")
 SCHEMA = "meta-card/1"
 RATIO, RATIO_TOL = 9 / 16, 0.01
 MAX_FLEX, CAROUSEL = 10, (2, 10)
-PAGE_AD_LIMIT = 1000           # ads per Page running or in review (read 1 Oct 2026: brand-a, Brand-B Skincare)
+PAGE_AD_LIMIT = 1000           # ads per Page running or in review (read 1 Oct 2026: brand_a, brand_b Skincare)
 TTL = 600                      # seconds a page/cap answer is reused
 
 
@@ -232,7 +232,7 @@ def page_ads(brand, meta=None):
 LABELS = {
     "media": "Media present, right kind",
     "ratio": "9:16",
-    "words": "Primary text + headline",
+    "words": "Primary text + headline + description",
     "name": "Ad name",
     "pages": "Landing pages live, in the funnel list",
     "product": "Ad product = page product",
@@ -244,10 +244,16 @@ LABELS = {
     "sound": "9:16 video has sound",
     "new_footage": "New footage (not already live)",
     "diversity": "A new creative to Meta (3+ moves)",
+    "made_by_tool": "Pictures made by the image production tool",
+    # the cover rule (cover_rule.py): a waiting video card is held until each passes
+    "cover_each": "A cover for every video",
+    "cover_swipe": "Each cover names the swipe it follows",
+    "cover_frame": "Each cover starts from a frame of its own video",
+    "cover_differs": "Covers differ from each other",
 }
 
 
-# ---- the Meta strategy checks (the owner, 7 Oct 2026) ------------------------------
+# ---- the Meta strategy checks (owner, 7 Oct 2026) ------------------------------
 # components/meta-strategy/rules.json · components/creative-diversity/META.md
 STRATEGY = Path(__file__).resolve().parents[1] / "meta-strategy" / "rules.json"
 
@@ -283,13 +289,31 @@ THUMB_MAX_BYTES = 10_000_000      # Meta's own cap on a video thumbnail (/{video
 THUMB_MIN_W = 1080
 
 
+def angle_mismatch(brand, card, ad_sets):
+    """Why the card's ad set is not the one its avatar x brief angle names, else []. Promo ad sets
+    and briefs with no angle on record are not judged here."""
+    import ad_sets as AS
+    import to_check as T
+    try:
+        facts = T.brief_facts(brand, card.get("brief_id"), card.get("product"))
+    except Exception:
+        return []
+    angle, avatar = facts.get("angle"), card.get("avatar") or facts.get("avatar")
+    if not angle or not avatar:
+        return []
+    want = AS.name_for(brand, avatar, angle)
+    return [f"{s} is not this brief's angle: the brief record says {angle}, so the ad set is {want}"
+            for s in sorted(filter(None, ad_sets)) if s != want and not AS.is_promo(brand, s)]
+
+
 def checks(folder, card, online=True, meta=None):
     """Every machine check -> {"<check>": {"ok", "why"}}. Reuses upload.py's plan
     (card_plan) for the joins: ad set, campaign, page vs product."""
     import upload as U
     from brand import Brand
     folder = Path(folder)
-    out = {}
+    import delivery_gate as DG
+    out = DG.check(folder, card) if where(folder)["state"] in ("1-check", "2-approved") else {}
     put = lambda k, ok, why="": out.__setitem__(k, {"ok": bool(ok), "why": why})
     w = where(folder)
     fmt, lane = card.get("format") or "flexible", card.get("lane") or w["lane"]
@@ -371,6 +395,10 @@ def checks(folder, card, online=True, meta=None):
         why.append("no primary text")
     if not words.get("headlines"):
         why.append("no headline")
+    if not words.get("descriptions"):
+        import to_check as T
+        if T.description_on("check"):          # switch: description.json, row DESCRIPTION
+            why.append("no description")
     for k in ("primary", "headlines", "descriptions"):
         if len(words.get(k) or []) > 5:
             why.append(f"{len(words[k])} {k} — Meta takes 5")
@@ -424,10 +452,13 @@ def checks(folder, card, online=True, meta=None):
         ad_sets = {r.get("ad_set") for r in rows} or {card.get("ad_set") or U.ad_set_for(
             Brand(card.get("brand") or w["brand"]), U.card_fields(card))[0]}
         miss = [x for r in p["held"] for x in r.get("why", []) if x.startswith("no ad set")]
-        # new ads go into ad sets already running unless the owner signed a new one (ad_sets.py, 2026-10-27)
+        # new ads go into ad sets already running unless owner signed a new one (ad_sets.py, 2026-10-27)
         import ad_sets as AS
         closed = [AS.why_closed(card.get("brand") or w["brand"], s) for s in sorted(filter(None, ad_sets))]
         miss += [x for x in closed if x]
+        # the ad set carries the brief's own angle: avatar x the angle on the brief record, never a
+        # running ad set of another angle picked to get past the closed check (8 Nov 2026)
+        miss += angle_mismatch(card.get("brand") or w["brand"], card, ad_sets)
         put("ad_set", not miss and None not in ad_sets, "; ".join(dict.fromkeys(miss)) or ", ".join(sorted(filter(None, ad_sets))))
         miss = [x for r in p["held"] for x in r.get("why", []) if x.startswith("no campaign")]
         camps = [r.get("campaign") for r in rows]
@@ -454,9 +485,10 @@ def checks(folder, card, online=True, meta=None):
     silent = [f.name for f in tall if has_sound(f) is False]
     put("sound", not silent, "; ".join(f"{n} has no sound track" for n in silent)
         or (f"{len(tall)} 9:16 video(s), all with sound" if tall else "no 9:16 video"))
+    # Reusing live creative in another ad unit is allowed, so this informs and never blocks (owner, 1 Nov 2026).
     seen = live_footage(brand)
     again = [f.name for f in media if f.is_file() and f.stat().st_size in seen]
-    put("new_footage", not again, "; ".join(f"{n} is already live on the Page" for n in again[:4])
+    put("new_footage", True, "; ".join(f"{n} is already live on the Page" for n in again[:4])
         or "none of these files is live yet")
     dv = card.get("diversity") or {}
     if not dv:
@@ -466,11 +498,31 @@ def checks(folder, card, online=True, meta=None):
     else:
         v, n = dv.get("verdict"), dv.get("moves_apart")
         same = ", ".join(dv.get("same_on") or [])
-        put("diversity", v in ("new", "risky", "unscored"),
+        put("diversity", v in ("new", "risky", "unscored") or card.get("same_creative_new_offer") or bool(again),
             {"new": f"new creative: {n} moves from the nearest running ad",
              "risky": f"risky: only {n} moves from the nearest running ad (same {same})",
              "variation": f"a variation of a running creative: {n} move(s) apart, same {same}",
              "unscored": dv.get("why", "no library to compare against yet")}.get(v, str(v)))
+
+    # Only the image production tool's pictures (RULE GATE-5, 2026-11-11): thumbnails and image/carousel pictures by
+    # sha256 in an image-production run record. Not added to a card filed before the switch's `since`.
+    try:
+        import made_by_tool as MBT
+        got = MBT.check(folder, card, lane)
+    except Exception as e:  # noqa: BLE001 — a check that cannot run says so, red
+        got = (False, f"the check could not run: {e}")
+    if got is not None:
+        put("made_by_tool", *got)
+
+    # The cover rule (cover_rule.py): on a waiting video card, a cover for every video, each cover's record naming
+    # the swipe it follows and a frame of its own video, no two covers the same picture. A card already approved or
+    # live is never checked. ROLLBACK: cover-rule.json "on": false, one check or one lane / META_COVER_RULE_OFF.
+    if w["state"] in ("1-check", "sent-back"):
+        try:
+            import cover_rule as CR
+            out.update(CR.checks(folder, card, lane, w["state"]))
+        except Exception as e:  # noqa: BLE001 — a check that cannot run says so, red
+            put("cover_each", False, f"the check could not run: {e}")
 
     # Page cap — asked of Meta only at Approve (online), at most once an hour per brand (page_ads)
     if online:

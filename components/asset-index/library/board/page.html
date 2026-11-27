@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: a sticky filter bar of category buttons, one open panel of choices under it, then a picture grid; a detail sheet slides up on tap. */
+:root{
+  /*LIGHT*/
+  --m-clean:#1f7a45; --m-cap:#9a6a00; --m-cleared:#2a5fb0; --m-warn:#b4471f; --m-red:#b3261e;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  /*DARK*/
+  --m-clean:#57c07f; --m-cap:#e0b23e; --m-cleared:#7aa6ec; --m-warn:#ec8a5f; --m-red:#ef6b62; color-scheme:dark}}
+:root[data-theme="dark"]{
+  /*DARK*/
+  --m-clean:#57c07f; --m-cap:#e0b23e; --m-cleared:#7aa6ec; --m-warn:#ec8a5f; --m-red:#ef6b62; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.45 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:18px 6px}
+h1{font:700 30px/1.05 var(--display);letter-spacing:.01em;margin:0;text-wrap:balance}
+.sub{color:var(--mute);margin:4px 0 0;font-size:14px}
+.bar{background:var(--bg);border-bottom:1px solid var(--line)}
+@media (min-width:860px){.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20}}
+.bar .wrap{padding-block:10px}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cat{font:600 13px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:9px 13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.cat[aria-expanded="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.cat .n{font-variant-numeric:tabular-nums;background:var(--gold);color:#fff;border-radius:999px;padding:2px 6px;font-size:11px}
+.cat[aria-expanded="true"] .n{background:#ffffff33}
+.search{flex:1 1 180px;min-width:0;font:15px var(--body);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.panel{display:flex;flex-wrap:wrap;gap:6px;padding-top:10px}
+.panel[hidden]{display:none!important}
+.opt{border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:8px;padding:7px 10px;font:500 14px var(--body);cursor:pointer;display:inline-flex;gap:8px;align-items:baseline}
+.opt small{color:var(--mute);font-variant-numeric:tabular-nums}
+.opt[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt[aria-pressed="true"] small{color:#ffffffcc}
+.opt:disabled{opacity:.4;cursor:default}
+.status{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:8px;font-size:14px;color:var(--mute)}
+.status b{color:var(--fg);font-variant-numeric:tabular-nums}
+.pill{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 9px;font-size:13px;color:var(--fg);cursor:pointer}
+.pill::after{content:" ×";color:var(--mute)}
+.clear{background:none;border:0;color:var(--accent);font:600 13px var(--body);cursor:pointer;text-decoration:underline}
+:root:not([data-theme="light"]) .clear{color:var(--m-clean)}
+main{padding-block:14px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+@media (max-width:420px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;text-align:left;padding:0;color:inherit;font:inherit;display:flex;flex-direction:column;min-width:0}
+.card:focus-visible,.opt:focus-visible,.cat:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.thumb{aspect-ratio:3/4;width:100%;background-color:#2a2d28;position:relative;overflow:hidden}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.thumb .tier,.thumb .adtag{z-index:1}
+.brands{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;font-size:14px}
+.brands a{color:var(--mute)}
+.tier{position:absolute;top:6px;left:6px;font:700 13px/1 var(--display);letter-spacing:.04em;padding:4px 6px;border-radius:5px;background:#000000b3;color:#fff}
+.tier.A{background:var(--accent)}
+.adtag{position:absolute;top:6px;right:6px;font:700 12px/1 var(--display);letter-spacing:.05em;padding:4px 6px;border-radius:5px;background:var(--m-red);color:#fff}
+.meta{padding:8px 9px 10px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.beat{font:700 15px/1.1 var(--display);letter-spacing:.02em;text-transform:uppercase}
+.line{font-size:12.5px;color:var(--mute);overflow-wrap:anywhere}
+.marks{display:flex;flex-wrap:wrap;gap:4px}
+.mk{font-size:11.5px;font-weight:600;padding:2px 6px;border-radius:5px;border:1px solid currentColor;line-height:1.2}
+.mk.clean{color:var(--m-clean)} .mk.caption{color:var(--m-cap)} .mk.partner-handle,.mk.brand-handle{color:var(--m-cleared)}
+.mk.platform-mark,.mk.editor-logo,.mk.handle{color:var(--m-warn)} .mk.offer-text,.mk.app-screen{color:var(--m-red)}
+.more{display:block;margin:22px auto 0;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:12px 22px;font:600 15px var(--body);cursor:pointer}
+.empty{color:var(--mute);padding:30px 0;text-align:center}
+.sheet{position:fixed;inset:auto 0 0 0;z-index:40;background:var(--panel);border-top:1px solid var(--line);border-radius:16px 16px 0 0;max-height:86vh;overflow-y:auto;box-shadow:0 -10px 40px #0005;padding:16px max(16px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:860px){.sheet{inset:0 0 0 auto;width:440px;max-height:none;border-radius:0;border-top:0;border-left:1px solid var(--line);padding-top:calc(16px + env(safe-area-inset-top,0px))}}
+.sheet[hidden]{display:none!important}
+.sheet .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.x{background:var(--chip);border:1px solid var(--line);color:var(--fg);border-radius:999px;width:36px;height:36px;font-size:18px;cursor:pointer}
+.big{width:min(100%,260px);margin:12px auto;border-radius:10px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:12px 0;font-size:14px}
+dt{color:var(--mute);font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding-top:2px}
+dd{margin:0;overflow-wrap:anywhere}
+.drive{display:inline-block;margin-top:6px;background:var(--accent);color:var(--accent-ink);text-decoration:none;padding:10px 16px;border-radius:999px;font-weight:600}
+.copy{margin-left:8px;background:none;border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:9px 14px;font:600 13px var(--body);cursor:pointer}
+.card{position:relative}
+.open{background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;width:100%}
+.open:focus-visible,.pk:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.pk{position:absolute;right:6px;top:6px;width:36px;height:36px;border-radius:999px;border:1px solid #ffffff66;background:#000000a6;color:#fff;font:700 20px/1 var(--body);cursor:pointer;display:grid;place-items:center}
+.card.has-ad .pk{top:34px}
+.pk[aria-pressed="true"]{background:var(--gold);border-color:var(--gold)}
+.card.picked{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.picksbtn{font:600 13px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--gold);background:var(--gold);color:#fff;border-radius:999px;padding:9px 13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.picksbtn .n{background:#ffffff33;border-radius:999px;padding:2px 6px;font-size:11px;font-variant-numeric:tabular-nums}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.act{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:10px 16px;font:600 14px var(--body);cursor:pointer;text-decoration:none;display:inline-block}
+.act.gold{background:var(--gold);color:#fff}
+.act.ghost{background:none;border:1px solid var(--line);color:var(--fg)}
+.plist{list-style:none;margin:12px 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.plist li{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--chip)}
+.plist .thumb{width:54px;border-radius:6px}
+.plist .x{width:32px;height:32px;font-size:16px}
+.hint{color:var(--mute);font-size:13px;margin:6px 0 0}
+.brief{margin:14px 0 4px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--chip);display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.dt{color:var(--mute);font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.sel{width:100%;max-width:100%;font:14px var(--body);padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.plist .sel{margin-top:6px;font-size:13px;padding:6px 8px}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .12s}.card:hover{transform:translateY(-2px)}}
+</style>
+</head><body>
+
+<header class="top"><div class="wrap">
+  <h1>__TITLE__</h1>
+  <p class="sub" id="sub">Loading the library…</p>
+  <nav class="brands" id="brands"></nav>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <div class="cats" id="cats"><input class="search" id="q" type="search" aria-label="Search what the scene shows or says" placeholder="Search"></div>
+  <div class="panel" id="panel" hidden></div>
+  <div class="status" id="status"></div>
+</div></div>
+
+<main><div class="wrap">
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>Nothing matches these filters. Remove one to widen it.</p>
+  <button class="more" id="more" hidden>Show more</button>
+</div></main>
+
+<aside class="sheet" id="sheet" hidden aria-label="Scene details"></aside>
+<aside class="sheet" id="tray" hidden aria-label="Picks for the edit"></aside>
+
+<script>
+const PAGE=60;
+const BRAND=/*BRAND*/;
+const BEATS=BRAND.beats;
+const PROD=BRAND.products;
+const TIER={A:"A · direct b-roll",B:"B · montage or proof",P:"P · talking to camera",photo:"Before/after photo"};
+const MARK={clean:"Clean",caption:"Captions","partner-handle":"Handle (cleared)","brand-handle":BRAND.name+" handle","platform-mark":"Watermark",
+ "offer-text":"Offer text","app-screen":"App screen","editor-logo":"Editor logo",handle:"Handle"};
+const POL={hucg:"High-quality creator","studio-staged":"Studio-staged","phone-ugc":"Phone UGC",mixed:"Mixed","screen-recording":"Screen recording",
+ "ai-generated":"AI","animation-graphic":"Animation",photo:"Photo",unchecked:"Not checked"};
+const SRC={"creator-raw":"Creator raw","creator-repost":"Creator repost","curated-ugc":"Curated UGC","brand-post":BRAND.name+" posts",founder:"Founder footage",ad:"From an ad","brand-footage":BRAND.name+" own footage",ai:"AI",reference:"Reference / swipe",internal:"Internal recording",proof:"Before/after",other:"Other"};
+const nice=s=>String(s||"").replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+const GROUPS=[
+ {k:"beat",label:"Beat",get:r=>[r.beat],name:v=>BEATS[v]||nice(v),order:Object.keys(BEATS)},
+ {k:"prod",label:"Product",get:r=>r.prod.length?r.prod:["none"],name:v=>PROD[v]||nice(v),order:Object.keys(PROD)},
+ {k:"tier",label:"Tier",get:r=>[r.tier],name:v=>TIER[v]||v,order:Object.keys(TIER)},
+ {k:"marks",label:"Text on screen",get:r=>r.marks,name:v=>MARK[v]||nice(v),order:Object.keys(MARK)},
+ {k:"pol",label:"Polish",get:r=>[r.pol||"unchecked"],name:v=>POL[v]||nice(v),order:Object.keys(POL)},
+ {k:"g",label:"Gender",get:r=>[r.g||"not filed"],name:nice},
+ {k:"e",label:"Ethnicity",get:r=>[r.e||"not filed"],name:nice},
+ {k:"a",label:"Age",get:r=>[r.a||"not filed"],name:v=>v==="not filed"||v==="unknown-age"?nice(v):v},
+ {k:"src",label:"Source",get:r=>[r.src],name:v=>SRC[v]||nice(v),order:Object.keys(SRC)},
+ {k:"lang",label:"Language",get:r=>[r.lang||"no speech"],name:v=>v==="no speech"?"No speech":v==="other or unclear"?"Other or unclear":v,order:["Thai","English","Chinese","other or unclear","no speech"]},
+ {k:"ad",label:"Ad",get:r=>[r.ad?r.ad.name:"not from an ad"],name:v=>v==="not from an ad"?"Not from an ad":"Ad "+v},
+];
+let ROWSDATA=[], sel={}, q="", open=null, shown=0, list=[], onlyPicks=false;
+// Picks: an editor's shortlist while sifting, kept in this browser; the shot list is what leaves the page.
+const PKEY="footage-picks-"+BRAND.name.toLowerCase();
+let PICKS=[];
+try{ PICKS=JSON.parse(localStorage.getItem(PKEY)||"[]"); if(!Array.isArray(PICKS)) PICKS=[]; }catch(e){ PICKS=[]; }
+const rid=r=>r.id||(r.path+"@"+r.in);
+const isPicked=r=>PICKS.includes(rid(r));
+function savePicks(){ try{ localStorage.setItem(PKEY,JSON.stringify(PICKS)); }catch(e){} }
+function togglePick(r){ const k=rid(r); PICKS=PICKS.includes(k)?PICKS.filter(x=>x!==k):[...PICKS,k]; savePicks(); }
+function shot(r,i){
+  const cut=r.cut&&r.cut!=="label"?" (on the cut)":"";
+  const prod=r.prod.map(p=>PROD[p]||p).join(", ")||"no product";
+  const marks=r.marks.map(m=>MARK[m]||m).join(", ");
+  return `${i!=null?(i+1)+". ":""}${(BEATS[r.beat]||r.beat).split(" · ")[0]} · ${prod} · ${time(r)}${cut} · ${marks}`+
+    `\n   ${r.path}`+(r.drive?`\n   ${r.drive}`:"");
+}
+function shotList(rows){
+  const d=new Date().toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
+  return `${BRAND.name} footage picks · ${d} · ${rows.length} shot${rows.length===1?"":"s"}\n\n`+rows.map((r,i)=>shot(r,i)).join("\n\n");
+}
+function copyText(t,btn,done){ const ok=()=>{btn.textContent=done;}; const fail=()=>{btn.textContent="Copy blocked: select the text";};
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(ok,fail); else fail(); }
+function picked(){ const m=new Map(ROWSDATA.map(r=>[rid(r),r])); return PICKS.map(k=>m.get(k)).filter(Boolean); }
+GROUPS.forEach(g=>sel[g.k]=new Set());
+const $=id=>document.getElementById(id);
+
+function pass(r, skip){
+  for(const g of GROUPS){ if(g.k===skip) continue; const s=sel[g.k]; if(s.size && !g.get(r).some(v=>s.has(v))) return false; }
+  if(q){ const t=(r.shows+" "+r.says+" "+(r.words||"")+" "+r.who+" "+r.file+" "+r.path).toLowerCase(); if(!q.split(/\s+/).every(w=>t.includes(w))) return false; }
+  if(onlyPicks && !isPicked(r)) return false;
+  return true;
+}
+// The scene's own frame from this machine; where the footage is not here, the file's Drive thumbnail (needs a Drive sign-in).
+function pic(r){const alt=r.gid?` data-alt="https://drive.google.com/thumbnail?id=${encodeURIComponent(r.gid)}&sz=w400"`:"";
+  return `<img loading="lazy" decoding="async" alt="" src="frame/${encodeURIComponent(r.id)}.jpg"${alt} onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.remove()}">`;}
+function prodShort(r){const n=r.prod.map(p=>PROD[p]||p); return n.length? n.slice(0,2).join(", ")+(n.length>2?` +${n.length-2}`:"") : "No product";}
+function time(r){if(r.in==null) return "photo"; const d=r.cut&&r.cut!=="label"?2:1; return `${(+r.in).toFixed(d)}–${(+r.out).toFixed(d)} s`;}
+const CUT={"shot change":"Starts and ends on the clip's real shot change","in on a cut":"Starts on a real shot change","out on a cut":"Ends on a real shot change",label:"From the scene label (no shot change within 1 s)"};
+function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+function renderCats(){
+  const box=$("cats"); box.querySelectorAll(".cat").forEach(b=>b.remove());
+  GROUPS.forEach(g=>{const b=document.createElement("button"); b.className="cat"; b.type="button"; b.id="cat-"+g.k;
+    b.setAttribute("aria-expanded",open===g.k?"true":"false"); b.innerHTML=esc(g.label)+(sel[g.k].size?` <span class="n">${sel[g.k].size}</span>`:"");
+    b.onclick=()=>{open=open===g.k?null:g.k; renderCats(); renderPanel();}; box.insertBefore(b,$("q"));});
+  let pb=$("picksbtn"); if(!pb){ pb=document.createElement("button"); pb.type="button"; pb.id="picksbtn"; pb.className="picksbtn"; pb.onclick=showTray; box.insertBefore(pb,box.firstChild); }
+  pb.innerHTML=`Picks <span class="n">${PICKS.length}</span>`;
+}
+function renderPanel(){
+  const p=$("panel"); if(!open){p.hidden=true; p.innerHTML=""; return;}
+  const g=GROUPS.find(x=>x.k===open); const counts={};
+  ROWSDATA.forEach(r=>{ if(pass(r,g.k)) g.get(r).forEach(v=>counts[v]=(counts[v]||0)+1); });
+  const vals=new Set([...Object.keys(counts),...sel[g.k]]);
+  const ord=g.order||[]; const list=[...vals].sort((a,b)=>{const ia=ord.indexOf(a), ib=ord.indexOf(b);
+    if(ia>=0||ib>=0) return (ia<0?999:ia)-(ib<0?999:ib); return (counts[b]||0)-(counts[a]||0);});
+  p.innerHTML=""; list.forEach(v=>{const b=document.createElement("button"); b.type="button"; b.className="opt";
+    b.setAttribute("aria-pressed",sel[g.k].has(v)?"true":"false"); b.disabled=!counts[v]&&!sel[g.k].has(v);
+    b.innerHTML=`${esc(g.name(v))} <small>${(counts[v]||0).toLocaleString()}</small>`;
+    b.onclick=()=>{sel[g.k].has(v)?sel[g.k].delete(v):sel[g.k].add(v); apply();}; p.appendChild(b);});
+  p.hidden=false;
+}
+function renderStatus(){
+  const st=$("status"); const pills=[];
+  GROUPS.forEach(g=>sel[g.k].forEach(v=>pills.push(`<button class="pill" type="button" data-g="${g.k}" data-v="${esc(v)}">${esc(g.name(v))}</button>`)));
+  if(onlyPicks) pills.unshift(`<button class="pill" type="button" id="onlyp">Picks only</button>`);
+  st.innerHTML=`<span><b>${list.length.toLocaleString()}</b> of ${ROWSDATA.length.toLocaleString()}</span>`+pills.join("")+
+    (pills.length||q?` <button class="clear" type="button" id="clr">Clear all</button>`:"");
+  st.querySelectorAll(".pill[data-g]").forEach(b=>b.onclick=()=>{sel[b.dataset.g].delete(b.dataset.v); apply();});
+  const op=$("onlyp"); if(op) op.onclick=()=>{onlyPicks=false; apply();};
+  const c=$("clr"); if(c) c.onclick=()=>{GROUPS.forEach(g=>sel[g.k].clear()); q=""; $("q").value=""; onlyPicks=false; apply();};
+}
+function card(r,i){
+  const c=document.createElement("div"); c.className="card"+(r.ad?" has-ad":"")+(isPicked(r)?" picked":"");
+  const b=document.createElement("button"); b.type="button"; b.className="open"; b.setAttribute("aria-label",(BEATS[r.beat]||r.beat)+", "+r.who);
+  b.innerHTML=`<div class="thumb">${pic(r)}<span class="tier ${r.tier}">${r.tier==="photo"?"PHOTO":r.tier}</span>${r.ad?'<span class="adtag">AD</span>':""}</div>
+   <div class="meta"><div class="beat">${esc((BEATS[r.beat]||r.beat).split(" · ")[0])}</div>
+   <div class="marks">${r.marks.map(m=>`<span class="mk ${m}">${esc(MARK[m]||m)}</span>`).join("")}</div>
+   <div class="line">${esc(prodShort(r))} · ${r.ad?"Ad "+esc(r.ad.name):esc(nice(r.who))} · ${time(r)}</div></div>`;
+  b.onclick=()=>detail(r);
+  const k=document.createElement("button"); k.type="button"; k.className="pk";
+  const paint=()=>{const on=isPicked(r); k.setAttribute("aria-pressed",on?"true":"false"); k.setAttribute("aria-label",on?"Remove from picks":"Add to picks"); k.textContent=on?"✓":"+"; c.classList.toggle("picked",on);};
+  k.onclick=e=>{e.stopPropagation(); togglePick(r); paint(); renderCats(); if(onlyPicks) apply();};
+  c._paint=paint; paint(); c.append(b,k); return c;
+}
+function showTray(){
+  const t=$("tray"), rows=picked(); $("sheet").hidden=true;
+  t.innerHTML=`<div class="head"><div class="beat">Picks for the edit · ${rows.length}</div><button class="x" id="tx" type="button" aria-label="Close">×</button></div>
+  ${rows.length?`<p class="hint">Each shot carries its file, its Drive link and the exact in and out. Copy the list into the edit brief or a message.</p>
+  <div class="btnrow"><button class="act gold" id="tcopy" type="button">Copy shot list</button>
+  <button class="act ghost" id="tonly" type="button">${onlyPicks?"Show everything":"Show only picks"}</button>
+  <button class="act ghost" id="tclear" type="button">Clear picks</button></div>
+  <div class="brief"><label for="bsel" class="dt">Put these in a brief</label>
+   <select id="bsel" class="sel"><option value="">${BRIEFS?"Choose the brief…":"Loading briefs…"}</option>${(BRIEFS||[]).map(b=>`<option value="${esc(b.brief)}"${b.brief===BRIEF?" selected":""}>${esc(b.title)}${b.picks?` · ${b.picks} in it`:""}</option>`).join("")}</select>
+   ${BRIEF?`<p class="hint">Pick the scene each shot is for. A shot for a scene becomes that scene's cut; "Any scene" goes into the brief's pool.</p>
+   <button class="act gold" id="tput" type="button">Put ${rows.length} in the brief</button> <span class="line" id="tres">${esc(LASTRES)}</span>`:""}</div>
+  <ol class="plist">${rows.map((r,i)=>`<li><div class="thumb">${pic(r)}</div>
+   <div><div class="beat">${i+1}. ${esc((BEATS[r.beat]||r.beat).split(" · ")[0])}</div><div class="line">${esc(prodShort(r))} · ${time(r)}${r.cut&&r.cut!=="label"?" · on the cut":""}</div><div class="line">${esc(r.path)}</div>
+   ${BRIEF?`<select class="sel scn" data-k="${esc(rid(r))}" aria-label="Scene this shot is for"><option value="">Any scene</option>${briefScenes().map(c=>`<option value="${esc(c.id)}"${SCENEFOR[rid(r)]===String(c.id)?" selected":""}>${esc(c.id)} · ${esc(c.shows)}</option>`).join("")}</select>`:""}</div>
+   <button class="x" type="button" data-k="${esc(rid(r))}" aria-label="Remove">×</button></li>`).join("")}</ol>`
+  :`<p class="hint">No picks yet. Tap + on any picture to add it here, then copy the shot list for the edit.</p>`}`;
+  t.hidden=false; $("tx").onclick=()=>{t.hidden=true;}; $("tx").focus();
+  const cp=$("tcopy"); if(cp) cp.onclick=()=>copyText(shotList(rows),cp,"Copied "+rows.length+" shots");
+  const on=$("tonly"); if(on) on.onclick=()=>{onlyPicks=!onlyPicks; apply(); showTray();};
+  const cl=$("tclear"); if(cl) cl.onclick=()=>{ if(cl.dataset.sure){ PICKS=[]; savePicks(); onlyPicks=false; apply(); showTray(); } else { cl.dataset.sure="1"; cl.textContent="Tap again to clear"; } };
+  t.querySelectorAll(".plist .x").forEach(x=>x.onclick=()=>{PICKS=PICKS.filter(k=>k!==x.dataset.k); savePicks(); apply(); showTray();});
+  const bs=$("bsel"); if(bs) bs.onchange=()=>{BRIEF=bs.value; LASTRES=""; try{localStorage.setItem(PKEY+"-brief",BRIEF);}catch(e){} showTray();};
+  t.querySelectorAll(".scn").forEach(x=>x.onchange=()=>{SCENEFOR[x.dataset.k]=x.value;});
+  const put=$("tput"); if(put) put.onclick=async()=>{
+    put.disabled=true; put.textContent="Putting them in…";
+    try{
+      const res=await fetch("picks",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({brief:BRIEF,picks:rows.map(r=>({id:rid(r),for_scene:SCENEFOR[rid(r)]||null}))})}).then(x=>x.json());
+      if(!res.ok) throw new Error(res.error||"not saved");
+      LASTRES=`✓ ${res.sent} put in · ${res.in_brief} picks in this brief${res.shared?" · shared with the team":""}`;
+      BRIEFS=null; loadBriefs();
+    }catch(e){ put.disabled=false; put.textContent="Try again"; $("tres").textContent="Not saved: "+e.message; }
+  };
+  if(BRIEFS===null) loadBriefs();
+}
+let BRIEFS=null, BRIEF="", SCENEFOR={}, LASTRES="";
+try{ BRIEF=localStorage.getItem(PKEY+"-brief")||""; }catch(e){}
+function briefScenes(){ const b=(BRIEFS||[]).find(x=>x.brief===BRIEF); return b?b.scenes:[]; }
+function loadBriefs(){ BRIEFS=undefined; fetch("briefs").then(r=>r.json()).then(d=>{ BRIEFS=d; if(BRIEF&&!d.some(b=>b.brief===BRIEF)) BRIEF="";
+  if(!$("tray").hidden) showTray(); }).catch(()=>{ BRIEFS=[]; }); }
+function more(){const g=$("grid"); const end=Math.min(list.length,shown+PAGE); for(let i=shown;i<end;i++) g.appendChild(card(list[i],i)); shown=end; $("more").hidden=shown>=list.length;}
+function apply(){
+  list=ROWSDATA.filter(r=>pass(r)); shown=0; $("grid").innerHTML=""; more(); $("empty").hidden=list.length>0;
+  renderCats(); renderPanel(); renderStatus();
+}
+function detail(r){
+  const sh=$("sheet"); const people=[r.g&&r.g!=="not filed"?`filed: ${nice(r.g)} / ${nice(r.e)} / ${r.a}`:"not filed", r.og?`on screen: ${r.og}${r.oa?", "+r.oa:""}`:""].filter(Boolean).join(" · ");
+  sh.innerHTML=`<div class="head"><div class="beat">${esc(BEATS[r.beat]||r.beat)}</div><button class="x" id="x" type="button" aria-label="Close">×</button></div>
+  <div class="thumb big">${pic(r)}<span class="tier ${r.tier}">${r.tier==="photo"?"PHOTO":esc(TIER[r.tier]||r.tier)}</span></div>
+  <dl><dt>Shows</dt><dd>${esc(r.shows)}</dd>
+  ${r.says?`<dt>Says</dt><dd>“${esc(r.says)}”</dd>`:""}
+  <dt>On screen</dt><dd>${r.marks.map(m=>`<span class="mk ${m}">${esc(MARK[m]||m)}</span>`).join(" ")}${r.words?`<br>${esc(r.words)}`:""}${r.size&&r.size!=="none"?` <span class="line">(${esc(r.size)})</span>`:""}</dd>
+  ${r.hand.length?`<dt>Handles</dt><dd>${esc(r.hand.join(", "))}</dd>`:""}
+  <dt>Product</dt><dd>${esc(r.prod.map(p=>PROD[p]||p).join(", ")||"none")}</dd>
+  <dt>Polish</dt><dd>${esc(POL[r.pol]||r.pol||"—")}</dd>
+  <dt>People</dt><dd>${esc(people)}</dd>
+  ${r.prob?`<dt>Problem</dt><dd>${esc(r.prob)}${r.stage?` · ${esc(r.stage)}`:""}</dd>`:""}
+  <dt>Cut</dt><dd><b>${time(r)}</b>${r.cut?`<br><span class="line">${esc(CUT[r.cut]||r.cut)}</span>`:""}</dd>
+  ${r.ad?`<dt>Used in</dt><dd><b>Ad ${esc(r.ad.name)}</b> (${esc(r.ad.kind)})<br><span class="line">${esc(r.ad.folder)}</span></dd>`:""}
+  <dt>Source</dt><dd>${esc(SRC[r.src]||r.src)}${r.ad?"":" · "+esc(nice(r.who))}</dd>
+  <dt>File</dt><dd>${esc(r.path)}</dd></dl>
+  <div class="btnrow"><button class="act gold" id="pk1" type="button">${isPicked(r)?"✓ In picks":"+ Add to picks"}</button>
+  ${r.drive?`<a class="act" href="${esc(r.drive)}" target="_blank" rel="noopener">Open on Drive</a>`:""}
+  <button class="act ghost" id="cp" type="button">Copy for the edit</button></div>`;
+  $("tray").hidden=true; sh.hidden=false; $("x").onclick=()=>{sh.hidden=true;}; $("x").focus();
+  $("cp").onclick=()=>copyText(shot(r),$("cp"),"Copied: file, time, link");
+  $("pk1").onclick=()=>{togglePick(r); $("pk1").textContent=isPicked(r)?"✓ In picks":"+ Add to picks"; renderCats();
+    document.querySelectorAll(".card").forEach(c=>c._paint&&c._paint());};
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){ $("sheet").hidden=true; $("tray").hidden=true; }});
+$("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase(); apply();});
+$("more").onclick=more;
+if("IntersectionObserver" in window){ new IntersectionObserver(es=>{ if(es[0].isIntersecting && shown<list.length) more(); },{rootMargin:"600px"}).observe($("more")); }
+{const o=(BRAND.brands||[]).filter(([b])=>b!==BRAND.brand); $("brands").innerHTML=o.map(([b,n])=>`<a href="../${encodeURIComponent(b)}/">Open the ${esc(n)} board</a>`).join("");}
+renderCats();
+fetch("data.json").then(r=>r.json()).then(d=>{
+  ROWSDATA=d; const pics=d.filter(r=>r.tier==="photo").length;
+  $("sub").textContent=`${(d.length-pics).toLocaleString()} scenes from our footage and ${pics} before-and-after photo${pics===1?"":"s"}, sorted by beat, product, tier and what's burned in. Tap a button to filter; tap a picture for its details and the Drive link.`;
+  apply();
+}).catch(()=>{$("sub").textContent="The library data did not load. Reload the page.";});
+</script>
+</body></html>

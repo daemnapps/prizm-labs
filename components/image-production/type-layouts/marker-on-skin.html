@@ -1,0 +1,7 @@
+<!-- Marker on skin: three stacked marker lines written across a limb, the middle one in quotes and struck through (the board keeps only the words inside quotes, so the layout draws them; `b_after` is the word after the closing quote), and a hand-drawn arrow at the right of the last line. Ink colours and the arrow's place come from `fixed` (c_a, c_b, c_c, c_strike, ax, ay, b_after). Sizes are at full scale; the fit step shrinks them together. -->
+<div class="area" data-fit style="justify-content:flex-start;gap:calc(var(--s)*30px)">
+ <div class="line" style="font:400 calc(var(--s)*72px)/1.15 Display;color:{{c_a}};transform:rotate(-1.2deg)">{{a}}</div>
+ <div class="line" style="position:relative;font:400 calc(var(--s)*86px)/1.15 Display;color:{{c_b}};transform:rotate(.6deg)">"<span style="position:relative">{{b}}<svg viewBox="0 0 300 20" preserveAspectRatio="none" style="position:absolute;left:-1%;top:44%;width:102%;height:calc(var(--s)*24px);overflow:visible"><path d="M2 12C70 6 150 15 298 7" fill="none" stroke="{{c_strike}}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></span>" {{b_after}}</div>
+ <div style="font:400 calc(var(--s)*68px)/1.2 Display;color:{{c_c}};max-width:90%;transform:rotate(-.8deg)">{{c}}</div>
+</div>
+<svg viewBox="0 0 100 120" style="position:fixed;left:{{ax}};top:{{ay}};width:9%;height:8%;overflow:visible"><path d="M78 4C84 44 62 84 14 108M10 70L12 110L50 104" fill="none" stroke="{{c_c}}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>

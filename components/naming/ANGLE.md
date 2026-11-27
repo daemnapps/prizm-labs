@@ -19,7 +19,7 @@ And: *"Let's keep this organized, streamlined, and straightforward."*
 ## Where it is set
 
 At the first point the brief exists and its content is settled: **when the brief gets its
-number** (`tools/image-teardown/tools/briefs.py` `open_brief` — every lane: image, carousel, video
+number** (`components/image-teardown/tools/briefs.py` `open_brief` — every lane: image, carousel, video
 teardown, video production, email, page, and every caller, the chain's own numbering included; until
 2026-10-27 only the `open` command did it, so picture briefs numbered by the chain never got an angle).
 Right after the number, `components/naming/angle_pick.py` reads the brief and names ONE angle.
@@ -40,7 +40,7 @@ Right after the number, `components/naming/angle_pick.py` reads the brief and na
 
 `brands/` is read-only to machines, so:
 
-1. **The brief record** — the register entry (`tools/image-teardown/briefs.json`):
+1. **The brief record** — the register entry (`components/image-teardown/briefs.json`):
    `angle`, `angle_why` (one line, quoting the brief), `angle_state` (picked · declared · no-fit),
    `angle_by` (tool, prompt, model, time). **This is the one home.**
 2. **A Notes line in the brief file itself**: `- Angle: \`<id>\` — <why> — "<quote>"`.
@@ -68,4 +68,4 @@ Right after the number, `components/naming/angle_pick.py` reads the brief and na
 - `names.py`: `brief_record()` (register under header — the one brief record) and
   `brief_angle()`; `brief_header()` falls back to the register's angle when the header has none.
 - The readers above switched to it; the hand-typed `--angle` paths removed or refused on disagreement.
-- Applied to <brand> brief-0035..0041 and <brand> brief-0308..0311; the cards in 1-check refiled.
+- Applied to Brand A brief-0035..0041 and Brand B brief-0308..0311; the cards in 1-check refiled.

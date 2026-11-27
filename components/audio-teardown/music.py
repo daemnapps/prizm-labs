@@ -5,18 +5,18 @@ Three reads of one swipe once described its music three different ways
 beyond a model's ear. So the music is read from the voices-removed track, and
 everything a tool can measure is measured first.
 
-    NAMED     Shazam (free, no account — the venv named by SHAZAM_PYTHON), then AudD
+    NAMED     Shazam (free, no account — ~/.daemn/venvs/shazam), then AudD
               (AUDD_API_TOKEN) — both asked, both answers kept: in the
               2026-09-25 test each named a song the other missed
     MEASURED  tempo, beat grid, key, energy across the video, where it builds or
-              drops, how it ends (librosa, in the venv named by AUDIO_PYTHON — measure.py)
-    HEARD     Gemini on the music track (prompts/music-read-v<N>-owner.md):
+              drops, how it ends (librosa, in ~/.daemn/venvs/audio — measure.py)
+    HEARD     Gemini on the music track (prompts/music-read-v<N>-owner.md), blind: since v2 (2026-11-15)
+              it is not told the recognised name, which was once wrong and was described instead of the music:
               genre, era, instruments, vocals, mood, shape, in the scene or laid
               over, how it sits under the voice, a composer brief
     CHECKED   every label against definitions/sound.json
 """
 import json
-import os
 import subprocess
 from pathlib import Path
 
@@ -24,8 +24,8 @@ import gemini as G
 from keys import key
 
 HERE = Path(__file__).resolve().parent
-PY = Path(os.environ.get("AUDIO_PYTHON") or "/nonexistent/audio-python")
-SHAZAM = Path(os.environ.get("SHAZAM_PYTHON") or "/nonexistent/shazam-python")
+PY = Path.home() / ".daemn" / "venvs" / "audio" / "bin" / "python"
+SHAZAM = Path.home() / ".daemn" / "venvs" / "shazam" / "bin" / "python"
 LISTS = json.loads((HERE / "definitions" / "sound.json").read_text())["lists"]
 MUSIC_LISTS = {k: LISTS[k] for k in ("music_source", "vocals", "energy", "valence", "arousal", "in_scene", "shape")}
 
@@ -62,8 +62,9 @@ def audd(track):
         tok = key("AUDD_API_TOKEN")
     except Exception:
         return None, "no AudD key"
-    r = subprocess.run(["curl", "-sS", "--max-time", "120", "-F", f"api_token={tok}", "-F", f"file=@{track}",
-                        "https://api.audd.io/"], capture_output=True, text=True)
+    # curl reads the token's form value from stdin — never on its command line
+    r = subprocess.run(["curl", "-sS", "--max-time", "120", "-F", "api_token=<-", "-F", f"file=@{track}",
+                        "https://api.audd.io/"], input=tok, capture_output=True, text=True)
     try:
         d = json.loads(r.stdout)
     except ValueError:
@@ -105,7 +106,10 @@ def read(track):
             .replace("{lists}", json.dumps(MUSIC_LISTS)))
     try:
         heard, model, _ = G.ask(track, text)
-        out["heard"] = heard if isinstance(heard, dict) else {}
+        raw, heard = heard, G.one(heard)
+        if not heard:
+            raise RuntimeError(f"{model} answered {type(raw).__name__}, not the music read: {json.dumps(raw)[:120]}")
+        out["heard"] = heard
         out["heard_by"], out["prompt"] = model, p.name
         out["unknown_labels"] = check(out["heard"])
     except Exception as e:
@@ -119,10 +123,11 @@ def render(mu):
         return "\n".join(md + [f"No music. {mu.get('why', '')}", ""])
     m, h = mu.get("measured", {}), mu.get("heard", {})
     song = mu.get("song")
-    md += [f"- **Track:** {song['title']} — {song['artist']} (named by {mu['named_by']})" if song
+    md += [f"- **Track:** {song['title']} — {song['artist']} (named by {mu['named_by']}; a recognition match, "
+           f"not checked by ear — everything below is from the ear, not the name)" if song
            else f"- **Track:** not a known recording (Shazam: {mu.get('shazam')}; AudD: {mu.get('audd')}) — "
                 f"source by ear: {h.get('source', '—')}",
-           f"- **Measured:** {m.get('tempo_bpm', '—')} bpm · key {m.get('key', '—')} "
+           f"- **Measured:** {m.get('tempo_bpm', '—')} bpm (felt by ear: {h.get('felt_bpm', '—')} bpm) · key {m.get('key', '—')} "
            f"(confidence {m.get('key_confidence', '—')}) · music under {m.get('music_share_percent', '—')}% of the video "
            f"({m.get('starts', '—')}s–{m.get('ends', '—')}s) · ends: {m.get('ending', '—')}",
            f"- **Builds and drops:** " + (", ".join(f"{c['what']} at {c['at']}s" for c in m.get("changes", [])) or "none — steady"),

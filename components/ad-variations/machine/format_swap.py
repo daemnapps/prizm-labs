@@ -4,7 +4,7 @@
     python3 format_swap.py --concept <teardown run> --format <format teardown> --brand <brand> \\
         --product brilliance-face-scrub --avatar spot-hider [--dials "awareness: problem-aware"] --label <name> [--dry-run]
 
-the owner, 5 Oct 2026: "taking the teardown records then change the format … the same concept just a new format."
+owner, 5 Oct 2026: "taking the teardown records then change the format … the same concept just a new format."
 The concept is read from a video-teardown run (`stages/1-teardown.md`, `1c-doctrine.md`, `1-transcript.md`) or an
 image-teardown run (`01-teardown.md`, `02-replication-spec.md`); the format from any teardown that carries a
 teardown + spec (an organic swipe's `records/teardowns/<code>/stage1-teardown.md` + `stage2-spec.md`, or a
@@ -55,14 +55,16 @@ def format_inputs(d):
     return t, s, [x for x in (a, b) if x]
 
 
-def brand_context(brand, product, avatar):
+def brand_context(brand, product, avatar, sub=None):
     bc = BC.BrandContext(REPO, brand, avatar)
     parts = [bc.rules()]
-    for rel, lim in ((f"products/{product}/product.md", 12000), ("products/offer-bank.md", 14000),
+    # one product name (2026-11-19): the product file by its catalog id, from any name
+    for rel, lim in ((bc.product_rel(product, f"products/{product}/product.md"), 12000), ("products/offer-bank.md", 14000),
                      (f"core-avatars/{avatar}/profile.md", 9000)):
         t = bc.file(rel, lim)
         parts.append(f"=== brands/{brand}/{rel} ===\n{t if t is not None else BC.MISSING}")
-    return "\n\n".join(parts), bc.read_files
+    parts.append(BC.who_text(BC.who_args(brand, avatar, sub, None, {"product": product, "creative": True})))      # who it is for and what it must say (who.py)
+    return "\n\n".join(x for x in parts if x), bc.read_files
 
 
 def main(argv=None):
@@ -70,12 +72,16 @@ def main(argv=None):
     ap.add_argument("--concept", required=True); ap.add_argument("--format", required=True)
     ap.add_argument("--brand", required=True); ap.add_argument("--product", required=True)
     ap.add_argument("--avatar", required=True); ap.add_argument("--dials", default="none — the concept's own awareness, hook and angle")
+    ap.add_argument("--sub", help="the sub-avatar the new ad speaks to")
     ap.add_argument("--label", required=True); ap.add_argument("--model", default=None, help="run the model; default stops at WAITING for the session")
     ap.add_argument("--dry-run", action="store_true")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar', 'sub')))
     ct, cd, ctr, cfiles = concept_inputs(a.concept)
     ft, fs, ffiles = format_inputs(a.format)
-    brand, bfiles = brand_context(a.brand, a.product, a.avatar)
+    brand, bfiles = brand_context(a.brand, a.product, a.avatar, a.sub)
     prompt = newest_prompt()
     filled = prompt.read_text().format(concept_teardown=ct, concept_doctrine=cd, concept_transcript=ctr,
                                        format_teardown=ft, format_spec=fs, brand_context=brand, dials=a.dials)

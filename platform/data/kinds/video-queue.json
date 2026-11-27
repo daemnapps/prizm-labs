@@ -1,0 +1,65 @@
+{
+  "kind": "video-queue",
+  "written_by": "video-production",
+  "written_by_evidence": "components/video-production/machine/work_queue.py files ONE record per claim / progress / release, committed straight onto origin/main (commit-tree + push, never through a working tree) — 2026-10-10, so a second video editor's computer and the owner's Mac work the song-ad / video line without both taking the same ad",
+  "title": "Video work queue — which computer is working which ad",
+  "note": "One append-only record per act on one ad (a brief id): `claim` (this machine takes the ad), `progress` (the ad reached a stage; also keeps the claim fresh) and `release` (the machine lets it go). Current state is FOLDED, never stored: the latest claim not followed by the same machine's release (or a forced release) is the owner, and the owner's latest claim/progress is its last progress. A claim whose owner filed nothing for the stale window (6 hours by default) may be taken over; the new claim carries `takeover_of`. A claim counts only once it is on origin/main — offline means not claimed. Stages, in order: song, b-roll, cut, hooks, card, done (a format with no song skips the song stage). The stage a machine reports is what ITS runs show; the status page takes the furthest of that and what the reading machine's own runs and the Drive card folders show. Records are written by work_queue.py, never by hand.",
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "open_items": true,
+  "verdict_fields": [
+    {
+      "key": "event",
+      "required": true,
+      "values": [
+        "claim",
+        "progress",
+        "release"
+      ],
+      "note": "exactly one per record"
+    },
+    {
+      "key": "machine",
+      "required": true,
+      "note": "the computer that filed it — VIDEO_QUEUE_MACHINE, else the host name, as a slug. Ownership is per MACHINE: the same person on two computers is two claimants."
+    },
+    {
+      "key": "person",
+      "required": true,
+      "note": "who was at it — VIDEO_QUEUE_PERSON, else the part of git user.email before the @; also the record's `reviewer`"
+    },
+    {
+      "key": "at",
+      "note": "the act's UTC time to the microsecond; orders two acts filed in one second. `created` stays the plane's to-the-second stamp."
+    },
+    {
+      "key": "stage",
+      "values": [
+        "song",
+        "b-roll",
+        "cut",
+        "hooks",
+        "card",
+        "done"
+      ],
+      "note": "on claim and progress: the stage the filing machine's own runs showed"
+    },
+    {
+      "key": "brand",
+      "note": "the brand folder of the run the filing machine has for this ad, when it has one"
+    },
+    {
+      "key": "label",
+      "note": "the run label (runs/video-production/<brand>/<label>/), when the filing machine has one"
+    },
+    {
+      "key": "takeover_of",
+      "note": "on a claim that replaced a stale one: {machine, person, last_at} of the claim it replaced"
+    },
+    {
+      "key": "forced",
+      "note": "on a release filed by a machine that is not the owner (work_queue.py release --force)"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "kind": "wf-review-component-cards",
+  "title": "review-component — the review record grammar and the surfaces over it",
+  "note": "Cards carded by the lead 2026-09-08 from ◆ PLAN [4a0105] batches 51–54 on the developer's word (\"design reviewed, queue it and design cards first\"). RV-1 freezes the kind manifest — it IS the contract between the engine and the email lead's front end, and no panel card dispatches before it is marked `approved`. Waves are set by FILE OWNERSHIP so concurrent makers never share a file: wave 1 RV-1/RV-2/RV-3(+RV-7)/RV-4/RV-9; wave 2 RV-5/RV-6/RV-8 after RV-1 merges; wave 3 RV-10 after PM-20 (personal view merge-back). RV-11 and RV-12 are carded and NOT dispatched (Phase 3/4, gated on use). Rulings: the-org/decision-log.md, 2026-09-08, six entries.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/review-component/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    {
+      "key": "approve",
+      "type": "boolean",
+      "label": "Approve card as-is"
+    },
+    {
+      "key": "feedback",
+      "type": "text",
+      "label": "What to change (required unless approved)"
+    }
+  ]
+}

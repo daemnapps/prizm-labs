@@ -1,0 +1,100 @@
+{
+  "kind": "dashboard-refresh",
+  "written_by": "metrics",
+  "written_by_evidence": "platform/workers/mini-worker/dashboard_adapter.py runs only components/metrics/refresh.py; one record = one metrics refresh (146 via dashboard-refresh/1) — the lead, 2026-10-01, for ATL-20b (exact run counts); a kind with no written_by is not attributable to any component",
+  "title": "Dashboard refresh — a record of every run",
+  "note": "One record per RUN of the dashboard refresh, filed by the mini worker's daily tick job (card DASH-C4, platform/workers/mini-worker/dashboard_adapter.py). The numbers on the performance page come from the always-on mini and nowhere else — no human's laptop in the loop — and this kind is the record that says so: what ran, when, whether it succeeded, whether a number actually moved, and whether that move was pushed. A refresh that DID NOT HAPPEN is readable here as a `failed` record; silence is never the answer. THE REFRESH ITSELF is components/metrics/refresh.py <run> --out --reconcile, which reads the run's source.sql, queries the warehouse and writes platform/data/metrics/<run>/{data.json, last-refresh.json}. It is spawned under scoped_env('dashboard-refresh') (WM-14), whose JOB_ENV row grants DATABASE_URL and the SUPABASE_DB_URL fallback and NO other key; PATH gets /opt/homebrew/bin because psql lives there on the mini. NO NEW SCHEDULER (the one-scheduler rule, 2026-08-27): the job rides the worker's existing 60s tick, gated by a DAY cursor at 06:15 America/New_York, so a second tick on the same NY day is a no-op and the row in platform/workers/README.md's jobs table is its declaration. The cursor advances on failure as well as success — one attempt per day, never a FAILED record every minute. PUSH ONLY ON CHANGE: the data plane is committed when a NUMBER moved, measured over the run's data directory MINUS last-refresh.json, whose refreshed_at moves on every rerun by design; on an unchanged day the record is written and rides the next push. NO CREDENTIAL EVER APPEARS: the connection string's exact value is scrubbed out of every captured line before it is logged or filed. Item id = the dashboard run name (a runs/<run>/ folder, discovered — never named in the worker, workspace rule 7), so a second brand is a second source.sql and a second item id. Several records exist per run and the LATEST BY `created` WINS; the history is the append-only record, never an edit.",
+  "open_items": true,
+  "item_id": "run",
+  "item_label": "run",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["refresh"],
+      "note": "exactly one per record; reserved so a later index or status event can join this kind without changing what a refresh record means"
+    },
+    {
+      "key": "run",
+      "required": true,
+      "note": "the dashboard run name; equals the record's item id"
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": ["ok", "failed"],
+      "note": "`failed` covers BOTH named failure modes and they are told apart by `failure`: a missing credential (the refresh never started) and a non-zero exit from refresh.py (it started and did not finish clean, which includes a --reconcile mismatch). Neither ever kills the worker's tick."
+    },
+    {
+      "key": "failure",
+      "required_when": "status=failed",
+      "values": ["missing-credential", "refresh-failed"],
+      "note": "which wall it hit, as a token a reader can count on. Named rather than left to prose because 'the env var is not set' and 'the warehouse disagreed with itself' are different problems with different owners."
+    },
+    {
+      "key": "reason",
+      "required_when": "status=failed",
+      "note": "the failure in words, including what to do about it"
+    },
+    {
+      "key": "exit_code",
+      "note": "refresh.py's exit code; null when it was never spawned (missing credential). 124 = timed out, 125 = could not be run."
+    },
+    {
+      "key": "changed",
+      "required": true,
+      "note": "did a NUMBER move — the data directory's diff MINUS last-refresh.json, whose refreshed_at moves on every rerun by design. This is the only thing that authorises a push. Always false on a failed run."
+    },
+    {
+      "key": "changed_paths",
+      "note": "up to 20 repo-relative paths that moved — pointers, never content"
+    },
+    {
+      "key": "pushed",
+      "required": true,
+      "note": "was the change committed and pushed. false with changed=true means the data moved and the push failed or was not asked for (a CLI run pushes nothing by design) — the two are different facts and are never collapsed."
+    },
+    {
+      "key": "push_error",
+      "note": "present only when the record claimed a push that then failed. The record is filed BEFORE the push so it rides the same commit as the numbers; a push that fails is corrected on disk by the same run, seconds later and before any reader could have seen it, rather than leaving a claim nobody checked. Not an exception to the append-only rule — no LATER record ever edits an earlier one."
+    },
+    {
+      "key": "day",
+      "required": true,
+      "note": "the America/New_York calendar day this tick was cursored to (YYYY-MM-DD). The cursor key: one attempt per day, and a second tick on the same day is a no-op."
+    },
+    {
+      "key": "at",
+      "required": true,
+      "note": "UTC instant of the run"
+    },
+    {
+      "key": "seconds",
+      "note": "wall-clock of the refresh subprocess"
+    },
+    {
+      "key": "command",
+      "note": "the exact refresh invocation, as words — never a shell string to re-run blind"
+    },
+    {
+      "key": "data_dir",
+      "note": "repo-relative directory the run wrote (platform/data/metrics/<run>/) — a POINTER; the viewer reads the numbers there and never from this record"
+    },
+    {
+      "key": "env_granted",
+      "note": "which of the credential names the scoped environment actually carried — NAMES ONLY, never values. What a reader checks first when a refresh fails."
+    },
+    {
+      "key": "stamp",
+      "note": "the run's last-refresh.json in summary — refreshed_at, cutoff and row counts (orders, days, spend_days, months, fulfillment_rate). Counts and a cutoff, never rows. null on a failed run, and a stated absence when the file could not be read."
+    },
+    {
+      "key": "log",
+      "note": "the refresh's own output, tail-trimmed, with the credential's value scrubbed out. A diagnostic — the full text is in worker.log. WM-6: the log rides with the verdict, so a reader never has to hold a record and a log file side by side to find out what happened."
+    },
+    {
+      "key": "truncated",
+      "note": "present only when the 16KB cap forced a shed, naming what was dropped. The log sheds first and nothing else sheds at all."
+    }
+  ]
+}

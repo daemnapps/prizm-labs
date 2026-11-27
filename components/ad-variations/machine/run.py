@@ -219,6 +219,11 @@ def plan(args):
     awareness = (brandctx.level_of(corpus.kv(run.audience, "AWARENESS"))
                  or brandctx.level_of((run.doctrine.get("awareness") or {}).get("entry")))
     bc = brandctx.BrandContext(repo, brand, avatar, awareness)
+    # who it speaks to, from the parent run: its `aim` when it carries one, else its 1b read
+    p_sub, p_demo, p_what = brandctx.aim_of(run.runjson)
+    read = {"desire": corpus.kv(run.audience, "LEAD DESIRE"), "awareness": awareness, "stage": corpus.kv(run.audience, "SOPHISTICATION"),
+            "leads_with": corpus.kv(run.audience, "SOPHISTICATION LEADS WITH")}
+    aim = bc.speak_to(p_sub or corpus.kv(run.audience, "SUB-AVATAR"), p_demo, {**read, **p_what})
     vdefs = IX.definitions()["variables"]
     vals = ad_values(ix, run, repo, brand, args.dry_run)
     edefs = defs("elements.json")["elements"]
@@ -226,7 +231,7 @@ def plan(args):
     chain = Chain(TOOL, brand, label, out, PROMPTS, STEPS, dry=args.dry_run, rerun_from=args.rerun_from,
                   force_model=args.model,
                   assignment={"teardown_run": str(tdir.relative_to(repo)), "post": run.metrics.get("id"),
-                              "n": args.n, "k": args.k, "plan": args.plan, "avatar": avatar, "awareness": awareness,
+                              "n": args.n, "k": args.k, "plan": args.plan, "avatar": avatar, "awareness": awareness, "aim": aim,
                               "index_built": ix["built"], "index_runs": ix["runs"]})
     print(f"ad-variations · {brand} · {label}{' · DRY RUN' if args.dry_run else ''}")
 

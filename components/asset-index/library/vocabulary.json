@@ -1,0 +1,575 @@
+{
+ "schema": "asset-library-vocabulary/v1",
+ "what": "One fixed vocabulary for every footage scene of any brand, keyed to the marketing doctrine's section ids (components/marketing-doctrine/ad-frameworks.json). A storyboard scene names a value for each descriptor; that row is the blank the library fills. Brand words live in the brand file, never here; '{brand_device}' stands for the brand's own product names.",
+ "descriptors": {
+  "beat": {
+   "what": "Which doctrine section this picture can carry. Ids are the doctrine's own section ids.",
+   "values": {
+    "problem": {
+     "means": "The skin problem visible: acne, bumps, dark marks, oily or dry skin, a man inspecting it.",
+     "doctrine": [
+      "problem",
+      "agitation"
+     ],
+     "any": [
+      "acne",
+      "pimple",
+      "breakout",
+      "razor bump",
+      "bumps",
+      "ingrown",
+      "dark mark",
+      "dark spot",
+      "dark spots",
+      "blemish",
+      "scar",
+      "oily",
+      "dry skin",
+      "flaky",
+      "irritat",
+      "redness",
+      "inspects",
+      "examines",
+      "squeez",
+      "pops"
+     ]
+    },
+    "failed-solutions": {
+     "means": "The old way: bare hands, a rag, a razor, other products, frustration.",
+     "doctrine": [
+      "failed-solutions",
+      "agitation"
+     ],
+     "any": [
+      "with his hands",
+      "with hands",
+      "with bare hands",
+      "bare hands",
+      "splashes",
+      "rubs his face",
+      "frustrat",
+      "stressed",
+      "head in hands",
+      "wipes face with",
+      "scrubs with his fingers"
+     ],
+     "none": [
+      "device",
+      "brush",
+      "{brand_device}"
+     ]
+    },
+    "mechanism": {
+     "means": "The device or product working on skin: FLEX on the face, foam, bristles, lather.",
+     "doctrine": [
+      "unique-mechanism",
+      "solution"
+     ],
+     "all_any": [
+      [
+       "device",
+       "brush",
+       "bristle",
+       "cleansing tool",
+       "{brand_device}"
+      ],
+      [
+       "face",
+       "cheek",
+       "forehead",
+       "beard",
+       "jaw",
+       "chin",
+       "skin",
+       "nose",
+       "neck",
+       "lather",
+       "foam",
+       "vibrat",
+       "jawline",
+       "temple",
+       "cleanser",
+       "pores"
+      ]
+     ],
+     "or_any": [
+      "render of",
+      "cross-section",
+      "animation of",
+      "diagram",
+      "follicle",
+      "pore",
+      "bacteria",
+      "under the skin"
+     ]
+    },
+    "routine": {
+     "means": "Applying the rest of the set: wash, PRIME, CRUSH, serum, towel dry.",
+     "doctrine": [
+      "product",
+      "solution"
+     ],
+     "any": [
+      "applies",
+      "applying",
+      "pumps",
+      "moisturizer",
+      "serum",
+      "cream",
+      "rubs in",
+      "pats",
+      "towel",
+      "dries his face",
+      "rinses",
+      "spray",
+      "rins",
+      "washes his face",
+      "lathers",
+      "sachet",
+      "packet"
+     ]
+    },
+    "product": {
+     "means": "The product itself: in hand to camera, on a surface, box, unboxing, charging.",
+     "doctrine": [
+      "product",
+      "offer"
+     ],
+     "all_any": [
+      [
+       "holds",
+       "shows",
+       "displays",
+       "presents",
+       "unbox",
+       "opens the box",
+       "box",
+       "package",
+       "close-up of",
+       "on the counter",
+       "on a table",
+       "charging",
+       "case",
+       "placed",
+       "sits",
+       "rotat",
+       "spins",
+       "floats",
+       "packshot",
+       "render",
+       "lineup",
+       "arranged",
+       "lined up",
+       "picks up",
+       "reaches for"
+      ],
+      [
+       "device",
+       "bottle",
+       "box",
+       "brush",
+       "case",
+       "product",
+       "tube",
+       "jar",
+       "pump",
+       "packaging"
+      ]
+     ],
+     "brand_words": "the brand's product match words are added to this group at load"
+    },
+    "transformation": {
+     "means": "The after: clear skin, touching his face, confident in the mirror, a reveal.",
+     "doctrine": [
+      "transformation",
+      "solution"
+     ],
+     "any": [
+      "clean skin",
+      "clear skin",
+      "smooth skin",
+      "smooth",
+      "glow",
+      "touches his face",
+      "admires",
+      "confident",
+      "checks his reflection",
+      "reveal",
+      "fresh",
+      "satisfied"
+     ]
+    },
+    "proof": {
+     "means": "Evidence: a before and after, a result shown, a reaction, a review on screen.",
+     "doctrine": [
+      "proof"
+     ],
+     "any": [
+      "before and after",
+      "before-and-after",
+      "side by side",
+      "split screen",
+      "split-screen",
+      "results",
+      "review",
+      "reacts",
+      "reaction",
+      "surprised",
+      "shocked",
+      "impressed",
+      "'after'",
+      "'before'",
+      "after photo",
+      "before photo",
+      "compares",
+      "preference",
+      "prefers"
+     ]
+    },
+    "identification": {
+     "means": "The viewer's world, no product: barber chair, getting ready, street, car, gym, his day.",
+     "doctrine": [
+      "identification",
+      "hook"
+     ],
+     "any": [
+      "barber",
+      "haircut",
+      "walks",
+      "walking",
+      "street",
+      "car",
+      "gym",
+      "getting ready",
+      "dances",
+      "laughs",
+      "friends",
+      "date",
+      "outside",
+      "mirror selfie",
+      "barber chair",
+      "trim",
+      "shav",
+      "razor",
+      "clipper",
+      "beard",
+      "hair",
+      "dryer",
+      "interview",
+      "asks",
+      "microphone",
+      "porch",
+      "restaurant",
+      "stairs",
+      "party",
+      "club",
+      "phone",
+      "texting"
+     ]
+    },
+    "presence": {
+     "means": "A man on screen with no product and no task: looks to camera, smiles, poses, walks in. Carries identification or the after.",
+     "doctrine": [
+      "identification",
+      "transformation"
+     ],
+     "any": [
+      "looks at camera",
+      "looks into the camera",
+      "smiles",
+      "poses",
+      "peace sign",
+      "nods",
+      "winks",
+      "enters",
+      "approaches the mirror",
+      "approaches mirror",
+      "stares",
+      "looks at himself"
+     ]
+    },
+    "presenter": {
+     "means": "A person talking to camera. Fills testimonial and story beats through the presenter route, never as b-roll.",
+     "doctrine": [
+      "proof",
+      "identification",
+      "story"
+     ],
+     "rule": "clip talking_head is true and the scene has speech"
+    }
+   },
+   "unmatched": "other",
+   "exact_words": [
+    "war",
+    "car",
+    "box",
+    "date",
+    "gym",
+    "rail",
+    "case",
+    "bed",
+    "he",
+    "mic",
+    "jar"
+   ]
+  },
+  "setting": {
+   "values": {
+    "bathroom": [
+     "bathroom",
+     "sink",
+     "shower",
+     "vanity",
+     "bathroom mirror"
+    ],
+    "barbershop": [
+     "barber",
+     "barbershop",
+     "salon",
+     "cape"
+    ],
+    "bedroom": [
+     "bedroom",
+     "bed "
+    ],
+    "car": [
+     "car",
+     "vehicle",
+     "driver"
+    ],
+    "outdoor": [
+     "street",
+     "outdoor",
+     "outside",
+     "park",
+     "beach",
+     "sidewalk",
+     "parking",
+     "rail"
+    ],
+    "studio": [
+     "studio",
+     "plain background",
+     "white background",
+     "solid background",
+     "backdrop",
+     "grey background",
+     "black background"
+    ],
+    "home": [
+     "living room",
+     "kitchen",
+     "couch",
+     "desk",
+     "office",
+     "room",
+     "counter",
+     "table"
+    ]
+   },
+   "unmatched": "unknown"
+  },
+  "person": {
+   "values": {
+    "none": "subject is empty",
+    "hands": "only hands or a body part",
+    "man": "a man",
+    "woman": "a woman",
+    "group": "more than one person"
+   }
+  },
+  "shot": {
+   "values": {
+    "close-up": [
+     "close-up",
+     "extreme-close-up",
+     "insert"
+    ],
+    "medium": [
+     "medium",
+     "selfie"
+    ],
+    "wide": [
+     "wide",
+     "locked-off"
+    ]
+   }
+  },
+  "tier": {
+   "what": "Picture quality only (owner ruling 2026-11-06). Text is its own descriptor, text_marks.",
+   "values": {
+    "A": "Direct b-roll. Checked clips: polish studio-staged or hucg, short side 720 px or more, no quality problem seen, scene 2 s or longer, not a talking head. Unchecked clips: short side 1080 px or more and no quality note.",
+    "B": "Montage or proof only: phone UGC, screen recording, AI or animation, a quality problem (shaky, blurry, dark, rotated, obstructed, low-res), or under 2 s.",
+    "P": "Presenter: a person talking to camera. A real person for testimonial and story beats, never cut in as b-roll."
+   },
+   "quality_flags": [
+    "shak",
+    "unstead",
+    "blur",
+    "soft focus",
+    "out of focus",
+    "dark",
+    "underexpos",
+    "rotated",
+    "sideways",
+    "orientation",
+    "compression",
+    "artifact",
+    "pixel",
+    "obscur",
+    "obstruct",
+    "finger",
+    "outtake",
+    "restart",
+    "flub",
+    "multiple takes",
+    "repeated",
+    "low resolution",
+    "grainy",
+    "noise"
+   ],
+   "watermark_flags": [
+    "tiktok",
+    "watermark",
+    "username",
+    "capcut",
+    "ui overlay",
+    "ui and",
+    "status bar",
+    "app ui",
+    "screen recording",
+    "instagram ui",
+    "reels ui",
+    "logo at end",
+    "outro"
+   ]
+  },
+  "stream": {
+   "what": "The three production streams, and which tiers each can use.",
+   "values": {
+    "human-only": "Cut owned footage straight in: tier A anywhere, tier B inside montage or proof beats, tier P for presenter beats.",
+    "ai-plus-human": "AI scroll stopper (the ruled use of AI) on an owned body cut from tier A and B; or an AI shot generated from a clean owned reference frame.",
+    "ai-continuous": "Every shot generated. The library supplies reference only: clean product frames and settings (text_marks clean)."
+   }
+  },
+  "source": {
+   "what": "Where the file sits on the Shared Drive. The only source signal the records have.",
+   "values": {
+    "creator-raw": "content-creators/.../raw or selects: footage a hired creator sent",
+    "creator-repost": "creator folder, but the filename is a downloader or repost (Snaptik, ssstik, SaveInsta, IG_reel, RPReplay, videoplayback)",
+    "curated-ugc": "archive/creators-curated",
+    "brand-post": "intake/organic: the brand's own posts",
+    "ai": "ai-elements, or an archive folder named ai-…",
+    "reference": "intake/references, intake/before-after, archive rushes",
+    "ad": "intake/ads/<product>/<project> or briefs/delivered/<brief>: a finished ad or the b-roll gathered for that ad (the row's used_in names it)",
+    "brand-footage": "brand-assets: the brand's own shoots and recordings",
+    "internal": "operations, core-avatars, brand-identity: meetings, samples, focus groups, packaging",
+    "other": "anything else"
+   }
+  },
+  "text_marks": {
+   "what": "What words or marks are burned into the scene. Every mark is shown at selection; none removes a clip (owner ruling 2026-11-06).",
+   "values": {
+    "clean": "no on-screen text and no mark noted",
+    "caption": "burned-in words (on_screen_text), not an offer and not a handle",
+    "offer-text": "a code, price, discount or 'shop' line burned in",
+    "handle": "an @handle not on the cleared list (after 6 Nov: only a handle the check pass did not read)",
+    "partner-handle": "a handle cleared to show: the verified partner @Tx3rd_ross, or any handle the check pass read (cleared by owner ruling 2026-11-06)",
+    "app-screen": "a phone app screen, platform UI or status bar noted",
+    "editor-logo": "a CapCut / editor logo or outro noted",
+    "platform-mark": "a TikTok, Instagram, CapCut or YouTube watermark seen by the check pass",
+    "brand-handle": "the brand's own handle (listed in the brand file)"
+   },
+   "offer_words": [
+    "code",
+    "% off",
+    "off",
+    "discount",
+    "shop",
+    "link in bio",
+    "sale",
+    "$",
+    "free",
+    "save"
+   ],
+   "text_words": "number of words in the scene's on-screen text (0 = none)"
+  },
+  "people": {
+   "what": "Who is in it. Two sources, kept apart and never mixed.",
+   "filed": "creator_gender, creator_ethnicity, creator_age: the Shared Drive's own filing, content-creators/<gender>/<ethnic-appearance>/<age-band>/<person>/, done by people. It describes the creator who supplied the file; the person on screen can differ (a creator filming a partner).",
+   "apparent": "on_screen_gender and on_screen_age: read from the label's subject line (casting notes). Ethnicity is never read from a picture; the labelling prompt forbids guessing it, and so does this library.",
+   "creator_gender": [
+    "male",
+    "female",
+    "not filed"
+   ],
+   "creator_ethnicity": [
+    "black",
+    "white",
+    "latino",
+    "east-asian",
+    "south-asian",
+    "mixed",
+    "unknown-ethnicity",
+    "not filed"
+   ],
+   "creator_age": [
+    "18-24",
+    "25-34",
+    "35-44",
+    "45-54",
+    "55-64",
+    "unknown-age",
+    "not filed"
+   ],
+   "on_screen_age": [
+    "teen",
+    "20s",
+    "30s",
+    "40+",
+    "adult (age not stated)",
+    "unknown"
+   ]
+  },
+  "polish": {
+   "what": "How the clip was made, from the check pass (one value per clip). 'unchecked' until the pass reaches it.",
+   "values": {
+    "studio-staged": "set, light and framing clearly arranged",
+    "hucg": "high-quality creator footage: deliberate, steady framing, good light, clean background",
+    "phone-ugc": "casual handheld phone footage",
+    "screen-recording": "a phone or computer screen captured",
+    "ai-generated": "made by an AI model",
+    "animation-graphic": "animation or motion graphics",
+    "mixed": "more than one of these"
+   }
+  },
+  "product": {
+   "what": "Which brand product is visible. Ids, match words and looks come from the brand file runs/asset-index/<brand>/library/brand-vocabulary.json.",
+   "none": "none"
+  }
+ },
+ "blank": {
+  "what": "The blank a storyboard scene leaves for the library. Every field is a dictionary value; anything left out matches all.",
+  "fields": [
+   "beat",
+   "product",
+   "action_words",
+   "setting",
+   "person",
+   "shot",
+   "min_tier",
+   "stream",
+   "text",
+   "creator_gender",
+   "creator_ethnicity",
+   "creator_age"
+  ],
+  "fill_order": [
+   "1. Owned cut: tier A (or B in a montage or proof beat, P in a presenter beat) matching beat and product; its text marks are shown.",
+   "2. AI with real reference: no owned cut, but clean frames of the product exist (text_marks clean). Generate with the frame attached.",
+   "3. [UNFILLED: what it needed]: nothing owned and no clean reference. Shoot it, or leave the hole marked (doctrine §5)."
+  ],
+  "selection": "Every query returns a ranked band and a different band and says how many it dropped (doctrine §10).",
+  "text": "'any' (default, marks shown), 'clean', or a list of allowed marks"
+ }
+}

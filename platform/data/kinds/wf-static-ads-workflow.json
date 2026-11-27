@@ -1,0 +1,12 @@
+{
+  "kind": "wf-static-ads-workflow",
+  "title": "static-ads — workflow assembly",
+  "note": "Assembly snapshots for the static-ads build (same convention as email-campaign-workflow: entries+scope+additions+archived, latest per reviewer wins).",
+  "items": [
+    {
+      "id": "assembly",
+      "label": "Workflow assembly snapshot",
+      "content": "See email-campaign-workflow.json for the snapshot verdict shape."
+    }
+  ]
+}

@@ -31,12 +31,12 @@ def check(label, cond, detail=""):
 
 
 print("\nThe name")
-OLD = ("brand-b-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-"
+OLD = ("brand_b-bodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-"
        "handsapplication-photostrip-p140-9x16-260902a")
 NEW = ("brand_b_brilliance-body-scrub_static_ai_none_spot-hider_dark-spots_"
        "pigment-memory_hands-application_photo-strip_brief-0140_9x16_"
        "batch-2026-09-02-a")
-ad = N.ad_name("brand-b", "brilliance-body-scrub", "static", "ai", "none",
+ad = N.ad_name("brand_b", "brilliance-body-scrub", "static", "ai", "none",
                "spot-hider", "dark-spots", "pigment-memory", "hands-application",
                "photo-strip", "p140", "9x16", "260902a")
 check("an ad name is written in the NEW form, values joined by '_'",
@@ -107,18 +107,18 @@ check("the alias file agrees with the arithmetic",
 check("the three never-used numbers are named",
       set(AL["never_used"]) == {"p128", "p130", "p134"})
 
-print("\nBrief numbers per brand and product (the owner, 2026-10-01)")
-_rows = N.register_rows() + [{**b, "brand": br} for br in ("brand-a", "brand-b") for b in N.brand_briefs(br)]
-check("BRAND-A CRUSH counts on from its own 0003", N.next_brief_number(_rows, "brand-a", "crush") == 4)
-check("a product with no brief yet starts at 1", N.next_brief_number(_rows, "brand-b", "no-such-product") == 1)
-check("DXS-01 is BRAND-A CRUSH brief-0001, inside BRAND-A only",
-      N.brand_alias("brand-a", "dxs01") == ("crush", "brief-0001") and "dxs01" not in AL["aliases"])
+print("\nBrief numbers per brand and product (owner, 2026-10-01)")
+_rows = N.register_rows() + [{**b, "brand": br} for br in ("brand_a", "brand_b") for b in N.brand_briefs(br)]
+check("brand_a CRUSH counts on from its own 0003", N.next_brief_number(_rows, "brand_a", "crush") == 4)
+check("a product with no brief yet starts at 1", N.next_brief_number(_rows, "brand_b", "no-such-product") == 1)
+check("DXS-01 is brand_a CRUSH brief-0001, inside brand_a only",
+      N.brand_alias("brand_a", "dxs01") == ("crush", "brief-0001") and "dxs01" not in AL["aliases"])
 try:
-    N.brief_header("brand-a", "brief-0001"); _amb = False
+    N.brief_header("brand_a", "brief-0001"); _amb = False
 except N.AmbiguousBrief:
     _amb = True
-check("BRAND-A brief-0001 with no product is refused (old p001 and CRUSH share it)", _amb)
-check("with the product it is CRUSH's", (N.brief_header("brand-a", "brief-0001", "crush") or {}).get("product") == "crush")
+check("brand_a brief-0001 with no product is refused (old p001 and CRUSH share it)", _amb)
+check("with the product it is CRUSH's", (N.brief_header("brand_a", "brief-0001", "crush") or {}).get("product") == "crush")
 
 print("\nThe batch")
 check("a batch id is `batch-YYYY-MM-DD-a`",
@@ -168,12 +168,12 @@ check("a rename onto an existing name is refused",
 
 
 print("\nThe angle vocabulary")
-signed = N.signed_angles("brand-b")
+signed = N.signed_angles("brand_b")
 check("the brand's angle source is readable", signed is not None)
 check("an unsigned angle is flagged",
-      N.check_angle("brand-b", "somethingmadeup") is not None)
+      N.check_angle("brand_b", "somethingmadeup") is not None)
 check("a signed angle passes",
-      N.check_angle("brand-b", "pigmentmemory") is None,
+      N.check_angle("brand_b", "pigmentmemory") is None,
       f"signed: {list(signed or [])}")
 
 print("\nDelivered batches")
@@ -326,7 +326,7 @@ if _BRAND_RE:
 
 # ── the four-axis model ──────────────────────────────────────────────────
 # Ruled 2026-09-11. An angle is a CLAIM: channel-free, format-free, aimed at
-# one core avatar. Stating that in a document is not enough — the BRAND-A bank
+# one core avatar. Stating that in a document is not enough — the brand_a bank
 # had nine entries breaking it, seven of them signed.
 print("\nThe four-axis model")
 _CONTAINER = _rx.compile(
@@ -413,6 +413,23 @@ for brand_dir in sorted(p for p in BRANDS.iterdir() if (p / "core-avatars").is_d
     for s in sorted(declared):
         check(f"{brand_dir.name}: declared sub `{s}` resolves to a card or a core",
               N.sub_key(s) in cards or s in cores, s)
+
+print("\nThe page list (page_list.py, 2026-11-14)")
+import page_list as PL  # noqa: E402
+import page_pick as _PP  # noqa: E402
+_pl = PL.load()
+check("the page list has pages", len(_pl["pages"]) > 0)
+for _pid, _e in sorted(_pl["pages"].items()):
+    check(f"{_pid}: a clean page ID that matches its brand, place and page",
+          PL.is_page_id(_pid) and _pid == f"{_e['brand']}_{_e['place']}_{_e['page']}")
+    if _e.get("state") == "live":
+        check(f"{_pid}: one step and one control version",
+              _e.get("step") in PL.STEPS and len([v for v in _e["versions"] if v.get("control")]) == 1)
+    check(f"{_pid}: status is draft/approved/deprecated", _e.get("status") in ("draft", "approved", "deprecated"))
+for _brand_dir in sorted((WS / "brands").iterdir()) if (WS / "brands").is_dir() else []:
+    for _link, _r in _PP.records(_brand_dir.name).items():
+        if _r.get("type") == "link" and _r.get("url") and (_r.get("status") or "").lower() in ("live", "off"):
+            check(f"{_link}: an address in the catalog is a page on the list", PL.find(_link, _pl)[0] is not None)
 
 print(f"\n{ok} ok · {fail} failing\n")
 sys.exit(1 if fail else 0)

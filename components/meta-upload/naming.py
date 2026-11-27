@@ -26,7 +26,7 @@ A brand's own words — which market, which product, how it spells its slugs
 
 The campaign persists for months — it is the thing whose CPA is compared
 month over month, so nothing dated or creative-specific goes in it. The drop
-date on the ad set is the owner's rule (2026-09-11): "Every time we run a new
+date on the ad set is owner's rule (2026-09-11): "Every time we run a new
 batch of creatives, we need to create a new ad set to put that batch of
 creatives in." It is also forced — `Culture Integration` already holds 115
 ads, `Content Creator` 62 and `Problem Solution` 60, so those themes cannot
@@ -79,7 +79,7 @@ def render(template, fields, sep=" | ", spell=None):
     two that exist:
 
         {market!u}{sep}{product}{sep}{funnel!u}{sep}{lane!t}
-            -> US | NOVA™ | ICON | Fed-Up King
+            -> US | FLEX™ | ICON | Fed-Up King
 
         {budget!l}_{market!l}_{event!l}_{product!l}_{lane!l}
             -> cbo_us_purchase_body-scrub_creators
@@ -137,7 +137,7 @@ def ad_set(fields, shard=1, shards=1, template=None, sep=None, spell=None):
     The **promise**: forty-year-shaver carried 37 razor-bump ads beside 12
     about lines. In one ad set the lines ads would never have spent.
 
-    The **person in the picture**: the owner, 2026-09-11, "the white guy, black
+    The **person in the picture**: owner, 2026-09-11, "the white guy, black
     guy, and indian dude should not be in the same ad set". Where three
     people play the same avatar, one ad set means Meta picks a face and the
     other two are never really tested. Note what this is and is not — it
@@ -165,7 +165,7 @@ def ad_set(fields, shard=1, shards=1, template=None, sep=None, spell=None):
 
 
 # Slugs are kebab-case everywhere they are stored and Title Case everywhere
-# the owner reads them. Ads Manager is somewhere he reads.
+# owner reads them. Ads Manager is somewhere he reads.
 #
 # No brand's words live here. A brand's own spellings — `el-jefe` -> `El
 # Jefe`, `fedupking` -> `Fed-Up King` — are in its account.json, and
@@ -234,7 +234,7 @@ if __name__ == "__main__":
              "campaign": "{budget!l}{sep}{market!l}{sep}{event!l}{sep}{product!l}{sep}{lane!l}",
              "ad_set": "{theme}"}
 
-    print(campaign({"market": "us", "product": "NOVA\u2122", "funnel": "icon",
+    print(campaign({"market": "us", "product": "FLEX\u2122", "funnel": "icon",
                     "lane": "fedupking"}, pipes["campaign"], pipes["sep"],
                    spell=lambda s: {"fedupking": "Fed-Up King"}.get(s, s.title())))
     print(campaign({"budget": "cbo", "market": "us", "event": "purchase",

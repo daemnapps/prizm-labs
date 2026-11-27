@@ -37,7 +37,7 @@ class Rules(unittest.TestCase):
         self.assertIn("number-inputs", [x["id"] for x in f])
 
     def test_studio_wording_and_author_quotes_are_flagged(self):
-        f = IR.check("gpt-image-2.5", GOOD + " cinematic studio lighting (the owner, 2026-10-25: x)", size="1152x2048")
+        f = IR.check("gpt-image-2.5", GOOD + " cinematic studio lighting (owner, 2026-10-25: x)", size="1152x2048")
         ids = [x["id"] for x in f]
         self.assertIn("studio-wording", ids)
         self.assertIn("author-quotes", ids)
@@ -130,7 +130,7 @@ class Rules(unittest.TestCase):
 
     def test_no_brand_name_in_definitions(self):
         for f in (IR.HERE / "inputs").glob("*.json"):
-            self.assertNotRegex(f.read_text().lower(), r"brand-b|brand-a|flex|crush")
+            self.assertNotRegex(f.read_text().lower(), r"brand_b|brand_a|flex|crush")
 
 
 if __name__ == "__main__":

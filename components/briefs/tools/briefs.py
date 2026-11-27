@@ -10,7 +10,7 @@
     python3 tools/briefs.py check                      every declared path still exists?
     python3 tools/briefs.py retire                     the kill list, with its evidence
 
-the owner, 2026-09-30: *"All of our tools can just round through whatever brief
+owner, 2026-09-30: *"All of our tools can just round through whatever brief
 needs to be built based off whatever records we have."* This is that door. It
 resolves; it never prints — the caller runs the prompt into its own run folder,
 exactly as today.
@@ -153,7 +153,7 @@ def cmd_check(a, reg):
 
 def cmd_retire(a, reg):
     say("  Superseded prompts still sitting in live folders.")
-    say("  the owner rules this list; archive into the folder's own archive/, never delete.\n")
+    say("  owner rules this list; archive into the folder's own archive/, never delete.\n")
     say(f"  {'last used':<12}{'runs':>5}  prompt")
     for r in sorted(reg.get("retire_candidates", []), key=lambda x: x.get("last") or ""):
         say(f"  {r.get('last','—'):<12}{r.get('runs',0):>5}  {r['prompt']}")

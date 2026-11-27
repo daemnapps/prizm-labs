@@ -11,7 +11,7 @@ the left and the board came back reading right; handedness is the thing a
 generator flips without noticing. Match the board, correct the board, never
 the shot.
 
-Lifted verbatim in form from `lab/owner/avatar-builder/build.py` (the `dp`
+Lifted verbatim in form from `lab/the owner/avatar-builder/build.py` (the `dp`
 prompt). The master sheet is the reference, never the anchor and never the
 last output.
 

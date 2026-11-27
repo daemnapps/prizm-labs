@@ -384,6 +384,6 @@ def markdown(d):
     L += ["## 5. Made once, used across the set", "", "| Key | Piece | Route | Cost | Used by |", "|---|---|---|---|---|"]
     for x in d["shared"]:
         L.append(f"| {x.get('key')} | {x.get('piece')} | {x.get('route')} × {x.get('units')} | {_money(x.get('usd'))} | {', '.join(x.get('used_by') or [])} |")
-    L += ["", "## 6. the owner decides", "", *[f"- {x}" for x in d["owner_decides"]], "",
+    L += ["", "## 6. owner decides", "", *[f"- {x}" for x in d["owner_decides"]], "",
           f"_Planning spend: {d['run']['llm_cost']['tokens_in']:,} tokens in, {d['run']['llm_cost']['tokens_out']:,} out ≈ {_money(d['run']['llm_cost']['usd'])} — {d['run']['llm_cost']['basis']}_"]
     return "\n".join(L) + "\n"

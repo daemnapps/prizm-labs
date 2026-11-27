@@ -133,7 +133,7 @@ def run_html(d):
 <h4>Made once, used across the set</h4><div class="tw"><table class="grid"><thead><tr><th>Key</th><th>Piece</th><th>Route × units</th><th>Cost</th><th>Used by</th></tr></thead><tbody>{shared}</tbody></table></div>
 <details class="more"><summary>The ad beat by beat, on the file's clock</summary><div class="tw"><table class="grid"><thead><tr><th>#</th><th>Seconds</th><th>Section</th><th>Picture</th><th>Words</th><th>Sound</th><th>Attention</th></tr></thead><tbody>{beats}</tbody></table></div>
 {f"<p><b>Where the record and the file differ</b></p><ul>{rvf}</ul>" if rvf else ""}</details>
-<div class="decides"><h4>the owner decides</h4><ul>{decides}</ul></div>
+<div class="decides"><h4>owner decides</h4><ul>{decides}</ul></div>
 <p class="foot">Contract: <code>runs/ad-variations/{E(d["brand"])}/{E(Path(d["source"]["teardown_run"]).name)}/variation-plan.json</code> · built {E(d["built"])}</p>
 </article>'''
 
@@ -220,7 +220,7 @@ HOWTO = """
 <li><code>variation-plan.json</code> in the run folder — the plan; no component reads it yet.</li>
 <li>A Markdown copy for the team beside it.</li></ul></section>
 <section><h4>Where it stops and asks you</h4><ul>
-<li>Anything under “the owner decides” — likeness, voice cloning, public figures, the hero SKU, the offer.</li>
+<li>Anything under “owner decides” — likeness, voice cloning, public figures, the hero SKU, the offer.</li>
 <li>A variation marked “Needs a ruling” is planned but never produced until you rule.</li></ul></section>
 </div>"""
 
@@ -342,7 +342,7 @@ def build(repo, echo=print):
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <style>{CSS}</style>
 <div class="wrap">
-<p class="eyebrow">Company · components/ad-variations · internal only — not for sale</p>
+<p class="eyebrow">company · components/ad-variations · internal only — not for sale</p>
 <h1>Ad Variations</h1>
 <p class="lede">One ad that already worked goes in. Out comes the plan: every element marked keep or test, with the brand's own numbers behind it; one-lever variations, highest impact first; new formats built from parts the brand has already proven; which seconds of the original get reused, what AI makes, what it costs, and what each one must pass. It plans — nothing is generated here.</p>
 <nav class="tabs" aria-label="Sections"><a href="#how">How it works</a><a href="#runs">Test runs</a><a href="#index">Variable Index</a><a href="#prompts">Prompts</a><a href="#calibration">Against the hand-made spec</a><a href="#run">How to run it</a></nav>
@@ -382,7 +382,7 @@ def build(repo, echo=print):
 
 
 def mirror(prompts, runs, indexes, cal, avg):
-    L = ["# Ad Variations (owner)", "", "> **Internal only — not for sale.** Company tooling; access is granted person by person.", "",
+    L = ["# Ad Variations (owner)", "", "> **Internal only — not for sale.** company tooling; access is granted person by person.", "",
          "Markdown mirror of the Ad Variations page. Rebuilt by `components/ad-variations/machine/page.py`.", "",
          "## How it works", ""]
     for key, name, what, how, _ in STRIP:
@@ -403,5 +403,5 @@ def mirror(prompts, runs, indexes, cal, avg):
     for p in prompts:
         L += [f"### {p['name']} — `{p['file']}`", "", "````", p["text"].rstrip(), "````", ""]
     L += ["## How to run it on any ad", "", "Say: “Run ad variations on <brand> post <id>.” The session checks the teardown exists, refreshes the Variable Index, "
-          "dry-runs, runs the seven stages, and republishes the page. Anything under “the owner decides” waits for the owner."]
+          "dry-runs, runs the seven stages, and republishes the page. Anything under “owner decides” waits for owner."]
     return "\n".join(L) + "\n"

@@ -1,0 +1,29 @@
+{
+ "_what": "HELD FOR REVIEW: not live, and nothing reads this file. The rule for taking a proven message into other forms. A winner is a bank row that clears its bar (components/winners). Going live is the owner's yes; the reader that would use it is named under `read_by_when_live`.",
+ "status": "draft",
+ "on": false,
+ "rule": "Cheapest test first. A proven message goes to a static first, then to an AI voiceover video, then to creators. The next form is asked for only once the one before it has been made. The message, the angle and the customer words stay; only the form changes.",
+ "order": [
+  {
+   "form": "static",
+   "queue_type": "image-ad",
+   "why": "the cheapest test of the message"
+  },
+  {
+   "form": "ai-voiceover-video",
+   "queue_type": "video-ad",
+   "why": "the same message with motion and a voice, no shoot"
+  },
+  {
+   "form": "creator",
+   "queue_type": "video-ad",
+   "why": "the most expensive form, asked for last"
+  }
+ ],
+ "then": [
+  "the landing page follows the message",
+  "the emails follow the message"
+ ],
+ "for_each_coming_date": "Rework the best past videos and statics for each coming date before making new ones.",
+ "read_by_when_live": "components/winners/queue_source.py: one more piece per winner for the next form not made yet, lane `across-forms`, in this order."
+}

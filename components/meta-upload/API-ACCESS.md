@@ -1,6 +1,6 @@
 # The Meta API — what is set up, and the one thing still blocking
 
-> **1 Oct 2026:** the Keychain no longer holds `daemn-META_ADS_TOKEN`, and only <brand> was ever assigned
+> **1 Oct 2026:** the Keychain no longer holds `daemn-META_ADS_TOKEN`, and only Brand A was ever assigned
 > to the system user. The way back, and the uploader that runs once it is back: `GO-LIVE.md`.
 
 Set up 2026-09-11 so RUN-01 could be built as the owner actually wants it: one ad
@@ -14,9 +14,9 @@ that; the API can.
 | token | Keychain `daemn-META_ADS_TOKEN`, system user, **never expires** |
 | identity | Conversions API System User (Meta caps unverified-second system users, so this one was extended rather than a new one created) |
 | scopes | ads_management, ads_read, business_management — all granted |
-| ad account | `1. <brand>` 2824261077700798, Manage campaigns only (no billing, no permissions) |
-| page | <brand> 105112857908322, Ads only |
-| pixel | <brand>' Main Pixel 303712903971974 |
+| ad account | `1. Brand A` 2824261077700798, Manage campaigns only (no billing, no permissions) |
+| page | Brand A 105112857908322, Ads only |
+| pixel | Brand A' Main Pixel 303712903971974 |
 | app | Outlier 28021475604113796, system user is app admin |
 | client | `meta.py` — reads the token at call time, never stores or prints it |
 
@@ -49,7 +49,7 @@ Marketing API Access Tier.
    review. Days of latency and a real submission (use case, screencast). The
    permanent answer: flexible ads, URL image uploads, ad-level spend read back
    on `ad_name`.
-2. **The Ads MCP on `1.2 <brand> 2`.** Enabled today, writes today — but a
+2. **The Ads MCP on `1.2 Brand A 2`.** Enabled today, writes today — but a
    different ad account with no history, and its creative tool has no flexible
    format either (single image, or static carousel).
 3. **Keep hand-building in Ads Manager.** Works now, no waiting, but the

@@ -1,0 +1,5 @@
+{
+  "on": true,
+  "why": "Owner ruling 2026-11-20: every video production moves through the process. Sessions never make clips by calling a video tool by hand; clips are made only by the production chain from the Video Studio. Enforced by the session hook clip-chain-guard.py. Set on to false to lift the block.",
+  "since": "2026-11-20"
+}

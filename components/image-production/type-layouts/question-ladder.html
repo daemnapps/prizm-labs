@@ -1,0 +1,11 @@
+<!-- Question ladder: a big question with one line under it in near-black, three short labels under the swipe's three panels, and a dark offer ticket beside the product. Sizes are at full scale; the fit step shrinks the question block, the rest keep their places. -->
+<div class="area" data-fit style="justify-content:flex-start;gap:calc(var(--s)*10px);color:{{ink}}">
+ <div class="line" style="font:400 calc(var(--s)*138px)/1 Display;letter-spacing:-.01em">{{head}}</div>
+ <div class="line" style="font:400 calc(var(--s)*74px)/1.08 Display">{{sub}}</div>
+</div>
+<div id="ladder" data-words="{{note}}" style="position:fixed;left:0;right:0;top:47.9%;color:{{ink}};font:400 44px/1 Display"></div>
+<div style="position:fixed;left:5%;width:30%;top:57.5%;padding:22px 22px;background:{{ground}};color:#fff;text-align:left">
+ <div style="font:400 37px/1.12 Display">{{lead}}</div>
+ <div style="font:400 27px/1.2 Sans;margin-top:10px">{{price}}</div>
+</div>
+<script>const l=document.getElementById('ladder');const x=[19,44,86];l.dataset.words.split(/\s+/).forEach((w,i)=>{const s=document.createElement('span');s.textContent=w;s.style.cssText='position:absolute;transform:translateX(-50%);left:'+x[i]+'%';l.appendChild(s)})</script>

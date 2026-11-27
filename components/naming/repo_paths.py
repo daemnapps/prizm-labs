@@ -6,8 +6,8 @@ repo-relative path or a "Shared Assets/…" label, never an absolute machine pat
 This tool finds the ones that are not, and rewrites the two kinds that have one
 true portable form:
 
-    /Users/<anyone>/Projects/workspace/<rest>                     -> <rest>
-    ~/Projects/workspace/<rest>                                   -> <rest>
+    /Users/<anyone>/Projects/ai-workspace/<rest>                     -> <rest>
+    ~/Projects/ai-workspace/<rest>                                   -> <rest>
     <anything>/GoogleDrive-<account>/Shared drives/Shared Assets/<rest> -> Shared Assets/<rest>
 
 Everything else is REPORTED, never rewritten:
@@ -49,7 +49,7 @@ _BAD_BEFORE = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678
 
 # Each rewrite is found by a LITERAL anchor (fast), then its path start is found by
 # walking left — a regex lookbehind at every position was 8 MB/s.
-_REPO_ANCHOR = re.compile(re.escape("/Projects/workspace/"))
+_REPO_ANCHOR = re.compile(re.escape("/Projects/ai-workspace/"))
 _REPO_PREFIX = re.compile(r"(?:/Users/[\w.@-]+|/home/[\w.@-]+|~)\Z")
 _DRIVE_ANCHOR = re.compile(r"/GoogleDrive(?:-%s+)?/Shared drives/Shared Assets" % _SEG + _END)
 _DRIVE_PREFIX = re.compile(r"~?(?:/[\w.@ -]+)*\Z")
@@ -138,7 +138,7 @@ def _portable(text, root=None):
         if r + "/" in text:
             text, k = _rewrite(text, _own_root(r), lambda p: p == "", "")
             n += k
-    if "/Projects/workspace/" in text:
+    if "/Projects/ai-workspace/" in text:
         text, k = _rewrite(text, _REPO_ANCHOR, lambda p: bool(_REPO_PREFIX.match(p)), "")
         n += k
     if "/Shared drives/Shared Assets" in text:

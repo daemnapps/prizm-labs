@@ -1,8 +1,8 @@
 """Step 2 — the owned footage, searched for an archetype, and the frames back.
 
 **This writes no search of its own.**
-`tools/image-production/image_production/assets.py` already reads the
-footage index (`tools/asset-index/work/<collection>/<id>/breakdown.json`)
+`components/image-production/image_production/assets.py` already reads the
+footage index (`components/asset-index/work/<collection>/<id>/breakdown.json`)
 and the brand's Drive shelves, and it already matches on WHAT IS IN an asset
 rather than what it is called. That is exactly the search this step needs, so
 it is imported. `lab/owner/avatar-builder/find.py` reads the same records with
@@ -63,7 +63,7 @@ def baselines(brand, like, collection=None, limit=8, need_frames=True,
         why.append("the footage index could not be read: %s: %s" % (type(e).__name__, e))
     if not described:
         why.append("no footage records for `%s` — the index reads owned footage into "
-                   "tools/asset-index/work/<collection>/; stage 4 (promote) has "
+                   "components/asset-index/work/<collection>/; stage 4 (promote) has "
                    "never run, so there is nothing faster to read either" % brand)
 
     # the best-matching records first, so a frame is fetched only for the few rows kept (the full-download

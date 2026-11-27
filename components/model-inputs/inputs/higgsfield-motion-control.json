@@ -20,8 +20,8 @@
   "https://docs.comfy.org/tutorials/partner-nodes/kling/kling-motion-control/workflow",
   "https://help.runwayml.com/hc/en-us/articles/50280558448147-Creating-with-Kling-3-0-Motion-Control",
   "https://vercel.com/ai-gateway/models/kling-v3.0-motion-control/api",
-  "[ours] tools/video-production/VIDEO-RULINGS.md V38 to V41",
-  "[ours] tools/video-production/SHOT-ROUTES.md",
+  "[ours] components/video-production/VIDEO-RULINGS.md V38 to V41",
+  "[ours] components/video-production/SHOT-ROUTES.md",
   "[ours] components/model-inputs/VIDEO-PATH-owner.md (baseline rule, the owner 2026-10-27)"
  ],
  "limits": {
@@ -161,7 +161,7 @@
    "status": "draft",
    "source": [
     "https://kling.ai/quickstart/motion-control-user-guide",
-    "[ours] tools/video-production/SHOT-ROUTES.md"
+    "[ours] components/video-production/SHOT-ROUTES.md"
    ]
   },
   {
@@ -240,7 +240,7 @@
    "status": "draft",
    "source": [
     "https://kling.ai/quickstart/motion-control-user-guide",
-    "[ours] tools/video-production/SHOT-ROUTES.md"
+    "[ours] components/video-production/SHOT-ROUTES.md"
    ]
   },
   {
@@ -282,7 +282,7 @@
    "rule": "Build the person inside the shot's own look (same pose, light, contact shadows, depth of field, grain); a studio sheet laid in reads as pasted on. The photo look is the swipe's, never cleaner.",
    "ours": "scene still prompt carries the swipe's look",
    "status": "draft",
-   "source": "tools/video-production/VIDEO-RULINGS.md V38, V52"
+   "source": "components/video-production/VIDEO-RULINGS.md V38, V52"
   },
   {
    "id": "body-matches-framing",
@@ -303,35 +303,35 @@
    "rule": "One continuous shot, one person, no cuts, camera movement or obstructions in the reference; if two people are present the larger is used. Cut the swipe at its cuts and run one shot at a time.",
    "ours": "per-shot runs on the frame map's boundaries (V39)",
    "status": "draft",
-   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/VIDEO-RULINGS.md V39"
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; components/video-production/VIDEO-RULINGS.md V39"
   },
   {
    "id": "moderate-speed",
    "rule": "Steady, moderate movement works best. Fast gestures smear in the source and again in the model: blur the source first and check fast hands in QC; use pro for a fast-hands shot.",
    "ours": "hand check in QC",
    "status": "draft",
-   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/VIDEO-RULINGS.md V38 to V41 (18 Oct)"
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; components/video-production/VIDEO-RULINGS.md V38 to V41 (18 Oct)"
   },
   {
    "id": "props-in-the-still-then-checked",
    "rule": "A prop is carried only if it is in the scene still, and the maker says face binding drops props, so check the product in every clip: whole, same size, not melted. If it did not survive, the product is laid in from the real photo at the edit.",
    "ours": "machine/product_check.py on the clip",
    "status": "draft",
-   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/SHOT-ROUTES.md"
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; components/video-production/SHOT-ROUTES.md"
   },
   {
    "id": "scale-not-crop",
    "rule": "The result comes back at the still's own shape; scale it back to 9:16, never crop it.",
    "ours": "finish step",
    "status": "draft",
-   "source": "[ours] tools/video-production/VIDEO-RULINGS.md (18 Oct)"
+   "source": "[ours] components/video-production/VIDEO-RULINGS.md (18 Oct)"
   },
   {
    "id": "face-gate",
    "rule": "Check the face against the baseline before a clip is kept; motion control exists because object swaps kept the original face (9 of 9 swaps kept it, 9 of 9 transfers carried ours).",
    "ours": "face_gate.py",
    "status": "draft",
-   "source": "tools/video-production/SHOT-ROUTES.md"
+   "source": "components/video-production/SHOT-ROUTES.md"
   },
   {
    "id": "props-away-from-hands",
@@ -352,13 +352,13 @@
    "id": "studio-backdrop-reference",
    "text": "A person built on a grey studio backdrop: it reads pasted on.",
    "status": "draft",
-   "source": "tools/video-production/VIDEO-RULINGS.md V38"
+   "source": "components/video-production/VIDEO-RULINGS.md V38"
   },
   {
    "id": "crop-the-output",
    "text": "Cropping the stretched output: the original caption shows at the edge.",
    "status": "draft",
-   "source": "tools/video-production/VIDEO-RULINGS.md (18 Oct)"
+   "source": "components/video-production/VIDEO-RULINGS.md (18 Oct)"
   },
   {
    "id": "cuts-in-the-reference",
@@ -382,13 +382,13 @@
    "id": "expect-our-line",
    "text": "Expecting our spoken line from motion control: it copies the swipe's mouth and carries no audio of ours.",
    "status": "draft",
-   "source": "tools/video-production/SHOT-ROUTES.md"
+   "source": "components/video-production/SHOT-ROUTES.md"
   },
   {
    "id": "assume-props-survive",
    "text": "Assuming a prop in the still survives the motion: the maker says face binding drops props; the product is checked in every clip and never drawn.",
    "status": "draft",
-   "source": "https://kling.ai/quickstart/motion-control-user-guide ; tools/video-production/SHOT-ROUTES.md"
+   "source": "https://kling.ai/quickstart/motion-control-user-guide ; components/video-production/SHOT-ROUTES.md"
   },
   {
    "id": "short-motion",

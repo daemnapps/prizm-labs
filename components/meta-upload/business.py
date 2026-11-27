@@ -2,18 +2,18 @@
 """business — the ad account next to the store: each brand's spend and CPA over time, its storefront and funnel
 sales, and (where orders carry the ad) store orders and sales per ad and per brief.
 
-    business.py --brand brand-b        writes runs/media-buying/<brand>/business/<date>/business.json
+    business.py --brand brand_b        writes runs/media-buying/<brand>/business/<date>/business.json
 
-the owner, 2 Oct 2026: "link back the ads to their briefs … per brand have a nice high level view of the spend and
+owner, 2 Oct 2026: "link back the ads to their briefs … per brand have a nice high level view of the spend and
 CPAs … a separate tab for numbers from their storefronts and funnels so we have a unified look at the impact of
 the ad on the overall business as well because meta just shows the platform metrics … gauge impact and
 percentage of spend across the entire business". No profit numbers ("i don't need a profit table").
 
 All from our warehouse — no Meta, Shopify or Next Commerce calls:
   meta_ad_insights        spend, Meta-reported purchases and value, per ad per day
-  shopify_orders          BRAND-A store (brand-a.com); sales = total − tax − refunds, test and cancelled out.
-                          Almost none of its orders carry the ad, so BRAND-A store numbers are whole-business only.
-  nextcommerce_orders     Brand-B funnels; sales = total excl. tax − refunds, test out. Orders carry the ad that
+  shopify_orders          brand_a store (brand_a.com); sales = total − tax − refunds, test and cancelled out.
+                          Almost none of its orders carry the ad, so brand_a store numbers are whole-business only.
+  nextcommerce_orders     brand_b funnels; sales = total excl. tax − refunds, test out. Orders carry the ad that
                           sold them (attribution.utm_content = Meta ad id), so store orders tie to ads and briefs.
 Briefs: brief_for(brand, ad_name) reads the ad's name (the short name, a brief-NNNN, or an old pNNN code) and
 finds the brief in the register (components/naming). Ads made before briefs existed say so.
@@ -25,7 +25,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 WS = next(d for d in HERE.parents if (d / "components").is_dir() and (d / "brands").is_dir())
 sys.path.insert(0, str(HERE))
-sys.path.insert(0, str(WS / "tools/copywriter/library"))
+sys.path.insert(0, str(WS / "components/copywriter/library"))
 sys.path.insert(0, str(WS / "components/naming"))
 import names as N  # noqa: E402
 
@@ -33,16 +33,16 @@ DAYS = 90
 TOK = [re.compile(r"(brief-\d{4})", re.I), re.compile(r"\bbrief[ _-]?p?(\d{3,4})\b", re.I),
        re.compile(r"(?:^|[_\-\s])p(\d{3})(?=[_\-\s]|$)", re.I), re.compile(r"\b(dxs-?\d{2})\b", re.I)]
 STORE = {
-    "brand-a": {"name": "brand-a.com (Shopify)", "per_ad": False, "sql": """
+    "brand_a": {"name": "brand_a.com (Shopify)", "per_ad": False, "sql": """
         select created_at::date d, count(*) n, sum(total_price - total_tax - coalesce(total_refunded,0)) s, null::text ad
         from shopify_orders where created_at >= '{since}' and coalesce(is_test,false) = false and cancelled_at is null
         group by 1"""},
-    "brand-b": {"name": "Brand-B funnels (Next Commerce)", "per_ad": True, "sql": """
+    "brand_b": {"name": "brand_b funnels (Next Commerce)", "per_ad": True, "sql": """
         select created_at::date d, count(*) n,
                sum(coalesce(report_total_excl_tax, total_excl_tax) - coalesce(refunds_total,0)) s,
                case when raw->'attribution'->>'utm_content' ~ '^[0-9]{{10,}}$' then raw->'attribution'->>'utm_content' end ad
         from nextcommerce_orders where created_at >= '{since}' and coalesce(is_test,false) = false
-          and account_label = 'brand-b'
+          and account_label = 'brand_b'
           and coalesce(lower(status),'') not in ('canceled','cancelled')
         group by 1, 4"""},
 }

@@ -52,7 +52,7 @@
  "stages": [
   {
    "id": "idea",
-   "name": "Teardown",
+   "name": "Swipe teardown",
    "who": "strategy",
    "from": [
     "Triage",
@@ -64,7 +64,7 @@
   },
   {
    "id": "brief",
-   "name": "Writing",
+   "name": "Brief writing",
    "who": "strategy",
    "from": [
     "Writing",
@@ -77,18 +77,19 @@
   },
   {
    "id": "brief-needs-you",
-   "name": "Brief review",
-   "needs_owner": true,
+   "name": "Approve brief",
+   "needs_the owner": true,
    "from": [
     "Approve production",
     "Briefs to produce",
     "produce",
-    "Brief · needs you"
+    "Brief · needs you",
+    "Brief review"
    ]
   },
   {
    "id": "making",
-   "name": "Production",
+   "name": "Handed off · making",
    "who": "production",
    "from": [
     "Production",
@@ -100,7 +101,7 @@
   },
   {
    "id": "editing",
-   "name": "Edit",
+   "name": "Editing",
    "who": "production",
    "from": [
     "Edit",
@@ -109,8 +110,8 @@
   },
   {
    "id": "final-needs-you",
-   "name": "Launch review",
-   "needs_owner": true,
+   "name": "Approve ad",
+   "needs_the owner": true,
    "from": [
     "Your OK",
     "Finished ads",
@@ -120,12 +121,13 @@
     "DRAFT IN KLAVIYO",
     "Launch to Meta",
     "ads",
-    "Final OK · needs you"
+    "Final OK · needs you",
+    "Launch review"
    ]
   },
   {
    "id": "launch",
-   "name": "Launch",
+   "name": "Sending to Meta",
    "who": "launch",
    "from": [
     "Versions",
@@ -138,7 +140,7 @@
   },
   {
    "id": "live",
-   "name": "Live",
+   "name": "On Meta · completed",
    "from": [
     "3-live",
     "Live",
@@ -182,5 +184,8 @@
     "Paused"
    ]
   }
+ ],
+ "_renamed": [
+  "2026-11-06: names say the step that happens (Approve brief = waiting for the Approve production OK, before any hand-off; Handed off · making = hand-off made; On Meta · completed = the ad reached Meta). Ids unchanged; old names kept in each from-list."
  ]
 }

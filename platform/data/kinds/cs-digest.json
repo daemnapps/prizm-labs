@@ -1,0 +1,95 @@
+{
+  "kind": "cs-digest",
+  "title": "CS weekly digest — a record of every week the digest moved",
+  "note": "One record per WEEK'S DIGEST that was written or that failed, filed by the mini worker's cs-refresh tick (card GORG-C3, components/cs-metrics/digest.py, wired in platform/workers/mini-worker/cs_adapter.py). THE DIGEST IS WHAT RETIRES MARIA'S FRIDAY GOOGLE SHEET and the Slack screenshots: refunds by reason plus a feedback summary for one complete Monday-Sunday week, counts and theme aggregates only. The doc itself lands on the data plane at platform/data/cs/<run>/digest/<week>.md; this record is the pointer and the facts about it, never a copy of it. IT READS THE DATA PLANE AND NOTHING ELSE - platform/data/cs/<run>/data.json, no database, no credential, no network - which is precisely why the digest needed NO NEW GRANT ROW: the tag counts it renders ride the refresh's own single warehouse pull (components/cs-metrics/source.sql, @tags_weekly / @tags_raw, appended by this card). NO NEW SCHEDULER either (the one-scheduler rule, 2026-08-27): it runs inside the existing 06:25 America/New_York cs-refresh tick, after a successful refresh and BEFORE the change test, so a digest that moved counts as a moved number and rides the same push. UNCHANGED IS NOT AN EVENT: the digest doc carries no wall clock, so identical data re-renders to identical bytes and files nothing - a run of daily ticks over one week produces at most one record per change, not seven. REFUNDS-BY-REASON IS DATA-DRIVEN: `taxonomy_state` reads `pending` until a refund-reason tag reaches gorgias_tickets.tags, and flips to `live` with no code change the week Maria starts applying taxonomy v2 (the checklist the designer approves is new-workflow-design/builds/cs-loop/taxonomy-v2-checklist.md, and her approval IS the taxonomy ruling). Item id = the cs run name; several records exist per run and the LATEST BY `created` WINS - the history is the append-only record, never an edit. AGGREGATES ONLY, inherited from the plane: no email, name, address, order id, ticket id or message text reaches this kind or the doc it points at, and tag values that are email-, phone- or id-shaped are WITHHELD from the digest and counted in `withheld` instead, because a tag is free text an agent typed. ACCEPTANCE IS THE LEAD'S: one real week reconciles against Maria's manual sheet before the sheet retires.",
+  "open_items": true,
+  "item_id": "run",
+  "item_label": "run",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "event",
+      "values": ["digest"],
+      "note": "exactly one per record; reserved so a later event on the same kind can join without changing what a digest record means"
+    },
+    {
+      "key": "run",
+      "required": true,
+      "note": "the cs run name; equals the record's item id and names the plane the digest was computed from"
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": ["ok", "failed"],
+      "note": "`ok` means the week's digest was rendered and its bytes moved. There is no `skipped` value on purpose: a plane with no complete week yet, a run whose data.json has not been written, or a tree with no digest.py is a LOG LINE and files no record at all - a record is for something that happened."
+    },
+    {
+      "key": "failure",
+      "required_when": "status=failed",
+      "values": ["digest-failed"],
+      "note": "which wall it hit. One token today because there is one failure mode: the formatter raised something other than its own stated DigestError. A stated absence is never a failure - see `status`."
+    },
+    {
+      "key": "reason",
+      "required_when": "status=failed",
+      "note": "the failure in words, exception type first. A failed digest NEVER fails the refresh: the numbers are the job, the digest is a rendering of them."
+    },
+    {
+      "key": "week",
+      "required_when": "status=ok",
+      "note": "the Monday (YYYY-MM-DD) of the complete week this digest covers - by default the latest complete week on the plane, which is what the tick renders"
+    },
+    {
+      "key": "week_end",
+      "note": "the Sunday of the same week. Stated rather than derived so a reader never has to know the week convention to read the record."
+    },
+    {
+      "key": "cutoff",
+      "note": "the warehouse cutoff of the data.json the digest was computed from - the last day both sources were complete. Two digests of the same week under different cutoffs are two different readings, and this is how they are told apart."
+    },
+    {
+      "key": "taxonomy_state",
+      "required_when": "status=ok",
+      "values": ["pending", "live"],
+      "note": "THE FIELD TO WATCH. `pending` = no refund-reason tag has reached the warehouse, so the digest renders its stated pending state and Maria's manual sheet is still the record of refund reasons. `live` = taxonomy v2 is being applied and the refunds-by-reason table renders. The flip needs no deploy and no code change; the first `live` record is the start of the one real week the lead reconciles against the sheet."
+    },
+    {
+      "key": "refund_reasons",
+      "note": "how many DISTINCT refund-reason tag values appeared in the week. 0 while pending. A number that climbs far past the approved taxonomy means free text is being typed into the tag field."
+    },
+    {
+      "key": "refund_tagged",
+      "note": "total refund-reason tag applications in the week. Applications, not tickets: one refund may carry two reasons, which the ledger says is the normal case (size and results complaints arrive fused in one message)."
+    },
+    {
+      "key": "tickets",
+      "note": "the week's customer-ticket count, from the same weekly grain the cs page reads - the scale every count in the digest is read against"
+    },
+    {
+      "key": "tags_available",
+      "note": "did the run's data.json carry a tag grain at all. false means the run's source.sql predates card GORG-C3's @tags_weekly section, which is a different problem from 'nobody has tagged anything yet' and must not be read as one."
+    },
+    {
+      "key": "withheld",
+      "note": "how many tag values were withheld as email-, phone- or id-shaped. Should be 0. Any other number means somebody typed a customer detail into a Gorgias tag - the digest counted it and refused to print it, and the tag wants fixing at the source."
+    },
+    {
+      "key": "path",
+      "required_when": "status=ok",
+      "note": "repo-relative path of the digest doc (platform/data/cs/<run>/digest/<week>.md) - a POINTER; the digest's content lives there and is never copied into this record"
+    },
+    {
+      "key": "changed",
+      "required": true,
+      "note": "did the digest's bytes move against what was already on disk. Always true on a filed `ok` record, by construction: an unchanged digest files nothing. Kept as an explicit field so the record states the fact rather than implying it."
+    },
+    {
+      "key": "written",
+      "note": "was the doc actually written to disk. false with changed=true means a --dry-run: the digest was computed and compared and deliberately not saved."
+    },
+    {
+      "key": "pushed",
+      "note": "was the change committed and pushed, by the same push that carried the refreshed numbers. false with changed=true means the data plane did not move overall, or the push failed, or nobody asked for one (a CLI run pushes nothing by design)."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 """One station hands its run folder to the next through Shared Assets (2026-10-19).
 
-the owner: "build the mini doors per station". A mini job runs in a fresh clone and its media never
+owner: "build the mini doors per station". A mini job runs in a fresh clone and its media never
 reaches git (workspace rule 3), so each station of the video line PUTS its whole run folder on the
 company drive at the mirror path and the next station's job GETS it from there:
 
@@ -125,7 +125,7 @@ def pull(machine, brand, label, dest, reach=None):
     return got
 
 
-# ONE ORDER FOR EVERY STATION DOOR — LD-53 (station-path runner), widened 2026-10-20 (the team: "stations
+# ONE ORDER FOR EVERY STATION DOOR — LD-53 (station-path runner), widened 2026-10-20 (developer: "stations
 # read the repo first"; "we should be able to see all of the files he uses on the mini"):
 #   (1) the machine's working folder; (2) the REPO copy runs/<station>/<brand>/<label>/, for text;
 #   (3) Shared Assets runs/<station>/<brand>/<label>/, for media only when the station needs it;
@@ -271,12 +271,12 @@ def resolve(machine, brand, label, work, also=(), need=(), want=(), keep_stage=N
 
 
 # BRIDGE — LD-53 (station-path runner), until LD-54 (Drive move list)'s move lands, then DROP IT.
-# Teardowns made on the owner's Mac before 2026-10-20 sit in the old mirror,
-# Shared Assets/tools/video-teardown/runs/swipes/<label>/, not at the station path. A pull that
+# Teardowns made on owner's Mac before 2026-10-20 sit in the old mirror,
+# Shared Assets/components/video-teardown/runs/swipes/<label>/, not at the station path. A pull that
 # finds nothing at the station path looks there and SAYS SO, with the folder's modified date, so a
 # run built on an old copy is never silent. A creator run (runs/creators/<handle>/<label>/) is not
 # looked for: the handle is not known from the label.
-OLD_MIRROR = ("tools", "video-teardown", "runs", "swipes")
+OLD_MIRROR = ("components", "video-teardown", "runs", "swipes")
 
 
 def _pull_old_mirror(label, dest, reach):
@@ -290,7 +290,7 @@ def _pull_old_mirror(label, dest, reach):
     return got
 
 
-# One shared file a machine keeps beside its runs (the owner's format calls: runs/video-teardown/
+# One shared file a machine keeps beside its runs (owner's format calls: runs/video-teardown/
 # format-calls.json), mirrored at the same path on Shared Assets so a mini job sees the calls he
 # made on his own Mac. Kept off git on purpose: a page writing into the repo would collide with
 # the shared clone's pulls.

@@ -1,0 +1,5 @@
+{
+ "_what": "Owner ruling 2026-11-20: only money and law hold a finished script. on=true is the new rule (section labels, unconfirmed claims and spent audit repairs are notes). A lane set false goes back to the old hold for that lane alone. One machine only: WRITING_HOLDS_OLD=all or a comma list of lanes.",
+ "on": true,
+ "lanes": {"sections": true, "claims": true, "audit": true}
+}

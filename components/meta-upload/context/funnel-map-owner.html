@@ -1,0 +1,392 @@
+<title>Funnel Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a control strip (brand buttons) on top; every view is a stack of visual blocks — status lights, the money split, a vertical funnel of steps, then action buttons. Zinc neutrals, one blue accent, traffic-light semantics. */
+:root{
+  --bg:#f6f6f8;--panel:#fff;--fg:#18181b;--muted:#71717a;--line:#e4e4e7;--soft:#f1f1f4;
+  --accent:#2563eb;--accentbg:#e8efff;
+  --good:#15803d;--goodbg:#dcfce7;--warn:#b45309;--warnbg:#fef3c7;--bad:#b91c1c;--badbg:#fee2e2;
+  --sans:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b0b0e;--panel:#141418;--fg:#f4f4f5;--muted:#a1a1aa;--line:#26262c;--soft:#1b1b21;
+  --accent:#6ea0ff;--accentbg:#16213a;--good:#4ade80;--goodbg:#0b2a17;--warn:#fbbf24;--warnbg:#33260a;--bad:#f87171;--badbg:#3a1010;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b0b0e;--panel:#141418;--fg:#f4f4f5;--muted:#a1a1aa;--line:#26262c;--soft:#1b1b21;
+  --accent:#6ea0ff;--accentbg:#16213a;--good:#4ade80;--goodbg:#0b2a17;--warn:#fbbf24;--warnbg:#33260a;--bad:#f87171;--badbg:#3a1010;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:16px;padding-block:24px 72px;display:flex;flex-direction:column;gap:28px}
+h1{font-size:clamp(26px,5vw,34px);letter-spacing:-.025em;margin:0;line-height:1.05}
+h2{font-size:19px;letter-spacing:-.01em;margin:0;display:flex;align-items:center;gap:8px;text-wrap:balance}
+h3{font-size:15px;margin:0}
+p{margin:0}
+.sub{color:var(--muted);max-width:66ch}
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico.lg{width:22px;height:22px}
+/* control strip */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg button{font:inherit;font-size:14px;font-weight:600;border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:9px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg button:focus-visible,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.tab{font-size:13px;color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--panel);display:inline-flex;gap:5px;align-items:center}
+.tab .ico{width:14px;height:14px}
+section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:70px}
+/* status lights */
+.lights{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.light{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.light .top{display:flex;gap:10px;align-items:center}
+.orb{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none}
+.orb.good{background:var(--goodbg);color:var(--good)}.orb.warn{background:var(--warnbg);color:var(--warn)}.orb.bad{background:var(--badbg);color:var(--bad)}
+.host{font-family:var(--mono);font-size:11.5px;color:var(--muted);word-break:break-all}
+.state{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.state.good{color:var(--good)}.state.warn{color:var(--warn)}.state.bad{color:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;border-radius:999px;padding:3px 9px;display:inline-flex;gap:5px;align-items:center;font-weight:500}
+.chip .ico{width:13px;height:13px}
+.chip.good{background:var(--goodbg);color:var(--good)}.chip.warn{background:var(--warnbg);color:var(--warn)}.chip.bad{background:var(--badbg);color:var(--bad)}.chip.plain{background:var(--soft);color:var(--muted)}
+/* money split */
+.money{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.tile{border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.tile.cpk{background:var(--accentbg)}.tile.shop{background:var(--warnbg)}.tile.none{background:var(--badbg)}
+.tile .k{font-size:12px;font-weight:600;color:var(--muted);display:flex;gap:6px;align-items:center}
+.tile .v{font-size:30px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.stack{height:14px;border-radius:999px;overflow:hidden;display:flex;background:var(--soft)}
+.stack span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.callout{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border-radius:12px;padding:12px 14px;font-size:14px}
+.callout .ico{color:var(--accent);margin-top:2px}
+/* funnel */
+.funnel{display:flex;flex-direction:column;gap:0}
+.stepr{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:start;position:relative;padding-block:8px}
+.stepr::before{content:"";position:absolute;left:21px;top:0;bottom:0;width:2px;background:var(--line)}
+.stepr:first-child::before{top:24px}.stepr:last-child::before{bottom:calc(100% - 24px)}
+.node{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;position:relative;z-index:1;border:2px solid var(--panel)}
+.node.ok{background:var(--goodbg);color:var(--good)}.node.part{background:var(--warnbg);color:var(--warn)}.node.no{background:var(--badbg);color:var(--bad)}
+.sbody{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.sbody b{font-size:14.5px}
+.sbody .how{font-size:13px;color:var(--muted);margin-top:2px}
+.sbody code{font-family:var(--mono);font-size:11.5px;background:var(--soft);padding:1px 5px;border-radius:4px}
+.count{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding-top:12px;max-width:150px;white-space:normal}
+.stepr.drop .sbody{border-color:var(--bad);box-shadow:0 0 0 3px var(--badbg)}
+.dropflag{display:inline-flex;gap:5px;align-items:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);margin-bottom:3px}
+.dropflag .ico{width:13px;height:13px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.barrow{display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:10px;align-items:center;font-size:13.5px}
+.barrow .track{height:22px;background:var(--soft);border-radius:6px;overflow:hidden}
+.barrow .fill{height:100%;background:var(--accent);border-radius:6px}
+.barrow .fill.hot{background:var(--bad)}
+.barrow .num{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+/* actions */
+.acts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.act{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.act .row{display:flex;gap:10px;align-items:flex-start}
+.act .num{width:28px;height:28px;border-radius:8px;background:var(--accentbg);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.act p{font-size:13.5px;color:var(--muted)}
+.effort{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;width:max-content}
+.e1{background:var(--goodbg);color:var(--good)}.e2{background:var(--warnbg);color:var(--warn)}.e3{background:var(--badbg);color:var(--bad)}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;text-decoration:none;width:max-content}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn .ico{width:15px;height:15px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+.foot{font-size:12.5px;color:var(--muted);max-width:75ch}
+/* standard view */
+.grid{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.grid table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+.grid th,.grid td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.grid tr:last-child td{border-bottom:0}
+.grid th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;background:var(--soft)}
+.grid td.c{text-align:center;white-space:nowrap}
+.grid code{font-family:var(--mono);font-size:11.5px;background:var(--soft);padding:1px 5px;border-radius:4px}
+.grid .n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.tick{color:var(--good);font-weight:700}.cross{color:var(--bad);font-weight:700}
+.urlbox{font-family:var(--mono);font-size:12px;background:var(--soft);border-radius:10px;padding:10px 12px;word-break:break-all;line-height:1.6}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.mini{height:8px;border-radius:99px;background:var(--soft);overflow:hidden;min-width:60px}
+.mini span{display:block;height:100%;border-radius:99px}
+.pill{font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.pill.meta{background:var(--accentbg);color:var(--accent)}.pill.other{background:var(--soft);color:var(--muted)}.pill.bad{background:var(--badbg);color:var(--bad)}
+ul.fix{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+/* full journey */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.fstage{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px;position:relative;min-width:0}
+.fstage .k{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:flex;gap:6px;align-items:center}
+.fstage .k .ico{width:14px;height:14px}
+.fstage .v{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.fstage .m{font-size:12.5px;color:var(--muted)}
+.fstage.blind{background:var(--soft);border-style:dashed}
+.fstage.money .v{color:var(--good)}
+.fstage .meter{height:6px;border-radius:99px;background:var(--soft);overflow:hidden;margin-top:4px}
+.fstage .meter span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.adname{font-weight:600}
+.adsub{font-family:var(--mono);font-size:11px;color:var(--muted);word-break:break-all}
+.blindlist{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+@media (max-width:560px){.tabs{margin-left:0}.barrow{grid-template-columns:90px minmax(0,1fr) 56px}.stepr{grid-template-columns:40px minmax(0,1fr)}.count{grid-column:2;text-align:left;padding-top:0}.node{width:40px;height:40px}.stepr::before{left:19px}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+ <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+ <symbol id="i-click" viewBox="0 0 24 24"><path d="M9 9l5 12 1.8-5.2L21 14z"/><path d="M7.2 2.2 8 5.1M5.1 8l-2.9-.8M14 4.1 12 6.2M6.2 12l-2.1 2"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+ <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+ <symbol id="i-screen" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+ <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol>
+ <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/></symbol>
+ <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></symbol>
+ <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+ <symbol id="i-card" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></symbol>
+ <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2 1 1V2l-1 1-3-2-3 2-3-2-3 2-3-2z"/><path d="M8 8h8M8 12h8"/></symbol>
+ <symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></symbol>
+ <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M22 3H2l8 9.5V19l4 2v-8.5z"/></symbol>
+ <symbol id="i-dollar" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></symbol>
+ <symbol id="i-rec" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+ <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L22 14l-8 8-2.3-2.3a4 4 0 0 0-5-5L2 10l8-8z"/></symbol>
+ <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+ <symbol id="i-link" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+ <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+</svg>
+
+<div class="wrap">
+ <header style="display:flex;flex-direction:column;gap:6px">
+  <span style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Brand A + Brand B · store and funnel · 5–12 Oct 2026 · both funnels tracked live 12 Oct · full journey + Clarity page data added 12 Oct · refreshes daily 06:00</span>
+  <h1>Funnel Map</h1>
+  <p class="sub">Where every visitor goes, what each page tells Meta, and which sales are real ad sales. Counts come from Next Commerce and Shopify. Meta itself was not read.</p>
+ </header>
+
+ <div class="bar">
+  <div class="seg" role="group" aria-label="Brand">
+   <button type="button" id="b-Brand A" aria-pressed="true" data-brand="Brand A">Brand A</button>
+   <button type="button" id="b-Brand B" aria-pressed="false" data-brand="Brand B">Brand B</button>
+  </div>
+  <nav class="tabs" aria-label="Jump to">
+   <a class="tab" href="#full"><svg class="ico"><use href="#i-mail"/></svg>Full journey</a>
+   <a class="tab" href="#standard"><svg class="ico"><use href="#i-list"/></svg>Standard</a>
+   <a class="tab" href="#status"><svg class="ico"><use href="#i-rec"/></svg>Status</a>
+   <a class="tab" href="#money"><svg class="ico"><use href="#i-dollar"/></svg>Real sales</a>
+   <a class="tab" href="#journey"><svg class="ico"><use href="#i-funnel"/></svg>Journey</a>
+   <a class="tab" href="#clarity"><svg class="ico"><use href="#i-eye"/></svg>Clarity</a>
+   <a class="tab" href="#do"><svg class="ico"><use href="#i-user"/></svg>Your moves</a>
+  </nav>
+ </div>
+
+
+ <section id="full"><h2><svg class="ico lg"><use href="#i-mail"/></svg>Full journey: ad → funnel → order → upsell → email → repeat</h2>
+  <p class="sub" id="fullsub"></p>
+  <div id="fullbox"></div>
+ </section>
+ <section id="standard"><h2><svg class="ico lg"><use href="#i-list"/></svg>Acquisition tracking standard</h2>
+  <p class="sub">One spec for every funnel, both brands. Every step sends the same event to Meta, GA4 and Clarity, and every event carries the ad that brought the visitor in. The pull request below makes this brand's funnel meet it.</p>
+  <div class="card"><h3>Every Meta ad carries these URL tags</h3><div class="urlbox" id="adurl"></div>
+   <div class="btnrow"><button type="button" class="btn ghost" id="copyurl"><svg class="ico"><use href="#i-copy"/></svg>Copy the tags</button></div>
+   <p style="font-size:13px;color:var(--muted)">The ad name rides in utm_content and the ad id in sub1, which the store keeps on every cart and order. The uploader now puts these on every ad it makes. Email links get the same shape: <code>utm_source=klaviyo&amp;utm_medium=email&amp;utm_campaign=&lt;campaign or flow&gt;&amp;utm_content=&lt;message&gt;</code>.</p></div>
+  <div class="grid"><table><thead><tr><th>Step</th><th>Event</th><th>Meta</th><th>GA4</th><th>Clarity</th><th class="c">Value</th></tr></thead><tbody id="stdgrid"></tbody></table></div>
+  <p class="foot">Every event also carries ad_name, brief, batch, campaign, ad set, ad id, funnel, page and step, plus an event id. Purchase uses &lt;store&gt;-&lt;order&gt;, the same id the store's Meta app sends from the server, so Meta counts it once. Upsells go as UpsellTake with value, never as a second Purchase.</p>
+  <div class="score" id="prcard"></div>
+  <h3 id="checkh">Checker, page by page: live today → this pull request</h3>
+  <div class="grid"><table><thead><tr><th>Page</th><th>Step</th><th class="n" id="thb">Live today</th><th class="n" id="tha">After the PR</th><th>Score</th></tr></thead><tbody id="checkrows"></tbody></table></div>
+  <p class="foot">Each page loaded in a headless browser under the funnel's real address, quiz and portal screens clicked through, every analytics hit answered on the Mac so nothing reached Meta, Google or Clarity. A score counts each expected event at Meta, GA4 and Clarity, plus "every Meta event has an event id" and "every Meta event names the ad". Checkout, payment, purchase and upsell takes need a real order and were not placed.</p>
+  <h3 id="truthh">What each ad really sold</h3>
+  <div class="grid"><table><thead><tr><th>Ad (utm_content)</th><th>Source</th><th class="n">Carts</th><th class="n">Orders</th><th class="n">Revenue</th><th class="n">Upsells</th><th>Funnel</th></tr></thead><tbody id="truthrows"></tbody></table></div>
+  <p class="foot" id="truthfoot"></p>
+ </section>
+ <section id="status"><h2><svg class="ico lg"><use href="#i-rec"/></svg>Status</h2><div class="lights" id="lights"></div></section>
+ <section id="money"><h2><svg class="ico lg"><use href="#i-dollar"/></svg>Real sales vs what Meta shows</h2><div id="moneybox"></div></section>
+ <section id="journey"><h2><svg class="ico lg"><use href="#i-funnel"/></svg>The journey, step by step</h2>
+  <div class="legend"><span><span class="sw" style="background:var(--good)"></span>tracked, we can count it</span><span><span class="sw" style="background:var(--warn)"></span>sent, but only visible inside Meta / GA4</span><span><span class="sw" style="background:var(--bad)"></span>not tracked today</span></div>
+  <div class="funnel" id="funnel"></div>
+  <div id="extra"></div>
+  <div id="clarflow"></div>
+ </section>
+ <section id="clarity"><h2><svg class="ico lg"><use href="#i-eye"/></svg>Clarity: watch every visit, by ad</h2><div class="lights" id="clar"></div>
+  <div class="callout"><svg class="ico"><use href="#i-info"/></svg><span>Recordings, scroll and click heatmaps, rage taps, and drop-off from each page to the next. Every recording is tagged with the ad name, brief, batch, campaign, ad set, source and page, so you can pick one song ad and watch exactly where its visitors leave.</span></div>
+ </section>
+ <section id="do"><h2><svg class="ico lg"><use href="#i-user"/></svg>Your moves</h2><p class="sub">Tap a button to copy the reply, then paste it in the chat. Cheapest first.</p><div class="acts" id="acts"></div>
+  <p class="foot">Not checked: InitiateCheckout with a cart, AddPaymentInfo, Purchase and UpsellTake need a real order, and none was placed. Whether the Next Meta app sends server Purchases for Brand B is unconfirmed. Both brands' status lights and journeys show the funnels after their tracking went live (12 Oct). Every number on this page rebuilds each morning at 06:00.</p>
+ </section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const I=(n,c="")=>`<svg class="ico ${c}"><use href="#i-${n}"/></svg>`;
+const D={
+ Brand A:{
+  lights:[
+   {s:"good",name:"Brand A funnel",host:"method.Brand A.com",line:"Live and tracked · 82/82",chips:[["good","ok","Tracking standard live 12 Oct"],["good","ok","Every portal screen sends QuizStep"],["good","ok","Offer page ViewContent $69.99"],["good","ok","Event id + ad name on every Meta event"],["good","ok","UpsellTake with value"],["good","ok","GA4 + Clarity on every page"],["warn","warn","Checkout → purchase needs a real order to prove"]]},
+   {s:"bad",name:"Brand A.com store",host:"Brand A.com · Shopify",line:"Shares the funnel's pixel",chips:[["bad","warn","Same pixel 303712903971974"],["good","ok","Clarity live"]]}
+  ],
+  money:{tiles:[["cpk","bag","Real funnel sales from ads","1 order · $139.98","The LeBron ad, Buy 2 Get 1."],["none","play","Song ads","0 orders","0 reached the email step at checkout, despite a high CTR and 38s average watch."],["shop","store","Brand A.com store, same week","130 orders · $50.94 avg","Same pixel, so Meta can credit these to the ads. This is the $50 AOV you see."]],
+   stack:[["var(--accent)",1],["var(--warn)",130]],stackLabel:[["var(--accent)","Funnel orders: 1"],["var(--warn)","Store orders on the same pixel: 130"]],
+   take:"The LeBron ad's low cost per sale is mostly store sales from people who clicked or saw it. Judge funnel ads on Next Commerce orders by ad name, not Meta's purchase column."},
+  steps:[
+   ["part","click","Ad click","Meta link click. Song ads: high CTR, 38s average watch.","not read"],
+   ["part","screen","Portal opens","Meta PageView (plus TikTok, Snap).","—"],
+   ["part","play","“Start my bump check”","Meta custom <code>PortalStart</code>.","—"],
+   ["part","list","6 questions","Meta custom <code>PortalAnswer</code> with the question and answer.","—"],
+   ["part","eye","5 screens: why · truth · match · proof · told","<code>QuizStep</code> per screen (live 12 Oct). Clarity records them.","—"],
+   ["part","unlock","Unlock → qualified","Meta custom <code>PortalQualified</code>.","—"],
+   ["part","tag","Offer card · “See the offer”","<code>PortalOfferView</code> · <code>PortalOfferClick</code>.","—"],
+   ["part","tag","FLEX offer page","ViewContent $69.99 (live 12 Oct).","—"],
+   ["part","cart","Checkout opens","ViewContent $69.99 + InitiateCheckout $139.98.","song ads: 0 past here",true],
+   ["ok","mail","Email entered","Next Commerce cart, tagged by ad.","4 · LeBron 1 · song 0"],
+   ["part","card","Payment info","AddPaymentInfo from the cart.","—"],
+   ["ok","bag","Purchase","Browser + server Purchase, matched.","3 · LeBron 1 ($139.98)"],
+   ["ok","plus","Upsells: case → Vitals → CORE/WAR → PRIME → CRUSH","<code>UpsellTake</code> with value to Meta (live 12 Oct); takes are order lines.","2 takes of 3"],
+   ["ok","receipt","Receipt","PageView + Purchase.","3"]
+  ],
+  extra:{title:"Brand A.com store · 5–11 Oct",rows:[["Visit",966,false],["Added to cart",83,true],["Checkout",65,false],["Bought",44,false]],note:"Biggest drop is visit → cart (8.6%). By source: direct 666 → 17 bought · search 212 → 23 · social 44 → 1 · email 27 → 1."},
+  clar:[["good","Brand A funnel","Live since 12 Oct on every page plus the Willow quiz. Recordings carry the ad name. Its numbers come in daily: see “Clarity, landing to order” above.","https://github.com/Sellmore-Co/Brand A-cpk/pull/7","PR #7"],["good","Brand A.com","Live, same Clarity project. Where store visits land is in the same block.",null,null]]
+ },
+ Brand B:{
+  lights:[
+   {s:"good",name:"Brand B funnel",host:"recipe.Brand B.com",line:"Live and tracked · 134/134",chips:[["good","ok","Tracking standard live 12 Oct (PR #13 merged)"],["good","ok","Pixel 1294318978367829 on all 22 pages"],["good","ok","QuizStep per screen · Lead when finished"],["good","ok","Offer ViewContent with value"],["good","ok","Event id + ad name on every Meta event"],["good","ok","UpsellTake with value"],["good","ok","GA4 + Clarity on every page"],["warn","warn","Checkout → purchase needs a real order to prove"]]},
+   {s:"warn",name:"Brand B.com store",host:"Brand B.com · Next Commerce",line:"Pixel live, no Clarity",chips:[["good","ok","Pixel 1294318978367829"],["good","ok","GA4"],["bad","x","No Clarity"]]}
+  ],
+  money:{tiles:[["cpk","bag","Face scrub funnel orders","6 orders","brief-0286: 3 · untagged: 3."],["none","play","Song ads","0 orders","They went live this week. Meta gets no browser signal from this funnel yet."],["shop","store","Body scrub funnel","13 orders","Its ads send the ad id instead of the ad name, so these can't be split by brief."]],
+   stack:[["var(--accent)",6],["var(--warn)",13]],stackLabel:[["var(--accent)","Face scrub: 6"],["var(--warn)","Body scrub: 13"]],
+   take:"Until 12 Oct Meta optimised the Brand B funnel ads with no pixel on the funnel. It is on now (134/134 live), so from today Meta sees every step. Judge these ads on Next Commerce orders by ad name."},
+  steps:[
+   ["part","click","Ad click","Meta link click.","not read"],
+   ["part","screen","Quiz / portal opens","Meta PageView + GA4 + Clarity on every page (live 12 Oct).","12 landed in Clarity · 3 days"],
+   ["part","list","Each quiz / portal screen","<code>QuizStep</code> per screen, Lead when finished (live 12 Oct). Clarity tags each step.","—"],
+   ["part","tag","Landing / offer","ViewContent with value: $87 face, $57 body (live 12 Oct).","—"],
+   ["part","cart","Checkout","Meta PageView + ViewContent. InitiateCheckout needs a real order to prove.","face scrub: 12 landed → 1 here",true],
+   ["ok","mail","Email entered","Next Commerce cart.","3 · brief-0286 1"],
+   ["ok","bag","Purchase","Next Commerce order + browser Purchase with id Brand B-&lt;order&gt;. Server copy unconfirmed.","6 · song ads 0"],
+   ["ok","plus","Upsells: body cream / body scrub","<code>UpsellTake</code> with value (live 12 Oct); takes are order lines.","1 take of 6"]
+  ],
+  extra:null,
+  clar:[["good","Brand B funnel","Live on all 22 pages across 3 funnels since 12 Oct (merged). Each quiz step is tagged. Its numbers come in daily: see “Clarity, landing to order” above.","https://github.com/Sellmore-Co/Brand B-cpk/pull/13","PR #13"],["bad","Brand B.com","Missing. Needs the snippet in the Next store theme.",null,null]]
+ }
+};
+const FJ={"from": "2026-09-12", "to": "2026-10-12", "st": {"carts": 36, "customers": 30, "first_revenue": 2666.28, "upsell_customers": 12, "upsell_revenue": 452.85, "emailed": 28, "opened": 22, "clicked": 8, "repeat_customers": 4, "repeat_revenue": 293.49, "ltv_to_date": 2959.77, "new_to_brand": 24, "already_store_customers": 4, "first_orders_klaviyo_credits_to_email": 0}, "ads": [["VSL · the owner to Rashad 2.0", "DamonVSL_DamontoRashad2.0 - 311385264607819 - Copy", "meta", 7, 10, 10, 1007.03, 10, 354.89, 10, 7, 4, 0, 0.0, 1007.03], ["No ad tags", "(no ad tags)", "none", 25, 10, 7, 844.56, 3, 77.97, 9, 7, 2, 0, 0.0, 844.56], ["Meta click, ad unknown", "(Meta click, no ad name)", "meta", 0, 3, 3, 147.39, 1, 0.0, 3, 3, 2, 2, 200.52, 347.91], ["Email · Happy 4th Of July", "email: Happy 4th Of July (01KWPQ3GE1BN5P2Z4R74QD7FRV)", "email", 0, 2, 0, 139.98, 0, 0.0, 2, 2, 0, 1, 39.98, 179.96], ["King static · Marcus poster", "Brand A-flex-static-ai-marcus-fedupking-razorbumps-razornotproblem-distressedpostermarcus-distressedposter-p003-9x16-260907c-a03", "meta", 0, 1, 0, 149.97, 0, 0.0, 1, 1, 0, 0, 0.0, 149.97], ["LeBron ad · bump-check portal", "Brand A_flex_brief-0019_batch-2026-10-09-b_cpk-bump-check-portal", "meta", 1, 1, 1, 139.98, 0, 0.0, 1, 1, 0, 0, 0.0, 139.98], ["Email · TS | FLEX vs Hands: The Dirt You Leave Behind", "email: TS | FLEX vs Hands: The Dirt You Leave Behind (01KN7J0GVZQFSA9SQ2X9TA3R4S)", "email", 0, 1, 1, 77.4, 0, 0.0, 1, 1, 0, 1, 52.99, 130.39], ["A King ad with broken tags", "(literal {{ad.name}}: the ad's URL tags are broken)", "meta", 1, 1, 1, 89.98, 1, 19.99, 1, 0, 0, 0, 0.0, 89.98], ["Evergreen offer · IG story images", "Evergreen Offer IG Story Images - Actually Works LP", "meta", 0, 1, 1, 69.99, 0, 0.0, 0, 0, 0, 0, 0.0, 69.99], ["ACH-DAN-17 · ICON page", "ACH-DAN-17(2) SS - Icon LP - Copy", "-", 1, 0, 0, 0.0, 0, 0.0, 0, 0, 0, 0, 0.0, 0.0], ["King static · Brett two-panel", "Brand A-flex-static-ai-brett-fedupking-ingrowns-razornotproblem-beardbrett-twopanel-p002-9x16-260907a-a01", "-", 1, 0, 0, 0.0, 0, 0.0, 0, 0, 0, 0, 0.0, 0.0], ["Song ads (live 10–11 Oct)", "batch-2026-10-10-a · every song ad", "meta", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], "email": [["no email touch", 0, 0, 0, 0, 2, 200.52], ["campaign: 6 Years of Brand A", 0, 0, 0, 0, 1, 52.99], ["campaign: Happy 4th Of July", 0, 0, 0, 0, 1, 39.98], ["flow: TS | New Customer Post Purchase + Thank You", 19, 102, 48, 6, 0, 0.0], ["flow: T | Delivered", 18, 34, 26, 2, 0, 0.0], ["flow: T | Carrier Picked Up", 17, 20, 19, 2, 0, 0.0], ["flow: T | Cancelled/Refund", 3, 6, 5, 2, 0, 0.0], ["flow: T | Out for Delivery", 16, 19, 23, 1, 0, 0.0], ["flow: C12 - 2+ Purchases Follow Up", 9, 9, 12, 1, 0, 0.0], ["flow: 7 | Level Up Guarantee", 6, 8, 9, 0, 0, 0.0], ["flow: TS | Subscription Invite Flow", 3, 6, 8, 0, 0, 0.0]], "flows": [["TS | Next Order Flow", 18, 896.65], ["TS | UGC request", 19, 831.71], ["6 | Customer Winback", 11, 741.24], ["7 | Level Up Guarantee", 15, 724.93], ["TS  | Abandoned Checkout [Site]", 6, 414.83], ["T | Delivered", 9, 272.45], ["9 | Replenishment Flow", 4, 146.76], ["T | Cancelled/Refund", 2, 79.96], ["T | Carrier Picked Up", 2, 68.96], ["T | Out for Delivery", 2, 60.75], ["C12 - 2+ Purchases Follow Up", 1, 32.09], ["TS | Post Purchase Upsell - Non Flex", 1, 17.99]], "camps": [["10/12/2026 | Flex | It was never about the bumps | VIP · Engaged 180d", 14, 0, 0.0]], "unattr": {"revenue": 29778.79, "orders": 588}};
+const FJP={"from": "2026-09-12", "to": "2026-10-12", "st": {"carts": 105, "customers": 208, "first_revenue": 13063.6, "upsell_customers": 44, "upsell_revenue": 2650.1, "emailed": 0, "opened": 0, "clicked": 0, "repeat_customers": 13, "repeat_revenue": 971.95, "ltv_to_date": 14035.55, "new_to_brand": 181, "already_store_customers": 0, "first_orders_klaviyo_credits_to_email": 0}, "ads": [["Meta click, ad unknown", "(Meta click, no ad name)", "meta", 0, 57, 54, 4084.2, 18, 892.0, 0, 0, 0, 2, 192.1, 4276.3], ["Ad sending its id, not its name · 360730591", "(ad id 120246009360730591: tagged with the ad id, not the name)", "meta", 32, 48, 48, 3452.4, 9, 783.0, 0, 0, 0, 3, 142.2, 3594.6], ["No ad tags", "(no ad tags)", "none", 40, 49, 32, 2478.1, 8, 369.4, 0, 0, 0, 6, 534.65, 3012.75], ["Ad sending its id, not its name · 050700591", "(ad id 120247623050700591: tagged with the ad id, not the name)", "meta", 8, 17, 16, 843.25, 4, 350.25, 0, 0, 0, 0, 0.0, 843.25], ["Ad sending its id, not its name · 220700591", "(ad id 120247796220700591: tagged with the ad id, not the name)", "meta", 11, 14, 13, 771.0, 1, 78.0, 0, 0, 0, 0, 0.0, 771.0], ["Face scrub · brief-0286 quiz", "Brand B_brilliance-face-scrub_brief-0286_batch-2026-10-03-a_face-scrub-cpk-quiz", "meta", 1, 3, 3, 230.0, 0, 0.0, 0, 0, 0, 0, 0.0, 230.0], ["Body scrub static · p152 spot-hider", "Brand B-brilliancebodyscrub-static-ai-none-spothider-darkspots-pigmentmemory-coverreveal-beforeaftersplitclaim-p152-9x16-260923a-quiz", "meta", 1, 3, 3, 189.0, 1, 39.0, 0, 0, 0, 0, 0.0, 189.0], ["Email · Body Scrub", "email: 09/20/2026 - Educational - Only Text | Body Scrub | FALLPREP20 ends tonight Engaged 90 vA-vB", "email", 0, 2, 0, 132.0, 0, 0.0, 0, 0, 0, 1, 57.0, 189.0], ["Ad sending its id, not its name · 036080591", "(ad id 120247623036080591: tagged with the ad id, not the name)", "meta", 2, 3, 3, 116.25, 1, 29.25, 0, 0, 0, 1, 46.0, 162.25], ["Email · Body Scrub", "email: 10/02/2026 - Educational | Body Scrub | What lands in our inbox lately Engaged 90 vA-vB", "email", 0, 1, 1, 135.0, 1, 78.0, 0, 0, 0, 0, 0.0, 135.0]], "email": [["no email touch", 0, 0, 0, 0, 10, 746.95], ["email: 09/25/2026 - Educational - Only Text | Body Scrub | How hard should you actually scrub? Engaged 90 vA-vB", 0, 0, 0, 0, 1, 75.0], ["email: 10/02/2026 - Educational | Body Scrub | What lands in our inbox lately Engaged 90 vA-vB", 0, 0, 0, 0, 1, 57.0], ["email: 10/10/2026 | Brilliance Body Scrub | Complete your Brand B routine | Returning Customer", 0, 0, 0, 0, 1, 57.0], ["email: 10/06/2026 | Educational | What summer printed is turning over now | Returning Customer", 0, 0, 0, 0, 1, 36.0]], "flows": [], "camps": [], "unattr": {"revenue": 0, "orders": 0}, "noemail": true};
+const FJS={Brand A:FJ,Brand B:FJP};
+const CL={"Brand A": {"days": 3, "sessions": 4, "funnels": [{"name": "ICON", "drop": [["landed (Clarity)", 4, null], ["checkout started", 3, 25.0], ["ordered", 2, 33.3], ["took an upsell", 0, 100.0]], "big": "ordered → took an upsell: 2 lost (100.0%)", "land": [["/icon/portal-ingrown/", "quiz", 4, 1.25, 99.8, 0, 0, 0]], "under": false}], "ads": [["Brand A_flex_brief-0039_batch-2026-10-10-a_icon-portal-ingrown", 3], ["Brand A_flex_brief-0038_batch-2026-10-10-a_icon-portal-ingrown", 1]], "sources": [["(none)", "(none)", 169], ["Brand A.com", "direct", 99], ["google", "organic", 65], ["ig", "social", 10], ["postscript", "sms", 8], ["Klaviyo", "email", 8]], "store": {"kinds": [["home", 77], ["collection", 46], ["product", 239], ["cart", 5]], "top": [["/products/flex", 106, 1.86, 18.6, 3.8, 0.0, 5.7], ["/", 77, 2.52, 21.1, 3.9, 1.3, 16.9], ["/products/the-king-skin-set", 29, 2.28, 7.9, 0.0, 0.0, 13.8], ["/collections/the-lift", 23, 3.96, 58.2, 0.0, 0.0, 21.7], ["/collections/formulas", 19, 4.79, 38.3, 0.0, 0.0, 26.3], ["/products/core", 16, 5.19, 18.0, 0.0, 0.0, 43.8], ["/products/crush", 10, 2.8, 20.5, 0.0, 0.0, 0.0], ["/products/war", 9, 2.89, 24.5, 0.0, 0.0, 0.0]]}}, "Brand B": {"days": 3, "sessions": 12, "funnels": [{"name": "Brand B Brilliance Face Scrub", "drop": [["landed (Clarity)", 12, null], ["checkout started", 1, 91.7], ["ordered", 3, null], ["took an upsell", 0, 100.0]], "big": "landed (Clarity) → checkout started: 11 lost (91.7%)", "land": [["/Brand B-facescrub-cpk/portal-yai/", "quiz", 12, 1.17, 100.0, 1, 0, 0]], "under": false}, {"name": "Brand B Brilliance Body Scrub", "drop": [["landed (Clarity)", 0, null], ["checkout started", 6, null], ["ordered", 5, 16.7], ["took an upsell", 1, 80.0]], "big": "ordered → took an upsell: 4 lost (80.0%)", "land": [], "under": false}, {"name": "Brand B Brilliance Body Scrub — Subscribe", "drop": [["landed (Clarity)", 0, null], ["checkout started", 0, null], ["ordered", 0, null], ["took an upsell", 0, null]], "big": null, "land": [], "under": false}], "ads": [], "sources": [["(none)", "(none)", 13], ["facebook", "paid", 1]], "store": null}};
+const money=v=>"$"+Math.round(v).toLocaleString("en-US");
+function renderFull(b){
+ const box=document.getElementById("fullbox"),sub=document.getElementById("fullsub");
+ const FJ=FJS[b],brandName=b==="Brand A"?"Brand A":"Brand B",storeName=b==="Brand A"?"Brand A.com":"Brand B.com";
+ const s=FJ.st;
+ sub.textContent=`Every customer whose first funnel order landed ${FJ.from.slice(5)} to ${FJ.to.slice(5)} (30 days), followed through ${FJ.noemail?"":"email and "}every later order, on the funnel and on ${storeName}. Joined by email address, which never appears here. Meta was not read, so clicks and spend are not on this page.${b==="Brand A"?" Refreshed 12 Oct evening; the email side is from the afternoon read (Klaviyo was skipped on the refresh).":" The email side waits on Brand B's Klaviyo key."}`;
+ const top=s.customers||1,pct=v=>Math.round(100*v/top);
+ const stage=(cls,ico,k,v,m,w)=>`<div class="fstage ${cls}"><div class="k">${I(ico)}${k}</div><div class="v">${v}</div><div class="m">${m}</div>${w!=null?`<div class="meter"><span style="width:${Math.min(100,w)}%"></span></div>`:""}</div>`;
+ const flow=`<div class="flow" role="list">
+  ${stage("blind","click","Ad click","—","Meta not read. Clarity shows the visits.",null)}
+  ${stage("","cart","Checkout started",s.carts,"email typed at checkout",null)}
+  ${stage("money","bag","Bought",s.customers,`${money(s.first_revenue)} first orders · ${s.new_to_brand} new to ${brandName}`,100)}
+  ${stage("money","plus","Took an upsell",s.upsell_customers,`${money(s.upsell_revenue)} upsell revenue`,pct(s.upsell_customers))}
+  ${FJ.noemail?stage("blind","mail","Got our emails","—","Waits on the Klaviyo key",null):stage("","mail","Got our emails",s.emailed,`${s.opened} opened · ${s.clicked} clicked`,pct(s.emailed))}
+  ${stage("money","receipt","Bought again",s.repeat_customers,`${money(s.repeat_revenue)} within 30 days`,pct(s.repeat_customers))}
+  ${stage("money","dollar","Worth so far",money(s.ltv_to_date),`${money(s.ltv_to_date/top)} per customer`,null)}
+ </div>`;
+ const adrows=FJ.ads.map(a=>`<tr><td style="min-width:190px"><div class="adname">${esc(a[0])}</div><div class="adsub">${esc(a[1])}</div></td><td><span class="pill ${a[2]==="meta"?"meta":/^\(/.test(a[1])&&a[1]!=="(Meta click, no ad name)"?"bad":"other"}">${a[2]==="none"?"none":a[2]}</span></td><td class="n">${a[3]}</td><td class="n"><b>${a[4]}</b>${a[4]?` <span style="color:var(--muted)">(${a[5]} new)</span>`:""}</td><td class="n">${money(a[6])}</td><td class="n">${a[7]}${a[7]?` · ${money(a[8])}`:""}</td><td class="n">${a[9]?`${a[10]} / ${a[11]}`:"—"}</td><td class="n">${a[12]}${a[12]?` · ${money(a[13])}`:""}</td><td class="n"><b>${money(a[14])}</b></td></tr>`).join("");
+ const maxf=Math.max(...FJ.flows.map(f=>f[2]),1);
+ const flows=FJ.flows.slice(0,9).map(f=>`<div class="barrow" style="grid-template-columns:minmax(0,190px) minmax(0,1fr) 70px"><span style="overflow-wrap:anywhere">${esc(f[0])}</span><div class="track"><div class="fill" style="width:${100*f[2]/maxf}%"></div></div><span class="num">${money(f[2])}</span></div>`).join("");
+ const rep=FJ.email.filter(e=>e[5]>0).map(e=>`<tr><td>${esc(e[0])}</td><td class="n">${e[5]}</td><td class="n">${money(e[6])}</td></tr>`).join("");
+ const reach=FJ.email.filter(e=>e[1]>0).slice(0,6).map(e=>`<tr><td>${esc(e[0])}</td><td class="n">${e[1]}</td><td class="n">${e[3]}</td><td class="n">${e[4]}</td></tr>`).join("");
+ const camp=FJ.camps.length?FJ.camps.map(c=>`${esc(c[0])}: ${c[1]} recipients, ${c[2]} orders`).join("; "):"none";
+ box.innerHTML=`${flow}
+  <div class="callout">${I("info")}<span>Upsells add ${Math.round(100*s.upsell_revenue/s.first_revenue)}% on top of first orders. ${b==="Brand A"?`Every repeat order so far happened on Brand A.com, not in the funnel. ${s.already_store_customers} of the ${s.customers} buyers had already bought on Brand A.com before.`:`${s.repeat_customers} of ${s.customers} bought again within the window (${money(s.repeat_revenue)}). ${FJ.ads.filter(a=>/^\(ad id/.test(a[1])).reduce((t,a)=>t+a[4],0)} buyers came from ads that send their id instead of their name, so they can't be split by brief yet.`}</span></div>
+  <h3>By ad</h3>
+  <div class="grid"><table><thead><tr><th>Ad</th><th>Source</th><th class="n">Checkouts</th><th class="n">Buyers</th><th class="n">First orders</th><th class="n">Upsells</th><th class="n">Emails opened / clicked</th><th class="n">Bought again</th><th class="n">Worth so far</th></tr></thead><tbody>${adrows}</tbody></table></div>
+  <p class="foot">Ad names come from the tags the order carried. “No ad tags” and “Meta click, ad unknown” are orders from before the tracking standard; the second came from a Meta click with no ad name. “Emails opened / clicked” counts buyers, not emails.</p>
+  ${FJ.noemail?`<div class="card"><h3>Emails that brought the second order (these buyers)</h3><div class="grid"><table><thead><tr><th>Email</th><th class="n">Orders</th><th class="n">Revenue</th></tr></thead><tbody>${rep}</tbody></table></div><p style="font-size:13px;color:var(--muted)">From the orders' own email tags only. Opens, clicks and Klaviyo's credit come in once Brand B's Klaviyo key is in.</p></div>`:`<div class="score">
+   <div class="card"><h3>Emails that brought the second order (these buyers)</h3><div class="grid"><table><thead><tr><th>Email</th><th class="n">Orders</th><th class="n">Revenue</th></tr></thead><tbody>${rep}</tbody></table></div><p style="font-size:13px;color:var(--muted)">An order counts for an email when its link carried the email's tags, Klaviyo credits it, or the buyer clicked that email in the 5 days before.</p></div>
+   <div class="card"><h3>What these buyers got after buying</h3><div class="grid"><table><thead><tr><th>Flow</th><th class="n">Buyers</th><th class="n">Opens</th><th class="n">Clicks</th></tr></thead><tbody>${reach}</tbody></table></div><p style="font-size:13px;color:var(--muted)">Opens include Apple Mail's automatic opens, so clicks are the real signal.</p></div>
+  </div>
+  <div class="card"><h3>Revenue per flow, whole Brand A list, last 30 days</h3><div class="bars">${flows}</div><p style="font-size:13px;color:var(--muted)">Klaviyo's own credit, every order on both stores. Campaigns sent in the 30 days: ${camp}. ${FJ.unattr.orders?`${FJ.unattr.orders} orders (${money(FJ.unattr.revenue)}) had no email credit.`:""}</p></div>`}
+  <h3>Still blind</h3>
+  <div class="blindlist">${(BLIND[b]||[]).map(x=>`<div class="act"><span class="effort ${x[0]}">${x[1]}</span><h3>${x[2]}</h3><p>${x[3]}</p></div>`).join("")}</div>`;
+}
+const BLIND={
+ Brand A:[["e2","Klaviyo","Email link tags in Klaviyo","Each Klaviyo account needs its UTM setting switched on so every email link carries the standard tags. Pending until Klaviyo is working again."],
+  ["e2","Clarity limit","Steps inside the funnel","Clarity's export only tells us where a visit landed and how many pages it saw. Each quiz step is tagged, so step by step is in Clarity itself (filter by quiz_step)."],
+  ["e2","Wait a week","Song ads","Live since 10–11 Oct: 0 checkouts and 0 orders so far. Clarity saw 4 portal visits from brief-0038/0039 in 3 days. Too early to judge; this fills in daily."],
+  ["e2","Old orders","13 of 30 buyers have no ad name","They bought before the tracking standard. From now on every order carries the ad."],
+  ["e1","By rule","Clicks and spend","Meta is never read, so there is no cost per buyer here. Judge ads on buyers and worth so far."],
+  ["e2","Short window","Repeat orders","30 days is short for a $70 brush. Repeat revenue will grow; this rebuilds every morning at 06:00."]],
+ Brand B:[["e3","Key pending","Brand B email side","Opens, clicks and Klaviyo's credit wait on Brand B's Klaviyo key, then the Klaviyo UTM setting on that account."],
+  ["e2","Clarity just started","Landing to checkout","Clarity went onto every funnel page on 12 Oct, so only the face scrub portal has visits so far (12). Body scrub numbers fill in from tomorrow."],
+  ["e2","Tags","Ads sending their id","Most body scrub buyers came from ads that send the ad id instead of the name, so they can't be split by brief until those ads carry the standard tags."],
+  ["e1","By rule","Clicks and spend","Meta is never read, so there is no cost per buyer here."]]
+};
+const ACTS=[
+ ["e1","Done","Both funnels tracked live","Brand A #7: 82/82 on the live pages. Brand B #13 merged 12 Oct: 134/134 on the live pages (was 24/134).","",[["https://github.com/Sellmore-Co/Brand B-cpk/pull/13","Brand B #13"]],true],
+ ["e1","If not done yet","Allow recipe.Brand B.com on the Brand B pixel","Events Manager → pixel 1294318978367829 → Settings → Traffic permissions. The pixel refuses sites not on its allow list; the checker can't see that setting.","recipe allowed",[]],
+ ["e2","Ads Manager edit · Brand B","Fix the URL tags on 2 Brand B ads","Ad 120247796220700591 (body scrub CPK, 10 orders $585) and ad 120246009360730591 (Scrub V2C, 3 orders $147) send the ad id as utm_content. Paste the standard tags into URL parameters.","Brand B tags fixed",[]],
+ ["e2","Ads Manager edit · Brand A","Fix the Brand A ad sending {{ad.name}}","An ad on the “Brand A - CC” funnel sends the literal text {{ad.name}} (1 order, $89.98). Its URL parameters were typed into the link; move them to URL parameters. Find it under the campaigns that point at flex.Brand A.com.","Brand A tag fixed",[]],
+ ["e3","Your call","Brand A: keep one pixel, report on a funnel-only conversion","Recommended: keep pixel 303712903971974 (no learning reset) and add a custom conversion “Funnel Purchase” = Purchase on method/flex.Brand A.com; judge funnel ads on it. A new pixel is cleaner but restarts learning on every funnel ad set.","custom conversion",[]],
+ ["e1","Done","Clarity export tokens","Both tokens are in. Clarity numbers come in every morning at 06:00 with the rest of this page's data. Clarity on the Brand B.com store theme comes with the storefront pass.","",[],true],
+ ["e2","When Klaviyo works","Klaviyo UTM setting, each account","Switch on UTM tracking in each Klaviyo account so every email link carries the standard tags.","klaviyo utm",[]],
+ ["e2","Only you","Brand B Klaviyo key","The Brand B email side needs a read-only Klaviyo private key. It gets checked when Klaviyo is working again.","klaviyo Brand B",[]]
+];
+const STD={"Brand A": {"live": 82, "pages": [["/icon/quiz", "quiz", 0, 8, 8, {"page_view": [false, false, false], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/icon/quiz/results.html", "offer", 0, 8, 8, {"page_view": [false, false, false], "offer_view": [false, false, false]}, {"page_view": [true, true, true], "offer_view": [true, true, true]}], ["/icon/portal-ingrown", "quiz", 1, 8, 8, {"page_view": [true, false, false], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/icon/salespage-fedupking-razornotproblem", "presell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/flex", "offer", 1, 8, 8, {"page_view": [true, false, false], "offer_view": [false, false, false]}, {"page_view": [true, true, true], "offer_view": [true, true, true]}], ["/icon/checkout", "checkout", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/quiz/checkout", "checkout", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/oto-charging-case", "upsell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/oto-vitals-set", "upsell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/oto-core", "upsell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/oto-war-facewash", "upsell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/oto-prime-face-quench", "upsell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/oto-crush-bump-serum", "upsell", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}], ["/icon/receipt", "receipt", 1, 5, 5, {"page_view": [true, false, false]}, {"page_view": [true, true, true]}]], "before": 12, "after": 82, "total": 82, "ads": [["(no ad tags)", "Klaviyo", false, 4, 3, 284.77, 2, 59.98, "Brand A - CC, ICON"], ["Brand A_flex_brief-0019_batch-2026-10-09-b_cpk-bump-check-portal", "fb", true, 1, 1, 139.98, 0, 0.0, "ICON"], ["(literal {{ad.name}}: the ad's URL tags are broken)", "facebook", true, 1, 1, 89.98, 1, 19.99, "Brand A - CC"]], "from": "2026-10-05", "to": "2026-10-12", "skipped": {"test": 1, "renewal": 10}}, "Brand B": {"live": 134, "pages": [["/facescrub-cpk/portal-face", "quiz", 2, 8, 8, {"page_view": [false, true, true], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/facescrub-cpk/portal-yai", "quiz", 2, 8, 8, {"page_view": [false, true, true], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/facescrub-cpk/quiz", "quiz", 1, 8, 8, {"page_view": [false, true, false], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/facescrub-cpk/landing", "offer", 1, 8, 8, {"page_view": [false, true, false], "offer_view": [false, false, false]}, {"page_view": [true, true, true], "offer_view": [true, true, true]}], ["/facescrub-cpk/checkout", "checkout", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/facescrub-cpk/oto-up-bodyscrub", "upsell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/facescrub-cpk/oto-up-bodycream", "upsell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/facescrub-cpk/receipt", "receipt", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-cpk/presell-five-ingredients", "presell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-cpk/quiz", "quiz", 1, 8, 8, {"page_view": [false, true, false], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/scrub-cpk/landing", "offer", 1, 8, 8, {"page_view": [false, true, false], "offer_view": [false, false, false]}, {"page_view": [true, true, true], "offer_view": [true, true, true]}], ["/scrub-cpk/checkout", "checkout", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-cpk/oto-up-bodycream", "upsell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-cpk/oto-up-facescrub", "upsell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-cpk/receipt", "receipt", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-subscribe/presell-five-ingredients", "presell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-subscribe/quiz", "quiz", 1, 8, 8, {"page_view": [false, true, false], "quiz_step": [false, false, false]}, {"page_view": [true, true, true], "quiz_step": [true, true, true]}], ["/scrub-subscribe/landing", "offer", 1, 8, 8, {"page_view": [false, true, false], "offer_view": [false, false, false]}, {"page_view": [true, true, true], "offer_view": [true, true, true]}], ["/scrub-subscribe/checkout", "checkout", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-subscribe/oto-up-bodycream", "upsell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-subscribe/oto-up-facescrub", "upsell", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}], ["/scrub-subscribe/receipt", "receipt", 1, 5, 5, {"page_view": [false, true, false]}, {"page_view": [true, true, true]}]], "before": 24, "after": 134, "total": 134, "ads": [["(no ad tags)", "-", false, 6, 11, 895.1, 1, 171.0, "PDP-Brilliance Body Scrub, PDP-Brilliance Face Scrub, PDP-Radiance Body Cream, Brand B Brilliance Body Scrub, Brand B Brilliance Face Scrub, Brand B Scrub V2C"], ["(ad id 120247796220700591: tagged with the ad id, not the name)", "fb, ig", true, 9, 10, 585.0, 1, 234.0, "Brand B Brilliance Body Scrub"], ["Brand B_brilliance-face-scrub_brief-0286_batch-2026-10-03-a_face-scrub-cpk-quiz", "fb, ig", true, 1, 3, 230.0, 0, 0.0, "Brand B Brilliance Face Scrub"], ["(ad id 120246009360730591: tagged with the ad id, not the name)", "fb, ig", true, 2, 3, 147.0, 0, 0.0, "Brand B Scrub V2C"], ["What October is showing you", "Klaviyo", false, 0, 2, 95.0, 0, 0.0, "checkout"], ["Complete your Brand B routine", "Klaviyo", false, 0, 1, 57.0, 0, 0.0, "Brand B Brilliance Body Scrub \u2014 Subscribe (Checkout Option 2)"], ["What summer printed is turning over now", "Klaviyo", false, 0, 1, 36.0, 0, 0.0, "Brand B Brilliance Body Scrub"], ["But if your skin still feels rough, dull or uneven, there may be one step missing", "Klaviyo", false, 1, 0, 0.0, 0, 0.0, "Brand B Brilliance Body Scrub"]], "from": "2026-10-05", "to": "2026-10-12", "skipped": {"test": 3, "renewal": 3}}}
+;
+const GRID=[["Every page","page_view","PageView","page_view","page_&lt;page&gt;",""],["Quiz / portal screen","quiz_step","QuizStep","quiz_step","quiz_step_&lt;n&gt;",""],["Quiz finished","quiz_complete","Lead","generate_lead","quiz_complete",""],["Offer page","offer_view","ViewContent","view_item","offer_view","✓"],["Add to cart","add_to_cart","AddToCart","add_to_cart","add_to_cart","✓"],["Checkout","checkout_start","InitiateCheckout","begin_checkout","checkout_start","✓"],["Payment","payment_info","AddPaymentInfo","add_payment_info","payment_info","✓"],["Order","purchase","Purchase · id &lt;store&gt;-&lt;order&gt;","purchase","purchase","✓"],["Upsell page","upsell_view","ViewedUpsell","upsell_view","upsell_view",""],["Upsell taken","upsell_take","UpsellTake · id &lt;store&gt;-&lt;order&gt;-u&lt;n&gt;","upsell_purchase","upsell_take","✓"]];
+const ADURL="utm_source=meta&utm_medium=paid&utm_campaign={{campaign.name}}&utm_term={{adset.name}}&utm_content={{ad.name}}&ad_id={{ad.id}}&sub1={{ad.id}}";
+const PR={Brand A:{url:"https://github.com/Sellmore-Co/Brand A-cpk/pull/7",n:"#7",fix:["The 5 silent portal screens now send QuizStep; Lead when the portal is finished","ViewContent $69.99 on the FLEX offer page","Pixel, GA4 and every step on the Willow quiz","Event id + ad name, brief, batch, campaign, ad set, ad id on every Meta event","UpsellTake with value on every upsell taken","GA4 G-17X34S9WNN on every page","Clarity on every page (already in this PR)"]},
+ Brand B:{url:"https://github.com/Sellmore-Co/Brand B-cpk/pull/13",n:"#13",fix:["Meta pixel 1294318978367829 on all 22 pages: PageView, ViewContent, checkout, Purchase","QuizStep per quiz and portal screen; Lead when finished","ViewContent with value on each offer page ($87 face, $57 body)","Event id + ad name, brief, batch, campaign, ad set, ad id on every Meta event","UpsellTake with value on every upsell taken","Quiz steps now reach GA4 (they stopped at the dataLayer before)","Clarity on every page (already in this PR)"]}};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const bar=(v,t,c)=>`<div class="mini"><span style="width:${Math.round(100*v/t)}%;background:${c}"></span></div>`;
+document.getElementById("adurl").textContent=ADURL;
+document.getElementById("stdgrid").innerHTML=GRID.map(g=>`<tr><td>${g[0]}</td><td><code>${g[1]}</code></td><td>${g[2]}</td><td><code>${g[3]}</code></td><td><code>${g[4]}</code></td><td class="c tick">${g[5]}</td></tr>`).join("");
+function renderStd(b){
+ const d=STD[b],p=PR[b];
+ document.getElementById("prcard").innerHTML=`<div class="card"><h3>What the pull request fixes</h3><ul class="fix">${p.fix.map(f=>`<li>${f}</li>`).join("")}</ul><a class="btn ghost" href="${p.url}" target="_blank" rel="noopener">${I("link")}Open PR ${p.n}</a></div>
+  <div class="card"><h3>Checker score, whole funnel</h3><div class="tile none"><div class="k">${I("x")}${d.live!=null?"Before (live, morning of 12 Oct)":"Live today"}</div><div class="v">${d.before} / ${d.total}</div></div><div class="tile cpk" style="background:var(--goodbg)"><div class="k">${I("ok")}${d.live!=null?"Live now":"After the PR"}</div><div class="v">${d.after} / ${d.total}</div></div><p style="font-size:13px;color:var(--muted)">${d.live!=null?`${d.pages.length} pages. <b>Live now: ${d.live} / ${d.total}</b>, checked on the live pages 12 Oct after the merge.`:`${d.pages.length} pages. Say “merge” and this is live.`}</p></div>`;
+ const lv=d.live!=null;document.getElementById("checkh").textContent=lv?"Checker, page by page: before → live now":"Checker, page by page: live today → this pull request";document.getElementById("thb").textContent=lv?"Before":"Live today";document.getElementById("tha").textContent=lv?"Live now":"After the PR";
+ document.getElementById("checkrows").innerHTML=d.pages.map(r=>`<tr><td><code>${esc(r[0])}</code></td><td>${r[1]}</td><td class="n">${r[2]}/${r[4]}</td><td class="n"><b>${r[3]}/${r[4]}</b></td><td style="min-width:110px">${bar(r[2],r[4],"var(--bad)")}<div style="height:4px"></div>${bar(r[3],r[4],"var(--good)")}</td></tr>`).join("");
+ document.getElementById("truthh").textContent=`What each ad really sold · ${d.from} to ${d.to}`;
+ document.getElementById("truthrows").innerHTML=d.ads.map(a=>{const broken=/^\((literal|ad id)/.test(a[0]);return `<tr><td style="min-width:200px;word-break:break-word">${esc(a[0])}</td><td><span class="pill ${broken?"bad":a[2]?"meta":"other"}">${esc(a[1])}</span></td><td class="n">${a[3]}</td><td class="n">${a[4]}</td><td class="n">$${a[5].toFixed(2)}</td><td class="n">${a[6]}${a[6]?` · $${a[7].toFixed(2)}`:""}</td><td style="font-size:12.5px;color:var(--muted)">${esc(a[8])}</td></tr>`}).join("");
+ document.getElementById("truthfoot").textContent=`From the store's own orders and carts (Next Commerce). Meta was not read. Carts = an email was typed at checkout. Klaviyo email orders sit on their own rows. Left out: ${d.skipped.renewal} subscription renewals, ${d.skipped.test} test orders. Red rows are ads whose URL tags are broken.`;
+}
+function renderClar(b){
+ const c=CL[b];if(!c){document.getElementById("clarflow").innerHTML="";return}
+ const pc=v=>v==null?"—":`${v}%`;
+ const fun=c.funnels.filter(f=>f.drop.some(d=>d[1])).map(f=>{const top=Math.max(...f.drop.map(d=>d[1]),1);
+  const bars=f.drop.map((d,i)=>`<div class="barrow" style="grid-template-columns:130px minmax(0,1fr) 90px"><span>${esc(d[0])}</span><div class="track"><div class="fill${f.big&&f.big.indexOf("→ "+d[0])>=0?" hot":""}" style="width:${100*d[1]/top}%"></div></div><span class="num">${d[1]}${d[2]!=null&&i?` <span style="color:var(--muted);font-weight:500">−${d[2]}%</span>`:""}</span></div>`).join("");
+  const land=f.land.length?`<div class="grid"><table><thead><tr><th>Landing page</th><th class="n">Visits</th><th class="n">Pages / visit</th><th class="n">Scroll</th><th class="n">Dead · rage · quick-back</th></tr></thead><tbody>${f.land.map(r=>`<tr><td><code>${esc(r[0])}</code></td><td class="n">${r[2]}</td><td class="n">${r[3]??"—"}</td><td class="n">${pc(r[4])}</td><td class="n">${r[5]} · ${r[6]} · ${r[7]}</td></tr>`).join("")}</tbody></table></div>`:`<p style="font-size:13px;color:var(--muted)">No Clarity visits on this funnel's pages yet: its Clarity went on 12 Oct.</p>`;
+  return `<div class="card"><h3 style="display:flex;gap:8px;align-items:center">${I("eye")}${esc(f.name)} · landing to order, last ${c.days} days</h3><div class="bars">${bars}</div>${f.big?`<div class="callout">${I("warn")}<span>Biggest drop: <b>${esc(f.big.replace("landed (Clarity)","landed"))}</b></span></div>`:""}${f.under?`<p style="font-size:13px;color:var(--muted)">The store counted more than Clarity saw land, so landing → checkout isn't given yet.</p>`:""}${land}</div>`}).join("");
+ const ads=c.ads.length?`<p style="font-size:13px;color:var(--muted)">Visits by ad (read off the landing link): ${c.ads.map(a=>`${esc(a[0])} ${a[1]}`).join(" · ")}</p>`:"";
+ const st=c.store?`<div class="card"><h3 style="display:flex;gap:8px;align-items:center">${I("store")}${b==="Brand A"?"Brand A.com":"Store"} · where visits land, last ${c.days} days</h3><div class="bars">${c.store.kinds.map(k=>`<div class="barrow"><span style="text-transform:capitalize">${k[0]}</span><div class="track"><div class="fill" style="width:${100*k[1]/Math.max(...c.store.kinds.map(x=>x[1]))}%"></div></div><span class="num">${k[1]}</span></div>`).join("")}</div><div class="grid"><table><thead><tr><th>Landing page</th><th class="n">Visits</th><th class="n">Pages / visit</th><th class="n">Scroll</th><th class="n">Dead</th><th class="n">Rage</th><th class="n">Quick-back</th></tr></thead><tbody>${c.store.top.map(r=>`<tr><td><code>${esc(r[0])}</code></td><td class="n">${r[1]}</td><td class="n">${r[2]??"—"}</td><td class="n">${pc(r[3])}</td><td class="n">${pc(r[4])}</td><td class="n">${pc(r[5])}</td><td class="n">${pc(r[6])}</td></tr>`).join("")}</tbody></table></div><p style="font-size:13px;color:var(--muted)">Checkout runs on Shopify's own checkout, which Clarity doesn't see. Quick-back = visitors who clicked away and came straight back.</p></div>`:`<p class="foot">Brand B.com has no Clarity yet (comes with the storefront pass).</p>`;
+ document.getElementById("clarflow").innerHTML=`<h3 style="margin-top:8px">Clarity, landing to order</h3><p class="sub">Where each visit landed (Clarity, ${c.sessions} funnel visits in ${c.days} days), then the store's own checkouts, orders and upsells for the same days. Clarity's export only knows the landing page, so steps inside the funnel are watched in Clarity itself.</p>${fun||`<p class="foot">No funnel visits in Clarity yet.</p>`}${ads}${st}`;
+}
+document.getElementById("copyurl").addEventListener("click",()=>{navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(ADURL).then(()=>say("Copied the ad URL tags."),()=>say("Select the tags above and copy them.")):say("Select the tags above and copy them.")});
+function render(b){
+ const d=D[b];renderStd(b);renderFull(b);
+ document.getElementById("lights").innerHTML=d.lights.map(l=>`<div class="light"><div class="top"><div class="orb ${l.s}">${I(l.s==="good"?"ok":l.s==="warn"?"warn":"x","lg")}</div><div style="min-width:0"><h3>${l.name}</h3><div class="host">${l.host}</div></div></div><div class="state ${l.s}">${l.line}</div><div class="chips">${l.chips.map(c=>`<span class="chip ${c[0]}">${I(c[1])}${c[2]}</span>`).join("")}</div></div>`).join("");
+ const m=d.money,tot=m.stack.reduce((a,x)=>a+x[1],0);
+ document.getElementById("moneybox").innerHTML=`<div class="money"><div class="split">${m.tiles.map(t=>`<div class="tile ${t[0]}"><div class="k">${I(t[1])}${t[2]}</div><div class="v">${t[3]}</div><p style="font-size:13px">${t[4]}</p></div>`).join("")}</div><div class="stack" role="img" aria-label="${m.stackLabel.map(x=>x[1]).join(", ")}">${m.stack.map(s=>`<span style="background:${s[0]};width:${Math.max(1.5,100*s[1]/tot)}%"></span>`).join("")}</div><div class="legend">${m.stackLabel.map(x=>`<span><span class="sw" style="background:${x[0]}"></span>${x[1]}</span>`).join("")}</div><div class="callout">${I("info")}<span>${m.take}</span></div></div>`;
+ document.getElementById("funnel").innerHTML=d.steps.map(s=>`<div class="stepr${s[5]?" drop":""}"><div class="node ${s[0]}">${I(s[1])}</div><div class="sbody">${s[5]?`<div class="dropflag">${I("warn")}Biggest drop</div>`:""}<b>${s[2]}</b><div class="how">${s[3]}</div></div><div class="count">${s[4]}</div></div>`).join("");
+ renderClar(b);
+ const e=d.extra;
+ document.getElementById("extra").innerHTML=e?`<div class="card"><h3 style="display:flex;gap:8px;align-items:center">${I("store")}${e.title}</h3><div class="bars">${e.rows.map(r=>`<div class="barrow"><span>${r[0]}</span><div class="track"><div class="fill${r[2]?" hot":""}" style="width:${100*r[1]/e.rows[0][1]}%"></div></div><span class="num">${r[1]}</span></div>`).join("")}</div><p style="font-size:13px;color:var(--muted)">${e.note}</p></div>`:"";
+ document.getElementById("clar").innerHTML=d.clar.map(c=>`<div class="light"><div class="top"><div class="orb ${c[0]}">${I(c[0]==="good"?"ok":c[0]==="warn"?"rec":"x","lg")}</div><h3>${c[1]}</h3></div><p style="font-size:13.5px;color:var(--muted)">${c[2]}</p>${c[3]?`<a class="btn ghost" href="${c[3]}" target="_blank" rel="noopener">${I("link")}Open ${c[4]}</a>`:""}</div>`).join("");
+ document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.brand===b)));
+ try{localStorage.setItem("fm-brand",b)}catch(_){}
+}
+document.getElementById("acts").innerHTML=ACTS.map((a,i)=>a[6]?`<div class="act" style="opacity:.75"><div class="row"><div class="num" style="background:var(--goodbg);color:var(--good)">${I("ok")}</div><div style="min-width:0;display:flex;flex-direction:column;gap:4px"><span class="effort ${a[0]}">${a[1]}</span><h3>${a[2]}</h3><p>${a[3]}</p></div></div>${a[5].length?`<div class="btnrow">${a[5].map(l=>`<a class="btn ghost" href="${l[0]}" target="_blank" rel="noopener">${I("link")}${l[1]}</a>`).join("")}</div>`:""}</div>`:`<div class="act"><div class="row"><div class="num">${i+1}</div><div style="min-width:0;display:flex;flex-direction:column;gap:4px"><span class="effort ${a[0]}">${a[1]}</span><h3>${a[2]}</h3><p>${a[3]}</p></div></div><div class="btnrow"><button type="button" class="btn" data-say="${a[4]}">${I("copy")}Reply “${a[4]}”</button>${a[5].map(l=>`<a class="btn ghost" href="${l[0]}" target="_blank" rel="noopener">${I("link")}${l[1]}</a>`).join("")}</div></div>`).join("");
+const toast=document.getElementById("toast");
+function say(t){toast.textContent=t;toast.classList.add("on");clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove("on"),1800)}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-brand]");if(b){render(b.dataset.brand);return}
+ const c=e.target.closest("[data-say]");if(c){const t=c.dataset.say;
+  navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t).then(()=>say(`Copied “${t}”. Paste it in the chat.`),()=>say(`Type “${t}” in the chat.`)):say(`Type “${t}” in the chat.`)}
+});
+let start="Brand A";try{start=localStorage.getItem("fm-brand")||"Brand A"}catch(_){}
+render(D[start]?start:"Brand A");
+</script>

@@ -1,0 +1,35 @@
+{
+  "ad_name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a",
+  "batch": "260905a",
+  "brand": "Brand A",
+  "product": "flex",
+  "media": "static",
+  "source": "ai",
+  "talent": "omar",
+  "avatar": "fedupking",
+  "problem": "razorbumps",
+  "angle": "unsigned",
+  "concept": "weforgot",
+  "format": "apology",
+  "brief": "p001",
+  "ratio": "9x16",
+  "_upload": "3 assets, 3 ads. One picture is one Meta ad \u2014 the bulk sheet carries one image per row. They share the concept 'Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a', which is the ad name minus its last field, and that is how they group in the report.",
+  "_join": "Meta's ad_name equals `ad_name`. Split on '-' for brand, product, media, source, talent, avatar, problem, angle, concept, format, brief, ratio, batch.",
+  "ads": [
+    {
+      "name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a-a01",
+      "ad_name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a",
+      "file": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a-a01.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a-a02",
+      "ad_name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a",
+      "file": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a-a02.png"
+    },
+    {
+      "name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a-a03",
+      "ad_name": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a",
+      "file": "Brand A-flex-static-ai-omar-fedupking-razorbumps-unsigned-weforgot-apology-p001-9x16-260905a-a03.png"
+    }
+  ]
+}

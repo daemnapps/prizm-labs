@@ -4,7 +4,7 @@
 
 Reads runs/creative-controls/<brand>/<label>/scores.json, writes
 runs/creative-controls/<brand>/<label>/creative-controls.html (published over
-(private page)) and the team's Markdown
+https://claude.ai/artifact/XRDxT6HRWkPi6HbQTzYcHi) and the team's Markdown
 mirror. Thumbnails are cached in <thumb-dir>, a temp folder of the caller's.
 """
 import base64, json, subprocess, sys, re
@@ -26,12 +26,12 @@ SC = json.loads((RUN / 'scores.json').read_text())
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
     2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
-    tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
+    components/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name
     hits = ([root / str(brand).lower() / run] if brand else []) + sorted(root.glob(f"*/{run}"))
     work = [d for d in hits if (d / "out").is_dir() or (d / "vars").is_dir()]
-    old = Path(repo) / "tools" / "image-teardown" / "runs" / run
+    old = Path(repo) / "components" / "image-teardown" / "runs" / run
     if work:
         return work[0]
     if old.is_dir():
@@ -71,7 +71,7 @@ if ex:
     ex['readsline'] = w.group(1).strip() if w else ''
 
 say = [
- {'say': 'Make this (in the Swipe Bank)', 'does': 'The next time you message this work, the swipe is opened, read on every dial, and briefed at Maxed: our objects swapped in by rhyme, every dial at or above the swipe.', 'shows': 'the BRAND-A Image Queue board, under its awareness level'},
+ {'say': 'Make this (in the Swipe Bank)', 'does': 'The next time you message this work, the swipe is opened, read on every dial, and briefed at Maxed: our objects swapped in by rhyme, every dial at or above the swipe.', 'shows': 'the brand_a Image Queue board, under its awareness level'},
  {'say': 'Run brief 229 at native', 'does': 'The brand step and the brief run again on the Native preset: no offer, no call to action, the post look, everything else maxed. Also: "at problem aware", "at proof".', 'shows': 'the same card on the board, new brief'},
  {'say': 'Absurdity down to 2 on 229', 'does': 'One dial changed for that brief, everything else kept. Any dial by its name: "edge up", "more rhyme", "less words on it" (anchorage).', 'shows': 'the same card on the board, new brief'},
  {'say': 'Move the sliders here, press Save', 'does': 'Those levels become the preset for every brief from the next run. They are picked up the next time you message this work.', 'shows': 'this page keeps them; every new brief carries them'},
@@ -89,11 +89,11 @@ page = (HERE / 'template.html').read_text().replace('/*DATA*/null', json.dumps(d
 print(len(assets), 'assets', round(len(page) / 1e6, 2), 'MB', 'example', ex and ex['id'])
 
 # the team's Markdown mirror
-G = {'ours-approved': 'Our ads the owner kept', 'ours-pulled': 'Our ads the owner pulled', 'swipe-picked': 'Swipes the owner picked',
+G = {'ours-approved': 'Our ads owner kept', 'ours-pulled': 'Our ads owner pulled', 'swipe-picked': 'Swipes owner picked',
      'swipe-organic': 'Popular organic posts', 'swipe-competitor': 'Competitor statics'}
 pic = [d for d in C['dials'] if 'image' in d['media']]
-md = ['# Creative controls (the owner)', '',
-      'Page: (private page) · home: `components/creative-controls/` '
+md = ['# Creative controls (owner)', '',
+      'Page: https://claude.ai/artifact/XRDxT6HRWkPi6HbQTzYcHi · home: `components/creative-controls/` '
       '(dials `controls.json`, names `glossary.json`, rendered `slices/controls.md` and `GLOSSARY.md`, reader `read.py`)', '',
       'One set of dials for copy, video and pictures. A reader measures the level an asset is at; a chain sets the level it should be at. '
       'Default stance: absurd, maxed out, hyper-specific, native at the top of the funnel.', '',
@@ -117,5 +117,5 @@ md += ['| %s | %s | %s | %s | %s |' % (d['name'], ', '.join(d['aka']), ' · '.jo
 md += ['', '## Guards (always on)', ''] + ['- **%s**: %s' % (g['name'], g['what']) for g in C['guards']]
 md += ['', '## Presets', ''] + ['- **%s** (%s): %s ' % (p['name'], p['id'], p['what']) + ', '.join('%s %s' % kv for kv in p['levels'].items()) for p in C['presets']]
 md += ['', 'The full glossary (%d real names) is `components/creative-controls/GLOSSARY.md`.' % len(GL)]
-(REPO / 'tools/image-teardown/context/CREATIVE-CONTROLS-owner.md').write_text('\n'.join(md) + '\n')
+(REPO / 'components/image-teardown/context/CREATIVE-CONTROLS-owner.md').write_text('\n'.join(md) + '\n')
 print('mirror written')

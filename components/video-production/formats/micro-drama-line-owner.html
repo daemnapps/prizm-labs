@@ -1,0 +1,208 @@
+<title>Micro Drama Line</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a film strip of eight frames down the page; your three stops marked in amber. */
+:root{
+  --bg:#f3f2f6; --panel:#ffffff; --ink:#18161f; --muted:#5f5b6e; --line:#dcd9e4;
+  --you:#c26a00; --you-bg:#fff3e2; --check:#24705a; --check-bg:#e6f4ee; --wan:#4b4fc4; --wan-bg:#ecedff;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121118; --panel:#1c1a24; --ink:#efedf5; --muted:#a8a3b8; --line:#2f2c3b;
+  --you:#ffae45; --you-bg:#3a2a14; --check:#5fd0a8; --check-bg:#16302a; --wan:#a3a6ff; --wan-bg:#22234a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121118; --panel:#1c1a24; --ink:#efedf5; --muted:#a8a3b8; --line:#2f2c3b;
+  --you:#ffae45; --you-bg:#3a2a14; --check:#5fd0a8; --check-bg:#16302a; --wan:#a3a6ff; --wan-bg:#22234a; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.45}
+.wrap{max-width:960px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,40px);letter-spacing:-.01em;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0}
+.top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:4px;min-width:0}
+.tile .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--display);font-weight:700;font-size:18px}
+.tile.you{background:var(--you-bg);border-color:transparent}
+.tile.you .v{color:var(--you)}
+.strip{display:grid;gap:10px}
+.frame{background:var(--panel);border:1px solid var(--line);border-radius:10px;display:grid;grid-template-columns:56px minmax(0,1fr);overflow:hidden}
+.frame.stop{border-color:var(--you)}
+.num{font-family:var(--display);font-weight:800;font-size:26px;display:flex;align-items:flex-start;justify-content:center;padding-top:14px;background:var(--bg);color:var(--muted);border-right:1px dashed var(--line)}
+.frame.stop .num{color:var(--you);background:var(--you-bg)}
+.body{padding:14px 16px;display:grid;gap:10px;min-width:0}
+.name{font-family:var(--display);font-weight:700;font-size:19px;margin:0}
+.io{display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr);gap:8px;align-items:center}
+.box{background:var(--bg);border-radius:8px;padding:8px 10px;font-size:14px;min-width:0}
+.box .k{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.arrow{color:var(--muted);text-align:center;font-size:18px}
+.marks{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:12.5px;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.pill.check{background:var(--check-bg);color:var(--check)}
+.pill.you{background:var(--you-bg);color:var(--you);font-weight:600}
+.pill.part2{background:var(--wan-bg);color:var(--wan)}
+h2{font-family:var(--display);font-weight:700;font-size:20px;margin:8px 0 0}
+.models{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.model{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px;min-width:0}
+.model.wan{border-color:var(--wan)}
+.model .v{font-family:var(--display);font-weight:800;font-size:20px}
+.model.wan .v{color:var(--wan)}
+.facts{display:grid;gap:4px;font-size:14px;margin:0;padding:0;list-style:none}
+.facts li::before{content:"· ";color:var(--muted)}
+.walk{display:flex;flex-wrap:wrap;gap:6px}
+.st{font-family:var(--mono);font-size:12px;padding:4px 8px;border-radius:6px;background:var(--panel);border:1px solid var(--line)}
+.st.ok{border-color:var(--check);color:var(--check)}
+.st.you{border-color:var(--you);color:var(--you)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+code{font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere}
+@media (max-width:600px){
+  .top,.models{grid-template-columns:minmax(0,1fr)}
+  .io{grid-template-columns:minmax(0,1fr)}
+  .arrow{transform:rotate(90deg)}
+  .frame{grid-template-columns:40px minmax(0,1fr)}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Micro Drama Line</h1>
+    <p class="sub">Any micro drama, the same 7 steps, runs on its own. You see the quote.</p>
+  </header>
+
+  <section class="top" aria-label="Needs you now">
+    <div class="tile you"><span class="k">Needs you · 0376 Christmas song ad</span><span class="v">Clip 7: two men hug</span></div>
+    <div class="tile you"><span class="k">Needs you · same ad</span><span class="v">Caption says "stink", lyric is "sting"</span></div>
+    <div class="tile"><span class="k">Where it is</span><span class="v">Your approval board, 1-check</span></div>
+  </section>
+
+  <section class="top" aria-label="Where you come in">
+    <div class="tile you"><span class="k">Your only stop</span><span class="v">The quote → go</span></div>
+    <div class="tile"><span class="k">Everything else</span><span class="v">Decided, filed for you</span></div>
+    <div class="tile"><span class="k">After</span><span class="v">Go live on approval page</span></div>
+  </section>
+
+  <section class="strip" aria-label="The seven steps">
+    <article class="frame">
+      <div class="num">1</div>
+      <div class="body">
+        <h3 class="name">Start: a swipe, or our own</h3>
+        <div class="io"><div class="box"><span class="k">In</span>A swipe · or nothing</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Beats: the swipe's · or a drama preset's</div></div>
+        <div class="marks"><span class="pill check">✓ swipe: saved, torn down, beats locked</span><span class="pill part2">No swipe: picks 1 of 21 live-action drama stories</span><span class="pill check">✓ never the same story twice for one person</span></div>
+      </div>
+    </article>
+
+    <article class="frame">
+      <div class="num">2</div>
+      <div class="body">
+        <h3 class="name">Writing chain → brief</h3>
+        <div class="io"><div class="box"><span class="k">In</span>The beats</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>The brief</div></div>
+        <div class="marks"><span class="pill check">✓ no hand patches</span><span class="pill check">✓ holds decided, filed for you</span></div>
+      </div>
+    </article>
+
+    <article class="frame">
+      <div class="num">3</div>
+      <div class="body">
+        <h3 class="name">Studio pack</h3>
+        <div class="io"><div class="box"><span class="k">In</span>The brief</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Higgsfield request: cast, places, product sheet</div></div>
+        <div class="marks"><span class="pill check">✓ nothing missing</span></div>
+      </div>
+    </article>
+
+    <article class="frame stop">
+      <div class="num">4</div>
+      <div class="body">
+        <h3 class="name">Quote → your go</h3>
+        <div class="io"><div class="box"><span class="k">In</span>The request</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Seedance price · Wan price · your pick · lane opened</div></div>
+        <div class="marks"><span class="pill you">★ You: pick the model, say go</span><span class="pill check">✓ no clip without it</span></div>
+      </div>
+    </article>
+
+    <article class="frame">
+      <div class="num">5</div>
+      <div class="body">
+        <h3 class="name">Higgsfield Drama Ads</h3>
+        <div class="io"><div class="box"><span class="k">In</span>Request · approved product sheet</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Accepted takes, each looked at</div></div>
+        <div class="marks">
+          <span class="pill check">✓ sheets made once</span>
+          <span class="pill check">✓ product = its casting sheet</span>
+          <span class="pill check">✓ script · plan · clips PASS</span>
+          <span class="pill check">✓ moving camera</span>
+          <span class="pill check">✓ every setup on a page first</span>
+          <span class="pill check">✓ sent exactly as shown</span>
+          <span class="pill check">✓ camera · acting · face · words · flow</span>
+          <span class="pill check">✓ bad take fixed or remade, not sent to you</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="frame">
+      <div class="num">6</div>
+      <div class="body">
+        <h3 class="name">The edit</h3>
+        <div class="io"><div class="box"><span class="k">In</span>Accepted takes + their sound</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Cut · opening variations · full teaser kept</div></div>
+        <div class="marks"><span class="pill check">✓ HyperFrames in Claude</span><span class="pill check">✓ pacing read</span></div>
+      </div>
+    </article>
+
+    <article class="frame">
+      <div class="num">7</div>
+      <div class="body">
+        <h3 class="name">Approval page</h3>
+        <div class="io"><div class="box"><span class="k">In</span>Finished versions</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>One ad in 1-check</div></div>
+        <div class="marks"><span class="pill check">✓ run ends here · go live is your click there</span></div>
+      </div>
+    </article>
+  </section>
+
+  <h2>Song Ad Line · same rules</h2>
+  <section class="strip" aria-label="Song ad steps">
+    <article class="frame"><div class="num">1</div><div class="body"><h3 class="name">Start → brief → song</h3>
+      <div class="io"><div class="box"><span class="k">In</span>A swipe · or our idea</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Brief · song through the song gate</div></div>
+      <div class="marks"><span class="pill check">✓ holds decided, filed for you</span><span class="pill check">✓ one brief version</span><span class="pill check">✓ every line heard, in order</span></div></div></article>
+    <article class="frame"><div class="num">2</div><div class="body"><h3 class="name">Cast, places, product → pack → story map</h3>
+      <div class="io"><div class="box"><span class="k">In</span>Brief + song</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Windows cut on the sung lines · clip prompts</div></div>
+      <div class="marks"><span class="pill check">✓ no held picture used</span><span class="pill check">✓ windows end to end</span><span class="pill check">✓ fast timed shots, camera moving</span><span class="pill check">✓ men never hug</span></div></div></article>
+    <article class="frame stop"><div class="num">3</div><div class="body"><h3 class="name">Quote → your go</h3>
+      <div class="io"><div class="box"><span class="k">In</span>Story map + song to hear</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Seedance price · Wan price · your pick</div></div>
+      <div class="marks"><span class="pill you">★ You: pick, say go</span></div></div></article>
+    <article class="frame"><div class="num">4</div><div class="body"><h3 class="name">Clips → takes → upscale → edit → board</h3>
+      <div class="io"><div class="box"><span class="k">In</span>Your go</div><div class="arrow">→</div><div class="box"><span class="k">Out</span>Captioned + clean · opening variations · on your board</div></div>
+      <div class="marks"><span class="pill check">✓ every setup shown first</span><span class="pill check">✓ each take looked at</span><span class="pill check">✓ upscaled on this Mac</span><span class="pill check">✓ captions = the lyric</span><span class="pill check">✓ never presses approve</span></div></div></article>
+  </section>
+
+  <h2>The video model: picked at the quote</h2>
+  <section class="models">
+    <div class="model">
+      <span class="k" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Default</span>
+      <span class="v">Seedance 2.5 · 480p</span>
+      <ul class="facts"><li>Priced on every quote</li><li>Extends clips</li><li>Up to 30 pictures a clip</li></ul>
+    </div>
+    <div class="model wan">
+      <span class="k" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Option · far cheaper</span>
+      <span class="v">Wan 3.0 · 480p</span>
+      <ul class="facts"><li>Priced on every quote</li><li>Same 7 steps, same checks</li><li>No extending: fresh clips</li><li>Up to 10 pictures, 5 voices a clip</li><li>Prompt rules being tuned</li></ul>
+    </div>
+  </section>
+
+  <h2>Series</h2>
+  <section class="models">
+    <div class="model">
+      <span class="v">Planned ahead</span>
+      <ul class="facts"><li>Parts and their jobs set first</li><li>One look row for every part</li><li>Each part runs these 7 steps</li><li>Next part written from what the last one shows</li></ul>
+    </div>
+  </section>
+
+  <h2>Dry walk · Forehead swipe</h2>
+  <section class="walk" aria-label="Dry walk result">
+    <span class="st ok">start ✓</span><span class="st">brief</span><span class="st ok">pack ✓</span><span class="st you">quote ★</span><span class="st">lane</span><span class="st">sheets</span><span class="st">sheets check</span><span class="st">script+plan</span><span class="st">setups</span><span class="st">setups check</span><span class="st">clips</span><span class="st">takes</span><span class="st">takes check</span><span class="st">edit</span><span class="st">approval page</span>
+  </section>
+  <p class="sub" style="margin:0">15 stations walked · 0 credits · nothing written</p>
+
+  <details>
+    <summary>For the team</summary>
+    <p>Stations: <code>components/video-production/formats/playbooks/micro-drama.json</code> · <code>workflow.py show micro-drama</code></p>
+    <p>Lane and checks: <code>components/video-studio/higgsfield/drama_lane.py</code> · series continuity: <code>components/video-production/machine/drama_series.py</code></p>
+    <p>Recipes: <code>formats/recipes/drama-series-v1.md</code> · <code>formats/recipes/drama-camera-v1.md</code></p>
+  </details>
+</div>

@@ -179,7 +179,7 @@ function s1(){const brands=[...new Set(LIST().map(p=>p.brand))];if(!brands.inclu
  // in order, each labelled (2026-10-27)
  const lab=(n,t)=>`<h2 class="part" style="margin:18px 0 8px">${n} · ${t}</h2>`;
  let h=`<h1>Which ${KIND==='clip'?'video':'ad'} do you want to make?</h1>`+lab(1,'Kind of ad')+`<div class="row"><button class="big ${KIND==='pic'?'on':''}" data-k="pic">Picture ad</button><button class="big ${KIND==='clip'?'on':''}" data-k="clip">Video ad</button></div>`+
-  lab(2,'Brand')+`<div class="row">`+brands.map(b=>`<button class="big ${b===BRAND?'on':''}" data-b="${b}">${b==='<brand>'?'<brand>':b[0].toUpperCase()+b.slice(1)}</button>`).join('')+`</div>`+
+  lab(2,'Brand')+`<div class="row">`+brands.map(b=>`<button class="big ${b===BRAND?'on':''}" data-b="${b}">${b==='Brand A'?'Brand A':b[0].toUpperCase()+b.slice(1)}</button>`).join('')+`</div>`+
   lab(3,'Which ones to show')+`<div class="row"><button class="big ${ONLYNEW?'on':''}" id="onlynew">Only ones not made yet</button>${KIND==='pic'?`<button class="big ${ONLYREADY?'on':''}" id="onlyready">Ready only</button>`:''}</div>
   <div class="row"><span class="hint" style="margin:0">Sort:</span>${[['new','Newest first'],['old','Oldest first'],['num','Brief number']].map(([k,t])=>`<button class="big ${SORT===k?'on':''}" data-sort="${k}">${t}</button>`).join('')}</div>
   <p class="hint" style="margin:0">Anything already in Meta or live is not shown here. It is done.</p>`+
@@ -222,7 +222,7 @@ function delivDraw(){const box=$('#sheetbox');
  if(DV.state==='failed'){box.innerHTML=h+`<div class="msg no">It stopped: ${esc(DV.error)}</div>`;return wireDv()}
  const rows=DV.delivered||[];
  (DV.result.roles||[]).forEach(r=>{const who='the '+r.words,kind=r.delivers,one=kind.replace(/s$/,''),nw=new Set((r.new||[]).map(n=>n.label));
-  h+=`<h2 class="part">${esc(kind[0].toUpperCase()+kind.slice(1))} from ${esc(who)}${esc(today(r))}</h2><p class="hint">They go in returned/ inside each brief's folder: ${esc(r.folder)}/&lt;brief&gt;/returned${r.confirmed?'':' · the team is confirming this folder'}</p>`;
+  h+=`<h2 class="part">${esc(kind[0].toUpperCase()+kind.slice(1))} from ${esc(who)}${esc(today(r))}</h2><p class="hint">They go in returned/ inside each brief's folder: ${esc(r.folder)}/&lt;brief&gt;/returned${r.confirmed?'':' · the email lead is confirming this folder'}</p>`;
   if(!r.found)h+=`<div class="msg no">No hand-off folder for ${esc(who)} on the Drive yet.</div>`;
   else if(r.new.length){const n=r.new.reduce((a,x)=>a+x.count,0);h+=`<div class="msg ok">✓ ${n} new ${n===1?one:kind} for ${r.new.length} brief${r.new.length===1?'':'s'}, matched and filed.</div>`}
   else h+=`<div class="msg ok">Nothing new from ${esc(who)} since the last check.</div>`;

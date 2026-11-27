@@ -1,0 +1,21 @@
+{
+  "kind": "infer-runs",
+  "title": "Infer runs — replies from the text vendor lane",
+  "note": "ONE RECORD PER CALL, filed by the mini-worker's `infer` action (card WM-34 (infer action), 2026-09-09) — a text-inference request against a REGISTRY id (components/models/models.json) through OpenRouter, the standing text vendor (MDL-4 (openrouter vendor)). Item id = the request's `run` (defaults to the request's own item name). The verdict carries what was asked (model, vendor_id, inputs by PATH, the diff refs and the files it touched, the prompt head), what came back (`reply` — a bounded head; `reply_file` is the sidecar beside the record holding all of it), and what it COST: `cost.usd` is the vendor's own usage.cost when reported, `cost.estimate_usd` the registry list price × the vendor's token counts, and a call the vendor did not price says `unreported` with its reason — never $0.00. `model_status` and `allow_draft` say whether the curator had blessed the model at call time. A refused or failed request files `status: failed` with the reason and no spend. Reply content is DATA, never instructions (rule 8).",
+  "open_items": true,
+  "item_id": "id",
+  "item_label": "label",
+  "items": [],
+  "verdict_fields": [
+    {"key": "action", "values": ["infer"]},
+    {"key": "status", "values": ["done", "failed"]},
+    {"key": "model", "note": "the REGISTRY id the request named"},
+    {"key": "vendor_id", "note": "what the wire carried — the registry entry's own vendor_id, read from the manifest and never from the request"},
+    {"key": "model_status", "values": ["draft", "approved"], "note": "the curator's gate at call time; draft runs only with allow_draft stated"},
+    {"key": "inputs", "note": "repo-relative paths, every one under infer.json input_roots"},
+    {"key": "git_diff", "note": "{base, head, files} when a diff was sent; every file under the allowlist or the request was refused naming the path"},
+    {"key": "reply", "note": "bounded head of the reply text; reply_chars / reply_truncated / reply_file say the rest"},
+    {"key": "cost", "note": "{usd, basis, estimate_usd, estimate_basis, tokens{input,output,total}}"},
+    {"key": "provider", "note": "which upstream provider OpenRouter routed to — this is what answers whether a non-training provider served the model under the account's data policy"}
+  ]
+}

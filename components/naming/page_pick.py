@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """page_pick — the landing page, chosen when the brief is written.
 
-    page_pick.py pick   --brand brand-b --brief brief-0289 [--product …] [--offer …]
+    page_pick.py pick   --brand brand_b --brief brief-0289 [--product …] [--offer …]
                                          what it would pick, and why — writes nothing
-    page_pick.py record --brand brand-b --brief brief-0289 [--product …]
+    page_pick.py record --brand brand_b --brief brief-0289 [--product …]
                                          pick and write it onto the brief record
     page_pick.py meta-page link_brand_b_cpk_quiz
                                          the page part of a Meta ad name (body-scrub-cpk-quiz)
 
-the owner, 2 Oct 2026: the landing page belongs to the brief — the only step that
+owner, 2 Oct 2026: the landing page belongs to the brief — the only step that
 knows the product, the offer and the swipe's page type. Everything after it
 (hand-off, delivery, the approval card) inherits the brief's page.
 
@@ -27,11 +27,15 @@ THE PICK, in order:
      match. No swipe page recorded → the product's main live page (the one
      with the most live ads), and the why says so.
   4. is live — answers HTTP 200 now. A page that does not is skipped and named.
+  +  and beside the pick: the product's LAUNCH PAGE, when the owner names one — a catalog link with
+     `"launch": {"since": …, "why": …}` that sells the product. While it is live every new ad for that
+     product gets BOTH pages, the pick above and the launch page (owner, 11 Nov 2026: "i want BOTH pages").
 
-Written onto the brief as `landing_page`:
-    {"link_ids": [...], "why": "...", "swipe_page": {url, type, from} | null,
+Written onto the brief as `landing_page` (`page_ids` = the one page list's IDs, 2026-11-14; `link_ids` kept
+for the readers that still take catalog link ids):
+    {"page_ids": [...], "link_ids": [...], "why": "...", "swipe_page": {url, type, from} | null,
      "checked": {link id: status}, "picked": "YYYY-MM-DD", "by": "page_pick"}
-— on the register record (tools/image-teardown/briefs.json, which the
+— on the register record (components/image-teardown/briefs.json, which the
 hand-off reads; its `links` filled when empty). A brief with no register record
 gets a PROPOSAL at runs/naming/<brand>/landing-proposals/briefs.json instead:
 a machine never writes the brand's brief header (K2 (brands write wall), SI-97 (brand research proposals)); a person commits an
@@ -142,7 +146,7 @@ def link_type(rec):
 
 def offer_pages(brand, product, cat=None):
     """The live offer pages that sell this product directly, most-run first — the
-    page every quiz test is paired with (the owner, 2026-10-23: "Anything that is
+    page every quiz test is paired with (owner, 2026-10-23: "Anything that is
     tested with a quiz should also get tested with the offer page too. Because
     sometimes the offer page just works better."). -> [link ids]."""
     pid = product_id(brand, product, cat)
@@ -372,6 +376,8 @@ def pick(brand, brief=None, product=None, offer=None, *, reg_rec=None, header=No
     for lid, r in records(brand, cat).items():
         if r.get("type") != "link" or r.get("status") != "live" or not r.get("url"):
             continue
+        if cat is None and not _usable(lid):
+            continue                             # archived on the page list: no new ad goes there
         how, said = sells(brand, r, pid, cat, fl)
         if not how:
             continue
@@ -379,13 +385,14 @@ def pick(brand, brief=None, product=None, offer=None, *, reg_rec=None, header=No
         type_rank = 2 if want and t == want else (1 if want and NEAR.get(want) == t else 0)
         offer_rank = 1 if offer and offer in (r.get("offers") or []) else 0
         cands.append({"id": lid, "rec": r, "type": t, "sells": how, "said": said,
-                      "rank": (type_rank, 1 if how == "direct" else 0, offer_rank, live_ads(r))})
+                      "rank": (type_rank, 1 if how == "direct" else 0, offer_rank, live_ads(r)), "launch": bool(r.get("launch"))})
     if not cands:
         out["why"] = f"no live {brand} page in the catalog sells {product}"
         return out
     cands.sort(key=lambda c: c["rank"], reverse=True)
     dead = []
-    for c in cands:
+    launch = [c for c in cands if c["launch"]]
+    for c in [c for c in cands if not c["launch"]] or cands:
         st = fetch(c["rec"]["url"])
         out["checked"][c["id"]] = st
         if st != 200:
@@ -414,9 +421,21 @@ def pick(brand, brief=None, product=None, offer=None, *, reg_rec=None, header=No
         if dead:
             bits.append("skipped: " + "; ".join(dead))
         out["link_ids"] = [c["id"]]
+        out["page_ids"] = page_ids_of([c["id"]])
         out["page"] = r.get("url")
         out["page_type"] = c["type"]
         out["why"] = " · ".join(bits)
+        for x in launch:                       # the owner's launch page goes beside the pick, not instead of it
+            if x["id"] in out["link_ids"]:
+                continue
+            st = out["checked"].get(x["id"]) or fetch(x["rec"]["url"])
+            out["checked"][x["id"]] = st
+            if st == 200:
+                out["link_ids"].append(x["id"])
+                out["why"] += (f" · and {x['id']} ({x['rec'].get('url')}), the launch page for {product}: "
+                               f"{(x['rec'].get('launch') or {}).get('why') or 'the owner names it'}")
+            else:
+                out["why"] += f" · launch page {x['id']} skipped: answered {st or 'nothing'}"
         return out
     out["why"] = f"every live page that sells {product} failed its check: " + "; ".join(dead)
     return out
@@ -471,11 +490,13 @@ def record(brand, brief, product=None, lp=None, *, register=None, root=None, fet
     key, reg_rec, header = brief_record(brand, brief, product)
     if reg_rec is None and header is None:
         raise KeyError(f"{brand} {brief}: no such brief")
+    if (reg_rec or {}).get("type") == "page":
+        raise ValueError(f"{brand} {brief} is a page brief — it names its page and never gets a landing page")
     lp = lp or pick(brand, brief, product, reg_rec=reg_rec, header=header, fetch=fetch)
     had = [x if isinstance(x, str) else (x or {}).get("id") for x in (reg_rec or {}).get("links") or []]
     had = [x for x in had if x] or list(((header or {}).get("landing_page") or {}).get("link_ids") or [])
     if had and had != lp.get("link_ids"):
-        lp = {"link_ids": had, "why": "chosen by hand before the picker existed — kept",
+        lp = {"link_ids": had, "page_ids": page_ids_of(had), "why": "chosen by hand before the picker existed — kept",
               "picker_would": lp.get("link_ids"), "picker_why": lp.get("why"),
               "swipe_page": lp.get("swipe_page"), "checked": lp.get("checked"),
               "picked": lp.get("picked"), "by": "page_pick"}
@@ -524,20 +545,60 @@ def landing_ids(brand, brief, product=None, root=None):
     """The brief's landing page link ids — what the hand-off, the card writer and
     the feeders use when nobody names a page. [] when none is recorded."""
     lp, reg_rec = _landing(brand, brief, product, root)
-    # a page switched off in the catalog never lands on a new ad, whatever a brief recorded (the owner, 28 Oct 2026:
+    # a page switched off in the catalog never lands on a new ad, whatever a brief recorded (owner, 28 Oct 2026:
     # "we are no longer going to launch these ads on portal-ingrown")
-    off = {k for k, r in records(brand).items() if (r.get("status") or "").lower() == "off"}
+    off = {k for k, r in records(brand).items() if (r.get("status") or "").lower() == "off" or not _usable(k)}
     if lp:
         return [x for x in lp["link_ids"] if x not in off]
     links = [x if isinstance(x, str) else (x or {}).get("id") for x in (reg_rec or {}).get("links") or []]
     return [x for x in links if x and x not in off]
 
 
+# ---------------------------------------------------------------- page IDs (the one page list)
+def _usable(ref):
+    """False when the page list archives (or retired) the page — a new ad never lands there (2026-11-14)."""
+    try:
+        import page_list as PL
+        return PL.usable(ref)
+    except Exception:                          # noqa: BLE001 — no page list, no say
+        return True
+
+
+def page_ids_of(refs, data=None):
+    """Page IDs (components/naming/page_list.py) for link ids, page IDs or addresses; unknown ones are dropped."""
+    import page_list as PL
+    data = data or PL.load()
+    out = []
+    for r in refs or []:
+        pid, _ = PL.find(r, data)
+        if pid and pid not in out:
+            out.append(pid)
+    return out
+
+
+def landing_page_ids(brand, brief, product=None, root=None):
+    """The brief's landing page as page IDs — what an ad brief records as its landing page (2026-11-14).
+    Read from `landing_page.page_ids`, else mapped from the old link ids."""
+    lp, _ = _landing(brand, brief, product, root)
+    if lp and lp.get("page_ids"):
+        return list(lp["page_ids"])
+    return page_ids_of(landing_ids(brand, brief, product, root))
+
+
 # ---------------------------------------------------------------- Meta names
 def meta_page(link_id, cat=None, fl=None):
     """The page part of a Meta ad name: `<funnel id>-<page>` (body-scrub-cpk-quiz,
-    body-scrub-cpk-offer). None when the link or its funnel is not known —
-    the caller keeps its old spelling then."""
+    body-scrub-cpk-offer). Takes a page ID or an old catalog link id: the page list's `meta` (frozen for every
+    page a live ad already names) wins; a link the list does not hold is worked out from its address. None when
+    nothing is known — the caller keeps its old spelling then."""
+    if cat is None and fl is None:
+        try:
+            import page_list as PL
+            m = PL.meta(link_id)
+            if m:
+                return m
+        except Exception:                      # noqa: BLE001 — the page list is a reader's convenience here
+            pass
     parts = str(link_id or "").split("_")
     if len(parts) < 3 or parts[0] != "link":
         return None

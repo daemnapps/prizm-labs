@@ -1,0 +1,119 @@
+<title>Video Tools Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one chain read top to bottom. Shared stations are full width, the production lanes split in the middle, then it rejoins. */
+:root{--bg:#FAFAFA;--panel:#FFFFFF;--line:#E4E4E7;--fg:#18181B;--mute:#63636B;--accent:#1F5FBF;--tint:#E8EFFA;--good:#1A7F4B;--part:#A16207;--miss:#B4232A;
+--sans:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;--mono:'IBM Plex Mono',Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111113;--panel:#1A1A1D;--line:#2E2E33;--fg:#F4F4F5;--mute:#A1A1AA;--accent:#7FB0F5;--tint:#1C2A40;--good:#5CCB92;--part:#E3B341;--miss:#F2837F;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111113;--panel:#1A1A1D;--line:#2E2E33;--fg:#F4F4F5;--mute:#A1A1AA;--accent:#7FB0F5;--tint:#1C2A40;--good:#5CCB92;--part:#E3B341;--miss:#F2837F;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--sans);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+main{max-width:1060px;margin:auto;display:grid;gap:52px}
+h1{font-size:38px;line-height:1.1;margin:0;text-wrap:balance}h2{font-size:24px;line-height:1.2;margin:0 0 6px;text-wrap:balance}h3{font-size:16px;margin:0}
+p{margin:0}.lead{font-size:19px;color:var(--mute);margin-top:10px;max-width:64ch}.sub{color:var(--mute);max-width:66ch;margin-bottom:16px}
+.tag{font:500 12px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--mute)}
+/* the chain */
+.chain{display:grid;gap:10px}
+.band{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.band>div{min-width:0}.band h3{font-size:18px}.band .tools{color:var(--mute);font-size:15px}
+.fork{background:var(--tint);border:1px solid var(--accent);border-radius:10px;padding:14px 16px}
+.fork b{color:var(--accent)}
+.lanes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.lane{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.lane h3{font-size:16px;line-height:1.25}.lane .ex{font-size:14px;color:var(--mute)}
+.lane dl{margin:0;display:grid;gap:6px;font-size:14px}.lane dt{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}.lane dd{margin:0}
+.st{font:500 12px var(--mono);margin-top:auto;padding-top:6px}.st.good{color:var(--good)}.st.part{color:var(--part)}.st.miss{color:var(--miss)}
+.arrow{text-align:center;color:var(--mute);font-size:18px;line-height:1}
+/* scene */
+.two{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}.card p{font-size:15px;margin-top:6px}
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.track{display:flex;gap:3px;margin-top:10px;height:42px}.track i{display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent);font:500 12px var(--mono);font-style:normal;border-radius:4px;min-width:0}
+.track.bad i{background:transparent;border:1px solid var(--line);color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:640px}th{text-align:left;font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--mute);padding:8px 12px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}td:first-child{font-weight:600}
+.scroll{overflow-x:auto}.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+ol.next{margin:0;padding-left:20px;display:grid;gap:8px}
+@media(max-width:900px){.lanes{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
+@media(max-width:560px){.lanes,.compare{grid-template-columns:1fr}.band{grid-template-columns:1fr;gap:4px}h1{font-size:30px}}
+</style>
+<main>
+<header>
+<span class="tag">Video machine · 2 Nov 2026</span>
+<h1>Different videos need different production lines</h1>
+<p class="lead">Teardown and writing work for every video. Production breaks because one line built for clips and talking lines is being asked to make songs, movies and phone threads.</p>
+</header>
+
+<section>
+<h2>How the tools fit together</h2>
+<p class="sub">Top and bottom stay shared. The middle splits by how the video is actually made.</p>
+<div class="chain">
+<div class="band"><div><span class="tag">Shared</span><h3>Teardown</h3></div><div class="tools">Swipe goes in. Out come the frame map, audio teardown and sound sheet, culture read and playbook match. Tools: <code>swipe-organic</code>, <code>intake</code>, <code>video-teardown</code>, <code>audio-teardown</code>, <code>culture</code>.</div></div>
+<div class="arrow">↓</div>
+<div class="band"><div><span class="tag">Shared</span><h3>Writing</h3></div><div class="tools">Injection, hooks, placement, audit, spice, then the brief. Tools: <code>video-writing</code>, <code>marketing-doctrine</code>, <code>creative-controls</code>, <code>language-layer</code>, <code>copywriter</code>.</div></div>
+<div class="arrow">↓</div>
+<div class="fork"><b>Missing step: which line does this video take?</b> Today there's a format bank, 13 playbooks and a shot route rule, but no single step that sends a video down a different production line. Only 2 formats can run as a full workflow.</div>
+<div class="arrow">↓</div>
+<div class="lanes">
+<div class="lane"><h3>Talking</h3><p class="ex">One person to camera, B-roll on top</p><dl><dt>Unit of work</dt><dd>A take of the line</dd><dt>What it needs</dt><dd>Person, voice, room, real movement</dd><dt>Tools</dt><dd>Voice, start picture, Seedance</dd></dl><p class="st good">Runs today</p></div>
+<div class="lane"><h3>Movie</h3><p class="ex">Micro-drama, skits, more depth</p><dl><dt>Unit of work</dt><dd>A whole scene</dd><dt>What it needs</dt><dd>All elements first, then a prompt that carries everything that happens</dd><dt>Tools</dt><dd>Cast, sets, Seedance up to 15 s, alternate door up to 30 s</dd></dl><p class="st miss">Not built as its own line</p></div>
+<div class="lane"><h3>Song</h3><p class="ex">Sung story, cut to the lyrics</p><dl><dt>Unit of work</dt><dd>A lyric line</dd><dt>What it needs</dt><dd>Song first, one style, worlds</dd><dt>Tools</dt><dd>Suno, MiniMax H3 at 2K</dd></dl><p class="st part">Runs, but costs too much</p></div>
+<div class="lane"><h3>Swap</h3><p class="ex">The swipe's shot, our cast</p><dl><dt>Unit of work</dt><dd>A swipe shot</dd><dt>What it needs</dt><dd>Sharp swipe shot, full cast sheet</dd><dt>Tools</dt><dd>Genjutsu object swap</dd></dl><p class="st part">Runs shot by shot</p></div>
+<div class="lane"><h3>Drawn in code</h3><p class="ex">Phone thread, stick, cartoon, anime, low-poly</p><dl><dt>Unit of work</dt><dd>A screen or beat</dd><dt>What it needs</dt><dd>Script, voice, cloned pictures, the swipe's sound</dd><dt>Tools</dt><dd><code>thread</code>, <code>stick</code>, <code>cartoon</code>, <code>anime</code>, <code>lowpoly</code></dd></dl><p class="st part">Works, sits in the wrong place</p></div>
+</div>
+<div class="arrow">↓</div>
+<div class="band"><div><span class="tag">Shared</span><h3>Edit</h3></div><div class="tools">Assembles what production made: cut, captions, B-roll, music, effects, checks. Tools: <code>video-edit</code>, <code>edit_map</code>, <code>compose</code>, <code>audit</code>, looks and moves banks.</div></div>
+<div class="arrow">↓</div>
+<div class="band"><div><span class="tag">Shared</span><h3>Hand-off and launch</h3></div><div class="tools">Editor folder, approval card, Meta. Tools: <code>briefs</code>, <code>image-edit/handoff</code>, <code>meta-upload</code>.</div></div>
+</div>
+</section>
+
+<section>
+<h2>Why nothing feels continuous</h2>
+<p class="sub">You're right, and it's written into the system. "Scene" has three different meanings in three places, and the working one is a single spoken line.</p>
+<div class="two">
+<div class="card"><span class="tag">The chain's word key</span><h3>A scene is one spoken line</h3><p>One row of the brief. This is how most runs get chopped up.</p></div>
+<div class="card"><span class="tag">The storyboard</span><h3>A scene is one swipe cut</h3><p>Every cut in the swipe becomes a scene, whatever the story needs.</p></div>
+<div class="card"><span class="tag">The September rule</span><h3>A scene is a paragraph, one clip</h3><p>Closest to what you want. Later rules cut across it: each line its own read, and clips grouped up to the 15 second limit.</p></div>
+</div>
+<div class="compare" style="margin-top:10px">
+<div class="card"><h3>Built line by line</h3><p>Each line makes its own short clip, then they get stitched. Motion restarts every time.</p><div class="track bad"><i style="flex:1">line</i><i style="flex:1">line</i><i style="flex:1">line</i><i style="flex:1">line</i><i style="flex:1">line</i><i style="flex:1">line</i></div></div>
+<div class="card"><h3>Built scene by scene</h3><p>Elements get set first, then one prompt carries the whole moment through to its end.</p><div class="track"><i style="flex:1">the whole scene, one generation</i></div></div>
+</div>
+</section>
+
+<section>
+<h2>Four things we keep calling the same thing</h2>
+<div class="scroll"><table>
+<tr><th>Word</th><th>What it is</th><th>Made in</th><th>In the system today</th></tr>
+<tr><td>A-roll</td><td>The person carrying the line</td><td>Production</td><td>Clear</td></tr>
+<tr><td>B-roll</td><td>Cover shots laid over a line that keeps playing</td><td>Production, placed in edit</td><td>Clear</td></tr>
+<tr><td>Cutscene</td><td>A moment in the sequence that plays as its own scene</td><td>Production</td><td>No word for it. Gets treated as B-roll</td></tr>
+<tr><td>Element</td><td>Person, place, prop, voice, look. Built once, then used inside scenes</td><td>Production step 1</td><td>Clear</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>What it has cost by line</h2>
+<p class="sub">Only the ads we have numbers for. Wrong line, wrong cost: the song went through a heavy path for a look it never held.</p>
+<div class="scroll"><table>
+<tr><th>Ad</th><th>Line</th><th>Cost</th><th>Result</th></tr>
+<tr><td>Song ad 0280</td><td>Song</td><td class="num">$133.74</td><td>Two films, inconsistent, shipped as is</td></tr>
+<tr><td>Four Christmas ads</td><td>Drawn in code</td><td class="num">about $9</td><td>Scripts stopped at the first writing pass</td></tr>
+<tr><td>Text Thread FLEX</td><td>Drawn in code</td><td class="num">about $5, estimate</td><td>Close to the swipe after two rebuilds</td></tr>
+<tr><td>Stick figure ad</td><td>Drawn in code</td><td class="num">about $1.31</td><td>One ad, 10 generated pictures</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>What this points to</h2>
+<ol class="next">
+<li><b>Add the routing step.</b> After writing, the brief names its production line, and only that line's stations run.</li>
+<li><b>Pick one meaning of scene.</b> A scene is one continuous moment with all its elements, built in one generation as far as the model allows.</li>
+<li><b>Build the Movie line first.</b> It's the biggest gap: elements, then full-scene prompts, on Seedance's longest length.</li>
+<li><b>Add cutscene as its own thing,</b> separate from B-roll, from the brief onward.</li>
+<li><b>Move the code tools into production</b> and give them one shared base. That card is already up.</li>
+<li><b>New format, new line.</b> When a swipe doesn't fit, build a line for it from tools we already have, and reuse them when they fit.</li>
+</ol>
+</section>
+</main>

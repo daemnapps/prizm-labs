@@ -1,0 +1,316 @@
+{
+ "_what": "THE video names. Six lists: production format, style and script format on every ad; hook format and headline format only when the opening is made differently from the body. Every page, brief and run of the video line (teardown, writing, production, edit) uses these names, spelled exactly like this. Locked: a change needs the owner's own word, and formats/test_names.py fails on any change made without updating it. Plain words go beside a name ('what'), never in place of it.",
+ "status": "approved",
+ "signed": "2026-11-19, owner: \"hold this naming list, do not change it ever again\"; 2026-11-19, owner on the formats page: added Meme, Dramatic continuation, Micro-drama, Testimonial montage, Era roll call as script formats (\"Add it\" on D1-D5); 2026-11-19, owner: hook formats (the scroll stoppers) added as a fourth list, Dramatic continuation moved there from script format (\"Yes, add those 4\"); 2026-11-19, owner: \"green screen reaction is a hook format, dramatized object is a hook format, street interview could be a script format\"; 2026-11-19, owner: \"how to get rid of chapped lips … that's just a demonstration script format with a up close body part hook format\" (Up close body part added; id from the variations tool's first-frame list); 2026-11-19, the session decided on the owner's rules and he reviews (owner: \"try to answer your own question before asking me\"): 3 hook formats, 5 script formats, the headline format list (17), length Short/Long; 2026-11-21, owner on the Preset Library page: \"Yes, add all 4\" (Claymation, Needle felt, Art toy, Cinematic live action added to style; the first three keep their element-bank ids)",
+ "production_format": {
+  "means": "how it's made",
+  "names": [
+   {
+    "id": "single-presenter",
+    "name": "Single presenter",
+    "what": "One person to camera"
+   },
+   {
+    "id": "song-ad",
+    "name": "Song ad",
+    "what": "A song carries it"
+   },
+   {
+    "id": "narrator-montage",
+    "name": "Narrator montage",
+    "what": "One voice over shots, nobody talks on screen"
+   },
+   {
+    "id": "multi-speaker-scene",
+    "name": "Multi-speaker scene",
+    "what": "Two or more people talking"
+   },
+   {
+    "id": "short-movie",
+    "name": "Short movie",
+    "what": "Acted, no words, music only"
+   },
+   {
+    "id": "text-thread",
+    "name": "Text thread",
+    "what": "A phone screen tells it"
+   }
+  ]
+ },
+ "style": {
+  "means": "what it looks like",
+  "names": [
+   {
+    "id": "phone-ugc",
+    "name": "Phone-camera UGC"
+   },
+   {
+    "id": "family-3d",
+    "name": "Family 3D animation"
+   },
+   {
+    "id": "low-poly",
+    "name": "Low poly"
+   },
+   {
+    "id": "anime",
+    "name": "Anime"
+   },
+   {
+    "id": "cel-1950s",
+    "name": "1950s hand-drawn cel"
+   },
+   {
+    "id": "stick-explainer",
+    "name": "Stick explainer"
+   },
+   {
+    "id": "claymation",
+    "name": "Claymation"
+   },
+   {
+    "id": "needle-felt",
+    "name": "Needle felt"
+   },
+   {
+    "id": "art-toy",
+    "name": "Art toy"
+   },
+   {
+    "id": "cinematic-live",
+    "name": "Cinematic live action"
+   }
+  ]
+ },
+ "script_format": {
+  "means": "what it says",
+  "names": [
+   {
+    "id": "remedy",
+    "name": "Remedy"
+   },
+   {
+    "id": "demonstration",
+    "name": "Demonstration"
+   },
+   {
+    "id": "expert-consult",
+    "name": "Expert consultation"
+   },
+   {
+    "id": "comedy-skit",
+    "name": "Comedy skit"
+   },
+   {
+    "id": "meme",
+    "name": "Meme",
+    "what": "One swiped meme beat, the caption added at the edit"
+   },
+   {
+    "id": "micro-drama",
+    "name": "Micro-drama",
+    "what": "Several characters in one set: a confrontation, a turn, an offer"
+   },
+   {
+    "id": "testimonial-montage",
+    "name": "Testimonial montage",
+    "what": "One person, one line, many times over"
+   },
+   {
+    "id": "era-roll-call",
+    "name": "Era roll call",
+    "what": "'If you grew up in the [decade] you remember…', ending on the one she still carries"
+   },
+   {
+    "id": "street-interview",
+    "name": "Street interview",
+    "what": "A host stops strangers in public and asks them questions or plays a quick game"
+   },
+   {
+    "id": "founder-story",
+    "name": "Founder story",
+    "what": "The founder tells why they made it: their own problem, the search, the product"
+   },
+   {
+    "id": "personal-story",
+    "name": "Personal story, then the fix",
+    "what": "One customer's own problem, what they tried, what finally worked"
+   },
+   {
+    "id": "tips-then-pitch",
+    "name": "Tips, then the pitch",
+    "what": "Useful tips or a warning first, then the product as the answer"
+   },
+   {
+    "id": "deal-walkthrough",
+    "name": "Deal walkthrough",
+    "what": "A voice runs through the stacked discounts and the deadline"
+   },
+   {
+    "id": "glow-up",
+    "name": "Glow-up",
+    "what": "Before and after to music: the change is the whole ad"
+   }
+  ]
+ },
+ "hook_format": {
+  "means": "the scroll stopper: the first seconds, made differently from the body, ending where the pitch starts (optional: most ads open with the body itself)",
+  "names": [
+   {
+    "id": "vfx-stunt-hook",
+    "name": "VFX stunt",
+    "what": "One impossible, obviously faked moment in real handheld footage, then straight to the pitch"
+   },
+   {
+    "id": "fooh-stunt",
+    "name": "Fake billboard stunt",
+    "what": "A giant billboard comes alive on a real street and hands the product out"
+   },
+   {
+    "id": "dramatic-continuation",
+    "name": "Dramatic continuation",
+    "what": "Watch-bait drama that cuts to the sales pitch"
+   },
+   {
+    "id": "stunt-funnel-reveal",
+    "name": "Weird stunt, then the pitch",
+    "what": "An attention toll that has nothing to do with the offer, then the reveal"
+   },
+   {
+    "id": "green-screen-reaction",
+    "name": "Green screen reaction",
+    "what": "A person cut out over someone else's clip or photo, reacting to it"
+   },
+   {
+    "id": "dramatized-object",
+    "name": "Dramatized object",
+    "what": "An everyday object made to act out the problem or the fix"
+   },
+   {
+    "id": "body-part-close-up",
+    "name": "Up close body part",
+    "what": "The first frame is a close-up of the problem on the body (lips, a pimple, a bump), then the body starts"
+   },
+   {
+    "id": "swiped-viral-clip",
+    "name": "Swiped viral clip",
+    "what": "A borrowed viral clip with a meme caption, then the pitch"
+   },
+   {
+    "id": "split-screen",
+    "name": "Split screen",
+    "what": "Two people side by side, or the demo beside the presenter, from the first frame"
+   },
+   {
+    "id": "3d-body-animation",
+    "name": "3D body animation",
+    "what": "A 3D body or character acts the problem out"
+   }
+  ]
+ },
+ "headline_format": {
+  "means": "the WORDS in the first seconds (spoken or on screen), apart from the hook format, what you see first; optional (none = no words up top)",
+  "names": [
+   {
+    "id": "question",
+    "name": "Question",
+    "what": "Opens on a question to the viewer"
+   },
+   {
+    "id": "story-open",
+    "name": "Story open",
+    "what": "Opens mid-story: \"So I…\""
+   },
+   {
+    "id": "bold-claim",
+    "name": "Bold claim",
+    "what": "Opens on a strong claim"
+   },
+   {
+    "id": "problem-callout",
+    "name": "Problem callout",
+    "what": "Names the viewer's problem"
+   },
+   {
+    "id": "command-interrupt",
+    "name": "Command interrupt",
+    "what": "Tells the viewer to stop or do something"
+   },
+   {
+    "id": "how-to-promise",
+    "name": "How-to promise",
+    "what": "Promises how to fix it: \"How to get rid of…\""
+   },
+   {
+    "id": "curiosity-gap",
+    "name": "Curiosity gap",
+    "what": "Withholds the answer: \"Nobody tells you this…\""
+   },
+   {
+    "id": "relatable-moment",
+    "name": "Relatable moment",
+    "what": "A moment the viewer knows from their own life"
+   },
+   {
+    "id": "list-promise",
+    "name": "List promise",
+    "what": "Promises a list: \"3 things…\""
+   },
+   {
+    "id": "result-first",
+    "name": "Result first",
+    "what": "Opens on the result"
+   },
+   {
+    "id": "skit-line",
+    "name": "Skit line",
+    "what": "A character's line inside a staged scene"
+   },
+   {
+    "id": "song-lyric",
+    "name": "Song lyric",
+    "what": "The first words are sung or rapped"
+   },
+   {
+    "id": "label-text",
+    "name": "Label text",
+    "what": "The only words are an on-screen title or label"
+   },
+   {
+    "id": "regret-open",
+    "name": "Regret open",
+    "what": "Opens on a regret or apology"
+   },
+   {
+    "id": "reaction-line",
+    "name": "Reaction line",
+    "what": "A live reaction to a clip"
+   },
+   {
+    "id": "pov-caption",
+    "name": "POV caption",
+    "what": "An on-screen \"POV:\" line"
+   },
+   {
+    "id": "comment-reply",
+    "name": "Comment reply",
+    "what": "Opens as a reply to a viewer's comment"
+   }
+  ]
+ },
+ "length": {
+  "means": "how long it runs; a VSL is not a format, it is Long (owner, 2026-11-19)",
+  "names": [
+   {
+    "id": "short",
+    "name": "Short",
+    "what": "2 minutes or under"
+   },
+   {
+    "id": "long",
+    "name": "Long",
+    "what": "Over 2 minutes (what used to be called a VSL)"
+   }
+  ]
+ }
+}

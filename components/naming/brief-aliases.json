@@ -300,7 +300,7 @@
   "p291": "brief-0291"
  },
  "brand_aliases": {
-  "brand-a": {
+  "Brand A": {
    "dxs01": {
     "product": "crush",
     "brief": "brief-0001"
@@ -326,7 +326,7 @@
     "brief": "brief-0003"
    }
   },
-  "brand-b": {
+  "Brand B": {
    "brief-prizm-0001": {
     "product": "brilliance-body-scrub",
     "brief": "brief-0307"
@@ -337,6 +337,6 @@
    }
   }
  },
- "_numbered": "2026-10-01: BRAND-A AI video briefs DXS-01 (Crush Collar Pull), DXS-02 (The Scout's Neck), DXS-03 (Skin in the Grind) are BRAND-A CRUSH brief-0001, 0002, 0003 (first numbered 0292-0294 under the shared count the same day, then renumbered on the owner's per-product rule).",
+ "_numbered": "2026-10-01: Brand A AI video briefs DXS-01 (Crush Collar Pull), DXS-02 (The Scout's Neck), DXS-03 (Skin in the Grind) are Brand A CRUSH brief-0001, 0002, 0003 (first numbered 0292-0294 under the shared count the same day, then renumbered on the owner's per-product rule).",
  "rule_per_product": "the owner, 2026-10-01: brief numbers count per brand AND product — each product starts at 1 inside its brand. They should not share one count. Older briefs keep their numbers. A brief is identified by brand + product + number (the short name brand_product_brief-NNNN carries all three)."
 }

@@ -1,0 +1,133 @@
+{
+  "kind": "folder-listings",
+  "title": "Folder listings — what a location holds, as of when someone asked",
+  "note": "ONE RECORD PER LOCATION, filed by the mini-worker's `list-folders` action (card RV-18c (lane inbox listing), 2026-09-09, widened by RV-21 (list a location) the same day, platform/workers/mini-worker/review_folder.py) so a form can offer a SELECT or a FILTER instead of a text field somebody spells differently from the way the warehouse did. THE ITEM ID IS THE LOCATION. IT IS A SNAPSHOT, NOT HISTORY, AND THAT IS THE OPPOSITE OF ITS NEIGHBOUR: `review` records are events and are appended forever, while a re-list REPLACES that location's listing — the writer removes the location's earlier records (head AND parts) after writing the new ones, so the plane holds exactly one listing per location. This is written down here because a later hand will read `records/` as append-only and want to 'fix' it, and the fix would fold three stale listings into one dropdown that offers folders which are gone. `serve_records` is deliberately ABSENT (latest write wins per reviewer+item), which is the same statement made to the API. ON DEMAND, NEVER ON A TICK (the developer, ruled 2026-09-09, \"and the tick should be on-demand listing\"): a form files a request, the worker answers that one request, and a location nobody asked about is never read — there is no schedule and no recurring job anywhere in this path. STALENESS IS BOUNDED BY WHEN THE PERSON LAST ASKED, so `taken` is load-bearing: the form shows it beside the control, and RV-18d (subfolder select) sets no age threshold because a form cannot know a location's rate of change. NOT THE `review` KIND, on purpose: a listing is not a review event, and the review manifest is frozen with a grammar (event, type, asset, reviewers, verdict, decision) that a fourth non-event shape would quietly empty out. It is PLUMBING, filed beside `infer-runs` — not the batch-request vocabulary the email lead curates. READ-ONLY, ABSOLUTELY: every Drive listing goes through the READ-ONLY reader service account on the same `drive.readonly` scope and the same list call RV-18 (folder inventory) already makes, and every repo listing reads names and sizes without opening a file; nothing on this path writes to Drive or to the tree it lists. POINTERS, NEVER BYTES (workspace rule 3): a row is a name, an id or a path and a size — no file is opened and no media is copied. A LOCATION THAT CANNOT BE LISTED IS SAID IN WORDS AND NEVER AS AN EMPTY LIST: a lane with no inbox is SKIPPED BY NAME on a record of its own, and every other failure REFUSES with a named reason and files nothing, because an absent record and an empty list are both read as 'the folder is not there', which is a different and false statement. NO BROWSER EVER CALLS DRIVE — the board reads these records through the records API it already polls.\n\nTHREE SHAPES, ONE ACTION AND ONE KIND (RV-21 (list a location), 2026-09-09). `shape` says which: `drive-folders` (the subfolders of the ONE Reviews folder, or — for a request that names no `warehouse` — RV-18c's original per-lane listing, answered byte for byte as it always was), `drive-files` (one subfolder's files as {name, id, type, bytes}, the call the form's checklist cannot exist without), `repo` (a directory's entries AND the flat markdown list under it). THE FLAT LIST IS THE PRIMARY CONTROL AND A MEASUREMENT CHOSE IT: over the real tree — 444 directories, 1,127 markdown names under the four declared roots — reaching a typical md file by drilling took a MEDIAN OF 5 list calls (21% within three, 100% only by six) against drill-down's own stated kill of about three, so the filter over the flat list leads and `entries` is the secondary control for browsing when the name is not known. Do not re-promote drill-down because serving the flat list is harder.\n\nA LOCATION'S ROWS ARE SPLIT ACROSS RECORDS, NEVER TRUNCATED. ~1,100 paths exceed the plane's 16 KB verdict cap (WM-25 (verdict cap one source)), so the HEAD record (item = the location id) holds the rows inline when the whole stream fits and holds `parts` — the item ids of the PART records, `<location>-p001`, `<location>-e001`, in order — when it does not. It always says which, and `total` is the whole count either way, so a reader checks it has them all rather than trusting that it does. A part record carries `part`, `index`, `of` and `parts_total` and is a FRAGMENT, not a short listing. A form that reads only the head of a split listing is filtering over a list that lies, which is the exact failure the split exists to avoid.\n\nALLOWED REPO ROOTS, RULED BY the developer 2026-09-09: new-workflow-design/, components/, team/, platform/. A path outside them is refused BY NAME. The set moves by a ruling, never by a maker widening it to make a test pass; it lives as one constant in review_folder.py and the declared test asserts exactly those four.",
+  "open_items": true,
+  "item_id": "item",
+  "item_label": "item",
+  "items": [],
+  "verdict_fields": [
+    {
+      "key": "action",
+      "values": ["list-folders"],
+      "note": "the worker action that filed it — the same word the request record carries. STILL ONE WORD after RV-21 (list a location): three shapes are answered by one action, and the name was kept rather than renamed because renaming it would have changed RV-18c (lane inbox listing)'s behaviour, which the widening card forbids."
+    },
+    {
+      "key": "event",
+      "values": ["listing"],
+      "note": "exactly one per record; reserved so a later event on this kind can join it without changing what a listing means"
+    },
+    {
+      "key": "status",
+      "required": true,
+      "values": ["listed", "skipped"],
+      "note": "`skipped` means a lane has NO inbox folder configured in platform/data/review-drive.json — a named skip, never an error and never an absent record. A Drive failure, a path outside the declared roots and a location that does not exist are none of these three: they REFUSE, file nothing, and the request record carries the reason in words (a wall a person must take down is never turned into an emptiness)."
+    },
+    {
+      "key": "shape",
+      "values": ["drive-folders", "drive-files", "repo"],
+      "note": "WHICH OF THE THREE (RV-21). Absent on RV-18c's original per-lane listing, which is unchanged and carries `lane`/`inbox`/`folders` instead — that record shape is frozen, and a reader tells the two apart by this field's presence."
+    },
+    {
+      "key": "warehouse",
+      "values": ["drive", "repo"],
+      "note": "where the location lives — the same word `asset.warehouse` uses on the review kind, so a row composed from a listing needs no translation. The two are the only two the form offers (the developer, 2026-09-09: \"we limit options for where it lives to just repo and google drive for now\")."
+    },
+    {
+      "key": "location",
+      "note": "the location IN WORDS: the Reviews folder's title, the subfolder's name, the repo path, or \"the four declared roots\". What a person reads on the record and in the status line; the item id is what machinery matches on."
+    },
+    {
+      "key": "lane",
+      "note": "RV-18c's per-lane listing ONLY — the lane whose inbox this is, the record's item id, and the ONLY lane read. No lane is ever listed that was not asked for. ABSENT on every RV-21 shape: there is one Reviews folder and no lane concept (the developer, 2026-09-09, \"I dont think we need the concept of a lane for now\")."
+    },
+    {
+      "key": "inbox",
+      "note": "the Drive folder id that was listed, READ from platform/data/review-drive.json and never a second copy of it. null when a lane was skipped; absent on the repo and drive-files shapes."
+    },
+    {
+      "key": "taken",
+      "required": true,
+      "note": "WHEN THE LISTING WAS TAKEN, UTC. Not bookkeeping: the form shows it beside the control, because a snapshot with no stamp is a claim about now that nobody checked. Every part record carries the SAME stamp as its head — the parts are one listing, not several."
+    },
+    {
+      "key": "count",
+      "required": true,
+      "note": "how many rows are IN THIS RECORD. On a head whose rows were split out to parts this is 0 and `total` is the real number — read `total` for the size of the list."
+    },
+    {
+      "key": "total",
+      "note": "how many rows the location holds ALTOGETHER, across the head and every part. The number a reader checks its own sum against; a form whose parts do not add up to this has not read the whole list and must say so rather than filter over what it got."
+    },
+    {
+      "key": "rows",
+      "note": "the rows of the shape's own row grammar: drive-folders [{name, id, modified}], drive-files [{name, id, type, bytes}], repo [{path, bytes}] — the FLAT MARKDOWN LIST, which is the primary control. Inline on the head when the whole stream fits the 16 KB cap, EMPTY on the head when `parts` names the records that carry them. Never a truncated prefix of the list: a filter over a truncated list is a filter that lies. In drive-files a null `type` means no panel renders that file — it is a ROW so the form can tick it off and disable it with the reason in words, never an omission, because a file that vanishes from a listing reads as a file that is not there."
+    },
+    {
+      "key": "parts",
+      "note": "the item ids of the records carrying `rows`, in order, or [] when the rows are inline. `<location>-p001`, `<location>-p002`, … Read them all or say you did not."
+    },
+    {
+      "key": "part",
+      "values": ["head", "rows", "entries"],
+      "note": "what this record IS. `head` is the one a form reads first; `rows` and `entries` are FRAGMENTS of a split stream and are not listings on their own."
+    },
+    {
+      "key": "index",
+      "note": "part records only: which part this is, 1-based."
+    },
+    {
+      "key": "of",
+      "note": "part records only: the item id of the head this part belongs to."
+    },
+    {
+      "key": "parts_total",
+      "note": "part records only: how many parts that stream has, so a part found alone says how much of the list is missing."
+    },
+    {
+      "key": "folders",
+      "note": "RV-18c's per-lane listing ONLY: the rows, [{name, id, modified}] in name order. The RV-21 shapes carry the same grammar under `rows`. POINTERS, NEVER BYTES: no file inside a subfolder is opened, listed or served from here."
+    },
+    {
+      "key": "files",
+      "note": "drive-folders only: how many LOOSE FILES the listed folder held. Counted, not offered — a person picks a folder — and stated rather than dropped in silence, so 'my file is not in the list' has an answer on the record."
+    },
+    {
+      "key": "folder",
+      "note": "drive-files only: the subfolder's NAME as the request gave it, or null when the request gave an id instead."
+    },
+    {
+      "key": "folder_id",
+      "note": "drive-files only: the Drive id of the subfolder whose files these are — the id shape 1's own rows carry, so the form needs no second lookup."
+    },
+    {
+      "key": "dirs",
+      "note": "drive-files only: how many NESTED FOLDERS the subfolder held. Counted for the same reason loose files are: a number on the record answers 'where did my file go' without a second call."
+    },
+    {
+      "key": "root",
+      "note": "repo only: the path the flat markdown list covers, or `*` for all four declared roots. The listing's own scope, stated on the record, because a filter is only honest about the tree it was given."
+    },
+    {
+      "key": "entries",
+      "note": "repo only: the location directory's immediate children, [{name, kind}] with kind `dir` or `file`, in name order — the SECONDARY control, for browsing when the name is not known. Inline when they fit, [] when `entry_parts` names the records that carry them. At the top location the entries are the four declared roots."
+    },
+    {
+      "key": "entry_parts",
+      "note": "repo only: the item ids of the records carrying `entries`, `<location>-e001`… , or [] when they are inline. Split for the same reason rows are — one directory in this repo holds over 2,500 entries, so this is not theoretical."
+    },
+    {
+      "key": "entry_total",
+      "note": "repo only: how many entries the directory holds altogether, across the head and every entry part."
+    },
+    {
+      "key": "skipped",
+      "required": true,
+      "note": "[{lane, reason, detail}] — the lanes named as skipped rather than errored or silently absent. Today the only reason is `no-inbox`. Empty on every listed location and on every RV-21 shape, which refuse by name instead."
+    },
+    {
+      "key": "via",
+      "note": "the writer's version, `folder-listing/<n>`. `folder-listing/1` is RV-18c's per-lane listing, unchanged; `folder-listing/2` is RV-21's three-shape writer."
+    }
+  ]
+}

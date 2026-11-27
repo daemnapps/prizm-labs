@@ -167,7 +167,7 @@ class NoModellessCalls(unittest.TestCase):
     def test_scan_reaches_the_known_sites(self):
         # the scan must actually see the call sites it guards, or a green run means nothing
         rels = {str(p.relative_to(ROOT)) for p in files()}
-        for site in ("components/swipe-organic/app.py", "tools/video-teardown/machine/run.py",
+        for site in ("components/swipe-organic/app.py", "components/video-teardown/machine/run.py",
                      "platform/workers/mini-worker/worker.py", "platform/workers/slack-pusher/push.py"):
             self.assertIn(site, rels)
 

@@ -31,7 +31,7 @@ Publish page lists the app being published as requirement one.
 
 The Publish page flags exactly one gap: a **Privacy policy URL**.
 
-Proposed value: `https://<brand>.com/policies/privacy-policy` — live, returns
+Proposed value: `https://Brand A.com/policies/privacy-policy` — live, returns
 200, owned by the same business that owns the app and the ad account.
 
 Then press Publish. Nothing about the app changes for anyone else: Outlier has
@@ -78,7 +78,7 @@ requesting the Marketing API Access Tier upgrade.
 4. Reading spend back at the ad level.
 
 Recording it is blocked until writes work, which is the circularity: it can be
-filmed on `1.2 <brand> 2`, which is a the company account and already
+filmed on `1.2 Brand A 2`, which is a the company account and already
 MCP-enabled, then submitted for the tier on the main account.
 
 ### Notes for the submission
@@ -91,7 +91,7 @@ MCP-enabled, then submitted for the tier on the main account.
 ## A third door worth knowing about
 
 The Outlier app also carries a **"Create & manage ads with ads MCP server"**
-use case. `1. <brand>` is not yet enabled for the Ads MCP ("gradually being
-rolled out"), but `1.2 <brand> 2` is. If Meta enables the main account, the MCP
+use case. `1. Brand A` is not yet enabled for the Ads MCP ("gradually being
+rolled out"), but `1.2 Brand A 2` is. If Meta enables the main account, the MCP
 writes without any of this — though its creative tool still has no flexible
 format, only single image or static carousel.

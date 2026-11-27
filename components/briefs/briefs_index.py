@@ -6,11 +6,11 @@
     python3 components/briefs/backfill_brief_key.py [--apply] stamp `brief_key` into every run record the index can place
 
     import briefs_index as BI
-    BI.find("acme_nova_brief-0076")  -> the entry, or None (acme_nova-face-brush_brief-0076 finds the same one)
+    BI.find("acme_flex_brief-0076")  -> the entry, or None (acme_flex-face-brush_brief-0076 finds the same one)
     BI.build()                       -> the index dict (what BRIEFS-INDEX.json holds)
     BI.place_runs()                  -> [{station, brand, folder, key, how}] every run folder and the brief it is for
 
-the owner, 2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md, "What's confusing today" 2): one ad has a
+owner, 2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md, "What's confusing today" 2): one ad has a
 different label at each station (`<swipe>-<brand>` at teardown, `<swipe>` at production) and only a
 handful of run folders carry the brief number. The folders are NOT renamed (links and other sessions lean on them);
 instead every run record carries `brief_key` and this one index joins them per brief.
@@ -77,13 +77,13 @@ def rel(p, repo):
 # ------------------------------------------------------------------------------------------------ the register
 
 class Register:
-    """The brief register (tools/image-teardown/briefs.json), read as data: each brief's ONE key — its `key`
+    """The brief register (components/image-teardown/briefs.json), read as data: each brief's ONE key — its `key`
     field, else its catalog form — and every spelling that lands on it."""
 
     def __init__(self, repo=None):
         self.repo = Path(repo or REPO)
         N = names(self.repo)
-        raw = _read(self.repo / "tools" / "image-teardown" / "briefs.json") or {}
+        raw = _read(self.repo / "components" / "image-teardown" / "briefs.json") or {}
         self.rows = {k: r for k, r in (raw.get("briefs") or {}).items() if isinstance(r, dict)}
         want = {}
         for k, r in self.rows.items():
@@ -208,13 +208,13 @@ def _linked(d, repo):
     return out
 
 
-def place_runs(repo=None, reg=None):
+def place_runs(repo=None, reg=None, brand=None):
     """Every run folder with the brief it is for: [{station, brand, folder, key, register, how, records}]; key None
-    (with `why`) when nothing places it."""
+    (with `why`) when nothing places it. `brand` reads that brand's folders only."""
     repo = Path(repo or REPO)
     reg = reg or Register(repo)
     N = names(repo)
-    folders = run_folders(repo)
+    folders = [x for x in run_folders(repo) if brand in (None, x[1])]
     index = {(st, b, f.name): f for st, b, f in folders}
     memo = {}
 
@@ -418,7 +418,7 @@ def build(repo=None):
 def markdown(ix):
     L = ["# Briefs — every station's run, per brief", "",
          f"Built {ix['built']} by `{ix['via']}`. The machine copy is `runs/BRIEFS-INDEX.json` (`find <key>` reads it; "
-         "every spelling of a key, `brand_nova_brief-NNNN` or `brand_<catalog id>_brief-NNNN`, lands on one entry). "
+         "every spelling of a key, `brand_flex_brief-NNNN` or `brand_<catalog id>_brief-NNNN`, lands on one entry). "
          "Each folder is on the Drive at the same path under `Shared Assets/`.", "",
          f"{ix['counts']['briefs']} briefs · {ix['counts']['with_runs']} with run folders · "
          f"{ix['counts']['runs_placed']} run folders placed · {ix['counts']['runs_unplaced']} not placed "
@@ -431,11 +431,11 @@ def markdown(ix):
         L += ["## Runs whose own brief number disagrees with the register", "",
               "`clear` = the register places the run by its label or name AND a hand-off of that brief names the run: "
               "`backfill_brief_key.py --fix-briefs --apply` corrects it (old value kept as `brief_was`). The rest are "
-              "for the owner.", "", "| Run | Says | Register gives that number to | Placed as | Clear |", "|---|---|---|---|---|"]
+              "for owner.", "", "| Run | Says | Register gives that number to | Placed as | Clear |", "|---|---|---|---|---|"]
         for c in ix["collisions"]:
             gives = "<br>".join(f"`{g['key']}` (run {g['run']})" for g in c["register_gives"]) or "nothing"
             L.append(f"| `{c['folder']}` | {c['says']} | {gives} | `{c['placed'] or '—'}` | "
-                     f"{'yes — ' + ', '.join(c['handoffs']) if c['clear'] else 'no: for the owner'} |")
+                     f"{'yes — ' + ', '.join(c['handoffs']) if c['clear'] else 'no: for owner'} |")
         L += [""]
     L += ["## Briefs with work on disk", "", "| Brief key | Title | Runs | Hand-off | Returned | Meta |", "|---|---|---|---|---|---|"]
     for k, e in sorted(ix["briefs"].items(), key=lambda kv: (kv[1]["brand"] or "", kv[0])):

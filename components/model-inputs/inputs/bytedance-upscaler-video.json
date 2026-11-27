@@ -139,7 +139,7 @@
    "use": "maybe",
    "status": "draft",
    "source": [
-    "[ours] tools/video-edit"
+    "[ours] components/video-edit"
    ]
   }
  ],
@@ -177,7 +177,7 @@
    "rule": "Check the result keeps the swipe's grain and the face.",
    "ours": "judge after",
    "status": "draft",
-   "source": "[ours] tools/video-production/VIDEO-RULINGS.md V38"
+   "source": "[ours] components/video-production/VIDEO-RULINGS.md V38"
   }
  ],
  "avoid": [

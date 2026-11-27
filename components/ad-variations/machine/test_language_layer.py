@@ -1,4 +1,4 @@
-"""The variation matrix's customer words come from the language layer (the owner, 2026-10-27: "awareness levels and
+"""The variation matrix's customer words come from the language layer (owner, 2026-10-27: "awareness levels and
 verbatims and spice are the foundation of what we're doing here"): the run's avatar, at the ad's awareness level
 first, hooks + injection + spice — never the raw bank files ranked by likes. A failed or empty query is said.
 Offline; every tree is a temp folder. Read-only on brands/."""

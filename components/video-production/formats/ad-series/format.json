@@ -1,0 +1,109 @@
+{
+ "_readme": "The one home of the ad-series format. formats/sync.py writes its row in bank.json and its playbook copies from this file; edit here, then run python3 formats/sync.py. Registered 2026-11-07 (story-repo install, wave 2); status stays draft, and no run uses it unless the run names ad-series. Instructions: FORMAT.md beside this file. What each run taught: LEARNINGS.md.",
+ "id": "ad-series",
+ "name": "Ad series",
+ "status": "draft",
+ "signed": null,
+ "state": "parked 2026-11-27: three or more ads told as one story; not proven end to end, so out of the owner's view (the live lines are micro-drama and song-ad). Was: new; dry runs only (no production run)",
+ "proven_on": null,
+ "what": "three or more ads that run as one story: each ad is a full ad in its own format, and a ledger carries the card, the product, the cast and the open promises from one ad to the next",
+ "notes": "a layer over other formats, not a scene shape: each ad in the series names its own production format (narrator-montage, single-presenter, ...). Built from short-drama-factory (MIT): continuity ledger, first-three-episodes card, paywall cut points, web-novel adaptation.",
+ "series": {
+  "ads_min": 3,
+  "arc_card": {
+   "_rule": "Ad 1, 2 and 3 each carry one task. Every ad is complete on its own (hook, proof, ask) and is also the next step of the story.",
+   "ads": [
+    {"ad": 1, "task": "the loss and the stance", "must": "within the first ad the viewer knows who to back and what is at stake; the lead takes a clear stance or action", "banned": "background with no conflict; the lead hit with nothing said or done back"},
+    {"ad": 2, "task": "the evidence, replayed", "must": "new information: at least one new proof item or demonstration, the recurring object shown again in close-up; the pressure goes up", "banned": "repeating ad 1's lines; no new information"},
+    {"ad": 3, "task": "the stakes go public", "must": "the clash moves from private to public, money or relationship level; the series' strongest proof and its strongest offer sit here", "banned": "ad 3 still setting up"}
+   ],
+   "shared": [
+    "one or two recurring objects carried through all three ads; the feeling lands on the object, not on a claim",
+    "one doubter voice who asks the hard question for the viewer, while the lead stays calm",
+    "each ad ends on a contrast line or the ask, never on an open question"
+   ],
+   "length_curves": {
+    "descending": "ad 1 longest, each next ad shorter and denser (source sample 86, 72, 58 seconds)",
+    "fluctuating": "set-up ads long, push ads short (82, 115, 69)",
+    "v-shaped": "ad 1 all in, ad 2 short and quick, ad 3 back up (89, 47, 82)",
+    "micro": "ad 1 sets the rules, then short single-point ads (76, 40, 41)"
+   }
+  },
+  "tap": {
+   "_rule": "The pay point of a series is the ask: the tap. Paid traffic moves it forward: every ad carries an ask, and the series' strongest offer sits on ad 3, not later. The offer is what the brand's guarantee file and the run's rulings carry, as written; an offer that is not on file is never added.",
+   "laws": [
+    "build the pressure in the ad before the strongest ask: the doubt said out loud, the cost of doing nothing",
+    "put the ask at the peak: straight after the proof answers the doubt, never after the energy has dropped",
+    "the next ad pays off what the last one promised in its first seconds; no bait and switch"
+   ]
+  },
+  "ledger": {
+   "_rule": "No ledger, no ad. The writer reads the ledger before writing ad N and updates it after. When a script and the ledger disagree, stop and settle which one changes before writing on. The ask is used as filed: ad 1's ask is the brief's own ask line, and every draft for an ad takes the ledger's ask for it word for word, with nothing raised about it. A setup is dated to the ad whose brief first says it.",
+   "kinds": {
+    "carried": {"what": "objects and cards that carry from ad to ad: the before-and-after card, the product, a prop", "fields": ["id", "item", "source", "state", "ads"]},
+    "cast": {"what": "every person and voice: who they are, which ads they appear in, their state", "fields": ["id", "who", "source", "state", "ads", "out_after"], "states": ["in", "out"], "out_after": "required when state is out: the last ad the person appears in"},
+    "setups": {"what": "a promise, question or claim planted in one ad and paid off in a later one", "fields": ["id", "setup", "planted", "due", "status", "paid"], "statuses": ["planted", "paid", "dropped"]},
+    "rules": {"what": "what may be said, each line with its source file; a line used in an ad cites its row", "fields": ["id", "rule", "source", "ads"]},
+    "proof": {"what": "the main proof type of each ad", "fields": ["ad", "type", "item"], "types": ["verdict", "before-after", "demonstration", "press", "guarantee", "customer-line", "scarcity"]}
+   },
+   "checks": {
+    "L1": "a setup still planted once current (the last ad written) is past its due ad is overdue",
+    "L2": "a cast member marked out does not appear in a later ad",
+    "L3": "every carried item, cast member and rule names a source file",
+    "L4": "the same main proof type is not used by two adjacent ads",
+    "L5": "the arc card has ads 1, 2 and 3, each with its task",
+    "L6": "every ad in the arc carries an ask",
+    "L7": "a creator brief named on an arc row (creator_brief) asks that ad's ask, word for word; build.py check holds the draft to the same line",
+    "L8": "a setup whose words the filed brief of an ad already says (the arc row's optional brief_file) is planted no later than that ad"
+   },
+   "hot_window": 3
+  },
+  "adapt": {
+   "_rule": "A long source (a long creator video, a customer story, a podcast, a sales video) becomes a series by its strongest line, never by shortening the whole thing.",
+   "steps": [
+    "extract: the moments table (every turn, proof and reveal in order, function only), the function table (merge people who do the same job), and the one-sentence contract the whole source runs on",
+    "cut: every side thread that does not touch the contract; fold its one needed fact into a line or a prop",
+    "map: one ad holds one pressure and one answer; the strongest moment goes on the ad with the strongest ask",
+    "first version: the first third of the source plus its strongest moments; the rest waits for the next series"
+   ],
+   "red_lines": [
+    "the lead's core want stays as it is in the source",
+    "a source we do not own gives its structure and each line's function, never its words",
+    "our own customers' and creators' filmed words are used as said, cited by row"
+   ]
+  }
+ },
+ "playbook": {
+  "family": "ad-series",
+  "signature": {"audio": null, "speakers": null, "address": null, "settings": null, "product_role": "hero", "pacing": null, "capture": null, "story": "series"},
+  "specialised": [
+   {"what": "workflow", "why": "a series layer: arc card and ledger before any ad is written; each ad then runs its own format's workflow"}
+  ],
+  "stage_order": ["teardown", "writing", "series", "elements", "gates", "voice", "storyboard", "pictures", "clips", "edit"],
+  "stages": {},
+  "failures": [],
+  "cost": {"target_usd_per_ad": null},
+  "quality_bar": [
+   "the ledger passes series_check.py with no L-check failing",
+   "each ad stands alone: hook, proof, ask",
+   "the recurring object is the same real item in every ad"
+  ],
+  "variants": [],
+  "built_from": [],
+  "rulings": [],
+  "workflow": {
+   "what": "The ad-series line. No person stop: the arc card and ledger are decided by the decision layer and filed for the owner to overrule; then each ad runs its own format's workflow, whose one stop is its quote.",
+   "ruled": null,
+   "route_locked": false,
+   "completion": "reviewed-arc-and-ledger",
+   "steps": [
+    {"id": "arc", "name": "Arc card and ledger", "component": "video-production formats/ad-series", "executor": "agent", "gate": null, "does": "Follow components/video-production/formats/ad-series/FORMAT.md, steps Arc and Ledger. Write arc.md and ledger.json in the workflow folder, then run python3 components/video-production/formats/ad-series/series_check.py on ledger.json. Also write runs/video-production/{brand}/workflow-{label}/arc-review.json as {\"files\": {\"repo-relative-output-path\": \"sha256\"}}, covering exactly the listed output files. The decision layer reviews it; nothing waits for the owner.", "prompts": ["components/video-production/formats/ad-series/FORMAT.md"], "evidence": ["runs/video-production/{brand}/workflow-{label}/arc.md", "runs/video-production/{brand}/workflow-{label}/ledger.json", "runs/video-production/{brand}/workflow-{label}/arc-review.json"]},
+    {"id": "arc-review", "name": "Arc card and ledger review", "component": "decision layer · video-teardown decide.py", "executor": "decided", "does": "The decision layer (video-teardown decide.py) passes this exact version from the owner's past calls and files the call in runs/decisions/calls.jsonl for him to agree with or overrule later; the run continues and nothing waits for him. An overruled version goes back to its authoring station.", "review_asset": "runs/video-production/{brand}/workflow-{label}/arc-review.json", "input_files": ["runs/video-production/{brand}/workflow-{label}/arc-review.json"], "review_files": ["runs/video-production/{brand}/workflow-{label}/arc.md", "runs/video-production/{brand}/workflow-{label}/ledger.json"], "overrule": "the owner"},
+    {"id": "learn", "name": "File what the series taught", "component": "video-production formats/ad-series", "executor": "agent", "gate": null, "does": "Follow FORMAT.md, step Learn: each lesson into learned.md in the workflow folder with its one home from the routing table in LEARNINGS.md; filed through the decision layer; nothing changes in a home in the run, only after the owner agrees with the filed call.", "prompts": ["components/video-production/formats/ad-series/FORMAT.md", "components/video-production/formats/ad-series/LEARNINGS.md"], "evidence": ["runs/video-production/{brand}/workflow-{label}/learned.md"]}
+   ]
+  }
+ },
+ "sources": [
+  {"repo": "https://github.com/lixiaoxiao9888-create/short-drama-factory", "commit": "33d9988", "license": "MIT", "files": ["references/continuity-ledger.md", "templates/ledger.md", "references/first-three-eps-beat-card.md", "references/hongguo-beat-sheet.md", "references/genre-map.md", "references/webnovel-adaptation.md"]}
+ ]
+}

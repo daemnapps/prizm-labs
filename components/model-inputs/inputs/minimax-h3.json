@@ -1,0 +1,56 @@
+{
+ "_readme": [
+  "MiniMax H3 on Higgsfield: under test for 3D-animated (family-3d) swipes, owner 12 Nov 2026 (\"with these cartoon videos we should test a new video model\"). Not the house default; Seedance 2.5 stays the default until a curator rules.",
+  "SOURCES ARE FLAGGED. Parameters and constraints read live from the Higgsfield CLI (`higgsfield model get minimax_h3`, `generate cost`, 2026-11-12). No official prompt guide read yet.",
+  "THE FACTS THAT SHAPE THE DOOR: start_image (and end_image) cannot be mixed with reference media, so a take is image-to-video from the approved start picture, or reference mode without a start picture. Audio references need an image or video reference. Output is 2K only; duration 4-15 s.",
+  "No brand, product, person or format word appears in this file."
+ ],
+ "model": "minimax-h3",
+ "label": "MiniMax H3 (under test)",
+ "registry_id": "minimax-h3",
+ "read": "2026-11-12",
+ "status": "draft",
+ "vendor_ids": {
+  "higgsfield_model_id": "minimax_h3",
+  "higgsfield_cli": "higgsfield generate create minimax_h3 --prompt … --start-image <file> --duration N --aspect_ratio 9:16 (the plan's credits, signed-in account)"
+ },
+ "sources": [
+  "[vendor, live] Higgsfield CLI `higgsfield model get minimax_h3` and `generate cost minimax_h3`, read 2026-11-12",
+  "[vendor, live] Higgsfield models_explore get minimax_h3, read 2026-11-12"
+ ],
+ "limits": {
+  "duration_seconds": [
+   4,
+   15
+  ],
+  "resolutions": [
+   "2K"
+  ],
+  "aspect_ratios": [
+   "auto",
+   "21:9",
+   "16:9",
+   "4:3",
+   "1:1",
+   "3:4",
+   "9:16"
+  ],
+  "start_and_references": "start_image / end_image cannot be combined with image, video or audio references",
+  "audio_references_need": "at least one image or video reference",
+  "batch_size": [
+   1,
+   4
+  ],
+  "credits": {
+   "6s_2K": 12,
+   "per_second_2K_estimate": 2
+  }
+ },
+ "inputs": {
+  "start_image": "the approved start picture (image-to-video mode)",
+  "end_image": "optional, only with start_image",
+  "prompt": "the take's words: staging, beats, camera; voice-over lines are said as heard-not-spoken (take.py beat_words)",
+  "duration": "whole seconds 4-15",
+  "aspect_ratio": "9:16"
+ }
+}

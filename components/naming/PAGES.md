@@ -1,3 +1,45 @@
+# Pages — page, page brief, page version (2026-11-14)
+
+Ruled by the owner 2026-11-14 ("ok this make sense to roll on"); plan and revisions in `page-naming-owner.md`.
+Everything below the line is the 2026-09-11 convention, kept as history where this section changes it.
+
+| | What | Home |
+|---|---|---|
+| **Funnel** | the whole page sequence to purchase: landing → cart → checkout → post-purchase | the brand's funnel list (`page_ids` per funnel); the store is a place too |
+| **Page** | one step in a sequence; a standing asset ads send traffic to, maintained and tested against | `pages.json`, through `page_list.py` |
+| **Page brief** | the work order: `new-page`, `new-control` or `variant` — numbered at the START of the run | the master brief register, type `page`; never carries a landing page |
+| **Page version** | one build: `v1, v2, v3 …`, never reused; exactly one holds the control mark | inside the page's entry |
+
+**The page ID** `<brand>_<place>_<page>` — place = a funnel id, `store`, or a place recorded in `pages.json`;
+page = read off the address (the place's root is `home`; a store page is `<kind>-<handle>`: `product-war`,
+`page-method-quiz`, `collection-…`, `article-…`). Lowercase, `-` inside a value, `_` between values. Never
+coined, reused or re-pointed; ID and address never change.
+
+**Three lengths, like ads.** Long (run folders, builds): `<ID>_v<N>` (run folder `<place>_<page>_v<N>`). ID.
+In Meta: `<place>-<page>` only — frozen in the page's `meta` for every page a live ad already names. No version
+ever appears in an ad name: a test runs on the page, so ads never change when a test starts.
+
+**Steps.** landing (advertorial · salespage · presell · prelander · listicle · quiz · portal · offer · product ·
+collection · page · article · home) → cart → checkout → post-purchase (upsell · downsell · receipt).
+
+**Tests** (words set by the owner, the scientific method): one page, one test at a time; `hypothesis` written first;
+`control` (the version running today) vs `variant` (the one new version); `group` = which one a visitor got;
+`primary_metric` checkout_reached, `confirm_metric` purchase; `stop` set before it starts; `gate` = compliance
+pass + the owner's dated approval; `result` variant wins · control holds · no difference — `variant wins` moves
+the control mark. A design test keeps one offer in both groups; an offer test changes only the offer. Field names
+are the funnel repos' `pv-tests.json` names; their `status` is `state` here (builder card rule 5).
+
+**Addresses.** New pre-sell: `format-angle[-sub]` (the avatar lives in the page list, not the address); money pages
+plain; a new store page uses the same rule as its handle; product pages keep the store handle. A variant build sits
+under its page (`/quiz/v7/`) and ads never point there. Live addresses are never renamed. Ad links = the page
+address + today's tracking tags (creator links keep `trybe=`).
+
+**The daily check** `page_list.py check --brand <brand>`: every address the brand serves (funnel lists, catalog,
+store sitemap) that answers and has no page ID is flagged; every page listed live that stops answering is flagged.
+Writes `runs/naming/<brand>/page-check/<date>/`.
+
+---
+
 # Page naming — the key that ties a page back to the avatar
 
 Extends the ad convention (`components/naming/CONVENTION.md`) to funnel pages.
@@ -28,7 +70,7 @@ listicle-fedupking-neckbumps
 | `concept` | the angle, not the headline — a claim family reused across pages | `neckbumps` · `baldnape` · `triedeverything` · `fortyyears` |
 | `variant` | only when two pages test the same three fields | `v2`, `b` |
 
-Funnel pages that are not pre-sells keep their plain names — `nova`,
+Funnel pages that are not pre-sells keep their plain names — `flex`,
 `checkout`, `receipt`, `oto-*`. There is one of each; a key buys nothing.
 
 ## The folder is the format
@@ -86,8 +128,8 @@ page_format: listicle
 page_avatar: fed-up-king
 page_subs:   [barbershop-regular, bald-bumps-guy, ingrown-fighter]
 page_concept: neckbumps
-page_swipe:  swipe:competitor-c:pages-acne
-page_next:   nova          # where it hands off — never checkout
+page_swipe:  swipe:Brand D:pages-acne
+page_next:   flex          # where it hands off — never checkout
 ```
 
 `page_swipe` uses the same `swipe:<brand>:<id>` reference the ad convention

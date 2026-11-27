@@ -1,0 +1,12 @@
+{
+  "kind": "email-campaign-workflow",
+  "title": "Email-campaign workflow — assembly",
+  "note": "The workflow CONSTRUCTED from the card inventory (the developer's reframing, 2026-08-19: the SE deck is a comprehensive task list from various inputs, not yet the workflow to design around). Each save appends one full snapshot of a reviewer's assembled flow: ordered card entries with now/later development scope, reviewer-drafted additions (DN-*) embedded whole, and the archived list. Latest snapshot per reviewer wins; convergence across reviewers is a human discussion, never a merge. The accepted assembly becomes the development baseline that feeds a pipeline view.",
+  "items": [
+    {
+      "id": "assembly",
+      "label": "Workflow assembly snapshot",
+      "content": "Snapshot verdict shape: { schema: 1, entries: [{id, scope: 'now'|'later'}] in workflow order, additions: {DN-1: {title, story, done_when, today_process, today_done_by, proposal_process, proposal_done_by}}, archived: [ids], note? }"
+    }
+  ]
+}

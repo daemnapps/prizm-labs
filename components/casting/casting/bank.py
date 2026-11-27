@@ -27,6 +27,7 @@ import json
 import re
 from pathlib import Path
 
+from . import new_only
 from . import paths as P
 
 # Words that say nothing about a role. "man" and "woman" are here on purpose:
@@ -255,6 +256,7 @@ def who_plays(brand_name, role, start=None, banked=None):
       bank: {...}, problems}`
     """
     data = banked if banked is not None else read(brand_name, start)
+    data = dict(data, people=new_only.keep(brand_name, data.get("people") or []))
     want = words(role)
     if not want:
         return {"brand": brand_name, "role": role, "covered": False, "person": None,
@@ -310,7 +312,7 @@ def _summary(data):
             "sources": data["sources"], "open": len(data["open"])}
 
 
-# THE OTHER END OF THE SPECTRUM (the owner, 2026-09-22). Casting answers "who plays
+# THE OTHER END OF THE SPECTRUM (owner, 2026-09-22). Casting answers "who plays
 # this role?"; this answers the reverse — "who do we have for THIS avatar?" The
 # link is one field, `lane`, on the cast row: the core avatar this person
 # serves. It points from the cast to the avatar and never the other way, so the

@@ -1,0 +1,12 @@
+{
+  "kind": "wf-consumer-plane-cards",
+  "title": "consumer-plane — inventory review",
+  "note": "Cards drafted by the lead 2026-08-25 from INB-40 (ruled 08-24, dispatch approved 08-25; not a studio run). Three ai-dev cards, strictly sequenced: CP-1 the shell behind an inert flag, CP-2 server-side module grants, CP-3 the promotion registry re-keyed to tool ids.",
+  "open_items": true,
+  "items_file": "new-workflow-design/builds/consumer-plane/task-cards.md",
+  "format": "md-sections",
+  "verdict_fields": [
+    { "key": "approve", "type": "boolean", "label": "Approve card as-is" },
+    { "key": "feedback", "type": "text", "label": "What to change (required unless approved)" }
+  ]
+}

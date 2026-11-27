@@ -12,7 +12,7 @@ fail the test if anything starts a process; no network. The real ~/.daemn,
 read.
 
   (a) loader    — mu_keys loads components/keys/loader.py by path as
-                  company_keys_loader, never on sys.path, only at call time.
+                  upright_keys_loader, never on sys.path, only at call time.
   (b) surface   — token() keeps its name, signature and default; a brand's
                   token_key is the name asked; Meta(brand, tok=) never asks.
   (c) order     — env beats the Keychain helper; the helper is found, stripped,
@@ -52,7 +52,7 @@ DEFAULT = "PRIZM_META_TOKEN"
 BRAND_KEY = "FAKE_SI194_MU_BRAND_TOKEN"
 HELPER = "daemn_keys"
 MARKER = ".workflow-worker.env"
-LOADER = "company_keys_loader"
+LOADER = "upright_keys_loader"
 HINT = "system-user token from Business Settings"
 
 _CRED = ("_KEY", "_TOKEN", "_SECRET", "_KEY_ID", "_KEY_SECRET", "_DB_URL")
@@ -252,7 +252,7 @@ class Mini(Case):
             msg = self.token_exit()
         self.assertNotIn(HELPER, sys.modules, "the Keychain helper was imported")
         self.assertIn(DEFAULT, msg)
-        self.assertIn("skipped (managed file", msg)
+        self.assertIn("old locations skipped", msg)
         self.assertIn(HINT, msg)
         self.assertNotIn("fake-", msg)
         self.assertNotIn("fake-", self.printed)

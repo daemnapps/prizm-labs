@@ -1,0 +1,12 @@
+<!-- Review cards: a two-line centred headline, the second line on a solid box, then four white starred quote cards in two columns either side of the product column. Sizes are at full scale; the fit step shrinks them together. -->
+<style>.rc{position:absolute;background:#fff;border-radius:calc(var(--s)*26px);box-shadow:0 4px 18px rgba(60,40,30,.13);padding:22px 20px;color:{{ink}};width:27%;text-align:center;line-height:1.26;font:400 31px/1.26 Sans}
+.rc b{display:block;font:400 34px/1 Sans;color:{{ground}};letter-spacing:5px;margin-bottom:12px}.rc i{display:block;font:400 25px/1.2 Sans;margin-top:12px;opacity:.8}</style>
+<div class="area" data-fit style="justify-content:flex-start;gap:calc(var(--s)*14px);color:{{ink}}">
+ <div class="line" style="font:400 calc(var(--s)*92px)/1.1 Display">{{head}}</div>
+ <div class="line" style="font:400 calc(var(--s)*86px)/1.15 Display;background:{{ground}};color:#fff;padding:calc(var(--s)*8px) calc(var(--s)*26px);border-radius:8px">{{box}}</div>
+</div>
+<div class="rc" style="left:5%;top:29%"><b>★★★★★</b>{{card1}}</div>
+<div class="rc" style="left:5%;top:49%"><b>★★★★★</b>{{card2}}</div>
+<div class="rc" style="right:5%;top:30%"><b>★★★★★</b>{{card3}} {{name3}}</div>
+<div class="rc" style="right:5%;top:50%"><b>★★★★★</b>{{card4}}</div>
+<script>document.querySelectorAll('.rc').forEach(c=>{const b=c.querySelector('b'),t=c.textContent.replace(b.textContent,'').replace(/"/g,'').trim(),m=t.match(/^(.*[.!?])\s+(\S.*)$/);c.innerHTML='';c.append(b);c.append(m?m[1]:t);if(m){const i=document.createElement('i');i.textContent=m[2];c.append(i)}})</script>

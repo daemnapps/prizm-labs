@@ -1,0 +1,20 @@
+{
+ "kind": "wf-system-path-cards",
+ "title": "system-path — the fit → ready → review framework, and its home",
+ "note": "Deck opened by the lead 2026-09-21. The build produced live work — three system-* skills, six review runs, the strategy page — with no deck and no registry row; both were added in the same commit as the deck. SI-1 creates components/system-integration as a real component; SI-2 (rewriting the skills as pointers) is deliberately NOT filed until the skills stop changing daily.",
+ "open_items": true,
+ "items_file": "new-workflow-design/builds/system-path/task-cards.md",
+ "format": "md-sections",
+ "verdict_fields": [
+  {
+   "key": "approve",
+   "type": "boolean",
+   "label": "Approve card as-is"
+  },
+  {
+   "key": "feedback",
+   "type": "text",
+   "label": "What to change (required unless approved)"
+  }
+ ]
+}

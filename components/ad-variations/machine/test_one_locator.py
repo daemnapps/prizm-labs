@@ -48,7 +48,7 @@ class TempClone(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name).resolve() / "clone"
         real = paths.repo(HERE)
-        for p in (real, Path.home() / "Projects" / "workspace"):
+        for p in (real, Path.home() / "Projects" / "ai-workspace"):
             self.assertNotIn(p, [self.root, *self.root.parents])
         bp = self.root / "components" / "brandpath"
         bp.mkdir(parents=True)

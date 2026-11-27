@@ -1,0 +1,16 @@
+{
+ "kind": "drive-move",
+ "title": "Drive moves",
+ "note": "One record per Drive move, written by components/gdrive-creator/gdrive_creator/move.py, LD-89 (tracked Drive moves): which file (its Drive id, kept by the move, and its name), the \"Shared Assets/…\" folder it left and the one it went to, who moved it, why, and when. Item = the file's Drive id; reviewer = the person the move was made for or by. Read it to answer \"where did my X go\"; one record per move, never an edit of an earlier one. A move only changes the file's parent: nothing is copied, deleted, trashed or renamed.",
+ "open_items": true,
+ "items": [],
+ "verdict_fields": [
+  { "key": "drive_id", "type": "text", "label": "Drive id (kept by the move)" },
+  { "key": "name", "type": "text", "label": "File name" },
+  { "key": "from", "type": "text", "label": "From (Shared Assets/…)" },
+  { "key": "to", "type": "text", "label": "To (Shared Assets/…)" },
+  { "key": "by", "type": "text", "label": "By" },
+  { "key": "why", "type": "text", "label": "Why" },
+  { "key": "at", "type": "text", "label": "At (UTC)" }
+ ]
+}

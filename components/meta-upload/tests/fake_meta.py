@@ -62,6 +62,12 @@ class FakeMeta:
         self.posts.append(("advideos", {"name": name}))
         return "vid-" + str(next(_ids))
 
+    def statuses(self, ids):
+        """One batch status read (media_library checks a reused video this way). `gone` = ids Meta no longer has."""
+        self.gets.append(("batch-status", {"ids": list(ids)}))
+        return {v: ({"error": {"code": 100}} if v in getattr(self, "gone", ()) else
+                    {"id": v, "status": {"video_status": "ready"}}) for v in ids}
+
     def wait_videos(self, ids, names=None, wait=900):
         self.get("", ids=",".join(ids), fields="status")
 

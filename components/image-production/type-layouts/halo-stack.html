@@ -1,0 +1,12 @@
+<!-- Halo stack: a centred stack above the product (wordmark, headline, subhead) and a proof line with a button below it, the middle band kept clear. Sizes are at full scale; the fit step shrinks them together. -->
+<div class="area" data-fit style="justify-content:space-between;color:{{ink}}">
+ <div style="display:flex;flex-direction:column;align-items:center;gap:calc(var(--s)*16px)">
+  <div class="line" style="font:500 calc(var(--s)*44px)/1 Sans;letter-spacing:.02em">{{logo}}</div>
+  <div style="font:800 calc(var(--s)*78px)/1.06 Display;text-transform:uppercase;text-shadow:0 0 22px #fff">{{head}}</div>
+  <div style="font:500 calc(var(--s)*40px)/1.18 Sans;max-width:80%">{{sub}}</div>
+ </div>
+ <div style="display:flex;flex-direction:column;align-items:center;gap:calc(var(--s)*20px)">
+  <div style="font:600 calc(var(--s)*36px)/1.2 Sans;color:#fff;text-shadow:0 1px 3px #000,0 0 16px #000;max-width:88%">{{note}}</div>
+  <div class="line" style="background:{{ground}};color:#fff;font:700 calc(var(--s)*38px)/1 Sans;letter-spacing:.03em;padding:calc(var(--s)*26px) calc(var(--s)*52px);border-radius:calc(var(--s)*18px)">{{cta}}</div>
+ </div>
+</div>

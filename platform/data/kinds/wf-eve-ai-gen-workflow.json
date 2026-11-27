@@ -1,0 +1,12 @@
+{
+  "kind": "wf-the editor-ai-gen-workflow",
+  "title": "the editor-ai-gen — workflow assembly",
+  "note": "Assembly snapshots for the the editor-ai-gen build (same convention as email-campaign-workflow: entries+scope+additions+archived, latest per reviewer wins).",
+  "items": [
+    {
+      "id": "assembly",
+      "label": "Workflow assembly snapshot",
+      "content": "See email-campaign-workflow.json for the snapshot verdict shape."
+    }
+  ]
+}

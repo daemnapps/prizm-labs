@@ -14,7 +14,7 @@ register, the wardrobe category, so a generated shot cuts against filmed
 footage without a visible change of world. **What must never carry is the
 person.** Baseline, not likeness.
 
-Lifted verbatim in form from `lab/owner/avatar-builder/build.py`
+Lifted verbatim in form from `lab/the owner/avatar-builder/build.py`
 (`master_prompt`), which is the course's own form, proven on the run that
 closed a brand's male-authority gap on 2026-09-14. The slots are this
 component's; the sentences are not new.

@@ -82,7 +82,7 @@ class Station(unittest.TestCase):
         from contextlib import redirect_stdout
         with tempfile.TemporaryDirectory() as t:
             t = Path(t)
-            old = t / "drive" / "tools" / "video-teardown" / "runs" / "swipes" / "lab-1"
+            old = t / "drive" / "components" / "video-teardown" / "runs" / "swipes" / "lab-1"
             old.mkdir(parents=True)
             (old / "run.json").write_text("{}")
             reach = FakeReach(t / "drive")
@@ -90,7 +90,7 @@ class Station(unittest.TestCase):
             with redirect_stdout(out):
                 got = station.pull("video-teardown", "brand-a", "lab-1", t / "back", reach=reach)
             self.assertTrue((got / "run.json").is_file())
-            self.assertIn("pulled from Shared Assets/tools/video-teardown/runs/swipes/lab-1, modified", out.getvalue())
+            self.assertIn("pulled from Shared Assets/components/video-teardown/runs/swipes/lab-1, modified", out.getvalue())
             self.assertIsNone(station.pull("video-writing", "brand-a", "lab-1", t / "w", reach=reach))
 
     # LD-53 (station-path runner), widened: working folder → repo copy → Shared Assets media → old mirror.

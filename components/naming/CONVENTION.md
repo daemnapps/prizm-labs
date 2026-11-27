@@ -10,12 +10,12 @@ refused ("say which"), never guessed.
 
 **The product token is the catalog id — one product, one name.** A product is named by its full catalog id everywhere — the name
 its kit folder (`runs/ai-elements/<brand>/products/<id>/`), its Drive folder and the hand-offs already
-use: `nova-face-brush`, `crush-bump-eliminator`, `core-supplement`, `war-face-wash`, `prime-face-quench`,
-`miro-face-towel`, `nova-charging-case`; a bundle is its Drive id (`vitals-set`, `king-set`). The short
-store handles (`nova`, `crush`, `core`, `war`, `prime`, `miro`, `the-starter-set`, `the-bundle-set`)
+use: `flex-face-brush`, `crush-bump-eliminator`, `core-supplement`, `war-face-wash`, `prime-face-quench`,
+`miro-face-towel`, `flex-charging-case`; a bundle is its Drive id (`vitals-set`, `king-set`). The short
+store handles (`flex`, `crush`, `core`, `war`, `prime`, `miro`, `the-vitals-set`, `the-king-skin-set`)
 are **aliases**: every lookup resolves through `names.product_id(brand, any_name)` (the reverse is
 `names.product_aliases`), built from each kit's `kit.json` `aliases`, the brand's Drive index and
-`product-aliases.json` here. So `<brand>_nova_brief-0076` and `<brand>_nova-face-brush_brief-0076` are
+`product-aliases.json` here. So `<brand>_flex_brief-0076` and `<brand>_flex-face-brush_brief-0076` are
 the same brief. New brief keys are minted with the catalog id; every register entry carries
 `product_id`. Nothing already made or live is renamed — old keys, Meta cards and live ad names keep the
 handle and still resolve.
@@ -27,11 +27,11 @@ handle and still resolve.
 | **Meta ad** | `brand_product_brief_batch_funnel` — **one per batch, no asset** | the upload tool at launch (`names.short_meta`) |
 
 ```
-folder    brand_b_brilliance-body-scrub_brief-0136_batch-2026-09-27-a
-file      brand_b_brilliance-body-scrub_brief-0136_batch-2026-09-27-a_asset-01.mp4
-meta ad   brand_b_brilliance-body-scrub_brief-0136_batch-2026-09-27-a_body-scrub-cpk
-ad set    adset_brand_b_spot-hider_pigment-memory          (avatar + angle, from the brief)
-campaign  campaign_brand_b_us_brilliance-body-scrub_body-scrub-cpk_purchase_cbo
+folder    Brand B_brilliance-body-scrub_brief-0136_batch-2026-09-27-a
+file      Brand B_brilliance-body-scrub_brief-0136_batch-2026-09-27-a_asset-01.mp4
+meta ad   Brand B_brilliance-body-scrub_brief-0136_batch-2026-09-27-a_body-scrub-cpk
+ad set    adset_Brand B_spot-hider_pigment-memory          (avatar + angle, from the brief)
+campaign  campaign_Brand B_us_brilliance-body-scrub_body-scrub-cpk_purchase_cbo
 ```
 
 - The file carries no funnel because one file can launch to several pages.
@@ -41,7 +41,7 @@ campaign  campaign_brand_b_us_brilliance-body-scrub_body-scrub-cpk_purchase_cbo
   A report joins on the brief number.
 
 **The number is given when the brief is written (the owner, 2026-10-09).** An AI-route video brief gets
-its brief-NNNN from the register (`tools/image-teardown/tools/briefs.py open … --type video-ai`)
+its brief-NNNN from the register (`components/image-teardown/tools/briefs.py open … --type video-ai`)
 the moment the teardown machine files it (`video-teardown/machine/file_run.py number_brief`); the run.json
 of the teardown, the writing shelf and every production run made from it carry `brief`, and
 `video-edit/deliver.py` names the delivery from that same field. One number, idea to Meta.
@@ -72,12 +72,12 @@ feedback loop.
 ## Three levels in the account
 
 ```
-CAMPAIGN   US | NOVA™ | ICON
+CAMPAIGN   US | FLEX™ | ICON
 AD SET       Fed-Up King | 260911 | 1 of 3
 AD             <the ad name, below>
 ```
 
-This follows what the ad account already runs (`US | NOVA™`, and message
+This follows what the ad account already runs (`US | FLEX™`, and message
 themes like `Problem Solution` at the ad set) rather than a new scheme. The
 **campaign** says which market, which product, which funnel. It persists for
 months, so nothing dated and nothing about a batch goes in it — it has to stay
@@ -88,6 +88,15 @@ forced a split. The date is what keeps a theme usable forever — three of the
 account's themes are already past 50 ads and cannot take another. Both are written by `components/meta-upload/naming.py`, and
 `components/meta-upload/STRUCTURE.md` carries the account's limits and why the
 ad set is a drop rather than a sub-avatar.
+
+## What the short name does not carry: concept and opening (2026-11-18)
+
+The name is not lengthened to hold them. The concept a brief names, and which opening each asset of a flexible
+video ad carries, are kept on the brief's record and looked up by the brief id the name already holds
+(`concept.py`): `concept` and `concept_from` are read off the brief once, when it is registered; `openings` is
+written under the ad's name when the ad is filed, one row per asset (`asset-01` is the control, each later asset
+its own opening). The card carries the same two fields (`components/meta-upload/CARD.md`). A name still never
+invents a field, and a concept is changed on the brief, never in the name.
 
 ## Two levels below that, because that is how the ads are built
 
@@ -106,9 +115,9 @@ So the asset id sits one level below the ad name:
 
 ```
 AD UNIT (this is what goes in Meta's Ad name field)
-brand_b_brilliance-body-scrub_static_ai_none_spot-hider_dark-spots_pigment-memory_turmeric-reset_photostrip_brief-0136_9x16_batch-2026-09-02-a
+Brand B_brilliance-body-scrub_static_ai_none_spot-hider_dark-spots_pigment-memory_turmeric-reset_photostrip_brief-0136_9x16_batch-2026-09-02-a
 
- brand    <brand>                 problem  dark-spots           brief  brief-0136
+ brand    Brand B                 problem  dark-spots           brief  brief-0136
  product  brilliance-body-scrub   angle    pigment-memory       ratio  9x16
  media    static                  concept  turmeric-reset       batch  batch-2026-09-02-a
  source   ai                      format   photostrip
@@ -116,7 +125,7 @@ brand_b_brilliance-body-scrub_static_ai_none_spot-hider_dark-spots_pigment-memor
  avatar   spot-hider
 
 ASSET (this is the filename — the ad name plus one field)
-brand_b_brilliance-body-scrub_static_ai_none_spot-hider_dark-spots_pigment-memory_turmeric-reset_photostrip_brief-0136_9x16_batch-2026-09-02-a_asset-01.png
+Brand B_brilliance-body-scrub_static_ai_none_spot-hider_dark-spots_pigment-memory_turmeric-reset_photostrip_brief-0136_9x16_batch-2026-09-02-a_asset-01.png
  the last field, asset-01, is the asset
 ```
 
@@ -130,8 +139,8 @@ the whole mechanism — no lookup table, no id to keep in sync.
 
 | Field | What it is | Examples |
 |---|---|---|
-| `brand` | the brand | `<brand>`, `<brand>` |
-| `product` | the product it sells — its catalog id; a store handle is an alias (`names.product_id`) | `brilliance-body-scrub`, `nova-face-brush` |
+| `brand` | the brand | `Brand B`, `Brand A` |
+| `product` | the product it sells — its catalog id; a store handle is an alias (`names.product_id`) | `brilliance-body-scrub`, `flex-face-brush` |
 | `media` | **static, video or carousel** — the first thing anyone slices a report by, and recoverable from no other field | `static`, `video`, `carousel` |
 | `source` | who made the picture — `ai`, `ugc`, `studio` or `mixed` | `ai`, `ugc` |
 | `talent` | who is in it — a trained AI identity, a real creator, or `none` when no person appears | `susan`, `andrea`, `none` |

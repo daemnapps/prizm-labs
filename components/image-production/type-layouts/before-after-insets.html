@@ -1,0 +1,7 @@
+<!-- Before and after insets: small lowercase labels at the foot of two picture insets, a capitals hook and a lowercase bracket line on the chest, all white with a hard black shadow, tight tracking on the hook. `left_label`, `right_label` and `label_top` come from `fixed`; keep_lines on `head`. Sizes are at full scale; the fit step shrinks the hook and the bracket line together. -->
+<div style="position:fixed;left:13.4%;width:34.6%;top:{{label_top}}%;text-align:center;font:500 42px/1 'Helvetica Neue',-apple-system,Sans;color:#fff;text-shadow:2px 2px 2px #000">{{left_label}}</div>
+<div style="position:fixed;left:59%;width:33.5%;top:{{label_top}}%;text-align:center;font:500 42px/1 'Helvetica Neue',-apple-system,Sans;color:#fff;text-shadow:2px 2px 2px #000">{{right_label}}</div>
+<div class="area" data-fit style="justify-content:flex-start;gap:calc(var(--s)*14px);color:#fff;text-shadow:calc(var(--s)*3px) calc(var(--s)*3px) calc(var(--s)*2px) #000">
+ <div class="line" style="font:500 calc(var(--s)*64px)/1.12 'Helvetica Neue',-apple-system,Sans;letter-spacing:-.01em">{{head}}</div>
+ <div class="line" style="font:400 calc(var(--s)*42px)/1.2 'Helvetica Neue',-apple-system,Sans">{{note}}</div>
+</div>

@@ -18,8 +18,8 @@
   "https://elevenlabs.io/docs/best-practices/prompting",
   "https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-do-audio-tags-work-with-eleven-v3-alpha",
   "https://elevenlabs.io/docs/overview/capabilities/text-to-dialogue",
-  "[ours] tools/video-production/VOICE-CHAIN.md",
-  "[ours] tools/video-production/VIDEO-RULINGS.md V4"
+  "[ours] components/video-production/VOICE-CHAIN.md",
+  "[ours] components/video-production/VIDEO-RULINGS.md V4"
  ],
  "limits": {
   "max_prompt_chars": 5000,
@@ -58,7 +58,7 @@
    "status": "draft",
    "source": [
     "https://elevenlabs.io/docs/best-practices/prompting",
-    "[ours] tools/video-production/VOICE-CHAIN.md"
+    "[ours] components/video-production/VOICE-CHAIN.md"
    ]
   },
   {
@@ -167,7 +167,7 @@
    "rule": "Each line is its own read with that shot's delivery as a tag; never one long take for the whole piece.",
    "ours": "voice chain",
    "status": "draft",
-   "source": "[ours] tools/video-production/VOICE-CHAIN.md"
+   "source": "[ours] components/video-production/VOICE-CHAIN.md"
   },
   {
    "id": "voice-first",
@@ -216,7 +216,7 @@
    "rule": "Write brand words and figures the way they are spoken; the text is the only lever.",
    "ours": "lexicon.for_model, spoken-rules.json",
    "status": "draft",
-   "source": "[ours] tools/video-production/SONG-CHAIN.md"
+   "source": "[ours] components/video-production/SONG-CHAIN.md"
   }
  ],
  "avoid": [
@@ -242,7 +242,7 @@
    "id": "one-long-take",
    "text": "One long take for the whole piece.",
    "status": "draft",
-   "source": "[ours] tools/video-production/VOICE-CHAIN.md"
+   "source": "[ours] components/video-production/VOICE-CHAIN.md"
   },
   {
    "id": "tiny-prompt",
