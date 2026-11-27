@@ -322,6 +322,18 @@ def _final_text(d):
     return ""
 
 
+def _meter(d):
+    """What the run cost, as Claude reports it at the end (list price), its tokens and its length."""
+    for ev in reversed(_events(d)):
+        if ev.get("type") == "result":
+            u = ev.get("usage") or {}
+            return {"cost_usd": ev.get("total_cost_usd"), "minutes": round((ev.get("duration_ms") or 0) / 60000, 1),
+                    "tokens_in": (u.get("input_tokens") or 0) + (u.get("cache_creation_input_tokens") or 0)
+                    + (u.get("cache_read_input_tokens") or 0), "tokens_out": u.get("output_tokens") or 0,
+                    "models": sorted((ev.get("modelUsage") or {}).keys()), "turns": ev.get("num_turns")}
+    return None
+
+
 def _finish(rec, code):
     d = WS / rec["dir"]
     raw = (d / "run.log").read_text(errors="replace") if (d / "run.log").is_file() else ""
@@ -331,8 +343,40 @@ def _finish(rec, code):
     ok = code == 0 and (d / "result.md").is_file()
     rec.update(state="done" if ok else "failed", finished=now(), why=None if ok else (log.strip()[-400:] or "no output"))
     rec.pop("pid", None)
+    m = _meter(d)
+    if m:
+        rec["usage"] = m
+    b = re.search(r"brief[\s-]*(\d{4})", rec.get("input") or "", re.I)
+    if b:
+        rec["brief"] = b.group(1)
     _write(d / "ask.json", rec)
     return rec
+
+
+def usage(brand):
+    """Every job's cost for a brand, by month, by kind of job and by brief: the meter the bill is made from."""
+    rows = []
+    for f in (root() / brand).glob("*/ask.json") if SAFE.match(brand or "") else []:
+        r = _read(f) or {}
+        u = r.get("usage") or {}
+        if u.get("cost_usd") is None:
+            continue
+        rows.append({"id": r.get("id"), "kind": r.get("kind"), "name": r.get("name"), "brief": r.get("brief"),
+                     "month": (r.get("asked") or "")[:7], "cost": u["cost_usd"], "minutes": u.get("minutes"),
+                     "tokens": (u.get("tokens_in") or 0) + (u.get("tokens_out") or 0), "state": r.get("state")})
+    def roll(key):
+        out = {}
+        for x in rows:
+            k = x.get(key) or "—"
+            o = out.setdefault(k, {"key": k, "jobs": 0, "cost": 0.0, "minutes": 0.0})
+            o["jobs"] += 1
+            o["cost"] = round(o["cost"] + x["cost"], 4)
+            o["minutes"] = round(o["minutes"] + (x["minutes"] or 0), 1)
+        return sorted(out.values(), key=lambda o: -o["cost"])
+    rows.sort(key=lambda x: x["id"] or "", reverse=True)
+    return {"total": round(sum(x["cost"] for x in rows), 4), "jobs": len(rows), "by_month": roll("month"),
+            "by_kind": roll("kind"), "by_brief": roll("brief"), "rows": rows[:100],
+            "basis": "Claude's own report of each job at list price; Higgsfield and data-tool credits are kept with their runs"}
 
 
 def run_one(rec, runner=None):

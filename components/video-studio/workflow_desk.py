@@ -1169,6 +1169,9 @@ def handle(h, method, parts, query, body):
                 import studio_asks as SA
                 SA.start_worker()                               # a restarted Studio picks up asks still open
                 return h.send(200, {"asks": SA.listing(q.get("brand") if SAFE.match(q.get("brand", "")) else None)})
+            if api == ["usage"] and SAFE.match(q.get("brand", "")):
+                import studio_asks as SA
+                return h.send(200, SA.usage(q["brand"]))
             if len(api) == 3 and api[0] == "ask":
                 import studio_asks as SA
                 a = SA.one(api[1], api[2])

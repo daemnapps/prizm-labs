@@ -61,6 +61,19 @@ class Asks(unittest.TestCase):
         self.assertEqual(out["state"], "done")
         self.assertEqual(SA.one("acme", r["id"])["result"], "Found it.\n")
 
+    def test_usage_is_metered_per_brand_kind_and_brief(self):
+        r = SA.create("variations", "acme", "brief 0042 · acme_ad")
+        def fake(cmd, d):
+            (Path(d) / "result.md").write_text("Planned.\n")
+            (Path(d) / "run.log").write_text("")
+            return 0, json.dumps({"type": "result", "total_cost_usd": 0.5, "duration_ms": 120000,
+                                  "usage": {"input_tokens": 10, "output_tokens": 5}, "modelUsage": {"m": {}}})
+        SA.run_one(r, runner=fake)
+        u = SA.usage("acme")
+        self.assertEqual((u["total"], u["jobs"]), (0.5, 1))
+        self.assertEqual(u["by_brief"][0]["key"], "0042")
+        self.assertEqual(u["by_kind"][0]["key"], "variations")
+
     def test_failed_run_says_why(self):
         r = SA.create("deeper", "acme", "dry skin")
         out = SA.run_one(r, runner=lambda cmd, d: (1, "boom"))
