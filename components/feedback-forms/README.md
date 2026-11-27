@@ -25,8 +25,8 @@ filed properly, and we just get really, really searchable."*
 - **The questions** are written per brand by `write_questions.py` from its foundational research: what to ask from its
   people profiles (the parts still open), how to ask from its voice and its customers' own words (also the tap
   options). It writes a proposal under `runs/`; a person applies it on the owner's yes.
-- **The look** is read at build time from the brand's design system (`design_system.py`: `design-system/tokens.json`,
-  else `web-tokens.md`, and its logo). Nothing is typed by hand; a value in the brand's file overrides.
+- **The look** is read at build time from the brand's design system (`design_system.py`: `email-sms/design-system.json`, the file its emails render with, by its standard keys; else the standard `web-tokens.md` table;
+  and its logo). Nothing is guessed: a key the brand has not declared is listed as missing; a value in the brand's file overrides.
 - **The starter set** (`brands/_TEMPLATE/operations/feedback-*.json`) is brand-neutral: eight stages for a store
   with an email platform; subscription and helpdesk stages apply only where the brand has them.
 

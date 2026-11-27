@@ -1,4 +1,4 @@
-"""The form's look comes from the brand's design system (synthetic brands only)."""
+"""The form's look comes from the brand's design system by standard names, never by guessing (synthetic brands)."""
 import json
 import sys
 import tempfile
@@ -15,54 +15,56 @@ class DesignSystem(unittest.TestCase):
     def setUp(self):
         self.root = Path(tempfile.mkdtemp())
         self.brand = self.root / "brands" / "acme"
-        (self.brand / "brand-identity" / "design-system").mkdir(parents=True)
+        (self.brand / "brand-identity").mkdir(parents=True)
+        (self.brand / "email-sms").mkdir()
 
-    def test_tokens_json_maps_roles_by_name_and_usage(self):
-        (self.brand / "brand-identity/design-system/tokens.json").write_text(json.dumps({
-            "color": {"tokens": [
-                {"name": "canvas", "value": {"light": "#FAF8F2", "dark": "#111111"}, "usage": "The ground of every page."},
-                {"name": "ink", "value": "#1A1A1A"},
-                {"name": "deep", "value": "#0B3D2E"}, {"name": "ink-on-deep", "value": "#FFFFFF"},
-                {"name": "coral", "value": "#FF6B57", "usage": "The one accent: button fill."},
-                {"name": "coral-ink", "value": "#1A1A1A"}]},
-            "type": {"families": {"display": "\"Display\", serif", "sans": "\"Body\", sans-serif"}},
-            "radius": {"tokens": [{"name": "radius-button", "value": "6px"}]}}))
-        (self.brand / "brand-identity/acme-logo.svg").write_text("<svg xmlns='http://www.w3.org/2000/svg'/>")
+    def ds(self, tokens, **extra):
+        (self.brand / "email-sms/design-system.json").write_text(json.dumps({"tokens": tokens, **extra}))
+
+    def test_design_system_json_maps_exact_keys(self):
+        (self.brand / "brand-identity/acme-logo-white.svg").write_text("<svg xmlns='http://www.w3.org/2000/svg'/>")
+        self.ds({"canvas": "#FAF8F2", "surface": "#FFFFFF", "ink": "#1A1A1A", "muted": "#666666", "line": "#DDDDDD",
+                 "band": "#0B3D2E", "band_ink": "#FFFFFF", "accent": "#FF6B57", "button": "#0B3D2E", "button_ink": "#FFFFFF"},
+                fonts={"display": {"family": "Display", "fallback": "serif"}, "body": {"family": "Body", "fallback": "sans-serif"}},
+                logo={"file": "brand:brand-identity/acme-logo-white.svg", "alt": "Acme"})
         look = DS.look_for(self.brand, self.root)
         t = look["tokens"]
-        self.assertEqual((t["ground"], t["ink"], t["band"], t["band_ink"]), ("#FAF8F2", "#1A1A1A", "#0B3D2E", "#FFFFFF"))
-        self.assertEqual((t["accent"], t["cta"], t["cta_ink"], t["radius"]), ("#FF6B57", "#FF6B57", "#1A1A1A", "6px"))
-        self.assertEqual(look["font_head"], "\"Display\", serif")
-        self.assertEqual(look["logo_source"], "brands/acme/brand-identity/acme-logo.svg")
+        self.assertEqual((t["ground"], t["band"], t["cta"], t["cta_ink"]), ("#FAF8F2", "#0B3D2E", "#0B3D2E", "#FFFFFF"))
+        self.assertEqual(look["font_head"], "'Display', serif")
+        self.assertEqual(look["logo_source"], "brands/acme/brand-identity/acme-logo-white.svg")
+        self.assertEqual(look["missing"], [])
+        self.assertEqual(look["source"], "brands/acme/email-sms/design-system.json")
 
-    def test_web_tokens_md_skips_open_rows(self):
+    def test_nothing_is_guessed(self):
+        # brand-specific names that are not the standard keys are ignored, and what is missing is said
+        self.ds({"canvas": "#FFFFFF", "sage": "#C7CFAD", "forest": "#062B14"})
+        look = DS.look_for(self.brand, self.root)
+        self.assertEqual(look["tokens"], {"ground": "#FFFFFF"})
+        self.assertEqual(look["missing"], ["ink", "band", "band_ink", "button", "button_ink"])
+
+    def test_web_tokens_standard_table_is_the_fallback(self):
         (self.brand / "brand-identity/web-tokens.md").write_text(
-            "| Token | Hex | What | Where |\n|---|---|---|---|\n| page | `#FFFFFF` | the page | x |\n| open | `#000000` | <..> | |\n"
-            "| text | `#222222` | body text | x |\n| action | `#0055FF` | primary button | x |\n"
-            ":root {\n  --brand--font--body: \"Inter\", sans-serif;\n  --brand--font--display: \"open\", serif;\n}\n")
+            "| Token | Value | From |\n|---|---|---|\n| surface-bg | `#FFFFFF` | x |\n| brand-cta | `#0055FF` | .btn |\n"
+            "| brand-cta-ink | `#FFFFFF` | .btn |\n| Forest | `#062B14` | a brand name, not a standard token |\n"
+            "| font-body | `inter, sans-serif` | x |\n")
         look = DS.look_for(self.brand, self.root)
         self.assertEqual(look["tokens"]["ground"], "#FFFFFF")
         self.assertEqual(look["tokens"]["cta"], "#0055FF")
-        self.assertEqual(look["font_body"], "\"Inter\", sans-serif")
-        self.assertNotIn("font_head", look)
+        self.assertNotIn("band", look["tokens"])
+        self.assertIn("brand-band", look["missing"])
 
-    def test_typed_look_wins_and_template_reads_design_system(self):
-        q = {"look": {"from": "design-system", "tokens": {"accent": "#123456"}}}
-        (self.brand / "brand-identity/web-tokens.md").write_text("| page | `#EEEEEE` | the page | x |\n")
-        look = DS.resolve(q, self.brand, self.root)
-        self.assertEqual(look["tokens"]["ground"], "#EEEEEE")
-        self.assertEqual(look["tokens"]["accent"], "#123456")
+    def test_typed_look_wins(self):
+        self.ds({"canvas": "#EEEEEE"})
+        look = DS.resolve({"look": {"from": "design-system", "tokens": {"accent": "#123456"}}}, self.brand, self.root)
+        self.assertEqual((look["tokens"]["ground"], look["tokens"]["accent"]), ("#EEEEEE", "#123456"))
         self.assertEqual(DS.resolve({"look": {"tokens": {"ground": "#000000"}}}, self.brand, self.root)["tokens"], {"ground": "#000000"})
-
-    def test_no_design_system_keeps_neutral(self):
-        self.assertEqual(DS.look_for(self.root / "brands" / "nobody", self.root), {})
 
     def test_build_uses_it(self):
         tpl = HERE.parents[2] / "brands" / "_TEMPLATE" / "operations"
         (self.brand / "operations").mkdir()
         for f in ("feedback-stages.json", "feedback-questions.json"):
             (self.brand / "operations" / f).write_text((tpl / f).read_text())
-        (self.brand / "brand-identity/web-tokens.md").write_text("| page | `#ABCDEF` | the page | x |\n")
+        self.ds({"canvas": "#ABCDEF"})
         _, qs = B.load("acme", self.root)
         self.assertIn("--fb-ground: #ABCDEF;", B.brand_css(qs))
 

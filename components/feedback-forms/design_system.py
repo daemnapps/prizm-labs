@@ -1,35 +1,50 @@
-"""The feedback form's look, read from the brand's own design system — never typed by hand.
+"""The feedback form's look, read from the brand's design system by the standard names — never guessed.
 
-Where it looks, first found wins (both under the brand's `brand-identity/`, or the older `identity/`):
-  1. design-system/tokens.json   colour tokens by name (a value, or {light, dark}), type families, radius tokens
-  2. web-tokens.md               the token table (`| name | `#hex` |`) and its "As CSS custom properties" block
-Each form role (ground, ink, accent, …) is matched to the token whose NAME says that role, then to one whose
-usage line does. A role nothing matches keeps the engine's neutral default. The logo is the brand's own SVG.
+First choice is the brand's design system file, `email-sms/design-system.json` — the same file the email design
+engine renders every email with (components/email-production/design/), so the form looks like the email that links
+to it. Its keys are the same for every brand: tokens canvas · surface · ink · muted · line · band · band_ink · accent ·
+button · button_ink, fonts display/body with their fallbacks, and the logo. Each form role reads exactly one key.
 
-    look_for(brand_dir) -> {"tokens": {...}, "font_body", "font_head", "logo_source", "source": "<file>"}
+Without that file the fallback standard is the web token table every brand keeps (`brand-identity/web-tokens.md`, the same table
+components/page-production reads): `| token-name | `value` | where it came from |`. Each form role reads exactly one
+standard token. A token the brand has not declared is NOT inferred from other names or colours: the form keeps the
+engine's neutral value for that role and the role is listed in `missing`, so a person adds the token (measured off
+the brand's live site) instead of anyone assuming it.
+
+A `design-system/tokens.json` counts only when it carries a `"web_tokens"` map in the same standard names.
+
+    look_for(brand_dir, root) -> {"tokens": {...}, "font_body", "font_head", "head_transform", "logo_source",
+                                  "source": "<file>", "missing": ["brand-cta", ...]}
 Brand-agnostic: no brand is named here.
 """
 import json
 import re
 from pathlib import Path
 
-# role -> (names that ARE this role, words in a usage line that point at it)
-ROLES = {
-    "ground":     (["canvas", "ground", "page", "background", "bg", "surface-bg", "base"], ["ground of every page", "page background", "background"]),
-    "card":       (["surface", "card", "surface-card", "panel"], ["cards", "tiles"]),
-    "ink":        (["ink", "text", "type", "text-primary", "foreground", "fg"], ["running text", "body text", "all text"]),
-    "muted":      (["muted", "text-secondary", "secondary", "subtle", "caption"], ["captions", "small print", "secondary text"]),
-    "line":       (["line", "border", "hairline", "rule", "divider"], ["hairline", "border"]),
-    "band":       (["deep", "band", "primary", "brand", "brand-primary", "brand-band", "dark"], ["bands", "header", "hero"]),
-    "band_ink":   (["ink-on-deep", "on-deep", "on-band", "on-primary", "text-inverse", "inverse"], ["text on the deep", "text on the band", "on dark"]),
-    "accent":     (["accent", "highlight", "brand-accent"], ["the one accent", "highlight", "accent"]),
-    "cta":        (["cta", "button", "action", "brand-cta"], ["button fill", "call-to-action", "call to action", "primary button"]),
-    "cta_ink":    (["cta-ink", "on-cta", "button-ink", "on-accent", "brand-cta-ink"], ["text on a", "button text"]),
+# form role -> the standard token it reads (in order; the first one the brand declares wins)
+ROLE_TOKENS = {
+    "ground":     ("surface-alt", "surface-bg"),     # the page behind the form: the brand's tinted ground if it has one
+    "card":       ("surface-card",),
+    "ink":        ("text-primary",),
+    "muted":      ("text-secondary",),
+    "line":       ("border",),
+    "band":       ("brand-band", "brand-primary-dark"),
+    "band_ink":   ("text-inverse",),
+    "accent":     ("brand-accent",),
+    "cta":        ("brand-cta", "brand-primary"),
+    "cta_ink":    ("brand-cta-ink",),
+    "cta_line":   ("brand-cta-border", "brand-cta"),
+    "picked":     ("brand-band", "brand-primary-dark"),
+    "picked_ink": ("text-inverse",),
+    "radius":     ("button-radius", "radius"),
+    "chip_radius": ("button-radius", "radius"),
 }
-HEX = re.compile(r"#[0-9A-Fa-f]{3,8}\b")
+TEXT_TOKENS = {"font_head": ("font-heading",), "font_body": ("font-body",), "head_transform": ("heading-case",)}
+REQUIRED = ("surface-bg", "text-primary", "brand-band", "text-inverse", "brand-cta", "brand-cta-ink", "font-heading", "font-body")
+ROW = re.compile(r"^\|\s*([a-z][a-z0-9-]+)\s*\|\s*`([^`]+)`", re.M)
 
 
-def _brand_identity(brand_dir):
+def _identity(brand_dir):
     for name in ("brand-identity", "identity"):
         d = Path(brand_dir) / name
         if d.is_dir():
@@ -37,97 +52,99 @@ def _brand_identity(brand_dir):
     return None
 
 
-def _value(v, mode="light"):
-    if isinstance(v, dict):
-        v = v.get(mode) or v.get("light") or next(iter(v.values()), None)
-    return v if isinstance(v, str) and HEX.fullmatch(v.strip()) else None
+def standard_tokens(ident):
+    """{token-name: value} from web-tokens.md (or tokens.json › web_tokens), and the file it came from."""
+    tj = ident / "design-system" / "tokens.json"
+    if tj.is_file():
+        try:
+            wt = json.loads(tj.read_text()).get("web_tokens")
+            if isinstance(wt, dict) and wt:
+                return {k: str(v) for k, v in wt.items()}, tj
+        except (OSError, ValueError):
+            pass
+    md = ident / "web-tokens.md"
+    if md.is_file():
+        found = {m.group(1): m.group(2).strip() for m in ROW.finditer(md.read_text())}
+        if found:
+            return found, md
+    return {}, None
 
 
-def _pick(tokens):
-    """tokens: [(name, hex, usage)] -> {role: hex}."""
-    out, used = {}, set()
-    for role, (names, words) in ROLES.items():
-        hit = next((t for n in names for t in tokens if t[0].lower() == n and t[1]), None)
-        if not hit:
-            hit = next((t for t in tokens if t[1] and t[0] not in used and any(w in (t[2] or "").lower() for w in words)), None)
-        if hit:
-            out[role] = hit[1]
-            used.add(hit[0])
-    if "cta" not in out and "accent" in out:
-        out["cta"] = out["accent"]
-    if "cta_ink" not in out and "cta" in out:
-        cta = next((t for t in tokens if t[1] == out["cta"]), None)
-        ink = next((t for t in tokens if cta and t[0].lower() == cta[0].lower() + "-ink"), None)
-        if ink:
-            out["cta_ink"] = ink[1]
-    if "picked" not in out and "band" in out:
-        out["picked"], out["picked_ink"] = out["band"], out.get("band_ink", out.get("ground"))
-    if "cta_line" not in out and "line" in out:
-        out["cta_line"] = out.get("cta", out["line"])
-    return out
+def logo(ident, on_dark=True):
+    svgs = sorted(ident.glob("*logo*.svg"))
+    light = [p for p in svgs if re.search(r"white|light|cream|-dt\b|_light", p.stem, re.I)]
+    pick = (light or svgs) if on_dark else ([p for p in svgs if p not in light] or svgs)
+    return pick[0] if pick else None
 
 
-def _from_json(path):
-    d = json.loads(path.read_text())
-    color = d.get("color") or {}
-    toks = [(t.get("name", ""), _value(t.get("value")), t.get("usage", "")) for t in color.get("tokens") or []]
-    look = {"tokens": _pick(toks)}
-    fam = ((d.get("type") or {}).get("families") or {})
-    body = fam.get("sans") or fam.get("body") or fam.get("text")
-    head = fam.get("display") or fam.get("heading") or body
-    if body:
-        look["font_body"] = body
-    if head:
-        look["font_head"] = head
-    radius = {t.get("name", ""): t.get("value") for t in (d.get("radius") or {}).get("tokens") or []}
-    r = next((v for k, v in radius.items() if "button" in k or "card" in k), None) or next(iter(radius.values()), None)
-    if r:
-        look["tokens"]["radius"] = r
+def _rel(p, root):
+    try:
+        return str(p.relative_to(root)) if root else str(p)
+    except ValueError:
+        return str(p)
+
+
+DS_ROLES = {"ground": "canvas", "card": "surface", "ink": "ink", "muted": "muted", "line": "line", "band": "band",
+            "band_ink": "band_ink", "accent": "accent", "cta": "button", "cta_ink": "button_ink", "cta_line": "button",
+            "picked": "band", "picked_ink": "band_ink"}
+DS_REQUIRED = ("canvas", "ink", "band", "band_ink", "button", "button_ink")
+
+
+def from_design_system(brand_dir, root=None):
+    """The look from email-sms/design-system.json, or None when the brand has none."""
+    p = Path(brand_dir) / "email-sms" / "design-system.json"
+    if not p.is_file():
+        return None
+    try:
+        d = json.loads(p.read_text())
+    except (OSError, ValueError):
+        return None
+    t = d.get("tokens") or {}
+    look = {"tokens": {role: t[key] for role, key in DS_ROLES.items() if t.get(key)}}
+    if t.get("radius"):
+        look["tokens"]["radius"] = look["tokens"]["chip_radius"] = t["radius"]
+    fonts = d.get("fonts") or {}
+    for key, face in (("font_head", "display"), ("font_body", "body")):
+        f = fonts.get(face) or {}
+        if f.get("family"):
+            look[key] = f"'{f['family']}', " + (f.get("fallback") or "sans-serif")
+    lg = (d.get("logo") or {}).get("file") or ""
+    if lg.startswith("brand:"):
+        lp = Path(brand_dir) / lg[len("brand:"):]
+        if lp.is_file():
+            look["logo_source"] = _rel(lp, root)
+    if (d.get("logo") or {}).get("alt"):
+        look["logo_alt"] = d["logo"]["alt"]
+    look["missing"] = [k for k in DS_REQUIRED if not t.get(k)]
+    look["source"] = _rel(p, root)
     return look
-
-
-def _from_md(path):
-    text = path.read_text()
-    toks = []
-    for m in re.finditer(r"^\|\s*\**([A-Za-z][A-Za-z0-9 _-]*?)\**\s*\|\s*`(#[0-9A-Fa-f]{3,8})`[^|]*\|\s*([^|\n]*)", text, re.M):
-        if m.group(1).strip().lower() != "open":
-            toks.append((m.group(1).strip().lower().replace(" ", "-"), m.group(2), m.group(3)))
-    for m in re.finditer(r"--brand--color--([a-z-]+)\s*:\s*(#[0-9A-Fa-f]{3,8})\s*;\s*(/\*\s*open)?", text):
-        if not m.group(3):
-            toks.append((m.group(1), m.group(2), ""))
-    look = {"tokens": _pick(toks)}
-    for role, key in (("display", "font_head"), ("body", "font_body")):
-        m = re.search(r"--brand--font--" + role + r"\s*:\s*([^;]+);", text)
-        if m and "open" not in m.group(1):
-            look[key] = m.group(1).strip()
-    return look
-
-
-def logo(identity):
-    svgs = sorted(identity.glob("*logo*.svg")) or sorted(identity.glob("*.svg"))
-    return svgs[0] if svgs else None
 
 
 def look_for(brand_dir, root=None):
-    """The look read off the brand's design system; {} when it has none yet."""
-    ident = _brand_identity(brand_dir)
+    found = from_design_system(brand_dir, root)
+    if found:
+        return found
+    ident = _identity(brand_dir)
     if not ident:
-        return {}
-    look = {}
-    for rel, reader in (("design-system/tokens.json", _from_json), ("web-tokens.md", _from_md)):
-        p = ident / rel
-        if p.is_file():
-            try:
-                found = reader(p)
-            except (OSError, ValueError):
-                continue
-            if found.get("tokens"):
-                look = found
-                look["source"] = str(p.relative_to(root)) if root and p.is_relative_to(root) else str(p)
-                break
-    lg = logo(ident)
+        return {"missing": list(REQUIRED)}
+    std, src = standard_tokens(ident)
+    look = {"tokens": {}}
+    for role, names in ROLE_TOKENS.items():
+        v = next((std[n] for n in names if std.get(n)), None)
+        if v:
+            look["tokens"][role] = v
+    for key, names in TEXT_TOKENS.items():
+        v = next((std[n] for n in names if std.get(n)), None)
+        if v and not v.startswith("http"):
+            look[key] = v if key != "font_head" or "," in v else v + ", system-ui, sans-serif"
+            if key == "font_body" and "," not in v:
+                look[key] = v + ", system-ui, sans-serif"
+    look["missing"] = [n for n in REQUIRED if not std.get(n)]
+    if src:
+        look["source"] = _rel(src, root)
+    lg = logo(ident, on_dark=bool(look["tokens"].get("band")))
     if lg:
-        look["logo_source"] = str(lg.relative_to(root)) if root and lg.is_relative_to(root) else str(lg)
+        look["logo_source"] = _rel(lg, root)
     return look
 
 
