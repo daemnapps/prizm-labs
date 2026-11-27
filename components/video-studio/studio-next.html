@@ -285,6 +285,8 @@ tr.grp{cursor:pointer}tr.grp:hover td{background:var(--paper)}
 tr.sub td{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--paper) 60%,var(--card))}
 tr.sub td:first-child{padding-left:30px;font-family:var(--mono);max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chev{display:inline-block;width:12px;color:var(--ink-3)}
+tr.grp.lit td{background:color-mix(in srgb,var(--amber) 12%,var(--card))}
+.row[data-go]{cursor:pointer}.row[data-go]:hover{border-color:var(--ink-3)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
 @media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
@@ -345,7 +347,12 @@ const ib = (n, hue) => `<i class="ib" style="--hue:var(--${hue})">${icon(n)}</i>
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const J = (u, o) => fetch(u, Object.assign({cache:'no-store'}, o)).then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || ('error ' + r.status)); return j; });
+/* one screen at a time: a read that comes back after you moved on (another brand, another screen) is dropped,
+   so a slow answer for one brand never draws over another. Actions (POST) and {keep:true} reads always land. */
+let RID = 0;
+const J = (u, o) => { const my = RID, keep = o && (o.keep || o.method); const opt = Object.assign({cache:'no-store'}, o); delete opt.keep;
+  return fetch(u, opt).then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || ('error ' + r.status)); return j; })
+    .then(v => (!keep && my !== RID) ? new Promise(() => {}) : v, e => { if (!keep && my !== RID) return new Promise(() => {}); throw e; }); };
 const usd = (v, d = 0) => v == null ? '—' : (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits:d, minimumFractionDigits:d});
 const int = v => v == null ? '—' : Number(v).toLocaleString('en-US');
 const toast = t => { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2800); };
@@ -374,18 +381,19 @@ const text = p => J('/api/desk/text?path=' + encodeURIComponent(p)).then(t => t.
 /* ---------- state + routing (#today · #ads/<id>|<step> · #swipes · #swipe/<label> · #research · #brands) ---------- */
 const S = { brand: store.get('st.brand') || '', menu: store.get('st.menu'), pieces: [], swipes: {}, view: 'today', arg: null, prods: null };
 async function boot(){
-  let bl = []; try { bl = (await J('/api/desk/brands')).brands; } catch {}
+  let bl = []; try { bl = (await J('/api/desk/brands', {keep:true})).brands; } catch {}
   S.labels = Object.fromEntries(bl.map(b => [b.id, b.label || b.id])); let bs = bl.map(b => b.id);
   if (!bs.includes(S.brand)) S.brand = bs[0] || '';
   $('#brand').innerHTML = `<option value="*">All brands</option>` + bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(blabel(b))}</option>`).join('');
   paintIcons();
-  J('/api/desk/pieces').then(r => { S.pieces = r.pieces || []; if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
-  J('/api/menu').then(m => { S.menu = {brands: m.brands}; store.set('st.menu', S.menu); if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
+  J('/api/desk/pieces', {keep:true}).then(r => { S.pieces = r.pieces || []; if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
+  J('/api/menu', {keep:true}).then(m => { S.menu = {brands: m.brands}; store.set('st.menu', S.menu); if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
   route();
 }
 $('#brand').onchange = e => { if (e.target.value === '*') { location.hash = 'portfolio'; return; } S.brand = e.target.value; store.set('st.brand', S.brand); openAd = null; if (S.view === 'swipe') location.hash = 'production/swipes'; else if (S.view === 'ads') location.hash = 'production/video'; else route(); };
 window.addEventListener('hashchange', route);
 function route(){
+  RID++;
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
@@ -427,11 +435,11 @@ async function today(){
       <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
         ${waiting ? `<a class="btn wait" href="#approve">Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'}</a>` : `<div class="empty">Nothing waiting for your approval</div>`}</div>
       <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">${(d.off || []).length}</span></h3>
-        ${(d.off || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
+        ${(d.off || []).map(a => `<a class="row" href="#live/${a.brief ? 'brief/' + encodeURIComponent(a.brief) : 'other/'}"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
         ${(d.calls || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${esc(a.name)}</b><span>${esc(a.why || '')}</span><span class="pill p-act">${esc(String(a.call).replace('_', ' '))}</span></a>`).join('')}
         ${d.calls_asof ? `<span class="lbl">media-buying desk · ${esc(dayLabel(d.calls_asof))}</span>` : ''}</div>
       <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${(d.vary || []).length}</span></h3>
-        ${(d.vary || []).map(v => `<div class="row"><b title="${esc(v.example)}">${v.kind === 'brief' ? 'Brief ' + esc(v.key) : esc(v.key)}${v.label ? ' · ' + esc(v.label) : ''}</b><span>${int(v.buys30)} buys 30d · CPA ${usd(v.cpa30)}${v.break_even ? ' (line ' + usd(v.break_even) + ')' : ''}${v.kind === 'creator' ? ' · creator' : ''}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc((v.kind === 'brief' ? 'brief ' + v.key : 'creator ' + v.key) + ' · ' + v.example)}">Plan</button></div>`).join('') || '<div class="empty">No new ad under break-even with 2+ buys in 30 days</div>'}
+        ${(d.vary || []).map(v => `<div class="row" data-go="#live/${v.kind}/${encodeURIComponent(v.key)}"><b title="${esc(v.example)}">${v.kind === 'brief' ? 'Brief ' + esc(v.key) : esc(v.key)}${v.label ? ' · ' + esc(v.label) : ''}</b><span>${int(v.buys30)} buys 30d · CPA ${usd(v.cpa30)}${v.break_even ? ' (line ' + usd(v.break_even) + ')' : ''}${v.kind === 'creator' ? ' · creator' : ''}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc((v.kind === 'brief' ? 'brief ' + v.key : 'creator ' + v.key) + ' · ' + v.example)}">Plan</button></div>`).join('') || '<div class="empty">No new ad under break-even with 2+ buys in 30 days</div>'}
         <span class="lbl">new ads only: a brief number or a trybe tag</span></div>
       <div class="card dcol" style="--hue:var(--violet)"><h3>${ib('search', 'violet')}Research to act on<span class="count">${resCount}</span></h3>
         ${(nx.angles || []).slice(0, 2).map(a => `<a class="row" href="#research"><b>${esc(a.angle)}</b><span>${int(a.purchases)} buys on ${usd(a.spend)}</span><span class="pill p-brief">angle</span></a>`).join('')}
@@ -477,6 +485,7 @@ function ads(){
   openAd = a ? a.id + '|' + (step || '') : null;
   if (a) (a.kind === 'line' ? openLine : openProd)(a, step);
 }
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g && !e.target.closest('button,a')) { location.hash = g.dataset.go; return; } });
 document.addEventListener('click', e => { const t = e.target.closest('[data-ad]'); if (t) location.hash = 'ads/' + encodeURIComponent(t.dataset.ad); });
 const host = () => $('#sub') || $('#main');
 const tabBar = (items, cur) => `<div class="lanes">${items.map(([id, name, ic, hue, href, badge]) => `<a href="${href}" class="${id === cur ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic">${icon(ic)}</i>${name}${badge ? `<b class="nb">${badge}</b>` : ''}</a>`).join('')}</div>`;
@@ -718,7 +727,7 @@ async function brandSetup(){
 /* ================= APPROVE (native; the approval page's own data, this brand only) ================= */
 let apCache = {};
 async function approveCount(){
-  try { const d = apCache[S.brand] || (apCache[S.brand] = await J('/approve/api/cards?view=check&brand=' + encodeURIComponent(S.brand))); return (d.cards || []).length; } catch { return null; }
+  try { const d = apCache[S.brand] || (apCache[S.brand] = await J('/approve/api/cards?view=check&brand=' + encodeURIComponent(S.brand), {keep:true})); return (d.cards || []).length; } catch { return null; }
 }
 async function approveBadge(){ const n = await approveCount(); S.waiting = n; const b = $('#nb'); if (b) b.textContent = n ? n : ''; }
 const amedia = p => '/approve' + p;
@@ -895,15 +904,15 @@ document.addEventListener('click', e => {
   b.disabled = true; ask(b.dataset.ask, b.dataset.input, b.dataset.brand).then(r => { if (r) { b.textContent = 'Asked ✓'; } else b.disabled = false; });
 });
 async function asksBadge(){
-  try { const r = await J('/api/desk/asks'); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wkn'); if (el) { el.textContent = n || ''; $('#wk').classList.toggle('busy', !!n); } } catch {}
+  try { const r = await J('/api/desk/asks?brand=' + encodeURIComponent(S.brand), {keep:true}); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wkn'); if (el) { el.textContent = n || ''; $('#wk').classList.toggle('busy', !!n); } } catch {}
 }
 setInterval(asksBadge, 15000);
 const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['working', 'act'], done:['ready', 'ready'], failed:['stopped', 'stop']};
 async function asksView(){
   const m = $('#main'), [brand, id] = (S.arg || '').split('/');
   if (brand && id) return askOne(brand, id);
-  m.innerHTML = `<div class="ph"><h1>Working on it</h1><span class="sub">every job the Studio handed to Claude, newest first</span></div><div class="skel">Loading…</div>`;
-  let r; try { r = await J('/api/desk/asks'); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  m.innerHTML = `<div class="ph"><h1>Working on it</h1><span class="sub">jobs handed to Claude for this brand, newest first</span></div><div class="skel">Loading…</div>`;
+  let r; try { r = await J('/api/desk/asks?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   m.querySelector('.skel').outerHTML = r.asks.length ? `<div class="card" style="padding:0">${r.asks.map(a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b><span class="j">${esc(blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; }).join('')}</div>` : `<div class="card note">Nothing handed off yet. Tune, Go deeper, Plan variations, Add a swipe and Fill buttons land here.</div>`;
 }
 async function askOne(brand, id){
@@ -1020,7 +1029,8 @@ async function adsLive(){
   const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
   const stats = rs => ({n: rs.length, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30'),
     off: rs.filter(r => r.call === 'off').length, act: rs.filter(r => r.call && !['too_early', 'keep', 'off'].includes(r.call)).length});
-  let curCat = store.get('st.adcat') || 'brief', open = new Set(), onlyCalls = false;
+  let curCat = store.get('st.adcat') || 'brief', open = new Set(), onlyCalls = false, focus = null;
+  if (S.arg) { const [c, ...k] = S.arg.split('/'); if (['brief', 'creator', 'other'].includes(c)) { curCat = c; if (k.join('/')) { focus = k.join('/'); open.add(focus); } } }
   const cpa = (s, b) => b ? usd(s / b) : '—';
   const draw = () => {
     m.querySelectorAll('.skel, #adtab').forEach(x => x.remove());
@@ -1044,6 +1054,7 @@ async function adsLive(){
     m.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { curCat = b.dataset.cat; store.set('st.adcat', curCat); open = new Set(); draw(); });
     m.querySelectorAll('[data-srt]').forEach(b => b.onclick = () => { adsSort = b.dataset.srt; store.set('st.adsort', adsSort); draw(); });
     m.querySelector('[data-only]').onclick = () => { onlyCalls = !onlyCalls; draw(); };
+    if (focus) { const tr = [...m.querySelectorAll('tr.grp')].find(x => x.dataset.g === focus); if (tr) { tr.classList.add('lit'); tr.scrollIntoView({block: 'center'}); } focus = null; }
     m.querySelectorAll('tr.grp').forEach(tr => tr.onclick = e => { if (e.target.closest('a,button')) return; const k = tr.dataset.g; open.has(k) ? open.delete(k) : open.add(k); draw(); });
   };
   draw();
