@@ -55,7 +55,7 @@ details summary{cursor:pointer;color:var(--ink2);font-size:14px}
 
   <section>
     <h2><span class="n">2</span>Your keys</h2>
-    <p class="sub" style="margin:0">Fill the ones for the tools you use. Each says what it's for and where to get it.</p>
+    <p class="sub" style="margin:0">The keys that make ads, and your accounts. Each says where to get it.</p>
     <div id="keys"></div>
   </section>
 
@@ -77,16 +77,22 @@ async function load(){
   const s=await (await fetch('/api/state')).json();
   $('brands').innerHTML=s.brands.length?s.brands.map(b=>`<div class="brand"><b>${esc(b.brand)}</b><span class="pill ${b.done===b.total?'set':'opt'}">${b.done} of ${b.total} questions${b.linked?' · linked':''}</span></div>`).join(''):'<p class="sub" style="margin:0">No brand yet.</p>';
   if(s.brands.length&&!$('abrand').value)$('abrand').value=s.brands[0].brand;
+  // What shows: the keys to make ads and your accounts; single-tool extras behind one click; the rest is not shown
+  // (unused so far, backups, or advanced) and can still be added to .env by hand.
+  const SHOW=/^(Needed to make ads|Your accounts)/, MORE=/^One tool each/;
+  const shown=s.keys.filter(k=>SHOW.test(k.section)), more=s.keys.filter(k=>MORE.test(k.section));
   let html='',group='';
-  const keys=[...s.keys].sort((a,b)=>(a.optional-b.optional));
-  for(const k of s.keys){
-    if(k.section!==group){group=k.section;html+=`<div class="group">${esc(group)}</div>`}
+  const row=k=>{
     const state=k.set?'<span class="pill set">set</span>':(k.optional?'<span class="pill opt">optional</span>':'<span class="pill miss">missing</span>');
-    html+=`<div class="key"><b>${esc(k.name)}</b>${state}<div class="what">${esc(k.what)}${k.where?` · <a href="${esc(k.where)}" target="_blank" rel="noopener">get it</a>`:''}</div>
+    return `<div class="key"><b>${esc(k.name)}</b>${state}<div class="what">${esc(k.what)}${k.where?` · <a href="${esc(k.where)}" target="_blank" rel="noopener">get it</a>`:''}</div>
       <div class="row"><input type="password" autocomplete="off" id="k_${esc(k.name)}" placeholder="${k.set?'replace it':'paste it here'}" aria-label="${esc(k.name)}"><button class="ghost" data-k="${esc(k.name)}">Save</button></div>
-      <div class="msg" id="m_${esc(k.name)}"></div></div>`;
-  }
+      <div class="msg" id="m_${esc(k.name)}"></div></div>`};
+  for(const k of shown){if(k.section!==group){group=k.section;html+=`<div class="group">${esc(group)}</div>`}html+=row(k)}
+  if(more.length)html+=`<details style="margin-top:10px"><summary>More keys, only if you use that tool (${more.length})</summary>${more.map(row).join('')}</details>`;
   $('keys').innerHTML=html;
+  bind();
+}
+function bind(){
   document.querySelectorAll('button[data-k]').forEach(b=>b.onclick=async()=>{
     const n=b.dataset.k,inp=$('k_'+n),m=$('m_'+n);
     try{const r=await post('/api/key',{name:n,value:inp.value});inp.value='';say(m,r.set?'Saved.':'Saved, but not found when read back.',r.set);setTimeout(load,600)}catch(e){say(m,e.message)}
