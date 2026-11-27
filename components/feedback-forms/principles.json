@@ -1,0 +1,179 @@
+{
+ "_what": "Why each feedback form exists, from first principles, and what it needs to know about a brand before it can run. A form exists for a MOMENT: someone has just had an experience only they can tell us about. Who gets it, when, and what it may not ask all follow from the brand's facts (feedback-variables.json); nothing here assumes a platform, a business model or a timing. stages.py turns this plus a brand's facts into its feedback-stages.json; a fact the brand has not given blocks the stage and says which fact.",
+ "moments": [
+  {
+   "stage": "list-no-order",
+   "label": "On the list, never bought",
+   "lane": "lead",
+   "relationship": "list-member",
+   "why": "They chose to hear from the brand but haven't bought: only they can say what is holding them back and what they use instead.",
+   "event": "joined-list",
+   "exclude": [
+    "has-ordered"
+   ],
+   "wait": {
+    "after": "welcome_series_days",
+    "plus": "buffer_days",
+    "why": "after the welcome emails have made the brand's case, or the answer is about emails they haven't read yet"
+   },
+   "requires": [
+    "has_email_signup"
+   ],
+   "known": {
+    "purchase_status": "no order",
+    "orders": 0,
+    "on_list": true
+   }
+  },
+  {
+   "stage": "abandoned-checkout",
+   "label": "Started checkout, didn't buy",
+   "lane": "lead",
+   "relationship": "checkout-starter",
+   "why": "They decided to buy and stopped at the last step: only they know which doubt or friction stopped them.",
+   "event": "started-checkout",
+   "exclude": [
+    "has-ordered"
+   ],
+   "wait": {
+    "after": "checkout_recovery_days",
+    "plus": "buffer_days",
+    "why": "after the recovery emails have had their turn, so the form doesn't compete with them"
+   },
+   "requires": [],
+   "known": {
+    "purchase_status": "started checkout, no order",
+    "orders": 0
+   }
+  },
+  {
+   "stage": "new-customer",
+   "label": "First order, delivered",
+   "lane": "customer",
+   "relationship": "first-time-buyer",
+   "why": "They have used the product for the first time: only they can say whether it did what the ads promised, and what they'd say to a friend.",
+   "event": "delivered_event",
+   "exclude": [
+    "refunded"
+   ],
+   "filter": {
+    "orders": 1
+   },
+   "wait": {
+    "after": "time_to_first_result_days",
+    "why": "once the product has had time to do what it promises; asked earlier, the answer is a guess"
+   },
+   "requires": [
+    "delivered_event"
+   ],
+   "known": {
+    "purchase_status": "bought",
+    "orders": 1,
+    "delivered": true
+   }
+  },
+  {
+   "stage": "repeat-customer",
+   "label": "Ordered again",
+   "lane": "customer",
+   "relationship": "repeat-buyer",
+   "why": "They chose the brand a second time: the reason they came back is freshest the moment they reorder.",
+   "event": "order-placed",
+   "exclude": [
+    "refunded",
+    "subscription-order"
+   ],
+   "filter": {
+    "orders": "2+"
+   },
+   "wait": {
+    "after": "buffer_days",
+    "why": "right after the order, once the order emails are out of the way"
+   },
+   "requires": [],
+   "known": {
+    "purchase_status": "bought",
+    "orders": "2+"
+   }
+  },
+  {
+   "stage": "subscriber",
+   "label": "Active subscriber",
+   "lane": "customer",
+   "relationship": "subscriber",
+   "why": "They let the brand charge them on repeat: only they know whether the rhythm fits and what nearly made them cancel.",
+   "event": "subscription_renewed_event",
+   "filter": {
+    "renewals": "2+"
+   },
+   "wait": {
+    "after": "buffer_days",
+    "why": "after a renewal has arrived, so the rhythm is real to them"
+   },
+   "requires": [
+    "sells_subscriptions",
+    "subscription_renewed_event"
+   ],
+   "known": {
+    "purchase_status": "bought",
+    "subscription": "active"
+   }
+  },
+  {
+   "stage": "churned-refund",
+   "label": "Refunded",
+   "lane": "churned",
+   "relationship": "refunder",
+   "why": "They asked for their money back: only they can say what broke between the promise and the product.",
+   "event": "refund_event",
+   "wait": {
+    "after": "buffer_days",
+    "why": "soon, while it's fresh, but not inside the refund's own emails"
+   },
+   "requires": [
+    "refund_event"
+   ],
+   "known": {
+    "purchase_status": "bought, then refunded"
+   }
+  },
+  {
+   "stage": "churned-cancelled",
+   "label": "Cancelled subscription",
+   "lane": "churned",
+   "relationship": "cancelled-subscriber",
+   "why": "They stopped the subscription: only they can say why it stopped fitting.",
+   "event": "subscription_cancelled_event",
+   "wait": {
+    "after": "buffer_days",
+    "why": "soon, while it's fresh"
+   },
+   "requires": [
+    "sells_subscriptions",
+    "subscription_cancelled_event"
+   ],
+   "known": {
+    "purchase_status": "bought",
+    "subscription": "cancelled"
+   }
+  },
+  {
+   "stage": "post-support",
+   "label": "After a support request",
+   "lane": "customer",
+   "relationship": "support-contact",
+   "why": "They needed help: only they can say whether the help worked and what the site should have answered first.",
+   "event": "ticket_resolved_event",
+   "wait": {
+    "after": "buffer_days",
+    "why": "after the reply, while the experience is fresh"
+   },
+   "requires": [
+    "ticket_resolved_event"
+   ],
+   "known": {
+    "contacted_support": true
+   }
+  }
+ ]
+}

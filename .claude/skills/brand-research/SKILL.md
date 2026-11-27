@@ -53,9 +53,12 @@ Every brand gets the eight-stage feedback forms (on the list · started checkout
 refunded · cancelled · after support). The starter set is in `brands/_TEMPLATE/operations/feedback-stages.json` and
 `feedback-questions.json`; the engine is `components/feedback-forms`.
 
-1. Copy both files into `brands/<b>/operations/`. Set `klaviyo.public_id` (the brand's PUBLIC Klaviyo id, safe on a
-   page), `form.url` / `form.link` (where the form will live on their store) and mark any stage their stack can't
-   trigger as blocked, saying why.
+1. Facts first, then forms. Copy `feedback-variables.json` from the template into `brands/<b>/operations/` and fill
+   each value from the brand's own systems and product facts (its store, its email platform, how long its welcome
+   and checkout emails run, how long its product takes to work, what each event is called). Leave unknowns null:
+   never guess one. Then `python3 components/feedback-forms/stages.py --brand <b>` derives which forms the brand
+   gets and when, from first principles (`principles.json`); a form waiting on a fact names it. Show `PROPOSAL.md`,
+   apply on the owner's yes, and set `klaviyo.public_id` and `form.url` / `form.link`.
 2. Questions: `python3 components/feedback-forms/write_questions.py --brand <b>` writes every stage's questions
    from the brand's own research: what to ask from its people profiles (the parts still open, the questions the
    research couldn't answer), how to ask it from its voice (position, story, core message) and its customers' own

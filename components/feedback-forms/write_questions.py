@@ -137,6 +137,7 @@ def packet(brand, root=REPO):
     ppl, pids = people(brand)
     wds, wids = words(brand)
     stages = "\n".join(f"- {s['stage']} · {s['label']} · lane {s['lane']} · status {s.get('status')}"
+                       + (f" · why this form exists: {s['why']}" if s.get("why") else "")
                        + (f" · applies if {s['applies_if']}" if s.get("applies_if") else "")
                        + f" · already known: {json.dumps(s.get('known') or {}, ensure_ascii=False)}" for s in st["stages"])
     starter = "\n".join(f"- {sid}: " + "; ".join(f"{q['id']} ({q['type']}): {q['text']}" for q in s["questions"])

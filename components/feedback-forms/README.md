@@ -22,6 +22,10 @@ filed properly, and we just get really, really searchable."*
 
 ## Where the questions and the look come from
 
+- **Which forms, and when** come from first principles (`principles.json`: each form is a moment only those people can
+  tell us about) and the brand's own facts (`brands/<b>/operations/feedback-variables.json`): `stages.py --brand B`
+  derives every trigger, exclusion and wait. A false fact leaves the form out; a fact nobody has given blocks it and
+  names the fact. Nothing is assumed. A proposal under `runs/`.
 - **The questions** are written per brand by `write_questions.py` from its foundational research: what to ask from its
   people profiles (the parts still open), how to ask from its voice and its customers' own words (also the tap
   options). It writes a proposal under `runs/`; a person applies it on the owner's yes.
@@ -44,6 +48,7 @@ Klaviyo flow (trigger + filters + wait)  →  email with one button
 ## Commands
 
 ```bash
+python3 components/feedback-forms/stages.py --brand B            # which forms and when, from the brand's facts (a proposal)
 python3 components/feedback-forms/write_questions.py --brand B   # every stage's questions from the brand's research (profiles, voice, customer words): a proposal
 python3 components/feedback-forms/build.py check   --brand B    # the config is sound
 python3 components/feedback-forms/build.py preview --brand B    # runs/feedback-forms/<B>/preview/<stage>.html (nothing sends)

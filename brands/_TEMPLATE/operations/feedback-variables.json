@@ -1,0 +1,68 @@
+{
+ "_what": "The facts about this brand that decide its feedback forms: which forms it gets, when each is sent, and what each event is called in its own systems. Fill each value from the brand's own systems and product facts. Leave a value null until it is known: a form that needs it waits and says so, nothing is assumed. components/feedback-forms/stages.py reads this.",
+ "store_platform": {
+  "value": null,
+  "means": "where orders happen",
+  "from": "the store's admin (e.g. shopify, woocommerce, next-commerce)"
+ },
+ "email_platform": {
+  "value": null,
+  "means": "what sends the flows",
+  "from": "the brand's email account (klaviyo is the one supported today)"
+ },
+ "has_email_signup": {
+  "value": null,
+  "means": "people can join the list without buying",
+  "from": "the site: a signup form or pop-up"
+ },
+ "welcome_series_days": {
+  "value": null,
+  "means": "how many days the welcome emails run after someone joins",
+  "from": "the email platform's welcome flow"
+ },
+ "checkout_recovery_days": {
+  "value": null,
+  "means": "how many days the abandoned-checkout emails run",
+  "from": "the email platform's checkout flow"
+ },
+ "time_to_first_result_days": {
+  "value": null,
+  "means": "days after delivery before the product shows what it promises",
+  "from": "the product facts and claims (products/<product>/product.md), not a guess"
+ },
+ "buffer_days": {
+  "value": null,
+  "means": "days to leave after an order or service email before asking anything",
+  "from": "the brand's own sending rules"
+ },
+ "delivered_event": {
+  "value": null,
+  "means": "the event name the email platform receives when an order is delivered",
+  "from": "the email platform's metrics list (Shopify + Klaviyo: 'Delivered Shipment', if delivery tracking is on)"
+ },
+ "refund_event": {
+  "value": null,
+  "means": "the event name for a refund",
+  "from": "the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order')"
+ },
+ "sells_subscriptions": {
+  "value": null,
+  "means": "the brand sells on subscription",
+  "from": "the store's products and offers"
+ },
+ "subscription_renewed_event": {
+  "value": null,
+  "means": "the event name for a renewal order, as the subscription app sends it",
+  "from": "the subscription app's integration with the email platform"
+ },
+ "subscription_cancelled_event": {
+  "value": null,
+  "means": "the event name for a cancelled subscription",
+  "from": "the subscription app's integration"
+ },
+ "ticket_resolved_event": {
+  "value": null,
+  "means": "the event name for a closed support ticket",
+  "from": "the helpdesk's integration with the email platform"
+ }
+}

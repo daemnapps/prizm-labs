@@ -1,5 +1,5 @@
 {
- "_what": "Starter feedback stages for a Shopify store with Klaviyo. Who gets each form, when (Klaviyo trigger, filters, wait) and what the flow already knows. Copy into brands/<brand>/operations/, set klaviyo.public_id and form.url, and mark stages you can't trigger as blocked with why.",
+ "_what": "Starter feedback stages, derived from first principles (components/feedback-forms/principles.json) with no brand facts yet: every form waits on the facts it names. Fill brands/<brand>/operations/feedback-variables.json and run components/feedback-forms/stages.py; nothing here assumes a platform, a business model or a timing.",
  "brand": "brand-name",
  "label": "<Brand>",
  "status": "template — nothing is live",
@@ -28,220 +28,212 @@
    "label": "On the list, never bought",
    "lane": "lead",
    "relationship": "list-member",
-   "force_lane": "lead",
    "known": {
     "purchase_status": "no order",
     "orders": 0,
     "on_list": true
    },
-   "status": "ready",
+   "why": "They chose to hear from the brand but haven't bought: only they can say what is holding them back and what they use instead.",
+   "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · list-no-order",
     "trigger": {
      "type": "metric",
-     "metric": "Subscribed to List",
-     "integration": "Klaviyo"
+     "metric": "<joined-list>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) — zero times over all time",
-     "Has not been in this flow over all time"
+     "the order event — zero times over all time",
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "7 days"
-   }
+    "wait": "<welcome_series_days + buffer_days>",
+    "why_the_wait": "after the welcome emails have made the brand's case, or the answer is about emails they haven't read yet"
+   },
+   "blocked_by": "needs has_email_signup — people can join the list without buying (from the site: a signup form or pop-up); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); the event name for 'joined-list' on the store + the email platform; store_platform — where orders happen (from the store's admin (e.g. shopify, woocommerce, next-commerce)); welcome_series_days — how many days the welcome emails run after someone joins (from the email platform's welcome flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "abandoned-checkout",
    "label": "Started checkout, didn't buy",
    "lane": "lead",
-   "relationship": "checkout-started",
-   "force_lane": "lead",
+   "relationship": "checkout-starter",
    "known": {
     "purchase_status": "started checkout, no order",
     "orders": 0
    },
-   "status": "ready",
+   "why": "They decided to buy and stopped at the last step: only they know which doubt or friction stopped them.",
+   "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · abandoned-checkout",
     "trigger": {
      "type": "metric",
-     "metric": "Checkout Started",
-     "integration": "Shopify"
+     "metric": "<started-checkout>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) — zero times since starting this flow",
-     "Placed Order (Shopify) — zero times over all time",
-     "Has not been in this flow in the last 90 days"
+     "the order event — zero times over all time",
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "3 days"
-   }
+    "wait": "<checkout_recovery_days + buffer_days>",
+    "why_the_wait": "after the recovery emails have had their turn, so the form doesn't compete with them"
+   },
+   "blocked_by": "needs email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); the event name for 'started-checkout' on the store + the email platform; store_platform — where orders happen (from the store's admin (e.g. shopify, woocommerce, next-commerce)); checkout_recovery_days — how many days the abandoned-checkout emails run (from the email platform's checkout flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "new-customer",
    "label": "First order, delivered",
    "lane": "customer",
-   "relationship": "ordered",
-   "force_lane": null,
+   "relationship": "first-time-buyer",
    "known": {
     "purchase_status": "bought",
     "orders": 1,
     "delivered": true
    },
-   "status": "ready",
+   "why": "They have used the product for the first time: only they can say whether it did what the ads promised, and what they'd say to a friend.",
+   "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · new-customer",
     "trigger": {
      "type": "metric",
-     "metric": "Delivered Shipment",
-     "integration": "Shopify"
+     "metric": "<delivered_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) — equals 1 over all time",
-     "Refunded Order (Shopify) — zero times since starting this flow",
-     "Has not been in this flow over all time"
+     "the order event — equals 1 over all time",
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "10 days"
-   }
+    "wait": "<time_to_first_result_days>",
+    "why_the_wait": "once the product has had time to do what it promises; asked earlier, the answer is a guess"
+   },
+   "blocked_by": "needs delivered_event — the event name the email platform receives when an order is delivered (from the email platform's metrics list (Shopify + Klaviyo: 'Delivered Shipment', if delivery tracking is on)); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); time_to_first_result_days — days after delivery before the product shows what it promises (from the product facts and claims (products/<product>/product.md), not a guess); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
   },
   {
    "stage": "repeat-customer",
-   "label": "2nd order or more",
+   "label": "Ordered again",
    "lane": "customer",
-   "relationship": "ordered",
-   "force_lane": null,
+   "relationship": "repeat-buyer",
    "known": {
     "purchase_status": "bought",
     "orders": "2+"
    },
-   "status": "ready",
+   "why": "They chose the brand a second time: the reason they came back is freshest the moment they reorder.",
+   "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · repeat-customer",
     "trigger": {
      "type": "metric",
-     "metric": "Delivered Shipment",
-     "integration": "Shopify"
+     "metric": "<order-placed>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) — at least 2 over all time",
-     "Placed Order (Shopify) where tags contains \"<subscription app>\" — zero times over all time (subscribers get their own stage)",
-     "Refunded Order (Shopify) — zero times since starting this flow",
-     "Has not been in this flow in the last 180 days"
+     "the order event — at least 2 over all time",
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "10 days"
-   }
+    "wait": "<buffer_days>",
+    "why_the_wait": "right after the order, once the order emails are out of the way"
+   },
+   "blocked_by": "needs email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); the event name for 'order-placed' on the store + the email platform; store_platform — where orders happen (from the store's admin (e.g. shopify, woocommerce, next-commerce)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
   },
   {
    "stage": "subscriber",
-   "label": "Active subscriber, after the 2nd renewal",
+   "label": "Active subscriber",
    "lane": "customer",
-   "relationship": "ordered",
-   "force_lane": null,
+   "relationship": "subscriber",
    "known": {
     "purchase_status": "bought",
-    "subscription": "active (<subscription app>)",
-    "renewals": "2+"
+    "subscription": "active"
    },
+   "why": "They let the brand charge them on repeat: only they know whether the rhythm fits and what nearly made them cancel.",
    "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · subscriber",
     "trigger": {
      "type": "metric",
-     "metric": "Placed Order",
-     "integration": "Shopify"
+     "metric": "<subscription_renewed_event>"
     },
-    "trigger_filters": [
-     "tags contains \"<subscription app> recurring order\""
-    ],
+    "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) where tags contains \"<subscription app> recurring order\" — at least 2 over all time",
-     "Has not been in this flow in the last 180 days"
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "10 days"
+    "wait": "<buffer_days>",
+    "why_the_wait": "after a renewal has arrived, so the rhythm is real to them"
    },
-   "blocked_by": "only for brands that sell subscriptions: connect the subscription app so Klaviyo receives its renewal and cancel events, then set this stage ready",
-   "applies_if": "the brand sells subscriptions"
+   "blocked_by": "needs sells_subscriptions — the brand sells on subscription (from the store's products and offers); subscription_renewed_event — the event name for a renewal order, as the subscription app sends it (from the subscription app's integration with the email platform); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "churned-refund",
    "label": "Refunded",
    "lane": "churned",
-   "relationship": "ordered",
-   "force_lane": "churned",
+   "relationship": "refunder",
    "known": {
     "purchase_status": "bought, then refunded"
    },
-   "status": "ready",
+   "why": "They asked for their money back: only they can say what broke between the promise and the product.",
+   "status": "blocked",
    "klaviyo": {
     "flow_name": "Feedback · churned-refund",
     "trigger": {
      "type": "metric",
-     "metric": "Refunded Order",
-     "integration": "Shopify"
+     "metric": "<refund_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) — zero times since starting this flow",
-     "Has not been in this flow in the last 90 days"
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "1 day"
-   }
+    "wait": "<buffer_days>",
+    "why_the_wait": "soon, while it's fresh, but not inside the refund's own emails"
+   },
+   "blocked_by": "needs refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order')); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "churned-cancelled",
    "label": "Cancelled subscription",
    "lane": "churned",
-   "relationship": "ordered",
-   "force_lane": "churned-subscriber",
+   "relationship": "cancelled-subscriber",
    "known": {
     "purchase_status": "bought",
     "subscription": "cancelled"
    },
+   "why": "They stopped the subscription: only they can say why it stopped fitting.",
    "status": "blocked",
-   "blocked_by": "only for brands that sell subscriptions: connect the subscription app so Klaviyo receives its renewal and cancel events, then set this stage ready",
    "klaviyo": {
     "flow_name": "Feedback · churned-cancelled",
     "trigger": {
      "type": "metric",
-     "metric": "<subscription app> subscription cancelled (name as <subscription app> sends it)",
-     "integration": "<subscription app> — not connected"
+     "metric": "<subscription_cancelled_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Has not been in this flow over all time"
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "1 day"
+    "wait": "<buffer_days>",
+    "why_the_wait": "soon, while it's fresh"
    },
-   "applies_if": "the brand sells subscriptions"
+   "blocked_by": "needs sells_subscriptions — the brand sells on subscription (from the store's products and offers); subscription_cancelled_event — the event name for a cancelled subscription (from the subscription app's integration); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "post-support",
-   "label": "Support ticket closed",
+   "label": "After a support request",
    "lane": "customer",
-   "relationship": "ordered",
-   "force_lane": null,
+   "relationship": "support-contact",
    "known": {
     "contacted_support": true
    },
+   "why": "They needed help: only they can say whether the help worked and what the site should have answered first.",
    "status": "blocked",
-   "blocked_by": "needs the brand helpdesk connected to Klaviyo so a resolved ticket reaches it as an event",
    "klaviyo": {
     "flow_name": "Feedback · post-support",
     "trigger": {
      "type": "metric",
-     "metric": "Resolved Ticket (<helpdesk>)",
-     "integration": "<helpdesk>"
+     "metric": "<ticket_resolved_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
-     "Placed Order (Shopify) — at least once over all time",
-     "Has not been in this flow in the last 60 days"
+     "Has not been in this flow over all time (one form per person per moment)"
     ],
-    "wait": "1 day"
+    "wait": "<buffer_days>",
+    "why_the_wait": "after the reply, while the experience is fresh"
    },
-   "applies_if": "the brand has a helpdesk connected to Klaviyo"
+   "blocked_by": "needs ticket_resolved_event — the event name for a closed support ticket (from the helpdesk's integration with the email platform); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   }
  ]
 }

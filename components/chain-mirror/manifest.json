@@ -917,6 +917,10 @@
    {
     "from": "components/funnel-tracking/standard.json",
     "to": "components/funnel-tracking/standard.json"
+   },
+   {
+    "from": "brands/_TEMPLATE/operations/feedback-variables.json",
+    "to": "brands/_TEMPLATE/operations/feedback-variables.json"
    }
   ]
  },
