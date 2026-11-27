@@ -706,7 +706,7 @@
    "basis": "source"
   },
   {
-   "path": "tools/video-studio",
+   "path": "components/video-studio",
    "kind": "tool",
    "does": "Storyboard, production, edit, versions and approval in one place",
    "role": "video-producer",
