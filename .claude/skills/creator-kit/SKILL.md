@@ -16,6 +16,12 @@ every command yourself; never ask them to run one, and never ask for a key in ch
 2. On the page: **link the brand folder** they were given (step 1, "My brand folder already lives in its own
    repo"). It is a private repo shared with them; clone it next to this folder first, then link it. Never copy a
    brand folder into this repo.
+   **If they were given an access key instead of a repo:** add `BRAND_API_URL` and `BRAND_API_KEY` on the page
+   (never in chat), then pull the brand folder: `python3 components/brand-sync/sync.py pull <brand>`. It lands in
+   `brands/<brand>/` (gitignored). Pull again before work, push their changes back with `sync.py push <brand>`.
+   **If they were given an access key instead of a repo:** add `BRAND_API_URL` and `BRAND_API_KEY` on the page
+   (never in chat), then pull the brand folder: `python3 components/brand-sync/sync.py pull <brand>`. It lands in
+   `brands/<brand>/` (gitignored). Pull again before work, push their changes back with `sync.py push <brand>`.
 3. On the page: the **needed keys** — Gemini, Apify, ElevenLabs — and Higgsfield if they make pictures or clips.
    The full list with why is in `components/creator-kit/kit.json`.
 4. Run `python3 components/creator-kit/check.py` and tell them the result in one line. Fix any ✗ with them on
