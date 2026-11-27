@@ -1,18 +1,16 @@
-diff --git a/components/video-studio/video_studio.py b/components/video-studio/video_studio.py
-index 5d4faa5a..d4dcf239 100644
---- a/components/video-studio/video_studio.py
-+++ b/components/video-studio/video_studio.py
-@@ -2794,6 +2794,9 @@ class H(BaseHTTPRequestHandler):
+--- a/components/video-studio/video_studio.py	2026-11-27 17:25:31
++++ b/components/video-studio/video_studio.py	2026-11-27 17:25:31
+@@ -2794,6 +2794,9 @@
              return proxy(self, *got)
          u = urlparse(self.path)
          parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
-+        if parts == ["desk"] or parts[:2] == ["api", "desk"]:    # the workflow desk: every video workflow, one page
++        if parts in (["desk"], ["next"]) or parts[:2] == ["api", "desk"]:    # the workflow desk + the new Studio
 +            import workflow_desk as WD
 +            return WD.handle(self, "GET", parts, u.query, None)
          if not parts or parts == ["studio"]:
              return self.send(200, open(os.path.join(HERE, "studio.html"), "rb").read(), "text/html; charset=utf-8")
          if len(parts) == 2 and parts[0] == "creator-hub" and re.fullmatch(r"[a-z0-9-]+", parts[1]):
-@@ -2978,6 +2981,9 @@ class H(BaseHTTPRequestHandler):
+@@ -2978,6 +2981,9 @@
          u = urlparse(self.path)
          parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
          body = self.rfile.read(int(self.headers.get("Content-Length") or 0) or 0)

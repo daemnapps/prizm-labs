@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23EFE9E1'/%3E%3Cpolygon points='25,11 45,51 5,51' fill='%232F5BFF' stroke='%23171512' stroke-width='3.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* The Studio in PRIZM (daemn.co's own system, docs/DESIGN.md + docs/studio.css), laid out like a Stripe dashboard:
+   light paper, white cards, numbers first. Colour carries a job: violet swipes · indigo press-this · cyan video ·
+   green ready/live · amber waiting on you · coral stop · magenta briefs. The prism sweep appears once, on the top bar. */
+:root{
+  --bone:#EFE9E1; --paper:#F7F4EF; --card:#FFFFFF; --ink:#171512; --ink-2:#4B453E; --ink-3:#716960;
+  --line:rgba(23,21,18,.12); --line-2:rgba(23,21,18,.22);
+  --violet:#6D3BF5; --indigo:#2F5BFF; --cyan:#00A8CC; --green:#12A06F; --amber:#F09000; --coral:#F04A2E; --magenta:#DB2A8C;
+  --prism:linear-gradient(96deg,#6D3BF5,#2F5BFF,#00A8CC,#12A06F,#F09000,#F04A2E,#DB2A8C);
+  --display:'Unbounded',system-ui,sans-serif; --body:'Plus Jakarta Sans','Helvetica Neue',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r1:3px; --r2:8px; --r3:16px; --r4:999px; --float:0 26px 60px rgba(23,21,18,.22);
+  --hue:var(--indigo); color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font:14px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--indigo);text-decoration:none}
+:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+.mono,.lbl,.pill,.btn,.num{font-family:var(--mono)}
+.lbl{font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums}
+
+/* icons: daemn.co's one set (docs/studio.js), one stroke, tinted by the block's --hue */
+.ic{width:18px;height:18px;flex:none;display:inline-block}
+.ic svg,.ib svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;display:block}
+.ib{display:inline-grid;place-items:center;width:34px;height:34px;padding:8px;border-radius:var(--r2);color:var(--hue);background:color-mix(in srgb,var(--hue) 11%,transparent);flex:none}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar::before{content:"";display:block;height:3px;background:var(--prism)}
+.barin{display:flex;align-items:center;gap:8px;height:56px;padding:0 24px}
+.mark{display:flex;align-items:center;gap:9px;margin-right:18px;font:800 15px var(--display);letter-spacing:-.01em;color:var(--ink)}
+.mark svg{width:26px;height:26px}
+.nav{display:flex;gap:2px}
+.nav a{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:var(--r2);color:var(--ink-2);font-weight:600;font-size:13.5px}
+.nav a .ic{width:16px;height:16px}
+.nav a:hover{background:var(--paper)}
+.nav a.on{color:var(--indigo);background:color-mix(in srgb,var(--indigo) 9%,transparent)}
+.grow{flex:1}
+select.brand{border:1px solid var(--line-2);background:var(--card);border-radius:var(--r2);padding:6px 10px;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);background:var(--card);border-radius:var(--r2);padding:7px 13px;font-size:12.5px;font-weight:500;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn.go{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.btn.wait{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn .ic{width:15px;height:15px}
+
+/* page */
+main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
+.ph{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.ph h1{margin:0;font:600 22px var(--display);letter-spacing:-.02em}
+.ph .sub{color:var(--ink-3);font:12px var(--mono)}
+.ph .acts{margin-left:auto;display:flex;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r3);padding:18px 20px}
+.card h3{margin:0;font:600 14px var(--body);display:flex;align-items:center;gap:10px}
+.card h3 .count{margin-left:auto;font:500 15px var(--mono);color:var(--hue)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:2px 9px;border-radius:var(--r4);border:1px solid color-mix(in srgb,var(--hue) 35%,transparent);color:var(--hue);background:color-mix(in srgb,var(--hue) 8%,transparent);white-space:nowrap}
+.pill .ic{width:13px;height:13px}
+.p-swipe{--hue:var(--violet)}.p-video{--hue:var(--cyan)}.p-ready{--hue:var(--green)}.p-wait{--hue:var(--amber)}.p-stop{--hue:var(--coral)}.p-brief{--hue:var(--magenta)}.p-act{--hue:var(--indigo)}.p-mute{--hue:var(--ink-3)}
+.empty{color:var(--ink-3);font-size:13px;padding:6px 0}
+.note{background:var(--paper);border:1px dashed var(--line-2);border-radius:var(--r2);padding:12px 14px;color:var(--ink-2);font-size:13px}
+.card.note{background:var(--card)}
+.note.stop{border-color:color-mix(in srgb,var(--coral) 45%,transparent);color:var(--coral)}
+.skel{color:var(--ink-3);padding:30px 0;text-align:center;font:12px var(--mono)}
+
+/* Today */
+.money{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.mcard{display:grid;grid-template-columns:1fr 190px;gap:12px 18px;align-items:end}
+.mcard .top{grid-column:1/-1;display:flex;align-items:center;gap:10px}
+.mcard .top b{font:600 14px var(--body)}
+.mcard .top .lbl{margin-left:auto}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.nums div{display:grid;gap:2px}
+.nums b{font:500 clamp(15px,1.5vw,22px) var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.nums .up b{color:var(--green)}.nums .dn b{color:var(--coral)}
+.spark{width:100%;height:48px}
+.dcol{display:grid;gap:10px;align-content:start}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);color:var(--ink)}
+.row b{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row span{color:var(--ink-3);font:11.5px var(--mono);grid-column:1}
+.row .pill{grid-row:1/3;grid-column:2;align-self:center}
+.run{display:flex;flex-wrap:wrap;gap:22px;margin-top:16px;padding:14px 20px}
+.run span{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+.run i{width:8px;height:8px;border-radius:50%;background:var(--hue)}
+
+/* Ads */
+.split{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+.list{padding:8px 0;max-height:calc(100vh - 170px);overflow:auto;position:sticky;top:80px}
+.list .g{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:center}
+.ad{padding:9px 16px;cursor:pointer;border-left:3px solid transparent;display:grid;gap:1px}
+.ad:hover{background:var(--paper)}
+.ad.on{background:color-mix(in srgb,var(--indigo) 6%,transparent);border-left-color:var(--indigo)}
+.ad b{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ad span{font:11.5px var(--mono);color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.detail{display:grid;gap:16px;min-width:0}
+.dh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dh h2{margin:0;font:600 18px var(--display);letter-spacing:-.02em}
+.dh .acts{margin-left:auto;display:flex;gap:8px}
+.steps{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.steps button{border:0;background:none;padding:10px 12px;border-bottom:2px solid transparent;color:var(--ink-3);font:600 13px var(--body);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.steps button:hover{color:var(--ink)}
+.steps button.on{color:var(--indigo);border-bottom-color:var(--indigo)}
+.steps .d{width:8px;height:8px;border-radius:50%;background:var(--line-2)}
+.steps .done .d{background:var(--green)}.steps .now .d{background:var(--indigo)}.steps .price .d{background:var(--amber)}
+.work{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+.insp{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto;padding:0}
+.insp section{padding:16px 18px;border-bottom:1px solid var(--line)}
+.insp section:last-child{border-bottom:0}
+.insp h4{margin:0 0 8px;font:500 11px var(--mono);letter-spacing:.04em;color:var(--ink-3);display:flex;justify-content:space-between;gap:8px}
+.prompt{margin:0;font:12px/1.65 var(--mono);white-space:pre-wrap;word-break:break-word;background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);padding:12px;max-height:50vh;overflow:auto;color:var(--ink)}
+.kv{display:grid;grid-template-columns:84px 1fr;gap:5px 10px;font-size:12.5px;margin:0}
+.kv dt{color:var(--ink-3);font:11.5px var(--mono)}.kv dd{margin:0;word-break:break-word}
+.tabs{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--card);border-radius:var(--r4);padding:3px 10px;font:11.5px var(--mono);color:var(--ink-2)}
+.tabs button.on{border-color:var(--indigo);color:var(--indigo)}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.shot{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--card);padding:0;text-align:left;cursor:pointer}
+.shot:hover{border-color:var(--ink-3)}
+.shot.on{border-color:var(--indigo);box-shadow:0 0 0 1px var(--indigo)}
+.shot .pic{aspect-ratio:9/16;background:var(--bone);position:relative}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot .dur{position:absolute;right:6px;bottom:6px;background:rgba(23,21,18,.72);color:#fff;border-radius:var(--r1);padding:1px 6px;font:11px var(--mono)}
+.shot .pill{position:absolute;left:6px;top:6px;background:var(--card)}
+.shot .cap{padding:8px 10px;display:grid;gap:2px}
+.shot .cap b{font-size:12px}
+.shot .cap span{font-size:12px;color:var(--ink-3);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tl{margin-top:16px;padding:12px 14px}
+.tl .trk{display:flex;gap:2px;height:52px}
+.tl .clip{background:var(--bone);border-radius:var(--r1);overflow:hidden;min-width:6px;cursor:pointer}
+.tl .clip img{width:100%;height:100%;object-fit:cover}
+.tl .rul{display:flex;justify-content:space-between;font:11px var(--mono);color:var(--ink-3);margin-top:6px}
+.vers{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.ver{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--card)}
+.ver video{width:100%;aspect-ratio:9/16;background:var(--ink);display:block}
+.ver b{display:block;padding:9px 11px;font-size:13px}
+.frame{width:100%;height:calc(100vh - 260px);border:1px solid var(--line);border-radius:var(--r2);background:var(--card)}
+.out{display:grid;gap:12px}
+.file{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--card)}
+.file header{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:600;font-size:13px}
+.file header .lbl{margin-left:auto}
+.file .md{padding:14px 16px;max-height:560px;overflow:auto;font-size:13.5px;line-height:1.6}
+.file .md h2,.file .md h3{font:600 14px var(--body);margin:14px 0 6px}
+.file .md p{margin:0 0 8px}.file .md ul{margin:0 0 8px;padding-left:18px}
+.file .md table{border-collapse:collapse;font-size:12.5px;margin:6px 0}.file .md td,.file .md th{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+.file .md code{font:12px var(--mono);background:var(--paper);padding:0 4px;border-radius:var(--r1)}
+.file.missing header{color:var(--ink-3);font-weight:500}
+.gal{display:flex;flex-wrap:wrap;gap:8px;padding:12px}
+.gal img,.gal video{height:180px;border-radius:var(--r1);background:var(--bone)}
+.price{border:1px solid color-mix(in srgb,var(--amber) 50%,transparent);border-radius:var(--r3);overflow:hidden;background:var(--card);max-width:640px}
+.price .pt{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:color-mix(in srgb,var(--amber) 9%,var(--card))}
+.price .pt b{font:500 30px var(--mono);font-variant-numeric:tabular-nums}
+.price table{width:100%;border-collapse:collapse;font-size:13px}
+.price td{padding:9px 18px;border-top:1px solid var(--line)}
+.price td:last-child{text-align:right;font-family:var(--mono)}
+.price form{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px;border-top:1px solid var(--line)}
+.price label{display:grid;gap:4px;font:11px var(--mono);color:var(--ink-3)}
+.price label.w,.price .gorow{grid-column:1/-1}
+.price input,.price textarea,.price select{border:1px solid var(--line-2);border-radius:var(--r2);padding:8px 10px;background:var(--card);font:14px var(--body)}
+.price .gorow{display:flex;justify-content:space-between;align-items:center}
+.sub-steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+
+/* Swipes */
+.filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.filters button{border:1px solid var(--line-2);background:var(--card);border-radius:var(--r4);padding:5px 12px;font:12px var(--mono);color:var(--ink-2)}
+.filters button.on{border-color:var(--violet);color:var(--violet);background:color-mix(in srgb,var(--violet) 8%,var(--card))}
+.covers{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px}
+.cover{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--card);color:var(--ink)}
+.cover:hover{border-color:var(--violet)}
+.cover .pic{aspect-ratio:9/16;background:var(--bone)}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover .cap{padding:9px 10px;display:grid;gap:6px}
+.cover .cap b{font-size:12.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cover .meta{display:flex;gap:5px;flex-wrap:wrap}
+.sw3{display:grid;grid-template-columns:260px 1fr 360px;gap:16px;align-items:start}
+.swv{padding:0;overflow:hidden;position:sticky;top:80px}
+.swv video,.swv img{width:100%;aspect-ratio:9/16;background:var(--ink);display:block;object-fit:cover}
+.swv .kv{padding:12px 14px}
+.stl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.stl button{border:1px solid var(--line);background:var(--card);border-radius:var(--r2);padding:6px 10px;font:600 12px var(--body);display:flex;align-items:center;gap:6px;color:var(--ink-2)}
+.stl button i{width:7px;height:7px;border-radius:50%;background:var(--hue)}
+.stl button.on{border-color:var(--indigo);color:var(--indigo)}
+
+/* Research */
+.bars{display:grid;gap:9px;margin-top:12px}
+.bars div{display:grid;grid-template-columns:1fr 60px;gap:4px 10px;align-items:center;font-size:12.5px}
+.bars .b{height:8px;border-radius:var(--r4);background:color-mix(in srgb,var(--violet) 14%,transparent);overflow:hidden;grid-column:1/-1}
+.bars .b i{display:block;height:100%;background:var(--violet);border-radius:var(--r4)}
+.bars span.n{text-align:right;font:12px var(--mono);color:var(--ink-3)}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{text-align:left;font:500 11px var(--mono);color:var(--ink-3);padding:8px 10px;border-bottom:1px solid var(--line)}
+table.t td{padding:10px;border-bottom:1px solid var(--line)}
+table.t td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+
+/* Brands */
+.prog{height:8px;border-radius:var(--r4);background:var(--bone);overflow:hidden;margin:12px 0 2px}
+.prog i{display:block;height:100%;background:var(--green)}
+.items{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:34px 1fr auto;gap:2px 12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r2);background:var(--card)}
+.item .ib{grid-row:1/3}
+.item b{font-size:13.5px}
+.item span:not(.pill){font:11.5px var(--mono);color:var(--ink-3);word-break:break-word}
+.item .pill{grid-row:1/3;grid-column:3}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
+@media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
+@media (max-width:860px){.split,.money,.grid2,.grid4{grid-template-columns:1fr}.list{position:static;max-height:40vh}.mcard{grid-template-columns:1fr}.nav a span{display:none}.barin{padding:0 12px}main{padding:20px 14px 50px}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="barin">
+  <a class="mark" href="#today"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="pz" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D3BF5"/><stop offset=".2" stop-color="#2F5BFF"/><stop offset=".38" stop-color="#00A8CC"/><stop offset=".54" stop-color="#12A06F"/><stop offset=".7" stop-color="#F09000"/><stop offset=".85" stop-color="#F04A2E"/><stop offset="1" stop-color="#DB2A8C"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="#EFE9E1"/><polygon points="25,11 45,51 55,45 35,5" fill="url(#pz)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/><polygon points="25,11 45,51 5,51" fill="url(#pz)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/></svg>Studio</a>
+  <nav class="nav" id="nav">
+    <a href="#today" data-v="today"><i class="ic" data-i="zap"></i><span>Today</span></a>
+    <a href="#ads" data-v="ads"><i class="ic" data-i="video"></i><span>Ads</span></a>
+    <a href="#swipes" data-v="swipes"><i class="ic" data-i="bookmark"></i><span>Swipes</span></a>
+    <a href="#research" data-v="research"><i class="ic" data-i="search"></i><span>Research</span></a>
+    <a href="#brands" data-v="brands"><i class="ic" data-i="layers"></i><span>Brands</span></a>
+  </nav>
+  <div class="grow"></div>
+  <select class="brand" id="brand" aria-label="Brand"></select>
+  <a class="btn" href="/approve/" target="_blank" rel="noopener"><i class="ic" data-i="check"></i>Approval page</a>
+  <a class="btn go" href="/desk#start"><i class="ic" data-i="plus"></i>New ad</a>
+</div></header>
+<main id="main"><div class="skel">Loading…</div></main>
+<script>
+'use strict';
+/* ---------- daemn.co's icon set (docs/studio.js), the same drawings ---------- */
+const I = {
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3"/>',
+  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
+  film:'<rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/>',
+  send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  sparkles:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/>',
+  check:'<path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  layers:'<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  alert:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  play:'<path d="m7 4 13 8-13 8z"/>',
+  bookmark:'<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  loop:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  plug:'<path d="M12 22v-5M9 8V2M15 8V2M18 8v5a6 6 0 0 1-12 0V8z"/>',
+  scissors:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>',
+};
+const icon = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[n] || I.sparkles}</svg>`;
+const paintIcons = (root = document) => root.querySelectorAll('[data-i]').forEach(el => { if (!el.firstChild) el.innerHTML = icon(el.dataset.i); });
+const ib = (n, hue) => `<i class="ib" style="--hue:var(--${hue})">${icon(n)}</i>`;
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const J = (u, o) => fetch(u, Object.assign({cache:'no-store'}, o)).then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || ('error ' + r.status)); return j; });
+const usd = (v, d = 0) => v == null ? '—' : (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US', {maximumFractionDigits:d, minimumFractionDigits:d});
+const int = v => v == null ? '—' : Number(v).toLocaleString('en-US');
+const toast = t => { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2800); };
+const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const media = p => `/api/desk/media?path=${encodeURIComponent(p)}`;
+const fmtT = s => Math.floor(s / 60) + ':' + String(Math.round(s % 60)).padStart(2, '0');
+const nice = s => { s = String(s || ''); const b = S.brand || ''; if (b && (s.startsWith(b + '-') || s.startsWith(b + '_'))) s = s.slice(b.length + 1); return s.replace(/[-_]+/g, ' '); };
+const dayLabel = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'short'}) : '';
+/* a small Markdown reader for stage outputs: headings, lists, tables, bold, code */
+function md(t){
+  const lines = String(t || '').split('\n'); let h = '', list = false, table = [];
+  const inl = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>');
+  const flushT = () => { if (!table.length) return; const rows = table.filter(r => !/^\|?\s*:?-{2,}/.test(r.replace(/\s/g, ''))); h += '<table>' + rows.map((r, i) => '<tr>' + r.replace(/^\||\|$/g, '').split('|').map(c => i ? `<td>${inl(c.trim())}</td>` : `<th>${inl(c.trim())}</th>`).join('') + '</tr>').join('') + '</table>'; table = []; };
+  for (const l of lines) {
+    if (/^\s*\|/.test(l)) { table.push(l.trim()); continue; } else flushT();
+    if (/^\s*[-*] /.test(l)) { if (!list) { h += '<ul>'; list = true; } h += '<li>' + inl(l.replace(/^\s*[-*] /, '')) + '</li>'; continue; }
+    if (list) { h += '</ul>'; list = false; }
+    const m = /^(#{1,4})\s+(.*)/.exec(l);
+    if (m) { const lv = Math.min(m[1].length + 1, 3); h += `<h${lv}>${inl(m[2])}</h${lv}>`; }
+    else if (l.trim()) h += '<p>' + inl(l) + '</p>';
+  }
+  flushT(); if (list) h += '</ul>'; return h;
+}
+const text = p => J('/api/desk/text?path=' + encodeURIComponent(p)).then(t => t.text || '');
+
+/* ---------- state + routing (#today · #ads/<id>|<step> · #swipes · #swipe/<label> · #research · #brands) ---------- */
+const S = { brand: store.get('st.brand') || '', menu: store.get('st.menu'), pieces: [], swipes: {}, view: 'today', arg: null, prods: null };
+async function boot(){
+  let bs; try { bs = (await J('/api/desk/brands')).brands.map(b => b.id); } catch { bs = []; }
+  if (!bs.includes(S.brand)) S.brand = bs[0] || '';
+  $('#brand').innerHTML = bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(b.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()))}</option>`).join('');
+  paintIcons();
+  J('/api/desk/pieces').then(r => { S.pieces = r.pieces || []; if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
+  J('/api/menu').then(m => { S.menu = {brands: m.brands}; store.set('st.menu', S.menu); if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
+  route();
+}
+$('#brand').onchange = e => { S.brand = e.target.value; store.set('st.brand', S.brand); if (S.view === 'swipe') location.hash = 'swipes'; else if (S.view === 'ads') location.hash = 'ads'; else route(); };
+window.addEventListener('hashchange', route);
+function route(){
+  const h = decodeURIComponent(location.hash.slice(1) || 'today');
+  const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
+  S.view = ['today', 'ads', 'swipes', 'swipe', 'research', 'brands'].includes(v) ? v : 'today';
+  S.arg = i < 0 ? null : h.slice(i + 1);
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === (S.view === 'swipe' ? 'swipes' : S.view)));
+  ({today, ads, swipes, swipe:swipeView, research, brands:brandSetup})[S.view]();
+}
+const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
+
+/* ================= TODAY ================= */
+async function today(){
+  const m = $('#main');
+  const head = `<div class="ph"><h1>Today</h1><span class="sub">${new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'})}</span>`;
+  if (!m.querySelector('.money')) m.innerHTML = head + `</div><div class="skel">Reading the numbers…</div>`;
+  let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `</div><div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'today') return;
+  const bm = brandMenu(), waiting = bm ? bm.waiting : null, mon = d.money || {};
+  const stale = (mon.brands || []).map(b => b.last).filter(Boolean).sort().pop();
+  const days = stale ? Math.round((Date.now() - new Date(stale + 'T12:00:00')) / 864e5) : null;
+  const moneyCards = (mon.brands || []).map(b => {
+    const ps = b.days.map(x => x.profit || 0), mx = Math.max(1, ...ps.map(Math.abs)), neg = ps.some(p => p < 0);
+    const mid = neg ? 24 : 48, scale = neg ? 24 : 48;
+    const bars = ps.map((p, k) => { const hh = Math.max(1, Math.abs(p) / mx * scale); const y = p >= 0 ? mid - hh : mid; return `<rect x="${k * 27 + 2}" y="${y.toFixed(1)}" width="22" height="${hh.toFixed(1)}" rx="2" fill="var(--${p >= 0 ? 'green' : 'coral'})"><title>${esc(dayLabel(b.days[k].d))}: ${usd(p)}</title></rect>`; }).join('');
+    return `<div class="card mcard"><div class="top">${ib('target', b.total.profit >= 0 ? 'green' : 'coral')}<b>${esc(b.label)}</b><span class="lbl">7 days to ${esc(dayLabel(b.last))}</span></div>
+      <div class="nums"><div><span class="lbl">Revenue</span><b>${usd(b.total.revenue)}</b></div><div><span class="lbl">Spend</span><b>${usd(b.total.spend)}</b></div>
+      <div class="${b.total.profit >= 0 ? 'up' : 'dn'}"><span class="lbl">Profit</span><b>${usd(b.total.profit)}</b></div><div><span class="lbl">ROAS</span><b>${b.roas ?? '—'}</b></div></div>
+      <svg class="spark" viewBox="0 0 190 48" preserveAspectRatio="none" role="img" aria-label="Daily profit, 7 days">${neg ? '<line x1="0" y1="24" x2="190" y2="24" stroke="var(--line-2)"/>' : ''}${bars}</svg></div>`;
+  }).join('');
+  const win = d.winners || [], nx = (d.research || {}).next || {}, rounds = (d.research || {}).rounds || [];
+  const variations = win.filter(w => !w.varied).slice(0, 4);
+  const rr = rounds.find(r => r.worlds && r.worlds.length);
+  const resCount = (nx.angles || []).length + (rr ? 1 : 0);
+  m.innerHTML = head + `${days != null && days > 2 ? `<span class="pill p-stop"><i class="ic" data-i="alert"></i>Money numbers stop ${esc(dayLabel(stale))} · ${days} days old</span>` : ''}</div>
+    ${mon.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon.why || 'No money numbers')}</div>`}
+    <div class="grid4">
+      <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
+        ${waiting ? `<a class="btn wait" href="/approve/" target="_blank" rel="noopener">Open the approval page</a>` : `<div class="empty">Nothing waiting on the approval page</div>`}</div>
+      <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">—</span></h3>
+        <div class="empty">Needs each live ad's numbers.${days > 2 ? ' The feed stopped ' + esc(dayLabel(stale)) + '.' : ''}</div></div>
+      <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${variations.length}</span></h3>
+        ${variations.map(w => `<div class="row"><b title="${esc(w.name)}">${esc(w.headline || w.name)}</b><span>${int(w.purchases)} buys · CPA ${usd(w.cpa)} · ROAS ${w.roas ?? '—'}</span><span class="pill p-video">${esc((w.format || '').toLowerCase())}</span></div>`).join('') || '<div class="empty">No winners on file</div>'}</div>
+      <div class="card dcol" style="--hue:var(--violet)"><h3>${ib('search', 'violet')}Research to act on<span class="count">${resCount}</span></h3>
+        ${(nx.angles || []).slice(0, 2).map(a => `<a class="row" href="#research"><b>${esc(a.angle)}</b><span>${int(a.purchases)} buys on ${usd(a.spend)}</span><span class="pill p-brief">angle</span></a>`).join('')}
+        ${rr ? `<a class="row" href="#research"><b>${esc(nice(rr.name))}</b><span>${esc(rr.worlds[0].world)} · ${int(rr.worlds[0].count)}</span><span class="pill p-swipe">round</span></a>` : ''}
+        ${!resCount ? '<div class="empty">Nothing new</div>' : ''}</div>
+    </div>
+    <div class="card run">${runStrip()}</div>`;
+  paintIcons(m);
+}
+function runStrip(){
+  const bm = brandMenu(); const ideas = bm ? bm.ideas.filter(i => !i.removed) : [];
+  const c = re => ideas.filter(i => re.test((i.stage || {}).id || '')).length;
+  const lines = S.pieces.filter(p => p.brand === S.brand);
+  return `<span style="--hue:var(--cyan)"><i></i>Being made · ${c(/hand|mak|prod/)}</span>
+    <span style="--hue:var(--magenta)"><i></i>With the editor · ${c(/editor|edit/)}</span>
+    <span style="--hue:var(--green)"><i></i>Live · ${c(/live|meta/)}</span>
+    <span style="--hue:var(--indigo)"><i></i>New workflow runs · ${lines.length}</span>`;
+}
+
+/* ================= ADS ================= */
+const num = it => { const m = /brief-(\d+)/.exec(it.key || ''); return m ? m[1] : null; };
+function adList(){
+  const out = []; const bm = brandMenu();
+  for (const it of (bm ? bm.ideas : [])) if (!it.removed) out.push({kind:'prod', id:'p:' + (it.key || it.id), title:it.name, n:num(it), stage:it.stage});
+  for (const p of S.pieces) if (p.brand === S.brand) out.push({kind:'line', id:'w:' + p.label, brand:p.brand, label:p.label, title:nice(p.label), line:p.line || p.format, state:p.state, next:p.next, quote:p.quote});
+  for (const a of out) {
+    const s = (a.stage && a.stage.id) || '';
+    a.group = a.kind === 'line' ? (a.quote ? 'need' : a.state === 'complete' ? 'live' : 'making') : /live|meta/.test(s) ? 'live' : /editor|edit/.test(s) ? 'editor' : a.n ? 'making' : 'ideas';
+  }
+  return out;
+}
+const GROUPS = [['need', 'Needs you', 'amber'], ['making', 'Being made', 'cyan'], ['editor', 'With the editor', 'magenta'], ['live', 'Live', 'green'], ['ideas', 'Ideas', 'violet']];
+let openAd = null;
+function ads(){
+  const list = adList();
+  const [cur, step] = (S.arg || '').split('|');
+  const a = list.find(x => x.id === cur) || null;
+  const m = $('#main');
+  const listHtml = list.length ? GROUPS.map(([g, name, hue]) => { const rows = list.filter(x => x.group === g); return rows.length ? `<div class="g"><span class="pill" style="--hue:var(--${hue})">${name}</span><span class="lbl">${rows.length}</span></div>` + rows.map(x => `<div class="ad ${a && a.id === x.id ? 'on' : ''}" data-ad="${esc(x.id)}" tabindex="0"><b>${esc(x.title)}</b><span>${esc(x.kind === 'line' ? x.line + ' · ' + (x.next || 'done') : (x.n ? x.n + ' · ' : '') + ((x.stage && x.stage.name) || ''))}</span></div>`).join('') : ''; }).join('') : '<div class="skel">Loading the ads…</div>';
+  if (m.querySelector('#list') && openAd && a && openAd === a.id + '|' + (step || '')) { $('#list').innerHTML = listHtml; return; }
+  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub">${list.length} for this brand</span></div>
+    <div class="split"><div class="card list" id="list">${listHtml}</div>
+    <div class="detail" id="detail">${a ? '<div class="skel">Opening…</div>' : `<div class="card note">Pick an ad. Every step, its prompt and its output open here.</div>`}</div></div>`;
+  openAd = a ? a.id + '|' + (step || '') : null;
+  if (a) (a.kind === 'line' ? openLine : openProd)(a, step);
+}
+document.addEventListener('click', e => { const t = e.target.closest('[data-ad]'); if (t) location.hash = 'ads/' + encodeURIComponent(t.dataset.ad); });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.ad) location.hash = 'ads/' + encodeURIComponent(e.target.dataset.ad); });
+function setStep(a, s){ history.replaceState(null, '', '#ads/' + encodeURIComponent(a.id + '|' + s)); S.arg = a.id + '|' + s; openAd = S.arg; }
+const stepsBar = (steps, cur) => `<div class="steps">${steps.map(s => `<button class="${s.cls || ''} ${s.id === cur ? 'on' : ''}" data-step="${esc(s.id)}"><i class="d"></i>${esc(s.name)}</button>`).join('')}</div>`;
+
+/* a production: Swipe · Script · Shots · Edit · Versions · Approve */
+const PROD = [['swipe', 'Swipe'], ['script', 'Script'], ['shots', 'Shots'], ['edit', 'Edit'], ['versions', 'Versions'], ['approve', 'Approve']];
+async function openProd(a, step){
+  const det = $('#detail');
+  if (!a.n) { det.innerHTML = `<div class="dh"><h2>${esc(a.title)}</h2><span class="pill p-swipe">idea</span></div><div class="card note">No production yet. Its swipe and teardown are on the board. <a href="/board/" target="_blank" rel="noopener">Open the board</a></div>`; return; }
+  const st = (a.stage || {}).id || '';
+  step = step || (/live|editor/.test(st) ? 'versions' : 'shots');
+  det.innerHTML = `<div class="dh"><h2>${esc(a.title)}</h2><span class="pill p-mute">${esc(a.n)}</span><span class="pill ${/live|meta/.test(st) ? 'p-ready' : /editor/.test(st) ? 'p-brief' : 'p-video'}">${esc((a.stage || {}).name || '')}</span>
+      <div class="acts"><button class="btn" data-goto="edit"><i class="ic" data-i="scissors"></i>Edit in HyperFrames</button></div></div>
+    ${stepsBar(PROD.map(([id, name]) => ({id, name})), step)}<div class="work"><div id="stage"><div class="skel">Loading…</div></div><aside class="card insp" id="insp"></aside></div>`;
+  paintIcons(det);
+  det.querySelectorAll('[data-step],[data-goto]').forEach(b => b.onclick = () => { const s = b.dataset.step || b.dataset.goto; setStep(a, s); openProd(a, s); });
+  if (!S.prods) S.prods = (await J('/api/productions').catch(() => ({productions: []}))).productions;
+  const pr = S.prods.find(x => 'p:' + x.key === a.id) || S.prods.find(x => x.n === a.n);
+  a.run = pr ? pr.run : null; a.pn = pr ? pr.n : a.n;
+  if (!a.brief) a.brief = await J('/api/brief/' + a.pn).catch(() => ({scenes: [], missing: true}));
+  if (a.brief.missing && step === 'shots') { $('#stage').innerHTML = `<div class="note">No shots are planned for this ad yet. Its swipe and script are in the first two steps.</div>`; inspText('Shots', 'Shots appear here once production plans them.'); return; }
+  renderProd(a, step);
+}
+const thumb = (n, sc) => sc.run && sc.run.files && sc.run.files.thumb ? `/files/${n}/scenes/${sc.scene}/${sc.run.files.thumb}?h=${sc.run.workflow_hash || ''}` : null;
+function renderProd(a, step){
+  const n = a.pn || a.n, scenes = (a.brief.scenes || []), stage = $("#stage");
+  if (step === 'swipe' || step === 'script') return teardownInAd(a, step);
+  if (step === 'shots') {
+    const made = scenes.filter(s => s.status === 'made').length, total = scenes.reduce((t, s) => t + ((s.run && s.run.duration) || 0), 0);
+    stage.innerHTML = `<div class="card"><h3>${ib('film', 'cyan')}Shots<span class="lbl" style="margin-left:auto">${made} of ${scenes.length} made · ${total.toFixed(1)} s</span></h3>
+      <div class="shots" style="margin-top:14px">${scenes.map(sc => { const t = thumb(n, sc); return `<button class="shot" data-scene="${esc(sc.scene)}"><div class="pic">${t ? `<img loading="lazy" src="${esc(t)}" alt="">` : ''}<span class="pill ${sc.status === 'made' ? 'p-ready' : 'p-wait'}">${sc.status === 'made' ? 'made' : 'waiting'}</span>${sc.run ? `<span class="dur">${sc.run.duration.toFixed(1)}s</span>` : ''}</div><div class="cap"><b>${esc(sc.scene)} · ${esc((sc.workflow || {}).title || '')}</b><span>${esc((sc.workflow || {}).words || '')}</span></div></button>`; }).join('')}</div></div>
+      <div class="card tl"><span class="lbl">Timeline</span><div class="trk" style="margin-top:6px">${scenes.map(sc => { const t = thumb(n, sc); return `<div class="clip" data-scene="${esc(sc.scene)}" style="flex:${(sc.run && sc.run.duration) || 1}" title="${esc(sc.scene)}">${t ? `<img src="${esc(t)}" alt="">` : ''}</div>`; }).join('')}</div><div class="rul"><span>0:00</span><span>${fmtT(total)}</span></div></div>`;
+    stage.querySelectorAll('[data-scene]').forEach(b => b.onclick = () => { stage.querySelectorAll('.shot').forEach(x => x.classList.toggle('on', x.dataset.scene === b.dataset.scene)); inspScene(a, b.dataset.scene); });
+    inspScene(a, null);
+  } else if (step === 'versions') {
+    stage.innerHTML = '<div class="skel">Loading versions…</div>';
+    J('/api/versions/' + n).then(v => { const vs = v.versions || []; stage.innerHTML = `<div class="card"><h3>${ib('play', 'cyan')}Versions<span class="lbl" style="margin-left:auto">${vs.length} cuts</span></h3><div class="vers" style="margin-top:14px">${vs.map(x => `<div class="ver"><video controls preload="metadata" src="/files/${esc(x.file)}#t=0.5"></video><b>${esc(x.label)}</b></div>`).join('') || '<div class="empty">No cut rendered yet</div>'}</div></div>`; }).catch(e => stage.innerHTML = `<div class="note stop">${esc(e.message)}</div>`);
+    inspText('Versions', 'The control and every opening, newest render of each.');
+  } else if (step === 'edit') {
+    stage.innerHTML = '<div class="skel">Opening the edit in HyperFrames…</div>';
+    J('/api/hyperframes/' + n, {method:'POST', headers:{'Content-Type':'application/json'}, body:'{}'})
+      .then(r => { stage.innerHTML = `<div class="card" style="padding:12px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">${ib('scissors', 'cyan')}<b>Edit · HyperFrames</b><a class="btn" style="margin-left:auto" href="${esc(r.url)}" target="_blank" rel="noopener">Open on its own</a></div><iframe class="frame" src="${esc(r.url)}" title="HyperFrames edit"></iframe></div>`; })
+      .catch(e => stage.innerHTML = `<div class="note">No HyperFrames edit for this ad yet (${esc(e.message)}). It is built once the shots are made.</div>`);
+    inspText('Edit', 'The cut, in HyperFrames, inside the Studio. Changes save into the ad\'s own edit.');
+  } else if (step === 'approve') {
+    stage.innerHTML = `<div class="card" style="padding:12px"><iframe class="frame" src="/approve/" title="Approval page"></iframe></div>`;
+    inspText('Approve', 'Going live is your click on the approval page.');
+  }
+}
+function inspText(t, body){ $('#insp').innerHTML = `<section><h4>${esc(t)}</h4><div style="color:var(--ink-2);font-size:13px">${esc(body)}</div></section>`; }
+function inspScene(a, sid){
+  const sc = (a.brief.scenes || []).find(s => s.scene === sid);
+  if (!sc) return inspText('Prompt and output', 'Pick a shot: its words, every step that made it (tool, model, prompt word for word) and the clip.');
+  const w = sc.workflow || {}, t = thumb(a.pn || a.n, sc);
+  let h = `<section><h4>${esc(sc.scene)} · ${esc(w.title || '')}<span>${esc(sc.pick || '')}</span></h4><dl class="kv"><dt>Status</dt><dd>${esc(sc.status)}${(sc.waits || []).length ? ' · waits: ' + esc(sc.waits.join(', ')) : ''}</dd><dt>Length</dt><dd>${sc.run ? sc.run.duration.toFixed(2) + ' s' : '—'}</dd><dt>Takes</dt><dd>${esc((sc.takes || []).join(', '))}</dd>${w.clock && w.clock.note ? `<dt>Note</dt><dd>${esc(w.clock.note)}</dd>` : ''}</dl></section>`;
+  if (sc.run && sc.run.files && sc.run.files.video) h += `<section><h4>Output</h4><video controls preload="metadata" style="width:100%;border-radius:8px;background:var(--ink)" src="/files/${a.pn || a.n}/scenes/${sc.scene}/${esc(sc.run.files.video)}" ${t ? `poster="${esc(t)}"` : ''}></video></section>`;
+  if (w.words) h += `<section><h4>Words</h4><pre class="prompt">${esc(w.words)}</pre></section>`;
+  for (const s of w.steps || []) {
+    const p = s.prompt ? (typeof s.prompt === 'string' ? s.prompt : JSON.stringify(s.prompt, null, 1)) : null;
+    h += `<section><h4>${esc(s.id)}<span>${esc(s.tool || '')}${s.model ? ' · ' + esc(s.model) : ''}</span></h4>${p ? `<pre class="prompt">${esc(p)}</pre>` : ''}<dl class="kv" style="margin-top:6px">${s.note ? `<dt>Note</dt><dd>${esc(s.note)}</dd>` : ''}${s.caption ? `<dt>Caption</dt><dd>${esc(s.caption)}</dd>` : ''}</dl></section>`;
+  }
+  $('#insp').innerHTML = h;
+}
+
+/* the teardown behind an ad: Swipe = the stages before the injection, Script = the injection onward */
+const STRIP = /^stage(0|1|1[a-z]|2)$/;
+async function teardownInAd(a, step){
+  const label = a.kind === 'line' ? ((a.piece || {}).values || {}).teardown : a.run;
+  if (!label) { $('#stage').innerHTML = `<div class="note">No teardown is on file for this ad.</div>`; inspText('Teardown', 'Older ads were made before teardowns were kept with them.'); return; }
+  let sw; try { sw = S.swipes[label] || (S.swipes[label] = await J('/api/desk/swipe?label=' + encodeURIComponent(label))); }
+  catch (e) { $('#stage').innerHTML = `<div class="note">${esc(e.message)}</div>`; inspText('Teardown', ''); return; }
+  const stages = sw.stages.filter(s => step === 'swipe' ? STRIP.test(s.id) : !STRIP.test(s.id));
+  chainView($('#stage'), $('#insp'), sw, stages, step === 'swipe');
+}
+function chainView(stageEl, inspEl, sw, stages, withVideo){
+  let cur = stages.find(s => s.out) || stages[0];
+  const draw = () => {
+    stageEl.innerHTML = `${withVideo && (sw.video || sw.poster) ? `<div class="card" style="padding:12px;margin-bottom:16px;display:flex;gap:16px;align-items:flex-start">${sw.video ? `<video controls preload="metadata" style="width:170px;aspect-ratio:9/16;border-radius:8px;background:var(--ink)" src="${media(sw.video)}" ${sw.poster ? `poster="${media(sw.poster)}"` : ''}></video>` : `<img style="width:170px;aspect-ratio:9/16;object-fit:cover;border-radius:8px" src="${media(sw.poster)}" alt="">`}<dl class="kv"><dt>Swipe</dt><dd>${esc(nice(sw.label))}</dd><dt>Format</dt><dd>${esc(sw.format || '—')}</dd><dt>Lane</dt><dd>${esc(sw.lane || '—')}</dd><dt>Post</dt><dd>${sw.post_url ? `<a href="${esc(sw.post_url)}" target="_blank" rel="noopener">open</a>` : '—'}</dd></dl></div>` : ''}
+      <div class="stl">${stages.map(s => `<button class="${cur && s.id === cur.id ? 'on' : ''}" data-st="${esc(s.id)}" style="--hue:var(--${s.status === 'done' ? 'green' : s.status === 'skipped' ? 'ink-3' : 'amber'})"><i></i>${esc(s.name)}</button>`).join('')}</div>
+      ${cur ? `<div class="file"><header>${esc(cur.name)}<span class="lbl">${esc([cur.model, cur.seconds ? Math.round(cur.seconds) + ' s' : '', cur.version ? 'v' + cur.version : ''].filter(Boolean).join(' · '))}</span></header><div class="md" id="outmd">${cur.out ? 'Loading…' : esc(cur.why || 'Nothing written at this stage.')}</div></div>` : '<div class="note">No stages here yet.</div>'}`;
+    stageEl.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { cur = stages.find(s => s.id === b.dataset.st); draw(); });
+    if (cur && cur.out) text(cur.out).then(t => { const el = $('#outmd'); if (el) el.innerHTML = /\.json$/.test(cur.out) ? `<pre class="prompt">${esc(t)}</pre>` : md(t); }).catch(e => { const el = $('#outmd'); if (el) el.textContent = e.message; });
+    promptPanel(inspEl, cur);
+  };
+  draw();
+}
+function promptPanel(el, s){
+  if (!s) { el.innerHTML = ''; return; }
+  const tabs = [['The prompt', s.prompt], ['What was sent', s.sent]].filter(x => x[1]);
+  el.innerHTML = `<section><h4>Prompt<span>${esc(s.prompt_name || '')}</span></h4>${tabs.length ? `<div class="tabs">${tabs.map((x, i) => `<button class="${i ? '' : 'on'}" data-pt="${i}">${x[0]}</button>`).join('')}<button data-copy>Copy</button></div><pre class="prompt" id="ptxt">Loading…</pre>` : '<div class="empty">No prompt for this stage</div>'}</section>
+    <section><h4>Run</h4><dl class="kv"><dt>Model</dt><dd>${esc(s.model || '—')}</dd><dt>Engine</dt><dd>${esc(s.engine || '—')}</dd><dt>Version</dt><dd>${esc(s.version || '—')}</dd><dt>Time</dt><dd>${esc(s.seconds ? Math.round(s.seconds) + ' s' : '—')}</dd><dt>Finished</dt><dd>${esc(s.finished || '—')}</dd></dl></section>`;
+  if (!tabs.length) return;
+  const load = i => text(tabs[i][1]).then(t => { const p = el.querySelector('#ptxt'); if (p) p.textContent = t; }).catch(e => { const p = el.querySelector('#ptxt'); if (p) p.textContent = e.message; });
+  load(0);
+  el.querySelectorAll('[data-pt]').forEach(b => b.onclick = () => { el.querySelectorAll('[data-pt]').forEach(x => x.classList.toggle('on', x === b)); load(+b.dataset.pt); });
+  el.querySelector('[data-copy]').onclick = () => navigator.clipboard.writeText(el.querySelector('#ptxt').textContent).then(() => toast('Prompt copied')).catch(() => toast('Select the text to copy'));
+}
+
+/* a workflow piece: the same six steps, its stations grouped under them */
+const PHASE = id => /^(start|swipe|teardown|source)/.test(id) ? 'swipe' : /^(brief|writ|song|elements|script|cast)/.test(id) ? 'script' : /^(pack|plan|price|go)/.test(id) ? 'price' : /^edit/.test(id) ? 'edit' : /^(meta|file|approv|launch)/.test(id) ? 'approve' : 'shots';
+const LINE = [['swipe', 'Swipe'], ['script', 'Script'], ['price', 'Price'], ['shots', 'Make'], ['edit', 'Edit'], ['approve', 'Approve']];
+async function openLine(a, step){
+  const det = $('#detail');
+  const dh = `<div class="dh"><h2>${esc(a.title)}</h2><span class="pill p-video">${esc(a.line || '')}</span><span class="pill ${a.quote ? 'p-wait' : 'p-act'}">${a.quote ? 'at the price' : a.state === 'complete' ? 'done' : 'running'}</span></div>`;
+  det.innerHTML = dh + `<div class="skel">Reading where it stands…</div>`;
+  let p; try { p = a.piece = await J(`/api/desk/piece/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.label)}`); } catch (e) { det.innerHTML = dh + `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const st = p.stations || []; const nowPh = p.now ? PHASE(p.now) : null;
+  const phases = LINE.map(([id, name]) => { const ss = st.filter(s => PHASE(s.id) === id); return {id, name, ss, cls: (ss.length && ss.every(s => s.status === 'done') ? 'done' : id === nowPh ? 'now' : '') + (id === 'price' ? ' price' : '')}; });
+  step = step || nowPh || 'swipe';
+  det.innerHTML = dh + stepsBar(phases, step) + `<div class="work"><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
+  det.querySelectorAll('[data-step]').forEach(b => b.onclick = () => { setStep(a, b.dataset.step); openLine(a, b.dataset.step); });
+  const ph = phases.find(x => x.id === step) || phases[0];
+  if ((step === 'swipe' || step === 'script') && (p.values || {}).teardown) return teardownInAd(a, step);
+  renderStations(a, ph.ss);
+}
+function renderStations(a, ss){
+  const p = a.piece, stage = $('#stage');
+  if (!ss.length) { stage.innerHTML = '<div class="note">Nothing in this step for this line.</div>'; inspText('Step', ''); return; }
+  let cur = ss.find(s => s.status === 'now') || ss.find(s => s.quote) || ss[0];
+  const draw = () => {
+    let h = `<div class="sub-steps">${ss.map(s => `<button class="btn ${s.id === cur.id ? 'go' : ''}" data-ss="${esc(s.id)}">${esc(s.name)}${s.status === 'done' ? ' ✓' : ''}</button>`).join('')}</div>`;
+    if (cur.status === 'now' && p.reason) h += `<div class="note" style="margin-bottom:12px">${esc(p.reason)}</div>`;
+    if (cur.quote) h += priceCard(a, cur);
+    h += '<div class="out" style="margin-top:12px">';
+    for (const o of cur.outputs || []) {
+      if (o.missing) h += `<div class="file missing"><header>${esc(o.name)}<span class="lbl">not made yet</span></header></div>`;
+      else if (/\.(jpe?g|png|webp|mp4|mov)$/i.test(o.path)) h += `<div class="file"><header>${esc(o.name)}</header><div class="gal">${/\.(mp4|mov)$/i.test(o.path) ? `<video controls preload="metadata" src="${media(o.path)}"></video>` : `<img loading="lazy" src="${media(o.path)}" alt="">`}</div></div>`;
+      else h += `<div class="file" data-text="${esc(o.path)}"><header>${esc(o.name)}<span class="lbl">${esc(o.path.split('/').slice(-2).join('/'))}</span></header><div class="md">Loading…</div></div>`;
+    }
+    const g = p.gallery || {};
+    for (const k of ['sheets', 'clips', 'versions', 'covers']) if (g[k] && /sheet|clip|take|upscale|edit|meta/.test(cur.id)) h += `<div class="file"><header>${esc(k)}<span class="lbl">${g[k + '_count']}</span></header><div class="gal">${g[k].map(x => x.video ? `<video controls preload="metadata" src="${media(x.path)}"></video>` : `<img loading="lazy" src="${media(x.path)}" alt="">`).join('')}</div></div>`;
+    h += '</div>';
+    stage.innerHTML = h;
+    stage.querySelectorAll('[data-ss]').forEach(b => b.onclick = () => { cur = ss.find(s => s.id === b.dataset.ss); draw(); });
+    stage.querySelectorAll('[data-text]').forEach(el => text(el.dataset.text).then(t => el.querySelector('.md').innerHTML = /\.json$/.test(el.dataset.text) ? `<pre class="prompt">${esc(t)}</pre>` : md(t)).catch(e => el.querySelector('.md').textContent = e.message));
+    $('#insp').innerHTML = `<section><h4>What this step is told<button style="border:0;background:none;color:var(--indigo);font:11px var(--mono);cursor:pointer" data-copy>Copy</button></h4><pre class="prompt" id="does">${esc(cur.does || '(no instruction written)')}</pre></section><section><h4>Run</h4><dl class="kv"><dt>Who</dt><dd>${esc(cur.who)}</dd>${cur.paid ? '<dt>Cost</dt><dd>paid step</dd>' : ''}${cur.command ? `<dt>Command</dt><dd style="font:11px var(--mono)">${esc(cur.command)}</dd>` : ''}</dl></section>${cur.status === 'now' && p.ask ? `<section><h4>Next move</h4><pre class="prompt">${esc(typeof p.ask === 'string' ? p.ask : p.ask.say || JSON.stringify(p.ask))}</pre></section>` : ''}`;
+    $('#insp [data-copy]').onclick = () => navigator.clipboard.writeText($('#does').textContent).then(() => toast('Copied')).catch(() => toast('Select the text to copy'));
+  };
+  draw();
+}
+function priceCard(a, s){
+  const q = s.price || {};
+  const tot = q.total_usd != null ? usd(q.total_usd, 2) : (q.total_credits != null ? int(q.total_credits) + ' credits' : '—');
+  if (!q.ready) return `<div class="note">The price is not worked out yet. It shows here, line by line, before anything is paid.</div>`;
+  if (q.lane_open) return `<div class="price"><div class="pt"><span class="pill p-ready">Go given${q.lane && q.lane.approved_by ? ' by ' + esc(q.lane.approved_by) : ''}</span><b>${tot}</b></div></div>`;
+  return `<div class="price"><div class="pt"><span class="lbl">Total for this ad</span><b>${tot}</b></div><table>
+    ${(Array.isArray(q.lines) ? q.lines : []).map(l => `<tr><td>${esc(l.name || l.what || l.item || '')}</td><td>${esc(l.usd != null ? usd(l.usd, 2) : l.credits != null ? l.credits + ' cr' : '')}</td></tr>`).join('')}
+    ${(q.models || []).map(m => `<tr><td>Clips on ${esc(m.id)}${m.default ? ' · default' : ''}</td><td>${esc(m.credits)} cr</td></tr>`).join('')}
+    ${q.balance != null ? `<tr><td style="color:var(--ink-3)">Balance</td><td style="color:var(--ink-3)">${esc(q.balance)} cr</td></tr>` : ''}</table>
+    <form id="go"><label>Your name<input id="go-by" required autocomplete="name"></label><label>Cap (credits)<input id="go-cap" type="number" min="0" required value="${esc(q.total_credits || '')}"></label>
+    ${(q.models || []).length > 1 ? `<label class="w">Clip model<select id="go-model">${q.models.map(m => `<option ${m.default ? 'selected' : ''}>${esc(m.id)}</option>`).join('')}</select></label>` : ''}
+    <label class="w">In your words<textarea id="go-said" rows="2" required></textarea></label>
+    <div class="gorow"><span class="lbl">Nothing is spent past the cap</span><button class="btn wait" type="submit">Go at ${tot}</button></div></form></div>`;
+}
+document.addEventListener('submit', async e => {
+  if (e.target.id !== 'go') return; e.preventDefault();
+  const a = adList().find(x => x.id === (S.arg || '').split('|')[0]); if (!a) return;
+  const btn = e.target.querySelector('[type=submit]'); btn.disabled = true;
+  try { await J(`/api/desk/piece/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.label)}/go`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved_by: $('#go-by').value, said: $('#go-said').value, cap: +$('#go-cap').value, model: $('#go-model') ? $('#go-model').value : undefined})}); toast('Go given · the run carries on under your cap'); openAd = null; route(); }
+  catch (err) { toast(err.message); btn.disabled = false; }
+});
+
+/* ================= SWIPES ================= */
+let swFilter = store.get('st.swf') || 'all';
+async function swipes(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Swipes</h1><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="/desk#start"><i class="ic" data-i="plus"></i>Add a swipe</a></div></div><div class="skel">Loading the library…</div>`;
+  paintIcons(m);
+  let r; try { r = await J('/api/desk/swipes?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'swipes') return;
+  const all = r.swipes || [];
+  const F = [['all', 'All'], ['brief', 'Brief written'], ['organic', 'Organic'], ['own', 'Our own']];
+  const pick = () => all.filter(s => swFilter === 'all' || (swFilter === 'brief' && s.brief) || (swFilter === 'organic' && s.lane === 'ORGANIC') || (swFilter === 'own' && s.own));
+  const draw = () => {
+    const rows = pick();
+    $('#swc').textContent = rows.length + ' of ' + all.length + ' torn down';
+    m.querySelectorAll('.skel, .lib').forEach(x => x.remove());
+    m.insertAdjacentHTML('beforeend', `<div class="lib"><div class="filters">${F.map(([k, n]) => `<button class="${k === swFilter ? 'on' : ''}" data-f="${k}">${n}</button>`).join('')}</div>
+      ${rows.length ? `<div class="covers">${rows.map(s => `<a class="cover" href="#swipe/${encodeURIComponent(s.label)}"><div class="pic">${s.poster ? `<img loading="lazy" src="${media(s.poster)}" alt="">` : ''}</div><div class="cap"><b>${esc(nice(s.label))}</b><div class="meta">${s.brief ? '<span class="pill p-brief">brief</span>' : ''}${s.lane ? `<span class="pill p-swipe">${esc(s.lane.toLowerCase())}</span>` : ''}<span class="pill p-mute">${s.done}/${s.stages}</span></div></div></a>`).join('')}</div>` : '<div class="card note">No swipes here yet.</div>'}</div>`);
+    m.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { swFilter = b.dataset.f; store.set('st.swf', swFilter); draw(); });
+  };
+  draw();
+}
+async function swipeView(){
+  const m = $('#main'), label = S.arg;
+  m.innerHTML = `<div class="ph"><a class="btn" href="#swipes">← Swipes</a><h1>${esc(nice(label))}</h1><div class="acts"><a class="btn go" href="/desk#start"><i class="ic" data-i="plus"></i>Make an ad from this</a></div></div><div class="skel">Opening the teardown…</div>`;
+  paintIcons(m);
+  let sw; try { sw = S.swipes[label] || (S.swipes[label] = await J('/api/desk/swipe?label=' + encodeURIComponent(label))); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  m.querySelector('.skel').outerHTML = `<div class="sw3"><div class="card swv">${sw.video ? `<video controls preload="metadata" src="${media(sw.video)}" ${sw.poster ? `poster="${media(sw.poster)}"` : ''}></video>` : (sw.poster ? `<img src="${media(sw.poster)}" alt="">` : '')}<dl class="kv"><dt>Format</dt><dd>${esc(sw.format || '—')}</dd><dt>Lane</dt><dd>${esc(sw.lane || '—')}</dd><dt>Product</dt><dd>${esc(sw.product || '—')}</dd><dt>Avatar</dt><dd>${esc(sw.avatar || '—')}</dd><dt>Post</dt><dd>${sw.post_url ? `<a href="${esc(sw.post_url)}" target="_blank" rel="noopener">open</a>` : '—'}</dd></dl></div><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
+  chainView($('#stage'), $('#insp'), sw, sw.stages, false);
+}
+
+/* ================= RESEARCH ================= */
+async function research(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Research</h1><span class="sub">what sold, what he watches, what to make next</span></div><div class="skel">Loading…</div>`;
+  let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'research') return;
+  const nx = d.research.next || {}, rounds = d.research.rounds || [];
+  const tried = Array.isArray(nx.tried) ? nx.tried : Object.entries(nx.tried || {}).map(([k, v]) => Object.assign({format: k}, v));
+  const roundCard = r => { const mx = Math.max(1, ...r.worlds.map(w => w.count || 0)); return `<div class="card"><h3>${ib('search', 'violet')}${esc(nice(r.name))}<span class="lbl" style="margin-left:auto">${new Date(r.at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span></h3><div class="bars">${r.worlds.map(w => `<div><span>${esc(w.world)}</span><span class="n">${int(w.count)}</span><div class="b"><i style="width:${((w.count || 0) / mx * 100).toFixed(1)}%"></i></div></div>`).join('') || '<div class="empty">No worlds read yet</div>'}</div></div>`; };
+  m.querySelector('.skel').outerHTML = `<div class="grid2" style="margin-bottom:16px">
+      <div class="card"><h3>${ib('target', 'magenta')}Angles that sold<span class="lbl" style="margin-left:auto">${esc(((nx.window || {}).since || '') + ' → ' + ((nx.window || {}).until || ''))}</span></h3>
+        <table class="t" style="margin-top:10px"><tr><th>Angle</th><th style="text-align:right">Videos</th><th style="text-align:right">Buys</th><th style="text-align:right">Spend</th></tr>${(nx.angles || []).map(a => `<tr><td>${esc(a.angle)}</td><td class="n">${int(a.videos)}</td><td class="n">${int(a.purchases)}</td><td class="n">${usd(a.spend)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">None past the bar yet</td></tr>'}</table></div>
+      <div class="card"><h3>${ib('list', 'indigo')}Tried so far</h3>
+        <table class="t" style="margin-top:10px"><tr><th>Format</th><th style="text-align:right">Videos</th><th style="text-align:right">Spend</th><th style="text-align:right">Buys</th></tr>${tried.map(t => `<tr><td>${esc(t.format || t.name || t.kind || '')}</td><td class="n">${int(t.videos)}</td><td class="n">${usd(t.spend)}</td><td class="n">${int(t.purchases)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">Nothing tried yet</td></tr>'}</table></div></div>
+    ${(nx.hooks || []).length ? `<div class="card" style="margin-bottom:16px"><h3>${ib('sparkles', 'amber')}Hook lines that sold</h3><div class="items" style="margin-top:10px">${nx.hooks.map(h => `<div class="row"><b style="white-space:normal">${esc(h.hook_line || h.line || '')}</b><span>${int(h.purchases)} buys${h.creator ? ' · ' + esc(h.creator) : ''}</span></div>`).join('')}</div></div>` : ''}
+    <div class="ph" style="margin:26px 0 14px"><h1 style="font-size:16px">Research rounds</h1><span class="sub">organic posts read for each avatar, grouped by world</span></div>
+    <div class="grid2">${rounds.map(roundCard).join('') || '<div class="card note">No research rounds yet for this brand.</div>'}</div>`;
+  paintIcons(m);
+}
+
+/* ================= BRANDS ================= */
+async function brandSetup(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Brand setup</h1><span class="sub">the checklist every brand fills</span></div><div class="skel">Loading…</div>`;
+  let d; try { d = await J('/api/desk/setup?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'brands') return;
+  const items = d.items || [], isOk = i => ['done', 'filled', 'skipped'].includes(i.state), ok = items.filter(isOk).length;
+  const hue = {done:'green', filled:'green', partial:'amber', skipped:'ink-3', todo:'coral'};
+  const word = {done:'done', filled:'on file', partial:'part on file', skipped:'skipped', todo:'not in its place'};
+  const icn = {'Brand basics':'shield', 'Products':'image', 'Customers':'user', 'Creative':'film', 'Accounts & keys':'plug', 'First run':'play'};
+  const groups = [...new Set(items.map(i => i.group))];
+  m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><h3>${ib('check', 'green')}${ok} of ${items.length} in place<span class="lbl" style="margin-left:auto">${d.progress ? 'progress kept' : 'no progress file yet'}</span></h3><div class="prog"><i style="width:${(ok / Math.max(1, items.length) * 100).toFixed(1)}%"></i></div></div>
+    <div class="grid2">${groups.map(g => { const gi = items.filter(i => i.group === g); return `<div class="card"><h3>${ib(icn[g] || 'list', 'indigo')}${esc(g)}<span class="count">${gi.filter(isOk).length}/${gi.length}</span></h3><div class="items" style="margin-top:12px">${gi.map(i => `<div class="item"><i class="ib" style="--hue:var(--${hue[i.state]})">${icon(i.state === 'todo' ? 'alert' : 'check')}</i><b>${esc(i.name)}</b><span>${esc((i.fills || []).join(' · '))}</span><span class="pill" style="--hue:var(--${hue[i.state]})">${word[i.state]}</span></div>`).join('')}</div></div>`; }).join('')}</div>`;
+  paintIcons(m);
+}
+
+boot();
+</script>
+</body>
+</html>

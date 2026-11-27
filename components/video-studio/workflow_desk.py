@@ -169,7 +169,8 @@ def writing_stages(run_dir):
         out.append({"id": key, "name": st.get("name") or key, "status": st.get("status"),
                     "why": st.get("why") or st.get("reason"), "prompt": ref("prompt_file"),
                     "prompt_name": st.get("prompt_name"), "sent": ref("sent"), "out": ref("out"),
-                    "model": st.get("model"), "finished": st.get("finished")})
+                    "model": st.get("model"), "finished": st.get("finished"), "version": st.get("version"),
+                    "engine": st.get("engine"), "seconds": st.get("seconds")})
     return out
 
 
@@ -366,6 +367,136 @@ def teardowns(brand):
             out.append(row)
     out.sort(key=lambda r: r["at"], reverse=True)
     return out[:60]
+
+
+def _swipe_row(label, r):
+    d = "runs/video-teardown/_work/" + label
+    st = r.get("stages") or {}
+    aim = r.get("aim") if isinstance(r.get("aim"), dict) else {}
+    names = r.get("names") if isinstance(r.get("names"), dict) else {}
+    return {"label": label, "brand": r.get("brand"), "product": r.get("product"),
+            "poster": d + "/" + r["poster"] if isinstance(r.get("poster"), str) and (WS / d / r["poster"]).is_file() else None,
+            "video": d + "/" + r["source"] if isinstance(r.get("source"), str) and (WS / d / r["source"]).is_file() else None,
+            "post_url": r.get("post_url") or (r.get("pick") or {}).get("post") if isinstance(r.get("pick"), dict) else r.get("post_url"),
+            "lane": r.get("triage_lane"), "format": names.get("script_format") or r.get("format_id"),
+            "avatar": aim.get("avatar"), "state": r.get("state"),
+            "brief": (st.get("stage5") or {}).get("status") == "done",
+            "done": sum(1 for v in st.values() if isinstance(v, dict) and v.get("status") == "done"),
+            "stages": len(st)}
+
+
+_SW = {}
+
+
+def swipes(brand):
+    """Every swipe torn down for a brand, newest first, with its cover: the Studio's swipe library."""
+    out = []
+    for f in glob.glob(str(WS / "runs/video-teardown/_work/*/run.json")):
+        try:
+            m = os.path.getmtime(f)
+        except OSError:
+            continue
+        hit = _SW.get(f)
+        if not hit or hit[0] != m:
+            r = _read(f) or {}
+            row = _swipe_row(Path(f).parent.name, r) if isinstance(r, dict) else None
+            if row:
+                row["at"] = m
+                row["own"] = ((r.get("stages") or {}).get("stage1") or {}).get("from") == "scratch"
+            hit = (m, row)
+            _SW[f] = hit
+        if hit[1] and hit[1]["brand"] == brand:
+            out.append(hit[1])
+    out.sort(key=lambda r: r["at"], reverse=True)
+    return out[:200]
+
+
+def swipe(label):
+    """One teardown: the swipe, and every stage with its prompt, what was sent and what came out."""
+    d = "runs/video-teardown/_work/" + label
+    r = _read(WS / d / "run.json")
+    if not isinstance(r, dict):
+        return None
+    row = _swipe_row(label, r)
+    row["stages"] = writing_stages(d)
+    return row
+
+
+# ---------- the owner's morning: money, winners, research, brand setup (read-only) ----------
+
+def _growth():
+    """Revenue, spend and profit by day, from Outlier's money feed (it reads the warehouse; never Meta)."""
+    import urllib.request
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8880/api/growth", timeout=6) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except Exception:  # noqa: BLE001 — the page says the feed is unreachable
+        return None
+
+
+def money():
+    g = _growth()
+    if not isinstance(g, dict):
+        return {"ok": False, "why": "the money feed (Outlier) did not answer"}
+    out = []
+    for b, v in (g.get("brands") or {}).items():
+        days = (v.get("daily") or [])[-7:]
+        tot = {k: round(sum(d.get(k) or 0 for d in days), 2) for k in ("revenue", "spend", "profit", "orders", "new")}
+        out.append({"brand": b, "label": v.get("label") or b, "days": days, "total": tot,
+                    "last": days[-1]["d"] if days else None,
+                    "roas": round(tot["revenue"] / tot["spend"], 2) if tot["spend"] else None})
+    return {"ok": True, "built": g.get("built"), "brands": out}
+
+
+def winners(brand, n=6):
+    b = _read(WS / "runs/winners" / brand / "bank.json")
+    rows = []
+    for r in (b.get("rows") or []) if isinstance(b, dict) else []:
+        snap = next((x for x in (r.get("snapshots") or []) if x.get("kind") == "audit"), None) or {}
+        if not snap.get("purchases"):
+            continue
+        varied = bool(glob.glob(str(WS / "runs/ad-variations" / brand / ("p2f-" + r["id"] + "*"))))
+        rows.append({"id": r["id"], "name": r.get("name"), "headline": r.get("headline"), "format": r.get("format"),
+                     "purchases": snap.get("purchases"), "spend": snap.get("spend"), "cpa": snap.get("cpa"),
+                     "roas": snap.get("roas"), "first": snap.get("first"), "last": snap.get("last"),
+                     "pulled": snap.get("pulled_at"), "varied": varied})
+    rows.sort(key=lambda x: x["purchases"] or 0, reverse=True)
+    return rows[:n]
+
+
+def research(brand):
+    nxt = _read(WS / "runs/winners" / brand / "brief-next.json")
+    rounds = []
+    for d in sorted(glob.glob(str(WS / "runs/swipe-organic" / brand / "research-*")), key=os.path.getmtime, reverse=True)[:6]:
+        w = _read(Path(d) / "worlds.json")
+        rounds.append({"name": Path(d).name[len("research-"):], "at": os.path.getmtime(d),
+                       "worlds": [{"world": x.get("world"), "count": x.get("count")} for x in (w or [])[:6]] if isinstance(w, list) else []})
+    return {"next": {k: nxt.get(k) for k in ("made", "window", "videos_running", "angles", "hooks", "formats", "avoid", "tried", "bar")}
+            if isinstance(nxt, dict) else None, "rounds": rounds}
+
+
+def setup(brand):
+    """The brand checklist (brands/_TEMPLATE/onboarding.json) with what this brand has done, skipped or filled."""
+    t = _read(WS / "brands/_TEMPLATE/onboarding.json") or {}
+    prog = _read(WS / "brands" / brand / "onboarding-progress.json") or {}
+    done, skipped = set(prog.get("done") or []), set(prog.get("skipped") or [])
+    items = []
+    for it in t.get("items") or []:
+        fills = it.get("fills") or []
+        paths = [f.split(" ")[0].rstrip(",") for f in fills]
+        paths = [x for x in paths if x and not x.startswith("brands/")]
+        have = [x for x in paths if glob.glob(str(WS / "brands" / brand / re.sub(r"<[^>]+>", "*", x)))]
+        fills = paths or fills
+        state = "done" if it.get("id") in done else "skipped" if it.get("id") in skipped else (
+            "filled" if fills and len(have) == len(fills) else "partial" if have else "todo")
+        items.append({"id": it.get("id"), "group": it.get("group"), "name": it.get("name") or it.get("id"),
+                      "why": it.get("why"), "required": it.get("required"), "when": it.get("when"),
+                      "fills": fills, "have": have, "state": state})
+    return {"brand": brand, "groups": t.get("groups"), "items": items, "progress": bool(prog)}
+
+
+def today(brand):
+    return {"money": money(), "winners": winners(brand), "research": research(brand)}
 
 
 def preset(brand, avatar):
@@ -566,6 +697,8 @@ def handle(h, method, parts, query, body):
     try:
         if parts == ["desk"] and method == "GET":
             return h.send(200, (HERE / "desk.html").read_bytes(), "text/html; charset=utf-8")
+        if parts == ["next"] and method == "GET":           # the new Studio: one app for every ad (studio-next.html)
+            return h.send(200, (HERE / "studio-next.html").read_bytes(), "text/html; charset=utf-8")
         api = parts[2:]
         if method == "GET":
             if api == ["lines"]:
@@ -574,6 +707,15 @@ def handle(h, method, parts, query, body):
                 return h.send(200, {"pieces": pieces()})
             if api == ["brands"]:
                 return h.send(200, {"brands": brands()})
+            if api == ["today"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, today(q["brand"]))
+            if api == ["setup"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, setup(q["brand"]))
+            if api == ["swipes"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, {"swipes": swipes(q["brand"])})
+            if api == ["swipe"] and SAFE.match(q.get("label", "")):
+                sw = swipe(q["label"])
+                return h.send(200, sw) if sw else h.send(404, {"error": "no teardown for that swipe"})
             if api == ["teardowns"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, {"teardowns": teardowns(q["brand"])})
             if api == ["preset"] and SAFE.match(q.get("brand", "")) and SAFE.match(q.get("avatar", "")):

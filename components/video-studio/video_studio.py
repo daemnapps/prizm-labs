@@ -2794,7 +2794,7 @@ class H(BaseHTTPRequestHandler):
             return proxy(self, *got)
         u = urlparse(self.path)
         parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
-        if parts == ["desk"] or parts[:2] == ["api", "desk"]:    # the workflow desk: every video workflow, one page
+        if parts in (["desk"], ["next"]) or parts[:2] == ["api", "desk"]:    # the workflow desk + the new Studio
             import workflow_desk as WD
             return WD.handle(self, "GET", parts, u.query, None)
         if not parts or parts == ["studio"]:

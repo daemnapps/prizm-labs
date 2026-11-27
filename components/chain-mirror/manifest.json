@@ -120,7 +120,7 @@
     "to": "components/video-studio",
     "replace": true,
     "keep": [
-     "components/video-studio/(desk\\.html|workflow_desk\\.py|test_workflow_desk\\.py)$"
+     "components/video-studio/(desk\\.html|workflow_desk\\.py|test_workflow_desk\\.py|studio-next\\.html|test_studio_next\\.py)$"
     ],
     "patches": [
      "components/chain-mirror/patches/video-studio-desk.patch"
