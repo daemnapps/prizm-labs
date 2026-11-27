@@ -20,6 +20,16 @@ filed properly, and we just get really, really searchable."*
 | **who installs the Klaviyo flows** | **the email lead**, from `runs/feedback-forms/<brand>/install/deliverable/feedback-klaviyo-install.md` — generated, one section per stage, every flow built in Draft |
 | **the plane it emits** | Klaviyo events (live); the language bank rows are written by `components/research-gatherer` (`gather.py feedback`), not here |
 
+## Where the questions and the look come from
+
+- **The questions** are written per brand by `write_questions.py` from its foundational research: what to ask from its
+  people profiles (the parts still open), how to ask from its voice and its customers' own words (also the tap
+  options). It writes a proposal under `runs/`; a person applies it on the owner's yes.
+- **The look** is read at build time from the brand's design system (`design_system.py`: `design-system/tokens.json`,
+  else `web-tokens.md`, and its logo). Nothing is typed by hand; a value in the brand's file overrides.
+- **The starter set** (`brands/_TEMPLATE/operations/feedback-*.json`) is brand-neutral: eight stages for a store
+  with an email platform; subscription and helpdesk stages apply only where the brand has them.
+
 ## The loop
 
 ```
@@ -34,6 +44,7 @@ Klaviyo flow (trigger + filters + wait)  →  email with one button
 ## Commands
 
 ```bash
+python3 components/feedback-forms/write_questions.py --brand B   # every stage's questions from the brand's research (profiles, voice, customer words): a proposal
 python3 components/feedback-forms/build.py check   --brand B    # the config is sound
 python3 components/feedback-forms/build.py preview --brand B    # runs/feedback-forms/<B>/preview/<stage>.html (nothing sends)
 python3 components/feedback-forms/build.py install --brand B    # runs/feedback-forms/<B>/install/deliverable/feedback-klaviyo-install.md

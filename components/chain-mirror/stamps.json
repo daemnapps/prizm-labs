@@ -3567,7 +3567,7 @@
   "commit": "6902c572762328443aa6fbe6718bf33ebcf8850f"
  },
  "components/feedback-forms/README.md": {
-  "commit": "e26f3b8a0dd68309c9eedc055f6d377b37c04264"
+  "commit": "225d0103d1a10211d7756098d7412e99008615fe"
  },
  "components/feedback-forms/build.py": {
   "commit": "e0267f6b7b73243e854b578f85eb2ea7506ccdda"
@@ -3587,6 +3587,9 @@
  "components/feedback-forms/language_pass.py": {
   "commit": "34f42a1784167274197012132b73788a8600085e"
  },
+ "components/feedback-forms/prompts/questions-v1-write.md": {
+  "commit": "225d0103d1a10211d7756098d7412e99008615fe"
+ },
  "components/feedback-forms/tests/test_build.py": {
   "commit": "4f2968032cb2e449d56fb4e9bd064c28c4180302"
  },
@@ -3598,6 +3601,12 @@
  },
  "components/feedback-forms/tests/test_tail_brand_words.py": {
   "commit": "34f42a1784167274197012132b73788a8600085e"
+ },
+ "components/feedback-forms/tests/test_write_questions.py": {
+  "commit": "74e913c8ab1951355bc4b50605f878a627106e38"
+ },
+ "components/feedback-forms/write_questions.py": {
+  "commit": "74e913c8ab1951355bc4b50605f878a627106e38"
  },
  "components/funnel-tracking/machine/standard.py": {
   "commit": "13d63cece432078888123d3695ff668f51ea56e0"

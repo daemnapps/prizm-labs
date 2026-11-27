@@ -56,9 +56,14 @@ refunded · cancelled · after support). The starter set is in `brands/_TEMPLATE
 1. Copy both files into `brands/<b>/operations/`. Set `klaviyo.public_id` (the brand's PUBLIC Klaviyo id, safe on a
    page), `form.url` / `form.link` (where the form will live on their store) and mark any stage their stack can't
    trigger as blocked, saying why.
-2. Words: `python3 components/feedback-forms/language_pass.py --brand <b> --write` proposes every question, tap
-   option and email from the brand's own customer words; show it, apply on the owner's yes.
-3. Look: set `look.tokens`, fonts and logo from the brand's design system.
+2. Questions: `python3 components/feedback-forms/write_questions.py --brand <b>` writes every stage's questions
+   from the brand's own research: what to ask from its people profiles (the parts still open, the questions the
+   research couldn't answer), how to ask it from its voice (position, story, core message) and its customers' own
+   words, which also give the tap options. It writes a proposal under `runs/feedback-forms/<b>/questions-<date>/`
+   (`PROPOSAL.md` reads like the forms); show it and apply it to `brands/<b>/operations/feedback-questions.json`
+   on the owner's yes. One model call. Do the research first (steps 3–5 of the fill), or the forms ask generic things.
+3. Look: nothing to set. The form reads the brand's design system (`brand-identity/design-system/tokens.json`,
+   else `brand-identity/web-tokens.md`) and its logo at build time.
 4. `python3 components/feedback-forms/build.py check --brand <b>`, then `preview` (nothing sends) and show the
    forms; `install` writes the per-stage flow sheet.
 5. Answers come back with `connect.py feedback --brand <b> --key <KLAVIYO_PRIVATE_KEY_NAME>`.
