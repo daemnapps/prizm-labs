@@ -81,7 +81,7 @@ prompts, one brand folder) in the clients' team space named in
   these keys work for every client.
 - **"new client: <name>"**: `python3 tools/client-copies/new_client.py "<name>"`.
   Then walk that client's onboarding exactly like "activate Prizm Lab" steps
-  5–8, but in the copy (`~/prizm-clients/<client>/`, brand folder
+  5–9, but in the copy (`~/prizm-clients/<client>/`, brand folder
   `brands/<client>/`), using absolute paths; ask the questions about the
   business, fetching from their website first. After each answer, save it in
   the copy (`git add -A && git commit && git push` there).
