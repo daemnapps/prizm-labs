@@ -12,7 +12,9 @@ file that still holds a private name, a key or a home path is refused and nothin
 
 Settings, all outside the public repo (so it works for anyone, in any copy):
   CHAIN_MIRROR_CONFIG  a JSON file {"source": "<source repo folder>", "ref": "origin/main",
-                       "names": {"<private word>": "<stand-in>", ...}}
+                       "names": {"<private word>": "<stand-in>", ...},
+                       "suffixes": {"-<tag>": "-owner", ...},   file-name tags, renamed in paths and text
+                       "drop_lines": ["<regex>", ...]}          lines that only work inside the source's company
                        default: nucleus/home/chain-mirror.json inside this repo (ignored by git)
   CHAIN_MIRROR_SOURCE  overrides "source"
 Standard library only.
@@ -40,6 +42,8 @@ def config():
     cfg["source"] = os.environ.get("CHAIN_MIRROR_SOURCE") or cfg.get("source")
     cfg.setdefault("ref", "origin/main")
     cfg.setdefault("names", {})
+    cfg.setdefault("suffixes", {})
+    cfg.setdefault("drop_lines", [])
     if not cfg["source"]:
         sys.exit("chain-mirror: no source repo set (CHAIN_MIRROR_SOURCE or the config file's \"source\").")
     return cfg
@@ -58,8 +62,22 @@ def last_commit(src, ref, path):
     return git(src, "log", "-1", "--format=%H", ref, "--", path).decode().strip()
 
 
-def strip(text, names):
-    """Private names to stand-ins (whole words, any case), home paths to ~/."""
+ALWAYS_SKIP = [re.compile(r"(^|/)archive/"), re.compile(r"__pycache__"), re.compile(r"\.DS_Store$")]
+
+
+def rename(text, suffixes):
+    """Name tags on file names (e.g. a person's tag on a prompt file) to the copy's tag, in paths and in text."""
+    for old in sorted(suffixes, key=len, reverse=True):
+        text = re.sub(re.escape(old) + r"(?=[.\-_/]|$)", suffixes[old], text)
+    return text
+
+
+def strip(text, names, suffixes=None, drop_lines=()):
+    """Lines that only make sense inside the source's own company go; then file-name tags, private names
+    (whole words, any case) and home paths."""
+    if drop_lines:
+        text = "".join(l for l in text.splitlines(keepends=True) if not any(re.search(d, l) for d in drop_lines))
+    text = rename(text, suffixes or {})
     text = HOME_PATH.sub("~/", text)
     for word in sorted(names, key=len, reverse=True):
         text = re.sub(r"(?i)(?<![A-Za-z0-9])" + re.escape(word) + r"(?![A-Za-z0-9])", names[word], text)
@@ -73,15 +91,37 @@ def leaks(text):
     return found
 
 
-def targets(entry, src, ref):
-    """(source file, repo file) pairs for one manifest entry, saved files only."""
+VERSIONED = re.compile(r"^(?P<stem>.*?)-v(?P<n>\d+)(?P<tail>-[^/]*)?\.(?P<ext>md|txt|json)$")
+
+
+def older_versions(files, src, ref):
+    """Prompt files with a newer -vN- beside them that no code file in the source still names."""
+    newest = {}
+    for f in files:
+        m = VERSIONED.match(f)
+        if m:
+            key = (m["stem"], m["tail"], m["ext"])
+            newest[key] = max(newest.get(key, 0), int(m["n"]))
+    old = {f for f in files if (m := VERSIONED.match(f)) and int(m["n"]) < newest[(m["stem"], m["tail"], m["ext"])]}
+    if not old:
+        return set()
+    named = git(src, "grep", "-h", "-o", "-I", "-E", r"[A-Za-z0-9_.-]+-v[0-9]+[A-Za-z0-9_.-]*", ref, "--",
+                "*.py", "*.json", "*.js", "*.html", "*.sh").decode(errors="ignore") if old else ""
+    named = {line.split(":", 1)[-1] for line in named.splitlines()}
+    return {f for f in old if f.rsplit("/", 1)[-1] not in named}
+
+
+def targets(entry, src, ref, suffixes=None):
+    """(source file, repo file) pairs for one manifest entry, saved files only, newest prompt versions only."""
     frm, to = entry["from"].rstrip("/"), entry["to"].rstrip("/")
-    skip = [re.compile(x) for x in entry.get("exclude", [])]
-    for f in saved_files(src, ref, frm):
-        if any(s.search(f) for s in skip):
+    skip = ALWAYS_SKIP + [re.compile(x) for x in entry.get("exclude", [])]
+    files = [f for f in saved_files(src, ref, frm) if not any(s.search(f) for s in skip)]
+    stale = older_versions(files, src, ref)
+    for f in files:
+        if f in stale:
             continue
         rel = f[len(frm):].lstrip("/")
-        yield f, (to + "/" + rel) if rel else to
+        yield f, rename((to + "/" + rel) if rel else to, suffixes or {})
 
 
 def unsaved(entry, src, ref):
@@ -104,7 +144,7 @@ def status(cfg, groups):
         copied = behind = missing = 0
         waiting = []
         for e in entries:
-            for f, to in targets(e, src, ref):
+            for f, to in targets(e, src, ref, cfg.get("suffixes", {})):
                 st = stamps.get(to)
                 if not st:
                     missing += 1
@@ -124,7 +164,7 @@ def run(cfg, groups, group, dry):
     stamps, src, ref = load_stamps(), cfg["source"], cfg["ref"]
     wrote, refused, same = [], [], 0
     for e in groups[group]:
-        for f, to in targets(e, src, ref):
+        for f, to in targets(e, src, ref, cfg.get("suffixes", {})):
             raw = git(src, "show", f"{ref}:{f}")
             dest = REPO / to
             try:
@@ -132,7 +172,7 @@ def run(cfg, groups, group, dry):
             except UnicodeDecodeError:
                 out = raw                                  # pictures and other binaries go over as they are
             else:
-                text = strip(text, cfg["names"])
+                text = strip(text, cfg["names"], cfg.get("suffixes", {}), cfg.get("drop_lines", ()))
                 found = leaks(text)
                 if found:
                     refused.append((to, found[:3]))

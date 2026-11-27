@@ -4,4 +4,3 @@ One set of creative dials for copy, video and pictures, the emotions and techniq
 
 Owner: the owner
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-creative-controls

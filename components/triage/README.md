@@ -36,4 +36,3 @@ The skill lives in `.claude/skills/triage/`. Each run lands in `runs/triage/<the
 
 the team and the team each work their own list and hand in one findings file, `themes/<theme>-FEEDBACK.md`. Each finding gives the item, what's wrong, the change wanted, and whether it is a **theme** change or an **engine** change.
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-triage

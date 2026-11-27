@@ -6,4 +6,3 @@ a definitions registry, no engine · 17 models (12 approved) and 2 trained ident
 
 Owner: the team
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-models

@@ -1,6 +1,5 @@
 # meta-strategy
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-meta-strategy
 
 **The Meta strategy, as a system.** It sets up the account, the ad sets and every creative the way Meta's delivery system rewards, with each rule cited to Meta's own words. Read `STRATEGY.md` first.
 

@@ -1,6 +1,5 @@
 # The marketing calendar
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-marketing-calendar
 
 Give it a brand and a month. It gives back the month: every send at a real
 date, what each one is, what it sells, and why it chose that. Then you read

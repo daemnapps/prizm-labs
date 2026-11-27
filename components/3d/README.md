@@ -1,6 +1,5 @@
 # make3d — free, local image-to-3D
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-3d
 
 One picture in, one textured `.glb` out, on this Mac. No credits, no login, no upload.
 Brought into the workspace 2026-09-29 nested inside `video-edit/`; moved out

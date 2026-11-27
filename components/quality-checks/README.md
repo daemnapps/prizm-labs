@@ -1,6 +1,5 @@
 # Moved → `components/marketing-chain-checks/`
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-quality-checks
 
 Renamed 2026-10-02 on the owner's word: *"we need to name this thing something else
 … call it marketing chain checks."* The old name sat one letter-group away from

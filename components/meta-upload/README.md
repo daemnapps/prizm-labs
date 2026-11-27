@@ -6,4 +6,3 @@ an engine · files every finished ad as an approval card and, on an approver's c
 
 Owner: the owner (engine and definitions both)
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-meta-upload

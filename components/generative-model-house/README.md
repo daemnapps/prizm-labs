@@ -4,4 +4,3 @@ The Generative Model House: which model does which job, for every tool that make
 
 Owner: the owner
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-generative-model-house

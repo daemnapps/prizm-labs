@@ -1,6 +1,5 @@
 # Asset index
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-asset-index
 
 Turns a folder of footage into records you can search by what is *in* the
 clip, not what the file is called. `IMG_5476.MOV` becomes "man patting his

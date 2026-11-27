@@ -2,7 +2,6 @@
 
 (Renamed from `quality-checks`, 2026-10-02. Not `qc-checks`, the team's engine.)
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-marketing-chain-checks
 
     import marketing_chain_checks as Q
     problems  = Q.price_check(text, Q.offer_block(bank_text, offer), offer)

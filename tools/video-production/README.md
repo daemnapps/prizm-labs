@@ -1,6 +1,5 @@
 # AI video production
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-video-production
 
 **A brief goes in. Finished clips come out — one command, nobody at a keyboard.**
 

@@ -6,4 +6,3 @@ an engine · two imported chains (15 and 11 stages) · writes only under --out �
 
 Owner: the team for now; the owner consulted on return
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-chain-runner

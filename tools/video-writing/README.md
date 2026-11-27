@@ -5,4 +5,3 @@ Station 2 of the video line: a finished teardown in, our version written for the
 
 Owner: the owner
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-video-writing

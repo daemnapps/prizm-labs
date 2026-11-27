@@ -1,6 +1,5 @@
 # brandpath — one door into a brand's folders
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-brandpath
 
 Every tool that reads `brands/<brand>/…` goes through this module, so the
 brand folders can be renamed to the v6 plan (Brand Folder Map) without a

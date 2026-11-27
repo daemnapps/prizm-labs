@@ -6,4 +6,3 @@ a 3D object maker · one reference picture in, a finished, satin-finished, catal
 
 Owner: the owner (engine and definitions both)
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-objects

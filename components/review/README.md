@@ -6,4 +6,3 @@ an engine · one record grammar, one writer, one fold · 77 records on the revie
 
 Owner: Engine the team; **definitions curator the team**
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-review

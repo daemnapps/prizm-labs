@@ -1,6 +1,5 @@
 # image-edit
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-image-edit
 
 Turns a reference picture and ONE change — free words, a named fix, or a
 variation row — into the edited picture, judged against the reference, filed

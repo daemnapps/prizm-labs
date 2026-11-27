@@ -1,6 +1,5 @@
 # components/research-gatherer — querying the open internet for a chain
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-research-gatherer
 
 Extracted 2026-09-18 (RG-1), the day it was built, on the owner's ruling: *"the
 OS pulls COMPONENTS into workflows, so the research gatherer must be a

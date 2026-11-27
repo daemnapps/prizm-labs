@@ -1,6 +1,5 @@
 # language-layer
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-language-layer
 
 The customer-language query engine, and the tools that keep a brand's
 language bank named, sourced and labelled. Contract, rules and ownership:

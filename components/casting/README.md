@@ -1,6 +1,5 @@
 # casting — who plays this role?
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-casting
 
 One engine, one question. Every tool that needs a person in a picture or a
 video asks it the same way, instead of each one casting its own way or not at

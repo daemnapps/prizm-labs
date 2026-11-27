@@ -6,4 +6,3 @@ a gate · seven checks between a finished ad drop and the person who uploads it 
 
 Owner: the owner
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-ad-handoff

@@ -1,6 +1,5 @@
 # image-production
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-image-production
 
 One image engine every workflow uses. An email hero, a static ad frame, a
 landing-page section picture and a scene still all go through the same models,

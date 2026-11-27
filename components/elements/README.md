@@ -1,6 +1,5 @@
 # elements
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-elements
 
 The one library of every element the system uses — formats, placements,
 structures, frameworks, styles, delivery values, templates, doctrine — in one

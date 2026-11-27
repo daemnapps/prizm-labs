@@ -1,6 +1,5 @@
 # Ad Variations
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-ad-variations
 
 > **Internal only — not for sale.** These tools are for people working with
 > the owner inside the company, Prism Digital Consulting, or the company

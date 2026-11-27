@@ -12,7 +12,6 @@ teardown". The one-page definition is `CLAUDE.md`; how to run it is `RUN.md`.
 Runs file at `runs/image-teardown/<brand>/<label>/`; every brief gets one id in
 `briefs.json` (`python3 tools/briefs.py check`).
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-image-teardown
 
 
 Same chain, one frame. Built 2026-08-19 from `stage1-teardown-v6-owner.md`

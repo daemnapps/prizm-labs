@@ -1,6 +1,5 @@
 # briefs — ask for a brief by what it is
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-briefs
 
 A brief is a **projection of a record**. The record is the expensive half; the
 brief is what you print from it. A teardown run costs ~25 minutes, the brief off

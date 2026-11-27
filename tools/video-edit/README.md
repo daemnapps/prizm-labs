@@ -1,6 +1,5 @@
 # video-edit
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-video-edit
 
 Turns an approved kit — voice, A-roll, B-roll, music, sound effects — into the
 finished captioned video, with two stops for the owner: the timeline, then the

@@ -1,6 +1,5 @@
 # components/marketing-doctrine — the marketing doctrine every machine cites
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-marketing-doctrine
 
 **marketing-doctrine** — the doctrine every marketing machine cites. It takes
 the four definition files (`frameworks.json`, `delivery.json`, `spoken.json`,

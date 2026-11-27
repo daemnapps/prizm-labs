@@ -1,6 +1,5 @@
 # Swipe
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-swipe-paid
 
 Competitor brands, torn down. One folder per brand, identical shape every time.
 

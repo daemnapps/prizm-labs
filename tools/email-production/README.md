@@ -1,6 +1,5 @@
 # email-production — brand context in, campaign emails out
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-email-production
 
 > **Current as of 2026-09-20: read `CLAUDE.md` first** — it has what this tool
 > takes and makes, how to run it, the free dry run and the checks that hold an

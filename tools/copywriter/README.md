@@ -1,6 +1,5 @@
 # copywriter
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-copywriter
 
 **copywriter** — takes **a source and a brief**, makes **the copy: primary
 text, captions, headlines**. Does not **make pictures**.

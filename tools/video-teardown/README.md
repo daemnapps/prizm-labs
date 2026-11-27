@@ -1,6 +1,5 @@
 # The video teardown machine
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-video-teardown
 
 **Two lines, and the one thing they share.**
 

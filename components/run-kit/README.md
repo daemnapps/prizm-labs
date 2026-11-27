@@ -1,6 +1,5 @@
 # run-kit
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-run-kit
 
     import sys; sys.path.insert(0, "<repo>/components/run-kit")
     from run_kit import filing

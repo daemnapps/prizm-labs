@@ -1,6 +1,5 @@
 # intake
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-intake
 
 One front door for every swipe. It reads the paid swipes and the organic swipes
 where they already live and presents them as **one list**, each swipe saying

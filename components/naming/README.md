@@ -6,4 +6,3 @@ a naming library · 364 files read it · /rename and every lane's brief open cal
 
 Owner: the owner (definition and engine both)
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-naming

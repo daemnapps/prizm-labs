@@ -23,6 +23,14 @@ class StripTest(unittest.TestCase):
         out = mirror.strip("Ask Zorbo at " + HOME + "zorbo/x and zorbo's file", {"zorbo": "the owner"})
         self.assertEqual(out, "Ask the owner at ~/x and the owner's file")
 
+    def test_file_tags_renamed_before_names(self):
+        out = mirror.strip("load stage1-v3-zorbo.md", {"zorbo": "the owner"}, {"-zorbo": "-owner"})
+        self.assertEqual(out, "load stage1-v3-owner.md")
+
+    def test_drop_lines(self):
+        out = mirror.strip("a\nHow to use it -> https://dash.inside/x\nb\n", {}, {}, [r"dash\.inside"])
+        self.assertEqual(out, "a\nb\n")
+
     def test_whole_words_only(self):
         self.assertEqual(mirror.strip("zorbonia", {"zorbo": "X"}), "zorbonia")
 
@@ -37,6 +45,13 @@ class RunTest(unittest.TestCase):
         src = Path(self.tmp.name) / "src"
         (src / "a").mkdir(parents=True)
         (src / "a" / "one.md").write_text("made by Zorbo\n")
+        (src / "a" / "archive").mkdir()
+        (src / "a" / "archive" / "old.md").write_text("old\n")
+        (src / "a" / "p-v2-zorbo.md").write_text("see p-v2-zorbo.md\n")
+        (src / "a" / "p-v1-zorbo.md").write_text("older\n")
+        (src / "a" / "q-v1.md").write_text("older but loaded\n")
+        (src / "a" / "q-v2.md").write_text("newer\n")
+        (src / "a" / "load.py").write_text("PROMPT = 'q-v1.md'\n")
         sh(src, "git", "init", "-q")
         sh(src, "git", "-c", "user.email=t@example.com", "-c", "user.name=t", "add", ".")
         sh(src, "git", "-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-qm", "x")
@@ -52,11 +67,15 @@ class RunTest(unittest.TestCase):
         self.tmp.cleanup()
 
     def test_copies_saved_only_and_stamps(self):
-        cfg = {"source": self.src, "ref": "HEAD", "names": {"zorbo": "the owner"}}
+        cfg = {"source": self.src, "ref": "HEAD", "names": {"zorbo": "the owner"}, "suffixes": {"-zorbo": "-owner"}}
         groups = {"g": [{"from": "a", "to": "b"}]}
         self.assertEqual(mirror.run(cfg, groups, "g", dry=False), 0)
         self.assertEqual((self.repo / "b" / "one.md").read_text(), "made by the owner\n")
         self.assertFalse((self.repo / "b" / "draft.md").exists())
+        self.assertFalse((self.repo / "b" / "archive").exists())
+        self.assertFalse((self.repo / "b" / "p-v1-owner.md").exists())
+        self.assertTrue((self.repo / "b" / "q-v1.md").exists())
+        self.assertEqual((self.repo / "b" / "p-v2-owner.md").read_text(), "see p-v2-owner.md\n")
         self.assertIn("b/one.md", json.loads(mirror.STAMPS.read_text()))
         self.assertEqual(mirror.unsaved(groups["g"][0], self.src, "HEAD"), ["a/draft.md"])
 

@@ -6,6 +6,5 @@ a library · the one Drive pipe for docs, files and folders · six caller machin
 
 Owner: the owner
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-gdrive-creator
 
 Stored references: refs.put / refs.local (LD-79 (Drive ref resolver)); never store a machine path (builder-card rule 4). `gdrive_creator/refs.py` hands out `{drive_id, label, bytes}` and reads one back into the one lasting cache, `~/.upright/cache/drive` (`DRIVE_CACHE` overrides).

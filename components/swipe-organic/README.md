@@ -1,6 +1,5 @@
 # swipe-organic — what the avatars actually watch
 
-## How to use it → https://dashboard.the company.com/atlas#c-components-swipe-organic
 
 > ## MY FEEDS IS THE FRONT (2026-09-19) — `desk.py`, port 8820, launch entry `my-feeds`
 >
