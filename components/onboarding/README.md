@@ -11,7 +11,7 @@ You don't run it by hand. Say **activate Prizm Lab** (Claude Code or Codex) and 
 
 | File | What it is |
 |---|---|
-| `serve.py` | the page's local server, http://127.0.0.1:8890, this computer only |
+| `serve.py` | the page's local server, http://127.0.0.1:8899, this computer only |
 | `page.html` | the page |
 | `test_onboarding.py` | tests |
 

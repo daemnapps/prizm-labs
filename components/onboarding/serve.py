@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The onboarding page: set up a brand, your keys and your ad account in one local page.
 
-    python3 components/onboarding/serve.py            # opens http://127.0.0.1:8890
+    python3 components/onboarding/serve.py            # opens http://127.0.0.1:8899
 
 Runs on this computer only (127.0.0.1). Keys typed here go straight into this repo's `.env` (created from
 `.env.example`, never saved to git, readable only by you); the page never shows a key back, only "set" or
@@ -172,7 +172,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
-    port = int(os.environ.get("ONBOARDING_PORT", "8890"))
+    port = int(os.environ.get("ONBOARDING_PORT", "8899"))
     srv = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     url = f"http://127.0.0.1:{port}"
     print(f"Onboarding page: {url}")
