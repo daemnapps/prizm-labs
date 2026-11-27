@@ -262,7 +262,29 @@ table.t td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabul
 .item{grid-template-rows:auto auto auto}
 select.brand{max-width:160px}
 @media (max-width:1600px){.nav a{padding:7px 8px;font-size:13px;gap:5px}.barin{gap:6px;padding:0 14px}.mark{margin-right:8px}}
-@media (max-width:1380px){.nav a span{display:none}.nav a{padding:8px}}
+@media (max-width:900px){.nav a span{display:none}.nav a{padding:8px}}
+.icb{display:inline-grid;place-items:center;position:relative;width:36px;height:36px;border-radius:var(--r2);color:var(--ink-2);border:1px solid transparent}
+.icb:hover{background:var(--paper)}
+.icb.on{color:var(--indigo);background:color-mix(in srgb,var(--indigo) 9%,transparent)}
+.icb .nb{position:absolute;top:-2px;right:-4px}
+.icb.wk.busy{color:var(--amber)}
+.kwrap{display:grid;gap:14px;max-width:880px}
+#klog{display:grid;gap:12px}
+.kme{justify-self:end;background:var(--ink);color:var(--paper);border-radius:var(--r3);padding:10px 14px;max-width:80%;font-size:14px}
+.kit{background:var(--card);border:1px solid var(--line);border-radius:var(--r3);padding:14px 18px}
+.kit .md{font-size:14.5px;line-height:1.65}.kit .md p{margin:0 0 9px}.kit .md ul{margin:0 0 9px;padding-left:18px}
+.cite{border:0;background:color-mix(in srgb,var(--indigo) 12%,transparent);color:var(--indigo);font:500 10.5px var(--mono);border-radius:var(--r4);padding:0 6px;margin:0 1px;vertical-align:1px;cursor:pointer}
+.ksrc{margin-top:8px;border-top:1px solid var(--line);padding-top:8px}.ksrc summary{cursor:pointer}
+.ksrc ol{margin:8px 0 0;padding-left:20px;display:grid;gap:8px;font-size:13px}.ksrc li.lit{background:color-mix(in srgb,var(--amber) 12%,transparent);border-radius:var(--r2);padding:4px 6px}
+.kbox{display:flex;gap:10px;align-items:flex-end;position:sticky;bottom:16px;padding:12px}
+.kbox textarea{flex:1;border:1px solid var(--line-2);border-radius:var(--r2);padding:10px 12px;font:14px var(--body);resize:vertical;background:var(--card)}
+.catc{text-align:left;cursor:pointer;display:grid;gap:12px;font:inherit;color:var(--ink)}
+.catc.on{border-color:var(--hue);box-shadow:0 0 0 1px var(--hue)}
+.catc .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.catc .stats div{display:grid}.catc .stats b{font:500 18px var(--mono)}
+tr.grp{cursor:pointer}tr.grp:hover td{background:var(--paper)}
+tr.sub td{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--paper) 60%,var(--card))}
+tr.sub td:first-child{padding-left:30px;font-family:var(--mono);max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chev{display:inline-block;width:12px;color:var(--ink-3)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
 @media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
@@ -273,19 +295,16 @@ select.brand{max-width:160px}
 <header class="bar"><div class="barin">
   <a class="mark" href="#today"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="pz" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D3BF5"/><stop offset=".2" stop-color="#2F5BFF"/><stop offset=".38" stop-color="#00A8CC"/><stop offset=".54" stop-color="#12A06F"/><stop offset=".7" stop-color="#F09000"/><stop offset=".85" stop-color="#F04A2E"/><stop offset="1" stop-color="#DB2A8C"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="#EFE9E1"/><polygon points="25,11 45,51 55,45 35,5" fill="url(#pz)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/><polygon points="25,11 45,51 5,51" fill="url(#pz)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/></svg>Studio</a>
   <nav class="nav" id="nav">
-    <a href="#portfolio" data-v="portfolio"><i class="ic" data-i="grid"></i><span>Portfolio</span></a>
     <a href="#today" data-v="today"><i class="ic" data-i="zap"></i><span>Today</span></a>
     <a href="#production" data-v="production"><i class="ic" data-i="film"></i><span>Production</span></a>
-    <a href="#live" data-v="live"><i class="ic" data-i="target"></i><span>Ads</span></a>
-    <a href="#approve" data-v="approve"><i class="ic" data-i="send"></i><span>Approve</span><b class="nb" id="nb"></b></a>
+    <a href="#ads" data-v="ads-top"><i class="ic" data-i="target"></i><span>Ads</span><b class="nb" id="nb"></b></a>
     <a href="#research" data-v="research"><i class="ic" data-i="search"></i><span>Research</span></a>
-    <a href="#skills" data-v="skills"><i class="ic" data-i="sparkles"></i><span>Skills</span></a>
-    <a href="#knowledge" data-v="knowledge"><i class="ic" data-i="book"></i><span>Knowledge</span></a>
-    <a href="#settings" data-v="settings"><i class="ic" data-i="shield"></i><span>Settings</span></a>
   </nav>
   <div class="grow"></div>
   <select class="brand" id="brand" aria-label="Brand"></select>
-  <a class="btn wk" href="#asks" id="wk">Working</a>
+  <a class="icb" href="#knowledge" data-v="knowledge" title="Knowledge" aria-label="Knowledge"><i class="ic" data-i="book"></i></a>
+  <a class="icb wk" href="#asks" id="wk" data-v="asks" title="Working on it" aria-label="Working on it"><i class="ic" data-i="loop"></i><b class="nb" id="wkn"></b></a>
+  <a class="icb" href="#settings" data-v="settings" title="Settings" aria-label="Settings"><i class="ic" data-i="shield"></i></a>
   <a class="btn go" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a>
 </div></header>
 <main id="main"><div class="skel">Loading…</div></main>
@@ -358,13 +377,13 @@ async function boot(){
   let bl = []; try { bl = (await J('/api/desk/brands')).brands; } catch {}
   S.labels = Object.fromEntries(bl.map(b => [b.id, b.label || b.id])); let bs = bl.map(b => b.id);
   if (!bs.includes(S.brand)) S.brand = bs[0] || '';
-  $('#brand').innerHTML = bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(blabel(b))}</option>`).join('');
+  $('#brand').innerHTML = `<option value="*">All brands</option>` + bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(blabel(b))}</option>`).join('');
   paintIcons();
   J('/api/desk/pieces').then(r => { S.pieces = r.pieces || []; if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
   J('/api/menu').then(m => { S.menu = {brands: m.brands}; store.set('st.menu', S.menu); if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
   route();
 }
-$('#brand').onchange = e => { S.brand = e.target.value; store.set('st.brand', S.brand); openAd = null; if (S.view === 'swipe') location.hash = 'production/swipes'; else if (S.view === 'ads') location.hash = 'production/video'; else route(); };
+$('#brand').onchange = e => { if (e.target.value === '*') { location.hash = 'portfolio'; return; } S.brand = e.target.value; store.set('st.brand', S.brand); openAd = null; if (S.view === 'swipe') location.hash = 'production/swipes'; else if (S.view === 'ads') location.hash = 'production/video'; else route(); };
 window.addEventListener('hashchange', route);
 function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
@@ -372,8 +391,11 @@ function route(){
   const alias = {brands:'settings'};
   S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
-  const tab = ['ads', 'swipes', 'swipe'].includes(S.view) ? 'production' : S.view;
-  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
+  if (S.view === 'ads' && !S.arg) S.view = 'live';
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', skills:'settings'};
+  const tab = TAB[S.view] || S.view;
+  document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
+  $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
   ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive})[S.view]();
   approveBadge();
 }
@@ -406,8 +428,8 @@ async function today(){
       <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
         ${waiting ? `<a class="btn wait" href="#approve">Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'}</a>` : `<div class="empty">Nothing waiting for your approval</div>`}</div>
       <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">${(d.off || []).length}</span></h3>
-        ${(d.off || []).map(a => `<a class="row" href="#live"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
-        ${(d.calls || []).map(a => `<a class="row" href="#live"><b title="${esc(a.name)}">${esc(a.name)}</b><span>${esc(a.why || '')}</span><span class="pill p-act">${esc(String(a.call).replace('_', ' '))}</span></a>`).join('')}
+        ${(d.off || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
+        ${(d.calls || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${esc(a.name)}</b><span>${esc(a.why || '')}</span><span class="pill p-act">${esc(String(a.call).replace('_', ' '))}</span></a>`).join('')}
         ${d.calls_asof ? `<span class="lbl">media-buying desk · ${esc(dayLabel(d.calls_asof))}</span>` : ''}</div>
       <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${variations.length}</span></h3>
         ${variations.map(w => `<div class="row"><b title="${esc(w.name)}">${esc(w.headline || w.name)}</b><span>${int(w.purchases)} buys · CPA ${usd(w.cpa)} · ROAS ${w.roas ?? '—'}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc(w.id + ' · ' + (w.headline || w.name))}">Plan</button></div>`).join('') || '<div class="empty">No winners on file</div>'}</div>
@@ -457,6 +479,9 @@ function ads(){
 }
 document.addEventListener('click', e => { const t = e.target.closest('[data-ad]'); if (t) location.hash = 'ads/' + encodeURIComponent(t.dataset.ad); });
 const host = () => $('#sub') || $('#main');
+const tabBar = (items, cur) => `<div class="lanes">${items.map(([id, name, ic, hue, href, badge]) => `<a href="${href}" class="${id === cur ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic">${icon(ic)}</i>${name}${badge ? `<b class="nb">${badge}</b>` : ''}</a>`).join('')}</div>`;
+const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads']], cur);
+const setTabs = cur => tabBar([['brand', 'Brand setup', 'shield', 'indigo', '#settings'], ['skills', 'Skills', 'sparkles', 'violet', '#skills']], cur);
 const blabel = b => (S.labels && S.labels[b] && S.labels[b] !== b) ? S.labels[b] : String(b).replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.ad) location.hash = 'ads/' + encodeURIComponent(e.target.dataset.ad); });
 function setStep(a, s){ history.replaceState(null, '', '#ads/' + encodeURIComponent(a.id + '|' + s)); S.arg = a.id + '|' + s; openAd = S.arg; }
@@ -677,7 +702,7 @@ async function research(){
 /* ================= BRANDS ================= */
 async function brandSetup(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Settings</h1><span class="sub">this brand's setup: what is on file, what is missing</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Settings</h1></div>${setTabs('brand')}<div class="skel">Loading…</div>`;
   let d; try { d = await J('/api/desk/setup?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'settings') return;
   const items = d.items || [], isOk = i => ['done', 'filled', 'skipped'].includes(i.state), ok = items.filter(isOk).length;
@@ -695,11 +720,11 @@ let apCache = {};
 async function approveCount(){
   try { const d = apCache[S.brand] || (apCache[S.brand] = await J('/approve/api/cards?view=check&brand=' + encodeURIComponent(S.brand))); return (d.cards || []).length; } catch { return null; }
 }
-async function approveBadge(){ const n = await approveCount(); const b = $('#nb'); if (b) b.textContent = n ? n : ''; }
+async function approveBadge(){ const n = await approveCount(); S.waiting = n; const b = $('#nb'); if (b) b.textContent = n ? n : ''; }
 const amedia = p => '/approve' + p;
 async function approve(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Approve</h1><span class="sub">finished ads waiting for your go · this brand only</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Ads</h1></div>${adsTabs('approve')}<div class="skel">Loading…</div>`;
   apCache[S.brand] = null;
   let d; try { d = apCache[S.brand] = await J('/approve/api/cards?view=check&brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">The approval feed did not answer: ${esc(e.message)}</div>`; return; }
   if (S.view !== 'approve') return;
@@ -837,7 +862,7 @@ async function newAd(pre){
 const SKILL_LANE = n => /email/.test(n) ? 'Email' : /image|static|statics|design|frame|cast|3d/.test(n) ? 'Static' : /video|recut|caption|clip|narrator|teardown|writing|production|edit|ad-|brief|stage|naming|meta|qc/.test(n) ? 'Video + ads' : /research|swipe|trend|winner|triage|avatar|product|brand/.test(n) ? 'Research' : /page/.test(n) ? 'Pages' : 'Running the system';
 async function skillsView(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Skills</h1><span class="sub">what each skill does, where it came from, and this brand's version of it</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Settings</h1></div>${setTabs('skills')}<div class="skel">Loading…</div>`;
   let d; try { d = await J('/api/desk/skills?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'skills') return;
   const groups = {};
@@ -870,7 +895,7 @@ document.addEventListener('click', e => {
   b.disabled = true; ask(b.dataset.ask, b.dataset.input, b.dataset.brand).then(r => { if (r) { b.textContent = 'Asked ✓'; } else b.disabled = false; });
 });
 async function asksBadge(){
-  try { const r = await J('/api/desk/asks'); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wk'); if (el) { el.textContent = n ? n + ' working' : 'Working'; el.classList.toggle('busy', !!n); } } catch {}
+  try { const r = await J('/api/desk/asks'); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wkn'); if (el) { el.textContent = n || ''; $('#wk').classList.toggle('busy', !!n); } } catch {}
 }
 setInterval(asksBadge, 15000);
 const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['working', 'act'], done:['ready', 'ready'], failed:['stopped', 'stop']};
@@ -917,18 +942,55 @@ async function creatorsLane(){
   paintIcons(h);
 }
 
-/* ================= KNOWLEDGE ================= */
-async function knowledgeView(){
+/* ================= KNOWLEDGE: ask it like daemn.co/knowledge; every answer shows its sources ================= */
+let kchat = store.get('st.kchat') || [];
+const kfill = t => esc(t).replace(/\{([^}]{1,30})\}/g, 'your $1');
+const kcited = t => new Set([...String(t).matchAll(/\[(\d+(?:\s*,\s*\d+)*)\]/g)].flatMap(m => m[1].split(/\s*,\s*/).map(Number)));
+const kformat = (t, n) => md(t).replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (x, g) => g.split(/\s*,\s*/).map(k => +k >= 1 && +k <= n ? `<button class="cite" data-n="${k}">${k}</button>` : '').join(''));
+function ksources(src, text){
+  const used = kcited(text), order = src.map((s, i) => i + 1).filter(n => used.has(n));
+  if (!order.length) return '';
+  return `<details class="ksrc"><summary class="lbl">${order.length} source${order.length > 1 ? 's' : ''}</summary><ol>${order.map(n => { const s = src[n - 1]; return `<li data-n="${n}"><span class="pill ${s.kind === 'Rule' ? 'p-act' : s.kind === 'Guide' ? 'p-ready' : 'p-swipe'}">${esc(s.kind === 'Guide' ? 'How it works' : s.kind || '')}</span> <span class="lbl">${esc(s.topic || '')}</span><div>${kfill(s.kind === 'Rule' ? s.text : (s.title || '') + ' — ' + (s.text || ''))}</div>${s.why && s.why !== s.text ? `<div class="lbl" style="margin-top:3px">Why: ${kfill(s.why)}</div>` : ''}</li>`; }).join('')}</ol></details>`;
+}
+const kturn = t => `<div class="kme">${esc(t.q)}</div><div class="kit"><div class="md">${kformat(t.a, t.sources.length)}</div>${ksources(t.sources, t.a)}</div>`;
+function knowledgeView(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Knowledge</h1><span class="sub">every rule and lesson you have written down, with why and when</span></div>
-    <div class="card" style="margin-bottom:16px"><label class="fld"><span>Search</span><input id="kq" placeholder="hooks, offers, statics, creators…" value="${esc(store.get('st.kq') || '')}"></label></div><div id="kr"><div class="skel">Loading…</div></div>`;
-  const run = async () => {
-    const q = $('#kq').value; store.set('st.kq', q);
-    let d; try { d = await J('/api/desk/knowledge?q=' + encodeURIComponent(q)); } catch (e) { $('#kr').innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-    $('#kr').innerHTML = `<div class="lbl" style="margin-bottom:10px">${d.items.length} shown of ${int(d.total)}</div><div class="items">${d.items.map(k => `<div class="card" style="padding:14px 16px;display:grid;gap:6px"><div class="arow"><span class="pill ${k.kind === 'Rule' ? 'p-act' : 'p-swipe'}">${esc(k.kind || '')}</span><b>${esc(k.title || '')}</b></div>${k.text && k.text !== k.title ? `<div style="font-size:13.5px">${esc(k.text)}</div>` : ''}${k.why ? `<div style="font-size:12.5px;color:var(--ink-3)"><b style="color:var(--ink-2)">Why</b> ${esc(k.why)}</div>` : ''}${k.when ? `<div style="font-size:12.5px;color:var(--ink-3)"><b style="color:var(--ink-2)">When</b> ${esc(k.when)}</div>` : ''}</div>`).join('') || '<div class="card note">Nothing matches.</div>'}</div>`;
+  m.innerHTML = `<div class="ph"><h1>Knowledge</h1><span class="sub">3,536 rules, lessons and how-it-works guides · every answer shows where it came from</span>${kchat.length ? '<div class="acts"><button class="btn" id="kreset">New chat</button></div>' : ''}</div>
+    <div class="kwrap"><div id="klog">${kchat.map(kturn).join('') || `<div class="card note">Ask how anything is done: hooks, offers, statics, creators, the ad system itself.</div>`}</div>
+    <form class="card kbox" id="kform"><textarea id="kq" rows="2" placeholder="Ask anything…" required></textarea><button class="btn go" id="ksend" type="submit">Ask</button></form></div>`;
+  const kq = $('#kq');
+  kq.onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#kform').requestSubmit(); } };
+  if ($('#kreset')) $('#kreset').onclick = () => { kchat = []; store.set('st.kchat', kchat); knowledgeView(); };
+  $('#klog').onclick = e => { const c = e.target.closest('.cite'); if (!c) return; const it = c.closest('.kit'), d = it.querySelector('details'); if (!d) return; d.open = true; it.querySelectorAll('li').forEach(li => li.classList.toggle('lit', li.dataset.n === c.dataset.n)); };
+  $('#kform').onsubmit = async e => {
+    e.preventDefault(); const q = kq.value.trim(); if (!q) return;
+    $('#ksend').disabled = true; kq.value = '';
+    if (!kchat.length) $('#klog').innerHTML = '';
+    $('#klog').insertAdjacentHTML('beforeend', `<div class="kme">${esc(q)}</div><div class="kit"><div class="md"><span class="lbl">Searching 3,536 rules, lessons and guides…</span></div></div>`);
+    const box = $('#klog').lastElementChild.querySelector('.md'); box.scrollIntoView({block: 'end'});
+    let text = '', src = [];
+    try {
+      const r = await fetch('/api/desk/knowledge-ask', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({q, history: kchat.slice(-4).map(t => ({q: t.q, a: t.a}))})});
+      if (!r.ok || !r.body) { const d = await r.json().catch(() => ({})); throw new Error(d.error || 'failed'); }
+      const rd = r.body.getReader(), dec = new TextDecoder(); let buf = '';
+      for (;;) {
+        const {value, done} = await rd.read(); if (done) break;
+        buf += dec.decode(value, {stream: true}); let i;
+        while ((i = buf.indexOf('\n\n')) >= 0) {
+          const block = buf.slice(0, i); buf = buf.slice(i + 2);
+          const ev = (block.match(/^event: (.+)$/m) || [])[1]; let data = {}; try { data = JSON.parse((block.match(/^data: (.*)$/m) || [, '{}'])[1]); } catch {}
+          if (ev === 'sources') { src = data; box.innerHTML = `<span class="lbl">Reading ${src.length} rules and lessons</span>`; }
+          if (ev === 'text') { text += data.t; box.innerHTML = kformat(text, src.length); }
+          if (ev === 'error') throw new Error(data.error);
+        }
+      }
+      if (!text) throw new Error('no answer');
+      box.insertAdjacentHTML('afterend', ksources(src, text));
+      kchat.push({q, a: text, sources: src}); kchat = kchat.slice(-20); store.set('st.kchat', kchat);
+    } catch (err) { box.insertAdjacentHTML('beforeend', `<p class="note stop">Couldn't finish that answer (${esc(err.message)}). Try again in a minute.</p>`); }
+    finally { $('#ksend').disabled = false; kq.focus(); }
   };
-  let t; $('#kq').oninput = () => { clearTimeout(t); t = setTimeout(run, 250); };
-  run();
+  kq.focus();
 }
 
 /* ================= GITHUB (on Portfolio): brands this login can reach ================= */
@@ -943,27 +1005,46 @@ const CALL = {off:['off', 'stop'], keep:['keep', 'ready'], budget_up:['budget up
 let adsSort = store.get('st.adsort') || 'spend7';
 async function adsLive(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub" id="adsub">live numbers by brief · from the warehouse, never Meta</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub" id="adsub">live numbers by brief · from the warehouse, never Meta</span></div>${adsTabs('live')}<div class="skel">Loading…</div>`;
   let d; try { d = await J('/api/desk/ads?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'live') return;
   if (!d.ads.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No live ad numbers on file for this brand yet.</div>'; return; }
   $('#adsub').textContent = `${d.ads.length} ads spent in 30 days · to ${dayLabel((d.money || {}).through)}${d.calls_asof ? ' · calls ' + dayLabel(d.calls_asof) : ''}`;
-  const groups = {};
-  for (const a of d.ads) (groups[a.brief || '—'] = groups[a.brief || '—'] || []).push(a);
-  const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
   const prods = S.prods || (S.prods = (await J('/api/productions').catch(() => ({productions: []}))).productions);
-  const bk = n => { const p = prods.find(x => (x.key || '').endsWith('brief-' + n)); return p ? 'p:' + p.key : null; };
-  const rowsOf = Object.entries(groups).map(([b, rs]) => ({b, rs, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30')}));
-  const sorts = {spend7: r => -r.s7, buys30: r => -r.b30, cpa7: r => (r.b7 ? r.s7 / r.b7 : 1e9)};
+  const prodOf = n => prods.find(x => (x.key || '').endsWith('brief-' + n));
+  const camp = c => String(c || 'no campaign').replace(/^campaign_[^_]+_/, '').replace(/_/g, ' ');
+  const creatorOf = n => String(n || '').split(/_|\s+-\s+/)[0].replace(/([a-z])([A-Z])/g, '$1 $2').trim();
+  const cat = a => a.brief ? 'brief' : /trybe=/i.test(a.name || '') ? 'creator' : 'other';
+  const keyOf = a => ({brief: a.brief, creator: creatorOf(a.name), other: camp(a.campaign)})[cat(a)];
+  const CATS = [['brief', 'Briefs', 'film', 'cyan'], ['creator', 'Creators', 'user', 'magenta'], ['other', 'Not briefed', 'list', 'ink-3']];
+  const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
+  const stats = rs => ({n: rs.length, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30'),
+    off: rs.filter(r => r.call === 'off').length, act: rs.filter(r => r.call && !['too_early', 'keep', 'off'].includes(r.call)).length});
+  let curCat = store.get('st.adcat') || 'brief', open = new Set(), onlyCalls = false;
+  const cpa = (s, b) => b ? usd(s / b) : '—';
   const draw = () => {
-    const rows = [...rowsOf].sort((a, b) => sorts[adsSort](a) - sorts[adsSort](b));
-    m.querySelector('.skel, #adtab')?.remove();
-    m.insertAdjacentHTML('beforeend', `<div id="adtab"><div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}</div>
-      <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>Brief · ad</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">Buys 30d</th><th style="text-align:right">ROAS 30d</th><th>Desk</th><th></th></tr>
-      ${rows.map(g => { const key = g.b !== '—' ? bk(g.b) : null; return `<tr style="background:var(--paper)"><td><b>${g.b === '—' ? 'No brief in the name' : 'Brief ' + esc(g.b)}</b> <span class="lbl">${g.rs.length} ads</span>${key ? ` · <a href="#ads/${encodeURIComponent(key)}">open</a>` : ''}</td><td class="n">${usd(g.s7)}</td><td class="n">${int(g.b7)}</td><td class="n">${g.b7 ? usd(g.s7 / g.b7) : '—'}</td><td class="n">${usd(g.s30)}</td><td class="n">${int(g.b30)}</td><td class="n">${g.s30 ? (g.v30 / g.s30).toFixed(2) : '—'}</td><td></td><td>${g.b !== '—' && g.b30 ? `<button class="btn" data-ask="variations" data-input="${esc('brief ' + g.b + ' · ' + g.rs[0].name)}">Make more</button>` : ''}</td></tr>` +
-        g.rs.map(a => { const [cw, cc] = CALL[a.call] || [a.call || '', 'mute']; return `<tr><td style="padding-left:22px;font:12px var(--mono);color:var(--ink-2)" title="${esc(a.name)}">${esc((a.name || '').replace(/^.*?brief-\d{4}_?/, '') || a.name)}</td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n" style="color:var(--${a.break_even && a.cpa7 > a.break_even ? 'coral' : 'ink'})">${a.cpa7 != null ? usd(a.cpa7) : '—'}</td><td class="n">${usd(a.spend30)}</td><td class="n">${int(a.buys30)}</td><td class="n">${a.spend30 ? (a.value30 / a.spend30).toFixed(2) : '—'}</td><td>${a.call ? `<span class="pill p-${cc}" title="${esc(a.why || '')}">${esc(cw)}</span>` : ''}</td><td></td></tr>`; }).join(''); }).join('')}</table></div>
+    m.querySelectorAll('.skel, #adtab').forEach(x => x.remove());
+    const byCat = Object.fromEntries(CATS.map(([c]) => [c, d.ads.filter(a => cat(a) === c)]));
+    const groups = {};
+    for (const a of byCat[curCat]) { if (onlyCalls && (!a.call || ['too_early', 'keep'].includes(a.call))) continue; (groups[keyOf(a)] = groups[keyOf(a)] || []).push(a); }
+    const rows = Object.entries(groups).map(([k, rs]) => ({k, rs, ...stats(rs)}));
+    const sorts = {spend7: r => -r.s7, buys30: r => -r.b30, cpa7: r => (r.b7 ? r.s7 / r.b7 : 1e9)};
+    rows.sort((x, y) => sorts[adsSort](x) - sorts[adsSort](y));
+    const title = r => curCat === 'brief' ? (() => { const p = prodOf(r.k), bi = (d.briefs || {})[r.k] || {}; return `Brief ${esc(r.k)}${p ? ' · ' + esc(p.title) : bi.angle ? ' · ' + esc(bi.angle) : ''}${(bi.lanes || []).map(l => ` <span class="pill ${l === 'video' ? 'p-video' : 'p-swipe'}">${esc(l)}</span>`).join('')}`; })() : esc(r.k);
+    m.insertAdjacentHTML('beforeend', `<div id="adtab">
+      <div class="grid4" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">${CATS.map(([c, name, ic, hue]) => { const t = stats(byCat[c]); return `<button class="card catc ${c === curCat ? 'on' : ''}" data-cat="${c}" style="--hue:var(--${hue})"><h3>${ib(ic, hue)}${name}<span class="count">${t.n} ads</span></h3>
+        <div class="stats"><div><span class="lbl">Spend 7d</span><b>${usd(t.s7)}</b></div><div><span class="lbl">Buys 7d</span><b>${int(t.b7)}</b></div><div><span class="lbl">CPA 7d</span><b>${cpa(t.s7, t.b7)}</b></div></div>
+        <div class="arow">${t.off ? `<span class="pill p-stop">${t.off} to turn off</span>` : ''}${t.act ? `<span class="pill p-act">${t.act} other calls</span>` : ''}${!t.off && !t.act ? '<span class="lbl">no calls from the desk</span>' : ''}</div></button>`; }).join('')}</div>
+      <div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}<button class="${onlyCalls ? 'on' : ''}" data-only style="margin-left:auto">Only the desk's calls</button></div>
+      <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>${curCat === 'brief' ? 'Brief' : curCat === 'creator' ? 'Creator' : 'Campaign'}</th><th style="text-align:right">Ads</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">ROAS 30d</th><th>Desk</th><th></th></tr>
+      ${rows.map(r => { const isOpen = open.has(r.k), p = curCat === 'brief' ? prodOf(r.k) : null; return `<tr class="grp" data-g="${esc(r.k)}"><td><span class="chev">${isOpen ? '▾' : '▸'}</span> <b>${title(r)}</b></td><td class="n">${r.n}</td><td class="n">${usd(r.s7)}</td><td class="n">${int(r.b7)}</td><td class="n">${cpa(r.s7, r.b7)}</td><td class="n">${usd(r.s30)}</td><td class="n">${r.s30 ? (r.v30 / r.s30).toFixed(2) : '—'}</td><td>${r.off ? `<span class="pill p-stop">${r.off} off</span>` : ''}${r.act ? ` <span class="pill p-act">${r.act} call</span>` : ''}</td><td style="white-space:nowrap">${p ? `<a class="btn" href="#ads/${encodeURIComponent('p:' + p.key)}">Open</a> ` : ''}${r.b30 ? `<button class="btn" data-ask="variations" data-input="${esc((curCat === 'brief' ? 'brief ' : '') + r.k + ' · ' + r.rs[0].name)}">Make more</button>` : ''}</td></tr>` +
+        (isOpen ? r.rs.map(a => { const [cw, cc] = CALL[a.call] || [a.call || '', 'mute']; return `<tr class="sub"><td title="${esc(a.name)}">${esc((a.name || '').replace(/^.*?brief-\d{4}_?/, '') || a.name)}</td><td></td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n" style="color:var(--${a.break_even && a.cpa7 > a.break_even ? 'coral' : 'ink'})">${a.cpa7 != null ? usd(a.cpa7) : '—'}</td><td class="n">${usd(a.spend30)}</td><td class="n">${a.spend30 ? (a.value30 / a.spend30).toFixed(2) : '—'}</td><td>${a.call ? `<span class="pill p-${cc}" title="${esc(a.why || '')}">${esc(cw)}</span>` : ''}</td><td class="lbl">${esc(a.why || '')}</td></tr>`; }).join('') : ''); }).join('') || '<tr><td colspan="9" class="empty">Nothing here</td></tr>'}</table></div>
       ${d.rule ? `<div class="lbl" style="margin-top:10px">Desk rule: ${esc(d.rule)}</div>` : ''}</div>`);
+    paintIcons(m);
+    m.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { curCat = b.dataset.cat; store.set('st.adcat', curCat); open = new Set(); draw(); });
     m.querySelectorAll('[data-srt]').forEach(b => b.onclick = () => { adsSort = b.dataset.srt; store.set('st.adsort', adsSort); draw(); });
+    m.querySelector('[data-only]').onclick = () => { onlyCalls = !onlyCalls; draw(); };
+    m.querySelectorAll('tr.grp').forEach(tr => tr.onclick = e => { if (e.target.closest('a,button')) return; const k = tr.dataset.g; open.has(k) ? open.delete(k) : open.add(k); draw(); });
   };
   draw();
 }

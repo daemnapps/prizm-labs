@@ -691,9 +691,62 @@ def live_ads(brand):
         money = {"through": w.get("spend_through"), "spend": w.get("spend") or {},
                  "revenue": {k: (v.get("blended") or {}).get("revenue") for k, v in o.items() if isinstance(v, dict)},
                  "orders": {k: (v.get("blended") or {}).get("orders") for k, v in o.items() if isinstance(v, dict)}}
-    return {"ads": rows, "money": money, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
+    idx = _read(WS / "runs/meta-upload" / brand / "ADS-INDEX.json")
+    briefs = {}
+    for b in (idx.get("briefs") or []) if isinstance(idx, dict) else []:
+        if b.get("number"):
+            briefs[str(b["number"])] = {"angle": (b.get("angle") or "").replace("-", " "), "lanes": b.get("lanes") or [],
+                                        "avatar": b.get("avatar"), "product": b.get("product")}
+    return {"ads": rows, "money": money, "briefs": briefs, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
             "rule": ((r or {}).get("rule") or {}).get("_what") if isinstance(r, dict) and isinstance(r.get("rule"), dict) else None,
             "from": str(Path(wf).relative_to(WS)) if wf else None}
+
+
+def knowledge_server():
+    """The knowledge service's address: PRIZM_KNOWLEDGE_URL, else the one the site's own knowledge page uses."""
+    if os.environ.get("PRIZM_KNOWLEDGE_URL"):
+        return os.environ["PRIZM_KNOWLEDGE_URL"].rstrip("/")
+    try:
+        m = re.search(r'const SERVER = "(https://[^"]+)"', (WS / "docs/knowledge/index.html").read_text())
+        return m.group(1) if m else None
+    except OSError:
+        return None
+
+
+def knowledge_ask(h, data):
+    """Pass one question to the knowledge service and stream its answer (event: sources, then text) back as it
+    comes. The service only answers its own site's address, so the Studio asks on the page's behalf."""
+    import urllib.request
+    q = str(data.get("q") or "").strip()[:1000]
+    if not q:
+        return h.send(400, {"error": "ask a question"})
+    hist = [{"q": str(t.get("q", ""))[:1000], "a": str(t.get("a", ""))[:4000]} for t in (data.get("history") or [])[-4:]
+            if isinstance(t, dict)]
+    server = knowledge_server()
+    if not server:
+        return h.send(503, {"error": "no knowledge service is set up for this copy"})
+    req = urllib.request.Request(server + "/ask", method="POST",
+                                 data=json.dumps({"q": q, "stream": True, "history": hist}).encode(),
+                                 headers={"Content-Type": "application/json", "Origin": "https://daemn.co",
+                                          "User-Agent": "Mozilla/5.0 (Prizm Studio)"})
+    try:
+        r = urllib.request.urlopen(req, timeout=120)
+    except Exception as e:  # noqa: BLE001 — said on the page
+        return h.send(502, {"error": "the knowledge service did not answer: %s" % e})
+    h.send_response(200)
+    h.send_header("Content-Type", "text/event-stream")
+    h.send_header("Cache-Control", "no-cache")
+    h.end_headers()
+    try:
+        while True:
+            chunk = r.read1(4096) if hasattr(r, "read1") else r.read(4096)
+            if not chunk:
+                break
+            h.wfile.write(chunk)
+            h.wfile.flush()
+    except (BrokenPipeError, ConnectionResetError):
+        pass
+    return None
 
 
 def today(brand):
@@ -972,6 +1025,8 @@ def handle(h, method, parts, query, body):
             data = json.loads(body or b"{}") or {}
             if api == ["start"]:
                 return h.send(200, start(data))
+            if api == ["knowledge-ask"]:                        # the knowledge chat (same service daemn.co/knowledge asks)
+                return knowledge_ask(h, data)
             if api == ["ask"]:                                  # a Studio button hands one job to Claude
                 import studio_asks as SA
                 return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by")))
