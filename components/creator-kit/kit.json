@@ -1,0 +1,32 @@
+{
+ "_readme": "The creator kit: what a person who manages clippers and creators needs to run the creator line on their own computer, with their own accounts. check.py reads this file.",
+ "keys": {
+  "needed": {
+   "GEMINI_API_KEY": "reads the swiped videos and writes the teardown",
+   "APIFY_TOKEN": "pulls posts and comments for the feeds and research rounds",
+   "ELEVENLABS_API_KEY": "transcribes what is said in a video"
+  },
+  "helpful": {
+   "HIGGSFIELD_KEY_ID": "makes pictures and clips (with HIGGSFIELD_KEY_SECRET)",
+   "HIGGSFIELD_KEY_SECRET": "the other half of the Higgsfield pair",
+   "GDRIVE_SA_KEY": "files hand-offs and creator footage to a shared Drive",
+   "OPENAI_API_KEY": "pictures and the judging steps"
+  }
+ },
+ "loop": [
+  {"step": "Find what works", "say": "run a research round for <avatar> of <brand>", "skill": "research-round"},
+  {"step": "Save the picks", "say": "add these swipes for <brand>", "skill": "swipe-intake"},
+  {"step": "Write the creator brief", "say": "tear down this video for a creator, brand <brand>", "skill": "video-teardown"},
+  {"step": "Write a picture brief for a creator", "say": "tear down this static for a creator to shoot", "skill": "image-teardown"},
+  {"step": "Send it to the creator", "say": "hand brief <number> to the creator", "skill": "brief-handoff"},
+  {"step": "Bring the footage back", "say": "check what came back for brief <number>", "skill": "brief-handoff"},
+  {"step": "Cut it", "say": "edit brief <number>", "skill": "video-edit"},
+  {"step": "One change to a cut", "say": "on brief <number>, move the hook to the start", "skill": "recut"},
+  {"step": "Send it for approval", "say": "send brief <number> to the approval page", "skill": "meta-upload"}
+ ],
+ "rules": [
+  "Every run uses this computer's own keys and accounts; nothing is billed to anyone else.",
+  "Nothing goes live from here. The approval page is the owner's click.",
+  "The brand folder is linked in from the brand's own repo; it is never copied into Prizm."
+ ]
+}

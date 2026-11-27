@@ -646,6 +646,16 @@
    "basis": "draft"
   },
   {
+   "path": "components/creator-kit",
+   "kind": "tool",
+   "does": "Runs the creator line on a creator manager's own computer and accounts",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/onboarding",
    "kind": "tool",
    "does": "One local page to set up a brand, its keys and its ad account",
