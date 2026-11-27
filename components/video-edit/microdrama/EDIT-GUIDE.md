@@ -31,8 +31,9 @@ the line's.
    white, thin black edge, sentence case, three to four words, one fixed lower-third position for the whole video).
    Timed to the words actually heard in the final cut, with brand words in capitals (FLEX) and names kept as written.
 8. **Sound is native.** The scene audio carries the voices. No music or added sounds unless the brief asks. No replacement voices.
-9. **The ending.** The last spoken beat is the series line ("Watch Part Two"); the first clip of the next part runs as
-   picture under it when it exists (wait for it rather than ship without), then a plain end card. Nothing more is said after it.
+9. **The ending.** The video stops on the series line ("Watch Part Two"). No end card, nothing after it. One shot
+   from the next part's footage (the owner picks it) lies on top of that line as picture only, muted, on its own track
+   under the captions. If the next part is not made yet, wait for it rather than ship without.
 10. **Versions.** The regular cut, plus the hooks the owner picks, each a short opening taken from the body (a reaction,
     a key line) laid in front of the regular cut. A hook plays whole, starts on a clear face, and goes straight into the cut.
 
@@ -49,6 +50,12 @@ the line's.
 | 7 | Build the HyperFrames project: scenes, captions, end card, hooks | tool | `hyperframes check` passes |
 | 8 | Render every version and read the sound back (every line present, in order) | tool | line list printed |
 | 9 | Look at every join and every caption position; listen end to end | person or session | no stray frame, no caption on a mouth |
+| 10 | Deliver the render as made (480p footage in the 1080x1920 frame). No upscale step. | session | the file filed and downloaded is the HyperFrames render |
+
+**No upscaling (owner's call, 2026-11-27).** Tested on Part 1: the local upscalers (Real-ESRGAN, including its video
+model) look worse than the source; Higgsfield ByteDance (11.49 credits for 57 s) and Topaz (11 credits) add no real
+detail over the 480p original. The owner chose the render as made. Higher quality comes later from generating at 720p
+in the footage itself, not from a post step.
 
 Always open the result in HyperFrames in Claude's browser pane for the owner; never the desktop app.
 

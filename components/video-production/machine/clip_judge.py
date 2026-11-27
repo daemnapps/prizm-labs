@@ -2,7 +2,7 @@
 
 Every shot is made as three takes (clips_run.make_picked); this scores each one so the best is kept. It asks the
 house judge (components/generative-model-house `behind.judge`, Gemini 3.1 Pro) to watch the take beside its
-approved start picture, with the prompt `prompts/v2/clip-judge-v4-owner.md` (v4, 2026-10-28 — v3 + props make sense, the right object, the voice, the swipe's elements):
+approved start picture, with the prompt `prompts/v2/clip-judge-v7-owner.md` (v7, 2026-11-16 — the swipe's elements are notes, the scene's job can fail, V57):
 
   dead pauses · lips closed while listening · kept its object · room unchanged · same person · the acting ·
   the camera move · no slop · absurd on purpose passes · stop-power (V24: how hard it stops a thumb)
@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE.parent / "prompts" / "v2" / "clip-judge-v4-owner.md"   # v4: props make sense, right object, voice, the swipe's elements (2026-10-28)
+PROMPT = HERE.parent / "prompts" / "v2" / "clip-judge-v9-owner.md"   # v9: the acting is four named looks (PR-1, 2026-11-27; v8 stays beside it, repoint here to roll back) · v8: V58, an animated film's product is made in its look (2026-11-18) · v7: the swipe's elements are notes (kept in "notes"); the scene's job can fail (V57, 2026-11-16)
 
 
 def _load(name: str, as_name: str | None = None):
@@ -52,6 +52,8 @@ def judge(run: Path, take: Path, call: dict, scenes: dict, start_picture: Path |
     sb = _load("scene_breakdown", "vm_cj_scene_breakdown")
     swipe = sb.judge_lines(sb.of_call(run, call)) or "- (this scene's swipe was not broken down: check 14 does not apply)"
     prompt = PROMPT.read_text().replace("{shot}", shot_words(call, scenes)).replace("{swipe}", swipe)
+    for var, name in (("{staging}", "staging.md"), ("{consistency}", "consistency.md")):
+        prompt = prompt.replace(var, (HERE.parents[1] / "video-doctrine" / "slices" / name).read_text())
     files = [Path(take)] + ([Path(start_picture)] if start_picture else [])
     sg = _load("sheet_gates", "vm_cj_sheet_gates")      # the judge's sheet: formats, count and inline size
     found = sg.judge_files(model, files)
@@ -83,6 +85,7 @@ def judge(run: Path, take: Path, call: dict, scenes: dict, start_picture: Path |
     except (TypeError, ValueError):
         stop = 0.0
     return {"state": "reviewed", "retry_kind": "creative", "score": score, "pass": ans.get("pass") is True and score >= 7, "problems": probs, "stop_power": stop,
+            "notes": [str(x)[:300] for x in ans.get("notes") or [] if str(x).strip()],     # V57: differences from the swipe
             "by": info.get("model") or model, "remembered": bool(info.get("remembered"))}
 
 

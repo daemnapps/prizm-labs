@@ -1,6 +1,8 @@
 """The Seedance prompt (2026-10-26): bound assets, one sentence, whole-second windows, no repeats. No network."""
 import importlib.util
+import os
 import unittest
+from unittest import mock
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -133,7 +135,9 @@ class HbSwitchOff(unittest.TestCase):
     """With no hb mode named, the builder's output is byte-for-byte what it was before the modes existed. The hashes
     were taken from the builder at origin/main before this change (sha256 of the prompt)."""
     def sha(self, call, scenes=SCENES):
-        return hashlib.sha256(SP.build(call, scenes, PEOPLE, {}, "", "YAI")["prompt"].encode()).hexdigest()[:16]
+        # these hashes pin the builder before the hb modes AND before the idle line (IL-1), so the idle line is off here
+        with mock.patch.dict(os.environ, {"IDLE_LINE_OFF": "1"}):
+            return hashlib.sha256(SP.build(call, scenes, PEOPLE, {}, "", "YAI")["prompt"].encode()).hexdigest()[:16]
 
     def test_the_switch_reads_off_by_default(self):
         for v in (None, "", "narrator", "something-else", [], ["narrator"]):
@@ -373,3 +377,41 @@ class HbFilmedAndPlaces(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class IdleLine(unittest.TestCase):
+    """IL-1 (2026-11-27): a spoken take carries one idle line (blinks, breath, settle). Lips, voice and the speaker lock are untouched."""
+    def prompt(self, call, **env):
+        with mock.patch.dict(os.environ, env):
+            return SP.build(call, SCENES, PEOPLE, {}, "", "YAI")["prompt"]
+
+    def test_a_spoken_take_carries_the_idle_line(self):
+        p = self.prompt(CALL)
+        self.assertIn("natural blinks", p)
+        self.assertIn("never a held stare", p)
+
+    def test_the_line_comes_before_the_negatives_and_after_the_movement_bar(self):
+        p = self.prompt(CALL)
+        self.assertLess(p.index("their head tilts and nods"), p.index("natural blinks"))
+        self.assertLess(p.index("natural blinks"), p.index("No subtitles."))
+
+    def test_lips_voice_and_the_speaker_lock_are_unchanged(self):
+        on, off = self.prompt(CALL), self.prompt(CALL, IDLE_LINE_OFF="1")
+        for s in ("Audio 1 is the woman's voice", "lips matching every word", "when Audio 1 goes silent the lips stay closed"):
+            self.assertIn(s, on)
+            self.assertIn(s, off)
+        self.assertEqual(on.replace(" " + SP.IDLE, ""), off)
+
+    def test_off_removes_exactly_the_idle_line_and_nothing_else(self):
+        on, off = self.prompt(CALL), self.prompt(CALL, IDLE_LINE_OFF="1")
+        self.assertNotIn("natural blinks", off)
+        self.assertEqual(on.replace(" " + SP.IDLE, ""), off)
+
+    def test_a_silent_take_and_a_sung_take_are_untouched(self):
+        silent = {**CALL, "talking": False, "end_frame": "S1-F2", "lines": []}
+        self.assertNotIn("natural blinks", self.prompt(silent))
+        self.assertNotIn("natural blinks", self.prompt({**CALL, "sung": True}))
+
+    def test_the_idle_line_names_no_feeling(self):
+        for w in ("angry", "sad", "happy", "nervous", "excited", "furious"):
+            self.assertNotIn(w, SP.IDLE.lower())

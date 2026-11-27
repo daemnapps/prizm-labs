@@ -264,10 +264,31 @@ PHYSICAL = ("Every lid comes off before anything is taken out; every ingredient 
             "the same thing and texture; each action lands on the object the timeline names, and that object stays the "
             "same object.")
 # THE MOVEMENT BAR (2026-10-28): the hands keep working and the eyes move, said in every clip with a person
+# FIRST TAKE (2026-11-01): the faults the first-take report counted most, stated in every clip
+HANDS = ("One hand action at a time, on one object, fingers relaxed and clearly apart. Every object used is already in the "
+         "picture within reach; nothing appears, vanishes or changes hands.")
 MOTION = ("The person's hands keep doing the real task the whole time, unhurried and continuous: each action flows into "
           "the next with no frozen hold; their eyes go down to their hands while they work and come back up to the lens "
           "between actions; their head tilts and nods with their words; the material visibly moves (it falls, pours, "
           "spreads).")
+# THE IDLE LINE (2026-11-27): a talking take keeps living on camera between the words. Natural blinks, an easy breath,
+# the head settling a little, hands relaxed, and in the last second the face eases into a small settle instead of a held
+# stare. It adds to the "keep moving with the speech" line above; it never touches lips, voice or the speaker lock.
+# Switch: `idle_line.json` -> {"on": false} turns it off; one machine only: IDLE_LINE_OFF=1. Row IL-1 in team/rollbacks.md.
+IDLE = ("Between the words the person keeps living on camera: natural blinks, an easy breath that lifts the shoulders, "
+        "the head settling a little, hands relaxed; in the last second the face eases into a small settle, never a held stare.")
+
+
+def idle_on() -> bool:
+    """True unless idle_line.json says off or IDLE_LINE_OFF is set. Read every call, so a switch takes effect at once."""
+    import json
+    import os
+    if os.environ.get("IDLE_LINE_OFF"):
+        return False
+    try:
+        return bool(json.loads((HERE / "idle_line.json").read_text()).get("on", True))
+    except (OSError, ValueError):
+        return True
 
 
 def build(call: dict, scenes: dict, people: dict, words: dict, style: str, lead: str | None = None) -> dict:
@@ -426,7 +447,8 @@ def build(call: dict, scenes: dict, people: dict, words: dict, style: str, lead:
     hold = (f"Constant throughout: one continuous take, {camera}; the same person, clothing, props, room and light as Image 1."
             + (f" Marks kept exactly as in Image 1: {marks}." if keep_marks else "")
             + (" " + " ".join(quiet) if quiet else "") + (" " + real if real else "")
-            + " " + (SUNG if call.get("sung") else PHYSICAL + (" " + MOTION if call.get("people") or talking else ""))
+            + " " + (SUNG if call.get("sung") else PHYSICAL + " " + HANDS + (" " + MOTION if call.get("people") or talking else ""))
+            + (" " + IDLE if talking and not call.get("sung") and idle_on() else "")      # IL-1: the idle line, spoken takes only
             + " No subtitles. No background music.")
     # THE SWIPE'S ELEMENTS, read to the smallest one (scene_breakdown.py, 2026-10-28): the camera's hand drift, the eyes,
     # each prop's state and lift, where each ingredient goes, what each action lands on, the atmosphere

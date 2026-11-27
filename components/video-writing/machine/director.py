@@ -90,7 +90,14 @@ MODE_PROMPTS = {"v1": {}, "ours": {"storyboard-ask": 2, "pick": 2, "rulings": 2}
 
 def prompt(name):
     """The prompt this mode reads (MODE_PROMPTS; v1 otherwise)."""
-    return (PROMPTS / f"{name}-v{MODE_PROMPTS[mode()].get(name, 1)}-owner.md").read_text()
+    v = MODE_PROMPTS[mode()].get(name, 1)
+    if name == "storyboard-ask" and mode() == "swipe-base":      # AI-1: the Intent paragraph (v4); off keeps v3
+        import importlib.util as _u                      # by path: this file may itself be loaded by path
+        _s = _u.spec_from_file_location("vw_acting_intent", HERE / "acting_intent.py")
+        AI = _u.module_from_spec(_s)
+        _s.loader.exec_module(AI)
+        v = AI.STORYBOARD_ASK if AI.on() else v
+    return (PROMPTS / f"{name}-v{v}-owner.md").read_text()
 
 
 def move_of(text):

@@ -1023,11 +1023,20 @@ def writing_keys():
 
 
 def invalidate_written(st, reason):
-    """Keep artifacts and retry limits; completed writing must be checked again after an input change."""
+    """Keep artifacts and retry limits; completed writing must be checked again after an input change.
+
+    A NEW SCRIPT IS AUDITED (2026-11-27): the old script's "repairs spent" mark is cleared here, so the new script gets
+    its own audit call; the spent repair count stays (no extra repair rounds bought by changing the story), so a failing
+    audit on the new script becomes notes and the brief is still written. Before this, the mark made the REPAIRS SPENT
+    branch skip every later audit: the audit stayed stale and the brief could never be accepted or numbered."""
     for key in writing_keys():
         rec = (st.get("stages") or {}).get(key) or {}
         if rec.get("status") == "done":
             rec.update(status="stale", stale_because=reason)
+    audit = (st.get("stages") or {}).get("stage4e")
+    if isinstance(audit, dict) and audit.pop("audit_spent", None):
+        audit.pop("audit_note", None)
+        audit.update(status="stale", stale_because=reason)
 
 
 def register_pass_order(st, passes):

@@ -118,7 +118,13 @@
    {
     "from": "components/video-studio",
     "to": "components/video-studio",
-    "replace": true
+    "replace": true,
+    "keep": [
+     "components/video-studio/(desk\\.html|workflow_desk\\.py|test_workflow_desk\\.py)$"
+    ],
+    "patches": [
+     "components/chain-mirror/patches/video-studio-desk.patch"
+    ]
    }
   ],
   "static": [

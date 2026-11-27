@@ -222,11 +222,21 @@ def run(cfg, groups, group, dry):
                 wrote.append(to)
             if not dry:
                 stamps[to] = {"commit": last_commit(src, ref, f)}   # the source path is not kept: it can name people
+        if e.get("patches") and not dry:
+            # Prizm's own small changes inside a copied file, put back after every copy; a patch that no longer
+            # fits is reported, never silently lost.
+            for pf in e["patches"]:
+                r = subprocess.run(["patch", "-p1", "--forward", "--silent", "-r", "-", "-i", str(REPO / pf)],
+                                   cwd=REPO, capture_output=True, text=True)
+                if r.returncode != 0:
+                    refused.append((pf, [("patch did not apply", (r.stdout + r.stderr).strip()[:120])]))
+        keep = [re.compile(x) for x in e.get("keep", [])]
         if e.get("replace") and (REPO / e["to"]).is_dir():
             # files here that the source no longer has: the stale copy goes, so the folder matches the source
             for p in sorted((REPO / e["to"]).rglob("*")):
                 rel = str(p.relative_to(REPO))
                 if p.is_file() and rel not in produced and "__pycache__" not in p.parts and not any(
+                        k.search(rel) for k in keep) and not any(
                         k in rel for k in ("/runs/", "/_work/", "/output/")) and refused_path(rel, refused) is None:
                     removed.append(rel)
                     if not dry:

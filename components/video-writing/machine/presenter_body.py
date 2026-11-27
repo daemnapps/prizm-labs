@@ -44,6 +44,13 @@ def _read(p):
 def live_prompt():
     files = sorted(PROMPTS.glob("presenter-body-v*-owner.md"),
                    key=lambda p: int(re.search(r"-v(\d+)-", p.name).group(1)))
+    # AI-1: off reads the last version before rule 18 (v6)
+    import importlib.util as _u                      # by path: this file may itself be loaded by path
+    _s = _u.spec_from_file_location("vw_acting_intent", HERE / "acting_intent.py")
+    AI = _u.module_from_spec(_s)
+    _s.loader.exec_module(AI)
+    if not AI.on():
+        files = [f for f in files if int(re.search(r"-v(\d+)-", f.name).group(1)) < AI.PRESENTER_BODY_MIN] or files
     if not files:
         raise SystemExit(f"no presenter-body prompt in {PROMPTS}")
     return files[-1]

@@ -9726,7 +9726,7 @@
   "commit": "08d729c37b3914512be7cbf1b4f152a8053a1115"
  },
  "components/video-edit/microdrama/EDIT-GUIDE.md": {
-  "commit": "63e2be036b89ac8c3164307e318003bb27133896"
+  "commit": "a1ebfa1f957b7dd48251d5eb40457c112d1806f5"
  },
  "components/video-edit/microdrama/microdrama_edit.py": {
   "commit": "63e2be036b89ac8c3164307e318003bb27133896"
@@ -10500,7 +10500,7 @@
   "commit": "a00477dcbd6744c694cebe4f230817961f908273"
  },
  "components/video-production/machine/clip_judge.py": {
-  "commit": "592aa45360c896e0b156b31e1f787525ce1fc575"
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/machine/clip_kit.py": {
   "commit": "b1de3de07711b72fcd6a7f7999f726f24d24c0f0"
@@ -10730,6 +10730,9 @@
  "components/video-production/machine/identity.py": {
   "commit": "a578abab001be4f6bec1a68546809c2c3d58bb1b"
  },
+ "components/video-production/machine/idle_line.json": {
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
+ },
  "components/video-production/machine/intake.py": {
   "commit": "592aa45360c896e0b156b31e1f787525ce1fc575"
  },
@@ -10914,7 +10917,7 @@
   "commit": "d20151beccafd57b33e062e2612ad2a5b45a670f"
  },
  "components/video-production/machine/scene_breakdown.py": {
-  "commit": "80109d39279ff930c074232219215b96fcaf76a7"
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/machine/scenes.py": {
   "commit": "592aa45360c896e0b156b31e1f787525ce1fc575"
@@ -10929,7 +10932,7 @@
   "commit": "ee82b5614e8515f17f8c12536b876af3d7d6612a"
  },
  "components/video-production/machine/seedance_prompt.py": {
-  "commit": "9d1d263dc0d11b5e04db458279672004885b5490"
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/machine/sequence.py": {
   "commit": "bb68b3f4ce020fd5401d1fd03a6b46e16545bbb2"
@@ -11074,6 +11077,9 @@
  },
  "components/video-production/machine/test_clip_handoff.py": {
   "commit": "b1de3de07711b72fcd6a7f7999f726f24d24c0f0"
+ },
+ "components/video-production/machine/test_clip_judge_v9.py": {
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/machine/test_clip_kit.py": {
   "commit": "7e9b7e6bf7bc1514088bf9ff6dc3cd45713d725c"
@@ -11280,7 +11286,7 @@
   "commit": "dfe81e5a1886c8e16f511452a3b290e3b4869a38"
  },
  "components/video-production/machine/test_seedance_prompt.py": {
-  "commit": "9d1d263dc0d11b5e04db458279672004885b5490"
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/machine/test_set_people.py": {
   "commit": "028a92d89fa5bf618bb3a0acdeb35e0ad4345e7c"
@@ -11594,8 +11600,14 @@
  "components/video-production/prompts/v2/clip-judge-v4-owner.md": {
   "commit": "518113919ced10411a8227c410edf51fd49e40e9"
  },
- "components/video-production/prompts/v2/clip-judge-v5-owner.md": {
-  "commit": "e6d3344bbea5295f1c4fb7f3964f9344763e1d9c"
+ "components/video-production/prompts/v2/clip-judge-v7-owner.md": {
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
+ },
+ "components/video-production/prompts/v2/clip-judge-v8-owner.md": {
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
+ },
+ "components/video-production/prompts/v2/clip-judge-v9-owner.md": {
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/prompts/v2/picture-review-v2-owner.md": {
   "commit": "bfd0908c147569c7802ee8fadc9055e61f1bdd63"
@@ -11624,11 +11636,8 @@
  "components/video-production/prompts/v2/scene-breakdown-v1-owner.md": {
   "commit": "e6d3344bbea5295f1c4fb7f3964f9344763e1d9c"
  },
- "components/video-production/prompts/v2/scene-breakdown-v2-owner.md": {
-  "commit": "e6d3344bbea5295f1c4fb7f3964f9344763e1d9c"
- },
- "components/video-production/prompts/v2/scene-breakdown-v3-owner.md": {
-  "commit": "e6d3344bbea5295f1c4fb7f3964f9344763e1d9c"
+ "components/video-production/prompts/v2/scene-breakdown-v4-owner.md": {
+  "commit": "63dac165ae94d54081c158e898b7390adaebedf1"
  },
  "components/video-production/prompts/v2/shot-use-v1-owner.md": {
   "commit": "b93698652cd223d1d9d741ddb724097b17a3bec5"
@@ -12572,6 +12581,12 @@
  "components/video-writing/creative-moves.md": {
   "commit": "caddf7ab081083fa75c08782e9ed7caf00bfb774"
  },
+ "components/video-writing/machine/acting_intent.json": {
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
+ },
+ "components/video-writing/machine/acting_intent.py": {
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
+ },
  "components/video-writing/machine/bakeoff.py": {
   "commit": "5f86116e6e56a973379f32656591bdb577df3bf4"
  },
@@ -12579,7 +12594,7 @@
   "commit": "bcf695605c7db300b361a13c1860d15a85ed611c"
  },
  "components/video-writing/machine/director.py": {
-  "commit": "06aef12c9dff619427e1e05960fc0b381513bd49"
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
  },
  "components/video-writing/machine/doctrine_tags.py": {
   "commit": "6d8a4ae7262613456c1a53e5f62b2d558e667a17"
@@ -12609,7 +12624,7 @@
   "commit": "efcc89ed46e3f6ab1ba123ba087292f28ff0f060"
  },
  "components/video-writing/machine/presenter_body.py": {
-  "commit": "3633149b3821548b507ec88468f7884be558bed5"
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
  },
  "components/video-writing/machine/proposed-switches.json": {
   "commit": "061d720e7362a9f65879ab281fb60647eb8cfdcd"
@@ -12654,7 +12669,7 @@
   "commit": "7fc15d25c60dac5fef6dc2896e178705d622b93f"
  },
  "components/video-writing/machine/writing_v2.py": {
-  "commit": "a00477dcbd6744c694cebe4f230817961f908273"
+  "commit": "66321f46b32e6f9df39b23aa0d1fabaf13b3f7b3"
  },
  "components/video-writing/owner-notes.md": {
   "commit": "a00477dcbd6744c694cebe4f230817961f908273"
@@ -12691,6 +12706,9 @@
  },
  "components/video-writing/prompts/stage-3p-presenter-body/presenter-body-v6-owner.md": {
   "commit": "e6d3344bbea5295f1c4fb7f3964f9344763e1d9c"
+ },
+ "components/video-writing/prompts/stage-3p-presenter-body/presenter-body-v7-owner.md": {
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
  },
  "components/video-writing/prompts/stage-3v-control/stage3v-control-v1-owner.md": {
   "commit": "8950a0916968926848f9bdfccddc47774a5a0d0c"
@@ -12802,6 +12820,9 @@
  },
  "components/video-writing/prompts/stage-5d-director/storyboard-ask-v3-owner.md": {
   "commit": "72b828129450daca06a5c12a40f0cf4f05d9eed4"
+ },
+ "components/video-writing/prompts/stage-5d-director/storyboard-ask-v4-owner.md": {
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
  },
  "components/video-writing/prompts/stage-5m-swipe-match/swipe-match-v1-owner.md": {
   "commit": "8950a0916968926848f9bdfccddc47774a5a0d0c"
@@ -13022,6 +13043,9 @@
  "components/video-writing/prompts/v2/stage5-ai-brief-v7-owner.md": {
   "commit": "94035c089c4a50add616075a32e27ec7108cc3f0"
  },
+ "components/video-writing/tests/test_acting_intent.py": {
+  "commit": "e1a133729bc7c1cdd0164ed644d253a9e0b82029"
+ },
  "components/video-writing/tests/test_ask.py": {
   "commit": "65ebac47741d6de562401fab85aae3906de370a3"
  },
@@ -13069,6 +13093,9 @@
  },
  "components/video-writing/tests/test_money_loop_records_writing.py": {
   "commit": "8248bbcf18f038880ea4f3ff3759f329de3638ea"
+ },
+ "components/video-writing/tests/test_new_story_resets_audit.py": {
+  "commit": "66321f46b32e6f9df39b23aa0d1fabaf13b3f7b3"
  },
  "components/video-writing/tests/test_orders.py": {
   "commit": "7fc15d25c60dac5fef6dc2896e178705d622b93f"

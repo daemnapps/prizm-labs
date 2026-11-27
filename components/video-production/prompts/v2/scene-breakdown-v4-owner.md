@@ -1,14 +1,25 @@
-# Scene breakdown — v2 (one scene of the swipe, read to the smallest element)
+# Scene breakdown — v4 (one scene of the swipe, read to the smallest element)
+
+v4, 2026-11-16 (VIDEO-RULINGS V57: the swipe is the backbone, the shot is ours): `must_match` is now what this scene must land, its job in the ad, never elements to copy. The rest of the read is a reference for our own shot.
 
 v2, 2026-10-28: the copy is made with OUR person, props and product, so what a copy carries over is written without the swipe's own objects (`manner`, `must_match`); v1 put the swipe's own objects into our clip. v1, 2026-10-28 (the owner, Tella review of a finished test ad: "we need to break it down to that granular of a level. To where
 every element that we even conceive of putting into our video has those exact elements" · "you didn't pick up on the
-subtle hand movement"). Every scene we make copies these elements; the clip prompt states them and the clip judge checks
-them, so nothing in the swipe is lost between the teardown and the clip.
+subtle hand movement"). The swipe gives each scene its job: what it must land for the viewer. That job is the backbone and the clip
+judge holds the take to it. How we shoot it (camera, hands, props, look, manner) is our own work; the elements read
+here are a reference for it, never a list our scene has to copy.
 
 You get **Video 1**: one scene of a vertical phone video ad (the swipe), with its sound.
 
 Watch the whole scene, frame by frame, and write down every element a viewer would feel even if they could not name it.
 Be literal and specific: what you see and hear, when, and how it moves. Never guess what is off screen.
+
+Name what you see in these shared craft terms where they fit (v3, 2026-11-02, the video doctrine):
+
+{shot_language}
+
+{look}
+
+{staging}
 
 ## Write down
 
@@ -30,7 +41,7 @@ Be literal and specific: what you see and hear, when, and how it moves. Never gu
 9. **captions** — the on-screen words' look: font weight, case, colour, outline or box, size, how many words at once,
    and WHERE on the screen (top, middle, bottom; above or below the face).
 10. **pace** — how fast the person talks and moves, and how long each action takes.
-11. **manner** — HOW things are done, written so it fits ANY copy of this scene with different objects: how items are
+11. **manner** — HOW things are done, written so it fits ANY version of this scene with different objects: how items are
     lifted (smooth, slow, careful), how things are dropped or poured, where the eyes go during each action, the rhythm
     of the actions against the words. NEVER name the swipe's own objects, ingredients or product here ("lifts each
     item smoothly to chest height, eyes down on it, then back to the lens", never "lifts the jar of red powder").
@@ -41,4 +52,4 @@ Reply with JSON only. Each list item is one short literal sentence with its seco
 
 {"camera": [...], "gaze": [...], "props": [...], "continuity": [...], "actions": [...], "sound": [...],
  "atmosphere": [...], "explainer": [...], "captions": [...], "pace": [...], "manner": [...],
- "must_match": ["the 3 to 8 elements a copy of this scene must have to feel like the same scene, one sentence each, naming NONE of the swipe's own objects, ingredients or product"]}
+ "must_match": ["the 3 to 8 things this scene must land: its job in the ad (what the viewer must see, learn, believe or feel by the end of it), one sentence each, naming NONE of the swipe's own objects, ingredients or product and never HOW the swipe shot it (no camera move, hand movement, prop handling or look)"]}

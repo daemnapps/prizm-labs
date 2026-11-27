@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROMPT = HERE.parent / "prompts" / "v2" / "scene-breakdown-v2-owner.md"
+PROMPT = HERE.parent / "prompts" / "v2" / "scene-breakdown-v4-owner.md"
 FILE = "scene-breakdown.json"
 FIELDS = ("camera", "gaze", "props", "continuity", "actions", "sound", "atmosphere", "explainer", "captions", "pace", "manner")
 # what the clip itself carries, in words that fit OUR objects (the edit lays sound, captions and explainers; pace is the
@@ -100,7 +100,10 @@ def read(run: Path, gid: str, ask=None) -> dict:
                         "-i", str(src), "-c:v", "libx264", "-crf", "20", "-preset", "fast", "-c:a", "aac", str(seg)],
                        check=True)
     V = _load("v2_checks")
-    text, info = (ask or V.ask)(run, f"{gid}-scene-breakdown", PROMPT.read_text(), [seg])
+    prompt = PROMPT.read_text()
+    for var, name in (("{shot_language}", "shot-language.md"), ("{look}", "look.md"), ("{staging}", "staging.md")):
+        prompt = prompt.replace(var, (HERE.parents[1] / "video-doctrine" / "slices" / name).read_text())
+    text, info = (ask or V.ask)(run, f"{gid}-scene-breakdown", prompt, [seg])
     got = V.json_of(text) or {}
     rec = {k: [str(x) for x in got.get(k) or [] if str(x).strip()] for k in FIELDS + ("must_match",)}
     drift = camera_drift(seg)
