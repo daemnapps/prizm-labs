@@ -208,6 +208,20 @@ class StudioNext(unittest.TestCase):
         _, d = self.js("/api/desk/brands")
         self.assertEqual(next(b for b in d["brands"] if b["id"] == "acme")["label"], "ACME Co")
 
+    def test_brands_in_their_own_repositories(self):
+        import os
+        ext = Path(self.tmp.name) / "elsewhere"
+        put(ext, "brands/zeta/operations/brand.json", {"label": "Zeta"})
+        put(ext, "brands/zeta/story.md", "theirs")
+        os.environ["PRIZM_BRAND_ROOTS"] = str(ext)
+        try:
+            _, d = self.js("/api/desk/brands")
+            self.assertIn(("zeta", "Zeta"), [(b["id"], b["label"]) for b in d["brands"]])
+            _, st = self.js("/api/desk/setup?brand=zeta")
+            self.assertEqual({i["id"]: i["state"] for i in st["items"]}["story"], "filled")
+        finally:
+            del os.environ["PRIZM_BRAND_ROOTS"]
+
     def test_portfolio_lists_every_brand(self):
         code, d = self.js("/api/desk/portfolio")
         self.assertEqual(code, 200)

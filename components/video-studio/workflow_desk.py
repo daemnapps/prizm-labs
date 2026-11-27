@@ -335,9 +335,38 @@ def ask_for(line, brand, label, cur):
 
 # ---------- what a new piece starts from ----------
 
+# ---------- brands that live in their own repositories ----------
+# A brand can keep its folder in its own repository (it owns its data). Such repositories are listed, on this computer
+# only, in ~/.prizm/brand-roots.json (a list of folders that each hold brands/<brand>/) or PRIZM_BRAND_ROOTS
+# (folders separated by ":"). Nothing about them is written into this repository.
+
+def brand_roots():
+    roots = [r for r in os.environ.get("PRIZM_BRAND_ROOTS", "").split(":") if r]
+    cfg = Path(os.path.expanduser("~/.prizm/brand-roots.json"))
+    try:
+        roots += [str(x) for x in json.loads(cfg.read_text())] if cfg.is_file() else []
+    except (OSError, ValueError):
+        pass
+    return [Path(os.path.expanduser(r)) for r in roots if Path(os.path.expanduser(r), "brands").is_dir()]
+
+
+def bdir(brand):
+    """The brand's folder: this repository's brands/<brand>, else the first own-repository root that holds it."""
+    here = WS / "brands" / brand
+    if here.is_dir():
+        return here
+    for r in brand_roots():
+        if (r / "brands" / brand).is_dir():
+            return r / "brands" / brand
+    return here
+
+
 def brands():
     out = []
-    for d in sorted((WS / "brands").glob("*")):
+    dirs = sorted((WS / "brands").glob("*"))
+    for r in brand_roots():
+        dirs += [d for d in sorted((r / "brands").glob("*")) if d.is_dir() and not (WS / "brands" / d.name).exists()]
+    for d in dirs:
         if not d.is_dir() or d.name.startswith(("_", ".")):
             continue
         av = sorted(p.name for p in (d / "core-avatars").glob("*") if p.is_dir() and not p.name.startswith((".", "_")))
@@ -486,14 +515,14 @@ def research(brand):
 def setup(brand):
     """The brand checklist (brands/_TEMPLATE/onboarding.json) with what this brand has done, skipped or filled."""
     t = _read(WS / "brands/_TEMPLATE/onboarding.json") or {}
-    prog = _read(WS / "brands" / brand / "onboarding-progress.json") or {}
+    prog = _read(bdir(brand) / "onboarding-progress.json") or {}
     done, skipped = set(prog.get("done") or []), set(prog.get("skipped") or [])
     items = []
     for it in t.get("items") or []:
         fills = it.get("fills") or []
         paths = [f.split(" ")[0].rstrip(",") for f in fills]
         paths = [x for x in paths if x and not x.startswith("brands/")]
-        have = [x for x in paths if glob.glob(str(WS / "brands" / brand / re.sub(r"<[^>]+>", "*", x)))]
+        have = [x for x in paths if glob.glob(str(bdir(brand) / re.sub(r"<[^>]+>", "*", x)))]
         fills = paths or fills
         state = "done" if it.get("id") in done else "skipped" if it.get("id") in skipped else (
             "filled" if fills and len(have) == len(fills) else "partial" if have else "todo")
@@ -514,7 +543,7 @@ def skills(brand):
     taste = {}
     for f in sorted((WS / "brands/_TEMPLATE/variables").glob("*.md")):
         if f.stem.lower() != "readme":
-            mine = WS / "brands" / brand / "variables" / f.name
+            mine = bdir(brand) / "variables" / f.name
             taste[f.stem] = {"file": "variables/" + f.name, "filled": mine.is_file() and mine.read_bytes() != f.read_bytes()}
     out = []
     for sk in sorted((WS / ".claude/skills").glob("*/SKILL.md")):
@@ -596,7 +625,7 @@ def creators(brand):
     reads = sorted(glob.glob(str(WS / "runs/winners" / brand / "creators/*/trybe.json")))
     t = _read(reads[-1]) if reads else None
     prof = []
-    for d in sorted((WS / "brands" / brand / "content-creators").glob("*/profile.md")):
+    for d in sorted((bdir(brand) / "content-creators").glob("*/profile.md")):
         first = next((l.strip("# ").strip() for l in d.read_text(errors="replace").splitlines() if l.strip()), d.parent.name)
         prof.append({"handle": d.parent.name, "title": first, "path": str(d.relative_to(WS))})
     out = {"profiles": prof, "read": None}
@@ -782,7 +811,7 @@ def brief_view(brand, number):
 def pages(brand):
     """The brand's landing pages: its funnels (brands/<brand>/web/funnels/funnels.json) and, for every page a live ad
     points at (the last part of a briefed ad's name), that page's numbers from the warehouse copy."""
-    f = _read(WS / "brands" / brand / "web/funnels/funnels.json")
+    f = _read(bdir(brand) / "web/funnels/funnels.json")
     funnels = []
     for x in (f.get("funnels") or []) if isinstance(f, dict) else []:
         funnels.append({"id": x.get("id"), "name": (x.get("name") or x.get("id") or "").split(" — ")[0],
@@ -823,6 +852,39 @@ def hide(brand, item, on=True):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(h, indent=1))
     return {"hidden": h}
+
+
+def market(brand):
+    """Products winning and growing in the market, from the product tracker's newest read for this brand
+    (runs/product-tracker/<brand>/<run>/list.json: Kalodata for TikTok Shop, TrendTrack for stores), newest first."""
+    runs = sorted(glob.glob(str(WS / "runs/product-tracker" / brand / "*/list.json")), key=os.path.getmtime, reverse=True)
+    out = {"reads": [], "products": []}
+    seen = set()
+    for f in runs:
+        l = _read(f) or {}
+        out["reads"].append({"run": Path(f).parent.name, "question": l.get("question"), "ran_at": l.get("ran_at"),
+                             "credits": l.get("credits_spent")})
+        for src, blk in (l.get("sources") or {}).items():
+            ps = (blk or {}).get("products") or {}
+            for p in (ps.values() if isinstance(ps, dict) else ps):
+                if not isinstance(p, dict) or p.get("key") in seen:
+                    continue
+                seen.add(p.get("key"))
+                t = p.get("totals") or {}
+                m30 = t.get("30") if t else p.get("month")
+                prior = (t.get("60") or 0) - (t.get("30") or 0) if t else None
+                wk = [w[2] for w in (p.get("weeks") or []) if isinstance(w, list) and len(w) > 2 and isinstance(w[2], (int, float))]
+                if not t and len(wk) >= 8 and sum(wk[-8:-4]):
+                    prior, m30 = sum(wk[-8:-4]), m30          # store products: the last 4 weeks against the 4 before
+                    p = dict(p, _growth=round((sum(wk[-4:]) / sum(wk[-8:-4]) - 1) * 100))
+                out["products"].append({"key": p.get("key"), "source": src, "name": p.get("name"), "shop": p.get("shop"),
+                                        "price": p.get("price"), "where": p.get("money_is"), "month": m30,
+                                        "growth": p.get("_growth") if "_growth" in p else (round((m30 / prior - 1) * 100) if prior and m30 else None),
+                                        "week": t.get("7"), "units": p.get("units"), "for": p.get("for"),
+                                        "launched": (p.get("launched") or "")[:10], "picture": p.get("picture"),
+                                        "link": p.get("link"), "pushers": p.get("pushers"), "run": Path(f).parent.name})
+    out["products"].sort(key=lambda x: -(x["month"] or 0))
+    return out
 
 
 def vary_candidates(la, n=6):
@@ -944,7 +1006,7 @@ def start(q):
         raise ValueError("pick a line: micro drama or song ad")
     if how not in STARTS:
         raise ValueError("pick how it starts")
-    if not brand or not SAFE.match(brand) or not (WS / "brands" / brand).is_dir():
+    if not brand or not SAFE.match(brand) or not bdir(brand).is_dir():
         raise ValueError("pick a brand")
     if not label:
         raise ValueError("give the piece a short name")
@@ -979,7 +1041,7 @@ def start(q):
                  "--set", "writing_run=runs/video-teardown/_work/" + td,
                  "--set", "brief=runs/video-teardown/_work/%s/stages/5-brief.md" % td]
         if how == "winner":
-            if not (WS / "brands" / brand / "winner.json").is_file():
+            if not (bdir(brand) / "winner.json").is_file():
                 raise ValueError("this brand has no winner on file yet")
             sets += ["--set", "winner=brands/%s/winner.json" % brand]
     film = label
@@ -1093,6 +1155,8 @@ def handle(h, method, parts, query, body):
                 return h.send(200, bv) if bv else h.send(404, {"error": "no brief with that number for this brand"})
             if api == ["hidden"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, {"hidden": hidden(q["brand"])})
+            if api == ["market"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, market(q["brand"]))
             if api == ["pages"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, pages(q["brand"]))
             if api == ["creators"] and SAFE.match(q.get("brand", "")):

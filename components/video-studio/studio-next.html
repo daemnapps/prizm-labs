@@ -298,6 +298,12 @@ tr.grp.lit td{background:color-mix(in srgb,var(--amber) 12%,var(--card))}
 .bn{font:500 11.5px var(--mono);background:var(--ink);color:var(--paper);border-radius:var(--r1);padding:1px 6px;margin-right:7px}
 .ad{position:relative}.ad .hide{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:1px solid var(--line-2);background:var(--card);border-radius:var(--r4);font:11px var(--mono);padding:2px 8px;color:var(--ink-3);display:none}
 .ad:hover .hide{display:block}
+.mk{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.mkc{padding:0;overflow:hidden;color:var(--ink);display:grid}
+.mkc:hover{border-color:var(--green)}
+.mkc .pic{aspect-ratio:1;background:var(--bone)}.mkc img{width:100%;height:100%;object-fit:cover;display:block}
+.mkc .cap{padding:12px 14px;display:grid;gap:8px}.mkc .cap b{font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mkc .stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mkc .stats div{display:grid}.mkc .stats b{font:500 16px var(--mono)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
 @media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
@@ -311,6 +317,7 @@ tr.grp.lit td{background:color-mix(in srgb,var(--amber) 12%,var(--card))}
     <a href="#today" data-v="today"><i class="ic" data-i="zap"></i><span>Today</span></a>
     <a href="#production" data-v="production"><i class="ic" data-i="film"></i><span>Production</span></a>
     <a href="#ads" data-v="ads-top"><i class="ic" data-i="target"></i><span>Ads</span><b class="nb" id="nb"></b></a>
+    <a href="#creators" data-v="creators"><i class="ic" data-i="user"></i><span>Creators</span></a>
     <a href="#research" data-v="research"><i class="ic" data-i="search"></i><span>Research</span></a>
   </nav>
   <div class="grow"></div>
@@ -408,14 +415,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && !S.arg) S.view = 'live';
-  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings'};
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -504,6 +511,7 @@ document.addEventListener('click', e => { if (e.target.closest('[data-hide]')) r
 const host = () => $('#sub') || $('#main');
 const tabBar = (items, cur) => `<div class="lanes">${items.map(([id, name, ic, hue, href, badge]) => `<a href="${href}" class="${id === cur ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic">${icon(ic)}</i>${name}${badge ? `<b class="nb">${badge}</b>` : ''}</a>`).join('')}</div>`;
 const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads'], ['pages', 'Pages', 'link', 'green', '#pages']], cur);
+const resTabs = cur => tabBar([['brand', 'This brand', 'search', 'violet', '#research'], ['market', 'Market', 'target', 'green', '#market']], cur);
 const setTabs = cur => tabBar([['brand', 'Brand setup', 'shield', 'indigo', '#settings'], ['skills', 'Skills', 'sparkles', 'violet', '#skills']], cur);
 const blabel = b => (S.labels && S.labels[b] && S.labels[b] !== b) ? S.labels[b] : String(b).replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.ad) location.hash = 'ads/' + encodeURIComponent(e.target.dataset.ad); });
@@ -703,7 +711,7 @@ async function swipeView(){
 /* ================= RESEARCH ================= */
 async function research(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Research</h1><span class="sub">what sold, what he watches, what to make next</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Research</h1></div>${resTabs('brand')}<div class="skel">Loading…</div>`;
   let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'research') return;
   const nx = d.research.next || {}, rounds = d.research.rounds || [];
@@ -807,12 +815,16 @@ async function portfolio(){
       ${x ? `<div class="stats"><div><span class="lbl">Revenue 7d</span><b>${usd(x.revenue)}</b></div><div><span class="lbl">Ad spend 7d</span><b>${usd(x.spend)}</b></div><div><span class="lbl">ROAS 7d</span><b style="color:var(--${x.spend && x.revenue / x.spend >= 1 ? 'green' : 'coral'})">${x.spend ? (x.revenue / x.spend).toFixed(2) : '—'}</b></div></div><span class="lbl">to ${esc(dayLabel(n.through))}</span>` : `<div class="empty">No money numbers connected</div>`}
       <div class="arow"><span class="pill p-swipe">${b.swipes} swipes</span><span class="pill p-ready">${b.winners} winners</span></div></a>`; }).join('')}</div>`;
   paintIcons(m);
-  m.insertAdjacentHTML('beforeend', '<div id="gh" style="margin-top:16px"><div class="skel">Reading GitHub…</div></div>'); githubCard($('#gh'));
+  m.insertAdjacentHTML('beforeend', `<form class="card" id="addb" style="margin-top:16px"><h3>${ib('plus', 'indigo')}Add a brand</h3>
+      <div class="flow" style="margin:12px 0"><span>1 · They make their own repo</span><i>→</i><span>2 · They invite us</span><i>→</i><span>3 · Their Claude fills the brand folder</span><i>→</i><span>4 · We get what's missing</span><i>→</i><span>5 · First run: top 5 ads → teardowns</span></div>
+      <div class="arow"><input name="name" required placeholder="Brand name" style="flex:1;min-width:180px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><input name="repo" placeholder="Their repo, owner/name (if they have one)" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Start</button></div></form>
+    <div id="gh" style="margin-top:16px"><div class="skel">Reading GitHub…</div></div>`); githubCard($('#gh'));
+  $('#addb').onsubmit = e => { e.preventDefault(); const f = e.target; ask('onboard', f.name.value + (f.repo.value ? ' · repo ' + f.repo.value : ''), '').then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
   m.querySelectorAll('[data-pick]').forEach(a => a.onclick = () => { S.brand = a.dataset.pick; store.set('st.brand', S.brand); $('#brand').value = S.brand; location.hash = 'today'; });
 }
 
 /* ================= PRODUCTION (one place: video, static, email, swipes, new ad) ================= */
-const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['creators', 'Creators', 'user', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
+const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
 function production(lane){
   const parts = (S.arg || '').split('/');
   lane = lane || parts[0] || 'video';
@@ -926,8 +938,8 @@ async function asksView(){
   const m = $('#main'), [brand, id] = (S.arg || '').split('/');
   if (brand && id) return askOne(brand, id);
   m.innerHTML = `<div class="ph"><h1>Working on it</h1><span class="sub">jobs handed to Claude for this brand, newest first</span></div><div class="skel">Loading…</div>`;
-  let r; try { r = await J('/api/desk/asks?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  m.querySelector('.skel').outerHTML = r.asks.length ? `<div class="card" style="padding:0">${r.asks.map(a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b><span class="j">${esc(blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; }).join('')}</div>` : `<div class="card note">Nothing handed off yet. Tune, Go deeper, Plan variations, Add a swipe and Fill buttons land here.</div>`;
+  let r; try { const [x, y] = await Promise.all([J('/api/desk/asks?brand=' + encodeURIComponent(S.brand)), J('/api/desk/asks?brand=_portfolio')]); r = {asks: [...x.asks, ...y.asks].sort((p, q) => String(q.asked).localeCompare(String(p.asked)))}; } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  m.querySelector('.skel').outerHTML = r.asks.length ? `<div class="card" style="padding:0">${r.asks.map(a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b><span class="j">${esc(a.brand === '_portfolio' ? 'All brands' : blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; }).join('')}</div>` : `<div class="card note">Nothing handed off yet. Tune, Go deeper, Plan variations, Add a swipe and Fill buttons land here.</div>`;
 }
 async function askOne(brand, id){
   const m = $('#main');
@@ -960,6 +972,10 @@ async function askOne(brand, id){
 }
 
 /* ================= CREATORS (a Production lane) ================= */
+function creatorsView(){
+  $('#main').innerHTML = `<div class="ph"><h1>Creators</h1><span class="sub">who makes for this brand, what they sent, what it sold</span></div><div id="sub"></div>`;
+  return creatorsLane();
+}
 async function creatorsLane(){
   const h = host(); h.innerHTML = '<div class="skel">Loading creators…</div>';
   let d; try { d = await J('/api/desk/creators?brand=' + encodeURIComponent(S.brand)); } catch (e) { h.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
@@ -1115,6 +1131,23 @@ async function pagesView(){
       ${d.pages.map(p => `<tr><td><b>${esc(p.page)}</b>${p.active ? ' <span class="pill p-ready">active</span>' : ' <span class="pill p-mute">not spending</span>'}</td><td class="n">${usd(p.spend7)}</td><td class="n">${int(p.buys7)}</td><td class="n">${p.buys7 ? usd(p.spend7 / p.buys7) : '—'}</td><td class="n">${usd(p.spend30)}</td><td class="n">${ro(p.value30, p.spend30)}</td><td style="font:11.5px var(--mono);color:var(--ink-3)">${p.briefs.slice(0, 8).map(b => `<a href="#brief/${encodeURIComponent(b)}">${esc(b)}</a>`).join(' ')}${p.briefs.length > 8 ? ' +' + (p.briefs.length - 8) : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No live ad names a page yet</td></tr>'}</table></div>
     <div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${ib('layers', 'green')}Funnels<span class="count" style="--hue:var(--ink-3)">${d.funnels.length}</span></h3></div>${d.funnels.map(f => `<div class="sk"><b>${esc(f.name || f.id)}</b><span class="j">${f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.url)}</a>` : ''} · ${int(f.pages)} pages · ${esc(f.product || '')}</span><span class="tags"><span class="pill ${f.status === 'off' ? 'p-mute' : 'p-ready'}">${esc(f.status || '')}</span></span></div>`).join('') || '<div class="empty" style="padding:14px">No funnel list for this brand yet</div>'}</div>`;
   paintIcons(m);
+}
+
+
+/* ================= MARKET: products winning and growing, for new offers ================= */
+async function marketView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Research</h1></div>${resTabs('market')}<form class="card arow" id="mkt" style="margin-bottom:16px"><i class="ib" style="--hue:var(--green)">${icon('target')}</i><input name="q" required placeholder="What to look for: e.g. men's body care, pheromone, supplements for sleep" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Scan the market</button></form><div class="skel">Loading…</div>`;
+  $('#mkt').onsubmit = e => { e.preventDefault(); ask('market', e.target.q.value).then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
+  let d; try { d = await J('/api/desk/market?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const ps = d.products || [];
+  if (!ps.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No market read on file for this brand yet. Scan the market above.</div>'; return; }
+  const r0 = d.reads[0] || {};
+  m.querySelector('.skel').outerHTML = `<div class="ph" style="margin-bottom:12px"><span class="sub">${ps.length} products · newest read ${esc(dayLabel(String(r0.ran_at || '').slice(0, 10)))}${r0.question ? ' · ' + esc(r0.question) : ''}</span></div>
+    <div class="mk">${ps.slice(0, 80).map(p => `<a class="card mkc" href="${esc(p.link || '#')}" target="_blank" rel="noopener"><div class="pic">${p.picture ? `<img loading="lazy" src="${esc(p.picture)}" alt="">` : ''}</div>
+      <div class="cap"><b>${esc(p.name)}</b><span class="lbl">${esc(p.shop || '')} · ${p.price != null ? usd(p.price, 2) : ''}</span>
+      <div class="stats"><div><span class="lbl">30 days</span><b>${usd(p.month)}</b></div><div><span class="lbl">Growth</span><b style="color:var(--${(p.growth || 0) >= 0 ? 'green' : 'coral'})">${p.growth != null ? (p.growth > 0 ? '+' : '') + p.growth + '%' : '—'}</b></div></div>
+      <div class="arow"><span class="pill ${p.source === 'kalodata' ? 'p-brief' : 'p-act'}">${p.source === 'kalodata' ? 'TikTok Shop' : 'own store'}</span>${p.for ? `<span class="pill p-mute">${esc(p.for)}</span>` : ''}${p.launched ? `<span class="lbl">since ${esc(p.launched)}</span>` : ''}</div></div></a>`).join('')}</div>`;
 }
 
 boot();

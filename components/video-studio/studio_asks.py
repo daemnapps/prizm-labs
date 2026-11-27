@@ -99,6 +99,31 @@ Use what the brand already has first (its folder, its website, its reviews) and 
 skills under .claude/skills/. Write the item's files inside brands/{brand}/ in the template's shape, and put
 "DRAFT · owner to confirm" at the top of anything you inferred. Never overwrite a file that already has the brand's own
 content: write <name>.draft.<ext> beside it instead. In the result: each file written and what is still missing."""},
+    "market": {
+        "name": "Scan the market: {input}",
+        "prompt": """Brand: {brand}. Job: scan the market for products and offers worth selling: "{input}".
+
+Follow .claude/skills/product-research/SKILL.md (Kalodata for TikTok Shop, TrendTrack for stores and ads). Reads that
+cost credits need the owner's go: plan the read, write the credits it would spend and stop, unless the input says a
+credit cap. Free reads (balances, lookups, what is already on file under runs/product-tracker/{brand}/ and
+runs/trendtrack/market/) you may do. In the result: the products ranked by 30-day revenue with growth, price, who
+sells them, and the angle they sell on; then the credits a fresh read would spend."""},
+    "onboard": {
+        "name": "Bring in a brand: {input}",
+        "prompt": """Job: bring this brand into the system: {input}
+(the input is the brand's name and, when it has one, its own GitHub repository as owner/name).
+
+The brand owns its own repository and its own data; we only get access. Read tools/client-copies/README.md and
+.claude/CLAUDE.md ("Running clients"). Then:
+1. If a repository is given, check our access with `gh repo view <owner/name>` (read-only). If we cannot see it, stop
+   and say in the result exactly what the brand must do: create the repository (private) from Prizm Labs, and invite
+   our GitHub account as a collaborator.
+2. If we can see it, bring it onto this computer with `python3 tools/client-copies/clients.py get <client>` when it is
+   one of our client copies; otherwise only read it through gh. Never clone into ~/Projects.
+3. Read its brand folder against brands/_TEMPLATE/onboarding.json, item by item: what is filled, what is missing.
+4. In the result: a table of the 23 items (filled / missing), then "What to ask the brand for": a short numbered
+   list in plain words the owner can forward as is, then the first run once it is filled (their top 5 ads by spend
+   → teardowns → scripts → production)."""},
     "connect": {
         "name": "Look at {input}",
         "prompt": """Job: say what this GitHub repository is, read-only: {input}
@@ -117,11 +142,18 @@ NEXT = {
     "swipe": ["Claude saves and tears it down", "It lands in Swipes", "Make an ad from it"],
     "setup": ["Claude fills the item as a draft", "You: confirm in Settings"],
     "connect": ["Claude reads the repository", "You: decide to connect it"],
+    "market": ["Claude plans the read (free)", "You: go on the credits", "New products on the radar"],
+    "onboard": ["Claude checks access and reads their brand folder", "You: send them the ask list", "Their Claude fills the folder", "First run: top 5 ads → teardowns"],
 }
 
 LOCK = threading.Lock()
 WAKE = threading.Event()
 _worker = None
+
+
+def _bdir(brand):
+    import workflow_desk as WD
+    return WD.bdir(brand)
 
 
 def root():
@@ -150,7 +182,7 @@ def create(kind, brand, text, by=None):
     """Queue one ask. Returns its record."""
     if kind not in KINDS:
         raise ValueError("unknown ask: " + str(kind))
-    if kind != "connect" and (not brand or not SAFE.match(brand) or not (WS / "brands" / brand).is_dir()):
+    if kind not in ("connect", "onboard") and (not brand or not SAFE.match(brand) or not _bdir(brand).is_dir()):
         raise ValueError("pick a brand")
     text = (text or "").strip()
     if not text or len(text) > 600:
@@ -161,7 +193,7 @@ def create(kind, brand, text, by=None):
         raise ValueError("a repository as owner/name")
     if kind == "swipe" and not re.match(r"https?://", text):
         raise ValueError("paste the post's link")
-    brand = brand if kind != "connect" else (brand or "_portfolio")
+    brand = brand if kind not in ("connect", "onboard") else "_portfolio"
     aid = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:4]
     d = root() / brand / aid
     rec = {"id": aid, "brand": brand, "kind": kind, "input": text, "name": KINDS[kind]["name"].format(input=text),
@@ -196,8 +228,8 @@ def one(brand, aid):
     r["steps"] = steps(d)
     r["next"] = NEXT.get(r.get("kind"), [])
     if r.get("kind") == "tune":
-        draft = WS / "brands" / brand / "variables" / (r["input"] + ".draft.md")
-        live = WS / "brands" / brand / "variables" / (r["input"] + ".md")
+        draft = _bdir(brand) / "variables" / (r["input"] + ".draft.md")
+        live = _bdir(brand) / "variables" / (r["input"] + ".md")
         r["draft"] = draft.read_text(errors="replace") if draft.is_file() else None
         r["live"] = live.read_text(errors="replace") if live.is_file() else None
     return r
@@ -207,7 +239,7 @@ def use_taste(brand, kind, keep=False):
     """The owner's "Use this": the draft replaces the live taste file (the old one kept), or "Discard" drops it."""
     if not SAFE.match(brand or "") or kind not in TASTES:
         raise ValueError("bad brand or taste")
-    v = WS / "brands" / brand / "variables"
+    v = _bdir(brand) / "variables"
     draft, live = v / (kind + ".draft.md"), v / (kind + ".md")
     if not draft.is_file():
         raise ValueError("no draft to use")
