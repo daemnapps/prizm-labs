@@ -1,0 +1,263 @@
+{
+  "name": "acquisition tracking standard",
+  "version": "2026-10-12",
+  "status": "draft",
+  "scope": "Meta ad -> funnel (portal / quiz / presell / offer / checkout / upsells / receipt) -> purchase. Storefronts are not covered yet.",
+  "ad_url": {
+    "why": "Every Meta ad carries these URL tags (Meta's 'URL parameters' field, url_tags in the API). The funnel's attribution collector keeps utm_source, utm_medium, utm_campaign, utm_term, utm_content and sub1..sub5 on the Next Commerce cart and order; ad_id is read by the browser layer and Clarity. sub1 repeats the ad id because Next keeps sub1 and drops ad_id.",
+    "params": [
+      [
+        "utm_source",
+        "meta"
+      ],
+      [
+        "utm_medium",
+        "paid"
+      ],
+      [
+        "utm_campaign",
+        "{{campaign.name}}"
+      ],
+      [
+        "utm_term",
+        "{{adset.name}}"
+      ],
+      [
+        "utm_content",
+        "{{ad.name}}"
+      ],
+      [
+        "ad_id",
+        "{{ad.id}}"
+      ],
+      [
+        "sub1",
+        "{{ad.id}}"
+      ]
+    ],
+    "accepted_legacy_sources": [
+      "facebook",
+      "fb",
+      "ig",
+      "meta"
+    ],
+    "never_in_the_link": "The tags go in url_tags, not typed into the website URL: Meta does not fill {{...}} placeholders typed into the link of some formats, so the order arrives with the literal text {{ad.name}}."
+  },
+  "email_url": {
+    "why": "Email links land in the same shape as ads, so one view can follow ad -> funnel -> purchase -> email -> repeat order. Set these in Klaviyo's UTM tracking (account, flow or campaign level).",
+    "params": [
+      [
+        "utm_source",
+        "klaviyo"
+      ],
+      [
+        "utm_medium",
+        "email"
+      ],
+      [
+        "utm_campaign",
+        "<campaign or flow name>"
+      ],
+      [
+        "utm_content",
+        "<message name>"
+      ],
+      [
+        "utm_term",
+        "<segment or flow step>"
+      ]
+    ],
+    "slots": {
+      "<campaign or flow name>": "campaign",
+      "<message name>": "message",
+      "<segment or flow step>": "term"
+    },
+    "required": [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content"
+    ],
+    "content_section": "utm_content is the message name, then '.' and the link's place in the email (button, logo, hero ...), so one email's links can be told apart: <message>.<section>. A campaign's message name is its send label.",
+    "funnel_param": "funnel",
+    "funnel_why": "A link to a CPK funnel page (a host and path a brand's tracking.json lists) also carries funnel=<that funnel's name>, the same value the page's browser layer puts on every event.",
+    "redirect_params": ["next"],
+    "redirect_why": "A coupon link is a redirect: the store's /discount/<code>/?next=<page> applies the code, then sends the reader to <page> with only <page>'s own query string, so tags on the outer link never reach the page (seen on Brand B.com, 2026-10-22). Such a link carries the tags on its target as well, URL-encoded inside next=, and the check asks for them there.",
+    "never_tagged": "mailto:, tel:, sms:, '#' anchors, Klaviyo merge-tag links ({% ... %} / {{ ... }} as the whole link), unsubscribe and preference links, and links to sites that are not the brand's own (a partner's link keeps its own tracking).",
+    "klaviyo_campaign_level": [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_term"
+    ],
+    "klaviyo_why": "Klaviyo's own UTM tracking (campaign tracking_options) is set to the same values for these keys, so whether Klaviyo or the link supplies a tag, the value is the same. utm_content stays on the link because it differs per link.",
+    "page_params": "funnel, page and step are added by the page itself (the browser layer), the same as for ads",
+    "state": "applied by the email line (components/email-production) since 2026-10-12: every own link in a built email carries these tags, Klaviyo drafts carry the same values in tracking_options, and the delivery gate holds an email whose own links miss them"
+  },
+  "attribution_params": {
+    "why": "Carried on every browser event (Meta custom data, GA4 event params, Clarity tags) so any event can be split by ad without opening Ads Manager.",
+    "params": {
+      "ad_name": "utm_content",
+      "brief": "brief-NNNN parsed from the ad name",
+      "batch": "batch-YYYY-MM-DD-x parsed from the ad name",
+      "campaign": "utm_campaign",
+      "adset": "utm_term",
+      "ad_id": "ad_id, else sub1, else fbadid",
+      "funnel": "the funnel (CPK campaign) name",
+      "page": "the page's own name (last part of its path)",
+      "step": "the step type of this page or screen (see events)",
+      "event_id": "<store>-<event>-<random>, or <store>-<order> on Purchase"
+    }
+  },
+  "events": [
+    {
+      "id": "page_view",
+      "when": "every page load",
+      "meta": "PageView",
+      "ga4": "page_view",
+      "clarity": "page_<page>",
+      "sent_by": "sdk",
+      "value": false
+    },
+    {
+      "id": "quiz_step",
+      "when": "each quiz or portal screen shown; n is the 1-based screen number, step_name its id",
+      "meta": "QuizStep",
+      "meta_custom": true,
+      "ga4": "quiz_step",
+      "clarity": "quiz_step_<n>",
+      "sent_by": "layer",
+      "value": false
+    },
+    {
+      "id": "quiz_complete",
+      "when": "the quiz or portal is finished (qualified / results shown)",
+      "meta": "Lead",
+      "ga4": "generate_lead",
+      "clarity": "quiz_complete",
+      "sent_by": "layer",
+      "value": false
+    },
+    {
+      "id": "offer_view",
+      "when": "the offer page loads (a product page whose next step is checkout)",
+      "meta": "ViewContent",
+      "ga4": "view_item",
+      "clarity": "offer_view",
+      "sent_by": "layer",
+      "value": true
+    },
+    {
+      "id": "add_to_cart",
+      "when": "a package goes into the cart",
+      "meta": "AddToCart",
+      "ga4": "add_to_cart",
+      "clarity": "add_to_cart",
+      "sent_by": "sdk",
+      "value": true
+    },
+    {
+      "id": "checkout_start",
+      "when": "the checkout page loads with a cart",
+      "meta": "InitiateCheckout",
+      "ga4": "begin_checkout",
+      "clarity": "checkout_start",
+      "sent_by": "sdk",
+      "value": true
+    },
+    {
+      "id": "payment_info",
+      "when": "payment details are entered",
+      "meta": "AddPaymentInfo",
+      "ga4": "add_payment_info",
+      "clarity": "payment_info",
+      "sent_by": "sdk",
+      "value": true
+    },
+    {
+      "id": "purchase",
+      "when": "the order is placed",
+      "meta": "Purchase",
+      "ga4": "purchase",
+      "clarity": "purchase",
+      "sent_by": "sdk",
+      "value": true,
+      "event_id": "<store>-<order number>, the same id the Next Meta app sends server-side, so Meta keeps one"
+    },
+    {
+      "id": "upsell_view",
+      "when": "an upsell page loads",
+      "meta": "ViewedUpsell",
+      "meta_custom": true,
+      "ga4": "upsell_view",
+      "clarity": "upsell_view",
+      "sent_by": "sdk+layer",
+      "value": false
+    },
+    {
+      "id": "upsell_take",
+      "when": "an upsell is accepted and charged (one order line)",
+      "meta": "UpsellTake",
+      "meta_custom": true,
+      "ga4": "upsell_purchase",
+      "clarity": "upsell_take",
+      "sent_by": "layer",
+      "value": true,
+      "event_id": "<store>-<order number>-u<upsell number>"
+    }
+  ],
+  "step_types": {
+    "why": "How a page is classed when it has no explicit step. The layer derives it from the page's type and where it sends the visitor next.",
+    "rules": [
+      [
+        "quiz",
+        "a page that mounts a portal or a quiz"
+      ],
+      [
+        "presell",
+        "a product page whose next step is not checkout"
+      ],
+      [
+        "offer",
+        "a product page whose next step is checkout"
+      ],
+      [
+        "checkout",
+        "page_type checkout"
+      ],
+      [
+        "upsell",
+        "page_type upsell"
+      ],
+      [
+        "receipt",
+        "page_type receipt"
+      ]
+    ]
+  },
+  "checker": {
+    "expect_per_step": {
+      "quiz": [
+        "page_view",
+        "quiz_step"
+      ],
+      "presell": [
+        "page_view"
+      ],
+      "offer": [
+        "page_view",
+        "offer_view"
+      ],
+      "checkout": [
+        "page_view"
+      ],
+      "upsell": [
+        "page_view"
+      ],
+      "receipt": [
+        "page_view"
+      ]
+    },
+    "note": "checkout_start, payment_info, purchase and upsell_take need a cart or a real order; the checker loads pages only and never places an order, so it reports those as 'needs a test order'."
+  }
+}

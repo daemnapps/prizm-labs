@@ -83,6 +83,16 @@
    "need": "own-words"
   },
   {
+   "id": "feedback-forms",
+   "name": "Feedback forms",
+   "unlocks": "answers from every customer stage, asked on the brand's own site and sent by its email flows",
+   "grant": "connect its email platform (Klaviyo), then the brand-research skill builds the forms from the starter set (components/feedback-forms)",
+   "check": {
+    "pulls_flag": "feedback.enabled"
+   },
+   "need": "own-words"
+  },
+  {
    "id": "products",
    "name": "Market data",
    "unlocks": "what is selling and what competitors run",

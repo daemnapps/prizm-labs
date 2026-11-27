@@ -20,6 +20,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Swipe | Intake | `components/intake/` |
 | Swipe | Gathers customer language | `components/research-gatherer/` |
 | Swipe | Research fill: what a brand grants for research, and the next research step | `components/research-fill/` |
+| Swipe | Feedback forms: one per customer stage, sent by the brand's email flows, answers into its bank | `components/feedback-forms/` |
 | Swipe | Ranks and sorts the swipes | `components/triage/` |
 | Take apart | Video teardown | `tools/video-teardown/` |
 | Take apart | Image teardown | `tools/image-teardown/` |

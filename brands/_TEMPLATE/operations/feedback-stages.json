@@ -1,0 +1,243 @@
+{
+ "_what": "Starter feedback stages for a Shopify store with Klaviyo. Who gets each form, when (Klaviyo trigger, filters, wait) and what the flow already knows. Copy into brands/<brand>/operations/, set klaviyo.public_id and form.url, and mark stages you can't trigger as blocked with why.",
+ "brand": "brand-name",
+ "label": "<Brand>",
+ "status": "template — nothing is live",
+ "klaviyo": {
+  "public_id": "<KLAVIYO_PUBLIC_ID>",
+  "metric": "Submitted Feedback",
+  "private_key": "KLAVIYO_<BRAND>_KEY",
+  "client_revision": "2025-10-15"
+ },
+ "form": {
+  "url": "https://<your-store>/pages/feedback",
+  "link": "https://<your-store>/pages/feedback?stage={stage}&e={{ email|urlencode }}",
+  "link_note": "Put this exact link on the email's button, with {stage} filled in. `e` is the profile's email so the answer lands on the right Klaviyo profile. The page reads it, then wipes it from the address bar before anything else runs; the page loads no ad pixels, so the email never reaches Meta/TikTok/Snap. If Klaviyo click tracking adds `_kx` to the link, the page uses that instead and `e` can be dropped.",
+  "slug": "feedback",
+  "repo": "<where the form page lives: the store's theme or a page repo>"
+ },
+ "email": {
+  "from_label": "<founder> from <brand>",
+  "from_email": "douxd@<brand>.com",
+  "style": "Plain founder note, no images, one link — the look of the three survey emails that collected 1,807 answers (T | Delivered › 'Brand Improvement Survey', template SMpqA6; T | Cancelled/Refund › 'Email #1 - Refund', template TXTuVD). Klaviyo footer as those emails have it: {% unsubscribe %} · {{ organization.name }} {{ organization.full_address }}.",
+  "reward": "The old emails promised a <reward> code shown after answering. The code itself is not on file (it lived on the Google Forms' confirmation screen). Put the code in feedback-questions.json › reward.code and the thank-you screen shows it; until then the emails below carry no reward line."
+ },
+ "stages": [
+  {
+   "stage": "list-no-order",
+   "label": "On the list, never bought",
+   "lane": "lead",
+   "relationship": "list-member",
+   "force_lane": "lead",
+   "known": {
+    "purchase_status": "no order",
+    "orders": 0,
+    "on_list": true
+   },
+   "status": "ready",
+   "klaviyo": {
+    "flow_name": "Feedback · list-no-order",
+    "trigger": {
+     "type": "metric",
+     "metric": "Subscribed to List",
+     "integration": "Klaviyo"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Placed Order (Shopify) — zero times over all time",
+     "Has not been in this flow over all time"
+    ],
+    "wait": "7 days"
+   }
+  },
+  {
+   "stage": "abandoned-checkout",
+   "label": "Started checkout, didn't buy",
+   "lane": "lead",
+   "relationship": "checkout-started",
+   "force_lane": "lead",
+   "known": {
+    "purchase_status": "started checkout, no order",
+    "orders": 0
+   },
+   "status": "ready",
+   "klaviyo": {
+    "flow_name": "Feedback · abandoned-checkout",
+    "trigger": {
+     "type": "metric",
+     "metric": "Checkout Started",
+     "integration": "Shopify"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Placed Order (Shopify) — zero times since starting this flow",
+     "Placed Order (Shopify) — zero times over all time",
+     "Has not been in this flow in the last 90 days"
+    ],
+    "wait": "3 days"
+   }
+  },
+  {
+   "stage": "new-customer",
+   "label": "First order, delivered",
+   "lane": "customer",
+   "relationship": "ordered",
+   "force_lane": null,
+   "known": {
+    "purchase_status": "bought",
+    "orders": 1,
+    "delivered": true
+   },
+   "status": "ready",
+   "klaviyo": {
+    "flow_name": "Feedback · new-customer",
+    "trigger": {
+     "type": "metric",
+     "metric": "Delivered Shipment",
+     "integration": "Shopify"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Placed Order (Shopify) — equals 1 over all time",
+     "Refunded Order (Shopify) — zero times since starting this flow",
+     "Has not been in this flow over all time"
+    ],
+    "wait": "10 days"
+   }
+  },
+  {
+   "stage": "repeat-customer",
+   "label": "2nd order or more",
+   "lane": "customer",
+   "relationship": "ordered",
+   "force_lane": null,
+   "known": {
+    "purchase_status": "bought",
+    "orders": "2+"
+   },
+   "status": "ready",
+   "klaviyo": {
+    "flow_name": "Feedback · repeat-customer",
+    "trigger": {
+     "type": "metric",
+     "metric": "Delivered Shipment",
+     "integration": "Shopify"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Placed Order (Shopify) — at least 2 over all time",
+     "Placed Order (Shopify) where tags contains \"<subscription app>\" — zero times over all time (subscribers get their own stage)",
+     "Refunded Order (Shopify) — zero times since starting this flow",
+     "Has not been in this flow in the last 180 days"
+    ],
+    "wait": "10 days"
+   }
+  },
+  {
+   "stage": "subscriber",
+   "label": "Active subscriber (<subscription app>), after 2nd renewal",
+   "lane": "customer",
+   "relationship": "ordered",
+   "force_lane": null,
+   "known": {
+    "purchase_status": "bought",
+    "subscription": "active (<subscription app>)",
+    "renewals": "2+"
+   },
+   "status": "ready",
+   "klaviyo": {
+    "flow_name": "Feedback · subscriber",
+    "trigger": {
+     "type": "metric",
+     "metric": "Placed Order",
+     "integration": "Shopify"
+    },
+    "trigger_filters": [
+     "tags contains \"<subscription app> recurring order\""
+    ],
+    "flow_filters": [
+     "Placed Order (Shopify) where tags contains \"<subscription app> recurring order\" — at least 2 over all time",
+     "Has not been in this flow in the last 180 days"
+    ],
+    "wait": "10 days"
+   }
+  },
+  {
+   "stage": "churned-refund",
+   "label": "Refunded",
+   "lane": "churned",
+   "relationship": "ordered",
+   "force_lane": "churned",
+   "known": {
+    "purchase_status": "bought, then refunded"
+   },
+   "status": "ready",
+   "klaviyo": {
+    "flow_name": "Feedback · churned-refund",
+    "trigger": {
+     "type": "metric",
+     "metric": "Refunded Order",
+     "integration": "Shopify"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Placed Order (Shopify) — zero times since starting this flow",
+     "Has not been in this flow in the last 90 days"
+    ],
+    "wait": "1 day"
+   }
+  },
+  {
+   "stage": "churned-cancelled",
+   "label": "Cancelled subscription",
+   "lane": "churned",
+   "relationship": "ordered",
+   "force_lane": "churned-subscriber",
+   "known": {
+    "purchase_status": "bought",
+    "subscription": "cancelled"
+   },
+   "status": "blocked",
+   "blocked_by": "<what is missing for this trigger in your stack>",
+   "klaviyo": {
+    "flow_name": "Feedback · churned-cancelled",
+    "trigger": {
+     "type": "metric",
+     "metric": "<subscription app> subscription cancelled (name as <subscription app> sends it)",
+     "integration": "<subscription app> — not connected"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Has not been in this flow over all time"
+    ],
+    "wait": "1 day"
+   }
+  },
+  {
+   "stage": "post-support",
+   "label": "Support ticket closed",
+   "lane": "customer",
+   "relationship": "ordered",
+   "force_lane": null,
+   "known": {
+    "contacted_support": true
+   },
+   "status": "blocked",
+   "blocked_by": "<what is missing for this trigger in your stack>",
+   "klaviyo": {
+    "flow_name": "Feedback · post-support",
+    "trigger": {
+     "type": "metric",
+     "metric": "Resolved Ticket (<helpdesk>)",
+     "integration": "<helpdesk>"
+    },
+    "trigger_filters": [],
+    "flow_filters": [
+     "Placed Order (Shopify) — at least once over all time",
+     "Has not been in this flow in the last 60 days"
+    ],
+    "wait": "1 day"
+   }
+  }
+ ]
+}

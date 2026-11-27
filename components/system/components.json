@@ -105,6 +105,16 @@
    "basis": "draft"
   },
   {
+   "path": "components/feedback-forms",
+   "kind": "tool",
+   "does": "Builds a brand's customer feedback forms, one per stage, sent by its email flows; answers file into its language bank",
+   "role": "retention-strategist",
+   "workflow": "email",
+   "stage": "production",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/video-teardown",
    "kind": "tool",
    "does": "Strips a video to its structure",
@@ -434,6 +444,16 @@
    "stage": "",
    "steps": [],
    "basis": "source"
+  },
+  {
+   "path": "components/funnel-tracking",
+   "kind": "library",
+   "does": "The link standard: tags email and ad links the same way everywhere (used by the feedback forms)",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
   },
   {
    "path": "components/roles",

@@ -1,6 +1,6 @@
 ---
 name: brand-research
-description: The research system for any brand, run the same way every time — connect the brand's own customer words (surveys, support inbox, store reviews, ad comments, interviews), keep them pulling daily, then fill each avatar in order (language bank, rooms, profile, what he watches, his problem, the matrix) until the owner picks concepts, and refresh what goes stale. Use when someone says "set up research for <brand>", "connect <brand>'s reviews / surveys / support / ad comments", "what does <brand> need to give us for research", "run the research for <brand>", "where is <brand>'s research", "what's next for <avatar>", "refresh <brand>'s research", or "research is stale".
+description: The research system for any brand, run the same way every time — connect the brand's own customer words (surveys, support inbox, store reviews, ad comments, interviews) and build its stage-by-stage feedback forms, keep them pulling daily, then fill each avatar in order (language bank, rooms, profile, what he watches, his problem, the matrix) until the owner picks concepts, and refresh what goes stale. Use when someone says "set up research for <brand>", "connect <brand>'s reviews / surveys / support / ad comments", "set up feedback forms for <brand>", "what does <brand> need to give us for research", "run the research for <brand>", "where is <brand>'s research", "what's next for <avatar>", "refresh <brand>'s research", or "research is stale".
 ---
 
 # Brand research
@@ -46,6 +46,25 @@ account. The daily switch is **off** by default. Turn it on only when the brand 
 `python3 components/research-fill/connect.py daily-on --brand <b>` (and `daily-off`). The 05:30 job runs only
 brands switched on; install it once per computer with `connect.py schedule`. Without the switch, pull by hand
 when needed: `connect.py daily --brand <b>`.
+
+## Feedback forms (once the brand's email platform is connected)
+
+Every brand gets the eight-stage feedback forms (on the list · started checkout · first order · repeat · subscriber ·
+refunded · cancelled · after support). The starter set is in `brands/_TEMPLATE/operations/feedback-stages.json` and
+`feedback-questions.json`; the engine is `components/feedback-forms`.
+
+1. Copy both files into `brands/<b>/operations/`. Set `klaviyo.public_id` (the brand's PUBLIC Klaviyo id, safe on a
+   page), `form.url` / `form.link` (where the form will live on their store) and mark any stage their stack can't
+   trigger as blocked, saying why.
+2. Words: `python3 components/feedback-forms/language_pass.py --brand <b> --write` proposes every question, tap
+   option and email from the brand's own customer words; show it, apply on the owner's yes.
+3. Look: set `look.tokens`, fonts and logo from the brand's design system.
+4. `python3 components/feedback-forms/build.py check --brand <b>`, then `preview` (nothing sends) and show the
+   forms; `install` writes the per-stage flow sheet.
+5. Answers come back with `connect.py feedback --brand <b> --key <KLAVIYO_PRIVATE_KEY_NAME>`.
+
+Putting the form on the store, building the flows in Klaviyo and designing each stage's email are separate steps,
+each the owner's go: nothing goes live or sends from here.
 
 ## 3. Fill each avatar, in order
 

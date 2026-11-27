@@ -68,6 +68,11 @@ class Brand:
             for part in rule["brand_json"].split("."):
                 value = value.get(part) if isinstance(value, dict) else None
             return _filled(value)
+        if "pulls_flag" in rule:
+            value = _json(self.folder / "operations" / "language-pulls.json") or {}
+            for part in rule["pulls_flag"].split("."):
+                value = value.get(part) if isinstance(value, dict) else None
+            return value is True
         if "daily" in rule:
             pulls = _json(self.folder / "operations" / "language-pulls.json") or {}
             return bool((pulls.get("daily") or {}).get("on"))

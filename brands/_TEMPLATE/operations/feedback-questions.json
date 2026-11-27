@@ -1,0 +1,1217 @@
+{
+ "_what": "Starter feedback questions, one set per stage, with the page's look and each stage's email. These are the starting shape only: before anything goes live, language_pass.py rewrites every question, tap option and email from the brand's own customer words (its language bank), and the look comes from the brand's design system.",
+ "brand": "brand-name",
+ "label": "<Brand>",
+ "form_version": "template",
+ "default_stage": "new-customer",
+ "areas": [
+  "marketing",
+  "product",
+  "operations",
+  "customer-service",
+  "customer-experience",
+  "website"
+ ],
+ "look": {
+  "logo_alt": "<Brand>",
+  "font_body": "system-ui, sans-serif",
+  "font_head": "system-ui, sans-serif",
+  "head_transform": "none",
+  "tokens": {
+   "band": "#111111",
+   "band_ink": "#FFFFFF",
+   "ground": "#FFFFFF",
+   "card": "#FFFFFF",
+   "ink": "#111111",
+   "muted": "#6B6B6B",
+   "line": "#111111",
+   "accent": "#111111",
+   "accent_2": "#444444",
+   "cta": "#111111",
+   "cta_ink": "#FFFFFF",
+   "cta_line": "#111111",
+   "picked": "#111111",
+   "picked_ink": "#FFFFFF",
+   "radius": "8px",
+   "chip_radius": "999px"
+  },
+  "source": "neutral starter look: replace every token with the brand's design system (brands/<brand>/brand-identity/web-tokens.md)",
+  "logo": "assets/images/logo.svg"
+ },
+ "copy": {
+  "start": "Let's go",
+  "next": "Next",
+  "back": "Back",
+  "skip": "Skip",
+  "submit": "Send it",
+  "sending": "Sending…",
+  "error": "That didn't send — check your connection and hit it again.",
+  "other_placeholder": "Tell me…",
+  "text_placeholder": "Type it how you'd say it…",
+  "step": "{n} of {total}"
+ },
+ "thanks": {
+  "title": "<thank-you line in the brand's voice>",
+  "body": "<thank-you line in the brand's voice>",
+  "sign": "<thank-you line in the brand's voice>"
+ },
+ "reward": {
+  "line": "",
+  "code": null,
+  "status": "optional: a thank-you reward shown after the last answer"
+ },
+ "stages": {
+  "list-no-order": {
+   "title": "Quick one",
+   "intro": "You've been following us for a minute but haven't bought our product yet. Six quick ones — straight answers help me the most.",
+   "questions": [
+    {
+     "id": "why-interested",
+     "n": 1,
+     "type": "choice",
+     "text": "What made you want to try us — what were you hoping to fix?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "why-interested",
+      "problem"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    },
+    {
+     "id": "problem-now",
+     "n": 2,
+     "type": "text",
+     "text": "What's going on with <the problem> right now?",
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "problem-language"
+     ],
+     "was_options": [
+      "<most-said answer>",
+      "Dark spots",
+      "<most-said answer>",
+      "<most-said answer>",
+      "<most-said answer>",
+      "Nothing — just want a real routine"
+     ]
+    },
+    {
+     "id": "holding-back",
+     "n": 3,
+     "type": "choice",
+     "text": "Why haven't you bought our product yet?",
+     "options": [
+      "Price",
+      "I already bought it",
+      "Still thinking about it",
+      "Not sure it works",
+      "The subscription"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "website"
+     ],
+     "yields": [
+      "objection"
+     ],
+     "was_options": [
+      "Price",
+      "Not sure it works for me",
+      "Don't know which product to get",
+      "Haven't got around to it",
+      "Already use something else"
+     ]
+    },
+    {
+     "id": "what-would-help",
+     "n": 4,
+     "type": "choice",
+     "text": "Is there anything that would help you finally buy it?",
+     "options": [
+      "A discount",
+      "A lower price",
+      "Seeing results",
+      "Samples"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "buy-trigger",
+      "objection"
+     ]
+    },
+    {
+     "id": "unanswered-question",
+     "n": 5,
+     "type": "choice",
+     "text": "Was there a question the website didn't answer for you?",
+     "options": [
+      "Shipping",
+      "If it actually works",
+      "How to use it",
+      "What's in it",
+      "No, it was all clear"
+     ],
+     "other": true,
+     "areas": [
+      "website",
+      "customer-service"
+     ],
+     "yields": [
+      "unanswered-question",
+      "site-friction"
+     ]
+    },
+    {
+     "id": "using-now",
+     "n": 6,
+     "type": "choice",
+     "text": "What are you using for <the problem> right now?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "competitor-brand"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    }
+   ],
+   "email": {
+    "subject": "Real quick",
+    "preview": "Two minutes. Straight answers.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Tell me straight",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "abandoned-checkout": {
+   "title": "What happened?",
+   "intro": "You got to checkout and stopped. No pressure — I just want to know what got in the way so we can fix it.",
+   "questions": [
+    {
+     "id": "checkout-stop",
+     "n": 1,
+     "type": "choice",
+     "text": "What stopped you at checkout?",
+     "options": [
+      "Price",
+      "Shipping",
+      "Too many pop-ups and add-ons",
+      "The subscription",
+      "Still thinking about it"
+     ],
+     "other": true,
+     "areas": [
+      "website",
+      "operations",
+      "marketing"
+     ],
+     "yields": [
+      "objection",
+      "checkout-friction"
+     ],
+     "was_options": [
+      "Price",
+      "Shipping cost or time",
+      "Payment didn't go through",
+      "Wanted to think about it",
+      "Not sure which product to get",
+      "Just looking"
+     ]
+    },
+    {
+     "id": "checkout-annoying",
+     "n": 2,
+     "type": "text",
+     "text": "Was anything confusing or pushy at checkout?",
+     "areas": [
+      "website"
+     ],
+     "yields": [
+      "checkout-friction",
+      "site-friction"
+     ]
+    },
+    {
+     "id": "what-would-help",
+     "n": 3,
+     "type": "choice",
+     "text": "Is there anything that would help you finish your order?",
+     "options": [
+      "A discount",
+      "A lower price",
+      "Seeing results",
+      "Samples"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "website"
+     ],
+     "yields": [
+      "buy-trigger",
+      "objection"
+     ]
+    },
+    {
+     "id": "unanswered-question",
+     "n": 4,
+     "type": "text",
+     "text": "Was there a question the website didn't answer for you?",
+     "areas": [
+      "website",
+      "customer-service"
+     ],
+     "yields": [
+      "unanswered-question",
+      "site-friction"
+     ]
+    },
+    {
+     "id": "why-interested",
+     "n": 5,
+     "type": "choice",
+     "text": "What made you want to try us in the first place?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "marketing"
+     ],
+     "yields": [
+      "why-interested",
+      "buy-trigger"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    }
+   ],
+   "email": {
+    "subject": "How can I help you?",
+    "preview": "You got to checkout and stopped.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Tell me what happened",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "new-customer": {
+   "title": "How's it going?",
+   "intro": "You've had your order for about ten days. Smooth? Clean? Nothing yet? I want your raw, honest take — the good and the bad. Seven quick ones.",
+   "questions": [
+    {
+     "id": "recommend",
+     "n": 1,
+     "type": "scale",
+     "min": 0,
+     "max": 10,
+     "low": "Not likely",
+     "high": "Definitely",
+     "text": "How likely are you to recommend <Brand> to a friend?",
+     "areas": [
+      "marketing",
+      "customer-experience"
+     ],
+     "yields": [
+      "rating"
+     ]
+    },
+    {
+     "id": "trying-to-fix",
+     "n": 2,
+     "type": "choice",
+     "text": "What problem did you want to solve?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "product",
+      "marketing"
+     ],
+     "yields": [
+      "problem-language"
+     ],
+     "was_options": [
+      "<most-said answer>",
+      "Dark spots",
+      "<most-said answer>",
+      "<most-said answer>",
+      "<most-said answer>",
+      "Just wanted a real routine"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    },
+    {
+     "id": "why-us",
+     "n": 3,
+     "type": "text",
+     "text": "What gut instinct made you buy from us over everything else out there?",
+     "areas": [
+      "marketing"
+     ],
+     "yields": [
+      "why-bought",
+      "buy-trigger"
+     ]
+    },
+    {
+     "id": "first-saw",
+     "n": 4,
+     "type": "choice",
+     "text": "Where did you first see us?",
+     "options": [
+      "Instagram",
+      "Facebook",
+      "TikTok",
+      "YouTube",
+      "A friend or family"
+     ],
+     "other": true,
+     "areas": [
+      "marketing"
+     ],
+     "yields": [
+      "channel"
+     ],
+     "was_options": [
+      "TikTok",
+      "Instagram",
+      "Facebook",
+      "YouTube",
+      "A friend or my barber",
+      "Google"
+     ]
+    },
+    {
+     "id": "how-it-feels",
+     "n": 5,
+     "type": "choice",
+     "text": "How do you feel after using it?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "product",
+      "marketing"
+     ],
+     "yields": [
+      "post-use-feeling",
+      "result-language"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    },
+    {
+     "id": "arrived-right",
+     "n": 6,
+     "type": "choice",
+     "text": "Did your order show up the way you expected?",
+     "options": [
+      "Yes, fast shipping",
+      "It took too long",
+      "Something was missing",
+      "It never came",
+      "Something was damaged"
+     ],
+     "areas": [
+      "operations",
+      "customer-experience"
+     ],
+     "yields": [
+      "delivery"
+     ],
+     "was_options": [
+      "Yes, all good",
+      "Mostly",
+      "No"
+     ]
+    },
+    {
+     "id": "arrived-what-off",
+     "n": 7,
+     "type": "text",
+     "text": "What happened with your order?",
+     "show_if": {
+      "q": "arrived-right",
+      "not_in": [
+       "Yes, fast shipping"
+      ]
+     },
+     "areas": [
+      "operations",
+      "customer-service"
+     ],
+     "yields": [
+      "expectation-gap",
+      "ops-issue"
+     ]
+    },
+    {
+     "id": "change-one-thing",
+     "n": 8,
+     "type": "text",
+     "text": "What's the ONE thing you'd change about the whole <Brand> experience?",
+     "areas": [
+      "product",
+      "operations",
+      "website",
+      "customer-experience"
+     ],
+     "yields": [
+      "improvement-request"
+     ]
+    }
+   ],
+   "email": {
+    "subject": "Help us build the most authentic brand on the internet.",
+    "preview": "Smooth? Clean? Not yet? Your raw take — two minutes.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Give me your take",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "repeat-customer": {
+   "title": "You keep coming back",
+   "intro": "That means a lot. Tell me what's working — and what isn't. Seven quick ones.",
+   "questions": [
+    {
+     "id": "recommend",
+     "n": 1,
+     "type": "scale",
+     "min": 0,
+     "max": 10,
+     "low": "Not likely",
+     "high": "Definitely",
+     "text": "How likely are you to recommend <Brand> to a friend?",
+     "areas": [
+      "marketing",
+      "customer-experience"
+     ],
+     "yields": [
+      "rating"
+     ]
+    },
+    {
+     "id": "why-back",
+     "n": 2,
+     "type": "text",
+     "text": "What do you like most about <Brand>?",
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "what-they-like",
+      "why-rebuy"
+     ]
+    },
+    {
+     "id": "whats-changed",
+     "n": 3,
+     "type": "text",
+     "text": "How do things look now compared to when you started?",
+     "areas": [
+      "product",
+      "marketing"
+     ],
+     "yields": [
+      "result-language"
+     ]
+    },
+    {
+     "id": "make-next",
+     "n": 4,
+     "type": "choice",
+     "text": "What product would you like us to make next?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "product"
+     ],
+     "yields": [
+      "product-request"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    },
+    {
+     "id": "others-annoyed",
+     "n": 5,
+     "type": "choice",
+     "text": "What annoyed you about other products before us?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "competitor-annoyance"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    },
+    {
+     "id": "change-one-thing",
+     "n": 6,
+     "type": "text",
+     "text": "What's the ONE thing you'd change about the whole <Brand> experience?",
+     "areas": [
+      "product",
+      "operations",
+      "website",
+      "customer-experience"
+     ],
+     "yields": [
+      "improvement-request"
+     ]
+    },
+    {
+     "id": "one-word",
+     "n": 7,
+     "type": "choice",
+     "text": "What word describes you best?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "marketing"
+     ],
+     "yields": [
+      "self-descriptor"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    }
+   ],
+   "email": {
+    "subject": "What's working for you?",
+    "preview": "Seven quick ones — I read every answer.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Tell me what's working",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "subscriber": {
+   "title": "How's the subscription treating you?",
+   "intro": "You've had a few deliveries now. Help me make the subscription work for you — six quick ones.",
+   "questions": [
+    {
+     "id": "recommend",
+     "n": 1,
+     "type": "scale",
+     "min": 0,
+     "max": 10,
+     "low": "Not likely",
+     "high": "Definitely",
+     "text": "How likely are you to recommend <Brand> to a friend?",
+     "areas": [
+      "marketing",
+      "customer-experience"
+     ],
+     "yields": [
+      "rating"
+     ]
+    },
+    {
+     "id": "timing",
+     "n": 2,
+     "type": "choice",
+     "text": "Is your subscription showing up at the right time?",
+     "options": [
+      "Just right",
+      "Too often — I have too much product",
+      "Not often enough — I run out"
+     ],
+     "areas": [
+      "operations",
+      "product"
+     ],
+     "yields": [
+      "cadence"
+     ],
+     "was_options": [
+      "Just right",
+      "Too often — it's stacking up",
+      "Not often enough — I run out"
+     ]
+    },
+    {
+     "id": "why-subscribe",
+     "n": 3,
+     "type": "text",
+     "text": "What made you go with a subscription instead of buying once?",
+     "areas": [
+      "marketing"
+     ],
+     "yields": [
+      "why-subscribe",
+      "buy-trigger"
+     ]
+    },
+    {
+     "id": "tell-a-friend",
+     "n": 4,
+     "type": "text",
+     "text": "What results would you tell a friend about?",
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "result-language"
+     ]
+    },
+    {
+     "id": "close-to-cancel",
+     "n": 5,
+     "type": "choice",
+     "text": "Anything come close to making you cancel?",
+     "options": [
+      "No, I'm good",
+      "Too much product",
+      "Price",
+      "Getting charged when I didn't expect it",
+      "Not seeing results"
+     ],
+     "other": true,
+     "areas": [
+      "operations",
+      "customer-service",
+      "product"
+     ],
+     "yields": [
+      "churn-risk"
+     ],
+     "was_options": [
+      "No, I'm locked in",
+      "Price",
+      "Too much product",
+      "Not seeing results",
+      "Billing or account hassle"
+     ]
+    },
+    {
+     "id": "cancel-what",
+     "n": 6,
+     "type": "text",
+     "text": "Tell me more — what happened?",
+     "show_if": {
+      "q": "close-to-cancel",
+      "not_in": [
+       "No, I'm good"
+      ]
+     },
+     "areas": [
+      "operations",
+      "customer-service",
+      "product"
+     ],
+     "yields": [
+      "churn-risk",
+      "objection"
+     ]
+    },
+    {
+     "id": "make-next",
+     "n": 7,
+     "type": "choice",
+     "text": "What product would you like us to make next?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "product"
+     ],
+     "yields": [
+      "product-request"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    }
+   ],
+   "email": {
+    "subject": "How's the subscription treating you?",
+    "preview": "Too much product? Running out? Six quick ones.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Make it work for me",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "churned-refund": {
+   "title": "Help me get this right",
+   "intro": "I saw you asked for a refund. I want to know why so it doesn't happen again. Six quick ones — no hard feelings.",
+   "questions": [
+    {
+     "id": "refund-reason",
+     "n": 1,
+     "type": "choice",
+     "text": "Why did you request a refund?",
+     "options": [
+      "Too expensive",
+      "Shipping took too long / never came",
+      "Got charged more than I expected",
+      "Ordered by mistake",
+      "It didn't work for me",
+      "I didn't place this order"
+     ],
+     "other": true,
+     "areas": [
+      "operations",
+      "product",
+      "customer-service"
+     ],
+     "yields": [
+      "refund-reason"
+     ],
+     "was_options": [
+      "It didn't work for me",
+      "It irritated me",
+      "Shipping took too long / never came",
+      "Wrong or damaged item",
+      "Got charged something I didn't expect",
+      "Ordered by mistake or too much",
+      "Changed my mind"
+     ]
+    },
+    {
+     "id": "what-happened",
+     "n": 2,
+     "type": "text",
+     "text": "Tell me what happened — straight up.",
+     "areas": [
+      "operations",
+      "product",
+      "customer-service"
+     ],
+     "yields": [
+      "refund-reason",
+      "expectation-gap"
+     ]
+    },
+    {
+     "id": "expected",
+     "n": 3,
+     "type": "text",
+     "text": "Were there expectations you had that we didn't meet?",
+     "areas": [
+      "product",
+      "marketing"
+     ],
+     "yields": [
+      "expectation-gap"
+     ]
+    },
+    {
+     "id": "make-it-right",
+     "n": 4,
+     "type": "choice",
+     "text": "Is there anything we could have done differently?",
+     "options": [
+      "Lower the price",
+      "Better communication",
+      "Faster delivery",
+      "Fix the website and checkout",
+      "No, everything was good"
+     ],
+     "other": true,
+     "areas": [
+      "customer-service",
+      "operations"
+     ],
+     "yields": [
+      "service-feedback"
+     ]
+    },
+    {
+     "id": "found-else",
+     "n": 5,
+     "type": "choice",
+     "text": "Have you found something else since?",
+     "options": [
+      "Not yet",
+      "I'm still using <Brand>",
+      "Yes"
+     ],
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "alternative-solution"
+     ],
+     "was_options": [
+      "Yes",
+      "Not yet",
+      "I'm still using <Brand>"
+     ]
+    },
+    {
+     "id": "found-what",
+     "n": 6,
+     "type": "text",
+     "text": "What are you using now?",
+     "show_if": {
+      "q": "found-else",
+      "in": [
+       "Yes"
+      ]
+     },
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "alternative-solution",
+      "competitor-brand"
+     ]
+    },
+    {
+     "id": "why-tried",
+     "n": 7,
+     "type": "choice",
+     "text": "Why were you interested in trying us in the first place?",
+     "options": [
+      "<most-said answer 1>",
+      "<most-said answer 2>",
+      "<most-said answer 3>",
+      "<most-said answer 4>"
+     ],
+     "other": true,
+     "areas": [
+      "marketing"
+     ],
+     "yields": [
+      "why-bought"
+     ],
+     "options_from": "the brand's own customer words (the language pass)"
+    }
+   ],
+   "email": {
+    "subject": "How can I help you?",
+    "preview": "I saw you requested a refund.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Tell me what happened",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "churned-cancelled": {
+   "title": "Before you go",
+   "intro": "I saw you cancelled your subscription. Help me understand why — five quick ones.",
+   "questions": [
+    {
+     "id": "cancel-reason",
+     "n": 1,
+     "type": "choice",
+     "text": "Why'd you cancel?",
+     "options": [
+      "Didn't know I signed up for a subscription",
+      "Too much product piling up",
+      "I'd rather buy as I need it",
+      "Got charged when I didn't expect it",
+      "Price",
+      "My order never came"
+     ],
+     "other": true,
+     "areas": [
+      "operations",
+      "product",
+      "customer-service"
+     ],
+     "yields": [
+      "churn-risk",
+      "refund-reason"
+     ],
+     "was_options": [
+      "Too much product piling up",
+      "Price",
+      "Not seeing results",
+      "Billing or account issue",
+      "I'd rather buy when I need it"
+     ]
+    },
+    {
+     "id": "tell-more",
+     "n": 2,
+     "type": "text",
+     "text": "Tell me more — what happened?",
+     "areas": [
+      "operations",
+      "product",
+      "customer-service"
+     ],
+     "yields": [
+      "churn-risk",
+      "expectation-gap"
+     ]
+    },
+    {
+     "id": "come-back-if",
+     "n": 3,
+     "type": "choice",
+     "text": "Would any of these have kept you on?",
+     "options": [
+      "A sample before subscribing",
+      "Clear subscription info before I pay",
+      "Easier account management",
+      "No, nothing"
+     ],
+     "other": true,
+     "areas": [
+      "marketing",
+      "operations"
+     ],
+     "yields": [
+      "offer-wish"
+     ],
+     "was_options": [
+      "Delivery every other month",
+      "A lower price",
+      "Pausing instead of cancelling",
+      "Different products in the box",
+      "No, nothing"
+     ]
+    },
+    {
+     "id": "best-part",
+     "n": 4,
+     "type": "text",
+     "text": "What did you like about the products?",
+     "areas": [
+      "marketing",
+      "product"
+     ],
+     "yields": [
+      "what-they-like",
+      "result-language"
+     ]
+    },
+    {
+     "id": "do-better",
+     "n": 5,
+     "type": "text",
+     "text": "What could we have done better?",
+     "areas": [
+      "customer-experience",
+      "operations",
+      "customer-service"
+     ],
+     "yields": [
+      "service-feedback"
+     ]
+    }
+   ],
+   "email": {
+    "subject": "Before you go…",
+    "preview": "I saw you cancelled. Can I ask why?",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Tell me why",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  },
+  "post-support": {
+   "title": "How'd we do?",
+   "intro": "You reached out to the team recently. Five quick ones on how we handled it.",
+   "questions": [
+    {
+     "id": "support-score",
+     "n": 1,
+     "type": "scale",
+     "min": 1,
+     "max": 5,
+     "low": "Bad",
+     "high": "Great",
+     "text": "How did we do on your request?",
+     "areas": [
+      "customer-service"
+     ],
+     "yields": [
+      "rating"
+     ]
+    },
+    {
+     "id": "fixed",
+     "n": 2,
+     "type": "choice",
+     "text": "Did we fix it?",
+     "options": [
+      "Yes",
+      "Partly",
+      "No"
+     ],
+     "areas": [
+      "customer-service",
+      "operations"
+     ],
+     "yields": [
+      "resolution"
+     ],
+     "was_options": [
+      "Yes",
+      "Partly",
+      "No"
+     ]
+    },
+    {
+     "id": "issue-own-words",
+     "n": 3,
+     "type": "text",
+     "text": "What was the issue, in your words?",
+     "areas": [
+      "operations",
+      "customer-service",
+      "website"
+     ],
+     "yields": [
+      "service-feedback"
+     ]
+    },
+    {
+     "id": "easier",
+     "n": 4,
+     "type": "choice",
+     "text": "What would have made it easier?",
+     "options": [
+      "A faster reply",
+      "Better communication",
+      "Answer my question",
+      "Updates on my order"
+     ],
+     "other": true,
+     "areas": [
+      "customer-service",
+      "customer-experience"
+     ],
+     "yields": [
+      "service-feedback"
+     ]
+    },
+    {
+     "id": "site-could-answer",
+     "n": 5,
+     "type": "choice",
+     "text": "Could the website have answered this before you had to ask?",
+     "options": [
+      "Yes",
+      "No",
+      "Not sure"
+     ],
+     "areas": [
+      "website"
+     ],
+     "yields": [
+      "site-friction"
+     ],
+     "was_options": [
+      "Yes",
+      "No",
+      "Not sure"
+     ]
+    }
+   ],
+   "email": {
+    "subject": "How'd we do?",
+    "preview": "Five quick ones on your request.",
+    "body": [
+     "Hi {{ first_name|default:'there' }},",
+     "<one or two lines in the founder's voice, written by email production from the brand's own words>",
+     "<what we're asking and how long it takes>"
+    ],
+    "button": "Rate us",
+    "after": [
+     "<sign-off in the brand's voice>"
+    ]
+   }
+  }
+ }
+}

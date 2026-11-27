@@ -896,6 +896,28 @@
     "to": ".claude/skills/winners",
     "replace": true
    }
+  ],
+  "feedback-forms": [
+   {
+    "from": "components/feedback-forms",
+    "to": "components/feedback-forms"
+   },
+   {
+    "from": "components/funnel-tracking/machine/standard.py",
+    "to": "components/funnel-tracking/machine/standard.py"
+   },
+   {
+    "from": "brands/_TEMPLATE/operations/feedback-stages.json",
+    "to": "brands/_TEMPLATE/operations/feedback-stages.json"
+   },
+   {
+    "from": "brands/_TEMPLATE/operations/feedback-questions.json",
+    "to": "brands/_TEMPLATE/operations/feedback-questions.json"
+   },
+   {
+    "from": "components/funnel-tracking/standard.json",
+    "to": "components/funnel-tracking/standard.json"
+   }
   ]
  },
  "_company_only": [
@@ -903,7 +925,6 @@
   "component-candidates",
   "cs-metrics",
   "eu-customs-faq-assistant",
-  "feedback-forms",
   "funnel-tracking",
   "keys",
   "metrics",

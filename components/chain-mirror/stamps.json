@@ -449,6 +449,12 @@
  "brands/_TEMPLATE/operations/brand.json": {
   "commit": "10b511880033d5b9d6187c7d05efea207cc2bbe1"
  },
+ "brands/_TEMPLATE/operations/feedback-questions.json": {
+  "commit": "e7ff7d24fb662d9b2511f8dad6f3cde4d08d4d3c"
+ },
+ "brands/_TEMPLATE/operations/feedback-stages.json": {
+  "commit": "4f2968032cb2e449d56fb4e9bd064c28c4180302"
+ },
  "brands/_TEMPLATE/operations/products.json": {
   "commit": "10b511880033d5b9d6187c7d05efea207cc2bbe1"
  },
@@ -3556,6 +3562,42 @@
  },
  "components/email-production/test_writer_rules.py": {
   "commit": "d9b0c14601a3f7554c4e99cb612d58998c8597d5"
+ },
+ "components/feedback-forms/CLAUDE.md": {
+  "commit": "6902c572762328443aa6fbe6718bf33ebcf8850f"
+ },
+ "components/feedback-forms/README.md": {
+  "commit": "e26f3b8a0dd68309c9eedc055f6d377b37c04264"
+ },
+ "components/feedback-forms/build.py": {
+  "commit": "8b83df1720a1ecc8cabe1cc18d8d7eed9fb1ca79"
+ },
+ "components/feedback-forms/docs/make_page.py": {
+  "commit": "34f42a1784167274197012132b73788a8600085e"
+ },
+ "components/feedback-forms/engine/feedback.css": {
+  "commit": "bf2fe1bb39b6238764f91142c215e33218a5c7d1"
+ },
+ "components/feedback-forms/engine/feedback.js": {
+  "commit": "f4c889472689a7f1151590d11253b6930a3b7d3f"
+ },
+ "components/feedback-forms/language_pass.py": {
+  "commit": "34f42a1784167274197012132b73788a8600085e"
+ },
+ "components/feedback-forms/tests/test_build.py": {
+  "commit": "4f2968032cb2e449d56fb4e9bd064c28c4180302"
+ },
+ "components/feedback-forms/tests/test_language_pass.py": {
+  "commit": "a8afcfc18a47440b6fc4690be17001e0fda26693"
+ },
+ "components/feedback-forms/tests/test_tail_brand_words.py": {
+  "commit": "34f42a1784167274197012132b73788a8600085e"
+ },
+ "components/funnel-tracking/machine/standard.py": {
+  "commit": "13d63cece432078888123d3695ff668f51ea56e0"
+ },
+ "components/funnel-tracking/standard.json": {
+  "commit": "13d63cece432078888123d3695ff668f51ea56e0"
  },
  "components/gdrive-creator/CLAUDE.md": {
   "commit": "9319799b826da6587d606d74f1cbfd18e4549740"
