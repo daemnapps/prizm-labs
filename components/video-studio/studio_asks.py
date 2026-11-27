@@ -62,6 +62,15 @@ in components/video-production/formats/playbooks/ whose state is not parked).
 
 In the result: 1) the words, verbatim, ranked by how often they appear; 2) five ad concepts, each one line: format ·
 hook line in the customer's words · the proof it stands on."""},
+    "make": {
+        "name": "Make: {input}",
+        "prompt": """Brand: {brand}. Job: make these planned variations: "{input}".
+
+The plan is in the result.md of the variations job named in the input (under runs/studio-asks/{brand}/). Follow
+.claude/skills/ad-variations/SKILL.md to set up only the variations named in the input, through the free steps, and
+register each one in the production workflow so it shows in the Studio's Production. Stop at the price: write the
+price per variation into the result and stop for the owner's go. In the result: each variation started, its name, where
+it is now, and its price if known."""},
     "swipe": {
         "name": "Add a swipe: {input}",
         "prompt": """Brand: {brand}. Job: add this post as a swipe and tear it down: {input}
@@ -97,6 +106,17 @@ content: write <name>.draft.<ext> beside it instead. In the result: each file wr
 Use `gh repo view {input}` (and its README through gh) only. Never clone, never write outside runs/. In the result: what
 brand or business it belongs to, what it holds (store, pages, data, tools), when it last changed, and what the Studio
 could read from it."""},
+}
+
+# Where each job goes after Claude: the stages the Studio shows as a strip on the job's page.
+NEXT = {
+    "tune": ["Claude drafts the taste", "You: Use this or Discard", "Every skill reads it"],
+    "deeper": ["Claude reads the brand's words and winners", "You: pick a concept", "Make it as a new ad"],
+    "variations": ["Claude plans the variations", "You: pick which to make", "Production (stops at the price)", "Approve"],
+    "make": ["Claude sets them up in production", "Production (stops at the price)", "You: go on the price", "Approve"],
+    "swipe": ["Claude saves and tears it down", "It lands in Swipes", "Make an ad from it"],
+    "setup": ["Claude fills the item as a draft", "You: confirm in Settings"],
+    "connect": ["Claude reads the repository", "You: decide to connect it"],
 }
 
 LOCK = threading.Lock()
@@ -170,10 +190,11 @@ def one(brand, aid):
     r = _read(d / "ask.json")
     if not isinstance(r, dict):
         return None
-    for name in ("result.md", "run.log"):
-        p = d / name
-        if p.is_file():
-            r[name.split(".")[0]] = p.read_text(errors="replace")[-200_000:]
+    p = d / "result.md"
+    if p.is_file():
+        r["result"] = p.read_text(errors="replace")[-200_000:]
+    r["steps"] = steps(d)
+    r["next"] = NEXT.get(r.get("kind"), [])
     if r.get("kind") == "tune":
         draft = WS / "brands" / brand / "variables" / (r["input"] + ".draft.md")
         live = WS / "brands" / brand / "variables" / (r["input"] + ".md")
@@ -215,9 +236,63 @@ def _alive(pid):
         return False
 
 
+def _events(d):
+    """The run's live log: one JSON event per line (claude --output-format stream-json)."""
+    out = []
+    p = Path(d) / "run.log"
+    if not p.is_file():
+        return out
+    for line in p.read_text(errors="replace").splitlines():
+        line = line.strip()
+        if line.startswith("{"):
+            try:
+                out.append(json.loads(line))
+            except ValueError:
+                pass
+    return out
+
+
+def _short(path):
+    return "/".join(str(path).split("/")[-2:])
+
+
+def steps(d, limit=30):
+    """What Claude has done so far, in plain words: each file read or written, each search, each command."""
+    out = []
+    for ev in _events(d):
+        if ev.get("type") != "assistant":
+            continue
+        for c in (ev.get("message") or {}).get("content") or []:
+            if c.get("type") == "tool_use":
+                n, i = c.get("name"), c.get("input") or {}
+                if n == "Read":
+                    out.append("Read " + _short(i.get("file_path", "")))
+                elif n in ("Write", "Edit"):
+                    out.append(("Wrote " if n == "Write" else "Edited ") + _short(i.get("file_path", "")))
+                elif n == "Grep":
+                    out.append('Searched for "%s"' % str(i.get("pattern", ""))[:60])
+                elif n == "Glob":
+                    out.append("Listed " + str(i.get("pattern", ""))[:60])
+                elif n == "Bash":
+                    out.append("Ran " + str(i.get("command", ""))[:70])
+                else:
+                    out.append(n)
+            elif c.get("type") == "text" and c.get("text", "").strip():
+                out.append("Note: " + c["text"].strip().splitlines()[0][:110])
+    return {"count": len(out), "last": out[-limit:]}
+
+
+def _final_text(d):
+    for ev in reversed(_events(d)):
+        if ev.get("type") == "result":
+            return ev.get("result") or ""
+    return ""
+
+
 def _finish(rec, code):
     d = WS / rec["dir"]
-    log = (d / "run.log").read_text(errors="replace") if (d / "run.log").is_file() else ""
+    raw = (d / "run.log").read_text(errors="replace") if (d / "run.log").is_file() else ""
+    log = _final_text(d) or raw
     if not (d / "result.md").is_file() and code == 0 and log.strip():
         (d / "result.md").write_text(log.strip() + "\n")
     ok = code == 0 and (d / "result.md").is_file()
@@ -243,7 +318,8 @@ def run_one(rec, runner=None):
     else:
         (d / "exit.txt").unlink(missing_ok=True)
         dirs = sorted({os.path.realpath(WS / x) for x in ("runs", "brands")})   # the data folders are often links
-        cmd = ["claude", "-p", prompt_for(rec), "--add-dir", *dirs, "--allowedTools", *TOOLS]
+        cmd = ["claude", "-p", prompt_for(rec), "--output-format", "stream-json", "--verbose",
+               "--add-dir", *dirs, "--allowedTools", *TOOLS]
         wrapper = 'cd "$1" && shift && "$@" > "$OUT/run.log" 2>&1; echo $? > "$OUT/exit.txt"'
         try:
             pr = subprocess.Popen(["/bin/sh", "-c", wrapper, "ask", str(WS), *cmd], start_new_session=True,

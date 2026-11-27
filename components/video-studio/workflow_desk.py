@@ -345,7 +345,8 @@ def brands():
                      if not p.name.startswith((".", "_")) and p.stem not in ("README", "DRIVE-INDEX")
                      and (p.is_dir() or p.suffix == ".md")})
         op = _read(d / "operations/brand.json")
-        out.append({"id": d.name, "label": (op.get("label") if isinstance(op, dict) else None) or d.name,
+        lab = op.get("label") if isinstance(op, dict) else None
+        out.append({"id": d.name, "label": lab if lab and "<" not in lab else d.name,
                     "avatars": av, "products": pr, "winner": (d / "winner.json").is_file()})
     return out
 
@@ -679,8 +680,9 @@ def live_ads(brand):
         c = calls.get(str(a.get("ad_id"))) or {}
         m = re.search(r"brief-(\d{4})", a.get("ad_name") or "")
         s7, b7, s30, b30 = num(a.get("spend7")), num(a.get("buys7")), num(a.get("spend30")), num(a.get("buys30"))
+        s3 = num(a.get("spend3"))
         rows.append({"id": a.get("ad_id"), "name": a.get("ad_name"), "brief": m.group(1) if m else None,
-                     "campaign": a.get("campaign"), "spend7": s7, "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None,
+                     "campaign": a.get("campaign"), "spend3": s3, "active": s3 > 0, "spend7": s7, "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None,
                      "spend30": s30, "buys30": b30, "value30": num(a.get("value30")),
                      "cpa30": round(s30 / b30, 2) if b30 else None, "first_seen": a.get("first_seen"),
                      "call": c.get("action"), "why": c.get("why"), "break_even": c.get("break_even")})
@@ -747,6 +749,80 @@ def knowledge_ask(h, data):
     except (BrokenPipeError, ConnectionResetError):
         pass
     return None
+
+
+def brief_view(brand, number):
+    """One brief as it went out: every batch's own files (served by the approval page), where each ad goes, and the
+    live numbers of every ad that carries the brief number."""
+    idx = _read(WS / "runs/meta-upload" / brand / "ADS-INDEX.json")
+    b = next((x for x in (idx.get("briefs") or []) if str(x.get("number")) == str(number)), None) if isinstance(idx, dict) else None
+    la = live_ads(brand)
+    ads = [a for a in la["ads"] if a["brief"] == str(number)]
+    if not b and not ads:
+        return None
+    cards = []
+    for c in (b or {}).get("cards") or []:
+        folder = (c.get("folder") or "").replace("Shared Assets/meta/", "", 1).strip("/")
+        media = []
+        for f in c.get("files") or []:
+            name = f.get("asset") or ""
+            if not name or not folder:
+                continue
+            kind = "video" if name.lower().endswith((".mp4", ".mov")) else "image"
+            media.append({"name": name, "kind": kind, "src": "/media/%s/%s" % (folder, name), "thumb": "/thumb/%s/%s" % (folder, name)})
+        cards.append({"ad_name": c.get("ad_name"), "state": c.get("state"), "lane": c.get("lane"), "format": c.get("format"),
+                      "made": c.get("made"), "live": c.get("live"), "media": media,
+                      "goes": [{"ad_id": m.get("ad_id"), "name": m.get("meta_ad_name"), "ad_set": m.get("ad_set"),
+                                "campaign": m.get("campaign")} for m in c.get("meta_ads") or []]})
+    keep = ("product", "avatar", "sub_avatar", "angle", "lanes", "state", "first_made", "last_change")
+    return {"number": str(number), "brief": {k: (b or {}).get(k) for k in keep}, "cards": cards, "ads": ads,
+            "rule": la.get("rule"), "through": (la.get("money") or {}).get("through")}
+
+
+def pages(brand):
+    """The brand's landing pages: its funnels (brands/<brand>/web/funnels/funnels.json) and, for every page a live ad
+    points at (the last part of a briefed ad's name), that page's numbers from the warehouse copy."""
+    f = _read(WS / "brands" / brand / "web/funnels/funnels.json")
+    funnels = []
+    for x in (f.get("funnels") or []) if isinstance(f, dict) else []:
+        funnels.append({"id": x.get("id"), "name": (x.get("name") or x.get("id") or "").split(" — ")[0],
+                        "status": x.get("status"), "url": x.get("url"), "product": x.get("product"),
+                        "pages": len(x.get("page_ids") or x.get("pages") or [])})
+    by = {}
+    for a in live_ads(brand)["ads"]:
+        m = re.search(r"_batch-[^_]+_(.+)$", a["name"] or "")
+        if not m:
+            continue
+        g = by.setdefault(m.group(1), {"page": m.group(1), "ads": 0, "briefs": set(), "spend7": 0.0, "buys7": 0.0,
+                                       "spend30": 0.0, "buys30": 0.0, "value30": 0.0, "active": False})
+        g["ads"] += 1
+        g["active"] = g["active"] or a["active"]
+        if a["brief"]:
+            g["briefs"].add(a["brief"])
+        for k in ("spend7", "buys7", "spend30", "buys30", "value30"):
+            g[k] += a[k]
+    rows = []
+    for g in by.values():
+        g["briefs"] = sorted(g["briefs"])
+        rows.append(g)
+    rows.sort(key=lambda g: -g["spend30"])
+    return {"funnels": funnels, "pages": rows}
+
+
+def hidden(brand):
+    h = _read(WS / "runs/studio-asks" / brand / "hidden.json")
+    return h if isinstance(h, list) else []
+
+
+def hide(brand, item, on=True):
+    """The owner's "Done, hide it" on a production row: kept in the Studio's own list, nothing else is touched."""
+    if not SAFE.match(brand or "") or not item or len(item) > 300:
+        raise ValueError("bad item")
+    h = [x for x in hidden(brand) if x != item] + ([item] if on else [])
+    p = WS / "runs/studio-asks" / brand / "hidden.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(h, indent=1))
+    return {"hidden": h}
 
 
 def vary_candidates(la, n=6):
@@ -1012,6 +1088,13 @@ def handle(h, method, parts, query, body):
                 return h.send(404, {"error": "no such page"})
             if api == ["ads"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, live_ads(q["brand"]))
+            if api == ["brief"] and SAFE.match(q.get("brand", "")) and re.fullmatch(r"\d{3,5}", q.get("n", "")):
+                bv = brief_view(q["brand"], q["n"])
+                return h.send(200, bv) if bv else h.send(404, {"error": "no brief with that number for this brand"})
+            if api == ["hidden"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, {"hidden": hidden(q["brand"])})
+            if api == ["pages"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, pages(q["brand"]))
             if api == ["creators"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, creators(q["brand"]))
             if api == ["knowledge"]:
@@ -1062,6 +1145,8 @@ def handle(h, method, parts, query, body):
             if api == ["ask"]:                                  # a Studio button hands one job to Claude
                 import studio_asks as SA
                 return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by")))
+            if api == ["hide"]:
+                return h.send(200, hide(data.get("brand"), data.get("item"), data.get("on", True) is not False))
             if api == ["taste"]:                                # the owner's "Use this" / "Discard" on a taste draft
                 import studio_asks as SA
                 return h.send(200, SA.use_taste(data.get("brand"), data.get("kind"), bool(data.get("use"))))
