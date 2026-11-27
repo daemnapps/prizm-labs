@@ -686,6 +686,16 @@
    "basis": "draft"
   },
   {
+   "path": "components/brand-intake",
+   "kind": "tool",
+   "does": "Indexes a brand's Google Drive and website and maps every file to the brand-folder blank it can fill",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/records",
    "kind": "definitions",
    "does": "Every record the system keeps, one name each, linked by id",

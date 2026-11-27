@@ -1,0 +1,28 @@
+{
+ "_what": "Which brand-folder blank a found file can fill. Each slot is one onboarding item (brands/_TEMPLATE/onboarding.json); `words` are matched against the file's whole Drive path (folders count), `kinds` against its type. A file can fit more than one slot; the plan ranks them. Change matching here, never in code.",
+ "kinds": {
+  "image": ["image/"],
+  "video": ["video/"],
+  "doc": ["application/vnd.google-apps.document", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml", "text/"],
+  "sheet": ["application/vnd.google-apps.spreadsheet", "text/csv", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml"],
+  "deck": ["application/vnd.google-apps.presentation", "application/vnd.openxmlformats-officedocument.presentationml", "application/vnd.ms-powerpoint"],
+  "form": ["application/vnd.google-apps.form"],
+  "font": ["font/", "application/x-font", "application/font"],
+  "design": ["image/svg", "application/postscript", "image/vnd.adobe.photoshop", "application/illustrator"]
+ },
+ "slots": [
+  {"id": "look", "name": "Logo, colours, fonts", "fills": ["identity/", "identity/palette.md", "identity/fonts.md"], "kinds": ["image", "design", "font", "doc", "deck"], "words": ["logo", "brand guide", "brand book", "guidelines", "style guide", "brand kit", "palette", "colors", "colours", "font", "typography", "identity"]},
+  {"id": "story", "name": "The brand's story", "fills": ["story.md"], "kinds": ["doc", "deck"], "words": ["about", "story", "founder", "mission", "origin", "history", "our why", "manifesto"]},
+  {"id": "position", "name": "Who it's for and why it works", "fills": ["position.md"], "kinds": ["doc", "deck"], "words": ["position", "positioning", "messaging", "pitch", "deck", "strategy", "brief", "usp", "value prop"]},
+  {"id": "core-message", "name": "The one line to remember", "fills": ["strategy/core-message.json"], "kinds": ["doc", "deck"], "words": ["tagline", "slogan", "messaging", "core message", "copy"]},
+  {"id": "best-seller", "name": "Products and their photos", "fills": ["products/<product>/product.md", "products/<product>/images/"], "kinds": ["image", "doc", "sheet"], "words": ["product", "packshot", "pack shot", "pdp", "sku", "catalog", "catalogue", "ingredients", "formula", "spec", "amazon listing"]},
+  {"id": "offer", "name": "The deal it leads with", "fills": ["offers/offers.json", "strategy/offer-page.json"], "kinds": ["doc", "sheet", "deck"], "words": ["offer", "pricing", "price", "promo", "bundle", "discount", "sale", "bfcm", "black friday", "subscription"]},
+  {"id": "avatar", "name": "Who buys", "fills": ["core-avatars/avatars.json", "core-avatars/<avatar>/profile.md"], "kinds": ["doc", "deck", "sheet"], "words": ["avatar", "persona", "customer", "icp", "audience", "target", "research", "demographic", "interview"]},
+  {"id": "reviews", "name": "Reviews and testimonials", "fills": ["customer/", "core-avatars/<avatar>/language/"], "kinds": ["sheet", "doc", "image", "video"], "words": ["review", "testimonial", "feedback", "trustpilot", "judge.me", "junip", "okendo", "yotpo", "loox", "stamped", "ugc testimonial"]},
+  {"id": "surveys-support", "name": "Surveys and support", "fills": ["operations/language-pulls.json"], "kinds": ["sheet", "form"], "words": ["survey", "form responses", "responses", "questionnaire", "post purchase", "exit survey", "refund", "support", "tickets", "nps"]},
+  {"id": "competitors", "name": "Competitors", "fills": ["competitive/"], "kinds": ["doc", "sheet", "image", "video", "deck"], "words": ["competitor", "competition", "competitive", "vs", "swipe", "inspo", "inspiration", "benchmark"]},
+  {"id": "past-ads", "name": "Ads that did well", "fills": ["existing-content/top/"], "kinds": ["video", "image"], "words": ["ad", "ads", "creative", "creatives", "winning", "winner", "top", "meta", "facebook", "tiktok", "hook", "static", "ugc"]},
+  {"id": "brand-assets", "name": "Footage and photos", "fills": ["footage-library.json (then the asset index)"], "kinds": ["video", "image"], "words": ["footage", "b-roll", "broll", "raw", "shoot", "photoshoot", "lifestyle", "content", "video", "photos", "assets"]},
+  {"id": "creators", "name": "Creators and UGC people", "fills": ["creators/"], "kinds": ["video", "image", "sheet", "doc"], "words": ["creator", "creators", "ugc", "influencer", "ambassador", "affiliate", "talent"]}
+ ]
+}
