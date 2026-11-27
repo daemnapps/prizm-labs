@@ -2794,6 +2794,9 @@ class H(BaseHTTPRequestHandler):
             return proxy(self, *got)
         u = urlparse(self.path)
         parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
+        if parts == ["desk"] or parts[:2] == ["api", "desk"]:    # the workflow desk: every video workflow, one page
+            import workflow_desk as WD
+            return WD.handle(self, "GET", parts, u.query, None)
         if not parts or parts == ["studio"]:
             return self.send(200, open(os.path.join(HERE, "studio.html"), "rb").read(), "text/html; charset=utf-8")
         if len(parts) == 2 and parts[0] == "creator-hub" and re.fullmatch(r"[a-z0-9-]+", parts[1]):
@@ -2978,6 +2981,9 @@ class H(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
         body = self.rfile.read(int(self.headers.get("Content-Length") or 0) or 0)
+        if parts[:2] == ["api", "desk"]:                        # the workflow desk (workflow_desk.py)
+            import workflow_desk as WD
+            return WD.handle(self, "POST", parts, u.query, body)
         try:
             if len(parts) == 3 and parts[:2] == ["api", "handoff"]:
                 q = json.loads(body or b"{}") or {}                      # the lane picked at Produce (16 Nov)

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Workflows</title>
+<style>
+/* The workflow desk: one place for every video workflow, start to approval page. Same tokens as the Studio so it
+   reads as one tool; the one loud thing is the price gate on the line, the only stop. */
+:root{--bg:#eceee9;--panel:#fff;--ink:#16211c;--dim:#5f6c65;--line:#d6dcd6;--green:#153c2b;--accent:#1d7a55;--soft:#f4f6f2;--hl:#e3efe8;
+  --gate:#b25f00;--gate-soft:#fff1d9;--gate-ink:#5c3300;--bad:#a8321e;--bad-soft:#fbe7e2}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a18;--panel:#222826;--ink:#eef2ee;--dim:#a3aea8;--line:#38413d;--green:#2f7d58;--accent:#52c79a;--soft:#1c211f;--hl:#1f3329;--gate:#f2a640;--gate-soft:#3a2a12;--gate-ink:#ffd9a3;--bad:#ff8c76;--bad-soft:#3a1e19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161a18;--panel:#222826;--ink:#eef2ee;--dim:#a3aea8;--line:#38413d;--green:#2f7d58;--accent:#52c79a;--soft:#1c211f;--hl:#1f3329;--gate:#f2a640;--gate-soft:#3a2a12;--gate-ink:#ffd9a3;--bad:#ff8c76;--bad-soft:#3a1e19;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+/* left: the pieces */
+#rail{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;position:sticky;top:0}
+.logo{display:flex;align-items:center;gap:9px;padding:16px 16px 12px;font-weight:800;font-size:15px}
+.logo i{width:26px;height:26px;border-radius:7px;background:var(--green);display:grid;place-items:center;color:#fff;font-style:normal}
+.logo a{margin-left:auto;font-size:12px;font-weight:600;color:var(--dim);text-decoration:none}
+#new{margin:0 12px 10px;border:0;border-radius:9px;background:var(--green);color:#fff;font-weight:700;padding:10px}
+#brandf{margin:0 12px 8px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--soft)}
+#list{flex:1;overflow:auto;padding:0 8px 12px}
+.grp{font-size:12px;font-weight:700;color:var(--dim);padding:12px 8px 4px}
+.pc{display:block;width:100%;text-align:left;border:0;background:none;border-radius:9px;padding:9px 10px;margin-bottom:2px}
+.pc:hover{background:var(--soft)}.pc.on{background:var(--hl)}
+.pc b{display:block;font-size:13.5px;line-height:1.3;overflow-wrap:anywhere}
+.pc span{font-size:12px;color:var(--dim)}
+.pc .gate{color:var(--gate);font-weight:700}
+/* main */
+main{min-width:0;padding:22px 28px 60px;max-width:1180px}
+h1{font-size:24px;line-height:1.2;margin:0 0 2px;font-weight:800;overflow-wrap:anywhere}
+.sub{color:var(--dim);margin:0 0 18px}
+.sub b{color:var(--ink)}
+/* the three things on top */
+.top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.blk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.blk h3{margin:0 0 6px;font-size:12.5px;color:var(--dim);font-weight:700}
+.blk p{margin:0 0 10px;font-weight:650;font-size:15px;line-height:1.35}
+.blk.gatehot{background:var(--gate-soft);border-color:var(--gate)}
+.blk.gatehot h3,.blk.gatehot p{color:var(--gate-ink)}
+.btn{border:0;border-radius:8px;padding:8px 13px;font-weight:700;background:var(--accent);color:#fff}
+.btn.ghost{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.btn.gate{background:var(--gate);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.copy{display:flex;gap:6px;align-items:flex-start}
+.copy code{flex:1;background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:6px 8px;font:12.5px/1.4 ui-monospace,Menlo,monospace;white-space:normal}
+/* the line map: the memorable thing */
+.map{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 8px;margin-bottom:18px;overflow-x:auto}
+.map h2{font-size:15px;margin:0 0 14px}
+.track{display:flex;align-items:flex-start;min-width:max-content;position:relative;padding-top:4px}
+.st{width:86px;flex:none;border:0;background:none;padding:0 4px 8px;text-align:center;position:relative}
+.st::before{content:"";position:absolute;top:13px;left:-50%;right:50%;height:4px;background:var(--line);z-index:0}
+.st:first-child::before{display:none}
+.st.done::before,.st.now::before{background:var(--accent)}
+.dot{position:relative;z-index:1;margin:0 auto 7px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--panel);border:3px solid var(--line);font-size:11.5px;font-weight:800;color:var(--dim)}
+.st.done .dot{background:var(--accent);border-color:var(--accent);color:#fff}
+.st.now .dot{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 5px var(--hl)}
+.st.quote .dot{border-radius:7px;transform:rotate(45deg);width:30px;height:30px;border-color:var(--gate);color:var(--gate);background:var(--gate-soft)}
+.st.quote .dot em{transform:rotate(-45deg);font-style:normal}
+.st.quote.done .dot{background:var(--gate);color:#fff}
+.st.quote.now .dot{box-shadow:0 0 0 6px var(--gate-soft)}
+.st .nm{display:block;font-size:11.5px;line-height:1.25;color:var(--dim)}
+.st.now .nm,.st.sel .nm{color:var(--ink);font-weight:700}
+.st.sel .dot{outline:2px solid var(--ink);outline-offset:3px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin-top:4px}
+/* the selected station */
+.stn{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.stn header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.stn header h2{margin:0;font-size:19px}
+.pill{font-size:12px;font-weight:700;border-radius:20px;padding:2px 9px;background:var(--soft);color:var(--dim);border:1px solid var(--line)}
+.pill.ok{background:var(--hl);color:var(--accent);border-color:transparent}
+.pill.now{background:var(--accent);color:#fff;border-color:transparent}
+.pill.money{background:var(--gate-soft);color:var(--gate-ink);border-color:var(--gate)}
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+.cols h3{font-size:13px;margin:0 0 8px;color:var(--dim)}
+.told{white-space:pre-wrap;font-size:13.5px;line-height:1.55;max-height:280px;overflow:auto;background:var(--soft);border-radius:9px;padding:10px 12px;margin:0}
+.outs{list-style:none;margin:0;padding:0}
+.outs li{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.outs li:last-child{border-bottom:0}
+.mk{width:18px;height:18px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:11px;font-weight:800}
+.mk.y{background:var(--accent);color:#fff}.mk.n{border:2px solid var(--line)}
+.outs button{border:0;background:none;color:var(--accent);font-weight:600;padding:0;text-align:left;overflow-wrap:anywhere}
+.outs .gap{color:var(--dim)}
+table.wr{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+table.wr th{text-align:left;font-size:12px;color:var(--dim);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.wr td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.wr button{border:1px solid var(--line);background:var(--soft);border-radius:6px;padding:2px 8px;font-size:12px}
+.stat-done{color:var(--accent);font-weight:700}.stat-held{color:var(--bad);font-weight:700}.stat-skip{color:var(--dim)}
+/* the price */
+.price{background:var(--gate-soft);border:2px solid var(--gate);border-radius:14px;padding:16px 18px;margin-top:14px;color:var(--gate-ink)}
+.price h3{margin:0 0 10px;font-size:16px;color:var(--gate-ink)}
+.models{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.model{flex:1;min-width:180px;border:2px solid transparent;background:var(--panel);color:var(--ink);border-radius:11px;padding:10px 12px;text-align:left}
+.model.on{border-color:var(--gate)}
+.model big{display:block;font-size:26px;font-weight:800;line-height:1.1}
+.model small{color:var(--dim)}
+.go{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.go label{display:block;font-size:12.5px;font-weight:700}
+.go input,.go textarea{width:100%;margin-top:3px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:var(--panel)}
+.go textarea{grid-column:1/-1;min-height:58px}
+.go .full{grid-column:1/-1}
+.done-go{font-weight:700}
+/* pictures and clips */
+.gal{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.gal h2{font-size:15px;margin:0 0 4px}
+.gal h3{font-size:13px;color:var(--dim);margin:14px 0 8px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.thumbs a{display:block;aspect-ratio:9/16;border-radius:8px;overflow:hidden;background:var(--soft);border:1px solid var(--line)}
+.thumbs img,.thumbs video{width:100%;height:100%;object-fit:cover;display:block}
+.links{display:flex;gap:10px;flex-wrap:wrap}
+.empty{color:var(--dim)}
+/* the reader */
+#reader{position:fixed;inset:0 0 0 auto;width:min(760px,100%);background:var(--panel);border-left:1px solid var(--line);box-shadow:-12px 0 40px rgba(0,0,0,.18);transform:translateX(105%);transition:transform .18s ease;display:flex;flex-direction:column;z-index:20}
+#reader.open{transform:none}
+#reader header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+#reader header b{flex:1;overflow-wrap:anywhere}
+#reader pre{flex:1;margin:0;overflow:auto;padding:16px 20px;white-space:pre-wrap;font:13px/1.55 ui-monospace,Menlo,monospace}
+/* new piece */
+.newp{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;max-width:820px}
+.newp h2{margin:0 0 4px}
+.newp ol{list-style:none;margin:16px 0 0;padding:0;counter-reset:s}
+.newp ol>li{counter-increment:s;margin-bottom:20px}
+.newp ol>li>h3{margin:0 0 8px;font-size:14.5px}
+.newp ol>li>h3::before{content:counter(s);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:12px;margin-right:8px}
+.choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.choice button{text-align:left;border:2px solid var(--line);background:var(--soft);border-radius:11px;padding:12px 14px}
+.choice button b{display:block;font-size:15px}
+.choice button span{font-size:13px;color:var(--dim)}
+.choice button.on{border-color:var(--accent);background:var(--hl)}
+.choice button:disabled{opacity:.45;cursor:default}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.fields label{font-size:12.5px;font-weight:700}
+.fields select,.fields input{display:block;width:100%;margin-top:3px;border:1px solid var(--line);border-radius:8px;padding:8px 9px;background:var(--panel)}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:9px;padding:9px 12px;margin:10px 0;font-weight:600}
+.job{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.job pre{max-height:220px;overflow:auto;background:var(--soft);border-radius:8px;padding:8px 10px;font:12px/1.45 ui-monospace,Menlo,monospace;white-space:pre-wrap;margin:8px 0 0}
+#menu{display:none}
+@media(max-width:860px){
+  body{grid-template-columns:1fr}
+  #rail{position:fixed;inset:0 auto 0 0;width:280px;transform:translateX(-100%);transition:transform .18s;z-index:30}
+  #rail.open{transform:none}
+  #menu{display:inline-block;margin-bottom:12px}
+  main{padding:16px}
+  .top{grid-template-columns:1fr}
+  .cols,.go{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<nav id="rail" aria-label="Pieces">
+  <div class="logo"><i>▶</i>Video workflows<a href="/">Studio</a></div>
+  <button id="new" type="button">Start a new piece</button>
+  <select id="brandf" aria-label="Brand"><option value="">Every brand</option></select>
+  <div id="list"></div>
+</nav>
+<main id="main"><button id="menu" class="btn ghost" type="button">Pieces</button><div id="view"><p class="empty">Loading…</p></div></main>
+<aside id="reader" aria-label="File reader" aria-hidden="true"><header><b id="rtitle"></b><button class="btn ghost" id="rclose" type="button">Close</button></header><pre id="rtext"></pre></aside>
+<script>
+const $=s=>document.querySelector(s);
+const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const api=(p,o)=>fetch('/api/desk/'+p,o).then(async r=>{const j=await r.json().catch(()=>({error:'no answer'}));if(!r.ok)throw new Error(j.error||r.status);return j});
+const post=(p,b)=>api(p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});
+let PIECES=[],CUR=null,SEL=null,POLL=null,BRANDS=null,LINES=null;
+const STATE={waiting:'waiting',complete:'finished'};
+
+function where(p){
+  if(p.state==='complete')return 'Finished';
+  if(p.quote)return '<span class="gate">Price waiting for your go</span>';
+  return esc(p.next?('Now: '+p.next):'Not started');
+}
+function renderList(){
+  const bf=$('#brandf').value, rows=PIECES.filter(p=>!bf||p.brand===bf);
+  const live=rows.filter(p=>p.live_line), other=rows.filter(p=>!p.live_line);
+  const one=p=>`<button class="pc ${CUR&&CUR.brand===p.brand&&CUR.label===p.label?'on':''}" data-b="${esc(p.brand)}" data-l="${esc(p.label)}"><b>${esc(p.label.replace(p.brand+'-','').replace(p.brand+'_',''))}</b><span>${esc(p.line||p.format)} · ${esc(p.brand)}</span><br><span>${where(p)}</span></button>`;
+  $('#list').innerHTML=(live.length?'<div class="grp">On a live line</div>'+live.map(one).join(''):'<p class="empty" style="padding:8px">No pieces yet. Start one.</p>')+
+    (other.length?'<div class="grp">Older lines (parked)</div>'+other.map(one).join(''):'');
+  $('#list').querySelectorAll('.pc').forEach(b=>b.onclick=()=>{location.hash=b.dataset.b+'/'+b.dataset.l;$('#rail').classList.remove('open')});
+}
+async function loadList(){
+  const r=await api('pieces');PIECES=r.pieces;
+  const brands=[...new Set(PIECES.map(p=>p.brand))].sort(), cur=$('#brandf').value;
+  $('#brandf').innerHTML='<option value="">Every brand</option>'+brands.map(b=>`<option ${b===cur?'selected':''}>${esc(b)}</option>`).join('');
+  renderList();
+}
+function reader(path,title){
+  $('#rtitle').textContent=title||path;$('#rtext').textContent='Opening…';
+  $('#reader').classList.add('open');$('#reader').setAttribute('aria-hidden','false');
+  api('text?path='+encodeURIComponent(path)).then(t=>{$('#rtext').textContent=t.text+(t.cut?'\n\n… (the rest is longer than the page shows)':'')}).catch(e=>{$('#rtext').textContent=e.message});
+}
+$('#rclose').onclick=()=>{$('#reader').classList.remove('open');$('#reader').setAttribute('aria-hidden','true')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#rclose').onclick()});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-read]');if(b){e.preventDefault();reader(b.dataset.read,b.dataset.title)}
+  const c=e.target.closest('[data-copy]');if(c){navigator.clipboard&&navigator.clipboard.writeText(c.dataset.copy);c.textContent='Copied';setTimeout(()=>c.textContent='Copy',1400)}});
+
+function top3(p){
+  const now=p.stations.find(s=>s.status==='now');
+  const pr=now&&now.quote?now.price:null;
+  let a,b,c;
+  if(p.state==='complete'){a=`<div class="blk"><h3>What needs you</h3><p>Nothing. This piece is finished.</p></div>`}
+  else if(pr&&pr.ready&&!pr.lane_open){a=`<div class="blk gatehot"><h3>What needs you</h3><p>The price is ready: ${esc(pr.total_credits??pr.total_usd)} ${pr.total_credits!=null?'credits':'dollars'}. Nothing is paid until you give the go.</p><button class="btn gate" type="button" data-sel="${esc(now.id)}">See the price</button></div>`}
+  else{a=`<div class="blk"><h3>What needs you</h3><p>Nothing right now. The run makes its own calls; the only stop is the price.</p></div>`}
+  if(!now){b=`<div class="blk"><h3>Your next click</h3><p>Send it to the approval page when it is filed.</p><a class="btn" href="/approve/">Open the approval page</a></div>`}
+  else if(now.executor==='command'){b=`<div class="blk"><h3>Your next click</h3><p>${esc(now.name)} runs by itself.</p><button class="btn" type="button" id="moveon">Move on</button></div>`}
+  else if(now.quote&&pr&&pr.ready){b=`<div class="blk"><h3>Your next click</h3><p>Give the go on the price below, or leave it.</p><button class="btn gate" type="button" data-sel="${esc(now.id)}">Go to the price</button></div>`}
+  else{b=`<div class="blk"><h3>Your next click</h3><p>${esc(now.name)} is Claude's to do. Say this to Claude:</p><div class="copy"><code>${esc(p.ask||'')}</code><button class="btn ghost" type="button" data-copy="${esc(p.ask||'')}">Copy</button></div></div>`}
+  const lastDone=[...p.stations].reverse().find(s=>s.status==='done'&&s.outputs.some(o=>!o.missing));
+  const look=lastDone?lastDone.outputs.find(o=>!o.missing):null;
+  c=look?`<div class="blk"><h3>Your next look</h3><p>${esc(lastDone.name)}: ${esc(look.name)}</p><button class="btn ghost" type="button" data-read="${esc(look.path)}" data-title="${esc(lastDone.name+' · '+look.name)}">Read it</button></div>`
+       :`<div class="blk"><h3>Your next look</h3><p>Nothing made yet.</p></div>`;
+  return `<section class="top">${a}${b}${c}</section>`;
+}
+function mapHtml(p){
+  return `<section class="map"><h2>The ${esc(p.line)} line</h2><div class="track" role="list">`+p.stations.map(s=>
+    `<button role="listitem" class="st ${s.status} ${s.quote?'quote':''} ${SEL===s.id?'sel':''}" data-st="${esc(s.id)}" title="${esc(s.name)}"><span class="dot"><em>${s.quote?'$':s.status==='done'?'✓':s.n}</em></span><span class="nm">${esc(s.name)}</span></button>`).join('')+
+    `</div><div class="legend"><span>✓ done</span><span>ringed: where it is now</span><span>$ the price, the only stop</span></div></section>`;
+}
+function plainWhy(r){r=String(r||'');
+  const m=[[/^Active assistant/,'Waiting for Claude to do this step.'],[/^Paid station/,'Paid: it waits for your go on the price.'],
+    [/^Previous attempt failed/,'The last try stopped. Claude looks at why before trying again.'],[/^Existing output found/,'Already made. Claude checks it belongs to this piece, then moves on.'],
+    [/^Component failed/,'It stopped. Claude looks at why.'],[/^Would run/,'Ready to run by itself: press Move on.'],[/^missing input: (\w+)/,'It needs the $1 from an earlier step first.'],
+    [/^THE ONE STOP/,'The price, waiting for your go.']];
+  for(const [re,t] of m)if(re.test(r))return r.replace(re,t).split('\n')[0].replace(/^(.*?\.).*/,'$1');return r}
+function stat(s){return s==='done'?'<span class="stat-done">done</span>':s==='held'||s==='error'?'<span class="stat-held">held</span>':s==='skipped'?'<span class="stat-skip">skipped</span>':esc(s||'not yet')}
+function writingTable(w){
+  if(!w||!w.length)return '';
+  return `<h3 style="margin-top:16px">Every writing stage: what it was told, what was sent, what came out</h3><table class="wr"><thead><tr><th>Stage</th><th>State</th><th>The prompt</th><th>As sent</th><th>What came out</th></tr></thead><tbody>`+
+    w.map(x=>`<tr><td>${esc(x.name)}</td><td>${stat(x.status)}${x.why?'<br><small>'+esc(x.why)+'</small>':''}</td>
+    <td>${x.prompt?`<button type="button" data-read="${esc(x.prompt)}" data-title="${esc(x.name+' · the prompt')}">Prompt</button>`:'—'}</td>
+    <td>${x.sent?`<button type="button" data-read="${esc(x.sent)}" data-title="${esc(x.name+' · as sent')}">As sent</button>`:'—'}</td>
+    <td>${x.out?`<button type="button" data-read="${esc(x.out)}" data-title="${esc(x.name+' · output')}">Output</button>`:'—'}</td></tr>`).join('')+'</tbody></table>';
+}
+function priceHtml(p,s){
+  const pr=s.price||{};
+  if(!pr.ready)return `<div class="price"><h3>The price</h3><p>Not written yet. Claude prices it on every clip model right before it is shown here. Nothing paid runs before your go.</p></div>`;
+  if(pr.lane_open||s.status==='done'){const l=pr.lane||{};return `<div class="price"><h3>The go is on file</h3><p class="done-go">${esc(l.approved_by||'')} said “${esc(l.approved||'')}”, up to ${esc(l.cap_credits)} credits on ${esc(l.clip_model||'')}.</p></div>`}
+  const models=pr.models.length?pr.models:[{id:pr.clip_model||'the quote',credits:pr.total_credits??pr.total_usd,default:true}];
+  const cur=models.find(m=>m.default)||models[0];
+  return `<div class="price" id="price"><h3>The price: nothing is paid until you say go</h3>
+  ${pr.clips?`<p>${esc(pr.clips.count)} clips, ${esc(pr.clips.total_seconds)} seconds in all.${pr.sheets?' Sheets: '+esc(pr.sheets)+'.':''}</p>`:''}
+  ${pr.balance!=null?`<p>On the account now: <b>${esc(pr.balance)}</b> credits.</p>`:''}
+  <div class="models">${models.map(m=>`<button type="button" class="model ${m===cur?'on':''}" data-model="${esc(m.id)}" data-credits="${esc(m.credits)}"><big>${esc(m.credits)}</big><small>credits · ${esc(m.id)}${m.resolution?' · '+esc(m.resolution):''}${m.default?' · the default':''}</small></button>`).join('')}</div>
+  <form class="go" id="goform">
+    <label>Your name<input name="approved_by" required autocomplete="name"></label>
+    <label>The most it may spend (credits)<input name="cap" type="number" min="1" step="any" required value="${esc(cur.credits)}"></label>
+    <label class="full">Your go, in your own words<textarea name="said" required placeholder="go on this price"></textarea></label>
+    <input type="hidden" name="model" value="${esc(cur.id)}">
+    <div class="full"><button class="btn gate" type="submit">Give the go</button> <button class="btn ghost" type="button" data-read="${esc(pr.path)}" data-title="The price, in full">See the full price</button></div>
+  </form></div>`;
+}
+function stationHtml(p){
+  const s=p.stations.find(x=>x.id===SEL)||p.stations[0];
+  const pill=s.status==='done'?'<span class="pill ok">done</span>':s.status==='now'?'<span class="pill now">now</span>':'<span class="pill">later</span>';
+  const outs=s.outputs.length?`<ul class="outs">`+s.outputs.map(o=>o.gap?`<li><span class="mk n"></span><span class="gap">${esc(o.name)}: waits on an earlier station</span></li>`:
+    o.missing?`<li><span class="mk n"></span><span class="gap">${esc(o.name)}: not made yet</span></li>`:
+    `<li><span class="mk y">✓</span><button type="button" data-read="${esc(o.path)}" data-title="${esc(s.name+' · '+o.name)}">${esc(o.name)}</button></li>`).join('')+
+    (s.log?`<li><span class="mk y">≡</span><button type="button" data-read="${esc(s.log)}" data-title="${esc(s.name+' · what it printed')}">What it printed</button></li>`:'')+'</ul>':'<p class="empty">This station leaves no file of its own.</p>';
+  const chk=(p.checks||[]).filter(c=>s.id.startsWith(c.stage)||s.id===c.stage+'-check');
+  return `<section class="stn"><header><h2>${esc(s.n+'. '+s.name)}</h2>${pill}${s.quote?'':`<span class="pill">${esc(s.who)}</span>`}${s.paid?'<span class="pill money">paid, only after your go</span>':''}${s.quote?'<span class="pill money">the only stop</span>':''}</header>
+  ${s.status==='now'&&p.reason?`<p><b>Where it is:</b> ${esc(plainWhy(p.reason))}</p>`:''}
+  <div class="cols"><div><h3>What this station is told to do</h3><pre class="told">${esc(s.does||'(no instructions written)')}</pre>${s.command?`<p style="font-size:12px;color:var(--dim);margin:8px 0 0">It runs the existing tool for this step by itself.</p>`:''}</div>
+  <div><h3>What it made</h3>${outs}${chk.length?'<h3 style="margin-top:14px">Its check</h3><ul class="outs">'+chk.map(c=>`<li><span class="mk y">✓</span><button type="button" data-read="${esc(c.path)}" data-title="Check · ${esc(c.stage)}">Passed: ${esc(c.stage)}</button></li>`).join('')+'</ul>':''}</div></div>
+  ${writingTable(s.writing)}${s.quote?priceHtml(p,s):''}</section>`;
+}
+function galleryHtml(p){
+  const g=p.gallery||{},kinds=[['sheets','Sheets'],['clips','Clips and takes'],['versions','Versions'],['covers','Covers']];
+  const any=kinds.some(([k])=>g[k]);
+  const t=(k,n)=>g[k]?`<h3>${n} (${g[k+'_count']})</h3><div class="thumbs">`+g[k].map(m=>`<a href="/api/desk/media?path=${encodeURIComponent(m.path)}" target="_blank" rel="noopener" title="${esc(m.name)}">${m.video?`<video src="/api/desk/media?path=${encodeURIComponent(m.path)}#t=0.5" preload="metadata" muted></video>`:`<img loading="lazy" alt="${esc(m.name)}" src="/api/desk/media?path=${encodeURIComponent(m.path)}">`}</a>`).join('')+'</div>':'';
+  return `<section class="gal"><h2>Production, the edit and the approval page</h2>
+  ${any?kinds.map(([k,n])=>t(k,n)).join(''):'<p class="empty">No sheets, clips, versions or covers yet. They show here as they are made.</p>'}
+  <h3>Open</h3><div class="links"><a class="btn ghost" href="/">The Studio (edit, versions, covers)</a><a class="btn ghost" href="/approve/">The approval page</a>${p.next_md?`<button class="btn ghost" type="button" data-read="${esc(p.next_md)}" data-title="What the run asks for next">What the run asks for next</button>`:''}</div>
+  <p class="empty" style="margin-top:10px">The edit is HyperFrames in Claude's browser pane: when the edit is up, say “open the edit for ${esc(p.label)} in HyperFrames”.</p></section>`;
+}
+function jobHtml(j){
+  if(!j)return '';
+  return `<section class="job" id="job"><b>${esc(j.what)}: ${j.state==='running'?'working…':j.state==='finished'?'done':'stopped'}</b><pre>${esc(j.tail||'')}</pre></section>`;
+}
+async function openPiece(b,l,keepSel){
+  clearInterval(POLL);
+  $('#view').innerHTML='<p class="empty">Opening…</p>';
+  let p;try{p=await api('piece/'+encodeURIComponent(b)+'/'+encodeURIComponent(l))}catch(e){$('#view').innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
+  CUR=p;renderList();
+  if(p.error){$('#view').innerHTML=`<h1>${esc(l)}</h1><div class="err">${esc(p.error)}</div>`;return}
+  if(!keepSel||!p.stations.some(s=>s.id===SEL))SEL=p.now||p.stations[p.stations.length-1].id;
+  draw();
+  const running=(p.jobs||[]).find(j=>j.state==='running');if(running)watch(running.id);
+}
+function draw(lastJob){
+  const p=CUR;
+  $('#view').innerHTML=`<h1>${esc(p.label)}</h1><p class="sub"><b>${esc(p.line)}</b> · ${esc(p.brand)} · ${p.values.source==='own'?'our own story':p.values.source==='swipe'?'from a swipe':''}${p.values.winner?' · winner swipe':''}${p.live_line?'':' · a parked line, kept for the team'}</p>
+  ${p.runner_error?`<div class="err">The run could not say where it is: ${esc(p.runner_error)}</div>`:''}
+  <div id="jobslot">${jobHtml(lastJob)}</div>${top3(p)}${mapHtml(p)}${stationHtml(p)}${galleryHtml(p)}`;
+  bind();
+}
+function bind(){
+  document.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{SEL=b.dataset.st;draw()});
+  document.querySelectorAll('[data-sel]').forEach(b=>b.onclick=()=>{SEL=b.dataset.sel;draw();setTimeout(()=>$('#price')&&$('#price').scrollIntoView({behavior:'smooth'}),30)});
+  document.querySelectorAll('.model').forEach(m=>m.onclick=()=>{document.querySelectorAll('.model').forEach(x=>x.classList.remove('on'));m.classList.add('on');
+    const f=$('#goform');f.model.value=m.dataset.model;f.cap.value=m.dataset.credits});
+  const mo=$('#moveon');if(mo)mo.onclick=async()=>{mo.disabled=true;try{const j=await post('piece/'+CUR.brand+'/'+CUR.label+'/run');watch(j.id)}catch(e){mo.disabled=false;alert(e.message)}};
+  const f=$('#goform');if(f)f.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));
+    const btn=f.querySelector('[type=submit]');btn.disabled=true;
+    try{const j=await post('piece/'+CUR.brand+'/'+CUR.label+'/go',d);watch(j.id)}catch(err){btn.disabled=false;f.insertAdjacentHTML('beforebegin',`<div class="err">${esc(err.message)}</div>`)}};
+}
+function watch(id){
+  clearInterval(POLL);
+  const tick=async()=>{let j;try{j=await api('job/'+id)}catch(e){clearInterval(POLL);return}
+    $('#jobslot').innerHTML=jobHtml(j);
+    if(j.state!=='running'){clearInterval(POLL);const k=CUR;await loadList();await openPiece(k.brand,k.label,true);$('#jobslot').innerHTML=jobHtml(j)}};
+  tick();POLL=setInterval(tick,2500);
+}
+
+/* a new piece */
+async function newPiece(){
+  clearInterval(POLL);CUR=null;renderList();
+  if(!BRANDS)BRANDS=(await api('brands')).brands;
+  if(!LINES)LINES=await api('lines');
+  const S={format:null,start:null};
+  const render=async()=>{
+    const brand=$('#nb')?$('#nb').value:(BRANDS[0]||{}).id;
+    const b=BRANDS.find(x=>x.id===brand)||{avatars:[],products:[]};
+    let extra='';
+    if(S.start==='own')extra=`<label>The person (avatar)<select id="na">${b.avatars.map(a=>`<option>${esc(a)}</option>`).join('')}</select></label>
+      <label>The product<select id="npr">${b.products.map(a=>`<option>${esc(a)}</option>`).join('')}</select></label>
+      <label>The story preset<input id="npre" placeholder="leave empty: the next fresh one is picked"></label>`;
+    else if(S.start){const td=(await api('teardowns?brand='+encodeURIComponent(brand))).teardowns;
+      extra=`<label style="grid-column:1/-1">The swipe (already torn down)<select id="ntd">${td.length?td.map(t=>`<option value="${esc(t.label)}">${esc(t.label)}${t.brief?' · has a brief':''}</option>`).join(''):'<option value="">No torn-down swipes for this brand yet</option>'}</select></label>
+      <p class="empty" style="grid-column:1/-1;margin:0">A new swipe link? Say to Claude: “swipe this for ${esc(brand)}: &lt;the link&gt;”. It shows up here once it is torn down.</p>`}
+    $('#view').innerHTML=`<section class="newp"><h2>Start a new piece</h2><p class="sub" style="margin:0">Free until the price. The run writes and checks everything itself, then stops once: at the price, for your go.</p>
+    <ol><li><h3>Pick the line</h3><div class="choice">${LINES.lines.map(l=>`<button type="button" data-f="${esc(l.id)}" class="${S.format===l.id?'on':''}"><b>${esc(l.name)}</b><span>${esc(l.what)}</span></button>`).join('')}</div></li>
+    <li><h3>How it starts</h3><div class="choice">${Object.entries(LINES.starts).map(([k,n])=>`<button type="button" data-s="${k}" class="${S.start===k?'on':''}" ${k==='winner'&&!b.winner?'disabled title="This brand has no winner on file yet"':''}><b>${esc(n)}</b><span>${k==='swipe'?'A swipe that already works, torn down to its beats.':k==='own'?'No swipe: a story preset gives the beats.':'The brand winner read beside a swipe you picked.'}</span></button>`).join('')}</div></li>
+    <li><h3>The details</h3><div class="fields"><label>Brand<select id="nb">${BRANDS.map(x=>`<option ${x.id===brand?'selected':''}>${esc(x.id)}</option>`).join('')}</select></label>
+      <label>A short name for the piece<input id="nl" placeholder="e.g. dinner-table-fight"></label>${extra}</div></li></ol>
+    <div id="nerr"></div><button class="btn" id="ngo" type="button" ${S.format&&S.start?'':'disabled'}>Start the workflow</button></section>`;
+    document.querySelectorAll('[data-f]').forEach(x=>x.onclick=()=>{S.format=x.dataset.f;keep(render)});
+    document.querySelectorAll('[data-s]').forEach(x=>x.onclick=()=>{S.start=x.dataset.s;keep(render)});
+    $('#nb').onchange=()=>keep(render);
+    $('#ngo').onclick=async()=>{const q={format:S.format,start:S.start,brand:$('#nb').value,label:$('#nl').value};
+      if($('#na'))Object.assign(q,{avatar:$('#na').value,product:$('#npr').value,preset:$('#npre').value.trim()});
+      if($('#ntd'))q.teardown=$('#ntd').value;
+      $('#ngo').disabled=true;
+      try{const r=await post('start',q);await loadList();location.hash=r.brand+'/'+r.label}catch(e){$('#nerr').innerHTML=`<div class="err">${esc(e.message)}</div>`;$('#ngo').disabled=false}};
+  };
+  const keep=fn=>{const v=$('#nl')&&$('#nl').value;fn().then(()=>{if(v&&$('#nl'))$('#nl').value=v})};
+  render();
+}
+$('#new').onclick=()=>{location.hash==='#new'?newPiece():location.hash='new';$('#rail').classList.remove('open')};
+$('#brandf').onchange=renderList;
+$('#menu').onclick=()=>$('#rail').classList.toggle('open');
+function route(){const h=decodeURIComponent(location.hash.slice(1));
+  if(h==='new')return newPiece();
+  const [b,l]=h.split('/');if(b&&l)return openPiece(b,l);
+  const first=PIECES.find(p=>p.live_line)||PIECES[0];
+  if(first)location.hash=first.brand+'/'+first.label;else newPiece()}
+window.addEventListener('hashchange',route);
+loadList().then(route).catch(e=>{$('#view').innerHTML=`<div class="err">${esc(e.message)}</div>`});
+</script>
+</body>
+</html>
