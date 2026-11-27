@@ -559,7 +559,8 @@ def portfolio():
     rows = []
     for b in brands():
         mb = next((x for x in m.get("brands", []) if x["brand"] == b["id"]), None) if m.get("ok") else None
-        rows.append({"brand": b["id"], "money": mb, "waiting": None if waiting is None else waiting.get(b["id"], 0),
+        rows.append({"brand": b["id"], "money": mb, "now": live_ads(b["id"])["money"],
+                     "waiting": None if waiting is None else waiting.get(b["id"], 0),
                      "swipes": len(swipes(b["id"])), "winners": len(winners(b["id"], 50))})
     return {"brands": rows, "money_ok": m.get("ok"), "approve_ok": waiting is not None}
 
@@ -588,8 +589,118 @@ def email(brand, label):
             "stages": writing_stages(d, "components/email-production")}
 
 
+def creators(brand):
+    """The brand's creators: the newest creator-program read (runs/winners/<brand>/creators/<date>/trybe.json) and the
+    creators we keep a profile on (brands/<brand>/content-creators/<handle>/profile.md)."""
+    reads = sorted(glob.glob(str(WS / "runs/winners" / brand / "creators/*/trybe.json")))
+    t = _read(reads[-1]) if reads else None
+    prof = []
+    for d in sorted((WS / "brands" / brand / "content-creators").glob("*/profile.md")):
+        first = next((l.strip("# ").strip() for l in d.read_text(errors="replace").splitlines() if l.strip()), d.parent.name)
+        prof.append({"handle": d.parent.name, "title": first, "path": str(d.relative_to(WS))})
+    out = {"profiles": prof, "read": None}
+    if isinstance(t, dict):
+        out["read"] = {"made": t.get("made"), "from": t.get("from"), "to": t.get("to"), "creators": t.get("creators"),
+                       "submissions": t.get("submissions"), "people": t.get("people") or [],
+                       "rows": (t.get("rows") or [])[:60]}
+    return out
+
+
+_KN = {"m": None, "items": []}
+
+
+def knowledge(q, limit=30):
+    """Search daemn.co's knowledge (docs/knowledge/knowledge.json: every rule and lesson, with why and when)."""
+    f = WS / "docs/knowledge/knowledge.json"
+    try:
+        m = os.path.getmtime(f)
+    except OSError:
+        return {"items": [], "total": 0}
+    if _KN["m"] != m:
+        k = _read(f) or {}
+        _KN.update(m=m, items=k.get("items") or [])
+    words = [w for w in re.findall(r"[a-z0-9]+", (q or "").lower()) if len(w) > 2]
+    rows = []
+    for it in _KN["items"]:
+        hay = " ".join(str(it.get(x) or "") for x in ("title", "text", "why", "when", "kind")).lower()
+        score = sum(hay.count(w) for w in words) if words else 1
+        if score:
+            rows.append((score, it))
+    rows.sort(key=lambda x: -x[0])
+    keep = ("kind", "title", "text", "why", "when", "source", "area", "topic")
+    return {"total": len(_KN["items"]), "items": [{k: it.get(k) for k in keep if it.get(k)} for _, it in rows[:limit]]}
+
+
+_GH = {"at": 0, "repos": None}
+
+
+def github():
+    """Repositories this computer's GitHub login can reach (its own and its organisations'), newest first; cached
+    for an hour. Read-only."""
+    import time
+    if _GH["repos"] is not None and time.time() - _GH["at"] < 3600:
+        return _GH["repos"]
+    def gh(*a):
+        r = subprocess.run(["gh", *a], capture_output=True, text=True, timeout=60)
+        return r.stdout if r.returncode == 0 else ""
+    owners = [""] + [o for o in gh("api", "user/orgs", "--jq", ".[].login").split() if o]
+    repos = []
+    for o in owners:
+        txt = gh("repo", "list", *([o] if o else []), "--limit", "100", "--json", "name,owner,isPrivate,updatedAt,description")
+        try:
+            for r in json.loads(txt or "[]"):
+                repos.append({"repo": r["owner"]["login"] + "/" + r["name"], "owner": r["owner"]["login"],
+                              "private": r.get("isPrivate"), "updated": (r.get("updatedAt") or "")[:10],
+                              "about": (r.get("description") or "")[:140]})
+        except ValueError:
+            pass
+    repos.sort(key=lambda r: r["updated"], reverse=True)
+    _GH.update(at=time.time(), repos={"repos": repos, "owners": [o for o in owners if o]})
+    return _GH["repos"]
+
+
+def _newest(pattern):
+    hits = sorted(glob.glob(str(WS / pattern)))
+    return hits[-1] if hits else None
+
+
+def live_ads(brand):
+    """Every ad that spent in the last 30 days, from the warehouse's daily copy (runs/funnel-tracking/<brand>/<date>/
+    warehouse.json, never Meta), with the media-buying desk's own call on it (runs/media-buying/<brand>/<date>/
+    report.json: off, keep, budget up …) and the brief its name carries."""
+    wf = _newest("runs/funnel-tracking/%s/2*/warehouse.json" % brand)
+    rf = _newest("runs/media-buying/%s/2*/report.json" % brand)
+    w = _read(wf) if wf else None
+    r = _read(rf) if rf else None
+    calls = {str(f.get("id")): f for f in (r.get("flags") or [])} if isinstance(r, dict) else {}
+    num = lambda v: float(v) if v not in (None, "") else 0.0
+    rows = []
+    for a in (w.get("ads") or []) if isinstance(w, dict) else []:
+        c = calls.get(str(a.get("ad_id"))) or {}
+        m = re.search(r"brief-(\d{4})", a.get("ad_name") or "")
+        s7, b7, s30, b30 = num(a.get("spend7")), num(a.get("buys7")), num(a.get("spend30")), num(a.get("buys30"))
+        rows.append({"id": a.get("ad_id"), "name": a.get("ad_name"), "brief": m.group(1) if m else None,
+                     "campaign": a.get("campaign"), "spend7": s7, "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None,
+                     "spend30": s30, "buys30": b30, "value30": num(a.get("value30")),
+                     "cpa30": round(s30 / b30, 2) if b30 else None, "first_seen": a.get("first_seen"),
+                     "call": c.get("action"), "why": c.get("why"), "break_even": c.get("break_even")})
+    rows.sort(key=lambda x: -x["spend7"])
+    money = None
+    if isinstance(w, dict):
+        o = w.get("orders") or {}
+        money = {"through": w.get("spend_through"), "spend": w.get("spend") or {},
+                 "revenue": {k: (v.get("blended") or {}).get("revenue") for k, v in o.items() if isinstance(v, dict)},
+                 "orders": {k: (v.get("blended") or {}).get("orders") for k, v in o.items() if isinstance(v, dict)}}
+    return {"ads": rows, "money": money, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
+            "rule": ((r or {}).get("rule") or {}).get("_what") if isinstance(r, dict) and isinstance(r.get("rule"), dict) else None,
+            "from": str(Path(wf).relative_to(WS)) if wf else None}
+
+
 def today(brand):
-    return {"money": money(), "winners": winners(brand), "research": research(brand)}
+    la = live_ads(brand)
+    return {"money": money(), "winners": winners(brand), "research": research(brand), "now": la["money"],
+            "off": [a for a in la["ads"] if a["call"] == "off"], "calls": [a for a in la["ads"] if a["call"] not in (None, "too_early", "keep", "off")],
+            "calls_asof": la["calls_asof"]}
 
 
 def preset(brand, avatar):
@@ -814,6 +925,22 @@ def handle(h, method, parts, query, body):
                 if p and p.is_file() and p.suffix.lower() == ".html" and "email-production" in p.parts:
                     return h.send(200, p.read_bytes(), "text/html; charset=utf-8")
                 return h.send(404, {"error": "no such page"})
+            if api == ["ads"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, live_ads(q["brand"]))
+            if api == ["creators"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, creators(q["brand"]))
+            if api == ["knowledge"]:
+                return h.send(200, knowledge(q.get("q", "")))
+            if api == ["github"]:
+                return h.send(200, github())
+            if api == ["asks"]:
+                import studio_asks as SA
+                SA.start_worker()                               # a restarted Studio picks up asks still open
+                return h.send(200, {"asks": SA.listing(q.get("brand") if SAFE.match(q.get("brand", "")) else None)})
+            if len(api) == 3 and api[0] == "ask":
+                import studio_asks as SA
+                a = SA.one(api[1], api[2])
+                return h.send(200, a) if a else h.send(404, {"error": "no such ask"})
             if api == ["portfolio"]:
                 return h.send(200, portfolio())
             if api == ["setup"] and SAFE.match(q.get("brand", "")):
@@ -845,6 +972,12 @@ def handle(h, method, parts, query, body):
             data = json.loads(body or b"{}") or {}
             if api == ["start"]:
                 return h.send(200, start(data))
+            if api == ["ask"]:                                  # a Studio button hands one job to Claude
+                import studio_asks as SA
+                return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by")))
+            if api == ["taste"]:                                # the owner's "Use this" / "Discard" on a taste draft
+                import studio_asks as SA
+                return h.send(200, SA.use_taste(data.get("brand"), data.get("kind"), bool(data.get("use"))))
             if len(api) == 4 and api[0] == "piece" and SAFE.match(api[1]) and SAFE.match(api[2]):
                 if api[3] == "run":
                     return h.send(200, move_on(api[1], api[2]))

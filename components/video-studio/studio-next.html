@@ -258,6 +258,11 @@ table.t td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabul
 .sk b{font-size:13.5px}.sk span.j{font-size:12.5px;color:var(--ink-3);grid-column:1}
 .sk .tags{grid-row:1/3;grid-column:2;display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 @media (max-width:860px){.acard{grid-template-columns:1fr}.acard .side{border-left:0;border-top:1px solid var(--line)}}
+.btn.wk{font-size:12px}.btn.wk.busy{border-color:var(--amber);color:var(--ink);background:color-mix(in srgb,var(--amber) 14%,var(--card))}
+.item{grid-template-rows:auto auto auto}
+select.brand{max-width:160px}
+@media (max-width:1600px){.nav a{padding:7px 8px;font-size:13px;gap:5px}.barin{gap:6px;padding:0 14px}.mark{margin-right:8px}}
+@media (max-width:1380px){.nav a span{display:none}.nav a{padding:8px}}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
 @media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
@@ -271,13 +276,16 @@ table.t td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabul
     <a href="#portfolio" data-v="portfolio"><i class="ic" data-i="grid"></i><span>Portfolio</span></a>
     <a href="#today" data-v="today"><i class="ic" data-i="zap"></i><span>Today</span></a>
     <a href="#production" data-v="production"><i class="ic" data-i="film"></i><span>Production</span></a>
+    <a href="#live" data-v="live"><i class="ic" data-i="target"></i><span>Ads</span></a>
     <a href="#approve" data-v="approve"><i class="ic" data-i="send"></i><span>Approve</span><b class="nb" id="nb"></b></a>
     <a href="#research" data-v="research"><i class="ic" data-i="search"></i><span>Research</span></a>
     <a href="#skills" data-v="skills"><i class="ic" data-i="sparkles"></i><span>Skills</span></a>
+    <a href="#knowledge" data-v="knowledge"><i class="ic" data-i="book"></i><span>Knowledge</span></a>
     <a href="#settings" data-v="settings"><i class="ic" data-i="shield"></i><span>Settings</span></a>
   </nav>
   <div class="grow"></div>
   <select class="brand" id="brand" aria-label="Brand"></select>
+  <a class="btn wk" href="#asks" id="wk">Working</a>
   <a class="btn go" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a>
 </div></header>
 <main id="main"><div class="skel">Loading…</div></main>
@@ -294,6 +302,7 @@ const I = {
   sparkles:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/>',
   check:'<path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
+  pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
   grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
   mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
   link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
@@ -361,11 +370,11 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   const tab = ['ads', 'swipes', 'swipe'].includes(S.view) ? 'production' : S.view;
   document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -377,31 +386,31 @@ async function today(){
   if (!m.querySelector('.money')) m.innerHTML = head + `</div><div class="skel">Reading the numbers…</div>`;
   let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `</div><div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'today') return;
-  const waiting = await approveCount(), mon = d.money || {};
-  const stale = (mon.brands || []).map(b => b.last).filter(Boolean).sort().pop();
-  const days = stale ? Math.round((Date.now() - new Date(stale + 'T12:00:00')) / 864e5) : null;
-  const moneyCards = (mon.brands || []).map(b => {
-    const ps = b.days.map(x => x.profit || 0), mx = Math.max(1, ...ps.map(Math.abs)), neg = ps.some(p => p < 0);
-    const mid = neg ? 24 : 48, scale = neg ? 24 : 48;
-    const bars = ps.map((p, k) => { const hh = Math.max(1, Math.abs(p) / mx * scale); const y = p >= 0 ? mid - hh : mid; return `<rect x="${k * 27 + 2}" y="${y.toFixed(1)}" width="22" height="${hh.toFixed(1)}" rx="2" fill="var(--${p >= 0 ? 'green' : 'coral'})"><title>${esc(dayLabel(b.days[k].d))}: ${usd(p)}</title></rect>`; }).join('');
-    return `<div class="card mcard"><div class="top">${ib('target', b.total.profit >= 0 ? 'green' : 'coral')}<b>${esc(b.label)}</b><span class="lbl">7 days to ${esc(dayLabel(b.last))}</span></div>
-      <div class="nums"><div><span class="lbl">Revenue</span><b>${usd(b.total.revenue)}</b></div><div><span class="lbl">Spend</span><b>${usd(b.total.spend)}</b></div>
-      <div class="${b.total.profit >= 0 ? 'up' : 'dn'}"><span class="lbl">Profit</span><b>${usd(b.total.profit)}</b></div><div><span class="lbl">ROAS</span><b>${b.roas ?? '—'}</b></div></div>
-      <svg class="spark" viewBox="0 0 190 48" preserveAspectRatio="none" role="img" aria-label="Daily profit, 7 days">${neg ? '<line x1="0" y1="24" x2="190" y2="24" stroke="var(--line-2)"/>' : ''}${bars}</svg></div>`;
-  }).join('');
+  const waiting = await approveCount();
+  const now = d.now, nowDay = now && now.through;
+  const days = nowDay ? Math.round((Date.now() - new Date(nowDay + 'T12:00:00')) / 864e5) : null;
+  const win3 = (k, w) => now && now[k] ? now[k][w] : null;
+  const roas = w => win3('spend', w) ? (win3('revenue', w) / win3('spend', w)).toFixed(2) : '—';
+  const spendBars = now ? (() => { const v = [['3 days', win3('spend', '3') / 3], ['7 days', win3('spend', '7') / 7], ['30 days', win3('spend', '30') / 30]].filter(x => x[1] != null && !isNaN(x[1])); const mx = Math.max(1, ...v.map(x => x[1])); return `<svg class="spark" viewBox="0 0 190 48" preserveAspectRatio="none" role="img" aria-label="Spend per day, 3, 7 and 30 days">${v.map((x, k) => `<rect x="${k * 64 + 2}" y="${(48 - x[1] / mx * 44).toFixed(1)}" width="56" height="${(x[1] / mx * 44).toFixed(1)}" rx="2" fill="var(--indigo)"><title>${x[0]}: ${usd(x[1])} a day</title></rect>`).join('')}</svg>`; })() : '';
+  const moneyCards = now ? `<div class="card mcard" style="grid-column:1/-1"><div class="top">${ib('target', 'green')}<b>${esc(blabel(S.brand))}</b><span class="lbl">to ${esc(dayLabel(nowDay))} · from the warehouse</span></div>
+      <div class="nums"><div><span class="lbl">Revenue 7d</span><b>${usd(win3('revenue', '7'))}</b></div><div><span class="lbl">Ad spend 7d</span><b>${usd(win3('spend', '7'))}</b></div><div class="up"><span class="lbl">ROAS 7d</span><b>${roas('7')}</b></div><div><span class="lbl">Orders 7d</span><b>${int(win3('orders', '7'))}</b></div>
+        <div><span class="lbl">Revenue 30d</span><b>${usd(win3('revenue', '30'))}</b></div><div><span class="lbl">Ad spend 30d</span><b>${usd(win3('spend', '30'))}</b></div><div><span class="lbl">ROAS 30d</span><b>${roas('30')}</b></div><div><span class="lbl">Orders 30d</span><b>${int(win3('orders', '30'))}</b></div></div>${spendBars}</div>` : '';
+  const mon2 = {ok: !!now, why: 'No warehouse numbers on file for this brand yet'};
   const win = d.winners || [], nx = (d.research || {}).next || {}, rounds = (d.research || {}).rounds || [];
   const variations = win.filter(w => !w.varied).slice(0, 4);
   const rr = rounds.find(r => r.worlds && r.worlds.length);
   const resCount = (nx.angles || []).length + (rr ? 1 : 0);
-  m.innerHTML = head + `${days != null && days > 2 ? `<span class="pill p-stop"><i class="ic" data-i="alert"></i>Money numbers stop ${esc(dayLabel(stale))} · ${days} days old</span>` : ''}</div>
-    ${mon.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon.why || 'No money numbers')}</div>`}
+  m.innerHTML = head + `${days != null && days > 2 ? `<span class="pill p-stop"><i class="ic" data-i="alert"></i>Numbers stop ${esc(dayLabel(nowDay))} · ${days} days old</span>` : ''}</div>
+    ${mon2.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon2.why)}</div>`}
     <div class="grid4">
       <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
         ${waiting ? `<a class="btn wait" href="#approve">Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'}</a>` : `<div class="empty">Nothing waiting for your approval</div>`}</div>
-      <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">—</span></h3>
-        <div class="empty">Needs each live ad's numbers.${days > 2 ? ' The feed stopped ' + esc(dayLabel(stale)) + '.' : ''}</div></div>
+      <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">${(d.off || []).length}</span></h3>
+        ${(d.off || []).map(a => `<a class="row" href="#live"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
+        ${(d.calls || []).map(a => `<a class="row" href="#live"><b title="${esc(a.name)}">${esc(a.name)}</b><span>${esc(a.why || '')}</span><span class="pill p-act">${esc(String(a.call).replace('_', ' '))}</span></a>`).join('')}
+        ${d.calls_asof ? `<span class="lbl">media-buying desk · ${esc(dayLabel(d.calls_asof))}</span>` : ''}</div>
       <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${variations.length}</span></h3>
-        ${variations.map(w => `<div class="row"><b title="${esc(w.name)}">${esc(w.headline || w.name)}</b><span>${int(w.purchases)} buys · CPA ${usd(w.cpa)} · ROAS ${w.roas ?? '—'}</span><span class="pill p-video">${esc((w.format || '').toLowerCase())}</span></div>`).join('') || '<div class="empty">No winners on file</div>'}</div>
+        ${variations.map(w => `<div class="row"><b title="${esc(w.name)}">${esc(w.headline || w.name)}</b><span>${int(w.purchases)} buys · CPA ${usd(w.cpa)} · ROAS ${w.roas ?? '—'}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc(w.id + ' · ' + (w.headline || w.name))}">Plan</button></div>`).join('') || '<div class="empty">No winners on file</div>'}</div>
       <div class="card dcol" style="--hue:var(--violet)"><h3>${ib('search', 'violet')}Research to act on<span class="count">${resCount}</span></h3>
         ${(nx.angles || []).slice(0, 2).map(a => `<a class="row" href="#research"><b>${esc(a.angle)}</b><span>${int(a.purchases)} buys on ${usd(a.spend)}</span><span class="pill p-brief">angle</span></a>`).join('')}
         ${rr ? `<a class="row" href="#research"><b>${esc(nice(rr.name))}</b><span>${esc(rr.worlds[0].world)} · ${int(rr.worlds[0].count)}</span><span class="pill p-swipe">round</span></a>` : ''}
@@ -615,7 +624,9 @@ document.addEventListener('submit', async e => {
 let swFilter = store.get('st.swf') || 'all';
 async function swipes(){
   const m = host();
-  m.innerHTML = `<div class="ph" style="margin-bottom:14px"><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="#production/new"><i class="ic" data-i="plus"></i>Make an ad from a swipe</a></div></div><div class="skel">Loading the library…</div>`;
+  m.innerHTML = `<form class="card arow" id="addsw" style="margin-bottom:16px"><i class="ib" style="--hue:var(--violet)">${icon('link')}</i><input name="u" type="url" required placeholder="Paste a post's link: it is saved and torn down" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Add swipe</button></form>
+    <div class="ph" style="margin-bottom:14px"><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="#production/new"><i class="ic" data-i="plus"></i>Make an ad from a swipe</a></div></div><div class="skel">Loading the library…</div>`;
+  $('#addsw').onsubmit = e => { e.preventDefault(); ask('swipe', e.target.u.value).then(r => { if (r) e.target.reset(); }); };
   paintIcons(m);
   let r; try { r = await J('/api/desk/swipes?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (!m.isConnected) return;
@@ -650,15 +661,17 @@ async function research(){
   const nx = d.research.next || {}, rounds = d.research.rounds || [];
   const tried = Array.isArray(nx.tried) ? nx.tried : Object.entries(nx.tried || {}).map(([k, v]) => Object.assign({format: k}, v));
   const roundCard = r => { const mx = Math.max(1, ...r.worlds.map(w => w.count || 0)); return `<div class="card"><h3>${ib('search', 'violet')}${esc(nice(r.name))}<span class="lbl" style="margin-left:auto">${new Date(r.at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span></h3><div class="bars">${r.worlds.map(w => `<div><span>${esc(w.world)}</span><span class="n">${int(w.count)}</span><div class="b"><i style="width:${((w.count || 0) / mx * 100).toFixed(1)}%"></i></div></div>`).join('') || '<div class="empty">No worlds read yet</div>'}</div></div>`; };
-  m.querySelector('.skel').outerHTML = `<div class="grid2" style="margin-bottom:16px">
+  m.querySelector('.skel').outerHTML = `<form class="card arow" id="deep" style="margin-bottom:16px"><i class="ib" style="--hue:var(--violet)">${icon('search')}</i><input name="q" required placeholder="An angle, a winner, a complaint: go deeper on it" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Go deeper</button></form>
+    <div class="grid2" style="margin-bottom:16px">
       <div class="card"><h3>${ib('target', 'magenta')}Angles that sold<span class="lbl" style="margin-left:auto">${esc(((nx.window || {}).since || '') + ' → ' + ((nx.window || {}).until || ''))}</span></h3>
-        <table class="t" style="margin-top:10px"><tr><th>Angle</th><th style="text-align:right">Videos</th><th style="text-align:right">Buys</th><th style="text-align:right">Spend</th></tr>${(nx.angles || []).map(a => `<tr><td>${esc(a.angle)}</td><td class="n">${int(a.videos)}</td><td class="n">${int(a.purchases)}</td><td class="n">${usd(a.spend)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">None past the bar yet</td></tr>'}</table></div>
+        <table class="t" style="margin-top:10px"><tr><th>Angle</th><th style="text-align:right">Videos</th><th style="text-align:right">Buys</th><th style="text-align:right">Spend</th></tr>${(nx.angles || []).map(a => `<tr><td>${esc(a.angle)}<br><button class="btn" style="margin-top:6px" data-ask="deeper" data-input="${esc(a.angle)}">Go deeper</button></td><td class="n">${int(a.videos)}</td><td class="n">${int(a.purchases)}</td><td class="n">${usd(a.spend)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">None past the bar yet</td></tr>'}</table></div>
       <div class="card"><h3>${ib('list', 'indigo')}Tried so far</h3>
         <table class="t" style="margin-top:10px"><tr><th>Format</th><th style="text-align:right">Videos</th><th style="text-align:right">Spend</th><th style="text-align:right">Buys</th></tr>${tried.map(t => `<tr><td>${esc(t.format || t.name || t.kind || '')}</td><td class="n">${int(t.videos)}</td><td class="n">${usd(t.spend)}</td><td class="n">${int(t.purchases)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">Nothing tried yet</td></tr>'}</table></div></div>
     ${(nx.hooks || []).length ? `<div class="card" style="margin-bottom:16px"><h3>${ib('sparkles', 'amber')}Hook lines that sold</h3><div class="items" style="margin-top:10px">${nx.hooks.map(h => `<div class="row"><b style="white-space:normal">${esc(h.hook_line || h.line || '')}</b><span>${int(h.purchases)} buys${h.creator ? ' · ' + esc(h.creator) : ''}</span></div>`).join('')}</div></div>` : ''}
     <div class="ph" style="margin:26px 0 14px"><h1 style="font-size:16px">Research rounds</h1><span class="sub">organic posts read for each avatar, grouped by world</span></div>
     <div class="grid2">${rounds.map(roundCard).join('') || '<div class="card note">No research rounds yet for this brand.</div>'}</div>`;
   paintIcons(m);
+  $('#deep').onsubmit = e => { e.preventDefault(); const q = e.target.q.value; ask('deeper', q).then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
 }
 
 /* ================= BRANDS ================= */
@@ -673,7 +686,7 @@ async function brandSetup(){
   const icn = {'Brand basics':'shield', 'Products':'image', 'Customers':'user', 'Creative':'film', 'Accounts & keys':'plug', 'First run':'play'};
   const groups = [...new Set(items.map(i => i.group))];
   m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><h3>${ib('check', 'green')}${ok} of ${items.length} in place<span class="lbl" style="margin-left:auto">${d.progress ? 'progress kept' : 'no progress file yet'}</span></h3><div class="prog"><i style="width:${(ok / Math.max(1, items.length) * 100).toFixed(1)}%"></i></div></div>
-    <div class="grid2">${groups.map(g => { const gi = items.filter(i => i.group === g); return `<div class="card"><h3>${ib(icn[g] || 'list', 'indigo')}${esc(g)}<span class="count">${gi.filter(isOk).length}/${gi.length}</span></h3><div class="items" style="margin-top:12px">${gi.map(i => `<div class="item"><i class="ib" style="--hue:var(--${hue[i.state]})">${icon(i.state === 'todo' ? 'alert' : 'check')}</i><b>${esc(i.name)}</b><span>${esc((i.fills || []).join(' · '))}</span><span class="pill" style="--hue:var(--${hue[i.state]})">${word[i.state]}</span></div>`).join('')}</div></div>`; }).join('')}</div>`;
+    <div class="grid2">${groups.map(g => { const gi = items.filter(i => i.group === g); return `<div class="card"><h3>${ib(icn[g] || 'list', 'indigo')}${esc(g)}<span class="count">${gi.filter(isOk).length}/${gi.length}</span></h3><div class="items" style="margin-top:12px">${gi.map(i => `<div class="item"><i class="ib" style="--hue:var(--${hue[i.state]})">${icon(i.state === 'todo' ? 'alert' : 'check')}</i><b>${esc(i.name)}</b><span>${esc((i.fills || []).join(' · '))}</span><span class="pill" style="--hue:var(--${hue[i.state]})">${word[i.state]}</span>${['todo', 'partial'].includes(i.state) ? `<button class="btn" style="grid-column:3;justify-self:end;margin-top:4px" data-ask="setup" data-input="${esc(i.id + ' · ' + i.name)}">Fill</button>` : ''}</div>`).join('')}</div></div>`; }).join('')}</div>`;
   paintIcons(m);
 }
 
@@ -738,19 +751,20 @@ async function portfolio(){
   m.innerHTML = `<div class="ph"><h1>Portfolio</h1><span class="sub">every brand you are connected to</span></div><div class="skel">Reading every brand…</div>`;
   let d; try { d = await J('/api/desk/portfolio'); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'portfolio') return;
-  const tot = d.brands.reduce((t, b) => { const x = (b.money || {}).total || {}; t.r += x.revenue || 0; t.s += x.spend || 0; t.p += x.profit || 0; return t; }, {r:0, s:0, p:0});
-  const last = d.brands.map(b => (b.money || {}).last).filter(Boolean).sort().pop();
-  m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><div class="nums"><div><span class="lbl">Revenue · 7 days${last ? ' to ' + esc(dayLabel(last)) : ''}</span><b>${usd(tot.r)}</b></div><div><span class="lbl">Spend</span><b>${usd(tot.s)}</b></div><div class="${tot.p >= 0 ? 'up' : 'dn'}"><span class="lbl">Profit</span><b>${usd(tot.p)}</b></div><div><span class="lbl">ROAS</span><b>${tot.s ? (tot.r / tot.s).toFixed(2) : '—'}</b></div></div></div>
-    <div class="pf">${d.brands.map(b => { const x = (b.money || {}).total; return `<a class="card" data-pick="${esc(b.brand)}">
-      <h3>${ib('target', x ? (x.profit >= 0 ? 'green' : 'coral') : 'ink-3')}${esc(blabel(b.brand))}<span class="count" style="--hue:var(--amber)">${b.waiting ? b.waiting + ' to approve' : ''}</span></h3>
-      ${x ? `<div class="stats"><div><span class="lbl">Revenue</span><b>${usd(x.revenue)}</b></div><div><span class="lbl">Spend</span><b>${usd(x.spend)}</b></div><div><span class="lbl">Profit</span><b style="color:var(--${x.profit >= 0 ? 'green' : 'coral'})">${usd(x.profit)}</b></div></div>` : `<div class="empty">No money numbers connected</div>`}
+  const tot = d.brands.reduce((t, b) => { const n = b.now || {}; t.r += (n.revenue || {})['7'] || 0; t.s += (n.spend || {})['7'] || 0; t.o += (n.orders || {})['7'] || 0; return t; }, {r:0, s:0, o:0});
+  const last = d.brands.map(b => (b.now || {}).through).filter(Boolean).sort().pop();
+  m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><div class="nums"><div><span class="lbl">Revenue · 7 days${last ? ' to ' + esc(dayLabel(last)) : ''}</span><b>${usd(tot.r)}</b></div><div><span class="lbl">Ad spend</span><b>${usd(tot.s)}</b></div><div><span class="lbl">Orders</span><b>${int(tot.o)}</b></div><div><span class="lbl">ROAS</span><b>${tot.s ? (tot.r / tot.s).toFixed(2) : '—'}</b></div></div></div>
+    <div class="pf">${d.brands.map(b => { const n = b.now; const x = n ? {revenue: (n.revenue || {})['7'], spend: (n.spend || {})['7']} : null; if (x) x.profit = null; return `<a class="card" data-pick="${esc(b.brand)}">
+      <h3>${ib('target', x ? 'green' : 'ink-3')}${esc(blabel(b.brand))}<span class="count" style="--hue:var(--amber)">${b.waiting ? b.waiting + ' to approve' : ''}</span></h3>
+      ${x ? `<div class="stats"><div><span class="lbl">Revenue 7d</span><b>${usd(x.revenue)}</b></div><div><span class="lbl">Ad spend 7d</span><b>${usd(x.spend)}</b></div><div><span class="lbl">ROAS 7d</span><b style="color:var(--${x.spend && x.revenue / x.spend >= 1 ? 'green' : 'coral'})">${x.spend ? (x.revenue / x.spend).toFixed(2) : '—'}</b></div></div><span class="lbl">to ${esc(dayLabel(n.through))}</span>` : `<div class="empty">No money numbers connected</div>`}
       <div class="arow"><span class="pill p-swipe">${b.swipes} swipes</span><span class="pill p-ready">${b.winners} winners</span></div></a>`; }).join('')}</div>`;
   paintIcons(m);
+  m.insertAdjacentHTML('beforeend', '<div id="gh" style="margin-top:16px"><div class="skel">Reading GitHub…</div></div>'); githubCard($('#gh'));
   m.querySelectorAll('[data-pick]').forEach(a => a.onclick = () => { S.brand = a.dataset.pick; store.set('st.brand', S.brand); $('#brand').value = S.brand; location.hash = 'today'; });
 }
 
 /* ================= PRODUCTION (one place: video, static, email, swipes, new ad) ================= */
-const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
+const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['creators', 'Creators', 'user', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
 function production(lane){
   const parts = (S.arg || '').split('/');
   lane = lane || parts[0] || 'video';
@@ -765,6 +779,7 @@ function production(lane){
   if (lane === 'swipes') return swipes();
   if (lane === 'static') return staticLane();
   if (lane === 'email') return emailLane(parts[1]);
+  if (lane === 'creators') return creatorsLane();
   if (lane === 'new') return newAd(parts.slice(1).join('/'));
 }
 async function staticLane(){
@@ -829,7 +844,7 @@ async function skillsView(){
   for (const k of d.skills) (groups[SKILL_LANE(k.name)] = groups[SKILL_LANE(k.name)] || []).push(k);
   const tasteIc = {copy:'sparkles', video:'video', image:'image', email:'mail'};
   m.querySelector('.skel').outerHTML = `
-    <div class="grid4" style="margin-bottom:16px">${Object.entries(d.taste).map(([k, t]) => `<div class="card"><h3>${ib(tasteIc[k] || 'pen', t.filled ? 'green' : 'amber')}${esc(k[0].toUpperCase() + k.slice(1))} taste<span class="count" style="--hue:var(--${t.filled ? 'green' : 'amber'})">${t.filled ? 'set' : 'blank'}</span></h3><div class="empty" style="font:11.5px var(--mono)">${esc(t.file)}</div></div>`).join('')}</div>
+    <div class="grid4" style="margin-bottom:16px">${Object.entries(d.taste).map(([k, t]) => `<div class="card"><h3>${ib(tasteIc[k] || 'pen', t.filled ? 'green' : 'amber')}${esc(k[0].toUpperCase() + k.slice(1))} taste<span class="count" style="--hue:var(--${t.filled ? 'green' : 'amber'})">${t.filled ? 'set' : 'blank'}</span></h3><div class="empty" style="font:11.5px var(--mono)">${esc(t.file)}</div><button class="btn" style="margin-top:8px" data-ask="tune" data-input="${esc(k)}">Tune from what sold</button></div>`).join('')}</div>
     <div class="grid2" style="align-items:start">
       <div style="display:grid;gap:16px">${Object.entries(groups).map(([g, ks]) => `<div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${esc(g)}<span class="count" style="--hue:var(--ink-3)">${ks.length}</span></h3></div>${ks.map(k => `<div class="sk"><b>${esc(k.name)}</b><span class="j">${esc(k.job)}</span><span class="tags">${k.taste.map(t => `<span class="pill ${t.filled ? 'p-ready' : 'p-wait'}">${esc(t.kind)} taste</span>`).join('')}<span class="pill ${k.source === 'made here' ? 'p-act' : 'p-mute'}">${esc(k.source)}</span></span></div>`).join('')}</div>`).join('')}</div>
       <div style="display:grid;gap:16px;position:sticky;top:80px">
@@ -842,7 +857,119 @@ async function skillsView(){
   paintIcons(m);
 }
 
+/* ================= ASKS: a button hands one job to Claude; the result comes back here for your OK ================= */
+async function ask(kind, input, brand){
+  try {
+    const r = await J('/api/desk/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({kind, input, brand: brand === undefined ? S.brand : brand, by: store.get('st.by') || ''})});
+    toast('On it · ' + r.name); asksBadge(); return r;
+  } catch (e) { toast(e.message); return null; }
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-ask]'); if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  b.disabled = true; ask(b.dataset.ask, b.dataset.input, b.dataset.brand).then(r => { if (r) { b.textContent = 'Asked ✓'; } else b.disabled = false; });
+});
+async function asksBadge(){
+  try { const r = await J('/api/desk/asks'); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wk'); if (el) { el.textContent = n ? n + ' working' : 'Working'; el.classList.toggle('busy', !!n); } } catch {}
+}
+setInterval(asksBadge, 15000);
+const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['working', 'act'], done:['ready', 'ready'], failed:['stopped', 'stop']};
+async function asksView(){
+  const m = $('#main'), [brand, id] = (S.arg || '').split('/');
+  if (brand && id) return askOne(brand, id);
+  m.innerHTML = `<div class="ph"><h1>Working on it</h1><span class="sub">every job the Studio handed to Claude, newest first</span></div><div class="skel">Loading…</div>`;
+  let r; try { r = await J('/api/desk/asks'); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  m.querySelector('.skel').outerHTML = r.asks.length ? `<div class="card" style="padding:0">${r.asks.map(a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b><span class="j">${esc(blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; }).join('')}</div>` : `<div class="card note">Nothing handed off yet. Tune, Go deeper, Plan variations, Add a swipe and Fill buttons land here.</div>`;
+}
+async function askOne(brand, id){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><a class="btn" href="#asks">← Working on it</a><h1 id="aname">…</h1><span id="astate"></span></div><div class="skel">Loading…</div>`;
+  let a; try { a = await J(`/api/desk/ask/${encodeURIComponent(brand)}/${encodeURIComponent(id)}`); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const [w, c] = ASKSTATE[a.state] || [a.state, 'mute'];
+  $('#aname').textContent = a.name; $('#astate').innerHTML = `<span class="pill p-${c}">${w}</span>`;
+  let h = '';
+  if (a.state === 'queued' || a.state === 'running') h += `<div class="card note">Claude is ${a.state === 'running' ? 'working on this now' : 'about to start this'}. This page updates on its own.</div>`;
+  if (a.state === 'failed') h += `<div class="note stop">It stopped: ${esc(a.why || 'no reason given')}</div>`;
+  if (a.kind === 'tune' && a.draft) h += `<div class="card" style="margin-bottom:16px"><h3>${ib('pen', 'amber')}New ${esc(a.input)} taste, ready for your OK<span style="margin-left:auto;display:flex;gap:8px"><button class="btn" data-taste="discard">Discard</button><button class="btn wait" data-taste="use"><i class="ic" data-i="check"></i>Use this</button></span></h3>
+      <div class="grid2" style="margin-top:12px"><div><div class="lbl" style="margin-bottom:6px">Now</div><pre class="prompt" style="max-height:60vh">${esc(a.live || '(empty)')}</pre></div><div><div class="lbl" style="margin-bottom:6px">Draft</div><pre class="prompt" style="max-height:60vh">${esc(a.draft)}</pre></div></div></div>`;
+  if (a.result) h += `<div class="file"><header>What came back<span class="lbl">${esc(a.finished || '')}</span></header><div class="md">${md(a.result)}</div></div>`;
+  m.querySelector('.skel').outerHTML = `<div>${h}</div>`;
+  paintIcons(m);
+  m.querySelectorAll('[data-taste]').forEach(b => b.onclick = async () => {
+    b.disabled = true;
+    try { await J('/api/desk/taste', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({brand, kind: a.input, use: b.dataset.taste === 'use'})}); toast(b.dataset.taste === 'use' ? 'In use · every ' + a.input + ' skill reads it now' : 'Draft discarded'); askOne(brand, id); }
+    catch (e) { toast(e.message); b.disabled = false; }
+  });
+  if (a.state === 'queued' || a.state === 'running') setTimeout(() => { if (S.view === 'asks' && S.arg === brand + '/' + id) askOne(brand, id); }, 10000);
+}
+
+/* ================= CREATORS (a Production lane) ================= */
+async function creatorsLane(){
+  const h = host(); h.innerHTML = '<div class="skel">Loading creators…</div>';
+  let d; try { d = await J('/api/desk/creators?brand=' + encodeURIComponent(S.brand)); } catch (e) { h.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const r = d.read;
+  const people = r ? [...r.people].sort((a, b) => (b.spend || 0) - (a.spend || 0)) : [];
+  h.innerHTML = `${r ? `<div class="card" style="margin-bottom:16px"><h3>${ib('user', 'magenta')}Creator program<span class="lbl" style="margin-left:auto">${esc((r.from || '') + ' → ' + (r.to || ''))}</span></h3>
+      <div class="nums" style="margin:14px 0 6px"><div><span class="lbl">Creators</span><b>${int(r.creators)}</b></div><div><span class="lbl">New videos</span><b>${int(r.submissions)}</b></div><div><span class="lbl">Ad spend on them</span><b>${usd(people.reduce((t, p) => t + (p.spend || 0), 0))}</b></div><div><span class="lbl">Purchases</span><b>${int(people.reduce((t, p) => t + (p.purchases || 0), 0))}</b></div></div>
+      <table class="t"><tr><th>Creator</th><th style="text-align:right">Ads</th><th style="text-align:right">Spend</th><th style="text-align:right">Buys</th><th style="text-align:right">ROAS</th></tr>${people.filter(p => p.spend || p.ads).slice(0, 25).map(p => `<tr><td>${esc(p.creator)}</td><td class="n">${int(p.ads)}</td><td class="n">${usd(p.spend)}</td><td class="n">${int(p.purchases)}</td><td class="n" style="color:var(--${(p.roas || 0) >= 1 ? 'green' : 'coral'})">${p.roas ?? '—'}</td></tr>`).join('') || '<tr><td colspan="5" class="empty">No creator ads running yet</td></tr>'}</table></div>` : '<div class="card note" style="margin-bottom:16px">No creator program read on file for this brand yet.</div>'}
+    ${r && r.rows.length ? `<div class="card" style="margin-bottom:16px;padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${ib('video', 'cyan')}Newest videos in<span class="count" style="--hue:var(--ink-3)">${r.rows.length}</span></h3></div>${r.rows.slice(0, 20).map(x => `<div class="sk"><b>${esc(x.creator)}</b><span class="j">${esc((x.products || []).join(', '))} · ${esc((x.created || '').slice(0, 10))}</span><span class="tags"><span class="pill ${x.status === 'approved' ? 'p-ready' : 'p-wait'}">${esc(x.status || '')}</span>${x.ads ? `<span class="pill p-act">${x.ads} ads</span>` : ''}</span></div>`).join('')}</div>` : ''}
+    ${d.profiles.length ? `<div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${ib('book', 'violet')}Creator profiles</h3></div>${d.profiles.map(p => `<div class="sk"><b>${esc(p.handle)}</b><span class="j">${esc(p.title)}</span></div>`).join('')}</div>` : ''}`;
+  paintIcons(h);
+}
+
+/* ================= KNOWLEDGE ================= */
+async function knowledgeView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Knowledge</h1><span class="sub">every rule and lesson you have written down, with why and when</span></div>
+    <div class="card" style="margin-bottom:16px"><label class="fld"><span>Search</span><input id="kq" placeholder="hooks, offers, statics, creators…" value="${esc(store.get('st.kq') || '')}"></label></div><div id="kr"><div class="skel">Loading…</div></div>`;
+  const run = async () => {
+    const q = $('#kq').value; store.set('st.kq', q);
+    let d; try { d = await J('/api/desk/knowledge?q=' + encodeURIComponent(q)); } catch (e) { $('#kr').innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+    $('#kr').innerHTML = `<div class="lbl" style="margin-bottom:10px">${d.items.length} shown of ${int(d.total)}</div><div class="items">${d.items.map(k => `<div class="card" style="padding:14px 16px;display:grid;gap:6px"><div class="arow"><span class="pill ${k.kind === 'Rule' ? 'p-act' : 'p-swipe'}">${esc(k.kind || '')}</span><b>${esc(k.title || '')}</b></div>${k.text && k.text !== k.title ? `<div style="font-size:13.5px">${esc(k.text)}</div>` : ''}${k.why ? `<div style="font-size:12.5px;color:var(--ink-3)"><b style="color:var(--ink-2)">Why</b> ${esc(k.why)}</div>` : ''}${k.when ? `<div style="font-size:12.5px;color:var(--ink-3)"><b style="color:var(--ink-2)">When</b> ${esc(k.when)}</div>` : ''}</div>`).join('') || '<div class="card note">Nothing matches.</div>'}</div>`;
+  };
+  let t; $('#kq').oninput = () => { clearTimeout(t); t = setTimeout(run, 250); };
+  run();
+}
+
+/* ================= GITHUB (on Portfolio): brands this login can reach ================= */
+async function githubCard(el){
+  let d; try { d = await J('/api/desk/github'); } catch (e) { el.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  el.innerHTML = `<div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${ib('link', 'indigo')}Reachable on GitHub<span class="lbl" style="margin-left:auto">${esc(d.owners.join(' · '))}</span></h3></div>${d.repos.map(r => `<div class="sk"><b>${esc(r.repo)}</b><span class="j">${esc(r.about || (r.private ? 'private' : 'public'))} · ${esc(r.updated)}</span><span class="tags"><button class="btn" data-ask="connect" data-input="${esc(r.repo)}" data-brand="">Look</button></span></div>`).join('')}</div>`;
+  paintIcons(el);
+}
+
+/* ================= ADS (live): every ad that spent, grouped by brief, with the desk's call ================= */
+const CALL = {off:['off', 'stop'], keep:['keep', 'ready'], budget_up:['budget up', 'ready'], budget_hold:['hold budget', 'wait'], budget_down:['budget down', 'wait'], prospect:['prospecting', 'act'], too_early:['too early', 'mute'], double_down:['double down', 'ready'], pull_up:['pull up', 'ready'], watch:['watch', 'wait']};
+let adsSort = store.get('st.adsort') || 'spend7';
+async function adsLive(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub" id="adsub">live numbers by brief · from the warehouse, never Meta</span></div><div class="skel">Loading…</div>`;
+  let d; try { d = await J('/api/desk/ads?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'live') return;
+  if (!d.ads.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No live ad numbers on file for this brand yet.</div>'; return; }
+  $('#adsub').textContent = `${d.ads.length} ads spent in 30 days · to ${dayLabel((d.money || {}).through)}${d.calls_asof ? ' · calls ' + dayLabel(d.calls_asof) : ''}`;
+  const groups = {};
+  for (const a of d.ads) (groups[a.brief || '—'] = groups[a.brief || '—'] || []).push(a);
+  const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
+  const prods = S.prods || (S.prods = (await J('/api/productions').catch(() => ({productions: []}))).productions);
+  const bk = n => { const p = prods.find(x => (x.key || '').endsWith('brief-' + n)); return p ? 'p:' + p.key : null; };
+  const rowsOf = Object.entries(groups).map(([b, rs]) => ({b, rs, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30')}));
+  const sorts = {spend7: r => -r.s7, buys30: r => -r.b30, cpa7: r => (r.b7 ? r.s7 / r.b7 : 1e9)};
+  const draw = () => {
+    const rows = [...rowsOf].sort((a, b) => sorts[adsSort](a) - sorts[adsSort](b));
+    m.querySelector('.skel, #adtab')?.remove();
+    m.insertAdjacentHTML('beforeend', `<div id="adtab"><div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}</div>
+      <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>Brief · ad</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">Buys 30d</th><th style="text-align:right">ROAS 30d</th><th>Desk</th><th></th></tr>
+      ${rows.map(g => { const key = g.b !== '—' ? bk(g.b) : null; return `<tr style="background:var(--paper)"><td><b>${g.b === '—' ? 'No brief in the name' : 'Brief ' + esc(g.b)}</b> <span class="lbl">${g.rs.length} ads</span>${key ? ` · <a href="#ads/${encodeURIComponent(key)}">open</a>` : ''}</td><td class="n">${usd(g.s7)}</td><td class="n">${int(g.b7)}</td><td class="n">${g.b7 ? usd(g.s7 / g.b7) : '—'}</td><td class="n">${usd(g.s30)}</td><td class="n">${int(g.b30)}</td><td class="n">${g.s30 ? (g.v30 / g.s30).toFixed(2) : '—'}</td><td></td><td>${g.b !== '—' && g.b30 ? `<button class="btn" data-ask="variations" data-input="${esc('brief ' + g.b + ' · ' + g.rs[0].name)}">Make more</button>` : ''}</td></tr>` +
+        g.rs.map(a => { const [cw, cc] = CALL[a.call] || [a.call || '', 'mute']; return `<tr><td style="padding-left:22px;font:12px var(--mono);color:var(--ink-2)" title="${esc(a.name)}">${esc((a.name || '').replace(/^.*?brief-\d{4}_?/, '') || a.name)}</td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n" style="color:var(--${a.break_even && a.cpa7 > a.break_even ? 'coral' : 'ink'})">${a.cpa7 != null ? usd(a.cpa7) : '—'}</td><td class="n">${usd(a.spend30)}</td><td class="n">${int(a.buys30)}</td><td class="n">${a.spend30 ? (a.value30 / a.spend30).toFixed(2) : '—'}</td><td>${a.call ? `<span class="pill p-${cc}" title="${esc(a.why || '')}">${esc(cw)}</span>` : ''}</td><td></td></tr>`; }).join(''); }).join('')}</table></div>
+      ${d.rule ? `<div class="lbl" style="margin-top:10px">Desk rule: ${esc(d.rule)}</div>` : ''}</div>`);
+    m.querySelectorAll('[data-srt]').forEach(b => b.onclick = () => { adsSort = b.dataset.srt; store.set('st.adsort', adsSort); draw(); });
+  };
+  draw();
+}
+
 boot();
+asksBadge();
 </script>
 </body>
 </html>
