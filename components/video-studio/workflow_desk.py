@@ -749,11 +749,43 @@ def knowledge_ask(h, data):
     return None
 
 
+def vary_candidates(la, n=6):
+    """New ads worth varying: groups that carry a brief number or a creator (trybe) tag, that sold in the last 30 days
+    and are under the desk's break-even (or that the desk says to keep or scale). Ranked by purchases."""
+    groups = {}
+    for a in la["ads"]:
+        if a["brief"]:
+            k = ("brief", a["brief"])
+        elif re.search(r"trybe=", a["name"] or "", re.I):
+            k = ("creator", re.split(r"_|\s+-\s+", a["name"])[0])
+        else:
+            continue
+        groups.setdefault(k, []).append(a)
+    out = []
+    for (kind, key), rs in groups.items():
+        s30, b30 = sum(r["spend30"] for r in rs), sum(r["buys30"] for r in rs)
+        s7, b7 = sum(r["spend7"] for r in rs), sum(r["buys7"] for r in rs)
+        if b30 < 2:
+            continue
+        be = max([r["break_even"] for r in rs if r.get("break_even")] or [0]) or None
+        calls = {r["call"] for r in rs if r.get("call")}
+        cpa30 = s30 / b30
+        if not ((be and cpa30 <= be) or calls & {"keep", "budget_up", "double_down", "pull_up"}):
+            continue
+        brief = (la.get("briefs") or {}).get(key) if kind == "brief" else None
+        out.append({"kind": kind, "key": key, "label": (brief or {}).get("angle") or "", "ads": len(rs),
+                    "buys30": b30, "spend30": round(s30, 2), "cpa30": round(cpa30, 2), "value30": round(sum(r["value30"] for r in rs), 2),
+                    "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None, "break_even": be, "calls": sorted(calls),
+                    "lanes": (brief or {}).get("lanes") or [], "example": rs[0]["name"]})
+    out.sort(key=lambda x: (-x["buys30"], x["cpa30"]))
+    return out[:n]
+
+
 def today(brand):
     la = live_ads(brand)
     return {"money": money(), "winners": winners(brand), "research": research(brand), "now": la["money"],
             "off": [a for a in la["ads"] if a["call"] == "off"], "calls": [a for a in la["ads"] if a["call"] not in (None, "too_early", "keep", "off")],
-            "calls_asof": la["calls_asof"]}
+            "calls_asof": la["calls_asof"], "vary": vary_candidates(la)}
 
 
 def preset(brand, avatar):

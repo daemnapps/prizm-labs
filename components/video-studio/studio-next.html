@@ -419,7 +419,6 @@ async function today(){
         <div><span class="lbl">Revenue 30d</span><b>${usd(win3('revenue', '30'))}</b></div><div><span class="lbl">Ad spend 30d</span><b>${usd(win3('spend', '30'))}</b></div><div><span class="lbl">ROAS 30d</span><b>${roas('30')}</b></div><div><span class="lbl">Orders 30d</span><b>${int(win3('orders', '30'))}</b></div></div>${spendBars}</div>` : '';
   const mon2 = {ok: !!now, why: 'No warehouse numbers on file for this brand yet'};
   const win = d.winners || [], nx = (d.research || {}).next || {}, rounds = (d.research || {}).rounds || [];
-  const variations = win.filter(w => !w.varied).slice(0, 4);
   const rr = rounds.find(r => r.worlds && r.worlds.length);
   const resCount = (nx.angles || []).length + (rr ? 1 : 0);
   m.innerHTML = head + `${days != null && days > 2 ? `<span class="pill p-stop"><i class="ic" data-i="alert"></i>Numbers stop ${esc(dayLabel(nowDay))} · ${days} days old</span>` : ''}</div>
@@ -431,8 +430,9 @@ async function today(){
         ${(d.off || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${a.brief ? 'Brief ' + esc(a.brief) + ' · ' : ''}${esc(a.name.split('_').slice(-1)[0])}</b><span>${esc(a.why || '')}</span><span class="pill p-stop">off</span></a>`).join('') || '<div class="empty">Nothing over break-even in every window</div>'}
         ${(d.calls || []).map(a => `<a class="row" href="#ads"><b title="${esc(a.name)}">${esc(a.name)}</b><span>${esc(a.why || '')}</span><span class="pill p-act">${esc(String(a.call).replace('_', ' '))}</span></a>`).join('')}
         ${d.calls_asof ? `<span class="lbl">media-buying desk · ${esc(dayLabel(d.calls_asof))}</span>` : ''}</div>
-      <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${variations.length}</span></h3>
-        ${variations.map(w => `<div class="row"><b title="${esc(w.name)}">${esc(w.headline || w.name)}</b><span>${int(w.purchases)} buys · CPA ${usd(w.cpa)} · ROAS ${w.roas ?? '—'}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc(w.id + ' · ' + (w.headline || w.name))}">Plan</button></div>`).join('') || '<div class="empty">No winners on file</div>'}</div>
+      <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${(d.vary || []).length}</span></h3>
+        ${(d.vary || []).map(v => `<div class="row"><b title="${esc(v.example)}">${v.kind === 'brief' ? 'Brief ' + esc(v.key) : esc(v.key)}${v.label ? ' · ' + esc(v.label) : ''}</b><span>${int(v.buys30)} buys 30d · CPA ${usd(v.cpa30)}${v.break_even ? ' (line ' + usd(v.break_even) + ')' : ''}${v.kind === 'creator' ? ' · creator' : ''}</span><button class="btn" style="grid-row:1/3;grid-column:2;align-self:center" data-ask="variations" data-input="${esc((v.kind === 'brief' ? 'brief ' + v.key : 'creator ' + v.key) + ' · ' + v.example)}">Plan</button></div>`).join('') || '<div class="empty">No new ad under break-even with 2+ buys in 30 days</div>'}
+        <span class="lbl">new ads only: a brief number or a trybe tag</span></div>
       <div class="card dcol" style="--hue:var(--violet)"><h3>${ib('search', 'violet')}Research to act on<span class="count">${resCount}</span></h3>
         ${(nx.angles || []).slice(0, 2).map(a => `<a class="row" href="#research"><b>${esc(a.angle)}</b><span>${int(a.purchases)} buys on ${usd(a.spend)}</span><span class="pill p-brief">angle</span></a>`).join('')}
         ${rr ? `<a class="row" href="#research"><b>${esc(nice(rr.name))}</b><span>${esc(rr.worlds[0].world)} · ${int(rr.worlds[0].count)}</span><span class="pill p-swipe">round</span></a>` : ''}

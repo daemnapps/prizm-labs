@@ -70,8 +70,13 @@ Follow .claude/skills/swipe-intake/SKILL.md, then .claude/skills/video-teardown/
 the teardown (no writing, no production). In the result: the teardown label and three lines on what the swipe is."""},
     "variations": {
         "name": "Plan variations of {input}",
-        "prompt": """Brand: {brand}. Job: plan variations of this winning ad: "{input}" (find it in
-runs/winners/{brand}/bank.json by id or name).
+        "prompt": """Brand: {brand}. Job: plan variations of this ad that is working now: "{input}".
+
+Find it: a brief number is in the ad names (`..._brief-NNNN_...`); read its live numbers in the newest
+runs/funnel-tracking/{brand}/<date>/warehouse.json and the desk's call in the newest runs/media-buying/{brand}/<date>/
+report.json, its cards in runs/meta-upload/{brand}/ADS-INDEX.json, and its brief and teardown wherever the index points.
+A creator ad carries trybe=<id> in its name; read its numbers the same way. Older all-time winners are in
+runs/winners/{brand}/bank.json, only if the input names one.
 
 Follow .claude/skills/ad-variations/SKILL.md, free planning steps only: stop before anything is made or paid for. In the
 result: the variations planned (opening, offer, format), each with the winner's number it builds on and the price to
