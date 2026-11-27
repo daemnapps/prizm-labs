@@ -922,6 +922,37 @@ def market(brand):
     return out
 
 
+def pricing():
+    """The owner's prices, kept on this computer only (~/.prizm/pricing.json), never in this repository."""
+    p = _read(Path(os.path.expanduser("~/.prizm/pricing.json")))
+    return p if isinstance(p, dict) else None
+
+
+def bill(brand):
+    """This brand's bill at the owner's prices, estimated from the last 30 days: retainer + the spend tier's % of ad
+    spend (warehouse) + metered usage × (1 + surcharge)."""
+    import studio_asks as SA
+    pr = pricing()
+    if not pr:
+        return {"ok": False, "why": "no prices set on this computer"}
+    spend = float(((live_ads(brand).get("money") or {}).get("spend") or {}).get("30") or 0)
+    pct = next((t["pct"] for t in pr.get("spend_tiers") or [] if t.get("up_to") is None or spend <= t["up_to"]), 0)
+    u = SA.usage(brand)
+    month = datetime_now_month()
+    used = next((m["cost"] for m in u["by_month"] if m["key"] == month), 0.0)
+    sur = pr.get("usage_surcharge_pct") or 0
+    lines = [{"what": "Retainer", "amount": pr.get("retainer_monthly") or 0},
+             {"what": "%d%% of ad spend (last 30 days: $%s)" % (pct, format(round(spend), ",")), "amount": round(spend * pct / 100, 2)},
+             {"what": "Usage this month at cost + %d%% (cost $%.2f)" % (sur, used), "amount": round(used * (1 + sur / 100), 2)}]
+    return {"ok": True, "lines": lines, "total": round(sum(l["amount"] for l in lines), 2), "spend30": spend, "pct": pct,
+            "cost": round(used, 2), "margin_on_usage": round(used * sur / 100, 2), "set": pr.get("set")}
+
+
+def datetime_now_month():
+    import datetime
+    return datetime.date.today().isoformat()[:7]
+
+
 def vary_candidates(la, n=6):
     """New ads worth varying: groups that carry a brief number or a creator (trybe) tag, that sold in the last 30 days
     and are under the desk's break-even (or that the desk says to keep or scale). Ranked by purchases."""
@@ -1204,6 +1235,8 @@ def handle(h, method, parts, query, body):
                 import studio_asks as SA
                 SA.start_worker()                               # a restarted Studio picks up asks still open
                 return h.send(200, {"asks": SA.listing(q.get("brand") if SAFE.match(q.get("brand", "")) else None)})
+            if api == ["bill"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, bill(q["brand"]))
             if api == ["usage"] and SAFE.match(q.get("brand", "")):
                 import studio_asks as SA
                 return h.send(200, SA.usage(q["brand"]))
