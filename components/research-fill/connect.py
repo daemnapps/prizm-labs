@@ -137,8 +137,7 @@ class Sources:
         data = self._brand_json()
         data.setdefault("accounts", {})["helpdesk"] = helpdesk
         _write(self.brand_path, data)
-        if not self.pulls_path.exists():
-            _write(self.pulls_path, self.pulls())
+        _write(self.pulls_path, self.pulls())            # names the avatar the rows file into, if still blank
 
     def ad_comments(self, account):
         if not re.fullmatch(r"act_\d{5,20}", account or ""):
@@ -147,8 +146,7 @@ class Sources:
         accounts = [a for a in data.get("ad_accounts", []) if a.get("account") and a.get("account") != account]
         data["ad_accounts"] = accounts + [{"network": "meta", "account": account, "note": ""}]
         _write(self.brand_path, data)
-        if not self.pulls_path.exists():
-            _write(self.pulls_path, self.pulls())
+        _write(self.pulls_path, self.pulls())            # names the avatar the rows file into, if still blank
 
     def daily_switch(self, on):
         data = self.pulls()
@@ -181,8 +179,15 @@ def dry_run(brand, source, root=REPO, runner=subprocess.run):
     argv = [sys.executable, str(Path(root) / GATHER.relative_to(REPO)), mode, "--brand", brand, "--dry-run"]
     if mode == "ownvoice":
         argv.append("--no-scrape")
+        avatar = _read(Path(root) / "brands" / brand / "operations" / "language-pulls.json", {}).get("language_avatar")
+        if avatar and not _placeholder(avatar):
+            argv += ["--avatar", avatar]
     r = runner(argv, capture_output=True, text=True, timeout=600)
+    text = (r.stdout or "") + (r.stderr or "")
     tail = "\n".join((r.stdout or "").strip().splitlines()[-6:] + (r.stderr or "").strip().splitlines()[-3:])
+    # The gatherer exits 0 when a source is unreadable and says MISSING / BLOCKED instead; that is not a pass.
+    if r.returncode == 0 and re.search(r"\b(MISSING|BLOCKED|could not)\b", text):
+        return 1, tail
     return r.returncode, tail
 
 

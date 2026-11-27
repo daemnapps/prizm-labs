@@ -84,6 +84,17 @@ class ConnectTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(sorted(c[2] for c in self.calls), ["interviews", "ownvoice"])
 
+    def test_missing_key_is_a_fail_not_a_pass(self):
+        self.run_c("helpdesk", "--brand", "acme", "--helpdesk", "gorgias", "--no-test")
+        def missing(argv, **kw):
+            self.calls.append(argv)
+            return SimpleNamespace(returncode=0, stdout="  MISSING — the key is not in the environment\n", stderr="")
+        out = io.StringIO()
+        code = connect.main(["test", "--brand", "acme"], out=out, root=self.root, runner=missing)
+        self.assertEqual(code, 1)
+        self.assertIn("✗ ad-comments", out.getvalue())
+        self.assertEqual(self.calls[-1][-2:], ["--avatar", "busy-mom"])
+
     def test_daily_runs_in_place_and_schedule_prints(self):
         code, out = self.run_c("daily", "--brand", "acme", "--dry-run")
         self.assertIn("--inside", self.calls[-1])
