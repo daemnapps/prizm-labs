@@ -149,7 +149,7 @@ def _plain(p):
     return PLAIN.get(name, name)
 
 
-def writing_stages(run_dir):
+def writing_stages(run_dir, component=None):
     """Each writing stage with its prompt (the template), what was sent (filled) and what came out."""
     run = _read(WS / run_dir / "run.json") if run_dir else None
     if not isinstance(run, dict):
@@ -165,6 +165,11 @@ def writing_stages(run_dir):
             if not v:
                 return None
             r = v if v.startswith(("components/", "runs/")) else str(Path(run_dir) / v)
+            if not (WS / r).exists() and component:
+                r = str(Path(component) / v)
+            if not (WS / r).exists():                    # a prompt renamed for its owner tag (…-v2-<who>.md)
+                hit = sorted(glob.glob(str(WS / re.sub(r"-[a-z]+(\.md)$", r"-*\1", r))))
+                r = str(Path(hit[0]).relative_to(WS)) if hit else r
             return r if (WS / r).exists() else None
         out.append({"id": key, "name": st.get("name") or key, "status": st.get("status"),
                     "why": st.get("why") or st.get("reason"), "prompt": ref("prompt_file"),
@@ -339,7 +344,9 @@ def brands():
         pr = sorted({p.stem if p.is_file() else p.name for p in (d / "products").glob("*")
                      if not p.name.startswith((".", "_")) and p.stem not in ("README", "DRIVE-INDEX")
                      and (p.is_dir() or p.suffix == ".md")})
-        out.append({"id": d.name, "avatars": av, "products": pr, "winner": (d / "winner.json").is_file()})
+        op = _read(d / "operations/brand.json")
+        out.append({"id": d.name, "label": (op.get("label") if isinstance(op, dict) else None) or d.name,
+                    "avatars": av, "products": pr, "winner": (d / "winner.json").is_file()})
     return out
 
 
@@ -493,6 +500,92 @@ def setup(brand):
                       "why": it.get("why"), "required": it.get("required"), "when": it.get("when"),
                       "fills": fills, "have": have, "state": state})
     return {"brand": brand, "groups": t.get("groups"), "items": items, "progress": bool(prog)}
+
+
+_SK = {}
+
+
+def skills(brand):
+    """Every skill this copy has: its job, where it came from (made here, the team's chain, or an outside collection),
+    the engine it runs, and the brand's own taste file it reads (brands/<brand>/variables/), with whether this brand
+    has filled it. Plus the outside collections the skills library indexes, counted by source."""
+    stamps = _read(WS / "components/chain-mirror/stamps.json") or {}
+    taste = {}
+    for f in sorted((WS / "brands/_TEMPLATE/variables").glob("*.md")):
+        if f.stem.lower() != "readme":
+            mine = WS / "brands" / brand / "variables" / f.name
+            taste[f.stem] = {"file": "variables/" + f.name, "filled": mine.is_file() and mine.read_bytes() != f.read_bytes()}
+    out = []
+    for sk in sorted((WS / ".claude/skills").glob("*/SKILL.md")):
+        m = os.path.getmtime(sk)
+        hit = _SK.get(str(sk))
+        if not hit or hit[0] != m:
+            t = sk.read_text(errors="replace")
+            desc = re.search(r"^description:\s*(.+)$", t, re.M)
+            comp = re.search(r"Activates component:\*\*\s*`?(components/[\w./-]+)", t) or re.search(r"`(components/[\w-]+)", t)
+            body = t
+            if comp and (WS / comp.group(1).rstrip("/") / "CLAUDE.md").is_file():
+                body += (WS / comp.group(1).rstrip("/") / "CLAUDE.md").read_text(errors="replace")
+            reads = sorted(set(re.findall(r"variables/(copy|email|image|video)\.md", body)))
+            d = (desc.group(1).strip() if desc else "")
+            hit = (m, {"name": sk.parent.name, "job": re.split(r"(?<=[.!?])\s|\s—\s", d)[0][:180],
+                       "component": comp.group(1).rstrip("/") if comp else None, "reads": reads})
+            _SK[str(sk)] = hit
+        row = dict(hit[1])
+        rel = ".claude/skills/%s/SKILL.md" % row["name"]
+        row["source"] = "team chain" if rel in stamps else "made here"
+        row["taste"] = [dict(taste[r], kind=r) for r in row["reads"] if r in taste]
+        out.append(row)
+    cat = _read(WS / "skills-library/catalog.json") or []
+    repos = {}
+    for r in cat if isinstance(cat, list) else []:
+        k = r.get("source") or "unknown"
+        repos[k] = repos.get(k, 0) + 1
+    return {"skills": out, "taste": taste,
+            "collections": sorted(({"source": k, "skills": v} for k, v in repos.items()), key=lambda x: -x["skills"])}
+
+
+def portfolio():
+    """Every brand at a glance: money for the last 7 days and what waits on the approval page."""
+    import urllib.request
+    m = money()
+    waiting = {}
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8795/api/cards?view=check", timeout=60) as r:
+            for c in json.loads(r.read().decode("utf-8")).get("cards") or []:
+                waiting[c.get("brand")] = waiting.get(c.get("brand"), 0) + 1
+    except Exception:  # noqa: BLE001 — the page says the approval page did not answer
+        waiting = None
+    rows = []
+    for b in brands():
+        mb = next((x for x in m.get("brands", []) if x["brand"] == b["id"]), None) if m.get("ok") else None
+        rows.append({"brand": b["id"], "money": mb, "waiting": None if waiting is None else waiting.get(b["id"], 0),
+                     "swipes": len(swipes(b["id"])), "winners": len(winners(b["id"], 50))})
+    return {"brands": rows, "money_ok": m.get("ok"), "approve_ok": waiting is not None}
+
+
+def emails(brand):
+    """The brand's email runs (runs/email-production/<brand>/<run>/run.json), newest first."""
+    out = []
+    for f in glob.glob(str(WS / "runs/email-production" / brand / "*/run.json")):
+        r = _read(f) or {}
+        d = Path(f).parent
+        st = r.get("stages") or {}
+        out.append({"label": d.name, "at": os.path.getmtime(f), "format": r.get("format"), "avatar": r.get("avatar"),
+                    "done": sum(1 for v in st.values() if isinstance(v, dict) and v.get("status") == "done"),
+                    "stages": len(st), "preview": (d / "deliverable/preview.html").is_file()})
+    out.sort(key=lambda x: x["at"], reverse=True)
+    return out[:120]
+
+
+def email(brand, label):
+    d = "runs/email-production/%s/%s" % (brand, label)
+    r = _read(WS / d / "run.json")
+    if not isinstance(r, dict):
+        return None
+    return {"label": label, "brand": brand, "format": r.get("format"), "avatar": r.get("avatar"),
+            "preview": d + "/deliverable/preview.html" if (WS / d / "deliverable/preview.html").is_file() else None,
+            "stages": writing_stages(d, "components/email-production")}
 
 
 def today(brand):
@@ -709,6 +802,20 @@ def handle(h, method, parts, query, body):
                 return h.send(200, {"brands": brands()})
             if api == ["today"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, today(q["brand"]))
+            if api == ["skills"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, skills(q["brand"]))
+            if api == ["emails"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, {"emails": emails(q["brand"])})
+            if api == ["email"] and SAFE.match(q.get("brand", "")) and SAFE.match(q.get("label", "")):
+                em = email(q["brand"], q["label"])
+                return h.send(200, em) if em else h.send(404, {"error": "no such email run"})
+            if api == ["page"]:                              # an email's own preview page, shown in a frame
+                p = inside(q.get("path", ""), ("runs",))
+                if p and p.is_file() and p.suffix.lower() == ".html" and "email-production" in p.parts:
+                    return h.send(200, p.read_bytes(), "text/html; charset=utf-8")
+                return h.send(404, {"error": "no such page"})
+            if api == ["portfolio"]:
+                return h.send(200, portfolio())
             if api == ["setup"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, setup(q["brand"]))
             if api == ["swipes"] and SAFE.match(q.get("brand", "")):

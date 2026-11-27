@@ -215,6 +215,49 @@ table.t td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabul
 .item span:not(.pill){font:11.5px var(--mono);color:var(--ink-3);word-break:break-word}
 .item .pill{grid-row:1/3;grid-column:3}
 
+.nb{font:500 10.5px var(--mono);background:var(--amber);color:var(--ink);border-radius:var(--r4);padding:0 6px;margin-left:2px}.nb:empty{display:none}
+.lanes{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
+.lanes a{display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:var(--r4);border:1px solid var(--line-2);color:var(--ink-2);font-weight:600;font-size:13px;background:var(--card)}
+.lanes a .ic{width:15px;height:15px}
+.lanes a.on{border-color:var(--hue);color:var(--hue);background:color-mix(in srgb,var(--hue) 8%,var(--card))}
+.lanes a.new{margin-left:auto;background:var(--indigo);border-color:var(--indigo);color:#fff}
+.pf{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.pf .card{display:grid;gap:12px;cursor:pointer;color:var(--ink)}
+.pf .card:hover{border-color:var(--ink-3)}
+.pf .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pf .stats div{display:grid}.pf .stats b{font:500 18px var(--mono)}
+.form{display:grid;gap:18px;max-width:960px}
+.choice{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.choice label{display:grid;gap:4px;border:1px solid var(--line-2);border-radius:var(--r2);padding:12px 14px;cursor:pointer;background:var(--card);position:relative}
+.choice label:has(input:checked){border-color:var(--indigo);box-shadow:0 0 0 1px var(--indigo)}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.choice b{font-size:14px}.choice span{font-size:12.5px;color:var(--ink-3)}
+.fld{display:grid;gap:6px}.fld > span{font:500 11px var(--mono);color:var(--ink-3);letter-spacing:.04em}
+.fld input,.fld select,.fld textarea{border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;background:var(--card);font:14px var(--body)}
+.pickgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;max-height:440px;overflow:auto;padding:2px}
+.pickgrid label{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;cursor:pointer;background:var(--card);display:grid;position:relative}
+.pickgrid label:has(input:checked){border-color:var(--violet);box-shadow:0 0 0 2px var(--violet)}
+.pickgrid input{position:absolute;opacity:0}
+.pickgrid img{width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--bone)}
+.pickgrid span{font-size:11.5px;padding:5px 7px;line-height:1.25}
+.acard{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;padding:0;overflow:hidden;margin-bottom:16px}
+.acard .media{background:var(--bone);display:flex;gap:6px;overflow-x:auto;padding:12px;align-items:flex-start}
+.acard .media img,.acard .media video{height:340px;border-radius:var(--r2);background:var(--ink);flex:none}
+.acard .side{padding:18px 20px;display:grid;gap:12px;align-content:start;border-left:1px solid var(--line)}
+.acard .side h3{font:600 16px var(--body);margin:0}
+.acard .words{font-size:13px;white-space:pre-wrap;max-height:160px;overflow:auto;background:var(--paper);border-radius:var(--r2);padding:10px 12px;border:1px solid var(--line)}
+.chk{display:flex;flex-wrap:wrap;gap:5px}
+.seg2{display:inline-flex;border:1px solid var(--line-2);border-radius:var(--r2);overflow:hidden}
+.seg2 label{padding:7px 14px;font:500 12.5px var(--mono);cursor:pointer;color:var(--ink-2);position:relative}
+.seg2 input{position:absolute;opacity:0}
+.seg2 label:has(input:checked){background:var(--ink);color:var(--paper)}
+.arow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.arow select,.arow textarea{border:1px solid var(--line-2);border-radius:var(--r2);padding:7px 10px;background:var(--card);font:13px var(--body)}
+.sk{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.sk:last-child{border-bottom:0}
+.sk b{font-size:13.5px}.sk span.j{font-size:12.5px;color:var(--ink-3);grid-column:1}
+.sk .tags{grid-row:1/3;grid-column:2;display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:860px){.acard{grid-template-columns:1fr}.acard .side{border-left:0;border-top:1px solid var(--line)}}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
 @media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
@@ -225,16 +268,17 @@ table.t td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabul
 <header class="bar"><div class="barin">
   <a class="mark" href="#today"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="pz" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D3BF5"/><stop offset=".2" stop-color="#2F5BFF"/><stop offset=".38" stop-color="#00A8CC"/><stop offset=".54" stop-color="#12A06F"/><stop offset=".7" stop-color="#F09000"/><stop offset=".85" stop-color="#F04A2E"/><stop offset="1" stop-color="#DB2A8C"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="#EFE9E1"/><polygon points="25,11 45,51 55,45 35,5" fill="url(#pz)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/><polygon points="25,11 45,51 5,51" fill="url(#pz)" stroke="#171512" stroke-width="3.2" stroke-linejoin="round"/></svg>Studio</a>
   <nav class="nav" id="nav">
+    <a href="#portfolio" data-v="portfolio"><i class="ic" data-i="grid"></i><span>Portfolio</span></a>
     <a href="#today" data-v="today"><i class="ic" data-i="zap"></i><span>Today</span></a>
-    <a href="#ads" data-v="ads"><i class="ic" data-i="video"></i><span>Ads</span></a>
-    <a href="#swipes" data-v="swipes"><i class="ic" data-i="bookmark"></i><span>Swipes</span></a>
+    <a href="#production" data-v="production"><i class="ic" data-i="film"></i><span>Production</span></a>
+    <a href="#approve" data-v="approve"><i class="ic" data-i="send"></i><span>Approve</span><b class="nb" id="nb"></b></a>
     <a href="#research" data-v="research"><i class="ic" data-i="search"></i><span>Research</span></a>
-    <a href="#brands" data-v="brands"><i class="ic" data-i="layers"></i><span>Brands</span></a>
+    <a href="#skills" data-v="skills"><i class="ic" data-i="sparkles"></i><span>Skills</span></a>
+    <a href="#settings" data-v="settings"><i class="ic" data-i="shield"></i><span>Settings</span></a>
   </nav>
   <div class="grow"></div>
   <select class="brand" id="brand" aria-label="Brand"></select>
-  <a class="btn" href="/approve/" target="_blank" rel="noopener"><i class="ic" data-i="check"></i>Approval page</a>
-  <a class="btn go" href="/desk#start"><i class="ic" data-i="plus"></i>New ad</a>
+  <a class="btn go" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a>
 </div></header>
 <main id="main"><div class="skel">Loading…</div></main>
 <script>
@@ -250,6 +294,10 @@ const I = {
   sparkles:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/>',
   check:'<path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
+  link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15zM6.5 22H20v-5"/>',
   layers:'<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
   shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
   alert:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
@@ -298,23 +346,27 @@ const text = p => J('/api/desk/text?path=' + encodeURIComponent(p)).then(t => t.
 /* ---------- state + routing (#today · #ads/<id>|<step> · #swipes · #swipe/<label> · #research · #brands) ---------- */
 const S = { brand: store.get('st.brand') || '', menu: store.get('st.menu'), pieces: [], swipes: {}, view: 'today', arg: null, prods: null };
 async function boot(){
-  let bs; try { bs = (await J('/api/desk/brands')).brands.map(b => b.id); } catch { bs = []; }
+  let bl = []; try { bl = (await J('/api/desk/brands')).brands; } catch {}
+  S.labels = Object.fromEntries(bl.map(b => [b.id, b.label || b.id])); let bs = bl.map(b => b.id);
   if (!bs.includes(S.brand)) S.brand = bs[0] || '';
-  $('#brand').innerHTML = bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(b.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()))}</option>`).join('');
+  $('#brand').innerHTML = bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(blabel(b))}</option>`).join('');
   paintIcons();
   J('/api/desk/pieces').then(r => { S.pieces = r.pieces || []; if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
   J('/api/menu').then(m => { S.menu = {brands: m.brands}; store.set('st.menu', S.menu); if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
   route();
 }
-$('#brand').onchange = e => { S.brand = e.target.value; store.set('st.brand', S.brand); if (S.view === 'swipe') location.hash = 'swipes'; else if (S.view === 'ads') location.hash = 'ads'; else route(); };
+$('#brand').onchange = e => { S.brand = e.target.value; store.set('st.brand', S.brand); openAd = null; if (S.view === 'swipe') location.hash = 'production/swipes'; else if (S.view === 'ads') location.hash = 'production/video'; else route(); };
 window.addEventListener('hashchange', route);
 function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
-  S.view = ['today', 'ads', 'swipes', 'swipe', 'research', 'brands'].includes(v) ? v : 'today';
+  const alias = {brands:'settings'};
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
-  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === (S.view === 'swipe' ? 'swipes' : S.view)));
-  ({today, ads, swipes, swipe:swipeView, research, brands:brandSetup})[S.view]();
+  const tab = ['ads', 'swipes', 'swipe'].includes(S.view) ? 'production' : S.view;
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup})[S.view]();
+  approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
 
@@ -325,7 +377,7 @@ async function today(){
   if (!m.querySelector('.money')) m.innerHTML = head + `</div><div class="skel">Reading the numbers…</div>`;
   let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `</div><div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'today') return;
-  const bm = brandMenu(), waiting = bm ? bm.waiting : null, mon = d.money || {};
+  const waiting = await approveCount(), mon = d.money || {};
   const stale = (mon.brands || []).map(b => b.last).filter(Boolean).sort().pop();
   const days = stale ? Math.round((Date.now() - new Date(stale + 'T12:00:00')) / 864e5) : null;
   const moneyCards = (mon.brands || []).map(b => {
@@ -345,7 +397,7 @@ async function today(){
     ${mon.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon.why || 'No money numbers')}</div>`}
     <div class="grid4">
       <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
-        ${waiting ? `<a class="btn wait" href="/approve/" target="_blank" rel="noopener">Open the approval page</a>` : `<div class="empty">Nothing waiting on the approval page</div>`}</div>
+        ${waiting ? `<a class="btn wait" href="#approve">Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'}</a>` : `<div class="empty">Nothing waiting for your approval</div>`}</div>
       <div class="card dcol" style="--hue:var(--coral)"><h3>${ib('alert', 'coral')}Turn off<span class="count">—</span></h3>
         <div class="empty">Needs each live ad's numbers.${days > 2 ? ' The feed stopped ' + esc(dayLabel(stale)) + '.' : ''}</div></div>
       <div class="card dcol" style="--hue:var(--green)"><h3>${ib('loop', 'green')}Make variations<span class="count">${variations.length}</span></h3>
@@ -386,16 +438,17 @@ function ads(){
   const list = adList();
   const [cur, step] = (S.arg || '').split('|');
   const a = list.find(x => x.id === cur) || null;
-  const m = $('#main');
+  const m = host();
   const listHtml = list.length ? GROUPS.map(([g, name, hue]) => { const rows = list.filter(x => x.group === g); return rows.length ? `<div class="g"><span class="pill" style="--hue:var(--${hue})">${name}</span><span class="lbl">${rows.length}</span></div>` + rows.map(x => `<div class="ad ${a && a.id === x.id ? 'on' : ''}" data-ad="${esc(x.id)}" tabindex="0"><b>${esc(x.title)}</b><span>${esc(x.kind === 'line' ? x.line + ' · ' + (x.next || 'done') : (x.n ? x.n + ' · ' : '') + ((x.stage && x.stage.name) || ''))}</span></div>`).join('') : ''; }).join('') : '<div class="skel">Loading the ads…</div>';
   if (m.querySelector('#list') && openAd && a && openAd === a.id + '|' + (step || '')) { $('#list').innerHTML = listHtml; return; }
-  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub">${list.length} for this brand</span></div>
-    <div class="split"><div class="card list" id="list">${listHtml}</div>
+  m.innerHTML = `<div class="split"><div class="card list" id="list">${listHtml}</div>
     <div class="detail" id="detail">${a ? '<div class="skel">Opening…</div>' : `<div class="card note">Pick an ad. Every step, its prompt and its output open here.</div>`}</div></div>`;
   openAd = a ? a.id + '|' + (step || '') : null;
   if (a) (a.kind === 'line' ? openLine : openProd)(a, step);
 }
 document.addEventListener('click', e => { const t = e.target.closest('[data-ad]'); if (t) location.hash = 'ads/' + encodeURIComponent(t.dataset.ad); });
+const host = () => $('#sub') || $('#main');
+const blabel = b => (S.labels && S.labels[b] && S.labels[b] !== b) ? S.labels[b] : String(b).replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.ad) location.hash = 'ads/' + encodeURIComponent(e.target.dataset.ad); });
 function setStep(a, s){ history.replaceState(null, '', '#ads/' + encodeURIComponent(a.id + '|' + s)); S.arg = a.id + '|' + s; openAd = S.arg; }
 const stepsBar = (steps, cur) => `<div class="steps">${steps.map(s => `<button class="${s.cls || ''} ${s.id === cur ? 'on' : ''}" data-step="${esc(s.id)}"><i class="d"></i>${esc(s.name)}</button>`).join('')}</div>`;
@@ -441,8 +494,8 @@ function renderProd(a, step){
       .catch(e => stage.innerHTML = `<div class="note">No HyperFrames edit for this ad yet (${esc(e.message)}). It is built once the shots are made.</div>`);
     inspText('Edit', 'The cut, in HyperFrames, inside the Studio. Changes save into the ad\'s own edit.');
   } else if (step === 'approve') {
-    stage.innerHTML = `<div class="card" style="padding:12px"><iframe class="frame" src="/approve/" title="Approval page"></iframe></div>`;
-    inspText('Approve', 'Going live is your click on the approval page.');
+    stage.innerHTML = `<div class="card note">Finished ads for this brand wait on the Approve screen. <a href="#approve">Open Approve</a></div>`;
+    inspText('Approve', 'Going live is your click on Approve.');
   }
 }
 function inspText(t, body){ $('#insp').innerHTML = `<section><h4>${esc(t)}</h4><div style="color:var(--ink-2);font-size:13px">${esc(body)}</div></section>`; }
@@ -561,11 +614,11 @@ document.addEventListener('submit', async e => {
 /* ================= SWIPES ================= */
 let swFilter = store.get('st.swf') || 'all';
 async function swipes(){
-  const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Swipes</h1><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="/desk#start"><i class="ic" data-i="plus"></i>Add a swipe</a></div></div><div class="skel">Loading the library…</div>`;
+  const m = host();
+  m.innerHTML = `<div class="ph" style="margin-bottom:14px"><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="#production/new"><i class="ic" data-i="plus"></i>Make an ad from a swipe</a></div></div><div class="skel">Loading the library…</div>`;
   paintIcons(m);
   let r; try { r = await J('/api/desk/swipes?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  if (S.view !== 'swipes') return;
+  if (!m.isConnected) return;
   const all = r.swipes || [];
   const F = [['all', 'All'], ['brief', 'Brief written'], ['organic', 'Organic'], ['own', 'Our own']];
   const pick = () => all.filter(s => swFilter === 'all' || (swFilter === 'brief' && s.brief) || (swFilter === 'organic' && s.lane === 'ORGANIC') || (swFilter === 'own' && s.own));
@@ -581,7 +634,7 @@ async function swipes(){
 }
 async function swipeView(){
   const m = $('#main'), label = S.arg;
-  m.innerHTML = `<div class="ph"><a class="btn" href="#swipes">← Swipes</a><h1>${esc(nice(label))}</h1><div class="acts"><a class="btn go" href="/desk#start"><i class="ic" data-i="plus"></i>Make an ad from this</a></div></div><div class="skel">Opening the teardown…</div>`;
+  m.innerHTML = `<div class="ph"><a class="btn" href="#production/swipes">← Swipes</a><h1>${esc(nice(label))}</h1><div class="acts"><a class="btn go" href="#production/new/${encodeURIComponent(label)}"><i class="ic" data-i="plus"></i>Make an ad from this</a></div></div><div class="skel">Opening the teardown…</div>`;
   paintIcons(m);
   let sw; try { sw = S.swipes[label] || (S.swipes[label] = await J('/api/desk/swipe?label=' + encodeURIComponent(label))); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   m.querySelector('.skel').outerHTML = `<div class="sw3"><div class="card swv">${sw.video ? `<video controls preload="metadata" src="${media(sw.video)}" ${sw.poster ? `poster="${media(sw.poster)}"` : ''}></video>` : (sw.poster ? `<img src="${media(sw.poster)}" alt="">` : '')}<dl class="kv"><dt>Format</dt><dd>${esc(sw.format || '—')}</dd><dt>Lane</dt><dd>${esc(sw.lane || '—')}</dd><dt>Product</dt><dd>${esc(sw.product || '—')}</dd><dt>Avatar</dt><dd>${esc(sw.avatar || '—')}</dd><dt>Post</dt><dd>${sw.post_url ? `<a href="${esc(sw.post_url)}" target="_blank" rel="noopener">open</a>` : '—'}</dd></dl></div><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
@@ -611,9 +664,9 @@ async function research(){
 /* ================= BRANDS ================= */
 async function brandSetup(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Brand setup</h1><span class="sub">the checklist every brand fills</span></div><div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Settings</h1><span class="sub">this brand's setup: what is on file, what is missing</span></div><div class="skel">Loading…</div>`;
   let d; try { d = await J('/api/desk/setup?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  if (S.view !== 'brands') return;
+  if (S.view !== 'settings') return;
   const items = d.items || [], isOk = i => ['done', 'filled', 'skipped'].includes(i.state), ok = items.filter(isOk).length;
   const hue = {done:'green', filled:'green', partial:'amber', skipped:'ink-3', todo:'coral'};
   const word = {done:'done', filled:'on file', partial:'part on file', skipped:'skipped', todo:'not in its place'};
@@ -621,6 +674,171 @@ async function brandSetup(){
   const groups = [...new Set(items.map(i => i.group))];
   m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><h3>${ib('check', 'green')}${ok} of ${items.length} in place<span class="lbl" style="margin-left:auto">${d.progress ? 'progress kept' : 'no progress file yet'}</span></h3><div class="prog"><i style="width:${(ok / Math.max(1, items.length) * 100).toFixed(1)}%"></i></div></div>
     <div class="grid2">${groups.map(g => { const gi = items.filter(i => i.group === g); return `<div class="card"><h3>${ib(icn[g] || 'list', 'indigo')}${esc(g)}<span class="count">${gi.filter(isOk).length}/${gi.length}</span></h3><div class="items" style="margin-top:12px">${gi.map(i => `<div class="item"><i class="ib" style="--hue:var(--${hue[i.state]})">${icon(i.state === 'todo' ? 'alert' : 'check')}</i><b>${esc(i.name)}</b><span>${esc((i.fills || []).join(' · '))}</span><span class="pill" style="--hue:var(--${hue[i.state]})">${word[i.state]}</span></div>`).join('')}</div></div>`; }).join('')}</div>`;
+  paintIcons(m);
+}
+
+/* ================= APPROVE (native; the approval page's own data, this brand only) ================= */
+let apCache = {};
+async function approveCount(){
+  try { const d = apCache[S.brand] || (apCache[S.brand] = await J('/approve/api/cards?view=check&brand=' + encodeURIComponent(S.brand))); return (d.cards || []).length; } catch { return null; }
+}
+async function approveBadge(){ const n = await approveCount(); const b = $('#nb'); if (b) b.textContent = n ? n : ''; }
+const amedia = p => '/approve' + p;
+async function approve(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Approve</h1><span class="sub">finished ads waiting for your go · this brand only</span></div><div class="skel">Loading…</div>`;
+  apCache[S.brand] = null;
+  let d; try { d = apCache[S.brand] = await J('/approve/api/cards?view=check&brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">The approval feed did not answer: ${esc(e.message)}</div>`; return; }
+  if (S.view !== 'approve') return;
+  approveBadge();
+  const cards = d.cards || [], by = store.get('st.by') || (d.approvers || [])[0] || '';
+  const reasons = d.reasons || [];
+  const card = c => {
+    const fails = (c.checks || []).filter(k => !k.ok);
+    const goes = c.goes || [];
+    return `<div class="card acard" data-cid="${esc(c.id)}">
+      <div class="media">${(c.media || []).map(x => x.kind === 'video' ? `<video controls preload="metadata" src="${esc(amedia(x.src))}" poster="${esc(amedia(x.thumb))}"></video>` : `<img loading="lazy" src="${esc(amedia(x.thumb))}" alt="">`).join('')}</div>
+      <div class="side">
+        <div class="arow"><span class="pill ${c.lane === 'video' ? 'p-video' : 'p-swipe'}">${esc(c.lane)}</span><span class="pill p-mute">${esc(c.format || '')}</span>${c.brief_label ? `<span class="pill p-brief">${esc(c.brief_label)}</span>` : ''}</div>
+        <h3>${esc(c.headline || c.ad_name)}</h3>
+        <div class="words">${esc(((c.words || {}).primary || [])[0] || '')}</div>
+        <div class="chk">${(c.checks || []).map(k => `<span class="pill ${k.ok ? 'p-ready' : 'p-stop'}" title="${esc(k.why)}">${k.ok ? '✓' : '✗'} ${esc(k.label)}</span>`).join('')}</div>
+        ${fails.length ? `<div class="note stop">${fails.map(k => esc(k.label + ': ' + k.why)).join('<br>')}</div>` : ''}
+        <dl class="kv"><dt>Account</dt><dd>${esc(c.account || '—')}</dd><dt>Goes to</dt><dd>${goes.map(g => `${esc(g.ad_set || '')} · <a href="${esc(g.url)}" target="_blank" rel="noopener">page</a>`).join('<br>') || '—'}</dd></dl>
+        <div class="arow"><span class="lbl">Start</span><span class="seg2"><label><input type="radio" name="st-${esc(c.id)}" value="ACTIVE">On</label><label><input type="radio" name="st-${esc(c.id)}" value="PAUSED">Paused</label></span>
+          <select data-by>${(d.approvers || []).map(a => `<option ${a === by ? 'selected' : ''}>${esc(a)}</option>`).join('')}</select></div>
+        <div class="arow"><button class="btn wait" data-act="approve" ${c.passed ? '' : 'disabled'}><i class="ic" data-i="check"></i>Approve</button><button class="btn" data-act="back">Send back</button></div>
+        <div class="arow" data-backform hidden><select data-reason>${reasons.map(r => `<option value="${esc(r.id)}">${esc(r.label)}</option>`).join('')}</select><textarea data-note rows="2" placeholder="What to change"></textarea><button class="btn" data-act="send-back">Send it back</button></div>
+      </div></div>`;
+  };
+  m.querySelector('.skel').outerHTML = cards.length ? `<div id="aplist">${cards.map(card).join('')}</div>` : `<div class="card note">Nothing waiting for your approval on this brand.</div>`;
+  paintIcons(m);
+  m.querySelectorAll('[data-cid]').forEach(el => {
+    const cid = el.dataset.cid, who = () => el.querySelector('[data-by]').value;
+    el.querySelector('[data-by]').onchange = e => store.set('st.by', e.target.value);
+    el.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
+      const act = b.dataset.act;
+      if (act === 'back') { el.querySelector('[data-backform]').hidden = false; return; }
+      let url, body;
+      if (act === 'approve') {
+        const st = el.querySelector('input[type=radio]:checked');
+        if (!st) { toast('Pick On or Paused first'); return; }
+        url = '/approve/api/approve'; body = {id: cid, start: st.value, by: who()};
+      } else { url = '/approve/api/disapprove'; body = {id: cid, reasons: [el.querySelector('[data-reason]').value], note: el.querySelector('[data-note]').value, by: who()}; }
+      b.disabled = true;
+      try { await J(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); toast(act === 'approve' ? 'Approved · uploading to Meta' : 'Sent back'); el.remove(); apCache[S.brand] = null; approveBadge(); }
+      catch (e) { toast(e.message); b.disabled = false; }
+    });
+  });
+}
+
+/* ================= PORTFOLIO (every brand) ================= */
+async function portfolio(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Portfolio</h1><span class="sub">every brand you are connected to</span></div><div class="skel">Reading every brand…</div>`;
+  let d; try { d = await J('/api/desk/portfolio'); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'portfolio') return;
+  const tot = d.brands.reduce((t, b) => { const x = (b.money || {}).total || {}; t.r += x.revenue || 0; t.s += x.spend || 0; t.p += x.profit || 0; return t; }, {r:0, s:0, p:0});
+  const last = d.brands.map(b => (b.money || {}).last).filter(Boolean).sort().pop();
+  m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><div class="nums"><div><span class="lbl">Revenue · 7 days${last ? ' to ' + esc(dayLabel(last)) : ''}</span><b>${usd(tot.r)}</b></div><div><span class="lbl">Spend</span><b>${usd(tot.s)}</b></div><div class="${tot.p >= 0 ? 'up' : 'dn'}"><span class="lbl">Profit</span><b>${usd(tot.p)}</b></div><div><span class="lbl">ROAS</span><b>${tot.s ? (tot.r / tot.s).toFixed(2) : '—'}</b></div></div></div>
+    <div class="pf">${d.brands.map(b => { const x = (b.money || {}).total; return `<a class="card" data-pick="${esc(b.brand)}">
+      <h3>${ib('target', x ? (x.profit >= 0 ? 'green' : 'coral') : 'ink-3')}${esc(blabel(b.brand))}<span class="count" style="--hue:var(--amber)">${b.waiting ? b.waiting + ' to approve' : ''}</span></h3>
+      ${x ? `<div class="stats"><div><span class="lbl">Revenue</span><b>${usd(x.revenue)}</b></div><div><span class="lbl">Spend</span><b>${usd(x.spend)}</b></div><div><span class="lbl">Profit</span><b style="color:var(--${x.profit >= 0 ? 'green' : 'coral'})">${usd(x.profit)}</b></div></div>` : `<div class="empty">No money numbers connected</div>`}
+      <div class="arow"><span class="pill p-swipe">${b.swipes} swipes</span><span class="pill p-ready">${b.winners} winners</span></div></a>`; }).join('')}</div>`;
+  paintIcons(m);
+  m.querySelectorAll('[data-pick]').forEach(a => a.onclick = () => { S.brand = a.dataset.pick; store.set('st.brand', S.brand); $('#brand').value = S.brand; location.hash = 'today'; });
+}
+
+/* ================= PRODUCTION (one place: video, static, email, swipes, new ad) ================= */
+const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
+function production(lane){
+  const parts = (S.arg || '').split('/');
+  lane = lane || parts[0] || 'video';
+  const m = $('#main');
+  if (!m.querySelector('#sub') || m.dataset.lane !== lane) {
+    m.dataset.lane = lane;
+    m.innerHTML = `<div class="ph"><h1>Production</h1><span class="sub">every ad this brand is making, by lane</span></div>
+      <div class="lanes">${LANES.map(([id, name, ic, hue]) => `<a href="#production/${id}" class="${id === lane ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic" data-i="${ic}"></i>${name}</a>`).join('')}<a class="new ${lane === 'new' ? 'on' : ''}" href="#production/new"><i class="ic" data-i="plus"></i>New ad</a></div><div id="sub"></div>`;
+    paintIcons(m);
+  }
+  if (lane === 'video') return ads();
+  if (lane === 'swipes') return swipes();
+  if (lane === 'static') return staticLane();
+  if (lane === 'email') return emailLane(parts[1]);
+  if (lane === 'new') return newAd(parts.slice(1).join('/'));
+}
+async function staticLane(){
+  const h = host(); h.innerHTML = '<div class="skel">Loading static ads…</div>';
+  const get = v => J(`/approve/api/cards?view=${v}&brand=${encodeURIComponent(S.brand)}&lane=image`).catch(() => ({cards: []}));
+  const [chk, live] = await Promise.all([get('check'), get('live')]);
+  const tile = (c, st) => `<div class="cover"><div class="pic">${(c.media || [])[0] ? `<img loading="lazy" src="${esc(amedia(c.media[0].thumb))}" alt="">` : ''}</div><div class="cap"><b>${esc(c.headline || c.ad_name)}</b><div class="meta"><span class="pill ${st === 'live' ? 'p-ready' : 'p-wait'}">${st === 'live' ? 'live' : 'to approve'}</span><span class="pill p-mute">${(c.media || []).length} pictures</span></div></div></div>`;
+  h.innerHTML = `${(chk.cards || []).length ? `<div class="ph" style="margin-bottom:10px"><span class="sub">waiting for you</span><a class="btn wait" href="#approve" style="margin-left:auto">Review on Approve</a></div><div class="covers" style="margin-bottom:22px">${chk.cards.map(c => tile(c, 'check')).join('')}</div>` : ''}
+    <div class="ph" style="margin-bottom:10px"><span class="sub">${(live.cards || []).length} static ads live</span></div><div class="covers">${(live.cards || []).slice(0, 60).map(c => tile(c, 'live')).join('') || '<div class="card note">No static ads live yet.</div>'}</div>`;
+}
+async function emailLane(label){
+  const h = host();
+  if (label) {
+    h.innerHTML = '<div class="skel">Opening the email…</div>';
+    let e; try { e = await J(`/api/desk/email?brand=${encodeURIComponent(S.brand)}&label=${encodeURIComponent(label)}`); } catch (err) { h.innerHTML = `<div class="note stop">${esc(err.message)}</div>`; return; }
+    h.innerHTML = `<div class="ph" style="margin-bottom:14px"><a class="btn" href="#production/email">← Emails</a><b style="font:600 16px var(--display)">${esc(nice(label))}</b><span class="pill p-brief">${esc(e.format || '')}</span></div>
+      <div class="sw3"><div class="card swv" style="padding:0">${e.preview ? `<iframe src="/api/desk/page?path=${encodeURIComponent(e.preview)}" title="The email" style="width:100%;height:620px;border:0;background:#fff"></iframe>` : '<div class="note">No preview built yet</div>'}</div><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
+    chainView($('#stage'), $('#insp'), {label}, e.stages, false);
+    return;
+  }
+  h.innerHTML = '<div class="skel">Loading emails…</div>';
+  let r; try { r = await J('/api/desk/emails?brand=' + encodeURIComponent(S.brand)); } catch (err) { h.innerHTML = `<div class="note stop">${esc(err.message)}</div>`; return; }
+  const rows = r.emails || [];
+  h.innerHTML = rows.length ? `<div class="card" style="padding:0">${rows.map(x => `<a class="sk" href="#production/email/${encodeURIComponent(x.label)}" style="color:var(--ink)"><b>${esc(nice(x.label))}</b><span class="j">${esc([x.format, x.avatar].filter(Boolean).join(' · '))} · ${new Date(x.at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span><span class="tags">${x.preview ? '<span class="pill p-ready">built</span>' : '<span class="pill p-wait">writing</span>'}<span class="pill p-mute">${x.done}/${x.stages}</span></span></a>`).join('')}</div>` : '<div class="card note">No email runs for this brand yet.</div>';
+}
+async function newAd(pre){
+  const h = host(); h.innerHTML = '<div class="skel">Loading…</div>';
+  let L, B, T;
+  try { [L, B, T] = await Promise.all([J('/api/desk/lines'), J('/api/desk/brands'), J('/api/desk/swipes?brand=' + encodeURIComponent(S.brand))]); } catch (e) { h.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const b = (B.brands || []).find(x => x.id === S.brand) || {avatars: [], products: []};
+  const ready = (T.swipes || []).filter(s => s.done >= 3 && !s.own);
+  h.innerHTML = `<form class="form" id="nf">
+    <div class="card"><h3>${ib('film', 'cyan')}What are we making?</h3><div class="choice" style="margin-top:12px">${L.lines.map((l, i) => `<label><input type="radio" name="format" value="${esc(l.id)}" ${i ? '' : 'checked'}><b>${esc(l.name)}</b><span>${esc(l.what)}</span></label>`).join('')}</div></div>
+    <div class="card"><h3>${ib('bookmark', 'violet')}Where does it start?</h3><div class="choice" style="margin-top:12px">${Object.entries(L.starts).map(([k, v]) => `<label><input type="radio" name="start" value="${esc(k)}" ${(pre ? k === 'swipe' : k === 'swipe') ? 'checked' : ''} ${k === 'winner' && !b.winner ? 'disabled' : ''}><b>${esc(v)}</b><span>${k === 'swipe' ? 'A swipe already torn down' : k === 'own' ? 'A story preset for one of your people' : (b.winner ? 'Your winner beside a swipe' : 'No winner on file yet')}</span></label>`).join('')}</div>
+      <div id="pickswipe" style="margin-top:14px"><div class="pickgrid">${ready.map(s => `<label><input type="radio" name="teardown" value="${esc(s.label)}" ${s.label === pre ? 'checked' : ''}>${s.poster ? `<img loading="lazy" src="${media(s.poster)}" alt="">` : '<img alt="">'}<span>${esc(nice(s.label))}</span></label>`).join('') || '<div class="empty">No torn-down swipes yet</div>'}</div></div>
+      <div id="pickown" style="margin-top:14px;display:none" class="grid2"><label class="fld"><span>Person</span><select name="avatar">${b.avatars.map(a => `<option>${esc(a)}</option>`).join('')}</select></label><label class="fld"><span>Product</span><select name="product">${b.products.map(a => `<option>${esc(a)}</option>`).join('')}</select></label></div></div>
+    <div class="card"><label class="fld"><span>A short name for it</span><input name="label" required placeholder="" value="${esc(pre ? nice(pre).replace(/\s+/g, '-').slice(0, 40) : '')}"></label>
+      <div class="arow" style="margin-top:14px"><span class="lbl">Free steps only. It stops at the price for your go.</span><button class="btn go" type="submit" style="margin-left:auto"><i class="ic" data-i="plus"></i>Start</button></div></div></form>`;
+  paintIcons(h);
+  const f = $('#nf');
+  const sync = () => { const st = f.start.value; $('#pickswipe').style.display = st === 'own' ? 'none' : ''; $('#pickown').style.display = st === 'own' ? '' : 'none'; };
+  f.querySelectorAll('input[name=start]').forEach(x => x.onchange = sync); sync();
+  if (pre) { const el = f.querySelector(`input[name=teardown][value="${CSS.escape(pre)}"]`); if (el) el.closest('label').scrollIntoView({block:'nearest'}); }
+  f.onsubmit = async e => {
+    e.preventDefault();
+    const q = {format: f.format.value, start: f.start.value, brand: S.brand, label: f.label.value};
+    if (q.start === 'own') { q.avatar = f.avatar.value; q.product = f.product.value; } else { const t = f.querySelector('input[name=teardown]:checked'); if (!t) { toast('Pick a swipe'); return; } q.teardown = t.value; }
+    const btn = f.querySelector('[type=submit]'); btn.disabled = true;
+    try { const r = await J('/api/desk/start', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(q)}); toast('Started · it runs to the price'); S.pieces.push({brand: r.brand, label: r.label, line: q.format, state: 'running', next: 'starting'}); location.hash = 'ads/' + encodeURIComponent('w:' + r.label); }
+    catch (err) { toast(err.message); btn.disabled = false; }
+  };
+}
+
+/* ================= SKILLS ================= */
+const SKILL_LANE = n => /email/.test(n) ? 'Email' : /image|static|statics|design|frame|cast|3d/.test(n) ? 'Static' : /video|recut|caption|clip|narrator|teardown|writing|production|edit|ad-|brief|stage|naming|meta|qc/.test(n) ? 'Video + ads' : /research|swipe|trend|winner|triage|avatar|product|brand/.test(n) ? 'Research' : /page/.test(n) ? 'Pages' : 'Running the system';
+async function skillsView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Skills</h1><span class="sub">what each skill does, where it came from, and this brand's version of it</span></div><div class="skel">Loading…</div>`;
+  let d; try { d = await J('/api/desk/skills?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'skills') return;
+  const groups = {};
+  for (const k of d.skills) (groups[SKILL_LANE(k.name)] = groups[SKILL_LANE(k.name)] || []).push(k);
+  const tasteIc = {copy:'sparkles', video:'video', image:'image', email:'mail'};
+  m.querySelector('.skel').outerHTML = `
+    <div class="grid4" style="margin-bottom:16px">${Object.entries(d.taste).map(([k, t]) => `<div class="card"><h3>${ib(tasteIc[k] || 'pen', t.filled ? 'green' : 'amber')}${esc(k[0].toUpperCase() + k.slice(1))} taste<span class="count" style="--hue:var(--${t.filled ? 'green' : 'amber'})">${t.filled ? 'set' : 'blank'}</span></h3><div class="empty" style="font:11.5px var(--mono)">${esc(t.file)}</div></div>`).join('')}</div>
+    <div class="grid2" style="align-items:start">
+      <div style="display:grid;gap:16px">${Object.entries(groups).map(([g, ks]) => `<div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${esc(g)}<span class="count" style="--hue:var(--ink-3)">${ks.length}</span></h3></div>${ks.map(k => `<div class="sk"><b>${esc(k.name)}</b><span class="j">${esc(k.job)}</span><span class="tags">${k.taste.map(t => `<span class="pill ${t.filled ? 'p-ready' : 'p-wait'}">${esc(t.kind)} taste</span>`).join('')}<span class="pill ${k.source === 'made here' ? 'p-act' : 'p-mute'}">${esc(k.source)}</span></span></div>`).join('')}</div>`).join('')}</div>
+      <div style="display:grid;gap:16px;position:sticky;top:80px">
+        <div class="card"><h3>${ib('layers', 'indigo')}How a skill becomes this brand's</h3><div class="items" style="margin-top:12px">
+          <div class="row"><b>1 · The shared skill</b><span>open, the same for every brand</span><span class="pill p-act">Prizm</span></div>
+          <div class="row"><b>2 · This brand's taste</b><span>its voice, look and rules, in its own folder</span><span class="pill p-ready">private</span></div>
+          <div class="row"><b>3 · What sold</b><span>winners and research tune it over time</span><span class="pill p-wait">data</span></div></div></div>
+        <div class="card"><h3>${ib('book', 'violet')}Outside collections<span class="count" style="--hue:var(--ink-3)">${d.collections.reduce((t, c) => t + c.skills, 0)}</span></h3><div class="bars">${(() => { const mx = Math.max(1, ...d.collections.map(c => c.skills)); return d.collections.map(c => `<div><span>${esc(c.source.replace(/_/g, ' / '))}</span><span class="n">${int(c.skills)}</span><div class="b"><i style="width:${(c.skills / mx * 100).toFixed(1)}%"></i></div></div>`).join(''); })()}</div></div>
+      </div></div>`;
   paintIcons(m);
 }
 

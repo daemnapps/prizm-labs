@@ -57,6 +57,21 @@ class StudioNext(unittest.TestCase):
         put(root, "brands/acme/story.md", "our story")
         put(root, "brands/acme/products/brush/product.md", "a brush")
         put(root, "brands/acme/onboarding-progress.json", {"done": ["position"], "skipped": []})
+        em = "runs/email-production/acme/acme-dec-01/"
+        put(root, em + "run.json", {"format": "sale-window", "avatar": "mom", "stages": {
+            "stage0": {"status": "done", "prompt_file": "prompts/stage0-triage-v2-someone.md", "out": "stage0--triage.md"}}})
+        put(root, em + "stage0--triage.md", "triage out")
+        put(root, em + "deliverable/preview.html", "<html>the email</html>")
+        put(root, "components/email-production/prompts/stage0-triage-v2-owner.md", "the triage prompt")
+        put(root, "brands/_TEMPLATE/variables/copy.md", "blank")
+        put(root, "brands/_TEMPLATE/variables/video.md", "blank")
+        put(root, "brands/acme/variables/copy.md", "our voice")
+        put(root, "brands/acme/operations/brand.json", {"label": "ACME Co"})
+        put(root, ".claude/skills/copywriter/SKILL.md", "---\nname: copywriter\ndescription: Write the ad copy. More.\n---\n> **Activates component:** `components/copywriter`")
+        put(root, "components/copywriter/CLAUDE.md", "reads brands/<brand>/variables/copy.md")
+        put(root, ".claude/skills/recut/SKILL.md", "---\nname: recut\ndescription: Recut a video.\n---\n")
+        put(root, "components/chain-mirror/stamps.json", {".claude/skills/recut/SKILL.md": {"commit": "x"}})
+        put(root, "skills-library/catalog.json", [{"name": "a", "source": "org_repo"}, {"name": "b", "source": "org_repo"}])
         cls.old = (WD.WS, WD._growth)
         WD.WS = root
         WD._growth = lambda: {"built": "now", "brands": {"acme": {"label": "ACME", "daily": [
@@ -165,6 +180,40 @@ class StudioNext(unittest.TestCase):
         self.assertEqual(st["best-seller"], "partial")
         self.assertEqual(st["position"], "done")
         self.assertTrue(d["progress"])
+
+    def test_skills_with_source_and_brand_taste(self):
+        code, d = self.js("/api/desk/skills?brand=acme")
+        self.assertEqual(code, 200)
+        sk = {x["name"]: x for x in d["skills"]}
+        self.assertEqual(sk["copywriter"]["source"], "made here")
+        self.assertEqual(sk["recut"]["source"], "team chain")
+        self.assertEqual(sk["copywriter"]["taste"][0]["kind"], "copy")
+        self.assertTrue(sk["copywriter"]["taste"][0]["filled"])
+        self.assertFalse(d["taste"]["video"]["filled"])
+        self.assertEqual(d["collections"], [{"source": "org_repo", "skills": 2}])
+
+    def test_email_runs_and_their_chain(self):
+        code, d = self.js("/api/desk/emails?brand=acme")
+        self.assertEqual(code, 200)
+        self.assertEqual(d["emails"][0]["label"], "acme-dec-01")
+        self.assertTrue(d["emails"][0]["preview"])
+        code, e = self.js("/api/desk/email?brand=acme&label=acme-dec-01")
+        self.assertEqual(code, 200)
+        self.assertEqual(e["stages"][0]["prompt"], "components/email-production/prompts/stage0-triage-v2-owner.md")
+        code, body, ctype = self.get("/api/desk/page?path=" + e["preview"])
+        self.assertEqual((code, body), (200, b"<html>the email</html>"))
+        self.assertEqual(self.get("/api/desk/page?path=runs/video-teardown/_work/acme-swipe/run.json")[0], 404)
+
+    def test_brands_carry_their_own_name(self):
+        _, d = self.js("/api/desk/brands")
+        self.assertEqual(next(b for b in d["brands"] if b["id"] == "acme")["label"], "ACME Co")
+
+    def test_portfolio_lists_every_brand(self):
+        code, d = self.js("/api/desk/portfolio")
+        self.assertEqual(code, 200)
+        acme = next(b for b in d["brands"] if b["brand"] == "acme")
+        self.assertEqual(acme["money"]["total"]["revenue"], 700.0)
+        self.assertEqual(acme["winners"], 2)
 
 
 if __name__ == "__main__":

@@ -166,7 +166,7 @@ class Desk(unittest.TestCase):
 
     def test_brands_and_teardowns(self):
         code, d = self.js("/api/desk/brands")
-        self.assertEqual(d["brands"][0], {"id": "acme", "avatars": ["tired-mom"], "products": ["brush"], "winner": False})
+        self.assertEqual(d["brands"][0], {"id": "acme", "label": "acme", "avatars": ["tired-mom"], "products": ["brush"], "winner": False})
         self.assertEqual(self.js("/api/desk/teardowns?brand=acme")[1], {"teardowns": []})
 
     # --- the go: only the owner's own words, at or over the price ---
