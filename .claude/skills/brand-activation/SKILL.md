@@ -20,9 +20,7 @@ Find the gaps. Activate only those. A brand that already works skips what alread
 3. Never mark Done from a guess. Use the owner's word or something you read.
 4. Save the result as `brands/<brand>/activation.md`, with the state and a one-line reason for each row.
 5. Work the first row marked Activate. Run `brands/_TEMPLATE/ONBOARDING.md` for anything in Foundation.
-6. For the research (customer words, profiles, research rounds, the matrix), run
-   `python3 components/research-fill/fill.py access --brand <brand>` and `status`; ask the brand for each missing
-   source, then work `fill.py next` until every avatar is full.
+6. For the research (customer words, profiles, research rounds, the matrix), follow the `brand-research` skill.
 
 ## New or running
 

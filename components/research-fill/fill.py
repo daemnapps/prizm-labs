@@ -13,6 +13,7 @@ Key checks say set or missing, never a value. Standard library only.
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -21,7 +22,7 @@ sys.path.insert(0, str(REPO / "components" / "keys"))
 import loader  # noqa: E402
 
 PROCESS = json.loads((HERE / "process.json").read_text())
-MARK = {"done": "✓", "todo": "✗", "blocked": "·", "owner": "◆"}
+MARK = {"done": "✓", "todo": "✗", "blocked": "·", "owner": "◆", "stale": "↻"}
 
 
 def _json(path):
@@ -73,6 +74,8 @@ class Brand:
             if not _filled(block):
                 return False
             if rule["pulls"] == "reviews":
+                if block.get("platform") not in ("junip", "judgeme"):
+                    return False
                 return bool(self._key(block.get("key", ""))) if _filled(block.get("key")) else False
             return True
         return False
@@ -101,6 +104,11 @@ class Brand:
         base = self.runs / "swipe-organic" / self.brand
         return sorted(p.name for p in base.glob(f"research-{avatar['id']}-*") if (p / "ranking.json").is_file())
 
+    def age_days(self, paths):
+        """Days since the newest of these files changed; None when there are none."""
+        times = [p.stat().st_mtime for p in paths if p.is_file()]
+        return None if not times else int((time.time() - max(times)) // 86400)
+
     def has_rooms(self, avatar):
         profile = self._avatar_folder(avatar) / "profile.md"
         text = profile.read_text() if profile.is_file() else ""
@@ -127,7 +135,7 @@ class Brand:
         apify = any(a["granted"] for a in self.access() if a["id"] == "apify")
         out = []
         for s in PROCESS["steps"]:
-            kind, detail = s["check"], ""
+            kind, detail, age = s["check"], "", None
             if kind == "avatar":
                 ok = (self._avatar_folder(avatar) / "profile.md").is_file()
             elif kind == "sources":
@@ -141,13 +149,17 @@ class Brand:
                 todo = self.profile_todo(avatar)
                 ok, detail = not todo, "; ".join(todo[:3])
             elif kind == "rounds":
-                n = len(self.rounds(avatar))
-                ok, detail = n >= s["min"], f"{n} ranked round(s)"
+                names = self.rounds(avatar)
+                ok, detail = len(names) >= s["min"], f"{len(names)} ranked round(s)"
+                age = self.age_days([self.runs / "swipe-organic" / self.brand / n / "ranking.json" for n in names])
             elif kind == "matrix":
-                ok = (self.runs / "swipe-organic" / self.brand / f"matrix-{avatar['id']}" / "concepts.json").is_file()
+                f = self.runs / "swipe-organic" / self.brand / f"matrix-{avatar['id']}" / "concepts.json"
+                ok, age = f.is_file(), self.age_days([f])
             else:
                 ok = False
             state = "done" if ok else ("owner" if s.get("owner") else "todo")
+            if ok and s.get("refresh_days") and age is not None and age > s["refresh_days"]:
+                state, detail = "stale", (detail + "; " if detail else "") + f"newest is {age} days old, refresh every {s['refresh_days']}"
             if state == "todo" and s.get("price") and not apify:
                 state, detail = "blocked", "needs the scraping account (access: apify)"
             if state == "todo" and kind == "bank" and not own_words:
@@ -161,7 +173,7 @@ class Brand:
 
 def _next(steps):
     for s in steps:
-        if s["state"] in ("todo", "blocked", "owner"):
+        if s["state"] in ("todo", "blocked", "stale", "owner"):
             return s
     return None
 

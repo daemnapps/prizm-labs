@@ -6,7 +6,7 @@
 The research system as one repeatable process, the same for every brand and every avatar. It answers two
 questions: **what has this brand given us access to**, and **which research step comes next**.
 
-Say **what does &lt;brand&gt; need to give us for research**, **where is &lt;brand&gt;'s research**, or **what's next
+The front door is the `brand-research` skill. Say **set up research for &lt;brand&gt;**, **what does &lt;brand&gt; need to give us for research**, **where is &lt;brand&gt;'s research**, or **what's next
 for &lt;avatar&gt;'s research**.
 
 | Command | Does |
@@ -14,6 +14,9 @@ for &lt;avatar&gt;'s research**.
 | `python3 components/research-fill/fill.py access --brand <b>` | each source the brand can grant: granted or missing, and how to grant it |
 | `python3 components/research-fill/fill.py status --brand <b> [--avatar <a>]` | the nine steps per avatar, done or not, with counts |
 | `python3 components/research-fill/fill.py next --brand <b> [--avatar <a>]` | the one next step and the command that runs it |
+| `python3 components/research-fill/connect.py <source> --brand <b> ...` | connects reviews, surveys, helpdesk, ad comments, interviews or feedback, then dry-runs it |
+| `python3 components/research-fill/connect.py test --brand <b>` | a dry run of every connected source |
+| `python3 components/research-fill/connect.py schedule` | the daily free pull for every brand in this copy, 05:30 (macOS) |
 
 ## What a brand grants
 
@@ -41,7 +44,9 @@ rounds and the matrix are read from `runs/swipe-organic/`. Reads only: it spends
 | File | What it is |
 |---|---|
 | `process.json` | the access list and the steps |
-| `fill.py` | the check |
+| `fill.py` | the check (a ↻ marks a round or matrix older than 30 days) |
+| `connect.py` | the connections and the daily schedule |
+| `test_connect.py` | tests for the connections |
 | `test_fill.py` | tests, on a synthetic brand |
 
 Neighbours: [research gatherer](../research-gatherer/), [language layer](../language-layer/),
