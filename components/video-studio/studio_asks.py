@@ -105,7 +105,8 @@ content: write <name>.draft.<ext> beside it instead. In the result: each file wr
 
 Follow .claude/skills/product-research/SKILL.md (Kalodata for TikTok Shop, TrendTrack for stores and ads). Reads that
 cost credits need the owner's go: plan the read, write the credits it would spend and stop, unless the input says a
-credit cap. Free reads (balances, lookups, what is already on file under runs/product-tracker/{brand}/ and
+credit cap. When the brand is _portfolio the scan is for no one brand: keep its files under runs/product-tracker/_system/.
+Free reads (balances, lookups, what is already on file under runs/product-tracker/ and
 runs/trendtrack/market/) you may do. In the result: the products ranked by 30-day revenue with growth, price, who
 sells them, and the angle they sell on; then the credits a fresh read would spend."""},
     "onboard": {
@@ -183,7 +184,7 @@ def create(kind, brand, text, by=None):
     """Queue one ask. Returns its record."""
     if kind not in KINDS:
         raise ValueError("unknown ask: " + str(kind))
-    if kind not in ("connect", "onboard") and (not brand or not SAFE.match(brand) or not _bdir(brand).is_dir()):
+    if not (kind in ("connect", "onboard") or (kind == "market" and not brand)) and (not brand or not SAFE.match(brand) or not _bdir(brand).is_dir()):
         raise ValueError("pick a brand")
     text = (text or "").strip()
     if not text or len(text) > 600:
@@ -194,7 +195,7 @@ def create(kind, brand, text, by=None):
         raise ValueError("a repository as owner/name")
     if kind == "swipe" and not re.match(r"https?://", text):
         raise ValueError("paste the post's link")
-    brand = brand if kind not in ("connect", "onboard") else "_portfolio"
+    brand = "_portfolio" if kind in ("connect", "onboard") or not brand else brand
     aid = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:4]
     d = root() / brand / aid
     rec = {"id": aid, "brand": brand, "kind": kind, "input": text, "name": KINDS[kind]["name"].format(input=text),

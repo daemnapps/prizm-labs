@@ -1138,17 +1138,25 @@ async function pagesView(){
 async function marketView(){
   const m = $('#main');
   m.innerHTML = `<div class="ph"><h1>Research</h1></div>${resTabs('market')}<form class="card arow" id="mkt" style="margin-bottom:16px"><i class="ib" style="--hue:var(--green)">${icon('target')}</i><input name="q" required placeholder="What to look for: e.g. men's body care, pheromone, supplements for sleep" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Scan the market</button></form><div class="skel">Loading…</div>`;
-  $('#mkt').onsubmit = e => { e.preventDefault(); ask('market', e.target.q.value).then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
+  $('#mkt').onsubmit = e => { e.preventDefault(); ask('market', e.target.q.value, '').then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
   let d; try { d = await J('/api/desk/market?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   const ps = d.products || [];
   if (!ps.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No market read on file for this brand yet. Scan the market above.</div>'; return; }
   const r0 = d.reads[0] || {};
-  m.querySelector('.skel').outerHTML = `<div class="ph" style="margin-bottom:12px"><span class="sub">${ps.length} products · newest read ${esc(dayLabel(String(r0.ran_at || '').slice(0, 10)))}${r0.question ? ' · ' + esc(r0.question) : ''}</span></div>
-    <div class="mk">${ps.slice(0, 80).map(p => `<a class="card mkc" href="${esc(p.link || '#')}" target="_blank" rel="noopener"><div class="pic">${p.picture ? `<img loading="lazy" src="${esc(p.picture)}" alt="">` : ''}</div>
+  let mode = store.get('st.mk') || 'big';
+  const sixMo = Date.now() - 183 * 864e5;
+  const pick = () => mode === 'grow' ? [...ps].filter(p => p.growth != null).sort((a, b) => b.growth - a.growth) : mode === 'new' ? ps.filter(p => p.launched && new Date(p.launched) > sixMo).sort((a, b) => (b.month || 0) - (a.month || 0)) : ps;
+  const draw = () => { const list = pick(); $('#mkgrid').innerHTML = list.slice(0, 80).map(card).join('') || '<div class="card note">Nothing here yet.</div>'; m.querySelectorAll('[data-mk]').forEach(b => b.classList.toggle('on', b.dataset.mk === mode)); $('#mkc').textContent = list.length + ' of ' + ps.length + ' products'; };
+  m.querySelector('.skel').outerHTML = `<div class="filters"><button data-mk="big">Biggest</button><button data-mk="grow">Fastest growing</button><button data-mk="new">New: launched in 6 months</button><span class="lbl" id="mkc" style="margin-left:auto;align-self:center"></span></div>
+    <div class="lbl" style="margin-bottom:12px">${d.reads.length} scans on file · newest ${esc(dayLabel(String(r0.ran_at || '').slice(0, 10)))}${r0.question ? ' · ' + esc(r0.question) : ''}</div>
+    <div class="mk" id="mkgrid"></div>`;
+  m.querySelectorAll('[data-mk]').forEach(b => b.onclick = () => { mode = b.dataset.mk; store.set('st.mk', mode); draw(); });
+  draw();
+}
+function card(p){ return (p => `<a class="card mkc" href="${esc(p.link || '#')}" target="_blank" rel="noopener"><div class="pic">${p.picture ? `<img loading="lazy" src="${esc(p.picture)}" alt="">` : ''}</div>
       <div class="cap"><b>${esc(p.name)}</b><span class="lbl">${esc(p.shop || '')} · ${p.price != null ? usd(p.price, 2) : ''}</span>
       <div class="stats"><div><span class="lbl">30 days</span><b>${usd(p.month)}</b></div><div><span class="lbl">Growth</span><b style="color:var(--${(p.growth || 0) >= 0 ? 'green' : 'coral'})">${p.growth != null ? (p.growth > 0 ? '+' : '') + p.growth + '%' : '—'}</b></div></div>
-      <div class="arow"><span class="pill ${p.source === 'kalodata' ? 'p-brief' : 'p-act'}">${p.source === 'kalodata' ? 'TikTok Shop' : 'own store'}</span>${p.for ? `<span class="pill p-mute">${esc(p.for)}</span>` : ''}${p.launched ? `<span class="lbl">since ${esc(p.launched)}</span>` : ''}</div></div></a>`).join('')}</div>`;
-}
+      <div class="arow"><span class="pill ${p.source === 'kalodata' ? 'p-brief' : 'p-act'}">${p.source === 'kalodata' ? 'TikTok Shop' : 'own store'}</span>${p.category ? `<span class="pill p-mute">${esc(p.category)}</span>` : ''}${p.launched ? `<span class="lbl">since ${esc(p.launched)}</span>` : ''}</div></div></a>`)(p); }
 
 
 /* ================= USAGE: what every job cost, the meter a bill is made from ================= */

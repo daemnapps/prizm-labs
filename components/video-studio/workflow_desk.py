@@ -857,7 +857,7 @@ def hide(brand, item, on=True):
 def market(brand):
     """Products winning and growing in the market, from the product tracker's newest read for this brand
     (runs/product-tracker/<brand>/<run>/list.json: Kalodata for TikTok Shop, TrendTrack for stores), newest first."""
-    runs = sorted(glob.glob(str(WS / "runs/product-tracker" / brand / "*/list.json")), key=os.path.getmtime, reverse=True)
+    runs = sorted(glob.glob(str(WS / "runs/product-tracker/*/*/list.json")), key=os.path.getmtime, reverse=True)  # every scan: the market is not one brand's
     out = {"reads": [], "products": []}
     seen = set()
     for f in runs:
@@ -882,6 +882,7 @@ def market(brand):
                                         "growth": p.get("_growth") if "_growth" in p else (round((m30 / prior - 1) * 100) if prior and m30 else None),
                                         "week": t.get("7"), "units": p.get("units"), "for": p.get("for"),
                                         "launched": (p.get("launched") or "")[:10], "picture": p.get("picture"),
+                                        "category": p.get("category") or p.get("for") or None,
                                         "link": p.get("link"), "pushers": p.get("pushers"), "run": Path(f).parent.name})
     out["products"].sort(key=lambda x: -(x["month"] or 0))
     return out
