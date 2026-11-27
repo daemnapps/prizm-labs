@@ -172,7 +172,22 @@
       if (focus && opts.autofocus !== false) setTimeout(function () { try { focus.focus({ preventScroll: true }); } catch (e) { /* old browsers */ } }, 30);
     }
 
+    // The browser's own back (button, swipe, phone gesture) steps back one question, like the form's Back link.
+    var stepping = false;
+    var canStep = (function () { try { return !!(window.history && window.history.pushState); } catch (e) { return false; } })();
+    function mark(p, replace) {
+      if (!canStep || stepping) return;
+      try { window.history[replace ? "replaceState" : "pushState"]({ fb: p }, ""); } catch (e) { canStep = false; }
+    }
+    if (canStep) window.addEventListener("popstate", function (e) {
+      if (sent) return;                               // after sending, back never reopens the questions
+      var p = e.state && typeof e.state.fb === "number" ? e.state.fb : -1;
+      stepping = true;
+      try { if (p < 0) intro(); else go(p); } finally { stepping = false; }
+    });
+
     function intro() {
+      if (pos === -1 && !stepping) mark(-1, true);
       pos = -1;
       frame([
         h("h1", { "class": "fb-title", text: st.title || cfg.label }),
@@ -184,12 +199,16 @@
     function go(i) {
       var qs = order();
       if (i >= qs.length) return submit();
+      var was = pos;
       pos = Math.max(0, i);
+      if (pos > was) mark(pos, false); else mark(pos, true);
       question(qs[pos], qs);
     }
 
     function nav(qs, nextEnabled, onNext, isLast) {
-      var kids = [h("button", { "class": "fb-back", type: "button", text: "← " + (copy.back || "Back"), on: { click: function () { pos === 0 ? intro() : go(pos - 1); } } })];
+      var kids = [h("button", { "class": "fb-back", type: "button", text: "← " + (copy.back || "Back"), on: { click: function () {
+        if (canStep && window.history.state && typeof window.history.state.fb === "number") { window.history.back(); return; }
+        pos === 0 ? intro() : go(pos - 1); } } })];
       if (onNext) kids.push(h("button", { "class": "fb-cta", type: "button", text: isLast ? (copy.submit || "Send") : (copy.next || "Next"), on: { click: onNext } }));
       return h("div", { "class": "fb-nav" }, kids);
     }
