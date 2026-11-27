@@ -252,9 +252,10 @@ class Desk(unittest.TestCase):
 
     # --- what the Studio served before still answers the same ---
     def test_the_studio_routes_still_answer(self):
-        code, body, ctype = self.get("/")
+        code, body, ctype = self.get("/studio")          # the old Studio; "/" is now the new one (studio-next.html)
         self.assertEqual(code, 200)
         self.assertEqual(body, (Path(VS.HERE) / "studio.html").read_bytes())
+        self.assertEqual(self.get("/")[1], (Path(VS.HERE) / "studio-next.html").read_bytes())
         self.assertEqual(self.get("/canvas")[0], 200)
         self.assertEqual(self.get("/nope")[0], 404)
         self.assertEqual(self.post("/api/nope", {})[0], 404)
