@@ -6,10 +6,15 @@ Ruled 2026-09-29 (owner): automate only what costs nothing. The 2026-09-23
 "no automatic Apify spend" stands, so nothing here may reach Apify — the run
 FAILS CLOSED if anything tries (no commit, exit 3).
 
-    python3 components/research-gatherer/daily.py                 # every brand with a language-pulls.json
+    python3 components/research-gatherer/daily.py                 # every brand whose daily switch is on
     python3 components/research-gatherer/daily.py --brand B        # one brand
     python3 components/research-gatherer/daily.py --dry-run        # pull and count; file, commit, push nothing
     python3 components/research-gatherer/daily.py --no-push        # file and commit in the throwaway checkout; keep it
+
+A brand runs on the schedule only when its operations/language-pulls.json says
+"daily": {"on": true}. The switch is off by default: labelling rows uses paid
+model calls on the brand's own account, so each brand turns it on itself.
+A brand named with --brand runs whatever its switch says.
 
 Per brand, in order:
   1. ownvoice --no-scrape  warehouse ad comments + Gorgias tickets (never the top-ad scrape)
@@ -129,11 +134,21 @@ COUNT = re.compile(r"(\d+) pulled · (\d+) already in the bank · (\d+) new")
 FILED = re.compile(r"filed (\d+) · dropped (\d+) · held (\d+)")
 
 
+def switched_on(ws, brand):
+    """A brand's daily switch: language-pulls.json › daily.on. Off unless the brand turned it on, because
+    labelling the rows uses paid model calls on the brand's own account."""
+    try:
+        conf = json.loads((ws / "brands" / brand / "operations" / "language-pulls.json").read_text())
+    except (OSError, ValueError):
+        return False
+    return bool((conf.get("daily") or {}).get("on"))
+
+
 def brands(ws, named):
     if named:
         return named
     return sorted(p.parent.parent.name for p in (ws / "brands").glob("*/operations/language-pulls.json")
-                  if not p.parent.parent.name.startswith("_"))
+                  if not p.parent.parent.name.startswith("_") and switched_on(ws, p.parent.parent.name))
 
 
 def run_mode(mode, brand, avatar, dry):

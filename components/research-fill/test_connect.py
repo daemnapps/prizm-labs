@@ -98,6 +98,25 @@ class ConnectTest(unittest.TestCase):
         self.assertTrue({a["id"]: a["granted"] for a in b.access()}["reviews"])
 
 
+class SwitchTest(ConnectTest):
+    def test_daily_switch_is_off_until_turned_on(self):
+        b = fill.Brand("acme", root=self.root, key=lambda n: None)
+        self.assertFalse({a["id"]: a["granted"] for a in b.access()}["daily"])
+        code, out = self.run_c("daily-on", "--brand", "acme")
+        self.assertIn("Daily pull on", out)
+        self.assertTrue(self.pulls()["daily"]["on"])
+        self.assertTrue({a["id"]: a["granted"] for a in b.access()}["daily"])
+        sys.path.insert(0, str(Path(connect.REPO) / "components" / "research-gatherer"))
+        import importlib
+        daily = importlib.import_module("daily")
+        self.assertEqual(daily.brands(self.root, None), ["acme"])
+        self.run_c("daily-off", "--brand", "acme")
+        self.assertFalse(self.pulls()["daily"]["on"])
+        self.assertEqual(daily.brands(self.root, None), [])
+        self.assertEqual(daily.brands(self.root, ["acme"]), ["acme"])
+        self.assertEqual(self.calls, [])
+
+
 class StaleTest(unittest.TestCase):
     def test_old_rounds_come_up_again(self):
         with tempfile.TemporaryDirectory() as t:

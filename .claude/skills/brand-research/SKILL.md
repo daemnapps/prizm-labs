@@ -41,8 +41,11 @@ that source's dry run on the spot; tell them ✓ it pulls (with the count) or �
 - A survey sheet must be shared with the Drive service account (`GDRIVE_SA_KEY`); say so with the sheet link.
 - The scraping account (`APIFY_TOKEN`, their own) is required for steps 4–7.
 
-Then keep it pulling: `python3 components/research-fill/connect.py schedule` (once per computer: every brand in this
-copy, daily at 05:30, free sources only). Prove it once: `connect.py daily --brand <b> --dry-run`.
+Keeping it pulling is the brand's choice, because labelling new rows every day uses paid model calls on its own
+account. The daily switch is **off** by default. Turn it on only when the brand says so:
+`python3 components/research-fill/connect.py daily-on --brand <b>` (and `daily-off`). The 05:30 job runs only
+brands switched on; install it once per computer with `connect.py schedule`. Without the switch, pull by hand
+when needed: `connect.py daily --brand <b>`.
 
 ## 3. Fill each avatar, in order
 

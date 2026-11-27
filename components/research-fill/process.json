@@ -98,6 +98,16 @@
     ]
    },
    "need": "optional"
+  },
+  {
+   "id": "daily",
+   "name": "Daily pull switch",
+   "unlocks": "new customer words every morning at 05:30",
+   "grant": "connect.py daily-on (labelling rows uses paid model calls on the brand's own account)",
+   "check": {
+    "daily": true
+   },
+   "need": "switch"
   }
  ],
  "steps": [

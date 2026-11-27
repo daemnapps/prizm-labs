@@ -8,7 +8,9 @@
     python3 components/research-fill/connect.py ad-comments --brand B --meta-account act_123
     python3 components/research-fill/connect.py feedback    --brand B --key KLAVIYO_KEY_NAME
     python3 components/research-fill/connect.py test        --brand B [--source reviews]   a dry run of each connected source: pulls and counts, files nothing
-    python3 components/research-fill/connect.py daily       --brand B [--dry-run]          the daily pull for this brand, in this copy
+    python3 components/research-fill/connect.py daily-on    --brand B                      turn this brand's 05:30 pull on (paid model calls on its account)
+    python3 components/research-fill/connect.py daily-off   --brand B                      turn it off
+    python3 components/research-fill/connect.py daily       --brand B [--dry-run]          the daily pull for this brand, in this copy, once
     python3 components/research-fill/connect.py schedule    [--hour 5] [--minute 30] [--print]  the daily pull at 05:30 on this Mac
 
 Every connect writes only the brand's own operations/language-pulls.json or operations/brand.json
@@ -19,6 +21,7 @@ fails closed if anything tries a paid scrape. Standard library only.
 """
 import argparse
 import json
+from datetime import datetime, timezone
 import os
 import re
 import subprocess
@@ -147,6 +150,15 @@ class Sources:
         if not self.pulls_path.exists():
             _write(self.pulls_path, self.pulls())
 
+    def daily_switch(self, on):
+        data = self.pulls()
+        block = dict(data.get("daily") or {})
+        block["on"] = bool(on)
+        block["changed"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        block.setdefault("note", "The 05:30 pull for this brand; labelling rows uses paid model calls on its account.")
+        data = {"daily": block, **{k: v for k, v in data.items() if k != "daily"}}
+        _write(self.pulls_path, data)
+
     def connected(self):
         data = _read(self.pulls_path, {})
         out = []
@@ -194,7 +206,7 @@ def plist(hour, minute, root=REPO):
 
 def main(argv=None, out=sys.stdout, root=REPO, runner=subprocess.run):
     ap = argparse.ArgumentParser(description="Connect a brand's own customer-word sources.")
-    ap.add_argument("cmd", choices=["reviews", "surveys", "interviews", "helpdesk", "ad-comments", "feedback", "test", "daily", "schedule"])
+    ap.add_argument("cmd", choices=["reviews", "surveys", "interviews", "helpdesk", "ad-comments", "feedback", "test", "daily", "daily-on", "daily-off", "schedule"])
     ap.add_argument("--brand")
     ap.add_argument("--platform")
     ap.add_argument("--key")
@@ -228,7 +240,7 @@ def main(argv=None, out=sys.stdout, root=REPO, runner=subprocess.run):
         target.write_text(text)
         subprocess.run(["launchctl", "unload", str(target)], capture_output=True)
         r = subprocess.run(["launchctl", "load", str(target)], capture_output=True, text=True)
-        out.write(f"Daily pull scheduled at {a.hour:02d}:{a.minute:02d} for every brand in this copy.\n" if r.returncode == 0
+        out.write(f"Daily pull scheduled at {a.hour:02d}:{a.minute:02d}; it runs only brands switched on (connect.py daily-on).\n" if r.returncode == 0
                   else f"Couldn't load the schedule: {r.stderr.strip()}\n")
         return r.returncode
 
@@ -237,6 +249,11 @@ def main(argv=None, out=sys.stdout, root=REPO, runner=subprocess.run):
         return 2
     try:
         s = Sources(a.brand, root=root)
+        if a.cmd in ("daily-on", "daily-off"):
+            s.daily_switch(a.cmd == "daily-on")
+            out.write(f"Daily pull {'on' if a.cmd == 'daily-on' else 'off'} for {a.brand}."
+                      + (" It runs at 05:30 once the schedule is installed on this computer (connect.py schedule)." if a.cmd == "daily-on" else "") + "\n")
+            return 0
         if a.cmd == "daily":
             argv2 = [sys.executable, str(Path(root) / DAILY.relative_to(REPO)), "--inside", "--brand", a.brand] + (["--dry-run"] if a.dry_run else [])
             r = runner(argv2, capture_output=True, text=True, timeout=1800, env=dict(os.environ, AI_WORKSPACE=str(root)))

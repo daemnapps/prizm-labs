@@ -68,6 +68,9 @@ class Brand:
             for part in rule["brand_json"].split("."):
                 value = value.get(part) if isinstance(value, dict) else None
             return _filled(value)
+        if "daily" in rule:
+            pulls = _json(self.folder / "operations" / "language-pulls.json") or {}
+            return bool((pulls.get("daily") or {}).get("on"))
         if "pulls" in rule:
             pulls = _json(self.folder / "operations" / "language-pulls.json") or {}
             block = pulls.get(rule["pulls"])
@@ -198,7 +201,8 @@ def main(argv=None, out=sys.stdout, root=REPO, key=None):
         for r in rows:
             out.write(f"{'✓' if r['granted'] else '✗'} {r['name']:22} {r['need']:9}  {'' if r['granted'] else 'grant: ' + r['grant']}\n")
         own = sum(1 for r in rows if r["need"] == "own-words" and r["granted"])
-        out.write(f"{own} own-words source(s) connected; scraping {'on' if rows[0]['granted'] else 'off'}.\n")
+        daily = next((r["granted"] for r in rows if r["id"] == "daily"), False)
+        out.write(f"{own} own-words source(s) connected; scraping {'on' if rows[0]['granted'] else 'off'}; daily pull {'on' if daily else 'off'}.\n")
         return 0
     avatars = [x for x in b.avatars() if not a.avatar or x["id"] == a.avatar]
     if not avatars:

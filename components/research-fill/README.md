@@ -16,7 +16,8 @@ for &lt;avatar&gt;'s research**.
 | `python3 components/research-fill/fill.py next --brand <b> [--avatar <a>]` | the one next step and the command that runs it |
 | `python3 components/research-fill/connect.py <source> --brand <b> ...` | connects reviews, surveys, helpdesk, ad comments, interviews or feedback, then dry-runs it |
 | `python3 components/research-fill/connect.py test --brand <b>` | a dry run of every connected source |
-| `python3 components/research-fill/connect.py schedule` | the daily free pull for every brand in this copy, 05:30 (macOS) |
+| `python3 components/research-fill/connect.py daily-on --brand <b>` / `daily-off` | the brand's daily switch, off by default: labelling new rows uses paid model calls on its account |
+| `python3 components/research-fill/connect.py schedule` | the 05:30 job on this computer; it runs only brands switched on (macOS) |
 
 ## What a brand grants
 

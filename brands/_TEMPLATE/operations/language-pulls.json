@@ -1,5 +1,9 @@
 {
   "_what": "What the research gatherer's free daily sources pull for this brand (components/research-gatherer: surveys, reviews, interviews, feedback; daily.py runs every brand that has this file). Keys are read by NAME from the environment or the Keychain, never written here. Fill in or delete each block.",
+  "daily": {
+    "on": false,
+    "note": "The 05:30 pull for this brand. Off until the brand turns it on: labelling new rows uses paid model calls on its own account. connect.py daily-on / daily-off."
+  },
   "language_avatar": "<core avatar id the rows file into>",
   "surveys": [
     {
@@ -27,7 +31,9 @@
   },
   "interviews": {
     "inbox": "core-avatars/<avatar>/language/evidence/inbox",
-    "company_speakers": ["<names of your own people in the transcripts>"],
+    "company_speakers": [
+      "<names of your own people in the transcripts>"
+    ],
     "note": ""
   }
 }
