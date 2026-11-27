@@ -118,7 +118,8 @@ The brand owns its own repository and its own data; we only get access. Read too
 1. If a repository is given, check our access with `gh repo view <owner/name>` (read-only). If we cannot see it, stop
    and say in the result exactly what the brand must do: create the repository (private) from Prizm Labs, and invite
    our GitHub account as a collaborator.
-2. If we can see it, bring it onto this computer with `python3 tools/client-copies/clients.py get <client>` when it is
+2. If the repository is already on this computer (a folder listed in ~/.prizm/brand-roots.json), read it there.
+   Otherwise, if we can see it, bring it onto this computer with `python3 tools/client-copies/clients.py get <client>` when it is
    one of our client copies; otherwise only read it through gh. Never clone into ~/Projects.
 3. Read its brand folder against brands/_TEMPLATE/onboarding.json, item by item: what is filled, what is missing.
 4. In the result: a table of the 23 items (filled / missing), then "What to ask the brand for": a short numbered
@@ -350,6 +351,11 @@ def run_one(rec, runner=None):
     else:
         (d / "exit.txt").unlink(missing_ok=True)
         dirs = sorted({os.path.realpath(WS / x) for x in ("runs", "brands")})   # the data folders are often links
+        try:                                                    # brands kept in their own repositories, read in place
+            import workflow_desk as WD
+            dirs += [str(r) for r in WD.brand_roots()]
+        except Exception:  # noqa: BLE001
+            pass
         cmd = ["claude", "-p", prompt_for(rec), "--output-format", "stream-json", "--verbose",
                "--add-dir", *dirs, "--allowedTools", *TOOLS]
         wrapper = 'cd "$1" && shift && "$@" > "$OUT/run.log" 2>&1; echo $? > "$OUT/exit.txt"'
