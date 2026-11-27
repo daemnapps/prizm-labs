@@ -18,6 +18,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Swipe | Paid and organic swipe | `components/swipe-paid/`, `components/swipe-organic/` |
 | Swipe | Intake | `components/intake/` |
 | Swipe | Gathers customer language | `components/research-gatherer/` |
+| Swipe | Research fill: what a brand grants for research, and the next research step | `components/research-fill/` |
 | Swipe | Ranks and sorts the swipes | `components/triage/` |
 | Take apart | Video teardown | `tools/video-teardown/` |
 | Take apart | Image teardown | `tools/image-teardown/` |

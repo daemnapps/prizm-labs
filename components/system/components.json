@@ -95,6 +95,16 @@
    "basis": "source"
   },
   {
+   "path": "components/research-fill",
+   "kind": "tool",
+   "does": "Shows what a brand has granted for research and which research step comes next, per avatar",
+   "role": "swiper",
+   "workflow": "all",
+   "stage": "swipe",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/video-teardown",
    "kind": "tool",
    "does": "Strips a video to its structure",

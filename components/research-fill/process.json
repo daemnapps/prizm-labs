@@ -1,0 +1,23 @@
+{
+ "_what": "The research system as one repeatable process, the same for every brand and every avatar. `access` is what a brand grants so the research can run on its own accounts; `steps` is the fill, in order. fill.py reads this file; change the process here, never in code.",
+ "access": [
+  {"id": "apify", "name": "Scraping account", "unlocks": "rooms, outside research for the profile, research rounds", "grant": "the brand's own Apify token, on the setup page", "check": {"key": "APIFY_TOKEN"}, "need": "required"},
+  {"id": "ad-comments", "name": "Ad comments", "unlocks": "what people say under the brand's ads", "grant": "the brand's own ads database (DATABASE_URL), or its Meta ad account in operations/brand.json for a paid scrape of its top ads", "check": {"any": [{"key": "DATABASE_URL"}, {"brand_json": "ad_accounts"}]}, "need": "own-words"},
+  {"id": "helpdesk", "name": "Support inbox", "unlocks": "customers' own words from support tickets", "grant": "which helpdesk it uses in operations/brand.json (accounts.helpdesk), read through its ads database", "check": {"all": [{"brand_json": "accounts.helpdesk"}, {"key": "DATABASE_URL"}]}, "need": "own-words"},
+  {"id": "reviews", "name": "Store reviews", "unlocks": "verified buyers' words, with star ratings", "grant": "the review app (Junip or Judge.me) and its key name in operations/language-pulls.json, the key on the setup page", "check": {"pulls": "reviews"}, "need": "own-words"},
+  {"id": "surveys", "name": "Customer surveys", "unlocks": "answers from buyers, refunds and leads", "grant": "each survey's response sheet in operations/language-pulls.json, shared with the brand's Drive service account", "check": {"all": [{"pulls": "surveys"}, {"key": "GDRIVE_SA_KEY"}]}, "need": "own-words"},
+  {"id": "interviews", "name": "Interviews and calls", "unlocks": "customer turns from recorded calls", "grant": "an inbox folder in operations/language-pulls.json; drop transcripts there", "check": {"pulls": "interviews"}, "need": "own-words"},
+  {"id": "products", "name": "Market data", "unlocks": "what is selling and what competitors run", "grant": "Kalodata or TrendTrack key on the setup page", "check": {"any": [{"key": "KALODATA_API_KEY"}, {"key": "TRENDTRACK_API_KEY"}]}, "need": "optional"}
+ ],
+ "steps": [
+  {"id": "avatar", "name": "Name the avatar", "fills": "core-avatars/avatars.json and core-avatars/<folder>/profile.md", "run": "say \"build the profile for <avatar> of <brand>\" (avatar-profile skill)", "check": "avatar"},
+  {"id": "sources", "name": "Connect the brand's own words", "fills": "operations/language-pulls.json", "run": "grant at least one own-words source (see the access list)", "check": "sources"},
+  {"id": "bank", "name": "Fill the language bank", "fills": "core-avatars/<folder>/language/evidence/", "run": "python3 components/research-gatherer/daily.py --brand <brand>", "check": "bank", "min": 25},
+  {"id": "rooms", "name": "Find where he talks", "fills": "the ### rooms block in profile.md (found by itself)", "run": "python3 components/research-gatherer/gather.py person --brand <brand> --avatar <avatar> --sub <sub> --plan", "check": "rooms", "price": true},
+  {"id": "profile", "name": "Build and gate the profile", "fills": "core-avatars/<folder>/sub-avatars/ (card and slots)", "run": "python3 components/creative-strategist/machine/who.py build --brand <brand> --avatar <avatar>", "check": "profile", "price": true},
+  {"id": "formats", "name": "Research round: what he watches", "fills": "runs/swipe-organic/<brand>/research-<avatar>-<label>/ranking.json", "run": "say \"run a research round for <avatar> of <brand>\" (research-round skill)", "check": "rounds", "min": 1, "price": true},
+  {"id": "problem", "name": "Research round: his problem", "fills": "a second ranked round, on the problem", "run": "say \"run a problem round for <avatar> of <brand>\" (research-round skill)", "check": "rounds", "min": 2, "price": true},
+  {"id": "matrix", "name": "Build the matrix", "fills": "runs/swipe-organic/<brand>/matrix-<avatar>/concepts.json", "run": "say \"build the matrix for <avatar> of <brand>\" (research-round skill, step 7)", "check": "matrix"},
+  {"id": "picks", "name": "Owner picks concepts", "fills": "picks go to teardown and writing", "run": "the owner picks on the matrix page", "check": "none", "owner": true}
+ ]
+}
