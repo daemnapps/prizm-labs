@@ -453,10 +453,10 @@
   "commit": "e0267f6b7b73243e854b578f85eb2ea7506ccdda"
  },
  "brands/_TEMPLATE/operations/feedback-stages.json": {
-  "commit": "7f6fba038cc92c7a321ae804464ccc89f795916b"
+  "commit": "03627c03d0b1b8aac76d7bd3dca525b476f8d0f2"
  },
  "brands/_TEMPLATE/operations/feedback-variables.json": {
-  "commit": "7f6fba038cc92c7a321ae804464ccc89f795916b"
+  "commit": "03627c03d0b1b8aac76d7bd3dca525b476f8d0f2"
  },
  "brands/_TEMPLATE/operations/products.json": {
   "commit": "10b511880033d5b9d6187c7d05efea207cc2bbe1"
@@ -3591,13 +3591,13 @@
   "commit": "34f42a1784167274197012132b73788a8600085e"
  },
  "components/feedback-forms/principles.json": {
-  "commit": "7f6fba038cc92c7a321ae804464ccc89f795916b"
+  "commit": "03627c03d0b1b8aac76d7bd3dca525b476f8d0f2"
  },
  "components/feedback-forms/prompts/questions-v1-write.md": {
   "commit": "225d0103d1a10211d7756098d7412e99008615fe"
  },
  "components/feedback-forms/stages.py": {
-  "commit": "7f6fba038cc92c7a321ae804464ccc89f795916b"
+  "commit": "03627c03d0b1b8aac76d7bd3dca525b476f8d0f2"
  },
  "components/feedback-forms/tests/test_build.py": {
   "commit": "4f2968032cb2e449d56fb4e9bd064c28c4180302"
@@ -3609,7 +3609,7 @@
   "commit": "a8afcfc18a47440b6fc4690be17001e0fda26693"
  },
  "components/feedback-forms/tests/test_stages.py": {
-  "commit": "7f6fba038cc92c7a321ae804464ccc89f795916b"
+  "commit": "03627c03d0b1b8aac76d7bd3dca525b476f8d0f2"
  },
  "components/feedback-forms/tests/test_tail_brand_words.py": {
   "commit": "34f42a1784167274197012132b73788a8600085e"

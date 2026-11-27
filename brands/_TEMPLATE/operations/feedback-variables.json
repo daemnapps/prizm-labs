@@ -1,5 +1,5 @@
 {
- "_what": "The facts about this brand that decide its feedback forms: which forms it gets, when each is sent, and what each event is called in its own systems. Fill each value from the brand's own systems and product facts. Leave a value null until it is known: a form that needs it waits and says so, nothing is assumed. components/feedback-forms/stages.py reads this.",
+ "_what": "The facts about this brand that decide its feedback forms: which forms it gets, when each is sent, and what each event is called in its own systems. Fill each value from the brand's own systems and product facts. Leave a value null until it is known: a form that needs it waits and says so, nothing is assumed. components/feedback-forms/stages.py reads this. An event value may be a list when the brand sells through more than one store or checkout (one flow per source). Each fact may carry a 'source' line saying where it was read.",
  "store_platform": {
   "value": null,
   "means": "where orders happen",
@@ -34,6 +34,21 @@
   "value": null,
   "means": "days to leave after an order or service email before asking anything",
   "from": "the brand's own sending rules"
+ },
+ "joined_list_event": {
+  "value": null,
+  "means": "the event name(s) when someone joins the list",
+  "from": "the email platform's metrics list (Klaviyo's own: 'Subscribed to List')"
+ },
+ "checkout_started_event": {
+  "value": null,
+  "means": "the event name(s) when someone starts checkout, one per store or checkout the brand sells through",
+  "from": "the email platform's metrics list, the ones still firing"
+ },
+ "order_placed_event": {
+  "value": null,
+  "means": "the event name(s) for a placed order, one per store or checkout",
+  "from": "the email platform's metrics list, the ones still firing"
  },
  "delivered_event": {
   "value": null,

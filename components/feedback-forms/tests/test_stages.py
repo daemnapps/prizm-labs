@@ -34,6 +34,8 @@ class Stages(unittest.TestCase):
     def test_facts_drive_triggers_waits_and_which_forms_exist(self):
         f = self.facts(store_platform="shopify", email_platform="klaviyo", has_email_signup=True, welcome_series_days=5,
                        checkout_recovery_days=2, time_to_first_result_days=21, buffer_days=1,
+                       joined_list_event="Subscribed to List", checkout_started_event="Checkout Started",
+                       order_placed_event=["Placed Order (store)", "Placed Order (checkout)"],
                        delivered_event="Delivered Shipment", refund_event="Refunded Order", sells_subscriptions=False)
         rows = {m["stage"]: s for m, s in S.derive(f)}
         self.assertIsNone(rows["subscriber"])
@@ -45,14 +47,18 @@ class Stages(unittest.TestCase):
         self.assertEqual(rows["post-support"]["status"], "blocked")
         self.assertIn("ticket_resolved_event", rows["post-support"]["blocked_by"])
 
-    def test_unknown_platform_pair_asks_instead_of_assuming(self):
-        f = self.facts(store_platform="woocommerce", email_platform="klaviyo", has_email_signup=True,
-                       welcome_series_days=3, buffer_days=1)
+    def test_event_names_are_the_brands_own(self):
+        f = self.facts(email_platform="klaviyo", has_email_signup=True, welcome_series_days=3, buffer_days=1)
         rows = {m["stage"]: s for m, s in S.derive(f)}
-        self.assertIn("the event name for 'joined-list' on woocommerce + klaviyo", rows["list-no-order"]["blocked_by"])
+        self.assertIn("joined_list_event", rows["list-no-order"]["blocked_by"])
         f = self.facts(email_platform="mailchimp")
         rows = {m["stage"]: s for m, s in S.derive(f)}
         self.assertIn("only klaviyo is built", rows["repeat-customer"]["blocked_by"])
+
+    def test_two_order_sources_show_as_either(self):
+        f = self.facts(email_platform="klaviyo", buffer_days=1, order_placed_event=["Placed Order (store)", "Placed Order (checkout)"])
+        rows = {m["stage"]: s for m, s in S.derive(f)}
+        self.assertEqual(rows["repeat-customer"]["klaviyo"]["trigger"]["metric"], "Placed Order (store) or Placed Order (checkout)")
 
     def test_proposal_drops_questions_for_dropped_forms_and_passes_check(self):
         self.facts(sells_subscriptions=False)

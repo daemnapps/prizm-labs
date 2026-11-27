@@ -29,10 +29,6 @@ import build as B  # noqa: E402
 
 PRINCIPLES = json.loads((HERE / "principles.json").read_text())
 SUPPORTED = {"klaviyo"}
-# The event names a store and an email platform use for the platform's own events. Only pairs checked are here;
-# any other pair asks the brand for the name instead of assuming one.
-PLATFORM_EVENTS = {("shopify", "klaviyo"): {"joined-list": "Subscribed to List", "started-checkout": "Checkout Started",
-                                            "order-placed": "Placed Order"}}
 
 
 def facts(brand, root=None):
@@ -46,6 +42,13 @@ def _val(f, name):
     return (f.get(name) or {}).get("value")
 
 
+def _names(v):
+    """An event value: one name, or a list of names (one per store or checkout) shown as 'A or B'."""
+    if isinstance(v, list):
+        return " or ".join(str(x) for x in v if x) or None
+    return v or None
+
+
 def _need(f, name):
     meta = f.get(name) or {}
     return f"{name} — {meta.get('means', '')} (from {meta.get('from', 'the brand')})"
@@ -53,31 +56,27 @@ def _need(f, name):
 
 def derive(f):
     """[(moment, stage dict or None)] — None means the form is not for this brand."""
-    store, esp = _val(f, "store_platform"), _val(f, "email_platform")
-    names = PLATFORM_EVENTS.get((str(store).lower(), str(esp).lower()), {})
+    esp = _val(f, "email_platform")
     out = []
     for m in PRINCIPLES["moments"]:
         if any(_val(f, r) is False for r in m["requires"]):
             out.append((m, None))
             continue
-        needs = [_need(f, r) for r in m["requires"] if _val(f, r) in (None, "")]
+        needs = [_need(f, r) for r in m["requires"] if _val(f, r) in (None, "", [])]
         if esp in (None, ""):
             needs.append(_need(f, "email_platform"))
         elif str(esp).lower() not in SUPPORTED:
             needs.append(f"email_platform {esp}: only {', '.join(sorted(SUPPORTED))} is built so far")
         ev = m["event"]
-        metric = _val(f, ev) if ev in f else names.get(ev)
-        if not metric and ev not in f:
-            needs.append(f"the event name for '{ev}' on {store or 'the store'} + {esp or 'the email platform'}"
-                         + ("" if store else f"; {_need(f, 'store_platform')}"))
+        metric = _names(_val(f, ev))
         w = m["wait"]
         days = [_val(f, w["after"])] + ([_val(f, w["plus"])] if w.get("plus") else [])
         for key, d in zip([w["after"], w.get("plus")], days):
             if key and d is None:
                 needs.append(_need(f, key))
         filters = []
-        order_ev = names.get("order-placed") or "the order event"
-        refund_ev = _val(f, "refund_event")
+        order_ev = _names(_val(f, "order_placed_event")) or "the order event"
+        refund_ev = _names(_val(f, "refund_event"))
         for ex in m.get("exclude", []):
             if ex == "has-ordered":
                 filters.append(f"{order_ev} — zero times over all time")
@@ -87,7 +86,7 @@ def derive(f):
                 elif _val(f, "refund_event") is None:
                     needs.append(_need(f, "refund_event"))
             elif ex == "subscription-order" and _val(f, "sells_subscriptions"):
-                renewed = _val(f, "subscription_renewed_event")
+                renewed = _names(_val(f, "subscription_renewed_event"))
                 if renewed:
                     filters.append(f"{renewed} — zero times over all time (subscribers get their own form)")
                 else:

@@ -39,7 +39,7 @@
     "flow_name": "Feedback · list-no-order",
     "trigger": {
      "type": "metric",
-     "metric": "<joined-list>"
+     "metric": "<joined_list_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -49,7 +49,7 @@
     "wait": "<welcome_series_days + buffer_days>",
     "why_the_wait": "after the welcome emails have made the brand's case, or the answer is about emails they haven't read yet"
    },
-   "blocked_by": "needs has_email_signup — people can join the list without buying (from the site: a signup form or pop-up); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); the event name for 'joined-list' on the store + the email platform; store_platform — where orders happen (from the store's admin (e.g. shopify, woocommerce, next-commerce)); welcome_series_days — how many days the welcome emails run after someone joins (from the email platform's welcome flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
+   "blocked_by": "needs has_email_signup — people can join the list without buying (from the site: a signup form or pop-up); joined_list_event — the event name(s) when someone joins the list (from the email platform's metrics list (Klaviyo's own: 'Subscribed to List')); order_placed_event — the event name(s) for a placed order, one per store or checkout (from the email platform's metrics list, the ones still firing); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); welcome_series_days — how many days the welcome emails run after someone joins (from the email platform's welcome flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "abandoned-checkout",
@@ -66,7 +66,7 @@
     "flow_name": "Feedback · abandoned-checkout",
     "trigger": {
      "type": "metric",
-     "metric": "<started-checkout>"
+     "metric": "<checkout_started_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -76,7 +76,7 @@
     "wait": "<checkout_recovery_days + buffer_days>",
     "why_the_wait": "after the recovery emails have had their turn, so the form doesn't compete with them"
    },
-   "blocked_by": "needs email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); the event name for 'started-checkout' on the store + the email platform; store_platform — where orders happen (from the store's admin (e.g. shopify, woocommerce, next-commerce)); checkout_recovery_days — how many days the abandoned-checkout emails run (from the email platform's checkout flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
+   "blocked_by": "needs checkout_started_event — the event name(s) when someone starts checkout, one per store or checkout the brand sells through (from the email platform's metrics list, the ones still firing); order_placed_event — the event name(s) for a placed order, one per store or checkout (from the email platform's metrics list, the ones still firing); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); checkout_recovery_days — how many days the abandoned-checkout emails run (from the email platform's checkout flow); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules)"
   },
   {
    "stage": "new-customer",
@@ -104,7 +104,7 @@
     "wait": "<time_to_first_result_days>",
     "why_the_wait": "once the product has had time to do what it promises; asked earlier, the answer is a guess"
    },
-   "blocked_by": "needs delivered_event — the event name the email platform receives when an order is delivered (from the email platform's metrics list (Shopify + Klaviyo: 'Delivered Shipment', if delivery tracking is on)); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); time_to_first_result_days — days after delivery before the product shows what it promises (from the product facts and claims (products/<product>/product.md), not a guess); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
+   "blocked_by": "needs delivered_event — the event name the email platform receives when an order is delivered (from the email platform's metrics list (Shopify + Klaviyo: 'Delivered Shipment', if delivery tracking is on)); order_placed_event — the event name(s) for a placed order, one per store or checkout (from the email platform's metrics list, the ones still firing); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); time_to_first_result_days — days after delivery before the product shows what it promises (from the product facts and claims (products/<product>/product.md), not a guess); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
   },
   {
    "stage": "repeat-customer",
@@ -121,7 +121,7 @@
     "flow_name": "Feedback · repeat-customer",
     "trigger": {
      "type": "metric",
-     "metric": "<order-placed>"
+     "metric": "<order_placed_event>"
     },
     "trigger_filters": [],
     "flow_filters": [
@@ -131,7 +131,7 @@
     "wait": "<buffer_days>",
     "why_the_wait": "right after the order, once the order emails are out of the way"
    },
-   "blocked_by": "needs email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); the event name for 'order-placed' on the store + the email platform; store_platform — where orders happen (from the store's admin (e.g. shopify, woocommerce, next-commerce)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
+   "blocked_by": "needs order_placed_event — the event name(s) for a placed order, one per store or checkout (from the email platform's metrics list, the ones still firing); email_platform — what sends the flows (from the brand's email account (klaviyo is the one supported today)); buffer_days — days to leave after an order or service email before asking anything (from the brand's own sending rules); refund_event — the event name for a refund (from the email platform's metrics list (Shopify + Klaviyo: 'Refunded Order'))"
   },
   {
    "stage": "subscriber",

@@ -7,7 +7,7 @@
    "lane": "lead",
    "relationship": "list-member",
    "why": "They chose to hear from the brand but haven't bought: only they can say what is holding them back and what they use instead.",
-   "event": "joined-list",
+   "event": "joined_list_event",
    "exclude": [
     "has-ordered"
    ],
@@ -17,7 +17,9 @@
     "why": "after the welcome emails have made the brand's case, or the answer is about emails they haven't read yet"
    },
    "requires": [
-    "has_email_signup"
+    "has_email_signup",
+    "joined_list_event",
+    "order_placed_event"
    ],
    "known": {
     "purchase_status": "no order",
@@ -31,7 +33,7 @@
    "lane": "lead",
    "relationship": "checkout-starter",
    "why": "They decided to buy and stopped at the last step: only they know which doubt or friction stopped them.",
-   "event": "started-checkout",
+   "event": "checkout_started_event",
    "exclude": [
     "has-ordered"
    ],
@@ -40,7 +42,10 @@
     "plus": "buffer_days",
     "why": "after the recovery emails have had their turn, so the form doesn't compete with them"
    },
-   "requires": [],
+   "requires": [
+    "checkout_started_event",
+    "order_placed_event"
+   ],
    "known": {
     "purchase_status": "started checkout, no order",
     "orders": 0
@@ -64,7 +69,8 @@
     "why": "once the product has had time to do what it promises; asked earlier, the answer is a guess"
    },
    "requires": [
-    "delivered_event"
+    "delivered_event",
+    "order_placed_event"
    ],
    "known": {
     "purchase_status": "bought",
@@ -78,7 +84,7 @@
    "lane": "customer",
    "relationship": "repeat-buyer",
    "why": "They chose the brand a second time: the reason they came back is freshest the moment they reorder.",
-   "event": "order-placed",
+   "event": "order_placed_event",
    "exclude": [
     "refunded",
     "subscription-order"
@@ -90,7 +96,9 @@
     "after": "buffer_days",
     "why": "right after the order, once the order emails are out of the way"
    },
-   "requires": [],
+   "requires": [
+    "order_placed_event"
+   ],
    "known": {
     "purchase_status": "bought",
     "orders": "2+"
