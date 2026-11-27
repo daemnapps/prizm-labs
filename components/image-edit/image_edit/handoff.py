@@ -514,10 +514,44 @@ def handoff_md(rec):
     return "\n".join(L)
 
 
+# Every hand-off folder on the Drive is open to anyone with its link, so a new outside maker needs the link and nothing
+# else, never an invite one person at a time (owner, 2026-11-27: every hand-off Drive folder shared "anyone with the link"
+# so editors scale). The folder reads; its returned/ folder takes uploads, the split creator folders already use (BRIEFS
+# reader, DELIVERABLES writer: gdrive-creator creator_share, 2026-08-28). The one exception to the public-sharing wall,
+# hand-off folders only: the-org/decision-log.md 2026-11-27 and the builder card's WALLS.
+LINK_ROLES = {"folder": "reader", RETURNED: "writer"}
+
+
+def _anyone_role(file_id, svc):
+    """The role Drive holds for anyone-with-the-link on a file, read back, or None (none, or not readable)."""
+    try:
+        have = svc.permissions().list(fileId=file_id, supportsAllDrives=True,
+                                      fields="permissions(type,role)").execute()
+    except Exception:  # noqa: BLE001 — an unreadable permission is recorded as not shared, never assumed
+        return None
+    return next((p.get("role") for p in have.get("permissions", []) if p.get("type") == "anyone"), None)
+
+
+def link_share(dest, svc, E, returned=None):
+    """Open one hand-off Drive folder to anyone with the link: the folder `reader`, its `returned/` (made if missing)
+    `writer`, through gdrive-creator's share with the person's own key (builder card rule 4). Drive's answer is read
+    back, so the record says what Drive holds, never what was asked; a refused share comes back `ok: False` and the
+    hand-off still lands. Returns {"link", "role", "returned_link", "returned_role", "ok", "set"}."""
+    returned = returned or E.folder(RETURNED, dest, svc=svc)
+    got = {}
+    for what, fid in (("folder", dest), (RETURNED, returned)):
+        E.share(fid, LINK_ROLES[what], svc)
+        got[what] = _anyone_role(fid, svc)
+    return {"link": f"https://drive.google.com/drive/folders/{dest}", "role": got["folder"],
+            "returned_link": f"https://drive.google.com/drive/folders/{returned}", "returned_role": got[RETURNED],
+            "ok": got["folder"] == LINK_ROLES["folder"] and got[RETURNED] == LINK_ROLES[RETURNED],
+            "set": datetime.now().strftime("%Y-%m-%d")}
+
+
 def mirror_folder(folder, svc=None, find_engine=None, repo=None):
     """One hand-off folder onto the Shared Assets drive under the same words as its repo path, through gdrive-creator by
-    key (builder card rule 4), with its `returned` folder. Same name = updated in place; nothing is deleted. Returns
-    {"link", "label", "id", "files"}."""
+    key (builder card rule 4), with its `returned` folder, both open to anyone with the link (link_share). Same name =
+    updated in place; nothing is deleted. Returns {"link", "label", "id", "files", "sharing"}."""
     import sys
     gc = P.sibling("gdrive-creator")
     if str(gc) not in sys.path:
@@ -528,30 +562,20 @@ def mirror_folder(folder, svc=None, find_engine=None, repo=None):
     svc = svc or E.service()
     dest = reach.folder_id(parts, svc, make=True, find_engine=lambda: E)
     ids = E.mirror_tree(str(folder), dest, svc)
-    E.folder(RETURNED, dest, svc=svc)
+    returned = E.folder(RETURNED, dest, svc=svc)
     return {"id": dest, "label": "Shared Assets/" + "/".join(parts), "link": f"https://drive.google.com/drive/folders/{dest}",
-            "files": ids}
+            "files": ids, "sharing": link_share(dest, svc, E, returned=returned)}
 
 
 def to_drive(rec, svc=None, find_engine=None, repo=None):
     """Copy the folder to the Shared Assets drive under the same words as its repo path (runs/handoffs/<role>/<brand>/
-    <brief key>/), with its empty `returned` folder for what comes back. Returns {"link", "label", "id", "files"}; a missing key
-    or drive is refused by name, never guessed around."""
-    import sys
-    folder = P.sibling("gdrive-creator")
-    if str(folder) not in sys.path:
-        sys.path.append(str(folder))
-    from gdrive_creator import engine as E, reach  # noqa: E402
-    E = find_engine() if find_engine else E
-    parts = drive_parts(rec["folder"], repo)
-    svc = svc or E.service()
-    dest = reach.folder_id(parts, svc, make=True, find_engine=lambda: E)
-    ids = E.mirror_tree(rec["folder"], dest, svc)
-    E.folder(RETURNED, dest, svc=svc)
-    out = {"id": dest, "label": "Shared Assets/" + "/".join(parts), "link": f"https://drive.google.com/drive/folders/{dest}",
-           "files": ids}
+    <brief key>/), with its empty `returned` folder for what comes back, both open to anyone with the link, the sharing
+    written into handoff.json. Returns {"link", "label", "id", "files", "sharing"}; a missing key or drive is refused by
+    name, never guessed around."""
+    out = mirror_folder(rec["folder"], svc=svc, find_engine=find_engine, repo=repo)
     f = Path(rec["folder"]) / "handoff.json"
     saved = json.loads(f.read_text())
     saved["drive"] = {k: out[k] for k in ("id", "label", "link")}
+    saved["sharing"] = out["sharing"]
     f.write_text(json.dumps(saved, indent=1, ensure_ascii=False))
     return out

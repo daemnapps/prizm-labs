@@ -130,6 +130,20 @@ def label_of(f, root=None):
 
 # ── the Drive: through gdrive-creator with the person's own key (builder card rule 4) ──
 
+def _link_share(dest, svc, E):
+    """The hand-off folder open to anyone with the link, its returned/ taking uploads (owner, 2026-11-27: every hand-off
+    Drive folder shared by link so editors scale): the one sharing rule, image-edit's handoff.link_share. Best effort: a
+    share that fails is recorded, never stops the hand-off."""
+    try:
+        ie = str(repo() / "components" / "image-edit")
+        if ie not in sys.path:
+            sys.path.append(ie)
+        from image_edit import handoff as IH  # noqa: E402
+        return IH.link_share(dest, svc, E)
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:200]}
+
+
 def _engine():
     gc = str(repo() / "components" / "gdrive-creator")
     if gc not in sys.path:
@@ -269,4 +283,5 @@ def mirror(f, root=None, missing_only=False):
     for sub in ("returned",):                                       # an empty folder is still where work comes back
         if (Path(f) / sub).is_dir():
             E.folder(sub, cur, svc)
+    _link_share(cur, svc, E)                                        # open by link, returned/ takes uploads (2026-11-27)
     return cur, ids

@@ -63,6 +63,20 @@ def _ws():
     return Path(ST.WRITING).resolve().parents[2]
 
 
+def _link_share(dest, svc, E):
+    """The hand-off folder open to anyone with the link, its returned/ taking uploads (owner, 2026-11-27: every hand-off
+    Drive folder shared by link so editors scale): the one sharing rule, image-edit's handoff.link_share. Best effort: a
+    share that fails is recorded, never stops the hand-off."""
+    try:
+        ie = str(_ws() / "components" / "image-edit")
+        if ie not in sys.path:
+            sys.path.append(ie)
+        from image_edit import handoff as IH  # noqa: E402
+        return IH.link_share(dest, svc, E)
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:200]}
+
+
 def _drive_root():
     try:
         import importlib.util as iu
@@ -1575,7 +1589,7 @@ def build(n, drive=True):
                                           if (out / "run.json").exists() else []))
     except Exception as e:  # noqa: BLE001 — a front page that cannot be written says why, in its place
         (out / "handoff.md").write_text("# %s\n\nThe front page could not be written: %s. Read CLIPS.md first.\n" % (key, str(e)[:300]))
-    link, web = None, None
+    link, web, sharing = None, None, None
     if drive and UNNUMBERED.search(key):     # an idea is not the maker's yet: packed here, sent once the register numbers it
         drive = False
         (out / "DRIVE-NOTE.txt").write_text("Not sent: %s has no brief number yet. Number it, then build the pack "
@@ -1600,6 +1614,7 @@ def build(n, drive=True):
                     time.sleep(10)
             web = "https://drive.google.com/drive/folders/" + dest
             link = "Shared Assets/" + "/".join(parts)
+            sharing = _link_share(dest, svc, E)
             if (out / "DRIVE-NOTE.txt").exists():
                 (out / "DRIVE-NOTE.txt").unlink()          # an earlier fallback's note, spent now the Drive tool wrote it
         except Exception as e:  # noqa: BLE001 — the mounted Drive copy is the fallback, said in the record
@@ -1609,7 +1624,7 @@ def build(n, drive=True):
                 shutil.copytree(out, dst, dirs_exist_ok=True)
                 link = str(dst)
             (out / "DRIVE-NOTE.txt").write_text("Uploaded through the Mac's Drive copy, not the Drive tool: %s\n" % str(e)[:300])
-    return {"key": key, "folder": str(out), "drive": link, "web": web, "clips": len(clips),
+    return {"key": key, "folder": str(out), "drive": link, "web": web, "sharing": sharing, "clips": len(clips),
             "made": sum(1 for r in scenes if r.get("file")), "scenes": len(scenes), "check": _check(out)}
 
 

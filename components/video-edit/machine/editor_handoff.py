@@ -45,6 +45,20 @@ def _sibling(component, *parts):
     return repo() / "components" / component / Path(*parts)
 
 
+def _link_share(dest, svc, E):
+    """The hand-off folder open to anyone with the link, its returned/ taking uploads (owner, 2026-11-27: every hand-off
+    Drive folder shared by link so editors scale): the one sharing rule, image-edit's handoff.link_share. Best effort: a
+    share that fails is recorded, never stops the hand-off."""
+    try:
+        ie = str(repo() / "components" / "image-edit")
+        if ie not in sys.path:
+            sys.path.append(ie)
+        from image_edit import handoff as IH  # noqa: E402
+        return IH.link_share(dest, svc, E)
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": str(e)[:200]}
+
+
 def _load(name, path):
     if str(path.parent) not in sys.path:
         sys.path.append(str(path.parent))
@@ -631,9 +645,11 @@ def to_drive(rec, svc=None, find_engine=None):
     svc = svc or E.service()
     dest = reach.folder_id(parts, svc, make=True, find_engine=lambda: E)
     ids = E.mirror_tree(rec["folder"], dest, svc)
-    out = {"id": dest, "label": rec["place"], "link": f"https://drive.google.com/drive/folders/{dest}", "files": ids}
+    out = {"id": dest, "label": rec["place"], "link": f"https://drive.google.com/drive/folders/{dest}", "files": ids,
+           "sharing": _link_share(dest, svc, E)}
     f = Path(rec["folder"]) / "manifest.json"
     saved = json.loads(f.read_text())
     saved["drive"] = {k: out[k] for k in ("id", "label", "link")}
+    saved["sharing"] = out["sharing"]
     f.write_text(json.dumps(saved, indent=1, ensure_ascii=False))
     return out

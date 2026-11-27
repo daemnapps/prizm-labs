@@ -3666,7 +3666,7 @@
   "commit": "1d0f90a457f114b717a2c65b74568e61d2bd5010"
  },
  "components/image-edit/CLAUDE.md": {
-  "commit": "aafbaa00f60e19d43e46dbd014c24e55e9898593"
+  "commit": "69e98f72cc902aaa9b033b3cbeae78fe97f591bf"
  },
  "components/image-edit/README.md": {
   "commit": "679c2033be1e74109405661ec22da17af80b3768"
@@ -3708,7 +3708,7 @@
   "commit": "dc84a893588f062e81956ed141e6175a10770a89"
  },
  "components/image-edit/image_edit/handoff.py": {
-  "commit": "fe9f73bad804cd71a16381df456198f0a4a10485"
+  "commit": "69e98f72cc902aaa9b033b3cbeae78fe97f591bf"
  },
  "components/image-edit/image_edit/paths.py": {
   "commit": "dfe81e5a1886c8e16f511452a3b290e3b4869a38"
@@ -3780,7 +3780,7 @@
   "commit": "d831630c06889509c45ad3b402b60829eb66e019"
  },
  "components/image-edit/tests/test_handoff.py": {
-  "commit": "7383fd4dc7a9aa6399fe57f80e7260fe971ee5ee"
+  "commit": "69e98f72cc902aaa9b033b3cbeae78fe97f591bf"
  },
  "components/image-edit/tests/test_image_edit.py": {
   "commit": "b71c57c0a4ce7c97e2fa549e2c6df693b4d62396"
@@ -8919,7 +8919,7 @@
   "commit": "0e1b7307339f222559c30aa0c0c0d3d9eb0371a4"
  },
  "components/video-edit/handoff/stage_handoff.py": {
-  "commit": "b317f0ac1f646cd26ce899134db01068f20b8083"
+  "commit": "69e98f72cc902aaa9b033b3cbeae78fe97f591bf"
  },
  "components/video-edit/handoff/tests/test_group.py": {
   "commit": "ad86dacd51f9b8d748e39912d3eb7fb120301fd9"
@@ -9489,7 +9489,7 @@
   "commit": "77e49f7acd7e0404e716b1fd225972247ed80abc"
  },
  "components/video-edit/machine/editor_handoff.py": {
-  "commit": "fe9f73bad804cd71a16381df456198f0a4a10485"
+  "commit": "69e98f72cc902aaa9b033b3cbeae78fe97f591bf"
  },
  "components/video-edit/machine/faces.py": {
   "commit": "bfd0908c147569c7802ee8fadc9055e61f1bdd63"
@@ -9702,7 +9702,7 @@
   "commit": "04ce648d7dd89b255e8337ea702ced0ec69d042f"
  },
  "components/video-edit/maker/maker_pack.py": {
-  "commit": "08d729c37b3914512be7cbf1b4f152a8053a1115"
+  "commit": "69e98f72cc902aaa9b033b3cbeae78fe97f591bf"
  },
  "components/video-edit/maker/maker_settings.py": {
   "commit": "c0a67ab4c10180443843047cec5c148329ffb3d3"

@@ -11,6 +11,7 @@ import re
 import shutil
 import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
 
@@ -273,8 +274,9 @@ class TestHandoffPage(Base):
 
 
 class FakeEngine:
-    def __init__(self):
-        self.mirrored, self.folders = [], []
+    def __init__(self, refuse=()):
+        self.mirrored, self.folders, self.shares, self.refuse = [], [], [], set(refuse)
+        self.anyone = {}                      # file id -> the anyone-with-the-link role Drive holds
 
     def mirror_tree(self, local, dest, svc):
         self.mirrored.append((local, dest))
@@ -283,6 +285,27 @@ class FakeEngine:
     def folder(self, name, parent, svc=None):
         self.folders.append((name, parent))
         return "f-" + name
+
+    def share(self, file_id, role="reader", svc=None):     # best effort, like gdrive-creator's: a refusal is no raise
+        self.shares.append((file_id, role))
+        if role in self.refuse:
+            return False
+        self.anyone[file_id] = role
+        return True
+
+
+class FakeDrive:
+    """The Drive service's permissions read-back, answered from the fake engine's shares."""
+    def __init__(self, engine):
+        self.engine = engine
+
+    def permissions(self):
+        return self
+
+    def list(self, fileId, **_):
+        role = self.engine.anyone.get(fileId)
+        return types.SimpleNamespace(execute=lambda: {"permissions": [{"type": "user", "role": "organizer"}]
+                                                      + ([{"type": "anyone", "role": role}] if role else [])})
 
 
 class TestDrive(Base):
@@ -301,7 +324,7 @@ class TestDrive(Base):
     def test_drive_path_is_the_repo_path_word_for_word(self):
         rec = self.build(out=H.folder_of(BRAND, KEY, repo=self.repo))
         E = FakeEngine()
-        got = H.to_drive(rec, svc=object(), find_engine=lambda: E, repo=self.repo)
+        got = H.to_drive(rec, svc=FakeDrive(E), find_engine=lambda: E, repo=self.repo)
         self.assertEqual(self.parts, [(["runs", "handoffs", "graphic-designer", BRAND, KEY], True)])
         self.assertEqual(Path(rec["folder"]), self.repo / "runs" / "handoffs" / "graphic-designer" / BRAND / KEY)
         self.assertEqual(got["label"], f"Shared Assets/runs/handoffs/graphic-designer/{BRAND}/{KEY}")
@@ -311,6 +334,37 @@ class TestDrive(Base):
         self.assertEqual(json.loads((Path(rec["folder"]) / "handoff.json").read_text())["drive"]["id"], "DEST")
         self.assertEqual(E.folders, [("returned", "DEST")])      # what comes back goes into the handoff's own folder
         self.assertTrue((Path(rec["folder"]) / "returned").is_dir())
+
+    def test_every_handoff_folder_opens_to_anyone_with_the_link(self):
+        """owner, 2026-11-27: hand-off folders are shared by link so editors scale without invites. The folder reads,
+        returned/ takes uploads, and handoff.json records what Drive holds."""
+        rec = self.build(out=H.folder_of(BRAND, KEY, repo=self.repo))
+        E = FakeEngine()
+        got = H.to_drive(rec, svc=FakeDrive(E), find_engine=lambda: E, repo=self.repo)
+        self.assertEqual(E.shares, [("DEST", "reader"), ("f-returned", "writer")])
+        saved = json.loads((Path(rec["folder"]) / "handoff.json").read_text())["sharing"]
+        self.assertEqual(saved, got["sharing"])
+        self.assertEqual((saved["link"], saved["role"]), ("https://drive.google.com/drive/folders/DEST", "reader"))
+        self.assertEqual((saved["returned_link"], saved["returned_role"]),
+                         ("https://drive.google.com/drive/folders/f-returned", "writer"))
+        self.assertTrue(saved["ok"])
+
+    def test_a_refused_share_is_recorded_and_the_handoff_still_lands(self):
+        rec = self.build(out=H.folder_of(BRAND, KEY, repo=self.repo))
+        E = FakeEngine(refuse={"writer"})
+        got = H.to_drive(rec, svc=FakeDrive(E), find_engine=lambda: E, repo=self.repo)
+        self.assertIn("HANDOFF.md", got["files"])
+        saved = json.loads((Path(rec["folder"]) / "handoff.json").read_text())["sharing"]
+        self.assertEqual((saved["role"], saved["returned_role"], saved["ok"]), ("reader", None, False))
+
+    def test_the_run_sheet_mirror_shares_the_same_way(self):
+        folder = H.folder_of(BRAND, KEY, repo=self.repo)
+        folder.mkdir(parents=True)
+        (folder / "BRIEF.md").write_text("brief")
+        E = FakeEngine()
+        got = H.mirror_folder(folder, svc=FakeDrive(E), find_engine=lambda: E, repo=self.repo)
+        self.assertEqual(E.shares, [("DEST", "reader"), ("f-returned", "writer")])
+        self.assertTrue(got["sharing"]["ok"])
 
 
 class TestFinalStage(Base):

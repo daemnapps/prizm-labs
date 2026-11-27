@@ -223,7 +223,10 @@ random set up"*, *"standardization is the default"*. A chain ends at its draft; 
   README pointing here. **The front door:** `handoff_index.py` writes `runs/handoffs/INDEX.md` + `index.json` (one row
   per hand-off: brand, brief key, role, made, files out, returned, card) and `START-HERE.md` for the role, here and on
   the Drive; every hand-off and every delivery check rebuilds it. The finished work comes back into that folder's
-  `returned/`, named `<brief key>-<variation>`, where the delivery check reads it.
+  `returned/`, named `<brief key>-<variation>`, where the delivery check reads it. **Open by link** (the owner,
+  2026-11-27; the one public-sharing exception, decision log): every hand-off Drive folder is anyone-with-the-link,
+  the folder reader and `returned/` writer, set by `link_share` on every mirror (this lane's `to_drive` /
+  `mirror_folder` and video-edit's three hand-off doors), Drive's answer recorded in `handoff.json` `sharing`.
 - **Only a brief from the chain's final stage** (`final_stage`, lesson L-26 (final-stage briefs only)): the picture
   chain filed the run (`runs/image-teardown/<brand>/<run>/run.json` `state: filed`), the writing chain's last stage
   (image-writing `writing.STAGES`, today `06-brief.md`) is among its stages and on disk, and `out/variations.json` is
