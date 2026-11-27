@@ -646,6 +646,16 @@
    "basis": "draft"
   },
   {
+   "path": "components/records",
+   "kind": "definitions",
+   "does": "Every record the system keeps, one name each, linked by id",
+   "role": "system-builder",
+   "workflow": "system",
+   "stage": "",
+   "steps": [],
+   "basis": "draft"
+  },
+  {
    "path": "components/chain-mirror",
    "kind": "tool",
    "does": "Brings saved work in from a source repo, names stripped, and says how far behind",

@@ -7,6 +7,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Set up | Brand folder and onboarding | `brands/_TEMPLATE/` |
 | Set up | Brand activation | `.claude/skills/brand-activation/` |
 | Set up | The system: words, components, check | `components/system/` |
+| Set up | Records: every record, one name each, linked by id | `components/records/` |
 | Set up | Roles and ownership | `components/roles/` |
 | Set up | Always-on server (jobs, boards, keys and rendering off the laptop) | `tools/always-on/` |
 | Set up | Chain mirror (brings saved tools in from a source repo, names stripped, says how far behind) | `tools/chain-mirror/` |

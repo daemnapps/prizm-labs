@@ -1,0 +1,98 @@
+{
+ "_readme": "Every record the system keeps, one name each, and how they link. A record is one JSON file at brands/<brand>/records/<record>/<id>.json. Each id starts with its record's prefix; a link field holds another record's id, so any result traces back to the brief, offer and brand that made it. records.py checks a file against this list. Field types: text, number, date, url, list, object, id:<record>, ids:<record>, one-of:<a|b|c>. A trailing ? marks a field that may be empty.",
+ "records": {
+  "brand": {
+   "means": "A business the system works for",
+   "prefix": "brand_",
+   "fields": {"name": "text", "website": "url", "ad_accounts": "list?", "folder": "text"},
+   "written_by": "brand-activation (onboarding)",
+   "replaces": ["brands/<brand>/operations/brand.json"]
+  },
+  "offer": {
+   "means": "What the brand sells in one deal: product, price, promise, guarantee",
+   "prefix": "offer_",
+   "fields": {"brand": "id:brand", "product": "text", "price": "number?", "promise": "text", "guarantee": "text?", "page_url": "url?"},
+   "written_by": "brand-activation (onboarding), the offer change workflow",
+   "replaces": ["brands/<brand>/meta/offer.json", "brands/<brand>/strategy/offer-page.json"]
+  },
+  "page": {
+   "means": "One page a buyer sees. The shape every page record shares",
+   "prefix": "page_",
+   "fields": {"brand": "id:brand", "offer": "id:offer", "kind": "one-of:presell|offer|checkout|post-purchase", "url": "url?", "blocks": "list?"},
+   "written_by": "page-writing, page-production"
+  },
+  "presell-page": {"means": "The page before the offer: an advertorial, quiz or story", "prefix": "presell_", "extends": "page", "fields": {"kind": "one-of:presell"}, "written_by": "page-writing, page-production"},
+  "offer-page": {"means": "The page that sells the offer", "prefix": "offerpage_", "extends": "page", "fields": {"kind": "one-of:offer"}, "written_by": "page-writing, page-production"},
+  "checkout-page": {"means": "Where the buyer pays", "prefix": "checkout_", "extends": "page", "fields": {"kind": "one-of:checkout"}, "written_by": "page-writing, page-production"},
+  "post-purchase-page": {"means": "Upsells and thank-you after the buy", "prefix": "postpurchase_", "extends": "page", "fields": {"kind": "one-of:post-purchase"}, "written_by": "page-writing, page-production"},
+  "funnel": {
+   "means": "The pages an ad sends a buyer through, in order",
+   "prefix": "funnel_",
+   "fields": {"brand": "id:brand", "offer": "id:offer", "pages": "ids:page", "entry_url": "url?"},
+   "written_by": "page-production, the funnel offer workflow"
+  },
+  "research": {
+   "means": "What the buyers say and want, with every quote's source",
+   "prefix": "research_",
+   "fields": {"brand": "id:brand", "avatar": "text", "findings": "list", "sources": "list"},
+   "written_by": "research-gatherer, creative-strategist"
+  },
+  "ad-brief": {
+   "means": "What one ad must say and do, before anyone makes it",
+   "prefix": "brief_",
+   "fields": {"brand": "id:brand", "offer": "id:offer", "research": "id:research?", "swipe": "text?", "winner": "text?", "angle": "text", "core_message": "text", "form": "one-of:organic|dr|creator"},
+   "written_by": "video-teardown, image-teardown, video-writing, image-writing"
+  },
+  "organic": {
+   "means": "A brief written as a native post: a proven organic format, light product",
+   "prefix": "organic_",
+   "fields": {"brief": "id:ad-brief", "format": "text", "platform": "text", "script": "text"},
+   "written_by": "video-writing, image-writing"
+  },
+  "dr": {
+   "means": "A brief written as a direct-response ad: hook, problem, proof, offer, ask",
+   "prefix": "dr_",
+   "fields": {"brief": "id:ad-brief", "script": "text", "scenes": "list?"},
+   "written_by": "video-writing, image-writing"
+  },
+  "creator": {
+   "means": "A brief written for a creator to film",
+   "prefix": "creatorbrief_",
+   "fields": {"brief": "id:ad-brief", "creator": "text?", "film": "list", "say": "list", "due": "date?"},
+   "written_by": "video-teardown (creator route), creator kit"
+  },
+  "ad": {
+   "means": "One finished ad, and the results it earns",
+   "prefix": "ad_",
+   "fields": {"brand": "id:brand", "offer": "id:offer", "funnel": "id:funnel?", "brief": "id:ad-brief", "made_from": "text", "type": "one-of:video|static|carousel", "route": "one-of:ai|creator|founder", "ad_name": "text", "files": "list", "platform_ids": "object?", "results": "object?"},
+   "results": ["spend", "impressions", "clicks", "ctr", "thumbstop", "purchases", "cpa", "roas", "as_of"],
+   "written_by": "video-edit, image-edit, naming, meta-upload; results by winners"
+  },
+  "email": {
+   "means": "One email, and what it earned",
+   "prefix": "email_",
+   "fields": {"brand": "id:brand", "offer": "id:offer", "ad": "id:ad?", "funnel": "id:funnel?", "subject": "text", "body": "text", "send_date": "date?", "results": "object?"},
+   "results": ["sent", "opens", "clicks", "revenue", "as_of"],
+   "written_by": "email-production"
+  },
+  "text": {
+   "means": "One text message, and what it earned",
+   "prefix": "text_",
+   "fields": {"brand": "id:brand", "offer": "id:offer", "email": "id:email?", "body": "text", "send_date": "date?", "results": "object?"},
+   "results": ["sent", "clicks", "revenue", "as_of"],
+   "written_by": "email-production (texts)"
+  },
+  "session": {
+   "means": "One working session by anyone, in any tool: what it made and what it learned",
+   "prefix": "session_",
+   "fields": {"holder": "text", "tool": "text", "workflow": "text?", "brand": "id:brand?", "started": "date", "ended": "date?", "made": "list", "learnings": "list", "cost": "object?"},
+   "learning": ["what", "applies_to", "evidence"],
+   "written_by": "every tool, at the end of a session"
+  }
+ },
+ "loops": [
+  {"name": "Ad loop", "path": ["research", "ad-brief", "organic|dr|creator", "ad", "results"], "feeds": "winners ranks ads by results; the top ones go back into the next ad-brief"},
+  {"name": "Funnel loop", "path": ["brand", "offer", "funnel", "ad", "email", "text"], "feeds": "each record carries the offer and funnel it sold, so revenue traces to the page and the offer"},
+  {"name": "Session loop", "path": ["session", "learnings"], "feeds": "each learning names the component or prompt it applies to; that component's owner path takes it in"}
+ ]
+}
