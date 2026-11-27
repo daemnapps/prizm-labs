@@ -2794,9 +2794,9 @@ class H(BaseHTTPRequestHandler):
             return proxy(self, *got)
         u = urlparse(self.path)
         parts = [unquote(p) for p in u.path.strip("/").split("/") if p]
-        if parts in (["desk"], ["next"]) or parts[:2] == ["api", "desk"]:    # the workflow desk + the new Studio
-            import workflow_desk as WD
-            return WD.handle(self, "GET", parts, u.query, None)
+        if (not parts and not u.query) or parts in (["desk"], ["next"]) or parts[:2] == ["api", "desk"]:
+            import workflow_desk as WD                      # the Studio (studio-next.html) at /, the workflow desk
+            return WD.handle(self, "GET", parts or ["next"], u.query, None)
         if not parts or parts == ["studio"]:
             return self.send(200, open(os.path.join(HERE, "studio.html"), "rb").read(), "text/html; charset=utf-8")
         if len(parts) == 2 and parts[0] == "creator-hub" and re.fullmatch(r"[a-z0-9-]+", parts[1]):

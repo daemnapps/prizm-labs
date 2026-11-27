@@ -92,6 +92,17 @@ class StudioNext(unittest.TestCase):
     def test_old_pages_still_served(self):
         self.assertEqual(self.get("/desk")[0], 200)
 
+    def test_main_address_is_the_new_studio(self):
+        code, body, _ = self.get("/")
+        self.assertEqual(code, 200)
+        self.assertIn(b"<title>Studio</title>", body)
+
+    def test_old_links_open_the_old_studio(self):
+        for path in ("/studio", "/?brand=acme&brief=x&stage=production"):
+            code, body, _ = self.get(path)
+            self.assertEqual(code, 200)
+            self.assertIn(b"<title>Video Studio</title>", body)
+
     def test_swipe_library_is_per_brand_with_covers(self):
         code, d = self.js("/api/desk/swipes?brand=acme")
         self.assertEqual(code, 200)
