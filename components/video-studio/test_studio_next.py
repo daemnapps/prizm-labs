@@ -222,6 +222,30 @@ class StudioNext(unittest.TestCase):
         finally:
             del os.environ["PRIZM_BRAND_ROOTS"]
 
+    def test_brands_joining_track_their_steps(self):
+        import os
+        os.environ["PRIZM_JOINING"] = str(Path(self.tmp.name) / "joining.json")
+        keep = WD._gh_view
+        WD._gh_view = lambda repo: (True, "WRITE") if repo == "acme/acme-prizm" else (False, None)
+        try:
+            req = lambda body: json.loads(urllib.request.urlopen(urllib.request.Request(
+                self.base + "/api/desk/joining", data=json.dumps(body).encode(), method="POST",
+                headers={"Content-Type": "application/json"}), timeout=20).read())
+            d = req({"name": "Newco", "contact": "Pat"})
+            n = d["brands"][0]
+            self.assertEqual((n["now"], n["steps"][0]["state"]), ("repo", "todo"))
+            d = req({"name": "Newco", "repo": "acme/acme-prizm", "brand": "acme"})
+            st = {x["id"]: x["state"] for x in d["brands"][0]["steps"]}
+            self.assertEqual((st["repo"], st["invite"]), ("done", "done"))
+            self.assertIn(st["folder"], ("partly", "done"))
+            d = req({"name": "Newco", "step": "asked"})
+            self.assertEqual({x["id"]: x["state"] for x in d["brands"][0]["steps"]}["asked"], "done")
+            d = req({"name": "Newco", "remove": True})
+            self.assertEqual(d["brands"], [])
+        finally:
+            WD._gh_view = keep
+            del os.environ["PRIZM_JOINING"]
+
     def test_portfolio_lists_every_brand(self):
         code, d = self.js("/api/desk/portfolio")
         self.assertEqual(code, 200)

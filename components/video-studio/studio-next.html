@@ -304,6 +304,15 @@ tr.grp.lit td{background:color-mix(in srgb,var(--amber) 12%,var(--card))}
 .mkc .pic{aspect-ratio:1;background:var(--bone)}.mkc img{width:100%;height:100%;object-fit:cover;display:block}
 .mkc .cap{padding:12px 14px;display:grid;gap:8px}.mkc .cap b{font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mkc .stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mkc .stats div{display:grid}.mkc .stats b{font:500 16px var(--mono)}
+.jn{padding:14px 16px;border-bottom:1px solid var(--line)}
+.jh{display:flex;gap:10px;align-items:baseline;margin-bottom:10px;flex-wrap:wrap}.jh b{font-size:15px}
+.jsteps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.js{border:1px solid var(--line);border-radius:var(--r2);padding:9px 10px;display:grid;gap:3px;background:var(--card);font-size:12.5px}
+.js i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:600 11px var(--mono);background:var(--bone);color:var(--ink-3)}
+.js.done i{background:var(--green);color:#fff}.js.partly i{background:var(--amber);color:var(--ink)}
+.js.now{border-color:var(--indigo);box-shadow:0 0 0 1px var(--indigo)}
+.js em{font-style:normal;font:11px var(--mono);color:var(--ink-3)}
+@media (max-width:860px){.jsteps{grid-template-columns:1fr 1fr}}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:var(--r2);font:12.5px var(--mono);z-index:9;box-shadow:var(--float)}
 @media (max-width:1200px){.work{grid-template-columns:1fr}.sw3{grid-template-columns:220px 1fr}.sw3 .insp{grid-column:1/-1}.insp{position:static;max-height:none}.grid4{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.sw3{grid-template-columns:1fr}.swv{position:static;max-width:260px}}
@@ -415,14 +424,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && !S.arg) S.view = 'live';
   const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, join:joinView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -815,11 +824,8 @@ async function portfolio(){
       ${x ? `<div class="stats"><div><span class="lbl">Revenue 7d</span><b>${usd(x.revenue)}</b></div><div><span class="lbl">Ad spend 7d</span><b>${usd(x.spend)}</b></div><div><span class="lbl">ROAS 7d</span><b style="color:var(--${x.spend && x.revenue / x.spend >= 1 ? 'green' : 'coral'})">${x.spend ? (x.revenue / x.spend).toFixed(2) : '—'}</b></div></div><span class="lbl">to ${esc(dayLabel(n.through))}</span>` : `<div class="empty">No money numbers connected</div>`}
       <div class="arow"><span class="pill p-swipe">${b.swipes} swipes</span><span class="pill p-ready">${b.winners} winners</span></div></a>`; }).join('')}</div>`;
   paintIcons(m);
-  m.insertAdjacentHTML('beforeend', `<form class="card" id="addb" style="margin-top:16px"><h3>${ib('plus', 'indigo')}Add a brand</h3>
-      <div class="flow" style="margin:12px 0"><span>1 · They make their own repo</span><i>→</i><span>2 · They invite us</span><i>→</i><span>3 · Their Claude fills the brand folder</span><i>→</i><span>4 · We get what's missing</span><i>→</i><span>5 · First run: top 5 ads → teardowns</span></div>
-      <div class="arow"><input name="name" required placeholder="Brand name" style="flex:1;min-width:180px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><input name="repo" placeholder="Their repo, owner/name (if they have one)" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Start</button></div></form>
-    <div id="gh" style="margin-top:16px"><div class="skel">Reading GitHub…</div></div>`); githubCard($('#gh'));
-  $('#addb').onsubmit = e => { e.preventDefault(); const f = e.target; ask('onboard', f.name.value + (f.repo.value ? ' · repo ' + f.repo.value : ''), '').then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
+  m.insertAdjacentHTML('beforeend', `<div id="joinbox" style="margin-top:16px"><div class="skel">Loading brands joining…</div></div><div id="gh" style="margin-top:16px"><div class="skel">Reading GitHub…</div></div>`);
+  githubCard($('#gh')); joinCard($('#joinbox'));
   m.querySelectorAll('[data-pick]').forEach(a => a.onclick = () => { S.brand = a.dataset.pick; store.set('st.brand', S.brand); $('#brand').value = S.brand; location.hash = 'today'; });
 }
 
@@ -1192,6 +1198,52 @@ async function usageView(){
   m.querySelector('.skel').outerHTML = billCard + `<div class="card" style="margin-bottom:16px"><div class="nums"><div><span class="lbl">Claude cost, all jobs</span><b>${usd(d.total, 2)}</b></div><div><span class="lbl">Jobs metered</span><b>${int(d.jobs)}</b></div></div><span class="lbl">${esc(d.basis)}</span></div>
     <div class="grid2" style="margin-bottom:16px">${tbl('By month', d.by_month, 'Month')}${tbl('By kind of job', d.by_kind, 'Job')}</div>${tbl('By brief', d.by_brief, 'Brief')}`;
 }
+
+
+/* ================= BRANDS JOINING: the five onboarding steps, inside the app ================= */
+const joinMsg = j => `Hi${j.contact ? ' ' + j.contact : ''}, here's how we get ${j.name} set up. About an hour of your time, and you keep all your data.
+
+1. In Claude, say: "Copy github.com/daemnapps/prizm-labs into a new private repo called ${String(j.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}-prizm"
+2. Then say: "Share this repo with daemnapps"
+3. In that folder, say: "activate Prizm Lab". It reads your website, reviews and Drive first and only asks you to confirm. Keys go on the setup page, never in a chat.
+4. Send us what it says is missing.
+5. We tear down your top ads by spend and start producing. Going live is always your click.`;
+async function joinCard(el){
+  let d; try { d = await J('/api/desk/joining'); } catch (e) { el.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const ICON = {done: '✓', partly: '◐', todo: ''};
+  el.innerHTML = `<div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px"><h3>${ib('plus', 'indigo')}Brands joining<span class="count" style="--hue:var(--ink-3)">${d.brands.length}</span></h3><a class="btn" href="#join" style="margin-left:auto">What they see</a></div>
+    ${d.brands.map((j, i) => `<div class="jn" data-j="${i}"><div class="jh"><b>${esc(j.name)}</b>${j.contact ? `<span class="lbl">${esc(j.contact)}</span>` : ''}${j.repo ? `<span class="lbl">${esc(j.repo)}</span>` : ''}</div>
+      <div class="jsteps">${j.steps.map((st, k) => `<div class="js ${st.state} ${j.now === st.id ? 'now' : ''}"><i>${ICON[st.state] || k + 1}</i><span>${esc(st.name)}</span>${st.note ? `<em>${esc(st.note)}</em>` : ''}</div>`).join('')}</div>
+      <div class="arow" style="margin-top:10px">
+        ${['repo', 'invite'].includes(j.now) ? `<button class="btn go" data-jmsg="${i}">Copy the message for ${esc(j.contact || j.name)}</button>` : ''}
+        ${!j.repo ? `<input data-jrepo="${i}" placeholder="Their repo, owner/name, once made" style="border:1px solid var(--line-2);border-radius:var(--r2);padding:7px 10px;font:13px var(--body);min-width:220px">` : ''}
+        ${j.now === 'folder' || j.now === 'asked' ? `<button class="btn" data-ask="onboard" data-brand="" data-input="${esc(j.name + (j.repo ? ' · repo ' + j.repo : ''))}">Make the ask list</button>` : ''}
+        ${j.now === 'asked' ? `<button class="btn go" data-jstep="${i}|asked">Mark the list sent</button>` : ''}
+        ${j.now === 'first' ? `<a class="btn go" href="#production/swipes">Start the first run</a>` : ''}
+        <button class="btn" data-jdel="${i}" style="margin-left:auto">Remove</button></div></div>`).join('') || '<div class="empty" style="padding:14px 16px">No brands joining yet.</div>'}
+    <form class="arow" id="jadd" style="padding:12px 16px;border-top:1px solid var(--line)"><input name="name" required placeholder="Brand name" style="flex:1;min-width:160px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><input name="contact" placeholder="Their contact" style="flex:1;min-width:140px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><input name="repo" placeholder="Their repo, if made (owner/name)" style="flex:1;min-width:200px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Add a brand</button></form></div>`;
+  paintIcons(el);
+  const post = body => J('/api/desk/joining', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}).then(() => joinCard(el)).catch(e => toast(e.message));
+  el.querySelector('#jadd').onsubmit = e => { e.preventDefault(); const f = e.target; post({name: f.name.value, contact: f.contact.value, repo: f.repo.value}); };
+  el.querySelectorAll('[data-jmsg]').forEach(b => b.onclick = () => { const t = joinMsg(d.brands[+b.dataset.jmsg]); navigator.clipboard.writeText(t).then(() => toast('Message copied: paste it to them')).catch(() => toast('Open "What they see" to select it')); });
+  el.querySelectorAll('[data-jrepo]').forEach(inp => inp.onchange = () => post({name: d.brands[+inp.dataset.jrepo].name, repo: inp.value}));
+  el.querySelectorAll('[data-jstep]').forEach(b => b.onclick = () => { const [i, st] = b.dataset.jstep.split('|'); post({name: d.brands[+i].name, step: st}); });
+  el.querySelectorAll('[data-jdel]').forEach(b => b.onclick = () => post({name: d.brands[+b.dataset.jdel].name, remove: true}));
+}
+async function joinView(){
+  const m = $('#main');
+  let d = {brands: []}; try { d = await J('/api/desk/joining'); } catch {}
+  const j = d.brands.find(x => x.name === S.arg) || d.brands[0] || {name: 'your brand'};
+  m.innerHTML = `<div class="ph"><a class="btn" href="#portfolio">← Portfolio</a><h1>What a new brand sees</h1></div>
+    <div class="card" style="margin-bottom:16px;display:grid;gap:12px"><h3>${ib('shield', 'green')}They keep their data<span class="lbl" style="margin-left:auto">their own private repo · we get access to that one repo</span></h3>
+      <div class="jsteps">${JOIN_TXT.map((t, k) => `<div class="js"><i>${k + 1}</i><span>${esc(t[0])}</span><em>${esc(t[1])}</em></div>`).join('')}</div></div>
+    <div class="card"><h3>${ib('send', 'indigo')}The message, ready to send${d.brands.length > 1 ? `<select id="jpick" style="margin-left:auto;border:1px solid var(--line-2);border-radius:var(--r2);padding:5px 8px">${d.brands.map(b => `<option ${b.name === j.name ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select>` : ''}</h3>
+      <pre class="prompt" id="jtext" style="margin-top:12px;font-family:var(--body);font-size:14px">${esc(joinMsg(j))}</pre><div class="arow" style="margin-top:10px"><button class="btn go" id="jcopy">Copy</button><span class="lbl">You send it. Nothing goes out from here.</span></div></div>`;
+  paintIcons(m);
+  $('#jcopy').onclick = () => navigator.clipboard.writeText($('#jtext').textContent).then(() => toast('Copied')).catch(() => toast('Select the text to copy'));
+  if ($('#jpick')) $('#jpick').onchange = e => { location.hash = 'join/' + encodeURIComponent(e.target.value); };
+}
+const JOIN_TXT = [['They make their own repo', 'a private copy of Prizm, under their account'], ['They invite us', 'to that one repo'], ['Their Claude fills the brand folder', '"activate Prizm Lab": site, reviews, Drive first'], ['We send what\'s missing', 'one plain list'], ['First run', 'top ads by spend → teardowns → scripts → production']];
 
 boot();
 asksBadge();

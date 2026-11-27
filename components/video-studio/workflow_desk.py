@@ -953,6 +953,103 @@ def datetime_now_month():
     return datetime.date.today().isoformat()[:7]
 
 
+# ---------- brands joining: the five onboarding steps, checked where they can be ----------
+# Client details stay on this computer (~/.prizm/joining.json), never in this repository. Per-brand APIs and partner
+# integrations (Meta, Shopify, reviews, Drive) live in Portal Commerce; this only tracks the steps.
+
+JOIN_STEPS = [("repo", "They make their own repo"), ("invite", "They invite us"), ("folder", "Their Claude fills the brand folder"),
+              ("asked", "We send what's missing"), ("first", "First run: top ads → teardowns")]
+
+
+def _joinfile():
+    return Path(os.path.expanduser(os.environ.get("PRIZM_JOINING") or "~/.prizm/joining.json"))
+
+
+def joining_raw():
+    j = _read(_joinfile())
+    return j if isinstance(j, list) else []
+
+
+_GHV = {}
+
+
+def _gh_view(repo):
+    """(exists, our permission) for owner/name, read-only, cached ten minutes."""
+    import time
+    hit = _GHV.get(repo)
+    if hit and time.time() - hit[0] < 600:
+        return hit[1]
+    try:
+        r = subprocess.run(["gh", "repo", "view", repo, "--json", "name,viewerPermission"], capture_output=True, text=True, timeout=30)
+        v = (True, json.loads(r.stdout).get("viewerPermission")) if r.returncode == 0 else (False, None)
+    except (OSError, subprocess.SubprocessError, ValueError):
+        v = (False, None)
+    _GHV[repo] = (time.time(), v)
+    return v
+
+
+def joining():
+    out = []
+    for j in joining_raw():
+        done = dict(j.get("done") or {})
+        st = {k: ("done" if done.get(k) else "todo") for k, _ in JOIN_STEPS}
+        notes = {}
+        if j.get("repo"):
+            seen, perm = _gh_view(j["repo"])
+            if seen:
+                st["repo"] = "done"
+                notes["repo"] = j["repo"]
+                if perm in ("ADMIN", "MAINTAIN", "WRITE"):
+                    st["invite"] = "done"
+                notes["invite"] = (perm or "").lower() or None
+        bid = j.get("brand")
+        if bid and SAFE.match(bid) and bdir(bid).is_dir():
+            items = setup(bid)["items"]
+            ok = sum(1 for i in items if i["state"] in ("done", "filled", "skipped"))
+            notes["folder"] = "%d of %d" % (ok, len(items))
+            if ok >= len(items) - 3:
+                st["folder"] = "done"
+            elif ok:
+                st["folder"] = "partly"
+            if glob.glob(str(WS / "runs/video-teardown/_work" / (bid + "*"))):
+                st["first"] = "done"
+        cur = next((k for k, _ in JOIN_STEPS if st[k] != "done"), None)
+        out.append({"name": j.get("name"), "repo": j.get("repo"), "brand": bid, "contact": j.get("contact"),
+                    "added": j.get("added"), "steps": [{"id": k, "name": n, "state": st[k], "note": notes.get(k)} for k, n in JOIN_STEPS],
+                    "now": cur, "ask": j.get("ask")})
+    return {"brands": out}
+
+
+def join_update(data):
+    import datetime
+    name = str(data.get("name") or "").strip()
+    if not name or len(name) > 80:
+        raise ValueError("give the brand's name")
+    repo = str(data.get("repo") or "").strip() or None
+    if repo and not re.fullmatch(r"[\w.-]+/[\w.-]+", repo):
+        raise ValueError("their repo as owner/name")
+    brand = str(data.get("brand") or "").strip() or None
+    if brand and not SAFE.match(brand):
+        raise ValueError("bad brand id")
+    rows = joining_raw()
+    row = next((r for r in rows if r.get("name", "").lower() == name.lower()), None)
+    if not row:
+        row = {"name": name, "added": datetime.date.today().isoformat(), "done": {}}
+        rows.append(row)
+    for k in ("repo", "brand", "contact", "ask"):
+        if data.get(k) is not None:
+            row[k] = (str(data[k]).strip() or None) if k != "repo" else repo
+    if data.get("step") in dict(JOIN_STEPS):
+        row.setdefault("done", {})[data["step"]] = datetime.date.today().isoformat() if data.get("done", True) else None
+    if data.get("remove"):
+        rows = [r for r in rows if r is not row]
+    f = _joinfile()
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(rows, indent=1))
+    _GHV.pop(repo, None)
+    return joining()
+
+
 def vary_candidates(la, n=6):
     """New ads worth varying: groups that carry a brief number or a creator (trybe) tag, that sold in the last 30 days
     and are under the desk's break-even (or that the desk says to keep or scale). Ranked by purchases."""
@@ -1235,6 +1332,8 @@ def handle(h, method, parts, query, body):
                 import studio_asks as SA
                 SA.start_worker()                               # a restarted Studio picks up asks still open
                 return h.send(200, {"asks": SA.listing(q.get("brand") if SAFE.match(q.get("brand", "")) else None)})
+            if api == ["joining"]:
+                return h.send(200, joining())
             if api == ["bill"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, bill(q["brand"]))
             if api == ["usage"] and SAFE.match(q.get("brand", "")):
@@ -1280,6 +1379,8 @@ def handle(h, method, parts, query, body):
             if api == ["ask"]:                                  # a Studio button hands one job to Claude
                 import studio_asks as SA
                 return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by")))
+            if api == ["joining"]:
+                return h.send(200, join_update(data))
             if api == ["hide"]:
                 return h.send(200, hide(data.get("brand"), data.get("item"), data.get("on", True) is not False))
             if api == ["taste"]:                                # the owner's "Use this" / "Discard" on a taste draft
